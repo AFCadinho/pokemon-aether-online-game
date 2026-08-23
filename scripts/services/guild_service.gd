@@ -64,6 +64,33 @@ func create_guild(
 	}
 
 
+func join_guild(guild_id: int) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILDS_ENDPOINT + "/%d/join" % guild_id,
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
+func apply_to_guild(guild_id: int) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILDS_ENDPOINT + "/%d/applications" % guild_id,
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	return response if not bool(response.get("success", false)) else {
+		"success": true,
+		"application": _dictionary(response.get("body", {})),
+	}
+
+
+func cancel_application(application_id: int) -> Dictionary:
+	return await _application_action(
+		"/game/guild-applications/%d/cancel" % application_id
+	)
+
+
 func load_home() -> Dictionary:
 	var response := await _authenticated_request(GUILD_HOME_ENDPOINT, HTTPClient.METHOD_GET, "")
 	if not bool(response.get("success", false)) and int(response.get("status", 0)) == 404:
@@ -149,6 +176,15 @@ func update_settings(
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
 
 
+func update_member_role(user_id: int, role: String) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_HOME_ENDPOINT + "/members/%d/role" % user_id,
+		HTTPClient.METHOD_PUT,
+		JSON.stringify({"role": role.strip_edges().to_lower()})
+	)
+	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
 func update_emblem(palette: Array[String], pixels: Array[int]) -> Dictionary:
 	var response := await _authenticated_request(
 		GUILD_HOME_ENDPOINT + "/emblem",
@@ -196,6 +232,21 @@ func cancel_invitation(invitation_id: int) -> Dictionary:
 	return await _invitation_action(GUILD_HOME_ENDPOINT + "/invitations/%d/cancel" % invitation_id)
 
 
+func accept_application(application_id: int) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_HOME_ENDPOINT + "/applications/%d/accept" % application_id,
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
+func decline_application(application_id: int) -> Dictionary:
+	return await _application_action(
+		GUILD_HOME_ENDPOINT + "/applications/%d/decline" % application_id
+	)
+
+
 func abandon_pending_creation() -> void:
 	pending_creation_request_id = ""
 
@@ -214,6 +265,7 @@ func _directory_result(value: Variant) -> Dictionary:
 		"guilds": normalized_guilds,
 		"membership": _dictionary(body.get("membership", {})),
 		"incomingInvitations": _array(body.get("incomingInvitations", [])),
+		"pendingApplications": _array(body.get("pendingApplications", [])),
 	}
 
 
@@ -227,7 +279,9 @@ func _home_result(value: Variant) -> Dictionary:
 		"membership": _dictionary(body.get("membership", {})),
 		"members": _array(body.get("members", [])),
 		"pendingInvitations": _array(body.get("pendingInvitations", [])),
+		"pendingApplications": _array(body.get("pendingApplications", [])),
 		"emblemTemplates": _array(body.get("emblemTemplates", [])),
+		"rankPermissions": _dictionary(body.get("rankPermissions", {})),
 	}
 
 
@@ -239,8 +293,17 @@ func _invitation_action(path: String) -> Dictionary:
 	}
 
 
+func _application_action(path: String) -> Dictionary:
+	var response := await _authenticated_request(path, HTTPClient.METHOD_POST, "{}")
+	return response if not bool(response.get("success", false)) else {
+		"success": true,
+		"application": _dictionary(response.get("body", {})),
+	}
+
+
 func can_invite_members() -> bool:
-	return str(current_membership.get("role", "")).to_lower() in ["leader", "officer"]
+	var permissions := _array(current_membership.get("permissions", []))
+	return permissions.has("manage_members") or str(current_membership.get("role", "")).to_lower() in ["leader", "captain"]
 
 
 func _set_current_membership(value: Variant) -> void:

@@ -1,6 +1,8 @@
 extends SceneTree
 
 var failed := false
+var guild_chat_open_requested := false
+var private_message_user: Dictionary = {}
 
 
 func _init() -> void:
@@ -31,8 +33,101 @@ func _run() -> void:
 	_check(popup.find_child("BrowseGuildsButton", true, false) != null, "browse action is present")
 	_check(popup.find_child("CreateGuildButton", true, false) != null, "create action is present")
 	_check(popup.find_child("GuildSearchInput", true, false) != null, "guild search is present")
+	_check(popup.find_child("GuildDirectoryFilters", true, false) != null, "guild discovery filters are present")
+	var filter_button := popup.find_child("GuildFilterButton", true, false) as Button
+	_check(filter_button != null, "one Guild filter button is present")
+	_check(popup.find_child("GuildFilterOpen", true, false) == null, "quick filter buttons stay out of the directory")
 	_check(popup.find_child("GuildRow_1", true, false) != null, "debug directory renders guild rows")
+	var discovery := popup.find_child("GuildRowDiscovery_1", true, false) as Label
+	var availability := popup.find_child("GuildRowAvailability_1", true, false) as Label
+	_check(discovery != null and discovery.text.contains("PvP") and discovery.text.contains("English"), "guild card shows focus and language")
+	_check(availability != null and availability.text.contains("38/50") and availability.text.contains("Applications"), "guild card shows capacity and recruitment")
 	_check(popup.find_child("GuildDetailPanel", true, false) != null, "guild information panel is present")
+	_check(popup.find_child("GuildForumButton", true, false) == null, "unavailable forum action stays out of the Guild profile")
+	var apply_button := popup.find_child("GuildApplyButton", true, false) as Button
+	_check(apply_button != null and apply_button.text == "Apply to Guild", "reviewed Guild exposes its application action")
+	popup.pending_applications = [{"id": 42, "guildId": 1, "status": "pending"}]
+	popup._render_guild_list()
+	await process_frame
+	apply_button = popup.find_child("GuildApplyButton", true, false) as Button
+	_check(apply_button != null and apply_button.text == "Cancel Application", "pending application can be cancelled")
+	_check(popup.find_child("GuildApplyButton", true, false) != null, "pending application remains actionable")
+	popup.pending_applications.clear()
+	popup._select_guild(2)
+	await process_frame
+	var join_button := popup.find_child("GuildApplyButton", true, false) as Button
+	_check(join_button != null and join_button.text == "Join Guild", "open Guild exposes direct joining")
+	if join_button != null:
+		join_button.pressed.emit()
+		await process_frame
+	var join_confirmation := popup.find_child("GuildJoinConfirmationDialog", true, false) as ConfirmationDialog
+	_check(join_confirmation != null and join_confirmation.visible, "direct Guild joining asks for confirmation")
+	if join_confirmation != null:
+		join_confirmation.canceled.emit()
+		await process_frame
+	popup._select_guild(1)
+	await process_frame
+	if filter_button != null:
+		filter_button.pressed.emit()
+		await process_frame
+	var filter_dialog := popup.find_child("GuildFilterDialog", true, false) as PopupPanel
+	_check(filter_dialog != null and filter_dialog.visible, "Guild filter button opens the filter dialog")
+	var focus_filter := popup.find_child("GuildFocusFilterSelect", true, false) as OptionButton
+	var language_filter := popup.find_child("GuildLanguageFilterSelect", true, false) as OptionButton
+	_check(language_filter != null and language_filter.item_count == 11, "Guild filters offer every supported language")
+	_check(_option_has_metadata(language_filter, "spanish"), "Guild filters include Spanish")
+	_check(_option_has_metadata(language_filter, "portuguese"), "Guild filters include Portuguese")
+	_check(_option_has_metadata(language_filter, "italian"), "Guild filters include Italian")
+	_check(_option_has_metadata(language_filter, "chinese"), "Guild filters include Chinese")
+	_check(_option_has_metadata(language_filter, "french"), "Guild filters include French")
+	_check(popup.language_select != null and popup.language_select.item_count == 10, "Guild creation uses the full language list")
+	popup.directory_language_filter = "english"
+	_check(popup._matches_directory_filter({"language": "Dutch / English"}), "English filter includes bilingual Guilds")
+	popup.directory_language_filter = "french"
+	_check(popup._matches_directory_filter({"language": "French"}), "French filter matches French Guilds")
+	_check(not popup._matches_directory_filter({"language": "German"}), "French filter excludes other languages")
+	popup.directory_language_filter = "chinese"
+	_check(popup._matches_directory_filter({"language": "Chinese"}), "Chinese filter matches Chinese Guilds")
+	popup.directory_language_filter = "all"
+	_select_option_with_metadata(focus_filter, "pvp")
+	var apply_filters := popup.find_child("GuildFiltersApplyButton", true, false) as Button
+	if apply_filters != null:
+		apply_filters.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildRow_1", true, false) != null, "PvP filter keeps mixed PvP Guilds")
+	_check(popup.find_child("GuildRow_2", true, false) == null, "PvP filter hides PvE Guilds")
+	_check(popup.find_child("GuildRow_3", true, false) != null, "PvP filter keeps competitive PvP Guilds")
+	_check(filter_button != null and filter_button.text.contains("1"), "filter button shows the active filter count")
+	if filter_button != null:
+		filter_button.pressed.emit()
+		await process_frame
+	var clear_filters := popup.find_child("GuildFiltersClearButton", true, false) as Button
+	if clear_filters != null:
+		clear_filters.pressed.emit()
+	if apply_filters != null:
+		apply_filters.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildRow_2", true, false) != null, "clearing the dialog restores all Guilds")
+	if filter_button != null:
+		filter_button.pressed.emit()
+		await process_frame
+	var recruitment_filter := popup.find_child("GuildRecruitmentFilterSelect", true, false) as OptionButton
+	_select_option_with_metadata(recruitment_filter, "open")
+	_select_option_with_metadata(language_filter, "dutch")
+	if apply_filters != null:
+		apply_filters.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildRow_1", true, false) == null, "combined filters hide Guilds outside either choice")
+	_check(popup.find_child("GuildRow_2", true, false) != null, "combined filters keep an open Dutch Guild")
+	_check(filter_button != null and filter_button.text.contains("2"), "filter button counts combined choices")
+	if filter_button != null:
+		filter_button.pressed.emit()
+		await process_frame
+	if clear_filters != null:
+		clear_filters.pressed.emit()
+	if apply_filters != null:
+		apply_filters.pressed.emit()
+		await process_frame
 
 	popup.incoming_invitations = [{"id": 7, "guildName": "Aether Vanguard", "invitedBy": "Nova"}]
 	popup._render_incoming_invitations()
@@ -57,29 +152,108 @@ func _run() -> void:
 	popup.show_debug_member_preview()
 	await process_frame
 	_check(popup.find_child("MyGuildButton", true, false) != null, "member navigation is present")
+	var create_button := popup.find_child("CreateGuildButton", true, false) as Button
+	_check(create_button != null and not create_button.visible, "Guild members do not see the create action")
 	_check(popup.find_child("GuildMemberDashboard", true, false) != null, "member dashboard renders")
 	_check(popup.find_child("GuildOverviewTab", true, false) != null, "guild overview tab renders")
+	_check(popup.find_child("GuildBankTab", true, false) != null, "guild bank tab renders")
 	_check(popup.find_child("GuildMembersTab", true, false) != null, "guild members tab renders")
 	_check(popup.find_child("GuildManagementTab", true, false) != null, "guild management tab renders for leaders")
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "guild dashboard opens on its overview")
-	_check(popup.find_child("GuildLobbyTeleportButton", true, false) != null, "guild overview renders free Lobby travel")
+	_check(popup.find_child("GuildTravelBar", true, false) != null, "guild travel sits above the dashboard content")
+	var lobby_button := popup.find_child("GuildLobbyTeleportButton", true, false) as Button
+	_check(lobby_button != null and not lobby_button.disabled, "Aether Clash Lobby travel is available")
+	var base_button := popup.find_child("GuildBaseTeleportButton", true, false) as Button
+	_check(base_button != null and base_button.disabled, "future Guild Base travel is visible but inactive")
+	var guild_chat_button := popup.find_child("GuildChatShortcutButton", true, false) as Button
+	_check(guild_chat_button != null, "guild overview renders a Guild chat shortcut")
+	if guild_chat_button != null:
+		popup.guild_chat_requested.connect(_on_guild_chat_requested, CONNECT_ONE_SHOT)
+		guild_chat_button.pressed.emit()
+	_check(guild_chat_open_requested, "Guild chat shortcut requests the Guild channel")
+	var members_shortcut := popup.find_child("GuildMembersShortcutButton", true, false) as Button
+	_check(members_shortcut != null, "guild overview renders a member roster shortcut")
+	if members_shortcut != null:
+		members_shortcut.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildMembersSection", true, false) != null, "member roster shortcut opens the roster")
+	var overview_tab := popup.find_child("GuildOverviewTab", true, false) as Button
+	if overview_tab != null:
+		overview_tab.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildLobbyTeleportButton", true, false) != null, "guild overview keeps Lobby travel available above its tabs")
 	_check(popup.find_child("GuildSettingsDescription", true, false) == null, "settings stay out of the guild overview")
+	var bank_tab := popup.find_child("GuildBankTab", true, false) as Button
+	if bank_tab != null:
+		bank_tab.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildBankSection", true, false) != null, "Guild Bank opens in its own workspace")
+	_check(popup.find_child("GuildBankFundsCard", true, false) != null, "Guild Bank shows shared funds")
+	_check(popup.find_child("GuildBankPokemonCard", true, false) != null, "Guild Bank shows Pokémon storage")
+	_check(popup.find_child("GuildBankItemsCard", true, false) != null, "Guild Bank shows item storage")
+	var funds_action := popup.find_child("GuildBankFundsAction", true, false) as Button
+	var pokemon_action := popup.find_child("GuildBankPokemonAction", true, false) as Button
+	var items_action := popup.find_child("GuildBankItemsAction", true, false) as Button
+	_check(
+		funds_action != null and not funds_action.disabled
+		and pokemon_action != null and not pokemon_action.disabled
+		and items_action != null and not items_action.disabled,
+		"every Guild member can open each bank category"
+	)
+	var permission_summary := popup.find_child("GuildBankPermissionSummary", true, false) as Label
+	_check(permission_summary != null and permission_summary.text.contains("allowed"), "Guild Bank shows the leader's transaction rights")
+	if pokemon_action != null:
+		pokemon_action.pressed.emit()
+	_check(popup.member_status_label != null and not popup.member_status_label.text.is_empty(), "opening a bank category gives clear foundation feedback")
+	_check(popup.find_child("GuildTravelBar", true, false) != null, "guild travel remains available while viewing the bank")
+	overview_tab = popup.find_child("GuildOverviewTab", true, false) as Button
+	if overview_tab != null:
+		overview_tab.pressed.emit()
+		await process_frame
 	var members_tab := popup.find_child("GuildMembersTab", true, false) as Button
 	if members_tab != null:
 		members_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildMembersSection", true, false) != null, "members tab opens the roster")
+	_check(popup.find_child("GuildMemberRoleSelect_2", true, false) != null, "leader can assign the Captain's rank")
+	_check(popup.find_child("GuildMemberRoleSelect_3", true, false) != null, "leader can assign a Member's rank")
+	_check(popup.find_child("GuildMemberCard_1", true, false) != null, "member roster uses distinct player cards")
+	var online_presence := popup.find_child("GuildMemberPresenceLabel_2", true, false) as Label
+	var offline_presence := popup.find_child("GuildMemberPresenceLabel_3", true, false) as Label
+	_check(online_presence != null and online_presence.text == "Online", "online Guild members are clearly marked")
+	_check(offline_presence != null and offline_presence.text.contains("Last online"), "offline Guild members show their last activity")
+	var self_pm := popup.find_child("GuildMemberPmButton_1", true, false) as Button
+	var online_pm := popup.find_child("GuildMemberPmButton_2", true, false) as Button
+	var offline_pm := popup.find_child("GuildMemberPmButton_3", true, false) as Button
+	_check(self_pm != null and self_pm.disabled, "the current player cannot PM themselves")
+	_check(online_pm != null and not online_pm.disabled, "online Guild members expose a PM action")
+	_check(offline_pm != null and offline_pm.disabled, "offline Guild members explain that PM is unavailable")
+	if online_pm != null:
+		popup.private_message_requested.connect(_on_private_message_requested, CONNECT_ONE_SHOT)
+		online_pm.pressed.emit()
+	_check(
+		int(private_message_user.get("userId", 0)) == 2
+		and str(private_message_user.get("username", "")) == "maple",
+		"Guild member PM action identifies the selected trainer"
+	)
 	var management_tab := popup.find_child("GuildManagementTab", true, false) as Button
 	if management_tab != null:
 		management_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildManagementSection", true, false) != null, "management tab opens guild controls")
 	_check(popup.find_child("GuildSettingsDescription", true, false) != null, "leader settings render")
+	_check(popup.find_child("GuildApplicationsInbox", true, false) != null, "Guild applications use a distinct inbox card")
+	var application_count := popup.find_child("GuildApplicationsPendingCount", true, false) as Label
+	_check(application_count != null and application_count.text.contains("1"), "Guild application inbox shows its pending count")
+	_check(popup.find_child("GuildApplicationRow_8", true, false) != null, "pending Guild application renders for staff")
+	_check(popup.find_child("AcceptGuildApplicationButton_8", true, false) != null, "staff can accept a Guild application")
+	_check(popup.find_child("DeclineGuildApplicationButton_8", true, false) != null, "staff can decline a Guild application")
 	_check(popup.find_child("GuildEmblemPreview", true, false) == null, "management keeps emblem controls out of settings")
-	var edit_emblem_button := popup.find_child("EditGuildEmblemButton", true, false) as Button
-	_check(edit_emblem_button != null, "leader can edit the Guild emblem from the header icon")
-	if edit_emblem_button != null:
-		edit_emblem_button.pressed.emit()
+	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "leader does not see a redundant Guild emblem edit button")
+	var edit_emblem_icon_button := popup.find_child("EditGuildEmblemIconButton", true, false) as Button
+	_check(edit_emblem_icon_button != null, "leader can edit the Guild emblem by clicking it")
+	if edit_emblem_icon_button != null:
+		edit_emblem_icon_button.pressed.emit()
 		await process_frame
 	var emblem_popup := popup.find_child("GuildEmblemEditorPopup", true, false) as PopupPanel
 	_check(emblem_popup != null and emblem_popup.visible, "emblem editor opens in a dedicated popup")
@@ -161,12 +335,24 @@ func _run() -> void:
 		member_minimum_size.x <= GuildPopup.POPUP_SIZE.x and member_minimum_size.y <= GuildPopup.POPUP_SIZE.y,
 		"member dashboard fits inside its popup"
 	)
-	popup.guild_home["membership"] = {"guildId": 1, "role": "member"}
-	popup.membership = {"guildId": 1, "role": "member"}
+	popup.guild_home["pendingApplications"] = []
+	popup._render_guild_home()
+	await process_frame
+	_check(popup.find_child("GuildApplicationsEmptyState", true, false) != null, "empty Guild application inbox remains clearly visible")
+	application_count = popup.find_child("GuildApplicationsPendingCount", true, false) as Label
+	_check(application_count != null and application_count.text.contains("0"), "empty Guild application inbox shows zero waiting")
+	popup.guild_home["membership"] = {
+		"guildId": 1,
+		"role": "member",
+		"permissions": ["bank_deposit", "bank_withdraw", "bank_borrow"],
+	}
+	popup.membership = popup.guild_home["membership"]
 	popup._render_guild_home()
 	await process_frame
 	_check(popup.find_child("GuildManagementTab", true, false) == null, "regular members do not see management")
+	_check(popup.find_child("GuildMemberRoleSelect_2", true, false) == null, "regular members cannot assign Guild ranks")
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "regular members cannot edit the Guild emblem")
+	_check(popup.find_child("EditGuildEmblemIconButton", true, false) == null, "regular members cannot edit the Guild emblem icon")
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "regular members return to the overview")
 
 	popup.close()
@@ -196,6 +382,32 @@ func _run() -> void:
 		await process_frame
 	popup.close()
 	quit(1 if failed else 0)
+
+
+func _on_guild_chat_requested() -> void:
+	guild_chat_open_requested = true
+
+
+func _on_private_message_requested(user: Dictionary) -> void:
+	private_message_user = user.duplicate(true)
+
+
+func _select_option_with_metadata(select: OptionButton, value: String) -> void:
+	if select == null:
+		return
+	for item_index: int in range(select.item_count):
+		if str(select.get_item_metadata(item_index)) == value:
+			select.select(item_index)
+			return
+
+
+func _option_has_metadata(select: OptionButton, value: String) -> bool:
+	if select == null:
+		return false
+	for item_index: int in range(select.item_count):
+		if str(select.get_item_metadata(item_index)) == value:
+			return true
+	return false
 
 
 func _check(condition: bool, label: String) -> void:
