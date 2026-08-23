@@ -2,6 +2,8 @@ extends Window
 
 class_name LendingWorkspaceNode
 
+signal return_requests_changed(requests: Array)
+
 const LoanInvitationDialogScript := preload("res://scripts/ui/loan_invitation_dialog.gd")
 const AetherConfirmationDialogScene := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 
@@ -34,6 +36,9 @@ var incoming_dialog: Window
 var last_incoming_signature := ""
 var incoming_account_generation := 0
 var displayed_notification_ids: Dictionary = {}
+var pending_return_requests: Array[Dictionary] = []
+var pending_return_request_signature := ""
+var focused_return_asset_id := ""
 var pokemon_source_mode := 0
 var selected_box_index := 0
 var pokemon_search_query := ""
@@ -50,6 +55,7 @@ var duration_select: OptionButton
 var fee_input: SpinBox
 var assets_list: VBoxContainer
 var loans_list: VBoxContainer
+var loans_scroll: ScrollContainer
 var view_select: OptionButton
 var status_label: Label
 var subtitle_label: Label
@@ -99,6 +105,10 @@ func clear_account_state() -> void:
 	_update_history_controls()
 	last_incoming_signature = ""
 	displayed_notification_ids.clear()
+	pending_return_requests.clear()
+	pending_return_request_signature = ""
+	focused_return_asset_id = ""
+	return_requests_changed.emit([])
 	incoming_account_generation += 1
 	if incoming_dialog != null and incoming_dialog.has_method("clear_offers"):
 		incoming_dialog.call("clear_offers")
@@ -122,6 +132,34 @@ func open_loans() -> void:
 	_refresh_loan_usage()
 	popup_centered(WINDOW_SIZE)
 	await refresh_all()
+
+
+func open_return_requests() -> void:
+	target_username = ""
+	_set_workspace_mode(false)
+	loan_overview_view = "borrowed"
+	_select_overview_view("borrowed")
+	if not pending_return_requests.is_empty():
+		var request: Dictionary = pending_return_requests[0]
+		focused_return_asset_id = str(request.get("assetId", ""))
+		loan_overview_asset_type = "items" if str(request.get("assetType", "")) == "item" else "pokemon"
+	_render_loan_type_tabs()
+	_refresh_loan_usage()
+	popup_centered(WINDOW_SIZE)
+	await refresh_all()
+
+
+func current_return_requests() -> Array[Dictionary]:
+	return pending_return_requests.duplicate(true)
+
+
+func _select_overview_view(view: String) -> void:
+	if view_select == null:
+		return
+	for index in range(view_select.item_count):
+		if str(view_select.get_item_metadata(index)) == view:
+			view_select.select(index)
+			return
 
 
 func refresh_all() -> void:
@@ -306,13 +344,13 @@ func _build_loans_panel() -> Control:
 	usage_label.add_theme_color_override("font_color", MUTED)
 	usage_label.add_theme_font_size_override("font_size", 10)
 	root.add_child(usage_label)
-	var scroll := ScrollContainer.new()
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	root.add_child(scroll)
+	loans_scroll = ScrollContainer.new()
+	loans_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root.add_child(loans_scroll)
 	loans_list = VBoxContainer.new()
 	loans_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	loans_list.add_theme_constant_override("separation", 7)
-	scroll.add_child(loans_list)
+	loans_scroll.add_child(loans_list)
 	return panel
 
 
@@ -620,6 +658,17 @@ func _render_loans() -> void:
 		elif status == "pending":
 			_add_action(actions, _t("common.cancel"), _loan_action.bind("cancel", str(loan.get("loanId", ""))))
 		loans_list.add_child(card)
+	_focus_requested_asset.call_deferred()
+
+
+func _focus_requested_asset() -> void:
+	if focused_return_asset_id == "" or loans_list == null or loans_scroll == null:
+		return
+	var row := loans_list.find_child("ReturnRequest_%s" % focused_return_asset_id, true, false) as Control
+	if row == null:
+		return
+	loans_scroll.ensure_control_visible(row)
+	row.grab_focus()
 
 
 func _on_loan_overview_view_selected(index: int) -> void:
@@ -745,6 +794,16 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, 
 	var snapshot: Dictionary = asset.get("snapshot", {}) if asset.get("snapshot", {}) is Dictionary else {}
 	var panel := PanelContainer.new()
 	panel.add_theme_stylebox_override("panel", _style(Color("#091725e8"), Color("#203b52"), 6))
+	var asset_id := str(asset.get("assetId", ""))
+	if asset_id != "" and asset_id == focused_return_asset_id:
+		panel.name = "ReturnRequest_%s" % asset_id
+		panel.focus_mode = Control.FOCUS_ALL
+		var focus_style := _style(Color("#18200df2"), GOLD, 7)
+		focus_style.border_width_left = 2
+		focus_style.border_width_top = 2
+		focus_style.border_width_right = 2
+		focus_style.border_width_bottom = 2
+		panel.add_theme_stylebox_override("panel", focus_style)
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 7)
 	margin.add_theme_constant_override("margin_top", 5)
@@ -886,7 +945,10 @@ func _add_asset_return_controls(row: HBoxContainer, asset: Dictionary, asset_nam
 	if is_borrower:
 		if return_requested:
 			row.add_child(_return_requested_label())
-		row.add_child(_asset_return_button(loan_id, asset_id, asset_name))
+			row.add_child(_asset_return_button(loan_id, asset_id, asset_name, true))
+			row.add_child(_asset_decline_return_button(loan_id, asset_id, asset_name))
+		else:
+			row.add_child(_asset_return_button(loan_id, asset_id, asset_name))
 	elif asset_status == "active":
 		if return_requested:
 			row.add_child(_return_requested_label())
@@ -911,11 +973,20 @@ func _asset_request_return_button(loan_id: String, asset_id: String, asset_name:
 	return button
 
 
-func _asset_return_button(loan_id: String, asset_id: String, asset_name: String) -> Button:
+func _asset_return_button(loan_id: String, asset_id: String, asset_name: String, requested := false) -> Button:
 	var button := Button.new()
-	button.text = _t("ui.lending.return_asset")
+	button.text = _t("ui.lending.accept_return_request") if requested else _t("ui.lending.return_asset")
 	button.disabled = mutation_in_flight
 	button.pressed.connect(_confirm_asset_return.bind(loan_id, asset_id, asset_name))
+	_apply_button_style(button)
+	return button
+
+
+func _asset_decline_return_button(loan_id: String, asset_id: String, asset_name: String) -> Button:
+	var button := Button.new()
+	button.text = _t("ui.lending.decline_return_request")
+	button.disabled = mutation_in_flight
+	button.pressed.connect(_decline_loan_asset_return.bind(loan_id, asset_id, asset_name))
 	_apply_button_style(button)
 	return button
 
@@ -961,10 +1032,39 @@ func _return_loan_asset(loan_id: String, asset_id: String, _asset_name: String) 
 	if not bool(result.get("success", false)):
 		_show_error(str(result.get("error", _t("ui.lending.error.action"))))
 		return
+	_remove_pending_return_request(asset_id)
 	await _refresh_after_asset_return()
 	await _refresh_assets()
 	await _refresh_loans()
 	await _poll_loan_notifications()
+	await _poll_incoming_offers()
+
+
+func _decline_loan_asset_return(loan_id: String, asset_id: String, _asset_name: String) -> void:
+	if mutation_in_flight:
+		return
+	mutation_in_flight = true
+	var service := get_node_or_null("/root/LendingService")
+	var result: Dictionary = await service.decline_return(loan_id, asset_id)
+	mutation_in_flight = false
+	if not bool(result.get("success", false)):
+		_show_error(str(result.get("error", _t("ui.lending.error.action"))))
+		return
+	_remove_pending_return_request(asset_id)
+	await _refresh_loans()
+	await _poll_incoming_offers()
+
+
+func _remove_pending_return_request(asset_id: String) -> void:
+	var remaining: Array[Dictionary] = []
+	for request: Dictionary in pending_return_requests:
+		if str(request.get("assetId", "")) != asset_id:
+			remaining.append(request)
+	pending_return_requests = remaining
+	pending_return_request_signature = ""
+	if focused_return_asset_id == asset_id:
+		focused_return_asset_id = ""
+	return_requests_changed.emit(pending_return_requests.duplicate(true))
 
 
 func _refresh_after_asset_return() -> void:
@@ -1348,10 +1448,31 @@ func _poll_incoming_offers() -> void:
 	if not bool(result.get("success", false)):
 		return
 	var pending: Array[Dictionary] = []
+	var return_requests: Array[Dictionary] = []
 	var body: Dictionary = result.get("body", {})
 	for value: Variant in body.get("loans", []):
-		if value is Dictionary and str(value.get("status", "")) == "pending":
-			pending.append(value.duplicate(true))
+		if not value is Dictionary:
+			continue
+		var loan: Dictionary = value
+		if str(loan.get("status", "")) == "pending":
+			pending.append(loan.duplicate(true))
+		if str(loan.get("status", "")) not in ["active", "return_pending"]:
+			continue
+		for asset_value: Variant in loan.get("assets", []):
+			if not asset_value is Dictionary:
+				continue
+			var asset: Dictionary = asset_value
+			if _optional_string(asset.get("returnRequestedAt")) == "":
+				continue
+			if str(asset.get("status", "")) not in ["active", "return_pending"]:
+				continue
+			return_requests.append({
+				"loanId": str(loan.get("loanId", "")),
+				"assetId": str(asset.get("assetId", "")),
+				"assetType": str(asset.get("assetType", "")),
+				"requestedAt": _optional_string(asset.get("returnRequestedAt")),
+			})
+	_update_return_request_attention(return_requests)
 	var signature_parts: Array[String] = []
 	for offer: Dictionary in pending:
 		signature_parts.append(str(offer.get("loanId", "")))
@@ -1359,6 +1480,23 @@ func _poll_incoming_offers() -> void:
 	if signature != last_incoming_signature and incoming_dialog != null and incoming_dialog.has_method("show_offers"):
 		incoming_dialog.call("show_offers", pending, true)
 	last_incoming_signature = signature
+
+
+func _update_return_request_attention(requests: Array[Dictionary]) -> void:
+	requests.sort_custom(func(left: Dictionary, right: Dictionary):
+		return "%s:%s" % [left.get("loanId", ""), left.get("assetId", "")] < "%s:%s" % [right.get("loanId", ""), right.get("assetId", "")]
+	)
+	var signature_parts: Array[String] = []
+	for request: Dictionary in requests:
+		signature_parts.append("%s:%s:%s" % [request.get("loanId", ""), request.get("assetId", ""), request.get("requestedAt", "")])
+	var signature := "|".join(signature_parts)
+	if signature == pending_return_request_signature:
+		return
+	pending_return_request_signature = signature
+	pending_return_requests = requests.duplicate(true)
+	if pending_return_requests.is_empty():
+		focused_return_asset_id = ""
+	return_requests_changed.emit(pending_return_requests.duplicate(true))
 
 
 func _poll_loan_notifications() -> void:

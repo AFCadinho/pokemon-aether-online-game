@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Return requests now show a notification badge in Social and Loans, play a notification sound, open the requested asset directly, and can be accepted or declined per asset.
+
 - Made the Guild and Aether Exchange toolbar icons easier to tell apart at a glance.
 
 - Loan History now covers the last 30 days and can be searched by Trainer or asset and filtered by outcome.

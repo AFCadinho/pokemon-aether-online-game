@@ -125,6 +125,15 @@ func request_return(loan_id: String, asset_id: String, request_id := "") -> Dict
 	})
 
 
+func decline_return(loan_id: String, asset_id: String, request_id := "") -> Dictionary:
+	if asset_id.strip_edges() == "":
+		return _validation_error("Loan asset id is required.")
+	return await _command("/%s/decline-return" % loan_id.strip_edges().uri_encode(), {
+		"assetId": asset_id.strip_edges(),
+		"requestId": _request_id(request_id),
+	})
+
+
 func return_assets(loan_id: String, asset_ids: Array = [], request_id := "") -> Dictionary:
 	return await _command("/%s/return" % loan_id.strip_edges().uri_encode(), {"assetIds": asset_ids, "requestId": _request_id(request_id)})
 

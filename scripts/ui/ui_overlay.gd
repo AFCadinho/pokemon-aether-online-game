@@ -1123,6 +1123,8 @@ var mail_inventory_load_state := "idle"
 var socials_attention_sources: Dictionary = {}
 var socials_friend_list_attention_badge: Panel
 var socials_mail_attention_badge: Panel
+var socials_loans_attention_badge: Panel
+var known_loan_return_request_ids: Dictionary = {}
 var known_mail_ids: Dictionary = {}
 var mail_ids_initialized: bool = false
 var play_existing_mail_notification_on_next_inbox_load: bool = true
@@ -1478,6 +1480,7 @@ func _ready() -> void:
 	_setup_socials_attention_badge()
 	if mail_notification_sound != null and AudioServer.get_bus_index(SettingsManager.NOTIFICATION_BUS) >= 0:
 		mail_notification_sound.bus = SettingsManager.NOTIFICATION_BUS
+	_setup_loan_return_request_attention()
 	_set_socials_attention("mail", false)
 	_refresh_location_label()
 	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
@@ -33433,7 +33436,11 @@ func _on_socials_players_on_map_button_pressed() -> void:
 func _on_socials_loans_button_pressed() -> void:
 	_hide_socials_menu()
 	var workspace := get_node_or_null("/root/LendingWorkspace")
-	if workspace != null and workspace.has_method("open_loans"):
+	if workspace == null:
+		return
+	if bool(socials_attention_sources.get("loans", false)) and workspace.has_method("open_return_requests"):
+		workspace.call("open_return_requests")
+	elif workspace.has_method("open_loans"):
 		workspace.call("open_loans")
 
 func _open_players_on_map() -> void:
@@ -35514,7 +35521,38 @@ func _setup_socials_attention_badge() -> void:
 	socials_attention_badge.add_theme_stylebox_override("panel", _make_attention_badge_style())
 	socials_friend_list_attention_badge = _create_socials_menu_attention_badge(socials_friend_list_button)
 	socials_mail_attention_badge = _create_socials_menu_attention_badge(socials_mail_button)
+	socials_loans_attention_badge = _create_socials_menu_attention_badge(socials_loans_button)
 	_refresh_socials_attention_badge()
+
+
+func _setup_loan_return_request_attention() -> void:
+	var workspace := get_node_or_null("/root/LendingWorkspace")
+	if workspace == null:
+		return
+	if workspace.has_signal("return_requests_changed") and not workspace.is_connected("return_requests_changed", _on_loan_return_requests_changed):
+		workspace.connect("return_requests_changed", _on_loan_return_requests_changed)
+	if workspace.has_method("current_return_requests"):
+		_on_loan_return_requests_changed(workspace.call("current_return_requests"))
+
+
+func _on_loan_return_requests_changed(requests_value: Variant) -> void:
+	var requests: Array = requests_value if requests_value is Array else []
+	var current_ids: Dictionary = {}
+	var has_new := false
+	for value: Variant in requests:
+		if not value is Dictionary:
+			continue
+		var request: Dictionary = value
+		var request_id := "%s:%s:%s" % [request.get("loanId", ""), request.get("assetId", ""), request.get("requestedAt", "")]
+		if request_id == "::":
+			continue
+		current_ids[request_id] = true
+		if not known_loan_return_request_ids.has(request_id):
+			has_new = true
+	known_loan_return_request_ids = current_ids
+	if has_new:
+		_play_mail_notification_sound()
+	_set_socials_attention("loans", not current_ids.is_empty())
 
 
 func _make_attention_badge_style() -> StyleBoxFlat:
@@ -35582,6 +35620,8 @@ func _refresh_socials_attention_badge() -> void:
 		socials_mail_attention_badge.visible = bool(socials_attention_sources.get("mail", false))
 	if socials_friend_list_attention_badge != null:
 		socials_friend_list_attention_badge.visible = bool(socials_attention_sources.get("friend_list", false))
+	if socials_loans_attention_badge != null:
+		socials_loans_attention_badge.visible = bool(socials_attention_sources.get("loans", false))
 
 
 func _has_socials_attention() -> bool:

@@ -4383,6 +4383,8 @@
   "ui.lending.asset_status.released": "Released",
   "ui.lending.return": "Return Now",
   "ui.lending.return_asset": "Return",
+  "ui.lending.accept_return_request": "Accept & Return",
+  "ui.lending.decline_return_request": "Decline",
   "ui.lending.return_confirm_title": "Return loan asset",
   "ui.lending.return_confirm_text": "Return {asset} to its owner? You will no longer be able to use it.",
   "ui.lending.request_return": "Request Return",
@@ -4473,5 +4475,6 @@
   "ui.lending.notification.asset_returned": "@{trainer} returned {asset}.",
   "ui.lending.notification.asset_auto_returned": "{asset} was automatically returned after the loan deadline.",
   "ui.lending.notification.asset_auto_returned_from_you": "Your loan of {asset} ended and it was automatically returned to @{trainer}.",
-  "ui.lending.notification.you_returned": "You returned {asset} to its owner."
+  "ui.lending.notification.you_returned": "You returned {asset} to its owner.",
+  "ui.lending.notification.asset_return_declined": "@{trainer} declined your request to return {asset}."
 }
