@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Guild applications now have a dedicated inbox with a pending notification badge and direct access to each applicant's Trainer Card.
+
 - The Guild Bank now supports shared Pokédollars, item storage, and Pokémon storage with rank-based deposit, withdrawal, and borrowing rights.
 
 - The Guild member list now shows each trainer's rank, online status or last activity, and a direct PM button for online members.

@@ -3,6 +3,7 @@ extends SceneTree
 var failed := false
 var guild_chat_open_requested := false
 var private_message_user: Dictionary = {}
+var trainer_card_user: Dictionary = {}
 
 
 func _init() -> void:
@@ -262,18 +263,38 @@ func _run() -> void:
 		and str(private_message_user.get("username", "")) == "maple",
 		"Guild member PM action identifies the selected trainer"
 	)
+	var applications_tab := popup.find_child("GuildApplicationsTab", true, false) as Button
+	_check(applications_tab != null, "Guild staff receive a dedicated applications tab")
+	_check(popup.find_child("GuildApplicationsNotificationBadge", true, false) != null, "pending applications show a red notification badge")
+	var application_badge_count := popup.find_child("GuildApplicationsNotificationCount", true, false) as Label
+	_check(application_badge_count != null and application_badge_count.text == "1", "application notification shows the pending count")
+	if applications_tab != null:
+		applications_tab.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildApplicationsSection", true, false) != null, "applications open in their own workspace")
+	_check(popup.find_child("GuildApplicationsInbox", true, false) != null, "Guild applications use a distinct inbox")
+	var application_count := popup.find_child("GuildApplicationsPendingCount", true, false) as Label
+	_check(application_count != null and application_count.text.contains("1"), "Guild application inbox shows its pending count")
+	_check(popup.find_child("GuildApplicationRow_8", true, false) != null, "pending Guild application renders for staff")
+	var trainer_card_button := popup.find_child("ViewGuildApplicantTrainerCardButton_8", true, false) as Button
+	_check(trainer_card_button != null and not trainer_card_button.disabled, "each applicant exposes a Trainer Card action")
+	if trainer_card_button != null:
+		popup.trainer_card_requested.connect(_on_trainer_card_requested, CONNECT_ONE_SHOT)
+		trainer_card_button.pressed.emit()
+	_check(
+		int(trainer_card_user.get("userId", 0)) == 4
+		and str(trainer_card_user.get("username", "")) == "red",
+		"applicant Trainer Card action identifies the selected Trainer"
+	)
+	_check(popup.find_child("AcceptGuildApplicationButton_8", true, false) != null, "staff can accept a Guild application")
+	_check(popup.find_child("DeclineGuildApplicationButton_8", true, false) != null, "staff can decline a Guild application")
 	var management_tab := popup.find_child("GuildManagementTab", true, false) as Button
 	if management_tab != null:
 		management_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildManagementSection", true, false) != null, "management tab opens guild controls")
 	_check(popup.find_child("GuildSettingsDescription", true, false) != null, "leader settings render")
-	_check(popup.find_child("GuildApplicationsInbox", true, false) != null, "Guild applications use a distinct inbox card")
-	var application_count := popup.find_child("GuildApplicationsPendingCount", true, false) as Label
-	_check(application_count != null and application_count.text.contains("1"), "Guild application inbox shows its pending count")
-	_check(popup.find_child("GuildApplicationRow_8", true, false) != null, "pending Guild application renders for staff")
-	_check(popup.find_child("AcceptGuildApplicationButton_8", true, false) != null, "staff can accept a Guild application")
-	_check(popup.find_child("DeclineGuildApplicationButton_8", true, false) != null, "staff can decline a Guild application")
+	_check(popup.find_child("GuildApplicationsInbox", true, false) == null, "applications no longer crowd Guild settings")
 	_check(popup.find_child("GuildEmblemPreview", true, false) == null, "management keeps emblem controls out of settings")
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "leader does not see a redundant Guild emblem edit button")
 	var edit_emblem_icon_button := popup.find_child("EditGuildEmblemIconButton", true, false) as Button
@@ -362,7 +383,7 @@ func _run() -> void:
 		"member dashboard fits inside its popup"
 	)
 	popup.guild_home["pendingApplications"] = []
-	popup._render_guild_home()
+	popup._show_guild_section("applications")
 	await process_frame
 	_check(popup.find_child("GuildApplicationsEmptyState", true, false) != null, "empty Guild application inbox remains clearly visible")
 	application_count = popup.find_child("GuildApplicationsPendingCount", true, false) as Label
@@ -376,6 +397,7 @@ func _run() -> void:
 	popup._render_guild_home()
 	await process_frame
 	_check(popup.find_child("GuildManagementTab", true, false) == null, "regular members do not see management")
+	_check(popup.find_child("GuildApplicationsTab", true, false) == null, "regular members do not see the staff applications inbox")
 	_check(popup.find_child("GuildMemberRoleSelect_2", true, false) == null, "regular members cannot assign Guild ranks")
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "regular members cannot edit the Guild emblem")
 	_check(popup.find_child("EditGuildEmblemIconButton", true, false) == null, "regular members cannot edit the Guild emblem icon")
@@ -416,6 +438,10 @@ func _on_guild_chat_requested() -> void:
 
 func _on_private_message_requested(user: Dictionary) -> void:
 	private_message_user = user.duplicate(true)
+
+
+func _on_trainer_card_requested(user: Dictionary) -> void:
+	trainer_card_user = user.duplicate(true)
 
 
 func _select_option_with_metadata(select: OptionButton, value: String) -> void:

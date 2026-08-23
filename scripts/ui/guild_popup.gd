@@ -6,6 +6,7 @@ signal closed
 signal lobby_teleport_requested
 signal guild_chat_requested
 signal private_message_requested(user: Dictionary)
+signal trainer_card_requested(player: Dictionary)
 
 const POPUP_SIZE := Vector2(1040, 700)
 const GUILD_ICON: Texture2D = preload("res://assets/ui/guild.svg")
@@ -290,6 +291,7 @@ func show_debug_member_preview() -> void:
 			{
 				"id": 8,
 				"guildId": int(guild.get("id", 1)),
+				"applicantUserId": 4,
 				"applicantUsername": "red",
 				"applicantDisplayName": "Red",
 				"status": "pending",
@@ -905,7 +907,7 @@ func _render_guild_home() -> void:
 	var is_leader := role == "leader"
 	var can_invite := permissions.has("manage_members") or role in ["leader", "captain"]
 	var can_manage := is_leader or can_invite or permissions.has("manage_guild")
-	if active_guild_section == "management" and not can_manage:
+	if active_guild_section in ["applications", "management"] and not can_manage:
 		active_guild_section = "overview"
 
 	var header := HBoxContainer.new()
@@ -938,6 +940,8 @@ func _render_guild_home() -> void:
 			member_content.add_child(_build_guild_bank())
 		"members":
 			member_content.add_child(_build_member_roster())
+		"applications":
+			member_content.add_child(_build_guild_applications())
 		"management":
 			member_content.add_child(_build_member_management(guild, is_leader, can_invite))
 		_:
@@ -982,6 +986,11 @@ func _build_guild_section_navigation(can_manage: bool) -> Control:
 	]
 	if can_manage:
 		sections.append({
+			"id": "applications",
+			"label_key": "ui.guild.section.applications",
+			"name": "GuildApplicationsTab",
+		})
+		sections.append({
 			"id": "management",
 			"label_key": "ui.guild.section.management",
 			"name": "GuildManagementTab",
@@ -999,6 +1008,8 @@ func _build_guild_section_navigation(can_manage: bool) -> Control:
 		button.pressed.connect(_show_guild_section.bind(section_id))
 		_apply_tab_style(button, active_guild_section == section_id)
 		navigation.add_child(button)
+		if section_id == "applications" and _pending_application_count() > 0:
+			_add_application_notification_badge(button, _pending_application_count())
 		guild_section_buttons[section_id] = button
 	var spacer := Control.new()
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1007,7 +1018,7 @@ func _build_guild_section_navigation(can_manage: bool) -> Control:
 
 
 func _show_guild_section(section: String) -> void:
-	if section not in ["overview", "bank", "members", "management"]:
+	if section not in ["overview", "bank", "members", "applications", "management"]:
 		return
 	active_guild_section = section
 	if section != "bank":
@@ -1015,6 +1026,33 @@ func _show_guild_section(section: String) -> void:
 	_render_guild_home()
 	if section == "bank" and not is_debug_preview:
 		_load_guild_bank_async.call_deferred()
+
+
+func _pending_application_count() -> int:
+	return _array_from_value(guild_home.get("pendingApplications", [])).size()
+
+
+func _add_application_notification_badge(button: Button, count: int) -> void:
+	var badge := PanelContainer.new()
+	badge.name = "GuildApplicationsNotificationBadge"
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.anchor_left = 1.0
+	badge.anchor_right = 1.0
+	badge.offset_left = -23.0
+	badge.offset_top = -5.0
+	badge.offset_right = 3.0
+	badge.offset_bottom = 17.0
+	badge.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#d94b55"), Color("#ff9ba2"), 11, 1)
+	)
+	button.add_child(badge)
+	var count_label := _label("99+" if count > 99 else str(count), 9, Color.WHITE)
+	count_label.name = "GuildApplicationsNotificationCount"
+	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	count_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.add_child(count_label)
 
 
 func _build_guild_travel_bar() -> Control:
@@ -1944,7 +1982,6 @@ func _build_member_management(guild: Dictionary, is_leader: bool, can_invite: bo
 		content.add_child(save_settings)
 
 	if can_invite:
-		_render_pending_applications(content)
 		content.add_child(_localized_label("ui.guild.invite.title", 10, UI_ACCENT))
 		var invite_row := HBoxContainer.new()
 		content.add_child(invite_row)
@@ -1966,6 +2003,22 @@ func _build_member_management(guild: Dictionary, is_leader: bool, can_invite: bo
 		_render_pending_invitations(content)
 	elif not is_leader:
 		content.add_child(_localized_label("ui.guild.management.restricted", 12, UI_MUTED))
+	return panel
+
+
+func _build_guild_applications() -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildApplicationsSection"
+	panel.custom_minimum_size = Vector2(610, 300)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 13, 12, 13, 12)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 9)
+	margin.add_child(content)
+	_render_pending_applications(content)
 	return panel
 
 
@@ -2251,8 +2304,21 @@ func _render_pending_applications(content: VBoxContainer) -> void:
 			11,
 			UI_TEXT
 		)
-		applicant.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(applicant)
+		var applicant_identity := VBoxContainer.new()
+		applicant_identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		applicant_identity.add_theme_constant_override("separation", 1)
+		row.add_child(applicant_identity)
+		applicant_identity.add_child(applicant)
+		var applicant_username := str(application.get("applicantUsername", "")).strip_edges()
+		if applicant_username != "":
+			applicant_identity.add_child(_label("@%s" % applicant_username, 9, UI_MUTED))
+		var trainer_card := Button.new()
+		trainer_card.name = "ViewGuildApplicantTrainerCardButton_%d" % application_id
+		_set_localized_property(trainer_card, "text", "ui.guild.application.trainer_card")
+		trainer_card.disabled = int(application.get("applicantUserId", 0)) <= 0
+		trainer_card.pressed.connect(_on_guild_application_trainer_card_pressed.bind(application))
+		_apply_button_style(trainer_card)
+		row.add_child(trainer_card)
 		var accept := Button.new()
 		accept.name = "AcceptGuildApplicationButton_%d" % application_id
 		_set_localized_property(accept, "text", "common.accept")
@@ -2265,6 +2331,17 @@ func _render_pending_applications(content: VBoxContainer) -> void:
 		decline.pressed.connect(_on_decline_application.bind(application_id))
 		_apply_button_style(decline)
 		row.add_child(decline)
+
+
+func _on_guild_application_trainer_card_pressed(application: Dictionary) -> void:
+	var user_id := int(application.get("applicantUserId", 0))
+	if user_id <= 0:
+		return
+	trainer_card_requested.emit({
+		"userId": user_id,
+		"username": str(application.get("applicantUsername", "")),
+		"displayName": str(application.get("applicantDisplayName", application.get("applicantUsername", "Trainer"))),
+	})
 
 
 func _render_pending_invitations(content: VBoxContainer) -> void:
