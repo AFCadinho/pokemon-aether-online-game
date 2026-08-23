@@ -36688,6 +36688,8 @@ func _open_guild_popup() -> void:
 			guild_popup.guild_chat_requested.connect(_on_guild_chat_requested)
 		if not guild_popup.private_message_requested.is_connected(_on_guild_private_message_requested):
 			guild_popup.private_message_requested.connect(_on_guild_private_message_requested)
+		if not guild_popup.trainer_card_requested.is_connected(_on_guild_trainer_card_requested):
+			guild_popup.trainer_card_requested.connect(_on_guild_trainer_card_requested)
 	guild_popup.open()
 	_activate_ui_panel(guild_popup)
 
@@ -36700,6 +36702,10 @@ func _on_guild_private_message_requested(user: Dictionary) -> void:
 	if guild_popup != null and guild_popup.visible:
 		guild_popup.close()
 	open_private_message_conversation(user)
+
+
+func _on_guild_trainer_card_requested(player: Dictionary) -> void:
+	await _on_player_interaction_trainer_card_requested(player)
 
 
 func _on_guild_chat_requested() -> void:
