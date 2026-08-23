@@ -72,6 +72,16 @@ func _run() -> void:
 	var filter_dialog := popup.find_child("GuildFilterDialog", true, false) as PopupPanel
 	_check(filter_dialog != null and filter_dialog.visible, "Guild filter button opens the filter dialog")
 	var focus_filter := popup.find_child("GuildFocusFilterSelect", true, false) as OptionButton
+	var language_filter := popup.find_child("GuildLanguageFilterSelect", true, false) as OptionButton
+	_check(language_filter != null and language_filter.item_count == 7, "Guild filters offer every supported language")
+	_check(_option_has_metadata(language_filter, "french"), "Guild filters include French")
+	_check(popup.language_select != null and popup.language_select.item_count == 6, "Guild creation uses the full language list")
+	popup.directory_language_filter = "english"
+	_check(popup._matches_directory_filter({"language": "Dutch / English"}), "English filter includes bilingual Guilds")
+	popup.directory_language_filter = "french"
+	_check(popup._matches_directory_filter({"language": "French"}), "French filter matches French Guilds")
+	_check(not popup._matches_directory_filter({"language": "German"}), "French filter excludes other languages")
+	popup.directory_language_filter = "all"
 	_select_option_with_metadata(focus_filter, "pvp")
 	var apply_filters := popup.find_child("GuildFiltersApplyButton", true, false) as Button
 	if apply_filters != null:
@@ -95,7 +105,6 @@ func _run() -> void:
 		filter_button.pressed.emit()
 		await process_frame
 	var recruitment_filter := popup.find_child("GuildRecruitmentFilterSelect", true, false) as OptionButton
-	var language_filter := popup.find_child("GuildLanguageFilterSelect", true, false) as OptionButton
 	_select_option_with_metadata(recruitment_filter, "open")
 	_select_option_with_metadata(language_filter, "dutch")
 	if apply_filters != null:
@@ -310,6 +319,15 @@ func _select_option_with_metadata(select: OptionButton, value: String) -> void:
 		if str(select.get_item_metadata(item_index)) == value:
 			select.select(item_index)
 			return
+
+
+func _option_has_metadata(select: OptionButton, value: String) -> bool:
+	if select == null:
+		return false
+	for item_index: int in range(select.item_count):
+		if str(select.get_item_metadata(item_index)) == value:
+			return true
+	return false
 
 
 func _check(condition: bool, label: String) -> void:

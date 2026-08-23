@@ -4,7 +4,7 @@
 
 - The Bag right-click menu now focuses on usable actions without a redundant Inspect option.
 
-- Guild browsing now uses one filter button with clear recruitment, focus, and language choices.
+- Guild browsing now uses one filter button and shares its full language list with Guild creation and settings.
 
 - Every skill now presents level unlocks as a clear, responsive progression roadmap with unlocked, next, and locked states.
 
