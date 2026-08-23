@@ -33,7 +33,9 @@ func _run() -> void:
 	_check(popup.find_child("CreateGuildButton", true, false) != null, "create action is present")
 	_check(popup.find_child("GuildSearchInput", true, false) != null, "guild search is present")
 	_check(popup.find_child("GuildDirectoryFilters", true, false) != null, "guild discovery filters are present")
-	_check(popup.find_child("GuildFilterOpen", true, false) != null, "open Guild filter is present")
+	var filter_button := popup.find_child("GuildFilterButton", true, false) as Button
+	_check(filter_button != null, "one Guild filter button is present")
+	_check(popup.find_child("GuildFilterOpen", true, false) == null, "quick filter buttons stay out of the directory")
 	_check(popup.find_child("GuildRow_1", true, false) != null, "debug directory renders guild rows")
 	var discovery := popup.find_child("GuildRowDiscovery_1", true, false) as Label
 	var availability := popup.find_child("GuildRowAvailability_1", true, false) as Label
@@ -64,16 +66,51 @@ func _run() -> void:
 		await process_frame
 	popup._select_guild(1)
 	await process_frame
-	var pvp_filter := popup.find_child("GuildFilterPvp", true, false) as Button
-	if pvp_filter != null:
-		pvp_filter.pressed.emit()
+	if filter_button != null:
+		filter_button.pressed.emit()
+		await process_frame
+	var filter_dialog := popup.find_child("GuildFilterDialog", true, false) as PopupPanel
+	_check(filter_dialog != null and filter_dialog.visible, "Guild filter button opens the filter dialog")
+	var focus_filter := popup.find_child("GuildFocusFilterSelect", true, false) as OptionButton
+	_select_option_with_metadata(focus_filter, "pvp")
+	var apply_filters := popup.find_child("GuildFiltersApplyButton", true, false) as Button
+	if apply_filters != null:
+		apply_filters.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildRow_1", true, false) != null, "PvP filter keeps mixed PvP Guilds")
 	_check(popup.find_child("GuildRow_2", true, false) == null, "PvP filter hides PvE Guilds")
 	_check(popup.find_child("GuildRow_3", true, false) != null, "PvP filter keeps competitive PvP Guilds")
-	var all_filter := popup.find_child("GuildFilterAll", true, false) as Button
-	if all_filter != null:
-		all_filter.pressed.emit()
+	_check(filter_button != null and filter_button.text.contains("1"), "filter button shows the active filter count")
+	if filter_button != null:
+		filter_button.pressed.emit()
+		await process_frame
+	var clear_filters := popup.find_child("GuildFiltersClearButton", true, false) as Button
+	if clear_filters != null:
+		clear_filters.pressed.emit()
+	if apply_filters != null:
+		apply_filters.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildRow_2", true, false) != null, "clearing the dialog restores all Guilds")
+	if filter_button != null:
+		filter_button.pressed.emit()
+		await process_frame
+	var recruitment_filter := popup.find_child("GuildRecruitmentFilterSelect", true, false) as OptionButton
+	var language_filter := popup.find_child("GuildLanguageFilterSelect", true, false) as OptionButton
+	_select_option_with_metadata(recruitment_filter, "open")
+	_select_option_with_metadata(language_filter, "dutch")
+	if apply_filters != null:
+		apply_filters.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildRow_1", true, false) == null, "combined filters hide Guilds outside either choice")
+	_check(popup.find_child("GuildRow_2", true, false) != null, "combined filters keep an open Dutch Guild")
+	_check(filter_button != null and filter_button.text.contains("2"), "filter button counts combined choices")
+	if filter_button != null:
+		filter_button.pressed.emit()
+		await process_frame
+	if clear_filters != null:
+		clear_filters.pressed.emit()
+	if apply_filters != null:
+		apply_filters.pressed.emit()
 		await process_frame
 
 	popup.incoming_invitations = [{"id": 7, "guildName": "Aether Vanguard", "invitedBy": "Nova"}]
@@ -264,6 +301,15 @@ func _run() -> void:
 
 func _on_guild_chat_requested() -> void:
 	guild_chat_open_requested = true
+
+
+func _select_option_with_metadata(select: OptionButton, value: String) -> void:
+	if select == null:
+		return
+	for item_index: int in range(select.item_count):
+		if str(select.get_item_metadata(item_index)) == value:
+			select.select(item_index)
+			return
 
 
 func _check(condition: bool, label: String) -> void:

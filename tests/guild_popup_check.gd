@@ -16,7 +16,7 @@ func _init() -> void:
 	_check_contains(popup_source, '"ui.guild.title"', "guildless interface has a localized title")
 	_check_contains(popup_source, '"ui.guild.tab.browse"', "guildless interface exposes localized guild discovery")
 	_check_contains(popup_source, '"ui.guild.tab.create"', "guildless interface exposes localized guild creation")
-	_check_contains(popup_source, "func _build_directory_filters", "guild directory exposes quick discovery filters")
+	_check_contains(popup_source, "func _build_directory_filter_dialog", "guild directory exposes its filters in one dialog")
 	_check_contains(popup_source, "func _render_guild_list", "guild directory renders a compact guild list")
 	_check_contains(popup_source, "func _render_selected_guild", "selected guild has a public information panel")
 	_check_contains(popup_source, "func _apply_to_selected_guild", "guild discovery submits real membership applications")

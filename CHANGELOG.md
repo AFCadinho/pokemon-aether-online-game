@@ -4,6 +4,8 @@
 
 - The Bag right-click menu now focuses on usable actions without a redundant Inspect option.
 
+- Guild browsing now uses one filter button with clear recruitment, focus, and language choices.
+
 - Every skill now presents level unlocks as a clear, responsive progression roadmap with unlocked, next, and locked states.
 
 - Fishing now has an area dropdown, quick rod filters, and responsive Pokémon cards in its catch catalog.
