@@ -18,10 +18,14 @@ const EMBLEM_EDITOR_POPUP_SIZE := Vector2i(630, 500)
 const DIRECTORY_FILTER_POPUP_SIZE := Vector2i(420, 390)
 const GUILD_LANGUAGE_OPTIONS: Array[String] = [
 	"English",
-	"Dutch",
-	"Dutch / English",
+	"Spanish",
+	"Portuguese",
+	"Italian",
+	"Chinese",
 	"German",
 	"French",
+	"Dutch",
+	"Dutch / English",
 	"Other",
 ]
 
@@ -531,10 +535,14 @@ func _build_directory_filter_dialog() -> PopupPanel:
 		[
 			{"id": "all", "key": "ui.guild.filter.all"},
 			{"id": "english", "key": "ui.guild.option.language.english"},
-			{"id": "dutch", "key": "ui.guild.option.language.dutch"},
-			{"id": "dutch_english", "key": "ui.guild.option.language.dutch_english"},
+			{"id": "spanish", "key": "ui.guild.option.language.spanish"},
+			{"id": "portuguese", "key": "ui.guild.option.language.portuguese"},
+			{"id": "italian", "key": "ui.guild.option.language.italian"},
+			{"id": "chinese", "key": "ui.guild.option.language.chinese"},
 			{"id": "german", "key": "ui.guild.option.language.german"},
 			{"id": "french", "key": "ui.guild.option.language.french"},
+			{"id": "dutch", "key": "ui.guild.option.language.dutch"},
+			{"id": "dutch_english", "key": "ui.guild.option.language.dutch_english"},
 			{"id": "other", "key": "ui.guild.option.language.other"},
 		]
 	)
@@ -2436,9 +2444,13 @@ func _matches_directory_language_filter(language: String) -> bool:
 		return language == "dutch / english"
 	var language_label := str({
 		"english": "english",
-		"dutch": "dutch",
+		"spanish": "spanish",
+		"portuguese": "portuguese",
+		"italian": "italian",
+		"chinese": "chinese",
 		"german": "german",
 		"french": "french",
+		"dutch": "dutch",
 		"other": "other",
 	}.get(directory_language_filter, ""))
 	return not language_label.is_empty() and language.contains(language_label)
@@ -2611,10 +2623,14 @@ func _option_display(value: String) -> String:
 		return _t("ui.guild.not_set")
 	var key := str({
 		"English": "ui.guild.option.language.english",
-		"Dutch": "ui.guild.option.language.dutch",
-		"Dutch / English": "ui.guild.option.language.dutch_english",
+		"Spanish": "ui.guild.option.language.spanish",
+		"Portuguese": "ui.guild.option.language.portuguese",
+		"Italian": "ui.guild.option.language.italian",
+		"Chinese": "ui.guild.option.language.chinese",
 		"German": "ui.guild.option.language.german",
 		"French": "ui.guild.option.language.french",
+		"Dutch": "ui.guild.option.language.dutch",
+		"Dutch / English": "ui.guild.option.language.dutch_english",
 		"Other": "ui.guild.option.language.other",
 		"Social": "ui.guild.option.focus.social",
 		"PvE": "ui.guild.option.focus.pve",
