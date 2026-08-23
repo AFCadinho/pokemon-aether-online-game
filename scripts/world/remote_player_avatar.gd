@@ -10,6 +10,7 @@ const MountService := preload("res://scripts/services/mount_service.gd")
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
+const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
 const SORT_Z_MIN := -4096
@@ -32,10 +33,8 @@ const STAFF_ROLE_CATEGORY := "staff"
 const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
 const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
-const NAMEPLATE_TEXT_PADDING := 6.0
 const ROLE_BADGE_TEXT_HEIGHT := 13.0
 const ROLE_BADGE_DEFAULT_WIDTH := 30.0
-const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 const NAMEPLATE_LAYER_GAP := 2.0
 const BODY_SPRITE_NAME := "BodySprite"
@@ -155,6 +154,8 @@ var tile_move_target_position := Vector2.ZERO
 var tile_move_elapsed := 0.0
 var tile_move_duration := 0.22
 var is_replaying_tile_move := false
+var stair_elevation := HorizontalStairElevationScript.ELEVATION_NONE
+var stair_visual_offset := Vector2.ZERO
 var pending_tile_moves: Array[Dictionary] = []
 var last_direction := Vector2.DOWN
 var look_node: Node2D
@@ -167,6 +168,7 @@ var appearance_sprites: Array[AnimatedSprite2D] = []
 var nameplate: Control
 var nameplate_background: Panel
 var nameplate_label: Label
+var guild_emblem_background: Panel
 var guild_emblem: TextureRect
 var role_badge_panel: Panel
 var role_badge_label: Label
@@ -511,6 +513,12 @@ func _start_next_pending_tile_move() -> void:
 	tile_move_elapsed = 0.0
 	is_replaying_tile_move = true
 	last_direction = move_direction
+	stair_elevation = HorizontalStairElevationScript.elevation_for_stair_exit(
+		GameState.current_map,
+		tile_move_start_position,
+		tile_move_target_position,
+		move_direction
+	)
 	_sync_body_frames_for_move_duration(tile_move_duration)
 	_sync_appearance_animation_speeds(tile_move_duration)
 
@@ -519,10 +527,13 @@ func _update_replayed_tile_move(delta: float) -> void:
 	tile_move_elapsed = minf(tile_move_elapsed + delta, tile_move_duration)
 	var progress := clampf(tile_move_elapsed / tile_move_duration, 0.0, 1.0)
 	global_position = _snap_world_position(tile_move_start_position.lerp(tile_move_target_position, progress))
+	stair_visual_offset = HorizontalStairElevationScript.visual_offset(progress, stair_elevation)
 	if tile_move_elapsed >= tile_move_duration:
 		global_position = tile_move_target_position
 		target_position = tile_move_target_position
 		is_replaying_tile_move = false
+		stair_elevation = HorizontalStairElevationScript.ELEVATION_NONE
+		stair_visual_offset = Vector2.ZERO
 		_sync_body_frames_for_move_duration(TILE_MOVE_DURATION)
 		_reset_position_samples(global_position)
 		if not pending_tile_moves.is_empty():
@@ -784,6 +795,7 @@ func _create_nameplate_from_player_scene(player_instance: Node) -> void:
 		return
 
 	nameplate_label = nameplate.get_node_or_null("NameLabel") as Label
+	guild_emblem_background = nameplate.get_node_or_null("GuildEmblemBackground") as Panel
 	guild_emblem = nameplate.get_node_or_null("GuildEmblem") as TextureRect
 	nameplate_background = nameplate.get_node_or_null("NameplateBackground") as Panel
 	role_badge_panel = nameplate.get_node_or_null("RoleBadgePanel") as Panel
@@ -849,6 +861,8 @@ func _apply_guild_emblem(emblem: Dictionary) -> void:
 		return
 	guild_emblem.texture = GuildEmblemTexture.create_nameplate_texture(emblem)
 	guild_emblem.visible = guild_emblem.texture != null
+	if guild_emblem_background != null:
+		guild_emblem_background.visible = guild_emblem.visible
 
 
 func _update_role_badge() -> void:
@@ -879,15 +893,13 @@ func _sync_nameplate_layout() -> void:
 
 	var has_role_badge: bool = role_badge_panel != null and role_badge_label != null and role_badge_label.text.strip_edges() != ""
 	var has_guild_emblem: bool = guild_emblem != null and guild_emblem.texture != null
-	var name_width: float = clampf(
-		_get_label_text_width(nameplate_label) + NAMEPLATE_TEXT_PADDING,
-		NAMEPLATE_MIN_NAME_WIDTH,
-		NAMEPLATE_MAX_NAME_WIDTH
-	)
-	var card_layout := NameplateLayout.calculate_name_card(name_width, has_guild_emblem)
+	var name_size := _get_label_text_size(nameplate_label)
+	name_size.x = minf(name_size.x, NAMEPLATE_MAX_NAME_WIDTH)
+	var card_layout := NameplateLayout.calculate_name_card(name_size, has_guild_emblem)
 	var label_rect: Rect2 = card_layout.get("labelRect", Rect2())
 	var background_rect: Rect2 = card_layout.get("backgroundRect", Rect2())
 	var emblem_rect: Rect2 = card_layout.get("emblemRect", Rect2())
+	var emblem_background_rect: Rect2 = card_layout.get("emblemBackgroundRect", Rect2())
 
 	nameplate_label.offset_left = label_rect.position.x
 	nameplate_label.offset_right = label_rect.end.x
@@ -900,12 +912,17 @@ func _sync_nameplate_layout() -> void:
 		nameplate_background.offset_top = background_rect.position.y
 		nameplate_background.offset_bottom = background_rect.end.y
 	if has_guild_emblem:
+		if guild_emblem_background != null:
+			guild_emblem_background.offset_left = emblem_background_rect.position.x
+			guild_emblem_background.offset_right = emblem_background_rect.end.x
+			guild_emblem_background.offset_top = emblem_background_rect.position.y
+			guild_emblem_background.offset_bottom = emblem_background_rect.end.y
 		guild_emblem.offset_left = emblem_rect.position.x
 		guild_emblem.offset_right = emblem_rect.end.x
 		guild_emblem.offset_top = emblem_rect.position.y
 		guild_emblem.offset_bottom = emblem_rect.end.y
 
-	var next_layer_bottom := nameplate_label.offset_top - NAMEPLATE_LAYER_GAP
+	var next_layer_bottom := background_rect.position.y - NAMEPLATE_LAYER_GAP
 	if has_role_badge:
 		var badge_width: float = _get_role_badge_width(role_badge_label.text)
 		var start_x := NAMEPLATE_CENTER_X - (badge_width * 0.5)
@@ -919,16 +936,26 @@ func _sync_nameplate_layout() -> void:
 		role_badge_label.offset_bottom = ROLE_BADGE_TEXT_HEIGHT
 
 
-func _get_label_text_width(label: Label) -> float:
+func _get_label_text_size(label: Label) -> Vector2:
 	var text: String = label.text.strip_edges()
 	if text == "":
-		return 0.0
+		return Vector2.ZERO
 
 	var font: Font = label.get_theme_font("font")
 	var font_size: int = label.get_theme_font_size("font_size")
+	if label.label_settings != null:
+		if label.label_settings.font != null:
+			font = label.label_settings.font
+		font_size = label.label_settings.font_size
 	if font == null:
-		return float(text.length() * max(font_size, 10) * 0.6)
-	return font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
+		return Vector2(
+			float(text.length() * max(font_size, 10) * 0.6),
+			float(max(font_size, 10))
+		)
+	return Vector2(
+		font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x,
+		font.get_height(font_size)
+	)
 
 
 func _get_role_badge_width(badge_text: String) -> float:
@@ -1361,7 +1388,7 @@ func _apply_activity_layer_offset(sprite: AnimatedSprite2D, category: String) ->
 func _apply_activity_visual_offset() -> void:
 	if look_node == null:
 		return
-	look_node.position = base_look_position + _get_activity_visual_offset()
+	look_node.position = base_look_position + _get_activity_visual_offset() + stair_visual_offset
 
 
 func _get_activity_visual_offset() -> Vector2:
