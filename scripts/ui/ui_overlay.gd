@@ -18596,10 +18596,10 @@ func _market_sell_items(catalog_items: Array[Dictionary], inventory_items: Array
 			continue
 		var inventory_item: Dictionary = inventory_value
 		var item_id := str(inventory_item.get("itemId", inventory_item.get("id", ""))).strip_edges()
-		var owned_quantity := max(int(inventory_item.get("quantity", 0)), 0)
+		var owned_quantity: int = max(int(inventory_item.get("quantity", 0)), 0)
 		var catalog_item: Dictionary = catalog_by_id.get(item_id, {})
 		var tradable := bool(inventory_item.get("tradable", not catalog_item.is_empty()))
-		var sell_price := max(int(inventory_item.get(
+		var sell_price: int = max(int(inventory_item.get(
 			"sellPrice",
 			catalog_item.get("sellPrice", 0)
 		)), 0)
