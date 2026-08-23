@@ -155,9 +155,15 @@ func _run() -> void:
 	_check(create_button != null and not create_button.visible, "Guild members do not see the create action")
 	_check(popup.find_child("GuildMemberDashboard", true, false) != null, "member dashboard renders")
 	_check(popup.find_child("GuildOverviewTab", true, false) != null, "guild overview tab renders")
+	_check(popup.find_child("GuildBankTab", true, false) != null, "guild bank tab renders")
 	_check(popup.find_child("GuildMembersTab", true, false) != null, "guild members tab renders")
 	_check(popup.find_child("GuildManagementTab", true, false) != null, "guild management tab renders for leaders")
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "guild dashboard opens on its overview")
+	_check(popup.find_child("GuildTravelBar", true, false) != null, "guild travel sits above the dashboard content")
+	var lobby_button := popup.find_child("GuildLobbyTeleportButton", true, false) as Button
+	_check(lobby_button != null and not lobby_button.disabled, "Aether Clash Lobby travel is available")
+	var base_button := popup.find_child("GuildBaseTeleportButton", true, false) as Button
+	_check(base_button != null and base_button.disabled, "future Guild Base travel is visible but inactive")
 	var guild_chat_button := popup.find_child("GuildChatShortcutButton", true, false) as Button
 	_check(guild_chat_button != null, "guild overview renders a Guild chat shortcut")
 	if guild_chat_button != null:
@@ -174,8 +180,30 @@ func _run() -> void:
 	if overview_tab != null:
 		overview_tab.pressed.emit()
 		await process_frame
-	_check(popup.find_child("GuildLobbyTeleportButton", true, false) != null, "guild overview renders free Lobby travel")
+	_check(popup.find_child("GuildLobbyTeleportButton", true, false) != null, "guild overview keeps Lobby travel available above its tabs")
 	_check(popup.find_child("GuildSettingsDescription", true, false) == null, "settings stay out of the guild overview")
+	var bank_tab := popup.find_child("GuildBankTab", true, false) as Button
+	if bank_tab != null:
+		bank_tab.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildBankSection", true, false) != null, "Guild Bank opens in its own workspace")
+	_check(popup.find_child("GuildBankFundsCard", true, false) != null, "Guild Bank shows shared funds")
+	_check(popup.find_child("GuildBankPokemonCard", true, false) != null, "Guild Bank shows Pokémon storage")
+	_check(popup.find_child("GuildBankItemsCard", true, false) != null, "Guild Bank shows item storage")
+	var funds_action := popup.find_child("GuildBankFundsAction", true, false) as Button
+	var pokemon_action := popup.find_child("GuildBankPokemonAction", true, false) as Button
+	var items_action := popup.find_child("GuildBankItemsAction", true, false) as Button
+	_check(
+		funds_action != null and funds_action.disabled
+		and pokemon_action != null and pokemon_action.disabled
+		and items_action != null and items_action.disabled,
+		"Guild Bank storage actions remain safely inactive during the preview"
+	)
+	_check(popup.find_child("GuildTravelBar", true, false) != null, "guild travel remains available while viewing the bank")
+	overview_tab = popup.find_child("GuildOverviewTab", true, false) as Button
+	if overview_tab != null:
+		overview_tab.pressed.emit()
+		await process_frame
 	var members_tab := popup.find_child("GuildMembersTab", true, false) as Button
 	if members_tab != null:
 		members_tab.pressed.emit()

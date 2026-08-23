@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- My Guild now has an always-visible travel bar for the Aether Clash Lobby and future Guild Base, plus a Guild Bank preview for shared funds, Pokémon and items.
+
 - Guild leaders can edit their emblem by clicking it directly, without a duplicate edit button.
 
 - Guilds now appears before Aether Exchange in the main interface for easier navigation.
