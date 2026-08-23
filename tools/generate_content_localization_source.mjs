@@ -9,10 +9,7 @@ const backendSpeciesDir = path.resolve(
 	process.argv[2] ?? path.join(projectRoot, "../pokemon-aether-backend/pokemon-data/data/species"),
 );
 const outputPath = path.join(projectRoot, "localization/content/generated/en.json");
-const backendItemsDir = path.join(
-	projectRoot,
-	"../pokemon-aether-backend/pokemon-data/data/items",
-);
+const backendItemsDir = path.resolve(backendSpeciesDir, "..", "items");
 const itemOutputPath = path.join(projectRoot, "localization/items/generated/en.json");
 
 function readJson(filePath) {

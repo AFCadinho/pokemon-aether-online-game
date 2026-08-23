@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/interactables/daily_smashable_rock.gd" id="1_daily_rock"]
+
+[node name="DailySmashableRock" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_daily_rock")
+required_field_move = "rock-smash"
+display_name = "Training Rock"
+unavailable_message = "This training rock can be smashed with Rock Smash."
+interaction_shape_size = Vector2(96, 96)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
