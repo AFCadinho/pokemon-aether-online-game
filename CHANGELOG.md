@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Guilds now appears before Aether Exchange in the main interface for easier navigation.
+
 - Guild management now shows membership applications in a clear inbox card with a pending count and visible empty state.
 
 - The Bag right-click menu now focuses on usable actions without a redundant Inspect option.
