@@ -142,6 +142,7 @@ func _ready() -> void:
 	_apply_premium_styles()
 	LanguageSelectorStyle.configure(language_options_button)
 	LanguageSelectorStyle.configure(terminology_options_button)
+	_configure_graphics_dropdowns()
 	battle_animations_check_box.toggled.connect(_on_battle_animations_toggled)
 	weather_effects_check_box.toggled.connect(_on_weather_effects_toggled)
 	terrain_effects_check_box.toggled.connect(_on_terrain_effects_toggled)
@@ -173,6 +174,15 @@ func _ready() -> void:
 	_apply_settings_to_controls()
 	_refresh_localized_content()
 	visible = false
+
+
+func _configure_graphics_dropdowns() -> void:
+	for dropdown: OptionButton in [
+		sprite_style_options_button,
+		resolution_options_button,
+		world_pixel_scale_options_button,
+	]:
+		LanguageSelectorStyle.configure(dropdown)
 
 
 func open(context: String = "game") -> void:

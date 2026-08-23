@@ -1,0 +1,9 @@
+{
+  "name": "pokeaether-forum-news-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "deploy": "npx --yes wrangler@4.125.0 deploy"
+  }
+}

@@ -2,9 +2,13 @@ extends Node
 
 class_name DialogueMetadataServiceNode
 
+class PendingRequest extends RefCounted:
+	signal completed(result: Dictionary)
+
 const DIALOGUE_METADATA_ENDPOINT := "/dialogues/%s"
 
 var dialogue_metadata_cache: Dictionary = {}
+var pending_dialogue_metadata_requests: Dictionary = {}
 
 
 func get_dialogue(dialogue_id: String) -> Dictionary:
@@ -20,20 +24,31 @@ func get_dialogue(dialogue_id: String) -> Dictionary:
 	var cache_key := _get_cache_key(locale, normalized_dialogue_id)
 	if dialogue_metadata_cache.has(cache_key):
 		return dialogue_metadata_cache[cache_key]
+	if pending_dialogue_metadata_requests.has(cache_key):
+		var pending := pending_dialogue_metadata_requests[cache_key] as PendingRequest
+		var pending_result: Variant = await pending.completed
+		return pending_result as Dictionary if pending_result is Dictionary else {
+			"success": false,
+			"error": "Dialogue metadata request completed without a result",
+			"metadata": {},
+		}
 
+	var pending := PendingRequest.new()
+	pending_dialogue_metadata_requests[cache_key] = pending
 	var response := await _fetch_dialogue_metadata(normalized_dialogue_id, locale)
-	if not response.get("success", false):
-		return response
-
-	var normalized_metadata := _normalize_dialogue_metadata(
-		normalized_dialogue_id,
-		response.get("metadata", {})
-	)
-	var result := {
-		"success": true,
-		"metadata": normalized_metadata,
-	}
-	dialogue_metadata_cache[cache_key] = result
+	var result: Dictionary = response
+	if response.get("success", false):
+		var normalized_metadata := _normalize_dialogue_metadata(
+			normalized_dialogue_id,
+			response.get("metadata", {})
+		)
+		result = {
+			"success": true,
+			"metadata": normalized_metadata,
+		}
+		dialogue_metadata_cache[cache_key] = result
+	pending_dialogue_metadata_requests.erase(cache_key)
+	pending.completed.emit(result)
 	return result
 
 
