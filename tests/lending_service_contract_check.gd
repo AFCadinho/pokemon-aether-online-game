@@ -60,8 +60,8 @@ func _init() -> void:
 	workspace.party_candidates = [{"pokemonId": 1, "heldItemId": "leftovers", "name": "Pikachu"}]
 	workspace.box_candidates = [{"pokemonId": 2, "heldItemId": "choice-band", "name": "Machamp"}]
 	_check(workspace._held_item_candidates().size() == 2, "item-only offers include eligible items held by Party and Box Pokemon")
-	_check(source.contains("duration_seconds not in [3600, 10800, 21600, 43200, 86400]"), "loan service rejects long alpha duration windows")
-	_check(workspace_source.contains("[3600, 10800, 21600, 43200, 86400]") and not workspace_source.contains("capabilities.get(\"durationsSeconds\", [3600, 86400, 259200, 604800])"), "loan duration selector uses short alpha windows")
+	_check(source.contains("duration_seconds not in [3600, 10800, 21600, 43200, 86400, 172800, 259200]"), "loan service accepts one-to-72-hour windows")
+	_check(workspace_source.contains("[3600, 10800, 21600, 43200, 86400, 172800, 259200]") and workspace_source.contains("172800: return _t(\"ui.lending.duration.forty_eight_hours\")") and workspace_source.contains("259200: return _t(\"ui.lending.duration.seventy_two_hours\")"), "loan duration selector includes 48 and 72 hours")
 	_check(workspace_source.contains("select.get_popup()") and workspace_source.contains("_dropdown_popup_style"), "loan dropdown popups use the Aether theme")
 	_check(workspace_source.contains("AetherConfirmationDialogScene.instantiate()"), "loan confirmations use the Aether dialog")
 	var option := OptionButton.new()

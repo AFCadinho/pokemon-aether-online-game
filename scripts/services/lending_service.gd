@@ -79,7 +79,7 @@ func create_loan(target_username: String, pokemon_ids: Array, items: Array, dura
 		return _validation_error("Choose between one and six Pokemon or items.")
 	if not normalized_pokemon.is_empty() and not normalized_items.is_empty():
 		return _validation_error("A loan offer must contain only Pokemon or only items.")
-	if duration_seconds not in [3600, 10800, 21600, 43200, 86400]:
+	if duration_seconds not in [3600, 10800, 21600, 43200, 86400, 172800, 259200]:
 		return _validation_error("Choose a supported loan duration.")
 	if fee_amount < 0:
 		return _validation_error("The fee cannot be negative.")
@@ -131,7 +131,7 @@ func normalize_capabilities(value: Variant) -> Dictionary:
 	return {
 		"enabled": bool(source.get("enabled", false)),
 		"requiresSameMap": bool(source.get("requiresSameMap", true)),
-		"durationsSeconds": _array(source.get("durationsSeconds", [3600, 10800, 21600, 43200, 86400])),
+		"durationsSeconds": _array(source.get("durationsSeconds", [3600, 10800, 21600, 43200, 86400, 172800, 259200])),
 		"maxBorrowedPokemon": maxi(int(source.get("maxBorrowedPokemon", 6)), 0),
 		"maxBorrowedItems": maxi(int(source.get("maxBorrowedItems", 6)), 0),
 		"maxLentPokemon": maxi(int(source.get("maxLentPokemon", 30)), 0),
