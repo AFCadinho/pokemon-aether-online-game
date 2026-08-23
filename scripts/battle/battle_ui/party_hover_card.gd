@@ -209,6 +209,9 @@ func _set_pokemon_data(pokemon_data: Dictionary) -> void:
 
 
 func _get_display_species(pokemon_data: Dictionary) -> String:
+	var cosmetic_species := str(pokemon_data.get("cosmeticDisplaySpecies", "")).strip_edges()
+	if cosmetic_species != "":
+		return _localized_content_name("species", cosmetic_species, cosmetic_species)
 	var species := str(pokemon_data.get("displaySpecies", pokemon_data.get("species", "")))
 	if species != "":
 		var species_id := str(pokemon_data.get(
