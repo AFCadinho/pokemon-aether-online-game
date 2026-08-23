@@ -131,6 +131,13 @@ static func preview(pokemon: Pokemon, gameplay: Dictionary, requested_quantity: 
 
 
 static func _preview_ability_change(pokemon: Pokemon, effect: Dictionary) -> Dictionary:
+	if pokemon.special_lineage == "battle-bond":
+		return _ability_no_effect_preview(
+			pokemon,
+			"ui.bag.preview.fixed_special_ability",
+			"ui.bag.preview.fixed_special_ability_tooltip",
+			{"ability": _ability_name(pokemon.ability)}
+		)
 	var mode := str(effect.get("mode", "")).strip_edges().to_lower()
 	var current_ability := str(pokemon.ability).strip_edges()
 	var current_name := _ability_name(current_ability)

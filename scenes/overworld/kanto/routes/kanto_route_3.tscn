@@ -13,8 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="10_pprsw"]
 [ext_resource type="SpriteFrames" uid="uid://dlaxxerx14l3u" path="res://assets/npcs/classes/firebreather_frames.tres" id="11_firebreather"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="12_pokecenter_hint"]
-[ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="13_mt_moon_lock"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="15_m5ude"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="16_overworld_item"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nuuyr"]
 texture = ExtResource("2_jmvwp")
@@ -252,6 +252,71 @@ size = Vector2(32, 56)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mt_moon_exit"]
 size = Vector2(64, 32)
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m5ude"]
+texture = ExtResource("4_2mnmk")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_qfrt0"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_m5ude")
+
 [node name="KantoRoute3" type="Node2D" unique_id=685382640]
 script = ExtResource("5_metadata")
 map_id = "kanto_route_3"
@@ -346,17 +411,20 @@ npc_sprite_frames = ExtResource("11_firebreather")
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=120000017]
 
+[node name="Awakening" parent="Entities/Interactables" unique_id=2131154250 instance=ExtResource("16_overworld_item")]
+position = Vector2(1744, 400)
+pickup_id = "kanto_route_3_awakening"
+item_id = "awakening"
+
+[node name="OranBerry" parent="Entities/Interactables" unique_id=1612219391 instance=ExtResource("16_overworld_item")]
+position = Vector2(1520, 1136)
+pickup_id = "kanto_route_3_oran_berry"
+item_id = "oran-berry"
+
 [node name="MtMoonSign" parent="Entities/Interactables" unique_id=764906515 instance=ExtResource("10_pprsw")]
 position = Vector2(2512, 976)
 sign_id = "kanto_route_3_mt_moon_sign"
 sign_type = "road"
-
-[node name="MtMoonCaveLock" parent="Entities/Interactables" unique_id=3248758 instance=ExtResource("13_mt_moon_lock")]
-position = Vector2(2640, 656)
-fallback_locked_dialogue_lines = Array[String](["Mt. Moon is closed for now.", "The cave will become accessible in a future update."])
-display_name = "Mt. Moon"
-blocked_tile_offset = Vector2i(-1, 0)
-blocked_tile_footprint = Vector2i(3, 1)
 
 [node name="Spawns" type="Node2D" parent="." unique_id=120000001]
 
@@ -406,15 +474,14 @@ tile_footprint = Vector2i(1, 2)
 
 [node name="ToMtMoon" type="Area2D" parent="Exits" unique_id=1945368174]
 position = Vector2(2640, 672)
-monitoring = false
-monitorable = false
 script = ExtResource("6_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn"
+target_spawn_name = "FromRoute3"
 transition_id = "kanto_route_3__to_mt_moon"
-metadata/pao_pending_target_map_id = "kanto_mt_moon"
+transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToMtMoon" unique_id=1866146210]
 shape = SubResource("RectangleShape2D_mt_moon_exit")
-disabled = true
 
 [node name="RouteTransitionHint" parent="Exits/ToMtMoon" unique_id=733482622 instance=ExtResource("7_route_hint")]
 z_as_relative = false
@@ -431,5 +498,21 @@ position = Vector2(2960, 1040)
 [node name="NightLight3" parent="NightLights" unique_id=1563000433 instance=ExtResource("15_m5ude")]
 position = Vector2(2864, 1040)
 
+[node name="Stairs" type="Node2D" parent="." unique_id=1457957262]
+visible = false
+
+[node name="StairUpLeft" type="TileMapLayer" parent="Stairs" unique_id=1407288689]
+visible = false
+z_index = 100
+tile_map_data = PackedByteArray("AAATACEAAAABAAEAAAApACcAAAABAAEAAAApACgAAAABAAEAAAApACkAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_qfrt0")
+
+[node name="StairUpRight" type="TileMapLayer" parent="Stairs" unique_id=1344035769]
+visible = false
+z_index = 100
+tile_map_data = PackedByteArray("AABEAB8AAAABAAEAAABEACAAAAABAAEAAABEACEAAAABAAEAAAArABUAAAABAAEAAAArABYAAAABAAEAAAArABcAAAABAAEAAAAbABUAAAABAAEAAAAbABYAAAABAAEAAAAbABcAAAABAAEAAAAVAAwAAAABAAEAAAAVAA0AAAABAAEAAAAVAA4AAAABAAEAAAAPAB8AAAABAAEAAAA=")
+tile_set = SubResource("TileSet_qfrt0")
+
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToMtMoon" to="Exits/ToMtMoon" method="_on_body_entered"]
