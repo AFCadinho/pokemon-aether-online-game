@@ -92,6 +92,9 @@ func get_animation_preload_keys_for_event(event_data: Dictionary) -> Dictionary:
 			var cant_effect_key: String = _get_cant_status_effect_animation_key(event_data)
 			if cant_effect_key != "":
 				effect_keys.append(cant_effect_key)
+		"formeChange":
+			if _is_battle_bond_visual_transformation(event_data):
+				effect_keys.append("mega_evolution")
 		"mega", "primal":
 			effect_keys.append("mega_evolution")
 		"zPower":
@@ -226,6 +229,14 @@ func build(event_data: Dictionary) -> Dictionary:
 			presentation["log_message"] = event_text_formatter.format_transform_event(actor, species)
 			presentation["battle_message"] = str(presentation["log_message"])
 			presentation["add_blank_after"] = str(presentation["log_message"]) != ""
+
+		"formeChange":
+			if _is_battle_bond_visual_transformation(event_data):
+				recent_field_effect_source = ""
+				recent_ability_event = false
+				recent_move_event = false
+				presentation["effect_animation_key"] = "mega_evolution"
+				presentation["effect_animation_target_ident"] = str(event_data.get("target", ""))
 
 		"mega":
 			recent_field_effect_source = ""
@@ -573,6 +584,15 @@ func _is_tera_shift_event(event_data: Dictionary) -> bool:
 	var normalized_ability := ability.to_lower().replace(" ", "").replace("-", "").replace("_", "")
 	var normalized_effect := effect.to_lower().replace(" ", "").replace("-", "").replace("_", "")
 	return normalized_ability == "terashift" or normalized_effect.ends_with("terashift")
+
+
+func _is_battle_bond_visual_transformation(event_data: Dictionary) -> bool:
+	if not bool(event_data.get("cosmeticOnly", false)):
+		return false
+	var species := _normalize_animation_key(str(event_data.get("species", "")))
+	var source := str(event_data.get("source", "")).to_lower()
+	source = source.replace(" ", "").replace("-", "").replace("_", "").replace(":", "")
+	return species == "greninja_ash" and source == "abilitybattlebond"
 
 
 func _new_presentation() -> Dictionary:

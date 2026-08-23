@@ -2,6 +2,7 @@ extends Control
 
 @export var default_is_double_battle := false
 
+const BattleSpriteRenderScale := preload("res://scripts/battle/battle_ui/battle_sprite_render_scale.gd")
 const IDLE_ANIMATION := "idle"
 const DEFAULT_SHEET_FRAME_SIZE := Vector2i(48, 57)
 const MIN_SHEET_FRAME_SIZE := Vector2i(16, 16)
@@ -1298,18 +1299,7 @@ func _get_metadata_position_offset(metadata: Dictionary) -> Vector2:
 	return Vector2.ZERO
 
 func _get_metadata_render_scale(metadata: Dictionary, side: String) -> float:
-	if metadata.has("render_scale"):
-		return max(float(metadata.get("render_scale", 1.0)), 1.0)
-	if metadata.has("scale"):
-		return max(float(metadata.get("scale", 1.0)), 1.0)
-
-	var frame_width := float(metadata.get("frame_width", 0.0))
-	var frame_height := float(metadata.get("frame_height", 0.0))
-	var is_front_sprite := side == "front" or side == "shiny_front"
-	if is_front_sprite and max(frame_width, frame_height) >= 160.0:
-		return 2.0
-
-	return 1.0
+	return BattleSpriteRenderScale.resolve(metadata, side)
 
 func _load_sprite_frames_from_sheet(sheet_path: String) -> SpriteFrames:
 	if sheet_path.begins_with("res://") and not ResourceLoader.exists(sheet_path):

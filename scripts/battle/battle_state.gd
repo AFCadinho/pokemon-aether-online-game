@@ -16,6 +16,7 @@ var field: Dictionary = {}
 var hp_event_helper := BattleHpEventHelper.new()
 var transformed_species_by_ident: Dictionary = {}
 var mega_species_by_ident: Dictionary = {}
+var battle_bond_cosmetic_species_by_ident: Dictionary = {}
 var hp_snapshot_by_ident: Dictionary = {}
 var skip_previous_hp_memory_once := false
 var timer_state: Dictionary = {}
@@ -59,6 +60,7 @@ func load_from_api_response(
 	if battle_changed:
 		transformed_species_by_ident.clear()
 		mega_species_by_ident.clear()
+		battle_bond_cosmetic_species_by_ident.clear()
 		hp_snapshot_by_ident.clear()
 		field.clear()
 		_reset_calcdex_projection_revision()
@@ -116,9 +118,11 @@ func load_from_api_response(
 	if apply_event_conditions:
 		_apply_mega_species_to_requests()
 		_apply_transformed_species_to_requests()
+		_apply_battle_bond_cosmetic_species_to_requests()
 		_apply_event_conditions_to_requests(response_events)
 	else:
 		_apply_mega_species_to_requests()
+		_apply_battle_bond_cosmetic_species_to_requests()
 		_remove_deferred_display_fields_from_requests(response_events, deferred_form_species_by_player)
 		_rewind_deferred_hp_events_from_requests(response_events)
 	_remember_hp_fields_from_requests(requests)
@@ -220,6 +224,7 @@ func reset_side_relative_presentation_memory() -> void:
 	hp_snapshot_by_ident.clear()
 	transformed_species_by_ident.clear()
 	mega_species_by_ident.clear()
+	battle_bond_cosmetic_species_by_ident.clear()
 	skip_previous_hp_memory_once = true
 
 func _preserve_missing_hp_fields_in_requests(next_requests: Dictionary) -> void:
@@ -579,6 +584,7 @@ func _apply_event_conditions_to_requests(events_value: Variant, allow_historical
 		var event: Dictionary = event_value as Dictionary
 		var event_type := str(event.get("type", ""))
 		if event_type == "switch" or event_type == "drag":
+			_clear_battle_bond_cosmetic_for_ident(str(event.get("fromIdent", "")))
 			_apply_switch_event_to_requests(event, allow_historical_switch_to_fainted)
 			_clear_transform_event_from_requests(event)
 			continue
@@ -605,6 +611,7 @@ func _apply_event_conditions_to_requests(events_value: Variant, allow_historical
 
 		if event_type == "faint":
 			_clear_transformed_species_for_ident(str(event.get("target", "")))
+			_clear_battle_bond_cosmetic_for_ident(str(event.get("target", "")))
 
 		if event_type == "status":
 			_apply_status_event_to_requests(event)
@@ -1004,6 +1011,18 @@ func _apply_forme_change_event_to_requests(event: Dictionary) -> void:
 	if target_ident == "" or species == "":
 		return
 
+	if bool(event.get("cosmeticOnly", event.get("cosmetic_only", false))):
+		var cosmetic_key := _get_transform_key_from_ident(target_ident)
+		if cosmetic_key != "":
+			battle_bond_cosmetic_species_by_ident[cosmetic_key] = species
+		var cosmetic_pokemon := _get_side_pokemon_by_ident(target_ident)
+		if cosmetic_pokemon.is_empty():
+			cosmetic_pokemon = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
+		if not cosmetic_pokemon.is_empty():
+			cosmetic_pokemon["cosmeticDisplaySpecies"] = species
+			cosmetic_pokemon["battleBondCosmeticActive"] = true
+		return
+
 	var pokemon_data: Dictionary = _get_side_pokemon_by_ident(target_ident)
 	if pokemon_data.is_empty():
 		pokemon_data = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
@@ -1339,6 +1358,27 @@ func _apply_mega_species_to_requests() -> void:
 
 		pokemon_data["displaySpecies"] = species
 		pokemon_data["megaSpecies"] = species
+
+func _apply_battle_bond_cosmetic_species_to_requests() -> void:
+	for cosmetic_key in battle_bond_cosmetic_species_by_ident.keys():
+		var species := str(battle_bond_cosmetic_species_by_ident.get(cosmetic_key, "")).strip_edges()
+		if species == "":
+			continue
+		var pokemon_data := _get_side_pokemon_by_transform_key(str(cosmetic_key))
+		if pokemon_data.is_empty():
+			continue
+		pokemon_data["cosmeticDisplaySpecies"] = species
+		pokemon_data["battleBondCosmeticActive"] = true
+
+func _clear_battle_bond_cosmetic_for_ident(ident: String) -> void:
+	var cosmetic_key := _get_transform_key_from_ident(ident)
+	if cosmetic_key == "":
+		return
+	var pokemon_data := _get_side_pokemon_by_transform_key(cosmetic_key)
+	if not pokemon_data.is_empty():
+		pokemon_data.erase("cosmeticDisplaySpecies")
+		pokemon_data.erase("battleBondCosmeticActive")
+	battle_bond_cosmetic_species_by_ident.erase(cosmetic_key)
 
 func _get_side_pokemon_by_ident(target_ident: String) -> Dictionary:
 	var player_id := _get_player_id_from_ident(target_ident)

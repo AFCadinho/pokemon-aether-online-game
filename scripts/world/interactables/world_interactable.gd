@@ -164,7 +164,9 @@ func _is_player_facing_interactable(player: Node2D) -> bool:
 	if player.has_method("get_feet_position"):
 		player_feet_position = player.call("get_feet_position") as Vector2
 
-	var facing_tile := _to_tile(_snap_world_position(player_feet_position) + player_direction * TILE_SIZE)
+	var player_tile := _to_tile(player_feet_position)
+	var cardinal_direction := Vector2i(roundi(player_direction.x), roundi(player_direction.y))
+	var facing_tile := player_tile + cardinal_direction
 	return _is_tile_in_blocked_footprint(facing_tile)
 
 
@@ -185,13 +187,6 @@ func _is_tile_in_blocked_footprint(tile: Vector2i) -> bool:
 
 func _blocked_tile_offset_pixels() -> Vector2:
 	return Vector2(float(blocked_tile_offset.x), float(blocked_tile_offset.y)) * TILE_SIZE
-
-
-func _snap_world_position(world_position: Vector2) -> Vector2:
-	return Vector2(
-		round(world_position.x / TILE_SIZE) * TILE_SIZE,
-		round(world_position.y / TILE_SIZE) * TILE_SIZE
-	)
 
 
 func _ensure_interaction_area() -> void:
