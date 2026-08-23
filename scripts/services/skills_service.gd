@@ -19,6 +19,8 @@ func _ready() -> void:
 	set_process(true)
 	if not ThievingService.state_changed.is_connected(_on_thieving_state_changed):
 		ThievingService.state_changed.connect(_on_thieving_state_changed)
+	if not RockSmashService.state_changed.is_connected(_on_rock_smash_state_changed):
+		RockSmashService.state_changed.connect(_on_rock_smash_state_changed)
 
 
 func _process(_delta: float) -> void:
@@ -90,6 +92,8 @@ func get_skill(skill_id: String) -> Dictionary:
 func _on_thieving_state_changed(thieving_state: Dictionary) -> void:
 	if not state_loaded or thieving_state.is_empty():
 		return
+
+
 	for index in range(skills.size()):
 		var skill := _dictionary_from_value(skills[index])
 		if str(skill.get("id", "")) != "thieving":
@@ -137,6 +141,61 @@ func _on_thieving_state_changed(thieving_state: Dictionary) -> void:
 				target["availableToday"] = unlocked and not attempted_today and not jailed
 				targets[target_index] = target
 			skill["targets"] = targets
+		skills[index] = skill
+		state_changed.emit(skills.duplicate(true))
+		return
+
+
+func _on_rock_smash_state_changed(rock_smash_state: Dictionary) -> void:
+	if not state_loaded or rock_smash_state.is_empty():
+		return
+	for index in range(skills.size()):
+		var skill := _dictionary_from_value(skills[index])
+		if str(skill.get("id", "")) != "rock_smash":
+			continue
+		var level := maxi(int(rock_smash_state.get("level", 1)), 1)
+		var skill_unlocked := bool(rock_smash_state.get("unlocked", false))
+		var experience_into_level := maxi(int(rock_smash_state.get("experienceIntoLevel", 0)), 0)
+		var experience_for_next_level := maxi(int(rock_smash_state.get("experienceForNextLevel", 0)), 0)
+		skill["unlocked"] = skill_unlocked
+		skill["level"] = level
+		skill["totalExperience"] = maxi(int(rock_smash_state.get("totalExperience", 0)), 0)
+		skill["experienceIntoLevel"] = experience_into_level
+		skill["experienceForNextLevel"] = experience_for_next_level
+		skill["progressPercent"] = 100.0 if level >= 100 or experience_for_next_level <= 0 else clampf(
+			float(experience_into_level) / float(experience_for_next_level) * 100.0,
+			0.0,
+			100.0
+		)
+		var stats := _dictionary_from_value(skill.get("stats", {}))
+		stats["fossilChancePercent"] = maxf(float(rock_smash_state.get("fossilChancePercent", 0.0)), 0.0)
+		var smashed_value: Variant = rock_smash_state.get("smashedRockIds", [])
+		var smashed_ids: Array = smashed_value as Array if smashed_value is Array else []
+		var available_rocks := 0
+		var rocks_value: Variant = skill.get("rocks", [])
+		if rocks_value is Array:
+			var rocks: Array = rocks_value as Array
+			for rock_index in range(rocks.size()):
+				var rock := _dictionary_from_value(rocks[rock_index])
+				var smashed_today := str(rock.get("rockId", "")) in smashed_ids
+				var unlocked := skill_unlocked and level >= int(rock.get("requiredLevel", 1))
+				rock["unlocked"] = unlocked
+				rock["smashedToday"] = smashed_today
+				rock["availableToday"] = unlocked and not smashed_today
+				if bool(rock["availableToday"]):
+					available_rocks += 1
+				rocks[rock_index] = rock
+			skill["rocks"] = rocks
+		stats["availableRocks"] = available_rocks
+		skill["stats"] = stats
+		var unlocks_value: Variant = skill.get("unlocks", [])
+		if unlocks_value is Array:
+			var unlocks: Array = unlocks_value as Array
+			for unlock_index in range(unlocks.size()):
+				var unlock := _dictionary_from_value(unlocks[unlock_index])
+				unlock["unlocked"] = skill_unlocked and level >= int(unlock.get("requiredLevel", 1))
+				unlocks[unlock_index] = unlock
+			skill["unlocks"] = unlocks
 		skills[index] = skill
 		state_changed.emit(skills.duplicate(true))
 		return
