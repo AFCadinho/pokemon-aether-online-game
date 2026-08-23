@@ -130,6 +130,7 @@
 
 **Added**
 
+- Added player loans beside Trade. You can offer Pokémon or reusable held items, set a duration and optional fee, and review received, borrowed, lent, and completed loans from the Social menu.
 - Trainers you have not defeated yet now show an exclamation mark above their head.
 - Wild Clefairy, Zubat, Paras, Geodude, and Onix can now appear throughout Mt. Moon, with Clefable also appearing on B2F.
 - The story now continues into Mt. Moon: investigate four suspicious people, face Miguel for a fossil, and survive Team Rocket's ambush.
