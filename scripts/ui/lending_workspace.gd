@@ -323,6 +323,15 @@ func _render_loans() -> void:
 			_add_action(actions, _t("ui.lending.return"), _loan_action.bind("return", str(loan.get("loanId", ""))))
 		elif status == "active":
 			_add_action(actions, _t("ui.lending.request_return"), _loan_action.bind("request-return", str(loan.get("loanId", ""))))
+		if status in ["active", "return_pending"] and is_borrower:
+			for asset_value: Variant in assets:
+				if not asset_value is Dictionary or str(asset_value.get("assetType", "")) != "item":
+					continue
+				var asset: Dictionary = asset_value
+				if int(asset.get("heldPokemonId", 0)) > 0:
+					_add_action(actions, _t("ui.lending.detach_item"), _detach_loan_item.bind(str(asset.get("assetId", ""))))
+				else:
+					_add_action(actions, _t("ui.lending.attach_item"), _open_attach_menu.bind(str(asset.get("assetId", "")), str(asset.get("itemId", ""))))
 		loans_list.add_child(card)
 
 
@@ -371,6 +380,65 @@ func _loan_action(action: String, loan_id: String) -> void:
 		"request-return": result = await service.request_return(loan_id)
 		"return": result = await service.return_assets(loan_id)
 		_: result = {"success": false, "error": "Unsupported loan action."}
+	mutation_in_flight = false
+	if not bool(result.get("success", false)):
+		_show_error(str(result.get("error", _t("ui.lending.error.action"))))
+		return
+	await _refresh_assets()
+	await _refresh_loans()
+
+
+func _open_attach_menu(asset_id: String, item_id: String) -> void:
+	var eligible: Array[Dictionary] = []
+	for candidate: Dictionary in party_candidates:
+		if str(candidate.get("heldItemId", "")) == "":
+			eligible.append(candidate)
+	if eligible.is_empty():
+		_show_error(_t("ui.lending.error.no_attach_target"))
+		return
+	var dialog := ConfirmationDialog.new()
+	dialog.title = _t("ui.lending.attach_title", {"item": item_id})
+	dialog.dialog_text = _t("ui.lending.attach_description")
+	dialog.ok_button_text = _t("ui.lending.attach_item")
+	var selector := OptionButton.new()
+	selector.custom_minimum_size = Vector2(310, 36)
+	for candidate: Dictionary in eligible:
+		selector.add_item("%s · Lv. %d" % [str(candidate.get("name", "Pokémon")), int(candidate.get("level", 1))])
+		selector.set_item_metadata(selector.item_count - 1, int(candidate.get("pokemonId", 0)))
+	dialog.add_child(selector)
+	dialog.confirmed.connect(func():
+		var pokemon_id := int(selector.get_item_metadata(selector.selected))
+		_attach_item_to_pokemon(asset_id, pokemon_id)
+	)
+	dialog.canceled.connect(dialog.queue_free)
+	dialog.close_requested.connect(dialog.queue_free)
+	dialog.visibility_changed.connect(func():
+		if not dialog.visible: dialog.queue_free()
+	)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(390, 190))
+
+
+func _attach_item_to_pokemon(asset_id: String, pokemon_id: int) -> void:
+	if mutation_in_flight or pokemon_id <= 0:
+		return
+	mutation_in_flight = true
+	var service := get_node_or_null("/root/LendingService")
+	var result: Dictionary = await service.attach_item(asset_id, pokemon_id)
+	mutation_in_flight = false
+	if not bool(result.get("success", false)):
+		_show_error(str(result.get("error", _t("ui.lending.error.action"))))
+		return
+	await _refresh_assets()
+	await _refresh_loans()
+
+
+func _detach_loan_item(asset_id: String) -> void:
+	if mutation_in_flight:
+		return
+	mutation_in_flight = true
+	var service := get_node_or_null("/root/LendingService")
+	var result: Dictionary = await service.detach_item(asset_id)
 	mutation_in_flight = false
 	if not bool(result.get("success", false)):
 		_show_error(str(result.get("error", _t("ui.lending.error.action"))))
