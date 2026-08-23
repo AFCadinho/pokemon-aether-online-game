@@ -18,7 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://w30miu0aiebu" path="res://assets/ui/pokedex.svg" id="14_pokedex"]
 [ext_resource type="Texture2D" path="res://assets/ui/alpha_tools.svg" id="15_content_creator"]
 [ext_resource type="Texture2D" path="res://assets/ui/content_creator.svg" id="15_creator_tools"]
-[ext_resource type="Texture2D" path="res://assets/ui/clan.svg" id="16_guild"]
+[ext_resource type="Texture2D" path="res://assets/ui/guild.svg" id="16_guild"]
 [ext_resource type="AudioStream" uid="uid://d0sitgcr6kq4u" path="res://assets/audio/notification/notification.mp3" id="17_notification"]
 [ext_resource type="Texture2D" path="res://assets/ui/pvp_battles.svg" id="18_pvp"]
 [ext_resource type="Texture2D" path="res://assets/ui/aether_exchange_icon.svg" id="19_exchange"]
