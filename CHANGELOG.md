@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Guild Bank donations now become Guild property, Pokémon and items show their icons, Shared Funds accept deposits from every member, and separate history windows track membership, rank, funds, item, and Pokémon activity.
+
 - Guild members can now leave their Guild from the overview after safely resolving any Pokémon they own or borrowed in the Guild Vault.
 
 - Guild applications now have a dedicated inbox with a pending notification badge and direct access to each applicant's Trainer Card.
