@@ -4,7 +4,7 @@ class_name PartyHoverCard
 
 const TYPE_ICON_PATH := "res://assets/sprites/types/%s.png"
 const CARD_WIDTH := 300.0
-const STORAGE_CARD_HEIGHT := 315.0
+const STORAGE_CARD_HEIGHT := 325.0
 const IV_STAT_ENTRIES: Array[Array] = [
 	["HP", "hp"],
 	["Atk", "atk"],
@@ -36,7 +36,7 @@ const NATURE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 	$MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer3,
 	$MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4,
 ]
-var iv_details_container: HBoxContainer
+var iv_details_container: PanelContainer
 var iv_value_labels: Dictionary = {}
 var ev_value_label: Label
 var show_ivs := false
@@ -135,36 +135,55 @@ func _apply_storage_visuals() -> void:
 	size.y = STORAGE_CARD_HEIGHT
 
 
-func _create_iv_details() -> HBoxContainer:
-	var details := HBoxContainer.new()
+func _create_iv_details() -> PanelContainer:
+	var details := PanelContainer.new()
 	details.name = "IVDetailsContainer"
-	details.add_theme_constant_override("separation", 5)
+	details.custom_minimum_size.y = 42.0
+	var details_style := StyleBoxFlat.new()
+	details_style.bg_color = Color("#0a1b2ad9")
+	details_style.border_color = Color("#60d3ff38")
+	details_style.set_border_width_all(1)
+	details_style.set_corner_radius_all(4)
+	details.add_theme_stylebox_override("panel", details_style)
+
+	var margin := MarginContainer.new()
+	margin.name = "MarginContainer"
+	margin.add_theme_constant_override("margin_left", 6)
+	margin.add_theme_constant_override("margin_top", 3)
+	margin.add_theme_constant_override("margin_right", 6)
+	margin.add_theme_constant_override("margin_bottom", 3)
+	details.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.name = "Row"
+	row.add_theme_constant_override("separation", 6)
+	margin.add_child(row)
 
 	var heading := Label.new()
 	heading.name = "IVHeadingLabel"
-	heading.custom_minimum_size.x = 24.0
+	heading.custom_minimum_size.x = 28.0
 	heading.text = "IVs"
 	heading.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	heading.add_theme_font_size_override("font_size", 10)
+	heading.add_theme_font_size_override("font_size", 12)
 	heading.add_theme_color_override("font_color", Color(0.38431373, 0.84313726, 1.0, 1.0))
-	details.add_child(heading)
+	row.add_child(heading)
 
 	var grid := GridContainer.new()
 	grid.name = "IVGrid"
 	grid.columns = IV_STAT_ENTRIES.size()
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	grid.add_theme_constant_override("h_separation", 2)
-	grid.add_theme_constant_override("v_separation", 0)
-	details.add_child(grid)
+	grid.add_theme_constant_override("h_separation", 4)
+	grid.add_theme_constant_override("v_separation", 1)
+	row.add_child(grid)
 
 	for entry: Array in IV_STAT_ENTRIES:
 		var header := Label.new()
 		header.name = "%sHeader" % str(entry[1]).to_pascal_case()
 		header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		header.text = str(entry[0]).to_upper()
+		header.text = str(entry[0])
 		header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		header.add_theme_font_size_override("font_size", 9)
-		header.add_theme_color_override("font_color", Color(0.48, 0.61, 0.70, 1.0))
+		header.add_theme_font_size_override("font_size", 10)
+		header.add_theme_color_override("font_color", Color(0.55, 0.68, 0.76, 1.0))
 		grid.add_child(header)
 
 	for entry: Array in IV_STAT_ENTRIES:
@@ -173,7 +192,7 @@ func _create_iv_details() -> HBoxContainer:
 		value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		value.text = "–"
 		value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		value.add_theme_font_size_override("font_size", 11)
+		value.add_theme_font_size_override("font_size", 13)
 		value.add_theme_color_override("font_color", Color(0.90, 0.95, 1.0, 1.0))
 		grid.add_child(value)
 		iv_value_labels[str(entry[1])] = value
@@ -397,7 +416,12 @@ func _set_ivs(ivs_value: Variant) -> void:
 		if value_label == null:
 			continue
 		if ivs.has(stat_key):
-			value_label.text = str(int(ivs.get(stat_key)))
+			var iv_value := int(ivs.get(stat_key))
+			value_label.text = str(iv_value)
+			value_label.add_theme_color_override(
+				"font_color",
+				Color("#76ddff") if iv_value == 31 else Color("#e6f2ff")
+			)
 			has_values = true
 		else:
 			value_label.text = "–"

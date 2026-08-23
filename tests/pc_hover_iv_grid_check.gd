@@ -16,7 +16,7 @@ func _init() -> void:
 		"Storage hover cards reserve one stable height"
 	)
 	var iv_grid := card.get_node_or_null(
-		"MarginContainer/VBoxContainer/IVDetailsContainer/IVGrid"
+		"MarginContainer/VBoxContainer/IVDetailsContainer/MarginContainer/Row/IVGrid"
 	) as GridContainer
 	_check(iv_grid != null, "Storage hover details present IVs as a compact grid")
 	if iv_grid != null:
