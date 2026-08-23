@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reusable held items now have a complete Player Loan flow with eligible Bag filtering, copy quantities, icons, holder details, equipping, and individual return controls.
+
 - Lenders can now request a specific Pokémon or item back, while borrowers can still choose when to return it before the agreed deadline.
 
 - Player Loan offers now require the lender to keep at least one Pokémon in their Party.
