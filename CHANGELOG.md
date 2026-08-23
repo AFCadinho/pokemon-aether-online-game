@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Player Loans now labels delayed deadline processing as overdue instead of leaving the misleading “due now” message visible.
+
 - Pokémon that cannot be lent are now clearly marked and disabled before creating a Player Loan offer.
 
 - Loan deadlines now count down in minutes during their final hour while keeping the exact UTC deadline visible.
