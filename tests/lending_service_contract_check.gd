@@ -4,6 +4,8 @@ const ServiceScript := preload("res://scripts/services/lending_service.gd")
 const WorkspaceScript := preload("res://scripts/ui/lending_workspace.gd")
 const InvitationScript := preload("res://scripts/ui/loan_invitation_dialog.gd")
 const ReturnsDialogScript := preload("res://scripts/ui/loan_returns_dialog.gd")
+const BorrowedPokemonDialogScript := preload("res://scripts/ui/borrowed_pokemon_dialog.gd")
+const PokemonFactoryScript := preload("res://scripts/data/pokemon_factory.gd")
 
 var failed := false
 
@@ -25,6 +27,14 @@ func _init() -> void:
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	_check(inventory_source.contains("cached_borrowed_inventory_items") and inventory_source.contains("borrowedItems"), "inventory service keeps borrowed assets separate from owned items")
 	_check(overlay_source.contains("ui.bag.loan_marker") and overlay_source.contains("_bag_item_key") and overlay_source.contains("loanAssetId"), "Bag identifies and labels borrowed item copies")
+	var party_slot_source := FileAccess.get_file_as_string("res://scripts/ui/party_slot.gd")
+	_check(party_slot_source.contains("_setup_loan_marker") and party_slot_source.contains("returnRequestedAt") and party_slot_source.contains("loan_requested.emit"), "Party cards mark borrowed Pokemon and open Player Loans")
+	_check(overlay_source.contains("_add_pc_loan_marker") and overlay_source.contains("_pc_borrowed_pokemon_entries") and overlay_source.contains("BORROWED_POKEMON_DIALOG_SCRIPT") and overlay_source.contains("_on_pc_loan_marker_gui_input"), "PC cards mark and list borrowed Pokemon")
+	var borrowed_dialog := BorrowedPokemonDialogScript.new()
+	_check(borrowed_dialog.has_signal("locate_requested") and borrowed_dialog.has_signal("loans_requested"), "borrowed Pokemon list supports location and loan management")
+	borrowed_dialog.free()
+	var borrowed_pokemon := PokemonFactoryScript.create_pokemon_from_backend_payload({"species": "Pikachu", "level": 20, "borrowed": true, "loan": {"lenderUsername": "misty", "status": "active"}})
+	_check(borrowed_pokemon != null and borrowed_pokemon.borrowed and str(borrowed_pokemon.loan.get("lenderUsername", "")) == "misty", "borrowed Pokemon retain loan metadata in runtime cards")
 	_check(workspace_source.contains("_open_attach_menu") and workspace_source.contains("_detach_loan_item"), "borrowed item attach and detach controls")
 	_check(workspace_source.contains("_poll_incoming_offers") and workspace_source.contains("load_loans(\"borrowed\")"), "incoming loan offers are polled for the borrower")
 	var invitation_source := FileAccess.get_file_as_string("res://scripts/ui/loan_invitation_dialog.gd")

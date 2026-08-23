@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Borrowed Pokémon now have loan markers in Party, PC, and Summary cards, plus a dedicated list in Pokémon Storage.
+
 - Borrowed held items now appear in the Bag with a clear loan marker while remaining separate from owned items.
 
 - Player Loan cards now show the names and icons of every item in an offer instead of only an item count.
