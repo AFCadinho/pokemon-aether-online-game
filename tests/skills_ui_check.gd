@@ -42,10 +42,19 @@ func _run() -> void:
 
 	var panel_scene := load(SKILLS_PANEL_PATH) as PackedScene
 	_check(panel_scene != null, "Skills panel scene loads")
+	var panel_host := Control.new()
+	panel_host.size = Vector2(1280, 900)
+	root.add_child(panel_host)
 	var panel := panel_scene.instantiate() as Control
-	root.add_child(panel)
+	panel_host.add_child(panel)
 	await process_frame
 	_check(not panel.visible, "Skills panel starts hidden")
+	_check(panel.size == Vector2(760, 780), "Skills uses its larger preferred size when screen space allows")
+	panel_host.size = Vector2(640, 520)
+	panel.call("_fit_window_to_parent")
+	_check(panel.size == Vector2(616, 496), "Skills shrinks to the available screen space with safe edge margins")
+	panel_host.size = Vector2(1280, 900)
+	panel.call("_fit_window_to_parent")
 
 	var test_skills: Array = [
 		{
@@ -182,31 +191,36 @@ func _run() -> void:
 	_check((panel.get("target_town_tabs") as HBoxContainer).get_child_count() == 2, "each available town receives a target tab")
 	_check(not (panel.get("target_town_previous_button") as Button).visible and not (panel.get("target_town_next_button") as Button).visible, "town arrows stay hidden while all tabs fit")
 	_check(str(panel.get("selected_target_town_key")) == "ui.skills.thieving.location.viridian_city", "the first target town is selected initially")
-	_check((panel.get("targets_container") as VBoxContainer).get_child_count() == 3, "only the selected town's targets are listed")
+	_check((panel.get("targets_container") as GridContainer).get_child_count() == 3, "only the selected town's targets are listed")
 	_check((panel.get("targets_summary_label") as Label).text.contains("3") and (panel.get("targets_summary_label") as Label).text.contains("1/4"), "target summary shows available and attempted counts")
-	var first_target := (panel.get("targets_container") as VBoxContainer).get_child(0) as PanelContainer
+	var first_target := (panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer
 	var first_target_content := first_target.get_child(0) as HBoxContainer
 	var first_target_status := first_target_content.get_child(1) as Label
 	_check(first_target_status.text == "Attempted today", "attempted targets have a clear daily status")
 	panel.call("_select_target_town", "ui.skills.thieving.location.pewter_city")
-	_check((panel.get("targets_container") as VBoxContainer).get_child_count() == 1, "selecting Pewter shows only Pewter targets")
+	_check((panel.get("targets_container") as GridContainer).get_child_count() == 1, "selecting Pewter shows only Pewter targets")
 	panel.call("_select_target_town", "ui.skills.thieving.location.viridian_city")
 	var expanded_town_order: Array[String] = [
 		"ui.skills.thieving.location.viridian_city",
 		"ui.skills.thieving.location.pewter_city",
 		"test.town.cerulean",
 		"test.town.saffron",
+		"test.town.celadon",
+		"test.town.fuchsia",
 	]
 	var expanded_town_targets: Dictionary = (panel.get("targets_by_town") as Dictionary).duplicate(true)
-	expanded_town_targets["test.town.cerulean"] = []
-	expanded_town_targets["test.town.saffron"] = []
+	for town_key: String in expanded_town_order:
+		if not expanded_town_targets.has(town_key):
+			expanded_town_targets[town_key] = []
 	panel.set("target_town_order", expanded_town_order)
 	panel.set("targets_by_town", expanded_town_targets)
 	panel.call("_render_target_town_tabs")
+	var wide_town_tab_count := int(panel.call("_target_town_tabs_per_page"))
+	_check(wide_town_tab_count >= 4, "wide Skills windows expose more location tabs at once")
 	_check((panel.get("target_town_previous_button") as Button).visible and (panel.get("target_town_next_button") as Button).visible, "town arrows appear when tabs overflow")
-	_check((panel.get("target_town_tabs") as HBoxContainer).get_child_count() == 3, "only one page of town tabs is rendered at once")
+	_check((panel.get("target_town_tabs") as HBoxContainer).get_child_count() == wide_town_tab_count, "only the responsive page of town tabs is rendered at once")
 	panel.call("_change_target_town_page", 1)
-	_check(str(panel.get("selected_target_town_key")) == "test.town.saffron", "the next arrow selects the first town on the next page")
+	_check(str(panel.get("selected_target_town_key")) == expanded_town_order[wide_town_tab_count], "the next arrow selects the first town on the next page")
 	panel.call("_render_targets", test_skills[1]["targets"] as Array)
 	skills_service.call("_on_thieving_state_changed", {
 		"unlocked": true,
@@ -221,7 +235,7 @@ func _run() -> void:
 		],
 		"jailed": false,
 	})
-	var refreshed_second_target := (panel.get("targets_container") as VBoxContainer).get_child(1) as PanelContainer
+	var refreshed_second_target := (panel.get("targets_container") as GridContainer).get_child(1) as PanelContainer
 	var refreshed_second_content := refreshed_second_target.get_child(0) as HBoxContainer
 	_check((refreshed_second_content.get_child(1) as Label).text == "Attempted today", "a successful pickpocket refreshes the daily target status immediately")
 	panel.call("_select_skill", "fishing")
@@ -247,9 +261,15 @@ func _run() -> void:
 	panel.call("_select_detail_tab", "catalog")
 	_check((panel.get("targets_section") as VBoxContainer).visible, "Rock Smash has a dedicated daily Rocks tab")
 	_check((panel.get("catalog_tab_button") as Button).text == "Rocks", "Rock Smash labels its secondary tab for rocks")
-	_check((panel.get("targets_container") as VBoxContainer).get_child_count() == 4, "the Pewter rock list contains all four fixed rocks")
+	_check((panel.get("targets_container") as GridContainer).get_child_count() == 4, "the Pewter rock list contains all four fixed rocks")
+	_check((panel.get("targets_container") as GridContainer).columns == 2, "wide Rock Smash lists use two columns")
+	panel.size.x = 620.0
+	panel.call("_on_window_resized")
+	_check((panel.get("targets_container") as GridContainer).columns == 1, "narrow Rock Smash lists collapse to one readable column")
+	panel.size.x = 760.0
+	panel.call("_on_window_resized")
 	_check((panel.get("targets_summary_label") as Label).text.contains("3") and (panel.get("targets_summary_label") as Label).text.contains("1/4"), "the rock summary shows available and smashed counts")
-	var first_rock := (panel.get("targets_container") as VBoxContainer).get_child(0) as PanelContainer
+	var first_rock := (panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer
 	var first_rock_status := ((first_rock.get_child(0) as HBoxContainer).get_child(1) as Label)
 	_check(first_rock_status.text == "Smashed today", "a completed rock has a clear daily status")
 	skills_service.call("_on_rock_smash_state_changed", {
@@ -264,7 +284,7 @@ func _run() -> void:
 			"kanto_pewter_city_training_rock_east",
 		],
 	})
-	var refreshed_second_rock := (panel.get("targets_container") as VBoxContainer).get_child(1) as PanelContainer
+	var refreshed_second_rock := (panel.get("targets_container") as GridContainer).get_child(1) as PanelContainer
 	var refreshed_second_rock_status := ((refreshed_second_rock.get_child(0) as HBoxContainer).get_child(1) as Label)
 	_check(refreshed_second_rock_status.text == "Smashed today", "a successful smash refreshes the daily rock status immediately")
 	panel.call("_show_overview")
