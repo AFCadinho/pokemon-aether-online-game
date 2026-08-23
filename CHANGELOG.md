@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Short Rock Smash area lists now use more of the available Skills window instead of bunching every rock at the top.
+
 - Rock Smash now groups daily rocks in a compact area dropdown that shows each area's daily progress.
 
 - The Skills window now adapts to the available screen space and shows Rock Smash rocks in two columns when there is enough room.
