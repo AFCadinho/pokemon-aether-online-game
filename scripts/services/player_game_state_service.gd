@@ -149,7 +149,18 @@ func dev_set_story_checkpoint(checkpoint_id: String) -> Dictionary:
 			"error": "Story checkpoint response was invalid.",
 		}
 	StoryService.apply_story(story)
-	return {"success": true, "story": StoryService.get_story()}
+	TrainerProgressService.invalidate_all()
+	# Developer checkpoints replace the authoritative fossil choice and pickup
+	# receipts as well as the story projection. Bypass both client caches so
+	# visible world pickups and Miguel's fossil logic update in the open map.
+	var pickup_result: Dictionary = await InventoryService.load_collected_world_pickups(true)
+	var inventory_result: Dictionary = await InventoryService.load_inventory()
+	return {
+		"success": true,
+		"story": StoryService.get_story(),
+		"worldPickupRefreshSuccess": bool(pickup_result.get("success", false)),
+		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
+	}
 
 
 func accept_side_quest(quest_id: String, expected_revision: int) -> Dictionary:
