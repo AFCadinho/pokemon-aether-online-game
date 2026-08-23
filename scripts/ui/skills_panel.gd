@@ -54,9 +54,11 @@ var unlocks_container: VBoxContainer
 var targets_section: VBoxContainer
 var targets_summary_label: Label
 var targets_reset_label: Label
+var target_town_navigation: HBoxContainer
 var target_town_previous_button: Button
 var target_town_tabs: HBoxContainer
 var target_town_next_button: Button
+var rock_area_selector: OptionButton
 var targets_scroll: ScrollContainer
 var targets_container: GridContainer
 var fishing_catalog_section: VBoxContainer
@@ -410,7 +412,7 @@ func _build_interface() -> void:
 	targets_reset_label.add_theme_font_size_override("font_size", 9)
 	targets_section.add_child(targets_reset_label)
 
-	var target_town_navigation := HBoxContainer.new()
+	target_town_navigation = HBoxContainer.new()
 	target_town_navigation.name = "TargetTownNavigation"
 	target_town_navigation.add_theme_constant_override("separation", 5)
 	targets_section.add_child(target_town_navigation)
@@ -428,6 +430,15 @@ func _build_interface() -> void:
 	target_town_next_button = _create_target_town_arrow("›")
 	target_town_next_button.pressed.connect(_change_target_town_page.bind(1))
 	target_town_navigation.add_child(target_town_next_button)
+
+	rock_area_selector = OptionButton.new()
+	rock_area_selector.name = "RockAreaSelector"
+	rock_area_selector.custom_minimum_size.y = 38.0
+	rock_area_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rock_area_selector.fit_to_longest_item = false
+	rock_area_selector.item_selected.connect(_select_rock_area)
+	_style_rock_area_selector(rock_area_selector)
+	targets_section.add_child(rock_area_selector)
 
 	targets_scroll = ScrollContainer.new()
 	targets_scroll.name = "TargetsScroll"
@@ -863,6 +874,8 @@ func _render_unlocks(unlocks: Array) -> void:
 
 
 func _render_targets(targets: Array) -> void:
+	target_town_navigation.visible = true
+	rock_area_selector.visible = false
 	var available_count := 0
 	var completed_count := 0
 	target_town_order.clear()
@@ -894,6 +907,8 @@ func _render_targets(targets: Array) -> void:
 
 
 func _render_rocks(rocks: Array) -> void:
+	target_town_navigation.visible = false
+	rock_area_selector.visible = true
 	var available_count := 0
 	var completed_count := 0
 	target_town_order.clear()
@@ -912,9 +927,7 @@ func _render_rocks(rocks: Array) -> void:
 		town_rocks.append(rock)
 	if selected_target_town_key not in target_town_order:
 		selected_target_town_key = target_town_order[0] if not target_town_order.is_empty() else ""
-	var selected_index := target_town_order.find(selected_target_town_key)
-	target_town_page = floori(float(maxi(selected_index, 0)) / _target_town_tabs_per_page())
-	_render_target_town_tabs()
+	_render_rock_area_selector()
 	_render_selected_target_town()
 	targets_summary_label.text = _text("ui.skills.rock_smash.rocks.summary", {
 		"available": available_count,
@@ -922,6 +935,39 @@ func _render_rocks(rocks: Array) -> void:
 		"total": rocks.size(),
 	})
 	targets_reset_label.text = _text("ui.skills.rock_smash.rocks.reset")
+
+
+func _render_rock_area_selector() -> void:
+	rock_area_selector.clear()
+	var selected_index := 0
+	for index in range(target_town_order.size()):
+		var town_key := target_town_order[index]
+		var town_rocks: Array = targets_by_town.get(town_key, []) as Array
+		var completed_count := 0
+		for rock_value: Variant in town_rocks:
+			if bool((rock_value as Dictionary).get("smashedToday", false)):
+				completed_count += 1
+		rock_area_selector.add_item(_text("ui.skills.rock_smash.rocks.area_option", {
+			"area": _text(town_key),
+			"completed": completed_count,
+			"total": town_rocks.size(),
+		}))
+		rock_area_selector.set_item_metadata(index, town_key)
+		if town_key == selected_target_town_key:
+			selected_index = index
+	rock_area_selector.disabled = target_town_order.is_empty()
+	if not target_town_order.is_empty():
+		rock_area_selector.select(selected_index)
+
+
+func _select_rock_area(index: int) -> void:
+	if index < 0 or index >= rock_area_selector.item_count:
+		return
+	var town_key := str(rock_area_selector.get_item_metadata(index))
+	if town_key not in target_town_order:
+		return
+	selected_target_town_key = town_key
+	_render_selected_target_town()
 
 
 func _render_target_town_tabs() -> void:
@@ -1004,6 +1050,34 @@ func _create_target_town_arrow(label: String) -> Button:
 	button.add_theme_stylebox_override("disabled", _make_panel_style(Color("#070c12"), Color("#25313d"), 7, 1))
 	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 	return button
+
+
+func _style_rock_area_selector(option: OptionButton) -> void:
+	option.focus_mode = Control.FOCUS_ALL
+	option.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	option.add_theme_font_size_override("font_size", 11)
+	option.add_theme_color_override("font_color", TEXT_COLOR)
+	option.add_theme_color_override("font_hover_color", TEXT_COLOR)
+	option.add_theme_color_override("font_pressed_color", TEXT_COLOR)
+	option.add_theme_color_override("font_focus_color", TEXT_COLOR)
+	option.add_theme_constant_override("arrow_margin", 12)
+	option.add_theme_stylebox_override("normal", _make_panel_style(Color("#07111c"), PANEL_BORDER, 7, 1))
+	option.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 7, 1))
+	option.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
+	option.add_theme_stylebox_override("focus", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
+	var popup := option.get_popup()
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.max_size = Vector2i(520, 360)
+	popup.add_theme_font_size_override("font_size", 11)
+	popup.add_theme_color_override("font_color", TEXT_COLOR)
+	popup.add_theme_color_override("font_hover_color", TEXT_COLOR)
+	popup.add_theme_color_override("font_disabled_color", LOCKED_COLOR)
+	popup.add_theme_constant_override("item_start_padding", 10)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 5)
+	popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#050e18fc"), CARD_SELECTED_BORDER, 8, 1))
+	popup.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 5, 1))
 
 
 func _select_target_town(town_key: String) -> void:
@@ -1211,7 +1285,7 @@ func _fit_window_to_parent() -> void:
 
 func _on_window_resized() -> void:
 	_update_target_grid_columns()
-	if target_town_tabs != null and not target_town_order.is_empty():
+	if selected_skill_id == "thieving" and target_town_tabs != null and not target_town_order.is_empty():
 		var selected_index := target_town_order.find(selected_target_town_key)
 		target_town_page = floori(float(maxi(selected_index, 0)) / _target_town_tabs_per_page())
 		_render_target_town_tabs()
