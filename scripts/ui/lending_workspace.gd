@@ -33,6 +33,7 @@ var incoming_account_generation := 0
 var displayed_notification_ids: Dictionary = {}
 var pokemon_source_mode := 0
 var selected_box_index := 0
+var pokemon_search_query := ""
 
 var target_display_label: Label
 var duration_select: OptionButton
@@ -46,6 +47,7 @@ var create_button: Button
 var usage_label: Label
 var compose_panel: Control
 var loans_panel: Control
+var pokemon_results_list: VBoxContainer
 
 
 func _ready() -> void:
@@ -309,6 +311,15 @@ func _render_assets() -> void:
 	)
 	_apply_option_style(box_select)
 	source_tools.add_child(box_select)
+	var search_input := LineEdit.new()
+	search_input.visible = pokemon_source_mode == 1
+	search_input.placeholder_text = _t("ui.lending.source.search")
+	search_input.text = pokemon_search_query
+	search_input.clear_button_enabled = true
+	search_input.custom_minimum_size.y = 36
+	search_input.text_changed.connect(_on_pokemon_search_changed)
+	_apply_line_edit_style(search_input)
+	assets_list.add_child(search_input)
 	var party_hint := Label.new()
 	party_hint.text = _t("ui.lending.party_required_hint")
 	party_hint.visible = pokemon_source_mode == 0
@@ -316,18 +327,10 @@ func _render_assets() -> void:
 	party_hint.add_theme_color_override("font_color", GOLD)
 	party_hint.add_theme_font_size_override("font_size", 10)
 	assets_list.add_child(party_hint)
-	var visible_candidates := party_candidates if pokemon_source_mode == 0 else _box_candidates_for_index(selected_box_index)
-	if visible_candidates.is_empty():
-		var empty := Label.new()
-		empty.text = _t("ui.lending.source.empty_party") if pokemon_source_mode == 0 else _t("ui.lending.source.empty_box")
-		empty.add_theme_color_override("font_color", MUTED)
-		assets_list.add_child(empty)
-	for candidate: Dictionary in visible_candidates:
-		var pokemon_id := int(candidate.get("pokemonId", 0))
-		assets_list.add_child(_pokemon_candidate_row(candidate, pokemon_id))
-		var held_item := str(candidate.get("heldItemId", ""))
-		if held_item != "":
-			assets_list.add_child(_item_candidate_row({"itemId": held_item, "name": _item_display_name(held_item, held_item), "quantity": 1, "holderName": str(candidate.get("name", "Pokémon"))}, "held:%d" % pokemon_id, true))
+	pokemon_results_list = VBoxContainer.new()
+	pokemon_results_list.add_theme_constant_override("separation", 6)
+	assets_list.add_child(pokemon_results_list)
+	_render_pokemon_candidate_results()
 	assets_list.add_child(_section_label(_t("ui.lending.assets.items")))
 	var item_hint := Label.new()
 	item_hint.text = _t("ui.lending.items_hint")
@@ -338,6 +341,48 @@ func _render_assets() -> void:
 	for item: Dictionary in inventory_candidates:
 		var item_id := str(item.get("itemId", ""))
 		assets_list.add_child(_item_candidate_row(item, "bag:%s" % item_id))
+
+
+func _on_pokemon_search_changed(value: String) -> void:
+	pokemon_search_query = value.strip_edges()
+	_render_pokemon_candidate_results()
+
+
+func _render_pokemon_candidate_results() -> void:
+	if pokemon_results_list == null:
+		return
+	_clear(pokemon_results_list)
+	var visible_candidates := _visible_pokemon_candidates()
+	if visible_candidates.is_empty():
+		var empty := Label.new()
+		if pokemon_source_mode == 0:
+			empty.text = _t("ui.lending.source.empty_party")
+		elif pokemon_search_query != "":
+			empty.text = _t("ui.lending.source.no_search_results")
+		else:
+			empty.text = _t("ui.lending.source.empty_box")
+		empty.add_theme_color_override("font_color", MUTED)
+		pokemon_results_list.add_child(empty)
+	for candidate: Dictionary in visible_candidates:
+		var pokemon_id := int(candidate.get("pokemonId", 0))
+		pokemon_results_list.add_child(_pokemon_candidate_row(candidate, pokemon_id))
+		var held_item := str(candidate.get("heldItemId", ""))
+		if held_item != "":
+			pokemon_results_list.add_child(_item_candidate_row({"itemId": held_item, "name": _item_display_name(held_item, held_item), "quantity": 1, "holderName": str(candidate.get("name", "Pokémon"))}, "held:%d" % pokemon_id, true))
+
+
+func _visible_pokemon_candidates() -> Array[Dictionary]:
+	if pokemon_source_mode == 0:
+		return party_candidates
+	var query := pokemon_search_query.to_lower()
+	if query == "":
+		return _box_candidates_for_index(selected_box_index)
+	var result: Array[Dictionary] = []
+	for candidate: Dictionary in box_candidates:
+		var searchable := "%s %s" % [str(candidate.get("name", "")), str(candidate.get("speciesId", ""))]
+		if query in searchable.to_lower():
+			result.append(candidate)
+	return result
 
 
 func _refresh_loans() -> void:
@@ -1147,6 +1192,11 @@ func _pokemon_candidate_row(candidate: Dictionary, pokemon_id: int) -> Control:
 	identity.add_child(name_label)
 	var level_label := Label.new()
 	level_label.text = "Lv. %d" % int(candidate.get("level", 1))
+	if str(candidate.get("sourceType", "party")) == "box":
+		level_label.text += " · %s · %s" % [
+			_t("ui.lending.source.box", {"number": int(candidate.get("boxIndex", 0)) + 1}),
+			_t("ui.lending.source.slot", {"number": int(candidate.get("slotIndex", 0)) + 1}),
+		]
 	level_label.add_theme_color_override("font_color", MUTED)
 	level_label.add_theme_font_size_override("font_size", 10)
 	identity.add_child(level_label)

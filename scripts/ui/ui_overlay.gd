@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 const STAFF_PERMISSION_POLICY := preload("res://scripts/ui/staff_permission_policy.gd")
+const LOAN_RETURNS_DIALOG_SCRIPT := preload("res://scripts/ui/loan_returns_dialog.gd")
 const MAX_PARTY_SIZE := 6
 const PARTY_SLOT_HEIGHT := 68.0
 const PARTY_SLOT_GAP := 5.0
@@ -1160,6 +1161,8 @@ var pc_pokemon_hover_card: PartyHoverCard
 var pc_pokemon_hover_generation := 0
 var pc_close_button: Button
 var pc_release_mode_button: Button
+var pc_loan_returns_button: Button
+var pc_loan_returns_dialog: Window
 var pc_release_drop_panel: PanelContainer
 var pc_release_hint_label: Label
 var pc_selected_box_index := 0
@@ -2594,6 +2597,21 @@ func _setup_pc_ui() -> void:
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	title_stack.add_child(subtitle)
+
+	pc_loan_returns_button = Button.new()
+	_set_localized_control_property(pc_loan_returns_button, "text", "ui.storage.loan_returns")
+	pc_loan_returns_button.custom_minimum_size = Vector2(140, 34)
+	pc_loan_returns_button.focus_mode = Control.FOCUS_NONE
+	_set_localized_control_property(pc_loan_returns_button, "tooltip_text", "ui.storage.loan_returns.tooltip")
+	pc_loan_returns_button.pressed.connect(_on_pc_loan_returns_pressed)
+	_apply_button_style(pc_loan_returns_button, "primary")
+	header.add_child(pc_loan_returns_button)
+
+	pc_loan_returns_dialog = LOAN_RETURNS_DIALOG_SCRIPT.new()
+	pc_loan_returns_dialog.locate_requested.connect(_on_pc_loan_return_locate_requested)
+	pc_loan_returns_dialog.summary_requested.connect(open_trade_pokemon_summary)
+	pc_loan_returns_dialog.count_changed.connect(_on_pc_loan_returns_count_changed)
+	add_child(pc_loan_returns_dialog)
 
 	pc_release_mode_button = Button.new()
 	_set_localized_control_property(pc_release_mode_button, "text", "ui.storage.release")
@@ -33441,6 +33459,7 @@ func _show_pc_popup() -> void:
 		pc_search_input.text = ""
 	await _compact_pc_party_storage_slots("open")
 	await _refresh_pc_state(true)
+	await _refresh_pc_loan_returns_count()
 
 
 func _on_pc_close_button_pressed() -> void:
@@ -33448,12 +33467,59 @@ func _on_pc_close_button_pressed() -> void:
 		return
 	_hide_pc_pokemon_hover()
 	pc_popup.visible = false
+	if pc_loan_returns_dialog != null:
+		pc_loan_returns_dialog.hide()
 	pc_popup_dragging = false
 	_set_pc_header_cursor(Control.CURSOR_MOVE)
 	_close_pc_box_selector()
 	pc_selected_source = {}
 	_set_pc_release_mode_active(false)
 	_deactivate_ui_panel(pc_popup)
+
+
+func _on_pc_loan_returns_pressed() -> void:
+	if pc_loan_returns_dialog != null:
+		await pc_loan_returns_dialog.open_inbox()
+
+
+func _refresh_pc_loan_returns_count() -> void:
+	var service := get_node_or_null("/root/LendingService")
+	if service == null:
+		return
+	var result: Dictionary = await service.load_return_inbox()
+	if not bool(result.get("success", false)):
+		return
+	var body: Dictionary = _dictionary_from_value(result.get("body", {}))
+	_on_pc_loan_returns_count_changed(int(body.get("count", 0)))
+
+
+func _on_pc_loan_returns_count_changed(count: int) -> void:
+	if pc_loan_returns_button == null:
+		return
+	pc_loan_returns_button.text = LocalizationManager.text(
+		"ui.storage.loan_returns_count" if count > 0 else "ui.storage.loan_returns",
+		{"count": count}
+	)
+
+
+func _on_pc_loan_return_locate_requested(entry: Dictionary) -> void:
+	var location: Dictionary = _dictionary_from_value(entry.get("location", {}))
+	var pokemon_id := int(entry.get("pokemonId", 0))
+	if str(location.get("type", "")) == "box":
+		pc_selected_box_index = maxi(int(location.get("boxIndex", 0)), 0)
+		await _refresh_pc_state(false)
+		pc_selected_source = {
+			"type": "box",
+			"boxIndex": pc_selected_box_index,
+			"slotIndex": int(location.get("slotIndex", 0)),
+			"pokemonId": pokemon_id,
+		}
+		_render_pc_box()
+	else:
+		var storage_slot := int(pc_party_slot_by_owned_id.get(pokemon_id, location.get("partySlot", 0)))
+		pc_selected_source = {"type": "party", "partySlot": storage_slot, "pokemonId": pokemon_id}
+		_render_pc_party()
+	await _refresh_pc_loan_returns_count()
 
 
 func _on_pc_box_selected(index: int) -> void:

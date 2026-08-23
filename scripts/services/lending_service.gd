@@ -35,6 +35,16 @@ func acknowledge_notification(notification_id: String) -> Dictionary:
 	return await _command("/notifications/%s/ack" % notification_id.strip_edges().uri_encode(), {})
 
 
+func load_return_inbox(limit := 50) -> Dictionary:
+	return await _get_resource("/returns/inbox?limit=%d" % clampi(limit, 1, 100))
+
+
+func acknowledge_return(asset_id: String) -> Dictionary:
+	if asset_id.strip_edges() == "":
+		return _validation_error("Loan asset id is required.")
+	return await _command("/returns/%s/ack" % asset_id.strip_edges().uri_encode(), {})
+
+
 func create_loan(target_username: String, pokemon_ids: Array, items: Array, duration_seconds: int, fee_amount: int, request_id := "") -> Dictionary:
 	var username := target_username.strip_edges()
 	if username == "":
