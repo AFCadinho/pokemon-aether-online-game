@@ -31,6 +31,7 @@ func _init() -> void:
 	_check(workspace_source.contains("selected_view < 3") and workspace_source.contains("[\"returned\", \"declined\", \"cancelled\", \"expired\"]"), "terminal loans stay in History")
 	_check(workspace_source.contains("_return_loan_asset") and workspace_source.contains("return_assets(loan_id, [asset_id])"), "borrowed assets return individually")
 	_check(workspace_source.contains("_poll_loan_notifications") and workspace_source.contains("acknowledge_notification"), "durable loan notifications become system messages and are acknowledged")
+	_check(workspace_source.contains("custody_changed") and workspace_source.contains("ui.lending.notification.accepted") and workspace_source.contains("await _refresh_after_asset_return()"), "loan custody notifications refresh Party, PC, and Bag state")
 	_check(not workspace_source.contains("service.return_assets(loan_id)"), "loan cards never return every asset implicitly")
 	var workspace := WorkspaceScript.new()
 	_check(workspace._format_loan_time("2026-08-23T16:45:12+00:00") == "2026-08-23 16:45 UTC", "loan timestamps are player readable")
