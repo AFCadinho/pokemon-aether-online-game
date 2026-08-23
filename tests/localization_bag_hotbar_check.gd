@@ -28,6 +28,12 @@ func _run() -> void:
 		),
 		"number keys bypass the overworld hotbar during battle"
 	)
+	_check(
+		not overlay_source.contains(
+			'bag_item_context_menu.add_item(LocalizationManager.text("ui.bag.action.inspect")'
+		),
+		"Bag context menu omits the redundant Inspect action"
+	)
 	if localization_manager == null or item_localization == null or settings_manager == null:
 		quit(1)
 		return
@@ -74,7 +80,26 @@ func _check_bag_and_hotbar_runtime_translation() -> void:
 	) as Button
 	var hotbar_buttons := overlay.get("hotbar_buttons") as Array
 	var first_hotbar_button := hotbar_buttons[0] as Control
+	var bag_detail_icon := overlay.get("bag_detail_icon") as TextureRect
+	var bag_item_slot := overlay.call("_create_bag_item_slot", {
+		"id": "ability-capsule",
+		"name": "Ability Capsule",
+		"quantity": 1,
+	}) as Control
+	var bag_item_icon := bag_item_slot.find_child("ItemIcon", true, false) as TextureRect
 	_check(search != null and search.placeholder_text == "Items zoeken...", "Bag search renders in Dutch")
+	_check(
+		bag_item_icon != null
+		and bag_item_icon.custom_minimum_size == Vector2(48, 48)
+		and bag_item_icon.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST,
+		"Bag grid renders item pixel art at its native 48 pixel size"
+	)
+	_check(
+		bag_detail_icon != null
+		and bag_detail_icon.custom_minimum_size == Vector2(72, 72)
+		and bag_detail_icon.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST,
+		"Bag detail preview keeps a compact sharp 72 pixel icon"
+	)
 	_check(all_label != null and all_label.text == "Alle items", "Bag category renders in Dutch")
 	_check(
 		first_hotbar_button != null
