@@ -4680,6 +4680,10 @@ func _show_next_move_learn_prompt() -> void:
 			))
 			_discard_move_learn_review_prompt()
 			continue
+		if pokemon.borrowed:
+			add_system_message(LocalizationManager.text("ui.lending.borrowed_moves_locked"))
+			_discard_move_learn_review_prompt()
+			continue
 
 		move_learn_pending_review_index += 1
 		move_learn_active_prompt = prompt
@@ -20095,6 +20099,12 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	if bag_item_use_quantity_spinbox != null:
 		requested_quantity = clampi(int(bag_item_use_quantity_spinbox.value), 1, int(bag_item_use_quantity_spinbox.max_value))
 	var preview: Dictionary = _bag_item_use_preview_for_pokemon(pokemon, item_id, requested_quantity)
+	if pokemon.borrowed:
+		preview = {
+			"label": LocalizationManager.text("ui.lending.borrowed_items_locked"),
+			"tooltip": LocalizationManager.text("ui.lending.borrowed_modification_locked"),
+			"canApply": false,
+		}
 	var can_apply := bool(preview.get("canApply", not preview.is_empty()))
 	if pokemon.owned_pokemon_id <= 0:
 		can_apply = false
@@ -20484,6 +20494,9 @@ func _on_bag_item_use_confirm_pressed() -> void:
 	var pokemon: Pokemon = PlayerSave.party[bag_item_use_selected_slot]
 	if pokemon == null or pokemon.owned_pokemon_id <= 0:
 		_set_bag_item_use_status(LocalizationManager.text("ui.pokemon_summary.readonly_error"), true)
+		return
+	if pokemon.borrowed:
+		_set_bag_item_use_status(LocalizationManager.text("ui.lending.borrowed_items_locked"), true)
 		return
 
 	var item_id := _normalize_item_id(str(bag_item_use_pending_item.get("id", "")))
@@ -21765,6 +21778,9 @@ func _get_active_pokemon_summary_pokemon() -> Pokemon:
 func _can_change_pokemon_nickname() -> bool:
 	if _is_pokemon_summary_readonly() or _is_world_battle_active() or _trade_workspace_is_visible():
 		return false
+	var pokemon := _get_active_pokemon_summary_pokemon()
+	if pokemon != null and pokemon.borrowed:
+		return false
 	if pvp_battle_starting or pvp_active_queue_entry_id.strip_edges() != "" or pvp_active_queue_match_id.strip_edges() != "":
 		return false
 	return str(PvpBattleRealtimeService.active_battle_id).strip_edges() == ""
@@ -22754,7 +22770,9 @@ func _create_summary_value_orb(label_text: String, value: int, max_value: int, c
 	return panel
 
 func _create_summary_ev_box(stat_id: String, label_text: String, value: int, color: Color) -> Control:
-	var panel: Control = PanelContainer.new() if _is_pokemon_summary_readonly() else Button.new()
+	var active_pokemon := _get_active_pokemon_summary_pokemon()
+	var allocation_locked := _is_pokemon_summary_readonly() or (active_pokemon != null and active_pokemon.borrowed)
+	var panel: Control = PanelContainer.new() if allocation_locked else Button.new()
 	panel.custom_minimum_size = Vector2(96, 50)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	if panel is Button:
@@ -22768,6 +22786,8 @@ func _create_summary_ev_box(stat_id: String, label_text: String, value: int, col
 		button.add_theme_stylebox_override("pressed", _make_panel_style(Color("#050912f4"), color, 7, 1))
 	else:
 		(panel as PanelContainer).add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), Color(color.r, color.g, color.b, 0.42), 7, 1))
+		if active_pokemon != null and active_pokemon.borrowed:
+			panel.tooltip_text = LocalizationManager.text("ui.lending.borrowed_modification_locked")
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 7)
@@ -23012,6 +23032,9 @@ func _on_summary_allocated_ev_pressed(stat_id: String, label_text: String, card_
 		return
 
 	var pokemon: Pokemon = PlayerSave.party[pokemon_summary_selected_slot]
+	if pokemon.borrowed:
+		_add_chat_message(LocalizationManager.text("ui.lending.borrowed_modification_locked"))
+		return
 	var current_value: int = int(pokemon.evs.get(stat_id, 0))
 	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
 	var stored_for_stat: int = clampi(int(pokemon.stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
@@ -23183,9 +23206,17 @@ func _create_summary_move_card(
 	var panel: PanelContainer = POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT.new() as PanelContainer
 	var move_id: String = _get_summary_move_id(move_value)
 	var is_direct_field_move: bool = FieldMoveService.is_direct_field_move(move_id)
+	var can_use_direct_move := (
+		pokemon != null
+		and not _is_pokemon_summary_readonly()
+		and pokemon.owned_pokemon_id > 0
+		and move_id != ""
+		and not _is_world_battle_active()
+	)
 	var can_reorder: bool = (
 		pokemon != null
 		and not _is_pokemon_summary_readonly()
+		and not pokemon.borrowed
 		and pokemon.owned_pokemon_id > 0
 		and move_index >= 0
 		and move_index < pokemon.moves.size()
@@ -23201,7 +23232,7 @@ func _create_summary_move_card(
 		move_id,
 		move_name,
 		can_reorder,
-		is_direct_field_move and can_reorder
+		is_direct_field_move and can_use_direct_move
 	)
 	panel.connect("reorder_drag_started", Callable(self, "_on_pokemon_summary_move_reorder_drag_started"))
 	panel.connect("reorder_hovered", Callable(self, "_on_pokemon_summary_move_reorder_hovered"))
@@ -23216,6 +23247,9 @@ func _create_summary_move_card(
 	elif _is_world_battle_active() and move_id != "":
 		var battle_hint := LocalizationManager.text("ui.pokemon_summary.moves.reorder_during_battle")
 		hover_description = "%s\n%s" % [description_text, battle_hint] if description_text != "" else battle_hint
+	elif pokemon != null and pokemon.borrowed and move_id != "":
+		var borrowed_hint := LocalizationManager.text("ui.lending.borrowed_moves_locked")
+		hover_description = "%s\n%s" % [description_text, borrowed_hint] if description_text != "" else borrowed_hint
 	panel.tooltip_text = hover_description
 	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#081321ef"), POKEMON_SUMMARY_ACCENT_FAINT, 8, 1))
 
@@ -23280,8 +23314,8 @@ func _create_summary_move_card(
 		direct_action_button.ignore_texture_size = true
 		direct_action_button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 		direct_action_button.focus_mode = Control.FOCUS_NONE
-		direct_action_button.disabled = not can_reorder
-		direct_action_button.modulate = Color.WHITE if can_reorder else Color(1, 1, 1, 0.38)
+		direct_action_button.disabled = not can_use_direct_move
+		direct_action_button.modulate = Color.WHITE if can_use_direct_move else Color(1, 1, 1, 0.38)
 		direct_action_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		direct_action_button.tooltip_text = LocalizationManager.text("ui.pokemon_summary.moves.use_while_exploring", {"move": move_name})
 		direct_action_button.pressed.connect(Callable(panel, "request_direct_action"))
@@ -23323,6 +23357,9 @@ func _on_pokemon_summary_move_reorder_drag_started(card_key: String, pokemon_id:
 
 	var pokemon: Pokemon = _get_active_pokemon_summary_pokemon()
 	if pokemon == null or pokemon.owned_pokemon_id != pokemon_id:
+		return
+	if pokemon.borrowed:
+		_add_chat_message(LocalizationManager.text("ui.lending.borrowed_moves_locked"))
 		return
 	if _find_summary_move_index_by_id(pokemon.moves, source_move_id) < 0:
 		return
@@ -23655,11 +23692,14 @@ func _set_pokemon_summary_ball_button(pokemon: Pokemon) -> void:
 	var ball_texture := _load_item_icon(ball_item_id)
 	pokemon_summary_ball_icon.texture = ball_texture
 	pokemon_summary_ball_icon.modulate = Color(1, 1, 1, 0.45) if ball_texture == null else Color(1, 1, 1, 1)
-	pokemon_summary_ball_button.disabled = _is_pokemon_summary_readonly()
-	pokemon_summary_ball_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if _is_pokemon_summary_readonly() else Control.CURSOR_POINTING_HAND
+	var ball_locked := _is_pokemon_summary_readonly() or pokemon.borrowed
+	pokemon_summary_ball_button.disabled = ball_locked
+	pokemon_summary_ball_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if ball_locked else Control.CURSOR_POINTING_HAND
 	var ball_action_text := (
 		LocalizationManager.text("ui.pokemon_summary.readonly_tooltip")
 		if _is_pokemon_summary_readonly()
+		else LocalizationManager.text("ui.lending.borrowed_modification_locked")
+		if pokemon.borrowed
 		else LocalizationManager.text("ui.pokemon_summary.ball.current_tooltip", {"ball": _item_name_from_id(ball_item_id)})
 	)
 	_set_pokemon_summary_detail_hover(
@@ -23680,6 +23720,9 @@ func _on_pokemon_summary_ball_button_pressed(card_key: String = "") -> void:
 	var pokemon: Pokemon = pokemon_value as Pokemon
 	if pokemon.owned_pokemon_id <= 0:
 		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.readonly_error"))
+		return
+	if pokemon.borrowed:
+		_add_chat_message(LocalizationManager.text("ui.lending.borrowed_modification_locked"))
 		return
 
 	await _ensure_bag_inventory_loaded()
