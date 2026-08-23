@@ -31,6 +31,9 @@ var back_button: Button
 var close_button: Button
 var status_label: Label
 var overview_panel: VBoxContainer
+var overview_summary_label: Label
+var overview_hint_label: Label
+var overview_scroll: ScrollContainer
 var skill_cards: GridContainer
 var detail_panel: PanelContainer
 var detail_icon: TextureRect
@@ -244,15 +247,40 @@ func _build_interface() -> void:
 
 	overview_panel = VBoxContainer.new()
 	overview_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	overview_panel.add_theme_constant_override("separation", 10)
+	overview_panel.add_theme_constant_override("separation", 12)
 	content.add_child(overview_panel)
 
+	var overview_header := HBoxContainer.new()
+	overview_header.add_theme_constant_override("separation", 12)
+	overview_panel.add_child(overview_header)
+
+	var overview_copy := VBoxContainer.new()
+	overview_copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	overview_copy.add_theme_constant_override("separation", 2)
+	overview_header.add_child(overview_copy)
+
+	overview_summary_label = Label.new()
+	overview_summary_label.add_theme_color_override("font_color", TEXT_COLOR)
+	overview_summary_label.add_theme_font_size_override("font_size", 13)
+	overview_copy.add_child(overview_summary_label)
+
+	overview_hint_label = Label.new()
+	overview_hint_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
+	overview_hint_label.add_theme_font_size_override("font_size", 10)
+	overview_copy.add_child(overview_hint_label)
+
+	overview_scroll = ScrollContainer.new()
+	overview_scroll.name = "SkillsOverviewScroll"
+	overview_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	overview_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	overview_panel.add_child(overview_scroll)
+
 	skill_cards = GridContainer.new()
-	skill_cards.columns = 2
+	skill_cards.columns = 1
+	skill_cards.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	skill_cards.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	skill_cards.add_theme_constant_override("h_separation", 10)
-	skill_cards.add_theme_constant_override("v_separation", 10)
-	overview_panel.add_child(skill_cards)
+	skill_cards.add_theme_constant_override("v_separation", 9)
+	overview_scroll.add_child(skill_cards)
 
 	detail_panel = PanelContainer.new()
 	detail_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -514,44 +542,30 @@ func _render_skills(skills: Array) -> void:
 	skill_buttons.clear()
 
 	if skills.is_empty():
+		overview_summary_label.text = ""
+		overview_hint_label.text = ""
 		overview_panel.visible = true
 		detail_panel.visible = false
 		return
+	var unlocked_count := 0
+	var total_level := 0
+	for skill_value: Variant in skills:
+		var summary_skill := skill_value as Dictionary
+		if bool(summary_skill.get("unlocked", true)):
+			unlocked_count += 1
+			total_level += maxi(int(summary_skill.get("level", 1)), 1)
+	overview_summary_label.text = _text("ui.skills.overview.summary", {
+		"unlocked": unlocked_count,
+		"total": skills.size(),
+		"level": total_level,
+	})
+	overview_hint_label.text = _text("ui.skills.overview.hint")
 	if not _has_skill(skills, selected_skill_id):
 		selected_skill_id = str((skills[0] as Dictionary).get("id", ""))
 	for skill_value: Variant in skills:
 		var skill := skill_value as Dictionary
 		var skill_id := str(skill.get("id", ""))
-		var skill_unlocked := bool(skill.get("unlocked", true))
-		var button := Button.new()
-		button.custom_minimum_size = Vector2(0, 96)
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.focus_mode = Control.FOCUS_NONE
-		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.icon = _skill_icon(skill_id)
-		button.expand_icon = true
-		button.add_theme_constant_override("icon_max_width", 42)
-		button.add_theme_color_override("font_color", TEXT_COLOR)
-		button.add_theme_color_override("font_hover_color", TEXT_COLOR)
-		button.add_theme_font_size_override("font_size", 12)
-		button.text = "%s\n%s" % [
-			_text(str(skill.get("nameKey", "ui.skills.%s.name" % skill_id))),
-			(
-				_text("ui.skills.level_short", {"level": maxi(int(skill.get("level", 1)), 1)})
-				if skill_unlocked
-				else "🔒 %s" % _text("ui.skills.locked")
-			),
-		]
-		button.add_theme_stylebox_override(
-			"normal",
-			_make_panel_style(CARD_BACKGROUND, PANEL_BORDER if skill_unlocked else Color("#35404c"), 9, 1)
-		)
-		button.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 9, 1))
-		button.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 9, 1))
-		button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
-		button.pressed.connect(_select_skill.bind(skill_id))
+		var button := _create_skill_overview_card(skill)
 		skill_cards.add_child(button)
 		skill_buttons[skill_id] = button
 	if showing_detail:
@@ -563,6 +577,150 @@ func _render_skills(skills: Array) -> void:
 		overview_panel.visible = true
 		detail_panel.visible = false
 		back_button.visible = false
+
+
+func _create_skill_overview_card(skill: Dictionary) -> Button:
+	var skill_id := str(skill.get("id", ""))
+	var skill_unlocked := bool(skill.get("unlocked", true))
+	var level := maxi(int(skill.get("level", 1)), 1)
+	var max_level := maxi(int(skill.get("maxLevel", 100)), level)
+	var accent := _skill_accent_color(skill_id) if skill_unlocked else LOCKED_COLOR
+	var button := Button.new()
+	button.name = "%sSkillCard" % skill_id.to_pascal_case()
+	button.custom_minimum_size = Vector2(0, 154)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_stylebox_override("normal", _make_panel_style(CARD_BACKGROUND, _with_alpha(accent, 0.55), 10, 1))
+	button.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, accent, 10, 1))
+	button.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, accent, 10, 1))
+	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	button.pressed.connect(_select_skill.bind(skill_id))
+
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	margin.add_theme_constant_override("margin_left", 15)
+	margin.add_theme_constant_override("margin_top", 13)
+	margin.add_theme_constant_override("margin_right", 15)
+	margin.add_theme_constant_override("margin_bottom", 13)
+	button.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 14)
+	margin.add_child(row)
+
+	var icon_frame := PanelContainer.new()
+	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.custom_minimum_size = Vector2(66, 66)
+	icon_frame.add_theme_stylebox_override("panel", _make_panel_style(_with_alpha(accent, 0.10), _with_alpha(accent, 0.42), 9, 1))
+	row.add_child(icon_frame)
+
+	var icon := TextureRect.new()
+	icon.name = "SkillIcon"
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.custom_minimum_size = Vector2(52, 52)
+	icon.texture = _skill_icon(skill_id)
+	icon.modulate = Color.WHITE if skill_unlocked else Color("#788492")
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon_frame.add_child(icon)
+
+	var copy := VBoxContainer.new()
+	copy.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.add_theme_constant_override("separation", 5)
+	row.add_child(copy)
+
+	var card_header := HBoxContainer.new()
+	card_header.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	copy.add_child(card_header)
+
+	var name_label := Label.new()
+	name_label.name = "SkillName"
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.text = _text(str(skill.get("nameKey", "ui.skills.%s.name" % skill_id)))
+	name_label.add_theme_color_override("font_color", TEXT_COLOR)
+	name_label.add_theme_font_size_override("font_size", 15)
+	card_header.add_child(name_label)
+
+	var level_label := Label.new()
+	level_label.name = "SkillLevel"
+	level_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	level_label.text = _text("ui.skills.level", {"level": level}) if skill_unlocked else "🔒 %s" % _text("ui.skills.locked")
+	level_label.add_theme_color_override("font_color", accent)
+	level_label.add_theme_font_size_override("font_size", 11)
+	level_label.add_theme_stylebox_override("normal", _make_panel_style(_with_alpha(accent, 0.12), _with_alpha(accent, 0.55), 7, 1))
+	card_header.add_child(level_label)
+
+	var description := Label.new()
+	description.name = "SkillDescription"
+	description.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	description.text = _text(str(skill.get("descriptionKey", "ui.skills.%s.description" % skill_id)))
+	description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	description.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
+	description.add_theme_font_size_override("font_size", 10)
+	copy.add_child(description)
+
+	var progress := ProgressBar.new()
+	progress.name = "SkillProgress"
+	progress.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	progress.custom_minimum_size.y = 12.0
+	progress.show_percentage = false
+	progress.min_value = 0.0
+	progress.max_value = 100.0
+	progress.value = clampf(float(skill.get("progressPercent", 0.0)), 0.0, 100.0) if skill_unlocked else 0.0
+	progress.add_theme_stylebox_override("background", _make_panel_style(Color("#030810"), Color("#263b50"), 4, 1))
+	progress.add_theme_stylebox_override("fill", _make_panel_style(_with_alpha(accent, 0.72), accent, 4, 1))
+	copy.add_child(progress)
+
+	var footer := HBoxContainer.new()
+	footer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	copy.add_child(footer)
+
+	var progress_label := Label.new()
+	progress_label.name = "SkillProgressLabel"
+	progress_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	progress_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	if not skill_unlocked:
+		progress_label.text = _text(str(skill.get("unlockHintKey", "ui.skills.%s.unlock_hint" % skill_id)))
+	elif level >= max_level:
+		progress_label.text = _text("ui.skills.max_level")
+	else:
+		progress_label.text = _text("ui.skills.overview.xp", {
+			"current": maxi(int(skill.get("experienceIntoLevel", 0)), 0),
+			"required": maxi(int(skill.get("experienceForNextLevel", 0)), 0),
+		})
+	progress_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	progress_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
+	progress_label.add_theme_font_size_override("font_size", 10)
+	footer.add_child(progress_label)
+
+	var action_label := Label.new()
+	action_label.name = "SkillAction"
+	action_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	action_label.text = "%s  →" % _text("ui.skills.overview.open")
+	action_label.add_theme_color_override("font_color", accent)
+	action_label.add_theme_font_size_override("font_size", 10)
+	footer.add_child(action_label)
+	return button
+
+
+func _skill_accent_color(skill_id: String) -> Color:
+	match skill_id:
+		"thieving":
+			return Color("#c39af4")
+		"rock_smash":
+			return GOLD_COLOR
+		_:
+			return ACCENT_COLOR
+
+
+func _with_alpha(color: Color, alpha: float) -> Color:
+	return Color(color.r, color.g, color.b, alpha)
 
 
 func _render_detail(skill: Dictionary) -> void:

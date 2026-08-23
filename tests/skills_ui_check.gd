@@ -159,7 +159,18 @@ func _run() -> void:
 	})
 	panel.call("_render_skills", test_skills)
 	panel.visible = true
+	await process_frame
 	_check((panel.get("skill_cards") as GridContainer).get_child_count() == 3, "Fishing, Thieving, and Rock Smash receive separate overview cards")
+	_check((panel.get("skill_cards") as GridContainer).columns == 1, "the Skills overview uses full-width dashboard cards")
+	_check(panel.get("overview_scroll") is ScrollContainer, "the Skills overview remains usable in shorter windows")
+	_check((panel.get("overview_summary_label") as Label).text.contains("2/3") and (panel.get("overview_summary_label") as Label).text.contains("40"), "the overview summarizes unlocked skills and total level")
+	var fishing_card := (panel.get("skill_cards") as GridContainer).get_child(0) as Button
+	var thieving_card := (panel.get("skill_cards") as GridContainer).get_child(1) as Button
+	_check(fishing_card.custom_minimum_size.y >= 150.0 and thieving_card.custom_minimum_size.y >= 150.0, "overview cards make useful use of the available window height")
+	_check(fishing_card.find_child("SkillDescription", true, false) is Label and fishing_card.find_child("SkillProgress", true, false) is ProgressBar, "each overview card shows its description and level progress")
+	_check((fishing_card.find_child("SkillLevel", true, false) as Label).text.contains("Locked"), "locked skills have a clear overview status")
+	_check(is_equal_approx((thieving_card.find_child("SkillProgress", true, false) as ProgressBar).value, 0.0), "unlocked skill cards use the server XP progress")
+	_check((thieving_card.find_child("SkillAction", true, false) as Label).text.contains("View skill"), "overview cards clearly link to skill details")
 	_check((panel.get("overview_panel") as VBoxContainer).visible, "Skills opens on the level overview")
 	_check(not (panel.get("detail_panel") as PanelContainer).visible, "Skill details stay hidden until a skill is selected")
 	panel.call("_select_skill", "fishing")
@@ -358,6 +369,14 @@ func _run() -> void:
 	]:
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(locale_path))
 		_check(parsed is Dictionary and (parsed as Dictionary).has("ui.skills.thieving.name"), "%s contains Skills translations" % locale_path)
+		_check(
+			parsed is Dictionary
+			and (parsed as Dictionary).has("ui.skills.overview.summary")
+			and (parsed as Dictionary).has("ui.skills.overview.hint")
+			and (parsed as Dictionary).has("ui.skills.overview.xp")
+			and (parsed as Dictionary).has("ui.skills.overview.open"),
+			"%s contains the Skills dashboard translations" % locale_path
+		)
 		_check(
 			parsed is Dictionary
 			and "{currency}" not in str((parsed as Dictionary).get("ui.skills.thieving.stats", ""))
