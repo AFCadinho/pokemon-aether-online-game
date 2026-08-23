@@ -12,11 +12,22 @@ func load_capabilities() -> Dictionary:
 	return await _get_resource("/capabilities", true)
 
 
-func load_loans(view := "all", limit := 50, offset := 0) -> Dictionary:
+func load_loans(view := "all", limit := 50, offset := 0, search := "", statuses: Array[String] = []) -> Dictionary:
 	var normalized := str(view).strip_edges().to_lower()
 	if normalized not in ["all", "borrowed", "lent", "history"]:
 		normalized = "all"
-	return await _get_resource("?view=%s&limit=%d&offset=%d" % [normalized.uri_encode(), clampi(limit, 1, 100), maxi(offset, 0)])
+	var query := "?view=%s&limit=%d&offset=%d" % [normalized.uri_encode(), clampi(limit, 1, 100), maxi(offset, 0)]
+	var normalized_search := str(search).strip_edges().left(64)
+	if normalized_search != "":
+		query += "&q=%s" % normalized_search.uri_encode()
+	var normalized_statuses: Array[String] = []
+	for status: String in statuses:
+		var value := status.strip_edges().to_lower()
+		if value in ["returned", "declined", "cancelled", "expired"] and value not in normalized_statuses:
+			normalized_statuses.append(value)
+	if not normalized_statuses.is_empty():
+		query += "&statuses=%s" % ",".join(normalized_statuses).uri_encode()
+	return await _get_resource(query)
 
 
 func load_loan(loan_id: String) -> Dictionary:

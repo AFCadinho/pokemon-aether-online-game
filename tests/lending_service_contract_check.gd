@@ -47,6 +47,8 @@ func _init() -> void:
 	_check(workspace_source.contains("_set_workspace_mode(false)") and workspace_source.contains("loans_panel.visible = not is_composing"), "Socials Loans opens as a management-only overview")
 	_check(workspace_source.contains("loan_overview_view := \"borrowed\"") and workspace_source.contains("Currently borrowing") == false, "loan overview defaults to the borrowed API view without hardcoded display text")
 	_check(workspace_source.contains("_render_loan_type_tabs") and workspace_source.contains("_loans_for_asset_type"), "loan overview separates Pokemon and item tabs")
+	_check(workspace_source.contains("_on_history_search_changed") and workspace_source.contains("_open_history_filter") and workspace_source.contains("historyWindowDays"), "30-day loan history has server-backed search and a status filter dialog")
+	_check(source.contains("statuses=%s") and source.contains("normalized_search.uri_encode()"), "loan history search and filters are sent to the backend")
 	_check(workspace_source.contains("create_loan(target_username") and not workspace_source.contains("create_loan(target_input"), "nearby target is fixed by player interaction")
 	_check(workspace_source.contains("_loan_asset_row") and workspace_source.contains("_status_badge") and workspace_source.contains("_loan_timing_text"), "loan cards expose assets, status, and timing details")
 	_check(workspace_source.contains("loan_overview_view != \"history\"") and workspace_source.contains("[\"returned\", \"declined\", \"cancelled\", \"expired\"]"), "terminal loans stay in History")

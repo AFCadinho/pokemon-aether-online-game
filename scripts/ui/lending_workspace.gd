@@ -15,6 +15,7 @@ const MUTED := Color("#aeb8c5")
 const GOLD := Color("#d8b767")
 const INCOMING_POLL_SECONDS := 5.0
 const DEADLINE_REFRESH_SECONDS := 30.0
+const HISTORY_SEARCH_DELAY_SECONDS := 0.35
 const INVALID_DEADLINE_SECONDS := -2147483648
 
 var target_username := ""
@@ -41,6 +42,8 @@ var loan_overview_asset_type := "pokemon"
 var loan_overview_view := "borrowed"
 var loan_counts: Dictionary = {}
 var loan_timing_rows: Array[Dictionary] = []
+var history_search_query := ""
+var history_status_filter := ""
 
 var target_display_label: Label
 var duration_select: OptionButton
@@ -56,6 +59,10 @@ var compose_panel: Control
 var loans_panel: Control
 var pokemon_results_list: VBoxContainer
 var loan_type_tabs: HBoxContainer
+var history_tools: HBoxContainer
+var history_search_input: LineEdit
+var history_filter_button: Button
+var history_search_timer: Timer
 
 
 func _ready() -> void:
@@ -85,6 +92,11 @@ func clear_account_state() -> void:
 	loan_overview_view = "borrowed"
 	loan_overview_asset_type = "pokemon"
 	loan_counts.clear()
+	history_search_query = ""
+	history_status_filter = ""
+	if history_search_input != null:
+		history_search_input.text = ""
+	_update_history_controls()
 	last_incoming_signature = ""
 	displayed_notification_ids.clear()
 	incoming_account_generation += 1
@@ -264,6 +276,28 @@ func _build_loans_panel() -> Control:
 	refresh.pressed.connect(refresh_all)
 	_apply_button_style(refresh)
 	tools.add_child(refresh)
+	history_tools = HBoxContainer.new()
+	history_tools.add_theme_constant_override("separation", 8)
+	root.add_child(history_tools)
+	history_search_input = LineEdit.new()
+	history_search_input.placeholder_text = _t("ui.lending.history.search_placeholder")
+	history_search_input.clear_button_enabled = true
+	history_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	history_search_input.custom_minimum_size.y = 36
+	history_search_input.text_changed.connect(_on_history_search_changed)
+	history_search_input.text_submitted.connect(_submit_history_search)
+	_apply_line_edit_style(history_search_input)
+	history_tools.add_child(history_search_input)
+	history_filter_button = Button.new()
+	history_filter_button.pressed.connect(_open_history_filter)
+	_apply_button_style(history_filter_button)
+	history_tools.add_child(history_filter_button)
+	history_search_timer = Timer.new()
+	history_search_timer.one_shot = true
+	history_search_timer.wait_time = HISTORY_SEARCH_DELAY_SECONDS
+	history_search_timer.timeout.connect(_refresh_history_search)
+	add_child(history_search_timer)
+	_update_history_controls()
 	loan_type_tabs = HBoxContainer.new()
 	loan_type_tabs.add_theme_constant_override("separation", 6)
 	root.add_child(loan_type_tabs)
@@ -484,7 +518,16 @@ func _refresh_loans() -> void:
 	var service := get_node_or_null("/root/LendingService")
 	if service == null:
 		return
-	var result: Dictionary = await service.load_loans(loan_overview_view)
+	var statuses: Array[String] = []
+	if loan_overview_view == "history" and history_status_filter != "":
+		statuses.append(history_status_filter)
+	var result: Dictionary = await service.load_loans(
+		loan_overview_view,
+		100 if loan_overview_view == "history" else 50,
+		0,
+		history_search_query if loan_overview_view == "history" else "",
+		statuses
+	)
 	if not bool(result.get("success", false)):
 		_show_error(str(result.get("error", _t("ui.lending.error.load"))))
 		return
@@ -581,7 +624,62 @@ func _render_loans() -> void:
 
 func _on_loan_overview_view_selected(index: int) -> void:
 	loan_overview_view = str(view_select.get_item_metadata(index))
+	_update_history_controls()
 	await _refresh_loans()
+
+
+func _on_history_search_changed(value: String) -> void:
+	history_search_query = value.strip_edges()
+	if loan_overview_view == "history" and history_search_timer != null:
+		history_search_timer.start()
+
+
+func _refresh_history_search() -> void:
+	if loan_overview_view == "history":
+		await _refresh_loans()
+
+
+func _submit_history_search(_value: String) -> void:
+	if history_search_timer != null:
+		history_search_timer.stop()
+	if loan_overview_view == "history":
+		await _refresh_loans()
+
+
+func _open_history_filter() -> void:
+	var dialog := AetherConfirmationDialogScene.instantiate() as AetherConfirmationDialog
+	add_child(dialog)
+	dialog.configure(
+		_t("ui.lending.history.filter_title"),
+		_t("ui.lending.history.filter_description"),
+		_t("ui.lending.history.apply_filter"),
+		_t("common.cancel")
+	)
+	var selector := OptionButton.new()
+	selector.custom_minimum_size = Vector2(0, 38)
+	for status: String in ["", "returned", "expired", "declined", "cancelled"]:
+		selector.add_item(_t("ui.lending.history.filter_all") if status == "" else _t("ui.lending.status.%s" % status))
+		selector.set_item_metadata(selector.item_count - 1, status)
+		if status == history_status_filter:
+			selector.select(selector.item_count - 1)
+	_apply_option_style(selector)
+	dialog.add_custom_control(selector)
+	dialog.confirmed.connect(func():
+		history_status_filter = str(selector.get_item_metadata(selector.selected))
+		_update_history_controls()
+		await _refresh_loans()
+		dialog.queue_free()
+	, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(520, 300))
+
+
+func _update_history_controls() -> void:
+	if history_tools == null:
+		return
+	history_tools.visible = loan_overview_view == "history"
+	if history_filter_button != null:
+		history_filter_button.text = _t("ui.lending.history.filter") if history_status_filter == "" else _t("ui.lending.history.filter_active", {"status": _t("ui.lending.status.%s" % history_status_filter)})
 
 
 func _render_loan_type_tabs() -> void:
@@ -629,7 +727,10 @@ func _refresh_loan_usage() -> void:
 	)
 	var count := int(loan_counts.get(count_key, 0))
 	if loan_overview_view == "history":
-		usage_label.text = _t("ui.lending.usage.history.%s" % loan_overview_asset_type)
+		usage_label.text = "%s · %s" % [
+			_t("ui.lending.usage.history.%s" % loan_overview_asset_type),
+			_t("ui.lending.history.window", {"days": int(loan_counts.get("historyWindowDays", 30))}),
+		]
 	elif loan_overview_view == "borrowed":
 		var limits: Dictionary = loan_counts.get("limits", {}) if loan_counts.get("limits", {}) is Dictionary else {}
 		usage_label.text = _t("ui.lending.usage.borrowed.%s" % loan_overview_asset_type, {

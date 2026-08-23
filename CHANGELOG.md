@@ -4,6 +4,8 @@
 
 - Made the Guild and Aether Exchange toolbar icons easier to tell apart at a glance.
 
+- Loan History now covers the last 30 days and can be searched by Trainer or asset and filtered by outcome.
+
 - Both players now receive a system message when a loaned Pokémon or item returns, including after logging back in.
 
 - Player Loans now labels delayed deadline processing as overdue instead of leaving the misleading “due now” message visible.
