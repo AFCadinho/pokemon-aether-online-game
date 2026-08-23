@@ -3,6 +3,7 @@ extends Window
 class_name LendingWorkspaceNode
 
 const LoanInvitationDialogScript := preload("res://scripts/ui/loan_invitation_dialog.gd")
+const AetherConfirmationDialogScene := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 
 const WINDOW_SIZE := Vector2i(900, 640)
 const BG := Color("#050912fa")
@@ -502,19 +503,18 @@ func _request_loan_asset_return(loan_id: String, asset_id: String, asset_name: S
 
 
 func _confirm_asset_return(loan_id: String, asset_id: String, asset_name: String) -> void:
-	var dialog := ConfirmationDialog.new()
-	dialog.title = _t("ui.lending.return_confirm_title")
-	dialog.dialog_text = _t("ui.lending.return_confirm_text", {"asset": asset_name})
-	dialog.ok_button_text = _t("ui.lending.return_asset")
-	dialog.confirmed.connect(_return_loan_asset.bind(loan_id, asset_id, asset_name))
-	dialog.canceled.connect(dialog.queue_free)
-	dialog.close_requested.connect(dialog.queue_free)
-	dialog.visibility_changed.connect(func():
-		if not dialog.visible:
-			dialog.queue_free()
-	)
+	var dialog := AetherConfirmationDialogScene.instantiate() as AetherConfirmationDialog
 	add_child(dialog)
-	dialog.popup_centered(Vector2i(430, 180))
+	dialog.configure(
+		_t("ui.lending.return_confirm_title"),
+		_t("ui.lending.return_confirm_text", {"asset": asset_name}),
+		_t("ui.lending.return_asset"),
+		_t("common.cancel")
+	)
+	dialog.confirmed.connect(_return_loan_asset.bind(loan_id, asset_id, asset_name), CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(500, 230))
 
 
 func _return_loan_asset(loan_id: String, asset_id: String, asset_name: String) -> void:
@@ -700,27 +700,28 @@ func _open_attach_menu(asset_id: String, item_id: String) -> void:
 	if eligible.is_empty():
 		_show_error(_t("ui.lending.error.no_attach_target"))
 		return
-	var dialog := ConfirmationDialog.new()
-	dialog.title = _t("ui.lending.attach_title", {"item": item_id})
-	dialog.dialog_text = _t("ui.lending.attach_description")
-	dialog.ok_button_text = _t("ui.lending.attach_item")
+	var dialog := AetherConfirmationDialogScene.instantiate() as AetherConfirmationDialog
+	add_child(dialog)
+	dialog.configure(
+		_t("ui.lending.attach_title", {"item": item_id}),
+		_t("ui.lending.attach_description"),
+		_t("ui.lending.attach_item"),
+		_t("common.cancel")
+	)
 	var selector := OptionButton.new()
 	selector.custom_minimum_size = Vector2(310, 36)
 	for candidate: Dictionary in eligible:
 		selector.add_item("%s · Lv. %d" % [str(candidate.get("name", "Pokémon")), int(candidate.get("level", 1))])
 		selector.set_item_metadata(selector.item_count - 1, int(candidate.get("pokemonId", 0)))
-	dialog.add_child(selector)
+	_apply_option_style(selector)
+	dialog.add_custom_control(selector)
 	dialog.confirmed.connect(func():
 		var pokemon_id := int(selector.get_item_metadata(selector.selected))
 		_attach_item_to_pokemon(asset_id, pokemon_id)
-	)
-	dialog.canceled.connect(dialog.queue_free)
-	dialog.close_requested.connect(dialog.queue_free)
-	dialog.visibility_changed.connect(func():
-		if not dialog.visible: dialog.queue_free()
-	)
-	add_child(dialog)
-	dialog.popup_centered(Vector2i(390, 190))
+	, CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(520, 280))
 
 
 func _attach_item_to_pokemon(asset_id: String, pokemon_id: int) -> void:
@@ -1182,11 +1183,80 @@ func _apply_line_edit_style(input: LineEdit) -> void:
 
 
 func _apply_option_style(select: OptionButton) -> void:
+	select.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	select.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	select.add_theme_color_override("font_color", TEXT)
+	select.add_theme_color_override("font_hover_color", Color.WHITE)
+	select.add_theme_color_override("font_pressed_color", Color.WHITE)
+	select.add_theme_color_override("font_focus_color", Color.WHITE)
+	select.add_theme_color_override("font_disabled_color", Color(MUTED, 0.5))
+	select.add_theme_icon_override("arrow", _dropdown_arrow_icon())
+	select.add_theme_constant_override("arrow_margin", 11)
 	select.add_theme_stylebox_override("normal", _input_style(Color("#07111df5"), BORDER))
 	select.add_theme_stylebox_override("hover", _input_style(Color("#102238f5"), ACCENT))
 	select.add_theme_stylebox_override("pressed", _input_style(Color("#071526f5"), ACCENT))
 	select.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	var popup := select.get_popup()
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.max_size = Vector2i(430, 340)
+	popup.add_theme_font_size_override("font_size", 13)
+	popup.add_theme_color_override("font_color", TEXT)
+	popup.add_theme_color_override("font_hover_color", Color.WHITE)
+	popup.add_theme_color_override("font_disabled_color", Color(MUTED, 0.5))
+	popup.add_theme_color_override("font_outline_color", Color("#02070b"))
+	popup.add_theme_constant_override("outline_size", 1)
+	popup.add_theme_constant_override("item_start_padding", 10)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 6)
+	popup.add_theme_stylebox_override("panel", _dropdown_popup_style())
+	popup.add_theme_stylebox_override("hover", _dropdown_item_style(Color("#17344cf7"), ACCENT))
+	popup.add_theme_icon_override("radio_checked", _dropdown_radio_icon(true))
+	popup.add_theme_icon_override("radio_unchecked", _dropdown_radio_icon(false))
+	popup.add_theme_icon_override("radio_checked_disabled", _dropdown_radio_icon(true))
+	popup.add_theme_icon_override("radio_unchecked_disabled", _dropdown_radio_icon(false))
+
+
+static func _dropdown_arrow_icon() -> ImageTexture:
+	var image := Image.create(12, 8, false, Image.FORMAT_RGBA8)
+	for row: int in range(4):
+		for x: int in range(2 + row, 10 - row):
+			image.set_pixel(x, row + 2, ACCENT)
+	return ImageTexture.create_from_image(image)
+
+
+static func _dropdown_radio_icon(checked: bool) -> ImageTexture:
+	var image := Image.create(16, 16, false, Image.FORMAT_RGBA8)
+	var center := Vector2(7.5, 7.5)
+	for y: int in range(16):
+		for x: int in range(16):
+			var distance := Vector2(x, y).distance_to(center)
+			if distance <= 7.0 and distance >= 5.1:
+				image.set_pixel(x, y, ACCENT if checked else Color("#527793"))
+			elif checked and distance <= 3.4:
+				image.set_pixel(x, y, ACCENT)
+	return ImageTexture.create_from_image(image)
+
+
+func _dropdown_popup_style() -> StyleBoxFlat:
+	var style := _dropdown_item_style(Color("#050e18fc"), Color("#4e8caae6"), 9)
+	style.content_margin_left = 5
+	style.content_margin_top = 6
+	style.content_margin_right = 5
+	style.content_margin_bottom = 6
+	style.shadow_color = Color("#00000099")
+	style.shadow_size = 14
+	style.shadow_offset = Vector2(0, 6)
+	return style
+
+
+func _dropdown_item_style(background: Color, border: Color, radius := 6) -> StyleBoxFlat:
+	var style := _style(background, border, radius)
+	style.content_margin_left = 6
+	style.content_margin_right = 6
+	style.content_margin_top = 3
+	style.content_margin_bottom = 3
+	return style
 
 
 func _apply_spinbox_style(spinbox: SpinBox) -> void:
