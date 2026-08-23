@@ -40,6 +40,8 @@ var base_experience: int
 var status: String
 var happiness: int
 var special_lineage: String = ""
+var borrowed := false
+var loan: Dictionary = {}
 
 var current_hp: int
 var max_hp: int
@@ -235,6 +237,9 @@ func to_persistence_dict() -> Dictionary:
 	pokemon_data["ballItemId"] = ball_item_id
 	if caught_ball_item_id != "":
 		pokemon_data["caughtBallItemId"] = caught_ball_item_id
+	pokemon_data["borrowed"] = borrowed
+	if not loan.is_empty():
+		pokemon_data["loan"] = loan.duplicate(true)
 	pokemon_data["tradable"] = tradable
 	pokemon_data["currentHp"] = current_hp
 	pokemon_data["maxHp"] = max_hp

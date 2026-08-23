@@ -2,6 +2,7 @@ extends CanvasLayer
 
 const STAFF_PERMISSION_POLICY := preload("res://scripts/ui/staff_permission_policy.gd")
 const LOAN_RETURNS_DIALOG_SCRIPT := preload("res://scripts/ui/loan_returns_dialog.gd")
+const BORROWED_POKEMON_DIALOG_SCRIPT := preload("res://scripts/ui/borrowed_pokemon_dialog.gd")
 const MAX_PARTY_SIZE := 6
 const PARTY_SLOT_HEIGHT := 68.0
 const PARTY_SLOT_GAP := 5.0
@@ -1163,6 +1164,8 @@ var pc_close_button: Button
 var pc_release_mode_button: Button
 var pc_loan_returns_button: Button
 var pc_loan_returns_dialog: Window
+var pc_borrowed_pokemon_button: Button
+var pc_borrowed_pokemon_dialog: Window
 var pc_release_drop_panel: PanelContainer
 var pc_release_hint_label: Label
 var pc_selected_box_index := 0
@@ -2612,6 +2615,21 @@ func _setup_pc_ui() -> void:
 	pc_loan_returns_dialog.summary_requested.connect(open_trade_pokemon_summary)
 	pc_loan_returns_dialog.count_changed.connect(_on_pc_loan_returns_count_changed)
 	add_child(pc_loan_returns_dialog)
+
+	pc_borrowed_pokemon_button = Button.new()
+	_set_localized_control_property(pc_borrowed_pokemon_button, "text", "ui.storage.borrowed.button")
+	pc_borrowed_pokemon_button.custom_minimum_size = Vector2(140, 34)
+	pc_borrowed_pokemon_button.focus_mode = Control.FOCUS_NONE
+	_set_localized_control_property(pc_borrowed_pokemon_button, "tooltip_text", "ui.storage.borrowed.tooltip")
+	pc_borrowed_pokemon_button.pressed.connect(_on_pc_borrowed_pokemon_pressed)
+	_apply_button_style(pc_borrowed_pokemon_button)
+	header.add_child(pc_borrowed_pokemon_button)
+
+	pc_borrowed_pokemon_dialog = BORROWED_POKEMON_DIALOG_SCRIPT.new()
+	pc_borrowed_pokemon_dialog.locate_requested.connect(_on_pc_borrowed_pokemon_locate_requested)
+	pc_borrowed_pokemon_dialog.summary_requested.connect(open_trade_pokemon_summary)
+	pc_borrowed_pokemon_dialog.loans_requested.connect(_on_pc_borrowed_manage_requested)
+	add_child(pc_borrowed_pokemon_dialog)
 
 	pc_release_mode_button = Button.new()
 	_set_localized_control_property(pc_release_mode_button, "text", "ui.storage.release")
@@ -21473,7 +21491,7 @@ func _refresh_pokemon_summary() -> void:
 		pokemon_summary_hidden_ability_badge.visible = pokemon.hidden_ability
 	if pokemon_summary_shiny_badge_label != null:
 		pokemon_summary_shiny_badge_label.text = "*"
-	pokemon_summary_trainer_label.text = _get_pokemon_summary_current_trainer_title_text(pokemon)
+	pokemon_summary_trainer_label.text = _pokemon_summary_trainer_and_loan_text(pokemon)
 	var level_text := LocalizationManager.text("ui.pokemon_summary.level", {"level": max(pokemon.level, 1)})
 	pokemon_summary_meta_label.text = level_text
 	if pokemon_summary_level_badge_label != null:
@@ -21535,7 +21553,7 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	var shiny_label := nodes.get("shiny_label") as Label
 	shiny_label.visible = pokemon.shiny
 	var trainer_label := nodes.get("trainer_label") as Label
-	var trainer_text := _get_pokemon_summary_current_trainer_title_text(pokemon)
+	var trainer_text := _pokemon_summary_trainer_and_loan_text(pokemon)
 	trainer_label.text = trainer_text
 	trainer_label.tooltip_text = trainer_text
 	(nodes.get("ability_caption") as Label).text = LocalizationManager.text("ui.pokemon_summary.ability").to_upper()
@@ -22492,6 +22510,16 @@ func _get_pokemon_summary_current_trainer_title_text(_pokemon: Pokemon) -> Strin
 	if trainer_name == "":
 		trainer_name = LocalizationManager.text("ui.pokemon_summary.trainer_fallback")
 	return LocalizationManager.text("ui.pokemon_summary.trainer_pokemon", {"trainer": trainer_name})
+
+
+func _pokemon_summary_trainer_and_loan_text(pokemon: Pokemon) -> String:
+	var trainer_text := _get_pokemon_summary_current_trainer_title_text(pokemon)
+	if not pokemon.borrowed:
+		return trainer_text
+	var return_requested := str(pokemon.loan.get("returnRequestedAt", "")) != ""
+	return "%s · %s" % [trainer_text, LocalizationManager.text(
+		"ui.lending.marker.summary_return_requested" if return_requested else "ui.lending.marker.summary_borrowed"
+	)]
 
 func _get_pokemon_summary_original_trainer_text(pokemon: Pokemon) -> String:
 	var origin: Dictionary = pokemon.origin
@@ -26046,6 +26074,7 @@ func _register_party_slot_drag_handlers(slot: Node, slot_index: int) -> void:
 	var clicked_callable := Callable(self, "_on_party_slot_clicked")
 	var held_item_dropped_callable := Callable(self, "_on_party_slot_held_item_dropped")
 	var context_requested_callable := Callable(self, "_on_party_slot_context_requested")
+	var loan_requested_callable := Callable(self, "_on_party_loan_marker_requested")
 	if slot.has_signal("drag_started") and not slot.is_connected("drag_started", drag_started_callable):
 		slot.connect("drag_started", drag_started_callable)
 	if slot.has_signal("drag_released") and not slot.is_connected("drag_released", drag_released_callable):
@@ -26056,6 +26085,12 @@ func _register_party_slot_drag_handlers(slot: Node, slot_index: int) -> void:
 		slot.connect("held_item_dropped", held_item_dropped_callable)
 	if slot.has_signal("context_requested") and not slot.is_connected("context_requested", context_requested_callable):
 		slot.connect("context_requested", context_requested_callable)
+	if slot.has_signal("loan_requested") and not slot.is_connected("loan_requested", loan_requested_callable):
+		slot.connect("loan_requested", loan_requested_callable)
+
+
+func _on_party_loan_marker_requested() -> void:
+	_on_socials_loans_button_pressed()
 
 
 func _on_party_slot_held_item_dropped(slot_index: int, item: Dictionary) -> void:
@@ -33514,6 +33549,7 @@ func _show_pc_popup() -> void:
 	await _compact_pc_party_storage_slots("open")
 	await _refresh_pc_state(true)
 	await _refresh_pc_loan_returns_count()
+	_refresh_pc_borrowed_pokemon_count()
 
 
 func _on_pc_close_button_pressed() -> void:
@@ -33523,6 +33559,8 @@ func _on_pc_close_button_pressed() -> void:
 	pc_popup.visible = false
 	if pc_loan_returns_dialog != null:
 		pc_loan_returns_dialog.hide()
+	if pc_borrowed_pokemon_dialog != null:
+		pc_borrowed_pokemon_dialog.hide()
 	pc_popup_dragging = false
 	_set_pc_header_cursor(Control.CURSOR_MOVE)
 	_close_pc_box_selector()
@@ -33534,6 +33572,69 @@ func _on_pc_close_button_pressed() -> void:
 func _on_pc_loan_returns_pressed() -> void:
 	if pc_loan_returns_dialog != null:
 		await pc_loan_returns_dialog.open_inbox()
+
+
+func _on_pc_borrowed_pokemon_pressed() -> void:
+	if pc_borrowed_pokemon_dialog != null:
+		pc_borrowed_pokemon_dialog.open_list(_pc_borrowed_pokemon_entries())
+
+
+func _on_pc_borrowed_manage_requested() -> void:
+	if pc_borrowed_pokemon_dialog != null:
+		pc_borrowed_pokemon_dialog.hide()
+	_on_pc_close_button_pressed()
+	_on_socials_loans_button_pressed()
+
+
+func _refresh_pc_borrowed_pokemon_count() -> void:
+	if pc_borrowed_pokemon_button == null:
+		return
+	var count := _pc_borrowed_pokemon_entries().size()
+	pc_borrowed_pokemon_button.text = LocalizationManager.text(
+		"ui.storage.borrowed.button_count" if count > 0 else "ui.storage.borrowed.button",
+		{"count": count},
+	)
+
+
+func _pc_borrowed_pokemon_entries() -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
+	for party_index in range(PlayerSave.party.size()):
+		var pokemon: Pokemon = PlayerSave.party[party_index]
+		if pokemon == null or not pokemon.borrowed:
+			continue
+		entries.append({
+			"pokemonId": pokemon.owned_pokemon_id,
+			"pokemon": pokemon.to_persistence_dict(),
+			"location": {"type": "party", "partySlot": _pc_storage_slot_for_party_pokemon(pokemon, party_index)},
+		})
+	for box_value: Variant in pc_all_boxes:
+		var box: Dictionary = _dictionary_from_value(box_value)
+		var box_index := int(box.get("boxIndex", -1))
+		for slot_value: Variant in _array_from_variant(box.get("slots", [])):
+			var slot: Dictionary = _dictionary_from_value(slot_value)
+			var wrapper: Dictionary = _dictionary_from_value(slot.get("pokemon", {}))
+			var payload: Dictionary = _dictionary_from_value(wrapper.get("pokemon", {}))
+			if not bool(payload.get("borrowed", false)):
+				continue
+			entries.append({
+				"pokemonId": int(wrapper.get("id", payload.get("ownedPokemonId", 0))),
+				"pokemon": payload.duplicate(true),
+				"location": {"type": "box", "boxIndex": box_index, "slotIndex": int(slot.get("slotIndex", 0))},
+			})
+	return entries
+
+
+func _on_pc_borrowed_pokemon_locate_requested(entry: Dictionary) -> void:
+	var location: Dictionary = _dictionary_from_value(entry.get("location", {}))
+	var pokemon_id := int(entry.get("pokemonId", 0))
+	if str(location.get("type", "")) == "box":
+		pc_selected_box_index = maxi(int(location.get("boxIndex", 0)), 0)
+		await _refresh_pc_state(false)
+		pc_selected_source = {"type": "box", "boxIndex": pc_selected_box_index, "slotIndex": int(location.get("slotIndex", 0)), "pokemonId": pokemon_id}
+		_render_pc_box()
+	else:
+		pc_selected_source = {"type": "party", "partySlot": int(location.get("partySlot", 0)), "pokemonId": pokemon_id}
+		_render_pc_party()
 
 
 func _refresh_pc_loan_returns_count() -> void:
@@ -33629,6 +33730,7 @@ func _refresh_pc_state(load_all_boxes: bool = false) -> void:
 
 	_render_pc_party()
 	_render_pc_box()
+	_refresh_pc_borrowed_pokemon_count()
 	if _pc_search_query() == "":
 		_set_pc_status("ui.storage.status.idle")
 
@@ -34085,6 +34187,8 @@ func _create_pc_party_slot_button(slot_index: int, storage_slot_index: int, poke
 		"%d" % (slot_index + 1),
 		PC_PARTY_SLOT_SIZE
 	)
+	if occupied:
+		_add_pc_loan_marker(button, pokemon.borrowed, pokemon.loan)
 	button.tooltip_text = LocalizationManager.text("ui.storage.slot.party", {
 		"pokemon": title,
 		"number": slot_index + 1,
@@ -34133,6 +34237,9 @@ func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, po
 		slot_badge,
 		PC_BOX_SLOT_SIZE
 	)
+	if occupied:
+		var loan_value: Variant = payload.get("loan", {})
+		_add_pc_loan_marker(button, bool(payload.get("borrowed", false)), (loan_value as Dictionary) if loan_value is Dictionary else {})
 	button.use_native_drag = false
 	button.tooltip_text = LocalizationManager.text("ui.storage.slot.box", {
 		"pokemon": (
@@ -34157,6 +34264,46 @@ func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, po
 		_connect_pc_pokemon_hover(button, payload)
 	button.slot_dropped.connect(_on_pc_slot_dropped)
 	return button
+
+
+func _add_pc_loan_marker(button: Control, borrowed: bool, loan: Dictionary) -> void:
+	if button == null or not borrowed:
+		return
+	var return_requested := str(loan.get("returnRequestedAt", "")) != ""
+	var accent := Color("#e2ad55") if return_requested else Color("#62d8ff")
+	var marker := PanelContainer.new()
+	marker.name = "LoanMarker"
+	marker.mouse_filter = Control.MOUSE_FILTER_PASS
+	marker.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	marker.gui_input.connect(_on_pc_loan_marker_gui_input)
+	marker.anchor_left = 1.0
+	marker.anchor_right = 1.0
+	marker.offset_left = -25.0
+	marker.offset_top = 3.0
+	marker.offset_right = -3.0
+	marker.offset_bottom = 23.0
+	marker.add_theme_stylebox_override("panel", _make_panel_style(Color("#071722f5"), accent, 6, 1))
+	var lender := str(loan.get("lenderUsername", "")).strip_edges()
+	marker.tooltip_text = LocalizationManager.text(
+		"ui.lending.marker.return_requested" if return_requested else "ui.lending.marker.borrowed",
+		{"trainer": lender},
+	)
+	var label := Label.new()
+	label.text = "↔"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_color_override("font_color", Color("#fff3cf") if return_requested else Color("#dff8ff"))
+	marker.add_child(label)
+	button.add_child(marker)
+
+
+func _on_pc_loan_marker_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		get_viewport().set_input_as_handled()
+		_on_pc_close_button_pressed()
+		_on_socials_loans_button_pressed()
 
 
 func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: bool, held_item_id: String, types: Array, texture: Texture2D, occupied: bool, selected: bool, slot_badge: String, slot_size: Vector2) -> PcPokemonSlotButton:
