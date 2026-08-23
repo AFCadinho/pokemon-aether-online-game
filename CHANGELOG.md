@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Guild member list now shows each trainer's rank, online status or last activity, and a direct PM button for online members.
+
 - Guilds now have Leader, Captain, Member, and Recruit ranks, with visible bank rights and rank controls for Guild leaders.
 
 - My Guild now has an always-visible travel bar for the Aether Clash Lobby and future Guild Base, plus a Guild Bank preview for shared funds, Pokémon and items.

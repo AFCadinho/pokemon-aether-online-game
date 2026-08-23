@@ -45,6 +45,8 @@ func _init() -> void:
 	_check_contains(popup_source, '"GuildBankItems"', "Guild Bank previews item storage")
 	_check_contains(popup_source, "GuildBankPermissionSummary", "Guild Bank explains the current rank's transaction rights")
 	_check_contains(popup_source, "GuildMemberRoleSelect_", "Guild leaders can assign compact member ranks")
+	_check_contains(popup_source, "GuildMemberPresenceLabel_", "Guild member cards show online and last-seen state")
+	_check_contains(popup_source, "GuildMemberPmButton_", "Guild member cards expose a private-message action")
 	_check_contains(popup_source, "GuildMembersTab", "guild dashboard separates its member roster")
 	_check_contains(popup_source, "GuildManagementTab", "guild dashboard separates management controls")
 	_check_contains(popup_source, "func _render_pending_applications", "Guild staff can review pending applications")
@@ -61,6 +63,7 @@ func _init() -> void:
 	_check_contains(overlay_source, "GUILD_POPUP_SCENE", "main overlay loads the guild popup")
 	_check_contains(overlay_source, "_open_guild_popup()", "existing guild button opens the new interface")
 	_check_contains(overlay_source, "_on_guild_chat_requested", "main overlay opens Guild chat from the Guild dashboard")
+	_check_contains(overlay_source, "_on_guild_private_message_requested", "main overlay opens private chat from the Guild roster")
 	_check_contains(overlay_source, "_on_guild_lobby_teleport_requested", "main overlay applies the authorized Lobby teleport")
 
 	quit(1 if failed else 0)

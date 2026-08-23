@@ -2,6 +2,7 @@ extends SceneTree
 
 var failed := false
 var guild_chat_open_requested := false
+var private_message_user: Dictionary = {}
 
 
 func _init() -> void:
@@ -216,6 +217,25 @@ func _run() -> void:
 	_check(popup.find_child("GuildMembersSection", true, false) != null, "members tab opens the roster")
 	_check(popup.find_child("GuildMemberRoleSelect_2", true, false) != null, "leader can assign the Captain's rank")
 	_check(popup.find_child("GuildMemberRoleSelect_3", true, false) != null, "leader can assign a Member's rank")
+	_check(popup.find_child("GuildMemberCard_1", true, false) != null, "member roster uses distinct player cards")
+	var online_presence := popup.find_child("GuildMemberPresenceLabel_2", true, false) as Label
+	var offline_presence := popup.find_child("GuildMemberPresenceLabel_3", true, false) as Label
+	_check(online_presence != null and online_presence.text == "Online", "online Guild members are clearly marked")
+	_check(offline_presence != null and offline_presence.text.contains("Last online"), "offline Guild members show their last activity")
+	var self_pm := popup.find_child("GuildMemberPmButton_1", true, false) as Button
+	var online_pm := popup.find_child("GuildMemberPmButton_2", true, false) as Button
+	var offline_pm := popup.find_child("GuildMemberPmButton_3", true, false) as Button
+	_check(self_pm != null and self_pm.disabled, "the current player cannot PM themselves")
+	_check(online_pm != null and not online_pm.disabled, "online Guild members expose a PM action")
+	_check(offline_pm != null and offline_pm.disabled, "offline Guild members explain that PM is unavailable")
+	if online_pm != null:
+		popup.private_message_requested.connect(_on_private_message_requested, CONNECT_ONE_SHOT)
+		online_pm.pressed.emit()
+	_check(
+		int(private_message_user.get("userId", 0)) == 2
+		and str(private_message_user.get("username", "")) == "maple",
+		"Guild member PM action identifies the selected trainer"
+	)
 	var management_tab := popup.find_child("GuildManagementTab", true, false) as Button
 	if management_tab != null:
 		management_tab.pressed.emit()
@@ -366,6 +386,10 @@ func _run() -> void:
 
 func _on_guild_chat_requested() -> void:
 	guild_chat_open_requested = true
+
+
+func _on_private_message_requested(user: Dictionary) -> void:
+	private_message_user = user.duplicate(true)
 
 
 func _select_option_with_metadata(select: OptionButton, value: String) -> void:

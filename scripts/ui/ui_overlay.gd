@@ -36686,12 +36686,20 @@ func _open_guild_popup() -> void:
 			guild_popup.lobby_teleport_requested.connect(_on_guild_lobby_teleport_requested)
 		if not guild_popup.guild_chat_requested.is_connected(_on_guild_chat_requested):
 			guild_popup.guild_chat_requested.connect(_on_guild_chat_requested)
+		if not guild_popup.private_message_requested.is_connected(_on_guild_private_message_requested):
+			guild_popup.private_message_requested.connect(_on_guild_private_message_requested)
 	guild_popup.open()
 	_activate_ui_panel(guild_popup)
 
 func _on_guild_popup_closed() -> void:
 	if guild_popup != null:
 		_deactivate_ui_panel(guild_popup)
+
+
+func _on_guild_private_message_requested(user: Dictionary) -> void:
+	if guild_popup != null and guild_popup.visible:
+		guild_popup.close()
+	open_private_message_conversation(user)
 
 
 func _on_guild_chat_requested() -> void:
