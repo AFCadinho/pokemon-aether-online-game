@@ -929,7 +929,7 @@ func _detach_loan_item(asset_id: String) -> void:
 func _populate_durations() -> void:
 	var current := int(duration_select.get_item_metadata(duration_select.selected)) if duration_select.item_count > 0 else 10800
 	duration_select.clear()
-	var durations: Array = capabilities.get("durationsSeconds", [3600, 10800, 21600, 43200, 86400])
+	var durations: Array = capabilities.get("durationsSeconds", [3600, 10800, 21600, 43200, 86400, 172800, 259200])
 	for value: Variant in durations:
 		var duration := int(value)
 		duration_select.add_item(_duration_label(duration))
@@ -1537,7 +1537,8 @@ func _duration_label(seconds: int) -> String:
 		21600: return _t("ui.lending.duration.six_hours")
 		43200: return _t("ui.lending.duration.twelve_hours")
 		86400: return _t("ui.lending.duration.day")
-		259200: return _t("ui.lending.duration.three_days")
+		172800: return _t("ui.lending.duration.forty_eight_hours")
+		259200: return _t("ui.lending.duration.seventy_two_hours")
 		604800: return _t("ui.lending.duration.week")
 	return "%d h" % maxi(seconds / 3600, 1)
 

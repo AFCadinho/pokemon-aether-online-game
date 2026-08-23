@@ -321,8 +321,12 @@ func _item_icon(item_id: String) -> Texture2D:
 func _duration_label(seconds: int) -> String:
 	match seconds:
 		3600: return _t("ui.lending.duration.hour")
+		10800: return _t("ui.lending.duration.three_hours")
+		21600: return _t("ui.lending.duration.six_hours")
+		43200: return _t("ui.lending.duration.twelve_hours")
 		86400: return _t("ui.lending.duration.day")
-		259200: return _t("ui.lending.duration.three_days")
+		172800: return _t("ui.lending.duration.forty_eight_hours")
+		259200: return _t("ui.lending.duration.seventy_two_hours")
 		604800: return _t("ui.lending.duration.week")
 	return "%d h" % maxi(seconds / 3600, 1)
 
