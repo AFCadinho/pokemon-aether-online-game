@@ -210,8 +210,20 @@ func _run() -> void:
 		await process_frame
 	_check(popup.find_child("GuildBankWorkspace", true, false) != null, "a bank category opens a dedicated workspace")
 	_check(popup.find_child("GuildBankPokemonWorkspace", true, false) != null, "Pokémon storage renders its live workspace")
+	_check(popup.find_child("GuildBankPokemonLogButton", true, false) != null, "Pokémon Vault has a dedicated log action")
 	_check(popup.find_child("GuildBankPokemonDepositButton_22", true, false) != null, "owned Pokémon can be deposited")
-	_check(popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) != null, "another member's stored Pokémon can be borrowed")
+	var pokemon_withdraw := popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) as Button
+	_check(pokemon_withdraw != null and pokemon_withdraw.text == "Withdraw", "Guild-owned Pokémon use permanent withdrawal instead of borrowing")
+	_check(popup.find_child("GuildBankPokemonIcon_21", true, false) != null, "stored Pokémon show an icon")
+	var pokemon_deposit := popup.find_child("GuildBankPokemonDepositButton_22", true, false) as Button
+	if pokemon_deposit != null:
+		pokemon_deposit.pressed.emit()
+		await process_frame
+	var donation_dialog := popup.find_child("GuildBankDonationConfirmationDialog", true, false) as ConfirmationDialog
+	_check(donation_dialog != null and donation_dialog.visible, "depositing a Pokémon confirms permanent Guild ownership")
+	if donation_dialog != null:
+		donation_dialog.canceled.emit()
+		await process_frame
 	var bank_back := popup.find_child("GuildBankBackButton", true, false) as Button
 	if bank_back != null:
 		bank_back.pressed.emit()
@@ -221,8 +233,10 @@ func _run() -> void:
 		items_action.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildBankItemsWorkspace", true, false) != null, "item storage renders Guild and personal inventories")
+	_check(popup.find_child("GuildBankItemsLogButton", true, false) != null, "Item Storage has a dedicated log action")
 	_check(popup.find_child("GuildBankItemWithdrawButton_potion", true, false) != null, "stored items can be withdrawn")
 	_check(popup.find_child("GuildBankItemDepositButton_poke-ball", true, false) != null, "bag items can be deposited")
+	_check(popup.find_child("GuildBankItemIcon_potion", true, false) != null, "stored items show an icon")
 	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
 	if bank_back != null:
 		bank_back.pressed.emit()
@@ -232,6 +246,7 @@ func _run() -> void:
 		funds_action.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildBankFundsWorkspace", true, false) != null, "shared funds render Guild and player balances")
+	_check(popup.find_child("GuildBankFundsLogButton", true, false) != null, "Shared Funds has a dedicated log action")
 	_check(popup.find_child("GuildBankMoneyDepositButton", true, false) != null, "Guild funds can be deposited")
 	_check(popup.find_child("GuildBankMoneyWithdrawButton", true, false) != null, "Guild funds can be withdrawn")
 	_check(popup.find_child("GuildTravelBar", true, false) != null, "guild travel remains available while viewing the bank")
@@ -244,6 +259,21 @@ func _run() -> void:
 		members_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildMembersSection", true, false) != null, "members tab opens the roster")
+	_check(popup.find_child("GuildHistoryLogButton", true, false) != null, "member roster has a dedicated Guild history action")
+	popup._show_guild_log_window("guild", {
+		"entries": [{
+			"id": 1, "category": "guild", "action": "joined",
+			"target": "Maple", "newRole": "captain", "createdAt": "2026-08-23T10:00:00Z",
+		}],
+		"nextBeforeId": 0,
+	})
+	await process_frame
+	var history_window := popup.find_child("GuildHistoryLogWindow", true, false) as Window
+	_check(history_window != null and history_window.visible, "Guild history opens in a separate window")
+	_check(popup.find_child("GuildLogEntries", true, false) != null, "Guild history renders its activity entries")
+	if history_window != null:
+		history_window.queue_free()
+		await process_frame
 	_check(popup.find_child("GuildMemberRoleSelect_2", true, false) != null, "leader can assign the Captain's rank")
 	_check(popup.find_child("GuildMemberRoleSelect_3", true, false) != null, "leader can assign a Member's rank")
 	_check(popup.find_child("GuildMemberCard_1", true, false) != null, "member roster uses distinct player cards")
@@ -393,7 +423,7 @@ func _run() -> void:
 	popup.guild_home["membership"] = {
 		"guildId": 1,
 		"role": "member",
-		"permissions": ["bank_deposit", "bank_withdraw", "bank_borrow"],
+		"permissions": ["bank_deposit"],
 	}
 	popup.membership = popup.guild_home["membership"]
 	popup._render_guild_home()

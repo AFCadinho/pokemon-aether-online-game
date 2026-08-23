@@ -124,6 +124,25 @@ func load_bank() -> Dictionary:
 	return response if not bool(response.get("success", false)) else _bank_result(response.get("body", {}))
 
 
+func load_history(before_id: int = 0) -> Dictionary:
+	var path := GUILD_HOME_ENDPOINT + "/history?limit=50"
+	if before_id > 0:
+		path += "&beforeId=%d" % before_id
+	var response := await _authenticated_request(path, HTTPClient.METHOD_GET, "")
+	return response if not bool(response.get("success", false)) else _log_result(response.get("body", {}))
+
+
+func load_bank_log(category: String, before_id: int = 0) -> Dictionary:
+	var normalized := category.strip_edges().to_lower()
+	if not normalized in ["funds", "items", "pokemon"]:
+		return {"success": false, "error": "Unknown Guild Bank log."}
+	var path := GUILD_BANK_ENDPOINT + "/logs/%s?limit=50" % normalized
+	if before_id > 0:
+		path += "&beforeId=%d" % before_id
+	var response := await _authenticated_request(path, HTTPClient.METHOD_GET, "")
+	return response if not bool(response.get("success", false)) else _log_result(response.get("body", {}))
+
+
 func deposit_bank_money(amount: int) -> Dictionary:
 	return await _bank_action("/money/deposit", {"amount": amount})
 
@@ -354,8 +373,17 @@ func _bank_result(value: Variant) -> Dictionary:
 		"inventory": _array(body.get("inventory", [])).duplicate(true),
 		"pokemon": _array(body.get("pokemon", [])).duplicate(true),
 		"depositablePokemon": _array(body.get("depositablePokemon", [])).duplicate(true),
-		"recentActivity": _array(body.get("recentActivity", [])).duplicate(true),
 		"party": _array(_dictionary(body.get("party", {})).get("party", [])).duplicate(true),
+	}
+
+
+func _log_result(value: Variant) -> Dictionary:
+	var body := _dictionary(value)
+	return {
+		"success": true,
+		"category": str(body.get("category", "")),
+		"entries": _array(body.get("entries", [])).duplicate(true),
+		"nextBeforeId": int(body.get("nextBeforeId", 0)),
 	}
 
 
