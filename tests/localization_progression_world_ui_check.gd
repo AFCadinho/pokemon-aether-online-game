@@ -65,6 +65,19 @@ func _check_runtime_copy() -> void:
 	game_state.set("fishing_region", "kanto")
 
 	localization_manager.call("set_locale", "nl")
+	var system_messages: Array = world.call("_story_reward_item_messages", [{
+		"alreadyGranted": false,
+		"grants": [{"itemId": "tm-rock-slide", "quantity": 1}],
+	}])
+	_check(
+		system_messages == ["Je hebt 1 × TM-rotsglijbaan ontvangen!"],
+		"Story item rewards name the localized Rock Slide TM in the Dutch System message"
+	)
+	var replay_messages: Array = world.call("_story_reward_item_messages", [{
+		"alreadyGranted": true,
+		"grants": [{"itemId": "tm-rock-slide", "quantity": 1}],
+	}])
+	_check(replay_messages.is_empty(), "Replayed story rewards do not duplicate System messages")
 	_check(fishing.call("_rod_button_text", unavailable_rod) == "Old Rod — Niet in bezit", "Fishing rod state renders in Dutch")
 	_check(
 		fishing.call("_rod_tooltip", unavailable_rod) == "Vislevel 1 • 0 regionale badges",

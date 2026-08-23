@@ -58,7 +58,7 @@ The script:
 - skips the pack when its hash version is already in `.github/workflows/deploy-desktop-r2.yml`
 - creates a zip file in `builds/asset-packs`
 - uploads the changed pack to R2 under `assets/`
-- updates `.github/workflows/deploy-desktop-r2.yml` with the new version and size
+- updates `.github/workflows/deploy-desktop-r2.yml` with the new version, size, and zip SHA-256
 
 ## Publish The New Manifest
 

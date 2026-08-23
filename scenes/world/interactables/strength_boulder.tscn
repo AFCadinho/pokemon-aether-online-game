@@ -1,0 +1,71 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/interactables/strength_boulder.gd" id="1_boulder"]
+[ext_resource type="Texture2D" path="res://assets/npcs/gen4-ow-sprites/Object boulder.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_boulder_0"]
+atlas = ExtResource("2_sheet")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_boulder_1"]
+atlas = ExtResource("2_sheet")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_boulder_2"]
+atlas = ExtResource("2_sheet")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_boulder_3"]
+atlas = ExtResource("2_sheet")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_boulder"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_boulder_0")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_boulder_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_boulder_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_boulder_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_boulder_3")
+}],
+"loop": true,
+"name": &"push",
+"speed": 14.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_interaction"]
+size = Vector2(96, 96)
+
+[node name="StrengthBoulder" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_boulder")
+interactable_kind = "strength_boulder"
+display_name = "Boulder"
+interaction_shape_size = Vector2(96, 96)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_boulder")
+animation = &"idle"
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("RectangleShape2D_interaction")
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

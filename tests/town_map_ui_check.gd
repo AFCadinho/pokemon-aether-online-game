@@ -38,7 +38,7 @@ func _run() -> void:
 	var route_points := layout_data.get("routePoints", []) as Array
 	_check(route_points.size() == 23, "Every Kanto route from Route 3 through Route 25 has a map coordinate")
 	_check((layout_points.get("kanto_map_point_02", {}) as Dictionary).get("kind") == "special", "Light-blue map circles are special locations")
-	_check((layout_points.get("kanto_map_point_08", {}) as Dictionary).get("name") == "Cerulean City", "Named settlement points use the supplied Kanto locations")
+	_check((layout_points.get("kanto_cerulean_city", {}) as Dictionary).get("name") == "Cerulean City", "Cerulean City uses its playable map point")
 	_check((layout_points.get("kanto_map_point_11", {}) as Dictionary).get("name") == "Diglett's Cave (Route 11)", "Named special points use the supplied Kanto locations")
 	_check((layout_points.get("kanto_map_point_16", {}) as Dictionary).get("kind") == "special", "The northern Diglett's Cave entrance is a special location")
 	_check((layout_points.get("kanto_map_point_17", {}) as Dictionary).get("kind") == "special", "Viridian Forest Gate is a special location")
@@ -55,7 +55,7 @@ func _run() -> void:
 	for area_value: Variant in areas.values():
 		if area_value is Dictionary:
 			location_groups[str((area_value as Dictionary).get("locationGroupId", ""))] = true
-	_check(locations.size() == 7, "Town Map contains the currently playable Kanto location groups")
+	_check(locations.size() == 9, "Town Map contains the currently playable Kanto location groups")
 	for location_id_value: Variant in locations.keys():
 		var location_id := str(location_id_value)
 		_check(location_groups.has(location_id), "%s is backed by a playable world location" % location_id)
@@ -101,8 +101,10 @@ func _run() -> void:
 		if str(location_id_value).begins_with("kanto_route_segment_"):
 			planned_route_count += 1
 	_check(popup_locations.size() == 46, "Town Map registers every configured point")
-	_check(planned_location_count == 39, "Future settlements, special locations, and routes are planned points")
-	_check(planned_route_count == 22, "Named future routes are available alongside map points")
+	_check(planned_location_count == 37, "Future settlements, special locations, and routes are planned points")
+	_check(planned_route_count == 21, "Named future routes are available alongside map points")
+	_check(not bool((popup_locations.get("kanto_route_4", {}) as Dictionary).get("planned", false)), "Route 4 is available as a playable route")
+	_check(not bool((popup_locations.get("kanto_cerulean_city", {}) as Dictionary).get("planned", false)), "Cerulean City is available as a playable city")
 	var towns_without_interiors := 0
 	for town_value: Variant in popup_locations.values():
 		if town_value is Dictionary and str((town_value as Dictionary).get("kind", "")) in ["town", "city", "settlement"]:
@@ -125,6 +127,13 @@ func _run() -> void:
 	_check(popup.current_location_id == "kanto_pallet_town", "Interior maps resolve to their parent Town Map location")
 	_check(popup.selected_location_id == "kanto_pallet_town", "Current location is selected when the map opens")
 	_check(popup.detail_name_label.size.x > 0.0, "Current location details use the full sidebar width without a duplicate portrait")
+	_check(popup.detail_name_label.get_parent() is HBoxContainer, "Location name and kind badge share one heading row")
+	_check(popup.detail_name_label.size_flags_horizontal == Control.SIZE_EXPAND_FILL, "Location name expands across the available heading width")
+	_check(popup.detail_kind_panel.get_parent() == popup.detail_name_label.get_parent(), "Location kind badge stays beside the location name")
+	_check(popup.detail_description_label.size_flags_horizontal == Control.SIZE_EXPAND_FILL, "Location description fills the detail card width")
+	_check(popup.detail_description_label.size.x >= 220.0, "Location description uses the wide sidebar instead of its minimum text width")
+	_check(popup.detail_interiors_container.columns == 2, "Town Map interiors use a compact two-column grid")
+	_check(popup.detail_connections_container.columns == 2, "Connected locations use a two-column navigation grid")
 	_check(popup.detail_interiors_container.get_child_count() == 3, "Pallet Town interiors come from the world access catalog")
 	_check(popup.detail_interiors_container.get_child(0) is Label, "Interiors are displayed separately from route navigation")
 	popup._refresh_details("kanto_pewter_city")
@@ -166,6 +175,10 @@ func _run() -> void:
 		popup.detail_connections_container.get_child_count() > 0
 		and popup.detail_connections_container.get_child(0) is Button,
 		"Connected locations are directly navigable from the detail card"
+	)
+	_check(
+		(popup.detail_connections_container.get_child(0) as Button).size_flags_horizontal == Control.SIZE_EXPAND_FILL,
+		"Connected-location buttons fill their grid cells"
 	)
 	_check(not popup.map_canvas.show_connection_overlay, "Baked route lines are not drawn a second time")
 	_check(not popup.map_canvas.show_marker_overlay, "Baked map circles use invisible interactive hotspots")

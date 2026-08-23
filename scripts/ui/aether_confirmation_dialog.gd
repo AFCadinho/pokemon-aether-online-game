@@ -20,6 +20,7 @@ const COLOR_MUTED := Color("9eb3c5")
 @onready var title_label: Label = $Center/Panel/Margin/Content/Header/Title
 @onready var close_button: Button = $Center/Panel/Margin/Content/Header/CloseButton
 @onready var message_label: Label = $Center/Panel/Margin/Content/MessagePanel/MessageMargin/Message
+@onready var custom_content: VBoxContainer = $Center/Panel/Margin/Content/CustomContent
 @onready var option_checkbox: CheckBox = $Center/Panel/Margin/Content/OptionCheckBox
 @onready var cancel_button: Button = $Center/Panel/Margin/Content/Actions/CancelButton
 @onready var confirm_button: Button = $Center/Panel/Margin/Content/Actions/ConfirmButton
@@ -55,6 +56,13 @@ func configure_option(option_text: String, pressed := false) -> void:
 	option_checkbox.text = option_text
 	option_checkbox.set_pressed_no_signal(pressed)
 	option_checkbox.visible = not option_text.strip_edges().is_empty()
+
+
+func add_custom_control(control: Control) -> void:
+	if control == null:
+		return
+	custom_content.visible = true
+	custom_content.add_child(control)
 
 
 func popup_centered(requested_size: Vector2i = Vector2i.ZERO) -> void:
