@@ -3909,6 +3909,7 @@
   "ui.skills.thieving.targets.tab": "Alvos",
   "ui.skills.thieving.targets.summary": "{available} disponíveis  •  {completed}/{total} tentados",
   "ui.skills.thieving.targets.town_summary": "{available}/{total} disponíveis",
+  "ui.skills.thieving.targets.area_option": "{area}  •  {completed}/{total} tentados",
   "ui.skills.thieving.targets.reset": "Cada alvo pode ser tentado uma vez por dia. Reinicia às 00:00 UTC.",
   "ui.skills.thieving.target.dorian": "Fã da Liga Dorian",
   "ui.skills.thieving.target.mabel": "Jardineira Mabel",

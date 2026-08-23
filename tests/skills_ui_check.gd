@@ -190,10 +190,9 @@ func _run() -> void:
 	_check((panel.get("catalog_tab_button") as Button).text == "Targets", "the secondary Thieving tab is labelled for targets")
 	_check(panel.get("targets_scroll") is ScrollContainer, "daily targets use an internal scroll area")
 	_check(panel.get_combined_minimum_size().y <= 600.0, "the target catalog does not lengthen the Skills window")
-	_check((panel.get("target_town_navigation") as HBoxContainer).visible, "Thieving keeps its quick location tabs")
-	_check(not (panel.get("rock_area_selector") as OptionButton).visible, "the Rock Smash area dropdown stays out of Thieving")
-	_check((panel.get("target_town_tabs") as HBoxContainer).get_child_count() == 2, "each available town receives a target tab")
-	_check(not (panel.get("target_town_previous_button") as Button).visible and not (panel.get("target_town_next_button") as Button).visible, "town arrows stay hidden while all tabs fit")
+	var area_selector := panel.get("area_selector") as OptionButton
+	_check(area_selector.visible and area_selector.item_count == 2, "Thieving offers one compact dropdown entry per area")
+	_check(area_selector.get_item_text(0).contains("Viridian City") and area_selector.get_item_text(0).contains("1/3"), "Thieving area options include daily attempt progress")
 	_check(str(panel.get("selected_target_town_key")) == "ui.skills.thieving.location.viridian_city", "the first target town is selected initially")
 	_check((panel.get("targets_container") as GridContainer).get_child_count() == 3, "only the selected town's targets are listed")
 	_check((panel.get("targets_summary_label") as Label).text.contains("3") and (panel.get("targets_summary_label") as Label).text.contains("1/4"), "target summary shows available and attempted counts")
@@ -201,31 +200,12 @@ func _run() -> void:
 	var first_target_content := first_target.get_child(0) as HBoxContainer
 	var first_target_status := first_target_content.get_child(1) as Label
 	_check(first_target_status.text == "Attempted today", "attempted targets have a clear daily status")
-	panel.call("_select_target_town", "ui.skills.thieving.location.pewter_city")
+	area_selector.select(1)
+	panel.call("_select_area", 1)
+	_check(str(panel.get("selected_target_town_key")) == "ui.skills.thieving.location.pewter_city", "selecting a Thieving dropdown area changes the active town")
 	_check((panel.get("targets_container") as GridContainer).get_child_count() == 1, "selecting Pewter shows only Pewter targets")
-	panel.call("_select_target_town", "ui.skills.thieving.location.viridian_city")
-	var expanded_town_order: Array[String] = [
-		"ui.skills.thieving.location.viridian_city",
-		"ui.skills.thieving.location.pewter_city",
-		"test.town.cerulean",
-		"test.town.saffron",
-		"test.town.celadon",
-		"test.town.fuchsia",
-	]
-	var expanded_town_targets: Dictionary = (panel.get("targets_by_town") as Dictionary).duplicate(true)
-	for town_key: String in expanded_town_order:
-		if not expanded_town_targets.has(town_key):
-			expanded_town_targets[town_key] = []
-	panel.set("target_town_order", expanded_town_order)
-	panel.set("targets_by_town", expanded_town_targets)
-	panel.call("_render_target_town_tabs")
-	var wide_town_tab_count := int(panel.call("_target_town_tabs_per_page"))
-	_check(wide_town_tab_count >= 4, "wide Skills windows expose more location tabs at once")
-	_check((panel.get("target_town_previous_button") as Button).visible and (panel.get("target_town_next_button") as Button).visible, "town arrows appear when tabs overflow")
-	_check((panel.get("target_town_tabs") as HBoxContainer).get_child_count() == wide_town_tab_count, "only the responsive page of town tabs is rendered at once")
-	panel.call("_change_target_town_page", 1)
-	_check(str(panel.get("selected_target_town_key")) == expanded_town_order[wide_town_tab_count], "the next arrow selects the first town on the next page")
-	panel.call("_render_targets", test_skills[1]["targets"] as Array)
+	area_selector.select(0)
+	panel.call("_select_area", 0)
 	skills_service.call("_on_thieving_state_changed", {
 		"unlocked": true,
 		"level": 20,
@@ -265,31 +245,30 @@ func _run() -> void:
 	panel.call("_select_detail_tab", "catalog")
 	_check((panel.get("targets_section") as VBoxContainer).visible, "Rock Smash has a dedicated daily Rocks tab")
 	_check((panel.get("catalog_tab_button") as Button).text == "Rocks", "Rock Smash labels its secondary tab for rocks")
-	_check(not (panel.get("target_town_navigation") as HBoxContainer).visible, "Rock Smash replaces paged location tabs")
-	var rock_area_selector := panel.get("rock_area_selector") as OptionButton
-	_check(rock_area_selector.visible and rock_area_selector.item_count == 2, "Rock Smash offers one compact dropdown entry per area")
-	_check(rock_area_selector.get_item_text(0).contains("Pewter City") and rock_area_selector.get_item_text(0).contains("1/4"), "area options include their daily smash progress")
+	area_selector = panel.get("area_selector") as OptionButton
+	_check(area_selector.visible and area_selector.item_count == 2, "Rock Smash offers one compact dropdown entry per area")
+	_check(area_selector.get_item_text(0).contains("Pewter City") and area_selector.get_item_text(0).contains("1/4"), "Rock Smash area options include their daily smash progress")
 	await process_frame
-	panel.call("_fit_rock_area_popup", rock_area_selector)
-	var rock_area_popup := rock_area_selector.get_popup()
-	_check(rock_area_popup.min_size.x == roundi(rock_area_selector.size.x), "the open area menu uses the full selector width")
-	_check(rock_area_popup.get_theme_font_size("font_size") == 13 and rock_area_popup.get_theme_constant("v_separation") == 12, "area menu options use larger text and roomier rows")
-	var rock_area_spacing := panel.get("rock_area_spacing") as Control
-	var selector_bottom := rock_area_selector.position.y + rock_area_selector.size.y
+	panel.call("_fit_area_popup", area_selector)
+	var area_popup := area_selector.get_popup()
+	_check(area_popup.min_size.x == roundi(area_selector.size.x), "the shared area menu uses the full selector width")
+	_check(area_popup.get_theme_font_size("font_size") == 13 and area_popup.get_theme_constant("v_separation") == 12, "the shared area menu uses larger text and roomier rows")
+	var area_selector_spacing := panel.get("area_selector_spacing") as Control
+	var selector_bottom := area_selector.position.y + area_selector.size.y
 	var gap_below_selector := (panel.get("targets_scroll") as ScrollContainer).position.y - selector_bottom
-	_check(rock_area_spacing.visible and gap_below_selector >= 14.0, "Rock Smash leaves clear space between the area selector and rock cards")
+	_check(area_selector_spacing.visible and gap_below_selector >= 14.0, "area selectors leave clear space before their cards")
 	_check((panel.get("targets_container") as GridContainer).get_child_count() == 4, "the Pewter rock list contains all four fixed rocks")
 	await process_frame
 	var pewter_rock_height := ((panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer).size.y
-	rock_area_selector.select(1)
-	panel.call("_select_rock_area", 1)
+	area_selector.select(1)
+	panel.call("_select_area", 1)
 	_check(str(panel.get("selected_target_town_key")) == "ui.skills.rock_smash.location.mt_moon", "selecting a dropdown area switches the active rock group")
 	_check((panel.get("targets_container") as GridContainer).get_child_count() == 2, "the dropdown only shows rocks from its selected area")
 	await process_frame
 	var mt_moon_rock_height := ((panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer).size.y
 	_check(is_equal_approx(pewter_rock_height, mt_moon_rock_height) and pewter_rock_height <= 55.0, "Pewter and Mt. Moon use the same compact rock cards")
-	rock_area_selector.select(0)
-	panel.call("_select_rock_area", 0)
+	area_selector.select(0)
+	panel.call("_select_area", 0)
 	_check((panel.get("targets_container") as GridContainer).columns == 2, "wide Rock Smash lists use two columns")
 	panel.size.x = 620.0
 	panel.call("_on_window_resized")
@@ -356,8 +335,9 @@ func _run() -> void:
 		)
 		_check(
 			parsed is Dictionary
+			and (parsed as Dictionary).has("ui.skills.thieving.targets.area_option")
 			and (parsed as Dictionary).has("ui.skills.rock_smash.rocks.area_option"),
-			"%s contains the Rock Smash area dropdown translation" % locale_path
+			"%s contains the shared Skills area dropdown translations" % locale_path
 		)
 
 	panel.queue_free()

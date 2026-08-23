@@ -3909,6 +3909,7 @@
   "ui.skills.thieving.targets.tab": "Targets",
   "ui.skills.thieving.targets.summary": "{available} available  •  {completed}/{total} attempted",
   "ui.skills.thieving.targets.town_summary": "{available}/{total} available",
+  "ui.skills.thieving.targets.area_option": "{area}  •  {completed}/{total} attempted",
   "ui.skills.thieving.targets.reset": "Each target can be attempted once per day. Resets at 00:00 UTC.",
   "ui.skills.thieving.target.dorian": "League Fan Dorian",
   "ui.skills.thieving.target.mabel": "Gardener Mabel",

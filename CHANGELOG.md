@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Thieving targets now use the same compact, progress-aware area dropdown as Rock Smash.
+
 - The Rock Smash area selector now has clearer spacing before the rock list.
 
 - The Rock Smash area menu is now wider and easier to read and select from.

@@ -21,8 +21,6 @@ const ROCK_SMASH_ICON: Texture2D = preload("res://assets/ui/rock_smash_skill_ico
 const WINDOW_PREFERRED_SIZE := Vector2(760, 780)
 const WINDOW_MINIMUM_SIZE := Vector2(480, 420)
 const WINDOW_EDGE_MARGIN := 12.0
-const TARGET_TOWN_TAB_MINIMUM_WIDTH := 145.0
-const TARGET_TOWN_TABS_MAXIMUM := 5
 const ROCK_GRID_MINIMUM_WIDTH := 700.0
 
 var main_panel: PanelContainer
@@ -54,12 +52,8 @@ var unlocks_container: VBoxContainer
 var targets_section: VBoxContainer
 var targets_summary_label: Label
 var targets_reset_label: Label
-var target_town_navigation: HBoxContainer
-var target_town_previous_button: Button
-var target_town_tabs: HBoxContainer
-var target_town_next_button: Button
-var rock_area_selector: OptionButton
-var rock_area_spacing: Control
+var area_selector: OptionButton
+var area_selector_spacing: Control
 var targets_scroll: ScrollContainer
 var targets_container: GridContainer
 var fishing_catalog_section: VBoxContainer
@@ -72,7 +66,6 @@ var selected_skill_id := "thieving"
 var selected_detail_tab := "progression"
 var selected_rod_id := "old_rod"
 var selected_target_town_key := ""
-var target_town_page := 0
 var target_town_order: Array[String] = []
 var targets_by_town: Dictionary = {}
 var showing_detail := false
@@ -413,41 +406,22 @@ func _build_interface() -> void:
 	targets_reset_label.add_theme_font_size_override("font_size", 9)
 	targets_section.add_child(targets_reset_label)
 
-	target_town_navigation = HBoxContainer.new()
-	target_town_navigation.name = "TargetTownNavigation"
-	target_town_navigation.add_theme_constant_override("separation", 5)
-	targets_section.add_child(target_town_navigation)
+	area_selector = OptionButton.new()
+	area_selector.name = "AreaSelector"
+	area_selector.custom_minimum_size.y = 40.0
+	area_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	area_selector.fit_to_longest_item = false
+	area_selector.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	area_selector.clip_text = true
+	area_selector.item_selected.connect(_select_area)
+	_style_area_selector(area_selector)
+	targets_section.add_child(area_selector)
 
-	target_town_previous_button = _create_target_town_arrow("‹")
-	target_town_previous_button.pressed.connect(_change_target_town_page.bind(-1))
-	target_town_navigation.add_child(target_town_previous_button)
-
-	target_town_tabs = HBoxContainer.new()
-	target_town_tabs.name = "TargetTownTabs"
-	target_town_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	target_town_tabs.add_theme_constant_override("separation", 5)
-	target_town_navigation.add_child(target_town_tabs)
-
-	target_town_next_button = _create_target_town_arrow("›")
-	target_town_next_button.pressed.connect(_change_target_town_page.bind(1))
-	target_town_navigation.add_child(target_town_next_button)
-
-	rock_area_selector = OptionButton.new()
-	rock_area_selector.name = "RockAreaSelector"
-	rock_area_selector.custom_minimum_size.y = 40.0
-	rock_area_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	rock_area_selector.fit_to_longest_item = false
-	rock_area_selector.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	rock_area_selector.clip_text = true
-	rock_area_selector.item_selected.connect(_select_rock_area)
-	_style_rock_area_selector(rock_area_selector)
-	targets_section.add_child(rock_area_selector)
-
-	rock_area_spacing = Control.new()
-	rock_area_spacing.name = "RockAreaSpacing"
-	rock_area_spacing.custom_minimum_size.y = 6.0
-	rock_area_spacing.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	targets_section.add_child(rock_area_spacing)
+	area_selector_spacing = Control.new()
+	area_selector_spacing.name = "AreaSelectorSpacing"
+	area_selector_spacing.custom_minimum_size.y = 6.0
+	area_selector_spacing.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	targets_section.add_child(area_selector_spacing)
 
 	targets_scroll = ScrollContainer.new()
 	targets_scroll.name = "TargetsScroll"
@@ -883,9 +857,6 @@ func _render_unlocks(unlocks: Array) -> void:
 
 
 func _render_targets(targets: Array) -> void:
-	target_town_navigation.visible = true
-	rock_area_selector.visible = false
-	rock_area_spacing.visible = false
 	var available_count := 0
 	var completed_count := 0
 	target_town_order.clear()
@@ -904,9 +875,7 @@ func _render_targets(targets: Array) -> void:
 		town_targets.append(target)
 	if selected_target_town_key not in target_town_order:
 		selected_target_town_key = target_town_order[0] if not target_town_order.is_empty() else ""
-	var selected_index := target_town_order.find(selected_target_town_key)
-	target_town_page = floori(float(maxi(selected_index, 0)) / _target_town_tabs_per_page())
-	_render_target_town_tabs()
+	_render_area_selector()
 	_render_selected_target_town()
 	targets_summary_label.text = _text("ui.skills.thieving.targets.summary", {
 		"available": available_count,
@@ -917,9 +886,6 @@ func _render_targets(targets: Array) -> void:
 
 
 func _render_rocks(rocks: Array) -> void:
-	target_town_navigation.visible = false
-	rock_area_selector.visible = true
-	rock_area_spacing.visible = true
 	var available_count := 0
 	var completed_count := 0
 	target_town_order.clear()
@@ -938,7 +904,7 @@ func _render_rocks(rocks: Array) -> void:
 		town_rocks.append(rock)
 	if selected_target_town_key not in target_town_order:
 		selected_target_town_key = target_town_order[0] if not target_town_order.is_empty() else ""
-	_render_rock_area_selector()
+	_render_area_selector()
 	_render_selected_target_town()
 	targets_summary_label.text = _text("ui.skills.rock_smash.rocks.summary", {
 		"available": available_count,
@@ -948,56 +914,43 @@ func _render_rocks(rocks: Array) -> void:
 	targets_reset_label.text = _text("ui.skills.rock_smash.rocks.reset")
 
 
-func _render_rock_area_selector() -> void:
-	rock_area_selector.clear()
+func _render_area_selector() -> void:
+	area_selector.clear()
 	var selected_index := 0
+	var completion_key := "smashedToday" if selected_skill_id == "rock_smash" else "attemptedToday"
+	var option_key := (
+		"ui.skills.rock_smash.rocks.area_option"
+		if selected_skill_id == "rock_smash"
+		else "ui.skills.thieving.targets.area_option"
+	)
 	for index in range(target_town_order.size()):
 		var town_key := target_town_order[index]
-		var town_rocks: Array = targets_by_town.get(town_key, []) as Array
+		var area_targets: Array = targets_by_town.get(town_key, []) as Array
 		var completed_count := 0
-		for rock_value: Variant in town_rocks:
-			if bool((rock_value as Dictionary).get("smashedToday", false)):
+		for target_value: Variant in area_targets:
+			if bool((target_value as Dictionary).get(completion_key, false)):
 				completed_count += 1
-		rock_area_selector.add_item(_text("ui.skills.rock_smash.rocks.area_option", {
+		area_selector.add_item(_text(option_key, {
 			"area": _text(town_key),
 			"completed": completed_count,
-			"total": town_rocks.size(),
+			"total": area_targets.size(),
 		}))
-		rock_area_selector.set_item_metadata(index, town_key)
+		area_selector.set_item_metadata(index, town_key)
 		if town_key == selected_target_town_key:
 			selected_index = index
-	rock_area_selector.disabled = target_town_order.is_empty()
+	area_selector.disabled = target_town_order.is_empty()
 	if not target_town_order.is_empty():
-		rock_area_selector.select(selected_index)
+		area_selector.select(selected_index)
 
 
-func _select_rock_area(index: int) -> void:
-	if index < 0 or index >= rock_area_selector.item_count:
+func _select_area(index: int) -> void:
+	if index < 0 or index >= area_selector.item_count:
 		return
-	var town_key := str(rock_area_selector.get_item_metadata(index))
+	var town_key := str(area_selector.get_item_metadata(index))
 	if town_key not in target_town_order:
 		return
 	selected_target_town_key = town_key
 	_render_selected_target_town()
-
-
-func _render_target_town_tabs() -> void:
-	for child: Node in target_town_tabs.get_children():
-		target_town_tabs.remove_child(child)
-		child.queue_free()
-	var tabs_per_page := _target_town_tabs_per_page()
-	var page_count := maxi(ceili(float(target_town_order.size()) / tabs_per_page), 1)
-	target_town_page = clampi(target_town_page, 0, page_count - 1)
-	var start_index := target_town_page * tabs_per_page
-	var end_index := mini(start_index + tabs_per_page, target_town_order.size())
-	for index in range(start_index, end_index):
-		var town_key := target_town_order[index]
-		target_town_tabs.add_child(_create_target_town_tab(town_key))
-	var has_overflow := target_town_order.size() > tabs_per_page
-	target_town_previous_button.visible = has_overflow
-	target_town_next_button.visible = has_overflow
-	target_town_previous_button.disabled = target_town_page <= 0
-	target_town_next_button.disabled = target_town_page >= page_count - 1
 
 
 func _render_selected_target_town() -> void:
@@ -1010,60 +963,7 @@ func _render_selected_target_town() -> void:
 	targets_scroll.scroll_vertical = 0
 
 
-func _create_target_town_tab(town_key: String) -> Button:
-	var town_targets: Array = targets_by_town.get(town_key, []) as Array
-	var available_count := 0
-	for target_value: Variant in town_targets:
-		if bool((target_value as Dictionary).get("availableToday", false)):
-			available_count += 1
-	var selected := town_key == selected_target_town_key
-	var button := Button.new()
-	button.custom_minimum_size = Vector2(0, 34)
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.focus_mode = Control.FOCUS_NONE
-	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.text = _text(town_key)
-	button.tooltip_text = _text(
-		"ui.skills.rock_smash.rocks.town_summary"
-		if selected_skill_id == "rock_smash"
-		else "ui.skills.thieving.targets.town_summary",
-		{
-		"available": available_count,
-		"total": town_targets.size(),
-		}
-	)
-	button.add_theme_font_size_override("font_size", 10)
-	button.add_theme_color_override("font_color", TEXT_COLOR if selected else MUTED_TEXT_COLOR)
-	button.add_theme_color_override("font_hover_color", TEXT_COLOR)
-	button.add_theme_stylebox_override(
-		"normal",
-		_make_panel_style(CARD_SELECTED if selected else Color("#07111c"), CARD_SELECTED_BORDER if selected else PANEL_BORDER, 7, 1)
-	)
-	button.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 7, 1))
-	button.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
-	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
-	button.pressed.connect(_select_target_town.bind(town_key))
-	return button
-
-
-func _create_target_town_arrow(label: String) -> Button:
-	var button := Button.new()
-	button.custom_minimum_size = Vector2(34, 34)
-	button.focus_mode = Control.FOCUS_NONE
-	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.text = label
-	button.add_theme_font_size_override("font_size", 18)
-	button.add_theme_color_override("font_color", ACCENT_COLOR)
-	button.add_theme_color_override("font_disabled_color", LOCKED_COLOR)
-	button.add_theme_stylebox_override("normal", _make_panel_style(Color("#07111c"), PANEL_BORDER, 7, 1))
-	button.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 7, 1))
-	button.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
-	button.add_theme_stylebox_override("disabled", _make_panel_style(Color("#070c12"), Color("#25313d"), 7, 1))
-	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
-	return button
-
-
-func _style_rock_area_selector(option: OptionButton) -> void:
+func _style_area_selector(option: OptionButton) -> void:
 	option.focus_mode = Control.FOCUS_ALL
 	option.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	option.add_theme_font_size_override("font_size", 12)
@@ -1089,38 +989,14 @@ func _style_rock_area_selector(option: OptionButton) -> void:
 	popup.add_theme_constant_override("v_separation", 12)
 	popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#050e18fc"), CARD_SELECTED_BORDER, 8, 1))
 	popup.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 5, 1))
-	popup.about_to_popup.connect(_fit_rock_area_popup.bind(option))
+	popup.about_to_popup.connect(_fit_area_popup.bind(option))
 
 
-func _fit_rock_area_popup(option: OptionButton) -> void:
+func _fit_area_popup(option: OptionButton) -> void:
 	var popup := option.get_popup()
 	var popup_width := maxi(roundi(option.size.x), 320)
 	popup.min_size = Vector2i(popup_width, 0)
 	popup.max_size = Vector2i(popup_width, 360)
-
-
-func _select_target_town(town_key: String) -> void:
-	if town_key not in target_town_order:
-		return
-	selected_target_town_key = town_key
-	target_town_page = floori(float(target_town_order.find(town_key)) / _target_town_tabs_per_page())
-	_render_target_town_tabs()
-	_render_selected_target_town()
-
-
-func _change_target_town_page(direction: int) -> void:
-	var tabs_per_page := _target_town_tabs_per_page()
-	var page_count := maxi(ceili(float(target_town_order.size()) / tabs_per_page), 1)
-	var next_page := clampi(target_town_page + direction, 0, page_count - 1)
-	if next_page == target_town_page:
-		return
-	target_town_page = next_page
-	var first_town_index := target_town_page * tabs_per_page
-	if first_town_index < target_town_order.size():
-		selected_target_town_key = target_town_order[first_town_index]
-	_render_target_town_tabs()
-	_render_selected_target_town()
-
 
 func _create_target_row(target: Dictionary) -> Control:
 	var row := PanelContainer.new()
@@ -1304,10 +1180,6 @@ func _fit_window_to_parent() -> void:
 
 func _on_window_resized() -> void:
 	_update_target_grid_columns()
-	if selected_skill_id == "thieving" and target_town_tabs != null and not target_town_order.is_empty():
-		var selected_index := target_town_order.find(selected_target_town_key)
-		target_town_page = floori(float(maxi(selected_index, 0)) / _target_town_tabs_per_page())
-		_render_target_town_tabs()
 
 
 func _update_target_grid_columns() -> void:
@@ -1315,17 +1187,6 @@ func _update_target_grid_columns() -> void:
 		return
 	targets_container.columns = (
 		2 if selected_skill_id == "rock_smash" and size.x >= ROCK_GRID_MINIMUM_WIDTH else 1
-	)
-
-
-func _target_town_tabs_per_page() -> int:
-	var available_width := size.x - 120.0
-	if target_town_tabs != null:
-		available_width = maxf(available_width, target_town_tabs.size.x)
-	return clampi(
-		floori(maxf(available_width, TARGET_TOWN_TAB_MINIMUM_WIDTH) / TARGET_TOWN_TAB_MINIMUM_WIDTH),
-		1,
-		TARGET_TOWN_TABS_MAXIMUM
 	)
 
 

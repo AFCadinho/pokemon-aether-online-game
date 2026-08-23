@@ -3909,6 +3909,7 @@
   "ui.skills.thieving.targets.tab": "Doelwitten",
   "ui.skills.thieving.targets.summary": "{available} beschikbaar  •  {completed}/{total} geprobeerd",
   "ui.skills.thieving.targets.town_summary": "{available}/{total} beschikbaar",
+  "ui.skills.thieving.targets.area_option": "{area}  •  {completed}/{total} geprobeerd",
   "ui.skills.thieving.targets.reset": "Elk doelwit kun je eenmaal per dag proberen. Reset om 00:00 UTC.",
   "ui.skills.thieving.target.dorian": "League-fan Dorian",
   "ui.skills.thieving.target.mabel": "Tuinier Mabel",
