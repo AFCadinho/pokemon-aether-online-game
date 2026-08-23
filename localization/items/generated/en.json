@@ -19,6 +19,10 @@
     "name": "Absolite",
     "shortDesc": "Held: Allows Absol to Mega Evolve into Mega Absol."
   },
+  "absolite-z": {
+    "name": "Absolite Z",
+    "shortDesc": "If held by an Absol, this item allows it to Mega Evolve into Mega Absol Z in battle."
+  },
   "absorb-bulb": {
     "name": "Absorb Bulb",
     "shortDesc": "Held: Raises the holders Special Attack by one stage when it takes Water-type damage."
@@ -283,6 +287,10 @@
     "name": "Banettite",
     "shortDesc": "Held: Allows Banette to Mega Evolve into Mega Banette."
   },
+  "barbaracite": {
+    "name": "Barbaracite",
+    "shortDesc": "If held by a Barbaracle, this item allows it to Mega Evolve in battle."
+  },
   "basement-key": {
     "name": "Basement Key",
     "shortDesc": "HS: Key to the tunnel under Goldenrod City. Gen III: Key to New Mauville."
@@ -298,6 +306,10 @@
   "battle-pocket": {
     "name": "Battle Pocket",
     "shortDesc": "- - -"
+  },
+  "baxcalibrite": {
+    "name": "Baxcalibrite",
+    "shortDesc": "If held by a Baxcalibur, this item allows it to Mega Evolve in battle."
   },
   "beach-glass": {
     "name": "Beach Glass",
@@ -595,6 +607,10 @@
     "name": "Chalky Stone",
     "shortDesc": "A small whitish stone picked up at the edge of the road."
   },
+  "chandelurite": {
+    "name": "Chandelurite",
+    "shortDesc": "If held by a Chandelure, this item allows it to Mega Evolve in battle."
+  },
   "charcoal": {
     "name": "Charcoal",
     "shortDesc": "Held: Fire-Type moves from holder do 20% more damage."
@@ -627,6 +643,10 @@
     "name": "Cherish Ball",
     "shortDesc": "Tries to catch a wild Pokemon."
   },
+  "chesnaughtite": {
+    "name": "Chesnaughtite",
+    "shortDesc": "If held by a Chesnaught, this item allows it to Mega Evolve in battle."
+  },
   "chesto-berry": {
     "name": "Chesto Berry",
     "shortDesc": "Held: Consumed when asleep to cure sleep."
@@ -638,6 +658,10 @@
   "chill-drive": {
     "name": "Chill Drive",
     "shortDesc": "Grants Genesect a white, Ice-type Techno Blast."
+  },
+  "chimechite": {
+    "name": "Chimechite",
+    "shortDesc": "If held by a Chimecho, this item allows it to Mega Evolve in battle."
   },
   "chipped-pot": {
     "name": "Chipped Pot",
@@ -674,6 +698,10 @@
   "clear-bell": {
     "name": "Clear Bell",
     "shortDesc": "HS: Allows Kimono-girls to summon Ho-oh. C: Summons Suicune to the Tin Tower."
+  },
+  "clefablite": {
+    "name": "Clefablite",
+    "shortDesc": "If held by a Clefable, this item allows it to Mega Evolve in battle."
   },
   "clever-wing": {
     "name": "Clever Feather",
@@ -767,6 +795,10 @@
     "name": "Covert Cloak",
     "shortDesc": "The holder is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause the holder to flinch, cause the holder's stat stages to be lowered, as well as Anchor Shot, Eerie Spell, Fling, Psychic Noise, Salt Cure, Spirit Shackle, Syrup Bomb, and Throat Chop. The effect of Sparkling Aria is prevented if the holder is the only target. Secondary effects added by King's Rock, Razor Fang, and the Poison Touch, Stench, and Toxic Chain Abilities are also prevented against the holder."
   },
+  "crabominite": {
+    "name": "Crabominite",
+    "shortDesc": "If held by a Crabominable, this item allows it to Mega Evolve in battle."
+  },
   "cracked-pot": {
     "name": "Cracked Pot",
     "shortDesc": "A peculiar teapot that can make a certain species of Pokemon evolve. It may be cracked, but tea poured from it is delicious."
@@ -811,6 +843,10 @@
     "name": "Darkinium Z",
     "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Dark moves."
   },
+  "darkranite": {
+    "name": "Darkranite",
+    "shortDesc": "If held by a Darkrai, this item allows it to Mega Evolve in battle."
+  },
   "dawn-stone": {
     "name": "Dawn Stone",
     "shortDesc": "Evolves a male Kirlia into Gallade or a female Snorunt into Froslass."
@@ -834,6 +870,10 @@
   "defog-charm": {
     "name": "Defog Charm",
     "shortDesc": "Lets you use Defog without a Pokemon knowing it."
+  },
+  "delphoxite": {
+    "name": "Delphoxite",
+    "shortDesc": "If held by a Delphox, this item allows it to Mega Evolve in battle."
   },
   "destiny-knot": {
     "name": "Destiny Knot",
@@ -903,6 +943,10 @@
     "name": "Draco Plate",
     "shortDesc": "Held: Dragon-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Dragon."
   },
+  "dragalgite": {
+    "name": "Dragalgite",
+    "shortDesc": "If held by a Dragalge, this item allows it to Mega Evolve in battle."
+  },
   "dragon-fang": {
     "name": "Dragon Fang",
     "shortDesc": "Held: Dragon-Type moves from holder do 20% more damage."
@@ -923,6 +967,10 @@
     "name": "Dragon Skull",
     "shortDesc": "Return to the museum in Nacrene City."
   },
+  "dragoninite": {
+    "name": "Dragoninite",
+    "shortDesc": "If held by a Dragonite, this item allows it to Mega Evolve in battle."
+  },
   "dragonium-z--bag": {
     "name": "Dragonium Z",
     "shortDesc": "XXX new effect for dragonium-z--bag"
@@ -930,6 +978,10 @@
   "dragonium-z--held": {
     "name": "Dragonium Z",
     "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Dragon moves."
+  },
+  "drampanite": {
+    "name": "Drampanite",
+    "shortDesc": "If held by a Drampa, this item allows it to Mega Evolve in battle."
   },
   "dread-plate": {
     "name": "Dread Plate",
@@ -983,6 +1035,10 @@
     "name": "Earth Plate",
     "shortDesc": "Held: Ground-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Ground."
   },
+  "eelektrossite": {
+    "name": "Eelektrossite",
+    "shortDesc": "If held by an Eelektross, this item allows it to Mega Evolve in battle."
+  },
   "eevium-z--bag": {
     "name": "Eevium Z",
     "shortDesc": "XXX new effect for eevium-z--bag"
@@ -1031,6 +1087,10 @@
     "name": "Elixir",
     "shortDesc": "Restores 10 PP for each move."
   },
+  "emboarite": {
+    "name": "Emboarite",
+    "shortDesc": "If held by an Emboar, this item allows it to Mega Evolve in battle."
+  },
   "endorsement": {
     "name": "Endorsement",
     "shortDesc": "A letter of recommendation that youll need in order to participate in the Gym Challenge."
@@ -1078,6 +1138,10 @@
   "eviolite": {
     "name": "Eviolite",
     "shortDesc": "Held: Holder has 1.5 Defense and Special Defense, as long as its not fully evolved."
+  },
+  "excadrite": {
+    "name": "Excadrite",
+    "shortDesc": "If held by an Excadrill, this item allows it to Mega Evolve in battle."
   },
   "exp-candy-l": {
     "name": "Exp. Candy L",
@@ -1135,6 +1199,10 @@
     "name": "Fairy Memory",
     "shortDesc": "Held: Changes Silvally to its Fairy form. Changes Multi-Attacks type to Fairy."
   },
+  "falinksite": {
+    "name": "Falinksite",
+    "shortDesc": "If held by a Falinks, this item allows it to Mega Evolve in battle."
+  },
   "fame-checker": {
     "name": "Fame Checker",
     "shortDesc": "Records information about NPCs."
@@ -1150,6 +1218,10 @@
   "fast-ball": {
     "name": "Fast Ball",
     "shortDesc": "4 effectiveness on Pokemon with 100 or greater base speed. (Gen II: Roaming or Fleeing Pokemon). Made from Wht Apricorn."
+  },
+  "feraligite": {
+    "name": "Feraligite",
+    "shortDesc": "If held by a Feraligatr, this item allows it to Mega Evolve in battle."
   },
   "festival-ticket": {
     "name": "Festival Ticket",
@@ -1223,6 +1295,10 @@
     "name": "Float Stone",
     "shortDesc": "Held: Holder has 0.5 weight."
   },
+  "floettite": {
+    "name": "Floettite",
+    "shortDesc": "If held by an Eternal Flower Floette, this item allows it to Mega Evolve in battle."
+  },
   "flower-sweet": {
     "name": "Flower Sweet",
     "shortDesc": "A flower-shaped sweet. When a Milcery holds this, it spins around happily."
@@ -1291,6 +1367,10 @@
     "name": "Friend Ball",
     "shortDesc": "Caught Pokemon start with 200 happiness. Made from Grn Apricorn."
   },
+  "froslassite": {
+    "name": "Froslassite",
+    "shortDesc": "If held by a Froslass, this item allows it to Mega Evolve in battle."
+  },
   "fruit-bunch": {
     "name": "Fruit Bunch",
     "shortDesc": "One of the many ingredients that can be used for cooking at your camp. The syrupy fruits give off a strong tropical feel."
@@ -1334,6 +1414,10 @@
   "garchompite": {
     "name": "Garchompite",
     "shortDesc": "Held: Allows Garchomp to Mega Evolve into Mega Garchomp."
+  },
+  "garchompite-z": {
+    "name": "Garchompite Z",
+    "shortDesc": "If held by a Garchomp, this item allows it to Mega Evolve into Mega Garchomp Z."
   },
   "gardevoirite": {
     "name": "Gardevoirite",
@@ -1383,6 +1467,10 @@
     "name": "Glalitite",
     "shortDesc": "Held: Allows Glalie to Mega Evolve into Mega Glalie."
   },
+  "glimmoranite": {
+    "name": "Glimmoranite",
+    "shortDesc": "If held by a Glimmora, this item allows it to Mega Evolve in battle."
+  },
   "go-goggles": {
     "name": "Go-Goggles",
     "shortDesc": "Allows passage through windy deserts."
@@ -1402,6 +1490,14 @@
   "gold-teeth": {
     "name": "Gold Teeth",
     "shortDesc": "The Safari Zone Wardens dentures. Trade for HM04 (Strength)."
+  },
+  "golisopite": {
+    "name": "Golisopite",
+    "shortDesc": "If held by a Golisopod, this item allows it to Mega Evolve in battle."
+  },
+  "golurkite": {
+    "name": "Golurkite",
+    "shortDesc": "If held by a Golurk, this item allows it to Mega Evolve in battle."
   },
   "good-rod": {
     "name": "Good Rod",
@@ -1467,6 +1563,10 @@
     "name": "Green Shard",
     "shortDesc": "No effect. Can be traded for items or moves."
   },
+  "greninjite": {
+    "name": "Greninjite",
+    "shortDesc": "If held by a Greninja, this item allows it to Mega Evolve in battle."
+  },
   "grepa-berry": {
     "name": "Grepa Berry",
     "shortDesc": "Drops Special Defense Effort Values by 10 and raises happiness."
@@ -1527,6 +1627,10 @@
     "name": "Hasty Mint",
     "shortDesc": "When a Pokemon smells this mint, its Speed will grow more easily, but its Defense will grow more slowly."
   },
+  "hawluchanite": {
+    "name": "Hawluchanite",
+    "shortDesc": "If held by a Hawlucha, this item allows it to Mega Evolve in battle."
+  },
   "heal-ball": {
     "name": "Heal Ball",
     "shortDesc": "Tries to catch a wild Pokemon. Caught Pokemon are immediately healed."
@@ -1562,6 +1666,10 @@
   "heat-rock": {
     "name": "Heat Rock",
     "shortDesc": "Held: Sunny Day by the holder lasts 8 rounds instead of 5."
+  },
+  "heatranite": {
+    "name": "Heatranite",
+    "shortDesc": "If held by a Heatran, this item allows it to Mega Evolve in battle."
   },
   "heavy-ball": {
     "name": "Heavy Ball",
@@ -1979,6 +2087,10 @@
     "name": "Lucarionite",
     "shortDesc": "Held: Allows Lucario to Mega Evolve into Mega Lucario."
   },
+  "lucarionite-z": {
+    "name": "Lucarionite Z",
+    "shortDesc": "If held by a Lucario, this item allows it to Mega Evolve into Mega Lucario Z in battle."
+  },
   "luck-incense": {
     "name": "Luck Incense",
     "shortDesc": "Held: Doubles the money earned from a battle. Does not stack with Amulet Coin. Breeding: Chansey and Blissey beget a Happiny Egg."
@@ -2055,6 +2167,10 @@
     "name": "Macho Brace",
     "shortDesc": "Held: Holder gains double effort values from battles, but has halved Speed in battle."
   },
+  "magearnite": {
+    "name": "Magearnite",
+    "shortDesc": "If held by a Magearna, this item allows it to Mega Evolve in battle."
+  },
   "magma-emblem": {
     "name": "Magma Emblem",
     "shortDesc": "Provides access to the Team Magma Hideout in the Jagged Pass."
@@ -2086,6 +2202,10 @@
   "makeup-bag": {
     "name": "Makeup Bag",
     "shortDesc": "Allows the player to change their lipstick color."
+  },
+  "malamarite": {
+    "name": "Malamarite",
+    "shortDesc": "If held by a Malamar, this item allows it to Mega Evolve in battle."
   },
   "malicious-armor": {
     "name": "Malicious Armor",
@@ -2219,6 +2339,10 @@
     "name": "Mega Tiara",
     "shortDesc": "Unused NPC Key Stone."
   },
+  "meganiumite": {
+    "name": "Meganiumite",
+    "shortDesc": "If held by a Meganium, this item allows it to Mega Evolve in battle."
+  },
   "member-card": {
     "name": "Member Card",
     "shortDesc": "Allows access to Newmoon Island and Darkrai."
@@ -2226,6 +2350,10 @@
   "mental-herb": {
     "name": "Mental Herb",
     "shortDesc": "Held: Consumed to cure infatuation. Gen V: Also removes Taunt, Encore, Torment, Disable, and Cursed Body."
+  },
+  "meowsticite": {
+    "name": "Meowsticite",
+    "shortDesc": "If held by a Meowstic, this item allows it to Mega Evolve in battle."
   },
   "metagrossite": {
     "name": "Metagrossite",
@@ -2691,10 +2819,6 @@
     "name": "Poke Toy",
     "shortDesc": "Ends a wild battle."
   },
-  "pokedex": {
-    "name": "Pokédex",
-    "shortDesc": "Records information about Pokémon you encounter."
-  },
   "pokeblock-case": {
     "name": "Pokeblock Case",
     "shortDesc": "Holds Pokeblocks."
@@ -2702,6 +2826,10 @@
   "pokeblock-kit": {
     "name": "Pokeblock Kit",
     "shortDesc": "Creates and stores Pokeblocks."
+  },
+  "pokedex": {
+    "name": "Pokédex",
+    "shortDesc": "Records information about Pokémon you encounter."
   },
   "pokemon-box": {
     "name": "Pokemon Box Link",
@@ -2863,6 +2991,10 @@
     "name": "Purple Petal",
     "shortDesc": "XXX new effect for purple-petal"
   },
+  "pyroarite": {
+    "name": "Pyroarite",
+    "shortDesc": "If held by a Pyroar, this item allows it to Mega Evolve in battle."
+  },
   "qualot-berry": {
     "name": "Qualot Berry",
     "shortDesc": "Drops Defense Effort Values by 10 and raises happiness."
@@ -2906,6 +3038,14 @@
   "rage-candy-bar": {
     "name": "Rage Candy Bar",
     "shortDesc": "HS: Traded for TM64. Gen II & Gen V: Acts as a Potion."
+  },
+  "raichunite-x": {
+    "name": "Raichunite X",
+    "shortDesc": "If held by a Raichu, this item allows it to Mega Evolve into Mega Raichu X in battle."
+  },
+  "raichunite-y": {
+    "name": "Raichunite Y",
+    "shortDesc": "If held by a Raichu, this item allows it to Mega Evolve into Mega Raichu Y in battle."
   },
   "rain-dance-charm": {
     "name": "Rain Dance Charm",
@@ -3295,9 +3435,21 @@
     "name": "Scizorite",
     "shortDesc": "Held: Allows Scizor to Mega Evolve into Mega Scizor."
   },
+  "scolipite": {
+    "name": "Scolipite",
+    "shortDesc": "If held by a Scolipede, this item allows it to Mega Evolve in battle."
+  },
   "scope-lens": {
     "name": "Scope Lens",
     "shortDesc": "Held: Raises the holders critical hit ratio by one stage."
+  },
+  "scovillainite": {
+    "name": "Scovillainite",
+    "shortDesc": "If held by a Scovillain, this item allows it to Mega Evolve in battle."
+  },
+  "scraftinite": {
+    "name": "Scraftinite",
+    "shortDesc": "If held by a Scrafty, this item allows it to Mega Evolve in battle."
   },
   "sea-incense": {
     "name": "Sea Incense",
@@ -3355,13 +3507,13 @@
     "name": "Shiny Charm",
     "shortDesc": "Use to raise Shiny encounter odds by 10% for 7 days."
   },
-  "shiny-tracker": {
-    "name": "Shiny Tracker",
-    "shortDesc": "Open your Shiny hunts and encounter statistics."
-  },
   "shiny-stone": {
     "name": "Shiny Stone",
     "shortDesc": "Evolves a Minccino into Cinccino, a Roselia into Roserade, or a Togetic into Togekiss."
+  },
+  "shiny-tracker": {
+    "name": "Shiny Tracker",
+    "shortDesc": "Open your Shiny hunts and encounter statistics."
   },
   "shoal-salt": {
     "name": "Shoal Salt",
@@ -3402,6 +3554,10 @@
   "sitrus-berry": {
     "name": "Sitrus Berry",
     "shortDesc": "Held: Consumed at 1/2 max HP to recover 1/4 max HP."
+  },
+  "skarmorite": {
+    "name": "Skarmorite",
+    "shortDesc": "If held by a Skarmory, this item allows it to Mega Evolve in battle."
   },
   "skull-fossil": {
     "name": "Skull Fossil",
@@ -3563,6 +3719,10 @@
     "name": "Star Sweet",
     "shortDesc": "A star-shaped sweet. When a Milcery holds this, it spins around happily."
   },
+  "staraptite": {
+    "name": "Staraptite",
+    "shortDesc": "If held by a Staraptor, this item allows it to Mega Evolve in battle."
+  },
   "stardust": {
     "name": "Stardust",
     "shortDesc": "Can be sold for money."
@@ -3570,6 +3730,10 @@
   "starf-berry": {
     "name": "Starf Berry",
     "shortDesc": "Held: Consumed at 1/4 max HP to boost a random stat by two stages."
+  },
+  "starminite": {
+    "name": "Starminite",
+    "shortDesc": "If held by a Starmie, this item allows it to Mega Evolve in battle."
   },
   "steel-gem": {
     "name": "Steel Gem",
@@ -3722,6 +3886,10 @@
   "tart-apple": {
     "name": "Tart Apple",
     "shortDesc": "A peculiar apple that can make a certain species of Pokemon evolve. Its exceptionally tart."
+  },
+  "tatsugirinite": {
+    "name": "Tatsugirinite",
+    "shortDesc": "If held by a Tatsugiri, this item allows it to Mega Evolve in battle."
   },
   "tea": {
     "name": "Tea",
@@ -5383,6 +5551,10 @@
     "name": "Venusaurite",
     "shortDesc": "Held: Allows Venusaur to Mega Evolve into Mega Venusaur."
   },
+  "victreebelite": {
+    "name": "Victreebelite",
+    "shortDesc": "If held by a Victreebel, this item allows it to Mega Evolve in battle."
+  },
   "vs-recorder": {
     "name": "Vs. Recorder",
     "shortDesc": "Records wireless, Wi-Fi, or Battle Frontier battles, and stores points."
@@ -5575,6 +5747,10 @@
     "name": "Zap Plate",
     "shortDesc": "Held: Electric-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Electric."
   },
+  "zeraorite": {
+    "name": "Zeraorite",
+    "shortDesc": "If held by a Zeraora, this item allows it to Mega Evolve in battle."
+  },
   "zinc": {
     "name": "Zinc",
     "shortDesc": "Raises Special Defense and happiness."
@@ -5586,5 +5762,9 @@
   "zygarde-cube": {
     "name": "Zygarde Cube",
     "shortDesc": "Contains collected Zygarde cells/cores. Can teach Zygarde moves."
+  },
+  "zygardite": {
+    "name": "Zygardite",
+    "shortDesc": "If held by a Zygarde in Complete Forme, this item allows it to Mega Evolve in battle."
   }
 }

@@ -5,6 +5,8 @@ class_name Pokemon
 const DEFAULT_HAPPINESS := 50
 
 var species: String
+var species_id: String = ""
+var showdown_id: String = ""
 var national_dex_number: int = 0
 var nickname: String = ""
 var gender: String = ""
@@ -37,6 +39,9 @@ var growth_rate: String
 var base_experience: int
 var status: String
 var happiness: int
+var special_lineage: String = ""
+var borrowed := false
+var loan: Dictionary = {}
 
 var current_hp: int
 var max_hp: int
@@ -167,6 +172,10 @@ func to_battle_dict() -> Dictionary:
 		"nextLevelExp": next_level_exp,
 		"experienceToNextLevel": experience_to_next_level,
 	}
+	if species_id != "":
+		battle_data["speciesId"] = species_id
+	if showdown_id != "":
+		battle_data["showdownId"] = showdown_id
 	if nickname != "":
 		battle_data["nickname"] = nickname
 		# Pokemon Showdown uses `name` for the nickname that appears in idents.
@@ -175,6 +184,8 @@ func to_battle_dict() -> Dictionary:
 		battle_data["growthRate"] = growth_rate
 	if base_experience > 0:
 		battle_data["baseExperience"] = base_experience
+	if special_lineage != "":
+		battle_data["specialLineage"] = special_lineage
 	if owned_pokemon_id > 0:
 		battle_data["ownedPokemonId"] = owned_pokemon_id
 	if caught_ball_item_id != "":
@@ -201,6 +212,10 @@ func to_battle_state_dict(metadata_slot: int = -1) -> Dictionary:
 		"moves": _moves_to_persistence_list(),
 		"condition": _to_battle_condition(),
 	}
+	if species_id != "":
+		battle_state["speciesId"] = species_id
+	if special_lineage != "":
+		battle_state["specialLineage"] = special_lineage
 	if nickname != "":
 		battle_state["nickname"] = nickname
 	if metadata_slot > 0:
@@ -222,6 +237,9 @@ func to_persistence_dict() -> Dictionary:
 	pokemon_data["ballItemId"] = ball_item_id
 	if caught_ball_item_id != "":
 		pokemon_data["caughtBallItemId"] = caught_ball_item_id
+	pokemon_data["borrowed"] = borrowed
+	if not loan.is_empty():
+		pokemon_data["loan"] = loan.duplicate(true)
 	pokemon_data["tradable"] = tradable
 	pokemon_data["currentHp"] = current_hp
 	pokemon_data["maxHp"] = max_hp
