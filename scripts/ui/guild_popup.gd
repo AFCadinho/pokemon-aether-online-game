@@ -16,6 +16,14 @@ const LEGACY_GUILD_EMBLEM_SIZE := 8
 const EMBLEM_EDITOR_PIXEL_SIZE := 11
 const EMBLEM_EDITOR_POPUP_SIZE := Vector2i(630, 500)
 const DIRECTORY_FILTER_POPUP_SIZE := Vector2i(420, 390)
+const GUILD_LANGUAGE_OPTIONS: Array[String] = [
+	"English",
+	"Dutch",
+	"Dutch / English",
+	"German",
+	"French",
+	"Other",
+]
 
 const UI_BG := Color("#050b14f5")
 const UI_SURFACE := Color("#081522f2")
@@ -522,7 +530,12 @@ func _build_directory_filter_dialog() -> PopupPanel:
 		"GuildLanguageFilterSelect",
 		[
 			{"id": "all", "key": "ui.guild.filter.all"},
-			{"id": "dutch", "key": "ui.guild.filter.dutch"},
+			{"id": "english", "key": "ui.guild.option.language.english"},
+			{"id": "dutch", "key": "ui.guild.option.language.dutch"},
+			{"id": "dutch_english", "key": "ui.guild.option.language.dutch_english"},
+			{"id": "german", "key": "ui.guild.option.language.german"},
+			{"id": "french", "key": "ui.guild.option.language.french"},
+			{"id": "other", "key": "ui.guild.option.language.other"},
 		]
 	)
 	content.add_child(_directory_filter_field("ui.guild.filters.language", directory_language_select))
@@ -719,7 +732,7 @@ func _build_create_page() -> Control:
 	var choices := HBoxContainer.new()
 	choices.add_theme_constant_override("separation", 10)
 	form.add_child(choices)
-	language_select = _option_button(["English", "Dutch", "Dutch / English", "German", "French", "Other"])
+	language_select = _option_button(GUILD_LANGUAGE_OPTIONS)
 	focus_select = _option_button(["Social", "PvE", "PvP", "PvP & Social", "PvE & Social", "Mixed"])
 	recruitment_select = _option_button(["Applications open", "Open", "Invite only", "Closed"])
 	choices.add_child(_labeled_field(_t("ui.guild.field.language"), language_select))
@@ -1061,7 +1074,7 @@ func _build_member_management(guild: Dictionary, is_leader: bool, can_invite: bo
 		var choices := HBoxContainer.new()
 		choices.add_theme_constant_override("separation", 7)
 		content.add_child(choices)
-		settings_language_select = _option_button(["English", "Dutch", "Dutch / English", "German", "French", "Other"])
+		settings_language_select = _option_button(GUILD_LANGUAGE_OPTIONS)
 		settings_focus_select = _option_button(["Social", "PvE", "PvP", "PvP & Social", "PvE & Social", "Mixed"])
 		settings_recruitment_select = _option_button(["Applications open", "Open", "Invite only", "Closed"])
 		_select_option_text(settings_language_select, str(guild.get("language", "English")))
@@ -2411,9 +2424,24 @@ func _matches_directory_filter(guild: Dictionary) -> bool:
 		return false
 	if directory_focus_filter != "all" and not focus.contains(directory_focus_filter):
 		return false
-	if directory_language_filter == "dutch" and not language.contains("dutch"):
+	if not _matches_directory_language_filter(language):
 		return false
 	return true
+
+
+func _matches_directory_language_filter(language: String) -> bool:
+	if directory_language_filter == "all":
+		return true
+	if directory_language_filter == "dutch_english":
+		return language == "dutch / english"
+	var language_label := str({
+		"english": "english",
+		"dutch": "dutch",
+		"german": "german",
+		"french": "french",
+		"other": "other",
+	}.get(directory_language_filter, ""))
+	return not language_label.is_empty() and language.contains(language_label)
 
 
 func _contains_guild_id(entries: Array[Dictionary], guild_id: int) -> bool:
