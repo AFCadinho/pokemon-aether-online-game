@@ -1430,6 +1430,11 @@ func _toggle_pokemon_selection(enabled: bool, pokemon_id: int, checkbox: CheckBo
 		_show_error(_t("ui.lending.error.selection_limit"))
 		return
 	var candidate := _candidate_by_id(pokemon_id)
+	if not _pokemon_candidate_is_lendable(candidate):
+		checkbox.set_pressed_no_signal(false)
+		selected_pokemon.erase(pokemon_id)
+		_show_error(_t("ui.lending.error.pokemon_not_lendable"))
+		return
 	if str(candidate.get("heldItemId", "")) != "":
 		checkbox.set_pressed_no_signal(false)
 		_show_error(_t("ui.lending.error.remove_held_item"))
@@ -1453,7 +1458,8 @@ func _add_action(parent: HBoxContainer, label: String, callback: Callable) -> vo
 func _pokemon_candidate_row(candidate: Dictionary, pokemon_id: int) -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size.y = 60
-	panel.add_theme_stylebox_override("panel", _style(Color("#07111df0"), BORDER, 7))
+	var is_lendable := _pokemon_candidate_is_lendable(candidate)
+	panel.add_theme_stylebox_override("panel", _style(Color("#07111df0"), BORDER if is_lendable else Color("#7f3f49"), 7))
 	var margin := MarginContainer.new()
 	for side in ["left", "top", "right", "bottom"]:
 		margin.add_theme_constant_override("margin_%s" % side, 6)
@@ -1465,8 +1471,10 @@ func _pokemon_candidate_row(candidate: Dictionary, pokemon_id: int) -> Control:
 	box.focus_mode = Control.FOCUS_NONE
 	_apply_checkbox_style(box)
 	var held_item_id := str(candidate.get("heldItemId", ""))
-	box.disabled = held_item_id != ""
-	if box.disabled:
+	box.disabled = not is_lendable or held_item_id != ""
+	if not is_lendable:
+		box.tooltip_text = _t("ui.lending.error.pokemon_not_lendable")
+	elif held_item_id != "":
 		box.tooltip_text = _t("ui.lending.error.remove_held_item")
 	box.set_pressed_no_signal(selected_pokemon.has(pokemon_id))
 	box.toggled.connect(_toggle_pokemon_selection.bind(pokemon_id, box))
@@ -1498,7 +1506,9 @@ func _pokemon_candidate_row(candidate: Dictionary, pokemon_id: int) -> Control:
 		]
 	if held_item_id != "":
 		level_label.text += " · %s" % _t("ui.lending.pokemon_holding_item", {"item": _item_display_name(held_item_id, held_item_id)})
-	level_label.add_theme_color_override("font_color", MUTED)
+	if not is_lendable:
+		level_label.text += " · %s" % _t("ui.lending.pokemon_not_lendable")
+	level_label.add_theme_color_override("font_color", MUTED if is_lendable else Color("#ff8a93"))
 	level_label.add_theme_font_size_override("font_size", 10)
 	identity.add_child(level_label)
 	var view := Button.new()
@@ -1507,6 +1517,17 @@ func _pokemon_candidate_row(candidate: Dictionary, pokemon_id: int) -> Control:
 	_apply_button_style(view)
 	row.add_child(view)
 	return panel
+
+
+func _pokemon_candidate_is_lendable(candidate: Dictionary) -> bool:
+	var payload_value: Variant = candidate.get("pokemon", {})
+	var payload: Dictionary = payload_value if payload_value is Dictionary else {}
+	for key: String in ["tradable", "tradeable", "isTradable", "is_tradable"]:
+		if candidate.has(key):
+			return bool(candidate.get(key))
+		if payload.has(key):
+			return bool(payload.get(key))
+	return true
 
 
 func _item_candidate_row(item: Dictionary, selection_key: String, held := false) -> Control:
@@ -1620,6 +1641,8 @@ func _apply_checkbox_style(checkbox: CheckBox) -> void:
 	checkbox.add_theme_icon_override("checked", _checkbox_icon(true, false))
 	checkbox.add_theme_icon_override("checked_hover", _checkbox_icon(true, true))
 	checkbox.add_theme_icon_override("checked_pressed", _checkbox_icon(true, true))
+	checkbox.add_theme_icon_override("unchecked_disabled", _checkbox_icon(false, false))
+	checkbox.add_theme_icon_override("checked_disabled", _checkbox_icon(true, false))
 
 
 static func _checkbox_icon(checked: bool, hovered: bool) -> ImageTexture:

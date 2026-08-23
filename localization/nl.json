@@ -4430,6 +4430,8 @@
   "ui.lending.error.assets_required_pokemon": "Kies minimaal één Pokémon.",
   "ui.lending.error.assets_required_items": "Kies minimaal één item.",
   "ui.lending.error.remove_held_item": "Verplaats het held item van deze Pokémon eerst naar je Bag.",
+  "ui.lending.error.pokemon_not_lendable": "Deze Pokémon kan niet worden uitgeleend.",
+  "ui.lending.pokemon_not_lendable": "Niet uitleenbaar",
   "ui.lending.pokemon_holding_item": "Draagt {item} — eerst verwijderen",
   "ui.lending.item_available": "Herbruikbaar held item · {count} beschikbaar",
   "ui.lending.item_held_by": "Gedragen door {pokemon}",
