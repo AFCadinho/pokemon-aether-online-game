@@ -21,7 +21,7 @@ const ROCK_SMASH_ICON: Texture2D = preload("res://assets/ui/rock_smash_skill_ico
 const WINDOW_PREFERRED_SIZE := Vector2(760, 780)
 const WINDOW_MINIMUM_SIZE := Vector2(480, 420)
 const WINDOW_EDGE_MARGIN := 12.0
-const ROCK_GRID_MINIMUM_WIDTH := 700.0
+const DETAIL_GRID_MINIMUM_WIDTH := 700.0
 
 var main_panel: PanelContainer
 var window_header: HBoxContainer
@@ -58,13 +58,16 @@ var targets_scroll: ScrollContainer
 var targets_container: GridContainer
 var fishing_catalog_section: VBoxContainer
 var fishing_catalog_summary: Label
+var fishing_area_selector: OptionButton
+var fishing_area_spacing: Control
 var fishing_rod_filters: HBoxContainer
 var fishing_catalog_scroll: ScrollContainer
-var fishing_catalog_container: VBoxContainer
+var fishing_catalog_container: GridContainer
 var skill_buttons: Dictionary = {}
 var selected_skill_id := "thieving"
 var selected_detail_tab := "progression"
 var selected_rod_id := "old_rod"
+var selected_fishing_area_id := ""
 var selected_target_town_key := ""
 var target_town_order: Array[String] = []
 var targets_by_town: Dictionary = {}
@@ -443,6 +446,27 @@ func _build_interface() -> void:
 	fishing_catalog_section.add_theme_constant_override("separation", 7)
 	detail_content.add_child(fishing_catalog_section)
 
+	fishing_area_selector = OptionButton.new()
+	fishing_area_selector.name = "FishingAreaSelector"
+	fishing_area_selector.custom_minimum_size.y = 40.0
+	fishing_area_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	fishing_area_selector.fit_to_longest_item = false
+	fishing_area_selector.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	fishing_area_selector.clip_text = true
+	fishing_area_selector.item_selected.connect(_select_fishing_area)
+	_style_area_selector(fishing_area_selector)
+	fishing_catalog_section.add_child(fishing_area_selector)
+
+	fishing_area_spacing = Control.new()
+	fishing_area_spacing.name = "FishingAreaSpacing"
+	fishing_area_spacing.custom_minimum_size.y = 6.0
+	fishing_area_spacing.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fishing_catalog_section.add_child(fishing_area_spacing)
+
+	fishing_rod_filters = HBoxContainer.new()
+	fishing_rod_filters.add_theme_constant_override("separation", 5)
+	fishing_catalog_section.add_child(fishing_rod_filters)
+
 	var catalog_header := HBoxContainer.new()
 	catalog_header.add_theme_constant_override("separation", 8)
 	fishing_catalog_section.add_child(catalog_header)
@@ -453,20 +477,19 @@ func _build_interface() -> void:
 	fishing_catalog_summary.add_theme_font_size_override("font_size", 10)
 	catalog_header.add_child(fishing_catalog_summary)
 
-	fishing_rod_filters = HBoxContainer.new()
-	fishing_rod_filters.add_theme_constant_override("separation", 5)
-	fishing_catalog_section.add_child(fishing_rod_filters)
-
 	fishing_catalog_scroll = ScrollContainer.new()
 	fishing_catalog_scroll.name = "FishingCatalogScroll"
 	fishing_catalog_scroll.custom_minimum_size.y = 120.0
 	fishing_catalog_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	fishing_catalog_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	fishing_catalog_scroll.resized.connect(_update_fishing_catalog_grid_columns)
 	fishing_catalog_section.add_child(fishing_catalog_scroll)
 
-	fishing_catalog_container = VBoxContainer.new()
+	fishing_catalog_container = GridContainer.new()
+	fishing_catalog_container.name = "FishingCatalogContainer"
 	fishing_catalog_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	fishing_catalog_container.add_theme_constant_override("separation", 5)
+	fishing_catalog_container.add_theme_constant_override("h_separation", 6)
+	fishing_catalog_container.add_theme_constant_override("v_separation", 5)
 	fishing_catalog_scroll.add_child(fishing_catalog_container)
 
 	_render_skills([])
@@ -655,18 +678,20 @@ func _render_fishing_catalog(skill: Dictionary) -> void:
 	var rods_value: Variant = catalog.get("rods", [])
 	var rods: Array = rods_value as Array if rods_value is Array else []
 	var fishing_level := maxi(int(skill.get("level", 1)), 1)
-	fishing_catalog_summary.text = _text("ui.skills.fishing.catalog.summary", {
-		"count": maxi(int(catalog.get("speciesCount", 0)), 0),
-		"level": fishing_level,
-	})
 	if rods.is_empty():
+		fishing_area_selector.clear()
+		fishing_area_selector.disabled = true
+		fishing_catalog_summary.text = ""
+		fishing_catalog_container.columns = 1
 		var empty_label := Label.new()
+		empty_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		empty_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
 		empty_label.text = _text("ui.skills.fishing.catalog.unavailable")
 		fishing_catalog_container.add_child(empty_label)
 		return
 
+	_render_fishing_area_selector(rods)
 	if not _catalog_has_rod(rods, selected_rod_id):
 		selected_rod_id = str((rods[0] as Dictionary).get("id", "old_rod"))
 	var selected_rod: Dictionary = {}
@@ -698,18 +723,46 @@ func _render_fishing_catalog(skill: Dictionary) -> void:
 	var entries: Array = entries_value as Array if entries_value is Array else []
 	var selected_rod_tier := _catalog_rod_tier(rods, selected_rod_id)
 	var active_tier := maxi(int((skill.get("stats", {}) as Dictionary).get("activeTier", 0)), 0)
+	var filtered_entries: Array[Dictionary] = []
 	for entry_value: Variant in entries:
-		if entry_value is Dictionary:
+		if entry_value is Dictionary and _entry_is_in_fishing_area(entry_value as Dictionary, selected_fishing_area_id):
+			filtered_entries.append(entry_value as Dictionary)
+	fishing_catalog_summary.text = _text("ui.skills.fishing.catalog.area_summary", {
+		"count": filtered_entries.size(),
+		"rod": _rod_name(selected_rod_id, str(selected_rod.get("name", selected_rod_id))),
+		"level": fishing_level,
+	})
+	if filtered_entries.is_empty():
+		var empty_area_label := Label.new()
+		empty_area_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		empty_area_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		empty_area_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
+		empty_area_label.text = _text("ui.skills.fishing.catalog.area_empty")
+		fishing_catalog_container.add_child(empty_area_label)
+	else:
+		for entry: Dictionary in filtered_entries:
 			fishing_catalog_container.add_child(
-				_create_fishing_catalog_row(entry_value as Dictionary, fishing_level, active_tier >= selected_rod_tier)
+				_create_fishing_catalog_row(
+					entry,
+					fishing_level,
+					active_tier >= selected_rod_tier,
+					selected_fishing_area_id
+				)
 			)
+	_update_fishing_catalog_grid_columns()
 
 
-func _create_fishing_catalog_row(entry: Dictionary, fishing_level: int, rod_available: bool) -> Control:
+func _create_fishing_catalog_row(
+	entry: Dictionary,
+	fishing_level: int,
+	rod_available: bool,
+	area_id: String
+) -> Control:
 	var required_level := maxi(int(entry.get("requiredFishingLevel", 1)), 1)
 	var available := rod_available and fishing_level >= required_level
 	var row := PanelContainer.new()
 	row.custom_minimum_size.y = 58.0
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_theme_stylebox_override(
 		"panel",
 		_make_panel_style(Color("#07111ceb"), Color("#326b74") if available else Color("#263746"), 8, 1)
@@ -752,13 +805,7 @@ func _create_fishing_catalog_row(entry: Dictionary, fishing_level: int, rod_avai
 	var location_label := Label.new()
 	location_label.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
 	location_label.add_theme_font_size_override("font_size", 9)
-	location_label.text = _text(
-		"ui.skills.fishing.catalog.location" if int(entry.get("locationCount", 0)) == 1 else "ui.skills.fishing.catalog.locations",
-		{
-		"region": _catalog_regions(entry),
-		"count": maxi(int(entry.get("locationCount", 0)), 0),
-		}
-	)
+	location_label.text = _fishing_area_name(area_id) if area_id != "" else _catalog_regions(entry)
 	identity.add_child(location_label)
 
 	var status := Label.new()
@@ -785,6 +832,77 @@ func _create_fishing_catalog_row(entry: Dictionary, fishing_level: int, rod_avai
 func _select_fishing_rod(rod_id: String) -> void:
 	selected_rod_id = rod_id
 	_render_fishing_catalog(SkillsService.get_skill("fishing"))
+
+
+func _select_fishing_area(index: int) -> void:
+	if index < 0 or index >= fishing_area_selector.item_count:
+		return
+	selected_fishing_area_id = str(fishing_area_selector.get_item_metadata(index))
+	_render_fishing_catalog(SkillsService.get_skill("fishing"))
+
+
+func _render_fishing_area_selector(rods: Array) -> void:
+	var area_ids := _fishing_catalog_area_ids(rods)
+	if selected_fishing_area_id not in area_ids:
+		selected_fishing_area_id = area_ids[0] if not area_ids.is_empty() else ""
+	fishing_area_selector.clear()
+	for index in range(area_ids.size()):
+		var area_id := area_ids[index]
+		fishing_area_selector.add_item(_text("ui.skills.fishing.catalog.area_option", {
+			"area": _fishing_area_name(area_id),
+			"count": _fishing_area_species_count(rods, area_id),
+		}))
+		fishing_area_selector.set_item_metadata(index, area_id)
+		if area_id == selected_fishing_area_id:
+			fishing_area_selector.select(index)
+	fishing_area_selector.disabled = area_ids.is_empty()
+
+
+func _fishing_catalog_area_ids(rods: Array) -> Array[String]:
+	var area_ids: Array[String] = []
+	for rod_value: Variant in rods:
+		var entries_value: Variant = (rod_value as Dictionary).get("entries", [])
+		if not entries_value is Array:
+			continue
+		for entry_value: Variant in entries_value as Array:
+			if not entry_value is Dictionary:
+				continue
+			var entry_area_ids: Variant = (entry_value as Dictionary).get("areaIds", [])
+			if not entry_area_ids is Array:
+				continue
+			for area_id_value: Variant in entry_area_ids as Array:
+				var area_id := str(area_id_value).strip_edges()
+				if area_id != "" and area_id not in area_ids:
+					area_ids.append(area_id)
+	return area_ids
+
+
+func _fishing_area_species_count(rods: Array, area_id: String) -> int:
+	var species: Dictionary = {}
+	for rod_value: Variant in rods:
+		var entries_value: Variant = (rod_value as Dictionary).get("entries", [])
+		if not entries_value is Array:
+			continue
+		for entry_value: Variant in entries_value as Array:
+			if entry_value is Dictionary and _entry_is_in_fishing_area(entry_value as Dictionary, area_id):
+				var species_name := str((entry_value as Dictionary).get("species", "")).strip_edges()
+				if species_name != "":
+					species[species_name] = true
+	return species.size()
+
+
+func _entry_is_in_fishing_area(entry: Dictionary, area_id: String) -> bool:
+	if area_id == "":
+		return true
+	var area_ids_value: Variant = entry.get("areaIds", [])
+	return area_ids_value is Array and area_id in (area_ids_value as Array)
+
+
+func _fishing_area_name(area_id: String) -> String:
+	var normalized := area_id.trim_prefix("kanto_")
+	var key := "ui.town_map.location.%s.name" % normalized
+	var translated := _text(key)
+	return normalized.replace("_", " ").capitalize() if translated == key else translated
 
 
 func _catalog_has_rod(rods: Array, rod_id: String) -> bool:
@@ -828,7 +946,7 @@ func _catalog_locations_tooltip(entry: Dictionary) -> String:
 		return ""
 	var names: Array[String] = []
 	for area_id_value: Variant in area_ids_value as Array:
-		var area_name := str(area_id_value).trim_prefix("kanto_").replace("_", " ").capitalize()
+		var area_name := _fishing_area_name(str(area_id_value))
 		if area_name != "":
 			names.append(area_name)
 	return ", ".join(names)
@@ -1180,14 +1298,24 @@ func _fit_window_to_parent() -> void:
 
 func _on_window_resized() -> void:
 	_update_target_grid_columns()
+	_update_fishing_catalog_grid_columns()
 
 
 func _update_target_grid_columns() -> void:
 	if targets_container == null:
 		return
 	targets_container.columns = (
-		2 if selected_skill_id == "rock_smash" and size.x >= ROCK_GRID_MINIMUM_WIDTH else 1
+		2 if selected_skill_id == "rock_smash" and size.x >= DETAIL_GRID_MINIMUM_WIDTH else 1
 	)
+
+
+func _update_fishing_catalog_grid_columns() -> void:
+	if fishing_catalog_container == null:
+		return
+	if fishing_catalog_container.get_child_count() == 1 and fishing_catalog_container.get_child(0) is Label:
+		fishing_catalog_container.columns = 1
+		return
+	fishing_catalog_container.columns = 2 if size.x >= DETAIL_GRID_MINIMUM_WIDTH else 1
 
 
 func _on_skills_changed(skills: Array) -> void:

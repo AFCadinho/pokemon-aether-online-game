@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fishing now has an area dropdown, quick rod filters, and responsive Pokémon cards in its catch catalog.
+
 - Thieving targets now use the same compact, progress-aware area dropdown as Rock Smash.
 
 - Bag item icons now use a more compact size that keeps their pixel art sharp.
