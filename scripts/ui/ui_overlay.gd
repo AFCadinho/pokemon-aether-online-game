@@ -24020,7 +24020,9 @@ func _on_pokemon_summary_header_gui_input(event: InputEvent, card_key: String = 
 		if summary_window != null:
 			summary_window.end_window_drag()
 	_store_active_pokemon_summary_card_context()
-	get_viewport().set_input_as_handled()
+	var viewport := get_viewport()
+	if viewport != null:
+		viewport.set_input_as_handled()
 
 func _handle_pokemon_summary_drag_input(event: InputEvent) -> void:
 	if pokemon_summary_dragging_card_key != "":
@@ -24031,16 +24033,21 @@ func _handle_pokemon_summary_drag_input(event: InputEvent) -> void:
 			pokemon_summary_dragging = false
 			pokemon_summary_dragging_card_key = ""
 			_store_active_pokemon_summary_card_context()
-			get_viewport().set_input_as_handled()
+			var viewport := get_viewport()
+			if viewport != null:
+				viewport.set_input_as_handled()
 		return
 
 	if not (event is InputEventMouseMotion):
 		return
 
 	var motion_event: InputEventMouseMotion = event as InputEventMouseMotion
-	_move_pokemon_summary_to_global_position(motion_event.global_position - pokemon_summary_drag_offset)
+	var current_position := pokemon_summary_popup.global_position if pokemon_summary_popup != null else Vector2.ZERO
+	_move_pokemon_summary_to_global_position(current_position + motion_event.relative)
 	_store_active_pokemon_summary_card_context()
-	get_viewport().set_input_as_handled()
+	var viewport := get_viewport()
+	if viewport != null:
+		viewport.set_input_as_handled()
 
 func _move_pokemon_summary_to_global_position(global_top_left: Vector2) -> void:
 	if pokemon_summary_popup == null:
@@ -33474,7 +33481,7 @@ func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, po
 	var texture: Texture2D = PokemonAssets.load_party_icon(species, shiny) if occupied else null
 	var button := _create_pc_box_pokemon_slot_button(
 		(
-			_pc_payload_species_display_name(payload)
+			_pc_payload_display_name(payload)
 			if occupied
 			else LocalizationManager.text("ui.storage.slot.empty")
 		),
@@ -33491,7 +33498,7 @@ func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, po
 	button.use_native_drag = false
 	button.tooltip_text = LocalizationManager.text("ui.storage.slot.box", {
 		"pokemon": (
-			_pc_payload_species_display_name(payload)
+			_pc_payload_display_name(payload)
 			if occupied
 			else LocalizationManager.text("ui.storage.slot.empty")
 		),
@@ -33733,6 +33740,14 @@ func _pc_payload_species_display_name(payload: Dictionary) -> String:
 		payload.get("species_id", payload.get("species", source_name))
 	))
 	return _localized_species_name(species_id, source_name)
+
+
+func _pc_payload_display_name(payload: Dictionary) -> String:
+	for key in ["nickname", "nickName", "displayName", "display_name"]:
+		var nickname := str(payload.get(key, "")).strip_edges()
+		if nickname != "":
+			return nickname
+	return _pc_payload_species_display_name(payload)
 
 
 func _pc_payload_level(payload: Dictionary) -> int:

@@ -209,13 +209,18 @@ func _set_pokemon_data(pokemon_data: Dictionary) -> void:
 
 
 func _get_display_species(pokemon_data: Dictionary) -> String:
+	var nickname := str(pokemon_data.get(
+		"nickname",
+		pokemon_data.get("nickName", pokemon_data.get("displayName", pokemon_data.get("display_name", "")))
+	)).strip_edges()
 	var species := str(pokemon_data.get("displaySpecies", pokemon_data.get("species", "")))
 	if species != "":
 		var species_id := str(pokemon_data.get(
 			"speciesId",
 			pokemon_data.get("species_id", pokemon_data.get("species", species))
 		))
-		return _localized_content_name("species", species_id, species)
+		var localized_species := _localized_content_name("species", species_id, species)
+		return "%s · %s" % [nickname, localized_species] if nickname != "" else localized_species
 
 	var ident := str(pokemon_data.get("ident", ""))
 	if ident.contains(": "):

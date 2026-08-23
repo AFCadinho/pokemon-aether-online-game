@@ -53,6 +53,26 @@ func _run() -> void:
 	_check(drag_handle.mouse_default_cursor_shape == Control.CURSOR_MOVE, "drag handle advertises that the card can move")
 	_check(drag_handle.tooltip_text != "", "drag handle explains its interaction on hover")
 	_check(drag_handle.gui_input.has_connections(), "read-only header is connected to the shared drag handler")
+	var starting_position := popup.global_position
+	var drag_start := drag_handle.get_global_rect().get_center()
+	var press := InputEventMouseButton.new()
+	press.button_index = MOUSE_BUTTON_LEFT
+	press.pressed = true
+	press.position = drag_start
+	press.global_position = drag_start
+	overlay.call("_on_pokemon_summary_header_gui_input", press, active_card_key)
+	var motion := InputEventMouseMotion.new()
+	motion.position = drag_start + Vector2(36, 24)
+	motion.global_position = motion.position
+	motion.relative = Vector2(36, 24)
+	overlay.call("_handle_pokemon_summary_drag_input", motion)
+	_check(popup.global_position != starting_position, "read-only Summary moves when its header is dragged")
+	var release := InputEventMouseButton.new()
+	release.button_index = MOUSE_BUTTON_LEFT
+	release.pressed = false
+	release.position = motion.position
+	release.global_position = motion.global_position
+	overlay.call("_handle_pokemon_summary_drag_input", release)
 	_check(context.get("left_panel") == null, "read-only Summary does not retain controls from a closed card")
 	_check(overlay.call("_apply_pokemon_summary_card_context", active_card_key), "read-only Summary context remains safe to reactivate")
 	_check((nodes.get("stat_rows", {}) as Dictionary).size() == 6, "all six stats render at once")
@@ -65,7 +85,8 @@ func _run() -> void:
 	)
 	_check((nodes.get("move_nodes", []) as Array).size() == 4, "all four moves render at once")
 	_check((nodes.get("type_row") as HBoxContainer).get_child_count() == 2, "both Pokémon types render as chips")
-	_check((nodes.get("name_label") as Label).text == "Garchomp", "localized Pokémon identity renders")
+	_check((nodes.get("name_label") as Label).text == "Jetstream", "Pokémon nickname renders as the primary identity")
+	_check((nodes.get("name_label") as Label).tooltip_text == "Garchomp", "species remains available beside a nickname")
 	_check((nodes.get("id_label") as Label).text == "#445", "header uses the National Dex number instead of the owned Pokémon id")
 	_check((nodes.get("gender_label") as Label).text == "♀", "gender renders beside the Pokémon name")
 	_check((nodes.get("ability_label") as Label).text != "", "ability renders on the overview")
@@ -115,7 +136,7 @@ func _sample_pokemon() -> Dictionary:
 		"pokemonId": 3,
 		"nationalDexNumber": 445,
 		"species": "garchomp",
-		"nickname": null,
+		"nickname": "Jetstream",
 		"gender": "Female",
 		"level": 100,
 		"nature": "Jolly",
