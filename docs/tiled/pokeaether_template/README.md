@@ -24,6 +24,8 @@ Use these tile layers in this order unless a map needs additional visual-only la
 10. `LedgeUp`
 11. `LedgeLeft`
 12. `LedgeRight`
+13. `StairUpLeft`
+14. `StairUpRight`
 
 Use these object layers exactly:
 
@@ -43,11 +45,12 @@ Use these object layers exactly:
 4. Paint visible art on visual layers only.
 5. Paint passability markers on `Collision`; keep that layer hidden in Tiled if preferred.
 6. Paint grass markers on `TallGrass` where encounter checks should later be possible.
-7. Add gameplay placeholders on the `PA_*` object layers, not on visual tile layers.
-8. Keep all gameplay objects aligned to the 32 px grid.
-9. For signs or other map objects with behavior, paint the visual tile on a visual layer and place a matching point object on `PA_Interactables`.
-10. Keep ids unique within each object layer, for example unique `spawn_id`, `warp_id`, `npc_id`, and `interactable_id`.
-11. Run the importer/check workflow before handing the map to engineering.
+7. Mark each horizontal stair tile with `StairUpLeft` when walking left climbs it, or `StairUpRight` when walking right climbs it. The opposite direction automatically descends.
+8. Add gameplay placeholders on the `PA_*` object layers, not on visual tile layers.
+9. Keep all gameplay objects aligned to the 32 px grid.
+10. For signs or other map objects with behavior, paint the visual tile on a visual layer and place a matching point object on `PA_Interactables`.
+11. Keep ids unique within each object layer, for example unique `spawn_id`, `warp_id`, `npc_id`, and `interactable_id`.
+12. Run the importer/check workflow before handing the map to engineering.
 
 Route guards do not use a tile layer. Place their marker through `PA_NPCs`; when
 the runtime NPC scene is authored, configure it as a transition guard and bind
