@@ -15,6 +15,7 @@ const MUTED := Color("#aeb8c5")
 const GOLD := Color("#d8b767")
 const INCOMING_POLL_SECONDS := 5.0
 const DEADLINE_REFRESH_SECONDS := 30.0
+const INVALID_DEADLINE_SECONDS := -2147483648
 
 var target_username := ""
 var capabilities: Dictionary = {}
@@ -946,8 +947,14 @@ func _loan_deadline_text(deadline: String, now_unix := -1) -> String:
 
 func _loan_remaining_text(deadline: String, now_unix := -1) -> String:
 	var seconds := _seconds_until_loan_deadline(deadline, now_unix)
-	if seconds < 0 or seconds >= 3600:
+	if seconds == INVALID_DEADLINE_SECONDS or seconds >= 3600:
 		return ""
+	if seconds < 0:
+		var overdue_seconds := absi(seconds)
+		if overdue_seconds < 60:
+			return _t("ui.lending.remaining.overdue_less_than_minute")
+		var overdue_minutes := maxi(int(ceil(float(overdue_seconds) / 60.0)), 1)
+		return _t("ui.lending.remaining.overdue_minute" if overdue_minutes == 1 else "ui.lending.remaining.overdue_minutes", {"count": overdue_minutes})
 	if seconds == 0:
 		return _t("ui.lending.remaining.due_now")
 	if seconds < 60:
@@ -959,12 +966,12 @@ func _loan_remaining_text(deadline: String, now_unix := -1) -> String:
 func _seconds_until_loan_deadline(deadline: String, now_unix := -1) -> int:
 	var cleaned := deadline.strip_edges()
 	if cleaned.length() < 19:
-		return -1
+		return INVALID_DEADLINE_SECONDS
 	var deadline_unix := int(Time.get_unix_time_from_datetime_string(cleaned.left(19)))
 	if deadline_unix <= 0:
-		return -1
+		return INVALID_DEADLINE_SECONDS
 	var current_unix := int(Time.get_unix_time_from_system()) if now_unix < 0 else now_unix
-	return maxi(deadline_unix - current_unix, 0)
+	return deadline_unix - current_unix
 
 
 func _format_loan_time(value: String) -> String:

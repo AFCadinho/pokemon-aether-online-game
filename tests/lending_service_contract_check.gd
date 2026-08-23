@@ -73,6 +73,8 @@ func _init() -> void:
 	_check(workspace._seconds_until_loan_deadline("2026-08-23T20:30:00+00:00", countdown_now) == 1800, "loan deadline countdown parses backend UTC timestamps")
 	_check(workspace._loan_remaining_text("2026-08-23T20:30:00+00:00", countdown_now) == "ui.lending.remaining.minutes", "the final loan hour switches to minute precision")
 	_check(workspace._loan_remaining_text("2026-08-23T21:00:00+00:00", countdown_now) == "", "a full hour remaining keeps the normal deadline display")
+	_check(workspace._seconds_until_loan_deadline("2026-08-23T19:30:00+00:00", countdown_now) == -1800, "past loan deadlines retain their overdue duration")
+	_check(workspace._loan_remaining_text("2026-08-23T19:30:00+00:00", countdown_now) == "ui.lending.remaining.overdue_minutes", "past loan deadlines are labelled overdue instead of due now")
 	_check(workspace_source.contains("_setup_deadline_refresh") and workspace_source.contains("_refresh_loan_deadline_labels"), "visible loan minute countdowns refresh while the window stays open")
 	_check(workspace._status_color("pending") == Color("#d8b767") and workspace._status_color("expired").a == 1.0, "loan status colors remain distinct")
 	_check(workspace_source.contains("_loan_terms_text") and workspace_source.contains("ui.lending.card.item_terms"), "item loan terms omit the irrelevant Pokemon count")
