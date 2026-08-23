@@ -19,6 +19,8 @@ var target_username := ""
 var capabilities: Dictionary = {}
 var loans: Array = []
 var party_candidates: Array[Dictionary] = []
+var pokemon_boxes: Array[Dictionary] = []
+var box_candidates: Array[Dictionary] = []
 var inventory_candidates: Array[Dictionary] = []
 var selected_pokemon: Dictionary = {}
 var selected_items: Dictionary = {}
@@ -29,6 +31,8 @@ var incoming_dialog: Window
 var last_incoming_signature := ""
 var incoming_account_generation := 0
 var displayed_notification_ids: Dictionary = {}
+var pokemon_source_mode := 0
+var selected_box_index := 0
 
 var target_display_label: Label
 var duration_select: OptionButton
@@ -61,6 +65,8 @@ func clear_account_state() -> void:
 	hide()
 	loans.clear()
 	party_candidates.clear()
+	pokemon_boxes.clear()
+	box_candidates.clear()
 	inventory_candidates.clear()
 	selected_pokemon.clear()
 	selected_items.clear()
@@ -255,10 +261,14 @@ func _refresh_assets() -> void:
 	selected_pokemon.clear()
 	selected_items.clear()
 	var party_service := get_node_or_null("/root/PlayerPartyStateService")
+	var storage_service := get_node_or_null("/root/PokemonStorageService")
 	var inventory_service := get_node_or_null("/root/InventoryService")
 	var party_result: Dictionary = await party_service.load_party() if party_service != null else {"success": false}
+	var boxes_result: Dictionary = await storage_service.load_boxes() if storage_service != null else {"success": false}
 	var inventory_result: Dictionary = await inventory_service.load_inventory() if inventory_service != null else {"success": false}
 	party_candidates = _party_candidates(party_result.get("party", [])) if bool(party_result.get("success", false)) else []
+	pokemon_boxes = boxes_result.get("boxes", []).duplicate(true) if bool(boxes_result.get("success", false)) else []
+	box_candidates = _box_candidates(pokemon_boxes)
 	inventory_candidates = _item_candidates(inventory_result.get("items", [])) if bool(inventory_result.get("success", false)) else []
 	_render_assets()
 
@@ -266,13 +276,53 @@ func _refresh_assets() -> void:
 func _render_assets() -> void:
 	_clear(assets_list)
 	assets_list.add_child(_section_label(_t("ui.lending.assets.pokemon")))
+	var source_tools := HBoxContainer.new()
+	source_tools.add_theme_constant_override("separation", 6)
+	assets_list.add_child(source_tools)
+	var source_select := OptionButton.new()
+	source_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	source_select.add_item(_t("ui.lending.source.party"))
+	source_select.add_item(_t("ui.lending.source.boxes"))
+	source_select.select(clampi(pokemon_source_mode, 0, 1))
+	source_select.item_selected.connect(func(index: int):
+		pokemon_source_mode = index
+		_render_assets()
+	)
+	_apply_option_style(source_select)
+	source_tools.add_child(source_select)
+	var box_select := OptionButton.new()
+	box_select.visible = pokemon_source_mode == 1
+	box_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	for box_value: Variant in pokemon_boxes:
+		if not box_value is Dictionary:
+			continue
+		var box: Dictionary = box_value
+		var box_index := int(box.get("boxIndex", box_select.item_count))
+		var box_name := str(box.get("name", "")).strip_edges()
+		box_select.add_item(box_name if box_name != "" else _t("ui.lending.source.box", {"number": box_index + 1}))
+		box_select.set_item_metadata(box_select.item_count - 1, box_index)
+		if box_index == selected_box_index:
+			box_select.select(box_select.item_count - 1)
+	box_select.item_selected.connect(func(index: int):
+		selected_box_index = int(box_select.get_item_metadata(index))
+		_render_assets()
+	)
+	_apply_option_style(box_select)
+	source_tools.add_child(box_select)
 	var party_hint := Label.new()
 	party_hint.text = _t("ui.lending.party_required_hint")
+	party_hint.visible = pokemon_source_mode == 0
 	party_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	party_hint.add_theme_color_override("font_color", GOLD)
 	party_hint.add_theme_font_size_override("font_size", 10)
 	assets_list.add_child(party_hint)
-	for candidate: Dictionary in party_candidates:
+	var visible_candidates := party_candidates if pokemon_source_mode == 0 else _box_candidates_for_index(selected_box_index)
+	if visible_candidates.is_empty():
+		var empty := Label.new()
+		empty.text = _t("ui.lending.source.empty_party") if pokemon_source_mode == 0 else _t("ui.lending.source.empty_box")
+		empty.add_theme_color_override("font_color", MUTED)
+		assets_list.add_child(empty)
+	for candidate: Dictionary in visible_candidates:
 		var pokemon_id := int(candidate.get("pokemonId", 0))
 		assets_list.add_child(_pokemon_candidate_row(candidate, pokemon_id))
 		var held_item := str(candidate.get("heldItemId", ""))
@@ -635,7 +685,8 @@ func _create_loan() -> void:
 	if pokemon_ids.size() > 6 or _selected_item_copy_count() > 6:
 		_show_error(_t("ui.lending.error.selection_limit"))
 		return
-	if not pokemon_ids.is_empty() and pokemon_ids.size() >= party_candidates.size():
+	var selected_party_count := _selected_party_pokemon_count()
+	if selected_party_count > 0 and selected_party_count >= party_candidates.size():
 		_show_error(_t("ui.lending.error.party_required"))
 		return
 	mutation_in_flight = true
@@ -753,9 +804,9 @@ func _detach_loan_item(asset_id: String) -> void:
 
 
 func _populate_durations() -> void:
-	var current := int(duration_select.get_item_metadata(duration_select.selected)) if duration_select.item_count > 0 else 86400
+	var current := int(duration_select.get_item_metadata(duration_select.selected)) if duration_select.item_count > 0 else 10800
 	duration_select.clear()
-	var durations: Array = capabilities.get("durationsSeconds", [3600, 86400, 259200, 604800])
+	var durations: Array = capabilities.get("durationsSeconds", [3600, 10800, 21600, 43200, 86400])
 	for value: Variant in durations:
 		var duration := int(value)
 		duration_select.add_item(_duration_label(duration))
@@ -775,7 +826,39 @@ func _party_candidates(value: Variant) -> Array[Dictionary]:
 			var species_id := str(payload.get("speciesId", payload.get("species_id", payload.get("species", ""))))
 			if not payload.has("speciesId"):
 				payload["speciesId"] = species_id
-			result.append({"pokemonId": pokemon_id, "name": _pokemon_display_name(payload), "speciesId": species_id, "level": int(payload.get("level", 1)), "heldItemId": str(payload.get("heldItemId", payload.get("item", ""))), "pokemon": payload})
+			result.append({"pokemonId": pokemon_id, "name": _pokemon_display_name(payload), "speciesId": species_id, "level": int(payload.get("level", 1)), "heldItemId": str(payload.get("heldItemId", payload.get("item", ""))), "pokemon": payload, "sourceType": "party"})
+	return result
+
+
+func _box_candidates(value: Variant) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	if not value is Array:
+		return result
+	for box_value: Variant in value:
+		if not box_value is Dictionary:
+			continue
+		var box: Dictionary = box_value
+		var box_index := int(box.get("boxIndex", 0))
+		for slot_value: Variant in box.get("slots", []):
+			if not slot_value is Dictionary:
+				continue
+			var slot: Dictionary = slot_value
+			var normalized := _party_candidates([slot.get("pokemon", {})])
+			if normalized.is_empty():
+				continue
+			var candidate: Dictionary = normalized[0]
+			candidate["sourceType"] = "box"
+			candidate["boxIndex"] = box_index
+			candidate["slotIndex"] = int(slot.get("slotIndex", 0))
+			result.append(candidate)
+	return result
+
+
+func _box_candidates_for_index(box_index: int) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for candidate: Dictionary in box_candidates:
+		if int(candidate.get("boxIndex", -1)) == box_index:
+			result.append(candidate)
 	return result
 
 
@@ -936,7 +1019,20 @@ func _item_candidates(value: Variant) -> Array[Dictionary]:
 func _candidate_by_id(pokemon_id: int) -> Dictionary:
 	for candidate: Dictionary in party_candidates:
 		if int(candidate.get("pokemonId", 0)) == pokemon_id: return candidate
+	for candidate: Dictionary in box_candidates:
+		if int(candidate.get("pokemonId", 0)) == pokemon_id: return candidate
 	return {}
+
+
+func _selected_party_pokemon_count(except_id := 0) -> int:
+	var total := 0
+	for key_value: Variant in selected_pokemon.keys():
+		var pokemon_id := int(key_value)
+		if pokemon_id == int(except_id):
+			continue
+		if str(_candidate_by_id(pokemon_id).get("sourceType", "party")) == "party":
+			total += 1
+	return total
 
 
 func _selected_item_copy_count(except_key := "") -> int:
@@ -983,8 +1079,12 @@ func _toggle_pokemon_selection(enabled: bool, pokemon_id: int, checkbox: CheckBo
 	if not enabled:
 		selected_pokemon.erase(pokemon_id)
 		return
-	var maximum_selection := maxi(party_candidates.size() - 1, 0)
-	if selected_pokemon.size() >= maximum_selection:
+	if selected_pokemon.size() >= 6:
+		checkbox.set_pressed_no_signal(false)
+		_show_error(_t("ui.lending.error.selection_limit"))
+		return
+	var candidate := _candidate_by_id(pokemon_id)
+	if str(candidate.get("sourceType", "party")) == "party" and _selected_party_pokemon_count(pokemon_id) >= maxi(party_candidates.size() - 1, 0):
 		checkbox.set_pressed_no_signal(false)
 		_show_error(_t("ui.lending.error.party_required"))
 		return
@@ -1014,6 +1114,7 @@ func _pokemon_candidate_row(candidate: Dictionary, pokemon_id: int) -> Control:
 	var box := CheckBox.new()
 	box.focus_mode = Control.FOCUS_NONE
 	_apply_checkbox_style(box)
+	box.set_pressed_no_signal(selected_pokemon.has(pokemon_id))
 	box.toggled.connect(_toggle_pokemon_selection.bind(pokemon_id, box))
 	row.add_child(box)
 	var payload: Dictionary = candidate.get("pokemon", {})
@@ -1063,6 +1164,7 @@ func _item_candidate_row(item: Dictionary, selection_key: String, held := false)
 	var box := CheckBox.new()
 	box.focus_mode = Control.FOCUS_NONE
 	_apply_checkbox_style(box)
+	box.set_pressed_no_signal(selected_items.has(selection_key))
 	row.add_child(box)
 	var item_id := str(item.get("itemId", ""))
 	var icon := TextureRect.new()
@@ -1094,8 +1196,8 @@ func _item_candidate_row(item: Dictionary, selection_key: String, held := false)
 		quantity = SpinBox.new()
 		quantity.min_value = 1
 		quantity.max_value = mini(int(item.get("quantity", 1)), 6)
-		quantity.value = 1
-		quantity.editable = false
+		quantity.value = int(selected_items.get(selection_key, 1))
+		quantity.editable = selected_items.has(selection_key)
 		quantity.prefix = "×"
 		quantity.custom_minimum_size.x = 72
 		_apply_spinbox_style(quantity)
@@ -1283,6 +1385,9 @@ func _section_label(value: String) -> Label:
 func _duration_label(seconds: int) -> String:
 	match seconds:
 		3600: return _t("ui.lending.duration.hour")
+		10800: return _t("ui.lending.duration.three_hours")
+		21600: return _t("ui.lending.duration.six_hours")
+		43200: return _t("ui.lending.duration.twelve_hours")
 		86400: return _t("ui.lending.duration.day")
 		259200: return _t("ui.lending.duration.three_days")
 		604800: return _t("ui.lending.duration.week")

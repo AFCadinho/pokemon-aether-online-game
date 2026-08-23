@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Player Loans now support Pokémon from Party or PC Boxes, respect the recipient's trade level cap, and offer safer one-to-24-hour durations.
+
 - Player Loans dropdowns and confirmation windows now match the Aether interface style.
 
 - Reusable held items now have a complete Player Loan flow with eligible Bag filtering, copy quantities, icons, holder details, equipping, and individual return controls.
