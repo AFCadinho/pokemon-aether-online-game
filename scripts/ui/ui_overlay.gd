@@ -21112,7 +21112,9 @@ func _reset_pokemon_summary_card_node_references() -> void:
 	pokemon_summary_type_icon_row = null
 	pokemon_summary_hidden_ability_badge = null
 	pokemon_summary_title_label = null
+	pokemon_summary_gender_label = null
 	pokemon_summary_id_label = null
+	pokemon_summary_nickname_button = null
 	pokemon_summary_meta_label = null
 	pokemon_summary_held_item_slot = null
 	pokemon_summary_held_item_slot_button = null
@@ -21155,7 +21157,7 @@ func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, m
 		"title_label": pokemon_summary_title_label,
 		"gender_label": pokemon_summary_gender_label if mode == "interactive" else null,
 		"id_label": pokemon_summary_id_label,
-		"nickname_button": pokemon_summary_nickname_button,
+		"nickname_button": pokemon_summary_nickname_button if mode == "interactive" else null,
 		"meta_label": pokemon_summary_meta_label,
 		"held_item_slot": pokemon_summary_held_item_slot,
 		"held_item_slot_button": pokemon_summary_held_item_slot_button,
