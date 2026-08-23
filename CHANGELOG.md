@@ -6,6 +6,10 @@
 
 - If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
 
+**Changed**
+
+- Guilds are now easier to browse with quick filters and clearer Guild cards. Guild members also get direct shortcuts to chat, the member list and the Aether Clash Lobby.
+
 **Fixed**
 
 - Ogerpon's correct battle sprites are now included in game downloads.

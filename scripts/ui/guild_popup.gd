@@ -4,6 +4,7 @@ class_name GuildPopup
 
 signal closed
 signal lobby_teleport_requested
+signal guild_chat_requested
 
 const POPUP_SIZE := Vector2(1040, 700)
 const GUILD_ICON: Texture2D = preload("res://assets/ui/guild.svg")
@@ -101,6 +102,8 @@ var directory_request_generation := 0
 var has_explicit_page_selection := false
 var active_guild_section := "overview"
 var guild_section_buttons: Dictionary = {}
+var active_directory_filter := "all"
+var directory_filter_buttons: Dictionary = {}
 
 var browse_tab_button: Button
 var my_guild_tab_button: Button
@@ -344,13 +347,6 @@ func _build_navigation() -> Control:
 	var navigation := HBoxContainer.new()
 	navigation.add_theme_constant_override("separation", 6)
 
-	browse_tab_button = Button.new()
-	browse_tab_button.name = "BrowseGuildsButton"
-	_set_localized_property(browse_tab_button, "text", "ui.guild.tab.browse")
-	browse_tab_button.custom_minimum_size = Vector2(190, 40)
-	browse_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("browse"))
-	navigation.add_child(browse_tab_button)
-
 	my_guild_tab_button = Button.new()
 	my_guild_tab_button.name = "MyGuildButton"
 	_set_localized_property(my_guild_tab_button, "text", "ui.guild.tab.mine")
@@ -359,10 +355,17 @@ func _build_navigation() -> Control:
 	my_guild_tab_button.visible = false
 	navigation.add_child(my_guild_tab_button)
 
+	browse_tab_button = Button.new()
+	browse_tab_button.name = "BrowseGuildsButton"
+	_set_localized_property(browse_tab_button, "text", "ui.guild.tab.browse")
+	browse_tab_button.custom_minimum_size = Vector2(190, 40)
+	browse_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("browse"))
+	navigation.add_child(browse_tab_button)
+
 	create_tab_button = Button.new()
 	create_tab_button.name = "CreateGuildButton"
 	_set_localized_property(create_tab_button, "text", "ui.guild.tab.create")
-	create_tab_button.custom_minimum_size = Vector2(190, 40)
+	create_tab_button.custom_minimum_size = Vector2(165, 40)
 	create_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("create"))
 	navigation.add_child(create_tab_button)
 
@@ -405,6 +408,7 @@ func _build_browse_page() -> Control:
 	search_input.text_changed.connect(_on_search_changed)
 	_apply_line_edit_style(search_input)
 	directory.add_child(search_input)
+	directory.add_child(_build_directory_filters())
 
 	guild_list = VBoxContainer.new()
 	guild_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -430,6 +434,35 @@ func _build_browse_page() -> Control:
 	detail_content.add_theme_constant_override("separation", 11)
 	body.add_child(detail_content)
 	return body
+
+
+func _build_directory_filters() -> Control:
+	var filters := GridContainer.new()
+	filters.name = "GuildDirectoryFilters"
+	filters.columns = 3
+	filters.add_theme_constant_override("h_separation", 6)
+	filters.add_theme_constant_override("v_separation", 6)
+	directory_filter_buttons.clear()
+	var definitions: Array[Dictionary] = [
+		{"id": "all", "key": "ui.guild.filter.all", "name": "GuildFilterAll"},
+		{"id": "open", "key": "ui.guild.filter.open", "name": "GuildFilterOpen"},
+		{"id": "social", "key": "ui.guild.filter.social", "name": "GuildFilterSocial"},
+		{"id": "pve", "key": "ui.guild.filter.pve", "name": "GuildFilterPve"},
+		{"id": "pvp", "key": "ui.guild.filter.pvp", "name": "GuildFilterPvp"},
+		{"id": "dutch", "key": "ui.guild.filter.dutch", "name": "GuildFilterDutch"},
+	]
+	for definition: Dictionary in definitions:
+		var filter_id := str(definition.get("id", "all"))
+		var button := Button.new()
+		button.name = str(definition.get("name", "GuildFilter"))
+		_set_localized_property(button, "text", str(definition.get("key", "ui.guild.filter.all")))
+		button.custom_minimum_size = Vector2(0, 32)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.pressed.connect(_on_directory_filter_pressed.bind(filter_id))
+		_apply_tab_style(button, active_directory_filter == filter_id)
+		filters.add_child(button)
+		directory_filter_buttons[filter_id] = button
+	return filters
 
 
 func _build_member_page() -> Control:
@@ -639,11 +672,24 @@ func _render_guild_home() -> void:
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(heading)
 	heading.add_child(_label(str(guild.get("name", "Your Guild")), 25, UI_TEXT))
-	heading.add_child(_label(
+	var role_row := HBoxContainer.new()
+	role_row.add_theme_constant_override("separation", 9)
+	heading.add_child(role_row)
+	var role_label := _label(
 		_t("ui.guild.membership.role", {"role": _membership_role_label(role).to_lower()}),
 		12,
 		UI_ACCENT
-	))
+	)
+	role_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	role_row.add_child(role_label)
+	if is_leader:
+		var edit_emblem_button := Button.new()
+		edit_emblem_button.name = "EditGuildEmblemButton"
+		_set_localized_property(edit_emblem_button, "text", "ui.guild.emblem.edit")
+		edit_emblem_button.custom_minimum_size = Vector2(150, 30)
+		edit_emblem_button.pressed.connect(_open_emblem_editor)
+		_apply_button_style(edit_emblem_button)
+		role_row.add_child(edit_emblem_button)
 	var description := _label(str(guild.get("description", "")), 12, UI_MUTED)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	heading.add_child(description)
@@ -667,7 +713,7 @@ func _build_guild_header_emblem(guild: Dictionary, is_editable: bool) -> Control
 	if not is_editable:
 		return _guild_emblem(guild, 88, UI_ACCENT)
 	var button := Button.new()
-	button.name = "EditGuildEmblemButton"
+	button.name = "EditGuildEmblemIconButton"
 	_set_localized_property(button, "tooltip_text", "ui.guild.emblem.edit")
 	button.custom_minimum_size = Vector2(88, 88)
 	button.focus_mode = Control.FOCUS_NONE
@@ -743,51 +789,58 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	))
 	metadata.add_child(_metadata_card(_t("ui.guild.field.language"), _option_display(str(guild.get("language", ""))), UI_GOLD))
 	metadata.add_child(_metadata_card(_t("ui.guild.field.focus"), _option_display(str(guild.get("focus", ""))), UI_ACCENT))
-	var welcome := PanelContainer.new()
-	welcome.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	welcome.custom_minimum_size = Vector2(0, 190)
-	welcome.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var actions_panel := PanelContainer.new()
+	actions_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	actions_panel.custom_minimum_size = Vector2(0, 150)
+	actions_panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
 	var margin := MarginContainer.new()
 	_set_margins(margin, 16, 14, 16, 14)
-	welcome.add_child(margin)
+	actions_panel.add_child(margin)
 	var copy := VBoxContainer.new()
-	copy.add_theme_constant_override("separation", 6)
+	copy.add_theme_constant_override("separation", 10)
 	margin.add_child(copy)
-	copy.add_child(_localized_label("ui.guild.overview", 10, UI_ACCENT))
-	var overview_description := _label(str(guild.get("description", "")), 13, UI_TEXT)
-	overview_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	copy.add_child(overview_description)
-	copy.add_child(_label(
-		_t("ui.guild.overview.hint"),
-		11,
-		UI_MUTED
-	))
-	var lobby_row := HBoxContainer.new()
-	lobby_row.name = "GuildLobbyTravelRow"
-	lobby_row.add_theme_constant_override("separation", 12)
-	copy.add_child(lobby_row)
-	var lobby_copy := VBoxContainer.new()
-	lobby_copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lobby_copy.add_theme_constant_override("separation", 2)
-	lobby_row.add_child(lobby_copy)
-	lobby_copy.add_child(_localized_label("ui.guild.lobby.title", 12, UI_GOLD))
-	var lobby_hint := _localized_label("ui.guild.lobby.description", 10, UI_MUTED)
-	lobby_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	lobby_copy.add_child(lobby_hint)
+	copy.add_child(_localized_label("ui.guild.quick_actions", 10, UI_ACCENT))
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 10)
+	copy.add_child(actions)
+	var chat_button := Button.new()
+	chat_button.name = "GuildChatShortcutButton"
+	_set_localized_property(chat_button, "text", "ui.guild.action.chat")
+	chat_button.custom_minimum_size = Vector2(170, 42)
+	chat_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	chat_button.pressed.connect(_on_guild_chat_pressed)
+	_apply_button_style(chat_button, "primary")
+	actions.add_child(chat_button)
+	var members_button := Button.new()
+	members_button.name = "GuildMembersShortcutButton"
+	_set_localized_property(members_button, "text", "ui.guild.action.members")
+	members_button.custom_minimum_size = Vector2(170, 42)
+	members_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	members_button.pressed.connect(_show_guild_section.bind("members"))
+	_apply_button_style(members_button)
+	actions.add_child(members_button)
 	var lobby_button := Button.new()
 	lobby_button.name = "GuildLobbyTeleportButton"
 	_set_localized_property(lobby_button, "text", "ui.guild.lobby.teleport")
 	_set_localized_property(lobby_button, "tooltip_text", "ui.guild.lobby.tooltip")
 	lobby_button.custom_minimum_size = Vector2(170, 42)
+	lobby_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lobby_button.pressed.connect(_on_guild_lobby_pressed)
 	_apply_button_style(lobby_button, "primary")
-	lobby_row.add_child(lobby_button)
-	overview.add_child(welcome)
+	actions.add_child(lobby_button)
+	var action_hint := _localized_label("ui.guild.quick_actions.hint", 11, UI_MUTED)
+	action_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	copy.add_child(action_hint)
+	overview.add_child(actions_panel)
 	return overview
 
 
 func _on_guild_lobby_pressed() -> void:
 	lobby_teleport_requested.emit()
+
+
+func _on_guild_chat_pressed() -> void:
+	guild_chat_requested.emit()
 
 
 func _build_member_roster() -> Control:
@@ -1137,7 +1190,7 @@ func _guild_row(guild: Dictionary) -> Control:
 	var button := Button.new()
 	button.name = "GuildRow_%d" % guild_id
 	button.text = ""
-	button.custom_minimum_size = Vector2(0, 76)
+	button.custom_minimum_size = Vector2(0, 92)
 	button.add_theme_stylebox_override("normal", _row_style(accent, selected))
 	button.add_theme_stylebox_override("hover", _row_style(Color("#7edfff"), true))
 	button.add_theme_stylebox_override("pressed", _row_style(UI_ACCENT, true, Color("#071624fa")))
@@ -1166,17 +1219,31 @@ func _guild_row(guild: Dictionary) -> Control:
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	info.add_child(name_label)
-	var summary := _label(
-		_t("ui.guild.row.summary", {
-			"level": int(guild.get("level", 1)),
+	var discovery := _label(
+		_t("ui.guild.row.discovery", {
+			"focus": _option_display(str(guild.get("focus", ""))),
+			"language": _option_display(str(guild.get("language", ""))),
+		}),
+		10,
+		UI_ACCENT
+	)
+	discovery.name = "GuildRowDiscovery_%d" % guild_id
+	discovery.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	discovery.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	info.add_child(discovery)
+	var availability := _label(
+		_t("ui.guild.row.availability", {
 			"members": int(guild.get("members", 0)),
 			"capacity": int(guild.get("capacity", 0)),
+			"recruitment": _option_display(str(guild.get("recruitment", "Closed"))),
 		}),
-		11,
+		10,
 		UI_MUTED
 	)
-	summary.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	info.add_child(summary)
+	availability.name = "GuildRowAvailability_%d" % guild_id
+	availability.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	availability.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	info.add_child(availability)
 	var arrow := _label("›", 22, UI_ACCENT if selected else UI_MUTED)
 	arrow.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	arrow.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1232,20 +1299,11 @@ func _render_selected_guild() -> void:
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	description_margin.add_child(description)
-	detail_content.add_child(_localized_label("ui.guild.forum.future", 10, UI_MUTED))
 
 	var actions := HBoxContainer.new()
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 8)
 	detail_content.add_child(actions)
-	var forum_button := Button.new()
-	forum_button.name = "GuildForumButton"
-	_set_localized_property(forum_button, "text", "ui.guild.forum")
-	_set_localized_property(forum_button, "tooltip_text", "ui.guild.forum.tooltip")
-	forum_button.disabled = true
-	forum_button.custom_minimum_size = Vector2(132, 40)
-	_apply_button_style(forum_button)
-	actions.add_child(forum_button)
 	var apply_button := Button.new()
 	apply_button.name = "GuildApplyButton"
 	var recruitment := str(guild.get("recruitment", "Closed"))
@@ -1464,6 +1522,18 @@ func _on_search_changed(_query: String) -> void:
 	_render_guild_list()
 
 
+func _on_directory_filter_pressed(filter_id: String) -> void:
+	if filter_id not in ["all", "open", "social", "pve", "pvp", "dutch"]:
+		return
+	active_directory_filter = filter_id
+	for button_id: String in directory_filter_buttons:
+		_apply_tab_style(
+			directory_filter_buttons.get(button_id) as Button,
+			button_id == active_directory_filter
+		)
+	_render_guild_list()
+
+
 func _on_application_pressed(guild: Dictionary) -> void:
 	browse_status_label.text = _t("ui.guild.application.unavailable", {
 		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
@@ -1619,14 +1689,13 @@ func _refresh_membership_state() -> void:
 	var guild_id := int(membership.get("guildId", 0))
 	if guild_id <= 0:
 		membership_label.text = _t("ui.guild.membership.none")
+		membership_label.visible = true
+		create_tab_button.visible = true
 		create_tab_button.disabled = false
 		my_guild_tab_button.visible = false
 		return
-	var guild := _guild_by_id(guild_id)
-	var guild_name := str(guild.get("name", _t("ui.guild.fallback.your_guild")))
-	var role := str(membership.get("role", "member"))
-	membership_label.text = "%s · %s" % [guild_name, _membership_role_label(role)]
-	create_tab_button.disabled = true
+	membership_label.visible = false
+	create_tab_button.visible = false
 	my_guild_tab_button.visible = true
 	if active_page == "create":
 		_show_page("member")
@@ -1957,19 +2026,38 @@ func _set_create_status(message: String, is_error: bool) -> void:
 
 func _filtered_guilds() -> Array[Dictionary]:
 	var query := search_input.text.strip_edges().to_lower() if search_input != null else ""
-	if query == "":
-		return guilds.duplicate()
 	var matches: Array[Dictionary] = []
 	for guild: Dictionary in guilds:
+		if not _matches_directory_filter(guild):
+			continue
 		var searchable := " ".join([
 			str(guild.get("name", "")),
 			str(guild.get("language", "")),
 			str(guild.get("focus", "")),
 			str(guild.get("description", "")),
 		]).to_lower()
-		if searchable.contains(query):
+		if query == "" or searchable.contains(query):
 			matches.append(guild)
 	return matches
+
+
+func _matches_directory_filter(guild: Dictionary) -> bool:
+	var recruitment := str(guild.get("recruitment", "")).to_lower()
+	var focus := str(guild.get("focus", "")).to_lower()
+	var language := str(guild.get("language", "")).to_lower()
+	match active_directory_filter:
+		"open":
+			return recruitment in ["open", "applications open"]
+		"social":
+			return focus.contains("social")
+		"pve":
+			return focus.contains("pve")
+		"pvp":
+			return focus.contains("pvp")
+		"dutch":
+			return language.contains("dutch")
+		_:
+			return true
 
 
 func _contains_guild_id(entries: Array[Dictionary], guild_id: int) -> bool:
