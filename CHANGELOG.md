@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Guild Bank now supports shared Pokédollars, item storage, and Pokémon storage with rank-based deposit, withdrawal, and borrowing rights.
+
 - The Guild member list now shows each trainer's rank, online status or last activity, and a direct PM button for online members.
 
 - Guilds now have Leader, Captain, Member, and Recruit ranks, with visible bank rights and rank controls for Guild leaders.
