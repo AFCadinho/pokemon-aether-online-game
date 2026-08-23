@@ -36,6 +36,7 @@ func _init() -> void:
 	_check_future_sight_lifecycle_messages()
 	_check_solar_beam_prepare_uses_charge_animation()
 	_check_electro_shot_prepare_uses_charge_animation()
+	_check_battle_bond_uses_transformation_animation()
 	_check_wish_heal_uses_delayed_animation()
 	_check_protect_activation_uses_block_animation()
 	_check_evasion_drop_uses_normalized_negative_amount()
@@ -64,6 +65,76 @@ func _init() -> void:
 	_check_semantic_battle_log_colors()
 	_check_supreme_overlord_fallen_counter_protocol()
 	quit(1 if failed else 0)
+
+
+func _check_battle_bond_uses_transformation_animation() -> void:
+	var presentation = _make_presentation()
+	var event := {
+		"type": "formeChange",
+		"target": "p1a: Greninja",
+		"species": "Greninja-Ash",
+		"source": "ability: Battle Bond",
+		"cosmeticOnly": true,
+	}
+	var preload_keys: Dictionary = presentation.get_animation_preload_keys_for_event(event)
+	var result: Dictionary = presentation.build(event)
+	_check_equal(
+		(preload_keys.get("effect_keys", []) as Array).has("mega_evolution"),
+		true,
+		"Battle Bond preloads the shared transformation animation"
+	)
+	_check_equal(
+		str(result.get("effect_animation_key", "")),
+		"mega_evolution",
+		"Battle Bond uses the shared transformation animation"
+	)
+	_check_equal(
+		str(result.get("effect_animation_target_ident", "")),
+		"p1a: Greninja",
+		"Battle Bond transformation targets Greninja"
+	)
+	_check_equal(str(result.get("log_message", "")), "", "Battle Bond does not show Mega Evolution text")
+
+	var ordinary_result: Dictionary = presentation.build({
+		"type": "formeChange",
+		"target": "p1a: Mimikyu",
+		"species": "Mimikyu-Busted",
+		"source": "ability: Disguise",
+	})
+	_check_equal(
+		str(ordinary_result.get("effect_animation_key", "")),
+		"",
+		"ordinary form changes do not use the transformation animation"
+	)
+
+	var switched_out_result: Dictionary = presentation.build({
+		"type": "formeChange",
+		"target": "p1a: Greninja",
+		"species": "Greninja",
+		"source": "ability: Battle Bond",
+		"cosmeticOnly": true,
+	})
+	_check_equal(
+		str(switched_out_result.get("effect_animation_key", "")),
+		"",
+		"Battle Bond returning to normal does not replay the transformation animation"
+	)
+
+	var mega_result: Dictionary = presentation.build({
+		"type": "mega",
+		"target": "p1a: Dragonite",
+		"species": "Dragonite-Mega",
+	})
+	_check_equal(
+		str(mega_result.get("effect_animation_key", "")),
+		"mega_evolution",
+		"Mega Evolution keeps using its transformation animation"
+	)
+	_check_equal(
+		str(mega_result.get("effect_animation_target_ident", "")),
+		"p1a: Dragonite",
+		"Mega Evolution keeps targeting the evolving Pokemon"
+	)
 
 
 func _make_presentation():

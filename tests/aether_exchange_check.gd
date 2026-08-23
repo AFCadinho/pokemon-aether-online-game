@@ -5,6 +5,7 @@ const EXCHANGE_POPUP := preload("res://scenes/interface/aether_exchange_popup.ts
 const EXCHANGE_POPUP_PATH := "res://scripts/ui/aether_exchange_popup.gd"
 const EXCHANGE_SERVICE_PATH := "res://scripts/services/aether_exchange_service.gd"
 const UI_OVERLAY_PATH := "res://scripts/ui/ui_overlay.gd"
+const UI_OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
 const PROJECT_PATH := "res://project.godot"
 
 var failed := false
@@ -372,7 +373,11 @@ func _run() -> void:
 	var service_source := FileAccess.get_file_as_string(EXCHANGE_SERVICE_PATH)
 	var popup_source := FileAccess.get_file_as_string(EXCHANGE_POPUP_PATH)
 	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
+	var overlay_scene_source := FileAccess.get_file_as_string(UI_OVERLAY_SCENE_PATH)
+	var guild_slot_position := overlay_scene_source.find('[node name="GuildSlot"')
+	var exchange_slot_position := overlay_scene_source.find('[node name="AetherExchangeSlot"')
 	_check(project_source.contains('AetherExchangeService="*res://scripts/services/aether_exchange_service.gd"'), "Exchange API client is an autoload")
+	_check(guild_slot_position >= 0 and exchange_slot_position > guild_slot_position, "Guilds appears before Aether Exchange in the main navigation")
 	_check(overlay_source.contains("aether_exchange_popup.open_exchange()"), "Existing Exchange navigation opens the live popup")
 	_check(overlay_source.contains("pokemon_summary_requested.connect(_on_aether_exchange_pokemon_summary_requested)"), "Exchange Summary actions are connected to the UI overlay")
 	_check(overlay_source.contains("_open_readonly_pokemon_summary(pokemon_payload)"), "Exchange opens the existing read-only Pokémon Summary")

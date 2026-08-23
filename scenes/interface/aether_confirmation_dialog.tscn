@@ -97,6 +97,11 @@ text = "Confirmation message"
 vertical_alignment = 1
 autowrap_mode = 2
 
+[node name="CustomContent" type="VBoxContainer" parent="Center/Panel/Margin/Content"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
 [node name="OptionCheckBox" type="CheckBox" parent="Center/Panel/Margin/Content"]
 visible = false
 custom_minimum_size = Vector2(0, 32)
