@@ -269,6 +269,11 @@ func _run() -> void:
 	var rock_area_selector := panel.get("rock_area_selector") as OptionButton
 	_check(rock_area_selector.visible and rock_area_selector.item_count == 2, "Rock Smash offers one compact dropdown entry per area")
 	_check(rock_area_selector.get_item_text(0).contains("Pewter City") and rock_area_selector.get_item_text(0).contains("1/4"), "area options include their daily smash progress")
+	await process_frame
+	panel.call("_fit_rock_area_popup", rock_area_selector)
+	var rock_area_popup := rock_area_selector.get_popup()
+	_check(rock_area_popup.min_size.x == roundi(rock_area_selector.size.x), "the open area menu uses the full selector width")
+	_check(rock_area_popup.get_theme_font_size("font_size") == 13 and rock_area_popup.get_theme_constant("v_separation") == 12, "area menu options use larger text and roomier rows")
 	_check((panel.get("targets_container") as GridContainer).get_child_count() == 4, "the Pewter rock list contains all four fixed rocks")
 	await process_frame
 	var pewter_rock_height := ((panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer).size.y
