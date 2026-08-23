@@ -48,7 +48,8 @@ var detail_tabs: HBoxContainer
 var progression_tab_button: Button
 var catalog_tab_button: Button
 var progression_section: VBoxContainer
-var unlocks_container: VBoxContainer
+var unlocks_scroll: ScrollContainer
+var unlocks_container: GridContainer
 var targets_section: VBoxContainer
 var targets_summary_label: Label
 var targets_reset_label: Label
@@ -379,9 +380,20 @@ func _build_interface() -> void:
 	unlock_title.add_theme_font_size_override("font_size", 12)
 	progression_section.add_child(unlock_title)
 
-	unlocks_container = VBoxContainer.new()
-	unlocks_container.add_theme_constant_override("separation", 4)
-	progression_section.add_child(unlocks_container)
+	unlocks_scroll = ScrollContainer.new()
+	unlocks_scroll.name = "UnlocksScroll"
+	unlocks_scroll.custom_minimum_size.y = 90.0
+	unlocks_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	unlocks_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	unlocks_scroll.resized.connect(_update_unlock_grid_columns)
+	progression_section.add_child(unlocks_scroll)
+
+	unlocks_container = GridContainer.new()
+	unlocks_container.name = "UnlocksContainer"
+	unlocks_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	unlocks_container.add_theme_constant_override("h_separation", 6)
+	unlocks_container.add_theme_constant_override("v_separation", 6)
+	unlocks_scroll.add_child(unlocks_container)
 
 	targets_section = VBoxContainer.new()
 	targets_section.name = "TargetsSection"
@@ -576,7 +588,7 @@ func _render_detail(skill: Dictionary) -> void:
 	var unlock_title := main_panel.find_child("UnlockTitle", true, false) as Label
 	if unlock_title != null:
 		unlock_title.visible = skill_unlocked
-	unlocks_container.visible = skill_unlocked
+	unlocks_scroll.visible = skill_unlocked
 	if not skill_unlocked:
 		stats_label.text = _text(str(skill.get("unlockHintKey", "ui.skills.%s.unlock_hint" % skill_id)))
 		wanted_section.visible = false
@@ -956,22 +968,67 @@ func _render_unlocks(unlocks: Array) -> void:
 	for child: Node in unlocks_container.get_children():
 		unlocks_container.remove_child(child)
 		child.queue_free()
-	for unlock_value: Variant in unlocks:
+	var next_unlock_found := false
+	for index in range(unlocks.size()):
+		var unlock_value: Variant = unlocks[index]
 		var unlock := unlock_value as Dictionary
 		var unlocked := bool(unlock.get("unlocked", false))
-		var row := Label.new()
-		row.custom_minimum_size.y = 25.0
-		row.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		row.add_theme_color_override("font_color", SUCCESS_COLOR if unlocked else LOCKED_COLOR)
-		row.add_theme_font_size_override("font_size", 11)
-		row.text = "%s  %s" % [
-			"✓" if unlocked else "🔒",
-			_text("ui.skills.unlock_row", {
-				"level": int(unlock.get("requiredLevel", 1)),
-				"name": _text(str(unlock.get("labelKey", ""))),
-			}),
-		]
-		unlocks_container.add_child(row)
+		var is_next := not unlocked and not next_unlock_found
+		if is_next:
+			next_unlock_found = true
+		unlocks_container.add_child(_create_unlock_card(unlock, unlocked, is_next))
+	_update_unlock_grid_columns()
+	unlocks_scroll.scroll_vertical = 0
+
+
+func _create_unlock_card(unlock: Dictionary, unlocked: bool, is_next: bool) -> Control:
+	var accent := SUCCESS_COLOR if unlocked else (GOLD_COLOR if is_next else LOCKED_COLOR)
+	var background := Color("#0a1d17") if unlocked else (Color("#211c0d") if is_next else Color("#080f18"))
+	var border := Color("#397858") if unlocked else (Color("#8c7436") if is_next else Color("#263746"))
+	var card := PanelContainer.new()
+	card.custom_minimum_size.y = 54.0
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.add_theme_stylebox_override("panel", _make_panel_style(background, border, 8, 1))
+
+	var content := HBoxContainer.new()
+	content.add_theme_constant_override("separation", 9)
+	card.add_child(content)
+
+	var marker := Label.new()
+	marker.custom_minimum_size = Vector2(28, 28)
+	marker.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	marker.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	marker.add_theme_color_override("font_color", accent)
+	marker.add_theme_font_size_override("font_size", 15)
+	marker.text = "✓" if unlocked else ("→" if is_next else "🔒")
+	content.add_child(marker)
+
+	var identity := VBoxContainer.new()
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.add_theme_constant_override("separation", 1)
+	content.add_child(identity)
+
+	var status_key := (
+		"ui.skills.unlock_status.unlocked"
+		if unlocked
+		else ("ui.skills.unlock_status.next" if is_next else "ui.skills.unlock_status.locked")
+	)
+	var meta_label := Label.new()
+	meta_label.add_theme_color_override("font_color", accent)
+	meta_label.add_theme_font_size_override("font_size", 9)
+	meta_label.text = "%s  •  %s" % [
+		_text("ui.skills.level", {"level": int(unlock.get("requiredLevel", 1))}),
+		_text(status_key),
+	]
+	identity.add_child(meta_label)
+
+	var name_label := Label.new()
+	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	name_label.add_theme_color_override("font_color", TEXT_COLOR if unlocked or is_next else COMPLETE_COLOR)
+	name_label.add_theme_font_size_override("font_size", 11)
+	name_label.text = _text(str(unlock.get("labelKey", "")))
+	identity.add_child(name_label)
+	return card
 
 
 func _render_targets(targets: Array) -> void:
@@ -1297,8 +1354,15 @@ func _fit_window_to_parent() -> void:
 
 
 func _on_window_resized() -> void:
+	_update_unlock_grid_columns()
 	_update_target_grid_columns()
 	_update_fishing_catalog_grid_columns()
+
+
+func _update_unlock_grid_columns() -> void:
+	if unlocks_container == null:
+		return
+	unlocks_container.columns = 2 if size.x >= DETAIL_GRID_MINIMUM_WIDTH else 1
 
 
 func _update_target_grid_columns() -> void:

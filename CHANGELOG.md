@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Every skill now presents level unlocks as a clear, responsive progression roadmap with unlocked, next, and locked states.
+
 - Fishing now has an area dropdown, quick rod filters, and responsive Pokémon cards in its catch catalog.
 
 - Thieving targets now use the same compact, progress-aware area dropdown as Rock Smash.

@@ -180,7 +180,19 @@ func _run() -> void:
 	_check((panel.get("wanted_title_label") as Label).text == "WANTED LEVEL", "Wanted meter has an explicit title")
 	_check(is_equal_approx((panel.get("wanted_bar") as ProgressBar).value, 65.0), "Wanted meter reflects the server percentage")
 	_check((panel.get("wanted_value_label") as Label).text == "65%", "Wanted meter keeps an exact percentage label")
-	_check((panel.get("unlocks_container") as VBoxContainer).get_child_count() == 10, "class-based target unlocks are listed")
+	var unlocks_container := panel.get("unlocks_container") as GridContainer
+	_check(panel.get("unlocks_scroll") is ScrollContainer, "level unlocks use an internal scroll area")
+	_check(unlocks_container.get_child_count() == 10, "class-based target unlocks are listed")
+	_check(unlocks_container.columns == 2, "wide progression roadmaps use two columns")
+	var unlocked_meta := ((((unlocks_container.get_child(0) as PanelContainer).get_child(0) as HBoxContainer).get_child(1) as VBoxContainer).get_child(0) as Label)
+	var next_unlock_meta := ((((unlocks_container.get_child(6) as PanelContainer).get_child(0) as HBoxContainer).get_child(1) as VBoxContainer).get_child(0) as Label)
+	var locked_meta := ((((unlocks_container.get_child(7) as PanelContainer).get_child(0) as HBoxContainer).get_child(1) as VBoxContainer).get_child(0) as Label)
+	_check(unlocked_meta.text.contains("Unlocked") and next_unlock_meta.text.contains("Next unlock") and locked_meta.text.contains("Locked"), "progression cards distinguish unlocked, next, and locked states")
+	panel.size.x = 620.0
+	panel.call("_on_window_resized")
+	_check(unlocks_container.columns == 1, "narrow progression roadmaps collapse to one column")
+	panel.size.x = 760.0
+	panel.call("_on_window_resized")
 	_check(not (panel.get("targets_section") as VBoxContainer).visible, "Thieving opens on its compact progression tab")
 	_check(panel.get_combined_minimum_size().y <= 600.0, "Thieving progression fits the fixed Skills window")
 	panel.call("_select_detail_tab", "catalog")
@@ -227,6 +239,7 @@ func _run() -> void:
 	_check(not (panel.get("targets_section") as VBoxContainer).visible, "the target catalog only appears for Thieving")
 	_check(not (panel.get("wanted_section") as VBoxContainer).visible, "Fishing hides the Thieving Wanted meter")
 	_check(is_equal_approx((panel.get("experience_bar") as ProgressBar).value, 42.86), "XP progress uses the server percentage")
+	_check((panel.get("unlocks_container") as GridContainer).get_child_count() == 3 and (panel.get("unlocks_container") as GridContainer).get_child(0) is PanelContainer, "Fishing uses the shared progression roadmap")
 	panel.call("_select_detail_tab", "catalog")
 	_check((panel.get("fishing_catalog_section") as VBoxContainer).visible, "Fishing has a dedicated catch catalog tab")
 	var fishing_area_selector := panel.get("fishing_area_selector") as OptionButton
@@ -267,6 +280,7 @@ func _run() -> void:
 	_check((panel.get("detail_name") as Label).text == "Rock Smash", "Rock Smash opens its own detailed interface")
 	_check((panel.get("stats_label") as Label).text.contains("0.25") and (panel.get("stats_label") as Label).text.contains("4"), "Rock Smash shows fossil chance and today's availability")
 	_check(not (panel.get("wanted_section") as VBoxContainer).visible, "Rock Smash hides the Thieving Wanted meter")
+	_check((panel.get("unlocks_container") as GridContainer).get_child_count() == 2 and (panel.get("unlocks_container") as GridContainer).get_child(0) is PanelContainer, "Rock Smash uses the shared progression roadmap")
 	panel.call("_select_detail_tab", "catalog")
 	_check((panel.get("targets_section") as VBoxContainer).visible, "Rock Smash has a dedicated daily Rocks tab")
 	_check((panel.get("catalog_tab_button") as Button).text == "Rocks", "Rock Smash labels its secondary tab for rocks")
@@ -360,6 +374,9 @@ func _run() -> void:
 		)
 		_check(
 			parsed is Dictionary
+			and (parsed as Dictionary).has("ui.skills.unlock_status.unlocked")
+			and (parsed as Dictionary).has("ui.skills.unlock_status.next")
+			and (parsed as Dictionary).has("ui.skills.unlock_status.locked")
 			and (parsed as Dictionary).has("ui.skills.fishing.catalog.area_option")
 			and (parsed as Dictionary).has("ui.skills.fishing.catalog.area_summary")
 			and (parsed as Dictionary).has("ui.skills.fishing.catalog.area_empty")
