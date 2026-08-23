@@ -780,6 +780,7 @@ func _poll_loan_notifications() -> void:
 	if account_generation != incoming_account_generation or not bool(result.get("success", false)):
 		return
 	var body: Dictionary = result.get("body", {})
+	var custody_changed := false
 	for value: Variant in body.get("notifications", []):
 		if not value is Dictionary:
 			continue
@@ -790,6 +791,12 @@ func _poll_loan_notifications() -> void:
 		if not displayed_notification_ids.has(notification_id):
 			displayed_notification_ids[notification_id] = true
 			var message_key := str(notification.get("messageKey", ""))
+			if message_key in [
+				"ui.lending.notification.accepted",
+				"ui.lending.notification.asset_returned",
+				"ui.lending.notification.asset_auto_returned",
+			]:
+				custody_changed = true
 			var message_args: Dictionary = _notification_message_args(notification.get("messageArgs", {}))
 			overlay.call("add_system_message", _t(message_key, message_args))
 		var ack: Dictionary = await service.acknowledge_notification(notification_id)
@@ -797,6 +804,8 @@ func _poll_loan_notifications() -> void:
 			return
 		if bool(ack.get("success", false)):
 			displayed_notification_ids.erase(notification_id)
+	if custody_changed:
+		await _refresh_after_asset_return()
 
 
 func _notification_message_args(value: Variant) -> Dictionary:

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Accepting or returning a Player Loan now refreshes both Trainers' Party, PC, and Bag state, so moved Pokémon no longer remain visible in the lender's Party.
+
 - Player Loans now deliver persistent system messages for offers, responses, return requests, and returned assets, including after logging in. Borrowed Pokémon and items can now be returned one at a time.
 
 - Player Loan cards now show who borrowed from whom, clear status and deadline details, and every Pokémon or item with its name, icon, and current state. Completed offers are kept in History instead of Open Loans.
