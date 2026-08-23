@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Player Loan cards now show who borrowed from whom, clear status and deadline details, and every Pokémon or item with its name, icon, and current state. Completed offers are kept in History instead of Open Loans.
+
 - Player loan offers now start only from a nearby Trainer on the same map. The Socials Loans window is now focused entirely on reviewing and managing loans.
 
 - Accepting a player loan now immediately refreshes the Party, PC, Bag, and wallet, confirms where the borrowed assets are available, and uses clearly visible selection boxes.
