@@ -26,6 +26,7 @@ const DEV_ITEM_SEARCH_ENDPOINT := "/game/dev/items/search?q=%s"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var cached_inventory_items: Array = []
+var cached_borrowed_inventory_items: Array = []
 var cached_inventory_user_id := 0
 var inventory_loaded := false
 var collected_world_pickup_ids: Dictionary = {}
@@ -57,6 +58,7 @@ func load_inventory() -> Dictionary:
 	return {
 		"success": true,
 		"items": cached_inventory_items.duplicate(true),
+		"borrowedItems": cached_borrowed_inventory_items.duplicate(true),
 	}
 
 
@@ -86,9 +88,14 @@ func apply_inventory_state(value: Variant) -> bool:
 	var inventory := value as Dictionary
 	if inventory.get("items", null) is not Array:
 		return false
+	var current_user_id := int(AuthService.current_user.get("id", 0))
+	if cached_inventory_user_id != current_user_id:
+		cached_borrowed_inventory_items.clear()
 	var items := _array_from_value(inventory.get("items", []))
 	cached_inventory_items = items.duplicate(true)
-	cached_inventory_user_id = int(AuthService.current_user.get("id", 0))
+	if inventory.get("borrowedItems", null) is Array:
+		cached_borrowed_inventory_items = _array_from_value(inventory.get("borrowedItems", [])).duplicate(true)
+	cached_inventory_user_id = current_user_id
 	inventory_loaded = true
 	inventory_changed.emit(cached_inventory_items.duplicate(true))
 	return true
@@ -96,6 +103,7 @@ func apply_inventory_state(value: Variant) -> bool:
 
 func _clear_inventory_cache() -> void:
 	cached_inventory_items.clear()
+	cached_borrowed_inventory_items.clear()
 	cached_inventory_user_id = 0
 	inventory_loaded = false
 	collected_world_pickup_ids.clear()

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Borrowed held items now appear in the Bag with a clear loan marker while remaining separate from owned items.
+
 - Player Loan cards now show the names and icons of every item in an offer instead of only an item count.
 
 - Player Loans now offer 48-hour and 72-hour durations, with every duration shown consistently in hours.
