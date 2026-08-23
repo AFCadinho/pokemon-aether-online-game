@@ -96,6 +96,7 @@ func normalize_capabilities(value: Variant) -> Dictionary:
 	var source := _dictionary(value)
 	return {
 		"enabled": bool(source.get("enabled", false)),
+		"requiresSameMap": bool(source.get("requiresSameMap", true)),
 		"durationsSeconds": _array(source.get("durationsSeconds", [3600, 86400, 259200, 604800])),
 		"maxBorrowedPokemon": maxi(int(source.get("maxBorrowedPokemon", 6)), 0),
 		"maxBorrowedItems": maxi(int(source.get("maxBorrowedItems", 6)), 0),

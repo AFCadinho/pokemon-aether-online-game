@@ -27,16 +27,18 @@ var incoming_dialog: Window
 var last_incoming_signature := ""
 var incoming_account_generation := 0
 
-var target_input: LineEdit
+var target_display_label: Label
 var duration_select: OptionButton
 var fee_input: SpinBox
 var assets_list: VBoxContainer
 var loans_list: VBoxContainer
 var view_select: OptionButton
 var status_label: Label
+var subtitle_label: Label
 var create_button: Button
 var usage_label: Label
 var compose_panel: Control
+var loans_panel: Control
 
 
 func _ready() -> void:
@@ -68,16 +70,16 @@ func clear_account_state() -> void:
 
 func open_for_trainer(username: String) -> void:
 	target_username = username.strip_edges()
-	if target_input != null:
-		target_input.text = target_username
+	_set_workspace_mode(true)
+	if target_display_label != null:
+		target_display_label.text = _t("ui.lending.compose_target", {"trainer": target_username})
 	popup_centered(WINDOW_SIZE)
 	await refresh_all()
 
 
 func open_loans() -> void:
 	target_username = ""
-	if target_input != null:
-		target_input.text = ""
+	_set_workspace_mode(false)
 	popup_centered(WINDOW_SIZE)
 	await refresh_all()
 
@@ -97,9 +99,11 @@ func refresh_all() -> void:
 		_show_error(_t("ui.lending.error.disabled"))
 		create_button.disabled = true
 		return
-	_populate_durations()
-	await _refresh_assets()
-	await _refresh_loans()
+	if compose_panel.visible:
+		_populate_durations()
+		await _refresh_assets()
+	else:
+		await _refresh_loans()
 	status_label.text = _t("ui.lending.status.ready")
 
 
@@ -125,10 +129,10 @@ func _build_ui() -> void:
 	heading_label.add_theme_font_size_override("font_size", 21)
 	heading_label.add_theme_color_override("font_color", TEXT)
 	heading.add_child(heading_label)
-	var subtitle := Label.new()
-	subtitle.text = _t("ui.lending.subtitle")
-	subtitle.add_theme_color_override("font_color", MUTED)
-	heading.add_child(subtitle)
+	subtitle_label = Label.new()
+	subtitle_label.text = _t("ui.lending.subtitle")
+	subtitle_label.add_theme_color_override("font_color", MUTED)
+	heading.add_child(subtitle_label)
 	var close := Button.new()
 	close.text = "×"
 	close.custom_minimum_size = Vector2(40, 36)
@@ -145,7 +149,8 @@ func _build_ui() -> void:
 	root.add_child(columns)
 	compose_panel = _build_compose_panel()
 	columns.add_child(compose_panel)
-	columns.add_child(_build_loans_panel())
+	loans_panel = _build_loans_panel()
+	columns.add_child(loans_panel)
 
 
 func _build_compose_panel() -> Control:
@@ -160,11 +165,14 @@ func _build_compose_panel() -> Control:
 	root.add_theme_constant_override("separation", 8)
 	margin.add_child(root)
 	root.add_child(_section_label(_t("ui.lending.compose")))
-	target_input = LineEdit.new()
-	target_input.placeholder_text = _t("ui.lending.target")
-	target_input.text = target_username
-	_apply_line_edit_style(target_input)
-	root.add_child(target_input)
+	var target_panel := PanelContainer.new()
+	target_panel.add_theme_stylebox_override("panel", _input_style(Color("#07111df5"), ACCENT))
+	root.add_child(target_panel)
+	target_display_label = Label.new()
+	target_display_label.text = _t("ui.lending.compose_target", {"trainer": target_username})
+	target_display_label.add_theme_color_override("font_color", TEXT)
+	target_display_label.add_theme_font_size_override("font_size", 13)
+	target_panel.add_child(target_display_label)
 	var terms := HBoxContainer.new()
 	terms.add_theme_constant_override("separation", 8)
 	root.add_child(terms)
@@ -367,14 +375,35 @@ func _create_loan() -> void:
 	create_button.disabled = true
 	var service := get_node_or_null("/root/LendingService")
 	var duration := int(duration_select.get_item_metadata(duration_select.selected))
-	var result: Dictionary = await service.create_loan(target_input.text, pokemon_ids, items, duration, int(fee_input.value))
+	var result: Dictionary = await service.create_loan(target_username, pokemon_ids, items, duration, int(fee_input.value))
 	mutation_in_flight = false
 	create_button.disabled = false
 	if not bool(result.get("success", false)):
-		_show_error(str(result.get("error", _t("ui.lending.error.create"))))
+		_show_error(_friendly_error(result, "ui.lending.error.create"))
 		return
-	status_label.text = _t("ui.lending.status.sent", {"trainer": target_input.text.strip_edges()})
-	await refresh_all()
+	status_label.text = _t("ui.lending.status.sent", {"trainer": target_username})
+	var overlay := get_tree().get_first_node_in_group("ui_overlay")
+	if overlay != null and overlay.has_method("add_system_message"):
+		overlay.call("add_system_message", status_label.text)
+	hide()
+
+
+func _set_workspace_mode(is_composing: bool) -> void:
+	if compose_panel != null:
+		compose_panel.visible = is_composing
+	if loans_panel != null:
+		loans_panel.visible = not is_composing
+	if subtitle_label != null:
+		subtitle_label.text = _t("ui.lending.subtitle" if is_composing else "ui.lending.overview_subtitle")
+
+
+func _friendly_error(result: Dictionary, fallback_key: String) -> String:
+	var code := str(result.get("code", ""))
+	if code in ["loan_same_map_required", "loan_presence_unavailable"]:
+		var localizer := get_node_or_null("/root/BackendErrorLocalization")
+		if localizer != null:
+			return str(localizer.call("message", result, fallback_key))
+	return str(result.get("error", _t(fallback_key)))
 
 
 func _loan_action(action: String, loan_id: String) -> void:

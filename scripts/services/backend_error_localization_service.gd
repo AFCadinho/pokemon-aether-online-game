@@ -128,6 +128,8 @@ const CODE_TO_KEY: Dictionary = {
 	"trade_confirmation_stale": "ui.trade.error.stale",
 	"trade_rate_limited": "backend.error.rate_limited",
 	"trade_rollout_unavailable": "ui.trade.error.service_unavailable",
+	"loan_same_map_required": "ui.lending.error.same_map",
+	"loan_presence_unavailable": "ui.lending.error.presence_unavailable",
 	"trade_payload_too_large": "backend.error.payload_too_large",
 	"aether_atelier_missing_components": "ui.atelier.error.components",
 	"aether_atelier_outfit_not_found": "backend.error.item_unavailable",

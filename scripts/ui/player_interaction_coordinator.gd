@@ -498,7 +498,9 @@ func _render_context_menu() -> void:
 	_add_context_action(
 		"Lend",
 		_t("ui.nearby.action.lend.description"),
-		_on_lend_pressed
+		_on_lend_pressed,
+		"default",
+		not _target_is_on_current_map()
 	)
 	_add_context_more_actions_toggle()
 	if context_more_actions_expanded:
@@ -761,6 +763,8 @@ func _on_trade_pressed() -> void:
 
 
 func _on_lend_pressed() -> void:
+	if not _target_is_on_current_map():
+		return
 	var username := str(current_target.get("username", "")).strip_edges()
 	var workspace := get_node_or_null("/root/LendingWorkspace")
 	if username == "" or workspace == null or not workspace.has_method("open_for_trainer"):
