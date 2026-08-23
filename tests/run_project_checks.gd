@@ -90,7 +90,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pokemon_level_cap_check.gd",
 	"res://tests/pokemon_factory_hp_snapshot_check.gd",
 	"res://tests/pokemon_pc_interactable_check.gd",
-	"res://tests/pc_hover_iv_grid_check.gd",
+	"res://tests/pc_hover_summary_check.gd",
 	"res://tests/new_player_spawn_check.gd",
 	"res://tests/blackout_respawn_contract_check.gd",
 	"res://tests/world_area_access_contract_check.gd",

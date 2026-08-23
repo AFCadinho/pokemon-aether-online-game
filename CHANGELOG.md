@@ -8,7 +8,7 @@
 
 **Fixed**
 
-- Pokémon Storage hover cards now stay consistently sized, with larger IV labels and values in a clearer grid.
+- Pokémon Storage hover cards now stay compact and consistently sized, show each Pokémon's level, and leave IV and EV details to the full Summary.
 - Ogerpon's correct battle sprites are now included in game downloads.
 - Training Rooms no longer blame a valid Poképaste when room timers are temporarily unavailable.
 - Wild battles now immediately show the first Pokémon that can battle when an earlier party member has fainted.

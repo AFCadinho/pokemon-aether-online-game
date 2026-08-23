@@ -4,7 +4,7 @@ class_name PartyHoverCard
 
 const TYPE_ICON_PATH := "res://assets/sprites/types/%s.png"
 const CARD_WIDTH := 300.0
-const STORAGE_CARD_HEIGHT := 325.0
+const STORAGE_CARD_HEIGHT := 261.0
 const IV_STAT_ENTRIES: Array[Array] = [
 	["HP", "hp"],
 	["Atk", "atk"],
@@ -75,6 +75,8 @@ func _ready() -> void:
 	var details_index := $MarginContainer/VBoxContainer/SeperationLabel2.get_index() + 1
 	content.move_child(ev_value_label, details_index)
 	content.move_child(iv_details_container, details_index + 1)
+	ev_value_label.visible = show_evs
+	iv_details_container.visible = show_ivs
 	if storage_visuals:
 		_apply_storage_visuals()
 	hide_card()
@@ -92,13 +94,13 @@ func set_show_ivs(enabled: bool) -> void:
 
 
 func set_show_storage_details(enabled: bool) -> void:
-	show_ivs = enabled
-	show_evs = enabled
+	show_ivs = false
+	show_evs = false
 	storage_visuals = enabled
 	if iv_details_container != null:
-		iv_details_container.visible = enabled
+		iv_details_container.visible = false
 	if ev_value_label != null:
-		ev_value_label.visible = enabled
+		ev_value_label.visible = false
 	if is_node_ready():
 		_apply_storage_visuals()
 
@@ -250,7 +252,7 @@ func position_near_rect(anchor_rect: Rect2, viewport_size: Vector2) -> void:
 
 func _set_pokemon_data(pokemon_data: Dictionary) -> void:
 	current_pokemon_data = pokemon_data.duplicate(true)
-	name_label.text = _get_display_species(pokemon_data)
+	name_label.text = _get_name_and_level(pokemon_data)
 	_set_type_icons(pokemon_data)
 	_set_hp(pokemon_data)
 	ability_value_label.text = _format_value(
@@ -279,6 +281,19 @@ func _set_pokemon_data(pokemon_data: Dictionary) -> void:
 	_set_ivs(pokemon_data.get("ivs", {}))
 	_set_evs(pokemon_data.get("evs", {}))
 	_set_moves(pokemon_data.get("moves", []))
+
+
+func _get_name_and_level(pokemon_data: Dictionary) -> String:
+	var display_name := _get_display_species(pokemon_data)
+	var level := int(pokemon_data.get("level", 0))
+	if level <= 0:
+		return display_name
+	var level_text := (
+		_t("ui.storage.level", {"level": level})
+		if localization_manager != null
+		else "Lv. %d" % level
+	)
+	return "%s  ·  %s" % [display_name, level_text]
 
 
 func _get_display_species(pokemon_data: Dictionary) -> String:

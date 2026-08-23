@@ -11,19 +11,18 @@ func _init() -> void:
 	root.add_child(card)
 	await process_frame
 
-	_check(
-		is_equal_approx(card.custom_minimum_size.y, PartyHoverCard.STORAGE_CARD_HEIGHT),
-		"Storage hover cards reserve one stable height"
-	)
-	var iv_grid := card.get_node_or_null(
-		"MarginContainer/VBoxContainer/IVDetailsContainer/MarginContainer/Row/IVGrid"
-	) as GridContainer
-	_check(iv_grid != null, "Storage hover details present IVs as a compact grid")
-	if iv_grid != null:
-		_check(iv_grid.columns == 6, "The IV grid keeps all six stats aligned")
+	var iv_details := card.get_node_or_null(
+		"MarginContainer/VBoxContainer/IVDetailsContainer"
+	) as Control
+	var ev_details := card.get_node_or_null(
+		"MarginContainer/VBoxContainer/EVValueLabel"
+	) as Control
+	_check(iv_details != null and not iv_details.visible, "Storage hover cards hide IV details")
+	_check(ev_details != null and not ev_details.visible, "Storage hover cards hide EV details")
 
 	card.show_for_pokemon({
 		"species": "Blastoise",
+		"level": 100,
 		"types": ["water"],
 		"hp": 299,
 		"maxHp": 299,
@@ -38,25 +37,21 @@ func _init() -> void:
 	card.size.y = 0.0
 	card.reset_size()
 	var populated_height := card.size.y
+	var name_label := card.get_node("MarginContainer/VBoxContainer/NameLabel") as Label
+	_check(name_label.text.contains("Blastoise"), "Storage hover cards show the Pokémon name")
+	_check(name_label.text.contains("Lv. 100"), "Storage hover cards show the Pokémon level")
+	_check(not iv_details.visible and not ev_details.visible, "Storage hover details stay hidden after data updates")
 	_check(
 		is_equal_approx(populated_height, PartyHoverCard.STORAGE_CARD_HEIGHT),
 		"A fully populated Storage hover card stays at the fixed height"
 	)
-	if iv_grid != null:
-		var hp_value := iv_grid.get_node_or_null("HpValue") as Label
-		var speed_value := iv_grid.get_node_or_null("SpeValue") as Label
-		_check(
-			hp_value != null and hp_value.text == "31"
-			and speed_value != null and speed_value.text == "31",
-			"The IV grid displays the supplied values"
-		)
 
 	card.show_for_pokemon({
 		"species": "Blastoise",
+		"level": 50,
 		"types": ["water"],
 		"hp": 1,
 		"maxHp": 1,
-		"ivs": {"hp": 0, "atk": 0, "def": 0, "spa": 0, "spd": 0, "spe": 0},
 	})
 	await process_frame
 	card.size.y = 0.0
