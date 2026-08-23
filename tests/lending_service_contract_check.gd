@@ -46,6 +46,8 @@ func _init() -> void:
 	_check(workspace_source.contains("_selected_item_copy_count") and workspace_source.contains("\"quantity\": int(selected_items.get"), "multiple item copies remain separate loan assets")
 	var box_candidates := workspace._box_candidates([{"boxIndex": 2, "slots": [{"slotIndex": 4, "pokemon": {"id": 9, "pokemon": {"species": "Abra", "level": 8}}}]}])
 	_check(box_candidates.size() == 1 and int(box_candidates[0].get("pokemonId", 0)) == 9 and str(box_candidates[0].get("sourceType", "")) == "box", "PC Box Pokemon are selectable loan candidates")
+	workspace.pokemon_boxes = workspace._pokemon_boxes([{"boxIndex": 2, "slots": []}])
+	_check(workspace.pokemon_boxes.size() == 1 and int(workspace.pokemon_boxes[0].get("boxIndex", -1)) == 2, "untyped Box API arrays normalize before typed assignment")
 	_check(source.contains("duration_seconds not in [3600, 10800, 21600, 43200, 86400]"), "loan service rejects long alpha duration windows")
 	_check(workspace_source.contains("[3600, 10800, 21600, 43200, 86400]") and not workspace_source.contains("capabilities.get(\"durationsSeconds\", [3600, 86400, 259200, 604800])"), "loan duration selector uses short alpha windows")
 	_check(workspace_source.contains("select.get_popup()") and workspace_source.contains("_dropdown_popup_style"), "loan dropdown popups use the Aether theme")

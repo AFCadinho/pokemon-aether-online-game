@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed Player Loans showing an empty Pokémon selection when PC Box data was loaded.
+
 - Player Loans now support Pokémon from Party or PC Boxes, respect the recipient's trade level cap, and offer safer one-to-24-hour durations.
 
 - Player Loans dropdowns and confirmation windows now match the Aether interface style.
