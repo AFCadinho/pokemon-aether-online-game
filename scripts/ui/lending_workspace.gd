@@ -649,7 +649,7 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, 
 	margin.add_child(row)
 	var asset_type := str(asset.get("assetType", ""))
 	var asset_status := str(asset.get("status", ""))
-	var return_requested := str(asset.get("returnRequestedAt", "")) != ""
+	var return_requested := _optional_string(asset.get("returnRequestedAt")) != ""
 	if asset_type == "pokemon":
 		var icon_button := Button.new()
 		icon_button.custom_minimum_size = Vector2(42, 42)
@@ -671,13 +671,14 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, 
 		row.add_child(view)
 	else:
 		var item_id := str(asset.get("itemId", snapshot.get("id", "")))
+		var held_pokemon_id := _nullable_positive_int(asset.get("heldPokemonId"))
 		var icon := TextureRect.new()
 		icon.custom_minimum_size = Vector2(36, 36)
 		icon.texture = _load_item_icon(item_id)
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		row.add_child(icon)
-		var item_location := _t("ui.lending.card.item_equipped" if int(asset.get("heldPokemonId", 0)) > 0 else "ui.lending.card.item_in_bag", {"state": _asset_state_label(asset_status)})
+		var item_location := _t("ui.lending.card.item_equipped" if held_pokemon_id > 0 else "ui.lending.card.item_in_bag", {"state": _asset_state_label(asset_status)})
 		var asset_name := _item_display_name(item_id, str(snapshot.get("name", item_id)))
 		var identity := _loan_asset_identity(asset_name, _t("ui.lending.card.item_copy_meta", {
 			"index": asset_index,
@@ -691,9 +692,9 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, 
 			icon.tooltip_text = description
 		if is_borrower and loan_status in ["active", "return_pending"] and asset_status in ["active", "return_pending"]:
 			var action := Button.new()
-			action.text = _t("ui.lending.detach_item") if int(asset.get("heldPokemonId", 0)) > 0 else _t("ui.lending.attach_item")
+			action.text = _t("ui.lending.detach_item") if held_pokemon_id > 0 else _t("ui.lending.attach_item")
 			action.disabled = mutation_in_flight
-			if int(asset.get("heldPokemonId", 0)) > 0:
+			if held_pokemon_id > 0:
 				action.pressed.connect(_detach_loan_item.bind(str(asset.get("assetId", ""))))
 			else:
 				action.pressed.connect(_open_attach_menu.bind(str(asset.get("assetId", "")), item_id))
@@ -706,6 +707,16 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, 
 		_apply_button_style(view)
 		row.add_child(view)
 	return panel
+
+
+func _nullable_positive_int(value: Variant) -> int:
+	if value == null:
+		return 0
+	return maxi(int(value), 0)
+
+
+func _optional_string(value: Variant) -> String:
+	return "" if value == null else str(value).strip_edges()
 
 
 func _open_item_details(asset: Dictionary) -> void:
@@ -908,16 +919,16 @@ func _loan_timing_text(loan: Dictionary) -> String:
 	var status := str(loan.get("status", ""))
 	match status:
 		"pending":
-			return _t("ui.lending.card.offer_expires", {"date": _format_loan_time(str(loan.get("offerExpiresAt", "")))})
+			return _t("ui.lending.card.offer_expires", {"date": _format_loan_time(_optional_string(loan.get("offerExpiresAt")))})
 		"active":
-			return _t("ui.lending.card.due", {"date": _format_loan_time(str(loan.get("dueAt", "")))})
+			return _t("ui.lending.card.due", {"date": _format_loan_time(_optional_string(loan.get("dueAt")))})
 		"return_pending":
-			return _t("ui.lending.card.return_requested", {"date": _format_loan_time(str(loan.get("returnRequestedAt", "")))})
+			return _t("ui.lending.card.return_requested", {"date": _format_loan_time(_optional_string(loan.get("returnRequestedAt")))})
 		"returned":
-			return _t("ui.lending.card.returned", {"date": _format_loan_time(str(loan.get("returnedAt", "")))})
+			return _t("ui.lending.card.returned", {"date": _format_loan_time(_optional_string(loan.get("returnedAt")))})
 		"expired":
-			return _t("ui.lending.card.expired", {"date": _format_loan_time(str(loan.get("offerExpiresAt", "")))})
-	return _t("ui.lending.card.created", {"date": _format_loan_time(str(loan.get("createdAt", "")))})
+			return _t("ui.lending.card.expired", {"date": _format_loan_time(_optional_string(loan.get("offerExpiresAt")))})
+	return _t("ui.lending.card.created", {"date": _format_loan_time(_optional_string(loan.get("createdAt")))})
 
 
 func _format_loan_time(value: String) -> String:
@@ -1715,5 +1726,7 @@ func _style(background: Color, border: Color, radius: int) -> StyleBoxFlat:
 
 
 func _t(key: String, values := {}) -> String:
+	if not is_inside_tree():
+		return key
 	var localization := get_node_or_null("/root/LocalizationManager")
 	return str(localization.call("text", key, values)) if localization != null else key

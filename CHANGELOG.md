@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Item loans now reliably show every individual item and its return action, including items that are currently in the Bag.
+
 - Player Loans now separates borrowed and lent assets, provides Pokémon and Item tabs, and lets each item copy be viewed, returned, or requested back individually.
 
 - Borrowed Pokémon now have loan markers in Party, PC, and Summary cards, plus a dedicated list in Pokémon Storage.

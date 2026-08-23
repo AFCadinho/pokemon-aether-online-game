@@ -66,6 +66,13 @@ func _init() -> void:
 	_check(workspace_source.contains("_loan_contents_title") and workspace_source.contains("ui.lending.card.item_contents"), "item loan cards label their contents and count")
 	_check(workspace_source.contains("ui.lending.card.item_copy_meta") and workspace_source.contains("_open_item_details"), "each item copy has a clear identity and read-only detail action")
 	_check(workspace_source.contains("panel.tooltip_text = description") and workspace_source.contains("icon.tooltip_text = description"), "item loan rows expose item descriptions")
+	var first_item_row := workspace._loan_asset_row({"assetId": "item-1", "assetType": "item", "status": "active", "itemId": "leftovers", "heldPokemonId": null, "snapshot": {"id": "leftovers", "name": "Leftovers"}}, false, "active", "item-loan", 1, 2)
+	var second_item_row := workspace._loan_asset_row({"assetId": "item-2", "assetType": "item", "status": "active", "itemId": "choice-band", "heldPokemonId": null, "snapshot": {"id": "choice-band", "name": "Choice Band"}}, false, "active", "item-loan", 2, 2)
+	_check(first_item_row != null and second_item_row != null, "null held-Pokemon ids still render every item copy as its own row")
+	_check("ui.lending.request_return_asset" in _button_texts(first_item_row) and "ui.lending.request_return_asset" in _button_texts(second_item_row), "each rendered item copy keeps its own request-return action")
+	_check(workspace._optional_string(null) == "", "nullable return timestamps do not become false return requests")
+	first_item_row.free()
+	second_item_row.free()
 	var party := workspace._party_candidates([{"id": 7, "pokemon": {"species": "Pikachu", "level": 22, "item": "light-ball"}}])
 	_check(party.size() == 1 and int(party[0].get("pokemonId", 0)) == 7, "party candidate normalization")
 	_check(str(party[0].get("heldItemId", "")) == "light-ball", "held item remains an explicit selectable asset")
@@ -108,3 +115,12 @@ func _check(value: bool, label: String) -> void:
 		return
 	failed = true
 	push_error(label)
+
+
+func _button_texts(node: Node) -> Array[String]:
+	var result: Array[String] = []
+	if node is Button:
+		result.append((node as Button).text)
+	for child: Node in node.get_children():
+		result.append_array(_button_texts(child))
+	return result
