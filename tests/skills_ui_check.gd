@@ -42,10 +42,19 @@ func _run() -> void:
 
 	var panel_scene := load(SKILLS_PANEL_PATH) as PackedScene
 	_check(panel_scene != null, "Skills panel scene loads")
+	var panel_host := Control.new()
+	panel_host.size = Vector2(1280, 900)
+	root.add_child(panel_host)
 	var panel := panel_scene.instantiate() as Control
-	root.add_child(panel)
+	panel_host.add_child(panel)
 	await process_frame
 	_check(not panel.visible, "Skills panel starts hidden")
+	_check(panel.size == Vector2(760, 780), "Skills uses its larger preferred size when screen space allows")
+	panel_host.size = Vector2(640, 520)
+	panel.call("_fit_window_to_parent")
+	_check(panel.size == Vector2(616, 496), "Skills shrinks to the available screen space with safe edge margins")
+	panel_host.size = Vector2(1280, 900)
+	panel.call("_fit_window_to_parent")
 
 	var test_skills: Array = [
 		{
@@ -99,6 +108,32 @@ func _run() -> void:
 				{"npcId": "kanto_pewter_city_gym_fan_max", "npcType": "child", "nameKey": "ui.skills.thieving.target.max", "townKey": "ui.skills.thieving.location.pewter_city", "locationKey": "ui.skills.thieving.location.pewter_city", "requiredLevel": 1, "unlocked": true, "attemptedToday": false, "availableToday": true},
 			],
 		},
+		{
+			"id": "rock_smash",
+			"unlocked": true,
+			"unlockHintKey": "ui.skills.rock_smash.unlock_hint",
+			"nameKey": "ui.skills.rock_smash.name",
+			"descriptionKey": "ui.skills.rock_smash.description",
+			"level": 20,
+			"maxLevel": 100,
+			"totalExperience": 9500,
+			"experienceIntoLevel": 0,
+			"experienceForNextLevel": 1000,
+			"progressPercent": 0.0,
+			"stats": {"fossilChancePercent": 0.25, "availableRocks": 4},
+			"unlocks": [
+				{"id": "rock_smash_training", "requiredLevel": 1, "unlocked": true, "labelKey": "ui.skills.unlock.rock_smash_training"},
+				{"id": "rock_smash_fossils", "requiredLevel": 20, "unlocked": true, "labelKey": "ui.skills.unlock.rock_smash_fossils"},
+			],
+			"rocks": [
+				{"rockId": "kanto_pewter_city_training_rock_north", "nameKey": "ui.skills.rock_smash.rock.training_north", "townKey": "ui.skills.rock_smash.location.pewter_city", "locationKey": "ui.skills.rock_smash.location.karate_yard", "requiredLevel": 1, "unlocked": true, "smashedToday": true, "availableToday": false},
+				{"rockId": "kanto_pewter_city_training_rock_east", "nameKey": "ui.skills.rock_smash.rock.training_east", "townKey": "ui.skills.rock_smash.location.pewter_city", "locationKey": "ui.skills.rock_smash.location.karate_yard", "requiredLevel": 1, "unlocked": true, "smashedToday": false, "availableToday": true},
+				{"rockId": "kanto_pewter_city_training_rock_south", "nameKey": "ui.skills.rock_smash.rock.training_south", "townKey": "ui.skills.rock_smash.location.pewter_city", "locationKey": "ui.skills.rock_smash.location.karate_yard", "requiredLevel": 1, "unlocked": true, "smashedToday": false, "availableToday": true},
+				{"rockId": "kanto_pewter_city_training_rock_west", "nameKey": "ui.skills.rock_smash.rock.training_west", "townKey": "ui.skills.rock_smash.location.pewter_city", "locationKey": "ui.skills.rock_smash.location.karate_yard", "requiredLevel": 1, "unlocked": true, "smashedToday": false, "availableToday": true},
+				{"rockId": "kanto_mt_moon_1f_rock_west", "nameKey": "ui.skills.rock_smash.rock.cave_west", "townKey": "ui.skills.rock_smash.location.mt_moon", "locationKey": "ui.skills.rock_smash.location.mt_moon_1f", "requiredLevel": 5, "unlocked": true, "smashedToday": false, "availableToday": true},
+				{"rockId": "kanto_mt_moon_b2f_rock_north", "nameKey": "ui.skills.rock_smash.rock.cave_north", "townKey": "ui.skills.rock_smash.location.mt_moon", "locationKey": "ui.skills.rock_smash.location.mt_moon_b2f", "requiredLevel": 50, "unlocked": false, "smashedToday": false, "availableToday": false},
+			],
+		},
 	]
 	skills_service.set("skills", test_skills)
 	skills_service.set("state_loaded", true)
@@ -124,7 +159,7 @@ func _run() -> void:
 	})
 	panel.call("_render_skills", test_skills)
 	panel.visible = true
-	_check((panel.get("skill_cards") as GridContainer).get_child_count() == 2, "Fishing and Thieving receive separate overview cards")
+	_check((panel.get("skill_cards") as GridContainer).get_child_count() == 3, "Fishing, Thieving, and Rock Smash receive separate overview cards")
 	_check((panel.get("overview_panel") as VBoxContainer).visible, "Skills opens on the level overview")
 	_check(not (panel.get("detail_panel") as PanelContainer).visible, "Skill details stay hidden until a skill is selected")
 	panel.call("_select_skill", "fishing")
@@ -155,35 +190,22 @@ func _run() -> void:
 	_check((panel.get("catalog_tab_button") as Button).text == "Targets", "the secondary Thieving tab is labelled for targets")
 	_check(panel.get("targets_scroll") is ScrollContainer, "daily targets use an internal scroll area")
 	_check(panel.get_combined_minimum_size().y <= 600.0, "the target catalog does not lengthen the Skills window")
-	_check((panel.get("target_town_tabs") as HBoxContainer).get_child_count() == 2, "each available town receives a target tab")
-	_check(not (panel.get("target_town_previous_button") as Button).visible and not (panel.get("target_town_next_button") as Button).visible, "town arrows stay hidden while all tabs fit")
+	var area_selector := panel.get("area_selector") as OptionButton
+	_check(area_selector.visible and area_selector.item_count == 2, "Thieving offers one compact dropdown entry per area")
+	_check(area_selector.get_item_text(0).contains("Viridian City") and area_selector.get_item_text(0).contains("1/3"), "Thieving area options include daily attempt progress")
 	_check(str(panel.get("selected_target_town_key")) == "ui.skills.thieving.location.viridian_city", "the first target town is selected initially")
-	_check((panel.get("targets_container") as VBoxContainer).get_child_count() == 3, "only the selected town's targets are listed")
+	_check((panel.get("targets_container") as GridContainer).get_child_count() == 3, "only the selected town's targets are listed")
 	_check((panel.get("targets_summary_label") as Label).text.contains("3") and (panel.get("targets_summary_label") as Label).text.contains("1/4"), "target summary shows available and attempted counts")
-	var first_target := (panel.get("targets_container") as VBoxContainer).get_child(0) as PanelContainer
+	var first_target := (panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer
 	var first_target_content := first_target.get_child(0) as HBoxContainer
 	var first_target_status := first_target_content.get_child(1) as Label
 	_check(first_target_status.text == "Attempted today", "attempted targets have a clear daily status")
-	panel.call("_select_target_town", "ui.skills.thieving.location.pewter_city")
-	_check((panel.get("targets_container") as VBoxContainer).get_child_count() == 1, "selecting Pewter shows only Pewter targets")
-	panel.call("_select_target_town", "ui.skills.thieving.location.viridian_city")
-	var expanded_town_order: Array[String] = [
-		"ui.skills.thieving.location.viridian_city",
-		"ui.skills.thieving.location.pewter_city",
-		"test.town.cerulean",
-		"test.town.saffron",
-	]
-	var expanded_town_targets: Dictionary = (panel.get("targets_by_town") as Dictionary).duplicate(true)
-	expanded_town_targets["test.town.cerulean"] = []
-	expanded_town_targets["test.town.saffron"] = []
-	panel.set("target_town_order", expanded_town_order)
-	panel.set("targets_by_town", expanded_town_targets)
-	panel.call("_render_target_town_tabs")
-	_check((panel.get("target_town_previous_button") as Button).visible and (panel.get("target_town_next_button") as Button).visible, "town arrows appear when tabs overflow")
-	_check((panel.get("target_town_tabs") as HBoxContainer).get_child_count() == 3, "only one page of town tabs is rendered at once")
-	panel.call("_change_target_town_page", 1)
-	_check(str(panel.get("selected_target_town_key")) == "test.town.saffron", "the next arrow selects the first town on the next page")
-	panel.call("_render_targets", test_skills[1]["targets"] as Array)
+	area_selector.select(1)
+	panel.call("_select_area", 1)
+	_check(str(panel.get("selected_target_town_key")) == "ui.skills.thieving.location.pewter_city", "selecting a Thieving dropdown area changes the active town")
+	_check((panel.get("targets_container") as GridContainer).get_child_count() == 1, "selecting Pewter shows only Pewter targets")
+	area_selector.select(0)
+	panel.call("_select_area", 0)
 	skills_service.call("_on_thieving_state_changed", {
 		"unlocked": true,
 		"level": 20,
@@ -197,7 +219,7 @@ func _run() -> void:
 		],
 		"jailed": false,
 	})
-	var refreshed_second_target := (panel.get("targets_container") as VBoxContainer).get_child(1) as PanelContainer
+	var refreshed_second_target := (panel.get("targets_container") as GridContainer).get_child(1) as PanelContainer
 	var refreshed_second_content := refreshed_second_target.get_child(0) as HBoxContainer
 	_check((refreshed_second_content.get_child(1) as Label).text == "Attempted today", "a successful pickpocket refreshes the daily target status immediately")
 	panel.call("_select_skill", "fishing")
@@ -207,15 +229,96 @@ func _run() -> void:
 	_check(is_equal_approx((panel.get("experience_bar") as ProgressBar).value, 42.86), "XP progress uses the server percentage")
 	panel.call("_select_detail_tab", "catalog")
 	_check((panel.get("fishing_catalog_section") as VBoxContainer).visible, "Fishing has a dedicated catch catalog tab")
+	var fishing_area_selector := panel.get("fishing_area_selector") as OptionButton
+	_check(fishing_area_selector.item_count == 2, "Fishing groups its catch catalog by area")
+	_check(fishing_area_selector.get_item_text(0).contains("Pallet Town") and fishing_area_selector.get_item_text(0).contains("2"), "Fishing area options show their species count")
+	await process_frame
+	panel.call("_fit_area_popup", fishing_area_selector)
+	_check(fishing_area_selector.get_popup().min_size.x == roundi(fishing_area_selector.size.x), "Fishing reuses the full-width Skills area menu")
+	var fishing_selector_bottom := fishing_area_selector.position.y + fishing_area_selector.size.y
+	var fishing_filter_gap := (panel.get("fishing_rod_filters") as HBoxContainer).position.y - fishing_selector_bottom
+	_check(fishing_filter_gap >= 14.0, "Fishing leaves clear space between its area and rod filters")
 	_check((panel.get("fishing_rod_filters") as HBoxContainer).get_child_count() == 3, "the catch catalog can be filtered by all three rods")
-	_check((panel.get("fishing_catalog_container") as VBoxContainer).get_child_count() == 1, "the selected rod lists its fishable Pokémon")
-	var old_rod_row := (panel.get("fishing_catalog_container") as VBoxContainer).get_child(0) as PanelContainer
-	var old_rod_status := ((old_rod_row.get_child(0) as HBoxContainer).get_child(2) as Label)
+	_check((panel.get("fishing_catalog_container") as GridContainer).get_child_count() == 1, "the selected area and rod list their fishable Pokémon")
+	_check((panel.get("fishing_catalog_container") as GridContainer).columns == 2, "wide Fishing catalogs use two responsive columns")
+	var old_rod_row := (panel.get("fishing_catalog_container") as GridContainer).get_child(0) as PanelContainer
+	var old_rod_content := old_rod_row.get_child(0) as HBoxContainer
+	var old_rod_identity := old_rod_content.get_child(1) as VBoxContainer
+	var old_rod_status := old_rod_content.get_child(2) as Label
 	_check(old_rod_status.text == "Available", "catalog entries reflect the player's Fishing level and active rod")
+	_check((old_rod_identity.get_child(2) as Label).text == "Pallet Town", "Fishing cards identify their selected area")
 	panel.call("_select_fishing_rod", "good_rod")
-	var good_rod_row := (panel.get("fishing_catalog_container") as VBoxContainer).get_child(0) as PanelContainer
+	var good_rod_row := (panel.get("fishing_catalog_container") as GridContainer).get_child(0) as PanelContainer
 	var good_rod_status := ((good_rod_row.get_child(0) as HBoxContainer).get_child(2) as Label)
 	_check(good_rod_status.text.contains("18"), "species above the player's Fishing level remain visibly locked")
+	fishing_area_selector.select(1)
+	panel.call("_select_fishing_area", 1)
+	_check(str(panel.get("selected_fishing_area_id")) == "kanto_safari_zone", "selecting a Fishing area filters the catalog")
+	_check((panel.get("fishing_catalog_container") as GridContainer).get_child(0) is Label, "Fishing explains when the selected rod has no catches in an area")
+	fishing_area_selector = panel.get("fishing_area_selector") as OptionButton
+	fishing_area_selector.select(0)
+	panel.call("_select_fishing_area", 0)
+	panel.size.x = 620.0
+	panel.call("_on_window_resized")
+	_check((panel.get("fishing_catalog_container") as GridContainer).columns == 1, "narrow Fishing catalogs collapse to one readable column")
+	panel.size.x = 760.0
+	panel.call("_on_window_resized")
+	panel.call("_select_skill", "rock_smash")
+	_check((panel.get("detail_name") as Label).text == "Rock Smash", "Rock Smash opens its own detailed interface")
+	_check((panel.get("stats_label") as Label).text.contains("0.25") and (panel.get("stats_label") as Label).text.contains("4"), "Rock Smash shows fossil chance and today's availability")
+	_check(not (panel.get("wanted_section") as VBoxContainer).visible, "Rock Smash hides the Thieving Wanted meter")
+	panel.call("_select_detail_tab", "catalog")
+	_check((panel.get("targets_section") as VBoxContainer).visible, "Rock Smash has a dedicated daily Rocks tab")
+	_check((panel.get("catalog_tab_button") as Button).text == "Rocks", "Rock Smash labels its secondary tab for rocks")
+	area_selector = panel.get("area_selector") as OptionButton
+	_check(area_selector.visible and area_selector.item_count == 2, "Rock Smash offers one compact dropdown entry per area")
+	_check(area_selector.get_item_text(0).contains("Pewter City") and area_selector.get_item_text(0).contains("1/4"), "Rock Smash area options include their daily smash progress")
+	await process_frame
+	panel.call("_fit_area_popup", area_selector)
+	var area_popup := area_selector.get_popup()
+	_check(area_popup.min_size.x == roundi(area_selector.size.x), "the shared area menu uses the full selector width")
+	_check(area_popup.get_theme_font_size("font_size") == 13 and area_popup.get_theme_constant("v_separation") == 12, "the shared area menu uses larger text and roomier rows")
+	var area_selector_spacing := panel.get("area_selector_spacing") as Control
+	var selector_bottom := area_selector.position.y + area_selector.size.y
+	var gap_below_selector := (panel.get("targets_scroll") as ScrollContainer).position.y - selector_bottom
+	_check(area_selector_spacing.visible and gap_below_selector >= 14.0, "area selectors leave clear space before their cards")
+	_check((panel.get("targets_container") as GridContainer).get_child_count() == 4, "the Pewter rock list contains all four fixed rocks")
+	await process_frame
+	var pewter_rock_height := ((panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer).size.y
+	area_selector.select(1)
+	panel.call("_select_area", 1)
+	_check(str(panel.get("selected_target_town_key")) == "ui.skills.rock_smash.location.mt_moon", "selecting a dropdown area switches the active rock group")
+	_check((panel.get("targets_container") as GridContainer).get_child_count() == 2, "the dropdown only shows rocks from its selected area")
+	await process_frame
+	var mt_moon_rock_height := ((panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer).size.y
+	_check(is_equal_approx(pewter_rock_height, mt_moon_rock_height) and pewter_rock_height <= 55.0, "Pewter and Mt. Moon use the same compact rock cards")
+	area_selector.select(0)
+	panel.call("_select_area", 0)
+	_check((panel.get("targets_container") as GridContainer).columns == 2, "wide Rock Smash lists use two columns")
+	panel.size.x = 620.0
+	panel.call("_on_window_resized")
+	_check((panel.get("targets_container") as GridContainer).columns == 1, "narrow Rock Smash lists collapse to one readable column")
+	panel.size.x = 760.0
+	panel.call("_on_window_resized")
+	_check((panel.get("targets_summary_label") as Label).text.contains("4") and (panel.get("targets_summary_label") as Label).text.contains("1/6"), "the rock summary shows available and smashed counts")
+	var first_rock := (panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer
+	var first_rock_status := ((first_rock.get_child(0) as HBoxContainer).get_child(1) as Label)
+	_check(first_rock_status.text == "Smashed today", "a completed rock has a clear daily status")
+	skills_service.call("_on_rock_smash_state_changed", {
+		"unlocked": true,
+		"level": 20,
+		"totalExperience": 9500,
+		"experienceIntoLevel": 0,
+		"experienceForNextLevel": 1000,
+		"fossilChancePercent": 0.25,
+		"smashedRockIds": [
+			"kanto_pewter_city_training_rock_north",
+			"kanto_pewter_city_training_rock_east",
+		],
+	})
+	var refreshed_second_rock := (panel.get("targets_container") as GridContainer).get_child(1) as PanelContainer
+	var refreshed_second_rock_status := ((refreshed_second_rock.get_child(0) as HBoxContainer).get_child(1) as Label)
+	_check(refreshed_second_rock_status.text == "Smashed today", "a successful smash refreshes the daily rock status immediately")
 	panel.call("_show_overview")
 	_check((panel.get("overview_panel") as VBoxContainer).visible, "the detail back action returns to all skill levels")
 	_check(not (panel.get("detail_panel") as PanelContainer).visible, "returning to the overview hides skill-specific content")
@@ -254,6 +357,15 @@ func _run() -> void:
 			and (parsed as Dictionary).has("ui.skills.thieving.target.mabel")
 			and (parsed as Dictionary).has("ui.skills.thieving.target.victor"),
 			"%s contains the grouped target interface translations" % locale_path
+		)
+		_check(
+			parsed is Dictionary
+			and (parsed as Dictionary).has("ui.skills.fishing.catalog.area_option")
+			and (parsed as Dictionary).has("ui.skills.fishing.catalog.area_summary")
+			and (parsed as Dictionary).has("ui.skills.fishing.catalog.area_empty")
+			and (parsed as Dictionary).has("ui.skills.thieving.targets.area_option")
+			and (parsed as Dictionary).has("ui.skills.rock_smash.rocks.area_option"),
+			"%s contains the shared Skills area dropdown translations" % locale_path
 		)
 
 	panel.queue_free()

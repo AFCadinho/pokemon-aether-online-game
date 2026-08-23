@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="8" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="8">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="8" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="23" nextobjectid="8">
  <properties>
   <property name="pa_schema_version" type="int" value="1"/>
   <property name="map_id" value="pokeaether_minimal_example"/>
@@ -157,7 +157,31 @@
 0,0,0,0,0,0,0,0
   </data>
  </layer>
- <objectgroup id="14" name="PA_Spawns">
+ <layer id="13" name="StairUpLeft" width="8" height="8" visible="0">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0
+  </data>
+ </layer>
+ <layer id="14" name="StairUpRight" width="8" height="8" visible="0">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0
+  </data>
+ </layer>
+ <objectgroup id="16" name="PA_Spawns">
   <object id="1" name="Start" x="96" y="192">
    <properties>
     <property name="spawn_id" value="Start"/>
@@ -166,7 +190,7 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="15" name="PA_Warps">
+ <objectgroup id="17" name="PA_Warps">
   <object id="2" name="ToTemplateExit" x="96" y="224" width="64" height="32">
    <properties>
     <property name="warp_id" value="ToTemplateExit"/>
@@ -176,7 +200,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="16" name="PA_NPCs">
+ <objectgroup id="18" name="PA_NPCs">
   <object id="3" name="Guide" x="128" y="96">
    <properties>
     <property name="npc_id" value="guide"/>
@@ -190,7 +214,7 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="17" name="PA_Interactables">
+ <objectgroup id="19" name="PA_Interactables">
   <object id="7" name="TrainerTipsSign" x="64" y="96">
    <properties>
     <property name="interactable_id" value="trainer_tips_sign"/>
@@ -202,7 +226,7 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="18" name="PA_Items">
+ <objectgroup id="20" name="PA_Items">
   <object id="4" name="HiddenPotion" x="32" y="160">
    <properties>
     <property name="item_spawn_id" value="hidden_potion_1"/>
@@ -213,7 +237,7 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="19" name="PA_EncounterRegions">
+ <objectgroup id="21" name="PA_EncounterRegions">
   <object id="5" name="GrassPatchA" x="160" y="128" width="64" height="64">
    <properties>
     <property name="encounter_region_id" value="grass_patch_a"/>
@@ -223,7 +247,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="20" name="PA_Triggers">
+ <objectgroup id="22" name="PA_Triggers">
   <object id="6" name="IntroTrigger" x="96" y="32" width="64" height="32">
    <properties>
     <property name="trigger_id" value="intro_trigger"/>
