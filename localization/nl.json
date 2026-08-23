@@ -4319,5 +4319,10 @@
   "ui.lending.error.load": "De leningen konden niet worden geladen.",
   "ui.lending.error.create": "Het leningsaanbod kon niet worden gemaakt.",
   "ui.lending.error.action": "De lening kon niet worden bijgewerkt.",
-  "ui.lending.error.selection_limit": "Kies maximaal zes Pokémon en zes items."
+  "ui.lending.error.selection_limit": "Kies maximaal zes Pokémon en zes items.",
+  "ui.lending.attach_item": "Item geven",
+  "ui.lending.detach_item": "Item losmaken",
+  "ui.lending.attach_title": "{item} geven",
+  "ui.lending.attach_description": "Kies een Pokémon die nog geen item draagt.",
+  "ui.lending.error.no_attach_target": "Geen Pokémon in je party kan dit item nu dragen."
 }

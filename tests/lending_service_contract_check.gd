@@ -15,6 +15,8 @@ func _init() -> void:
 	var source := FileAccess.get_file_as_string("res://scripts/services/lending_service.gd")
 	for contract in ["func create_loan", "func accept_loan", "func decline_loan", "func cancel_loan", "func request_return", "func return_assets", "func attach_item", "func detach_item"]:
 		_check(source.contains(contract), contract)
+	var workspace_source := FileAccess.get_file_as_string("res://scripts/ui/lending_workspace.gd")
+	_check(workspace_source.contains("_open_attach_menu") and workspace_source.contains("_detach_loan_item"), "borrowed item attach and detach controls")
 	var workspace := WorkspaceScript.new()
 	var party := workspace._party_candidates([{"id": 7, "pokemon": {"species": "Pikachu", "level": 22, "item": "light-ball"}}])
 	_check(party.size() == 1 and int(party[0].get("pokemonId", 0)) == 7, "party candidate normalization")

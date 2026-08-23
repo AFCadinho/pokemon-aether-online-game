@@ -4319,5 +4319,10 @@
   "ui.lending.error.load": "Não foi possível carregar os empréstimos.",
   "ui.lending.error.create": "Não foi possível criar a oferta.",
   "ui.lending.error.action": "Não foi possível atualizar o empréstimo.",
-  "ui.lending.error.selection_limit": "Escolha no máximo seis Pokémon e seis itens."
+  "ui.lending.error.selection_limit": "Escolha no máximo seis Pokémon e seis itens.",
+  "ui.lending.attach_item": "Equipar item",
+  "ui.lending.detach_item": "Remover item",
+  "ui.lending.attach_title": "Equipar {item}",
+  "ui.lending.attach_description": "Escolha um Pokémon que não esteja segurando um item.",
+  "ui.lending.error.no_attach_target": "Nenhum Pokémon da sua equipe pode segurar este item agora."
 }

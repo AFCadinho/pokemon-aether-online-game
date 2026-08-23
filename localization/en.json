@@ -4319,5 +4319,10 @@
   "ui.lending.error.load": "Loans could not be loaded.",
   "ui.lending.error.create": "The loan offer could not be created.",
   "ui.lending.error.action": "The loan could not be updated.",
-  "ui.lending.error.selection_limit": "Choose no more than six Pokémon and six items."
+  "ui.lending.error.selection_limit": "Choose no more than six Pokémon and six items.",
+  "ui.lending.attach_item": "Attach Item",
+  "ui.lending.detach_item": "Detach Item",
+  "ui.lending.attach_title": "Attach {item}",
+  "ui.lending.attach_description": "Choose a Pokémon that is not holding an item.",
+  "ui.lending.error.no_attach_target": "No Pokémon in your party can hold this item right now."
 }
