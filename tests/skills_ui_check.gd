@@ -229,15 +229,40 @@ func _run() -> void:
 	_check(is_equal_approx((panel.get("experience_bar") as ProgressBar).value, 42.86), "XP progress uses the server percentage")
 	panel.call("_select_detail_tab", "catalog")
 	_check((panel.get("fishing_catalog_section") as VBoxContainer).visible, "Fishing has a dedicated catch catalog tab")
+	var fishing_area_selector := panel.get("fishing_area_selector") as OptionButton
+	_check(fishing_area_selector.item_count == 2, "Fishing groups its catch catalog by area")
+	_check(fishing_area_selector.get_item_text(0).contains("Pallet Town") and fishing_area_selector.get_item_text(0).contains("2"), "Fishing area options show their species count")
+	await process_frame
+	panel.call("_fit_area_popup", fishing_area_selector)
+	_check(fishing_area_selector.get_popup().min_size.x == roundi(fishing_area_selector.size.x), "Fishing reuses the full-width Skills area menu")
+	var fishing_selector_bottom := fishing_area_selector.position.y + fishing_area_selector.size.y
+	var fishing_filter_gap := (panel.get("fishing_rod_filters") as HBoxContainer).position.y - fishing_selector_bottom
+	_check(fishing_filter_gap >= 14.0, "Fishing leaves clear space between its area and rod filters")
 	_check((panel.get("fishing_rod_filters") as HBoxContainer).get_child_count() == 3, "the catch catalog can be filtered by all three rods")
-	_check((panel.get("fishing_catalog_container") as VBoxContainer).get_child_count() == 1, "the selected rod lists its fishable Pokémon")
-	var old_rod_row := (panel.get("fishing_catalog_container") as VBoxContainer).get_child(0) as PanelContainer
-	var old_rod_status := ((old_rod_row.get_child(0) as HBoxContainer).get_child(2) as Label)
+	_check((panel.get("fishing_catalog_container") as GridContainer).get_child_count() == 1, "the selected area and rod list their fishable Pokémon")
+	_check((panel.get("fishing_catalog_container") as GridContainer).columns == 2, "wide Fishing catalogs use two responsive columns")
+	var old_rod_row := (panel.get("fishing_catalog_container") as GridContainer).get_child(0) as PanelContainer
+	var old_rod_content := old_rod_row.get_child(0) as HBoxContainer
+	var old_rod_identity := old_rod_content.get_child(1) as VBoxContainer
+	var old_rod_status := old_rod_content.get_child(2) as Label
 	_check(old_rod_status.text == "Available", "catalog entries reflect the player's Fishing level and active rod")
+	_check((old_rod_identity.get_child(2) as Label).text == "Pallet Town", "Fishing cards identify their selected area")
 	panel.call("_select_fishing_rod", "good_rod")
-	var good_rod_row := (panel.get("fishing_catalog_container") as VBoxContainer).get_child(0) as PanelContainer
+	var good_rod_row := (panel.get("fishing_catalog_container") as GridContainer).get_child(0) as PanelContainer
 	var good_rod_status := ((good_rod_row.get_child(0) as HBoxContainer).get_child(2) as Label)
 	_check(good_rod_status.text.contains("18"), "species above the player's Fishing level remain visibly locked")
+	fishing_area_selector.select(1)
+	panel.call("_select_fishing_area", 1)
+	_check(str(panel.get("selected_fishing_area_id")) == "kanto_safari_zone", "selecting a Fishing area filters the catalog")
+	_check((panel.get("fishing_catalog_container") as GridContainer).get_child(0) is Label, "Fishing explains when the selected rod has no catches in an area")
+	fishing_area_selector = panel.get("fishing_area_selector") as OptionButton
+	fishing_area_selector.select(0)
+	panel.call("_select_fishing_area", 0)
+	panel.size.x = 620.0
+	panel.call("_on_window_resized")
+	_check((panel.get("fishing_catalog_container") as GridContainer).columns == 1, "narrow Fishing catalogs collapse to one readable column")
+	panel.size.x = 760.0
+	panel.call("_on_window_resized")
 	panel.call("_select_skill", "rock_smash")
 	_check((panel.get("detail_name") as Label).text == "Rock Smash", "Rock Smash opens its own detailed interface")
 	_check((panel.get("stats_label") as Label).text.contains("0.25") and (panel.get("stats_label") as Label).text.contains("4"), "Rock Smash shows fossil chance and today's availability")
@@ -335,6 +360,9 @@ func _run() -> void:
 		)
 		_check(
 			parsed is Dictionary
+			and (parsed as Dictionary).has("ui.skills.fishing.catalog.area_option")
+			and (parsed as Dictionary).has("ui.skills.fishing.catalog.area_summary")
+			and (parsed as Dictionary).has("ui.skills.fishing.catalog.area_empty")
 			and (parsed as Dictionary).has("ui.skills.thieving.targets.area_option")
 			and (parsed as Dictionary).has("ui.skills.rock_smash.rocks.area_option"),
 			"%s contains the shared Skills area dropdown translations" % locale_path
