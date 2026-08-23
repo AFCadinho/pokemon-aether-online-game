@@ -15,6 +15,7 @@ const GUILD_EMBLEM_PIXEL_COUNT := GUILD_EMBLEM_SIZE * GUILD_EMBLEM_SIZE
 const LEGACY_GUILD_EMBLEM_SIZE := 8
 const EMBLEM_EDITOR_PIXEL_SIZE := 11
 const EMBLEM_EDITOR_POPUP_SIZE := Vector2i(630, 500)
+const DIRECTORY_FILTER_POPUP_SIZE := Vector2i(420, 390)
 
 const UI_BG := Color("#050b14f5")
 const UI_SURFACE := Color("#081522f2")
@@ -104,8 +105,9 @@ var directory_request_generation := 0
 var has_explicit_page_selection := false
 var active_guild_section := "overview"
 var guild_section_buttons: Dictionary = {}
-var active_directory_filter := "all"
-var directory_filter_buttons: Dictionary = {}
+var directory_recruitment_filter := "all"
+var directory_focus_filter := "all"
+var directory_language_filter := "all"
 
 var browse_tab_button: Button
 var my_guild_tab_button: Button
@@ -118,6 +120,11 @@ var guild_list: VBoxContainer
 var guild_count_label: Label
 var detail_content: VBoxContainer
 var browse_status_label: Label
+var directory_filter_button: Button
+var directory_filter_popup: PopupPanel
+var directory_recruitment_select: OptionButton
+var directory_focus_select: OptionButton
+var directory_language_select: OptionButton
 var create_status_label: Label
 var guild_name_input: LineEdit
 var guild_description_input: TextEdit
@@ -181,6 +188,8 @@ func close() -> void:
 	is_dragging_popup = false
 	if emblem_editor_popup != null:
 		emblem_editor_popup.hide()
+	if directory_filter_popup != null:
+		directory_filter_popup.hide()
 	visible = false
 	closed.emit()
 
@@ -419,8 +428,12 @@ func _build_browse_page() -> Control:
 	search_input.custom_minimum_size = Vector2(0, 40)
 	search_input.text_changed.connect(_on_search_changed)
 	_apply_line_edit_style(search_input)
-	directory.add_child(search_input)
-	directory.add_child(_build_directory_filters())
+	var search_row := HBoxContainer.new()
+	search_row.add_theme_constant_override("separation", 7)
+	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	search_row.add_child(search_input)
+	search_row.add_child(_build_directory_filters())
+	directory.add_child(search_row)
 
 	guild_list = VBoxContainer.new()
 	guild_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -449,32 +462,174 @@ func _build_browse_page() -> Control:
 
 
 func _build_directory_filters() -> Control:
-	var filters := GridContainer.new()
+	var filters := HBoxContainer.new()
 	filters.name = "GuildDirectoryFilters"
-	filters.columns = 3
-	filters.add_theme_constant_override("h_separation", 6)
-	filters.add_theme_constant_override("v_separation", 6)
-	directory_filter_buttons.clear()
-	var definitions: Array[Dictionary] = [
-		{"id": "all", "key": "ui.guild.filter.all", "name": "GuildFilterAll"},
-		{"id": "open", "key": "ui.guild.filter.open", "name": "GuildFilterOpen"},
-		{"id": "social", "key": "ui.guild.filter.social", "name": "GuildFilterSocial"},
-		{"id": "pve", "key": "ui.guild.filter.pve", "name": "GuildFilterPve"},
-		{"id": "pvp", "key": "ui.guild.filter.pvp", "name": "GuildFilterPvp"},
-		{"id": "dutch", "key": "ui.guild.filter.dutch", "name": "GuildFilterDutch"},
-	]
-	for definition: Dictionary in definitions:
-		var filter_id := str(definition.get("id", "all"))
-		var button := Button.new()
-		button.name = str(definition.get("name", "GuildFilter"))
-		_set_localized_property(button, "text", str(definition.get("key", "ui.guild.filter.all")))
-		button.custom_minimum_size = Vector2(0, 32)
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.pressed.connect(_on_directory_filter_pressed.bind(filter_id))
-		_apply_tab_style(button, active_directory_filter == filter_id)
-		filters.add_child(button)
-		directory_filter_buttons[filter_id] = button
+	directory_filter_button = Button.new()
+	directory_filter_button.name = "GuildFilterButton"
+	directory_filter_button.custom_minimum_size = Vector2(112, 40)
+	directory_filter_button.pressed.connect(_open_directory_filters)
+	filters.add_child(directory_filter_button)
+	_refresh_directory_filter_button()
 	return filters
+
+
+func _open_directory_filters() -> void:
+	if directory_filter_popup == null:
+		directory_filter_popup = _build_directory_filter_dialog()
+		add_child(directory_filter_popup)
+	_set_directory_filter_select(directory_recruitment_select, directory_recruitment_filter)
+	_set_directory_filter_select(directory_focus_select, directory_focus_filter)
+	_set_directory_filter_select(directory_language_select, directory_language_filter)
+	directory_filter_popup.popup_centered(DIRECTORY_FILTER_POPUP_SIZE)
+
+
+func _build_directory_filter_dialog() -> PopupPanel:
+	var popup := PopupPanel.new()
+	popup.name = "GuildFilterDialog"
+	popup.exclusive = true
+	popup.unresizable = true
+	popup.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 11, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 18, 16, 18, 18)
+	popup.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 12)
+	margin.add_child(content)
+	content.add_child(_localized_label("ui.guild.filters.title", 19, UI_TEXT))
+
+	directory_recruitment_select = _directory_filter_select(
+		"GuildRecruitmentFilterSelect",
+		[
+			{"id": "all", "key": "ui.guild.filter.all"},
+			{"id": "open", "key": "ui.guild.filter.open"},
+		]
+	)
+	content.add_child(_directory_filter_field(
+		"ui.guild.filters.recruitment",
+		directory_recruitment_select
+	))
+	directory_focus_select = _directory_filter_select(
+		"GuildFocusFilterSelect",
+		[
+			{"id": "all", "key": "ui.guild.filter.all"},
+			{"id": "social", "key": "ui.guild.filter.social"},
+			{"id": "pve", "key": "ui.guild.filter.pve"},
+			{"id": "pvp", "key": "ui.guild.filter.pvp"},
+		]
+	)
+	content.add_child(_directory_filter_field("ui.guild.filters.focus", directory_focus_select))
+	directory_language_select = _directory_filter_select(
+		"GuildLanguageFilterSelect",
+		[
+			{"id": "all", "key": "ui.guild.filter.all"},
+			{"id": "dutch", "key": "ui.guild.filter.dutch"},
+		]
+	)
+	content.add_child(_directory_filter_field("ui.guild.filters.language", directory_language_select))
+
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 7)
+	content.add_child(actions)
+	var clear_button := Button.new()
+	clear_button.name = "GuildFiltersClearButton"
+	_set_localized_property(clear_button, "text", "ui.guild.filters.clear")
+	clear_button.pressed.connect(_clear_directory_filter_choices)
+	_apply_button_style(clear_button)
+	actions.add_child(clear_button)
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	actions.add_child(spacer)
+	var cancel_button := Button.new()
+	cancel_button.name = "GuildFiltersCancelButton"
+	_set_localized_property(cancel_button, "text", "common.cancel")
+	cancel_button.pressed.connect(popup.hide)
+	_apply_button_style(cancel_button)
+	actions.add_child(cancel_button)
+	var apply_button := Button.new()
+	apply_button.name = "GuildFiltersApplyButton"
+	_set_localized_property(apply_button, "text", "ui.guild.filters.apply")
+	apply_button.pressed.connect(_apply_directory_filter_choices)
+	_apply_button_style(apply_button, "primary")
+	actions.add_child(apply_button)
+	return popup
+
+
+func _directory_filter_select(name_value: String, definitions: Array) -> OptionButton:
+	var select := OptionButton.new()
+	select.name = name_value
+	select.custom_minimum_size = Vector2(0, 40)
+	select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	select.set_meta("guild_filter_definitions", definitions)
+	_populate_directory_filter_select(select, "all")
+	_apply_option_button_style(select)
+	return select
+
+
+func _directory_filter_field(label_key: String, select: OptionButton) -> Control:
+	var field := VBoxContainer.new()
+	field.add_theme_constant_override("separation", 4)
+	field.add_child(_localized_label(label_key, 10, UI_ACCENT))
+	field.add_child(select)
+	return field
+
+
+func _populate_directory_filter_select(select: OptionButton, selected_id: String) -> void:
+	if select == null:
+		return
+	var definitions := _array_from_value(select.get_meta("guild_filter_definitions", []))
+	select.clear()
+	for definition_value: Variant in definitions:
+		var definition := _dictionary(definition_value)
+		var filter_id := str(definition.get("id", "all"))
+		select.add_item(_t(str(definition.get("key", "ui.guild.filter.all"))))
+		select.set_item_metadata(select.item_count - 1, filter_id)
+		if filter_id == selected_id:
+			select.select(select.item_count - 1)
+
+
+func _set_directory_filter_select(select: OptionButton, selected_id: String) -> void:
+	if select == null:
+		return
+	for item_index: int in range(select.item_count):
+		if str(select.get_item_metadata(item_index)) == selected_id:
+			select.select(item_index)
+			return
+	select.select(0)
+
+
+func _clear_directory_filter_choices() -> void:
+	_set_directory_filter_select(directory_recruitment_select, "all")
+	_set_directory_filter_select(directory_focus_select, "all")
+	_set_directory_filter_select(directory_language_select, "all")
+
+
+func _apply_directory_filter_choices() -> void:
+	directory_recruitment_filter = _selected_option_value(directory_recruitment_select)
+	directory_focus_filter = _selected_option_value(directory_focus_select)
+	directory_language_filter = _selected_option_value(directory_language_select)
+	if directory_filter_popup != null:
+		directory_filter_popup.hide()
+	_refresh_directory_filter_button()
+	_render_guild_list()
+
+
+func _refresh_directory_filter_button() -> void:
+	if directory_filter_button == null:
+		return
+	var active_count := 0
+	for filter_value: String in [
+		directory_recruitment_filter,
+		directory_focus_filter,
+		directory_language_filter,
+	]:
+		if filter_value != "all":
+			active_count += 1
+	directory_filter_button.text = (
+		_t("ui.guild.filters.button_active", {"count": active_count})
+		if active_count > 0
+		else _t("ui.guild.filters.button")
+	)
+	_apply_button_style(directory_filter_button, "primary" if active_count > 0 else "default")
 
 
 func _build_member_page() -> Control:
@@ -1592,18 +1747,6 @@ func _on_search_changed(_query: String) -> void:
 	_render_guild_list()
 
 
-func _on_directory_filter_pressed(filter_id: String) -> void:
-	if filter_id not in ["all", "open", "social", "pve", "pvp", "dutch"]:
-		return
-	active_directory_filter = filter_id
-	for button_id: String in directory_filter_buttons:
-		_apply_tab_style(
-			directory_filter_buttons.get(button_id) as Button,
-			button_id == active_directory_filter
-		)
-	_render_guild_list()
-
-
 func _on_application_pressed(guild: Dictionary) -> void:
 	if is_application_action_in_flight or not membership.is_empty():
 		return
@@ -2264,19 +2407,13 @@ func _matches_directory_filter(guild: Dictionary) -> bool:
 	var recruitment := str(guild.get("recruitment", "")).to_lower()
 	var focus := str(guild.get("focus", "")).to_lower()
 	var language := str(guild.get("language", "")).to_lower()
-	match active_directory_filter:
-		"open":
-			return recruitment in ["open", "applications open"]
-		"social":
-			return focus.contains("social")
-		"pve":
-			return focus.contains("pve")
-		"pvp":
-			return focus.contains("pvp")
-		"dutch":
-			return language.contains("dutch")
-		_:
-			return true
+	if directory_recruitment_filter == "open" and recruitment not in ["open", "applications open"]:
+		return false
+	if directory_focus_filter != "all" and not focus.contains(directory_focus_filter):
+		return false
+	if directory_language_filter == "dutch" and not language.contains("dutch"):
+		return false
+	return true
 
 
 func _contains_guild_id(entries: Array[Dictionary], guild_id: int) -> bool:
@@ -2492,6 +2629,20 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_option_labels(settings_language_select)
 	_refresh_option_labels(settings_focus_select)
 	_refresh_option_labels(settings_recruitment_select)
+	if directory_filter_popup != null:
+		_populate_directory_filter_select(
+			directory_recruitment_select,
+			_selected_option_value(directory_recruitment_select)
+		)
+		_populate_directory_filter_select(
+			directory_focus_select,
+			_selected_option_value(directory_focus_select)
+		)
+		_populate_directory_filter_select(
+			directory_language_select,
+			_selected_option_value(directory_language_select)
+		)
+	_refresh_directory_filter_button()
 	_refresh_creation_requirements()
 	_refresh_membership_state()
 	_render_guild_list()
