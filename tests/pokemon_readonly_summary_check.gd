@@ -32,8 +32,11 @@ func _run() -> void:
 	_check(ev_allocate_status_panel.get_theme_stylebox("panel") is StyleBoxFlat, "EV allocation preview uses a layered Summary surface")
 	_check(ev_allocate_confirm.get_theme_stylebox("disabled") is StyleBoxFlat, "EV allocation Confirm action has a styled disabled state")
 	var stale_left_panel := PanelContainer.new()
+	var stale_nickname_button := Button.new()
 	overlay.set("pokemon_summary_left_panel", stale_left_panel)
+	overlay.set("pokemon_summary_nickname_button", stale_nickname_button)
 	stale_left_panel.free()
+	stale_nickname_button.free()
 	overlay.call("_open_readonly_pokemon_summary", _sample_pokemon())
 	await process_frame
 	await process_frame
@@ -74,6 +77,7 @@ func _run() -> void:
 	release.global_position = motion.global_position
 	overlay.call("_handle_pokemon_summary_drag_input", release)
 	_check(context.get("left_panel") == null, "read-only Summary does not retain controls from a closed card")
+	_check(context.get("nickname_button") == null, "read-only Summary does not retain a freed nickname button")
 	_check(overlay.call("_apply_pokemon_summary_card_context", active_card_key), "read-only Summary context remains safe to reactivate")
 	_check((nodes.get("stat_rows", {}) as Dictionary).size() == 6, "all six stats render at once")
 	var stats_grid := nodes.get("stats_grid") as GridContainer
