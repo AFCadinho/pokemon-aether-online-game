@@ -4335,6 +4335,9 @@
   "ui.lending.asset_status.returned": "Returned",
   "ui.lending.asset_status.released": "Released",
   "ui.lending.return": "Return Now",
+  "ui.lending.return_asset": "Return",
+  "ui.lending.return_confirm_title": "Return loan asset",
+  "ui.lending.return_confirm_text": "Return {asset} to its owner? You will no longer be able to use it.",
   "ui.lending.request_return": "Request Return",
   "ui.lending.duration.hour": "1 hour",
   "ui.lending.duration.day": "24 hours",
@@ -4361,5 +4364,14 @@
   "ui.lending.invitation.view": "View",
   "ui.lending.invitation.item": "Reusable loan item",
   "ui.lending.invitation.accepted": "Loan accepted. The borrowed assets are now available in your Party, PC, or Bag.",
-  "ui.lending.invitation.declined": "Loan offer declined."
+  "ui.lending.invitation.declined": "Loan offer declined.",
+  "ui.lending.notification.offer_received": "@{trainer} sent you a loan offer.",
+  "ui.lending.notification.accepted": "@{trainer} accepted your loan offer.",
+  "ui.lending.notification.declined": "@{trainer} declined your loan offer.",
+  "ui.lending.notification.cancelled": "@{trainer} cancelled the loan offer.",
+  "ui.lending.notification.expired": "Your loan offer with @{trainer} expired.",
+  "ui.lending.notification.return_requested": "@{trainer} requested the return of their loaned assets.",
+  "ui.lending.notification.asset_returned": "@{trainer} returned {asset}.",
+  "ui.lending.notification.asset_auto_returned": "{asset} was automatically returned after the loan deadline.",
+  "ui.lending.notification.you_returned": "You returned {asset} to its owner."
 }

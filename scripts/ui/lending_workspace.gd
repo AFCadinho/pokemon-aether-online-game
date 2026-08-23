@@ -23,9 +23,11 @@ var selected_pokemon: Dictionary = {}
 var selected_items: Dictionary = {}
 var mutation_in_flight := false
 var incoming_poll_in_flight := false
+var notification_poll_in_flight := false
 var incoming_dialog: Window
 var last_incoming_signature := ""
 var incoming_account_generation := 0
+var displayed_notification_ids: Dictionary = {}
 
 var target_display_label: Label
 var duration_select: OptionButton
@@ -63,6 +65,7 @@ func clear_account_state() -> void:
 	selected_items.clear()
 	target_username = ""
 	last_incoming_signature = ""
+	displayed_notification_ids.clear()
 	incoming_account_generation += 1
 	if incoming_dialog != null and incoming_dialog.has_method("clear_offers"):
 		incoming_dialog.call("clear_offers")
@@ -354,7 +357,7 @@ func _render_loans() -> void:
 		stack.add_child(asset_stack)
 		for asset_value: Variant in assets:
 			if asset_value is Dictionary:
-				asset_stack.add_child(_loan_asset_row(asset_value, is_borrower, status))
+				asset_stack.add_child(_loan_asset_row(asset_value, is_borrower, status, str(loan.get("loanId", ""))))
 		var actions := HBoxContainer.new()
 		actions.alignment = BoxContainer.ALIGNMENT_END
 		actions.add_theme_constant_override("separation", 6)
@@ -364,14 +367,12 @@ func _render_loans() -> void:
 			_add_action(actions, _t("common.accept"), _loan_action.bind("accept", str(loan.get("loanId", ""))))
 		elif status == "pending":
 			_add_action(actions, _t("common.cancel"), _loan_action.bind("cancel", str(loan.get("loanId", ""))))
-		elif status in ["active", "return_pending"] and is_borrower:
-			_add_action(actions, _t("ui.lending.return"), _loan_action.bind("return", str(loan.get("loanId", ""))))
-		elif status == "active":
+		elif status == "active" and not is_borrower:
 			_add_action(actions, _t("ui.lending.request_return"), _loan_action.bind("request-return", str(loan.get("loanId", ""))))
 		loans_list.add_child(card)
 
 
-func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String) -> Control:
+func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, loan_id: String) -> Control:
 	var snapshot: Dictionary = asset.get("snapshot", {}) if asset.get("snapshot", {}) is Dictionary else {}
 	var panel := PanelContainer.new()
 	panel.add_theme_stylebox_override("panel", _style(Color("#091725e8"), Color("#203b52"), 6))
@@ -397,6 +398,8 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String) 
 		row.add_child(icon_button)
 		var identity := _loan_asset_identity(_pokemon_display_name(snapshot), _t("ui.lending.card.pokemon_meta", {"level": int(snapshot.get("level", 1)), "state": _asset_state_label(str(asset.get("status", "")))}))
 		row.add_child(identity)
+		if is_borrower and loan_status in ["active", "return_pending"] and str(asset.get("status", "")) in ["active", "return_pending"]:
+			row.add_child(_asset_return_button(loan_id, str(asset.get("assetId", "")), _pokemon_display_name(snapshot)))
 		var view := Button.new()
 		view.text = _t("ui.lending.invitation.view")
 		view.pressed.connect(_open_pokemon_summary.bind(snapshot))
@@ -413,7 +416,7 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String) 
 		var item_meta_key := "ui.lending.card.item_equipped" if int(asset.get("heldPokemonId", 0)) > 0 else "ui.lending.card.item_in_bag"
 		var identity := _loan_asset_identity(_item_display_name(item_id, str(snapshot.get("name", item_id))), _t(item_meta_key, {"state": _asset_state_label(str(asset.get("status", "")))}))
 		row.add_child(identity)
-		if is_borrower and loan_status in ["active", "return_pending"]:
+		if is_borrower and loan_status in ["active", "return_pending"] and str(asset.get("status", "")) in ["active", "return_pending"]:
 			var action := Button.new()
 			action.text = _t("ui.lending.detach_item") if int(asset.get("heldPokemonId", 0)) > 0 else _t("ui.lending.attach_item")
 			action.disabled = mutation_in_flight
@@ -423,7 +426,63 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String) 
 				action.pressed.connect(_open_attach_menu.bind(str(asset.get("assetId", "")), item_id))
 			_apply_button_style(action)
 			row.add_child(action)
+			row.add_child(_asset_return_button(loan_id, str(asset.get("assetId", "")), _item_display_name(item_id, str(snapshot.get("name", item_id)))))
 	return panel
+
+
+func _asset_return_button(loan_id: String, asset_id: String, asset_name: String) -> Button:
+	var button := Button.new()
+	button.text = _t("ui.lending.return_asset")
+	button.disabled = mutation_in_flight
+	button.pressed.connect(_confirm_asset_return.bind(loan_id, asset_id, asset_name))
+	_apply_button_style(button)
+	return button
+
+
+func _confirm_asset_return(loan_id: String, asset_id: String, asset_name: String) -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.title = _t("ui.lending.return_confirm_title")
+	dialog.dialog_text = _t("ui.lending.return_confirm_text", {"asset": asset_name})
+	dialog.ok_button_text = _t("ui.lending.return_asset")
+	dialog.confirmed.connect(_return_loan_asset.bind(loan_id, asset_id, asset_name))
+	dialog.canceled.connect(dialog.queue_free)
+	dialog.close_requested.connect(dialog.queue_free)
+	dialog.visibility_changed.connect(func():
+		if not dialog.visible:
+			dialog.queue_free()
+	)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(430, 180))
+
+
+func _return_loan_asset(loan_id: String, asset_id: String, asset_name: String) -> void:
+	if mutation_in_flight:
+		return
+	mutation_in_flight = true
+	var service := get_node_or_null("/root/LendingService")
+	var result: Dictionary = await service.return_assets(loan_id, [asset_id])
+	mutation_in_flight = false
+	if not bool(result.get("success", false)):
+		_show_error(str(result.get("error", _t("ui.lending.error.action"))))
+		return
+	var overlay := get_tree().get_first_node_in_group("ui_overlay")
+	if overlay != null and overlay.has_method("add_system_message"):
+		overlay.call("add_system_message", _t("ui.lending.notification.you_returned", {"asset": asset_name}))
+	await _refresh_after_asset_return()
+	await _refresh_assets()
+	await _refresh_loans()
+
+
+func _refresh_after_asset_return() -> void:
+	var party_service := get_node_or_null("/root/PlayerPartyStateService")
+	if party_service != null and party_service.has_method("refresh_party"):
+		await party_service.call("refresh_party")
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	if inventory_service != null and inventory_service.has_method("load_inventory"):
+		await inventory_service.call("load_inventory")
+	var overlay := get_tree().get_first_node_in_group("ui_overlay")
+	if overlay != null and overlay.has_method("_refresh_pc_state"):
+		await overlay.call("_refresh_pc_state", true)
 
 
 func _loan_asset_identity(display_name: String, metadata: String) -> VBoxContainer:
@@ -560,7 +619,6 @@ func _loan_action(action: String, loan_id: String) -> void:
 		"decline": result = await service.decline_loan(loan_id)
 		"cancel": result = await service.cancel_loan(loan_id)
 		"request-return": result = await service.request_return(loan_id)
-		"return": result = await service.return_assets(loan_id)
 		_: result = {"success": false, "error": "Unsupported loan action."}
 	mutation_in_flight = false
 	if not bool(result.get("success", false)):
@@ -666,8 +724,10 @@ func _setup_incoming_offers() -> void:
 	timer.wait_time = INCOMING_POLL_SECONDS
 	timer.autostart = true
 	timer.timeout.connect(_poll_incoming_offers)
+	timer.timeout.connect(_poll_loan_notifications)
 	add_child(timer)
 	_poll_incoming_offers.call_deferred()
+	_poll_loan_notifications.call_deferred()
 
 
 func _poll_incoming_offers() -> void:
@@ -699,6 +759,58 @@ func _poll_incoming_offers() -> void:
 	if signature != last_incoming_signature and incoming_dialog != null and incoming_dialog.has_method("show_offers"):
 		incoming_dialog.call("show_offers", pending, true)
 	last_incoming_signature = signature
+
+
+func _poll_loan_notifications() -> void:
+	if notification_poll_in_flight:
+		return
+	var auth := get_node_or_null("/root/AuthService")
+	if auth == null or not auth.has_method("is_authenticated") or not bool(auth.is_authenticated()):
+		return
+	var overlay := get_tree().get_first_node_in_group("ui_overlay")
+	if overlay == null or not overlay.has_method("add_system_message"):
+		return
+	var service := get_node_or_null("/root/LendingService")
+	if service == null or not service.has_method("load_notifications"):
+		return
+	var account_generation := incoming_account_generation
+	notification_poll_in_flight = true
+	var result: Dictionary = await service.load_notifications()
+	notification_poll_in_flight = false
+	if account_generation != incoming_account_generation or not bool(result.get("success", false)):
+		return
+	var body: Dictionary = result.get("body", {})
+	for value: Variant in body.get("notifications", []):
+		if not value is Dictionary:
+			continue
+		var notification: Dictionary = value
+		var notification_id := str(notification.get("notificationId", ""))
+		if notification_id == "":
+			continue
+		if not displayed_notification_ids.has(notification_id):
+			displayed_notification_ids[notification_id] = true
+			var message_key := str(notification.get("messageKey", ""))
+			var message_args: Dictionary = _notification_message_args(notification.get("messageArgs", {}))
+			overlay.call("add_system_message", _t(message_key, message_args))
+		var ack: Dictionary = await service.acknowledge_notification(notification_id)
+		if account_generation != incoming_account_generation:
+			return
+		if bool(ack.get("success", false)):
+			displayed_notification_ids.erase(notification_id)
+
+
+func _notification_message_args(value: Variant) -> Dictionary:
+	var args: Dictionary = value.duplicate(true) if value is Dictionary else {}
+	var asset_type := str(args.get("assetType", ""))
+	var asset_id := str(args.get("assetId", ""))
+	var fallback := str(args.get("asset", asset_id))
+	if asset_type == "pokemon":
+		var content_localizer := get_node_or_null("/root/ContentLocalization")
+		if content_localizer != null:
+			args["asset"] = str(content_localizer.call("display_name", "species", asset_id, fallback))
+	elif asset_type == "item":
+		args["asset"] = _item_display_name(asset_id, fallback)
+	return args
 
 
 func _on_incoming_offers_changed() -> void:

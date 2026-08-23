@@ -4335,6 +4335,9 @@
   "ui.lending.asset_status.returned": "Devolvido",
   "ui.lending.asset_status.released": "Liberado",
   "ui.lending.return": "Devolver agora",
+  "ui.lending.return_asset": "Devolver",
+  "ui.lending.return_confirm_title": "Devolver recurso emprestado",
+  "ui.lending.return_confirm_text": "Devolver {asset} ao dono? Você não poderá mais usá-lo.",
   "ui.lending.request_return": "Pedir devolução",
   "ui.lending.duration.hour": "1 hora",
   "ui.lending.duration.day": "24 horas",
@@ -4361,5 +4364,14 @@
   "ui.lending.invitation.view": "Ver",
   "ui.lending.invitation.item": "Item de empréstimo reutilizável",
   "ui.lending.invitation.accepted": "Empréstimo aceito. Os recursos emprestados agora estão na sua equipe, PC ou mochila.",
-  "ui.lending.invitation.declined": "Oferta de empréstimo recusada."
+  "ui.lending.invitation.declined": "Oferta de empréstimo recusada.",
+  "ui.lending.notification.offer_received": "@{trainer} enviou uma oferta de empréstimo para você.",
+  "ui.lending.notification.accepted": "@{trainer} aceitou sua oferta de empréstimo.",
+  "ui.lending.notification.declined": "@{trainer} recusou sua oferta de empréstimo.",
+  "ui.lending.notification.cancelled": "@{trainer} cancelou a oferta de empréstimo.",
+  "ui.lending.notification.expired": "Sua oferta de empréstimo com @{trainer} expirou.",
+  "ui.lending.notification.return_requested": "@{trainer} pediu a devolução dos recursos emprestados.",
+  "ui.lending.notification.asset_returned": "@{trainer} devolveu {asset}.",
+  "ui.lending.notification.asset_auto_returned": "{asset} foi devolvido automaticamente após o prazo.",
+  "ui.lending.notification.you_returned": "Você devolveu {asset} ao dono."
 }

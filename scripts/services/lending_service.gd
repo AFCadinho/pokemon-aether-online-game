@@ -25,6 +25,16 @@ func load_loan(loan_id: String) -> Dictionary:
 	return await _get_resource("/%s" % loan_id.strip_edges().uri_encode())
 
 
+func load_notifications(limit := 20) -> Dictionary:
+	return await _get_resource("/notifications/pending?limit=%d" % clampi(limit, 1, 50))
+
+
+func acknowledge_notification(notification_id: String) -> Dictionary:
+	if notification_id.strip_edges() == "":
+		return _validation_error("Notification id is required.")
+	return await _command("/notifications/%s/ack" % notification_id.strip_edges().uri_encode(), {})
+
+
 func create_loan(target_username: String, pokemon_ids: Array, items: Array, duration_seconds: int, fee_amount: int, request_id := "") -> Dictionary:
 	var username := target_username.strip_edges()
 	if username == "":
