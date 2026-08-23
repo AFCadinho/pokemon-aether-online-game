@@ -4351,6 +4351,8 @@
   "ui.lending.error.same_map": "Both Trainers must be online, available, and on the same map.",
   "ui.lending.error.presence_unavailable": "Nearby Trainer validation is temporarily unavailable. Try again shortly.",
   "ui.lending.error.selection_limit": "Choose no more than six Pokémon and six items.",
+  "ui.lending.party_required_hint": "You must keep at least one Pokémon in your party.",
+  "ui.lending.error.party_required": "Keep at least one Pokémon in your party when lending.",
   "ui.lending.attach_item": "Attach Item",
   "ui.lending.detach_item": "Detach Item",
   "ui.lending.attach_title": "Attach {item}",
