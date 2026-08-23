@@ -5,6 +5,7 @@ class_name GuildPopup
 signal closed
 signal lobby_teleport_requested
 signal guild_chat_requested
+signal private_message_requested(user: Dictionary)
 
 const POPUP_SIZE := Vector2(1040, 700)
 const GUILD_ICON: Texture2D = preload("res://assets/ui/guild.svg")
@@ -252,6 +253,7 @@ func show_debug_member_preview() -> void:
 		]),
 	}
 	membership = {
+		"userId": 1,
 		"guildId": int(guild.get("id", 1)),
 		"role": "leader",
 		"permissions": [
@@ -263,9 +265,19 @@ func show_debug_member_preview() -> void:
 		"guild": guild,
 		"membership": membership.duplicate(),
 		"members": [
-			{"userId": 1, "username": "nova", "displayName": "Nova", "role": "leader"},
-			{"userId": 2, "username": "maple", "displayName": "Maple", "role": "captain"},
-			{"userId": 3, "username": "pecha", "displayName": "Pecha", "role": "member"},
+			{
+				"userId": 1, "username": "nova", "displayName": "Nova",
+				"role": "leader", "online": true,
+			},
+			{
+				"userId": 2, "username": "maple", "displayName": "Maple",
+				"role": "captain", "online": true,
+			},
+			{
+				"userId": 3, "username": "pecha", "displayName": "Pecha",
+				"role": "member", "online": false,
+				"lastSeenAt": "2026-08-22T16:30:00Z",
+			},
 		],
 		"pendingInvitations": [
 			{"id": 1, "invitedUsername": "leaf", "invitedDisplayName": "Leaf"},
@@ -1193,23 +1205,177 @@ func _build_member_roster() -> Control:
 	var content := VBoxContainer.new()
 	content.add_theme_constant_override("separation", 7)
 	margin.add_child(content)
-	content.add_child(_localized_label("ui.guild.roster", 10, UI_ACCENT))
+	var members := _array_from_value(guild_home.get("members", []))
+	var online_count := 0
+	for member_value: Variant in members:
+		if member_value is Dictionary and bool((member_value as Dictionary).get("online", false)):
+			online_count += 1
+	var heading_row := HBoxContainer.new()
+	heading_row.add_theme_constant_override("separation", 10)
+	content.add_child(heading_row)
+	var roster_heading := _localized_label("ui.guild.roster", 10, UI_ACCENT)
+	roster_heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading_row.add_child(roster_heading)
+	heading_row.add_child(_label(
+		_t("ui.guild.roster.summary", {"online": online_count, "total": members.size()}),
+		10,
+		UI_MUTED
+	))
 	var own_role := str(_dictionary(guild_home.get("membership", {})).get("role", "recruit"))
-	for member_value: Variant in _array_from_value(guild_home.get("members", [])):
+	var own_user_id := int(_dictionary(guild_home.get("membership", {})).get("userId", 0))
+	for member_value: Variant in members:
 		if not member_value is Dictionary:
 			continue
 		var member := member_value as Dictionary
-		var row := HBoxContainer.new()
-		content.add_child(row)
-		var identity := _label(str(member.get("displayName", member.get("username", "Trainer"))), 12, UI_TEXT)
-		identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(identity)
-		var member_role := str(member.get("role", "recruit"))
-		if own_role == "leader" and member_role != "leader":
-			row.add_child(_guild_member_role_select(int(member.get("userId", 0)), member_role))
-		else:
-			row.add_child(_label(_membership_role_label(member_role), 10, UI_GOLD))
+		content.add_child(_build_guild_member_card(member, own_role, own_user_id))
 	return panel
+
+
+func _build_guild_member_card(member: Dictionary, own_role: String, own_user_id: int) -> Control:
+	var user_id := int(member.get("userId", 0))
+	var online := bool(member.get("online", false))
+	var card := PanelContainer.new()
+	card.name = "GuildMemberCard_%d" % user_id
+	card.custom_minimum_size = Vector2(0, 70)
+	card.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#081827f2"), UI_ACCENT_SOFT if online else UI_BORDER_INNER, 8, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 9, 10, 9)
+	card.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 14)
+	margin.add_child(row)
+
+	var presence_dot := _label("●", 15, UI_SUCCESS if online else UI_MUTED)
+	presence_dot.name = "GuildMemberPresenceDot_%d" % user_id
+	presence_dot.custom_minimum_size = Vector2(18, 0)
+	presence_dot.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(presence_dot)
+
+	var identity := VBoxContainer.new()
+	identity.custom_minimum_size = Vector2(225, 0)
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.add_theme_constant_override("separation", 2)
+	row.add_child(identity)
+	var display_name := str(member.get("displayName", member.get("username", _t("common.unknown"))))
+	var name_label := _label(display_name, 14, UI_TEXT)
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	identity.add_child(name_label)
+	var username := str(member.get("username", "")).strip_edges()
+	identity.add_child(_label("@%s" % username if username != "" else "", 10, UI_ACCENT))
+
+	var presence := VBoxContainer.new()
+	presence.custom_minimum_size = Vector2(210, 0)
+	presence.add_theme_constant_override("separation", 3)
+	row.add_child(presence)
+	presence.add_child(_localized_label("ui.guild.member.status", 9, UI_MUTED))
+	var presence_label := _label(_guild_member_presence_text(member), 11, UI_SUCCESS if online else UI_MUTED)
+	presence_label.name = "GuildMemberPresenceLabel_%d" % user_id
+	presence_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	presence.add_child(presence_label)
+
+	var rank := VBoxContainer.new()
+	rank.custom_minimum_size = Vector2(145, 0)
+	rank.add_theme_constant_override("separation", 3)
+	row.add_child(rank)
+	rank.add_child(_localized_label("ui.guild.member.rank", 9, UI_MUTED))
+	var member_role := str(member.get("role", "recruit"))
+	if own_role == "leader" and member_role != "leader":
+		rank.add_child(_guild_member_role_select(user_id, member_role))
+	else:
+		var role_label := _label(_membership_role_label(member_role).to_upper(), 10, UI_GOLD)
+		role_label.name = "GuildMemberRankLabel_%d" % user_id
+		rank.add_child(role_label)
+
+	var message_button := Button.new()
+	message_button.name = "GuildMemberPmButton_%d" % user_id
+	message_button.custom_minimum_size = Vector2(92, 36)
+	message_button.disabled = user_id == own_user_id or not online
+	_set_localized_property(
+		message_button,
+		"text",
+		"ui.guild.member.you" if user_id == own_user_id else "ui.guild.member.message"
+	)
+	_set_localized_property(
+		message_button,
+		"tooltip_text",
+		"ui.guild.member.message_self"
+		if user_id == own_user_id
+		else ("ui.guild.member.message_tooltip" if online else "ui.guild.member.message_offline")
+	)
+	message_button.pressed.connect(_on_guild_member_private_message_pressed.bind(member.duplicate(true)))
+	_apply_button_style(message_button, "primary")
+	row.add_child(message_button)
+	return card
+
+
+func _on_guild_member_private_message_pressed(member: Dictionary) -> void:
+	if not bool(member.get("online", false)):
+		return
+	private_message_requested.emit({
+		"id": int(member.get("userId", 0)),
+		"userId": int(member.get("userId", 0)),
+		"username": str(member.get("username", "")),
+		"displayName": str(member.get("displayName", member.get("username", ""))),
+		"online": true,
+	})
+
+
+func _guild_member_presence_text(member: Dictionary) -> String:
+	if bool(member.get("online", false)):
+		return _t("ui.guild.member.online")
+	var last_seen_at := str(member.get("lastSeenAt", "")).strip_edges()
+	if last_seen_at == "":
+		return _t("ui.guild.member.offline")
+	return _t("ui.guild.member.last_seen", {"time": _relative_last_seen_text(last_seen_at)})
+
+
+func _relative_last_seen_text(last_seen_at: String) -> String:
+	var last_seen_unix := _unix_from_iso_datetime(last_seen_at)
+	if last_seen_unix <= 0.0:
+		return _t("ui.guild.member.offline").to_lower()
+	var elapsed_seconds := maxi(0, int(Time.get_unix_time_from_system() - last_seen_unix))
+	if elapsed_seconds < 60:
+		return _t("ui.friends.time.just_now")
+	if elapsed_seconds < 3600:
+		return _t("ui.friends.time.minutes_ago", {"count": int(elapsed_seconds / 60)})
+	if elapsed_seconds < 86400:
+		return _t("ui.friends.time.hours_ago", {"count": int(elapsed_seconds / 3600)})
+	if elapsed_seconds < 172800:
+		return _t("ui.friends.time.yesterday")
+	if elapsed_seconds < 604800:
+		return _t("ui.friends.time.days_ago", {"count": int(elapsed_seconds / 86400)})
+	var datetime := Time.get_datetime_dict_from_unix_time(int(last_seen_unix))
+	var month := int(datetime.get("month", 0))
+	var day := int(datetime.get("day", 0))
+	var year := int(datetime.get("year", 0))
+	if month < 1 or month > 12 or day < 1:
+		return _t("ui.guild.member.offline").to_lower()
+	var month_name := _t("ui.friends.month.%02d" % month)
+	if year == int(Time.get_datetime_dict_from_system().get("year", 0)):
+		return "%s %s" % [month_name, day]
+	return "%s %s, %s" % [month_name, day, year]
+
+
+func _unix_from_iso_datetime(value: String) -> float:
+	var datetime_text := value.strip_edges()
+	if datetime_text == "":
+		return 0.0
+	if datetime_text.ends_with("Z"):
+		datetime_text = datetime_text.substr(0, datetime_text.length() - 1)
+	var plus_index := datetime_text.find("+", 10)
+	if plus_index >= 0:
+		datetime_text = datetime_text.substr(0, plus_index)
+	else:
+		var minus_index := datetime_text.find("-", 10)
+		if minus_index >= 0:
+			datetime_text = datetime_text.substr(0, minus_index)
+	var dot_index := datetime_text.find(".")
+	if dot_index >= 0:
+		datetime_text = datetime_text.substr(0, dot_index)
+	return float(Time.get_unix_time_from_datetime_string(datetime_text))
 
 
 func _guild_member_role_select(user_id: int, current_role: String) -> OptionButton:
