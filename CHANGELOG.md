@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Rock Smash area selector now has clearer spacing before the rock list.
+
 - The Rock Smash area menu is now wider and easier to read and select from.
 
 - Rock Smash now keeps rock cards compact and consistent across every area.
