@@ -60,8 +60,18 @@ func _run() -> void:
 			"file=%s/download.zip" % user_data_path
 		))
 		_check(
-			not sanitized_path.contains(user_data_path) and sanitized_path.contains("<user_data>"),
+			not sanitized_path.contains(user_data_path) and sanitized_path.contains("<private_path>"),
 			"launcher diagnostics redact local user storage paths"
+		)
+		launcher.set("install_dir", "/custom/private/game-folder")
+		var sanitized_custom_install := str(launcher.call(
+			"_sanitize_diagnostic_message",
+			"install=/custom/private/game-folder/game/update.zip"
+		))
+		_check(
+			not sanitized_custom_install.contains("/custom/private/game-folder")
+			and sanitized_custom_install.contains("<private_path>"),
+			"launcher diagnostics redact a custom install folder"
 		)
 		var sanitized_history := str(launcher.call(
 			"_sanitize_diagnostic_contents",
@@ -73,6 +83,25 @@ func _run() -> void:
 			and sanitized_history.contains("\n"),
 			"launcher diagnostics sanitize historical multiline logs before display and copying"
 		)
+		var valid_manifest := {
+			"game": {
+				"url": "https://updates.example/game.zip",
+				"sizeBytes": 10,
+				"sha256": "ab".repeat(32),
+			},
+			"assetPacks": [{
+				"id": "sprites",
+				"url": "https://updates.example/assets/sprites.zip",
+				"sizeBytes": 20,
+				"sha256": "cd".repeat(32),
+			}],
+		}
+		_check(str(launcher.call("_validate_download_manifest", valid_manifest)).is_empty(), "launcher accepts complete download integrity metadata")
+		valid_manifest["assetPacks"][0]["sha256"] = ""
+		_check(str(launcher.call("_validate_download_manifest", valid_manifest)).contains("SHA-256"), "launcher rejects asset packs without a checksum")
+		_check(bool(launcher.call("_is_safe_archive_path", "assets/sprites/front.png")), "launcher accepts safe archive paths")
+		_check(not bool(launcher.call("_is_safe_archive_path", "../outside.txt")), "launcher rejects archive path traversal")
+		_check_transactional_game_install(launcher)
 		_check(language_options != null, "launcher language selector exists")
 		launcher.set("last_check_datetime", {
 			"day": 16,
@@ -128,6 +157,50 @@ func _check_language_selector_presentation(manager: Node) -> void:
 		"launcher language popup uses the matching visual style"
 	)
 	selector.free()
+
+
+func _check_transactional_game_install(launcher: Node) -> void:
+	var install_root := "user://launcher-transaction-test"
+	launcher.set("install_dir", install_root)
+	launcher.call("_remove_directory_tree", install_root)
+	var executable := str(launcher.call("_get_default_game_executable_name"))
+	launcher.set("manifest", {"game": {"executable": executable}})
+	var target_dir := install_root.path_join("game")
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(target_dir))
+	_write_test_file(target_dir.path_join("old.txt"), "old")
+
+	var staging_root := install_root.path_join(".launcher-staging/valid")
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(staging_root))
+	_write_test_file(staging_root.path_join(executable), "new")
+	var install_error := int(launcher.call("_commit_staged_download", {"type": "game", "id": "game"}, staging_root))
+	_check(install_error == OK, "launcher promotes a complete staged game")
+	_check(FileAccess.file_exists(target_dir.path_join(executable)), "transactional install exposes the new game")
+	_check(not FileAccess.file_exists(target_dir.path_join("old.txt")), "transactional install removes the replaced game only after promotion")
+
+	var invalid_staging := install_root.path_join(".launcher-staging/invalid")
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(invalid_staging))
+	_write_test_file(invalid_staging.path_join("not-the-game.txt"), "invalid")
+	var invalid_error := int(launcher.call("_commit_staged_download", {"type": "game", "id": "game"}, invalid_staging))
+	_check(invalid_error != OK, "launcher rejects an incomplete staged game")
+	_check(FileAccess.file_exists(target_dir.path_join(executable)), "failed staged install preserves the working game")
+
+	var backup_dir := "%s.launcher-backup" % ProjectSettings.globalize_path(target_dir)
+	DirAccess.rename_absolute(ProjectSettings.globalize_path(target_dir), backup_dir)
+	var recovery_staging := install_root.path_join(".launcher-staging/recovery")
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(recovery_staging))
+	_write_test_file(recovery_staging.path_join(executable), "recovered-update")
+	var recovery_error := int(launcher.call("_commit_staged_download", {"type": "game", "id": "game"}, recovery_staging))
+	_check(recovery_error == OK, "launcher recovers an interrupted install transaction")
+	_check(FileAccess.file_exists(target_dir.path_join(executable)), "transaction recovery leaves a working game")
+	launcher.call("_remove_directory_tree", install_root)
+
+
+func _write_test_file(path: String, contents: String) -> void:
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path).get_base_dir())
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file != null:
+		file.store_string(contents)
+		file.close()
 
 
 func _check(condition: bool, message: String) -> void:
