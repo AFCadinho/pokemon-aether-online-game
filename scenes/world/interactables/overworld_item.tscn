@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/interactables/overworld_item.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://assets/npcs/gen4-ow-sprites/Object ball.png" id="2_ball"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ball"]
+atlas = ExtResource("2_ball")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_interaction"]
+size = Vector2(96, 96)
+
+[node name="OverworldItem" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_item")
+interactable_kind = "overworld_item"
+display_name = "Item"
+interaction_shape_size = Vector2(96, 96)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = SubResource("AtlasTexture_ball")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("RectangleShape2D_interaction")
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]
