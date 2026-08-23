@@ -43,6 +43,7 @@ func _init() -> void:
 	_check(invitation_source.contains("_refresh_after_acceptance") and invitation_source.contains("refresh_party") and invitation_source.contains("load_inventory"), "accepted loans refresh visible player state")
 	_check(workspace_source.contains("_apply_checkbox_style") and workspace_source.contains("_checkbox_icon"), "loan asset selection remains clearly visible")
 	_check(workspace_source.contains("_toggle_pokemon_selection") and workspace_source.contains("party_candidates.size() - 1") and workspace_source.contains("ui.lending.error.party_required"), "lender must retain one party Pokemon")
+	_check(workspace_source.contains("ui.lending.pokemon_not_lendable") and workspace_source.contains("box.disabled = not is_lendable"), "non-lendable Pokemon are visibly marked and disabled in Party and Box results")
 	_check(workspace_source.contains("_set_workspace_mode(false)") and workspace_source.contains("loans_panel.visible = not is_composing"), "Socials Loans opens as a management-only overview")
 	_check(workspace_source.contains("loan_overview_view := \"borrowed\"") and workspace_source.contains("Currently borrowing") == false, "loan overview defaults to the borrowed API view without hardcoded display text")
 	_check(workspace_source.contains("_render_loan_type_tabs") and workspace_source.contains("_loans_for_asset_type"), "loan overview separates Pokemon and item tabs")
@@ -55,6 +56,13 @@ func _init() -> void:
 	_check(workspace_source.contains("custody_changed") and workspace_source.contains("ui.lending.notification.accepted") and workspace_source.contains("await _refresh_after_asset_return()"), "loan custody notifications refresh Party, PC, and Bag state")
 	_check(not workspace_source.contains("service.return_assets(loan_id)"), "loan cards never return every asset implicitly")
 	var workspace := WorkspaceScript.new()
+	_check(not workspace._pokemon_candidate_is_lendable({"pokemon": {"tradable": false}}), "non-tradable Pokemon are identified before offer selection")
+	_check(workspace._pokemon_candidate_is_lendable({"pokemon": {"tradable": true}}), "tradable Pokemon remain selectable for lending")
+	var locked_candidate_row := workspace._pokemon_candidate_row({"pokemonId": 25, "name": "Starter", "speciesId": "pikachu", "level": 5, "pokemon": {"speciesId": "pikachu", "tradable": false}}, 25)
+	var locked_checkboxes := _checkboxes(locked_candidate_row)
+	_check(locked_checkboxes.size() == 1 and locked_checkboxes[0].disabled, "non-lendable Pokemon render with a disabled selector")
+	_check(_has_label_fragment(locked_candidate_row, "ui.lending.pokemon_not_lendable"), "non-lendable Pokemon render a visible reason")
+	locked_candidate_row.free()
 	workspace.loans = [
 		{"loanId": "pokemon-loan", "assets": [{"assetType": "pokemon"}]},
 		{"loanId": "item-loan", "assets": [{"assetType": "item"}, {"assetType": "item"}]},
@@ -129,3 +137,28 @@ func _button_texts(node: Node) -> Array[String]:
 	for child: Node in node.get_children():
 		result.append_array(_button_texts(child))
 	return result
+
+
+func _checkboxes(node: Node) -> Array[CheckBox]:
+	var result: Array[CheckBox] = []
+	if node is CheckBox:
+		result.append(node as CheckBox)
+	for child: Node in node.get_children():
+		result.append_array(_checkboxes(child))
+	return result
+
+
+func _label_texts(node: Node) -> Array[String]:
+	var result: Array[String] = []
+	if node is Label:
+		result.append((node as Label).text)
+	for child: Node in node.get_children():
+		result.append_array(_label_texts(child))
+	return result
+
+
+func _has_label_fragment(node: Node, fragment: String) -> bool:
+	for label_text: String in _label_texts(node):
+		if fragment in label_text:
+			return true
+	return false

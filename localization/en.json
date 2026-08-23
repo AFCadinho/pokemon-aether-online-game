@@ -4430,6 +4430,8 @@
   "ui.lending.error.assets_required_pokemon": "Choose at least one Pokémon.",
   "ui.lending.error.assets_required_items": "Choose at least one item.",
   "ui.lending.error.remove_held_item": "Move this Pokémon's held item to your Bag before lending it.",
+  "ui.lending.error.pokemon_not_lendable": "This Pokémon cannot be lent.",
+  "ui.lending.pokemon_not_lendable": "Not lendable",
   "ui.lending.pokemon_holding_item": "Holding {item} — remove first",
   "ui.lending.item_available": "Reusable held item · {count} available",
   "ui.lending.item_held_by": "Held by {pokemon}",

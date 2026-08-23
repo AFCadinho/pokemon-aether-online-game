@@ -4430,6 +4430,8 @@
   "ui.lending.error.assets_required_pokemon": "Escolha pelo menos um Pokémon.",
   "ui.lending.error.assets_required_items": "Escolha pelo menos um item.",
   "ui.lending.error.remove_held_item": "Mova o item equipado deste Pokémon para a Bolsa antes de emprestá-lo.",
+  "ui.lending.error.pokemon_not_lendable": "Este Pokémon não pode ser emprestado.",
+  "ui.lending.pokemon_not_lendable": "Não pode ser emprestado",
   "ui.lending.pokemon_holding_item": "Equipado com {item} — remova primeiro",
   "ui.lending.item_available": "Item equipável reutilizável · {count} disponível(is)",
   "ui.lending.item_held_by": "Equipado em {pokemon}",

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon that cannot be lent are now clearly marked and disabled before creating a Player Loan offer.
+
 - Loan deadlines now count down in minutes during their final hour while keeping the exact UTC deadline visible.
 
 - Item loans now reliably show every individual item and its return action, including items that are currently in the Bag.
