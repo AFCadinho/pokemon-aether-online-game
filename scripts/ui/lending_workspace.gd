@@ -2,6 +2,8 @@ extends Window
 
 class_name LendingWorkspaceNode
 
+const LoanInvitationDialogScript := preload("res://scripts/ui/loan_invitation_dialog.gd")
+
 const WINDOW_SIZE := Vector2i(900, 640)
 const BG := Color("#050912fa")
 const SURFACE := Color("#081522f7")
@@ -10,6 +12,7 @@ const ACCENT := Color("#62d7ff")
 const TEXT := Color("#f4f0de")
 const MUTED := Color("#aeb8c5")
 const GOLD := Color("#d8b767")
+const INCOMING_POLL_SECONDS := 5.0
 
 var target_username := ""
 var capabilities: Dictionary = {}
@@ -19,6 +22,10 @@ var inventory_candidates: Array[Dictionary] = []
 var selected_pokemon: Dictionary = {}
 var selected_items: Dictionary = {}
 var mutation_in_flight := false
+var incoming_poll_in_flight := false
+var incoming_dialog: Window
+var last_incoming_signature := ""
+var incoming_account_generation := 0
 
 var target_input: LineEdit
 var duration_select: OptionButton
@@ -41,6 +48,7 @@ func _ready() -> void:
 	unresizable = true
 	borderless = true
 	_build_ui()
+	_setup_incoming_offers()
 	close_requested.connect(hide)
 
 
@@ -52,6 +60,10 @@ func clear_account_state() -> void:
 	selected_pokemon.clear()
 	selected_items.clear()
 	target_username = ""
+	last_incoming_signature = ""
+	incoming_account_generation += 1
+	if incoming_dialog != null and incoming_dialog.has_method("clear_offers"):
+		incoming_dialog.call("clear_offers")
 
 
 func open_for_trainer(username: String) -> void:
@@ -121,6 +133,7 @@ func _build_ui() -> void:
 	close.text = "×"
 	close.custom_minimum_size = Vector2(40, 36)
 	close.pressed.connect(hide)
+	_apply_button_style(close, "danger")
 	header.add_child(close)
 	status_label = Label.new()
 	status_label.add_theme_color_override("font_color", MUTED)
@@ -150,18 +163,21 @@ func _build_compose_panel() -> Control:
 	target_input = LineEdit.new()
 	target_input.placeholder_text = _t("ui.lending.target")
 	target_input.text = target_username
+	_apply_line_edit_style(target_input)
 	root.add_child(target_input)
 	var terms := HBoxContainer.new()
 	terms.add_theme_constant_override("separation", 8)
 	root.add_child(terms)
 	duration_select = OptionButton.new()
 	duration_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_apply_option_style(duration_select)
 	terms.add_child(duration_select)
 	fee_input = SpinBox.new()
 	fee_input.min_value = 0
 	fee_input.max_value = 2147483647
 	fee_input.prefix = "₽"
 	fee_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_apply_spinbox_style(fee_input)
 	terms.add_child(fee_input)
 	var hint := Label.new()
 	hint.text = _t("ui.lending.ownership_hint")
@@ -180,6 +196,7 @@ func _build_compose_panel() -> Control:
 	create_button.text = _t("ui.lending.create")
 	create_button.custom_minimum_size = Vector2(0, 40)
 	create_button.pressed.connect(_create_loan)
+	_apply_button_style(create_button, "primary")
 	root.add_child(create_button)
 	return panel
 
@@ -201,10 +218,12 @@ func _build_loans_panel() -> Control:
 		view_select.add_item(label)
 	view_select.item_selected.connect(func(_index: int): await _refresh_loans())
 	view_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_apply_option_style(view_select)
 	tools.add_child(view_select)
 	var refresh := Button.new()
 	refresh.text = _t("common.refresh")
 	refresh.pressed.connect(refresh_all)
+	_apply_button_style(refresh)
 	tools.add_child(refresh)
 	usage_label = Label.new()
 	usage_label.add_theme_color_override("font_color", MUTED)
@@ -237,23 +256,14 @@ func _render_assets() -> void:
 	assets_list.add_child(_section_label(_t("ui.lending.assets.pokemon")))
 	for candidate: Dictionary in party_candidates:
 		var pokemon_id := int(candidate.get("pokemonId", 0))
-		var box := CheckBox.new()
-		box.text = "%s · Lv. %d" % [str(candidate.get("name", "Pokémon")), int(candidate.get("level", 1))]
-		box.toggled.connect(func(enabled: bool): _set_selected(selected_pokemon, pokemon_id, enabled))
-		assets_list.add_child(box)
+		assets_list.add_child(_pokemon_candidate_row(candidate, pokemon_id))
 		var held_item := str(candidate.get("heldItemId", ""))
 		if held_item != "":
-			var held := CheckBox.new()
-			held.text = "  ↳ %s (%s)" % [_t("ui.lending.held_item"), held_item]
-			held.toggled.connect(func(enabled: bool): _set_selected(selected_items, "held:%d" % pokemon_id, enabled))
-			assets_list.add_child(held)
+			assets_list.add_child(_item_candidate_row({"itemId": held_item, "name": _item_display_name(held_item, held_item), "quantity": 1}, "held:%d" % pokemon_id, true))
 	assets_list.add_child(_section_label(_t("ui.lending.assets.items")))
 	for item: Dictionary in inventory_candidates:
 		var item_id := str(item.get("itemId", ""))
-		var box := CheckBox.new()
-		box.text = "%s  ×%d" % [str(item.get("name", item_id)), int(item.get("quantity", 0))]
-		box.toggled.connect(func(enabled: bool): _set_selected(selected_items, "bag:%s" % item_id, enabled))
-		assets_list.add_child(box)
+		assets_list.add_child(_item_candidate_row(item, "bag:%s" % item_id))
 
 
 func _refresh_loans() -> void:
@@ -463,11 +473,81 @@ func _party_candidates(value: Variant) -> Array[Dictionary]:
 	if value is Array:
 		for entry: Variant in value:
 			if not entry is Dictionary: continue
-			var payload: Dictionary = entry.get("pokemon", entry)
+			var payload: Dictionary = entry.get("pokemon", entry).duplicate(true)
 			var pokemon_id := int(entry.get("id", entry.get("pokemonId", payload.get("ownedPokemonId", 0))))
 			if pokemon_id <= 0: continue
-			result.append({"pokemonId": pokemon_id, "name": str(payload.get("nickname", payload.get("name", payload.get("species", "Pokémon")))), "level": int(payload.get("level", 1)), "heldItemId": str(payload.get("heldItemId", payload.get("item", "")))})
+			payload["ownedPokemonId"] = pokemon_id
+			var species_id := str(payload.get("speciesId", payload.get("species_id", payload.get("species", ""))))
+			if not payload.has("speciesId"):
+				payload["speciesId"] = species_id
+			result.append({"pokemonId": pokemon_id, "name": _pokemon_display_name(payload), "speciesId": species_id, "level": int(payload.get("level", 1)), "heldItemId": str(payload.get("heldItemId", payload.get("item", ""))), "pokemon": payload})
 	return result
+
+
+func _setup_incoming_offers() -> void:
+	incoming_dialog = LoanInvitationDialogScript.new()
+	add_child(incoming_dialog)
+	incoming_dialog.call("setup")
+	if incoming_dialog.has_signal("offers_changed"):
+		incoming_dialog.connect("offers_changed", _on_incoming_offers_changed)
+	var timer := Timer.new()
+	timer.wait_time = INCOMING_POLL_SECONDS
+	timer.autostart = true
+	timer.timeout.connect(_poll_incoming_offers)
+	add_child(timer)
+	_poll_incoming_offers.call_deferred()
+
+
+func _poll_incoming_offers() -> void:
+	if incoming_poll_in_flight:
+		return
+	var auth := get_node_or_null("/root/AuthService")
+	if auth == null or not auth.has_method("is_authenticated") or not bool(auth.is_authenticated()):
+		return
+	var service := get_node_or_null("/root/LendingService")
+	if service == null:
+		return
+	var account_generation := incoming_account_generation
+	incoming_poll_in_flight = true
+	var result: Dictionary = await service.load_loans("borrowed")
+	incoming_poll_in_flight = false
+	if account_generation != incoming_account_generation:
+		return
+	if not bool(result.get("success", false)):
+		return
+	var pending: Array[Dictionary] = []
+	var body: Dictionary = result.get("body", {})
+	for value: Variant in body.get("loans", []):
+		if value is Dictionary and str(value.get("status", "")) == "pending":
+			pending.append(value.duplicate(true))
+	var signature_parts: Array[String] = []
+	for offer: Dictionary in pending:
+		signature_parts.append(str(offer.get("loanId", "")))
+	var signature := "|".join(signature_parts)
+	if signature != last_incoming_signature and incoming_dialog != null and incoming_dialog.has_method("show_offers"):
+		incoming_dialog.call("show_offers", pending, true)
+	last_incoming_signature = signature
+
+
+func _on_incoming_offers_changed() -> void:
+	last_incoming_signature = ""
+	await _poll_incoming_offers()
+	if visible:
+		await _refresh_loans()
+
+
+func _pokemon_display_name(pokemon: Dictionary) -> String:
+	var nickname := str(pokemon.get("nickname", "")).strip_edges()
+	if nickname != "" and nickname != "<null>":
+		return nickname
+	var species_id := str(pokemon.get("speciesId", pokemon.get("species_id", pokemon.get("species", "")))).strip_edges()
+	var fallback := str(pokemon.get("speciesName", species_id)).strip_edges()
+	if fallback == "":
+		fallback = "Pokémon"
+	if not is_inside_tree():
+		return fallback
+	var localizer := get_node_or_null("/root/ContentLocalization")
+	return str(localizer.call("display_name", "species", species_id, fallback)) if localizer != null else fallback
 
 
 func _item_candidates(value: Variant) -> Array[Dictionary]:
@@ -478,7 +558,7 @@ func _item_candidates(value: Variant) -> Array[Dictionary]:
 			var category := str(entry.get("category", "")).to_lower()
 			var item_id := str(entry.get("itemId", "")).strip_edges().to_lower()
 			if item_id == "" or int(entry.get("quantity", 0)) <= 0 or category in ["key-items", "key_items", "important"]: continue
-			result.append({"itemId": item_id, "name": str(entry.get("name", item_id)), "quantity": int(entry.get("quantity", 0))})
+			result.append({"itemId": item_id, "name": _item_display_name(item_id, str(entry.get("name", item_id))), "quantity": int(entry.get("quantity", 0))})
 	return result
 
 
@@ -498,7 +578,165 @@ func _add_action(parent: HBoxContainer, label: String, callback: Callable) -> vo
 	button.text = label
 	button.disabled = mutation_in_flight
 	button.pressed.connect(callback)
+	_apply_button_style(button)
 	parent.add_child(button)
+
+
+func _pokemon_candidate_row(candidate: Dictionary, pokemon_id: int) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size.y = 60
+	panel.add_theme_stylebox_override("panel", _style(Color("#07111df0"), BORDER, 7))
+	var margin := MarginContainer.new()
+	for side in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_%s" % side, 6)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+	var box := CheckBox.new()
+	box.focus_mode = Control.FOCUS_NONE
+	box.toggled.connect(func(enabled: bool): _set_selected(selected_pokemon, pokemon_id, enabled))
+	row.add_child(box)
+	var payload: Dictionary = candidate.get("pokemon", {})
+	var icon_button := Button.new()
+	icon_button.custom_minimum_size = Vector2(46, 46)
+	icon_button.icon = PokemonAssets.load_party_icon(str(candidate.get("speciesId", "")), bool(payload.get("shiny", false)))
+	icon_button.expand_icon = true
+	icon_button.add_theme_constant_override("icon_max_width", 42)
+	icon_button.pressed.connect(_open_pokemon_summary.bind(payload))
+	_apply_icon_button_style(icon_button)
+	row.add_child(icon_button)
+	var identity := VBoxContainer.new()
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_child(identity)
+	var name_label := Label.new()
+	name_label.text = str(candidate.get("name", "Pokémon"))
+	name_label.add_theme_color_override("font_color", TEXT)
+	name_label.add_theme_font_size_override("font_size", 13)
+	identity.add_child(name_label)
+	var level_label := Label.new()
+	level_label.text = "Lv. %d" % int(candidate.get("level", 1))
+	level_label.add_theme_color_override("font_color", MUTED)
+	level_label.add_theme_font_size_override("font_size", 10)
+	identity.add_child(level_label)
+	var view := Button.new()
+	view.text = _t("ui.lending.invitation.view")
+	view.pressed.connect(_open_pokemon_summary.bind(payload))
+	_apply_button_style(view)
+	row.add_child(view)
+	return panel
+
+
+func _item_candidate_row(item: Dictionary, selection_key: String, held := false) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size.y = 46
+	panel.add_theme_stylebox_override("panel", _style(Color("#07111df0"), BORDER, 7))
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 5)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 5)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+	var box := CheckBox.new()
+	box.focus_mode = Control.FOCUS_NONE
+	box.toggled.connect(func(enabled: bool): _set_selected(selected_items, selection_key, enabled))
+	row.add_child(box)
+	var item_id := str(item.get("itemId", ""))
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(32, 32)
+	icon.texture = _load_item_icon(item_id)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	row.add_child(icon)
+	var label := Label.new()
+	label.text = "%s%s" % ["↳ " if held else "", str(item.get("name", item_id))]
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_color_override("font_color", TEXT)
+	row.add_child(label)
+	var quantity := Label.new()
+	quantity.text = "×%d" % int(item.get("quantity", 1))
+	quantity.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	quantity.add_theme_color_override("font_color", MUTED)
+	row.add_child(quantity)
+	return panel
+
+
+func _open_pokemon_summary(payload: Dictionary) -> void:
+	var preview := payload.duplicate(true)
+	if str(preview.get("species", "")).strip_edges() == "":
+		preview["species"] = str(preview.get("speciesId", preview.get("speciesName", "")))
+	var overlay := get_tree().get_first_node_in_group("ui_overlay")
+	if overlay != null and overlay.has_method("open_trade_pokemon_summary"):
+		overlay.call("open_trade_pokemon_summary", preview)
+
+
+func _item_display_name(item_id: String, fallback: String) -> String:
+	if not is_inside_tree():
+		return fallback
+	var localizer := get_node_or_null("/root/ItemLocalization")
+	return str(localizer.call("display_name", item_id, fallback)) if localizer != null else fallback
+
+
+func _load_item_icon(item_id: String) -> Texture2D:
+	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
+	for path: String in ["res://assets/items/icons/%s.png" % normalized, "res://assets/items/icons/%s.png" % item_id.strip_edges(), "res://assets/items/icons/000.png"]:
+		if ResourceLoader.exists(path):
+			return load(path) as Texture2D
+	return null
+
+
+func _apply_button_style(button: Button, kind := "secondary") -> void:
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	var primary := kind == "primary"
+	var danger := kind == "danger"
+	var normal := Color("#0d4359") if primary else (Color("#2a1015") if danger else Color("#111d2c"))
+	var hover := Color("#12627f") if primary else (Color("#6a1f2a") if danger else Color("#192c42"))
+	button.add_theme_color_override("font_color", TEXT)
+	button.add_theme_color_override("font_disabled_color", Color("#667382"))
+	button.add_theme_stylebox_override("normal", _input_style(normal, ACCENT if primary else BORDER))
+	button.add_theme_stylebox_override("hover", _input_style(hover, ACCENT))
+	button.add_theme_stylebox_override("pressed", _input_style(BG, ACCENT))
+	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	button.add_theme_stylebox_override("disabled", _input_style(Color("#0a1018"), Color("#253344")))
+
+
+func _apply_icon_button_style(button: Button) -> void:
+	_apply_button_style(button)
+	button.add_theme_stylebox_override("normal", _style(Color("#00000000"), Color("#00000000"), 5))
+
+
+func _apply_line_edit_style(input: LineEdit) -> void:
+	input.add_theme_color_override("font_color", TEXT)
+	input.add_theme_color_override("font_placeholder_color", MUTED)
+	input.add_theme_stylebox_override("normal", _input_style(Color("#07111df5"), BORDER))
+	input.add_theme_stylebox_override("focus", _input_style(Color("#071526f5"), ACCENT))
+
+
+func _apply_option_style(select: OptionButton) -> void:
+	select.add_theme_color_override("font_color", TEXT)
+	select.add_theme_stylebox_override("normal", _input_style(Color("#07111df5"), BORDER))
+	select.add_theme_stylebox_override("hover", _input_style(Color("#102238f5"), ACCENT))
+	select.add_theme_stylebox_override("pressed", _input_style(Color("#071526f5"), ACCENT))
+	select.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+
+
+func _apply_spinbox_style(spinbox: SpinBox) -> void:
+	_apply_line_edit_style(spinbox.get_line_edit())
+
+
+func _input_style(background: Color, border: Color) -> StyleBoxFlat:
+	var style := _style(background, border, 7)
+	style.content_margin_left = 10
+	style.content_margin_right = 10
+	style.content_margin_top = 7
+	style.content_margin_bottom = 7
+	return style
 
 
 func _section_label(value: String) -> Label:

@@ -2,6 +2,7 @@ extends SceneTree
 
 const ServiceScript := preload("res://scripts/services/lending_service.gd")
 const WorkspaceScript := preload("res://scripts/ui/lending_workspace.gd")
+const InvitationScript := preload("res://scripts/ui/loan_invitation_dialog.gd")
 
 var failed := false
 
@@ -17,6 +18,10 @@ func _init() -> void:
 		_check(source.contains(contract), contract)
 	var workspace_source := FileAccess.get_file_as_string("res://scripts/ui/lending_workspace.gd")
 	_check(workspace_source.contains("_open_attach_menu") and workspace_source.contains("_detach_loan_item"), "borrowed item attach and detach controls")
+	_check(workspace_source.contains("_poll_incoming_offers") and workspace_source.contains("load_loans(\"borrowed\")"), "incoming loan offers are polled for the borrower")
+	var invitation_source := FileAccess.get_file_as_string("res://scripts/ui/loan_invitation_dialog.gd")
+	_check(invitation_source.contains("accept_loan") and invitation_source.contains("decline_loan"), "incoming offer has direct accept and decline actions")
+	_check(invitation_source.contains("open_trade_pokemon_summary"), "incoming Pokemon can open a read-only summary")
 	var workspace := WorkspaceScript.new()
 	var party := workspace._party_candidates([{"id": 7, "pokemon": {"species": "Pikachu", "level": 22, "item": "light-ball"}}])
 	_check(party.size() == 1 and int(party[0].get("pokemonId", 0)) == 7, "party candidate normalization")
