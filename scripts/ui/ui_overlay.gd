@@ -19316,10 +19316,10 @@ func _refresh_bag_items() -> void:
 		_refresh_hotbar_ui()
 		return
 
-	var selected_id := _normalize_item_id(str(bag_selected_item.get("id", "")))
+	var selected_id := _bag_item_key(bag_selected_item)
 	var selected_is_visible := false
 	for item: Dictionary in visible_items:
-		if _normalize_item_id(str(item.get("id", ""))) == selected_id:
+		if _bag_item_key(item) == selected_id:
 			bag_selected_item = item.duplicate(true)
 			selected_is_visible = true
 			break
@@ -19366,14 +19366,17 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	slot.custom_minimum_size = Vector2(106, 118)
 	slot.mouse_filter = Control.MOUSE_FILTER_STOP
 	var item_name := str(item.get("name", LocalizationManager.text("ui.bag.item_fallback")))
-	slot.tooltip_text = LocalizationManager.text("ui.bag.item_tooltip", {"item": item_name})
+	slot.tooltip_text = LocalizationManager.text(
+		"ui.bag.borrowed_tooltip" if bool(item.get("borrowed", false)) else "ui.bag.item_tooltip",
+		{"item": item_name},
+	)
 	slot.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	slot.gui_input.connect(_on_bag_item_slot_gui_input.bind(item.duplicate(true), slot))
 	slot.mouse_entered.connect(_on_bag_item_slot_hover_changed.bind(slot, true))
 	slot.mouse_exited.connect(_on_bag_item_slot_hover_changed.bind(slot, false))
 	slot.set_meta("bag_hovered", false)
 	var item_id := _normalize_item_id(str(item.get("id", "")))
-	bag_item_slots[item_id] = slot
+	bag_item_slots[_bag_item_key(item)] = slot
 	_apply_bag_item_slot_style(slot, item)
 
 	var margin_container := MarginContainer.new()
@@ -19427,17 +19430,23 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	quantity_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	quantity_badge.add_theme_stylebox_override(
 		"panel",
-		_make_panel_style(Color("#09111ce8"), Color("#b5964d99"), 6, 1)
+		_make_panel_style(Color("#09111ce8"), Color("#62d8ff99") if bool(item.get("borrowed", false)) else Color("#b5964d99"), 6, 1)
 	)
 	icon_wrap.add_child(quantity_badge)
 
 	var quantity_label := Label.new()
 	quantity_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	quantity_label.text = LocalizationManager.text("ui.bag.key_marker") if bool(item.get("permanent", false)) else "x%s" % max(int(item.get("quantity", 1)), 1)
+	quantity_label.text = (
+		LocalizationManager.text("ui.bag.loan_marker")
+		if bool(item.get("borrowed", false))
+		else LocalizationManager.text("ui.bag.key_marker")
+		if bool(item.get("permanent", false))
+		else "x%s" % max(int(item.get("quantity", 1)), 1)
+	)
 	quantity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	quantity_label.add_theme_font_size_override("font_size", 9)
-	quantity_label.add_theme_color_override("font_color", UI_MONEY)
+	quantity_label.add_theme_color_override("font_color", Color("#62d8ff") if bool(item.get("borrowed", false)) else UI_MONEY)
 	quantity_badge.add_child(quantity_label)
 
 	var name_label := Label.new()
@@ -19463,12 +19472,12 @@ func _on_bag_item_slot_hover_changed(slot: HotbarBagItemSlot, hovered: bool) -> 
 func _apply_bag_item_slot_style(slot: HotbarBagItemSlot, item: Dictionary) -> void:
 	if slot == null:
 		return
-	var item_id := _normalize_item_id(str(item.get("id", "")))
-	var selected_id := _normalize_item_id(str(bag_selected_item.get("id", "")))
+	var item_id := _bag_item_key(item)
+	var selected_id := _bag_item_key(bag_selected_item)
 	var selected := item_id != "" and item_id == selected_id
 	var hovered := bool(slot.get_meta("bag_hovered", false))
 	var background := UI_SURFACE_INTERACTIVE
-	var border := UI_BORDER_SUBTLE
+	var border := Color("#62d8ff99") if bool(item.get("borrowed", false)) else UI_BORDER_SUBTLE
 	var border_width := 1
 	if hovered:
 		background = UI_SURFACE_HOVER
@@ -19534,7 +19543,9 @@ func _refresh_bag_detail() -> void:
 	bag_detail_name_label.text = item_name
 	bag_detail_meta_label.text = "%s · %s" % [
 		_bag_category_label(category),
-		LocalizationManager.text("ui.bag.key_item")
+		LocalizationManager.text("ui.bag.quantity_borrowed", {"quantity": quantity})
+		if bool(bag_selected_item.get("borrowed", false))
+		else LocalizationManager.text("ui.bag.key_item")
 		if bool(bag_selected_item.get("permanent", false))
 		else LocalizationManager.text("ui.bag.quantity_owned", {"quantity": quantity}),
 	]
@@ -20872,6 +20883,27 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"useAction": str(item.get("useAction", "")).strip_edges(),
 			"appearanceUnlocks": item.get("appearanceUnlocks", []),
 		}))
+	for borrowed_value: Variant in InventoryService.cached_borrowed_inventory_items:
+		if borrowed_value is not Dictionary:
+			continue
+		var borrowed: Dictionary = borrowed_value
+		var borrowed_item_id := str(borrowed.get("itemId", borrowed.get("id", ""))).strip_edges()
+		var loan_asset_id := str(borrowed.get("loanAssetId", "")).strip_edges()
+		if borrowed_item_id == "" or loan_asset_id == "":
+			continue
+		normalized_items.append(ItemLocalization.localize_item({
+			"id": borrowed_item_id,
+			"name": str(borrowed.get("name", _format_item_name_from_id(borrowed_item_id))),
+			"category": _normalize_backend_bag_category(str(borrowed.get("category", "held-items")), borrowed_item_id),
+			"shortDesc": str(borrowed.get("shortDesc", borrowed.get("description", ""))).strip_edges(),
+			"isHoldable": true,
+			"quantity": 1,
+			"borrowed": true,
+			"loanAssetId": loan_asset_id,
+			"gameplay": {},
+			"useNotice": {},
+			"useAction": "",
+		}))
 	normalized_items.append(ItemLocalization.localize_item({
 		"id": "escape-rope-action",
 		"category": "key_items",
@@ -20880,6 +20912,12 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 		"gameplay": {},
 	}))
 	return normalized_items
+
+
+func _bag_item_key(item: Dictionary) -> String:
+	var item_id := _normalize_item_id(str(item.get("id", item.get("itemId", ""))))
+	var loan_asset_id := str(item.get("loanAssetId", "")).strip_edges()
+	return "loan:%s" % loan_asset_id if bool(item.get("borrowed", false)) and loan_asset_id != "" else "owned:%s" % item_id
 
 func _normalize_backend_bag_category(category: String, item_id: String) -> String:
 	if _is_power_stone_item_id(item_id):
