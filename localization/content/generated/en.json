@@ -1540,10 +1540,10 @@
       "name": "Greninja"
     },
     "greninja-ash": {
-      "name": "Greninja Ash"
+      "name": "Ash-Greninja"
     },
     "greninja-bond": {
-      "name": "Greninja Bond"
+      "name": "Greninja"
     },
     "greninja-mega": {
       "name": "Greninja Mega"
@@ -8074,7 +8074,7 @@
     },
     "battle-bond": {
       "name": "Battle Bond",
-      "shortDesc": "Transforms this Pokémon into Ash-Greninja after fainting an opponent. Water Shuriken's power is 20 and always hits three times."
+      "shortDesc": "Once per battle, fainting an opponent raises Attack, Sp. Atk, and Speed by one stage."
     },
     "beads-of-ruin": {
       "name": "Beads of Ruin",
