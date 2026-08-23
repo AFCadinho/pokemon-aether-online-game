@@ -234,9 +234,47 @@ func _act(action: String) -> void:
 		accept_button.disabled = false
 		decline_button.disabled = false
 		return
+	var resolved_offer := offer.duplicate(true)
 	hide()
 	offer.clear()
+	_notify_resolution(action)
+	if action == "accept":
+		await _refresh_after_acceptance(resolved_offer)
 	offers_changed.emit()
+
+
+func _refresh_after_acceptance(resolved_offer: Dictionary) -> void:
+	var party_service := get_node_or_null("/root/PlayerPartyStateService")
+	if party_service != null and party_service.has_method("refresh_party"):
+		await party_service.call("refresh_party")
+	var assets: Array = resolved_offer.get("assets", []) if resolved_offer.get("assets", []) is Array else []
+	var has_items := false
+	for value: Variant in assets:
+		if value is Dictionary and str(value.get("assetType", "")) == "item":
+			has_items = true
+			break
+	if has_items:
+		var inventory_service := get_node_or_null("/root/InventoryService")
+		if inventory_service != null and inventory_service.has_method("load_inventory"):
+			await inventory_service.call("load_inventory")
+	if int(resolved_offer.get("feeAmount", 0)) > 0:
+		var wallet_service := get_node_or_null("/root/PlayerWalletService")
+		if wallet_service != null and wallet_service.has_method("load_wallet"):
+			var wallet_result: Dictionary = await wallet_service.call("load_wallet")
+			if bool(wallet_result.get("success", false)) and wallet_service.has_method("apply_wallet_result"):
+				wallet_service.call("apply_wallet_result", wallet_result)
+				get_tree().call_group("ui_overlay", "refresh_money_display")
+	var overlay := get_tree().get_first_node_in_group("ui_overlay")
+	if overlay != null and overlay.has_method("_refresh_pc_state"):
+		await overlay.call("_refresh_pc_state", true)
+
+
+func _notify_resolution(action: String) -> void:
+	var overlay := get_tree().get_first_node_in_group("ui_overlay")
+	if overlay == null or not overlay.has_method("add_system_message"):
+		return
+	var key := "ui.lending.invitation.accepted" if action == "accept" else "ui.lending.invitation.declined"
+	overlay.call("add_system_message", _t(key))
 
 
 func _open_summary(snapshot: Dictionary) -> void:

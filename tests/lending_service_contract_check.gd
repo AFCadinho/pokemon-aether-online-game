@@ -22,6 +22,8 @@ func _init() -> void:
 	var invitation_source := FileAccess.get_file_as_string("res://scripts/ui/loan_invitation_dialog.gd")
 	_check(invitation_source.contains("accept_loan") and invitation_source.contains("decline_loan"), "incoming offer has direct accept and decline actions")
 	_check(invitation_source.contains("open_trade_pokemon_summary"), "incoming Pokemon can open a read-only summary")
+	_check(invitation_source.contains("_refresh_after_acceptance") and invitation_source.contains("refresh_party") and invitation_source.contains("load_inventory"), "accepted loans refresh visible player state")
+	_check(workspace_source.contains("_apply_checkbox_style") and workspace_source.contains("_checkbox_icon"), "loan asset selection remains clearly visible")
 	var workspace := WorkspaceScript.new()
 	var party := workspace._party_candidates([{"id": 7, "pokemon": {"species": "Pikachu", "level": 22, "item": "light-ball"}}])
 	_check(party.size() == 1 and int(party[0].get("pokemonId", 0)) == 7, "party candidate normalization")

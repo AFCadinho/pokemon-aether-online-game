@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Accepting a player loan now immediately refreshes the Party, PC, Bag, and wallet, confirms where the borrowed assets are available, and uses clearly visible selection boxes.
+
 - Incoming player loan offers now appear like trade requests, with a clear asset summary and direct accept or decline actions.
 
 - Guild Bank donations now become Guild property, Pokémon and items show their icons, Shared Funds accept deposits from every member, and separate history windows track membership, rank, funds, item, and Pokémon activity.

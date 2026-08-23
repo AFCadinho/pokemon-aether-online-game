@@ -4331,5 +4331,7 @@
   "ui.lending.invitation.terms": "{duration} · ₽{fee} vergoeding · De uitlener blijft eigenaar",
   "ui.lending.invitation.pending_count": "{count} openstaand(e) aanbod(en)",
   "ui.lending.invitation.view": "Bekijken",
-  "ui.lending.invitation.item": "Herbruikbaar leenitem"
+  "ui.lending.invitation.item": "Herbruikbaar leenitem",
+  "ui.lending.invitation.accepted": "Lening geaccepteerd. De geleende bezittingen staan nu in je Party, PC of Bag.",
+  "ui.lending.invitation.declined": "Leningsaanbod afgewezen."
 }
