@@ -35,6 +35,9 @@ var pokemon_source_mode := 0
 var selected_box_index := 0
 var pokemon_search_query := ""
 var loan_asset_mode := "pokemon"
+var loan_overview_asset_type := "pokemon"
+var loan_overview_view := "borrowed"
+var loan_counts: Dictionary = {}
 
 var target_display_label: Label
 var duration_select: OptionButton
@@ -49,6 +52,7 @@ var usage_label: Label
 var compose_panel: Control
 var loans_panel: Control
 var pokemon_results_list: VBoxContainer
+var loan_type_tabs: HBoxContainer
 
 
 func _ready() -> void:
@@ -74,6 +78,9 @@ func clear_account_state() -> void:
 	selected_pokemon.clear()
 	selected_items.clear()
 	target_username = ""
+	loan_overview_view = "borrowed"
+	loan_overview_asset_type = "pokemon"
+	loan_counts.clear()
 	last_incoming_signature = ""
 	displayed_notification_ids.clear()
 	incoming_account_generation += 1
@@ -93,6 +100,10 @@ func open_for_trainer(username: String) -> void:
 func open_loans() -> void:
 	target_username = ""
 	_set_workspace_mode(false)
+	loan_overview_view = "borrowed"
+	if view_select != null:
+		view_select.select(0)
+	_refresh_loan_usage()
 	popup_centered(WINDOW_SIZE)
 	await refresh_all()
 
@@ -233,11 +244,14 @@ func _build_loans_panel() -> Control:
 	root.add_theme_constant_override("separation", 8)
 	margin.add_child(root)
 	var tools := HBoxContainer.new()
+	tools.add_theme_constant_override("separation", 8)
 	root.add_child(tools)
 	view_select = OptionButton.new()
-	for label in [_t("ui.lending.view.all"), _t("ui.lending.view.borrowed"), _t("ui.lending.view.lent"), _t("ui.lending.view.history")]:
-		view_select.add_item(label)
-	view_select.item_selected.connect(func(_index: int): await _refresh_loans())
+	for view: String in ["borrowed", "lent", "history"]:
+		view_select.add_item(_t("ui.lending.view.%s" % view))
+		view_select.set_item_metadata(view_select.item_count - 1, view)
+	view_select.select(0)
+	view_select.item_selected.connect(_on_loan_overview_view_selected)
 	view_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_apply_option_style(view_select)
 	tools.add_child(view_select)
@@ -246,6 +260,10 @@ func _build_loans_panel() -> Control:
 	refresh.pressed.connect(refresh_all)
 	_apply_button_style(refresh)
 	tools.add_child(refresh)
+	loan_type_tabs = HBoxContainer.new()
+	loan_type_tabs.add_theme_constant_override("separation", 6)
+	root.add_child(loan_type_tabs)
+	_render_loan_type_tabs()
 	usage_label = Label.new()
 	usage_label.add_theme_color_override("font_color", MUTED)
 	usage_label.add_theme_font_size_override("font_size", 10)
@@ -462,35 +480,35 @@ func _refresh_loans() -> void:
 	var service := get_node_or_null("/root/LendingService")
 	if service == null:
 		return
-	var views := ["all", "borrowed", "lent", "history"]
-	var result: Dictionary = await service.load_loans(views[clampi(view_select.selected, 0, 3)])
+	var result: Dictionary = await service.load_loans(loan_overview_view)
 	if not bool(result.get("success", false)):
 		_show_error(str(result.get("error", _t("ui.lending.error.load"))))
 		return
 	var body: Dictionary = result.get("body", {})
 	loans = []
-	var selected_view := clampi(view_select.selected, 0, 3)
 	for value: Variant in body.get("loans", []):
 		if not value is Dictionary:
 			continue
 		var loan: Dictionary = value
-		if selected_view < 3 and str(loan.get("status", "")) in ["returned", "declined", "cancelled", "expired"]:
+		if loan_overview_view != "history" and str(loan.get("status", "")) in ["returned", "declined", "cancelled", "expired"]:
 			continue
 		loans.append(loan.duplicate(true))
-	usage_label.text = _t("ui.lending.usage", {"bp": int(body.get("borrowedPokemon", 0)), "bi": int(body.get("borrowedItems", 0)), "lp": int(body.get("lentPokemon", 0)), "li": int(body.get("lentItems", 0))})
+	loan_counts = body.duplicate(true)
+	_refresh_loan_usage()
 	_render_loans()
 
 
 func _render_loans() -> void:
 	_clear(loans_list)
-	if loans.is_empty():
+	var visible_loans := _loans_for_asset_type(loan_overview_asset_type)
+	if visible_loans.is_empty():
 		var empty := Label.new()
-		empty.text = _t("ui.lending.empty")
+		empty.text = _t("ui.lending.empty.%s.%s" % [loan_overview_view, loan_overview_asset_type])
 		empty.add_theme_color_override("font_color", MUTED)
 		loans_list.add_child(empty)
 		return
 	var current_user_id := _current_user_id()
-	for value: Variant in loans:
+	for value: Variant in visible_loans:
 		if not value is Dictionary:
 			continue
 		var loan: Dictionary = value
@@ -538,9 +556,11 @@ func _render_loans() -> void:
 		stack.add_child(asset_stack)
 		if not assets.is_empty():
 			asset_stack.add_child(_section_label(_loan_contents_title(pokemon_count, item_count)))
+		var visible_asset_index := 0
 		for asset_value: Variant in assets:
 			if asset_value is Dictionary:
-				asset_stack.add_child(_loan_asset_row(asset_value, is_borrower, status, str(loan.get("loanId", ""))))
+				visible_asset_index += 1
+				asset_stack.add_child(_loan_asset_row(asset_value, is_borrower, status, str(loan.get("loanId", "")), visible_asset_index, assets.size()))
 		var actions := HBoxContainer.new()
 		actions.alignment = BoxContainer.ALIGNMENT_END
 		actions.add_theme_constant_override("separation", 6)
@@ -553,7 +573,68 @@ func _render_loans() -> void:
 		loans_list.add_child(card)
 
 
-func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, loan_id: String) -> Control:
+func _on_loan_overview_view_selected(index: int) -> void:
+	loan_overview_view = str(view_select.get_item_metadata(index))
+	await _refresh_loans()
+
+
+func _render_loan_type_tabs() -> void:
+	if loan_type_tabs == null:
+		return
+	_clear(loan_type_tabs)
+	for asset_type: String in ["pokemon", "items"]:
+		var button := Button.new()
+		button.text = _t("ui.lending.overview_tab.%s" % asset_type)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.custom_minimum_size.y = 38
+		button.pressed.connect(_set_loan_overview_asset_type.bind(asset_type))
+		_apply_button_style(button, "primary" if loan_overview_asset_type == asset_type else "secondary")
+		loan_type_tabs.add_child(button)
+
+
+func _set_loan_overview_asset_type(asset_type: String) -> void:
+	var normalized := "items" if asset_type == "items" else "pokemon"
+	if normalized == loan_overview_asset_type:
+		return
+	loan_overview_asset_type = normalized
+	_render_loan_type_tabs()
+	_refresh_loan_usage()
+	_render_loans()
+
+
+func _loans_for_asset_type(asset_type: String) -> Array[Dictionary]:
+	var expected_type := "item" if asset_type == "items" else "pokemon"
+	var result: Array[Dictionary] = []
+	for loan: Dictionary in loans:
+		var assets: Array = loan.get("assets", []) if loan.get("assets", []) is Array else []
+		if assets.any(func(asset: Variant): return asset is Dictionary and str(asset.get("assetType", "")) == expected_type):
+			result.append(loan)
+	return result
+
+
+func _refresh_loan_usage() -> void:
+	if usage_label == null:
+		return
+	var is_items := loan_overview_asset_type == "items"
+	var count_key := (
+		("borrowedItems" if is_items else "borrowedPokemon")
+		if loan_overview_view != "lent"
+		else ("lentItems" if is_items else "lentPokemon")
+	)
+	var count := int(loan_counts.get(count_key, 0))
+	if loan_overview_view == "history":
+		usage_label.text = _t("ui.lending.usage.history.%s" % loan_overview_asset_type)
+	elif loan_overview_view == "borrowed":
+		var limits: Dictionary = loan_counts.get("limits", {}) if loan_counts.get("limits", {}) is Dictionary else {}
+		usage_label.text = _t("ui.lending.usage.borrowed.%s" % loan_overview_asset_type, {
+			"count": count,
+			"limit": int(limits.get(count_key, 6)),
+		})
+	else:
+		usage_label.text = _t("ui.lending.usage.lent.%s" % loan_overview_asset_type, {"count": count})
+
+
+func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, loan_id: String, asset_index: int, asset_total: int) -> Control:
 	var snapshot: Dictionary = asset.get("snapshot", {}) if asset.get("snapshot", {}) is Dictionary else {}
 	var panel := PanelContainer.new()
 	panel.add_theme_stylebox_override("panel", _style(Color("#091725e8"), Color("#203b52"), 6))
@@ -596,9 +677,13 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, 
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		row.add_child(icon)
-		var item_meta_key := "ui.lending.card.item_equipped" if int(asset.get("heldPokemonId", 0)) > 0 else "ui.lending.card.item_in_bag"
+		var item_location := _t("ui.lending.card.item_equipped" if int(asset.get("heldPokemonId", 0)) > 0 else "ui.lending.card.item_in_bag", {"state": _asset_state_label(asset_status)})
 		var asset_name := _item_display_name(item_id, str(snapshot.get("name", item_id)))
-		var identity := _loan_asset_identity(asset_name, _t(item_meta_key, {"state": _asset_state_label(asset_status)}))
+		var identity := _loan_asset_identity(asset_name, _t("ui.lending.card.item_copy_meta", {
+			"index": asset_index,
+			"count": asset_total,
+			"location": item_location,
+		}))
 		row.add_child(identity)
 		var description := str(snapshot.get("short_desc", snapshot.get("description", ""))).strip_edges()
 		if description != "":
@@ -615,7 +700,47 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, 
 			_apply_button_style(action)
 			row.add_child(action)
 		_add_asset_return_controls(row, asset, asset_name, is_borrower, loan_status, return_requested, loan_id)
+		var view := Button.new()
+		view.text = _t("ui.lending.invitation.view")
+		view.pressed.connect(_open_item_details.bind(asset))
+		_apply_button_style(view)
+		row.add_child(view)
 	return panel
+
+
+func _open_item_details(asset: Dictionary) -> void:
+	var snapshot: Dictionary = asset.get("snapshot", {}) if asset.get("snapshot", {}) is Dictionary else {}
+	var item_id := str(asset.get("itemId", snapshot.get("id", "")))
+	var item_name := _item_display_name(item_id, str(snapshot.get("name", item_id)))
+	var description := str(snapshot.get("description", snapshot.get("short_desc", ""))).strip_edges()
+	if description == "":
+		description = _t("ui.lending.item_details.no_description")
+	var dialog := AetherConfirmationDialogScene.instantiate() as AetherConfirmationDialog
+	add_child(dialog)
+	dialog.configure(
+		item_name,
+		description,
+		_t("common.close"),
+		""
+	)
+	dialog.cancel_button.visible = false
+	var detail_row := HBoxContainer.new()
+	detail_row.add_theme_constant_override("separation", 12)
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(52, 52)
+	icon.texture = _load_item_icon(item_id)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	detail_row.add_child(icon)
+	var state := Label.new()
+	state.text = _asset_state_label(str(asset.get("status", "active")))
+	state.add_theme_color_override("font_color", ACCENT)
+	state.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	detail_row.add_child(state)
+	dialog.add_custom_control(detail_row)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(520, 300))
 
 
 func _loan_terms_text(pokemon_count: int, item_count: int, fee: int, duration_seconds: int) -> String:

@@ -44,19 +44,27 @@ func _init() -> void:
 	_check(workspace_source.contains("_apply_checkbox_style") and workspace_source.contains("_checkbox_icon"), "loan asset selection remains clearly visible")
 	_check(workspace_source.contains("_toggle_pokemon_selection") and workspace_source.contains("party_candidates.size() - 1") and workspace_source.contains("ui.lending.error.party_required"), "lender must retain one party Pokemon")
 	_check(workspace_source.contains("_set_workspace_mode(false)") and workspace_source.contains("loans_panel.visible = not is_composing"), "Socials Loans opens as a management-only overview")
+	_check(workspace_source.contains("loan_overview_view := \"borrowed\"") and workspace_source.contains("Currently borrowing") == false, "loan overview defaults to the borrowed API view without hardcoded display text")
+	_check(workspace_source.contains("_render_loan_type_tabs") and workspace_source.contains("_loans_for_asset_type"), "loan overview separates Pokemon and item tabs")
 	_check(workspace_source.contains("create_loan(target_username") and not workspace_source.contains("create_loan(target_input"), "nearby target is fixed by player interaction")
 	_check(workspace_source.contains("_loan_asset_row") and workspace_source.contains("_status_badge") and workspace_source.contains("_loan_timing_text"), "loan cards expose assets, status, and timing details")
-	_check(workspace_source.contains("selected_view < 3") and workspace_source.contains("[\"returned\", \"declined\", \"cancelled\", \"expired\"]"), "terminal loans stay in History")
+	_check(workspace_source.contains("loan_overview_view != \"history\"") and workspace_source.contains("[\"returned\", \"declined\", \"cancelled\", \"expired\"]"), "terminal loans stay in History")
 	_check(workspace_source.contains("_return_loan_asset") and workspace_source.contains("return_assets(loan_id, [asset_id])"), "borrowed assets return individually")
 	_check(workspace_source.contains("_request_loan_asset_return") and workspace_source.contains("request_return(loan_id, asset_id)") and not workspace_source.contains("_loan_action.bind(\"request-return\""), "lenders request individual assets without a contract-wide recall")
 	_check(workspace_source.contains("_poll_loan_notifications") and workspace_source.contains("acknowledge_notification"), "durable loan notifications become system messages and are acknowledged")
 	_check(workspace_source.contains("custody_changed") and workspace_source.contains("ui.lending.notification.accepted") and workspace_source.contains("await _refresh_after_asset_return()"), "loan custody notifications refresh Party, PC, and Bag state")
 	_check(not workspace_source.contains("service.return_assets(loan_id)"), "loan cards never return every asset implicitly")
 	var workspace := WorkspaceScript.new()
+	workspace.loans = [
+		{"loanId": "pokemon-loan", "assets": [{"assetType": "pokemon"}]},
+		{"loanId": "item-loan", "assets": [{"assetType": "item"}, {"assetType": "item"}]},
+	]
+	_check(workspace._loans_for_asset_type("pokemon").size() == 1 and workspace._loans_for_asset_type("items").size() == 1, "asset tabs keep each single-type loan in its matching overview")
 	_check(workspace._format_loan_time("2026-08-23T16:45:12+00:00") == "2026-08-23 16:45 UTC", "loan timestamps are player readable")
 	_check(workspace._status_color("pending") == Color("#d8b767") and workspace._status_color("expired").a == 1.0, "loan status colors remain distinct")
 	_check(workspace_source.contains("_loan_terms_text") and workspace_source.contains("ui.lending.card.item_terms"), "item loan terms omit the irrelevant Pokemon count")
 	_check(workspace_source.contains("_loan_contents_title") and workspace_source.contains("ui.lending.card.item_contents"), "item loan cards label their contents and count")
+	_check(workspace_source.contains("ui.lending.card.item_copy_meta") and workspace_source.contains("_open_item_details"), "each item copy has a clear identity and read-only detail action")
 	_check(workspace_source.contains("panel.tooltip_text = description") and workspace_source.contains("icon.tooltip_text = description"), "item loan rows expose item descriptions")
 	var party := workspace._party_candidates([{"id": 7, "pokemon": {"species": "Pikachu", "level": 22, "item": "light-ball"}}])
 	_check(party.size() == 1 and int(party[0].get("pokemonId", 0)) == 7, "party candidate normalization")
