@@ -176,6 +176,15 @@ func update_settings(
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
 
 
+func update_member_role(user_id: int, role: String) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_HOME_ENDPOINT + "/members/%d/role" % user_id,
+		HTTPClient.METHOD_PUT,
+		JSON.stringify({"role": role.strip_edges().to_lower()})
+	)
+	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
 func update_emblem(palette: Array[String], pixels: Array[int]) -> Dictionary:
 	var response := await _authenticated_request(
 		GUILD_HOME_ENDPOINT + "/emblem",
@@ -272,6 +281,7 @@ func _home_result(value: Variant) -> Dictionary:
 		"pendingInvitations": _array(body.get("pendingInvitations", [])),
 		"pendingApplications": _array(body.get("pendingApplications", [])),
 		"emblemTemplates": _array(body.get("emblemTemplates", [])),
+		"rankPermissions": _dictionary(body.get("rankPermissions", {})),
 	}
 
 
@@ -292,7 +302,8 @@ func _application_action(path: String) -> Dictionary:
 
 
 func can_invite_members() -> bool:
-	return str(current_membership.get("role", "")).to_lower() in ["leader", "officer"]
+	var permissions := _array(current_membership.get("permissions", []))
+	return permissions.has("manage_members") or str(current_membership.get("role", "")).to_lower() in ["leader", "captain"]
 
 
 func _set_current_membership(value: Variant) -> void:

@@ -194,11 +194,16 @@ func _run() -> void:
 	var pokemon_action := popup.find_child("GuildBankPokemonAction", true, false) as Button
 	var items_action := popup.find_child("GuildBankItemsAction", true, false) as Button
 	_check(
-		funds_action != null and funds_action.disabled
-		and pokemon_action != null and pokemon_action.disabled
-		and items_action != null and items_action.disabled,
-		"Guild Bank storage actions remain safely inactive during the preview"
+		funds_action != null and not funds_action.disabled
+		and pokemon_action != null and not pokemon_action.disabled
+		and items_action != null and not items_action.disabled,
+		"every Guild member can open each bank category"
 	)
+	var permission_summary := popup.find_child("GuildBankPermissionSummary", true, false) as Label
+	_check(permission_summary != null and permission_summary.text.contains("allowed"), "Guild Bank shows the leader's transaction rights")
+	if pokemon_action != null:
+		pokemon_action.pressed.emit()
+	_check(popup.member_status_label != null and not popup.member_status_label.text.is_empty(), "opening a bank category gives clear foundation feedback")
 	_check(popup.find_child("GuildTravelBar", true, false) != null, "guild travel remains available while viewing the bank")
 	overview_tab = popup.find_child("GuildOverviewTab", true, false) as Button
 	if overview_tab != null:
@@ -209,6 +214,8 @@ func _run() -> void:
 		members_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildMembersSection", true, false) != null, "members tab opens the roster")
+	_check(popup.find_child("GuildMemberRoleSelect_2", true, false) != null, "leader can assign the Captain's rank")
+	_check(popup.find_child("GuildMemberRoleSelect_3", true, false) != null, "leader can assign a Member's rank")
 	var management_tab := popup.find_child("GuildManagementTab", true, false) as Button
 	if management_tab != null:
 		management_tab.pressed.emit()
@@ -314,11 +321,16 @@ func _run() -> void:
 	_check(popup.find_child("GuildApplicationsEmptyState", true, false) != null, "empty Guild application inbox remains clearly visible")
 	application_count = popup.find_child("GuildApplicationsPendingCount", true, false) as Label
 	_check(application_count != null and application_count.text.contains("0"), "empty Guild application inbox shows zero waiting")
-	popup.guild_home["membership"] = {"guildId": 1, "role": "member"}
-	popup.membership = {"guildId": 1, "role": "member"}
+	popup.guild_home["membership"] = {
+		"guildId": 1,
+		"role": "member",
+		"permissions": ["bank_deposit", "bank_withdraw", "bank_borrow"],
+	}
+	popup.membership = popup.guild_home["membership"]
 	popup._render_guild_home()
 	await process_frame
 	_check(popup.find_child("GuildManagementTab", true, false) == null, "regular members do not see management")
+	_check(popup.find_child("GuildMemberRoleSelect_2", true, false) == null, "regular members cannot assign Guild ranks")
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "regular members cannot edit the Guild emblem")
 	_check(popup.find_child("EditGuildEmblemIconButton", true, false) == null, "regular members cannot edit the Guild emblem icon")
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "regular members return to the overview")
