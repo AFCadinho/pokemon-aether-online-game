@@ -194,10 +194,11 @@ func _run() -> void:
 	_check(popup.find_child("AcceptGuildApplicationButton_8", true, false) != null, "staff can accept a Guild application")
 	_check(popup.find_child("DeclineGuildApplicationButton_8", true, false) != null, "staff can decline a Guild application")
 	_check(popup.find_child("GuildEmblemPreview", true, false) == null, "management keeps emblem controls out of settings")
-	var edit_emblem_button := popup.find_child("EditGuildEmblemButton", true, false) as Button
-	_check(edit_emblem_button != null, "leader has an explicit Guild emblem edit action")
-	if edit_emblem_button != null:
-		edit_emblem_button.pressed.emit()
+	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "leader does not see a redundant Guild emblem edit button")
+	var edit_emblem_icon_button := popup.find_child("EditGuildEmblemIconButton", true, false) as Button
+	_check(edit_emblem_icon_button != null, "leader can edit the Guild emblem by clicking it")
+	if edit_emblem_icon_button != null:
+		edit_emblem_icon_button.pressed.emit()
 		await process_frame
 	var emblem_popup := popup.find_child("GuildEmblemEditorPopup", true, false) as PopupPanel
 	_check(emblem_popup != null and emblem_popup.visible, "emblem editor opens in a dedicated popup")
