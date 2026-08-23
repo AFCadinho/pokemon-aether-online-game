@@ -18584,23 +18584,43 @@ func _apply_market_context_copy() -> void:
 
 
 func _market_sell_items(catalog_items: Array[Dictionary], inventory_items: Array) -> Array[Dictionary]:
-	var inventory_by_id := {}
+	var catalog_by_id := {}
+	for catalog_item: Dictionary in catalog_items:
+		var catalog_item_id := str(catalog_item.get("id", "")).strip_edges()
+		if not catalog_item_id.is_empty():
+			catalog_by_id[catalog_item_id] = catalog_item
+
+	var sell_items: Array[Dictionary] = []
 	for inventory_value: Variant in inventory_items:
 		if typeof(inventory_value) != TYPE_DICTIONARY:
 			continue
 		var inventory_item: Dictionary = inventory_value
 		var item_id := str(inventory_item.get("itemId", inventory_item.get("id", ""))).strip_edges()
-		if item_id != "":
-			inventory_by_id[item_id] = max(int(inventory_item.get("quantity", 0)), 0)
-
-	var sell_items: Array[Dictionary] = []
-	for catalog_item: Dictionary in catalog_items:
-		var item_id := str(catalog_item.get("id", ""))
-		var owned_quantity: int = int(inventory_by_id.get(item_id, 0))
-		var sell_price: int = int(catalog_item.get("sellPrice", 0))
-		if owned_quantity <= 0 or sell_price <= 0:
+		var owned_quantity := max(int(inventory_item.get("quantity", 0)), 0)
+		var catalog_item: Dictionary = catalog_by_id.get(item_id, {})
+		var tradable := bool(inventory_item.get("tradable", not catalog_item.is_empty()))
+		var sell_price := max(int(inventory_item.get(
+			"sellPrice",
+			catalog_item.get("sellPrice", 0)
+		)), 0)
+		if item_id.is_empty() or not tradable or owned_quantity <= 0 or sell_price <= 0:
 			continue
-		var sell_item := catalog_item.duplicate(true)
+		var sell_item := ItemLocalization.localize_item({
+			"id": item_id,
+			"name": str(inventory_item.get(
+				"name",
+				catalog_item.get("name", _format_item_name_from_id(item_id))
+			)),
+			"category": str(inventory_item.get(
+				"category",
+				catalog_item.get("category", "")
+			)),
+			"shortDesc": str(inventory_item.get(
+				"shortDesc",
+				catalog_item.get("shortDesc", "")
+			)),
+			"sellPrice": sell_price,
+		})
 		sell_item["price"] = sell_price
 		sell_item["basePrice"] = sell_price
 		sell_item["currency"] = "money"
