@@ -59,6 +59,7 @@ var target_town_previous_button: Button
 var target_town_tabs: HBoxContainer
 var target_town_next_button: Button
 var rock_area_selector: OptionButton
+var rock_area_spacing: Control
 var targets_scroll: ScrollContainer
 var targets_container: GridContainer
 var fishing_catalog_section: VBoxContainer
@@ -441,6 +442,12 @@ func _build_interface() -> void:
 	rock_area_selector.item_selected.connect(_select_rock_area)
 	_style_rock_area_selector(rock_area_selector)
 	targets_section.add_child(rock_area_selector)
+
+	rock_area_spacing = Control.new()
+	rock_area_spacing.name = "RockAreaSpacing"
+	rock_area_spacing.custom_minimum_size.y = 6.0
+	rock_area_spacing.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	targets_section.add_child(rock_area_spacing)
 
 	targets_scroll = ScrollContainer.new()
 	targets_scroll.name = "TargetsScroll"
@@ -878,6 +885,7 @@ func _render_unlocks(unlocks: Array) -> void:
 func _render_targets(targets: Array) -> void:
 	target_town_navigation.visible = true
 	rock_area_selector.visible = false
+	rock_area_spacing.visible = false
 	var available_count := 0
 	var completed_count := 0
 	target_town_order.clear()
@@ -911,6 +919,7 @@ func _render_targets(targets: Array) -> void:
 func _render_rocks(rocks: Array) -> void:
 	target_town_navigation.visible = false
 	rock_area_selector.visible = true
+	rock_area_spacing.visible = true
 	var available_count := 0
 	var completed_count := 0
 	target_town_order.clear()

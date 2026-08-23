@@ -274,6 +274,10 @@ func _run() -> void:
 	var rock_area_popup := rock_area_selector.get_popup()
 	_check(rock_area_popup.min_size.x == roundi(rock_area_selector.size.x), "the open area menu uses the full selector width")
 	_check(rock_area_popup.get_theme_font_size("font_size") == 13 and rock_area_popup.get_theme_constant("v_separation") == 12, "area menu options use larger text and roomier rows")
+	var rock_area_spacing := panel.get("rock_area_spacing") as Control
+	var selector_bottom := rock_area_selector.position.y + rock_area_selector.size.y
+	var gap_below_selector := (panel.get("targets_scroll") as ScrollContainer).position.y - selector_bottom
+	_check(rock_area_spacing.visible and gap_below_selector >= 14.0, "Rock Smash leaves clear space between the area selector and rock cards")
 	_check((panel.get("targets_container") as GridContainer).get_child_count() == 4, "the Pewter rock list contains all four fixed rocks")
 	await process_frame
 	var pewter_rock_height := ((panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer).size.y
