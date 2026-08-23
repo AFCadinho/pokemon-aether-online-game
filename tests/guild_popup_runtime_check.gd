@@ -41,6 +41,29 @@ func _run() -> void:
 	_check(availability != null and availability.text.contains("38/50") and availability.text.contains("Applications"), "guild card shows capacity and recruitment")
 	_check(popup.find_child("GuildDetailPanel", true, false) != null, "guild information panel is present")
 	_check(popup.find_child("GuildForumButton", true, false) == null, "unavailable forum action stays out of the Guild profile")
+	var apply_button := popup.find_child("GuildApplyButton", true, false) as Button
+	_check(apply_button != null and apply_button.text == "Apply to Guild", "reviewed Guild exposes its application action")
+	popup.pending_applications = [{"id": 42, "guildId": 1, "status": "pending"}]
+	popup._render_guild_list()
+	await process_frame
+	apply_button = popup.find_child("GuildApplyButton", true, false) as Button
+	_check(apply_button != null and apply_button.text == "Cancel Application", "pending application can be cancelled")
+	_check(popup.find_child("GuildApplyButton", true, false) != null, "pending application remains actionable")
+	popup.pending_applications.clear()
+	popup._select_guild(2)
+	await process_frame
+	var join_button := popup.find_child("GuildApplyButton", true, false) as Button
+	_check(join_button != null and join_button.text == "Join Guild", "open Guild exposes direct joining")
+	if join_button != null:
+		join_button.pressed.emit()
+		await process_frame
+	var join_confirmation := popup.find_child("GuildJoinConfirmationDialog", true, false) as ConfirmationDialog
+	_check(join_confirmation != null and join_confirmation.visible, "direct Guild joining asks for confirmation")
+	if join_confirmation != null:
+		join_confirmation.canceled.emit()
+		await process_frame
+	popup._select_guild(1)
+	await process_frame
 	var pvp_filter := popup.find_child("GuildFilterPvp", true, false) as Button
 	if pvp_filter != null:
 		pvp_filter.pressed.emit()
@@ -112,6 +135,9 @@ func _run() -> void:
 		await process_frame
 	_check(popup.find_child("GuildManagementSection", true, false) != null, "management tab opens guild controls")
 	_check(popup.find_child("GuildSettingsDescription", true, false) != null, "leader settings render")
+	_check(popup.find_child("GuildApplicationRow_8", true, false) != null, "pending Guild application renders for staff")
+	_check(popup.find_child("AcceptGuildApplicationButton_8", true, false) != null, "staff can accept a Guild application")
+	_check(popup.find_child("DeclineGuildApplicationButton_8", true, false) != null, "staff can decline a Guild application")
 	_check(popup.find_child("GuildEmblemPreview", true, false) == null, "management keeps emblem controls out of settings")
 	var edit_emblem_button := popup.find_child("EditGuildEmblemButton", true, false) as Button
 	_check(edit_emblem_button != null, "leader has an explicit Guild emblem edit action")

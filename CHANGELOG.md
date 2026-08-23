@@ -116,6 +116,7 @@
 - The Skills window now shows Rock Smash levels, fossil odds, unlocks, and which fixed rocks are still available today.
 - Launcher and login news now follow official forum announcements automatically.
 - Players now visibly rise or descend while crossing marked horizontal stairways, without leaving the normal movement grid.
+- Players can now join open Guilds directly or apply to Guilds that review new members. Guild leaders and officers can accept or decline applications from Guild Management.
 
 **Changed**
 

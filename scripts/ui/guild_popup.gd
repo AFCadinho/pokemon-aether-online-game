@@ -92,12 +92,14 @@ var guilds: Array[Dictionary] = []
 var membership: Dictionary = {}
 var guild_home: Dictionary = {}
 var incoming_invitations: Array = []
+var pending_applications: Array = []
 var selected_guild_id := 0
 var active_page := "browse"
 var is_dragging_popup := false
 var is_debug_preview := false
 var is_loading_guilds := false
 var is_creating_guild := false
+var is_application_action_in_flight := false
 var directory_request_generation := 0
 var has_explicit_page_selection := false
 var active_guild_section := "overview"
@@ -200,6 +202,7 @@ func set_guilds(entries: Array) -> void:
 func show_debug_preview() -> void:
 	is_debug_preview = true
 	membership = {}
+	pending_applications = []
 	set_guilds(DEBUG_GUILDS)
 	if browse_status_label != null:
 		browse_status_label.text = _t("ui.guild.status.preview")
@@ -237,6 +240,15 @@ func show_debug_member_preview() -> void:
 		],
 		"pendingInvitations": [
 			{"id": 1, "invitedUsername": "leaf", "invitedDisplayName": "Leaf"},
+		],
+		"pendingApplications": [
+			{
+				"id": 8,
+				"guildId": int(guild.get("id", 1)),
+				"applicantUsername": "red",
+				"applicantDisplayName": "Red",
+				"status": "pending",
+			},
 		],
 		"emblemTemplates": [
 			{
@@ -910,6 +922,7 @@ func _build_member_management(guild: Dictionary, is_leader: bool, can_invite: bo
 		content.add_child(save_settings)
 
 	if can_invite:
+		_render_pending_applications(content)
 		content.add_child(_localized_label("ui.guild.invite.title", 10, UI_ACCENT))
 		var invite_row := HBoxContainer.new()
 		content.add_child(invite_row)
@@ -1139,6 +1152,45 @@ func _cancel_emblem_edit() -> void:
 		emblem_editor_popup.hide()
 
 
+func _render_pending_applications(content: VBoxContainer) -> void:
+	var applications := _array_from_value(guild_home.get("pendingApplications", []))
+	content.add_child(_localized_label("ui.guild.application.pending_title", 10, UI_GOLD))
+	if applications.is_empty():
+		content.add_child(_localized_label("ui.guild.application.pending_empty", 10, UI_MUTED))
+		return
+	for application_value: Variant in applications:
+		if not application_value is Dictionary:
+			continue
+		var application := application_value as Dictionary
+		var application_id := int(application.get("id", 0))
+		var row := HBoxContainer.new()
+		row.name = "GuildApplicationRow_%d" % application_id
+		row.add_theme_constant_override("separation", 7)
+		content.add_child(row)
+		var applicant := _label(
+			str(application.get(
+				"applicantDisplayName",
+				application.get("applicantUsername", _t("common.unknown"))
+			)),
+			11,
+			UI_TEXT
+		)
+		applicant.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(applicant)
+		var accept := Button.new()
+		accept.name = "AcceptGuildApplicationButton_%d" % application_id
+		_set_localized_property(accept, "text", "common.accept")
+		accept.pressed.connect(_on_accept_application.bind(application_id))
+		_apply_button_style(accept, "primary")
+		row.add_child(accept)
+		var decline := Button.new()
+		decline.name = "DeclineGuildApplicationButton_%d" % application_id
+		_set_localized_property(decline, "text", "common.decline")
+		decline.pressed.connect(_on_decline_application.bind(application_id))
+		_apply_button_style(decline)
+		row.add_child(decline)
+
+
 func _render_pending_invitations(content: VBoxContainer) -> void:
 	var invitations := _array_from_value(guild_home.get("pendingInvitations", []))
 	if invitations.is_empty():
@@ -1308,11 +1360,29 @@ func _render_selected_guild() -> void:
 	apply_button.name = "GuildApplyButton"
 	var recruitment := str(guild.get("recruitment", "Closed"))
 	var is_own_guild := int(membership.get("guildId", 0)) == int(guild.get("id", 0))
-	apply_button.text = _t("ui.guild.yours") if is_own_guild else _application_button_text(recruitment)
-	apply_button.disabled = is_own_guild or recruitment.to_lower() in ["closed", "invite only"]
+	var pending_application := _pending_application_for_guild(int(guild.get("id", 0)))
+	if not pending_application.is_empty():
+		var pending_label := _localized_label("ui.guild.application.pending", 11, UI_GOLD)
+		pending_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		pending_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		actions.add_child(pending_label)
+	if is_own_guild:
+		apply_button.text = _t("ui.guild.yours")
+	elif not membership.is_empty():
+		apply_button.text = _t("ui.guild.application.already_member")
+	elif not pending_application.is_empty():
+		apply_button.text = _t("ui.guild.application.cancel")
+	else:
+		apply_button.text = _application_button_text(recruitment)
+	apply_button.disabled = (
+		is_application_action_in_flight
+		or is_own_guild
+		or not membership.is_empty()
+		or (pending_application.is_empty() and recruitment.to_lower() in ["closed", "invite only"])
+	)
 	apply_button.custom_minimum_size = Vector2(150, 40)
 	apply_button.pressed.connect(_on_application_pressed.bind(guild))
-	_apply_button_style(apply_button, "primary")
+	_apply_button_style(apply_button, "" if not pending_application.is_empty() else "primary")
 	actions.add_child(apply_button)
 
 
@@ -1535,10 +1605,109 @@ func _on_directory_filter_pressed(filter_id: String) -> void:
 
 
 func _on_application_pressed(guild: Dictionary) -> void:
-	browse_status_label.text = _t("ui.guild.application.unavailable", {
+	if is_application_action_in_flight or not membership.is_empty():
+		return
+	var guild_id := int(guild.get("id", 0))
+	if guild_id <= 0:
+		return
+	var pending_application := _pending_application_for_guild(guild_id)
+	if not pending_application.is_empty():
+		_cancel_application(int(pending_application.get("id", 0)), guild)
+		return
+	match str(guild.get("recruitment", "Closed")).to_lower():
+		"open":
+			_confirm_open_guild_join(guild)
+		"applications open":
+			_apply_to_selected_guild(guild)
+
+
+func _confirm_open_guild_join(guild: Dictionary) -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "GuildJoinConfirmationDialog"
+	dialog.title = _t("ui.guild.application.join_confirm_title")
+	dialog.dialog_text = _t("ui.guild.application.join_confirm", {
 		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
 	})
-	browse_status_label.visible = true
+	dialog.ok_button_text = _t("ui.guild.application.join")
+	dialog.cancel_button_text = _t("common.cancel")
+	dialog.confirmed.connect(_join_selected_guild.bind(guild), CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(430, 170))
+
+
+func _join_selected_guild(guild: Dictionary) -> void:
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_browse_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	is_application_action_in_flight = true
+	_render_guild_list()
+	_set_browse_status(_t("ui.guild.status.joining", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
+	var response: Variant = await guild_service.call("join_guild", int(guild.get("id", 0)))
+	var result := _dictionary(response)
+	is_application_action_in_flight = false
+	if not bool(result.get("success", false)):
+		_render_guild_list()
+		_set_browse_status(str(result.get("error", _t("ui.guild.error.join"))), true)
+		return
+	pending_applications.clear()
+	incoming_invitations.clear()
+	_apply_home_result(result)
+	_show_page("member")
+	_set_member_status(_t("ui.guild.status.joined", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
+
+
+func _apply_to_selected_guild(guild: Dictionary) -> void:
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_browse_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	is_application_action_in_flight = true
+	_render_guild_list()
+	_set_browse_status(_t("ui.guild.status.applying", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
+	var response: Variant = await guild_service.call("apply_to_guild", int(guild.get("id", 0)))
+	var result := _dictionary(response)
+	is_application_action_in_flight = false
+	if not bool(result.get("success", false)):
+		_render_guild_list()
+		_set_browse_status(str(result.get("error", _t("ui.guild.error.apply"))), true)
+		return
+	_upsert_pending_application(_dictionary(result.get("application", {})))
+	_render_guild_list()
+	_set_browse_status(_t("ui.guild.status.application_sent", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
+
+
+func _cancel_application(application_id: int, guild: Dictionary) -> void:
+	if application_id <= 0:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_browse_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	is_application_action_in_flight = true
+	_render_guild_list()
+	var response: Variant = await guild_service.call("cancel_application", application_id)
+	var result := _dictionary(response)
+	is_application_action_in_flight = false
+	if not bool(result.get("success", false)):
+		_render_guild_list()
+		_set_browse_status(str(result.get("error", _t("ui.guild.error.cancel_application"))), true)
+		return
+	_remove_pending_application(application_id)
+	_render_guild_list()
+	_set_browse_status(_t("ui.guild.status.application_cancelled", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
 
 
 func _on_create_form_changed(_unused: Variant = null) -> void:
@@ -1634,6 +1803,7 @@ func _refresh_from_server() -> void:
 		return
 	membership = _dictionary(result.get("membership", {})).duplicate(true)
 	incoming_invitations = _array_from_value(result.get("incomingInvitations", [])).duplicate(true)
+	pending_applications = _array_from_value(result.get("pendingApplications", [])).duplicate(true)
 	set_guilds(_array_from_value(result.get("guilds", [])))
 	browse_status_label.visible = false
 	if not membership.is_empty():
@@ -1666,6 +1836,8 @@ func _refresh_home_from_server() -> void:
 func _apply_home_result(result: Dictionary) -> void:
 	guild_home = result.duplicate(true)
 	membership = _dictionary(result.get("membership", {})).duplicate(true)
+	if not membership.is_empty():
+		pending_applications.clear()
 	var home_guild := _dictionary(result.get("guild", {})).duplicate(true)
 	if not home_guild.is_empty():
 		_upsert_guild(home_guild)
@@ -1809,6 +1981,42 @@ func _on_cancel_invitation(invitation_id: int) -> void:
 		return
 	await _refresh_home_from_server()
 	_set_member_status(_t("ui.guild.status.invitation_cancelled"), false)
+
+
+func _on_accept_application(application_id: int) -> void:
+	if application_id <= 0:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	var response: Variant = await guild_service.call("accept_application", application_id)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", _t("ui.guild.error.accept_application"))), true)
+		return
+	_apply_home_result(result)
+	active_guild_section = "management"
+	_render_guild_home()
+	_set_member_status(_t("ui.guild.status.application_accepted"), false)
+
+
+func _on_decline_application(application_id: int) -> void:
+	if application_id <= 0:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	var response: Variant = await guild_service.call("decline_application", application_id)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", _t("ui.guild.error.decline_application"))), true)
+		return
+	await _refresh_home_from_server()
+	active_guild_section = "management"
+	_render_guild_home()
+	_set_member_status(_t("ui.guild.status.application_declined"), false)
 
 
 func _load_emblem_editor(emblem: Dictionary) -> void:
@@ -2000,6 +2208,17 @@ func _set_member_status(message: String, is_error: bool) -> void:
 	member_status_label.add_theme_color_override("font_color", UI_WARNING if is_error else UI_SUCCESS)
 
 
+func _set_browse_status(message: String, is_error: bool) -> void:
+	if browse_status_label == null:
+		return
+	browse_status_label.text = message
+	browse_status_label.visible = not message.is_empty()
+	browse_status_label.add_theme_color_override(
+		"font_color",
+		UI_WARNING if is_error else UI_SUCCESS
+	)
+
+
 func _refresh_creation_requirements() -> void:
 	if money_requirement_label == null:
 		return
@@ -2072,6 +2291,42 @@ func _guild_by_id(guild_id: int) -> Dictionary:
 		if int(guild.get("id", 0)) == guild_id:
 			return guild
 	return {}
+
+
+func _pending_application_for_guild(guild_id: int) -> Dictionary:
+	for application_value: Variant in pending_applications:
+		if not application_value is Dictionary:
+			continue
+		var application := application_value as Dictionary
+		if (
+			int(application.get("guildId", 0)) == guild_id
+			and str(application.get("status", "pending")) == "pending"
+		):
+			return application
+	return {}
+
+
+func _upsert_pending_application(application: Dictionary) -> void:
+	var application_id := int(application.get("id", 0))
+	if application_id <= 0:
+		return
+	for index: int in range(pending_applications.size()):
+		var existing := _dictionary(pending_applications[index])
+		if int(existing.get("id", 0)) == application_id:
+			pending_applications[index] = application.duplicate(true)
+			return
+	pending_applications.append(application.duplicate(true))
+
+
+func _remove_pending_application(application_id: int) -> void:
+	var remaining: Array = []
+	for application_value: Variant in pending_applications:
+		if (
+			not application_value is Dictionary
+			or int((application_value as Dictionary).get("id", 0)) != application_id
+		):
+			remaining.append(application_value)
+	pending_applications = remaining
 
 
 func _application_button_text(recruitment: String) -> String:
