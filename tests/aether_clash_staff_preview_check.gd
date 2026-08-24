@@ -133,19 +133,29 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 			jail_bars.to_global(jail_bars.map_to_local(Vector2i(69, 72))).y
 			if jail_bars != null else INF
 		)
+		var bars_depth_boundary_y := (
+			bars_bottom_y
+			+ AetherClashJailDepthScript.get_depth_boundary_offset("JailBarsTop")
+		)
+		var one_step_north_y := jail_position.y - 32.0
 		_check(
 			has_complete_jail_bars and jail_bars_last_row == 73,
 			"%s isolates the complete jail bars from the side wall below" % scene_path.get_file()
 		)
 		_check(
-			behind_bars_y < bars_bottom_y and bars_bottom_y < jail_position.y,
-			"%s depth-sorts the jail bars behind players in front and ahead of players behind"
+			behind_bars_y < one_step_north_y
+			and one_step_north_y < bars_depth_boundary_y
+			and bars_depth_boundary_y < jail_position.y,
+			"%s puts the jail bars behind players at the spawn and ahead one step north"
 				% scene_path.get_file()
 		)
 		var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 		_check(
 			world_source.contains(
 				"AetherClashJailDepthScript.split_jail_bars_for_depth_sorting(map)"
+			)
+			and world_source.contains(
+				"AetherClashJailDepthScript.get_depth_boundary_offset(tiled_name)"
 			),
 			"%s registers its isolated jail bars for world depth sorting" % scene_path.get_file()
 		)

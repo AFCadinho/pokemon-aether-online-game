@@ -1519,6 +1519,9 @@ func _collect_structure_top_visual_layers_recursive(node: Node, structure_layers
 
 func _get_structure_top_group_z_offset(layer: TileMapLayer) -> int:
 	var tiled_name := str(layer.get_meta("tiled_name", layer.name))
+	var jail_depth_offset := AetherClashJailDepthScript.get_depth_boundary_offset(tiled_name)
+	if jail_depth_offset != 0:
+		return jail_depth_offset
 	# Viridian Forest's TreeTop and StructureTop layers sit above its grass layer
 	# in Tiled. Preserve that priority when their depth boundary is shared.
 	return FOREST_TOP_LAYER_Z_OFFSET if tiled_name in ["StructureTop", "TreeTop"] else 0
