@@ -5,13 +5,15 @@ const AetherClashJailDepthScript := preload("res://scripts/world/aether_clash_ja
 const PREVIEWS := {
 	"res://scenes/overworld/aether_clash/aether_clash_battle_royale_preview.tscn": {
 		"map_id": "aether_clash_battle_royale_preview",
-		"source_suffix": "/Clan Wars Map.tmx",
-	},
-	"res://scenes/overworld/aether_clash/aether_clash_duel_preview.tscn": {
-		"map_id": "aether_clash_duel_preview",
 		"source_suffix": "/Clan Wars Map x1 Jail.tmx",
 		"requires_collision": true,
 		"has_jail_spawn": true,
+		"runtime_visual_layers": ["JailTop"],
+	},
+	"res://scenes/overworld/aether_clash/aether_clash_duel_preview.tscn": {
+		"map_id": "aether_clash_duel_preview",
+		"source_suffix": "/Clan Wars Map.tmx",
+		"requires_collision": true,
 		"runtime_visual_layers": ["JailTop"],
 	},
 	"res://scenes/overworld/aether_clash/waiting_area_preview.tscn": {
