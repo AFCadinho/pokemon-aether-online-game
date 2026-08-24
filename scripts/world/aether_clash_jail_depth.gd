@@ -4,6 +4,13 @@ const VISUAL_NAME := "ClanWarsMapX1Jail"
 const OBJECTS_TOP_NAME := "ObjectsTop"
 const JAIL_BARS_LAYER_NAME := "JailBarsTop"
 const JAIL_BARS_RECT := Rect2i(66, 71, 9, 3)
+# The jail spawn sits one tile south of the bars. Put the draw boundary
+# halfway between that spawn tile and the tile immediately north of it.
+const JAIL_BARS_DEPTH_OFFSET := 32
+
+
+static func get_depth_boundary_offset(tiled_name: String) -> int:
+	return JAIL_BARS_DEPTH_OFFSET if tiled_name == JAIL_BARS_LAYER_NAME else 0
 
 
 static func split_jail_bars_for_depth_sorting(map: Node) -> void:
