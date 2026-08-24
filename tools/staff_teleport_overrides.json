@@ -4,6 +4,12 @@
       "label": "Aether Clash Battle Royale (Staff Preview)",
       "regionName": "Aether Clash",
       "points": {
+        "jail_spawn": {
+          "facingDirection": "down",
+          "id": "jail",
+          "label": "Jail",
+          "safe": false
+        },
         "preview_spawn": {
           "facingDirection": "down",
           "id": "preview",
@@ -16,12 +22,6 @@
       "label": "Aether Clash Duel (Staff Preview)",
       "regionName": "Aether Clash",
       "points": {
-        "jail_spawn": {
-          "facingDirection": "down",
-          "id": "jail",
-          "label": "Jail",
-          "safe": false
-        },
         "preview_spawn": {
           "facingDirection": "down",
           "id": "preview",

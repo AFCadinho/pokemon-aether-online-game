@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/overworld/aether_clash/aether_clash_duel.tscn" id="1_map"]
-[ext_resource type="Script" path="res://scripts/world/aether_clash_duel_preview.gd" id="2_metadata"]
+[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 
 [node name="AetherClashDuelPreview" type="Node2D"]
 script = ExtResource("2_metadata")
@@ -23,6 +23,3 @@ music_track_id = "login.lugia_theme_lofi"
 
 [node name="PreviewSpawn" type="Marker2D" parent="Spawns"]
 position = Vector2(336, 496)
-
-[node name="JailSpawn" type="Marker2D" parent="Spawns"]
-position = Vector2(2224, 2416)

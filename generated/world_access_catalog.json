@@ -10,6 +10,16 @@
 			"sceneAliases": [],
 			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_battle_royale_preview.tscn",
 			"spawnPoints": {
+				"jail": {
+					"facingDirection": "down",
+					"label": "Jail",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "JailSpawn",
+					"tile": {
+						"x": 69,
+						"y": 75
+					}
+				},
 				"preview": {
 					"facingDirection": "down",
 					"label": "Preview Spawn",
@@ -32,16 +42,6 @@
 			"sceneAliases": [],
 			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_duel_preview.tscn",
 			"spawnPoints": {
-				"jail": {
-					"facingDirection": "down",
-					"label": "Jail",
-					"safeForStaffTeleport": false,
-					"spawnMarker": "JailSpawn",
-					"tile": {
-						"x": 69,
-						"y": 75
-					}
-				},
 				"preview": {
 					"facingDirection": "down",
 					"label": "Preview Spawn",

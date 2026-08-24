@@ -2,15 +2,17 @@
 
 ## Unreleased
 
-- The Aether Clash duel jail now displays its arena objects correctly in front of the jail bars.
+- Aether Clash Duel now uses the regular Clan Wars arena, while Battle Royale uses the jail arena.
 
-- Players now appear in front of the Aether Clash duel jail bars at the jail spawn and behind them after stepping north.
+- The Aether Clash Battle Royale jail now displays its arena objects correctly in front of the jail bars.
 
-- The staff jail teleport now follows the jail spawn position in the Aether Clash duel map.
+- Players now appear in front of the Aether Clash Battle Royale jail bars at the jail spawn and behind them after stepping north.
 
-- Staff can teleport directly into the jail in the Aether Clash duel preview, and the duel map now exposes the same jail spawn for minigame sessions.
+- The staff jail teleport now follows the jail spawn position in the Aether Clash Battle Royale map.
 
-- Updated the Aether Clash duel arena so its jail bars use the correct foreground depth layer.
+- Staff can teleport directly into the jail in the Aether Clash Battle Royale preview, and the Battle Royale map now exposes the same jail spawn for minigame sessions.
+
+- Updated the Aether Clash Battle Royale arena so its jail bars use the correct foreground depth layer.
 
 - Staff can now freely explore isolated previews of the Aether Clash duel, battle royale, and waiting-area maps without entering a live match. Their updated visual layers are included.
 
