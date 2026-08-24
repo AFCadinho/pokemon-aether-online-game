@@ -382,7 +382,6 @@ animation = &"idle_down"
 
 [node name="FutureSelf" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush" unique_id=1245447231]
 position = Vector2(16, -32)
-animation = &"idle_down"
 
 [node name="BottomSprite" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush/FutureSelf"]
 z_index = 1
