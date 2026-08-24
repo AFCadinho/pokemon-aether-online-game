@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The staff jail teleport now follows the jail spawn position in the Aether Clash duel map.
+
 - Staff can teleport directly into the jail in the Aether Clash duel preview, and the duel map now exposes the same jail spawn for minigame sessions.
 
 - Updated the Aether Clash duel arena so its jail bars use the correct foreground depth layer.
