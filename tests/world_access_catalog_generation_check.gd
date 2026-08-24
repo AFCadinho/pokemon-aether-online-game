@@ -113,6 +113,8 @@ func _init() -> void:
 		unsafe_staff_points == [
 			"aether_clash_battle_royale_preview:jail",
 			"aether_clash_battle_royale_preview:preview",
+			"aether_clash_duel_preview:guild_1_jail",
+			"aether_clash_duel_preview:guild_2_jail",
 			"aether_clash_duel_preview:preview",
 			"aether_clash_waiting_area_preview:preview",
 		],

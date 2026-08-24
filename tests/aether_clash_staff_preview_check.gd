@@ -14,6 +14,7 @@ const PREVIEWS := {
 		"map_id": "aether_clash_duel_preview",
 		"source_suffix": "/Clan Wars Map.tmx",
 		"requires_collision": true,
+		"match_spawn_names": ["Guild1JailSpawn", "Guild2JailSpawn"],
 		"runtime_visual_layers": ["JailTop"],
 	},
 	"res://scenes/overworld/aether_clash/waiting_area_preview.tscn": {
@@ -90,6 +91,40 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 		),
 		"%s has a walkable staff preview spawn" % scene_path.get_file()
 	)
+	var match_spawn_names: Array = expected.get("match_spawn_names", [])
+	var match_spawn_positions := {}
+	for match_spawn_name: String in match_spawn_names:
+		var preview_match_spawn := preview.get_node_or_null(
+			"Spawns/%s" % match_spawn_name
+		) as Marker2D
+		var match_spawn := preview.get_node_or_null(
+			"PreviewMap/Spawns/%s" % match_spawn_name
+		) as Marker2D
+		var match_spawn_position := (
+			match_spawn.position if match_spawn != null else Vector2.ZERO
+		)
+		var match_spawn_tile := Vector2i(
+			floori(match_spawn_position.x / 32.0),
+			floori(match_spawn_position.y / 32.0)
+		)
+		_check(
+			preview_match_spawn != null
+			and match_spawn != null
+			and preview_match_spawn.position == match_spawn_position,
+			"%s exposes %s to matches and staff previews"
+			% [scene_path.get_file(), match_spawn_name]
+		)
+		_check(
+			collision != null and collision.get_cell_source_id(match_spawn_tile) == -1,
+			"%s places %s on a walkable tile"
+			% [scene_path.get_file(), match_spawn_name]
+		)
+		match_spawn_positions[match_spawn_position] = true
+	if not match_spawn_names.is_empty():
+		_check(
+			match_spawn_positions.size() == match_spawn_names.size(),
+			"%s keeps its match spawn positions distinct" % scene_path.get_file()
+		)
 	if bool(expected.get("has_jail_spawn", false)):
 		var preview_jail_spawn := preview.get_node_or_null("Spawns/JailSpawn") as Marker2D
 		var match_jail_spawn := preview.get_node_or_null("PreviewMap/Spawns/JailSpawn") as Marker2D
