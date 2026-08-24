@@ -38,8 +38,8 @@
 					"safeForStaffTeleport": false,
 					"spawnMarker": "JailSpawn",
 					"tile": {
-						"x": 68,
-						"y": 72
+						"x": 69,
+						"y": 75
 					}
 				},
 				"preview": {

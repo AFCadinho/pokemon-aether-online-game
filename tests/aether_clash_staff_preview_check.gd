@@ -9,7 +9,7 @@ const PREVIEWS := {
 		"map_id": "aether_clash_duel_preview",
 		"source_suffix": "/Clan Wars Map x1 Jail.tmx",
 		"requires_collision": true,
-		"jail_spawn": Vector2(2192, 2320),
+		"has_jail_spawn": true,
 	},
 	"res://scenes/overworld/aether_clash/waiting_area_preview.tscn": {
 		"map_id": "aether_clash_waiting_area_preview",
@@ -81,10 +81,12 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 		),
 		"%s has a walkable staff preview spawn" % scene_path.get_file()
 	)
-	if expected.has("jail_spawn"):
-		var jail_position := expected.get("jail_spawn", Vector2.ZERO) as Vector2
+	if bool(expected.get("has_jail_spawn", false)):
 		var preview_jail_spawn := preview.get_node_or_null("Spawns/JailSpawn") as Marker2D
 		var match_jail_spawn := preview.get_node_or_null("PreviewMap/Spawns/JailSpawn") as Marker2D
+		var jail_position := (
+			match_jail_spawn.position if match_jail_spawn != null else Vector2.ZERO
+		)
 		var jail_tile := Vector2i(
 			floori(jail_position.x / 32.0),
 			floori(jail_position.y / 32.0)
@@ -93,7 +95,7 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 			preview_jail_spawn != null
 			and preview_jail_spawn.position == jail_position
 			and match_jail_spawn != null
-			and match_jail_spawn.position == jail_position,
+			and preview_jail_spawn.position == match_jail_spawn.position,
 			"%s exposes the jail spawn to matches and staff previews" % scene_path.get_file()
 		)
 		_check(
