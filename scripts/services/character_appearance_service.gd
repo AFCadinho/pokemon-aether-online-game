@@ -216,6 +216,31 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 
 	var layers: Array[Dictionary] = []
 	match normalized_item_id:
+		"mysterious-outfit":
+			layers = [
+				{"kind": "body"},
+				{"category": BOTTOM_CATEGORY, "id": "Mysterious_Trousers"},
+				{"category": SHOES_CATEGORY, "id": "Mysterious_Shoes"},
+				{"category": TOP_CATEGORY, "id": "Mysterious_Shirt"},
+				{"category": EYES_CATEGORY, "id": get_default_part_id(EYES_CATEGORY, normalized_gender), "tint": Color(get_default_eye_color(normalized_gender))},
+				{"category": FACEGEAR_CATEGORY, "id": "Mysterious_Mask"},
+			]
+		"mysterious-mask":
+			layers = [
+				{"category": FACEGEAR_CATEGORY, "id": "Mysterious_Mask"},
+			]
+		"mysterious-shirt":
+			layers = [
+				{"category": TOP_CATEGORY, "id": "Mysterious_Shirt"},
+			]
+		"mysterious-trousers":
+			layers = [
+				{"category": BOTTOM_CATEGORY, "id": "Mysterious_Trousers"},
+			]
+		"mysterious-shoes":
+			layers = [
+				{"category": SHOES_CATEGORY, "id": "Mysterious_Shoes"},
+			]
 		"aether-blossom-outfit":
 			layers = [
 				{"kind": "body"},

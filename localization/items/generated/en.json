@@ -2491,6 +2491,26 @@
     "name": "Muscle Feather",
     "shortDesc": "Increases Attack effort by 1."
   },
+  "mysterious-mask": {
+    "name": "Mysterious Mask",
+    "shortDesc": "Move the Mysterious Mask into Character Customization."
+  },
+  "mysterious-outfit": {
+    "name": "Mysterious Outfit Box",
+    "shortDesc": "Open this outfit box to receive four separate Mysterious Outfit cosmetic items."
+  },
+  "mysterious-shirt": {
+    "name": "Mysterious Shirt",
+    "shortDesc": "Move the Mysterious Shirt and gloves into Character Customization."
+  },
+  "mysterious-shoes": {
+    "name": "Mysterious Shoes",
+    "shortDesc": "Move the Mysterious Shoes into Character Customization."
+  },
+  "mysterious-trousers": {
+    "name": "Mysterious Trousers",
+    "shortDesc": "Move the Mysterious Trousers into Character Customization."
+  },
   "mystery-egg": {
     "name": "Mystery Egg",
     "shortDesc": "Deliver to Professor Elm."

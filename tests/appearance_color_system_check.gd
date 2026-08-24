@@ -34,6 +34,21 @@ func _run() -> void:
 			APPEARANCE.is_tintable_part("hair", hairstyle_id),
 			"%s supports Chroma colours" % hairstyle_id
 		)
+	for gender: String in ["male", "female"]:
+		for mysterious_part: Dictionary in [
+			{"category": "facegear", "id": "Mysterious_Mask"},
+			{"category": "top", "id": "Mysterious_Shirt"},
+			{"category": "bottom", "id": "Mysterious_Trousers"},
+			{"category": "shoes", "id": "Mysterious_Shoes"},
+		]:
+			var category := str(mysterious_part.get("category", ""))
+			var part_id := str(mysterious_part.get("id", ""))
+			_check(
+				APPEARANCE.get_available_part_ids(category, gender).has(part_id),
+				"%s is available for %s models" % [part_id, gender]
+			)
+			var part_frames := APPEARANCE.get_part_frames(category, part_id, gender)
+			_check(part_frames != null, "%s renders for %s models" % [part_id, gender])
 	_check(APPEARANCE.SKIN_TONE_SWATCHES.size() >= 13, "skin palette includes Default plus twelve curated tones")
 	_check(
 		str(APPEARANCE.SKIN_TONE_SWATCHES[0].get("label", "")) == "Default"
@@ -199,6 +214,11 @@ func _run() -> void:
 		"Character Customization no longer edits Chroma colours for free"
 	)
 	for cosmetic_item_id: String in [
+		"mysterious-outfit",
+		"mysterious-mask",
+		"mysterious-shirt",
+		"mysterious-trousers",
+		"mysterious-shoes",
 		"aether-blossom-outfit",
 		"aether-blossom-hair",
 		"aether-blossom-earrings",
