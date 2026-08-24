@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Staff can teleport directly into the jail in the Aether Clash duel preview, and the duel map now exposes the same jail spawn for minigame sessions.
+
 - Updated the Aether Clash duel arena so its jail bars use the correct foreground depth layer.
 
 - Staff can now freely explore isolated previews of the Aether Clash duel, battle royale, and waiting-area maps without entering a live match. Their updated visual layers are included.
