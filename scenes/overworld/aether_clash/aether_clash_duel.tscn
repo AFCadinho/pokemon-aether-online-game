@@ -233,3 +233,11 @@ tile_set = SubResource("TileSet_sg8c7")
 z_index = 100
 tile_map_data = PackedByteArray("AABDAFkAAAAHAAAAAABEAFkAAAAHAAAAAABFAFkAAAAHAAAAAABGAFkAAAAHAAAAAABHAFkAAAAHAAAAAABIAFkAAAAHAAAAAABCAEkAAAAHAAAAAABDAEkAAAAHAAAAAABEAEkAAAAHAAAAAABHAEkAAAAHAAAAAABIAEkAAAAHAAAAAAA=")
 tile_set = SubResource("TileSet_sg8c7")
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="Guild1JailSpawn" type="Marker2D" parent="Spawns"]
+position = Vector2(2224, 2416)
+
+[node name="Guild2JailSpawn" type="Marker2D" parent="Spawns"]
+position = Vector2(2224, 2672)

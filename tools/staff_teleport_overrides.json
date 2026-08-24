@@ -22,6 +22,18 @@
       "label": "Aether Clash Duel (Staff Preview)",
       "regionName": "Aether Clash",
       "points": {
+        "guild_1_jail_spawn": {
+          "facingDirection": "down",
+          "id": "guild_1_jail",
+          "label": "Guild 1 Jail",
+          "safe": false
+        },
+        "guild_2_jail_spawn": {
+          "facingDirection": "down",
+          "id": "guild_2_jail",
+          "label": "Guild 2 Jail",
+          "safe": false
+        },
         "preview_spawn": {
           "facingDirection": "down",
           "id": "preview",
