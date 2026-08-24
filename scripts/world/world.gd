@@ -29,6 +29,7 @@ const STRUCTURE_TOP_VISUAL_LAYER_NAMES: Array[String] = [
 	"ObjectTop",
 	"ObjectsTop",
 	"Objects Top",
+	"JailTop",
 	"JailBarsTop",
 ]
 const TALL_GRASS_DEPTH_ROW_META := "pao_tall_grass_depth_row"
