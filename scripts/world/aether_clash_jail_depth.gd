@@ -1,24 +1,17 @@
-extends Node2D
+extends RefCounted
 
-const VISUAL_PATH := ^"ClanWarsMapX1Jail"
-const OBJECTS_TOP_PATH := ^"ClanWarsMapX1Jail/ObjectsTop"
+const VISUAL_NAME := "ClanWarsMapX1Jail"
+const OBJECTS_TOP_NAME := "ObjectsTop"
 const JAIL_BARS_LAYER_NAME := "JailBarsTop"
 const JAIL_BARS_RECT := Rect2i(66, 71, 9, 3)
 
 
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_SCENE_INSTANTIATED:
-		_split_jail_bars_for_depth_sorting()
-
-
-func _ready() -> void:
-	_split_jail_bars_for_depth_sorting()
-
-
-func _split_jail_bars_for_depth_sorting() -> void:
-	var visual := get_node_or_null(VISUAL_PATH)
-	var objects_top := get_node_or_null(OBJECTS_TOP_PATH) as TileMapLayer
-	if visual == null or objects_top == null or visual.get_node_or_null(JAIL_BARS_LAYER_NAME) != null:
+static func split_jail_bars_for_depth_sorting(map: Node) -> void:
+	var visual := map.find_child(VISUAL_NAME, true, false)
+	if visual == null:
+		return
+	var objects_top := visual.get_node_or_null(OBJECTS_TOP_NAME) as TileMapLayer
+	if objects_top == null or visual.get_node_or_null(JAIL_BARS_LAYER_NAME) != null:
 		return
 
 	var jail_bars := TileMapLayer.new()

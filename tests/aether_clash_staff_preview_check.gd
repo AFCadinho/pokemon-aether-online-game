@@ -1,5 +1,7 @@
 extends SceneTree
 
+const AetherClashJailDepthScript := preload("res://scripts/world/aether_clash_jail_depth.gd")
+
 const PREVIEWS := {
 	"res://scenes/overworld/aether_clash/aether_clash_battle_royale_preview.tscn": {
 		"map_id": "aether_clash_battle_royale_preview",
@@ -43,6 +45,8 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 	)
 	var preview_map := preview.get_node_or_null("PreviewMap")
 	var visual := preview_map.get_child(0) if preview_map != null and preview_map.get_child_count() > 0 else null
+	if bool(expected.get("has_jail_spawn", false)):
+		AetherClashJailDepthScript.split_jail_bars_for_depth_sorting(preview)
 	_check(
 		visual != null
 		and str(visual.get_meta("tiled_source_path", "")).ends_with(
@@ -134,7 +138,9 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 		)
 		var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 		_check(
-			world_source.contains('"JailBarsTop"'),
+			world_source.contains(
+				"AetherClashJailDepthScript.split_jail_bars_for_depth_sorting(map)"
+			),
 			"%s registers its isolated jail bars for world depth sorting" % scene_path.get_file()
 		)
 	preview.queue_free()

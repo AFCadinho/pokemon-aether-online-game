@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/aether_clash_duel/aether_clash_duel.visual.tscn" id="1_43ewj"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="2_qwbn3"]
-[ext_resource type="Script" path="res://scripts/world/aether_clash_duel_map.gd" id="3_depth"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_43ewj"]
 texture = ExtResource("2_qwbn3")
@@ -200,7 +199,6 @@ tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_chlkg")
 
 [node name="AetherClashDuel" type="Node2D" unique_id=580975362]
-script = ExtResource("3_depth")
 
 [node name="ClanWarsMapX1Jail" parent="." unique_id=811969563 instance=ExtResource("1_43ewj")]
 
