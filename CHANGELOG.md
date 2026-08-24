@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Guild Bank now shows available and borrowed assets separately, lets members borrow and return individual Pokémon or items, and gives Leaders and Captains a force-return action.
+
 - Loan History now defaults to the last 30 days and can be filtered by the last 24 hours, 7, 14, or 30 days, or by a custom date range.
 
 - Local development servers now offer a five-minute lending duration at the bottom of the duration list for faster loan-return testing.

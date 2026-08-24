@@ -162,6 +162,7 @@ var settings_description_input: TextEdit
 var settings_language_select: OptionButton
 var settings_focus_select: OptionButton
 var settings_recruitment_select: OptionButton
+var settings_loan_duration_select: OptionButton
 var invite_username_input: LineEdit
 var emblem_editor_popup: PopupPanel
 var emblem_grid: GridContainer
@@ -263,7 +264,7 @@ func show_debug_member_preview() -> void:
 		"guildId": int(guild.get("id", 1)),
 		"role": "leader",
 		"permissions": [
-			"bank_deposit", "bank_withdraw",
+			"bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return",
 			"manage_members", "manage_guild", "manage_permissions",
 		],
 	}
@@ -307,16 +308,17 @@ func show_debug_member_preview() -> void:
 		],
 		"rankPermissions": {
 			"leader": membership["permissions"],
-			"captain": ["bank_deposit", "bank_withdraw", "manage_members"],
-			"member": ["bank_deposit"],
+			"captain": ["bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return", "manage_members"],
+			"member": ["bank_deposit", "bank_borrow"],
 			"recruit": [],
 		},
 	}
 	guild_bank_state = {
-		"access": {"canDeposit": true, "canWithdraw": true, "canDepositFunds": true, "canWithdrawFunds": true},
+		"access": {"canDeposit": true, "canWithdraw": true, "canDepositFunds": true, "canWithdrawFunds": true, "canBorrow": true, "canForceReturn": true},
 		"funds": {"balance": 250000, "playerBalance": 87500},
 		"items": [
-			{"itemId": "potion", "name": "Potion", "category": "Medicine", "quantity": 18},
+			{"itemId": "potion", "name": "Potion", "category": "Medicine", "quantity": 18, "availableQuantity": 18, "borrowedQuantity": 0, "lendable": false},
+			{"itemId": "leftovers", "name": "Leftovers", "category": "Held Items", "quantity": 18, "availableQuantity": 17, "borrowedQuantity": 1, "lendable": true},
 		],
 		"inventory": [
 			{"itemId": "poke-ball", "name": "Poke Ball", "category": "Poke Balls", "quantity": 12},
@@ -328,6 +330,7 @@ func show_debug_member_preview() -> void:
 				"depositedBy": "Maple",
 				"isBorrowed": false,
 				"canReturn": false,
+				"canBorrow": true,
 			},
 		],
 		"depositablePokemon": [
@@ -1323,6 +1326,7 @@ func _guild_bank_access_summary() -> String:
 	var access_by_permission := {
 		"bank_deposit": bool(access.get("canDeposit", permissions.has("bank_deposit"))),
 		"bank_withdraw": bool(access.get("canWithdraw", permissions.has("bank_withdraw"))),
+		"bank_borrow": bool(access.get("canBorrow", permissions.has("bank_borrow"))),
 	}
 	for permission: String in access_by_permission:
 		states.append(_t(
@@ -1460,6 +1464,8 @@ func _build_guild_funds_workspace() -> Control:
 
 
 func _build_guild_items_workspace() -> Control:
+	var workspace := VBoxContainer.new()
+	workspace.add_theme_constant_override("separation", 10)
 	var columns := GridContainer.new()
 	columns.name = "GuildBankItemsWorkspace"
 	columns.columns = 2
@@ -1474,7 +1480,40 @@ func _build_guild_items_workspace() -> Control:
 		_array_from_value(guild_bank_state.get("inventory", [])),
 		"deposit"
 	))
-	return columns
+	workspace.add_child(columns)
+	var borrowed_items := _array_from_value(guild_bank_state.get("borrowedItems", []))
+	if not borrowed_items.is_empty():
+		workspace.add_child(_build_guild_borrowed_item_list(borrowed_items))
+	return workspace
+
+
+func _build_guild_borrowed_item_list(items: Array) -> Control:
+	var panel := PanelContainer.new()
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1))
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 6)
+	panel.add_child(content)
+	content.add_child(_localized_label("ui.guild.bank.items.borrowed", 10, UI_ACCENT))
+	for value: Variant in items:
+		if not value is Dictionary:
+			continue
+		var entry := value as Dictionary
+		var row := HBoxContainer.new()
+		var item_id := str(entry.get("itemId", ""))
+		var snapshot := _dictionary(entry.get("snapshot", {}))
+		var label := _label("%s · %s" % [
+			_guild_bank_item_name(item_id, str(snapshot.get("name", item_id))),
+			str(entry.get("borrowedBy", _t("common.unknown"))),
+		], 11, UI_TEXT)
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(label)
+		var asset_id := str(entry.get("loanAssetId", ""))
+		if bool(entry.get("canReturn", false)):
+			row.add_child(_guild_bank_action_button("GuildItemLoanReturn_%s" % asset_id, "ui.guild.bank.return", true, _on_guild_bank_loan_action.bind("return", asset_id)))
+		elif bool(entry.get("canForceReturn", false)):
+			row.add_child(_guild_bank_action_button("GuildItemLoanForceReturn_%s" % asset_id, "ui.guild.bank.force_return", true, _on_guild_bank_loan_action.bind("force", asset_id)))
+		content.add_child(row)
+	return panel
 
 
 func _build_guild_item_list(title_key: String, items: Array, action: String) -> Control:
@@ -1513,8 +1552,9 @@ func _build_guild_item_row(item: Dictionary, action: String) -> Control:
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(icon)
+	var available := int(item.get("availableQuantity", item.get("quantity", 0)))
 	var name := _label(
-		"%s  ×%d" % [item_name, int(item.get("quantity", 0))],
+		"%s  ×%d (%d available)" % [item_name, int(item.get("quantity", 0)), available],
 		11,
 		UI_TEXT
 	)
@@ -1523,7 +1563,7 @@ func _build_guild_item_row(item: Dictionary, action: String) -> Control:
 	row.add_child(name)
 	var quantity := SpinBox.new()
 	quantity.min_value = 1
-	quantity.max_value = maxi(int(item.get("quantity", 1)), 1)
+	quantity.max_value = maxi(available if action != "deposit" else int(item.get("quantity", 1)), 1)
 	quantity.value = 1
 	quantity.custom_minimum_size = Vector2(78, 32)
 	_apply_spin_box_style(quantity)
@@ -1536,6 +1576,13 @@ func _build_guild_item_row(item: Dictionary, action: String) -> Control:
 		allowed,
 		_on_guild_bank_item_action.bind(action, str(item.get("itemId", "")), quantity)
 	))
+	if action == "withdraw":
+		row.add_child(_guild_bank_action_button(
+			"GuildBankItemBorrowButton_%s" % str(item.get("itemId", "item")),
+			"ui.guild.bank.borrow",
+			bool(access.get("canBorrow", false)) and available > 0 and bool(item.get("lendable", false)),
+			_on_guild_bank_item_action.bind("borrow", str(item.get("itemId", "")), quantity)
+		))
 	return row
 
 
@@ -1621,12 +1668,27 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool) -> Control:
 			9,
 			UI_WARNING
 		))
-		if bool(entry.get("canReturn", false)):
+		var loan_asset_id := str(entry.get("loanAssetId", ""))
+		if bool(entry.get("canReturn", false)) and loan_asset_id != "":
 			row.add_child(_guild_bank_action_button(
 				"GuildBankPokemonReturnButton_%d" % pokemon_id,
 				"ui.guild.bank.return",
 				true,
+				_on_guild_bank_loan_action.bind("return", loan_asset_id)
+			))
+		elif bool(entry.get("canReturn", false)):
+			row.add_child(_guild_bank_action_button(
+				"GuildBankPokemonLegacyReturnButton_%d" % pokemon_id,
+				"ui.guild.bank.return",
+				true,
 				_on_guild_bank_pokemon_action.bind("return", pokemon_id, pokemon)
+			))
+		elif bool(entry.get("canForceReturn", false)) and loan_asset_id != "":
+			row.add_child(_guild_bank_action_button(
+				"GuildBankPokemonForceReturnButton_%d" % pokemon_id,
+				"ui.guild.bank.force_return",
+				true,
+				_on_guild_bank_loan_action.bind("force", loan_asset_id)
 			))
 		return row
 	identity.add_child(_label(
@@ -1641,6 +1703,12 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool) -> Control:
 		"ui.guild.bank.withdraw",
 		allowed,
 		_on_guild_bank_pokemon_action.bind("withdraw", pokemon_id, pokemon)
+	))
+	row.add_child(_guild_bank_action_button(
+		"GuildBankPokemonBorrowButton_%d" % pokemon_id,
+		"ui.guild.bank.borrow",
+		bool(entry.get("canBorrow", false)),
+		_on_guild_bank_pokemon_action.bind("borrow", pokemon_id, pokemon)
 	))
 	return row
 
@@ -1899,8 +1967,15 @@ func _on_guild_bank_pokemon_action(action: String, pokemon_id: int, pokemon: Dic
 			_run_guild_bank_action.bind("deposit_bank_pokemon", [pokemon_id], "pokemon")
 		)
 		return
-	var service_method := "deposit_bank_pokemon" if action in ["deposit", "return"] else "withdraw_bank_pokemon"
+	var service_method := "deposit_bank_pokemon" if action == "return" else "%s_bank_pokemon" % action
 	await _run_guild_bank_action(service_method, [pokemon_id], "pokemon")
+
+
+func _on_guild_bank_loan_action(action: String, asset_id: String) -> void:
+	if asset_id.strip_edges() == "":
+		return
+	var method := "force_return_bank_loan_asset" if action == "force" else "return_bank_loan_asset"
+	await _run_guild_bank_action(method, [asset_id], "loan")
 
 
 func _confirm_guild_bank_donation(asset_name: String, confirmed_action: Callable) -> void:
@@ -2204,6 +2279,25 @@ func _guild_member_role_select(user_id: int, current_role: String) -> OptionButt
 	return select
 
 
+func _guild_loan_duration_label(seconds: int) -> String:
+	return _t("ui.guild.bank.loan_duration.hours", {"hours": seconds / 3600})
+
+
+func _select_guild_loan_duration(seconds: int) -> void:
+	if settings_loan_duration_select == null:
+		return
+	for index: int in range(settings_loan_duration_select.item_count):
+		if int(settings_loan_duration_select.get_item_metadata(index)) == seconds:
+			settings_loan_duration_select.select(index)
+			return
+
+
+func _selected_guild_loan_duration() -> int:
+	if settings_loan_duration_select == null or settings_loan_duration_select.selected < 0:
+		return 86400
+	return int(settings_loan_duration_select.get_item_metadata(settings_loan_duration_select.selected))
+
+
 func _on_guild_member_role_selected(index: int, user_id: int, select: OptionButton) -> void:
 	if select == null or index < 0 or index >= select.item_count:
 		return
@@ -2252,12 +2346,19 @@ func _build_member_management(guild: Dictionary, is_leader: bool, can_invite: bo
 		settings_language_select = _option_button(GUILD_LANGUAGE_OPTIONS)
 		settings_focus_select = _option_button(["Social", "PvE", "PvP", "PvP & Social", "PvE & Social", "Mixed"])
 		settings_recruitment_select = _option_button(["Applications open", "Open", "Invite only", "Closed"])
+		settings_loan_duration_select = OptionButton.new()
+		for duration: int in [3600, 10800, 21600, 43200, 86400, 172800, 259200]:
+			settings_loan_duration_select.add_item(_guild_loan_duration_label(duration))
+			settings_loan_duration_select.set_item_metadata(settings_loan_duration_select.item_count - 1, duration)
+		_apply_option_button_style(settings_loan_duration_select)
 		_select_option_text(settings_language_select, str(guild.get("language", "English")))
 		_select_option_text(settings_focus_select, str(guild.get("focus", "Social")))
 		_select_option_text(settings_recruitment_select, str(guild.get("recruitment", "Applications open")))
+		_select_guild_loan_duration(int(guild.get("loanDurationSeconds", 86400)))
 		choices.add_child(settings_language_select)
 		choices.add_child(settings_focus_select)
 		choices.add_child(settings_recruitment_select)
+		choices.add_child(settings_loan_duration_select)
 		var save_settings := Button.new()
 		_set_localized_property(save_settings, "text", "ui.guild.settings.save")
 		save_settings.pressed.connect(_on_save_settings)
@@ -3326,7 +3427,8 @@ func _on_save_settings() -> void:
 		description,
 		_selected_option_value(settings_language_select),
 		_selected_option_value(settings_focus_select),
-		_selected_option_value(settings_recruitment_select)
+		_selected_option_value(settings_recruitment_select),
+		_selected_guild_loan_duration()
 	)
 	var result := _dictionary(response)
 	if not bool(result.get("success", false)):

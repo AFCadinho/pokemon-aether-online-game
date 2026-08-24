@@ -159,12 +159,41 @@ func withdraw_bank_item(item_id: String, quantity: int) -> Dictionary:
 	return await _bank_action("/items/withdraw", {"itemId": item_id, "quantity": quantity})
 
 
+func borrow_bank_item(item_id: String, quantity: int) -> Dictionary:
+	return await _bank_action("/items/borrow", {
+		"itemId": item_id,
+		"quantity": quantity,
+		"requestId": _new_request_id(),
+	})
+
+
 func deposit_bank_pokemon(pokemon_id: int) -> Dictionary:
 	return await _bank_action("/pokemon/deposit", {"pokemonId": pokemon_id})
 
 
 func withdraw_bank_pokemon(pokemon_id: int) -> Dictionary:
 	return await _bank_action("/pokemon/withdraw", {"pokemonId": pokemon_id})
+
+
+func borrow_bank_pokemon(pokemon_id: int) -> Dictionary:
+	return await _bank_action("/pokemon/borrow", {
+		"pokemonId": pokemon_id,
+		"requestId": _new_request_id(),
+	})
+
+
+func return_bank_loan_asset(asset_id: String) -> Dictionary:
+	return await _bank_action("/loans/return", {
+		"assetId": asset_id,
+		"requestId": _new_request_id(),
+	})
+
+
+func force_return_bank_loan_asset(asset_id: String) -> Dictionary:
+	return await _bank_action("/loans/force-return", {
+		"assetId": asset_id,
+		"requestId": _new_request_id(),
+	})
 
 
 func teleport_to_lobby() -> Dictionary:
@@ -229,7 +258,8 @@ func update_settings(
 	description: String,
 	language: String,
 	focus: String,
-	recruitment: String
+	recruitment: String,
+	loan_duration_seconds: int = 86400
 ) -> Dictionary:
 	var response := await _authenticated_request(
 		GUILD_HOME_ENDPOINT + "/settings",
@@ -239,6 +269,7 @@ func update_settings(
 			"language": language,
 			"focus": focus,
 			"recruitment": recruitment,
+			"loanDurationSeconds": loan_duration_seconds,
 		})
 	)
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
@@ -374,6 +405,8 @@ func _bank_result(value: Variant) -> Dictionary:
 		"pokemon": _array(body.get("pokemon", [])).duplicate(true),
 		"depositablePokemon": _array(body.get("depositablePokemon", [])).duplicate(true),
 		"party": _array(_dictionary(body.get("party", {})).get("party", [])).duplicate(true),
+		"loanDurationSeconds": int(body.get("loanDurationSeconds", 86400)),
+		"borrowedItems": _array(body.get("borrowedItems", [])).duplicate(true),
 	}
 
 

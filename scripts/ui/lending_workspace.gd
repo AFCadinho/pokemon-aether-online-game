@@ -619,7 +619,9 @@ func _render_loans() -> void:
 		var stack := VBoxContainer.new()
 		stack.add_theme_constant_override("separation", 7)
 		margin.add_child(stack)
-		var lender := str(loan.get("lenderUsername", "Guild"))
+		var lender := str(loan.get("lenderUsername", "")).strip_edges()
+		if lender == "":
+			lender = str(loan.get("lenderGuildName", "Guild"))
 		var borrower := str(loan.get("borrowerUsername", "Trainer"))
 		var header := HBoxContainer.new()
 		header.add_theme_constant_override("separation", 8)
