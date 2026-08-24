@@ -88,7 +88,7 @@ func _check_catalogs() -> void:
 		_check(parsed is Dictionary, "generated %s item catalog is valid JSON" % locale)
 		var catalog: Dictionary = parsed as Dictionary if parsed is Dictionary else {}
 		generated_catalogs[locale] = catalog
-		_check(catalog.size() == 1397, "generated %s item catalog covers the complete source index" % locale)
+		_check(catalog.size() == 1447, "generated %s item catalog covers the complete source index" % locale)
 		for item_id_value: Variant in catalog.keys():
 			var item_id := str(item_id_value)
 			var entry: Dictionary = catalog.get(item_id, {})
@@ -112,7 +112,7 @@ func _check_catalogs() -> void:
 		localized_ids.sort()
 		_check(localized_ids == expected_generated_ids, "generated %s item IDs match English" % locale)
 		_check(
-			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1398,
+			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1448,
 			"%s complete item catalog plus virtual Escape Rope action loads into the runtime resolver" % locale
 		)
 
@@ -142,11 +142,29 @@ func _check_resolver_fallback_and_mechanics() -> void:
 	_check(generated_dutch.get("name") == "Armorieterts", "Dutch generated catalog covers an item outside the reviewed pilot")
 	_check(generated_dutch.get("quantity") == 7, "generated item localization preserves quantity")
 	_check(generated_dutch.get("sellPrice") == 5, "generated item localization preserves price mechanics")
+	var mega_stone_dutch: Dictionary = item_localization.call("localize_item", {
+		"itemId": "raichunite-x",
+		"name": "Raichunite X",
+		"shortDesc": "Server-provided English description.",
+		"isHoldable": true,
+	})
+	_check(mega_stone_dutch.get("name") == "Raichuniet X", "Dutch resolves a Mega Champions stone name")
+	_check(
+		str(mega_stone_dutch.get("shortDesc", "")).contains("mega-evolueren"),
+		"Dutch resolves a Mega Champions stone description"
+	)
+	_check(mega_stone_dutch.get("isHoldable") == true, "Mega Stone localization preserves held-item mechanics")
 
 	localization_manager.call("set_locale", "pt_BR")
 	var portuguese: Dictionary = item_localization.call("localize_item", dutch)
 	_check(portuguese.get("name") == "Poção", "Portuguese resolves the Potion name")
 	_check(portuguese.get("shortDesc") == "Restaura 20 PS.", "Portuguese resolves the Potion description")
+	var mega_stone_portuguese: Dictionary = item_localization.call("localize_item", mega_stone_dutch)
+	_check(mega_stone_portuguese.get("name") == "Raichunita X", "Portuguese resolves a Mega Champions stone name")
+	_check(
+		str(mega_stone_portuguese.get("shortDesc", "")).contains("megaevoluir"),
+		"Portuguese resolves a Mega Champions stone description"
+	)
 
 	localization_manager.call("set_locale", "en")
 	var english: Dictionary = item_localization.call("localize_item", portuguese)

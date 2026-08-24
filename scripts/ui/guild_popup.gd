@@ -4,6 +4,9 @@ class_name GuildPopup
 
 signal closed
 signal lobby_teleport_requested
+signal guild_chat_requested
+signal private_message_requested(user: Dictionary)
+signal trainer_card_requested(player: Dictionary)
 
 const POPUP_SIZE := Vector2(1040, 700)
 const GUILD_ICON: Texture2D = preload("res://assets/ui/guild.svg")
@@ -14,6 +17,20 @@ const GUILD_EMBLEM_PIXEL_COUNT := GUILD_EMBLEM_SIZE * GUILD_EMBLEM_SIZE
 const LEGACY_GUILD_EMBLEM_SIZE := 8
 const EMBLEM_EDITOR_PIXEL_SIZE := 11
 const EMBLEM_EDITOR_POPUP_SIZE := Vector2i(630, 500)
+const DIRECTORY_FILTER_POPUP_SIZE := Vector2i(420, 390)
+const GUILD_LANGUAGE_OPTIONS: Array[String] = [
+	"English",
+	"Spanish",
+	"Portuguese",
+	"Italian",
+	"Chinese",
+	"German",
+	"French",
+	"Dutch",
+	"Dutch / English",
+	"Other",
+]
+const GUILD_ASSIGNABLE_ROLES: Array[String] = ["recruit", "member", "captain"]
 
 const UI_BG := Color("#050b14f5")
 const UI_SURFACE := Color("#081522f2")
@@ -91,16 +108,26 @@ var guilds: Array[Dictionary] = []
 var membership: Dictionary = {}
 var guild_home: Dictionary = {}
 var incoming_invitations: Array = []
+var pending_applications: Array = []
 var selected_guild_id := 0
 var active_page := "browse"
 var is_dragging_popup := false
 var is_debug_preview := false
 var is_loading_guilds := false
 var is_creating_guild := false
+var is_application_action_in_flight := false
+var is_leaving_guild := false
 var directory_request_generation := 0
 var has_explicit_page_selection := false
 var active_guild_section := "overview"
+var active_guild_bank_category := ""
+var guild_bank_state: Dictionary = {}
+var is_loading_guild_bank := false
+var is_guild_bank_action_in_flight := false
 var guild_section_buttons: Dictionary = {}
+var directory_recruitment_filter := "all"
+var directory_focus_filter := "all"
+var directory_language_filter := "all"
 
 var browse_tab_button: Button
 var my_guild_tab_button: Button
@@ -113,6 +140,11 @@ var guild_list: VBoxContainer
 var guild_count_label: Label
 var detail_content: VBoxContainer
 var browse_status_label: Label
+var directory_filter_button: Button
+var directory_filter_popup: PopupPanel
+var directory_recruitment_select: OptionButton
+var directory_focus_select: OptionButton
+var directory_language_select: OptionButton
 var create_status_label: Label
 var guild_name_input: LineEdit
 var guild_description_input: TextEdit
@@ -130,6 +162,7 @@ var settings_description_input: TextEdit
 var settings_language_select: OptionButton
 var settings_focus_select: OptionButton
 var settings_recruitment_select: OptionButton
+var settings_loan_duration_select: OptionButton
 var invite_username_input: LineEdit
 var emblem_editor_popup: PopupPanel
 var emblem_grid: GridContainer
@@ -176,6 +209,8 @@ func close() -> void:
 	is_dragging_popup = false
 	if emblem_editor_popup != null:
 		emblem_editor_popup.hide()
+	if directory_filter_popup != null:
+		directory_filter_popup.hide()
 	visible = false
 	closed.emit()
 
@@ -197,6 +232,7 @@ func set_guilds(entries: Array) -> void:
 func show_debug_preview() -> void:
 	is_debug_preview = true
 	membership = {}
+	pending_applications = []
 	set_guilds(DEBUG_GUILDS)
 	if browse_status_label != null:
 		browse_status_label.text = _t("ui.guild.status.preview")
@@ -223,17 +259,45 @@ func show_debug_member_preview() -> void:
 			-1, -1, -1, 0, 0, -1, -1, -1,
 		]),
 	}
-	membership = {"guildId": int(guild.get("id", 1)), "role": "leader"}
+	membership = {
+		"userId": 1,
+		"guildId": int(guild.get("id", 1)),
+		"role": "leader",
+		"permissions": [
+			"bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return",
+			"manage_members", "manage_guild", "manage_permissions",
+		],
+	}
 	guild_home = {
 		"guild": guild,
 		"membership": membership.duplicate(),
 		"members": [
-			{"userId": 1, "username": "nova", "displayName": "Nova", "role": "leader"},
-			{"userId": 2, "username": "maple", "displayName": "Maple", "role": "officer"},
-			{"userId": 3, "username": "pecha", "displayName": "Pecha", "role": "member"},
+			{
+				"userId": 1, "username": "nova", "displayName": "Nova",
+				"role": "leader", "online": true,
+			},
+			{
+				"userId": 2, "username": "maple", "displayName": "Maple",
+				"role": "captain", "online": true,
+			},
+			{
+				"userId": 3, "username": "pecha", "displayName": "Pecha",
+				"role": "member", "online": false,
+				"lastSeenAt": "2026-08-22T16:30:00Z",
+			},
 		],
 		"pendingInvitations": [
 			{"id": 1, "invitedUsername": "leaf", "invitedDisplayName": "Leaf"},
+		],
+		"pendingApplications": [
+			{
+				"id": 8,
+				"guildId": int(guild.get("id", 1)),
+				"applicantUserId": 4,
+				"applicantUsername": "red",
+				"applicantDisplayName": "Red",
+				"status": "pending",
+			},
 		],
 		"emblemTemplates": [
 			{
@@ -242,6 +306,37 @@ func show_debug_member_preview() -> void:
 				"emblem": guild["emblem"],
 			},
 		],
+		"rankPermissions": {
+			"leader": membership["permissions"],
+			"captain": ["bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return", "manage_members"],
+			"member": ["bank_deposit", "bank_borrow"],
+			"recruit": [],
+		},
+	}
+	guild_bank_state = {
+		"access": {"canDeposit": true, "canWithdraw": true, "canDepositFunds": true, "canWithdrawFunds": true, "canBorrow": true, "canForceReturn": true},
+		"funds": {"balance": 250000, "playerBalance": 87500},
+		"items": [
+			{"itemId": "potion", "name": "Potion", "category": "Medicine", "quantity": 18, "availableQuantity": 18, "borrowedQuantity": 0, "lendable": false},
+			{"itemId": "leftovers", "name": "Leftovers", "category": "Held Items", "quantity": 18, "availableQuantity": 17, "borrowedQuantity": 1, "lendable": true},
+		],
+		"inventory": [
+			{"itemId": "poke-ball", "name": "Poke Ball", "category": "Poke Balls", "quantity": 12},
+		],
+		"pokemon": [
+			{
+				"pokemonId": 21,
+				"pokemon": {"name": "Blastoise", "level": 50},
+				"depositedBy": "Maple",
+				"isBorrowed": false,
+				"canReturn": false,
+				"canBorrow": true,
+			},
+		],
+		"depositablePokemon": [
+			{"pokemonId": 22, "pokemon": {"name": "Venusaur", "level": 48}},
+		],
+		"party": [],
 	}
 	set_guilds([guild])
 	_refresh_membership_state()
@@ -344,13 +439,6 @@ func _build_navigation() -> Control:
 	var navigation := HBoxContainer.new()
 	navigation.add_theme_constant_override("separation", 6)
 
-	browse_tab_button = Button.new()
-	browse_tab_button.name = "BrowseGuildsButton"
-	_set_localized_property(browse_tab_button, "text", "ui.guild.tab.browse")
-	browse_tab_button.custom_minimum_size = Vector2(190, 40)
-	browse_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("browse"))
-	navigation.add_child(browse_tab_button)
-
 	my_guild_tab_button = Button.new()
 	my_guild_tab_button.name = "MyGuildButton"
 	_set_localized_property(my_guild_tab_button, "text", "ui.guild.tab.mine")
@@ -359,10 +447,17 @@ func _build_navigation() -> Control:
 	my_guild_tab_button.visible = false
 	navigation.add_child(my_guild_tab_button)
 
+	browse_tab_button = Button.new()
+	browse_tab_button.name = "BrowseGuildsButton"
+	_set_localized_property(browse_tab_button, "text", "ui.guild.tab.browse")
+	browse_tab_button.custom_minimum_size = Vector2(190, 40)
+	browse_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("browse"))
+	navigation.add_child(browse_tab_button)
+
 	create_tab_button = Button.new()
 	create_tab_button.name = "CreateGuildButton"
 	_set_localized_property(create_tab_button, "text", "ui.guild.tab.create")
-	create_tab_button.custom_minimum_size = Vector2(190, 40)
+	create_tab_button.custom_minimum_size = Vector2(165, 40)
 	create_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("create"))
 	navigation.add_child(create_tab_button)
 
@@ -404,7 +499,12 @@ func _build_browse_page() -> Control:
 	search_input.custom_minimum_size = Vector2(0, 40)
 	search_input.text_changed.connect(_on_search_changed)
 	_apply_line_edit_style(search_input)
-	directory.add_child(search_input)
+	var search_row := HBoxContainer.new()
+	search_row.add_theme_constant_override("separation", 7)
+	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	search_row.add_child(search_input)
+	search_row.add_child(_build_directory_filters())
+	directory.add_child(search_row)
 
 	guild_list = VBoxContainer.new()
 	guild_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -430,6 +530,186 @@ func _build_browse_page() -> Control:
 	detail_content.add_theme_constant_override("separation", 11)
 	body.add_child(detail_content)
 	return body
+
+
+func _build_directory_filters() -> Control:
+	var filters := HBoxContainer.new()
+	filters.name = "GuildDirectoryFilters"
+	directory_filter_button = Button.new()
+	directory_filter_button.name = "GuildFilterButton"
+	directory_filter_button.custom_minimum_size = Vector2(112, 40)
+	directory_filter_button.pressed.connect(_open_directory_filters)
+	filters.add_child(directory_filter_button)
+	_refresh_directory_filter_button()
+	return filters
+
+
+func _open_directory_filters() -> void:
+	if directory_filter_popup == null:
+		directory_filter_popup = _build_directory_filter_dialog()
+		add_child(directory_filter_popup)
+	_set_directory_filter_select(directory_recruitment_select, directory_recruitment_filter)
+	_set_directory_filter_select(directory_focus_select, directory_focus_filter)
+	_set_directory_filter_select(directory_language_select, directory_language_filter)
+	directory_filter_popup.popup_centered(DIRECTORY_FILTER_POPUP_SIZE)
+
+
+func _build_directory_filter_dialog() -> PopupPanel:
+	var popup := PopupPanel.new()
+	popup.name = "GuildFilterDialog"
+	popup.exclusive = true
+	popup.unresizable = true
+	popup.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 11, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 18, 16, 18, 18)
+	popup.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 12)
+	margin.add_child(content)
+	content.add_child(_localized_label("ui.guild.filters.title", 19, UI_TEXT))
+
+	directory_recruitment_select = _directory_filter_select(
+		"GuildRecruitmentFilterSelect",
+		[
+			{"id": "all", "key": "ui.guild.filter.all"},
+			{"id": "open", "key": "ui.guild.filter.open"},
+		]
+	)
+	content.add_child(_directory_filter_field(
+		"ui.guild.filters.recruitment",
+		directory_recruitment_select
+	))
+	directory_focus_select = _directory_filter_select(
+		"GuildFocusFilterSelect",
+		[
+			{"id": "all", "key": "ui.guild.filter.all"},
+			{"id": "social", "key": "ui.guild.filter.social"},
+			{"id": "pve", "key": "ui.guild.filter.pve"},
+			{"id": "pvp", "key": "ui.guild.filter.pvp"},
+		]
+	)
+	content.add_child(_directory_filter_field("ui.guild.filters.focus", directory_focus_select))
+	directory_language_select = _directory_filter_select(
+		"GuildLanguageFilterSelect",
+		[
+			{"id": "all", "key": "ui.guild.filter.all"},
+			{"id": "english", "key": "ui.guild.option.language.english"},
+			{"id": "spanish", "key": "ui.guild.option.language.spanish"},
+			{"id": "portuguese", "key": "ui.guild.option.language.portuguese"},
+			{"id": "italian", "key": "ui.guild.option.language.italian"},
+			{"id": "chinese", "key": "ui.guild.option.language.chinese"},
+			{"id": "german", "key": "ui.guild.option.language.german"},
+			{"id": "french", "key": "ui.guild.option.language.french"},
+			{"id": "dutch", "key": "ui.guild.option.language.dutch"},
+			{"id": "dutch_english", "key": "ui.guild.option.language.dutch_english"},
+			{"id": "other", "key": "ui.guild.option.language.other"},
+		]
+	)
+	content.add_child(_directory_filter_field("ui.guild.filters.language", directory_language_select))
+
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 7)
+	content.add_child(actions)
+	var clear_button := Button.new()
+	clear_button.name = "GuildFiltersClearButton"
+	_set_localized_property(clear_button, "text", "ui.guild.filters.clear")
+	clear_button.pressed.connect(_clear_directory_filter_choices)
+	_apply_button_style(clear_button)
+	actions.add_child(clear_button)
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	actions.add_child(spacer)
+	var cancel_button := Button.new()
+	cancel_button.name = "GuildFiltersCancelButton"
+	_set_localized_property(cancel_button, "text", "common.cancel")
+	cancel_button.pressed.connect(popup.hide)
+	_apply_button_style(cancel_button)
+	actions.add_child(cancel_button)
+	var apply_button := Button.new()
+	apply_button.name = "GuildFiltersApplyButton"
+	_set_localized_property(apply_button, "text", "ui.guild.filters.apply")
+	apply_button.pressed.connect(_apply_directory_filter_choices)
+	_apply_button_style(apply_button, "primary")
+	actions.add_child(apply_button)
+	return popup
+
+
+func _directory_filter_select(name_value: String, definitions: Array) -> OptionButton:
+	var select := OptionButton.new()
+	select.name = name_value
+	select.custom_minimum_size = Vector2(0, 40)
+	select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	select.set_meta("guild_filter_definitions", definitions)
+	_populate_directory_filter_select(select, "all")
+	_apply_option_button_style(select)
+	return select
+
+
+func _directory_filter_field(label_key: String, select: OptionButton) -> Control:
+	var field := VBoxContainer.new()
+	field.add_theme_constant_override("separation", 4)
+	field.add_child(_localized_label(label_key, 10, UI_ACCENT))
+	field.add_child(select)
+	return field
+
+
+func _populate_directory_filter_select(select: OptionButton, selected_id: String) -> void:
+	if select == null:
+		return
+	var definitions := _array_from_value(select.get_meta("guild_filter_definitions", []))
+	select.clear()
+	for definition_value: Variant in definitions:
+		var definition := _dictionary(definition_value)
+		var filter_id := str(definition.get("id", "all"))
+		select.add_item(_t(str(definition.get("key", "ui.guild.filter.all"))))
+		select.set_item_metadata(select.item_count - 1, filter_id)
+		if filter_id == selected_id:
+			select.select(select.item_count - 1)
+
+
+func _set_directory_filter_select(select: OptionButton, selected_id: String) -> void:
+	if select == null:
+		return
+	for item_index: int in range(select.item_count):
+		if str(select.get_item_metadata(item_index)) == selected_id:
+			select.select(item_index)
+			return
+	select.select(0)
+
+
+func _clear_directory_filter_choices() -> void:
+	_set_directory_filter_select(directory_recruitment_select, "all")
+	_set_directory_filter_select(directory_focus_select, "all")
+	_set_directory_filter_select(directory_language_select, "all")
+
+
+func _apply_directory_filter_choices() -> void:
+	directory_recruitment_filter = _selected_option_value(directory_recruitment_select)
+	directory_focus_filter = _selected_option_value(directory_focus_select)
+	directory_language_filter = _selected_option_value(directory_language_select)
+	if directory_filter_popup != null:
+		directory_filter_popup.hide()
+	_refresh_directory_filter_button()
+	_render_guild_list()
+
+
+func _refresh_directory_filter_button() -> void:
+	if directory_filter_button == null:
+		return
+	var active_count := 0
+	for filter_value: String in [
+		directory_recruitment_filter,
+		directory_focus_filter,
+		directory_language_filter,
+	]:
+		if filter_value != "all":
+			active_count += 1
+	directory_filter_button.text = (
+		_t("ui.guild.filters.button_active", {"count": active_count})
+		if active_count > 0
+		else _t("ui.guild.filters.button")
+	)
+	_apply_button_style(directory_filter_button, "primary" if active_count > 0 else "default")
 
 
 func _build_member_page() -> Control:
@@ -519,7 +799,7 @@ func _build_create_page() -> Control:
 	var choices := HBoxContainer.new()
 	choices.add_theme_constant_override("separation", 10)
 	form.add_child(choices)
-	language_select = _option_button(["English", "Dutch", "Dutch / English", "German", "French", "Other"])
+	language_select = _option_button(GUILD_LANGUAGE_OPTIONS)
 	focus_select = _option_button(["Social", "PvE", "PvP", "PvP & Social", "PvE & Social", "Mixed"])
 	recruitment_select = _option_button(["Applications open", "Open", "Invite only", "Closed"])
 	choices.add_child(_labeled_field(_t("ui.guild.field.language"), language_select))
@@ -625,10 +905,11 @@ func _render_guild_home() -> void:
 	var guild := _dictionary(guild_home.get("guild", {}))
 	var own_membership := _dictionary(guild_home.get("membership", {}))
 	var role := str(own_membership.get("role", "member"))
+	var permissions := _array_from_value(own_membership.get("permissions", []))
 	var is_leader := role == "leader"
-	var can_invite := role in ["leader", "officer"]
-	var can_manage := is_leader or can_invite
-	if active_guild_section == "management" and not can_manage:
+	var can_invite := permissions.has("manage_members") or role in ["leader", "captain"]
+	var can_manage := is_leader or can_invite or permissions.has("manage_guild")
+	if active_guild_section in ["applications", "management"] and not can_manage:
 		active_guild_section = "overview"
 
 	var header := HBoxContainer.new()
@@ -639,20 +920,30 @@ func _render_guild_home() -> void:
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(heading)
 	heading.add_child(_label(str(guild.get("name", "Your Guild")), 25, UI_TEXT))
-	heading.add_child(_label(
+	var role_row := HBoxContainer.new()
+	role_row.add_theme_constant_override("separation", 9)
+	heading.add_child(role_row)
+	var role_label := _label(
 		_t("ui.guild.membership.role", {"role": _membership_role_label(role).to_lower()}),
 		12,
 		UI_ACCENT
-	))
+	)
+	role_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	role_row.add_child(role_label)
 	var description := _label(str(guild.get("description", "")), 12, UI_MUTED)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	heading.add_child(description)
 	header.add_child(_status_pill(str(guild.get("recruitment", "Closed"))))
 
+	member_content.add_child(_build_guild_travel_bar())
 	member_content.add_child(_build_guild_section_navigation(can_manage))
 	match active_guild_section:
+		"bank":
+			member_content.add_child(_build_guild_bank())
 		"members":
 			member_content.add_child(_build_member_roster())
+		"applications":
+			member_content.add_child(_build_guild_applications())
 		"management":
 			member_content.add_child(_build_member_management(guild, is_leader, can_invite))
 		_:
@@ -667,7 +958,7 @@ func _build_guild_header_emblem(guild: Dictionary, is_editable: bool) -> Control
 	if not is_editable:
 		return _guild_emblem(guild, 88, UI_ACCENT)
 	var button := Button.new()
-	button.name = "EditGuildEmblemButton"
+	button.name = "EditGuildEmblemIconButton"
 	_set_localized_property(button, "tooltip_text", "ui.guild.emblem.edit")
 	button.custom_minimum_size = Vector2(88, 88)
 	button.focus_mode = Control.FOCUS_NONE
@@ -692,9 +983,15 @@ func _build_guild_section_navigation(can_manage: bool) -> Control:
 	guild_section_buttons.clear()
 	var sections: Array[Dictionary] = [
 		{"id": "overview", "label_key": "ui.guild.section.overview", "name": "GuildOverviewTab"},
+		{"id": "bank", "label_key": "ui.guild.section.bank", "name": "GuildBankTab"},
 		{"id": "members", "label_key": "ui.guild.section.members", "name": "GuildMembersTab"},
 	]
 	if can_manage:
+		sections.append({
+			"id": "applications",
+			"label_key": "ui.guild.section.applications",
+			"name": "GuildApplicationsTab",
+		})
 		sections.append({
 			"id": "management",
 			"label_key": "ui.guild.section.management",
@@ -709,10 +1006,12 @@ func _build_guild_section_navigation(can_manage: bool) -> Control:
 			"text",
 			str(section.get("label_key", "ui.guild.section.overview"))
 		)
-		button.custom_minimum_size = Vector2(145, 36)
+		button.custom_minimum_size = Vector2(138, 36)
 		button.pressed.connect(_show_guild_section.bind(section_id))
 		_apply_tab_style(button, active_guild_section == section_id)
 		navigation.add_child(button)
+		if section_id == "applications" and _pending_application_count() > 0:
+			_add_application_notification_badge(button, _pending_application_count())
 		guild_section_buttons[section_id] = button
 	var spacer := Control.new()
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -721,10 +1020,79 @@ func _build_guild_section_navigation(can_manage: bool) -> Control:
 
 
 func _show_guild_section(section: String) -> void:
-	if section not in ["overview", "members", "management"]:
+	if section not in ["overview", "bank", "members", "applications", "management"]:
 		return
 	active_guild_section = section
+	if section != "bank":
+		active_guild_bank_category = ""
 	_render_guild_home()
+	if section == "bank" and not is_debug_preview:
+		_load_guild_bank_async.call_deferred()
+
+
+func _pending_application_count() -> int:
+	return _array_from_value(guild_home.get("pendingApplications", [])).size()
+
+
+func _add_application_notification_badge(button: Button, count: int) -> void:
+	var badge := PanelContainer.new()
+	badge.name = "GuildApplicationsNotificationBadge"
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.anchor_left = 1.0
+	badge.anchor_right = 1.0
+	badge.offset_left = -23.0
+	badge.offset_top = -5.0
+	badge.offset_right = 3.0
+	badge.offset_bottom = 17.0
+	badge.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#d94b55"), Color("#ff9ba2"), 11, 1)
+	)
+	button.add_child(badge)
+	var count_label := _label("99+" if count > 99 else str(count), 9, Color.WHITE)
+	count_label.name = "GuildApplicationsNotificationCount"
+	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	count_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.add_child(count_label)
+
+
+func _build_guild_travel_bar() -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildTravelBar"
+	panel.custom_minimum_size = Vector2(0, 72)
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#091827f2"), Color("#4b9dc488"), 9, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 13, 10, 13, 10)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 9)
+	margin.add_child(row)
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.add_theme_constant_override("separation", 2)
+	row.add_child(copy)
+	copy.add_child(_localized_label("ui.guild.travel.title", 10, UI_ACCENT))
+	var hint := _localized_label("ui.guild.travel.hint", 11, UI_MUTED)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	copy.add_child(hint)
+	var lobby_button := Button.new()
+	lobby_button.name = "GuildLobbyTeleportButton"
+	_set_localized_property(lobby_button, "text", "ui.guild.lobby.teleport")
+	_set_localized_property(lobby_button, "tooltip_text", "ui.guild.lobby.tooltip")
+	lobby_button.custom_minimum_size = Vector2(205, 44)
+	lobby_button.pressed.connect(_on_guild_lobby_pressed)
+	_apply_button_style(lobby_button, "primary")
+	row.add_child(lobby_button)
+	var base_button := Button.new()
+	base_button.name = "GuildBaseTeleportButton"
+	_set_localized_property(base_button, "text", "ui.guild.base.teleport")
+	_set_localized_property(base_button, "tooltip_text", "ui.guild.base.tooltip")
+	base_button.custom_minimum_size = Vector2(205, 44)
+	base_button.disabled = true
+	_apply_button_style(base_button)
+	row.add_child(base_button)
+	return panel
 
 
 func _build_guild_overview(guild: Dictionary) -> Control:
@@ -743,51 +1111,967 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	))
 	metadata.add_child(_metadata_card(_t("ui.guild.field.language"), _option_display(str(guild.get("language", ""))), UI_GOLD))
 	metadata.add_child(_metadata_card(_t("ui.guild.field.focus"), _option_display(str(guild.get("focus", ""))), UI_ACCENT))
-	var welcome := PanelContainer.new()
-	welcome.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	welcome.custom_minimum_size = Vector2(0, 190)
-	welcome.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var actions_panel := PanelContainer.new()
+	actions_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	actions_panel.custom_minimum_size = Vector2(0, 150)
+	actions_panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
 	var margin := MarginContainer.new()
 	_set_margins(margin, 16, 14, 16, 14)
-	welcome.add_child(margin)
+	actions_panel.add_child(margin)
 	var copy := VBoxContainer.new()
-	copy.add_theme_constant_override("separation", 6)
+	copy.add_theme_constant_override("separation", 10)
 	margin.add_child(copy)
-	copy.add_child(_localized_label("ui.guild.overview", 10, UI_ACCENT))
-	var overview_description := _label(str(guild.get("description", "")), 13, UI_TEXT)
-	overview_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	copy.add_child(overview_description)
-	copy.add_child(_label(
-		_t("ui.guild.overview.hint"),
+	copy.add_child(_localized_label("ui.guild.quick_actions", 10, UI_ACCENT))
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 10)
+	copy.add_child(actions)
+	var chat_button := Button.new()
+	chat_button.name = "GuildChatShortcutButton"
+	_set_localized_property(chat_button, "text", "ui.guild.action.chat")
+	chat_button.custom_minimum_size = Vector2(170, 42)
+	chat_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	chat_button.pressed.connect(_on_guild_chat_pressed)
+	_apply_button_style(chat_button, "primary")
+	actions.add_child(chat_button)
+	var members_button := Button.new()
+	members_button.name = "GuildMembersShortcutButton"
+	_set_localized_property(members_button, "text", "ui.guild.action.members")
+	members_button.custom_minimum_size = Vector2(170, 42)
+	members_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	members_button.pressed.connect(_show_guild_section.bind("members"))
+	_apply_button_style(members_button)
+	actions.add_child(members_button)
+	var own_membership := _dictionary(guild_home.get("membership", {}))
+	var is_leader := str(own_membership.get("role", "member")) == "leader"
+	var leave_button := Button.new()
+	leave_button.name = "LeaveGuildButton"
+	_set_localized_property(leave_button, "text", "ui.guild.leave.action")
+	leave_button.custom_minimum_size = Vector2(170, 42)
+	leave_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	leave_button.disabled = is_leader or is_leaving_guild
+	_set_localized_property(
+		leave_button,
+		"tooltip_text",
+		"ui.guild.leave.leader_blocked" if is_leader else "ui.guild.leave.tooltip"
+	)
+	leave_button.pressed.connect(_confirm_guild_leave.bind(guild))
+	_apply_button_style(leave_button, "danger")
+	actions.add_child(leave_button)
+	var action_hint := _localized_label(
+		"ui.guild.leave.leader_blocked" if is_leader else "ui.guild.quick_actions.hint",
 		11,
 		UI_MUTED
-	))
-	var lobby_row := HBoxContainer.new()
-	lobby_row.name = "GuildLobbyTravelRow"
-	lobby_row.add_theme_constant_override("separation", 12)
-	copy.add_child(lobby_row)
-	var lobby_copy := VBoxContainer.new()
-	lobby_copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lobby_copy.add_theme_constant_override("separation", 2)
-	lobby_row.add_child(lobby_copy)
-	lobby_copy.add_child(_localized_label("ui.guild.lobby.title", 12, UI_GOLD))
-	var lobby_hint := _localized_label("ui.guild.lobby.description", 10, UI_MUTED)
-	lobby_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	lobby_copy.add_child(lobby_hint)
-	var lobby_button := Button.new()
-	lobby_button.name = "GuildLobbyTeleportButton"
-	_set_localized_property(lobby_button, "text", "ui.guild.lobby.teleport")
-	_set_localized_property(lobby_button, "tooltip_text", "ui.guild.lobby.tooltip")
-	lobby_button.custom_minimum_size = Vector2(170, 42)
-	lobby_button.pressed.connect(_on_guild_lobby_pressed)
-	_apply_button_style(lobby_button, "primary")
-	lobby_row.add_child(lobby_button)
-	overview.add_child(welcome)
+	)
+	action_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	copy.add_child(action_hint)
+	overview.add_child(actions_panel)
 	return overview
+
+
+func _confirm_guild_leave(guild: Dictionary) -> void:
+	if is_leaving_guild or str(_dictionary(guild_home.get("membership", {})).get("role", "")) == "leader":
+		return
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "GuildLeaveConfirmationDialog"
+	dialog.title = _t("ui.guild.leave.confirm_title")
+	dialog.dialog_text = _t("ui.guild.leave.confirm", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	})
+	dialog.ok_button_text = _t("ui.guild.leave.action")
+	dialog.cancel_button_text = _t("common.cancel")
+	dialog.confirmed.connect(_leave_current_guild.bind(guild), CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(460, 190))
+
+
+func _leave_current_guild(guild: Dictionary) -> void:
+	if is_leaving_guild:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	is_leaving_guild = true
+	_render_guild_home()
+	_set_member_status(_t("ui.guild.leave.status"), false)
+	var response: Variant = await guild_service.call("leave_guild")
+	var result := _dictionary(response)
+	is_leaving_guild = false
+	if not bool(result.get("success", false)):
+		_render_guild_home()
+		_set_member_status(str(result.get("error", _t("ui.guild.leave.error"))), true)
+		return
+	membership.clear()
+	guild_home.clear()
+	guild_bank_state.clear()
+	active_guild_section = "overview"
+	active_guild_bank_category = ""
+	_refresh_membership_state()
+	_show_page("browse")
+	await _refresh_from_server()
+	_set_browse_status(_t("ui.guild.leave.success", {
+		"guild": str(result.get("guildName", guild.get("name", _t("ui.guild.fallback.this_guild")))),
+	}), false)
+
+
+func _build_guild_bank() -> Control:
+	if active_guild_bank_category != "":
+		return _build_guild_bank_workspace()
+	var panel := PanelContainer.new()
+	panel.name = "GuildBankSection"
+	panel.custom_minimum_size = Vector2(0, 245)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 15, 13, 15, 14)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 9)
+	margin.add_child(content)
+	var header := HBoxContainer.new()
+	content.add_child(header)
+	var title_stack := VBoxContainer.new()
+	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_stack.add_theme_constant_override("separation", 2)
+	header.add_child(title_stack)
+	title_stack.add_child(_localized_label("ui.guild.bank.title", 16, UI_TEXT))
+	var description := _localized_label("ui.guild.bank.description", 11, UI_MUTED)
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	title_stack.add_child(description)
+	header.add_child(_status_pill(
+		_t("ui.guild.bank.status.loading")
+		if is_loading_guild_bank
+		else _t("ui.guild.bank.status.ready")
+	))
+	var access_summary := _label(_guild_bank_access_summary(), 10, UI_ACCENT)
+	access_summary.name = "GuildBankPermissionSummary"
+	access_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(access_summary)
+	var vaults := GridContainer.new()
+	vaults.name = "GuildBankVaults"
+	vaults.columns = 3
+	vaults.add_theme_constant_override("h_separation", 9)
+	content.add_child(vaults)
+	vaults.add_child(_build_guild_bank_card(
+		"GuildBankFunds",
+		"ui.guild.bank.funds.title",
+		_guild_bank_card_description("funds"),
+		"ui.guild.bank.funds.action",
+		"funds",
+		UI_GOLD
+	))
+	vaults.add_child(_build_guild_bank_card(
+		"GuildBankPokemon",
+		"ui.guild.bank.pokemon.title",
+		_guild_bank_card_description("pokemon"),
+		"ui.guild.bank.pokemon.action",
+		"pokemon",
+		UI_ACCENT
+	))
+	vaults.add_child(_build_guild_bank_card(
+		"GuildBankItems",
+		"ui.guild.bank.items.title",
+		_guild_bank_card_description("items"),
+		"ui.guild.bank.items.action",
+		"items",
+		UI_SUCCESS
+	))
+	var hint := _localized_label("ui.guild.bank.access_hint", 10, UI_MUTED)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(hint)
+	return panel
+
+
+func _build_guild_bank_card(
+	node_prefix: String,
+	title_key: String,
+	description_text: String,
+	action_key: String,
+	category: String,
+	accent: Color
+) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "%sCard" % node_prefix
+	panel.custom_minimum_size = Vector2(0, 125)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), Color(accent.r, accent.g, accent.b, 0.48), 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 10, 12, 10)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 5)
+	margin.add_child(content)
+	content.add_child(_localized_label(title_key, 13, accent))
+	var description := _label(description_text, 10, UI_MUTED)
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content.add_child(description)
+	var action := Button.new()
+	action.name = "%sAction" % node_prefix
+	_set_localized_property(action, "text", action_key)
+	action.disabled = is_loading_guild_bank
+	action.pressed.connect(_on_guild_bank_category_opened.bind(category))
+	_apply_button_style(action)
+	content.add_child(action)
+	return panel
+
+
+func _guild_bank_access_summary() -> String:
+	var access := _dictionary(guild_bank_state.get("access", {}))
+	var own_membership := _dictionary(guild_home.get("membership", {}))
+	var permissions := _array_from_value(own_membership.get("permissions", []))
+	var states: Array[String] = []
+	var access_by_permission := {
+		"bank_deposit": bool(access.get("canDeposit", permissions.has("bank_deposit"))),
+		"bank_withdraw": bool(access.get("canWithdraw", permissions.has("bank_withdraw"))),
+		"bank_borrow": bool(access.get("canBorrow", permissions.has("bank_borrow"))),
+	}
+	for permission: String in access_by_permission:
+		states.append(_t(
+			"ui.guild.bank.permission.allowed" if bool(access_by_permission[permission]) else "ui.guild.bank.permission.locked",
+			{"permission": _t("ui.guild.permission.%s" % permission)}
+		))
+	return "  ·  ".join(states)
+
+
+func _guild_bank_card_description(category: String) -> String:
+	match category:
+		"funds":
+			var funds := _dictionary(guild_bank_state.get("funds", {}))
+			return _t("ui.guild.bank.funds.balance", {
+				"amount": _format_number(int(funds.get("balance", 0))),
+			}) if not guild_bank_state.is_empty() else _t("ui.guild.bank.funds.description")
+		"pokemon":
+			return _t("ui.guild.bank.pokemon.count", {
+				"count": _array_from_value(guild_bank_state.get("pokemon", [])).size(),
+			}) if not guild_bank_state.is_empty() else _t("ui.guild.bank.pokemon.description")
+		"items":
+			return _t("ui.guild.bank.items.count", {
+				"count": _array_from_value(guild_bank_state.get("items", [])).size(),
+			}) if not guild_bank_state.is_empty() else _t("ui.guild.bank.items.description")
+	return ""
+
+
+func _on_guild_bank_category_opened(category: String) -> void:
+	active_guild_bank_category = category
+	_render_guild_home()
+	if guild_bank_state.is_empty() and not is_debug_preview:
+		_load_guild_bank_async.call_deferred()
+
+
+func _build_guild_bank_workspace() -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildBankWorkspace"
+	panel.custom_minimum_size = Vector2(0, 310)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 15, 13, 15, 14)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 10)
+	margin.add_child(content)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 9)
+	content.add_child(header)
+	var back := Button.new()
+	back.name = "GuildBankBackButton"
+	_set_localized_property(back, "text", "ui.guild.bank.back")
+	back.pressed.connect(_on_guild_bank_back_pressed)
+	_apply_button_style(back)
+	header.add_child(back)
+	var title_key := "ui.guild.bank.%s.title" % active_guild_bank_category
+	var title := _localized_label(title_key, 17, UI_TEXT)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(title)
+	var refresh := Button.new()
+	refresh.name = "GuildBankRefreshButton"
+	_set_localized_property(refresh, "text", "ui.guild.bank.refresh")
+	refresh.disabled = is_loading_guild_bank or is_guild_bank_action_in_flight
+	refresh.pressed.connect(_load_guild_bank_async)
+	_apply_button_style(refresh)
+	header.add_child(refresh)
+	var log_button := Button.new()
+	log_button.name = "GuildBank%sLogButton" % active_guild_bank_category.capitalize()
+	_set_localized_property(log_button, "text", "ui.guild.log.view")
+	log_button.pressed.connect(_open_guild_log.bind(active_guild_bank_category))
+	_apply_button_style(log_button)
+	header.add_child(log_button)
+	if is_loading_guild_bank and guild_bank_state.is_empty():
+		var loading := _localized_label("ui.guild.bank.loading", 13, UI_MUTED)
+		loading.custom_minimum_size = Vector2(0, 180)
+		loading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		loading.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		content.add_child(loading)
+		return panel
+	match active_guild_bank_category:
+		"funds":
+			content.add_child(_build_guild_funds_workspace())
+		"pokemon":
+			content.add_child(_build_guild_pokemon_workspace())
+		"items":
+			content.add_child(_build_guild_items_workspace())
+	return panel
+
+
+func _build_guild_funds_workspace() -> Control:
+	var content := VBoxContainer.new()
+	content.name = "GuildBankFundsWorkspace"
+	content.add_theme_constant_override("separation", 10)
+	var funds := _dictionary(guild_bank_state.get("funds", {}))
+	var balances := GridContainer.new()
+	balances.columns = 2
+	balances.add_theme_constant_override("h_separation", 10)
+	content.add_child(balances)
+	balances.add_child(_guild_bank_value_card(
+		"ui.guild.bank.funds.guild_balance",
+		"$%s" % _format_number(int(funds.get("balance", 0))),
+		UI_GOLD
+	))
+	balances.add_child(_guild_bank_value_card(
+		"ui.guild.bank.funds.your_balance",
+		"$%s" % _format_number(int(funds.get("playerBalance", 0))),
+		UI_ACCENT
+	))
+	var transfer := HBoxContainer.new()
+	transfer.add_theme_constant_override("separation", 8)
+	content.add_child(transfer)
+	var amount := SpinBox.new()
+	amount.name = "GuildBankMoneyAmount"
+	amount.min_value = 1
+	amount.max_value = 2147483647
+	amount.value = 1000
+	amount.step = 100
+	amount.custom_minimum_size = Vector2(220, 38)
+	_apply_spin_box_style(amount)
+	transfer.add_child(amount)
+	var access := _dictionary(guild_bank_state.get("access", {}))
+	transfer.add_child(_guild_bank_action_button(
+		"GuildBankMoneyDepositButton",
+		"ui.guild.bank.deposit",
+		bool(access.get("canDepositFunds", true)),
+		_on_guild_bank_money_action.bind("deposit", amount)
+	))
+	transfer.add_child(_guild_bank_action_button(
+		"GuildBankMoneyWithdrawButton",
+		"ui.guild.bank.withdraw",
+		bool(access.get("canWithdrawFunds", access.get("canWithdraw", false))),
+		_on_guild_bank_money_action.bind("withdraw", amount)
+	))
+	return content
+
+
+func _build_guild_items_workspace() -> Control:
+	var workspace := VBoxContainer.new()
+	workspace.add_theme_constant_override("separation", 10)
+	var columns := GridContainer.new()
+	columns.name = "GuildBankItemsWorkspace"
+	columns.columns = 2
+	columns.add_theme_constant_override("h_separation", 10)
+	columns.add_child(_build_guild_item_list(
+		"ui.guild.bank.items.stored",
+		_array_from_value(guild_bank_state.get("items", [])),
+		"withdraw"
+	))
+	columns.add_child(_build_guild_item_list(
+		"ui.guild.bank.items.yours",
+		_array_from_value(guild_bank_state.get("inventory", [])),
+		"deposit"
+	))
+	workspace.add_child(columns)
+	var borrowed_items := _array_from_value(guild_bank_state.get("borrowedItems", []))
+	if not borrowed_items.is_empty():
+		workspace.add_child(_build_guild_borrowed_item_list(borrowed_items))
+	return workspace
+
+
+func _build_guild_borrowed_item_list(items: Array) -> Control:
+	var panel := PanelContainer.new()
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1))
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 6)
+	panel.add_child(content)
+	content.add_child(_localized_label("ui.guild.bank.items.borrowed", 10, UI_ACCENT))
+	for value: Variant in items:
+		if not value is Dictionary:
+			continue
+		var entry := value as Dictionary
+		var row := HBoxContainer.new()
+		var item_id := str(entry.get("itemId", ""))
+		var snapshot := _dictionary(entry.get("snapshot", {}))
+		var label := _label("%s · %s" % [
+			_guild_bank_item_name(item_id, str(snapshot.get("name", item_id))),
+			str(entry.get("borrowedBy", _t("common.unknown"))),
+		], 11, UI_TEXT)
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(label)
+		var asset_id := str(entry.get("loanAssetId", ""))
+		if bool(entry.get("canReturn", false)):
+			row.add_child(_guild_bank_action_button("GuildItemLoanReturn_%s" % asset_id, "ui.guild.bank.return", true, _on_guild_bank_loan_action.bind("return", asset_id)))
+		elif bool(entry.get("canForceReturn", false)):
+			row.add_child(_guild_bank_action_button("GuildItemLoanForceReturn_%s" % asset_id, "ui.guild.bank.force_return", true, _on_guild_bank_loan_action.bind("force", asset_id)))
+		content.add_child(row)
+	return panel
+
+
+func _build_guild_item_list(title_key: String, items: Array, action: String) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 190)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 10, 9, 10, 9)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 6)
+	margin.add_child(content)
+	content.add_child(_localized_label(title_key, 10, UI_ACCENT))
+	if items.is_empty():
+		content.add_child(_localized_label("ui.guild.bank.empty", 11, UI_MUTED))
+		return panel
+	for item_value: Variant in items:
+		if not item_value is Dictionary:
+			continue
+		content.add_child(_build_guild_item_row(item_value as Dictionary, action))
+	return panel
+
+
+func _build_guild_item_row(item: Dictionary, action: String) -> Control:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
+	var item_id := str(item.get("itemId", ""))
+	var item_name := _guild_bank_item_name(item_id, str(item.get("name", item_id)))
+	var icon := TextureRect.new()
+	icon.name = "GuildBankItemIcon_%s" % item_id
+	icon.custom_minimum_size = Vector2(34, 34)
+	icon.texture = _guild_bank_item_icon(item_id)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(icon)
+	var available := int(item.get("availableQuantity", item.get("quantity", 0)))
+	var name := _label(
+		"%s  ×%d (%d available)" % [item_name, int(item.get("quantity", 0)), available],
+		11,
+		UI_TEXT
+	)
+	name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	row.add_child(name)
+	var quantity := SpinBox.new()
+	quantity.min_value = 1
+	quantity.max_value = maxi(available if action != "deposit" else int(item.get("quantity", 1)), 1)
+	quantity.value = 1
+	quantity.custom_minimum_size = Vector2(78, 32)
+	_apply_spin_box_style(quantity)
+	row.add_child(quantity)
+	var access := _dictionary(guild_bank_state.get("access", {}))
+	var allowed := bool(access.get("canDeposit" if action == "deposit" else "canWithdraw", false))
+	row.add_child(_guild_bank_action_button(
+		"GuildBankItem%sButton_%s" % [action.capitalize(), str(item.get("itemId", "item"))],
+		"ui.guild.bank.donate" if action == "deposit" else "ui.guild.bank.withdraw",
+		allowed,
+		_on_guild_bank_item_action.bind(action, str(item.get("itemId", "")), quantity)
+	))
+	if action == "withdraw":
+		row.add_child(_guild_bank_action_button(
+			"GuildBankItemBorrowButton_%s" % str(item.get("itemId", "item")),
+			"ui.guild.bank.borrow",
+			bool(access.get("canBorrow", false)) and available > 0 and bool(item.get("lendable", false)),
+			_on_guild_bank_item_action.bind("borrow", str(item.get("itemId", "")), quantity)
+		))
+	return row
+
+
+func _build_guild_pokemon_workspace() -> Control:
+	var columns := GridContainer.new()
+	columns.name = "GuildBankPokemonWorkspace"
+	columns.columns = 2
+	columns.add_theme_constant_override("h_separation", 10)
+	columns.add_child(_build_guild_pokemon_list(
+		"ui.guild.bank.pokemon.stored",
+		_array_from_value(guild_bank_state.get("pokemon", [])),
+		true
+	))
+	columns.add_child(_build_guild_pokemon_list(
+		"ui.guild.bank.pokemon.yours",
+		_array_from_value(guild_bank_state.get("depositablePokemon", [])),
+		false
+	))
+	return columns
+
+
+func _build_guild_pokemon_list(title_key: String, pokemon_values: Array, is_bank: bool) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 190)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 10, 9, 10, 9)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 6)
+	margin.add_child(content)
+	content.add_child(_localized_label(title_key, 10, UI_ACCENT))
+	if pokemon_values.is_empty():
+		content.add_child(_localized_label("ui.guild.bank.empty", 11, UI_MUTED))
+		return panel
+	for pokemon_value: Variant in pokemon_values:
+		if not pokemon_value is Dictionary:
+			continue
+		content.add_child(_build_guild_pokemon_row(pokemon_value as Dictionary, is_bank))
+	return panel
+
+
+func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool) -> Control:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 7)
+	var pokemon := _dictionary(entry.get("pokemon", {}))
+	var icon := TextureRect.new()
+	icon.name = "GuildBankPokemonIcon_%d" % int(entry.get("pokemonId", 0))
+	icon.custom_minimum_size = Vector2(44, 44)
+	icon.texture = _guild_bank_pokemon_icon(pokemon)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(icon)
+	var identity := VBoxContainer.new()
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(identity)
+	identity.add_child(_label(
+		_t("ui.guild.bank.pokemon.identity", {
+			"name": _guild_bank_pokemon_name(pokemon),
+			"level": int(pokemon.get("level", 1)),
+		}),
+		11,
+		UI_TEXT
+	))
+	var pokemon_id := int(entry.get("pokemonId", 0))
+	if not is_bank:
+		identity.add_child(_localized_label("ui.guild.bank.pokemon.ready_to_deposit", 9, UI_MUTED))
+		var can_deposit := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
+		row.add_child(_guild_bank_action_button(
+			"GuildBankPokemonDepositButton_%d" % pokemon_id,
+			"ui.guild.bank.donate",
+			can_deposit,
+			_on_guild_bank_pokemon_action.bind("deposit", pokemon_id, pokemon)
+		))
+		return row
+	var is_borrowed := bool(entry.get("isBorrowed", false))
+	if is_borrowed:
+		identity.add_child(_label(
+			_t("ui.guild.bank.pokemon.borrowed_by", {"trainer": str(entry.get("borrowedBy", _t("common.unknown")))}),
+			9,
+			UI_WARNING
+		))
+		var loan_asset_id := str(entry.get("loanAssetId", ""))
+		if bool(entry.get("canReturn", false)) and loan_asset_id != "":
+			row.add_child(_guild_bank_action_button(
+				"GuildBankPokemonReturnButton_%d" % pokemon_id,
+				"ui.guild.bank.return",
+				true,
+				_on_guild_bank_loan_action.bind("return", loan_asset_id)
+			))
+		elif bool(entry.get("canReturn", false)):
+			row.add_child(_guild_bank_action_button(
+				"GuildBankPokemonLegacyReturnButton_%d" % pokemon_id,
+				"ui.guild.bank.return",
+				true,
+				_on_guild_bank_pokemon_action.bind("return", pokemon_id, pokemon)
+			))
+		elif bool(entry.get("canForceReturn", false)) and loan_asset_id != "":
+			row.add_child(_guild_bank_action_button(
+				"GuildBankPokemonForceReturnButton_%d" % pokemon_id,
+				"ui.guild.bank.force_return",
+				true,
+				_on_guild_bank_loan_action.bind("force", loan_asset_id)
+			))
+		return row
+	identity.add_child(_label(
+		_t("ui.guild.bank.pokemon.deposited_by", {"trainer": str(entry.get("depositedBy", _t("common.unknown")))}),
+		9,
+		UI_MUTED
+	))
+	var access := _dictionary(guild_bank_state.get("access", {}))
+	var allowed := bool(access.get("canWithdraw", false))
+	row.add_child(_guild_bank_action_button(
+		"GuildBankPokemonWithdrawButton_%d" % pokemon_id,
+		"ui.guild.bank.withdraw",
+		allowed,
+		_on_guild_bank_pokemon_action.bind("withdraw", pokemon_id, pokemon)
+	))
+	row.add_child(_guild_bank_action_button(
+		"GuildBankPokemonBorrowButton_%d" % pokemon_id,
+		"ui.guild.bank.borrow",
+		bool(entry.get("canBorrow", false)),
+		_on_guild_bank_pokemon_action.bind("borrow", pokemon_id, pokemon)
+	))
+	return row
+
+
+func _open_guild_log(category: String) -> void:
+	if category not in ["guild", "funds", "items", "pokemon"]:
+		return
+	var result := await _request_guild_log(category, 0)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", _t("ui.guild.log.error"))), true)
+		return
+	_show_guild_log_window(category, result)
+
+
+func _request_guild_log(category: String, before_id: int) -> Dictionary:
+	var service := get_node_or_null("/root/GuildService")
+	if service == null:
+		return {"success": false, "error": _t("ui.guild.error.service_unavailable")}
+	var response: Variant
+	if category == "guild":
+		response = await service.call("load_history", before_id)
+	else:
+		response = await service.call("load_bank_log", category, before_id)
+	return _dictionary(response)
+
+
+func _show_guild_log_window(category: String, result: Dictionary) -> void:
+	var window := Window.new()
+	window.name = "GuildHistoryLogWindow" if category == "guild" else "Guild%sLogWindow" % category.capitalize()
+	window.title = _t("ui.guild.log.%s.title" % category)
+	window.size = Vector2i(680, 500)
+	window.min_size = Vector2i(520, 360)
+	window.transient = true
+	window.exclusive = true
+	window.close_requested.connect(window.queue_free)
+	add_child(window)
+	var panel := PanelContainer.new()
+	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER, 10, 1))
+	window.add_child(panel)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 16, 15, 16, 15)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 10)
+	margin.add_child(content)
+	content.add_child(_localized_label("ui.guild.log.%s.heading" % category, 12, UI_ACCENT))
+	var scroll := ScrollContainer.new()
+	scroll.name = "GuildLogScroll"
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content.add_child(scroll)
+	var entries := VBoxContainer.new()
+	entries.name = "GuildLogEntries"
+	entries.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	entries.add_theme_constant_override("separation", 7)
+	scroll.add_child(entries)
+	var footer := HBoxContainer.new()
+	footer.name = "GuildLogFooter"
+	footer.alignment = BoxContainer.ALIGNMENT_CENTER
+	content.add_child(footer)
+	_append_guild_log_page(category, result, entries, footer)
+	window.popup_centered()
+
+
+func _append_guild_log_page(category: String, result: Dictionary, entries: VBoxContainer, footer: HBoxContainer) -> void:
+	for child in footer.get_children():
+		child.queue_free()
+	var page_entries := _array_from_value(result.get("entries", []))
+	if entries.get_child_count() == 0 and page_entries.is_empty():
+		entries.add_child(_localized_label("ui.guild.log.empty", 12, UI_MUTED))
+	for entry_value: Variant in page_entries:
+		if entry_value is Dictionary:
+			entries.add_child(_build_guild_log_entry(category, entry_value as Dictionary))
+	var next_before_id := int(result.get("nextBeforeId", 0))
+	if next_before_id > 0:
+		var more := Button.new()
+		more.name = "GuildLogLoadMoreButton"
+		_set_localized_property(more, "text", "ui.guild.log.load_more")
+		more.pressed.connect(_load_more_guild_log.bind(category, next_before_id, entries, footer))
+		_apply_button_style(more)
+		footer.add_child(more)
+
+
+func _load_more_guild_log(category: String, before_id: int, entries: VBoxContainer, footer: HBoxContainer) -> void:
+	for child in footer.get_children():
+		child.queue_free()
+	var result := await _request_guild_log(category, before_id)
+	if not bool(result.get("success", false)):
+		footer.add_child(_localized_label("ui.guild.log.error", 11, UI_WARNING))
+		return
+	_append_guild_log_page(category, result, entries, footer)
+
+
+func _build_guild_log_entry(category: String, entry: Dictionary) -> Control:
+	var card := PanelContainer.new()
+	card.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 10, 8, 10, 8)
+	card.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	margin.add_child(row)
+	if category == "items":
+		var item := _dictionary(entry.get("item", {}))
+		row.add_child(_guild_log_icon(_guild_bank_item_icon(str(item.get("itemId", entry.get("assetReference", ""))))))
+	elif category == "pokemon":
+		row.add_child(_guild_log_icon(_guild_bank_pokemon_icon(_dictionary(entry.get("pokemon", {})))))
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(copy)
+	copy.add_child(_label(_guild_log_entry_text(category, entry), 12, UI_TEXT))
+	var created_at := str(entry.get("createdAt", ""))
+	copy.add_child(_label(_relative_last_seen_text(created_at), 10, UI_MUTED))
+	return card
+
+
+func _guild_log_icon(texture: Texture2D) -> TextureRect:
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(42, 42)
+	icon.texture = texture
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	return icon
+
+
+func _guild_log_entry_text(category: String, entry: Dictionary) -> String:
+	var action := str(entry.get("action", "deposit"))
+	if category == "guild":
+		if action == "joined":
+			return _t("ui.guild.log.guild.joined", {
+				"trainer": str(entry.get("target", _t("common.unknown"))),
+				"rank": _t("ui.guild.role.%s" % str(entry.get("newRole", "recruit"))),
+			})
+		if action == "left":
+			return _t("ui.guild.log.guild.left", {"trainer": str(entry.get("target", _t("common.unknown")))})
+		if action == "rank_changed":
+			return _t("ui.guild.log.guild.rank_changed", {
+				"actor": str(entry.get("actor", _t("common.unknown"))),
+				"trainer": str(entry.get("target", _t("common.unknown"))),
+				"old_rank": _t("ui.guild.role.%s" % str(entry.get("previousRole", "recruit"))),
+				"new_rank": _t("ui.guild.role.%s" % str(entry.get("newRole", "recruit"))),
+			})
+		return _t("ui.guild.log.guild.generic", {"trainer": str(entry.get("target", _t("common.unknown")))})
+	var actor := str(entry.get("actor", _t("common.unknown")))
+	var action_group := "funds" if category == "funds" else "asset"
+	var action_text := _t("ui.guild.log.action.%s.%s" % [action_group, action])
+	if category == "funds":
+		return _t("ui.guild.log.funds.entry", {
+			"trainer": actor,
+			"action": action_text,
+			"amount": _format_number(int(entry.get("amount", 0))),
+		})
+	if category == "items":
+		var item := _dictionary(entry.get("item", {}))
+		return _t("ui.guild.log.items.entry", {
+			"trainer": actor,
+			"action": action_text,
+			"item": _guild_bank_item_name(str(item.get("itemId", "")), str(item.get("name", entry.get("assetReference", "")))),
+			"amount": int(entry.get("amount", 1)),
+		})
+	var pokemon := _dictionary(entry.get("pokemon", {}))
+	return _t("ui.guild.log.pokemon.entry", {
+		"trainer": actor,
+		"action": action_text,
+		"pokemon": _guild_bank_pokemon_name(pokemon),
+	})
+
+
+func _guild_bank_value_card(title_key: String, value: String, accent: Color) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), Color(accent.r, accent.g, accent.b, 0.5), 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 9, 12, 9)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	margin.add_child(content)
+	content.add_child(_localized_label(title_key, 9, UI_MUTED))
+	content.add_child(_label(value, 18, accent))
+	return panel
+
+
+func _guild_bank_action_button(
+	node_name: String,
+	text_key: String,
+	allowed: bool,
+	callback: Callable
+) -> Button:
+	var button := Button.new()
+	button.name = node_name
+	_set_localized_property(button, "text", text_key)
+	button.custom_minimum_size = Vector2(92, 32)
+	button.disabled = not allowed or is_guild_bank_action_in_flight
+	button.pressed.connect(callback)
+	_apply_button_style(button, "primary")
+	return button
+
+
+func _on_guild_bank_back_pressed() -> void:
+	active_guild_bank_category = ""
+	_render_guild_home()
+
+
+func _load_guild_bank_async() -> void:
+	if is_loading_guild_bank or is_guild_bank_action_in_flight or is_debug_preview:
+		return
+	is_loading_guild_bank = true
+	_render_guild_home()
+	var service := get_node_or_null("/root/GuildService")
+	var response: Variant = await service.call("load_bank") if service != null else {
+		"success": false, "error": _t("ui.guild.error.service_unavailable"),
+	}
+	is_loading_guild_bank = false
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", _t("ui.guild.bank.error.load"))), true)
+		_render_guild_home()
+		return
+	_apply_guild_bank_result(result)
+	_render_guild_home()
+
+
+func _on_guild_bank_money_action(action: String, amount_input: SpinBox) -> void:
+	var amount := int(amount_input.value) if amount_input != null else 0
+	if amount <= 0:
+		return
+	if action == "deposit":
+		_confirm_guild_bank_donation(
+			"$%s" % _format_number(amount),
+			_run_guild_bank_action.bind("deposit_bank_money", [amount], "money")
+		)
+		return
+	await _run_guild_bank_action("%s_bank_money" % action, [amount], "money")
+
+
+func _on_guild_bank_item_action(action: String, item_id: String, quantity_input: SpinBox) -> void:
+	var quantity := int(quantity_input.value) if quantity_input != null else 0
+	if item_id == "" or quantity <= 0:
+		return
+	if action == "deposit":
+		_confirm_guild_bank_donation(
+			"%s ×%d" % [_guild_bank_item_name(item_id, item_id), quantity],
+			_run_guild_bank_action.bind("deposit_bank_item", [item_id, quantity], "item")
+		)
+		return
+	await _run_guild_bank_action("%s_bank_item" % action, [item_id, quantity], "item")
+
+
+func _on_guild_bank_pokemon_action(action: String, pokemon_id: int, pokemon: Dictionary = {}) -> void:
+	if pokemon_id <= 0:
+		return
+	if action == "deposit":
+		_confirm_guild_bank_donation(
+			_guild_bank_pokemon_name(pokemon),
+			_run_guild_bank_action.bind("deposit_bank_pokemon", [pokemon_id], "pokemon")
+		)
+		return
+	var service_method := "deposit_bank_pokemon" if action == "return" else "%s_bank_pokemon" % action
+	await _run_guild_bank_action(service_method, [pokemon_id], "pokemon")
+
+
+func _on_guild_bank_loan_action(action: String, asset_id: String) -> void:
+	if asset_id.strip_edges() == "":
+		return
+	var method := "force_return_bank_loan_asset" if action == "force" else "return_bank_loan_asset"
+	await _run_guild_bank_action(method, [asset_id], "loan")
+
+
+func _confirm_guild_bank_donation(asset_name: String, confirmed_action: Callable) -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "GuildBankDonationConfirmationDialog"
+	dialog.title = _t("ui.guild.bank.donation.confirm_title")
+	dialog.dialog_text = _t("ui.guild.bank.donation.confirm", {"asset": asset_name})
+	dialog.ok_button_text = _t("ui.guild.bank.donation.action")
+	dialog.cancel_button_text = _t("common.cancel")
+	dialog.confirmed.connect(confirmed_action, CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(470, 190))
+
+
+func _run_guild_bank_action(method: String, arguments: Array, asset_type: String) -> void:
+	if is_guild_bank_action_in_flight:
+		return
+	is_guild_bank_action_in_flight = true
+	_render_guild_home()
+	var service := get_node_or_null("/root/GuildService")
+	var response: Variant = await service.callv(method, arguments) if service != null else {
+		"success": false, "error": _t("ui.guild.error.service_unavailable"),
+	}
+	is_guild_bank_action_in_flight = false
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", _t("ui.guild.bank.error.action"))), true)
+		_render_guild_home()
+		return
+	_apply_guild_bank_result(result)
+	if asset_type == "money":
+		var wallet_service := get_node_or_null("/root/PlayerWalletService")
+		if wallet_service != null:
+			var wallet_result: Variant = await wallet_service.call("load_wallet")
+			if wallet_result is Dictionary:
+				wallet_service.call("apply_wallet_result", wallet_result)
+	elif asset_type == "item":
+		var inventory_service := get_node_or_null("/root/InventoryService")
+		if inventory_service != null:
+			await inventory_service.call("load_inventory")
+	_set_member_status(_t("ui.guild.bank.status.updated"), false)
+	_render_guild_home()
+
+
+func _apply_guild_bank_result(result: Dictionary) -> void:
+	guild_bank_state = result.duplicate(true)
+	var party_value: Variant = result.get("party", [])
+	if party_value is Array:
+		var player_save := get_node_or_null("/root/PlayerSave")
+		if player_save != null and player_save.has_method("replace_party_from_state"):
+			player_save.call("replace_party_from_state", party_value)
+
+
+func _guild_bank_pokemon_name(pokemon: Dictionary) -> String:
+	var nickname := str(pokemon.get("nickname", "")).strip_edges()
+	if nickname != "":
+		return nickname
+	return str(pokemon.get("name", pokemon.get("speciesName", "Pokemon")))
+
+
+func _guild_bank_item_icon(item_id: String) -> Texture2D:
+	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
+	for path: String in [
+		"res://assets/items/icons/%s.png" % normalized,
+		"res://assets/items/icons/%s.png" % item_id.strip_edges(),
+		"res://assets/items/icons/000.png",
+	]:
+		if ResourceLoader.exists(path):
+			return load(path) as Texture2D
+	return null
+
+
+func _guild_bank_pokemon_icon(pokemon: Dictionary) -> Texture2D:
+	var species := str(pokemon.get("speciesName", pokemon.get("species", pokemon.get("name", ""))))
+	var shiny := bool(pokemon.get("shiny", pokemon.get("isShiny", false)))
+	var texture := PokemonAssets.load_party_icon(species, shiny)
+	if texture == null:
+		texture = PokemonAssets.load_home_sprite(species, shiny)
+	return texture if texture != null else PokemonAssets.load_unknown_icon()
+
+
+func _guild_bank_item_name(item_id: String, fallback: String) -> String:
+	var localization := get_node_or_null("/root/ItemLocalization")
+	if localization != null and localization.has_method("display_name"):
+		return str(localization.call("display_name", item_id, fallback))
+	return fallback
 
 
 func _on_guild_lobby_pressed() -> void:
 	lobby_teleport_requested.emit()
+
+
+func _on_guild_chat_pressed() -> void:
+	guild_chat_requested.emit()
 
 
 func _build_member_roster() -> Control:
@@ -802,18 +2086,236 @@ func _build_member_roster() -> Control:
 	var content := VBoxContainer.new()
 	content.add_theme_constant_override("separation", 7)
 	margin.add_child(content)
-	content.add_child(_localized_label("ui.guild.roster", 10, UI_ACCENT))
-	for member_value: Variant in _array_from_value(guild_home.get("members", [])):
+	var members := _array_from_value(guild_home.get("members", []))
+	var online_count := 0
+	for member_value: Variant in members:
+		if member_value is Dictionary and bool((member_value as Dictionary).get("online", false)):
+			online_count += 1
+	var heading_row := HBoxContainer.new()
+	heading_row.add_theme_constant_override("separation", 10)
+	content.add_child(heading_row)
+	var roster_heading := _localized_label("ui.guild.roster", 10, UI_ACCENT)
+	roster_heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading_row.add_child(roster_heading)
+	var history_button := Button.new()
+	history_button.name = "GuildHistoryLogButton"
+	_set_localized_property(history_button, "text", "ui.guild.log.history.view")
+	history_button.pressed.connect(_open_guild_log.bind("guild"))
+	_apply_button_style(history_button)
+	heading_row.add_child(history_button)
+	heading_row.add_child(_label(
+		_t("ui.guild.roster.summary", {"online": online_count, "total": members.size()}),
+		10,
+		UI_MUTED
+	))
+	var own_role := str(_dictionary(guild_home.get("membership", {})).get("role", "recruit"))
+	var own_user_id := int(_dictionary(guild_home.get("membership", {})).get("userId", 0))
+	for member_value: Variant in members:
 		if not member_value is Dictionary:
 			continue
 		var member := member_value as Dictionary
-		var row := HBoxContainer.new()
-		content.add_child(row)
-		var identity := _label(str(member.get("displayName", member.get("username", "Trainer"))), 12, UI_TEXT)
-		identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(identity)
-		row.add_child(_label(_membership_role_label(str(member.get("role", "member"))), 10, UI_GOLD))
+		content.add_child(_build_guild_member_card(member, own_role, own_user_id))
 	return panel
+
+
+func _build_guild_member_card(member: Dictionary, own_role: String, own_user_id: int) -> Control:
+	var user_id := int(member.get("userId", 0))
+	var online := bool(member.get("online", false))
+	var card := PanelContainer.new()
+	card.name = "GuildMemberCard_%d" % user_id
+	card.custom_minimum_size = Vector2(0, 70)
+	card.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#081827f2"), UI_ACCENT_SOFT if online else UI_BORDER_INNER, 8, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 9, 10, 9)
+	card.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 14)
+	margin.add_child(row)
+
+	var presence_dot := _label("●", 15, UI_SUCCESS if online else UI_MUTED)
+	presence_dot.name = "GuildMemberPresenceDot_%d" % user_id
+	presence_dot.custom_minimum_size = Vector2(18, 0)
+	presence_dot.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(presence_dot)
+
+	var identity := VBoxContainer.new()
+	identity.custom_minimum_size = Vector2(225, 0)
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.add_theme_constant_override("separation", 2)
+	row.add_child(identity)
+	var display_name := str(member.get("displayName", member.get("username", _t("common.unknown"))))
+	var name_label := _label(display_name, 14, UI_TEXT)
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	identity.add_child(name_label)
+	var username := str(member.get("username", "")).strip_edges()
+	identity.add_child(_label("@%s" % username if username != "" else "", 10, UI_ACCENT))
+
+	var presence := VBoxContainer.new()
+	presence.custom_minimum_size = Vector2(210, 0)
+	presence.add_theme_constant_override("separation", 3)
+	row.add_child(presence)
+	presence.add_child(_localized_label("ui.guild.member.status", 9, UI_MUTED))
+	var presence_label := _label(_guild_member_presence_text(member), 11, UI_SUCCESS if online else UI_MUTED)
+	presence_label.name = "GuildMemberPresenceLabel_%d" % user_id
+	presence_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	presence.add_child(presence_label)
+
+	var rank := VBoxContainer.new()
+	rank.custom_minimum_size = Vector2(145, 0)
+	rank.add_theme_constant_override("separation", 3)
+	row.add_child(rank)
+	rank.add_child(_localized_label("ui.guild.member.rank", 9, UI_MUTED))
+	var member_role := str(member.get("role", "recruit"))
+	if own_role == "leader" and member_role != "leader":
+		rank.add_child(_guild_member_role_select(user_id, member_role))
+	else:
+		var role_label := _label(_membership_role_label(member_role).to_upper(), 10, UI_GOLD)
+		role_label.name = "GuildMemberRankLabel_%d" % user_id
+		rank.add_child(role_label)
+
+	var message_button := Button.new()
+	message_button.name = "GuildMemberPmButton_%d" % user_id
+	message_button.custom_minimum_size = Vector2(92, 36)
+	message_button.disabled = user_id == own_user_id or not online
+	_set_localized_property(
+		message_button,
+		"text",
+		"ui.guild.member.you" if user_id == own_user_id else "ui.guild.member.message"
+	)
+	_set_localized_property(
+		message_button,
+		"tooltip_text",
+		"ui.guild.member.message_self"
+		if user_id == own_user_id
+		else ("ui.guild.member.message_tooltip" if online else "ui.guild.member.message_offline")
+	)
+	message_button.pressed.connect(_on_guild_member_private_message_pressed.bind(member.duplicate(true)))
+	_apply_button_style(message_button, "primary")
+	row.add_child(message_button)
+	return card
+
+
+func _on_guild_member_private_message_pressed(member: Dictionary) -> void:
+	if not bool(member.get("online", false)):
+		return
+	private_message_requested.emit({
+		"id": int(member.get("userId", 0)),
+		"userId": int(member.get("userId", 0)),
+		"username": str(member.get("username", "")),
+		"displayName": str(member.get("displayName", member.get("username", ""))),
+		"online": true,
+	})
+
+
+func _guild_member_presence_text(member: Dictionary) -> String:
+	if bool(member.get("online", false)):
+		return _t("ui.guild.member.online")
+	var last_seen_at := str(member.get("lastSeenAt", "")).strip_edges()
+	if last_seen_at == "":
+		return _t("ui.guild.member.offline")
+	return _t("ui.guild.member.last_seen", {"time": _relative_last_seen_text(last_seen_at)})
+
+
+func _relative_last_seen_text(last_seen_at: String) -> String:
+	var last_seen_unix := _unix_from_iso_datetime(last_seen_at)
+	if last_seen_unix <= 0.0:
+		return _t("ui.guild.member.offline").to_lower()
+	var elapsed_seconds := maxi(0, int(Time.get_unix_time_from_system() - last_seen_unix))
+	if elapsed_seconds < 60:
+		return _t("ui.friends.time.just_now")
+	if elapsed_seconds < 3600:
+		return _t("ui.friends.time.minutes_ago", {"count": int(elapsed_seconds / 60)})
+	if elapsed_seconds < 86400:
+		return _t("ui.friends.time.hours_ago", {"count": int(elapsed_seconds / 3600)})
+	if elapsed_seconds < 172800:
+		return _t("ui.friends.time.yesterday")
+	if elapsed_seconds < 604800:
+		return _t("ui.friends.time.days_ago", {"count": int(elapsed_seconds / 86400)})
+	var datetime := Time.get_datetime_dict_from_unix_time(int(last_seen_unix))
+	var month := int(datetime.get("month", 0))
+	var day := int(datetime.get("day", 0))
+	var year := int(datetime.get("year", 0))
+	if month < 1 or month > 12 or day < 1:
+		return _t("ui.guild.member.offline").to_lower()
+	var month_name := _t("ui.friends.month.%02d" % month)
+	if year == int(Time.get_datetime_dict_from_system().get("year", 0)):
+		return "%s %s" % [month_name, day]
+	return "%s %s, %s" % [month_name, day, year]
+
+
+func _unix_from_iso_datetime(value: String) -> float:
+	var datetime_text := value.strip_edges()
+	if datetime_text == "":
+		return 0.0
+	if datetime_text.ends_with("Z"):
+		datetime_text = datetime_text.substr(0, datetime_text.length() - 1)
+	var plus_index := datetime_text.find("+", 10)
+	if plus_index >= 0:
+		datetime_text = datetime_text.substr(0, plus_index)
+	else:
+		var minus_index := datetime_text.find("-", 10)
+		if minus_index >= 0:
+			datetime_text = datetime_text.substr(0, minus_index)
+	var dot_index := datetime_text.find(".")
+	if dot_index >= 0:
+		datetime_text = datetime_text.substr(0, dot_index)
+	return float(Time.get_unix_time_from_datetime_string(datetime_text))
+
+
+func _guild_member_role_select(user_id: int, current_role: String) -> OptionButton:
+	var select := OptionButton.new()
+	select.name = "GuildMemberRoleSelect_%d" % user_id
+	select.custom_minimum_size = Vector2(125, 30)
+	for role: String in GUILD_ASSIGNABLE_ROLES:
+		select.add_item(_membership_role_label(role))
+		select.set_item_metadata(select.item_count - 1, role)
+		if role == current_role:
+			select.select(select.item_count - 1)
+	_apply_option_button_style(select)
+	select.item_selected.connect(_on_guild_member_role_selected.bind(user_id, select))
+	return select
+
+
+func _guild_loan_duration_label(seconds: int) -> String:
+	return _t("ui.guild.bank.loan_duration.hours", {"hours": seconds / 3600})
+
+
+func _select_guild_loan_duration(seconds: int) -> void:
+	if settings_loan_duration_select == null:
+		return
+	for index: int in range(settings_loan_duration_select.item_count):
+		if int(settings_loan_duration_select.get_item_metadata(index)) == seconds:
+			settings_loan_duration_select.select(index)
+			return
+
+
+func _selected_guild_loan_duration() -> int:
+	if settings_loan_duration_select == null or settings_loan_duration_select.selected < 0:
+		return 86400
+	return int(settings_loan_duration_select.get_item_metadata(settings_loan_duration_select.selected))
+
+
+func _on_guild_member_role_selected(index: int, user_id: int, select: OptionButton) -> void:
+	if select == null or index < 0 or index >= select.item_count:
+		return
+	var role := str(select.get_item_metadata(index))
+	select.disabled = true
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		select.disabled = false
+		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	var response: Variant = await guild_service.call("update_member_role", user_id, role)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		select.disabled = false
+		_set_member_status(str(result.get("error", _t("ui.guild.error.update_role"))), true)
+		return
+	_apply_home_result(result)
+	_set_member_status(_t("ui.guild.status.role_updated"), false)
 
 
 func _build_member_management(guild: Dictionary, is_leader: bool, can_invite: bool) -> Control:
@@ -841,15 +2343,22 @@ func _build_member_management(guild: Dictionary, is_leader: bool, can_invite: bo
 		var choices := HBoxContainer.new()
 		choices.add_theme_constant_override("separation", 7)
 		content.add_child(choices)
-		settings_language_select = _option_button(["English", "Dutch", "Dutch / English", "German", "French", "Other"])
+		settings_language_select = _option_button(GUILD_LANGUAGE_OPTIONS)
 		settings_focus_select = _option_button(["Social", "PvE", "PvP", "PvP & Social", "PvE & Social", "Mixed"])
 		settings_recruitment_select = _option_button(["Applications open", "Open", "Invite only", "Closed"])
+		settings_loan_duration_select = OptionButton.new()
+		for duration: int in [3600, 10800, 21600, 43200, 86400, 172800, 259200]:
+			settings_loan_duration_select.add_item(_guild_loan_duration_label(duration))
+			settings_loan_duration_select.set_item_metadata(settings_loan_duration_select.item_count - 1, duration)
+		_apply_option_button_style(settings_loan_duration_select)
 		_select_option_text(settings_language_select, str(guild.get("language", "English")))
 		_select_option_text(settings_focus_select, str(guild.get("focus", "Social")))
 		_select_option_text(settings_recruitment_select, str(guild.get("recruitment", "Applications open")))
+		_select_guild_loan_duration(int(guild.get("loanDurationSeconds", 86400)))
 		choices.add_child(settings_language_select)
 		choices.add_child(settings_focus_select)
 		choices.add_child(settings_recruitment_select)
+		choices.add_child(settings_loan_duration_select)
 		var save_settings := Button.new()
 		_set_localized_property(save_settings, "text", "ui.guild.settings.save")
 		save_settings.pressed.connect(_on_save_settings)
@@ -878,6 +2387,22 @@ func _build_member_management(guild: Dictionary, is_leader: bool, can_invite: bo
 		_render_pending_invitations(content)
 	elif not is_leader:
 		content.add_child(_localized_label("ui.guild.management.restricted", 12, UI_MUTED))
+	return panel
+
+
+func _build_guild_applications() -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildApplicationsSection"
+	panel.custom_minimum_size = Vector2(610, 300)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 13, 12, 13, 12)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 9)
+	margin.add_child(content)
+	_render_pending_applications(content)
 	return panel
 
 
@@ -1086,6 +2611,123 @@ func _cancel_emblem_edit() -> void:
 		emblem_editor_popup.hide()
 
 
+func _render_pending_applications(content: VBoxContainer) -> void:
+	var applications := _array_from_value(guild_home.get("pendingApplications", []))
+	var inbox := PanelContainer.new()
+	inbox.name = "GuildApplicationsInbox"
+	inbox.custom_minimum_size = Vector2(0, 126)
+	inbox.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#0b1b29f2"), Color(UI_GOLD.r, UI_GOLD.g, UI_GOLD.b, 0.58), 9, 1)
+	)
+	content.add_child(inbox)
+	var inbox_margin := MarginContainer.new()
+	_set_margins(inbox_margin, 13, 11, 13, 12)
+	inbox.add_child(inbox_margin)
+	var inbox_content := VBoxContainer.new()
+	inbox_content.add_theme_constant_override("separation", 7)
+	inbox_margin.add_child(inbox_content)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	inbox_content.add_child(header)
+	var title := _localized_label("ui.guild.application.pending_title", 12, UI_GOLD)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(title)
+	var count := Label.new()
+	count.name = "GuildApplicationsPendingCount"
+	count.text = _t("ui.guild.application.pending_count", {"count": applications.size()})
+	count.add_theme_font_size_override("font_size", 10)
+	count.add_theme_color_override("font_color", UI_TEXT)
+	header.add_child(count)
+	var hint := _localized_label("ui.guild.application.review_hint", 10, UI_MUTED)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	inbox_content.add_child(hint)
+
+	if applications.is_empty():
+		var empty_state := PanelContainer.new()
+		empty_state.name = "GuildApplicationsEmptyState"
+		empty_state.add_theme_stylebox_override("panel", _panel_style(UI_INPUT, UI_BORDER_INNER, 7, 1))
+		inbox_content.add_child(empty_state)
+		var empty_margin := MarginContainer.new()
+		_set_margins(empty_margin, 11, 9, 11, 9)
+		empty_state.add_child(empty_margin)
+		var empty_row := HBoxContainer.new()
+		empty_row.add_theme_constant_override("separation", 9)
+		empty_margin.add_child(empty_row)
+		var marker := _label("✓", 18, UI_SUCCESS)
+		marker.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		empty_row.add_child(marker)
+		var empty_copy := VBoxContainer.new()
+		empty_copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		empty_copy.add_theme_constant_override("separation", 2)
+		empty_row.add_child(empty_copy)
+		empty_copy.add_child(_localized_label("ui.guild.application.pending_empty_title", 12, UI_TEXT))
+		empty_copy.add_child(_localized_label("ui.guild.application.pending_empty", 10, UI_MUTED))
+		return
+	for application_value: Variant in applications:
+		if not application_value is Dictionary:
+			continue
+		var application := application_value as Dictionary
+		var application_id := int(application.get("id", 0))
+		var application_card := PanelContainer.new()
+		application_card.add_theme_stylebox_override("panel", _panel_style(UI_INPUT, UI_BORDER_INNER, 7, 1))
+		inbox_content.add_child(application_card)
+		var row_margin := MarginContainer.new()
+		_set_margins(row_margin, 11, 8, 9, 8)
+		application_card.add_child(row_margin)
+		var row := HBoxContainer.new()
+		row.name = "GuildApplicationRow_%d" % application_id
+		row.add_theme_constant_override("separation", 7)
+		row_margin.add_child(row)
+		var applicant := _label(
+			str(application.get(
+				"applicantDisplayName",
+				application.get("applicantUsername", _t("common.unknown"))
+			)),
+			11,
+			UI_TEXT
+		)
+		var applicant_identity := VBoxContainer.new()
+		applicant_identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		applicant_identity.add_theme_constant_override("separation", 1)
+		row.add_child(applicant_identity)
+		applicant_identity.add_child(applicant)
+		var applicant_username := str(application.get("applicantUsername", "")).strip_edges()
+		if applicant_username != "":
+			applicant_identity.add_child(_label("@%s" % applicant_username, 9, UI_MUTED))
+		var trainer_card := Button.new()
+		trainer_card.name = "ViewGuildApplicantTrainerCardButton_%d" % application_id
+		_set_localized_property(trainer_card, "text", "ui.guild.application.trainer_card")
+		trainer_card.disabled = int(application.get("applicantUserId", 0)) <= 0
+		trainer_card.pressed.connect(_on_guild_application_trainer_card_pressed.bind(application))
+		_apply_button_style(trainer_card)
+		row.add_child(trainer_card)
+		var accept := Button.new()
+		accept.name = "AcceptGuildApplicationButton_%d" % application_id
+		_set_localized_property(accept, "text", "common.accept")
+		accept.pressed.connect(_on_accept_application.bind(application_id))
+		_apply_button_style(accept, "primary")
+		row.add_child(accept)
+		var decline := Button.new()
+		decline.name = "DeclineGuildApplicationButton_%d" % application_id
+		_set_localized_property(decline, "text", "common.decline")
+		decline.pressed.connect(_on_decline_application.bind(application_id))
+		_apply_button_style(decline)
+		row.add_child(decline)
+
+
+func _on_guild_application_trainer_card_pressed(application: Dictionary) -> void:
+	var user_id := int(application.get("applicantUserId", 0))
+	if user_id <= 0:
+		return
+	trainer_card_requested.emit({
+		"userId": user_id,
+		"username": str(application.get("applicantUsername", "")),
+		"displayName": str(application.get("applicantDisplayName", application.get("applicantUsername", "Trainer"))),
+	})
+
+
 func _render_pending_invitations(content: VBoxContainer) -> void:
 	var invitations := _array_from_value(guild_home.get("pendingInvitations", []))
 	if invitations.is_empty():
@@ -1137,7 +2779,7 @@ func _guild_row(guild: Dictionary) -> Control:
 	var button := Button.new()
 	button.name = "GuildRow_%d" % guild_id
 	button.text = ""
-	button.custom_minimum_size = Vector2(0, 76)
+	button.custom_minimum_size = Vector2(0, 92)
 	button.add_theme_stylebox_override("normal", _row_style(accent, selected))
 	button.add_theme_stylebox_override("hover", _row_style(Color("#7edfff"), true))
 	button.add_theme_stylebox_override("pressed", _row_style(UI_ACCENT, true, Color("#071624fa")))
@@ -1166,17 +2808,31 @@ func _guild_row(guild: Dictionary) -> Control:
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	info.add_child(name_label)
-	var summary := _label(
-		_t("ui.guild.row.summary", {
-			"level": int(guild.get("level", 1)),
+	var discovery := _label(
+		_t("ui.guild.row.discovery", {
+			"focus": _option_display(str(guild.get("focus", ""))),
+			"language": _option_display(str(guild.get("language", ""))),
+		}),
+		10,
+		UI_ACCENT
+	)
+	discovery.name = "GuildRowDiscovery_%d" % guild_id
+	discovery.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	discovery.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	info.add_child(discovery)
+	var availability := _label(
+		_t("ui.guild.row.availability", {
 			"members": int(guild.get("members", 0)),
 			"capacity": int(guild.get("capacity", 0)),
+			"recruitment": _option_display(str(guild.get("recruitment", "Closed"))),
 		}),
-		11,
+		10,
 		UI_MUTED
 	)
-	summary.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	info.add_child(summary)
+	availability.name = "GuildRowAvailability_%d" % guild_id
+	availability.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	availability.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	info.add_child(availability)
 	var arrow := _label("›", 22, UI_ACCENT if selected else UI_MUTED)
 	arrow.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	arrow.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1232,29 +2888,38 @@ func _render_selected_guild() -> void:
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	description_margin.add_child(description)
-	detail_content.add_child(_localized_label("ui.guild.forum.future", 10, UI_MUTED))
 
 	var actions := HBoxContainer.new()
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 8)
 	detail_content.add_child(actions)
-	var forum_button := Button.new()
-	forum_button.name = "GuildForumButton"
-	_set_localized_property(forum_button, "text", "ui.guild.forum")
-	_set_localized_property(forum_button, "tooltip_text", "ui.guild.forum.tooltip")
-	forum_button.disabled = true
-	forum_button.custom_minimum_size = Vector2(132, 40)
-	_apply_button_style(forum_button)
-	actions.add_child(forum_button)
 	var apply_button := Button.new()
 	apply_button.name = "GuildApplyButton"
 	var recruitment := str(guild.get("recruitment", "Closed"))
 	var is_own_guild := int(membership.get("guildId", 0)) == int(guild.get("id", 0))
-	apply_button.text = _t("ui.guild.yours") if is_own_guild else _application_button_text(recruitment)
-	apply_button.disabled = is_own_guild or recruitment.to_lower() in ["closed", "invite only"]
+	var pending_application := _pending_application_for_guild(int(guild.get("id", 0)))
+	if not pending_application.is_empty():
+		var pending_label := _localized_label("ui.guild.application.pending", 11, UI_GOLD)
+		pending_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		pending_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		actions.add_child(pending_label)
+	if is_own_guild:
+		apply_button.text = _t("ui.guild.yours")
+	elif not membership.is_empty():
+		apply_button.text = _t("ui.guild.application.already_member")
+	elif not pending_application.is_empty():
+		apply_button.text = _t("ui.guild.application.cancel")
+	else:
+		apply_button.text = _application_button_text(recruitment)
+	apply_button.disabled = (
+		is_application_action_in_flight
+		or is_own_guild
+		or not membership.is_empty()
+		or (pending_application.is_empty() and recruitment.to_lower() in ["closed", "invite only"])
+	)
 	apply_button.custom_minimum_size = Vector2(150, 40)
 	apply_button.pressed.connect(_on_application_pressed.bind(guild))
-	_apply_button_style(apply_button, "primary")
+	_apply_button_style(apply_button, "" if not pending_application.is_empty() else "primary")
 	actions.add_child(apply_button)
 
 
@@ -1465,10 +3130,109 @@ func _on_search_changed(_query: String) -> void:
 
 
 func _on_application_pressed(guild: Dictionary) -> void:
-	browse_status_label.text = _t("ui.guild.application.unavailable", {
+	if is_application_action_in_flight or not membership.is_empty():
+		return
+	var guild_id := int(guild.get("id", 0))
+	if guild_id <= 0:
+		return
+	var pending_application := _pending_application_for_guild(guild_id)
+	if not pending_application.is_empty():
+		_cancel_application(int(pending_application.get("id", 0)), guild)
+		return
+	match str(guild.get("recruitment", "Closed")).to_lower():
+		"open":
+			_confirm_open_guild_join(guild)
+		"applications open":
+			_apply_to_selected_guild(guild)
+
+
+func _confirm_open_guild_join(guild: Dictionary) -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "GuildJoinConfirmationDialog"
+	dialog.title = _t("ui.guild.application.join_confirm_title")
+	dialog.dialog_text = _t("ui.guild.application.join_confirm", {
 		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
 	})
-	browse_status_label.visible = true
+	dialog.ok_button_text = _t("ui.guild.application.join")
+	dialog.cancel_button_text = _t("common.cancel")
+	dialog.confirmed.connect(_join_selected_guild.bind(guild), CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(430, 170))
+
+
+func _join_selected_guild(guild: Dictionary) -> void:
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_browse_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	is_application_action_in_flight = true
+	_render_guild_list()
+	_set_browse_status(_t("ui.guild.status.joining", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
+	var response: Variant = await guild_service.call("join_guild", int(guild.get("id", 0)))
+	var result := _dictionary(response)
+	is_application_action_in_flight = false
+	if not bool(result.get("success", false)):
+		_render_guild_list()
+		_set_browse_status(str(result.get("error", _t("ui.guild.error.join"))), true)
+		return
+	pending_applications.clear()
+	incoming_invitations.clear()
+	_apply_home_result(result)
+	_show_page("member")
+	_set_member_status(_t("ui.guild.status.joined", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
+
+
+func _apply_to_selected_guild(guild: Dictionary) -> void:
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_browse_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	is_application_action_in_flight = true
+	_render_guild_list()
+	_set_browse_status(_t("ui.guild.status.applying", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
+	var response: Variant = await guild_service.call("apply_to_guild", int(guild.get("id", 0)))
+	var result := _dictionary(response)
+	is_application_action_in_flight = false
+	if not bool(result.get("success", false)):
+		_render_guild_list()
+		_set_browse_status(str(result.get("error", _t("ui.guild.error.apply"))), true)
+		return
+	_upsert_pending_application(_dictionary(result.get("application", {})))
+	_render_guild_list()
+	_set_browse_status(_t("ui.guild.status.application_sent", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
+
+
+func _cancel_application(application_id: int, guild: Dictionary) -> void:
+	if application_id <= 0:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_browse_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	is_application_action_in_flight = true
+	_render_guild_list()
+	var response: Variant = await guild_service.call("cancel_application", application_id)
+	var result := _dictionary(response)
+	is_application_action_in_flight = false
+	if not bool(result.get("success", false)):
+		_render_guild_list()
+		_set_browse_status(str(result.get("error", _t("ui.guild.error.cancel_application"))), true)
+		return
+	_remove_pending_application(application_id)
+	_render_guild_list()
+	_set_browse_status(_t("ui.guild.status.application_cancelled", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}), false)
 
 
 func _on_create_form_changed(_unused: Variant = null) -> void:
@@ -1564,6 +3328,7 @@ func _refresh_from_server() -> void:
 		return
 	membership = _dictionary(result.get("membership", {})).duplicate(true)
 	incoming_invitations = _array_from_value(result.get("incomingInvitations", [])).duplicate(true)
+	pending_applications = _array_from_value(result.get("pendingApplications", [])).duplicate(true)
 	set_guilds(_array_from_value(result.get("guilds", [])))
 	browse_status_label.visible = false
 	if not membership.is_empty():
@@ -1596,6 +3361,8 @@ func _refresh_home_from_server() -> void:
 func _apply_home_result(result: Dictionary) -> void:
 	guild_home = result.duplicate(true)
 	membership = _dictionary(result.get("membership", {})).duplicate(true)
+	if not membership.is_empty():
+		pending_applications.clear()
 	var home_guild := _dictionary(result.get("guild", {})).duplicate(true)
 	if not home_guild.is_empty():
 		_upsert_guild(home_guild)
@@ -1619,14 +3386,13 @@ func _refresh_membership_state() -> void:
 	var guild_id := int(membership.get("guildId", 0))
 	if guild_id <= 0:
 		membership_label.text = _t("ui.guild.membership.none")
+		membership_label.visible = true
+		create_tab_button.visible = true
 		create_tab_button.disabled = false
 		my_guild_tab_button.visible = false
 		return
-	var guild := _guild_by_id(guild_id)
-	var guild_name := str(guild.get("name", _t("ui.guild.fallback.your_guild")))
-	var role := str(membership.get("role", "member"))
-	membership_label.text = "%s · %s" % [guild_name, _membership_role_label(role)]
-	create_tab_button.disabled = true
+	membership_label.visible = false
+	create_tab_button.visible = false
 	my_guild_tab_button.visible = true
 	if active_page == "create":
 		_show_page("member")
@@ -1636,10 +3402,12 @@ func _membership_role_label(role: String) -> String:
 	match role.to_lower():
 		"leader":
 			return _t("ui.guild.role.leader")
-		"officer":
-			return _t("ui.guild.role.officer")
-		_:
+		"captain", "officer":
+			return _t("ui.guild.role.captain")
+		"member":
 			return _t("ui.guild.role.member")
+		_:
+			return _t("ui.guild.role.recruit")
 
 
 func _on_save_settings() -> void:
@@ -1659,7 +3427,8 @@ func _on_save_settings() -> void:
 		description,
 		_selected_option_value(settings_language_select),
 		_selected_option_value(settings_focus_select),
-		_selected_option_value(settings_recruitment_select)
+		_selected_option_value(settings_recruitment_select),
+		_selected_guild_loan_duration()
 	)
 	var result := _dictionary(response)
 	if not bool(result.get("success", false)):
@@ -1740,6 +3509,42 @@ func _on_cancel_invitation(invitation_id: int) -> void:
 		return
 	await _refresh_home_from_server()
 	_set_member_status(_t("ui.guild.status.invitation_cancelled"), false)
+
+
+func _on_accept_application(application_id: int) -> void:
+	if application_id <= 0:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	var response: Variant = await guild_service.call("accept_application", application_id)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", _t("ui.guild.error.accept_application"))), true)
+		return
+	_apply_home_result(result)
+	active_guild_section = "management"
+	_render_guild_home()
+	_set_member_status(_t("ui.guild.status.application_accepted"), false)
+
+
+func _on_decline_application(application_id: int) -> void:
+	if application_id <= 0:
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	var response: Variant = await guild_service.call("decline_application", application_id)
+	var result := _dictionary(response)
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", _t("ui.guild.error.decline_application"))), true)
+		return
+	await _refresh_home_from_server()
+	active_guild_section = "management"
+	_render_guild_home()
+	_set_member_status(_t("ui.guild.status.application_declined"), false)
 
 
 func _load_emblem_editor(emblem: Dictionary) -> void:
@@ -1931,6 +3736,17 @@ func _set_member_status(message: String, is_error: bool) -> void:
 	member_status_label.add_theme_color_override("font_color", UI_WARNING if is_error else UI_SUCCESS)
 
 
+func _set_browse_status(message: String, is_error: bool) -> void:
+	if browse_status_label == null:
+		return
+	browse_status_label.text = message
+	browse_status_label.visible = not message.is_empty()
+	browse_status_label.add_theme_color_override(
+		"font_color",
+		UI_WARNING if is_error else UI_SUCCESS
+	)
+
+
 func _refresh_creation_requirements() -> void:
 	if money_requirement_label == null:
 		return
@@ -1957,19 +3773,51 @@ func _set_create_status(message: String, is_error: bool) -> void:
 
 func _filtered_guilds() -> Array[Dictionary]:
 	var query := search_input.text.strip_edges().to_lower() if search_input != null else ""
-	if query == "":
-		return guilds.duplicate()
 	var matches: Array[Dictionary] = []
 	for guild: Dictionary in guilds:
+		if not _matches_directory_filter(guild):
+			continue
 		var searchable := " ".join([
 			str(guild.get("name", "")),
 			str(guild.get("language", "")),
 			str(guild.get("focus", "")),
 			str(guild.get("description", "")),
 		]).to_lower()
-		if searchable.contains(query):
+		if query == "" or searchable.contains(query):
 			matches.append(guild)
 	return matches
+
+
+func _matches_directory_filter(guild: Dictionary) -> bool:
+	var recruitment := str(guild.get("recruitment", "")).to_lower()
+	var focus := str(guild.get("focus", "")).to_lower()
+	var language := str(guild.get("language", "")).to_lower()
+	if directory_recruitment_filter == "open" and recruitment not in ["open", "applications open"]:
+		return false
+	if directory_focus_filter != "all" and not focus.contains(directory_focus_filter):
+		return false
+	if not _matches_directory_language_filter(language):
+		return false
+	return true
+
+
+func _matches_directory_language_filter(language: String) -> bool:
+	if directory_language_filter == "all":
+		return true
+	if directory_language_filter == "dutch_english":
+		return language == "dutch / english"
+	var language_label := str({
+		"english": "english",
+		"spanish": "spanish",
+		"portuguese": "portuguese",
+		"italian": "italian",
+		"chinese": "chinese",
+		"german": "german",
+		"french": "french",
+		"dutch": "dutch",
+		"other": "other",
+	}.get(directory_language_filter, ""))
+	return not language_label.is_empty() and language.contains(language_label)
 
 
 func _contains_guild_id(entries: Array[Dictionary], guild_id: int) -> bool:
@@ -1984,6 +3832,42 @@ func _guild_by_id(guild_id: int) -> Dictionary:
 		if int(guild.get("id", 0)) == guild_id:
 			return guild
 	return {}
+
+
+func _pending_application_for_guild(guild_id: int) -> Dictionary:
+	for application_value: Variant in pending_applications:
+		if not application_value is Dictionary:
+			continue
+		var application := application_value as Dictionary
+		if (
+			int(application.get("guildId", 0)) == guild_id
+			and str(application.get("status", "pending")) == "pending"
+		):
+			return application
+	return {}
+
+
+func _upsert_pending_application(application: Dictionary) -> void:
+	var application_id := int(application.get("id", 0))
+	if application_id <= 0:
+		return
+	for index: int in range(pending_applications.size()):
+		var existing := _dictionary(pending_applications[index])
+		if int(existing.get("id", 0)) == application_id:
+			pending_applications[index] = application.duplicate(true)
+			return
+	pending_applications.append(application.duplicate(true))
+
+
+func _remove_pending_application(application_id: int) -> void:
+	var remaining: Array = []
+	for application_value: Variant in pending_applications:
+		if (
+			not application_value is Dictionary
+			or int((application_value as Dictionary).get("id", 0)) != application_id
+		):
+			remaining.append(application_value)
+	pending_applications = remaining
 
 
 func _application_button_text(recruitment: String) -> String:
@@ -2103,10 +3987,14 @@ func _option_display(value: String) -> String:
 		return _t("ui.guild.not_set")
 	var key := str({
 		"English": "ui.guild.option.language.english",
-		"Dutch": "ui.guild.option.language.dutch",
-		"Dutch / English": "ui.guild.option.language.dutch_english",
+		"Spanish": "ui.guild.option.language.spanish",
+		"Portuguese": "ui.guild.option.language.portuguese",
+		"Italian": "ui.guild.option.language.italian",
+		"Chinese": "ui.guild.option.language.chinese",
 		"German": "ui.guild.option.language.german",
 		"French": "ui.guild.option.language.french",
+		"Dutch": "ui.guild.option.language.dutch",
+		"Dutch / English": "ui.guild.option.language.dutch_english",
 		"Other": "ui.guild.option.language.other",
 		"Social": "ui.guild.option.focus.social",
 		"PvE": "ui.guild.option.focus.pve",
@@ -2149,6 +4037,20 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_option_labels(settings_language_select)
 	_refresh_option_labels(settings_focus_select)
 	_refresh_option_labels(settings_recruitment_select)
+	if directory_filter_popup != null:
+		_populate_directory_filter_select(
+			directory_recruitment_select,
+			_selected_option_value(directory_recruitment_select)
+		)
+		_populate_directory_filter_select(
+			directory_focus_select,
+			_selected_option_value(directory_focus_select)
+		)
+		_populate_directory_filter_select(
+			directory_language_select,
+			_selected_option_value(directory_language_select)
+		)
+	_refresh_directory_filter_button()
 	_refresh_creation_requirements()
 	_refresh_membership_state()
 	_render_guild_list()
@@ -2203,6 +4105,12 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 		pressed_bg = Color("#071624f2")
 		border = Color("#4b9dc4cc")
 		hover_border = Color("#79d9ff")
+	elif variant == "danger":
+		normal_bg = Color("#35151bf2")
+		hover_bg = Color("#512029f2")
+		pressed_bg = Color("#260d12f2")
+		border = Color("#b84f5dcc")
+		hover_border = Color("#ff8895")
 	button.add_theme_color_override("font_color", UI_TEXT)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
 	button.add_theme_color_override("font_pressed_color", UI_TEXT)
@@ -2224,6 +4132,12 @@ func _apply_line_edit_style(input: LineEdit) -> void:
 	input.add_theme_font_size_override("font_size", 13)
 	input.add_theme_stylebox_override("normal", _input_style(UI_INPUT, UI_BORDER))
 	input.add_theme_stylebox_override("focus", _input_style(Color("#071225f2"), Color("#7aa7f4"), 2))
+
+
+func _apply_spin_box_style(input: SpinBox) -> void:
+	var line_edit := input.get_line_edit()
+	if line_edit != null:
+		_apply_line_edit_style(line_edit)
 
 
 func _apply_text_edit_style(input: TextEdit) -> void:

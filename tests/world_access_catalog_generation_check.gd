@@ -92,21 +92,34 @@ func _init() -> void:
 		labels_avoid_directional_prefixes,
 		"Staff destination labels never expose technical From or To prefixes"
 	)
-	var all_spawn_points_are_staff_safe := true
-	for area_value: Variant in areas.values():
+	var unsafe_staff_points: Array[String] = []
+	for area_id_value: Variant in areas:
+		var area_id := str(area_id_value)
+		var area_value: Variant = areas.get(area_id, {})
 		if not area_value is Dictionary:
-			all_spawn_points_are_staff_safe = false
 			continue
 		var spawn_points_value: Variant = area_value.get("spawnPoints", {})
 		if not spawn_points_value is Dictionary:
-			all_spawn_points_are_staff_safe = false
 			continue
-		for point_value: Variant in spawn_points_value.values():
+		for point_id_value: Variant in spawn_points_value:
+			var point_id := str(point_id_value)
+			var point_value: Variant = spawn_points_value.get(point_id, {})
 			if not point_value is Dictionary or not bool(point_value.get(
 				"safeForStaffTeleport", false
 			)):
-				all_spawn_points_are_staff_safe = false
-	_expect(all_spawn_points_are_staff_safe, "Every spawn point is safe for staff teleport")
+				unsafe_staff_points.append("%s:%s" % [area_id, point_id])
+	unsafe_staff_points.sort()
+	_expect(
+		unsafe_staff_points == [
+			"aether_clash_battle_royale_preview:jail",
+			"aether_clash_battle_royale_preview:preview",
+			"aether_clash_duel_preview:guild_1_jail",
+			"aether_clash_duel_preview:guild_2_jail",
+			"aether_clash_duel_preview:preview",
+			"aether_clash_waiting_area_preview:preview",
+		],
+		"Only isolated Aether Clash previews are excluded from safe player teleports"
+	)
 	_expect(areas.has("kanto_route_2_gate"), "Inherited transition building is registered")
 	_expect(
 		areas.has("kanto_pewter_city_gym")

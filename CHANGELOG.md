@@ -1,16 +1,51 @@
 # Changelog
 
-## Unreleased
+## 0.3.62 - 2026-08-24
 
 **Added**
 
-- If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
+- Added Player Loans. Offer Pokémon or reusable held items to a nearby Trainer for a chosen duration and optional fee, then manage active and completed loans from the Social menu.
+- Player Loans now include return requests, notifications, a searchable 30-day history, and clear loan markers in the Party, PC, Bag, and Pokémon Summary.
+- Added the Guild Bank with shared funds, Pokémon and item storage, borrowing, rank-based permissions, and activity history.
+- Guilds now have Leader, Captain, Member, and Recruit ranks. Players can join open Guilds or apply to Guilds that review new members.
+- Added Rock Smash as a daily skill. Karate Master Kenji teaches the skill in Pewter City, and more rocks and rewards become available as it levels up.
+- The story now continues through Mt. Moon to Route 4 and Cerulean City, with new battles, wild Pokémon, item pickups, and places to explore.
+- Added new options for unrated private battles, including rooms without a tier and Aether OU rooms.
+- Added the Aether Clash Battle Royale, Duel, and waiting-area visuals.
+- Added the unisex Mysterious Outfit with separate clothing pieces.
+- If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report that can be viewed from the notification or the Support page in Settings.
+- Launcher and login news now follow official forum announcements.
+
+**Changed**
+
+- Borrowed Pokémon can train, level up, evolve, move between the Party and PC, and change held items. Other permanent changes remain available only to their owner.
+- Player Loan screens now separate Pokémon and items, show every asset individually, and make deadlines, returns, and loan status easier to understand.
+- Guild screens now make applications, ranks, members, bank contents, chat, and travel easier to find and use.
+- The Skills window now has clearer progress cards, level rewards, and improved area and catch lists for Fishing, Thieving, and Rock Smash.
+- Regional Aethernet travel now costs ₽200, or ₽100 with an active Aether Blessing. Aether Anchors remain free.
+- Mt. Moon now rewards TM Payback; TM Thief remains a reward from the Thieving quest.
+- Battle Bond Greninja now changes into Ash-Greninja after gaining its once-per-battle stat boosts and returns to normal after switching out.
+- Champions ZA and the new Mega Evolutions are now available in supported unrated battles, with clearer explanations when a Pokémon is not compatible.
+- Ranked PvP now opens and reconnects more quickly while keeping the correct queue time.
+- Ground items now play a pickup sound and appear in System messages without interrupting play with a dialogue window.
+- Poké Mart item buyers now accept every tradeable item in the Bag, including items the shop does not sell.
 
 **Fixed**
 
+- Player Loans now refresh the Party, PC, Bag, and loan lists correctly when an offer is accepted or an asset is returned.
+- Loaned items and recently returned Pokémon now appear reliably in the correct Bag or PC location.
+- Loan deadlines and automatic returns now remain clear and reliable, including while a player is offline or in battle.
+- Fixed several Mt. Moon story scenes, Trainer sight ranges, portraits, animations, scenery, item locations, and entrances.
+- Pokémon Storage and read-only Summaries now show names and details more clearly and behave more reliably.
+- Champions ZA Mega Evolutions now use the correct sprites, names, forms, abilities, and battle stats throughout the interface.
+- Launcher downloads now recover from slow or interrupted connections and can resume after restarting the launcher.
+- NPC dialogue now opens more quickly, and missing translations reliably fall back to English.
 - Ogerpon's correct battle sprites are now included in game downloads.
 - Training Rooms no longer blame a valid Poképaste when room timers are temporarily unavailable.
 - Wild battles now immediately show the first Pokémon that can battle when an earlier party member has fainted.
+- The house on Route 2 can now be entered and exited safely.
+- Ash-Greninja now loads its Pokédex sprite without a false missing-asset error.
+- Fixed collision and visual layering in the Aether Clash waiting area and Battle Royale jail.
 
 ## 0.3.59 - 2026-08-20
 
