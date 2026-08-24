@@ -7,6 +7,7 @@ const MAP_TRANSITION_INDICATOR_SCRIPT: Script = preload("res://scripts/ui/map_tr
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
 const BattleEnvironmentResolverScript := preload("res://scripts/battle/battle_environment_resolver.gd")
 const TallGrassDepthSortingScript := preload("res://scripts/world/tall_grass_depth_sorting.gd")
+const AetherClashJailDepthScript := preload("res://scripts/world/aether_clash_jail_depth.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
 const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.06
 const POSITION_SAVE_EPSILON := 1.0
@@ -28,6 +29,7 @@ const STRUCTURE_TOP_VISUAL_LAYER_NAMES: Array[String] = [
 	"ObjectTop",
 	"ObjectsTop",
 	"Objects Top",
+	"JailBarsTop",
 ]
 const TALL_GRASS_DEPTH_ROW_META := "pao_tall_grass_depth_row"
 const TALL_GRASS_DEPTH_ROWS_BUILT_META := "pao_tall_grass_depth_rows_built"
@@ -1314,6 +1316,7 @@ func _normalize_map_depth_layer_z_indices(map: Node) -> void:
 	if map == null:
 		return
 
+	AetherClashJailDepthScript.split_jail_bars_for_depth_sorting(map)
 	_normalize_map_tree_layer_z_indices(map)
 	_build_tall_grass_visual_depth_rows(map)
 	_build_decorative_visual_depth_rows(map)
