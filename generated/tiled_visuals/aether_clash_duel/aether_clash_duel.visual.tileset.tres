@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://bmbayomb0qiqb"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/aether_clash_duel/assets/5GEN_TILESET_1699757399_000.texture.res" id="1_5rtqn"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/aether_clash_duel/assets/5GEN_TILESET_1699757399_005.texture.res" id="2_tbwci"]
