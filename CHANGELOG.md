@@ -4,6 +4,7 @@
 
 **Added**
 
+- Added the Aether Clash battle royale, duel, and waiting-area visuals.
 - If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
 
 **Fixed**

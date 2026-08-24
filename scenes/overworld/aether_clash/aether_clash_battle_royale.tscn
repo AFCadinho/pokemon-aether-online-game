@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/aether_clash_battle_royale/aether_clash_battle_royale.visual.tscn" id="1_visual"]
+
+[node name="AetherClashBattleRoyale" type="Node2D"]
+
+[node name="BattleRoyale" parent="." instance=ExtResource("1_visual")]
