@@ -2363,6 +2363,26 @@
     "name": "Spierveer",
     "shortDesc": "Verhoogt de aanvalsinspanning met 1."
   },
+  "mysterious-mask": {
+    "name": "Mysterieus masker",
+    "shortDesc": "Verplaats het Mysterieuze masker naar Personage aanpassen."
+  },
+  "mysterious-outfit": {
+    "name": "Mysterieuze-outfitdoos",
+    "shortDesc": "Open deze outfitdoos om vier losse cosmetische items van de Mysterieuze outfit te ontvangen."
+  },
+  "mysterious-shirt": {
+    "name": "Mysterieus shirt",
+    "shortDesc": "Verplaats het Mysterieuze shirt met handschoenen naar Personage aanpassen."
+  },
+  "mysterious-shoes": {
+    "name": "Mysterieuze schoenen",
+    "shortDesc": "Verplaats de Mysterieuze schoenen naar Personage aanpassen."
+  },
+  "mysterious-trousers": {
+    "name": "Mysterieuze broek",
+    "shortDesc": "Verplaats de Mysterieuze broek naar Personage aanpassen."
+  },
   "mystery-egg": {
     "name": "Mysterie-ei",
     "shortDesc": "Afleveren bij professor Elm."

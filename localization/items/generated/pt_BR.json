@@ -2363,6 +2363,26 @@
     "name": "Pena Muscular",
     "shortDesc": "Aumenta o esforço de ataque em 1."
   },
+  "mysterious-mask": {
+    "name": "Máscara Misteriosa",
+    "shortDesc": "Mova a Máscara Misteriosa para a Personalização de Personagem."
+  },
+  "mysterious-outfit": {
+    "name": "Caixa de Traje Misterioso",
+    "shortDesc": "Abra esta caixa para receber quatro itens cosméticos separados do Traje Misterioso."
+  },
+  "mysterious-shirt": {
+    "name": "Camisa Misteriosa",
+    "shortDesc": "Mova a Camisa Misteriosa com luvas para a Personalização de Personagem."
+  },
+  "mysterious-shoes": {
+    "name": "Calçados Misteriosos",
+    "shortDesc": "Mova os Calçados Misteriosos para a Personalização de Personagem."
+  },
+  "mysterious-trousers": {
+    "name": "Calças Misteriosas",
+    "shortDesc": "Mova as Calças Misteriosas para a Personalização de Personagem."
+  },
   "mystery-egg": {
     "name": "Ovo Misterioso",
     "shortDesc": "Entregue ao Professor Elm."

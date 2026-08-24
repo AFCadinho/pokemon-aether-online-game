@@ -88,7 +88,7 @@ func _check_catalogs() -> void:
 		_check(parsed is Dictionary, "generated %s item catalog is valid JSON" % locale)
 		var catalog: Dictionary = parsed as Dictionary if parsed is Dictionary else {}
 		generated_catalogs[locale] = catalog
-		_check(catalog.size() == 1397, "generated %s item catalog covers the complete source index" % locale)
+		_check(catalog.size() == 1402, "generated %s item catalog covers the complete source index" % locale)
 		for item_id_value: Variant in catalog.keys():
 			var item_id := str(item_id_value)
 			var entry: Dictionary = catalog.get(item_id, {})
@@ -112,7 +112,7 @@ func _check_catalogs() -> void:
 		localized_ids.sort()
 		_check(localized_ids == expected_generated_ids, "generated %s item IDs match English" % locale)
 		_check(
-			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1398,
+			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1403,
 			"%s complete item catalog plus virtual Escape Rope action loads into the runtime resolver" % locale
 		)
 

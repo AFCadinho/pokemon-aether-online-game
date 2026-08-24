@@ -14719,6 +14719,14 @@ func _format_appearance_option_name(category_id: String, part_id: String) -> Str
 				return LocalizationManager.text("ui.appearance.option.blossom_chroma_earrings")
 			"Aether_Blossom_Shoes_Chroma":
 				return LocalizationManager.text("ui.appearance.option.blossom_chroma_shoes")
+			"Mysterious_Mask":
+				return LocalizationManager.text("ui.appearance.option.mysterious_mask")
+			"Mysterious_Shirt":
+				return LocalizationManager.text("ui.appearance.option.mysterious_shirt")
+			"Mysterious_Trousers":
+				return LocalizationManager.text("ui.appearance.option.mysterious_trousers")
+			"Mysterious_Shoes":
+				return LocalizationManager.text("ui.appearance.option.mysterious_shoes")
 	return _humanize_appearance_id(normalized_part_id)
 
 func _format_appearance_swatch_name(raw_label: String) -> String:
