@@ -6,6 +6,7 @@ const QUEST_ID := "travel_through_mt_moon"
 const FINAL_STEP_ID := "cross_mt_moon"
 const OVERWORLD_POKEMON_SCENE := preload("res://scenes/npcs/overworld_pokemon.tscn")
 const RIFT_TEXTURE := preload("res://assets/npcs/Ultimate Gen 4 Overworlds Pack/Animations & Others/DistortionWorld_Portal.png")
+const FUTURE_SELF_MUGSHOT := preload("res://assets/sprites/mugshots/future_self_mugshot.png")
 const CINEMATIC_MOVE_CATALOG := preload("res://scripts/world/story/mt_moon_cinematic_move_catalog.gd")
 const ROCKET_PORTRAIT_ID := "showdown_rainbowrocketgrunt"
 const ROCKET_SPECIES: Array[String] = ["zubat", "rattata", "ekans", "koffing", "sandshrew"]
@@ -29,7 +30,9 @@ const DIALOGUE_STAGE_ROCKET_REVEAL_CHALLENGE := 2
 const DIALOGUE_STAGE_ROCKET_BATTLE_CHALLENGE := 3
 const DIALOGUE_STAGE_ROCKET_FLEE := 4
 const DIALOGUE_STAGE_PLAYER_QUESTION := 5
+const DIALOGUE_STAGE_FUTURE_REBUKE := 6
 const DIALOGUE_STAGE_PLAYER_DEFENSE := 7
+const DIALOGUE_STAGE_FUTURE_WARNING := 8
 const DIALOGUE_STAGE_PLAYER_PROMISE := 9
 const DIALOGUE_STAGE_FAREWELL := 10
 const DIALOGUE_STAGE_PLAYER_SURPRISE := 11
@@ -44,6 +47,11 @@ const PLAYER_DIALOGUE_STAGES: Array[int] = [
 	DIALOGUE_STAGE_PLAYER_DEFENSE,
 	DIALOGUE_STAGE_PLAYER_PROMISE,
 	DIALOGUE_STAGE_PLAYER_SURPRISE,
+]
+const REVEALED_FUTURE_SELF_DIALOGUE_STAGES: Array[int] = [
+	DIALOGUE_STAGE_FUTURE_REBUKE,
+	DIALOGUE_STAGE_FUTURE_WARNING,
+	DIALOGUE_STAGE_FAREWELL,
 ]
 
 @export var miguel_path: NodePath
@@ -156,7 +164,7 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 	if current_stage in PLAYER_DIALOGUE_STAGES:
 		resolved_speaker_name = _player_speaker_name()
 	var portrait := await _dialogue_portrait(current_stage)
-	var show_portrait := current_stage in ROCKET_DIALOGUE_STAGES or current_stage in PLAYER_DIALOGUE_STAGES
+	var show_portrait := current_stage in ROCKET_DIALOGUE_STAGES or current_stage in PLAYER_DIALOGUE_STAGES or current_stage in REVEALED_FUTURE_SELF_DIALOGUE_STAGES
 	dialogue_box.call("start_dialogue", lines, resolved_speaker_name, portrait, show_portrait)
 	await dialogue_box.dialogue_finished
 	await _wait_for_interact_release()
@@ -599,6 +607,8 @@ func _dialogue_portrait(stage: int) -> Texture2D:
 		return TrainerPortraitCatalog.get_texture(ROCKET_PORTRAIT_ID)
 	if stage in PLAYER_DIALOGUE_STAGES:
 		return await _player_mugshot()
+	if stage in REVEALED_FUTURE_SELF_DIALOGUE_STAGES:
+		return FUTURE_SELF_MUGSHOT
 	return null
 
 

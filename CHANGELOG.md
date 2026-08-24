@@ -225,7 +225,7 @@
 
 **Changed**
 
-- Your future self now wears the Mysterious Outfit when rescuing you from Team Rocket in Mt. Moon.
+- Your future self now wears the Mysterious Outfit when rescuing you from Team Rocket in Mt. Moon, with a dedicated portrait after the reveal.
 - Mt. Moon's TM reward is now TM Payback, because TM Thief is earned through the Thieving quest.
 - PvP now reconnects more quickly after a short connection problem and clearly shows when your battle is being restored.
 - Ranked PvP opens faster, finds ready matches sooner, and keeps the correct queue time after reconnecting.
