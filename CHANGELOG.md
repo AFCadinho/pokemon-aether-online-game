@@ -2,284 +2,50 @@
 
 ## Unreleased
 
-- Collision now works correctly in the Aether Clash waiting area.
-
-- Aether Clash Duel now has separate jail spawn points for Guild 1 and Guild 2.
-
-- Aether Clash Duel now uses the regular Clan Wars arena, while Battle Royale uses the jail arena.
-
-- The Aether Clash Battle Royale jail now displays its arena objects correctly in front of the jail bars.
-
-- Players now appear in front of the Aether Clash Battle Royale jail bars at the jail spawn and behind them after stepping north.
-
-- The staff jail teleport now follows the jail spawn position in the Aether Clash Battle Royale map.
-
-- Staff can teleport directly into the jail in the Aether Clash Battle Royale preview, and the Battle Royale map now exposes the same jail spawn for minigame sessions.
-
-- Updated the Aether Clash Battle Royale arena so its jail bars use the correct foreground depth layer.
-
-- Staff can now freely explore isolated previews of the Aether Clash duel, battle royale, and waiting-area maps without entering a live match. Their updated visual layers are included.
-
-- The Guild Bank now shows available and borrowed assets separately, lets members borrow and return individual Pokémon or items, and gives Leaders and Captains a force-return action.
-
-- Loan History now defaults to the last 30 days and can be filtered by the last 24 hours, 7, 14, or 30 days, or by a custom date range.
-
-- Local development servers now offer a five-minute lending duration at the bottom of the duration list for faster loan-return testing.
-
-- Borrowed Pokémon can train and evolve from leveling, but their moves, EV allocation, Poké Ball, nickname, and other details cannot be changed, and items cannot be used on them. Held items remain available.
-
-- Return requests now show a notification badge in Social and Loans, play a notification sound, open the requested asset directly, and can be accepted or declined per asset.
-
-- Made the Guild and Aether Exchange toolbar icons easier to tell apart at a glance.
-
-- Loan History now covers the last 30 days and can be searched by Trainer or asset and filtered by outcome.
-
-- Both players now receive a system message when a loaned Pokémon or item returns, including after logging back in.
-
-- Player Loans now labels delayed deadline processing as overdue instead of leaving the misleading “due now” message visible.
-
-- Pokémon that cannot be lent are now clearly marked and disabled before creating a Player Loan offer.
-
-- Loan deadlines now count down in minutes during their final hour while keeping the exact UTC deadline visible.
-
-- Item loans now reliably show every individual item and its return action, including items that are currently in the Bag.
-
-- Player Loans now separates borrowed and lent assets, provides Pokémon and Item tabs, and lets each item copy be viewed, returned, or requested back individually.
-
-- Borrowed Pokémon now have loan markers in Party, PC, and Summary cards, plus a dedicated list in Pokémon Storage.
-
-- Borrowed held items now appear in the Bag with a clear loan marker while remaining separate from owned items.
-
-- Player Loan cards now show the names and icons of every item in an offer instead of only an item count.
-
-- Player Loans now offer 48-hour and 72-hour durations, with every duration shown consistently in hours.
-
-- Player Loan offers now use separate Pokémon and item modes, so one offer can never mix both asset types.
-
-- Pokémon Storage now uses distinct warning colors for releasing Pokémon and closing the window.
-
-- Player Loan offers can now search Pokémon across every PC Box, and the PC has a separate Loan Returns inbox that locates recently returned Pokémon in their real storage position.
-
-- Fixed Player Loans showing an empty Pokémon selection when PC Box data was loaded.
-
-- Player Loans now support Pokémon from Party or PC Boxes, respect the recipient's trade level cap, and offer safer one-to-24-hour durations.
-
-- Player Loans dropdowns and confirmation windows now match the Aether interface style.
-
-- Reusable held items now have a complete Player Loan flow with eligible Bag filtering, copy quantities, icons, holder details, equipping, and individual return controls.
-
-- Lenders can now request a specific Pokémon or item back, while borrowers can still choose when to return it before the agreed deadline.
-
-- Player Loan offers now require the lender to keep at least one Pokémon in their Party.
-
-- Accepting or returning a Player Loan now refreshes both Trainers' Party, PC, and Bag state, so moved Pokémon no longer remain visible in the lender's Party.
-
-- Player Loans now deliver persistent system messages for offers, responses, return requests, and returned assets, including after logging in. Borrowed Pokémon and items can now be returned one at a time.
-
-- Player Loan cards now show who borrowed from whom, clear status and deadline details, and every Pokémon or item with its name, icon, and current state. Completed offers are kept in History instead of Open Loans.
-
-- Player loan offers now start only from a nearby Trainer on the same map. The Socials Loans window is now focused entirely on reviewing and managing loans.
-
-- Accepting a player loan now immediately refreshes the Party, PC, Bag, and wallet, confirms where the borrowed assets are available, and uses clearly visible selection boxes.
-
-- Incoming player loan offers now appear like trade requests, with a clear asset summary and direct accept or decline actions.
-
-- Guild Bank donations now become Guild property, Pokémon and items show their icons, Shared Funds accept deposits from every member, and separate history windows track membership, rank, funds, item, and Pokémon activity.
-
-- Guild members can now leave their Guild from the overview after safely resolving any Pokémon they own or borrowed in the Guild Vault.
-
-- Guild applications now have a dedicated inbox with a pending notification badge and direct access to each applicant's Trainer Card.
-
-- The Guild Bank now supports shared Pokédollars, item storage, and Pokémon storage with rank-based deposit, withdrawal, and borrowing rights.
-
-- The Guild member list now shows each trainer's rank, online status or last activity, and a direct PM button for online members.
-
-- Guilds now have Leader, Captain, Member, and Recruit ranks, with visible bank rights and rank controls for Guild leaders.
-
-- My Guild now has an always-visible travel bar for the Aether Clash Lobby and future Guild Base, plus a Guild Bank preview for shared funds, Pokémon and items.
-
-- Guild leaders can edit their emblem by clicking it directly, without a duplicate edit button.
-
-- Guilds now appears before Aether Exchange in the main interface for easier navigation.
-
-- Guild management now shows membership applications in a clear inbox card with a pending count and visible empty state.
-
-- The Bag right-click menu now focuses on usable actions without a redundant Inspect option.
-
-- Guild browsing, creation, and settings now share a broader language list including Spanish, Portuguese, Italian, and Chinese.
-
-- The Skills overview now shows richer full-width cards with level progress, descriptions, status, and clear links to each skill.
-
-- Every skill now presents level unlocks as a clear, responsive progression roadmap with unlocked, next, and locked states.
-
-- Fishing now has an area dropdown, quick rod filters, and responsive Pokémon cards in its catch catalog.
-
-- Thieving targets now use the same compact, progress-aware area dropdown as Rock Smash.
-
-- Bag item icons now use a more compact size that keeps their pixel art sharp.
-
-- The Rock Smash area selector now has clearer spacing before the rock list.
-
-- The Rock Smash area menu is now wider and easier to read and select from.
-
-- Rock Smash now keeps rock cards compact and consistent across every area.
-
-- Rock Smash now groups daily rocks in a compact area dropdown that shows each area's daily progress.
-
-- Poké Mart item buyers now accept every tradeable item in the player's Bag, including items not sold by the shop.
-
-- The Skills window now adapts to the available screen space and shows Rock Smash rocks in two columns when there is enough room.
-
-- The house on Route 2 can now be entered and safely exited back onto the route.
-
-- Graphics dropdowns in Settings now use the complete PokeAether interface style.
-
-- Karate Master Kenji now refreshes his Rock Smash quest offer so it always shows the current reward.
-
-- Pewter City now loads Karate Master Kenji's overworld sprite without an invalid resource warning.
-
-- Regional Aethernet travel now costs ₽200, or ₽100 with an active Aether Blessing. Aether Anchors remain free.
-
-- The Town Map location panel now uses its available width for clearer descriptions, interiors, and route links.
-
-- Mt. Moon's nine existing rocks now work with the daily Rock Smash skill and unlock from level 5 through levels 20, 50, and 75.
-
-- Karate Master Kenji now has a Black Belt mugshot during the Rock Smash lesson.
-
-- Route 3 and Route 22 now reward exploration with additional visible field items.
-
-- Early Kanto maps now include their visible FireRed and LeafGreen field items through Route 4.
-
-- Cerulean City now plays its own remastered city theme.
-
-- You can now travel between Route 4 and the first playable version of Cerulean City.
-
-- Team Rocket now reacts to your fallen Pokémon before your future self intervenes during the Mt. Moon rescue.
-
-- Your mugshot now appears for every line your character speaks during the Mt. Moon rescue.
-
-- Your future partner's attack during the Mt. Moon rescue now plays a matching move sound.
-
-- Your character now turns toward Team Rocket as they surround you during the Mt. Moon ambush.
-
-- TMs and HMs found in the overworld now use a distinct golden Poké Ball.
-
-- Ground items now play their pickup sound and appear in System messages without opening a dialogue box.
-
-- Miguel now blocks the entire fossil-room approach until you have defeated the required Team Rocket Grunts.
-
-- Ash-Greninja now loads its Pokédex sprite without showing a false missing-asset error.
-
-- Several Trainers in Mt. Moon now watch the intended paths from their corrected sight distances and directions.
-
-- Entering Mt. Moon from Route 4 now leaves your character facing into the cave.
-
-- Both upper Team Rocket Grunts now face you correctly during the Mt. Moon ambush, regardless of which fossil you choose.
-
-- Lass Iris in Mt. Moon can now spot you from five tiles away.
-
-- The Hiker at Mt. Moon's entrance now reliably stops you with his warning when you first walk past him.
-
-- Guild emblems now appear as clear, compact badges beside player names instead of enlarging the name box.
-
-- Player and NPC name boxes now fit their displayed name instead of keeping an oversized minimum width and height.
-
-- You can now leave Mt. Moon through its eastern exit and arrive on Route 4, then return through the same cave entrance.
-
-- Mt. Moon no longer moves you to Miguel after a Team Rocket battle. Miguel now speaks before taking the fossil you leave behind, and the Moon Stone on 1F appears in its intended spot.
-
-- Brock now clearly names Rock Slide when awarding its TM, the reward appears in your System messages, and the Hiker at Mt. Moon uses the correct portrait.
-
-- The main story now continues after Mt. Moon by directing you to Cerulean Gym and then toward Nugget Bridge while the Gym Leader is away.
-
-- The two tiles beside Miguel are now walkable once his Mt. Moon confrontation becomes available.
-
-- Your character now responds to the mysterious Mt. Moon rescuer before receiving his warning about protecting your Pokémon.
-
-- The Mt. Moon rescue now surrounds you from both sides, gives Team Rocket and your character the correct portraits, keeps the mysterious Trainer and partner visibly separated, plays every summon and attack without skipped dialogue, and turns both characters toward each other after Team Rocket escapes.
-
-- Your portrait in the Mt. Moon rescue dialogue now includes your upper body and current clothing instead of zooming tightly into the face.
-
-- Pokémon summoned during the Mt. Moon rescue now remain inside their Poké Balls until the release animation plays.
-
-- A Rocket Grunt now orders Zubat to attack through a full dialogue message, after which Zubat visibly lunges and strikes your follower before your character calls out to them.
-
-- The Mt. Moon rescue now shows Miguel panicking and fleeing as Team Rocket closes in, without getting stuck in his run animation; the scene ends with your character reacting to the mysterious Trainer's disappearance, and Miguel apologizes when you meet again.
-
-- Rewinding the Mt. Moon story now restores the fossil Poké Balls immediately.
-
-- The Mt. Moon rescue now plays as a full cutscene with Team Rocket summoning Pokémon, a mysterious rift, and your future partner's counterattack.
-
 **Added**
 
-- Added player loans beside Trade. You can offer Pokémon or reusable held items, set a duration and optional fee, and review received, borrowed, lent, and completed loans from the Social menu.
-- Trainers you have not defeated yet now show an exclamation mark above their head.
-- Wild Clefairy, Zubat, Paras, Geodude, and Onix can now appear throughout Mt. Moon, with Clefable also appearing on B2F.
-- The story now continues into Mt. Moon: investigate four suspicious people, face Miguel for a fossil, and survive Team Rocket's ambush.
-- Mt. Moon now contains its visible FireRed and LeafGreen item pickups, plus optional rocks that can be cleared with Rock Smash.
-- Ground Poké Balls can hold one-time item rewards, and Strength boulders can be pushed one tile at a time.
-- Mt. Moon now has its FireRed and LeafGreen battle Trainers on 1F and B2F.
-- Private battle room hosts can choose no tier or Aether OU when creating a room.
-- Authorized developers can keep a direct Mega battle form for a clearly marked test Pokémon and clean up those test Pokémon from Developer Tools.
-- Route 3 now connects to Mt. Moon, and all three cave floors connect through their matching ladders and tunnels.
-- Mt. Moon now plays its own cave music on every floor.
-- Mt. Moon B1F now hides its other disconnected passages while you explore.
-- Added the Aether Clash battle royale, duel, and waiting-area visuals.
-- Added the unisex Mysterious Outfit with a mask, shirt and gloves, trousers, and shoes.
-- If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
-- Added the first Rock Smash lesson in Pewter City. Karate Master Kenji gives the HM, and his four daily training rocks award Rock Smash XP, valuable items, and later complete fossils.
-- The Skills window now shows Rock Smash levels, fossil odds, unlocks, and which fixed rocks are still available today.
-- Launcher and login news now follow official forum announcements automatically.
-- Players now visibly rise or descend while crossing marked horizontal stairways, without leaving the normal movement grid.
-- Players can now join open Guilds directly or apply to Guilds that review new members. Guild leaders and officers can accept or decline applications from Guild Management.
+- Added Player Loans. Offer Pokémon or reusable held items to a nearby Trainer for a chosen duration and optional fee, then manage active and completed loans from the Social menu.
+- Player Loans now include return requests, notifications, a searchable 30-day history, and clear loan markers in the Party, PC, Bag, and Pokémon Summary.
+- Added the Guild Bank with shared funds, Pokémon and item storage, borrowing, rank-based permissions, and activity history.
+- Guilds now have Leader, Captain, Member, and Recruit ranks. Players can join open Guilds or apply to Guilds that review new members.
+- Added Rock Smash as a daily skill. Karate Master Kenji teaches the skill in Pewter City, and more rocks and rewards become available as it levels up.
+- The story now continues through Mt. Moon to Route 4 and Cerulean City, with new battles, wild Pokémon, item pickups, and places to explore.
+- Added new options for unrated private battles, including rooms without a tier and Aether OU rooms.
+- Added the Aether Clash Battle Royale, Duel, and waiting-area visuals.
+- Added the unisex Mysterious Outfit with separate clothing pieces.
+- If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report that can be viewed from the notification or the Support page in Settings.
+- Launcher and login news now follow official forum announcements.
 
 **Changed**
 
-- Your future self now wears the Mysterious Outfit when rescuing you from Team Rocket in Mt. Moon, with a dedicated portrait after the reveal.
-- Mt. Moon's TM reward is now TM Payback, because TM Thief is earned through the Thieving quest.
-- PvP now reconnects more quickly after a short connection problem and clearly shows when your battle is being restored.
-- Ranked PvP opens faster, finds ready matches sooner, and keeps the correct queue time after reconnecting.
-- Battle Bond Greninja now shows Ash-Greninja after activating its current once-per-battle stat boosts. It returns to its normal appearance permanently for that battle after switching out.
-- Champions ZA is now available to every player as an unrated private-room tier. It does not give players Pokémon or items and does not affect Ranked Battles.
-- The game now shows clear localized messages when a new Mega Evolution is not ready or allowed for an action.
-- Testers can use every Developer Tools action except unrestricted Pokémon creation. They can still create normalized Pokémon through Alpha Tools.
-
-**Changed**
-
-- Wild battles now focus on the Pokémon after the opening summon instead of keeping your Trainer behind it. Trainers remain visible in Trainer and PvP battles.
-
-**Changed**
-
-- Guilds are now easier to browse with quick filters and clearer Guild cards. Guild members also get direct shortcuts to chat, the member list and the Aether Clash Lobby.
+- Borrowed Pokémon can train, level up, evolve, move between the Party and PC, and change held items. Other permanent changes remain available only to their owner.
+- Player Loan screens now separate Pokémon and items, show every asset individually, and make deadlines, returns, and loan status easier to understand.
+- Guild screens now make applications, ranks, members, bank contents, chat, and travel easier to find and use.
+- The Skills window now has clearer progress cards, level rewards, and improved area and catch lists for Fishing, Thieving, and Rock Smash.
+- Regional Aethernet travel now costs ₽200, or ₽100 with an active Aether Blessing. Aether Anchors remain free.
+- Mt. Moon now rewards TM Payback; TM Thief remains a reward from the Thieving quest.
+- Battle Bond Greninja now changes into Ash-Greninja after gaining its once-per-battle stat boosts and returns to normal after switching out.
+- Champions ZA and the new Mega Evolutions are now available in supported unrated battles, with clearer explanations when a Pokémon is not compatible.
+- Ranked PvP now opens and reconnects more quickly while keeping the correct queue time.
+- Ground items now play a pickup sound and appear in System messages without interrupting play with a dialogue window.
+- Poké Mart item buyers now accept every tradeable item in the Bag, including items the shop does not sell.
 
 **Fixed**
 
-- Pokémon Storage hover cards now stay compact and consistently sized, show each Pokémon's level, and leave IV and EV details to the full Summary.
-- Read-only Pokémon Summaries opened from Storage can now be dragged reliably, and Storage slots and hover cards show nicknames when available.
-- Map changes now fade smoothly while keeping a dim view of the previous area during loading, reducing sudden dark-to-bright jumps.
-- Miguel now warns you and sends you back when he blocks the fossil corridor, instead of leaving you against an unexplained invisible barrier.
-- Miguel no longer moves into a Mt. Moon wall after his battle.
-- Missing translated text now reliably falls back to English.
-- Battle Bond Greninja now uses the transformation animation when it changes into Ash-Greninja.
-- Shiny Champions ZA Mega Evolutions now use their own colors in the Pokédex, party, storage, and Damage Calculator instead of falling back to their normal sprites.
-- The Pokédex now hides Greninja's technical Bond record, keeps Ash-Greninja visible as a battle-only form, and shows Battle Bond as Greninja's Special Ability. Ability-changing items also explain that this Ability is fixed.
-- Finished battles now close the Damage Calculator automatically so the battle result can be closed immediately.
-- Champions ZA's battle HUD, Damage Calc, and party hover cards now use the active Mega form, ability, and current battle stats.
-- Opponent names now update to their revealed Mega form in the battle HUD and battle log.
-- Static front sprites for the new Champions ZA Mega Evolutions now appear at the correct battle size.
-- Launcher downloads now recover from slow or interrupted connections, resume after restarting the launcher, and show clearer speed and connection details.
-- Foreground cave walls on Mt. Moon B1F and B2F now pass in front of or behind characters correctly.
-- Ground Poké Balls and other overworld objects can now be interacted with correctly on offset map grids.
-- Updated the Mt. Moon B2F scenery to match the latest map artwork.
-- Players now face away from the entrance after using a Mt. Moon ladder or tunnel.
-- NPC dialogue now opens promptly by preparing nearby dialogue and avoiding duplicate content requests.
-- Move, ability, nature, EXP, Happiness, held item, and Poké Ball details now use compact hover cards across their full fields in every Pokémon Summary; read-only Summaries also show IV and EV details this way.
-- Champions ZA now explains the exact Mega compatibility problem instead of showing a generic room-creation error.
-- Private battle rooms now explain when the battle server is recovering instead of showing a generic creation error.
-- Read-only Pokémon Summaries now fill in a missing National Dex number instead of leaving the number blank.
+- Player Loans now refresh the Party, PC, Bag, and loan lists correctly when an offer is accepted or an asset is returned.
+- Loaned items and recently returned Pokémon now appear reliably in the correct Bag or PC location.
+- Loan deadlines and automatic returns now remain clear and reliable, including while a player is offline or in battle.
+- Fixed several Mt. Moon story scenes, Trainer sight ranges, portraits, animations, scenery, item locations, and entrances.
+- Pokémon Storage and read-only Summaries now show names and details more clearly and behave more reliably.
+- Champions ZA Mega Evolutions now use the correct sprites, names, forms, abilities, and battle stats throughout the interface.
+- Launcher downloads now recover from slow or interrupted connections and can resume after restarting the launcher.
+- NPC dialogue now opens more quickly, and missing translations reliably fall back to English.
 - Ogerpon's correct battle sprites are now included in game downloads.
 - Training Rooms no longer blame a valid Poképaste when room timers are temporarily unavailable.
 - Wild battles now immediately show the first Pokémon that can battle when an earlier party member has fainted.
+- The house on Route 2 can now be entered and exited safely.
+- Ash-Greninja now loads its Pokédex sprite without a false missing-asset error.
+- Fixed collision and visual layering in the Aether Clash waiting area and Battle Royale jail.
 
 ## 0.3.59 - 2026-08-20
 
