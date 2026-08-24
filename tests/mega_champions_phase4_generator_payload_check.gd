@@ -52,4 +52,3 @@ func _check(condition: bool, message: String) -> void:
 		return
 	failed = true
 	push_error("FAIL: %s" % message)
-
