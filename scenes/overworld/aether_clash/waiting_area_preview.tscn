@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/aether_clash/waiting_area.tscn" id="1_map"]
+[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
+
+[node name="AetherClashWaitingAreaPreview" type="Node2D"]
+script = ExtResource("2_metadata")
+map_id = "aether_clash_waiting_area_preview"
+map_region_name = "Aether Clash"
+map_display_name = "Aether Clash Waiting Area (Staff Preview)"
+world_access_group_id = "aether_clash"
+world_access_group_label = "Aether Clash"
+world_access_area_type = "exterior"
+location_id = "aether_clash.waiting_area_preview"
+location_name = "Aether Clash Waiting Area Preview"
+region_id = "aether_clash"
+weather_profile = "disabled"
+music_track_id = "login.lugia_theme_lofi"
+
+[node name="PreviewMap" parent="." instance=ExtResource("1_map")]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="PreviewSpawn" type="Marker2D" parent="Spawns"]
+position = Vector2(400, 400)

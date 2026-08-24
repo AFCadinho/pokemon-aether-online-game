@@ -24,6 +24,18 @@
         }
       }
     },
+    "aether_clash_waiting_area_preview": {
+      "label": "Aether Clash Waiting Area (Staff Preview)",
+      "regionName": "Aether Clash",
+      "points": {
+        "preview_spawn": {
+          "facingDirection": "down",
+          "id": "preview",
+          "label": "Preview Spawn",
+          "safe": false
+        }
+      }
+    },
     "kanto_oaks_lab": {
       "points": {
         "from_pallet_town": {
