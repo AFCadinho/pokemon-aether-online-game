@@ -18,7 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://w30miu0aiebu" path="res://assets/ui/pokedex.svg" id="14_pokedex"]
 [ext_resource type="Texture2D" path="res://assets/ui/alpha_tools.svg" id="15_content_creator"]
 [ext_resource type="Texture2D" path="res://assets/ui/content_creator.svg" id="15_creator_tools"]
-[ext_resource type="Texture2D" path="res://assets/ui/clan.svg" id="16_guild"]
+[ext_resource type="Texture2D" path="res://assets/ui/guild.svg" id="16_guild"]
 [ext_resource type="AudioStream" uid="uid://d0sitgcr6kq4u" path="res://assets/audio/notification/notification.mp3" id="17_notification"]
 [ext_resource type="Texture2D" path="res://assets/ui/pvp_battles.svg" id="18_pvp"]
 [ext_resource type="Texture2D" path="res://assets/ui/aether_exchange_icon.svg" id="19_exchange"]
@@ -786,7 +786,7 @@ text = "ui.chat.send"
 
 [node name="DevPokemonPopup" type="PanelContainer" parent="Control" unique_id=1288104280]
 visible = false
-custom_minimum_size = Vector2(560, 460)
+custom_minimum_size = Vector2(560, 540)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -794,9 +794,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -280.0
-offset_top = -230.0
+offset_top = -270.0
 offset_right = 280.0
-offset_bottom = 230.0
+offset_bottom = 270.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
@@ -825,10 +825,22 @@ theme_override_font_sizes/font_size = 11
 text = "ui.staff.dev.pokemon.add_subtitle"
 
 [node name="PokemonText" type="TextEdit" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=488137648]
-custom_minimum_size = Vector2(0, 338)
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 size_flags_vertical = 3
 placeholder_text = "ui.staff.dev.pokemon.add_placeholder"
+
+[node name="PreserveDirectBattleForm" type="CheckButton" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "ui.staff.dev.pokemon.preserve_direct_form"
+
+[node name="TestPurpose" type="LineEdit" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+max_length = 255
+placeholder_text = "ui.staff.dev.pokemon.test_purpose_placeholder"
 
 [node name="ButtonRow" type="HBoxContainer" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=1480530736]
 layout_mode = 2
@@ -1340,24 +1352,6 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_socials_badge")
 
-[node name="AetherExchangeSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=3952606]
-custom_minimum_size = Vector2(52, 52)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
-
-[node name="AetherExchangeButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/AetherExchangeSlot" unique_id=1721297434]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-tooltip_text = "ui.navigation.exchange"
-mouse_default_cursor_shape = 2
-texture_normal = ExtResource("19_exchange")
-texture_pressed = ExtResource("19_exchange")
-texture_hover = ExtResource("19_exchange")
-texture_disabled = ExtResource("19_exchange")
-texture_focused = ExtResource("19_exchange")
-ignore_texture_size = true
-stretch_mode = 5
-
 [node name="GuildSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=870794241]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
@@ -1373,6 +1367,24 @@ texture_pressed = ExtResource("16_guild")
 texture_hover = ExtResource("16_guild")
 texture_disabled = ExtResource("16_guild")
 texture_focused = ExtResource("16_guild")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="AetherExchangeSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=3952606]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="AetherExchangeButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/AetherExchangeSlot" unique_id=1721297434]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "ui.navigation.exchange"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("19_exchange")
+texture_pressed = ExtResource("19_exchange")
+texture_hover = ExtResource("19_exchange")
+texture_disabled = ExtResource("19_exchange")
+texture_focused = ExtResource("19_exchange")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -1768,7 +1780,7 @@ anchor_right = 1.0
 offset_left = -226.0
 offset_top = 78.0
 offset_right = -16.0
-offset_bottom = 430.0
+offset_bottom = 474.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
@@ -1807,6 +1819,12 @@ custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "ui.staff.dev.clear_data"
+
+[node name="CleanupTestPokemonButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "ui.staff.dev.cleanup_test_pokemon"
 
 [node name="WorldTimeLabel" type="Label" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -1930,6 +1948,11 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 
 [node name="PlayersOnMapButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+
+[node name="LoansButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 72)
 layout_mode = 2
 mouse_default_cursor_shape = 2

@@ -23,6 +23,7 @@ class MusicPack:
     source_path: Path
     version_env: str
     size_env: str
+    sha256_env: str
 
 
 MUSIC_PACKS: tuple[MusicPack, ...] = (
@@ -32,6 +33,7 @@ MUSIC_PACKS: tuple[MusicPack, ...] = (
         PROJECT_ROOT / "assets" / "music",
         "MUSIC_ASSET_VERSION",
         "MUSIC_ASSET_SIZE",
+        "MUSIC_ASSET_SHA256",
     ),
 )
 
@@ -84,8 +86,9 @@ def main() -> None:
     output_dir = Path(args.output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
     workflow_versions = _read_workflow_versions()
+    workflow_sha256 = _read_workflow_sha256()
 
-    uploaded_versions: dict[str, tuple[str, int]] = {}
+    uploaded_versions: dict[str, tuple[str, int, str]] = {}
     r2_config = None if args.no_upload else _load_config()
 
     for pack in selected_packs:
@@ -96,7 +99,11 @@ def main() -> None:
         zip_path = output_dir / f"{version}.zip"
         current_version = workflow_versions.get(pack.version_env, "")
 
-        if not args.force and current_version == version:
+        if (
+            not args.force
+            and current_version == version
+            and workflow_sha256.get(pack.sha256_env, "")
+        ):
             print(f"Skipping unchanged {pack.pack_id}: {version}")
             continue
 
@@ -106,7 +113,14 @@ def main() -> None:
             print(f"Reusing existing {zip_path.relative_to(PROJECT_ROOT)}")
 
         size_bytes = zip_path.stat().st_size
-        uploaded_versions[pack.pack_id] = (version, size_bytes)
+        sha256 = _sha256_file(zip_path)
+        current_sha256 = workflow_sha256.get(pack.sha256_env, "")
+        if current_version == version and current_sha256 and current_sha256 != sha256:
+            raise SystemExit(
+                f"Refusing to overwrite immutable asset {version}.zip with different bytes. "
+                "Use --version-label to publish a new version."
+            )
+        uploaded_versions[pack.pack_id] = (version, size_bytes, sha256)
         print(f"{pack.pack_id}: {version}.zip ({size_bytes} bytes)")
 
         if r2_config is not None:
@@ -184,7 +198,7 @@ def _write_pack_zip(files: list[Path], zip_path: Path) -> None:
 
 def _update_workflow(
     packs: list[MusicPack],
-    uploaded_versions: dict[str, tuple[str, int]],
+    uploaded_versions: dict[str, tuple[str, int, str]],
 ) -> None:
     workflow_text = WORKFLOW_PATH.read_text(encoding="utf-8")
 
@@ -192,9 +206,10 @@ def _update_workflow(
         if pack.pack_id not in uploaded_versions:
             continue
 
-        version, size_bytes = uploaded_versions[pack.pack_id]
+        version, size_bytes, sha256 = uploaded_versions[pack.pack_id]
         workflow_text = _replace_env_value(workflow_text, pack.version_env, version)
         workflow_text = _replace_env_value(workflow_text, pack.size_env, str(size_bytes))
+        workflow_text = _replace_env_value(workflow_text, pack.sha256_env, sha256)
 
     WORKFLOW_PATH.write_text(workflow_text, encoding="utf-8")
 
@@ -206,6 +221,22 @@ def _read_workflow_versions() -> dict[str, str]:
         versions[pack.version_env] = _read_env_value(workflow_text, pack.version_env)
 
     return versions
+
+
+def _read_workflow_sha256() -> dict[str, str]:
+    workflow_text = WORKFLOW_PATH.read_text(encoding="utf-8")
+    return {
+        pack.sha256_env: _read_env_value(workflow_text, pack.sha256_env)
+        for pack in MUSIC_PACKS
+    }
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as file:
+        for chunk in iter(lambda: file.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _read_env_value(workflow_text: str, env_name: str) -> str:

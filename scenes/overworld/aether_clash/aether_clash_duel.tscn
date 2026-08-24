@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/aether_clash_duel/aether_clash_duel.visual.tscn" id="1_visual"]
+
+[node name="AetherClashDuel" type="Node2D"]
+
+[node name="Duel" parent="." instance=ExtResource("1_visual")]

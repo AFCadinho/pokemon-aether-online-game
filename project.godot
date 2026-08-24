@@ -63,6 +63,7 @@ FieldMoveService="*res://scripts/services/field_move_service.gd"
 PlayerWalletService="*res://scripts/services/player_wallet_service.gd"
 NpcPokemonSaleService="*res://scripts/services/npc_pokemon_sale_service.gd"
 ThievingService="*res://scripts/services/thieving_service.gd"
+RockSmashService="*res://scripts/services/rock_smash_service.gd"
 SkillsService="*res://scripts/services/skills_service.gd"
 ThievingStatusHud="*res://scripts/ui/thieving_status_hud.gd"
 InventoryService="*res://scripts/services/inventory_service.gd"
@@ -84,25 +85,21 @@ SocialService="*res://scripts/services/social_service.gd"
 PartyHealService="*res://scripts/services/party_heal_service.gd"
 TradeService="*res://scripts/services/trade_service.gd"
 TradeRealtimeService="*res://scripts/services/trade_realtime_service.gd"
+LendingService="*res://scripts/services/lending_service.gd"
 AetherExchangeService="*res://scripts/services/aether_exchange_service.gd"
 TradeWorkspace="*res://scripts/ui/trade_workspace.gd"
+LendingWorkspace="*res://scripts/ui/lending_workspace.gd"
+
+[debug]
+
+file_logging/enable_file_logging=true
+settings/gdscript/always_track_call_stacks=true
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
-
-[debug]
-
-file_logging/enable_file_logging=true
-file_logging/log_path="user://logs/godot.log"
-file_logging/max_log_files=5
-settings/gdscript/always_track_call_stacks=true
-
-[internationalization]
-
-locale/fallback="en"
 
 [input]
 
