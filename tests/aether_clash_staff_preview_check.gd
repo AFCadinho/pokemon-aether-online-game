@@ -52,9 +52,19 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 	if visual != null:
 		for child: Node in visual.get_children():
 			layer_names.append(str(child.name))
+	layer_names.sort()
+	var expected_layer_names := EXPECTED_VISUAL_LAYERS.duplicate()
+	expected_layer_names.sort()
 	_check(
-		layer_names == EXPECTED_VISUAL_LAYERS,
+		layer_names == expected_layer_names,
 		"%s uses the updated visual layer names" % scene_path.get_file()
+	)
+	var objects_top: TileMapLayer = null
+	if visual != null:
+		objects_top = visual.get_node_or_null("ObjectsTop") as TileMapLayer
+	_check(
+		objects_top != null and objects_top.z_index >= 2048,
+		"%s renders ObjectsTop as a foreground depth layer" % scene_path.get_file()
 	)
 	var spawn := preview.get_node_or_null("Spawns/PreviewSpawn") as Marker2D
 	var collision := preview.find_child("Collision", true, false) as TileMapLayer
