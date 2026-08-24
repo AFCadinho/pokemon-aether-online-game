@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Staff can now freely explore isolated previews of the Aether Clash duel and battle royale maps without entering a live match.
+- Staff can now freely explore isolated previews of the Aether Clash duel, battle royale, and waiting-area maps without entering a live match. Their updated visual layers are included.
 
 - The Guild Bank now shows available and borrowed assets separately, lets members borrow and return individual Pokémon or items, and gives Leaders and Captains a force-return action.
 

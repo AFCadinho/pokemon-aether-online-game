@@ -113,6 +113,7 @@ func _init() -> void:
 		unsafe_staff_points == [
 			"aether_clash_battle_royale_preview:preview",
 			"aether_clash_duel_preview:preview",
+			"aether_clash_waiting_area_preview:preview",
 		],
 		"Only isolated Aether Clash previews are excluded from safe player teleports"
 	)

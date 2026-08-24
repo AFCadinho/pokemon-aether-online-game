@@ -68,6 +68,28 @@
 				}
 			}
 		},
+		"aether_clash_waiting_area_preview": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Aether Clash Waiting Area (Staff Preview)",
+			"locationGroupId": "aether_clash",
+			"locationGroupLabel": "Aether Clash",
+			"regionName": "Aether Clash",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/aether_clash/waiting_area_preview.tscn",
+			"spawnPoints": {
+				"preview": {
+					"facingDirection": "down",
+					"label": "Preview Spawn",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "PreviewSpawn",
+					"tile": {
+						"x": 12,
+						"y": 12
+					}
+				}
+			}
+		},
 		"kanto_cerulean_city": {
 			"areaType": "exterior",
 			"defaultMode": "open",

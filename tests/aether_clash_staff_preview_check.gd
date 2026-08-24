@@ -8,8 +8,16 @@ const PREVIEWS := {
 	"res://scenes/overworld/aether_clash/aether_clash_duel_preview.tscn": {
 		"map_id": "aether_clash_duel_preview",
 		"source_suffix": "/Clan Wars Map x1 Jail.tmx",
+		"requires_collision": true,
+	},
+	"res://scenes/overworld/aether_clash/waiting_area_preview.tscn": {
+		"map_id": "aether_clash_waiting_area_preview",
+		"source_suffix": "/Waiting Area.tmx",
+		"requires_collision": false,
 	},
 }
+
+const EXPECTED_VISUAL_LAYERS := ["Ground", "Grass", "GroundDetail", "Objects", "ObjectsTop"]
 
 var failed := false
 
@@ -40,6 +48,14 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 		),
 		"%s uses the intended Aether Clash visual" % scene_path.get_file()
 	)
+	var layer_names: Array[String] = []
+	if visual != null:
+		for child: Node in visual.get_children():
+			layer_names.append(str(child.name))
+	_check(
+		layer_names == EXPECTED_VISUAL_LAYERS,
+		"%s uses the updated visual layer names" % scene_path.get_file()
+	)
 	var spawn := preview.get_node_or_null("Spawns/PreviewSpawn") as Marker2D
 	var collision := preview.find_child("Collision", true, false) as TileMapLayer
 	var spawn_tile := Vector2i(
@@ -48,8 +64,10 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 	) if spawn != null else Vector2i(-1, -1)
 	_check(
 		spawn != null
-		and collision != null
-		and collision.get_cell_source_id(spawn_tile) == -1,
+		and (
+			not bool(expected.get("requires_collision", true))
+			or (collision != null and collision.get_cell_source_id(spawn_tile) == -1)
+		),
 		"%s has a walkable staff preview spawn" % scene_path.get_file()
 	)
 	preview.queue_free()
