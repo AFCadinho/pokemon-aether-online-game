@@ -213,7 +213,9 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankPokemonLogButton", true, false) != null, "Pokémon Vault has a dedicated log action")
 	_check(popup.find_child("GuildBankPokemonDepositButton_22", true, false) != null, "owned Pokémon can be deposited")
 	var pokemon_withdraw := popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) as Button
-	_check(pokemon_withdraw != null and pokemon_withdraw.text == "Withdraw", "Guild-owned Pokémon use permanent withdrawal instead of borrowing")
+	_check(pokemon_withdraw != null and pokemon_withdraw.text == "Withdraw", "authorized ranks retain permanent Guild withdrawal")
+	var pokemon_borrow := popup.find_child("GuildBankPokemonBorrowButton_21", true, false) as Button
+	_check(pokemon_borrow != null and pokemon_borrow.text == "Borrow", "Guild-owned Pokémon expose borrowing without ownership transfer")
 	_check(popup.find_child("GuildBankPokemonIcon_21", true, false) != null, "stored Pokémon show an icon")
 	var pokemon_deposit := popup.find_child("GuildBankPokemonDepositButton_22", true, false) as Button
 	if pokemon_deposit != null:
