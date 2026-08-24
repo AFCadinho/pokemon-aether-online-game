@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Local development servers now offer a five-minute lending duration at the bottom of the duration list for faster loan-return testing.
+
 - Borrowed Pokémon can train and evolve from leveling, but their moves, EV allocation, Poké Ball, nickname, and other details cannot be changed, and items cannot be used on them. Held items remain available.
 
 - Return requests now show a notification badge in Social and Loans, play a notification sound, open the requested asset directly, and can be accepted or declined per asset.

@@ -61,6 +61,12 @@ func _init() -> void:
 	_check(workspace_source.contains("ui.lending.notification.asset_auto_returned_from_you") and workspace_source.contains("await _poll_loan_notifications()") and not workspace_source.contains("overlay.call(\"add_system_message\", _t(\"ui.lending.notification.you_returned\""), "borrowers receive durable return messages without a duplicate local-only message")
 	_check(not workspace_source.contains("service.return_assets(loan_id)"), "loan cards never return every asset implicitly")
 	var workspace := WorkspaceScript.new()
+	workspace.duration_select = OptionButton.new()
+	workspace.add_child(workspace.duration_select)
+	workspace.capabilities = {"durationsSeconds": [3600, 10800, 21600, 43200, 86400, 172800, 259200, 300]}
+	workspace._populate_durations()
+	_check(int(workspace.duration_select.get_item_metadata(workspace.duration_select.item_count - 1)) == 300, "five-minute development duration is last")
+	_check(int(workspace.duration_select.get_item_metadata(workspace.duration_select.selected)) == 10800, "five-minute development duration is not selected by default")
 	_check(not workspace._pokemon_candidate_is_lendable({"pokemon": {"tradable": false}}), "non-tradable Pokemon are identified before offer selection")
 	_check(workspace._pokemon_candidate_is_lendable({"pokemon": {"tradable": true}}), "tradable Pokemon remain selectable for lending")
 	var locked_candidate_row := workspace._pokemon_candidate_row({"pokemonId": 25, "name": "Starter", "speciesId": "pikachu", "level": 5, "pokemon": {"speciesId": "pikachu", "tradable": false}}, 25)
@@ -115,8 +121,8 @@ func _init() -> void:
 	workspace.party_candidates = [{"pokemonId": 1, "heldItemId": "leftovers", "name": "Pikachu"}]
 	workspace.box_candidates = [{"pokemonId": 2, "heldItemId": "choice-band", "name": "Machamp"}]
 	_check(workspace._held_item_candidates().size() == 2, "item-only offers include eligible items held by Party and Box Pokemon")
-	_check(source.contains("duration_seconds not in [3600, 10800, 21600, 43200, 86400, 172800, 259200]"), "loan service accepts one-to-72-hour windows")
-	_check(workspace_source.contains("[3600, 10800, 21600, 43200, 86400, 172800, 259200]") and workspace_source.contains("172800: return _t(\"ui.lending.duration.forty_eight_hours\")") and workspace_source.contains("259200: return _t(\"ui.lending.duration.seventy_two_hours\")"), "loan duration selector includes 48 and 72 hours")
+	_check(source.contains("duration_seconds not in [3600, 10800, 21600, 43200, 86400, 172800, 259200, 300]"), "loan service accepts standard windows plus the short development window")
+	_check(workspace_source.contains("capabilities.get(\"durationsSeconds\"") and workspace_source.contains("300: return _t(\"ui.lending.duration.five_minutes_development\")") and workspace_source.contains("259200: return _t(\"ui.lending.duration.seventy_two_hours\")"), "loan duration selector renders the server-provided five-minute development window")
 	_check(workspace_source.contains("select.get_popup()") and workspace_source.contains("_dropdown_popup_style"), "loan dropdown popups use the Aether theme")
 	_check(workspace_source.contains("AetherConfirmationDialogScene.instantiate()"), "loan confirmations use the Aether dialog")
 	var option := OptionButton.new()
