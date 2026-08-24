@@ -1,0 +1,63 @@
+extends SceneTree
+
+const PREVIEWS := {
+	"res://scenes/overworld/aether_clash/aether_clash_battle_royale_preview.tscn": {
+		"map_id": "aether_clash_battle_royale_preview",
+		"source_suffix": "/Clan Wars Map.tmx",
+	},
+	"res://scenes/overworld/aether_clash/aether_clash_duel_preview.tscn": {
+		"map_id": "aether_clash_duel_preview",
+		"source_suffix": "/Clan Wars Map x1 Jail.tmx",
+	},
+}
+
+var failed := false
+
+
+func _init() -> void:
+	for scene_path: String in PREVIEWS:
+		_check_preview(scene_path, PREVIEWS[scene_path] as Dictionary)
+	quit(1 if failed else 0)
+
+
+func _check_preview(scene_path: String, expected: Dictionary) -> void:
+	var packed := load(scene_path) as PackedScene
+	_check(packed != null, "%s loads" % scene_path.get_file())
+	if packed == null:
+		return
+	var preview := packed.instantiate()
+	root.add_child(preview)
+	_check(
+		preview.call("get_map_id") == str(expected.get("map_id", "")),
+		"%s has an isolated preview map id" % scene_path.get_file()
+	)
+	var preview_map := preview.get_node_or_null("PreviewMap")
+	var visual := preview_map.get_child(0) if preview_map != null and preview_map.get_child_count() > 0 else null
+	_check(
+		visual != null
+		and str(visual.get_meta("tiled_source_path", "")).ends_with(
+			str(expected.get("source_suffix", ""))
+		),
+		"%s uses the intended Aether Clash visual" % scene_path.get_file()
+	)
+	var spawn := preview.get_node_or_null("Spawns/PreviewSpawn") as Marker2D
+	var collision := preview.find_child("Collision", true, false) as TileMapLayer
+	var spawn_tile := Vector2i(
+		floori(spawn.position.x / 32.0),
+		floori(spawn.position.y / 32.0)
+	) if spawn != null else Vector2i(-1, -1)
+	_check(
+		spawn != null
+		and collision != null
+		and collision.get_cell_source_id(spawn_tile) == -1,
+		"%s has a walkable staff preview spawn" % scene_path.get_file()
+	)
+	preview.queue_free()
+
+
+func _check(condition: bool, label: String) -> void:
+	if condition:
+		print("PASS %s" % label)
+		return
+	failed = true
+	push_error(label)
