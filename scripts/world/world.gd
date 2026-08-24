@@ -1489,7 +1489,19 @@ func _build_structure_top_visual_depth_groups(map: Node) -> void:
 			group_layer.modulate = structure_layer.modulate
 			group_layer.position = structure_layer.position
 			group_layer.z_as_relative = false
-			group_layer.z_index = _get_tile_group_bottom_z_index(structure_layer, group, group_z_offset)
+			var group_z_index := _get_tile_group_bottom_z_index(
+				structure_layer,
+				group,
+				group_z_offset
+			)
+			group_z_index = maxi(
+				group_z_index,
+				AetherClashJailDepthScript.get_objects_top_overlay_z_floor(
+					structure_layer,
+					group
+				)
+			)
+			group_layer.z_index = group_z_index
 			group_layer.set_meta(STRUCTURE_TOP_DEPTH_GROUP_META, true)
 			group_root.add_child(group_layer)
 
