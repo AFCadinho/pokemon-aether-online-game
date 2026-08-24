@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Aether Clash duel jail now displays its arena objects correctly in front of the jail bars.
+
 - Players now appear in front of the Aether Clash duel jail bars at the jail spawn and behind them after stepping north.
 
 - The staff jail teleport now follows the jail spawn position in the Aether Clash duel map.

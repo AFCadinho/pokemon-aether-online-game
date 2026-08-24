@@ -114,17 +114,16 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 		if jail_bars != null:
 			jail_bar_cells = jail_bars.get_used_cells()
 		var has_complete_jail_bars := jail_bars != null
-		var jail_bars_last_row := -1
 		if jail_bars != null:
 			for y in range(71, 74):
 				for x in range(66, 74):
 					if jail_bars.get_cell_source_id(Vector2i(x, y)) == -1:
 						has_complete_jail_bars = false
-			for cell: Vector2i in jail_bar_cells:
-				jail_bars_last_row = maxi(jail_bars_last_row, cell.y)
 		var bars_bottom_y := -INF
 		if jail_bars != null:
 			for cell: Vector2i in jail_bar_cells:
+				if cell.y > 73:
+					continue
 				bars_bottom_y = maxf(
 					bars_bottom_y,
 					jail_bars.to_global(jail_bars.map_to_local(cell) + Vector2(0, 16)).y
@@ -137,9 +136,18 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 			bars_bottom_y
 			+ AetherClashJailDepthScript.get_depth_boundary_offset("JailTop")
 		)
+		var jail_overlap_cells: Array[Vector2i] = [
+			Vector2i(69, 72),
+			Vector2i(69, 73),
+		]
+		var objects_top_overlay_z := AetherClashJailDepthScript.get_objects_top_overlay_z_floor(
+			objects_top,
+			jail_overlap_cells
+		)
 		var one_step_north_y := jail_position.y - 32.0
 		_check(
-			has_complete_jail_bars and jail_bars_last_row == 73,
+			has_complete_jail_bars
+			and jail_bars.get_cell_source_id(Vector2i(69, 74)) == -1,
 			"%s isolates the complete jail bars from the side wall below" % scene_path.get_file()
 		)
 		_check(
@@ -149,6 +157,10 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 			"%s puts the jail bars behind players at the spawn and ahead one step north"
 				% scene_path.get_file()
 		)
+		_check(
+			objects_top_overlay_z == floori(bars_depth_boundary_y) + 1,
+			"%s keeps overlapping ObjectsTop artwork above JailTop" % scene_path.get_file()
+		)
 		var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 		_check(
 			world_source.contains(
@@ -156,6 +168,9 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 			)
 			and world_source.contains(
 				"AetherClashJailDepthScript.get_depth_boundary_offset(tiled_name)"
+			)
+			and world_source.contains(
+				"AetherClashJailDepthScript.get_objects_top_overlay_z_floor("
 			),
 			"%s registers its isolated jail bars for world depth sorting" % scene_path.get_file()
 		)
