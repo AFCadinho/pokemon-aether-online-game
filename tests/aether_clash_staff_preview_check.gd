@@ -20,7 +20,7 @@ const PREVIEWS := {
 	"res://scenes/overworld/aether_clash/waiting_area_preview.tscn": {
 		"map_id": "aether_clash_waiting_area_preview",
 		"source_suffix": "/Waiting Area.tmx",
-		"requires_collision": false,
+		"requires_collision": true,
 	},
 }
 
