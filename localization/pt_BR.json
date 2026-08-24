@@ -4391,6 +4391,7 @@
   "ui.lending.request_return_asset": "Pedir de volta",
   "ui.lending.card.asset_return_requested": "Devolução solicitada",
   "ui.lending.duration.hour": "1 hora",
+  "ui.lending.duration.five_minutes_development": "5 minutos (Desenvolvimento)",
   "ui.lending.duration.three_hours": "3 horas",
   "ui.lending.duration.six_hours": "6 horas",
   "ui.lending.duration.twelve_hours": "12 horas",

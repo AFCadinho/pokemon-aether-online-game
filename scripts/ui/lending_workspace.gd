@@ -2014,6 +2014,7 @@ func _section_label(value: String) -> Label:
 
 func _duration_label(seconds: int) -> String:
 	match seconds:
+		300: return _t("ui.lending.duration.five_minutes_development")
 		3600: return _t("ui.lending.duration.hour")
 		10800: return _t("ui.lending.duration.three_hours")
 		21600: return _t("ui.lending.duration.six_hours")

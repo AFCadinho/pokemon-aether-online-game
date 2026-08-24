@@ -4391,6 +4391,7 @@
   "ui.lending.request_return_asset": "Terugvragen",
   "ui.lending.card.asset_return_requested": "Teruggave gevraagd",
   "ui.lending.duration.hour": "1 uur",
+  "ui.lending.duration.five_minutes_development": "5 minuten (Development)",
   "ui.lending.duration.three_hours": "3 uur",
   "ui.lending.duration.six_hours": "6 uur",
   "ui.lending.duration.twelve_hours": "12 uur",
