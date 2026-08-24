@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Staff can now freely explore isolated previews of the Aether Clash duel and battle royale maps without entering a live match.
+
 - The Guild Bank now shows available and borrowed assets separately, lets members borrow and return individual Pokémon or items, and gives Leaders and Captains a force-return action.
 
 - Loan History now defaults to the last 30 days and can be filtered by the last 24 hours, 7, 14, or 30 days, or by a custom date range.

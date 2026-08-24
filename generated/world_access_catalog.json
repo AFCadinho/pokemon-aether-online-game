@@ -1,5 +1,49 @@
 {
 	"areas": {
+		"aether_clash_battle_royale_preview": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Aether Clash Battle Royale (Staff Preview)",
+			"locationGroupId": "aether_clash",
+			"locationGroupLabel": "Aether Clash",
+			"regionName": "Aether Clash",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_battle_royale_preview.tscn",
+			"spawnPoints": {
+				"preview": {
+					"facingDirection": "down",
+					"label": "Preview Spawn",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "PreviewSpawn",
+					"tile": {
+						"x": 10,
+						"y": 15
+					}
+				}
+			}
+		},
+		"aether_clash_duel_preview": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Aether Clash Duel (Staff Preview)",
+			"locationGroupId": "aether_clash",
+			"locationGroupLabel": "Aether Clash",
+			"regionName": "Aether Clash",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_duel_preview.tscn",
+			"spawnPoints": {
+				"preview": {
+					"facingDirection": "down",
+					"label": "Preview Spawn",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "PreviewSpawn",
+					"tile": {
+						"x": 10,
+						"y": 15
+					}
+				}
+			}
+		},
 		"aether_clash_lobby": {
 			"areaType": "exterior",
 			"defaultMode": "open",

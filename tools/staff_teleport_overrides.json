@@ -1,5 +1,29 @@
 {
   "maps": {
+    "aether_clash_battle_royale_preview": {
+      "label": "Aether Clash Battle Royale (Staff Preview)",
+      "regionName": "Aether Clash",
+      "points": {
+        "preview_spawn": {
+          "facingDirection": "down",
+          "id": "preview",
+          "label": "Preview Spawn",
+          "safe": false
+        }
+      }
+    },
+    "aether_clash_duel_preview": {
+      "label": "Aether Clash Duel (Staff Preview)",
+      "regionName": "Aether Clash",
+      "points": {
+        "preview_spawn": {
+          "facingDirection": "down",
+          "id": "preview",
+          "label": "Preview Spawn",
+          "safe": false
+        }
+      }
+    },
     "kanto_oaks_lab": {
       "points": {
         "from_pallet_town": {
