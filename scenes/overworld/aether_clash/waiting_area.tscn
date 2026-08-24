@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/waiting_area/waiting_area.visual.tscn" id="1_visual"]
+
+[node name="WaitingArea" type="Node2D"]
+
+[node name="WaitingAreaVisual" parent="." instance=ExtResource("1_visual")]
