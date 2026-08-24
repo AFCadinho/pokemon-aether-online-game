@@ -113,6 +113,15 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 		var jail_bar_cells: Array[Vector2i] = []
 		if jail_bars != null:
 			jail_bar_cells = jail_bars.get_used_cells()
+		var has_complete_jail_bars := jail_bars != null
+		var jail_bars_last_row := -1
+		if jail_bars != null:
+			for y in range(71, 74):
+				for x in range(66, 75):
+					if jail_bars.get_cell_source_id(Vector2i(x, y)) == -1:
+						has_complete_jail_bars = false
+			for cell: Vector2i in jail_bar_cells:
+				jail_bars_last_row = maxi(jail_bars_last_row, cell.y)
 		var bars_bottom_y := -INF
 		if jail_bars != null:
 			for cell: Vector2i in jail_bar_cells:
@@ -125,11 +134,8 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 			if jail_bars != null else INF
 		)
 		_check(
-			jail_bars != null
-			and jail_bar_cells.size() == 27
-			and objects_top != null
-			and objects_top.get_cell_source_id(Vector2i(69, 72)) == -1,
-			"%s isolates the jail bars from their connected side wall" % scene_path.get_file()
+			has_complete_jail_bars and jail_bars_last_row == 73,
+			"%s isolates the complete jail bars from the side wall below" % scene_path.get_file()
 		)
 		_check(
 			behind_bars_y < bars_bottom_y and bars_bottom_y < jail_position.y,
