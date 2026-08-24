@@ -58,6 +58,13 @@ const PLAYER_DIALOGUE_STAGES: Array[int] = [
 	$RocketUpperRight,
 ]
 @onready var future_self: AnimatedSprite2D = $FutureSelf
+@onready var future_self_layers: Array[AnimatedSprite2D] = [
+	$FutureSelf/BottomSprite,
+	$FutureSelf/ShoesSprite,
+	$FutureSelf/TopSprite,
+	$FutureSelf/EyesSprite,
+	$FutureSelf/FaceGearSprite,
+]
 
 var _dialogue_stage := 0
 var _starter: Node2D
@@ -78,10 +85,55 @@ var _story_player: Node2D
 func _ready() -> void:
 	for rocket: Node in rockets:
 		rocket.visible = false
+	_configure_future_self_appearance()
 	future_self.visible = false
 	if not StoryService.story_changed.is_connected(_on_story_changed):
 		StoryService.story_changed.connect(_on_story_changed)
 	_on_story_changed(StoryService.get_revision())
+
+
+func _configure_future_self_appearance() -> void:
+	var gender := CharacterAppearanceService.normalize_gender(PlayerSave.gender)
+	var body_id := CharacterAppearanceService.resolve_body_model_id(
+		PlayerSave.appearance_body_id,
+		gender
+	)
+	future_self.sprite_frames = CharacterAppearanceService.get_skin_tinted_body_frames(
+		body_id,
+		gender,
+		CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+		PlayerSave.appearance_skin_tone
+	)
+	var part_specs: Array[Dictionary] = [
+		{"sprite": future_self_layers[0], "category": "bottom", "id": "Mysterious_Trousers"},
+		{"sprite": future_self_layers[1], "category": "shoes", "id": "Mysterious_Shoes"},
+		{"sprite": future_self_layers[2], "category": "top", "id": "Mysterious_Shirt"},
+		{
+			"sprite": future_self_layers[3],
+			"category": "eyes",
+			"id": CharacterAppearanceService.get_default_part_id("eyes", gender),
+		},
+		{"sprite": future_self_layers[4], "category": "facegear", "id": "Mysterious_Mask"},
+	]
+	for part_spec: Dictionary in part_specs:
+		var sprite := part_spec.get("sprite") as AnimatedSprite2D
+		var category := str(part_spec.get("category", ""))
+		var part_id := str(part_spec.get("id", ""))
+		if category == "eyes":
+			sprite.sprite_frames = CharacterAppearanceService.get_tinted_part_frames(
+				category,
+				part_id,
+				gender,
+				CharacterAppearanceService.BODY_MOVEMENT_DEFAULT,
+				Color.from_string(PlayerSave.appearance_eye_color, Color.WHITE)
+			)
+		else:
+			sprite.sprite_frames = CharacterAppearanceService.get_part_frames(
+				category,
+				part_id,
+				gender
+			)
+	_set_future_self_animation(&"idle_down")
 
 
 func _exit_tree() -> void:
@@ -170,7 +222,7 @@ func _show_miguel_takes_other_fossil() -> void:
 			var fossil_side := signf(other_fossil.global_position.x - player.global_position.x)
 			if is_zero_approx(fossil_side):
 				fossil_side = -1.0
-			# Dadinho's temporary frames have a visual baseline 16 px below the player frames.
+			# The standalone layered sprite is centered 16 px above the player's feet origin.
 			_future_self_spawn_global_position = player.global_position + Vector2(fossil_side * 32.0, -16)
 	if miguel == null or other_fossil == null:
 		return
@@ -607,9 +659,18 @@ func _face_future_self_and_player() -> void:
 	elif delta.y < 0.0:
 		direction_name = "up"
 	var animation_name := StringName("idle_%s" % direction_name)
+	_set_future_self_animation(animation_name)
+
+
+func _set_future_self_animation(animation_name: StringName) -> void:
 	if future_self.sprite_frames != null and future_self.sprite_frames.has_animation(animation_name):
 		future_self.play(animation_name)
 		future_self.stop()
+	for layer: AnimatedSprite2D in future_self_layers:
+		if layer.sprite_frames == null or not layer.sprite_frames.has_animation(animation_name):
+			continue
+		layer.play(animation_name)
+		layer.stop()
 
 
 func _on_story_changed(_revision: int) -> void:
