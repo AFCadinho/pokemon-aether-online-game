@@ -5,12 +5,35 @@
 **Added**
 
 - If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report at the next start. The report can be viewed and copied directly from the notification or the new Support page in Settings.
+- Added Player Loans. Offer Pokémon or reusable held items to a nearby Trainer for a chosen duration and optional fee, then manage active and completed loans from the Social menu.
+- Player Loans now include return requests, notifications, a 30-day searchable history, and clear loan markers in the Party, PC, Bag, and Pokémon Summary.
+- Added the Guild Bank with shared funds, Pokémon and item storage, borrowing, rank-based permissions, and activity history.
+- Guilds now have Leader, Captain, Member, and Recruit ranks. Applications, member activity, private messages, and bank permissions can be managed from the Guild window.
+- Added Rock Smash as a daily skill in Mt. Moon, with more rocks becoming available as the skill levels up.
+- The Skills window now includes clearer progress cards, level rewards, and improved area and catch lists for Fishing, Thieving, and Rock Smash.
+- The story now continues through Mt. Moon to Route 4 and Cerulean City, with new battles, wild Pokémon, item pickups, and places to explore.
+
+**Changed**
+
+- Borrowed Pokémon can train, level up, evolve, move between the Party and PC, and change held items. Other permanent changes remain available only to their owner.
+- Player Loan screens now separate Pokémon and items, show every asset individually, and make deadlines, returns, and loan status easier to understand.
+- Guild screens now make applications, ranks, members, bank contents, and travel easier to find and use.
+- Regional Aethernet travel now costs ₽200, or ₽100 with an active Aether Blessing. Aether Anchors remain free.
+- Ground items now play a pickup sound and appear in System messages without interrupting play with a dialogue window.
+- Poké Mart item buyers now accept every tradeable item in the Bag, including items the shop does not sell.
 
 **Fixed**
 
 - Ogerpon's correct battle sprites are now included in game downloads.
 - Training Rooms no longer blame a valid Poképaste when room timers are temporarily unavailable.
 - Wild battles now immediately show the first Pokémon that can battle when an earlier party member has fainted.
+- Player Loans now refresh the Party, PC, Bag, and loan lists correctly when an offer is accepted or an asset is returned.
+- Loaned items and recently returned Pokémon now appear reliably in the correct Bag or PC location.
+- Loan deadlines and automatic returns now remain clear and reliable, including while a player is offline or in battle.
+- Fixed several Mt. Moon story scenes, Trainer sight ranges, portraits, animations, item locations, and entrances between Mt. Moon and Route 4.
+- The house on Route 2 can now be entered and exited safely.
+- Ash-Greninja now loads its Pokédex sprite without a false missing-asset error.
+- Fixed collision and visual layering in the Aether Clash waiting area and Battle Royale jail.
 
 ## 0.3.59 - 2026-08-20
 
