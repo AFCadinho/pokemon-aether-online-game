@@ -49,6 +49,9 @@ var loan_counts: Dictionary = {}
 var loan_timing_rows: Array[Dictionary] = []
 var history_search_query := ""
 var history_status_filter := ""
+var history_period_filter := "30"
+var history_date_from := ""
+var history_date_to := ""
 
 var target_display_label: Label
 var duration_select: OptionButton
@@ -100,6 +103,9 @@ func clear_account_state() -> void:
 	loan_counts.clear()
 	history_search_query = ""
 	history_status_filter = ""
+	history_period_filter = "30"
+	history_date_from = ""
+	history_date_to = ""
 	if history_search_input != null:
 		history_search_input.text = ""
 	_update_history_controls()
@@ -564,7 +570,10 @@ func _refresh_loans() -> void:
 		100 if loan_overview_view == "history" else 50,
 		0,
 		history_search_query if loan_overview_view == "history" else "",
-		statuses
+		statuses,
+		int(history_period_filter) if loan_overview_view == "history" and history_period_filter != "custom" else 0,
+		history_date_from if loan_overview_view == "history" and history_period_filter == "custom" else "",
+		history_date_to if loan_overview_view == "history" and history_period_filter == "custom" else ""
 	)
 	if not bool(result.get("success", false)):
 		_show_error(str(result.get("error", _t("ui.lending.error.load"))))
@@ -704,6 +713,9 @@ func _open_history_filter() -> void:
 		_t("ui.lending.history.apply_filter"),
 		_t("common.cancel")
 	)
+	var controls := VBoxContainer.new()
+	controls.add_theme_constant_override("separation", 8)
+	controls.add_child(_section_label(_t("ui.lending.history.outcome")))
 	var selector := OptionButton.new()
 	selector.custom_minimum_size = Vector2(0, 38)
 	for status: String in ["", "returned", "expired", "declined", "cancelled"]:
@@ -712,15 +724,62 @@ func _open_history_filter() -> void:
 		if status == history_status_filter:
 			selector.select(selector.item_count - 1)
 	_apply_option_style(selector)
-	dialog.add_custom_control(selector)
+	controls.add_child(selector)
+	controls.add_child(_section_label(_t("ui.lending.history.period")))
+	var period_selector := OptionButton.new()
+	period_selector.custom_minimum_size = Vector2(0, 38)
+	for period: String in ["1", "7", "14", "30", "custom"]:
+		period_selector.add_item(_t("ui.lending.history.period.%s" % period))
+		period_selector.set_item_metadata(period_selector.item_count - 1, period)
+		if period == history_period_filter:
+			period_selector.select(period_selector.item_count - 1)
+	_apply_option_style(period_selector)
+	controls.add_child(period_selector)
+	var custom_dates := HBoxContainer.new()
+	custom_dates.add_theme_constant_override("separation", 8)
+	var from_input := LineEdit.new()
+	from_input.placeholder_text = _t("ui.lending.history.date_from_placeholder")
+	from_input.text = history_date_from if history_date_from != "" else _history_date_days_ago(29)
+	from_input.max_length = 10
+	from_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_apply_line_edit_style(from_input)
+	custom_dates.add_child(from_input)
+	var to_input := LineEdit.new()
+	to_input.placeholder_text = _t("ui.lending.history.date_to_placeholder")
+	to_input.text = history_date_to if history_date_to != "" else _history_date_days_ago(0)
+	to_input.max_length = 10
+	to_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_apply_line_edit_style(to_input)
+	custom_dates.add_child(to_input)
+	custom_dates.visible = history_period_filter == "custom"
+	period_selector.item_selected.connect(func(index: int):
+		custom_dates.visible = str(period_selector.get_item_metadata(index)) == "custom"
+	)
+	controls.add_child(custom_dates)
+	dialog.add_custom_control(controls)
 	dialog.confirmed.connect(func():
+		var selected_period := str(period_selector.get_item_metadata(period_selector.selected))
+		var selected_from := from_input.text.strip_edges()
+		var selected_to := to_input.text.strip_edges()
+		if selected_period == "custom" and (
+			not _history_date_is_valid(selected_from)
+			or not _history_date_is_valid(selected_to)
+			or selected_from > selected_to
+		):
+			_show_error(_t("ui.lending.history.date_invalid"))
+			dialog.queue_free()
+			return
 		history_status_filter = str(selector.get_item_metadata(selector.selected))
+		history_period_filter = selected_period
+		if selected_period == "custom":
+			history_date_from = selected_from
+			history_date_to = selected_to
 		_update_history_controls()
 		await _refresh_loans()
 		dialog.queue_free()
 	, CONNECT_ONE_SHOT)
 	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
-	dialog.popup_centered(Vector2i(520, 300))
+	dialog.popup_centered(Vector2i(560, 420))
 
 
 func _update_history_controls() -> void:
@@ -728,7 +787,48 @@ func _update_history_controls() -> void:
 		return
 	history_tools.visible = loan_overview_view == "history"
 	if history_filter_button != null:
-		history_filter_button.text = _t("ui.lending.history.filter") if history_status_filter == "" else _t("ui.lending.history.filter_active", {"status": _t("ui.lending.status.%s" % history_status_filter)})
+		var period_text := _history_period_label()
+		history_filter_button.text = (
+			_t("ui.lending.history.filter_period", {"period": period_text})
+			if history_status_filter == ""
+			else _t("ui.lending.history.filter_period_status", {
+				"period": period_text,
+				"status": _t("ui.lending.status.%s" % history_status_filter),
+			})
+		)
+
+
+func _history_period_label() -> String:
+	if history_period_filter == "custom":
+		return _t("ui.lending.history.custom_range", {
+			"from": history_date_from,
+			"to": history_date_to,
+		})
+	return _t("ui.lending.history.period.%s" % history_period_filter)
+
+
+func _history_date_days_ago(days_ago: int) -> String:
+	var timestamp := int(Time.get_unix_time_from_system()) - maxi(days_ago, 0) * 86400
+	var value := Time.get_datetime_dict_from_unix_time(timestamp)
+	return "%04d-%02d-%02d" % [int(value.get("year", 0)), int(value.get("month", 0)), int(value.get("day", 0))]
+
+
+func _history_date_is_valid(value: String) -> bool:
+	var parts := value.split("-")
+	if parts.size() != 3 or parts[0].length() != 4 or parts[1].length() != 2 or parts[2].length() != 2:
+		return false
+	if not parts[0].is_valid_int() or not parts[1].is_valid_int() or not parts[2].is_valid_int():
+		return false
+	var year := int(parts[0])
+	var month := int(parts[1])
+	var day := int(parts[2])
+	if year < 1970 or month < 1 or month > 12 or day < 1:
+		return false
+	var month_days: Array[int] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+	var is_leap_year := year % 400 == 0 or (year % 4 == 0 and year % 100 != 0)
+	if is_leap_year:
+		month_days[1] = 29
+	return day <= month_days[month - 1]
 
 
 func _render_loan_type_tabs() -> void:
@@ -778,7 +878,7 @@ func _refresh_loan_usage() -> void:
 	if loan_overview_view == "history":
 		usage_label.text = "%s · %s" % [
 			_t("ui.lending.usage.history.%s" % loan_overview_asset_type),
-			_t("ui.lending.history.window", {"days": int(loan_counts.get("historyWindowDays", 30))}),
+			_history_period_label(),
 		]
 	elif loan_overview_view == "borrowed":
 		var limits: Dictionary = loan_counts.get("limits", {}) if loan_counts.get("limits", {}) is Dictionary else {}

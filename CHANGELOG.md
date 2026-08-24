@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Loan History now defaults to the last 30 days and can be filtered by the last 24 hours, 7, 14, or 30 days, or by a custom date range.
+
 - Local development servers now offer a five-minute lending duration at the bottom of the duration list for faster loan-return testing.
 
 - Borrowed Pokémon can train and evolve from leveling, but their moves, EV allocation, Poké Ball, nickname, and other details cannot be changed, and items cannot be used on them. Held items remain available.

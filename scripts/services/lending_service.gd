@@ -12,7 +12,7 @@ func load_capabilities() -> Dictionary:
 	return await _get_resource("/capabilities", true)
 
 
-func load_loans(view := "all", limit := 50, offset := 0, search := "", statuses: Array[String] = []) -> Dictionary:
+func load_loans(view := "all", limit := 50, offset := 0, search := "", statuses: Array[String] = [], history_days := 0, date_from := "", date_to := "") -> Dictionary:
 	var normalized := str(view).strip_edges().to_lower()
 	if normalized not in ["all", "borrowed", "lent", "history"]:
 		normalized = "all"
@@ -27,6 +27,13 @@ func load_loans(view := "all", limit := 50, offset := 0, search := "", statuses:
 			normalized_statuses.append(value)
 	if not normalized_statuses.is_empty():
 		query += "&statuses=%s" % ",".join(normalized_statuses).uri_encode()
+	if normalized == "history":
+		var normalized_date_from := str(date_from).strip_edges()
+		var normalized_date_to := str(date_to).strip_edges()
+		if normalized_date_from != "" and normalized_date_to != "":
+			query += "&dateFrom=%s&dateTo=%s" % [normalized_date_from.uri_encode(), normalized_date_to.uri_encode()]
+		elif int(history_days) > 0:
+			query += "&days=%d" % clampi(int(history_days), 1, 30)
 	return await _get_resource(query)
 
 
