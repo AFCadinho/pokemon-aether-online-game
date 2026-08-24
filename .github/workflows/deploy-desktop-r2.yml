@@ -230,6 +230,12 @@ jobs:
       - name: Verify client crash reporting
         run: ./godot --headless --path . --script res://tests/client_crash_reporting_check.gd
 
+      - name: Import launcher assets
+        if: env.BUILD_LAUNCHER == 'true'
+        run: |
+          cd launcher
+          ../godot --headless --import --quit
+
       - name: Verify launcher download resilience
         env:
           GODOT_BIN: ./godot
@@ -240,12 +246,6 @@ jobs:
 
       - name: Verify generated world access catalog
         run: ./godot --no-header --headless --path . res://tools/generate_world_access_catalog.tscn -- --check
-
-      - name: Import launcher assets
-        if: env.BUILD_LAUNCHER == 'true'
-        run: |
-          cd launcher
-          ../godot --headless --import --quit
 
       - name: Export Windows build
         run: |
