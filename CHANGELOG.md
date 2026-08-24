@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Collision now works correctly in the Aether Clash waiting area.
+
 - Aether Clash Duel now has separate jail spawn points for Guild 1 and Guild 2.
 
 - Aether Clash Duel now uses the regular Clan Wars arena, while Battle Royale uses the jail arena.
