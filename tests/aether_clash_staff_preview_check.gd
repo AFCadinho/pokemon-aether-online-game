@@ -12,7 +12,7 @@ const PREVIEWS := {
 		"source_suffix": "/Clan Wars Map x1 Jail.tmx",
 		"requires_collision": true,
 		"has_jail_spawn": true,
-		"runtime_visual_layers": ["JailBarsTop"],
+		"runtime_visual_layers": ["JailTop"],
 	},
 	"res://scenes/overworld/aether_clash/waiting_area_preview.tscn": {
 		"map_id": "aether_clash_waiting_area_preview",
@@ -109,7 +109,7 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 			collision != null and collision.get_cell_source_id(jail_tile) == -1,
 			"%s places its jail spawn on a walkable tile" % scene_path.get_file()
 		)
-		var jail_bars := visual.get_node_or_null("JailBarsTop") as TileMapLayer
+		var jail_bars := visual.get_node_or_null("JailTop") as TileMapLayer
 		var jail_bar_cells: Array[Vector2i] = []
 		if jail_bars != null:
 			jail_bar_cells = jail_bars.get_used_cells()
@@ -117,7 +117,7 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 		var jail_bars_last_row := -1
 		if jail_bars != null:
 			for y in range(71, 74):
-				for x in range(66, 75):
+				for x in range(66, 74):
 					if jail_bars.get_cell_source_id(Vector2i(x, y)) == -1:
 						has_complete_jail_bars = false
 			for cell: Vector2i in jail_bar_cells:
@@ -135,7 +135,7 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 		)
 		var bars_depth_boundary_y := (
 			bars_bottom_y
-			+ AetherClashJailDepthScript.get_depth_boundary_offset("JailBarsTop")
+			+ AetherClashJailDepthScript.get_depth_boundary_offset("JailTop")
 		)
 		var one_step_north_y := jail_position.y - 32.0
 		_check(

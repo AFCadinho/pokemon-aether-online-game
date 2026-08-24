@@ -2,7 +2,8 @@ extends RefCounted
 
 const VISUAL_NAME := "ClanWarsMapX1Jail"
 const OBJECTS_TOP_NAME := "ObjectsTop"
-const JAIL_BARS_LAYER_NAME := "JailBarsTop"
+const JAIL_TOP_LAYER_NAME := "JailTop"
+const LEGACY_JAIL_BARS_LAYER_NAME := "JailBarsTop"
 const JAIL_BARS_RECT := Rect2i(66, 71, 9, 3)
 # The jail spawn sits one tile south of the bars. Put the draw boundary
 # halfway between that spawn tile and the tile immediately north of it.
@@ -10,7 +11,11 @@ const JAIL_BARS_DEPTH_OFFSET := 32
 
 
 static func get_depth_boundary_offset(tiled_name: String) -> int:
-	return JAIL_BARS_DEPTH_OFFSET if tiled_name == JAIL_BARS_LAYER_NAME else 0
+	return (
+		JAIL_BARS_DEPTH_OFFSET
+		if tiled_name in [JAIL_TOP_LAYER_NAME, LEGACY_JAIL_BARS_LAYER_NAME]
+		else 0
+	)
 
 
 static func split_jail_bars_for_depth_sorting(map: Node) -> void:
@@ -18,11 +23,15 @@ static func split_jail_bars_for_depth_sorting(map: Node) -> void:
 	if visual == null:
 		return
 	var objects_top := visual.get_node_or_null(OBJECTS_TOP_NAME) as TileMapLayer
-	if objects_top == null or visual.get_node_or_null(JAIL_BARS_LAYER_NAME) != null:
+	if (
+		objects_top == null
+		or visual.get_node_or_null(JAIL_TOP_LAYER_NAME) != null
+		or visual.get_node_or_null(LEGACY_JAIL_BARS_LAYER_NAME) != null
+	):
 		return
 
 	var jail_bars := TileMapLayer.new()
-	jail_bars.name = JAIL_BARS_LAYER_NAME
+	jail_bars.name = LEGACY_JAIL_BARS_LAYER_NAME
 	jail_bars.tile_set = objects_top.tile_set
 	jail_bars.position = objects_top.position
 	jail_bars.z_index = objects_top.z_index
@@ -30,7 +39,7 @@ static func split_jail_bars_for_depth_sorting(map: Node) -> void:
 	jail_bars.visible = objects_top.visible
 	jail_bars.modulate = objects_top.modulate
 	jail_bars.self_modulate = objects_top.self_modulate
-	jail_bars.set_meta("tiled_name", JAIL_BARS_LAYER_NAME)
+	jail_bars.set_meta("tiled_name", LEGACY_JAIL_BARS_LAYER_NAME)
 	jail_bars.set_meta("tiled_visual_layer", true)
 	visual.add_child(jail_bars)
 
