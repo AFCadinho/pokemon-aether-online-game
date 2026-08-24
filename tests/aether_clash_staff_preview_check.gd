@@ -10,6 +10,7 @@ const PREVIEWS := {
 		"source_suffix": "/Clan Wars Map x1 Jail.tmx",
 		"requires_collision": true,
 		"has_jail_spawn": true,
+		"runtime_visual_layers": ["JailBarsTop"],
 	},
 	"res://scenes/overworld/aether_clash/waiting_area_preview.tscn": {
 		"map_id": "aether_clash_waiting_area_preview",
@@ -55,10 +56,12 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 			layer_names.append(str(child.name))
 	layer_names.sort()
 	var expected_layer_names := EXPECTED_VISUAL_LAYERS.duplicate()
+	for runtime_layer_name: String in expected.get("runtime_visual_layers", []):
+		expected_layer_names.append(runtime_layer_name)
 	expected_layer_names.sort()
 	_check(
 		layer_names == expected_layer_names,
-		"%s uses the updated visual layer names" % scene_path.get_file()
+		"%s uses the updated visual layer names (%s)" % [scene_path.get_file(), layer_names]
 	)
 	var objects_top: TileMapLayer = null
 	if visual != null:
@@ -101,6 +104,38 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 		_check(
 			collision != null and collision.get_cell_source_id(jail_tile) == -1,
 			"%s places its jail spawn on a walkable tile" % scene_path.get_file()
+		)
+		var jail_bars := visual.get_node_or_null("JailBarsTop") as TileMapLayer
+		var jail_bar_cells: Array[Vector2i] = []
+		if jail_bars != null:
+			jail_bar_cells = jail_bars.get_used_cells()
+		var bars_bottom_y := -INF
+		if jail_bars != null:
+			for cell: Vector2i in jail_bar_cells:
+				bars_bottom_y = maxf(
+					bars_bottom_y,
+					jail_bars.to_global(jail_bars.map_to_local(cell) + Vector2(0, 16)).y
+				)
+		var behind_bars_y := (
+			jail_bars.to_global(jail_bars.map_to_local(Vector2i(69, 72))).y
+			if jail_bars != null else INF
+		)
+		_check(
+			jail_bars != null
+			and jail_bar_cells.size() == 27
+			and objects_top != null
+			and objects_top.get_cell_source_id(Vector2i(69, 72)) == -1,
+			"%s isolates the jail bars from their connected side wall" % scene_path.get_file()
+		)
+		_check(
+			behind_bars_y < bars_bottom_y and bars_bottom_y < jail_position.y,
+			"%s depth-sorts the jail bars behind players in front and ahead of players behind"
+				% scene_path.get_file()
+		)
+		var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+		_check(
+			world_source.contains('"JailBarsTop"'),
+			"%s registers its isolated jail bars for world depth sorting" % scene_path.get_file()
 		)
 	preview.queue_free()
 
