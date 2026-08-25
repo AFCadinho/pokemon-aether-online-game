@@ -107,7 +107,7 @@ func _check_catalog_localization_contract() -> void:
 	if not (parsed is Dictionary):
 		return
 	var catalogs: Array[Dictionary] = []
-	for locale: String in ["en", "nl", "pt_BR"]:
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var catalog_value: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))
 		_check(catalog_value is Dictionary, "%s localization catalog is valid JSON" % locale)
 		catalogs.append(catalog_value as Dictionary if catalog_value is Dictionary else {})

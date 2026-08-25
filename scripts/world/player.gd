@@ -39,6 +39,7 @@ const PixelPerfectRenderingScript := preload("res://scripts/services/pixel_perfe
 const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
+const LedgeDirectionResolverScript := preload("res://scripts/world/ledge_direction_resolver.gd")
 const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
@@ -159,6 +160,7 @@ const ACTIVITY_VISUAL_OFFSETS := {
 }
 const WATER_TILEMAP_NAMES: Array[String] = ["Water"]
 const TALL_GRASS_VISUAL_TILEMAP_NAMES: Array[String] = ["TallGrassVisual", "Grass"]
+const TALL_GRASS_DEPTH_SORTING_SCRIPT := preload("res://scripts/world/tall_grass_depth_sorting.gd")
 const TALL_GRASS_RUSTLE_EFFECT_SCRIPT := preload("res://scripts/world/tall_grass_rustle_effect.gd")
 const WATER_RIPPLE_EFFECT_SCRIPT := preload("res://scripts/world/water_ripple_effect.gd")
 const SAND_FOOTPRINT_EFFECT_SCRIPT := preload("res://scripts/world/sand_footprint_effect.gd")
@@ -768,7 +770,7 @@ func _is_story_grid_step_blocked(
 		return true
 	if direction == Vector2.RIGHT and _tilemap_has_tile_at(block_right_tilemap, current_position):
 		return true
-	if _get_ledge_direction_for_tile(next_position) != Vector2.ZERO:
+	if not _get_ledge_directions_for_tile(next_position).is_empty():
 		return true
 	var current_map := _resolve_current_map()
 	if (
@@ -824,7 +826,7 @@ func _ready() -> void:
 	# Bij scene switches kan de vorige map al freed zijn terwijl de autoload nog
 	# even naar die node wijst.
 	if GameState.current_map != null and is_instance_valid(GameState.current_map):
-		grass_tilemap = GameState.current_map.get_node_or_null("TallGrass")
+		grass_tilemap = _find_tilemap_layer(GameState.current_map, ["TallGrass"])
 		water_tilemap = _find_tilemap_layer(GameState.current_map, WATER_TILEMAP_NAMES)
 		_refresh_sand_tilemaps(GameState.current_map)
 		collision_tilemap = _find_tilemap_layer(GameState.current_map, ["Collision"])
@@ -1940,12 +1942,12 @@ func _try_start_move(direction: Vector2) -> bool:
 		set_idle_frame()
 		return false
 
-	var ledge_direction: Vector2 = _get_ledge_direction_for_tile(new_target_position)
-	if ledge_direction != Vector2.ZERO:
-		if direction != ledge_direction:
+	var ledge_directions := _get_ledge_directions_for_tile(new_target_position)
+	if not ledge_directions.is_empty():
+		if not ledge_directions.has(direction):
 			return false
 
-		movement_target_position = _snap_world_position(new_target_position + (ledge_direction * TILE_SIZE))
+		movement_target_position = _snap_world_position(new_target_position + (direction * TILE_SIZE))
 
 	# Check eerst of de target tile vrij is.
 	# Alleen als can_move_to true teruggeeft, starten we de beweging.
@@ -2052,19 +2054,15 @@ func _is_direction_blocked_by_current_tile(direction: Vector2) -> bool:
 
 	return false
 
-func _get_ledge_direction_for_tile(check_position: Vector2) -> Vector2:
+func _get_ledge_directions_for_tile(check_position: Vector2) -> Array[Vector2]:
 	refresh_map_layers()
-
-	if _tilemap_has_tile_at(ledge_down_tilemap, check_position):
-		return Vector2.DOWN
-	if _tilemap_has_tile_at(ledge_up_tilemap, check_position):
-		return Vector2.UP
-	if _tilemap_has_tile_at(ledge_left_tilemap, check_position):
-		return Vector2.LEFT
-	if _tilemap_has_tile_at(ledge_right_tilemap, check_position):
-		return Vector2.RIGHT
-
-	return Vector2.ZERO
+	return LedgeDirectionResolverScript.directions_for_tile(
+		check_position,
+		ledge_down_tilemap,
+		ledge_up_tilemap,
+		ledge_left_tilemap,
+		ledge_right_tilemap
+	)
 
 func _tilemap_has_tile_at(tilemap: TileMapLayer, check_position: Vector2) -> bool:
 	if tilemap == null:
@@ -2134,7 +2132,7 @@ func refresh_map_layers() -> void:
 
 	GameState.current_map = current_map
 	collision_tilemap = _find_tilemap_layer(current_map, ["Collision"])
-	grass_tilemap = current_map.get_node_or_null("TallGrass")
+	grass_tilemap = _find_tilemap_layer(current_map, ["TallGrass"])
 	grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
 	water_tilemap = _find_tilemap_layer(current_map, WATER_TILEMAP_NAMES)
 	_refresh_sand_tilemaps(current_map)
@@ -2206,27 +2204,30 @@ func _is_cave_encounter_map() -> bool:
 	return not str(current_map.call("get_wild_encounter_area_id")).strip_edges().is_empty()
 
 func _spawn_tall_grass_rustle_effect() -> void:
-	if grass_visual_tilemap == null:
-		var current_map := _resolve_current_map()
-		grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
-
-	if grass_visual_tilemap == null:
-		return
-
-	var local_position := grass_visual_tilemap.to_local(global_position)
-	var tile_position := grass_visual_tilemap.local_to_map(local_position)
-	var source_id := grass_visual_tilemap.get_cell_source_id(tile_position)
-	if source_id == -1 and grass_visual_tilemap.get_cell_tile_data(tile_position) == null:
-		return
-
 	var current_map := _resolve_current_map()
 	var effect_parent: Node = current_map if current_map != null else get_parent()
 	if effect_parent == null:
 		return
 
+	var effect_source := TALL_GRASS_DEPTH_SORTING_SCRIPT.find_depth_row_at_global_position(
+		current_map,
+		global_position
+	)
+	var effect_tilemap := effect_source.get("layer") as TileMapLayer
+	var tile_position: Vector2i = effect_source.get("tile_position", Vector2i.ZERO)
+	if effect_tilemap == null:
+		if grass_visual_tilemap == null:
+			grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
+		if grass_visual_tilemap == null:
+			return
+		effect_tilemap = grass_visual_tilemap
+		tile_position = effect_tilemap.local_to_map(effect_tilemap.to_local(global_position))
+		if effect_tilemap.get_cell_source_id(tile_position) < 0:
+			return
+
 	var effect := TALL_GRASS_RUSTLE_EFFECT_SCRIPT.new()
 	effect_parent.add_child(effect)
-	effect.play(grass_visual_tilemap, tile_position)
+	effect.play(effect_tilemap, tile_position)
 
 func _spawn_water_ripple_effect(world_position: Vector2, kind: String, require_water_tile := true) -> void:
 	if require_water_tile and not _is_water_tile_at(world_position):

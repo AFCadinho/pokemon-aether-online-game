@@ -67,11 +67,25 @@ function baseEnv(bucket = new FakeBucket()) {
   };
 }
 
-function discourseFetch(topics = [topic(26, "2026-08-20T12:00:00Z")]) {
+function discourseFetch(
+  topics = [topic(26, "2026-08-20T12:00:00Z")],
+  topicDetails = {},
+) {
   return async (url) => {
     if (url.includes("/show.json")) return Response.json(categoryPayload());
     if (url.includes("/l/latest.json")) return Response.json(topicsPayload(topics));
+    const topicId = Number(/\/t\/(\d+)\.json$/.exec(url)?.[1]);
+    if (Number.isInteger(topicId) && topicDetails[topicId]) return Response.json(topicDetails[topicId]);
     return new Response("Not found", { status: 404 });
+  };
+}
+
+function topicDetail(id, cooked = "<p>A useful announcement summary.</p>") {
+  return {
+    id,
+    post_stream: {
+      posts: [{ topic_id: id, post_number: 1, cooked }],
+    },
   };
 }
 
@@ -194,6 +208,49 @@ test("sync creates an initial feed with mutable-cache metadata", async () => {
     contentType: "application/json; charset=utf-8",
     cacheControl: "no-cache, max-age=0",
   });
+});
+
+test("sync fetches public first-post content when Discourse omits a topic excerpt", async () => {
+  const bucket = new FakeBucket();
+  const env = baseEnv(bucket);
+  const announcement = topic(62, "2026-08-25T00:20:55Z", {
+    title: "Battle Engine Update",
+    excerpt: null,
+  });
+  const result = await syncForumNews(
+    env,
+    readConfig(env),
+    discourseFetch([announcement], { 62: topicDetail(62, "<p>New Mega Evolutions are here!</p>") }),
+  );
+
+  assert.deepEqual(result, { changed: true, articles: 1 });
+  const feed = JSON.parse(bucket.puts[0].value);
+  assert.equal(feed.articles[0].title, "Battle Engine Update");
+  assert.equal(feed.articles[0].summary, "New Mega Evolutions are here!");
+});
+
+test("sync preserves the current feed when missing topic content cannot be hydrated", async () => {
+  const previous = JSON.stringify({
+    articles: [{
+      title: "Legacy",
+      date: "August 1, 2026",
+      summary: "Previous valid news.",
+      featuredImage: "",
+      imageAlt: "",
+      externalLink: "",
+      localizations: {},
+    }],
+  });
+  const bucket = new FakeBucket({ "data/news.json": previous });
+  const env = baseEnv(bucket);
+  const announcement = topic(62, "2026-08-25T00:20:55Z", { excerpt: null });
+
+  await assert.rejects(
+    syncForumNews(env, readConfig(env), discourseFetch([announcement])),
+    /Discourse request failed/,
+  );
+  assert.equal(bucket.puts.length, 0);
+  assert.equal(await (await bucket.get("data/news.json")).text(), previous);
 });
 
 test("sync skips writes when the generated feed is byte-identical", async () => {

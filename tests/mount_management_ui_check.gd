@@ -131,6 +131,7 @@ func _run() -> void:
 		"res://localization/en.json",
 		"res://localization/nl.json",
 		"res://localization/pt_BR.json",
+		"res://localization/zh_CN.json",
 	]:
 		var locale_source := FileAccess.get_file_as_string(locale_path)
 		_check(

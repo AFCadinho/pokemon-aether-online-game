@@ -182,7 +182,7 @@ func _run() -> void:
 	)
 	trade_service.free()
 
-	for locale: String in ["en", "nl", "pt_BR"]:
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var catalog: Dictionary = localization.call("get_catalog", locale)
 		for key_value: Variant in errors.call("mapped_translation_keys"):
 			_check(catalog.has(str(key_value)), "%s contains mapped backend key %s" % [locale, key_value])
