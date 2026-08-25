@@ -16884,7 +16884,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_copy_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_copy_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	pokemon_summary_copy_button.pressed.connect(_on_pokemon_summary_copy_pressed.bind(card_key))
-	_set_localized_control_property(pokemon_summary_copy_button, "tooltip_text", "ui.pokemon_summary.copy_pokepaste")
+	_set_localized_control_property(pokemon_summary_copy_button, "tooltip_text", "ui.pokemon_summary.copy_export_set")
 	pokemon_summary_copy_button.add_theme_constant_override("icon_max_width", 14)
 	pokemon_summary_copy_button.add_theme_stylebox_override("normal", _make_pokemon_summary_compact_icon_button_style(Color("#0e2138f0"), Color("#5a82ad")))
 	pokemon_summary_copy_button.add_theme_stylebox_override("hover", _make_pokemon_summary_compact_icon_button_style(Color("#12304bf0"), POKEMON_SUMMARY_ACCENT))
@@ -21898,20 +21898,20 @@ func _on_pokemon_summary_copy_pressed(card_key: String = "") -> void:
 	if not bool(response.get("success", false)) or export_text == "":
 		if is_instance_valid(copy_button):
 			copy_button.disabled = false
-		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.copy_pokepaste_failed"))
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.copy_export_set_failed"))
 		return
 
 	DisplayServer.clipboard_set(export_text)
 	if not is_instance_valid(copy_button):
 		return
-	copy_button.tooltip_text = LocalizationManager.text("ui.pokemon_summary.copy_pokepaste_copied")
+	copy_button.tooltip_text = LocalizationManager.text("ui.pokemon_summary.copy_export_set_copied")
 	for state: String in ["normal", "hover", "pressed", "disabled"]:
 		copy_button.add_theme_color_override("icon_%s_color" % state, Color("#75d69c"))
 	await get_tree().create_timer(1.25).timeout
 	if not is_instance_valid(copy_button):
 		return
 	copy_button.disabled = false
-	copy_button.tooltip_text = LocalizationManager.text("ui.pokemon_summary.copy_pokepaste")
+	copy_button.tooltip_text = LocalizationManager.text("ui.pokemon_summary.copy_export_set")
 	for state: String in ["normal", "hover", "pressed", "disabled"]:
 		copy_button.remove_theme_color_override("icon_%s_color" % state)
 

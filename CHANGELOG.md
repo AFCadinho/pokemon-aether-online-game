@@ -4,7 +4,7 @@
 
 **Added**
 
-- Pokémon can now be copied from their Summary as PokéPaste text.
+- Pokémon Showdown export sets can now be copied from a Pokémon's Summary.
 
 **Changed**
 

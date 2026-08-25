@@ -109,7 +109,7 @@ func _run() -> void:
 	overlay.call("_handle_pokemon_summary_drag_input", release)
 	_check(context.get("left_panel") == null, "read-only Summary does not retain controls from a closed card")
 	_check(context.get("nickname_button") == null, "read-only Summary does not retain a freed nickname button")
-	_check(context.get("copy_button") == null, "read-only Summary does not expose the PokéPaste copy action")
+	_check(context.get("copy_button") == null, "read-only Summary does not expose the export-set copy action")
 	_check(overlay.call("_apply_pokemon_summary_card_context", active_card_key), "read-only Summary context remains safe to reactivate")
 	_check((nodes.get("stat_rows", {}) as Dictionary).size() == 6, "all six stats render at once")
 	var stats_grid := nodes.get("stats_grid") as GridContainer
