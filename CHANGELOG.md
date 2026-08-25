@@ -33,6 +33,7 @@
 
 **Changed**
 
+- Pokémon Summary hover hints now share the same clear, styled appearance.
 - Borrowed Pokémon can train, level up, evolve, move between the Party and PC, and change held items. Other permanent changes remain available only to their owner.
 - Player Loan screens now separate Pokémon and items, show every asset individually, and make deadlines, returns, and loan status easier to understand.
 - Guild screens now make applications, ranks, members, bank contents, chat, and travel easier to find and use.

@@ -74,6 +74,10 @@ func _run() -> void:
 
 	var popup := overlay.get("pokemon_summary_popup") as PanelContainer
 	_check(popup != null, "read-only Summary opens a dedicated card")
+	_check(
+		popup != null and popup.get_theme_stylebox("panel", "TooltipPanel") is StyleBoxFlat,
+		"read-only Summary hover hints use the same styled tooltip card"
+	)
 	_check(popup.name == "PokemonReadonlySummaryPopup", "read-only Summary uses the compact layout")
 	_check(popup.size == EXPECTED_SIZE, "read-only Summary keeps its fixed production size")
 	_check(popup.size == Vector2(620, 380), "read-only and interactive summaries share the same window geometry")

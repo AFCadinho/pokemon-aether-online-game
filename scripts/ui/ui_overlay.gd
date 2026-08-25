@@ -15620,6 +15620,7 @@ func _setup_pokemon_summary_popup(card_key: String = "") -> void:
 	pokemon_summary_popup.offset_right = POKEMON_SUMMARY_SIZE.x * 0.5
 	pokemon_summary_popup.offset_bottom = POKEMON_SUMMARY_SIZE.y * 0.5
 	pokemon_summary_popup.size = POKEMON_SUMMARY_SIZE
+	pokemon_summary_popup.theme = _make_pokemon_summary_tooltip_theme()
 	pokemon_summary_popup.add_theme_stylebox_override("panel", _make_pokemon_summary_outer_style())
 	pokemon_summary_popup.modulate = Color(1, 1, 1, 0.98)
 	pokemon_summary_popup.gui_input.connect(_on_pokemon_summary_card_gui_input.bind(card_key))
@@ -15668,6 +15669,7 @@ func _setup_readonly_pokemon_summary_popup(card_key: String = "") -> void:
 	pokemon_summary_popup.offset_right = POKEMON_READONLY_SUMMARY_SIZE.x * 0.5
 	pokemon_summary_popup.offset_bottom = POKEMON_READONLY_SUMMARY_SIZE.y * 0.5
 	pokemon_summary_popup.size = POKEMON_READONLY_SUMMARY_SIZE
+	pokemon_summary_popup.theme = _make_pokemon_summary_tooltip_theme()
 	pokemon_summary_popup.add_theme_stylebox_override("panel", _make_pokemon_summary_outer_style())
 	pokemon_summary_popup.modulate = Color(1, 1, 1, 0.99)
 	pokemon_summary_popup.gui_input.connect(_on_pokemon_summary_card_gui_input.bind(card_key))
@@ -25163,6 +25165,24 @@ func _make_pokemon_summary_outer_style() -> StyleBoxFlat:
 	style.content_margin_top = 0
 	style.content_margin_bottom = 0
 	return style
+
+func _make_pokemon_summary_tooltip_theme() -> Theme:
+	var tooltip_theme := Theme.new()
+	var tooltip_style := _make_panel_style(Color("#07101af8"), POKEMON_SUMMARY_ACCENT, 7, 1)
+	tooltip_style.content_margin_left = 10
+	tooltip_style.content_margin_top = 7
+	tooltip_style.content_margin_right = 10
+	tooltip_style.content_margin_bottom = 7
+	tooltip_style.shadow_color = Color("#0000008f")
+	tooltip_style.shadow_size = 6
+	tooltip_style.shadow_offset = Vector2(0, 3)
+	tooltip_theme.set_stylebox("panel", "TooltipPanel", tooltip_style)
+	tooltip_theme.set_color("font_color", "TooltipLabel", Color("#d9e3f0"))
+	tooltip_theme.set_color("font_shadow_color", "TooltipLabel", Color("#00111f"))
+	tooltip_theme.set_font_size("font_size", "TooltipLabel", 11)
+	tooltip_theme.set_constant("shadow_offset_x", "TooltipLabel", 1)
+	tooltip_theme.set_constant("shadow_offset_y", "TooltipLabel", 1)
+	return tooltip_theme
 
 func _make_pokemon_summary_inner_style(background_color: Color, border_color: Color) -> StyleBoxFlat:
 	var style := _make_panel_style(background_color, border_color, 5, 1)
