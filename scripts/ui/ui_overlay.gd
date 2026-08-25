@@ -21468,7 +21468,7 @@ func _show_pokemon_summary(slot_index: int) -> void:
 	if _trade_workspace_is_visible():
 		_promote_trade_summary_to_window(card_key)
 
-func open_ev_training_allocation(pokemon_id: int, stat_id: String) -> bool:
+func open_ev_training_allocation(pokemon_id: int, stat_id: String, suggested_addition: int = 0) -> bool:
 	for slot_index in range(PlayerSave.party.size()):
 		var pokemon: Pokemon = PlayerSave.party[slot_index]
 		if pokemon == null or pokemon.owned_pokemon_id != pokemon_id:
@@ -21477,6 +21477,14 @@ func open_ev_training_allocation(pokemon_id: int, stat_id: String) -> bool:
 		var card_key := _get_pokemon_summary_card_key(pokemon, slot_index, "interactive")
 		_on_pokemon_summary_tab_selected("evs", card_key)
 		_on_summary_allocated_ev_pressed(stat_id, _summary_stat_label(stat_id), card_key)
+		if suggested_addition > 0:
+			var suggested_target := _get_summary_ev_suggested_target(
+				int(pokemon_summary_ev_allocate_input.min_value),
+				int(pokemon_summary_ev_allocate_input.max_value),
+				suggested_addition
+			)
+			pokemon_summary_ev_allocate_input.set_value_no_signal(suggested_target)
+			_on_summary_ev_allocate_value_changed(suggested_target)
 		return true
 	return false
 
@@ -23266,6 +23274,10 @@ func _get_summary_ev_allocation_max(current_value: int, allocated_total: int, st
 	var stored_target: int = clamped_current + maxi(stored_for_stat, 0)
 	var total_target: int = clamped_current + maxi(POKEMON_EV_TOTAL_LIMIT - allocated_total, 0)
 	return mini(POKEMON_EV_STAT_LIMIT, mini(stored_target, total_target))
+
+func _get_summary_ev_suggested_target(current_value: int, max_value: int, suggested_addition: int) -> int:
+	var safe_maximum := maxi(current_value, max_value)
+	return clampi(current_value + maxi(suggested_addition, 0), current_value, safe_maximum)
 
 func _get_summary_ev_total(evs: Dictionary) -> int:
 	var total := 0

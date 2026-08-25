@@ -4,7 +4,7 @@
 
 **Changed**
 
-- EV allocation now clearly shows the current value, the 252-per-stat limit, the reachable value, and the 510 total limit. You can choose an exact target with a number field, slider, or Max button.
+- EV allocation now clearly shows the current value, the 252-per-stat limit, the reachable value, and the 510 total limit. You can choose an exact target with a number field, slider, or Max button, and Mateo's lesson now guides you through the new target controls.
 
 ## 0.3.62 - 2026-08-24
 

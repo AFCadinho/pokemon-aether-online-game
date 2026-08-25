@@ -37,6 +37,9 @@ func _run() -> void:
 	_check(int(overlay.call("_get_summary_ev_allocation_max", 5, 84, 6)) == 11, "reachable target includes current and stored EVs")
 	_check(int(overlay.call("_get_summary_ev_allocation_max", 250, 250, 20)) == 252, "reachable target respects the 252 stat limit")
 	_check(int(overlay.call("_get_summary_ev_allocation_max", 5, 508, 100)) == 7, "reachable target respects the 510 total limit")
+	_check(int(overlay.call("_get_summary_ev_suggested_target", 40, 252, 4)) == 44, "Mateo's lesson suggests four EVs above the current value")
+	_check(int(overlay.call("_get_summary_ev_suggested_target", 40, 252, 2)) == 42, "Mateo's lesson suggests only the remaining partial allocation")
+	_check(int(overlay.call("_get_summary_ev_suggested_target", 251, 252, 4)) == 252, "Mateo's suggested target respects the reachable limit")
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	_check(overlay_source.contains("pokemon_summary_ev_allocate_slider.min_value = current_value"), "EV slider cannot move below the current EV value")
 	ev_allocate_input.min_value = 5
