@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Changed**
+
+- Main interface hover cards now share a clear, styled appearance across navigation, party, hotbar, status, buffs, and chat controls.
+
 ## 0.3.62 - 2026-08-24
 
 **Added**

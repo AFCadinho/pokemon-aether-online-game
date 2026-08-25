@@ -62,6 +62,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/item_acquisition_audio_check.gd",
 	"res://tests/localization_foundation_check.gd",
 	"res://tests/localization_shared_ui_check.gd",
+	"res://tests/main_ui_tooltip_theme_check.gd",
 	"res://tests/localization_party_summary_check.gd",
 	"res://tests/pokemon_nickname_payload_check.gd",
 	"res://tests/pokemon_nickname_ui_check.gd",
