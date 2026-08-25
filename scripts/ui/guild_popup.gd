@@ -314,7 +314,7 @@ func show_debug_member_preview() -> void:
 		},
 	}
 	guild_bank_state = {
-		"access": {"canDeposit": true, "canWithdraw": true, "canDepositFunds": true, "canWithdrawFunds": true, "canBorrow": true, "canForceReturn": true},
+		"access": {"canDeposit": true, "canWithdraw": true, "canDepositFunds": true, "canWithdrawFunds": true, "lendingEnabled": true, "canBorrow": true, "canForceReturn": true},
 		"funds": {"balance": 250000, "playerBalance": 87500},
 		"items": [
 			{"itemId": "potion", "name": "Potion", "category": "Medicine", "quantity": 18, "availableQuantity": 18, "borrowedQuantity": 0, "lendable": false},
@@ -908,8 +908,11 @@ func _render_guild_home() -> void:
 	var permissions := _array_from_value(own_membership.get("permissions", []))
 	var is_leader := role == "leader"
 	var can_invite := permissions.has("manage_members") or role in ["leader", "captain"]
-	var can_manage := is_leader or can_invite or permissions.has("manage_guild")
-	if active_guild_section in ["applications", "management"] and not can_manage:
+	var can_review_applications := can_invite
+	var can_manage_settings := is_leader or permissions.has("manage_guild")
+	if active_guild_section == "applications" and not can_review_applications:
+		active_guild_section = "overview"
+	if active_guild_section == "management" and not can_manage_settings:
 		active_guild_section = "overview"
 
 	var header := HBoxContainer.new()
@@ -924,7 +927,7 @@ func _render_guild_home() -> void:
 	role_row.add_theme_constant_override("separation", 9)
 	heading.add_child(role_row)
 	var role_label := _label(
-		_t("ui.guild.membership.role", {"role": _membership_role_label(role).to_lower()}),
+		_t("ui.guild.membership.role", {"role": _membership_role_label(role)}),
 		12,
 		UI_ACCENT
 	)
@@ -936,16 +939,16 @@ func _render_guild_home() -> void:
 	header.add_child(_status_pill(str(guild.get("recruitment", "Closed"))))
 
 	member_content.add_child(_build_guild_travel_bar())
-	member_content.add_child(_build_guild_section_navigation(can_manage))
+	member_content.add_child(_build_guild_section_navigation(can_review_applications, can_manage_settings))
 	match active_guild_section:
 		"bank":
 			member_content.add_child(_build_guild_bank())
 		"members":
-			member_content.add_child(_build_member_roster())
+			member_content.add_child(_build_member_roster(can_invite))
 		"applications":
 			member_content.add_child(_build_guild_applications())
 		"management":
-			member_content.add_child(_build_member_management(guild, is_leader, can_invite))
+			member_content.add_child(_build_member_management(guild, is_leader))
 		_:
 			member_content.add_child(_build_guild_overview(guild))
 
@@ -976,7 +979,7 @@ func _build_guild_header_emblem(guild: Dictionary, is_editable: bool) -> Control
 	return button
 
 
-func _build_guild_section_navigation(can_manage: bool) -> Control:
+func _build_guild_section_navigation(can_review_applications: bool, can_manage_settings: bool) -> Control:
 	var navigation := HBoxContainer.new()
 	navigation.name = "GuildSectionNavigation"
 	navigation.add_theme_constant_override("separation", 6)
@@ -986,12 +989,13 @@ func _build_guild_section_navigation(can_manage: bool) -> Control:
 		{"id": "bank", "label_key": "ui.guild.section.bank", "name": "GuildBankTab"},
 		{"id": "members", "label_key": "ui.guild.section.members", "name": "GuildMembersTab"},
 	]
-	if can_manage:
+	if can_review_applications:
 		sections.append({
 			"id": "applications",
 			"label_key": "ui.guild.section.applications",
 			"name": "GuildApplicationsTab",
 		})
+	if can_manage_settings:
 		sections.append({
 			"id": "management",
 			"label_key": "ui.guild.section.management",
@@ -1336,6 +1340,30 @@ func _guild_bank_access_summary() -> String:
 	return "  ·  ".join(states)
 
 
+func _guild_bank_rank_label() -> String:
+	var role := str(_dictionary(guild_home.get("membership", {})).get("role", "recruit"))
+	return _membership_role_label(role)
+
+
+func _guild_bank_rank_restriction(key: String) -> String:
+	return _t(key, {"role": _guild_bank_rank_label()})
+
+
+func _guild_bank_borrow_tooltip(item: Dictionary = {}) -> String:
+	var own_membership := _dictionary(guild_home.get("membership", {}))
+	var permissions := _array_from_value(own_membership.get("permissions", []))
+	if not permissions.has("bank_borrow"):
+		return _guild_bank_rank_restriction("ui.guild.bank.tooltip.borrow_rank")
+	if not item.is_empty() and not bool(item.get("lendable", false)):
+		return _t("ui.guild.bank.tooltip.borrow_item_ineligible")
+	if not item.is_empty() and int(item.get("availableQuantity", item.get("quantity", 0))) <= 0:
+		return _t("ui.guild.bank.tooltip.borrow_unavailable")
+	var access := _dictionary(guild_bank_state.get("access", {}))
+	if not bool(access.get("lendingEnabled", false)):
+		return _t("ui.guild.bank.tooltip.borrow_disabled")
+	return _t("ui.guild.bank.tooltip.borrow_unavailable")
+
+
 func _guild_bank_card_description(category: String) -> String:
 	match category:
 		"funds":
@@ -1443,7 +1471,9 @@ func _build_guild_funds_workspace() -> Control:
 	amount.min_value = 1
 	amount.max_value = 2147483647
 	amount.value = 1000
-	amount.step = 100
+	amount.step = 1
+	amount.update_on_text_changed = true
+	_set_localized_property(amount, "tooltip_text", "ui.guild.bank.funds.amount_hint")
 	amount.custom_minimum_size = Vector2(220, 38)
 	_apply_spin_box_style(amount)
 	transfer.add_child(amount)
@@ -1458,8 +1488,12 @@ func _build_guild_funds_workspace() -> Control:
 		"GuildBankMoneyWithdrawButton",
 		"ui.guild.bank.withdraw",
 		bool(access.get("canWithdrawFunds", access.get("canWithdraw", false))),
-		_on_guild_bank_money_action.bind("withdraw", amount)
+		_on_guild_bank_money_action.bind("withdraw", amount),
+		"" if bool(access.get("canWithdrawFunds", access.get("canWithdraw", false))) else _guild_bank_rank_restriction("ui.guild.bank.tooltip.withdraw_rank")
 	))
+	var amount_hint := _localized_label("ui.guild.bank.funds.amount_hint", 9, UI_MUTED)
+	amount_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(amount_hint)
 	return content
 
 
@@ -1529,7 +1563,17 @@ func _build_guild_item_list(title_key: String, items: Array, action: String) -> 
 	margin.add_child(content)
 	content.add_child(_localized_label(title_key, 10, UI_ACCENT))
 	if items.is_empty():
-		content.add_child(_localized_label("ui.guild.bank.empty", 11, UI_MUTED))
+		var empty_key := "ui.guild.bank.empty"
+		if action == "deposit":
+			var can_deposit := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
+			empty_key = "ui.guild.bank.empty.items_eligible" if can_deposit else "ui.guild.bank.empty.deposit_rank"
+		var empty_label := _label(
+			_t(empty_key, {"role": _guild_bank_rank_label()}),
+			11,
+			UI_MUTED
+		)
+		empty_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		content.add_child(empty_label)
 		return panel
 	for item_value: Variant in items:
 		if not item_value is Dictionary:
@@ -1574,14 +1618,24 @@ func _build_guild_item_row(item: Dictionary, action: String) -> Control:
 		"GuildBankItem%sButton_%s" % [action.capitalize(), str(item.get("itemId", "item"))],
 		"ui.guild.bank.donate" if action == "deposit" else "ui.guild.bank.withdraw",
 		allowed,
-		_on_guild_bank_item_action.bind(action, str(item.get("itemId", "")), quantity)
+		_on_guild_bank_item_action.bind(action, str(item.get("itemId", "")), quantity),
+		"" if allowed else _guild_bank_rank_restriction(
+			"ui.guild.bank.tooltip.deposit_rank" if action == "deposit" else "ui.guild.bank.tooltip.withdraw_rank"
+		)
 	))
 	if action == "withdraw":
+		var can_borrow := (
+			bool(access.get("lendingEnabled", false))
+			and bool(access.get("canBorrow", false))
+			and available > 0
+			and bool(item.get("lendable", false))
+		)
 		row.add_child(_guild_bank_action_button(
 			"GuildBankItemBorrowButton_%s" % str(item.get("itemId", "item")),
 			"ui.guild.bank.borrow",
-			bool(access.get("canBorrow", false)) and available > 0 and bool(item.get("lendable", false)),
-			_on_guild_bank_item_action.bind("borrow", str(item.get("itemId", "")), quantity)
+			can_borrow,
+			_on_guild_bank_item_action.bind("borrow", str(item.get("itemId", "")), quantity),
+			"" if can_borrow else _guild_bank_borrow_tooltip(item)
 		))
 	return row
 
@@ -1617,7 +1671,17 @@ func _build_guild_pokemon_list(title_key: String, pokemon_values: Array, is_bank
 	margin.add_child(content)
 	content.add_child(_localized_label(title_key, 10, UI_ACCENT))
 	if pokemon_values.is_empty():
-		content.add_child(_localized_label("ui.guild.bank.empty", 11, UI_MUTED))
+		var empty_key := "ui.guild.bank.empty"
+		if not is_bank:
+			var can_deposit := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
+			empty_key = "ui.guild.bank.empty.pokemon_eligible" if can_deposit else "ui.guild.bank.empty.deposit_rank"
+		var empty_label := _label(
+			_t(empty_key, {"role": _guild_bank_rank_label()}),
+			11,
+			UI_MUTED
+		)
+		empty_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		content.add_child(empty_label)
 		return panel
 	for pokemon_value: Variant in pokemon_values:
 		if not pokemon_value is Dictionary:
@@ -1658,7 +1722,8 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool) -> Control:
 			"GuildBankPokemonDepositButton_%d" % pokemon_id,
 			"ui.guild.bank.donate",
 			can_deposit,
-			_on_guild_bank_pokemon_action.bind("deposit", pokemon_id, pokemon)
+			_on_guild_bank_pokemon_action.bind("deposit", pokemon_id, pokemon),
+			"" if can_deposit else _guild_bank_rank_restriction("ui.guild.bank.tooltip.deposit_rank")
 		))
 		return row
 	var is_borrowed := bool(entry.get("isBorrowed", false))
@@ -1702,13 +1767,20 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool) -> Control:
 		"GuildBankPokemonWithdrawButton_%d" % pokemon_id,
 		"ui.guild.bank.withdraw",
 		allowed,
-		_on_guild_bank_pokemon_action.bind("withdraw", pokemon_id, pokemon)
+		_on_guild_bank_pokemon_action.bind("withdraw", pokemon_id, pokemon),
+		"" if allowed else _guild_bank_rank_restriction("ui.guild.bank.tooltip.withdraw_rank")
 	))
+	var can_borrow := (
+		bool(access.get("lendingEnabled", false))
+		and bool(access.get("canBorrow", false))
+		and bool(entry.get("canBorrow", false))
+	)
 	row.add_child(_guild_bank_action_button(
 		"GuildBankPokemonBorrowButton_%d" % pokemon_id,
 		"ui.guild.bank.borrow",
-		bool(entry.get("canBorrow", false)),
-		_on_guild_bank_pokemon_action.bind("borrow", pokemon_id, pokemon)
+		can_borrow,
+		_on_guild_bank_pokemon_action.bind("borrow", pokemon_id, pokemon),
+		"" if can_borrow else _guild_bank_borrow_tooltip()
 	))
 	return row
 
@@ -1896,13 +1968,15 @@ func _guild_bank_action_button(
 	node_name: String,
 	text_key: String,
 	allowed: bool,
-	callback: Callable
+	callback: Callable,
+	tooltip_text: String = ""
 ) -> Button:
 	var button := Button.new()
 	button.name = node_name
 	_set_localized_property(button, "text", text_key)
 	button.custom_minimum_size = Vector2(92, 32)
 	button.disabled = not allowed or is_guild_bank_action_in_flight
+	button.tooltip_text = tooltip_text
 	button.pressed.connect(callback)
 	_apply_button_style(button, "primary")
 	return button
@@ -1925,8 +1999,10 @@ func _load_guild_bank_async() -> void:
 	is_loading_guild_bank = false
 	var result := _dictionary(response)
 	if not bool(result.get("success", false)):
-		_set_member_status(str(result.get("error", _t("ui.guild.bank.error.load"))), true)
-		_render_guild_home()
+		_render_guild_home_with_status(
+			str(result.get("error", _t("ui.guild.bank.error.load"))),
+			true
+		)
 		return
 	_apply_guild_bank_result(result)
 	_render_guild_home()
@@ -2004,8 +2080,10 @@ func _run_guild_bank_action(method: String, arguments: Array, asset_type: String
 	is_guild_bank_action_in_flight = false
 	var result := _dictionary(response)
 	if not bool(result.get("success", false)):
-		_set_member_status(str(result.get("error", _t("ui.guild.bank.error.action"))), true)
-		_render_guild_home()
+		_render_guild_home_with_status(
+			str(result.get("error", _t("ui.guild.bank.error.action"))),
+			true
+		)
 		return
 	_apply_guild_bank_result(result)
 	if asset_type == "money":
@@ -2018,8 +2096,7 @@ func _run_guild_bank_action(method: String, arguments: Array, asset_type: String
 		var inventory_service := get_node_or_null("/root/InventoryService")
 		if inventory_service != null:
 			await inventory_service.call("load_inventory")
-	_set_member_status(_t("ui.guild.bank.status.updated"), false)
-	_render_guild_home()
+	_render_guild_home_with_status(_t("ui.guild.bank.status.updated"), false)
 
 
 func _apply_guild_bank_result(result: Dictionary) -> void:
@@ -2074,7 +2151,7 @@ func _on_guild_chat_pressed() -> void:
 	guild_chat_requested.emit()
 
 
-func _build_member_roster() -> Control:
+func _build_member_roster(can_invite: bool = false) -> Control:
 	var panel := PanelContainer.new()
 	panel.name = "GuildMembersSection"
 	panel.custom_minimum_size = Vector2(330, 330)
@@ -2108,6 +2185,8 @@ func _build_member_roster() -> Control:
 		10,
 		UI_MUTED
 	))
+	if can_invite:
+		content.add_child(_build_guild_invitation_controls())
 	var own_role := str(_dictionary(guild_home.get("membership", {})).get("role", "recruit"))
 	var own_user_id := int(_dictionary(guild_home.get("membership", {})).get("userId", 0))
 	for member_value: Variant in members:
@@ -2116,6 +2195,32 @@ func _build_member_roster() -> Control:
 		var member := member_value as Dictionary
 		content.add_child(_build_guild_member_card(member, own_role, own_user_id))
 	return panel
+
+
+func _build_guild_invitation_controls() -> Control:
+	var controls := VBoxContainer.new()
+	controls.name = "GuildMemberInvitationControls"
+	controls.add_theme_constant_override("separation", 6)
+	controls.add_child(_localized_label("ui.guild.invite.title", 10, UI_ACCENT))
+	var invite_row := HBoxContainer.new()
+	controls.add_child(invite_row)
+	invite_username_input = LineEdit.new()
+	invite_username_input.name = "GuildInviteUsername"
+	_set_localized_property(
+		invite_username_input,
+		"placeholder_text",
+		"ui.guild.invite.username"
+	)
+	invite_username_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_apply_line_edit_style(invite_username_input)
+	invite_row.add_child(invite_username_input)
+	var invite_button := Button.new()
+	_set_localized_property(invite_button, "text", "ui.guild.invite.send")
+	invite_button.pressed.connect(_on_invite_member)
+	_apply_button_style(invite_button, "primary")
+	invite_row.add_child(invite_button)
+	_render_pending_invitations(controls)
+	return controls
 
 
 func _build_guild_member_card(member: Dictionary, own_role: String, own_user_id: int) -> Control:
@@ -2318,7 +2423,7 @@ func _on_guild_member_role_selected(index: int, user_id: int, select: OptionButt
 	_set_member_status(_t("ui.guild.status.role_updated"), false)
 
 
-func _build_member_management(guild: Dictionary, is_leader: bool, can_invite: bool) -> Control:
+func _build_member_management(guild: Dictionary, is_leader: bool) -> Control:
 	var panel := PanelContainer.new()
 	panel.name = "GuildManagementSection"
 	panel.custom_minimum_size = Vector2(610, 300)
@@ -2365,27 +2470,7 @@ func _build_member_management(guild: Dictionary, is_leader: bool, can_invite: bo
 		_apply_button_style(save_settings, "primary")
 		content.add_child(save_settings)
 
-	if can_invite:
-		content.add_child(_localized_label("ui.guild.invite.title", 10, UI_ACCENT))
-		var invite_row := HBoxContainer.new()
-		content.add_child(invite_row)
-		invite_username_input = LineEdit.new()
-		invite_username_input.name = "GuildInviteUsername"
-		_set_localized_property(
-			invite_username_input,
-			"placeholder_text",
-			"ui.guild.invite.username"
-		)
-		invite_username_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		_apply_line_edit_style(invite_username_input)
-		invite_row.add_child(invite_username_input)
-		var invite_button := Button.new()
-		_set_localized_property(invite_button, "text", "ui.guild.invite.send")
-		invite_button.pressed.connect(_on_invite_member)
-		_apply_button_style(invite_button, "primary")
-		invite_row.add_child(invite_button)
-		_render_pending_invitations(content)
-	elif not is_leader:
+	if not is_leader:
 		content.add_child(_localized_label("ui.guild.management.restricted", 12, UI_MUTED))
 	return panel
 
@@ -3734,6 +3819,11 @@ func _set_member_status(message: String, is_error: bool) -> void:
 		return
 	member_status_label.text = message
 	member_status_label.add_theme_color_override("font_color", UI_WARNING if is_error else UI_SUCCESS)
+
+
+func _render_guild_home_with_status(message: String, is_error: bool) -> void:
+	_render_guild_home()
+	_set_member_status(message, is_error)
 
 
 func _set_browse_status(message: String, is_error: bool) -> void:
