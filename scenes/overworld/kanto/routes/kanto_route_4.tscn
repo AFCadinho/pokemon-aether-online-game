@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c6taahbjj1mnh"]
 
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/open_field/open_field.visual.tscn" id="1_visual"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_4/route_4.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://dobdgdwix1gen" path="res://scripts/world/kanto/routes/kanto_route_4.gd" id="2_route"]
 [ext_resource type="TileSet" uid="uid://p6ylhm8hwe2y" path="res://generated/tiled_visuals/open_field/open_field.visual.tileset.tres" id="3_collision"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_exit"]
@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="6_overworld_item"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mt_moon_exit"]
-size = Vector2(128, 32)
+size = Vector2(96, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cerulean_exit"]
 size = Vector2(32, 96)
@@ -26,7 +26,7 @@ location_name = "Route 4"
 region_id = "kanto"
 music_profile_id = "kanto.routes_3_10_16_22"
 
-[node name="OpenField" parent="." unique_id=618531668 instance=ExtResource("1_visual")]
+[node name="Route4Visual" parent="." unique_id=618531668 instance=ExtResource("1_visual")]
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=208040001]
 visible = false
@@ -36,15 +36,15 @@ tile_set = ExtResource("3_collision")
 [node name="Spawns" type="Node2D" parent="." unique_id=208040002]
 
 [node name="FromMtMoon" type="Marker2D" parent="Spawns" unique_id=208040003]
-position = Vector2(384, 64)
+position = Vector2(176, 1280)
 
 [node name="FromCerulean" type="Marker2D" parent="Spawns"]
-position = Vector2(704, 288)
+position = Vector2(3136, 1216)
 
 [node name="Exits" type="Node2D" parent="." unique_id=208040004]
 
 [node name="ToMtMoon" type="Area2D" parent="Exits" unique_id=208040005]
-position = Vector2(384, 16)
+position = Vector2(176, 1344)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"
 target_spawn_name = "FromRoute4"
@@ -56,11 +56,11 @@ shape = SubResource("RectangleShape2D_mt_moon_exit")
 
 [node name="RouteTransitionHint" parent="Exits/ToMtMoon" unique_id=208040007 instance=ExtResource("5_hint")]
 z_as_relative = false
-tile_footprint = Vector2i(4, 1)
+tile_footprint = Vector2i(3, 1)
 flow_direction = "down"
 
 [node name="ToCerulean" type="Area2D" parent="Exits"]
-position = Vector2(752, 288)
+position = Vector2(3184, 1216)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 target_spawn_name = "FromRoute4"
@@ -87,7 +87,7 @@ z_index = 5
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=208040012]
 
 [node name="TM05Roar" parent="Entities/Interactables" instance=ExtResource("6_overworld_item")]
-position = Vector2(576, 160)
+position = Vector2(400, 1248)
 pickup_id = "kanto_route_4_tm_roar"
 item_id = "tm-roar"
 

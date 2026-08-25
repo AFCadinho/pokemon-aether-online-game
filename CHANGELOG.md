@@ -9,6 +9,7 @@
 
 **Changed**
 
+- Route 4 now uses its complete new outdoor layout, with its Mt. Moon and Cerulean City entrances in the correct places.
 - Main interface hover cards now share a clear, styled appearance across navigation, party, hotbar, status, buffs, and chat controls.
 - Bag hover cards now share a clear, styled appearance across item browsing and use screens.
 - Item Dex hover cards now share a clear, styled appearance.
