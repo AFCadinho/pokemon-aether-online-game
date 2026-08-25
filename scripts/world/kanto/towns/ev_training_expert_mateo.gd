@@ -99,6 +99,10 @@ func _show_battle_progress() -> void:
 func _guide_allocation() -> void:
 	var response: Dictionary = await EvTrainingService.get_session()
 	var tutorial: Dictionary = response.get("tutorial", {})
+	var remaining_allocation := maxi(
+		int(tutorial.get("requiredAllocation", 4)) - int(tutorial.get("allocated", 0)),
+		0
+	)
 	await show_dialogue([
 		LocalizationManager.text("ui.ev_training.mateo.allocation_stored", {
 			"stat": _stat_label(str(tutorial.get("stat", ""))),
@@ -106,13 +110,15 @@ func _guide_allocation() -> void:
 		}),
 		LocalizationManager.text("ui.ev_training.mateo.allocation_instructions", {
 			"stat": _stat_label(str(tutorial.get("stat", ""))),
+			"amount": remaining_allocation,
 		}),
 	], display_name)
 	get_tree().call_group(
 		"ui_overlay",
 		"open_ev_training_allocation",
 		int(tutorial.get("pokemonId", 0)),
-		str(tutorial.get("stat", ""))
+		str(tutorial.get("stat", "")),
+		remaining_allocation
 	)
 
 
@@ -149,6 +155,7 @@ func _show_completed_help() -> void:
 			[
 				{"id": "basics", "label": LocalizationManager.text("mentor.mateo.help.topic.basics")},
 				{"id": "earning", "label": LocalizationManager.text("mentor.mateo.help.topic.earning")},
+				{"id": "field", "label": LocalizationManager.text("mentor.mateo.help.topic.field")},
 				{"id": "allocating", "label": LocalizationManager.text("mentor.mateo.help.topic.allocating")},
 				{"id": "limits", "label": LocalizationManager.text("mentor.mateo.help.topic.limits")},
 			]
@@ -165,6 +172,8 @@ func _mateo_help_lines(topic_id: String) -> Array[String]:
 			keys = ["mentor.mateo.help.basics.1", "mentor.mateo.help.basics.2"]
 		"earning":
 			keys = ["mentor.mateo.help.earning.1", "mentor.mateo.help.earning.2"]
+		"field":
+			keys = ["mentor.mateo.help.field.1", "mentor.mateo.help.field.2"]
 		"allocating":
 			keys = ["mentor.mateo.help.allocating.1", "mentor.mateo.help.allocating.2"]
 		"limits":

@@ -121,6 +121,7 @@ const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/m
 const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const OVERWORLD_MOVE_ACTION_ICON := preload("res://assets/ui/icons/overworld_move_action.svg")
+const POKEMON_SUMMARY_COPY_ICON: Texture2D = preload("res://assets/ui/icons/clipboard_copy.svg")
 const CHAT_RESIZE_ICON: Texture2D = preload("res://assets/ui/chat_resize.svg")
 const GLOBAL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_exp_boost.svg")
 const GLOBAL_EV_BUFF_ICON: Texture2D = preload("res://assets/ui/global_ev_boost.svg")
@@ -1218,6 +1219,7 @@ var pokemon_summary_title_label: Label
 var pokemon_summary_gender_label: Label
 var pokemon_summary_id_label: Label
 var pokemon_summary_nickname_button: Button
+var pokemon_summary_copy_button: Button
 var pokemon_summary_meta_label: Label
 var pokemon_summary_held_item_slot: PanelContainer
 var pokemon_summary_held_item_slot_button: Button
@@ -1241,7 +1243,10 @@ var pokemon_summary_item_list: VBoxContainer
 var pokemon_summary_ev_allocate_popup: PanelContainer
 var pokemon_summary_ev_allocate_stat_label: Label
 var pokemon_summary_ev_allocate_current_label: Label
+var pokemon_summary_ev_allocate_target_label: Label
 var pokemon_summary_ev_allocate_input: SpinBox
+var pokemon_summary_ev_allocate_slider: HSlider
+var pokemon_summary_ev_allocate_max_button: Button
 var pokemon_summary_ev_allocate_status_label: Label
 var pokemon_summary_ev_allocate_status_panel: PanelContainer
 var pokemon_summary_ev_allocate_confirm_button: Button
@@ -1421,6 +1426,7 @@ func _ready() -> void:
 	add_to_group("ui_overlay")
 	layer = UI_OVERLAY_BASE_LAYER
 	root_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root_control.theme = _make_main_ui_tooltip_theme()
 	_setup_pvp_queue_ball_spin()
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
@@ -9109,6 +9115,7 @@ func _setup_item_dex_popup() -> void:
 	item_dex_popup.anchor_top = 0.5
 	item_dex_popup.anchor_right = 0.5
 	item_dex_popup.anchor_bottom = 0.5
+	item_dex_popup.theme = _make_item_dex_tooltip_theme()
 	var item_dex_shell_style := _make_glass_panel_style(14)
 	item_dex_shell_style.border_color = Color("#75613bcc")
 	item_dex_popup.add_theme_stylebox_override("panel", item_dex_shell_style)
@@ -9380,6 +9387,24 @@ func _position_item_dex_popup() -> void:
 	item_dex_popup.offset_right = popup_size.x * 0.5
 	item_dex_popup.offset_bottom = popup_size.y * 0.5
 
+func _make_item_dex_tooltip_theme() -> Theme:
+	var tooltip_theme := Theme.new()
+	var tooltip_style := _make_panel_style(Color("#171208fa"), ITEM_DEX_ACCENT_SOFT, 8, 1)
+	tooltip_style.content_margin_left = 12
+	tooltip_style.content_margin_top = 9
+	tooltip_style.content_margin_right = 12
+	tooltip_style.content_margin_bottom = 9
+	tooltip_style.shadow_color = Color("#000000a6")
+	tooltip_style.shadow_size = 8
+	tooltip_style.shadow_offset = Vector2(0, 4)
+	tooltip_theme.set_stylebox("panel", "TooltipPanel", tooltip_style)
+	tooltip_theme.set_color("font_color", "TooltipLabel", Color("#fff3d1"))
+	tooltip_theme.set_color("font_shadow_color", "TooltipLabel", Color("#1a1002"))
+	tooltip_theme.set_font_size("font_size", "TooltipLabel", 12)
+	tooltip_theme.set_constant("shadow_offset_x", "TooltipLabel", 1)
+	tooltip_theme.set_constant("shadow_offset_y", "TooltipLabel", 1)
+	return tooltip_theme
+
 func _setup_pokedex_popup() -> void:
 	pokedex_popup = PanelContainer.new()
 	pokedex_popup.name = "PokedexPopup"
@@ -9391,6 +9416,7 @@ func _setup_pokedex_popup() -> void:
 	pokedex_popup.anchor_top = 0.5
 	pokedex_popup.anchor_right = 0.5
 	pokedex_popup.anchor_bottom = 0.5
+	pokedex_popup.theme = _make_pokedex_tooltip_theme()
 	var pokedex_shell_style := _make_glass_panel_style(14)
 	pokedex_shell_style.border_color = Color("#7f4654cc")
 	pokedex_popup.add_theme_stylebox_override("panel", pokedex_shell_style)
@@ -9850,6 +9876,24 @@ func _make_pokedex_dex_popup_panel_style() -> StyleBoxFlat:
 	style.shadow_size = 12
 	style.shadow_offset = Vector2(0, 5)
 	return style
+
+func _make_pokedex_tooltip_theme() -> Theme:
+	var tooltip_theme := Theme.new()
+	var tooltip_style := _make_panel_style(Color("#160a10fa"), POKEDEX_ACCENT_SOFT, 8, 1)
+	tooltip_style.content_margin_left = 12
+	tooltip_style.content_margin_top = 9
+	tooltip_style.content_margin_right = 12
+	tooltip_style.content_margin_bottom = 9
+	tooltip_style.shadow_color = Color("#000000a6")
+	tooltip_style.shadow_size = 8
+	tooltip_style.shadow_offset = Vector2(0, 4)
+	tooltip_theme.set_stylebox("panel", "TooltipPanel", tooltip_style)
+	tooltip_theme.set_color("font_color", "TooltipLabel", Color("#f7e9ec"))
+	tooltip_theme.set_color("font_shadow_color", "TooltipLabel", Color("#19030a"))
+	tooltip_theme.set_font_size("font_size", "TooltipLabel", 12)
+	tooltip_theme.set_constant("shadow_offset_x", "TooltipLabel", 1)
+	tooltip_theme.set_constant("shadow_offset_y", "TooltipLabel", 1)
+	return tooltip_theme
 
 func _create_pokedex_variant_button(variant_id: String, label_key: String) -> Button:
 	var button := Button.new()
@@ -15615,6 +15659,7 @@ func _setup_pokemon_summary_popup(card_key: String = "") -> void:
 	pokemon_summary_popup.offset_right = POKEMON_SUMMARY_SIZE.x * 0.5
 	pokemon_summary_popup.offset_bottom = POKEMON_SUMMARY_SIZE.y * 0.5
 	pokemon_summary_popup.size = POKEMON_SUMMARY_SIZE
+	pokemon_summary_popup.theme = _make_pokemon_summary_tooltip_theme()
 	pokemon_summary_popup.add_theme_stylebox_override("panel", _make_pokemon_summary_outer_style())
 	pokemon_summary_popup.modulate = Color(1, 1, 1, 0.98)
 	pokemon_summary_popup.gui_input.connect(_on_pokemon_summary_card_gui_input.bind(card_key))
@@ -15663,6 +15708,7 @@ func _setup_readonly_pokemon_summary_popup(card_key: String = "") -> void:
 	pokemon_summary_popup.offset_right = POKEMON_READONLY_SUMMARY_SIZE.x * 0.5
 	pokemon_summary_popup.offset_bottom = POKEMON_READONLY_SUMMARY_SIZE.y * 0.5
 	pokemon_summary_popup.size = POKEMON_READONLY_SUMMARY_SIZE
+	pokemon_summary_popup.theme = _make_pokemon_summary_tooltip_theme()
 	pokemon_summary_popup.add_theme_stylebox_override("panel", _make_pokemon_summary_outer_style())
 	pokemon_summary_popup.modulate = Color(1, 1, 1, 0.99)
 	pokemon_summary_popup.gui_input.connect(_on_pokemon_summary_card_gui_input.bind(card_key))
@@ -16805,14 +16851,20 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 
 	var identity_margin := MarginContainer.new()
 	identity_margin.add_theme_constant_override("margin_left", 7)
-	identity_margin.add_theme_constant_override("margin_top", 4)
+	identity_margin.add_theme_constant_override("margin_top", 2)
 	identity_margin.add_theme_constant_override("margin_right", 7)
-	identity_margin.add_theme_constant_override("margin_bottom", 4)
+	identity_margin.add_theme_constant_override("margin_bottom", 2)
 	identity_panel.add_child(identity_margin)
 
+	var identity_content := HBoxContainer.new()
+	identity_content.add_theme_constant_override("separation", 5)
+	identity_margin.add_child(identity_content)
+
 	var identity_stack := VBoxContainer.new()
+	identity_stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	identity_stack.add_theme_constant_override("separation", 1)
-	identity_margin.add_child(identity_stack)
+	identity_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity_content.add_child(identity_stack)
 
 	var title_row := HBoxContainer.new()
 	title_row.add_theme_constant_override("separation", 4)
@@ -16824,7 +16876,9 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_title_label = Label.new()
 	pokemon_summary_title_label.text = LocalizationManager.text("ui.pokemon_summary.title")
 	pokemon_summary_title_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	pokemon_summary_title_label.add_theme_font_size_override("font_size", 14)
+	_make_label_clip_width(pokemon_summary_title_label)
+	pokemon_summary_title_label.custom_minimum_size.x = 140.0
+	pokemon_summary_title_label.add_theme_font_size_override("font_size", 15)
 	pokemon_summary_title_label.add_theme_color_override("font_color", Color("#f4f7ff"))
 	pokemon_summary_title_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
 	pokemon_summary_title_label.add_theme_constant_override("shadow_offset_x", 1)
@@ -16835,7 +16889,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_gender_label.visible = false
 	pokemon_summary_gender_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pokemon_summary_gender_label.mouse_filter = Control.MOUSE_FILTER_PASS
-	pokemon_summary_gender_label.add_theme_font_size_override("font_size", 14)
+	pokemon_summary_gender_label.add_theme_font_size_override("font_size", 15)
 	pokemon_summary_gender_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
 	pokemon_summary_gender_label.add_theme_constant_override("shadow_offset_x", 1)
 	pokemon_summary_gender_label.add_theme_constant_override("shadow_offset_y", 1)
@@ -16843,44 +16897,53 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 
 	pokemon_summary_nickname_button = Button.new()
 	pokemon_summary_nickname_button.text = "✎"
-	pokemon_summary_nickname_button.custom_minimum_size = Vector2(18, 18)
+	pokemon_summary_nickname_button.custom_minimum_size = Vector2(20, 20)
 	pokemon_summary_nickname_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	pokemon_summary_nickname_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_nickname_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	pokemon_summary_nickname_button.pressed.connect(_on_pokemon_summary_nickname_pressed.bind(card_key))
 	_set_localized_control_property(pokemon_summary_nickname_button, "tooltip_text", "ui.pokemon_summary.nickname.edit_tooltip")
-	pokemon_summary_nickname_button.add_theme_font_size_override("font_size", 9)
+	pokemon_summary_nickname_button.add_theme_font_size_override("font_size", 10)
 	pokemon_summary_nickname_button.add_theme_stylebox_override("normal", _make_pokemon_summary_compact_icon_button_style(Color("#0e2138f0"), Color("#5a82ad")))
 	pokemon_summary_nickname_button.add_theme_stylebox_override("hover", _make_pokemon_summary_compact_icon_button_style(Color("#12304bf0"), POKEMON_SUMMARY_ACCENT))
 	pokemon_summary_nickname_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_compact_icon_button_style(Color("#071421f0"), POKEMON_SUMMARY_ACCENT))
 	pokemon_summary_nickname_button.add_theme_stylebox_override("disabled", _make_pokemon_summary_compact_icon_button_style(Color("#0b1420b8"), Color("#35465a")))
 	title_row.add_child(pokemon_summary_nickname_button)
 
-	var title_spacer := Control.new()
-	title_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title_row.add_child(title_spacer)
+	pokemon_summary_id_label = Label.new()
+	pokemon_summary_id_label.text = LocalizationManager.text("ui.pokemon_summary.id_empty")
+	pokemon_summary_id_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_make_label_clip_width(pokemon_summary_id_label)
+	pokemon_summary_id_label.add_theme_font_size_override("font_size", 10)
+	pokemon_summary_id_label.add_theme_color_override("font_color", Color("#b8c9e4"))
+	identity_stack.add_child(pokemon_summary_id_label)
 
 	pokemon_summary_meta_label = Label.new()
 	pokemon_summary_meta_label.text = LocalizationManager.text("ui.pokemon_summary.level_empty")
 	pokemon_summary_meta_label.custom_minimum_size = Vector2(38, 0)
+	pokemon_summary_meta_label.visible = false
 	pokemon_summary_meta_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_make_label_clip_width(pokemon_summary_meta_label)
 	pokemon_summary_meta_label.add_theme_font_size_override("font_size", 11)
 	pokemon_summary_meta_label.add_theme_color_override("font_color", Color("#f4d78a"))
 	title_row.add_child(pokemon_summary_meta_label)
 
-	var identity_meta_row := HBoxContainer.new()
-	identity_meta_row.add_theme_constant_override("separation", 4)
-	identity_stack.add_child(identity_meta_row)
-
-	pokemon_summary_id_label = Label.new()
-	pokemon_summary_id_label.text = LocalizationManager.text("ui.pokemon_summary.id_empty")
-	pokemon_summary_id_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_make_label_clip_width(pokemon_summary_id_label)
-	pokemon_summary_id_label.add_theme_font_size_override("font_size", 9)
-	pokemon_summary_id_label.add_theme_color_override("font_color", Color("#b8c9e4"))
-	identity_meta_row.add_child(pokemon_summary_id_label)
+	pokemon_summary_copy_button = Button.new()
+	pokemon_summary_copy_button.name = "PokemonSummaryCopyButton"
+	pokemon_summary_copy_button.icon = POKEMON_SUMMARY_COPY_ICON
+	pokemon_summary_copy_button.expand_icon = true
+	pokemon_summary_copy_button.custom_minimum_size = Vector2(24, 24)
+	pokemon_summary_copy_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	pokemon_summary_copy_button.focus_mode = Control.FOCUS_NONE
+	pokemon_summary_copy_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	pokemon_summary_copy_button.pressed.connect(_on_pokemon_summary_copy_pressed.bind(card_key))
+	_set_localized_control_property(pokemon_summary_copy_button, "tooltip_text", "ui.pokemon_summary.copy_export_set")
+	pokemon_summary_copy_button.add_theme_constant_override("icon_max_width", 18)
+	pokemon_summary_copy_button.add_theme_stylebox_override("normal", _make_pokemon_summary_compact_icon_button_style(Color("#0e2138f0"), Color("#5a82ad")))
+	pokemon_summary_copy_button.add_theme_stylebox_override("hover", _make_pokemon_summary_compact_icon_button_style(Color("#12304bf0"), POKEMON_SUMMARY_ACCENT))
+	pokemon_summary_copy_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_compact_icon_button_style(Color("#071421f0"), POKEMON_SUMMARY_ACCENT))
+	pokemon_summary_copy_button.add_theme_stylebox_override("disabled", _make_pokemon_summary_compact_icon_button_style(Color("#0b1420b8"), Color("#35465a")))
+	identity_content.add_child(pokemon_summary_copy_button)
 
 	var hp_row := HBoxContainer.new()
 	hp_row.add_theme_constant_override("separation", 6)
@@ -17381,7 +17444,7 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	pokemon_summary_ev_allocate_popup = PanelContainer.new()
 	pokemon_summary_ev_allocate_popup.name = "PokemonSummaryEvAllocatePopup"
 	pokemon_summary_ev_allocate_popup.visible = false
-	pokemon_summary_ev_allocate_popup.custom_minimum_size = Vector2(380, 250)
+	pokemon_summary_ev_allocate_popup.custom_minimum_size = Vector2(380, 336)
 	pokemon_summary_ev_allocate_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	pokemon_summary_ev_allocate_popup.z_index = UI_MODAL_Z_INDEX + 1
 	pokemon_summary_ev_allocate_popup.anchor_left = 0.5
@@ -17389,9 +17452,9 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	pokemon_summary_ev_allocate_popup.anchor_right = 0.5
 	pokemon_summary_ev_allocate_popup.anchor_bottom = 0.5
 	pokemon_summary_ev_allocate_popup.offset_left = -190
-	pokemon_summary_ev_allocate_popup.offset_top = -125
+	pokemon_summary_ev_allocate_popup.offset_top = -168
 	pokemon_summary_ev_allocate_popup.offset_right = 190
-	pokemon_summary_ev_allocate_popup.offset_bottom = 125
+	pokemon_summary_ev_allocate_popup.offset_bottom = 168
 	pokemon_summary_ev_allocate_popup.add_theme_stylebox_override("panel", _make_pokemon_summary_outer_style())
 	root_control.add_child(pokemon_summary_ev_allocate_popup)
 
@@ -17438,7 +17501,29 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	pokemon_summary_ev_allocate_current_label.add_theme_font_size_override("font_size", 12)
 	pokemon_summary_ev_allocate_current_label.add_theme_color_override("font_color", Color("#c8d8e8"))
 	pokemon_summary_ev_allocate_current_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pokemon_summary_ev_allocate_current_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pokemon_summary_ev_allocate_current_label.custom_minimum_size = Vector2(0, 44)
 	allocation_overview_panel.add_child(pokemon_summary_ev_allocate_current_label)
+
+	var target_header := HBoxContainer.new()
+	target_header.add_theme_constant_override("separation", 8)
+	layout.add_child(target_header)
+
+	pokemon_summary_ev_allocate_target_label = Label.new()
+	pokemon_summary_ev_allocate_target_label.text = LocalizationManager.text("ui.pokemon_summary.evs.target")
+	pokemon_summary_ev_allocate_target_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_ev_allocate_target_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pokemon_summary_ev_allocate_target_label.add_theme_font_size_override("font_size", 12)
+	pokemon_summary_ev_allocate_target_label.add_theme_color_override("font_color", Color("#f5df9a"))
+	target_header.add_child(pokemon_summary_ev_allocate_target_label)
+
+	pokemon_summary_ev_allocate_max_button = Button.new()
+	pokemon_summary_ev_allocate_max_button.text = LocalizationManager.text("ui.pokemon_summary.evs.max")
+	pokemon_summary_ev_allocate_max_button.custom_minimum_size = Vector2(62, 28)
+	pokemon_summary_ev_allocate_max_button.focus_mode = Control.FOCUS_NONE
+	pokemon_summary_ev_allocate_max_button.pressed.connect(_on_summary_ev_allocate_max_pressed)
+	target_header.add_child(pokemon_summary_ev_allocate_max_button)
+	_apply_button_style(pokemon_summary_ev_allocate_max_button)
 
 	pokemon_summary_ev_allocate_input = SpinBox.new()
 	pokemon_summary_ev_allocate_input.name = "PokemonSummaryEvAllocationInput"
@@ -17455,6 +17540,23 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	_apply_line_edit_style(allocation_line_edit)
 	allocation_line_edit.add_theme_color_override("font_color", Color("#f5df9a"))
 	layout.add_child(pokemon_summary_ev_allocate_input)
+
+	pokemon_summary_ev_allocate_slider = HSlider.new()
+	pokemon_summary_ev_allocate_slider.name = "PokemonSummaryEvAllocationSlider"
+	pokemon_summary_ev_allocate_slider.custom_minimum_size = Vector2(0, 24)
+	pokemon_summary_ev_allocate_slider.min_value = 0
+	pokemon_summary_ev_allocate_slider.max_value = POKEMON_EV_STAT_LIMIT
+	pokemon_summary_ev_allocate_slider.step = 1
+	pokemon_summary_ev_allocate_slider.value_changed.connect(_on_summary_ev_allocate_slider_changed)
+	pokemon_summary_ev_allocate_slider.add_theme_stylebox_override(
+		"slider",
+		_make_panel_style(Color("#081321ef"), Color("#263b58"), 4, 1)
+	)
+	pokemon_summary_ev_allocate_slider.add_theme_stylebox_override(
+		"grabber_area",
+		_make_panel_style(POKEMON_SUMMARY_ACCENT, POKEMON_SUMMARY_ACCENT, 4, 0)
+	)
+	layout.add_child(pokemon_summary_ev_allocate_slider)
 
 	pokemon_summary_ev_allocate_status_panel = PanelContainer.new()
 	pokemon_summary_ev_allocate_status_panel.name = "PokemonSummaryEvAllocationPreview"
@@ -17573,6 +17675,24 @@ func _make_pokemon_summary_tab_button_style(
 		style.border_color = border_color
 	return style
 
+func _make_bag_tooltip_theme() -> Theme:
+	var tooltip_theme := Theme.new()
+	var tooltip_style := _make_panel_style(Color("#171208fa"), Color("#a98b43cc"), 8, 1)
+	tooltip_style.content_margin_left = 12
+	tooltip_style.content_margin_top = 9
+	tooltip_style.content_margin_right = 12
+	tooltip_style.content_margin_bottom = 9
+	tooltip_style.shadow_color = Color("#000000a6")
+	tooltip_style.shadow_size = 8
+	tooltip_style.shadow_offset = Vector2(0, 4)
+	tooltip_theme.set_stylebox("panel", "TooltipPanel", tooltip_style)
+	tooltip_theme.set_color("font_color", "TooltipLabel", Color("#fff3d1"))
+	tooltip_theme.set_color("font_shadow_color", "TooltipLabel", Color("#1a1002"))
+	tooltip_theme.set_font_size("font_size", "TooltipLabel", 12)
+	tooltip_theme.set_constant("shadow_offset_x", "TooltipLabel", 1)
+	tooltip_theme.set_constant("shadow_offset_y", "TooltipLabel", 1)
+	return tooltip_theme
+
 func _setup_bag_popup() -> void:
 	bag_popup = PanelContainer.new()
 	bag_popup.name = "BagPopup"
@@ -17588,6 +17708,7 @@ func _setup_bag_popup() -> void:
 	bag_popup.offset_top = -BAG_SIZE.y * 0.5
 	bag_popup.offset_right = BAG_SIZE.x * 0.5
 	bag_popup.offset_bottom = BAG_SIZE.y * 0.5
+	bag_popup.theme = _make_bag_tooltip_theme()
 	var bag_shell_style := _make_glass_panel_style(14)
 	bag_shell_style.border_color = Color("#456784cc")
 	bag_popup.add_theme_stylebox_override("panel", bag_shell_style)
@@ -19187,6 +19308,7 @@ func _setup_bag_item_use_popup() -> void:
 	bag_item_use_popup.offset_top = -195
 	bag_item_use_popup.offset_right = 220
 	bag_item_use_popup.offset_bottom = 195
+	bag_item_use_popup.theme = _make_bag_tooltip_theme()
 	bag_item_use_popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912fa"), POKEMON_SUMMARY_ACCENT_SOFT, 8, 1))
 	root_control.add_child(bag_item_use_popup)
 
@@ -20316,9 +20438,10 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 		return {}
 
 	var current_stored_evs: Dictionary = pokemon.stored_evs
+	var allocated_value: int = clampi(int(pokemon.evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
 	var current_value: int = clampi(int(current_stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
 	var stored_total: int = _get_summary_stored_ev_total(current_stored_evs)
-	var max_gain: int = max(POKEMON_EV_STAT_LIMIT - current_value, 0)
+	var max_gain: int = max(POKEMON_EV_STAT_LIMIT - allocated_value - current_value, 0)
 	var stat_label := _summary_stat_label(stat_id)
 	if max_gain <= 0:
 		return {
@@ -21213,6 +21336,7 @@ func _reset_pokemon_summary_card_node_references() -> void:
 	pokemon_summary_gender_label = null
 	pokemon_summary_id_label = null
 	pokemon_summary_nickname_button = null
+	pokemon_summary_copy_button = null
 	pokemon_summary_meta_label = null
 	pokemon_summary_held_item_slot = null
 	pokemon_summary_held_item_slot_button = null
@@ -21256,6 +21380,7 @@ func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, m
 		"gender_label": pokemon_summary_gender_label if mode == "interactive" else null,
 		"id_label": pokemon_summary_id_label,
 		"nickname_button": pokemon_summary_nickname_button if mode == "interactive" else null,
+		"copy_button": pokemon_summary_copy_button if mode == "interactive" else null,
 		"meta_label": pokemon_summary_meta_label,
 		"held_item_slot": pokemon_summary_held_item_slot,
 		"held_item_slot_button": pokemon_summary_held_item_slot_button,
@@ -21313,6 +21438,7 @@ func _apply_pokemon_summary_card_context(card_key: String) -> bool:
 	pokemon_summary_gender_label = context.get("gender_label") as Label
 	pokemon_summary_id_label = context.get("id_label") as Label
 	pokemon_summary_nickname_button = context.get("nickname_button") as Button
+	pokemon_summary_copy_button = context.get("copy_button") as Button
 	pokemon_summary_meta_label = context.get("meta_label") as Label
 	pokemon_summary_held_item_slot = context.get("held_item_slot") as PanelContainer
 	pokemon_summary_held_item_slot_button = context.get("held_item_slot_button") as Button
@@ -21426,7 +21552,7 @@ func _show_pokemon_summary(slot_index: int) -> void:
 	if _trade_workspace_is_visible():
 		_promote_trade_summary_to_window(card_key)
 
-func open_ev_training_allocation(pokemon_id: int, stat_id: String) -> bool:
+func open_ev_training_allocation(pokemon_id: int, stat_id: String, suggested_addition: int = 0) -> bool:
 	for slot_index in range(PlayerSave.party.size()):
 		var pokemon: Pokemon = PlayerSave.party[slot_index]
 		if pokemon == null or pokemon.owned_pokemon_id != pokemon_id:
@@ -21435,6 +21561,14 @@ func open_ev_training_allocation(pokemon_id: int, stat_id: String) -> bool:
 		var card_key := _get_pokemon_summary_card_key(pokemon, slot_index, "interactive")
 		_on_pokemon_summary_tab_selected("evs", card_key)
 		_on_summary_allocated_ev_pressed(stat_id, _summary_stat_label(stat_id), card_key)
+		if suggested_addition > 0:
+			var suggested_target := _get_summary_ev_suggested_target(
+				int(pokemon_summary_ev_allocate_input.min_value),
+				int(pokemon_summary_ev_allocate_input.max_value),
+				suggested_addition
+			)
+			pokemon_summary_ev_allocate_input.set_value_no_signal(suggested_target)
+			_on_summary_ev_allocate_value_changed(suggested_target)
 		return true
 	return false
 
@@ -21497,20 +21631,20 @@ func _refresh_pokemon_summary() -> void:
 	var summary_id: String = str(pokemon.owned_pokemon_id) if pokemon.owned_pokemon_id > 0 else ""
 	if summary_id == "":
 		summary_id = pokemon.instance_id.strip_edges()
-	var id_text := (
-		LocalizationManager.text("ui.pokemon_summary.id", {"id": summary_id})
+	pokemon_summary_id_label.text = (
+		LocalizationManager.text(
+			"ui.pokemon_summary.species_and_number",
+			{"species": localized_species_name, "id": summary_id}
+		)
 		if summary_id != ""
-		else LocalizationManager.text("ui.pokemon_summary.id_empty")
-	)
-	pokemon_summary_id_label.text = LocalizationManager.text(
-		"ui.pokemon_summary.species_and_id",
-		{"species": localized_species_name, "id": id_text}
+		else localized_species_name
 	)
 	pokemon_summary_id_label.tooltip_text = pokemon_summary_id_label.text
 	if pokemon_summary_nickname_button != null:
 		pokemon_summary_nickname_button.visible = not _is_pokemon_summary_readonly() and pokemon.owned_pokemon_id > 0
 		pokemon_summary_nickname_button.disabled = not _can_change_pokemon_nickname() or pokemon_nickname_pending
 	pokemon_summary_shiny_badge.visible = pokemon.shiny
+	_fit_pokemon_summary_title_label()
 	if pokemon_summary_hidden_ability_badge != null:
 		pokemon_summary_hidden_ability_badge.visible = pokemon.hidden_ability
 	if pokemon_summary_shiny_badge_label != null:
@@ -21805,6 +21939,45 @@ func _on_pokemon_summary_nickname_pressed(card_key: String = "") -> void:
 	_show_pokemon_nickname_popup(card_key, pokemon)
 
 
+func _on_pokemon_summary_copy_pressed(card_key: String = "") -> void:
+	if not _apply_pokemon_summary_card_context(card_key) or _is_pokemon_summary_readonly():
+		return
+	var pokemon := _get_active_pokemon_summary_pokemon()
+	var copy_button := pokemon_summary_copy_button
+	if pokemon == null or copy_button == null or copy_button.disabled:
+		return
+
+	copy_button.disabled = true
+	var request_node := HTTPRequest.new()
+	add_child(request_node)
+	var response: Dictionary = await PokemonDataApiClient.export_team(
+		request_node,
+		[pokemon.to_battle_dict()]
+	)
+	request_node.queue_free()
+
+	var export_text := str(response.get("text", "")).strip_edges()
+	if not bool(response.get("success", false)) or export_text == "":
+		if is_instance_valid(copy_button):
+			copy_button.disabled = false
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.copy_export_set_failed"))
+		return
+
+	DisplayServer.clipboard_set(export_text)
+	if not is_instance_valid(copy_button):
+		return
+	copy_button.tooltip_text = LocalizationManager.text("ui.pokemon_summary.copy_export_set_copied")
+	for state: String in ["normal", "hover", "pressed", "disabled"]:
+		copy_button.add_theme_color_override("icon_%s_color" % state, Color("#75d69c"))
+	await get_tree().create_timer(1.25).timeout
+	if not is_instance_valid(copy_button):
+		return
+	copy_button.disabled = false
+	copy_button.tooltip_text = LocalizationManager.text("ui.pokemon_summary.copy_export_set")
+	for state: String in ["normal", "hover", "pressed", "disabled"]:
+		copy_button.remove_theme_color_override("icon_%s_color" % state)
+
+
 func _show_pokemon_nickname_popup(card_key: String, pokemon: Pokemon) -> void:
 	_hide_pokemon_nickname_popup()
 	pokemon_nickname_card_key = card_key
@@ -21982,6 +22155,34 @@ func _make_label_clip_width(label: Label) -> void:
 	label.clip_text = true
 	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	label.custom_minimum_size = Vector2.ZERO
+
+
+func _fit_pokemon_summary_title_label() -> void:
+	var label := pokemon_summary_title_label
+	if label == null:
+		return
+	var row := label.get_parent() as HBoxContainer
+	if row == null or row.size.x <= 0.0:
+		return
+	var visible_controls := 0
+	var available_width := row.size.x
+	for child: Node in row.get_children():
+		var control := child as Control
+		if control == null or not control.visible:
+			continue
+		visible_controls += 1
+		if control != label:
+			available_width -= control.get_combined_minimum_size().x
+	available_width -= row.get_theme_constant("separation") * max(visible_controls - 1, 0)
+	var font := label.get_theme_font("font")
+	var font_size := label.get_theme_font_size("font_size")
+	var desired_width := font.get_string_size(
+		label.text,
+		HORIZONTAL_ALIGNMENT_LEFT,
+		-1.0,
+		font_size
+	).x
+	label.custom_minimum_size.x = minf(ceilf(desired_width), maxf(available_width, 0.0))
 
 
 func _apply_pokemon_summary_gender_label(label: Label, gender: String) -> void:
@@ -23046,19 +23247,23 @@ func _on_summary_allocated_ev_pressed(stat_id: String, label_text: String, card_
 	var current_value: int = int(pokemon.evs.get(stat_id, 0))
 	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
 	var stored_for_stat: int = clampi(int(pokemon.stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
-	var total_room: int = max(510 - allocated_total, 0)
-	var max_value: int = min(252, current_value + stored_for_stat, current_value + total_room)
+	var max_value: int = _get_summary_ev_allocation_max(current_value, allocated_total, stored_for_stat)
 
 	pokemon_summary_ev_allocate_stat_id = stat_id
 	pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate_stat", {"stat": label_text})
 	pokemon_summary_ev_allocate_current_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate_current", {
 		"current": current_value,
+		"reachable": max_value,
 		"allocated": allocated_total,
 		"stored": stored_for_stat,
 	})
 	pokemon_summary_ev_allocate_input.min_value = current_value
 	pokemon_summary_ev_allocate_input.max_value = max(current_value, max_value)
-	pokemon_summary_ev_allocate_input.value = current_value
+	pokemon_summary_ev_allocate_input.set_value_no_signal(current_value)
+	pokemon_summary_ev_allocate_slider.min_value = current_value
+	pokemon_summary_ev_allocate_slider.max_value = max(current_value, max_value)
+	pokemon_summary_ev_allocate_slider.set_value_no_signal(current_value)
+	pokemon_summary_ev_allocate_max_button.disabled = max_value <= current_value
 	pokemon_summary_ev_allocate_popup.visible = true
 	_activate_ui_panel(pokemon_summary_ev_allocate_popup)
 	# Summary cards use the modal layer, while regular active windows use the
@@ -23076,6 +23281,8 @@ func _hide_pokemon_summary_ev_allocate_popup() -> void:
 func _refresh_pokemon_summary_ev_allocate_translation() -> void:
 	if pokemon_summary_ev_allocate_popup == null:
 		return
+	pokemon_summary_ev_allocate_target_label.text = LocalizationManager.text("ui.pokemon_summary.evs.target")
+	pokemon_summary_ev_allocate_max_button.text = LocalizationManager.text("ui.pokemon_summary.evs.max")
 	if not pokemon_summary_ev_allocate_popup.visible:
 		pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate")
 		return
@@ -23088,19 +23295,31 @@ func _refresh_pokemon_summary_ev_allocate_translation() -> void:
 	var current_value: int = int(pokemon.evs.get(stat_id, 0))
 	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
 	var stored_for_stat: int = clampi(int(pokemon.stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
+	var max_value: int = _get_summary_ev_allocation_max(current_value, allocated_total, stored_for_stat)
 	pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text(
 		"ui.pokemon_summary.evs.allocate_stat",
 		{"stat": _summary_stat_label(stat_id)}
 	)
 	pokemon_summary_ev_allocate_current_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate_current", {
 		"current": current_value,
+		"reachable": max_value,
 		"allocated": allocated_total,
 		"stored": stored_for_stat,
 	})
 	_refresh_summary_ev_allocate_status()
 
-func _on_summary_ev_allocate_value_changed(_value: float) -> void:
+func _on_summary_ev_allocate_value_changed(value: float) -> void:
+	pokemon_summary_ev_allocate_slider.set_value_no_signal(value)
 	_refresh_summary_ev_allocate_status()
+
+func _on_summary_ev_allocate_slider_changed(value: float) -> void:
+	pokemon_summary_ev_allocate_input.set_value_no_signal(value)
+	_refresh_summary_ev_allocate_status()
+
+func _on_summary_ev_allocate_max_pressed() -> void:
+	var max_value: float = pokemon_summary_ev_allocate_input.max_value
+	pokemon_summary_ev_allocate_input.set_value_no_signal(max_value)
+	_on_summary_ev_allocate_value_changed(max_value)
 
 func _on_summary_ev_allocate_confirm_pressed() -> void:
 	if pokemon_summary_ev_allocate_confirm_button.disabled:
@@ -23119,11 +23338,14 @@ func _on_summary_ev_allocate_confirm_pressed() -> void:
 	var requested_value: int = int(pokemon_summary_ev_allocate_input.value)
 	pokemon_summary_ev_allocate_confirm_button.disabled = true
 	pokemon_summary_ev_allocate_input.editable = false
+	pokemon_summary_ev_allocate_slider.editable = false
+	pokemon_summary_ev_allocate_max_button.disabled = true
 	pokemon_summary_ev_allocate_status_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocating")
 	pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 
 	var result: Dictionary = await PlayerPartyStateService.allocate_pokemon_evs(pokemon.owned_pokemon_id, stat_id, requested_value)
 	pokemon_summary_ev_allocate_input.editable = true
+	pokemon_summary_ev_allocate_slider.editable = true
 	if not bool(result.get("success", false)):
 		pokemon_summary_ev_allocate_status_label.text = str(result.get("error", LocalizationManager.text("ui.pokemon_summary.evs.allocate_failed")))
 		pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_DANGER)
@@ -23163,6 +23385,12 @@ func _refresh_summary_ev_allocate_status() -> void:
 	var stored_for_stat: int = clampi(int(pokemon.stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
 	var requested_allocated_total: int = allocated_total + max(added_value, 0)
 	var error_text := ""
+	var stat_label := _summary_stat_label(stat_id)
+	pokemon_summary_ev_allocate_confirm_button.text = LocalizationManager.text("ui.pokemon_summary.evs.apply_target", {
+		"stat": stat_label,
+		"target": requested_value,
+	})
+	pokemon_summary_ev_allocate_max_button.disabled = pokemon_summary_ev_allocate_input.max_value <= current_value
 
 	if requested_value < current_value:
 		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.below_current")
@@ -23171,7 +23399,7 @@ func _refresh_summary_ev_allocate_status() -> void:
 	elif requested_allocated_total > 510:
 		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.total_limit")
 	elif added_value > stored_for_stat:
-		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.not_enough_stored", {"stat": _summary_stat_label(stat_id)})
+		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.not_enough_stored", {"stat": stat_label})
 
 	if error_text != "":
 		pokemon_summary_ev_allocate_status_label.text = error_text
@@ -23179,12 +23407,28 @@ func _refresh_summary_ev_allocate_status() -> void:
 		pokemon_summary_ev_allocate_confirm_button.disabled = true
 		return
 
-	pokemon_summary_ev_allocate_status_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocation_preview", {
-		"amount": max(added_value, 0),
-		"total": requested_allocated_total,
-	})
+	if added_value <= 0:
+		pokemon_summary_ev_allocate_status_label.text = LocalizationManager.text("ui.pokemon_summary.evs.no_change")
+	else:
+		pokemon_summary_ev_allocate_status_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocation_preview", {
+			"current": current_value,
+			"target": requested_value,
+			"stat": stat_label,
+			"amount": added_value,
+			"total": requested_allocated_total,
+		})
 	pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	pokemon_summary_ev_allocate_confirm_button.disabled = added_value <= 0
+
+func _get_summary_ev_allocation_max(current_value: int, allocated_total: int, stored_for_stat: int) -> int:
+	var clamped_current: int = clampi(current_value, 0, POKEMON_EV_STAT_LIMIT)
+	var stored_target: int = clamped_current + maxi(stored_for_stat, 0)
+	var total_target: int = clamped_current + maxi(POKEMON_EV_TOTAL_LIMIT - allocated_total, 0)
+	return mini(POKEMON_EV_STAT_LIMIT, mini(stored_target, total_target))
+
+func _get_summary_ev_suggested_target(current_value: int, max_value: int, suggested_addition: int) -> int:
+	var safe_maximum := maxi(current_value, max_value)
+	return clampi(current_value + maxi(suggested_addition, 0), current_value, safe_maximum)
 
 func _get_summary_ev_total(evs: Dictionary) -> int:
 	var total := 0
@@ -24955,6 +25199,24 @@ func _format_playtime(total_seconds: int) -> String:
 	var hours: int = safe_seconds / 3600
 	return "%s H." % hours
 
+func _make_main_ui_tooltip_theme() -> Theme:
+	var tooltip_theme := Theme.new()
+	var tooltip_style := _make_panel_style(Color("#07101afa"), Color("#4f86a3cc"), 8, 1)
+	tooltip_style.content_margin_left = 12
+	tooltip_style.content_margin_top = 9
+	tooltip_style.content_margin_right = 12
+	tooltip_style.content_margin_bottom = 9
+	tooltip_style.shadow_color = Color("#000000a6")
+	tooltip_style.shadow_size = 8
+	tooltip_style.shadow_offset = Vector2(0, 4)
+	tooltip_theme.set_stylebox("panel", "TooltipPanel", tooltip_style)
+	tooltip_theme.set_color("font_color", "TooltipLabel", Color("#eaf6ff"))
+	tooltip_theme.set_color("font_shadow_color", "TooltipLabel", Color("#020b13"))
+	tooltip_theme.set_font_size("font_size", "TooltipLabel", 12)
+	tooltip_theme.set_constant("shadow_offset_x", "TooltipLabel", 1)
+	tooltip_theme.set_constant("shadow_offset_y", "TooltipLabel", 1)
+	return tooltip_theme
+
 func _make_panel_style(background_color: Color, border_color: Color, corner_radius: int, border_width: int) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = background_color
@@ -24980,6 +25242,24 @@ func _make_pokemon_summary_outer_style() -> StyleBoxFlat:
 	style.content_margin_top = 0
 	style.content_margin_bottom = 0
 	return style
+
+func _make_pokemon_summary_tooltip_theme() -> Theme:
+	var tooltip_theme := Theme.new()
+	var tooltip_style := _make_panel_style(Color("#07101af8"), POKEMON_SUMMARY_ACCENT, 7, 1)
+	tooltip_style.content_margin_left = 10
+	tooltip_style.content_margin_top = 7
+	tooltip_style.content_margin_right = 10
+	tooltip_style.content_margin_bottom = 7
+	tooltip_style.shadow_color = Color("#0000008f")
+	tooltip_style.shadow_size = 6
+	tooltip_style.shadow_offset = Vector2(0, 3)
+	tooltip_theme.set_stylebox("panel", "TooltipPanel", tooltip_style)
+	tooltip_theme.set_color("font_color", "TooltipLabel", Color("#d9e3f0"))
+	tooltip_theme.set_color("font_shadow_color", "TooltipLabel", Color("#00111f"))
+	tooltip_theme.set_font_size("font_size", "TooltipLabel", 11)
+	tooltip_theme.set_constant("shadow_offset_x", "TooltipLabel", 1)
+	tooltip_theme.set_constant("shadow_offset_y", "TooltipLabel", 1)
+	return tooltip_theme
 
 func _make_pokemon_summary_inner_style(background_color: Color, border_color: Color) -> StyleBoxFlat:
 	var style := _make_panel_style(background_color, border_color, 5, 1)
@@ -31172,6 +31452,7 @@ func _add_pokedex_ability_rows(abilities: Array, target: VBoxContainer = null) -
 			label,
 			_localized_content_name("abilities", ability_id, ability_name)
 		)
+		ability_row.name = "PokedexAbility_%s" % ability_id.strip_edges().to_lower().replace(" ", "-")
 		var ability_description := _localized_content_description(
 			"abilities",
 			ability_id,
@@ -31179,6 +31460,7 @@ func _add_pokedex_ability_rows(abilities: Array, target: VBoxContainer = null) -
 		)
 		if ability_description != "":
 			ability_row.tooltip_text = ability_description
+			ability_row.mouse_default_cursor_shape = Control.CURSOR_HELP
 		target_stack.add_child(ability_row)
 		added_count += 1
 	return added_count
@@ -32321,6 +32603,8 @@ func _create_item_dex_result_button(item: Dictionary) -> Control:
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
 	button.tooltip_text = str(localized_item.get("shortDesc", localized_item.get("desc", "")))
+	if button.tooltip_text != "":
+		button.mouse_default_cursor_shape = Control.CURSOR_HELP
 	button.pressed.connect(_on_item_dex_result_selected.bind(localized_item))
 	button.set_meta("item_id", item_id)
 	button.set_meta("item_data", localized_item)

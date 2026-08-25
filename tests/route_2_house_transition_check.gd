@@ -17,7 +17,8 @@ func _init() -> void:
 
 
 func _check_route(source: String) -> void:
-	_check(source.contains('[node name="FromHouse" type="Marker2D" parent="Spawns"]\nposition = Vector2(1424, 560)'), "Route 2 has a safe arrival below the house door")
+	var arrival := _node_block(source, "FromHouse")
+	_check(arrival.contains("position = Vector2(1424, 560)"), "Route 2 has a safe arrival below the house door")
 	var exit := _node_block(source, "ToHouse")
 	_check(exit.contains("position = Vector2(1424, 528)"), "Route 2 house transition aligns with the mapped door")
 	_check(exit.contains('target_scene_path = "%s"' % HOUSE_PATH), "Route 2 targets the new house interior")

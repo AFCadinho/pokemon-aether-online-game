@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.3.63 - 2026-08-25
+
+**Added**
+
+- Pokémon Showdown export sets can now be copied from a Pokémon's Summary.
+- A mysterious golden Poké Ball can now be spotted near Master Thief Rook in Viridian City.
+
+**Changed**
+
+- Main interface hover cards now share a clear, styled appearance across navigation, party, hotbar, status, buffs, and chat controls.
+- Bag hover cards now share a clear, styled appearance across item browsing and use screens.
+- Item Dex hover cards now share a clear, styled appearance.
+- Pokédex hover cards now share a clear, styled appearance across every tab.
+- Viridian City's EV Training Field now offers three tiers. Earn 3 and 6 Gym Badges to unlock evolved opponents that give 2 or 3 EVs per victory, with higher session fees for faster training.
+- EV allocation now clearly shows the current value, the 252-per-stat limit, the reachable value, and the 510 total limit. You can choose an exact target with a number field, slider, or Max button, and Mateo's lesson now guides you through the new target controls.
+- Mateo and the Field Assistants now explain training tiers, safe level 5 opponents, capture restrictions, and the combined per-stat EV limit.
+
+**Fixed**
+
+- Missing translations now reliably fall back to English.
+- Mega Eelektross's Eelevate Ability now explains its Ground and entry-hazard immunity and its highest-stat boost.
+- EV item previews now respect the combined limit of 252 Allocated and Stored EVs per stat.
+- Hidden Power now shows its actual type in battle instead of always showing Normal.
+- Hidden Power descriptions now correctly state that the move always has 60 Power.
+
 ## 0.3.62 - 2026-08-24
 
 **Added**
@@ -18,6 +43,7 @@
 
 **Changed**
 
+- Pokémon Summary hover hints now share the same clear, styled appearance.
 - Borrowed Pokémon can train, level up, evolve, move between the Party and PC, and change held items. Other permanent changes remain available only to their owner.
 - Player Loan screens now separate Pokémon and items, show every asset individually, and make deadlines, returns, and loan status easier to understand.
 - Guild screens now make applications, ranks, members, bank contents, chat, and travel easier to find and use.

@@ -49,9 +49,12 @@ func _check_trade_context_action() -> void:
 	await process_frame
 	await process_frame
 	_check_equal(
-		coordinator.context_menu.size.y < 300.0,
+		is_equal_approx(
+			coordinator.context_menu.size.y,
+			coordinator.context_menu.get_combined_minimum_size().y
+		),
 		true,
-		"collapsed trainer context card shrinks to its rendered content on first open"
+		"collapsed trainer context card fits its rendered content on first open"
 	)
 
 	var trade_button := _find_player_action("Trade")

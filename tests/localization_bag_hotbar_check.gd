@@ -61,9 +61,12 @@ func _check_bag_and_hotbar_runtime_translation() -> void:
 
 	localization_manager.call("set_locale", "nl")
 	overlay.call("_setup_bag_popup")
+	overlay.call("_setup_bag_item_use_popup")
 	overlay.call("_setup_player_hotbar")
 
 	var search := overlay.get("bag_search_input") as LineEdit
+	var bag_popup := overlay.get("bag_popup") as PanelContainer
+	var bag_item_use_popup := overlay.get("bag_item_use_popup") as PanelContainer
 	var category_buttons := overlay.get("bag_category_buttons") as Dictionary
 	var all_button := category_buttons.get("all") as Button
 	var all_label := all_button.find_child("Label", true, false) as Label
@@ -88,6 +91,18 @@ func _check_bag_and_hotbar_runtime_translation() -> void:
 	}) as Control
 	var bag_item_icon := bag_item_slot.find_child("ItemIcon", true, false) as TextureRect
 	_check(search != null and search.placeholder_text == "Items zoeken...", "Bag search renders in Dutch")
+	_check(
+		bag_popup != null
+		and bag_popup.get_theme_stylebox("panel", "TooltipPanel") is StyleBoxFlat
+		and bag_popup.get_theme_font_size("font_size", "TooltipLabel") == 12,
+		"Bag item and close-button hover cards use the styled Bag tooltip theme"
+	)
+	_check(
+		bag_item_use_popup != null
+		and bag_item_use_popup.get_theme_stylebox("panel", "TooltipPanel") is StyleBoxFlat
+		and bag_item_use_popup.get_theme_font_size("font_size", "TooltipLabel") == 12,
+		"Bag target hover cards inherit the same styled tooltip theme"
+	)
 	_check(
 		bag_item_icon != null
 		and bag_item_icon.custom_minimum_size == Vector2(48, 48)

@@ -7,9 +7,9 @@ mechanical indexes, but contains presentation fields only:
 
 - 1,439 species and forms;
 - 919 moves;
-- 376 abilities;
+- 377 abilities;
 - 1,395 items;
-- short descriptions for all 919 moves and the 316 abilities whose source index has
+- short descriptions for all 919 moves and the 317 abilities whose source index has
   a description;
 - names and short descriptions for all 1,395 canonical items.
 

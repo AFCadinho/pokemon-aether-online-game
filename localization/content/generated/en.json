@@ -5757,7 +5757,7 @@
     },
     "hidden-power": {
       "name": "Hidden Power",
-      "shortDesc": "Power and type depend upon user’s IVs. Power can range from 30 to 70."
+      "shortDesc": "Power is always 60. Its type depends on the Pokémon using it."
     },
     "high-horsepower": {
       "name": "High Horsepower",
@@ -8282,6 +8282,10 @@
     "earth-eater": {
       "name": "Earth Eater",
       "shortDesc": "Restores HP when hit by a Ground-type move."
+    },
+    "eelevate": {
+      "name": "Eelevate",
+      "shortDesc": "Immune to Ground-type moves and grounded entry hazards; raises its highest stat after knocking out a target."
     },
     "effect-spore": {
       "name": "Effect Spore",

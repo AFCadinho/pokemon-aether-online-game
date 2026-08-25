@@ -524,6 +524,13 @@
     "name": "Earth Eater",
     "shortDesc": "Restores HP when hit by a Ground-type move."
   },
+  "eelevate": {
+    "desc": "This Pok\u00e9mon is airborne, so Ground-type moves, Spikes, Toxic Spikes, and Sticky Web do not affect it. After it knocks out a target with an attack, its highest stat rises by one stage.",
+    "flavorText": "Floats above the ground and raises its highest stat after knocking out a target.",
+    "id": "eelevate",
+    "name": "Eelevate",
+    "shortDesc": "Immune to Ground-type moves and grounded entry hazards; raises its highest stat after knocking out a target."
+  },
   "effect-spore": {
     "desc": "Whenever a move makes contact with this Pok\u00e9mon, the move's user has a 30% chance of being paralyzed, poisoned, or put to sleep, chosen at random. Nothing is done to compensate if the move's user is immune to one of these ailments; there is simply a lower chance that the move's user will be affected.",
     "flavorText": "Leaves spores on contact.",

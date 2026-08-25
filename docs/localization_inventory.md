@@ -64,7 +64,7 @@ The remaining localization surface is concentrated in later phases:
 | Directly player-visible backend-message candidates | 73 occurrences | Status labels, dialogs, chat system messages, and error helpers |
 | Launcher scene and script candidates | 68 occurrences | 39 scene properties and 29 script assignments |
 | Local English world-sign files | 1 file / 3 signs | Pallet Town is the current local sign-content pilot |
-| Local Pokémon data indexes | 919 moves / 376 abilities | English display names and descriptions mixed with mechanical data |
+| Local Pokémon data indexes | 919 moves / 377 abilities | English display names and descriptions mixed with mechanical data |
 
 These counts are deliberately called *candidates*. They are useful for tracking the
 surface and spotting new debt, but catalog keys—not raw occurrence counts—will be the
@@ -146,7 +146,7 @@ Phase 8 work.
 
 - `move_summary_index.json` contains 919 English move names and descriptions alongside
   mechanical fields.
-- `ability_summary_index.json` contains 376 English ability names and descriptions
+- `ability_summary_index.json` contains 377 English ability names and descriptions
   alongside mechanical fields.
 - Species, item, market, cosmetic, Pokédex, and shop responses also carry display text
   from APIs.

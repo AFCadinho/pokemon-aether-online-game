@@ -47,6 +47,16 @@ func _init() -> void:
 		"ui.ev_training.assistant.title",
 		"ui.ev_training.assistant.stat_prompt",
 		"ui.ev_training.assistant.session_fee",
+		"ui.ev_training.assistant.tier_title",
+		"ui.ev_training.assistant.tier_prompt",
+		"ui.ev_training.assistant.tier.1",
+		"ui.ev_training.assistant.tier.2",
+		"ui.ev_training.assistant.tier.3",
+		"ui.ev_training.assistant.tier_option",
+		"ui.ev_training.assistant.tier_locked",
+		"mentor.mateo.help.topic.field",
+		"mentor.mateo.help.field.1",
+		"mentor.mateo.help.field.2",
 		"ui.ev_training.mateo.lesson_intro.evs",
 		"ui.ev_training.mateo.focus_targets",
 		"ui.ev_training.mateo.battle_progress",
@@ -77,14 +87,16 @@ func _init() -> void:
 	)
 	_assert(
 		expert_source.contains('LocalizationManager.text("ui.ev_training.mateo.lesson_intro.evs")')
+		and expert_source.contains('{"id": "field", "label": LocalizationManager.text("mentor.mateo.help.topic.field")}')
+		and expert_source.contains('keys = ["mentor.mateo.help.field.1", "mentor.mateo.help.field.2"]')
 		and not expert_source.contains("EV means Effort Value. A Pokemon that participates"),
 		"Mateo's runtime lesson must use the localization catalog"
 	)
 	_assert(
 		gate_source.contains('backdrop.name = "EvTrainingChoiceBackdrop"')
-		and gate_source.contains('fee_badge.name = "EvTrainingFeeBadge"')
-		and gate_source.contains('grid_panel.name = "EvTrainingStatGridPanel"'),
-		"EV stat choice uses layered themed surfaces"
+		and gate_source.contains('grid_panel.name = "EvTrainingStatGridPanel"')
+		and gate_source.contains('list_panel.name = "EvTrainingTierListPanel"'),
+		"EV stat and tier choices use layered themed surfaces"
 	)
 	_assert(
 		gate_source.contains("func _apply_stat_button_style")
@@ -93,8 +105,26 @@ func _init() -> void:
 		"EV stat choice replaces default Godot buttons with interactive styles"
 	)
 	_assert(service_source.contains("/game/ev-training/session"), "EV session endpoint is missing")
+	_assert(
+		service_source.contains('"tier": clampi(tier, 1, 3)')
+		and gate_source.contains("await _show_tier_prompt")
+		and gate_source.contains("EvTrainingService.start_session(selected_stat, selected_tier)")
+		and gate_source.contains('definition.get("unlocked", false)'),
+		"paid EV training must offer badge-gated tiers through the authoritative session API"
+	)
 	_assert(service_source.contains("/game/ev-training/tutorial/focus"), "EV tutorial focus endpoint is missing")
 	_assert(expert_source.contains("allocate_training_evs"), "Mateo's EV allocation lesson is missing")
+	_assert(
+		expert_source.contains('tutorial.get("requiredAllocation", 4)')
+		and expert_source.contains('tutorial.get("allocated", 0)')
+		and expert_source.contains("remaining_allocation"),
+		"Mateo's EV lesson must suggest only the allocation still required"
+	)
+	_assert(
+		ui_overlay_source.contains("func open_ev_training_allocation(pokemon_id: int, stat_id: String, suggested_addition: int = 0)")
+		and ui_overlay_source.contains("_get_summary_ev_suggested_target"),
+		"Mateo's EV lesson must preselect a target total without using Max"
+	)
 	_assert(
 		world_source.contains('const EV_TRAINING_MAP_ID := "kanto_viridian_city"')
 		and world_source.contains("func _end_ev_training_session_for_map_exit")
@@ -113,9 +143,10 @@ func _init() -> void:
 	)
 	_assert(
 		ui_overlay_source.contains("const POKEMON_EV_STORAGE_TOTAL_LIMIT := POKEMON_EV_STAT_LIMIT * 6")
-		and ui_overlay_source.contains("var max_gain: int = max(POKEMON_EV_STAT_LIMIT - current_value, 0)")
+		and ui_overlay_source.contains("var allocated_value: int = clampi(int(pokemon.evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)")
+		and ui_overlay_source.contains("var max_gain: int = max(POKEMON_EV_STAT_LIMIT - allocated_value - current_value, 0)")
 		and not ui_overlay_source.contains("POKEMON_EV_TOTAL_LIMIT - allocated_total - stored_total"),
-		"stored EV capacity must be independent from the 510 allocated EV limit"
+		"stored EV capacity must respect the combined per-stat cap and remain independent from the 510 allocated EV limit"
 	)
 	_assert(
 		ui_overlay_source.contains('LocalizationManager.text("ui.pokemon_summary.evs.stored", {')

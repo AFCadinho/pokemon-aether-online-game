@@ -14,6 +14,16 @@ func parse_team(request_node: HTTPRequest, text: String) -> Dictionary:
 		{"text": text}
 	)
 
+func export_team(request_node: HTTPRequest, team: Array, format_id: String = "gen9nationaldex") -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/team/export",
+		{
+			"team": team,
+			"formatId": format_id,
+		}
+	)
+
 func create_pokemon_from_text(
 	request_node: HTTPRequest,
 	text: String,

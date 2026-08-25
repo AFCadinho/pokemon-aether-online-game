@@ -1,5 +1,6 @@
 extends Button
 
+const MOVE_DISPLAY_TYPE := preload("res://scripts/battle/battle_ui/move_display_type.gd")
 const TYPE_BANNER_PATH := "res://assets/sprites/types/small/%s.png"
 const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
 const NEUTRAL_BACKGROUND := Color("#020612f5")
@@ -151,19 +152,11 @@ func _make_slot_style(background: Color, border: Color, border_width: int) -> St
 
 
 func _get_move_type(move_data: Dictionary) -> String:
-	for key in ["type", "moveType", "move_type"]:
-		var type_text := str(move_data.get(key, "")).strip_edges()
-		if type_text != "":
-			return type_text
+	var display_type := MOVE_DISPLAY_TYPE.resolve(move_data)
+	if display_type != "":
+		return display_type
 
 	var metadata_value: Variant = move_data.get("metadata", move_data.get("data", {}))
-	if metadata_value is Dictionary:
-		var metadata: Dictionary = metadata_value as Dictionary
-		for key in ["type", "moveType", "move_type"]:
-			var type_text := str(metadata.get(key, "")).strip_edges()
-			if type_text != "":
-				return type_text
-
 	for key in ["id", "move", "moveId", "move_id", "name"]:
 		var indexed_type := _lookup_move_type(str(move_data.get(key, "")))
 		if indexed_type != "":

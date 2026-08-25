@@ -4,6 +4,7 @@ extends DialogueNPC
 class_name EvTrainingGateNPC
 
 signal stat_selected(stat: String)
+signal tier_selected(tier: int)
 
 const STATS := [
 	{"id": "hp", "label": "HP", "accent": Color("#ff697d")},
@@ -31,6 +32,8 @@ const TRAINER_SCHOOL_QUEST_ID := "learn_at_trainer_school"
 
 var choice_layer: CanvasLayer
 var choice_root: Control
+var tier_choice_layer: CanvasLayer
+var tier_choice_root: Control
 
 
 func interact_with_player(player: Node2D) -> void:
@@ -55,7 +58,11 @@ func _enter_training_area(player: Node2D) -> void:
 	if bool(session.get("active", false)):
 		var stat_label := _stat_label(str(session.get("stat", "")))
 		await show_dialogue([
-			LocalizationManager.text("ui.ev_training.assistant.session_active", {"stat": stat_label}),
+			LocalizationManager.text("ui.ev_training.assistant.session_active", {
+				"stat": stat_label,
+				"tier": int(session.get("tier", 1)),
+				"yield": int(session.get("evYield", 1)),
+			}),
 		], display_name)
 		_teleport_player(player, inside_marker_path, -inside_direction)
 		return
@@ -89,23 +96,30 @@ func _enter_training_area(player: Node2D) -> void:
 
 	await show_dialogue([
 		LocalizationManager.text("ui.ev_training.assistant.introduction"),
-		LocalizationManager.text(
-			"ui.ev_training.assistant.fee_explanation",
-			{"fee": int(session.get("fee", 500))}
-		),
+		LocalizationManager.text("ui.ev_training.assistant.fee_explanation"),
 		LocalizationManager.text("ui.ev_training.assistant.choose_stat"),
 	], display_name)
-	var selected_stat := await _show_stat_prompt(int(session.get("fee", 500)))
+	var selected_stat := await _show_stat_prompt()
 	if selected_stat.is_empty():
 		return
-	var response: Dictionary = await EvTrainingService.start_session(selected_stat)
+	var selected_tier := await _show_tier_prompt(
+		session.get("tiers", []) as Array,
+		int(session.get("badgeCount", 0))
+	)
+	if selected_tier <= 0:
+		return
+	var response: Dictionary = await EvTrainingService.start_session(selected_stat, selected_tier)
 	if not bool(response.get("success", false)):
 		await GameErrorDialogService.show_response(response, "ui.ev_training.assistant.error.session_start")
 		return
 	await show_dialogue([
 		LocalizationManager.text(
 			"ui.ev_training.assistant.session_started",
-			{"stat": _stat_label(selected_stat)}
+			{
+				"stat": _stat_label(selected_stat),
+				"tier": int(response.get("session", {}).get("tier", selected_tier)),
+				"yield": int(response.get("session", {}).get("evYield", selected_tier)),
+			}
 		),
 	], display_name)
 	_teleport_player(player, inside_marker_path, -inside_direction)
@@ -150,13 +164,13 @@ func _teleport_player(player: Node2D, marker_path: NodePath, facing: Vector2) ->
 		player.global_position = marker.global_position
 
 
-func _show_stat_prompt(fee: int) -> String:
-	_ensure_choice_panel(fee)
+func _show_stat_prompt() -> String:
+	_ensure_choice_panel()
 	choice_root.show()
 	return await stat_selected
 
 
-func _ensure_choice_panel(fee: int) -> void:
+func _ensure_choice_panel() -> void:
 	if choice_root != null and is_instance_valid(choice_root):
 		return
 	choice_layer = CanvasLayer.new()
@@ -213,25 +227,13 @@ func _ensure_choice_panel(fee: int) -> void:
 	accent_line.color = UI_GOLD
 	accent_line.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layout.add_child(accent_line)
-	var prompt_row := HBoxContainer.new()
-	prompt_row.add_theme_constant_override("separation", 10)
-	layout.add_child(prompt_row)
 	var prompt := Label.new()
 	prompt.text = LocalizationManager.text("ui.ev_training.assistant.stat_prompt")
-	prompt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	prompt.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	prompt.add_theme_font_size_override("font_size", 13)
 	prompt.add_theme_color_override("font_color", UI_TEXT)
-	prompt_row.add_child(prompt)
-	var fee_badge := PanelContainer.new()
-	fee_badge.name = "EvTrainingFeeBadge"
-	fee_badge.add_theme_stylebox_override("panel", _fee_badge_style())
-	prompt_row.add_child(fee_badge)
-	var fee_label := Label.new()
-	fee_label.text = LocalizationManager.text("ui.ev_training.assistant.session_fee", {"fee": fee})
-	fee_label.add_theme_font_size_override("font_size", 10)
-	fee_label.add_theme_color_override("font_color", UI_GOLD_BRIGHT)
-	fee_badge.add_child(fee_label)
+	layout.add_child(prompt)
 	var grid_panel := PanelContainer.new()
 	grid_panel.name = "EvTrainingStatGridPanel"
 	grid_panel.add_theme_stylebox_override(
@@ -273,6 +275,131 @@ func _choice_button(label: String, stat: String) -> Button:
 func _select_stat(stat: String) -> void:
 	choice_root.hide()
 	stat_selected.emit(stat)
+
+
+func _show_tier_prompt(tiers: Array, badge_count: int) -> int:
+	_build_tier_choice_panel(tiers, badge_count)
+	tier_choice_root.show()
+	return await tier_selected
+
+
+func _build_tier_choice_panel(tiers: Array, badge_count: int) -> void:
+	if tier_choice_layer != null and is_instance_valid(tier_choice_layer):
+		tier_choice_layer.queue_free()
+	tier_choice_layer = CanvasLayer.new()
+	tier_choice_layer.name = "EvTrainingTierChoiceLayer"
+	tier_choice_layer.layer = 90
+	add_child(tier_choice_layer)
+	tier_choice_root = Control.new()
+	tier_choice_root.name = "EvTrainingTierChoiceRoot"
+	tier_choice_root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	tier_choice_root.mouse_filter = Control.MOUSE_FILTER_STOP
+	tier_choice_layer.add_child(tier_choice_root)
+
+	var backdrop := ColorRect.new()
+	backdrop.name = "EvTrainingTierBackdrop"
+	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	backdrop.color = Color("#01050a8c")
+	backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
+	tier_choice_root.add_child(backdrop)
+
+	var panel := PanelContainer.new()
+	panel.name = "EvTrainingTierChoicePanel"
+	panel.custom_minimum_size = Vector2(490, 0)
+	panel.anchor_left = 0.5
+	panel.anchor_top = 0.5
+	panel.anchor_right = 0.5
+	panel.anchor_bottom = 0.5
+	panel.offset_left = -245.0
+	panel.offset_top = -190.0
+	panel.offset_right = 245.0
+	panel.offset_bottom = 190.0
+	panel.add_theme_stylebox_override("panel", _panel_style())
+	tier_choice_root.add_child(panel)
+	var margin := MarginContainer.new()
+	for side in ["left", "right"]:
+		margin.add_theme_constant_override("margin_%s" % side, 20)
+	for side in ["top", "bottom"]:
+		margin.add_theme_constant_override("margin_%s" % side, 16)
+	panel.add_child(margin)
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 9)
+	margin.add_child(layout)
+	var title := Label.new()
+	title.text = LocalizationManager.text("ui.ev_training.assistant.tier_title")
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 19)
+	title.add_theme_color_override("font_color", UI_GOLD_BRIGHT)
+	layout.add_child(title)
+	var prompt := Label.new()
+	prompt.text = LocalizationManager.text("ui.ev_training.assistant.tier_prompt", {"badges": badge_count})
+	prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	prompt.add_theme_font_size_override("font_size", 12)
+	prompt.add_theme_color_override("font_color", UI_TEXT_MUTED)
+	layout.add_child(prompt)
+	var list_panel := PanelContainer.new()
+	list_panel.name = "EvTrainingTierListPanel"
+	list_panel.add_theme_stylebox_override("panel", _surface_style(UI_SURFACE_INSET, UI_BORDER_SOFT, 10, 1))
+	layout.add_child(list_panel)
+	var list_margin := MarginContainer.new()
+	for side in ["left", "top", "right", "bottom"]:
+		list_margin.add_theme_constant_override("margin_%s" % side, 7)
+	list_panel.add_child(list_margin)
+	var tier_list := VBoxContainer.new()
+	tier_list.add_theme_constant_override("separation", 7)
+	list_margin.add_child(tier_list)
+	var available_tiers := tiers
+	if available_tiers.is_empty():
+		available_tiers = [{"tier": 1, "evYield": 1, "fee": 500, "requiredBadges": 0, "unlocked": true}]
+	for tier_value: Variant in available_tiers:
+		if tier_value is Dictionary:
+			tier_list.add_child(_tier_choice_button(tier_value as Dictionary))
+	var cancel := Button.new()
+	cancel.text = LocalizationManager.text("common.cancel")
+	cancel.focus_mode = Control.FOCUS_NONE
+	cancel.custom_minimum_size = Vector2(174, 40)
+	cancel.add_theme_font_size_override("font_size", 13)
+	_apply_cancel_button_style(cancel)
+	cancel.pressed.connect(_select_tier.bind(0))
+	layout.add_child(cancel)
+
+
+func _tier_choice_button(definition: Dictionary) -> Button:
+	var tier := int(definition.get("tier", 1))
+	var required_badges := int(definition.get("requiredBadges", 0))
+	var unlocked := bool(definition.get("unlocked", false))
+	var label_key := "ui.ev_training.assistant.tier.%d" % tier
+	var button := Button.new()
+	button.name = "EvTrainingTier%dButton" % tier
+	button.text = LocalizationManager.text("ui.ev_training.assistant.tier_option", {
+		"tier": tier,
+		"name": LocalizationManager.text(label_key),
+		"yield": int(definition.get("evYield", tier)),
+		"fee": int(definition.get("fee", 0)),
+	})
+	if not unlocked:
+		button.text += "\n" + LocalizationManager.text(
+			"ui.ev_training.assistant.tier_locked",
+			{"badges": required_badges}
+		)
+	button.custom_minimum_size = Vector2(420, 56)
+	button.focus_mode = Control.FOCUS_NONE
+	button.disabled = not unlocked
+	button.tooltip_text = (
+		LocalizationManager.text("ui.ev_training.assistant.tier_locked", {"badges": required_badges})
+		if not unlocked
+		else button.text
+	)
+	_apply_stat_button_style(button, UI_GOLD)
+	button.add_theme_color_override("font_disabled_color", Color("#73808b"))
+	button.add_theme_stylebox_override("disabled", _surface_style(Color("#081019d9"), Color("#263744"), 8, 1))
+	button.pressed.connect(_select_tier.bind(tier))
+	return button
+
+
+func _select_tier(tier: int) -> void:
+	tier_choice_root.hide()
+	tier_selected.emit(tier)
 
 
 func _stat_label(stat: String) -> String:

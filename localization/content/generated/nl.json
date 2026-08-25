@@ -5757,7 +5757,7 @@
     },
     "hidden-power": {
       "name": "Verborgen kracht",
-      "shortDesc": "Vermogen en type zijn afhankelijk van de IV's van de gebruiker. Het vermogen kan variëren van 30 tot 70."
+      "shortDesc": "De kracht is altijd 60. Het type hangt af van de Pokémon die de aanval gebruikt."
     },
     "high-horsepower": {
       "name": "Hoog vermogen",
@@ -8282,6 +8282,10 @@
     "earth-eater": {
       "name": "Aardevreter",
       "shortDesc": "Herstelt HP wanneer hij wordt geraakt door een grondtype-beweging."
+    },
+    "eelevate": {
+      "name": "Eelevate",
+      "shortDesc": "Is immuun voor Ground-aanvallen en entry hazards op de grond; verhoogt de hoogste stat na een knock-out."
     },
     "effect-spore": {
       "name": "Effectspoor",
