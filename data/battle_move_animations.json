@@ -9794,27 +9794,65 @@
       }
     },
     "psyshock": {
-      "template": "imported_sheet",
+      "template": "custom_godot_effect",
       "category": "special_projectile",
-      "speed_scale": 1.08,
+      "speed_scale": 1.1,
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
-      "show_sheet_sprites": true,
+      "show_sheet_sprites": false,
       "overlay_fill_enabled": false,
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
+      "psychic_shards": {
+        "enabled": true,
+        "visible_start": 0.02,
+        "visible_end": 0.98,
+        "fade_in": 0.06,
+        "fade_out": 0.15,
+        "launch_start": 0.2,
+        "impact_start": 0.64,
+        "shard_count": 6,
+        "shard_length": 23.0,
+        "shard_width": 10.0,
+        "spread": 46.0,
+        "orbit_radius": 42.0,
+        "trail_length": 28.0,
+        "impact_radius": 64.0,
+        "impact_shard_count": 12,
+        "outer_color": [0.48, 0.08, 0.9, 1.0],
+        "inner_color": [0.86, 0.38, 1.0, 1.0],
+        "core_color": [1.0, 0.9, 1.0, 1.0],
+        "path": [
+          {
+            "at": 0.0,
+            "position": [128, 204]
+          },
+          {
+            "at": 1.0,
+            "position": [384, 92]
+          }
+        ]
+      },
+      "flash": {
+        "enabled": true,
+        "start": 0.58,
+        "peak": 0.68,
+        "end": 0.88,
+        "alpha": 0.08,
+        "color": [0.58, 0.12, 0.94, 1.0]
+      },
       "target_hit_flash": {
         "enabled": true,
-        "delay": 0.51,
+        "delay": 0.69,
         "duration": 0.14,
         "color": [0.84, 0.58, 1.0, 1.0]
       },
       "target_shake": {
         "enabled": true,
-        "delay": 0.51,
+        "delay": 0.69,
         "duration": 0.38,
-        "amplitude": 7.0,
+        "amplitude": 8.0,
         "interval": 0.04,
         "vertical_scale": 0.18,
         "decay": true

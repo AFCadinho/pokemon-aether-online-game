@@ -30,6 +30,7 @@ signal animation_finished
 @export var orb_projectile_config: Dictionary = {}
 @export var orb_barrage_config: Dictionary = {}
 @export var psychic_pulse_config: Dictionary = {}
+@export var psychic_shards_config: Dictionary = {}
 @export var energy_blast_config: Dictionary = {}
 @export var water_splash_config: Dictionary = {}
 @export var electric_switch_config: Dictionary = {}
@@ -378,6 +379,7 @@ func _draw() -> void:
 	_draw_orb_projectile_visual()
 	_draw_orb_barrage_visual()
 	_draw_psychic_pulse_visual()
+	_draw_psychic_shards_visual()
 	_draw_energy_blast_visual()
 	_draw_water_splash_visual()
 	_draw_electric_switch_visual()
@@ -625,6 +627,100 @@ func _draw_hidden_power_orb(center: Vector2, radius: float, color: Color, core_c
 	draw_circle(center, radius, _color_with_alpha(color, alpha * 0.78))
 	draw_circle(center + Vector2(-radius * 0.26, -radius * 0.28), radius * 0.42, _color_with_alpha(core_color, alpha * 0.9))
 	draw_arc(center, radius * 1.08, 0.0, TAU, 32, _color_with_alpha(core_color, alpha * 0.72), 1.1, true)
+
+
+func _draw_psychic_shards_visual() -> void:
+	if not bool(psychic_shards_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := clampf(float(psychic_shards_config.get("visible_start", 0.02)), 0.0, 1.0)
+	var visible_end := clampf(float(psychic_shards_config.get("visible_end", 0.98)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, psychic_shards_config)
+	if alpha <= 0.02:
+		return
+
+	var source_state := _get_projectile_state_from_config(0.0, psychic_shards_config)
+	var target_state := _get_projectile_state_from_config(1.0, psychic_shards_config)
+	var source := _projectile_battlefield_position(source_state.get("position", Vector2(128.0, 204.0)) as Vector2, psychic_shards_config)
+	var target := _projectile_battlefield_position(target_state.get("position", Vector2(384.0, 92.0)) as Vector2, psychic_shards_config)
+	var direction := (target - source).normalized()
+	if direction == Vector2.ZERO:
+		return
+	var normal := direction.orthogonal()
+	var launch_start := clampf(float(psychic_shards_config.get("launch_start", 0.2)), visible_start, visible_end - 0.16)
+	var impact_start := clampf(float(psychic_shards_config.get("impact_start", 0.64)), launch_start + 0.16, visible_end)
+	var charge_progress := clampf((progress - visible_start) / maxf(launch_start - visible_start, 0.001), 0.0, 1.0)
+	var travel_progress := clampf((progress - launch_start) / maxf(impact_start - launch_start, 0.001), 0.0, 1.0)
+	var impact_progress := clampf((progress - impact_start) / maxf(visible_end - impact_start, 0.001), 0.0, 1.0)
+	var shard_count := clampi(int(psychic_shards_config.get("shard_count", 6)), 3, 10)
+	var shard_length := maxf(float(psychic_shards_config.get("shard_length", 22.0)), 6.0)
+	var shard_width := maxf(float(psychic_shards_config.get("shard_width", 10.0)), 3.0)
+	var spread := maxf(float(psychic_shards_config.get("spread", 42.0)), 0.0)
+	var orbit_radius := maxf(float(psychic_shards_config.get("orbit_radius", 38.0)), 10.0)
+	var trail_length := maxf(float(psychic_shards_config.get("trail_length", 26.0)), 0.0)
+	var outer_color := _color_from_value(psychic_shards_config.get("outer_color", [0.58, 0.12, 0.92, 1.0]), Color(0.58, 0.12, 0.92, 1.0))
+	var inner_color := _color_from_value(psychic_shards_config.get("inner_color", [0.9, 0.58, 1.0, 1.0]), Color(0.9, 0.58, 1.0, 1.0))
+	var core_color := _color_from_value(psychic_shards_config.get("core_color", [1.0, 0.94, 1.0, 1.0]), Color(1.0, 0.94, 1.0, 1.0))
+
+	if progress < launch_start:
+		var ring_radius := lerpf(orbit_radius * 1.25, orbit_radius * 0.72, charge_progress)
+		draw_circle(source, ring_radius * 0.62, _color_with_alpha(outer_color, alpha * 0.08))
+		draw_arc(source, ring_radius, float(frame_index) * 0.09, TAU + float(frame_index) * 0.09, 48, _color_with_alpha(inner_color, alpha * 0.62), 1.8, true)
+		for shard_index: int in range(shard_count):
+			var phase := float(shard_index) * TAU / float(shard_count) + float(frame_index) * 0.16
+			var shard_center := source + Vector2(cos(phase), sin(phase) * 0.68) * ring_radius
+			_draw_psychic_shard(shard_center, phase + PI * 0.5, shard_length * 0.72, shard_width * 0.72, outer_color, core_color, alpha * (0.62 + charge_progress * 0.34))
+
+	for shard_index: int in range(shard_count):
+		var stagger := float(shard_index) * 0.035
+		var shard_progress := clampf((travel_progress - stagger) / maxf(1.0 - stagger, 0.001), 0.0, 1.0)
+		if progress < launch_start or shard_progress <= 0.0:
+			continue
+		var eased := 1.0 - pow(1.0 - shard_progress, 2.0)
+		var lane := (float(shard_index) - float(shard_count - 1) * 0.5) / maxf(float(shard_count - 1), 1.0)
+		var curve_offset := normal * lane * spread * sin(eased * PI)
+		var shard_center := source.lerp(target, eased) + curve_offset
+		var shard_angle := direction.angle() + sin(float(frame_index) * 0.38 + float(shard_index) * 1.4) * 0.28
+		var shard_alpha := alpha * (0.78 + eased * 0.22)
+		if trail_length > 0.0:
+			draw_line(shard_center - direction * trail_length, shard_center, _color_with_alpha(outer_color, shard_alpha * 0.24), shard_width * 1.05, true)
+			draw_line(shard_center - direction * trail_length * 0.72, shard_center, _color_with_alpha(inner_color, shard_alpha * 0.52), maxf(1.0, shard_width * 0.34), true)
+		_draw_psychic_shard(shard_center, shard_angle, shard_length, shard_width, outer_color, core_color, shard_alpha)
+
+	if impact_progress > 0.0:
+		var impact_fade := alpha * (1.0 - impact_progress)
+		var impact_radius := lerpf(10.0, float(psychic_shards_config.get("impact_radius", 62.0)), 1.0 - pow(1.0 - impact_progress, 2.0))
+		draw_circle(target, impact_radius * 0.7, _color_with_alpha(outer_color, impact_fade * 0.2))
+		draw_arc(target, impact_radius, -float(frame_index) * 0.13, TAU - float(frame_index) * 0.13, 56, _color_with_alpha(inner_color, impact_fade * 0.88), 2.6, true)
+		draw_arc(target, impact_radius * 0.58, float(frame_index) * 0.17, TAU + float(frame_index) * 0.17, 48, _color_with_alpha(core_color, impact_fade * 0.72), 1.5, true)
+		var impact_shards := maxi(8, int(psychic_shards_config.get("impact_shard_count", 12)))
+		for shard_index: int in range(impact_shards):
+			var angle := float(shard_index) * TAU / float(impact_shards) + float(frame_index) * 0.04
+			var shard_center := target + Vector2.from_angle(angle) * impact_radius * (0.58 + float(shard_index % 3) * 0.1)
+			_draw_psychic_shard(shard_center, angle, shard_length * 0.62, shard_width * 0.5, outer_color, core_color, impact_fade * 0.88)
+
+
+func _draw_psychic_shard(center: Vector2, angle: float, length: float, width: float, color: Color, core_color: Color, alpha: float) -> void:
+	if alpha <= 0.02:
+		return
+	var forward := Vector2.from_angle(angle)
+	var side := forward.orthogonal()
+	var tip := center + forward * length * 0.58
+	var tail := center - forward * length * 0.42
+	var points := PackedVector2Array([
+		tip,
+		center + side * width * 0.5,
+		tail,
+		center - side * width * 0.5,
+	])
+	draw_colored_polygon(points, _color_with_alpha(color, alpha * 0.72))
+	draw_polyline(PackedVector2Array([tip, center + side * width * 0.5, tail, center - side * width * 0.5, tip]), _color_with_alpha(core_color, alpha * 0.82), 1.2, true)
+	draw_line(tail, tip, _color_with_alpha(core_color, alpha * 0.68), 1.0, true)
 
 
 func _draw_psychic_pulse_visual() -> void:

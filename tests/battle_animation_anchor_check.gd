@@ -33,6 +33,7 @@ func _init() -> void:
 	_check_contains(router_source, "_play_move_target_hit_flash_if_needed(config, move_target_ident, animation_options)", "moves can flash their target at impact timing")
 	_check_contains(router_source, "func _should_suppress_target_feedback_for_miss", "misses can suppress hit-only target feedback")
 	_check_contains(router_source, "animation_node.heat_wave_config = _with_projectile_endpoint_anchors(", "heat waves receive live attacker and target anchors")
+	_check_contains(router_source, "animation_node.psychic_shards_config = _with_projectile_endpoint_anchors(", "psychic shard volleys receive live attacker and target anchors")
 	_check_contains(router_source, "animation_node.draco_meteor_config = _with_target_effect_anchor(", "Draco Meteor rain follows the live target anchor")
 	_check_contains(router_source, "animation_node.celestial_charge_config = _with_self_effect_anchor(", "Moonblast charge effects follow the live attacker anchor")
 	_check_contains(router_source, "actor_anchor += -center_offset if reverse_battlefield else center_offset", "self-effect offsets remain screen-relative for opposing users")
@@ -61,6 +62,7 @@ func _init() -> void:
 	_check_contains(player_source, "if index < sheet_visible_start_frame:", "sheet impact effects can wait until their projectile arrives")
 	_check_contains(player_source, "func _draw_heat_wave_visual() -> void:", "moves can render a configurable multi-lane heat wave")
 	_check_contains(player_source, "func _draw_energy_blast_launch_ring", "projectiles can leave a configurable launch ring behind")
+	_check_contains(player_source, "func _draw_psychic_shards_visual() -> void:", "Psyshock can render a custom psychic shard volley")
 	_check_contains(player_source, "func _draw_court_change_visual", "Court Change can render a configurable battlefield swap")
 	_check_contains(player_source, "func _draw_sound_wave_visual", "sound moves can send layered rings towards the target")
 	_check_contains(player_source, "func _draw_leaf_rush_visual", "grass moves can send a configurable leaf rush towards the target")
@@ -87,6 +89,8 @@ func _init() -> void:
 	_check_move_animation_assets(moves, "watershuriken", true, false, "Water Shuriken")
 	_check_equal(str((moves.get("explosion", {}) as Dictionary).get("static_visual_anchor", "")), "actor", "Explosion smoke follows its user")
 	_check_equal(bool(((moves.get("gigaimpact", {}) as Dictionary).get("actor_motion", {}) as Dictionary).get("enabled", false)), true, "Giga Impact moves its user into the hit")
+	_check_equal(bool(((moves.get("psyshock", {}) as Dictionary).get("psychic_shards", {}) as Dictionary).get("enabled", false)), true, "Psyshock uses its custom psychic shard volley")
+	_check_equal(bool((moves.get("psyshock", {}) as Dictionary).get("show_sheet_sprites", true)), false, "Psyshock hides the imported placeholder sprites")
 	var water_shuriken_config: Dictionary = moves.get("watershuriken", {}) as Dictionary
 	var water_shuriken_data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(str(water_shuriken_config.get("data_path", "")))) as Dictionary
 	var water_shuriken_frames: Array = water_shuriken_data.get("frames", []) as Array
