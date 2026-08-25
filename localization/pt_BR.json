@@ -764,7 +764,7 @@
   "ui.pokemon_summary.id": "ID: {id}",
   "ui.pokemon_summary.id_empty": "ID: -",
   "ui.pokemon_summary.species_and_id": "{species} · {id}",
-  "ui.pokemon_summary.species_and_number": "{species} · nº {id}",
+  "ui.pokemon_summary.species_and_number": "{species} · ID: {id}",
   "ui.pokemon_summary.nickname.edit_tooltip": "Alterar apelido",
   "ui.pokemon_summary.copy_export_set": "Copiar conjunto de exportação",
   "ui.pokemon_summary.copy_export_set_copied": "Conjunto de exportação copiado!",
