@@ -47,6 +47,13 @@ func _init() -> void:
 		"ui.ev_training.assistant.title",
 		"ui.ev_training.assistant.stat_prompt",
 		"ui.ev_training.assistant.session_fee",
+		"ui.ev_training.assistant.tier_title",
+		"ui.ev_training.assistant.tier_prompt",
+		"ui.ev_training.assistant.tier.1",
+		"ui.ev_training.assistant.tier.2",
+		"ui.ev_training.assistant.tier.3",
+		"ui.ev_training.assistant.tier_option",
+		"ui.ev_training.assistant.tier_locked",
 		"ui.ev_training.mateo.lesson_intro.evs",
 		"ui.ev_training.mateo.focus_targets",
 		"ui.ev_training.mateo.battle_progress",
@@ -82,9 +89,9 @@ func _init() -> void:
 	)
 	_assert(
 		gate_source.contains('backdrop.name = "EvTrainingChoiceBackdrop"')
-		and gate_source.contains('fee_badge.name = "EvTrainingFeeBadge"')
-		and gate_source.contains('grid_panel.name = "EvTrainingStatGridPanel"'),
-		"EV stat choice uses layered themed surfaces"
+		and gate_source.contains('grid_panel.name = "EvTrainingStatGridPanel"')
+		and gate_source.contains('list_panel.name = "EvTrainingTierListPanel"'),
+		"EV stat and tier choices use layered themed surfaces"
 	)
 	_assert(
 		gate_source.contains("func _apply_stat_button_style")
@@ -93,6 +100,13 @@ func _init() -> void:
 		"EV stat choice replaces default Godot buttons with interactive styles"
 	)
 	_assert(service_source.contains("/game/ev-training/session"), "EV session endpoint is missing")
+	_assert(
+		service_source.contains('"tier": clampi(tier, 1, 3)')
+		and gate_source.contains("await _show_tier_prompt")
+		and gate_source.contains("EvTrainingService.start_session(selected_stat, selected_tier)")
+		and gate_source.contains('definition.get("unlocked", false)'),
+		"paid EV training must offer badge-gated tiers through the authoritative session API"
+	)
 	_assert(service_source.contains("/game/ev-training/tutorial/focus"), "EV tutorial focus endpoint is missing")
 	_assert(expert_source.contains("allocate_training_evs"), "Mateo's EV allocation lesson is missing")
 	_assert(

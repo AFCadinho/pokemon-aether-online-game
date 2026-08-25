@@ -13,12 +13,13 @@ func get_session() -> Dictionary:
 	return await _request_json(SESSION_ENDPOINT, HTTPClient.METHOD_GET, "")
 
 
-func start_session(stat: String) -> Dictionary:
+func start_session(stat: String, tier: int = 1) -> Dictionary:
 	return await _request_json(
 		SESSION_ENDPOINT,
 		HTTPClient.METHOD_POST,
 		JSON.stringify({
 			"stat": stat.strip_edges().to_lower(),
+			"tier": clampi(tier, 1, 3),
 			"requestId": _new_request_id(),
 		})
 	)
