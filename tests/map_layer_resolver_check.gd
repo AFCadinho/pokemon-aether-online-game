@@ -61,6 +61,13 @@ func _check_direct_layer_priority() -> void:
 		MapLayerResolverScript.find_tilemap_layer(map_root, ["Collision"]) == direct_collision,
 		"Direct collision keeps priority over a nested fallback"
 	)
+	var nested_grass := TileMapLayer.new()
+	nested_grass.name = "TallGrass"
+	nested_container.add_child(nested_grass)
+	_check(
+		MapLayerResolverScript.find_tilemap_layer(map_root, ["TallGrass"]) == nested_grass,
+		"Recursive resolver finds a nested TallGrass scene mask"
+	)
 	map_root.free()
 
 
@@ -71,6 +78,12 @@ func _check_collision_consumers_use_recursive_lookup() -> void:
 			'collision_tilemap = _find_tilemap_layer(current_map, ["Collision"])'
 		),
 		"Player refresh resolves nested collision"
+	)
+	_check(
+		player_source.contains(
+			'grass_tilemap = _find_tilemap_layer(current_map, ["TallGrass"])'
+		),
+		"Player refresh resolves a nested TallGrass scene mask"
 	)
 	_check(
 		player_source.contains('block_left_tilemap = _find_tilemap_layer(current_map, ["BlockLeft"])')

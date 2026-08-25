@@ -52,10 +52,6 @@ func _check_scene(scene_path: String) -> void:
 			continue
 		tall_grass_layer_count += 1
 		_check(
-			_node_attribute(line, "parent") == ".",
-			"%s keeps TallGrass directly under the map root" % scene_path
-		)
-		_check(
 			_node_property_is_false(lines, line_index + 1, "visible"),
 			"%s keeps TallGrass invisible" % scene_path
 		)
