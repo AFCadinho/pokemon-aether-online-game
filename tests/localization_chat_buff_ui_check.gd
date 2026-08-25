@@ -38,6 +38,10 @@ func _check_localized_helpers() -> void:
 	_check(overlay.call("_chat_tab_label", "languages") == "Talen", "Languages chat tab renders in Dutch")
 	_check(overlay.call("_language_chat_label", "language_zh") == "中文", "Chinese chat keeps its native label")
 	_check(
+		str(localization_manager.call("text", "ui.chat.settings.description")).contains("Moderatie kan beperkt zijn"),
+		"Dutch language chat settings disclose limited community moderation"
+	)
+	_check(
 		overlay.call("_localized_buff_name", {"name_key": "ui.buff.global_exp.name"}) == "Wereldwijde EXP-boost",
 		"Global buff name renders in Dutch"
 	)
@@ -111,6 +115,10 @@ func _check_localized_helpers() -> void:
 	_check(overlay.call("_chat_tab_label", "languages") == "Idiomas", "Languages chat tab updates to Portuguese")
 	_check(overlay.call("_language_chat_label", "language_pt") == "Português", "Portuguese chat keeps its native label")
 	_check(
+		str(localization_manager.call("text", "ui.chat.settings.description")).contains("moderação pode ser limitada"),
+		"Portuguese language chat settings disclose limited community moderation"
+	)
+	_check(
 		overlay.call("_localized_buff_name", {"name_key": "ui.buff.global_exp.name"}) == "Bônus global de EXP",
 		"Global buff name updates to Portuguese"
 	)
@@ -127,6 +135,10 @@ func _check_localized_helpers() -> void:
 	localization_manager.call("set_locale", "zh_CN")
 	_check(overlay.call("_chat_tab_label", "languages") == "语言", "Languages chat tab updates to Simplified Chinese")
 	_check(overlay.call("_language_chat_label", "language_zh") == "中文", "Chinese chat uses its native Simplified Chinese label")
+	_check(
+		str(localization_manager.call("text", "ui.chat.settings.description")).contains("审核可能有限"),
+		"Chinese language chat settings disclose limited community moderation"
+	)
 
 	if map_prefix != null:
 		map_prefix.free()
