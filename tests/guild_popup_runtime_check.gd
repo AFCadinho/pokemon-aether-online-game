@@ -216,6 +216,30 @@ func _run() -> void:
 	_check(pokemon_withdraw != null and pokemon_withdraw.text == "Withdraw", "authorized ranks retain permanent Guild withdrawal")
 	var pokemon_borrow := popup.find_child("GuildBankPokemonBorrowButton_21", true, false) as Button
 	_check(pokemon_borrow != null and pokemon_borrow.text == "Borrow" and not pokemon_borrow.disabled, "available Guild-owned Pokémon expose borrowing without ownership transfer")
+	popup.guild_bank_state["access"]["pokemonTradeLevelCap"] = 5
+	popup.guild_bank_state["pokemon"][0]["canWithdraw"] = false
+	popup.guild_bank_state["pokemon"][0]["canBorrow"] = false
+	popup._render_guild_home()
+	await process_frame
+	pokemon_withdraw = popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) as Button
+	pokemon_borrow = popup.find_child("GuildBankPokemonBorrowButton_21", true, false) as Button
+	_check(
+		pokemon_withdraw != null
+		and pokemon_withdraw.disabled
+		and pokemon_withdraw.tooltip_text.contains("trade level cap"),
+		"Pokémon withdrawal explains the recipient trade level cap"
+	)
+	_check(
+		pokemon_borrow != null
+		and pokemon_borrow.disabled
+		and pokemon_borrow.tooltip_text.contains("trade level cap"),
+		"Pokémon borrowing explains the recipient trade level cap"
+	)
+	popup.guild_bank_state["access"]["pokemonTradeLevelCap"] = 100
+	popup.guild_bank_state["pokemon"][0]["canWithdraw"] = true
+	popup.guild_bank_state["pokemon"][0]["canBorrow"] = true
+	popup._render_guild_home()
+	await process_frame
 	popup.guild_bank_state["access"]["lendingEnabled"] = false
 	popup.guild_bank_state["access"]["canBorrow"] = false
 	popup.guild_bank_state["pokemon"][0]["canBorrow"] = false
@@ -291,6 +315,14 @@ func _run() -> void:
 	_check(
 		popup.member_status_label != null and popup.member_status_label.text == "Visible bank feedback",
 		"Guild Bank feedback remains visible after a workspace refresh"
+	)
+	var visible_status := popup.find_child("GuildMemberStatus", true, false) as Label
+	var visible_workspace := popup.find_child("GuildBankWorkspace", true, false) as Control
+	_check(
+		visible_status != null
+		and visible_workspace != null
+		and visible_status.global_position.y < visible_workspace.global_position.y,
+		"Guild Bank feedback renders above the active workspace"
 	)
 	_check(popup.find_child("GuildTravelBar", true, false) != null, "guild travel remains available while viewing the bank")
 	overview_tab = popup.find_child("GuildOverviewTab", true, false) as Button

@@ -1659,6 +1659,7 @@
   "ui.guild.bank.tooltip.borrow_disabled": "Guild lending is not available on this server.",
   "ui.guild.bank.tooltip.borrow_item_ineligible": "Only reusable held items can be borrowed. Consumables, Poké Balls and berries cannot be borrowed.",
   "ui.guild.bank.tooltip.borrow_unavailable": "This asset is not currently available to borrow.",
+  "ui.guild.bank.tooltip.pokemon_trade_level_cap": "This Pokémon is level {pokemonLevel}. Your current trade level cap is {tradeLevelCap}.",
   "ui.guild.bank.funds.guild_balance": "GUILD BALANCE",
   "ui.guild.bank.funds.your_balance": "YOUR BALANCE",
   "ui.guild.bank.items.stored": "GUILD STORAGE",

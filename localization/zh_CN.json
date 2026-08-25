@@ -1656,6 +1656,7 @@
   "ui.guild.bank.tooltip.borrow_disabled": "此服务器目前未开放公会借用功能。",
   "ui.guild.bank.tooltip.borrow_item_ineligible": "只能借用可重复使用的携带物品。消耗品、精灵球和树果不能借用。",
   "ui.guild.bank.tooltip.borrow_unavailable": "该资产目前无法借用。",
+  "ui.guild.bank.tooltip.pokemon_trade_level_cap": "这只宝可梦为 {pokemonLevel} 级。你当前的交换等级上限为 {tradeLevelCap}。",
   "ui.guild.bank.funds.guild_balance": "公会平衡",
   "ui.guild.bank.funds.your_balance": "您的余额",
   "ui.guild.bank.items.stored": "公会存储",
