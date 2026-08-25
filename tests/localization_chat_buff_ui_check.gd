@@ -124,6 +124,10 @@ func _check_localized_helpers() -> void:
 	_check(map_prefix != null and map_prefix.text == "[Mapa]", "Existing channel prefix updates to Portuguese")
 	_check(map_prefix != null and map_prefix.tooltip_text == "Abrir o chat do Mapa", "Existing channel tooltip updates to Portuguese")
 
+	localization_manager.call("set_locale", "zh_CN")
+	_check(overlay.call("_chat_tab_label", "languages") == "语言", "Languages chat tab updates to Simplified Chinese")
+	_check(overlay.call("_language_chat_label", "language_zh") == "中文", "Chinese chat uses its native Simplified Chinese label")
+
 	if map_prefix != null:
 		map_prefix.free()
 	overlay.free()
