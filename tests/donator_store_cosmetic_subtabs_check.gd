@@ -130,6 +130,16 @@ func _run() -> void:
 	_check(not store.product_buttons.has("adinho-classic-outfit"), "Face hides the Classic outfit box")
 
 	store.call("_select_cosmetic_subcategory", "outfits")
+	_check(store.product_buttons.has("mysterious-outfit"), "Outfits lists the unisex Mysterious Outfit Box")
+	store.call("_select_product", "mysterious-outfit")
+	var mysterious_item: Dictionary = store.call("_catalog_item", "mysterious-outfit")
+	_check(mysterious_item.get("price", 0) == 400, "Mysterious Outfit uses the complete four-item outfit price")
+	_check(mysterious_item.get("badge", "") == "4-ITEM BOX", "Mysterious Outfit communicates its four loose contents")
+	var mysterious_preview: Dictionary = store.call("_current_character_preview_appearance")
+	_check(mysterious_preview.get("facegear", "") == "Mysterious_Mask", "Mysterious preview includes the mask")
+	_check(mysterious_preview.get("top", "") == "Mysterious_Shirt", "Mysterious preview includes the shirt and gloves")
+	_check(mysterious_preview.get("bottom", "") == "Mysterious_Trousers", "Mysterious preview includes the trousers")
+	_check(mysterious_preview.get("shoes", "") == "Mysterious_Shoes", "Mysterious preview includes the shoes")
 	_check(store.product_buttons.has("adinho-classic-outfit"), "Outfits lists Adinho Classic as one six-item box")
 	_check(not store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom stays hidden for male models")
 	store.call("_select_product", "adinho-classic-outfit")
@@ -153,6 +163,7 @@ func _run() -> void:
 	_check(preview_visual.position.y <= 160.0 and preview_visual.scale.y <= 3.0, "preview camera leaves room for the trainer's legs and feet")
 
 	store.set_trainer_gender("female")
+	_check(store.product_buttons.has("mysterious-outfit"), "unisex Mysterious Outfit stays available for female models")
 	_check(not store.product_buttons.has("adinho-classic-outfit"), "male-only Adinho Classic stays hidden for female models")
 	_check(store.product_buttons.has("aether-blossom-outfit"), "Aether Blossom is listed for compatible female models")
 	store.call("_select_product", "aether-blossom-outfit")
@@ -307,6 +318,7 @@ func _run() -> void:
 		"aether-blessing-voucher-7-days": 150,
 		"aether-blessing-voucher-14-days": 275,
 		"aether-blessing-voucher-30-days": 500,
+		"mysterious-outfit": 400,
 		"adinho-classic-outfit": 500,
 		"aether-blossom-outfit": 400,
 		"aether-blossom-chroma-hair": 100,
@@ -355,6 +367,11 @@ func _run() -> void:
 		{"gems": 500},
 		{
 			"items": [
+				{
+					"itemId": "mysterious-outfit",
+					"genders": ["female", "male"],
+					"costs": [{"currency": "gems", "amount": 400}],
+				},
 				{
 					"itemId": "aether-blessing-voucher-3-days",
 					"genders": [],
@@ -461,6 +478,11 @@ func _run() -> void:
 	_check(not store.purchase_button.disabled, "server-listed Surf Charm can be purchased")
 
 	store.call("_select_category", "cosmetics")
+	store.call("_select_cosmetic_subcategory", "outfits")
+	_check(store.product_buttons.has("mysterious-outfit"), "server-listed Mysterious Outfit can be bought by either model")
+	store.call("_select_product", "mysterious-outfit")
+	_check(store.call("_gem_price", "mysterious-outfit") == 400, "Mysterious Outfit uses its server Aether Gem price")
+	_check(not store.purchase_button.disabled, "Mysterious Outfit can be purchased with enough Aether Gems")
 	store.call("_select_cosmetic_subcategory", "top")
 	store.call("_select_product", "adinho-chroma-shirt")
 	_check(not store.purchase_button.disabled, "server-listed cosmetic can be purchased with enough Aether Gems")
