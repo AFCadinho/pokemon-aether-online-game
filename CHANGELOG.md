@@ -9,6 +9,7 @@
 
 **Changed**
 
+- Main interface hover cards now share a clear, styled appearance across navigation, party, hotbar, status, buffs, and chat controls.
 - Bag hover cards now share a clear, styled appearance across item browsing and use screens.
 - Item Dex hover cards now share a clear, styled appearance.
 - Pokédex hover cards now share a clear, styled appearance across every tab.

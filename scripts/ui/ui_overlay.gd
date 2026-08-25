@@ -1426,6 +1426,7 @@ func _ready() -> void:
 	add_to_group("ui_overlay")
 	layer = UI_OVERLAY_BASE_LAYER
 	root_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root_control.theme = _make_main_ui_tooltip_theme()
 	_setup_pvp_queue_ball_spin()
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
@@ -25197,6 +25198,24 @@ func _format_playtime(total_seconds: int) -> String:
 	var safe_seconds: int = max(total_seconds, 0)
 	var hours: int = safe_seconds / 3600
 	return "%s H." % hours
+
+func _make_main_ui_tooltip_theme() -> Theme:
+	var tooltip_theme := Theme.new()
+	var tooltip_style := _make_panel_style(Color("#07101afa"), Color("#4f86a3cc"), 8, 1)
+	tooltip_style.content_margin_left = 12
+	tooltip_style.content_margin_top = 9
+	tooltip_style.content_margin_right = 12
+	tooltip_style.content_margin_bottom = 9
+	tooltip_style.shadow_color = Color("#000000a6")
+	tooltip_style.shadow_size = 8
+	tooltip_style.shadow_offset = Vector2(0, 4)
+	tooltip_theme.set_stylebox("panel", "TooltipPanel", tooltip_style)
+	tooltip_theme.set_color("font_color", "TooltipLabel", Color("#eaf6ff"))
+	tooltip_theme.set_color("font_shadow_color", "TooltipLabel", Color("#020b13"))
+	tooltip_theme.set_font_size("font_size", "TooltipLabel", 12)
+	tooltip_theme.set_constant("shadow_offset_x", "TooltipLabel", 1)
+	tooltip_theme.set_constant("shadow_offset_y", "TooltipLabel", 1)
+	return tooltip_theme
 
 func _make_panel_style(background_color: Color, border_color: Color, corner_radius: int, border_width: int) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
