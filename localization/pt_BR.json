@@ -1579,7 +1579,7 @@
   "ui.guild.section.applications": "Candidaturas",
   "ui.guild.section.management": "Gerenciamento",
   "ui.guild.overview": "VISÃO GERAL DA GUILDA",
-  "ui.guild.overview.hint": "Use Membros para ver a lista e Gerenciamento para configurações, convites e o emblema da Guilda.",
+  "ui.guild.overview.hint": "Use Membros para ver a lista e os convites. Líderes da Guilda podem usar Gerenciamento para as configurações.",
   "ui.guild.quick_actions": "AÇÕES DA GUILDA",
   "ui.guild.quick_actions.hint": "Abra o chat da Guilda ou vá direto para a lista de membros.",
   "ui.guild.action.chat": "Abrir chat da Guilda",

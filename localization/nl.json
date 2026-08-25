@@ -1579,7 +1579,7 @@
   "ui.guild.section.applications": "Aanmeldingen",
   "ui.guild.section.management": "Beheer",
   "ui.guild.overview": "GUILDOVERZICHT",
-  "ui.guild.overview.hint": "Gebruik Leden voor de ledenlijst en Beheer voor instellingen, uitnodigingen en het Guild-embleem.",
+  "ui.guild.overview.hint": "Gebruik Leden voor de ledenlijst en uitnodigingen. Guildleiders kunnen via Beheer de instellingen aanpassen.",
   "ui.guild.quick_actions": "GUILD-ACTIES",
   "ui.guild.quick_actions.hint": "Open de Guildchat of ga direct naar de ledenlijst.",
   "ui.guild.action.chat": "Guildchat openen",

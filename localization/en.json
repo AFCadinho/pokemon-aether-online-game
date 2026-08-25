@@ -1579,7 +1579,7 @@
   "ui.guild.section.applications": "Applications",
   "ui.guild.section.management": "Management",
   "ui.guild.overview": "GUILD OVERVIEW",
-  "ui.guild.overview.hint": "Use the Members tab for the roster and Management for settings, invitations and the Guild emblem.",
+  "ui.guild.overview.hint": "Use Members for the roster and invitations. Guild leaders can use Management for settings.",
   "ui.guild.quick_actions": "GUILD ACTIONS",
   "ui.guild.quick_actions.hint": "Open Guild chat or jump directly to the member roster.",
   "ui.guild.action.chat": "Open Guild Chat",
