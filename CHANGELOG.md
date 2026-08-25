@@ -4,6 +4,7 @@
 
 **Added**
 
+- Guild leaders can publish a dedicated announcement that occupies the main Guild overview.
 - Guild application decisions now appear as localized system messages, including decisions received while the applicant was offline.
 - The Guild member roster now has current-member search and a separate Trainer invite dialog.
 - Guild leaders can now give individual members explicit Guild Bank permission exceptions while keeping rank permissions as the default.
@@ -12,6 +13,7 @@
 
 **Changed**
 
+- Redundant Guild chat and member shortcuts were removed from Overview, while leaving a Guild now lives in the low-prominence Guild options menu.
 - Guild teleport actions now occupy the member header instead of a separate travel bar, leaving more room inside every Guild tab.
 - Members and recruits now need an explicit Guild Bank permission to deposit items or Pokémon; depositing money remains available to every Guild member.
 - Guild members now get Overview, Guild Bank, Members, and authorized management tabs in the top navigation, while Guild discovery is a compact secondary action.

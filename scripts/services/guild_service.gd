@@ -307,6 +307,7 @@ func load_invitations() -> Dictionary:
 
 func update_settings(
 	description: String,
+	announcement: String,
 	language: String,
 	focus: String,
 	recruitment: String,
@@ -317,6 +318,7 @@ func update_settings(
 		HTTPClient.METHOD_PUT,
 		JSON.stringify({
 			"description": description.strip_edges(),
+			"announcement": announcement.strip_edges(),
 			"language": language,
 			"focus": focus,
 			"recruitment": recruitment,
@@ -423,6 +425,7 @@ func _directory_result(value: Variant) -> Dictionary:
 		"success": true,
 		"guilds": normalized_guilds,
 		"membership": _dictionary(body.get("membership", {})),
+		"announcement": str(body.get("announcement", "")),
 		"incomingInvitations": _array(body.get("incomingInvitations", [])),
 		"pendingApplications": _array(body.get("pendingApplications", [])),
 	}

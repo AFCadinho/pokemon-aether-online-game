@@ -4,7 +4,6 @@ class_name GuildPopup
 
 signal closed
 signal lobby_teleport_requested
-signal guild_chat_requested
 signal private_message_requested(user: Dictionary)
 signal trainer_card_requested(player: Dictionary)
 
@@ -168,6 +167,7 @@ var incoming_invitations_container: VBoxContainer
 var member_content: VBoxContainer
 var member_status_label: Label
 var settings_description_input: TextEdit
+var settings_announcement_input: TextEdit
 var settings_language_select: OptionButton
 var settings_focus_select: OptionButton
 var settings_recruitment_select: OptionButton
@@ -288,6 +288,7 @@ func show_debug_member_preview() -> void:
 	guild_home = {
 		"guild": guild,
 		"membership": membership.duplicate(),
+		"announcement": "Aether Clash practice starts Friday at 20:00.",
 		"members": [
 			{
 				"userId": 1, "username": "nova", "displayName": "Nova",
@@ -959,7 +960,7 @@ func _render_guild_home() -> void:
 	var description := _label(str(guild.get("description", "")), 12, UI_MUTED)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	heading.add_child(description)
-	header.add_child(_build_guild_header_travel_actions())
+	header.add_child(_build_guild_header_travel_actions(guild, is_leader))
 
 	_build_guild_section_navigation(can_review_applications, can_manage_settings)
 	member_status_label = _label("", 11, UI_MUTED)
@@ -1083,7 +1084,7 @@ func _add_application_notification_badge(button: Button, count: int) -> void:
 	badge.add_child(count_label)
 
 
-func _build_guild_header_travel_actions() -> Control:
+func _build_guild_header_travel_actions(guild: Dictionary, is_leader: bool) -> Control:
 	var actions := VBoxContainer.new()
 	actions.name = "GuildHeaderTravelActions"
 	actions.add_theme_constant_override("separation", 6)
@@ -1096,15 +1097,35 @@ func _build_guild_header_travel_actions() -> Control:
 	lobby_button.pressed.connect(_on_guild_lobby_pressed)
 	_apply_button_style(lobby_button, "primary")
 	actions.add_child(lobby_button)
+	var secondary_row := HBoxContainer.new()
+	secondary_row.add_theme_constant_override("separation", 6)
+	actions.add_child(secondary_row)
 	var base_button := Button.new()
 	base_button.name = "GuildBaseTeleportButton"
 	_set_localized_property(base_button, "text", "ui.guild.base.teleport")
 	_set_localized_property(base_button, "tooltip_text", "ui.guild.base.tooltip")
-	base_button.custom_minimum_size = Vector2(170, 36)
+	base_button.custom_minimum_size = Vector2(128, 36)
+	base_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	base_button.disabled = true
 	_apply_button_style(base_button)
-	actions.add_child(base_button)
+	secondary_row.add_child(base_button)
+	var options := MenuButton.new()
+	options.name = "GuildOptionsMenuButton"
+	options.text = "⋯"
+	options.custom_minimum_size = Vector2(36, 36)
+	_set_localized_property(options, "tooltip_text", "ui.guild.options.tooltip")
+	_apply_button_style(options)
+	var popup := options.get_popup()
+	popup.add_item(_t("ui.guild.leave.action"), 1)
+	popup.set_item_disabled(popup.get_item_index(1), is_leader or is_leaving_guild)
+	popup.id_pressed.connect(_on_guild_options_menu_pressed.bind(guild.duplicate(true)))
+	secondary_row.add_child(options)
 	return actions
+
+
+func _on_guild_options_menu_pressed(id: int, guild: Dictionary) -> void:
+	if id == 1:
+		_confirm_guild_leave(guild)
 
 
 func _build_guild_overview(guild: Dictionary) -> Control:
@@ -1123,60 +1144,29 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	))
 	metadata.add_child(_metadata_card(_t("ui.guild.field.language"), _option_display(str(guild.get("language", ""))), UI_GOLD))
 	metadata.add_child(_metadata_card(_t("ui.guild.field.focus"), _option_display(str(guild.get("focus", ""))), UI_ACCENT))
-	var actions_panel := PanelContainer.new()
-	actions_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	actions_panel.custom_minimum_size = Vector2(0, 150)
-	actions_panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var announcement_panel := PanelContainer.new()
+	announcement_panel.name = "GuildAnnouncementPanel"
+	announcement_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	announcement_panel.custom_minimum_size = Vector2(0, 150)
+	announcement_panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
 	var margin := MarginContainer.new()
 	_set_margins(margin, 16, 14, 16, 14)
-	actions_panel.add_child(margin)
+	announcement_panel.add_child(margin)
 	var copy := VBoxContainer.new()
 	copy.add_theme_constant_override("separation", 10)
 	margin.add_child(copy)
-	copy.add_child(_localized_label("ui.guild.quick_actions", 10, UI_ACCENT))
-	var actions := HBoxContainer.new()
-	actions.add_theme_constant_override("separation", 10)
-	copy.add_child(actions)
-	var chat_button := Button.new()
-	chat_button.name = "GuildChatShortcutButton"
-	_set_localized_property(chat_button, "text", "ui.guild.action.chat")
-	chat_button.custom_minimum_size = Vector2(170, 42)
-	chat_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	chat_button.pressed.connect(_on_guild_chat_pressed)
-	_apply_button_style(chat_button, "primary")
-	actions.add_child(chat_button)
-	var members_button := Button.new()
-	members_button.name = "GuildMembersShortcutButton"
-	_set_localized_property(members_button, "text", "ui.guild.action.members")
-	members_button.custom_minimum_size = Vector2(170, 42)
-	members_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	members_button.pressed.connect(_show_guild_section.bind("members"))
-	_apply_button_style(members_button)
-	actions.add_child(members_button)
-	var own_membership := _dictionary(guild_home.get("membership", {}))
-	var is_leader := str(own_membership.get("role", "member")) == "leader"
-	var leave_button := Button.new()
-	leave_button.name = "LeaveGuildButton"
-	_set_localized_property(leave_button, "text", "ui.guild.leave.action")
-	leave_button.custom_minimum_size = Vector2(170, 42)
-	leave_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	leave_button.disabled = is_leader or is_leaving_guild
-	_set_localized_property(
-		leave_button,
-		"tooltip_text",
-		"ui.guild.leave.leader_blocked" if is_leader else "ui.guild.leave.tooltip"
+	copy.add_child(_localized_label("ui.guild.announcement.title", 10, UI_ACCENT))
+	var announcement := str(guild_home.get("announcement", "")).strip_edges()
+	var announcement_label := _label(
+		announcement if announcement != "" else _t("ui.guild.announcement.empty"),
+		14 if announcement != "" else 12,
+		UI_TEXT if announcement != "" else UI_MUTED
 	)
-	leave_button.pressed.connect(_confirm_guild_leave.bind(guild))
-	_apply_button_style(leave_button, "danger")
-	actions.add_child(leave_button)
-	var action_hint := _localized_label(
-		"ui.guild.leave.leader_blocked" if is_leader else "ui.guild.quick_actions.hint",
-		11,
-		UI_MUTED
-	)
-	action_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	copy.add_child(action_hint)
-	overview.add_child(actions_panel)
+	announcement_label.name = "GuildAnnouncementText"
+	announcement_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	announcement_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	copy.add_child(announcement_label)
+	overview.add_child(announcement_panel)
 	return overview
 
 
@@ -2242,10 +2232,6 @@ func _on_guild_lobby_pressed() -> void:
 	lobby_teleport_requested.emit()
 
 
-func _on_guild_chat_pressed() -> void:
-	guild_chat_requested.emit()
-
-
 func _build_member_roster(can_invite: bool = false) -> Control:
 	var panel := PanelContainer.new()
 	panel.name = "GuildMembersSection"
@@ -2688,6 +2674,7 @@ func _build_member_management(guild: Dictionary, is_leader: bool) -> Control:
 
 	if is_leader:
 		content.add_child(_localized_label("ui.guild.settings", 10, UI_ACCENT))
+		content.add_child(_localized_label("ui.guild.settings.description", 9, UI_MUTED))
 		settings_description_input = TextEdit.new()
 		settings_description_input.name = "GuildSettingsDescription"
 		settings_description_input.text = str(guild.get("description", ""))
@@ -2695,6 +2682,14 @@ func _build_member_management(guild: Dictionary, is_leader: bool) -> Control:
 		settings_description_input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
 		_apply_text_edit_style(settings_description_input)
 		content.add_child(settings_description_input)
+		content.add_child(_localized_label("ui.guild.announcement.manage", 9, UI_MUTED))
+		settings_announcement_input = TextEdit.new()
+		settings_announcement_input.name = "GuildSettingsAnnouncement"
+		settings_announcement_input.text = str(guild_home.get("announcement", ""))
+		settings_announcement_input.custom_minimum_size = Vector2(0, 70)
+		settings_announcement_input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+		_apply_text_edit_style(settings_announcement_input)
+		content.add_child(settings_announcement_input)
 		var choices := HBoxContainer.new()
 		choices.add_theme_constant_override("separation", 7)
 		content.add_child(choices)
@@ -3775,7 +3770,7 @@ func _membership_role_label(role: String) -> String:
 
 
 func _on_save_settings() -> void:
-	if settings_description_input == null:
+	if settings_description_input == null or settings_announcement_input == null:
 		return
 	var description := settings_description_input.text.strip_edges()
 	if description.length() < 12:
@@ -3789,6 +3784,7 @@ func _on_save_settings() -> void:
 	var response: Variant = await guild_service.call(
 		"update_settings",
 		description,
+		settings_announcement_input.text.strip_edges(),
 		_selected_option_value(settings_language_select),
 		_selected_option_value(settings_focus_select),
 		_selected_option_value(settings_recruitment_select),

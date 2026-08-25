@@ -1,7 +1,6 @@
 extends SceneTree
 
 var failed := false
-var guild_chat_open_requested := false
 var private_message_user: Dictionary = {}
 var trainer_card_user: Dictionary = {}
 
@@ -174,32 +173,23 @@ func _run() -> void:
 		"Guild discovery becomes a compact secondary action for members"
 	)
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "guild dashboard opens on its overview")
-	var leader_leave_button := popup.find_child("LeaveGuildButton", true, false) as Button
-	_check(leader_leave_button != null and leader_leave_button.disabled, "Guild leaders must transfer leadership before leaving")
+	var announcement_text := popup.find_child("GuildAnnouncementText", true, false) as Label
+	_check(announcement_text != null and announcement_text.text.contains("Aether Clash practice"), "guild overview displays the current announcement")
+	var leader_options := popup.find_child("GuildOptionsMenuButton", true, false) as MenuButton
+	_check(leader_options != null and leader_options.get_popup().is_item_disabled(0), "Guild leaders cannot leave through Guild options")
 	var header_travel := popup.find_child("GuildHeaderTravelActions", true, false) as VBoxContainer
 	_check(header_travel != null, "guild travel occupies the member header")
 	var lobby_button := popup.find_child("GuildLobbyTeleportButton", true, false) as Button
 	_check(lobby_button != null and not lobby_button.disabled, "Aether Clash Lobby travel is available")
 	var base_button := popup.find_child("GuildBaseTeleportButton", true, false) as Button
 	_check(base_button != null and base_button.disabled, "future Guild Base travel is visible but inactive")
-	var guild_chat_button := popup.find_child("GuildChatShortcutButton", true, false) as Button
-	_check(guild_chat_button != null, "guild overview renders a Guild chat shortcut")
-	if guild_chat_button != null:
-		popup.guild_chat_requested.connect(_on_guild_chat_requested, CONNECT_ONE_SHOT)
-		guild_chat_button.pressed.emit()
-	_check(guild_chat_open_requested, "Guild chat shortcut requests the Guild channel")
-	var members_shortcut := popup.find_child("GuildMembersShortcutButton", true, false) as Button
-	_check(members_shortcut != null, "guild overview renders a member roster shortcut")
-	if members_shortcut != null:
-		members_shortcut.pressed.emit()
-		await process_frame
-	_check(popup.find_child("GuildMembersSection", true, false) != null, "member roster shortcut opens the roster")
 	var overview_tab := popup.find_child("GuildOverviewTab", true, false) as Button
 	if overview_tab != null:
 		overview_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildLobbyTeleportButton", true, false) != null, "guild overview keeps Lobby travel available below the top tabs")
 	_check(popup.find_child("GuildSettingsDescription", true, false) == null, "settings stay out of the guild overview")
+	_check(popup.find_child("GuildSettingsAnnouncement", true, false) == null, "announcement editing stays out of the guild overview")
 	var bank_tab := popup.find_child("GuildBankTab", true, false) as Button
 	if bank_tab != null:
 		bank_tab.pressed.emit()
@@ -457,6 +447,7 @@ func _run() -> void:
 		await process_frame
 	_check(popup.find_child("GuildManagementSection", true, false) != null, "management tab opens guild controls")
 	_check(popup.find_child("GuildSettingsDescription", true, false) != null, "leader settings render")
+	_check(popup.find_child("GuildSettingsAnnouncement", true, false) != null, "leaders can edit the Guild announcement")
 	_check(popup.find_child("GuildApplicationsInbox", true, false) == null, "applications no longer crowd Guild settings")
 	_check(popup.find_child("GuildMemberSearchInput", true, false) == null, "member roster tools do not live under management")
 	_check(popup.find_child("GuildEmblemPreview", true, false) == null, "management keeps emblem controls out of settings")
@@ -571,10 +562,10 @@ func _run() -> void:
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "regular members cannot edit the Guild emblem")
 	_check(popup.find_child("EditGuildEmblemIconButton", true, false) == null, "regular members cannot edit the Guild emblem icon")
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "regular members return to the overview")
-	var member_leave_button := popup.find_child("LeaveGuildButton", true, false) as Button
-	_check(member_leave_button != null and not member_leave_button.disabled, "regular members can leave their Guild")
-	if member_leave_button != null:
-		member_leave_button.pressed.emit()
+	var member_options := popup.find_child("GuildOptionsMenuButton", true, false) as MenuButton
+	_check(member_options != null and not member_options.get_popup().is_item_disabled(0), "regular members can leave through Guild options")
+	if member_options != null:
+		member_options.get_popup().id_pressed.emit(1)
 		await process_frame
 	var leave_dialog := popup.find_child("GuildLeaveConfirmationDialog", true, false) as ConfirmationDialog
 	_check(leave_dialog != null and leave_dialog.visible, "leaving a Guild asks for confirmation")
@@ -610,10 +601,6 @@ func _run() -> void:
 		await process_frame
 	popup.close()
 	quit(1 if failed else 0)
-
-
-func _on_guild_chat_requested() -> void:
-	guild_chat_open_requested = true
 
 
 func _on_private_message_requested(user: Dictionary) -> void:
