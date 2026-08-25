@@ -26,6 +26,7 @@ func _init() -> void:
 	_check_contains(service_source, "func load_bank", "guild service loads the authoritative Guild Bank")
 	_check_contains(service_source, "func load_history", "guild service loads membership and rank history")
 	_check_contains(service_source, "func load_bank_log", "guild service loads categorized bank logs")
+	_check_contains(service_source, 'next_before_id != null else 0', "guild service accepts a null final log cursor")
 	_check_contains(service_source, "func deposit_bank_money", "guild service deposits Guild funds")
 	_check_contains(service_source, "func withdraw_bank_money", "guild service withdraws Guild funds")
 	_check_contains(service_source, "func deposit_bank_item", "guild service deposits Guild items")
