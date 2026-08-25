@@ -60,9 +60,11 @@ const CHAT_TAB_HELP := "help"
 const CHAT_TAB_SYSTEM := "system"
 const CHAT_TAB_PM := "pm"
 const CHAT_TAB_GUILD := "guild"
+const CHAT_TAB_LANGUAGES := "languages"
 const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
 	CHAT_TAB_ALL,
 	CHAT_TAB_GENERAL,
+	CHAT_TAB_LANGUAGES,
 	CHAT_TAB_SYSTEM,
 	CHAT_TAB_PM,
 	CHAT_TAB_GUILD,
@@ -83,6 +85,7 @@ const CHAT_TAB_LABELS := {
 	CHAT_TAB_SYSTEM: "ui.chat.tab.system",
 	CHAT_TAB_PM: "ui.chat.tab.pm",
 	CHAT_TAB_GUILD: "ui.chat.tab.guild",
+	CHAT_TAB_LANGUAGES: "ui.chat.tab.languages",
 }
 const CHAT_CATEGORY_USER := "user"
 const CHAT_CATEGORY_SYSTEM := "system"
@@ -91,6 +94,16 @@ const CHAT_CHANNEL_GLOBAL := "global"
 const CHAT_CHANNEL_MAP := "map"
 const CHAT_CHANNEL_TRADE := "trade"
 const CHAT_CHANNEL_HELP := "help"
+const CHAT_CHANNEL_LANGUAGE_ZH := "language_zh"
+const CHAT_CHANNEL_LANGUAGE_PT := "language_pt"
+const LANGUAGE_CHAT_CHANNELS: Array[String] = [
+	CHAT_CHANNEL_LANGUAGE_ZH,
+	CHAT_CHANNEL_LANGUAGE_PT,
+]
+const LANGUAGE_CHAT_LABELS := {
+	CHAT_CHANNEL_LANGUAGE_ZH: "ui.chat.language.zh",
+	CHAT_CHANNEL_LANGUAGE_PT: "ui.chat.language.pt",
+}
 const CHAT_MUTE_PERMISSION := "chat:mute"
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
@@ -965,11 +978,14 @@ var pm_tab_button: Button
 var pm_tab_attention_badge: Panel
 var help_chat_tab_button: Button
 var chat_settings_button: Button
-var chat_settings_attention_badge: Panel
 var chat_settings_popup: PanelContainer
 var chat_settings_rows: VBoxContainer
-var chat_tab_visibility: Dictionary = {}
-var chat_tab_order: Array[String] = []
+var enabled_language_chats: Array[String] = []
+var selected_language_chat := ""
+var language_chat_tab_button: Button
+var language_chat_empty_state: CenterContainer
+var language_chat_empty_title_label: Label
+var language_chat_empty_hint_label: Label
 var selected_general_chat_tab := CHAT_TAB_GENERAL
 var all_chat_tab_button: Button
 var guild_chat_tab_button: Button
@@ -1532,6 +1548,7 @@ func _ready() -> void:
 	_setup_help_chat_tab()
 	_setup_pm_chat_ui()
 	_setup_guild_chat_ui()
+	_setup_language_chat_ui()
 	_setup_chat_context_selector_ui()
 	_setup_chat_tab_settings_ui()
 	general_chat_tab_button.focus_mode = Control.FOCUS_NONE
@@ -1540,6 +1557,7 @@ func _ready() -> void:
 	all_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	help_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	guild_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	language_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	if not GuildService.membership_changed.is_connected(_on_guild_chat_membership_changed):
 		GuildService.membership_changed.connect(_on_guild_chat_membership_changed)
 	_refresh_guild_chat_membership.call_deferred()
@@ -26886,6 +26904,55 @@ func _setup_guild_chat_ui() -> void:
 	_reorder_chat_tab_buttons()
 
 
+func _setup_language_chat_ui() -> void:
+	if language_chat_tab_button != null:
+		return
+
+	enabled_language_chats = SettingsManager.enabled_language_chats.duplicate()
+	if not enabled_language_chats.is_empty():
+		selected_language_chat = enabled_language_chats[0]
+
+	language_chat_tab_button = Button.new()
+	language_chat_tab_button.name = "LanguagesButton"
+	language_chat_tab_button.custom_minimum_size = Vector2(86, 28)
+	_set_localized_control_property(language_chat_tab_button, "text", "ui.chat.tab.languages")
+	language_chat_tab_button.focus_mode = Control.FOCUS_NONE
+	_set_localized_control_property(
+		language_chat_tab_button,
+		"tooltip_text",
+		"ui.chat.languages.tooltip"
+	)
+	language_chat_tab_button.pressed.connect(_on_chat_tab_pressed.bind(CHAT_TAB_LANGUAGES))
+	$Control/ChatTabsPanel/TabRow.add_child(language_chat_tab_button)
+	_apply_button_style(language_chat_tab_button, "primary")
+
+	var empty_state := _create_chat_empty_state(
+		LocalizationManager.text("ui.chat.languages.empty_title"),
+		LocalizationManager.text("ui.chat.languages.empty_hint")
+	)
+	language_chat_empty_state = empty_state.get("container") as CenterContainer
+	language_chat_empty_title_label = empty_state.get("title") as Label
+	language_chat_empty_hint_label = empty_state.get("hint") as Label
+	language_chat_empty_state.name = "LanguageChatEmptyState"
+	language_chat_empty_state.visible = false
+	language_chat_empty_state.mouse_filter = Control.MOUSE_FILTER_PASS
+
+	var choose_button := Button.new()
+	choose_button.name = "ChooseLanguagesButton"
+	_set_localized_control_property(choose_button, "text", "ui.chat.languages.choose")
+	choose_button.custom_minimum_size = Vector2(150, 30)
+	choose_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	choose_button.focus_mode = Control.FOCUS_NONE
+	choose_button.pressed.connect(_on_chat_settings_button_pressed)
+	_apply_button_style(choose_button, "primary")
+	(language_chat_empty_state.get_child(0) as VBoxContainer).add_child(choose_button)
+
+	var chat_vbox := $Control/ChatPanel/MarginContainer/VBoxContainer as VBoxContainer
+	chat_vbox.add_child(language_chat_empty_state)
+	chat_vbox.move_child(language_chat_empty_state, message_scroll.get_index())
+	_reorder_chat_tab_buttons()
+
+
 func _refresh_guild_chat_membership() -> void:
 	guild_chat_membership_loading = true
 	_apply_chat_tab_state()
@@ -26988,6 +27055,15 @@ func _rebuild_chat_context_options() -> void:
 		_add_chat_context_option(LocalizationManager.text("ui.chat.tab.help"), CHAT_TAB_HELP, active_chat_tab == CHAT_TAB_HELP)
 		_refresh_chat_context_scroll_size()
 		return
+	if primary_tab == CHAT_TAB_LANGUAGES:
+		for channel: String in enabled_language_chats:
+			_add_language_chat_context_option(
+				_language_chat_label(channel),
+				channel,
+				active_chat_tab == channel
+			)
+		_refresh_chat_context_scroll_size()
+		return
 	if primary_tab != CHAT_TAB_PM:
 		return
 
@@ -27013,6 +27089,12 @@ func _refresh_chat_context_scroll_size() -> void:
 func _add_chat_context_option(label_text: String, channel_tab_id: String, selected: bool) -> void:
 	var button := _create_chat_context_option_button(label_text, selected)
 	button.pressed.connect(_on_general_chat_context_selected.bind(channel_tab_id))
+	chat_context_options.add_child(button)
+
+
+func _add_language_chat_context_option(label_text: String, channel: String, selected: bool) -> void:
+	var button := _create_chat_context_option_button(label_text, selected)
+	button.pressed.connect(_on_language_chat_context_selected.bind(channel))
 	chat_context_options.add_child(button)
 
 
@@ -27054,6 +27136,16 @@ func _on_pm_chat_context_selected(user_id: int) -> void:
 	_on_pm_conversation_selected(user_id)
 
 
+func _on_language_chat_context_selected(channel: String) -> void:
+	if channel not in enabled_language_chats:
+		return
+	selected_language_chat = channel
+	active_chat_tab = channel
+	_hide_chat_context_popup()
+	_apply_chat_tab_state()
+	chat_input.grab_focus()
+
+
 func _hide_chat_context_popup() -> void:
 	if chat_context_popup == null or not chat_context_popup.visible:
 		return
@@ -27064,6 +27156,8 @@ func _hide_chat_context_popup() -> void:
 func _active_primary_chat_tab_id() -> String:
 	if active_chat_tab in [CHAT_TAB_GENERAL, CHAT_TAB_MAP, CHAT_TAB_TRADE, CHAT_TAB_HELP]:
 		return CHAT_TAB_GENERAL
+	if active_chat_tab == CHAT_TAB_LANGUAGES or active_chat_tab in LANGUAGE_CHAT_CHANNELS:
+		return CHAT_TAB_LANGUAGES
 	return active_chat_tab
 
 
@@ -27113,6 +27207,19 @@ func _refresh_chat_context_selector() -> void:
 				if not guild_chat_membership.is_empty()
 				else LocalizationManager.text("ui.chat.guild.join_required")
 			)
+		CHAT_TAB_LANGUAGES:
+			chat_context_selector_button.disabled = selected_language_chat == ""
+			chat_context_selector_button.text = (
+				LocalizationManager.text("ui.chat.languages.choose")
+				if selected_language_chat == ""
+				else LocalizationManager.text(
+					"ui.chat.context.selector",
+					{"channel": _language_chat_label(selected_language_chat)}
+				)
+			)
+			chat_context_selector_button.tooltip_text = LocalizationManager.text(
+				"ui.chat.languages.choose"
+			)
 
 
 func _setup_all_chat_tab() -> void:
@@ -27149,18 +27256,6 @@ func _setup_chat_tab_settings_ui() -> void:
 	if chat_settings_button != null:
 		return
 
-	chat_tab_visibility = SettingsManager.chat_tab_visibility.duplicate()
-	chat_tab_visibility[CHAT_TAB_ALL] = true
-	chat_tab_visibility[CHAT_TAB_GENERAL] = true
-	chat_tab_order.clear()
-	for tab_value: Variant in SettingsManager.chat_tab_order:
-		var tab_id := str(tab_value)
-		if tab_id in CHAT_TAB_DEFAULT_ORDER and not chat_tab_order.has(tab_id):
-			chat_tab_order.append(tab_id)
-	for tab_id: String in CHAT_TAB_DEFAULT_ORDER:
-		if not chat_tab_order.has(tab_id):
-			chat_tab_order.append(tab_id)
-
 	var tab_row := $Control/ChatTabsPanel/TabRow
 	chat_settings_button = Button.new()
 	chat_settings_button.name = "ChatSettingsButton"
@@ -27172,7 +27267,6 @@ func _setup_chat_tab_settings_ui() -> void:
 	tab_row.add_child(chat_settings_button)
 	_apply_button_style(chat_settings_button)
 	_apply_compact_chat_settings_button_style(chat_settings_button)
-	chat_settings_attention_badge = _create_attention_badge_for_button(chat_settings_button, 3.0, 3.0)
 
 	chat_settings_popup = PanelContainer.new()
 	chat_settings_popup.name = "ChatSettingsPopup"
@@ -27218,6 +27312,7 @@ func _setup_chat_tab_settings_ui() -> void:
 
 	var description := Label.new()
 	_set_localized_control_property(description, "text", "ui.chat.settings.description")
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.add_theme_font_size_override("font_size", 11)
 	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	content.add_child(description)
@@ -27227,7 +27322,7 @@ func _setup_chat_tab_settings_ui() -> void:
 	content.add_child(divider)
 
 	chat_settings_rows = VBoxContainer.new()
-	chat_settings_rows.name = "TabRows"
+	chat_settings_rows.name = "LanguageRows"
 	chat_settings_rows.add_theme_constant_override("separation", 3)
 	content.add_child(chat_settings_rows)
 
@@ -27255,7 +27350,7 @@ func _setup_chat_tab_settings_ui() -> void:
 	footer.add_child(reset_button)
 
 	chat_settings_popup.gui_input.connect(_on_focusable_overlay_panel_gui_input.bind(chat_settings_popup))
-	_apply_chat_tab_preferences()
+	_apply_language_chat_preferences()
 
 
 func _apply_compact_chat_settings_button_style(button: Button) -> void:
@@ -27273,6 +27368,11 @@ func _apply_compact_chat_settings_button_style(button: Button) -> void:
 		compact_style.content_margin_bottom = 3
 		button.add_theme_stylebox_override(style_name, compact_style)
 
+func _language_chat_label(channel: String) -> String:
+	var key := str(LANGUAGE_CHAT_LABELS.get(channel, ""))
+	return LocalizationManager.text(key) if key != "" else channel.capitalize()
+
+
 func _chat_tab_label(tab_id: String) -> String:
 	var key := str(CHAT_TAB_LABELS.get(tab_id, ""))
 	return LocalizationManager.text(key) if key != "" else tab_id.capitalize()
@@ -27285,6 +27385,14 @@ func _refresh_chat_localized_ui() -> void:
 	if chat_settings_popup != null:
 		LocalizationManager.localize_tree(chat_settings_popup)
 		_render_chat_tab_settings_rows()
+	if language_chat_empty_title_label != null:
+		language_chat_empty_title_label.text = LocalizationManager.text(
+			"ui.chat.languages.empty_title"
+		)
+	if language_chat_empty_hint_label != null:
+		language_chat_empty_hint_label.text = LocalizationManager.text(
+			"ui.chat.languages.empty_hint"
+		)
 	if socials_menu != null:
 		LocalizationManager.localize_tree(socials_menu)
 	for state_value: Variant in collapsible_panels.values():
@@ -27309,56 +27417,25 @@ func _render_chat_tab_settings_rows() -> void:
 		chat_settings_rows.remove_child(child)
 		child.queue_free()
 
-	for order_index: int in range(chat_tab_order.size()):
-		var tab_id := chat_tab_order[order_index]
-		var tab_label := _chat_tab_label(tab_id)
+	for channel: String in LANGUAGE_CHAT_CHANNELS:
+		var channel_label := _language_chat_label(channel)
 		var row := HBoxContainer.new()
-		row.name = "%sRow" % tab_id.capitalize()
+		row.name = "%sRow" % channel.capitalize()
 		row.custom_minimum_size = Vector2(0, 30)
 		row.add_theme_constant_override("separation", 5)
 		chat_settings_rows.add_child(row)
 
 		var visibility_toggle := CheckButton.new()
-		visibility_toggle.name = "VisibilityToggle"
-		visibility_toggle.text = tab_label
+		visibility_toggle.name = "LanguageToggle"
+		visibility_toggle.text = channel_label
 		visibility_toggle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		visibility_toggle.focus_mode = Control.FOCUS_NONE
-		visibility_toggle.set_pressed_no_signal(bool(chat_tab_visibility.get(tab_id, true)))
-		visibility_toggle.disabled = tab_id in [CHAT_TAB_ALL, CHAT_TAB_GENERAL]
-		visibility_toggle.tooltip_text = (
-			LocalizationManager.text("ui.chat.settings.always_visible", {"tab": tab_label})
-			if visibility_toggle.disabled
-			else LocalizationManager.text("ui.chat.settings.toggle_tab")
-		)
+		visibility_toggle.set_pressed_no_signal(enabled_language_chats.has(channel))
+		visibility_toggle.tooltip_text = LocalizationManager.text("ui.chat.settings.toggle_language")
 		visibility_toggle.add_theme_font_size_override("font_size", 13)
 		visibility_toggle.add_theme_color_override("font_color", UI_TEXT)
-		visibility_toggle.add_theme_color_override("font_disabled_color", Color(UI_TEXT.r, UI_TEXT.g, UI_TEXT.b, 0.72))
-		visibility_toggle.toggled.connect(_on_chat_tab_visibility_toggled.bind(tab_id))
+		visibility_toggle.toggled.connect(_on_language_chat_toggled.bind(channel))
 		row.add_child(visibility_toggle)
-
-		var move_up_button := Button.new()
-		move_up_button.name = "MoveUpButton"
-		move_up_button.text = "↑"
-		move_up_button.custom_minimum_size = Vector2(28, 26)
-		move_up_button.focus_mode = Control.FOCUS_NONE
-		move_up_button.disabled = order_index == 0
-		_set_localized_control_property(move_up_button, "tooltip_text", "ui.chat.settings.move_left")
-		move_up_button.pressed.connect(_on_chat_tab_move_pressed.bind(tab_id, -1))
-		_apply_button_style(move_up_button)
-		_apply_compact_chat_settings_button_style(move_up_button)
-		row.add_child(move_up_button)
-
-		var move_down_button := Button.new()
-		move_down_button.name = "MoveDownButton"
-		move_down_button.text = "↓"
-		move_down_button.custom_minimum_size = Vector2(28, 26)
-		move_down_button.focus_mode = Control.FOCUS_NONE
-		move_down_button.disabled = order_index == chat_tab_order.size() - 1
-		_set_localized_control_property(move_down_button, "tooltip_text", "ui.chat.settings.move_right")
-		move_down_button.pressed.connect(_on_chat_tab_move_pressed.bind(tab_id, 1))
-		_apply_button_style(move_down_button)
-		_apply_compact_chat_settings_button_style(move_down_button)
-		row.add_child(move_down_button)
 
 
 func _on_chat_settings_button_pressed() -> void:
@@ -27382,62 +27459,50 @@ func _hide_chat_settings_popup() -> void:
 	_deactivate_ui_panel(chat_settings_popup)
 
 
-func _on_chat_tab_visibility_toggled(visible: bool, tab_id: String) -> void:
-	if tab_id in [CHAT_TAB_ALL, CHAT_TAB_GENERAL]:
-		chat_tab_visibility[CHAT_TAB_ALL] = true
-		chat_tab_visibility[CHAT_TAB_GENERAL] = true
+func _on_language_chat_toggled(enabled: bool, channel: String) -> void:
+	if channel not in LANGUAGE_CHAT_CHANNELS:
 		return
-	chat_tab_visibility[tab_id] = visible
-	_apply_chat_tab_preferences()
-	SettingsManager.set_chat_tab_preferences(chat_tab_visibility, chat_tab_order)
-
-
-func _on_chat_tab_move_pressed(tab_id: String, direction: int) -> void:
-	var current_index := chat_tab_order.find(tab_id)
-	if current_index < 0:
-		return
-	var target_index := clampi(current_index + direction, 0, chat_tab_order.size() - 1)
-	if target_index == current_index:
-		return
-
-	chat_tab_order.remove_at(current_index)
-	chat_tab_order.insert(target_index, tab_id)
-	_apply_chat_tab_preferences()
-	SettingsManager.set_chat_tab_preferences(chat_tab_visibility, chat_tab_order)
+	if enabled and not enabled_language_chats.has(channel):
+		enabled_language_chats.append(channel)
+	elif not enabled:
+		enabled_language_chats.erase(channel)
+	_apply_language_chat_preferences()
+	SettingsManager.set_enabled_language_chats(enabled_language_chats)
 
 
 func _on_chat_tab_settings_reset_pressed() -> void:
-	chat_tab_visibility = {}
-	for tab_id: String in CHAT_TAB_DEFAULT_ORDER:
-		chat_tab_visibility[tab_id] = true
-	chat_tab_order = CHAT_TAB_DEFAULT_ORDER.duplicate()
-	_apply_chat_tab_preferences()
-	SettingsManager.reset_chat_tab_preferences()
+	enabled_language_chats.clear()
+	_apply_language_chat_preferences()
+	SettingsManager.reset_enabled_language_chats()
 
 
-func _apply_chat_tab_preferences() -> void:
-	chat_tab_visibility[CHAT_TAB_ALL] = true
-	chat_tab_visibility[CHAT_TAB_GENERAL] = true
-	for tab_id: String in CHAT_TAB_DEFAULT_ORDER:
-		if not chat_tab_visibility.has(tab_id):
-			chat_tab_visibility[tab_id] = true
+func _apply_language_chat_preferences() -> void:
+	for index in range(enabled_language_chats.size() - 1, -1, -1):
+		if enabled_language_chats[index] not in LANGUAGE_CHAT_CHANNELS:
+			enabled_language_chats.remove_at(index)
+	if not enabled_language_chats.has(selected_language_chat):
+		selected_language_chat = (
+			enabled_language_chats[0]
+			if not enabled_language_chats.is_empty()
+			else ""
+		)
+	if _active_primary_chat_tab_id() == CHAT_TAB_LANGUAGES:
+		active_chat_tab = selected_language_chat if selected_language_chat != "" else CHAT_TAB_LANGUAGES
 
 	if all_chat_tab_button != null:
 		all_chat_tab_button.visible = true
 	general_chat_tab_button.visible = true
-	system_chat_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_SYSTEM, true))
+	system_chat_tab_button.visible = true
 	trade_chat_tab_button.visible = false
 	if help_chat_tab_button != null:
 		help_chat_tab_button.visible = false
 	if pm_tab_button != null:
-		pm_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_PM, true))
+		pm_tab_button.visible = true
 	if guild_chat_tab_button != null:
-		guild_chat_tab_button.visible = bool(chat_tab_visibility.get(CHAT_TAB_GUILD, true))
+		guild_chat_tab_button.visible = true
+	if language_chat_tab_button != null:
+		language_chat_tab_button.visible = true
 	_refresh_guild_chat_attention_badge()
-
-	if not bool(chat_tab_visibility.get(_active_primary_chat_tab_id(), true)):
-		active_chat_tab = CHAT_TAB_ALL
-		selected_general_chat_tab = CHAT_TAB_GENERAL
 
 	_reorder_chat_tab_buttons()
 	_render_chat_tab_settings_rows()
@@ -27457,14 +27522,15 @@ func _chat_tab_button_for_id(tab_id: String) -> Button:
 			return pm_tab_button
 		CHAT_TAB_GUILD:
 			return guild_chat_tab_button
+		CHAT_TAB_LANGUAGES:
+			return language_chat_tab_button
 	return null
 
 
 func _reorder_chat_tab_buttons() -> void:
 	var tab_row := $Control/ChatTabsPanel/TabRow
-	var effective_order: Array[String] = chat_tab_order if not chat_tab_order.is_empty() else CHAT_TAB_DEFAULT_ORDER
 	var index: int = 0
-	for tab_id: String in effective_order:
+	for tab_id: String in CHAT_TAB_DEFAULT_ORDER:
 		var button := _chat_tab_button_for_id(tab_id)
 		if button == null or button.get_parent() != tab_row:
 			continue
@@ -27665,7 +27731,6 @@ func _refresh_pm_tab_label() -> void:
 			and chat_context_selector_button != null
 			and chat_context_selector_button.visible
 		)
-	_refresh_hidden_chat_attention_badge()
 	_refresh_chat_context_selector()
 
 
@@ -27675,21 +27740,6 @@ func _refresh_guild_chat_attention_badge() -> void:
 			guild_chat_has_unread
 			and guild_chat_tab_button != null
 			and guild_chat_tab_button.visible
-		)
-	_refresh_hidden_chat_attention_badge()
-
-
-func _refresh_hidden_chat_attention_badge() -> void:
-	if chat_settings_attention_badge != null:
-		chat_settings_attention_badge.visible = (
-			(
-				pm_total_unread_count > 0
-				and not bool(chat_tab_visibility.get(CHAT_TAB_PM, true))
-			)
-			or (
-				guild_chat_has_unread
-				and not bool(chat_tab_visibility.get(CHAT_TAB_GUILD, true))
-			)
 		)
 
 func _scroll_pm_to_bottom() -> void:
@@ -27726,7 +27776,15 @@ func _on_chat_text_submitted(_text: String) -> void:
 	_submit_chat_input_deferred()
 
 func _on_chat_tab_pressed(tab_id: String) -> void:
-	var resolved_tab_id := selected_general_chat_tab if tab_id == CHAT_TAB_GENERAL else tab_id
+	var resolved_tab_id := tab_id
+	if tab_id == CHAT_TAB_GENERAL:
+		resolved_tab_id = selected_general_chat_tab
+	elif tab_id == CHAT_TAB_LANGUAGES:
+		resolved_tab_id = (
+			selected_language_chat
+			if selected_language_chat in enabled_language_chats
+			else CHAT_TAB_LANGUAGES
+		)
 	if active_chat_tab == resolved_tab_id:
 		return
 
@@ -27784,9 +27842,11 @@ func _apply_chat_tab_state() -> void:
 		active_pm_user_id != 0
 		and pm_conversations_by_user_id.has(active_pm_user_id)
 	)
+	var primary_tab := _active_primary_chat_tab_id()
 	var input_active: bool = (
 		active_chat_tab != CHAT_TAB_SYSTEM
 		and (active_chat_tab != CHAT_TAB_PM or pm_conversation_selected)
+		and (primary_tab != CHAT_TAB_LANGUAGES or selected_language_chat != "")
 		and (
 			active_chat_tab != CHAT_TAB_GUILD
 			or (not guild_chat_membership_loading and not guild_chat_membership.is_empty())
@@ -27795,13 +27855,13 @@ func _apply_chat_tab_state() -> void:
 	var mute_remaining := _chat_mute_remaining_seconds()
 	var public_chat_muted := mute_remaining > 0 and active_chat_tab != CHAT_TAB_PM
 	var input_available := input_active and not public_chat_muted
-	var primary_tab := _active_primary_chat_tab_id()
 	var general_active: bool = primary_tab == CHAT_TAB_GENERAL
 	_apply_chat_main_tab_style(all_chat_tab_button, active_chat_tab == CHAT_TAB_ALL)
 	_apply_chat_main_tab_style(general_chat_tab_button, general_active)
 	_apply_chat_main_tab_style(system_chat_tab_button, active_chat_tab == CHAT_TAB_SYSTEM)
 	_apply_chat_main_tab_style(pm_tab_button, active_chat_tab == CHAT_TAB_PM)
 	_apply_chat_main_tab_style(guild_chat_tab_button, active_chat_tab == CHAT_TAB_GUILD)
+	_apply_chat_main_tab_style(language_chat_tab_button, primary_tab == CHAT_TAB_LANGUAGES)
 	var dock_visible := primary_tab != CHAT_TAB_SYSTEM
 	chat_input_row.visible = dock_visible
 	if chat_input_dock != null:
@@ -27832,6 +27892,11 @@ func _apply_chat_tab_state() -> void:
 				else LocalizationManager.text("ui.chat.guild.join_required")
 			)
 		)
+	elif primary_tab == CHAT_TAB_LANGUAGES:
+		chat_input.placeholder_text = LocalizationManager.text(
+			"ui.chat.input.language",
+			{"language": _language_chat_label(selected_language_chat)}
+		)
 	else:
 		chat_input.placeholder_text = "" if input_active else LocalizationManager.text("ui.chat.input.system")
 	if public_chat_muted:
@@ -27843,9 +27908,17 @@ func _apply_chat_tab_state() -> void:
 	if not input_available:
 		chat_input.release_focus()
 	if message_scroll != null:
-		message_scroll.visible = active_chat_tab != CHAT_TAB_PM
+		message_scroll.visible = (
+			active_chat_tab != CHAT_TAB_PM
+			and not (primary_tab == CHAT_TAB_LANGUAGES and selected_language_chat == "")
+		)
 	if pm_chat_container != null:
 		pm_chat_container.visible = active_chat_tab == CHAT_TAB_PM
+	if language_chat_empty_state != null:
+		language_chat_empty_state.visible = (
+			primary_tab == CHAT_TAB_LANGUAGES
+			and selected_language_chat == ""
+		)
 	_refresh_chat_message_visibility()
 	_refresh_pm_context_navigation()
 	_render_active_pm_conversation()
@@ -28021,6 +28094,8 @@ func _get_active_chat_channel() -> String:
 		return CHAT_CHANNEL_HELP
 	if active_chat_tab == CHAT_TAB_GUILD:
 		return CHAT_TAB_GUILD
+	if active_chat_tab in LANGUAGE_CHAT_CHANNELS:
+		return active_chat_tab
 	return CHAT_CHANNEL_GLOBAL
 
 func _submit_pm_input_async(text: String) -> void:
@@ -41276,7 +41351,10 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		var error_channel := str(message.get("channel", "")).strip_edges().to_lower()
 		var error_category := (
 			error_channel
-			if error_channel in [CHAT_CHANNEL_MAP, CHAT_CHANNEL_TRADE, CHAT_CHANNEL_HELP, CHAT_TAB_GUILD]
+			if (
+				error_channel in [CHAT_CHANNEL_MAP, CHAT_CHANNEL_TRADE, CHAT_CHANNEL_HELP, CHAT_TAB_GUILD]
+				or error_channel in LANGUAGE_CHAT_CHANNELS
+			)
 			else CHAT_CATEGORY_SYSTEM
 		)
 		_add_chat_message(error_text, false, error_category)
@@ -41299,6 +41377,8 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		return
 
 	var channel: String = str(message.get("channel", CHAT_CHANNEL_GLOBAL)).strip_edges().to_lower()
+	if channel in LANGUAGE_CHAT_CHANNELS and channel not in enabled_language_chats:
+		return
 	_add_user_chat_message(
 		user,
 		display_name,
@@ -41587,6 +41667,8 @@ func _add_user_chat_message(
 		chat_category = CHAT_TAB_PM
 	elif channel == CHAT_TAB_GUILD:
 		chat_category = CHAT_TAB_GUILD
+	elif channel in LANGUAGE_CHAT_CHANNELS:
+		chat_category = channel
 	row.set_meta("chat_category", chat_category)
 	row.visible = _should_show_chat_category(chat_category)
 	message_list.add_child(row)
@@ -42239,6 +42321,12 @@ func _create_chat_channel_prefix(channel: String, target_user_id: int = 0) -> Bu
 		CHAT_TAB_GUILD:
 			prefix_key = "ui.chat.prefix.guild"
 			tooltip_key = "ui.chat.open.guild"
+		CHAT_CHANNEL_LANGUAGE_ZH:
+			prefix_key = "ui.chat.prefix.language_zh"
+			tooltip_key = "ui.chat.open.language_zh"
+		CHAT_CHANNEL_LANGUAGE_PT:
+			prefix_key = "ui.chat.prefix.language_pt"
+			tooltip_key = "ui.chat.open.language_pt"
 		_:
 			prefix_color = Color("#d8b767")
 	_set_localized_control_property(prefix, "text", prefix_key)
@@ -42271,6 +42359,10 @@ func _on_all_channel_badge_pressed(channel: String) -> void:
 			active_chat_tab = CHAT_TAB_HELP
 		CHAT_TAB_GUILD:
 			active_chat_tab = CHAT_TAB_GUILD
+		CHAT_CHANNEL_LANGUAGE_ZH, CHAT_CHANNEL_LANGUAGE_PT:
+			if channel in enabled_language_chats:
+				selected_language_chat = channel
+				active_chat_tab = channel
 		_:
 			selected_general_chat_tab = CHAT_TAB_GENERAL
 			active_chat_tab = CHAT_TAB_GENERAL
@@ -42362,6 +42454,8 @@ func _should_show_chat_category(category: String) -> bool:
 		return category == CHAT_CHANNEL_HELP
 	if active_chat_tab == CHAT_TAB_GUILD:
 		return category == CHAT_TAB_GUILD
+	if active_chat_tab in LANGUAGE_CHAT_CHANNELS:
+		return category == active_chat_tab
 	return false
 
 

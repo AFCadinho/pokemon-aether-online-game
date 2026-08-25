@@ -35,6 +35,8 @@ func _check_localized_helpers() -> void:
 	var overlay: Node = overlay_script.new()
 	localization_manager.call("set_locale", "nl")
 	_check(overlay.call("_chat_tab_label", "general") == "Algemeen", "General chat tab renders in Dutch")
+	_check(overlay.call("_chat_tab_label", "languages") == "Talen", "Languages chat tab renders in Dutch")
+	_check(overlay.call("_language_chat_label", "language_zh") == "中文", "Chinese chat keeps its native label")
 	_check(
 		overlay.call("_localized_buff_name", {"name_key": "ui.buff.global_exp.name"}) == "Wereldwijde EXP-boost",
 		"Global buff name renders in Dutch"
@@ -106,6 +108,8 @@ func _check_localized_helpers() -> void:
 	if map_prefix != null:
 		localization_manager.call("localize_tree", map_prefix)
 	_check(overlay.call("_chat_tab_label", "general") == "Geral", "General chat tab updates to Portuguese")
+	_check(overlay.call("_chat_tab_label", "languages") == "Idiomas", "Languages chat tab updates to Portuguese")
+	_check(overlay.call("_language_chat_label", "language_pt") == "Português", "Portuguese chat keeps its native label")
 	_check(
 		overlay.call("_localized_buff_name", {"name_key": "ui.buff.global_exp.name"}) == "Bônus global de EXP",
 		"Global buff name updates to Portuguese"

@@ -6,9 +6,11 @@
 
 - Pokémon Showdown export sets can now be copied from a Pokémon's Summary.
 - A mysterious golden Poké Ball can now be spotted near Master Thief Rook in Viridian City.
+- Added opt-in official Chinese and Portuguese chats under a dedicated Languages tab.
 
 **Changed**
 
+- Chat settings now manage official language chats; the main chat tabs keep a fixed order.
 - Main interface hover cards now share a clear, styled appearance across navigation, party, hotbar, status, buffs, and chat controls.
 - Bag hover cards now share a clear, styled appearance across item browsing and use screens.
 - Item Dex hover cards now share a clear, styled appearance.
