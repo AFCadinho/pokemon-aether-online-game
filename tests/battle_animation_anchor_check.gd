@@ -91,6 +91,12 @@ func _init() -> void:
 	_check_move_animation_assets(moves, "watershuriken", true, false, "Water Shuriken")
 	_check_equal(str((moves.get("explosion", {}) as Dictionary).get("static_visual_anchor", "")), "actor", "Explosion smoke follows its user")
 	_check_equal(bool(((moves.get("gigaimpact", {}) as Dictionary).get("actor_motion", {}) as Dictionary).get("enabled", false)), true, "Giga Impact moves its user into the hit")
+	_check_equal(bool((moves.get("gigaimpact", {}) as Dictionary).get("timing_background_persist_until_clear", false)), true, "Giga Impact keeps its background through the impact")
+	var giga_impact_config: Dictionary = moves.get("gigaimpact", {}) as Dictionary
+	var giga_impact_data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(str(giga_impact_config.get("data_path", "")))) as Dictionary
+	_check_equal((giga_impact_data.get("frames", []) as Array).size(), 39, "Giga Impact leaves enough time for its impact sound")
+	var giga_impact_motion_points: Array = ((giga_impact_config.get("actor_motion", {}) as Dictionary).get("points", []) as Array)
+	_check_equal(float((giga_impact_motion_points[3] as Dictionary).get("at", 1.0)), 0.32, "Giga Impact reaches contact on its impact frame")
 	_check_equal(bool(((moves.get("psyshock", {}) as Dictionary).get("psychic_shards", {}) as Dictionary).get("enabled", false)), true, "Psyshock uses its custom psychic shard volley")
 	_check_equal(bool((moves.get("psyshock", {}) as Dictionary).get("show_sheet_sprites", true)), false, "Psyshock hides the imported placeholder sprites")
 	_check_equal(bool(((moves.get("explosion", {}) as Dictionary).get("explosion_burst", {}) as Dictionary).get("enabled", false)), true, "Explosion uses its synchronized custom blast")

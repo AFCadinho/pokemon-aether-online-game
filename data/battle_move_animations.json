@@ -9715,6 +9715,7 @@
       "speed_scale": 1.12,
       "show_timing_backgrounds": true,
       "timing_background_fill_canvas": true,
+      "timing_background_persist_until_clear": true,
       "background_below_sprites": true,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
@@ -9724,7 +9725,7 @@
       "sparkle_count": 0,
       "actor_motion": {
         "enabled": true,
-        "duration": 1.08,
+        "duration": 1.22,
         "points": [
           {
             "at": 0.0,
@@ -9733,28 +9734,42 @@
             "duration": 0.01
           },
           {
-            "at": 0.18,
+            "at": 0.12,
             "offset": [-16, 8],
             "rotation_degrees": -3,
             "scale": 0.96,
-            "duration": 0.12
+            "duration": 0.1
           },
           {
-            "at": 0.42,
+            "at": 0.21,
             "offset": [188, -82],
             "rotation_degrees": 5,
             "scale": 1.1,
-            "duration": 0.16
+            "duration": 0.14
           },
           {
-            "at": 0.56,
+            "at": 0.32,
             "offset": [224, -96],
             "rotation_degrees": 2,
             "scale": 1.16,
-            "duration": 0.08
+            "duration": 0.06
           },
           {
-            "at": 1.0,
+            "at": 0.44,
+            "offset": [224, -96],
+            "rotation_degrees": 2,
+            "scale": 1.16,
+            "duration": 0.01
+          },
+          {
+            "at": 0.58,
+            "offset": [110, -42],
+            "rotation_degrees": 1,
+            "scale": 1.06,
+            "duration": 0.16
+          },
+          {
+            "at": 0.76,
             "offset": [0, 0],
             "rotation_degrees": 0,
             "scale": 1.0,
