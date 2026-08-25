@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Changed**
+
+- Bag hover cards now share a clear, styled appearance across item browsing and use screens.
+
 ## 0.3.62 - 2026-08-24
 
 **Added**
