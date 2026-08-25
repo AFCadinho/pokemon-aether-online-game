@@ -152,7 +152,7 @@ func _run() -> void:
 
 	popup.show_debug_member_preview()
 	await process_frame
-	_check(popup.find_child("MyGuildButton", true, false) != null, "member navigation is present")
+	_check(popup.find_child("MyGuildButton", true, false) == null, "member navigation removes the redundant My Guild tab")
 	var create_button := popup.find_child("CreateGuildButton", true, false) as Button
 	_check(create_button != null and not create_button.visible, "Guild members do not see the create action")
 	_check(popup.find_child("GuildMemberDashboard", true, false) != null, "member dashboard renders")
@@ -160,6 +160,19 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankTab", true, false) != null, "guild bank tab renders")
 	_check(popup.find_child("GuildMembersTab", true, false) != null, "guild members tab renders")
 	_check(popup.find_child("GuildManagementTab", true, false) != null, "guild management tab renders for leaders")
+	var section_navigation := popup.find_child("GuildSectionNavigation", true, false) as HBoxContainer
+	var member_browse_button := popup.find_child("BrowseGuildsButton", true, false) as Button
+	_check(
+		section_navigation != null
+		and member_browse_button != null
+		and section_navigation.get_parent() == member_browse_button.get_parent()
+		and section_navigation.get_index() < member_browse_button.get_index(),
+		"Guild member tabs occupy the top navigation before the secondary browse action"
+	)
+	_check(
+		member_browse_button != null and member_browse_button.custom_minimum_size.x <= 150.0,
+		"Guild discovery becomes a compact secondary action for members"
+	)
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "guild dashboard opens on its overview")
 	var leader_leave_button := popup.find_child("LeaveGuildButton", true, false) as Button
 	_check(leader_leave_button != null and leader_leave_button.disabled, "Guild leaders must transfer leadership before leaving")
@@ -184,7 +197,7 @@ func _run() -> void:
 	if overview_tab != null:
 		overview_tab.pressed.emit()
 		await process_frame
-	_check(popup.find_child("GuildLobbyTeleportButton", true, false) != null, "guild overview keeps Lobby travel available above its tabs")
+	_check(popup.find_child("GuildLobbyTeleportButton", true, false) != null, "guild overview keeps Lobby travel available below the top tabs")
 	_check(popup.find_child("GuildSettingsDescription", true, false) == null, "settings stay out of the guild overview")
 	var bank_tab := popup.find_child("GuildBankTab", true, false) as Button
 	if bank_tab != null:
@@ -558,6 +571,7 @@ func _run() -> void:
 	_check(popup.active_page == "member", "returning guild members land on My Guild")
 	popup._on_primary_navigation_pressed("browse")
 	_check(popup.active_page == "browse", "guild members can still browse guilds explicitly")
+	_check(section_navigation != null and section_navigation.visible, "member section tabs remain available while browsing Guilds")
 	var localization_manager := root.get_node_or_null("LocalizationManager")
 	if localization_manager != null:
 		localization_manager.set_locale("nl")

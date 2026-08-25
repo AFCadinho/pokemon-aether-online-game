@@ -8,6 +8,10 @@
 - Giga Impact, Psyshock, Explosion, and Water Shuriken now have their own battle animations and sound effects.
 - Added full Simplified Chinese language support throughout the game and launcher.
 
+**Changed**
+
+- Guild members now get Overview, Guild Bank, Members, and authorized management tabs in the top navigation, while Guild discovery is a compact secondary action.
+
 **Fixed**
 
 - Pokémon in battle now show the correct blue male or pink female gender icon.
