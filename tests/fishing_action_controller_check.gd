@@ -6,6 +6,8 @@ const WORLD_PATH := "res://scripts/world/world.gd"
 const PLAYER_PATH := "res://scripts/world/player.gd"
 const APPEARANCE_SERVICE_PATH := "res://scripts/services/character_appearance_service.gd"
 const REMOTE_PLAYER_PATH := "res://scripts/world/remote_player_avatar.gd"
+const SETTINGS_MANAGER_PATH := "res://scripts/services/settings_manager.gd"
+const SETTINGS_MENU_PATH := "res://scripts/ui/settings_menu.gd"
 const CharacterAppearanceServiceScript := preload(
 	"res://scripts/services/character_appearance_service.gd"
 )
@@ -20,6 +22,8 @@ func _init() -> void:
 	var player_source := FileAccess.get_file_as_string(PLAYER_PATH)
 	var appearance_source := FileAccess.get_file_as_string(APPEARANCE_SERVICE_PATH)
 	var remote_player_source := FileAccess.get_file_as_string(REMOTE_PLAYER_PATH)
+	var settings_manager_source := FileAccess.get_file_as_string(SETTINGS_MANAGER_PATH)
+	var settings_menu_source := FileAccess.get_file_as_string(SETTINGS_MENU_PATH)
 
 	for activity_asset_path: String in [
 		"res://assets/player/male/top/fish/Adinho_Shirt_fish.png",
@@ -49,6 +53,23 @@ func _init() -> void:
 		controller_source.contains("actions_row.add_child(action_slot)")
 		and controller_source.contains('action_button.pressed.connect(_toggle_popup)'),
 		"action bar exposes a clickable rod selector"
+	)
+	_check(
+		settings_manager_source.contains('CONFIGURABLE_INPUT_ACTIONS: Array[String] = ["fish", "pickpocket"]')
+		and settings_manager_source.contains('"input_bindings": input_bindings')
+		and settings_manager_source.contains("InputMap.action_erase_events(action)")
+		and settings_manager_source.contains("func get_input_binding_label(action: String)"),
+		"Fishing cast and reel use one persisted configurable Input Map action"
+	)
+	_check(
+		settings_menu_source.contains('_create_tab_content("Controls", "ui.settings.tab.controls")')
+		and settings_menu_source.contains('binding_button.name = "%sBindingButton" % control_name')
+		and settings_menu_source.contains("SettingsManager.set_input_binding"),
+		"Settings expose a Fishing hotkey capture control"
+	)
+	_check(
+		controller_source.contains("action_slot.visible = GameState.fishing_skill_unlocked"),
+		"the fishing action remains hidden until the Guru unlocks the skill"
 	)
 	_check(
 		controller_source.contains('const FISHING_ACTION_ICON := preload("res://assets/ui/fishing_rod.svg")')
@@ -234,6 +255,13 @@ func _init() -> void:
 		and world_source.contains('reward.get("fishingProgression", {})')
 		and world_source.contains('"ui.world.reward.fishing_level"'),
 		"world refreshes regional progression and reports localized Fishing XP levels"
+	)
+	_check(
+		world_source.contains('reason == "caught"')
+		and world_source.contains('active_wild_encounter_type in ["old_rod", "good_rod", "super_rod"]')
+		and world_source.contains('_notify_fishing_treasure_award(reward.get("items", []))')
+		and world_source.contains('SfxManager.play("item_found")'),
+		"completed Fishing wins and catches report authoritative treasure rewards"
 	)
 	quit(1 if failed else 0)
 

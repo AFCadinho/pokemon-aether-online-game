@@ -33,6 +33,11 @@ SUPPLEMENTAL_ENTRIES = [
         "artist": "Pokémon Showdown",
         "catalog_source": ALL_SPRITES_PAGE_URL,
     },
+    {
+        "filename": "pokemonbreeder-gen4.png",
+        "artist": "Pokémon Showdown",
+        "catalog_source": ALL_SPRITES_PAGE_URL,
+    },
 ]
 
 

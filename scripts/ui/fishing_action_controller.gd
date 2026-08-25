@@ -177,6 +177,9 @@ func _build_interface() -> void:
 func refresh_from_game_state() -> void:
 	if action_button == null:
 		return
+	action_slot.visible = GameState.fishing_skill_unlocked
+	if not GameState.fishing_skill_unlocked:
+		popup.visible = false
 	var selected_id := GameState.selected_fishing_rod_item_id
 	action_button.texture_normal = FISHING_ACTION_ICON
 	action_button.texture_hover = FISHING_ACTION_ICON

@@ -4,6 +4,7 @@ const CATALOG_PATHS: Dictionary = {
 	"en": "res://localization/en.json",
 	"nl": "res://localization/nl.json",
 	"pt_BR": "res://localization/pt_BR.json",
+	"zh_CN": "res://localization/zh_CN.json",
 }
 const SETTINGS_SCENE_PATH := "res://scenes/interface/settings/settings_menu.tscn"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
@@ -72,8 +73,11 @@ func _check_locale_normalization() -> void:
 	_check(localization_manager.call("normalize_locale", "nl_NL") == "nl", "Dutch regions normalize to nl")
 	_check(localization_manager.call("normalize_locale", "pt-BR") == "pt_BR", "Brazilian Portuguese normalizes to pt_BR")
 	_check(localization_manager.call("normalize_locale", "pt-PT") == "pt_BR", "Portuguese currently falls back to pt_BR")
+	_check(localization_manager.call("normalize_locale", "zh-Hans") == "zh_CN", "Simplified Chinese script locale normalizes to zh_CN")
+	_check(localization_manager.call("normalize_locale", "zh-SG") == "zh_CN", "Chinese regions normalize to zh_CN")
 	_check(localization_manager.call("normalize_locale", "de-DE") == "en", "unsupported locales fall back to English")
 	_check(localization_manager.call("get_http_locale", "pt_BR") == "pt-BR", "Godot pt_BR maps to HTTP pt-BR")
+	_check(localization_manager.call("get_http_locale", "zh_CN") == "zh-CN", "Godot zh_CN maps to HTTP zh-CN")
 
 
 func _check_locale_request_headers() -> void:
@@ -97,6 +101,12 @@ func _check_runtime_translation(catalogs: Dictionary) -> void:
 	)
 	localization_manager.call("set_locale", "pt_BR")
 	_check(localization_manager.call("text", "ui.login.sign_in") == "Entrar", "Brazilian Portuguese runtime translation works")
+	localization_manager.call("set_locale", "zh_CN")
+	_check(localization_manager.call("text", "ui.login.sign_in") == "登录", "Simplified Chinese runtime translation works")
+	_check(
+		ThemeDB.fallback_font != null and ThemeDB.fallback_font.has_char("简".unicode_at(0)),
+		"Simplified Chinese activates a bundled font with Chinese glyph coverage"
+	)
 
 	var manager_catalogs: Dictionary = localization_manager.get("catalogs")
 	var dutch_catalog: Dictionary = manager_catalogs.get("nl", {})
@@ -122,7 +132,7 @@ func _check_language_selector_presentation() -> void:
 			localization_manager.call("get_language_name", locale),
 			index
 		)
-	_check(selector.item_count == 3, "styled language selector lists every locale")
+	_check(selector.item_count == 4, "styled language selector lists every locale")
 	for index: int in range(selector.item_count):
 		_check(selector.get_item_icon(index) != null, "language option %d has a flag" % index)
 	_check(selector.has_theme_icon_override("arrow"), "language selector uses the custom chevron")
@@ -150,14 +160,18 @@ func _check_settings_scene_translation() -> void:
 	var title := menu.get_node_or_null("MarginContainer/VBoxContainer/Header/Heading/TitleLabel") as Label
 	var language_options := menu.find_child("LanguageOptionsButton", true, false) as OptionButton
 	var terminology_options := menu.find_child("TerminologyOptionsButton", true, false) as OptionButton
+	var sprite_style_options := menu.find_child("SpriteStyleOptionsButton", true, false) as OptionButton
+	var resolution_options := menu.find_child("ResolutionOptionsButton", true, false) as OptionButton
+	var world_pixel_scale_options := menu.find_child("WorldPixelScaleOptionsButton", true, false) as OptionButton
 	var tabs := menu.find_child("SettingsTabs", true, false) as TabContainer
 	var workspace := menu.find_child("SettingsWorkspace", true, false) as HBoxContainer
 	var navigation := menu.find_child("SettingsNavigation", true, false) as VBoxContainer
+	var fishing_binding_button := menu.find_child("FishingBindingButton", true, false) as Button
 	_check(
 		title != null and title.text == "Instellingen",
 		"static settings text renders in Dutch (received %s)" % str(title.text if title != null else "<missing>")
 	)
-	_check(language_options != null and language_options.item_count == 3, "language selector lists three locales")
+	_check(language_options != null and language_options.item_count == 4, "language selector lists four locales")
 	_check(
 		terminology_options != null
 		and terminology_options.item_count == 2
@@ -176,8 +190,27 @@ func _check_settings_scene_translation() -> void:
 		language_options != null and language_options.get_item_icon(0) != null,
 		"settings language selector displays flags"
 	)
+	for styled_dropdown: OptionButton in [
+		sprite_style_options,
+		resolution_options,
+		world_pixel_scale_options,
+	]:
+		_check(styled_dropdown != null, "graphics dropdown exists")
+		if styled_dropdown == null:
+			continue
+		var dropdown_popup := styled_dropdown.get_popup()
+		_check(styled_dropdown.has_theme_icon_override("arrow"), "%s uses the PokeAether dropdown arrow" % styled_dropdown.name)
+		_check(styled_dropdown.has_theme_stylebox_override("normal"), "%s replaces the default button surface" % styled_dropdown.name)
+		_check(dropdown_popup.has_theme_stylebox_override("panel"), "%s popup replaces the default Godot panel" % styled_dropdown.name)
+		_check(dropdown_popup.has_theme_stylebox_override("hover"), "%s popup has a custom hover state" % styled_dropdown.name)
+		_check(dropdown_popup.has_theme_icon_override("radio_checked"), "%s popup uses a custom selection marker" % styled_dropdown.name)
 	_check(tabs != null and tabs.get_tab_title(0) == "Algemeen", "dynamic tab title renders in Dutch")
 	_check(tabs != null and tabs.get_tab_title(1) == "Taal", "language settings use a dedicated localized tab")
+	_check(tabs != null and tabs.get_tab_title(4) == "Besturing", "Fishing hotkeys use a dedicated Controls tab")
+	_check(
+		fishing_binding_button != null and not fishing_binding_button.text.is_empty(),
+		"Fishing hotkey control displays the active binding"
+	)
 	_check(
 		language_options != null
 		and language_options.find_parent("LanguageContent") != null
@@ -270,7 +303,7 @@ func _check_login_scene_translation() -> void:
 		LanguageSelectorStyle.configure_login_compact(language_options)
 		login.set("language_options_button", language_options)
 		login.call("_apply_language_options_to_control")
-		_check(language_options.item_count == 3, "login language selector lists three locales")
+		_check(language_options.item_count == 4, "login language selector lists four locales")
 		_check(language_options.get_item_icon(0) != null, "login language selector displays flags")
 		_check(language_options.text == "NL", "login language selector uses the compact locale code")
 		_check(

@@ -5,7 +5,7 @@ const OVERLAY_SCRIPT_PATH := "res://scripts/ui/ui_overlay.gd"
 const PLAYER_STATUS_SCENE_PATH := "res://scenes/interface/player_status_card.tscn"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const VS_SCENE_PATH := "res://scenes/battle/vs_panel_container.tscn"
-const SUPPORTED_LOCALES: Array[String] = ["en", "nl", "pt_BR"]
+const SUPPORTED_LOCALES: Array[String] = ["en", "nl", "pt_BR", "zh_CN"]
 const SUPPORTED_RESOLUTIONS: Array[Vector2i] = [
 	Vector2i(1280, 720),
 	Vector2i(1600, 900),
@@ -89,7 +89,20 @@ func _check_runtime_locale_and_layout_matrix() -> void:
 	var mail_title := mail_popup.find_child("Title", true, false) as Label
 	var compose_title := compose_popup.find_child("Title", true, false) as Label
 	var compose_body := overlay.get("mail_compose_body_input") as TextEdit
+	var compose_scroll := compose_popup.get_node_or_null("ComposeScroll") as ScrollContainer
+	var compose_margin := compose_popup.find_child("MarginContainer", true, false) as MarginContainer
+	var selected_attachments_list := overlay.get("mail_selected_attachments_list") as VBoxContainer
 	var trainer_eyebrow := player_status_panel.find_child("EyebrowLabel", true, false) as Label
+	_check(compose_scroll != null, "Mail composer installs its minimum-resolution scroll workspace")
+	_check(
+		compose_margin != null and compose_margin.get_parent() == compose_scroll,
+		"Mail composer content remains reachable after workspace setup"
+	)
+	_check(
+		selected_attachments_list != null
+		and selected_attachments_list.get_parent() is ScrollContainer,
+		"Mail attachment styling has a stable runtime scroll reference"
+	)
 	if root_control != null:
 		root_control.set_anchors_preset(Control.PRESET_TOP_LEFT)
 		root_control.position = Vector2.ZERO

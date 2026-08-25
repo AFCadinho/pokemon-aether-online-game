@@ -8,12 +8,15 @@ import hmac
 import http.client
 import mimetypes
 import os
+import time
 from pathlib import Path
 from urllib.parse import quote, urlparse
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RELEASE_DIR = PROJECT_ROOT / "builds" / "launcher"
+MAX_UPLOAD_ATTEMPTS = 4
+INITIAL_RETRY_DELAY_SECONDS = 2.0
 
 
 def main() -> None:
@@ -132,6 +135,49 @@ def _upload_file(config: R2Config, file_path: Path, key: str) -> None:
     content_type = mimetypes.guess_type(file_path.name)[0] or "application/octet-stream"
     cache_control = _get_cache_control_for_key(key)
 
+    for attempt in range(1, MAX_UPLOAD_ATTEMPTS + 1):
+        try:
+            status, reason, response_body = _upload_file_once(
+                config,
+                file_path,
+                host,
+                canonical_uri,
+                payload_hash,
+                content_length,
+                content_type,
+                cache_control,
+            )
+        except (OSError, http.client.HTTPException) as error:
+            failure = f"{type(error).__name__}: {error}"
+            if attempt >= MAX_UPLOAD_ATTEMPTS:
+                raise SystemExit(
+                    f"Upload failed for {file_path.name} after {attempt} attempts: {failure}"
+                ) from error
+            _wait_before_retry(file_path.name, attempt, failure)
+            continue
+
+        if 200 <= status < 300:
+            return
+
+        failure = f"{status} {reason}"
+        if response_body:
+            failure = f"{failure}\n{response_body}"
+        if not _is_retryable_http_status(status) or attempt >= MAX_UPLOAD_ATTEMPTS:
+            raise SystemExit(f"Upload failed for {file_path.name}: {failure}")
+        _wait_before_retry(file_path.name, attempt, failure)
+
+
+def _upload_file_once(
+    config: R2Config,
+    file_path: Path,
+    host: str,
+    canonical_uri: str,
+    payload_hash: str,
+    content_length: int,
+    content_type: str,
+    cache_control: str,
+) -> tuple[int, str, str]:
+
     now = dt.datetime.now(dt.UTC)
     amz_date = now.strftime("%Y%m%dT%H%M%SZ")
     date_stamp = now.strftime("%Y%m%d")
@@ -180,12 +226,23 @@ def _upload_file(config: R2Config, file_path: Path, key: str) -> None:
             connection.request("PUT", canonical_uri, body=file, headers=headers)
             response = connection.getresponse()
             response_body = response.read().decode("utf-8", errors="replace")
-            if response.status < 200 or response.status >= 300:
-                raise SystemExit(
-                    f"Upload failed for {file_path.name}: {response.status} {response.reason}\n{response_body}"
-                )
+            return response.status, response.reason, response_body
     finally:
         connection.close()
+
+
+def _is_retryable_http_status(status: int) -> bool:
+    return status in (408, 429) or 500 <= status < 600
+
+
+def _wait_before_retry(file_name: str, attempt: int, failure: str) -> None:
+    delay = INITIAL_RETRY_DELAY_SECONDS * (2 ** (attempt - 1))
+    print(
+        f"Upload attempt {attempt}/{MAX_UPLOAD_ATTEMPTS} for {file_name} failed: {failure}",
+        flush=True,
+    )
+    print(f"Retrying in {delay:g} seconds.", flush=True)
+    time.sleep(delay)
 
 
 def _canonical_uri(bucket: str, key: str) -> str:
@@ -198,6 +255,7 @@ def _get_cache_control_for_key(key: str) -> str:
     if (
         key.startswith("launcher/latest/")
         or key.startswith("game/latest/")
+        or key in ("data/news.json", "data/news.previous.json")
         or file_name == "manifest.json"
         or file_name.startswith("manifest-")
     ):

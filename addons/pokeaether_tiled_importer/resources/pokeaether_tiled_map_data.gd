@@ -10,7 +10,7 @@ class_name PokeAetherTiledMapData
 @export var region_name := ""
 @export var location_id := ""
 @export var location_name := ""
-@export var music_track_path := ""
+@export var music_track_id := ""
 @export var default_spawn := ""
 @export var encounter_area_id := ""
 @export var map_size_tiles := Vector2i.ZERO

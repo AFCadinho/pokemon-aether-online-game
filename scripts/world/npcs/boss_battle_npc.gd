@@ -47,9 +47,9 @@ func interact_with_player(_player: Node2D) -> void:
 		await _show_report_to_staff_message()
 		return
 
-	var battle_result: Dictionary = await world.start_trainer_battle(
-		build_battle_trainer_metadata(trainer_metadata)
-	)
+	var battle_metadata := build_battle_trainer_metadata(trainer_metadata)
+	battle_metadata["battleTransitionStyle"] = WildEncounterTransition.STYLE_SPECIAL_TRAINER
+	var battle_result: Dictionary = await world.start_trainer_battle(battle_metadata)
 	if not bool(battle_result.get("success", false)):
 		await GameErrorDialogService.show_response(
 			battle_result,
@@ -228,4 +228,4 @@ func _show_report_to_staff_message() -> void:
 		await error_dialog_service.call("show_report_to_staff_message")
 		return
 
-	await show_dialogue(["This boss battle is not available right now."])
+	await show_dialogue([LocalizationManager.text("npc.error.boss_battle")])

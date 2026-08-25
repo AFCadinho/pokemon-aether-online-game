@@ -7,7 +7,10 @@ signal guild_changed(guild: Dictionary)
 
 const GUILDS_ENDPOINT := "/game/guilds"
 const GUILD_HOME_ENDPOINT := "/game/guilds/me"
+const GUILD_BANK_ENDPOINT := "/game/guilds/me/bank"
 const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
+const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
+const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var pending_creation_request_id := ""
@@ -62,12 +65,178 @@ func create_guild(
 	}
 
 
+func join_guild(guild_id: int) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILDS_ENDPOINT + "/%d/join" % guild_id,
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
+func apply_to_guild(guild_id: int) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILDS_ENDPOINT + "/%d/applications" % guild_id,
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	return response if not bool(response.get("success", false)) else {
+		"success": true,
+		"application": _dictionary(response.get("body", {})),
+	}
+
+
+func cancel_application(application_id: int) -> Dictionary:
+	return await _application_action(
+		"/game/guild-applications/%d/cancel" % application_id
+	)
+
+
 func load_home() -> Dictionary:
 	var response := await _authenticated_request(GUILD_HOME_ENDPOINT, HTTPClient.METHOD_GET, "")
 	if not bool(response.get("success", false)) and int(response.get("status", 0)) == 404:
 		_set_current_membership({})
 		_set_current_guild({})
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
+func leave_guild() -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_HOME_ENDPOINT + "/leave",
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	_set_current_membership({})
+	_set_current_guild({})
+	return {
+		"success": true,
+		"left": bool(body.get("left", false)),
+		"guildId": int(body.get("guildId", 0)),
+		"guildName": str(body.get("guildName", "")),
+	}
+
+
+func load_bank() -> Dictionary:
+	var response := await _authenticated_request(GUILD_BANK_ENDPOINT, HTTPClient.METHOD_GET, "")
+	return response if not bool(response.get("success", false)) else _bank_result(response.get("body", {}))
+
+
+func load_history(before_id: int = 0) -> Dictionary:
+	var path := GUILD_HOME_ENDPOINT + "/history?limit=50"
+	if before_id > 0:
+		path += "&beforeId=%d" % before_id
+	var response := await _authenticated_request(path, HTTPClient.METHOD_GET, "")
+	return response if not bool(response.get("success", false)) else _log_result(response.get("body", {}))
+
+
+func load_bank_log(category: String, before_id: int = 0) -> Dictionary:
+	var normalized := category.strip_edges().to_lower()
+	if not normalized in ["funds", "items", "pokemon"]:
+		return {"success": false, "error": "Unknown Guild Bank log."}
+	var path := GUILD_BANK_ENDPOINT + "/logs/%s?limit=50" % normalized
+	if before_id > 0:
+		path += "&beforeId=%d" % before_id
+	var response := await _authenticated_request(path, HTTPClient.METHOD_GET, "")
+	return response if not bool(response.get("success", false)) else _log_result(response.get("body", {}))
+
+
+func deposit_bank_money(amount: int) -> Dictionary:
+	return await _bank_action("/money/deposit", {"amount": amount})
+
+
+func withdraw_bank_money(amount: int) -> Dictionary:
+	return await _bank_action("/money/withdraw", {"amount": amount})
+
+
+func deposit_bank_item(item_id: String, quantity: int) -> Dictionary:
+	return await _bank_action("/items/deposit", {"itemId": item_id, "quantity": quantity})
+
+
+func withdraw_bank_item(item_id: String, quantity: int) -> Dictionary:
+	return await _bank_action("/items/withdraw", {"itemId": item_id, "quantity": quantity})
+
+
+func borrow_bank_item(item_id: String, quantity: int) -> Dictionary:
+	return await _bank_action("/items/borrow", {
+		"itemId": item_id,
+		"quantity": quantity,
+		"requestId": _new_request_id(),
+	})
+
+
+func deposit_bank_pokemon(pokemon_id: int) -> Dictionary:
+	return await _bank_action("/pokemon/deposit", {"pokemonId": pokemon_id})
+
+
+func withdraw_bank_pokemon(pokemon_id: int) -> Dictionary:
+	return await _bank_action("/pokemon/withdraw", {"pokemonId": pokemon_id})
+
+
+func borrow_bank_pokemon(pokemon_id: int) -> Dictionary:
+	return await _bank_action("/pokemon/borrow", {
+		"pokemonId": pokemon_id,
+		"requestId": _new_request_id(),
+	})
+
+
+func return_bank_loan_asset(asset_id: String) -> Dictionary:
+	return await _bank_action("/loans/return", {
+		"assetId": asset_id,
+		"requestId": _new_request_id(),
+	})
+
+
+func force_return_bank_loan_asset(asset_id: String) -> Dictionary:
+	return await _bank_action("/loans/force-return", {
+		"assetId": asset_id,
+		"requestId": _new_request_id(),
+	})
+
+
+func teleport_to_lobby() -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_LOBBY_TELEPORT_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	var state := _dictionary(body.get("state", {}))
+	if state.is_empty():
+		return {"success": false, "error": "Guild Lobby teleport response was empty."}
+	return {
+		"success": true,
+		"accepted": bool(body.get("accepted", false)),
+		"cost": int(body.get("cost", 0)),
+		"state": state,
+	}
+
+
+func load_aether_clash_champion() -> Dictionary:
+	var response := await _authenticated_request(
+		AETHER_CLASH_CHAMPION_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	return normalize_aether_clash_champion(response.get("body", {}))
+
+
+static func normalize_aether_clash_champion(value: Variant) -> Dictionary:
+	var body := value as Dictionary if value is Dictionary else {}
+	var guild_id_value: Variant = body.get("guildId")
+	var won_at_value: Variant = body.get("wonAt")
+	return {
+		"success": true,
+		"guildId": int(guild_id_value) if guild_id_value != null else 0,
+		"guildName": str(body.get("guildName", "")).strip_edges(),
+		"wonAt": str(won_at_value) if won_at_value != null else "",
+	}
 
 
 func load_invitations() -> Dictionary:
@@ -89,7 +258,8 @@ func update_settings(
 	description: String,
 	language: String,
 	focus: String,
-	recruitment: String
+	recruitment: String,
+	loan_duration_seconds: int = 86400
 ) -> Dictionary:
 	var response := await _authenticated_request(
 		GUILD_HOME_ENDPOINT + "/settings",
@@ -99,7 +269,17 @@ func update_settings(
 			"language": language,
 			"focus": focus,
 			"recruitment": recruitment,
+			"loanDurationSeconds": loan_duration_seconds,
 		})
+	)
+	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
+func update_member_role(user_id: int, role: String) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_HOME_ENDPOINT + "/members/%d/role" % user_id,
+		HTTPClient.METHOD_PUT,
+		JSON.stringify({"role": role.strip_edges().to_lower()})
 	)
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
 
@@ -151,6 +331,21 @@ func cancel_invitation(invitation_id: int) -> Dictionary:
 	return await _invitation_action(GUILD_HOME_ENDPOINT + "/invitations/%d/cancel" % invitation_id)
 
 
+func accept_application(application_id: int) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_HOME_ENDPOINT + "/applications/%d/accept" % application_id,
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
+func decline_application(application_id: int) -> Dictionary:
+	return await _application_action(
+		GUILD_HOME_ENDPOINT + "/applications/%d/decline" % application_id
+	)
+
+
 func abandon_pending_creation() -> void:
 	pending_creation_request_id = ""
 
@@ -169,6 +364,7 @@ func _directory_result(value: Variant) -> Dictionary:
 		"guilds": normalized_guilds,
 		"membership": _dictionary(body.get("membership", {})),
 		"incomingInvitations": _array(body.get("incomingInvitations", [])),
+		"pendingApplications": _array(body.get("pendingApplications", [])),
 	}
 
 
@@ -182,7 +378,45 @@ func _home_result(value: Variant) -> Dictionary:
 		"membership": _dictionary(body.get("membership", {})),
 		"members": _array(body.get("members", [])),
 		"pendingInvitations": _array(body.get("pendingInvitations", [])),
+		"pendingApplications": _array(body.get("pendingApplications", [])),
 		"emblemTemplates": _array(body.get("emblemTemplates", [])),
+		"rankPermissions": _dictionary(body.get("rankPermissions", {})),
+	}
+
+
+func _bank_action(path: String, payload: Dictionary) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_BANK_ENDPOINT + path,
+		HTTPClient.METHOD_POST,
+		JSON.stringify(payload)
+	)
+	return response if not bool(response.get("success", false)) else _bank_result(response.get("body", {}))
+
+
+func _bank_result(value: Variant) -> Dictionary:
+	var body := _dictionary(value)
+	return {
+		"success": true,
+		"guildId": int(body.get("guildId", 0)),
+		"access": _dictionary(body.get("access", {})).duplicate(true),
+		"funds": _dictionary(body.get("funds", {})).duplicate(true),
+		"items": _array(body.get("items", [])).duplicate(true),
+		"inventory": _array(body.get("inventory", [])).duplicate(true),
+		"pokemon": _array(body.get("pokemon", [])).duplicate(true),
+		"depositablePokemon": _array(body.get("depositablePokemon", [])).duplicate(true),
+		"party": _array(_dictionary(body.get("party", {})).get("party", [])).duplicate(true),
+		"loanDurationSeconds": int(body.get("loanDurationSeconds", 86400)),
+		"borrowedItems": _array(body.get("borrowedItems", [])).duplicate(true),
+	}
+
+
+func _log_result(value: Variant) -> Dictionary:
+	var body := _dictionary(value)
+	return {
+		"success": true,
+		"category": str(body.get("category", "")),
+		"entries": _array(body.get("entries", [])).duplicate(true),
+		"nextBeforeId": int(body.get("nextBeforeId", 0)),
 	}
 
 
@@ -194,8 +428,17 @@ func _invitation_action(path: String) -> Dictionary:
 	}
 
 
+func _application_action(path: String) -> Dictionary:
+	var response := await _authenticated_request(path, HTTPClient.METHOD_POST, "{}")
+	return response if not bool(response.get("success", false)) else {
+		"success": true,
+		"application": _dictionary(response.get("body", {})),
+	}
+
+
 func can_invite_members() -> bool:
-	return str(current_membership.get("role", "")).to_lower() in ["leader", "officer"]
+	var permissions := _array(current_membership.get("permissions", []))
+	return permissions.has("manage_members") or str(current_membership.get("role", "")).to_lower() in ["leader", "captain"]
 
 
 func _set_current_membership(value: Variant) -> void:

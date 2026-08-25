@@ -1,5 +1,360 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Giga Impact, Psyshock, Explosion, and Water Shuriken now have their own battle animations and sound effects.
+- Added full Simplified Chinese language support throughout the game and launcher.
+
+**Fixed**
+
+- Pokémon in battle now show the correct blue male or pink female gender icon.
+- Forum announcements now appear in launcher and login news even when the forum omits their preview text.
+
+## 0.3.63 - 2026-08-25
+
+**Added**
+
+- The Mysterious Outfit Box can now be bought from the Aether Gift Store for 400 Aether Gems.
+- Pokémon Showdown export sets can now be copied from a Pokémon's Summary.
+- A mysterious golden Poké Ball can now be spotted near Master Thief Rook in Viridian City.
+
+**Changed**
+
+- Route 4 now uses its complete new outdoor layout, with its Mt. Moon and Cerulean City entrances in the correct places.
+- Main interface hover cards now share a clear, styled appearance across navigation, party, hotbar, status, buffs, and chat controls.
+- Bag hover cards now share a clear, styled appearance across item browsing and use screens.
+- Item Dex hover cards now share a clear, styled appearance.
+- Pokédex hover cards now share a clear, styled appearance across every tab.
+- Viridian City's EV Training Field now offers three tiers. Earn 3 and 6 Gym Badges to unlock evolved opponents that give 2 or 3 EVs per victory, with higher session fees for faster training.
+- EV allocation now clearly shows the current value, the 252-per-stat limit, the reachable value, and the 510 total limit. You can choose an exact target with a number field, slider, or Max button, and Mateo's lesson now guides you through the new target controls.
+- Mateo and the Field Assistants now explain training tiers, safe level 5 opponents, capture restrictions, and the combined per-stat EV limit.
+
+**Fixed**
+
+- The Mysterious Outfit now stays visible while fishing, surfing, and riding mounts.
+- Missing translations now reliably fall back to English.
+- Mega Eelektross's Eelevate Ability now explains its Ground and entry-hazard immunity and its highest-stat boost.
+- EV item previews now respect the combined limit of 252 Allocated and Stored EVs per stat.
+- Hidden Power now shows its actual type in battle instead of always showing Normal.
+- Hidden Power descriptions now correctly state that the move always has 60 Power.
+
+## 0.3.62 - 2026-08-24
+
+**Added**
+
+- Added Player Loans. Offer Pokémon or reusable held items to a nearby Trainer for a chosen duration and optional fee, then manage active and completed loans from the Social menu.
+- Player Loans now include return requests, notifications, a searchable 30-day history, and clear loan markers in the Party, PC, Bag, and Pokémon Summary.
+- Added the Guild Bank with shared funds, Pokémon and item storage, borrowing, rank-based permissions, and activity history.
+- Guilds now have Leader, Captain, Member, and Recruit ranks. Players can join open Guilds or apply to Guilds that review new members.
+- Added Rock Smash as a daily skill. Karate Master Kenji teaches the skill in Pewter City, and more rocks and rewards become available as it levels up.
+- The story now continues through Mt. Moon to Route 4 and Cerulean City, with new battles, wild Pokémon, item pickups, and places to explore.
+- Added new options for unrated private battles, including rooms without a tier and Aether OU rooms.
+- Added the Aether Clash Battle Royale, Duel, and waiting-area visuals.
+- Added the unisex Mysterious Outfit with separate clothing pieces.
+- If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report that can be viewed from the notification or the Support page in Settings.
+- Launcher and login news now follow official forum announcements.
+
+**Changed**
+
+- Pokémon Summary hover hints now share the same clear, styled appearance.
+- Borrowed Pokémon can train, level up, evolve, move between the Party and PC, and change held items. Other permanent changes remain available only to their owner.
+- Player Loan screens now separate Pokémon and items, show every asset individually, and make deadlines, returns, and loan status easier to understand.
+- Guild screens now make applications, ranks, members, bank contents, chat, and travel easier to find and use.
+- The Skills window now has clearer progress cards, level rewards, and improved area and catch lists for Fishing, Thieving, and Rock Smash.
+- Regional Aethernet travel now costs ₽200, or ₽100 with an active Aether Blessing. Aether Anchors remain free.
+- Mt. Moon now rewards TM Payback; TM Thief remains a reward from the Thieving quest.
+- Battle Bond Greninja now changes into Ash-Greninja after gaining its once-per-battle stat boosts and returns to normal after switching out.
+- Champions ZA and the new Mega Evolutions are now available in supported unrated battles, with clearer explanations when a Pokémon is not compatible.
+- Ranked PvP now opens and reconnects more quickly while keeping the correct queue time.
+- Ground items now play a pickup sound and appear in System messages without interrupting play with a dialogue window.
+- Poké Mart item buyers now accept every tradeable item in the Bag, including items the shop does not sell.
+
+**Fixed**
+
+- Player Loans now refresh the Party, PC, Bag, and loan lists correctly when an offer is accepted or an asset is returned.
+- Loaned items and recently returned Pokémon now appear reliably in the correct Bag or PC location.
+- Loan deadlines and automatic returns now remain clear and reliable, including while a player is offline or in battle.
+- Fixed several Mt. Moon story scenes, Trainer sight ranges, portraits, animations, scenery, item locations, and entrances.
+- Pokémon Storage and read-only Summaries now show names and details more clearly and behave more reliably.
+- Champions ZA Mega Evolutions now use the correct sprites, names, forms, abilities, and battle stats throughout the interface.
+- Launcher downloads now recover from slow or interrupted connections and can resume after restarting the launcher.
+- NPC dialogue now opens more quickly, and missing translations reliably fall back to English.
+- Ogerpon's correct battle sprites are now included in game downloads.
+- Training Rooms no longer blame a valid Poképaste when room timers are temporarily unavailable.
+- Wild battles now immediately show the first Pokémon that can battle when an earlier party member has fainted.
+- The house on Route 2 can now be entered and exited safely.
+- Ash-Greninja now loads its Pokédex sprite without a false missing-asset error.
+- Fixed collision and visual layering in the Aether Clash waiting area and Battle Royale jail.
+
+## 0.3.59 - 2026-08-20
+
+**Added**
+
+- An active Aether Blessing now gives 5% better Shiny odds, 5% off at NPC shops, half-price regional Aether Transit, and a second free Aether Anchor. You can see these bonuses in your boost list.
+- Mom now gives you an Ability Capsule from Dadinho when you return home after delivering Oak's Parcel.
+- Added PvP Training Rooms. Paste a team from Poképaste and battle with it without changing your regular party.
+- Timers can now be turned on in Custom and Training Rooms. You can choose Casual, Relaxed, Standard, Fast, Blitz, or Lightning.
+- You can now search the Pokédex by number as well as by name.
+
+**Changed**
+
+- An Ability Patch now unlocks and selects a Pokémon's Hidden Ability. An Ability Capsule can switch between all unlocked Abilities.
+- Timed Custom and Training Rooms now use the Casual timer by default.
+- It is now clearer when a Pokémon Summary is only for viewing. Move information is easier to inspect, and the Bag shows which party members can use the selected item.
+- Global Heal now has a 5-minute cooldown. Its window and choices are also clearer.
+
+**Fixed**
+
+- Training Rooms now use the correct pasted team when switching Pokémon. Team Preview is shown only to the correct player.
+- Fixed several Custom Room timer problems. Finished PvP battles also recover more reliably after a connection problem.
+- Ogerpon now keeps the correct mask, name, move type, and sprite during battles.
+- Global Boost panels now update when another player contributes or activates a boost.
+- Global Heal requests now appear only once per use, even after reconnecting. The icon also shows when Global Heal is active or cooling down.
+- Shared Pokémon teams now fit and line up better in chat.
+- The Aether Clash Lobby now uses the correct outdoor zoom setting.
+
+## 0.3.58 - 2026-08-19
+
+**Added**
+
+- Added the Aether Exchange, a fixed-price marketplace for buying and selling eligible Pokémon and items. Listings can be searched, filtered and sorted, and Pokémon can be inspected through a complete read-only Summary before purchase.
+- Added a secure Account Portal that opens from Account Settings after signing in through the game. Trainers can change their display name, password or email address and manage personal-data exports and account deletion without a separate browser login.
+- Email changes now require confirmation from the new inbox. The current inbox has 72 hours to approve or cancel the request; approval from both addresses applies the change immediately, while no response from the old address allows the verified change to complete after the review window.
+- Chat messages now have context actions for copying the message or its full details, starting a private conversation and sending a friend request.
+- Owned Pokémon can now be given a nickname from their Summary for ₽5,000. Nicknames may contain up to 18 characters, are checked for disallowed content, and appear with species context in battles and battle logs.
+- Added Global Heal: for ₽25,000, a Trainer can offer every online Trainer an optional full-party heal. Requests wait until battles finish, can be declined or disabled, do not award Aetherite, and the service has a 15-minute cooldown.
+
+**Changed**
+
+- The Aether Exchange now offers detailed Pokémon and item filters, individual IV filters, price, level and date sorting, compact listing cards and clearer confirmations and status feedback.
+- The Pokédex now loads Pokémon progressively while scrolling, opens linked pre-evolutions and evolutions directly, and shows Pokémon HOME artwork in evolution entries.
+- Long chat messages, badges, sender names and shared Pokémon cards now wrap and align more cleanly.
+- The overworld hotbar now uses a paginated two-column layout and stays below the quest tracker when several quests are visible.
+- Exp. Share holders now receive eligible EV rewards as well as battle experience. Stored EVs can continue accumulating per stat after a Pokémon reaches the 510 allocated-EV limit, while allocation itself remains capped.
+- Gym Leader battles now use the stadium battlefield background.
+
+**Fixed**
+
+- Pokémon Summary cards now show each Pokémon's gender. Existing Pokémon without stored gender data are assigned a stable, species-appropriate gender.
+- Multi-hit attacks now keep HP changes continuous through knockouts instead of briefly restoring or rewinding the target's health.
+- NPC reserve Pokémon remain concealed while team-sidebar animations are playing.
+- Fixed fishing encounters being resolved incorrectly on maps that share encounter data.
+- Fixed player and tall-grass depth ordering, including affected grass on Route 22.
+- Fixed Professor Oak's starter objective missing its quest marker.
+- Fixed alternate Pokémon form names failing to resolve the correct sprites in shared cards and other interfaces.
+- Fixed malformed Pokémon levels appearing in battle hover information.
+- Story-driven Trainer battles now clearly explain when the party exceeds the current level cap instead of showing an unexpected error.
+- NPC Trainer battles now select your first healthy Pokémon when the current lead has fainted, preventing the next challenge from failing to start.
+- Fixed opposing NPC Pokémon occasionally appearing at level 100 after simultaneous faint-and-switch sequences, including poison or burn knockouts.
+
+## 0.3.57 - 2026-08-16
+
+**Added**
+
+- Added community-funded Global Boosts. Trainers can work together to activate double battle EXP (₽100,000), double EVs (₽50,000), and double encounter weight for Rare Pokémon and higher (₽200,000) for the whole server.
+- Added custom Global Boost contributions. Contributions are at least ₽10,000, never exceed the remaining goal, award 10 Aetherite for every full ₽10,000 contributed, and are announced to the server.
+- Added a community-funded Global Shiny Boost. Funding its ₽1,000,000 goal raises Shiny encounter odds for the whole server for seven days.
+- Shiny Charms can now be activated from the Bag. Each Charm raises your Shiny encounter odds by 10% for seven days, and repeated uses extend the duration.
+- Exp. Share now grants battle experience to eligible party Pokémon.
+- Evolution Stones and all trade-evolution items can now be used directly from the Bag. Linking Cords evolve trade Pokémon without trading and are sold at standard PokéMarts for ₽1,000.
+- Added a configurable Thieving hotkey in Control Settings.
+- Added an Aethernet Beacon menu with a clear explanation of the travel network and Aether Anchor management. Members can set a second Anchor.
+- Abra and Bounsweet starters now receive a Water-, Fire-, or Grass-type Hidden Power, giving them reliable early-game coverage.
+- Protean and similar type-changing effects now show the Pokémon's current type in a coloured battle indicator.
+- Brock's Onix is now Shiny.
+- The permanent Shiny Tracker is now included in every Trainer's Bag and defaults to hotbar slot 2.
+- Shared Shiny Tracker hunts now also show the owner's overall encounter statistics.
+- Shared Shiny Tracker hunts can now be posted in chat and opened through a compact Shiny Tracker card.
+- Gideon's catching lesson now rewards a Lucky Egg alongside ten Great Balls; its holder earns 50% more battle EXP.
+
+**Changed**
+
+- The overworld hotbar now uses Ctrl+1 through Ctrl+8, leaving the plain 1 through 4 keys free for battle moves.
+- Removed the redundant Currency tab from the Bag; account balances remain available in the Trainer Card wallet.
+- Map chat is now available from the General channel selector alongside Global, Trade, and Help.
+- Aethernet travel now uses a destination catalogue: Aether Anchor destinations are free, while other attuned destinations cost ₽500.
+- Mom remains available to heal your Pokémon after you receive your starter; her story conversation now waits until you receive the Pokédex.
+- The Viridian EV Training Assistants, Youngster Caleb, and other placed Trainers now use localized dialogue.
+- Global Boost panels now show accurate goals, a live minute countdown during an active boost, clearer contribution controls, and inline payment errors.
+
+**Fixed**
+
+- Fixed Ranked team-validation reasons disappearing after the server finished checking the selected team.
+- Fixed the PvP damage calculator getting stuck when its opening privacy-safe battle snapshot became stale.
+- Fixed Photo Mode zoom using an absolute camera scale that prevented reliable zooming on interior maps and canvas-scaled displays.
+- Trainer rematches now only start their cooldown after you win.
+- Battle logs now correctly identify your Pokémon during switches and retain NPC Trainer names.
+- Fixed blackout recovery and overworld presence reconnects that could leave a Trainer unable to resume normally.
+- Fixed the inactive Pewter City Aether Beacon and restored encounters for main Kanto caves and landmark areas.
+- Fixed unclear battle stat-stage labels, removed unnecessary EV reward messages, and made a left mouse click advance dialogue like Space.
+- Fixed Global Boost panels occasionally opening at the wrong height or trapping a Trainer after an insufficient-funds message.
+- Developer world-time previews now also control time-based wild encounters.
+- Technical Machines are now consumed after successfully teaching their move; HMs remain reusable.
+- Fixed the Shiny Tracker failing to open before a Trainer had started their first hunt.
+- Active Shiny Tracker hunts now show the target Pokémon sprite.
+- The active Shiny Tracker counter now clearly identifies itself as the current hunt count.
+
+## 0.3.55 - 2026-08-16
+
+**Added**
+
+- Gym Badge progress now determines separate Pokémon level and trade caps. Your current caps are shown on the Trainer Card, Pokémon cannot level past the current cap, and trades cannot offer Pokémon above the recipient's trade cap.
+- Added battle animations for 63 more early-game moves, including Water Gun, Ember, Tackle, Vine Whip, Razor Leaf, Psychic, Hidden Power, Ice Shard, Double Team, and Teleport. Sound effects play where available.
+- Defeating Brock now begins the next main-story objective, which leads east through Route 3 and Mt. Moon toward Cerulean City.
+- Pokémon can now learn evolution moves immediately after evolving. These moves also have their own section in the Pokédex.
+- Abra and Bounsweet chosen as starters now begin with Hidden Power.
+
+**Changed**
+
+- Pewter Gym Trainers and Brock now have stronger teams and use more tactical strategies. They can switch out of poor matchups, use moves that change stats or status conditions at useful moments, and plan combinations across multiple turns.
+- The Bag now dims Pokémon that cannot use the selected item and explains why that target is unavailable.
+- New Pokémon now start with 50 friendship unless they already have a specific friendship value.
+
+**Fixed**
+
+- Route 3 now remains blocked until Brock is defeated, opens reliably afterward, and places Trainers at the correct entrance when arriving from Pewter City.
+- Fixed the battle damage calculator sometimes keeping outdated information after an NPC Trainer acted.
+- Fixed mouse clicks reaching the HUD during Gary's starter-selection cutscene.
+- Fixed missing Pokédex battle sprites for Pikachu Rock Star, Mega Raichu X, and Mega Raichu Y.
+- Trade errors now remain visible long enough to explain when a Pokémon exceeds the recipient's trade cap.
+- Move visuals no longer disappear when a sound effect is missing.
+
+## 0.3.53 - 2026-08-13
+
+**Added**
+
+- Added localized text to all interactive signs in Viridian City.
+- EV Expert Mateo and Catching Mentor Gideon now offer permanent topic menus after their quests, so their training instructions can be reviewed at any time.
+- The HUD quest tracker can now cycle between multiple active side quests.
+- Successful NPC heals now play a dedicated Pokémon recovery jingle.
+- Super-effective attacks now use a distinct hit sound when they deal damage.
+- Item discoveries and NPC item rewards now play their own acquisition jingles.
+- Added the Aether Clash Lobby. Guild members can travel there for free, and the name of the reigning Guild is shown below the location name.
+- The Aether Clash Lobby now contains animated purple and red portals for Guild wars.
+- Added Aethernet fast travel. Attune to a town's crystal to unlock it, then ask an Aethernet Keeper to take you to another unlocked town in the same region. You can also choose one Aether Anchor that is always free to reach.
+- The Aether Clash Lobby is now shown as a worldwide Aethernet hub. Public travel costs ₽1,000, while Guild members travel there for free.
+- Held items can now be dragged directly from the Bag onto an owned party slot or the held-item slot on a Pokémon Summary Card.
+- Party slots now have a right-click menu for opening the Summary Card, managing held items, and setting the lead Pokémon.
+- Fixed Route 1 Trainers starting overlapping dialogue and battle flows when spoken to as their sight challenge triggered.
+- Regular Trainer battles now select the player's first healthy lead automatically and conceal unrevealed opposing Pokémon behind Pokéball icons. Configured important battles can still use Team Preview.
+- PvE and PvP Trainer battles now keep all six battlefield party slots visible, with empty positions shown as disabled grey slots.
+- Added daily Trainer rematches. Their teams become stronger and can evolve as you progress.
+- Added an EV training field in Viridian City. Its battles teach EV training without damaging your Pokémon.
+- Added the Viridian Trainer School story, the first Pewter Gym challenge, and new houses to explore in Viridian City and Pewter City.
+- The battle damage calculator now has more room and keeps the battlefield and both teams in view.
+- While using the calculator, you can hover over your own Pokémon and revealed opposing Pokémon to view their known information.
+- You can adjust HP, status conditions, moves, abilities, items, stats, and field effects to explore different battle situations.
+- The calculator now supports Z-Moves and critical hits.
+- Haze now has its own mist animation and sound, and clearly shows when stat changes are removed.
+
+**Changed**
+
+- Gideon now clearly directs searches for a specific Pokémon to the Pokédex and current-map encounter checks to the Radar.
+- The focused EV training stat picker now uses a compact themed interface with distinct stat colours.
+- Item-reward and recovery jingles now wait until their dialogue closes or their result message is shown.
+- Wild Pokémon now choose moves randomly, while Trainer opponents try to use the move that will deal the most damage.
+- Regular Trainer battles no longer show Team Preview; it remains available for important battles.
+- The Aether Clash Lobby now stays clear, follows the day-and-night cycle, and uses the login-screen music.
+- Improved Aethernet travel points and nighttime lighting in Pallet Town, Viridian City, Pewter City, and the Aether Clash Lobby.
+- Damage results and battle-log percentages are now shown more precisely.
+- The calculator makes your Pokémon's stats, stat changes, move suggestions, KO chances, and field effects easier to read and adjust.
+- Weather, terrain, screens, hazards, and Spikes are easier to recognize and set for the correct side.
+- The calculator now follows the Pokémon you have sent out when you switch.
+
+**Fixed**
+
+- Fixed NPC dialogue helpers rejecting inline or localized fallback lines because Godot inferred them as untyped arrays.
+- Regular Trainer battles no longer briefly flash the lead-selection phase while automatic leads are being chosen.
+- Gary now waits to appear on Route 22 until Oak's Parcel has been delivered.
+- Fixed evolution choices sometimes appearing twice.
+- Fixed being able to move too early while choosing a starter from Professor Oak.
+- Fixed Aethernet crystals sometimes failing to respond, asking you to move closer while you were already beside them, or showing the wrong portrait.
+- Fixed the position of Aethernet Keepers and objects incorrectly covering players or nameplates in the Aether Clash Lobby.
+- The Aether Clash Lobby now works correctly when no Guild has won yet.
+- Fixed calculator results sometimes failing to load after switching Pokémon or changing battle tabs.
+- Fixed fainted Pokémon being unavailable in the calculator.
+- Fixed HP and HP percentage fields interfering with each other.
+- Fixed incomplete or incorrectly sized team information cards in the calculator.
+- Fixed the calculator occasionally showing the wrong Pokémon after a switch.
+- Consumable held items such as Eject Button, Focus Sash, and Berries now show the correct battle message and animation.
+- Fixed some active PvP players being incorrectly shown as disconnected.
+- Weather and terrain timers now show the correct remaining range after a faint or a pivot move, without revealing duration-extending items.
+- Fixed Terapagos's Tera Shift being shown as restoring health in PvP battles.
+- Fixed Team Preview occasionally opening without showing either team's Pokémon for one player.
+- Fixed some ranked matches leaving a player behind in the queue instead of bringing both players into the battle.
+- Fixed moves such as Haze and Clear Smog not clearly showing when they reset stat changes.
+
+## 0.3.52 - 2026-08-08
+
+**Added**
+
+- Your Pokémon's party hover card now shows the effective stats from stat-changing held items, including Choice items, Eviolite, Assault Vest, Iron Ball, Macho Brace, Power items, and several Pokémon-specific items.
+- PvP battles now show when a Pokémon is floating with an Air Balloon, including a clear indicator, battle-log message, and the correct “It had no effect!” feedback when a Ground-type move misses because of the balloon.
+
+**Changed**
+
+- The battle log now uses clearer colors to distinguish turns, actions, important battle events, and results.
+- Spectator side switching now moves the Trainer portraits, Trainer icons, and team information together with the Pokémon and player names.
+
+**Fixed**
+
+- Trainer appearances no longer change color when move animations pass over them.
+- Other players now see the correct beard color instead of a white beard.
+- Talking to Palet Kid Leo no longer traps you in an endless conversation.
+- Public held-item effects and effectiveness feedback in PvP are now shown consistently to both players and spectators.
+
+## 0.3.47 - 2026-08-06
+
+**Added**
+
+- Added Route 3 as a playable Kanto route, including new Trainer battles, wild encounters, a Pokémon Center, route signs, and the connection between Pewter City and Route 3.
+- Added Catching Mentor Gideon's Route 22 side quest. Learn how catching works, catch a Mankey, and receive 10 Great Balls as a reward.
+- Added the next part of the opening story: Gary's childhood-rival battle on Route 22, the journey toward Pewter City, and the first Gym challenge. Professor Oak now also gives you 10 Poké Balls with the Pokédex, and Dadinho's training reward is claimed by returning to him.
+- Added richer battle presentation for special Trainer battles, including battle introductions, Pokémon send-out callouts, contextual Trainer banter, and “Dodge!” reactions after genuine misses. These callouts are also visible to spectators.
+- Added the Viridian City jail manager, wanted-level-based bail costs, and staff detention support.
+
+**Changed**
+
+- Building entrances can now be controlled through world access. Buildings without an interior map remain blocked with a clear “This building is closed.” message.
+- Route guards now appear only when a route is actually blocked for the current Trainer. Story and party requirements still keep the Pallet Town guard in place until you collect a Pokémon from Oak.
+- Improved the battle Bag layout so it sits cleanly above the move controls, and key items no longer clutter the All Items category.
+- Skills now open with a simple overview first, with detailed information shown after selecting an individual skill.
+- Staff teleport tools now close their parent menu automatically, and staff map search uses the standard “Pokémon” spelling.
+- Removed Fearow from Route 22 wild encounters and adjusted the early-route encounter progression.
+
+**Fixed**
+
+- Fixed the Mankey catching quest not recognizing a Mankey caught on Route 22.
+- Fixed Pokémon move-learning choices failing to save.
+- Fixed early Kanto story progression stopping after the Town Map or after the Route 22 rival battle.
+- Fixed PvP hover information so revealed Pokémon usage history and activated held items are shown consistently.
+- Fixed movement remaining available behind modal shop, Atelier, and other overworld windows, while preserving authorized staff teleports.
+- Fixed duplicate chat reconnect attempts after progress resets and improved NPC battle transition handling.
+
+## 0.3.46 - 2026-08-05
+
+**Added**
+
+- Added the Thieving skill. Pickpocket supported NPCs to earn Thieving XP and Loot, build Wanted, and risk arrest and public service.
+- Added a Skills overview for Fishing and Thieving with levels, XP progress, bonuses, unlocks, and daily Thieving targets.
+- Added Surf mounts, starting with Lapras, plus a mount manager for choosing available travel companions.
+- Wild Pokémon can now vary by time of day. Encounter information shows when each Pokémon is available.
+- Early Kanto areas now feel livelier with more Trainers, residents, ambient Pokémon, route signs, and character portraits.
+
+**Changed**
+
+- Expanded Route 22 with complete gameplay and wild encounters, and refreshed Viridian City's layout, residents, and collision boundaries.
+- Improved overworld presentation with pixel-perfect scaling, revised zoom options, cleaner Surf animations, and clearer route guards.
+- Updated Pallet Town family dialogue and moved Dadinho's training quest to Route 1 so the opening story flows more naturally.
+
+**Fixed**
+
+- Fixed several PvP issues involving reconnect recovery, repeated turn choices, battle hazards, spectator information, and spectator forfeits.
+- Fixed Surf rider layering and animation problems, including the upward-facing rider alignment.
+- Fixed route guards or NPC dialogue occasionally blocking passage or failing to start correctly.
+
 ## 0.3.45 - 2026-08-03
 
 **Added**

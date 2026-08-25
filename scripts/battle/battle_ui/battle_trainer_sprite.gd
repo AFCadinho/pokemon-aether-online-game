@@ -2,17 +2,29 @@ extends Node2D
 
 class_name BattleTrainerSprite
 
+const BattleRenderLayers := preload("res://scripts/battle/battle_render_layers.gd")
 const REMOTE_PLAYER_AVATAR_SCRIPT_PATH := "res://scripts/world/remote_player_avatar.gd"
 const DEFAULT_DISPLAY_SCALE := 2.0
 
 @export_range(0.5, 4.0, 0.05) var display_scale := DEFAULT_DISPLAY_SCALE
 
 @onready var npc_sprite: AnimatedSprite2D = $NpcSprite
+@onready var command_callout: Control = $TrainerCommandCallout
 
 var player_avatar: Node2D
+var facing_direction := Vector2.RIGHT
+
+
+func _ready() -> void:
+	# Move animations intentionally cover Pokemon at MOVE_FOREGROUND. Trainer
+	# identities and their callouts must remain color-stable above that band.
+	z_as_relative = true
+	z_index = BattleRenderLayers.TRAINERS
 
 
 func clear() -> void:
+	if command_callout != null:
+		command_callout.call("clear_command")
 	visible = false
 	if player_avatar != null and is_instance_valid(player_avatar):
 		player_avatar.free()
@@ -24,6 +36,7 @@ func clear() -> void:
 
 func show_player(appearance_state: Dictionary, facing_direction: Vector2) -> void:
 	clear()
+	self.facing_direction = facing_direction
 	var avatar_script := load(REMOTE_PLAYER_AVATAR_SCRIPT_PATH) as Script
 	if avatar_script == null:
 		return
@@ -41,6 +54,9 @@ func show_player(appearance_state: Dictionary, facing_direction: Vector2) -> voi
 	# local position, so restore the avatar to this marker after applying state.
 	player_avatar.position = Vector2.ZERO
 	player_avatar.scale = Vector2.ONE * display_scale
+	# RemotePlayerAvatar is absolute in the overworld. In battle it must inherit
+	# this trainer's render band or its layered body parts fall back below moves.
+	player_avatar.z_as_relative = true
 	player_avatar.z_index = 0
 	player_avatar.call("set_interaction_enabled", false)
 	player_avatar.call("set_creator_nameplate_visible", false)
@@ -54,6 +70,7 @@ func show_npc(
 	sprite_offset := Vector2(0.0, -16.0)
 ) -> void:
 	clear()
+	self.facing_direction = facing_direction
 	if sprite_frames == null or npc_sprite == null:
 		return
 
@@ -67,6 +84,12 @@ func show_npc(
 	npc_sprite.stop()
 	npc_sprite.visible = true
 	visible = true
+
+
+func show_command(message: String) -> void:
+	if not visible or command_callout == null:
+		return
+	command_callout.call("show_command", message, facing_direction.x < 0.0)
 
 
 func _resolve_npc_animation(sprite_frames: SpriteFrames, facing_direction: Vector2) -> StringName:

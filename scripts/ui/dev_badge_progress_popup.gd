@@ -4,6 +4,9 @@ class_name DevBadgeProgressPopup
 
 signal closed
 
+const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/trainer_progress_dropdown_arrow.svg")
+const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/trainer_progress_radio_checked.svg")
+const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/trainer_progress_radio_unchecked.svg")
 const POPUP_SIZE := Vector2(720, 540)
 const REGION := "kanto"
 const BADGES: Array[Dictionary] = [
@@ -28,6 +31,29 @@ const KEY_ITEMS: Array[Dictionary] = [
 		"texture": "res://assets/ui/town_map_navigation.svg",
 	},
 ]
+const STORY_CHECKPOINTS: Array[Dictionary] = [
+	{"id": "journey_start", "chapter_id": "pallet", "label_key": "ui.staff.story_checkpoint.journey_start"},
+	{"id": "choose_starter", "chapter_id": "pallet", "label_key": "ui.staff.story_checkpoint.choose_starter"},
+	{"id": "oaks_parcel", "chapter_id": "pallet", "label_key": "ui.staff.story_checkpoint.oaks_parcel"},
+	{"id": "route_22_gary", "chapter_id": "viridian", "label_key": "ui.staff.story_checkpoint.route_22_gary"},
+	{"id": "trainer_school", "chapter_id": "viridian", "label_key": "ui.staff.story_checkpoint.trainer_school"},
+	{"id": "after_dadinho", "chapter_id": "viridian", "label_key": "ui.staff.story_checkpoint.after_dadinho"},
+	{"id": "pewter_gym", "chapter_id": "pewter", "label_key": "ui.staff.story_checkpoint.pewter_gym"},
+	{"id": "mt_moon_warning", "chapter_id": "mt_moon", "label_key": "ui.staff.story_checkpoint.mt_moon_warning"},
+	{"id": "mt_moon_grunts", "chapter_id": "mt_moon", "label_key": "ui.staff.story_checkpoint.mt_moon_grunts"},
+	{"id": "mt_moon_miguel", "chapter_id": "mt_moon", "label_key": "ui.staff.story_checkpoint.mt_moon_miguel"},
+	{"id": "mt_moon_fossil", "chapter_id": "mt_moon", "label_key": "ui.staff.story_checkpoint.mt_moon_fossil"},
+	{"id": "mt_moon_rescue", "chapter_id": "mt_moon", "label_key": "ui.staff.story_checkpoint.mt_moon_rescue"},
+	{"id": "cerulean_gym", "chapter_id": "cerulean", "label_key": "ui.staff.story_checkpoint.cerulean_gym"},
+	{"id": "cerulean_nugget_bridge", "chapter_id": "cerulean", "label_key": "ui.staff.story_checkpoint.cerulean_nugget_bridge"},
+]
+const STORY_CHAPTERS: Array[Dictionary] = [
+	{"id": "pallet", "label_key": "ui.staff.story_chapter.pallet"},
+	{"id": "viridian", "label_key": "ui.staff.story_chapter.viridian"},
+	{"id": "pewter", "label_key": "ui.staff.story_chapter.pewter"},
+	{"id": "mt_moon", "label_key": "ui.staff.story_chapter.mt_moon"},
+	{"id": "cerulean", "label_key": "ui.staff.story_chapter.cerulean"},
+]
 
 const UI_BG := Color("#050b14fa")
 const UI_SURFACE := Color("#0a1726f5")
@@ -45,6 +71,11 @@ var badge_content: VBoxContainer
 var key_item_content: VBoxContainer
 var badge_tab_button: Button
 var key_item_tab_button: Button
+var story_tab_button: Button
+var story_content: VBoxContainer
+var story_chapter_select: OptionButton
+var story_checkpoint_select: OptionButton
+var story_status_label: Label
 var badge_buttons: Dictionary = {}
 var badge_icon_rects: Dictionary = {}
 var badge_status_labels: Dictionary = {}
@@ -171,6 +202,15 @@ func _build_ui() -> void:
 	key_item_tab_button.pressed.connect(_show_tab.bind("key_items"))
 	tabs.add_child(key_item_tab_button)
 
+	story_tab_button = Button.new()
+	story_tab_button.name = "StoryTabButton"
+	story_tab_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	story_tab_button.custom_minimum_size = Vector2(0, 38)
+	story_tab_button.focus_mode = Control.FOCUS_NONE
+	_set_localized_property(story_tab_button, "text", "ui.staff.trainer_progress.story")
+	story_tab_button.pressed.connect(_show_tab.bind("story"))
+	tabs.add_child(story_tab_button)
+
 	badge_content = VBoxContainer.new()
 	badge_content.name = "BadgesContent"
 	badge_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -277,6 +317,7 @@ func _build_ui() -> void:
 	footer.add_child(status_label)
 
 	_build_key_items_ui(layout)
+	_build_story_ui(layout)
 	_show_tab(active_tab)
 	_render_badges()
 	_render_key_items()
@@ -372,6 +413,65 @@ func _build_key_items_ui(layout: VBoxContainer) -> void:
 	footer.add_child(key_item_status_label)
 
 
+func _build_story_ui(layout: VBoxContainer) -> void:
+	story_content = VBoxContainer.new()
+	story_content.name = "StoryContent"
+	story_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	story_content.add_theme_constant_override("separation", 16)
+	layout.add_child(story_content)
+
+	var notice := PanelContainer.new()
+	notice.add_theme_stylebox_override("panel", _panel_style(Color("#112033e8"), Color("#486888aa"), 9, 1))
+	story_content.add_child(notice)
+	var notice_margin := MarginContainer.new()
+	_set_margins(notice_margin, 14, 12, 14, 12)
+	notice.add_child(notice_margin)
+	var notice_label := _localized_label("ui.staff.story_checkpoint.notice", 12, UI_MUTED)
+	notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	notice_margin.add_child(notice_label)
+
+	var form := VBoxContainer.new()
+	form.add_theme_constant_override("separation", 8)
+	story_content.add_child(form)
+	form.add_child(_localized_label("ui.staff.story_chapter.select", 13, UI_TEXT))
+	story_chapter_select = OptionButton.new()
+	story_chapter_select.name = "StoryChapterSelect"
+	story_chapter_select.custom_minimum_size = Vector2(0, 46)
+	story_chapter_select.focus_mode = Control.FOCUS_NONE
+	_apply_story_checkpoint_dropdown_style(story_chapter_select)
+	story_chapter_select.item_selected.connect(_on_story_chapter_selected)
+	form.add_child(story_chapter_select)
+	form.add_child(_localized_label("ui.staff.story_checkpoint.select", 13, UI_TEXT))
+	story_checkpoint_select = OptionButton.new()
+	story_checkpoint_select.name = "StoryCheckpointSelect"
+	story_checkpoint_select.custom_minimum_size = Vector2(0, 46)
+	story_checkpoint_select.focus_mode = Control.FOCUS_NONE
+	_apply_story_checkpoint_dropdown_style(story_checkpoint_select)
+	form.add_child(story_checkpoint_select)
+	_refresh_story_chapter_options()
+	_refresh_story_checkpoint_options()
+
+	var spacer := Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	story_content.add_child(spacer)
+
+	var footer := HBoxContainer.new()
+	footer.add_theme_constant_override("separation", 10)
+	story_content.add_child(footer)
+	var apply_button := Button.new()
+	apply_button.name = "ApplyStoryCheckpointButton"
+	apply_button.custom_minimum_size = Vector2(210, 40)
+	_set_localized_property(apply_button, "text", "ui.staff.story_checkpoint.apply")
+	apply_button.pressed.connect(_apply_story_checkpoint)
+	_apply_button_style(apply_button, true)
+	footer.add_child(apply_button)
+	story_status_label = _label("", 11, UI_MUTED)
+	story_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	story_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	story_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	footer.add_child(story_status_label)
+
+
 func _toggle_badge(badge_id: String) -> void:
 	if busy:
 		return
@@ -411,15 +511,91 @@ func _submit_badges(badge_ids: Array[String], earned: bool) -> void:
 
 
 func _show_tab(tab_id: String) -> void:
-	active_tab = "key_items" if tab_id == "key_items" else "badges"
+	active_tab = tab_id if tab_id in ["badges", "key_items", "story"] else "badges"
 	if badge_content != null:
 		badge_content.visible = active_tab == "badges"
 	if key_item_content != null:
 		key_item_content.visible = active_tab == "key_items"
+	if story_content != null:
+		story_content.visible = active_tab == "story"
 	if badge_tab_button != null:
 		_apply_button_style(badge_tab_button, active_tab == "badges")
 	if key_item_tab_button != null:
 		_apply_button_style(key_item_tab_button, active_tab == "key_items")
+	if story_tab_button != null:
+		_apply_button_style(story_tab_button, active_tab == "story")
+
+
+func _refresh_story_chapter_options() -> void:
+	if story_chapter_select == null:
+		return
+	var selected_id := _selected_story_chapter_id()
+	story_chapter_select.clear()
+	for chapter: Dictionary in STORY_CHAPTERS:
+		story_chapter_select.add_item(_t(str(chapter.get("label_key", ""))))
+		var index := story_chapter_select.item_count - 1
+		var chapter_id := str(chapter.get("id", ""))
+		story_chapter_select.set_item_metadata(index, chapter_id)
+		if chapter_id == selected_id:
+			story_chapter_select.select(index)
+	if story_chapter_select.selected < 0 and story_chapter_select.item_count > 0:
+		story_chapter_select.select(0)
+
+
+func _refresh_story_checkpoint_options() -> void:
+	if story_checkpoint_select == null:
+		return
+	var chapter_id := _selected_story_chapter_id()
+	var selected_id := ""
+	if story_checkpoint_select.selected >= 0:
+		selected_id = str(story_checkpoint_select.get_item_metadata(story_checkpoint_select.selected))
+	story_checkpoint_select.clear()
+	for checkpoint: Dictionary in STORY_CHECKPOINTS:
+		if str(checkpoint.get("chapter_id", "")) != chapter_id:
+			continue
+		story_checkpoint_select.add_item(_t(str(checkpoint.get("label_key", ""))))
+		var index := story_checkpoint_select.item_count - 1
+		var checkpoint_id := str(checkpoint.get("id", ""))
+		story_checkpoint_select.set_item_metadata(index, checkpoint_id)
+		if checkpoint_id == selected_id:
+			story_checkpoint_select.select(index)
+	if story_checkpoint_select.selected < 0 and story_checkpoint_select.item_count > 0:
+		story_checkpoint_select.select(0)
+
+
+func _selected_story_chapter_id() -> String:
+	if story_chapter_select == null or story_chapter_select.selected < 0:
+		return ""
+	return str(story_chapter_select.get_item_metadata(story_chapter_select.selected))
+
+
+func _on_story_chapter_selected(_index: int) -> void:
+	_refresh_story_checkpoint_options()
+	_set_story_status("", false)
+
+
+func _apply_story_checkpoint() -> void:
+	if busy or story_checkpoint_select == null or story_checkpoint_select.selected < 0:
+		return
+	var checkpoint_id := str(story_checkpoint_select.get_item_metadata(story_checkpoint_select.selected))
+	var service := get_node_or_null("/root/PlayerGameStateService")
+	if service == null or not service.has_method("dev_set_story_checkpoint"):
+		_set_story_status(_t("ui.staff.story_checkpoint.unavailable"), true)
+		return
+	_set_busy(true)
+	_set_story_status(_t("ui.staff.story_checkpoint.applying"), false)
+	var result: Dictionary = await service.call("dev_set_story_checkpoint", checkpoint_id)
+	_set_busy(false)
+	if not bool(result.get("success", false)):
+		_set_story_status(str(result.get("error", _t("ui.staff.story_checkpoint.failed"))), true)
+		return
+	_set_story_status(_t("ui.staff.story_checkpoint.applied"), false)
+	var badge_service := get_node_or_null("/root/BadgeProgressionService")
+	if badge_service != null and badge_service.has_method("load_gym_badges"):
+		var badge_result: Dictionary = await badge_service.call("load_gym_badges")
+		if bool(badge_result.get("success", false)):
+			set_badge_state(badge_result)
+	_load_key_items.call_deferred()
 
 
 func _load_key_items() -> void:
@@ -600,6 +776,13 @@ func _set_key_item_status(message: String, is_error: bool) -> void:
 	key_item_status_label.add_theme_color_override("font_color", UI_ERROR if is_error else UI_MUTED)
 
 
+func _set_story_status(message: String, is_error: bool) -> void:
+	if story_status_label == null:
+		return
+	story_status_label.text = message
+	story_status_label.add_theme_color_override("font_color", UI_ERROR if is_error else UI_MUTED)
+
+
 func _t(key: String, replacements: Dictionary = {}) -> String:
 	var localization_manager := get_node_or_null("/root/LocalizationManager")
 	if localization_manager == null:
@@ -624,6 +807,8 @@ func _on_locale_changed(_locale: String) -> void:
 		localization_manager.call("localize_tree", self)
 	_render_badges()
 	_render_key_items()
+	_refresh_story_chapter_options()
+	_refresh_story_checkpoint_options()
 
 
 func _on_header_gui_input(event: InputEvent) -> void:
@@ -667,6 +852,94 @@ func _apply_button_style(button: Button, primary: bool) -> void:
 	button.add_theme_color_override("font_color", UI_TEXT)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
 	button.add_theme_color_override("font_disabled_color", Color("#687382"))
+
+
+func _apply_story_checkpoint_dropdown_style(select: OptionButton) -> void:
+	if select == null:
+		return
+	select.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	select.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	select.add_theme_font_size_override("font_size", 14)
+	select.add_theme_color_override("font_color", UI_TEXT)
+	select.add_theme_color_override("font_hover_color", Color.WHITE)
+	select.add_theme_color_override("font_pressed_color", Color.WHITE)
+	select.add_theme_color_override("font_focus_color", Color.WHITE)
+	select.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.5))
+	select.add_theme_constant_override("arrow_margin", 12)
+	select.add_theme_icon_override("arrow", DROPDOWN_ARROW)
+	select.add_theme_stylebox_override(
+		"normal",
+		_dropdown_button_style(UI_SURFACE, UI_BORDER)
+	)
+	select.add_theme_stylebox_override(
+		"hover",
+		_dropdown_button_style(UI_SURFACE_HOVER, UI_ACCENT)
+	)
+	select.add_theme_stylebox_override(
+		"pressed",
+		_dropdown_button_style(Color("#172d41"), UI_ACCENT)
+	)
+	select.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	select.add_theme_stylebox_override(
+		"disabled",
+		_dropdown_button_style(Color("#09111c"), Color("#303b4b"))
+	)
+
+	var popup := select.get_popup()
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.add_theme_font_size_override("font_size", 14)
+	popup.add_theme_color_override("font_color", UI_MUTED)
+	popup.add_theme_color_override("font_hover_color", UI_TEXT)
+	popup.add_theme_color_override("font_disabled_color", Color("#687382"))
+	popup.add_theme_color_override("font_outline_color", Color("#02070b"))
+	popup.add_theme_constant_override("outline_size", 1)
+	popup.add_theme_constant_override("item_start_padding", 10)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 6)
+	popup.add_theme_stylebox_override("panel", _dropdown_popup_style())
+	popup.add_theme_stylebox_override(
+		"hover",
+		_dropdown_item_style(Color("#17304afa"), UI_ACCENT)
+	)
+	popup.add_theme_icon_override("radio_checked", DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked", DROPDOWN_RADIO_UNCHECKED)
+	popup.add_theme_icon_override("radio_checked_disabled", DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked_disabled", DROPDOWN_RADIO_UNCHECKED)
+
+
+func _dropdown_button_style(background: Color, border: Color) -> StyleBoxFlat:
+	var style := _panel_style(background, border, 8, 1)
+	style.content_margin_left = 12
+	style.content_margin_top = 8
+	style.content_margin_right = 30
+	style.content_margin_bottom = 8
+	return style
+
+
+func _dropdown_popup_style() -> StyleBoxFlat:
+	var style := _dropdown_item_style(UI_BG, UI_BORDER, 9)
+	style.content_margin_left = 5
+	style.content_margin_top = 6
+	style.content_margin_right = 5
+	style.content_margin_bottom = 6
+	style.shadow_color = Color("#00000099")
+	style.shadow_size = 14
+	style.shadow_offset = Vector2(0, 6)
+	return style
+
+
+func _dropdown_item_style(
+	background: Color,
+	border: Color,
+	radius: int = 6
+) -> StyleBoxFlat:
+	var style := _panel_style(background, border, radius, 1)
+	style.content_margin_left = 8
+	style.content_margin_top = 5
+	style.content_margin_right = 8
+	style.content_margin_bottom = 5
+	return style
 
 
 func _panel_style(background: Color, border: Color, radius: int, width: int) -> StyleBoxFlat:

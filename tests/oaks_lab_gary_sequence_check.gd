@@ -9,11 +9,17 @@ const OAK_SCRIPT := "res://scripts/world/kanto/towns/pallet_town/oak.gd"
 const STARTER_BALL_SCRIPT := "res://scripts/world/interactables/starter_poke_ball.gd"
 const WORLD_SCRIPT := "res://scripts/world/world.gd"
 const BASE_NPC_SCRIPT := "res://scripts/world/npcs/base_npc.gd"
+const GAME_STATE_SCRIPT := "res://scripts/core/game_state.gd"
+const UI_OVERLAY_SCRIPT := "res://scripts/ui/ui_overlay.gd"
 
 var failed := false
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
 	var lab_resource := load(LAB_SCENE) as PackedScene
 	_check_true(lab_resource != null, "Oak's Lab scene loads with starter balls")
 	_check_true(load(GARY_SCENE) is PackedScene, "Oak's Lab Gary scene loads")
@@ -58,8 +64,9 @@ func _init() -> void:
 	)
 	_check_true(
 		gary_text.contains("play_parcel_return_departure")
-		and gary_text.contains("ROUTE_22_DEPARTURE_DIALOGUE_ID"),
-		"Gary returns after the parcel and announces Route 22"
+		and gary_text.contains("ROUTE_22_DEPARTURE_DIALOGUE_ID")
+		and gary_text.contains("parcel_departure_pending"),
+		"Gary stays present through the parcel scene and then announces Route 22"
 	)
 	_check_true(
 		gary_text.contains("_set_story_presence(false)"),
@@ -79,14 +86,46 @@ func _init() -> void:
 		"Gary stays visible while the starter claim hands off to his turn"
 	)
 	_check_true(
+		gary_text.contains("func is_starter_sequence_active() -> bool:")
+		and gary_text.contains("return starter_sequence_pending or starter_sequence_running"),
+		"Gary exposes the complete pending and running starter sequence window"
+	)
+	_check_true(
+		gary_text.contains("GameState.acquire_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)")
+		and gary_text.contains("GameState.release_overworld_input_lock(STARTER_SEQUENCE_INPUT_LOCK)")
+		and gary_text.contains("GameState.acquire_ui_input_lock(STARTER_SEQUENCE_INPUT_LOCK)")
+		and gary_text.contains("GameState.release_ui_input_lock(STARTER_SEQUENCE_INPUT_LOCK)"),
+		"Gary owns the overworld and UI input locks throughout his starter walk and dialogue"
+	)
+	var game_state_text := _read_text(GAME_STATE_SCRIPT)
+	_check_true(
+		game_state_text.contains("func acquire_ui_input_lock(owner_id: StringName) -> void:")
+		and game_state_text.contains("func release_ui_input_lock(owner_id: StringName) -> void:"),
+		"UI input locks preserve independent owners during nested dialogue"
+	)
+	var ui_overlay_text := _read_text(UI_OVERLAY_SCRIPT)
+	_check_true(
+		ui_overlay_text.contains('ui_input_mouse_blocker.name = "UIInputMouseBlocker"')
+		and ui_overlay_text.contains("ui_input_mouse_blocker.mouse_filter = Control.MOUSE_FILTER_STOP")
+		and ui_overlay_text.contains("var should_block := GameState.is_ui_input_locked()"),
+		"The HUD consumes mouse clicks while story UI input is locked"
+	)
+	_check_true(
+		oak_text.contains("func _run_story_or_legacy_interaction(body: Node2D, trigger: String)")
+		and oak_text.contains('"status": "gary_starter_sequence_active"')
+		and oak_text.contains("return await super._run_story_or_legacy_interaction(body, trigger)"),
+		"Oak blocks both parcel story hooks and normal dialogue until Gary has left"
+	)
+	_check_true(
 		gary_text.contains('if parcel_status == "active":')
 		and gary_text.contains('_set_story_presence(_is_parcel_return_active())'),
 		"Active parcel progress keeps Gary hidden until the return step"
 	)
 	_check_true(oak_text.contains("_schedule_gary_starter_sequence(player, create_result)"), "Oak hands the new-starter flow to Gary")
 	_check_true(
-		oak_text.contains('gary.call("play_parcel_return_departure", player)'),
-		"Oak hands the completed parcel scene to Gary"
+		oak_text.contains('gary.call("prepare_parcel_return_departure")')
+		and oak_text.contains('gary.call("play_parcel_return_departure", player)'),
+		"Oak keeps Gary staged throughout the completed parcel scene"
 	)
 	var starter_ball_text := _read_text(STARTER_BALL_SCRIPT)
 	_check_true(

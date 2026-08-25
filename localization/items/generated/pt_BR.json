@@ -1,11 +1,11 @@
 {
   "ability-capsule": {
     "name": "Cápsula de Habilidade",
-    "shortDesc": "Alterna um Pokémon entre suas duas habilidades possíveis (não ocultas)."
+    "shortDesc": "Alterna entre todas as Habilidades desbloqueadas de um Pokémon, incluindo a Habilidade Oculta."
   },
   "ability-patch": {
     "name": "Atualização de habilidade",
-    "shortDesc": "Um patch que permite que um Pokémon com uma habilidade regular tenha uma habilidade rara."
+    "shortDesc": "Desbloqueia permanentemente a Habilidade Oculta de um Pokémon e a ativa imediatamente."
   },
   "ability-shield": {
     "name": "Escudo de Habilidade",
@@ -18,6 +18,10 @@
   "absolite": {
     "name": "Absoluto",
     "shortDesc": "Realizado: Permite que Absol Megaevolua para Mega Absol."
+  },
+  "absolite-z": {
+    "name": "Absolita Z",
+    "shortDesc": "Se Absol estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "absorb-bulb": {
     "name": "Absorver Bulbo",
@@ -97,19 +101,19 @@
   },
   "aether-blessing-voucher-14-days": {
     "name": "Vale da Bênção do Aether · 14 dias",
-    "shortDesc": "Um vale negociável que adiciona quatorze dias à Bênção do Aether de quem o recebe."
+    "shortDesc": "Um vale negociável para quatorze dias de Bênção Aether com chance Shiny ×1,05, 50% de desconto em viagens e duas Âncoras grátis."
   },
   "aether-blessing-voucher-3-days": {
     "name": "Vale da Bênção do Aether · 3 dias",
-    "shortDesc": "Um vale negociável que adiciona três dias à Bênção do Aether de quem o recebe."
+    "shortDesc": "Um vale negociável para três dias de Bênção Aether com chance Shiny ×1,05, 50% de desconto em viagens e duas Âncoras grátis."
   },
   "aether-blessing-voucher-30-days": {
     "name": "Vale da Bênção do Aether · 30 dias",
-    "shortDesc": "Um vale negociável que adiciona trinta dias à Bênção do Aether de quem o recebe."
+    "shortDesc": "Um vale negociável para trinta dias de Bênção Aether com chance Shiny ×1,05, 50% de desconto em viagens e duas Âncoras grátis."
   },
   "aether-blessing-voucher-7-days": {
     "name": "Vale da Bênção do Aether · 7 dias",
-    "shortDesc": "Um vale negociável que adiciona sete dias à Bênção do Aether de quem o recebe."
+    "shortDesc": "Um vale negociável para sete dias de Bênção Aether com chance Shiny ×1,05, 50% de desconto em viagens e duas Âncoras grátis."
   },
   "aether-blossom-chroma-earrings": {
     "name": "Brincos Chroma Aether Blossom",
@@ -283,6 +287,10 @@
     "name": "Banettita",
     "shortDesc": "Realizado: Permite que Banette megaevolua para Mega Banette."
   },
+  "barbaracite": {
+    "name": "Barbaracita",
+    "shortDesc": "Se Barbaracle estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "basement-key": {
     "name": "Chave do porão",
     "shortDesc": "HS: Chave do túnel sob Goldenrod City. Geração III: Chave para New Mauville."
@@ -298,6 +306,10 @@
   "battle-pocket": {
     "name": "Bolso de Batalha",
     "shortDesc": "- - -"
+  },
+  "baxcalibrite": {
+    "name": "Baxcalibrita",
+    "shortDesc": "Se Baxcalibur estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "beach-glass": {
     "name": "Vidro de praia",
@@ -595,6 +607,10 @@
     "name": "Pedra calcária",
     "shortDesc": "Uma pequena pedra esbranquiçada encontrada na beira da estrada."
   },
+  "chandelurite": {
+    "name": "Chandelurita",
+    "shortDesc": "Se Chandelure estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "charcoal": {
     "name": "Carvão",
     "shortDesc": "Realizado: Movimentos Fire-Type do titular causam 20% a mais de dano."
@@ -627,6 +643,10 @@
     "name": "Valorize a bola",
     "shortDesc": "Tenta capturar um Pokémon selvagem."
   },
+  "chesnaughtite": {
+    "name": "Chesnaughtita",
+    "shortDesc": "Se Chesnaught estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "chesto-berry": {
     "name": "Chesto Berry",
     "shortDesc": "Realizado: Consumido durante o sono para curar o sono."
@@ -638,6 +658,10 @@
   "chill-drive": {
     "name": "Relaxamento",
     "shortDesc": "Concede a Genesect um Techno Blast branco do tipo Ice."
+  },
+  "chimechite": {
+    "name": "Chimechita",
+    "shortDesc": "Se Chimecho estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "chipped-pot": {
     "name": "Pote Lascado",
@@ -674,6 +698,10 @@
   "clear-bell": {
     "name": "Sino claro",
     "shortDesc": "HS: Permite que garotas quimono invoquem Ho-oh. C: Invoca Suicune para a Torre de Lata."
+  },
+  "clefablite": {
+    "name": "Clefablita",
+    "shortDesc": "Se Clefable estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "clever-wing": {
     "name": "Pena Inteligente",
@@ -767,6 +795,10 @@
     "name": "Capa Secreta",
     "shortDesc": "O titular não é afetado pelo efeito secundário do ataque de outro Pokémon. Ataques com efeitos secundários que são evitados incluem aqueles com chance (até 100%) de paralisar, dormir, congelar, queimar, envenenar, confundir, fazer o portador recuar, fazer com que os estágios de estatísticas do portador sejam reduzidos, bem como Anchor Shot, Eerie Spell, Fling, Psychic Noise, Salt Cure, Spirit Shackle, Syrup Bomb e Throat Chop. O efeito de Sparkling Aria é evitado se o titular for o único alvo. Efeitos secundários adicionados por King's Rock, Razor Fang e as habilidades Poison Touch, Stench e Toxic Chain também são evitados contra o titular."
   },
+  "crabominite": {
+    "name": "Crabominita",
+    "shortDesc": "Se Crabominable estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "cracked-pot": {
     "name": "Pote quebrado",
     "shortDesc": "Um bule peculiar que pode fazer evoluir uma certa espécie de Pokémon. Pode estar rachado, mas o chá servido é delicioso."
@@ -811,6 +843,10 @@
     "name": "Darkínio Z",
     "shortDesc": "Held: Permite que um Pokémon use os movimentos Z equivalentes aos seus movimentos Dark."
   },
+  "darkranite": {
+    "name": "Darkranita",
+    "shortDesc": "Se Darkrai estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "dawn-stone": {
     "name": "Pedra do Amanhecer",
     "shortDesc": "Evolui um Kirlia macho para Gallade ou uma Snorunt fêmea para Froslass."
@@ -834,6 +870,10 @@
   "defog-charm": {
     "name": "Amuleto de Defog",
     "shortDesc": "Permite usar Defog sem que um Pokémon conheça o movimento."
+  },
+  "delphoxite": {
+    "name": "Delphoxita",
+    "shortDesc": "Se Delphox estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "destiny-knot": {
     "name": "Nó do Destino",
@@ -903,6 +943,10 @@
     "name": "Prato Draco",
     "shortDesc": "Realizado: Movimentos do Tipo Dragão do titular causam 20% a mais de dano. Muda o tipo de Arceuss e Julgamentos para Dragão."
   },
+  "dragalgite": {
+    "name": "Dragalgita",
+    "shortDesc": "Se Dragalge estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "dragon-fang": {
     "name": "Presa de Dragão",
     "shortDesc": "Realizado: Golpes do Tipo Dragão do titular causam 20% a mais de dano."
@@ -923,6 +967,10 @@
     "name": "Caveira de Dragão",
     "shortDesc": "Retorne ao museu na cidade de Nacrene."
   },
+  "dragoninite": {
+    "name": "Dragoninita",
+    "shortDesc": "Se Dragonite estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "dragonium-z--bag": {
     "name": "Dragão Z",
     "shortDesc": "XXX novo efeito para dragonium-z--bag"
@@ -930,6 +978,10 @@
   "dragonium-z--held": {
     "name": "Dragão Z",
     "shortDesc": "Held: Permite que um Pokémon use os movimentos Z equivalentes aos seus movimentos de Dragão."
+  },
+  "drampanite": {
+    "name": "Drampanita",
+    "shortDesc": "Se Drampa estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "dread-plate": {
     "name": "Placa do Medo",
@@ -983,6 +1035,10 @@
     "name": "Placa Terrestre",
     "shortDesc": "Realizado: Movimentos Ground-Type do titular causam 20% a mais de dano. Muda o tipo de Arceuss e Judgments para Ground."
   },
+  "eelektrossite": {
+    "name": "Eelektrossita",
+    "shortDesc": "Se Eelektross estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "eevium-z--bag": {
     "name": "Eevium Z",
     "shortDesc": "XXX novo efeito para eevium-z--bag"
@@ -1031,6 +1087,10 @@
     "name": "Elixir",
     "shortDesc": "Restaura 10 PP para cada movimento."
   },
+  "emboarite": {
+    "name": "Emboarita",
+    "shortDesc": "Se Emboar estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "endorsement": {
     "name": "Endosso",
     "shortDesc": "Uma carta de recomendação necessária para participar do Gym Challenge."
@@ -1078,6 +1138,10 @@
   "eviolite": {
     "name": "Eviolita",
     "shortDesc": "Mantido: Holder tem 1,5 de Defesa e Defesa Especial, desde que não esteja totalmente evoluído."
+  },
+  "excadrite": {
+    "name": "Excadrita",
+    "shortDesc": "Se Excadrill estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "exp-candy-l": {
     "name": "Exp. Doce L",
@@ -1135,6 +1199,10 @@
     "name": "Memória de fada",
     "shortDesc": "Realizado: Muda Silvally para sua forma de Fada. Muda o tipo de ataques múltiplos para Fada."
   },
+  "falinksite": {
+    "name": "Falinksita",
+    "shortDesc": "Se Falinks estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "fame-checker": {
     "name": "Verificador de Fama",
     "shortDesc": "Registra informações sobre NPCs."
@@ -1150,6 +1218,10 @@
   "fast-ball": {
     "name": "Bola rápida",
     "shortDesc": "4 de eficácia em Pokémon com velocidade base 100 ou superior. (Geração II: Pokémon em roaming ou em fuga). Feito de Apricórnio Branco."
+  },
+  "feraligite": {
+    "name": "Feraligita",
+    "shortDesc": "Se Feraligatr estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "festival-ticket": {
     "name": "Ingresso para o Festival",
@@ -1223,6 +1295,10 @@
     "name": "Pedra Flutuante",
     "shortDesc": "Realizado: Suporte tem peso 0,5."
   },
+  "floettite": {
+    "name": "Floettita",
+    "shortDesc": "Se Floette Flor Eterna estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "flower-sweet": {
     "name": "Flor Doce",
     "shortDesc": "Um doce em forma de flor. Quando um Milcery segura isso, ele gira alegremente."
@@ -1291,6 +1367,10 @@
     "name": "Bola Amiga",
     "shortDesc": "Pokémon capturados começam com 200 de felicidade. Feito de Apricórnio Verde."
   },
+  "froslassite": {
+    "name": "Froslassita",
+    "shortDesc": "Se Froslass estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "fruit-bunch": {
     "name": "Cacho de frutas",
     "shortDesc": "Um dos muitos ingredientes que podem ser usados ​​para cozinhar em seu acampamento. Os frutos xaroposos exalam um forte toque tropical."
@@ -1334,6 +1414,10 @@
   "garchompite": {
     "name": "Garchompita",
     "shortDesc": "Realizado: Permite que Garchomp Megaevolua para Mega Garchomp."
+  },
+  "garchompite-z": {
+    "name": "Garchompita Z",
+    "shortDesc": "Se Garchomp estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "gardevoirite": {
     "name": "Gardevoirita",
@@ -1383,6 +1467,10 @@
     "name": "Glalite",
     "shortDesc": "Realizado: Permite que Glalie Megaevolua para Mega Glalie."
   },
+  "glimmoranite": {
+    "name": "Glimmoranita",
+    "shortDesc": "Se Glimmora estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "go-goggles": {
     "name": "Óculos de proteção",
     "shortDesc": "Permite passagem por desertos ventosos."
@@ -1402,6 +1490,14 @@
   "gold-teeth": {
     "name": "Dentes de Ouro",
     "shortDesc": "As dentaduras dos Guardiões da Zona Safari. Troque por HM04 (Força)."
+  },
+  "golisopite": {
+    "name": "Golisopita",
+    "shortDesc": "Se Golisopod estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
+  "golurkite": {
+    "name": "Golurkita",
+    "shortDesc": "Se Golurk estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "good-rod": {
     "name": "Vara Boa",
@@ -1467,6 +1563,10 @@
     "name": "Fragmento Verde",
     "shortDesc": "Sem efeito. Pode ser trocado por itens ou movimentos."
   },
+  "greninjite": {
+    "name": "Greninjita",
+    "shortDesc": "Se Greninja estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "grepa-berry": {
     "name": "Grepa Berry",
     "shortDesc": "Reduz os valores de esforço de defesa especial em 10 e aumenta a felicidade."
@@ -1527,6 +1627,10 @@
     "name": "Menta Apressada",
     "shortDesc": "Quando um Pokémon cheira esta menta, sua velocidade crescerá mais facilmente, mas sua defesa crescerá mais lentamente."
   },
+  "hawluchanite": {
+    "name": "Hawluchanita",
+    "shortDesc": "Se Hawlucha estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "heal-ball": {
     "name": "Bola de Cura",
     "shortDesc": "Tenta capturar um Pokémon selvagem. Os Pokémon capturados são curados imediatamente."
@@ -1562,6 +1666,10 @@
   "heat-rock": {
     "name": "Rocha Aquecida",
     "shortDesc": "Realizado: Sunny Day pelo titular dura 8 rodadas em vez de 5."
+  },
+  "heatranite": {
+    "name": "Heatranita",
+    "shortDesc": "Se Heatran estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "heavy-ball": {
     "name": "Bola Pesada",
@@ -1979,6 +2087,10 @@
     "name": "Lucarionita",
     "shortDesc": "Realizado: Permite que Lucario Megaevolua para Mega Lucario."
   },
+  "lucarionite-z": {
+    "name": "Lucarionita Z",
+    "shortDesc": "Se Lucario estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "luck-incense": {
     "name": "Incenso da Sorte",
     "shortDesc": "Realizado: Dobra o dinheiro ganho em uma batalha. Não acumula com Moeda Amuleto. Reprodução: Chansey e Blissey geram um Ovo Feliz."
@@ -2055,6 +2167,10 @@
     "name": "Cinta Macho",
     "shortDesc": "Realizado: Holder ganha o dobro dos valores de esforço em batalhas, mas reduziu pela metade a velocidade em batalha."
   },
+  "magearnite": {
+    "name": "Magearnita",
+    "shortDesc": "Se Magearna estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "magma-emblem": {
     "name": "Emblema de Magma",
     "shortDesc": "Fornece acesso ao Esconderijo da Equipe Magma em Jagged Pass."
@@ -2086,6 +2202,10 @@
   "makeup-bag": {
     "name": "Bolsa de maquiagem",
     "shortDesc": "Permite ao jogador mudar a cor do batom."
+  },
+  "malamarite": {
+    "name": "Malamarita",
+    "shortDesc": "Se Malamar estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "malicious-armor": {
     "name": "Armadura Maliciosa",
@@ -2219,6 +2339,10 @@
     "name": "Mega Tiara",
     "shortDesc": "Pedra-chave do NPC não utilizada."
   },
+  "meganiumite": {
+    "name": "Meganiumita",
+    "shortDesc": "Se Meganium estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "member-card": {
     "name": "Cartão de Membro",
     "shortDesc": "Permite acesso à Ilha Newmoon e Darkrai."
@@ -2226,6 +2350,10 @@
   "mental-herb": {
     "name": "Erva Mental",
     "shortDesc": "Realizado: Consumido para curar a paixão. Gen V: Também remove Taunt, Encore, Torment, Disable e Cursed Body."
+  },
+  "meowsticite": {
+    "name": "Meowsticita",
+    "shortDesc": "Se Meowstic estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "metagrossite": {
     "name": "Metagrossita",
@@ -2362,6 +2490,26 @@
   "muscle-wing": {
     "name": "Pena Muscular",
     "shortDesc": "Aumenta o esforço de ataque em 1."
+  },
+  "mysterious-mask": {
+    "name": "Máscara Misteriosa",
+    "shortDesc": "Mova a Máscara Misteriosa para a Personalização de Personagem."
+  },
+  "mysterious-outfit": {
+    "name": "Caixa de Traje Misterioso",
+    "shortDesc": "Abra esta caixa para receber quatro itens cosméticos separados do Traje Misterioso."
+  },
+  "mysterious-shirt": {
+    "name": "Camisa Misteriosa",
+    "shortDesc": "Mova a Camisa Misteriosa com luvas para a Personalização de Personagem."
+  },
+  "mysterious-shoes": {
+    "name": "Calçados Misteriosos",
+    "shortDesc": "Mova os Calçados Misteriosos para a Personalização de Personagem."
+  },
+  "mysterious-trousers": {
+    "name": "Calças Misteriosas",
+    "shortDesc": "Mova as Calças Misteriosas para a Personalização de Personagem."
   },
   "mystery-egg": {
     "name": "Ovo Misterioso",
@@ -2691,10 +2839,6 @@
     "name": "Brinquedo de cutucar",
     "shortDesc": "Termina uma batalha selvagem."
   },
-  "pokedex": {
-    "name": "Pokédex",
-    "shortDesc": "Registra informações sobre os Pokémon que você encontra."
-  },
   "pokeblock-case": {
     "name": "Estojo Pokéblock",
     "shortDesc": "Segura Pokeblocks."
@@ -2702,6 +2846,10 @@
   "pokeblock-kit": {
     "name": "Kit Pokéblock",
     "shortDesc": "Cria e armazena Pokeblocks."
+  },
+  "pokedex": {
+    "name": "Pokédex",
+    "shortDesc": "Registra informações sobre os Pokémon que você encontra."
   },
   "pokemon-box": {
     "name": "Link da caixa Pokémon",
@@ -2863,6 +3011,10 @@
     "name": "Pétala Roxa",
     "shortDesc": "XXX novo efeito para pétala roxa"
   },
+  "pyroarite": {
+    "name": "Pyroarita",
+    "shortDesc": "Se Pyroar estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "qualot-berry": {
     "name": "Baga Qualot",
     "shortDesc": "Reduz os valores de esforço de defesa em 10 e aumenta a felicidade."
@@ -2906,6 +3058,14 @@
   "rage-candy-bar": {
     "name": "Barra de chocolate de raiva",
     "shortDesc": "HS: Trocado por TM64. Geração II e Geração V: atua como uma poção."
+  },
+  "raichunite-x": {
+    "name": "Raichunita X",
+    "shortDesc": "Se Raichu estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
+  "raichunite-y": {
+    "name": "Raichunita Y",
+    "shortDesc": "Se Raichu estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "rain-dance-charm": {
     "name": "Amuleto de Rain Dance",
@@ -3295,9 +3455,21 @@
     "name": "Scizorita",
     "shortDesc": "Realizado: Permite que Scizor Megaevolua para Mega Scizor."
   },
+  "scolipite": {
+    "name": "Scolipita",
+    "shortDesc": "Se Scolipede estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "scope-lens": {
     "name": "Lente de escopo",
     "shortDesc": "Realizado: Aumenta a taxa de acerto crítico do titular em um estágio."
+  },
+  "scovillainite": {
+    "name": "Scovillainita",
+    "shortDesc": "Se Scovillain estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
+  "scraftinite": {
+    "name": "Scraftinita",
+    "shortDesc": "Se Scrafty estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "sea-incense": {
     "name": "Incenso Marinho",
@@ -3353,11 +3525,15 @@
   },
   "shiny-charm": {
     "name": "Amuleto Brilhante",
-    "shortDesc": "Aumenta a chance de encontrar um Pokémon brilhante."
+    "shortDesc": "Use para aumentar em 10% a chance de encontrar Shiny por 7 dias."
   },
   "shiny-stone": {
     "name": "Pedra Brilhante",
     "shortDesc": "Evolui um Minccino para Cinccino, uma Roselia para Roserade ou um Togetic para Togekiss."
+  },
+  "shiny-tracker": {
+    "name": "Rastreador Shiny",
+    "shortDesc": "Abra suas caçadas Shiny e estatísticas de encontros."
   },
   "shoal-salt": {
     "name": "Sal de cardume",
@@ -3398,6 +3574,10 @@
   "sitrus-berry": {
     "name": "Fruta Sitrus",
     "shortDesc": "Realizado: Consumido com 1/2 do HP máximo para recuperar 1/4 do HP máximo."
+  },
+  "skarmorite": {
+    "name": "Skarmorita",
+    "shortDesc": "Se Skarmory estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "skull-fossil": {
     "name": "Fóssil de Crânio",
@@ -3559,6 +3739,10 @@
     "name": "Estrela doce",
     "shortDesc": "Um doce em forma de estrela. Quando um Milcery segura isso, ele gira alegremente."
   },
+  "staraptite": {
+    "name": "Staraptita",
+    "shortDesc": "Se Staraptor estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "stardust": {
     "name": "Poeira Estelar",
     "shortDesc": "Pode ser vendido por dinheiro."
@@ -3566,6 +3750,10 @@
   "starf-berry": {
     "name": "Starf Berry",
     "shortDesc": "Realizado: Consumido com 1/4 do HP máximo para aumentar uma estatística aleatória em dois estágios."
+  },
+  "starminite": {
+    "name": "Starminita",
+    "shortDesc": "Se Starmie estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "steel-gem": {
     "name": "Gema de Aço",
@@ -3718,6 +3906,10 @@
   "tart-apple": {
     "name": "Torta de Maçã",
     "shortDesc": "Uma maçã peculiar que pode fazer evoluir uma certa espécie de Pokémon. É excepcionalmente ácido."
+  },
+  "tatsugirinite": {
+    "name": "Tatsugirinita",
+    "shortDesc": "Se Tatsugiri estiver segurando este item, poderá megaevoluir durante a batalha."
   },
   "tea": {
     "name": "Chá",
@@ -5379,6 +5571,10 @@
     "name": "Venusaurita",
     "shortDesc": "Realizado: Permite que Venusaur Megaevolua para Mega Venusaur."
   },
+  "victreebelite": {
+    "name": "Victreebelita",
+    "shortDesc": "Se Victreebel estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "vs-recorder": {
     "name": "Vs. Gravador",
     "shortDesc": "Grava batalhas sem fio, Wi-Fi ou Battle Frontier e armazena pontos."
@@ -5571,6 +5767,10 @@
     "name": "Prato Zap",
     "shortDesc": "Realizado: Golpes do tipo elétrico do suporte causam 20% a mais de dano. Muda o tipo de Arceuss e Julgamentos para Elétrico."
   },
+  "zeraorite": {
+    "name": "Zeraorita",
+    "shortDesc": "Se Zeraora estiver segurando este item, poderá megaevoluir durante a batalha."
+  },
   "zinc": {
     "name": "Zinco",
     "shortDesc": "Aumenta a defesa especial e a felicidade."
@@ -5582,5 +5782,9 @@
   "zygarde-cube": {
     "name": "Cubo Zygarde",
     "shortDesc": "Contém células/núcleos Zygarde coletados. Pode ensinar movimentos a Zygarde."
+  },
+  "zygardite": {
+    "name": "Zygardita",
+    "shortDesc": "Se Zygarde estiver segurando este item, poderá megaevoluir durante a batalha."
   }
 }

@@ -14,7 +14,10 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var dialogue_lines: Array[String] = []
 @export var blocks_movement := true
 @export var requires_facing := true
+# The offset selects the top-left tile of the blocked footprint relative to
+# this node. A 1x1 footprint preserves the original single-tile behaviour.
 @export var blocked_tile_offset := Vector2i.ZERO
+@export var blocked_tile_footprint := Vector2i.ONE
 @export var interaction_shape_size := Vector2(96, 96)
 
 var player_nearby := false
@@ -37,14 +40,18 @@ func blocks_world_position(world_position: Vector2) -> bool:
 	if not blocks_movement:
 		return false
 
-	return _to_tile(global_position + _blocked_tile_offset_pixels()) == _to_tile(world_position)
+	return _is_tile_in_blocked_footprint(_to_tile(world_position))
 
 
 func interact_with_player(_player: Node2D) -> void:
 	await show_dialogue()
 
 
-func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bool:
+func show_dialogue(
+	lines: Array[String] = [],
+	speaker_name_override := "",
+	mugshot_override: Texture2D = null
+) -> bool:
 	var dialogue_box := _get_dialogue_box()
 	if dialogue_box == null:
 		push_warning("%s: DialogueBox/Box not found." % name)
@@ -62,7 +69,7 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bo
 	if speaker_name.is_empty():
 		speaker_name = "Sign" if interactable_kind == "road_sign" else name
 
-	dialogue_box.start_dialogue(valid_dialogue_lines, speaker_name)
+	dialogue_box.start_dialogue(valid_dialogue_lines, speaker_name, mugshot_override)
 	await dialogue_box.dialogue_finished
 	return true
 
@@ -157,20 +164,29 @@ func _is_player_facing_interactable(player: Node2D) -> bool:
 	if player.has_method("get_feet_position"):
 		player_feet_position = player.call("get_feet_position") as Vector2
 
-	var facing_tile := _to_tile(_snap_world_position(player_feet_position) + player_direction * TILE_SIZE)
-	var interactable_tile := _to_tile(global_position + _blocked_tile_offset_pixels())
-	return facing_tile == interactable_tile
+	var player_tile := _to_tile(player_feet_position)
+	var cardinal_direction := Vector2i(roundi(player_direction.x), roundi(player_direction.y))
+	var facing_tile := player_tile + cardinal_direction
+	return _is_tile_in_blocked_footprint(facing_tile)
+
+
+func _is_tile_in_blocked_footprint(tile: Vector2i) -> bool:
+	var origin := _to_tile(global_position + _blocked_tile_offset_pixels())
+	var footprint := Vector2i(
+		maxi(1, blocked_tile_footprint.x),
+		maxi(1, blocked_tile_footprint.y)
+	)
+	var relative := tile - origin
+	return (
+		relative.x >= 0
+		and relative.y >= 0
+		and relative.x < footprint.x
+		and relative.y < footprint.y
+	)
 
 
 func _blocked_tile_offset_pixels() -> Vector2:
 	return Vector2(float(blocked_tile_offset.x), float(blocked_tile_offset.y)) * TILE_SIZE
-
-
-func _snap_world_position(world_position: Vector2) -> Vector2:
-	return Vector2(
-		round(world_position.x / TILE_SIZE) * TILE_SIZE,
-		round(world_position.y / TILE_SIZE) * TILE_SIZE
-	)
 
 
 func _ensure_interaction_area() -> void:

@@ -11,6 +11,7 @@ func _init() -> void:
 	var overlay := _source("res://scripts/ui/ui_overlay.gd")
 	var starter := _source("res://scripts/world/kanto/towns/pallet_town/oak.gd")
 	var party_service := _source("res://scripts/services/player_party_state_service.gd")
+	var chat_realtime := _source("res://scripts/services/chat_realtime_service.gd")
 
 	_expect(reset_service.contains('const RESET_ENDPOINT := "/game/dev/new-game-reset"'), "reset uses the protected developer endpoint")
 	_expect(reset_service.contains('"confirmation": "RESET"'), "reset sends the destructive confirmation token")
@@ -36,6 +37,15 @@ func _init() -> void:
 	_expect(overlay.contains('"Reset / New Game"'), "Developer Tools exposes Reset / New Game")
 	_expect(overlay.contains("await PlayerGameplayResetService.reset_gameplay()"), "Developer Tools awaits the server transaction")
 	_expect(overlay.contains("change_scene_to_file(LOADING_SCENE_PATH)"), "successful reset reloads authoritative state")
+	_expect(
+		chat_realtime.contains("if connecting or ready_state != WebSocketPeer.STATE_CLOSED:"),
+		"reset scene reload cannot reconnect an already active chat socket"
+	)
+	_expect(
+		chat_realtime.contains("if attempt_generation != connection_attempt_generation:")
+		and chat_realtime.contains("connection_attempt_generation += 1"),
+		"stale asynchronous chat connection attempts are invalidated"
+	)
 	_expect(party_service.contains('"/game/starter"'), "starter claim uses the durable server endpoint")
 	_expect(party_service.contains('"/game/starter/options"'), "starter choices come from the authoritative server catalog")
 	_expect(party_service.contains('"speciesId": normalized_species_id'), "starter claim sends only the selected species identity")

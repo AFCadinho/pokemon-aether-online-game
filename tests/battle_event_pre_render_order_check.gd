@@ -9,12 +9,14 @@ var failed := false
 
 func _init() -> void:
 	_check_pre_event_render_skips_final_team_hud_refresh()
+	_check_damage_continuity_is_normalized_before_hud_rewind()
 	_check_non_pvp_switch_events_are_not_deduped_by_species()
 	_check_initial_setup_switch_events_are_filtered_once()
 	_check_initial_event_seq_cursor_tracks_start_event_boundary()
 	_check_initial_start_events_include_booster_energy_item_events()
 	_check_initial_setup_keeps_specific_form_species()
 	_check_wild_player_lead_waits_for_summon_reveal()
+	_check_wild_player_lead_uses_authoritative_active_slot()
 	_check_team_preview_lead_selection_unlocks_party_grid()
 	_check_initial_shiny_lead_uses_entrance_identity()
 	_check_stat_stage_events_normalize_drops()
@@ -37,6 +39,7 @@ func _init() -> void:
 	_check_instant_prepare_events_render_as_one_action()
 	_check_disguise_form_change_follows_recoil_damage()
 	_check_resolved_response_holds_species_until_ordered_form_event()
+	_check_animated_forme_change_is_prepared_before_render()
 	quit(1 if failed else 0)
 
 
@@ -89,7 +92,31 @@ func _check_resolved_response_holds_species_until_ordered_form_event() -> void:
 	_check_equal(capture_index >= 0 and capture_index < request_index, true, "wild resolution captures visible species before the final response arrives")
 	_check_equal(source.contains("ordered_response_display_species_hold.get(player_id"), true, "pre-event sprite and Disguise badge use the held visible species")
 	_check_equal(source.contains("BattleState.get_mimikyu_disguise_state_for_species(canonical_species) == \"\""), true, "the response display hold is scoped to canonical Mimikyu and cannot delay unrelated forms")
-	_check_equal(source.contains("if event_type == \"formeChange\":\n\t\t\t_release_ordered_response_display_species_for_ident"), true, "formeChange releases the display hold only at its ordered event")
+	_check_equal(
+		source.contains("var apply_forme_change_after_render := event_type == \"formeChange\""),
+		true,
+		"formeChange releases the display hold only at its ordered event"
+	)
+
+
+func _check_animated_forme_change_is_prepared_before_render() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var render_index := source.find("func _render_battle_events(")
+	var next_function_index := source.find("\nfunc ", render_index + 1)
+	var render_source := source.substr(render_index, next_function_index - render_index)
+	var animated_form_index := render_source.find("var apply_forme_change_after_render :=")
+	var render_event_index := render_source.find("await event_renderer.render_event(event_data, presentation)")
+	var deferred_form_index := render_source.find("if apply_forme_change_after_render:", render_event_index)
+	_check_equal(
+		animated_form_index >= 0 and animated_form_index < render_event_index,
+		true,
+		"animated form changes prepare their new visual form before the transformation effect"
+	)
+	_check_equal(
+		deferred_form_index > render_event_index,
+		true,
+		"ordinary form changes keep their existing post-render update order"
+	)
 
 
 func _check_pre_event_render_skips_final_team_hud_refresh() -> void:
@@ -103,6 +130,22 @@ func _check_pre_event_render_skips_final_team_hud_refresh() -> void:
 	_check_equal(function_source.contains("_update_hud_panels()"), false, "pre-event presentation does not push final team HUD")
 	_check_equal(function_source.contains("_update_party_slots()"), false, "pre-event presentation does not push final party slots")
 
+
+func _check_damage_continuity_is_normalized_before_hud_rewind() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var function_index := source.find("func _rewind_active_hud_hp_for_events(events: Array) -> void:")
+	var next_function_index := source.find("\nfunc ", function_index + 1)
+	var function_source := source.substr(function_index, next_function_index - function_index)
+	var normalize_index := function_source.find("normalize_damage_event_continuity")
+	var hud_rewind_index := function_source.find("_set_active_hud_hp_from_event")
+
+	_check_equal(function_index >= 0, true, "active HUD rewind function exists")
+	_check_equal(normalize_index >= 0, true, "damage continuity is normalized in the pre-render rewind path")
+	_check_equal(
+		normalize_index < hud_rewind_index,
+		true,
+		"multi-hit continuity is repaired before stale previous HP can reach the HUD"
+	)
 
 func _check_non_pvp_switch_events_are_not_deduped_by_species() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
@@ -290,15 +333,27 @@ func _check_initial_setup_keeps_specific_form_species() -> void:
 		"initial setup keeps explicit form species before falling back to Showdown ident"
 	)
 	_check_equal(
-		original_species_source.find("_is_specific_battle_form_species(fallback_species)") < original_species_source.find("ident.contains(\": \")"),
+		original_species_source.find("_is_specific_battle_form_species(fallback_species)") < original_species_source.find("battle_state.get_active_pokemon_species(\"p1\")"),
 		true,
-		"initial setup checks explicit form species before ident species"
+		"initial setup checks explicit form species before canonical state species"
 	)
 	_check_equal(form_check_index >= 0, true, "specific battle form helper exists")
 	_check_equal(
 		form_check_source.contains("replace(\" \", \"-\")"),
 		true,
 		"specific battle form helper treats spaced form names as form species"
+	)
+	_check_equal(
+		form_check_source.contains("\"-terastal\""),
+		true,
+		"PvP identity correction preserves Terapagos Terastal form"
+	)
+
+	var metadata_source := FileAccess.get_file_as_string("res://scripts/battle/battle_display_metadata.gd")
+	_check_equal(
+		metadata_source.contains("\"-terastal\""),
+		true,
+		"battle display metadata preserves Terapagos Terastal form"
 	)
 
 
@@ -313,6 +368,39 @@ func _check_wild_player_lead_waits_for_summon_reveal() -> void:
 		prepare_source.find("_show_original_player_lead_before_initial_events") < prepare_source.find("player_sprite_box.visible = false"),
 		true,
 		"wild lead sprite is prepared but stays hidden until its Poké Ball summon releases it"
+	)
+
+
+func _check_wild_player_lead_uses_authoritative_active_slot() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var prepare_index := source.find("func prepare_wild_battle_from_response(")
+	var prepare_next_index := source.find("\nfunc ", prepare_index + 1)
+	var prepare_source := source.substr(prepare_index, prepare_next_index - prepare_index)
+	var intro_index := source.find("func play_wild_battle_intro(")
+	var intro_next_index := source.find("\nfunc ", intro_index + 1)
+	var intro_source := source.substr(intro_index, intro_next_index - intro_index)
+
+	_check_equal(
+		prepare_source.find("_apply_initial_battle_response(api_response)")
+			< prepare_source.find('battle_state.get_active_player_pokemon("p1")'),
+		true,
+		"wild lead resolves from the authoritative response after it is applied"
+	)
+	_check_equal(
+		prepare_source.contains("active_player_pokemon = response_player_pokemon"),
+		true,
+		"wild setup adopts the auto-selected usable party member"
+	)
+	_check_equal(
+		prepare_source.contains("_show_original_player_lead_before_initial_events(player_species, player_lead_pokemon)"),
+		true,
+		"wild lead sprite is prepared from the auto-selected usable party member"
+	)
+	_check_equal(
+		intro_source.contains("var player_lead_pokemon := active_player_pokemon if active_player_pokemon != null else player_pokemon")
+			and intro_source.contains('player_lead_pokemon.ball_item_id'),
+		true,
+		"wild summon keeps the authoritative lead sprite, cry, and Poke Ball identity"
 	)
 
 
@@ -701,7 +789,7 @@ func _check_pvp_restore_keeps_rendered_hp_and_field_events() -> void:
 
 	_check_equal(restore_source.contains("_reapply_rendered_condition_events(rendered_events)"), true, "canonical restore retains rendered hazard HP")
 	_check_equal(restore_source.contains("_reapply_rendered_field_effect_events(rendered_events)"), false, "canonical restore cannot replay field starts against a future turn")
-	_check_equal(condition_source.contains('"damage", "heal", "faint", "status":'), true, "restore replays condition-changing events")
+	_check_equal(condition_source.contains('"damage", "heal", "faint", "status", "ability", "pokemonEffect":'), true, "restore replays condition and form-changing events")
 	_check_equal(condition_source.contains('"switch", "drag":'), true, "restore recognizes public spectator switch events")
 	_check_equal(condition_source.contains("if _is_spectator_battle():"), true, "only spectators replay switches over a request-free public batch")
 	_check_equal(condition_source.contains("Participant switch events deliberately remain canonical"), true, "participant Pursuit presentation keeps canonical switch state")

@@ -9,12 +9,15 @@ signal animation_finished
 @export_file("*.png") var background_path := ""
 @export_file("*.png") var foreground_path := ""
 @export var sound_paths: Dictionary = {}
+@export var custom_sound_events: Array = []
+@export var disable_data_sound_events: bool = false
 @export var autoplay: bool = true
 @export var loop: bool = false
 @export var free_on_finish: bool = false
 @export var show_timing_backgrounds: bool = false
 @export var timing_background_fill_canvas: bool = false
 @export var timing_background_persist_until_clear: bool = false
+@export var background_motion_config: Dictionary = {}
 @export var show_timing_foregrounds: bool = false
 @export var timing_foreground_scale: Vector2 = Vector2.ONE
 @export_range(0.0, 1.0, 0.01) var foreground_opacity_multiplier: float = 1.0
@@ -25,17 +28,23 @@ signal animation_finished
 @export var projectile_config: Dictionary = {}
 @export var orb_config: Dictionary = {}
 @export var orb_projectile_config: Dictionary = {}
+@export var orb_barrage_config: Dictionary = {}
+@export var psychic_pulse_config: Dictionary = {}
+@export var psychic_shards_config: Dictionary = {}
+@export var explosion_burst_config: Dictionary = {}
 @export var energy_blast_config: Dictionary = {}
 @export var water_splash_config: Dictionary = {}
 @export var electric_switch_config: Dictionary = {}
 @export var fire_stream_config: Dictionary = {}
 @export var heat_wave_config: Dictionary = {}
 @export var draco_meteor_config: Dictionary = {}
+@export var coin_rain_config: Dictionary = {}
 @export var solar_beam_config: Dictionary = {}
 @export var bloom_doom_config: Dictionary = {}
 @export var solar_charge_config: Dictionary = {}
 @export var celestial_charge_config: Dictionary = {}
 @export var focus_aura_config: Dictionary = {}
+@export var afterimage_config: Dictionary = {}
 @export var stat_change_config: Dictionary = {}
 @export var heal_energy_config: Dictionary = {}
 @export var dragon_dance_config: Dictionary = {}
@@ -98,6 +107,9 @@ var base_position := Vector2.ZERO
 var base_position_active := false
 var shake_applied := false
 var timing_background_detached := false
+var timing_background_base_position := Vector2.ZERO
+var timing_background_base_scale := Vector2.ONE
+var timing_background_motion_time := 0.0
 
 @onready var bg: Sprite2D = Sprite2D.new()
 @onready var fg: Sprite2D = Sprite2D.new()
@@ -143,6 +155,11 @@ func stop() -> void:
 	bg_hide_frame = -1
 	fg_hide_frame = -1
 	pink_overlay_alpha = 0.0
+	timing_background_motion_time = 0.0
+	if is_instance_valid(bg):
+		bg.position = timing_background_base_position
+		bg.scale = timing_background_base_scale
+		bg.rotation = 0.0
 	_restore_base_position()
 	_dispose_detached_timing_background()
 	queue_redraw()
@@ -152,6 +169,7 @@ func _process(delta: float) -> void:
 	if not is_playing or data.is_empty():
 		return
 
+	_update_timing_background_motion(delta)
 	pink_overlay_alpha = maxf(0.0, pink_overlay_alpha - delta * 0.42)
 	queue_redraw()
 
@@ -231,6 +249,7 @@ func _build_nodes() -> void:
 	bg.centered = false
 	if timing_background_fill_canvas:
 		_fit_timing_background_to_canvas()
+	bg.z_index = 0
 	bg.modulate.a = 0.0
 	add_child(bg)
 
@@ -293,6 +312,8 @@ func _fit_timing_background_to_canvas() -> void:
 	)
 	bg.scale = Vector2(cover_scale, cover_scale)
 	bg.position = (ANIMATION_CANVAS_SIZE - texture_size * cover_scale) * 0.5
+	timing_background_base_position = bg.position
+	timing_background_base_scale = bg.scale
 
 
 func move_timing_background_to(parent_node: Node, sibling_index: int) -> void:
@@ -301,7 +322,29 @@ func move_timing_background_to(parent_node: Node, sibling_index: int) -> void:
 
 	bg.reparent(parent_node, true)
 	parent_node.move_child(bg, clampi(sibling_index, 0, parent_node.get_child_count() - 1))
+	# Keep the detached texture on the field layer. The router places it before
+	# the animation overlay in sibling order so the procedural effect draws over it.
+	bg.z_index = 0
+	timing_background_base_position = bg.position
+	timing_background_base_scale = bg.scale
 	timing_background_detached = true
+
+
+func _update_timing_background_motion(delta: float) -> void:
+	if bg.texture == null or not bool(background_motion_config.get("enabled", false)):
+		return
+
+	timing_background_motion_time += delta
+	var speed := float(background_motion_config.get("speed", 0.8))
+	var time := timing_background_motion_time * speed
+	var drift_x := float(background_motion_config.get("drift_x", 4.0))
+	var drift_y := float(background_motion_config.get("drift_y", 3.0))
+	var rotation_amount := float(background_motion_config.get("rotation", 0.004))
+	var pulse := float(background_motion_config.get("pulse", 0.012))
+	bg.position = timing_background_base_position + Vector2(sin(time) * drift_x, cos(time * 0.82) * drift_y)
+	bg.rotation = sin(time * 0.7) * rotation_amount
+	var scale_pulse := 1.0 + sin(time * 0.58) * pulse
+	bg.scale = timing_background_base_scale * scale_pulse
 
 
 func _dispose_detached_timing_background() -> void:
@@ -335,17 +378,23 @@ func _draw() -> void:
 			draw_line(center + Vector2(-sparkle_size * 0.7, sparkle_size * 0.7), center + Vector2(sparkle_size * 0.7, -sparkle_size * 0.7), sparkle_color, 1.0)
 			draw_circle(center, sparkle_size * 0.38, sparkle_color)
 	_draw_orb_projectile_visual()
+	_draw_orb_barrage_visual()
+	_draw_psychic_pulse_visual()
+	_draw_psychic_shards_visual()
+	_draw_explosion_burst_visual()
 	_draw_energy_blast_visual()
 	_draw_water_splash_visual()
 	_draw_electric_switch_visual()
 	_draw_fire_stream_visual()
 	_draw_heat_wave_visual()
 	_draw_draco_meteor_visual()
+	_draw_coin_rain_visual()
 	_draw_solar_beam_visual()
 	_draw_bloom_doom_visual()
 	_draw_solar_charge_visual()
 	_draw_celestial_charge_visual()
 	_draw_focus_aura_visual()
+	_draw_afterimage_visual()
 	_draw_stat_change_visual()
 	_draw_heal_energy_visual()
 	_draw_dragon_dance_visual()
@@ -483,6 +532,430 @@ func _draw_orb_projectile_visual() -> void:
 
 func _orb_projectile_enabled() -> bool:
 	return bool(orb_projectile_config.get("enabled", false))
+
+
+func _draw_orb_barrage_visual() -> void:
+	if not bool(orb_barrage_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := clampf(float(orb_barrage_config.get("visible_start", 0.02)), 0.0, 1.0)
+	var visible_end := clampf(float(orb_barrage_config.get("visible_end", 0.98)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, orb_barrage_config)
+	if alpha <= 0.02:
+		return
+
+	var source_state := _get_projectile_state_from_config(0.0, orb_barrage_config)
+	var target_state := _get_projectile_state_from_config(1.0, orb_barrage_config)
+	var source := _projectile_battlefield_position(source_state.get("position", Vector2(128.0, 196.0)) as Vector2, orb_barrage_config)
+	var target := _projectile_battlefield_position(target_state.get("position", Vector2(384.0, 96.0)) as Vector2, orb_barrage_config)
+	var direction := target - source
+	if direction.length_squared() < 1.0:
+		return
+	var forward := direction.normalized()
+	var normal := Vector2(-forward.y, forward.x)
+	var launch_start := clampf(float(orb_barrage_config.get("launch_start", 0.24)), visible_start, visible_end - 0.08)
+	var impact_start := clampf(float(orb_barrage_config.get("impact_start", 0.70)), launch_start + 0.12, visible_end)
+	var launch_progress := clampf((progress - visible_start) / maxf(launch_start - visible_start, 0.001), 0.0, 1.0)
+	var travel_progress := clampf((progress - launch_start) / maxf(impact_start - launch_start, 0.001), 0.0, 1.0)
+	var impact_progress := clampf((progress - impact_start) / maxf(visible_end - impact_start, 0.001), 0.0, 1.0)
+
+	var orb_count := clampi(int(orb_barrage_config.get("orb_count", 6)), 3, 10)
+	var orb_radius := maxf(float(orb_barrage_config.get("orb_radius", 8.0)), 2.0)
+	var orb_spread := maxf(float(orb_barrage_config.get("orb_spread", 34.0)), 0.0)
+	var charge_radius := maxf(float(orb_barrage_config.get("charge_radius", 34.0)), 8.0)
+	var colors: Array[Color] = [
+		_color_from_value(orb_barrage_config.get("green", [0.36, 1.0, 0.34, 1.0]), Color(0.36, 1.0, 0.34, 1.0)),
+		_color_from_value(orb_barrage_config.get("cyan", [0.22, 0.9, 1.0, 1.0]), Color(0.22, 0.9, 1.0, 1.0)),
+		_color_from_value(orb_barrage_config.get("pink", [1.0, 0.34, 0.76, 1.0]), Color(1.0, 0.34, 0.76, 1.0)),
+		_color_from_value(orb_barrage_config.get("gold", [1.0, 0.72, 0.18, 1.0]), Color(1.0, 0.72, 0.18, 1.0)),
+		_color_from_value(orb_barrage_config.get("violet", [0.68, 0.34, 1.0, 1.0]), Color(0.68, 0.34, 1.0, 1.0)),
+		_color_from_value(orb_barrage_config.get("mint", [0.28, 1.0, 0.76, 1.0]), Color(0.28, 1.0, 0.76, 1.0)),
+	]
+	var core_color := _color_from_value(orb_barrage_config.get("core_color", [1.0, 0.96, 0.8, 1.0]), Color(1.0, 0.96, 0.8, 1.0))
+	var impact_color := _color_from_value(orb_barrage_config.get("impact_color", [0.72, 0.34, 1.0, 1.0]), Color(0.72, 0.34, 1.0, 1.0))
+
+	if progress < impact_start:
+		var charge_alpha := alpha * (1.0 - clampf(travel_progress * 1.6, 0.0, 0.86))
+		var charge_radius_now := lerpf(10.0, charge_radius, launch_progress)
+		draw_circle(source, charge_radius_now * 0.82, _color_with_alpha(core_color, charge_alpha * 0.12))
+		draw_arc(source, charge_radius_now, -0.35 + float(frame_index) * 0.08, PI * 1.5 + float(frame_index) * 0.08, 48, _color_with_alpha(core_color, charge_alpha * 0.55), 1.6, true)
+		for orb_index: int in range(orb_count):
+			var charge_phase := float(frame_index) * 0.12 + float(orb_index) * TAU / float(orb_count)
+			var charge_position := source + Vector2(cos(charge_phase), sin(charge_phase) * 0.7) * charge_radius_now
+			_draw_hidden_power_orb(charge_position, orb_radius * (0.72 + launch_progress * 0.2), colors[orb_index % colors.size()], core_color, charge_alpha * (0.72 + launch_progress * 0.25))
+
+	for orb_index: int in range(orb_count):
+		var stagger := float(orb_index % 3) * 0.045
+		var orb_progress := clampf((travel_progress - stagger) / maxf(1.0 - stagger, 0.001), 0.0, 1.0)
+		if progress < launch_start or orb_progress <= 0.0:
+			continue
+		var eased := 1.0 - pow(1.0 - orb_progress, 2.0)
+		var lane := (float(orb_index) - float(orb_count - 1) * 0.5) / maxf(float(orb_count - 1), 1.0)
+		var lane_offset := normal * lane * orb_spread * (1.0 - eased)
+		var bob := sin(float(frame_index) * 0.22 + float(orb_index) * 1.7) * 3.0 * (1.0 - eased)
+		var orb_position := source.lerp(target, eased) + lane_offset + normal * bob
+		var color: Color = colors[orb_index % colors.size()]
+		var orb_alpha := alpha * (0.82 + 0.18 * eased)
+		var radius := orb_radius * (1.0 + 0.14 * sin(float(frame_index) * 0.24 + float(orb_index)))
+		var trail_length := maxf(float(orb_barrage_config.get("trail_length", 18.0)), 0.0)
+		if trail_length > 0.0:
+			draw_line(orb_position - forward * trail_length, orb_position, _color_with_alpha(color, orb_alpha * 0.34), maxf(1.2, radius * 0.7), true)
+		_draw_hidden_power_orb(orb_position, radius, color, core_color, orb_alpha)
+
+	if impact_progress > 0.0:
+		var impact_center := target + _vector2_from_value(orb_barrage_config.get("impact_offset", [0.0, -8.0]))
+		var impact_fade := alpha * (1.0 - impact_progress)
+		var impact_radius := lerpf(10.0, float(orb_barrage_config.get("impact_radius", 54.0)), 1.0 - pow(1.0 - impact_progress, 2.0))
+		draw_circle(impact_center, impact_radius * 0.72, _color_with_alpha(impact_color, impact_fade * 0.18))
+		draw_arc(impact_center, impact_radius, -float(frame_index) * 0.12, TAU - float(frame_index) * 0.12, 64, _color_with_alpha(impact_color, impact_fade * 0.9), 2.8, true)
+		draw_circle(impact_center, impact_radius * 0.28, _color_with_alpha(core_color, impact_fade * 0.8))
+		var ray_count := maxi(8, int(orb_barrage_config.get("impact_ray_count", 12)))
+		for ray_index: int in range(ray_count):
+			var angle := float(ray_index) * TAU / float(ray_count) + float(frame_index) * 0.08
+			var ray_start := impact_center + Vector2.from_angle(angle) * impact_radius * 0.42
+			var ray_end := impact_center + Vector2.from_angle(angle) * impact_radius * (0.78 + float(ray_index % 3) * 0.08)
+			draw_line(ray_start, ray_end, _color_with_alpha(colors[ray_index % colors.size()], impact_fade * 0.8), 1.8, true)
+
+
+func _draw_hidden_power_orb(center: Vector2, radius: float, color: Color, core_color: Color, alpha: float) -> void:
+	if alpha <= 0.02:
+		return
+	draw_circle(center, radius * 1.7, _color_with_alpha(color, alpha * 0.16))
+	draw_circle(center, radius, _color_with_alpha(color, alpha * 0.78))
+	draw_circle(center + Vector2(-radius * 0.26, -radius * 0.28), radius * 0.42, _color_with_alpha(core_color, alpha * 0.9))
+	draw_arc(center, radius * 1.08, 0.0, TAU, 32, _color_with_alpha(core_color, alpha * 0.72), 1.1, true)
+
+
+func _draw_psychic_shards_visual() -> void:
+	if not bool(psychic_shards_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := clampf(float(psychic_shards_config.get("visible_start", 0.02)), 0.0, 1.0)
+	var visible_end := clampf(float(psychic_shards_config.get("visible_end", 0.98)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, psychic_shards_config)
+	if alpha <= 0.02:
+		return
+
+	var source_state := _get_projectile_state_from_config(0.0, psychic_shards_config)
+	var target_state := _get_projectile_state_from_config(1.0, psychic_shards_config)
+	var source := _projectile_battlefield_position(source_state.get("position", Vector2(128.0, 204.0)) as Vector2, psychic_shards_config)
+	var target := _projectile_battlefield_position(target_state.get("position", Vector2(384.0, 92.0)) as Vector2, psychic_shards_config)
+	var direction := (target - source).normalized()
+	if direction == Vector2.ZERO:
+		return
+	var normal := direction.orthogonal()
+	var launch_start := clampf(float(psychic_shards_config.get("launch_start", 0.2)), visible_start, visible_end - 0.16)
+	var impact_start := clampf(float(psychic_shards_config.get("impact_start", 0.64)), launch_start + 0.16, visible_end)
+	var charge_progress := clampf((progress - visible_start) / maxf(launch_start - visible_start, 0.001), 0.0, 1.0)
+	var travel_progress := clampf((progress - launch_start) / maxf(impact_start - launch_start, 0.001), 0.0, 1.0)
+	var impact_progress := clampf((progress - impact_start) / maxf(visible_end - impact_start, 0.001), 0.0, 1.0)
+	var shard_count := clampi(int(psychic_shards_config.get("shard_count", 6)), 3, 10)
+	var shard_length := maxf(float(psychic_shards_config.get("shard_length", 22.0)), 6.0)
+	var shard_width := maxf(float(psychic_shards_config.get("shard_width", 10.0)), 3.0)
+	var spread := maxf(float(psychic_shards_config.get("spread", 42.0)), 0.0)
+	var orbit_radius := maxf(float(psychic_shards_config.get("orbit_radius", 38.0)), 10.0)
+	var trail_length := maxf(float(psychic_shards_config.get("trail_length", 26.0)), 0.0)
+	var outer_color := _color_from_value(psychic_shards_config.get("outer_color", [0.58, 0.12, 0.92, 1.0]), Color(0.58, 0.12, 0.92, 1.0))
+	var inner_color := _color_from_value(psychic_shards_config.get("inner_color", [0.9, 0.58, 1.0, 1.0]), Color(0.9, 0.58, 1.0, 1.0))
+	var core_color := _color_from_value(psychic_shards_config.get("core_color", [1.0, 0.94, 1.0, 1.0]), Color(1.0, 0.94, 1.0, 1.0))
+
+	if progress < launch_start:
+		var ring_radius := lerpf(orbit_radius * 1.25, orbit_radius * 0.72, charge_progress)
+		draw_circle(source, ring_radius * 0.62, _color_with_alpha(outer_color, alpha * 0.08))
+		draw_arc(source, ring_radius, float(frame_index) * 0.09, TAU + float(frame_index) * 0.09, 48, _color_with_alpha(inner_color, alpha * 0.62), 1.8, true)
+		for shard_index: int in range(shard_count):
+			var phase := float(shard_index) * TAU / float(shard_count) + float(frame_index) * 0.16
+			var shard_center := source + Vector2(cos(phase), sin(phase) * 0.68) * ring_radius
+			_draw_psychic_shard(shard_center, phase + PI * 0.5, shard_length * 0.72, shard_width * 0.72, outer_color, core_color, alpha * (0.62 + charge_progress * 0.34))
+
+	for shard_index: int in range(shard_count):
+		var stagger := float(shard_index) * 0.035
+		var shard_progress := clampf((travel_progress - stagger) / maxf(1.0 - stagger, 0.001), 0.0, 1.0)
+		if progress < launch_start or shard_progress <= 0.0:
+			continue
+		var eased := 1.0 - pow(1.0 - shard_progress, 2.0)
+		var lane := (float(shard_index) - float(shard_count - 1) * 0.5) / maxf(float(shard_count - 1), 1.0)
+		var curve_offset := normal * lane * spread * sin(eased * PI)
+		var shard_center := source.lerp(target, eased) + curve_offset
+		var shard_angle := direction.angle() + sin(float(frame_index) * 0.38 + float(shard_index) * 1.4) * 0.28
+		var shard_alpha := alpha * (0.78 + eased * 0.22)
+		if trail_length > 0.0:
+			draw_line(shard_center - direction * trail_length, shard_center, _color_with_alpha(outer_color, shard_alpha * 0.24), shard_width * 1.05, true)
+			draw_line(shard_center - direction * trail_length * 0.72, shard_center, _color_with_alpha(inner_color, shard_alpha * 0.52), maxf(1.0, shard_width * 0.34), true)
+		_draw_psychic_shard(shard_center, shard_angle, shard_length, shard_width, outer_color, core_color, shard_alpha)
+
+	if impact_progress > 0.0:
+		var impact_fade := alpha * (1.0 - impact_progress)
+		var impact_radius := lerpf(10.0, float(psychic_shards_config.get("impact_radius", 62.0)), 1.0 - pow(1.0 - impact_progress, 2.0))
+		draw_circle(target, impact_radius * 0.7, _color_with_alpha(outer_color, impact_fade * 0.2))
+		draw_arc(target, impact_radius, -float(frame_index) * 0.13, TAU - float(frame_index) * 0.13, 56, _color_with_alpha(inner_color, impact_fade * 0.88), 2.6, true)
+		draw_arc(target, impact_radius * 0.58, float(frame_index) * 0.17, TAU + float(frame_index) * 0.17, 48, _color_with_alpha(core_color, impact_fade * 0.72), 1.5, true)
+		var impact_shards := maxi(8, int(psychic_shards_config.get("impact_shard_count", 12)))
+		for shard_index: int in range(impact_shards):
+			var angle := float(shard_index) * TAU / float(impact_shards) + float(frame_index) * 0.04
+			var shard_center := target + Vector2.from_angle(angle) * impact_radius * (0.58 + float(shard_index % 3) * 0.1)
+			_draw_psychic_shard(shard_center, angle, shard_length * 0.62, shard_width * 0.5, outer_color, core_color, impact_fade * 0.88)
+
+
+func _draw_psychic_shard(center: Vector2, angle: float, length: float, width: float, color: Color, core_color: Color, alpha: float) -> void:
+	if alpha <= 0.02:
+		return
+	var forward := Vector2.from_angle(angle)
+	var side := forward.orthogonal()
+	var tip := center + forward * length * 0.58
+	var tail := center - forward * length * 0.42
+	var points := PackedVector2Array([
+		tip,
+		center + side * width * 0.5,
+		tail,
+		center - side * width * 0.5,
+	])
+	draw_colored_polygon(points, _color_with_alpha(color, alpha * 0.72))
+	draw_polyline(PackedVector2Array([tip, center + side * width * 0.5, tail, center - side * width * 0.5, tip]), _color_with_alpha(core_color, alpha * 0.82), 1.2, true)
+	draw_line(tail, tip, _color_with_alpha(core_color, alpha * 0.68), 1.0, true)
+
+
+func _draw_explosion_burst_visual() -> void:
+	if not bool(explosion_burst_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_end := clampf(float(explosion_burst_config.get("visible_end", 0.95)), 0.1, 1.0)
+	if progress > visible_end:
+		return
+
+	var source_state := _get_projectile_state_from_config(0.0, explosion_burst_config)
+	var target_state := _get_projectile_state_from_config(1.0, explosion_burst_config)
+	var center := _projectile_battlefield_position(source_state.get("position", Vector2(128.0, 204.0)) as Vector2, explosion_burst_config)
+	var target := _projectile_battlefield_position(target_state.get("position", Vector2(384.0, 92.0)) as Vector2, explosion_burst_config)
+	var travel_direction := (target - center).normalized()
+	if travel_direction == Vector2.ZERO:
+		travel_direction = Vector2.RIGHT
+	var travel_normal := travel_direction.orthogonal()
+	var impact_start := clampf(float(explosion_burst_config.get("impact_start", 0.28)), 0.08, visible_end - 0.2)
+	var charge_progress := clampf(progress / maxf(impact_start, 0.001), 0.0, 1.0)
+	var burst_progress := clampf((progress - impact_start) / maxf(visible_end - impact_start, 0.001), 0.0, 1.0)
+	var smoke_color := _color_from_value(explosion_burst_config.get("smoke_color", [0.2, 0.17, 0.22, 1.0]), Color(0.2, 0.17, 0.22, 1.0))
+	var ember_color := _color_from_value(explosion_burst_config.get("ember_color", [1.0, 0.22, 0.03, 1.0]), Color(1.0, 0.22, 0.03, 1.0))
+	var flame_color := _color_from_value(explosion_burst_config.get("flame_color", [1.0, 0.48, 0.04, 1.0]), Color(1.0, 0.48, 0.04, 1.0))
+	var hot_color := _color_from_value(explosion_burst_config.get("hot_color", [1.0, 0.9, 0.2, 1.0]), Color(1.0, 0.9, 0.2, 1.0))
+	var core_color := _color_from_value(explosion_burst_config.get("core_color", [1.0, 1.0, 0.92, 1.0]), Color(1.0, 1.0, 0.92, 1.0))
+
+	if progress < impact_start:
+		var charge_radius := lerpf(58.0, 22.0, charge_progress)
+		var charge_alpha := 0.3 + charge_progress * 0.7
+		draw_circle(center, lerpf(4.0, 13.0, charge_progress), _color_with_alpha(hot_color, charge_alpha * 0.28))
+		draw_arc(center, charge_radius, float(frame_index) * 0.12, TAU + float(frame_index) * 0.12, 48, _color_with_alpha(ember_color, charge_alpha * 0.62), 1.8, true)
+		var charge_particle_count := maxi(6, int(explosion_burst_config.get("charge_particle_count", 12)))
+		for particle_index: int in range(charge_particle_count):
+			var angle := float(particle_index) * 2.399 + float(frame_index) * 0.13
+			var radius := charge_radius * (0.54 + float(particle_index % 4) * 0.12)
+			var particle_center := center + Vector2(cos(angle), sin(angle) * 0.72) * radius
+			var particle_size := 2.0 + float(particle_index % 3)
+			draw_circle(particle_center, particle_size * 2.0, _color_with_alpha(smoke_color, charge_alpha * 0.22))
+			draw_circle(particle_center, particle_size, _color_with_alpha(ember_color, charge_alpha * 0.82))
+		return
+
+	var fade := 1.0 - burst_progress
+	var eased := 1.0 - pow(1.0 - burst_progress, 2.0)
+	var shock_radius := lerpf(16.0, float(explosion_burst_config.get("shock_radius", 152.0)), eased)
+	var smoke_radius := lerpf(22.0, float(explosion_burst_config.get("smoke_radius", 118.0)), eased)
+	var blast_grow := clampf(burst_progress / 0.22, 0.0, 1.0)
+	var blast_fade := 1.0 - clampf((burst_progress - 0.3) / 0.48, 0.0, 1.0)
+	var blast_radius := lerpf(12.0, float(explosion_burst_config.get("blast_radius", 76.0)), 1.0 - pow(1.0 - blast_grow, 2.0))
+
+	draw_circle(center, shock_radius * 0.96, _color_with_alpha(ember_color, fade * 0.035))
+	draw_arc(center, shock_radius, -float(frame_index) * 0.06, TAU - float(frame_index) * 0.06, 72, _color_with_alpha(hot_color, fade * 0.82), maxf(1.2, 5.0 * fade), true)
+	draw_arc(center, shock_radius * 0.82, float(frame_index) * 0.08, TAU + float(frame_index) * 0.08, 64, _color_with_alpha(ember_color, fade * 0.48), maxf(1.0, 2.8 * fade), true)
+
+	var travel_fraction := clampf(float(explosion_burst_config.get("travel_fraction", 0.48)), 0.24, 0.72)
+	var wave_progress := clampf(burst_progress / travel_fraction, 0.0, 1.0)
+	var wave_eased := wave_progress * wave_progress * (3.0 - 2.0 * wave_progress)
+	var wave_fade := 1.0 - clampf((burst_progress - travel_fraction) / 0.3, 0.0, 1.0)
+	var wave_segment_count := maxi(6, int(explosion_burst_config.get("wave_segment_count", 11)))
+	for segment_index: int in range(wave_segment_count):
+		var segment_progress := wave_eased - float(segment_index) * 0.062
+		if segment_progress <= 0.0:
+			continue
+		var segment_alpha := wave_fade * (1.0 - float(segment_index) / float(wave_segment_count + 2))
+		var wave_center := center.lerp(target, clampf(segment_progress, 0.0, 1.0))
+		wave_center += travel_normal * sin(float(frame_index) * 0.34 + float(segment_index) * 1.27) * 7.0 * (1.0 - segment_progress * 0.5)
+		var wave_radius := lerpf(18.0, 42.0, segment_progress) * (1.0 - float(segment_index) * 0.025)
+		draw_circle(wave_center, wave_radius * 1.34, _color_with_alpha(smoke_color.darkened(0.3), segment_alpha * 0.2))
+		draw_circle(wave_center, wave_radius, _color_with_alpha(ember_color, segment_alpha * 0.32))
+		draw_circle(wave_center + travel_direction * wave_radius * 0.2, wave_radius * 0.62, _color_with_alpha(flame_color, segment_alpha * 0.72))
+		draw_circle(wave_center + travel_direction * wave_radius * 0.4, wave_radius * 0.3, _color_with_alpha(hot_color, segment_alpha * 0.86))
+
+	var target_impact_start := travel_fraction * 0.8
+	var target_impact_progress := clampf((burst_progress - target_impact_start) / 0.26, 0.0, 1.0)
+	if target_impact_progress > 0.0:
+		var target_impact_fade := 1.0 - target_impact_progress
+		var target_impact_radius := lerpf(10.0, float(explosion_burst_config.get("target_impact_radius", 74.0)), 1.0 - pow(1.0 - target_impact_progress, 2.0))
+		draw_circle(target, target_impact_radius * 0.76, _color_with_alpha(flame_color, target_impact_fade * 0.3))
+		draw_circle(target, target_impact_radius * 0.38, _color_with_alpha(hot_color, target_impact_fade * 0.82))
+		draw_arc(target, target_impact_radius, -float(frame_index) * 0.12, TAU - float(frame_index) * 0.12, 56, _color_with_alpha(core_color, target_impact_fade * 0.9), 2.8, true)
+		var target_ray_count := maxi(8, int(explosion_burst_config.get("target_ray_count", 14)))
+		for target_ray_index: int in range(target_ray_count):
+			var target_ray_angle := float(target_ray_index) * TAU / float(target_ray_count) + float(frame_index) * 0.04
+			var target_ray_start := target + Vector2.from_angle(target_ray_angle) * target_impact_radius * 0.34
+			var target_ray_end := target + Vector2.from_angle(target_ray_angle) * target_impact_radius * (0.82 + float(target_ray_index % 3) * 0.1)
+			draw_line(target_ray_start, target_ray_end, _color_with_alpha(ember_color, target_impact_fade * 0.8), 2.0, true)
+
+	var smoke_count := maxi(8, int(explosion_burst_config.get("smoke_count", 18)))
+	for smoke_index: int in range(smoke_count):
+		var angle := float(smoke_index) * 2.399 + sin(float(smoke_index) * 1.73) * 0.22
+		var radius_factor := 0.48 + float(smoke_index % 5) * 0.11
+		var puff_center := center + Vector2.from_angle(angle) * smoke_radius * radius_factor
+		puff_center.y -= burst_progress * (10.0 + float(smoke_index % 4) * 5.0)
+		var puff_size := (10.0 + float(smoke_index % 4) * 3.2) * (0.56 + eased * 0.72)
+		var puff_alpha := fade * (0.28 + float(smoke_index % 3) * 0.06)
+		draw_circle(puff_center, puff_size * 1.28, _color_with_alpha(smoke_color.darkened(0.28), puff_alpha * 0.48))
+		draw_circle(puff_center, puff_size, _color_with_alpha(smoke_color, puff_alpha))
+		if smoke_index % 3 == 0:
+			draw_circle(puff_center - Vector2(puff_size * 0.18, puff_size * 0.2), puff_size * 0.48, _color_with_alpha(flame_color, puff_alpha * blast_fade * 0.7))
+
+	var ray_count := maxi(10, int(explosion_burst_config.get("ray_count", 18)))
+	for ray_index: int in range(ray_count):
+		var angle := float(ray_index) * TAU / float(ray_count) + float(frame_index) * 0.025
+		var ray_length := shock_radius * (0.58 + float(ray_index % 4) * 0.09)
+		var ray_start := center + Vector2.from_angle(angle) * blast_radius * 0.62
+		var ray_end := center + Vector2.from_angle(angle) * ray_length
+		draw_line(ray_start, ray_end, _color_with_alpha(flame_color, fade * blast_fade * 0.68), maxf(1.0, 3.4 * blast_fade), true)
+
+	if blast_fade > 0.02:
+		draw_circle(center, blast_radius * 1.22, _color_with_alpha(ember_color, blast_fade * 0.22))
+		draw_circle(center, blast_radius, _color_with_alpha(flame_color, blast_fade * 0.9))
+		draw_circle(center, blast_radius * 0.68, _color_with_alpha(hot_color, blast_fade * 0.96))
+		draw_circle(center, blast_radius * 0.34, _color_with_alpha(core_color, blast_fade))
+
+	var debris_count := maxi(8, int(explosion_burst_config.get("debris_count", 16)))
+	for debris_index: int in range(debris_count):
+		var stagger := float(debris_index % 4) * 0.025
+		var debris_progress := clampf((burst_progress - stagger) / maxf(1.0 - stagger, 0.001), 0.0, 1.0)
+		if debris_progress <= 0.0:
+			continue
+		var angle := float(debris_index) * 2.399 - 0.9
+		var distance := shock_radius * (0.36 + float(debris_index % 5) * 0.075)
+		var debris_center := center + Vector2.from_angle(angle) * distance
+		debris_center.y += 42.0 * debris_progress * debris_progress
+		var debris_alpha := (1.0 - debris_progress) * 0.9
+		var debris_size := 2.0 + float(debris_index % 3) * 1.2
+		draw_line(debris_center - Vector2.from_angle(angle) * debris_size * 3.6, debris_center, _color_with_alpha(ember_color, debris_alpha * 0.5), debris_size, true)
+		draw_circle(debris_center, debris_size, _color_with_alpha(hot_color, debris_alpha))
+
+
+func _draw_psychic_pulse_visual() -> void:
+	if not bool(psychic_pulse_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := clampf(float(psychic_pulse_config.get("visible_start", 0.02)), 0.0, 1.0)
+	var visible_end := clampf(float(psychic_pulse_config.get("visible_end", 0.98)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, psychic_pulse_config)
+	if alpha <= 0.02:
+		return
+
+	var source_state := _get_projectile_state_from_config(0.0, psychic_pulse_config)
+	var target_state := _get_projectile_state_from_config(1.0, psychic_pulse_config)
+	var source := _projectile_battlefield_position(source_state.get("position", Vector2(128.0, 198.0)) as Vector2, psychic_pulse_config)
+	var target := _projectile_battlefield_position(target_state.get("position", Vector2(384.0, 94.0)) as Vector2, psychic_pulse_config)
+	var vector := target - source
+	if vector.length_squared() < 1.0:
+		return
+	var direction := vector.normalized()
+	var normal := Vector2(-direction.y, direction.x)
+	var charge_end := clampf(float(psychic_pulse_config.get("charge_end", 0.28)), visible_start, visible_end - 0.12)
+	var wave_start := clampf(float(psychic_pulse_config.get("wave_start", 0.22)), visible_start, charge_end)
+	var impact_start := clampf(float(psychic_pulse_config.get("impact_start", 0.7)), wave_start + 0.12, visible_end)
+	var charge_progress := clampf((progress - visible_start) / maxf(charge_end - visible_start, 0.001), 0.0, 1.0)
+	var wave_progress := clampf((progress - wave_start) / maxf(impact_start - wave_start, 0.001), 0.0, 1.0)
+	var impact_progress := clampf((progress - impact_start) / maxf(visible_end - impact_start, 0.001), 0.0, 1.0)
+
+	var ring_color := _color_from_value(psychic_pulse_config.get("ring_color", [0.7, 0.22, 1.0, 1.0]), Color(0.7, 0.22, 1.0, 1.0))
+	var glow_color := _color_from_value(psychic_pulse_config.get("glow_color", [0.38, 0.08, 0.86, 1.0]), Color(0.38, 0.08, 0.86, 1.0))
+	var core_color := _color_from_value(psychic_pulse_config.get("core_color", [1.0, 0.9, 1.0, 1.0]), Color(1.0, 0.9, 1.0, 1.0))
+	var impact_color := _color_from_value(psychic_pulse_config.get("impact_color", [0.95, 0.16, 1.0, 1.0]), Color(0.95, 0.16, 1.0, 1.0))
+
+	if progress <= charge_end:
+		var charge_center := source + Vector2(0.0, -6.0)
+		var pulse := 0.86 + 0.14 * sin(float(frame_index) * 0.46)
+		draw_circle(charge_center, 30.0 * pulse, _color_with_alpha(glow_color, alpha * 0.1))
+		var charge_ring_count := maxi(2, int(psychic_pulse_config.get("charge_ring_count", 3)))
+		for ring_index: int in range(charge_ring_count):
+			var ring_radius := (18.0 + float(ring_index) * 13.0) * (0.68 + charge_progress * 0.34) * pulse
+			var ring_alpha := alpha * (0.82 - float(ring_index) * 0.12) * (1.0 - charge_progress * 0.18)
+			_draw_psychic_ring(charge_center, ring_radius, 0.52, float(frame_index) * (0.04 + float(ring_index) * 0.02) + float(ring_index), ring_color, core_color, ring_alpha)
+
+		var particle_count := maxi(6, int(psychic_pulse_config.get("particle_count", 14)))
+		var particle_spread := maxf(float(psychic_pulse_config.get("particle_spread", 54.0)), 16.0)
+		for particle_index: int in range(particle_count):
+			var phase := float(particle_index) * 2.399 + float(frame_index) * 0.14
+			var life := fmod(float(particle_index) * 0.137 + charge_progress * 1.7, 1.0)
+			var particle_position := charge_center + Vector2(cos(phase), sin(phase) * 0.64) * particle_spread * (0.32 + life * 0.68)
+			var particle_alpha := alpha * (0.16 + (1.0 - life) * 0.52) * (0.8 + charge_progress * 0.2)
+			var particle_size := 1.8 + float(particle_index % 3) * 0.9
+			draw_circle(particle_position, particle_size * 1.8, _color_with_alpha(glow_color, particle_alpha * 0.28))
+			draw_circle(particle_position, particle_size, _color_with_alpha(core_color, particle_alpha))
+			draw_line(particle_position - Vector2(particle_size * 2.2, 0.0), particle_position + Vector2(particle_size * 2.2, 0.0), _color_with_alpha(ring_color, particle_alpha * 0.66), 1.0, true)
+
+	if progress >= wave_start and progress < impact_start:
+		var ring_count := maxi(3, int(psychic_pulse_config.get("ring_count", 5)))
+		var ring_spacing := clampf(float(psychic_pulse_config.get("ring_spacing", 0.14)), 0.06, 0.28)
+		for ring_index: int in range(ring_count):
+			var ring_progress := clampf(wave_progress - float(ring_index) * ring_spacing, 0.0, 1.0)
+			if ring_progress <= 0.0:
+				continue
+			var eased := 1.0 - pow(1.0 - ring_progress, 2.0)
+			var ring_center := source.lerp(target, eased) + normal * sin(float(frame_index) * 0.16 + float(ring_index) * 1.4) * 5.0 * (1.0 - eased)
+			var radius := float(psychic_pulse_config.get("ring_radius", 22.0)) * (0.78 + eased * 0.42)
+			var ring_alpha := alpha * (0.88 - float(ring_index) * 0.1) * (0.55 + eased * 0.45)
+			_draw_psychic_ring(ring_center, radius, float(psychic_pulse_config.get("ring_squash", 0.46)), direction.angle() + float(frame_index) * 0.03, ring_color, core_color, ring_alpha)
+			draw_circle(ring_center, radius * 0.22, _color_with_alpha(core_color, ring_alpha * 0.46))
+
+		var front := source.lerp(target, 1.0 - pow(1.0 - wave_progress, 2.0))
+		draw_circle(front, 15.0, _color_with_alpha(glow_color, alpha * 0.18))
+		draw_circle(front, 5.0, _color_with_alpha(core_color, alpha * 0.9))
+
+	if impact_progress > 0.0:
+		var impact_center := target + _vector2_from_value(psychic_pulse_config.get("impact_offset", [0.0, -8.0]))
+		var impact_fade := alpha * (1.0 - impact_progress)
+		var impact_radius := lerpf(14.0, float(psychic_pulse_config.get("impact_radius", 68.0)), 1.0 - pow(1.0 - impact_progress, 2.0))
+		draw_circle(impact_center, impact_radius * 0.62, _color_with_alpha(glow_color, impact_fade * 0.22))
+		_draw_psychic_ring(impact_center, impact_radius, 0.78, -float(frame_index) * 0.08, impact_color, core_color, impact_fade * 0.92)
+		draw_circle(impact_center, impact_radius * 0.28, _color_with_alpha(core_color, impact_fade * 0.92))
+		var ray_count := maxi(8, int(psychic_pulse_config.get("impact_ray_count", 16)))
+		for ray_index: int in range(ray_count):
+			var angle := float(ray_index) * TAU / float(ray_count) + float(frame_index) * 0.06
+			var inner := impact_center + Vector2.from_angle(angle) * impact_radius * 0.32
+			var mid := impact_center + Vector2.from_angle(angle + 0.06 * sin(float(ray_index))) * impact_radius * 0.7
+			var outer := impact_center + Vector2.from_angle(angle) * impact_radius * (1.0 + float(ray_index % 3) * 0.12)
+			draw_line(inner, mid, _color_with_alpha(impact_color, impact_fade * 0.82), 2.6, true)
+			draw_line(mid, outer, _color_with_alpha(core_color, impact_fade * 0.74), 1.4, true)
+
+
+func _draw_psychic_ring(center: Vector2, radius: float, squash: float, rotation: float, ring_color: Color, core_color: Color, alpha: float) -> void:
+	if alpha <= 0.02:
+		return
+	draw_set_transform(center, rotation, Vector2(1.0, squash))
+	draw_arc(Vector2.ZERO, radius * 1.12, 0.0, TAU, 56, _color_with_alpha(ring_color, alpha * 0.22), 5.6, true)
+	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 56, _color_with_alpha(ring_color, alpha), 2.4, true)
+	draw_arc(Vector2.ZERO, radius * 0.78, float(frame_index) * 0.08, float(frame_index) * 0.08 + PI * 1.22, 42, _color_with_alpha(core_color, alpha * 0.78), 1.1, true)
+	draw_set_transform(Vector2.ZERO)
 
 
 func _draw_flash_visual() -> void:
@@ -891,6 +1364,74 @@ func _draw_draco_meteor_visual() -> void:
 			)
 
 
+func _draw_coin_rain_visual() -> void:
+	if not bool(coin_rain_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := clampf(float(coin_rain_config.get("visible_start", 0.0)), 0.0, 1.0)
+	var visible_end := clampf(float(coin_rain_config.get("visible_end", 1.0)), visible_start + 0.01, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var rain_progress := clampf((progress - visible_start) / maxf(visible_end - visible_start, 0.001), 0.0, 1.0)
+	var target := _battlefield_position(_vector2_from_value(coin_rain_config.get("target", [384.0, 132.0])))
+	var coin_count := clampi(int(coin_rain_config.get("coin_count", 24)), 8, 48)
+	var spread_x := maxf(float(coin_rain_config.get("spread_x", 150.0)), 40.0)
+	var spread_y := maxf(float(coin_rain_config.get("spread_y", 44.0)), 12.0)
+	var flight_height := maxf(float(coin_rain_config.get("flight_height", 205.0)), 80.0)
+	var flight_duration := clampf(float(coin_rain_config.get("flight_duration", 0.34)), 0.14, 0.7)
+	var coin_scale := clampf(float(coin_rain_config.get("coin_scale", 1.0)), 0.35, 2.2)
+	var gold := _color_from_value(coin_rain_config.get("gold_color", [1.0, 0.63, 0.04, 1.0]), Color(1.0, 0.63, 0.04, 1.0))
+	var bright_gold := _color_from_value(coin_rain_config.get("bright_color", [1.0, 0.94, 0.42, 1.0]), Color(1.0, 0.94, 0.42, 1.0))
+	var shadow_gold := _color_from_value(coin_rain_config.get("shadow_color", [0.7, 0.22, 0.01, 1.0]), Color(0.7, 0.22, 0.01, 1.0))
+
+	for coin_index: int in range(coin_count):
+		var lane := fmod(float(coin_index) * 0.61803398875, 1.0) * 2.0 - 1.0
+		var row_seed := fmod(float(coin_index * 29), 9.0) / 8.0
+		var impact_position := target + Vector2(lane * spread_x * 0.62, (row_seed - 0.5) * spread_y)
+		var start_position := target + Vector2(lane * spread_x, -flight_height - row_seed * 72.0)
+		var stagger := fmod(float(coin_index) * 0.071, 0.58)
+		var coin_life := (rain_progress - stagger) / flight_duration
+		if coin_life < 0.0 or coin_life > 1.22:
+			continue
+
+		if coin_life <= 1.0:
+			var fall := coin_life * coin_life * (3.0 - 2.0 * coin_life)
+			var position := start_position.lerp(impact_position, fall)
+			var velocity := (impact_position - start_position).normalized()
+			var alpha := clampf(coin_life / 0.12, 0.0, 1.0) * clampf((1.12 - coin_life) / 0.12, 0.0, 1.0)
+			var size := coin_scale * (0.78 + float(coin_index % 4) * 0.11)
+			draw_line(position - velocity * (34.0 + float(coin_index % 3) * 10.0) * size, position, _color_with_alpha(bright_gold, alpha * 0.42), 3.0 * size, true)
+			_draw_coin(position, size, alpha, gold, bright_gold, shadow_gold, float(coin_index) * 1.7 + float(frame_index) * 0.34)
+
+		var impact_progress := (coin_life - 1.0) / 0.22
+		if impact_progress >= 0.0 and impact_progress <= 1.0:
+			var impact_alpha := sin(PI * impact_progress)
+			var impact_radius := 12.0 + (1.0 - pow(1.0 - impact_progress, 2.0)) * 28.0 * coin_scale
+			draw_circle(impact_position, impact_radius * 0.58, _color_with_alpha(gold, impact_alpha * 0.3))
+			draw_arc(impact_position, impact_radius, float(coin_index) * 0.47, float(coin_index) * 0.47 + TAU * 0.82, 28, _color_with_alpha(bright_gold, impact_alpha * 0.86), 2.2, true)
+
+	var ring_progress := clampf((rain_progress - 0.2) / 0.8, 0.0, 1.0)
+	var ring_alpha := (1.0 - ring_progress) * 0.7
+	if ring_alpha > 0.01:
+		var ring_radius := 34.0 + ring_progress * 94.0
+		draw_arc(target, ring_radius, -PI * 0.82, PI * 0.34, 64, _color_with_alpha(bright_gold, ring_alpha), 4.0, true)
+		draw_arc(target, ring_radius * 0.72, PI * 0.18, PI * 1.28, 48, _color_with_alpha(gold, ring_alpha * 0.72), 2.2, true)
+
+
+func _draw_coin(position: Vector2, scale_value: float, alpha: float, gold: Color, bright_gold: Color, shadow_gold: Color, rotation: float) -> void:
+	var pulse := 1.0 + sin(rotation * 1.7) * 0.08
+	draw_set_transform(position, rotation, Vector2(scale_value * 1.3, scale_value * 0.58 * pulse))
+	draw_circle(Vector2(2.0, 3.0), 10.0, _color_with_alpha(shadow_gold, alpha * 0.72))
+	draw_circle(Vector2.ZERO, 10.0, _color_with_alpha(gold, alpha * 0.96))
+	draw_arc(Vector2.ZERO, 8.0, 0.0, TAU, 32, _color_with_alpha(bright_gold, alpha * 0.92), 2.0, true)
+	draw_line(Vector2(-3.0, -4.0), Vector2(3.0, 4.0), _color_with_alpha(bright_gold, alpha * 0.7), 1.8, true)
+	draw_line(Vector2(3.0, -4.0), Vector2(-3.0, 4.0), _color_with_alpha(shadow_gold, alpha * 0.42), 1.2, true)
+	draw_set_transform(Vector2.ZERO)
+
+
 func _draw_draco_meteor_trail(
 	meteor_position: Vector2,
 	velocity: Vector2,
@@ -1081,6 +1622,59 @@ func _draw_focus_aura_sparkle(position: Vector2, size: float, color: Color, core
 	draw_line(position + Vector2(0.0, -size * 2.4), position + Vector2(0.0, size * 2.4), core, 1.1, true)
 	draw_line(position + Vector2(-size, -size), position + Vector2(size, size), outer, 0.8, true)
 	draw_line(position + Vector2(-size, size), position + Vector2(size, -size), outer, 0.8, true)
+
+
+func _draw_afterimage_visual() -> void:
+	if not bool(afterimage_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := clampf(float(afterimage_config.get("visible_start", 0.02)), 0.0, 1.0)
+	var visible_end := clampf(float(afterimage_config.get("visible_end", 0.94)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, afterimage_config)
+	if alpha <= 0.02:
+		return
+
+	var center := _battlefield_position(_vector2_from_value(afterimage_config.get("center", [128.0, 224.0])))
+	var image_count := clampi(int(afterimage_config.get("image_count", 3)), 2, 5)
+	var body_width := maxf(float(afterimage_config.get("body_width", 30.0)), 10.0)
+	var body_height := maxf(float(afterimage_config.get("body_height", 54.0)), 16.0)
+	var ghost_alpha := clampf(float(afterimage_config.get("ghost_alpha", 0.34)), 0.05, 0.8)
+	var body_color := _color_from_value(afterimage_config.get("body_color", [0.5, 0.78, 1.0, 1.0]), Color(0.5, 0.78, 1.0, 1.0))
+	var core_color := _color_from_value(afterimage_config.get("core_color", [0.9, 0.98, 1.0, 1.0]), Color(0.9, 0.98, 1.0, 1.0))
+	var offsets_value: Variant = afterimage_config.get("offsets", [])
+	var offsets: Array = offsets_value as Array if offsets_value is Array else []
+
+	for image_index: int in range(image_count):
+		var offset := Vector2(
+			(float(image_index) - float(image_count - 1) * 0.5) * 34.0,
+			-10.0 - absf(float(image_index) - float(image_count - 1) * 0.5) * 4.0
+		)
+		if image_index < offsets.size() and offsets[image_index] is Array:
+			offset = _vector2_from_value(offsets[image_index])
+		var ghost_center := center + offset
+		var ghost_fade := ghost_alpha * (0.72 + 0.18 * sin(float(frame_index) * 0.34 + float(image_index)))
+		var ghost_color := _color_with_alpha(body_color, alpha * ghost_fade)
+		var ghost_core := _color_with_alpha(core_color, alpha * ghost_fade * 0.9)
+
+		draw_set_transform(ghost_center, 0.0, Vector2(1.0, 0.78))
+		draw_arc(Vector2.ZERO, body_width, 0.0, TAU, 32, ghost_color, 3.0, true)
+		draw_arc(Vector2(0.0, -body_height * 0.52), body_width * 0.42, 0.0, TAU, 24, ghost_core, 2.4, true)
+		draw_line(Vector2(-body_width * 0.52, -body_height * 0.18), Vector2(body_width * 0.52, -body_height * 0.18), ghost_core, 2.0, true)
+		draw_line(Vector2(-body_width * 0.4, body_height * 0.24), Vector2(-body_width * 0.58, body_height * 0.58), ghost_color, 2.2, true)
+		draw_line(Vector2(body_width * 0.4, body_height * 0.24), Vector2(body_width * 0.58, body_height * 0.58), ghost_color, 2.2, true)
+		draw_set_transform(Vector2.ZERO)
+
+	var streak_alpha := alpha * ghost_alpha * 0.52
+	for streak_index: int in range(image_count - 1):
+		var streak_offset: Variant = offsets[streak_index] if streak_index < offsets.size() and offsets[streak_index] is Array else [0.0, 0.0]
+		var streak_start := center + _vector2_from_value(streak_offset) + Vector2(0.0, body_height * 0.46)
+		var streak_end := center + _vector2_from_value(streak_offset) + Vector2(0.0, body_height * 0.7)
+		draw_line(streak_start, streak_end, _color_with_alpha(body_color, streak_alpha), 1.6, true)
 
 
 func _draw_stat_change_visual() -> void:
@@ -2724,6 +3318,8 @@ func _apply_timing_events(index: int) -> void:
 
 		match int(event["type"]):
 			0:
+				if disable_data_sound_events:
+					continue
 				_play_sound_event(event)
 			1:
 				if show_timing_backgrounds:
@@ -2745,6 +3341,28 @@ func _apply_timing_events(index: int) -> void:
 				if show_timing_foregrounds:
 					fg.modulate.a = float(event["opacity"]) / 255.0 * foreground_opacity_multiplier if event["opacity"] != null else fg.modulate.a
 					fg_hide_frame = _timing_hide_frame(index, event) if fg.modulate.a > 0.0 else -1
+	_apply_custom_sound_events(index)
+
+
+func _apply_custom_sound_events(index: int) -> void:
+	for event_value: Variant in custom_sound_events:
+		if not event_value is Dictionary:
+			continue
+		var event := event_value as Dictionary
+		if int(event.get("frame", -1)) != index:
+			continue
+		var sound_name := str(event.get("name", "")).strip_edges()
+		if sound_name == "":
+			continue
+		var event_key := "custom:%s:%s" % [index, sound_name]
+		if played_events.has(event_key):
+			continue
+		played_events[event_key] = true
+		_play_sound_event({
+			"name": sound_name,
+			"volume": float(event.get("volume", 100.0)),
+			"pitch": float(event.get("pitch", 100.0)),
+		})
 
 
 func _expire_timing_layers(index: int) -> void:

@@ -8,6 +8,8 @@ const TELEPORT_SELF_ENDPOINT := "/game/moderation/teleport-self"
 const TELEPORT_ONLINE_PLAYERS_ENDPOINT := "/game/moderation/teleport-online-players"
 const TELEPORT_TO_PLAYER_ENDPOINT := "/game/moderation/teleport-to-player"
 const TELEPORT_PLAYER_ENDPOINT := "/game/moderation/teleport-player"
+const JAIL_DETAIN_ENDPOINT := "/game/moderation/jail/detain"
+const JAIL_RELEASE_ENDPOINT := "/game/moderation/jail/release"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -195,6 +197,46 @@ func teleport_player(
 		"status": str(body.get("status", "")),
 		"idempotent": bool(body.get("idempotent", false)),
 	}
+
+
+func detain_player(
+	target_player_id: int,
+	duration_minutes: int,
+	permanent: bool,
+	reason: String
+) -> Dictionary:
+	var payload := {
+		"requestId": _request_id(""),
+		"targetPlayerId": target_player_id,
+		"permanent": permanent,
+		"reason": reason.strip_edges(),
+	}
+	if not permanent:
+		payload["durationMinutes"] = maxi(duration_minutes, 1)
+	return await _moderation_jail_request(JAIL_DETAIN_ENDPOINT, payload)
+
+
+func release_player_from_jail(target_player_id: int, reason: String) -> Dictionary:
+	return await _moderation_jail_request(JAIL_RELEASE_ENDPOINT, {
+		"requestId": _request_id(""),
+		"targetPlayerId": target_player_id,
+		"reason": reason.strip_edges(),
+	})
+
+
+func _moderation_jail_request(endpoint: String, payload: Dictionary) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response := await _request_json(
+		base_url + endpoint,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify(payload)
+	)
+	if not bool(response.get("success", false)):
+		return response
+	return {"success": true, "body": _dictionary_from_value(response.get("body", {}))}
 
 
 func _request_id(value: String) -> String:

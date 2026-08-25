@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal overworld_steps_completed(step_count: int)
+
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
 const RUN_TILE_MOVE_DURATION := 0.14
@@ -37,6 +39,8 @@ const PixelPerfectRenderingScript := preload("res://scripts/services/pixel_perfe
 const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
+const LedgeDirectionResolverScript := preload("res://scripts/world/ledge_direction_resolver.gd")
+const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
 const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/OLDROD.png")
@@ -64,10 +68,8 @@ const STAFF_ROLE_CATEGORY := "staff"
 const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
 const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
-const NAMEPLATE_TEXT_PADDING := 6.0
 const ROLE_BADGE_TEXT_HEIGHT := 13.0
 const ROLE_BADGE_DEFAULT_WIDTH := 30.0
-const NAMEPLATE_MIN_NAME_WIDTH := 44.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 const NAMEPLATE_LAYER_GAP := 2.0
 const ACTIVITY_LAYER_OFFSETS := {
@@ -158,6 +160,7 @@ const ACTIVITY_VISUAL_OFFSETS := {
 }
 const WATER_TILEMAP_NAMES: Array[String] = ["Water"]
 const TALL_GRASS_VISUAL_TILEMAP_NAMES: Array[String] = ["TallGrassVisual", "Grass"]
+const TALL_GRASS_DEPTH_SORTING_SCRIPT := preload("res://scripts/world/tall_grass_depth_sorting.gd")
 const TALL_GRASS_RUSTLE_EFFECT_SCRIPT := preload("res://scripts/world/tall_grass_rustle_effect.gd")
 const WATER_RIPPLE_EFFECT_SCRIPT := preload("res://scripts/world/water_ripple_effect.gd")
 const SAND_FOOTPRINT_EFFECT_SCRIPT := preload("res://scripts/world/sand_footprint_effect.gd")
@@ -169,6 +172,7 @@ const SAND_FOOTPRINT_LAYER_OFFSETS := {
 	"SandDown": Vector2(0.0, 8.0),
 }
 const ENCOUNTER_TYPE_GRASS := "grass"
+const ENCOUNTER_TYPE_CAVE := "cave"
 const ENCOUNTER_TYPE_SURF := "surf"
 const ENCOUNTER_TYPE_FISH := "fish"
 const FISHING_ENCOUNTER_TYPES := {
@@ -204,6 +208,7 @@ const FISHING_RIPPLE_DISTANCE := TILE_SIZE * 1.45
 @onready var nameplate: Control = $Nameplate
 @onready var nameplate_background: Panel = $Nameplate/NameplateBackground
 @onready var nameplate_label: Label = $Nameplate/NameLabel
+@onready var guild_emblem_background: Panel = $Nameplate/GuildEmblemBackground
 @onready var guild_emblem: TextureRect = $Nameplate/GuildEmblem
 @onready var role_badge_panel: Panel = $Nameplate/RoleBadgePanel
 @onready var role_badge_label: Label = $Nameplate/RoleBadgePanel/RoleBadge
@@ -219,6 +224,8 @@ var water_tilemap: TileMapLayer
 var sand_tilemaps: Dictionary = {}
 var block_down_tilemap: TileMapLayer
 var block_up_tilemap: TileMapLayer
+var block_left_tilemap: TileMapLayer
+var block_right_tilemap: TileMapLayer
 var ledge_down_tilemap: TileMapLayer
 var ledge_up_tilemap: TileMapLayer
 var ledge_left_tilemap: TileMapLayer
@@ -236,6 +243,8 @@ var target_position := Vector2.ZERO
 var move_start_position := Vector2.ZERO
 var move_elapsed := 0.0
 var move_duration := TILE_MOVE_DURATION
+var stair_elevation := HorizontalStairElevationScript.ELEVATION_NONE
+var stair_visual_offset := Vector2.ZERO
 
 # Onthoudt de laatste kijkrichting, zodat de idle frame goed blijft staan.
 var last_direction := Vector2.DOWN
@@ -573,6 +582,8 @@ func set_guild_emblem(emblem: Dictionary) -> void:
 		return
 	guild_emblem.texture = GuildEmblemTexture.create_nameplate_texture(emblem)
 	guild_emblem.visible = guild_emblem.texture != null
+	if guild_emblem_background != null:
+		guild_emblem_background.visible = guild_emblem.visible
 	_sync_nameplate_visibility(nameplate_label != null and nameplate_label.text != "")
 
 func set_role_badge(role_badge: String, role_color: Color = Color(0.847, 0.718, 0.404), role_id: String = "") -> void:
@@ -633,9 +644,31 @@ func reset_movement_state() -> void:
 	move_start_position = global_position
 	move_elapsed = 0.0
 	move_duration = _get_current_tile_move_duration()
+	_clear_stair_visual_offset()
 	_clear_input_buffer()
 	_clear_held_direction()
 	set_idle_frame()
+	if pokemon_follower != null:
+		pokemon_follower.reset_follow_position()
+
+
+func teleport_within_current_map(world_position: Vector2, facing_direction := Vector2.ZERO) -> void:
+	_finish_fishing_activity()
+	_finish_surf_activity()
+	is_moving = false
+	story_path_movement_active = false
+	global_position = _snap_world_position(world_position)
+	target_position = global_position
+	move_start_position = global_position
+	move_elapsed = 0.0
+	move_duration = _get_current_tile_move_duration()
+	_clear_stair_visual_offset()
+	_clear_input_buffer()
+	_clear_held_direction()
+	if facing_direction != Vector2.ZERO:
+		last_direction = facing_direction.normalized()
+	set_idle_frame()
+	refresh_map_layers()
 	if pokemon_follower != null:
 		pokemon_follower.reset_follow_position()
 
@@ -682,6 +715,12 @@ func story_move_path(path: Array[String]) -> bool:
 		global_position = current_position
 		move_elapsed = 0.0
 		move_duration = _get_current_tile_move_duration()
+		stair_elevation = HorizontalStairElevationScript.elevation_for_stair_exit(
+			_resolve_current_map(),
+			move_start_position,
+			target_position,
+			direction
+		)
 		is_moving = true
 		play_walk_animation(direction)
 		while is_inside_tree() and is_moving:
@@ -727,7 +766,11 @@ func _is_story_grid_step_blocked(
 		return true
 	if direction == Vector2.UP and _tilemap_has_tile_at(block_up_tilemap, current_position):
 		return true
-	if _get_ledge_direction_for_tile(next_position) != Vector2.ZERO:
+	if direction == Vector2.LEFT and _tilemap_has_tile_at(block_left_tilemap, current_position):
+		return true
+	if direction == Vector2.RIGHT and _tilemap_has_tile_at(block_right_tilemap, current_position):
+		return true
+	if not _get_ledge_directions_for_tile(next_position).is_empty():
 		return true
 	var current_map := _resolve_current_map()
 	if (
@@ -756,6 +799,8 @@ func _ready() -> void:
 		SettingsManager.world_pixel_scale_changed.connect(_on_world_pixel_scale_changed)
 	if not SettingsManager.mount_loadout_changed.is_connected(_on_mount_loadout_changed):
 		SettingsManager.mount_loadout_changed.connect(_on_mount_loadout_changed)
+	if not SettingsManager.input_binding_changed.is_connected(_on_input_binding_changed):
+		SettingsManager.input_binding_changed.connect(_on_input_binding_changed)
 	if not get_viewport().size_changed.is_connected(_on_render_viewport_size_changed):
 		get_viewport().size_changed.connect(_on_render_viewport_size_changed)
 	_apply_world_pixel_scale()
@@ -781,12 +826,14 @@ func _ready() -> void:
 	# Bij scene switches kan de vorige map al freed zijn terwijl de autoload nog
 	# even naar die node wijst.
 	if GameState.current_map != null and is_instance_valid(GameState.current_map):
-		grass_tilemap = GameState.current_map.get_node_or_null("TallGrass")
+		grass_tilemap = _find_tilemap_layer(GameState.current_map, ["TallGrass"])
 		water_tilemap = _find_tilemap_layer(GameState.current_map, WATER_TILEMAP_NAMES)
 		_refresh_sand_tilemaps(GameState.current_map)
 		collision_tilemap = _find_tilemap_layer(GameState.current_map, ["Collision"])
 		block_down_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockDown"])
 		block_up_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockUp"])
+		block_left_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockLeft"])
+		block_right_tilemap = _find_tilemap_layer(GameState.current_map, ["BlockRight"])
 		ledge_down_tilemap = _find_tilemap_layer(GameState.current_map, ["LedgeDown"])
 		ledge_up_tilemap = _find_tilemap_layer(GameState.current_map, ["LedgeUp"])
 		ledge_left_tilemap = _find_tilemap_layer(GameState.current_map, ["LedgeLeft"])
@@ -829,11 +876,39 @@ func _on_render_viewport_size_changed() -> void:
 func _apply_world_pixel_scale() -> void:
 	if world_camera == null:
 		return
+	var effective_scale := PixelPerfectRenderingScript.resolve_world_scale_for_area(
+		SettingsManager.world_pixel_scale,
+		_get_current_map_world_access_area_type()
+	)
+	var canvas_scale := world_camera.get_viewport().get_screen_transform().get_scale()
+	var baseline_zoom := PixelPerfectRenderingScript.camera_zoom_for_output_scale(
+		effective_scale,
+		canvas_scale
+	)
+	var photo_mode := get_tree().get_first_node_in_group("content_creator_photo_mode")
+	if (
+		photo_mode != null
+		and photo_mode.has_method("apply_camera_baseline_zoom")
+		and bool(photo_mode.call("apply_camera_baseline_zoom", world_camera, baseline_zoom))
+	):
+		return
 	PixelPerfectRenderingScript.apply_to_camera(
 		world_camera,
-		SettingsManager.world_pixel_scale,
+		effective_scale,
 		get_window().size
 	)
+
+
+func _get_current_map_world_access_area_type() -> String:
+	var current_map := _resolve_current_map()
+	if current_map == null:
+		return ""
+	if current_map.has_method("get_world_access_area_type"):
+		return str(current_map.call("get_world_access_area_type")).strip_edges().to_lower()
+	for property: Dictionary in current_map.get_property_list():
+		if str(property.get("name", "")) == "world_access_area_type":
+			return str(current_map.get("world_access_area_type")).strip_edges().to_lower()
+	return ""
 
 func _exit_tree() -> void:
 	var had_activity := fishing_activity_active or surf_activity_active
@@ -888,15 +963,13 @@ func _sync_nameplate_layout() -> void:
 
 	var has_role_badge: bool = role_badge_panel != null and role_badge_label != null and role_badge_label.text.strip_edges() != ""
 	var has_guild_emblem: bool = guild_emblem != null and guild_emblem.texture != null
-	var name_width: float = clampf(
-		_get_label_text_width(nameplate_label) + NAMEPLATE_TEXT_PADDING,
-		NAMEPLATE_MIN_NAME_WIDTH,
-		NAMEPLATE_MAX_NAME_WIDTH
-	)
-	var card_layout := NameplateLayout.calculate_name_card(name_width, has_guild_emblem)
+	var name_size := _get_label_text_size(nameplate_label)
+	name_size.x = minf(name_size.x, NAMEPLATE_MAX_NAME_WIDTH)
+	var card_layout := NameplateLayout.calculate_name_card(name_size, has_guild_emblem)
 	var label_rect: Rect2 = card_layout.get("labelRect", Rect2())
 	var background_rect: Rect2 = card_layout.get("backgroundRect", Rect2())
 	var emblem_rect: Rect2 = card_layout.get("emblemRect", Rect2())
+	var emblem_background_rect: Rect2 = card_layout.get("emblemBackgroundRect", Rect2())
 
 	nameplate_label.offset_left = label_rect.position.x
 	nameplate_label.offset_right = label_rect.end.x
@@ -909,12 +982,17 @@ func _sync_nameplate_layout() -> void:
 		nameplate_background.offset_top = background_rect.position.y
 		nameplate_background.offset_bottom = background_rect.end.y
 	if has_guild_emblem:
+		if guild_emblem_background != null:
+			guild_emblem_background.offset_left = emblem_background_rect.position.x
+			guild_emblem_background.offset_right = emblem_background_rect.end.x
+			guild_emblem_background.offset_top = emblem_background_rect.position.y
+			guild_emblem_background.offset_bottom = emblem_background_rect.end.y
 		guild_emblem.offset_left = emblem_rect.position.x
 		guild_emblem.offset_right = emblem_rect.end.x
 		guild_emblem.offset_top = emblem_rect.position.y
 		guild_emblem.offset_bottom = emblem_rect.end.y
 
-	var next_layer_bottom := nameplate_label.offset_top - NAMEPLATE_LAYER_GAP
+	var next_layer_bottom := background_rect.position.y - NAMEPLATE_LAYER_GAP
 	if has_role_badge:
 		var badge_width: float = _get_role_badge_width(role_badge_label.text)
 		var start_x := NAMEPLATE_CENTER_X - (badge_width * 0.5)
@@ -941,16 +1019,26 @@ func _on_guild_changed(guild: Dictionary) -> void:
 	set_guild_emblem(emblem_value as Dictionary if emblem_value is Dictionary else {})
 
 
-func _get_label_text_width(label: Label) -> float:
+func _get_label_text_size(label: Label) -> Vector2:
 	var text: String = label.text.strip_edges()
 	if text == "":
-		return 0.0
+		return Vector2.ZERO
 
 	var font: Font = label.get_theme_font("font")
 	var font_size: int = label.get_theme_font_size("font_size")
+	if label.label_settings != null:
+		if label.label_settings.font != null:
+			font = label.label_settings.font
+		font_size = label.label_settings.font_size
 	if font == null:
-		return float(text.length() * max(font_size, 10) * 0.6)
-	return font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
+		return Vector2(
+			float(text.length() * max(font_size, 10) * 0.6),
+			float(max(font_size, 10))
+		)
+	return Vector2(
+		font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x,
+		font.get_height(font_size)
+	)
 
 func _get_role_badge_width(badge_text: String) -> float:
 	var normalized_badge := badge_text.strip_edges()
@@ -1109,7 +1197,7 @@ func _setup_fishing_prompt() -> void:
 	fishing_prompt_button.size = FISHING_PROMPT_SIZE
 	fishing_prompt_button.position = FISHING_PROMPT_POSITION
 	fishing_prompt_button.z_index = 560
-	fishing_prompt_button.tooltip_text = LocalizationManager.text("ui.fishing.prompt.fish")
+	fishing_prompt_button.tooltip_text = _fishing_prompt_tooltip("ui.fishing.prompt.fish")
 	_apply_fishing_prompt_style(fishing_prompt_button)
 	fishing_prompt_button.pressed.connect(Callable(self, "_on_fishing_prompt_pressed"))
 	add_child(fishing_prompt_button)
@@ -1130,7 +1218,7 @@ func _setup_fishing_bite_prompt() -> void:
 	fishing_bite_prompt_button.size = FISHING_BITE_PROMPT_SIZE
 	fishing_bite_prompt_button.position = FISHING_BITE_PROMPT_POSITION
 	fishing_bite_prompt_button.z_index = 570
-	fishing_bite_prompt_button.tooltip_text = LocalizationManager.text("ui.fishing.prompt.reel")
+	fishing_bite_prompt_button.tooltip_text = _fishing_prompt_tooltip("ui.fishing.prompt.reel")
 	_apply_fishing_bite_prompt_style(fishing_bite_prompt_button)
 	fishing_bite_prompt_button.button_down.connect(Callable(self, "_on_fishing_bite_prompt_button_down"))
 	fishing_bite_prompt_button.gui_input.connect(Callable(self, "_on_fishing_bite_prompt_gui_input"))
@@ -1335,14 +1423,18 @@ func _process(delta: float) -> void:
 		var move_progress := move_elapsed / move_duration
 		var interpolated_position: Vector2 = move_start_position.lerp(target_position, _get_move_interpolation(move_progress))
 		global_position = _snap_world_position(interpolated_position)
+		_update_stair_visual_offset(move_progress)
 		_update_sort_z()
 
 		# Als de bestemming is bereikt.
 		if _has_reached_target():
 			global_position = _snap_world_position(target_position)
 			is_moving = false
+			_clear_stair_visual_offset()
 
 			if not story_path_movement_active:
+				var completed_tiles := maxi(int(round(move_start_position.distance_to(target_position) / float(TILE_SIZE))), 1)
+				overworld_steps_completed.emit(completed_tiles)
 				if check_for_map_exit():
 					return
 
@@ -1357,6 +1449,8 @@ func _process(delta: float) -> void:
 					check_for_wild_encounter(ENCOUNTER_TYPE_SURF)
 				elif standing_on_tall_grass:
 					check_for_grass_encounter()
+				elif _is_cave_encounter_map():
+					check_for_wild_encounter(ENCOUNTER_TYPE_CAVE)
 
 			if _can_accept_movement_input():
 				var next_direction := _get_next_movement_direction()
@@ -1529,11 +1623,26 @@ func _show_field_move_system_message(move_id: String) -> void:
 
 func _on_locale_changed(_locale: String) -> void:
 	if fishing_prompt_button != null:
-		fishing_prompt_button.tooltip_text = LocalizationManager.text("ui.fishing.prompt.fish")
+		fishing_prompt_button.tooltip_text = _fishing_prompt_tooltip("ui.fishing.prompt.fish")
 	if fishing_bite_prompt_button != null:
-		fishing_bite_prompt_button.tooltip_text = LocalizationManager.text("ui.fishing.prompt.reel")
+		fishing_bite_prompt_button.tooltip_text = _fishing_prompt_tooltip("ui.fishing.prompt.reel")
 	if surf_prompt_button != null:
 		surf_prompt_button.tooltip_text = LocalizationManager.text("ui.field_move.surf")
+
+
+func _on_input_binding_changed(action: String, _keycode: Key) -> void:
+	if action != "fish":
+		return
+	if fishing_prompt_button != null:
+		fishing_prompt_button.tooltip_text = _fishing_prompt_tooltip("ui.fishing.prompt.fish")
+	if fishing_bite_prompt_button != null:
+		fishing_bite_prompt_button.tooltip_text = _fishing_prompt_tooltip("ui.fishing.prompt.reel")
+
+
+func _fishing_prompt_tooltip(translation_key: String) -> String:
+	return LocalizationManager.text(translation_key, {
+		"hotkey": SettingsManager.get_input_binding_label("fish"),
+	})
 
 func _start_surf_activity(clear_input := true) -> void:
 	surf_activity_active = true
@@ -1833,12 +1942,12 @@ func _try_start_move(direction: Vector2) -> bool:
 		set_idle_frame()
 		return false
 
-	var ledge_direction: Vector2 = _get_ledge_direction_for_tile(new_target_position)
-	if ledge_direction != Vector2.ZERO:
-		if direction != ledge_direction:
+	var ledge_directions := _get_ledge_directions_for_tile(new_target_position)
+	if not ledge_directions.is_empty():
+		if not ledge_directions.has(direction):
 			return false
 
-		movement_target_position = _snap_world_position(new_target_position + (ledge_direction * TILE_SIZE))
+		movement_target_position = _snap_world_position(new_target_position + (direction * TILE_SIZE))
 
 	# Check eerst of de target tile vrij is.
 	# Alleen als can_move_to true teruggeeft, starten we de beweging.
@@ -1850,6 +1959,12 @@ func _try_start_move(direction: Vector2) -> bool:
 	global_position = move_start_position
 	move_elapsed = 0.0
 	move_duration = _get_current_tile_move_duration()
+	stair_elevation = HorizontalStairElevationScript.elevation_for_stair_exit(
+		_resolve_current_map(),
+		move_start_position,
+		target_position,
+		direction
+	)
 	is_moving = true
 	play_walk_animation(direction)
 	return true
@@ -1932,22 +2047,22 @@ func _is_direction_blocked_by_current_tile(direction: Vector2) -> bool:
 		return _tilemap_has_tile_at(block_down_tilemap, global_position)
 	if direction == Vector2.UP:
 		return _tilemap_has_tile_at(block_up_tilemap, global_position)
+	if direction == Vector2.LEFT:
+		return _tilemap_has_tile_at(block_left_tilemap, global_position)
+	if direction == Vector2.RIGHT:
+		return _tilemap_has_tile_at(block_right_tilemap, global_position)
 
 	return false
 
-func _get_ledge_direction_for_tile(check_position: Vector2) -> Vector2:
+func _get_ledge_directions_for_tile(check_position: Vector2) -> Array[Vector2]:
 	refresh_map_layers()
-
-	if _tilemap_has_tile_at(ledge_down_tilemap, check_position):
-		return Vector2.DOWN
-	if _tilemap_has_tile_at(ledge_up_tilemap, check_position):
-		return Vector2.UP
-	if _tilemap_has_tile_at(ledge_left_tilemap, check_position):
-		return Vector2.LEFT
-	if _tilemap_has_tile_at(ledge_right_tilemap, check_position):
-		return Vector2.RIGHT
-
-	return Vector2.ZERO
+	return LedgeDirectionResolverScript.directions_for_tile(
+		check_position,
+		ledge_down_tilemap,
+		ledge_up_tilemap,
+		ledge_left_tilemap,
+		ledge_right_tilemap
+	)
 
 func _tilemap_has_tile_at(tilemap: TileMapLayer, check_position: Vector2) -> bool:
 	if tilemap == null:
@@ -2006,6 +2121,8 @@ func refresh_map_layers() -> void:
 		sand_tilemaps.clear()
 		block_down_tilemap = null
 		block_up_tilemap = null
+		block_left_tilemap = null
+		block_right_tilemap = null
 		ledge_down_tilemap = null
 		ledge_up_tilemap = null
 		ledge_left_tilemap = null
@@ -2015,12 +2132,14 @@ func refresh_map_layers() -> void:
 
 	GameState.current_map = current_map
 	collision_tilemap = _find_tilemap_layer(current_map, ["Collision"])
-	grass_tilemap = current_map.get_node_or_null("TallGrass")
+	grass_tilemap = _find_tilemap_layer(current_map, ["TallGrass"])
 	grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
 	water_tilemap = _find_tilemap_layer(current_map, WATER_TILEMAP_NAMES)
 	_refresh_sand_tilemaps(current_map)
 	block_down_tilemap = _find_tilemap_layer(current_map, ["BlockDown"])
 	block_up_tilemap = _find_tilemap_layer(current_map, ["BlockUp"])
+	block_left_tilemap = _find_tilemap_layer(current_map, ["BlockLeft"])
+	block_right_tilemap = _find_tilemap_layer(current_map, ["BlockRight"])
 	ledge_down_tilemap = _find_tilemap_layer(current_map, ["LedgeDown"])
 	ledge_up_tilemap = _find_tilemap_layer(current_map, ["LedgeUp"])
 	ledge_left_tilemap = _find_tilemap_layer(current_map, ["LedgeLeft"])
@@ -2028,6 +2147,7 @@ func refresh_map_layers() -> void:
 
 	if collision_tilemap == null:
 		push_warning("Player.refresh_map_layers: Collision layer missing on %s." % current_map.name)
+	_apply_world_pixel_scale()
 
 func _find_tilemap_layer(parent: Node, layer_names: Array[String]) -> TileMapLayer:
 	return MapLayerResolverScript.find_tilemap_layer(parent, layer_names)
@@ -2062,32 +2182,52 @@ func is_standing_on_tall_grass() -> bool:
 	var tile_data := grass_tilemap.get_cell_tile_data(tile_position)
 	
 	return tile_data != null
+
+
+func is_standing_on_water() -> bool:
+	return _is_water_tile_at(global_position)
 		
 func check_for_grass_encounter() -> void:
 	check_for_wild_encounter(ENCOUNTER_TYPE_GRASS)
 
+
+func _is_cave_encounter_map() -> bool:
+	var current_map := _resolve_current_map()
+	if current_map == null:
+		return false
+	if not current_map.has_method("get_battle_environment_id"):
+		return false
+	if str(current_map.call("get_battle_environment_id")).strip_edges().to_lower() != ENCOUNTER_TYPE_CAVE:
+		return false
+	if not current_map.has_method("get_wild_encounter_area_id"):
+		return false
+	return not str(current_map.call("get_wild_encounter_area_id")).strip_edges().is_empty()
+
 func _spawn_tall_grass_rustle_effect() -> void:
-	if grass_visual_tilemap == null:
-		var current_map := _resolve_current_map()
-		grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
-
-	if grass_visual_tilemap == null:
-		return
-
-	var local_position := grass_visual_tilemap.to_local(global_position)
-	var tile_position := grass_visual_tilemap.local_to_map(local_position)
-	var source_id := grass_visual_tilemap.get_cell_source_id(tile_position)
-	if source_id == -1 and grass_visual_tilemap.get_cell_tile_data(tile_position) == null:
-		return
-
 	var current_map := _resolve_current_map()
 	var effect_parent: Node = current_map if current_map != null else get_parent()
 	if effect_parent == null:
 		return
 
+	var effect_source := TALL_GRASS_DEPTH_SORTING_SCRIPT.find_depth_row_at_global_position(
+		current_map,
+		global_position
+	)
+	var effect_tilemap := effect_source.get("layer") as TileMapLayer
+	var tile_position: Vector2i = effect_source.get("tile_position", Vector2i.ZERO)
+	if effect_tilemap == null:
+		if grass_visual_tilemap == null:
+			grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
+		if grass_visual_tilemap == null:
+			return
+		effect_tilemap = grass_visual_tilemap
+		tile_position = effect_tilemap.local_to_map(effect_tilemap.to_local(global_position))
+		if effect_tilemap.get_cell_source_id(tile_position) < 0:
+			return
+
 	var effect := TALL_GRASS_RUSTLE_EFFECT_SCRIPT.new()
 	effect_parent.add_child(effect)
-	effect.play(grass_visual_tilemap, tile_position)
+	effect.play(effect_tilemap, tile_position)
 
 func _spawn_water_ripple_effect(world_position: Vector2, kind: String, require_water_tile := true) -> void:
 	if require_water_tile and not _is_water_tile_at(world_position):
@@ -2552,16 +2692,32 @@ func _sync_activity_layer_offsets() -> void:
 func _apply_activity_visual_offset() -> void:
 	if look_node == null:
 		return
-	look_node.position = base_look_position + _get_activity_visual_offset()
+	look_node.position = base_look_position + _get_activity_visual_offset() + stair_visual_offset
 
 func _restore_activity_visual_offset() -> void:
 	if look_node == null:
 		return
-	look_node.position = base_look_position
+	look_node.position = base_look_position + stair_visual_offset
+
+
+func _update_stair_visual_offset(progress: float) -> void:
+	stair_visual_offset = HorizontalStairElevationScript.visual_offset(
+		progress,
+		stair_elevation
+	)
+	_apply_activity_visual_offset()
+
+
+func _clear_stair_visual_offset() -> void:
+	stair_elevation = HorizontalStairElevationScript.ELEVATION_NONE
+	stair_visual_offset = Vector2.ZERO
+	_apply_activity_visual_offset()
 
 func _get_activity_visual_offset() -> Vector2:
 	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(activity_style)
 	if normalized_style == CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
+		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_FISH
+	elif normalized_style == CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET:
 		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_FISH
 	var style_offsets: Variant = ACTIVITY_VISUAL_OFFSETS.get(normalized_style, {})
 	if not style_offsets is Dictionary:
@@ -2583,6 +2739,8 @@ func _get_activity_layer_offset(category: String) -> Vector2:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
 	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(body_sprite_frames_movement_style)
 	if normalized_style == CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
+		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_FISH
+	elif normalized_style == CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET:
 		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_FISH
 	var style_offsets: Variant = ACTIVITY_LAYER_OFFSETS.get(normalized_style, {})
 	if not style_offsets is Dictionary:

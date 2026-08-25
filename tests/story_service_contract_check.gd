@@ -27,7 +27,10 @@ func _run() -> void:
 				"questType": "main",
 				"titleKey": "story.kanto.choose_starter.title",
 				"summaryKey": "story.kanto.choose_starter.summary",
-				"rewardPreviews": [{"type": "item", "itemId": "exp-share", "quantity": 1, "private": true}],
+				"rewardPreviews": [
+					{"type": "item", "itemId": "exp-share", "quantity": 1, "private": true},
+					{"type": "skill_experience", "skillId": "fishing", "experience": 130, "private": true},
+				],
 				"status": "active",
 				"steps": [
 					{
@@ -67,7 +70,10 @@ func _run() -> void:
 		)
 		_expect(not quest.has("serverOnly"), "projection only keeps quest contract fields")
 		_expect(
-			quest.get("rewardPreviews", []) == [{"type": "item", "itemId": "exp-share", "quantity": 1}],
+			quest.get("rewardPreviews", []) == [
+				{"type": "item", "itemId": "exp-share", "quantity": 1},
+				{"type": "skill_experience", "skillId": "fishing", "experience": 130},
+			],
 			"quest reward previews are safely projected"
 		)
 		_expect(quest.get("completedAt", "unexpected") == null, "nullable quest timestamps remain null")
@@ -206,6 +212,12 @@ func _verify_integration_contract() -> void:
 		inventory.contains('const NPC_QUEST_ITEM_TURN_IN_ENDPOINT := "/game/npc-quest-item-turn-ins/%s/claim"')
 		and inventory.contains("func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:"),
 		"inventory service exposes the authoritative parcel turn-in"
+	)
+	_expect(
+		inventory.contains('if bool(body.get("caught", false))')
+		and inventory.contains("PlayerGameStateService.refresh_story()")
+		and inventory.contains('"storyRefreshSuccess": story_refresh_success'),
+		"successful wild captures refresh local story progress"
 	)
 	_expect(
 		base_npc.contains('quest_marker_label.text = "!"')

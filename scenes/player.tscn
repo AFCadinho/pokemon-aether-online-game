@@ -30,6 +30,20 @@ corner_radius_bottom_left = 6
 shadow_color = Color(0, 0, 0, 0.35)
 shadow_size = 2
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_guild_emblem_background"]
+bg_color = Color(0.0392157, 0.054902, 0.0862745, 0.76)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.22, 0.78, 0.68, 0.48)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 2
+
 [sub_resource type="LabelSettings" id="LabelSettings_nameplate_role"]
 font_size = 8
 font_color = Color(0.72, 1, 0.91, 1)
@@ -94,7 +108,8 @@ z_index = 9
 
 [node name="Nameplate" type="Control" parent="." unique_id=1400626741]
 visible = false
-z_index = 512
+z_index = 4096
+z_as_relative = false
 layout_mode = 3
 anchors_preset = 0
 offset_left = -82.0
@@ -122,13 +137,23 @@ offset_bottom = 15.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_role_badge")
 
+[node name="GuildEmblemBackground" type="Panel" parent="Nameplate"]
+visible = false
+layout_mode = 0
+offset_left = 7.0
+offset_top = 39.0
+offset_right = 35.0
+offset_bottom = 67.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_guild_emblem_background")
+
 [node name="GuildEmblem" type="TextureRect" parent="Nameplate"]
 visible = false
 layout_mode = 0
-offset_left = 41.0
-offset_top = 36.0
-offset_right = 65.0
-offset_bottom = 60.0
+offset_left = 9.0
+offset_top = 41.0
+offset_right = 33.0
+offset_bottom = 65.0
 mouse_filter = 2
 texture_filter = 1
 expand_mode = 1

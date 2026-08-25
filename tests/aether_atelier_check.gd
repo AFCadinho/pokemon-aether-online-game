@@ -91,7 +91,9 @@ func _init() -> void:
 	_check(
 		ui_source.contains("func open_aether_atelier()")
 			and ui_source.contains("_on_aether_atelier_bundle_created")
-			and ui_source.contains("_on_aether_atelier_chroma_dyed"),
+			and ui_source.contains("_on_aether_atelier_chroma_dyed")
+			and ui_source.contains("_activate_ui_panel(aether_atelier_popup)")
+			and ui_source.contains("_deactivate_ui_panel(aether_atelier_popup)"),
 		"UI overlay applies Atelier inventory and Chroma dye results"
 	)
 	quit(1 if failed else 0)

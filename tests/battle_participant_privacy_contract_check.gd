@@ -32,6 +32,29 @@ func _init() -> void:
 		"damage calculation authority comes from the authenticated session"
 	)
 	_check(
+		api_source.contains('CALCDEX_SNAPSHOT.is_valid_mechanics_manifest(response.get("mechanicsManifest"))'),
+		"legacy calculator responses fail closed without the approved engine manifest"
+	)
+	var snapshot_request_start := api_source.find("func get_calcdex_snapshot(")
+	var snapshot_request_end := api_source.find("\nfunc ", snapshot_request_start + 1)
+	var snapshot_request_source := api_source.substr(
+		snapshot_request_start,
+		snapshot_request_end - snapshot_request_start
+	)
+	_check(
+		snapshot_request_source.contains('"lastProjectionRevision"') \
+			and not snapshot_request_source.contains('"viewerId"') \
+			and not snapshot_request_source.contains('"pokemon"') \
+			and not snapshot_request_source.contains('"team"'),
+		"Calcdex snapshot requests contain only the authenticated projection cursor"
+	)
+	_check(
+		not battle_source.contains("_apply_known_damage_calc_defender_info") \
+			and not battle_source.contains("_get_known_damage_calc_defender_item") \
+			and not battle_source.contains("_get_known_damage_calc_defender_ability"),
+		"public reveals are not copied into user scenario assumptions"
+	)
+	_check(
 		realtime_source.contains('if message_type == "pvp.choice_confirmed":') \
 			and realtime_source.contains("_apply_timer_projection_from_battle_response(message)"),
 		"a public opponent confirmation can still change the battle timer to Waiting"
@@ -79,9 +102,22 @@ func _init() -> void:
 	)
 	_check(
 		battle_source.contains("public_confirmed_only\n\t)") \
-			and hover_service_source.contains("if not embedded_public_only:") \
+			and hover_service_source.contains("var pokemon_info: Dictionary = await _fetch_hover_pokemon_info(") \
 			and hover_service_source.contains("PublicPokemonKnowledge.from_pokemon_data(pokemon_data)"),
-		"public side-preview delegates only the sanitized embedded knowledge contract"
+		"public side-preview uses server-confirmed knowledge with a sanitized embedded fallback"
+	)
+	var item_reveal := PublicPokemonKnowledge.confirmed_item_reveal_from_event({
+		"type": "pokemonEffect",
+		"target": "p2a: Great Tusk",
+		"effect": "item: Protective Pads",
+		"state": "activate",
+	})
+	_check(
+		item_reveal == {
+			"ident": "p2a: Great Tusk",
+			"item": "Protective Pads",
+		},
+		"direct item activations are retained for subsequent hover cards"
 	)
 	print("PASS battle_participant_privacy_contract_check")
 	quit(0)

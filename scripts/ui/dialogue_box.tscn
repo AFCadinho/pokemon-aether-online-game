@@ -256,25 +256,10 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 5
 
-[node name="RewardRow" type="HBoxContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin"]
+[node name="RewardEntries" type="HFlowContainer" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin"]
 layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="RewardIcon" type="TextureRect" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin/RewardRow"]
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-texture_filter = 1
-expand_mode = 1
-stretch_mode = 5
-
-[node name="RewardLabel" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/QuestOfferContent/RewardCard/RewardMargin/RewardRow"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-theme_override_colors/font_color = Color(1, 0.87, 0.48, 1)
-theme_override_font_sizes/font_size = 17
-text = "Exp. Share  ×1"
-text_overrun_behavior = 3
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 5
 
 [node name="QuestOfferStatus" type="Label" parent="Box/PanelContainer/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2

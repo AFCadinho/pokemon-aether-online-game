@@ -26,6 +26,7 @@ func _run() -> void:
 	_test_action_allowlist()
 	await _test_safe_action_execution()
 	_test_movement_helper_contract()
+	_test_story_battle_error_feedback()
 	_test_hook_and_api_integration_contract()
 	quit(1 if failed else 0)
 
@@ -141,6 +142,28 @@ func _test_movement_helper_contract() -> void:
 	)
 
 
+func _test_story_battle_error_feedback() -> void:
+	var hook_script := load("res://scripts/world/story/story_hook.gd") as GDScript
+	var hook := hook_script.new() as Node
+	_expect(
+		bool(hook.call("_is_player_actionable_sequence_error", {
+			"status": 409,
+			"detail": {
+				"code": "pokemon_level_cap_party_ineligible",
+				"levelCap": 18,
+			},
+		})),
+		"story battles expose an actionable party level-cap rejection"
+	)
+	_expect(
+		not bool(hook.call("_is_player_actionable_sequence_error", {
+			"status": "trainer_identity_mismatch",
+		})),
+		"internal story sequence failures keep the safe generic error"
+	)
+	hook.free()
+
+
 func _test_hook_and_api_integration_contract() -> void:
 	var game_state_service := get_root().get_node("PlayerGameStateService")
 	var service := _source("res://scripts/services/player_game_state_service.gd")
@@ -208,8 +231,23 @@ func _test_hook_and_api_integration_contract() -> void:
 	missing_effects.erase("effects")
 	var invalid_effects := roundtrip_complete.duplicate(true)
 	invalid_effects["effects"] = {}
-	var unexpected_effects := roundtrip_complete.duplicate(true)
-	unexpected_effects["effects"] = [{"effectId": "unexpected"}]
+	var item_reward_effects := roundtrip_complete.duplicate(true)
+	item_reward_effects["effects"] = [{
+		"effectId": "grant_mom_ability_capsule",
+		"rewardId": "mom_ability_capsule_reward",
+		"alreadyGranted": false,
+		"grants": [{
+			"itemId": "ability-capsule",
+			"name": "ability-capsule",
+			"quantity": 1,
+			"quantityAfter": 1,
+		}],
+	}]
+	var malformed_effects := item_reward_effects.duplicate(true)
+	((malformed_effects["effects"] as Array)[0] as Dictionary)["grants"] = [{
+		"itemId": "ability-capsule",
+		"quantity": 1,
+	}]
 	_expect(
 		not bool(game_state_service.call("_is_valid_story_complete_body", mismatched_complete, request_id, 4))
 		and not bool(game_state_service.call("_is_valid_story_complete_body", noncanonical_complete, str(noncanonical_complete["requestId"]), 4))
@@ -220,8 +258,9 @@ func _test_hook_and_api_integration_contract() -> void:
 	)
 	_expect(
 		not bool(game_state_service.call("_is_valid_story_complete_body", invalid_effects, request_id, 4))
-		and not bool(game_state_service.call("_is_valid_story_complete_body", unexpected_effects, request_id, 4)),
-		"client completion requires an empty effects array"
+		and bool(game_state_service.call("_is_valid_story_complete_body", item_reward_effects, request_id, 4))
+		and not bool(game_state_service.call("_is_valid_story_complete_body", malformed_effects, request_id, 4)),
+		"client completion accepts only the trusted item-reward effect contract"
 	)
 	var stale_revision := roundtrip_complete.duplicate(true)
 	(stale_revision["story"] as Dictionary)["revision"] = 4
@@ -278,7 +317,8 @@ func _test_hook_and_api_integration_contract() -> void:
 	_expect(
 		hook.contains("for attempt: int in range(COMPLETE_ATTEMPTS):")
 		and hook.contains("request_id,")
-		and hook.contains("_is_retryable_completion_failure"),
+		and hook.contains("_is_retryable_completion_failure")
+		and hook.contains("await InventoryService.load_inventory()"),
 		"completion retries reuse one UUID inside a single hook call"
 	)
 	_expect(
@@ -288,7 +328,7 @@ func _test_hook_and_api_integration_contract() -> void:
 	)
 	_expect(
 		runner.contains("GameState.lock_input()")
-		and runner.contains("DialogueBox releases every GameState lock")
+		and runner.contains("DialogueBox restores")
 		and runner.contains('"dialogue_not_presented"')
 		and runner.contains('"status": "pending_battle"'),
 		"sequence requires presented dialogue, stays locked, and leaves battle pending"
@@ -300,6 +340,11 @@ func _test_hook_and_api_integration_contract() -> void:
 		and runner.contains('str(trainer_metadata.get("id", "")) != trainer_id')
 		and runner.contains('"status": "trainer_identity_mismatch"'),
 		"sequence verifies fetched dialogue and trainer identities before side effects"
+	)
+	_expect(
+		runner.contains('host.has_method("build_battle_trainer_metadata")')
+		and runner.contains('host.call("build_battle_trainer_metadata", trainer_metadata)'),
+		"story battles reuse the placed NPC's battle sprite and portrait"
 	)
 	_expect(
 		npc.contains("func story_move_path(path: Array[String]) -> bool:")

@@ -1540,10 +1540,10 @@
       "name": "Greninja"
     },
     "greninja-ash": {
-      "name": "Greninja Ash"
+      "name": "Ash-Greninja"
     },
     "greninja-bond": {
-      "name": "Greninja Bond"
+      "name": "Greninja"
     },
     "greninja-mega": {
       "name": "Greninja Mega"
@@ -5757,7 +5757,7 @@
     },
     "hidden-power": {
       "name": "Poder Oculto",
-      "shortDesc": "A potência e o tipo dependem dos IVs do usuário. A potência pode variar de 30 a 70."
+      "shortDesc": "O poder é sempre 60. O tipo depende do Pokémon que usa o golpe."
     },
     "high-horsepower": {
       "name": "Alta potência",
@@ -8074,7 +8074,7 @@
     },
     "battle-bond": {
       "name": "Vínculo de Batalha",
-      "shortDesc": "Transforma este Pokémon em Ash-Greninja após desmaiar um oponente. O poder do Water Shuriken é 20 e sempre acerta três vezes."
+      "shortDesc": "Uma vez por batalha, derrotar um oponente aumenta Attack, Sp. Atk e Speed em um estágio."
     },
     "beads-of-ruin": {
       "name": "Contas de Ruína",
@@ -8282,6 +8282,10 @@
     "earth-eater": {
       "name": "Comensal da Terra",
       "shortDesc": "Restaura HP quando atingido por um golpe do tipo Ground."
+    },
+    "eelevate": {
+      "name": "Eelevate",
+      "shortDesc": "É imune a golpes do tipo Ground e a perigos de entrada no chão; aumenta seu atributo mais alto após nocautear um alvo."
     },
     "effect-spore": {
       "name": "Efeito Esporo",

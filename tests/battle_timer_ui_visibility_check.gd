@@ -11,6 +11,10 @@ func _init() -> void:
 		"bank timer visibility defaults on when a valid projection exists"
 	)
 	_check(not battle_source.to_lower().contains("server enforcement is still being finalized"), "technical preview warning is absent")
+	_check(
+		battle_source.contains('"TEAM_PREVIEW" if team_preview_lead_selection_active else ""'),
+		"visible Team Preview overrides stale per-player decision labels"
+	)
 	await _check_supported_resolutions()
 	print("PASS battle_timer_ui_visibility_check")
 	quit(0)
@@ -55,6 +59,15 @@ func _check_supported_resolutions() -> void:
 		_check(not panel.player_2_timer_label.text.contains("Bank"), "player 2 bank value stays hidden")
 		_check(panel.player_2_timer_state_label.text == "%s · %s" % [_t("battle.timer.move"), _t("battle.timer.choosing")], "privacy-stripped active opponent still renders Move Choosing")
 		_check(panel.player_2_timer_label.text == _t("battle.timer.time", {"time": "01:30"}), "privacy-stripped active opponent keeps its countdown")
+		panel.show_decision_timers(
+			{"effectiveDecisionRemainingMs": 30_000, "decisionMaximumMs": 30_000, "decisionKind": "TEAM_PREVIEW", "state": "DECIDING"},
+			{"effectiveDecisionRemainingMs": 30_000, "decisionMaximumMs": 30_000, "decisionKind": "MOVE_SELECTION", "state": "DECIDING"},
+			"TEAM_PREVIEW"
+		)
+		_check(
+			panel.player_2_timer_state_label.text == "%s · %s" % [_t("battle.timer.team_preview"), _t("battle.timer.choosing")],
+			"active Team Preview keeps the opponent label in the shared preview phase"
+		)
 		_check_equal(panel.player_1_timer_bar.value, 100.0, "player 1 decision bar starts full")
 		_check_equal(panel.player_2_timer_bar.value, 100.0, "player 2 decision bar starts full")
 		panel.show_decision_timers(
@@ -118,6 +131,29 @@ func _check_supported_resolutions() -> void:
 		panel.hide_decision_timers(true)
 		_check(not panel.player_1_timer_panel.visible, "leaving PvP hides player 1 timer block")
 		_check(not panel.player_2_timer_panel.visible, "leaving PvP hides player 2 timer block")
+		panel.configure_compact_timer_mode(true, true)
+		panel.show_decision_timers(
+			{"effectiveDecisionRemainingMs": 12_000, "decisionMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "DECIDING"},
+			{"effectiveDecisionRemainingMs": 38_000, "decisionMaximumMs": 90_000, "decisionKind": "MOVE_SELECTION", "state": "DECIDING"}
+		)
+		_check(not panel.names_panel.visible, "compact Calcdex timer hides the VS name card")
+		_check(panel.player_1_timer_panel.visible, "compact Calcdex timer keeps the local countdown visible")
+		_check(panel.player_2_timer_panel.visible, "wide compact Calcdex timer can show the opponent countdown")
+		_check(panel.player_1_timer_state_label.text.begins_with(_t("ui.chat.you")), "compact local timer identifies the player")
+		_check(panel.player_2_timer_state_label.text.begins_with(_t("battle.player.opponent")), "compact secondary timer identifies the opponent")
+		_check(panel.player_1_timer_label.modulate.is_equal_approx(Color(1.0, 0.72, 0.24)), "compact timer warns the player when time is running low")
+		_check_equal(panel.player_1_timer_panel.custom_minimum_size.x, 170.0, "compact timer cards use the reduced width")
+		_check(panel.mouse_filter == Control.MOUSE_FILTER_IGNORE, "compact timer dock never intercepts battle input")
+		panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		panel.size = Vector2(370, 50)
+		await process_frame
+		_check(panel.get_combined_minimum_size().x <= 370.0, "wide compact timer fits the reserved Calcdex side space")
+		panel.configure_compact_timer_mode(true, false)
+		panel.size = Vector2(170, 50)
+		await process_frame
+		_check(panel.player_1_timer_panel.visible, "narrow compact timer prioritizes the local countdown")
+		_check(not panel.player_2_timer_panel.visible, "narrow compact timer hides the secondary opponent countdown")
+		_check(panel.get_combined_minimum_size().x <= 170.0, "narrow compact timer collapses to a single local card")
 		host.queue_free()
 		await process_frame
 

@@ -36,6 +36,16 @@ func _run_checks() -> void:
 	await transition.reveal()
 	_check_true(not transition.visible, "ranked transition hides after battle reveal")
 
+	transition.begin(WildEncounterTransition.STYLE_TRAINER)
+	_check_true(transition.transition_style == WildEncounterTransition.STYLE_TRAINER, "ordinary NPC battles use the trainer transition")
+	await transition.wait_until_covered()
+	await transition.reveal()
+
+	transition.begin(WildEncounterTransition.STYLE_SPECIAL_TRAINER)
+	_check_true(transition.transition_style == WildEncounterTransition.STYLE_SPECIAL_TRAINER, "special NPC battles use the cinematic trainer transition")
+	await transition.wait_until_covered()
+	await transition.reveal()
+
 	var ui_source := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
 	var world_source := FileAccess.get_file_as_string(WORLD_PATH)
 	var battle_source := FileAccess.get_file_as_string(BATTLE_PATH)
@@ -59,6 +69,62 @@ func _run_checks() -> void:
 	_check_true(
 		ready_index > setup_index and ready_index < lead_selection_index,
 		"ranked transition reveals when Team Preview is ready"
+	)
+	var world_trainer_start_index := world_source.find("func start_trainer_battle")
+	var trainer_transition_index := world_source.find("_begin_trainer_battle_transition(battle_trainer_data)", world_trainer_start_index)
+	var trainer_request_index := world_source.find("await create_trainer_battle_response", world_trainer_start_index)
+	var trainer_expected_rejection_index := world_source.find(
+		"if not _is_expected_trainer_battle_rejection(response):",
+		trainer_request_index
+	)
+	var trainer_failure_warning_index := world_source.find(
+		'push_warning("World.start_trainer_battle failed:',
+		trainer_request_index
+	)
+	var trainer_mount_index := world_source.find("if not _mount_battle_ui():", world_trainer_start_index)
+	_check_true(
+		trainer_transition_index > world_trainer_start_index
+		and trainer_transition_index < trainer_request_index
+		and trainer_request_index < trainer_mount_index,
+		"NPC transition covers trainer loading before the battle scene mounts"
+	)
+	_check_true(
+		trainer_expected_rejection_index > trainer_request_index
+		and trainer_failure_warning_index > trainer_expected_rejection_index
+		and world_source.contains('"pokemon_level_cap_party_ineligible"'),
+		"expected trainer level-cap rejections do not emit failure warnings"
+	)
+	var trainer_setup_index := battle_source.find("func setup_trainer_battle_from_response")
+	var trainer_lead_index := battle_source.find("var lead_response := await _run_trainer_lead_selection", trainer_setup_index)
+	var trainer_preview_gate_index := battle_source.find("if team_preview_enabled:", trainer_setup_index)
+	var trainer_preview_ready_index := battle_source.find(
+		"await _notify_trainer_entry_ready(entry_ready_callback)",
+		trainer_preview_gate_index
+	)
+	var trainer_default_gate_index := battle_source.find("if not team_preview_enabled:", trainer_lead_index)
+	var trainer_default_ready_index := battle_source.find(
+		"await _notify_trainer_entry_ready(entry_ready_callback)",
+		trainer_default_gate_index
+	)
+	var trainer_default_field_clear_index := battle_source.find(
+		"await _prepare_team_preview_lead_summon_transition()",
+		trainer_default_gate_index
+	)
+	_check_true(
+		trainer_preview_gate_index > trainer_setup_index
+		and trainer_preview_ready_index > trainer_preview_gate_index
+		and trainer_preview_ready_index < trainer_lead_index,
+		"configured NPC Team Preview reveals before interactive lead selection"
+	)
+	_check_true(
+		trainer_default_gate_index > trainer_lead_index
+		and trainer_default_field_clear_index > trainer_default_gate_index
+		and trainer_default_ready_index > trainer_default_gate_index,
+		"regular NPC transition stays covered until automatic leads and the empty summon field are ready"
+	)
+	_check_true(
+		trainer_default_field_clear_index < trainer_default_ready_index,
+		"regular NPC transition reveals the empty field before either lead is summoned"
 	)
 
 	transition.queue_free()

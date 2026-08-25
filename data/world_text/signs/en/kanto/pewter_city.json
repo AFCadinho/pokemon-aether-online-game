@@ -1,0 +1,15 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_pewter_city",
+  "signs": [
+    {
+      "id": "kanto_pewter_city_gym",
+      "type": "building",
+      "title": "Pewter City Pokémon Gym",
+      "lines": [
+        "Pewter City Pokémon Gym",
+        "Leader: Brock — The Rock-Solid Pokémon Trainer. Victory earns the Boulder Badge."
+      ]
+    }
+  ]
+}

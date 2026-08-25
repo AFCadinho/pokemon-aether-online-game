@@ -2,9 +2,12 @@ extends SceneTree
 
 const PROJECT_PATH := "res://project.godot"
 const SERVICE_PATH := "res://scripts/services/world_transition_service.gd"
+const LOCKED_DOOR_PATH := "res://scripts/world/interactables/locked_door_interactable.gd"
+const LOCKED_DOOR_SCENE_PATH := "res://scenes/world/interactables/locked_door_interactable.tscn"
 const AUTH_SERVICE_PATH := "res://scripts/services/auth_service.gd"
 const MAP_EXIT_PATH := "res://scripts/world/map_exit.gd"
 const GATE_NPC_PATH := "res://scripts/world/npcs/gate_npc.gd"
+const GATE_SCENE_PATH := "res://scenes/npcs/gate_npc.tscn"
 const WORLD_PATH := "res://scripts/world/world.gd"
 const ROUTE_1_PATH := "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
 const ROUTE_22_PATH := "res://scenes/overworld/kanto/routes/kanto_route_22.tscn"
@@ -23,9 +26,12 @@ var failed := false
 func _init() -> void:
 	var project_source := FileAccess.get_file_as_string(PROJECT_PATH)
 	var service_source := FileAccess.get_file_as_string(SERVICE_PATH)
+	var locked_door_source := FileAccess.get_file_as_string(LOCKED_DOOR_PATH)
+	var locked_door_scene_source := FileAccess.get_file_as_string(LOCKED_DOOR_SCENE_PATH)
 	var auth_service_source := FileAccess.get_file_as_string(AUTH_SERVICE_PATH)
 	var map_exit_source := FileAccess.get_file_as_string(MAP_EXIT_PATH)
 	var gate_source := FileAccess.get_file_as_string(GATE_NPC_PATH)
+	var gate_scene_source := FileAccess.get_file_as_string(GATE_SCENE_PATH)
 	var world_source := FileAccess.get_file_as_string(WORLD_PATH)
 	var route_source := FileAccess.get_file_as_string(ROUTE_1_PATH)
 	var route_22_source := FileAccess.get_file_as_string(ROUTE_22_PATH)
@@ -46,8 +52,26 @@ func _init() -> void:
 		"Client uses the transition-scoped preview and authoritative enter endpoints"
 	)
 	_expect(
+		service_source.contains('"/game/world/areas/%s/access"')
+		and service_source.contains("func get_area_access")
+		and service_source.contains("area_access_cache"),
+		"Door locks use the shared server-authoritative world area access service"
+	)
+	_expect(
+		locked_door_source.contains("get_area_access")
+		and locked_door_source.contains("dialogueId")
+		and locked_door_source.contains("blocks_movement = not allowed")
+		and locked_door_scene_source.contains("LockedDoorInteractable"),
+		"Locked door interactables block movement and display backend-provided reasons"
+	)
+	_expect(
 		service_source.contains("transition_access_cache[normalized_transition_id] = access"),
 		"Transition previews are cached for synchronous NPC collision checks"
+	)
+	_expect(
+		service_source.contains('body.get("story", {})')
+		and service_source.contains("StoryService.apply_story_if_not_stale(story)"),
+		"Authorized transitions immediately apply their authoritative story projection"
 	)
 	_expect(
 		auth_service_source.contains("WorldTransitionService.clear_cache()"),
@@ -71,7 +95,13 @@ func _init() -> void:
 		"Denied transitions release the teleport lock and route presentation to the guard"
 	)
 	_expect(
-		world_source.contains("func begin_authorized_teleport(ignore_player_movement := false)")
+		map_exit_source.contains("func _is_route_gate_interaction_active")
+		and map_exit_source.count("_is_route_gate_interaction_active(") == 3
+		and map_exit_source.contains('player.get("route_gate_interaction_in_progress")'),
+		"Map exits silently yield before and during deferred entry when a route guard owns the interaction"
+	)
+	_expect(
+		world_source.contains("ignore_player_movement := false,")
 		and world_source.contains("not ignore_player_movement"),
 		"Boundary transitions can authorize while a tile movement is finishing"
 	)
@@ -102,6 +132,22 @@ func _init() -> void:
 		"Gate NPCs own an explicit role and derive transition blocking from their guarded exit"
 	)
 	_expect(
+		gate_source.contains("transition_access_resolved")
+		and gate_source.contains("func _sync_guard_presence()")
+		and gate_source.contains('Callable(self, "_refresh_transition_access").call_deferred(true)')
+		and gate_source.contains("guard_role != GUARD_ROLE_TRANSITION")
+		and gate_source.contains("not _are_local_gate_requirements_met()")
+		and gate_source.contains("guard_role == GUARD_ROLE_TRANSITION and not guard_present")
+		and gate_source.contains("return super.blocks_world_position(world_position)"),
+		"Exterior transition guards refresh and appear only while authoritative access is blocked"
+	)
+	_expect(
+		gate_scene_source.contains("NPC_088_Policeman.png")
+		and gate_scene_source.contains("trainer_cards/showdown/policeman-gen8.png")
+		and not gate_scene_source.contains("trainer_cards/showdown/policeman-gen7.png"),
+		"All route guards share the police overworld sprite and fuller Showdown police portrait"
+	)
+	_expect(
 		map_exit_source.contains("func handles_transition")
 		and map_exit_source.contains("func contains_world_position"),
 		"Map exits expose their identity and spatial zone to transition guards"
@@ -114,20 +160,25 @@ func _init() -> void:
 	_expect(
 		route_source.contains('guarded_transition_id = "route_1_to_viridian_city"')
 		and route_source.contains('guard_role = "transition_guard"')
-		and route_source.contains('transition_id = "route_1_to_viridian_city"'),
+		and route_source.contains('transition_id = "route_1_to_viridian_city"')
+		and route_source.contains('[node name="ViridianGuide"')
+		and route_source.contains('position = Vector2(1072, 272)'),
 		"Route 1 guard and exit share one stable transition identifier"
 	)
 	_expect(
 		pallet_town_source.contains('guarded_transition_id = "kanto_pallet_town__to_route_1"')
 		and pallet_town_source.contains('transition_id = "kanto_pallet_town__to_route_1"')
-		and pallet_town_source.contains('guard_role = "transition_guard"'),
+		and pallet_town_source.contains('guard_role = "transition_guard"')
+		and pallet_town_source.contains('[node name="RouteGateNPC"')
+		and pallet_town_source.contains('position = Vector2(1040, 208)'),
 		"Pallet Town guard owns its starter-gated Route 1 transition"
 	)
 	_expect(
 		viridian_city_source.contains('[node name="NorthRouteGuard"')
 		and viridian_city_source.contains('guarded_transition_id = "kanto_viridian_city__to_route_2"')
+		and viridian_city_source.contains('blocked_dialogue_id = "kanto_viridian_city_route_2_trainer_school_required"')
 		and viridian_city_source.contains('transition_id = "kanto_viridian_city__to_route_2"'),
-		"Viridian City north guard protects the Route 2 transition"
+		"Viridian City north guard protects Route 2 until Dadinho's Trainer School lesson"
 	)
 	_expect(
 		viridian_city_source.contains('[node name="SouthRouteGuard"')
@@ -141,6 +192,14 @@ func _init() -> void:
 		and viridian_city_source.contains('transition_id = "kanto_viridian_city__to_route_22"')
 		and viridian_city_source.contains('npc_id = "kanto_viridian_city_west_route_guard"'),
 		"Viridian City west guard protects the Route 22 transition"
+	)
+	_expect(
+		pewter_city_source.contains('[node name="Route3Guard"')
+		and pewter_city_source.contains('guarded_transition_id = "kanto_pewter_city__to_route_3"')
+		and pewter_city_source.contains('transition_id = "kanto_pewter_city__to_route_3"')
+		and pewter_city_source.contains('npc_id = "kanto_pewter_city_route_3_guard"')
+		and not pewter_city_source.contains('required_quest_id = "challenge_pewter_gym"'),
+		"Pewter Route 3 guard derives its Brock gate from authoritative transition access"
 	)
 	_expect(
 		route_22_source.contains('map_id = "kanto_route_22"')

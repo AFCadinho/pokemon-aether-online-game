@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://bfy37wf81vi6g"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/pokemon_center/pokemon_center.visual.tscn" id="1_7j0le"]
-[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_ehdw6"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_ehdw6"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="3_map_meta"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_map_exit"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="5_floor_mask"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/pokemon_pc_interactable.tscn" id="8_dptnb"]
 [ext_resource type="Script" uid="uid://cm7fo281e44an" path="res://scripts/world/npcs/heal_machine_effect.gd" id="9_heal_effect"]
 [ext_resource type="Texture2D" uid="uid://bb62an6t47c7m" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_044_Beauty.png" id="10_k6grd"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="20_transition_hint"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y5qkb"]
 texture = ExtResource("2_ehdw6")
@@ -80,7 +81,7 @@ map_region_name = "Kanto"
 region_id = "kanto"
 lighting_profile = "indoor"
 weather_profile = "disabled"
-music_track_path = "res://assets/music/overworld/kanto/interiors/pokemon_center.ogg"
+music_track_id = "overworld.kanto.interior.pokemon_center"
 
 [node name="Visuals" parent="." unique_id=1140960568 instance=ExtResource("1_7j0le")]
 
@@ -117,6 +118,7 @@ y_sort_enabled = true
 
 [node name="NurseJoy" parent="Entities/NPCs" unique_id=1839105410 instance=ExtResource("6_nurse")]
 position = Vector2(464, 688)
+manual_interaction_reach_tiles = 2
 
 [node name="HealMachineEffect" type="Node2D" parent="Entities/NPCs" unique_id=1029628802]
 position = Vector2(464, 600)
@@ -155,6 +157,9 @@ script = ExtResource("4_map_exit")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToOutside" unique_id=1579254416]
 shape = SubResource("RectangleShape2D_center_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToOutside" instance=ExtResource("20_transition_hint")]
+flow_direction = "down"
 
 [connection signal="heal_sequence_started" from="Entities/NPCs/NurseJoy" to="Entities/NPCs/HealMachineEffect" method="play_heal_sequence"]
 [connection signal="body_entered" from="Exits/ToOutside" to="Exits/ToOutside" method="_on_body_entered"]

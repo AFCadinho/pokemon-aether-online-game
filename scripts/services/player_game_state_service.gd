@@ -14,6 +14,7 @@ const PLAYER_STORY_ENDPOINT := "/game/story"
 const STORY_BOOTSTRAP_ENDPOINT := "/game/story/bootstrap"
 const STORY_INTERACTION_ENDPOINT := "/game/story/interactions/%s"
 const STORY_QUEST_ACCEPT_ENDPOINT := "/game/story/quests/%s/accept"
+const DEV_STORY_CHECKPOINT_ENDPOINT := "/game/dev/progression/story-checkpoint"
 const PUBLIC_TRAINER_CARD_ENDPOINT := "/game/trainers/%s/card"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
@@ -121,6 +122,44 @@ func bootstrap_story() -> Dictionary:
 	return {
 		"success": true,
 		"story": StoryService.get_story(),
+	}
+
+
+func dev_set_story_checkpoint(checkpoint_id: String) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "status": 401, "error": "Not authenticated."}
+	var normalized_checkpoint_id := checkpoint_id.strip_edges().to_lower()
+	if normalized_checkpoint_id.is_empty():
+		return {"success": false, "status": 0, "error": "Choose a story checkpoint."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + DEV_STORY_CHECKPOINT_ENDPOINT,
+		HTTPClient.METHOD_PUT,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"checkpointId": normalized_checkpoint_id})
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var story: Dictionary = _dictionary_from_value(response.get("body", {}))
+	if not _is_valid_story_projection_body(story):
+		return {
+			"success": false,
+			"status": int(response.get("status", 0)),
+			"error": "Story checkpoint response was invalid.",
+		}
+	StoryService.apply_story(story)
+	TrainerProgressService.invalidate_all()
+	# Developer checkpoints replace the authoritative fossil choice and pickup
+	# receipts as well as the story projection. Bypass both client caches so
+	# visible world pickups and Miguel's fossil logic update in the open map.
+	var pickup_result: Dictionary = await InventoryService.load_collected_world_pickups(true)
+	var inventory_result: Dictionary = await InventoryService.load_inventory()
+	return {
+		"success": true,
+		"story": StoryService.get_story(),
+		"worldPickupRefreshSuccess": bool(pickup_result.get("success", false)),
+		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
 	}
 
 
@@ -283,8 +322,80 @@ func _is_valid_story_complete_body(
 	return (
 		body.has("effects")
 		and body.get("effects") is Array
-		and (body.get("effects") as Array).is_empty()
+		and _is_valid_story_effects(body.get("effects"))
 	)
+
+
+func _is_valid_story_effects(value: Variant) -> bool:
+	if not (value is Array):
+		return false
+	var effects: Array = value as Array
+	if effects.size() > 16:
+		return false
+	for effect_value: Variant in effects:
+		if not (effect_value is Dictionary):
+			return false
+		var effect: Dictionary = effect_value as Dictionary
+		if not _has_exact_fields(effect, ["effectId", "rewardId", "alreadyGranted", "grants"]):
+			return false
+		if (
+			not (effect.get("effectId") is String)
+			or not _is_valid_reference(str(effect.get("effectId", "")))
+			or not (effect.get("rewardId") is String)
+			or not _is_valid_reference(str(effect.get("rewardId", "")))
+			or not (effect.get("alreadyGranted") is bool)
+			or not (effect.get("grants") is Array)
+		):
+			return false
+		var grants: Array = effect.get("grants") as Array
+		if grants.is_empty() or grants.size() > 32:
+			return false
+		for grant_value: Variant in grants:
+			if not _is_valid_story_item_grant(grant_value):
+				return false
+	return true
+
+
+func _is_valid_story_item_grant(value: Variant) -> bool:
+	if not (value is Dictionary):
+		return false
+	var grant: Dictionary = value as Dictionary
+	if not _has_exact_fields(grant, ["itemId", "name", "quantity", "quantityAfter"]):
+		return false
+	return (
+		grant.get("itemId") is String
+		and _is_valid_reference(str(grant.get("itemId", "")))
+		and grant.get("name") is String
+		and not str(grant.get("name", "")).is_empty()
+		and str(grant.get("name", "")).length() <= 160
+		and _is_nonnegative_integer(grant.get("quantity"))
+		and int(grant.get("quantity", 0)) > 0
+		and _is_nonnegative_integer(grant.get("quantityAfter"))
+		and int(grant.get("quantityAfter", 0)) >= int(grant.get("quantity", 0))
+	)
+
+
+func _has_exact_fields(value: Dictionary, expected_fields: Array[String]) -> bool:
+	if value.size() != expected_fields.size():
+		return false
+	for field: String in expected_fields:
+		if not value.has(field):
+			return false
+	return true
+
+
+func _is_valid_reference(value: String) -> bool:
+	if value.is_empty() or value.length() > 160 or value != value.strip_edges():
+		return false
+	for index: int in range(value.length()):
+		var character := value.substr(index, 1)
+		var is_lowercase_letter := character >= "a" and character <= "z"
+		var is_digit := character >= "0" and character <= "9"
+		if index == 0 and not (is_lowercase_letter or is_digit):
+			return false
+		if not (is_lowercase_letter or is_digit or character in ["_", ".", ":", "-"]):
+			return false
+	return true
 
 
 func _is_valid_story_projection_body(story: Dictionary) -> bool:
@@ -406,6 +517,8 @@ func load_player_position() -> Dictionary:
 		"success": true,
 		"hasState": bool(body.get("hasState", false)),
 		"state": _dictionary_from_value(body.get("state", {})),
+		"happinessUpdated": bool(body.get("happinessUpdated", false)),
+		"party": _array_from_value(body.get("party", [])),
 	}
 
 
@@ -431,6 +544,8 @@ func save_player_position(state: Dictionary) -> Dictionary:
 		"success": true,
 		"hasState": bool(body.get("hasState", false)),
 		"state": _dictionary_from_value(body.get("state", {})),
+		"happinessUpdated": bool(body.get("happinessUpdated", false)),
+		"party": _array_from_value(body.get("party", [])),
 	}
 
 

@@ -6,11 +6,16 @@ Small Godot launcher project for PokeAether.
 
 1. Downloads `manifest.json`.
 2. Compares remote versions with `user://versions.json`.
-3. Downloads missing or outdated zip files.
-4. Extracts the game build into `user://game/game`.
-5. Extracts asset packs into `user://game/assets`.
-6. Replaces `user://game/game` on each game update while keeping unchanged asset packs.
+3. Downloads missing or outdated zip files into persistent `.part` files.
+4. Resumes interrupted downloads with validated HTTP byte ranges and bounded retries.
+5. Verifies every completed zip against its manifest size and SHA-256.
+6. Extracts into a staging folder and only replaces the installed game or asset pack after extraction succeeds.
 7. Starts the configured game executable.
+
+The launcher records periodic speed samples, stalls, reconnects, resume offsets,
+HTTP range responses, and the Cloudflare edge code in its local diagnostics log.
+It never uploads diagnostics automatically. URL query values and local userdata
+paths are redacted before logs are displayed or copied.
 
 Every published game also has an immutable `game.buildId`. CI derives it from
 the Git commit, workflow run, and run attempt, stamps it into the exported game,
@@ -23,7 +28,19 @@ Asset packs marked with `"optional": true` are skipped by the normal update flow
 
 The default install folder is `user://game`. Players can choose a custom install folder from the launcher Game Folder button; that choice is saved in `user://launcher_settings.json`.
 
-Launcher news is loaded separately from the update manifest through `newsUrl` in `config/launcher_config.json`. The expected shape is documented in `config/news.example.json`.
+Launcher news is loaded separately from the update manifest through `newsUrl`
+in `config/launcher_config.json`. The expected shape is documented in
+`config/news.example.json`.
+
+The production feed at `data/news.json` is generated from public topics in the
+Discourse `Official Announcements` category (category ID 17). A signed
+Discourse topic webhook asks the Cloudflare Worker in
+`infrastructure/forum-news-worker` to rebuild the feed immediately. The Worker
+uses its direct R2 binding, preserves the previous valid object as
+`data/news.previous.json`, and publishes only when the content changed. A daily
+Cloudflare Cron Trigger reconciles missed webhook deliveries; there is no
+scheduled GitHub Actions polling job. Invalid, private, or empty category data
+fails without replacing the current feed.
 
 ## Configure
 
@@ -55,6 +72,12 @@ python3 -m http.server 8000
 Then run the launcher scene and click `Check updates`.
 
 If the launcher shows a 404 for `manifest.json`, the server is usually running from the wrong folder.
+
+Run the automated interrupted-download and resume checks with:
+
+```bash
+python3 launcher/tests/run_resumable_download_check.py
+```
 
 The default launcher config points at:
 
@@ -110,6 +133,8 @@ manifest.json
 manifest-linux.json
 manifest-macos.json
 manifest-windows.json
+data/news.json
+data/news.previous.json
 launcher/latest/PokeAetherLauncher-linux.zip
 launcher/latest/PokeAetherLauncher-macos.zip
 launcher/latest/PokeAetherLauncher-windows.zip
@@ -145,7 +170,7 @@ Set R2 credentials in your shell:
 
 ```bash
 export R2_ACCOUNT_ID="64ea7ddcb5e97df8500c33b8cb48f921"
-export R2_BUCKET="pokeaether-updates"
+export R2_BUCKET="pokemon-aether-updates"
 export R2_ACCESS_KEY_ID="..."
 export R2_SECRET_ACCESS_KEY="..."
 ```
@@ -167,6 +192,23 @@ artifacts first, verifies their public sizes, and publishes the stable manifest
 URLs last. R2 prefixes are object names rather than folders, so no bucket
 directory setup or migration is required.
 
+After the stable manifests are published, the workflow also prunes obsolete
+immutable objects under `game/` and `assets/`. The cleanup reads both the newly
+generated and live manifests, retains every referenced object plus one previous
+version per game platform or asset pack, and never deletes objects younger than
+24 hours. Unknown object names and stable aliases such as `game/latest/` are
+outside the deletion allowlist. Set the workflow's `cleanup_r2` input to false
+to skip cleanup for an exceptional release.
+
+The cleanup tool defaults to a dry-run when used locally:
+
+```bash
+python3 tools/prune_r2_release_objects.py builds/launcher
+```
+
+Actual deletion additionally requires `--apply`; use the workflow for normal
+production cleanup so publication and pruning retain their safe ordering.
+
 ## Upload Sprite Asset Packs
 
 Pokemon sprite packs are intentionally kept out of git. When sprite files change, package and upload them from a local checkout that has `assets/sprites/pokemon` populated:
@@ -175,9 +217,20 @@ Pokemon sprite packs are intentionally kept out of git. When sprite files change
 python3 tools/upload_sprite_asset_packs.py
 ```
 
-This writes zip files to `builds/asset-packs`, uploads them to R2 under `assets/`, and updates `.github/workflows/deploy-desktop-r2.yml` with the new asset versions and sizes. Commit and push that workflow change so the launcher manifests reference the new packs. The launcher downloads a pack again when its manifest `version` changes, and also redownloads required packs when the local asset folder is missing.
+This writes zip files to `builds/asset-packs`, uploads them to R2 under `assets/`, and updates `.github/workflows/deploy-desktop-r2.yml` with the new asset versions, sizes, and zip SHA-256 values. Commit and push that workflow change so the launcher manifests reference the new packs. The launcher downloads a pack again when its manifest `version` changes, and also redownloads required packs when the local asset folder is missing.
 
 The script uses content hashes for versions and skips packs whose computed version is already in the workflow. That means unchanged packs are not uploaded again and users do not redownload them.
+
+For the Mega Champions Phase 3 audit, all 49 catalog forms have complete exact
+battle sprite sets. Fifteen mappings are pinned to Generation 9 Pack 3.3.6 in
+`data/mega_champions_sprite_imports.generated.json`: the twelve formerly
+missing mappings plus corrected form indexes for Floette, regular Magearna,
+and Zygarde. Credits and source hashes are recorded in
+`assets/sprites/README.md`; the source bundle does not declare a license.
+
+Release publication fails when any artifact is missing a valid SHA-256 or exact
+size, or when its public URL does not return a correct `206 Partial Content`
+response for a one-byte Range request. Stable manifests are still uploaded last.
 
 To upload only one changed pack:
 

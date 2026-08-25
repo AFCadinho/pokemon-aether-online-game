@@ -3,6 +3,7 @@ extends Node
 class_name PartyHealServiceNode
 
 const PLAYER_PARTY_HEAL_ENDPOINT := "/game/party/heal"
+const GLOBAL_HEAL_ENDPOINT := "/game/global-heal"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -20,7 +21,7 @@ func heal_party_locally(party: Array) -> bool:
 	return changed
 
 
-func heal_current_party_and_save(respawn_point: Dictionary = {}) -> Dictionary:
+func heal_current_party_and_save(respawn_point: Dictionary = {}, public_service := true) -> Dictionary:
 	var player_save := _get_player_save()
 	if player_save == null:
 		return {
@@ -38,7 +39,7 @@ func heal_current_party_and_save(respawn_point: Dictionary = {}) -> Dictionary:
 		}
 
 	var server_changed := _party_needs_heal(party)
-	var server_result := await _heal_current_party_on_server(respawn_point)
+	var server_result := await _heal_current_party_on_server(respawn_point, public_service)
 	if bool(server_result.get("success", false)):
 		_apply_party_response(player_save, server_result)
 		server_result["changed"] = server_changed
@@ -61,6 +62,115 @@ func heal_current_party_and_save(respawn_point: Dictionary = {}) -> Dictionary:
 	return result
 
 
+func party_needs_heal(party: Array) -> bool:
+	return _party_needs_heal(party)
+
+
+func acknowledge_global_heal(event_id: String) -> Dictionary:
+	var normalized_event_id := event_id.strip_edges()
+	if normalized_event_id.is_empty():
+		return {"success": false, "error": "Missing Global Heal event id."}
+	var gateway_config := get_node_or_null("/root/GatewayApiConfig")
+	if gateway_config == null:
+		return {"success": false, "error": "Global Heal is unavailable."}
+
+	var request := HTTPRequest.new()
+	request.timeout = REQUEST_TIMEOUT_SECONDS
+	add_child(request)
+	var error := request.request(
+		str(await gateway_config.call("get_base_url"))
+		+ GLOBAL_HEAL_ENDPOINT
+		+ "/%s/acknowledge" % normalized_event_id.uri_encode(),
+		gateway_config.call("get_json_headers"),
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	if error != OK:
+		request.queue_free()
+		return {"success": false, "error": "Could not acknowledge Global Heal: %s" % error_string(error)}
+
+	var result: Array = await request.request_completed
+	request.queue_free()
+	var request_result := int(result[0])
+	var response_code := int(result[1])
+	var response_text := (result[3] as PackedByteArray).get_string_from_utf8()
+	var parsed_body: Variant = JSON.parse_string(response_text)
+	var body: Dictionary = parsed_body as Dictionary if parsed_body is Dictionary else {}
+	if request_result != HTTPRequest.RESULT_SUCCESS:
+		return {
+			"success": false,
+			"status": response_code,
+			"error": _request_result_message(request_result),
+		}
+	if response_code < 200 or response_code >= 300:
+		return {
+			"success": false,
+			"status": response_code,
+			"error": _extract_error(body, response_code),
+			"body": body,
+		}
+	return {
+		"success": true,
+		"alreadyAcknowledged": bool(body.get("alreadyAcknowledged", false)),
+	}
+
+
+func accept_global_heal(event_id: String) -> Dictionary:
+	var normalized_event_id := event_id.strip_edges()
+	if normalized_event_id.is_empty():
+		return {"success": false, "error": "Missing Global Heal event id."}
+	var gateway_config := get_node_or_null("/root/GatewayApiConfig")
+	var player_save := _get_player_save()
+	if gateway_config == null or player_save == null:
+		return {"success": false, "error": "Global Heal is unavailable."}
+
+	var request := HTTPRequest.new()
+	request.timeout = REQUEST_TIMEOUT_SECONDS
+	add_child(request)
+	var error := request.request(
+		str(await gateway_config.call("get_base_url"))
+		+ GLOBAL_HEAL_ENDPOINT
+		+ "/%s/accept" % normalized_event_id.uri_encode(),
+		gateway_config.call("get_json_headers"),
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	if error != OK:
+		request.queue_free()
+		return {"success": false, "error": "Could not start Global Heal request: %s" % error_string(error)}
+
+	var result: Array = await request.request_completed
+	request.queue_free()
+	var request_result := int(result[0])
+	var response_code := int(result[1])
+	var response_text := (result[3] as PackedByteArray).get_string_from_utf8()
+	var parsed_body: Variant = JSON.parse_string(response_text)
+	var body: Dictionary = parsed_body as Dictionary if parsed_body is Dictionary else {}
+	if request_result != HTTPRequest.RESULT_SUCCESS:
+		return {
+			"success": false,
+			"status": response_code,
+			"error": _request_result_message(request_result),
+		}
+	if response_code < 200 or response_code >= 300:
+		return {
+			"success": false,
+			"status": response_code,
+			"error": _extract_error(body, response_code),
+			"body": body,
+		}
+
+	var party_state: Dictionary = body.get("party", {}) as Dictionary
+	var normalized_result := {
+		"success": true,
+		"alreadyAccepted": bool(body.get("alreadyAccepted", false)),
+		"hasParty": bool(party_state.get("hasParty", false)),
+		"party": _array_from_value(party_state.get("party", [])),
+	}
+	_apply_party_response(player_save, normalized_result)
+	return normalized_result
+
+
 func _party_needs_heal(party: Array) -> bool:
 	for pokemon_value: Variant in party:
 		var pokemon := pokemon_value as Pokemon
@@ -69,6 +179,8 @@ func _party_needs_heal(party: Array) -> bool:
 
 		var restored_max_hp: int = max(pokemon.max_hp, int(pokemon.stats.get("hp", pokemon.max_hp)), 1)
 		if pokemon.max_hp != restored_max_hp or pokemon.current_hp != restored_max_hp or not pokemon.has_saved_hp_state:
+			return true
+		if not pokemon.status.strip_edges().is_empty():
 			return true
 
 		for move_value: Variant in pokemon.moves:
@@ -92,6 +204,9 @@ func _heal_party_pokemon(pokemon: Pokemon) -> bool:
 		changed = true
 	if not pokemon.has_saved_hp_state:
 		pokemon.has_saved_hp_state = true
+		changed = true
+	if not pokemon.status.strip_edges().is_empty():
+		pokemon.status = ""
 		changed = true
 
 	for move_index in range(pokemon.moves.size()):
@@ -152,7 +267,7 @@ func _get_player_party_state_service() -> Node:
 	return get_node_or_null("/root/PlayerPartyStateService")
 
 
-func _heal_current_party_on_server(respawn_point: Dictionary = {}) -> Dictionary:
+func _heal_current_party_on_server(respawn_point: Dictionary = {}, public_service := true) -> Dictionary:
 	var gateway_config := get_node_or_null("/root/GatewayApiConfig")
 	if gateway_config == null or not gateway_config.has_method("get_base_url") or not gateway_config.has_method("get_accept_headers") or not gateway_config.has_method("get_json_headers"):
 		return {
@@ -161,11 +276,8 @@ func _heal_current_party_on_server(respawn_point: Dictionary = {}) -> Dictionary
 		}
 
 	var base_url: String = str(await gateway_config.call("get_base_url"))
-	var request_body := ""
-	var headers_value: Variant = gateway_config.call("get_accept_headers")
-	if not respawn_point.is_empty():
-		request_body = JSON.stringify({"respawnPoint": respawn_point})
-		headers_value = gateway_config.call("get_json_headers")
+	var request_body := JSON.stringify(build_heal_request_body(respawn_point, public_service))
+	var headers_value: Variant = gateway_config.call("get_json_headers")
 	var headers := PackedStringArray()
 	if headers_value is PackedStringArray:
 		headers = headers_value as PackedStringArray
@@ -221,6 +333,15 @@ func _heal_current_party_on_server(respawn_point: Dictionary = {}) -> Dictionary
 		"hasParty": bool(body.get("hasParty", false)),
 		"party": _array_from_value(body.get("party", [])),
 	}
+
+
+static func build_heal_request_body(respawn_point: Dictionary = {}, public_service := true) -> Dictionary:
+	var body := {
+		"publicService": public_service,
+	}
+	if not respawn_point.is_empty():
+		body["respawnPoint"] = respawn_point.duplicate(true)
+	return body
 
 
 func _apply_party_response(player_save: Node, result: Dictionary) -> void:

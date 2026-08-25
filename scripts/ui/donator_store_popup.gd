@@ -77,7 +77,7 @@ const CATEGORY_LABELS := {
 }
 const CATEGORY_DESCRIPTIONS := {
 	"featured": "A curated mix of supporter items, style and permanent conveniences.",
-	"membership": "Temporary supporter recognition. No battle advantages.",
+	"membership": "Tradeable supporter membership with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
 	"cosmetics": "Outfits and profile details that personalize your trainer without affecting gameplay.",
 	"guilds": "Consumable templates that permanently unlock for your Guild without affecting gameplay.",
 	"mounts": "Travel through the overworld in your own style.",
@@ -86,7 +86,7 @@ const CATEGORY_DESCRIPTIONS := {
 }
 const CATEGORY_PROMISES := {
 	"featured": "FAIR SUPPORT",
-	"membership": "NO BATTLE POWER",
+	"membership": "5% SHINY · TRAVEL · NPC SHOPS",
 	"cosmetics": "COSMETIC",
 	"guilds": "GUILD COSMETIC",
 	"mounts": "TRAVEL STYLE",
@@ -128,7 +128,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-3-days",
 		"name": "Aether Blessing Voucher · 3 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add three days of Aether Blessing.",
+		"description": "Tradeable voucher. Use it from the Bag to add three days with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
 		"price": 75,
 		"icon": AETHER_BLESSING_VOUCHER_3_DAYS_ICON,
 		"categories": ["membership"],
@@ -137,7 +137,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-7-days",
 		"name": "Aether Blessing Voucher · 7 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add one week of Aether Blessing.",
+		"description": "Tradeable voucher. Use it from the Bag to add one week with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
 		"price": 150,
 		"icon": AETHER_BLESSING_VOUCHER_7_DAYS_ICON,
 		"categories": ["membership"],
@@ -146,7 +146,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-14-days",
 		"name": "Aether Blessing Voucher · 14 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add two weeks of Aether Blessing.",
+		"description": "Tradeable voucher. Use it from the Bag to add two weeks with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
 		"price": 275,
 		"icon": AETHER_BLESSING_VOUCHER_14_DAYS_ICON,
 		"categories": ["membership"],
@@ -155,7 +155,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "aether-blessing-voucher-30-days",
 		"name": "Aether Blessing Voucher · 30 Days",
-		"description": "Tradeable voucher. Use it from the Bag to add thirty days of Aether Blessing.",
+		"description": "Tradeable voucher. Use it from the Bag to add thirty days with 5% better Shiny odds, 50% off regional travel, two free Aether Anchors, and 5% off NPC currency shops. Aether Gems excluded.",
 		"price": 500,
 		"icon": AETHER_BLESSING_VOUCHER_30_DAYS_ICON,
 		"categories": ["featured", "membership"],
@@ -220,6 +220,24 @@ const CATALOG: Array[Dictionary] = [
 		"categories": ["featured", "guilds"],
 		"badge": "GUILD UNLOCK",
 		"guild_emblem_template": true,
+	},
+	{
+		"id": "mysterious-outfit",
+		"name": "Mysterious Outfit Box",
+		"description": "Tradeable unisex outfit box. Open it in your Bag to receive the mask, shirt and gloves, trousers, and shoes as separate tradeable items.",
+		"price": 400,
+		"icon": STYLE_ICON,
+		"categories": ["featured", "cosmetics"],
+		"cosmetic_subcategory": "outfits",
+		"appearance_slots": ["facegear", "top", "bottom", "shoes"],
+		"preview_parts": [
+			{"slot": "facegear", "appearance_id": "Mysterious_Mask"},
+			{"slot": "top", "appearance_id": "Mysterious_Shirt"},
+			{"slot": "bottom", "appearance_id": "Mysterious_Trousers"},
+			{"slot": "shoes", "appearance_id": "Mysterious_Shoes"},
+		],
+		"genders": ["male", "female"],
+		"badge": "4-ITEM BOX",
 	},
 	{
 		"id": "adinho-classic-outfit",

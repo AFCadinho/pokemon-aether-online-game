@@ -6,11 +6,17 @@ const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box
 
 var sprite_loader := BATTLE_SPRITE_LOADER.new()
 var slot_sprites: Array[AnimatedSprite2D] = []
+var team_is_shown := false
 
 
 func _ready() -> void:
 	_cache_slot_sprites()
-	clear()
+	# The battle controller can populate this layer immediately after mounting
+	# the Battle scene, before this child receives its ready notification. Do
+	# not erase that already-built Team Preview here; doing so left one client
+	# with an empty overview depending on frame timing.
+	if not team_is_shown:
+		clear()
 
 
 func show_team(team_data: Array, side: String) -> void:
@@ -24,6 +30,7 @@ func show_team(team_data: Array, side: String) -> void:
 
 		_show_pokemon_in_slot(slot_sprites[index], pokemon_value as Dictionary, side)
 
+	team_is_shown = true
 	visible = true
 
 
@@ -31,6 +38,7 @@ func clear() -> void:
 	# Hide the owner before clearing individual sprites. This prevents a cached
 	# SubViewport frame or a late lead transition from drawing preview Pokemon
 	# underneath the Pokeball summon.
+	team_is_shown = false
 	visible = false
 	_cache_slot_sprites()
 	for sprite in slot_sprites:

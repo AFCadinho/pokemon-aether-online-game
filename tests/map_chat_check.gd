@@ -43,8 +43,9 @@ func _init() -> void:
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	var remote_avatar_source := FileAccess.get_file_as_string("res://scripts/world/remote_player_avatar.gd")
 	_check(
-		overlay_source.contains("CHAT_TAB_MAP") and overlay_source.contains("CHAT_CHANNEL_MAP"),
-		"Map is a dedicated top-level chat tab and channel"
+		overlay_source.contains("CHAT_TAB_MAP") and overlay_source.contains("CHAT_CHANNEL_MAP")
+		and overlay_source.contains('LocalizationManager.text("ui.chat.tab.map"), CHAT_TAB_MAP'),
+		"Map is a General chat channel"
 	)
 	_check(
 		overlay_source.contains('_show_map_chat_bubble(user, text, str(message.get("mapId", "")))'),
@@ -68,18 +69,10 @@ func _init() -> void:
 		"a temporarily empty local presence map does not suppress a valid bubble"
 	)
 	_check(
-		settings_source.contains("CHAT_TAB_MAP") and settings_source.contains("CHAT_TAB_MAP: true"),
-		"Map tab is visible by default and persisted"
-	)
-	_check(
 		settings_source.contains(
-			"CHAT_TAB_ALL,\n\tCHAT_TAB_GENERAL,\n\tCHAT_TAB_SYSTEM,\n\tCHAT_TAB_MAP,\n\tCHAT_TAB_PM,\n\tCHAT_TAB_GUILD,"
+			"CHAT_TAB_ALL,\n\tCHAT_TAB_GENERAL,\n\tCHAT_TAB_SYSTEM,\n\tCHAT_TAB_PM,\n\tCHAT_TAB_GUILD,"
 		),
-		"default top tab order is All, General, System, Map, PM, Guild"
-	)
-	_check(
-		settings_source.contains("order.insert(system_index + 1, CHAT_TAB_MAP)"),
-		"older saved tab orders place the newly added Map tab after System"
+		"the top-level chat tab order no longer includes Map"
 	)
 	_check(
 		overlay_source.contains("var active_chat_tab: String = CHAT_TAB_ALL")
@@ -113,11 +106,10 @@ func _init() -> void:
 		overlay_source.contains("func _apply_chat_row_emphasis")
 		and overlay_source.contains("CHAT_ALL_SECONDARY_CONTENT_ALPHA := 0.68")
 		and overlay_source.contains(
-			'category not in [CHAT_CHANNEL_GLOBAL, CHAT_CATEGORY_USER]'
+			'category not in [\n\t\t\tCHAT_CHANNEL_GLOBAL,\n\t\t\tCHAT_CATEGORY_USER,'
 		)
-		and overlay_source.contains(
-			'for node_name: StringName in [&"RoleBadge", &"SenderName", &"MessageText"]'
-		),
+		and overlay_source.contains('NodePath("MessageLine/Header/RoleBadge")')
+		and overlay_source.contains('NodePath("MessageLine/MessageText")'),
 		"All keeps Global prominent and softens secondary channel message content"
 	)
 	_check(

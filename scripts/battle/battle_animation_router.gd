@@ -2,9 +2,11 @@ extends RefCounted
 
 class_name BattleAnimationRouter
 
+const BattleRenderLayers := preload("res://scripts/battle/battle_render_layers.gd")
 const MOVE_ANIMATION_CATALOG_PATH := "res://data/battle_move_animations.json"
 const EFFECT_ANIMATION_CATALOG_PATH := "res://data/battle_effect_animations.json"
 const TAKE_DAMAGE_SOUND_PATH := "res://assets/battles/animations/common/damage/normaldamage.ogg"
+const SUPER_EFFECTIVE_DAMAGE_SOUND_PATH := "res://assets/audio/sfx/battle/hit_super_effective.ogg"
 const EFFECT_SOURCE_PLAYER_POSITION := Vector2(128, 224)
 const EFFECT_SOURCE_ENEMY_POSITION := Vector2(384, 96)
 const REVERSED_BATTLEFIELD_AXIS := Vector2(512, 320)
@@ -187,7 +189,7 @@ func _play_animation_config(
 			underlay_overlay.queue_free()
 		return
 
-	animation_node.z_index = 50
+	animation_node.z_index = BattleRenderLayers.MOVE_FOREGROUND
 	_fit_animation_to_parent(animation_node, parent_node)
 	_apply_move_projectile_endpoint_anchors(animation_node, move_actor_ident, move_target_ident, parent_node, config, animation_options)
 	_apply_move_sheet_anchor(animation_node, move_actor_ident, move_target_ident, parent_node, config)
@@ -274,6 +276,7 @@ func prewarm_common_battle_sounds() -> void:
 		return
 
 	_request_threaded_resource(TAKE_DAMAGE_SOUND_PATH)
+	_request_threaded_resource(SUPER_EFFECTIVE_DAMAGE_SOUND_PATH)
 
 
 func has_move_animation(move_name: String) -> bool:
@@ -417,6 +420,8 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.foreground_path = str(config.get("foreground_path", ""))
 	var sound_paths: Dictionary = (config.get("sound_paths", {}) as Dictionary).duplicate(true)
 	animation_node.sound_paths = sound_paths
+	animation_node.custom_sound_events = (config.get("custom_sound_events", []) as Array).duplicate(true)
+	animation_node.disable_data_sound_events = bool(config.get("disable_data_sound_events", false))
 	if not resources.is_empty():
 		animation_node.data_override = resources.get("data", {}) as Dictionary
 		animation_node.sheet_texture_override = resources.get("sheet_texture", null) as Texture2D
@@ -430,7 +435,16 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 		config.get("sprite_position_anchor", [EFFECT_SOURCE_PLAYER_POSITION.x, EFFECT_SOURCE_PLAYER_POSITION.y]),
 		EFFECT_SOURCE_PLAYER_POSITION
 	)
-	animation_node.sprite_position_offset = _vector2_from_config_value(config.get("sprite_position_offset", [0.0, 0.0]), Vector2.ZERO)
+	var sprite_position_offset := _vector2_from_config_value(
+		config.get("sprite_position_offset", [0.0, 0.0]),
+		Vector2.ZERO
+	)
+	if reverse_battlefield:
+		sprite_position_offset += _vector2_from_config_value(
+			config.get("reverse_sprite_position_offset", [0.0, 0.0]),
+			Vector2.ZERO
+		)
+	animation_node.sprite_position_offset = sprite_position_offset
 	animation_node.sheet_visual_offset = _vector2_from_config_value(config.get("sheet_visual_offset", [0.0, 0.0]), Vector2.ZERO)
 	animation_node.sheet_frame_offsets = (config.get("sheet_frame_offsets", []) as Array).duplicate(true)
 	animation_node.sparkle_size_multiplier = float(config.get("sparkle_size_multiplier", 1.0))
@@ -448,6 +462,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.show_timing_backgrounds = bool(config.get("show_timing_backgrounds", false))
 	animation_node.timing_background_fill_canvas = bool(config.get("timing_background_fill_canvas", false))
 	animation_node.timing_background_persist_until_clear = bool(config.get("timing_background_persist_until_clear", false))
+	animation_node.background_motion_config = (config.get("background_motion", {}) as Dictionary).duplicate(true)
 	animation_node.show_timing_foregrounds = bool(config.get("show_timing_foregrounds", false))
 	animation_node.timing_foreground_scale = _vector2_from_config_value(config.get("timing_foreground_scale", [1.0, 1.0]), Vector2.ONE)
 	animation_node.foreground_opacity_multiplier = clampf(float(config.get("foreground_opacity_multiplier", 1.0)), 0.0, 1.0)
@@ -458,17 +473,23 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.projectile_config = (config.get("projectile", {}) as Dictionary).duplicate(true)
 	animation_node.orb_config = (config.get("orb", {}) as Dictionary).duplicate(true)
 	animation_node.orb_projectile_config = (config.get("orb_projectile", {}) as Dictionary).duplicate(true)
+	animation_node.orb_barrage_config = (config.get("orb_barrage", {}) as Dictionary).duplicate(true)
+	animation_node.psychic_pulse_config = (config.get("psychic_pulse", {}) as Dictionary).duplicate(true)
+	animation_node.psychic_shards_config = (config.get("psychic_shards", {}) as Dictionary).duplicate(true)
+	animation_node.explosion_burst_config = (config.get("explosion_burst", {}) as Dictionary).duplicate(true)
 	animation_node.energy_blast_config = (config.get("energy_blast", {}) as Dictionary).duplicate(true)
 	animation_node.water_splash_config = (config.get("water_splash", {}) as Dictionary).duplicate(true)
 	animation_node.electric_switch_config = (config.get("electric_switch", {}) as Dictionary).duplicate(true)
 	animation_node.fire_stream_config = (config.get("fire_stream", {}) as Dictionary).duplicate(true)
 	animation_node.heat_wave_config = (config.get("heat_wave", {}) as Dictionary).duplicate(true)
 	animation_node.draco_meteor_config = (config.get("draco_meteor", {}) as Dictionary).duplicate(true)
+	animation_node.coin_rain_config = (config.get("coin_rain", {}) as Dictionary).duplicate(true)
 	animation_node.solar_beam_config = (config.get("solar_beam", {}) as Dictionary).duplicate(true)
 	animation_node.bloom_doom_config = (config.get("bloom_doom", {}) as Dictionary).duplicate(true)
 	animation_node.solar_charge_config = (config.get("solar_charge", {}) as Dictionary).duplicate(true)
 	animation_node.celestial_charge_config = (config.get("celestial_charge", {}) as Dictionary).duplicate(true)
 	animation_node.focus_aura_config = (config.get("focus_aura", {}) as Dictionary).duplicate(true)
+	animation_node.afterimage_config = (config.get("afterimage", {}) as Dictionary).duplicate(true)
 	animation_node.stat_change_config = (config.get("stat_change", {}) as Dictionary).duplicate(true)
 	animation_node.heal_energy_config = (config.get("heal_energy", {}) as Dictionary).duplicate(true)
 	animation_node.dragon_dance_config = (config.get("dragon_dance", {}) as Dictionary).duplicate(true)
@@ -680,8 +701,9 @@ func _get_animation_resources(config: Dictionary) -> Dictionary:
 		var sound_path: String = str(sound_path_value)
 		if sound_path != "":
 			var stream: AudioStream = _get_cached_sound_stream(sound_path)
-			if stream == null:
-				return {}
+			# A sound is an optional layer of an animation.  Do not discard the
+			# complete visual animation when an imported sound is unavailable (for
+			# example while Godot is still importing a newly added asset).
 			if stream != null:
 				sound_streams[_sound_name_for_path(sound_paths, sound_path)] = stream
 	resources["sound_streams"] = sound_streams
@@ -876,7 +898,11 @@ func _create_animation_overlay(parent_node: Node, config: Dictionary = {}) -> Co
 	overlay.name = "MoveAnimationOverlay"
 	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	overlay.clip_contents = true
-	overlay.z_index = 0 if bool(config.get("render_below_sprites", false)) else 50
+	overlay.z_index = (
+		BattleRenderLayers.FIELD
+		if bool(config.get("render_below_sprites", false))
+		else BattleRenderLayers.MOVE_FOREGROUND
+	)
 	overlay.anchor_left = 0.0
 	overlay.anchor_top = 0.0
 	overlay.anchor_right = 0.0
@@ -903,6 +929,9 @@ func _move_timing_background_below_sprites(animation_node: MoveAnimationPlayer, 
 		return
 
 	var sibling_index: int = parent_node.get_child_count()
+	var animation_overlay := animation_node.get_parent()
+	if animation_overlay != null and animation_overlay.get_parent() == parent_node:
+		sibling_index = animation_overlay.get_index()
 	for sprite_box: Node in [player_sprite_box, enemy_sprite_box]:
 		if sprite_box != null and sprite_box.get_parent() == parent_node:
 			sibling_index = mini(sibling_index, sprite_box.get_index())
@@ -1020,6 +1049,30 @@ func _apply_move_projectile_endpoint_anchors(
 		target_anchor,
 		animation_node.reverse_battlefield
 	)
+	animation_node.orb_barrage_config = _with_projectile_endpoint_anchors(
+		animation_node.orb_barrage_config,
+		actor_anchor,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.psychic_pulse_config = _with_projectile_endpoint_anchors(
+		animation_node.psychic_pulse_config,
+		actor_anchor,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.psychic_shards_config = _with_projectile_endpoint_anchors(
+		animation_node.psychic_shards_config,
+		actor_anchor,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.explosion_burst_config = _with_projectile_endpoint_anchors(
+		animation_node.explosion_burst_config,
+		actor_anchor,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
 	animation_node.energy_blast_config = _with_projectile_endpoint_anchors(
 		animation_node.energy_blast_config,
 		actor_anchor,
@@ -1067,6 +1120,11 @@ func _apply_move_projectile_endpoint_anchors(
 		target_anchor,
 		animation_node.reverse_battlefield
 	)
+	animation_node.stat_change_config = _with_target_effect_anchor(
+		animation_node.stat_change_config,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
 	animation_node.celestial_charge_config = _with_self_effect_anchor(
 		animation_node.celestial_charge_config,
 		actor_anchor,
@@ -1074,6 +1132,11 @@ func _apply_move_projectile_endpoint_anchors(
 	)
 	animation_node.focus_aura_config = _with_self_effect_anchor(
 		animation_node.focus_aura_config,
+		actor_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.afterimage_config = _with_self_effect_anchor(
+		animation_node.afterimage_config,
 		actor_anchor,
 		animation_node.reverse_battlefield
 	)
@@ -1391,18 +1454,25 @@ func _wait_for_animation_node(animation_node: Node2D, parent_node: Node) -> void
 		animation_node.queue_free()
 
 
-func play_damage_tween_for_target(target_ident: String) -> void:
+func play_damage_tween_for_target(target_ident: String, sound_variant: String = "normal") -> void:
 	if not SettingsManager.battle_animations:
 		return
 	if not _can_start_battle_animation("router.damage_tween", {"target": target_ident}):
 		return
 
-	_play_one_shot_sound(TAKE_DAMAGE_SOUND_PATH)
+	var sound_path := get_damage_sound_path(sound_variant)
+	_play_one_shot_sound(sound_path)
 	match _get_player_id_from_ident(target_ident):
 		"p1":
 			await player_sprite_box.play_damage_tween()
 		"p2":
 			await enemy_sprite_box.play_damage_tween()
+
+
+static func get_damage_sound_path(sound_variant: String) -> String:
+	if sound_variant == "super_effective":
+		return SUPER_EFFECTIVE_DAMAGE_SOUND_PATH
+	return TAKE_DAMAGE_SOUND_PATH
 
 
 func _play_one_shot_sound(sound_path: String) -> void:

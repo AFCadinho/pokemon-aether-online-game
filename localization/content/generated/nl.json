@@ -1540,10 +1540,10 @@
       "name": "Greninja"
     },
     "greninja-ash": {
-      "name": "Greninja Ash"
+      "name": "Ash-Greninja"
     },
     "greninja-bond": {
-      "name": "Greninja Bond"
+      "name": "Greninja"
     },
     "greninja-mega": {
       "name": "Greninja Mega"
@@ -5757,7 +5757,7 @@
     },
     "hidden-power": {
       "name": "Verborgen kracht",
-      "shortDesc": "Vermogen en type zijn afhankelijk van de IV's van de gebruiker. Het vermogen kan variëren van 30 tot 70."
+      "shortDesc": "De kracht is altijd 60. Het type hangt af van de Pokémon die de aanval gebruikt."
     },
     "high-horsepower": {
       "name": "Hoog vermogen",
@@ -8073,8 +8073,8 @@
       "shortDesc": "Beschermt tegen kritieke treffers."
     },
     "battle-bond": {
-      "name": "Vecht tegen Bond",
-      "shortDesc": "Transformeert deze Pokémon in Ash-Greninja nadat hij een tegenstander heeft laten flauwvallen. De kracht van Water Shuriken is 20 en raakt altijd drie keer."
+      "name": "Battle Bond",
+      "shortDesc": "Eén keer per gevecht verhoogt het uitschakelen van een tegenstander Attack, Sp. Atk en Speed met één niveau."
     },
     "beads-of-ruin": {
       "name": "Ruïnekralen",
@@ -8282,6 +8282,10 @@
     "earth-eater": {
       "name": "Aardevreter",
       "shortDesc": "Herstelt HP wanneer hij wordt geraakt door een grondtype-beweging."
+    },
+    "eelevate": {
+      "name": "Eelevate",
+      "shortDesc": "Is immuun voor Ground-aanvallen en entry hazards op de grond; verhoogt de hoogste stat na een knock-out."
     },
     "effect-spore": {
       "name": "Effectspoor",

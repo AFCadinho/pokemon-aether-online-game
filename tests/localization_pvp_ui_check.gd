@@ -18,16 +18,22 @@ func _run() -> void:
 		return
 
 	var original_locale := str(localization_manager.get("current_locale"))
-	_check_pvp_runtime_translation()
+	await _check_pvp_runtime_translation()
 	localization_manager.call("set_locale", original_locale)
 	await process_frame
 	quit(1 if failed else 0)
 
 
 func _check_pvp_runtime_translation() -> void:
+	var auth_service := root.get_node_or_null("AuthService")
+	var original_user: Dictionary = (auth_service.get("current_user") as Dictionary).duplicate(true) if auth_service != null else {}
+	if auth_service != null:
+		auth_service.call("apply_current_user", {"permissions": []})
 	var packed := load(OVERLAY_SCENE_PATH) as PackedScene
 	_check(packed != null, "localized PvP overlay loads")
 	if packed == null:
+		if auth_service != null:
+			auth_service.call("apply_current_user", original_user)
 		return
 
 	var overlay := packed.instantiate()
@@ -42,8 +48,28 @@ func _check_pvp_runtime_translation() -> void:
 	var title := overlay.get("pvp_popup_title_label") as Label
 	var subtitle := overlay.get("pvp_popup_subtitle_label") as Label
 	var ranked_tabs := overlay.get("pvp_ranked_tabs") as TabContainer
+	var room_workspace := overlay.find_child("RoomWorkspace", true, false) as HBoxContainer
+	var room_type_card := overlay.find_child("BattleTypeCard", true, false) as PanelContainer
+	var room_flow_card := overlay.find_child("RoomFlowCard", true, false) as PanelContainer
 	var room_join_button := overlay.get("pvp_room_join_mode_button") as Button
+	var room_create_button := overlay.get("pvp_room_create_mode_button") as Button
+	var room_spectate_button := overlay.get("pvp_room_spectate_mode_button") as Button
+	var casual_button := overlay.get("pvp_room_casual_type_button") as Button
+	var training_button := overlay.get("pvp_room_training_type_button") as Button
+	var room_type_note := overlay.get("pvp_room_type_note") as Label
+	var room_flow_hint := overlay.get("pvp_room_flow_hint") as Label
+	var training_input := overlay.get("pvp_training_team_input") as TextEdit
+	var training_preview := overlay.get("pvp_training_team_preview_section") as VBoxContainer
+	var training_preview_title := overlay.get("pvp_training_team_preview_title") as Label
+	var training_preview_grid := overlay.get("pvp_training_team_preview_grid") as HBoxContainer
+	var room_code_input := overlay.get("pvp_room_code_input") as LineEdit
+	var room_form_title := overlay.get("pvp_room_form_title") as Label
+	var room_timer_check := overlay.get("pvp_timer_enabled_check") as CheckBox
+	var room_timer_tier := overlay.get("pvp_timer_tier_select") as OptionButton
+	var room_tier_row := overlay.get("pvp_room_tier_row") as HBoxContainer
+	var room_tier_select := overlay.get("pvp_room_tier_select") as OptionButton
 	var room_status := overlay.get("pvp_room_status_label") as Label
+	var format_select := overlay.get("pvp_queue_select") as OptionButton
 	var leaderboard_scope := overlay.get("pvp_leaderboard_scope_select") as OptionButton
 	var compact_status := overlay.get("pvp_queue_compact_status_label") as Label
 
@@ -51,9 +77,127 @@ func _check_pvp_runtime_translation() -> void:
 	_check(subtitle != null and subtitle.text.begins_with("Competitieve"), "PvP subtitle renders in Dutch")
 	_check(ranked_tabs != null and ranked_tabs.get_tab_title(0) == "Spelen", "PvP tab title renders in Dutch")
 	_check(room_join_button != null and room_join_button.text == "Deelnemen", "Private room action renders in Dutch")
+	_check(training_button != null and training_button.text == "Training Room", "Training room selector renders in Dutch")
+	_check(casual_button != null and casual_button.text.begins_with("✓ "), "Default room type is visibly selected")
+	_check(room_workspace != null and room_workspace.get_child_count() == 2, "Room setup uses a clear two-column workflow")
+	_check(room_type_card != null and room_type_card.custom_minimum_size.x >= 280.0, "Battle type has a dedicated setup card")
+	_check(room_flow_card != null, "Room actions have a dedicated workflow card")
+	_check(casual_button.custom_minimum_size.y >= 48.0 and training_button.custom_minimum_size.y >= 48.0, "Battle type cards have comfortable click targets")
+	_check(room_flow_hint != null and room_flow_hint.visible, "Room action card explains the next step before a choice")
+	_check(room_timer_check != null and room_timer_check.text.begins_with("Keuzetimer"), "Private room timer renders in Dutch")
+	_check(
+		overlay.call(
+			"_pvp_room_failure_status_key",
+			{"code": "room_timer_authority_disabled"},
+			true,
+			"ui.pvp.room.create_failed"
+		) == "ui.pvp.room.timer_unavailable",
+		"Unavailable room timers are not presented as an invalid Pokepaste"
+	)
+	_check(
+		overlay.call(
+			"_pvp_room_failure_status_key",
+			{"detail": {"code": "CIRCUIT_BREAKER_OPEN"}},
+			false,
+			"ui.pvp.room.create_failed"
+		) == "ui.pvp.room.battle_server_recovering",
+		"Authority recovery is explained instead of shown as a generic room failure"
+	)
+	_check(
+		overlay.call(
+			"_pvp_room_failure_status_key",
+			{"detail": {"code": "TRAINING_TEAM_INVALID"}},
+			true,
+			"ui.pvp.room.create_failed"
+		) == "ui.pvp.training.paste_invalid",
+		"Invalid Training Room teams keep the Pokepaste guidance"
+	)
+	_check(
+		overlay.call(
+			"_pvp_room_failure_status_key",
+			{"code": "service_error"},
+			true,
+			"ui.pvp.room.create_failed"
+		) == "ui.pvp.room.create_failed",
+		"Unrelated Training Room failures use the room fallback"
+	)
+	_check(
+		overlay.call(
+			"_pvp_room_failure_status_key",
+			{"detail": {"code": "PVP_ROOM_TEAM_INVALID"}},
+			false,
+			"ui.pvp.room.create_failed"
+		) == "ui.pvp.room.tier_team_invalid",
+		"Tier validation failures explain that the selected rules were not met"
+	)
+	_check(
+		overlay.call(
+			"_pvp_room_failure_status_key",
+			{"detail": {"code": "MEGA_READINESS_PENDING"}},
+			false,
+			"ui.pvp.room.create_failed"
+		) == "backend.error.mega_readiness_pending",
+		"Mega readiness failures keep their specific localized explanation"
+	)
 	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Dagelijks", "Leaderboard period renders in Dutch")
+	_check_ranked_dropdown_style(format_select, "Matchmaking format")
+	_check_ranked_dropdown_style(leaderboard_scope, "Leaderboard period")
 
-	overlay.call("_on_pvp_room_mode_selected", "join")
+	training_button.emit_signal("pressed")
+	await process_frame
+	_check(overlay.get("pvp_room_battle_purpose") == "training", "Training button signal selects training mode")
+	_check(training_button.text.begins_with("✓ "), "Training selection is immediately visible on its button")
+	_check(room_type_note != null and room_type_note.text.contains("beide spelers"), "Training selection immediately changes its explanation")
+	_check(room_status != null and room_status.text.begins_with("Training Room geselecteerd"), "Training selection immediately changes room status")
+	_check(room_create_button != null and room_create_button.text == "Training maken", "Training selection changes the create action")
+	room_create_button.emit_signal("pressed")
+	await process_frame
+	_check(room_tier_row != null and room_tier_row.visible, "Room creation exposes the optional battle tier")
+	_check(room_tier_select != null and room_tier_select.item_count == 3, "Players can choose no tier, Aether OU, or Champions ZA")
+	_check(str(room_tier_select.get_selected_metadata()) == "none", "No tier is selected by default")
+	_check(room_tier_select.get_item_text(0) == "Geen tier", "The default tier is localized in Dutch")
+	_check(room_tier_select.get_item_text(1) == "Aether OU", "Aether OU is available for unrated rooms")
+	room_tier_select.select(1)
+	_check(overlay.call("_selected_pvp_room_format_id") == "gen9nationaldex", "Aether OU resolves to the reviewed National Dex engine")
+	room_tier_select.select(2)
+	_check(room_tier_select.get_item_text(2) == "Champions ZA", "Champions ZA is available without a developer label")
+	_check(str(room_tier_select.get_selected_metadata()) == "pokeaether-mega-z-test", "Champions ZA keeps its bounded room identity")
+	_check(overlay.call("_selected_pvp_room_format_id") == "pokeaether-mega-z-test-v1", "Champions ZA maps to the versioned engine format")
+	_check(room_timer_check != null and room_timer_check.visible, "Training room creation exposes the shared decision timer option")
+	room_timer_check.button_pressed = true
+	room_timer_check.emit_signal("toggled", true)
+	await process_frame
+	_check(room_timer_tier != null and room_timer_tier.visible, "Enabling the timer exposes standard speed tiers")
+	_check(room_timer_tier.item_count == 6, "Room timer offers the Casual default and five speed tiers")
+	_check(str(room_timer_tier.get_selected_metadata()) == "casual_v1", "Casual is the default room timer tier")
+	room_join_button.emit_signal("pressed")
+	await process_frame
+	_check(not room_tier_row.visible, "Joiners inherit the host tier instead of selecting their own")
+	_check(not room_flow_hint.visible, "Choosing a room action replaces guidance with its form")
+	_check(training_input != null and training_input.visible, "Training room exposes the paste-only team input")
+	_check(room_code_input.get_index() < training_input.get_index(), "Training join asks for the room code before the team paste")
+	_check(room_form_title != null and room_form_title.text.begins_with("VOER EEN ROOMCODE"), "Training join form explains both required inputs")
+	overlay.call("_set_pvp_training_team_preview", [
+		{"species": "Pikachu", "shiny": true, "moves": ["Thunderbolt"]},
+		{"species": "Staryu", "shiny": false, "item": "Leftovers"},
+	])
+	_check(training_preview != null and training_preview.visible, "Accepted training team exposes its read-only preview")
+	_check(training_preview_title != null and training_preview_title.text == "JOUW TRAININGSTEAM  ·  2/6", "Training preview count renders in Dutch")
+	_check(training_preview_grid != null and training_preview_grid.get_child_count() == 6, "Training preview always renders six team slots")
+	_check(training_preview_grid.get_child(0).tooltip_text == "Pikachu", "Training preview identifies the accepted species")
+	_check(popup.get_combined_minimum_size().y <= 620.0, "Training preview fits inside the room popup")
+	casual_button.emit_signal("pressed")
+	await process_frame
+	_check(overlay.get("pvp_room_battle_purpose") == "casual", "Custom button signal selects custom mode")
+	_check(not training_input.visible, "Custom selection hides the Pokepaste input")
+	_check(not training_preview.visible, "Changing room type clears the submitted training preview")
+	room_spectate_button.emit_signal("pressed")
+	await process_frame
+	_check(room_code_input != null and room_code_input.visible, "Spectate flow keeps the room code field visible")
+	_check(not training_input.visible, "Spectate flow never asks for a Pokepaste team")
+	training_button.emit_signal("pressed")
+	room_join_button.emit_signal("pressed")
+	await process_frame
 	overlay.call("_set_pvp_status_key", "ui.pvp.room.waiting")
 	overlay.set("pvp_active_queue_entry_id", "queue-entry")
 	overlay.set("pvp_active_queue_status", "waiting")
@@ -71,7 +215,11 @@ func _check_pvp_runtime_translation() -> void:
 	_check(title != null and title.text == "Ranqueada", "PvP ranked title updates to Portuguese")
 	_check(subtitle != null and subtitle.text.begins_with("Pareamento"), "PvP subtitle updates to Portuguese")
 	_check(ranked_tabs != null and ranked_tabs.get_tab_title(0) == "Jogar", "PvP tab title updates to Portuguese")
-	_check(room_join_button != null and room_join_button.text == "Entrar na sala", "Private room action updates to Portuguese")
+	_check(room_join_button != null and room_join_button.text == "Entrar no treinamento", "Training room action updates to Portuguese")
+	_check(training_button != null and training_button.text == "✓ Sala de treinamento", "Selected training room updates to Portuguese")
+	_check(room_timer_check != null and room_timer_check.text.begins_with("Cronômetro"), "Private room timer updates to Portuguese")
+	_check(room_timer_tier != null and room_timer_tier.get_item_text(0).begins_with("Casual"), "Timer tier labels update to Portuguese")
+	_check(room_tier_select != null and room_tier_select.get_item_text(0) == "Sem tier", "Room tier labels update to Portuguese")
 	_check(room_status != null and room_status.text == "Aguardando outro jogador...", "Dynamic room status updates to Portuguese")
 	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Diária", "Leaderboard period updates to Portuguese")
 	_check(compact_status != null and compact_status.text == "Fila ranqueada", "Compact queue status updates to Portuguese")
@@ -79,12 +227,38 @@ func _check_pvp_runtime_translation() -> void:
 	if popup != null:
 		var minimum_size := popup.get_combined_minimum_size()
 		_check(minimum_size.x <= 980.0 and minimum_size.y <= 620.0, "PvP translations fit the designed popup bounds")
+	if auth_service != null:
+		auth_service.call("apply_current_user", original_user)
 
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
 		var loader := overlay.get(loader_property) as Node
 		if loader != null:
 			loader.free()
 	overlay.free()
+
+
+func _check_ranked_dropdown_style(option: OptionButton, label: String) -> void:
+	_check(option != null, "%s dropdown exists" % label)
+	if option == null:
+		return
+	var popup := option.get_popup()
+	_check(option.has_theme_icon_override("arrow"), "%s uses the Ranked dropdown arrow" % label)
+	_check(
+		option.has_theme_stylebox_override("normal")
+		and option.has_theme_stylebox_override("hover")
+		and option.has_theme_stylebox_override("disabled"),
+		"%s uses styled closed states" % label
+	)
+	_check(
+		popup.has_theme_stylebox_override("panel")
+		and popup.has_theme_stylebox_override("hover"),
+		"%s uses styled popup states" % label
+	)
+	_check(
+		popup.has_theme_icon_override("radio_checked")
+		and popup.has_theme_icon_override("radio_unchecked"),
+		"%s uses custom selection indicators" % label
+	)
 
 
 func _check(condition: bool, label: String) -> void:

@@ -21,6 +21,7 @@ func load_gym_badges() -> Dictionary:
 	var result := _badge_result_from_response(response)
 	if bool(result.get("success", false)):
 		PlayerSave.apply_gym_badge_state(result)
+		return await _result_with_refreshed_level_caps(result)
 	return result
 
 
@@ -44,6 +45,17 @@ func dev_set_gym_badges(region: String, badge_ids: Array[String], earned: bool) 
 	var result := _badge_result_from_response(response)
 	if bool(result.get("success", false)):
 		PlayerSave.apply_gym_badge_state(result)
+		return await _result_with_refreshed_level_caps(result)
+	return result
+
+
+func _result_with_refreshed_level_caps(result: Dictionary) -> Dictionary:
+	var cap_refresh: Dictionary = await PlayerPartyStateService.load_party()
+	result["capRefreshSuccess"] = bool(cap_refresh.get("success", false))
+	if bool(result.get("capRefreshSuccess", false)):
+		result["pokemonLevelCap"] = _dictionary_from_value(cap_refresh.get("pokemonLevelCap", {}))
+	else:
+		result["capRefreshError"] = str(cap_refresh.get("error", "Could not refresh level caps."))
 	return result
 
 

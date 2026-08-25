@@ -13,7 +13,7 @@ const MAP_PROPERTY_REGION_ID := "region_id"
 const MAP_PROPERTY_REGION_NAME := "region_name"
 const MAP_PROPERTY_LOCATION_ID := "location_id"
 const MAP_PROPERTY_LOCATION_NAME := "location_name"
-const MAP_PROPERTY_MUSIC_TRACK_PATH := "music_track_path"
+const MAP_PROPERTY_MUSIC_TRACK_ID := "music_track_id"
 const MAP_PROPERTY_DEFAULT_SPAWN := "default_spawn"
 const MAP_PROPERTY_ENCOUNTER_AREA_ID := "encounter_area_id"
 
@@ -23,6 +23,8 @@ const TILE_LAYER_LEDGE_DOWN := "LedgeDown"
 const TILE_LAYER_LEDGE_UP := "LedgeUp"
 const TILE_LAYER_LEDGE_LEFT := "LedgeLeft"
 const TILE_LAYER_LEDGE_RIGHT := "LedgeRight"
+const TILE_LAYER_STAIR_UP_LEFT := "StairUpLeft"
+const TILE_LAYER_STAIR_UP_RIGHT := "StairUpRight"
 
 const REQUIRED_DIRECT_TILE_LAYERS: Array[String] = [
 	TILE_LAYER_COLLISION,
@@ -31,6 +33,8 @@ const REQUIRED_DIRECT_TILE_LAYERS: Array[String] = [
 	TILE_LAYER_LEDGE_UP,
 	TILE_LAYER_LEDGE_LEFT,
 	TILE_LAYER_LEDGE_RIGHT,
+	TILE_LAYER_STAIR_UP_LEFT,
+	TILE_LAYER_STAIR_UP_RIGHT,
 ]
 
 const HIDDEN_RUNTIME_TILE_LAYERS: Array[String] = [

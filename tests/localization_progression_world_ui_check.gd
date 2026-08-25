@@ -65,6 +65,19 @@ func _check_runtime_copy() -> void:
 	game_state.set("fishing_region", "kanto")
 
 	localization_manager.call("set_locale", "nl")
+	var system_messages: Array = world.call("_story_reward_item_messages", [{
+		"alreadyGranted": false,
+		"grants": [{"itemId": "tm-rock-slide", "quantity": 1}],
+	}])
+	_check(
+		system_messages == ["Je hebt 1 × TM-rotsglijbaan ontvangen!"],
+		"Story item rewards name the localized Rock Slide TM in the Dutch System message"
+	)
+	var replay_messages: Array = world.call("_story_reward_item_messages", [{
+		"alreadyGranted": true,
+		"grants": [{"itemId": "tm-rock-slide", "quantity": 1}],
+	}])
+	_check(replay_messages.is_empty(), "Replayed story rewards do not duplicate System messages")
 	_check(fishing.call("_rod_button_text", unavailable_rod) == "Old Rod — Niet in bezit", "Fishing rod state renders in Dutch")
 	_check(
 		fishing.call("_rod_tooltip", unavailable_rod) == "Vislevel 1 • 0 regionale badges",
@@ -80,6 +93,11 @@ func _check_runtime_copy() -> void:
 			== "Pidgey kan evolueren in Pidgeotto.",
 		"Evolution prompt renders in Dutch"
 	)
+	_check(
+		localization_manager.call("text", "ui.skills.unlock.old_rod_tentacool")
+			== "Level 5 Tentacool met de Old Rod",
+		"Old Rod Tentacool unlock is not tied to Pallet Town"
+	)
 
 	localization_manager.call("set_locale", "pt_BR")
 	_check(fishing.call("_rod_button_text", unavailable_rod) == "Vara Velha — Não possuída", "Fishing rod state updates to Portuguese")
@@ -88,6 +106,11 @@ func _check_runtime_copy() -> void:
 		"Move-learning names update to Portuguese"
 	)
 	_check(world.call("_localized_gym_badge_name", "boulder") == "Insígnia da Rocha", "Gym Badge rewards update to Portuguese")
+	_check(
+		localization_manager.call("text", "ui.skills.unlock.old_rod_tentacool")
+			== "Tentacool de nível 5 com a Vara Velha",
+		"Old Rod Tentacool unlock stays location-independent in Portuguese"
+	)
 	_check(
 		localization_manager.call("text", "ui.world.capture.caught_party", {"pokemon": "Pikachu"})
 			== "Você capturou Pikachu! Adicionado à sua equipe.",

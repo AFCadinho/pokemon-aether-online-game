@@ -9,6 +9,8 @@ const BAND_COUNT := 12
 const BAND_STAGGER_SHARE := 0.28
 const STYLE_WILD := "wild"
 const STYLE_RANKED := "ranked"
+const STYLE_TRAINER := "trainer"
+const STYLE_SPECIAL_TRAINER := "special_trainer"
 
 var cover_progress := 0.0:
 	set(value):
@@ -39,7 +41,12 @@ func _notification(what: int) -> void:
 
 func begin(style: String = STYLE_WILD) -> void:
 	_stop_active_tween()
-	transition_style = STYLE_RANKED if style == STYLE_RANKED else STYLE_WILD
+	transition_style = style if style in [
+		STYLE_WILD,
+		STYLE_RANKED,
+		STYLE_TRAINER,
+		STYLE_SPECIAL_TRAINER,
+	] else STYLE_WILD
 	animation_elapsed = 0.0
 	cover_progress = 0.0
 	visible = true
@@ -85,10 +92,15 @@ func _draw() -> void:
 		Rect2(Vector2.ZERO, viewport_size),
 		Color(0.006, 0.012, 0.035, 0.72 * cover_progress)
 	)
-	if transition_style == STYLE_RANKED:
-		_draw_ranked_panels(viewport_size)
-	else:
-		_draw_bands(viewport_size)
+	match transition_style:
+		STYLE_RANKED:
+			_draw_ranked_panels(viewport_size)
+		STYLE_TRAINER:
+			_draw_trainer_shutter(viewport_size)
+		STYLE_SPECIAL_TRAINER:
+			_draw_special_trainer_panels(viewport_size)
+		_:
+			_draw_bands(viewport_size)
 	_draw_moving_streaks(viewport_size)
 	_draw_encounter_flash(viewport_size)
 
@@ -133,6 +145,70 @@ func _draw_ranked_panels(viewport_size: Vector2) -> void:
 		Vector2(center_x - skew * 0.5 + 8.0, viewport_size.y),
 		Color(1.0, 0.32, 0.72, 0.55 * hold_strength),
 		2.0
+	)
+
+
+func _draw_trainer_shutter(viewport_size: Vector2) -> void:
+	var shutter_progress := ease(cover_progress, 0.72)
+	var center_y := viewport_size.y * 0.5
+	var half_cover := (center_y + 3.0) * shutter_progress
+	draw_rect(
+		Rect2(Vector2(0.0, 0.0), Vector2(viewport_size.x, half_cover)),
+		Color(0.015, 0.055, 0.115, 1.0)
+	)
+	draw_rect(
+		Rect2(
+			Vector2(0.0, viewport_size.y - half_cover),
+			Vector2(viewport_size.x, half_cover)
+		),
+		Color(0.025, 0.035, 0.075, 1.0)
+	)
+	var seam_strength := smoothstep(0.72, 1.0, cover_progress)
+	if seam_strength > 0.0:
+		draw_line(
+			Vector2(0.0, center_y),
+			Vector2(viewport_size.x, center_y),
+			Color(0.98, 0.66, 0.18, 0.82 * seam_strength),
+			3.0
+		)
+
+
+func _draw_special_trainer_panels(viewport_size: Vector2) -> void:
+	var panel_progress := ease(cover_progress, 0.68)
+	var center := viewport_size * 0.5
+	var covered_width := (center.x + 4.0) * panel_progress
+	var point_height := minf(viewport_size.y * 0.22, 150.0)
+	draw_colored_polygon(
+		PackedVector2Array([
+			Vector2(0.0, 0.0),
+			Vector2(covered_width, 0.0),
+			Vector2(covered_width + point_height, center.y),
+			Vector2(covered_width, viewport_size.y),
+			Vector2(0.0, viewport_size.y),
+		]),
+		Color(0.18, 0.025, 0.035, 1.0)
+	)
+	draw_colored_polygon(
+		PackedVector2Array([
+			Vector2(viewport_size.x, 0.0),
+			Vector2(viewport_size.x - covered_width, 0.0),
+			Vector2(viewport_size.x - covered_width - point_height, center.y),
+			Vector2(viewport_size.x - covered_width, viewport_size.y),
+			Vector2(viewport_size.x, viewport_size.y),
+		]),
+		Color(0.045, 0.035, 0.09, 1.0)
+	)
+	var crest_strength := smoothstep(0.78, 1.0, cover_progress)
+	if crest_strength <= 0.0:
+		return
+	var crest_radius := minf(viewport_size.x, viewport_size.y) * 0.075
+	draw_circle(center, crest_radius, Color(0.98, 0.7, 0.18, 0.92 * crest_strength))
+	draw_circle(center, crest_radius * 0.72, Color(0.055, 0.04, 0.085, crest_strength))
+	draw_line(
+		Vector2(center.x - crest_radius, center.y),
+		Vector2(center.x + crest_radius, center.y),
+		Color(1.0, 0.86, 0.4, crest_strength),
+		3.0
 	)
 
 

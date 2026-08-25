@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/battle/battle_ui/trainer_command_callout.gd" id="1_callout"]
+
+[node name="TrainerCommandCallout" type="Control"]
+visible = false
+custom_minimum_size = Vector2(214, 72)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 214.0
+offset_bottom = 72.0
+mouse_filter = 2
+z_index = 90
+script = ExtResource("1_callout")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 214.0
+offset_bottom = 56.0
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 6
+mouse_filter = 2
+
+[node name="MessageLabel" type="Label" parent="Panel/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.97, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+mouse_filter = 2

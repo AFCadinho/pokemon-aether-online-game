@@ -2,10 +2,18 @@ extends RefCounted
 
 class_name Pokemon
 
+const DEFAULT_HAPPINESS := 50
+
 var species: String
+var species_id: String = ""
+var showdown_id: String = ""
+var national_dex_number: int = 0
+var nickname: String = ""
+var gender: String = ""
 var level: int
 var item: String
 var ability: String
+var hidden_ability: bool
 var nature: String
 var location: String
 var origin: Dictionary
@@ -21,6 +29,7 @@ var stats: Dictionary
 var moves: Array
 var types: Array
 var possible_abilities: Array
+var can_evolve: bool
 var tradable: bool
 var experience: int
 var current_level_exp: int
@@ -29,6 +38,10 @@ var experience_to_next_level: int
 var growth_rate: String
 var base_experience: int
 var status: String
+var happiness: int
+var special_lineage: String = ""
+var borrowed := false
+var loan: Dictionary = {}
 
 var current_hp: int
 var max_hp: int
@@ -62,12 +75,14 @@ func _init(
 	_experience_to_next_level: int = 0,
 	_growth_rate: String = "",
 	_base_experience: int = 0,
-	_status: String = ""
+	_status: String = "",
+	_happiness: int = DEFAULT_HAPPINESS
 	) -> void:
 	species = _species
 	level = _level
 	item = _item
 	ability = _ability
+	hidden_ability = false
 	nature = _nature
 	location = _location
 	origin = _normalize_origin(_origin, location)
@@ -105,6 +120,7 @@ func _init(
 	moves = _moves
 	types = _normalize_types(_types)
 	possible_abilities = _normalize_string_array(_possible_abilities)
+	can_evolve = false
 	tradable = _tradable
 	experience = max(_experience, 0)
 	current_level_exp = max(_current_level_exp, 0)
@@ -113,6 +129,7 @@ func _init(
 	growth_rate = _growth_rate.strip_edges()
 	base_experience = max(_base_experience, 0)
 	status = _normalize_status(_status)
+	happiness = clampi(_happiness, 0, 255)
 
 	max_hp = 20
 	current_hp = max_hp
@@ -131,10 +148,13 @@ func to_battle_dict() -> Dictionary:
 
 	var battle_data := {
 		"species": species,
+		"gender": gender,
 		"level": level,
 		"item": item,
 		"ability": ability,
+		"hiddenAbility": hidden_ability,
 		"nature": nature,
+		"happiness": happiness,
 		"evs": evs,
 		"storedEvs": stored_evs,
 		"ivs": ivs,
@@ -143,6 +163,7 @@ func to_battle_dict() -> Dictionary:
 		"savedMoves": _moves_to_persistence_list(),
 		"types": types,
 		"possibleAbilities": possible_abilities,
+		"canEvolve": can_evolve,
 		"instanceId": instance_id,
 		"ballItemId": ball_item_id,
 		"shiny": shiny,
@@ -151,10 +172,20 @@ func to_battle_dict() -> Dictionary:
 		"nextLevelExp": next_level_exp,
 		"experienceToNextLevel": experience_to_next_level,
 	}
+	if species_id != "":
+		battle_data["speciesId"] = species_id
+	if showdown_id != "":
+		battle_data["showdownId"] = showdown_id
+	if nickname != "":
+		battle_data["nickname"] = nickname
+		# Pokemon Showdown uses `name` for the nickname that appears in idents.
+		battle_data["name"] = nickname
 	if growth_rate != "":
 		battle_data["growthRate"] = growth_rate
 	if base_experience > 0:
 		battle_data["baseExperience"] = base_experience
+	if special_lineage != "":
+		battle_data["specialLineage"] = special_lineage
 	if owned_pokemon_id > 0:
 		battle_data["ownedPokemonId"] = owned_pokemon_id
 	if caught_ball_item_id != "":
@@ -173,6 +204,7 @@ func to_battle_state_dict(metadata_slot: int = -1) -> Dictionary:
 
 	var battle_state := {
 		"species": species,
+		"gender": gender,
 		"ownedPokemonId": owned_pokemon_id,
 		"instanceId": instance_id,
 		"currentHp": current_hp,
@@ -180,6 +212,12 @@ func to_battle_state_dict(metadata_slot: int = -1) -> Dictionary:
 		"moves": _moves_to_persistence_list(),
 		"condition": _to_battle_condition(),
 	}
+	if species_id != "":
+		battle_state["speciesId"] = species_id
+	if special_lineage != "":
+		battle_state["specialLineage"] = special_lineage
+	if nickname != "":
+		battle_state["nickname"] = nickname
 	if metadata_slot > 0:
 		battle_state["metadataSlot"] = metadata_slot
 
@@ -187,6 +225,7 @@ func to_battle_state_dict(metadata_slot: int = -1) -> Dictionary:
 
 func to_persistence_dict() -> Dictionary:
 	var pokemon_data := to_battle_dict()
+	pokemon_data.erase("name")
 	pokemon_data.erase("savedMoves")
 	pokemon_data["moves"] = _moves_to_persistence_list()
 	if owned_pokemon_id > 0:
@@ -198,6 +237,9 @@ func to_persistence_dict() -> Dictionary:
 	pokemon_data["ballItemId"] = ball_item_id
 	if caught_ball_item_id != "":
 		pokemon_data["caughtBallItemId"] = caught_ball_item_id
+	pokemon_data["borrowed"] = borrowed
+	if not loan.is_empty():
+		pokemon_data["loan"] = loan.duplicate(true)
 	pokemon_data["tradable"] = tradable
 	pokemon_data["currentHp"] = current_hp
 	pokemon_data["maxHp"] = max_hp

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/battle/battle_ui/battle_trainer_sprite.gd" id="1_trainer"]
+[ext_resource type="PackedScene" path="res://scenes/battle/trainer_command_callout.tscn" id="2_callout"]
 
 [node name="BattleTrainerSprite" type="Node2D"]
 visible = false
@@ -9,3 +10,5 @@ script = ExtResource("1_trainer")
 [node name="NpcSprite" type="AnimatedSprite2D" parent="."]
 visible = false
 texture_filter = 1
+
+[node name="TrainerCommandCallout" parent="." instance=ExtResource("2_callout")]

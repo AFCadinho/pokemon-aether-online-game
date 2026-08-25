@@ -26,7 +26,12 @@ func _check_market_popup_contract() -> void:
 	_check_true(text.contains("MarketService.purchase_standard_item(item_id, quantity)"), "UIOverlay purchases through MarketService")
 	_check_true(text.contains("MarketService.sell_standard_item(item_id, quantity)"), "UIOverlay sells through MarketService")
 	_check_true(text.contains('market_mode == "player_sells"'), "UIOverlay supports the player-sells mode")
+	_check_true(text.contains("for inventory_value: Variant in inventory_items:"), "Market buyer builds its catalog from the player's inventory")
+	_check_true(text.contains('inventory_item.get("tradable"'), "Market buyer filters inventory by server-authoritative tradeability")
+	_check_true(text.contains('inventory_item.get(\n\t\t\t"sellPrice"'), "Market buyer uses the server-authoritative item sale price")
 	_check_true(text.contains("PlayerWalletService.apply_wallet_result(result)"), "UIOverlay applies wallet updates")
+	_check_true(text.contains("_track_movement_blocking_ui_panel(panel)"), "modal UI windows block overworld movement")
+	_check_true(text.contains("_untrack_movement_blocking_ui_panel(panel)"), "closing the last modal restores overworld movement")
 	_check_true(text.contains("bag_inventory_items = _normalize_bag_inventory_items(inventory_value)"), "UIOverlay refreshes bag inventory")
 	_check_true(text.contains('"ui.market.status.not_enough_money"'), "UIOverlay localizes insufficient-money feedback")
 	_check_true(

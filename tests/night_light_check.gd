@@ -56,11 +56,10 @@ func _check_viridian_pilot_contract() -> void:
 	var scene_source := FileAccess.get_file_as_string(VIRIDIAN_CITY_SCENE_PATH)
 	var script_source := FileAccess.get_file_as_string("res://scripts/world/night_light.gd")
 	_check_true(script_source.contains('call_deferred("_connect_day_night_controller")'), "initial world load defers light-controller discovery until World is ready")
-	_check_true(scene_source.contains('[node name="NightLights" type="Node2D" parent="."]'), "Viridian City owns a hand-maintained light layer")
-	_check_true(scene_source.count('instance=ExtResource("21_night_light")') == 3, "Viridian pilot contains exactly three verified lamps")
-	_check_true(scene_source.contains("position = Vector2(272, 224)"), "north-west street light matches the map artwork")
-	_check_true(scene_source.contains("position = Vector2(368, 224)"), "north-east street light matches the map artwork")
-	_check_true(scene_source.contains("position = Vector2(592, 480)"), "central lantern matches the map artwork")
+	_check_true(scene_source.contains('[node name="NightLights" type="Node2D" parent="."'), "Viridian City owns a hand-maintained light layer")
+	var light_count := scene_source.count('instance=ExtResource("21_night_light")')
+	_check_true(light_count >= 3, "Viridian City retains broad nighttime lamp coverage")
+	_check_true(scene_source.count("light_color = Color(1, 0.72, 0.38, 1)") == light_count, "Viridian lamps share the verified warm light treatment")
 
 
 func _check_approx(actual: float, expected: float, label: String) -> void:

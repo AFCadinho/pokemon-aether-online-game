@@ -1,11 +1,11 @@
 {
   "ability-capsule": {
     "name": "Vaardigheidscapsule",
-    "shortDesc": "Schakelt een Pokemon tussen zijn twee mogelijke (niet-verborgen) vaardigheden."
+    "shortDesc": "Wisselt tussen alle ontgrendelde Abilities van een Pokémon, inclusief de Hidden Ability."
   },
   "ability-patch": {
     "name": "Mogelijkheidspatch",
-    "shortDesc": "Een patch waarmee een Pokemon met een normale vaardigheid een zeldzame vaardigheid kan hebben."
+    "shortDesc": "Ontgrendelt permanent de Hidden Ability van een Pokémon en activeert deze meteen."
   },
   "ability-shield": {
     "name": "Vaardigheidsschild",
@@ -18,6 +18,10 @@
   "absolite": {
     "name": "Absoluut",
     "shortDesc": "Vastgehouden: zorgt ervoor dat Absol kan mega-evolueren naar Mega Absol."
+  },
+  "absolite-z": {
+    "name": "Absoliet Z",
+    "shortDesc": "Als Absol dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "absorb-bulb": {
     "name": "Lamp absorberen",
@@ -97,19 +101,19 @@
   },
   "aether-blessing-voucher-14-days": {
     "name": "Aether Blessing-voucher · 14 dagen",
-    "shortDesc": "Een verhandelbare voucher die veertien dagen toevoegt aan de Aether Blessing van de ontvanger."
+    "shortDesc": "Een verhandelbare voucher voor veertien dagen Aether Blessing met ×1,05 Shiny-kans, 50% reiskorting en twee gratis Anchors."
   },
   "aether-blessing-voucher-3-days": {
     "name": "Aether Blessing-voucher · 3 dagen",
-    "shortDesc": "Een verhandelbare voucher die drie dagen toevoegt aan de Aether Blessing van de ontvanger."
+    "shortDesc": "Een verhandelbare voucher voor drie dagen Aether Blessing met ×1,05 Shiny-kans, 50% reiskorting en twee gratis Anchors."
   },
   "aether-blessing-voucher-30-days": {
     "name": "Aether Blessing-voucher · 30 dagen",
-    "shortDesc": "Een verhandelbare voucher die dertig dagen toevoegt aan de Aether Blessing van de ontvanger."
+    "shortDesc": "Een verhandelbare voucher voor dertig dagen Aether Blessing met ×1,05 Shiny-kans, 50% reiskorting en twee gratis Anchors."
   },
   "aether-blessing-voucher-7-days": {
     "name": "Aether Blessing-voucher · 7 dagen",
-    "shortDesc": "Een verhandelbare voucher die zeven dagen toevoegt aan de Aether Blessing van de ontvanger."
+    "shortDesc": "Een verhandelbare voucher voor zeven dagen Aether Blessing met ×1,05 Shiny-kans, 50% reiskorting en twee gratis Anchors."
   },
   "aether-blossom-chroma-earrings": {
     "name": "Aether Blossom Chroma Earrings",
@@ -283,6 +287,10 @@
     "name": "Banettiet",
     "shortDesc": "Vastgehouden: Hiermee kan Banette mega-evolueren naar Mega Banette."
   },
+  "barbaracite": {
+    "name": "Barbaraciet",
+    "shortDesc": "Als Barbaracle dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "basement-key": {
     "name": "Keldersleutel",
     "shortDesc": "HS: Sleutel van de tunnel onder Goldenrod City. Gen III: Sleutel tot New Mauville."
@@ -298,6 +306,10 @@
   "battle-pocket": {
     "name": "Gevechtszak",
     "shortDesc": "- - -"
+  },
+  "baxcalibrite": {
+    "name": "Baxcalibriet",
+    "shortDesc": "Als Baxcalibur dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "beach-glass": {
     "name": "Strandglas",
@@ -595,6 +607,10 @@
     "name": "Krijtachtige steen",
     "shortDesc": "Een kleine witachtige steen opgepikt aan de rand van de weg."
   },
+  "chandelurite": {
+    "name": "Chandeluriet",
+    "shortDesc": "Als Chandelure dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "charcoal": {
     "name": "Houtskool",
     "shortDesc": "Vastgehouden: aanvallen van het type Vuur van de houder veroorzaken 20% meer schade."
@@ -627,6 +643,10 @@
     "name": "Koester de bal",
     "shortDesc": "Probeert een wilde Pokemon te vangen."
   },
+  "chesnaughtite": {
+    "name": "Chesnaughtiet",
+    "shortDesc": "Als Chesnaught dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "chesto-berry": {
     "name": "Chesto-bes",
     "shortDesc": "Vastgehouden: geconsumeerd tijdens de slaap om de slaap te genezen."
@@ -638,6 +658,10 @@
   "chill-drive": {
     "name": "Chill-aandrijving",
     "shortDesc": "Geeft Genesect een witte, Ice-type Techno Blast."
+  },
+  "chimechite": {
+    "name": "Chimechiet",
+    "shortDesc": "Als Chimecho dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "chipped-pot": {
     "name": "Gechipte pot",
@@ -674,6 +698,10 @@
   "clear-bell": {
     "name": "Duidelijke bel",
     "shortDesc": "HS: Hiermee kunnen Kimono-meisjes Ho-oh oproepen. C: Roept Suicune op naar de Tin Tower."
+  },
+  "clefablite": {
+    "name": "Clefabliet",
+    "shortDesc": "Als Clefable dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "clever-wing": {
     "name": "Slimme veren",
@@ -767,6 +795,10 @@
     "name": "Verborgen mantel",
     "shortDesc": "De houder wordt niet beïnvloed door het secundaire effect van de aanval van een andere Pokemon. Aanvallen met secundaire effecten die worden voorkomen, zijn onder meer aanvallen met een kans (zelfs 100%) om te verlammen, slapen, bevriezen, verbranden, vergiftigen, verwarren, de houder doen terugdeinzen, ervoor zorgen dat de statusniveaus van de houder worden verlaagd, evenals Anchor Shot, Eerie Spell, Fling, Psychic Noise, Salt Cure, Spirit Shackle, Syrup Bomb en Throat Chop. Het effect van Sparkling Aria wordt voorkomen als de houder het enige doelwit is. Secundaire effecten toegevoegd door King's Rock, Razor Fang en de Poison Touch, Stench en Toxic Chain Abilities worden ook voorkomen tegen de houder."
   },
+  "crabominite": {
+    "name": "Crabominiet",
+    "shortDesc": "Als Crabominable dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "cracked-pot": {
     "name": "Gebarsten pot",
     "shortDesc": "Een bijzondere theepot die een bepaalde soort Pokemon kan laten evolueren. Het is misschien gebarsten, maar de thee die eruit wordt gegoten is heerlijk."
@@ -811,6 +843,10 @@
     "name": "Darkinium Z",
     "shortDesc": "Vastgehouden: Hiermee kan een Pokemon de Z-zet-equivalenten van zijn duistere bewegingen gebruiken."
   },
+  "darkranite": {
+    "name": "Darkraniet",
+    "shortDesc": "Als Darkrai dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "dawn-stone": {
     "name": "Dageraadsteen",
     "shortDesc": "Evolueert een mannelijke Kirlia in Gallade of een vrouwelijke Snorunt in Froslass."
@@ -834,6 +870,10 @@
   "defog-charm": {
     "name": "Defog Charm",
     "shortDesc": "Hiermee kun je Defog gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "delphoxite": {
+    "name": "Delphoxiet",
+    "shortDesc": "Als Delphox dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "destiny-knot": {
     "name": "Bestemmingsknoop",
@@ -903,6 +943,10 @@
     "name": "Draco-plaat",
     "shortDesc": "Vastgehouden: aanvallen van het drakentype van de houder veroorzaken 20% meer schade. Verandert het type Arceuss en Judgments in Dragon."
   },
+  "dragalgite": {
+    "name": "Dragalgiet",
+    "shortDesc": "Als Dragalge dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "dragon-fang": {
     "name": "Drakentand",
     "shortDesc": "Vastgehouden: aanvallen van het drakentype van de houder veroorzaken 20% meer schade."
@@ -923,6 +967,10 @@
     "name": "Drakenschedel",
     "shortDesc": "Keer terug naar het museum in Nacrene City."
   },
+  "dragoninite": {
+    "name": "Dragoniniet",
+    "shortDesc": "Als Dragonite dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "dragonium-z--bag": {
     "name": "Dragonium Z",
     "shortDesc": "XXX nieuw effect voor dragonium-z--bag"
@@ -930,6 +978,10 @@
   "dragonium-z--held": {
     "name": "Dragonium Z",
     "shortDesc": "Vastgehouden: Hiermee kan een Pokemon de Z-zet-equivalenten van zijn Dragon-bewegingen gebruiken."
+  },
+  "drampanite": {
+    "name": "Drampaniet",
+    "shortDesc": "Als Drampa dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "dread-plate": {
     "name": "Dreadplaat",
@@ -983,6 +1035,10 @@
     "name": "Aardplaat",
     "shortDesc": "Vastgehouden: grondtypebewegingen van de houder veroorzaken 20% meer schade. Verandert het type Arceuss en Judgments in Ground."
   },
+  "eelektrossite": {
+    "name": "Eelektrossiet",
+    "shortDesc": "Als Eelektross dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "eevium-z--bag": {
     "name": "Eevium Z",
     "shortDesc": "XXX nieuw effect voor eevium-z--bag"
@@ -1031,6 +1087,10 @@
     "name": "Elixer",
     "shortDesc": "Herstelt 10 PP voor elke zet."
   },
+  "emboarite": {
+    "name": "Emboariet",
+    "shortDesc": "Als Emboar dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "endorsement": {
     "name": "Goedkeuring",
     "shortDesc": "Een aanbevelingsbrief die je nodig hebt om deel te nemen aan de Gym Challenge."
@@ -1078,6 +1138,10 @@
   "eviolite": {
     "name": "Evioliet",
     "shortDesc": "Vastgehouden: Holder heeft 1,5 Defensie en Speciale Defensie, zolang deze nog niet volledig ontwikkeld zijn."
+  },
+  "excadrite": {
+    "name": "Excadriet",
+    "shortDesc": "Als Excadrill dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "exp-candy-l": {
     "name": "Verl. Snoep L",
@@ -1135,6 +1199,10 @@
     "name": "Feeherinnering",
     "shortDesc": "Vastgehouden: verandert Silvally in zijn Fairy-vorm. Verandert het type Multi-Aanvallen in Fee."
   },
+  "falinksite": {
+    "name": "Falinksiet",
+    "shortDesc": "Als Falinks dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "fame-checker": {
     "name": "Famechecker",
     "shortDesc": "Registreert informatie over NPC's."
@@ -1150,6 +1218,10 @@
   "fast-ball": {
     "name": "Snelle bal",
     "shortDesc": "4 effectiviteit op Pokemon met een basissnelheid van 100 of hoger. (Gen II: zwervende of vluchtende Pokemon). Gemaakt van witte abrikoos."
+  },
+  "feraligite": {
+    "name": "Feraligiet",
+    "shortDesc": "Als Feraligatr dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "festival-ticket": {
     "name": "Festivalticket",
@@ -1223,6 +1295,10 @@
     "name": "Zwevende steen",
     "shortDesc": "Vastgehouden: houder heeft 0,5 gewicht."
   },
+  "floettite": {
+    "name": "Floettiet",
+    "shortDesc": "Als Floette met de Eeuwige Bloem dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "flower-sweet": {
     "name": "Bloem zoet",
     "shortDesc": "Een bloemvormig snoepje. Als een Milcery dit vasthoudt, draait hij vrolijk rond."
@@ -1291,6 +1367,10 @@
     "name": "Vriendenbal",
     "shortDesc": "Gevangen Pokemon beginnen met 200 geluk. Gemaakt van Grn Apricorn."
   },
+  "froslassite": {
+    "name": "Froslassiet",
+    "shortDesc": "Als Froslass dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "fruit-bunch": {
     "name": "Fruitbos",
     "shortDesc": "Een van de vele ingrediënten die je kunt gebruiken bij het koken op je kamp. De stroperige vruchten geven een sterk tropisch gevoel."
@@ -1334,6 +1414,10 @@
   "garchompite": {
     "name": "Garchompiet",
     "shortDesc": "Vastgehouden: zorgt ervoor dat Garchomp kan mega-evolueren naar Mega Garchomp."
+  },
+  "garchompite-z": {
+    "name": "Garchompiet Z",
+    "shortDesc": "Als Garchomp dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "gardevoirite": {
     "name": "Gardevoiriet",
@@ -1383,6 +1467,10 @@
     "name": "Glalietiet",
     "shortDesc": "Vastgehouden: Hiermee kan Glalie mega-evolueren naar Mega Glalie."
   },
+  "glimmoranite": {
+    "name": "Glimmoraniet",
+    "shortDesc": "Als Glimmora dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "go-goggles": {
     "name": "Go-bril",
     "shortDesc": "Maakt doorgang door winderige woestijnen mogelijk."
@@ -1402,6 +1490,14 @@
   "gold-teeth": {
     "name": "Gouden tanden",
     "shortDesc": "Het kunstgebit van Safari Zone Wardens. Ruil voor HM04 (Kracht)."
+  },
+  "golisopite": {
+    "name": "Golisopiet",
+    "shortDesc": "Als Golisopod dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
+  "golurkite": {
+    "name": "Golurkiet",
+    "shortDesc": "Als Golurk dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "good-rod": {
     "name": "Good Rod",
@@ -1467,6 +1563,10 @@
     "name": "Groene scherf",
     "shortDesc": "Geen effect. Kan worden geruild voor items of bewegingen."
   },
+  "greninjite": {
+    "name": "Greninjiet",
+    "shortDesc": "Als Greninja dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "grepa-berry": {
     "name": "Grepabes",
     "shortDesc": "Verlaagt de waarden voor speciale verdedigingsinspanningen met 10 en verhoogt het geluk."
@@ -1527,6 +1627,10 @@
     "name": "Haastige munt",
     "shortDesc": "Wanneer een Pokemon deze munt ruikt, zal zijn snelheid gemakkelijker groeien, maar zijn verdediging zal langzamer groeien."
   },
+  "hawluchanite": {
+    "name": "Hawluchaniet",
+    "shortDesc": "Als Hawlucha dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "heal-ball": {
     "name": "Genees de bal",
     "shortDesc": "Probeert een wilde Pokemon te vangen. Gevangen Pokemon worden onmiddellijk genezen."
@@ -1562,6 +1666,10 @@
   "heat-rock": {
     "name": "Hittesteen",
     "shortDesc": "Gehouden: Sunny Day door de houder duurt 8 ronden in plaats van 5."
+  },
+  "heatranite": {
+    "name": "Heatraniet",
+    "shortDesc": "Als Heatran dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "heavy-ball": {
     "name": "Zware bal",
@@ -1979,6 +2087,10 @@
     "name": "Lucarioniet",
     "shortDesc": "Vastgehouden: Hiermee kan Lucario mega-evolueren naar Mega Lucario."
   },
+  "lucarionite-z": {
+    "name": "Lucarioniet Z",
+    "shortDesc": "Als Lucario dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "luck-incense": {
     "name": "Gelukswierook",
     "shortDesc": "Vastgehouden: verdubbelt het geld dat je verdient met een gevecht. Kan niet worden gestapeld met Amulet Coin. Kweken: Chansey en Blissey krijgen een Happiny Egg."
@@ -2055,6 +2167,10 @@
     "name": "Macho-beugel",
     "shortDesc": "Vastgehouden: Holder krijgt dubbele inspanningswaarden uit gevechten, maar heeft de snelheid in gevechten gehalveerd."
   },
+  "magearnite": {
+    "name": "Magearniet",
+    "shortDesc": "Als Magearna dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "magma-emblem": {
     "name": "Magma-embleem",
     "shortDesc": "Biedt toegang tot de Team Magma-schuilplaats in de Jagged Pass."
@@ -2086,6 +2202,10 @@
   "makeup-bag": {
     "name": "Make-uptasje",
     "shortDesc": "Hiermee kan de speler de kleur van zijn lippenstift veranderen."
+  },
+  "malamarite": {
+    "name": "Malamariet",
+    "shortDesc": "Als Malamar dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "malicious-armor": {
     "name": "Kwaadaardig pantser",
@@ -2219,6 +2339,10 @@
     "name": "Megatiara",
     "shortDesc": "Ongebruikte NPC-sleutelsteen."
   },
+  "meganiumite": {
+    "name": "Meganiumiet",
+    "shortDesc": "Als Meganium dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "member-card": {
     "name": "Ledenkaart",
     "shortDesc": "Geeft toegang tot Newmoon Island en Darkrai."
@@ -2226,6 +2350,10 @@
   "mental-herb": {
     "name": "Geestelijk kruid",
     "shortDesc": "Gehouden: gebruikt om verliefdheid te genezen. Gen V: Verwijdert ook Taunt, Encore, Torment, Disable en Cursed Body."
+  },
+  "meowsticite": {
+    "name": "Meowsticiet",
+    "shortDesc": "Als Meowstic dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "metagrossite": {
     "name": "Metagrossite",
@@ -2362,6 +2490,26 @@
   "muscle-wing": {
     "name": "Spierveer",
     "shortDesc": "Verhoogt de aanvalsinspanning met 1."
+  },
+  "mysterious-mask": {
+    "name": "Mysterieus masker",
+    "shortDesc": "Verplaats het Mysterieuze masker naar Personage aanpassen."
+  },
+  "mysterious-outfit": {
+    "name": "Mysterieuze-outfitdoos",
+    "shortDesc": "Open deze outfitdoos om vier losse cosmetische items van de Mysterieuze outfit te ontvangen."
+  },
+  "mysterious-shirt": {
+    "name": "Mysterieus shirt",
+    "shortDesc": "Verplaats het Mysterieuze shirt met handschoenen naar Personage aanpassen."
+  },
+  "mysterious-shoes": {
+    "name": "Mysterieuze schoenen",
+    "shortDesc": "Verplaats de Mysterieuze schoenen naar Personage aanpassen."
+  },
+  "mysterious-trousers": {
+    "name": "Mysterieuze broek",
+    "shortDesc": "Verplaats de Mysterieuze broek naar Personage aanpassen."
   },
   "mystery-egg": {
     "name": "Mysterie-ei",
@@ -2691,10 +2839,6 @@
     "name": "Poke-speeltje",
     "shortDesc": "Beëindigt een wild gevecht."
   },
-  "pokedex": {
-    "name": "Pokédex",
-    "shortDesc": "Registreert informatie over Pokémon die je tegenkomt."
-  },
   "pokeblock-case": {
     "name": "Pokeblock-koffer",
     "shortDesc": "Bevat Pokeblocks."
@@ -2702,6 +2846,10 @@
   "pokeblock-kit": {
     "name": "Pokeblock-set",
     "shortDesc": "Creëert en bewaart Pokeblocks."
+  },
+  "pokedex": {
+    "name": "Pokédex",
+    "shortDesc": "Registreert informatie over Pokémon die je tegenkomt."
   },
   "pokemon-box": {
     "name": "Pokemon Box-link",
@@ -2863,6 +3011,10 @@
     "name": "Paars bloemblaadje",
     "shortDesc": "XXX nieuw effect voor paars bloemblaadje"
   },
+  "pyroarite": {
+    "name": "Pyroariet",
+    "shortDesc": "Als Pyroar dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "qualot-berry": {
     "name": "Qualot-bes",
     "shortDesc": "Verlaagt de verdedigingsinspanningswaarden met 10 en verhoogt het geluk."
@@ -2906,6 +3058,14 @@
   "rage-candy-bar": {
     "name": "Rage-snoepreep",
     "shortDesc": "HS: Geruild voor TM64. Gen II en Gen V: fungeert als een drankje."
+  },
+  "raichunite-x": {
+    "name": "Raichuniet X",
+    "shortDesc": "Als Raichu dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
+  "raichunite-y": {
+    "name": "Raichuniet Y",
+    "shortDesc": "Als Raichu dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "rain-dance-charm": {
     "name": "Rain Dance Charm",
@@ -3295,9 +3455,21 @@
     "name": "Scizoriet",
     "shortDesc": "Vastgehouden: Hiermee kan Scizor mega-evolueren naar Mega Scizor."
   },
+  "scolipite": {
+    "name": "Scolipiet",
+    "shortDesc": "Als Scolipede dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "scope-lens": {
     "name": "Scopelens",
     "shortDesc": "Vastgehouden: verhoogt de kritische trefferratio van de houder met één niveau."
+  },
+  "scovillainite": {
+    "name": "Scovillainiet",
+    "shortDesc": "Als Scovillain dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
+  "scraftinite": {
+    "name": "Scraftiniet",
+    "shortDesc": "Als Scrafty dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "sea-incense": {
     "name": "Zeewierook",
@@ -3353,11 +3525,15 @@
   },
   "shiny-charm": {
     "name": "Glanzende bedel",
-    "shortDesc": "Vergroot de kans op het vinden van een glanzende Pokemon."
+    "shortDesc": "Gebruik om de Shiny-kans 7 dagen lang met 10% te verhogen."
   },
   "shiny-stone": {
     "name": "Glanzende steen",
     "shortDesc": "Evolueert een Minccino in Cinccino, een Roselia in Roserade, of een Togetic in Togekiss."
+  },
+  "shiny-tracker": {
+    "name": "Shiny Tracker",
+    "shortDesc": "Open je Shiny hunts en encounterstatistieken."
   },
   "shoal-salt": {
     "name": "Ondieptezout",
@@ -3398,6 +3574,10 @@
   "sitrus-berry": {
     "name": "Sitrusbes",
     "shortDesc": "Vastgehouden: verbruikt op 1/2 max. HP om 1/4 max. HP te herstellen."
+  },
+  "skarmorite": {
+    "name": "Skarmoriet",
+    "shortDesc": "Als Skarmory dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "skull-fossil": {
     "name": "Schedelfossiel",
@@ -3559,6 +3739,10 @@
     "name": "Ster lief",
     "shortDesc": "Een stervormig snoepje. Als een Milcery dit vasthoudt, draait hij vrolijk rond."
   },
+  "staraptite": {
+    "name": "Staraptiet",
+    "shortDesc": "Als Staraptor dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "stardust": {
     "name": "Sterrenstof",
     "shortDesc": "Kan voor geld worden verkocht."
@@ -3566,6 +3750,10 @@
   "starf-berry": {
     "name": "Sterbes",
     "shortDesc": "Vastgehouden: verbruikt met 1/4 max. HP om een ​​willekeurige statistiek met twee niveaus te verhogen."
+  },
+  "starminite": {
+    "name": "Starminiet",
+    "shortDesc": "Als Starmie dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "steel-gem": {
     "name": "Stalen edelsteen",
@@ -3718,6 +3906,10 @@
   "tart-apple": {
     "name": "Taartappel",
     "shortDesc": "Een bijzondere appel die een bepaalde soort Pokemon kan laten evolueren. Het is uitzonderlijk scherp."
+  },
+  "tatsugirinite": {
+    "name": "Tatsugiriniet",
+    "shortDesc": "Als Tatsugiri dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
   "tea": {
     "name": "Thee",
@@ -5379,6 +5571,10 @@
     "name": "Venusauriet",
     "shortDesc": "Vastgehouden: Hiermee kan Venusaur mega-evolueren naar Mega Venusaur."
   },
+  "victreebelite": {
+    "name": "Victreebeliet",
+    "shortDesc": "Als Victreebel dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "vs-recorder": {
     "name": "Vs. Recorder",
     "shortDesc": "Neemt draadloze, Wi-Fi- of Battle Frontier-gevechten op en slaat punten op."
@@ -5571,6 +5767,10 @@
     "name": "Zapplaat",
     "shortDesc": "Vastgehouden: elektrische bewegingen van de houder veroorzaken 20% meer schade. Verandert het type Arceuss en Judgments in Elektrisch."
   },
+  "zeraorite": {
+    "name": "Zeraoriet",
+    "shortDesc": "Als Zeraora dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
+  },
   "zinc": {
     "name": "Zink",
     "shortDesc": "Verhoogt speciale verdediging en geluk."
@@ -5582,5 +5782,9 @@
   "zygarde-cube": {
     "name": "Zygarde-kubus",
     "shortDesc": "Bevat verzamelde Zygarde-cellen/kernen. Kan Zygarde-bewegingen leren."
+  },
+  "zygardite": {
+    "name": "Zygardiet",
+    "shortDesc": "Als Zygarde dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   }
 }

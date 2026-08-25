@@ -37,8 +37,8 @@ func get_location_metadata() -> Dictionary:
 	}
 
 
-func get_music_track_path() -> String:
-	return str(map_data.get("music_track_path")) if map_data != null else ""
+func get_music_track_id() -> String:
+	return str(map_data.get("music_track_id")) if map_data != null else ""
 
 
 func get_wild_encounter_area_id() -> String:

@@ -1,0 +1,138 @@
+[gd_scene format=4 uid="uid://c518t3j64b286"]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/viridian_house_template/viridian_house_template.visual.tscn" id="1_bmpmk"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="2_map_exit"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="3_map_meta"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="4_8nq3v"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="5_floor_mask"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="6_dialogue_npc"]
+[ext_resource type="SpriteFrames" uid="uid://yluab5wp1usc" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="7_poke_fan_m"]
+[ext_resource type="SpriteFrames" uid="uid://b8fh81or510qb" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="8_school_kid_m"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="9_transition_hint"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_house_exit"]
+size = Vector2(96, 32)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7jdf6"]
+texture = ExtResource("4_8nq3v")
+texture_region_size = Vector2i(32, 32)
+1:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+1:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_rxawo"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_7jdf6")
+
+[node name="House1" type="Node2D" unique_id=992766721]
+script = ExtResource("3_map_meta")
+map_id = "kanto_viridian_city_house_1"
+map_region_name = "Kanto"
+map_display_name = "Viridian City House 1"
+world_access_group_id = "kanto_viridian_city"
+world_access_group_label = "Viridian City"
+world_access_area_type = "interior"
+location_id = "kanto.viridian_city.house_1"
+location_name = "Viridian City House 1"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_profile_id = "kanto.viridian_city"
+
+[node name="ViridianHouseTemplate" parent="." unique_id=455492845 instance=ExtResource("1_bmpmk")]
+
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1048238413]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("5_floor_mask")
+floor_regions = {
+&"ground_floor": Rect2(96, 160, 448, 384)
+}
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=349465452]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1654235108]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=2061235239]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1151018465]
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="PokeFanRowan" parent="Entities/NPCs" instance=ExtResource("6_dialogue_npc")]
+position = Vector2(272, 336)
+npc_id = "kanto_viridian_city_house_1_poke_fan_rowan"
+npc_definition_id = "trainer_class_poke_fan_m"
+display_name = "Poke Fan Rowan"
+npc_sprite_frames = ExtResource("7_poke_fan_m")
+
+[node name="SchoolKidSam" parent="Entities/NPCs" instance=ExtResource("6_dialogue_npc")]
+position = Vector2(400, 368)
+npc_id = "kanto_viridian_city_house_1_school_kid_sam"
+npc_definition_id = "trainer_class_school_kid_m"
+display_name = "School Kid Sam"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("8_school_kid_m")
+
+[node name="Spawns" type="Node2D" parent="." unique_id=710550243]
+
+[node name="FromViridianCity" type="Marker2D" parent="Spawns" unique_id=1797584352]
+position = Vector2(304, 464)
+
+[node name="Exits" type="Node2D" parent="." unique_id=417336261]
+
+[node name="ToViridianCity" type="Area2D" parent="Exits" unique_id=1139229615]
+position = Vector2(320, 480)
+script = ExtResource("2_map_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
+target_spawn_name = "FromHouse1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToViridianCity" unique_id=664444253]
+position = Vector2(-16, 16)
+shape = SubResource("RectangleShape2D_house_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToViridianCity" instance=ExtResource("9_transition_hint")]
+position = Vector2(-16, 16)
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1448815856]
+visible = false
+z_index = 100
+tile_map_data = PackedByteArray("AAAFAA8AAAABAAEAAAAGAA8AAAABAAEAAAAHAA8AAAABAAEAAAAHABAAAAABAAEAAAAIABAAAAABAAEAAAAJABAAAAABAAEAAAAKABAAAAABAAEAAAALABAAAAABAAEAAAALAA8AAAABAAEAAAAMAA8AAAABAAEAAAANAA8AAAABAAEAAAAOAA8AAAABAAEAAAAOAA4AAAABAAEAAAAPAA4AAAABAAEAAAAPAAYAAAABAAEAAAAPAAcAAAABAAEAAAAPAAgAAAABAAEAAAAPAAkAAAABAAEAAAAPAAoAAAABAAEAAAAPAAsAAAABAAEAAAAPAAwAAAABAAEAAAAPAA0AAAABAAEAAAAOAAUAAAABAAEAAAAOAAYAAAABAAEAAAAFAAUAAAABAAEAAAAGAAUAAAABAAEAAAAHAAUAAAABAAEAAAAIAAUAAAABAAEAAAAJAAUAAAABAAEAAAAKAAUAAAABAAEAAAALAAUAAAABAAEAAAAMAAUAAAABAAEAAAANAAUAAAABAAEAAAAEAAUAAAABAAEAAAAEAAYAAAABAAEAAAADAAYAAAABAAEAAAADAAcAAAABAAEAAAADAAgAAAABAAEAAAADAAkAAAABAAEAAAADAAoAAAABAAEAAAADAAsAAAABAAEAAAADAAwAAAABAAEAAAADAA0AAAABAAEAAAADAA4AAAABAAEAAAAEAA4AAAABAAEAAAAEAA8AAAABAAEAAAAEAA0AAAABAAEAAAAFAA0AAAABAAEAAAAGAA0AAAABAAEAAAAHAA0AAAABAAEAAAAFAAsAAAABAAEAAAAFAAwAAAABAAEAAAAGAAsAAAABAAEAAAAGAAwAAAABAAEAAAAHAAsAAAABAAEAAAAHAAwAAAABAAEAAAALAA4AAAABAAEAAAAMAA4AAAABAAEAAAANAA4AAAABAAEAAAAOAA0AAAABAAEAAAAOAAwAAAABAAEAAAAOAAkAAAABAAEAAAAOAAoAAAABAAEAAAAOAAsAAAABAAEAAAAOAAcAAAABAAEAAAAOAAgAAAABAAEAAAALAAYAAAABAAEAAAALAAcAAAABAAEAAAALAAgAAAABAAEAAAAMAAYAAAABAAEAAAAMAAcAAAABAAEAAAAMAAgAAAABAAEAAAANAAYAAAABAAEAAAANAAcAAAABAAEAAAANAAgAAAABAAEAAAAKAAkAAAABAAEAAAAKAAoAAAABAAEAAAAJAAYAAAABAAEAAAAJAAcAAAABAAEAAAAJAAgAAAABAAEAAAAKAAYAAAABAAEAAAAKAAcAAAABAAEAAAAKAAgAAAABAAEAAAAFAAYAAAABAAEAAAAFAAcAAAABAAEAAAAGAAYAAAABAAEAAAAGAAcAAAABAAEAAAAHAAYAAAABAAEAAAAHAAcAAAABAAEAAAAIAAYAAAABAAEAAAAIAAcAAAABAAEAAAAEAAcAAAABAAEAAAAEAAgAAAABAAEAAAAEAAkAAAABAAEAAAAFAAkAAAABAAEAAAAGAAkAAAABAAEAAAAHAAkAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_rxawo")
+
+[connection signal="body_entered" from="Exits/ToViridianCity" to="Exits/ToViridianCity" method="_on_body_entered"]

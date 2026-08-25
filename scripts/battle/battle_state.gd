@@ -2,6 +2,7 @@ extends RefCounted
 
 class_name BattleState
 
+const CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const DEBUG_PAO_BATTLE_IDENTITY := false
 const DEBUG_PREFIX := "[PAO Battle Identity Debug]"
 
@@ -15,6 +16,7 @@ var field: Dictionary = {}
 var hp_event_helper := BattleHpEventHelper.new()
 var transformed_species_by_ident: Dictionary = {}
 var mega_species_by_ident: Dictionary = {}
+var battle_bond_cosmetic_species_by_ident: Dictionary = {}
 var hp_snapshot_by_ident: Dictionary = {}
 var skip_previous_hp_memory_once := false
 var timer_state: Dictionary = {}
@@ -22,6 +24,13 @@ var operational_state: Dictionary = {}
 var decisions: Dictionary = {}
 var timer_contract_version := 0
 var battle_event_seq := 0
+var visibility_contract_version := 0
+var snapshot_fingerprint := ""
+var event_seq := -1
+var batch_seq := -1
+var mechanical_revision := -1
+var aggregate_revision := -1
+var calcdex_battle_event_seq := -2
 
 
 static func get_mimikyu_disguise_state_for_species(species: String) -> String:
@@ -51,8 +60,10 @@ func load_from_api_response(
 	if battle_changed:
 		transformed_species_by_ident.clear()
 		mega_species_by_ident.clear()
+		battle_bond_cosmetic_species_by_ident.clear()
 		hp_snapshot_by_ident.clear()
 		field.clear()
+		_reset_calcdex_projection_revision()
 
 	battle_id = next_battle_id
 	format_id = str(response.get("formatId", ""))
@@ -103,17 +114,57 @@ func load_from_api_response(
 			operational_state = (next_operational_state as Dictionary).duplicate(true)
 	decisions = (response.get("decisions", {}) as Dictionary).duplicate(true) if response.get("decisions", {}) is Dictionary else {}
 	battle_event_seq = max(battle_event_seq, int(response.get("battleEventSeq", 0)))
+	_update_calcdex_projection_revision(response)
 	if apply_event_conditions:
 		_apply_mega_species_to_requests()
 		_apply_transformed_species_to_requests()
+		_apply_battle_bond_cosmetic_species_to_requests()
 		_apply_event_conditions_to_requests(response_events)
 	else:
 		_apply_mega_species_to_requests()
+		_apply_battle_bond_cosmetic_species_to_requests()
 		_remove_deferred_display_fields_from_requests(response_events, deferred_form_species_by_player)
 		_rewind_deferred_hp_events_from_requests(response_events)
 	_remember_hp_fields_from_requests(requests)
 	if DEBUG_PAO_BATTLE_IDENTITY:
 		_debug_print_requests_snapshot("load_from_api_response final state")
+
+func get_calcdex_projection_revision() -> Dictionary:
+	var revision := {
+		"visibilityContractVersion": visibility_contract_version,
+		"snapshotFingerprint": snapshot_fingerprint,
+		"eventSeq": event_seq,
+		"batchSeq": batch_seq,
+		"mechanicalRevision": mechanical_revision,
+		"aggregateRevision": aggregate_revision,
+		"battleEventSeq": calcdex_battle_event_seq,
+	}
+	return revision if CALCDEX_SNAPSHOT.is_valid_projection_revision(revision) else {}
+
+func _update_calcdex_projection_revision(response: Dictionary) -> void:
+	var required_fields := [
+		"visibilityContractVersion", "snapshotFingerprint", "eventSeq", "batchSeq",
+		"mechanicalRevision", "aggregateRevision", "battleEventSeq",
+	]
+	for field_name: String in required_fields:
+		if not response.has(field_name):
+			return
+	visibility_contract_version = int(response.get("visibilityContractVersion"))
+	snapshot_fingerprint = str(response.get("snapshotFingerprint", ""))
+	event_seq = int(response.get("eventSeq"))
+	batch_seq = int(response.get("batchSeq"))
+	mechanical_revision = int(response.get("mechanicalRevision"))
+	aggregate_revision = int(response.get("aggregateRevision"))
+	calcdex_battle_event_seq = int(response.get("battleEventSeq"))
+
+func _reset_calcdex_projection_revision() -> void:
+	visibility_contract_version = 0
+	snapshot_fingerprint = ""
+	event_seq = -1
+	batch_seq = -1
+	mechanical_revision = -1
+	aggregate_revision = -1
+	calcdex_battle_event_seq = -2
 
 func _get_response_events_after_cursor(response: Dictionary, since_event_seq: int) -> Array:
 	var events_value: Variant = response.get("events", [])
@@ -173,6 +224,7 @@ func reset_side_relative_presentation_memory() -> void:
 	hp_snapshot_by_ident.clear()
 	transformed_species_by_ident.clear()
 	mega_species_by_ident.clear()
+	battle_bond_cosmetic_species_by_ident.clear()
 	skip_previous_hp_memory_once = true
 
 func _preserve_missing_hp_fields_in_requests(next_requests: Dictionary) -> void:
@@ -473,6 +525,7 @@ func _normalize_public_species_base_key(species: String) -> String:
 	for suffix in [
 		"-alola", "-galar", "-hisui", "-paldea",
 		"-therian", "-incarnate", "-origin", "-altered",
+		"-terastal",
 		"-wash", "-heat", "-frost", "-fan", "-mow",
 		"-sky", "-land", "-blade", "-shield",
 		"-disguised", "-busted",
@@ -531,6 +584,7 @@ func _apply_event_conditions_to_requests(events_value: Variant, allow_historical
 		var event: Dictionary = event_value as Dictionary
 		var event_type := str(event.get("type", ""))
 		if event_type == "switch" or event_type == "drag":
+			_clear_battle_bond_cosmetic_for_ident(str(event.get("fromIdent", "")))
 			_apply_switch_event_to_requests(event, allow_historical_switch_to_fainted)
 			_clear_transform_event_from_requests(event)
 			continue
@@ -543,12 +597,21 @@ func _apply_event_conditions_to_requests(events_value: Variant, allow_historical
 			_apply_forme_change_event_to_requests(event)
 			continue
 
+		if event_type == "ability":
+			_apply_ability_event_to_requests(event)
+			continue
+
+		if event_type == "pokemonEffect":
+			_apply_pokemon_effect_event_to_requests(event)
+			continue
+
 		if event_type == "mega" or event_type == "primal":
 			_apply_mega_event_to_requests(event)
 			continue
 
 		if event_type == "faint":
 			_clear_transformed_species_for_ident(str(event.get("target", "")))
+			_clear_battle_bond_cosmetic_for_ident(str(event.get("target", "")))
 
 		if event_type == "status":
 			_apply_status_event_to_requests(event)
@@ -652,11 +715,14 @@ func _apply_switch_event_to_requests(event: Dictionary, allow_historical_switch_
 		var event_details := str(event.get("details", "")).strip_edges()
 		if event_details != "":
 			pokemon_data["details"] = event_details
+		var event_level := _get_switch_event_level(event)
+		if event_level > 0:
+			pokemon_data["level"] = event_level
 		if event.has("shiny"):
 			pokemon_data["shiny"] = bool(event.get("shiny", false))
 		elif event_details.to_lower().contains(", shiny"):
 			pokemon_data["shiny"] = true
-		for public_field in ["gender", "level"]:
+		for public_field in ["gender"]:
 			if event.has(public_field):
 				pokemon_data[public_field] = event.get(public_field)
 		if condition == "":
@@ -679,6 +745,45 @@ func _apply_switch_event_to_requests(event: Dictionary, allow_historical_switch_
 			"targetIndex": target_index,
 			"teamAfter": _debug_summarize_team(team),
 		})
+
+func _get_switch_event_level(event: Dictionary) -> int:
+	var direct_level := _parse_public_pokemon_level(event.get("level", null))
+	if direct_level > 0:
+		return direct_level
+
+	for ref_key in ["toRef", "to_ref", "targetRef", "target_ref"]:
+		var ref_value: Variant = event.get(ref_key, {})
+		if not (ref_value is Dictionary):
+			continue
+		var ref_level := _parse_public_pokemon_level((ref_value as Dictionary).get("level", null))
+		if ref_level > 0:
+			return ref_level
+
+	var details := str(event.get("details", "")).strip_edges()
+	for detail_value: String in details.split(","):
+		var detail := detail_value.strip_edges()
+		if detail.length() < 2 or detail.substr(0, 1).to_upper() != "L":
+			continue
+		var details_level := _parse_public_pokemon_level(detail.substr(1))
+		if details_level > 0:
+			return details_level
+
+	return -1
+
+func _parse_public_pokemon_level(value: Variant) -> int:
+	var parsed_level := -1
+	if value is int:
+		parsed_level = int(value)
+	elif value is float:
+		var float_level := float(value)
+		if is_finite(float_level) and float_level == floor(float_level):
+			parsed_level = int(float_level)
+	elif value is String:
+		var text := str(value).strip_edges()
+		if text.is_valid_int():
+			parsed_level = text.to_int()
+
+	return parsed_level if parsed_level >= 1 and parsed_level <= 100 else -1
 
 func _get_switch_event_ident(event: Dictionary) -> String:
 	for key in ["toIdent", "target", "pokemon", "ident"]:
@@ -906,6 +1011,18 @@ func _apply_forme_change_event_to_requests(event: Dictionary) -> void:
 	if target_ident == "" or species == "":
 		return
 
+	if bool(event.get("cosmeticOnly", event.get("cosmetic_only", false))):
+		var cosmetic_key := _get_transform_key_from_ident(target_ident)
+		if cosmetic_key != "":
+			battle_bond_cosmetic_species_by_ident[cosmetic_key] = species
+		var cosmetic_pokemon := _get_side_pokemon_by_ident(target_ident)
+		if cosmetic_pokemon.is_empty():
+			cosmetic_pokemon = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
+		if not cosmetic_pokemon.is_empty():
+			cosmetic_pokemon["cosmeticDisplaySpecies"] = species
+			cosmetic_pokemon["battleBondCosmeticActive"] = true
+		return
+
 	var pokemon_data: Dictionary = _get_side_pokemon_by_ident(target_ident)
 	if pokemon_data.is_empty():
 		pokemon_data = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
@@ -913,6 +1030,42 @@ func _apply_forme_change_event_to_requests(event: Dictionary) -> void:
 		return
 
 	pokemon_data["displaySpecies"] = species
+
+func _apply_ability_event_to_requests(event: Dictionary) -> void:
+	var ability := str(event.get("ability", event.get("abilityName", ""))).strip_edges().to_lower().replace(" ", "-")
+	if ability != "tera-shift":
+		return
+	_apply_tera_shift_form_to_target(event)
+
+func _apply_pokemon_effect_event_to_requests(event: Dictionary) -> void:
+	var effect := str(event.get("effect", "")).strip_edges().to_lower().replace(" ", "-")
+	var state := str(event.get("state", "")).strip_edges().to_lower()
+	if effect != "ability:-tera-shift" or state != "activate":
+		return
+	_apply_tera_shift_form_to_target(event)
+
+func _apply_tera_shift_form_to_target(event: Dictionary) -> void:
+
+	var target_ident := str(event.get("target", ""))
+	if target_ident == "":
+		return
+
+	var pokemon_data: Dictionary = _get_side_pokemon_by_ident(target_ident)
+	if pokemon_data.is_empty():
+		pokemon_data = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
+	if pokemon_data.is_empty():
+		return
+
+	var species := get_species_from_pokemon_data(pokemon_data).strip_edges()
+	if _normalize_public_species_base_key(species) != "terapagos":
+		return
+
+	var transformed_species := "Terapagos-Terastal"
+	var transform_key := _get_transform_key_from_ident(target_ident)
+	if transform_key != "":
+		transformed_species_by_ident[transform_key] = transformed_species
+	pokemon_data["displaySpecies"] = transformed_species
+	pokemon_data["transformedSpecies"] = transformed_species
 
 func _apply_mega_event_to_requests(event: Dictionary) -> void:
 	var target_ident := str(event.get("target", ""))
@@ -1205,6 +1358,27 @@ func _apply_mega_species_to_requests() -> void:
 
 		pokemon_data["displaySpecies"] = species
 		pokemon_data["megaSpecies"] = species
+
+func _apply_battle_bond_cosmetic_species_to_requests() -> void:
+	for cosmetic_key in battle_bond_cosmetic_species_by_ident.keys():
+		var species := str(battle_bond_cosmetic_species_by_ident.get(cosmetic_key, "")).strip_edges()
+		if species == "":
+			continue
+		var pokemon_data := _get_side_pokemon_by_transform_key(str(cosmetic_key))
+		if pokemon_data.is_empty():
+			continue
+		pokemon_data["cosmeticDisplaySpecies"] = species
+		pokemon_data["battleBondCosmeticActive"] = true
+
+func _clear_battle_bond_cosmetic_for_ident(ident: String) -> void:
+	var cosmetic_key := _get_transform_key_from_ident(ident)
+	if cosmetic_key == "":
+		return
+	var pokemon_data := _get_side_pokemon_by_transform_key(cosmetic_key)
+	if not pokemon_data.is_empty():
+		pokemon_data.erase("cosmeticDisplaySpecies")
+		pokemon_data.erase("battleBondCosmeticActive")
+	battle_bond_cosmetic_species_by_ident.erase(cosmetic_key)
 
 func _get_side_pokemon_by_ident(target_ident: String) -> Dictionary:
 	var player_id := _get_player_id_from_ident(target_ident)

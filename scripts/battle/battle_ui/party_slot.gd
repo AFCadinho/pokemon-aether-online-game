@@ -11,10 +11,13 @@ const ACTIVE_BORDER := Color("#62d7ff")
 const PARTY_BACKGROUND := Color("#081321f2")
 const PARTY_BORDER := Color("#315070")
 const ICON_PARTY_BORDER := Color("#223b55")
+const EMPTY_BACKGROUND := Color("#101722d9")
+const EMPTY_BORDER := Color("#2a3747")
 const NORMAL_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const FAINTED_MODULATE := Color(0.62, 0.62, 0.62, 1.0)
 const ICON_FAINTED_MODULATE := Color(0.38, 0.38, 0.38, 0.84)
 const POISON_STATUS_TEXTURE: Texture2D = preload("res://assets/battles/status/poisoned.png")
+const UNREVEALED_POKEMON_TEXTURE: Texture2D = preload("res://assets/items/icons/POKEBALL.png")
 const POISON_STATUS_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 const TOXIC_STATUS_MODULATE := Color("#8c58ff")
 const NAME_FONT_SIZE := 14
@@ -37,6 +40,7 @@ const VERY_LONG_NAME_FONT_SIZE := 11
 @onready var status_icon: TextureRect = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer/StatusIcon
 
 var current_pokemon_data: Dictionary = {}
+var empty_visible := false
 var localization_manager: Node
 
 func _ready() -> void:
@@ -108,7 +112,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	modulate = FAINTED_MODULATE if is_fainted and not icon_only_mode else NORMAL_MODULATE
 	tooltip_text = _t("battle.party.active") if is_active else ""
 
-	_set_species_name(pokemon.species, pokemon.shiny)
+	_set_pokemon_name(pokemon.species, pokemon.nickname, pokemon.shiny)
 	hp_bar.max_value = max(pokemon.max_hp, 1)
 	hp_bar.value = clamp(pokemon.current_hp, 0, pokemon.max_hp)
 	pokemon_icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
@@ -117,6 +121,9 @@ func set_pokemon(pokemon: Pokemon) -> void:
 
 func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	current_pokemon_data = pokemon_data.duplicate(true)
+	if bool(pokemon_data.get("unrevealed", false)):
+		_set_unrevealed()
+		return
 	var species := _get_species_from_data(pokemon_data)
 	var types := _get_types_from_data(pokemon_data)
 	var is_active := bool(pokemon_data.get("active", false))
@@ -132,7 +139,7 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	tooltip_text = _t("battle.party.active") if is_active else ""
 
 	var is_shiny := _get_shiny_from_data(pokemon_data)
-	_set_species_name(species, is_shiny)
+	_set_pokemon_name(species, _get_nickname_from_data(pokemon_data), is_shiny)
 
 	hp_bar.max_value = max_hp
 	hp_bar.value = clamp(current_hp, 0, int(hp_bar.max_value))
@@ -141,7 +148,28 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	_set_status_icon(status)
 	_apply_icon_only_condition_badge(status, is_fainted)
 
+
+func _set_unrevealed() -> void:
+	pokemon_unhovered.emit()
+	_apply_slot_style("", false, false)
+	visible = true
+	disabled = true
+	modulate = NORMAL_MODULATE
+	tooltip_text = ""
+
+	_set_species_name("", false)
+	hp_bar.max_value = 1
+	hp_bar.value = 0
+	pokemon_icon.texture = UNREVEALED_POKEMON_TEXTURE
+	pokemon_icon.self_modulate = NORMAL_MODULATE
+	_set_status_icon("")
+	icon_status_badge.visible = false
+	icon_status_badge.text = ""
+
 func _get_species_from_data(pokemon_data: Dictionary) -> String:
+	var cosmetic_species := str(pokemon_data.get("cosmeticDisplaySpecies", ""))
+	if cosmetic_species != "":
+		return cosmetic_species
 	var display_species := str(pokemon_data.get("displaySpecies", ""))
 	if display_species != "":
 		return display_species
@@ -154,6 +182,14 @@ func _get_species_from_data(pokemon_data: Dictionary) -> String:
 	if ident.contains(": "):
 		return str(ident.split(": ")[1]).strip_edges()
 
+	return ""
+
+
+func _get_nickname_from_data(pokemon_data: Dictionary) -> String:
+	for key: String in ["nickname", "name", "displayName"]:
+		var nickname := str(pokemon_data.get(key, "")).strip_edges()
+		if nickname != "":
+			return nickname
 	return ""
 
 func _get_shiny_from_data(pokemon_data: Dictionary) -> bool:
@@ -314,9 +350,7 @@ func _get_status_modulate(status: String) -> Color:
 
 func set_empty() -> void:
 	current_pokemon_data = {}
-	# Battlefield icon rails should only occupy space for actual team members.
-	# Interactive switch rows keep their empty positions for stable navigation.
-	visible = not icon_only_mode
+	visible = not icon_only_mode or empty_visible
 	disabled = true
 	modulate = NORMAL_MODULATE
 
@@ -332,10 +366,19 @@ func set_empty() -> void:
 	_set_status_icon("")
 	tooltip_text = ""
 
-	remove_theme_stylebox_override("normal")
-	remove_theme_stylebox_override("hover")
-	remove_theme_stylebox_override("pressed")
-	remove_theme_stylebox_override("disabled")
+	if visible:
+		_set_color(EMPTY_BACKGROUND, EMPTY_BORDER, false)
+	else:
+		remove_theme_stylebox_override("normal")
+		remove_theme_stylebox_override("hover")
+		remove_theme_stylebox_override("pressed")
+		remove_theme_stylebox_override("disabled")
+
+
+func set_empty_visible(is_visible: bool) -> void:
+	empty_visible = is_visible
+	if current_pokemon_data.is_empty():
+		set_empty()
 
 func _apply_slot_style(species: String, is_fainted: bool, is_active: bool, types: Array = []) -> void:
 	if is_fainted:
@@ -391,6 +434,17 @@ func _set_species_name(species: String, is_shiny: bool) -> void:
 	shiny_badge.text = "S" if is_shiny else ""
 	shiny_badge.tooltip_text = _t("ui.party.shiny") if is_shiny else ""
 
+
+func _set_pokemon_name(species: String, nickname: String, is_shiny: bool) -> void:
+	if nickname.strip_edges() == "":
+		_set_species_name(species, is_shiny)
+		return
+	var display_name := nickname.strip_edges()
+	name_label.text = display_name
+	name_label.add_theme_font_size_override("font_size", _get_name_font_size(display_name))
+	shiny_badge.text = "S" if is_shiny else ""
+	shiny_badge.tooltip_text = _t("ui.party.shiny") if is_shiny else ""
+
 func _get_name_font_size(species: String) -> int:
 	var compact_name := species.replace(" ", "")
 	if compact_mode:
@@ -412,7 +466,7 @@ func _on_pressed() -> void:
 	selected.emit()
 
 func _on_mouse_entered() -> void:
-	if current_pokemon_data.is_empty():
+	if current_pokemon_data.is_empty() or bool(current_pokemon_data.get("unrevealed", false)):
 		return
 
 	pokemon_hovered.emit(current_pokemon_data, Rect2(global_position, size))

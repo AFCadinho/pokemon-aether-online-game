@@ -3,12 +3,45 @@ extends RefCounted
 class_name BattlePokemonHoverService
 
 const PublicPokemonKnowledge := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
+const HoverLevel := preload("res://scripts/battle/battle_pokemon_hover_level.gd")
 
 var pokemon_stats_cache: Dictionary = {}
 var debug_enabled := false
 
 func clear_cache() -> void:
 	pokemon_stats_cache.clear()
+
+func get_species_stats(
+	request_node: HTTPRequest,
+	species: String,
+	level: int = 100
+) -> Dictionary:
+	var normalized_species := species.strip_edges()
+	if normalized_species == "" or level <= 0:
+		return {}
+
+	var cache_key: String = "%s|%s" % [normalized_species.to_lower(), level]
+	var cached_value: Variant = pokemon_stats_cache.get(cache_key, {})
+	if cached_value is Dictionary and not cached_value.is_empty():
+		return (cached_value as Dictionary).duplicate(true)
+
+	var response: Dictionary = await PokemonDataApiClient.get_pokemon_stats(
+		request_node,
+		normalized_species,
+		level
+	)
+	if not bool(response.get("success", false)):
+		return {}
+
+	var pokemon_value: Variant = response.get("pokemon", {})
+	if not (pokemon_value is Dictionary):
+		return {}
+	var pokemon_stats := pokemon_value as Dictionary
+	if not _pokemon_stats_match_requested_species(pokemon_stats, normalized_species):
+		return {}
+
+	pokemon_stats_cache[cache_key] = pokemon_stats.duplicate(true)
+	return pokemon_stats.duplicate(true)
 
 func get_hover_card_data(
 	battle_state: BattleState,
@@ -20,7 +53,7 @@ func get_hover_card_data(
 	viewer_id_override: String = "",
 	ident_override: String = "",
 	stats_species_override: String = "",
-	embedded_public_only := false
+	_embedded_public_only := false
 ) -> Dictionary:
 	var requested_ident := str(pokemon_data.get("ident", ""))
 	var requested_lookup_ident := ident_override.strip_edges()
@@ -28,15 +61,16 @@ func get_hover_card_data(
 		requested_lookup_ident = requested_ident
 	var requested_species := battle_state.get_species_from_pokemon_data(pokemon_data)
 	var embedded_knowledge := PublicPokemonKnowledge.from_pokemon_data(pokemon_data)
-	var pokemon_info: Dictionary = {}
-	if not embedded_public_only:
-		pokemon_info = await _fetch_hover_pokemon_info(
-			battle_state,
-			pokemon_info_request,
-			pokemon_data,
-			viewer_id_override,
-			ident_override
-		)
+	# The server resolves the authenticated viewer and returns only confirmed
+	# knowledge. Side-slot hovers must use this same authoritative history as
+	# active-sprite hovers; the embedded projection is only a reconnect fallback.
+	var pokemon_info: Dictionary = await _fetch_hover_pokemon_info(
+		battle_state,
+		pokemon_info_request,
+		pokemon_data,
+		viewer_id_override,
+		ident_override
+	)
 	var pokemon_stats: Dictionary = await _fetch_hover_pokemon_stats(
 		battle_state,
 		pokemon_stats_request,
@@ -146,35 +180,10 @@ func _fetch_hover_pokemon_stats(
 		])
 		return {}
 
-	var cache_key: String = "%s|%s" % [species.to_lower(), level]
-	var cached_value: Variant = pokemon_stats_cache.get(cache_key, {})
-	if cached_value is Dictionary and not cached_value.is_empty():
-		return cached_value as Dictionary
-
 	_debug_battle_move("pokemon-stats request species=%s level=%s" % [species, str(level)])
-	var response: Dictionary = await PokemonDataApiClient.get_pokemon_stats(
-		request_node,
-		species,
-		level
-	)
-	_debug_battle_move("pokemon-stats response=%s" % JSON.stringify(response))
-	if not bool(response.get("success", false)):
-		return {}
-
-	var pokemon_value: Variant = response.get("pokemon", {})
-	if pokemon_value is Dictionary:
-		var pokemon_stats: Dictionary = pokemon_value as Dictionary
-		if not _pokemon_stats_match_requested_species(pokemon_stats, species):
-			_debug_battle_move("pokemon-stats ignored mismatched response requested=%s response=%s" % [
-				species,
-				JSON.stringify(pokemon_stats),
-			])
-			return {}
-
-		pokemon_stats_cache[cache_key] = pokemon_stats
-		return pokemon_stats
-
-	return {}
+	var pokemon_stats := await get_species_stats(request_node, species, level)
+	_debug_battle_move("pokemon-stats response=%s" % JSON.stringify(pokemon_stats))
+	return pokemon_stats
 
 func _pokemon_stats_match_requested_species(pokemon_stats: Dictionary, requested_species: String) -> bool:
 	var response_species := str(pokemon_stats.get("species", ""))
@@ -184,13 +193,7 @@ func _pokemon_stats_match_requested_species(pokemon_stats: Dictionary, requested
 	return _normalize_species_for_compare(response_species) == _normalize_species_for_compare(requested_species)
 
 func _get_level_from_pokemon_data(pokemon_data: Dictionary) -> int:
-	var level_value: Variant = pokemon_data.get("level", null)
-	if level_value != null:
-		var parsed_level := int(level_value)
-		if parsed_level > 0:
-			return parsed_level
-
-	return 100
+	return HoverLevel.from_pokemon_data(pokemon_data)
 
 func _get_hover_known_info_viewer_id(ident: String) -> String:
 	match _get_player_id_from_ident(ident):

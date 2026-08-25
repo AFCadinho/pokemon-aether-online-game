@@ -10,7 +10,7 @@ world_access_group_label = "Viridian Forest"
 world_access_area_type = "transition"
 location_id = "kanto.route_2.viridian_forest.south_gate"
 location_name = "Viridian Forest Gate"
-music_track_path = "res://assets/music/overworld/kanto/routes/route1.ogg"
+music_track_id = "overworld.kanto.route.1"
 
 [node name="GateNPC" parent="Entities/NPCs" index="0"]
 npc_id = "kanto_viridian_forest_south_gate_attendant"

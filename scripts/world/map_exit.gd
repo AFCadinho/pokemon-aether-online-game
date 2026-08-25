@@ -34,6 +34,8 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	if body.name != player_node_name:
 		return
+	if _is_route_gate_interaction_active(body):
+		return
 
 	if target_scene_path.strip_edges() == "":
 		push_error("MapExit failed: target_scene_path is empty on %s." % get_path())
@@ -76,6 +78,10 @@ func _enter_authorized_transition(
 	normalized_transition_id: String,
 	arrival_facing_direction: String
 ) -> void:
+	if _is_route_gate_interaction_active(player):
+		is_transitioning = false
+		return
+
 	if (
 		not world.has_method("begin_authorized_teleport")
 		or not world.has_method("apply_authorized_teleport_state")
@@ -122,6 +128,10 @@ func _enter_authorized_transition(
 	if not bool(apply_result.get("success", false)):
 		is_transitioning = false
 		await _show_transition_error()
+
+
+func _is_route_gate_interaction_active(player: Node2D) -> bool:
+	return bool(player.get("route_gate_interaction_in_progress"))
 
 
 func _present_denied_transition(

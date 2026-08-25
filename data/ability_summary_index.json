@@ -133,11 +133,11 @@
     "shortDesc": "Protects against critical hits."
   },
   "battle-bond": {
-    "desc": "Transforms this Pok\u00e9mon into Ash-Greninja after fainting an opponent. Water Shuriken's power is 20 and always hits three times. This ability cannot be copied or replaced. This ability only takes effect for Greninja.",
+    "desc": "Once per battle, when this Pok\u00e9mon directly causes an opposing Pok\u00e9mon to faint, its Attack, Sp. Atk, and Speed are raised by one stage. PokeAether shows Ash-Greninja cosmetically until it switches out; its species and base stats do not change.",
     "flavorText": "Defeating an opposing Pok\u00e9mon strengthens the Pok\u00e9mon\u2019s bond with its Trainer, and it becomes Ash-Greninja. Water Shuriken gets more powerful.",
     "id": "battle-bond",
     "name": "Battle Bond",
-    "shortDesc": "Transforms this Pok\u00e9mon into Ash-Greninja after fainting an opponent. Water Shuriken's power is 20 and always hits three times."
+    "shortDesc": "Once per battle, fainting an opponent raises Attack, Sp. Atk, and Speed by one stage."
   },
   "beads-of-ruin": {
     "desc": "The power of the Pok\u00e9mon\u2019s ruinous beads lowers the Sp. Def stats of all Pok\u00e9mon except itself.",
@@ -523,6 +523,13 @@
     "id": "earth-eater",
     "name": "Earth Eater",
     "shortDesc": "Restores HP when hit by a Ground-type move."
+  },
+  "eelevate": {
+    "desc": "This Pok\u00e9mon is airborne, so Ground-type moves, Spikes, Toxic Spikes, and Sticky Web do not affect it. After it knocks out a target with an attack, its highest stat rises by one stage.",
+    "flavorText": "Floats above the ground and raises its highest stat after knocking out a target.",
+    "id": "eelevate",
+    "name": "Eelevate",
+    "shortDesc": "Immune to Ground-type moves and grounded entry hazards; raises its highest stat after knocking out a target."
   },
   "effect-spore": {
     "desc": "Whenever a move makes contact with this Pok\u00e9mon, the move's user has a 30% chance of being paralyzed, poisoned, or put to sleep, chosen at random. Nothing is done to compensate if the move's user is immune to one of these ailments; there is simply a lower chance that the move's user will be affected.",

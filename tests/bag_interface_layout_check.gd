@@ -25,6 +25,9 @@ func _init() -> void:
 	_check(source.contains("MOUSE_BUTTON_RIGHT") and source.contains("_assign_bag_item_to_hotbar(item)"), "Right-click hotbar assignment remains available")
 	_check(source.contains('"shortDesc": str(item.get("shortDesc", item.get("description", ""))).strip_edges()'), "Inventory normalization preserves item descriptions")
 	_check(source.contains('LocalizationManager.text("ui.bag.no_search_matches")') and source.contains('LocalizationManager.text("ui.bag.no_items_in_category"'), "Bag has localized search and category empty states")
+	_check(source.contains('active_bag_category == "all" and item_category == "key_items"'), "All Items hides key items")
+	_check(source.contains('category_id == "all" and item_category != "key_items"'), "All Items count excludes key items")
+	_check(not source.contains('{"id": "currency", "labelKey": "ui.bag.category.currency"'), "Bag omits the redundant Currency tab")
 
 	quit(1 if failures > 0 else 0)
 

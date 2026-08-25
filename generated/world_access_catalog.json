@@ -1,5 +1,351 @@
 {
 	"areas": {
+		"aether_clash_battle_royale_preview": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Aether Clash Battle Royale (Staff Preview)",
+			"locationGroupId": "aether_clash",
+			"locationGroupLabel": "Aether Clash",
+			"regionName": "Aether Clash",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_battle_royale_preview.tscn",
+			"spawnPoints": {
+				"jail": {
+					"facingDirection": "down",
+					"label": "Jail",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "JailSpawn",
+					"tile": {
+						"x": 69,
+						"y": 75
+					}
+				},
+				"preview": {
+					"facingDirection": "down",
+					"label": "Preview Spawn",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "PreviewSpawn",
+					"tile": {
+						"x": 10,
+						"y": 15
+					}
+				}
+			}
+		},
+		"aether_clash_duel_preview": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Aether Clash Duel (Staff Preview)",
+			"locationGroupId": "aether_clash",
+			"locationGroupLabel": "Aether Clash",
+			"regionName": "Aether Clash",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_duel_preview.tscn",
+			"spawnPoints": {
+				"guild_1_jail": {
+					"facingDirection": "down",
+					"label": "Guild 1 Jail",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "Guild1JailSpawn",
+					"tile": {
+						"x": 69,
+						"y": 75
+					}
+				},
+				"guild_2_jail": {
+					"facingDirection": "down",
+					"label": "Guild 2 Jail",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "Guild2JailSpawn",
+					"tile": {
+						"x": 69,
+						"y": 83
+					}
+				},
+				"preview": {
+					"facingDirection": "down",
+					"label": "Preview Spawn",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "PreviewSpawn",
+					"tile": {
+						"x": 10,
+						"y": 15
+					}
+				}
+			}
+		},
+		"aether_clash_lobby": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Aether Clash Lobby",
+			"locationGroupId": "aether_clash",
+			"locationGroupLabel": "Aether Clash",
+			"regionName": "Aether Clash",
+			"sceneAliases": [
+				"uid://is25lssna4ae"
+			],
+			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_lobby.tscn",
+			"spawnPoints": {
+				"guild_arrival": {
+					"facingDirection": "down",
+					"label": "Guild Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "GuildArrival",
+					"tile": {
+						"x": 30,
+						"y": 45
+					}
+				}
+			}
+		},
+		"aether_clash_waiting_area_preview": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Aether Clash Waiting Area (Staff Preview)",
+			"locationGroupId": "aether_clash",
+			"locationGroupLabel": "Aether Clash",
+			"regionName": "Aether Clash",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/aether_clash/waiting_area_preview.tscn",
+			"spawnPoints": {
+				"preview": {
+					"facingDirection": "down",
+					"label": "Preview Spawn",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "PreviewSpawn",
+					"tile": {
+						"x": 12,
+						"y": 12
+					}
+				}
+			}
+		},
+		"kanto_cerulean_city": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Cerulean City",
+			"locationGroupId": "kanto_cerulean_city",
+			"locationGroupLabel": "Cerulean City",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://dly1ylygogcj3"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"spawnPoints": {
+				"from_route_4": {
+					"facingDirection": "down",
+					"label": "Route 4",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute4",
+					"tile": {
+						"x": 2,
+						"y": 9
+					}
+				}
+			}
+		},
+		"kanto_mt_moon_1f": {
+			"areaType": "wilderness",
+			"defaultMode": "open",
+			"label": "Mt. Moon 1F",
+			"locationGroupId": "kanto_mt_moon",
+			"locationGroupLabel": "Mt. Moon",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://dinyabx52dya6"
+			],
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+			"spawnPoints": {
+				"from_b_1f_1": {
+					"facingDirection": "down",
+					"label": "B 1f 1",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB1F1",
+					"tile": {
+						"x": 61,
+						"y": 26
+					}
+				},
+				"from_b_1f_3": {
+					"facingDirection": "down",
+					"label": "B 1f 3",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB1F3",
+					"tile": {
+						"x": 39,
+						"y": 23
+					}
+				},
+				"from_b_1f_5": {
+					"facingDirection": "down",
+					"label": "B 1f 5",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB1F5",
+					"tile": {
+						"x": 19,
+						"y": 13
+					}
+				},
+				"from_route_3": {
+					"facingDirection": "down",
+					"label": "Route 3",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute3",
+					"tile": {
+						"x": 29,
+						"y": 76
+					}
+				}
+			}
+		},
+		"kanto_mt_moon_b1f": {
+			"areaType": "wilderness",
+			"defaultMode": "open",
+			"label": "Mt. Moon B1F",
+			"locationGroupId": "kanto_mt_moon",
+			"locationGroupLabel": "Mt. Moon",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://dmu7iwolokkl7"
+			],
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
+			"spawnPoints": {
+				"from_1f_1": {
+					"facingDirection": "down",
+					"label": "1f 1",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1F1",
+					"tile": {
+						"x": 49,
+						"y": 61
+					}
+				},
+				"from_1f_3": {
+					"facingDirection": "down",
+					"label": "1f 3",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1F3",
+					"tile": {
+						"x": 66,
+						"y": 9
+					}
+				},
+				"from_1f_5": {
+					"facingDirection": "down",
+					"label": "1f 5",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "From1F5",
+					"tile": {
+						"x": 29,
+						"y": 32
+					}
+				},
+				"from_b_2f_2": {
+					"facingDirection": "down",
+					"label": "B 2f 2",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB2F2",
+					"tile": {
+						"x": 75,
+						"y": 41
+					}
+				},
+				"from_b_2f_4": {
+					"facingDirection": "down",
+					"label": "B 2f 4",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB2F4",
+					"tile": {
+						"x": 75,
+						"y": 5
+					}
+				},
+				"from_b_2f_6": {
+					"facingDirection": "down",
+					"label": "B 2f 6",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB2F6",
+					"tile": {
+						"x": 4,
+						"y": 7
+					}
+				},
+				"from_b_2f_7": {
+					"facingDirection": "down",
+					"label": "B 2f 7",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB2F7",
+					"tile": {
+						"x": 10,
+						"y": 68
+					}
+				},
+				"from_route_4": {
+					"facingDirection": "down",
+					"label": "Route 4",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute4",
+					"tile": {
+						"x": 16,
+						"y": 62
+					}
+				}
+			}
+		},
+		"kanto_mt_moon_b2f": {
+			"areaType": "wilderness",
+			"defaultMode": "open",
+			"label": "Mt. Moon B2F",
+			"locationGroupId": "kanto_mt_moon",
+			"locationGroupLabel": "Mt. Moon",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://k7f42q7h56tv"
+			],
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+			"spawnPoints": {
+				"from_b_1f_2": {
+					"facingDirection": "down",
+					"label": "B 1f 2",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB1F2",
+					"tile": {
+						"x": 31,
+						"y": 57
+					}
+				},
+				"from_b_1f_4": {
+					"facingDirection": "down",
+					"label": "B 1f 4",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB1F4",
+					"tile": {
+						"x": 61,
+						"y": 22
+					}
+				},
+				"from_b_1f_6": {
+					"facingDirection": "down",
+					"label": "B 1f 6",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB1F6",
+					"tile": {
+						"x": 55,
+						"y": 30
+					}
+				},
+				"from_b_1f_7": {
+					"facingDirection": "down",
+					"label": "B 1f 7",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromB1F7",
+					"tile": {
+						"x": 9,
+						"y": 21
+					}
+				}
+			}
+		},
 		"kanto_oaks_lab": {
 			"areaType": "interior",
 			"defaultMode": "open",
@@ -85,6 +431,16 @@
 						"x": 20,
 						"y": 17
 					}
+				},
+				"transit_arrival": {
+					"facingDirection": "down",
+					"label": "Transit Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "TransitArrival",
+					"tile": {
+						"x": 24,
+						"y": 7
+					}
 				}
 			}
 		},
@@ -107,7 +463,7 @@
 					"spawnMarker": "FromGym",
 					"tile": {
 						"x": 18,
-						"y": 18
+						"y": 17
 					}
 				},
 				"from_house_1": {
@@ -169,7 +525,103 @@
 						"x": 58,
 						"y": 33
 					}
+				},
+				"transit_arrival": {
+					"facingDirection": "down",
+					"label": "Transit Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "TransitArrival",
+					"tile": {
+						"x": 47,
+						"y": 30
+					}
 				}
+			}
+		},
+		"kanto_pewter_city_gym": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Pewter City Gym",
+			"locationGroupId": "kanto_pewter_city",
+			"locationGroupLabel": "Pewter City",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://c8ldtdneumywx"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn",
+			"spawnPoints": {
+				"from_pewter_city": {
+					"facingDirection": "down",
+					"label": "Pewter City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPewterCity",
+					"tile": {
+						"x": 16,
+						"y": 28
+					}
+				}
+			}
+		},
+		"kanto_pewter_city_house_1": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Pewter City House 1",
+			"locationGroupId": "kanto_pewter_city",
+			"locationGroupLabel": "Pewter City",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://dd5re2mpmfhvf"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/house1.tscn",
+			"spawnPoints": {
+				"from_pewter_city": {
+					"facingDirection": "down",
+					"label": "Pewter City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPewterCity",
+					"tile": {
+						"x": 9,
+						"y": 14
+					}
+				}
+			}
+		},
+		"kanto_pewter_city_house_2": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Pewter City House 2",
+			"locationGroupId": "kanto_pewter_city",
+			"locationGroupLabel": "Pewter City",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://bnch2l51wuwbh"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/house2.tscn",
+			"spawnPoints": {
+				"from_pewter_city": {
+					"facingDirection": "down",
+					"label": "Pewter City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPewterCity",
+					"tile": {
+						"x": 9,
+						"y": 14
+					}
+				}
+			}
+		},
+		"kanto_pewter_city_museum": {
+			"accessOnly": true,
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Pewter City Museum",
+			"locationGroupId": "kanto_pewter_city",
+			"locationGroupLabel": "Pewter City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "",
+			"spawnPoints": {
+
 			}
 		},
 		"kanto_pewter_city_pokemon_center": {
@@ -235,7 +687,7 @@
 					"spawnMarker": "GroundFloorStairs",
 					"tile": {
 						"x": 15,
-						"y": 23
+						"y": 22
 					}
 				},
 				"initial_spawn": {
@@ -265,7 +717,7 @@
 					"spawnMarker": "UpperFloorStairs",
 					"tile": {
 						"x": 11,
-						"y": 8
+						"y": 7
 					}
 				}
 			}
@@ -360,6 +812,16 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
 			"spawnPoints": {
+				"from_house": {
+					"facingDirection": "down",
+					"label": "House",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromHouse",
+					"tile": {
+						"x": 44,
+						"y": 17
+					}
+				},
 				"from_route_2_gate_north": {
 					"facingDirection": "down",
 					"label": "Route 2 Gate North",
@@ -434,6 +896,16 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
 			"spawnPoints": {
+				"victory_road_post": {
+					"facingDirection": "down",
+					"label": "Victory Road Post",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromVictoryRoadPost",
+					"tile": {
+						"x": 11,
+						"y": 11
+					}
+				},
 				"viridian_city_entrance": {
 					"facingDirection": "left",
 					"label": "Viridian City Entrance",
@@ -474,6 +946,28 @@
 					"tile": {
 						"x": 10,
 						"y": 18
+					}
+				}
+			}
+		},
+		"kanto_route_2_house": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Route 2 House",
+			"locationGroupId": "kanto_route_2",
+			"locationGroupLabel": "Route 2",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/route_2_house.tscn",
+			"spawnPoints": {
+				"from_route_2": {
+					"facingDirection": "down",
+					"label": "Route 2",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute2",
+					"tile": {
+						"x": 9,
+						"y": 14
 					}
 				}
 			}
@@ -542,6 +1036,118 @@
 				}
 			}
 		},
+		"kanto_route_3": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 3",
+			"locationGroupId": "kanto_route_3",
+			"locationGroupLabel": "Route 3",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://bsfma5bbk6lxj"
+			],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
+			"spawnPoints": {
+				"from_mt_moon": {
+					"facingDirection": "down",
+					"label": "Mt Moon",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromMtMoon",
+					"tile": {
+						"x": 82,
+						"y": 22
+					}
+				},
+				"from_pewter_city": {
+					"facingDirection": "down",
+					"label": "Pewter City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPewterCity",
+					"tile": {
+						"x": 2,
+						"y": 21
+					}
+				},
+				"from_pokecenter": {
+					"facingDirection": "down",
+					"label": "Pokémon Center",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPokecenter",
+					"tile": {
+						"x": 89,
+						"y": 34
+					}
+				}
+			}
+		},
+		"kanto_route_3_pokemon_center": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Route 3 Pokémon Center",
+			"locationGroupId": "kanto_route_3",
+			"locationGroupLabel": "Route 3",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://dl5ioebfcun4f"
+			],
+			"scenePath": "res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn",
+			"spawnPoints": {
+				"from_outside": {
+					"facingDirection": "down",
+					"label": "Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromOutside",
+					"tile": {
+						"x": 14,
+						"y": 31
+					}
+				},
+				"heal_npc": {
+					"facingDirection": "down",
+					"label": "Heal NPC",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "HealNPC",
+					"tile": {
+						"x": 14,
+						"y": 23
+					}
+				}
+			}
+		},
+		"kanto_route_4": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 4",
+			"locationGroupId": "kanto_route_4",
+			"locationGroupLabel": "Route 4",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://c6taahbjj1mnh"
+			],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_4.tscn",
+			"spawnPoints": {
+				"from_cerulean": {
+					"facingDirection": "down",
+					"label": "Cerulean",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromCerulean",
+					"tile": {
+						"x": 22,
+						"y": 9
+					}
+				},
+				"from_mt_moon": {
+					"facingDirection": "down",
+					"label": "Mt Moon",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromMtMoon",
+					"tile": {
+						"x": 12,
+						"y": 2
+					}
+				}
+			}
+		},
 		"kanto_viridian_city": {
 			"areaType": "exterior",
 			"defaultMode": "open",
@@ -554,14 +1160,74 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
 			"spawnPoints": {
+				"ev_training_north_inside": {
+					"facingDirection": "down",
+					"label": "Ev Training North Inside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "EVTrainingNorthInside",
+					"tile": {
+						"x": 13,
+						"y": 15
+					}
+				},
+				"ev_training_north_outside": {
+					"facingDirection": "down",
+					"label": "Ev Training North Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "EVTrainingNorthOutside",
+					"tile": {
+						"x": 13,
+						"y": 11
+					}
+				},
+				"ev_training_south_inside": {
+					"facingDirection": "down",
+					"label": "Ev Training South Inside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "EVTrainingSouthInside",
+					"tile": {
+						"x": 13,
+						"y": 32
+					}
+				},
+				"ev_training_south_outside": {
+					"facingDirection": "down",
+					"label": "Ev Training South Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "EVTrainingSouthOutside",
+					"tile": {
+						"x": 13,
+						"y": 36
+					}
+				},
+				"from_gym": {
+					"facingDirection": "down",
+					"label": "Gym",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromGym",
+					"tile": {
+						"x": 41,
+						"y": 13
+					}
+				},
+				"from_house_1": {
+					"facingDirection": "down",
+					"label": "House 1",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromHouse1",
+					"tile": {
+						"x": 48,
+						"y": 28
+					}
+				},
 				"from_pokecenter": {
 					"facingDirection": "down",
 					"label": "Pokémon Center",
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromPokecenter",
 					"tile": {
-						"x": 32,
-						"y": 20
+						"x": 35,
+						"y": 46
 					}
 				},
 				"from_route_2": {
@@ -570,8 +1236,18 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute2",
 					"tile": {
-						"x": 24,
-						"y": 1
+						"x": 28,
+						"y": 2
+					}
+				},
+				"from_trainer_school": {
+					"facingDirection": "down",
+					"label": "Trainer School",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromTrainerSchool",
+					"tile": {
+						"x": 59,
+						"y": 28
 					}
 				},
 				"route_1_entrance": {
@@ -580,8 +1256,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute1",
 					"tile": {
-						"x": 24,
-						"y": 37
+						"x": 42,
+						"y": 62
 					}
 				},
 				"route_22_entrance": {
@@ -590,8 +1266,66 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute22",
 					"tile": {
-						"x": 1,
-						"y": 19
+						"x": 2,
+						"y": 38
+					}
+				},
+				"transit_arrival": {
+					"facingDirection": "down",
+					"label": "Transit Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "TransitArrival",
+					"tile": {
+						"x": 33,
+						"y": 35
+					}
+				},
+				"viridian_jail": {
+					"facingDirection": "down",
+					"label": "Viridian Jail",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "ViridianJail",
+					"tile": {
+						"x": 48,
+						"y": 43
+					}
+				}
+			}
+		},
+		"kanto_viridian_city_gym": {
+			"accessOnly": true,
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Viridian City Gym",
+			"locationGroupId": "kanto_viridian_city",
+			"locationGroupLabel": "Viridian City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "",
+			"spawnPoints": {
+
+			}
+		},
+		"kanto_viridian_city_house_1": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Viridian City House 1",
+			"locationGroupId": "kanto_viridian_city",
+			"locationGroupLabel": "Viridian City",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://c518t3j64b286"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/house1.tscn",
+			"spawnPoints": {
+				"from_viridian_city": {
+					"facingDirection": "down",
+					"label": "Viridian City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromViridianCity",
+					"tile": {
+						"x": 9,
+						"y": 14
 					}
 				}
 			}
@@ -603,7 +1337,9 @@
 			"locationGroupId": "kanto_viridian_city",
 			"locationGroupLabel": "Viridian City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://cjdjdlmhov8ss"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn",
 			"spawnPoints": {
 				"from_outside": {
@@ -624,6 +1360,30 @@
 					"tile": {
 						"x": 14,
 						"y": 23
+					}
+				}
+			}
+		},
+		"kanto_viridian_city_trainer_school": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Viridian City Trainer School",
+			"locationGroupId": "kanto_viridian_city",
+			"locationGroupLabel": "Viridian City",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://dv0aevldj7iyb"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/trainer_school.tscn",
+			"spawnPoints": {
+				"from_viridian_city": {
+					"facingDirection": "down",
+					"label": "Viridian City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromViridianCity",
+					"tile": {
+						"x": 12,
+						"y": 19
 					}
 				}
 			}
@@ -665,6 +1425,295 @@
 	},
 	"schemaVersion": 3,
 	"transitions": {
+		"kanto_cerulean_city__to_route_4": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_route_4",
+				"mapSceneAliases": [
+					"uid://c6taahbjj1mnh"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_4.tscn",
+				"position": {
+					"x": 704.0,
+					"y": 288.0
+				},
+				"spawnMarker": "FromCerulean"
+			},
+			"destinationAreaId": "kanto_route_4",
+			"sourceMapId": "kanto_cerulean_city"
+		},
+		"kanto_mt_moon_1f__to_b1f_1": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_mt_moon_b1f",
+				"mapSceneAliases": [
+					"uid://dmu7iwolokkl7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
+				"position": {
+					"x": 1584.0,
+					"y": 1968.0
+				},
+				"spawnMarker": "From1F1"
+			},
+			"destinationAreaId": "kanto_mt_moon_b1f",
+			"sourceMapId": "kanto_mt_moon_1f"
+		},
+		"kanto_mt_moon_1f__to_b1f_3": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_mt_moon_b1f",
+				"mapSceneAliases": [
+					"uid://dmu7iwolokkl7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
+				"position": {
+					"x": 2128.0,
+					"y": 304.0
+				},
+				"spawnMarker": "From1F3"
+			},
+			"destinationAreaId": "kanto_mt_moon_b1f",
+			"sourceMapId": "kanto_mt_moon_1f"
+		},
+		"kanto_mt_moon_1f__to_b1f_5": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_mt_moon_b1f",
+				"mapSceneAliases": [
+					"uid://dmu7iwolokkl7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
+				"position": {
+					"x": 944.0,
+					"y": 1040.0
+				},
+				"spawnMarker": "From1F5"
+			},
+			"destinationAreaId": "kanto_mt_moon_b1f",
+			"sourceMapId": "kanto_mt_moon_1f"
+		},
+		"kanto_mt_moon_1f__to_route_3": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_3",
+				"mapSceneAliases": [
+					"uid://bsfma5bbk6lxj"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
+				"position": {
+					"x": 2640.0,
+					"y": 720.0
+				},
+				"spawnMarker": "FromMtMoon"
+			},
+			"destinationAreaId": "kanto_route_3",
+			"sourceMapId": "kanto_mt_moon_1f"
+		},
+		"kanto_mt_moon__to_route_4": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_4",
+				"mapSceneAliases": [
+					"uid://c6taahbjj1mnh"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_4.tscn",
+				"position": {
+					"x": 384.0,
+					"y": 64.0
+				},
+				"spawnMarker": "FromMtMoon"
+			},
+			"destinationAreaId": "kanto_route_4",
+			"sourceMapId": "kanto_mt_moon_b1f"
+		},
+		"kanto_mt_moon_b1f__to_1f_1": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_mt_moon_1f",
+				"mapSceneAliases": [
+					"uid://dinyabx52dya6"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+				"position": {
+					"x": 1968.0,
+					"y": 848.0
+				},
+				"spawnMarker": "FromB1F1"
+			},
+			"destinationAreaId": "kanto_mt_moon_1f",
+			"sourceMapId": "kanto_mt_moon_b1f"
+		},
+		"kanto_mt_moon_b1f__to_1f_3": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_mt_moon_1f",
+				"mapSceneAliases": [
+					"uid://dinyabx52dya6"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+				"position": {
+					"x": 1264.0,
+					"y": 752.0
+				},
+				"spawnMarker": "FromB1F3"
+			},
+			"destinationAreaId": "kanto_mt_moon_1f",
+			"sourceMapId": "kanto_mt_moon_b1f"
+		},
+		"kanto_mt_moon_b1f__to_1f_5": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_mt_moon_1f",
+				"mapSceneAliases": [
+					"uid://dinyabx52dya6"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+				"position": {
+					"x": 624.0,
+					"y": 432.0
+				},
+				"spawnMarker": "FromB1F5"
+			},
+			"destinationAreaId": "kanto_mt_moon_1f",
+			"sourceMapId": "kanto_mt_moon_b1f"
+		},
+		"kanto_mt_moon_b1f__to_b2f_2": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_mt_moon_b2f",
+				"mapSceneAliases": [
+					"uid://k7f42q7h56tv"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+				"position": {
+					"x": 1008.0,
+					"y": 1840.0
+				},
+				"spawnMarker": "FromB1F2"
+			},
+			"destinationAreaId": "kanto_mt_moon_b2f",
+			"sourceMapId": "kanto_mt_moon_b1f"
+		},
+		"kanto_mt_moon_b1f__to_b2f_4": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_mt_moon_b2f",
+				"mapSceneAliases": [
+					"uid://k7f42q7h56tv"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+				"position": {
+					"x": 1968.0,
+					"y": 720.0
+				},
+				"spawnMarker": "FromB1F4"
+			},
+			"destinationAreaId": "kanto_mt_moon_b2f",
+			"sourceMapId": "kanto_mt_moon_b1f"
+		},
+		"kanto_mt_moon_b1f__to_b2f_6": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_mt_moon_b2f",
+				"mapSceneAliases": [
+					"uid://k7f42q7h56tv"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+				"position": {
+					"x": 1776.0,
+					"y": 976.0
+				},
+				"spawnMarker": "FromB1F6"
+			},
+			"destinationAreaId": "kanto_mt_moon_b2f",
+			"sourceMapId": "kanto_mt_moon_b1f"
+		},
+		"kanto_mt_moon_b1f__to_b2f_7": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_mt_moon_b2f",
+				"mapSceneAliases": [
+					"uid://k7f42q7h56tv"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 688.0
+				},
+				"spawnMarker": "FromB1F7"
+			},
+			"destinationAreaId": "kanto_mt_moon_b2f",
+			"sourceMapId": "kanto_mt_moon_b1f"
+		},
+		"kanto_mt_moon_b2f__to_b1f_2": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_mt_moon_b1f",
+				"mapSceneAliases": [
+					"uid://dmu7iwolokkl7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
+				"position": {
+					"x": 2416.0,
+					"y": 1328.0
+				},
+				"spawnMarker": "FromB2F2"
+			},
+			"destinationAreaId": "kanto_mt_moon_b1f",
+			"sourceMapId": "kanto_mt_moon_b2f"
+		},
+		"kanto_mt_moon_b2f__to_b1f_4": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_mt_moon_b1f",
+				"mapSceneAliases": [
+					"uid://dmu7iwolokkl7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
+				"position": {
+					"x": 2416.0,
+					"y": 176.0
+				},
+				"spawnMarker": "FromB2F4"
+			},
+			"destinationAreaId": "kanto_mt_moon_b1f",
+			"sourceMapId": "kanto_mt_moon_b2f"
+		},
+		"kanto_mt_moon_b2f__to_b1f_6": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_mt_moon_b1f",
+				"mapSceneAliases": [
+					"uid://dmu7iwolokkl7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
+				"position": {
+					"x": 144.0,
+					"y": 240.0
+				},
+				"spawnMarker": "FromB2F6"
+			},
+			"destinationAreaId": "kanto_mt_moon_b1f",
+			"sourceMapId": "kanto_mt_moon_b2f"
+		},
+		"kanto_mt_moon_b2f__to_b1f_7": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_mt_moon_b1f",
+				"mapSceneAliases": [
+					"uid://dmu7iwolokkl7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
+				"position": {
+					"x": 336.0,
+					"y": 2192.0
+				},
+				"spawnMarker": "FromB2F7"
+			},
+			"destinationAreaId": "kanto_mt_moon_b1f",
+			"sourceMapId": "kanto_mt_moon_b2f"
+		},
 		"kanto_oaks_lab__to_pallet_town": {
 			"destination": {
 				"mapId": "kanto_pallet_town",
@@ -745,6 +1794,54 @@
 			"destinationAreaId": "kanto_route_1",
 			"sourceMapId": "kanto_pallet_town"
 		},
+		"kanto_pewter_city__to_gym": {
+			"destination": {
+				"mapId": "kanto_pewter_city_gym",
+				"mapSceneAliases": [
+					"uid://c8ldtdneumywx"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn",
+				"position": {
+					"x": 528.0,
+					"y": 912.0
+				},
+				"spawnMarker": "FromPewterCity"
+			},
+			"destinationAreaId": "kanto_pewter_city_gym",
+			"sourceMapId": "kanto_pewter_city"
+		},
+		"kanto_pewter_city__to_house_1": {
+			"destination": {
+				"mapId": "kanto_pewter_city_house_1",
+				"mapSceneAliases": [
+					"uid://dd5re2mpmfhvf"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/house1.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromPewterCity"
+			},
+			"destinationAreaId": "kanto_pewter_city_house_1",
+			"sourceMapId": "kanto_pewter_city"
+		},
+		"kanto_pewter_city__to_house_2": {
+			"destination": {
+				"mapId": "kanto_pewter_city_house_2",
+				"mapSceneAliases": [
+					"uid://bnch2l51wuwbh"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/house2.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromPewterCity"
+			},
+			"destinationAreaId": "kanto_pewter_city_house_2",
+			"sourceMapId": "kanto_pewter_city"
+		},
 		"kanto_pewter_city__to_pokecenter": {
 			"destination": {
 				"mapId": "kanto_pewter_city_pokemon_center",
@@ -776,6 +1873,70 @@
 			},
 			"destinationAreaId": "kanto_route_2",
 			"sourceMapId": "kanto_pewter_city"
+		},
+		"kanto_pewter_city__to_route_3": {
+			"destination": {
+				"mapId": "kanto_route_3",
+				"mapSceneAliases": [
+					"uid://bsfma5bbk6lxj"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
+				"position": {
+					"x": 80.0,
+					"y": 688.0
+				},
+				"spawnMarker": "FromPewterCity"
+			},
+			"destinationAreaId": "kanto_route_3",
+			"sourceMapId": "kanto_pewter_city"
+		},
+		"kanto_pewter_city_gym__to_pewter_city": {
+			"destination": {
+				"mapId": "kanto_pewter_city",
+				"mapSceneAliases": [
+					"uid://b63qp0afy4rpd"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+				"position": {
+					"x": 592.0,
+					"y": 560.0
+				},
+				"spawnMarker": "FromGym"
+			},
+			"destinationAreaId": "kanto_pewter_city",
+			"sourceMapId": "kanto_pewter_city_gym"
+		},
+		"kanto_pewter_city_house_1__to_pewter_city": {
+			"destination": {
+				"mapId": "kanto_pewter_city",
+				"mapSceneAliases": [
+					"uid://b63qp0afy4rpd"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+				"position": {
+					"x": 1104.0,
+					"y": 1008.0
+				},
+				"spawnMarker": "FromHouse1"
+			},
+			"destinationAreaId": "kanto_pewter_city",
+			"sourceMapId": "kanto_pewter_city_house_1"
+		},
+		"kanto_pewter_city_house_2__to_pewter_city": {
+			"destination": {
+				"mapId": "kanto_pewter_city",
+				"mapSceneAliases": [
+					"uid://b63qp0afy4rpd"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 1584.0
+				},
+				"spawnMarker": "FromHouse2"
+			},
+			"destinationAreaId": "kanto_pewter_city",
+			"sourceMapId": "kanto_pewter_city_house_2"
 		},
 		"kanto_pewter_city_pokemon_center__to_outside": {
 			"destination": {
@@ -849,13 +2010,28 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
 				"position": {
-					"x": 48.0,
-					"y": 624.0
+					"x": 80.0,
+					"y": 1232.0
 				},
 				"spawnMarker": "FromRoute22"
 			},
 			"destinationAreaId": "kanto_viridian_city",
 			"sourceMapId": "kanto_route_22"
+		},
+		"kanto_route_2__to_house": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_route_2_house",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route_2_house.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromRoute2"
+			},
+			"destinationAreaId": "kanto_route_2_house",
+			"sourceMapId": "kanto_route_2"
 		},
 		"kanto_route_2__to_pewter_city": {
 			"destination": {
@@ -909,8 +2085,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
 				"position": {
-					"x": 784.0,
-					"y": 48.0
+					"x": 912.0,
+					"y": 80.0
 				},
 				"spawnMarker": "FromRoute2"
 			},
@@ -977,6 +2153,23 @@
 			"destinationAreaId": "kanto_route_2",
 			"sourceMapId": "kanto_route_2_gate"
 		},
+		"kanto_route_2_house__to_route_2": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_2",
+				"mapSceneAliases": [
+					"uid://cnbfksossjfg7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"position": {
+					"x": 1424.0,
+					"y": 560.0
+				},
+				"spawnMarker": "FromHouse"
+			},
+			"destinationAreaId": "kanto_route_2",
+			"sourceMapId": "kanto_route_2_house"
+		},
 		"kanto_route_2_viridian_forest_north_gate__to_north": {
 			"destination": {
 				"mapId": "kanto_route_2",
@@ -1041,10 +2234,127 @@
 			"destinationAreaId": "kanto_route_2",
 			"sourceMapId": "kanto_route_2_viridian_forest_south_gate"
 		},
+		"kanto_route_3__to_mt_moon": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_mt_moon_1f",
+				"mapSceneAliases": [
+					"uid://dinyabx52dya6"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+				"position": {
+					"x": 944.0,
+					"y": 2448.0
+				},
+				"spawnMarker": "FromRoute3"
+			},
+			"destinationAreaId": "kanto_mt_moon_1f",
+			"sourceMapId": "kanto_route_3"
+		},
+		"kanto_route_3__to_pewter_city": {
+			"destination": {
+				"mapId": "kanto_pewter_city",
+				"mapSceneAliases": [
+					"uid://b63qp0afy4rpd"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+				"position": {
+					"x": 1872.0,
+					"y": 1072.0
+				},
+				"spawnMarker": "FromRoute3"
+			},
+			"destinationAreaId": "kanto_pewter_city",
+			"sourceMapId": "kanto_route_3"
+		},
+		"kanto_route_3__to_pokecenter": {
+			"destination": {
+				"mapId": "kanto_route_3_pokemon_center",
+				"mapSceneAliases": [
+					"uid://dl5ioebfcun4f"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 1008.0
+				},
+				"spawnMarker": "FromOutside"
+			},
+			"destinationAreaId": "kanto_route_3_pokemon_center",
+			"sourceMapId": "kanto_route_3"
+		},
+		"kanto_route_3_pokemon_center__to_outside": {
+			"destination": {
+				"mapId": "kanto_route_3",
+				"mapSceneAliases": [
+					"uid://bsfma5bbk6lxj"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
+				"position": {
+					"x": 2864.0,
+					"y": 1104.0
+				},
+				"spawnMarker": "FromPokecenter"
+			},
+			"destinationAreaId": "kanto_route_3",
+			"sourceMapId": "kanto_route_3_pokemon_center"
+		},
+		"kanto_route_4__to_cerulean_city": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_cerulean_city",
+				"mapSceneAliases": [
+					"uid://dly1ylygogcj3"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+				"position": {
+					"x": 64.0,
+					"y": 288.0
+				},
+				"spawnMarker": "FromRoute4"
+			},
+			"destinationAreaId": "kanto_cerulean_city",
+			"sourceMapId": "kanto_route_4"
+		},
+		"kanto_route_4__to_mt_moon": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_mt_moon_b1f",
+				"mapSceneAliases": [
+					"uid://dmu7iwolokkl7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
+				"position": {
+					"x": 512.0,
+					"y": 1984.0
+				},
+				"spawnMarker": "FromRoute4"
+			},
+			"destinationAreaId": "kanto_mt_moon_b1f",
+			"sourceMapId": "kanto_route_4"
+		},
+		"kanto_viridian_city__to_house_1": {
+			"destination": {
+				"mapId": "kanto_viridian_city_house_1",
+				"mapSceneAliases": [
+					"uid://c518t3j64b286"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/house1.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromViridianCity"
+			},
+			"destinationAreaId": "kanto_viridian_city_house_1",
+			"sourceMapId": "kanto_viridian_city"
+		},
 		"kanto_viridian_city__to_pokecenter": {
 			"destination": {
 				"mapId": "kanto_viridian_city_pokemon_center",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cjdjdlmhov8ss"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn",
 				"position": {
 					"x": 464.0,
@@ -1103,6 +2413,38 @@
 			"destinationAreaId": "kanto_route_22",
 			"sourceMapId": "kanto_viridian_city"
 		},
+		"kanto_viridian_city__to_trainer_school": {
+			"destination": {
+				"mapId": "kanto_viridian_city_trainer_school",
+				"mapSceneAliases": [
+					"uid://dv0aevldj7iyb"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/trainer_school.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 608.0
+				},
+				"spawnMarker": "FromViridianCity"
+			},
+			"destinationAreaId": "kanto_viridian_city_trainer_school",
+			"sourceMapId": "kanto_viridian_city"
+		},
+		"kanto_viridian_city_house_1__to_viridian_city": {
+			"destination": {
+				"mapId": "kanto_viridian_city",
+				"mapSceneAliases": [
+					"uid://b8tl17hk3yovn"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+				"position": {
+					"x": 1552.0,
+					"y": 912.0
+				},
+				"spawnMarker": "FromHouse1"
+			},
+			"destinationAreaId": "kanto_viridian_city",
+			"sourceMapId": "kanto_viridian_city_house_1"
+		},
 		"kanto_viridian_city_pokemon_center__to_outside": {
 			"destination": {
 				"mapId": "kanto_viridian_city",
@@ -1111,13 +2453,29 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
 				"position": {
-					"x": 1040.0,
-					"y": 656.0
+					"x": 1136.0,
+					"y": 1488.0
 				},
 				"spawnMarker": "FromPokecenter"
 			},
 			"destinationAreaId": "kanto_viridian_city",
 			"sourceMapId": "kanto_viridian_city_pokemon_center"
+		},
+		"kanto_viridian_city_trainer_school__to_viridian_city": {
+			"destination": {
+				"mapId": "kanto_viridian_city",
+				"mapSceneAliases": [
+					"uid://b8tl17hk3yovn"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+				"position": {
+					"x": 1904.0,
+					"y": 912.0
+				},
+				"spawnMarker": "FromTrainerSchool"
+			},
+			"destinationAreaId": "kanto_viridian_city",
+			"sourceMapId": "kanto_viridian_city_trainer_school"
 		},
 		"kanto_viridian_forest__to_route_2_north": {
 			"destination": {
@@ -1155,8 +2513,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
 				"position": {
-					"x": 784.0,
-					"y": 1200.0
+					"x": 1360.0,
+					"y": 2000.0
 				},
 				"spawnMarker": "FromRoute1"
 			},

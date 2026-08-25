@@ -5,13 +5,15 @@ class_name TrainerHeadPortrait
 const REMOTE_PLAYER_AVATAR_SCRIPT_PATH := "res://scripts/world/remote_player_avatar.gd"
 const SOURCE_FRAME_SIZE := 64.0
 const HEAD_CROP_HEIGHT := 44.0
-const PORTRAIT_RENDER_SCALE := 1.75
+const DEFAULT_RENDER_SCALE := 1.75
 const HEAD_LOCAL_CENTER_X := -1.0
 const HEAD_LOCAL_CENTER_Y := -21.0
 
 var viewport: SubViewport
 var avatar: Node2D
 var appearance_state: Dictionary = {}
+var render_scale := DEFAULT_RENDER_SCALE
+var head_only := true
 
 
 func _ready() -> void:
@@ -29,7 +31,10 @@ func set_appearance_state(state: Dictionary) -> void:
 		return
 	_set_up_viewport()
 	if avatar != null and is_instance_valid(avatar):
-		avatar.queue_free()
+		# Perspective swaps replace the owner in the same frame. A deferred free
+		# leaves the old head in the SubViewport long enough for the swapped
+		# portrait to render the previous player's face.
+		avatar.free()
 		avatar = null
 	var avatar_script := load(REMOTE_PLAYER_AVATAR_SCRIPT_PATH) as Script
 	if avatar_script == null:
@@ -43,14 +48,15 @@ func set_appearance_state(state: Dictionary) -> void:
 		"position": {"x": 0.0, "y": 0.0},
 		"facingDirection": "down",
 	})
-	_configure_head_only(avatar)
+	if head_only:
+		_configure_head_only(avatar)
 	# The avatar's Look node lives at y=-16 and each 64px frame is centered on
 	# that node. Keep the complete head centered inside the fixed render target.
 	# The TextureRect scales that target to each UI use without changing its crop.
-	avatar.scale = Vector2.ONE * PORTRAIT_RENDER_SCALE
+	avatar.scale = Vector2.ONE * render_scale
 	avatar.position = Vector2(
-		viewport.size.x * 0.5 - HEAD_LOCAL_CENTER_X * PORTRAIT_RENDER_SCALE,
-		viewport.size.y * 0.5 - HEAD_LOCAL_CENTER_Y * PORTRAIT_RENDER_SCALE
+		viewport.size.x * 0.5 - HEAD_LOCAL_CENTER_X * render_scale,
+		viewport.size.y * 0.5 - HEAD_LOCAL_CENTER_Y * render_scale
 	)
 	var nameplate := avatar.get_node_or_null("Nameplate") as Control
 	if nameplate != null:

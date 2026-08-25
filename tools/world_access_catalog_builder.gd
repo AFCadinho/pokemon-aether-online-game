@@ -5,6 +5,7 @@ class_name WorldAccessCatalogBuilder
 const SCHEMA_VERSION := 3
 const TILE_SIZE := 32.0
 const STAFF_TELEPORT_OVERRIDES_PATH := "res://tools/staff_teleport_overrides.json"
+const VIRTUAL_AREA_OVERRIDES_PATH := "res://tools/world_access_virtual_areas.json"
 const AREA_TYPES: Array[String] = [
 	"exterior",
 	"interior",
@@ -27,6 +28,9 @@ func build(
 			"catalog": {},
 		}
 	var staff_teleport_overrides: Dictionary = overrides_result.get("overrides", {})
+	var virtual_result := _load_virtual_areas(VIRTUAL_AREA_OVERRIDES_PATH)
+	if not bool(virtual_result.get("success", false)):
+		return {"success": false, "errors": [str(virtual_result.get("error", ""))], "catalog": {}}
 	var scene_paths: Array[String] = []
 	_collect_scene_paths(scene_root, scene_paths)
 	scene_paths.sort()
@@ -49,6 +53,15 @@ func build(
 			continue
 		areas[map_id] = record.get("area", {})
 		records_by_scene_path[scene_path] = record
+	for virtual_area_value: Variant in virtual_result.get("areas", []):
+		if not virtual_area_value is Dictionary:
+			continue
+		var virtual_area := virtual_area_value as Dictionary
+		var virtual_id := str(virtual_area.get("areaId", "")).strip_edges()
+		if virtual_id.is_empty() or areas.has(virtual_id):
+			errors.append("Duplicate or empty virtual area id %s." % virtual_id)
+			continue
+		areas[virtual_id] = virtual_area.get("definition", {})
 
 	var transitions: Dictionary = {}
 	for source_scene_path: String in records_by_scene_path:
@@ -182,9 +195,9 @@ func _load_scene_record(scene_path: String, staff_teleport_overrides: Dictionary
 		}
 
 	var scene_aliases: Array[String] = []
-	var resource_uid := ResourceLoader.get_resource_uid(scene_path)
-	if resource_uid != ResourceUID.INVALID_ID:
-		scene_aliases.append(ResourceUID.id_to_text(resource_uid))
+	var scene_uid := _read_scene_uid(scene_path)
+	if not scene_uid.is_empty():
+		scene_aliases.append(scene_uid)
 
 	var spawns: Dictionary = {}
 	var spawn_points: Dictionary = {}
@@ -236,7 +249,7 @@ func _load_scene_record(scene_path: String, staff_teleport_overrides: Dictionary
 						"y": roundi((spawn_position.y - (TILE_SIZE / 2.0)) / TILE_SIZE),
 					},
 					"facingDirection": facing_direction,
-					"safeForStaffTeleport": true,
+					"safeForStaffTeleport": bool(point_override.get("safe", true)),
 				}
 
 	var exits: Array[Dictionary] = []
@@ -312,6 +325,24 @@ func _canonical_scene_path(scene_reference: String) -> String:
 	return str((resource_value as PackedScene).resource_path).strip_edges()
 
 
+func _read_scene_uid(scene_path: String) -> String:
+	var file := FileAccess.open(scene_path, FileAccess.READ)
+	if file == null:
+		return ""
+	var header := file.get_line()
+	file.close()
+	var marker := 'uid="'
+	var uid_start := header.find(marker)
+	if uid_start < 0:
+		return ""
+	uid_start += marker.length()
+	var uid_end := header.find('"', uid_start)
+	if uid_end < 0:
+		return ""
+	var scene_uid := header.substr(uid_start, uid_end - uid_start).strip_edges()
+	return scene_uid if scene_uid.begins_with("uid://") else ""
+
+
 func _load_staff_teleport_overrides(path: String) -> Dictionary:
 	var source := FileAccess.get_file_as_string(path)
 	if source.is_empty():
@@ -326,6 +357,34 @@ func _load_staff_teleport_overrides(path: String) -> Dictionary:
 			"error": "Staff teleport overrides are invalid JSON: %s." % path,
 		}
 	return {"success": true, "overrides": parsed_value as Dictionary}
+
+
+func _load_virtual_areas(path: String) -> Dictionary:
+	var source := FileAccess.get_file_as_string(path)
+	if source.is_empty():
+		return {"success": false, "error": "Could not read virtual area overrides from %s." % path}
+	var parsed_value: Variant = JSON.parse_string(source)
+	if not parsed_value is Dictionary:
+		return {"success": false, "error": "Virtual area overrides are invalid JSON: %s." % path}
+	var areas_value: Variant = (parsed_value as Dictionary).get("areas", [])
+	if not areas_value is Array:
+		return {"success": false, "error": "Virtual area overrides must contain an areas array."}
+	var result: Array[Dictionary] = []
+	for value: Variant in areas_value:
+		if not value is Dictionary:
+			return {"success": false, "error": "Virtual area override is not an object."}
+		var entry := value as Dictionary
+		var area_id := str(entry.get("areaId", "")).strip_edges()
+		var definition_value: Variant = entry.get("definition", {})
+		if area_id.is_empty() or not definition_value is Dictionary:
+			return {"success": false, "error": "Virtual area override has an invalid id or definition."}
+		var definition := (definition_value as Dictionary).duplicate(true)
+		definition["accessOnly"] = true
+		definition["scenePath"] = ""
+		definition["sceneAliases"] = []
+		definition["spawnPoints"] = {}
+		result.append({"areaId": area_id, "definition": definition})
+	return {"success": true, "areas": result}
 
 
 func _collect_scene_paths(directory_path: String, result: Array[String]) -> void:

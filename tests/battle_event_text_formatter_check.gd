@@ -30,6 +30,36 @@ func _run() -> void:
 		"wild battle start messages"
 	)
 	_check_equal(
+		formatter.format_pokemon_identity("Sparky", "Pikachu"),
+		"Sparky (Pikachu)",
+		"battle-log identity links nickname to species"
+	)
+	_check_equal(
+		formatter.format_pokemon_identity("Pikachu", "Pikachu"),
+		"Pikachu",
+		"battle-log identity does not duplicate the species name"
+	)
+	_check_equal(
+		formatter.format_pokemon_identity("Ogerpon", "Ogerpon-Wellspring"),
+		"Ogerpon Wellspring",
+		"an unnicknamed Ogerpon battle ident displays its mask forme"
+	)
+	_check_equal(
+		formatter.format_pokemon_identity("Mossy", "Ogerpon-Wellspring"),
+		"Mossy (Ogerpon Wellspring)",
+		"a real Ogerpon nickname remains linked to its mask forme"
+	)
+	_check_equal(
+		formatter.format_pokemon_identity("Dragonite", "Dragonite-Mega"),
+		"Dragonite Mega",
+		"an unnicknamed opponent uses its revealed Mega species in the battle log"
+	)
+	_check_equal(
+		formatter.format_pokemon_identity("Puff", "Dragonite-Mega"),
+		"Puff (Dragonite Mega)",
+		"a custom nickname remains linked to its revealed Mega species"
+	)
+	_check_equal(
 		formatter.format_trainer_battle_start_messages("Pikachu", "Eevee", "Gary Oak"),
 		["Gary Oak wants to battle!", "Gary Oak sent out Eevee!", "Go! Pikachu!"],
 		"trainer battle start messages"
@@ -65,8 +95,18 @@ func _run() -> void:
 		"resisted message"
 	)
 	_check_equal(
+		formatter.format_stat_stage_event({"type": "statStage", "operation": "clearAll"}),
+		"All stat changes were eliminated!",
+		"Haze stat reset message"
+	)
+	_check_equal(
+		formatter.format_stat_stage_event({"type": "statStage", "operation": "clear", "target": "p2a: Gholdengo"}),
+		"The opposing Gholdengo's stat changes were eliminated!",
+		"Clear Smog stat reset message"
+	)
+	_check_equal(
 		formatter.format_direct_damage_message("Pikachu", 12, true, false),
-		"(Pikachu lost 12% of its health!)",
+		"(Pikachu lost 12.0% of its health!)",
 		"direct damage message"
 	)
 	_check_equal(
@@ -135,6 +175,11 @@ func _run() -> void:
 		formatter.format_status_event({"target": "Pikachu", "status": "brn"}),
 		"Pikachu liep een brandwond op!",
 		"Dutch status event localizes battle grammar"
+	)
+	_check_equal(
+		formatter.format_hit_count_event({"count": 4}),
+		"Raakte 4 keer!",
+		"Dutch multi-hit count matches the Showdown battle log"
 	)
 	_check_equal(
 		formatter.format_field_effect_event({"state": "end", "effectType": "weather", "effect": "Snow"}),

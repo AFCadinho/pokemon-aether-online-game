@@ -2,6 +2,9 @@ extends RefCounted
 
 class_name BattleHpEventHelper
 
+var _presentation_hp_cursor_by_target: Dictionary = {}
+
+
 func get_event_hp_snapshot(event: Dictionary, use_previous_hp: bool) -> Dictionary:
 	var condition_key: String = "previousCondition" if use_previous_hp else "condition"
 	var condition_snapshot := parse_condition_hp_snapshot(str(event.get(condition_key, "")))
@@ -57,6 +60,109 @@ func get_rewind_hp_snapshot(event: Dictionary, state_snapshot: Dictionary) -> Di
 		return state_snapshot.duplicate(true)
 
 	return previous_snapshot
+
+
+func normalize_damage_event_continuity(events: Array) -> Array:
+	var normalized_events: Array = events.duplicate(true)
+
+	for event_value: Variant in normalized_events:
+		if not (event_value is Dictionary):
+			continue
+
+		var event: Dictionary = event_value as Dictionary
+		var event_type := str(event.get("type", ""))
+		if event_type == "switch" or event_type == "drag":
+			# Active idents may be reused by the incoming Pokemon. Never carry an
+			# outgoing Pokemon's rendered HP into the next switch target.
+			_presentation_hp_cursor_by_target.clear()
+			continue
+		if event_type != "damage" and event_type != "heal" and event_type != "faint":
+			continue
+
+		var target_key := _get_hp_event_target_key(event)
+		if target_key == "":
+			continue
+
+		if event_type == "damage" and _presentation_hp_cursor_by_target.has(target_key):
+			_clamp_damage_rewind_to_cursor(event, _presentation_hp_cursor_by_target[target_key])
+
+		var current_snapshot := get_event_hp_snapshot(event, false)
+		if current_snapshot.is_empty():
+			continue
+		current_snapshot["condition"] = str(event.get("condition", ""))
+		_presentation_hp_cursor_by_target[target_key] = current_snapshot
+
+	return normalized_events
+
+func _clamp_damage_rewind_to_cursor(event: Dictionary, cursor_value: Variant) -> void:
+	if not (cursor_value is Dictionary):
+		return
+
+	var cursor: Dictionary = cursor_value as Dictionary
+	var previous_snapshot := get_event_hp_snapshot(event, true)
+	var current_snapshot := get_event_hp_snapshot(event, false)
+	if event.has("previousHp") and event.has("hp") and int(event.get("maxHp", 0)) > 0:
+		var numeric_max_hp := int(event.get("maxHp", 0))
+		previous_snapshot = {
+			"hp": int(event.get("previousHp", 0)),
+			"max_hp": numeric_max_hp,
+		}
+		current_snapshot = {
+			"hp": int(event.get("hp", 0)),
+			"max_hp": numeric_max_hp,
+		}
+	if previous_snapshot.is_empty() or current_snapshot.is_empty():
+		return
+
+	var cursor_max_hp := int(cursor.get("max_hp", 0))
+	var previous_max_hp := int(previous_snapshot.get("max_hp", 0))
+	var current_max_hp := int(current_snapshot.get("max_hp", 0))
+	if cursor_max_hp <= 0 or previous_max_hp <= 0 or current_max_hp <= 0:
+		return
+
+	var cursor_hp := int(cursor.get("hp", 0))
+	var previous_hp := int(previous_snapshot.get("hp", 0))
+	var current_hp := int(current_snapshot.get("hp", 0))
+	var cursor_percent := to_visible_hp_percent(cursor_hp, cursor_max_hp)
+	var previous_percent := to_visible_hp_percent(previous_hp, previous_max_hp)
+	var current_percent := to_visible_hp_percent(current_hp, current_max_hp)
+	if previous_percent <= cursor_percent or current_percent > cursor_percent:
+		return
+
+	var event_max_hp := int(event.get("maxHp", 0))
+	if event_max_hp > 0:
+		event["previousHp"] = clamp(
+			roundi((float(cursor_hp) / float(cursor_max_hp)) * float(event_max_hp)),
+			0,
+			event_max_hp
+		)
+	var cursor_condition := str(cursor.get("condition", ""))
+	if cursor_condition != "":
+		event["previousCondition"] = cursor_condition
+	else:
+		event["previousCondition"] = "%d/%d" % [cursor_hp, cursor_max_hp]
+
+
+func _get_hp_event_target_key(event: Dictionary) -> String:
+	for key in ["pokemonKey", "pokemon_key"]:
+		var pokemon_key := str(event.get(key, "")).strip_edges()
+		if pokemon_key != "":
+			return "pokemon:%s" % pokemon_key
+
+	for ref_key in ["targetRef", "target_ref"]:
+		var target_ref_value: Variant = event.get(ref_key, {})
+		if not (target_ref_value is Dictionary):
+			continue
+		var target_ref: Dictionary = target_ref_value as Dictionary
+		var pokemon_key := str(target_ref.get("pokemonKey", target_ref.get("pokemon_key", ""))).strip_edges()
+		if pokemon_key != "":
+			return "pokemon:%s" % pokemon_key
+
+	var target := str(event.get("target", "")).strip_edges().to_lower()
+	if target != "":
+		return "target:%s" % target
+
+	return ""
 
 func get_event_status(event: Dictionary, use_previous_hp: bool) -> String:
 	var condition_key: String = "previousCondition" if use_previous_hp else "condition"
@@ -183,6 +289,19 @@ func get_event_visible_hp_change(event: Dictionary) -> int:
 		return current_only_change
 
 	return 0
+
+func get_event_damage_percent(event: Dictionary) -> float:
+	var public_damage_percent: float = float(event.get("damagePercent", 0.0))
+	if is_finite(public_damage_percent) and public_damage_percent > 0.0:
+		return public_damage_percent
+
+	var previous_hp: int = int(event.get("previousHp", 0))
+	var hp: int = int(event.get("hp", 0))
+	var max_hp: int = int(event.get("maxHp", 0))
+	var amount: int = int(event.get("amount", 0))
+	if previous_hp > hp and amount > 0 and max_hp > 0:
+		return (float(amount) / float(max_hp)) * 100.0
+	return float(get_event_visible_hp_change(event))
 
 func event_has_hp_loss(event: Dictionary) -> bool:
 	if is_percentage_only_condition_event(event, false):

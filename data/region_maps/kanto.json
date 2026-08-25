@@ -40,6 +40,21 @@
       "kind": "city",
       "nameKey": "ui.town_map.location.pewter_city.name",
       "descriptionKey": "ui.town_map.location.pewter_city.description"
+    },
+    "kanto_route_3": {
+      "kind": "route",
+      "nameKey": "ui.town_map.location.route_3.name",
+      "descriptionKey": "ui.town_map.location.route_3.description"
+    },
+    "kanto_route_4": {
+      "kind": "route",
+      "nameKey": "ui.town_map.location.route_4.name",
+      "descriptionKey": "ui.town_map.location.route_4.description"
+    },
+    "kanto_cerulean_city": {
+      "kind": "city",
+      "nameKey": "ui.town_map.location.cerulean_city.name",
+      "descriptionKey": "ui.town_map.location.cerulean_city.description"
     }
   }
 }

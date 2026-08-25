@@ -156,9 +156,15 @@ func _materialize_tileset_image_chunks(
 	if columns <= 0:
 		columns = maxi(1, image_width / tile_width)
 
+	var image_tile_count := columns * int(floor(float(image_height) / float(tile_height)))
 	var tile_count := int(tileset.get("tile_count", 0))
+	# Some Tiled tilesets keep a stale tilecount after the source image grows.
+	# Use the image dimensions as a lower bound so valid cells in the newly
+	# appended rows are not silently dropped during import.
 	if tile_count <= 0:
-		tile_count = columns * int(floor(float(image_height) / float(tile_height)))
+		tile_count = image_tile_count
+	else:
+		tile_count = maxi(tile_count, image_tile_count)
 
 	var max_rows_per_chunk := maxi(1, MAX_GENERATED_TEXTURE_SIZE / tile_height)
 	var total_rows := int(ceil(float(tile_count) / float(columns)))

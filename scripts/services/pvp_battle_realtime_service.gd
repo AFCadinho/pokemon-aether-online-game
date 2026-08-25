@@ -13,7 +13,7 @@ signal room_ready(room_code: String, battle_id: String)
 signal session_invalid(reason: String)
 signal timer_state_changed(timer_projection: RefCounted)
 
-const RECONNECT_DELAY_SECONDS := 3.0
+const RECONNECT_RETRY_DELAYS_SECONDS: Array[float] = [0.0, 1.0, 3.0]
 const CONNECTION_HEARTBEAT_SECONDS := 5.0
 const CONNECTION_PONG_TIMEOUT_MSEC := 12000
 const JOIN_ACK_TIMEOUT_MSEC := 10000
@@ -34,6 +34,7 @@ var connected := false
 var connecting := false
 var should_reconnect := false
 var reconnect_timer := 0.0
+var reconnect_retry_count := 0
 var connection_heartbeat_timer := 0.0
 var connection_attempt_generation := 0
 var join_sent := false
@@ -81,6 +82,8 @@ func _process(delta: float) -> void:
 	var is_connected := ready_state == WebSocketPeer.STATE_OPEN
 	if connected != is_connected:
 		connected = is_connected
+		if not connected and should_reconnect and reconnect_retry_count == 0:
+			_schedule_reconnect_retry()
 		connection_changed.emit(connected)
 
 	if ready_state == WebSocketPeer.STATE_OPEN:
@@ -118,7 +121,9 @@ func _process(delta: float) -> void:
 
 	reconnect_timer -= delta
 	if reconnect_timer <= 0.0:
-		reconnect_timer = RECONNECT_DELAY_SECONDS
+		# Keep the async connection setup from being scheduled again while this
+		# attempt resolves. A failed attempt installs its next bounded delay.
+		reconnect_timer = RECONNECT_RETRY_DELAYS_SECONDS[-1]
 		connect_room(active_room_code, active_player_id, active_battle_id, active_match_id, active_viewer_role)
 
 
@@ -198,7 +203,7 @@ func _connect_room_async(attempt_generation: int) -> void:
 	if error != OK:
 		connecting = false
 		connected = false
-		reconnect_timer = RECONNECT_DELAY_SECONDS
+		_schedule_reconnect_retry()
 		connection_changed.emit(false)
 		push_warning("PvpBattleRealtimeService: could not connect websocket: %s" % error_string(error))
 		return
@@ -272,6 +277,8 @@ func disconnect_room() -> void:
 	last_spectator_event_seq = 0
 	spectator_cursor_valid = false
 	received_battle_event_count = 0
+	reconnect_retry_count = 0
+	reconnect_timer = 0.0
 	_reset_battle_event_buffer()
 	timer_projection.reset()
 	pending_render_ack_payload.clear()
@@ -301,6 +308,7 @@ func report_diagnostic(event_type: String, context: Dictionary = {}) -> bool:
 		"pvp.invalid_realtime_response",
 		"pvp.realtime_response_timeout",
 		"pvp.resync_required_received",
+		"pvp.forced_switch_selection_blocked",
 	]:
 		return false
 	var payload := {
@@ -310,7 +318,8 @@ func report_diagnostic(event_type: String, context: Dictionary = {}) -> bool:
 	for key: String in [
 		"requestId", "eventBatchId", "displayedPhase", "reasonCode",
 		"serverSeq", "phaseSeq", "lastRenderedSeq", "observedDurationMs",
-		"inputLocked", "pendingAction",
+		"decisionGeneration", "inputLocked", "pendingAction", "forceSwitchRequired",
+		"decisionId", "selectionGate",
 	]:
 		if context.has(key):
 			payload[key] = context[key]
@@ -523,6 +532,8 @@ func _process_packets() -> void:
 			var message_battle := str(message.get("battleId", active_battle_id)).strip_edges()
 			if message_room == active_room_code and (active_battle_id == "" or message_battle == active_battle_id):
 				room_is_ready = true
+				reconnect_retry_count = 0
+				reconnect_timer = 0.0
 				room_ready.emit(message_room, message_battle)
 			continue
 		if message_type == "pvp.battle_update":
@@ -589,6 +600,10 @@ func _process_packets() -> void:
 			if timer_applied:
 				timer_state_changed.emit(timer_projection)
 			continue
+		if message_type.begins_with("pvp.timer_"):
+			if timer_projection.apply_legacy_event(message):
+				timer_state_changed.emit(timer_projection)
+			continue
 		if message_type == "pvp.opponent_disconnected" or message_type == "pvp.opponent_reconnected" or message_type == "pvp.reconnect_grace_started":
 			battle_update_received.emit(message)
 			continue
@@ -652,13 +667,51 @@ func _apply_timer_projection_from_battle_response(message: Dictionary) -> bool:
 	var response_value: Variant = message.get("response", {})
 	if not (response_value is Dictionary):
 		return false
-	var timer_value: Variant = (response_value as Dictionary).get("timerState", {})
-	if not (timer_value is Dictionary):
-		return false
-	if not timer_projection.apply_snapshot(timer_value as Dictionary):
-		return false
-	timer_state_changed.emit(timer_projection)
-	return true
+	var response := response_value as Dictionary
+	var applied := false
+	var timer_value: Variant = response.get("timerState", {})
+	if timer_value is Dictionary:
+		applied = timer_projection.apply_snapshot(timer_value as Dictionary) or applied
+
+	# Legacy room timers are returned inside the same authoritative action
+	# response. Applying only standalone websocket timer packets leaves the old
+	# phase clock running whenever such a packet is delayed or coalesced.
+	if not timer_projection.contract_enabled:
+		var timer_events_value: Variant = response.get("pvpTimerEvents", [])
+		if timer_events_value is Array:
+			for event_value: Variant in timer_events_value:
+				if not (event_value is Dictionary):
+					continue
+				var event := event_value as Dictionary
+				var timers_value: Variant = event.get("timers", [])
+				if timers_value is Array:
+					for legacy_timer_value: Variant in timers_value:
+						if legacy_timer_value is Dictionary:
+							applied = timer_projection.apply_legacy_event(legacy_timer_value as Dictionary) or applied
+				var legacy_timer_value: Variant = event.get("timer", {})
+				if legacy_timer_value is Dictionary:
+					applied = timer_projection.apply_legacy_event(legacy_timer_value as Dictionary) or applied
+		var direct_timer_value: Variant = response.get("pvpTimer", {})
+		if direct_timer_value is Dictionary:
+			applied = timer_projection.apply_legacy_event(direct_timer_value as Dictionary) or applied
+		# A successful participant response also carries the caller's exact
+		# decision state. Treat LOCKED as authoritative confirmation that their
+		# submitted choice stopped this phase clock. This closes the visual race
+		# when a standalone consumed packet is coalesced or arrives late.
+		applied = timer_projection.apply_legacy_decision_projection(
+			response.get("decisions", {})
+		) or applied
+
+	if applied:
+		timer_state_changed.emit(timer_projection)
+	return applied
+
+
+func apply_initial_timer_response(response: Dictionary) -> void:
+	var timers_value: Variant = response.get("pvpTimers", [])
+	var enabled := bool(response.get("timerEnabled", false))
+	if timer_projection.apply_legacy_snapshot(timers_value, enabled):
+		timer_state_changed.emit(timer_projection)
 
 
 func _remember_spectator_event_cursor(message: Dictionary) -> void:
@@ -1239,7 +1292,7 @@ func _restart_stalled_connection(reason: String) -> void:
 	ping_sent_at_msec = 0
 	connection_heartbeat_timer = 0.0
 	connecting = false
-	reconnect_timer = RECONNECT_DELAY_SECONDS
+	_schedule_reconnect_retry()
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		websocket.close(1013, reason.left(120))
 	# A peer left in CLOSING can otherwise remain the active object forever and
@@ -1248,6 +1301,12 @@ func _restart_stalled_connection(reason: String) -> void:
 	if connected:
 		connected = false
 		connection_changed.emit(false)
+
+
+func _schedule_reconnect_retry() -> void:
+	var delay_index := mini(reconnect_retry_count, RECONNECT_RETRY_DELAYS_SECONDS.size() - 1)
+	reconnect_timer = RECONNECT_RETRY_DELAYS_SECONDS[delay_index]
+	reconnect_retry_count += 1
 
 
 func _handle_join_error(message: Dictionary) -> void:
@@ -1297,6 +1356,8 @@ func _handle_battle_events_message(message: Dictionary) -> void:
 		valid_event_count += 1
 		if str(event.get("type", "")).begins_with("battle.timer_"):
 			timer_projection.apply_event(event)
+		elif str(event.get("type", "")).begins_with("pvp.timer_"):
+			timer_projection.apply_legacy_event(event)
 		else:
 			timer_projection.mark_event_applied(next_event_seq)
 		var terminal_payload_value: Variant = event.get("payload", {})

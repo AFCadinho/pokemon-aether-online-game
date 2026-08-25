@@ -7,14 +7,14 @@ mechanical indexes, but contains presentation fields only:
 
 - 1,439 species and forms;
 - 919 moves;
-- 376 abilities;
+- 377 abilities;
 - 1,395 items;
-- short descriptions for all 919 moves and the 316 abilities whose source index has
+- short descriptions for all 919 moves and the 317 abilities whose source index has
   a description;
 - names and short descriptions for all 1,395 canonical items.
 
 `localization/content/generated/en.json` is the complete English presentation source.
-The Dutch and Brazilian Portuguese files in the same directory are machine-generated
+The Dutch, Brazilian Portuguese, and Simplified Chinese files in the same directory are machine-generated
 review drafts. They make the full catalog testable in-game, but are not considered
 language-reviewed.
 
@@ -22,17 +22,24 @@ The item equivalents live under `localization/items/generated/`. The generated i
 catalogs contain only `name` and `shortDesc`; quantities, prices, effects, ownership,
 and other mechanics remain in canonical game data.
 
+The initial Simplified Chinese interface, launcher, item, content, sign, and dialogue
+catalogs are complete machine-generated review drafts with a reviewed core glossary.
+They provide full technical coverage and English fallback, but still require
+native-speaker review before language-quality approval is recorded.
+
 The manually reviewed overlays remain:
 
 - `localization/content/en.json`;
 - `localization/content/nl.json`;
 - `localization/content/pt_BR.json`.
+- `localization/content/zh_CN.json`.
 
 The manually reviewed item overlays remain:
 
 - `localization/items/en.json`;
 - `localization/items/nl.json`;
 - `localization/items/pt_BR.json`.
+- `localization/items/zh_CN.json`.
 
 These files load after the generated catalogs, so a reviewed entry always overrides
 its generated draft. Current reviewed coverage is all 18 types, all 25 natures, and
@@ -47,7 +54,7 @@ the 69-item pilot catalog.
    node tools/generate_content_localization_source.mjs
    ```
 
-2. Generate separate Dutch and Portuguese review drafts only when intentionally
+2. Generate separate Dutch, Portuguese, and Simplified Chinese review drafts only when intentionally
    refreshing automated translations:
 
    ```bash

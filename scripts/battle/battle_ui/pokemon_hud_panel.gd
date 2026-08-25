@@ -18,11 +18,9 @@ const STATUS_ICON_ROWS := {
 	"frz": 4,
 	"tox": 7,
 }
-
-const GENDER_COLORS := {
-	"M": Color("#64a8ff"),
-	"F": Color("#ff78c8"),
-}
+const POKEMON_GENDER_DISPLAY := preload("res://scripts/ui/pokemon_gender_display.gd")
+const MALE_GENDER_ICON: Texture2D = preload("res://assets/gender/male.png")
+const FEMALE_GENDER_ICON: Texture2D = preload("res://assets/gender/female.png")
 
 var status_icon_texture_cache: Dictionary = {}
 var localization_manager: Node
@@ -43,9 +41,10 @@ func set_pokemon_data(
 	status: String = "",
 	gender: String = "",
 	is_shiny: bool = false,
-	experience_data: Dictionary = {}
+	experience_data: Dictionary = {},
+	display_name: String = ""
 ) -> void:
-	_set_active_info_row_data(0, species, level, current_hp, max_hp, status, gender, is_shiny, experience_data)
+	_set_active_info_row_data(0, species, level, current_hp, max_hp, status, gender, is_shiny, experience_data, display_name)
 
 func set_experience_bar_enabled(enabled: bool) -> void:
 	experience_bar_enabled = enabled
@@ -104,7 +103,8 @@ func _set_active_info_row_data(
 	status: String = "",
 	gender: String = "",
 	is_shiny: bool = false,
-	experience_data: Dictionary = {}
+	experience_data: Dictionary = {},
+	display_name: String = ""
 ) -> void:
 	if row_index < 0 or row_index >= active_info_rows.size():
 		return
@@ -119,12 +119,13 @@ func _set_active_info_row_data(
 		"gender": gender,
 		"is_shiny": is_shiny,
 		"experience_data": experience_data.duplicate(true),
+		"display_name": display_name,
 	})
 	_set_active_info_row_visible(row_index, true)
 
 	var name_label: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/NameContainer/NameLabel") as Label
 	if name_label != null:
-		name_label.text = species
+		name_label.text = display_name if display_name.strip_edges() != "" else species
 
 	_set_shiny_badge(row, is_shiny)
 	var level_label: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/HBoxContainer/LevelLabel") as Label
@@ -189,17 +190,19 @@ func _set_gender(row: Node, gender: String) -> void:
 	if gender_icon == null:
 		return
 
-	var gender_text: String = gender.strip_edges().to_upper()
-	gender_icon.visible = GENDER_COLORS.has(gender_text)
+	var presentation: Dictionary = POKEMON_GENDER_DISPLAY.presentation(gender)
+	gender_icon.visible = bool(presentation.get("visible", false))
 	if not gender_icon.visible:
+		gender_icon.texture = null
+		gender_icon.modulate = Color.WHITE
 		gender_icon.tooltip_text = ""
 		return
 
-	var gender_color: Color = GENDER_COLORS.get(gender_text, Color.WHITE)
-	gender_icon.modulate = gender_color
-	gender_icon.tooltip_text = _t(
-		"battle.gender.male" if gender_text == "M" else "battle.gender.female"
-	)
+	var symbol := str(presentation.get("symbol", ""))
+	gender_icon.texture = MALE_GENDER_ICON if symbol == "♂" else FEMALE_GENDER_ICON
+	# The gender artwork already contains its intended blue or pink color.
+	gender_icon.modulate = Color.WHITE
+	gender_icon.tooltip_text = _t(str(presentation.get("localization_key", "")))
 
 func _set_status(row: Node, status: String) -> void:
 	var status_icon: TextureRect = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/HBoxContainer/StatusIcon") as TextureRect
@@ -284,7 +287,8 @@ func _on_locale_changed(_locale: String) -> void:
 			str(data.get("status", "")),
 			str(data.get("gender", "")),
 			bool(data.get("is_shiny", false)),
-			data.get("experience_data", {}) as Dictionary
+			data.get("experience_data", {}) as Dictionary,
+			str(data.get("display_name", ""))
 		)
 
 func _to_visible_hp_percent(current_hp: int, max_hp: int) -> int:

@@ -46,11 +46,34 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 		_get_int_option(data, ["experienceToNextLevel", "experience_to_next_level", "expToNextLevel", "exp_to_next_level"]),
 		_get_string_option(data, ["growthRate", "growth_rate"]),
 		_get_int_option(data, ["baseExperience", "base_experience"]),
-		_get_payload_status(data)
+		_get_payload_status(data),
+		_get_int_option(data, ["happiness", "friendship"], Pokemon.DEFAULT_HAPPINESS)
 	)
 
 	_apply_payload_hp_state(pokemon, data)
+	pokemon.national_dex_number = _get_int_option(data, ["nationalDexNumber", "national_dex_number", "dexNumber", "dex_number"])
+	pokemon.species_id = _get_string_option(data, ["speciesId", "species_id"])
+	pokemon.showdown_id = _get_string_option(data, ["showdownId", "showdown_id"])
+	pokemon.nickname = _get_string_option(data, ["nickname", "nickName", "displayName", "display_name", "name"])
+	pokemon.gender = _normalize_pokemon_gender(_get_string_option(data, ["gender", "sex"]))
+	pokemon.can_evolve = bool(data.get("canEvolve", data.get("can_evolve", false)))
+	pokemon.hidden_ability = _get_bool_option(data, ["hiddenAbility", "hidden_ability"])
+	pokemon.special_lineage = _get_string_option(data, ["specialLineage", "special_lineage"]).strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+	pokemon.borrowed = _get_bool_option(data, ["borrowed", "isBorrowed", "is_borrowed"])
+	var loan_value: Variant = data.get("loan", {})
+	pokemon.loan = (loan_value as Dictionary).duplicate(true) if loan_value is Dictionary else {}
 	return pokemon
+
+
+static func _normalize_pokemon_gender(value: String) -> String:
+	match value.strip_edges().to_lower():
+		"m", "male", "masculine", "♂":
+			return "male"
+		"f", "female", "feminine", "♀":
+			return "female"
+		"n", "genderless", "none", "neutral":
+			return "genderless"
+	return ""
 
 
 static func _get_payload_moves(data: Dictionary) -> Array:
@@ -203,7 +226,10 @@ static func _get_string_option(options: Dictionary, keys: Array, default_value: 
 		if not options.has(key):
 			continue
 
-		var text_value: String = str(options.get(key)).strip_edges()
+		var value: Variant = options.get(key)
+		if value == null:
+			continue
+		var text_value: String = str(value).strip_edges()
 		if text_value != "":
 			return text_value
 

@@ -42,6 +42,11 @@ func _init() -> void:
 		0.70,
 		"Air Balloon message remains visible long enough to notice"
 	)
+	_check_equal(
+		timing.get_battle_message_hold_seconds({"type": "item", "item": "Eject Button", "state": "end"}, "Ferrothorn used its Eject Button!"),
+		0.55,
+		"consumable item activation message remains visible with or without animations"
+	)
 
 	quit(1 if failed else 0)
 

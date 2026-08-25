@@ -23,6 +23,7 @@ var should_reconnect: bool = false
 var reconnect_timer: float = 0.0
 var session_check_timer: float = SESSION_CHECK_INTERVAL_SECONDS
 var session_invalid_handled: bool = false
+var connection_attempt_generation := 0
 
 
 func _process(delta: float) -> void:
@@ -62,22 +63,29 @@ func _process(delta: float) -> void:
 
 
 func connect_chat() -> void:
-	if connecting:
-		return
 	if not AuthService.is_authenticated():
 		return
 
 	should_reconnect = true
+	var ready_state := websocket.get_ready_state()
+	if connecting or ready_state != WebSocketPeer.STATE_CLOSED:
+		return
 	connecting = true
 	session_invalid_handled = false
 	session_check_timer = SESSION_CHECK_INTERVAL_SECONDS
-	_connect_chat_async.call_deferred()
+	connection_attempt_generation += 1
+	_connect_chat_async.call_deferred(connection_attempt_generation)
 
 
-func _connect_chat_async() -> void:
+func _connect_chat_async(attempt_generation: int) -> void:
 	var base_url: String = await GatewayApiConfig.get_base_url()
+	if attempt_generation != connection_attempt_generation:
+		return
 	if not AuthService.is_authenticated():
 		connecting = false
+		return
+	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
+		connecting = websocket.get_ready_state() == WebSocketPeer.STATE_CONNECTING
 		return
 
 	var websocket_url: String = ClientBuild.append_websocket_query(
@@ -95,6 +103,7 @@ func _connect_chat_async() -> void:
 func disconnect_chat() -> void:
 	should_reconnect = false
 	connecting = false
+	connection_attempt_generation += 1
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		websocket.close()
 	websocket = WebSocketPeer.new()
@@ -106,9 +115,14 @@ func disconnect_chat() -> void:
 		connection_changed.emit(false)
 
 
-func send_chat_message(text: String, channel: String = "global", pokemon_attachments: Array = []) -> bool:
+func send_chat_message(
+	text: String,
+	channel: String = "global",
+	pokemon_attachments: Array = [],
+	shiny_hunt_share_id: String = ""
+) -> bool:
 	var cleaned_text: String = text.strip_edges()
-	if cleaned_text.is_empty() and pokemon_attachments.is_empty():
+	if cleaned_text.is_empty() and pokemon_attachments.is_empty() and shiny_hunt_share_id.is_empty():
 		return true
 	if cleaned_text.length() > MAX_MESSAGE_LENGTH:
 		cleaned_text = cleaned_text.substr(0, MAX_MESSAGE_LENGTH)
@@ -124,6 +138,8 @@ func send_chat_message(text: String, channel: String = "global", pokemon_attachm
 	}
 	if not pokemon_attachments.is_empty():
 		payload["pokemonAttachments"] = pokemon_attachments
+	if not shiny_hunt_share_id.is_empty():
+		payload["shinyHuntShareId"] = shiny_hunt_share_id
 	var error: Error = websocket.send_text(JSON.stringify(payload))
 	return error == OK
 

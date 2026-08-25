@@ -1,13 +1,18 @@
 extends Node
 
 const FORMAT_ID = "gen9nationaldex"
+const CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
+const CALCDEX_MATCHUP := preload("res://scripts/battle/battle_calcdex_matchup.gd")
+const CALCDEX_CANDIDATES := preload("res://scripts/battle/battle_calcdex_candidates.gd")
+const CALCDEX_INFERENCE := preload("res://scripts/battle/battle_calcdex_inference.gd")
 
 func create_triggered_wild_battle(
 	request_node: HTTPRequest,
 	player: Dictionary,
 	area_id: String,
 	encounter_type: String = "grass",
-	origin: Dictionary = {}
+	origin: Dictionary = {},
+	debug_time_of_day: String = ""
 ) -> Dictionary:
 	var payload := {
 		"player": player,
@@ -17,6 +22,8 @@ func create_triggered_wild_battle(
 	}
 	if not origin.is_empty():
 		payload["origin"] = origin.duplicate(true)
+	if debug_time_of_day in ["day", "night"]:
+		payload["debugTimeOfDay"] = debug_time_of_day
 	return await send_post_request(
 		request_node,
 		"/battle/wild-encounter",
@@ -42,7 +49,12 @@ func create_dev_wild_battle(
 		payload
 	)
 
-func create_trainer_battle(request_node: HTTPRequest, player: Dictionary, trainer_id: String) -> Dictionary:
+func create_trainer_battle(
+	request_node: HTTPRequest,
+	player: Dictionary,
+	trainer_id: String,
+	is_rematch := false
+) -> Dictionary:
 	return await send_post_request(
 		request_node,
 		"/battle/trainer",
@@ -50,6 +62,7 @@ func create_trainer_battle(request_node: HTTPRequest, player: Dictionary, traine
 			"player": player,
 			"trainerId": trainer_id,
 			"formatId": FORMAT_ID,
+			"isRematch": is_rematch,
 		}
 	)
 
@@ -57,16 +70,32 @@ func create_pvp_room(
 	request_node: HTTPRequest,
 	player: Dictionary,
 	allow_spectators: bool = false,
-	max_spectators: int = 8
+	max_spectators: int = 8,
+	battle_purpose: String = "casual",
+	team_text: String = "",
+	timer_enabled: bool = false,
+	timer_tier_id: String = "casual_v1",
+	room_tier_id: String = "none",
+	format_id: String = FORMAT_ID
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,
 		"/battle/pvp/rooms",
 		{
 			"player": player,
-			"formatId": FORMAT_ID,
+			"formatId": format_id,
+			"roomTierId": room_tier_id,
+			"battlePurpose": battle_purpose,
+			"teamText": team_text,
 			"allowSpectators": allow_spectators,
 			"maxSpectators": clampi(max_spectators, 1, 32),
+			"timerEnabled": timer_enabled,
+			"timerTierId": timer_tier_id,
+			"metadata": {"clientCapabilities": {
+				"timerContractVersions": [1],
+				"decisionContractVersions": [1],
+				"battleCommandContractVersions": [1],
+			}},
 		}
 	)
 
@@ -76,13 +105,24 @@ func get_pvp_room(request_node: HTTPRequest, room_code: String) -> Dictionary:
 		"/battle/pvp/rooms/%s" % room_code.strip_edges().uri_encode()
 	)
 
-func join_pvp_room(request_node: HTTPRequest, room_code: String, player: Dictionary) -> Dictionary:
+func join_pvp_room(
+	request_node: HTTPRequest,
+	room_code: String,
+	player: Dictionary,
+	team_text: String = ""
+) -> Dictionary:
 	return await send_post_request(
 		request_node,
 		"/battle/pvp/rooms/%s/join" % room_code.strip_edges().uri_encode(),
 		{
 			"player": player,
 			"formatId": FORMAT_ID,
+			"teamText": team_text,
+			"metadata": {"clientCapabilities": {
+				"timerContractVersions": [1],
+				"decisionContractVersions": [1],
+				"battleCommandContractVersions": [1],
+			}},
 		}
 	)
 
@@ -353,6 +393,163 @@ func calculate_battle_damage(
 	)
 	return _normalize_damage_calc_response(response)
 
+func get_calcdex_snapshot(
+	request_node: HTTPRequest,
+	battle_id: String,
+	last_projection_revision: Dictionary
+) -> Dictionary:
+	var normalized_battle_id := battle_id.strip_edges()
+	if normalized_battle_id == "" or not CALCDEX_SNAPSHOT.is_valid_projection_revision(last_projection_revision):
+		return {
+			"success": false,
+			"code": "invalid_calcdex_request",
+			"error": "A valid battle and projection revision are required.",
+		}
+	var response: Dictionary = await send_post_request(
+		request_node,
+		"/battle/%s/calcdex/v1/snapshot" % normalized_battle_id.uri_encode(),
+		{
+			"schemaVersion": CALCDEX_SNAPSHOT.SCHEMA_VERSION,
+			"lastProjectionRevision": last_projection_revision.duplicate(true),
+		}
+	)
+	return CALCDEX_SNAPSHOT.normalize_response(response, last_projection_revision)
+
+func calculate_calcdex_matchup(
+	request_node: HTTPRequest,
+	battle_id: String,
+	last_projection_revision: Dictionary,
+	direction: String,
+	attacker_ref: String,
+	defender_ref: String,
+	opponent_scenario: Dictionary = {},
+	field_scenario: Dictionary = {},
+	species_scenario: Dictionary = {},
+	move_scenarios: Array = [],
+	viewer_scenario: Dictionary = {},
+	battle_state_scenario: Dictionary = {}
+) -> Dictionary:
+	var normalized_battle_id := battle_id.strip_edges()
+	if normalized_battle_id == "" or not CALCDEX_SNAPSHOT.is_valid_projection_revision(last_projection_revision):
+		return {"success": false, "code": "invalid_calcdex_request", "error": "A valid battle revision is required."}
+	var payload := {
+		"schemaVersion": CALCDEX_MATCHUP.SCHEMA_VERSION,
+		"lastProjectionRevision": last_projection_revision.duplicate(true),
+		"direction": direction,
+		"attackerRef": attacker_ref,
+		"defenderRef": defender_ref,
+		"viewerScenario": {
+			"boosts": _normalize_damage_calc_boost_table(viewer_scenario.get("boosts", {})),
+		},
+		"opponentScenario": _normalize_damage_calc_assumptions(opponent_scenario),
+		"fieldScenario": field_scenario.duplicate(true),
+		"speciesScenario": _normalize_calcdex_species_scenario(species_scenario),
+		"moveScenarios": move_scenarios.duplicate(true),
+	}
+	var viewer_state: Dictionary = battle_state_scenario.get("viewer", {}) as Dictionary if battle_state_scenario.get("viewer", {}) is Dictionary else {}
+	var opponent_state: Dictionary = battle_state_scenario.get("opponent", {}) as Dictionary if battle_state_scenario.get("opponent", {}) is Dictionary else {}
+	if viewer_state.has("status"):
+		payload["viewerScenario"]["status"] = str(viewer_state.get("status", ""))
+	if viewer_state.has("currentHp"):
+		payload["viewerScenario"]["currentHp"] = maxi(0, int(viewer_state.get("currentHp", 0)))
+	if viewer_scenario.has("ability"):
+		payload["viewerScenario"]["ability"] = str(viewer_scenario.get("ability", ""))
+	if opponent_state.has("status"):
+		payload["opponentScenario"]["status"] = str(opponent_state.get("status", ""))
+	if opponent_state.has("currentHpPercent"):
+		payload["opponentScenario"]["currentHpPercent"] = clampf(float(opponent_state.get("currentHpPercent", 0.0)), 0.0, 100.0)
+	if opponent_scenario.get("assumedMoves") is Array:
+		payload["opponentScenario"]["assumedMoves"] = (opponent_scenario.get("assumedMoves") as Array).duplicate(true)
+	var response: Dictionary = await send_post_request(
+		request_node,
+		"/battle/%s/calcdex/v1/matchup" % normalized_battle_id.uri_encode(),
+		payload
+	)
+	return CALCDEX_MATCHUP.normalize_response(response, last_projection_revision)
+
+func _normalize_calcdex_species_scenario(value: Dictionary) -> Dictionary:
+	var result := {}
+	for relation: String in ["viewer", "opponent"]:
+		var species := str(value.get(relation, "")).strip_edges()
+		if species != "" and species.length() <= 128:
+			result[relation] = species
+	return result
+
+func calculate_calcdex_smart_matchup(
+	request_node: HTTPRequest,
+	battle_id: String,
+	last_projection_revision: Dictionary,
+	direction: String,
+	attacker_ref: String,
+	defender_ref: String,
+	opponent_scenario: Dictionary = {},
+	field_scenario: Dictionary = {},
+	range_mode: String = "likely",
+	pinned_candidate_id: String = ""
+) -> Dictionary:
+	var normalized_battle_id := battle_id.strip_edges()
+	if normalized_battle_id == "" or not CALCDEX_SNAPSHOT.is_valid_projection_revision(last_projection_revision):
+		return {"success": false, "code": "invalid_calcdex_request", "error": "A valid battle revision is required."}
+	var scenario := _normalize_damage_calc_assumptions(opponent_scenario)
+	if opponent_scenario.get("assumedMoves") is Array:
+		scenario["assumedMoves"] = (opponent_scenario.get("assumedMoves") as Array).duplicate(true)
+	var payload := {
+		"schemaVersion": CALCDEX_CANDIDATES.SCHEMA_VERSION,
+		"lastProjectionRevision": last_projection_revision.duplicate(true),
+		"direction": direction,
+		"attackerRef": attacker_ref,
+		"defenderRef": defender_ref,
+		"opponentScenario": scenario,
+		"fieldScenario": field_scenario.duplicate(true),
+		"rangeMode": range_mode,
+	}
+	if pinned_candidate_id.strip_edges() != "":
+		payload["pinnedCandidateId"] = pinned_candidate_id.strip_edges()
+	var response: Dictionary = await send_post_request(
+		request_node,
+		"/battle/%s/calcdex/v1/smart-matchup" % normalized_battle_id.uri_encode(),
+		payload
+	)
+	return CALCDEX_CANDIDATES.normalize_response(response, last_projection_revision)
+
+func calculate_calcdex_inferred_matchup(
+	request_node: HTTPRequest,
+	battle_id: String,
+	last_projection_revision: Dictionary,
+	direction: String,
+	attacker_ref: String,
+	defender_ref: String,
+	opponent_scenario: Dictionary = {},
+	field_scenario: Dictionary = {},
+	range_mode: String = "likely",
+	pinned_candidate_id: String = ""
+) -> Dictionary:
+	var normalized_battle_id := battle_id.strip_edges()
+	if normalized_battle_id == "" or not CALCDEX_SNAPSHOT.is_valid_projection_revision(last_projection_revision):
+		return {"success": false, "code": "invalid_calcdex_request", "error": "A valid battle revision is required."}
+	var scenario := _normalize_damage_calc_assumptions(opponent_scenario)
+	if opponent_scenario.get("assumedMoves") is Array:
+		scenario["assumedMoves"] = (opponent_scenario.get("assumedMoves") as Array).duplicate(true)
+	var payload := {
+		"schemaVersion": CALCDEX_CANDIDATES.SCHEMA_VERSION,
+		"lastProjectionRevision": last_projection_revision.duplicate(true),
+		"direction": direction,
+		"attackerRef": attacker_ref,
+		"defenderRef": defender_ref,
+		"opponentScenario": scenario,
+		"fieldScenario": field_scenario.duplicate(true),
+		"rangeMode": range_mode,
+		"inferenceMode": "public_observations",
+	}
+	if pinned_candidate_id.strip_edges() != "":
+		payload["pinnedCandidateId"] = pinned_candidate_id.strip_edges()
+	var response: Dictionary = await send_post_request(
+		request_node,
+		"/battle/%s/calcdex/v1/inferred-matchup" % normalized_battle_id.uri_encode(),
+		payload
+	)
+	return CALCDEX_INFERENCE.normalize_response(response, last_projection_revision)
+
 func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
 
@@ -449,13 +646,37 @@ func _normalize_damage_calc_assumptions(defender_assumptions: Dictionary) -> Dic
 		assumptions["item"] = defender_assumptions.get("item")
 	if defender_assumptions.has("ability"):
 		assumptions["ability"] = defender_assumptions.get("ability")
+	var status := str(defender_assumptions.get("status", "")).strip_edges().to_lower()
+	if status in ["brn", "par", "psn", "tox", "slp", "frz"]:
+		assumptions["status"] = status
 	if defender_assumptions.has("nature"):
 		assumptions["nature"] = str(defender_assumptions.get("nature", "Hardy")).strip_edges()
 	if defender_assumptions.has("evs"):
 		assumptions["evs"] = _normalize_damage_calc_stat_table(defender_assumptions.get("evs"))
 	if defender_assumptions.has("ivs"):
 		assumptions["ivs"] = _normalize_damage_calc_stat_table(defender_assumptions.get("ivs"))
+	if defender_assumptions.has("boosts"):
+		assumptions["boosts"] = _normalize_damage_calc_boost_table(defender_assumptions.get("boosts"))
+	if defender_assumptions.has("replaceMoves"):
+		assumptions["replaceMoves"] = bool(defender_assumptions.get("replaceMoves", false))
+	if defender_assumptions.has("exactStats"):
+		assumptions["exactStats"] = bool(defender_assumptions.get("exactStats", false))
 	return assumptions
+
+func _normalize_damage_calc_boost_table(value: Variant) -> Dictionary:
+	if not (value is Dictionary):
+		return {}
+	var source: Dictionary = value as Dictionary
+	var result := {}
+	for key: String in ["atk", "def", "spa", "spd", "spe"]:
+		if not source.has(key):
+			continue
+		var stat_value: Variant = source.get(key)
+		if typeof(stat_value) == TYPE_INT or typeof(stat_value) == TYPE_FLOAT:
+			result[key] = clampi(int(stat_value), -6, 6)
+		elif typeof(stat_value) == TYPE_STRING and str(stat_value).strip_edges().is_valid_int():
+			result[key] = clampi(int(str(stat_value).strip_edges()), -6, 6)
+	return result
 
 func _normalize_damage_calc_stat_table(value: Variant) -> Dictionary:
 	if not (value is Dictionary):
@@ -490,6 +711,8 @@ func _normalize_damage_calc_response(response: Dictionary) -> Dictionary:
 		return _make_malformed_damage_calc_response(response, "defender")
 	if not (response.get("results") is Array):
 		return _make_malformed_damage_calc_response(response, "results")
+	if not CALCDEX_SNAPSHOT.is_valid_mechanics_manifest(response.get("mechanicsManifest")):
+		return _make_malformed_damage_calc_response(response, "mechanicsManifest")
 
 	var normalized := {
 		"success": true,
@@ -500,6 +723,7 @@ func _normalize_damage_calc_response(response: Dictionary) -> Dictionary:
 		"attacker": response.get("attacker", {}),
 		"defender": response.get("defender", {}),
 		"results": response.get("results", []),
+		"mechanicsManifest": (response.get("mechanicsManifest") as Dictionary).duplicate(true),
 		"warnings": _as_array(response.get("warnings", [])),
 		"emptyReason": str(response.get("emptyReason", "")),
 	}

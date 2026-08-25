@@ -11,7 +11,10 @@ const POKEMON_SPRITE_RELATIVE_ROOT := "assets/sprites/pokemon"
 const GEN5_SPRITE_ROOT := "gen5"
 const PARTY_ICON_CROP_PADDING := 4
 const PARTY_ICON_ALPHA_THRESHOLD := 0.01
-const HOME_SPRITE_ALIASES := {
+const SPECIES_SPRITE_ALIASES := {
+	"absol-mega-z": ["Absol-Mega"],
+	"basculin-red-striped": ["Basculin"],
+	"darmanitan-galar-zen": ["darmanitan-galarzen"],
 	"flabébé": ["Flabe-be"],
 	"flabebe": ["Flabe-be"],
 	"flabebe-blue": ["Flabe-be-Blue"],
@@ -20,9 +23,32 @@ const HOME_SPRITE_ALIASES := {
 	"flabebe-yellow": ["Flabe-be-Yellow"],
 	"jangmo-o": ["Jangmo-o"],
 	"hakamo-o": ["Hakamo-o"],
+	"furfrou-la-reine": ["furfrou-lareine"],
+	"garchomp-mega-z": ["Garchomp-Mega"],
+	"greninja-bond": ["greninja"],
+	"greninja-mega": ["Greninja"],
 	"kommo-o": ["Kommo-o"],
+	"kommo-o-totem": ["kommoo-totem"],
+	"keldeo-ordinary": ["Keldeo"],
+	"landorus-incarnate": ["Landorus"],
+	"lucario-mega-z": ["Lucario-Mega"],
+	"magearna-original-mega": ["Magearna-Mega"],
+	"meloetta-aria": ["Meloetta"],
+	"meowstic-f-mega": ["meowstic-mega"],
+	"meowstic-m-mega": ["meowstic-mega"],
 	"mime-jr": ["Mime-Jr"],
+	"mr-mime-galar": ["mrmime-galar"],
 	"ninetales-alola": ["Ninetales-Alola"],
+	"ogerpon-cornerstone-tera": ["ogerpon-cornerstonetera", "Ogerpon-Cornerstone"],
+	"ogerpon-hearthflame-tera": ["ogerpon-hearthflametera", "Ogerpon-Hearthflame"],
+	"pichu-spiky-eared": ["Pichu"],
+	"ribombee-totem": ["Ribombee"],
+	"rockruff-dusk": ["Rockruff"],
+	"tatsugiri-curly-mega": ["Tatsugiri-Mega"],
+	"tatsugiri-droopy-mega": ["Tatsugiri-Mega"],
+	"tatsugiri-stretchy-mega": ["Tatsugiri-Mega"],
+	"thundurus-incarnate": ["Thundurus"],
+	"tornadus-incarnate": ["Tornadus"],
 	"vulpix-alola": ["Vulpix-Alola"],
 	"mimikyu": ["Mimikyu-Disguised"],
 	"oricorio": ["Oricorio"],
@@ -120,7 +146,7 @@ static func load_home_sprite(species: String, is_shiny: bool = false) -> Texture
 
 static func _load_front_sprite_fallback(species: String, is_shiny: bool) -> Texture2D:
 	var sprite_directory := "shiny_front" if is_shiny else "front"
-	for species_id: String in _get_battle_sprite_ids(species):
+	for species_id: String in get_battle_sprite_ids(species):
 		for root: String in get_pokemon_sprite_roots():
 			var sprite_root := root.path_join(sprite_directory).path_join(species_id)
 			var sheet := load_texture(sprite_root.path_join("sheet.png"))
@@ -143,7 +169,7 @@ static func _load_front_sprite_fallback(species: String, is_shiny: bool) -> Text
 			return frame
 	return null
 
-static func _get_battle_sprite_ids(species: String) -> Array[String]:
+static func get_battle_sprite_ids(species: String) -> Array[String]:
 	var ids: Array[String] = []
 	var normalized := _normalize_battle_sprite_id(species)
 	if not normalized.is_empty():
@@ -151,6 +177,16 @@ static func _get_battle_sprite_ids(species: String) -> Array[String]:
 	var compact := _to_showdown_compact_sprite_name(species)
 	if not compact.is_empty() and not ids.has(compact):
 		ids.append(compact)
+
+	var alias_key := _normalize_home_sprite_key(species)
+	if SPECIES_SPRITE_ALIASES.has(alias_key):
+		for alias: String in SPECIES_SPRITE_ALIASES[alias_key]:
+			var normalized_alias := _normalize_battle_sprite_id(alias)
+			if not normalized_alias.is_empty() and not ids.has(normalized_alias):
+				ids.append(normalized_alias)
+			var compact_alias := _to_showdown_compact_sprite_name(alias)
+			if not compact_alias.is_empty() and not ids.has(compact_alias):
+				ids.append(compact_alias)
 	return ids
 
 static func _normalize_battle_sprite_id(value: String) -> String:
@@ -176,8 +212,8 @@ static func _get_home_sprite_names(species: String) -> Array[String]:
 	_add_home_sprite_name(names, _to_home_sprite_case(cleaned.replace("'", "")))
 
 	var alias_key := _normalize_home_sprite_key(cleaned)
-	if HOME_SPRITE_ALIASES.has(alias_key):
-		for alias: String in HOME_SPRITE_ALIASES[alias_key]:
+	if SPECIES_SPRITE_ALIASES.has(alias_key):
+		for alias: String in SPECIES_SPRITE_ALIASES[alias_key]:
 			_add_home_sprite_name(names, alias)
 
 	return names

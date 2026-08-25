@@ -46,15 +46,31 @@ func _init() -> void:
 	var quest_button_block := _node_block(scene_source, '[node name="QuestButton"')
 	var socials_menu_block := _node_block(scene_source, '[node name="SocialsMenu"')
 	var disable_icon_focus_block := _function_block(script_source, "func _disable_icon_button_focus()")
+	var item_dex_tooltip_theme_block := _function_block(script_source, "func _make_item_dex_tooltip_theme()")
 
 	_check(hotbar_block.contains("anchors_preset = 6"), "hotbar is anchored to the right")
 	_check(hotbar_block.contains("offset_right = 0.0"), "hotbar hugs the right screen edge")
-	_check(hotbar_block.contains("offset_top = -245.0") and hotbar_block.contains("offset_bottom = 165.0"), "hotbar keeps its base position when quest trackers are absent")
 	_check(
-		script_source.contains("quest_journal_view.get_visible_tracker_count()")
-		and script_source.contains("var hotbar_shift := 86.0 if tracker_count > 1 else 0.0")
+		hotbar_block.contains("offset_left = -60.0")
+		and hotbar_block.contains("offset_top = -245.0")
+		and hotbar_block.contains("offset_bottom = -26.0"),
+		"paginated hotbar starts from a narrow right-edge position"
+	)
+	_check(
+		hotkey_sidebar_scene_source.contains('[node name="SlotStack" type="GridContainer" parent="MarginContainer/Layout"')
+		and hotkey_sidebar_scene_source.contains("columns = 1")
+		and hotkey_sidebar_scene_source.contains("custom_minimum_size = Vector2(58, 219)")
+		and hotkey_sidebar_scene_source.contains('[node name="PageControls" type="HBoxContainer"'),
+		"hotbar presents four shortcuts at a time in a narrow paginated column"
+	)
+	_check(
+		script_source.contains('get_node_or_null("MarginContainer/Layout/SlotStack") as GridContainer')
+		and script_source.contains("func _set_hotbar_page(page_index: int)")
+		and script_source.contains("quest_journal_view.get_visible_tracker_bottom()")
+		and script_source.contains("var hotbar_top_offset: float = maxf(HOTBAR_GRID_BASE_TOP_OFFSET, tracker_bottom_offset)")
+		and script_source.contains("root_control.resized.connect(_refresh_quest_tracker_layout)")
 		and script_source.contains('_position_collapsible_button("hotkey_sidebar")'),
-		"hotbar dynamically clears a second visible quest tracker"
+		"quest and viewport updates place the compact hotbar below visible quest cards"
 	)
 	_check(party_block.contains("anchors_preset = 0"), "normal party is anchored to the left")
 	_check(party_block.contains("offset_left = 0.0"), "normal party hugs the left screen edge")
@@ -97,7 +113,7 @@ func _init() -> void:
 	_check(chat_tabs_block.contains("anchors_preset = 2"), "chat tabs follow the left-side chat")
 	_check(global_buffs_block.contains("anchors_preset = 5"), "global buffs sit beside the top-center location card")
 	_check(global_buffs_block.contains("offset_left = 214.0"), "global buffs clear the location collapse button")
-	_check(global_buffs_block.contains("custom_minimum_size = Vector2(197, 50)"), "global buffs use a compact four-icon tray")
+	_check(global_buffs_block.contains("custom_minimum_size = Vector2(242, 50)"), "global buffs use a compact five-icon tray")
 	_check(personal_buffs_block.contains("anchors_preset = 3"), "personal buffs sit above the bottom-right trainer card")
 	_check(personal_buffs_block.contains("offset_bottom = -104.0"), "personal buffs leave space above the trainer card")
 	_check(personal_buffs_block.contains("custom_minimum_size = Vector2(188, 98)"), "personal buffs have room for readable detail cards")
@@ -115,7 +131,7 @@ func _init() -> void:
 		"Mount management joins the bottom-right character utility rail"
 	)
 	_check(
-		my_powers_button_block.contains("offset_top = -290.0"),
+		my_powers_button_block.contains("offset_top = -338.0"),
 		"My Powers moves up one slot to keep the character utility rail evenly spaced"
 	)
 	_check(quest_slot_block.contains("custom_minimum_size = Vector2(52, 52)") and quest_button_block.contains('texture_normal = ExtResource("27_quest_log")'), "Quest Log replaces Settings in the primary navigation bar")
@@ -141,9 +157,11 @@ func _init() -> void:
 	_check(script_source.contains('dev_actions_popup.custom_minimum_size = Vector2(420, 0)') and script_source.contains('"ui.staff.dev.title"'), "Developer Tools uses a structured launcher surface")
 	_check(script_source.contains('"DeveloperQuickActions"') and script_source.contains('"ui.staff.dev.world_preview"'), "Developer actions and world preview have separate visual groups")
 	_check(script_source.contains('"ui.staff.dev.create_pokemon"') and script_source.contains('"ui.staff.dev.start_encounter"') and script_source.contains('"ui.staff.dev.resources"'), "Developer quick actions use clear task-oriented labels")
-	_check(script_source.contains('"ui.staff.dev.heal_party"') and script_source.contains('"ui.staff.dev.preview_evolution"') and script_source.contains('"ui.staff.dev.clear_data"'), "Developer utility and destructive actions remain available")
+	_check(script_source.contains('"ui.staff.dev.heal_party"') and script_source.contains('"ui.staff.dev.trainer_progress"') and script_source.contains('"ui.staff.dev.clear_data"'), "Developer utility and destructive actions remain available")
+	_check(not script_source.contains("dev_preview_evolution_button") and not script_source.contains("dev_pickpocket_pose_button"), "Developer Tools omits temporary animation preview actions")
 	_check(script_source.contains('staff_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.staff.tools.subtitle"'), "Staff Tools uses the shared compact launcher")
 	_check(script_source.contains('"ui.staff.teleport.action_description"') and script_source.contains('"ui.staff.impersonate.action_description"'), "Staff actions explain Teleport and Impersonate")
+	_check(script_source.contains('"ui.staff.chat.action_description"') and script_source.contains("CHAT_MODERATION_CENTER_SCRIPT.new()"), "Staff Tools opens the compact chat moderation center")
 	_check(script_source.contains('alpha_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.staff.alpha.subtitle"'), "Alpha Tools uses the shared compact launcher")
 	_check(script_source.contains('"ui.staff.alpha.create_description"') and script_source.contains('"ui.staff.alpha.clear_description"'), "Alpha Tools actions explain their scope")
 	_check(scene_source.contains('path="res://assets/ui/alpha_tools.svg" id="15_content_creator"') and script_source.contains('preload("res://assets/ui/alpha_tools.svg")'), "Alpha Tools uses its dedicated validated Alpha icon")
@@ -173,11 +191,13 @@ func _init() -> void:
 		and disable_icon_focus_block.contains("button.focus_mode = Control.FOCUS_NONE"),
 		"toolbar menu buttons cannot retain Space-triggerable keyboard focus"
 	)
-	_check(scene_source.contains('path="res://assets/ui/clan.svg" id="16_guild"') and scene_source.contains('tooltip_text = "ui.navigation.guilds"'), "Guilds use a three-member group crest with a localized tooltip")
+	_check(scene_source.contains('path="res://assets/ui/guild.svg" id="16_guild"') and scene_source.contains('tooltip_text = "ui.navigation.guilds"'), "Guilds use the guild hall icon with a localized tooltip")
 	_check(scene_source.contains('path="res://assets/ui/follower_toggle.svg" id="10_follower"'), "Follower toggle shows a trainer and companion")
 	_check(scene_source.contains('path="res://assets/ui/running_shoes_toggle.svg" id="11_running_shoe"'), "Running Shoes use a dedicated speed-toggle icon")
 	_check(scene_source.contains('path="res://assets/ui/town_map_navigation.svg" id="3_riyyd"'), "Town Map uses a navigation-focused map icon")
 	_check(scene_source.contains('path="res://assets/ui/item_dex.svg" id="12_item_dex"') and script_source.contains('const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")'), "Item Dex uses its dedicated item catalogue icon")
+	_check(script_source.contains("item_dex_popup.theme = _make_item_dex_tooltip_theme()"), "Every Item Dex hover card inherits the Item Dex tooltip theme")
+	_check(item_dex_tooltip_theme_block.contains('tooltip_theme.set_stylebox("panel", "TooltipPanel"'), "Item Dex hover cards use a styled panel instead of the Godot default")
 	_check(scene_source.contains('path="res://assets/ui/staff_tools.svg" id="13_staff_tools"'), "Staff tools use a moderation shield instead of a rank crown")
 	_check(hotkey_sidebar_scene_source.contains("border_width_left = 2") and hotkey_sidebar_scene_source.contains("0.92941177)"), "hotbar rail uses the shared stable-opacity frame")
 	_check(script_source.contains('const UI_SURFACE_BASE := Color("#050b14ed")'), "overworld UI declares one semantic base surface")
@@ -188,17 +208,25 @@ func _init() -> void:
 	_check(scene_source.count("Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)") >= 5, "major overworld frames share one neutral navy base")
 	_check(scene_source.contains("StyleBoxFlat_personal_buff_slot") and scene_source.contains("Color(0.043137256, 0.101960786, 0.16862746, 0.91764706)"), "buff and action slots use a neutral interactive surface")
 	_check(not scene_source.contains('[node name="ScopeLabel"'), "buff tray context labels are removed")
-	_check(scene_source.count('parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots"') == 4, "global buff tray exposes four community-goal slots")
+	_check(scene_source.count('parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots"') == 5, "global buff tray exposes four community goals and Global Heal")
 	_check(scene_source.count('parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots"') == 3, "personal buff tray exposes three placeholder slots")
 	_check(scene_source.contains('icon = ExtResource("23_global_exp")'), "global EXP goal uses its own icon")
 	_check(scene_source.contains('icon = ExtResource("24_global_ev")'), "global EV goal uses its own icon")
 	_check(scene_source.contains('icon = ExtResource("25_global_shiny")'), "global Shiny goal uses its own icon")
 	_check(scene_source.contains('icon = ExtResource("26_global_rare")'), "rare encounter goal uses its own icon")
 	_check(scene_source.count('[node name="ProgressBar" type="ProgressBar" parent="Control/GlobalBuffsPanel') == 4, "each global icon includes compact funding progress")
+	_check(scene_source.contains('[node name="GlobalHealSection" type="VBoxContainer" parent="Control/GlobalBuffDetailsPanel'), "Global Heal has a dedicated action section")
+	_check(scene_source.contains('text = "ui.buff.global_heal.receive_requests"'), "Global Heal exposes its request preference beside the action")
 	_check(global_buff_details_block.contains("visible = false"), "global buff details start closed")
 	_check(scene_source.contains('[node name="DonationSection" type="VBoxContainer" parent="Control/GlobalBuffDetailsPanel'), "global buff details expose contribution controls")
+	_check(scene_source.contains('[node name="AmountInput" type="LineEdit" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]'), "global buff contributions use a custom amount input")
+	_check(scene_source.contains('[node name="FillRemainingButton" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection"]'), "global buff contributions can fill the exact remaining goal without competing with the main action")
 	_check(scene_source.count('[node name="NameLabel" type="Label" parent="Control/PersonalBuffsPanel') == 3, "personal buffs render readable effect names")
-	_check(scene_source.count('[node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel') == 3, "personal buffs render readable effect descriptions")
+	_check(
+		scene_source.count('[node name="BadgeLabel" type="Label" parent="Control/PersonalBuffsPanel') == 0
+		and scene_source.count('[node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel') == 0,
+		"personal buff rows avoid duplicate badges and clipped descriptions"
+	)
 	_check(scene_source.count('[node name="TimeLabel" type="Label" parent="Control/PersonalBuffsPanel') == 3, "personal buffs render remaining durations")
 	_check(scene_source.contains('[node name="EmptyLabel" type="Label" parent="Control/PersonalBuffsPanel'), "personal buffs provide an empty-state label")
 	_check(scene_source.contains('text = "ui.buff.none"'), "personal empty state uses its localization key")
@@ -206,7 +234,7 @@ func _init() -> void:
 
 	_check(script_source.contains('_register_collapsible_panel("hotkey_sidebar", hotkey_sidebar_panel, "left_center")'), "hotbar collapse control sits on its inner edge")
 	_check(script_source.contains('_register_collapsible_panel("chat", chat_panel, "right")'), "chat controls sit on its inner edge")
-	_check(script_source.contains("[personal_buffs_panel, settings_button, mount_button, donator_store_button, my_powers_button]"), "trainer collapse includes personal buffs, mount management, utilities, and My Powers")
+	_check(script_source.contains("[personal_buffs_panel, settings_button, mount_button, skills_button, donator_store_button, my_powers_button]"), "trainer collapse includes personal buffs, mount management, Skills, utilities, and My Powers")
 	_check(script_source.contains("func _set_my_powers_available") and script_source.contains("func _hide_my_powers_menu"), "My Powers only appears for accounts with available privileged tools")
 	_check(script_source.contains('_register_collapsible_panel("party", party_panel, "right")'), "party collapse control sits on its inner edge")
 	_check(script_source.contains('_register_collapsible_panel("location", location_panel, "right_center", null, [global_buffs_panel])'), "location collapse includes global buffs")
@@ -240,6 +268,7 @@ func _init() -> void:
 	_check(script_source.contains("trade_chat_tab_button.visible = false") and script_source.contains("help_chat_tab_button.visible = false"), "Trade and Help no longer consume top-tab space")
 	_check(script_source.contains('"ui.chat.context.selector"'), "bottom-left selector localizes the active General channel")
 	_check(script_source.contains('_add_chat_context_option(LocalizationManager.text("ui.chat.channel.global"), CHAT_TAB_GENERAL'), "General selector exposes localized Global")
+	_check(script_source.contains('_add_chat_context_option(LocalizationManager.text("ui.chat.tab.map"), CHAT_TAB_MAP'), "General selector exposes localized Map")
 	_check(script_source.contains('_add_chat_context_option(LocalizationManager.text("ui.chat.tab.trade"), CHAT_TAB_TRADE'), "General selector exposes localized Trade")
 	_check(script_source.contains('_add_chat_context_option(LocalizationManager.text("ui.chat.tab.help"), CHAT_TAB_HELP'), "General selector exposes localized Help")
 	_check(script_source.contains("pm_context_selector_attention_badge = _create_attention_badge_for_button"), "PM selector button has a red unread indicator")
@@ -254,6 +283,87 @@ func _init() -> void:
 	_check(script_source.contains('chat_input_dock.name = "ChatInputDock"'), "selector, input, and Send share a styled input dock")
 	_check(script_source.contains('chat_tabs_background.name = "ChatTabsBackground"'), "main tabs sit on a cohesive translucent rail")
 	_check(script_source.contains('message_scroll.add_theme_stylebox_override("panel", _make_chat_message_surface_style())'), "chat messages use a subtle inner surface")
+	_check(
+		script_source.contains("func _create_chat_sender_message_line(")
+		and script_source.contains('entry.append_text(" [color=%s]%s[/color]"')
+		and script_source.contains('"\\u00a0".repeat(spacer_count)')
+		and script_source.contains("func _sync_chat_inline_header_spacing(")
+		and script_source.contains("func _chat_header_prefix_width(")
+		and script_source.contains("const CHAT_INLINE_HEADER_CLEARANCE := 24.0")
+		and script_source.contains("header_prefix_width > 0.0")
+		and script_source.contains("entry.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART"),
+		"visible chat metadata gets first-line clearance while plain names stay left aligned"
+	)
+	_check(
+		script_source.contains("var inline_pokemon_share := (")
+		and script_source.contains("and not pokemon_attachments.is_empty()")
+		and script_source.contains('attachment_group.name = "InlinePokemonAttachments"')
+		and script_source.contains("for attachment_index: int in range(pokemon_attachments.size()):")
+		and script_source.contains("attachment_index == 0")
+		and script_source.contains('inline_spacer.name = "InlinePokemonSpacer"')
+		and script_source.contains("align_icon_left: bool = false")
+		and script_source.contains("TextureRect.STRETCH_KEEP_ASPECT\n\t\tif align_icon_left")
+		and script_source.contains("not inline_pokemon_share and not pokemon_attachments.is_empty()"),
+		"Pokemon-only shares keep a full clickable party with the first sprite close to the sender"
+	)
+	_check(
+		script_source.contains('message_list.add_theme_constant_override("separation", 5)'),
+		"separate chat messages keep a small visual gap"
+	)
+	_check(
+		script_source.contains("mouse_event.double_click")
+		and script_source.contains("DisplayServer.clipboard_set(text)")
+		and script_source.contains("CHAT_CONTEXT_COPY_FULL")
+		and script_source.contains("_format_full_chat_message(active_chat_message_context)")
+		and script_source.contains("func _show_chat_copy_confirmation()")
+		and script_source.contains('confirmation.name = "ChatCopyConfirmation"')
+		and script_source.contains('label.text = "✓ %s" % LocalizationManager.text("ui.chat.message.copied")')
+		and script_source.contains("_open_chat_sender_context_menu")
+		and script_source.contains("open_private_message_conversation(user)")
+		and script_source.contains("SocialService.send_friend_request(username)"),
+		"chat supports quick copying and sender or message context actions"
+	)
+	_check(
+		script_source.contains("CHAT_CONTEXT_MUTE_PLAYER")
+		and script_source.contains("CHAT_CONTEXT_UNMUTE_PLAYER")
+		and script_source.contains("ChatModerationService.get_mute_state(target_user_id)")
+		and script_source.contains("ChatModerationService.mute_player(target_user_id, duration_minutes, reason)")
+		and script_source.contains("ChatModerationService.unmute_player(target_user_id, reason)")
+		and script_source.contains("reason.strip_edges().length() < 3")
+		and script_source.contains("_has_user_permission(CHAT_MUTE_PERMISSION)"),
+		"authorized staff can mute or unmute chat senders with a required reason"
+	)
+	_check(
+		script_source.contains("player_interaction_coordinator.chat_moderation_requested.connect")
+		and script_source.contains("func _on_player_interaction_chat_moderation_requested("),
+		"direct player actions share the required-reason chat moderation flow"
+	)
+	_check(
+		script_source.contains("func _refresh_chat_sender_moderation_action(")
+		and script_source.contains("CHAT_CONTEXT_MUTE_PLAYER"),
+		"chat sender moderation remains available while mute state refreshes"
+	)
+	_check(
+		script_source.contains("func _can_use_chat_moderation(")
+		and script_source.contains("player_interaction_coordinator.can_moderate_chat()")
+		and script_source.contains("_activate_ui_panel(chat_moderation_popup)"),
+		"chat and direct player moderation share permission state and an active modal"
+	)
+	_check(
+		script_source.contains("func _user_id_from_state(user: Dictionary) -> int:")
+		and script_source.contains("if value is int or value is float:")
+		and script_source.contains("if text.is_valid_float():"),
+		"chat actions accept numeric user ids decoded from JSON"
+	)
+	_check(
+		script_source.contains("func _chat_mute_remaining_seconds() -> int:")
+		and script_source.contains("func _refresh_chat_mute_countdown() -> void:")
+		and script_source.contains("ui.chat.muted.remaining")
+		and script_source.contains('message_type == "chat.mute.updated"')
+		and script_source.contains("ui.chat.muted.notice")
+		and script_source.contains("chat_input.editable = input_available"),
+		"muted players receive realtime updates and see a countdown in the disabled chat input"
+	)
 	_check(script_source.contains('_apply_chat_main_tab_style(general_chat_tab_button, general_active)'), "active and inactive main tabs receive distinct styling")
 	_check(script_source.contains("style.border_width_bottom = 2"), "selected main tab gets a clear bottom accent")
 	_check(script_source.contains("_apply_chat_dock_button_style(send_button, true)"), "Send uses the input dock accent treatment")
@@ -274,15 +384,29 @@ func _init() -> void:
 	_check(script_source.contains("func set_personal_buffs(buffs: Array)"), "personal buff tray accepts future live data")
 	_check(script_source.contains("set_personal_buffs([])"), "personal buffs default to the empty state")
 	_check(
-		script_source.contains("func _current_aether_blessing_buff()")
-		and script_source.contains('"name_key": "ui.buff.aether_blessing.name"')
+		player_status_scene_source.contains('[node name="MembershipBadge"')
+		and player_status_scene_source.contains('text = "ui.membership.aether_blessing.badge"')
+		and script_source.contains("func _current_aether_blessing_membership()")
 		and script_source.contains('"expiresAt": expires_at'),
-		"active Aether Blessings appear in the personal buff tray with their expiry"
+		"active Aether Blessings appear as membership status in the mini Trainer Card"
 	)
 	_check(
 		script_source.contains("func _refresh_personal_buffs_if_needed(delta: float)")
-		and script_source.contains("_format_aether_blessing_remaining"),
-		"the personal buff tray keeps the Blessing countdown current"
+		and script_source.contains("_refresh_aether_blessing_membership_status()")
+		and script_source.contains("_aether_blessing_membership_tooltip"),
+		"the mini Trainer Card keeps membership status and details current"
+	)
+	_check(
+		script_source.contains('"aether_blessing_travel_discount",')
+		and script_source.contains('"aether_blessing_shop_discount",')
+		and script_source.contains("func _current_aether_blessing_shiny_bonus()")
+		and script_source.contains("func _current_aether_blessing_travel_discount()")
+		and script_source.contains("func _current_aether_blessing_shop_discount()")
+		and script_source.contains('"ui.buff.aether_blessing_shiny.name"')
+		and script_source.contains('"ui.buff.aether_blessing_travel.name"')
+		and script_source.contains('"ui.buff.aether_blessing_shops.name"')
+		and not script_source.contains('"name_key": "ui.buff.aether_blessing.name"'),
+		"the boost tray shows the membership's concrete Shiny, travel, and shop effects"
 	)
 	_check(script_source.contains('personal_buffs_panel.set_meta("group_available", true)'), "personal empty state remains part of the trainer collapse group")
 	_check(script_source.contains("PERSONAL_BUFF_PANEL_COMPACT_HEIGHT"), "empty and collapsed active states use a compact panel height")
@@ -291,14 +415,54 @@ func _init() -> void:
 	_check(script_source.contains("func _personal_buffs_summary_tooltip()"), "personal buff count exposes hover details")
 	_check(script_source.contains('LocalizationManager.plural(') and script_source.contains('"ui.buff.active.one"') and script_source.contains('"ui.buff.active.many"'), "personal buff summary localizes the active count")
 	_check(script_source.contains("func _on_global_buff_button_pressed(button: Button)"), "global buff icons open their detail panel")
+	_check(script_source.contains("await get_tree().process_frame") and script_source.contains("get_combined_minimum_size"), "global buff details wait for their first layout before positioning")
 	_check(script_source.contains('str(buff.get("state", "funding")) == "active"'), "global buff icons distinguish active and funding states")
 	_check(script_source.contains('"id": "global_shiny"'), "global buff data includes Shiny encounters")
+	_check(script_source.contains('["global_exp", "global_ev", "global_shiny", "global_rare_encounter"]'), "Shiny global boost accepts community contributions")
+	_check(script_source.contains('"activate_shiny_charm"'), "Shiny Charm can be activated from the Bag")
+	_check(script_source.contains('"ui.bag.message.shiny_charm_activated"'), "Shiny Charm activation gives the player clear feedback")
 	_check(script_source.contains('"id": "global_rare_encounter"'), "global buff data includes rarer Pokémon encounters")
-	_check(script_source.contains('"ui.buff.contribution_unavailable"'), "localized community contribution placeholder cannot silently spend currency")
-	_check(script_source.contains("name_label.text = _localized_buff_name(buff)"), "personal buff rows receive localized readable names")
+	_check(script_source.contains('"id": "global_heal"') and script_source.contains("PlayerWalletService.activate_global_heal()"), "Global Heal is an authoritative paid global action")
+	_check(script_source.contains("_is_world_battle_active()") and script_source.contains("pending_global_heal_request"), "Global Heal requests wait while a battle is active")
+	_check(script_source.contains("PartyHealService.accept_global_heal") and script_source.contains("globalHealRequestsEnabled"), "Global Heal acceptance and request preference use server-backed services")
+	_check(script_source.contains("PlayerWalletService.contribute_to_global_exp_boost"), "global EXP contributions use the authoritative wallet service")
+	_check(script_source.contains("PlayerWalletService.contribute_to_global_ev_boost"), "global EV contributions use the authoritative wallet service")
+	_check(script_source.contains("PlayerWalletService.contribute_to_global_rare_encounter_boost"), "rare encounter contributions use the authoritative wallet service")
+	_check(script_source.contains("PlayerWalletService.contribute_to_global_shiny_boost"), "Shiny contributions use the authoritative wallet service")
+	_check(script_source.contains("_load_global_shiny_boost.call_deferred()"), "Shiny boost state loads from the server")
+	_check(script_source.contains('"goal": 1000000') and script_source.contains('"active_duration": "7d"'), "Shiny boost starts at one million for seven days")
+	_check(script_source.contains('message_type == "system.global_exp_boost_contribution"'), "global EXP contributions appear as realtime system messages")
+	_check(script_source.contains('message_type == "system.global_ev_boost_contribution"'), "global EV contributions appear as realtime system messages")
+	_check(script_source.contains('message_type == "system.global_rare_encounter_boost_contribution"'), "rare encounter contributions appear as realtime system messages")
+	_check(script_source.contains('_load_global_boost_state.call_deferred("global_exp")'), "global EXP contribution events refresh authoritative boost state")
+	_check(script_source.contains('_load_global_boost_state.call_deferred("global_ev")'), "global EV contribution events refresh authoritative boost state")
+	_check(script_source.contains('_load_global_boost_state.call_deferred("global_rare_encounter")'), "rare encounter contribution events refresh authoritative boost state")
+	_check(script_source.contains('_load_global_boost_state.call_deferred("global_shiny")'), "global Shiny contribution events refresh authoritative boost state")
+	_check(script_source.contains('await _load_global_boost_state(selected_boost_id)'), "stale contribution conflicts recover the authoritative boost state")
+	_check(script_source.contains('if int(response.get("status", 0)) == 409:') and script_source.contains('else:\n\t\t\t_add_chat_message'), "stale boost conflicts refresh without showing a misleading payment error")
+	_check(script_source.contains('buff["activeUntil"] = str(state.get("activeUntil", ""))'), "active global buffs retain their authoritative expiry")
+	_check(script_source.contains("_refresh_global_buffs_if_needed(delta)"), "active global buff countdowns refresh while the overlay remains open")
+	_check(not script_source.contains('GameErrorDialogService.show_response(response, "backend.error.transit_unavailable")'), "global EXP contribution errors stay inside the boost flow")
+	_check(script_source.contains("const MINIMUM_GLOBAL_BUFF_CONTRIBUTION := 10_000"), "global buff contributions enforce the 10,000 Pokédollar minimum")
+	_check(script_source.contains("selected_global_buff_contribution = mini(requested, remaining)"), "global buff contribution input is capped to the remaining goal")
+	_check(script_source.contains('"aetheriteReward"'), "global EXP contributions display their personal Aetherite reward")
+	_check(
+		script_source.contains("const PERSONAL_BUFF_ROW_HEIGHT := 38.0")
+		and script_source.contains("name_label.text = _localized_buff_name(buff)"),
+		"personal buff rows use compact localized effect labels"
+	)
 	_check(donator_store_scene_source.contains("custom_minimum_size = Vector2(1120, 680)"), "Donator Store opens as a full catalog and character-preview interface")
 	_check(donator_store_script_source.contains('"membership",') and donator_store_script_source.contains('"cosmetics",') and donator_store_script_source.contains('"mounts",') and donator_store_script_source.contains('"charms",') and donator_store_script_source.contains('"services",'), "Aether Store separates its six scalable catalog categories")
-	_check(donator_store_script_source.contains('"membership": "Blessings"') and donator_store_script_source.contains('"membership": "NO BATTLE POWER"') and donator_store_script_source.contains("No battle advantages"), "Blessings establish a fair supporter direction")
+	_check(
+		donator_store_script_source.contains('"membership": "Blessings"')
+		and donator_store_script_source.contains('"membership": "5% SHINY · TRAVEL · NPC SHOPS"')
+		and donator_store_script_source.contains("5% better Shiny odds")
+		and donator_store_script_source.contains("50% off regional travel")
+		and donator_store_script_source.contains("two free Aether Anchors")
+		and donator_store_script_source.contains("5% off NPC currency shops")
+		and donator_store_script_source.contains("Aether Gems excluded"),
+		"Blessings disclose the complete Shiny, travel, anchor, and NPC shop package"
+	)
 	_check(donator_store_script_source.contains('"name": "Aether Blessing Voucher · 3 Days"') and donator_store_script_source.contains('"badge": "3 DAYS"') and donator_store_script_source.contains('"badge": "7 DAYS"') and donator_store_script_source.contains('"badge": "14 DAYS"') and donator_store_script_source.contains('"badge": "30 DAYS"') and not donator_store_script_source.contains('"badge": "90 DAYS"'), "Aether Blessing offers the intended four tradeable voucher durations")
 	_check(
 		donator_store_script_source.contains("AETHERBLESSINGVOUCHER3DAYS.png")

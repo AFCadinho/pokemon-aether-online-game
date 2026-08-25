@@ -4,7 +4,12 @@ const PlayersHouseVisualScene := preload("res://generated/tiled_visuals/players_
 const PokemonLaboratoryVisualScene := preload("res://generated/tiled_visuals/pokemon_laboratory/pokemon_laboratory.visual.tscn")
 const PokemonCenterVisualScene := preload("res://generated/tiled_visuals/pokemon_center/pokemon_center.visual.tscn")
 const VerticalTransitionBuildingVisualScene := preload("res://generated/tiled_visuals/transition_building_vertical/transition_building_vertical.visual.tscn")
+const AetherClashLobbyVisualScene := preload("res://generated/tiled_visuals/lobby/lobby.visual.tscn")
+const MtMoonB1FVisualScene := preload("res://generated/tiled_visuals/mt_moon_b1f/mt_moon_b1f.visual.tscn")
+const MtMoonB2FVisualScene := preload("res://generated/tiled_visuals/mt_moon_b2f/mt_moon_b2f.visual.tscn")
 const WORLD_SCRIPT_PATH := "res://scripts/world/world.gd"
+const PLAYER_SCENE_PATH := "res://scenes/player.tscn"
+const NPC_SCRIPT_PATH := "res://scripts/world/npcs/base_npc.gd"
 
 var failed := false
 
@@ -14,6 +19,9 @@ func _init() -> void:
 	_check_visual(PokemonLaboratoryVisualScene, "Oak's Lab", &"StructuresTop")
 	_check_visual(PokemonCenterVisualScene, "Pokémon Center template", &"StructuresTop")
 	_check_visual(VerticalTransitionBuildingVisualScene, "vertical transition building", &"StructuresTop")
+	_check_visual(AetherClashLobbyVisualScene, "Aether Clash Lobby", &"ObjectTop")
+	_check_visual(MtMoonB1FVisualScene, "Mt. Moon B1F", &"ObjectsTop")
+	_check_visual(MtMoonB2FVisualScene, "Mt. Moon B2F", &"ObjectsTop")
 
 	var world_source := FileAccess.get_file_as_string(WORLD_SCRIPT_PATH)
 	_check(
@@ -25,9 +33,18 @@ func _init() -> void:
 		"World recognizes StructuresTop as a shared depth-sorted visual layer"
 	)
 	_check(
+		world_source.contains('"ObjectTop",'),
+		"World recognizes the Lobby ObjectTop as a shared depth-sorted visual layer"
+	)
+	_check(
+		world_source.contains('"ObjectsTop",'),
+		"World recognizes ObjectsTop as a shared depth-sorted visual layer"
+	)
+	_check(
 		world_source.contains("_build_structure_top_visual_depth_groups(map)"),
 		"World builds connected object depth groups when a map loads"
 	)
+	_check_nameplate_depth()
 
 	quit(1 if failed else 0)
 
@@ -46,6 +63,24 @@ func _check_visual(visual_scene: PackedScene, display_name: String, layer_name: 
 			"%s %s contains foreground object tiles" % [display_name, layer_name]
 		)
 	visual.free()
+
+
+func _check_nameplate_depth() -> void:
+	var player_scene_source := FileAccess.get_file_as_string(PLAYER_SCENE_PATH)
+	_check(
+		player_scene_source.contains(
+			'[node name="Nameplate" type="Control" parent="." unique_id=1400626741]\nvisible = false\nz_index = 4096\nz_as_relative = false'
+		),
+		"player nameplate renders in the absolute foreground band"
+	)
+
+	var npc_source := FileAccess.get_file_as_string(NPC_SCRIPT_PATH)
+	_check(
+		npc_source.contains(
+			"nameplate.z_as_relative = false\n\tnameplate.z_index = RenderingServer.CANVAS_ITEM_Z_MAX"
+		),
+		"NPC nameplates render in the same absolute foreground band"
+	)
 
 
 func _check(condition: bool, label: String) -> void:

@@ -18,10 +18,14 @@ const REQUIRED_NPC_IDS: Array[String] = [
 	"kanto_route_1_dadinho",
 	"kanto_rivals_house_daisy",
 	"kanto_route_1_north_guard",
+	"kanto_route_3_pokemon_center_magikarp_salesman",
+	"kanto_viridian_city_ace_trainer_victor",
+	"kanto_viridian_city_gardener_mabel",
 	"kanto_viridian_city_north_route_guard",
 	"kanto_viridian_city_pokemon_center_clerk",
 	"kanto_viridian_city_pokemon_center_clerk_2",
 	"kanto_viridian_city_pokemon_center_nurse_joy",
+	"kanto_viridian_city_rocket_grunt_rook",
 	"kanto_viridian_city_south_route_guard",
 	"kanto_viridian_city_west_route_guard",
 ]
@@ -58,9 +62,62 @@ func _init() -> void:
 		"Lt. Surge resolves his exact Showdown portrait"
 	)
 	_check_equal(
+		catalog.resolve_portrait_id("", "kanto_pallet_town_north_guard", ""),
+		"showdown_policeman_gen7",
+		"Pallet Town route guard resolves the shared police portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "kanto_route_1_north_guard", ""),
+		"showdown_policeman_gen7",
+		"Route 1 route guard resolves the shared police portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id(
+			"",
+			"kanto_route_3_pokemon_center_magikarp_salesman",
+			""
+		),
+		"showdown_pokefan_gen6",
+		"Magikarp Salesman uses the male Poke Fan portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "kanto_viridian_city_rocket_grunt_rook", ""),
+		"showdown_rainbowrocketgrunt",
+		"Master Thief Rook resolves the male Team Rocket portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "kanto_viridian_city_gardener_mabel", "trainer_class_elder"),
+		"showdown_agatha_lgpe",
+		"Gardener Mabel resolves her elderly female portrait instead of the generic elder portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "kanto_viridian_city_ace_trainer_victor", "trainer_class_ace_trainer_m"),
+		"showdown_acetrainer_gen6",
+		"Ace Trainer Victor resolves his Showdown Ace Trainer portrait instead of the default portrait"
+	)
+	_check_equal(
 		catalog.resolve_portrait_id("", "unlisted_nurse", "pokemon_center_nurse"),
 		"showdown_pokemoncenterlady",
 		"Reusable NPC resolves its profile portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "unlisted_seller", "pokemart_seller"),
+		"showdown_pokemonbreeder_gen4",
+		"Poké Mart item sellers use the Gen 4 Pokémon Breeder portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "unlisted_buyer", "pokemart_buyer"),
+		"showdown_pokemonbreeder_gen4",
+		"Poké Mart item buyers use the Gen 4 Pokémon Breeder portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id(
+			"",
+			"kanto_viridian_city_pokemon_center_clerk_2",
+			"pokemart_buyer"
+		),
+		"showdown_pokemonbreeder_gen4",
+		"Placed Poké Mart buyers keep the shared breeder portrait"
 	)
 	_check_equal(
 		catalog.resolve_portrait_id("showdown_red_lgpe", "kanto_oaklab_oak_1", ""),
@@ -75,6 +132,12 @@ func _init() -> void:
 	var oak_texture := catalog.get_texture("showdown_oak")
 	_check_true(oak_texture != null, "Assigned portrait texture loads on demand")
 	_check_true(catalog.get_texture("showdown_oak") == oak_texture, "Loaded portrait texture is cached")
+	var breeder_texture := catalog.get_texture("showdown_pokemonbreeder_gen4")
+	_check_true(breeder_texture != null, "Gen 4 Pokémon Breeder portrait texture loads on demand")
+	_check_true(
+		breeder_texture != null and breeder_texture.get_size() == Vector2(80, 80),
+		"Gen 4 Pokémon Breeder portrait keeps its catalog dimensions"
+	)
 
 	catalog.queue_free()
 	quit(1 if failed else 0)

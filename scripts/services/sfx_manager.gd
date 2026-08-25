@@ -40,6 +40,18 @@ const SOUND_DATA := {
 		"path": "res://assets/audio/sfx/ui/ranked_match_found.ogg",
 		"volume_db": -2.0,
 	},
+	"item_found": {
+		"path": "res://assets/audio/sfx/overworld/item_found.ogg",
+		"volume_db": 0.0,
+	},
+	"item_received": {
+		"path": "res://assets/audio/sfx/overworld/item_received.ogg",
+		"volume_db": -3.0,
+	},
+	"pokemon_recovery": {
+		"path": "res://assets/audio/sfx/overworld/pokemon_recovery.ogg",
+		"volume_db": 0.0,
+	},
 }
 
 var stream_cache: Dictionary = {}

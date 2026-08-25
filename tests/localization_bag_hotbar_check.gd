@@ -1,6 +1,7 @@
 extends SceneTree
 
 const OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
+const OVERLAY_SCRIPT_PATH := "res://scripts/ui/ui_overlay.gd"
 const PREVIEW := preload("res://scripts/ui/bag_item_effect_preview.gd")
 
 var failed := false
@@ -20,6 +21,19 @@ func _run() -> void:
 	_check(localization_manager != null, "Bag and hotbar check can access LocalizationManager")
 	_check(item_localization != null, "Bag and hotbar check can access ItemLocalization")
 	_check(settings_manager != null, "Bag and hotbar check can access SettingsManager")
+	var overlay_source := FileAccess.get_file_as_string(OVERLAY_SCRIPT_PATH)
+	_check(
+		overlay_source.contains(
+			"hotbar_index >= 0 and not typing and not _is_world_battle_active()"
+		),
+		"number keys bypass the overworld hotbar during battle"
+	)
+	_check(
+		not overlay_source.contains(
+			'bag_item_context_menu.add_item(LocalizationManager.text("ui.bag.action.inspect")'
+		),
+		"Bag context menu omits the redundant Inspect action"
+	)
 	if localization_manager == null or item_localization == null or settings_manager == null:
 		quit(1)
 		return
@@ -47,19 +61,96 @@ func _check_bag_and_hotbar_runtime_translation() -> void:
 
 	localization_manager.call("set_locale", "nl")
 	overlay.call("_setup_bag_popup")
+	overlay.call("_setup_bag_item_use_popup")
 	overlay.call("_setup_player_hotbar")
 
 	var search := overlay.get("bag_search_input") as LineEdit
+	var bag_popup := overlay.get("bag_popup") as PanelContainer
+	var bag_item_use_popup := overlay.get("bag_item_use_popup") as PanelContainer
 	var category_buttons := overlay.get("bag_category_buttons") as Dictionary
 	var all_button := category_buttons.get("all") as Button
 	var all_label := all_button.find_child("Label", true, false) as Label
+	var hotbar_panel := overlay.get("hotkey_sidebar_panel") as PanelContainer
+	var hotbar_grid := hotbar_panel.get_node_or_null("MarginContainer/Layout/SlotStack") as GridContainer
+	var hotbar_page_label := hotbar_panel.get_node_or_null(
+		"MarginContainer/Layout/PageControls/PageLabel"
+	) as Label
+	var hotbar_previous_button := hotbar_panel.get_node_or_null(
+		"MarginContainer/Layout/PageControls/PreviousButton"
+	) as Button
+	var hotbar_next_button := hotbar_panel.get_node_or_null(
+		"MarginContainer/Layout/PageControls/NextButton"
+	) as Button
 	var hotbar_buttons := overlay.get("hotbar_buttons") as Array
 	var first_hotbar_button := hotbar_buttons[0] as Control
+	var bag_detail_icon := overlay.get("bag_detail_icon") as TextureRect
+	var bag_item_slot := overlay.call("_create_bag_item_slot", {
+		"id": "ability-capsule",
+		"name": "Ability Capsule",
+		"quantity": 1,
+	}) as Control
+	var bag_item_icon := bag_item_slot.find_child("ItemIcon", true, false) as TextureRect
 	_check(search != null and search.placeholder_text == "Items zoeken...", "Bag search renders in Dutch")
+	_check(
+		bag_popup != null
+		and bag_popup.get_theme_stylebox("panel", "TooltipPanel") is StyleBoxFlat
+		and bag_popup.get_theme_font_size("font_size", "TooltipLabel") == 12,
+		"Bag item and close-button hover cards use the styled Bag tooltip theme"
+	)
+	_check(
+		bag_item_use_popup != null
+		and bag_item_use_popup.get_theme_stylebox("panel", "TooltipPanel") is StyleBoxFlat
+		and bag_item_use_popup.get_theme_font_size("font_size", "TooltipLabel") == 12,
+		"Bag target hover cards inherit the same styled tooltip theme"
+	)
+	_check(
+		bag_item_icon != null
+		and bag_item_icon.custom_minimum_size == Vector2(48, 48)
+		and bag_item_icon.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST,
+		"Bag grid renders item pixel art at its native 48 pixel size"
+	)
+	_check(
+		bag_detail_icon != null
+		and bag_detail_icon.custom_minimum_size == Vector2(72, 72)
+		and bag_detail_icon.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST,
+		"Bag detail preview keeps a compact sharp 72 pixel icon"
+	)
 	_check(all_label != null and all_label.text == "Alle items", "Bag category renders in Dutch")
 	_check(
-		first_hotbar_button != null and first_hotbar_button.tooltip_text.begins_with("Lege sneltoets 1"),
+		first_hotbar_button != null
+		and first_hotbar_button.tooltip_text.begins_with("Lege sneltoets 1")
+		and first_hotbar_button.tooltip_text.contains("Ctrl+1"),
 		"hotbar instructions render in Dutch"
+	)
+	_check(
+		hotbar_grid != null
+		and hotbar_grid.columns == 1
+		and hotbar_grid.get_child_count() == 8,
+		"hotbar keeps all eight shortcuts in one paginated column"
+	)
+	_check(
+		hotbar_grid.get_child(0).visible
+		and hotbar_grid.get_child(3).visible
+		and not hotbar_grid.get_child(4).visible
+		and hotbar_page_label != null
+		and hotbar_page_label.text == "1/2",
+		"hotbar opens on shortcuts one through four"
+	)
+	if hotbar_next_button != null:
+		hotbar_next_button.pressed.emit()
+	_check(
+		not hotbar_grid.get_child(0).visible
+		and hotbar_grid.get_child(4).visible
+		and hotbar_grid.get_child(7).visible
+		and hotbar_page_label.text == "2/2",
+		"hotbar pager reveals shortcuts five through eight"
+	)
+	_check(
+		hotbar_previous_button != null
+		and hotbar_previous_button.tooltip_text == "Vorige hotbarpagina"
+		and hotbar_next_button != null
+		and hotbar_next_button.tooltip_text == "Volgende hotbarpagina",
+		"hotbar pager controls render localized guidance"
 	)
 	_check(
 		localization_manager.call(
@@ -69,6 +160,20 @@ func _check_bag_and_hotbar_runtime_translation() -> void:
 		) == "Escape Rope gebruiken?",
 		"Escape Rope confirmation renders in Dutch"
 	)
+
+	var max_level_pokemon := Pokemon.new("Blastoise", 100)
+	max_level_pokemon.owned_pokemon_id = 42
+	max_level_pokemon.experience = 1_000_000
+	max_level_pokemon.growth_rate = "medium"
+	overlay.set("bag_item_use_pending_item", {"id": "exp-candy-l"})
+	var disabled_target := overlay.call("_create_bag_item_use_pokemon_button", max_level_pokemon, 0) as Button
+	_check(disabled_target != null and disabled_target.disabled, "max-level Bag target is disabled")
+	_check(
+		_find_label(disabled_target, "Niet bruikbaar · Maximaal niveau") != null,
+		"disabled Bag target explains the reason inline"
+	)
+	if disabled_target != null:
+		disabled_target.free()
 
 	var external_item := {
 		"id": "potion",
@@ -148,6 +253,18 @@ func _check_item_effect_preview_translation() -> void:
 		str(PREVIEW.preview(pokemon, antidote, 1).get("label")) == "Envenenado → Saudável",
 		"item-effect preview updates to Portuguese"
 	)
+
+
+func _find_label(node: Node, text: String) -> Label:
+	if node == null:
+		return null
+	if node is Label and (node as Label).text == text:
+		return node as Label
+	for child: Node in node.get_children():
+		var result := _find_label(child, text)
+		if result != null:
+			return result
+	return null
 
 
 func _check(condition: bool, label: String) -> void:

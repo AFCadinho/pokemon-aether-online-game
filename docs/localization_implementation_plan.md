@@ -375,7 +375,7 @@ overlays provide names and short descriptions. Pokémon Summary, Pokédex move s
 PC filters, battle move slots, move hover cards, and Pokémon hover cards resolve these
 presentation fields through the shared service. The catalogs contain no power,
 accuracy, PP, type, category, or ability mechanics. Full local indexes (919 moves and
-376 abilities) and all 1,439 species/forms now have generated presentation coverage.
+377 abilities) and all 1,439 species/forms now have generated presentation coverage.
 Dutch and Brazilian Portuguese generated entries are review drafts; manually approved
 overlays always take precedence. See `localization_content_review.md` for the guarded
 generation and review workflow.

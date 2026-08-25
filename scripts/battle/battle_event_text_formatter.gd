@@ -43,6 +43,42 @@ func format_move_event(actor: String, move_name: String) -> String:
 		"move": _localized_content_name("moves", move_name, move_name),
 	})
 
+func format_pokemon_identity(display_name: String, species: String) -> String:
+	var safe_name := display_name.strip_edges()
+	var safe_species := species.strip_edges()
+	if safe_species != "":
+		safe_species = _localized_content_name("species", safe_species, safe_species)
+	if safe_name == "":
+		return safe_species if safe_species != "" else _t("battle.fallback.pokemon")
+	if safe_species == "" or _normalize_pokemon_identity(safe_name) == _normalize_pokemon_identity(safe_species):
+		return safe_name
+	# After a public Mega Evolution, Showdown keeps the base species in an
+	# unnicknamed battle ident. Treat that default ident as the species name so
+	# logs show the revealed Mega forme instead of a fake nickname in brackets.
+	if _is_base_name_for_mega_species(safe_name, safe_species):
+		return safe_species
+	# Showdown keeps the base species in an unnicknamed Ogerpon ident while its
+	# details expose the mask-selected battle forme. That base name is not a
+	# nickname, so present the effective forme instead of adding parentheses.
+	if (
+		_normalize_pokemon_identity(safe_name) == "ogerpon"
+		and _normalize_pokemon_identity(safe_species).begins_with("ogerpon")
+	):
+		return safe_species
+	return _t("battle.event.pokemon_identity", {
+		"nickname": safe_name,
+		"species": safe_species,
+	})
+
+
+func _is_base_name_for_mega_species(display_name: String, species: String) -> bool:
+	var normalized_name := _normalize_pokemon_identity(display_name)
+	var normalized_species := _normalize_pokemon_identity(species)
+	for suffix in ["megax", "megay", "megaz", "mega", "primal"]:
+		if normalized_species.ends_with(suffix):
+			return normalized_name == normalized_species.trim_suffix(suffix)
+	return false
+
 func format_move_source_message(event: Dictionary, actor: String) -> String:
 	var raw_source := str(event.get("source", ""))
 	if raw_source == "" or actor == "":
@@ -274,6 +310,34 @@ func format_stat_change_battle_message(event: Dictionary) -> String:
 
 	return _t("battle.event.stat.changed", {"target": target, "stat": stat, "action": action})
 
+
+func format_stat_stage_event(event: Dictionary) -> String:
+	var operation := str(event.get("operation", "")).strip_edges()
+	var target := _format_battle_actor(_get_first_event_text_value(event, [
+		"target",
+		"pokemon",
+		"actor",
+	]))
+	match operation:
+		"clearAll":
+			return _t("battle.event.stat.reset.all")
+		"clear":
+			return _t("battle.event.stat.reset.target", {"target": target}) if target != "" else ""
+		"clearPositive":
+			return _t("battle.event.stat.reset.positive", {"target": target}) if target != "" else ""
+		"invert":
+			return _t("battle.event.stat.reset.inverted", {"target": target}) if target != "" else ""
+		"swap":
+			var source_target := _format_battle_actor(str(event.get("sourceTarget", "")))
+			if target == "" or source_target == "":
+				return ""
+			return _t("battle.event.stat.reset.swapped", {
+				"target": target,
+				"source": source_target,
+			})
+
+	return ""
+
 func is_stat_change_from_ability(event: Dictionary) -> bool:
 	var source := str(event.get("source", "")).strip_edges()
 	if source.begins_with("[from] "):
@@ -403,12 +467,12 @@ func format_critical_hit_event(_event: Dictionary) -> String:
 
 func format_direct_damage_message(
 	target: String,
-	visible_hp_change: int,
+	damage_percent: float,
 	has_hp_loss: bool,
 	has_sub_percent_hp_loss: bool
 	) -> String:
 	if has_hp_loss:
-		var percent: int = max(1, visible_hp_change)
+		var percent := "%.1f" % maxf(0.1, damage_percent)
 		return _t("battle.event.damage.direct", {"target": target, "percent": percent})
 	if has_sub_percent_hp_loss:
 		return _t("battle.event.damage.direct_small", {"target": target})
@@ -697,6 +761,9 @@ func _localized_content_name(kind: String, content_id: String, fallback_name: St
 	if content_localization != null and content_localization.has_method("display_name"):
 		return str(content_localization.call("display_name", kind, content_id, fallback_name))
 	return fallback_name
+
+func _normalize_pokemon_identity(value: String) -> String:
+	return value.to_lower().replace(" ", "").replace("-", "").replace("_", "").replace(".", "").replace("'", "").replace("’", "")
 
 func _is_reflection_effect(raw_effect: String, effect: String) -> bool:
 	var source_kind := ""

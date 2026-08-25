@@ -20,6 +20,15 @@ func _init() -> void:
 	_check(PixelPerfectRenderingScript.resolve_scale(1.0, Vector2i(1920, 1080)) == 1.0, "explicit 1x remains exact")
 	_check(PixelPerfectRenderingScript.resolve_scale(1.5, Vector2i(1280, 720)) == 1.5, "explicit 1.5x remains exact")
 	_check(PixelPerfectRenderingScript.resolve_scale(2.0, Vector2i(1920, 1080)) == 2.0, "explicit 2x remains exact")
+	_check(
+		PixelPerfectRenderingScript.resolve_world_scale_for_area(1.0, "interior") == 1.5,
+		"building interiors always use fixed 1.5x zoom"
+	)
+	_check(
+		PixelPerfectRenderingScript.resolve_world_scale_for_area(2.0, "exterior") == 2.0
+		and PixelPerfectRenderingScript.resolve_world_scale_for_area(1.0, "cave") == 1.0,
+		"non-interior maps preserve the configured outdoor zoom"
+	)
 	_check(PixelPerfectRenderingScript.validate_scale(0) == 1.0, "legacy automatic scale migrates to 1x")
 	_check(PixelPerfectRenderingScript.validate_scale(3) == 1.0, "legacy 3x scale migrates to 1x")
 	_check(
@@ -52,12 +61,15 @@ func _init() -> void:
 	)
 	_check(
 		player_text.contains("SettingsManager.world_pixel_scale_changed.connect")
+		and player_text.contains("resolve_world_scale_for_area")
+		and player_text.contains("_get_current_map_world_access_area_type")
+		and player_text.contains("apply_camera_baseline_zoom")
 		and player_text.contains("PixelPerfectRenderingScript.apply_to_camera"),
-		"player camera follows dedicated pixel scale changes"
+		"player camera applies map scaling without overwriting active Photo Mode zoom"
 	)
 	_check(_read_text(PLAYER_SCENE).contains("zoom = Vector2(1, 1)"), "player camera scene defaults to 1x")
 	_check(_read_text(WORLD_SCENE).contains("texture_filter = 1"), "overworld uses nearest texture filtering")
-	for locale_path: String in ["res://localization/en.json", "res://localization/nl.json", "res://localization/pt_BR.json"]:
+	for locale_path: String in ["res://localization/en.json", "res://localization/nl.json", "res://localization/pt_BR.json", "res://localization/zh_CN.json"]:
 		var locale_text := _read_text(locale_path)
 		_check(
 			locale_text.contains('"ui.settings.world_pixel_scale"')

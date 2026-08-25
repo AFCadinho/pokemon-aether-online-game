@@ -26,6 +26,12 @@ var quest_reward_received_dialogue_id := ""
 
 
 func interact_with_player(_player: Node2D) -> void:
+	var access: Dictionary = await ThievingService.use_public_service("market")
+	if not bool(access.get("success", false)):
+		await GameErrorDialogService.show_response(access, "backend.error.market_load")
+		return
+	if not bool(access.get("allowed", true)):
+		return
 	var metadata_response: Dictionary = await _load_npc_metadata()
 	if not bool(metadata_response.get("success", false)):
 		await _show_report_to_staff_message()
@@ -149,6 +155,8 @@ func _claim_quest_reward() -> void:
 		quest_reward_received_dialogue_id,
 		["You received Oak's Parcel!", "Please deliver it to Professor Oak."]
 	))
+	if bool(result.get("claimed", false)):
+		SfxManager.play("item_received")
 
 
 func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_key: String, current_value: String) -> String:
@@ -158,7 +166,7 @@ func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_ke
 	return metadata_dialogue_id
 
 
-func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:
+func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array) -> Array[String]:
 	return await NpcDialogueService.resolve_lines(
 		dialogue_reference_id,
 		fallback_lines,

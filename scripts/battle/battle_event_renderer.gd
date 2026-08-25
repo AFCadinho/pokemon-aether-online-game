@@ -2,6 +2,10 @@ extends RefCounted
 
 class_name BattleEventRenderer
 
+const DODGE_RESPONSE_DELAY_SECONDS := 0.10
+const FALLBACK_MOVE_ACTION_LEAD_SECONDS := 0.40
+const FALLBACK_DODGE_ACTION_LEAD_SECONDS := 0.70
+
 var battle_log_panel: BattleLogPanel
 var mini_battle_feed: MiniBattleFeed
 var current_action_panel: CurrentActionPanel
@@ -10,6 +14,7 @@ var message_timing: BattleMessageTiming
 var host_node: Node
 var set_active_hud_hp_from_event: Callable
 var animation_guard: Callable
+var show_trainer_command: Callable
 var last_battle_log_player_id := ""
 
 
@@ -21,7 +26,8 @@ func setup(
 	timing: BattleMessageTiming,
 	host: Node,
 	hp_event_callback: Callable,
-	animation_guard_callback: Callable = Callable()
+	animation_guard_callback: Callable = Callable(),
+	trainer_command_callback: Callable = Callable()
 ) -> void:
 	battle_log_panel = battle_log
 	mini_battle_feed = mini_feed
@@ -31,6 +37,7 @@ func setup(
 	host_node = host
 	set_active_hud_hp_from_event = hp_event_callback
 	animation_guard = animation_guard_callback
+	show_trainer_command = trainer_command_callback
 
 
 func reset_battle_log_player_gap() -> void:
@@ -49,7 +56,9 @@ func add_turn_header(turn: int) -> void:
 
 func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 	var pre_log_message := str(presentation.get("pre_log_message", ""))
+	var pre_log_kind := str(presentation.get("pre_log_kind", ""))
 	var log_message := str(presentation.get("log_message", ""))
+	var log_kind := str(presentation.get("log_kind", ""))
 	var battle_message := str(presentation.get("battle_message", ""))
 	var add_blank_after := bool(presentation.get("add_blank_after", false))
 	var suppress_player_gap := bool(presentation.get("suppress_player_gap", false))
@@ -59,6 +68,7 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 	var move_animation_target_ident := str(presentation.get("move_animation_target_ident", ""))
 	var move_animation_result := str(presentation.get("move_animation_result", ""))
 	var damage_target_ident := str(presentation.get("damage_target_ident", ""))
+	var damage_sound_variant := str(presentation.get("damage_sound_variant", "normal"))
 	var heal_target_ident := str(presentation.get("heal_target_ident", ""))
 	var heal_followup_effect_animation_key := str(presentation.get("heal_followup_effect_animation_key", ""))
 	var faint_target_ident := str(presentation.get("faint_target_ident", ""))
@@ -71,12 +81,12 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 	if pre_log_message != "":
 		if not suppress_player_gap:
 			_add_battle_log_player_gap(event_data)
-		_add_log_message(pre_log_message)
+		_add_log_message(pre_log_message, pre_log_kind)
 
 	if log_message != "":
 		if not suppress_player_gap:
 			_add_battle_log_player_gap(event_data)
-		_add_log_message(log_message)
+		_add_log_message(log_message, log_kind)
 
 	if add_blank_after:
 		battle_log_panel.add_blank_line()
@@ -109,6 +119,14 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 			"faint_target": faint_target_ident,
 			"stat_target": stat_change_target_ident,
 		})
+	if animations_allowed and attack_actor_ident != "" and move_animation_name != "":
+		await _show_trainer_move_commands(
+			event_data,
+			attack_actor_ident,
+			move_animation_name,
+			move_animation_target_ident,
+			move_animation_result
+		)
 	var defer_stat_change_effect := (
 		stat_change_target_ident != ""
 		and effect_animation_key in ["stat_up", "stat_down"]
@@ -133,7 +151,10 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 	if damage_target_ident != "":
 		_set_active_hud_hp_from_event(damage_target_ident, event_data, true)
 		if animations_allowed:
-			await animation_router.play_damage_tween_for_target(damage_target_ident)
+			await animation_router.play_damage_tween_for_target(
+				damage_target_ident,
+				damage_sound_variant
+			)
 		_set_active_hud_hp_from_event(damage_target_ident, event_data, false)
 		var damage_hold_seconds := message_timing.get_damage_animation_hold_seconds()
 		artificial_hold_seconds += damage_hold_seconds
@@ -187,11 +208,11 @@ func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_
 	if set_active_hud_hp_from_event.is_valid():
 		set_active_hud_hp_from_event.call(target_ident, event, use_previous_hp)
 
-func _add_log_message(message: String) -> void:
+func _add_log_message(message: String, kind := "") -> void:
 	if battle_log_panel != null:
-		battle_log_panel.add_message(message)
+		battle_log_panel.add_message(message, kind)
 	if mini_battle_feed != null:
-		mini_battle_feed.add_message(message)
+		mini_battle_feed.add_message(message, kind)
 
 
 func _wait(seconds: float) -> void:
@@ -206,6 +227,61 @@ func _can_start_battle_animation(source: String, details: Dictionary = {}) -> bo
 		return true
 
 	return bool(animation_guard.call(source, details))
+
+
+func _show_trainer_move_commands(
+	event_data: Dictionary,
+	actor_ident: String,
+	move_name: String,
+	target_ident: String,
+	animation_result: String
+) -> void:
+	if not show_trainer_command.is_valid():
+		return
+	var attack_command_result: Variant = show_trainer_command.call({
+		"kind": "move",
+		"player_id": _get_player_id_from_ident(actor_ident),
+		"pokemon": actor_ident,
+		"move": move_name,
+		"event": event_data,
+	})
+	var attack_command_shown := _command_was_shown(attack_command_result)
+	if attack_command_shown:
+		await _wait(_get_command_minimum_read_seconds(
+			attack_command_result,
+			FALLBACK_MOVE_ACTION_LEAD_SECONDS
+		))
+	if not attack_command_shown or animation_result != "miss" or target_ident == "":
+		return
+
+	await _wait(DODGE_RESPONSE_DELAY_SECONDS)
+	var dodge_command_result: Variant = show_trainer_command.call({
+		"kind": "dodge",
+		"player_id": _get_player_id_from_ident(target_ident),
+		"pokemon": target_ident,
+		"event": event_data,
+	})
+	if _command_was_shown(dodge_command_result):
+		await _wait(_get_command_minimum_read_seconds(
+			dodge_command_result,
+			FALLBACK_DODGE_ACTION_LEAD_SECONDS
+		))
+
+
+func _command_was_shown(result: Variant) -> bool:
+	if result is Dictionary:
+		return bool((result as Dictionary).get("shown", false))
+	return bool(result)
+
+
+func _get_command_minimum_read_seconds(result: Variant, fallback_seconds: float) -> float:
+	if not (result is Dictionary):
+		return fallback_seconds
+	return clampf(
+		float((result as Dictionary).get("minimum_read_seconds", fallback_seconds)),
+		0.0,
+		0.80
+	)
 
 
 func _add_battle_log_player_gap(event: Dictionary) -> void:
@@ -234,7 +310,7 @@ func _get_battle_log_event_player_id(event: Dictionary) -> String:
 			return _get_player_id_from_ident(str(event.get("target", "")))
 		"ability":
 			return _get_ability_event_player_id(event)
-		"statChange":
+		"statChange", "statStage":
 			return _get_stat_change_event_player_id(event)
 		"status":
 			return _get_player_id_from_ident(str(event.get("target", event.get("pokemon", ""))))

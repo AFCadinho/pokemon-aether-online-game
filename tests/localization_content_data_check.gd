@@ -4,11 +4,13 @@ const CATALOG_PATHS: Dictionary = {
 	"en": "res://localization/content/en.json",
 	"nl": "res://localization/content/nl.json",
 	"pt_BR": "res://localization/content/pt_BR.json",
+	"zh_CN": "res://localization/content/zh_CN.json",
 }
 const GENERATED_CATALOG_PATHS: Dictionary = {
 	"en": "res://localization/content/generated/en.json",
 	"nl": "res://localization/content/generated/nl.json",
 	"pt_BR": "res://localization/content/generated/pt_BR.json",
+	"zh_CN": "res://localization/content/generated/zh_CN.json",
 }
 const OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
 const CALC_PANEL_SCRIPT := preload("res://scripts/battle/battle_ui/battle_damage_calc_panel.gd")
@@ -98,11 +100,34 @@ func _check_catalogs() -> void:
 		generated_catalogs[locale] = generated_value as Dictionary if generated_value is Dictionary else {}
 
 	var generated_english: Dictionary = generated_catalogs.get("en", {})
+	var expected_hidden_power_descriptions := {
+		"en": "Power is always 60. Its type depends on the Pokémon using it.",
+		"nl": "De kracht is altijd 60. Het type hangt af van de Pokémon die de aanval gebruikt.",
+		"pt_BR": "O poder é sempre 60. O tipo depende do Pokémon que usa o golpe.",
+		"zh_CN": "威力固定为 60。属性取决于使用该招式的宝可梦。",
+	}
+	for locale: String in GENERATED_CATALOG_PATHS:
+		var generated_moves: Dictionary = (generated_catalogs.get(locale, {}) as Dictionary).get("moves", {})
+		var hidden_power: Dictionary = generated_moves.get("hidden-power", {})
+		_check(
+			str(hidden_power.get("shortDesc", "")) == str(expected_hidden_power_descriptions.get(locale, "")),
+			"generated %s Hidden Power description uses its fixed 60 Power" % locale
+		)
+	var summary_index_value: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string("res://data/move_summary_index.json")
+	)
+	var summary_index: Dictionary = summary_index_value as Dictionary if summary_index_value is Dictionary else {}
+	var summary_hidden_power: Dictionary = summary_index.get("hidden-power", {})
+	_check(
+		str(summary_hidden_power.get("shortDesc", "")).contains("always 60")
+		and not str(summary_hidden_power.get("desc", "")).contains("30 and 70"),
+		"Pokémon Summary uses the current Hidden Power mechanics"
+	)
 	for generated_kind: String in ["species", "moves", "abilities"]:
 		var expected_size: int = int({
 			"species": 1439,
 			"moves": 919,
-			"abilities": 376,
+			"abilities": 377,
 		}.get(generated_kind, 0))
 		var english_generated_entries: Dictionary = generated_english.get(generated_kind, {})
 		var expected_ids: Array = english_generated_entries.keys()
@@ -149,7 +174,7 @@ func _check_catalogs() -> void:
 					).strip_edges().is_empty():
 						described_ability_count += 1
 				_check(
-					described_ability_count == 316,
+					described_ability_count == 317,
 					"generated %s abilities preserve every available source description" % locale
 				)
 
@@ -157,7 +182,7 @@ func _check_catalogs() -> void:
 		var merged_catalog: Dictionary = content_localization.call("get_catalog", locale)
 		_check((merged_catalog.get("species", {}) as Dictionary).size() == 1439, "%s resolver merges all species" % locale)
 		_check((merged_catalog.get("moves", {}) as Dictionary).size() == 919, "%s resolver merges all moves" % locale)
-		_check((merged_catalog.get("abilities", {}) as Dictionary).size() == 376, "%s resolver merges all abilities" % locale)
+		_check((merged_catalog.get("abilities", {}) as Dictionary).size() == 377, "%s resolver merges all abilities" % locale)
 
 
 func _check_runtime_resolution() -> void:

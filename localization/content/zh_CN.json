@@ -1,0 +1,479 @@
+{
+  "types": {
+    "normal": {
+      "name": "正常"
+    },
+    "fire": {
+      "name": "火灾"
+    },
+    "water": {
+      "name": "水"
+    },
+    "electric": {
+      "name": "电动"
+    },
+    "grass": {
+      "name": "草"
+    },
+    "ice": {
+      "name": "冰"
+    },
+    "fighting": {
+      "name": "战斗"
+    },
+    "poison": {
+      "name": "毒药"
+    },
+    "ground": {
+      "name": "接地"
+    },
+    "flying": {
+      "name": "飞行"
+    },
+    "psychic": {
+      "name": "通灵"
+    },
+    "bug": {
+      "name": "错误"
+    },
+    "rock": {
+      "name": "摇滚"
+    },
+    "ghost": {
+      "name": "幽灵"
+    },
+    "dragon": {
+      "name": "龙"
+    },
+    "dark": {
+      "name": "黑暗"
+    },
+    "steel": {
+      "name": "钢"
+    },
+    "fairy": {
+      "name": "仙女"
+    }
+  },
+  "natures": {
+    "hardy": {
+      "name": "哈迪"
+    },
+    "lonely": {
+      "name": "孤独"
+    },
+    "brave": {
+      "name": "勇敢"
+    },
+    "adamant": {
+      "name": "坚定"
+    },
+    "naughty": {
+      "name": "淘气"
+    },
+    "bold": {
+      "name": "粗体"
+    },
+    "docile": {
+      "name": "温顺"
+    },
+    "relaxed": {
+      "name": "放松"
+    },
+    "impish": {
+      "name": "顽皮"
+    },
+    "lax": {
+      "name": "松懈"
+    },
+    "timid": {
+      "name": "胆怯"
+    },
+    "hasty": {
+      "name": "仓促"
+    },
+    "serious": {
+      "name": "严重"
+    },
+    "jolly": {
+      "name": "乔利"
+    },
+    "naive": {
+      "name": "天真"
+    },
+    "modest": {
+      "name": "谦虚"
+    },
+    "mild": {
+      "name": "轻度"
+    },
+    "quiet": {
+      "name": "安静"
+    },
+    "bashful": {
+      "name": "害羞"
+    },
+    "rash": {
+      "name": "皮疹"
+    },
+    "calm": {
+      "name": "冷静"
+    },
+    "gentle": {
+      "name": "温柔"
+    },
+    "sassy": {
+      "name": "时髦"
+    },
+    "careful": {
+      "name": "小心"
+    },
+    "quirky": {
+      "name": "古怪"
+    }
+  },
+  "moves": {
+    "air-slash": {
+      "name": "空气斩",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "aqua-tail": {
+      "name": "水尾",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "aura-sphere": {
+      "name": "光环球",
+      "shortDesc": "绝不会错过。"
+    },
+    "bind": {
+      "name": "绑定",
+      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+    },
+    "bite": {
+      "name": "咬",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "body-slam": {
+      "name": "身体猛击",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "bubble": {
+      "name": "气泡",
+      "shortDesc": "有一定几率使目标速度降低一级。"
+    },
+    "calm-mind": {
+      "name": "冷静的头脑",
+      "shortDesc": "使使用者的特攻和特防提升一级。"
+    },
+    "confuse-ray": {
+      "name": "迷惑雷",
+      "shortDesc": "迷惑目标。"
+    },
+    "crunch": {
+      "name": "紧缩",
+      "shortDesc": "有一定几率降低目标防御一级。"
+    },
+    "dark-pulse": {
+      "name": "暗脉冲",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "dazzling-gleam": {
+      "name": "耀眼的光芒",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "defense-curl": {
+      "name": "防御弯举",
+      "shortDesc": "使使用者的防御力提升一级。"
+    },
+    "double-team": {
+      "name": "包夹",
+      "shortDesc": "使使用者的回避率提高一级。"
+    },
+    "dragon-claw": {
+      "name": "龙爪",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "earthquake": {
+      "name": "地震",
+      "shortDesc": "造成常规伤害并能击中 Dig 用户。"
+    },
+    "electro-ball": {
+      "name": "电球",
+      "shortDesc": "当用户比目标更快时，力量会增加，最高可达 150。"
+    },
+    "extreme-speed": {
+      "name": "极速",
+      "shortDesc": "以更高的优先级造成常规伤害。"
+    },
+    "flamethrower": {
+      "name": "火焰喷射器",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "flash-cannon": {
+      "name": "闪光炮",
+      "shortDesc": "有一定几率降低目标特防一级。"
+    },
+    "giga-drain": {
+      "name": "千兆排水",
+      "shortDesc": "吸收一半的伤害来治疗用户。"
+    },
+    "gust": {
+      "name": "阵风",
+      "shortDesc": "造成常规伤害，并且可以击中空中的宝可梦。"
+    },
+    "harden": {
+      "name": "哈登",
+      "shortDesc": "使使用者的防御力提升一级。"
+    },
+    "heavy-slam": {
+      "name": "重击",
+      "shortDesc": "当用户超过目标时，力量会增加，最高可达 120。"
+    },
+    "ice-beam": {
+      "name": "冰光束",
+      "shortDesc": "有几率冻结目标。"
+    },
+    "iron-tail": {
+      "name": "铁尾",
+      "shortDesc": "有一定几率降低目标防御一级。"
+    },
+    "light-screen": {
+      "name": "光幕",
+      "shortDesc": "减少特殊攻击伤害，持续五回合。"
+    },
+    "mirror-coat": {
+      "name": "镜面涂层",
+      "shortDesc": "返回上次收到的特殊命中造成的伤害的两倍。"
+    },
+    "pain-split": {
+      "name": "疼痛分裂",
+      "shortDesc": "平均用户和目标的当前 HP。"
+    },
+    "poison-sting": {
+      "name": "毒刺",
+      "shortDesc": "有几率使目标中毒。"
+    },
+    "psywave": {
+      "name": "心灵波",
+      "shortDesc": "根据用户的等级造成不同的伤害。"
+    },
+    "quick-attack": {
+      "name": "快速攻击",
+      "shortDesc": "以更高的优先级造成常规伤害。"
+    },
+    "razor-leaf": {
+      "name": "剃刀叶",
+      "shortDesc": "暴击几率增加。"
+    },
+    "recover": {
+      "name": "恢复",
+      "shortDesc": "使使用者恢复最大生命值的一半。"
+    },
+    "rest": {
+      "name": "休息",
+      "shortDesc": "使用者睡眠两回合并完全治愈自己。"
+    },
+    "rock-throw": {
+      "name": "扔石头",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "rollout": {
+      "name": "推出",
+      "shortDesc": "每次连续使用，功率加倍，最多五圈。"
+    },
+    "roost": {
+      "name": "栖息地",
+      "shortDesc": "使使用者恢复最大生命值的一半。"
+    },
+    "sand-attack": {
+      "name": "沙土攻击",
+      "shortDesc": "将目标精度降低一级。"
+    },
+    "scald": {
+      "name": "烫伤",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "screech": {
+      "name": "尖叫声",
+      "shortDesc": "降低目标防御力两级。"
+    },
+    "shadow-ball": {
+      "name": "影子球",
+      "shortDesc": "有一定几率降低目标特防一级。"
+    },
+    "shock-wave": {
+      "name": "冲击波",
+      "shortDesc": "绝不会错过。"
+    },
+    "sing": {
+      "name": "唱歌",
+      "shortDesc": "让目标进入睡眠状态。"
+    },
+    "slash": {
+      "name": "斜杠",
+      "shortDesc": "暴击几率增加。"
+    },
+    "sleep-powder": {
+      "name": "睡眠粉",
+      "shortDesc": "让目标进入睡眠状态。"
+    },
+    "sludge-bomb": {
+      "name": "污泥炸弹",
+      "shortDesc": "有几率使目标中毒。"
+    },
+    "sonic-boom": {
+      "name": "音爆",
+      "shortDesc": "造成正好 20 点伤害。"
+    },
+    "spark": {
+      "name": "火花",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "stone-edge": {
+      "name": "石缘",
+      "shortDesc": "暴击几率增加。"
+    },
+    "string-shot": {
+      "name": "弦乐射击",
+      "shortDesc": "将目标的速度降低两级。"
+    },
+    "surf": {
+      "name": "冲浪",
+      "shortDesc": "造成常规伤害并能击中潜水者。"
+    },
+    "swift": {
+      "name": "斯威夫特",
+      "shortDesc": "绝不会错过。"
+    },
+    "swords-dance": {
+      "name": "剑舞",
+      "shortDesc": "将用户的攻击力提高两个阶段。"
+    },
+    "synthesis": {
+      "name": "合成",
+      "shortDesc": "治疗使用者；数量取决于天气。"
+    },
+    "tackle": {
+      "name": "铲球",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "tail-whip": {
+      "name": "尾鞭",
+      "shortDesc": "降低目标防御一级。"
+    },
+    "thunder-shock": {
+      "name": "雷霆震击",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "thunder-wave": {
+      "name": "雷霆波动",
+      "shortDesc": "麻痹目标。"
+    },
+    "thunderbolt": {
+      "name": "雷电",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "vine-whip": {
+      "name": "藤鞭",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "water-gun": {
+      "name": "水枪",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "water-pulse": {
+      "name": "水脉冲",
+      "shortDesc": "有一定几率迷惑目标。"
+    },
+    "wing-attack": {
+      "name": "侧翼攻击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "withdraw": {
+      "name": "撤回",
+      "shortDesc": "使使用者的防御力提升一级。"
+    }
+  },
+  "abilities": {
+    "blaze": {
+      "name": "火焰",
+      "shortDesc": "强化火系招式，最大生命值三分之一以下。"
+    },
+    "guts": {
+      "name": "胆量",
+      "shortDesc": "受到严重状态影响时攻击力提高 50%。"
+    },
+    "inner-focus": {
+      "name": "内在焦点",
+      "shortDesc": "防止退缩。"
+    },
+    "keen-eye": {
+      "name": "敏锐的目光",
+      "shortDesc": "防止精度降低。"
+    },
+    "marvel-scale": {
+      "name": "奇迹规模",
+      "shortDesc": "受到严重状态影响时防御力提高 50%。"
+    },
+    "natural-cure": {
+      "name": "自然疗法",
+      "shortDesc": "解决切换时的主要状态问题。"
+    },
+    "overgrow": {
+      "name": "过度生长",
+      "shortDesc": "强化草招式，最大生命值三分之一以下。"
+    },
+    "pressure": {
+      "name": "压力",
+      "shortDesc": "使对方的动作额外消耗1点PP。"
+    },
+    "rock-head": {
+      "name": "岩头",
+      "shortDesc": "防止反冲伤害。"
+    },
+    "rough-skin": {
+      "name": "皮肤粗糙",
+      "shortDesc": "对接触的攻击者造成伤害。"
+    },
+    "run-away": {
+      "name": "逃跑",
+      "shortDesc": "确保逃离狂野战斗。"
+    },
+    "serene-grace": {
+      "name": "宁静的恩典",
+      "shortDesc": "额外移动效果的几率加倍。"
+    },
+    "shed-skin": {
+      "name": "脱皮",
+      "shortDesc": "每回合后可以治愈主要状态状况。"
+    },
+    "shield-dust": {
+      "name": "护盾灰尘",
+      "shortDesc": "阻止传入动作的附加效果。"
+    },
+    "simple": {
+      "name": "简单",
+      "shortDesc": "使宝可梦的统计阶段变化加倍。"
+    },
+    "soundproof": {
+      "name": "隔音",
+      "shortDesc": "防止基于声音的移动。"
+    },
+    "static": {
+      "name": "静态",
+      "shortDesc": "可能会瘫痪进行接触的攻击者。"
+    },
+    "thick-fat": {
+      "name": "厚厚的脂肪",
+      "shortDesc": "火与冰招式造成的伤害减半。"
+    },
+    "torrent": {
+      "name": "激流",
+      "shortDesc": "强化水系招式，最大生命值三分之一以下。"
+    },
+    "water-absorb": {
+      "name": "吸水",
+      "shortDesc": "吸收水移动并恢复四分之一最大生命值。"
+    }
+  }
+}

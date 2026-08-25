@@ -2,6 +2,7 @@ extends Control
 
 @export var default_is_double_battle := false
 
+const BattleSpriteRenderScale := preload("res://scripts/battle/battle_ui/battle_sprite_render_scale.gd")
 const IDLE_ANIMATION := "idle"
 const DEFAULT_SHEET_FRAME_SIZE := Vector2i(48, 57)
 const MIN_SHEET_FRAME_SIZE := Vector2i(16, 16)
@@ -20,6 +21,8 @@ const BATTLE_SPRITE_ASSET_ALIASES := {
 	# the base species. Without the alias the loader falls through to the HOME
 	# icon, then gets refreshed to the real battle sprite by later state data.
 	"mimikyu-disguised": ["mimikyu"],
+	# Showdown's animated sprite pack omits the separator between Rock and Star.
+	"pikachu-rock-star": ["pikachu-rockstar"],
 }
 const SPECIES_POSITION_OFFSETS := {
 	"back:charizard": Vector2(-46, -10),
@@ -948,7 +951,12 @@ func prewarm_species(species: String, side: String, is_shiny: bool = false) -> v
 		return
 	_load_sprite_frames(species, side, is_shiny)
 
-func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) -> SpriteFrames:
+func _load_sprite_frames(
+	species: String,
+	side: String,
+	is_shiny: bool = false,
+	report_missing: bool = true
+) -> SpriteFrames:
 	var cache_key := "%s|%s|%s|%s" % [
 		_normalize_species_asset_id(species),
 		side.strip_edges().to_lower(),
@@ -958,12 +966,30 @@ func _load_sprite_frames(species: String, side: String, is_shiny: bool = false) 
 	if sprite_frames_cache.has(cache_key):
 		return sprite_frames_cache[cache_key] as SpriteFrames
 
-	var frames := _load_sprite_frames_uncached(species, side, is_shiny)
+	var frames := _load_sprite_frames_uncached(species, side, is_shiny, report_missing)
 	if frames != null:
+		_apply_species_render_scale_override(frames, species, side)
 		sprite_frames_cache[cache_key] = frames
 	return frames
 
-func _load_sprite_frames_uncached(species: String, side: String, is_shiny: bool = false) -> SpriteFrames:
+func _apply_species_render_scale_override(sprite_frames: SpriteFrames, species: String, side: String) -> void:
+	# The Gen 9 Ogerpon front sheets use a 192 px canvas for artwork authored at
+	# 2x battle resolution. Unlike the 288 px back sheets, those static folders
+	# do not carry animation metadata, so the generic folder loader otherwise
+	# displays them at twice their intended size. HOME fallbacks already use the
+	# same render scale, making this override safe while an external pack loads.
+	if side.strip_edges().to_lower() != "front":
+		return
+	if not _normalize_species_asset_id(species).begins_with("ogerpon"):
+		return
+	_set_sprite_frames_render_scale(sprite_frames, 2.0)
+
+func _load_sprite_frames_uncached(
+	species: String,
+	side: String,
+	is_shiny: bool = false,
+	report_missing: bool = true
+) -> SpriteFrames:
 	for sprite_root in _get_sprite_asset_roots(side, is_shiny):
 		for asset_id in _get_species_asset_id_candidates(species):
 			for sheet_metadata_path in PokemonAssets.build_pokemon_sprite_path("%s/%s/animation.json" % [sprite_root, asset_id]):
@@ -992,7 +1018,8 @@ func _load_sprite_frames_uncached(species: String, side: String, is_shiny: bool 
 		_apply_species_position_offset(home_frames, species, side, is_shiny)
 		return home_frames
 
-	push_error("Pokemon sprite assets are not found for %s/%s" % [side, species])
+	if report_missing:
+		push_error("Pokemon sprite assets are not found for %s/%s" % [side, species])
 	return null
 
 func _apply_sprite_source_display_scale(sprite_frames: SpriteFrames, source_path: String) -> void:
@@ -1051,6 +1078,10 @@ func _get_species_asset_id_candidates(species: String) -> Array[String]:
 	var compact_asset_id: String = asset_id.replace("-", "")
 	if compact_asset_id != asset_id:
 		candidates.append(compact_asset_id)
+	for shared_candidate: String in PokemonAssets.get_battle_sprite_ids(species):
+		var normalized_candidate := _normalize_species_asset_id(shared_candidate)
+		if normalized_candidate != "" and not candidates.has(normalized_candidate):
+			candidates.append(normalized_candidate)
 
 	var aliases_value: Variant = BATTLE_SPRITE_ASSET_ALIASES.get(asset_id, [])
 	if aliases_value is Array:
@@ -1268,18 +1299,7 @@ func _get_metadata_position_offset(metadata: Dictionary) -> Vector2:
 	return Vector2.ZERO
 
 func _get_metadata_render_scale(metadata: Dictionary, side: String) -> float:
-	if metadata.has("render_scale"):
-		return max(float(metadata.get("render_scale", 1.0)), 1.0)
-	if metadata.has("scale"):
-		return max(float(metadata.get("scale", 1.0)), 1.0)
-
-	var frame_width := float(metadata.get("frame_width", 0.0))
-	var frame_height := float(metadata.get("frame_height", 0.0))
-	var is_front_sprite := side == "front" or side == "shiny_front"
-	if is_front_sprite and max(frame_width, frame_height) >= 160.0:
-		return 2.0
-
-	return 1.0
+	return BattleSpriteRenderScale.resolve(metadata, side)
 
 func _load_sprite_frames_from_sheet(sheet_path: String) -> SpriteFrames:
 	if sheet_path.begins_with("res://") and not ResourceLoader.exists(sheet_path):

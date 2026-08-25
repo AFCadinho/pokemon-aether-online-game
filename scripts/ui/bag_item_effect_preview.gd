@@ -6,6 +6,7 @@ const SUPPORTED_EFFECT_TYPES := {
 	"heal_hp": true,
 	"cure_status": true,
 	"revive": true,
+	"change_ability": true,
 }
 
 const STATUS_LABELS := {
@@ -39,6 +40,9 @@ static func supports(gameplay: Dictionary) -> bool:
 static func preview(pokemon: Pokemon, gameplay: Dictionary, requested_quantity: int) -> Dictionary:
 	if pokemon == null or not supports(gameplay):
 		return {}
+	var ability_effect := _first_effect_of_type(gameplay, "change_ability")
+	if not ability_effect.is_empty():
+		return _preview_ability_change(pokemon, ability_effect)
 
 	var max_hp: int = max(pokemon.max_hp, int(pokemon.stats.get("hp", pokemon.max_hp)), 1)
 	var current_hp: int = clampi(pokemon.current_hp, 0, max_hp)
@@ -124,6 +128,149 @@ static func preview(pokemon: Pokemon, gameplay: Dictionary, requested_quantity: 
 		"status": status,
 		"revived": revived,
 	}
+
+
+static func _preview_ability_change(pokemon: Pokemon, effect: Dictionary) -> Dictionary:
+	if pokemon.special_lineage == "battle-bond":
+		return _ability_no_effect_preview(
+			pokemon,
+			"ui.bag.preview.fixed_special_ability",
+			"ui.bag.preview.fixed_special_ability_tooltip",
+			{"ability": _ability_name(pokemon.ability)}
+		)
+	var mode := str(effect.get("mode", "")).strip_edges().to_lower()
+	var current_ability := str(pokemon.ability).strip_edges()
+	var current_name := _ability_name(current_ability)
+	var possible_abilities := _unique_ability_ids(pokemon.possible_abilities)
+
+	# The backend publishes possibleAbilities in primary, secondary, hidden order.
+	# An empty list can occur on a legacy payload; let the authoritative server
+	# decide instead of blocking an otherwise valid item client-side.
+	if possible_abilities.is_empty():
+		return {
+			"canApply": true,
+			"label": _text(
+				"ui.bag.preview.ability_hidden_generic"
+				if mode == "hidden"
+				else "ui.bag.preview.ability_cycle_generic",
+				{"current": current_name}
+			),
+			"tooltip": _text("ui.bag.preview.ability_server_check", {
+				"pokemon": pokemon.species,
+				"current": current_name,
+			}),
+			"usedQuantity": 1,
+		}
+
+	if mode == "hidden":
+		var hidden_ability := possible_abilities[-1] if possible_abilities.size() > 1 else ""
+		if hidden_ability == "":
+			return _ability_no_effect_preview(
+				pokemon,
+				"ui.bag.preview.no_hidden_ability",
+				"ui.bag.preview.no_hidden_ability_tooltip"
+			)
+		var hidden_name := _ability_name(hidden_ability)
+		if pokemon.hidden_ability and _normalize_ability_id(current_ability) == hidden_ability:
+			return _ability_no_effect_preview(
+				pokemon,
+				"ui.bag.preview.hidden_ability_active",
+				"ui.bag.preview.hidden_ability_active_tooltip",
+				{"ability": hidden_name}
+			)
+		return {
+			"canApply": true,
+			"label": _text("ui.bag.preview.ability_change", {
+				"current": current_name,
+				"next": hidden_name,
+			}),
+			"tooltip": _text("ui.bag.preview.hidden_ability_tooltip", {
+				"pokemon": pokemon.species,
+				"current": current_name,
+				"next": hidden_name,
+			}),
+			"usedQuantity": 1,
+		}
+
+	var unlocked_abilities := possible_abilities.duplicate()
+	if not pokemon.hidden_ability and unlocked_abilities.size() > 1:
+		unlocked_abilities.remove_at(unlocked_abilities.size() - 1)
+	if unlocked_abilities.size() <= 1:
+		return _ability_no_effect_preview(
+			pokemon,
+			"ui.bag.preview.no_alternative_ability",
+			"ui.bag.preview.no_alternative_ability_tooltip"
+		)
+
+	var current_id := _normalize_ability_id(current_ability)
+	var current_index := unlocked_abilities.find(current_id)
+	var next_ability: String = unlocked_abilities[0]
+	if current_index >= 0:
+		next_ability = unlocked_abilities[(current_index + 1) % unlocked_abilities.size()]
+	var next_name := _ability_name(next_ability)
+	return {
+		"canApply": next_ability != current_id,
+		"label": _text("ui.bag.preview.ability_change", {
+			"current": current_name,
+			"next": next_name,
+		}),
+		"tooltip": _text("ui.bag.preview.ability_change_tooltip", {
+			"pokemon": pokemon.species,
+			"current": current_name,
+			"next": next_name,
+		}),
+		"usedQuantity": 1,
+	}
+
+
+static func _ability_no_effect_preview(
+	pokemon: Pokemon,
+	label_key: String,
+	tooltip_key: String,
+	values: Dictionary = {}
+) -> Dictionary:
+	var localized_values := values.duplicate()
+	localized_values["pokemon"] = pokemon.species
+	return {
+		"canApply": false,
+		"label": _text(label_key, localized_values),
+		"tooltip": _text(tooltip_key, localized_values),
+		"usedQuantity": 0,
+	}
+
+
+static func _first_effect_of_type(gameplay: Dictionary, effect_type: String) -> Dictionary:
+	for effect_value: Variant in gameplay.get("effects", []):
+		if not (effect_value is Dictionary):
+			continue
+		var effect := effect_value as Dictionary
+		if str(effect.get("type", "")).strip_edges().to_lower() == effect_type:
+			return effect
+	return {}
+
+
+static func _unique_ability_ids(values: Array) -> Array[String]:
+	var result: Array[String] = []
+	for value: Variant in values:
+		var ability_id := _normalize_ability_id(str(value))
+		if ability_id != "" and not result.has(ability_id):
+			result.append(ability_id)
+	return result
+
+
+static func _normalize_ability_id(value: String) -> String:
+	return value.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+
+
+static func _ability_name(ability_id: String) -> String:
+	var normalized_id := _normalize_ability_id(ability_id)
+	var fallback := " ".join(normalized_id.split("-", false)).capitalize()
+	var main_loop := Engine.get_main_loop()
+	if main_loop is SceneTree:
+		var localizer := (main_loop as SceneTree).root.get_node_or_null("ContentLocalization")
+		if localizer != null and localizer.has_method("display_name"):
+			return str(localizer.call("display_name", "abilities", normalized_id, fallback))
+	return fallback
 
 
 static func _no_effect_label(fainted: bool, current_hp: int, max_hp: int, status: String) -> String:

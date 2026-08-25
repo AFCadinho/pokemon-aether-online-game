@@ -5,7 +5,10 @@ class_name LanguageSelectorStyle
 const FLAG_EN: Texture2D = preload("res://assets/ui/language_flags/en.svg")
 const FLAG_NL: Texture2D = preload("res://assets/ui/language_flags/nl.svg")
 const FLAG_PT_BR: Texture2D = preload("res://assets/ui/language_flags/pt_BR.svg")
+const FLAG_ZH_CN: Texture2D = preload("res://assets/ui/language_flags/zh_CN.svg")
 const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/store_dropdown_arrow.svg")
+const RADIO_CHECKED: Texture2D = preload("res://assets/ui/store_radio_checked.svg")
+const RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/store_radio_unchecked.svg")
 
 const TEXT := Color("#f4f0de")
 const MUTED_TEXT := Color("#aeb8c5")
@@ -114,6 +117,10 @@ static func _configure_popup(popup: PopupMenu) -> void:
 		"hover",
 		_button_style(Color("#173354f5"), BORDER_HOVER)
 	)
+	popup.add_theme_icon_override("radio_checked", RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked", RADIO_UNCHECKED)
+	popup.add_theme_icon_override("radio_checked_disabled", RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked_disabled", RADIO_UNCHECKED)
 
 
 static func _flag_for_locale(locale: String) -> Texture2D:
@@ -122,12 +129,20 @@ static func _flag_for_locale(locale: String) -> Texture2D:
 			return FLAG_NL
 		"pt_BR":
 			return FLAG_PT_BR
+		"zh_CN":
+			return FLAG_ZH_CN
 		_:
 			return FLAG_EN
 
 
 static func _locale_code(locale: String) -> String:
-	return "PT-BR" if locale == "pt_BR" else locale.to_upper()
+	match locale:
+		"pt_BR":
+			return "PT-BR"
+		"zh_CN":
+			return "ZH-CN"
+		_:
+			return locale.to_upper()
 
 
 static func _button_style(

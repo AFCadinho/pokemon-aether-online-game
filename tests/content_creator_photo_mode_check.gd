@@ -1,5 +1,6 @@
 extends SceneTree
 
+const PhotoZoomScript := preload("res://scripts/ui/content_creator_photo_zoom.gd")
 const PHOTO_SCENE_PATH := "res://scenes/interface/content_creator_photo_mode.tscn"
 const PHOTO_SCRIPT_PATH := "res://scripts/ui/content_creator_photo_mode.gd"
 const WORLD_SCENE_PATH := "res://scenes/world.tscn"
@@ -69,6 +70,7 @@ var failures := 0
 
 func _init() -> void:
 	_check_sources()
+	_check_zoom_scaling()
 	_check_localization()
 	_check_scene()
 	if failures == 0:
@@ -102,6 +104,8 @@ func _check_sources() -> void:
 	)
 	_check(photo_source.contains("camera.position -= mouse_motion.relative"), "Photo mode supports mouse camera panning")
 	_check(photo_source.contains("MOUSE_BUTTON_WHEEL_UP"), "Photo mode supports mouse wheel zoom")
+	_check(photo_source.contains("current_zoom_factor"), "Photo mode tracks zoom relative to the current map camera")
+	_check(photo_source.contains("apply_camera_baseline_zoom"), "Photo mode accepts refreshed pixel-scale camera baselines")
 	_check(photo_source.contains("composition_grid.visible = false"), "Composition guides are excluded from screenshots")
 	_check(photo_source.contains("CAPTURE_TIMER_SECONDS"), "Photo mode supports delayed captures")
 	_check(photo_source.contains("_face_player_direction"), "Photo mode can pose the local player direction")
@@ -113,6 +117,7 @@ func _check_sources() -> void:
 	_check(world_script_source.contains("clear_creator_remote_players_visibility_override"), "Remote player visibility is restored")
 	_check(world_script_source.contains("set_creator_nameplates_visible"), "Photo mode can temporarily hide nameplates")
 	_check(player_source.contains("clear_creator_nameplate_visibility_override"), "Local nameplate visibility is restored")
+	_check(player_source.contains("apply_camera_baseline_zoom"), "Player camera preserves an active Photo Mode zoom override")
 	_check(remote_player_source.contains("creator_nameplate_visibility_override_active"), "Remote nameplates honor creator overrides")
 	_check(world_source.contains("content_creator_photo_mode.tscn"), "World owns the photo mode layer")
 	_check(overlay_source.contains("content_creator_photo_mode_button"), "Creator menu exposes Photo Mode")
@@ -134,8 +139,26 @@ func _check_sources() -> void:
 	_check(overlay_source.contains('"open_photo_mode"'), "Creator menu launches Photo Mode")
 
 
+func _check_zoom_scaling() -> void:
+	_check(
+		PhotoZoomScript.resolve_zoom(Vector2(1.5, 1.5), 0.5)
+			.is_equal_approx(Vector2(0.75, 0.75)),
+		"Interior camera zoom uses a relative Photo Mode factor"
+	)
+	_check(
+		PhotoZoomScript.resolve_zoom(Vector2(0.75, 0.75), 0.25)
+			.is_equal_approx(Vector2(0.1875, 0.1875)),
+		"Canvas-scaled interiors can still zoom out below the old absolute floor"
+	)
+	_check(
+		PhotoZoomScript.resolve_zoom(Vector2.ONE, 0.0)
+			.is_equal_approx(Vector2(0.25, 0.25)),
+		"Photo Mode clamps unsafe zoom factors"
+	)
+
+
 func _check_localization() -> void:
-	for locale: String in ["en", "nl", "pt_BR"]:
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var path := "res://localization/%s.json" % locale
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 		_check(parsed is Dictionary, "%s localization is valid JSON" % locale)

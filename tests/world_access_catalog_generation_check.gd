@@ -30,6 +30,23 @@ func _init() -> void:
 	_expect(transitions.size() >= 28, "All configured map exits are registered")
 	_expect(areas.has("kanto_pallet_town"), "Pallet Town is registered")
 	_expect(
+		areas.has("aether_clash_lobby")
+			and (areas.get("aether_clash_lobby", {}) as Dictionary)
+				.get("spawnPoints", {})
+				.has("guild_arrival"),
+		"Aether Clash Lobby and its Guild arrival point are registered"
+	)
+	_expect(
+		(areas.get("aether_clash_lobby", {}) as Dictionary).get("sceneAliases", [])
+			== ["uid://is25lssna4ae"],
+		"Aether Clash Lobby exposes its scene UID independently of the local cache"
+	)
+	_expect(
+		(areas.get("aether_clash_lobby", {}) as Dictionary).get("areaType", "")
+			== "exterior",
+		"Aether Clash Lobby is categorized as an exterior map"
+	)
+	_expect(
 		areas.has("kanto_pewter_city_pokemon_center"),
 		"Inherited Pokémon Center scene metadata is registered"
 	)
@@ -75,22 +92,67 @@ func _init() -> void:
 		labels_avoid_directional_prefixes,
 		"Staff destination labels never expose technical From or To prefixes"
 	)
-	var all_spawn_points_are_staff_safe := true
-	for area_value: Variant in areas.values():
+	var unsafe_staff_points: Array[String] = []
+	for area_id_value: Variant in areas:
+		var area_id := str(area_id_value)
+		var area_value: Variant = areas.get(area_id, {})
 		if not area_value is Dictionary:
-			all_spawn_points_are_staff_safe = false
 			continue
 		var spawn_points_value: Variant = area_value.get("spawnPoints", {})
 		if not spawn_points_value is Dictionary:
-			all_spawn_points_are_staff_safe = false
 			continue
-		for point_value: Variant in spawn_points_value.values():
+		for point_id_value: Variant in spawn_points_value:
+			var point_id := str(point_id_value)
+			var point_value: Variant = spawn_points_value.get(point_id, {})
 			if not point_value is Dictionary or not bool(point_value.get(
 				"safeForStaffTeleport", false
 			)):
-				all_spawn_points_are_staff_safe = false
-	_expect(all_spawn_points_are_staff_safe, "Every spawn point is safe for staff teleport")
+				unsafe_staff_points.append("%s:%s" % [area_id, point_id])
+	unsafe_staff_points.sort()
+	_expect(
+		unsafe_staff_points == [
+			"aether_clash_battle_royale_preview:jail",
+			"aether_clash_battle_royale_preview:preview",
+			"aether_clash_duel_preview:guild_1_jail",
+			"aether_clash_duel_preview:guild_2_jail",
+			"aether_clash_duel_preview:preview",
+			"aether_clash_waiting_area_preview:preview",
+		],
+		"Only isolated Aether Clash previews are excluded from safe player teleports"
+	)
 	_expect(areas.has("kanto_route_2_gate"), "Inherited transition building is registered")
+	_expect(
+		areas.has("kanto_pewter_city_gym")
+			and not bool((areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("accessOnly", false))
+			and (areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("scenePath", "")
+			== "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn"
+			and (areas.get("kanto_pewter_city_gym", {}) as Dictionary).get("defaultMode", "") == "open",
+		"Pewter Gym is registered as an open scene-backed area"
+	)
+	_expect(
+		bool((areas.get("kanto_pewter_city_museum", {}) as Dictionary).get("accessOnly", false)),
+		"Future Pewter Museum remains an open access-only area"
+	)
+	_expect(
+		not bool((areas.get("kanto_pewter_city_house_1", {}) as Dictionary).get("accessOnly", false))
+			and (areas.get("kanto_pewter_city_house_1", {}) as Dictionary).get("scenePath", "")
+			== "res://scenes/overworld/kanto/towns/pewter_city/house1.tscn"
+			and (areas.get("kanto_pewter_city_house_1", {}) as Dictionary).get("defaultMode", "")
+			== "open"
+			and not bool((areas.get("kanto_pewter_city_house_2", {}) as Dictionary).get("accessOnly", false))
+			and (areas.get("kanto_pewter_city_house_2", {}) as Dictionary).get("scenePath", "")
+			== "res://scenes/overworld/kanto/towns/pewter_city/house2.tscn"
+			and (areas.get("kanto_pewter_city_house_2", {}) as Dictionary).get("defaultMode", "")
+			== "open",
+		"Pewter houses are registered as open scene-backed areas"
+	)
+	_expect(
+		transitions.has("kanto_pewter_city__to_house_1")
+			and transitions.has("kanto_pewter_city__to_house_2")
+			and transitions.has("kanto_pewter_city_house_1__to_pewter_city")
+			and transitions.has("kanto_pewter_city_house_2__to_pewter_city"),
+		"Pewter houses expose connected entrance and exit transitions"
+	)
 	_expect(
 		(areas.get("kanto_oaks_lab", {}) as Dictionary).get("locationGroupId", "")
 			== "kanto_pallet_town",
@@ -111,6 +173,16 @@ func _init() -> void:
 			and transitions.has("kanto_viridian_city__to_route_22")
 			and transitions.has("kanto_route_22__to_viridian_city"),
 		"Viridian City exposes guarded route transitions including Route 22"
+	)
+	var route_22_points := (
+		(areas.get("kanto_route_22", {}) as Dictionary).get("spawnPoints", {}) as Dictionary
+	)
+	_expect(
+		route_22_points.has("victory_road_post")
+			and (route_22_points.get("victory_road_post", {}) as Dictionary).get(
+				"spawnMarker", ""
+			) == "FromVictoryRoadPost",
+		"Route 22 exposes the Victory Road Post staff destination"
 	)
 	_expect(
 		transitions.has("kanto_viridian_city__to_pokecenter")

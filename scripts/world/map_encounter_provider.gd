@@ -2,6 +2,7 @@ extends RefCounted
 class_name MapEncounterProvider
 
 const DEFAULT_ENCOUNTER_TYPE := "grass"
+const FISHING_ENCOUNTER_TYPES := [&"old_rod", &"good_rod", &"super_rod"]
 const ENCOUNTER_REGIONS_ROOT := "EncounterRegions"
 
 const META_PLACEHOLDER_TYPE := "pao_placeholder_type"
@@ -34,9 +35,14 @@ static func _resolve_region_encounter(current_map: Node, region: Node, requested
 		return _unavailable("missing_area_id", resolved_type)
 
 	var chance := _get_region_encounter_chance(region)
-	var use_map_trigger := chance < 0.0 and current_map.has_method("should_trigger_wild_encounter")
-	if chance < 0.0 and not use_map_trigger:
-		chance = _get_map_encounter_chance(current_map, resolved_type)
+	var use_map_trigger := false
+	if chance < 0.0:
+		if _is_fishing_encounter_type(resolved_type):
+			chance = 1.0
+		else:
+			use_map_trigger = current_map.has_method("should_trigger_wild_encounter")
+			if not use_map_trigger:
+				chance = _get_map_encounter_chance(current_map, resolved_type)
 
 	return {
 		"available": true,
@@ -54,16 +60,21 @@ static func _resolve_map_encounter(current_map: Node, requested_type: String) ->
 	if area_id == "":
 		return _unavailable("missing_area_id", requested_type)
 
-	var use_map_trigger := current_map.has_method("should_trigger_wild_encounter")
+	var is_fishing_encounter := _is_fishing_encounter_type(requested_type)
+	var use_map_trigger := not is_fishing_encounter and current_map.has_method("should_trigger_wild_encounter")
 	return {
 		"available": true,
 		"area_id": area_id,
 		"encounter_type": requested_type,
-		"chance": _get_map_encounter_chance(current_map, requested_type),
+		"chance": 1.0 if is_fishing_encounter else _get_map_encounter_chance(current_map, requested_type),
 		"use_map_trigger": use_map_trigger,
 		"source": "map",
 		"region_id": "",
 	}
+
+
+static func _is_fishing_encounter_type(encounter_type: String) -> bool:
+	return StringName(_normalize_encounter_type(encounter_type)) in FISHING_ENCOUNTER_TYPES
 
 
 static func _find_encounter_region(current_map: Node, world_position: Vector2, requested_type: String) -> Node:

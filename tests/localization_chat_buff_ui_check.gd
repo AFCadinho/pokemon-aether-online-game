@@ -43,6 +43,60 @@ func _check_localized_helpers() -> void:
 		overlay.call("_localized_buff_description", {"description_key": "ui.buff.global_exp.description"}).begins_with("Na financiering"),
 		"Global buff description renders in Dutch"
 	)
+	_check(
+		overlay.call("_localized_buff_name", {"name_key": "ui.buff.global_heal.name"}) == "Global Heal",
+		"Global Heal name renders in Dutch"
+	)
+	_check(
+		overlay.call(
+			"_localized_buff_name",
+			{"name_key": "ui.buff.aether_blessing_shiny.name"}
+		) == "5% Shiny",
+		"Aether Blessing's Shiny effect is immediately readable in the boost tray"
+	)
+	_check(
+		overlay.call(
+			"_localized_buff_name",
+			{"name_key": "ui.buff.aether_blessing_travel.name"}
+		) == "50% Travel",
+		"Aether Blessing's travel effect is immediately readable in the boost tray"
+	)
+	_check(
+		overlay.call(
+			"_localized_buff_name",
+			{"name_key": "ui.buff.aether_blessing_shops.name"}
+		) == "5% NPC Shops",
+		"Aether Blessing's NPC shop effect is immediately readable in the boost tray"
+	)
+	_check(
+		str(localization_manager.call("text", "ui.buff.global_heal.no_aetherite")).contains("geen Aetherite"),
+		"Global Heal clearly states that it does not award Aetherite"
+	)
+	_check(
+		overlay.call("_format_global_buff_remaining", 3_541) == "60 min",
+		"Global buff countdown rounds remaining time up to whole minutes"
+	)
+	_check(
+		overlay.call("_global_exp_boost_contribution_message", {
+			"displayName": "Misty",
+			"amount": 25_000,
+		}) == "Misty heeft ₽25,000 bijgedragen aan de Wereldwijde EXP-boost!",
+		"Global EXP contributions render as localized Dutch system messages"
+	)
+	_check(
+		overlay.call("_global_ev_boost_contribution_message", {
+			"displayName": "Misty",
+			"amount": 10_000,
+		}) == "Misty heeft ₽10,000 bijgedragen aan de Wereldwijde EV-boost!",
+		"Global EV contributions render as localized Dutch system messages"
+	)
+	_check(
+		overlay.call("_global_rare_encounter_boost_contribution_message", {
+			"displayName": "Misty",
+			"amount": 10_000,
+		}) == "Misty heeft ₽10,000 bijgedragen aan de Zeldzame-ontmoetingsboost!",
+		"Rare encounter contributions render as localized Dutch system messages"
+	)
 
 	var map_prefix := overlay.call("_create_chat_channel_prefix", "map") as Button
 	_check(map_prefix != null and map_prefix.text == "[Kaart]", "All-chat channel prefix renders in Dutch")
@@ -55,6 +109,13 @@ func _check_localized_helpers() -> void:
 	_check(
 		overlay.call("_localized_buff_name", {"name_key": "ui.buff.global_exp.name"}) == "Bônus global de EXP",
 		"Global buff name updates to Portuguese"
+	)
+	_check(
+		overlay.call("_global_exp_boost_contribution_message", {
+			"displayName": "Misty",
+			"amount": 25_000,
+		}) == "Misty contribuiu com ₽25,000 para o Bônus global de EXP!",
+		"Global EXP contribution system messages update to Portuguese"
 	)
 	_check(map_prefix != null and map_prefix.text == "[Mapa]", "Existing channel prefix updates to Portuguese")
 	_check(map_prefix != null and map_prefix.tooltip_text == "Abrir o chat do Mapa", "Existing channel tooltip updates to Portuguese")
@@ -73,6 +134,7 @@ func _check_scene_uses_semantic_keys() -> void:
 		"ui.chat.send",
 		"ui.buff.none",
 		"ui.buff.global_exp.name",
+		"ui.buff.global_heal.receive_requests",
 		"ui.social.title",
 	]:
 		_check(source.contains('"%s"' % key), "Overlay scene uses semantic key %s" % key)

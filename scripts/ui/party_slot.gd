@@ -3,6 +3,11 @@ extends PanelContainer
 signal drag_started(slot_index: int)
 signal drag_released(slot_index: int, global_position: Vector2)
 signal clicked(slot_index: int)
+signal held_item_dropped(slot_index: int, item: Dictionary)
+signal context_requested(slot_index: int, global_position: Vector2)
+signal loan_requested
+
+const HeldItemDropTarget := preload("res://scripts/ui/held_item_drop_target_button.gd")
 
 const SLOT_BG := Color("#081522eb")
 const SLOT_BORDER := Color("#2d4b66b3")
@@ -61,8 +66,13 @@ var current_held_item_id: String = ""
 var current_status_key: String = ""
 var current_species_id: String = ""
 var current_species_source_name: String = ""
+var current_nickname: String = ""
 var held_item_marker: Control
+var loan_marker: PanelContainer
+var current_is_borrowed := false
+var current_loan: Dictionary = {}
 var status_icon_texture_cache: Dictionary = {}
+var held_item_drop_enabled := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -75,9 +85,15 @@ func _ready() -> void:
 		click_button.mouse_entered.connect(_on_click_button_mouse_entered)
 	if not click_button.mouse_exited.is_connected(_on_click_button_mouse_exited):
 		click_button.mouse_exited.connect(_on_click_button_mouse_exited)
+	if click_button.has_signal("held_item_dropped") and not click_button.is_connected("held_item_dropped", _on_click_button_held_item_dropped):
+		click_button.connect("held_item_dropped", _on_click_button_held_item_dropped)
+	if click_button.has_signal("drop_highlight_changed") and not click_button.is_connected("drop_highlight_changed", _on_click_button_drop_highlight_changed):
+		click_button.connect("drop_highlight_changed", _on_click_button_drop_highlight_changed)
+	click_button.set("held_item_drop_enabled", held_item_drop_enabled)
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	_setup_held_item_marker()
+	_setup_loan_marker()
 	_refresh_localized_text()
 	_refresh_lead_accent()
 	_apply_slot_style()
@@ -89,6 +105,8 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	current_level = pokemon.level
 	current_species_id = pokemon.species
 	current_species_source_name = pokemon.species
+	current_nickname = pokemon.nickname.strip_edges()
+	_set_held_item_drop_enabled(pokemon.owned_pokemon_id > 0)
 	_refresh_species_name()
 	shiny_badge.visible = pokemon.shiny
 	_refresh_level_label()
@@ -99,6 +117,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 	
 	pokemon_sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
 	_set_held_item_marker(pokemon.item)
+	_set_loan_marker(pokemon.borrowed, pokemon.loan)
 	_set_status_icon(pokemon.status)
 	click_button.disabled = false
 	_apply_slot_style()
@@ -112,6 +131,8 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 		pokemon_data.get("species_id", pokemon_data.get("species", species))
 	))
 	current_species_source_name = species
+	current_nickname = str(pokemon_data.get("nickname", "")).strip_edges()
+	_set_held_item_drop_enabled(false)
 	var is_shiny := bool(pokemon_data.get("shiny", false))
 	var level := int(pokemon_data.get("level", 0))
 	var max_hp: int = maxi(int(pokemon_data.get("maxHp", pokemon_data.get("max_hp", 1))), 1)
@@ -128,6 +149,8 @@ func set_pokemon_data(pokemon_data: Dictionary) -> void:
 	exp_bar.visible = false
 	pokemon_sprite.texture = PokemonAssets.load_party_icon(species, is_shiny)
 	_set_held_item_marker(str(pokemon_data.get("item", pokemon_data.get("heldItemId", ""))))
+	var loan_value: Variant = pokemon_data.get("loan", {})
+	_set_loan_marker(bool(pokemon_data.get("borrowed", false)), (loan_value as Dictionary) if loan_value is Dictionary else {})
 	_set_status_icon(str(pokemon_data.get("status", "")))
 	click_button.disabled = false
 	_apply_slot_style()
@@ -138,6 +161,8 @@ func set_empty() -> void:
 	current_level = 0
 	current_species_id = ""
 	current_species_source_name = ""
+	current_nickname = ""
+	_set_held_item_drop_enabled(false)
 	is_hovered = false
 	is_pressed = false
 	is_dragging = false
@@ -147,6 +172,7 @@ func set_empty() -> void:
 	shiny_badge.visible = false
 	pokemon_sprite.texture = null
 	_set_held_item_marker("")
+	_set_loan_marker(false, {})
 	_set_status_icon("")
 	hp_bar.value = 0.0
 	exp_bar.value = 0.0
@@ -170,6 +196,44 @@ func set_drop_target(value: bool) -> void:
 		return
 	is_drop_target = value
 	_apply_slot_style()
+
+
+func _set_held_item_drop_enabled(value: bool) -> void:
+	held_item_drop_enabled = value
+	if click_button != null:
+		click_button.set("held_item_drop_enabled", value)
+
+
+func _on_click_button_held_item_dropped(item: Dictionary) -> void:
+	if held_item_drop_enabled:
+		held_item_dropped.emit(slot_index, item.duplicate(true))
+
+
+func _on_click_button_drop_highlight_changed(highlighted: bool) -> void:
+	set_drop_target(highlighted and held_item_drop_enabled)
+
+
+func _can_drop_data(_position: Vector2, data: Variant) -> bool:
+	var accepted := held_item_drop_enabled and HeldItemDropTarget.can_accept_drag_data(data)
+	set_drop_target(accepted)
+	return accepted
+
+
+func _drop_data(_position: Vector2, data: Variant) -> void:
+	var item: Dictionary = HeldItemDropTarget.item_from_drag_data(data)
+	if not held_item_drop_enabled or item.is_empty():
+		return
+	set_drop_target(false)
+	held_item_dropped.emit(slot_index, item.duplicate(true))
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_DRAG_END or (
+		what == NOTIFICATION_MOUSE_EXIT
+		and get_viewport() != null
+		and get_viewport().gui_is_dragging()
+	):
+		set_drop_target(false)
 
 func _refresh_lead_accent() -> void:
 	if lead_accent != null:
@@ -244,6 +308,56 @@ func _set_held_item_marker(item_id: String) -> void:
 		else ""
 	)
 
+
+func _setup_loan_marker() -> void:
+	if loan_marker != null:
+		return
+	loan_marker = PanelContainer.new()
+	loan_marker.name = "LoanMarker"
+	loan_marker.visible = false
+	loan_marker.mouse_filter = Control.MOUSE_FILTER_PASS
+	loan_marker.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	loan_marker.gui_input.connect(_on_loan_marker_gui_input)
+	loan_marker.custom_minimum_size = Vector2(20, 18)
+	loan_marker.position = Vector2(6, 6)
+	var label := Label.new()
+	label.text = "↔"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_color_override("font_color", Color("#dff8ff"))
+	loan_marker.add_child(label)
+	# Keep the marker above the full-slot ClickButton so it remains visible and clickable.
+	click_button.add_child(loan_marker)
+
+
+func _set_loan_marker(borrowed: bool, loan: Dictionary) -> void:
+	current_is_borrowed = borrowed
+	current_loan = loan.duplicate(true)
+	if loan_marker == null:
+		return
+	loan_marker.visible = borrowed
+	if not borrowed:
+		loan_marker.tooltip_text = ""
+		_apply_slot_style()
+		return
+	var return_requested := str(loan.get("returnRequestedAt", "")) != ""
+	var accent := Color("#e2ad55") if return_requested else Color("#62d8ff")
+	loan_marker.add_theme_stylebox_override("panel", _make_slot_style(Color("#071722f5"), accent, Color("#00000055"), 1, 2))
+	var lender := str(loan.get("lenderUsername", "")).strip_edges()
+	loan_marker.tooltip_text = LocalizationManager.text(
+		"ui.lending.marker.return_requested" if return_requested else "ui.lending.marker.borrowed",
+		{"trainer": lender},
+	)
+	_apply_slot_style()
+
+
+func _on_loan_marker_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		get_viewport().set_input_as_handled()
+		loan_requested.emit()
+
 func _set_status_icon(status: String) -> void:
 	if status_icon == null:
 		return
@@ -309,6 +423,8 @@ func _refresh_localized_text() -> void:
 	_refresh_level_label()
 	if held_item_marker != null:
 		_set_held_item_marker(current_held_item_id)
+	if loan_marker != null:
+		_set_loan_marker(current_is_borrowed, current_loan)
 	if status_icon != null:
 		status_icon.tooltip_text = _get_status_tooltip(current_status_key) if status_icon.visible else ""
 	_refresh_species_name()
@@ -317,17 +433,22 @@ func _refresh_localized_text() -> void:
 func _refresh_species_name() -> void:
 	if name_label == null or current_species_id.strip_edges().is_empty():
 		return
-	var display_name := current_species_source_name
+	var species_name := current_species_source_name
 	var content_localization := get_node_or_null("/root/ContentLocalization")
 	if content_localization != null and content_localization.has_method("display_name"):
-		display_name = str(content_localization.call(
+		species_name = str(content_localization.call(
 			"display_name",
 			"species",
 			current_species_id,
 			current_species_source_name
 		))
+	var display_name := current_nickname if current_nickname != "" else species_name
 	name_label.text = display_name
-	name_label.tooltip_text = display_name
+	name_label.tooltip_text = (
+		"%s (%s)" % [current_nickname, species_name]
+		if current_nickname != "" and current_nickname.to_lower() != species_name.to_lower()
+		else display_name
+	)
 
 func _refresh_level_label() -> void:
 	if level_label == null:
@@ -339,6 +460,10 @@ func _on_click_button_gui_input(event: InputEvent) -> void:
 		return
 
 	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index == MOUSE_BUTTON_RIGHT and mouse_event.pressed:
+		context_requested.emit(slot_index, mouse_event.global_position)
+		get_viewport().set_input_as_handled()
+		return
 	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
 		return
 
@@ -375,6 +500,9 @@ func _apply_slot_style() -> void:
 		border = SHINY_SLOT_BORDER
 		shadow = SHINY_SLOT_SHADOW
 		shadow_size = 4
+	if current_is_borrowed:
+		border = Color("#e2ad55") if str(current_loan.get("returnRequestedAt", "")) != "" else Color("#62d8ff")
+		border_width = 2
 	if is_hovered:
 		background = SHINY_SLOT_HOVER_BG if current_is_shiny else SLOT_HOVER_BG
 		border = SHINY_SLOT_HOVER_BORDER if current_is_shiny else SLOT_HOVER_BORDER

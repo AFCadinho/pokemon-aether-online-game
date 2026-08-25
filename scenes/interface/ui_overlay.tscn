@@ -18,7 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://w30miu0aiebu" path="res://assets/ui/pokedex.svg" id="14_pokedex"]
 [ext_resource type="Texture2D" path="res://assets/ui/alpha_tools.svg" id="15_content_creator"]
 [ext_resource type="Texture2D" path="res://assets/ui/content_creator.svg" id="15_creator_tools"]
-[ext_resource type="Texture2D" path="res://assets/ui/clan.svg" id="16_guild"]
+[ext_resource type="Texture2D" path="res://assets/ui/guild.svg" id="16_guild"]
 [ext_resource type="AudioStream" uid="uid://d0sitgcr6kq4u" path="res://assets/audio/notification/notification.mp3" id="17_notification"]
 [ext_resource type="Texture2D" path="res://assets/ui/pvp_battles.svg" id="18_pvp"]
 [ext_resource type="Texture2D" path="res://assets/ui/aether_exchange_icon.svg" id="19_exchange"]
@@ -36,6 +36,7 @@
 [ext_resource type="Script" path="res://scripts/ui/fishing_action_controller.gd" id="31_fishing_action"]
 [ext_resource type="Texture2D" path="res://assets/ui/my_powers.svg" id="32_my_powers"]
 [ext_resource type="Texture2D" path="res://assets/ui/mount_management.svg" id="33_mounts"]
+[ext_resource type="Texture2D" path="res://assets/ui/skills.svg" id="34_skills"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grslb"]
 bg_color = Color(0.019607844, 0.043137256, 0.078431375, 0.92941177)
@@ -351,10 +352,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -62.0
+offset_left = -60.0
 offset_top = -245.0
 offset_right = 0.0
-offset_bottom = 165.0
+offset_bottom = -26.0
 grow_horizontal = 0
 grow_vertical = 2
 
@@ -417,7 +418,7 @@ layout_mode = 2
 theme_override_constants/separation = 4
 
 [node name="BuffSlot1" type="Button" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots"]
-custom_minimum_size = Vector2(174, 52)
+custom_minimum_size = Vector2(174, 38)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_personal_buff_slot")
@@ -430,41 +431,24 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 7.0
-offset_right = -7.0
+offset_left = 10.0
+offset_right = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
-[node name="BadgeLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot1/Content"]
-custom_minimum_size = Vector2(28, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.7607843, 0.627451, 1, 1)
-theme_override_font_sizes/font_size = 10
-text = "XP"
-vertical_alignment = 1
-
-[node name="Details" type="VBoxContainer" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot1/Content"]
+[node name="NameLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot1/Content"]
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="NameLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot1/Content/Details"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.92156863, 0.9019608, 0.96862745, 1)
 theme_override_font_sizes/font_size = 11
 text = "ui.buff.preview_exp.name"
 text_overrun_behavior = 3
-
-[node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot1/Content/Details"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.6156863, 0.6784314, 0.7607843, 1)
-theme_override_font_sizes/font_size = 9
-text = "ui.buff.preview_exp.description"
-text_overrun_behavior = 3
+vertical_alignment = 1
 
 [node name="TimeLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot1/Content"]
-custom_minimum_size = Vector2(42, 0)
+custom_minimum_size = Vector2(34, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.69803923, 0.6509804, 0.8039216, 1)
 theme_override_font_sizes/font_size = 10
@@ -473,7 +457,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="BuffSlot2" type="Button" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots"]
-custom_minimum_size = Vector2(174, 52)
+custom_minimum_size = Vector2(174, 38)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_personal_buff_slot")
@@ -486,41 +470,24 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 7.0
-offset_right = -7.0
+offset_left = 10.0
+offset_right = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
-[node name="BadgeLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot2/Content"]
-custom_minimum_size = Vector2(28, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.7607843, 0.627451, 1, 1)
-theme_override_font_sizes/font_size = 10
-text = ""
-vertical_alignment = 1
-
-[node name="Details" type="VBoxContainer" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot2/Content"]
+[node name="NameLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot2/Content"]
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="NameLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot2/Content/Details"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.92156863, 0.9019608, 0.96862745, 1)
 theme_override_font_sizes/font_size = 11
 text = "ui.buff.preview_egg.name"
 text_overrun_behavior = 3
-
-[node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot2/Content/Details"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.6156863, 0.6784314, 0.7607843, 1)
-theme_override_font_sizes/font_size = 9
-text = "ui.buff.preview_egg.description"
-text_overrun_behavior = 3
+vertical_alignment = 1
 
 [node name="TimeLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot2/Content"]
-custom_minimum_size = Vector2(42, 0)
+custom_minimum_size = Vector2(34, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.69803923, 0.6509804, 0.8039216, 1)
 theme_override_font_sizes/font_size = 10
@@ -529,7 +496,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="BuffSlot3" type="Button" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots"]
-custom_minimum_size = Vector2(174, 52)
+custom_minimum_size = Vector2(174, 38)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_personal_buff_slot")
@@ -542,41 +509,24 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 7.0
-offset_right = -7.0
+offset_left = 10.0
+offset_right = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
-[node name="BadgeLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot3/Content"]
-custom_minimum_size = Vector2(28, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.7607843, 0.627451, 1, 1)
-theme_override_font_sizes/font_size = 10
-text = ""
-vertical_alignment = 1
-
-[node name="Details" type="VBoxContainer" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot3/Content"]
+[node name="NameLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot3/Content"]
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="NameLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot3/Content/Details"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.92156863, 0.9019608, 0.96862745, 1)
 theme_override_font_sizes/font_size = 11
 text = "ui.buff.preview_run.name"
 text_overrun_behavior = 3
-
-[node name="DescriptionLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot3/Content/Details"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.6156863, 0.6784314, 0.7607843, 1)
-theme_override_font_sizes/font_size = 9
-text = "ui.buff.preview_run.description"
-text_overrun_behavior = 3
+vertical_alignment = 1
 
 [node name="TimeLabel" type="Label" parent="Control/PersonalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot3/Content"]
-custom_minimum_size = Vector2(42, 0)
+custom_minimum_size = Vector2(34, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.69803923, 0.6509804, 0.8039216, 1)
 theme_override_font_sizes/font_size = 10
@@ -657,8 +607,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_utility_button_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_button_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_utility_button_hover")
 
-[node name="MyPowersButton" type="Button" parent="Control"]
-visible = false
+[node name="SkillsButton" type="Button" parent="Control"]
 custom_minimum_size = Vector2(42, 42)
 layout_mode = 1
 anchors_preset = 3
@@ -670,6 +619,32 @@ offset_left = -58.0
 offset_top = -290.0
 offset_right = -16.0
 offset_bottom = -248.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+tooltip_text = "ui.skills.title"
+toggle_mode = true
+icon = ExtResource("34_skills")
+icon_max_width = 28
+expand_icon = true
+theme_override_styles/normal = SubResource("StyleBoxFlat_utility_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_utility_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_utility_button_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_utility_button_hover")
+
+[node name="MyPowersButton" type="Button" parent="Control"]
+visible = false
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -58.0
+offset_top = -338.0
+offset_right = -16.0
+offset_bottom = -296.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_default_cursor_shape = 2
@@ -811,7 +786,7 @@ text = "ui.chat.send"
 
 [node name="DevPokemonPopup" type="PanelContainer" parent="Control" unique_id=1288104280]
 visible = false
-custom_minimum_size = Vector2(560, 460)
+custom_minimum_size = Vector2(560, 540)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -819,9 +794,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -280.0
-offset_top = -230.0
+offset_top = -270.0
 offset_right = 280.0
-offset_bottom = 230.0
+offset_bottom = 270.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
@@ -850,10 +825,22 @@ theme_override_font_sizes/font_size = 11
 text = "ui.staff.dev.pokemon.add_subtitle"
 
 [node name="PokemonText" type="TextEdit" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=488137648]
-custom_minimum_size = Vector2(0, 338)
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 size_flags_vertical = 3
 placeholder_text = "ui.staff.dev.pokemon.add_placeholder"
+
+[node name="PreserveDirectBattleForm" type="CheckButton" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "ui.staff.dev.pokemon.preserve_direct_form"
+
+[node name="TestPurpose" type="LineEdit" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+max_length = 255
+placeholder_text = "ui.staff.dev.pokemon.test_purpose_placeholder"
 
 [node name="ButtonRow" type="HBoxContainer" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=1480530736]
 layout_mode = 2
@@ -871,14 +858,14 @@ custom_minimum_size = Vector2(108, 36)
 text = "ui.staff.dev.add"
 
 [node name="LocationPanel" type="PanelContainer" parent="Control" unique_id=907156867]
-custom_minimum_size = Vector2(332, 66)
+custom_minimum_size = Vector2(332, 82)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -166.0
 offset_right = 166.0
-offset_bottom = 66.0
+offset_bottom = 82.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8bipm")
 
@@ -914,6 +901,14 @@ mouse_default_cursor_shape = 2
 texture_normal = ExtResource("21_wild_radar")
 ignore_texture_size = true
 stretch_mode = 5
+
+[node name="AetherClashChampionLabel" type="Label" parent="Control/LocationPanel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
+theme_override_font_sizes/font_size = 11
+text = "ui.aether_clash.reigning_guild"
+text_overrun_behavior = 3
 
 [node name="StatusRow" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -961,14 +956,14 @@ theme_override_font_sizes/font_size = 13
 text = "ui.world.weather.clear"
 
 [node name="GlobalBuffsPanel" type="PanelContainer" parent="Control"]
-custom_minimum_size = Vector2(197, 50)
+custom_minimum_size = Vector2(242, 50)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = 214.0
 offset_top = 6.0
-offset_right = 411.0
+offset_right = 456.0
 offset_bottom = 56.0
 grow_horizontal = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_global_buff_tray")
@@ -1104,6 +1099,18 @@ show_percentage = false
 theme_override_styles/background = SubResource("StyleBoxFlat_global_buff_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_global_buff_progress_fill")
 
+[node name="BuffSlot5" type="Button" parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots"]
+custom_minimum_size = Vector2(42, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+icon = ExtResource("23_global_exp")
+icon_max_width = 30
+expand_icon = true
+theme_override_styles/normal = SubResource("StyleBoxFlat_global_buff_slot")
+theme_override_styles/hover = SubResource("StyleBoxFlat_global_buff_slot_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_global_buff_slot_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_global_buff_slot_hover")
+
 [node name="GlobalBuffDetailsPanel" type="PanelContainer" parent="Control"]
 visible = false
 custom_minimum_size = Vector2(340, 0)
@@ -1231,30 +1238,59 @@ text = "ui.buff.contribution_hint"
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Amount1000Button" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]
-custom_minimum_size = Vector2(48, 32)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-text = "1K"
-
-[node name="Amount10000Button" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]
-custom_minimum_size = Vector2(48, 32)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-text = "10K"
-
-[node name="Amount25000Button" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]
-custom_minimum_size = Vector2(48, 32)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-text = "25K"
-
-[node name="ContributeButton" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]
-custom_minimum_size = Vector2(0, 32)
+[node name="AmountInput" type="LineEdit" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]
+custom_minimum_size = Vector2(128, 32)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
+placeholder_text = "10.000"
+alignment = 2
+virtual_keyboard_type = 2
+
+[node name="ContributeButton" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection/DonationRow"]
+custom_minimum_size = Vector2(112, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "ui.buff.contribute"
+
+[node name="FillRemainingButton" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/DonationSection"]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_default_cursor_shape = 2
+text = "ui.buff.fill_remaining"
+alignment = 2
+
+[node name="GlobalHealSection" type="VBoxContainer" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="CooldownLabel" type="Label" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/GlobalHealSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.59607846, 0.6509804, 0.7294118, 1)
+theme_override_font_sizes/font_size = 11
+text = "ui.buff.global_heal.available"
+horizontal_alignment = 1
+
+[node name="ActivateButton" type="Button" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/GlobalHealSection"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "ui.buff.global_heal.activate"
+
+[node name="AetheriteHint" type="Label" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/GlobalHealSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.59607846, 0.6509804, 0.7294118, 1)
+theme_override_font_sizes/font_size = 11
+text = "ui.buff.global_heal.no_aetherite"
+autowrap_mode = 2
+
+[node name="RequestsToggle" type="CheckButton" parent="Control/GlobalBuffDetailsPanel/MarginContainer/Content/GlobalHealSection"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+button_pressed = true
+text = "ui.buff.global_heal.receive_requests"
 
 [node name="OptionsPanel" type="PanelContainer" parent="Control" unique_id=1882847732]
 custom_minimum_size = Vector2(368, 0)
@@ -1316,24 +1352,6 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_socials_badge")
 
-[node name="AetherExchangeSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=3952606]
-custom_minimum_size = Vector2(52, 52)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
-
-[node name="AetherExchangeButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/AetherExchangeSlot" unique_id=1721297434]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-tooltip_text = "ui.navigation.exchange"
-mouse_default_cursor_shape = 2
-texture_normal = ExtResource("19_exchange")
-texture_pressed = ExtResource("19_exchange")
-texture_hover = ExtResource("19_exchange")
-texture_disabled = ExtResource("19_exchange")
-texture_focused = ExtResource("19_exchange")
-ignore_texture_size = true
-stretch_mode = 5
-
 [node name="GuildSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=870794241]
 custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
@@ -1349,6 +1367,24 @@ texture_pressed = ExtResource("16_guild")
 texture_hover = ExtResource("16_guild")
 texture_disabled = ExtResource("16_guild")
 texture_focused = ExtResource("16_guild")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="AetherExchangeSlot" type="PanelContainer" parent="Control/OptionsPanel/MarginContainer/HBoxContainer" unique_id=3952606]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwbg5")
+
+[node name="AetherExchangeButton" type="TextureButton" parent="Control/OptionsPanel/MarginContainer/HBoxContainer/AetherExchangeSlot" unique_id=1721297434]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "ui.navigation.exchange"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("19_exchange")
+texture_pressed = ExtResource("19_exchange")
+texture_hover = ExtResource("19_exchange")
+texture_disabled = ExtResource("19_exchange")
+texture_focused = ExtResource("19_exchange")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -1744,7 +1780,7 @@ anchor_right = 1.0
 offset_left = -226.0
 offset_top = 78.0
 offset_right = -16.0
-offset_bottom = 430.0
+offset_bottom = 474.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7g5y2")
 
@@ -1783,6 +1819,12 @@ custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "ui.staff.dev.clear_data"
+
+[node name="CleanupTestPokemonButton" type="Button" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "ui.staff.dev.cleanup_test_pokemon"
 
 [node name="WorldTimeLabel" type="Label" parent="Control/DevActionsPopup/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -1906,6 +1948,11 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 
 [node name="PlayersOnMapButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+
+[node name="LoansButton" type="Button" parent="Control/SocialsMenu/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 72)
 layout_mode = 2
 mouse_default_cursor_shape = 2
@@ -2160,6 +2207,7 @@ layout_mode = 2
 min_value = 1.0
 max_value = 999.0
 value = 1.0
+update_on_text_changed = true
 
 [node name="AddItemButton" type="Button" parent="Control/MailComposePopup/MarginContainer/VBoxContainer/ItemAttachmentRow" unique_id=616399086]
 custom_minimum_size = Vector2(110, 34)
@@ -2187,6 +2235,7 @@ layout_mode = 2
 max_value = 999999999.0
 allow_greater = false
 prefix = "₽ "
+update_on_text_changed = true
 
 [node name="PokemonAttachmentRow" type="HBoxContainer" parent="Control/MailComposePopup/MarginContainer/VBoxContainer" unique_id=1417563497]
 layout_mode = 2

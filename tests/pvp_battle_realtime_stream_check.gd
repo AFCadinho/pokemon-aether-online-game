@@ -1,5 +1,7 @@
 extends SceneTree
 
+var failed := false
+
 func _init() -> void:
 	var service := PvpBattleRealtimeServiceNode.new()
 	var battle_source := FileAccess.get_file_as_string("res://scripts/battle/battle.gd")
@@ -16,7 +18,8 @@ func _init() -> void:
 	var decision_kind_position := battle_source.find('str(decision.get("decisionKind", ""))', action_wait_start)
 	var send_position := battle_source.find("var request_id := PvpBattleRealtimeService.send_action", action_wait_start)
 	var update_handler_start := battle_source.find("func _on_pvp_realtime_battle_update(message: Dictionary) -> void:")
-	var immediate_terminal_position := battle_source.find("if _should_apply_pvp_realtime_end_immediately(message):", update_handler_start)
+	var immediate_terminal_position := battle_source.find("if is_immediate_terminal and not is_snapshot_message:", update_handler_start)
+	var stale_update_position := battle_source.find("elif _is_stale_pvp_realtime_message(message):", update_handler_start)
 	var normal_queue_position := battle_source.find("pvp_realtime_updates.append(message.duplicate(true))", update_handler_start)
 	var opponent_force_wait_start := battle_source.find("func _wait_for_pvp_opponent_force_switch_and_render() -> bool:")
 	var opponent_force_wait_lock_position := battle_source.find("_show_pvp_opponent_force_switch_wait()", opponent_force_wait_start)
@@ -24,12 +27,50 @@ func _init() -> void:
 	var preview_drain_position := battle_source.find("await _drain_pvp_team_preview_completion_updates()")
 	var initial_render_position := battle_source.rfind("await _render_initial_battle_events(lead_response)", preview_drain_position)
 	var initial_controls_position := battle_source.find("_show_battle_controls_after_initial_events()", preview_drain_position)
+	var connection_log_start := battle_source.find("func _apply_pvp_connection_log_event(message_type: String, message: Dictionary) -> bool:")
+	var local_connection_handler_start := battle_source.find("func _on_pvp_realtime_connection_changed(is_connected: bool) -> void:")
+	var local_room_ready_handler_start := battle_source.find("func _on_pvp_realtime_room_ready(room_code: String, battle_id: String) -> void:")
+	var forced_switch_diagnostic_start := battle_source.find("func _report_pvp_forced_switch_selection_blocked(selection_gate: String) -> void:")
 	_check_equal(action_wait_start >= 0, true, "realtime action wait implementation exists")
 	_check_equal(
 		show_moves_decision_guard >= show_moves_start and show_moves_decision_guard < timer_control_start,
 		true,
 		"move controls stay closed while the local decision is locked"
 	)
+	_check_equal(
+		forced_switch_diagnostic_start >= 0 \
+			and battle_source.contains('"canonical_slot_unresolved"') \
+			and battle_source.find('PvpBattleRealtimeService.report_diagnostic("pvp.forced_switch_selection_blocked"', forced_switch_diagnostic_start) >= forced_switch_diagnostic_start,
+		true,
+		"blocked forced-switch selections report a sanitized production diagnostic"
+	)
+	_check_equal(
+		connection_log_start >= 0 \
+			and battle_source.find("pvp_reconnect_grace_deadline_by_side", connection_log_start) >= connection_log_start \
+			and battle_source.find("if duplicate_grace:", connection_log_start) >= connection_log_start,
+		true,
+		"duplicate reconnect-grace packets refresh the timer without repeating Battle Text"
+	)
+	_check_equal(
+		local_connection_handler_start >= 0 \
+			and local_room_ready_handler_start > local_connection_handler_start \
+			and battle_source.contains("PvpBattleRealtimeService.connection_changed.connect(_on_pvp_realtime_connection_changed)") \
+			and battle_source.contains("PvpBattleRealtimeService.room_ready.connect(_on_pvp_realtime_room_ready)") \
+			and battle_source.contains("not is_locked and _is_pvp_battle() and pvp_local_connection_recovering") \
+			and battle_source.contains('_t("battle.connection.restoring_self")') \
+			and battle_source.contains('_t("battle.connection.synchronizing_self")'),
+		true,
+		"local connection loss visibly locks controls until the authoritative room is ready"
+	)
+	service.reconnect_retry_count = 0
+	service._schedule_reconnect_retry()
+	_check_equal(service.reconnect_timer, 0.0, "the first reconnect retry is immediate")
+	service._schedule_reconnect_retry()
+	_check_equal(service.reconnect_timer, 1.0, "the second reconnect retry uses a short delay")
+	service._schedule_reconnect_retry()
+	_check_equal(service.reconnect_timer, 3.0, "later reconnect retries use the bounded delay")
+	service._schedule_reconnect_retry()
+	_check_equal(service.reconnect_timer, 3.0, "reconnect retry delay remains bounded")
 	_check_equal(
 		timer_decision_guard >= timer_control_start and timer_decision_guard < request_control_start,
 		true,
@@ -52,9 +93,11 @@ func _init() -> void:
 		"realtime actions include the authoritative decision kind"
 	)
 	_check_equal(
-		immediate_terminal_position >= update_handler_start and immediate_terminal_position < normal_queue_position,
+		immediate_terminal_position >= update_handler_start \
+		and immediate_terminal_position < stale_update_position \
+		and immediate_terminal_position < normal_queue_position,
 		true,
-		"confirmed terminal actions finish before they can fall into the ordinary realtime queue"
+		"confirmed terminal actions finish before stale filtering or the ordinary realtime queue"
 	)
 	_check_equal(
 		opponent_force_wait_lock_position >= opponent_force_wait_start \
@@ -260,8 +303,8 @@ func _init() -> void:
 	)
 	_check_equal(
 		battle_source.contains("func _is_spectator_battle() -> bool:") \
-			and battle_source.contains('return "Waiting for both players..."') \
-			and battle_source.contains('return "Waiting for players..."') \
+			and battle_source.contains('return _t("battle.prompt.waiting_both_players")') \
+			and battle_source.contains('return _t("battle.spectator.waiting_players")') \
 			and battle_source.contains("action_buttons.visible = false") \
 			and battle_source.contains('action_buttons.set_action_visible("run", false)') \
 			and battle_source.contains("spectator_action_panel.visible = true") \
@@ -292,7 +335,7 @@ func _init() -> void:
 	)
 	_check_equal(
 		battle_source.contains("func _run_pvp_spectator_team_preview() -> Dictionary:") \
-			and battle_source.contains('current_action_panel.set_message("Waiting for both players...")') \
+			and battle_source.contains('current_action_panel.set_message(_t("battle.prompt.waiting_both_players"))') \
 			and battle_source.contains("_seed_spectator_leads_from_team_preview_events(display_response)") \
 			and battle_source.contains("_build_spectator_lead_event_from_public_ident(player_id, public_ident)") \
 			and battle_source.contains('for ident_key in ["target", "actor", "pokemon", "sourceTarget", "fromIdent", "toIdent"]') \
@@ -336,6 +379,30 @@ func _init() -> void:
 	_check_equal(service.received_battle_event_count, 3, "counts valid received events")
 	service._apply_timer_projection_from_battle_response({"response":{"timerState":{"timerContractVersion":1,"authority":"BATTLE_BANK_V1_SHADOW","timerRevision":1,"battleEventSeq":41,"serverNowMs":1,"participants":{}}}})
 	_check_equal(service.last_battle_event_seq, 3, "newer timer snapshot cannot skip unapplied durable terminal events")
+
+	var legacy_service := PvpBattleRealtimeServiceNode.new()
+	legacy_service.timer_projection.apply_legacy_snapshot([{
+		"activeSide": "p1", "phase": "team_preview", "status": "active",
+		"durationSeconds": 90,
+	}], true)
+	_check_equal(legacy_service._apply_timer_projection_from_battle_response({
+		"response": {
+			"pvpTimerEvents": [
+				{"eventType": "pvp.timer_consumed", "timers": [{"activeSide": "p1", "phase": "team_preview", "status": "consumed"}]},
+				{"eventType": "pvp.timer_started", "timer": {"activeSide": "p1", "phase": "turn", "status": "active", "durationSeconds": 90}},
+			],
+		},
+	}), true, "embedded legacy phase timer events are applied")
+	_check_equal(legacy_service.timer_projection.participants["p1"].get("decisionKind"), "MOVE_SELECTION", "turn one replaces the team preview clock")
+	_check_equal(legacy_service.timer_projection.participants["p1"].get("maxDecisionMs"), 90000, "turn one receives a fresh 90 second clock")
+	_check_equal(legacy_service._apply_timer_projection_from_battle_response({
+		"response": {
+			"decisions": {
+				"p1": {"status": "LOCKED", "decisionGeneration": 2, "decisionKind": "MOVE_SELECTION"},
+			},
+		},
+	}), true, "locked participant response stops a coalesced legacy timer")
+	_check_equal(legacy_service.timer_projection.participant_display("p1").get("state"), "WAITING", "submitted legacy choice no longer keeps counting")
 
 	var gap_service := PvpBattleRealtimeServiceNode.new()
 	gap_service.active_room_code = "ROOM"
@@ -850,12 +917,13 @@ func _init() -> void:
 
 	normal_terminal_service.free()
 	service.free()
-	print("PASS pvp_battle_realtime_stream_check")
-	quit(0)
+	if not failed:
+		print("PASS pvp_battle_realtime_stream_check")
+	quit(1 if failed else 0)
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
 	if actual == expected:
 		return
+	failed = true
 	push_error("%s: expected %s, got %s" % [label, str(expected), str(actual)])
-	quit(1)

@@ -47,6 +47,8 @@ var language_options_button: OptionButton
 var terminology_label: Label
 var terminology_options_button: OptionButton
 var terminology_hint_label: Label
+var input_binding_buttons: Dictionary = {}
+var input_binding_capture_action := ""
 @onready var sprite_style_options_button: OptionButton = $MarginContainer/VBoxContainer/SpriteStyleOptionsButton
 @onready var sprite_style_status_label: Label = $MarginContainer/VBoxContainer/SpriteStyleStatusLabel
 @onready var fullscreen_check_box: CheckBox = $MarginContainer/VBoxContainer/FullscreenCheckBox
@@ -83,12 +85,17 @@ var settings_navigation_buttons: Array[Button] = []
 var account_tab_root: Control
 var account_user_label: Label
 var account_status_label: Label
+var account_portal_button: Button
+var account_portal_note_label: Label
 var edit_account_button: Button
 var logout_button: Button
 var exit_game_button: Button
 var credits_button: Button
 var credits_status_label: Label
 var about_version_label: Label
+var support_report_status_label: Label
+var support_view_report_button: Button
+var support_copy_report_button: Button
 var logout_confirm_dialog: PanelContainer
 var logout_confirm_return_button: Button
 var logout_confirm_cancel_button: Button
@@ -135,6 +142,7 @@ func _ready() -> void:
 	_apply_premium_styles()
 	LanguageSelectorStyle.configure(language_options_button)
 	LanguageSelectorStyle.configure(terminology_options_button)
+	_configure_graphics_dropdowns()
 	battle_animations_check_box.toggled.connect(_on_battle_animations_toggled)
 	weather_effects_check_box.toggled.connect(_on_weather_effects_toggled)
 	terrain_effects_check_box.toggled.connect(_on_terrain_effects_toggled)
@@ -154,13 +162,12 @@ func _ready() -> void:
 	notification_volume_slider.value_changed.connect(_on_notification_volume_changed)
 	language_options_button.item_selected.connect(_on_language_selected)
 	terminology_options_button.item_selected.connect(_on_terminology_selected)
-	edit_account_button.pressed.connect(_on_edit_account_button_pressed)
-	privacy_manage_button.pressed.connect(_on_privacy_manage_button_pressed)
-	privacy_export_button.pressed.connect(_on_privacy_export_button_pressed)
-	delete_account_button.pressed.connect(_on_delete_account_button_pressed)
+	account_portal_button.pressed.connect(_on_account_portal_button_pressed)
 	logout_button.pressed.connect(_on_logout_button_pressed)
 	exit_game_button.pressed.connect(_on_exit_game_button_pressed)
 	credits_button.pressed.connect(_on_credits_button_pressed)
+	support_view_report_button.pressed.connect(_on_view_crash_report_pressed)
+	support_copy_report_button.pressed.connect(_on_copy_crash_report_pressed)
 	close_button.pressed.connect(close)
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
@@ -169,10 +176,20 @@ func _ready() -> void:
 	visible = false
 
 
+func _configure_graphics_dropdowns() -> void:
+	for dropdown: OptionButton in [
+		sprite_style_options_button,
+		resolution_options_button,
+		world_pixel_scale_options_button,
+	]:
+		LanguageSelectorStyle.configure(dropdown)
+
+
 func open(context: String = "game") -> void:
 	_apply_settings_to_controls()
 	_apply_context(context)
 	_refresh_impersonation_account_controls()
+	_refresh_support_report_state()
 	visible = true
 	_focus_active_navigation_button()
 
@@ -200,7 +217,25 @@ func close() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if not visible or not event.is_action_pressed("ui_cancel"):
+	if not visible:
+		return
+	if not input_binding_capture_action.is_empty() and event is InputEventKey:
+		var key_event := event as InputEventKey
+		if not key_event.pressed or key_event.echo:
+			return
+		if key_event.keycode == KEY_ESCAPE or key_event.physical_keycode == KEY_ESCAPE:
+			_cancel_input_binding_capture()
+		else:
+			var keycode := key_event.physical_keycode
+			if keycode == KEY_NONE:
+				keycode = key_event.keycode
+			if keycode != KEY_NONE:
+				SettingsManager.set_input_binding(input_binding_capture_action, keycode)
+				input_binding_capture_action = ""
+				_refresh_input_binding_buttons()
+		get_viewport().set_input_as_handled()
+		return
+	if not event.is_action_pressed("ui_cancel"):
 		return
 
 	if privacy_dialog != null and privacy_dialog.visible:
@@ -244,6 +279,7 @@ func _apply_settings_to_controls() -> void:
 	_set_volume_control(pokemon_cry_volume_slider, pokemon_cry_volume_value_label, SettingsManager.pokemon_cry_volume)
 	_set_volume_control(ui_volume_slider, ui_volume_value_label, SettingsManager.ui_volume)
 	_set_volume_control(notification_volume_slider, notification_volume_value_label, SettingsManager.notification_volume)
+	_refresh_input_binding_buttons()
 
 	loading_controls = false
 
@@ -300,7 +336,9 @@ func _setup_tabs() -> void:
 	var language_tab: VBoxContainer = _create_tab_content("Language", "ui.settings.tab.language")
 	var graphics_tab: VBoxContainer = _create_tab_content("Graphics", "ui.settings.tab.graphics")
 	var sound_tab: VBoxContainer = _create_tab_content("Sound", "ui.settings.tab.sound")
+	var controls_tab: VBoxContainer = _create_tab_content("Controls", "ui.settings.tab.controls")
 	var account_tab: VBoxContainer = _create_tab_content("Account", "ui.settings.tab.account")
+	var support_tab: VBoxContainer = _create_tab_content("Support", "ui.settings.tab.support")
 	var about_tab: VBoxContainer = _create_tab_content("About", "ui.settings.tab.about")
 	account_tab_root = account_tab.get_parent().get_parent() as Control
 	_build_navigation()
@@ -394,7 +432,9 @@ func _setup_tabs() -> void:
 		"ui.settings.section.audio_mix_subtitle",
 		sound_tab.get_children()
 	)
+	_build_controls_tab(controls_tab)
 	_build_account_tab(account_tab)
+	_build_support_tab(support_tab)
 	_build_about_tab(about_tab)
 
 
@@ -543,6 +583,104 @@ func _create_cursor_scale_control() -> void:
 	row.add_child(cursor_scale_value_label)
 
 
+func _build_controls_tab(controls_tab: VBoxContainer) -> void:
+	_add_input_binding_control(
+		controls_tab,
+		"fish",
+		"Fishing",
+		"ui.settings.controls.fishing",
+		"ui.settings.controls.fishing_hint"
+	)
+	_add_input_binding_control(
+		controls_tab,
+		"pickpocket",
+		"Thieving",
+		"ui.settings.controls.thieving",
+		"ui.settings.controls.thieving_hint"
+	)
+	_wrap_settings_section(
+		controls_tab,
+		"ui.settings.section.controls",
+		"ui.settings.section.controls_subtitle",
+		controls_tab.get_children()
+	)
+
+
+func _add_input_binding_control(
+	controls_tab: VBoxContainer,
+	action: String,
+	control_name: String,
+	label_key: String,
+	hint_key: String
+) -> void:
+	var row := HBoxContainer.new()
+	row.name = "%sBindingRow" % control_name
+	row.add_theme_constant_override("separation", 12)
+
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.add_theme_constant_override("separation", 2)
+	row.add_child(copy)
+
+	var label := Label.new()
+	_set_localized_text(label, label_key)
+	label.add_theme_color_override("font_color", UI_TEXT)
+	copy.add_child(label)
+
+	var hint := Label.new()
+	_set_localized_text(hint, hint_key)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.add_theme_font_size_override("font_size", 11)
+	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	copy.add_child(hint)
+
+	var binding_button := Button.new()
+	binding_button.name = "%sBindingButton" % control_name
+	binding_button.custom_minimum_size = Vector2(112, 38)
+	binding_button.focus_mode = Control.FOCUS_ALL
+	binding_button.pressed.connect(_start_input_binding_capture.bind(action))
+	row.add_child(binding_button)
+	input_binding_buttons[action] = binding_button
+
+	var reset_button := Button.new()
+	reset_button.name = "Reset%sBindingButton" % control_name
+	_set_localized_text(reset_button, "ui.settings.controls.reset")
+	reset_button.focus_mode = Control.FOCUS_ALL
+	reset_button.pressed.connect(_reset_input_binding.bind(action))
+
+	controls_tab.add_child(row)
+	controls_tab.add_child(reset_button)
+
+
+func _start_input_binding_capture(action: String) -> void:
+	input_binding_capture_action = action
+	_refresh_input_binding_buttons()
+
+
+func _cancel_input_binding_capture() -> void:
+	input_binding_capture_action = ""
+	_refresh_input_binding_buttons()
+
+
+func _reset_input_binding(action: String) -> void:
+	input_binding_capture_action = ""
+	SettingsManager.reset_input_binding(action)
+	_refresh_input_binding_buttons()
+
+
+func _refresh_input_binding_buttons() -> void:
+	for action_value: Variant in input_binding_buttons:
+		var action := str(action_value)
+		var button := input_binding_buttons.get(action) as Button
+		if button == null:
+			continue
+		button.text = (
+			LocalizationManager.text("ui.settings.controls.press_key")
+			if input_binding_capture_action == action
+			else SettingsManager.get_input_binding_label(action)
+		)
+
+
 func _move_nodes_to_container(container: VBoxContainer, nodes: Array) -> void:
 	for node_value: Variant in nodes:
 		var node := node_value as Node
@@ -603,27 +741,23 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 	account_user_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	account_tab.add_child(account_user_label)
 
-	edit_account_button = Button.new()
-	_set_localized_text(edit_account_button, "ui.settings.account.edit")
-	edit_account_button.focus_mode = Control.FOCUS_NONE
-	account_tab.add_child(edit_account_button)
+	account_portal_note_label = Label.new()
+	_set_localized_text(account_portal_note_label, "ui.settings.account.portal_note")
+	account_portal_note_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	account_portal_note_label.add_theme_font_size_override("font_size", 12)
+	account_portal_note_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	account_tab.add_child(account_portal_note_label)
 
-	_setup_account_details_dialog()
-	account_tab.add_child(account_details_dialog)
+	account_portal_button = Button.new()
+	_set_localized_text(account_portal_button, "ui.settings.account.portal")
+	account_portal_button.focus_mode = Control.FOCUS_NONE
+	account_tab.add_child(account_portal_button)
 
 	account_status_label = Label.new()
 	account_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	account_status_label.add_theme_font_size_override("font_size", 12)
 	account_status_label.visible = false
 	account_tab.add_child(account_status_label)
-
-	privacy_manage_button = Button.new()
-	_set_localized_text(privacy_manage_button, "ui.settings.privacy.manage")
-	privacy_manage_button.focus_mode = Control.FOCUS_NONE
-	account_tab.add_child(privacy_manage_button)
-
-	_setup_privacy_dialog()
-	account_tab.add_child(privacy_dialog)
 
 	account_return_note_label = Label.new()
 	_set_localized_text(account_return_note_label, "ui.settings.account.return_note")
@@ -682,6 +816,50 @@ func _build_about_tab(about_tab: VBoxContainer) -> void:
 	about_tab.add_child(legal_note)
 
 
+func _build_support_tab(support_tab: VBoxContainer) -> void:
+	var title := Label.new()
+	_set_localized_text(title, "ui.settings.support.title")
+	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	support_tab.add_child(title)
+
+	var explanation := Label.new()
+	_set_localized_text(explanation, "ui.settings.support.description")
+	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	explanation.add_theme_font_size_override("font_size", 13)
+	support_tab.add_child(explanation)
+
+	var privacy_note := Label.new()
+	_set_localized_text(privacy_note, "ui.settings.support.privacy")
+	privacy_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	privacy_note.add_theme_font_size_override("font_size", 12)
+	privacy_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	support_tab.add_child(privacy_note)
+
+	var button_row := HBoxContainer.new()
+	button_row.add_theme_constant_override("separation", 10)
+	support_tab.add_child(button_row)
+
+	support_view_report_button = Button.new()
+	support_view_report_button.name = "ViewCrashReportButton"
+	_set_localized_text(support_view_report_button, "ui.settings.support.view_report")
+	support_view_report_button.focus_mode = Control.FOCUS_ALL
+	button_row.add_child(support_view_report_button)
+
+	support_copy_report_button = Button.new()
+	support_copy_report_button.name = "CopyCrashReportButton"
+	_set_localized_text(support_copy_report_button, "ui.settings.support.copy_report")
+	support_copy_report_button.focus_mode = Control.FOCUS_ALL
+	button_row.add_child(support_copy_report_button)
+
+	support_report_status_label = Label.new()
+	support_report_status_label.name = "CrashReportStatusLabel"
+	support_report_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	support_report_status_label.add_theme_font_size_override("font_size", 12)
+	support_tab.add_child(support_report_status_label)
+	_refresh_support_report_state()
+
+
 func _create_display_own_name_check_box() -> CheckBox:
 	display_own_name_check_box = CheckBox.new()
 	_set_localized_text(display_own_name_check_box, "ui.settings.display_own_name")
@@ -703,6 +881,7 @@ func _setup_logout_confirm_dialog() -> void:
 	logout_confirm_dialog.top_level = true
 	logout_confirm_dialog.z_as_relative = false
 	logout_confirm_dialog.mouse_filter = Control.MOUSE_FILTER_STOP
+	logout_confirm_dialog.set_focus_behavior_recursive(Control.FOCUS_BEHAVIOR_ENABLED)
 	logout_confirm_dialog.z_index = LOGOUT_CONFIRM_Z_INDEX
 	logout_confirm_dialog.custom_minimum_size = LOGOUT_CONFIRM_SIZE
 	logout_confirm_dialog.set_anchors_preset(Control.PRESET_TOP_LEFT)
@@ -758,7 +937,7 @@ func _setup_logout_confirm_dialog() -> void:
 	logout_confirm_return_button = Button.new()
 	_set_localized_text(logout_confirm_return_button, "common.return")
 	logout_confirm_return_button.custom_minimum_size = Vector2(112, 32)
-	logout_confirm_return_button.focus_mode = Control.FOCUS_NONE
+	logout_confirm_return_button.focus_mode = Control.FOCUS_ALL
 	logout_confirm_return_button.pressed.connect(_logout_confirmed)
 	button_row.add_child(logout_confirm_return_button)
 
@@ -1012,6 +1191,7 @@ func _refresh_localized_content() -> void:
 		)
 	if privacy_dialog != null and privacy_dialog.visible:
 		_refresh_privacy_dialog_copy()
+	_refresh_support_report_state()
 
 
 func _update_about_version_label() -> void:
@@ -1313,17 +1493,11 @@ func _refresh_account_tab() -> void:
 	print("[settings] refresh account tab. display=%s username=%s" % [display_name, username])
 	if display_name == "" and username == "":
 		account_user_label.text = LocalizationManager.text("ui.settings.account.no_active")
-		if edit_account_button != null:
-			edit_account_button.disabled = true
-		if privacy_manage_button != null:
-			privacy_manage_button.disabled = true
-		print("[settings] edit account disabled: no active account")
+		if account_portal_button != null:
+			account_portal_button.disabled = true
 		return
-	if edit_account_button != null:
-		edit_account_button.disabled = false
-		print("[settings] edit account enabled")
-	if privacy_manage_button != null:
-		privacy_manage_button.disabled = AuthService.is_impersonating()
+	if account_portal_button != null:
+		account_portal_button.disabled = AuthService.is_impersonating()
 	if username != "" and username != display_name:
 		account_user_label.text = LocalizationManager.text(
 			"ui.settings.account.logged_in_with_username",
@@ -1533,16 +1707,66 @@ func _on_credits_button_pressed() -> void:
 		credits_status_label.visible = true
 
 
+func _on_view_crash_report_pressed() -> void:
+	if not ClientCrashReportService.has_report():
+		_refresh_support_report_state()
+		return
+	ClientCrashReportService.show_report_dialog(false)
+
+
+func _on_copy_crash_report_pressed() -> void:
+	var copied := ClientCrashReportService.copy_latest_report()
+	if support_report_status_label == null:
+		return
+	support_report_status_label.text = LocalizationManager.text(
+		"ui.settings.support.copied" if copied else "ui.settings.support.no_report"
+	)
+	support_report_status_label.add_theme_color_override(
+		"font_color",
+		Color("#75d69c") if copied else UI_MUTED_TEXT
+	)
+
+
+func _refresh_support_report_state() -> void:
+	if support_report_status_label == null:
+		return
+	var report_available := ClientCrashReportService.has_report()
+	if support_view_report_button != null:
+		support_view_report_button.disabled = not report_available
+	if support_copy_report_button != null:
+		support_copy_report_button.disabled = not report_available
+	support_report_status_label.text = LocalizationManager.text(
+		"ui.settings.support.report_available" if report_available else "ui.settings.support.no_report"
+	)
+	support_report_status_label.add_theme_color_override(
+		"font_color",
+		UI_TEXT if report_available else UI_MUTED_TEXT
+	)
+
+
 func _show_logout_confirm_dialog() -> void:
 	logout_confirmation_requested = true
 	_refresh_impersonation_account_controls()
 	if logout_confirm_dialog != null:
 		_position_logout_confirm_dialog()
+		logout_confirm_dialog.set_focus_behavior_recursive(Control.FOCUS_BEHAVIOR_ENABLED)
 		logout_confirm_dialog.visible = true
 		logout_confirm_dialog.z_index = LOGOUT_CONFIRM_Z_INDEX
 		logout_confirm_dialog.move_to_front()
 	if logout_confirm_return_button != null:
-		logout_confirm_return_button.grab_focus()
+		logout_confirm_return_button.focus_mode = Control.FOCUS_ALL
+		call_deferred("_focus_logout_confirm_return_button")
+
+
+func _focus_logout_confirm_return_button() -> void:
+	if (
+		logout_confirm_dialog == null
+		or not logout_confirm_dialog.is_visible_in_tree()
+		or logout_confirm_return_button == null
+		or logout_confirm_return_button.disabled
+	):
+		return
+	logout_confirm_return_button.grab_focus()
 
 
 func _position_logout_confirm_dialog() -> void:
@@ -1569,6 +1793,30 @@ func _is_account_tab_active() -> bool:
 	if tab_container == null or account_tab_root == null or not account_tab_root.visible:
 		return false
 	return tab_container.current_tab == account_tab_root.get_index()
+
+
+func _on_account_portal_button_pressed() -> void:
+	if account_portal_button == null or account_portal_button.disabled:
+		return
+	if AuthService.is_impersonating():
+		_set_account_status_key("ui.settings.account.portal_error_impersonation", {}, true)
+		return
+
+	_set_account_controls_disabled(true)
+	_set_account_status_key("ui.settings.account.portal_opening")
+	var result: Dictionary = await AuthService.create_account_portal_launch(
+		LocalizationManager.current_locale
+	)
+	_set_account_controls_disabled(false)
+	if not bool(result.get("success", false)):
+		_set_account_status_key("ui.settings.account.portal_error_request", {}, true)
+		return
+
+	var launch_url := str(result.get("url", ""))
+	if OS.shell_open(launch_url) != OK:
+		_set_account_status_key("ui.settings.account.portal_error_open", {}, true)
+		return
+	_set_account_status_key("ui.settings.account.portal_opened")
 
 
 func _on_edit_account_button_pressed() -> void:
@@ -1894,6 +2142,8 @@ func _set_account_dialog_status_key(key: String, values: Dictionary = {}, is_err
 
 
 func _set_account_controls_disabled(disabled: bool) -> void:
+	if account_portal_button != null:
+		account_portal_button.disabled = disabled or AuthService.is_impersonating()
 	if edit_account_button != null:
 		edit_account_button.disabled = disabled
 	if logout_button != null:
@@ -2052,8 +2302,8 @@ func _refresh_impersonation_account_controls() -> void:
 		_set_localized_text(logout_confirm_title_label, button_key)
 	if logout_confirm_message_label != null:
 		_set_localized_text(logout_confirm_message_label, message_key)
-	if privacy_manage_button != null:
-		privacy_manage_button.disabled = impersonating
+	if account_portal_button != null:
+		account_portal_button.disabled = impersonating
 
 func _leave_ranked_queue_before_logout() -> void:
 	var tree := get_tree()

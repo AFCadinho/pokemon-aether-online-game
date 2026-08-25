@@ -35,8 +35,18 @@ func _process(_delta: float) -> void:
 	await _process_base_npc()
 
 
+func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictionary:
+	if _is_gary_starter_sequence_active():
+		return {
+			"success": true,
+			"handled": true,
+			"status": "gary_starter_sequence_active",
+		}
+	return await super._run_story_or_legacy_interaction(body, trigger)
+
+
 func interact_with_player(player: Node2D) -> void:
-	if is_creating_starter:
+	if is_creating_starter or _is_gary_starter_sequence_active():
 		return
 
 	is_creating_starter = true
@@ -97,6 +107,14 @@ func interact_with_player(player: Node2D) -> void:
 		selected_species_name = claimed_name
 	PlayerSave.flags["received_starter"] = true
 	PlayerSave.flags["starter_species"] = selected_species_id
+	get_tree().call_group(
+		"ui_overlay",
+		"add_system_message",
+		LocalizationManager.text(
+			"ui.oaks_lab.starter_received",
+			{"pokemon": selected_species_name}
+		)
+	)
 	if last_starter_claim_already_completed:
 		_cancel_gary_starter_sequence()
 		await show_dialogue(
@@ -141,6 +159,15 @@ func _cancel_gary_starter_sequence() -> void:
 		gary.call("cancel_pending_starter_sequence")
 
 
+func _is_gary_starter_sequence_active() -> bool:
+	var gary := get_parent().get_node_or_null("Gary")
+	return (
+		gary != null
+		and gary.has_method("is_starter_sequence_active")
+		and bool(gary.call("is_starter_sequence_active"))
+	)
+
+
 func _apply_npc_metadata(metadata: Dictionary) -> void:
 	super._apply_npc_metadata(metadata)
 
@@ -183,8 +210,12 @@ func _turn_in_quest_item(player: Node2D) -> void:
 		quest_turn_in_dialogue_id,
 		["Ah, that is the parcel I was waiting for! Let me take a look."]
 	))
+	var gary := get_parent().get_node_or_null("Gary")
+	if gary != null and gary.has_method("prepare_parcel_return_departure"):
+		gary.call("prepare_parcel_return_departure")
 	var inventory_service := get_node_or_null("/root/InventoryService")
 	if inventory_service == null or not inventory_service.has_method("turn_in_npc_quest_item"):
+		_cancel_pending_gary_parcel_departure(gary)
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 	var result: Dictionary = await inventory_service.call(
@@ -192,6 +223,7 @@ func _turn_in_quest_item(player: Node2D) -> void:
 		quest_turn_in_id
 	)
 	if not bool(result.get("success", false)):
+		_cancel_pending_gary_parcel_departure(gary)
 		await GameErrorDialogService.show_response(result, "backend.error.reward_claim")
 		return
 	if not bool(result.get("storyRefreshSuccess", false)):
@@ -209,9 +241,16 @@ func _turn_in_quest_item(player: Node2D) -> void:
 			"add_system_message",
 			LocalizationManager.text("ui.key_item.received_pokedex")
 		)
-	var gary := get_parent().get_node_or_null("Gary")
+		SfxManager.play("item_received")
 	if gary != null and gary.has_method("play_parcel_return_departure"):
 		await gary.call("play_parcel_return_departure", player)
+	else:
+		_cancel_pending_gary_parcel_departure(gary)
+
+
+func _cancel_pending_gary_parcel_departure(gary: Node) -> void:
+	if gary != null and gary.has_method("cancel_pending_parcel_return_departure"):
+		gary.call("cancel_pending_parcel_return_departure")
 
 
 func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_key: String, current_value: String) -> String:
@@ -221,7 +260,7 @@ func _get_metadata_dialogue_id(metadata: Dictionary, camel_key: String, snake_ke
 	return metadata_dialogue_id
 
 
-func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array[String]) -> Array[String]:
+func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array) -> Array[String]:
 	var resolved_dialogue_id := dialogue_reference_id.strip_edges()
 	if resolved_dialogue_id.is_empty():
 		return fallback_lines

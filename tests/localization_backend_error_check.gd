@@ -81,9 +81,44 @@ func _run() -> void:
 		"known backend code displays in Dutch"
 	)
 	_check(
+		errors.call("message", {
+			"detail": {"code": "GUILD_LOBBY_TRANSIT_ATTUNEMENT_REQUIRED"}
+		}) == "Stem eerst af op een Aethernet Crystal voordat je naar de Aether Clash Lobby reist.",
+		"Guild Lobby attunement requirement displays in Dutch"
+	)
+	_check(
 		errors.call("message", {"detail": {"code": "current_password_incorrect"}})
 		== "Het huidige wachtwoord is onjuist.",
 		"privacy password errors explain how identity verification failed"
+	)
+	_check(
+		errors.call("message", {
+			"detail": {
+				"code": "pokemon_level_cap_party_ineligible",
+				"levelCap": 18.0,
+			}
+		}) == "Je team bevat een Pokémon boven de huidige levellimiet van 18.",
+		"party level cap errors display whole-number caps"
+	)
+	_check(
+		errors.call("message", {
+			"detail": {
+				"code": "trade_pokemon_level_cap_exceeded",
+				"pokemonLevel": 20.0,
+				"tradeLevelCap": 5.0,
+			}
+		}) == "Deze Pokémon is level 20 en komt boven de trade-levellimiet van de ontvanger (5).",
+		"trade level cap errors include the relevant levels"
+	)
+	_check(
+		errors.call("message", {"detail": {"code": "MEGA_CALCULATOR_PENDING"}})
+		== "De damage calculator is nog niet klaar voor die Mega Evolution.",
+		"Mega calculator readiness errors display in Dutch"
+	)
+	_check(
+		errors.call("message", {"detail": {"code": "TEST_FORM_NOT_ALLOWED"}})
+		== "Pokémon die alleen voor tests zijn, kunnen niet voor deze actie worden gebruikt.",
+		"testing-only Mega errors display in Dutch"
 	)
 	var unknown_response := {
 		"detail": {
@@ -147,7 +182,7 @@ func _run() -> void:
 	)
 	trade_service.free()
 
-	for locale: String in ["en", "nl", "pt_BR"]:
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var catalog: Dictionary = localization.call("get_catalog", locale)
 		for key_value: Variant in errors.call("mapped_translation_keys"):
 			_check(catalog.has(str(key_value)), "%s contains mapped backend key %s" % [locale, key_value])

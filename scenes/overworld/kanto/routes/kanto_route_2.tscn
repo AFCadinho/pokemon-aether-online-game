@@ -17,6 +17,8 @@
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="16_bug_catcher"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="17_youngster"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="18_pokemon"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="19_overworld_item"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="20_door_hint"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r7yom"]
 texture = ExtResource("2_yrfmu")
@@ -217,6 +219,9 @@ sources/0 = SubResource("TileSetAtlasSource_3mgn4")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gac6d"]
 size = Vector2(192, 32)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_house_door"]
+size = Vector2(48, 16)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j62p7"]
 texture = ExtResource("9_gac6d")
 texture_region_size = Vector2i(32, 32)
@@ -251,6 +256,71 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_bej5m"]
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_j62p7")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ohdj5"]
+texture = ExtResource("5_vmo04")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_ywtea"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_ohdj5")
 
 [node name="KantoRoute2" type="Node2D" unique_id=1334981567]
 script = ExtResource("8_metadata")
@@ -317,6 +387,9 @@ position = Vector2(1376, 784)
 [node name="FromRoute2GateSouth" type="Marker2D" parent="Spawns" unique_id=1928536631]
 position = Vector2(1376, 1136)
 
+[node name="FromHouse" type="Marker2D" parent="Spawns" unique_id=1370384655]
+position = Vector2(1424, 560)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1183129315]
 
 [node name="ToViridianCity" type="Area2D" parent="Exits" unique_id=1185183787]
@@ -330,8 +403,10 @@ position = Vector2(-16, 0)
 shape = SubResource("RectangleShape2D_gac6d")
 
 [node name="RouteTransitionHint" parent="Exits/ToViridianCity" unique_id=868490827 instance=ExtResource("7_f8n3h")]
+z_as_relative = false
 position = Vector2(-16, 0)
-width = 194.0
+tile_footprint = Vector2i(6, 2)
+flow_direction = "down"
 
 [node name="ToPewterCity" type="Area2D" parent="Exits" unique_id=1328365275]
 position = Vector2(1488, 16)
@@ -343,14 +418,16 @@ target_spawn_name = "FromRoute2"
 shape = SubResource("RectangleShape2D_gac6d")
 
 [node name="RouteTransitionHint" parent="Exits/ToPewterCity" unique_id=968794573 instance=ExtResource("7_f8n3h")]
+z_as_relative = false
 position = Vector2(-16, 0)
-width = 194.0
+tile_footprint = Vector2i(6, 2)
 
 [node name="ToViridianForestNorth" type="Area2D" parent="Exits" unique_id=418307891]
 position = Vector2(368, 592)
 script = ExtResource("6_3mgn4")
 target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_north_gate.tscn"
 target_spawn_name = "FromNorth"
+metadata/pao_transition_hint_hidden = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToViridianForestNorth" unique_id=514723512]
 position = Vector2(-16, 16)
@@ -366,11 +443,17 @@ target_spawn_name = "FromSouth"
 position = Vector2(-16, 16)
 shape = SubResource("RectangleShape2D_gac6d")
 
+[node name="RouteTransitionHint" parent="Exits/ToViridianForestSouth" unique_id=245634641 instance=ExtResource("7_f8n3h")]
+z_as_relative = false
+position = Vector2(-16, 16)
+tile_footprint = Vector2i(3, 2)
+
 [node name="ToRoute2GateNorth" type="Area2D" parent="Exits" unique_id=1207811318]
 position = Vector2(1376, 848)
 script = ExtResource("6_3mgn4")
 target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_2_gate.tscn"
 target_spawn_name = "FromNorth"
+metadata/pao_transition_hint_hidden = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2GateNorth" unique_id=139787917]
 shape = SubResource("RectangleShape2D_gac6d")
@@ -383,6 +466,24 @@ target_spawn_name = "FromSouth"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2GateSouth" unique_id=2132130911]
 shape = SubResource("RectangleShape2D_gac6d")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute2GateSouth" unique_id=1168923763 instance=ExtResource("7_f8n3h")]
+z_as_relative = false
+tile_footprint = Vector2i(3, 2)
+
+[node name="ToHouse" type="Area2D" parent="Exits" unique_id=2031672591]
+position = Vector2(1424, 528)
+script = ExtResource("6_3mgn4")
+target_scene_path = "res://scenes/overworld/kanto/routes/route_2_house.tscn"
+target_spawn_name = "FromRoute2"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse" unique_id=986702895]
+position = Vector2(8, -8)
+shape = SubResource("RectangleShape2D_house_door")
+
+[node name="DoorTransitionHint" parent="Exits/ToHouse" unique_id=27466854 instance=ExtResource("20_door_hint")]
+z_as_relative = false
 
 [node name="SandTiles" type="Node2D" parent="." unique_id=597055844]
 
@@ -468,6 +569,16 @@ movement_speed_pixels = 50.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=2096619694]
 
+[node name="Ether" parent="Entities/Interactables" unique_id=265507974 instance=ExtResource("19_overworld_item")]
+position = Vector2(848, 1616)
+pickup_id = "kanto_route_2_ether"
+item_id = "ether"
+
+[node name="ParalyzeHeal" parent="Entities/Interactables" unique_id=1734849859 instance=ExtResource("19_overworld_item")]
+position = Vector2(688, 1296)
+pickup_id = "kanto_route_2_paralyze_heal"
+item_id = "paralyze-heal"
+
 [node name="CuttableTree" parent="Entities/Interactables" unique_id=592280505 instance=ExtResource("10_j62p7")]
 position = Vector2(1584, 432)
 
@@ -485,9 +596,23 @@ position = Vector2(1104, 624)
 sign_id = "kanto_route_2_digletts_cave"
 sign_type = "road"
 
+[node name="Stairs" type="Node2D" parent="." unique_id=1892561235]
+visible = false
+
+[node name="StairUpLeft" type="TileMapLayer" parent="Stairs" unique_id=739250306]
+visible = false
+z_index = 100
+tile_map_data = PackedByteArray("AAAQADMAAAABAAEAAAAQADIAAAABAAEAAAAQADQAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_ywtea")
+
+[node name="StairUpRight" type="TileMapLayer" parent="Stairs" unique_id=1462988124]
+z_index = 100
+tile_set = SubResource("TileSet_ywtea")
+
 [connection signal="body_entered" from="Exits/ToViridianCity" to="Exits/ToViridianCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToViridianForestNorth" to="Exits/ToViridianForestNorth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToViridianForestSouth" to="Exits/ToViridianForestSouth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute2GateNorth" to="Exits/ToRoute2GateNorth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute2GateSouth" to="Exits/ToRoute2GateSouth" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToHouse" to="Exits/ToHouse" method="_on_body_entered"]
