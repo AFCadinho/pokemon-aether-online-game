@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Pokémon can now be copied from their Summary as PokéPaste text.
+
 ## 0.3.62 - 2026-08-24
 
 **Added**

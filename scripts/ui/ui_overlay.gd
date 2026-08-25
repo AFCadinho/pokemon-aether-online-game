@@ -121,6 +121,7 @@ const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/m
 const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const OVERWORLD_MOVE_ACTION_ICON := preload("res://assets/ui/icons/overworld_move_action.svg")
+const POKEMON_SUMMARY_COPY_ICON: Texture2D = preload("res://assets/ui/icons/clipboard_copy.svg")
 const CHAT_RESIZE_ICON: Texture2D = preload("res://assets/ui/chat_resize.svg")
 const GLOBAL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_exp_boost.svg")
 const GLOBAL_EV_BUFF_ICON: Texture2D = preload("res://assets/ui/global_ev_boost.svg")
@@ -1218,6 +1219,7 @@ var pokemon_summary_title_label: Label
 var pokemon_summary_gender_label: Label
 var pokemon_summary_id_label: Label
 var pokemon_summary_nickname_button: Button
+var pokemon_summary_copy_button: Button
 var pokemon_summary_meta_label: Label
 var pokemon_summary_held_item_slot: PanelContainer
 var pokemon_summary_held_item_slot_button: Button
@@ -16870,6 +16872,23 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_meta_label.add_theme_color_override("font_color", Color("#f4d78a"))
 	title_row.add_child(pokemon_summary_meta_label)
 
+	pokemon_summary_copy_button = Button.new()
+	pokemon_summary_copy_button.name = "PokemonSummaryCopyButton"
+	pokemon_summary_copy_button.icon = POKEMON_SUMMARY_COPY_ICON
+	pokemon_summary_copy_button.expand_icon = true
+	pokemon_summary_copy_button.custom_minimum_size = Vector2(20, 20)
+	pokemon_summary_copy_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	pokemon_summary_copy_button.focus_mode = Control.FOCUS_NONE
+	pokemon_summary_copy_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	pokemon_summary_copy_button.pressed.connect(_on_pokemon_summary_copy_pressed.bind(card_key))
+	_set_localized_control_property(pokemon_summary_copy_button, "tooltip_text", "ui.pokemon_summary.copy_pokepaste")
+	pokemon_summary_copy_button.add_theme_constant_override("icon_max_width", 14)
+	pokemon_summary_copy_button.add_theme_stylebox_override("normal", _make_pokemon_summary_compact_icon_button_style(Color("#0e2138f0"), Color("#5a82ad")))
+	pokemon_summary_copy_button.add_theme_stylebox_override("hover", _make_pokemon_summary_compact_icon_button_style(Color("#12304bf0"), POKEMON_SUMMARY_ACCENT))
+	pokemon_summary_copy_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_compact_icon_button_style(Color("#071421f0"), POKEMON_SUMMARY_ACCENT))
+	pokemon_summary_copy_button.add_theme_stylebox_override("disabled", _make_pokemon_summary_compact_icon_button_style(Color("#0b1420b8"), Color("#35465a")))
+	title_row.add_child(pokemon_summary_copy_button)
+
 	var identity_meta_row := HBoxContainer.new()
 	identity_meta_row.add_theme_constant_override("separation", 4)
 	identity_stack.add_child(identity_meta_row)
@@ -21213,6 +21232,7 @@ func _reset_pokemon_summary_card_node_references() -> void:
 	pokemon_summary_gender_label = null
 	pokemon_summary_id_label = null
 	pokemon_summary_nickname_button = null
+	pokemon_summary_copy_button = null
 	pokemon_summary_meta_label = null
 	pokemon_summary_held_item_slot = null
 	pokemon_summary_held_item_slot_button = null
@@ -21256,6 +21276,7 @@ func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, m
 		"gender_label": pokemon_summary_gender_label if mode == "interactive" else null,
 		"id_label": pokemon_summary_id_label,
 		"nickname_button": pokemon_summary_nickname_button if mode == "interactive" else null,
+		"copy_button": pokemon_summary_copy_button if mode == "interactive" else null,
 		"meta_label": pokemon_summary_meta_label,
 		"held_item_slot": pokemon_summary_held_item_slot,
 		"held_item_slot_button": pokemon_summary_held_item_slot_button,
@@ -21313,6 +21334,7 @@ func _apply_pokemon_summary_card_context(card_key: String) -> bool:
 	pokemon_summary_gender_label = context.get("gender_label") as Label
 	pokemon_summary_id_label = context.get("id_label") as Label
 	pokemon_summary_nickname_button = context.get("nickname_button") as Button
+	pokemon_summary_copy_button = context.get("copy_button") as Button
 	pokemon_summary_meta_label = context.get("meta_label") as Label
 	pokemon_summary_held_item_slot = context.get("held_item_slot") as PanelContainer
 	pokemon_summary_held_item_slot_button = context.get("held_item_slot_button") as Button
@@ -21803,6 +21825,45 @@ func _on_pokemon_summary_nickname_pressed(card_key: String = "") -> void:
 	if not _can_change_pokemon_nickname():
 		return
 	_show_pokemon_nickname_popup(card_key, pokemon)
+
+
+func _on_pokemon_summary_copy_pressed(card_key: String = "") -> void:
+	if not _apply_pokemon_summary_card_context(card_key) or _is_pokemon_summary_readonly():
+		return
+	var pokemon := _get_active_pokemon_summary_pokemon()
+	var copy_button := pokemon_summary_copy_button
+	if pokemon == null or copy_button == null or copy_button.disabled:
+		return
+
+	copy_button.disabled = true
+	var request_node := HTTPRequest.new()
+	add_child(request_node)
+	var response: Dictionary = await PokemonDataApiClient.export_team(
+		request_node,
+		[pokemon.to_battle_dict()]
+	)
+	request_node.queue_free()
+
+	var export_text := str(response.get("text", "")).strip_edges()
+	if not bool(response.get("success", false)) or export_text == "":
+		if is_instance_valid(copy_button):
+			copy_button.disabled = false
+		_add_chat_message(LocalizationManager.text("ui.pokemon_summary.copy_pokepaste_failed"))
+		return
+
+	DisplayServer.clipboard_set(export_text)
+	if not is_instance_valid(copy_button):
+		return
+	copy_button.tooltip_text = LocalizationManager.text("ui.pokemon_summary.copy_pokepaste_copied")
+	for state: String in ["normal", "hover", "pressed", "disabled"]:
+		copy_button.add_theme_color_override("icon_%s_color" % state, Color("#75d69c"))
+	await get_tree().create_timer(1.25).timeout
+	if not is_instance_valid(copy_button):
+		return
+	copy_button.disabled = false
+	copy_button.tooltip_text = LocalizationManager.text("ui.pokemon_summary.copy_pokepaste")
+	for state: String in ["normal", "hover", "pressed", "disabled"]:
+		copy_button.remove_theme_color_override("icon_%s_color" % state)
 
 
 func _show_pokemon_nickname_popup(card_key: String, pokemon: Pokemon) -> void:
