@@ -16813,6 +16813,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	identity_panel.add_child(identity_margin)
 
 	var identity_stack := VBoxContainer.new()
+	identity_stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	identity_stack.add_theme_constant_override("separation", 1)
 	identity_margin.add_child(identity_stack)
 
@@ -16825,8 +16826,10 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 
 	pokemon_summary_title_label = Label.new()
 	pokemon_summary_title_label.text = LocalizationManager.text("ui.pokemon_summary.title")
-	pokemon_summary_title_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	pokemon_summary_title_label.add_theme_font_size_override("font_size", 14)
+	pokemon_summary_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_title_label.size_flags_stretch_ratio = 1.1
+	_make_label_clip_width(pokemon_summary_title_label)
+	pokemon_summary_title_label.add_theme_font_size_override("font_size", 15)
 	pokemon_summary_title_label.add_theme_color_override("font_color", Color("#f4f7ff"))
 	pokemon_summary_title_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
 	pokemon_summary_title_label.add_theme_constant_override("shadow_offset_x", 1)
@@ -16837,7 +16840,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_gender_label.visible = false
 	pokemon_summary_gender_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pokemon_summary_gender_label.mouse_filter = Control.MOUSE_FILTER_PASS
-	pokemon_summary_gender_label.add_theme_font_size_override("font_size", 14)
+	pokemon_summary_gender_label.add_theme_font_size_override("font_size", 15)
 	pokemon_summary_gender_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
 	pokemon_summary_gender_label.add_theme_constant_override("shadow_offset_x", 1)
 	pokemon_summary_gender_label.add_theme_constant_override("shadow_offset_y", 1)
@@ -16845,27 +16848,32 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 
 	pokemon_summary_nickname_button = Button.new()
 	pokemon_summary_nickname_button.text = "✎"
-	pokemon_summary_nickname_button.custom_minimum_size = Vector2(18, 18)
+	pokemon_summary_nickname_button.custom_minimum_size = Vector2(20, 20)
 	pokemon_summary_nickname_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	pokemon_summary_nickname_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_nickname_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	pokemon_summary_nickname_button.pressed.connect(_on_pokemon_summary_nickname_pressed.bind(card_key))
 	_set_localized_control_property(pokemon_summary_nickname_button, "tooltip_text", "ui.pokemon_summary.nickname.edit_tooltip")
-	pokemon_summary_nickname_button.add_theme_font_size_override("font_size", 9)
+	pokemon_summary_nickname_button.add_theme_font_size_override("font_size", 10)
 	pokemon_summary_nickname_button.add_theme_stylebox_override("normal", _make_pokemon_summary_compact_icon_button_style(Color("#0e2138f0"), Color("#5a82ad")))
 	pokemon_summary_nickname_button.add_theme_stylebox_override("hover", _make_pokemon_summary_compact_icon_button_style(Color("#12304bf0"), POKEMON_SUMMARY_ACCENT))
 	pokemon_summary_nickname_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_compact_icon_button_style(Color("#071421f0"), POKEMON_SUMMARY_ACCENT))
 	pokemon_summary_nickname_button.add_theme_stylebox_override("disabled", _make_pokemon_summary_compact_icon_button_style(Color("#0b1420b8"), Color("#35465a")))
 	title_row.add_child(pokemon_summary_nickname_button)
 
-	var title_spacer := Control.new()
-	title_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title_row.add_child(title_spacer)
+	pokemon_summary_id_label = Label.new()
+	pokemon_summary_id_label.text = LocalizationManager.text("ui.pokemon_summary.id_empty")
+	pokemon_summary_id_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_id_label.size_flags_stretch_ratio = 0.9
+	_make_label_clip_width(pokemon_summary_id_label)
+	pokemon_summary_id_label.add_theme_font_size_override("font_size", 10)
+	pokemon_summary_id_label.add_theme_color_override("font_color", Color("#b8c9e4"))
+	title_row.add_child(pokemon_summary_id_label)
 
 	pokemon_summary_meta_label = Label.new()
 	pokemon_summary_meta_label.text = LocalizationManager.text("ui.pokemon_summary.level_empty")
 	pokemon_summary_meta_label.custom_minimum_size = Vector2(38, 0)
+	pokemon_summary_meta_label.visible = false
 	pokemon_summary_meta_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_make_label_clip_width(pokemon_summary_meta_label)
 	pokemon_summary_meta_label.add_theme_font_size_override("font_size", 11)
@@ -16876,30 +16884,18 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_copy_button.name = "PokemonSummaryCopyButton"
 	pokemon_summary_copy_button.icon = POKEMON_SUMMARY_COPY_ICON
 	pokemon_summary_copy_button.expand_icon = true
-	pokemon_summary_copy_button.custom_minimum_size = Vector2(20, 20)
+	pokemon_summary_copy_button.custom_minimum_size = Vector2(24, 24)
 	pokemon_summary_copy_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	pokemon_summary_copy_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_copy_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	pokemon_summary_copy_button.pressed.connect(_on_pokemon_summary_copy_pressed.bind(card_key))
 	_set_localized_control_property(pokemon_summary_copy_button, "tooltip_text", "ui.pokemon_summary.copy_export_set")
-	pokemon_summary_copy_button.add_theme_constant_override("icon_max_width", 14)
+	pokemon_summary_copy_button.add_theme_constant_override("icon_max_width", 18)
 	pokemon_summary_copy_button.add_theme_stylebox_override("normal", _make_pokemon_summary_compact_icon_button_style(Color("#0e2138f0"), Color("#5a82ad")))
 	pokemon_summary_copy_button.add_theme_stylebox_override("hover", _make_pokemon_summary_compact_icon_button_style(Color("#12304bf0"), POKEMON_SUMMARY_ACCENT))
 	pokemon_summary_copy_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_compact_icon_button_style(Color("#071421f0"), POKEMON_SUMMARY_ACCENT))
 	pokemon_summary_copy_button.add_theme_stylebox_override("disabled", _make_pokemon_summary_compact_icon_button_style(Color("#0b1420b8"), Color("#35465a")))
 	title_row.add_child(pokemon_summary_copy_button)
-
-	var identity_meta_row := HBoxContainer.new()
-	identity_meta_row.add_theme_constant_override("separation", 4)
-	identity_stack.add_child(identity_meta_row)
-
-	pokemon_summary_id_label = Label.new()
-	pokemon_summary_id_label.text = LocalizationManager.text("ui.pokemon_summary.id_empty")
-	pokemon_summary_id_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_make_label_clip_width(pokemon_summary_id_label)
-	pokemon_summary_id_label.add_theme_font_size_override("font_size", 9)
-	pokemon_summary_id_label.add_theme_color_override("font_color", Color("#b8c9e4"))
-	identity_meta_row.add_child(pokemon_summary_id_label)
 
 	var hp_row := HBoxContainer.new()
 	hp_row.add_theme_constant_override("separation", 6)

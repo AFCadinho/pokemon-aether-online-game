@@ -25,6 +25,9 @@ func _run() -> void:
 	var popup := overlay.get("pokemon_summary_popup") as PanelContainer
 	var content_panel := overlay.get("pokemon_summary_content_panel") as PanelContainer
 	var copy_button := overlay.get("pokemon_summary_copy_button") as Button
+	var title_label := overlay.get("pokemon_summary_title_label") as Label
+	var id_label := overlay.get("pokemon_summary_id_label") as Label
+	var nickname_button := overlay.get("pokemon_summary_nickname_button") as Button
 	_check(popup != null, "Pokémon Summary popup is created")
 	_check(content_panel != null, "Pokémon Summary content panel is created")
 	_check(copy_button != null, "interactive Summary exposes the export-set copy action")
@@ -33,6 +36,14 @@ func _run() -> void:
 		_check(copy_button.icon != null, "export-set action shows a clipboard icon")
 		_check(copy_button.tooltip_text != "", "export-set action explains itself on hover")
 		_check(copy_button.get_index() == copy_button.get_parent().get_child_count() - 1, "export-set action sits at the far right of the name row")
+		_check(copy_button.custom_minimum_size == Vector2(24, 24), "export-set action uses the larger icon button")
+	_check(title_label != null and title_label.get_theme_font_size("font_size") == 15, "Pokémon name uses the larger identity text")
+	_check(id_label != null and id_label.get_theme_font_size("font_size") == 10, "species and ID use the larger metadata text")
+	_check(
+		id_label != null and nickname_button != null and id_label.get_parent() == nickname_button.get_parent()
+		and id_label.get_index() == nickname_button.get_index() + 1,
+		"species and ID sit directly after the nickname edit action"
+	)
 	if popup == null or content_panel == null:
 		host.queue_free()
 		overlay.free()
