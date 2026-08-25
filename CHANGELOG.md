@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Changed**
+
+- Item Dex hover cards now share a clear, styled appearance.
+
 ## 0.3.62 - 2026-08-24
 
 **Added**

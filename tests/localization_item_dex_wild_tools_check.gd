@@ -32,6 +32,13 @@ func _check_runtime_copy() -> void:
 	if overlay_script == null:
 		return
 	var overlay: Node = overlay_script.new()
+	var tooltip_theme := overlay.call("_make_item_dex_tooltip_theme") as Theme
+	_check(
+		tooltip_theme != null
+		and tooltip_theme.get_stylebox("panel", "TooltipPanel") is StyleBoxFlat
+		and tooltip_theme.get_font_size("font_size", "TooltipLabel") == 12,
+		"Item Dex hover cards use the shared styled tooltip theme"
+	)
 	var medicine := {
 		"id": "potion",
 		"category": "medicine",

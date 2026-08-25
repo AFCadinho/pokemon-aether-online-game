@@ -9109,6 +9109,7 @@ func _setup_item_dex_popup() -> void:
 	item_dex_popup.anchor_top = 0.5
 	item_dex_popup.anchor_right = 0.5
 	item_dex_popup.anchor_bottom = 0.5
+	item_dex_popup.theme = _make_item_dex_tooltip_theme()
 	var item_dex_shell_style := _make_glass_panel_style(14)
 	item_dex_shell_style.border_color = Color("#75613bcc")
 	item_dex_popup.add_theme_stylebox_override("panel", item_dex_shell_style)
@@ -9379,6 +9380,24 @@ func _position_item_dex_popup() -> void:
 	item_dex_popup.offset_top = -popup_size.y * 0.5
 	item_dex_popup.offset_right = popup_size.x * 0.5
 	item_dex_popup.offset_bottom = popup_size.y * 0.5
+
+func _make_item_dex_tooltip_theme() -> Theme:
+	var tooltip_theme := Theme.new()
+	var tooltip_style := _make_panel_style(Color("#171208fa"), ITEM_DEX_ACCENT_SOFT, 8, 1)
+	tooltip_style.content_margin_left = 12
+	tooltip_style.content_margin_top = 9
+	tooltip_style.content_margin_right = 12
+	tooltip_style.content_margin_bottom = 9
+	tooltip_style.shadow_color = Color("#000000a6")
+	tooltip_style.shadow_size = 8
+	tooltip_style.shadow_offset = Vector2(0, 4)
+	tooltip_theme.set_stylebox("panel", "TooltipPanel", tooltip_style)
+	tooltip_theme.set_color("font_color", "TooltipLabel", Color("#fff3d1"))
+	tooltip_theme.set_color("font_shadow_color", "TooltipLabel", Color("#1a1002"))
+	tooltip_theme.set_font_size("font_size", "TooltipLabel", 12)
+	tooltip_theme.set_constant("shadow_offset_x", "TooltipLabel", 1)
+	tooltip_theme.set_constant("shadow_offset_y", "TooltipLabel", 1)
+	return tooltip_theme
 
 func _setup_pokedex_popup() -> void:
 	pokedex_popup = PanelContainer.new()
@@ -32321,6 +32340,8 @@ func _create_item_dex_result_button(item: Dictionary) -> Control:
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
 	button.tooltip_text = str(localized_item.get("shortDesc", localized_item.get("desc", "")))
+	if button.tooltip_text != "":
+		button.mouse_default_cursor_shape = Control.CURSOR_HELP
 	button.pressed.connect(_on_item_dex_result_selected.bind(localized_item))
 	button.set_meta("item_id", item_id)
 	button.set_meta("item_data", localized_item)
