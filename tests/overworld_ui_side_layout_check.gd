@@ -46,6 +46,7 @@ func _init() -> void:
 	var quest_button_block := _node_block(scene_source, '[node name="QuestButton"')
 	var socials_menu_block := _node_block(scene_source, '[node name="SocialsMenu"')
 	var disable_icon_focus_block := _function_block(script_source, "func _disable_icon_button_focus()")
+	var item_dex_tooltip_theme_block := _function_block(script_source, "func _make_item_dex_tooltip_theme()")
 
 	_check(hotbar_block.contains("anchors_preset = 6"), "hotbar is anchored to the right")
 	_check(hotbar_block.contains("offset_right = 0.0"), "hotbar hugs the right screen edge")
@@ -195,6 +196,8 @@ func _init() -> void:
 	_check(scene_source.contains('path="res://assets/ui/running_shoes_toggle.svg" id="11_running_shoe"'), "Running Shoes use a dedicated speed-toggle icon")
 	_check(scene_source.contains('path="res://assets/ui/town_map_navigation.svg" id="3_riyyd"'), "Town Map uses a navigation-focused map icon")
 	_check(scene_source.contains('path="res://assets/ui/item_dex.svg" id="12_item_dex"') and script_source.contains('const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")'), "Item Dex uses its dedicated item catalogue icon")
+	_check(script_source.contains("item_dex_popup.theme = _make_item_dex_tooltip_theme()"), "Every Item Dex hover card inherits the Item Dex tooltip theme")
+	_check(item_dex_tooltip_theme_block.contains('tooltip_theme.set_stylebox("panel", "TooltipPanel"'), "Item Dex hover cards use a styled panel instead of the Godot default")
 	_check(scene_source.contains('path="res://assets/ui/staff_tools.svg" id="13_staff_tools"'), "Staff tools use a moderation shield instead of a rank crown")
 	_check(hotkey_sidebar_scene_source.contains("border_width_left = 2") and hotkey_sidebar_scene_source.contains("0.92941177)"), "hotbar rail uses the shared stable-opacity frame")
 	_check(script_source.contains('const UI_SURFACE_BASE := Color("#050b14ed")'), "overworld UI declares one semantic base surface")

@@ -9,6 +9,7 @@
 
 **Changed**
 
+- Item Dex hover cards now share a clear, styled appearance.
 - Pokédex hover cards now share a clear, styled appearance across every tab.
 - Viridian City's EV Training Field now offers three tiers. Earn 3 and 6 Gym Badges to unlock evolved opponents that give 2 or 3 EVs per victory, with higher session fees for faster training.
 - EV allocation now clearly shows the current value, the 252-per-stat limit, the reachable value, and the 510 total limit. You can choose an exact target with a number field, slider, or Max button, and Mateo's lesson now guides you through the new target controls.
