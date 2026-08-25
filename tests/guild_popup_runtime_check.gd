@@ -62,6 +62,7 @@ func _run() -> void:
 		await process_frame
 	var join_confirmation := popup.find_child("GuildJoinConfirmationDialog", true, false) as ConfirmationDialog
 	_check(join_confirmation != null and join_confirmation.visible, "direct Guild joining asks for confirmation")
+	_check_dialog_styled(join_confirmation, "join confirmation")
 	if join_confirmation != null:
 		join_confirmation.canceled.emit()
 		await process_frame
@@ -72,6 +73,10 @@ func _run() -> void:
 		await process_frame
 	var filter_dialog := popup.find_child("GuildFilterDialog", true, false) as PopupPanel
 	_check(filter_dialog != null and filter_dialog.visible, "Guild filter button opens the filter dialog")
+	_check(
+		filter_dialog != null and filter_dialog.has_theme_stylebox_override("panel"),
+		"Guild filter dialog uses the Guild popup styling"
+	)
 	var focus_filter := popup.find_child("GuildFocusFilterSelect", true, false) as OptionButton
 	var language_filter := popup.find_child("GuildLanguageFilterSelect", true, false) as OptionButton
 	_check(language_filter != null and language_filter.item_count == 11, "Guild filters offer every supported language")
@@ -268,6 +273,7 @@ func _run() -> void:
 		await process_frame
 	var donation_dialog := popup.find_child("GuildBankDonationConfirmationDialog", true, false) as ConfirmationDialog
 	_check(donation_dialog != null and donation_dialog.visible, "depositing a Pokémon confirms permanent Guild ownership")
+	_check_dialog_styled(donation_dialog, "Guild Bank donation confirmation")
 	if donation_dialog != null:
 		donation_dialog.canceled.emit()
 		await process_frame
@@ -356,6 +362,7 @@ func _run() -> void:
 		await process_frame
 	var invite_dialog := popup.find_child("GuildInviteDialog", true, false) as ConfirmationDialog
 	_check(invite_dialog != null and invite_dialog.visible, "invite action opens a dedicated dialog")
+	_check_dialog_styled(invite_dialog, "Guild invite dialog")
 	_check(popup.find_child("GuildInviteUsername", true, false) != null, "invite dialog asks for a Trainer username")
 	if invite_dialog != null:
 		invite_dialog.queue_free()
@@ -370,6 +377,10 @@ func _run() -> void:
 	await process_frame
 	var history_window := popup.find_child("GuildHistoryLogWindow", true, false) as Window
 	_check(history_window != null and history_window.visible, "Guild history opens in a separate window")
+	_check(
+		history_window != null and history_window.has_theme_stylebox_override("embedded_border"),
+		"Guild history window uses the Guild window styling"
+	)
 	_check(popup.find_child("GuildLogEntries", true, false) != null, "Guild history renders its activity entries")
 	if history_window != null:
 		history_window.queue_free()
@@ -387,6 +398,7 @@ func _run() -> void:
 		await process_frame
 	var bank_permissions_dialog := popup.find_child("GuildMemberBankPermissionsDialog_2", true, false) as ConfirmationDialog
 	_check(bank_permissions_dialog != null and bank_permissions_dialog.visible, "member Guild Bank rights open in a dedicated dialog")
+	_check_dialog_styled(bank_permissions_dialog, "Guild Bank permissions dialog")
 	var borrow_permission_select := popup.find_child("GuildBankPermissionSelect_bank_borrow", true, false) as OptionButton
 	_check(
 		borrow_permission_select != null
@@ -459,6 +471,10 @@ func _run() -> void:
 		await process_frame
 	var emblem_popup := popup.find_child("GuildEmblemEditorPopup", true, false) as PopupPanel
 	_check(emblem_popup != null and emblem_popup.visible, "emblem editor opens in a dedicated popup")
+	_check(
+		emblem_popup != null and emblem_popup.has_theme_stylebox_override("panel"),
+		"Guild emblem editor uses the Guild popup styling"
+	)
 	var emblem_grid := popup.find_child("GuildEmblemGrid", true, false) as GridContainer
 	_check(
 		emblem_grid != null and emblem_grid.columns == 32 and emblem_grid.get_child_count() == 1024,
@@ -564,11 +580,16 @@ func _run() -> void:
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "regular members return to the overview")
 	var member_options := popup.find_child("GuildOptionsMenuButton", true, false) as MenuButton
 	_check(member_options != null and not member_options.get_popup().is_item_disabled(0), "regular members can leave through Guild options")
+	_check(
+		member_options != null and member_options.get_popup().has_theme_stylebox_override("panel"),
+		"Guild options menu uses the Guild dropdown styling"
+	)
 	if member_options != null:
 		member_options.get_popup().id_pressed.emit(1)
 		await process_frame
 	var leave_dialog := popup.find_child("GuildLeaveConfirmationDialog", true, false) as ConfirmationDialog
 	_check(leave_dialog != null and leave_dialog.visible, "leaving a Guild asks for confirmation")
+	_check_dialog_styled(leave_dialog, "leave Guild confirmation")
 	if leave_dialog != null:
 		leave_dialog.canceled.emit()
 		await process_frame
@@ -627,6 +648,19 @@ func _option_has_metadata(select: OptionButton, value: String) -> bool:
 		if str(select.get_item_metadata(item_index)) == value:
 			return true
 	return false
+
+
+func _check_dialog_styled(dialog: ConfirmationDialog, label: String) -> void:
+	_check(
+		dialog != null and dialog.has_theme_stylebox_override("embedded_border"),
+		"%s uses the Guild window styling" % label
+	)
+	_check(
+		dialog != null
+		and dialog.get_ok_button().has_theme_stylebox_override("normal")
+		and dialog.get_cancel_button().has_theme_stylebox_override("normal"),
+		"%s uses styled action buttons" % label
+	)
 
 
 func _check(condition: bool, label: String) -> void:

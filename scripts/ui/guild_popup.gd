@@ -583,7 +583,7 @@ func _build_directory_filter_dialog() -> PopupPanel:
 	popup.name = "GuildFilterDialog"
 	popup.exclusive = true
 	popup.unresizable = true
-	popup.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 11, 1))
+	_apply_guild_popup_panel_style(popup)
 	var margin := MarginContainer.new()
 	_set_margins(margin, 18, 16, 18, 18)
 	popup.add_child(margin)
@@ -1116,6 +1116,7 @@ func _build_guild_header_travel_actions(guild: Dictionary, is_leader: bool) -> C
 	_set_localized_property(options, "tooltip_text", "ui.guild.options.tooltip")
 	_apply_button_style(options)
 	var popup := options.get_popup()
+	_apply_popup_menu_style(popup)
 	popup.add_item(_t("ui.guild.leave.action"), 1)
 	popup.set_item_disabled(popup.get_item_index(1), is_leader or is_leaving_guild)
 	popup.id_pressed.connect(_on_guild_options_menu_pressed.bind(guild.duplicate(true)))
@@ -1181,6 +1182,7 @@ func _confirm_guild_leave(guild: Dictionary) -> void:
 	})
 	dialog.ok_button_text = _t("ui.guild.leave.action")
 	dialog.cancel_button_text = _t("common.cancel")
+	_apply_guild_confirmation_style(dialog, "danger")
 	dialog.confirmed.connect(_leave_current_guild.bind(guild), CONNECT_ONE_SHOT)
 	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
 	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
@@ -1879,6 +1881,7 @@ func _show_guild_log_window(category: String, result: Dictionary) -> void:
 	window.min_size = Vector2i(520, 360)
 	window.transient = true
 	window.exclusive = true
+	_apply_guild_window_style(window)
 	window.close_requested.connect(window.queue_free)
 	add_child(window)
 	var panel := PanelContainer.new()
@@ -2130,6 +2133,7 @@ func _confirm_guild_bank_donation(asset_name: String, confirmed_action: Callable
 	dialog.dialog_text = _t("ui.guild.bank.donation.confirm", {"asset": asset_name})
 	dialog.ok_button_text = _t("ui.guild.bank.donation.action")
 	dialog.cancel_button_text = _t("common.cancel")
+	_apply_guild_confirmation_style(dialog, "primary")
 	dialog.confirmed.connect(confirmed_action, CONNECT_ONE_SHOT)
 	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
 	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
@@ -2328,6 +2332,7 @@ func _open_guild_invite_dialog() -> void:
 	dialog.title = _t("ui.guild.invite.title")
 	dialog.ok_button_text = _t("ui.guild.invite.send")
 	dialog.cancel_button_text = _t("common.cancel")
+	_apply_guild_confirmation_style(dialog, "primary")
 	add_child(dialog)
 	var content := VBoxContainer.new()
 	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -2550,6 +2555,7 @@ func _open_guild_member_bank_permissions(member: Dictionary) -> void:
 	})
 	dialog.ok_button_text = _t("common.save")
 	dialog.cancel_button_text = _t("common.cancel")
+	_apply_guild_confirmation_style(dialog, "primary")
 	add_child(dialog)
 	var content := VBoxContainer.new()
 	content.add_theme_constant_override("separation", 8)
@@ -2754,7 +2760,7 @@ func _build_emblem_editor_popup() -> PopupPanel:
 	popup.name = "GuildEmblemEditorPopup"
 	popup.exclusive = true
 	popup.unresizable = true
-	popup.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 11, 1))
+	_apply_guild_popup_panel_style(popup)
 	var margin := MarginContainer.new()
 	_set_margins(margin, 16, 14, 16, 16)
 	popup.add_child(margin)
@@ -3484,6 +3490,7 @@ func _confirm_open_guild_join(guild: Dictionary) -> void:
 	})
 	dialog.ok_button_text = _t("ui.guild.application.join")
 	dialog.cancel_button_text = _t("common.cancel")
+	_apply_guild_confirmation_style(dialog, "primary")
 	dialog.confirmed.connect(_join_selected_guild.bind(guild), CONNECT_ONE_SHOT)
 	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
 	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
@@ -4548,6 +4555,62 @@ func _apply_option_button_style(select: OptionButton) -> void:
 	select.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 	select.focus_mode = Control.FOCUS_NONE
 	select.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	_apply_popup_menu_style(select.get_popup())
+
+
+func _apply_guild_window_style(window: Window) -> void:
+	var border := _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 11, 1)
+	border.content_margin_left = 8
+	border.content_margin_top = 30
+	border.content_margin_right = 8
+	border.content_margin_bottom = 8
+	border.shadow_color = Color(0, 0, 0, 0.55)
+	border.shadow_size = 18
+	border.shadow_offset = Vector2(0, 7)
+	window.add_theme_stylebox_override("embedded_border", border)
+	window.add_theme_stylebox_override("embedded_unfocused_border", border.duplicate())
+	window.add_theme_color_override("title_color", UI_TEXT)
+	window.add_theme_font_size_override("title_font_size", 15)
+
+
+func _apply_guild_confirmation_style(dialog: ConfirmationDialog, ok_variant: String = "primary") -> void:
+	_apply_guild_window_style(dialog)
+	dialog.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 10, 1))
+	var message := dialog.get_label()
+	if message != null:
+		message.add_theme_color_override("font_color", UI_TEXT)
+		message.add_theme_font_size_override("font_size", 13)
+		message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	var ok_button := dialog.get_ok_button()
+	var cancel_button := dialog.get_cancel_button()
+	_apply_button_style(ok_button, ok_variant)
+	_apply_button_style(cancel_button)
+	ok_button.focus_mode = Control.FOCUS_ALL
+	cancel_button.focus_mode = Control.FOCUS_ALL
+
+
+func _apply_guild_popup_panel_style(popup: PopupPanel) -> void:
+	var panel := _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 11, 1)
+	panel.shadow_color = Color(0, 0, 0, 0.55)
+	panel.shadow_size = 18
+	panel.shadow_offset = Vector2(0, 7)
+	popup.add_theme_stylebox_override("panel", panel)
+
+
+func _apply_popup_menu_style(popup: PopupMenu) -> void:
+	if popup == null:
+		return
+	popup.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 8, 1))
+	popup.add_theme_stylebox_override("hover", _panel_style(UI_HOVER, Color("#7aa7f4"), 5, 1))
+	popup.add_theme_stylebox_override("separator", _panel_style(UI_BORDER_INNER, UI_BORDER_INNER, 0, 0))
+	popup.add_theme_color_override("font_color", UI_TEXT)
+	popup.add_theme_color_override("font_hover_color", UI_TEXT)
+	popup.add_theme_color_override("font_disabled_color", Color(UI_MUTED.r, UI_MUTED.g, UI_MUTED.b, 0.48))
+	popup.add_theme_color_override("font_separator_color", UI_MUTED)
+	popup.add_theme_font_size_override("font_size", 12)
+	popup.add_theme_constant_override("v_separation", 5)
+	popup.add_theme_constant_override("item_start_padding", 10)
+	popup.add_theme_constant_override("item_end_padding", 10)
 
 
 func _outer_style() -> StyleBoxFlat:
