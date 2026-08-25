@@ -138,9 +138,10 @@ func _init() -> void:
 	)
 	_assert(
 		ui_overlay_source.contains("const POKEMON_EV_STORAGE_TOTAL_LIMIT := POKEMON_EV_STAT_LIMIT * 6")
-		and ui_overlay_source.contains("var max_gain: int = max(POKEMON_EV_STAT_LIMIT - current_value, 0)")
+		and ui_overlay_source.contains("var allocated_value: int = clampi(int(pokemon.evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)")
+		and ui_overlay_source.contains("var max_gain: int = max(POKEMON_EV_STAT_LIMIT - allocated_value - current_value, 0)")
 		and not ui_overlay_source.contains("POKEMON_EV_TOTAL_LIMIT - allocated_total - stored_total"),
-		"stored EV capacity must be independent from the 510 allocated EV limit"
+		"stored EV capacity must respect the combined per-stat cap and remain independent from the 510 allocated EV limit"
 	)
 	_assert(
 		ui_overlay_source.contains('LocalizationManager.text("ui.pokemon_summary.evs.stored", {')
