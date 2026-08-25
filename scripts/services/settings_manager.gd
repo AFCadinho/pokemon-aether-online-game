@@ -526,7 +526,7 @@ func _validated_content_name_language(value: String) -> String:
 func _default_content_name_language(interface_locale: String) -> String:
 	return (
 		CONTENT_NAME_LANGUAGE_LOCALIZED
-		if LocalizationManager.normalize_locale(interface_locale) == "pt_BR"
+		if LocalizationManager.normalize_locale(interface_locale) in ["pt_BR", "zh_CN"]
 		else CONTENT_NAME_LANGUAGE_ENGLISH
 	)
 

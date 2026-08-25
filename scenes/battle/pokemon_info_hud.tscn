@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://bbpta6p7kugpi"]
 
-[ext_resource type="Texture2D" uid="uid://b7jncpf4e5h86" path="res://assets/gender/female.png" id="1_trgae"]
 [ext_resource type="Texture2D" path="res://assets/items/icons/POKEBALL.png" id="2_owned"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h0kxc"]
@@ -85,7 +84,6 @@ texture_filter = 1
 visible = false
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-texture = ExtResource("1_trgae")
 expand_mode = 2
 stretch_mode = 5
 

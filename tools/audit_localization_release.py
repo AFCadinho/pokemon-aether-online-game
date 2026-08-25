@@ -21,11 +21,13 @@ CLIENT_CATALOGS = {
     "en": ROOT / "localization/en.json",
     "nl": ROOT / "localization/nl.json",
     "pt_BR": ROOT / "localization/pt_BR.json",
+    "zh_CN": ROOT / "localization/zh_CN.json",
 }
 LAUNCHER_CATALOGS = {
     "en": ROOT / "launcher/localization/en.json",
     "nl": ROOT / "launcher/localization/nl.json",
     "pt_BR": ROOT / "launcher/localization/pt_BR.json",
+    "zh_CN": ROOT / "launcher/localization/zh_CN.json",
 }
 PLACEHOLDER_PATTERN = re.compile(r"\{[A-Za-z0-9_]+\}")
 SEMANTIC_KEY_PATTERN = re.compile(
