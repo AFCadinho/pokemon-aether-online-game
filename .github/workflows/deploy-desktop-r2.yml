@@ -231,7 +231,6 @@ jobs:
         run: ./godot --headless --path . --script res://tests/client_crash_reporting_check.gd
 
       - name: Import launcher assets
-        if: env.BUILD_LAUNCHER == 'true'
         run: |
           cd launcher
           ../godot --headless --import --quit
