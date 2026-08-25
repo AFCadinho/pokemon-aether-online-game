@@ -826,7 +826,7 @@ func _ready() -> void:
 	# Bij scene switches kan de vorige map al freed zijn terwijl de autoload nog
 	# even naar die node wijst.
 	if GameState.current_map != null and is_instance_valid(GameState.current_map):
-		grass_tilemap = GameState.current_map.get_node_or_null("TallGrass")
+		grass_tilemap = _find_tilemap_layer(GameState.current_map, ["TallGrass"])
 		water_tilemap = _find_tilemap_layer(GameState.current_map, WATER_TILEMAP_NAMES)
 		_refresh_sand_tilemaps(GameState.current_map)
 		collision_tilemap = _find_tilemap_layer(GameState.current_map, ["Collision"])
@@ -2132,7 +2132,7 @@ func refresh_map_layers() -> void:
 
 	GameState.current_map = current_map
 	collision_tilemap = _find_tilemap_layer(current_map, ["Collision"])
-	grass_tilemap = current_map.get_node_or_null("TallGrass")
+	grass_tilemap = _find_tilemap_layer(current_map, ["TallGrass"])
 	grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
 	water_tilemap = _find_tilemap_layer(current_map, WATER_TILEMAP_NAMES)
 	_refresh_sand_tilemaps(current_map)
