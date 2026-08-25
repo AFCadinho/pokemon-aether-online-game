@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Added full Simplified Chinese language support throughout the game and launcher.
+
 ## 0.3.63 - 2026-08-25
 
 **Added**

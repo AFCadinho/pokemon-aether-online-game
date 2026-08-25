@@ -31,6 +31,7 @@ func _init() -> void:
 		"res://localization/en.json",
 		"res://localization/nl.json",
 		"res://localization/pt_BR.json",
+		"res://localization/zh_CN.json",
 	]:
 		var catalog := FileAccess.get_file_as_string(locale_path)
 		_check(catalog.contains('"ui.settings.account.portal"'), "%s has portal button copy" % locale_path)
