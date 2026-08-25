@@ -35,15 +35,16 @@ func _run() -> void:
 		_check(copy_button.text == "", "export-set action uses only an icon")
 		_check(copy_button.icon != null, "export-set action shows a clipboard icon")
 		_check(copy_button.tooltip_text != "", "export-set action explains itself on hover")
-		_check(copy_button.get_index() == copy_button.get_parent().get_child_count() - 1, "export-set action sits at the far right of the name row")
+		_check(copy_button.get_index() == copy_button.get_parent().get_child_count() - 1, "export-set action sits in the fixed far-right identity column")
 		_check(copy_button.custom_minimum_size == Vector2(24, 24), "export-set action uses the larger icon button")
 	_check(title_label != null and title_label.get_theme_font_size("font_size") == 15, "Pokémon name uses the larger identity text")
 	_check(id_label != null and id_label.get_theme_font_size("font_size") == 10, "species and ID use the larger metadata text")
 	_check(
-		id_label != null and nickname_button != null and id_label.get_parent() == nickname_button.get_parent()
-		and id_label.get_index() == nickname_button.get_index() + 1,
-		"species and ID sit directly after the nickname edit action"
+		id_label != null and nickname_button != null
+		and id_label.get_parent() == nickname_button.get_parent().get_parent(),
+		"species and ID sit below the name and nickname edit action"
 	)
+	_check(copy_button != null and id_label != null and copy_button.get_parent() == id_label.get_parent().get_parent(), "export-set action spans both identity text rows")
 	if popup == null or content_panel == null:
 		host.queue_free()
 		overlay.free()
