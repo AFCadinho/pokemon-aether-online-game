@@ -96,6 +96,17 @@ func _init() -> void:
 	_assert(service_source.contains("/game/ev-training/tutorial/focus"), "EV tutorial focus endpoint is missing")
 	_assert(expert_source.contains("allocate_training_evs"), "Mateo's EV allocation lesson is missing")
 	_assert(
+		expert_source.contains('tutorial.get("requiredAllocation", 4)')
+		and expert_source.contains('tutorial.get("allocated", 0)')
+		and expert_source.contains("remaining_allocation"),
+		"Mateo's EV lesson must suggest only the allocation still required"
+	)
+	_assert(
+		ui_overlay_source.contains("func open_ev_training_allocation(pokemon_id: int, stat_id: String, suggested_addition: int = 0)")
+		and ui_overlay_source.contains("_get_summary_ev_suggested_target"),
+		"Mateo's EV lesson must preselect a target total without using Max"
+	)
+	_assert(
 		world_source.contains('const EV_TRAINING_MAP_ID := "kanto_viridian_city"')
 		and world_source.contains("func _end_ev_training_session_for_map_exit")
 		and world_source.count("await _end_ev_training_session_for_map_exit(") == 2,
