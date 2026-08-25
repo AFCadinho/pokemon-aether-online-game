@@ -36,7 +36,7 @@ func _init() -> void:
 	_check_contains(router_source, "animation_node.psychic_shards_config = _with_projectile_endpoint_anchors(", "psychic shard volleys receive live attacker and target anchors")
 	_check_contains(router_source, "animation_node.draco_meteor_config = _with_target_effect_anchor(", "Draco Meteor rain follows the live target anchor")
 	_check_contains(router_source, "animation_node.celestial_charge_config = _with_self_effect_anchor(", "Moonblast charge effects follow the live attacker anchor")
-	_check_contains(router_source, "animation_node.explosion_burst_config = _with_self_effect_anchor(", "explosion bursts follow the live user anchor")
+	_check_contains(router_source, "animation_node.explosion_burst_config = _with_projectile_endpoint_anchors(", "explosion waves travel between the live user and target anchors")
 	_check_contains(router_source, "actor_anchor += -center_offset if reverse_battlefield else center_offset", "self-effect offsets remain screen-relative for opposing users")
 	_check_contains(router_source, "target_anchor += -center_offset if reverse_battlefield else center_offset", "target-effect offsets remain screen-relative for opposing users")
 	_check_contains(router_source, "animation_node.focus_aura_config = (config.get(\"focus_aura\", {}) as Dictionary).duplicate(true)", "focus auras are configured through the move catalog")
@@ -95,6 +95,9 @@ func _init() -> void:
 	_check_equal(bool((moves.get("psyshock", {}) as Dictionary).get("show_sheet_sprites", true)), false, "Psyshock hides the imported placeholder sprites")
 	_check_equal(bool(((moves.get("explosion", {}) as Dictionary).get("explosion_burst", {}) as Dictionary).get("enabled", false)), true, "Explosion uses its synchronized custom blast")
 	_check_equal(bool((moves.get("explosion", {}) as Dictionary).get("show_sheet_sprites", true)), false, "Explosion hides the imported smoke-only frames")
+	var explosion_path: Array = (((moves.get("explosion", {}) as Dictionary).get("explosion_burst", {}) as Dictionary).get("path", []) as Array)
+	_check_equal(explosion_path.size(), 2, "Explosion defines a user-to-target blast path")
+	_check_equal(bool(((moves.get("explosion", {}) as Dictionary).get("target_shake", {}) as Dictionary).get("enabled", false)), true, "Explosion shakes the target when its blast front arrives")
 	var water_shuriken_config: Dictionary = moves.get("watershuriken", {}) as Dictionary
 	var water_shuriken_data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(str(water_shuriken_config.get("data_path", "")))) as Dictionary
 	var water_shuriken_frames: Array = water_shuriken_data.get("frames", []) as Array

@@ -735,7 +735,14 @@ func _draw_explosion_burst_visual() -> void:
 	if progress > visible_end:
 		return
 
-	var center := _battlefield_position(_vector2_from_value(explosion_burst_config.get("center", [128.0, 204.0])))
+	var source_state := _get_projectile_state_from_config(0.0, explosion_burst_config)
+	var target_state := _get_projectile_state_from_config(1.0, explosion_burst_config)
+	var center := _projectile_battlefield_position(source_state.get("position", Vector2(128.0, 204.0)) as Vector2, explosion_burst_config)
+	var target := _projectile_battlefield_position(target_state.get("position", Vector2(384.0, 92.0)) as Vector2, explosion_burst_config)
+	var travel_direction := (target - center).normalized()
+	if travel_direction == Vector2.ZERO:
+		travel_direction = Vector2.RIGHT
+	var travel_normal := travel_direction.orthogonal()
 	var impact_start := clampf(float(explosion_burst_config.get("impact_start", 0.28)), 0.08, visible_end - 0.2)
 	var charge_progress := clampf(progress / maxf(impact_start, 0.001), 0.0, 1.0)
 	var burst_progress := clampf((progress - impact_start) / maxf(visible_end - impact_start, 0.001), 0.0, 1.0)
@@ -771,6 +778,39 @@ func _draw_explosion_burst_visual() -> void:
 	draw_circle(center, shock_radius * 0.96, _color_with_alpha(ember_color, fade * 0.035))
 	draw_arc(center, shock_radius, -float(frame_index) * 0.06, TAU - float(frame_index) * 0.06, 72, _color_with_alpha(hot_color, fade * 0.82), maxf(1.2, 5.0 * fade), true)
 	draw_arc(center, shock_radius * 0.82, float(frame_index) * 0.08, TAU + float(frame_index) * 0.08, 64, _color_with_alpha(ember_color, fade * 0.48), maxf(1.0, 2.8 * fade), true)
+
+	var travel_fraction := clampf(float(explosion_burst_config.get("travel_fraction", 0.48)), 0.24, 0.72)
+	var wave_progress := clampf(burst_progress / travel_fraction, 0.0, 1.0)
+	var wave_eased := wave_progress * wave_progress * (3.0 - 2.0 * wave_progress)
+	var wave_fade := 1.0 - clampf((burst_progress - travel_fraction) / 0.3, 0.0, 1.0)
+	var wave_segment_count := maxi(6, int(explosion_burst_config.get("wave_segment_count", 11)))
+	for segment_index: int in range(wave_segment_count):
+		var segment_progress := wave_eased - float(segment_index) * 0.062
+		if segment_progress <= 0.0:
+			continue
+		var segment_alpha := wave_fade * (1.0 - float(segment_index) / float(wave_segment_count + 2))
+		var wave_center := center.lerp(target, clampf(segment_progress, 0.0, 1.0))
+		wave_center += travel_normal * sin(float(frame_index) * 0.34 + float(segment_index) * 1.27) * 7.0 * (1.0 - segment_progress * 0.5)
+		var wave_radius := lerpf(18.0, 42.0, segment_progress) * (1.0 - float(segment_index) * 0.025)
+		draw_circle(wave_center, wave_radius * 1.34, _color_with_alpha(smoke_color.darkened(0.3), segment_alpha * 0.2))
+		draw_circle(wave_center, wave_radius, _color_with_alpha(ember_color, segment_alpha * 0.32))
+		draw_circle(wave_center + travel_direction * wave_radius * 0.2, wave_radius * 0.62, _color_with_alpha(flame_color, segment_alpha * 0.72))
+		draw_circle(wave_center + travel_direction * wave_radius * 0.4, wave_radius * 0.3, _color_with_alpha(hot_color, segment_alpha * 0.86))
+
+	var target_impact_start := travel_fraction * 0.8
+	var target_impact_progress := clampf((burst_progress - target_impact_start) / 0.26, 0.0, 1.0)
+	if target_impact_progress > 0.0:
+		var target_impact_fade := 1.0 - target_impact_progress
+		var target_impact_radius := lerpf(10.0, float(explosion_burst_config.get("target_impact_radius", 74.0)), 1.0 - pow(1.0 - target_impact_progress, 2.0))
+		draw_circle(target, target_impact_radius * 0.76, _color_with_alpha(flame_color, target_impact_fade * 0.3))
+		draw_circle(target, target_impact_radius * 0.38, _color_with_alpha(hot_color, target_impact_fade * 0.82))
+		draw_arc(target, target_impact_radius, -float(frame_index) * 0.12, TAU - float(frame_index) * 0.12, 56, _color_with_alpha(core_color, target_impact_fade * 0.9), 2.8, true)
+		var target_ray_count := maxi(8, int(explosion_burst_config.get("target_ray_count", 14)))
+		for target_ray_index: int in range(target_ray_count):
+			var target_ray_angle := float(target_ray_index) * TAU / float(target_ray_count) + float(frame_index) * 0.04
+			var target_ray_start := target + Vector2.from_angle(target_ray_angle) * target_impact_radius * 0.34
+			var target_ray_end := target + Vector2.from_angle(target_ray_angle) * target_impact_radius * (0.82 + float(target_ray_index % 3) * 0.1)
+			draw_line(target_ray_start, target_ray_end, _color_with_alpha(ember_color, target_impact_fade * 0.8), 2.0, true)
 
 	var smoke_count := maxi(8, int(explosion_burst_config.get("smoke_count", 18)))
 	for smoke_index: int in range(smoke_count):

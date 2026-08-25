@@ -1067,6 +1067,12 @@ func _apply_move_projectile_endpoint_anchors(
 		target_anchor,
 		animation_node.reverse_battlefield
 	)
+	animation_node.explosion_burst_config = _with_projectile_endpoint_anchors(
+		animation_node.explosion_burst_config,
+		actor_anchor,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
 	animation_node.energy_blast_config = _with_projectile_endpoint_anchors(
 		animation_node.energy_blast_config,
 		actor_anchor,
@@ -1126,11 +1132,6 @@ func _apply_move_projectile_endpoint_anchors(
 	)
 	animation_node.focus_aura_config = _with_self_effect_anchor(
 		animation_node.focus_aura_config,
-		actor_anchor,
-		animation_node.reverse_battlefield
-	)
-	animation_node.explosion_burst_config = _with_self_effect_anchor(
-		animation_node.explosion_burst_config,
 		actor_anchor,
 		animation_node.reverse_battlefield
 	)

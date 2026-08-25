@@ -9881,9 +9881,12 @@
       "sparkle_count": 0,
       "explosion_burst": {
         "enabled": true,
-        "center": [128, 204],
         "impact_start": 0.28,
         "visible_end": 0.95,
+        "travel_fraction": 0.48,
+        "wave_segment_count": 11,
+        "target_impact_radius": 76.0,
+        "target_ray_count": 14,
         "charge_particle_count": 12,
         "blast_radius": 78.0,
         "shock_radius": 154.0,
@@ -9895,7 +9898,17 @@
         "ember_color": [1.0, 0.16, 0.02, 1.0],
         "flame_color": [1.0, 0.42, 0.03, 1.0],
         "hot_color": [1.0, 0.86, 0.12, 1.0],
-        "core_color": [1.0, 1.0, 0.9, 1.0]
+        "core_color": [1.0, 1.0, 0.9, 1.0],
+        "path": [
+          {
+            "at": 0.0,
+            "position": [128, 204]
+          },
+          {
+            "at": 1.0,
+            "position": [384, 92]
+          }
+        ]
       },
       "flash": {
         "enabled": true,
@@ -9913,6 +9926,21 @@
         "frequency_x": 4.2,
         "frequency_y": 5.4,
         "vertical_scale": 0.62,
+        "decay": true
+      },
+      "target_hit_flash": {
+        "enabled": true,
+        "delay": 1.47,
+        "duration": 0.16,
+        "color": [1.0, 0.72, 0.28, 1.0]
+      },
+      "target_shake": {
+        "enabled": true,
+        "delay": 1.47,
+        "duration": 0.5,
+        "amplitude": 10.0,
+        "interval": 0.035,
+        "vertical_scale": 0.24,
         "decay": true
       },
       "miss": {
