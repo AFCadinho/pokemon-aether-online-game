@@ -4,12 +4,15 @@
 
 **Added**
 
+- Guild application decisions now appear as localized system messages, including decisions received while the applicant was offline.
+- The Guild member roster now has current-member search and a separate Trainer invite dialog.
 - Guild leaders can now give individual members explicit Guild Bank permission exceptions while keeping rank permissions as the default.
 - Giga Impact, Psyshock, Explosion, and Water Shuriken now have their own battle animations and sound effects.
 - Added full Simplified Chinese language support throughout the game and launcher.
 
 **Changed**
 
+- Members and recruits now need an explicit Guild Bank permission to deposit items or Pokémon; depositing money remains available to every Guild member.
 - Guild members now get Overview, Guild Bank, Members, and authorized management tabs in the top navigation, while Guild discovery is a compact secondary action.
 
 **Fixed**

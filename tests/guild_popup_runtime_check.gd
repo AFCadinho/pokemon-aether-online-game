@@ -348,8 +348,27 @@ func _run() -> void:
 		await process_frame
 	_check(popup.find_child("GuildMembersSection", true, false) != null, "members tab opens the roster")
 	_check(popup.find_child("GuildHistoryLogButton", true, false) != null, "member roster has a dedicated Guild history action")
-	_check(popup.find_child("GuildMemberInvitationControls", true, false) != null, "member invitations are grouped with the roster")
-	_check(popup.find_child("GuildInviteUsername", true, false) != null, "member invitation form renders in the roster")
+	var member_search := popup.find_child("GuildMemberSearchInput", true, false) as LineEdit
+	_check(member_search != null, "member roster provides a search field")
+	if member_search != null:
+		member_search.text = "pecha"
+		popup._filter_guild_member_cards(member_search.text)
+		await process_frame
+		var maple_card := popup.find_child("GuildMemberCard_2", true, false) as Control
+		var pecha_card := popup.find_child("GuildMemberCard_3", true, false) as Control
+		_check(maple_card != null and not maple_card.visible and pecha_card != null and pecha_card.visible, "member search filters current Guild members")
+		member_search.text = ""
+	var invite_action := popup.find_child("OpenGuildInviteDialogButton", true, false) as Button
+	_check(invite_action != null, "member roster exposes a separate invite action")
+	if invite_action != null:
+		invite_action.pressed.emit()
+		await process_frame
+	var invite_dialog := popup.find_child("GuildInviteDialog", true, false) as ConfirmationDialog
+	_check(invite_dialog != null and invite_dialog.visible, "invite action opens a dedicated dialog")
+	_check(popup.find_child("GuildInviteUsername", true, false) != null, "invite dialog asks for a Trainer username")
+	if invite_dialog != null:
+		invite_dialog.queue_free()
+		await process_frame
 	popup._show_guild_log_window("guild", {
 		"entries": [{
 			"id": 1, "category": "guild", "action": "joined",
@@ -438,7 +457,7 @@ func _run() -> void:
 	_check(popup.find_child("GuildManagementSection", true, false) != null, "management tab opens guild controls")
 	_check(popup.find_child("GuildSettingsDescription", true, false) != null, "leader settings render")
 	_check(popup.find_child("GuildApplicationsInbox", true, false) == null, "applications no longer crowd Guild settings")
-	_check(popup.find_child("GuildMemberInvitationControls", true, false) == null, "member invitations no longer live under management")
+	_check(popup.find_child("GuildMemberSearchInput", true, false) == null, "member roster tools do not live under management")
 	_check(popup.find_child("GuildEmblemPreview", true, false) == null, "management keeps emblem controls out of settings")
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "leader does not see a redundant Guild emblem edit button")
 	var edit_emblem_icon_button := popup.find_child("EditGuildEmblemIconButton", true, false) as Button
