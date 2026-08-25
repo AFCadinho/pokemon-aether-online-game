@@ -5,6 +5,7 @@
 **Added**
 
 - Pokémon Showdown export sets can now be copied from a Pokémon's Summary.
+- A mysterious golden Poké Ball can now be spotted near Master Thief Rook in Viridian City.
 
 **Changed**
 
