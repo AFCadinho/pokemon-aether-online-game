@@ -16834,8 +16834,9 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 
 	pokemon_summary_title_label = Label.new()
 	pokemon_summary_title_label.text = LocalizationManager.text("ui.pokemon_summary.title")
-	pokemon_summary_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_title_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	_make_label_clip_width(pokemon_summary_title_label)
+	pokemon_summary_title_label.custom_minimum_size.x = 140.0
 	pokemon_summary_title_label.add_theme_font_size_override("font_size", 15)
 	pokemon_summary_title_label.add_theme_color_override("font_color", Color("#f4f7ff"))
 	pokemon_summary_title_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
@@ -21581,6 +21582,7 @@ func _refresh_pokemon_summary() -> void:
 		pokemon_summary_nickname_button.visible = not _is_pokemon_summary_readonly() and pokemon.owned_pokemon_id > 0
 		pokemon_summary_nickname_button.disabled = not _can_change_pokemon_nickname() or pokemon_nickname_pending
 	pokemon_summary_shiny_badge.visible = pokemon.shiny
+	_fit_pokemon_summary_title_label()
 	if pokemon_summary_hidden_ability_badge != null:
 		pokemon_summary_hidden_ability_badge.visible = pokemon.hidden_ability
 	if pokemon_summary_shiny_badge_label != null:
@@ -22091,6 +22093,34 @@ func _make_label_clip_width(label: Label) -> void:
 	label.clip_text = true
 	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	label.custom_minimum_size = Vector2.ZERO
+
+
+func _fit_pokemon_summary_title_label() -> void:
+	var label := pokemon_summary_title_label
+	if label == null:
+		return
+	var row := label.get_parent() as HBoxContainer
+	if row == null or row.size.x <= 0.0:
+		return
+	var visible_controls := 0
+	var available_width := row.size.x
+	for child: Node in row.get_children():
+		var control := child as Control
+		if control == null or not control.visible:
+			continue
+		visible_controls += 1
+		if control != label:
+			available_width -= control.get_combined_minimum_size().x
+	available_width -= row.get_theme_constant("separation") * max(visible_controls - 1, 0)
+	var font := label.get_theme_font("font")
+	var font_size := label.get_theme_font_size("font_size")
+	var desired_width := font.get_string_size(
+		label.text,
+		HORIZONTAL_ALIGNMENT_LEFT,
+		-1.0,
+		font_size
+	).x
+	label.custom_minimum_size.x = minf(ceilf(desired_width), maxf(available_width, 0.0))
 
 
 func _apply_pokemon_summary_gender_label(label: Label, gender: String) -> void:
