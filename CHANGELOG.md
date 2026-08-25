@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- A mysterious golden Poké Ball can now be spotted near Master Thief Rook in Viridian City.
+
 ## 0.3.62 - 2026-08-24
 
 **Added**
