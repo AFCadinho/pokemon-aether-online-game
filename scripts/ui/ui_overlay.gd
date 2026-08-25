@@ -1560,6 +1560,8 @@ func _ready() -> void:
 	language_chat_tab_button.focus_mode = Control.FOCUS_NONE
 	if not GuildService.membership_changed.is_connected(_on_guild_chat_membership_changed):
 		GuildService.membership_changed.connect(_on_guild_chat_membership_changed)
+	if not GuildService.notification_received.is_connected(_on_guild_notification_received):
+		GuildService.notification_received.connect(_on_guild_notification_received)
 	_refresh_guild_chat_membership.call_deferred()
 	_sync_chat_mute_from_current_user()
 	_apply_chat_tab_state()
@@ -41175,6 +41177,15 @@ func _add_chat_message(
 func add_system_message(text: String) -> void:
 	_add_chat_message(text)
 
+
+func _on_guild_notification_received(notification: Dictionary) -> void:
+	var kind := str(notification.get("kind", ""))
+	var key := "ui.guild.notification.application_accepted" if kind == "application_accepted" else "ui.guild.notification.application_declined"
+	add_system_message(LocalizationManager.text(key, {
+		"guild": str(notification.get("guildName", "Guild")),
+		"actor": str(notification.get("actorName", "Guild staff")),
+	}))
+
 func add_system_warning(text: String) -> void:
 	_add_chat_message(text, false, CHAT_CATEGORY_SYSTEM_WARNING)
 
@@ -41279,6 +41290,11 @@ func _scroll_chat_to_bottom() -> void:
 
 func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	if message_type == "guild.application.updated":
+		var notification := _dictionary_from_value(message.get("notification", {}))
+		if not notification.is_empty():
+			GuildService.deliver_notification.call_deferred(notification)
+		return
 	if message_type == "system.logout_scheduled":
 		_start_session_logout_countdown(message)
 		return

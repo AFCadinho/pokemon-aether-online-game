@@ -173,6 +173,8 @@ var settings_focus_select: OptionButton
 var settings_recruitment_select: OptionButton
 var settings_loan_duration_select: OptionButton
 var invite_username_input: LineEdit
+var member_search_input: LineEdit
+var member_cards_container: VBoxContainer
 var emblem_editor_popup: PopupPanel
 var emblem_grid: GridContainer
 var emblem_pixel_buttons: Array[Button] = []
@@ -303,7 +305,7 @@ func show_debug_member_preview() -> void:
 				"userId": 3, "username": "pecha", "displayName": "Pecha",
 				"role": "member", "online": false,
 				"lastSeenAt": "2026-08-22T16:30:00Z",
-				"rankPermissions": ["bank_deposit", "bank_borrow"],
+				"rankPermissions": ["bank_borrow"],
 				"bankPermissionOverrides": {},
 			},
 		],
@@ -330,7 +332,7 @@ func show_debug_member_preview() -> void:
 		"rankPermissions": {
 			"leader": membership["permissions"],
 			"captain": ["bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return", "manage_members"],
-			"member": ["bank_deposit", "bank_borrow"],
+			"member": ["bank_borrow"],
 			"recruit": [],
 		},
 	}
@@ -2293,44 +2295,88 @@ func _build_member_roster(can_invite: bool = false) -> Control:
 		10,
 		UI_MUTED
 	))
+	content.add_child(_build_guild_roster_toolbar(can_invite))
 	if can_invite:
-		content.add_child(_build_guild_invitation_controls())
+		_render_pending_invitations(content)
 	var own_role := str(_dictionary(guild_home.get("membership", {})).get("role", "recruit"))
 	var own_membership := _dictionary(guild_home.get("membership", {}))
 	var own_user_id := int(own_membership.get("userId", 0))
 	var can_manage_permissions := _array_from_value(own_membership.get("permissions", [])).has("manage_permissions")
+	member_cards_container = VBoxContainer.new()
+	member_cards_container.name = "GuildMemberCards"
+	member_cards_container.add_theme_constant_override("separation", 7)
+	content.add_child(member_cards_container)
 	for member_value: Variant in members:
 		if not member_value is Dictionary:
 			continue
 		var member := member_value as Dictionary
-		content.add_child(_build_guild_member_card(member, own_role, own_user_id, can_manage_permissions))
+		member_cards_container.add_child(_build_guild_member_card(member, own_role, own_user_id, can_manage_permissions))
 	return panel
 
 
-func _build_guild_invitation_controls() -> Control:
-	var controls := VBoxContainer.new()
-	controls.name = "GuildMemberInvitationControls"
-	controls.add_theme_constant_override("separation", 6)
-	controls.add_child(_localized_label("ui.guild.invite.title", 10, UI_ACCENT))
-	var invite_row := HBoxContainer.new()
-	controls.add_child(invite_row)
+func _build_guild_roster_toolbar(can_invite: bool) -> Control:
+	var toolbar := HBoxContainer.new()
+	toolbar.name = "GuildMemberRosterToolbar"
+	toolbar.add_theme_constant_override("separation", 8)
+	member_search_input = LineEdit.new()
+	member_search_input.name = "GuildMemberSearchInput"
+	_set_localized_property(
+		member_search_input,
+		"placeholder_text",
+		"ui.guild.roster.search"
+	)
+	member_search_input.clear_button_enabled = true
+	member_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	member_search_input.text_changed.connect(_filter_guild_member_cards)
+	_apply_line_edit_style(member_search_input)
+	toolbar.add_child(member_search_input)
+	if not can_invite:
+		return toolbar
+	var invite_button := Button.new()
+	invite_button.name = "OpenGuildInviteDialogButton"
+	_set_localized_property(invite_button, "text", "ui.guild.invite.send")
+	invite_button.pressed.connect(_open_guild_invite_dialog)
+	_apply_button_style(invite_button, "primary")
+	toolbar.add_child(invite_button)
+	return toolbar
+
+
+func _filter_guild_member_cards(query: String) -> void:
+	if member_cards_container == null:
+		return
+	var normalized := query.strip_edges().to_lower()
+	for child: Node in member_cards_container.get_children():
+		if child is Control:
+			var haystack := str(child.get_meta("member_search_text", ""))
+			(child as Control).visible = normalized == "" or haystack.contains(normalized)
+
+
+func _open_guild_invite_dialog() -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "GuildInviteDialog"
+	dialog.title = _t("ui.guild.invite.title")
+	dialog.ok_button_text = _t("ui.guild.invite.send")
+	dialog.cancel_button_text = _t("common.cancel")
+	add_child(dialog)
+	var content := VBoxContainer.new()
+	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content.offset_left = 18
+	content.offset_top = 48
+	content.offset_right = -18
+	content.offset_bottom = -62
+	content.add_theme_constant_override("separation", 8)
+	dialog.add_child(content)
+	content.add_child(_localized_label("ui.guild.invite.prompt", 11, UI_MUTED))
 	invite_username_input = LineEdit.new()
 	invite_username_input.name = "GuildInviteUsername"
-	_set_localized_property(
-		invite_username_input,
-		"placeholder_text",
-		"ui.guild.invite.username"
-	)
-	invite_username_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_set_localized_property(invite_username_input, "placeholder_text", "ui.guild.invite.username")
+	invite_username_input.clear_button_enabled = true
 	_apply_line_edit_style(invite_username_input)
-	invite_row.add_child(invite_username_input)
-	var invite_button := Button.new()
-	_set_localized_property(invite_button, "text", "ui.guild.invite.send")
-	invite_button.pressed.connect(_on_invite_member)
-	_apply_button_style(invite_button, "primary")
-	invite_row.add_child(invite_button)
-	_render_pending_invitations(controls)
-	return controls
+	content.add_child(invite_username_input)
+	dialog.confirmed.connect(_on_invite_member.bind(dialog))
+	dialog.canceled.connect(dialog.queue_free)
+	dialog.popup_centered(Vector2i(460, 210))
+	invite_username_input.grab_focus.call_deferred()
 
 
 func _build_guild_member_card(
@@ -2343,6 +2389,10 @@ func _build_guild_member_card(
 	var online := bool(member.get("online", false))
 	var card := PanelContainer.new()
 	card.name = "GuildMemberCard_%d" % user_id
+	card.set_meta("member_search_text", "%s %s" % [
+		str(member.get("displayName", "")).to_lower(),
+		str(member.get("username", "")).to_lower(),
+	])
 	card.custom_minimum_size = Vector2(0, 70)
 	card.add_theme_stylebox_override(
 		"panel",
@@ -3767,12 +3817,14 @@ func _on_save_settings() -> void:
 	_set_member_status(_t("ui.guild.status.settings_saved"), false)
 
 
-func _on_invite_member() -> void:
+func _on_invite_member(dialog: ConfirmationDialog = null) -> void:
 	if invite_username_input == null:
 		return
 	var username := invite_username_input.text.strip_edges()
 	if username.length() < 3:
 		_set_member_status(_t("ui.guild.error.username_required"), true)
+		if dialog != null and is_instance_valid(dialog):
+			dialog.popup_centered(Vector2i(460, 210))
 		return
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
@@ -3782,7 +3834,11 @@ func _on_invite_member() -> void:
 	var result := _dictionary(response)
 	if not bool(result.get("success", false)):
 		_set_member_status(str(result.get("error", _t("ui.guild.error.send_invitation"))), true)
+		if dialog != null and is_instance_valid(dialog):
+			dialog.popup_centered(Vector2i(460, 210))
 		return
+	if dialog != null and is_instance_valid(dialog):
+		dialog.queue_free()
 	await _refresh_home_from_server()
 	_set_member_status(_t("ui.guild.status.invitation_sent", {"username": username}), false)
 
@@ -3847,6 +3903,7 @@ func _on_accept_application(application_id: int) -> void:
 	if guild_service == null:
 		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
 		return
+	var trainer_name := _guild_application_trainer_name(application_id)
 	var response: Variant = await guild_service.call("accept_application", application_id)
 	var result := _dictionary(response)
 	if not bool(result.get("success", false)):
@@ -3856,6 +3913,7 @@ func _on_accept_application(application_id: int) -> void:
 	active_guild_section = "management"
 	_render_guild_home()
 	_set_member_status(_t("ui.guild.status.application_accepted"), false)
+	_show_guild_system_message("ui.guild.notification.you_accepted", {"trainer": trainer_name})
 
 
 func _on_decline_application(application_id: int) -> void:
@@ -3865,6 +3923,7 @@ func _on_decline_application(application_id: int) -> void:
 	if guild_service == null:
 		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
 		return
+	var trainer_name := _guild_application_trainer_name(application_id)
 	var response: Variant = await guild_service.call("decline_application", application_id)
 	var result := _dictionary(response)
 	if not bool(result.get("success", false)):
@@ -3874,6 +3933,21 @@ func _on_decline_application(application_id: int) -> void:
 	active_guild_section = "management"
 	_render_guild_home()
 	_set_member_status(_t("ui.guild.status.application_declined"), false)
+	_show_guild_system_message("ui.guild.notification.you_declined", {"trainer": trainer_name})
+
+
+func _guild_application_trainer_name(application_id: int) -> String:
+	for value: Variant in _array_from_value(guild_home.get("pendingApplications", [])):
+		if value is Dictionary and int((value as Dictionary).get("id", 0)) == application_id:
+			return str((value as Dictionary).get(
+				"applicantDisplayName",
+				(value as Dictionary).get("applicantUsername", _t("common.unknown"))
+			))
+	return _t("common.unknown")
+
+
+func _show_guild_system_message(key: String, args: Dictionary = {}) -> void:
+	get_tree().call_group("ui_overlay", "add_system_message", _t(key, args))
 
 
 func _load_emblem_editor(emblem: Dictionary) -> void:

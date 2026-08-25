@@ -4,11 +4,13 @@ class_name GuildServiceNode
 
 signal membership_changed(membership: Dictionary)
 signal guild_changed(guild: Dictionary)
+signal notification_received(notification: Dictionary)
 
 const GUILDS_ENDPOINT := "/game/guilds"
 const GUILD_HOME_ENDPOINT := "/game/guilds/me"
 const GUILD_BANK_ENDPOINT := "/game/guilds/me/bank"
 const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
+const GUILD_NOTIFICATIONS_ENDPOINT := "/game/guild-notifications"
 const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
 const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
 const REQUEST_TIMEOUT_SECONDS := 8.0
@@ -17,6 +19,17 @@ var pending_creation_request_id := ""
 var current_membership: Dictionary = {}
 var current_guild: Dictionary = {}
 var membership_loaded := false
+var notification_poll_in_flight := false
+var delivered_notification_ids: Dictionary = {}
+
+
+func _ready() -> void:
+	var timer := Timer.new()
+	timer.name = "GuildNotificationPollTimer"
+	timer.wait_time = 60.0
+	timer.autostart = true
+	timer.timeout.connect(_poll_notifications)
+	add_child(timer)
 
 
 func load_directory() -> Dictionary:
@@ -25,7 +38,45 @@ func load_directory() -> Dictionary:
 	var response := await _request_json(GUILDS_ENDPOINT, HTTPClient.METHOD_GET, "")
 	if not bool(response.get("success", false)):
 		return response
+	_poll_notifications.call_deferred()
 	return _directory_result(response.get("body", {}))
+
+
+func deliver_notification(notification: Dictionary) -> void:
+	var notification_id := int(notification.get("id", 0))
+	if notification_id <= 0 or delivered_notification_ids.has(notification_id):
+		return
+	delivered_notification_ids[notification_id] = true
+	notification_received.emit(notification.duplicate(true))
+	await _acknowledge_notification(notification_id)
+
+
+func _poll_notifications() -> void:
+	if notification_poll_in_flight or not AuthService.is_authenticated():
+		return
+	notification_poll_in_flight = true
+	var response := await _authenticated_request(
+		GUILD_NOTIFICATIONS_ENDPOINT + "/pending?limit=20",
+		HTTPClient.METHOD_GET,
+		""
+	)
+	notification_poll_in_flight = false
+	if not bool(response.get("success", false)):
+		return
+	var body := _dictionary(response.get("body", {}))
+	for value: Variant in _array(body.get("notifications", [])):
+		if value is Dictionary:
+			await deliver_notification(value as Dictionary)
+
+
+func _acknowledge_notification(notification_id: int) -> void:
+	var response := await _authenticated_request(
+		GUILD_NOTIFICATIONS_ENDPOINT + "/%d/ack" % notification_id,
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	if not bool(response.get("success", false)):
+		delivered_notification_ids.erase(notification_id)
 
 
 func create_guild(
