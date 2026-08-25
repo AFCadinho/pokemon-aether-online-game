@@ -40,6 +40,8 @@ func _init() -> void:
 	_check_contains(service_source, "func update_settings", "guild service updates leader settings")
 	_check_contains(service_source, '"loanDurationSeconds": loan_duration_seconds', "guild settings preserve the selected loan duration")
 	_check_contains(service_source, "func update_member_role", "guild service updates compact Guild ranks")
+	_check_contains(service_source, "func update_member_bank_permissions", "guild service updates personal Guild Bank rights")
+	_check_contains(service_source, '"/members/%d/bank-permissions"', "Guild Bank rights use the dedicated member endpoint")
 	_check_contains(service_source, "func update_emblem", "guild service updates the emblem")
 	_check_contains(service_source, "func apply_emblem_template", "guild service reapplies Guild-owned emblem templates")
 	_check_contains(service_source, '"emblemTemplates": _array', "guild service preserves Guild-owned emblem templates")
