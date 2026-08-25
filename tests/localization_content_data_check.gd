@@ -102,7 +102,7 @@ func _check_catalogs() -> void:
 		var expected_size: int = int({
 			"species": 1439,
 			"moves": 919,
-			"abilities": 376,
+			"abilities": 377,
 		}.get(generated_kind, 0))
 		var english_generated_entries: Dictionary = generated_english.get(generated_kind, {})
 		var expected_ids: Array = english_generated_entries.keys()
@@ -149,7 +149,7 @@ func _check_catalogs() -> void:
 					).strip_edges().is_empty():
 						described_ability_count += 1
 				_check(
-					described_ability_count == 316,
+					described_ability_count == 317,
 					"generated %s abilities preserve every available source description" % locale
 				)
 
@@ -157,7 +157,7 @@ func _check_catalogs() -> void:
 		var merged_catalog: Dictionary = content_localization.call("get_catalog", locale)
 		_check((merged_catalog.get("species", {}) as Dictionary).size() == 1439, "%s resolver merges all species" % locale)
 		_check((merged_catalog.get("moves", {}) as Dictionary).size() == 919, "%s resolver merges all moves" % locale)
-		_check((merged_catalog.get("abilities", {}) as Dictionary).size() == 376, "%s resolver merges all abilities" % locale)
+		_check((merged_catalog.get("abilities", {}) as Dictionary).size() == 377, "%s resolver merges all abilities" % locale)
 
 
 func _check_runtime_resolution() -> void:

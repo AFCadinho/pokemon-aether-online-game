@@ -8283,6 +8283,10 @@
       "name": "Earth Eater",
       "shortDesc": "Restores HP when hit by a Ground-type move."
     },
+    "eelevate": {
+      "name": "Eelevate",
+      "shortDesc": "Immune to Ground-type moves and grounded entry hazards; raises its highest stat after knocking out a target."
+    },
     "effect-spore": {
       "name": "Effect Spore",
       "shortDesc": "Has a 30% chance of inflcting either paralysis, poison, or sleep on attacking Pokémon on contact."

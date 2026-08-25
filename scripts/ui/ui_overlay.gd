@@ -9391,6 +9391,7 @@ func _setup_pokedex_popup() -> void:
 	pokedex_popup.anchor_top = 0.5
 	pokedex_popup.anchor_right = 0.5
 	pokedex_popup.anchor_bottom = 0.5
+	pokedex_popup.theme = _make_pokedex_tooltip_theme()
 	var pokedex_shell_style := _make_glass_panel_style(14)
 	pokedex_shell_style.border_color = Color("#7f4654cc")
 	pokedex_popup.add_theme_stylebox_override("panel", pokedex_shell_style)
@@ -9850,6 +9851,24 @@ func _make_pokedex_dex_popup_panel_style() -> StyleBoxFlat:
 	style.shadow_size = 12
 	style.shadow_offset = Vector2(0, 5)
 	return style
+
+func _make_pokedex_tooltip_theme() -> Theme:
+	var tooltip_theme := Theme.new()
+	var tooltip_style := _make_panel_style(Color("#160a10fa"), POKEDEX_ACCENT_SOFT, 8, 1)
+	tooltip_style.content_margin_left = 12
+	tooltip_style.content_margin_top = 9
+	tooltip_style.content_margin_right = 12
+	tooltip_style.content_margin_bottom = 9
+	tooltip_style.shadow_color = Color("#000000a6")
+	tooltip_style.shadow_size = 8
+	tooltip_style.shadow_offset = Vector2(0, 4)
+	tooltip_theme.set_stylebox("panel", "TooltipPanel", tooltip_style)
+	tooltip_theme.set_color("font_color", "TooltipLabel", Color("#f7e9ec"))
+	tooltip_theme.set_color("font_shadow_color", "TooltipLabel", Color("#19030a"))
+	tooltip_theme.set_font_size("font_size", "TooltipLabel", 12)
+	tooltip_theme.set_constant("shadow_offset_x", "TooltipLabel", 1)
+	tooltip_theme.set_constant("shadow_offset_y", "TooltipLabel", 1)
+	return tooltip_theme
 
 func _create_pokedex_variant_button(variant_id: String, label_key: String) -> Button:
 	var button := Button.new()
@@ -31172,6 +31191,7 @@ func _add_pokedex_ability_rows(abilities: Array, target: VBoxContainer = null) -
 			label,
 			_localized_content_name("abilities", ability_id, ability_name)
 		)
+		ability_row.name = "PokedexAbility_%s" % ability_id.strip_edges().to_lower().replace(" ", "-")
 		var ability_description := _localized_content_description(
 			"abilities",
 			ability_id,
@@ -31179,6 +31199,7 @@ func _add_pokedex_ability_rows(abilities: Array, target: VBoxContainer = null) -
 		)
 		if ability_description != "":
 			ability_row.tooltip_text = ability_description
+			ability_row.mouse_default_cursor_shape = Control.CURSOR_HELP
 		target_stack.add_child(ability_row)
 		added_count += 1
 	return added_count

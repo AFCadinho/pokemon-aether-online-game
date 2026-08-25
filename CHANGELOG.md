@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+**Changed**
+
+- Pokédex hover cards now share a clear, styled appearance across every tab.
+
+**Fixed**
+
+- Mega Eelektross's Eelevate Ability now explains its Ground and entry-hazard immunity and its highest-stat boost.
+
 ## 0.3.62 - 2026-08-24
 
 **Added**
