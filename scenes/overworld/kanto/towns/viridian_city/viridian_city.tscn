@@ -884,7 +884,7 @@ local_destination_id = "kanto_viridian_city"
 npc_id = "kanto_viridian_city_transit_keeper"
 
 [node name="RocketGruntRook" parent="Entities/NPCs" unique_id=106374275 instance=ExtResource("24_dialogue")]
-position = Vector2(1728, 832)
+position = Vector2(1728, 864)
 script = ExtResource("42_thieving_mentor")
 npc_id = "kanto_viridian_city_rocket_grunt_rook"
 display_name = "Master Thief Rook"
@@ -964,9 +964,9 @@ pickup_id = "kanto_viridian_city_potion"
 item_id = "potion"
 
 [node name="TMEarthquakeTeaser" type="Sprite2D" parent="Entities/Interactables" unique_id=716845631]
-texture_filter = 1
 z_index = 720
 z_as_relative = false
+texture_filter = 1
 position = Vector2(1072, 720)
 texture = SubResource("AtlasTexture_earthquake_teaser")
 metadata/item_id = "tm-earthquake"
