@@ -26,6 +26,7 @@ func _run() -> void:
 	var content_panel := overlay.get("pokemon_summary_content_panel") as PanelContainer
 	var copy_button := overlay.get("pokemon_summary_copy_button") as Button
 	var title_label := overlay.get("pokemon_summary_title_label") as Label
+	var gender_label := overlay.get("pokemon_summary_gender_label") as Label
 	var id_label := overlay.get("pokemon_summary_id_label") as Label
 	var nickname_button := overlay.get("pokemon_summary_nickname_button") as Button
 	_check(popup != null, "Pokémon Summary popup is created")
@@ -38,6 +39,11 @@ func _run() -> void:
 		_check(copy_button.get_index() == copy_button.get_parent().get_child_count() - 1, "export-set action sits in the fixed far-right identity column")
 		_check(copy_button.custom_minimum_size == Vector2(24, 24), "export-set action uses the larger icon button")
 	_check(title_label != null and title_label.get_theme_font_size("font_size") == 15, "Pokémon name uses the larger identity text")
+	_check(
+		title_label != null and nickname_button != null
+		and title_label.size_flags_horizontal == Control.SIZE_SHRINK_BEGIN,
+		"gender and nickname edit action stay directly beside the Pokémon name"
+	)
 	_check(id_label != null and id_label.get_theme_font_size("font_size") == 10, "species and ID use the larger metadata text")
 	_check(
 		id_label != null and nickname_button != null
@@ -58,6 +64,23 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	var fixed_summary_size := popup.size
+
+	if title_label != null and gender_label != null and nickname_button != null:
+		title_label.text = "Crabominable"
+		gender_label.text = "♀"
+		gender_label.visible = true
+		overlay.call("_fit_pokemon_summary_title_label")
+		await process_frame
+		await process_frame
+		_check(title_label.size.x > 80.0, "Pokémon name keeps its readable content width")
+		_check(
+			gender_label.global_position.x - (title_label.global_position.x + title_label.size.x) <= 5.0,
+			"gender sits directly after the Pokémon name"
+		)
+		_check(
+			nickname_button.global_position.x - (gender_label.global_position.x + gender_label.size.x) <= 5.0,
+			"nickname edit action sits directly after gender"
+		)
 
 	var pokemon := Pokemon.new(
 		"Pikachu",
