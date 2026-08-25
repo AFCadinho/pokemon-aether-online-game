@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Fixed**
+
+- Forum announcements now appear in launcher and login news even when the forum omits their preview text.
+
 ## 0.3.63 - 2026-08-25
 
 **Added**
