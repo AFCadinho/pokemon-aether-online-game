@@ -137,8 +137,10 @@ var directory_focus_filter := "all"
 var directory_language_filter := "all"
 
 var browse_tab_button: Button
-var my_guild_tab_button: Button
 var create_tab_button: Button
+var primary_navigation: HBoxContainer
+var guild_section_navigation: HBoxContainer
+var primary_navigation_spacer: Control
 var browse_page: Control
 var member_page: Control
 var create_page: Control
@@ -457,15 +459,14 @@ func _build_header() -> Control:
 
 func _build_navigation() -> Control:
 	var navigation := HBoxContainer.new()
+	primary_navigation = navigation
 	navigation.add_theme_constant_override("separation", 6)
 
-	my_guild_tab_button = Button.new()
-	my_guild_tab_button.name = "MyGuildButton"
-	_set_localized_property(my_guild_tab_button, "text", "ui.guild.tab.mine")
-	my_guild_tab_button.custom_minimum_size = Vector2(170, 40)
-	my_guild_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("member"))
-	my_guild_tab_button.visible = false
-	navigation.add_child(my_guild_tab_button)
+	guild_section_navigation = HBoxContainer.new()
+	guild_section_navigation.name = "GuildSectionNavigation"
+	guild_section_navigation.add_theme_constant_override("separation", 6)
+	guild_section_navigation.visible = false
+	navigation.add_child(guild_section_navigation)
 
 	browse_tab_button = Button.new()
 	browse_tab_button.name = "BrowseGuildsButton"
@@ -481,9 +482,9 @@ func _build_navigation() -> Control:
 	create_tab_button.pressed.connect(_on_primary_navigation_pressed.bind("create"))
 	navigation.add_child(create_tab_button)
 
-	var spacer := Control.new()
-	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	navigation.add_child(spacer)
+	primary_navigation_spacer = Control.new()
+	primary_navigation_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	navigation.add_child(primary_navigation_spacer)
 	membership_label = _localized_label("ui.guild.membership.none", 11, UI_MUTED)
 	membership_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	navigation.add_child(membership_label)
@@ -958,8 +959,8 @@ func _render_guild_home() -> void:
 	heading.add_child(description)
 	header.add_child(_status_pill(str(guild.get("recruitment", "Closed"))))
 
+	_build_guild_section_navigation(can_review_applications, can_manage_settings)
 	member_content.add_child(_build_guild_travel_bar())
-	member_content.add_child(_build_guild_section_navigation(can_review_applications, can_manage_settings))
 	member_status_label = _label("", 11, UI_MUTED)
 	member_status_label.name = "GuildMemberStatus"
 	member_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -999,9 +1000,10 @@ func _build_guild_header_emblem(guild: Dictionary, is_editable: bool) -> Control
 
 
 func _build_guild_section_navigation(can_review_applications: bool, can_manage_settings: bool) -> Control:
-	var navigation := HBoxContainer.new()
-	navigation.name = "GuildSectionNavigation"
-	navigation.add_theme_constant_override("separation", 6)
+	var navigation := guild_section_navigation
+	if navigation == null:
+		return Control.new()
+	_clear_children(navigation)
 	guild_section_buttons.clear()
 	var sections: Array[Dictionary] = [
 		{"id": "overview", "label_key": "ui.guild.section.overview", "name": "GuildOverviewTab"},
@@ -1031,14 +1033,11 @@ func _build_guild_section_navigation(can_review_applications: bool, can_manage_s
 		)
 		button.custom_minimum_size = Vector2(138, 36)
 		button.pressed.connect(_show_guild_section.bind(section_id))
-		_apply_tab_style(button, active_guild_section == section_id)
+		_apply_tab_style(button, active_page == "member" and active_guild_section == section_id)
 		navigation.add_child(button)
 		if section_id == "applications" and _pending_application_count() > 0:
 			_add_application_notification_badge(button, _pending_application_count())
 		guild_section_buttons[section_id] = button
-	var spacer := Control.new()
-	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	navigation.add_child(spacer)
 	return navigation
 
 
@@ -1048,7 +1047,10 @@ func _show_guild_section(section: String) -> void:
 	active_guild_section = section
 	if section != "bank":
 		active_guild_bank_category = ""
-	_render_guild_home()
+	if active_page != "member":
+		_show_page("member")
+	else:
+		_render_guild_home()
 	if section == "bank" and not is_debug_preview:
 		_load_guild_bank_async.call_deferred()
 
@@ -3404,8 +3406,7 @@ func _show_page(page: String) -> void:
 		member_page.visible = active_page == "member"
 	if create_page != null:
 		create_page.visible = active_page == "create"
-	_apply_tab_style(browse_tab_button, active_page == "browse")
-	_apply_tab_style(my_guild_tab_button, active_page == "member")
+	_refresh_primary_navigation_style()
 	_apply_tab_style(create_tab_button, active_page == "create")
 	if active_page == "create":
 		_refresh_creation_requirements()
@@ -3689,13 +3690,41 @@ func _refresh_membership_state() -> void:
 		membership_label.visible = true
 		create_tab_button.visible = true
 		create_tab_button.disabled = false
-		my_guild_tab_button.visible = false
+		guild_section_navigation.visible = false
+		browse_tab_button.custom_minimum_size = Vector2(190, 40)
+		primary_navigation.move_child(browse_tab_button, 0)
+		primary_navigation.move_child(create_tab_button, 1)
+		primary_navigation.move_child(primary_navigation_spacer, 2)
+		_refresh_primary_navigation_style()
 		return
 	membership_label.visible = false
 	create_tab_button.visible = false
-	my_guild_tab_button.visible = true
+	guild_section_navigation.visible = true
+	browse_tab_button.custom_minimum_size = Vector2(150, 34)
+	if guild_section_buttons.is_empty():
+		_build_guild_section_navigation(false, false)
+	primary_navigation.move_child(guild_section_navigation, 0)
+	primary_navigation.move_child(primary_navigation_spacer, 1)
+	primary_navigation.move_child(browse_tab_button, 2)
+	_refresh_primary_navigation_style()
 	if active_page == "create":
 		_show_page("member")
+
+
+func _refresh_primary_navigation_style() -> void:
+	if browse_tab_button == null:
+		return
+	if membership.is_empty():
+		_apply_tab_style(browse_tab_button, active_page == "browse")
+	else:
+		_apply_button_style(browse_tab_button, "primary" if active_page == "browse" else "secondary")
+	for section_id: String in guild_section_buttons:
+		var button := guild_section_buttons.get(section_id) as Button
+		if button != null:
+			_apply_tab_style(
+				button,
+				active_page == "member" and active_guild_section == section_id
+			)
 
 
 func _membership_role_label(role: String) -> String:
