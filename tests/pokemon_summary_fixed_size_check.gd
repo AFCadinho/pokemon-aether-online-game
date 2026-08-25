@@ -24,8 +24,15 @@ func _run() -> void:
 
 	var popup := overlay.get("pokemon_summary_popup") as PanelContainer
 	var content_panel := overlay.get("pokemon_summary_content_panel") as PanelContainer
+	var copy_button := overlay.get("pokemon_summary_copy_button") as Button
 	_check(popup != null, "Pokémon Summary popup is created")
 	_check(content_panel != null, "Pokémon Summary content panel is created")
+	_check(copy_button != null, "interactive Summary exposes the PokéPaste copy action")
+	if copy_button != null:
+		_check(copy_button.text == "", "PokéPaste action uses only an icon")
+		_check(copy_button.icon != null, "PokéPaste action shows a clipboard icon")
+		_check(copy_button.tooltip_text != "", "PokéPaste action explains itself on hover")
+		_check(copy_button.get_index() == copy_button.get_parent().get_child_count() - 1, "PokéPaste action sits at the far right of the name row")
 	if popup == null or content_panel == null:
 		host.queue_free()
 		overlay.free()
