@@ -39,6 +39,7 @@ const PixelPerfectRenderingScript := preload("res://scripts/services/pixel_perfe
 const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
+const LedgeDirectionResolverScript := preload("res://scripts/world/ledge_direction_resolver.gd")
 const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
@@ -768,7 +769,7 @@ func _is_story_grid_step_blocked(
 		return true
 	if direction == Vector2.RIGHT and _tilemap_has_tile_at(block_right_tilemap, current_position):
 		return true
-	if _get_ledge_direction_for_tile(next_position) != Vector2.ZERO:
+	if not _get_ledge_directions_for_tile(next_position).is_empty():
 		return true
 	var current_map := _resolve_current_map()
 	if (
@@ -1940,12 +1941,12 @@ func _try_start_move(direction: Vector2) -> bool:
 		set_idle_frame()
 		return false
 
-	var ledge_direction: Vector2 = _get_ledge_direction_for_tile(new_target_position)
-	if ledge_direction != Vector2.ZERO:
-		if direction != ledge_direction:
+	var ledge_directions := _get_ledge_directions_for_tile(new_target_position)
+	if not ledge_directions.is_empty():
+		if not ledge_directions.has(direction):
 			return false
 
-		movement_target_position = _snap_world_position(new_target_position + (ledge_direction * TILE_SIZE))
+		movement_target_position = _snap_world_position(new_target_position + (direction * TILE_SIZE))
 
 	# Check eerst of de target tile vrij is.
 	# Alleen als can_move_to true teruggeeft, starten we de beweging.
@@ -2052,19 +2053,15 @@ func _is_direction_blocked_by_current_tile(direction: Vector2) -> bool:
 
 	return false
 
-func _get_ledge_direction_for_tile(check_position: Vector2) -> Vector2:
+func _get_ledge_directions_for_tile(check_position: Vector2) -> Array[Vector2]:
 	refresh_map_layers()
-
-	if _tilemap_has_tile_at(ledge_down_tilemap, check_position):
-		return Vector2.DOWN
-	if _tilemap_has_tile_at(ledge_up_tilemap, check_position):
-		return Vector2.UP
-	if _tilemap_has_tile_at(ledge_left_tilemap, check_position):
-		return Vector2.LEFT
-	if _tilemap_has_tile_at(ledge_right_tilemap, check_position):
-		return Vector2.RIGHT
-
-	return Vector2.ZERO
+	return LedgeDirectionResolverScript.directions_for_tile(
+		check_position,
+		ledge_down_tilemap,
+		ledge_up_tilemap,
+		ledge_left_tilemap,
+		ledge_right_tilemap
+	)
 
 func _tilemap_has_tile_at(tilemap: TileMapLayer, check_position: Vector2) -> bool:
 	if tilemap == null:
