@@ -4,6 +4,7 @@
 
 **Added**
 
+- The Mysterious Outfit Box can now be bought from the Aether Gift Store for 400 Aether Gems.
 - Pokémon Showdown export sets can now be copied from a Pokémon's Summary.
 - A mysterious golden Poké Ball can now be spotted near Master Thief Rook in Viridian City.
 
@@ -19,6 +20,7 @@
 
 **Fixed**
 
+- The Mysterious Outfit now stays visible while fishing, surfing, and riding mounts.
 - Missing translations now reliably fall back to English.
 - Mega Eelektross's Eelevate Ability now explains its Ground and entry-hazard immunity and its highest-stat boost.
 - EV item previews now respect the combined limit of 252 Allocated and Stored EVs per stat.
