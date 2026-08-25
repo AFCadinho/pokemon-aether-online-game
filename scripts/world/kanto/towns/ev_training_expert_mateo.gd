@@ -155,6 +155,7 @@ func _show_completed_help() -> void:
 			[
 				{"id": "basics", "label": LocalizationManager.text("mentor.mateo.help.topic.basics")},
 				{"id": "earning", "label": LocalizationManager.text("mentor.mateo.help.topic.earning")},
+				{"id": "field", "label": LocalizationManager.text("mentor.mateo.help.topic.field")},
 				{"id": "allocating", "label": LocalizationManager.text("mentor.mateo.help.topic.allocating")},
 				{"id": "limits", "label": LocalizationManager.text("mentor.mateo.help.topic.limits")},
 			]
@@ -171,6 +172,8 @@ func _mateo_help_lines(topic_id: String) -> Array[String]:
 			keys = ["mentor.mateo.help.basics.1", "mentor.mateo.help.basics.2"]
 		"earning":
 			keys = ["mentor.mateo.help.earning.1", "mentor.mateo.help.earning.2"]
+		"field":
+			keys = ["mentor.mateo.help.field.1", "mentor.mateo.help.field.2"]
 		"allocating":
 			keys = ["mentor.mateo.help.allocating.1", "mentor.mateo.help.allocating.2"]
 		"limits":
