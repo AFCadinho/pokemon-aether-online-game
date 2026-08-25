@@ -24,11 +24,39 @@ func _run() -> void:
 	overlay.call("_setup_pokemon_summary_ev_allocate_popup")
 	var ev_allocate_popup := overlay.get("pokemon_summary_ev_allocate_popup") as PanelContainer
 	var ev_allocate_input := overlay.get("pokemon_summary_ev_allocate_input") as SpinBox
+	var ev_allocate_slider := overlay.get("pokemon_summary_ev_allocate_slider") as HSlider
+	var ev_allocate_max := overlay.get("pokemon_summary_ev_allocate_max_button") as Button
 	var ev_allocate_status_panel := overlay.get("pokemon_summary_ev_allocate_status_panel") as PanelContainer
 	var ev_allocate_confirm := overlay.get("pokemon_summary_ev_allocate_confirm_button") as Button
-	_check(ev_allocate_popup.custom_minimum_size == Vector2(380, 250), "EV allocation uses a spacious Summary dialog")
+	_check(ev_allocate_popup.custom_minimum_size == Vector2(380, 336), "EV allocation has room for target controls and limits")
 	_check(ev_allocate_input.get_line_edit().get_theme_stylebox("normal") is StyleBoxFlat, "EV allocation input replaces the default Godot field")
 	_check(ev_allocate_input.get_theme_icon("updown").resource_path.ends_with("ev_allocation_spinbox_updown.svg"), "EV allocation stepper uses the Summary arrow artwork")
+	_check(ev_allocate_slider != null and ev_allocate_slider.value_changed.has_connections(), "EV allocation offers a connected target slider")
+	_check(ev_allocate_slider.get_theme_stylebox("grabber_area") is StyleBoxFlat, "EV allocation slider matches the Summary styling")
+	_check(ev_allocate_max != null and ev_allocate_max.pressed.has_connections(), "EV allocation offers a one-click reachable maximum")
+	_check(int(overlay.call("_get_summary_ev_allocation_max", 5, 84, 6)) == 11, "reachable target includes current and stored EVs")
+	_check(int(overlay.call("_get_summary_ev_allocation_max", 250, 250, 20)) == 252, "reachable target respects the 252 stat limit")
+	_check(int(overlay.call("_get_summary_ev_allocation_max", 5, 508, 100)) == 7, "reachable target respects the 510 total limit")
+	_check(int(overlay.call("_get_summary_ev_suggested_target", 40, 252, 4)) == 44, "Mateo's lesson suggests four EVs above the current value")
+	_check(int(overlay.call("_get_summary_ev_suggested_target", 40, 252, 2)) == 42, "Mateo's lesson suggests only the remaining partial allocation")
+	_check(int(overlay.call("_get_summary_ev_suggested_target", 251, 252, 4)) == 252, "Mateo's suggested target respects the reachable limit")
+	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	_check(overlay_source.contains("pokemon_summary_ev_allocate_slider.min_value = current_value"), "EV slider cannot move below the current EV value")
+	ev_allocate_input.min_value = 5
+	ev_allocate_input.max_value = 11
+	ev_allocate_slider.min_value = 5
+	ev_allocate_slider.max_value = 11
+	ev_allocate_input.set_value_no_signal(8)
+	overlay.call("_on_summary_ev_allocate_value_changed", 8)
+	_check(int(ev_allocate_slider.value) == 8, "number input updates the EV target slider")
+	ev_allocate_slider.set_value_no_signal(10)
+	overlay.call("_on_summary_ev_allocate_slider_changed", 10)
+	_check(int(ev_allocate_input.value) == 10, "EV target slider updates the number input")
+	ev_allocate_max.pressed.emit()
+	_check(int(ev_allocate_input.value) == 11 and int(ev_allocate_slider.value) == 11, "Max selects the highest currently reachable target")
+	ev_allocate_slider.set_value_no_signal(0)
+	overlay.call("_on_summary_ev_allocate_slider_changed", ev_allocate_slider.value)
+	_check(int(ev_allocate_slider.value) == 5 and int(ev_allocate_input.value) == 5, "EV target controls clamp attempts below the current value")
 	_check(ev_allocate_status_panel.get_theme_stylebox("panel") is StyleBoxFlat, "EV allocation preview uses a layered Summary surface")
 	_check(ev_allocate_confirm.get_theme_stylebox("disabled") is StyleBoxFlat, "EV allocation Confirm action has a styled disabled state")
 	var stale_left_panel := PanelContainer.new()

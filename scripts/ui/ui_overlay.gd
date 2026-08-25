@@ -1241,7 +1241,10 @@ var pokemon_summary_item_list: VBoxContainer
 var pokemon_summary_ev_allocate_popup: PanelContainer
 var pokemon_summary_ev_allocate_stat_label: Label
 var pokemon_summary_ev_allocate_current_label: Label
+var pokemon_summary_ev_allocate_target_label: Label
 var pokemon_summary_ev_allocate_input: SpinBox
+var pokemon_summary_ev_allocate_slider: HSlider
+var pokemon_summary_ev_allocate_max_button: Button
 var pokemon_summary_ev_allocate_status_label: Label
 var pokemon_summary_ev_allocate_status_panel: PanelContainer
 var pokemon_summary_ev_allocate_confirm_button: Button
@@ -17381,7 +17384,7 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	pokemon_summary_ev_allocate_popup = PanelContainer.new()
 	pokemon_summary_ev_allocate_popup.name = "PokemonSummaryEvAllocatePopup"
 	pokemon_summary_ev_allocate_popup.visible = false
-	pokemon_summary_ev_allocate_popup.custom_minimum_size = Vector2(380, 250)
+	pokemon_summary_ev_allocate_popup.custom_minimum_size = Vector2(380, 336)
 	pokemon_summary_ev_allocate_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	pokemon_summary_ev_allocate_popup.z_index = UI_MODAL_Z_INDEX + 1
 	pokemon_summary_ev_allocate_popup.anchor_left = 0.5
@@ -17389,9 +17392,9 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	pokemon_summary_ev_allocate_popup.anchor_right = 0.5
 	pokemon_summary_ev_allocate_popup.anchor_bottom = 0.5
 	pokemon_summary_ev_allocate_popup.offset_left = -190
-	pokemon_summary_ev_allocate_popup.offset_top = -125
+	pokemon_summary_ev_allocate_popup.offset_top = -168
 	pokemon_summary_ev_allocate_popup.offset_right = 190
-	pokemon_summary_ev_allocate_popup.offset_bottom = 125
+	pokemon_summary_ev_allocate_popup.offset_bottom = 168
 	pokemon_summary_ev_allocate_popup.add_theme_stylebox_override("panel", _make_pokemon_summary_outer_style())
 	root_control.add_child(pokemon_summary_ev_allocate_popup)
 
@@ -17438,7 +17441,29 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	pokemon_summary_ev_allocate_current_label.add_theme_font_size_override("font_size", 12)
 	pokemon_summary_ev_allocate_current_label.add_theme_color_override("font_color", Color("#c8d8e8"))
 	pokemon_summary_ev_allocate_current_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pokemon_summary_ev_allocate_current_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pokemon_summary_ev_allocate_current_label.custom_minimum_size = Vector2(0, 44)
 	allocation_overview_panel.add_child(pokemon_summary_ev_allocate_current_label)
+
+	var target_header := HBoxContainer.new()
+	target_header.add_theme_constant_override("separation", 8)
+	layout.add_child(target_header)
+
+	pokemon_summary_ev_allocate_target_label = Label.new()
+	pokemon_summary_ev_allocate_target_label.text = LocalizationManager.text("ui.pokemon_summary.evs.target")
+	pokemon_summary_ev_allocate_target_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_summary_ev_allocate_target_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pokemon_summary_ev_allocate_target_label.add_theme_font_size_override("font_size", 12)
+	pokemon_summary_ev_allocate_target_label.add_theme_color_override("font_color", Color("#f5df9a"))
+	target_header.add_child(pokemon_summary_ev_allocate_target_label)
+
+	pokemon_summary_ev_allocate_max_button = Button.new()
+	pokemon_summary_ev_allocate_max_button.text = LocalizationManager.text("ui.pokemon_summary.evs.max")
+	pokemon_summary_ev_allocate_max_button.custom_minimum_size = Vector2(62, 28)
+	pokemon_summary_ev_allocate_max_button.focus_mode = Control.FOCUS_NONE
+	pokemon_summary_ev_allocate_max_button.pressed.connect(_on_summary_ev_allocate_max_pressed)
+	target_header.add_child(pokemon_summary_ev_allocate_max_button)
+	_apply_button_style(pokemon_summary_ev_allocate_max_button)
 
 	pokemon_summary_ev_allocate_input = SpinBox.new()
 	pokemon_summary_ev_allocate_input.name = "PokemonSummaryEvAllocationInput"
@@ -17455,6 +17480,23 @@ func _setup_pokemon_summary_ev_allocate_popup() -> void:
 	_apply_line_edit_style(allocation_line_edit)
 	allocation_line_edit.add_theme_color_override("font_color", Color("#f5df9a"))
 	layout.add_child(pokemon_summary_ev_allocate_input)
+
+	pokemon_summary_ev_allocate_slider = HSlider.new()
+	pokemon_summary_ev_allocate_slider.name = "PokemonSummaryEvAllocationSlider"
+	pokemon_summary_ev_allocate_slider.custom_minimum_size = Vector2(0, 24)
+	pokemon_summary_ev_allocate_slider.min_value = 0
+	pokemon_summary_ev_allocate_slider.max_value = POKEMON_EV_STAT_LIMIT
+	pokemon_summary_ev_allocate_slider.step = 1
+	pokemon_summary_ev_allocate_slider.value_changed.connect(_on_summary_ev_allocate_slider_changed)
+	pokemon_summary_ev_allocate_slider.add_theme_stylebox_override(
+		"slider",
+		_make_panel_style(Color("#081321ef"), Color("#263b58"), 4, 1)
+	)
+	pokemon_summary_ev_allocate_slider.add_theme_stylebox_override(
+		"grabber_area",
+		_make_panel_style(POKEMON_SUMMARY_ACCENT, POKEMON_SUMMARY_ACCENT, 4, 0)
+	)
+	layout.add_child(pokemon_summary_ev_allocate_slider)
 
 	pokemon_summary_ev_allocate_status_panel = PanelContainer.new()
 	pokemon_summary_ev_allocate_status_panel.name = "PokemonSummaryEvAllocationPreview"
@@ -21426,7 +21468,7 @@ func _show_pokemon_summary(slot_index: int) -> void:
 	if _trade_workspace_is_visible():
 		_promote_trade_summary_to_window(card_key)
 
-func open_ev_training_allocation(pokemon_id: int, stat_id: String) -> bool:
+func open_ev_training_allocation(pokemon_id: int, stat_id: String, suggested_addition: int = 0) -> bool:
 	for slot_index in range(PlayerSave.party.size()):
 		var pokemon: Pokemon = PlayerSave.party[slot_index]
 		if pokemon == null or pokemon.owned_pokemon_id != pokemon_id:
@@ -21435,6 +21477,14 @@ func open_ev_training_allocation(pokemon_id: int, stat_id: String) -> bool:
 		var card_key := _get_pokemon_summary_card_key(pokemon, slot_index, "interactive")
 		_on_pokemon_summary_tab_selected("evs", card_key)
 		_on_summary_allocated_ev_pressed(stat_id, _summary_stat_label(stat_id), card_key)
+		if suggested_addition > 0:
+			var suggested_target := _get_summary_ev_suggested_target(
+				int(pokemon_summary_ev_allocate_input.min_value),
+				int(pokemon_summary_ev_allocate_input.max_value),
+				suggested_addition
+			)
+			pokemon_summary_ev_allocate_input.set_value_no_signal(suggested_target)
+			_on_summary_ev_allocate_value_changed(suggested_target)
 		return true
 	return false
 
@@ -23046,19 +23096,23 @@ func _on_summary_allocated_ev_pressed(stat_id: String, label_text: String, card_
 	var current_value: int = int(pokemon.evs.get(stat_id, 0))
 	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
 	var stored_for_stat: int = clampi(int(pokemon.stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
-	var total_room: int = max(510 - allocated_total, 0)
-	var max_value: int = min(252, current_value + stored_for_stat, current_value + total_room)
+	var max_value: int = _get_summary_ev_allocation_max(current_value, allocated_total, stored_for_stat)
 
 	pokemon_summary_ev_allocate_stat_id = stat_id
 	pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate_stat", {"stat": label_text})
 	pokemon_summary_ev_allocate_current_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate_current", {
 		"current": current_value,
+		"reachable": max_value,
 		"allocated": allocated_total,
 		"stored": stored_for_stat,
 	})
 	pokemon_summary_ev_allocate_input.min_value = current_value
 	pokemon_summary_ev_allocate_input.max_value = max(current_value, max_value)
-	pokemon_summary_ev_allocate_input.value = current_value
+	pokemon_summary_ev_allocate_input.set_value_no_signal(current_value)
+	pokemon_summary_ev_allocate_slider.min_value = current_value
+	pokemon_summary_ev_allocate_slider.max_value = max(current_value, max_value)
+	pokemon_summary_ev_allocate_slider.set_value_no_signal(current_value)
+	pokemon_summary_ev_allocate_max_button.disabled = max_value <= current_value
 	pokemon_summary_ev_allocate_popup.visible = true
 	_activate_ui_panel(pokemon_summary_ev_allocate_popup)
 	# Summary cards use the modal layer, while regular active windows use the
@@ -23076,6 +23130,8 @@ func _hide_pokemon_summary_ev_allocate_popup() -> void:
 func _refresh_pokemon_summary_ev_allocate_translation() -> void:
 	if pokemon_summary_ev_allocate_popup == null:
 		return
+	pokemon_summary_ev_allocate_target_label.text = LocalizationManager.text("ui.pokemon_summary.evs.target")
+	pokemon_summary_ev_allocate_max_button.text = LocalizationManager.text("ui.pokemon_summary.evs.max")
 	if not pokemon_summary_ev_allocate_popup.visible:
 		pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate")
 		return
@@ -23088,19 +23144,31 @@ func _refresh_pokemon_summary_ev_allocate_translation() -> void:
 	var current_value: int = int(pokemon.evs.get(stat_id, 0))
 	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
 	var stored_for_stat: int = clampi(int(pokemon.stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
+	var max_value: int = _get_summary_ev_allocation_max(current_value, allocated_total, stored_for_stat)
 	pokemon_summary_ev_allocate_stat_label.text = LocalizationManager.text(
 		"ui.pokemon_summary.evs.allocate_stat",
 		{"stat": _summary_stat_label(stat_id)}
 	)
 	pokemon_summary_ev_allocate_current_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocate_current", {
 		"current": current_value,
+		"reachable": max_value,
 		"allocated": allocated_total,
 		"stored": stored_for_stat,
 	})
 	_refresh_summary_ev_allocate_status()
 
-func _on_summary_ev_allocate_value_changed(_value: float) -> void:
+func _on_summary_ev_allocate_value_changed(value: float) -> void:
+	pokemon_summary_ev_allocate_slider.set_value_no_signal(value)
 	_refresh_summary_ev_allocate_status()
+
+func _on_summary_ev_allocate_slider_changed(value: float) -> void:
+	pokemon_summary_ev_allocate_input.set_value_no_signal(value)
+	_refresh_summary_ev_allocate_status()
+
+func _on_summary_ev_allocate_max_pressed() -> void:
+	var max_value: float = pokemon_summary_ev_allocate_input.max_value
+	pokemon_summary_ev_allocate_input.set_value_no_signal(max_value)
+	_on_summary_ev_allocate_value_changed(max_value)
 
 func _on_summary_ev_allocate_confirm_pressed() -> void:
 	if pokemon_summary_ev_allocate_confirm_button.disabled:
@@ -23119,11 +23187,14 @@ func _on_summary_ev_allocate_confirm_pressed() -> void:
 	var requested_value: int = int(pokemon_summary_ev_allocate_input.value)
 	pokemon_summary_ev_allocate_confirm_button.disabled = true
 	pokemon_summary_ev_allocate_input.editable = false
+	pokemon_summary_ev_allocate_slider.editable = false
+	pokemon_summary_ev_allocate_max_button.disabled = true
 	pokemon_summary_ev_allocate_status_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocating")
 	pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 
 	var result: Dictionary = await PlayerPartyStateService.allocate_pokemon_evs(pokemon.owned_pokemon_id, stat_id, requested_value)
 	pokemon_summary_ev_allocate_input.editable = true
+	pokemon_summary_ev_allocate_slider.editable = true
 	if not bool(result.get("success", false)):
 		pokemon_summary_ev_allocate_status_label.text = str(result.get("error", LocalizationManager.text("ui.pokemon_summary.evs.allocate_failed")))
 		pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_DANGER)
@@ -23163,6 +23234,12 @@ func _refresh_summary_ev_allocate_status() -> void:
 	var stored_for_stat: int = clampi(int(pokemon.stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
 	var requested_allocated_total: int = allocated_total + max(added_value, 0)
 	var error_text := ""
+	var stat_label := _summary_stat_label(stat_id)
+	pokemon_summary_ev_allocate_confirm_button.text = LocalizationManager.text("ui.pokemon_summary.evs.apply_target", {
+		"stat": stat_label,
+		"target": requested_value,
+	})
+	pokemon_summary_ev_allocate_max_button.disabled = pokemon_summary_ev_allocate_input.max_value <= current_value
 
 	if requested_value < current_value:
 		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.below_current")
@@ -23171,7 +23248,7 @@ func _refresh_summary_ev_allocate_status() -> void:
 	elif requested_allocated_total > 510:
 		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.total_limit")
 	elif added_value > stored_for_stat:
-		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.not_enough_stored", {"stat": _summary_stat_label(stat_id)})
+		error_text = LocalizationManager.text("ui.pokemon_summary.evs.error.not_enough_stored", {"stat": stat_label})
 
 	if error_text != "":
 		pokemon_summary_ev_allocate_status_label.text = error_text
@@ -23179,12 +23256,28 @@ func _refresh_summary_ev_allocate_status() -> void:
 		pokemon_summary_ev_allocate_confirm_button.disabled = true
 		return
 
-	pokemon_summary_ev_allocate_status_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocation_preview", {
-		"amount": max(added_value, 0),
-		"total": requested_allocated_total,
-	})
+	if added_value <= 0:
+		pokemon_summary_ev_allocate_status_label.text = LocalizationManager.text("ui.pokemon_summary.evs.no_change")
+	else:
+		pokemon_summary_ev_allocate_status_label.text = LocalizationManager.text("ui.pokemon_summary.evs.allocation_preview", {
+			"current": current_value,
+			"target": requested_value,
+			"stat": stat_label,
+			"amount": added_value,
+			"total": requested_allocated_total,
+		})
 	pokemon_summary_ev_allocate_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	pokemon_summary_ev_allocate_confirm_button.disabled = added_value <= 0
+
+func _get_summary_ev_allocation_max(current_value: int, allocated_total: int, stored_for_stat: int) -> int:
+	var clamped_current: int = clampi(current_value, 0, POKEMON_EV_STAT_LIMIT)
+	var stored_target: int = clamped_current + maxi(stored_for_stat, 0)
+	var total_target: int = clamped_current + maxi(POKEMON_EV_TOTAL_LIMIT - allocated_total, 0)
+	return mini(POKEMON_EV_STAT_LIMIT, mini(stored_target, total_target))
+
+func _get_summary_ev_suggested_target(current_value: int, max_value: int, suggested_addition: int) -> int:
+	var safe_maximum := maxi(current_value, max_value)
+	return clampi(current_value + maxi(suggested_addition, 0), current_value, safe_maximum)
 
 func _get_summary_ev_total(evs: Dictionary) -> int:
 	var total := 0
