@@ -42435,6 +42435,8 @@ func _should_show_chat_category(category: String) -> bool:
 	if category == CHAT_CATEGORY_SYSTEM:
 		return active_chat_tab == CHAT_TAB_ALL or active_chat_tab == CHAT_TAB_SYSTEM
 	if active_chat_tab == CHAT_TAB_ALL:
+		if category in LANGUAGE_CHAT_CHANNELS:
+			return category in enabled_language_chats
 		return category in [
 			CHAT_CHANNEL_GLOBAL,
 			CHAT_CHANNEL_MAP,

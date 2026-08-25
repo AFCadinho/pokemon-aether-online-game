@@ -280,6 +280,7 @@ func _init() -> void:
 	_check(script_source.contains("minf(float(option_count * 34), 238.0)"), "large PM lists stay inside a scrollable context menu")
 	_check(settings_source.contains('LANGUAGE_CHAT_ZH := "language_zh"') and settings_source.contains('LANGUAGE_CHAT_PT := "language_pt"'), "settings expose Chinese and Portuguese community chats")
 	_check(script_source.contains("channel in LANGUAGE_CHAT_CHANNELS and channel not in enabled_language_chats"), "disabled language chats do not enter the local message feed")
+	_check(script_source.contains("if category in LANGUAGE_CHAT_CHANNELS:") and script_source.contains("return category in enabled_language_chats"), "All shows messages from enabled community language chats")
 	_check(script_source.contains("if active_chat_tab in LANGUAGE_CHAT_CHANNELS:") and script_source.contains("return category == active_chat_tab"), "the Languages tab shows only its selected community channel")
 	_check(script_source.contains("func _make_chat_panel_style()"), "chat uses a dedicated glass frame instead of the generic panel style")
 	_check(script_source.contains('chat_input_dock.name = "ChatInputDock"'), "selector, input, and Send share a styled input dock")
