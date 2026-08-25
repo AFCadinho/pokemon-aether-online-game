@@ -81,9 +81,13 @@ func _check_collision_consumers_use_recursive_lookup() -> void:
 	)
 	_check(
 		player_source.contains(
-			'grass_tilemap = _find_tilemap_layer(current_map, ["TallGrass"])'
+			'grass_tilemap = _find_tall_grass_tilemap(current_map)'
 		),
-		"Player refresh resolves a nested TallGrass scene mask"
+		"Player refresh uses the TallGrass scene-mask resolver"
+	)
+	_check(
+		player_source.contains('get_node_or_null("Tiles/TallGrass") as TileMapLayer'),
+		"Player prefers the canonical Tiles/TallGrass scene path"
 	)
 	_check(
 		player_source.contains('block_left_tilemap = _find_tilemap_layer(current_map, ["BlockLeft"])')

@@ -826,7 +826,7 @@ func _ready() -> void:
 	# Bij scene switches kan de vorige map al freed zijn terwijl de autoload nog
 	# even naar die node wijst.
 	if GameState.current_map != null and is_instance_valid(GameState.current_map):
-		grass_tilemap = _find_tilemap_layer(GameState.current_map, ["TallGrass"])
+		grass_tilemap = _find_tall_grass_tilemap(GameState.current_map)
 		water_tilemap = _find_tilemap_layer(GameState.current_map, WATER_TILEMAP_NAMES)
 		_refresh_sand_tilemaps(GameState.current_map)
 		collision_tilemap = _find_tilemap_layer(GameState.current_map, ["Collision"])
@@ -2132,7 +2132,7 @@ func refresh_map_layers() -> void:
 
 	GameState.current_map = current_map
 	collision_tilemap = _find_tilemap_layer(current_map, ["Collision"])
-	grass_tilemap = _find_tilemap_layer(current_map, ["TallGrass"])
+	grass_tilemap = _find_tall_grass_tilemap(current_map)
 	grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
 	water_tilemap = _find_tilemap_layer(current_map, WATER_TILEMAP_NAMES)
 	_refresh_sand_tilemaps(current_map)
@@ -2151,6 +2151,13 @@ func refresh_map_layers() -> void:
 
 func _find_tilemap_layer(parent: Node, layer_names: Array[String]) -> TileMapLayer:
 	return MapLayerResolverScript.find_tilemap_layer(parent, layer_names)
+
+
+func _find_tall_grass_tilemap(parent: Node) -> TileMapLayer:
+	var scene_layer := parent.get_node_or_null("Tiles/TallGrass") as TileMapLayer
+	if scene_layer != null:
+		return scene_layer
+	return _find_tilemap_layer(parent, ["TallGrass"])
 
 
 func _find_tall_grass_visual_tilemap(parent: Node) -> TileMapLayer:
@@ -2410,7 +2417,11 @@ func _is_inside_exit_area(exit_area: Area2D) -> bool:
 func _resolve_current_map() -> Node:
 	var parent_node := get_parent()
 	while parent_node != null:
-		if parent_node.get_node_or_null("Collision") != null or parent_node.get_node_or_null("TallGrass") != null:
+		if (
+			parent_node.get_node_or_null("Collision") != null
+			or parent_node.get_node_or_null("Tiles/TallGrass") != null
+			or parent_node.get_node_or_null("TallGrass") != null
+		):
 			return parent_node
 
 		parent_node = parent_node.get_parent()

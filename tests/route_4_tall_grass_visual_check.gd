@@ -12,8 +12,8 @@ var failed := false
 func _init() -> void:
 	var route_source := FileAccess.get_file_as_string(ROUTE_4_SCENE_PATH)
 	_check(
-		route_source.contains('[node name="TallGrass" type="TileMapLayer"'),
-		"Route 4 exposes its TallGrass scene mask"
+		route_source.contains('[node name="TallGrass" type="TileMapLayer" parent="Tiles"'),
+		"Route 4 exposes its TallGrass scene mask under Tiles"
 	)
 	var marker_layer := _build_route_4_grass_marker(route_source)
 	_check(not marker_layer.visible, "Route 4 keeps its encounter mask invisible")
