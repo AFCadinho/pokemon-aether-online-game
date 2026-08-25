@@ -353,6 +353,26 @@ func _run() -> void:
 		await process_frame
 	_check(popup.find_child("GuildMemberRoleSelect_2", true, false) != null, "leader can assign the Captain's rank")
 	_check(popup.find_child("GuildMemberRoleSelect_3", true, false) != null, "leader can assign a Member's rank")
+	var bank_permissions_button := popup.find_child("GuildMemberBankPermissionsButton_2", true, false) as Button
+	_check(bank_permissions_button != null, "permission managers can edit a member's Guild Bank rights")
+	_check(
+		popup.find_child("GuildMemberPermissionOverrideCount_2", true, false) != null,
+		"member cards identify custom Guild Bank rights"
+	)
+	if bank_permissions_button != null:
+		bank_permissions_button.pressed.emit()
+		await process_frame
+	var bank_permissions_dialog := popup.find_child("GuildMemberBankPermissionsDialog_2", true, false) as ConfirmationDialog
+	_check(bank_permissions_dialog != null and bank_permissions_dialog.visible, "member Guild Bank rights open in a dedicated dialog")
+	var borrow_permission_select := popup.find_child("GuildBankPermissionSelect_bank_borrow", true, false) as OptionButton
+	_check(
+		borrow_permission_select != null
+		and str(borrow_permission_select.get_item_metadata(borrow_permission_select.selected)) == "deny",
+		"the permissions dialog shows an existing personal denial"
+	)
+	if bank_permissions_dialog != null:
+		bank_permissions_dialog.canceled.emit()
+		await process_frame
 	_check(popup.find_child("GuildMemberCard_1", true, false) != null, "member roster uses distinct player cards")
 	var online_presence := popup.find_child("GuildMemberPresenceLabel_2", true, false) as Label
 	var offline_presence := popup.find_child("GuildMemberPresenceLabel_3", true, false) as Label
@@ -502,6 +522,7 @@ func _run() -> void:
 		"guildId": 1,
 		"role": "member",
 		"permissions": ["bank_deposit"],
+		"bankPermissionOverrides": {"bank_borrow": "deny"},
 	}
 	popup.membership = popup.guild_home["membership"]
 	popup._render_guild_home()
@@ -509,6 +530,11 @@ func _run() -> void:
 	_check(popup.find_child("GuildManagementTab", true, false) == null, "regular members do not see management")
 	_check(popup.find_child("GuildApplicationsTab", true, false) == null, "regular members do not see the staff applications inbox")
 	_check(popup.find_child("GuildMemberRoleSelect_2", true, false) == null, "regular members cannot assign Guild ranks")
+	_check(popup.find_child("GuildMemberBankPermissionsButton_2", true, false) == null, "regular members cannot edit Guild Bank rights")
+	_check(
+		popup._guild_bank_borrow_tooltip().contains("personally disabled"),
+		"personal Guild Bank denials explain that they are not rank restrictions"
+	)
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "regular members cannot edit the Guild emblem")
 	_check(popup.find_child("EditGuildEmblemIconButton", true, false) == null, "regular members cannot edit the Guild emblem icon")
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "regular members return to the overview")

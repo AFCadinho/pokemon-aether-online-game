@@ -31,6 +31,12 @@ const GUILD_LANGUAGE_OPTIONS: Array[String] = [
 	"Other",
 ]
 const GUILD_ASSIGNABLE_ROLES: Array[String] = ["recruit", "member", "captain"]
+const GUILD_BANK_PERMISSIONS: Array[String] = [
+	"bank_deposit",
+	"bank_withdraw",
+	"bank_borrow",
+	"bank_force_return",
+]
 
 const UI_BG := Color("#050b14f5")
 const UI_SURFACE := Color("#081522f2")
@@ -273,6 +279,7 @@ func show_debug_member_preview() -> void:
 			"bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return",
 			"manage_members", "manage_guild", "manage_permissions",
 		],
+		"bankPermissionOverrides": {},
 	}
 	guild_home = {
 		"guild": guild,
@@ -281,15 +288,21 @@ func show_debug_member_preview() -> void:
 			{
 				"userId": 1, "username": "nova", "displayName": "Nova",
 				"role": "leader", "online": true,
+				"rankPermissions": membership["permissions"],
+				"bankPermissionOverrides": {},
 			},
 			{
 				"userId": 2, "username": "maple", "displayName": "Maple",
 				"role": "captain", "online": true,
+				"rankPermissions": ["bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return", "manage_members"],
+				"bankPermissionOverrides": {"bank_borrow": "deny"},
 			},
 			{
 				"userId": 3, "username": "pecha", "displayName": "Pecha",
 				"role": "member", "online": false,
 				"lastSeenAt": "2026-08-22T16:30:00Z",
+				"rankPermissions": ["bank_deposit", "bank_borrow"],
+				"bankPermissionOverrides": {},
 			},
 		],
 		"pendingInvitations": [
@@ -1355,11 +1368,28 @@ func _guild_bank_rank_restriction(key: String) -> String:
 	return _t(key, {"role": _guild_bank_rank_label()})
 
 
+func _guild_bank_permission_restriction(permission: String, rank_key: String) -> String:
+	if _guild_bank_permission_is_personally_denied(permission):
+		return _t("ui.guild.bank.tooltip.personal_deny", {
+			"permission": _t("ui.guild.permission.%s" % permission),
+		})
+	return _guild_bank_rank_restriction(rank_key)
+
+
+func _guild_bank_permission_is_personally_denied(permission: String) -> bool:
+	var access := _dictionary(guild_bank_state.get("access", {}))
+	var overrides := _dictionary(access.get(
+		"bankPermissionOverrides",
+		_dictionary(guild_home.get("membership", {})).get("bankPermissionOverrides", {})
+	))
+	return str(overrides.get(permission, "")) == "deny"
+
+
 func _guild_bank_borrow_tooltip(item: Dictionary = {}) -> String:
 	var own_membership := _dictionary(guild_home.get("membership", {}))
 	var permissions := _array_from_value(own_membership.get("permissions", []))
 	if not permissions.has("bank_borrow"):
-		return _guild_bank_rank_restriction("ui.guild.bank.tooltip.borrow_rank")
+		return _guild_bank_permission_restriction("bank_borrow", "ui.guild.bank.tooltip.borrow_rank")
 	if not item.is_empty() and not bool(item.get("lendable", false)):
 		return _t("ui.guild.bank.tooltip.borrow_item_ineligible")
 	if not item.is_empty() and int(item.get("availableQuantity", item.get("quantity", 0))) <= 0:
@@ -1515,7 +1545,7 @@ func _build_guild_funds_workspace() -> Control:
 		"ui.guild.bank.withdraw",
 		bool(access.get("canWithdrawFunds", access.get("canWithdraw", false))),
 		_on_guild_bank_money_action.bind("withdraw", amount),
-		"" if bool(access.get("canWithdrawFunds", access.get("canWithdraw", false))) else _guild_bank_rank_restriction("ui.guild.bank.tooltip.withdraw_rank")
+		"" if bool(access.get("canWithdrawFunds", access.get("canWithdraw", false))) else _guild_bank_permission_restriction("bank_withdraw", "ui.guild.bank.tooltip.withdraw_rank")
 	))
 	var amount_hint := _localized_label("ui.guild.bank.funds.amount_hint", 9, UI_MUTED)
 	amount_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1592,7 +1622,12 @@ func _build_guild_item_list(title_key: String, items: Array, action: String) -> 
 		var empty_key := "ui.guild.bank.empty"
 		if action == "deposit":
 			var can_deposit := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
-			empty_key = "ui.guild.bank.empty.items_eligible" if can_deposit else "ui.guild.bank.empty.deposit_rank"
+			if can_deposit:
+				empty_key = "ui.guild.bank.empty.items_eligible"
+			elif _guild_bank_permission_is_personally_denied("bank_deposit"):
+				empty_key = "ui.guild.bank.empty.deposit_personal_deny"
+			else:
+				empty_key = "ui.guild.bank.empty.deposit_rank"
 		var empty_label := _label(
 			_t(empty_key, {"role": _guild_bank_rank_label()}),
 			11,
@@ -1645,7 +1680,8 @@ func _build_guild_item_row(item: Dictionary, action: String) -> Control:
 		"ui.guild.bank.donate" if action == "deposit" else "ui.guild.bank.withdraw",
 		allowed,
 		_on_guild_bank_item_action.bind(action, str(item.get("itemId", "")), quantity),
-		"" if allowed else _guild_bank_rank_restriction(
+		"" if allowed else _guild_bank_permission_restriction(
+			"bank_deposit" if action == "deposit" else "bank_withdraw",
 			"ui.guild.bank.tooltip.deposit_rank" if action == "deposit" else "ui.guild.bank.tooltip.withdraw_rank"
 		)
 	))
@@ -1700,7 +1736,12 @@ func _build_guild_pokemon_list(title_key: String, pokemon_values: Array, is_bank
 		var empty_key := "ui.guild.bank.empty"
 		if not is_bank:
 			var can_deposit := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
-			empty_key = "ui.guild.bank.empty.pokemon_eligible" if can_deposit else "ui.guild.bank.empty.deposit_rank"
+			if can_deposit:
+				empty_key = "ui.guild.bank.empty.pokemon_eligible"
+			elif _guild_bank_permission_is_personally_denied("bank_deposit"):
+				empty_key = "ui.guild.bank.empty.deposit_personal_deny"
+			else:
+				empty_key = "ui.guild.bank.empty.deposit_rank"
 		var empty_label := _label(
 			_t(empty_key, {"role": _guild_bank_rank_label()}),
 			11,
@@ -1749,7 +1790,7 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool) -> Control:
 			"ui.guild.bank.donate",
 			can_deposit,
 			_on_guild_bank_pokemon_action.bind("deposit", pokemon_id, pokemon),
-			"" if can_deposit else _guild_bank_rank_restriction("ui.guild.bank.tooltip.deposit_rank")
+			"" if can_deposit else _guild_bank_permission_restriction("bank_deposit", "ui.guild.bank.tooltip.deposit_rank")
 		))
 		return row
 	var is_borrowed := bool(entry.get("isBorrowed", false))
@@ -1797,7 +1838,7 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool) -> Control:
 	)
 	var withdraw_tooltip := ""
 	if not rank_can_withdraw:
-		withdraw_tooltip = _guild_bank_rank_restriction("ui.guild.bank.tooltip.withdraw_rank")
+		withdraw_tooltip = _guild_bank_permission_restriction("bank_withdraw", "ui.guild.bank.tooltip.withdraw_rank")
 	elif exceeds_trade_level_cap:
 		withdraw_tooltip = _guild_bank_pokemon_level_cap_tooltip(pokemon)
 	elif not allowed:
@@ -1967,6 +2008,11 @@ func _guild_log_entry_text(category: String, entry: Dictionary) -> String:
 				"trainer": str(entry.get("target", _t("common.unknown"))),
 				"old_rank": _t("ui.guild.role.%s" % str(entry.get("previousRole", "recruit"))),
 				"new_rank": _t("ui.guild.role.%s" % str(entry.get("newRole", "recruit"))),
+			})
+		if action == "bank_permission_changed":
+			return _t("ui.guild.log.guild.bank_permission_changed", {
+				"actor": str(entry.get("actor", _t("common.unknown"))),
+				"trainer": str(entry.get("target", _t("common.unknown"))),
 			})
 		return _t("ui.guild.log.guild.generic", {"trainer": str(entry.get("target", _t("common.unknown")))})
 	var actor := str(entry.get("actor", _t("common.unknown")))
@@ -2248,12 +2294,14 @@ func _build_member_roster(can_invite: bool = false) -> Control:
 	if can_invite:
 		content.add_child(_build_guild_invitation_controls())
 	var own_role := str(_dictionary(guild_home.get("membership", {})).get("role", "recruit"))
-	var own_user_id := int(_dictionary(guild_home.get("membership", {})).get("userId", 0))
+	var own_membership := _dictionary(guild_home.get("membership", {}))
+	var own_user_id := int(own_membership.get("userId", 0))
+	var can_manage_permissions := _array_from_value(own_membership.get("permissions", [])).has("manage_permissions")
 	for member_value: Variant in members:
 		if not member_value is Dictionary:
 			continue
 		var member := member_value as Dictionary
-		content.add_child(_build_guild_member_card(member, own_role, own_user_id))
+		content.add_child(_build_guild_member_card(member, own_role, own_user_id, can_manage_permissions))
 	return panel
 
 
@@ -2283,7 +2331,12 @@ func _build_guild_invitation_controls() -> Control:
 	return controls
 
 
-func _build_guild_member_card(member: Dictionary, own_role: String, own_user_id: int) -> Control:
+func _build_guild_member_card(
+	member: Dictionary,
+	own_role: String,
+	own_user_id: int,
+	can_manage_permissions: bool = false
+) -> Control:
 	var user_id := int(member.get("userId", 0))
 	var online := bool(member.get("online", false))
 	var card := PanelContainer.new()
@@ -2340,6 +2393,25 @@ func _build_guild_member_card(member: Dictionary, own_role: String, own_user_id:
 		var role_label := _label(_membership_role_label(member_role).to_upper(), 10, UI_GOLD)
 		role_label.name = "GuildMemberRankLabel_%d" % user_id
 		rank.add_child(role_label)
+	var overrides := _dictionary(member.get("bankPermissionOverrides", {}))
+	if not overrides.is_empty():
+		var override_label := _label(
+			_t("ui.guild.permissions.custom_count", {"count": overrides.size()}),
+			9,
+			UI_ACCENT
+		)
+		override_label.name = "GuildMemberPermissionOverrideCount_%d" % user_id
+		rank.add_child(override_label)
+
+	if can_manage_permissions and member_role != "leader":
+		var permissions_button := Button.new()
+		permissions_button.name = "GuildMemberBankPermissionsButton_%d" % user_id
+		permissions_button.custom_minimum_size = Vector2(118, 36)
+		_set_localized_property(permissions_button, "text", "ui.guild.permissions.action")
+		_set_localized_property(permissions_button, "tooltip_text", "ui.guild.permissions.action_tooltip")
+		permissions_button.pressed.connect(_open_guild_member_bank_permissions.bind(member.duplicate(true)))
+		_apply_button_style(permissions_button)
+		row.add_child(permissions_button)
 
 	var message_button := Button.new()
 	message_button.name = "GuildMemberPmButton_%d" % user_id
@@ -2442,6 +2514,87 @@ func _guild_member_role_select(user_id: int, current_role: String) -> OptionButt
 	_apply_option_button_style(select)
 	select.item_selected.connect(_on_guild_member_role_selected.bind(user_id, select))
 	return select
+
+
+func _open_guild_member_bank_permissions(member: Dictionary) -> void:
+	var user_id := int(member.get("userId", 0))
+	if user_id <= 0 or str(member.get("role", "recruit")) == "leader":
+		return
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "GuildMemberBankPermissionsDialog_%d" % user_id
+	dialog.title = _t("ui.guild.permissions.title", {
+		"trainer": str(member.get("displayName", member.get("username", _t("common.unknown")))),
+	})
+	dialog.ok_button_text = _t("common.save")
+	dialog.cancel_button_text = _t("common.cancel")
+	add_child(dialog)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 8)
+	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content.offset_left = 18
+	content.offset_top = 48
+	content.offset_right = -18
+	content.offset_bottom = -62
+	dialog.add_child(content)
+	var explanation := _localized_label("ui.guild.permissions.hint", 11, UI_MUTED)
+	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(explanation)
+	var overrides := _dictionary(member.get("bankPermissionOverrides", {}))
+	var rank_permissions := _array_from_value(member.get("rankPermissions", []))
+	var selects: Dictionary = {}
+	for permission: String in GUILD_BANK_PERMISSIONS:
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 10)
+		content.add_child(row)
+		var permission_label := _label(_t("ui.guild.permission.%s" % permission), 11, UI_TEXT)
+		permission_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(permission_label)
+		var select := OptionButton.new()
+		select.name = "GuildBankPermissionSelect_%s" % permission
+		select.custom_minimum_size = Vector2(230, 32)
+		select.add_item(_t(
+			"ui.guild.permissions.inherit_allowed" if rank_permissions.has(permission) else "ui.guild.permissions.inherit_denied"
+		))
+		select.set_item_metadata(0, "inherit")
+		select.add_item(_t("ui.guild.permissions.allow"))
+		select.set_item_metadata(1, "allow")
+		select.add_item(_t("ui.guild.permissions.deny"))
+		select.set_item_metadata(2, "deny")
+		var current_mode := str(overrides.get(permission, "inherit"))
+		select.select(1 if current_mode == "allow" else (2 if current_mode == "deny" else 0))
+		_apply_option_button_style(select)
+		row.add_child(select)
+		selects[permission] = select
+	dialog.confirmed.connect(_save_guild_member_bank_permissions.bind(user_id, selects, dialog))
+	dialog.canceled.connect(dialog.queue_free)
+	dialog.popup_centered(Vector2i(520, 330))
+
+
+func _save_guild_member_bank_permissions(
+	user_id: int,
+	selects: Dictionary,
+	dialog: ConfirmationDialog
+) -> void:
+	var overrides: Dictionary = {}
+	for permission: String in GUILD_BANK_PERMISSIONS:
+		var select := selects.get(permission) as OptionButton
+		if select != null and select.selected >= 0:
+			overrides[permission] = str(select.get_item_metadata(select.selected))
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		if is_instance_valid(dialog):
+			dialog.queue_free()
+		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	var response: Variant = await guild_service.call("update_member_bank_permissions", user_id, overrides)
+	var result := _dictionary(response)
+	if is_instance_valid(dialog):
+		dialog.queue_free()
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", _t("ui.guild.permissions.error"))), true)
+		return
+	_apply_home_result(result)
+	_set_member_status(_t("ui.guild.permissions.updated"), false)
 
 
 func _guild_loan_duration_label(seconds: int) -> String:
