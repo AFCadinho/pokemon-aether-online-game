@@ -17674,6 +17674,24 @@ func _make_pokemon_summary_tab_button_style(
 		style.border_color = border_color
 	return style
 
+func _make_bag_tooltip_theme() -> Theme:
+	var tooltip_theme := Theme.new()
+	var tooltip_style := _make_panel_style(Color("#171208fa"), Color("#a98b43cc"), 8, 1)
+	tooltip_style.content_margin_left = 12
+	tooltip_style.content_margin_top = 9
+	tooltip_style.content_margin_right = 12
+	tooltip_style.content_margin_bottom = 9
+	tooltip_style.shadow_color = Color("#000000a6")
+	tooltip_style.shadow_size = 8
+	tooltip_style.shadow_offset = Vector2(0, 4)
+	tooltip_theme.set_stylebox("panel", "TooltipPanel", tooltip_style)
+	tooltip_theme.set_color("font_color", "TooltipLabel", Color("#fff3d1"))
+	tooltip_theme.set_color("font_shadow_color", "TooltipLabel", Color("#1a1002"))
+	tooltip_theme.set_font_size("font_size", "TooltipLabel", 12)
+	tooltip_theme.set_constant("shadow_offset_x", "TooltipLabel", 1)
+	tooltip_theme.set_constant("shadow_offset_y", "TooltipLabel", 1)
+	return tooltip_theme
+
 func _setup_bag_popup() -> void:
 	bag_popup = PanelContainer.new()
 	bag_popup.name = "BagPopup"
@@ -17689,6 +17707,7 @@ func _setup_bag_popup() -> void:
 	bag_popup.offset_top = -BAG_SIZE.y * 0.5
 	bag_popup.offset_right = BAG_SIZE.x * 0.5
 	bag_popup.offset_bottom = BAG_SIZE.y * 0.5
+	bag_popup.theme = _make_bag_tooltip_theme()
 	var bag_shell_style := _make_glass_panel_style(14)
 	bag_shell_style.border_color = Color("#456784cc")
 	bag_popup.add_theme_stylebox_override("panel", bag_shell_style)
@@ -19288,6 +19307,7 @@ func _setup_bag_item_use_popup() -> void:
 	bag_item_use_popup.offset_top = -195
 	bag_item_use_popup.offset_right = 220
 	bag_item_use_popup.offset_bottom = 195
+	bag_item_use_popup.theme = _make_bag_tooltip_theme()
 	bag_item_use_popup.add_theme_stylebox_override("panel", _make_panel_style(Color("#050912fa"), POKEMON_SUMMARY_ACCENT_SOFT, 8, 1))
 	root_control.add_child(bag_item_use_popup)
 

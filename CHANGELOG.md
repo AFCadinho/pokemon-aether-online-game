@@ -9,6 +9,7 @@
 
 **Changed**
 
+- Bag hover cards now share a clear, styled appearance across item browsing and use screens.
 - Item Dex hover cards now share a clear, styled appearance.
 - Pokédex hover cards now share a clear, styled appearance across every tab.
 - Viridian City's EV Training Field now offers three tiers. Earn 3 and 6 Gym Badges to unlock evolved opponents that give 2 or 3 EVs per victory, with higher session fees for faster training.
