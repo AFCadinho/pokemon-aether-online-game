@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.63 - 2026-08-25
 
 **Added**
 
@@ -19,6 +19,7 @@
 
 **Fixed**
 
+- Missing translations now reliably fall back to English.
 - Mega Eelektross's Eelevate Ability now explains its Ground and entry-hazard immunity and its highest-stat boost.
 - EV item previews now respect the combined limit of 252 Allocated and Stored EVs per stat.
 - Hidden Power now shows its actual type in battle instead of always showing Normal.
