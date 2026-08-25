@@ -14,6 +14,7 @@
 **Fixed**
 
 - EV item previews now respect the combined limit of 252 Allocated and Stored EVs per stat.
+- Hidden Power now shows its actual type in battle instead of always showing Normal.
 
 ## 0.3.62 - 2026-08-24
 
