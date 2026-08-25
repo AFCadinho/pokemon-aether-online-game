@@ -33,7 +33,7 @@
 [ext_resource type="SpriteFrames" uid="uid://ndd4lyovddgq" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="41_rocket_grunt_m"]
 [ext_resource type="Script" uid="uid://dpp0ukwuvwmdl" path="res://scripts/world/kanto/towns/thieving_mentor_rook.gd" id="42_thieving_mentor"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="43_overworld_item"]
-[ext_resource type="Texture2D" path="res://assets/npcs/gen4-ow-sprites/Object ball gold.png" id="44_machine_ball"]
+[ext_resource type="Texture2D" uid="uid://dgqoro3uooka7" path="res://assets/npcs/gen4-ow-sprites/Object ball gold.png" id="44_machine_ball"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(208, 34)
@@ -963,9 +963,11 @@ position = Vector2(528, 1520)
 pickup_id = "kanto_viridian_city_potion"
 item_id = "potion"
 
-[node name="TMEarthquakeTeaser" type="Sprite2D" parent="Entities/Interactables"]
+[node name="TMEarthquakeTeaser" type="Sprite2D" parent="Entities/Interactables" unique_id=716845631]
 texture_filter = 1
-position = Vector2(1728, 800)
+z_index = 4096
+z_as_relative = false
+position = Vector2(1072, 720)
 texture = SubResource("AtlasTexture_earthquake_teaser")
 metadata/item_id = "tm-earthquake"
 metadata/decorative_only = true
