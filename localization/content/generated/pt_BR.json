@@ -5757,7 +5757,7 @@
     },
     "hidden-power": {
       "name": "Poder Oculto",
-      "shortDesc": "A potência e o tipo dependem dos IVs do usuário. A potência pode variar de 30 a 70."
+      "shortDesc": "O poder é sempre 60. O tipo depende do Pokémon que usa o golpe."
     },
     "high-horsepower": {
       "name": "Alta potência",

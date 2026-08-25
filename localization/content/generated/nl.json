@@ -5757,7 +5757,7 @@
     },
     "hidden-power": {
       "name": "Verborgen kracht",
-      "shortDesc": "Vermogen en type zijn afhankelijk van de IV's van de gebruiker. Het vermogen kan variëren van 30 tot 70."
+      "shortDesc": "De kracht is altijd 60. Het type hangt af van de Pokémon die de aanval gebruikt."
     },
     "high-horsepower": {
       "name": "Hoog vermogen",
