@@ -81,8 +81,27 @@ func _init() -> void:
 	_check_equal(bool(wish_config.get("reverse_battlefield_vertical", true)), false, "opposing Wish preserves its top-to-bottom travel")
 	_check_equal(bool((moves.get("taunt", {}) as Dictionary).get("mirror_sheet_sprites_on_reverse", false)), true, "opposing Taunt points back toward the player")
 	_check_equal(int(((moves.get("taunt", {}) as Dictionary).get("sprite_position_offset", []) as Array)[1]), -28, "Taunt moves symmetrically toward the battlefield center")
+	_check_move_animation_assets(moves, "gigaimpact", true, true, "Giga Impact")
+	_check_move_animation_assets(moves, "psyshock", true, false, "Psyshock")
+	_check_move_animation_assets(moves, "explosion", true, true, "Explosion")
+	_check_move_animation_assets(moves, "watershuriken", true, false, "Water Shuriken")
+	_check_equal(str((moves.get("explosion", {}) as Dictionary).get("static_visual_anchor", "")), "actor", "Explosion smoke follows its user")
+	_check_equal(bool(((moves.get("gigaimpact", {}) as Dictionary).get("actor_motion", {}) as Dictionary).get("enabled", false)), true, "Giga Impact moves its user into the hit")
 
 	quit(1 if failed else 0)
+
+
+func _check_move_animation_assets(moves: Dictionary, move_key: String, expect_sheet: bool, expect_background: bool, label: String) -> void:
+	var config: Dictionary = moves.get(move_key, {}) as Dictionary
+	_check_equal(FileAccess.file_exists(str(config.get("data_path", ""))), true, "%s has animation data" % label)
+	if expect_sheet:
+		_check_equal(FileAccess.file_exists(str(config.get("sheet_path", ""))), true, "%s has a sprite sheet" % label)
+	if expect_background:
+		_check_equal(FileAccess.file_exists(str(config.get("background_path", ""))), true, "%s has a background" % label)
+	var sounds: Dictionary = config.get("sound_paths", {}) as Dictionary
+	_check_equal(sounds.is_empty(), false, "%s has sound effects" % label)
+	for sound_path: Variant in sounds.values():
+		_check_equal(FileAccess.file_exists(str(sound_path)), true, "%s sound effect exists" % label)
 
 
 func _check_contains(source: String, needle: String, label: String) -> void:

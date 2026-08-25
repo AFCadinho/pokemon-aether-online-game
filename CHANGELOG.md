@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Giga Impact, Psyshock, Explosion, and Water Shuriken now have their own battle animations and sound effects.
+
 ## 0.3.63 - 2026-08-25
 
 **Added**

@@ -9708,6 +9708,197 @@
       "sound_paths": {
         "PRSFX- Teleport.wav": "res://assets/battles/animations/teleport/PRSFX- Teleport.wav"
       }
+    },
+    "gigaimpact": {
+      "template": "imported_sheet",
+      "category": "physical_contact",
+      "speed_scale": 1.12,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "actor_motion": {
+        "enabled": true,
+        "duration": 1.08,
+        "points": [
+          {
+            "at": 0.0,
+            "offset": [0, 0],
+            "scale": 1.0,
+            "duration": 0.01
+          },
+          {
+            "at": 0.18,
+            "offset": [-16, 8],
+            "rotation_degrees": -3,
+            "scale": 0.96,
+            "duration": 0.12
+          },
+          {
+            "at": 0.42,
+            "offset": [188, -82],
+            "rotation_degrees": 5,
+            "scale": 1.1,
+            "duration": 0.16
+          },
+          {
+            "at": 0.56,
+            "offset": [224, -96],
+            "rotation_degrees": 2,
+            "scale": 1.16,
+            "duration": 0.08
+          },
+          {
+            "at": 1.0,
+            "offset": [0, 0],
+            "rotation_degrees": 0,
+            "scale": 1.0,
+            "duration": 0.22
+          }
+        ]
+      },
+      "target_hit_flash": {
+        "enabled": true,
+        "delay": 0.45,
+        "duration": 0.16,
+        "color": [1.0, 0.76, 1.0, 1.0]
+      },
+      "target_shake": {
+        "enabled": true,
+        "delay": 0.45,
+        "duration": 0.48,
+        "amplitude": 12.0,
+        "interval": 0.035,
+        "vertical_scale": 0.2,
+        "decay": true
+      },
+      "miss": {
+        "enabled": true,
+        "target_offset": [68, -28],
+        "sheet_offset": [68, -28],
+        "suppress_shake": true,
+        "suppress_target_feedback": true
+      },
+      "data_path": "res://assets/battles/animations/gigaimpact/gigaimpact.json",
+      "sheet_path": "res://assets/battles/animations/gigaimpact/PRAS- Me First.png",
+      "background_path": "res://assets/battles/animations/gigaimpact/PRAS- Giga Impact BG.png",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Giga Impact1.wav": "res://assets/battles/animations/gigaimpact/PRSFX- Giga Impact1.wav",
+        "PRSFX- Giga Impact2.wav": "res://assets/battles/animations/gigaimpact/PRSFX- Giga Impact2.wav"
+      }
+    },
+    "psyshock": {
+      "template": "imported_sheet",
+      "category": "special_projectile",
+      "speed_scale": 1.08,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "target_hit_flash": {
+        "enabled": true,
+        "delay": 0.51,
+        "duration": 0.14,
+        "color": [0.84, 0.58, 1.0, 1.0]
+      },
+      "target_shake": {
+        "enabled": true,
+        "delay": 0.51,
+        "duration": 0.38,
+        "amplitude": 7.0,
+        "interval": 0.04,
+        "vertical_scale": 0.18,
+        "decay": true
+      },
+      "data_path": "res://assets/battles/animations/psyshock/psyshock.json",
+      "sheet_path": "res://assets/battles/animations/psyshock/PRAS- Swords Dance + Signal Beam.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Psyshock1.wav": "res://assets/battles/animations/psyshock/PRSFX- Psyshock1.wav",
+        "PRSFX- Psyshock2.wav": "res://assets/battles/animations/psyshock/PRSFX- Psyshock2.wav"
+      }
+    },
+    "explosion": {
+      "template": "imported_sheet",
+      "category": "field_impact",
+      "static_visual_anchor": "actor",
+      "speed_scale": 1.18,
+      "animation_end_frame": 60,
+      "show_timing_backgrounds": true,
+      "timing_background_fill_canvas": true,
+      "background_below_sprites": true,
+      "show_timing_foregrounds": true,
+      "foreground_opacity_multiplier": 0.5,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "shake": {
+        "enabled": true,
+        "start_frame": 14,
+        "end_frame": 52,
+        "amplitude": 11.0,
+        "frequency_x": 4.2,
+        "frequency_y": 5.4,
+        "vertical_scale": 0.55,
+        "decay": true
+      },
+      "miss": {
+        "enabled": false
+      },
+      "data_path": "res://assets/battles/animations/explosion/explosion.json",
+      "sheet_path": "res://assets/battles/animations/explosion/PRAS- Explosions.png",
+      "background_path": "res://assets/battles/animations/explosion/PRAS- Fire BG.png",
+      "foreground_path": "res://assets/battles/animations/explosion/PRAS- Flash FG.png",
+      "sound_paths": {
+        "PRSFX- Explosion.wav": "res://assets/battles/animations/explosion/PRSFX- Explosion.wav",
+        "PRSFX- Selfdestruct1.wav": "res://assets/battles/animations/explosion/PRSFX- Selfdestruct1.wav"
+      }
+    },
+    "watershuriken": {
+      "template": "imported_sheet",
+      "category": "physical_projectile",
+      "speed_scale": 1.06,
+      "show_timing_backgrounds": false,
+      "show_timing_foregrounds": false,
+      "show_pink_visual": false,
+      "show_sheet_sprites": true,
+      "overlay_fill_enabled": false,
+      "overlay_peak_alpha": 0.0,
+      "sparkle_count": 0,
+      "target_hit_flash": {
+        "enabled": true,
+        "delay": 0.42,
+        "duration": 0.12,
+        "color": [0.62, 0.9, 1.0, 1.0]
+      },
+      "target_shake": {
+        "enabled": true,
+        "delay": 0.42,
+        "duration": 0.28,
+        "amplitude": 5.0,
+        "interval": 0.04,
+        "vertical_scale": 0.16,
+        "decay": true
+      },
+      "data_path": "res://assets/battles/animations/watershuriken/watershuriken.json",
+      "sheet_path": "res://assets/battles/animations/watershuriken/PRAS- Water Shuriken.png",
+      "background_path": "",
+      "foreground_path": "",
+      "sound_paths": {
+        "PRSFX- Water Shurkein.wav": "res://assets/battles/animations/watershuriken/PRSFX- Water Shurkein.wav"
+      }
     }
   }
 }
