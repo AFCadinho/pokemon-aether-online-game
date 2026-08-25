@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Fixed**
+
+- Pokémon in battle now show the correct blue male or pink female gender icon.
+
 ## 0.3.63 - 2026-08-25
 
 **Added**
