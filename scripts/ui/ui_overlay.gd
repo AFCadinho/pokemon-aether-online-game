@@ -16810,15 +16810,20 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 
 	var identity_margin := MarginContainer.new()
 	identity_margin.add_theme_constant_override("margin_left", 7)
-	identity_margin.add_theme_constant_override("margin_top", 4)
+	identity_margin.add_theme_constant_override("margin_top", 2)
 	identity_margin.add_theme_constant_override("margin_right", 7)
-	identity_margin.add_theme_constant_override("margin_bottom", 4)
+	identity_margin.add_theme_constant_override("margin_bottom", 2)
 	identity_panel.add_child(identity_margin)
+
+	var identity_content := HBoxContainer.new()
+	identity_content.add_theme_constant_override("separation", 5)
+	identity_margin.add_child(identity_content)
 
 	var identity_stack := VBoxContainer.new()
 	identity_stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	identity_stack.add_theme_constant_override("separation", 1)
-	identity_margin.add_child(identity_stack)
+	identity_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity_content.add_child(identity_stack)
 
 	var title_row := HBoxContainer.new()
 	title_row.add_theme_constant_override("separation", 4)
@@ -16830,7 +16835,6 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_title_label = Label.new()
 	pokemon_summary_title_label.text = LocalizationManager.text("ui.pokemon_summary.title")
 	pokemon_summary_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pokemon_summary_title_label.size_flags_stretch_ratio = 1.1
 	_make_label_clip_width(pokemon_summary_title_label)
 	pokemon_summary_title_label.add_theme_font_size_override("font_size", 15)
 	pokemon_summary_title_label.add_theme_color_override("font_color", Color("#f4f7ff"))
@@ -16867,11 +16871,10 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_id_label = Label.new()
 	pokemon_summary_id_label.text = LocalizationManager.text("ui.pokemon_summary.id_empty")
 	pokemon_summary_id_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pokemon_summary_id_label.size_flags_stretch_ratio = 0.9
 	_make_label_clip_width(pokemon_summary_id_label)
 	pokemon_summary_id_label.add_theme_font_size_override("font_size", 10)
 	pokemon_summary_id_label.add_theme_color_override("font_color", Color("#b8c9e4"))
-	title_row.add_child(pokemon_summary_id_label)
+	identity_stack.add_child(pokemon_summary_id_label)
 
 	pokemon_summary_meta_label = Label.new()
 	pokemon_summary_meta_label.text = LocalizationManager.text("ui.pokemon_summary.level_empty")
@@ -16898,7 +16901,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_copy_button.add_theme_stylebox_override("hover", _make_pokemon_summary_compact_icon_button_style(Color("#12304bf0"), POKEMON_SUMMARY_ACCENT))
 	pokemon_summary_copy_button.add_theme_stylebox_override("pressed", _make_pokemon_summary_compact_icon_button_style(Color("#071421f0"), POKEMON_SUMMARY_ACCENT))
 	pokemon_summary_copy_button.add_theme_stylebox_override("disabled", _make_pokemon_summary_compact_icon_button_style(Color("#0b1420b8"), Color("#35465a")))
-	title_row.add_child(pokemon_summary_copy_button)
+	identity_content.add_child(pokemon_summary_copy_button)
 
 	var hp_row := HBoxContainer.new()
 	hp_row.add_theme_constant_override("separation", 6)
@@ -21565,14 +21568,13 @@ func _refresh_pokemon_summary() -> void:
 	var summary_id: String = str(pokemon.owned_pokemon_id) if pokemon.owned_pokemon_id > 0 else ""
 	if summary_id == "":
 		summary_id = pokemon.instance_id.strip_edges()
-	var id_text := (
-		LocalizationManager.text("ui.pokemon_summary.id", {"id": summary_id})
+	pokemon_summary_id_label.text = (
+		LocalizationManager.text(
+			"ui.pokemon_summary.species_and_number",
+			{"species": localized_species_name, "id": summary_id}
+		)
 		if summary_id != ""
-		else LocalizationManager.text("ui.pokemon_summary.id_empty")
-	)
-	pokemon_summary_id_label.text = LocalizationManager.text(
-		"ui.pokemon_summary.species_and_id",
-		{"species": localized_species_name, "id": id_text}
+		else localized_species_name
 	)
 	pokemon_summary_id_label.tooltip_text = pokemon_summary_id_label.text
 	if pokemon_summary_nickname_button != null:
