@@ -421,11 +421,12 @@ func _bank_result(value: Variant) -> Dictionary:
 
 func _log_result(value: Variant) -> Dictionary:
 	var body := _dictionary(value)
+	var next_before_id: Variant = body.get("nextBeforeId")
 	return {
 		"success": true,
 		"category": str(body.get("category", "")),
 		"entries": _array(body.get("entries", [])).duplicate(true),
-		"nextBeforeId": int(body.get("nextBeforeId", 0)),
+		"nextBeforeId": int(next_before_id) if next_before_id != null else 0,
 	}
 
 
