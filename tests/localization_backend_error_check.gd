@@ -92,6 +92,11 @@ func _run() -> void:
 		"privacy password errors explain how identity verification failed"
 	)
 	_check(
+		errors.call("message", {"detail": {"code": "pokemon_held_item_locked"}})
+		== "Het meegegenereerde item van deze Pokémon is vergrendeld en kan niet worden afgenomen of vervangen.",
+		"locked generated held items explain why they cannot be changed"
+	)
+	_check(
 		errors.call("message", {
 			"detail": {
 				"code": "pokemon_level_cap_party_ineligible",

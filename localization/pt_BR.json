@@ -17,6 +17,7 @@
   "ui.magikarp_sale.received": "Você comprou um Magikarp de nível 5 por ₽{price}!",
   "backend.error.npc_pokemon_sale": "A compra do Magikarp não pôde ser concluída. Tente novamente.",
   "backend.error.generic": "Algo deu errado. Tente novamente.",
+  "backend.error.pokemon_held_item_locked": "O item gerado com este Pokémon está bloqueado e não pode ser retirado nem substituído.",
   "backend.error.mega_test_form_not_allowed": "Pokémon exclusivos para testes não podem ser usados nesta ação.",
   "backend.error.mega_direct_form_not_allowed": "Formas Mega diretas de batalha só podem ser usadas em testes de desenvolvedor.",
   "backend.error.mega_catalog_disabled": "As novas Mega Evoluções estão desativadas para batalhas no momento.",
