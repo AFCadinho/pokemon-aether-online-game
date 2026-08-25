@@ -11,6 +11,8 @@ Trigger reconciles missed events; no scheduled GitHub Actions job is involved.
   `X-Discourse-Event-Signature` HMAC-SHA256 signature.
 - The webhook payload is only a trigger. Feed content is fetched from the
   public Discourse category API, so payload fields are never trusted as news.
+- When a category response omits a topic excerpt, the Worker fetches that
+  public topic's first post and derives the summary from its rendered content.
 - Invalid, private, or empty category responses fail without replacing the
   current feed.
 - The current R2 object is validated and copied to `data/news.previous.json`
