@@ -965,7 +965,7 @@ item_id = "potion"
 
 [node name="TMEarthquakeTeaser" type="Sprite2D" parent="Entities/Interactables" unique_id=716845631]
 texture_filter = 1
-z_index = 4096
+z_index = 720
 z_as_relative = false
 position = Vector2(1072, 720)
 texture = SubResource("AtlasTexture_earthquake_teaser")

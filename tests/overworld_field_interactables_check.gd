@@ -80,7 +80,7 @@ func _check_viridian_earthquake_teaser() -> void:
 	var teaser_source := city_source.substr(teaser_start, teaser_end - teaser_start) if teaser_start >= 0 and teaser_end > teaser_start else ""
 	_check(teaser_source.contains('type="Sprite2D"'), "Viridian City contains the decorative TM Earthquake teaser")
 	_check(teaser_source.contains("position = Vector2(1072, 720)"), "TM Earthquake teaser remains at its inaccessible Viridian City position")
-	_check(teaser_source.contains("z_index = 4096") and teaser_source.contains("z_as_relative = false"), "Viridian TM Earthquake teaser renders above the map scenery")
+	_check(teaser_source.contains("z_index = 720") and teaser_source.contains("z_as_relative = false"), "Viridian TM Earthquake teaser uses its world Y position for depth sorting")
 	_check(teaser_source.contains('metadata/item_id = "tm-earthquake"'), "Viridian teaser represents TM Earthquake")
 	_check(teaser_source.contains("metadata/decorative_only = true"), "Viridian TM Earthquake teaser is explicitly decorative")
 	_check(not teaser_source.contains("InteractionArea") and not teaser_source.contains("pickup_id"), "Viridian TM Earthquake teaser cannot be interacted with or picked up")
