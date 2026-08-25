@@ -31,6 +31,7 @@ signal animation_finished
 @export var orb_barrage_config: Dictionary = {}
 @export var psychic_pulse_config: Dictionary = {}
 @export var psychic_shards_config: Dictionary = {}
+@export var explosion_burst_config: Dictionary = {}
 @export var energy_blast_config: Dictionary = {}
 @export var water_splash_config: Dictionary = {}
 @export var electric_switch_config: Dictionary = {}
@@ -380,6 +381,7 @@ func _draw() -> void:
 	_draw_orb_barrage_visual()
 	_draw_psychic_pulse_visual()
 	_draw_psychic_shards_visual()
+	_draw_explosion_burst_visual()
 	_draw_energy_blast_visual()
 	_draw_water_splash_visual()
 	_draw_electric_switch_visual()
@@ -721,6 +723,96 @@ func _draw_psychic_shard(center: Vector2, angle: float, length: float, width: fl
 	draw_colored_polygon(points, _color_with_alpha(color, alpha * 0.72))
 	draw_polyline(PackedVector2Array([tip, center + side * width * 0.5, tail, center - side * width * 0.5, tip]), _color_with_alpha(core_color, alpha * 0.82), 1.2, true)
 	draw_line(tail, tip, _color_with_alpha(core_color, alpha * 0.68), 1.0, true)
+
+
+func _draw_explosion_burst_visual() -> void:
+	if not bool(explosion_burst_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_end := clampf(float(explosion_burst_config.get("visible_end", 0.95)), 0.1, 1.0)
+	if progress > visible_end:
+		return
+
+	var center := _battlefield_position(_vector2_from_value(explosion_burst_config.get("center", [128.0, 204.0])))
+	var impact_start := clampf(float(explosion_burst_config.get("impact_start", 0.28)), 0.08, visible_end - 0.2)
+	var charge_progress := clampf(progress / maxf(impact_start, 0.001), 0.0, 1.0)
+	var burst_progress := clampf((progress - impact_start) / maxf(visible_end - impact_start, 0.001), 0.0, 1.0)
+	var smoke_color := _color_from_value(explosion_burst_config.get("smoke_color", [0.2, 0.17, 0.22, 1.0]), Color(0.2, 0.17, 0.22, 1.0))
+	var ember_color := _color_from_value(explosion_burst_config.get("ember_color", [1.0, 0.22, 0.03, 1.0]), Color(1.0, 0.22, 0.03, 1.0))
+	var flame_color := _color_from_value(explosion_burst_config.get("flame_color", [1.0, 0.48, 0.04, 1.0]), Color(1.0, 0.48, 0.04, 1.0))
+	var hot_color := _color_from_value(explosion_burst_config.get("hot_color", [1.0, 0.9, 0.2, 1.0]), Color(1.0, 0.9, 0.2, 1.0))
+	var core_color := _color_from_value(explosion_burst_config.get("core_color", [1.0, 1.0, 0.92, 1.0]), Color(1.0, 1.0, 0.92, 1.0))
+
+	if progress < impact_start:
+		var charge_radius := lerpf(58.0, 22.0, charge_progress)
+		var charge_alpha := 0.3 + charge_progress * 0.7
+		draw_circle(center, lerpf(4.0, 13.0, charge_progress), _color_with_alpha(hot_color, charge_alpha * 0.28))
+		draw_arc(center, charge_radius, float(frame_index) * 0.12, TAU + float(frame_index) * 0.12, 48, _color_with_alpha(ember_color, charge_alpha * 0.62), 1.8, true)
+		var charge_particle_count := maxi(6, int(explosion_burst_config.get("charge_particle_count", 12)))
+		for particle_index: int in range(charge_particle_count):
+			var angle := float(particle_index) * 2.399 + float(frame_index) * 0.13
+			var radius := charge_radius * (0.54 + float(particle_index % 4) * 0.12)
+			var particle_center := center + Vector2(cos(angle), sin(angle) * 0.72) * radius
+			var particle_size := 2.0 + float(particle_index % 3)
+			draw_circle(particle_center, particle_size * 2.0, _color_with_alpha(smoke_color, charge_alpha * 0.22))
+			draw_circle(particle_center, particle_size, _color_with_alpha(ember_color, charge_alpha * 0.82))
+		return
+
+	var fade := 1.0 - burst_progress
+	var eased := 1.0 - pow(1.0 - burst_progress, 2.0)
+	var shock_radius := lerpf(16.0, float(explosion_burst_config.get("shock_radius", 152.0)), eased)
+	var smoke_radius := lerpf(22.0, float(explosion_burst_config.get("smoke_radius", 118.0)), eased)
+	var blast_grow := clampf(burst_progress / 0.22, 0.0, 1.0)
+	var blast_fade := 1.0 - clampf((burst_progress - 0.3) / 0.48, 0.0, 1.0)
+	var blast_radius := lerpf(12.0, float(explosion_burst_config.get("blast_radius", 76.0)), 1.0 - pow(1.0 - blast_grow, 2.0))
+
+	draw_circle(center, shock_radius * 0.96, _color_with_alpha(ember_color, fade * 0.035))
+	draw_arc(center, shock_radius, -float(frame_index) * 0.06, TAU - float(frame_index) * 0.06, 72, _color_with_alpha(hot_color, fade * 0.82), maxf(1.2, 5.0 * fade), true)
+	draw_arc(center, shock_radius * 0.82, float(frame_index) * 0.08, TAU + float(frame_index) * 0.08, 64, _color_with_alpha(ember_color, fade * 0.48), maxf(1.0, 2.8 * fade), true)
+
+	var smoke_count := maxi(8, int(explosion_burst_config.get("smoke_count", 18)))
+	for smoke_index: int in range(smoke_count):
+		var angle := float(smoke_index) * 2.399 + sin(float(smoke_index) * 1.73) * 0.22
+		var radius_factor := 0.48 + float(smoke_index % 5) * 0.11
+		var puff_center := center + Vector2.from_angle(angle) * smoke_radius * radius_factor
+		puff_center.y -= burst_progress * (10.0 + float(smoke_index % 4) * 5.0)
+		var puff_size := (10.0 + float(smoke_index % 4) * 3.2) * (0.56 + eased * 0.72)
+		var puff_alpha := fade * (0.28 + float(smoke_index % 3) * 0.06)
+		draw_circle(puff_center, puff_size * 1.28, _color_with_alpha(smoke_color.darkened(0.28), puff_alpha * 0.48))
+		draw_circle(puff_center, puff_size, _color_with_alpha(smoke_color, puff_alpha))
+		if smoke_index % 3 == 0:
+			draw_circle(puff_center - Vector2(puff_size * 0.18, puff_size * 0.2), puff_size * 0.48, _color_with_alpha(flame_color, puff_alpha * blast_fade * 0.7))
+
+	var ray_count := maxi(10, int(explosion_burst_config.get("ray_count", 18)))
+	for ray_index: int in range(ray_count):
+		var angle := float(ray_index) * TAU / float(ray_count) + float(frame_index) * 0.025
+		var ray_length := shock_radius * (0.58 + float(ray_index % 4) * 0.09)
+		var ray_start := center + Vector2.from_angle(angle) * blast_radius * 0.62
+		var ray_end := center + Vector2.from_angle(angle) * ray_length
+		draw_line(ray_start, ray_end, _color_with_alpha(flame_color, fade * blast_fade * 0.68), maxf(1.0, 3.4 * blast_fade), true)
+
+	if blast_fade > 0.02:
+		draw_circle(center, blast_radius * 1.22, _color_with_alpha(ember_color, blast_fade * 0.22))
+		draw_circle(center, blast_radius, _color_with_alpha(flame_color, blast_fade * 0.9))
+		draw_circle(center, blast_radius * 0.68, _color_with_alpha(hot_color, blast_fade * 0.96))
+		draw_circle(center, blast_radius * 0.34, _color_with_alpha(core_color, blast_fade))
+
+	var debris_count := maxi(8, int(explosion_burst_config.get("debris_count", 16)))
+	for debris_index: int in range(debris_count):
+		var stagger := float(debris_index % 4) * 0.025
+		var debris_progress := clampf((burst_progress - stagger) / maxf(1.0 - stagger, 0.001), 0.0, 1.0)
+		if debris_progress <= 0.0:
+			continue
+		var angle := float(debris_index) * 2.399 - 0.9
+		var distance := shock_radius * (0.36 + float(debris_index % 5) * 0.075)
+		var debris_center := center + Vector2.from_angle(angle) * distance
+		debris_center.y += 42.0 * debris_progress * debris_progress
+		var debris_alpha := (1.0 - debris_progress) * 0.9
+		var debris_size := 2.0 + float(debris_index % 3) * 1.2
+		draw_line(debris_center - Vector2.from_angle(angle) * debris_size * 3.6, debris_center, _color_with_alpha(ember_color, debris_alpha * 0.5), debris_size, true)
+		draw_circle(debris_center, debris_size, _color_with_alpha(hot_color, debris_alpha))
 
 
 func _draw_psychic_pulse_visual() -> void:

@@ -476,6 +476,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.orb_barrage_config = (config.get("orb_barrage", {}) as Dictionary).duplicate(true)
 	animation_node.psychic_pulse_config = (config.get("psychic_pulse", {}) as Dictionary).duplicate(true)
 	animation_node.psychic_shards_config = (config.get("psychic_shards", {}) as Dictionary).duplicate(true)
+	animation_node.explosion_burst_config = (config.get("explosion_burst", {}) as Dictionary).duplicate(true)
 	animation_node.energy_blast_config = (config.get("energy_blast", {}) as Dictionary).duplicate(true)
 	animation_node.water_splash_config = (config.get("water_splash", {}) as Dictionary).duplicate(true)
 	animation_node.electric_switch_config = (config.get("electric_switch", {}) as Dictionary).duplicate(true)
@@ -1125,6 +1126,11 @@ func _apply_move_projectile_endpoint_anchors(
 	)
 	animation_node.focus_aura_config = _with_self_effect_anchor(
 		animation_node.focus_aura_config,
+		actor_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.explosion_burst_config = _with_self_effect_anchor(
+		animation_node.explosion_burst_config,
 		actor_anchor,
 		animation_node.reverse_battlefield
 	)
