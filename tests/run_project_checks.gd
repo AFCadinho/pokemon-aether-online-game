@@ -3,6 +3,7 @@ extends SceneTree
 const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_display_data_presenter_check.gd",
 	"res://tests/pokemon_nickname_battle_ui_check.gd",
+	"res://tests/battle_hud_gender_check.gd",
 	"res://tests/npc_battle_team_reveal_check.gd",
 	"res://tests/held_item_stat_modifier_check.gd",
 	"res://tests/held_item_drag_drop_check.gd",
@@ -128,6 +129,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/impersonation_account_switch_check.gd",
 	"res://tests/floor_visibility_mask_camera_check.gd",
 	"res://tests/tall_grass_character_depth_check.gd",
+	"res://tests/tall_grass_rustle_effect_check.gd",
 	"res://tests/players_house_visual_depth_check.gd",
 	"res://tests/players_house_location_label_check.gd",
 	"res://tests/map_music_profile_check.gd",
@@ -142,6 +144,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/mt_moon_ambush_cinematic_check.gd",
 	"res://tests/mt_moon_transition_facing_check.gd",
 	"res://tests/route_4_mt_moon_transition_check.gd",
+	"res://tests/route_4_tall_grass_visual_check.gd",
 	"res://tests/pokemon_center_template_structure_check.gd",
 	"res://tests/aether_atelier_check.gd",
 	"res://tests/aether_atelier_runtime_check.gd",

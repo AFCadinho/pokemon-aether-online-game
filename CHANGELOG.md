@@ -1,14 +1,28 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Giga Impact, Psyshock, Explosion, and Water Shuriken now have their own battle animations and sound effects.
+- Added full Simplified Chinese language support throughout the game and launcher.
+
+**Fixed**
+
+- Pokémon in battle now show the correct blue male or pink female gender icon.
+- Forum announcements now appear in launcher and login news even when the forum omits their preview text.
+
 ## 0.3.63 - 2026-08-25
 
 **Added**
 
+- The Mysterious Outfit Box can now be bought from the Aether Gift Store for 400 Aether Gems.
 - Pokémon Showdown export sets can now be copied from a Pokémon's Summary.
 - A mysterious golden Poké Ball can now be spotted near Master Thief Rook in Viridian City.
 
 **Changed**
 
+- Route 4 now uses its complete new outdoor layout, with its Mt. Moon and Cerulean City entrances in the correct places.
 - Main interface hover cards now share a clear, styled appearance across navigation, party, hotbar, status, buffs, and chat controls.
 - Bag hover cards now share a clear, styled appearance across item browsing and use screens.
 - Item Dex hover cards now share a clear, styled appearance.
@@ -19,6 +33,7 @@
 
 **Fixed**
 
+- The Mysterious Outfit now stays visible while fishing, surfing, and riding mounts.
 - Missing translations now reliably fall back to English.
 - Mega Eelektross's Eelevate Ability now explains its Ground and entry-hazard immunity and its highest-stat boost.
 - EV item previews now respect the combined limit of 252 Allocated and Stored EVs per stat.

@@ -5,6 +5,18 @@ const RUSTLE_Z_OFFSET := 2
 const RUSTLE_DISTANCE := 2.0
 
 
+static func get_render_z_index(
+	tilemap: TileMapLayer,
+	tile_position: Vector2i,
+	tile_size: Vector2
+) -> int:
+	if bool(tilemap.get_meta("pao_tall_grass_depth_row", false)):
+		return mini(tilemap.z_index + 1, RenderingServer.CANVAS_ITEM_Z_MAX)
+	return floori(tilemap.to_global(
+		tilemap.map_to_local(tile_position) + Vector2(0.0, tile_size.y * 0.5)
+	).y) + RUSTLE_Z_OFFSET
+
+
 func play(tilemap: TileMapLayer, tile_position: Vector2i) -> void:
 	if tilemap == null or tilemap.tile_set == null:
 		queue_free()
@@ -21,7 +33,7 @@ func play(tilemap: TileMapLayer, tile_position: Vector2i) -> void:
 
 	global_position = tilemap.to_global(tilemap.map_to_local(tile_position))
 	z_as_relative = false
-	z_index = floori(tilemap.to_global(tilemap.map_to_local(tile_position) + Vector2(0.0, tile_size.y * 0.5)).y) + RUSTLE_Z_OFFSET
+	z_index = get_render_z_index(tilemap, tile_position, tile_size)
 
 	var overlay := TileMapLayer.new()
 	overlay.tile_set = tilemap.tile_set
