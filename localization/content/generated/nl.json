@@ -8283,6 +8283,10 @@
       "name": "Aardevreter",
       "shortDesc": "Herstelt HP wanneer hij wordt geraakt door een grondtype-beweging."
     },
+    "eelevate": {
+      "name": "Eelevate",
+      "shortDesc": "Is immuun voor Ground-aanvallen en entry hazards op de grond; verhoogt de hoogste stat na een knock-out."
+    },
     "effect-spore": {
       "name": "Effectspoor",
       "shortDesc": "Heeft een kans van 30% om verlamming, vergif of slaap te veroorzaken bij het aanvallen van Pokémon bij contact."

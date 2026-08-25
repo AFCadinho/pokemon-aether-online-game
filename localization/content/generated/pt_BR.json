@@ -8283,6 +8283,10 @@
       "name": "Comensal da Terra",
       "shortDesc": "Restaura HP quando atingido por um golpe do tipo Ground."
     },
+    "eelevate": {
+      "name": "Eelevate",
+      "shortDesc": "É imune a golpes do tipo Ground e a perigos de entrada no chão; aumenta seu atributo mais alto após nocautear um alvo."
+    },
     "effect-spore": {
       "name": "Efeito Esporo",
       "shortDesc": "Tem 30% de chance de causar paralisia, veneno ou sono ao atacar Pokémon ao entrar em contato."

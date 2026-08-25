@@ -38,6 +38,8 @@ func _init() -> void:
 	_check(source.contains("func _style_pokedex_species_button") and source.contains("func _refresh_pokedex_species_selection_state"), "Selected species stays visually marked")
 	_check(source.contains("func _create_pokedex_detail_section_title"), "Detail content uses modern section cards")
 	_check(source.contains("func _create_pokedex_dossier_card") and source.contains("func _create_pokedex_profile_fact"), "General data is grouped into calm dossier cards")
+	_check(source.contains("pokedex_popup.theme = _make_pokedex_tooltip_theme()"), "Every Pokédex hover card inherits the Pokédex tooltip theme")
+	_check(source.contains('tooltip_theme.set_stylebox("panel", "TooltipPanel"'), "Pokédex hover cards use a styled panel instead of the Godot default")
 	_check(source.contains('"ui.pokedex.profile.title"'), "Localized profile facts no longer render as disconnected boxes")
 	_check(source.contains("PokedexService.search_species") and source.contains("PokedexService.get_species_detail"), "Existing Pokédex data loading remains connected")
 	_check(source.contains('get("preEvolutions", [])'), "Evolution tab renders server-owned pre-evolution relationships")
