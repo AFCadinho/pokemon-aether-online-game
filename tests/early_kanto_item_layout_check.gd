@@ -20,7 +20,7 @@ const MAP_PICKUPS := {
 		["kanto_route_3_oran_berry", "oran-berry", Vector2i(1520, 1136)],
 	],
 	"res://scenes/overworld/kanto/routes/kanto_route_4.tscn": [
-		["kanto_route_4_tm_roar", "tm-roar", Vector2i(576, 160)],
+		["kanto_route_4_tm_roar", "tm-roar", Vector2i(400, 1248)],
 	],
 	"res://scenes/overworld/kanto/routes/kanto_route_22.tscn": [
 		["kanto_route_22_great_ball", "great-ball", Vector2i(240, 848)],
