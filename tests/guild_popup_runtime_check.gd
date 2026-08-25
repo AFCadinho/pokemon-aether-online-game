@@ -215,7 +215,24 @@ func _run() -> void:
 	var pokemon_withdraw := popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) as Button
 	_check(pokemon_withdraw != null and pokemon_withdraw.text == "Withdraw", "authorized ranks retain permanent Guild withdrawal")
 	var pokemon_borrow := popup.find_child("GuildBankPokemonBorrowButton_21", true, false) as Button
-	_check(pokemon_borrow != null and pokemon_borrow.text == "Borrow", "Guild-owned Pokémon expose borrowing without ownership transfer")
+	_check(pokemon_borrow != null and pokemon_borrow.text == "Borrow" and not pokemon_borrow.disabled, "available Guild-owned Pokémon expose borrowing without ownership transfer")
+	popup.guild_bank_state["access"]["lendingEnabled"] = false
+	popup.guild_bank_state["access"]["canBorrow"] = false
+	popup.guild_bank_state["pokemon"][0]["canBorrow"] = false
+	popup._render_guild_home()
+	await process_frame
+	pokemon_borrow = popup.find_child("GuildBankPokemonBorrowButton_21", true, false) as Button
+	_check(
+		pokemon_borrow != null
+		and pokemon_borrow.disabled
+		and pokemon_borrow.tooltip_text.contains("not available"),
+		"Pokémon borrowing is disabled with an explanation when server lending is off"
+	)
+	popup.guild_bank_state["access"]["lendingEnabled"] = true
+	popup.guild_bank_state["access"]["canBorrow"] = true
+	popup.guild_bank_state["pokemon"][0]["canBorrow"] = true
+	popup._render_guild_home()
+	await process_frame
 	_check(popup.find_child("GuildBankPokemonIcon_21", true, false) != null, "stored Pokémon show an icon")
 	var pokemon_deposit := popup.find_child("GuildBankPokemonDepositButton_22", true, false) as Button
 	if pokemon_deposit != null:
@@ -239,6 +256,13 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankItemWithdrawButton_potion", true, false) != null, "stored items can be withdrawn")
 	_check(popup.find_child("GuildBankItemDepositButton_poke-ball", true, false) != null, "bag items can be deposited")
 	_check(popup.find_child("GuildBankItemIcon_potion", true, false) != null, "stored items show an icon")
+	var potion_borrow := popup.find_child("GuildBankItemBorrowButton_potion", true, false) as Button
+	_check(
+		potion_borrow != null
+		and potion_borrow.disabled
+		and potion_borrow.tooltip_text.contains("held items"),
+		"consumable items explain why Borrow is unavailable"
+	)
 	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
 	if bank_back != null:
 		bank_back.pressed.emit()
@@ -251,6 +275,23 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankFundsLogButton", true, false) != null, "Shared Funds has a dedicated log action")
 	_check(popup.find_child("GuildBankMoneyDepositButton", true, false) != null, "Guild funds can be deposited")
 	_check(popup.find_child("GuildBankMoneyWithdrawButton", true, false) != null, "Guild funds can be withdrawn")
+	var money_amount := popup.find_child("GuildBankMoneyAmount", true, false) as SpinBox
+	_check(
+		money_amount != null and money_amount.step == 1.0 and money_amount.update_on_text_changed,
+		"Guild money accepts exact whole amounts without Enter"
+	)
+	if money_amount != null:
+		var money_line_edit := money_amount.get_line_edit()
+		money_line_edit.text = "150"
+		money_line_edit.text_changed.emit(money_line_edit.text)
+		await process_frame
+		_check(int(money_amount.value) == 150, "Guild money keeps the exact typed amount")
+	popup._render_guild_home_with_status("Visible bank feedback", true)
+	await process_frame
+	_check(
+		popup.member_status_label != null and popup.member_status_label.text == "Visible bank feedback",
+		"Guild Bank feedback remains visible after a workspace refresh"
+	)
 	_check(popup.find_child("GuildTravelBar", true, false) != null, "guild travel remains available while viewing the bank")
 	overview_tab = popup.find_child("GuildOverviewTab", true, false) as Button
 	if overview_tab != null:
@@ -262,6 +303,8 @@ func _run() -> void:
 		await process_frame
 	_check(popup.find_child("GuildMembersSection", true, false) != null, "members tab opens the roster")
 	_check(popup.find_child("GuildHistoryLogButton", true, false) != null, "member roster has a dedicated Guild history action")
+	_check(popup.find_child("GuildMemberInvitationControls", true, false) != null, "member invitations are grouped with the roster")
+	_check(popup.find_child("GuildInviteUsername", true, false) != null, "member invitation form renders in the roster")
 	popup._show_guild_log_window("guild", {
 		"entries": [{
 			"id": 1, "category": "guild", "action": "joined",
@@ -289,6 +332,7 @@ func _run() -> void:
 	_check(self_pm != null and self_pm.disabled, "the current player cannot PM themselves")
 	_check(online_pm != null and not online_pm.disabled, "online Guild members expose a PM action")
 	_check(offline_pm != null and offline_pm.disabled, "offline Guild members explain that PM is unavailable")
+	_check(offline_pm != null and offline_pm.tooltip_text.contains("Mail"), "offline Guild PM explains that Mail handles offline messages")
 	if online_pm != null:
 		popup.private_message_requested.connect(_on_private_message_requested, CONNECT_ONE_SHOT)
 		online_pm.pressed.emit()
@@ -329,6 +373,7 @@ func _run() -> void:
 	_check(popup.find_child("GuildManagementSection", true, false) != null, "management tab opens guild controls")
 	_check(popup.find_child("GuildSettingsDescription", true, false) != null, "leader settings render")
 	_check(popup.find_child("GuildApplicationsInbox", true, false) == null, "applications no longer crowd Guild settings")
+	_check(popup.find_child("GuildMemberInvitationControls", true, false) == null, "member invitations no longer live under management")
 	_check(popup.find_child("GuildEmblemPreview", true, false) == null, "management keeps emblem controls out of settings")
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "leader does not see a redundant Guild emblem edit button")
 	var edit_emblem_icon_button := popup.find_child("EditGuildEmblemIconButton", true, false) as Button
@@ -410,7 +455,6 @@ func _run() -> void:
 	popup._cancel_emblem_edit()
 	await process_frame
 	_check(emblem_popup != null and not emblem_popup.visible, "emblem editor closes without saving")
-	_check(popup.find_child("GuildInviteUsername", true, false) != null, "member invitation form renders")
 	var member_minimum_size := popup.get_combined_minimum_size()
 	_check(
 		member_minimum_size.x <= GuildPopup.POPUP_SIZE.x and member_minimum_size.y <= GuildPopup.POPUP_SIZE.y,
