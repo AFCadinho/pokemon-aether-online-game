@@ -33,6 +33,17 @@ func _check_localized_helpers() -> void:
 		return
 
 	var overlay: Node = overlay_script.new()
+	var enabled_language_chats: Array[String] = ["language_zh"]
+	overlay.set("enabled_language_chats", enabled_language_chats)
+	overlay.set("active_chat_tab", "all")
+	_check(
+		overlay.call("_should_show_chat_category", "language_zh"),
+		"All chat shows an enabled community language channel"
+	)
+	_check(
+		not overlay.call("_should_show_chat_category", "language_pt"),
+		"All chat keeps a disabled community language channel hidden"
+	)
 	localization_manager.call("set_locale", "nl")
 	_check(overlay.call("_chat_tab_label", "general") == "Algemeen", "General chat tab renders in Dutch")
 	_check(overlay.call("_chat_tab_label", "languages") == "Talen", "Languages chat tab renders in Dutch")
