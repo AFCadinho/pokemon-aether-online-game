@@ -2,6 +2,7 @@ extends PanelContainer
 
 class_name MoveHoverCard
 
+const MOVE_DISPLAY_TYPE := preload("res://scripts/battle/battle_ui/move_display_type.gd")
 const TYPE_ICON_PATH := "res://assets/sprites/types/%s.png"
 const CARD_WIDTH := 300.0
 const CATEGORY_ICON_PATHS := {
@@ -79,7 +80,7 @@ func position_near_rect(anchor_rect: Rect2, viewport_size: Vector2) -> void:
 func _set_move_data(move_data: Dictionary) -> void:
 	current_move_data = move_data.duplicate(true)
 	name_label.text = _localized_move_name(move_data)
-	_set_icon_or_text(type_node, str(move_data.get("type", "")), TYPE_ICON_PATH)
+	_set_icon_or_text(type_node, MOVE_DISPLAY_TYPE.resolve(move_data), TYPE_ICON_PATH)
 	var category := str(move_data.get("category", ""))
 	_set_category_icon_or_text(category)
 	power_row.visible = category.to_lower() != "status"

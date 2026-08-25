@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Fixed**
+
+- Hidden Power now shows its actual type in battle instead of always showing Normal.
+
 ## 0.3.62 - 2026-08-24
 
 **Added**
