@@ -87,6 +87,13 @@ func _init() -> void:
 	_check_move_animation_assets(moves, "watershuriken", true, false, "Water Shuriken")
 	_check_equal(str((moves.get("explosion", {}) as Dictionary).get("static_visual_anchor", "")), "actor", "Explosion smoke follows its user")
 	_check_equal(bool(((moves.get("gigaimpact", {}) as Dictionary).get("actor_motion", {}) as Dictionary).get("enabled", false)), true, "Giga Impact moves its user into the hit")
+	var water_shuriken_config: Dictionary = moves.get("watershuriken", {}) as Dictionary
+	var water_shuriken_data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(str(water_shuriken_config.get("data_path", "")))) as Dictionary
+	var water_shuriken_frames: Array = water_shuriken_data.get("frames", []) as Array
+	var water_shuriken_start_cell: Dictionary = (water_shuriken_frames[0] as Array)[2] as Dictionary
+	var water_shuriken_impact_cell: Dictionary = (water_shuriken_frames[9] as Array)[2] as Dictionary
+	_check_equal(int(water_shuriken_start_cell.get("y", 999)), 203, "Water Shuriken starts beside its user instead of below it")
+	_check_equal(int(water_shuriken_impact_cell.get("y", 999)), 120, "Water Shuriken retains its tuned impact height")
 
 	quit(1 if failed else 0)
 
