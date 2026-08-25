@@ -160,6 +160,7 @@ const ACTIVITY_VISUAL_OFFSETS := {
 }
 const WATER_TILEMAP_NAMES: Array[String] = ["Water"]
 const TALL_GRASS_VISUAL_TILEMAP_NAMES: Array[String] = ["TallGrassVisual", "Grass"]
+const TALL_GRASS_DEPTH_SORTING_SCRIPT := preload("res://scripts/world/tall_grass_depth_sorting.gd")
 const TALL_GRASS_RUSTLE_EFFECT_SCRIPT := preload("res://scripts/world/tall_grass_rustle_effect.gd")
 const WATER_RIPPLE_EFFECT_SCRIPT := preload("res://scripts/world/water_ripple_effect.gd")
 const SAND_FOOTPRINT_EFFECT_SCRIPT := preload("res://scripts/world/sand_footprint_effect.gd")
@@ -2203,27 +2204,30 @@ func _is_cave_encounter_map() -> bool:
 	return not str(current_map.call("get_wild_encounter_area_id")).strip_edges().is_empty()
 
 func _spawn_tall_grass_rustle_effect() -> void:
-	if grass_visual_tilemap == null:
-		var current_map := _resolve_current_map()
-		grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
-
-	if grass_visual_tilemap == null:
-		return
-
-	var local_position := grass_visual_tilemap.to_local(global_position)
-	var tile_position := grass_visual_tilemap.local_to_map(local_position)
-	var source_id := grass_visual_tilemap.get_cell_source_id(tile_position)
-	if source_id == -1 and grass_visual_tilemap.get_cell_tile_data(tile_position) == null:
-		return
-
 	var current_map := _resolve_current_map()
 	var effect_parent: Node = current_map if current_map != null else get_parent()
 	if effect_parent == null:
 		return
 
+	var effect_source := TALL_GRASS_DEPTH_SORTING_SCRIPT.find_depth_row_at_global_position(
+		current_map,
+		global_position
+	)
+	var effect_tilemap := effect_source.get("layer") as TileMapLayer
+	var tile_position: Vector2i = effect_source.get("tile_position", Vector2i.ZERO)
+	if effect_tilemap == null:
+		if grass_visual_tilemap == null:
+			grass_visual_tilemap = _find_tall_grass_visual_tilemap(current_map)
+		if grass_visual_tilemap == null:
+			return
+		effect_tilemap = grass_visual_tilemap
+		tile_position = effect_tilemap.local_to_map(effect_tilemap.to_local(global_position))
+		if effect_tilemap.get_cell_source_id(tile_position) < 0:
+			return
+
 	var effect := TALL_GRASS_RUSTLE_EFFECT_SCRIPT.new()
 	effect_parent.add_child(effect)
-	effect.play(grass_visual_tilemap, tile_position)
+	effect.play(effect_tilemap, tile_position)
 
 func _spawn_water_ripple_effect(world_position: Vector2, kind: String, require_water_tile := true) -> void:
 	if require_water_tile and not _is_water_tile_at(world_position):
