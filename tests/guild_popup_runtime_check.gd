@@ -176,7 +176,8 @@ func _run() -> void:
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "guild dashboard opens on its overview")
 	var leader_leave_button := popup.find_child("LeaveGuildButton", true, false) as Button
 	_check(leader_leave_button != null and leader_leave_button.disabled, "Guild leaders must transfer leadership before leaving")
-	_check(popup.find_child("GuildTravelBar", true, false) != null, "guild travel sits above the dashboard content")
+	var header_travel := popup.find_child("GuildHeaderTravelActions", true, false) as VBoxContainer
+	_check(header_travel != null, "guild travel occupies the member header")
 	var lobby_button := popup.find_child("GuildLobbyTeleportButton", true, false) as Button
 	_check(lobby_button != null and not lobby_button.disabled, "Aether Clash Lobby travel is available")
 	var base_button := popup.find_child("GuildBaseTeleportButton", true, false) as Button
@@ -337,7 +338,7 @@ func _run() -> void:
 		and visible_status.global_position.y < visible_workspace.global_position.y,
 		"Guild Bank feedback renders above the active workspace"
 	)
-	_check(popup.find_child("GuildTravelBar", true, false) != null, "guild travel remains available while viewing the bank")
+	_check(popup.find_child("GuildHeaderTravelActions", true, false) != null, "guild travel remains available while viewing the bank")
 	overview_tab = popup.find_child("GuildOverviewTab", true, false) as Button
 	if overview_tab != null:
 		overview_tab.pressed.emit()

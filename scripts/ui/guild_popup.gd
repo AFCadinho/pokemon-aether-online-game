@@ -959,10 +959,9 @@ func _render_guild_home() -> void:
 	var description := _label(str(guild.get("description", "")), 12, UI_MUTED)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	heading.add_child(description)
-	header.add_child(_status_pill(str(guild.get("recruitment", "Closed"))))
+	header.add_child(_build_guild_header_travel_actions())
 
 	_build_guild_section_navigation(can_review_applications, can_manage_settings)
-	member_content.add_child(_build_guild_travel_bar())
 	member_status_label = _label("", 11, UI_MUTED)
 	member_status_label.name = "GuildMemberStatus"
 	member_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1084,42 +1083,28 @@ func _add_application_notification_badge(button: Button, count: int) -> void:
 	badge.add_child(count_label)
 
 
-func _build_guild_travel_bar() -> Control:
-	var panel := PanelContainer.new()
-	panel.name = "GuildTravelBar"
-	panel.custom_minimum_size = Vector2(0, 72)
-	panel.add_theme_stylebox_override("panel", _panel_style(Color("#091827f2"), Color("#4b9dc488"), 9, 1))
-	var margin := MarginContainer.new()
-	_set_margins(margin, 13, 10, 13, 10)
-	panel.add_child(margin)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 9)
-	margin.add_child(row)
-	var copy := VBoxContainer.new()
-	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	copy.add_theme_constant_override("separation", 2)
-	row.add_child(copy)
-	copy.add_child(_localized_label("ui.guild.travel.title", 10, UI_ACCENT))
-	var hint := _localized_label("ui.guild.travel.hint", 11, UI_MUTED)
-	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	copy.add_child(hint)
+func _build_guild_header_travel_actions() -> Control:
+	var actions := VBoxContainer.new()
+	actions.name = "GuildHeaderTravelActions"
+	actions.add_theme_constant_override("separation", 6)
+	actions.alignment = BoxContainer.ALIGNMENT_CENTER
 	var lobby_button := Button.new()
 	lobby_button.name = "GuildLobbyTeleportButton"
 	_set_localized_property(lobby_button, "text", "ui.guild.lobby.teleport")
 	_set_localized_property(lobby_button, "tooltip_text", "ui.guild.lobby.tooltip")
-	lobby_button.custom_minimum_size = Vector2(205, 44)
+	lobby_button.custom_minimum_size = Vector2(170, 36)
 	lobby_button.pressed.connect(_on_guild_lobby_pressed)
 	_apply_button_style(lobby_button, "primary")
-	row.add_child(lobby_button)
+	actions.add_child(lobby_button)
 	var base_button := Button.new()
 	base_button.name = "GuildBaseTeleportButton"
 	_set_localized_property(base_button, "text", "ui.guild.base.teleport")
 	_set_localized_property(base_button, "tooltip_text", "ui.guild.base.tooltip")
-	base_button.custom_minimum_size = Vector2(205, 44)
+	base_button.custom_minimum_size = Vector2(170, 36)
 	base_button.disabled = true
 	_apply_button_style(base_button)
-	row.add_child(base_button)
-	return panel
+	actions.add_child(base_button)
+	return actions
 
 
 func _build_guild_overview(guild: Dictionary) -> Control:
