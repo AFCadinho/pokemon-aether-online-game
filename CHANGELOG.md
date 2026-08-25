@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Fixed**
+
+- EV item previews now respect the combined limit of 252 Allocated and Stored EVs per stat.
+
 ## 0.3.62 - 2026-08-24
 
 **Added**

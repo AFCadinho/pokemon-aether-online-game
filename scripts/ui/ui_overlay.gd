@@ -20316,9 +20316,10 @@ func _bag_ev_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, req
 		return {}
 
 	var current_stored_evs: Dictionary = pokemon.stored_evs
+	var allocated_value: int = clampi(int(pokemon.evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
 	var current_value: int = clampi(int(current_stored_evs.get(stat_id, 0)), 0, POKEMON_EV_STAT_LIMIT)
 	var stored_total: int = _get_summary_stored_ev_total(current_stored_evs)
-	var max_gain: int = max(POKEMON_EV_STAT_LIMIT - current_value, 0)
+	var max_gain: int = max(POKEMON_EV_STAT_LIMIT - allocated_value - current_value, 0)
 	var stat_label := _summary_stat_label(stat_id)
 	if max_gain <= 0:
 		return {
