@@ -124,6 +124,7 @@ var active_guild_bank_category := ""
 var guild_bank_state: Dictionary = {}
 var is_loading_guild_bank := false
 var is_guild_bank_action_in_flight := false
+var is_applying_guild_bank_party := false
 var guild_section_buttons: Dictionary = {}
 var directory_recruitment_filter := "all"
 var directory_focus_filter := "all"
@@ -191,6 +192,11 @@ func _ready() -> void:
 		var locale_callable := Callable(self, "_on_locale_changed")
 		if not localization_manager.is_connected("locale_changed", locale_callable):
 			localization_manager.connect("locale_changed", locale_callable)
+	var player_save := get_node_or_null("/root/PlayerSave")
+	if player_save != null:
+		var party_callable := Callable(self, "_on_player_party_changed")
+		if not player_save.is_connected("party_changed", party_callable):
+			player_save.connect("party_changed", party_callable)
 
 
 func open() -> void:
@@ -314,7 +320,7 @@ func show_debug_member_preview() -> void:
 		},
 	}
 	guild_bank_state = {
-		"access": {"canDeposit": true, "canWithdraw": true, "canDepositFunds": true, "canWithdrawFunds": true, "lendingEnabled": true, "canBorrow": true, "canForceReturn": true},
+		"access": {"canDeposit": true, "canWithdraw": true, "canDepositFunds": true, "canWithdrawFunds": true, "lendingEnabled": true, "pokemonTradeLevelCap": 100, "canBorrow": true, "canForceReturn": true},
 		"funds": {"balance": 250000, "playerBalance": 87500},
 		"items": [
 			{"itemId": "potion", "name": "Potion", "category": "Medicine", "quantity": 18, "availableQuantity": 18, "borrowedQuantity": 0, "lendable": false},
@@ -330,6 +336,7 @@ func show_debug_member_preview() -> void:
 				"depositedBy": "Maple",
 				"isBorrowed": false,
 				"canReturn": false,
+				"canWithdraw": true,
 				"canBorrow": true,
 			},
 		],
@@ -940,6 +947,10 @@ func _render_guild_home() -> void:
 
 	member_content.add_child(_build_guild_travel_bar())
 	member_content.add_child(_build_guild_section_navigation(can_review_applications, can_manage_settings))
+	member_status_label = _label("", 11, UI_MUTED)
+	member_status_label.name = "GuildMemberStatus"
+	member_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	member_content.add_child(member_status_label)
 	match active_guild_section:
 		"bank":
 			member_content.add_child(_build_guild_bank())
@@ -951,11 +962,6 @@ func _render_guild_home() -> void:
 			member_content.add_child(_build_member_management(guild, is_leader))
 		_:
 			member_content.add_child(_build_guild_overview(guild))
-
-	member_status_label = _label("", 11, UI_MUTED)
-	member_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	member_content.add_child(member_status_label)
-
 
 func _build_guild_header_emblem(guild: Dictionary, is_editable: bool) -> Control:
 	if not is_editable:
@@ -1364,6 +1370,26 @@ func _guild_bank_borrow_tooltip(item: Dictionary = {}) -> String:
 	return _t("ui.guild.bank.tooltip.borrow_unavailable")
 
 
+func _guild_bank_pokemon_trade_level_cap() -> int:
+	var access := _dictionary(guild_bank_state.get("access", {}))
+	return clampi(int(access.get("pokemonTradeLevelCap", 100)), 1, 100)
+
+
+func _guild_bank_pokemon_level(pokemon: Dictionary) -> int:
+	return maxi(int(pokemon.get("level", 1)), 1)
+
+
+func _guild_bank_pokemon_exceeds_trade_level_cap(pokemon: Dictionary) -> bool:
+	return _guild_bank_pokemon_level(pokemon) > _guild_bank_pokemon_trade_level_cap()
+
+
+func _guild_bank_pokemon_level_cap_tooltip(pokemon: Dictionary) -> String:
+	return _t("ui.guild.bank.tooltip.pokemon_trade_level_cap", {
+		"pokemonLevel": _guild_bank_pokemon_level(pokemon),
+		"tradeLevelCap": _guild_bank_pokemon_trade_level_cap(),
+	})
+
+
 func _guild_bank_card_description(category: String) -> String:
 	match category:
 		"funds":
@@ -1762,25 +1788,43 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool) -> Control:
 		UI_MUTED
 	))
 	var access := _dictionary(guild_bank_state.get("access", {}))
-	var allowed := bool(access.get("canWithdraw", false))
+	var rank_can_withdraw := bool(access.get("canWithdraw", false))
+	var exceeds_trade_level_cap := _guild_bank_pokemon_exceeds_trade_level_cap(pokemon)
+	var allowed := (
+		rank_can_withdraw
+		and not exceeds_trade_level_cap
+		and bool(entry.get("canWithdraw", true))
+	)
+	var withdraw_tooltip := ""
+	if not rank_can_withdraw:
+		withdraw_tooltip = _guild_bank_rank_restriction("ui.guild.bank.tooltip.withdraw_rank")
+	elif exceeds_trade_level_cap:
+		withdraw_tooltip = _guild_bank_pokemon_level_cap_tooltip(pokemon)
+	elif not allowed:
+		withdraw_tooltip = _t("ui.guild.bank.tooltip.borrow_unavailable")
 	row.add_child(_guild_bank_action_button(
 		"GuildBankPokemonWithdrawButton_%d" % pokemon_id,
 		"ui.guild.bank.withdraw",
 		allowed,
 		_on_guild_bank_pokemon_action.bind("withdraw", pokemon_id, pokemon),
-		"" if allowed else _guild_bank_rank_restriction("ui.guild.bank.tooltip.withdraw_rank")
+		withdraw_tooltip
 	))
 	var can_borrow := (
 		bool(access.get("lendingEnabled", false))
 		and bool(access.get("canBorrow", false))
 		and bool(entry.get("canBorrow", false))
+		and not exceeds_trade_level_cap
 	)
 	row.add_child(_guild_bank_action_button(
 		"GuildBankPokemonBorrowButton_%d" % pokemon_id,
 		"ui.guild.bank.borrow",
 		can_borrow,
 		_on_guild_bank_pokemon_action.bind("borrow", pokemon_id, pokemon),
-		"" if can_borrow else _guild_bank_borrow_tooltip()
+		"" if can_borrow else (
+			_guild_bank_pokemon_level_cap_tooltip(pokemon)
+			if exceeds_trade_level_cap
+			else _guild_bank_borrow_tooltip()
+		)
 	))
 	return row
 
@@ -2105,7 +2149,23 @@ func _apply_guild_bank_result(result: Dictionary) -> void:
 	if party_value is Array:
 		var player_save := get_node_or_null("/root/PlayerSave")
 		if player_save != null and player_save.has_method("replace_party_from_state"):
+			is_applying_guild_bank_party = true
 			player_save.call("replace_party_from_state", party_value)
+			is_applying_guild_bank_party = false
+
+
+func _on_player_party_changed() -> void:
+	if (
+		is_applying_guild_bank_party
+		or not visible
+		or is_debug_preview
+		or active_guild_section != "bank"
+		or active_guild_bank_category != "pokemon"
+		or is_loading_guild_bank
+		or is_guild_bank_action_in_flight
+	):
+		return
+	_load_guild_bank_async.call_deferred()
 
 
 func _guild_bank_pokemon_name(pokemon: Dictionary) -> String:
@@ -3454,6 +3514,8 @@ func _apply_home_result(result: Dictionary) -> void:
 		selected_guild_id = int(home_guild.get("id", selected_guild_id))
 	_refresh_membership_state()
 	_render_guild_home()
+	if visible and active_guild_section == "bank" and not is_debug_preview:
+		_load_guild_bank_async.call_deferred()
 
 
 func _upsert_guild(guild: Dictionary) -> void:
