@@ -3,24 +3,31 @@ extends Node
 signal locale_changed(locale: String)
 
 const DEFAULT_LOCALE := "en"
-const SUPPORTED_LOCALES: Array[String] = ["en", "nl", "pt_BR"]
+const SIMPLIFIED_CHINESE_FONT: Font = preload(
+	"res://assets/fonts/NotoSansCJKsc-Regular.otf"
+)
+const SUPPORTED_LOCALES: Array[String] = ["en", "nl", "pt_BR", "zh_CN"]
 const CATALOG_PATHS: Dictionary = {
 	"en": "res://localization/en.json",
 	"nl": "res://localization/nl.json",
 	"pt_BR": "res://localization/pt_BR.json",
+	"zh_CN": "res://localization/zh_CN.json",
 }
 const HTTP_LOCALE_BY_GODOT_LOCALE: Dictionary = {
 	"en": "en",
 	"nl": "nl",
 	"pt_BR": "pt-BR",
+	"zh_CN": "zh-CN",
 }
 
 var current_locale := DEFAULT_LOCALE
 var catalogs: Dictionary = {}
 var registered_translations: Array[Translation] = []
+var default_fallback_font: Font
 
 
 func _ready() -> void:
+	default_fallback_font = ThemeDB.fallback_font
 	_load_catalogs()
 	set_locale(DEFAULT_LOCALE)
 
@@ -29,10 +36,19 @@ func set_locale(locale: String) -> String:
 	var normalized_locale := normalize_locale(locale)
 	var changed := current_locale != normalized_locale
 	current_locale = normalized_locale
+	_apply_locale_font(current_locale)
 	TranslationServer.set_locale(current_locale)
 	if changed:
 		locale_changed.emit(current_locale)
 	return current_locale
+
+
+func _apply_locale_font(locale: String) -> void:
+	ThemeDB.fallback_font = (
+		SIMPLIFIED_CHINESE_FONT
+		if locale == "zh_CN"
+		else default_fallback_font
+	)
 
 
 func refresh_current_locale() -> void:
@@ -51,6 +67,8 @@ func normalize_locale(locale: String) -> String:
 			return "nl"
 		"pt":
 			return "pt_BR"
+		"zh":
+			return "zh_CN"
 		"en":
 			return "en"
 		_:

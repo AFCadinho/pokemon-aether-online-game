@@ -5,6 +5,7 @@
 **Added**
 
 - Giga Impact, Psyshock, Explosion, and Water Shuriken now have their own battle animations and sound effects.
+- Added full Simplified Chinese language support throughout the game and launcher.
 
 **Fixed**
 

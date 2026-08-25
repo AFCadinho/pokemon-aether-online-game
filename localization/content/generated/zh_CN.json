@@ -1,0 +1,9449 @@
+{
+  "species": {
+    "abomasnow": {
+      "name": "Abomasnow"
+    },
+    "abomasnow-mega": {
+      "name": "Abomasnow Mega"
+    },
+    "abra": {
+      "name": "Abra"
+    },
+    "absol": {
+      "name": "Absol"
+    },
+    "absol-mega": {
+      "name": "Absol Mega"
+    },
+    "absol-mega-z": {
+      "name": "Absol Mega Z"
+    },
+    "accelgor": {
+      "name": "Accelgor"
+    },
+    "aegislash-blade": {
+      "name": "Aegislash Blade"
+    },
+    "aegislash-shield": {
+      "name": "Aegislash"
+    },
+    "aerodactyl": {
+      "name": "Aerodactyl"
+    },
+    "aerodactyl-mega": {
+      "name": "Aerodactyl Mega"
+    },
+    "aggron": {
+      "name": "Aggron"
+    },
+    "aggron-mega": {
+      "name": "Aggron Mega"
+    },
+    "aipom": {
+      "name": "Aipom"
+    },
+    "alakazam": {
+      "name": "Alakazam"
+    },
+    "alakazam-mega": {
+      "name": "Alakazam Mega"
+    },
+    "alcremie": {
+      "name": "Alcremie"
+    },
+    "alcremie-caramel-swirl": {
+      "name": "Alcremie Caramel Swirl"
+    },
+    "alcremie-lemon-cream": {
+      "name": "Alcremie Lemon Cream"
+    },
+    "alcremie-matcha-cream": {
+      "name": "Alcremie Matcha Cream"
+    },
+    "alcremie-mint-cream": {
+      "name": "Alcremie Mint Cream"
+    },
+    "alcremie-rainbow-swirl": {
+      "name": "Alcremie Rainbow Swirl"
+    },
+    "alcremie-ruby-cream": {
+      "name": "Alcremie Ruby Cream"
+    },
+    "alcremie-ruby-swirl": {
+      "name": "Alcremie Ruby Swirl"
+    },
+    "alcremie-salted-cream": {
+      "name": "Alcremie Salted Cream"
+    },
+    "alomomola": {
+      "name": "Alomomola"
+    },
+    "altaria": {
+      "name": "Altaria"
+    },
+    "altaria-mega": {
+      "name": "Altaria Mega"
+    },
+    "amaura": {
+      "name": "Amaura"
+    },
+    "ambipom": {
+      "name": "Ambipom"
+    },
+    "amoonguss": {
+      "name": "Amoonguss"
+    },
+    "ampharos": {
+      "name": "Ampharos"
+    },
+    "ampharos-mega": {
+      "name": "Ampharos Mega"
+    },
+    "annihilape": {
+      "name": "Annihilape"
+    },
+    "anorith": {
+      "name": "Anorith"
+    },
+    "appletun": {
+      "name": "Appletun"
+    },
+    "applin": {
+      "name": "Applin"
+    },
+    "araquanid": {
+      "name": "Araquanid"
+    },
+    "araquanid-totem": {
+      "name": "Araquanid Totem"
+    },
+    "arbok": {
+      "name": "Arbok"
+    },
+    "arboliva": {
+      "name": "Arboliva"
+    },
+    "arcanine": {
+      "name": "Arcanine"
+    },
+    "arcanine-hisui": {
+      "name": "Arcanine Hisui"
+    },
+    "arceus": {
+      "name": "Arceus"
+    },
+    "arceus-bug": {
+      "name": "Arceus Bug"
+    },
+    "arceus-dark": {
+      "name": "Arceus Dark"
+    },
+    "arceus-dragon": {
+      "name": "Arceus Dragon"
+    },
+    "arceus-electric": {
+      "name": "Arceus Electric"
+    },
+    "arceus-fairy": {
+      "name": "Arceus Fairy"
+    },
+    "arceus-fighting": {
+      "name": "Arceus Fighting"
+    },
+    "arceus-fire": {
+      "name": "Arceus Fire"
+    },
+    "arceus-flying": {
+      "name": "Arceus Flying"
+    },
+    "arceus-ghost": {
+      "name": "Arceus Ghost"
+    },
+    "arceus-grass": {
+      "name": "Arceus Grass"
+    },
+    "arceus-ground": {
+      "name": "Arceus Ground"
+    },
+    "arceus-ice": {
+      "name": "Arceus Ice"
+    },
+    "arceus-poison": {
+      "name": "Arceus Poison"
+    },
+    "arceus-psychic": {
+      "name": "Arceus Psychic"
+    },
+    "arceus-rock": {
+      "name": "Arceus Rock"
+    },
+    "arceus-steel": {
+      "name": "Arceus Steel"
+    },
+    "arceus-water": {
+      "name": "Arceus Water"
+    },
+    "archaludon": {
+      "name": "Archaludon"
+    },
+    "archen": {
+      "name": "Archen"
+    },
+    "archeops": {
+      "name": "Archeops"
+    },
+    "arctibax": {
+      "name": "Arctibax"
+    },
+    "arctovish": {
+      "name": "Arctovish"
+    },
+    "arctozolt": {
+      "name": "Arctozolt"
+    },
+    "ariados": {
+      "name": "Ariados"
+    },
+    "armaldo": {
+      "name": "Armaldo"
+    },
+    "armarouge": {
+      "name": "Armarouge"
+    },
+    "aromatisse": {
+      "name": "Aromatisse"
+    },
+    "aron": {
+      "name": "Aron"
+    },
+    "arrokuda": {
+      "name": "Arrokuda"
+    },
+    "articuno": {
+      "name": "Articuno"
+    },
+    "articuno-galar": {
+      "name": "Articuno Galar"
+    },
+    "audino": {
+      "name": "Audino"
+    },
+    "audino-mega": {
+      "name": "Audino Mega"
+    },
+    "aurorus": {
+      "name": "Aurorus"
+    },
+    "avalugg": {
+      "name": "Avalugg"
+    },
+    "avalugg-hisui": {
+      "name": "Avalugg Hisui"
+    },
+    "axew": {
+      "name": "Axew"
+    },
+    "azelf": {
+      "name": "Azelf"
+    },
+    "azumarill": {
+      "name": "Azumarill"
+    },
+    "azurill": {
+      "name": "Azurill"
+    },
+    "bagon": {
+      "name": "Bagon"
+    },
+    "baltoy": {
+      "name": "Baltoy"
+    },
+    "banette": {
+      "name": "Banette"
+    },
+    "banette-mega": {
+      "name": "Banette Mega"
+    },
+    "barbaracle": {
+      "name": "Barbaracle"
+    },
+    "barbaracle-mega": {
+      "name": "Barbaracle Mega"
+    },
+    "barboach": {
+      "name": "Barboach"
+    },
+    "barraskewda": {
+      "name": "Barraskewda"
+    },
+    "basculegion": {
+      "name": "Basculegion"
+    },
+    "basculegion-f": {
+      "name": "Basculegion F"
+    },
+    "basculin-blue-striped": {
+      "name": "Basculin Blue Striped"
+    },
+    "basculin-red-striped": {
+      "name": "Basculin Red-Striped"
+    },
+    "basculin-white-striped": {
+      "name": "Basculin White Striped"
+    },
+    "bastiodon": {
+      "name": "Bastiodon"
+    },
+    "baxcalibur": {
+      "name": "Baxcalibur"
+    },
+    "baxcalibur-mega": {
+      "name": "Baxcalibur Mega"
+    },
+    "bayleef": {
+      "name": "Bayleef"
+    },
+    "beartic": {
+      "name": "Beartic"
+    },
+    "beautifly": {
+      "name": "Beautifly"
+    },
+    "beedrill": {
+      "name": "Beedrill"
+    },
+    "beedrill-mega": {
+      "name": "Beedrill Mega"
+    },
+    "beheeyem": {
+      "name": "Beheeyem"
+    },
+    "beldum": {
+      "name": "Beldum"
+    },
+    "bellibolt": {
+      "name": "Bellibolt"
+    },
+    "bellossom": {
+      "name": "Bellossom"
+    },
+    "bellsprout": {
+      "name": "Bellsprout"
+    },
+    "bergmite": {
+      "name": "Bergmite"
+    },
+    "bewear": {
+      "name": "Bewear"
+    },
+    "bibarel": {
+      "name": "Bibarel"
+    },
+    "bidoof": {
+      "name": "Bidoof"
+    },
+    "binacle": {
+      "name": "Binacle"
+    },
+    "bisharp": {
+      "name": "Bisharp"
+    },
+    "blacephalon": {
+      "name": "Blacephalon"
+    },
+    "blastoise": {
+      "name": "Blastoise"
+    },
+    "blastoise-mega": {
+      "name": "Blastoise Mega"
+    },
+    "blaziken": {
+      "name": "Blaziken"
+    },
+    "blaziken-mega": {
+      "name": "Blaziken Mega"
+    },
+    "blipbug": {
+      "name": "Blipbug"
+    },
+    "blissey": {
+      "name": "Blissey"
+    },
+    "blitzle": {
+      "name": "Blitzle"
+    },
+    "boldore": {
+      "name": "Boldore"
+    },
+    "boltund": {
+      "name": "Boltund"
+    },
+    "bombirdier": {
+      "name": "Bombirdier"
+    },
+    "bonsly": {
+      "name": "Bonsly"
+    },
+    "bouffalant": {
+      "name": "Bouffalant"
+    },
+    "bounsweet": {
+      "name": "Bounsweet"
+    },
+    "braixen": {
+      "name": "Braixen"
+    },
+    "brambleghast": {
+      "name": "Brambleghast"
+    },
+    "bramblin": {
+      "name": "Bramblin"
+    },
+    "braviary": {
+      "name": "Braviary"
+    },
+    "braviary-hisui": {
+      "name": "Braviary Hisui"
+    },
+    "breloom": {
+      "name": "Breloom"
+    },
+    "brionne": {
+      "name": "Brionne"
+    },
+    "bronzong": {
+      "name": "Bronzong"
+    },
+    "bronzor": {
+      "name": "Bronzor"
+    },
+    "brute-bonnet": {
+      "name": "Brute Bonnet"
+    },
+    "bruxish": {
+      "name": "Bruxish"
+    },
+    "budew": {
+      "name": "Budew"
+    },
+    "buizel": {
+      "name": "Buizel"
+    },
+    "bulbasaur": {
+      "name": "Bulbasaur"
+    },
+    "buneary": {
+      "name": "Buneary"
+    },
+    "bunnelby": {
+      "name": "Bunnelby"
+    },
+    "burmy": {
+      "name": "Burmy"
+    },
+    "burmy-sandy": {
+      "name": "Burmy Sandy"
+    },
+    "burmy-trash": {
+      "name": "Burmy Trash"
+    },
+    "butterfree": {
+      "name": "Butterfree"
+    },
+    "buzzwole": {
+      "name": "Buzzwole"
+    },
+    "cacnea": {
+      "name": "Cacnea"
+    },
+    "cacturne": {
+      "name": "Cacturne"
+    },
+    "calyrex": {
+      "name": "Calyrex"
+    },
+    "calyrex-ice": {
+      "name": "Calyrex Ice"
+    },
+    "calyrex-shadow": {
+      "name": "Calyrex Shadow"
+    },
+    "camerupt": {
+      "name": "Camerupt"
+    },
+    "camerupt-mega": {
+      "name": "Camerupt Mega"
+    },
+    "capsakid": {
+      "name": "Capsakid"
+    },
+    "carbink": {
+      "name": "Carbink"
+    },
+    "carkol": {
+      "name": "Carkol"
+    },
+    "carnivine": {
+      "name": "Carnivine"
+    },
+    "carracosta": {
+      "name": "Carracosta"
+    },
+    "carvanha": {
+      "name": "Carvanha"
+    },
+    "cascoon": {
+      "name": "Cascoon"
+    },
+    "castform": {
+      "name": "Castform"
+    },
+    "castform-rainy": {
+      "name": "Castform Rainy"
+    },
+    "castform-snowy": {
+      "name": "Castform Snowy"
+    },
+    "castform-sunny": {
+      "name": "Castform Sunny"
+    },
+    "caterpie": {
+      "name": "Caterpie"
+    },
+    "celebi": {
+      "name": "Celebi"
+    },
+    "celesteela": {
+      "name": "Celesteela"
+    },
+    "centiskorch": {
+      "name": "Centiskorch"
+    },
+    "ceruledge": {
+      "name": "Ceruledge"
+    },
+    "cetitan": {
+      "name": "Cetitan"
+    },
+    "cetoddle": {
+      "name": "Cetoddle"
+    },
+    "chandelure": {
+      "name": "Chandelure"
+    },
+    "chandelure-mega": {
+      "name": "Chandelure Mega"
+    },
+    "chansey": {
+      "name": "Chansey"
+    },
+    "charcadet": {
+      "name": "Charcadet"
+    },
+    "charizard": {
+      "name": "Charizard"
+    },
+    "charizard-megax": {
+      "name": "Charizard Mega X"
+    },
+    "charizard-megay": {
+      "name": "Charizard Mega Y"
+    },
+    "charjabug": {
+      "name": "Charjabug"
+    },
+    "charmander": {
+      "name": "Charmander"
+    },
+    "charmeleon": {
+      "name": "Charmeleon"
+    },
+    "chatot": {
+      "name": "Chatot"
+    },
+    "cherrim": {
+      "name": "Cherrim"
+    },
+    "cherrim-sunshine": {
+      "name": "Cherrim Sunshine"
+    },
+    "cherubi": {
+      "name": "Cherubi"
+    },
+    "chesnaught": {
+      "name": "Chesnaught"
+    },
+    "chesnaught-mega": {
+      "name": "Chesnaught Mega"
+    },
+    "chespin": {
+      "name": "Chespin"
+    },
+    "chewtle": {
+      "name": "Chewtle"
+    },
+    "chi-yu": {
+      "name": "Chi-Yu"
+    },
+    "chien-pao": {
+      "name": "Chien-Pao"
+    },
+    "chikorita": {
+      "name": "Chikorita"
+    },
+    "chimchar": {
+      "name": "Chimchar"
+    },
+    "chimecho": {
+      "name": "Chimecho"
+    },
+    "chimecho-mega": {
+      "name": "Chimecho Mega"
+    },
+    "chinchou": {
+      "name": "Chinchou"
+    },
+    "chingling": {
+      "name": "Chingling"
+    },
+    "cinccino": {
+      "name": "Cinccino"
+    },
+    "cinderace": {
+      "name": "Cinderace"
+    },
+    "clamperl": {
+      "name": "Clamperl"
+    },
+    "clauncher": {
+      "name": "Clauncher"
+    },
+    "clawitzer": {
+      "name": "Clawitzer"
+    },
+    "claydol": {
+      "name": "Claydol"
+    },
+    "clefable": {
+      "name": "Clefable"
+    },
+    "clefable-mega": {
+      "name": "Clefable Mega"
+    },
+    "clefairy": {
+      "name": "Clefairy"
+    },
+    "cleffa": {
+      "name": "Cleffa"
+    },
+    "clobbopus": {
+      "name": "Clobbopus"
+    },
+    "clodsire": {
+      "name": "Clodsire"
+    },
+    "cloyster": {
+      "name": "Cloyster"
+    },
+    "coalossal": {
+      "name": "Coalossal"
+    },
+    "cobalion": {
+      "name": "Cobalion"
+    },
+    "cofagrigus": {
+      "name": "Cofagrigus"
+    },
+    "combee": {
+      "name": "Combee"
+    },
+    "combusken": {
+      "name": "Combusken"
+    },
+    "comfey": {
+      "name": "Comfey"
+    },
+    "conkeldurr": {
+      "name": "Conkeldurr"
+    },
+    "copperajah": {
+      "name": "Copperajah"
+    },
+    "corphish": {
+      "name": "Corphish"
+    },
+    "corsola": {
+      "name": "Corsola"
+    },
+    "corsola-galar": {
+      "name": "Corsola Galar"
+    },
+    "corviknight": {
+      "name": "Corviknight"
+    },
+    "corvisquire": {
+      "name": "Corvisquire"
+    },
+    "cosmoem": {
+      "name": "Cosmoem"
+    },
+    "cosmog": {
+      "name": "Cosmog"
+    },
+    "cottonee": {
+      "name": "Cottonee"
+    },
+    "crabominable": {
+      "name": "Crabominable"
+    },
+    "crabominable-mega": {
+      "name": "Crabominable Mega"
+    },
+    "crabrawler": {
+      "name": "Crabrawler"
+    },
+    "cradily": {
+      "name": "Cradily"
+    },
+    "cramorant": {
+      "name": "Cramorant"
+    },
+    "cramorant-gorging": {
+      "name": "Cramorant Gorging"
+    },
+    "cramorant-gulping": {
+      "name": "Cramorant Gulping"
+    },
+    "cranidos": {
+      "name": "Cranidos"
+    },
+    "crawdaunt": {
+      "name": "Crawdaunt"
+    },
+    "cresselia": {
+      "name": "Cresselia"
+    },
+    "croagunk": {
+      "name": "Croagunk"
+    },
+    "crobat": {
+      "name": "Crobat"
+    },
+    "crocalor": {
+      "name": "Crocalor"
+    },
+    "croconaw": {
+      "name": "Croconaw"
+    },
+    "crustle": {
+      "name": "Crustle"
+    },
+    "cryogonal": {
+      "name": "Cryogonal"
+    },
+    "cubchoo": {
+      "name": "Cubchoo"
+    },
+    "cubone": {
+      "name": "Cubone"
+    },
+    "cufant": {
+      "name": "Cufant"
+    },
+    "cursola": {
+      "name": "Cursola"
+    },
+    "cutiefly": {
+      "name": "Cutiefly"
+    },
+    "cyclizar": {
+      "name": "Cyclizar"
+    },
+    "cyndaquil": {
+      "name": "Cyndaquil"
+    },
+    "dachsbun": {
+      "name": "Dachsbun"
+    },
+    "darkrai": {
+      "name": "Darkrai"
+    },
+    "darkrai-mega": {
+      "name": "Darkrai Mega"
+    },
+    "darmanitan-galar": {
+      "name": "Darmanitan Galar"
+    },
+    "darmanitan-galar-zen": {
+      "name": "Darmanitan Galar Zen"
+    },
+    "darmanitan-standard": {
+      "name": "Darmanitan Standard"
+    },
+    "darmanitan-zen": {
+      "name": "Darmanitan Zen"
+    },
+    "dartrix": {
+      "name": "Dartrix"
+    },
+    "darumaka": {
+      "name": "Darumaka"
+    },
+    "darumaka-galar": {
+      "name": "Darumaka Galar"
+    },
+    "decidueye": {
+      "name": "Decidueye"
+    },
+    "decidueye-hisui": {
+      "name": "Decidueye Hisui"
+    },
+    "dedenne": {
+      "name": "Dedenne"
+    },
+    "deerling": {
+      "name": "Deerling"
+    },
+    "deerling-autumn": {
+      "name": "Deerling Autumn"
+    },
+    "deerling-summer": {
+      "name": "Deerling Summer"
+    },
+    "deerling-winter": {
+      "name": "Deerling Winter"
+    },
+    "deino": {
+      "name": "Deino"
+    },
+    "delcatty": {
+      "name": "Delcatty"
+    },
+    "delibird": {
+      "name": "Delibird"
+    },
+    "delphox": {
+      "name": "Delphox"
+    },
+    "delphox-mega": {
+      "name": "Delphox Mega"
+    },
+    "deoxys": {
+      "name": "Deoxys"
+    },
+    "deoxys-attack": {
+      "name": "Deoxys Attack"
+    },
+    "deoxys-defense": {
+      "name": "Deoxys Defense"
+    },
+    "deoxys-speed": {
+      "name": "Deoxys Speed"
+    },
+    "dewgong": {
+      "name": "Dewgong"
+    },
+    "dewott": {
+      "name": "Dewott"
+    },
+    "dewpider": {
+      "name": "Dewpider"
+    },
+    "dhelmise": {
+      "name": "Dhelmise"
+    },
+    "dialga": {
+      "name": "Dialga"
+    },
+    "dialga-origin": {
+      "name": "Dialga Origin"
+    },
+    "diancie": {
+      "name": "Diancie"
+    },
+    "diancie-mega": {
+      "name": "Diancie Mega"
+    },
+    "diggersby": {
+      "name": "Diggersby"
+    },
+    "diglett": {
+      "name": "Diglett"
+    },
+    "diglett-alola": {
+      "name": "Diglett Alola"
+    },
+    "dipplin": {
+      "name": "Dipplin"
+    },
+    "ditto": {
+      "name": "Ditto"
+    },
+    "dodrio": {
+      "name": "Dodrio"
+    },
+    "doduo": {
+      "name": "Doduo"
+    },
+    "dolliv": {
+      "name": "Dolliv"
+    },
+    "dondozo": {
+      "name": "Dondozo"
+    },
+    "donphan": {
+      "name": "Donphan"
+    },
+    "dottler": {
+      "name": "Dottler"
+    },
+    "doublade": {
+      "name": "Doublade"
+    },
+    "dracovish": {
+      "name": "Dracovish"
+    },
+    "dracozolt": {
+      "name": "Dracozolt"
+    },
+    "dragalge": {
+      "name": "Dragalge"
+    },
+    "dragalge-mega": {
+      "name": "Dragalge Mega"
+    },
+    "dragapult": {
+      "name": "Dragapult"
+    },
+    "dragonair": {
+      "name": "Dragonair"
+    },
+    "dragonite": {
+      "name": "Dragonite"
+    },
+    "dragonite-mega": {
+      "name": "Dragonite Mega"
+    },
+    "drakloak": {
+      "name": "Drakloak"
+    },
+    "drampa": {
+      "name": "Drampa"
+    },
+    "drampa-mega": {
+      "name": "Drampa Mega"
+    },
+    "drapion": {
+      "name": "Drapion"
+    },
+    "dratini": {
+      "name": "Dratini"
+    },
+    "drednaw": {
+      "name": "Drednaw"
+    },
+    "dreepy": {
+      "name": "Dreepy"
+    },
+    "drifblim": {
+      "name": "Drifblim"
+    },
+    "drifloon": {
+      "name": "Drifloon"
+    },
+    "drilbur": {
+      "name": "Drilbur"
+    },
+    "drizzile": {
+      "name": "Drizzile"
+    },
+    "drowzee": {
+      "name": "Drowzee"
+    },
+    "druddigon": {
+      "name": "Druddigon"
+    },
+    "dubwool": {
+      "name": "Dubwool"
+    },
+    "ducklett": {
+      "name": "Ducklett"
+    },
+    "dudunsparce": {
+      "name": "Dudunsparce"
+    },
+    "dudunsparce-three-segment": {
+      "name": "Dudunsparce Three Segment"
+    },
+    "dugtrio": {
+      "name": "Dugtrio"
+    },
+    "dugtrio-alola": {
+      "name": "Dugtrio Alola"
+    },
+    "dunsparce": {
+      "name": "Dunsparce"
+    },
+    "duosion": {
+      "name": "Duosion"
+    },
+    "duraludon": {
+      "name": "Duraludon"
+    },
+    "durant": {
+      "name": "Durant"
+    },
+    "dusclops": {
+      "name": "Dusclops"
+    },
+    "dusknoir": {
+      "name": "Dusknoir"
+    },
+    "duskull": {
+      "name": "Duskull"
+    },
+    "dustox": {
+      "name": "Dustox"
+    },
+    "dwebble": {
+      "name": "Dwebble"
+    },
+    "eelektrik": {
+      "name": "Eelektrik"
+    },
+    "eelektross": {
+      "name": "Eelektross"
+    },
+    "eelektross-mega": {
+      "name": "Eelektross Mega"
+    },
+    "eevee": {
+      "name": "Eevee"
+    },
+    "eevee-starter": {
+      "name": "Eevee Starter"
+    },
+    "eiscue": {
+      "name": "Eiscue"
+    },
+    "eiscue-noice": {
+      "name": "Eiscue Noice"
+    },
+    "ekans": {
+      "name": "Ekans"
+    },
+    "eldegoss": {
+      "name": "Eldegoss"
+    },
+    "electabuzz": {
+      "name": "Electabuzz"
+    },
+    "electivire": {
+      "name": "Electivire"
+    },
+    "electrike": {
+      "name": "Electrike"
+    },
+    "electrode": {
+      "name": "Electrode"
+    },
+    "electrode-hisui": {
+      "name": "Electrode Hisui"
+    },
+    "elekid": {
+      "name": "Elekid"
+    },
+    "elgyem": {
+      "name": "Elgyem"
+    },
+    "emboar": {
+      "name": "Emboar"
+    },
+    "emboar-mega": {
+      "name": "Emboar Mega"
+    },
+    "emolga": {
+      "name": "Emolga"
+    },
+    "empoleon": {
+      "name": "Empoleon"
+    },
+    "enamorus": {
+      "name": "Enamorus"
+    },
+    "enamorus-therian": {
+      "name": "Enamorus Therian"
+    },
+    "entei": {
+      "name": "Entei"
+    },
+    "escavalier": {
+      "name": "Escavalier"
+    },
+    "espathra": {
+      "name": "Espathra"
+    },
+    "espeon": {
+      "name": "Espeon"
+    },
+    "espurr": {
+      "name": "Espurr"
+    },
+    "eternatus": {
+      "name": "Eternatus"
+    },
+    "eternatus-eternamax": {
+      "name": "Eternatus Eternamax"
+    },
+    "excadrill": {
+      "name": "Excadrill"
+    },
+    "excadrill-mega": {
+      "name": "Excadrill Mega"
+    },
+    "exeggcute": {
+      "name": "Exeggcute"
+    },
+    "exeggutor": {
+      "name": "Exeggutor"
+    },
+    "exeggutor-alola": {
+      "name": "Exeggutor Alola"
+    },
+    "exploud": {
+      "name": "Exploud"
+    },
+    "falinks": {
+      "name": "Falinks"
+    },
+    "falinks-mega": {
+      "name": "Falinks Mega"
+    },
+    "farfetchd": {
+      "name": "Farfetch'd"
+    },
+    "farfetchd-galar": {
+      "name": "Farfetchd Galar"
+    },
+    "farigiraf": {
+      "name": "Farigiraf"
+    },
+    "fearow": {
+      "name": "Fearow"
+    },
+    "feebas": {
+      "name": "Feebas"
+    },
+    "fennekin": {
+      "name": "Fennekin"
+    },
+    "feraligatr": {
+      "name": "Feraligatr"
+    },
+    "feraligatr-mega": {
+      "name": "Feraligatr Mega"
+    },
+    "ferroseed": {
+      "name": "Ferroseed"
+    },
+    "ferrothorn": {
+      "name": "Ferrothorn"
+    },
+    "fezandipiti": {
+      "name": "Fezandipiti"
+    },
+    "fidough": {
+      "name": "Fidough"
+    },
+    "finizen": {
+      "name": "Finizen"
+    },
+    "finneon": {
+      "name": "Finneon"
+    },
+    "flaaffy": {
+      "name": "Flaaffy"
+    },
+    "flabebe": {
+      "name": "Flabébé"
+    },
+    "flabebe-blue": {
+      "name": "Flabebe Blue"
+    },
+    "flabebe-orange": {
+      "name": "Flabebe Orange"
+    },
+    "flabebe-white": {
+      "name": "Flabebe White"
+    },
+    "flabebe-yellow": {
+      "name": "Flabebe Yellow"
+    },
+    "flamigo": {
+      "name": "Flamigo"
+    },
+    "flapple": {
+      "name": "Flapple"
+    },
+    "flareon": {
+      "name": "Flareon"
+    },
+    "fletchinder": {
+      "name": "Fletchinder"
+    },
+    "fletchling": {
+      "name": "Fletchling"
+    },
+    "flittle": {
+      "name": "Flittle"
+    },
+    "floatzel": {
+      "name": "Floatzel"
+    },
+    "floette": {
+      "name": "Floette"
+    },
+    "floette-blue": {
+      "name": "Floette Blue"
+    },
+    "floette-eternal": {
+      "name": "Floette Eternal"
+    },
+    "floette-mega": {
+      "name": "Floette Mega"
+    },
+    "floette-orange": {
+      "name": "Floette Orange"
+    },
+    "floette-white": {
+      "name": "Floette White"
+    },
+    "floette-yellow": {
+      "name": "Floette Yellow"
+    },
+    "floragato": {
+      "name": "Floragato"
+    },
+    "florges": {
+      "name": "Florges"
+    },
+    "florges-blue": {
+      "name": "Florges Blue"
+    },
+    "florges-orange": {
+      "name": "Florges Orange"
+    },
+    "florges-white": {
+      "name": "Florges White"
+    },
+    "florges-yellow": {
+      "name": "Florges Yellow"
+    },
+    "flutter-mane": {
+      "name": "Flutter Mane"
+    },
+    "flygon": {
+      "name": "Flygon"
+    },
+    "fomantis": {
+      "name": "Fomantis"
+    },
+    "foongus": {
+      "name": "Foongus"
+    },
+    "forretress": {
+      "name": "Forretress"
+    },
+    "fraxure": {
+      "name": "Fraxure"
+    },
+    "frigibax": {
+      "name": "Frigibax"
+    },
+    "frillish-male": {
+      "name": "Frillish Male"
+    },
+    "froakie": {
+      "name": "Froakie"
+    },
+    "frogadier": {
+      "name": "Frogadier"
+    },
+    "froslass": {
+      "name": "Froslass"
+    },
+    "froslass-mega": {
+      "name": "Froslass Mega"
+    },
+    "frosmoth": {
+      "name": "Frosmoth"
+    },
+    "fuecoco": {
+      "name": "Fuecoco"
+    },
+    "furfrou": {
+      "name": "Furfrou"
+    },
+    "furfrou-dandy": {
+      "name": "Furfrou Dandy"
+    },
+    "furfrou-debutante": {
+      "name": "Furfrou Debutante"
+    },
+    "furfrou-diamond": {
+      "name": "Furfrou Diamond"
+    },
+    "furfrou-heart": {
+      "name": "Furfrou Heart"
+    },
+    "furfrou-kabuki": {
+      "name": "Furfrou Kabuki"
+    },
+    "furfrou-la-reine": {
+      "name": "Furfrou La Reine"
+    },
+    "furfrou-matron": {
+      "name": "Furfrou Matron"
+    },
+    "furfrou-pharaoh": {
+      "name": "Furfrou Pharaoh"
+    },
+    "furfrou-star": {
+      "name": "Furfrou Star"
+    },
+    "furret": {
+      "name": "Furret"
+    },
+    "gabite": {
+      "name": "Gabite"
+    },
+    "gallade": {
+      "name": "Gallade"
+    },
+    "gallade-mega": {
+      "name": "Gallade Mega"
+    },
+    "galvantula": {
+      "name": "Galvantula"
+    },
+    "garbodor": {
+      "name": "Garbodor"
+    },
+    "garchomp": {
+      "name": "Garchomp"
+    },
+    "garchomp-mega": {
+      "name": "Garchomp Mega"
+    },
+    "garchomp-mega-z": {
+      "name": "Garchomp Mega Z"
+    },
+    "gardevoir": {
+      "name": "Gardevoir"
+    },
+    "gardevoir-mega": {
+      "name": "Gardevoir Mega"
+    },
+    "garganacl": {
+      "name": "Garganacl"
+    },
+    "gastly": {
+      "name": "Gastly"
+    },
+    "gastrodon": {
+      "name": "Gastrodon"
+    },
+    "gastrodon-east": {
+      "name": "Gastrodon East"
+    },
+    "genesect": {
+      "name": "Genesect"
+    },
+    "genesect-burn": {
+      "name": "Genesect Burn"
+    },
+    "genesect-chill": {
+      "name": "Genesect Chill"
+    },
+    "genesect-douse": {
+      "name": "Genesect Douse"
+    },
+    "genesect-shock": {
+      "name": "Genesect Shock"
+    },
+    "gengar": {
+      "name": "Gengar"
+    },
+    "gengar-mega": {
+      "name": "Gengar Mega"
+    },
+    "geodude": {
+      "name": "Geodude"
+    },
+    "geodude-alola": {
+      "name": "Geodude Alola"
+    },
+    "gholdengo": {
+      "name": "Gholdengo"
+    },
+    "gible": {
+      "name": "Gible"
+    },
+    "gigalith": {
+      "name": "Gigalith"
+    },
+    "gimmighoul": {
+      "name": "Gimmighoul"
+    },
+    "gimmighoul-roaming": {
+      "name": "Gimmighoul Roaming"
+    },
+    "girafarig": {
+      "name": "Girafarig"
+    },
+    "giratina": {
+      "name": "Giratina"
+    },
+    "giratina-origin": {
+      "name": "Giratina Origin"
+    },
+    "glaceon": {
+      "name": "Glaceon"
+    },
+    "glalie": {
+      "name": "Glalie"
+    },
+    "glalie-mega": {
+      "name": "Glalie Mega"
+    },
+    "glameow": {
+      "name": "Glameow"
+    },
+    "glastrier": {
+      "name": "Glastrier"
+    },
+    "gligar": {
+      "name": "Gligar"
+    },
+    "glimmet": {
+      "name": "Glimmet"
+    },
+    "glimmora": {
+      "name": "Glimmora"
+    },
+    "glimmora-mega": {
+      "name": "Glimmora Mega"
+    },
+    "gliscor": {
+      "name": "Gliscor"
+    },
+    "gloom": {
+      "name": "Gloom"
+    },
+    "gogoat": {
+      "name": "Gogoat"
+    },
+    "golbat": {
+      "name": "Golbat"
+    },
+    "goldeen": {
+      "name": "Goldeen"
+    },
+    "golduck": {
+      "name": "Golduck"
+    },
+    "golem": {
+      "name": "Golem"
+    },
+    "golem-alola": {
+      "name": "Golem Alola"
+    },
+    "golett": {
+      "name": "Golett"
+    },
+    "golisopod": {
+      "name": "Golisopod"
+    },
+    "golisopod-mega": {
+      "name": "Golisopod Mega"
+    },
+    "golurk": {
+      "name": "Golurk"
+    },
+    "golurk-mega": {
+      "name": "Golurk Mega"
+    },
+    "goodra": {
+      "name": "Goodra"
+    },
+    "goodra-hisui": {
+      "name": "Goodra Hisui"
+    },
+    "goomy": {
+      "name": "Goomy"
+    },
+    "gorebyss": {
+      "name": "Gorebyss"
+    },
+    "gossifleur": {
+      "name": "Gossifleur"
+    },
+    "gothita": {
+      "name": "Gothita"
+    },
+    "gothitelle": {
+      "name": "Gothitelle"
+    },
+    "gothorita": {
+      "name": "Gothorita"
+    },
+    "gouging-fire": {
+      "name": "Gouging Fire"
+    },
+    "gourgeist-average": {
+      "name": "Gourgeist"
+    },
+    "gourgeist-large": {
+      "name": "Gourgeist Large"
+    },
+    "gourgeist-small": {
+      "name": "Gourgeist Small"
+    },
+    "gourgeist-super": {
+      "name": "Gourgeist Super"
+    },
+    "grafaiai": {
+      "name": "Grafaiai"
+    },
+    "granbull": {
+      "name": "Granbull"
+    },
+    "grapploct": {
+      "name": "Grapploct"
+    },
+    "graveler": {
+      "name": "Graveler"
+    },
+    "graveler-alola": {
+      "name": "Graveler Alola"
+    },
+    "great-tusk": {
+      "name": "Great Tusk"
+    },
+    "greavard": {
+      "name": "Greavard"
+    },
+    "greedent": {
+      "name": "Greedent"
+    },
+    "greninja": {
+      "name": "Greninja"
+    },
+    "greninja-ash": {
+      "name": "Ash-Greninja"
+    },
+    "greninja-bond": {
+      "name": "Greninja"
+    },
+    "greninja-mega": {
+      "name": "Greninja Mega"
+    },
+    "grimer": {
+      "name": "Grimer"
+    },
+    "grimer-alola": {
+      "name": "Grimer Alola"
+    },
+    "grimmsnarl": {
+      "name": "Grimmsnarl"
+    },
+    "grookey": {
+      "name": "Grookey"
+    },
+    "grotle": {
+      "name": "Grotle"
+    },
+    "groudon": {
+      "name": "Groudon"
+    },
+    "groudon-primal": {
+      "name": "Groudon Primal"
+    },
+    "grovyle": {
+      "name": "Grovyle"
+    },
+    "growlithe": {
+      "name": "Growlithe"
+    },
+    "growlithe-hisui": {
+      "name": "Growlithe Hisui"
+    },
+    "grubbin": {
+      "name": "Grubbin"
+    },
+    "grumpig": {
+      "name": "Grumpig"
+    },
+    "gulpin": {
+      "name": "Gulpin"
+    },
+    "gumshoos": {
+      "name": "Gumshoos"
+    },
+    "gumshoos-totem": {
+      "name": "Gumshoos Totem"
+    },
+    "gurdurr": {
+      "name": "Gurdurr"
+    },
+    "guzzlord": {
+      "name": "Guzzlord"
+    },
+    "gyarados": {
+      "name": "Gyarados"
+    },
+    "gyarados-mega": {
+      "name": "Gyarados Mega"
+    },
+    "hakamo-o": {
+      "name": "Hakamo O"
+    },
+    "happiny": {
+      "name": "Happiny"
+    },
+    "hariyama": {
+      "name": "Hariyama"
+    },
+    "hatenna": {
+      "name": "Hatenna"
+    },
+    "hatterene": {
+      "name": "Hatterene"
+    },
+    "hattrem": {
+      "name": "Hattrem"
+    },
+    "haunter": {
+      "name": "Haunter"
+    },
+    "hawlucha": {
+      "name": "Hawlucha"
+    },
+    "hawlucha-mega": {
+      "name": "Hawlucha Mega"
+    },
+    "haxorus": {
+      "name": "Haxorus"
+    },
+    "heatmor": {
+      "name": "Heatmor"
+    },
+    "heatran": {
+      "name": "Heatran"
+    },
+    "heatran-mega": {
+      "name": "Heatran Mega"
+    },
+    "heliolisk": {
+      "name": "Heliolisk"
+    },
+    "helioptile": {
+      "name": "Helioptile"
+    },
+    "heracross": {
+      "name": "Heracross"
+    },
+    "heracross-mega": {
+      "name": "Heracross Mega"
+    },
+    "herdier": {
+      "name": "Herdier"
+    },
+    "hippopotas": {
+      "name": "Hippopotas"
+    },
+    "hippowdon": {
+      "name": "Hippowdon"
+    },
+    "hitmonchan": {
+      "name": "Hitmonchan"
+    },
+    "hitmonlee": {
+      "name": "Hitmonlee"
+    },
+    "hitmontop": {
+      "name": "Hitmontop"
+    },
+    "ho-oh": {
+      "name": "Ho-Oh"
+    },
+    "honchkrow": {
+      "name": "Honchkrow"
+    },
+    "honedge": {
+      "name": "Honedge"
+    },
+    "hoopa": {
+      "name": "Hoopa"
+    },
+    "hoopa-unbound": {
+      "name": "Hoopa Unbound"
+    },
+    "hoothoot": {
+      "name": "Hoothoot"
+    },
+    "hoppip": {
+      "name": "Hoppip"
+    },
+    "horsea": {
+      "name": "Horsea"
+    },
+    "houndoom": {
+      "name": "Houndoom"
+    },
+    "houndoom-mega": {
+      "name": "Houndoom Mega"
+    },
+    "houndour": {
+      "name": "Houndour"
+    },
+    "houndstone": {
+      "name": "Houndstone"
+    },
+    "huntail": {
+      "name": "Huntail"
+    },
+    "hydrapple": {
+      "name": "Hydrapple"
+    },
+    "hydreigon": {
+      "name": "Hydreigon"
+    },
+    "hypno": {
+      "name": "Hypno"
+    },
+    "igglybuff": {
+      "name": "Igglybuff"
+    },
+    "illumise": {
+      "name": "Illumise"
+    },
+    "impidimp": {
+      "name": "Impidimp"
+    },
+    "incineroar": {
+      "name": "Incineroar"
+    },
+    "indeedee": {
+      "name": "Indeedee"
+    },
+    "indeedee-f": {
+      "name": "Indeedee F"
+    },
+    "infernape": {
+      "name": "Infernape"
+    },
+    "inkay": {
+      "name": "Inkay"
+    },
+    "inteleon": {
+      "name": "Inteleon"
+    },
+    "iron-boulder": {
+      "name": "Iron Boulder"
+    },
+    "iron-bundle": {
+      "name": "Iron Bundle"
+    },
+    "iron-crown": {
+      "name": "Iron Crown"
+    },
+    "iron-hands": {
+      "name": "Iron Hands"
+    },
+    "iron-jugulis": {
+      "name": "Iron Jugulis"
+    },
+    "iron-leaves": {
+      "name": "Iron Leaves"
+    },
+    "iron-moth": {
+      "name": "Iron Moth"
+    },
+    "iron-thorns": {
+      "name": "Iron Thorns"
+    },
+    "iron-treads": {
+      "name": "Iron Treads"
+    },
+    "iron-valiant": {
+      "name": "Iron Valiant"
+    },
+    "ivysaur": {
+      "name": "Ivysaur"
+    },
+    "jangmo-o": {
+      "name": "Jangmo O"
+    },
+    "jellicent-male": {
+      "name": "Jellicent Male"
+    },
+    "jigglypuff": {
+      "name": "Jigglypuff"
+    },
+    "jirachi": {
+      "name": "Jirachi"
+    },
+    "jolteon": {
+      "name": "Jolteon"
+    },
+    "joltik": {
+      "name": "Joltik"
+    },
+    "jumpluff": {
+      "name": "Jumpluff"
+    },
+    "jynx": {
+      "name": "Jynx"
+    },
+    "kabuto": {
+      "name": "Kabuto"
+    },
+    "kabutops": {
+      "name": "Kabutops"
+    },
+    "kadabra": {
+      "name": "Kadabra"
+    },
+    "kakuna": {
+      "name": "Kakuna"
+    },
+    "kangaskhan": {
+      "name": "Kangaskhan"
+    },
+    "kangaskhan-mega": {
+      "name": "Kangaskhan Mega"
+    },
+    "karrablast": {
+      "name": "Karrablast"
+    },
+    "kartana": {
+      "name": "Kartana"
+    },
+    "kecleon": {
+      "name": "Kecleon"
+    },
+    "keldeo-ordinary": {
+      "name": "Keldeo Ordinary"
+    },
+    "keldeo-resolute": {
+      "name": "Keldeo Resolute"
+    },
+    "kilowattrel": {
+      "name": "Kilowattrel"
+    },
+    "kingambit": {
+      "name": "Kingambit"
+    },
+    "kingdra": {
+      "name": "Kingdra"
+    },
+    "kingler": {
+      "name": "Kingler"
+    },
+    "kirlia": {
+      "name": "Kirlia"
+    },
+    "klang": {
+      "name": "Klang"
+    },
+    "klawf": {
+      "name": "Klawf"
+    },
+    "kleavor": {
+      "name": "Kleavor"
+    },
+    "klefki": {
+      "name": "Klefki"
+    },
+    "klink": {
+      "name": "Klink"
+    },
+    "klinklang": {
+      "name": "Klinklang"
+    },
+    "koffing": {
+      "name": "Koffing"
+    },
+    "komala": {
+      "name": "Komala"
+    },
+    "kommo-o": {
+      "name": "Kommo O"
+    },
+    "kommo-o-totem": {
+      "name": "Kommo o Totem"
+    },
+    "koraidon": {
+      "name": "Koraidon"
+    },
+    "krabby": {
+      "name": "Krabby"
+    },
+    "kricketot": {
+      "name": "Kricketot"
+    },
+    "kricketune": {
+      "name": "Kricketune"
+    },
+    "krokorok": {
+      "name": "Krokorok"
+    },
+    "krookodile": {
+      "name": "Krookodile"
+    },
+    "kubfu": {
+      "name": "Kubfu"
+    },
+    "kyogre": {
+      "name": "Kyogre"
+    },
+    "kyogre-primal": {
+      "name": "Kyogre Primal"
+    },
+    "kyurem": {
+      "name": "Kyurem"
+    },
+    "kyurem-black": {
+      "name": "Kyurem Black"
+    },
+    "kyurem-white": {
+      "name": "Kyurem White"
+    },
+    "lairon": {
+      "name": "Lairon"
+    },
+    "lampent": {
+      "name": "Lampent"
+    },
+    "landorus": {
+      "name": "Landorus"
+    },
+    "landorus-incarnate": {
+      "name": "Landorus Incarnate"
+    },
+    "landorus-therian": {
+      "name": "Landorus Therian"
+    },
+    "lanturn": {
+      "name": "Lanturn"
+    },
+    "lapras": {
+      "name": "Lapras"
+    },
+    "larvesta": {
+      "name": "Larvesta"
+    },
+    "larvitar": {
+      "name": "Larvitar"
+    },
+    "latias": {
+      "name": "Latias"
+    },
+    "latias-mega": {
+      "name": "Latias Mega"
+    },
+    "latios": {
+      "name": "Latios"
+    },
+    "latios-mega": {
+      "name": "Latios Mega"
+    },
+    "leafeon": {
+      "name": "Leafeon"
+    },
+    "leavanny": {
+      "name": "Leavanny"
+    },
+    "lechonk": {
+      "name": "Lechonk"
+    },
+    "ledian": {
+      "name": "Ledian"
+    },
+    "ledyba": {
+      "name": "Ledyba"
+    },
+    "lickilicky": {
+      "name": "Lickilicky"
+    },
+    "lickitung": {
+      "name": "Lickitung"
+    },
+    "liepard": {
+      "name": "Liepard"
+    },
+    "lileep": {
+      "name": "Lileep"
+    },
+    "lilligant": {
+      "name": "Lilligant"
+    },
+    "lilligant-hisui": {
+      "name": "Lilligant Hisui"
+    },
+    "lillipup": {
+      "name": "Lillipup"
+    },
+    "linoone": {
+      "name": "Linoone"
+    },
+    "linoone-galar": {
+      "name": "Linoone Galar"
+    },
+    "litleo": {
+      "name": "Litleo"
+    },
+    "litten": {
+      "name": "Litten"
+    },
+    "litwick": {
+      "name": "Litwick"
+    },
+    "lokix": {
+      "name": "Lokix"
+    },
+    "lombre": {
+      "name": "Lombre"
+    },
+    "lopunny": {
+      "name": "Lopunny"
+    },
+    "lopunny-mega": {
+      "name": "Lopunny Mega"
+    },
+    "lotad": {
+      "name": "Lotad"
+    },
+    "loudred": {
+      "name": "Loudred"
+    },
+    "lucario": {
+      "name": "Lucario"
+    },
+    "lucario-mega": {
+      "name": "Lucario Mega"
+    },
+    "lucario-mega-z": {
+      "name": "Lucario Mega Z"
+    },
+    "ludicolo": {
+      "name": "Ludicolo"
+    },
+    "lugia": {
+      "name": "Lugia"
+    },
+    "lumineon": {
+      "name": "Lumineon"
+    },
+    "lunala": {
+      "name": "Lunala"
+    },
+    "lunatone": {
+      "name": "Lunatone"
+    },
+    "lurantis": {
+      "name": "Lurantis"
+    },
+    "lurantis-totem": {
+      "name": "Lurantis Totem"
+    },
+    "luvdisc": {
+      "name": "Luvdisc"
+    },
+    "luxio": {
+      "name": "Luxio"
+    },
+    "luxray": {
+      "name": "Luxray"
+    },
+    "lycanroc": {
+      "name": "Lycanroc Midday"
+    },
+    "lycanroc-dusk": {
+      "name": "Lycanroc Dusk"
+    },
+    "lycanroc-midnight": {
+      "name": "Lycanroc Midnight"
+    },
+    "mabosstiff": {
+      "name": "Mabosstiff"
+    },
+    "machamp": {
+      "name": "Machamp"
+    },
+    "machoke": {
+      "name": "Machoke"
+    },
+    "machop": {
+      "name": "Machop"
+    },
+    "magby": {
+      "name": "Magby"
+    },
+    "magcargo": {
+      "name": "Magcargo"
+    },
+    "magearna": {
+      "name": "Magearna"
+    },
+    "magearna-mega": {
+      "name": "Magearna Mega"
+    },
+    "magearna-original": {
+      "name": "Magearna Original"
+    },
+    "magearna-original-mega": {
+      "name": "Magearna Original Mega"
+    },
+    "magikarp": {
+      "name": "Magikarp"
+    },
+    "magmar": {
+      "name": "Magmar"
+    },
+    "magmortar": {
+      "name": "Magmortar"
+    },
+    "magnemite": {
+      "name": "Magnemite"
+    },
+    "magneton": {
+      "name": "Magneton"
+    },
+    "magnezone": {
+      "name": "Magnezone"
+    },
+    "makuhita": {
+      "name": "Makuhita"
+    },
+    "malamar": {
+      "name": "Malamar"
+    },
+    "malamar-mega": {
+      "name": "Malamar Mega"
+    },
+    "mamoswine": {
+      "name": "Mamoswine"
+    },
+    "manaphy": {
+      "name": "Manaphy"
+    },
+    "mandibuzz": {
+      "name": "Mandibuzz"
+    },
+    "manectric": {
+      "name": "Manectric"
+    },
+    "manectric-mega": {
+      "name": "Manectric Mega"
+    },
+    "mankey": {
+      "name": "Mankey"
+    },
+    "mantine": {
+      "name": "Mantine"
+    },
+    "mantyke": {
+      "name": "Mantyke"
+    },
+    "maractus": {
+      "name": "Maractus"
+    },
+    "mareanie": {
+      "name": "Mareanie"
+    },
+    "mareep": {
+      "name": "Mareep"
+    },
+    "marill": {
+      "name": "Marill"
+    },
+    "marowak": {
+      "name": "Marowak"
+    },
+    "marowak-alola": {
+      "name": "Marowak Alola"
+    },
+    "marowak-alola-totem": {
+      "name": "Marowak Alola Totem"
+    },
+    "marshadow": {
+      "name": "Marshadow"
+    },
+    "marshtomp": {
+      "name": "Marshtomp"
+    },
+    "maschiff": {
+      "name": "Maschiff"
+    },
+    "masquerain": {
+      "name": "Masquerain"
+    },
+    "maushold": {
+      "name": "Maushold"
+    },
+    "maushold-four": {
+      "name": "Maushold Four"
+    },
+    "mawile": {
+      "name": "Mawile"
+    },
+    "mawile-mega": {
+      "name": "Mawile Mega"
+    },
+    "medicham": {
+      "name": "Medicham"
+    },
+    "medicham-mega": {
+      "name": "Medicham Mega"
+    },
+    "meditite": {
+      "name": "Meditite"
+    },
+    "meganium": {
+      "name": "Meganium"
+    },
+    "meganium-mega": {
+      "name": "Meganium Mega"
+    },
+    "melmetal": {
+      "name": "Melmetal"
+    },
+    "meloetta": {
+      "name": "Meloetta"
+    },
+    "meloetta-aria": {
+      "name": "Meloetta Aria"
+    },
+    "meloetta-pirouette": {
+      "name": "Meloetta Pirouette"
+    },
+    "meltan": {
+      "name": "Meltan"
+    },
+    "meowscarada": {
+      "name": "Meowscarada"
+    },
+    "meowstic-f": {
+      "name": "Meowstic F"
+    },
+    "meowstic-f-mega": {
+      "name": "Meowstic F Mega"
+    },
+    "meowstic-m-mega": {
+      "name": "Meowstic M Mega"
+    },
+    "meowstic-male": {
+      "name": "Meowstic"
+    },
+    "meowth": {
+      "name": "Meowth"
+    },
+    "meowth-alola": {
+      "name": "Meowth Alola"
+    },
+    "meowth-galar": {
+      "name": "Meowth Galar"
+    },
+    "mesprit": {
+      "name": "Mesprit"
+    },
+    "metagross": {
+      "name": "Metagross"
+    },
+    "metagross-mega": {
+      "name": "Metagross Mega"
+    },
+    "metang": {
+      "name": "Metang"
+    },
+    "metapod": {
+      "name": "Metapod"
+    },
+    "mew": {
+      "name": "Mew"
+    },
+    "mewtwo": {
+      "name": "Mewtwo"
+    },
+    "mewtwo-megax": {
+      "name": "Mewtwo Mega X"
+    },
+    "mewtwo-megay": {
+      "name": "Mewtwo Mega Y"
+    },
+    "mienfoo": {
+      "name": "Mienfoo"
+    },
+    "mienshao": {
+      "name": "Mienshao"
+    },
+    "mightyena": {
+      "name": "Mightyena"
+    },
+    "milcery": {
+      "name": "Milcery"
+    },
+    "milotic": {
+      "name": "Milotic"
+    },
+    "miltank": {
+      "name": "Miltank"
+    },
+    "mime-jr": {
+      "name": "Mime Jr."
+    },
+    "mimikyu": {
+      "name": "Mimikyu Disguised"
+    },
+    "mimikyu-busted": {
+      "name": "Mimikyu Busted"
+    },
+    "mimikyu-busted-totem": {
+      "name": "Mimikyu Busted Totem"
+    },
+    "mimikyu-totem": {
+      "name": "Mimikyu Totem"
+    },
+    "minccino": {
+      "name": "Minccino"
+    },
+    "minior": {
+      "name": "Minior Red Meteor"
+    },
+    "minior-blue": {
+      "name": "Minior Blue"
+    },
+    "minior-green": {
+      "name": "Minior Green"
+    },
+    "minior-indigo": {
+      "name": "Minior Indigo"
+    },
+    "minior-meteor": {
+      "name": "Minior Meteor"
+    },
+    "minior-orange": {
+      "name": "Minior Orange"
+    },
+    "minior-violet": {
+      "name": "Minior Violet"
+    },
+    "minior-yellow": {
+      "name": "Minior Yellow"
+    },
+    "minun": {
+      "name": "Minun"
+    },
+    "miraidon": {
+      "name": "Miraidon"
+    },
+    "misdreavus": {
+      "name": "Misdreavus"
+    },
+    "mismagius": {
+      "name": "Mismagius"
+    },
+    "moltres": {
+      "name": "Moltres"
+    },
+    "moltres-galar": {
+      "name": "Moltres Galar"
+    },
+    "monferno": {
+      "name": "Monferno"
+    },
+    "morelull": {
+      "name": "Morelull"
+    },
+    "morgrem": {
+      "name": "Morgrem"
+    },
+    "morpeko": {
+      "name": "Morpeko"
+    },
+    "morpeko-hangry": {
+      "name": "Morpeko Hangry"
+    },
+    "mothim": {
+      "name": "Mothim"
+    },
+    "mr-mime": {
+      "name": "Mr. Mime"
+    },
+    "mr-mime-galar": {
+      "name": "Mr. Mime Galar"
+    },
+    "mr-rime": {
+      "name": "Mr. Rime"
+    },
+    "mudbray": {
+      "name": "Mudbray"
+    },
+    "mudkip": {
+      "name": "Mudkip"
+    },
+    "mudsdale": {
+      "name": "Mudsdale"
+    },
+    "muk": {
+      "name": "Muk"
+    },
+    "muk-alola": {
+      "name": "Muk Alola"
+    },
+    "munchlax": {
+      "name": "Munchlax"
+    },
+    "munkidori": {
+      "name": "Munkidori"
+    },
+    "munna": {
+      "name": "Munna"
+    },
+    "murkrow": {
+      "name": "Murkrow"
+    },
+    "musharna": {
+      "name": "Musharna"
+    },
+    "nacli": {
+      "name": "Nacli"
+    },
+    "naclstack": {
+      "name": "Naclstack"
+    },
+    "naganadel": {
+      "name": "Naganadel"
+    },
+    "natu": {
+      "name": "Natu"
+    },
+    "necrozma": {
+      "name": "Necrozma"
+    },
+    "necrozma-dawn-wings": {
+      "name": "Necrozma Dawn Wings"
+    },
+    "necrozma-dusk-mane": {
+      "name": "Necrozma Dusk Mane"
+    },
+    "necrozma-ultra": {
+      "name": "Necrozma Ultra"
+    },
+    "nickit": {
+      "name": "Nickit"
+    },
+    "nidoking": {
+      "name": "Nidoking"
+    },
+    "nidoqueen": {
+      "name": "Nidoqueen"
+    },
+    "nidoran-f": {
+      "name": "Nidoran-F"
+    },
+    "nidoran-m": {
+      "name": "Nidoran-M"
+    },
+    "nidorina": {
+      "name": "Nidorina"
+    },
+    "nidorino": {
+      "name": "Nidorino"
+    },
+    "nihilego": {
+      "name": "Nihilego"
+    },
+    "nincada": {
+      "name": "Nincada"
+    },
+    "ninetales": {
+      "name": "Ninetales"
+    },
+    "ninetales-alola": {
+      "name": "Ninetales Alola"
+    },
+    "ninjask": {
+      "name": "Ninjask"
+    },
+    "noctowl": {
+      "name": "Noctowl"
+    },
+    "noibat": {
+      "name": "Noibat"
+    },
+    "noivern": {
+      "name": "Noivern"
+    },
+    "nosepass": {
+      "name": "Nosepass"
+    },
+    "numel": {
+      "name": "Numel"
+    },
+    "nuzleaf": {
+      "name": "Nuzleaf"
+    },
+    "nymble": {
+      "name": "Nymble"
+    },
+    "obstagoon": {
+      "name": "Obstagoon"
+    },
+    "octillery": {
+      "name": "Octillery"
+    },
+    "oddish": {
+      "name": "Oddish"
+    },
+    "ogerpon": {
+      "name": "Ogerpon"
+    },
+    "ogerpon-cornerstone": {
+      "name": "Ogerpon Cornerstone"
+    },
+    "ogerpon-cornerstone-tera": {
+      "name": "Ogerpon Cornerstone Tera"
+    },
+    "ogerpon-hearthflame": {
+      "name": "Ogerpon Hearthflame"
+    },
+    "ogerpon-hearthflame-tera": {
+      "name": "Ogerpon Hearthflame Tera"
+    },
+    "ogerpon-teal-tera": {
+      "name": "Ogerpon Teal Tera"
+    },
+    "ogerpon-wellspring": {
+      "name": "Ogerpon Wellspring"
+    },
+    "ogerpon-wellspring-tera": {
+      "name": "Ogerpon Wellspring Tera"
+    },
+    "oinkologne": {
+      "name": "Oinkologne"
+    },
+    "oinkologne-f": {
+      "name": "Oinkologne F"
+    },
+    "okidogi": {
+      "name": "Okidogi"
+    },
+    "omanyte": {
+      "name": "Omanyte"
+    },
+    "omastar": {
+      "name": "Omastar"
+    },
+    "onix": {
+      "name": "Onix"
+    },
+    "oranguru": {
+      "name": "Oranguru"
+    },
+    "orbeetle": {
+      "name": "Orbeetle"
+    },
+    "oricorio": {
+      "name": "Oricorio Baile"
+    },
+    "oricorio-pau": {
+      "name": "Oricorio Pa'u"
+    },
+    "oricorio-pom-pom": {
+      "name": "Oricorio Pom-Pom"
+    },
+    "oricorio-sensu": {
+      "name": "Oricorio Sensu"
+    },
+    "orthworm": {
+      "name": "Orthworm"
+    },
+    "oshawott": {
+      "name": "Oshawott"
+    },
+    "overqwil": {
+      "name": "Overqwil"
+    },
+    "pachirisu": {
+      "name": "Pachirisu"
+    },
+    "palafin": {
+      "name": "Palafin"
+    },
+    "palafin-hero": {
+      "name": "Palafin Hero"
+    },
+    "palkia": {
+      "name": "Palkia"
+    },
+    "palkia-origin": {
+      "name": "Palkia Origin"
+    },
+    "palossand": {
+      "name": "Palossand"
+    },
+    "palpitoad": {
+      "name": "Palpitoad"
+    },
+    "pancham": {
+      "name": "Pancham"
+    },
+    "pangoro": {
+      "name": "Pangoro"
+    },
+    "panpour": {
+      "name": "Panpour"
+    },
+    "pansage": {
+      "name": "Pansage"
+    },
+    "pansear": {
+      "name": "Pansear"
+    },
+    "paras": {
+      "name": "Paras"
+    },
+    "parasect": {
+      "name": "Parasect"
+    },
+    "passimian": {
+      "name": "Passimian"
+    },
+    "patrat": {
+      "name": "Patrat"
+    },
+    "pawmi": {
+      "name": "Pawmi"
+    },
+    "pawmo": {
+      "name": "Pawmo"
+    },
+    "pawmot": {
+      "name": "Pawmot"
+    },
+    "pawniard": {
+      "name": "Pawniard"
+    },
+    "pecharunt": {
+      "name": "Pecharunt"
+    },
+    "pelipper": {
+      "name": "Pelipper"
+    },
+    "perrserker": {
+      "name": "Perrserker"
+    },
+    "persian": {
+      "name": "Persian"
+    },
+    "persian-alola": {
+      "name": "Persian Alola"
+    },
+    "petilil": {
+      "name": "Petilil"
+    },
+    "phanpy": {
+      "name": "Phanpy"
+    },
+    "phantump": {
+      "name": "Phantump"
+    },
+    "pheromosa": {
+      "name": "Pheromosa"
+    },
+    "phione": {
+      "name": "Phione"
+    },
+    "pichu": {
+      "name": "Pichu"
+    },
+    "pichu-spiky-eared": {
+      "name": "Pichu Spiky eared"
+    },
+    "pidgeot": {
+      "name": "Pidgeot"
+    },
+    "pidgeot-mega": {
+      "name": "Pidgeot Mega"
+    },
+    "pidgeotto": {
+      "name": "Pidgeotto"
+    },
+    "pidgey": {
+      "name": "Pidgey"
+    },
+    "pidove": {
+      "name": "Pidove"
+    },
+    "pignite": {
+      "name": "Pignite"
+    },
+    "pikachu": {
+      "name": "Pikachu"
+    },
+    "pikachu-alola": {
+      "name": "Pikachu Alola"
+    },
+    "pikachu-belle": {
+      "name": "Pikachu Belle"
+    },
+    "pikachu-cosplay": {
+      "name": "Pikachu Cosplay"
+    },
+    "pikachu-hoenn": {
+      "name": "Pikachu Hoenn"
+    },
+    "pikachu-kalos": {
+      "name": "Pikachu Kalos"
+    },
+    "pikachu-libre": {
+      "name": "Pikachu Libre"
+    },
+    "pikachu-original": {
+      "name": "Pikachu Original"
+    },
+    "pikachu-partner": {
+      "name": "Pikachu Partner"
+    },
+    "pikachu-phd": {
+      "name": "Pikachu PhD"
+    },
+    "pikachu-pop-star": {
+      "name": "Pikachu Pop Star"
+    },
+    "pikachu-rock-star": {
+      "name": "Pikachu Rock Star"
+    },
+    "pikachu-sinnoh": {
+      "name": "Pikachu Sinnoh"
+    },
+    "pikachu-starter": {
+      "name": "Pikachu Starter"
+    },
+    "pikachu-unova": {
+      "name": "Pikachu Unova"
+    },
+    "pikachu-world": {
+      "name": "Pikachu World"
+    },
+    "pikipek": {
+      "name": "Pikipek"
+    },
+    "piloswine": {
+      "name": "Piloswine"
+    },
+    "pincurchin": {
+      "name": "Pincurchin"
+    },
+    "pineco": {
+      "name": "Pineco"
+    },
+    "pinsir": {
+      "name": "Pinsir"
+    },
+    "pinsir-mega": {
+      "name": "Pinsir Mega"
+    },
+    "piplup": {
+      "name": "Piplup"
+    },
+    "plusle": {
+      "name": "Plusle"
+    },
+    "poipole": {
+      "name": "Poipole"
+    },
+    "politoed": {
+      "name": "Politoed"
+    },
+    "poliwag": {
+      "name": "Poliwag"
+    },
+    "poliwhirl": {
+      "name": "Poliwhirl"
+    },
+    "poliwrath": {
+      "name": "Poliwrath"
+    },
+    "poltchageist": {
+      "name": "Poltchageist"
+    },
+    "poltchageist-artisan": {
+      "name": "Poltchageist Artisan"
+    },
+    "polteageist": {
+      "name": "Polteageist"
+    },
+    "polteageist-antique": {
+      "name": "Polteageist Antique"
+    },
+    "ponyta": {
+      "name": "Ponyta"
+    },
+    "ponyta-galar": {
+      "name": "Ponyta Galar"
+    },
+    "poochyena": {
+      "name": "Poochyena"
+    },
+    "popplio": {
+      "name": "Popplio"
+    },
+    "porygon": {
+      "name": "Porygon"
+    },
+    "porygon-z": {
+      "name": "Porygon-Z"
+    },
+    "porygon2": {
+      "name": "Porygon2"
+    },
+    "primarina": {
+      "name": "Primarina"
+    },
+    "primeape": {
+      "name": "Primeape"
+    },
+    "prinplup": {
+      "name": "Prinplup"
+    },
+    "probopass": {
+      "name": "Probopass"
+    },
+    "psyduck": {
+      "name": "Psyduck"
+    },
+    "pumpkaboo-average": {
+      "name": "Pumpkaboo"
+    },
+    "pumpkaboo-large": {
+      "name": "Pumpkaboo Large"
+    },
+    "pumpkaboo-small": {
+      "name": "Pumpkaboo Small"
+    },
+    "pumpkaboo-super": {
+      "name": "Pumpkaboo Super"
+    },
+    "pupitar": {
+      "name": "Pupitar"
+    },
+    "purrloin": {
+      "name": "Purrloin"
+    },
+    "purugly": {
+      "name": "Purugly"
+    },
+    "pyroar-male": {
+      "name": "Pyroar"
+    },
+    "pyroar-mega": {
+      "name": "Pyroar Mega"
+    },
+    "pyukumuku": {
+      "name": "Pyukumuku"
+    },
+    "quagsire": {
+      "name": "Quagsire"
+    },
+    "quaquaval": {
+      "name": "Quaquaval"
+    },
+    "quaxly": {
+      "name": "Quaxly"
+    },
+    "quaxwell": {
+      "name": "Quaxwell"
+    },
+    "quilava": {
+      "name": "Quilava"
+    },
+    "quilladin": {
+      "name": "Quilladin"
+    },
+    "qwilfish": {
+      "name": "Qwilfish"
+    },
+    "qwilfish-hisui": {
+      "name": "Qwilfish Hisui"
+    },
+    "raboot": {
+      "name": "Raboot"
+    },
+    "rabsca": {
+      "name": "Rabsca"
+    },
+    "raging-bolt": {
+      "name": "Raging Bolt"
+    },
+    "raichu": {
+      "name": "Raichu"
+    },
+    "raichu-alola": {
+      "name": "Raichu Alola"
+    },
+    "raichu-mega-x": {
+      "name": "Raichu Mega X"
+    },
+    "raichu-mega-y": {
+      "name": "Raichu Mega Y"
+    },
+    "raikou": {
+      "name": "Raikou"
+    },
+    "ralts": {
+      "name": "Ralts"
+    },
+    "rampardos": {
+      "name": "Rampardos"
+    },
+    "rapidash": {
+      "name": "Rapidash"
+    },
+    "rapidash-galar": {
+      "name": "Rapidash Galar"
+    },
+    "raticate": {
+      "name": "Raticate"
+    },
+    "raticate-alola": {
+      "name": "Raticate Alola"
+    },
+    "raticate-alola-totem": {
+      "name": "Raticate Alola Totem"
+    },
+    "rattata": {
+      "name": "Rattata"
+    },
+    "rattata-alola": {
+      "name": "Rattata Alola"
+    },
+    "rayquaza": {
+      "name": "Rayquaza"
+    },
+    "rayquaza-mega": {
+      "name": "Rayquaza Mega"
+    },
+    "regice": {
+      "name": "Regice"
+    },
+    "regidrago": {
+      "name": "Regidrago"
+    },
+    "regieleki": {
+      "name": "Regieleki"
+    },
+    "regigigas": {
+      "name": "Regigigas"
+    },
+    "regirock": {
+      "name": "Regirock"
+    },
+    "registeel": {
+      "name": "Registeel"
+    },
+    "relicanth": {
+      "name": "Relicanth"
+    },
+    "rellor": {
+      "name": "Rellor"
+    },
+    "remoraid": {
+      "name": "Remoraid"
+    },
+    "reshiram": {
+      "name": "Reshiram"
+    },
+    "reuniclus": {
+      "name": "Reuniclus"
+    },
+    "revavroom": {
+      "name": "Revavroom"
+    },
+    "rhydon": {
+      "name": "Rhydon"
+    },
+    "rhyhorn": {
+      "name": "Rhyhorn"
+    },
+    "rhyperior": {
+      "name": "Rhyperior"
+    },
+    "ribombee": {
+      "name": "Ribombee"
+    },
+    "ribombee-totem": {
+      "name": "Ribombee Totem"
+    },
+    "rillaboom": {
+      "name": "Rillaboom"
+    },
+    "riolu": {
+      "name": "Riolu"
+    },
+    "roaring-moon": {
+      "name": "Roaring Moon"
+    },
+    "rockruff": {
+      "name": "Rockruff"
+    },
+    "rockruff-dusk": {
+      "name": "Rockruff Dusk"
+    },
+    "roggenrola": {
+      "name": "Roggenrola"
+    },
+    "rolycoly": {
+      "name": "Rolycoly"
+    },
+    "rookidee": {
+      "name": "Rookidee"
+    },
+    "roselia": {
+      "name": "Roselia"
+    },
+    "roserade": {
+      "name": "Roserade"
+    },
+    "rotom": {
+      "name": "Rotom"
+    },
+    "rotom-fan": {
+      "name": "Rotom Fan"
+    },
+    "rotom-frost": {
+      "name": "Rotom Frost"
+    },
+    "rotom-heat": {
+      "name": "Rotom Heat"
+    },
+    "rotom-mow": {
+      "name": "Rotom Mow"
+    },
+    "rotom-wash": {
+      "name": "Rotom Wash"
+    },
+    "rowlet": {
+      "name": "Rowlet"
+    },
+    "rufflet": {
+      "name": "Rufflet"
+    },
+    "runerigus": {
+      "name": "Runerigus"
+    },
+    "sableye": {
+      "name": "Sableye"
+    },
+    "sableye-mega": {
+      "name": "Sableye Mega"
+    },
+    "salamence": {
+      "name": "Salamence"
+    },
+    "salamence-mega": {
+      "name": "Salamence Mega"
+    },
+    "salandit": {
+      "name": "Salandit"
+    },
+    "salazzle": {
+      "name": "Salazzle"
+    },
+    "salazzle-totem": {
+      "name": "Salazzle Totem"
+    },
+    "samurott": {
+      "name": "Samurott"
+    },
+    "samurott-hisui": {
+      "name": "Samurott Hisui"
+    },
+    "sandaconda": {
+      "name": "Sandaconda"
+    },
+    "sandile": {
+      "name": "Sandile"
+    },
+    "sandshrew": {
+      "name": "Sandshrew"
+    },
+    "sandshrew-alola": {
+      "name": "Sandshrew Alola"
+    },
+    "sandslash": {
+      "name": "Sandslash"
+    },
+    "sandslash-alola": {
+      "name": "Sandslash Alola"
+    },
+    "sandy-shocks": {
+      "name": "Sandy Shocks"
+    },
+    "sandygast": {
+      "name": "Sandygast"
+    },
+    "sawk": {
+      "name": "Sawk"
+    },
+    "sawsbuck": {
+      "name": "Sawsbuck"
+    },
+    "sawsbuck-autumn": {
+      "name": "Sawsbuck Autumn"
+    },
+    "sawsbuck-summer": {
+      "name": "Sawsbuck Summer"
+    },
+    "sawsbuck-winter": {
+      "name": "Sawsbuck Winter"
+    },
+    "scatterbug": {
+      "name": "Scatterbug"
+    },
+    "sceptile": {
+      "name": "Sceptile"
+    },
+    "sceptile-mega": {
+      "name": "Sceptile Mega"
+    },
+    "scizor": {
+      "name": "Scizor"
+    },
+    "scizor-mega": {
+      "name": "Scizor Mega"
+    },
+    "scolipede": {
+      "name": "Scolipede"
+    },
+    "scolipede-mega": {
+      "name": "Scolipede Mega"
+    },
+    "scorbunny": {
+      "name": "Scorbunny"
+    },
+    "scovillain": {
+      "name": "Scovillain"
+    },
+    "scovillain-mega": {
+      "name": "Scovillain Mega"
+    },
+    "scrafty": {
+      "name": "Scrafty"
+    },
+    "scrafty-mega": {
+      "name": "Scrafty Mega"
+    },
+    "scraggy": {
+      "name": "Scraggy"
+    },
+    "scream-tail": {
+      "name": "Scream Tail"
+    },
+    "scyther": {
+      "name": "Scyther"
+    },
+    "seadra": {
+      "name": "Seadra"
+    },
+    "seaking": {
+      "name": "Seaking"
+    },
+    "sealeo": {
+      "name": "Sealeo"
+    },
+    "seedot": {
+      "name": "Seedot"
+    },
+    "seel": {
+      "name": "Seel"
+    },
+    "seismitoad": {
+      "name": "Seismitoad"
+    },
+    "sentret": {
+      "name": "Sentret"
+    },
+    "serperior": {
+      "name": "Serperior"
+    },
+    "servine": {
+      "name": "Servine"
+    },
+    "seviper": {
+      "name": "Seviper"
+    },
+    "sewaddle": {
+      "name": "Sewaddle"
+    },
+    "sharpedo": {
+      "name": "Sharpedo"
+    },
+    "sharpedo-mega": {
+      "name": "Sharpedo Mega"
+    },
+    "shaymin": {
+      "name": "Shaymin"
+    },
+    "shaymin-sky": {
+      "name": "Shaymin Sky"
+    },
+    "shedinja": {
+      "name": "Shedinja"
+    },
+    "shelgon": {
+      "name": "Shelgon"
+    },
+    "shellder": {
+      "name": "Shellder"
+    },
+    "shellos": {
+      "name": "Shellos"
+    },
+    "shellos-east": {
+      "name": "Shellos East"
+    },
+    "shelmet": {
+      "name": "Shelmet"
+    },
+    "shieldon": {
+      "name": "Shieldon"
+    },
+    "shiftry": {
+      "name": "Shiftry"
+    },
+    "shiinotic": {
+      "name": "Shiinotic"
+    },
+    "shinx": {
+      "name": "Shinx"
+    },
+    "shroodle": {
+      "name": "Shroodle"
+    },
+    "shroomish": {
+      "name": "Shroomish"
+    },
+    "shuckle": {
+      "name": "Shuckle"
+    },
+    "shuppet": {
+      "name": "Shuppet"
+    },
+    "sigilyph": {
+      "name": "Sigilyph"
+    },
+    "silcoon": {
+      "name": "Silcoon"
+    },
+    "silicobra": {
+      "name": "Silicobra"
+    },
+    "silvally": {
+      "name": "Silvally"
+    },
+    "silvally-bug": {
+      "name": "Silvally Bug"
+    },
+    "silvally-dark": {
+      "name": "Silvally Dark"
+    },
+    "silvally-dragon": {
+      "name": "Silvally Dragon"
+    },
+    "silvally-electric": {
+      "name": "Silvally Electric"
+    },
+    "silvally-fairy": {
+      "name": "Silvally Fairy"
+    },
+    "silvally-fighting": {
+      "name": "Silvally Fighting"
+    },
+    "silvally-fire": {
+      "name": "Silvally Fire"
+    },
+    "silvally-flying": {
+      "name": "Silvally Flying"
+    },
+    "silvally-ghost": {
+      "name": "Silvally Ghost"
+    },
+    "silvally-grass": {
+      "name": "Silvally Grass"
+    },
+    "silvally-ground": {
+      "name": "Silvally Ground"
+    },
+    "silvally-ice": {
+      "name": "Silvally Ice"
+    },
+    "silvally-poison": {
+      "name": "Silvally Poison"
+    },
+    "silvally-psychic": {
+      "name": "Silvally Psychic"
+    },
+    "silvally-rock": {
+      "name": "Silvally Rock"
+    },
+    "silvally-steel": {
+      "name": "Silvally Steel"
+    },
+    "silvally-water": {
+      "name": "Silvally Water"
+    },
+    "simipour": {
+      "name": "Simipour"
+    },
+    "simisage": {
+      "name": "Simisage"
+    },
+    "simisear": {
+      "name": "Simisear"
+    },
+    "sinistcha": {
+      "name": "Sinistcha"
+    },
+    "sinistcha-masterpiece": {
+      "name": "Sinistcha Masterpiece"
+    },
+    "sinistea": {
+      "name": "Sinistea"
+    },
+    "sinistea-antique": {
+      "name": "Sinistea Antique"
+    },
+    "sirfetchd": {
+      "name": "Sirfetchd"
+    },
+    "sizzlipede": {
+      "name": "Sizzlipede"
+    },
+    "skarmory": {
+      "name": "Skarmory"
+    },
+    "skarmory-mega": {
+      "name": "Skarmory Mega"
+    },
+    "skeledirge": {
+      "name": "Skeledirge"
+    },
+    "skiddo": {
+      "name": "Skiddo"
+    },
+    "skiploom": {
+      "name": "Skiploom"
+    },
+    "skitty": {
+      "name": "Skitty"
+    },
+    "skorupi": {
+      "name": "Skorupi"
+    },
+    "skrelp": {
+      "name": "Skrelp"
+    },
+    "skuntank": {
+      "name": "Skuntank"
+    },
+    "skwovet": {
+      "name": "Skwovet"
+    },
+    "slaking": {
+      "name": "Slaking"
+    },
+    "slakoth": {
+      "name": "Slakoth"
+    },
+    "sliggoo": {
+      "name": "Sliggoo"
+    },
+    "sliggoo-hisui": {
+      "name": "Sliggoo Hisui"
+    },
+    "slither-wing": {
+      "name": "Slither Wing"
+    },
+    "slowbro": {
+      "name": "Slowbro"
+    },
+    "slowbro-galar": {
+      "name": "Slowbro Galar"
+    },
+    "slowbro-mega": {
+      "name": "Slowbro Mega"
+    },
+    "slowking": {
+      "name": "Slowking"
+    },
+    "slowking-galar": {
+      "name": "Slowking Galar"
+    },
+    "slowpoke": {
+      "name": "Slowpoke"
+    },
+    "slowpoke-galar": {
+      "name": "Slowpoke Galar"
+    },
+    "slugma": {
+      "name": "Slugma"
+    },
+    "slurpuff": {
+      "name": "Slurpuff"
+    },
+    "smeargle": {
+      "name": "Smeargle"
+    },
+    "smoliv": {
+      "name": "Smoliv"
+    },
+    "smoochum": {
+      "name": "Smoochum"
+    },
+    "sneasel": {
+      "name": "Sneasel"
+    },
+    "sneasel-hisui": {
+      "name": "Sneasel Hisui"
+    },
+    "sneasler": {
+      "name": "Sneasler"
+    },
+    "snivy": {
+      "name": "Snivy"
+    },
+    "snom": {
+      "name": "Snom"
+    },
+    "snorlax": {
+      "name": "Snorlax"
+    },
+    "snorunt": {
+      "name": "Snorunt"
+    },
+    "snover": {
+      "name": "Snover"
+    },
+    "snubbull": {
+      "name": "Snubbull"
+    },
+    "sobble": {
+      "name": "Sobble"
+    },
+    "solgaleo": {
+      "name": "Solgaleo"
+    },
+    "solosis": {
+      "name": "Solosis"
+    },
+    "solrock": {
+      "name": "Solrock"
+    },
+    "spearow": {
+      "name": "Spearow"
+    },
+    "spectrier": {
+      "name": "Spectrier"
+    },
+    "spewpa": {
+      "name": "Spewpa"
+    },
+    "spheal": {
+      "name": "Spheal"
+    },
+    "spidops": {
+      "name": "Spidops"
+    },
+    "spinarak": {
+      "name": "Spinarak"
+    },
+    "spinda": {
+      "name": "Spinda"
+    },
+    "spiritomb": {
+      "name": "Spiritomb"
+    },
+    "spoink": {
+      "name": "Spoink"
+    },
+    "sprigatito": {
+      "name": "Sprigatito"
+    },
+    "spritzee": {
+      "name": "Spritzee"
+    },
+    "squawkabilly": {
+      "name": "Squawkabilly"
+    },
+    "squawkabilly-blue": {
+      "name": "Squawkabilly Blue"
+    },
+    "squawkabilly-white": {
+      "name": "Squawkabilly White"
+    },
+    "squawkabilly-yellow": {
+      "name": "Squawkabilly Yellow"
+    },
+    "squirtle": {
+      "name": "Squirtle"
+    },
+    "stakataka": {
+      "name": "Stakataka"
+    },
+    "stantler": {
+      "name": "Stantler"
+    },
+    "staraptor": {
+      "name": "Staraptor"
+    },
+    "staraptor-mega": {
+      "name": "Staraptor Mega"
+    },
+    "staravia": {
+      "name": "Staravia"
+    },
+    "starly": {
+      "name": "Starly"
+    },
+    "starmie": {
+      "name": "Starmie"
+    },
+    "starmie-mega": {
+      "name": "Starmie Mega"
+    },
+    "staryu": {
+      "name": "Staryu"
+    },
+    "steelix": {
+      "name": "Steelix"
+    },
+    "steelix-mega": {
+      "name": "Steelix Mega"
+    },
+    "steenee": {
+      "name": "Steenee"
+    },
+    "stonjourner": {
+      "name": "Stonjourner"
+    },
+    "stoutland": {
+      "name": "Stoutland"
+    },
+    "stufful": {
+      "name": "Stufful"
+    },
+    "stunfisk": {
+      "name": "Stunfisk"
+    },
+    "stunfisk-galar": {
+      "name": "Stunfisk Galar"
+    },
+    "stunky": {
+      "name": "Stunky"
+    },
+    "sudowoodo": {
+      "name": "Sudowoodo"
+    },
+    "suicune": {
+      "name": "Suicune"
+    },
+    "sunflora": {
+      "name": "Sunflora"
+    },
+    "sunkern": {
+      "name": "Sunkern"
+    },
+    "surskit": {
+      "name": "Surskit"
+    },
+    "swablu": {
+      "name": "Swablu"
+    },
+    "swadloon": {
+      "name": "Swadloon"
+    },
+    "swalot": {
+      "name": "Swalot"
+    },
+    "swampert": {
+      "name": "Swampert"
+    },
+    "swampert-mega": {
+      "name": "Swampert Mega"
+    },
+    "swanna": {
+      "name": "Swanna"
+    },
+    "swellow": {
+      "name": "Swellow"
+    },
+    "swinub": {
+      "name": "Swinub"
+    },
+    "swirlix": {
+      "name": "Swirlix"
+    },
+    "swoobat": {
+      "name": "Swoobat"
+    },
+    "sylveon": {
+      "name": "Sylveon"
+    },
+    "tadbulb": {
+      "name": "Tadbulb"
+    },
+    "taillow": {
+      "name": "Taillow"
+    },
+    "talonflame": {
+      "name": "Talonflame"
+    },
+    "tandemaus": {
+      "name": "Tandemaus"
+    },
+    "tangela": {
+      "name": "Tangela"
+    },
+    "tangrowth": {
+      "name": "Tangrowth"
+    },
+    "tapu-bulu": {
+      "name": "Tapu Bulu"
+    },
+    "tapu-fini": {
+      "name": "Tapu Fini"
+    },
+    "tapu-koko": {
+      "name": "Tapu Koko"
+    },
+    "tapu-lele": {
+      "name": "Tapu Lele"
+    },
+    "tarountula": {
+      "name": "Tarountula"
+    },
+    "tatsugiri": {
+      "name": "Tatsugiri"
+    },
+    "tatsugiri-curly-mega": {
+      "name": "Tatsugiri Curly Mega"
+    },
+    "tatsugiri-droopy": {
+      "name": "Tatsugiri Droopy"
+    },
+    "tatsugiri-droopy-mega": {
+      "name": "Tatsugiri Droopy Mega"
+    },
+    "tatsugiri-stretchy": {
+      "name": "Tatsugiri Stretchy"
+    },
+    "tatsugiri-stretchy-mega": {
+      "name": "Tatsugiri Stretchy Mega"
+    },
+    "tauros": {
+      "name": "Tauros"
+    },
+    "tauros-paldea-aqua": {
+      "name": "Tauros Paldea Aqua"
+    },
+    "tauros-paldea-blaze": {
+      "name": "Tauros Paldea Blaze"
+    },
+    "tauros-paldea-combat": {
+      "name": "Tauros Paldea Combat"
+    },
+    "teddiursa": {
+      "name": "Teddiursa"
+    },
+    "tentacool": {
+      "name": "Tentacool"
+    },
+    "tentacruel": {
+      "name": "Tentacruel"
+    },
+    "tepig": {
+      "name": "Tepig"
+    },
+    "terapagos": {
+      "name": "Terapagos"
+    },
+    "terapagos-stellar": {
+      "name": "Terapagos Stellar"
+    },
+    "terapagos-terastal": {
+      "name": "Terapagos Terastal"
+    },
+    "terrakion": {
+      "name": "Terrakion"
+    },
+    "thievul": {
+      "name": "Thievul"
+    },
+    "throh": {
+      "name": "Throh"
+    },
+    "thundurus": {
+      "name": "Thundurus"
+    },
+    "thundurus-incarnate": {
+      "name": "Thundurus Incarnate"
+    },
+    "thundurus-therian": {
+      "name": "Thundurus Therian"
+    },
+    "thwackey": {
+      "name": "Thwackey"
+    },
+    "timburr": {
+      "name": "Timburr"
+    },
+    "ting-lu": {
+      "name": "Ting-Lu"
+    },
+    "tinkatink": {
+      "name": "Tinkatink"
+    },
+    "tinkaton": {
+      "name": "Tinkaton"
+    },
+    "tinkatuff": {
+      "name": "Tinkatuff"
+    },
+    "tirtouga": {
+      "name": "Tirtouga"
+    },
+    "toedscool": {
+      "name": "Toedscool"
+    },
+    "toedscruel": {
+      "name": "Toedscruel"
+    },
+    "togedemaru": {
+      "name": "Togedemaru"
+    },
+    "togedemaru-totem": {
+      "name": "Togedemaru Totem"
+    },
+    "togekiss": {
+      "name": "Togekiss"
+    },
+    "togepi": {
+      "name": "Togepi"
+    },
+    "togetic": {
+      "name": "Togetic"
+    },
+    "torchic": {
+      "name": "Torchic"
+    },
+    "torkoal": {
+      "name": "Torkoal"
+    },
+    "tornadus": {
+      "name": "Tornadus"
+    },
+    "tornadus-incarnate": {
+      "name": "Tornadus Incarnate"
+    },
+    "tornadus-therian": {
+      "name": "Tornadus Therian"
+    },
+    "torracat": {
+      "name": "Torracat"
+    },
+    "torterra": {
+      "name": "Torterra"
+    },
+    "totodile": {
+      "name": "Totodile"
+    },
+    "toucannon": {
+      "name": "Toucannon"
+    },
+    "toxapex": {
+      "name": "Toxapex"
+    },
+    "toxel": {
+      "name": "Toxel"
+    },
+    "toxicroak": {
+      "name": "Toxicroak"
+    },
+    "toxtricity": {
+      "name": "Toxtricity"
+    },
+    "toxtricity-low-key": {
+      "name": "Toxtricity Low Key"
+    },
+    "tranquill": {
+      "name": "Tranquill"
+    },
+    "trapinch": {
+      "name": "Trapinch"
+    },
+    "treecko": {
+      "name": "Treecko"
+    },
+    "trevenant": {
+      "name": "Trevenant"
+    },
+    "tropius": {
+      "name": "Tropius"
+    },
+    "trubbish": {
+      "name": "Trubbish"
+    },
+    "trumbeak": {
+      "name": "Trumbeak"
+    },
+    "tsareena": {
+      "name": "Tsareena"
+    },
+    "turtonator": {
+      "name": "Turtonator"
+    },
+    "turtwig": {
+      "name": "Turtwig"
+    },
+    "tympole": {
+      "name": "Tympole"
+    },
+    "tynamo": {
+      "name": "Tynamo"
+    },
+    "type-null": {
+      "name": "Type Null"
+    },
+    "typhlosion": {
+      "name": "Typhlosion"
+    },
+    "typhlosion-hisui": {
+      "name": "Typhlosion Hisui"
+    },
+    "tyranitar": {
+      "name": "Tyranitar"
+    },
+    "tyranitar-mega": {
+      "name": "Tyranitar Mega"
+    },
+    "tyrantrum": {
+      "name": "Tyrantrum"
+    },
+    "tyrogue": {
+      "name": "Tyrogue"
+    },
+    "tyrunt": {
+      "name": "Tyrunt"
+    },
+    "umbreon": {
+      "name": "Umbreon"
+    },
+    "unfezant": {
+      "name": "Unfezant"
+    },
+    "unown": {
+      "name": "Unown"
+    },
+    "unown-b": {
+      "name": "Unown B"
+    },
+    "unown-c": {
+      "name": "Unown C"
+    },
+    "unown-d": {
+      "name": "Unown D"
+    },
+    "unown-e": {
+      "name": "Unown E"
+    },
+    "unown-exclamation": {
+      "name": "Unown Exclamation"
+    },
+    "unown-f": {
+      "name": "Unown F"
+    },
+    "unown-g": {
+      "name": "Unown G"
+    },
+    "unown-h": {
+      "name": "Unown H"
+    },
+    "unown-i": {
+      "name": "Unown I"
+    },
+    "unown-j": {
+      "name": "Unown J"
+    },
+    "unown-k": {
+      "name": "Unown K"
+    },
+    "unown-l": {
+      "name": "Unown L"
+    },
+    "unown-m": {
+      "name": "Unown M"
+    },
+    "unown-n": {
+      "name": "Unown N"
+    },
+    "unown-o": {
+      "name": "Unown O"
+    },
+    "unown-p": {
+      "name": "Unown P"
+    },
+    "unown-q": {
+      "name": "Unown Q"
+    },
+    "unown-question": {
+      "name": "Unown Question"
+    },
+    "unown-r": {
+      "name": "Unown R"
+    },
+    "unown-s": {
+      "name": "Unown S"
+    },
+    "unown-t": {
+      "name": "Unown T"
+    },
+    "unown-u": {
+      "name": "Unown U"
+    },
+    "unown-v": {
+      "name": "Unown V"
+    },
+    "unown-w": {
+      "name": "Unown W"
+    },
+    "unown-x": {
+      "name": "Unown X"
+    },
+    "unown-y": {
+      "name": "Unown Y"
+    },
+    "unown-z": {
+      "name": "Unown Z"
+    },
+    "ursaluna": {
+      "name": "Ursaluna"
+    },
+    "ursaluna-bloodmoon": {
+      "name": "Ursaluna Bloodmoon"
+    },
+    "ursaring": {
+      "name": "Ursaring"
+    },
+    "urshifu": {
+      "name": "Urshifu"
+    },
+    "urshifu-rapid-strike": {
+      "name": "Urshifu Rapid-Strike"
+    },
+    "uxie": {
+      "name": "Uxie"
+    },
+    "vanillish": {
+      "name": "Vanillish"
+    },
+    "vanillite": {
+      "name": "Vanillite"
+    },
+    "vanilluxe": {
+      "name": "Vanilluxe"
+    },
+    "vaporeon": {
+      "name": "Vaporeon"
+    },
+    "varoom": {
+      "name": "Varoom"
+    },
+    "veluza": {
+      "name": "Veluza"
+    },
+    "venipede": {
+      "name": "Venipede"
+    },
+    "venomoth": {
+      "name": "Venomoth"
+    },
+    "venonat": {
+      "name": "Venonat"
+    },
+    "venusaur": {
+      "name": "Venusaur"
+    },
+    "venusaur-mega": {
+      "name": "Venusaur Mega"
+    },
+    "vespiquen": {
+      "name": "Vespiquen"
+    },
+    "vibrava": {
+      "name": "Vibrava"
+    },
+    "victini": {
+      "name": "Victini"
+    },
+    "victreebel": {
+      "name": "Victreebel"
+    },
+    "victreebel-mega": {
+      "name": "Victreebel Mega"
+    },
+    "vigoroth": {
+      "name": "Vigoroth"
+    },
+    "vikavolt": {
+      "name": "Vikavolt"
+    },
+    "vikavolt-totem": {
+      "name": "Vikavolt Totem"
+    },
+    "vileplume": {
+      "name": "Vileplume"
+    },
+    "virizion": {
+      "name": "Virizion"
+    },
+    "vivillon": {
+      "name": "Vivillon"
+    },
+    "vivillon-archipelago": {
+      "name": "Vivillon Archipelago"
+    },
+    "vivillon-continental": {
+      "name": "Vivillon Continental"
+    },
+    "vivillon-elegant": {
+      "name": "Vivillon Elegant"
+    },
+    "vivillon-fancy": {
+      "name": "Vivillon Fancy"
+    },
+    "vivillon-garden": {
+      "name": "Vivillon Garden"
+    },
+    "vivillon-high-plains": {
+      "name": "Vivillon High Plains"
+    },
+    "vivillon-icy-snow": {
+      "name": "Vivillon Icy Snow"
+    },
+    "vivillon-jungle": {
+      "name": "Vivillon Jungle"
+    },
+    "vivillon-marine": {
+      "name": "Vivillon Marine"
+    },
+    "vivillon-modern": {
+      "name": "Vivillon Modern"
+    },
+    "vivillon-monsoon": {
+      "name": "Vivillon Monsoon"
+    },
+    "vivillon-ocean": {
+      "name": "Vivillon Ocean"
+    },
+    "vivillon-pokeball": {
+      "name": "Vivillon Pokeball"
+    },
+    "vivillon-polar": {
+      "name": "Vivillon Polar"
+    },
+    "vivillon-river": {
+      "name": "Vivillon River"
+    },
+    "vivillon-sandstorm": {
+      "name": "Vivillon Sandstorm"
+    },
+    "vivillon-savanna": {
+      "name": "Vivillon Savanna"
+    },
+    "vivillon-sun": {
+      "name": "Vivillon Sun"
+    },
+    "vivillon-tundra": {
+      "name": "Vivillon Tundra"
+    },
+    "volbeat": {
+      "name": "Volbeat"
+    },
+    "volcanion": {
+      "name": "Volcanion"
+    },
+    "volcarona": {
+      "name": "Volcarona"
+    },
+    "voltorb": {
+      "name": "Voltorb"
+    },
+    "voltorb-hisui": {
+      "name": "Voltorb Hisui"
+    },
+    "vullaby": {
+      "name": "Vullaby"
+    },
+    "vulpix": {
+      "name": "Vulpix"
+    },
+    "vulpix-alola": {
+      "name": "Vulpix Alola"
+    },
+    "wailmer": {
+      "name": "Wailmer"
+    },
+    "wailord": {
+      "name": "Wailord"
+    },
+    "walking-wake": {
+      "name": "Walking Wake"
+    },
+    "walrein": {
+      "name": "Walrein"
+    },
+    "wartortle": {
+      "name": "Wartortle"
+    },
+    "watchog": {
+      "name": "Watchog"
+    },
+    "wattrel": {
+      "name": "Wattrel"
+    },
+    "weavile": {
+      "name": "Weavile"
+    },
+    "weedle": {
+      "name": "Weedle"
+    },
+    "weepinbell": {
+      "name": "Weepinbell"
+    },
+    "weezing": {
+      "name": "Weezing"
+    },
+    "weezing-galar": {
+      "name": "Weezing Galar"
+    },
+    "whimsicott": {
+      "name": "Whimsicott"
+    },
+    "whirlipede": {
+      "name": "Whirlipede"
+    },
+    "whiscash": {
+      "name": "Whiscash"
+    },
+    "whismur": {
+      "name": "Whismur"
+    },
+    "wigglytuff": {
+      "name": "Wigglytuff"
+    },
+    "wiglett": {
+      "name": "Wiglett"
+    },
+    "wimpod": {
+      "name": "Wimpod"
+    },
+    "wingull": {
+      "name": "Wingull"
+    },
+    "wishiwashi": {
+      "name": "Wishiwashi Solo"
+    },
+    "wishiwashi-school": {
+      "name": "Wishiwashi School"
+    },
+    "wo-chien": {
+      "name": "Wo-Chien"
+    },
+    "wobbuffet": {
+      "name": "Wobbuffet"
+    },
+    "woobat": {
+      "name": "Woobat"
+    },
+    "wooloo": {
+      "name": "Wooloo"
+    },
+    "wooper": {
+      "name": "Wooper"
+    },
+    "wooper-paldea": {
+      "name": "Wooper Paldea"
+    },
+    "wormadam": {
+      "name": "Wormadam"
+    },
+    "wormadam-sandy": {
+      "name": "Wormadam Sandy"
+    },
+    "wormadam-trash": {
+      "name": "Wormadam Trash"
+    },
+    "wugtrio": {
+      "name": "Wugtrio"
+    },
+    "wurmple": {
+      "name": "Wurmple"
+    },
+    "wynaut": {
+      "name": "Wynaut"
+    },
+    "wyrdeer": {
+      "name": "Wyrdeer"
+    },
+    "xatu": {
+      "name": "Xatu"
+    },
+    "xerneas": {
+      "name": "Xerneas"
+    },
+    "xerneas-neutral": {
+      "name": "Xerneas Neutral"
+    },
+    "xurkitree": {
+      "name": "Xurkitree"
+    },
+    "yamask": {
+      "name": "Yamask"
+    },
+    "yamask-galar": {
+      "name": "Yamask Galar"
+    },
+    "yamper": {
+      "name": "Yamper"
+    },
+    "yanma": {
+      "name": "Yanma"
+    },
+    "yanmega": {
+      "name": "Yanmega"
+    },
+    "yungoos": {
+      "name": "Yungoos"
+    },
+    "yveltal": {
+      "name": "Yveltal"
+    },
+    "zacian": {
+      "name": "Zacian"
+    },
+    "zacian-crowned": {
+      "name": "Zacian Crowned"
+    },
+    "zamazenta": {
+      "name": "Zamazenta"
+    },
+    "zamazenta-crowned": {
+      "name": "Zamazenta Crowned"
+    },
+    "zangoose": {
+      "name": "Zangoose"
+    },
+    "zapdos": {
+      "name": "Zapdos"
+    },
+    "zapdos-galar": {
+      "name": "Zapdos Galar"
+    },
+    "zarude": {
+      "name": "Zarude"
+    },
+    "zarude-dada": {
+      "name": "Zarude Dada"
+    },
+    "zebstrika": {
+      "name": "Zebstrika"
+    },
+    "zekrom": {
+      "name": "Zekrom"
+    },
+    "zeraora": {
+      "name": "Zeraora"
+    },
+    "zeraora-mega": {
+      "name": "Zeraora Mega"
+    },
+    "zigzagoon": {
+      "name": "Zigzagoon"
+    },
+    "zigzagoon-galar": {
+      "name": "Zigzagoon Galar"
+    },
+    "zoroark": {
+      "name": "Zoroark"
+    },
+    "zoroark-hisui": {
+      "name": "Zoroark Hisui"
+    },
+    "zorua": {
+      "name": "Zorua"
+    },
+    "zorua-hisui": {
+      "name": "Zorua Hisui"
+    },
+    "zubat": {
+      "name": "Zubat"
+    },
+    "zweilous": {
+      "name": "Zweilous"
+    },
+    "zygarde-10": {
+      "name": "Zygarde 10%"
+    },
+    "zygarde-50": {
+      "name": "Zygarde"
+    },
+    "zygarde-complete": {
+      "name": "Zygarde Complete"
+    },
+    "zygarde-mega": {
+      "name": "Zygarde Mega"
+    }
+  },
+  "moves": {
+    "10-000-000-volt-thunderbolt": {
+      "name": "10,000,000伏雷电",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "absorb": {
+      "name": "吸收",
+      "shortDesc": "吸收一半的伤害来治疗用户。"
+    },
+    "accelerock": {
+      "name": "加速摇滚",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "acid": {
+      "name": "酸",
+      "shortDesc": "有一定几率降低目标特防一级。"
+    },
+    "acid-armor": {
+      "name": "酸甲",
+      "shortDesc": "使使用者的防御力提升两级。"
+    },
+    "acid-downpour--physical": {
+      "name": "酸雨",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "acid-downpour--special": {
+      "name": "酸雨",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "acid-spray": {
+      "name": "酸喷雾",
+      "shortDesc": "降低目标特防两级。"
+    },
+    "acrobatics": {
+      "name": "杂技",
+      "shortDesc": "如果用户没有持有物品，则拥有双倍力量。"
+    },
+    "acupressure": {
+      "name": "指压按摩",
+      "shortDesc": "随机将一只友方宝可梦的属性提升两个阶段。"
+    },
+    "aerial-ace": {
+      "name": "空中王牌",
+      "shortDesc": "绝不会错过。"
+    },
+    "aeroblast": {
+      "name": "气爆",
+      "shortDesc": "暴击几率增加。"
+    },
+    "after-you": {
+      "name": "在你之后",
+      "shortDesc": "使目标在本回合中进行下一个行动。"
+    },
+    "agility": {
+      "name": "敏捷",
+      "shortDesc": "将用户的速度提高两个阶段。"
+    },
+    "air-cutter": {
+      "name": "空气切割机",
+      "shortDesc": "暴击几率增加。"
+    },
+    "air-slash": {
+      "name": "空气斩",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "all-out-pummeling--physical": {
+      "name": "全力打击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "all-out-pummeling--special": {
+      "name": "全力打击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "alluring-voice": {
+      "name": "诱人的声音",
+      "shortDesc": "用户使用天使般的声音攻击目标。如果目标的统计数据在回合中得到提升，这也会让目标感到困惑。"
+    },
+    "ally-switch": {
+      "name": "盟友开关",
+      "shortDesc": "用户与对面的友好宝可梦交换位置。"
+    },
+    "amnesia": {
+      "name": "失忆症",
+      "shortDesc": "使使用者的特防提升两级。"
+    },
+    "anchor-shot": {
+      "name": "锚定射击",
+      "shortDesc": "困住目标。"
+    },
+    "ancient-power": {
+      "name": "远古力量",
+      "shortDesc": "有几率将使用者的所有属性提升一级。"
+    },
+    "apple-acid": {
+      "name": "苹果酸",
+      "shortDesc": "使用者用酸苹果制成的酸性液体攻击目标。这也会降低目标的 Sp。默认统计数据。"
+    },
+    "aqua-cutter": {
+      "name": "水切割机",
+      "shortDesc": "使用者喷出加压水，像刀片一样切割目标。这一举动增加了致命一击的几率。"
+    },
+    "aqua-jet": {
+      "name": "水流喷射",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "aqua-ring": {
+      "name": "水色戒指",
+      "shortDesc": "每回合恢复使用者最大生命值的1/16。"
+    },
+    "aqua-step": {
+      "name": "水步",
+      "shortDesc": "用户玩弄目标并使用轻盈流畅的舞步攻击它。这也提高了用户的速度统计数据。"
+    },
+    "aqua-tail": {
+      "name": "水尾",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "arm-thrust": {
+      "name": "手臂推力",
+      "shortDesc": "一回合击中2-5次。"
+    },
+    "armor-cannon": {
+      "name": "装甲炮",
+      "shortDesc": "使用者将自己的装甲作为炽热的射弹射出。这也会降低用户的防御和 Sp。绝对统计数据。"
+    },
+    "aromatherapy": {
+      "name": "香薰疗法",
+      "shortDesc": "治愈整个队伍的主要状态影响。"
+    },
+    "aromatic-mist": {
+      "name": "芳香雾",
+      "shortDesc": "将选定的盟友的特防提升一级。"
+    },
+    "assist": {
+      "name": "协助",
+      "shortDesc": "随机选择并使用训练家的其他宝可梦的招式之一。"
+    },
+    "assurance": {
+      "name": "保证",
+      "shortDesc": "如果目标本回合已经受到伤害，则力量加倍。"
+    },
+    "astonish": {
+      "name": "震惊",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "astral-barrage": {
+      "name": "星界弹幕",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "attack-order": {
+      "name": "攻击顺序",
+      "shortDesc": "暴击几率增加。"
+    },
+    "attract": {
+      "name": "吸引",
+      "shortDesc": "目标与异性恋爱，有50%概率拒绝攻击使用者。"
+    },
+    "aura-sphere": {
+      "name": "光环球",
+      "shortDesc": "绝不会错过。"
+    },
+    "aura-wheel": {
+      "name": "光环轮",
+      "shortDesc": "莫佩科攻击并利用其脸颊中储存的能量提高其速度。该动作的类型根据使用者的形态而变化。"
+    },
+    "aurora-beam": {
+      "name": "极光光束",
+      "shortDesc": "有一定几率降低目标攻击一级。"
+    },
+    "aurora-veil": {
+      "name": "极光面纱",
+      "shortDesc": "减少伤害五回合，但必须在冰雹期间使用。"
+    },
+    "autotomize": {
+      "name": "自动",
+      "shortDesc": "将用户的速度提高两级并将用户的体重减半。"
+    },
+    "avalanche": {
+      "name": "雪崩",
+      "shortDesc": "如果使用者在本回合攻击前受到伤害，则造成双倍伤害。"
+    },
+    "axe-kick": {
+      "name": "斧踢",
+      "shortDesc": "使用者通过踢向空中并用脚后跟猛击目标来进行攻击。这也可能会让目标感到困惑。如果未命中，用户则会受到伤害。"
+    },
+    "baby-doll-eyes": {
+      "name": "娃娃眼",
+      "shortDesc": "使目标的攻击力降低一级。"
+    },
+    "baddy-bad": {
+      "name": "坏坏人",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "baneful-bunker": {
+      "name": "邪恶碉堡",
+      "shortDesc": "在回合的剩余时间内为用户提供保护，并毒害任何试图对其使用接触移动的宝可梦。"
+    },
+    "barb-barrage": {
+      "name": "倒钩弹幕",
+      "shortDesc": "使用者发射无数有毒的倒刺来造成伤害。这也可能使目标中毒。如果目标处于状态状态，此招式的威力将加倍。"
+    },
+    "barrage": {
+      "name": "弹幕",
+      "shortDesc": "一回合击中2-5次。"
+    },
+    "barrier": {
+      "name": "屏障",
+      "shortDesc": "使使用者的防御力提升两级。"
+    },
+    "baton-pass": {
+      "name": "接力棒传球",
+      "shortDesc": "允许训练师切换用户并将效果传递给其替代者。"
+    },
+    "beak-blast": {
+      "name": "喙爆炸",
+      "shortDesc": "对攻击前接触的所有宝可梦造成灼伤。"
+    },
+    "beat-up": {
+      "name": "殴打",
+      "shortDesc": "训练师每拥有一个有意识的宝可梦，就击中一次。"
+    },
+    "behemoth-bash": {
+      "name": "巨兽猛击",
+      "shortDesc": "使用者变成一面巨大的盾牌并猛击目标。如果目标处于极巨化状态，此移动会造成两倍伤害。"
+    },
+    "behemoth-blade": {
+      "name": "巨兽之刃",
+      "shortDesc": "使用者变成一把巨大的剑并切割目标。如果目标处于极巨化状态，此移动会造成两倍伤害。"
+    },
+    "belch": {
+      "name": "打嗝",
+      "shortDesc": "只能在用户吃完浆果后使用。"
+    },
+    "belly-drum": {
+      "name": "肚鼓",
+      "shortDesc": "用户支付最大生命值的一半来最大化其攻击力。"
+    },
+    "bestow": {
+      "name": "赐予",
+      "shortDesc": "将用户持有的物品交给目标。"
+    },
+    "bide": {
+      "name": "拜德",
+      "shortDesc": "用户等待两回合，然后进行反击，造成两倍的伤害。"
+    },
+    "bind": {
+      "name": "绑定",
+      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+    },
+    "bite": {
+      "name": "咬",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "bitter-blade": {
+      "name": "苦涩之刃",
+      "shortDesc": "使用者将其对生者世界的苦涩感情集中在猛烈攻击上。使用者的生命值恢复最多为目标所受伤害的一半。"
+    },
+    "bitter-malice": {
+      "name": "苦涩的恶意",
+      "shortDesc": "使用者以令人毛骨悚然的怨恨攻击其目标。这也可能使目标冻伤。如果目标处于状态状态，此招式的威力将加倍。"
+    },
+    "black-hole-eclipse--physical": {
+      "name": "黑洞日食",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "black-hole-eclipse--special": {
+      "name": "黑洞日食",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "blast-burn": {
+      "name": "爆炸燃烧",
+      "shortDesc": "用户放弃下一轮充值。"
+    },
+    "blaze-kick": {
+      "name": "火焰踢",
+      "shortDesc": "增加致命一击的几率以及燃烧目标的几率。"
+    },
+    "blazing-torque": {
+      "name": "炽热扭矩",
+      "shortDesc": "没有可用的附加效果信息。"
+    },
+    "bleakwind-storm": {
+      "name": "寒风风暴",
+      "shortDesc": "使用者用狂暴的寒风攻击，使身体和精神都颤抖。这也可能使目标冻伤。"
+    },
+    "blizzard": {
+      "name": "暴风雪",
+      "shortDesc": "有几率冻结目标。"
+    },
+    "block": {
+      "name": "块",
+      "shortDesc": "阻止目标离开战斗。"
+    },
+    "blood-moon": {
+      "name": "血月",
+      "shortDesc": "使用者从一轮如血般闪耀的满月中释放出其灵魂的全部冲击力。这个动作不能连续使用两次。"
+    },
+    "bloom-doom--physical": {
+      "name": "绽放末日",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "bloom-doom--special": {
+      "name": "绽放末日",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "blue-flare": {
+      "name": "蓝色耀斑",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "body-press": {
+      "name": "身体按压",
+      "shortDesc": "使用者通过将身体猛烈撞击目标来进行攻击。用户的防御越高，对目标造成的伤害就越大。"
+    },
+    "body-slam": {
+      "name": "身体猛击",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "bolt-beak": {
+      "name": "螺栓喙",
+      "shortDesc": "使用者用带电的喙刺伤目标。如果使用者在目标之前攻击，则该招式的威力会加倍。"
+    },
+    "bolt-strike": {
+      "name": "螺栓攻击",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "bone-club": {
+      "name": "骨头俱乐部",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "bone-rush": {
+      "name": "骨头冲刺",
+      "shortDesc": "一回合击中2-5次。"
+    },
+    "bonemerang": {
+      "name": "碎骨镖",
+      "shortDesc": "一回合击中两次。"
+    },
+    "boomburst": {
+      "name": "爆炸",
+      "shortDesc": "造成常规伤害。"
+    },
+    "bounce": {
+      "name": "弹跳",
+      "shortDesc": "使用者弹到空中，躲避所有攻击，并在下一回合命中。"
+    },
+    "bouncy-bubble": {
+      "name": "弹力泡泡",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "branch-poke": {
+      "name": "树枝戳",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "brave-bird": {
+      "name": "勇敢的鸟",
+      "shortDesc": "用户受到后坐力造成的伤害的 1/3。"
+    },
+    "breaking-swipe": {
+      "name": "破坏滑动",
+      "shortDesc": "造成伤害后，目标攻击力降低一级。"
+    },
+    "breakneck-blitz--physical": {
+      "name": "极速闪电战",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "breakneck-blitz--special": {
+      "name": "极速闪电战",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "brick-break": {
+      "name": "砖块破坏",
+      "shortDesc": "摧毁反射屏和光屏。"
+    },
+    "brine": {
+      "name": "盐水",
+      "shortDesc": "对剩余最大生命值一半以下的宝可梦拥有双倍力量。"
+    },
+    "brutal-swing": {
+      "name": "残酷的摇摆",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "bubble": {
+      "name": "气泡",
+      "shortDesc": "有一定几率使目标速度降低一级。"
+    },
+    "bubble-beam": {
+      "name": "气泡光束",
+      "shortDesc": "有一定几率使目标速度降低一级。"
+    },
+    "bug-bite": {
+      "name": "虫咬",
+      "shortDesc": "如果目标有浆果，造成双倍伤害并使用浆果。"
+    },
+    "bug-buzz": {
+      "name": "错误嗡嗡声",
+      "shortDesc": "有一定几率降低目标特防一级。"
+    },
+    "bulk-up": {
+      "name": "散装",
+      "shortDesc": "使使用者的攻击力和防御力提升一级。"
+    },
+    "bulldoze": {
+      "name": "推土机",
+      "shortDesc": "有一定几率使目标速度降低一级。"
+    },
+    "bullet-punch": {
+      "name": "子弹拳",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "bullet-seed": {
+      "name": "子弹种子",
+      "shortDesc": "一回合击中2-5次。"
+    },
+    "burn-up": {
+      "name": "燃烧",
+      "shortDesc": "造成伤害后移除用户的火焰类型。"
+    },
+    "burning-bulwark": {
+      "name": "燃烧的壁垒",
+      "shortDesc": "使用者炽热的毛皮可以保护其免受攻击，并会烧伤任何与其直接接触的攻击者。"
+    },
+    "burning-jealousy": {
+      "name": "燃烧的嫉妒",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "buzzy-buzz": {
+      "name": "嗡嗡嗡",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "calm-mind": {
+      "name": "冷静的头脑",
+      "shortDesc": "使使用者的特攻和特防提升一级。"
+    },
+    "camouflage": {
+      "name": "迷彩",
+      "shortDesc": "用户的类型会发生变化以匹配地形。"
+    },
+    "captivate": {
+      "name": "着迷",
+      "shortDesc": "如果目标是异性，则其特攻降低两级。"
+    },
+    "catastropika": {
+      "name": "灾祸",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "ceaseless-edge": {
+      "name": "无尽的边缘",
+      "shortDesc": "使用者将其炮弹刀片砍向目标，旨在造成致命一击。这次攻击留下的炮弹碎片将继续对目标造成几个回合的伤害。"
+    },
+    "celebrate": {
+      "name": "庆祝",
+      "shortDesc": "不执行任何操作。"
+    },
+    "charge": {
+      "name": "充电",
+      "shortDesc": "使使用者的特防提升一级。用户的电动动作下回合威力加倍。"
+    },
+    "charge-beam": {
+      "name": "充电光束",
+      "shortDesc": "有一定几率使自身特攻提升一级。"
+    },
+    "charm": {
+      "name": "魅力",
+      "shortDesc": "降低目标攻击力两级。"
+    },
+    "chatter": {
+      "name": "喋喋不休",
+      "shortDesc": "录制的声音越大，迷惑目标的几率越高。"
+    },
+    "chilling-water": {
+      "name": "冷冻水",
+      "shortDesc": "用户通过向目标喷洒水来攻击目标，水的温度太低，会削弱目标的力量。这也会降低目标的攻击统计数据。"
+    },
+    "chilly-reception": {
+      "name": "冷淡的接待",
+      "shortDesc": "用户在与等待的队伍宝可梦交换位置之前讲了一个令人毛骨悚然的糟糕笑话。这会召唤一场持续五回合的暴风雪。"
+    },
+    "chip-away": {
+      "name": "削掉",
+      "shortDesc": "忽略目标的统计修正。"
+    },
+    "chloroblast": {
+      "name": "叶绿细胞",
+      "shortDesc": "使用者发射其积累的叶绿素对目标造成伤害。这也会损害使用者并降低使用者的动作速度。"
+    },
+    "circle-throw": {
+      "name": "圆圈投掷",
+      "shortDesc": "结束狂野的战斗。强制训练师更换宝可梦。"
+    },
+    "clamp": {
+      "name": "夹钳",
+      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+    },
+    "clanging-scales": {
+      "name": "叮当作响的音阶",
+      "shortDesc": "造成伤害后，使使用者的防御降低一级。"
+    },
+    "clangorous-soul": {
+      "name": "铿锵的灵魂",
+      "shortDesc": "用户通过使用部分生命值来提升所有属性。"
+    },
+    "clangorous-soulblaze": {
+      "name": "铿锵的灵魂火焰",
+      "shortDesc": "对敌方所有宝可梦造成伤害，并使自己的攻击力、防御力、特攻力、特防力、速度各增加一级。"
+    },
+    "clear-smog": {
+      "name": "清除烟雾",
+      "shortDesc": "移除目标的所有统计修正值。"
+    },
+    "close-combat": {
+      "name": "近战",
+      "shortDesc": "造成伤害后，使使用者的防御和特防降低一级。"
+    },
+    "coaching": {
+      "name": "辅导",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "coil": {
+      "name": "线圈",
+      "shortDesc": "使使用者的攻击力、防御力、准确度各提升一级。"
+    },
+    "collision-course": {
+      "name": "碰撞路线",
+      "shortDesc": "使用者变形并坠落到地面，引起巨大的史前爆炸。如果这是一次超级有效的打击，那么该招式的威力会比平时增强更多。"
+    },
+    "combat-torque": {
+      "name": "战斗扭矩",
+      "shortDesc": "没有可用的附加效果信息。"
+    },
+    "comet-punch": {
+      "name": "彗星拳",
+      "shortDesc": "一回合击中2-5次。"
+    },
+    "comeuppance": {
+      "name": "报应",
+      "shortDesc": "使用者以更大的力量对最后对其造成伤害的对手进行报复。"
+    },
+    "confide": {
+      "name": "倾诉",
+      "shortDesc": "使目标的特攻降低一级。"
+    },
+    "confuse-ray": {
+      "name": "迷惑雷",
+      "shortDesc": "迷惑目标。"
+    },
+    "confusion": {
+      "name": "混乱",
+      "shortDesc": "有一定几率迷惑目标。"
+    },
+    "constrict": {
+      "name": "收缩",
+      "shortDesc": "有一定几率使目标速度降低一级。"
+    },
+    "continental-crush--physical": {
+      "name": "大陆粉碎",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "continental-crush--special": {
+      "name": "大陆粉碎",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "conversion": {
+      "name": "转换",
+      "shortDesc": "用户的类型随机改变为其某一动作的类型。"
+    },
+    "conversion-2": {
+      "name": "转换 2",
+      "shortDesc": "将用户的类型更改为随机类型，可以抵抗或免疫对其使用的最后一步。"
+    },
+    "copycat": {
+      "name": "模仿者",
+      "shortDesc": "使用目标最后使用的动作。"
+    },
+    "core-enforcer": {
+      "name": "核心执行者",
+      "shortDesc": "如果目标提前移动，则其能力无效。"
+    },
+    "corkscrew-crash--physical": {
+      "name": "开瓶器崩溃",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "corkscrew-crash--special": {
+      "name": "开瓶器崩溃",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "corrosive-gas": {
+      "name": "腐蚀性气体",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "cosmic-power": {
+      "name": "宇宙力量",
+      "shortDesc": "使使用者的防御和特防提升一级。"
+    },
+    "cotton-guard": {
+      "name": "棉花防护罩",
+      "shortDesc": "使使用者的防御力提升三个阶段。"
+    },
+    "cotton-spore": {
+      "name": "棉花孢子",
+      "shortDesc": "将目标的速度降低两级。"
+    },
+    "counter": {
+      "name": "计数器",
+      "shortDesc": "造成的伤害是用户上次物理攻击所受到的伤害的两倍。"
+    },
+    "court-change": {
+      "name": "法院变更",
+      "shortDesc": "凭借其神秘的力量，使用者可以交换场地两侧的效果。"
+    },
+    "covet": {
+      "name": "觊觎",
+      "shortDesc": "取得目标的物品。"
+    },
+    "crabhammer": {
+      "name": "蟹锤",
+      "shortDesc": "暴击几率增加。"
+    },
+    "crafty-shield": {
+      "name": "狡猾的盾牌",
+      "shortDesc": "保护所有友方宝可梦免受非伤害性动作的伤害。"
+    },
+    "cross-chop": {
+      "name": "十字斩",
+      "shortDesc": "暴击几率增加。"
+    },
+    "cross-poison": {
+      "name": "交叉毒药",
+      "shortDesc": "暴击几率增加，并且有几率使目标中毒。"
+    },
+    "crunch": {
+      "name": "紧缩",
+      "shortDesc": "有一定几率降低目标防御一级。"
+    },
+    "crush-claw": {
+      "name": "粉碎爪",
+      "shortDesc": "有一定几率降低目标防御一级。"
+    },
+    "crush-grip": {
+      "name": "粉碎之握",
+      "shortDesc": "针对剩余 HP 较多的目标，力量会增加，最多可达 121 力量。"
+    },
+    "curse": {
+      "name": "诅咒",
+      "shortDesc": "幽灵每回合支付最大生命值一半的伤害来伤害目标。其他人会降低速度，但会提高攻击力和防御力。"
+    },
+    "cut": {
+      "name": "剪切",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "dark-pulse": {
+      "name": "暗脉冲",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "dark-void": {
+      "name": "黑暗虚空",
+      "shortDesc": "让目标进入睡眠状态。"
+    },
+    "darkest-lariat": {
+      "name": "黑暗套索",
+      "shortDesc": "忽略目标的统计修正。"
+    },
+    "dazzling-gleam": {
+      "name": "耀眼的光芒",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "decorate": {
+      "name": "装饰",
+      "shortDesc": "用户大幅提升目标的攻击力和SP。通过装饰目标来统计攻击力。"
+    },
+    "defend-order": {
+      "name": "捍卫秩序",
+      "shortDesc": "使使用者的防御和特防提升一级。"
+    },
+    "defense-curl": {
+      "name": "防御弯举",
+      "shortDesc": "使使用者的防御力提升一级。"
+    },
+    "defog": {
+      "name": "除雾",
+      "shortDesc": "使目标的回避率降低一级。消除敌方场上的场效应。"
+    },
+    "destiny-bond": {
+      "name": "缘分",
+      "shortDesc": "如果用户本回合晕倒，目标也会自动晕倒。"
+    },
+    "detect": {
+      "name": "检测",
+      "shortDesc": "防止本回合任何动作击中用户。"
+    },
+    "devastating-drake--physical": {
+      "name": "毁灭性的德雷克",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "devastating-drake--special": {
+      "name": "毁灭性的德雷克",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "diamond-storm": {
+      "name": "钻石风暴",
+      "shortDesc": "每击中一个目标，就有一定几率提升使用者两段防御。"
+    },
+    "dig": {
+      "name": "挖",
+      "shortDesc": "使用者在地下挖掘，躲避所有攻击，并在下一回合命中。"
+    },
+    "dire-claw": {
+      "name": "凶恶之爪",
+      "shortDesc": "使用者用毁灭性的利爪攻击目标，旨在造成致命一击。这也可能导致目标中毒、瘫痪或昏昏欲睡。"
+    },
+    "disable": {
+      "name": "禁用",
+      "shortDesc": "禁用目标最后使用的动作 1-8 回合。"
+    },
+    "disarming-voice": {
+      "name": "撤防语音",
+      "shortDesc": "绝不会错过。"
+    },
+    "discharge": {
+      "name": "放电",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "dive": {
+      "name": "潜水",
+      "shortDesc": "使用者潜入水下，躲避所有攻击，并在下一回合命中。"
+    },
+    "dizzy-punch": {
+      "name": "眩晕拳",
+      "shortDesc": "有一定几率迷惑目标。"
+    },
+    "doodle": {
+      "name": "涂鸦",
+      "shortDesc": "用户在草图中捕捉到目标的本质。这会将用户及其盟友宝可梦的能力更改为目标的能力。"
+    },
+    "doom-desire": {
+      "name": "末日欲望",
+      "shortDesc": "两回合后击中目标。"
+    },
+    "double-edge": {
+      "name": "双刃",
+      "shortDesc": "用户受到后坐力造成的伤害的 1/3。"
+    },
+    "double-hit": {
+      "name": "连击",
+      "shortDesc": "一回合击中两次。"
+    },
+    "double-iron-bash": {
+      "name": "双铁猛击",
+      "shortDesc": "一回合击中两次。"
+    },
+    "double-kick": {
+      "name": "双踢",
+      "shortDesc": "一回合击中两次。"
+    },
+    "double-shock": {
+      "name": "双重冲击",
+      "shortDesc": "使用者释放体内所有的电力来进行高伤害攻击。使用此招式后，使用者将不再是电属性。"
+    },
+    "double-slap": {
+      "name": "双耳光",
+      "shortDesc": "一回合击中2-5次。"
+    },
+    "double-team": {
+      "name": "包夹",
+      "shortDesc": "使使用者的回避率提高一级。"
+    },
+    "draco-meteor": {
+      "name": "天龙流星",
+      "shortDesc": "造成伤害后，使使用者的特攻降低两级。"
+    },
+    "dragon-ascent": {
+      "name": "龙腾飞",
+      "shortDesc": "造成伤害后，使使用者的防御和特防降低一级。"
+    },
+    "dragon-breath": {
+      "name": "龙息",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "dragon-cheer": {
+      "name": "龙欢呼",
+      "shortDesc": "使用者通过龙吟般的叫喊来提高盟友的士气，这样他们未来的攻击就有更大的机会获得暴击。这激发了更多的龙类型。"
+    },
+    "dragon-claw": {
+      "name": "龙爪",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "dragon-dance": {
+      "name": "龙舞",
+      "shortDesc": "使使用者的攻击力和速度提升一级。"
+    },
+    "dragon-darts": {
+      "name": "龙镖",
+      "shortDesc": "用户使用 Dreepy 攻击两次。如果有两个目标，则该动作对每个目标命中一次。"
+    },
+    "dragon-energy": {
+      "name": "龙能",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "dragon-hammer": {
+      "name": "龙锤",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "dragon-pulse": {
+      "name": "龙脉",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "dragon-rage": {
+      "name": "龙之怒",
+      "shortDesc": "造成 40 点伤害。"
+    },
+    "dragon-rush": {
+      "name": "龙之冲锋",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "dragon-tail": {
+      "name": "龙尾",
+      "shortDesc": "结束狂野的战斗。强制训练师更换宝可梦。"
+    },
+    "drain-punch": {
+      "name": "排水冲头",
+      "shortDesc": "吸收一半的伤害来治疗用户。"
+    },
+    "draining-kiss": {
+      "name": "排水之吻",
+      "shortDesc": "吸收 75% 的伤害来治疗使用者。"
+    },
+    "dream-eater": {
+      "name": "食梦者",
+      "shortDesc": "仅适用于睡眠的宝可梦。吸收一半的伤害来治疗使用者。"
+    },
+    "drill-peck": {
+      "name": "钻啄",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "drill-run": {
+      "name": "练习运行",
+      "shortDesc": "暴击几率增加。"
+    },
+    "drum-beating": {
+      "name": "击鼓",
+      "shortDesc": "有一定几率使目标速度降低一级。"
+    },
+    "dual-chop": {
+      "name": "双斩",
+      "shortDesc": "一回合击中两次。"
+    },
+    "dual-wingbeat": {
+      "name": "双翼拍",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "dynamax-cannon": {
+      "name": "极巨炮",
+      "shortDesc": "在造成伤害后，在场地的用户一侧设置光幕。"
+    },
+    "dynamic-punch": {
+      "name": "动态冲孔",
+      "shortDesc": "有一定几率迷惑目标。"
+    },
+    "earth-power": {
+      "name": "大地之力",
+      "shortDesc": "有一定几率降低目标特防一级。"
+    },
+    "earthquake": {
+      "name": "地震",
+      "shortDesc": "造成常规伤害并能击中 Dig 用户。"
+    },
+    "echoed-voice": {
+      "name": "回声",
+      "shortDesc": "任何友方宝可梦每次连续使用，力量都会增加 100%，最多可达 200。"
+    },
+    "eerie-impulse": {
+      "name": "诡异的冲动",
+      "shortDesc": "使目标的特攻降低两级。"
+    },
+    "eerie-spell": {
+      "name": "诡异咒语",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "egg-bomb": {
+      "name": "鸡蛋炸弹",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "electric-terrain": {
+      "name": "电动地形",
+      "shortDesc": "5回合内，使地面上的所有宝可梦无法休眠，并将电招式强化至1.5倍。"
+    },
+    "electrify": {
+      "name": "通电",
+      "shortDesc": "如果目标本回合尚未移动，则将其移动类型更改为电动。"
+    },
+    "electro-ball": {
+      "name": "电球",
+      "shortDesc": "当用户比目标更快时，力量会增加，最高可达 150。"
+    },
+    "electro-drift": {
+      "name": "电漂移",
+      "shortDesc": "使用者以超快的速度向前奔跑，用未来的电力刺穿目标。如果是超级有效的打击，此招式的威力会比平常增强更多。"
+    },
+    "electro-shot": {
+      "name": "电子射击",
+      "shortDesc": "使用者在第一回合收集电力，提升其Sp。攻击力统计，然后在下一回合发射高压射击。在雨中将立即开枪。"
+    },
+    "electroweb": {
+      "name": "电网",
+      "shortDesc": "将目标的速度降低一级。"
+    },
+    "embargo": {
+      "name": "禁运",
+      "shortDesc": "目标不能使用持有的物品。"
+    },
+    "ember": {
+      "name": "余烬",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "encore": {
+      "name": "安可",
+      "shortDesc": "强制目标每回合重复上次使用的动作，持续 2 到 6 回合。"
+    },
+    "endeavor": {
+      "name": "努力",
+      "shortDesc": "降低目标的生命值以等于用户的生命值。"
+    },
+    "endure": {
+      "name": "忍耐",
+      "shortDesc": "防止本回合使用者的HP低于1。"
+    },
+    "energy-ball": {
+      "name": "能量球",
+      "shortDesc": "有一定几率降低目标特防一级。"
+    },
+    "entrainment": {
+      "name": "夹带",
+      "shortDesc": "将用户的能力复制到目标上。"
+    },
+    "eruption": {
+      "name": "火山喷发",
+      "shortDesc": "当用户剩余生命值较多时，会造成更多伤害，最大伤害为 150。"
+    },
+    "esper-wing": {
+      "name": "异能之翼",
+      "shortDesc": "使用者用光环丰富的翅膀猛击目标。这也提高了用户的动作速度。这一举动增加了致命一击的几率。"
+    },
+    "eternabeam": {
+      "name": "永恒之光",
+      "shortDesc": "用户放弃下一轮充值。"
+    },
+    "expanding-force": {
+      "name": "扩张力",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "explosion": {
+      "name": "爆炸",
+      "shortDesc": "用户晕倒。"
+    },
+    "extrasensory": {
+      "name": "超感官",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "extreme-evoboost": {
+      "name": "极限 Evoboost",
+      "shortDesc": "将用户的所有属性提高两个阶段。"
+    },
+    "extreme-speed": {
+      "name": "极速",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "facade": {
+      "name": "外观",
+      "shortDesc": "如果用户被烧伤、瘫痪或中毒，力量会加倍。"
+    },
+    "fairy-lock": {
+      "name": "仙锁",
+      "shortDesc": "防止所有宝可梦在下一回合逃跑或切换。"
+    },
+    "fairy-wind": {
+      "name": "仙风",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "fake-out": {
+      "name": "假装",
+      "shortDesc": "只能作为用户进入战斗后的第一招。导致目标退缩。"
+    },
+    "fake-tears": {
+      "name": "假眼泪",
+      "shortDesc": "降低目标特防两级。"
+    },
+    "false-surrender": {
+      "name": "假投降",
+      "shortDesc": "绝不会错过。"
+    },
+    "false-swipe": {
+      "name": "误刷",
+      "shortDesc": "无法将目标的生命值降低到1以下。"
+    },
+    "feather-dance": {
+      "name": "羽舞",
+      "shortDesc": "降低目标攻击力两级。"
+    },
+    "feint": {
+      "name": "佯攻",
+      "shortDesc": "通过保护和检测命中。"
+    },
+    "feint-attack": {
+      "name": "佯攻",
+      "shortDesc": "绝不会错过。"
+    },
+    "fell-stinger": {
+      "name": "堕落毒刺",
+      "shortDesc": "击倒目标后，攻击力提升两级。"
+    },
+    "fickle-beam": {
+      "name": "变化无常的光束",
+      "shortDesc": "用户发射光束造成伤害。有时，所有使用者的头部会同时发射光束，使招式的威力加倍。"
+    },
+    "fiery-dance": {
+      "name": "火热之舞",
+      "shortDesc": "有一定几率使自身特攻提升一级。"
+    },
+    "fiery-wrath": {
+      "name": "烈火之怒",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "fillet-away": {
+      "name": "去圆角",
+      "shortDesc": "用户大幅提升其攻击 Sp。使用自身的 HP 来统计攻击力和速度。"
+    },
+    "final-gambit": {
+      "name": "最后的策略",
+      "shortDesc": "造成与使用者剩余生命值相同的伤害。用户晕倒。"
+    },
+    "fire-blast": {
+      "name": "火焰冲击",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "fire-fang": {
+      "name": "火牙",
+      "shortDesc": "有一定几率燃烧目标，也有一定几率使目标退缩。"
+    },
+    "fire-lash": {
+      "name": "火鞭",
+      "shortDesc": "造成伤害后，目标防御力降低一级。"
+    },
+    "fire-pledge": {
+      "name": "火誓言",
+      "shortDesc": "水之誓约使友方宝可梦的招式效果概率翻倍，持续四回合。"
+    },
+    "fire-punch": {
+      "name": "火拳",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "fire-spin": {
+      "name": "火旋转",
+      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+    },
+    "first-impression": {
+      "name": "第一印象",
+      "shortDesc": "只能作为用户进入战斗后的第一步。"
+    },
+    "fishious-rend": {
+      "name": "鱼腥裂",
+      "shortDesc": "使用者用坚硬的鳃撕裂目标。如果使用者在目标之前攻击，则该招式的威力会加倍。"
+    },
+    "fissure": {
+      "name": "裂缝",
+      "shortDesc": "造成一击KO。"
+    },
+    "flail": {
+      "name": "连枷",
+      "shortDesc": "当用户剩余生命值较少时造成更多伤害，最大伤害为 200。"
+    },
+    "flame-burst": {
+      "name": "火焰爆发",
+      "shortDesc": "对目标旁边的宝可梦造成溅射伤害。"
+    },
+    "flame-charge": {
+      "name": "火焰冲锋",
+      "shortDesc": "造成常规伤害。将使用者的速度提升一级。"
+    },
+    "flame-wheel": {
+      "name": "火焰轮",
+      "shortDesc": "有几率燃烧目标。让冰冻的宝可梦自行解冻。"
+    },
+    "flamethrower": {
+      "name": "火焰喷射器",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "flare-blitz": {
+      "name": "照明弹闪电战",
+      "shortDesc": "使用者承受反冲造成的伤害的 1/3。有一定几率燃烧目标。"
+    },
+    "flash": {
+      "name": "闪光",
+      "shortDesc": "将目标精度降低一级。"
+    },
+    "flash-cannon": {
+      "name": "闪光炮",
+      "shortDesc": "有一定几率降低目标特防一级。"
+    },
+    "flatter": {
+      "name": "奉承",
+      "shortDesc": "使目标特攻提升一级并迷惑目标。"
+    },
+    "fleur-cannon": {
+      "name": "芙蓉炮",
+      "shortDesc": "造成伤害后，使使用者的特攻降低两级。"
+    },
+    "fling": {
+      "name": "投掷",
+      "shortDesc": "将持有的物品扔向目标；功率取决于项目。"
+    },
+    "flip-turn": {
+      "name": "翻转",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "floaty-fall": {
+      "name": "漂浮坠落",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "floral-healing": {
+      "name": "花疗",
+      "shortDesc": "治疗目标最大生命值的 1/2，在草地上则为 2/3。"
+    },
+    "flower-shield": {
+      "name": "花盾",
+      "shortDesc": "提高战斗中所有草系宝可梦的防御力。"
+    },
+    "flower-trick": {
+      "name": "花戏法",
+      "shortDesc": "用户向目标投掷一束经过操纵的花束。这种攻击绝不会失手，而且总是能造成致命一击。"
+    },
+    "fly": {
+      "name": "飞",
+      "shortDesc": "使用者飞到空中，躲避所有攻击，并在下一回合命中。"
+    },
+    "flying-press": {
+      "name": "飞行出版社",
+      "shortDesc": "造成战斗型和飞行型伤害。"
+    },
+    "focus-blast": {
+      "name": "焦点爆炸",
+      "shortDesc": "有一定几率降低目标特防一级。"
+    },
+    "focus-energy": {
+      "name": "聚焦能量",
+      "shortDesc": "增加用户获得暴击的机会。"
+    },
+    "focus-punch": {
+      "name": "聚焦拳",
+      "shortDesc": "如果用户在攻击前受到伤害，则攻击被取消。"
+    },
+    "follow-me": {
+      "name": "跟我来",
+      "shortDesc": "本回合将目标的单体效果重定向至使用者。"
+    },
+    "force-palm": {
+      "name": "力掌",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "foresight": {
+      "name": "远见",
+      "shortDesc": "强制目标无法闪避，即使是幽灵也可以被普通招式和战斗招式击中。"
+    },
+    "forests-curse": {
+      "name": "森林的诅咒",
+      "shortDesc": "将草添加到目标的类型中。"
+    },
+    "foul-play": {
+      "name": "犯规行为",
+      "shortDesc": "根据目标的攻击力计算伤害。"
+    },
+    "freeze-dry": {
+      "name": "冷冻干燥",
+      "shortDesc": "对水超级有效。"
+    },
+    "freeze-shock": {
+      "name": "冰冻冲击",
+      "shortDesc": "攻击前需要一回合冲锋。有一定几率使目标麻痹。"
+    },
+    "freezing-glare": {
+      "name": "冰冷眩光",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "freezy-frost": {
+      "name": "冰冻",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "frenzy-plant": {
+      "name": "疯狂植物",
+      "shortDesc": "用户放弃下一轮充值。"
+    },
+    "frost-breath": {
+      "name": "冰霜呼吸",
+      "shortDesc": "总是能获得暴击。"
+    },
+    "frustration": {
+      "name": "沮丧",
+      "shortDesc": "力量随着幸福度的降低而增加，最高可达 102。"
+    },
+    "fury-attack": {
+      "name": "狂怒攻击",
+      "shortDesc": "一回合击中2-5次。"
+    },
+    "fury-cutter": {
+      "name": "狂怒切割者",
+      "shortDesc": "在第一个动作之后连续使用此动作，每回合力量都会翻倍，五回合后达到最大。"
+    },
+    "fury-swipes": {
+      "name": "狂怒横扫",
+      "shortDesc": "一回合击中2-5次。"
+    },
+    "fusion-bolt": {
+      "name": "融合螺栓",
+      "shortDesc": "使用融合耀斑，造成双倍伤害。"
+    },
+    "fusion-flare": {
+      "name": "融合耀斑",
+      "shortDesc": "使用融合箭，造成双倍伤害。"
+    },
+    "future-sight": {
+      "name": "未来之镜",
+      "shortDesc": "两回合后击中目标。"
+    },
+    "gastro-acid": {
+      "name": "胃酸",
+      "shortDesc": "使目标的能力无效直至其离开战斗。"
+    },
+    "gear-grind": {
+      "name": "齿轮研磨",
+      "shortDesc": "一回合击中两次。"
+    },
+    "gear-up": {
+      "name": "加速",
+      "shortDesc": "使所有友方正负宝可梦的攻击力和特攻力提高一级。"
+    },
+    "genesis-supernova": {
+      "name": "创世超新星",
+      "shortDesc": "造成伤害后将地形更改为心灵地形。"
+    },
+    "geomancy": {
+      "name": "风水",
+      "shortDesc": "冲锋一回合，使自身特攻、特防、速度提升两级。"
+    },
+    "giga-drain": {
+      "name": "千兆排水",
+      "shortDesc": "吸收一半的伤害来治疗用户。"
+    },
+    "giga-impact": {
+      "name": "千兆影响",
+      "shortDesc": "用户放弃下一轮充值。"
+    },
+    "gigaton-hammer": {
+      "name": "十亿吨锤",
+      "shortDesc": "使用者挥舞全身，用巨大的锤子进行攻击。这个动作不能连续使用两次。"
+    },
+    "gigavolt-havoc--physical": {
+      "name": "千兆伏浩劫",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "gigavolt-havoc--special": {
+      "name": "千兆伏浩劫",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "glacial-lance": {
+      "name": "冰川之枪",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "glaciate": {
+      "name": "冰川",
+      "shortDesc": "将目标的速度降低一级。"
+    },
+    "glaive-rush": {
+      "name": "战刃冲锋",
+      "shortDesc": "使用者将其整个身体投入鲁莽的冲锋中。使用此招式后，对使用者的攻击不会失手，并且会造成双倍伤害，直到使用者的下一个回合。"
+    },
+    "glare": {
+      "name": "眩光",
+      "shortDesc": "麻痹目标。"
+    },
+    "glitzy-glow": {
+      "name": "耀眼的光芒",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "grass-knot": {
+      "name": "草结",
+      "shortDesc": "对较重的目标造成更多伤害，最大伤害为 120 点。"
+    },
+    "grass-pledge": {
+      "name": "草的誓言",
+      "shortDesc": "使用火誓约，每回合对对方宝可梦造成最大生命值 1/8 的伤害，持续 4 回合。"
+    },
+    "grass-whistle": {
+      "name": "草哨",
+      "shortDesc": "让目标进入睡眠状态。"
+    },
+    "grassy-glide": {
+      "name": "草滑行",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "grassy-terrain": {
+      "name": "草地地形",
+      "shortDesc": "5回合内，每回合回复地面上所有宝可梦1/16最大生命值，并将草招强化至1.5倍。"
+    },
+    "grav-apple": {
+      "name": "红苹果",
+      "shortDesc": "造成伤害后，目标防御力降低一级。"
+    },
+    "gravity": {
+      "name": "重力",
+      "shortDesc": "禁用涉及飞行或悬浮的动作和免疫五回合。"
+    },
+    "growl": {
+      "name": "咆哮",
+      "shortDesc": "使目标的攻击力降低一级。"
+    },
+    "growth": {
+      "name": "成长",
+      "shortDesc": "使使用者的攻击力和特攻力提升一级。"
+    },
+    "grudge": {
+      "name": "怨恨",
+      "shortDesc": "如果使用者本回合昏倒，则昏倒动作的PP会降至0。"
+    },
+    "guard-split": {
+      "name": "守卫分裂",
+      "shortDesc": "与目标平均防御和特防。"
+    },
+    "guard-swap": {
+      "name": "守卫交换",
+      "shortDesc": "用户与目标交换防御和特防变化。"
+    },
+    "guardian-of-alola": {
+      "name": "阿罗拉守护者",
+      "shortDesc": "对目标造成相当于其剩余生命值 75% 的伤害。"
+    },
+    "guillotine": {
+      "name": "断头台",
+      "shortDesc": "造成一击KO。"
+    },
+    "gunk-shot": {
+      "name": "垃圾射击",
+      "shortDesc": "有几率使目标中毒。"
+    },
+    "gust": {
+      "name": "阵风",
+      "shortDesc": "造成常规伤害，并且可以击中空中的宝可梦。"
+    },
+    "gyro-ball": {
+      "name": "陀螺球",
+      "shortDesc": "当用户速度较低时，力量会增加，最多可达 150。"
+    },
+    "hail": {
+      "name": "冰雹",
+      "shortDesc": "将天气变为冰雹，持续五回合。"
+    },
+    "hammer-arm": {
+      "name": "锤臂",
+      "shortDesc": "将用户的速度降低一级。"
+    },
+    "happy-hour": {
+      "name": "欢乐时光",
+      "shortDesc": "双打奖金。"
+    },
+    "hard-press": {
+      "name": "硬压",
+      "shortDesc": "用手臂、爪子等压碎目标以造成伤害。目标剩余的生命值越多，招式的威力就越大。"
+    },
+    "harden": {
+      "name": "哈登",
+      "shortDesc": "使使用者的防御力提升一级。"
+    },
+    "haze": {
+      "name": "阴霾",
+      "shortDesc": "重置所有宝可梦的统计数据、准确度和回避率。"
+    },
+    "head-charge": {
+      "name": "头部冲锋",
+      "shortDesc": "用户受到后坐力造成的伤害的 1/4。"
+    },
+    "head-smash": {
+      "name": "头部粉碎",
+      "shortDesc": "用户受到反冲造成伤害的 1/2。"
+    },
+    "headbutt": {
+      "name": "头撞",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "headlong-rush": {
+      "name": "猛冲",
+      "shortDesc": "用户以全身铲球的方式撞向目标。这也会降低用户的防御统计数据。"
+    },
+    "heal-bell": {
+      "name": "治愈铃",
+      "shortDesc": "治愈整个队伍的主要状态影响。"
+    },
+    "heal-block": {
+      "name": "治疗方块",
+      "shortDesc": "阻止目标恢复生命值五回合。"
+    },
+    "heal-order": {
+      "name": "治疗秩序",
+      "shortDesc": "使使用者恢复最大生命值的一半。"
+    },
+    "heal-pulse": {
+      "name": "治疗脉冲",
+      "shortDesc": "治疗目标最大生命值的一半。"
+    },
+    "healing-wish": {
+      "name": "治愈愿望",
+      "shortDesc": "用户晕倒。它的替代品的生命值完全恢复，并且所有主要状态效果都被消除。"
+    },
+    "heart-stamp": {
+      "name": "心印",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "heart-swap": {
+      "name": "心交换",
+      "shortDesc": "用户和目标交换统计数据更改。"
+    },
+    "heat-crash": {
+      "name": "热崩溃",
+      "shortDesc": "当用户超过目标时，力量会增加，最高可达 120。"
+    },
+    "heat-wave": {
+      "name": "热浪",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "heavy-slam": {
+      "name": "重击",
+      "shortDesc": "当用户超过目标时，力量会增加，最高可达 120。"
+    },
+    "helping-hand": {
+      "name": "伸出援助之手",
+      "shortDesc": "盟友的下一步行动造成的伤害增加一半。"
+    },
+    "hex": {
+      "name": "十六进制",
+      "shortDesc": "如果目标患有严重疾病，则拥有双倍力量。"
+    },
+    "hidden-power": {
+      "name": "隐藏的力量",
+      "shortDesc": "威力固定为 60。属性取决于使用该招式的宝可梦。"
+    },
+    "high-horsepower": {
+      "name": "高马力",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "high-jump-kick": {
+      "name": "跳高踢",
+      "shortDesc": "如果使用者未命中，则受到后坐力造成的伤害的一半。"
+    },
+    "hold-back": {
+      "name": "阻止",
+      "shortDesc": "无法将目标的生命值降低到1以下。"
+    },
+    "hold-hands": {
+      "name": "牵手",
+      "shortDesc": "不执行任何操作。"
+    },
+    "hone-claws": {
+      "name": "磨爪",
+      "shortDesc": "使使用者的攻击力和准确度提升一级。"
+    },
+    "horn-attack": {
+      "name": "喇叭攻击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "horn-drill": {
+      "name": "喇叭钻",
+      "shortDesc": "造成一击KO。"
+    },
+    "horn-leech": {
+      "name": "角水蛭",
+      "shortDesc": "吸收一半的伤害来治疗用户。"
+    },
+    "howl": {
+      "name": "嚎叫",
+      "shortDesc": "使使用者的攻击力提升一级。"
+    },
+    "hurricane": {
+      "name": "飓风",
+      "shortDesc": "有一定几率迷惑目标。"
+    },
+    "hydro-cannon": {
+      "name": "水力炮",
+      "shortDesc": "用户放弃下一轮充值。"
+    },
+    "hydro-pump": {
+      "name": "液压泵",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "hydro-steam": {
+      "name": "水力蒸汽",
+      "shortDesc": "使用者用滚烫的热水喷射目标。此招式的威力在强烈阳光下不但没有降低，反而增强了百分之五十。"
+    },
+    "hydro-vortex--physical": {
+      "name": "水涡",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "hydro-vortex--special": {
+      "name": "水涡",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "hyper-beam": {
+      "name": "超光束",
+      "shortDesc": "用户放弃下一轮充值。"
+    },
+    "hyper-drill": {
+      "name": "超级钻",
+      "shortDesc": "使用者高速旋转身体的尖部刺穿目标。此攻击可以使用“保护”或“检测”等移动来击中目标。"
+    },
+    "hyper-fang": {
+      "name": "超级牙",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "hyper-voice": {
+      "name": "超级语音",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "hyperspace-fury": {
+      "name": "超空间之怒",
+      "shortDesc": "忽略并破坏保护效果。"
+    },
+    "hyperspace-hole": {
+      "name": "超空间洞",
+      "shortDesc": "忽略并破坏保护效果。"
+    },
+    "hypnosis": {
+      "name": "催眠",
+      "shortDesc": "让目标进入睡眠状态。"
+    },
+    "ice-ball": {
+      "name": "冰球",
+      "shortDesc": "每次连续使用，功率加倍，最多五圈。"
+    },
+    "ice-beam": {
+      "name": "冰光束",
+      "shortDesc": "有几率冻结目标。"
+    },
+    "ice-burn": {
+      "name": "冰烧",
+      "shortDesc": "攻击前需要一回合冲锋。有一定几率燃烧目标。"
+    },
+    "ice-fang": {
+      "name": "冰牙",
+      "shortDesc": "有一定几率冻结目标，也有一定几率使目标退缩。"
+    },
+    "ice-hammer": {
+      "name": "冰锤",
+      "shortDesc": "将用户的速度降低一级。"
+    },
+    "ice-punch": {
+      "name": "冰拳",
+      "shortDesc": "有几率冻结目标。"
+    },
+    "ice-shard": {
+      "name": "冰碎片",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "ice-spinner": {
+      "name": "冰旋器",
+      "shortDesc": "使用者用薄冰覆盖双脚并旋转，猛烈撞击目标。此移动的旋转运动也会破坏地形。"
+    },
+    "icicle-crash": {
+      "name": "冰柱撞击",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "icicle-spear": {
+      "name": "冰柱矛",
+      "shortDesc": "一回合击中2-5次。"
+    },
+    "icy-wind": {
+      "name": "冰冷的风",
+      "shortDesc": "有一定几率使目标速度降低一级。"
+    },
+    "imprison": {
+      "name": "监禁",
+      "shortDesc": "防止目标使用用户也知道的任何动作。"
+    },
+    "incinerate": {
+      "name": "焚烧",
+      "shortDesc": "摧毁目标持有的浆果。"
+    },
+    "infernal-parade": {
+      "name": "地狱游行",
+      "shortDesc": "使用者用无数火球攻击。这也可能使目标被烧伤。如果目标处于状态状态，此招式的威力将加倍。"
+    },
+    "inferno": {
+      "name": "地狱",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "inferno-overdrive--physical": {
+      "name": "地狱超速",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "inferno-overdrive--special": {
+      "name": "地狱超速",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "infestation": {
+      "name": "感染",
+      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+    },
+    "ingrain": {
+      "name": "英格伦",
+      "shortDesc": "阻止用户离开战斗。使用者每回合恢复最大生命值的1/16。"
+    },
+    "instruct": {
+      "name": "指示",
+      "shortDesc": "强制目标重复其上次使用的动作。"
+    },
+    "ion-deluge": {
+      "name": "离子洪水",
+      "shortDesc": "在本回合的剩余时间内将所有普通动作更改为电动动作。"
+    },
+    "iron-defense": {
+      "name": "钢铁防御",
+      "shortDesc": "使使用者的防御力提升两级。"
+    },
+    "iron-head": {
+      "name": "铁头",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "iron-tail": {
+      "name": "铁尾",
+      "shortDesc": "有一定几率降低目标防御一级。"
+    },
+    "ivy-cudgel": {
+      "name": "常春藤棍棒",
+      "shortDesc": "使用者用一根常春藤包裹的棍棒进行攻击。该招式的类型根据使用者佩戴的面具而变化，并且获得暴击的几率更高。"
+    },
+    "jaw-lock": {
+      "name": "颚锁",
+      "shortDesc": "在造成伤害后为目标播种。"
+    },
+    "jet-punch": {
+      "name": "喷射冲床",
+      "shortDesc": "使用者在拳头周围召唤一股洪流，并以令人眼花缭乱的速度出拳。这个动作总是先进行。"
+    },
+    "judgment": {
+      "name": "判断",
+      "shortDesc": "如果用户持有适当的板或驱动器，则造成的伤害将与其相匹配。"
+    },
+    "jump-kick": {
+      "name": "跳踢",
+      "shortDesc": "如果使用者未命中，则受到后坐力造成的伤害的一半。"
+    },
+    "jungle-healing": {
+      "name": "丛林疗愈",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "karate-chop": {
+      "name": "空手道斩",
+      "shortDesc": "暴击几率增加。"
+    },
+    "kinesis": {
+      "name": "运动",
+      "shortDesc": "将目标精度降低一级。"
+    },
+    "kings-shield": {
+      "name": "国王之盾",
+      "shortDesc": "格挡伤害性攻击，并在接触时将攻击宝可梦的攻击力降低两个阶段。将神盾斩切换为盾阵。"
+    },
+    "knock-off": {
+      "name": "敲掉",
+      "shortDesc": "目标掉落其持有的物品。"
+    },
+    "kowtow-cleave": {
+      "name": "磕头劈砍",
+      "shortDesc": "使用者在向目标磕头后挥砍，使目标放松警惕。这次攻击绝不会失手。"
+    },
+    "lands-wrath": {
+      "name": "大地之怒",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "laser-focus": {
+      "name": "激光聚焦",
+      "shortDesc": "保证用户的下一步动作会造成致命一击。"
+    },
+    "lash-out": {
+      "name": "猛烈抨击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "last-resort": {
+      "name": "最后的手段",
+      "shortDesc": "只能在用户的所有其他动作都已使用后才能使用。"
+    },
+    "last-respects": {
+      "name": "最后的敬意",
+      "shortDesc": "用户攻击是为了为其盟友报仇。使用者队伍中被击败的盟友越多，该招式的威力就越大。"
+    },
+    "lava-plume": {
+      "name": "熔岩羽流",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "leaf-blade": {
+      "name": "叶片",
+      "shortDesc": "暴击几率增加。"
+    },
+    "leaf-storm": {
+      "name": "树叶风暴",
+      "shortDesc": "造成伤害后，使使用者的特攻降低两级。"
+    },
+    "leaf-tornado": {
+      "name": "树叶龙卷风",
+      "shortDesc": "有一定几率降低目标精准度一级。"
+    },
+    "leafage": {
+      "name": "叶子",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "leech-life": {
+      "name": "水蛭生命",
+      "shortDesc": "吸收一半的伤害来治疗用户。"
+    },
+    "leech-seed": {
+      "name": "水蛭种子",
+      "shortDesc": "播种目标，每回合窃取其生命值。"
+    },
+    "leer": {
+      "name": "丽尔",
+      "shortDesc": "降低目标防御一级。"
+    },
+    "lets-snuggle-forever": {
+      "name": "让我们永远依偎在一起",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "lick": {
+      "name": "舔",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "life-dew": {
+      "name": "生命露",
+      "shortDesc": "使用者向周围散布神秘之水，并在战斗中恢复自身及其盟友宝可梦的生命值。"
+    },
+    "light-of-ruin": {
+      "name": "毁灭之光",
+      "shortDesc": "用户受到反冲造成伤害的 1/2。"
+    },
+    "light-screen": {
+      "name": "光幕",
+      "shortDesc": "减少特殊攻击伤害，持续五回合。"
+    },
+    "light-that-burns-the-sky": {
+      "name": "燃烧天空的光芒",
+      "shortDesc": "使用攻击或特殊攻击统计数据（以较高者为准）造成伤害。"
+    },
+    "liquidation": {
+      "name": "清算",
+      "shortDesc": "有一定几率降低目标防御一级。"
+    },
+    "lock-on": {
+      "name": "锁定",
+      "shortDesc": "确保用户的下一步动作将击中目标。"
+    },
+    "lovely-kiss": {
+      "name": "可爱的吻",
+      "shortDesc": "让目标进入睡眠状态。"
+    },
+    "low-kick": {
+      "name": "低踢",
+      "shortDesc": "对较重的目标造成更多伤害，最大伤害为 120 点。"
+    },
+    "low-sweep": {
+      "name": "低扫",
+      "shortDesc": "将目标的速度降低一级。"
+    },
+    "lucky-chant": {
+      "name": "幸运颂歌",
+      "shortDesc": "阻止目标在五回合内获得暴击。"
+    },
+    "lumina-crash": {
+      "name": "卢米纳崩溃",
+      "shortDesc": "使用者释放出甚至影响心灵的特殊光芒进行攻击。这也会严重降低目标的 Sp。默认统计数据。"
+    },
+    "lunar-blessing": {
+      "name": "月光祝福",
+      "shortDesc": "使用者治愈自身状态并恢复生命值。接下来的动作也变得更有可能错过。"
+    },
+    "lunar-dance": {
+      "name": "月之舞",
+      "shortDesc": "使用者晕倒，其替代者已完全治愈。"
+    },
+    "lunge": {
+      "name": "弓步",
+      "shortDesc": "造成伤害后，目标攻击力降低一级。"
+    },
+    "luster-purge": {
+      "name": "光泽净化",
+      "shortDesc": "有一定几率降低目标特防一级。"
+    },
+    "mach-punch": {
+      "name": "马赫拳",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "magic-coat": {
+      "name": "魔法外套",
+      "shortDesc": "反射回用户本回合使用的第一个效果动作。"
+    },
+    "magic-powder": {
+      "name": "魔法粉",
+      "shortDesc": "使用者散布一团魔法粉末，将目标转变为心灵类型。"
+    },
+    "magic-room": {
+      "name": "魔法室",
+      "shortDesc": "使持有的物品无效五回合。"
+    },
+    "magical-leaf": {
+      "name": "魔法叶",
+      "shortDesc": "绝不会错过。"
+    },
+    "magical-torque": {
+      "name": "魔法扭矩",
+      "shortDesc": "没有可用的附加效果信息。"
+    },
+    "magma-storm": {
+      "name": "岩浆风暴",
+      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+    },
+    "magnet-bomb": {
+      "name": "磁铁炸弹",
+      "shortDesc": "绝不会错过。"
+    },
+    "magnet-rise": {
+      "name": "磁力崛起",
+      "shortDesc": "使用者在五回合内免疫地面招式和效果。"
+    },
+    "magnetic-flux": {
+      "name": "磁通量",
+      "shortDesc": "使所有友方正负宝可梦的防御力和特防力提高一级。"
+    },
+    "magnitude": {
+      "name": "幅度",
+      "shortDesc": "功率在 10 到 150 之间随机变化。"
+    },
+    "make-it-rain": {
+      "name": "下雨",
+      "shortDesc": "用户通过扔出大量硬币进行攻击。这也会降低用户的 Sp。攻击力统计。战斗结束后就能赚到钱。"
+    },
+    "malicious-moonsault": {
+      "name": "恶意月翻",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "malignant-chain": {
+      "name": "恶性链条",
+      "shortDesc": "使用者将毒素包裹在有毒、腐蚀性的链条中，将毒素注入目标体内。这也可能使目标严重中毒。"
+    },
+    "mat-block": {
+      "name": "垫块",
+      "shortDesc": "保护所有友方宝可梦免受伤害性动作。仅在用户被送出后的第一回合有效。"
+    },
+    "matcha-gotcha": {
+      "name": "抹茶陷阱",
+      "shortDesc": "用户喷射出混合好的茶。使用者的生命值恢复最多为目标所受伤害的一半。这也可能使目标被烧伤。"
+    },
+    "max-airstream": {
+      "name": "最大气流",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-darkness": {
+      "name": "最大黑暗度",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-flare": {
+      "name": "最大耀斑",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-flutterby": {
+      "name": "最大颤振",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-geyser": {
+      "name": "最大间歇泉",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-guard": {
+      "name": "最大防护",
+      "shortDesc": "防止本回合任何动作击中用户。"
+    },
+    "max-hailstorm": {
+      "name": "最大冰雹",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-knuckle": {
+      "name": "最大指关节",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-lightning": {
+      "name": "最大闪电",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-mindstorm": {
+      "name": "最大心灵风暴",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-ooze": {
+      "name": "最大软泥",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-overgrowth": {
+      "name": "最大过度生长",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-phantasm": {
+      "name": "最大幻象",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-quake": {
+      "name": "最大地震",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-rockfall": {
+      "name": "最大落石量",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-starfall": {
+      "name": "最大星落",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-steelspike": {
+      "name": "最大钢钉",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-strike": {
+      "name": "最大打击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "max-wyrmwind": {
+      "name": "最大龙风",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "me-first": {
+      "name": "我优先",
+      "shortDesc": "在攻击前使用目标的招式对抗它，威力增加一半。"
+    },
+    "mean-look": {
+      "name": "刻薄的表情",
+      "shortDesc": "阻止目标离开战斗。"
+    },
+    "meditate": {
+      "name": "冥想",
+      "shortDesc": "使使用者的攻击力提升一级。"
+    },
+    "mega-drain": {
+      "name": "巨型排水沟",
+      "shortDesc": "吸收一半的伤害来治疗用户。"
+    },
+    "mega-kick": {
+      "name": "超级踢",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "mega-punch": {
+      "name": "超级拳",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "megahorn": {
+      "name": "巨角",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "memento": {
+      "name": "纪念品",
+      "shortDesc": "使目标的攻击力和特攻力降低两级。用户晕倒。"
+    },
+    "menacing-moonraze-maelstrom": {
+      "name": "来势汹汹的月荒漩涡",
+      "shortDesc": "不会被技能打乱。"
+    },
+    "metal-burst": {
+      "name": "金属爆裂",
+      "shortDesc": "以1.5倍伤害反击本回合最后击中使用者的宝可梦。"
+    },
+    "metal-claw": {
+      "name": "金属爪",
+      "shortDesc": "有一定几率使自身攻击力提升一级。"
+    },
+    "metal-sound": {
+      "name": "金属声音",
+      "shortDesc": "降低目标特防两级。"
+    },
+    "meteor-assault": {
+      "name": "流星袭击",
+      "shortDesc": "用户放弃下一轮充值。"
+    },
+    "meteor-beam": {
+      "name": "流星光束",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "meteor-mash": {
+      "name": "流星大混战",
+      "shortDesc": "有一定几率使自身攻击力提升一级。"
+    },
+    "metronome": {
+      "name": "节拍器",
+      "shortDesc": "随机选择并使用游戏中的任意动作。"
+    },
+    "mighty-cleave": {
+      "name": "强力劈砍",
+      "shortDesc": "使用者挥动头顶积聚的光来劈开目标。即使目标保护自己，这一招也会命中。"
+    },
+    "milk-drink": {
+      "name": "牛奶饮料",
+      "shortDesc": "使使用者恢复最大生命值的一半。"
+    },
+    "mimic": {
+      "name": "模仿",
+      "shortDesc": "复制目标最后使用的动作。"
+    },
+    "mind-blown": {
+      "name": "心碎",
+      "shortDesc": "造成伤害，使用者受到最大生命值一半的伤害，向上舍入。"
+    },
+    "mind-reader": {
+      "name": "读心者",
+      "shortDesc": "确保用户的下一步动作将击中目标。"
+    },
+    "minimize": {
+      "name": "最小化",
+      "shortDesc": "使使用者的回避率提高两个阶段。"
+    },
+    "miracle-eye": {
+      "name": "奇迹之眼",
+      "shortDesc": "强制目标无法闪避，即使是黑暗也能被念力招式击中。"
+    },
+    "mirror-coat": {
+      "name": "镜面涂层",
+      "shortDesc": "返回上次收到的特殊命中造成的伤害的两倍。"
+    },
+    "mirror-move": {
+      "name": "镜像移动",
+      "shortDesc": "使用目标最后使用的动作。"
+    },
+    "mirror-shot": {
+      "name": "镜像拍摄",
+      "shortDesc": "有一定几率降低目标精准度一级。"
+    },
+    "mist": {
+      "name": "雾",
+      "shortDesc": "保护用户的统计数据不被敌人的动作改变。"
+    },
+    "mist-ball": {
+      "name": "雾球",
+      "shortDesc": "有一定几率使目标特攻降低一级。"
+    },
+    "misty-explosion": {
+      "name": "迷雾爆炸",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "misty-terrain": {
+      "name": "迷雾地形",
+      "shortDesc": "持续五回合，保护地面上的所有宝可梦免受严重异常状态和混乱的影响，并将传入的龙招式的威力减半。"
+    },
+    "moonblast": {
+      "name": "月光",
+      "shortDesc": "有一定几率使目标特攻降低一级。"
+    },
+    "moongeist-beam": {
+      "name": "月灵光束",
+      "shortDesc": "不会被技能打乱。"
+    },
+    "moonlight": {
+      "name": "月光",
+      "shortDesc": "治疗使用者；数量取决于天气。"
+    },
+    "morning-sun": {
+      "name": "早晨的阳光",
+      "shortDesc": "治疗使用者；数量取决于天气。"
+    },
+    "mortal-spin": {
+      "name": "凡人旋转",
+      "shortDesc": "用户执行旋转攻击，也可以消除“束缚”、“包裹”和“吸血种子”等动作的效果。这也会使敌对的宝可梦中毒。"
+    },
+    "mountain-gale": {
+      "name": "山风",
+      "shortDesc": "使用者向目标投掷巨大的冰块以造成伤害。"
+    },
+    "mud-bomb": {
+      "name": "泥弹",
+      "shortDesc": "有一定几率降低目标精准度一级。"
+    },
+    "mud-shot": {
+      "name": "泥浆射击",
+      "shortDesc": "有一定几率使目标速度降低一级。"
+    },
+    "mud-slap": {
+      "name": "拍泥",
+      "shortDesc": "有一定几率降低目标精准度一级。"
+    },
+    "mud-sport": {
+      "name": "泥地运动",
+      "shortDesc": "所有电系伤害减半。"
+    },
+    "muddy-water": {
+      "name": "浑水",
+      "shortDesc": "有一定几率降低目标精准度一级。"
+    },
+    "multi-attack": {
+      "name": "多重攻击",
+      "shortDesc": "如果用户持有适当的板或驱动器，则造成的伤害将与其相匹配。"
+    },
+    "mystical-fire": {
+      "name": "神秘之火",
+      "shortDesc": "有一定几率使目标特攻降低一级。"
+    },
+    "mystical-power": {
+      "name": "神秘力量",
+      "shortDesc": "使用者用神秘的力量强化自己。如果进攻出色，进攻数据就会提高。如果防守出色，其防守数据就会提高。"
+    },
+    "nasty-plot": {
+      "name": "肮脏的阴谋",
+      "shortDesc": "将使用者的特攻提升两级。"
+    },
+    "natural-gift": {
+      "name": "天赋",
+      "shortDesc": "力量和类型取决于所持有的浆果。"
+    },
+    "nature-power": {
+      "name": "自然之力",
+      "shortDesc": "使用取决于地形的移动。"
+    },
+    "natures-madness": {
+      "name": "大自然的疯狂",
+      "shortDesc": "对目标造成生命值一半的伤害。"
+    },
+    "needle-arm": {
+      "name": "针臂",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "never-ending-nightmare--physical": {
+      "name": "永无休止的噩梦",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "never-ending-nightmare--special": {
+      "name": "永无休止的噩梦",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "night-daze": {
+      "name": "夜发呆",
+      "shortDesc": "有一定几率降低目标精准度一级。"
+    },
+    "night-shade": {
+      "name": "夜影",
+      "shortDesc": "造成等同于使用者等级的伤害。"
+    },
+    "night-slash": {
+      "name": "夜斩",
+      "shortDesc": "暴击几率增加。"
+    },
+    "nightmare": {
+      "name": "噩梦",
+      "shortDesc": "只要目标处于睡眠状态，每回合都会损失最大生命值的1/4。"
+    },
+    "no-retreat": {
+      "name": "没有退路",
+      "shortDesc": "一回合命中两次，有一定几率使目标退缩。"
+    },
+    "noble-roar": {
+      "name": "高贵的咆哮",
+      "shortDesc": "使目标的攻击力和特攻力降低一级。"
+    },
+    "noxious-torque": {
+      "name": "有害扭矩",
+      "shortDesc": "没有可用的附加效果信息。"
+    },
+    "nuzzle": {
+      "name": "鼻子",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "oblivion-wing": {
+      "name": "湮灭之翼",
+      "shortDesc": "吸收 75% 的伤害来治疗使用者。"
+    },
+    "obstruct": {
+      "name": "阻碍",
+      "shortDesc": "此举动使用户能够保护自己免受所有攻击。如果连续使用，失败的几率会增加。直接接触会严重降低攻击者的防御统计数据。"
+    },
+    "oceanic-operetta": {
+      "name": "海洋轻歌剧",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "octazooka": {
+      "name": "八角形",
+      "shortDesc": "有一定几率降低目标精准度一级。"
+    },
+    "octolock": {
+      "name": "八锁",
+      "shortDesc": "用户锁定目标并防止其逃跑。此动作还会降低目标的防御力和 Sp。定义每个回合。"
+    },
+    "odor-sleuth": {
+      "name": "气味侦探",
+      "shortDesc": "强制目标无法闪避，即使是幽灵也可以被普通招式和战斗招式击中。"
+    },
+    "ominous-wind": {
+      "name": "不祥之风",
+      "shortDesc": "有几率将使用者的所有属性提升一级。"
+    },
+    "order-up": {
+      "name": "订购",
+      "shortDesc": "使用者以优雅的姿态进行攻击。如果用户嘴里含着龙切，这一举动会根据龙切的形态提升用户的一项统计数据。"
+    },
+    "origin-pulse": {
+      "name": "原点脉冲",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "outrage": {
+      "name": "愤怒",
+      "shortDesc": "每回合都会命中 2-3 回合，然后迷惑使用者。"
+    },
+    "overdrive": {
+      "name": "超速档",
+      "shortDesc": "使用者通过弹奏吉他或低音吉他来攻击敌对的宝可梦，引起巨大的回声和强烈的振动。"
+    },
+    "overheat": {
+      "name": "过热",
+      "shortDesc": "造成伤害后，使使用者的特攻降低两级。"
+    },
+    "pain-split": {
+      "name": "疼痛分裂",
+      "shortDesc": "平均用户和目标的当前 HP。"
+    },
+    "parabolic-charge": {
+      "name": "抛物线电荷",
+      "shortDesc": "治疗用户的伤害是对所有目标造成的总伤害的一半。"
+    },
+    "parting-shot": {
+      "name": "离别镜头",
+      "shortDesc": "所有目标的攻击力和特攻力降低一级。使用户退出。"
+    },
+    "pay-day": {
+      "name": "发薪日",
+      "shortDesc": "将价值五倍于用户等级的金钱撒在地上。"
+    },
+    "payback": {
+      "name": "回报",
+      "shortDesc": "如果目标本回合已经移动，则力量加倍。"
+    },
+    "peck": {
+      "name": "佩克",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "perish-song": {
+      "name": "灭亡之歌",
+      "shortDesc": "三回合后用户和目标都晕倒了。"
+    },
+    "petal-blizzard": {
+      "name": "花瓣暴风雪",
+      "shortDesc": "造成常规伤害。"
+    },
+    "petal-dance": {
+      "name": "花瓣舞",
+      "shortDesc": "每回合都会命中 2-3 回合，然后迷惑使用者。"
+    },
+    "phantom-force": {
+      "name": "幻影之力",
+      "shortDesc": "使用者消失，躲避所有攻击，并在下一回合命中。通过保护和检测命中。"
+    },
+    "photon-geyser": {
+      "name": "光子间歇泉",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "pika-papow": {
+      "name": "皮卡帕波",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "pin-missile": {
+      "name": "销钉导弹",
+      "shortDesc": "一回合击中2-5次。"
+    },
+    "plasma-fists": {
+      "name": "等离子拳头",
+      "shortDesc": "造成伤害后，在回合剩余时间内所有普通属性招式变为电属性。"
+    },
+    "play-nice": {
+      "name": "玩得好",
+      "shortDesc": "使目标的攻击力降低一级。"
+    },
+    "play-rough": {
+      "name": "粗暴地玩",
+      "shortDesc": "有一定几率降低目标攻击一级。"
+    },
+    "pluck": {
+      "name": "拔毛",
+      "shortDesc": "如果目标有浆果，造成双倍伤害并使用浆果。"
+    },
+    "poison-fang": {
+      "name": "毒牙",
+      "shortDesc": "有几率使目标严重中毒。"
+    },
+    "poison-gas": {
+      "name": "毒气",
+      "shortDesc": "使目标中毒。"
+    },
+    "poison-jab": {
+      "name": "毒刺",
+      "shortDesc": "有几率使目标中毒。"
+    },
+    "poison-powder": {
+      "name": "毒粉",
+      "shortDesc": "使目标中毒。"
+    },
+    "poison-sting": {
+      "name": "毒刺",
+      "shortDesc": "有几率使目标中毒。"
+    },
+    "poison-tail": {
+      "name": "毒尾",
+      "shortDesc": "暴击几率增加，并且有几率使目标中毒。"
+    },
+    "pollen-puff": {
+      "name": "花粉泡",
+      "shortDesc": "伤害对手，但治疗盟友最大生命值的 50%。"
+    },
+    "poltergeist": {
+      "name": "恶作剧鬼",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "population-bomb": {
+      "name": "人口炸弹",
+      "shortDesc": "使用者的同伴成群结队地进行连击，连续攻击目标1到10次。"
+    },
+    "pounce": {
+      "name": "猛扑",
+      "shortDesc": "用户通过猛扑目标进行攻击。这也会降低目标的速度统计数据。"
+    },
+    "pound": {
+      "name": "磅",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "powder": {
+      "name": "粉末",
+      "shortDesc": "如果目标本回合使用火系招式，则会爆炸，造成其最大生命值 1/4 的伤害并阻止该招式。"
+    },
+    "powder-snow": {
+      "name": "粉雪",
+      "shortDesc": "有几率冻结目标。"
+    },
+    "power-gem": {
+      "name": "能量宝石",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "power-shift": {
+      "name": "动力换档",
+      "shortDesc": "用户交换其进攻和防守统计数据。"
+    },
+    "power-split": {
+      "name": "功率分配",
+      "shortDesc": "使目标的攻击力和特攻力平均。"
+    },
+    "power-swap": {
+      "name": "电源交换",
+      "shortDesc": "用户与目标交换攻击和特殊攻击的变化。"
+    },
+    "power-trick": {
+      "name": "力量技巧",
+      "shortDesc": "用户交换攻击和防御。"
+    },
+    "power-trip": {
+      "name": "电源跳闸",
+      "shortDesc": "用户的属性提升得越多，力量就越高，最多可达31倍。"
+    },
+    "power-up-punch": {
+      "name": "强化拳",
+      "shortDesc": "造成伤害后，使使用者的攻击力提升一级。"
+    },
+    "power-whip": {
+      "name": "动力鞭",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "precipice-blades": {
+      "name": "悬崖刀片",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "present": {
+      "name": "礼物",
+      "shortDesc": "随机造成40至120点伤害或治疗目标最大生命值1/4。"
+    },
+    "prismatic-laser": {
+      "name": "棱镜激光器",
+      "shortDesc": "用户放弃下一轮充值。"
+    },
+    "protect": {
+      "name": "保护",
+      "shortDesc": "防止本回合任何动作击中用户。"
+    },
+    "psybeam": {
+      "name": "Psybeam",
+      "shortDesc": "有一定几率迷惑目标。"
+    },
+    "psyblade": {
+      "name": "灵刃",
+      "shortDesc": "使用者用空灵之刃撕裂目标。如果用户处于电动地形上，此招式的威力会增加 50%。"
+    },
+    "psych-up": {
+      "name": "精神起来",
+      "shortDesc": "放弃用户的统计数据更改并复制目标的统计数据更改。"
+    },
+    "psychic": {
+      "name": "通灵",
+      "shortDesc": "有一定几率降低目标特防一级。"
+    },
+    "psychic-fangs": {
+      "name": "心灵獠牙",
+      "shortDesc": "摧毁反射屏和光屏。"
+    },
+    "psychic-noise": {
+      "name": "心灵噪音",
+      "shortDesc": "使用者用令人不快的声波攻击目标。在两回合内，目标无法通过移动、技能或持有的物品恢复生命值。"
+    },
+    "psychic-terrain": {
+      "name": "心灵地形",
+      "shortDesc": "保护地面上的宝可梦免受优先招式的伤害，并将其心灵招式的威力提高 50%。"
+    },
+    "psycho-boost": {
+      "name": "心理提升",
+      "shortDesc": "造成伤害后，使使用者的特攻降低两级。"
+    },
+    "psycho-cut": {
+      "name": "心理剪辑",
+      "shortDesc": "暴击几率增加。"
+    },
+    "psycho-shift": {
+      "name": "心理转变",
+      "shortDesc": "将用户的主要状态效果转移给目标。"
+    },
+    "psyshield-bash": {
+      "name": "心灵盾击",
+      "shortDesc": "使用者将自己隐藏在灵能能量中，猛烈撞击目标。这也可能会提高用户的防御统计数据。"
+    },
+    "psyshock": {
+      "name": "精神冲击",
+      "shortDesc": "根据目标的防御而非特防造成伤害。"
+    },
+    "psystrike": {
+      "name": "精神打击",
+      "shortDesc": "根据目标的防御而非特防造成伤害。"
+    },
+    "psywave": {
+      "name": "心灵波",
+      "shortDesc": "根据用户的等级造成不同的伤害。"
+    },
+    "pulverizing-pancake": {
+      "name": "粉碎煎饼",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "punishment": {
+      "name": "惩罚",
+      "shortDesc": "针对属性提升较多的目标，力量会增加，最多可达 200。"
+    },
+    "purify": {
+      "name": "净化",
+      "shortDesc": "治愈目标的严重状态异常，并治愈使用者最大生命值的 50%。"
+    },
+    "pursuit": {
+      "name": "追击",
+      "shortDesc": "对试图切换的宝可梦具有双倍力量，并且可以击中它们。"
+    },
+    "pyro-ball": {
+      "name": "火焰球",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "quash": {
+      "name": "压制",
+      "shortDesc": "使目标本回合最后行动。"
+    },
+    "quick-attack": {
+      "name": "快速攻击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "quick-guard": {
+      "name": "快速卫士",
+      "shortDesc": "本回合阻止任何优先动作击中友方宝可梦。"
+    },
+    "quiver-dance": {
+      "name": "箭袋舞",
+      "shortDesc": "使使用者的特攻、特防、速度各提升一级。"
+    },
+    "rage": {
+      "name": "愤怒",
+      "shortDesc": "如果使用者在使用此招式后被击中，其攻击力会上升一级。"
+    },
+    "rage-fist": {
+      "name": "愤怒拳头",
+      "shortDesc": "使用者将愤怒转化为能量进行攻击。使用者受到攻击的次数越多，招式的威力就越大。"
+    },
+    "rage-powder": {
+      "name": "愤怒粉",
+      "shortDesc": "本回合将目标的单体效果重定向至使用者。"
+    },
+    "raging-bull": {
+      "name": "愤怒的公牛",
+      "shortDesc": "用户像愤怒的公牛一样进行铲球。此动作的类型取决于用户的形式。它还可以打破障碍，例如光幕和反射。"
+    },
+    "raging-fury": {
+      "name": "狂怒",
+      "shortDesc": "使用者狂暴并喷出恶毒火焰对目标造成伤害，然后专注于使用此招式。"
+    },
+    "rain-dance": {
+      "name": "雨舞",
+      "shortDesc": "将天气改为下雨五回合。"
+    },
+    "rapid-spin": {
+      "name": "快速旋转",
+      "shortDesc": "使用户摆脱束缚动作，移除水蛭种子，并吹走尖刺。"
+    },
+    "razor-leaf": {
+      "name": "剃刀叶",
+      "shortDesc": "暴击几率增加。"
+    },
+    "razor-shell": {
+      "name": "剃刀外壳",
+      "shortDesc": "有一定几率降低目标防御一级。"
+    },
+    "razor-wind": {
+      "name": "利刃风",
+      "shortDesc": "攻击前需要一回合冲锋。"
+    },
+    "recover": {
+      "name": "恢复",
+      "shortDesc": "使使用者恢复最大生命值的一半。"
+    },
+    "recycle": {
+      "name": "回收",
+      "shortDesc": "用户恢复上次用完的物品。"
+    },
+    "reflect": {
+      "name": "反映",
+      "shortDesc": "物理攻击造成的伤害减半。"
+    },
+    "reflect-type": {
+      "name": "反射型",
+      "shortDesc": "用户成为目标类型。"
+    },
+    "refresh": {
+      "name": "刷新",
+      "shortDesc": "净化使用者的烧伤、麻痹或中毒。"
+    },
+    "relic-song": {
+      "name": "遗物之歌",
+      "shortDesc": "有机会使目标进入睡眠状态。"
+    },
+    "rest": {
+      "name": "休息",
+      "shortDesc": "使用者睡眠两回合并完全治愈自己。"
+    },
+    "retaliate": {
+      "name": "报复",
+      "shortDesc": "如果友方宝可梦上回合晕倒，则拥有双倍力量。"
+    },
+    "return": {
+      "name": "返回",
+      "shortDesc": "力量随着幸福度的增加而增加，最高可达102。"
+    },
+    "revelation-dance": {
+      "name": "启示之舞",
+      "shortDesc": "与用户具有相同的类型。"
+    },
+    "revenge": {
+      "name": "复仇",
+      "shortDesc": "如果使用者在本回合攻击前受到伤害，则造成双倍伤害。"
+    },
+    "reversal": {
+      "name": "逆转",
+      "shortDesc": "当用户剩余生命值较少时造成更多伤害，最大伤害为 200。"
+    },
+    "revival-blessing": {
+      "name": "复兴祝福",
+      "shortDesc": "使用者给予爱心祝福，使昏倒的队伍宝可梦复活，并恢复该宝可梦最大生命值的一半。"
+    },
+    "rising-voltage": {
+      "name": "电压上升",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "roar": {
+      "name": "咆哮",
+      "shortDesc": "立即结束狂野战斗。强制训练师更换宝可梦。"
+    },
+    "roar-of-time": {
+      "name": "时间的咆哮",
+      "shortDesc": "用户放弃下一轮充值。"
+    },
+    "rock-blast": {
+      "name": "岩石爆炸",
+      "shortDesc": "一回合击中2-5次。"
+    },
+    "rock-climb": {
+      "name": "攀岩",
+      "shortDesc": "有一定几率迷惑目标。"
+    },
+    "rock-polish": {
+      "name": "岩石抛光剂",
+      "shortDesc": "将用户的速度提高两个阶段。"
+    },
+    "rock-slide": {
+      "name": "岩石滑坡",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "rock-smash": {
+      "name": "岩石粉碎",
+      "shortDesc": "有一定几率降低目标防御一级。"
+    },
+    "rock-throw": {
+      "name": "扔石头",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "rock-tomb": {
+      "name": "岩石墓穴",
+      "shortDesc": "有一定几率使目标速度降低一级。"
+    },
+    "rock-wrecker": {
+      "name": "岩石破坏者",
+      "shortDesc": "用户放弃下一轮充值。"
+    },
+    "role-play": {
+      "name": "角色扮演",
+      "shortDesc": "复制目标的能力。"
+    },
+    "rolling-kick": {
+      "name": "滚踢",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "rollout": {
+      "name": "推出",
+      "shortDesc": "每次连续使用，功率加倍，最多五圈。"
+    },
+    "roost": {
+      "name": "栖息地",
+      "shortDesc": "使使用者恢复最大生命值的一半。"
+    },
+    "rototiller": {
+      "name": "旋耕机",
+      "shortDesc": "提高战斗中所有草系宝可梦的攻击力和特攻力。"
+    },
+    "round": {
+      "name": "回合",
+      "shortDesc": "如果每回合使用多次，则拥有双倍力量。"
+    },
+    "ruination": {
+      "name": "毁灭",
+      "shortDesc": "使用者召唤了毁灭性的灾难。这会将目标的生命值减少一半。"
+    },
+    "sacred-fire": {
+      "name": "圣火",
+      "shortDesc": "有几率燃烧目标。让冰冻的宝可梦自行解冻。"
+    },
+    "sacred-sword": {
+      "name": "圣剑",
+      "shortDesc": "忽略目标的统计修正。"
+    },
+    "safeguard": {
+      "name": "保障",
+      "shortDesc": "保护使用者的领域免受重大状态异常和混乱的影响，持续五回合。"
+    },
+    "salt-cure": {
+      "name": "盐疗",
+      "shortDesc": "用户盐治疗目标，每回合造成伤害。钢铁和水利类型受这一举措的影响更为强烈。"
+    },
+    "sand-attack": {
+      "name": "沙土攻击",
+      "shortDesc": "将目标精度降低一级。"
+    },
+    "sand-tomb": {
+      "name": "沙墓",
+      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+    },
+    "sandsear-storm": {
+      "name": "沙灼风暴",
+      "shortDesc": "使用者将目标包裹在狂风和灼热的沙子中进行攻击。这也会使目标被烧伤。"
+    },
+    "sandstorm": {
+      "name": "沙尘暴",
+      "shortDesc": "将天气变为沙尘暴，持续五回合。"
+    },
+    "sappy-seed": {
+      "name": "多汁的种子",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "savage-spin-out--physical": {
+      "name": "野蛮衍生",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "savage-spin-out--special": {
+      "name": "野蛮衍生",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "scald": {
+      "name": "烫伤",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "scale-shot": {
+      "name": "比例射击",
+      "shortDesc": "连续造成2~5次伤害后，速度提升一级，防御降低一级。"
+    },
+    "scary-face": {
+      "name": "可怕的脸",
+      "shortDesc": "将目标的速度降低两级。"
+    },
+    "scorching-sands": {
+      "name": "灼热的沙子",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "scratch": {
+      "name": "刮擦",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "screech": {
+      "name": "尖叫声",
+      "shortDesc": "降低目标防御力两级。"
+    },
+    "searing-shot": {
+      "name": "灼热射击",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "searing-sunraze-smash": {
+      "name": "灼热烈日粉碎",
+      "shortDesc": "不会被技能打乱。"
+    },
+    "secret-power": {
+      "name": "秘密力量",
+      "shortDesc": "有机会造成取决于地形的状态效果。"
+    },
+    "secret-sword": {
+      "name": "秘剑",
+      "shortDesc": "根据目标的防御而非特防造成伤害。"
+    },
+    "seed-bomb": {
+      "name": "种子炸弹",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "seed-flare": {
+      "name": "种子耀斑",
+      "shortDesc": "有一定几率降低目标特防两级。"
+    },
+    "seismic-toss": {
+      "name": "地震抛掷",
+      "shortDesc": "造成等同于使用者等级的伤害。"
+    },
+    "self-destruct": {
+      "name": "自毁",
+      "shortDesc": "用户晕倒。"
+    },
+    "shadow-ball": {
+      "name": "影子球",
+      "shortDesc": "有一定几率降低目标特防一级。"
+    },
+    "shadow-bone": {
+      "name": "影骨",
+      "shortDesc": "有一定几率降低目标防御一级。"
+    },
+    "shadow-claw": {
+      "name": "暗影爪",
+      "shortDesc": "暴击几率增加。"
+    },
+    "shadow-force": {
+      "name": "暗影力量",
+      "shortDesc": "使用者消失，躲避所有攻击，并在下一回合命中。通过保护和检测命中。"
+    },
+    "shadow-punch": {
+      "name": "暗影拳",
+      "shortDesc": "绝不会错过。"
+    },
+    "shadow-sneak": {
+      "name": "暗影潜行",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "sharpen": {
+      "name": "锐化",
+      "shortDesc": "使使用者的攻击力提升一级。"
+    },
+    "shattered-psyche--physical": {
+      "name": "破碎的心灵",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "shattered-psyche--special": {
+      "name": "破碎的心灵",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "shed-tail": {
+      "name": "棚尾",
+      "shortDesc": "用户在与等待的队伍宝可梦交换位置之前，使用自己的生命值为自己创建一个替代品。"
+    },
+    "sheer-cold": {
+      "name": "彻骨的寒冷",
+      "shortDesc": "造成一击KO。"
+    },
+    "shell-side-arm": {
+      "name": "外壳侧臂",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "shell-smash": {
+      "name": "贝壳粉碎",
+      "shortDesc": "使用户的攻击力、特攻力、速度提升两级。降低自身防御和特防一级。"
+    },
+    "shell-trap": {
+      "name": "贝壳陷阱",
+      "shortDesc": "仅当用户本回合被物理移动击中时才会造成伤害。"
+    },
+    "shelter": {
+      "name": "庇护所",
+      "shortDesc": "使皮肤坚硬如铁盾，防御力提升。接下来的动作也变得更有可能错过。"
+    },
+    "shift-gear": {
+      "name": "换档",
+      "shortDesc": "使使用者的攻击力提升一级，速度提升两级。"
+    },
+    "shock-wave": {
+      "name": "冲击波",
+      "shortDesc": "绝不会错过。"
+    },
+    "shore-up": {
+      "name": "支撑",
+      "shortDesc": "治疗使用者最大生命值的 1/2，或沙尘暴期间的 2/3。"
+    },
+    "signal-beam": {
+      "name": "信号光束",
+      "shortDesc": "有一定几率迷惑目标。"
+    },
+    "silk-trap": {
+      "name": "丝绸陷阱",
+      "shortDesc": "用户旋转一个丝绸陷阱，保护自己免受伤害，同时降低任何直接接触的攻击者的速度统计数据。"
+    },
+    "silver-wind": {
+      "name": "银风",
+      "shortDesc": "有几率将使用者的所有属性提升一级。"
+    },
+    "simple-beam": {
+      "name": "简单梁",
+      "shortDesc": "将目标的能力更改为简单。"
+    },
+    "sing": {
+      "name": "唱歌",
+      "shortDesc": "让目标进入睡眠状态。"
+    },
+    "sinister-arrow-raid": {
+      "name": "邪恶之箭袭击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "sizzly-slide": {
+      "name": "热滑梯",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "sketch": {
+      "name": "草图",
+      "shortDesc": "永久成为目标最后使用的招式。"
+    },
+    "skill-swap": {
+      "name": "技能交换",
+      "shortDesc": "用户和目标交换能力。"
+    },
+    "skitter-smack": {
+      "name": "飞掠者一击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "skull-bash": {
+      "name": "骷髅猛击",
+      "shortDesc": "使使用者的防御力提升一级。用户在攻击前蓄力一回合。"
+    },
+    "sky-attack": {
+      "name": "天空攻击",
+      "shortDesc": "用户在攻击前蓄力一回合。有一定几率使目标退缩。"
+    },
+    "sky-drop": {
+      "name": "天降",
+      "shortDesc": "将目标带到空中，躲避对任一目标的所有攻击，并在下一回合将其掉落。"
+    },
+    "sky-uppercut": {
+      "name": "天空上勾拳",
+      "shortDesc": "造成常规伤害，并能击中弹跳和飞行用户。"
+    },
+    "slack-off": {
+      "name": "放松",
+      "shortDesc": "使使用者恢复最大生命值的一半。"
+    },
+    "slam": {
+      "name": "猛击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "slash": {
+      "name": "斜杠",
+      "shortDesc": "暴击几率增加。"
+    },
+    "sleep-powder": {
+      "name": "睡眠粉",
+      "shortDesc": "让目标进入睡眠状态。"
+    },
+    "sleep-talk": {
+      "name": "梦话",
+      "shortDesc": "随机使用用户的其他三个动作之一。仅当用户正在睡觉时才有效。"
+    },
+    "sludge": {
+      "name": "污泥",
+      "shortDesc": "有几率使目标中毒。"
+    },
+    "sludge-bomb": {
+      "name": "污泥炸弹",
+      "shortDesc": "有几率使目标中毒。"
+    },
+    "sludge-wave": {
+      "name": "污泥波",
+      "shortDesc": "有几率使目标中毒。"
+    },
+    "smack-down": {
+      "name": "猛击",
+      "shortDesc": "移除对地面伤害的任何免疫力。"
+    },
+    "smart-strike": {
+      "name": "智能打击",
+      "shortDesc": "绝不会错过。"
+    },
+    "smelling-salts": {
+      "name": "嗅盐",
+      "shortDesc": "如果目标处于麻痹状态，则造成双倍伤害并治愈麻痹状态。"
+    },
+    "smog": {
+      "name": "烟雾",
+      "shortDesc": "有几率使目标中毒。"
+    },
+    "smokescreen": {
+      "name": "烟幕",
+      "shortDesc": "将目标精度降低一级。"
+    },
+    "snap-trap": {
+      "name": "捕捉陷阱",
+      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+    },
+    "snarl": {
+      "name": "咆哮",
+      "shortDesc": "有一定几率使目标特攻降低一级。"
+    },
+    "snatch": {
+      "name": "抢夺",
+      "shortDesc": "窃取目标的移动（如果目标是自我瞄准的）。"
+    },
+    "snipe-shot": {
+      "name": "狙击射击",
+      "shortDesc": "在造成伤害后，在场地的用户一侧设置反射。"
+    },
+    "snore": {
+      "name": "打鼾",
+      "shortDesc": "有一定几率使目标退缩。仅当用户正在睡觉时才有效。"
+    },
+    "snowscape": {
+      "name": "雪景",
+      "shortDesc": "使用者召唤一场持续五回合的暴风雪。这会提高冰系类型的防御统计数据。"
+    },
+    "soak": {
+      "name": "浸泡",
+      "shortDesc": "将目标类型更改为水。"
+    },
+    "soft-boiled": {
+      "name": "软煮",
+      "shortDesc": "使使用者恢复最大生命值的一半。"
+    },
+    "solar-beam": {
+      "name": "太阳光束",
+      "shortDesc": "攻击前需要一回合冲锋。"
+    },
+    "solar-blade": {
+      "name": "太阳之刃",
+      "shortDesc": "攻击前需要一回合冲锋。"
+    },
+    "sonic-boom": {
+      "name": "音爆",
+      "shortDesc": "造成正好 20 点伤害。"
+    },
+    "soul-stealing-7-star-strike": {
+      "name": "夺魂七星一击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "spacial-rend": {
+      "name": "空间撕裂",
+      "shortDesc": "暴击几率增加。"
+    },
+    "spark": {
+      "name": "火花",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "sparkling-aria": {
+      "name": "闪闪发光的咏叹调",
+      "shortDesc": "治疗烧伤目标。"
+    },
+    "sparkly-swirl": {
+      "name": "闪闪发光的漩涡",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "spectral-thief": {
+      "name": "幽灵小偷",
+      "shortDesc": "窃取目标的属性提升，然后造成伤害。"
+    },
+    "speed-swap": {
+      "name": "速度交换",
+      "shortDesc": "将用户的速度与目标的速度交换。"
+    },
+    "spicy-extract": {
+      "name": "辣提取物",
+      "shortDesc": "使用者发出令人难以置信的辛辣提取物，大幅提升目标的攻击统计数据并大幅降低目标的防御统计数据。"
+    },
+    "spider-web": {
+      "name": "蜘蛛网",
+      "shortDesc": "阻止目标离开战斗。"
+    },
+    "spike-cannon": {
+      "name": "尖刺炮",
+      "shortDesc": "一回合击中2-5次。"
+    },
+    "spikes": {
+      "name": "尖刺",
+      "shortDesc": "散布尖刺，伤害切换过来的对方宝可梦。"
+    },
+    "spiky-shield": {
+      "name": "尖刺盾",
+      "shortDesc": "格挡伤害性攻击并对攻击宝可梦造成最大生命值 1/8 的伤害。"
+    },
+    "spin-out": {
+      "name": "分拆",
+      "shortDesc": "使用者通过拉紧双腿来猛烈旋转，对目标造成伤害。这也会严重降低用户的速度统计数据。"
+    },
+    "spirit-break": {
+      "name": "精神崩溃",
+      "shortDesc": "有一定几率使目标特攻降低一级。"
+    },
+    "spirit-shackle": {
+      "name": "灵魂枷锁",
+      "shortDesc": "困住目标。"
+    },
+    "spit-up": {
+      "name": "吐出来",
+      "shortDesc": "力量是储存能量的100倍。"
+    },
+    "spite": {
+      "name": "尽管",
+      "shortDesc": "使目标最后使用的招式的PP降低4。"
+    },
+    "splash": {
+      "name": "飞溅",
+      "shortDesc": "不执行任何操作。"
+    },
+    "splintered-stormshards": {
+      "name": "破碎的风暴碎片",
+      "shortDesc": "造成伤害并移除战场上存在的任何地形。"
+    },
+    "splishy-splash": {
+      "name": "泼溅",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "spore": {
+      "name": "孢子",
+      "shortDesc": "让目标进入睡眠状态。"
+    },
+    "spotlight": {
+      "name": "聚光灯",
+      "shortDesc": "迫使目标的对手在回合剩余时间内瞄准目标。"
+    },
+    "springtide-storm": {
+      "name": "春潮风暴",
+      "shortDesc": "使用者将目标包裹在充满爱与恨的狂风中进行攻击。此招式的附加效果取决于使用者的形态。"
+    },
+    "stealth-rock": {
+      "name": "隐形岩石",
+      "shortDesc": "当对手的宝可梦切换时造成伤害。"
+    },
+    "steam-eruption": {
+      "name": "蒸汽喷发",
+      "shortDesc": "有几率燃烧目标。"
+    },
+    "steamroller": {
+      "name": "压路机",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "steel-beam": {
+      "name": "钢梁",
+      "shortDesc": "造成伤害，使用者受到最大生命值一半的伤害，向上舍入。"
+    },
+    "steel-roller": {
+      "name": "钢滚轮",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "steel-wing": {
+      "name": "钢翼",
+      "shortDesc": "有一定几率提升自身防御一级。"
+    },
+    "sticky-web": {
+      "name": "粘性网络",
+      "shortDesc": "覆盖对方场地，切换时降低对方速度一级。"
+    },
+    "stockpile": {
+      "name": "储存",
+      "shortDesc": "储存能量最多三倍，用于吐出和吞咽。"
+    },
+    "stoked-sparksurfer": {
+      "name": "激动的火花冲浪者",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "stomp": {
+      "name": "跺脚",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "stomping-tantrum": {
+      "name": "跺脚发脾气",
+      "shortDesc": "如果用户最后一步失败，则拥有双倍力量。"
+    },
+    "stone-axe": {
+      "name": "石斧",
+      "shortDesc": "使用者向目标挥舞石斧，旨在造成致命一击。这次攻击留下的石碎片会继续对目标造成数回合的伤害。"
+    },
+    "stone-edge": {
+      "name": "石缘",
+      "shortDesc": "暴击几率增加。"
+    },
+    "stored-power": {
+      "name": "储存电量",
+      "shortDesc": "用户的属性提升得越多，力量就越高，最多可达31倍。"
+    },
+    "storm-throw": {
+      "name": "风暴投掷",
+      "shortDesc": "总是能获得暴击。"
+    },
+    "strange-steam": {
+      "name": "奇怪的蒸汽",
+      "shortDesc": "有一定几率迷惑目标。"
+    },
+    "strength": {
+      "name": "实力",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "strength-sap": {
+      "name": "力量闷棍",
+      "shortDesc": "治疗目标当前攻击力的数值，并降低目标攻击力一级。"
+    },
+    "string-shot": {
+      "name": "弦乐射击",
+      "shortDesc": "将目标的速度降低两级。"
+    },
+    "struggle": {
+      "name": "奋斗",
+      "shortDesc": "用户在后坐力中承受最大生命值的 1/4。"
+    },
+    "struggle-bug": {
+      "name": "斗争虫子",
+      "shortDesc": "有一定几率使目标特攻降低一级。"
+    },
+    "stuff-cheeks": {
+      "name": "脸颊",
+      "shortDesc": "在造成伤害后治愈全队的主要状态效果。"
+    },
+    "stun-spore": {
+      "name": "击晕孢子",
+      "shortDesc": "麻痹目标。"
+    },
+    "submission": {
+      "name": "提交",
+      "shortDesc": "用户受到后坐力造成的伤害的 1/4。"
+    },
+    "substitute": {
+      "name": "替补",
+      "shortDesc": "将用户最大生命值的 1/4 转移到玩偶上，保护用户免受进一步伤害或状态变化，直到玩偶损坏。"
+    },
+    "subzero-slammer--physical": {
+      "name": "零下猛击者",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "subzero-slammer--special": {
+      "name": "零下猛击者",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "sucker-punch": {
+      "name": "美少女拳",
+      "shortDesc": "仅当目标即将使用伤害性招式时才有效。"
+    },
+    "sunny-day": {
+      "name": "阳光灿烂的日子",
+      "shortDesc": "将天气改为晴天五回合。"
+    },
+    "sunsteel-strike": {
+      "name": "日钢罢工",
+      "shortDesc": "不会被技能打乱。"
+    },
+    "super-fang": {
+      "name": "超级獠牙",
+      "shortDesc": "对目标造成生命值一半的伤害。"
+    },
+    "supercell-slam": {
+      "name": "超级细胞大满贯",
+      "shortDesc": "使用者使身体带电并掉落到目标上以造成伤害。如果此动作未命中，则使用者会受到伤害。"
+    },
+    "superpower": {
+      "name": "超能力",
+      "shortDesc": "造成伤害后，使使用者的攻击力和防御力降低一级。"
+    },
+    "supersonic": {
+      "name": "超音速",
+      "shortDesc": "迷惑目标。"
+    },
+    "supersonic-skystrike--physical": {
+      "name": "超音速天击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "supersonic-skystrike--special": {
+      "name": "超音速天击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "surf": {
+      "name": "冲浪",
+      "shortDesc": "造成常规伤害并能击中潜水者。"
+    },
+    "surging-strikes": {
+      "name": "汹涌的打击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "swagger": {
+      "name": "大摇大摆",
+      "shortDesc": "使目标攻击力提升两级并迷惑目标。"
+    },
+    "swallow": {
+      "name": "燕子",
+      "shortDesc": "1个储备后恢复1/4生命值，2个储备后恢复1/2生命值，或3个储备后恢复全部生命值。"
+    },
+    "sweet-kiss": {
+      "name": "甜蜜之吻",
+      "shortDesc": "迷惑目标。"
+    },
+    "sweet-scent": {
+      "name": "甜香",
+      "shortDesc": "使目标的闪避降低一级。"
+    },
+    "swift": {
+      "name": "斯威夫特",
+      "shortDesc": "绝不会错过。"
+    },
+    "switcheroo": {
+      "name": "开关",
+      "shortDesc": "用户和目标交换项目。"
+    },
+    "swords-dance": {
+      "name": "剑舞",
+      "shortDesc": "将用户的攻击力提高两个阶段。"
+    },
+    "synchronoise": {
+      "name": "同步",
+      "shortDesc": "击中任何与用户共享类型的宝可梦。"
+    },
+    "synthesis": {
+      "name": "合成",
+      "shortDesc": "治疗使用者；数量取决于天气。"
+    },
+    "syrup-bomb": {
+      "name": "糖浆炸弹",
+      "shortDesc": "用户引发粘性糖果糖浆爆炸，覆盖目标并导致目标的速度统计数据每回合下降，持续三回合。"
+    },
+    "tachyon-cutter": {
+      "name": "超光速粒子切割器",
+      "shortDesc": "用户通过连续两次向目标发射粒子刀片进行攻击。这次攻击绝不会失手。"
+    },
+    "tackle": {
+      "name": "铲球",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "tail-glow": {
+      "name": "尾光",
+      "shortDesc": "将使用者的特攻提升三级。"
+    },
+    "tail-slap": {
+      "name": "尾巴拍打",
+      "shortDesc": "一回合击中2-5次。"
+    },
+    "tail-whip": {
+      "name": "尾鞭",
+      "shortDesc": "降低目标防御一级。"
+    },
+    "tailwind": {
+      "name": "顺风",
+      "shortDesc": "三回合内，友方宝可梦的速度加倍。"
+    },
+    "take-down": {
+      "name": "取下",
+      "shortDesc": "用户受到后坐力造成的伤害的 1/4。"
+    },
+    "take-heart": {
+      "name": "振作起来",
+      "shortDesc": "使用者精神振奋，治愈自身状态，提升攻防属性。"
+    },
+    "tar-shot": {
+      "name": "焦油弹",
+      "shortDesc": "用户将粘性焦油倒在目标上，降低目标的速度统计数据。目标对于火系招式的攻击力会变弱。"
+    },
+    "taunt": {
+      "name": "嘲讽",
+      "shortDesc": "在接下来的几个回合中，目标只能使用伤害性招式。"
+    },
+    "tearful-look": {
+      "name": "泪流满面",
+      "shortDesc": "使目标的攻击力和特攻力降低一级。"
+    },
+    "teatime": {
+      "name": "下午茶时间",
+      "shortDesc": "用户与战斗中的所有宝可梦一起喝茶。每个宝可梦都会吃掉它持有的浆果。"
+    },
+    "techno-blast": {
+      "name": "科技爆炸",
+      "shortDesc": "如果用户持有适当的板或驱动器，则造成的伤害将与其相匹配。"
+    },
+    "tectonic-rage--physical": {
+      "name": "构造之怒",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "tectonic-rage--special": {
+      "name": "构造之怒",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "teeter-dance": {
+      "name": "摇摇欲坠舞",
+      "shortDesc": "迷惑目标。"
+    },
+    "telekinesis": {
+      "name": "心灵传动",
+      "shortDesc": "移动对目标的准确度为 100%，持续三回合。"
+    },
+    "teleport": {
+      "name": "传送",
+      "shortDesc": "立即结束狂野战斗。否则没有影响。"
+    },
+    "temper-flare": {
+      "name": "脾气耀斑",
+      "shortDesc": "在绝望的刺激下，使用者攻击了目标。如果用户之前的动作失败，则该动作的威力加倍。"
+    },
+    "tera-blast": {
+      "name": "太拉爆炸",
+      "shortDesc": "如果用户已Terastallized，它会释放其Tera类型的能量。此动作使用攻击或 Sp 造成伤害。 Atk 统计数据 — 以用户的较高者为准。"
+    },
+    "tera-starstorm": {
+      "name": "泰拉星暴",
+      "shortDesc": "使用者利用水晶的力量轰击并消灭目标。当特拉帕戈斯以恒星形态使用时，此招式会对所有敌方宝可梦造成伤害。"
+    },
+    "terrain-pulse": {
+      "name": "地形脉冲",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "thief": {
+      "name": "小偷",
+      "shortDesc": "取得目标的物品。"
+    },
+    "thousand-arrows": {
+      "name": "千箭",
+      "shortDesc": "使目标接地，甚至击中飞行型或悬浮型宝可梦。"
+    },
+    "thousand-waves": {
+      "name": "千浪",
+      "shortDesc": "阻止目标离开战斗。"
+    },
+    "thrash": {
+      "name": "鞭打",
+      "shortDesc": "每回合都会命中 2-3 回合，然后迷惑使用者。"
+    },
+    "throat-chop": {
+      "name": "斩喉",
+      "shortDesc": "防止目标在两回合内使用基于声音的移动。"
+    },
+    "thunder": {
+      "name": "雷霆",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "thunder-cage": {
+      "name": "雷霆牢笼",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "thunder-fang": {
+      "name": "雷牙",
+      "shortDesc": "有一定几率使目标麻痹，也有一定几率使目标退缩。"
+    },
+    "thunder-punch": {
+      "name": "雷霆拳",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "thunder-shock": {
+      "name": "雷霆震击",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "thunder-wave": {
+      "name": "雷霆波动",
+      "shortDesc": "麻痹目标。"
+    },
+    "thunderbolt": {
+      "name": "雷电",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "thunderclap": {
+      "name": "雷霆一击",
+      "shortDesc": "此招式使使用者能够先用电击进行攻击。如果目标没有准备好攻击，则此移动失败。"
+    },
+    "thunderous-kick": {
+      "name": "雷霆一脚",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "tickle": {
+      "name": "痒痒的",
+      "shortDesc": "降低目标攻击力和防御力一级。"
+    },
+    "tidy-up": {
+      "name": "整理",
+      "shortDesc": "用户清理并移除尖刺、隐形岩石、粘网、有毒尖刺和替代物的效果。这也提高了用户的攻击和速度统计数据。"
+    },
+    "topsy-turvy": {
+      "name": "颠倒黑白",
+      "shortDesc": "反转目标的统计修正值。"
+    },
+    "torch-song": {
+      "name": "火炬歌",
+      "shortDesc": "使用者如同歌唱一般喷出熊熊火焰，将目标烧焦。这也提升了使用者的 Sp。攻击力统计。"
+    },
+    "torment": {
+      "name": "折磨",
+      "shortDesc": "防止目标连续两次使用相同的动作。"
+    },
+    "toxic": {
+      "name": "有毒",
+      "shortDesc": "使目标严重中毒，每回合造成更多伤害。"
+    },
+    "toxic-spikes": {
+      "name": "有毒尖刺",
+      "shortDesc": "散布有毒的尖刺，使切换进来的对手宝可梦中毒。"
+    },
+    "toxic-thread": {
+      "name": "有毒线",
+      "shortDesc": "使目标中毒并降低其速度一级。"
+    },
+    "trailblaze": {
+      "name": "开拓者",
+      "shortDesc": "使用者突然攻击，就像从高高的草丛中跳出来一样。用户灵活的脚步可以提高其速度统计数据。"
+    },
+    "transform": {
+      "name": "变换",
+      "shortDesc": "用户成为目标的复制体，直到目标离开战斗。"
+    },
+    "tri-attack": {
+      "name": "三重攻击",
+      "shortDesc": "有几率燃烧、冻结或麻痹目标。"
+    },
+    "trick": {
+      "name": "技巧",
+      "shortDesc": "用户和目标交换项目。"
+    },
+    "trick-or-treat": {
+      "name": "不给糖就捣蛋",
+      "shortDesc": "将幽灵添加到目标类型中。"
+    },
+    "trick-room": {
+      "name": "恶作剧室",
+      "shortDesc": "五回合内，较慢的宝可梦会先于较快的宝可梦行动。"
+    },
+    "triple-arrows": {
+      "name": "三箭",
+      "shortDesc": "使用者发出斧头踢击，然后发射三支箭。这增加了其未来攻击造成致命一击的几率，同时也降低了目标的防御统计数据。"
+    },
+    "triple-axel": {
+      "name": "三轴",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "triple-dive": {
+      "name": "三重潜水",
+      "shortDesc": "用户执行一次完美的三重潜水，连续三次溅起水花击中目标。"
+    },
+    "triple-kick": {
+      "name": "三重踢",
+      "shortDesc": "攻击三次，每次攻击成功，威力增加100%。"
+    },
+    "trop-kick": {
+      "name": "热带踢",
+      "shortDesc": "造成伤害后，目标攻击力降低一级。"
+    },
+    "trump-card": {
+      "name": "王牌",
+      "shortDesc": "当该招式的PP较少时，力量会增加，最多可达200。"
+    },
+    "twin-beam": {
+      "name": "双梁",
+      "shortDesc": "使用者从眼睛发射神秘光束来造成伤害。目标连续被击中两次。"
+    },
+    "twineedle": {
+      "name": "双针",
+      "shortDesc": "在同一回合中击中两次。有一定几率使目标中毒。"
+    },
+    "twinkle-tackle--physical": {
+      "name": "闪烁铲球",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "twinkle-tackle--special": {
+      "name": "闪烁铲球",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "twister": {
+      "name": "龙卷风",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "u-turn": {
+      "name": "掉头",
+      "shortDesc": "用户必须在攻击后退出。"
+    },
+    "upper-hand": {
+      "name": "上风",
+      "shortDesc": "使用者对目标的移动做出反应并用手掌根部进行打击，使目标退缩。如果目标未准备好优先移动，则此移动失败。"
+    },
+    "uproar": {
+      "name": "喧嚣",
+      "shortDesc": "被迫使用此招数回合。宝可梦在那段时间无法入睡。"
+    },
+    "v-create": {
+      "name": "V-创建",
+      "shortDesc": "使使用者的防御、特防、速度各降低一级。"
+    },
+    "vacuum-wave": {
+      "name": "真空波",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "veevee-volley": {
+      "name": "Veevee 凌空",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "venom-drench": {
+      "name": "毒液浸泡",
+      "shortDesc": "如果目标中毒，其攻击力、特攻力和速度都会降低一级。"
+    },
+    "venoshock": {
+      "name": "静脉休克",
+      "shortDesc": "如果目标中毒，则造成双倍伤害。"
+    },
+    "vice-grip": {
+      "name": "虎钳夹具",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "victory-dance": {
+      "name": "胜利之舞",
+      "shortDesc": "用户跳起舞蹈迎来胜利。这会提高用户的进攻和防御统计数据，并使用户的动作造成的伤害增加 50%。"
+    },
+    "vine-whip": {
+      "name": "藤鞭",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "vital-throw": {
+      "name": "致命投掷",
+      "shortDesc": "绝不会错过。"
+    },
+    "volt-switch": {
+      "name": "电压开关",
+      "shortDesc": "用户必须在攻击后退出。"
+    },
+    "volt-tackle": {
+      "name": "伏特钓具",
+      "shortDesc": "使用者承受反冲造成的伤害的 1/3。有一定几率使目标麻痹。"
+    },
+    "wake-up-slap": {
+      "name": "唤醒一巴掌",
+      "shortDesc": "如果目标处于睡眠状态，则拥有双倍力量并将其唤醒。"
+    },
+    "water-gun": {
+      "name": "水枪",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "water-pledge": {
+      "name": "水承诺",
+      "shortDesc": "通过草之誓约，四回合内对手宝可梦的速度减半。"
+    },
+    "water-pulse": {
+      "name": "水脉冲",
+      "shortDesc": "有一定几率迷惑目标。"
+    },
+    "water-shuriken": {
+      "name": "水手里剑",
+      "shortDesc": "点击 2-5 次。"
+    },
+    "water-sport": {
+      "name": "水上运动",
+      "shortDesc": "所有火焰伤害减半。"
+    },
+    "water-spout": {
+      "name": "喷水口",
+      "shortDesc": "当用户剩余生命值较多时，会造成更多伤害，最大伤害为 150。"
+    },
+    "waterfall": {
+      "name": "瀑布",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "wave-crash": {
+      "name": "波浪崩溃",
+      "shortDesc": "使用者将自己浸入水中并用全身猛击目标造成伤害。这也会对使用者造成伤害，提高使用者的动作速度。"
+    },
+    "weather-ball": {
+      "name": "天气球",
+      "shortDesc": "如果有天气，该招式的威力和天气类型都会加倍。"
+    },
+    "whirlpool": {
+      "name": "漩涡",
+      "shortDesc": "阻止目标离开战斗，并造成最大生命值1/16的伤害，持续2-5回合。"
+    },
+    "whirlwind": {
+      "name": "旋风",
+      "shortDesc": "立即结束狂野战斗。强制训练师更换宝可梦。"
+    },
+    "wicked-blow": {
+      "name": "邪恶的一击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "wicked-torque": {
+      "name": "邪恶扭矩",
+      "shortDesc": "没有可用的附加效果信息。"
+    },
+    "wide-guard": {
+      "name": "宽卫",
+      "shortDesc": "本回合防止任何多目标动作击中友方宝可梦。"
+    },
+    "wild-charge": {
+      "name": "狂野冲锋",
+      "shortDesc": "用户受到后坐力造成的伤害的 1/4。"
+    },
+    "wildbolt-storm": {
+      "name": "狂箭风暴",
+      "shortDesc": "使用者召唤雷霆风暴，用闪电和风进行野蛮攻击。这也可能使目标陷入瘫痪。"
+    },
+    "will-o-wisp": {
+      "name": "鬼火",
+      "shortDesc": "燃烧目标。"
+    },
+    "wing-attack": {
+      "name": "侧翼攻击",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "wish": {
+      "name": "愿望",
+      "shortDesc": "下一回合结束时，使用者将恢复最大生命值的一半。"
+    },
+    "withdraw": {
+      "name": "撤回",
+      "shortDesc": "使使用者的防御力提升一级。"
+    },
+    "wonder-room": {
+      "name": "奇妙房间",
+      "shortDesc": "所有宝可梦的防御和特防互换5回合。"
+    },
+    "wood-hammer": {
+      "name": "木锤",
+      "shortDesc": "用户受到后坐力造成的伤害的 1/3。"
+    },
+    "work-up": {
+      "name": "锻炼",
+      "shortDesc": "使使用者的攻击力和特攻力各提升一级。"
+    },
+    "worry-seed": {
+      "name": "忧心种子",
+      "shortDesc": "将目标的能力改为失眠。"
+    },
+    "wrap": {
+      "name": "包裹",
+      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+    },
+    "wring-out": {
+      "name": "拧干",
+      "shortDesc": "针对剩余 HP 较多的目标，力量会增加，最多可达 121 力量。"
+    },
+    "x-scissor": {
+      "name": "X 剪刀",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    },
+    "yawn": {
+      "name": "打哈欠",
+      "shortDesc": "目标在下一回合结束时休眠。"
+    },
+    "zap-cannon": {
+      "name": "电击炮",
+      "shortDesc": "有几率使目标瘫痪。"
+    },
+    "zen-headbutt": {
+      "name": "禅宗头撞",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "zing-zap": {
+      "name": "Zing Zap",
+      "shortDesc": "有一定几率使目标退缩。"
+    },
+    "zippy-zap": {
+      "name": "活泼的 Zap",
+      "shortDesc": "造成常规伤害，没有额外效果。"
+    }
+  },
+  "abilities": {
+    "adaptability": {
+      "name": "适应性",
+      "shortDesc": "同类型攻击加值从1.5倍增加到2倍。"
+    },
+    "aerilate": {
+      "name": "空气",
+      "shortDesc": "将持有者的普通招式转变为飞行招式，并将其威力强化至1.3倍。"
+    },
+    "aftermath": {
+      "name": "后果",
+      "shortDesc": "当攻击者被接触移动击倒时，对攻击者造成最大生命值 1/4 的伤害。"
+    },
+    "air-lock": {
+      "name": "气闸",
+      "shortDesc": "消除天气的所有影响，但不会阻止天气本身。"
+    },
+    "analytic": {
+      "name": "分析",
+      "shortDesc": "最后移动时，将移动强度增强至1.3倍。"
+    },
+    "anger-point": {
+      "name": "愤怒点",
+      "shortDesc": "受到致命一击时，攻击力提升至最多六级。"
+    },
+    "anger-shell": {
+      "name": "愤怒外壳",
+      "shortDesc": "当宝可梦的生命值低于一半时，愤怒贝壳会降低其防御和特防，但其攻击、特攻和速度会提高。"
+    },
+    "anticipation": {
+      "name": "期待",
+      "shortDesc": "如果对手有超效招式、自毁、爆炸或一击KO招式，则在进入战斗时通知所有训练家。"
+    },
+    "aqua-boost": {
+      "name": "水色增强"
+    },
+    "arena-trap": {
+      "name": "竞技场陷阱",
+      "shortDesc": "防止对手逃跑或切换。被飞行型和空中的宝可梦躲避。"
+    },
+    "armor-tail": {
+      "name": "装甲尾部",
+      "shortDesc": "阻止对手使用任何优先动作，例如快速攻击。"
+    },
+    "aroma-veil": {
+      "name": "香薰面纱",
+      "shortDesc": "保护盟友免受影响其精神状态的动作。"
+    },
+    "as-one-glastrier": {
+      "name": "合而为一",
+      "shortDesc": "该能力结合了卡里莱克斯的不安能力和格拉斯特里尔的寒冷嘶鸣能力的效果。"
+    },
+    "as-one-spectrier": {
+      "name": "合而为一",
+      "shortDesc": "该能力结合了卡里克斯的不安能力和幽灵的冷战能力的效果。"
+    },
+    "aura-break": {
+      "name": "光环破坏",
+      "shortDesc": "使暗黑气场和仙气气场各自类型的招式减弱。"
+    },
+    "bad-dreams": {
+      "name": "噩梦",
+      "shortDesc": "每回合后对熟睡的对手造成最大生命值 1/8 的伤害。"
+    },
+    "ball-fetch": {
+      "name": "取球",
+      "shortDesc": "如果宝可梦没有持有物品，它将从战斗中第一次失败的投掷中获取宝可梦球。"
+    },
+    "battery": {
+      "name": "电池",
+      "shortDesc": "我方宝可梦的招式威力提升至1.3倍。"
+    },
+    "battle-armor": {
+      "name": "战甲",
+      "shortDesc": "防止致命一击。"
+    },
+    "battle-bond": {
+      "name": "战斗债券",
+      "shortDesc": "每场战斗一次，晕倒对手会提高攻击力、SP。攻击力、速度提升一级。"
+    },
+    "beads-of-ruin": {
+      "name": "毁灭珠子",
+      "shortDesc": "降低除自身以外的所有宝可梦的特防。"
+    },
+    "beast-boost": {
+      "name": "野兽强化",
+      "shortDesc": "当该宝可梦晕倒另一只宝可梦时，该宝可梦的最高属性会提升一级。"
+    },
+    "berserk": {
+      "name": "狂暴",
+      "shortDesc": "每当该宝可梦的生命值低于一半时，该宝可梦的特攻就会提升一级。"
+    },
+    "big-pecks": {
+      "name": "大啄",
+      "shortDesc": "防止防御下降。"
+    },
+    "black-hole": {
+      "name": "黑洞"
+    },
+    "blaze": {
+      "name": "火焰",
+      "shortDesc": "强化火系招式，最大生命值三分之一以下。"
+    },
+    "bodyguard": {
+      "name": "保镖"
+    },
+    "bonanza": {
+      "name": "富矿"
+    },
+    "bulletproof": {
+      "name": "防弹",
+      "shortDesc": "防止基于子弹、球和炸弹的移动。"
+    },
+    "calming": {
+      "name": "平静"
+    },
+    "celebrate": {
+      "name": "庆祝"
+    },
+    "cheek-pouch": {
+      "name": "颊袋",
+      "shortDesc": "除了浆果的效果外，吃浆果还会恢复生命值。"
+    },
+    "chilling-neigh": {
+      "name": "寒冷的嘶鸣",
+      "shortDesc": "击倒宝可梦后提高攻击力。"
+    },
+    "chlorophyll": {
+      "name": "叶绿素",
+      "shortDesc": "强烈阳光下速度加倍。"
+    },
+    "clear-body": {
+      "name": "透明体",
+      "shortDesc": "防止属性被其他宝可梦降低。"
+    },
+    "climber": {
+      "name": "登山者"
+    },
+    "cloud-nine": {
+      "name": "云九",
+      "shortDesc": "消除天气的所有影响，但不会阻止天气本身。"
+    },
+    "color-change": {
+      "name": "颜色变化",
+      "shortDesc": "更改类型以在受到伤害性招式击中时进行匹配。"
+    },
+    "comatose": {
+      "name": "昏迷",
+      "shortDesc": "这只宝可梦总是表现得好像睡着了一样。"
+    },
+    "commander": {
+      "name": "指挥官",
+      "shortDesc": "如果盟友 Dondozo 在场上，则进入其嘴内。"
+    },
+    "competitive": {
+      "name": "竞争",
+      "shortDesc": "任何属性降低时，特攻提升两级。"
+    },
+    "compound-eyes": {
+      "name": "复眼",
+      "shortDesc": "移动精度提高至 1.3 倍。"
+    },
+    "confidence": {
+      "name": "信心"
+    },
+    "conqueror": {
+      "name": "征服者"
+    },
+    "contrary": {
+      "name": "相反",
+      "shortDesc": "反转统计数据变化。"
+    },
+    "corrosion": {
+      "name": "腐蚀",
+      "shortDesc": "该宝可梦可以对毒钢宝可梦造成中毒。"
+    },
+    "costar": {
+      "name": "科斯塔",
+      "shortDesc": "复制盟友进入战斗时的统计变化。"
+    },
+    "cotton-down": {
+      "name": "棉羽绒",
+      "shortDesc": "当忽略招式和吸引招式的技能时。"
+    },
+    "cud-chew": {
+      "name": "反刍咀嚼",
+      "shortDesc": "使宝可梦在下一回合结束时重复使用已经消耗的浆果。"
+    },
+    "curious-medicine": {
+      "name": "好奇医学",
+      "shortDesc": "进入战场后重置所有统计数据变化。"
+    },
+    "cursed-body": {
+      "name": "被诅咒的身体",
+      "shortDesc": "有 30% 的几率使任何击中宝可梦的动作失效。"
+    },
+    "cute-charm": {
+      "name": "可爱的魅力",
+      "shortDesc": "有 30% 的几率在接触时迷惑攻击的宝可梦。"
+    },
+    "damp": {
+      "name": "潮湿",
+      "shortDesc": "防止宝可梦在战斗时自毁、爆炸和余波发挥作用。"
+    },
+    "dancer": {
+      "name": "舞者",
+      "shortDesc": "每当其他宝可梦使用舞蹈动作时，该宝可梦会立即使用相同的动作。"
+    },
+    "dark-aura": {
+      "name": "黑暗光环",
+      "shortDesc": "将所有友方和敌方宝可梦的暗属性强化至 1.33 倍。"
+    },
+    "dauntless-shield": {
+      "name": "无畏之盾",
+      "shortDesc": "提高战斗中的防御力。"
+    },
+    "daze": {
+      "name": "发呆"
+    },
+    "dazzling": {
+      "name": "眼花缭乱",
+      "shortDesc": "敌方宝可梦无法使用优先攻击。"
+    },
+    "decoy": {
+      "name": "诱饵"
+    },
+    "deep-sleep": {
+      "name": "深度睡眠"
+    },
+    "defeatist": {
+      "name": "失败主义者",
+      "shortDesc": "最大生命值 50% 或以下时攻击力和特攻力减半。"
+    },
+    "defiant": {
+      "name": "挑衅",
+      "shortDesc": "任何属性降低时攻击力提升两个阶段。"
+    },
+    "delta-stream": {
+      "name": "Delta 流",
+      "shortDesc": "产生一股神秘的气流，该气流无法替代，并且导致招式对飞行宝可梦永远不会超级有效。"
+    },
+    "desolate-land": {
+      "name": "荒凉之地",
+      "shortDesc": "产生极其刺眼的阳光，具有晴天的所有属性，无法替代，并导致破坏性的水系招式失败。"
+    },
+    "disguise": {
+      "name": "伪装",
+      "shortDesc": "防止第一次战斗伤害。"
+    },
+    "disgust": {
+      "name": "厌恶"
+    },
+    "dodge": {
+      "name": "闪避"
+    },
+    "download": {
+      "name": "下载",
+      "shortDesc": "进入战斗时，根据对手防御较弱的情况，将攻击力提升一级。"
+    },
+    "dragonize": {
+      "name": "龙化",
+      "shortDesc": "宝可梦的普通属性招式变为龙属性招式，且威力提升20%。"
+    },
+    "dragons-maw": {
+      "name": "龙之喉",
+      "shortDesc": "强化龙类招式。"
+    },
+    "drizzle": {
+      "name": "毛毛雨",
+      "shortDesc": "召唤进入战斗后无限期持续的降雨。"
+    },
+    "drought": {
+      "name": "干旱",
+      "shortDesc": "召唤进入战斗后无限期持续的强烈阳光。"
+    },
+    "dry-skin": {
+      "name": "皮肤干燥",
+      "shortDesc": "在强阳光下每回合造成 1/8 最大生命值伤害，但在雨天时可治疗 1/8 最大生命值。火招式伤害增加至 1.25 倍，但吸收水招式，治疗最大生命值 1/4。"
+    },
+    "early-bird": {
+      "name": "早鸟",
+      "shortDesc": "使睡眠速度加快两倍。"
+    },
+    "earth-eater": {
+      "name": "噬地者",
+      "shortDesc": "被地属性招式击中时恢复生命值。"
+    },
+    "eelevate": {
+      "name": "提升",
+      "shortDesc": "免疫地面类型移动和接地进入危险；击倒目标后提升最高属性。"
+    },
+    "effect-spore": {
+      "name": "效果孢子",
+      "shortDesc": "接触攻击的宝可梦时，有 30% 的几率造成麻痹、中毒或睡眠。"
+    },
+    "electric-surge": {
+      "name": "电涌",
+      "shortDesc": "当这只宝可梦进入战斗时，它会将地形更改为电力地形。"
+    },
+    "electromorphosis": {
+      "name": "电形态",
+      "shortDesc": "受到攻击时，下一次使用的电属性招式的威力翻倍。"
+    },
+    "embody-aspect": {
+      "name": "体现方面",
+      "shortDesc": "体现方面会提升特定的统计数据，具体取决于巨型巨蜥的形态"
+    },
+    "embody-aspect-cornerstone": {
+      "name": "体现方面（基石）",
+      "shortDesc": "切换时，该宝可梦的防御力提升1级。"
+    },
+    "embody-aspect-hearthflame": {
+      "name": "体现方面（炉火）",
+      "shortDesc": "切换时，该宝可梦的攻击力提升1级。"
+    },
+    "embody-aspect-teal": {
+      "name": "体现方面（青色）",
+      "shortDesc": "切换时，该宝可梦的速度提升1级。"
+    },
+    "embody-aspect-wellspring": {
+      "name": "体现方面（源泉）",
+      "shortDesc": "切换时，该宝可梦的特防提升1级。"
+    },
+    "emergency-exit": {
+      "name": "紧急出口",
+      "shortDesc": "当该宝可梦的生命值低于一半时，该宝可梦会自动切换。"
+    },
+    "explode": {
+      "name": "爆炸"
+    },
+    "fairy-aura": {
+      "name": "仙气",
+      "shortDesc": "将所有友方和敌方宝可梦的妖精招式强化至 1.33 倍。"
+    },
+    "filter": {
+      "name": "过滤器",
+      "shortDesc": "超级有效招式受到的伤害减少 1/4。"
+    },
+    "flame-body": {
+      "name": "火焰体",
+      "shortDesc": "有 30% 的几率在接触时燃烧攻击宝可梦。"
+    },
+    "flame-boost": {
+      "name": "火焰增强"
+    },
+    "flare-boost": {
+      "name": "照明弹增强",
+      "shortDesc": "燃烧时特攻增加至 1.5 倍。"
+    },
+    "flash-fire": {
+      "name": "闪火",
+      "shortDesc": "防御火系移动。一旦被格挡，宝可梦自身的火焰招式就会造成 1.5 倍的伤害，直到它离开战斗。"
+    },
+    "flower-gift": {
+      "name": "鲜花礼物",
+      "shortDesc": "在强烈阳光下，友方宝可梦的攻击力和特防提高至 1.5 倍。"
+    },
+    "flower-veil": {
+      "name": "花纱",
+      "shortDesc": "保护友方草宝可梦的统计数据不被其他宝可梦降低。"
+    },
+    "fluffy": {
+      "name": "蓬松",
+      "shortDesc": "接触移动造成的伤害减半。火焰招式造成的伤害加倍。"
+    },
+    "forecast": {
+      "name": "预测",
+      "shortDesc": "更改 Castform 的类型和形态以适应天气。"
+    },
+    "forewarn": {
+      "name": "预警",
+      "shortDesc": "进入战斗时揭示对手的最强招式。"
+    },
+    "fortune": {
+      "name": "财富"
+    },
+    "friend-guard": {
+      "name": "朋友守卫",
+      "shortDesc": "将友方宝可梦受到的所有直接伤害降低至 0.75 倍。"
+    },
+    "frighten": {
+      "name": "害怕"
+    },
+    "frisk": {
+      "name": "搜查",
+      "shortDesc": "进入战斗时显示对手持有的物品。"
+    },
+    "frostbite": {
+      "name": "冻伤"
+    },
+    "full-metal-body": {
+      "name": "全金属机身",
+      "shortDesc": "其他宝可梦无法降低该宝可梦的属性。"
+    },
+    "fur-coat": {
+      "name": "毛皮大衣",
+      "shortDesc": "物理攻击造成的伤害减半。"
+    },
+    "gale-wings": {
+      "name": "烈风之翼",
+      "shortDesc": "飞行招式的优先级提升一级。"
+    },
+    "galvanize": {
+      "name": "镀锌",
+      "shortDesc": "该宝可梦的普通招式是电系，威力提升至1.2倍。"
+    },
+    "gluttony": {
+      "name": "暴食",
+      "shortDesc": "使宝可梦吃掉任何因低于其最大生命值 1/2 的低生命值而触发的持有的浆果。"
+    },
+    "good-as-gold": {
+      "name": "一诺千金",
+      "shortDesc": "免疫状态移动。"
+    },
+    "gooey": {
+      "name": "粘糊糊的",
+      "shortDesc": "接触时，攻击宝可梦的速度降低一级。"
+    },
+    "gorilla-tactics": {
+      "name": "大猩猩战术",
+      "shortDesc": "提高宝可梦的攻击力，但只允许使用第一个选定的动作。"
+    },
+    "grass-cloak": {
+      "name": "草斗篷"
+    },
+    "grass-pelt": {
+      "name": "草皮",
+      "shortDesc": "在草地地形生效时提高防御力。"
+    },
+    "grassy-surge": {
+      "name": "草丛涌动",
+      "shortDesc": "当这只宝可梦进入战斗时，它会将地形更改为草地地形。"
+    },
+    "grim-neigh": {
+      "name": "可怕的嘶鸣",
+      "shortDesc": "击倒宝可梦后提高特攻。"
+    },
+    "guard-dog": {
+      "name": "看门狗",
+      "shortDesc": "在受到威胁时提高攻击力，并防止被迫退出。"
+    },
+    "gulp": {
+      "name": "咕噜咕噜"
+    },
+    "gulp-missile": {
+      "name": "吞咽导弹",
+      "shortDesc": "如果带有吞噬导弹的克拉莫兰特使用冲浪或潜水，它会捕获猎物并根据其剩余生命值改变其形态。"
+    },
+    "guts": {
+      "name": "胆量",
+      "shortDesc": "受到严重状态影响时攻击力提高 50%。"
+    },
+    "hadron-engine": {
+      "name": "强子引擎",
+      "shortDesc": "进入战斗时创建一个电地形，并在激活时增强特殊攻击力。"
+    },
+    "harvest": {
+      "name": "收获",
+      "shortDesc": "如果宝可梦在此期间没有持有任何物品，则每回合后有 50% 的几率恢复使用过的浆果。"
+    },
+    "healer": {
+      "name": "治疗者",
+      "shortDesc": "每回合后有 30% 的几率治愈相邻盟友的任何严重状态疾病。"
+    },
+    "heatproof": {
+      "name": "耐热",
+      "shortDesc": "火焰移动和燃烧造成的伤害减半。"
+    },
+    "heavy-metal": {
+      "name": "重金属",
+      "shortDesc": "宝可梦的重量加倍。"
+    },
+    "herbivore": {
+      "name": "草食动物"
+    },
+    "hero": {
+      "name": "英雄"
+    },
+    "high-rise": {
+      "name": "高层"
+    },
+    "honey-gather": {
+      "name": "蜂蜜采集",
+      "shortDesc": "宝可梦可能会在战斗后拾取蜂蜜。"
+    },
+    "hospitality": {
+      "name": "热情好客",
+      "shortDesc": "热情款待的宝可梦进入战斗时，为我方恢复25%的生命值。"
+    },
+    "hot-blooded": {
+      "name": "热血"
+    },
+    "huge-power": {
+      "name": "巨大的力量",
+      "shortDesc": "战斗中攻击力加倍。"
+    },
+    "hunger-switch": {
+      "name": "饥饿开关",
+      "shortDesc": "使 Morpeko 每回合改变形态，在饱腹模式和饥饿模式之间交替"
+    },
+    "hustle": {
+      "name": "喧嚣",
+      "shortDesc": "强化物理动作，造成 1.5 倍伤害，但精度降低至 0.8 倍。"
+    },
+    "hydration": {
+      "name": "保湿",
+      "shortDesc": "在下雨期间每回合后治愈任何主要状态疾病。"
+    },
+    "hyper-cutter": {
+      "name": "超级切割机",
+      "shortDesc": "防止其他宝可梦降低攻击力。"
+    },
+    "ice-body": {
+      "name": "冰体",
+      "shortDesc": "冰雹期间每回合后恢复 1/16 最大生命值。防止冰雹损坏。"
+    },
+    "ice-face": {
+      "name": "冰面",
+      "shortDesc": "宝可梦的冰头可以代替物理攻击，但攻击也会改变宝可梦的外观。下雪时冰会恢复原状。"
+    },
+    "ice-scales": {
+      "name": "冰鳞",
+      "shortDesc": "特殊动作造成的伤害减半。"
+    },
+    "illuminate": {
+      "name": "照亮",
+      "shortDesc": "野外遭遇率加倍。"
+    },
+    "illusion": {
+      "name": "幻象",
+      "shortDesc": "被派出时，会呈现最后一个有意识的队伍宝可梦的外观，直到受到伤害性招式击中为止。"
+    },
+    "immunity": {
+      "name": "免疫",
+      "shortDesc": "防止中毒。"
+    },
+    "imposter": {
+      "name": "冒名顶替者",
+      "shortDesc": "进入战斗时变形。"
+    },
+    "infiltrator": {
+      "name": "渗透者",
+      "shortDesc": "绕过光幕、反射和防护。"
+    },
+    "innards-out": {
+      "name": "内脏出炉",
+      "shortDesc": "当这只宝可梦因对手的动作而晕倒时，对手将受到这只宝可梦剩余生命值的伤害。"
+    },
+    "inner-focus": {
+      "name": "内在焦点",
+      "shortDesc": "防止退缩。"
+    },
+    "insomnia": {
+      "name": "失眠",
+      "shortDesc": "阻止睡眠。"
+    },
+    "instinct": {
+      "name": "本能"
+    },
+    "interference": {
+      "name": "干扰"
+    },
+    "intimidate": {
+      "name": "恐吓",
+      "shortDesc": "进入战斗时降低对手攻击一级。"
+    },
+    "intrepid-sword": {
+      "name": "无畏之剑",
+      "shortDesc": "战斗中攻击力提升。"
+    },
+    "iron-barbs": {
+      "name": "铁倒刺",
+      "shortDesc": "对接触的攻击者造成伤害。"
+    },
+    "iron-fist": {
+      "name": "铁拳",
+      "shortDesc": "将基于拳击的动作强化至其威力的 1.2 倍。"
+    },
+    "jagged-edge": {
+      "name": "锯齿状边缘"
+    },
+    "justified": {
+      "name": "有道理",
+      "shortDesc": "受到暗招伤害时攻击力提升一级。"
+    },
+    "keen-eye": {
+      "name": "敏锐的目光",
+      "shortDesc": "防止精度降低。"
+    },
+    "klutz": {
+      "name": "克鲁兹",
+      "shortDesc": "防止宝可梦在战斗中使用其持有的物品。"
+    },
+    "last-bastion": {
+      "name": "最后的堡垒"
+    },
+    "leaf-guard": {
+      "name": "护叶",
+      "shortDesc": "防止强烈阳光照射下的重大疾病。"
+    },
+    "levitate": {
+      "name": "悬浮",
+      "shortDesc": "躲避地面移动。"
+    },
+    "libero": {
+      "name": "自由人",
+      "shortDesc": "自由人将宝可梦的类型更改为其之前使用的攻击类型。"
+    },
+    "life-force": {
+      "name": "生命力"
+    },
+    "light-metal": {
+      "name": "轻金属",
+      "shortDesc": "宝可梦的重量减半。"
+    },
+    "lightning-rod": {
+      "name": "避雷针",
+      "shortDesc": "在可能的情况下将单目标电招式重定向到该宝可梦。吸收电击，特攻提升一级。"
+    },
+    "limber": {
+      "name": "柔软",
+      "shortDesc": "防止瘫痪。"
+    },
+    "lingering-aroma": {
+      "name": "余香缭绕",
+      "shortDesc": "接触会改变攻击者的余香能力。"
+    },
+    "liquid-ooze": {
+      "name": "软泥怪",
+      "shortDesc": "使用吸血动作对对手造成伤害，伤害程度与其治疗量相同。"
+    },
+    "liquid-voice": {
+      "name": "流畅的声音",
+      "shortDesc": "声音类招式变为水类招式。"
+    },
+    "long-reach": {
+      "name": "长距离",
+      "shortDesc": "该宝可梦的招式不产生接触。"
+    },
+    "lullaby": {
+      "name": "摇篮曲"
+    },
+    "lunchbox": {
+      "name": "饭盒"
+    },
+    "magic-bounce": {
+      "name": "魔法弹跳",
+      "shortDesc": "将大多数非伤害性动作反射回其使用者。"
+    },
+    "magic-guard": {
+      "name": "魔法守卫",
+      "shortDesc": "防止并非由移动直接造成的伤害。"
+    },
+    "magician": {
+      "name": "魔术师",
+      "shortDesc": "当持有者使用伤害性动作时窃取目标持有的物品。"
+    },
+    "magma-armor": {
+      "name": "岩浆铠甲",
+      "shortDesc": "防止冻结。"
+    },
+    "magnet-pull": {
+      "name": "磁铁拉力",
+      "shortDesc": "防止钢铁对手逃跑或切换。"
+    },
+    "marvel-scale": {
+      "name": "奇迹规模",
+      "shortDesc": "受到严重状态影响时防御力提高 50%。"
+    },
+    "medic": {
+      "name": "医生"
+    },
+    "mega-launcher": {
+      "name": "巨型发射器",
+      "shortDesc": "增强光环，脉冲移动至其力量的 1.5 倍。"
+    },
+    "mega-sol": {
+      "name": "超级太阳",
+      "shortDesc": "宝可梦可以像天气是刺眼的阳光一样使用其招式。"
+    },
+    "melee": {
+      "name": "近战"
+    },
+    "merciless": {
+      "name": "无情",
+      "shortDesc": "该宝可梦的招式对中毒目标造成致命一击。"
+    },
+    "mimicry": {
+      "name": "模仿",
+      "shortDesc": "根据地形改变类型。"
+    },
+    "mind-s-eye": {
+      "name": "心灵之眼",
+      "shortDesc": "战斗，普通招式击中幽灵。准确率不能降低，忽略回避率。"
+    },
+    "minds-eye": {
+      "name": "心灵之眼",
+      "shortDesc": "宝可梦无视对手闪避的变化，其准确度不会降低，并且可以用普通和战斗类型的招式攻击幽灵类型。"
+    },
+    "minus": {
+      "name": "减",
+      "shortDesc": "当友方宝可梦具有正值或负值时，特攻增加至 1.5 倍。"
+    },
+    "mirror-armor": {
+      "name": "镜甲",
+      "shortDesc": "反映任何统计降低效果。"
+    },
+    "misty-surge": {
+      "name": "迷雾涌动",
+      "shortDesc": "当这只宝可梦进入战斗时，它会将地形更改为迷雾地形。"
+    },
+    "mold-breaker": {
+      "name": "模具破碎机",
+      "shortDesc": "如果目标的能力能够阻碍或阻止移动，则绕过目标的能力。"
+    },
+    "mood-maker": {
+      "name": "心情制造者"
+    },
+    "moody": {
+      "name": "穆迪",
+      "shortDesc": "每回合后提升一个随机属性两级并降低另一级。"
+    },
+    "motor-drive": {
+      "name": "电机驱动",
+      "shortDesc": "吸收电动，速度提升一级。"
+    },
+    "mountaineer": {
+      "name": "登山者"
+    },
+    "moxie": {
+      "name": "莫西",
+      "shortDesc": "击倒宝可梦后，攻击力提升一级。"
+    },
+    "multiscale": {
+      "name": "多尺度",
+      "shortDesc": "将满生命值造成的伤害减半。"
+    },
+    "multitype": {
+      "name": "多种类型",
+      "shortDesc": "改变阿尔宙斯的类型和形态以匹配其持有的板甲。"
+    },
+    "mummy": {
+      "name": "妈妈",
+      "shortDesc": "在接触时将攻击宝可梦的能力更改为木乃伊。"
+    },
+    "mycelium-might": {
+      "name": "菌丝之力",
+      "shortDesc": "状态动作最后进行，但不受对手能力的影响。"
+    },
+    "natural-cure": {
+      "name": "自然疗法",
+      "shortDesc": "解决切换时的主要状态问题。"
+    },
+    "neuroforce": {
+      "name": "神经力",
+      "shortDesc": "造成的超有效伤害增加至 1.25 倍。"
+    },
+    "neutralizing-gas": {
+      "name": "中和气体",
+      "shortDesc": "无效化战斗中所有宝可梦的能力。"
+    },
+    "no-guard": {
+      "name": "没有守卫",
+      "shortDesc": "确保击中宝可梦时使用的所有动作。"
+    },
+    "nomad": {
+      "name": "游牧者"
+    },
+    "normalize": {
+      "name": "标准化",
+      "shortDesc": "使宝可梦的招式全部表现为普通型。"
+    },
+    "nurse": {
+      "name": "护士"
+    },
+    "oblivious": {
+      "name": "遗忘",
+      "shortDesc": "防止迷恋并防止迷惑。"
+    },
+    "omnipotent": {
+      "name": "无所不能"
+    },
+    "opportunist": {
+      "name": "机会主义者",
+      "shortDesc": "复制对手的统计提升。"
+    },
+    "orichalcum-pulse": {
+      "name": "山铜脉冲",
+      "shortDesc": "进入战斗时使阳光变得刺眼，并在激活时增强攻击力。"
+    },
+    "overcoat": {
+      "name": "大衣",
+      "shortDesc": "防止天气造成的损坏。"
+    },
+    "overgrow": {
+      "name": "过度生长",
+      "shortDesc": "强化草招式，最大生命值三分之一以下。"
+    },
+    "own-tempo": {
+      "name": "自己的节奏",
+      "shortDesc": "防止混乱。"
+    },
+    "parental-bond": {
+      "name": "父母纽带",
+      "shortDesc": "让持有者以伤害性动作击中两次。第二击威力减半。"
+    },
+    "parry": {
+      "name": "招架"
+    },
+    "pastel-veil": {
+      "name": "柔和的面纱",
+      "shortDesc": "防止宝可梦及其盟友中毒。"
+    },
+    "perception": {
+      "name": "感知"
+    },
+    "perish-body": {
+      "name": "尸体灭亡",
+      "shortDesc": "当被直接接触的招式击中时，宝可梦和攻击者将在三回合后昏倒，除非他们退出战斗。"
+    },
+    "pickpocket": {
+      "name": "扒手",
+      "shortDesc": "在接触时窃取攻击宝可梦持有的物品。"
+    },
+    "pickup": {
+      "name": "皮卡",
+      "shortDesc": "捡起其他宝可梦用过的和扔出的物品。战斗后也可能拾取物品。"
+    },
+    "piercing-drill": {
+      "name": "穿孔钻",
+      "shortDesc": "当宝可梦使用接触动作时，它甚至可以击中正在保护自己的目标。"
+    },
+    "pixilate": {
+      "name": "像素化",
+      "shortDesc": "将持有者的普通招式转变为仙招式，并将其威力强化至1.3倍。"
+    },
+    "plus": {
+      "name": "加上",
+      "shortDesc": "当友方宝可梦具有正值或负值时，特攻增加至 1.5 倍。"
+    },
+    "poison-heal": {
+      "name": "毒药治疗",
+      "shortDesc": "每回合中毒时恢复 1/8 最大生命值以代替伤害。"
+    },
+    "poison-point": {
+      "name": "毒点",
+      "shortDesc": "有 30% 的几率接触到攻击宝可梦时中毒。"
+    },
+    "poison-puppeteer": {
+      "name": "毒傀儡师",
+      "shortDesc": "被佩查朗的招式中毒的宝可梦也会变得混乱。"
+    },
+    "poison-touch": {
+      "name": "毒触",
+      "shortDesc": "接触时有 30% 的几率使目标宝可梦中毒。"
+    },
+    "power-construct": {
+      "name": "动力构造",
+      "shortDesc": "当生命值低于50%时，将10%或50%的基伽德转化为完整形态。"
+    },
+    "power-nap": {
+      "name": "午睡"
+    },
+    "power-of-alchemy": {
+      "name": "炼金之力",
+      "shortDesc": "当盟友晕倒时，这只宝可梦获得其能力。"
+    },
+    "power-spot": {
+      "name": "能量点",
+      "shortDesc": "只要靠近宝可梦就能增强招式。"
+    },
+    "prankster": {
+      "name": "恶作剧者",
+      "shortDesc": "将非伤害招式的优先级提高一级。"
+    },
+    "pressure": {
+      "name": "压力",
+      "shortDesc": "使对方的动作额外消耗1点PP。"
+    },
+    "pride": {
+      "name": "骄傲"
+    },
+    "primordial-sea": {
+      "name": "原始海",
+      "shortDesc": "制造大雨，具有雨舞的所有属性，无法替代，并导致伤害性火系招式失败。"
+    },
+    "prism-armor": {
+      "name": "棱镜装甲",
+      "shortDesc": "超级有效伤害降低至0.75倍。"
+    },
+    "propeller-tail": {
+      "name": "螺旋桨尾部",
+      "shortDesc": "忽略招式和吸引招式的技能。"
+    },
+    "protean": {
+      "name": "千变万化",
+      "shortDesc": "更改持有者的类型以匹配其使用的每个动作。"
+    },
+    "protosynthesis": {
+      "name": "原合成",
+      "shortDesc": "在强烈阳光下或持有助推器能量时提高最高属性。"
+    },
+    "psychic-surge": {
+      "name": "心灵涌动",
+      "shortDesc": "当这只宝可梦进入战斗时，它会将地形更改为心灵地形。"
+    },
+    "punk-rock": {
+      "name": "朋克摇滚",
+      "shortDesc": "增强基于声音的动作并将相同动作的伤害减半。"
+    },
+    "pure-power": {
+      "name": "纯粹的力量",
+      "shortDesc": "战斗中攻击力加倍。"
+    },
+    "purifying-salt": {
+      "name": "净化盐",
+      "shortDesc": "免受状态状况影响并将幽灵类动作造成的伤害减半。"
+    },
+    "quark-drive": {
+      "name": "夸克驱动器",
+      "shortDesc": "提高电动地形上的最高统计数据，或者如果持有助推器能量。"
+    },
+    "queenly-majesty": {
+      "name": "女王陛下",
+      "shortDesc": "敌方宝可梦无法使用优先攻击。"
+    },
+    "quick-draw": {
+      "name": "快速抽奖",
+      "shortDesc": "偶尔让宝可梦先移动。"
+    },
+    "quick-feet": {
+      "name": "快脚",
+      "shortDesc": "严重状态异常时速度提高至 1.5 倍。"
+    },
+    "rain-dish": {
+      "name": "雨盘",
+      "shortDesc": "下雨期间每回合后恢复 1/16 最大生命值。"
+    },
+    "rattled": {
+      "name": "惊慌失措",
+      "shortDesc": "被黑暗、幽灵或虫子招式击中时，速度提高一级。"
+    },
+    "receiver": {
+      "name": "接收器",
+      "shortDesc": "当盟友晕倒时，这只宝可梦获得其能力。"
+    },
+    "reckless": {
+      "name": "鲁莽",
+      "shortDesc": "后坐力增强至其威力的 1.2 倍。"
+    },
+    "refrigerate": {
+      "name": "冷藏",
+      "shortDesc": "将持有者的普通招式转变为冰招式，并将其威力强化至1.3倍。"
+    },
+    "regenerator": {
+      "name": "再生器",
+      "shortDesc": "切换时恢复 1/3 最大生命值。"
+    },
+    "ripen": {
+      "name": "成熟",
+      "shortDesc": "使浆果的效果加倍。"
+    },
+    "rivalry": {
+      "name": "竞争",
+      "shortDesc": "对同性宝可梦造成的伤害增加至1.25倍，但对异性宝可梦造成的伤害减少至0.75倍。"
+    },
+    "rks-system": {
+      "name": "RKS系统",
+      "shortDesc": "更改该宝可梦的类型以匹配其持有的记忆。"
+    },
+    "rock-head": {
+      "name": "岩头",
+      "shortDesc": "防止反冲伤害。"
+    },
+    "rocky-payload": {
+      "name": "洛基有效载荷",
+      "shortDesc": "增强岩石类型的招式。"
+    },
+    "rough-skin": {
+      "name": "皮肤粗糙",
+      "shortDesc": "对接触的攻击者造成伤害。"
+    },
+    "run-away": {
+      "name": "逃跑",
+      "shortDesc": "确保逃离狂野战斗。"
+    },
+    "run-up": {
+      "name": "跑起来"
+    },
+    "sand-force": {
+      "name": "沙力",
+      "shortDesc": "沙尘暴期间，岩石、地面和钢铁的移动威力增强至 1.3 倍。防止沙尘暴损坏。"
+    },
+    "sand-rush": {
+      "name": "沙冲",
+      "shortDesc": "沙尘暴期间速度加倍。防止沙尘暴损坏。"
+    },
+    "sand-spit": {
+      "name": "沙嘴",
+      "shortDesc": "受到攻击时会产生沙尘暴。"
+    },
+    "sand-stream": {
+      "name": "沙流",
+      "shortDesc": "召唤一场进入战斗后无限期持续的沙尘暴。"
+    },
+    "sand-veil": {
+      "name": "沙幕",
+      "shortDesc": "沙尘暴期间回避率增加至 1.25 倍。防止沙尘暴损坏。"
+    },
+    "sandpit": {
+      "name": "沙坑"
+    },
+    "sap-sipper": {
+      "name": "汁液吸管",
+      "shortDesc": "吸收草招，攻击力提升一级。"
+    },
+    "schooling": {
+      "name": "学校教育",
+      "shortDesc": "愿望在生命值达到25%或更高时变为学校形式。"
+    },
+    "scrappy": {
+      "name": "好斗",
+      "shortDesc": "让宝可梦的普通动作和战斗动作攻击幽灵宝可梦。"
+    },
+    "screen-cleaner": {
+      "name": "屏幕清洁剂",
+      "shortDesc": "使光幕、反射和极光面纱的效果无效。"
+    },
+    "seed-sower": {
+      "name": "播种者",
+      "shortDesc": "当宝可梦受到攻击时，将地面变成草地地形。"
+    },
+    "sequence": {
+      "name": "序列"
+    },
+    "serene-grace": {
+      "name": "宁静的恩典",
+      "shortDesc": "额外移动效果的几率加倍。"
+    },
+    "shackle": {
+      "name": "卸扣"
+    },
+    "shadow-dash": {
+      "name": "暗影冲刺"
+    },
+    "shadow-shield": {
+      "name": "暗影之盾",
+      "shortDesc": "当这只宝可梦的生命值满时，招式造成的普通伤害减半。"
+    },
+    "shadow-tag": {
+      "name": "影子标签",
+      "shortDesc": "防止对手逃跑或切换。"
+    },
+    "share": {
+      "name": "分享"
+    },
+    "sharpness": {
+      "name": "清晰度",
+      "shortDesc": "增强切片动作。"
+    },
+    "shed-skin": {
+      "name": "脱皮",
+      "shortDesc": "每回合后可以治愈主要状态状况。"
+    },
+    "sheer-force": {
+      "name": "纯粹的力量",
+      "shortDesc": "将具有额外效果的招式强化至其威力的1.3倍，但会阻止其额外效果。"
+    },
+    "shell-armor": {
+      "name": "贝壳装甲",
+      "shortDesc": "防止致命一击。"
+    },
+    "shield": {
+      "name": "护盾"
+    },
+    "shield-dust": {
+      "name": "护盾灰尘",
+      "shortDesc": "阻止传入动作的附加效果。"
+    },
+    "shields-down": {
+      "name": "护盾下降",
+      "shortDesc": "在核心形态和流星形态之间变换这个小形态。在流星形态下防止严重的状态疾病和嗜睡。"
+    },
+    "simple": {
+      "name": "简单",
+      "shortDesc": "使宝可梦的统计阶段变化加倍。"
+    },
+    "skater": {
+      "name": "溜冰者"
+    },
+    "skill-link": {
+      "name": "技能链接",
+      "shortDesc": "每次将两到五击的动作和三重踢延伸至完全长度。"
+    },
+    "slow-start": {
+      "name": "慢启动",
+      "shortDesc": "进入战斗后五回合内攻击力和速度减半。"
+    },
+    "slush-rush": {
+      "name": "泥浆冲刺",
+      "shortDesc": "在冰雹期间，该宝可梦的速度为双倍。"
+    },
+    "sniper": {
+      "name": "狙击手",
+      "shortDesc": "强化致命一击，造成 3 倍伤害，而不是 2 倍。"
+    },
+    "snow-cloak": {
+      "name": "雪斗篷",
+      "shortDesc": "冰雹期间回避率增加至 1.25 倍。防止冰雹损坏。"
+    },
+    "snow-warning": {
+      "name": "雪警告",
+      "shortDesc": "召唤进入战斗后无限期持续的冰雹。"
+    },
+    "solar-power": {
+      "name": "太阳能",
+      "shortDesc": "强阳光下，特攻提升至 1.5 倍，但每回合后消耗 1/8 最大生命值。"
+    },
+    "solid-rock": {
+      "name": "坚硬的岩石",
+      "shortDesc": "超级有效招式受到的伤害减少 1/4。"
+    },
+    "soul-heart": {
+      "name": "魂心",
+      "shortDesc": "每当有宝可梦昏倒时，该宝可梦的特攻就会上升一级。"
+    },
+    "soundproof": {
+      "name": "隔音",
+      "shortDesc": "防止基于声音的移动。"
+    },
+    "speed-boost": {
+      "name": "速度提升",
+      "shortDesc": "每回合后速度提升一级。"
+    },
+    "spicy-spray": {
+      "name": "辣味喷雾",
+      "shortDesc": "当宝可梦因招式受到伤害时，它会燃烧攻击者。"
+    },
+    "spirit": {
+      "name": "精神"
+    },
+    "sponge": {
+      "name": "海绵"
+    },
+    "sprint": {
+      "name": "冲刺"
+    },
+    "stakeout": {
+      "name": "放样",
+      "shortDesc": "该宝可梦的招式对本回合中切换的宝可梦具有双倍威力。"
+    },
+    "stall": {
+      "name": "失速",
+      "shortDesc": "使宝可梦的招式在其招式的优先级范围内排在最后。"
+    },
+    "stalwart": {
+      "name": "坚定",
+      "shortDesc": "忽略招式和吸引招式的技能。"
+    },
+    "stamina": {
+      "name": "耐力",
+      "shortDesc": "当这只宝可梦受到招式伤害时，其防御力提升一级。"
+    },
+    "stance-change": {
+      "name": "立场改变",
+      "shortDesc": "在使用伤害性招式之前将圣盾斩更改为剑刃形态，或者在使用王之盾之前将盾牌形态更改为盾牌形态。"
+    },
+    "static": {
+      "name": "静态",
+      "shortDesc": "可能会瘫痪进行接触的攻击者。"
+    },
+    "steadfast": {
+      "name": "坚定",
+      "shortDesc": "退缩时速度提高一级。"
+    },
+    "stealth": {
+      "name": "隐身"
+    },
+    "steam-engine": {
+      "name": "蒸汽机",
+      "shortDesc": "当宝可梦被火或水类型的招式击中时，速度属性会大幅提升。"
+    },
+    "steelworker": {
+      "name": "钢铁工人",
+      "shortDesc": "该宝可梦的钢招式威力为 1.5 倍。"
+    },
+    "steely-spirit": {
+      "name": "钢铁之魂",
+      "shortDesc": "增强我方宝可梦的钢系招式。"
+    },
+    "stench": {
+      "name": "恶臭",
+      "shortDesc": "每次攻击都有 10% 的几率使目标宝可梦退缩。"
+    },
+    "sticky-hold": {
+      "name": "粘滞保持",
+      "shortDesc": "防止持有的物品被其他宝可梦移除。"
+    },
+    "storm-drain": {
+      "name": "雨水渠",
+      "shortDesc": "在可能的情况下将单目标水招式重定向到该宝可梦。吸收水系招式，特攻提升一级。"
+    },
+    "strong-jaw": {
+      "name": "强壮的下巴",
+      "shortDesc": "撕咬动作的威力增强至 1.5 倍。"
+    },
+    "sturdy": {
+      "name": "坚固",
+      "shortDesc": "防止被满HP击倒，留下1 HP。无论 HP 多少，都能防御一击 KO 动作。"
+    },
+    "suction-cups": {
+      "name": "吸盘",
+      "shortDesc": "防止因其他宝可梦的动作而被迫退出战斗。"
+    },
+    "super-luck": {
+      "name": "超级好运",
+      "shortDesc": "招式暴击率提升一级。"
+    },
+    "supersweet-syrup": {
+      "name": "超甜糖浆",
+      "shortDesc": "每场战斗一次，当拥有超甜糖浆的宝可梦进入战斗时，它会使所有相邻对手的回避能力降低一级。"
+    },
+    "supreme-overlord": {
+      "name": "至高霸主",
+      "shortDesc": "每击败一方宝可梦，攻击力和特攻力都会增强。"
+    },
+    "surge-surfer": {
+      "name": "冲浪者",
+      "shortDesc": "使该宝可梦在电动地形上的速度加倍。"
+    },
+    "swarm": {
+      "name": "蜂群",
+      "shortDesc": "强化虫子动作，在 1/3 最大生命值或以下时造成 1.5 倍伤害。"
+    },
+    "sweet-veil": {
+      "name": "甜蜜的面纱",
+      "shortDesc": "阻止友方宝可梦睡觉。"
+    },
+    "swift-swim": {
+      "name": "快速游泳",
+      "shortDesc": "下雨时速度加倍。"
+    },
+    "sword-of-ruin": {
+      "name": "毁灭之剑",
+      "shortDesc": "降低除自身以外的所有宝可梦的防御力。"
+    },
+    "symbiosis": {
+      "name": "共生",
+      "shortDesc": "当盟友用完其物品时，将持有者持有的物品传递给盟友。"
+    },
+    "synchronize": {
+      "name": "同步",
+      "shortDesc": "将受到的烧伤、麻痹和中毒复制到造成它们的宝可梦身上。"
+    },
+    "tablets-of-ruin": {
+      "name": "废墟石碑",
+      "shortDesc": "降低除自身以外的所有宝可梦的攻击力。"
+    },
+    "tangled-feet": {
+      "name": "纠结的脚",
+      "shortDesc": "困惑时闪避加倍。"
+    },
+    "tangling-hair": {
+      "name": "头发缠结",
+      "shortDesc": "当该宝可梦因接触动作而受到常规伤害时，攻击宝可梦的速度会降低一级。"
+    },
+    "technician": {
+      "name": "技术员",
+      "shortDesc": "将基础力量 60 或以下的招式强化至其力量的 1.5 倍。"
+    },
+    "telepathy": {
+      "name": "心灵感应",
+      "shortDesc": "防止友方宝可梦的破坏性动作。"
+    },
+    "tenacity": {
+      "name": "坚韧"
+    },
+    "tera-shell": {
+      "name": "泰拉贝壳",
+      "shortDesc": "当宝可梦HP满时，所有造成伤害的招式都不会非常有效。"
+    },
+    "tera-shift": {
+      "name": "万亿次转变",
+      "shortDesc": "当特拉帕戈斯进入战斗时，它会转变为特拉斯塔形态，直到战斗结束。"
+    },
+    "teraform-zero": {
+      "name": "变形零",
+      "shortDesc": "一旦特拉帕戈斯呈现出恒星形态，它就会立即抵消天气和地形的影响。"
+    },
+    "teravolt": {
+      "name": "太伏",
+      "shortDesc": "如果目标的能力能够阻碍或阻止移动，则绕过目标的能力。"
+    },
+    "thermal-exchange": {
+      "name": "热交换",
+      "shortDesc": "被火系招式击中时攻击力上升。不能被烧毁。"
+    },
+    "thick-fat": {
+      "name": "厚厚的脂肪",
+      "shortDesc": "火与冰招式造成的伤害减半。"
+    },
+    "thrust": {
+      "name": "推力"
+    },
+    "tinted-lens": {
+      "name": "有色镜片",
+      "shortDesc": "效果不佳的动作造成的伤害加倍。"
+    },
+    "torrent": {
+      "name": "激流",
+      "shortDesc": "强化水系招式，最大生命值三分之一以下。"
+    },
+    "tough-claws": {
+      "name": "坚韧的爪子",
+      "shortDesc": "接触动作的威力增强至1.33倍。"
+    },
+    "toxic-boost": {
+      "name": "毒性增强",
+      "shortDesc": "中毒时攻击力增加至 1.5 倍。"
+    },
+    "toxic-chain": {
+      "name": "有毒链",
+      "shortDesc": "当宝可梦用招式击中对手时可能会导致严重中毒。"
+    },
+    "toxic-debris": {
+      "name": "有毒碎片",
+      "shortDesc": "当宝可梦因物理动作受到伤害时，在对方队伍的脚下散布毒刺。"
+    },
+    "trace": {
+      "name": "跟踪",
+      "shortDesc": "进入战斗时复制对手的能力。"
+    },
+    "transistor": {
+      "name": "晶体管",
+      "shortDesc": "启动电动类动作。"
+    },
+    "triage": {
+      "name": "分类",
+      "shortDesc": "该宝可梦的治疗动作的优先级提高 3 级。"
+    },
+    "truant": {
+      "name": "逃学",
+      "shortDesc": "每隔一回合跳过一次。"
+    },
+    "turboblaze": {
+      "name": "涡轮火焰",
+      "shortDesc": "如果目标的能力能够阻碍或阻止移动，则绕过目标的能力。"
+    },
+    "unaware": {
+      "name": "不知道",
+      "shortDesc": "忽略其他宝可梦的伤害和准确度计算的统计修正。"
+    },
+    "unburden": {
+      "name": "卸下负担",
+      "shortDesc": "使用或丢失持有的物品时速度加倍。"
+    },
+    "unnerve": {
+      "name": "不安",
+      "shortDesc": "防止对手的宝可梦吃掉持有的浆果。"
+    },
+    "unseen-fist": {
+      "name": "看不见的拳头",
+      "shortDesc": "接触移动可以击穿保护/检测。"
+    },
+    "vanguard": {
+      "name": "先锋"
+    },
+    "vessel-of-ruin": {
+      "name": "毁灭之舟",
+      "shortDesc": "降低除自身以外的所有宝可梦的特攻。"
+    },
+    "victory-star": {
+      "name": "胜利之星",
+      "shortDesc": "将友方宝可梦的招式准确度提高至 1.1 倍。"
+    },
+    "vital-spirit": {
+      "name": "元气",
+      "shortDesc": "阻止睡眠。"
+    },
+    "volt-absorb": {
+      "name": "电压吸收",
+      "shortDesc": "吸收电击，治疗最大生命值的 1/4。"
+    },
+    "wandering-spirit": {
+      "name": "游魂",
+      "shortDesc": "在接触时与对手交换能力。"
+    },
+    "warm-blanket": {
+      "name": "温暖的毯子"
+    },
+    "water-absorb": {
+      "name": "吸水",
+      "shortDesc": "吸收水移动并恢复四分之一最大生命值。"
+    },
+    "water-bubble": {
+      "name": "水泡",
+      "shortDesc": "将火招式的伤害减半，将水招式的伤害加倍，并防止烧伤。"
+    },
+    "water-compaction": {
+      "name": "水压实",
+      "shortDesc": "当这只宝可梦被水属性招式击中时，它的防御力会提升两级。"
+    },
+    "water-veil": {
+      "name": "水幕",
+      "shortDesc": "防止烧伤。"
+    },
+    "wave-rider": {
+      "name": "乘浪者"
+    },
+    "weak-armor": {
+      "name": "弱装甲",
+      "shortDesc": "被物理招式击中时，速度各提升一级，防御降低一级。"
+    },
+    "well-baked-body": {
+      "name": "烤熟的身体",
+      "shortDesc": "免疫火系招式，防御大幅提升。"
+    },
+    "white-smoke": {
+      "name": "白烟",
+      "shortDesc": "防止属性被其他宝可梦降低。"
+    },
+    "wimp-out": {
+      "name": "懦夫出局",
+      "shortDesc": "当该宝可梦的生命值低于一半时，该宝可梦会自动切换。"
+    },
+    "wind-power": {
+      "name": "风力发电",
+      "shortDesc": "被风系招式击中时，下一个电系招式的威力变为2倍。"
+    },
+    "wind-rider": {
+      "name": "驭风者",
+      "shortDesc": "免疫风属性招式，并且受到一只宝可梦攻击时攻击力提升一级。"
+    },
+    "wonder-guard": {
+      "name": "奇迹守卫",
+      "shortDesc": "防止不是非常有效的伤害性动作。"
+    },
+    "wonder-skin": {
+      "name": "神奇皮肤",
+      "shortDesc": "将传入的非伤害性动作的基础准确度降低至 50%。"
+    },
+    "zen-mode": {
+      "name": "禅宗模式",
+      "shortDesc": "每回合后根据 HP 改变 Darmanitan 的形态：禅宗模式低于 50% 最大 HP，否则为标准模式。"
+    },
+    "zero-to-hero": {
+      "name": "从零到英雄",
+      "shortDesc": "切换时变身为英雄形态。"
+    }
+  }
+}

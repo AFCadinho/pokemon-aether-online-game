@@ -1,0 +1,278 @@
+{
+  "escape-rope-action": {
+    "name": "逃生绳·关键物品",
+    "shortDesc": "返回您上次访问过的安全室内位置。"
+  },
+  "escape-rope": {
+    "name": "逃生绳",
+    "shortDesc": "立即逃离洞穴和地牢。"
+  },
+  "poke-ball": {
+    "name": "精灵球",
+    "shortDesc": "用于捕捉野生宝可梦的基本球。"
+  },
+  "great-ball": {
+    "name": "伟大的球",
+    "shortDesc": "比精灵球更好的球，接球率更高。"
+  },
+  "ultra-ball": {
+    "name": "超级球",
+    "shortDesc": "高性能球，接球率高于 Great Ball。"
+  },
+  "potion": {
+    "name": "药水",
+    "shortDesc": "恢复 20 生命值。"
+  },
+  "super-potion": {
+    "name": "超级药水",
+    "shortDesc": "恢复 50 生命值。"
+  },
+  "hyper-potion": {
+    "name": "超级药水",
+    "shortDesc": "恢复 200 生命值。"
+  },
+  "max-potion": {
+    "name": "最大药水",
+    "shortDesc": "完全恢复宝可梦的生命值。"
+  },
+  "full-restore": {
+    "name": "完全恢复",
+    "shortDesc": "完全恢复生命值并治愈任何状态状况。"
+  },
+  "antidote": {
+    "name": "解毒剂",
+    "shortDesc": "治愈中毒。"
+  },
+  "paralyze-heal": {
+    "name": "麻痹治疗",
+    "shortDesc": "治愈瘫痪。"
+  },
+  "awakening": {
+    "name": "觉醒",
+    "shortDesc": "唤醒沉睡的宝可梦。"
+  },
+  "burn-heal": {
+    "name": "烧伤治疗",
+    "shortDesc": "治愈烧伤。"
+  },
+  "ice-heal": {
+    "name": "冰疗",
+    "shortDesc": "解冻冻结的宝可梦。"
+  },
+  "full-heal": {
+    "name": "全面治疗",
+    "shortDesc": "解决任何状态问题。"
+  },
+  "revive": {
+    "name": "复活",
+    "shortDesc": "以最大生命值的一半复活昏倒的宝可梦。"
+  },
+  "old-rod": {
+    "name": "老棒",
+    "shortDesc": "用它来钓鱼宝可梦。"
+  },
+  "good-rod": {
+    "name": "好棒",
+    "shortDesc": "用它来捕捉水体中的宝可梦。"
+  },
+  "super-rod": {
+    "name": "超级棒",
+    "shortDesc": "用它在水体中捕捉强大的宝可梦。"
+  },
+  "cut-charm": {
+    "name": "切割魅力",
+    "shortDesc": "让你可以在宝可梦不知情的情况下使用 Cut。"
+  },
+  "defog-charm": {
+    "name": "除雾咒",
+    "shortDesc": "让你可以在宝可梦不知情的情况下使用除雾。"
+  },
+  "dive-charm": {
+    "name": "潜水魅力",
+    "shortDesc": "让你可以在宝可梦不知情的情况下使用潜水。"
+  },
+  "flash-charm": {
+    "name": "闪光吊饰",
+    "shortDesc": "让您可以在 Pokémon 不知情的情况下使用 Flash。"
+  },
+  "rain-dance-charm": {
+    "name": "雨舞符咒",
+    "shortDesc": "让你在宝可梦不知情的情况下使用雨之舞。"
+  },
+  "rock-climb-charm": {
+    "name": "攀岩魅力",
+    "shortDesc": "让你可以在宝可梦不知情的情况下使用攀岩。"
+  },
+  "rock-smash-charm": {
+    "name": "碎岩符咒",
+    "shortDesc": "让你可以在宝可梦不知情的情况下使用岩石粉碎。"
+  },
+  "snowscape-charm": {
+    "name": "雪景魅力",
+    "shortDesc": "让你可以在宝可梦不知情的情况下使用雪景。"
+  },
+  "strength-charm": {
+    "name": "力量魅力",
+    "shortDesc": "让你在宝可梦不知情的情况下使用力量。"
+  },
+  "sunny-day-charm": {
+    "name": "阳光灿烂的日子魅力",
+    "shortDesc": "让你可以在宝可梦不知情的情况下使用 Sunny Day。"
+  },
+  "surf-charm": {
+    "name": "冲浪魅力",
+    "shortDesc": "让你可以在宝可梦不知情的情况下使用冲浪。"
+  },
+  "waterfall-charm": {
+    "name": "瀑布魅力",
+    "shortDesc": "让你在宝可梦不知情的情况下使用瀑布。"
+  },
+  "whirlpool-charm": {
+    "name": "漩涡魅力",
+    "shortDesc": "让你在宝可梦不知情的情况下使用漩涡。"
+  },
+  "aether-blessing-voucher-3-days": {
+    "name": "以太祝福券·3天",
+    "shortDesc": "三天以太祝福的可交易代金券，赔率×1.05，区域旅行 50% 折扣，以及两个免费锚。"
+  },
+  "aether-blessing-voucher-7-days": {
+    "name": "以太祝福券·7天",
+    "shortDesc": "一张可交易的 7 天以太祝福券，赔率 ×1.05，区域旅行 50% 折扣，以及两个免费锚。"
+  },
+  "aether-blessing-voucher-14-days": {
+    "name": "以太祝福券·14天",
+    "shortDesc": "一张可交易的十四天以太祝福券，赔率×1.05，区域旅行 50% 折扣，以及两个免费锚。"
+  },
+  "aether-blessing-voucher-30-days": {
+    "name": "以太祝福券·30天",
+    "shortDesc": "一张可交易三十天以太祝福的优惠券，具有 ×1.05 闪亮赔率、50% 区域旅行折扣和两个免费锚。"
+  },
+  "name-change-ticket": {
+    "name": "改名票",
+    "shortDesc": "更改您的用户名和公开培训师姓名。"
+  },
+  "gender-chance-ticket": {
+    "name": "性别变更票",
+    "shortDesc": "更改性别并将衣柜化妆品放回您的包中。"
+  },
+  "squirtle-guild-emblem-template": {
+    "name": "杰尼龟公会徽章",
+    "shortDesc": "使用此模板为您当前的公会永久解锁它。"
+  },
+  "charmander-guild-emblem-template": {
+    "name": "小火龙公会徽章",
+    "shortDesc": "使用此模板为您当前的公会永久解锁它。"
+  },
+  "bulbasaur-guild-emblem-template": {
+    "name": "妙蛙种子公会徽章",
+    "shortDesc": "使用此模板为您当前的公会永久解锁它。"
+  },
+  "venusaur-guild-emblem-template": {
+    "name": "妙蛙花公会徽章",
+    "shortDesc": "使用此模板为您当前的公会永久解锁它。"
+  },
+  "charizard-guild-emblem-template": {
+    "name": "喷火龙公会徽章",
+    "shortDesc": "使用此模板为您当前的公会永久解锁它。"
+  },
+  "blastoise-guild-emblem-template": {
+    "name": "Blastoise公会徽章",
+    "shortDesc": "使用此模板为您当前的公会永久解锁它。"
+  },
+  "aether-blossom-outfit": {
+    "name": "以太花盒",
+    "shortDesc": "打开这个女性专用装备盒可获得四件单独的以太之花化妆品。"
+  },
+  "aether-blossom-hair": {
+    "name": "以太花发",
+    "shortDesc": "将以太花发型移至角色定制中。"
+  },
+  "aether-blossom-earrings": {
+    "name": "以太花耳环",
+    "shortDesc": "将以太花耳环移至角色定制中。"
+  },
+  "aether-blossom-dress": {
+    "name": "以太花连衣裙",
+    "shortDesc": "将以太花连衣裙移至角色定制中。"
+  },
+  "aether-blossom-shoes": {
+    "name": "以太花鞋",
+    "shortDesc": "将以太花鞋子移至角色定制中。"
+  },
+  "aether-blossom-chroma-hair": {
+    "name": "以太花彩发",
+    "shortDesc": "解锁女性专用、颜色可定制的以太花发型。"
+  },
+  "aether-blossom-chroma-earrings": {
+    "name": "以太花彩耳环",
+    "shortDesc": "解锁女性专用、可定制颜色的以太花耳环。"
+  },
+  "aether-blossom-chroma-shoes": {
+    "name": "以太花彩鞋",
+    "shortDesc": "解锁女性专用、颜色可定制的 Aether Blossom 鞋子。"
+  },
+  "aether-male-chroma-hair-1": {
+    "name": "以太彩发 I",
+    "shortDesc": "解锁男性专用、颜色可定制的以太发型。"
+  },
+  "aether-male-chroma-hair-2": {
+    "name": "以太彩发 II",
+    "shortDesc": "解锁男性专用、颜色可定制的以太发型。"
+  },
+  "aether-male-chroma-hair-3": {
+    "name": "以太炫彩头发 III",
+    "shortDesc": "解锁男性专用、颜色可定制的以太发型。"
+  },
+  "aether-female-chroma-hair-1": {
+    "name": "以太彩发 I",
+    "shortDesc": "解锁女性专用、颜色可定制的以太发型。"
+  },
+  "aether-female-chroma-hair-2": {
+    "name": "以太彩发 II",
+    "shortDesc": "解锁女性专用、颜色可定制的以太发型。"
+  },
+  "adinho-classic-outfit": {
+    "name": "阿迪尼奥经典盒",
+    "shortDesc": "打开这个男性专用装备盒可获得六件单独的 Adinho 化妆品。"
+  },
+  "adinho-classic-sunglasses": {
+    "name": "Adinho 经典太阳镜",
+    "shortDesc": "将原来的 Adinho 太阳镜移至角色自定义中。"
+  },
+  "adinho-classic-shirt": {
+    "name": "阿迪尼奥经典衬衫",
+    "shortDesc": "将原来的男性专用 Adinho 衬衫移至角色定制中。"
+  },
+  "adinho-classic-trousers": {
+    "name": "Adinho 经典长裤",
+    "shortDesc": "将原来的男性专用 Adinho 裤子移至角色定制中。"
+  },
+  "adinho-classic-shoes": {
+    "name": "阿迪尼奥经典鞋",
+    "shortDesc": "将原来的男性专用 Adinho 鞋移至角色定制中。"
+  },
+  "adinho-chroma-hair": {
+    "name": "Adinho Chroma 头发",
+    "shortDesc": "解锁男性专用的 Adinho Chroma 发型。"
+  },
+  "adinho-chroma-beard": {
+    "name": "阿迪尼奥色度胡子",
+    "shortDesc": "解锁男性专用、可自定义颜色的 Adinho 胡须。"
+  },
+  "adinho-chroma-glasses": {
+    "name": "Adinho Chroma 眼镜",
+    "shortDesc": "解锁男性专用、可定制颜色的 Adinho 眼镜。"
+  },
+  "adinho-chroma-shirt": {
+    "name": "Adinho Chroma 衬衫",
+    "shortDesc": "解锁男性专用、颜色可定制的 Adinho 衬衫。"
+  },
+  "adinho-chroma-trousers": {
+    "name": "Adinho Chroma 长裤",
+    "shortDesc": "解锁男性专用、颜色可定制的 Adinho 裤子。"
+  },
+  "adinho-chroma-shoes": {
+    "name": "Adinho Chroma 鞋",
+    "shortDesc": "解锁男性专用、颜色可定制的 Adinho 鞋。"
+  }
+}

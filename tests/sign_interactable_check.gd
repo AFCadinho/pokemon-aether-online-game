@@ -86,6 +86,14 @@ func _check_service_uses_global_locale() -> void:
 	)
 	_check_true(portuguese_lines.has("Uma cidade tranquila onde novas jornadas começam."), "SignTextService maps pt_BR to the pt-BR sign directory")
 
+	localization_manager.call("set_locale", "zh_CN")
+	var chinese_lines: Array[String] = service.call(
+		"get_lines",
+		"kanto_pallet_town_town_sign",
+		"kanto_pallet_town"
+	)
+	_check_true(chinese_lines.has("一座宁静的小镇，新的旅程从这里开始。"), "SignTextService maps zh_CN to the zh-CN sign directory")
+
 	localization_manager.call("set_locale", original_locale)
 	service.free()
 
