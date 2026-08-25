@@ -174,6 +174,7 @@ const CODE_TO_KEY: Dictionary = {
 	"pokemon_level_cap_party_ineligible": "backend.error.pokemon_level_cap_party_ineligible",
 	"pokemon_level_cap_authentication_required": "backend.error.auth_required",
 	"pokemon_level_cap_validation_unavailable": "backend.error.unavailable",
+	"pokemon_held_item_locked": "backend.error.pokemon_held_item_locked",
 	"room_timer_authority_disabled": "ui.pvp.room.timer_unavailable",
 	"room_timer_authority_unavailable": "ui.pvp.room.timer_unavailable",
 	"room_timer_client_contract_required": "ui.pvp.room.timer_unavailable",
