@@ -19,12 +19,12 @@
 - The Mysterious Outfit Box can now be bought from the Aether Gift Store for 400 Aether Gems.
 - Pokémon Showdown export sets can now be copied from a Pokémon's Summary.
 - A mysterious golden Poké Ball can now be spotted near Master Thief Rook in Viridian City.
-- Added opt-in official Chinese and Portuguese chats under a dedicated Languages tab.
+- Added opt-in Chinese and Portuguese community chats under a dedicated Languages tab.
 
 **Changed**
 
 - Route 4 now uses its complete new outdoor layout, with its Mt. Moon and Cerulean City entrances in the correct places.
-- Chat settings now manage official language chats; the main chat tabs keep a fixed order.
+- Chat settings now manage community language chats and disclose that moderation may be limited; the main chat tabs keep a fixed order.
 - Main interface hover cards now share a clear, styled appearance across navigation, party, hotbar, status, buffs, and chat controls.
 - Bag hover cards now share a clear, styled appearance across item browsing and use screens.
 - Item Dex hover cards now share a clear, styled appearance.
