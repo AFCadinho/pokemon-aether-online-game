@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Fixed**
+
+- Hidden Power descriptions now correctly state that the move always has 60 Power.
+
 ## 0.3.62 - 2026-08-24
 
 **Added**

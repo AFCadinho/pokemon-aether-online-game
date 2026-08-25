@@ -98,6 +98,28 @@ func _check_catalogs() -> void:
 		generated_catalogs[locale] = generated_value as Dictionary if generated_value is Dictionary else {}
 
 	var generated_english: Dictionary = generated_catalogs.get("en", {})
+	var expected_hidden_power_descriptions := {
+		"en": "Power is always 60. Its type depends on the Pokémon using it.",
+		"nl": "De kracht is altijd 60. Het type hangt af van de Pokémon die de aanval gebruikt.",
+		"pt_BR": "O poder é sempre 60. O tipo depende do Pokémon que usa o golpe.",
+	}
+	for locale: String in GENERATED_CATALOG_PATHS:
+		var generated_moves: Dictionary = (generated_catalogs.get(locale, {}) as Dictionary).get("moves", {})
+		var hidden_power: Dictionary = generated_moves.get("hidden-power", {})
+		_check(
+			str(hidden_power.get("shortDesc", "")) == str(expected_hidden_power_descriptions.get(locale, "")),
+			"generated %s Hidden Power description uses its fixed 60 Power" % locale
+		)
+	var summary_index_value: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string("res://data/move_summary_index.json")
+	)
+	var summary_index: Dictionary = summary_index_value as Dictionary if summary_index_value is Dictionary else {}
+	var summary_hidden_power: Dictionary = summary_index.get("hidden-power", {})
+	_check(
+		str(summary_hidden_power.get("shortDesc", "")).contains("always 60")
+		and not str(summary_hidden_power.get("desc", "")).contains("30 and 70"),
+		"Pokémon Summary uses the current Hidden Power mechanics"
+	)
 	for generated_kind: String in ["species", "moves", "abilities"]:
 		var expected_size: int = int({
 			"species": 1439,
