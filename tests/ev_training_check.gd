@@ -54,6 +54,9 @@ func _init() -> void:
 		"ui.ev_training.assistant.tier.3",
 		"ui.ev_training.assistant.tier_option",
 		"ui.ev_training.assistant.tier_locked",
+		"mentor.mateo.help.topic.field",
+		"mentor.mateo.help.field.1",
+		"mentor.mateo.help.field.2",
 		"ui.ev_training.mateo.lesson_intro.evs",
 		"ui.ev_training.mateo.focus_targets",
 		"ui.ev_training.mateo.battle_progress",
@@ -84,6 +87,8 @@ func _init() -> void:
 	)
 	_assert(
 		expert_source.contains('LocalizationManager.text("ui.ev_training.mateo.lesson_intro.evs")')
+		and expert_source.contains('{"id": "field", "label": LocalizationManager.text("mentor.mateo.help.topic.field")}')
+		and expert_source.contains('keys = ["mentor.mateo.help.field.1", "mentor.mateo.help.field.2"]')
 		and not expert_source.contains("EV means Effort Value. A Pokemon that participates"),
 		"Mateo's runtime lesson must use the localization catalog"
 	)
