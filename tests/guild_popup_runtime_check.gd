@@ -286,9 +286,10 @@ func _run() -> void:
 		pokemon_action.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildBankWorkspace", true, false) != null, "a bank category opens a dedicated workspace")
-	_check(popup.find_child("GuildBankPokemonPreview", true, false) != null, "Pokémon Vault opens with a read-only overview")
+	_check(popup.find_child("GuildBankPokemonPreview", true, false) != null, "Pokémon Vault opens with a scalable donation overview")
 	_check(popup.find_child("GuildBankPokemonListScroll", true, false) != null, "Pokémon Vault overview remains scrollable at scale")
-	_check(popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) == null, "Pokémon Vault overview keeps transactions out of the preview")
+	_check(popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) == null, "Pokémon Vault overview keeps Guild withdrawals out of the preview")
+	_check(popup.find_child("GuildBankPokemonDepositButton_22", true, false) != null, "Pokémon Vault overview keeps direct personal donations available")
 	var pokemon_full_action := popup.find_child("GuildBankPokemonOpenFullButton", true, false) as Button
 	_check(pokemon_full_action != null, "Pokémon Vault overview exposes its full management view")
 	if pokemon_full_action != null:
@@ -298,7 +299,7 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankAssetSearchInput", true, false) != null, "full Pokémon Vault provides search")
 	_check(popup.find_child("GuildBankAssetFilterSelect", true, false) != null, "full Pokémon Vault provides filters")
 	_check(popup.find_child("GuildBankPokemonLogButton", true, false) != null, "Pokémon Vault has a dedicated log action")
-	_check(popup.find_child("GuildBankPokemonDepositButton_22", true, false) != null, "owned Pokémon can be deposited")
+	_check(popup.find_child("GuildBankPokemonDepositButton_22", true, false) == null, "full Pokémon Vault focuses only on Guild-owned assets")
 	var pokemon_withdraw := popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) as Button
 	_check(pokemon_withdraw != null and pokemon_withdraw.text == "Withdraw", "authorized ranks retain permanent Guild withdrawal")
 	var pokemon_borrow := popup.find_child("GuildBankPokemonBorrowButton_21", true, false) as Button
@@ -345,6 +346,10 @@ func _run() -> void:
 	popup._render_guild_home()
 	await process_frame
 	_check(popup.find_child("GuildBankPokemonIcon_21", true, false) != null, "stored Pokémon show an icon")
+	var bank_back := popup.find_child("GuildBankBackButton", true, false) as Button
+	if bank_back != null:
+		bank_back.pressed.emit()
+		await process_frame
 	var pokemon_deposit := popup.find_child("GuildBankPokemonDepositButton_22", true, false) as Button
 	if pokemon_deposit != null:
 		pokemon_deposit.pressed.emit()
@@ -355,11 +360,7 @@ func _run() -> void:
 	if donation_dialog != null:
 		donation_dialog.canceled.emit()
 		await process_frame
-	var bank_back := popup.find_child("GuildBankBackButton", true, false) as Button
-	if bank_back != null:
-		bank_back.pressed.emit()
-		await process_frame
-	_check(popup.find_child("GuildBankPokemonPreview", true, false) != null, "back from full Pokémon Vault returns to its overview")
+	_check(popup.find_child("GuildBankPokemonPreview", true, false) != null, "back from full Pokémon Vault returns to its donation overview")
 	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
 	if bank_back != null:
 		bank_back.pressed.emit()
@@ -381,8 +382,9 @@ func _run() -> void:
 	if items_action != null:
 		items_action.pressed.emit()
 		await process_frame
-	_check(popup.find_child("GuildBankItemsPreview", true, false) != null, "Item Storage opens with a read-only overview")
-	_check(popup.find_child("GuildBankItemWithdrawButton_leftovers", true, false) == null, "Item Storage overview hides transaction controls")
+	_check(popup.find_child("GuildBankItemsPreview", true, false) != null, "Item Storage opens with a scalable donation overview")
+	_check(popup.find_child("GuildBankItemWithdrawButton_scale-item-0", true, false) == null, "Item Storage overview hides Guild withdrawal controls")
+	_check(popup.find_child("GuildBankItemDepositButton_exp-share", true, false) != null, "Item Storage overview keeps direct Bag donations available")
 	var scale_item_scroll := popup.find_child("GuildBankItemListScroll", true, false) as ScrollContainer
 	_check(
 		scale_item_scroll != null
@@ -397,10 +399,10 @@ func _run() -> void:
 	if items_full_action != null:
 		items_full_action.pressed.emit()
 		await process_frame
-	_check(popup.find_child("GuildBankItemsWorkspace", true, false) != null, "item storage renders Guild and personal inventories")
+	_check(popup.find_child("GuildBankItemsWorkspace", true, false) != null, "full Item Storage renders its Guild inventory")
 	_check(popup.find_child("GuildBankItemsLogButton", true, false) != null, "Item Storage has a dedicated log action")
 	_check(popup.find_child("GuildBankItemWithdrawButton_leftovers", true, false) != null, "stored reusable items can be withdrawn")
-	_check(popup.find_child("GuildBankItemDepositButton_exp-share", true, false) != null, "reusable bag items can be deposited")
+	_check(popup.find_child("GuildBankItemDepositButton_exp-share", true, false) == null, "full Item Storage focuses only on Guild assets")
 	_check(popup.find_child("GuildBankItemIcon_leftovers", true, false) != null, "stored items show an icon")
 	var stored_item_name := popup.find_child("GuildBankItemName_leftovers", true, false) as Label
 	var stored_item_detail := popup.find_child("GuildBankItemDetail_leftovers", true, false) as Label
@@ -409,14 +411,21 @@ func _run() -> void:
 	_check(stored_item_detail != null and stored_item_detail.text.contains("18 stored") and stored_item_detail.text.contains("17 available") and stored_item_detail.text.contains("1 borrowed"), "stored item quantities and loan availability use a dedicated detail line")
 	var asset_search := popup.find_child("GuildBankAssetSearchInput", true, false) as LineEdit
 	if asset_search != null:
-		asset_search.text = "exp"
+		asset_search.text = "left"
 		asset_search.text_changed.emit(asset_search.text)
 		await process_frame
 	_check(
 		popup.find_child("GuildBankItemRow_leftovers", true, false) != null
-		and not popup.find_child("GuildBankItemRow_leftovers", true, false).visible
-		and popup.find_child("GuildBankItemRow_exp-share", true, false).visible,
-		"full Item Storage filters both Guild storage and the player's Bag live"
+		and popup.find_child("GuildBankItemRow_leftovers", true, false).visible,
+		"full Item Storage searches Guild assets live"
+	)
+	if asset_search != null:
+		asset_search.text = "exp"
+		asset_search.text_changed.emit(asset_search.text)
+		await process_frame
+	_check(
+		popup.find_child("GuildBankFilterEmptyState", true, false).visible,
+		"full Item Storage does not mix personal Bag results into Guild search"
 	)
 	if asset_search != null:
 		asset_search.text = ""
@@ -427,8 +436,7 @@ func _run() -> void:
 		asset_filter.item_selected.emit(2)
 		await process_frame
 	_check(
-		popup.find_child("GuildBankItemRow_leftovers", true, false).visible
-		and not popup.find_child("GuildBankItemRow_exp-share", true, false).visible,
+		popup.find_child("GuildBankItemRow_leftovers", true, false).visible,
 		"Item Storage lendable filter focuses on borrowable Guild assets"
 	)
 	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
@@ -444,8 +452,9 @@ func _run() -> void:
 	if resources_action != null:
 		resources_action.pressed.emit()
 		await process_frame
-	_check(popup.find_child("GuildBankResourcesPreview", true, false) != null, "Resources opens with a read-only overview")
-	_check(popup.find_child("GuildBankResourceWithdrawButton_potion", true, false) == null, "Resources overview hides transaction controls")
+	_check(popup.find_child("GuildBankResourcesPreview", true, false) != null, "Resources opens with a scalable donation overview")
+	_check(popup.find_child("GuildBankResourceWithdrawButton_potion", true, false) == null, "Resources overview hides Guild withdrawal controls")
+	_check(popup.find_child("GuildBankResourceDepositButton_poke-ball", true, false) != null, "Resources overview keeps direct Bag donations available")
 	var resources_full_action := popup.find_child("GuildBankResourcesOpenFullButton", true, false) as Button
 	if resources_full_action != null:
 		resources_full_action.pressed.emit()
@@ -453,7 +462,7 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankResourcesWorkspace", true, false) != null, "Resources opens a dedicated consumable workspace")
 	_check(popup.find_child("GuildBankResourcesLogButton", true, false) != null, "Resources has a dedicated transaction log")
 	_check(popup.find_child("GuildBankResourceWithdrawButton_potion", true, false) != null, "Guild consumables can be taken")
-	_check(popup.find_child("GuildBankResourceDepositButton_poke-ball", true, false) != null, "personal consumables can be donated")
+	_check(popup.find_child("GuildBankResourceDepositButton_poke-ball", true, false) == null, "full Resources focuses only on Guild supplies")
 	_check(popup.find_child("GuildBankItemBorrowButton_potion", true, false) == null, "Resources never expose borrowing")
 	_check(popup.find_child("GuildBankResourceWithdrawButton_potion", true, false).tooltip_text == "", "authorized Resources withdrawal is immediately available")
 	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button

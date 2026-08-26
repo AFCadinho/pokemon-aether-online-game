@@ -1959,28 +1959,53 @@ func _build_guild_bank_category_preview(category: String) -> Control:
 	open_button.pressed.connect(_open_guild_bank_full_view)
 	_apply_button_style(open_button, "primary")
 	heading.add_child(open_button)
+	if category == "resources":
+		var ownership := _localized_label("ui.guild.bank.resources.ownership", 10, UI_WARNING)
+		ownership.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		workspace.add_child(ownership)
+	var columns := GridContainer.new()
+	columns.name = "GuildBank%sPreviewColumns" % category.capitalize()
+	columns.columns = 2
+	columns.add_theme_constant_override("h_separation", 10)
+	workspace.add_child(columns)
 	match category:
 		"pokemon":
-			workspace.add_child(_build_guild_pokemon_list(
+			columns.add_child(_build_guild_pokemon_list(
 				"ui.guild.bank.pokemon.stored",
 				_array_from_value(guild_bank_state.get("pokemon", [])),
 				true,
 				true
 			))
+			columns.add_child(_build_guild_pokemon_list(
+				"ui.guild.bank.pokemon.yours",
+				_array_from_value(guild_bank_state.get("depositablePokemon", [])),
+				false
+			))
 		"items":
-			workspace.add_child(_build_guild_item_list(
+			columns.add_child(_build_guild_item_list(
 				"ui.guild.bank.items.stored",
 				_array_from_value(guild_bank_state.get("items", [])),
 				"withdraw",
 				false,
 				true
 			))
+			columns.add_child(_build_guild_item_list(
+				"ui.guild.bank.items.yours",
+				_array_from_value(guild_bank_state.get("inventory", [])),
+				"deposit"
+			))
 		"resources":
-			workspace.add_child(_build_guild_item_list(
+			columns.add_child(_build_guild_item_list(
 				"ui.guild.bank.resources.stored",
 				_array_from_value(guild_bank_state.get("resources", [])),
 				"withdraw",
 				true,
+				true
+			))
+			columns.add_child(_build_guild_item_list(
+				"ui.guild.bank.resources.yours",
+				_array_from_value(guild_bank_state.get("resourceInventory", [])),
+				"deposit",
 				true
 			))
 	return workspace
@@ -2068,21 +2093,11 @@ func _build_guild_items_workspace() -> Control:
 	workspace.name = "GuildBankItemsWorkspace"
 	workspace.add_theme_constant_override("separation", 10)
 	workspace.add_child(_build_guild_bank_asset_toolbar("items"))
-	var columns := GridContainer.new()
-	columns.name = "GuildBankItemsColumns"
-	columns.columns = 2
-	columns.add_theme_constant_override("h_separation", 10)
-	columns.add_child(_build_guild_item_list(
+	workspace.add_child(_build_guild_item_list(
 		"ui.guild.bank.items.stored",
 		_array_from_value(guild_bank_state.get("items", [])),
 		"withdraw"
 	))
-	columns.add_child(_build_guild_item_list(
-		"ui.guild.bank.items.yours",
-		_array_from_value(guild_bank_state.get("inventory", [])),
-		"deposit"
-	))
-	workspace.add_child(columns)
 	var borrowed_items := _array_from_value(guild_bank_state.get("borrowedItems", []))
 	if not borrowed_items.is_empty():
 		workspace.add_child(_build_guild_borrowed_item_list(borrowed_items))
@@ -2099,22 +2114,12 @@ func _build_guild_resources_workspace() -> Control:
 	var ownership := _localized_label("ui.guild.bank.resources.ownership", 10, UI_WARNING)
 	ownership.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	workspace.add_child(ownership)
-	var columns := GridContainer.new()
-	columns.columns = 2
-	columns.add_theme_constant_override("h_separation", 10)
-	columns.add_child(_build_guild_item_list(
+	workspace.add_child(_build_guild_item_list(
 		"ui.guild.bank.resources.stored",
 		_array_from_value(guild_bank_state.get("resources", [])),
 		"withdraw",
 		true
 	))
-	columns.add_child(_build_guild_item_list(
-		"ui.guild.bank.resources.yours",
-		_array_from_value(guild_bank_state.get("resourceInventory", [])),
-		"deposit",
-		true
-	))
-	workspace.add_child(columns)
 	workspace.add_child(_build_guild_bank_filter_empty_state())
 	_apply_guild_bank_asset_filters.call_deferred()
 	return workspace
@@ -2331,21 +2336,11 @@ func _build_guild_pokemon_workspace() -> Control:
 	workspace.name = "GuildBankPokemonWorkspace"
 	workspace.add_theme_constant_override("separation", 10)
 	workspace.add_child(_build_guild_bank_asset_toolbar("pokemon"))
-	var columns := GridContainer.new()
-	columns.name = "GuildBankPokemonColumns"
-	columns.columns = 2
-	columns.add_theme_constant_override("h_separation", 10)
-	columns.add_child(_build_guild_pokemon_list(
+	workspace.add_child(_build_guild_pokemon_list(
 		"ui.guild.bank.pokemon.stored",
 		_array_from_value(guild_bank_state.get("pokemon", [])),
 		true
 	))
-	columns.add_child(_build_guild_pokemon_list(
-		"ui.guild.bank.pokemon.yours",
-		_array_from_value(guild_bank_state.get("depositablePokemon", [])),
-		false
-	))
-	workspace.add_child(columns)
 	workspace.add_child(_build_guild_bank_filter_empty_state())
 	_apply_guild_bank_asset_filters.call_deferred()
 	return workspace
