@@ -365,7 +365,12 @@ func _verify_completed_download() -> void:
 		if actual_sha256 != expected_sha256:
 			if checksum_retry_count < 1:
 				checksum_retry_count += 1
-				_reset_partial_download("checksum mismatch")
+				var clean_restart_error := _prepare_clean_checksum_retry()
+				if clean_restart_error != OK:
+					_fail_terminal(
+						"could not prepare a clean checksum retry: %s" % error_string(clean_restart_error)
+					)
+					return
 				_schedule_retry("checksum mismatch required a clean restart", 0.0, false)
 				return
 			_fail_terminal("download checksum mismatch")
@@ -559,6 +564,43 @@ func _reset_partial_download(reason: String) -> void:
 	speed_sample_bytes = 0
 	recent_bytes_per_second = 0.0
 	_emit_event("partial_reset", {"reason": reason})
+
+
+func _prepare_clean_checksum_retry() -> Error:
+	_close_connection()
+	var corrupt_part_path := part_path
+	var corrupt_metadata_path := metadata_path
+	_remove_file(corrupt_part_path)
+	_remove_file(corrupt_metadata_path)
+
+	# A virus scanner or another Windows process can temporarily retain the
+	# completed ZIP. Reusing its deterministic path would then turn the promised
+	# clean retry into another Range request against the same corrupt bytes.
+	# Always select a previously unused path, independent of whether deletion of
+	# the corrupt file succeeded.
+	var base_path := corrupt_part_path.trim_suffix(".part")
+	var selected_path := ""
+	for suffix in range(1, 1000):
+		var candidate := "%s.clean-%d.part" % [base_path, suffix]
+		if not FileAccess.file_exists(candidate) and not FileAccess.file_exists("%s.json" % candidate):
+			selected_path = candidate
+			break
+	if selected_path.is_empty():
+		return ERR_ALREADY_EXISTS
+
+	part_path = selected_path
+	metadata_path = "%s.json" % part_path
+	bytes_received = 0
+	stored_etag = ""
+	speed_sample_at_msec = Time.get_ticks_msec()
+	speed_sample_bytes = 0
+	recent_bytes_per_second = 0.0
+	_emit_event("partial_reset", {
+		"reason": "checksum mismatch",
+		"fresh_file": true,
+		"corrupt_file_removed": not FileAccess.file_exists(corrupt_part_path),
+	})
+	return OK
 
 
 func _write_metadata() -> void:

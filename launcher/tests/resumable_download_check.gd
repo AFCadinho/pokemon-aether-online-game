@@ -183,6 +183,7 @@ func _run_checksum_failure_case() -> void:
 	_check(bool(result.get("failed", false)), "checksum mismatch fails after one clean redownload")
 	_check(_event_count(events, "download_attempt") == 2, "checksum mismatch performs exactly one clean redownload")
 	_check(_has_event(events, "partial_reset"), "checksum mismatch discards corrupt partial data")
+	_check(_checksum_retry_uses_fresh_file(events), "checksum retry uses a guaranteed fresh partial file")
 	service.queue_free()
 	await process_frame
 
@@ -218,6 +219,17 @@ func _event_count(events: Array[Dictionary], event_name: String) -> int:
 		if str(event.get("event", "")) == event_name:
 			count += 1
 	return count
+
+
+func _checksum_retry_uses_fresh_file(events: Array[Dictionary]) -> bool:
+	var saw_fresh_reset := false
+	var attempt_offsets: Array[int] = []
+	for event: Dictionary in events:
+		if str(event.get("event", "")) == "partial_reset" and bool(event.get("fresh_file", false)):
+			saw_fresh_reset = true
+		if str(event.get("event", "")) == "download_attempt":
+			attempt_offsets.append(int(event.get("offset", -1)))
+	return saw_fresh_reset and attempt_offsets.size() == 2 and attempt_offsets[1] == 0
 
 
 func _remove_test_downloads() -> void:

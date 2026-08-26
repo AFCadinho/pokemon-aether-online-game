@@ -1766,6 +1766,7 @@ func _on_download_diagnostic_event(event: Dictionary) -> void:
 		"content_range", "accept_ranges", "edge", "duration_seconds", "stalls",
 		"resumed", "resumed_bytes", "expected_size", "actual_size",
 		"time_to_first_byte_seconds", "last_failure",
+		"fresh_file", "corrupt_file_removed",
 	]
 	for field_name: String in field_names:
 		if event.has(field_name) and str(event[field_name]) != "":
