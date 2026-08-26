@@ -10,7 +10,6 @@ const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
 const DEFAULT_DISCORD_URL := "https://discord.com/invite/b6WexWT8HX"
 const DEFAULT_PATCH_NOTES_URL := "https://pokeaether.com/patch-notes"
 const DEFAULT_CREDITS_URL := "https://pokeaether.com/credits"
-const DEFAULT_STATUS_URL := "https://pokeaether.com/auth/status"
 const DEFAULT_PRESENCE_URL := "https://admin.pokeaether.com/presence/online-count"
 const LAUNCHER_CONFIG_FILE := "res://config/launcher_config.json"
 const DEFAULT_INSTALL_DIR := "user://game"
@@ -115,7 +114,7 @@ var current_download: Dictionary = {}
 var update_required := false
 var manifest_url := DEFAULT_MANIFEST_URL
 var news_url := DEFAULT_NEWS_URL
-var server_status_url := DEFAULT_STATUS_URL
+var server_status_url := LauncherServerHealthService.DEFAULT_STATUS_URL
 var presence_url := DEFAULT_PRESENCE_URL
 var discord_url := DEFAULT_DISCORD_URL
 var patch_notes_url := DEFAULT_PATCH_NOTES_URL
@@ -2426,7 +2425,7 @@ func _load_launcher_config() -> void:
 	if manifest_url.is_empty():
 		manifest_url = DEFAULT_MANIFEST_URL
 	if server_status_url.is_empty():
-		server_status_url = DEFAULT_STATUS_URL
+		server_status_url = LauncherServerHealthService.DEFAULT_STATUS_URL
 	if presence_url.is_empty():
 		presence_url = DEFAULT_PRESENCE_URL
 
