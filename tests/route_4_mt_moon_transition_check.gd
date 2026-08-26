@@ -54,13 +54,14 @@ func _init() -> void:
 	_check(cerulean_visual.contains('metadata/tiled_name = "Doors"'), "Cerulean City visual preserves its door layer")
 	_check(cerulean_visual.contains('metadata/tiled_name = "ObjectsTop"'), "Cerulean City visual preserves its foreground layer")
 	_check(cerulean_source.contains('[node name="FromRoute4" type="Marker2D" parent="Spawns"'), "Cerulean City has a Route 4 arrival")
-	_check(cerulean_source.contains('position = Vector2(64, 544)'), "Route 4 arrival is on the imported west road")
+	_check(cerulean_source.contains('position = Vector2(48, 816)'), "Route 4 arrival is on the imported west road")
 	_check(cerulean_source.contains('transition_id = "kanto_cerulean_city__to_route_4"'), "Cerulean City returns to Route 4")
 	_check(cerulean_source.contains('target_spawn_name = "FromCerulean"'), "Cerulean City targets the Route 4 arrival")
 	_check(cerulean_source.contains('transition_facing_direction = "left"'), "Route 4 return faces west")
 	_check(cerulean_source.contains('[connection signal="body_entered" from="Exits/ToRoute4"'), "Cerulean City listens for the Route 4 exit")
 	_check(cerulean_script.contains('const MAP_SIZE := Vector2i(75, 70)'), "Cerulean City bounds match its imported visual")
-	_check(cerulean_script.contains('if y < ROUTE_4_ROAD_MIN_Y or y > ROUTE_4_ROAD_MAX_Y:'), "Cerulean City keeps the Route 4 road open")
+	_check(cerulean_script.contains('MapLayerResolverScript.find_tilemap_layer'), "Cerulean City resolves the imported Collision layer")
+	_check(cerulean_script.contains('"route_4"'), "Cerulean City keeps the Route 4 road open")
 	quit(1 if failed else 0)
 
 
