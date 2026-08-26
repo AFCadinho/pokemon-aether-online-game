@@ -363,6 +363,15 @@ func update_member_role(user_id: int, role: String) -> Dictionary:
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
 
 
+func kick_member(user_id: int) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_HOME_ENDPOINT + "/members/%d" % user_id,
+		HTTPClient.METHOD_DELETE,
+		""
+	)
+	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
 func update_member_bank_permissions(user_id: int, overrides: Dictionary) -> Dictionary:
 	var response := await _authenticated_request(
 		GUILD_HOME_ENDPOINT + "/members/%d/bank-permissions" % user_id,

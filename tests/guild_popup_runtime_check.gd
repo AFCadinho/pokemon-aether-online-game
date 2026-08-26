@@ -750,7 +750,7 @@ func _run() -> void:
 	_check(popup.find_child("GuildLogSearchField", true, false) != null, "Guild log search has a visible field label")
 	_check(popup.find_child("GuildLogActionField", true, false) != null, "Guild log action choice has a visible field label")
 	_check(log_search != null, "Guild logs expose a search field")
-	_check(log_action_filter != null and log_action_filter.item_count == 5, "Guild history exposes its relevant action filters")
+	_check(log_action_filter != null and log_action_filter.item_count == 6, "Guild history exposes its relevant action filters")
 	_check(log_period_filter != null and log_period_filter.item_count == 5, "Guild logs offer all-time and useful recent periods")
 	_check(log_filter_fields != null and log_filter_fields.size.x <= history_window.size.x - 32, "Guild log filter fields fit inside the window")
 	if log_period_filter != null:
@@ -801,6 +801,11 @@ func _run() -> void:
 		"permission managers can edit Guild Bank rights from the action menu"
 	)
 	_check(
+		managed_actions != null
+		and managed_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_KICK) >= 0,
+		"Guild leaders can remove members from the action menu"
+	)
+	_check(
 		popup.find_child("GuildMemberPermissionOverrideCount_2", true, false) != null,
 		"member cards identify custom Guild Bank rights"
 	)
@@ -831,6 +836,32 @@ func _run() -> void:
 	if bank_permissions_dialog != null:
 		bank_permissions_dialog.canceled.emit()
 		await process_frame
+	if managed_actions != null:
+		managed_actions.get_popup().id_pressed.emit(GuildPopup.GUILD_MEMBER_ACTION_KICK)
+		await process_frame
+	var kick_dialog := popup.find_child("GuildMemberKickDialog_2", true, false) as ConfirmationDialog
+	_check(kick_dialog != null and kick_dialog.visible, "removing a Guild member asks for confirmation")
+	_check(kick_dialog != null and kick_dialog.dialog_text.contains("Maple"), "Guild removal confirmation identifies the selected Trainer")
+	_check_dialog_styled(kick_dialog, "Guild member removal dialog")
+	if kick_dialog != null:
+		kick_dialog.canceled.emit()
+		await process_frame
+	var captain_member_actions := popup._build_guild_member_actions_button(
+		{"userId": 2, "role": "member", "online": true}, "captain", 1, false
+	)
+	_check(
+		captain_member_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_KICK) >= 0,
+		"Guild Captains can remove Members and Recruits"
+	)
+	var captain_peer_actions := popup._build_guild_member_actions_button(
+		{"userId": 2, "role": "captain", "online": true}, "captain", 1, false
+	)
+	_check(
+		captain_peer_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_KICK) < 0,
+		"Guild Captains cannot remove another Captain"
+	)
+	captain_member_actions.free()
+	captain_peer_actions.free()
 	_check(popup.find_child("GuildMemberCard_1", true, false) != null, "member roster uses distinct player cards")
 	var online_presence := popup.find_child("GuildMemberPresenceLabel_2", true, false) as Label
 	var offline_presence := popup.find_child("GuildMemberPresenceLabel_3", true, false) as Label
@@ -1078,6 +1109,11 @@ func _run() -> void:
 		regular_member_actions != null
 		and regular_member_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_BANK_RIGHTS) < 0,
 		"regular members cannot edit Guild Bank rights"
+	)
+	_check(
+		regular_member_actions != null
+		and regular_member_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_KICK) < 0,
+		"regular members cannot remove Guild members"
 	)
 	_check(
 		popup._guild_bank_borrow_tooltip().contains("personally disabled"),

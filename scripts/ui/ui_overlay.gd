@@ -41491,6 +41491,8 @@ func _on_guild_notification_received(notification: Dictionary) -> void:
 			key = "ui.guild.notification.application_declined"
 		"guild_member_left":
 			key = "ui.guild.notification.member_left"
+		"guild_member_kicked":
+			key = "ui.guild.notification.member_kicked"
 		_:
 			return
 	add_system_message(LocalizationManager.text(key, {
@@ -41498,6 +41500,15 @@ func _on_guild_notification_received(notification: Dictionary) -> void:
 		"actor": str(notification.get("actorName", "Guild staff")),
 		"trainer": str(notification.get("actorName", "Trainer")),
 	}))
+	if kind == "guild_member_kicked":
+		_refresh_after_guild_membership_notification.call_deferred()
+
+
+func _refresh_after_guild_membership_notification() -> void:
+	await GuildService.load_directory()
+	if guild_popup != null and guild_popup.visible:
+		await guild_popup._refresh_from_server()
+
 
 func add_system_warning(text: String) -> void:
 	_add_chat_message(text, false, CHAT_CATEGORY_SYSTEM_WARNING)

@@ -53,6 +53,8 @@ func _init() -> void:
 	_check_contains(service_source, '"announcement": str(body.get("announcement", ""))', "guild home preserves the current announcement")
 	_check_contains(service_source, '"loanDurationSeconds": loan_duration_seconds', "guild settings preserve the selected loan duration")
 	_check_contains(service_source, "func update_member_role", "guild service updates compact Guild ranks")
+	_check_contains(service_source, "func kick_member", "guild service removes authorized Guild members")
+	_check_contains(service_source, 'HTTPClient.METHOD_DELETE', "Guild member removal uses the dedicated destructive endpoint")
 	_check_contains(service_source, "func update_member_bank_permissions", "guild service updates personal Guild Bank rights")
 	_check_contains(service_source, '"/members/%d/bank-permissions"', "Guild Bank rights use the dedicated member endpoint")
 	_check_contains(service_source, "func update_emblem", "guild service updates the emblem")

@@ -120,6 +120,8 @@ func _init() -> void:
 	_check_contains(popup_source, "GuildMemberActionsButton_", "Guild member management uses one compact action menu")
 	_check_contains(popup_source, "GUILD_MEMBER_ACTION_CHANGE_RANK", "Guild leaders can change ranks from member actions")
 	_check_contains(popup_source, "GUILD_MEMBER_ACTION_BANK_RIGHTS", "permission managers can edit member Guild Bank rights")
+	_check_contains(popup_source, "GUILD_MEMBER_ACTION_KICK", "Guild Leaders and Captains can remove members from member actions")
+	_check_contains(popup_source, "GuildMemberKickDialog_", "Guild member removal requires confirmation")
 	_check_contains(popup_source, "func _build_guild_member_actions_button", "member controls stay grouped behind one action button")
 	_check_contains(popup_source, "func _open_guild_member_bank_permissions", "Guild Bank rights open as per-member overrides")
 	_check_contains(popup_source, '"update_member_bank_permissions"', "Guild Bank permission changes use the authoritative service")
@@ -163,6 +165,7 @@ func _init() -> void:
 	_check_contains(overlay_source, '"guild.application.updated", "guild.notification.received"', "main overlay receives realtime Guild notifications")
 	_check_contains(overlay_source, "_on_guild_notification_received", "Guild application decisions become system messages")
 	_check_contains(overlay_source, '"ui.guild.notification.member_left"', "Guild departures become system messages")
+	_check_contains(overlay_source, '"ui.guild.notification.member_kicked"', "removed Guild members receive a system message")
 	_check_contains(overlay_source, "_on_guild_lobby_teleport_requested", "main overlay applies the authorized Lobby teleport")
 
 	quit(1 if failed else 0)

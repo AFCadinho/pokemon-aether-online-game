@@ -38,6 +38,7 @@ const GUILD_ASSIGNABLE_ROLES: Array[String] = ["recruit", "member", "captain"]
 const GUILD_MEMBER_ACTION_PM := 1
 const GUILD_MEMBER_ACTION_CHANGE_RANK := 2
 const GUILD_MEMBER_ACTION_BANK_RIGHTS := 3
+const GUILD_MEMBER_ACTION_KICK := 4
 const GUILD_BANK_PERMISSIONS: Array[String] = [
 	"bank_deposit",
 	"bank_withdraw",
@@ -3416,7 +3417,7 @@ func _guild_log_action_filter(category: String) -> OptionButton:
 	select.set_item_metadata(0, "")
 	var actions: Array[String] = []
 	if category == "guild":
-		actions.assign(["joined", "left", "rank_changed", "bank_permission_changed"])
+		actions.assign(["joined", "left", "kicked", "rank_changed", "bank_permission_changed"])
 	elif category in ["funds", "resources"]:
 		actions.assign(["deposit", "withdraw"])
 	else:
@@ -3654,7 +3655,7 @@ func _guild_log_player_names(category: String, entry: Dictionary) -> Array[Strin
 	var field_names: Array[String] = []
 	if category == "guild":
 		var action := str(entry.get("action", ""))
-		field_names.assign(["actor", "target"] if action in ["rank_changed", "bank_permission_changed"] else ["target"])
+		field_names.assign(["actor", "target"] if action in ["kicked", "rank_changed", "bank_permission_changed"] else ["target"])
 	else:
 		field_names.assign(["actor"])
 	var names: Array[String] = []
@@ -3686,6 +3687,11 @@ func _guild_log_entry_text(category: String, entry: Dictionary) -> String:
 			})
 		if action == "left":
 			return _t("ui.guild.log.guild.left", {"trainer": str(entry.get("target", _t("common.unknown")))})
+		if action == "kicked":
+			return _t("ui.guild.log.guild.kicked", {
+				"actor": str(entry.get("actor", _t("common.unknown"))),
+				"trainer": str(entry.get("target", _t("common.unknown"))),
+			})
 		if action == "rank_changed":
 			return _t("ui.guild.log.guild.rank_changed", {
 				"actor": str(entry.get("actor", _t("common.unknown"))),
@@ -4238,6 +4244,13 @@ func _build_guild_member_actions_button(
 	var is_self := user_id == own_user_id
 	var can_change_rank := own_role == "leader" and member_role != "leader" and not is_self
 	var can_edit_bank_rights := can_manage_permissions and member_role != "leader" and not is_self
+	var can_kick := (
+		not is_self
+		and (
+			(own_role == "leader" and member_role != "leader")
+			or (own_role in ["captain", "officer"] and member_role in ["member", "recruit"])
+		)
+	)
 	var actions := MenuButton.new()
 	actions.name = "GuildMemberActionsButton_%d" % user_id
 	actions.custom_minimum_size = Vector2(105, 36)
@@ -4247,7 +4260,7 @@ func _build_guild_member_actions_button(
 		"tooltip_text",
 		"ui.guild.member.message_self" if is_self else "ui.guild.member.actions_tooltip"
 	)
-	actions.disabled = is_self or (not online and not can_change_rank and not can_edit_bank_rights)
+	actions.disabled = is_self or (not online and not can_change_rank and not can_edit_bank_rights and not can_kick)
 	_apply_button_style(actions, "primary" if not is_self else "default")
 	var popup := actions.get_popup()
 	_apply_popup_menu_style(popup)
@@ -4258,12 +4271,16 @@ func _build_guild_member_actions_button(
 			popup.get_item_index(GUILD_MEMBER_ACTION_PM),
 			_t("ui.guild.member.message_tooltip" if online else "ui.guild.member.message_offline")
 		)
-	if can_change_rank or can_edit_bank_rights:
+	if can_change_rank or can_edit_bank_rights or can_kick:
 		popup.add_separator()
 	if can_change_rank:
 		popup.add_item(_t("ui.guild.member.change_rank"), GUILD_MEMBER_ACTION_CHANGE_RANK)
 	if can_edit_bank_rights:
 		popup.add_item(_t("ui.guild.permissions.action"), GUILD_MEMBER_ACTION_BANK_RIGHTS)
+	if can_kick:
+		if can_change_rank or can_edit_bank_rights:
+			popup.add_separator()
+		popup.add_item(_t("ui.guild.member.kick"), GUILD_MEMBER_ACTION_KICK)
 	popup.id_pressed.connect(_on_guild_member_action_selected.bind(member.duplicate(true)))
 	return actions
 
@@ -4276,6 +4293,8 @@ func _on_guild_member_action_selected(action_id: int, member: Dictionary) -> voi
 			_open_guild_member_rank_dialog(member)
 		GUILD_MEMBER_ACTION_BANK_RIGHTS:
 			_open_guild_member_bank_permissions(member)
+		GUILD_MEMBER_ACTION_KICK:
+			_open_guild_member_kick_dialog(member)
 
 
 func _on_guild_member_private_message_pressed(member: Dictionary) -> void:
@@ -4288,6 +4307,41 @@ func _on_guild_member_private_message_pressed(member: Dictionary) -> void:
 		"displayName": str(member.get("displayName", member.get("username", ""))),
 		"online": true,
 	})
+
+
+func _open_guild_member_kick_dialog(member: Dictionary) -> void:
+	var user_id := int(member.get("userId", 0))
+	if user_id <= 0:
+		return
+	var trainer_name := str(member.get("displayName", member.get("username", _t("common.unknown"))))
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "GuildMemberKickDialog_%d" % user_id
+	dialog.title = _t("ui.guild.member.kick_title")
+	dialog.dialog_text = _t("ui.guild.member.kick_confirm", {"trainer": trainer_name})
+	dialog.ok_button_text = _t("ui.guild.member.kick_confirm_action")
+	dialog.cancel_button_text = _t("common.cancel")
+	_apply_guild_confirmation_style(dialog, "danger")
+	add_child(dialog)
+	dialog.confirmed.connect(_kick_guild_member.bind(user_id, trainer_name, dialog))
+	dialog.canceled.connect(dialog.queue_free)
+	dialog.popup_centered(Vector2i(470, 220))
+
+
+func _kick_guild_member(user_id: int, trainer_name: String, dialog: ConfirmationDialog) -> void:
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		if is_instance_valid(dialog):
+			dialog.queue_free()
+		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		return
+	var result := _dictionary(await guild_service.call("kick_member", user_id))
+	if is_instance_valid(dialog):
+		dialog.queue_free()
+	if not bool(result.get("success", false)):
+		_set_member_status(str(result.get("error", _t("ui.guild.member.kick_error"))), true)
+		return
+	_apply_home_result(result)
+	_set_member_status(_t("ui.guild.member.kick_success", {"trainer": trainer_name}), false)
 
 
 func _guild_member_presence_text(member: Dictionary) -> String:
@@ -4482,7 +4536,7 @@ func _select_guild_loan_duration(seconds: int) -> void:
 
 func _selected_guild_loan_duration() -> int:
 	if settings_loan_duration_select == null or settings_loan_duration_select.selected < 0:
-		return 86400
+		return 3600
 	return int(settings_loan_duration_select.get_item_metadata(settings_loan_duration_select.selected))
 
 
