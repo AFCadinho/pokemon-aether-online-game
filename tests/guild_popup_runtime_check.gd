@@ -176,8 +176,18 @@ func _run() -> void:
 	_check(rewards_list != null and rewards_list.get_child_count() == 20, "level unlock roadmap shows all twenty levels")
 	var level_two_unlocks := popup.find_child("GuildLevelRewardUnlocks_2", true, false) as Label
 	_check(level_two_unlocks != null and level_two_unlocks.text.contains("+3"), "level two shows its member capacity unlock")
+	var level_three_unlocks := popup.find_child("GuildLevelRewardUnlocks_3", true, false) as Label
+	_check(level_three_unlocks != null and level_three_unlocks.text.contains("+15"), "level three starts the item capacity checkpoints")
 	var level_five_unlocks := popup.find_child("GuildLevelRewardUnlocks_5", true, false) as Label
-	_check(level_five_unlocks != null and level_five_unlocks.text.contains("+5") and level_five_unlocks.text.contains("+2"), "level five shows both bank capacity unlocks")
+	_check(level_five_unlocks != null and level_five_unlocks.text.contains("+10"), "level five starts the Pokémon capacity checkpoints")
+	var roadmap: Array = popup.guild_home.get("guild", {}).get("levelRewards", [])
+	_check(
+		roadmap.size() == 20
+		and int((roadmap[17] as Dictionary).get("memberCapacity", 0)) == 50
+		and int((roadmap[18] as Dictionary).get("bankItemCapacity", 0)) == 200
+		and int((roadmap[19] as Dictionary).get("bankPokemonCapacity", 0)) == 120,
+		"level roadmap reaches every configured maximum capacity"
+	)
 	var rewards_close := popup.find_child("CloseGuildLevelRewardsButton", true, false) as Button
 	if rewards_close != null:
 		rewards_close.pressed.emit()

@@ -365,17 +365,29 @@ func show_debug_member_preview() -> void:
 
 func _debug_guild_level_rewards() -> Array[Dictionary]:
 	var rewards: Array[Dictionary] = []
+	var member_rewards := {2: 3, 4: 3, 6: 3, 8: 3, 10: 3, 12: 3, 14: 4, 16: 4, 18: 4}
+	var item_rewards := {3: 15, 7: 20, 11: 25, 15: 35, 19: 55}
+	var pokemon_rewards := {5: 10, 9: 15, 13: 20, 17: 20, 20: 25}
+	var member_capacity := 20
+	var item_capacity := 50
+	var pokemon_capacity := 30
 	for index in range(DEBUG_GUILD_LEVEL_THRESHOLDS.size()):
 		var level := index + 1
+		var member_increase := int(member_rewards.get(level, 0))
+		var item_increase := int(item_rewards.get(level, 0))
+		var pokemon_increase := int(pokemon_rewards.get(level, 0))
+		member_capacity += member_increase
+		item_capacity += item_increase
+		pokemon_capacity += pokemon_increase
 		rewards.append({
 			"level": level,
 			"requiredTotalExperience": DEBUG_GUILD_LEVEL_THRESHOLDS[index],
-			"memberCapacity": 20 if level == 1 else 23,
-			"bankItemCapacity": 50 if level < 5 else 55,
-			"bankPokemonCapacity": 30 if level < 5 else 32,
-			"memberCapacityIncrease": 20 if level == 1 else (3 if level == 2 else 0),
-			"bankItemCapacityIncrease": 50 if level == 1 else (5 if level == 5 else 0),
-			"bankPokemonCapacityIncrease": 30 if level == 1 else (2 if level == 5 else 0),
+			"memberCapacity": member_capacity,
+			"bankItemCapacity": item_capacity,
+			"bankPokemonCapacity": pokemon_capacity,
+			"memberCapacityIncrease": 20 if level == 1 else member_increase,
+			"bankItemCapacityIncrease": 50 if level == 1 else item_increase,
+			"bankPokemonCapacityIncrease": 30 if level == 1 else pokemon_increase,
 		})
 	return rewards
 
