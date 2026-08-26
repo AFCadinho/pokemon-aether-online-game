@@ -150,6 +150,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/route_4_mt_moon_transition_check.gd",
 	"res://tests/route_4_collision_boundary_check.gd",
 	"res://tests/route_4_tall_grass_visual_check.gd",
+	"res://tests/route_4_encounters_and_trainers_check.gd",
 	"res://tests/pokemon_center_template_structure_check.gd",
 	"res://tests/aether_atelier_check.gd",
 	"res://tests/aether_atelier_runtime_check.gd",
