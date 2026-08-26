@@ -185,7 +185,7 @@ func load_history(before_id: int = 0) -> Dictionary:
 
 func load_bank_log(category: String, before_id: int = 0) -> Dictionary:
 	var normalized := category.strip_edges().to_lower()
-	if not normalized in ["funds", "items", "pokemon"]:
+	if not normalized in ["funds", "items", "pokemon", "resources"]:
 		return {"success": false, "error": "Unknown Guild Bank log."}
 	var path := GUILD_BANK_ENDPOINT + "/logs/%s?limit=50" % normalized
 	if before_id > 0:
@@ -208,6 +208,14 @@ func deposit_bank_item(item_id: String, quantity: int) -> Dictionary:
 
 func withdraw_bank_item(item_id: String, quantity: int) -> Dictionary:
 	return await _bank_action("/items/withdraw", {"itemId": item_id, "quantity": quantity})
+
+
+func deposit_bank_resource(item_id: String, quantity: int) -> Dictionary:
+	return await _bank_action("/resources/deposit", {"itemId": item_id, "quantity": quantity})
+
+
+func withdraw_bank_resource(item_id: String, quantity: int) -> Dictionary:
+	return await _bank_action("/resources/withdraw", {"itemId": item_id, "quantity": quantity})
 
 
 func borrow_bank_item(item_id: String, quantity: int) -> Dictionary:
@@ -465,6 +473,8 @@ func _bank_result(value: Variant) -> Dictionary:
 		"funds": _dictionary(body.get("funds", {})).duplicate(true),
 		"items": _array(body.get("items", [])).duplicate(true),
 		"inventory": _array(body.get("inventory", [])).duplicate(true),
+		"resources": _array(body.get("resources", [])).duplicate(true),
+		"resourceInventory": _array(body.get("resourceInventory", [])).duplicate(true),
 		"pokemon": _array(body.get("pokemon", [])).duplicate(true),
 		"depositablePokemon": _array(body.get("depositablePokemon", [])).duplicate(true),
 		"party": _array(_dictionary(body.get("party", {})).get("party", [])).duplicate(true),

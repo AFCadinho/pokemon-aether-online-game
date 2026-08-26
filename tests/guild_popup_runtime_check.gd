@@ -203,13 +203,16 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankFundsCard", true, false) != null, "Guild Bank shows shared funds")
 	_check(popup.find_child("GuildBankPokemonCard", true, false) != null, "Guild Bank shows Pokémon storage")
 	_check(popup.find_child("GuildBankItemsCard", true, false) != null, "Guild Bank shows item storage")
+	_check(popup.find_child("GuildBankResourcesCard", true, false) != null, "Guild Bank shows shared consumable resources")
 	var funds_action := popup.find_child("GuildBankFundsAction", true, false) as Button
 	var pokemon_action := popup.find_child("GuildBankPokemonAction", true, false) as Button
 	var items_action := popup.find_child("GuildBankItemsAction", true, false) as Button
+	var resources_action := popup.find_child("GuildBankResourcesAction", true, false) as Button
 	_check(
 		funds_action != null and not funds_action.disabled
 		and pokemon_action != null and not pokemon_action.disabled
-		and items_action != null and not items_action.disabled,
+		and items_action != null and not items_action.disabled
+		and resources_action != null and not resources_action.disabled,
 		"every Guild member can open each bank category"
 	)
 	var permission_summary := popup.find_child("GuildBankPermissionSummary", true, false) as Label
@@ -287,16 +290,23 @@ func _run() -> void:
 		await process_frame
 	_check(popup.find_child("GuildBankItemsWorkspace", true, false) != null, "item storage renders Guild and personal inventories")
 	_check(popup.find_child("GuildBankItemsLogButton", true, false) != null, "Item Storage has a dedicated log action")
-	_check(popup.find_child("GuildBankItemWithdrawButton_potion", true, false) != null, "stored items can be withdrawn")
-	_check(popup.find_child("GuildBankItemDepositButton_poke-ball", true, false) != null, "bag items can be deposited")
-	_check(popup.find_child("GuildBankItemIcon_potion", true, false) != null, "stored items show an icon")
-	var potion_borrow := popup.find_child("GuildBankItemBorrowButton_potion", true, false) as Button
-	_check(
-		potion_borrow != null
-		and potion_borrow.disabled
-		and potion_borrow.tooltip_text.contains("held items"),
-		"consumable items explain why Borrow is unavailable"
-	)
+	_check(popup.find_child("GuildBankItemWithdrawButton_leftovers", true, false) != null, "stored reusable items can be withdrawn")
+	_check(popup.find_child("GuildBankItemDepositButton_exp-share", true, false) != null, "reusable bag items can be deposited")
+	_check(popup.find_child("GuildBankItemIcon_leftovers", true, false) != null, "stored items show an icon")
+	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
+	if bank_back != null:
+		bank_back.pressed.emit()
+		await process_frame
+	resources_action = popup.find_child("GuildBankResourcesAction", true, false) as Button
+	if resources_action != null:
+		resources_action.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildBankResourcesWorkspace", true, false) != null, "Resources opens a dedicated consumable workspace")
+	_check(popup.find_child("GuildBankResourcesLogButton", true, false) != null, "Resources has a dedicated transaction log")
+	_check(popup.find_child("GuildBankResourceWithdrawButton_potion", true, false) != null, "Guild consumables can be taken")
+	_check(popup.find_child("GuildBankResourceDepositButton_poke-ball", true, false) != null, "personal consumables can be donated")
+	_check(popup.find_child("GuildBankItemBorrowButton_potion", true, false) == null, "Resources never expose borrowing")
+	_check(popup.find_child("GuildBankResourceWithdrawButton_potion", true, false).tooltip_text == "", "authorized Resources withdrawal is immediately available")
 	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
 	if bank_back != null:
 		bank_back.pressed.emit()
@@ -400,11 +410,13 @@ func _run() -> void:
 	_check(bank_permissions_dialog != null and bank_permissions_dialog.visible, "member Guild Bank rights open in a dedicated dialog")
 	_check_dialog_styled(bank_permissions_dialog, "Guild Bank permissions dialog")
 	var borrow_permission_select := popup.find_child("GuildBankPermissionSelect_bank_borrow", true, false) as OptionButton
+	var resource_withdraw_select := popup.find_child("GuildBankPermissionSelect_resource_withdraw", true, false) as OptionButton
 	_check(
 		borrow_permission_select != null
 		and str(borrow_permission_select.get_item_metadata(borrow_permission_select.selected)) == "deny",
 		"the permissions dialog shows an existing personal denial"
 	)
+	_check(resource_withdraw_select != null, "leaders can block a member's Resources withdrawal access")
 	if bank_permissions_dialog != null:
 		bank_permissions_dialog.canceled.emit()
 		await process_frame
@@ -561,7 +573,7 @@ func _run() -> void:
 	popup.guild_home["membership"] = {
 		"guildId": 1,
 		"role": "member",
-		"permissions": ["bank_deposit"],
+		"permissions": ["resource_deposit", "resource_withdraw"],
 		"bankPermissionOverrides": {"bank_borrow": "deny"},
 	}
 	popup.membership = popup.guild_home["membership"]
@@ -578,6 +590,23 @@ func _run() -> void:
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "regular members cannot edit the Guild emblem")
 	_check(popup.find_child("EditGuildEmblemIconButton", true, false) == null, "regular members cannot edit the Guild emblem icon")
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "regular members return to the overview")
+	popup.guild_bank_state["access"]["canWithdrawResources"] = false
+	popup.guild_bank_state["access"]["bankPermissionOverrides"] = {"resource_withdraw": "deny"}
+	popup._show_guild_section("bank")
+	await process_frame
+	var blocked_resources_action := popup.find_child("GuildBankResourcesAction", true, false) as Button
+	if blocked_resources_action != null:
+		blocked_resources_action.pressed.emit()
+		await process_frame
+	var blocked_resource_withdraw := popup.find_child("GuildBankResourceWithdrawButton_potion", true, false) as Button
+	_check(
+		blocked_resource_withdraw != null
+		and blocked_resource_withdraw.disabled
+		and blocked_resource_withdraw.tooltip_text.contains("personally disabled"),
+		"a leader's personal block disables Resources withdrawal with an explanation"
+	)
+	popup._show_guild_section("overview")
+	await process_frame
 	var member_options := popup.find_child("GuildOptionsMenuButton", true, false) as MenuButton
 	_check(member_options != null and not member_options.get_popup().is_item_disabled(0), "regular members can leave through Guild options")
 	_check(

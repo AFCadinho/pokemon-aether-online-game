@@ -35,6 +35,8 @@ const GUILD_BANK_PERMISSIONS: Array[String] = [
 	"bank_withdraw",
 	"bank_borrow",
 	"bank_force_return",
+	"resource_deposit",
+	"resource_withdraw",
 ]
 
 const UI_BG := Color("#050b14f5")
@@ -281,6 +283,7 @@ func show_debug_member_preview() -> void:
 		"role": "leader",
 		"permissions": [
 			"bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return",
+			"resource_deposit", "resource_withdraw",
 			"manage_members", "manage_guild", "manage_permissions",
 		],
 		"bankPermissionOverrides": {},
@@ -299,14 +302,14 @@ func show_debug_member_preview() -> void:
 			{
 				"userId": 2, "username": "maple", "displayName": "Maple",
 				"role": "captain", "online": true,
-				"rankPermissions": ["bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return", "manage_members"],
+				"rankPermissions": ["bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return", "resource_deposit", "resource_withdraw", "manage_members"],
 				"bankPermissionOverrides": {"bank_borrow": "deny"},
 			},
 			{
 				"userId": 3, "username": "pecha", "displayName": "Pecha",
 				"role": "member", "online": false,
 				"lastSeenAt": "2026-08-22T16:30:00Z",
-				"rankPermissions": ["bank_borrow"],
+				"rankPermissions": ["bank_borrow", "resource_deposit", "resource_withdraw"],
 				"bankPermissionOverrides": {},
 			},
 		],
@@ -332,20 +335,25 @@ func show_debug_member_preview() -> void:
 		],
 		"rankPermissions": {
 			"leader": membership["permissions"],
-			"captain": ["bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return", "manage_members"],
-			"member": ["bank_borrow"],
+			"captain": ["bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return", "resource_deposit", "resource_withdraw", "manage_members"],
+			"member": ["bank_borrow", "resource_deposit", "resource_withdraw"],
 			"recruit": [],
 		},
 	}
 	guild_bank_state = {
-		"access": {"canDeposit": true, "canWithdraw": true, "canDepositFunds": true, "canWithdrawFunds": true, "lendingEnabled": true, "pokemonTradeLevelCap": 100, "canBorrow": true, "canForceReturn": true},
+		"access": {"canDeposit": true, "canWithdraw": true, "canDepositFunds": true, "canWithdrawFunds": true, "canDepositResources": true, "canWithdrawResources": true, "lendingEnabled": true, "pokemonTradeLevelCap": 100, "canBorrow": true, "canForceReturn": true},
 		"funds": {"balance": 250000, "playerBalance": 87500},
 		"items": [
-			{"itemId": "potion", "name": "Potion", "category": "Medicine", "quantity": 18, "availableQuantity": 18, "borrowedQuantity": 0, "lendable": false},
 			{"itemId": "leftovers", "name": "Leftovers", "category": "Held Items", "quantity": 18, "availableQuantity": 17, "borrowedQuantity": 1, "lendable": true},
 		],
 		"inventory": [
-			{"itemId": "poke-ball", "name": "Poke Ball", "category": "Poke Balls", "quantity": 12},
+			{"itemId": "exp-share", "name": "Exp. Share", "category": "Held Items", "quantity": 1},
+		],
+		"resources": [
+			{"itemId": "potion", "name": "Potion", "category": "Medicine", "quantity": 18, "availableQuantity": 18},
+		],
+		"resourceInventory": [
+			{"itemId": "poke-ball", "name": "Poke Ball", "category": "Poke Balls", "quantity": 12, "availableQuantity": 12},
 		],
 		"pokemon": [
 			{
@@ -1255,7 +1263,7 @@ func _build_guild_bank() -> Control:
 	content.add_child(access_summary)
 	var vaults := GridContainer.new()
 	vaults.name = "GuildBankVaults"
-	vaults.columns = 3
+	vaults.columns = 4
 	vaults.add_theme_constant_override("h_separation", 9)
 	content.add_child(vaults)
 	vaults.add_child(_build_guild_bank_card(
@@ -1281,6 +1289,14 @@ func _build_guild_bank() -> Control:
 		"ui.guild.bank.items.action",
 		"items",
 		UI_SUCCESS
+	))
+	vaults.add_child(_build_guild_bank_card(
+		"GuildBankResources",
+		"ui.guild.bank.resources.title",
+		_guild_bank_card_description("resources"),
+		"ui.guild.bank.resources.action",
+		"resources",
+		UI_WARNING
 	))
 	var hint := _localized_label("ui.guild.bank.access_hint", 10, UI_MUTED)
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1416,6 +1432,10 @@ func _guild_bank_card_description(category: String) -> String:
 			return _t("ui.guild.bank.items.count", {
 				"count": _array_from_value(guild_bank_state.get("items", [])).size(),
 			}) if not guild_bank_state.is_empty() else _t("ui.guild.bank.items.description")
+		"resources":
+			return _t("ui.guild.bank.resources.count", {
+				"count": _array_from_value(guild_bank_state.get("resources", [])).size(),
+			}) if not guild_bank_state.is_empty() else _t("ui.guild.bank.resources.description")
 	return ""
 
 
@@ -1478,6 +1498,8 @@ func _build_guild_bank_workspace() -> Control:
 			content.add_child(_build_guild_pokemon_workspace())
 		"items":
 			content.add_child(_build_guild_items_workspace())
+		"resources":
+			content.add_child(_build_guild_resources_workspace())
 	return panel
 
 
@@ -1558,6 +1580,32 @@ func _build_guild_items_workspace() -> Control:
 	return workspace
 
 
+func _build_guild_resources_workspace() -> Control:
+	var workspace := VBoxContainer.new()
+	workspace.name = "GuildBankResourcesWorkspace"
+	workspace.add_theme_constant_override("separation", 10)
+	var ownership := _localized_label("ui.guild.bank.resources.ownership", 10, UI_WARNING)
+	ownership.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	workspace.add_child(ownership)
+	var columns := GridContainer.new()
+	columns.columns = 2
+	columns.add_theme_constant_override("h_separation", 10)
+	columns.add_child(_build_guild_item_list(
+		"ui.guild.bank.resources.stored",
+		_array_from_value(guild_bank_state.get("resources", [])),
+		"withdraw",
+		true
+	))
+	columns.add_child(_build_guild_item_list(
+		"ui.guild.bank.resources.yours",
+		_array_from_value(guild_bank_state.get("resourceInventory", [])),
+		"deposit",
+		true
+	))
+	workspace.add_child(columns)
+	return workspace
+
+
 func _build_guild_borrowed_item_list(items: Array) -> Control:
 	var panel := PanelContainer.new()
 	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1))
@@ -1587,7 +1635,7 @@ func _build_guild_borrowed_item_list(items: Array) -> Control:
 	return panel
 
 
-func _build_guild_item_list(title_key: String, items: Array, action: String) -> Control:
+func _build_guild_item_list(title_key: String, items: Array, action: String, is_resource: bool = false) -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 190)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1602,10 +1650,11 @@ func _build_guild_item_list(title_key: String, items: Array, action: String) -> 
 	if items.is_empty():
 		var empty_key := "ui.guild.bank.empty"
 		if action == "deposit":
-			var can_deposit := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
+			var can_deposit_key := "canDepositResources" if is_resource else "canDeposit"
+			var can_deposit := bool(_dictionary(guild_bank_state.get("access", {})).get(can_deposit_key, false))
 			if can_deposit:
-				empty_key = "ui.guild.bank.empty.items_eligible"
-			elif _guild_bank_permission_is_personally_denied("bank_deposit"):
+				empty_key = "ui.guild.bank.empty.resources_eligible" if is_resource else "ui.guild.bank.empty.items_eligible"
+			elif _guild_bank_permission_is_personally_denied("resource_deposit" if is_resource else "bank_deposit"):
 				empty_key = "ui.guild.bank.empty.deposit_personal_deny"
 			else:
 				empty_key = "ui.guild.bank.empty.deposit_rank"
@@ -1620,11 +1669,11 @@ func _build_guild_item_list(title_key: String, items: Array, action: String) -> 
 	for item_value: Variant in items:
 		if not item_value is Dictionary:
 			continue
-		content.add_child(_build_guild_item_row(item_value as Dictionary, action))
+		content.add_child(_build_guild_item_row(item_value as Dictionary, action, is_resource))
 	return panel
 
 
-func _build_guild_item_row(item: Dictionary, action: String) -> Control:
+func _build_guild_item_row(item: Dictionary, action: String, is_resource: bool = false) -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 6)
 	var item_id := str(item.get("itemId", ""))
@@ -1655,18 +1704,30 @@ func _build_guild_item_row(item: Dictionary, action: String) -> Control:
 	_apply_spin_box_style(quantity)
 	row.add_child(quantity)
 	var access := _dictionary(guild_bank_state.get("access", {}))
-	var allowed := bool(access.get("canDeposit" if action == "deposit" else "canWithdraw", false))
+	var permission := (
+		"resource_deposit" if action == "deposit" else "resource_withdraw"
+	) if is_resource else (
+		"bank_deposit" if action == "deposit" else "bank_withdraw"
+	)
+	var access_key := (
+		"canDepositResources" if action == "deposit" else "canWithdrawResources"
+	) if is_resource else (
+		"canDeposit" if action == "deposit" else "canWithdraw"
+	)
+	var allowed := bool(access.get(access_key, false))
 	row.add_child(_guild_bank_action_button(
-		"GuildBankItem%sButton_%s" % [action.capitalize(), str(item.get("itemId", "item"))],
+		"GuildBank%s%sButton_%s" % ["Resource" if is_resource else "Item", action.capitalize(), str(item.get("itemId", "item"))],
 		"ui.guild.bank.donate" if action == "deposit" else "ui.guild.bank.withdraw",
 		allowed,
-		_on_guild_bank_item_action.bind(action, str(item.get("itemId", "")), quantity),
+		_on_guild_bank_resource_action.bind(action, str(item.get("itemId", "")), quantity)
+		if is_resource
+		else _on_guild_bank_item_action.bind(action, str(item.get("itemId", "")), quantity),
 		"" if allowed else _guild_bank_permission_restriction(
-			"bank_deposit" if action == "deposit" else "bank_withdraw",
+			permission,
 			"ui.guild.bank.tooltip.deposit_rank" if action == "deposit" else "ui.guild.bank.tooltip.withdraw_rank"
 		)
 	))
-	if action == "withdraw":
+	if action == "withdraw" and not is_resource:
 		var can_borrow := (
 			bool(access.get("lendingEnabled", false))
 			and bool(access.get("canBorrow", false))
@@ -1852,7 +1913,7 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool) -> Control:
 
 
 func _open_guild_log(category: String) -> void:
-	if category not in ["guild", "funds", "items", "pokemon"]:
+	if category not in ["guild", "funds", "items", "pokemon", "resources"]:
 		return
 	var result := await _request_guild_log(category, 0)
 	if not bool(result.get("success", false)):
@@ -1950,7 +2011,7 @@ func _build_guild_log_entry(category: String, entry: Dictionary) -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
 	margin.add_child(row)
-	if category == "items":
+	if category in ["items", "resources"]:
 		var item := _dictionary(entry.get("item", {}))
 		row.add_child(_guild_log_icon(_guild_bank_item_icon(str(item.get("itemId", entry.get("assetReference", ""))))))
 	elif category == "pokemon":
@@ -2006,7 +2067,7 @@ func _guild_log_entry_text(category: String, entry: Dictionary) -> String:
 			"action": action_text,
 			"amount": _format_number(int(entry.get("amount", 0))),
 		})
-	if category == "items":
+	if category in ["items", "resources"]:
 		var item := _dictionary(entry.get("item", {}))
 		return _t("ui.guild.log.items.entry", {
 			"trainer": actor,
@@ -2104,6 +2165,19 @@ func _on_guild_bank_item_action(action: String, item_id: String, quantity_input:
 		)
 		return
 	await _run_guild_bank_action("%s_bank_item" % action, [item_id, quantity], "item")
+
+
+func _on_guild_bank_resource_action(action: String, item_id: String, quantity_input: SpinBox) -> void:
+	var quantity := int(quantity_input.value) if quantity_input != null else 0
+	if item_id == "" or quantity <= 0:
+		return
+	if action == "deposit":
+		_confirm_guild_bank_donation(
+			"%s ×%d" % [_guild_bank_item_name(item_id, item_id), quantity],
+			_run_guild_bank_action.bind("deposit_bank_resource", [item_id, quantity], "resource")
+		)
+		return
+	await _run_guild_bank_action("withdraw_bank_resource", [item_id, quantity], "resource")
 
 
 func _on_guild_bank_pokemon_action(action: String, pokemon_id: int, pokemon: Dictionary = {}) -> void:
@@ -2596,7 +2670,7 @@ func _open_guild_member_bank_permissions(member: Dictionary) -> void:
 		selects[permission] = select
 	dialog.confirmed.connect(_save_guild_member_bank_permissions.bind(user_id, selects, dialog))
 	dialog.canceled.connect(dialog.queue_free)
-	dialog.popup_centered(Vector2i(520, 330))
+	dialog.popup_centered(Vector2i(520, 410))
 
 
 func _save_guild_member_bank_permissions(
