@@ -15753,7 +15753,7 @@ func _setup_readonly_pokemon_summary_popup(card_key: String = "") -> void:
 	body.custom_minimum_size = Vector2(0, POKEMON_SUMMARY_BODY_HEIGHT)
 	body.add_theme_constant_override("separation", 7)
 	layout.add_child(body)
-	body.add_child(_build_readonly_summary_profile(nodes))
+	body.add_child(_build_readonly_summary_profile(nodes, card_key))
 	body.add_child(_build_readonly_summary_details(nodes))
 	pokemon_summary_popup.add_child(_build_readonly_summary_move_hover_panel(nodes))
 	pokemon_summary_popup.set_meta("readonly_summary_nodes", nodes)
@@ -15811,7 +15811,7 @@ func _build_readonly_summary_header(card_key: String, nodes: Dictionary) -> Cont
 	row.add_child(close_button)
 	return header
 
-func _build_readonly_summary_profile(nodes: Dictionary) -> Control:
+func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(POKEMON_SUMMARY_LEFT_PANEL_WIDTH, POKEMON_SUMMARY_BODY_HEIGHT)
 	panel.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
@@ -15834,7 +15834,12 @@ func _build_readonly_summary_profile(nodes: Dictionary) -> Control:
 		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.x),
 		float(POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE.y)
 	)
+	sprite_stage.mouse_filter = Control.MOUSE_FILTER_STOP
+	sprite_stage.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	_set_localized_control_property(sprite_stage, "tooltip_text", "ui.pokemon_summary.switch_sprite_view")
+	sprite_stage.gui_input.connect(_on_pokemon_summary_sprite_frame_gui_input.bind(card_key))
 	stack.add_child(sprite_stage)
+	nodes["sprite_stage"] = sprite_stage
 	var sprite_background := TextureRect.new()
 	sprite_background.texture = BATTLE_SUMMARY_SLOT_BG_TEXTURE
 	sprite_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

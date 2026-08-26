@@ -14,6 +14,7 @@
 
 **Changed**
 
+- Read-only Pokémon Summary cards now switch between front and back sprites when clicked.
 - Borrowed Pokémon Summary cards now show how much loan time remains next to their borrowed status.
 - Guild log filters now have explicit field labels and a clear in-theme title bar with a prominent close action.
 - Guild history and all Guild Bank logs can now be searched and filtered by action across their complete server-side history.
