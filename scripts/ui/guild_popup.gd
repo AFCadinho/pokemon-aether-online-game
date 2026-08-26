@@ -1942,6 +1942,7 @@ func _show_guild_log_window(category: String, result: Dictionary) -> void:
 	window.min_size = Vector2i(520, 360)
 	window.transient = true
 	window.exclusive = true
+	window.borderless = true
 	_apply_guild_window_style(window)
 	window.close_requested.connect(window.queue_free)
 	add_child(window)
@@ -1955,11 +1956,42 @@ func _show_guild_log_window(category: String, result: Dictionary) -> void:
 	var content := VBoxContainer.new()
 	content.add_theme_constant_override("separation", 10)
 	margin.add_child(content)
+	var title_bar := PanelContainer.new()
+	title_bar.name = "GuildLogTitleBar"
+	title_bar.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 8, 1))
+	content.add_child(title_bar)
+	var title_margin := MarginContainer.new()
+	_set_margins(title_margin, 12, 7, 7, 7)
+	title_bar.add_child(title_margin)
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 9)
+	title_margin.add_child(title_row)
+	title_row.add_child(_icon_rect(22, UI_ACCENT))
+	var window_title := _localized_label("ui.guild.log.%s.title" % category, 16, UI_TEXT)
+	window_title.name = "GuildLogWindowTitle"
+	window_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	window_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title_row.add_child(window_title)
+	var close := Button.new()
+	close.name = "GuildLogCloseButton"
+	close.text = "×"
+	close.custom_minimum_size = Vector2(38, 34)
+	_set_localized_property(close, "tooltip_text", "common.close")
+	_apply_button_style(close, "danger")
+	close.add_theme_font_size_override("font_size", 19)
+	close.pressed.connect(window.queue_free)
+	title_row.add_child(close)
 	content.add_child(_localized_label("ui.guild.log.%s.heading" % category, 12, UI_ACCENT))
 	var filters := HBoxContainer.new()
 	filters.name = "GuildLogFilters"
-	filters.add_theme_constant_override("separation", 8)
+	filters.add_theme_constant_override("separation", 10)
 	content.add_child(filters)
+	var search_field := VBoxContainer.new()
+	search_field.name = "GuildLogSearchField"
+	search_field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	search_field.add_theme_constant_override("separation", 4)
+	search_field.add_child(_localized_label("ui.guild.log.filter.search_label", 10, UI_ACCENT))
+	filters.add_child(search_field)
 	var search := LineEdit.new()
 	search.name = "GuildLogSearchInput"
 	search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1967,19 +1999,30 @@ func _show_guild_log_window(category: String, result: Dictionary) -> void:
 	search.clear_button_enabled = true
 	_set_localized_property(search, "placeholder_text", "ui.guild.log.filter.search")
 	_apply_line_edit_style(search)
-	filters.add_child(search)
+	search_field.add_child(search)
+	var action_field := VBoxContainer.new()
+	action_field.name = "GuildLogActionField"
+	action_field.add_theme_constant_override("separation", 4)
+	action_field.add_child(_localized_label("ui.guild.log.filter.action_label", 10, UI_ACCENT))
+	filters.add_child(action_field)
 	var action_select := _guild_log_action_filter(category)
-	filters.add_child(action_select)
+	action_field.add_child(action_select)
+	var button_margin := MarginContainer.new()
+	button_margin.add_theme_constant_override("margin_top", 18)
+	filters.add_child(button_margin)
+	var filter_buttons := HBoxContainer.new()
+	filter_buttons.add_theme_constant_override("separation", 8)
+	button_margin.add_child(filter_buttons)
 	var apply := Button.new()
 	apply.name = "GuildLogApplyFiltersButton"
 	_set_localized_property(apply, "text", "ui.guild.log.filter.apply")
 	_apply_button_style(apply, "primary")
-	filters.add_child(apply)
+	filter_buttons.add_child(apply)
 	var clear := Button.new()
 	clear.name = "GuildLogClearFiltersButton"
 	_set_localized_property(clear, "text", "common.clear")
 	_apply_button_style(clear)
-	filters.add_child(clear)
+	filter_buttons.add_child(clear)
 	var scroll := ScrollContainer.new()
 	scroll.name = "GuildLogScroll"
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -2017,6 +2060,11 @@ func _guild_log_action_filter(category: String) -> OptionButton:
 		select.add_item(_t("ui.guild.log.filter.action.%s" % action))
 		select.set_item_metadata(select.item_count - 1, action)
 	_apply_option_button_style(select)
+	select.add_theme_stylebox_override("normal", _input_style(Color("#0b2033f5"), UI_ACCENT_SOFT, 1))
+	select.add_theme_stylebox_override("hover", _input_style(UI_HOVER, UI_ACCENT, 2))
+	select.add_theme_stylebox_override("pressed", _input_style(Color("#0d2a42f5"), UI_ACCENT, 2))
+	select.add_theme_color_override("font_color", UI_TEXT)
+	select.add_theme_color_override("font_hover_color", Color.WHITE)
 	return select
 
 

@@ -387,8 +387,14 @@ func _run() -> void:
 	await process_frame
 	var history_window := popup.find_child("GuildHistoryLogWindow", true, false) as Window
 	_check(history_window != null and history_window.visible, "Guild history opens in a separate window")
+	_check(history_window != null and history_window.borderless, "Guild logs hide the unclear native title bar")
+	_check(popup.find_child("GuildLogTitleBar", true, false) != null, "Guild logs render a dedicated visible title bar")
+	var log_close := popup.find_child("GuildLogCloseButton", true, false) as Button
+	_check(log_close != null and log_close.has_theme_stylebox_override("normal"), "Guild log close action is clearly styled")
 	var log_search := popup.find_child("GuildLogSearchInput", true, false) as LineEdit
 	var log_action_filter := popup.find_child("GuildLogActionFilter", true, false) as OptionButton
+	_check(popup.find_child("GuildLogSearchField", true, false) != null, "Guild log search has a visible field label")
+	_check(popup.find_child("GuildLogActionField", true, false) != null, "Guild log action choice has a visible field label")
 	_check(log_search != null, "Guild logs expose a search field")
 	_check(log_action_filter != null and log_action_filter.item_count == 5, "Guild history exposes its relevant action filters")
 	_check(popup.find_child("GuildLogApplyFiltersButton", true, false) != null, "Guild logs can apply filters")
