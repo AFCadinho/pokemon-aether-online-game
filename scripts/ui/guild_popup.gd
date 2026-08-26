@@ -1784,57 +1784,80 @@ func _build_guild_bank_rank_rights_workspace() -> Control:
 	var hint := _localized_label("ui.guild.bank.rank_rights.hint", 10, UI_MUTED)
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	content.add_child(hint)
-	var table := GridContainer.new()
+	var table_panel := PanelContainer.new()
+	table_panel.add_theme_stylebox_override(
+		"panel", _panel_style(Color("#06111dee"), UI_BORDER_INNER, 8, 1)
+	)
+	content.add_child(table_panel)
+	var table_margin := MarginContainer.new()
+	_set_margins(table_margin, 6, 6, 6, 6)
+	table_panel.add_child(table_margin)
+	var table := VBoxContainer.new()
 	table.name = "GuildBankRankRightsTable"
-	table.columns = 5
-	table.add_theme_constant_override("h_separation", 6)
-	table.add_theme_constant_override("v_separation", 6)
-	content.add_child(table)
-	table.add_child(_guild_bank_rank_rights_cell(
-		_t("ui.guild.bank.rank_rights.permission"), UI_ACCENT, true
-	))
+	table.add_theme_constant_override("separation", 3)
+	table_margin.add_child(table)
 	var roles: Array[String] = ["recruit", "member", "captain", "leader"]
 	var own_role := str(_dictionary(guild_home.get("membership", {})).get("role", "recruit"))
-	for role: String in roles:
-		table.add_child(_guild_bank_rank_rights_cell(
-			_membership_role_label(role),
-			UI_GOLD if role == own_role else UI_TEXT,
-			true
-		))
 	var rank_permissions := _dictionary(guild_home.get("rankPermissions", {}))
-	for permission: String in GUILD_BANK_PERMISSIONS:
-		table.add_child(_guild_bank_rank_rights_cell(
-			_t("ui.guild.permission.%s" % permission), UI_TEXT, false
+	table.add_child(_guild_bank_rank_rights_row("", roles, rank_permissions, own_role, -1))
+	for row_index: int in range(GUILD_BANK_PERMISSIONS.size()):
+		table.add_child(_guild_bank_rank_rights_row(
+			GUILD_BANK_PERMISSIONS[row_index], roles, rank_permissions, own_role, row_index
 		))
-		for role: String in roles:
-			var allowed := _array_from_value(rank_permissions.get(role, [])).has(permission)
-			table.add_child(_guild_bank_rank_rights_cell(
-				_t("ui.guild.bank.rank_rights.allowed" if allowed else "ui.guild.bank.rank_rights.blocked"),
-				UI_SUCCESS if allowed else UI_MUTED,
-				false
-			))
 	var override_hint := _localized_label("ui.guild.bank.rank_rights.override_hint", 10, UI_ACCENT)
 	override_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	content.add_child(override_hint)
 	return content
 
 
-func _guild_bank_rank_rights_cell(text: String, color: Color, is_header: bool) -> Control:
+func _guild_bank_rank_rights_row(
+	permission: String,
+	roles: Array[String],
+	rank_permissions: Dictionary,
+	own_role: String,
+	row_index: int
+) -> Control:
+	var is_header := row_index < 0
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(150 if is_header else 0, 40)
-	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override(
-		"panel",
-		_panel_style(UI_INPUT if is_header else Color("#07131ff2"), UI_BORDER_INNER, 6, 1)
+	panel.custom_minimum_size.y = 38 if is_header else 42
+	var background := UI_INPUT if is_header else (
+		Color("#0a1b2af2") if row_index % 2 == 0 else Color("#071521ee")
 	)
+	panel.add_theme_stylebox_override("panel", _panel_style(background, Color.TRANSPARENT, 5, 0))
 	var margin := MarginContainer.new()
-	_set_margins(margin, 8, 6, 8, 6)
+	_set_margins(margin, 12, 6, 12, 6)
 	panel.add_child(margin)
-	var label := _label(text, 10, color)
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	margin.add_child(label)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+	var permission_label := _label(
+		_t("ui.guild.bank.rank_rights.permission")
+		if is_header
+		else _t("ui.guild.permission.%s" % permission),
+		10,
+		UI_ACCENT if is_header else UI_TEXT
+	)
+	permission_label.custom_minimum_size.x = 230
+	permission_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(permission_label)
+	for role: String in roles:
+		var value := Label.new()
+		value.custom_minimum_size.x = 130
+		value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		value.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		value.add_theme_font_size_override("font_size", 10)
+		if is_header:
+			value.text = _membership_role_label(role)
+			value.add_theme_color_override("font_color", UI_GOLD if role == own_role else UI_TEXT)
+		else:
+			var allowed := _array_from_value(rank_permissions.get(role, [])).has(permission)
+			value.text = "✓  %s" % _t("ui.guild.bank.rank_rights.allowed") if allowed else "—"
+			value.tooltip_text = _t(
+				"ui.guild.bank.rank_rights.allowed" if allowed else "ui.guild.bank.rank_rights.blocked"
+			)
+			value.add_theme_color_override("font_color", UI_SUCCESS if allowed else UI_MUTED)
+		row.add_child(value)
 	return panel
 
 
@@ -3007,23 +3030,35 @@ func _open_guild_invite_dialog() -> void:
 	add_child(dialog)
 	var content := VBoxContainer.new()
 	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	content.offset_left = 18
-	content.offset_top = 48
-	content.offset_right = -18
-	content.offset_bottom = -62
-	content.add_theme_constant_override("separation", 8)
+	content.offset_left = 20
+	content.offset_top = 46
+	content.offset_right = -20
+	content.offset_bottom = -58
+	content.add_theme_constant_override("separation", 7)
 	dialog.add_child(content)
 	content.add_child(_localized_label("ui.guild.invite.prompt", 11, UI_MUTED))
 	invite_username_input = LineEdit.new()
 	invite_username_input.name = "GuildInviteUsername"
 	_set_localized_property(invite_username_input, "placeholder_text", "ui.guild.invite.username")
 	invite_username_input.clear_button_enabled = true
+	invite_username_input.custom_minimum_size.y = 38
 	_apply_line_edit_style(invite_username_input)
 	content.add_child(invite_username_input)
 	dialog.confirmed.connect(_on_invite_member.bind(dialog))
 	dialog.canceled.connect(dialog.queue_free)
-	dialog.popup_centered(Vector2i(460, 210))
+	dialog.popup_centered(Vector2i(500, 170))
+	_style_guild_invite_dialog_actions.call_deferred(dialog)
 	invite_username_input.grab_focus.call_deferred()
+
+
+func _style_guild_invite_dialog_actions(dialog: ConfirmationDialog) -> void:
+	if dialog == null or not is_instance_valid(dialog):
+		return
+	var ok_button := dialog.get_ok_button()
+	var action_row := ok_button.get_parent() as BoxContainer
+	if action_row != null:
+		action_row.alignment = BoxContainer.ALIGNMENT_END
+		action_row.add_theme_constant_override("separation", 8)
 
 
 func _build_guild_member_card(
@@ -4907,7 +4942,7 @@ func _on_invite_member(dialog: ConfirmationDialog = null) -> void:
 	if username.length() < 3:
 		_set_member_status(_t("ui.guild.error.username_required"), true)
 		if dialog != null and is_instance_valid(dialog):
-			dialog.popup_centered(Vector2i(460, 210))
+			dialog.popup_centered(Vector2i(500, 170))
 		return
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
@@ -4918,7 +4953,7 @@ func _on_invite_member(dialog: ConfirmationDialog = null) -> void:
 	if not bool(result.get("success", false)):
 		_set_member_status(str(result.get("error", _t("ui.guild.error.send_invitation"))), true)
 		if dialog != null and is_instance_valid(dialog):
-			dialog.popup_centered(Vector2i(460, 210))
+			dialog.popup_centered(Vector2i(500, 170))
 		return
 	if dialog != null and is_instance_valid(dialog):
 		dialog.queue_free()

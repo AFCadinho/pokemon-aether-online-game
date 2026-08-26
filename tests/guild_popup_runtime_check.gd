@@ -272,10 +272,10 @@ func _run() -> void:
 		rank_rights_action.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildBankRankRightsWorkspace", true, false) != null, "Guild Bank rank rights open in a dedicated page")
-	var rank_rights_table := popup.find_child("GuildBankRankRightsTable", true, false) as GridContainer
+	var rank_rights_table := popup.find_child("GuildBankRankRightsTable", true, false) as VBoxContainer
 	_check(
-		rank_rights_table != null and rank_rights_table.columns == 5 and rank_rights_table.get_child_count() == 35,
-		"rank-rights page compares all six Bank permissions across all four ranks"
+		rank_rights_table != null and rank_rights_table.get_child_count() == 7,
+		"rank-rights page compares all six Bank permissions in clean table rows"
 	)
 	var rank_rights_back := popup.find_child("GuildBankBackButton", true, false) as Button
 	if rank_rights_back != null:
@@ -467,8 +467,17 @@ func _run() -> void:
 		invite_action.pressed.emit()
 		await process_frame
 	var invite_dialog := popup.find_child("GuildInviteDialog", true, false) as ConfirmationDialog
+	var invite_actions := invite_dialog.get_ok_button().get_parent() as BoxContainer if invite_dialog != null else null
 	_check(invite_dialog != null and invite_dialog.visible, "invite action opens a dedicated dialog")
 	_check_dialog_styled(invite_dialog, "Guild invite dialog")
+	_check(
+		invite_dialog != null
+		and invite_dialog.size.y <= 180
+		and invite_actions != null
+		and invite_actions.alignment == BoxContainer.ALIGNMENT_END
+		and invite_actions.get_theme_constant("separation") == 8,
+		"Guild invite dialog keeps its form and actions compactly grouped"
+	)
 	_check(popup.find_child("GuildInviteUsername", true, false) != null, "invite dialog asks for a Trainer username")
 	if invite_dialog != null:
 		invite_dialog.queue_free()
