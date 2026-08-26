@@ -1,5 +1,9 @@
 extends "res://scripts/world/map_metadata.gd"
 
+const CeruleanWeatherWaterMaskScript := preload(
+	"res://scripts/world/kanto/towns/cerulean_weather_water_mask.gd"
+)
+
 const MAP_SIZE := Vector2i(75, 70)
 const EXIT_OPENINGS := {
 	"route_4": {
@@ -25,6 +29,7 @@ const EXIT_OPENINGS := {
 }
 
 func _ready() -> void:
+	CeruleanWeatherWaterMaskScript.build(get_node_or_null("CeruleanCityVisual"))
 	_open_exterior_connections()
 	super._ready()
 
