@@ -137,12 +137,14 @@ var is_leaving_guild := false
 var directory_request_generation := 0
 var has_explicit_page_selection := false
 var active_guild_section := "overview"
+var active_management_section := "profile"
 var active_guild_bank_category := ""
 var guild_bank_state: Dictionary = {}
 var is_loading_guild_bank := false
 var is_guild_bank_action_in_flight := false
 var is_applying_guild_bank_party := false
 var guild_section_buttons: Dictionary = {}
+var management_section_buttons: Dictionary = {}
 var directory_recruitment_filter := "all"
 var directory_focus_filter := "all"
 var directory_language_filter := "all"
@@ -1008,9 +1010,10 @@ func _render_guild_home() -> void:
 	var can_invite := permissions.has("manage_members") or role in ["leader", "captain"]
 	var can_review_applications := can_invite
 	var can_manage_settings := is_leader or permissions.has("manage_guild")
-	if active_guild_section == "applications" and not can_review_applications:
-		active_guild_section = "overview"
-	if active_guild_section == "management" and not can_manage_settings:
+	if active_guild_section == "applications":
+		active_guild_section = "management"
+		active_management_section = "applications"
+	if active_guild_section == "management" and not (can_review_applications or can_manage_settings):
 		active_guild_section = "overview"
 
 	var header := HBoxContainer.new()
@@ -1036,7 +1039,7 @@ func _render_guild_home() -> void:
 	heading.add_child(description)
 	header.add_child(_build_guild_header_travel_actions(guild, is_leader))
 
-	_build_guild_section_navigation(can_review_applications, can_manage_settings)
+	_build_guild_section_navigation(can_review_applications or can_manage_settings)
 	member_status_label = _label("", 11, UI_MUTED)
 	member_status_label.name = "GuildMemberStatus"
 	member_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1046,10 +1049,8 @@ func _render_guild_home() -> void:
 			member_content.add_child(_build_guild_bank())
 		"members":
 			member_content.add_child(_build_member_roster(can_invite))
-		"applications":
-			member_content.add_child(_build_guild_applications())
 		"management":
-			member_content.add_child(_build_member_management(guild, is_leader))
+			member_content.add_child(_build_member_management(guild, can_manage_settings, can_review_applications))
 		_:
 			member_content.add_child(_build_guild_overview(guild))
 
@@ -1075,7 +1076,7 @@ func _build_guild_header_emblem(guild: Dictionary, is_editable: bool) -> Control
 	return button
 
 
-func _build_guild_section_navigation(can_review_applications: bool, can_manage_settings: bool) -> Control:
+func _build_guild_section_navigation(can_open_management: bool) -> Control:
 	var navigation := guild_section_navigation
 	if navigation == null:
 		return Control.new()
@@ -1086,13 +1087,7 @@ func _build_guild_section_navigation(can_review_applications: bool, can_manage_s
 		{"id": "bank", "label_key": "ui.guild.section.bank", "name": "GuildBankTab"},
 		{"id": "members", "label_key": "ui.guild.section.members", "name": "GuildMembersTab"},
 	]
-	if can_review_applications:
-		sections.append({
-			"id": "applications",
-			"label_key": "ui.guild.section.applications",
-			"name": "GuildApplicationsTab",
-		})
-	if can_manage_settings:
+	if can_open_management:
 		sections.append({
 			"id": "management",
 			"label_key": "ui.guild.section.management",
@@ -1111,14 +1106,14 @@ func _build_guild_section_navigation(can_review_applications: bool, can_manage_s
 		button.pressed.connect(_show_guild_section.bind(section_id))
 		_apply_tab_style(button, active_page == "member" and active_guild_section == section_id)
 		navigation.add_child(button)
-		if section_id == "applications" and _pending_application_count() > 0:
-			_add_application_notification_badge(button, _pending_application_count())
+		if section_id == "management" and _pending_application_count() > 0:
+			_add_application_notification_badge(button, _pending_application_count(), "GuildManagementNotificationBadge")
 		guild_section_buttons[section_id] = button
 	return navigation
 
 
 func _show_guild_section(section: String) -> void:
-	if section not in ["overview", "bank", "members", "applications", "management"]:
+	if section not in ["overview", "bank", "members", "management"]:
 		return
 	active_guild_section = section
 	if section != "bank":
@@ -1135,9 +1130,9 @@ func _pending_application_count() -> int:
 	return _array_from_value(guild_home.get("pendingApplications", [])).size()
 
 
-func _add_application_notification_badge(button: Button, count: int) -> void:
+func _add_application_notification_badge(button: Button, count: int, badge_name: String = "GuildApplicationsNotificationBadge") -> void:
 	var badge := PanelContainer.new()
-	badge.name = "GuildApplicationsNotificationBadge"
+	badge.name = badge_name
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	badge.anchor_left = 1.0
 	badge.anchor_right = 1.0
@@ -3278,7 +3273,7 @@ func _on_guild_member_role_selected(index: int, user_id: int, select: OptionButt
 	_set_member_status(_t("ui.guild.status.role_updated"), false)
 
 
-func _build_member_management(guild: Dictionary, is_leader: bool) -> Control:
+func _build_member_management(guild: Dictionary, can_manage_settings: bool, can_review_applications: bool) -> Control:
 	var panel := PanelContainer.new()
 	panel.name = "GuildManagementSection"
 	panel.custom_minimum_size = Vector2(610, 300)
@@ -3288,71 +3283,165 @@ func _build_member_management(guild: Dictionary, is_leader: bool) -> Control:
 	_set_margins(margin, 13, 12, 13, 12)
 	panel.add_child(margin)
 	var content := VBoxContainer.new()
-	content.add_theme_constant_override("separation", 8)
+	content.add_theme_constant_override("separation", 10)
 	margin.add_child(content)
-
-	if is_leader:
-		content.add_child(_localized_label("ui.guild.settings", 10, UI_ACCENT))
-		content.add_child(_localized_label("ui.guild.settings.description", 9, UI_MUTED))
-		settings_description_input = TextEdit.new()
-		settings_description_input.name = "GuildSettingsDescription"
-		settings_description_input.text = str(guild.get("description", ""))
-		settings_description_input.custom_minimum_size = Vector2(0, 58)
-		settings_description_input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
-		_apply_text_edit_style(settings_description_input)
-		content.add_child(settings_description_input)
-		content.add_child(_localized_label("ui.guild.announcement.manage", 9, UI_MUTED))
-		settings_announcement_input = TextEdit.new()
-		settings_announcement_input.name = "GuildSettingsAnnouncement"
-		settings_announcement_input.text = str(guild_home.get("announcement", ""))
-		settings_announcement_input.custom_minimum_size = Vector2(0, 70)
-		settings_announcement_input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
-		_apply_text_edit_style(settings_announcement_input)
-		content.add_child(settings_announcement_input)
-		content.add_child(_localized_label("ui.guild.requirements.manage_title", 10, UI_ACCENT))
-		var requirements_hint := _localized_label("ui.guild.requirements.manage_hint", 9, UI_MUTED)
-		requirements_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		content.add_child(requirements_hint)
-		settings_requirements = _guild_requirements(guild)
-		settings_requirements_container = VBoxContainer.new()
-		settings_requirements_container.name = "GuildSettingsRequirements"
-		settings_requirements_container.add_theme_constant_override("separation", 6)
-		content.add_child(settings_requirements_container)
-		_render_settings_requirements()
-		var add_requirement := Button.new()
-		add_requirement.name = "GuildAddRequirementButton"
-		_set_localized_property(add_requirement, "text", "ui.guild.requirements.add")
-		add_requirement.pressed.connect(_on_add_guild_requirement)
-		_apply_button_style(add_requirement)
-		content.add_child(add_requirement)
-		var choices := HBoxContainer.new()
-		choices.add_theme_constant_override("separation", 7)
-		content.add_child(choices)
-		settings_language_select = _option_button(GUILD_LANGUAGE_OPTIONS)
-		settings_focus_select = _option_button(["Social", "PvE", "PvP", "PvP & Social", "PvE & Social", "Mixed"])
-		settings_recruitment_select = _option_button(["Applications open", "Open", "Invite only", "Closed"])
-		settings_loan_duration_select = OptionButton.new()
-		for duration: int in [3600, 10800, 21600, 43200, 86400, 172800, 259200]:
-			settings_loan_duration_select.add_item(_guild_loan_duration_label(duration))
-			settings_loan_duration_select.set_item_metadata(settings_loan_duration_select.item_count - 1, duration)
-		_apply_option_button_style(settings_loan_duration_select)
-		_select_option_text(settings_language_select, str(guild.get("language", "English")))
-		_select_option_text(settings_focus_select, str(guild.get("focus", "Social")))
-		_select_option_text(settings_recruitment_select, str(guild.get("recruitment", "Applications open")))
-		_select_guild_loan_duration(int(guild.get("loanDurationSeconds", 86400)))
-		choices.add_child(settings_language_select)
-		choices.add_child(settings_focus_select)
-		choices.add_child(settings_recruitment_select)
-		choices.add_child(settings_loan_duration_select)
-		var save_settings := Button.new()
-		_set_localized_property(save_settings, "text", "ui.guild.settings.save")
-		save_settings.pressed.connect(_on_save_settings)
-		_apply_button_style(save_settings, "primary")
-		content.add_child(save_settings)
-
-	if not is_leader:
-		content.add_child(_localized_label("ui.guild.management.restricted", 12, UI_MUTED))
+	var available_sections: Array[String] = []
+	if can_manage_settings:
+		available_sections.assign(["profile", "recruitment", "bank"])
+	if can_review_applications:
+		available_sections.insert(2 if can_manage_settings else 0, "applications")
+	if active_management_section not in available_sections:
+		active_management_section = "applications" if can_review_applications else "profile"
+	var navigation := HBoxContainer.new()
+	navigation.name = "GuildManagementNavigation"
+	navigation.add_theme_constant_override("separation", 7)
+	content.add_child(navigation)
+	management_section_buttons.clear()
+	for section: String in available_sections:
+		var button := Button.new()
+		button.name = "GuildManagement%sTab" % section.capitalize()
+		_set_localized_property(button, "text", "ui.guild.management.tab.%s" % section)
+		button.custom_minimum_size = Vector2(145, 34)
+		button.pressed.connect(_show_management_section.bind(section))
+		_apply_tab_style(button, active_management_section == section)
+		navigation.add_child(button)
+		if section == "applications" and _pending_application_count() > 0:
+			_add_application_notification_badge(button, _pending_application_count())
+		management_section_buttons[section] = button
+	var divider := HSeparator.new()
+	divider.add_theme_color_override("separator", UI_BORDER_INNER)
+	content.add_child(divider)
+	var workspace := VBoxContainer.new()
+	workspace.name = "GuildManagementWorkspace"
+	workspace.add_theme_constant_override("separation", 8)
+	content.add_child(workspace)
+	match active_management_section:
+		"recruitment":
+			workspace.add_child(_build_management_recruitment_page(guild))
+		"applications":
+			workspace.add_child(_build_guild_applications())
+		"bank":
+			workspace.add_child(_build_management_bank_page(guild))
+		_:
+			workspace.add_child(_build_management_profile_page(guild))
 	return panel
+
+
+func _show_management_section(section: String) -> void:
+	if section not in ["profile", "recruitment", "applications", "bank"]:
+		return
+	active_management_section = section
+	active_guild_section = "management"
+	_render_guild_home()
+
+
+func _build_management_profile_page(guild: Dictionary) -> Control:
+	var content := VBoxContainer.new()
+	content.name = "GuildManagementProfilePage"
+	content.add_theme_constant_override("separation", 8)
+	content.add_child(_localized_label("ui.guild.management.profile_title", 12, UI_ACCENT))
+	var hint := _localized_label("ui.guild.management.profile_hint", 9, UI_MUTED)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(hint)
+	content.add_child(_localized_label("ui.guild.settings.description", 9, UI_MUTED))
+	settings_description_input = TextEdit.new()
+	settings_description_input.name = "GuildSettingsDescription"
+	settings_description_input.text = str(guild.get("description", ""))
+	settings_description_input.custom_minimum_size = Vector2(0, 70)
+	settings_description_input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	_apply_text_edit_style(settings_description_input)
+	content.add_child(settings_description_input)
+	content.add_child(_localized_label("ui.guild.announcement.manage", 9, UI_MUTED))
+	settings_announcement_input = TextEdit.new()
+	settings_announcement_input.name = "GuildSettingsAnnouncement"
+	settings_announcement_input.text = str(guild_home.get("announcement", ""))
+	settings_announcement_input.custom_minimum_size = Vector2(0, 70)
+	settings_announcement_input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	_apply_text_edit_style(settings_announcement_input)
+	content.add_child(settings_announcement_input)
+	var choices := HBoxContainer.new()
+	choices.add_theme_constant_override("separation", 8)
+	content.add_child(choices)
+	settings_language_select = _option_button(GUILD_LANGUAGE_OPTIONS)
+	settings_language_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	settings_focus_select = _option_button(["Social", "PvE", "PvP", "PvP & Social", "PvE & Social", "Mixed"])
+	settings_focus_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_select_option_text(settings_language_select, str(guild.get("language", "English")))
+	_select_option_text(settings_focus_select, str(guild.get("focus", "Social")))
+	choices.add_child(_management_select_field("ui.guild.field.language", settings_language_select))
+	choices.add_child(_management_select_field("ui.guild.field.focus", settings_focus_select))
+	content.add_child(_management_save_button("GuildSaveProfileButton", _on_save_profile_settings))
+	return content
+
+
+func _build_management_recruitment_page(guild: Dictionary) -> Control:
+	var content := VBoxContainer.new()
+	content.name = "GuildManagementRecruitmentPage"
+	content.add_theme_constant_override("separation", 8)
+	content.add_child(_localized_label("ui.guild.management.recruitment_title", 12, UI_ACCENT))
+	var hint := _localized_label("ui.guild.management.recruitment_hint", 9, UI_MUTED)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(hint)
+	settings_recruitment_select = _option_button(["Applications open", "Open", "Invite only", "Closed"])
+	settings_recruitment_select.custom_minimum_size = Vector2(220, 36)
+	_select_option_text(settings_recruitment_select, str(guild.get("recruitment", "Applications open")))
+	content.add_child(_management_select_field("ui.guild.field.recruitment", settings_recruitment_select))
+	content.add_child(_localized_label("ui.guild.requirements.manage_title", 10, UI_ACCENT))
+	var requirements_hint := _localized_label("ui.guild.requirements.manage_hint", 9, UI_MUTED)
+	requirements_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(requirements_hint)
+	settings_requirements = _guild_requirements(guild)
+	settings_requirements_container = VBoxContainer.new()
+	settings_requirements_container.name = "GuildSettingsRequirements"
+	settings_requirements_container.add_theme_constant_override("separation", 6)
+	content.add_child(settings_requirements_container)
+	_render_settings_requirements()
+	var add_requirement := Button.new()
+	add_requirement.name = "GuildAddRequirementButton"
+	_set_localized_property(add_requirement, "text", "ui.guild.requirements.add")
+	add_requirement.pressed.connect(_on_add_guild_requirement)
+	_apply_button_style(add_requirement)
+	content.add_child(add_requirement)
+	content.add_child(_management_save_button("GuildSaveRecruitmentButton", _on_save_recruitment_settings))
+	return content
+
+
+func _build_management_bank_page(guild: Dictionary) -> Control:
+	var content := VBoxContainer.new()
+	content.name = "GuildManagementBankPage"
+	content.add_theme_constant_override("separation", 8)
+	content.add_child(_localized_label("ui.guild.management.bank_title", 12, UI_ACCENT))
+	var hint := _localized_label("ui.guild.management.bank_hint", 9, UI_MUTED)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(hint)
+	settings_loan_duration_select = OptionButton.new()
+	settings_loan_duration_select.custom_minimum_size = Vector2(220, 36)
+	for duration: int in [3600, 10800, 21600, 43200, 86400, 172800, 259200]:
+		settings_loan_duration_select.add_item(_guild_loan_duration_label(duration))
+		settings_loan_duration_select.set_item_metadata(settings_loan_duration_select.item_count - 1, duration)
+	_apply_option_button_style(settings_loan_duration_select)
+	_select_guild_loan_duration(int(guild.get("loanDurationSeconds", 86400)))
+	content.add_child(_management_select_field("ui.guild.management.loan_duration", settings_loan_duration_select))
+	content.add_child(_management_save_button("GuildSaveBankSettingsButton", _on_save_bank_settings))
+	return content
+
+
+func _management_select_field(label_key: String, select: OptionButton) -> Control:
+	var field := VBoxContainer.new()
+	field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	field.add_theme_constant_override("separation", 4)
+	field.add_child(_localized_label(label_key, 9, UI_MUTED))
+	field.add_child(select)
+	return field
+
+
+func _management_save_button(button_name: String, callback: Callable) -> Button:
+	var button := Button.new()
+	button.name = button_name
+	_set_localized_property(button, "text", "ui.guild.settings.save")
+	button.pressed.connect(callback)
+	_apply_button_style(button, "primary")
+	return button
 
 
 func _render_settings_requirements() -> void:
@@ -4600,7 +4689,7 @@ func _refresh_membership_state() -> void:
 	guild_section_navigation.visible = true
 	browse_tab_button.custom_minimum_size = Vector2(150, 34)
 	if guild_section_buttons.is_empty():
-		_build_guild_section_navigation(false, false)
+		_build_guild_section_navigation(false)
 	primary_navigation.move_child(guild_section_navigation, 0)
 	primary_navigation.move_child(primary_navigation_spacer, 1)
 	primary_navigation.move_child(browse_tab_button, 2)
@@ -4637,17 +4726,64 @@ func _membership_role_label(role: String) -> String:
 			return _t("ui.guild.role.recruit")
 
 
-func _on_save_settings() -> void:
+func _on_save_profile_settings() -> void:
 	if settings_description_input == null or settings_announcement_input == null:
 		return
 	var description := settings_description_input.text.strip_edges()
 	if description.length() < 12:
 		_set_member_status(_t("ui.guild.error.description_short"), true)
 		return
+	var guild := _dictionary(guild_home.get("guild", {}))
+	await _submit_guild_settings(
+		description,
+		settings_announcement_input.text.strip_edges(),
+		_selected_option_value(settings_language_select),
+		_selected_option_value(settings_focus_select),
+		str(guild.get("recruitment", "Applications open")),
+		int(guild.get("loanDurationSeconds", 86400)),
+		_guild_requirements(guild)
+	)
+
+
+func _on_save_recruitment_settings() -> void:
 	var requirements_result := _validated_settings_requirements()
 	if not bool(requirements_result.get("success", false)):
 		_set_member_status(str(requirements_result.get("error", "")), true)
 		return
+	var guild := _dictionary(guild_home.get("guild", {}))
+	await _submit_guild_settings(
+		str(guild.get("description", "")),
+		str(guild_home.get("announcement", "")),
+		str(guild.get("language", "English")),
+		str(guild.get("focus", "Social")),
+		_selected_option_value(settings_recruitment_select),
+		int(guild.get("loanDurationSeconds", 86400)),
+		_array_from_value(requirements_result.get("requirements", []))
+	)
+
+
+func _on_save_bank_settings() -> void:
+	var guild := _dictionary(guild_home.get("guild", {}))
+	await _submit_guild_settings(
+		str(guild.get("description", "")),
+		str(guild_home.get("announcement", "")),
+		str(guild.get("language", "English")),
+		str(guild.get("focus", "Social")),
+		str(guild.get("recruitment", "Applications open")),
+		_selected_guild_loan_duration(),
+		_guild_requirements(guild)
+	)
+
+
+func _submit_guild_settings(
+	description: String,
+	announcement: String,
+	language: String,
+	focus: String,
+	recruitment: String,
+	loan_duration_seconds: int,
+	requirements: Array
+) -> void:
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
 		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
@@ -4656,12 +4792,12 @@ func _on_save_settings() -> void:
 	var response: Variant = await guild_service.call(
 		"update_settings",
 		description,
-		settings_announcement_input.text.strip_edges(),
-		_selected_option_value(settings_language_select),
-		_selected_option_value(settings_focus_select),
-		_selected_option_value(settings_recruitment_select),
-		_selected_guild_loan_duration(),
-		_array_from_value(requirements_result.get("requirements", []))
+		announcement,
+		language,
+		focus,
+		recruitment,
+		loan_duration_seconds,
+		requirements
 	)
 	var result := _dictionary(response)
 	if not bool(result.get("success", false)):
@@ -4782,6 +4918,7 @@ func _on_accept_application(application_id: int) -> void:
 		return
 	_apply_home_result(result)
 	active_guild_section = "management"
+	active_management_section = "applications"
 	_render_guild_home()
 	_set_member_status(_t("ui.guild.status.application_accepted"), false)
 	_show_guild_system_message("ui.guild.notification.you_accepted", {"trainer": trainer_name})
@@ -4802,6 +4939,7 @@ func _on_decline_application(application_id: int) -> void:
 		return
 	await _refresh_home_from_server()
 	active_guild_section = "management"
+	active_management_section = "applications"
 	_render_guild_home()
 	_set_member_status(_t("ui.guild.status.application_declined"), false)
 	_show_guild_system_message("ui.guild.notification.you_declined", {"trainer": trainer_name})

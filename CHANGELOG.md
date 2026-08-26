@@ -16,6 +16,7 @@
 
 **Changed**
 
+- Guild Management now organizes profile, recruitment, applications, and Guild Bank settings into permission-aware internal tabs.
 - Guild Item Storage rows now separate item names from stored, available, and borrowed quantities.
 - Guild history and Guild Bank logs can now be limited to the past 24 hours, 7 days, 30 days, or 90 days.
 - Read-only Pokémon Summary cards now switch between front and back sprites when clicked.

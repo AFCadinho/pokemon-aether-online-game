@@ -515,11 +515,21 @@ func _run() -> void:
 		and str(private_message_user.get("username", "")) == "maple",
 		"Guild member PM action identifies the selected trainer"
 	)
-	var applications_tab := popup.find_child("GuildApplicationsTab", true, false) as Button
-	_check(applications_tab != null, "Guild staff receive a dedicated applications tab")
-	_check(popup.find_child("GuildApplicationsNotificationBadge", true, false) != null, "pending applications show a red notification badge")
+	var management_tab := popup.find_child("GuildManagementTab", true, false) as Button
+	_check(popup.find_child("GuildApplicationsTab", true, false) == null, "applications no longer occupy the primary Guild navigation")
+	_check(popup.find_child("GuildManagementNotificationBadge", true, false) != null, "Management shows pending application notifications")
 	var application_badge_count := popup.find_child("GuildApplicationsNotificationCount", true, false) as Label
 	_check(application_badge_count != null and application_badge_count.text == "1", "application notification shows the pending count")
+	if management_tab != null:
+		management_tab.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildManagementNavigation", true, false) != null, "Management opens an organized secondary navigation")
+	_check(popup.find_child("GuildManagementProfileTab", true, false) != null, "leaders receive a Guild Profile management page")
+	_check(popup.find_child("GuildManagementRecruitmentTab", true, false) != null, "leaders receive a Recruitment management page")
+	var applications_tab := popup.find_child("GuildManagementApplicationsTab", true, false) as Button
+	_check(applications_tab != null, "Guild staff receive an Applications management page")
+	_check(popup.find_child("GuildManagementBankTab", true, false) != null, "leaders receive a Bank Settings management page")
+	_check(popup.find_child("GuildApplicationsNotificationBadge", true, false) != null, "the Applications management page repeats its pending badge")
 	if applications_tab != null:
 		applications_tab.pressed.emit()
 		await process_frame
@@ -540,13 +550,20 @@ func _run() -> void:
 	)
 	_check(popup.find_child("AcceptGuildApplicationButton_8", true, false) != null, "staff can accept a Guild application")
 	_check(popup.find_child("DeclineGuildApplicationButton_8", true, false) != null, "staff can decline a Guild application")
-	var management_tab := popup.find_child("GuildManagementTab", true, false) as Button
-	if management_tab != null:
-		management_tab.pressed.emit()
+	var profile_tab := popup.find_child("GuildManagementProfileTab", true, false) as Button
+	if profile_tab != null:
+		profile_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildManagementSection", true, false) != null, "management tab opens guild controls")
+	_check(popup.find_child("GuildManagementProfilePage", true, false) != null, "Guild Profile settings stay on their own page")
 	_check(popup.find_child("GuildSettingsDescription", true, false) != null, "leader settings render")
 	_check(popup.find_child("GuildSettingsAnnouncement", true, false) != null, "leaders can edit the Guild announcement")
+	_check(popup.find_child("GuildApplicationsInbox", true, false) == null, "applications do not crowd Guild Profile settings")
+	var recruitment_tab := popup.find_child("GuildManagementRecruitmentTab", true, false) as Button
+	if recruitment_tab != null:
+		recruitment_tab.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildManagementRecruitmentPage", true, false) != null, "Recruitment settings stay on their own page")
 	_check(popup.find_child("GuildSettingsRequirements", true, false) != null, "leaders can manage a dynamic requirement list")
 	_check(popup.find_child("GuildSettingsRequirement_0", true, false) != null, "saved requirements remain editable")
 	var add_requirement := popup.find_child("GuildAddRequirementButton", true, false) as Button
@@ -567,7 +584,12 @@ func _run() -> void:
 	_check(str(popup.settings_requirements[2].get("value", "")) == "Welcome newer Trainers", "leaders can reorder requirements")
 	popup._on_remove_guild_requirement(2)
 	_check(popup.settings_requirements.size() == 3, "leaders can remove requirements")
-	_check(popup.find_child("GuildApplicationsInbox", true, false) == null, "applications no longer crowd Guild settings")
+	var bank_settings_tab := popup.find_child("GuildManagementBankTab", true, false) as Button
+	if bank_settings_tab != null:
+		bank_settings_tab.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildManagementBankPage", true, false) != null, "Guild Bank rules stay on their own management page")
+	_check(popup.find_child("GuildSaveBankSettingsButton", true, false) != null, "Bank Settings expose an independent save action")
 	_check(popup.find_child("GuildMemberSearchInput", true, false) == null, "member roster tools do not live under management")
 	_check(popup.find_child("GuildEmblemPreview", true, false) == null, "management keeps emblem controls out of settings")
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "leader does not see a redundant Guild emblem edit button")
@@ -660,11 +682,28 @@ func _run() -> void:
 		"member dashboard fits inside its popup"
 	)
 	popup.guild_home["pendingApplications"] = []
-	popup._show_guild_section("applications")
+	popup._show_guild_section("management")
+	popup._show_management_section("applications")
 	await process_frame
 	_check(popup.find_child("GuildApplicationsEmptyState", true, false) != null, "empty Guild application inbox remains clearly visible")
 	application_count = popup.find_child("GuildApplicationsPendingCount", true, false) as Label
 	_check(application_count != null and application_count.text.contains("0"), "empty Guild application inbox shows zero waiting")
+	popup.guild_home["membership"] = {
+		"guildId": 1,
+		"role": "captain",
+		"permissions": ["manage_members"],
+	}
+	popup.membership = popup.guild_home["membership"]
+	popup.active_guild_section = "management"
+	popup.active_management_section = "profile"
+	popup._render_guild_home()
+	await process_frame
+	_check(popup.find_child("GuildManagementTab", true, false) != null, "application reviewers can open Management")
+	_check(popup.find_child("GuildManagementApplicationsTab", true, false) != null, "application reviewers receive the Applications page")
+	_check(popup.find_child("GuildManagementProfileTab", true, false) == null, "captains without Guild settings permission cannot edit the profile")
+	_check(popup.find_child("GuildManagementRecruitmentTab", true, false) == null, "captains without Guild settings permission cannot edit recruitment")
+	_check(popup.find_child("GuildManagementBankTab", true, false) == null, "captains without Guild settings permission cannot edit Bank settings")
+	_check(popup.find_child("GuildApplicationsSection", true, false) != null, "application-only Management defaults to its authorized page")
 	popup.guild_home["membership"] = {
 		"guildId": 1,
 		"role": "member",
@@ -675,7 +714,7 @@ func _run() -> void:
 	popup._render_guild_home()
 	await process_frame
 	_check(popup.find_child("GuildManagementTab", true, false) == null, "regular members do not see management")
-	_check(popup.find_child("GuildApplicationsTab", true, false) == null, "regular members do not see the staff applications inbox")
+	_check(popup.find_child("GuildManagementApplicationsTab", true, false) == null, "regular members do not see the staff applications inbox")
 	_check(popup.find_child("GuildMemberRoleSelect_2", true, false) == null, "regular members cannot assign Guild ranks")
 	_check(popup.find_child("GuildMemberBankPermissionsButton_2", true, false) == null, "regular members cannot edit Guild Bank rights")
 	_check(
