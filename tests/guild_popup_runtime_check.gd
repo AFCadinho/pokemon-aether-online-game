@@ -184,6 +184,10 @@ func _run() -> void:
 	_check(leader_options != null and leader_options.get_popup().is_item_disabled(0), "Guild leaders cannot leave through Guild options")
 	var header_travel := popup.find_child("GuildHeaderTravelActions", true, false) as VBoxContainer
 	_check(header_travel != null, "guild travel occupies the member header")
+	var guild_progress := popup.find_child("GuildExperienceProgress", true, false) as ProgressBar
+	_check(guild_progress != null and is_equal_approx(guild_progress.value, 47.5), "guild overview shows authoritative level progress")
+	var guild_progress_label := popup.find_child("GuildExperienceProgressLabel", true, false) as Label
+	_check(guild_progress_label != null and guild_progress_label.text.contains("500,000"), "guild overview shows total Guild EXP")
 	var lobby_button := popup.find_child("GuildLobbyTeleportButton", true, false) as Button
 	_check(lobby_button != null and not lobby_button.disabled, "Aether Clash Lobby travel is available")
 	var base_button := popup.find_child("GuildBaseTeleportButton", true, false) as Button
@@ -354,6 +358,8 @@ func _run() -> void:
 		members_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildMembersSection", true, false) != null, "members tab opens the roster")
+	var leader_contribution := popup.find_child("GuildMemberContributionLabel_1", true, false) as Label
+	_check(leader_contribution != null and leader_contribution.text == "124,350", "member roster shows contributed Guild EXP")
 	_check(popup.find_child("GuildHistoryLogButton", true, false) != null, "member roster has a dedicated Guild history action")
 	var member_search := popup.find_child("GuildMemberSearchInput", true, false) as LineEdit
 	_check(member_search != null, "member roster provides a search field")

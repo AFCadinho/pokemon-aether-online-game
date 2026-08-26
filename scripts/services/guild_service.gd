@@ -485,6 +485,8 @@ func _bank_result(value: Variant) -> Dictionary:
 	return {
 		"success": true,
 		"guildId": int(body.get("guildId", 0)),
+		"itemCapacity": int(body.get("itemCapacity", 50)),
+		"pokemonCapacity": int(body.get("pokemonCapacity", 30)),
 		"access": _dictionary(body.get("access", {})).duplicate(true),
 		"funds": _dictionary(body.get("funds", {})).duplicate(true),
 		"items": _array(body.get("items", [])).duplicate(true),
