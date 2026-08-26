@@ -1844,7 +1844,7 @@
   "ui.guild.invite.action": "邀请玩家",
   "ui.guild.invite.pending": "待处理的邀请",
   "ui.guild.notification.application_accepted": "您加入 {guild} 的申请已被 {actor} 接受。",
-  "ui.guild.notification.application_declined": "您加入 {guild} 的申请已被 {actor} 拒绝。",
+  "ui.guild.notification.application_declined": "您加入 {guild} 的申请已被拒绝。",
   "ui.guild.notification.member_left": "{trainer} 离开了 {guild}。",
   "ui.guild.notification.you_accepted": "您接受了 {trainer} 的公会申请。",
   "ui.guild.notification.you_declined": "您拒绝了 {trainer} 的公会申请。",
