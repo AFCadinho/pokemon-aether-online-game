@@ -1922,15 +1922,15 @@ func _open_guild_log(category: String) -> void:
 	_show_guild_log_window(category, result)
 
 
-func _request_guild_log(category: String, before_id: int, search: String = "", action: String = "") -> Dictionary:
+func _request_guild_log(category: String, before_id: int, search: String = "", action: String = "", date_from: String = "", date_to: String = "") -> Dictionary:
 	var service := get_node_or_null("/root/GuildService")
 	if service == null:
 		return {"success": false, "error": _t("ui.guild.error.service_unavailable")}
 	var response: Variant
 	if category == "guild":
-		response = await service.call("load_history", before_id, search, action)
+		response = await service.call("load_history", before_id, search, action, date_from, date_to)
 	else:
-		response = await service.call("load_bank_log", category, before_id, search, action)
+		response = await service.call("load_bank_log", category, before_id, search, action, date_from, date_to)
 	return _dictionary(response)
 
 
@@ -1939,7 +1939,7 @@ func _show_guild_log_window(category: String, result: Dictionary) -> void:
 	window.name = "GuildHistoryLogWindow" if category == "guild" else "Guild%sLogWindow" % category.capitalize()
 	window.title = _t("ui.guild.log.%s.title" % category)
 	window.size = Vector2i(760, 540)
-	window.min_size = Vector2i(520, 360)
+	window.min_size = Vector2i(640, 400)
 	window.transient = true
 	window.exclusive = true
 	window.borderless = true
@@ -1982,16 +1982,20 @@ func _show_guild_log_window(category: String, result: Dictionary) -> void:
 	close.pressed.connect(window.queue_free)
 	title_row.add_child(close)
 	content.add_child(_localized_label("ui.guild.log.%s.heading" % category, 12, UI_ACCENT))
-	var filters := HBoxContainer.new()
+	var filters := VBoxContainer.new()
 	filters.name = "GuildLogFilters"
-	filters.add_theme_constant_override("separation", 10)
+	filters.add_theme_constant_override("separation", 8)
 	content.add_child(filters)
+	var filter_fields := HBoxContainer.new()
+	filter_fields.name = "GuildLogFilterFields"
+	filter_fields.add_theme_constant_override("separation", 10)
+	filters.add_child(filter_fields)
 	var search_field := VBoxContainer.new()
 	search_field.name = "GuildLogSearchField"
 	search_field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	search_field.add_theme_constant_override("separation", 4)
 	search_field.add_child(_localized_label("ui.guild.log.filter.search_label", 10, UI_ACCENT))
-	filters.add_child(search_field)
+	filter_fields.add_child(search_field)
 	var search := LineEdit.new()
 	search.name = "GuildLogSearchInput"
 	search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2004,15 +2008,21 @@ func _show_guild_log_window(category: String, result: Dictionary) -> void:
 	action_field.name = "GuildLogActionField"
 	action_field.add_theme_constant_override("separation", 4)
 	action_field.add_child(_localized_label("ui.guild.log.filter.action_label", 10, UI_ACCENT))
-	filters.add_child(action_field)
+	filter_fields.add_child(action_field)
 	var action_select := _guild_log_action_filter(category)
 	action_field.add_child(action_select)
-	var button_margin := MarginContainer.new()
-	button_margin.add_theme_constant_override("margin_top", 18)
-	filters.add_child(button_margin)
+	var period_field := VBoxContainer.new()
+	period_field.name = "GuildLogPeriodField"
+	period_field.add_theme_constant_override("separation", 4)
+	period_field.add_child(_localized_label("ui.guild.log.filter.period_label", 10, UI_ACCENT))
+	filter_fields.add_child(period_field)
+	var period_select := _guild_log_period_filter()
+	period_field.add_child(period_select)
 	var filter_buttons := HBoxContainer.new()
+	filter_buttons.name = "GuildLogFilterButtons"
 	filter_buttons.add_theme_constant_override("separation", 8)
-	button_margin.add_child(filter_buttons)
+	filter_buttons.alignment = BoxContainer.ALIGNMENT_END
+	filters.add_child(filter_buttons)
 	var apply := Button.new()
 	apply.name = "GuildLogApplyFiltersButton"
 	_set_localized_property(apply, "text", "ui.guild.log.filter.apply")
@@ -2036,10 +2046,10 @@ func _show_guild_log_window(category: String, result: Dictionary) -> void:
 	footer.name = "GuildLogFooter"
 	footer.alignment = BoxContainer.ALIGNMENT_CENTER
 	content.add_child(footer)
-	apply.pressed.connect(_reload_guild_log.bind(category, search, action_select, entries, footer))
-	search.text_submitted.connect(_reload_guild_log_from_submit.bind(category, search, action_select, entries, footer))
-	clear.pressed.connect(_clear_guild_log_filters.bind(category, search, action_select, entries, footer))
-	_append_guild_log_page(category, result, entries, footer, "", "")
+	apply.pressed.connect(_reload_guild_log.bind(category, search, action_select, period_select, entries, footer))
+	search.text_submitted.connect(_reload_guild_log_from_submit.bind(category, search, action_select, period_select, entries, footer))
+	clear.pressed.connect(_clear_guild_log_filters.bind(category, search, action_select, period_select, entries, footer))
+	_append_guild_log_page(category, result, entries, footer, "", "", "", "")
 	window.popup_centered()
 
 
@@ -2047,6 +2057,8 @@ func _guild_log_action_filter(category: String) -> OptionButton:
 	var select := OptionButton.new()
 	select.name = "GuildLogActionFilter"
 	select.custom_minimum_size = Vector2(170, 36)
+	select.fit_to_longest_item = false
+	select.clip_text = true
 	select.add_item(_t("ui.guild.log.filter.all_actions"))
 	select.set_item_metadata(0, "")
 	var actions: Array[String] = []
@@ -2074,25 +2086,60 @@ func _selected_guild_log_action(select: OptionButton) -> String:
 	return str(select.get_item_metadata(select.selected))
 
 
+func _guild_log_period_filter() -> OptionButton:
+	var select := OptionButton.new()
+	select.name = "GuildLogPeriodFilter"
+	select.custom_minimum_size = Vector2(155, 36)
+	select.fit_to_longest_item = false
+	select.clip_text = true
+	var periods := [
+		["all", 0],
+		["24_hours", 86400],
+		["7_days", 604800],
+		["30_days", 2592000],
+		["90_days", 7776000],
+	]
+	for period: Array in periods:
+		select.add_item(_t("ui.guild.log.filter.period.%s" % str(period[0])))
+		select.set_item_metadata(select.item_count - 1, int(period[1]))
+	_apply_option_button_style(select)
+	select.add_theme_stylebox_override("normal", _input_style(Color("#0b2033f5"), UI_ACCENT_SOFT, 1))
+	select.add_theme_stylebox_override("hover", _input_style(UI_HOVER, UI_ACCENT, 2))
+	select.add_theme_stylebox_override("pressed", _input_style(Color("#0d2a42f5"), UI_ACCENT, 2))
+	return select
+
+
+func _selected_guild_log_period(select: OptionButton) -> String:
+	if select == null or select.selected < 0:
+		return ""
+	var seconds := int(select.get_item_metadata(select.selected))
+	if seconds <= 0:
+		return ""
+	var cutoff := int(Time.get_unix_time_from_system()) - seconds
+	return Time.get_datetime_string_from_unix_time(cutoff, true) + "Z"
+
+
 func _reload_guild_log(
 	category: String,
 	search: LineEdit,
 	action_select: OptionButton,
+	period_select: OptionButton,
 	entries: VBoxContainer,
 	footer: HBoxContainer
 ) -> void:
 	var search_text := search.text.strip_edges() if search != null else ""
 	var action := _selected_guild_log_action(action_select)
+	var date_from := _selected_guild_log_period(period_select)
 	_clear_guild_log_entries(entries)
 	entries.add_child(_localized_label("ui.guild.bank.loading", 11, UI_MUTED))
 	for child in footer.get_children():
 		child.queue_free()
-	var result := await _request_guild_log(category, 0, search_text, action)
+	var result := await _request_guild_log(category, 0, search_text, action, date_from)
 	_clear_guild_log_entries(entries)
 	if not bool(result.get("success", false)):
 		entries.add_child(_localized_label("ui.guild.log.error", 11, UI_WARNING))
 		return
-	_append_guild_log_page(category, result, entries, footer, search_text, action)
+	_append_guild_log_page(category, result, entries, footer, search_text, action, date_from, "")
 
 
 func _reload_guild_log_from_submit(
@@ -2100,16 +2147,18 @@ func _reload_guild_log_from_submit(
 	category: String,
 	search: LineEdit,
 	action_select: OptionButton,
+	period_select: OptionButton,
 	entries: VBoxContainer,
 	footer: HBoxContainer
 ) -> void:
-	await _reload_guild_log(category, search, action_select, entries, footer)
+	await _reload_guild_log(category, search, action_select, period_select, entries, footer)
 
 
 func _clear_guild_log_filters(
 	category: String,
 	search: LineEdit,
 	action_select: OptionButton,
+	period_select: OptionButton,
 	entries: VBoxContainer,
 	footer: HBoxContainer
 ) -> void:
@@ -2117,7 +2166,9 @@ func _clear_guild_log_filters(
 		search.clear()
 	if action_select != null:
 		action_select.select(0)
-	await _reload_guild_log(category, search, action_select, entries, footer)
+	if period_select != null:
+		period_select.select(0)
+	await _reload_guild_log(category, search, action_select, period_select, entries, footer)
 
 
 func _clear_guild_log_entries(entries: VBoxContainer) -> void:
@@ -2132,14 +2183,16 @@ func _append_guild_log_page(
 	entries: VBoxContainer,
 	footer: HBoxContainer,
 	search: String,
-	action: String
+	action: String,
+	date_from: String,
+	date_to: String
 ) -> void:
 	for child in footer.get_children():
 		child.queue_free()
 	var page_entries := _array_from_value(result.get("entries", []))
 	if entries.get_child_count() == 0 and page_entries.is_empty():
 		entries.add_child(_localized_label(
-			"ui.guild.log.filter.empty" if search != "" or action != "" else "ui.guild.log.empty",
+			"ui.guild.log.filter.empty" if search != "" or action != "" or date_from != "" or date_to != "" else "ui.guild.log.empty",
 			12,
 			UI_MUTED
 		))
@@ -2151,7 +2204,7 @@ func _append_guild_log_page(
 		var more := Button.new()
 		more.name = "GuildLogLoadMoreButton"
 		_set_localized_property(more, "text", "ui.guild.log.load_more")
-		more.pressed.connect(_load_more_guild_log.bind(category, next_before_id, entries, footer, search, action))
+		more.pressed.connect(_load_more_guild_log.bind(category, next_before_id, entries, footer, search, action, date_from, date_to))
 		_apply_button_style(more)
 		footer.add_child(more)
 
@@ -2162,15 +2215,17 @@ func _load_more_guild_log(
 	entries: VBoxContainer,
 	footer: HBoxContainer,
 	search: String,
-	action: String
+	action: String,
+	date_from: String,
+	date_to: String
 ) -> void:
 	for child in footer.get_children():
 		child.queue_free()
-	var result := await _request_guild_log(category, before_id, search, action)
+	var result := await _request_guild_log(category, before_id, search, action, date_from, date_to)
 	if not bool(result.get("success", false)):
 		footer.add_child(_localized_label("ui.guild.log.error", 11, UI_WARNING))
 		return
-	_append_guild_log_page(category, result, entries, footer, search, action)
+	_append_guild_log_page(category, result, entries, footer, search, action, date_from, date_to)
 
 
 func _build_guild_log_entry(category: String, entry: Dictionary) -> Control:

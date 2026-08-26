@@ -393,10 +393,17 @@ func _run() -> void:
 	_check(log_close != null and log_close.has_theme_stylebox_override("normal"), "Guild log close action is clearly styled")
 	var log_search := popup.find_child("GuildLogSearchInput", true, false) as LineEdit
 	var log_action_filter := popup.find_child("GuildLogActionFilter", true, false) as OptionButton
+	var log_period_filter := popup.find_child("GuildLogPeriodFilter", true, false) as OptionButton
+	var log_filter_fields := popup.find_child("GuildLogFilterFields", true, false) as HBoxContainer
 	_check(popup.find_child("GuildLogSearchField", true, false) != null, "Guild log search has a visible field label")
 	_check(popup.find_child("GuildLogActionField", true, false) != null, "Guild log action choice has a visible field label")
 	_check(log_search != null, "Guild logs expose a search field")
 	_check(log_action_filter != null and log_action_filter.item_count == 5, "Guild history exposes its relevant action filters")
+	_check(log_period_filter != null and log_period_filter.item_count == 5, "Guild logs offer all-time and useful recent periods")
+	_check(log_filter_fields != null and log_filter_fields.size.x <= history_window.size.x - 32, "Guild log filter fields fit inside the window")
+	if log_period_filter != null:
+		log_period_filter.select(2)
+		_check(str(popup._selected_guild_log_period(log_period_filter)).ends_with("Z"), "Guild log periods produce a stable UTC boundary")
 	_check(popup.find_child("GuildLogApplyFiltersButton", true, false) != null, "Guild logs can apply filters")
 	_check(popup.find_child("GuildLogClearFiltersButton", true, false) != null, "Guild log filters can be cleared")
 	_check(

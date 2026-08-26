@@ -175,7 +175,7 @@ func load_bank() -> Dictionary:
 	return response if not bool(response.get("success", false)) else _bank_result(response.get("body", {}))
 
 
-func load_history(before_id: int = 0, search: String = "", action: String = "") -> Dictionary:
+func load_history(before_id: int = 0, search: String = "", action: String = "", date_from: String = "", date_to: String = "") -> Dictionary:
 	var path := GUILD_HOME_ENDPOINT + "/history?limit=50"
 	if before_id > 0:
 		path += "&beforeId=%d" % before_id
@@ -183,11 +183,15 @@ func load_history(before_id: int = 0, search: String = "", action: String = "") 
 		path += "&search=%s" % search.strip_edges().uri_encode()
 	if action.strip_edges() != "":
 		path += "&action=%s" % action.strip_edges().uri_encode()
+	if date_from.strip_edges() != "":
+		path += "&dateFrom=%s" % date_from.strip_edges().uri_encode()
+	if date_to.strip_edges() != "":
+		path += "&dateTo=%s" % date_to.strip_edges().uri_encode()
 	var response := await _authenticated_request(path, HTTPClient.METHOD_GET, "")
 	return response if not bool(response.get("success", false)) else _log_result(response.get("body", {}))
 
 
-func load_bank_log(category: String, before_id: int = 0, search: String = "", action: String = "") -> Dictionary:
+func load_bank_log(category: String, before_id: int = 0, search: String = "", action: String = "", date_from: String = "", date_to: String = "") -> Dictionary:
 	var normalized := category.strip_edges().to_lower()
 	if not normalized in ["funds", "items", "pokemon", "resources"]:
 		return {"success": false, "error": "Unknown Guild Bank log."}
@@ -198,6 +202,10 @@ func load_bank_log(category: String, before_id: int = 0, search: String = "", ac
 		path += "&search=%s" % search.strip_edges().uri_encode()
 	if action.strip_edges() != "":
 		path += "&action=%s" % action.strip_edges().uri_encode()
+	if date_from.strip_edges() != "":
+		path += "&dateFrom=%s" % date_from.strip_edges().uri_encode()
+	if date_to.strip_edges() != "":
+		path += "&dateTo=%s" % date_to.strip_edges().uri_encode()
 	var response := await _authenticated_request(path, HTTPClient.METHOD_GET, "")
 	return response if not bool(response.get("success", false)) else _log_result(response.get("body", {}))
 
