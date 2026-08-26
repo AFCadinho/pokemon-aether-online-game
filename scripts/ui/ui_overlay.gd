@@ -105,6 +105,7 @@ const LANGUAGE_CHAT_LABELS := {
 	CHAT_CHANNEL_LANGUAGE_PT: "ui.chat.language.pt",
 }
 const CHAT_MUTE_PERMISSION := "chat:mute"
+const CHAT_TRANSLATE_PERMISSION := "chat:translate"
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
 const DEV_ITEM_GENERATING_PERMISSION := "items:generating"
@@ -986,6 +987,7 @@ var language_chat_tab_button: Button
 var language_chat_empty_state: CenterContainer
 var language_chat_empty_title_label: Label
 var language_chat_empty_hint_label: Label
+var chat_translate_mode_button: CheckButton
 var selected_general_chat_tab := CHAT_TAB_GENERAL
 var all_chat_tab_button: Button
 var guild_chat_tab_button: Button
@@ -1532,6 +1534,10 @@ func _ready() -> void:
 		ChatRealtimeService.authorized_teleport_received.connect(_on_authorized_teleport_received)
 	if not ChatRealtimeService.session_invalid.is_connected(_on_chat_session_invalid):
 		ChatRealtimeService.session_invalid.connect(_on_chat_session_invalid)
+	if not ChatRealtimeService.translation_state_changed.is_connected(_on_chat_translation_state_changed):
+		ChatRealtimeService.translation_state_changed.connect(_on_chat_translation_state_changed)
+	if not ChatRealtimeService.translation_warning.is_connected(_on_chat_translation_warning):
+		ChatRealtimeService.translation_warning.connect(_on_chat_translation_warning)
 	if not WorldPresenceService.weather_changed.is_connected(_on_location_weather_changed):
 		WorldPresenceService.weather_changed.connect(_on_location_weather_changed)
 	ChatRealtimeService.connect_chat.call_deferred()
@@ -1549,6 +1555,7 @@ func _ready() -> void:
 	_setup_pm_chat_ui()
 	_setup_guild_chat_ui()
 	_setup_language_chat_ui()
+	_setup_chat_translate_mode_ui()
 	_setup_chat_context_selector_ui()
 	_setup_chat_tab_settings_ui()
 	general_chat_tab_button.focus_mode = Control.FOCUS_NONE
@@ -26953,6 +26960,80 @@ func _setup_language_chat_ui() -> void:
 	_reorder_chat_tab_buttons()
 
 
+func _setup_chat_translate_mode_ui() -> void:
+	if chat_translate_mode_button != null:
+		return
+	chat_translate_mode_button = CheckButton.new()
+	chat_translate_mode_button.name = "ChatTranslateModeButton"
+	chat_translate_mode_button.custom_minimum_size = Vector2(86, 34)
+	chat_translate_mode_button.focus_mode = Control.FOCUS_NONE
+	_set_localized_control_property(
+		chat_translate_mode_button,
+		"text",
+		"ui.chat.translate.toggle"
+	)
+	_set_localized_control_property(
+		chat_translate_mode_button,
+		"tooltip_text",
+		"ui.chat.translate.tooltip"
+	)
+	chat_translate_mode_button.toggled.connect(_on_chat_translate_mode_toggled)
+	chat_input_row.add_child(chat_translate_mode_button)
+	chat_input_row.move_child(chat_translate_mode_button, send_button.get_index())
+	_refresh_chat_translate_mode_ui()
+
+
+func _on_chat_translate_mode_toggled(enabled: bool) -> void:
+	if not _has_user_permission(CHAT_TRANSLATE_PERMISSION):
+		chat_translate_mode_button.set_pressed_no_signal(false)
+		return
+	ChatRealtimeService.set_translation_mode_requested(enabled)
+
+
+func _on_chat_translation_state_changed(
+	available: bool,
+	allowed: bool,
+	enabled: bool
+) -> void:
+	if chat_translate_mode_button == null:
+		return
+	chat_translate_mode_button.set_pressed_no_signal(enabled)
+	chat_translate_mode_button.disabled = not available or not allowed
+	_refresh_chat_translate_mode_ui()
+
+
+func _on_chat_translation_warning(_message: String) -> void:
+	_add_chat_message(
+		LocalizationManager.text("ui.chat.translate.unavailable"),
+		false,
+		CHAT_CATEGORY_SYSTEM_WARNING
+	)
+
+
+func _refresh_chat_translate_mode_ui() -> void:
+	if chat_translate_mode_button == null:
+		return
+	var in_language_chat := (
+		_active_primary_chat_tab_id() == CHAT_TAB_LANGUAGES
+		and selected_language_chat in LANGUAGE_CHAT_CHANNELS
+	)
+	chat_translate_mode_button.visible = (
+		in_language_chat
+		and _has_user_permission(CHAT_TRANSLATE_PERMISSION)
+	)
+	chat_translate_mode_button.disabled = (
+		not ChatRealtimeService.translation_mode_available
+		or not ChatRealtimeService.translation_mode_allowed
+	)
+	_set_localized_control_property(
+		chat_translate_mode_button,
+		"tooltip_text",
+		"ui.chat.translate.tooltip"
+		if not chat_translate_mode_button.disabled
+		else "ui.chat.translate.unavailable"
+	)
+
+
 func _refresh_guild_chat_membership() -> void:
 	guild_chat_membership_loading = true
 	_apply_chat_tab_state()
@@ -27924,6 +28005,7 @@ func _apply_chat_tab_state() -> void:
 	_render_active_pm_conversation()
 	_refresh_pm_tab_label()
 	_refresh_chat_context_selector()
+	_refresh_chat_translate_mode_ui()
 	_scroll_chat_to_bottom.call_deferred()
 
 func _refresh_chat_message_visibility() -> void:
@@ -41371,6 +41453,8 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	var display_name: String = str(user.get("displayName", user.get("username", "Trainer")))
 	user = _with_local_chat_role_state(user, display_name)
 	var text: String = str(message.get("text", "")).strip_edges()
+	var original_text: String = str(message.get("originalText", "")).strip_edges()
+	var machine_translated := bool(message.get("machineTranslated", false))
 	var pokemon_attachments: Array[Dictionary] = _get_chat_pokemon_attachments(message)
 	var shiny_hunt_attachment := _dictionary_from_value(message.get("shinyHuntAttachment", {}))
 	if text == "" and pokemon_attachments.is_empty() and shiny_hunt_attachment.is_empty():
@@ -41387,7 +41471,9 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		pokemon_attachments,
 		0,
 		shiny_hunt_attachment,
-		str(message.get("sentAt", ""))
+		str(message.get("sentAt", "")),
+		machine_translated,
+		original_text
 	)
 	if channel == CHAT_TAB_GUILD and active_chat_tab != CHAT_TAB_GUILD:
 		guild_chat_has_unread = true
@@ -41647,7 +41733,9 @@ func _add_user_chat_message(
 	pokemon_attachments: Array[Dictionary] = [],
 	target_user_id: int = 0,
 	shiny_hunt_attachment: Dictionary = {},
-	sent_at: String = ""
+	sent_at: String = "",
+	machine_translated: bool = false,
+	original_text: String = ""
 ) -> void:
 	var role: Dictionary = _get_primary_visible_chat_role(user)
 	var role_color: String = str(role.get("color", "#d8b767"))
@@ -41709,7 +41797,9 @@ func _add_user_chat_message(
 		role_name,
 		role_color,
 		message_context,
-		inline_pokemon_attachments
+		inline_pokemon_attachments,
+		machine_translated,
+		original_text
 	))
 
 	var has_visual_attachments := (
@@ -41745,7 +41835,9 @@ func _create_chat_sender_message_line(
 	role_name: String,
 	role_color: String,
 	message_context: Dictionary,
-	inline_pokemon_attachments: Control = null
+	inline_pokemon_attachments: Control = null,
+	machine_translated: bool = false,
+	original_text: String = ""
 ) -> Control:
 	var line := PanelContainer.new()
 	line.name = "MessageLine"
@@ -41772,6 +41864,13 @@ func _create_chat_sender_message_line(
 	)
 	header.add_child(channel_prefix)
 
+	if machine_translated and original_text != "" and original_text != text:
+		header.add_child(_create_chat_translation_badge(
+			entry,
+			original_text,
+			text
+		))
+
 	if role_name != "":
 		var role_badge := _create_chat_role_badge(role_name, role_color)
 		role_badge.size_flags_vertical = (
@@ -41797,6 +41896,66 @@ func _create_chat_sender_message_line(
 	header.minimum_size_changed.connect(_sync_chat_inline_header_spacing.bind(header, entry))
 	_sync_chat_inline_header_spacing.call_deferred(header, entry)
 	return line
+
+
+func _create_chat_translation_badge(
+	entry: RichTextLabel,
+	original_text: String,
+	translated_text: String
+) -> Button:
+	var badge := Button.new()
+	badge.name = "TranslationBadge"
+	_set_localized_control_property(badge, "text", "ui.chat.translate.translated")
+	_set_localized_control_property(
+		badge,
+		"tooltip_text",
+		"ui.chat.translate.show_original"
+	)
+	badge.focus_mode = Control.FOCUS_NONE
+	badge.flat = true
+	badge.add_theme_font_size_override("font_size", 9)
+	badge.add_theme_color_override("font_color", Color("#64d7f0"))
+	badge.add_theme_color_override("font_hover_color", Color("#a8f0ff"))
+	badge.set_meta("showing_original", false)
+	badge.pressed.connect(_toggle_chat_translation_text.bind(
+		entry,
+		badge,
+		original_text,
+		translated_text
+	))
+	return badge
+
+
+func _toggle_chat_translation_text(
+	entry: RichTextLabel,
+	badge: Button,
+	original_text: String,
+	translated_text: String
+) -> void:
+	if not is_instance_valid(entry) or not is_instance_valid(badge):
+		return
+	var showing_original := not bool(badge.get_meta("showing_original", false))
+	var visible_text := original_text if showing_original else translated_text
+	badge.set_meta("showing_original", showing_original)
+	_set_localized_control_property(
+		badge,
+		"text",
+		"ui.chat.translate.original"
+		if showing_original
+		else "ui.chat.translate.translated"
+	)
+	_set_localized_control_property(
+		badge,
+		"tooltip_text",
+		"ui.chat.translate.show_translation"
+		if showing_original
+		else "ui.chat.translate.show_original"
+	)
+	entry.set_meta("chat_message_text", visible_text)
+	var context := _dictionary_from_value(entry.get_meta("chat_message_context", {}))
+	context["text"] = visible_text
+	entry.set_meta("chat_message_context", context)
+	_render_chat_sender_message_label(entry)
 
 
 func _create_chat_sender_message_label(
