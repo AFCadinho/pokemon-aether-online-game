@@ -41483,10 +41483,20 @@ func add_system_message(text: String) -> void:
 
 func _on_guild_notification_received(notification: Dictionary) -> void:
 	var kind := str(notification.get("kind", ""))
-	var key := "ui.guild.notification.application_accepted" if kind == "application_accepted" else "ui.guild.notification.application_declined"
+	var key := ""
+	match kind:
+		"application_accepted":
+			key = "ui.guild.notification.application_accepted"
+		"application_declined":
+			key = "ui.guild.notification.application_declined"
+		"guild_member_left":
+			key = "ui.guild.notification.member_left"
+		_:
+			return
 	add_system_message(LocalizationManager.text(key, {
 		"guild": str(notification.get("guildName", "Guild")),
 		"actor": str(notification.get("actorName", "Guild staff")),
+		"trainer": str(notification.get("actorName", "Trainer")),
 	}))
 
 func add_system_warning(text: String) -> void:
@@ -41593,7 +41603,7 @@ func _scroll_chat_to_bottom() -> void:
 
 func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	var message_type := str(message.get("type", "")).strip_edges().to_lower()
-	if message_type == "guild.application.updated":
+	if message_type in ["guild.application.updated", "guild.notification.received"]:
 		var notification := _dictionary_from_value(message.get("notification", {}))
 		if not notification.is_empty():
 			GuildService.deliver_notification.call_deferred(notification)

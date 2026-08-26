@@ -662,13 +662,25 @@ func _run() -> void:
 	if invite_action != null:
 		invite_action.pressed.emit()
 		await process_frame
-	var invite_dialog := popup.find_child("GuildInviteDialog", true, false) as ConfirmationDialog
-	var invite_actions := invite_dialog.get_ok_button().get_parent() as BoxContainer if invite_dialog != null else null
+	var invite_dialog := popup.find_child("GuildInviteDialog", true, false) as Window
+	var invite_submit := popup.find_child("GuildInviteSubmitButton", true, false) as Button
+	var invite_cancel := popup.find_child("GuildInviteCancelButton", true, false) as Button
+	var invite_actions := invite_submit.get_parent() as BoxContainer if invite_submit != null else null
 	_check(invite_dialog != null and invite_dialog.visible, "invite action opens a dedicated dialog")
-	_check_dialog_styled(invite_dialog, "Guild invite dialog")
+	_check(
+		invite_dialog != null and invite_dialog.has_theme_stylebox_override("embedded_border"),
+		"Guild invite dialog uses the Guild window styling"
+	)
+	_check(
+		invite_submit != null
+		and invite_cancel != null
+		and invite_submit.has_theme_stylebox_override("normal")
+		and invite_cancel.has_theme_stylebox_override("normal"),
+		"Guild invite dialog uses styled action buttons"
+	)
 	_check(
 		invite_dialog != null
-		and invite_dialog.size.y <= 180
+		and invite_dialog.size.y <= 220
 		and invite_actions != null
 		and invite_actions.alignment == BoxContainer.ALIGNMENT_END
 		and invite_actions.get_theme_constant("separation") == 8,

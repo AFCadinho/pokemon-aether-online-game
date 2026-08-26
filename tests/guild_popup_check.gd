@@ -49,6 +49,7 @@ func _init() -> void:
 	_check_contains(popup_source, "GuildLevelRewardRow_", "guild level roadmap renders each level separately")
 	_check_contains(popup_source, "GuildLeaveConfirmationDialog", "Guild departure requires confirmation")
 	_check_contains(popup_source, "func _leave_current_guild", "Guild departure calls the authoritative service")
+	_check_contains(popup_source, '_show_guild_system_message("ui.guild.leave.success"', "departing Trainer receives a system message")
 	_check_contains(popup_source, "GuildHeaderTravelActions", "guild travel occupies the member header")
 	_check_contains(popup_source, "header.add_child(_build_guild_header_travel_actions(guild, is_leader))", "member header replaces recruitment status with travel actions")
 	_check_contains(popup_source, "guild_section_navigation.visible = true", "Guild members receive section tabs in the primary navigation")
@@ -154,8 +155,9 @@ func _init() -> void:
 	_check_contains(overlay_source, "_open_guild_popup()", "existing guild button opens the new interface")
 	_check_contains(overlay_source, "_on_guild_private_message_requested", "main overlay opens private chat from the Guild roster")
 	_check_contains(overlay_source, "_on_guild_trainer_card_requested", "main overlay opens public Trainer Cards from Guild applications")
-	_check_contains(overlay_source, 'message_type == "guild.application.updated"', "main overlay receives realtime Guild application decisions")
+	_check_contains(overlay_source, '"guild.application.updated", "guild.notification.received"', "main overlay receives realtime Guild notifications")
 	_check_contains(overlay_source, "_on_guild_notification_received", "Guild application decisions become system messages")
+	_check_contains(overlay_source, '"ui.guild.notification.member_left"', "Guild departures become system messages")
 	_check_contains(overlay_source, "_on_guild_lobby_teleport_requested", "main overlay applies the authorized Lobby teleport")
 
 	quit(1 if failed else 0)

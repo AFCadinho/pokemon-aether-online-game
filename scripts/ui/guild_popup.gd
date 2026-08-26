@@ -1479,9 +1479,9 @@ func _leave_current_guild(guild: Dictionary) -> void:
 	_refresh_membership_state()
 	_show_page("browse")
 	await _refresh_from_server()
-	_set_browse_status(_t("ui.guild.leave.success", {
-		"guild": str(result.get("guildName", guild.get("name", _t("ui.guild.fallback.this_guild")))),
-	}), false)
+	var left_guild_name := str(result.get("guildName", guild.get("name", _t("ui.guild.fallback.this_guild"))))
+	_set_browse_status(_t("ui.guild.leave.success", {"guild": left_guild_name}), false)
+	_show_guild_system_message("ui.guild.leave.success", {"guild": left_guild_name})
 
 
 func _build_guild_bank() -> Control:
@@ -3734,21 +3734,53 @@ func _filter_guild_member_cards(query: String) -> void:
 
 
 func _open_guild_invite_dialog() -> void:
-	var dialog := ConfirmationDialog.new()
+	var existing := find_child("GuildInviteDialog", true, false) as Window
+	if existing != null:
+		existing.grab_focus()
+		return
+	var dialog := Window.new()
 	dialog.name = "GuildInviteDialog"
 	dialog.title = _t("ui.guild.invite.title")
-	dialog.ok_button_text = _t("ui.guild.invite.send")
-	dialog.cancel_button_text = _t("common.cancel")
-	_apply_guild_confirmation_style(dialog, "primary")
+	dialog.size = Vector2i(500, 205)
+	dialog.min_size = Vector2i(440, 190)
+	dialog.transient = true
+	dialog.exclusive = true
+	dialog.borderless = true
+	_apply_guild_window_style(dialog)
+	dialog.close_requested.connect(dialog.queue_free)
 	add_child(dialog)
+	var panel := PanelContainer.new()
+	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER, 10, 1))
+	dialog.add_child(panel)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 14, 12, 14, 14)
+	panel.add_child(margin)
 	var content := VBoxContainer.new()
-	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	content.offset_left = 20
-	content.offset_top = 46
-	content.offset_right = -20
-	content.offset_bottom = -58
-	content.add_theme_constant_override("separation", 7)
-	dialog.add_child(content)
+	content.add_theme_constant_override("separation", 9)
+	margin.add_child(content)
+	var title_bar := PanelContainer.new()
+	title_bar.name = "GuildInviteTitleBar"
+	title_bar.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 8, 1))
+	content.add_child(title_bar)
+	var title_margin := MarginContainer.new()
+	_set_margins(title_margin, 12, 6, 6, 6)
+	title_bar.add_child(title_margin)
+	var title_row := HBoxContainer.new()
+	title_margin.add_child(title_row)
+	var title := _localized_label("ui.guild.invite.title", 14, UI_TEXT)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title_row.add_child(title)
+	var close := Button.new()
+	close.name = "GuildInviteCloseButton"
+	close.text = "×"
+	close.custom_minimum_size = Vector2(34, 30)
+	_set_localized_property(close, "tooltip_text", "common.close")
+	_apply_button_style(close, "danger")
+	close.add_theme_font_size_override("font_size", 17)
+	close.pressed.connect(dialog.queue_free)
+	title_row.add_child(close)
 	content.add_child(_localized_label("ui.guild.invite.prompt", 11, UI_MUTED))
 	invite_username_input = LineEdit.new()
 	invite_username_input.name = "GuildInviteUsername"
@@ -3757,21 +3789,25 @@ func _open_guild_invite_dialog() -> void:
 	invite_username_input.custom_minimum_size.y = 38
 	_apply_line_edit_style(invite_username_input)
 	content.add_child(invite_username_input)
-	dialog.confirmed.connect(_on_invite_member.bind(dialog))
-	dialog.canceled.connect(dialog.queue_free)
-	dialog.popup_centered(Vector2i(500, 170))
-	_style_guild_invite_dialog_actions.call_deferred(dialog)
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 8)
+	content.add_child(actions)
+	var cancel := Button.new()
+	cancel.name = "GuildInviteCancelButton"
+	_set_localized_property(cancel, "text", "common.cancel")
+	_apply_button_style(cancel)
+	cancel.pressed.connect(dialog.queue_free)
+	actions.add_child(cancel)
+	var submit := Button.new()
+	submit.name = "GuildInviteSubmitButton"
+	_set_localized_property(submit, "text", "ui.guild.invite.send")
+	_apply_button_style(submit, "primary")
+	submit.pressed.connect(_on_invite_member.bind(dialog))
+	actions.add_child(submit)
+	invite_username_input.text_submitted.connect(func(_value: String) -> void: _on_invite_member(dialog))
+	dialog.popup_centered()
 	invite_username_input.grab_focus.call_deferred()
-
-
-func _style_guild_invite_dialog_actions(dialog: ConfirmationDialog) -> void:
-	if dialog == null or not is_instance_valid(dialog):
-		return
-	var ok_button := dialog.get_ok_button()
-	var action_row := ok_button.get_parent() as BoxContainer
-	if action_row != null:
-		action_row.alignment = BoxContainer.ALIGNMENT_END
-		action_row.add_theme_constant_override("separation", 8)
 
 
 func _build_guild_member_card(
@@ -5656,14 +5692,12 @@ func _validated_settings_requirements() -> Dictionary:
 	return {"success": true, "requirements": normalized}
 
 
-func _on_invite_member(dialog: ConfirmationDialog = null) -> void:
+func _on_invite_member(dialog: Window = null) -> void:
 	if invite_username_input == null:
 		return
 	var username := invite_username_input.text.strip_edges()
 	if username.length() < 3:
 		_set_member_status(_t("ui.guild.error.username_required"), true)
-		if dialog != null and is_instance_valid(dialog):
-			dialog.popup_centered(Vector2i(500, 170))
 		return
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
@@ -5673,8 +5707,6 @@ func _on_invite_member(dialog: ConfirmationDialog = null) -> void:
 	var result := _dictionary(response)
 	if not bool(result.get("success", false)):
 		_set_member_status(str(result.get("error", _t("ui.guild.error.send_invitation"))), true)
-		if dialog != null and is_instance_valid(dialog):
-			dialog.popup_centered(Vector2i(500, 170))
 		return
 	if dialog != null and is_instance_valid(dialog):
 		dialog.queue_free()

@@ -1848,6 +1848,7 @@
   "ui.guild.invite.pending": "CONVITES PENDENTES",
   "ui.guild.notification.application_accepted": "Sua candidatura à {guild} foi aceita por {actor}.",
   "ui.guild.notification.application_declined": "Sua candidatura à {guild} foi recusada por {actor}.",
+  "ui.guild.notification.member_left": "{trainer} saiu de {guild}.",
   "ui.guild.notification.you_accepted": "Você aceitou a candidatura de {trainer} à Guilda.",
   "ui.guild.notification.you_declined": "Você recusou a candidatura de {trainer} à Guilda.",
   "ui.guild.create.title": "Crie sua Guilda",

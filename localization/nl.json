@@ -1848,6 +1848,7 @@
   "ui.guild.invite.pending": "OPENSTAANDE UITNODIGINGEN",
   "ui.guild.notification.application_accepted": "Je aanmelding bij {guild} is geaccepteerd door {actor}.",
   "ui.guild.notification.application_declined": "Je aanmelding bij {guild} is geweigerd door {actor}.",
+  "ui.guild.notification.member_left": "{trainer} heeft {guild} verlaten.",
   "ui.guild.notification.you_accepted": "Je hebt de Guild-aanmelding van {trainer} geaccepteerd.",
   "ui.guild.notification.you_declined": "Je hebt de Guild-aanmelding van {trainer} geweigerd.",
   "ui.guild.create.title": "Maak je Guild",

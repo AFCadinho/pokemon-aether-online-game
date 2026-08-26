@@ -1848,6 +1848,7 @@
   "ui.guild.invite.pending": "PENDING INVITATIONS",
   "ui.guild.notification.application_accepted": "Your application to {guild} was accepted by {actor}.",
   "ui.guild.notification.application_declined": "Your application to {guild} was declined by {actor}.",
+  "ui.guild.notification.member_left": "{trainer} left {guild}.",
   "ui.guild.notification.you_accepted": "You accepted {trainer}'s Guild application.",
   "ui.guild.notification.you_declined": "You declined {trainer}'s Guild application.",
   "ui.guild.create.title": "Create your Guild",
