@@ -116,16 +116,16 @@ func _run() -> void:
 	)
 	var expected_route_rocks := {
 		"kanto_route_3": {
-			"kanto_route_3_rock_west": "position = Vector2(400, 752)",
-			"kanto_route_3_rock_central_west": "position = Vector2(1328, 496)",
-			"kanto_route_3_rock_central_east": "position = Vector2(1808, 752)",
-			"kanto_route_3_rock_east": "position = Vector2(2608, 752)",
+			"kanto_route_3_rock_west": "position = Vector2(400, 1008)",
+			"kanto_route_3_rock_central_west": "position = Vector2(720, 1040)",
+			"kanto_route_3_rock_central_east": "position = Vector2(464, 1168)",
+			"kanto_route_3_rock_east": "position = Vector2(2704, 752)",
 		},
 		"kanto_route_4": {
-			"kanto_route_4_rock_west": "position = Vector2(400, 1040)",
-			"kanto_route_4_rock_central_west": "position = Vector2(1040, 1008)",
-			"kanto_route_4_rock_central_east": "position = Vector2(2128, 496)",
-			"kanto_route_4_rock_east": "position = Vector2(2720, 1232)",
+			"kanto_route_4_rock_west": "position = Vector2(176, 1040)",
+			"kanto_route_4_rock_central_west": "position = Vector2(944, 592)",
+			"kanto_route_4_rock_central_east": "position = Vector2(2256, 560)",
+			"kanto_route_4_rock_east": "position = Vector2(2608, 784)",
 		},
 	}
 	for map_id: String in expected_route_rocks:
