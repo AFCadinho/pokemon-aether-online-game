@@ -13,13 +13,13 @@ size = Vector2(32, 160)
 size = Vector2(96, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_24_exit"]
-size = Vector2(96, 32)
+size = Vector2(160, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_9_exit"]
-size = Vector2(32, 96)
+size = Vector2(32, 192)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_5_exit"]
-size = Vector2(96, 32)
+size = Vector2(160, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_31plc"]
 texture = ExtResource("6_hujw2")
@@ -106,13 +106,13 @@ music_track_id = "overworld.kanto.cerulean_city"
 position = Vector2(48, 816)
 
 [node name="FromCeruleanCave" type="Marker2D" parent="Spawns" unique_id=1182562427]
-position = Vector2(544, 224)
+position = Vector2(528, 208)
 
 [node name="FromRoute24" type="Marker2D" parent="Spawns" unique_id=686192888]
-position = Vector2(2208, 64)
+position = Vector2(2192, 80)
 
 [node name="FromRoute9" type="Marker2D" parent="Spawns" unique_id=2084918086]
-position = Vector2(2336, 1456)
+position = Vector2(2352, 1424)
 
 [node name="FromRoute5" type="Marker2D" parent="Spawns" unique_id=1189067734]
 position = Vector2(496, 2176)
@@ -136,7 +136,7 @@ tile_footprint = Vector2i(1, 5)
 flow_direction = "left"
 
 [node name="ToCeruleanCave" type="Area2D" parent="Exits" unique_id=1154148418]
-position = Vector2(544, 176)
+position = Vector2(528, 176)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn"
 target_spawn_name = "FromCerulean"
@@ -151,7 +151,7 @@ z_as_relative = false
 tile_footprint = Vector2i(3, 1)
 
 [node name="ToRoute24" type="Area2D" parent="Exits" unique_id=1437830918]
-position = Vector2(2208, 16)
+position = Vector2(2192, 16)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
 target_spawn_name = "FromCerulean"
@@ -159,14 +159,15 @@ transition_id = "kanto_cerulean_city__to_route_24"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute24" unique_id=1678932295]
+position = Vector2(16, -16)
 shape = SubResource("RectangleShape2D_route_24_exit")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute24" unique_id=246062632 instance=ExtResource("5_hint")]
 z_as_relative = false
-tile_footprint = Vector2i(3, 1)
+tile_footprint = Vector2i(5, 1)
 
 [node name="ToRoute9" type="Area2D" parent="Exits" unique_id=1635975885]
-position = Vector2(2384, 1456)
+position = Vector2(2384, 1424)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_9.tscn"
 target_spawn_name = "FromCerulean"
@@ -174,6 +175,7 @@ transition_id = "kanto_cerulean_city__to_route_9"
 transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute9" unique_id=117564256]
+position = Vector2(16, 0)
 shape = SubResource("RectangleShape2D_route_9_exit")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute9" unique_id=558143365 instance=ExtResource("5_hint")]
@@ -182,7 +184,7 @@ tile_footprint = Vector2i(1, 3)
 flow_direction = "right"
 
 [node name="ToRoute5" type="Area2D" parent="Exits" unique_id=159942707]
-position = Vector2(496, 2224)
+position = Vector2(464, 2224)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_5.tscn"
 target_spawn_name = "FromCerulean"
@@ -190,6 +192,7 @@ transition_id = "kanto_cerulean_city__to_route_5"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute5" unique_id=1100155674]
+position = Vector2(-16, 16)
 shape = SubResource("RectangleShape2D_route_5_exit")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute5" unique_id=865795484 instance=ExtResource("5_hint")]
