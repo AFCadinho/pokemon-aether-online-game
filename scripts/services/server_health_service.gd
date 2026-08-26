@@ -3,21 +3,22 @@ class_name ServerHealthService
 
 const REQUEST_TIMEOUT_SECONDS := 8.0
 const USER_AGENT_HEADER := "User-Agent: PokeAether/1.0"
-const HEALTH_ENDPOINT := "/health"
+const ACCESS_STATUS_ENDPOINT := "/auth/status"
 const PRESENCE_ENDPOINT := "/presence/online-count"
+const StatusParser := preload("res://scripts/services/server_access_status_parser.gd")
 
 
-static func check_async(parent: Node, health_url: String = "") -> Dictionary:
-	if health_url.strip_edges().is_empty():
+static func check_async(parent: Node, status_url: String = "") -> Dictionary:
+	if status_url.strip_edges().is_empty():
 		var base_url: String = await GatewayApiConfig.get_base_url()
-		health_url = base_url.rstrip("/") + HEALTH_ENDPOINT
+		status_url = base_url.rstrip("/") + ACCESS_STATUS_ENDPOINT
 
 	var request := HTTPRequest.new()
 	request.timeout = REQUEST_TIMEOUT_SECONDS
 	parent.add_child(request)
 
 	var error: Error = request.request(
-		health_url,
+		status_url,
 		[USER_AGENT_HEADER],
 		HTTPClient.METHOD_GET
 	)
@@ -25,7 +26,7 @@ static func check_async(parent: Node, health_url: String = "") -> Dictionary:
 		request.queue_free()
 		return {
 			"online": false,
-			"error": "Could not start health request: %s" % error_string(error),
+			"error": "Could not start server status request: %s" % error_string(error),
 		}
 
 	var result: Array = await request.request_completed
@@ -46,7 +47,7 @@ static func check_async(parent: Node, health_url: String = "") -> Dictionary:
 		return {
 			"online": false,
 			"status": response_code,
-			"error": "Health check returned HTTP %s." % response_code,
+			"error": "Server status returned HTTP %s." % response_code,
 		}
 
 	var parsed_body: Variant = JSON.parse_string(body.get_string_from_utf8())
@@ -54,16 +55,23 @@ static func check_async(parent: Node, health_url: String = "") -> Dictionary:
 		return {
 			"online": false,
 			"status": response_code,
-			"error": "Health response is invalid.",
+			"error": "Server status response is invalid.",
 		}
 
 	var response: Dictionary = parsed_body
-	var status_text: String = str(response.get("status", "")).strip_edges().to_lower()
-	return {
-		"online": status_text == "online" or status_text == "ok",
-		"status": response_code,
-		"server_status": status_text,
-	}
+	var status_result := parse_status_response(response)
+	if not bool(status_result.get("valid", false)):
+		return {
+			"online": false,
+			"status": response_code,
+			"error": "Server status response is invalid.",
+		}
+	status_result["status"] = response_code
+	return status_result
+
+
+static func parse_status_response(response: Dictionary) -> Dictionary:
+	return StatusParser.parse(response)
 
 
 static func check_presence_async(parent: Node) -> Dictionary:
@@ -141,6 +149,6 @@ static func _request_result_message(result: int) -> String:
 		HTTPRequest.RESULT_TLS_HANDSHAKE_ERROR:
 			return "Server TLS error."
 		HTTPRequest.RESULT_TIMEOUT:
-			return "Server health check timed out."
+			return "Server status check timed out."
 		_:
-			return "Server health check failed: %s." % result
+			return "Server status check failed: %s." % result

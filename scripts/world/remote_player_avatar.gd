@@ -193,6 +193,7 @@ var creator_nameplate_visible := true
 
 func _ready() -> void:
 	z_as_relative = false
+	y_sort_enabled = true
 	_create_visual()
 	_update_animation(false)
 	_update_sort_z()
