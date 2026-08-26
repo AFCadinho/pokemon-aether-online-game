@@ -4,11 +4,13 @@ const CATALOG_PATHS: Dictionary = {
 	"en": "res://localization/content/en.json",
 	"nl": "res://localization/content/nl.json",
 	"pt_BR": "res://localization/content/pt_BR.json",
+	"zh_CN": "res://localization/content/zh_CN.json",
 }
 const GENERATED_CATALOG_PATHS: Dictionary = {
 	"en": "res://localization/content/generated/en.json",
 	"nl": "res://localization/content/generated/nl.json",
 	"pt_BR": "res://localization/content/generated/pt_BR.json",
+	"zh_CN": "res://localization/content/generated/zh_CN.json",
 }
 const OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
 const CALC_PANEL_SCRIPT := preload("res://scripts/battle/battle_ui/battle_damage_calc_panel.gd")
@@ -102,6 +104,7 @@ func _check_catalogs() -> void:
 		"en": "Power is always 60. Its type depends on the Pokémon using it.",
 		"nl": "De kracht is altijd 60. Het type hangt af van de Pokémon die de aanval gebruikt.",
 		"pt_BR": "O poder é sempre 60. O tipo depende do Pokémon que usa o golpe.",
+		"zh_CN": "威力固定为 60。属性取决于使用该招式的宝可梦。",
 	}
 	for locale: String in GENERATED_CATALOG_PATHS:
 		var generated_moves: Dictionary = (generated_catalogs.get(locale, {}) as Dictionary).get("moves", {})

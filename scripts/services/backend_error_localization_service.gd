@@ -7,6 +7,7 @@ const CATALOG_PATHS: Dictionary = {
 	"en": "res://localization/en.json",
 	"nl": "res://localization/nl.json",
 	"pt_BR": "res://localization/pt_BR.json",
+	"zh_CN": "res://localization/zh_CN.json",
 }
 
 const CODE_TO_KEY: Dictionary = {

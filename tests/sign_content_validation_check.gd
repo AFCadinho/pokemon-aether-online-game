@@ -16,7 +16,7 @@ const SIGN_SCENE_SUFFIXES: Array[String] = [
 	"/scenes/world/interactables/large_sign_interactable.tscn",
 ]
 const SIGN_DATA_ROOT := "res://data/world_text/signs"
-const SUPPORTED_LOCALES: Array[String] = ["en", "nl", "pt-br"]
+const SUPPORTED_LOCALES: Array[String] = ["en", "nl", "pt-br", "zh-cn"]
 const LOCAL_CONTENT_SOURCES: Array[String] = ["", "local"]
 const VALID_CONTENT_SOURCES: Dictionary = {
 	"local": true,

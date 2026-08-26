@@ -12,7 +12,7 @@ func _init() -> void:
 	var party_heal := FileAccess.get_file_as_string("res://scripts/services/party_heal_service.gd")
 	var status_hud := FileAccess.get_file_as_string("res://scripts/ui/thieving_status_hud.gd")
 	var mentor := FileAccess.get_file_as_string("res://scripts/world/kanto/towns/thieving_mentor_rook.gd")
-	var rook_help_locales: Array[String] = ["en", "nl", "pt_BR"]
+	var rook_help_locales: Array[String] = ["en", "nl", "pt_BR", "zh_CN"]
 	var viridian := FileAccess.get_file_as_string(
 		"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
 	)

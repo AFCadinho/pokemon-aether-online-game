@@ -20,22 +20,15 @@ const SFX_BUS := "SFX"
 const POKEMON_CRY_BUS := "Pokemon Cries"
 const UI_BUS := "UI"
 const NOTIFICATION_BUS := "Notifications"
-const CHAT_TAB_ALL := "all"
-const CHAT_TAB_GENERAL := "general"
-const CHAT_TAB_SYSTEM := "system"
-const CHAT_TAB_PM := "pm"
-const CHAT_TAB_GUILD := "guild"
-const LEGACY_CHAT_TAB_CLAN := "clan"
+const LANGUAGE_CHAT_ZH := "language_zh"
+const LANGUAGE_CHAT_PT := "language_pt"
+const AVAILABLE_LANGUAGE_CHATS: Array[String] = [
+	LANGUAGE_CHAT_ZH,
+	LANGUAGE_CHAT_PT,
+]
 const DEFAULT_LOCALE := "en"
 const CONTENT_NAME_LANGUAGE_ENGLISH := "english"
 const CONTENT_NAME_LANGUAGE_LOCALIZED := "localized"
-const DEFAULT_CHAT_TAB_ORDER: Array[String] = [
-	CHAT_TAB_ALL,
-	CHAT_TAB_GENERAL,
-	CHAT_TAB_SYSTEM,
-	CHAT_TAB_PM,
-	CHAT_TAB_GUILD,
-]
 const DEFAULT_WINDOW_RESOLUTION := Vector2i(1600, 900)
 const DEFAULT_WORLD_PIXEL_SCALE := PixelPerfectRendering.DEFAULT_SCALE
 const AVAILABLE_WORLD_PIXEL_SCALES: Array[float] = PixelPerfectRendering.AVAILABLE_SCALES
@@ -76,14 +69,7 @@ var notification_volume := 75.0
 var battle_music_track := BATTLE_MUSIC_DEFAULT
 var locale := DEFAULT_LOCALE
 var content_name_language := CONTENT_NAME_LANGUAGE_ENGLISH
-var chat_tab_visibility: Dictionary = {
-	CHAT_TAB_ALL: true,
-	CHAT_TAB_GENERAL: true,
-	CHAT_TAB_SYSTEM: true,
-	CHAT_TAB_PM: true,
-	CHAT_TAB_GUILD: true,
-}
-var chat_tab_order: Array[String] = DEFAULT_CHAT_TAB_ORDER.duplicate()
+var enabled_language_chats: Array[String] = []
 var input_bindings: Dictionary = DEFAULT_INPUT_BINDINGS.duplicate()
 
 
@@ -147,8 +133,9 @@ func load_settings() -> void:
 	content_name_language = _validated_content_name_language(
 		str(data.get("content_name_language", _default_content_name_language(locale)))
 	)
-	chat_tab_visibility = _validated_chat_tab_visibility(data.get("chat_tab_visibility", chat_tab_visibility))
-	chat_tab_order = _validated_chat_tab_order(data.get("chat_tab_order", chat_tab_order))
+	enabled_language_chats = _validated_language_chats(
+		data.get("enabled_language_chats", enabled_language_chats)
+	)
 	input_bindings = _validated_input_bindings(data.get("input_bindings", input_bindings))
 	var launcher_changed := _apply_launcher_locale_argument()
 	if not has_content_name_language:
@@ -194,8 +181,7 @@ func save_settings() -> void:
 		"battle_music_track": battle_music_track,
 		"locale": locale,
 		"content_name_language": content_name_language,
-		"chat_tab_visibility": chat_tab_visibility,
-		"chat_tab_order": chat_tab_order,
+		"enabled_language_chats": enabled_language_chats,
 		"input_bindings": input_bindings,
 	}
 
@@ -477,25 +463,17 @@ func set_battle_music_track(track_id: String) -> void:
 	_save_and_emit()
 
 
-func set_chat_tab_preferences(visibility: Dictionary, order: Array[String]) -> void:
-	var validated_visibility := _validated_chat_tab_visibility(visibility)
-	var validated_order := _validated_chat_tab_order(order)
-	if chat_tab_visibility == validated_visibility and chat_tab_order == validated_order:
+func set_enabled_language_chats(channels: Array[String]) -> void:
+	var validated_channels := _validated_language_chats(channels)
+	if enabled_language_chats == validated_channels:
 		return
 
-	chat_tab_visibility = validated_visibility
-	chat_tab_order = validated_order
+	enabled_language_chats = validated_channels
 	_save_and_emit()
 
 
-func reset_chat_tab_preferences() -> void:
-	set_chat_tab_preferences({
-		CHAT_TAB_ALL: true,
-		CHAT_TAB_GENERAL: true,
-		CHAT_TAB_SYSTEM: true,
-		CHAT_TAB_PM: true,
-		CHAT_TAB_GUILD: true,
-	}, DEFAULT_CHAT_TAB_ORDER.duplicate())
+func reset_enabled_language_chats() -> void:
+	set_enabled_language_chats([])
 
 
 func _save_and_emit() -> void:
@@ -526,7 +504,7 @@ func _validated_content_name_language(value: String) -> String:
 func _default_content_name_language(interface_locale: String) -> String:
 	return (
 		CONTENT_NAME_LANGUAGE_LOCALIZED
-		if LocalizationManager.normalize_locale(interface_locale) == "pt_BR"
+		if LocalizationManager.normalize_locale(interface_locale) in ["pt_BR", "zh_CN"]
 		else CONTENT_NAME_LANGUAGE_ENGLISH
 	)
 
@@ -539,36 +517,14 @@ func _validated_cursor_scale(value: Variant) -> float:
 	return clampf(float(value), MIN_CURSOR_SCALE, MAX_CURSOR_SCALE)
 
 
-func _validated_chat_tab_visibility(value: Variant) -> Dictionary:
-	var source: Dictionary = value as Dictionary if value is Dictionary else {}
-	if not source.has(CHAT_TAB_GUILD) and source.has(LEGACY_CHAT_TAB_CLAN):
-		source = source.duplicate()
-		source[CHAT_TAB_GUILD] = source.get(LEGACY_CHAT_TAB_CLAN, true)
-	var visibility: Dictionary = {}
-	for tab_id: String in DEFAULT_CHAT_TAB_ORDER:
-		visibility[tab_id] = (
-			true
-			if tab_id in [CHAT_TAB_ALL, CHAT_TAB_GENERAL]
-			else bool(source.get(tab_id, true))
-		)
-	return visibility
-
-
-func _validated_chat_tab_order(value: Variant) -> Array[String]:
-	var order: Array[String] = []
+func _validated_language_chats(value: Variant) -> Array[String]:
+	var channels: Array[String] = []
 	if value is Array:
-		for tab_value: Variant in value as Array:
-			var tab_id := str(tab_value)
-			if tab_id == LEGACY_CHAT_TAB_CLAN:
-				tab_id = CHAT_TAB_GUILD
-			if tab_id in DEFAULT_CHAT_TAB_ORDER and not order.has(tab_id):
-				order.append(tab_id)
-	if not order.has(CHAT_TAB_ALL):
-		order.push_front(CHAT_TAB_ALL)
-	for tab_id: String in DEFAULT_CHAT_TAB_ORDER:
-		if not order.has(tab_id):
-			order.append(tab_id)
-	return order
+		for channel_value: Variant in value as Array:
+			var channel := str(channel_value)
+			if channel in AVAILABLE_LANGUAGE_CHATS and not channels.has(channel):
+				channels.append(channel)
+	return channels
 
 
 func _validated_input_bindings(value: Variant) -> Dictionary:
