@@ -4,6 +4,7 @@
 
 **Added**
 
+- Guild Bank now provides a complete comparison page for the default rights of every Guild rank.
 - Guild leaders can build an ordered recruitment-requirement checklist that applicants review on the Guild profile and before applying.
 - Guild Resources provide shared consumable-item stacks that Members can freely donate to or withdraw from, with per-member access controls for Guild leaders.
 - Guild leaders can publish a dedicated announcement that occupies the main Guild overview.
@@ -17,6 +18,8 @@
 
 **Changed**
 
+- Guild member search now occupies its own row, while invitations use a separate, clearly named roster action.
+- Guild money transfers now start at zero and show validation before accepting amounts from one Pokédollar.
 - Guild Management now organizes profile, recruitment, applications, and Guild Bank settings into permission-aware internal tabs.
 - Guild Item Storage rows now separate item names from stored, available, and borrowed quantities.
 - Guild history and Guild Bank logs can now be limited to the past 24 hours, 7 days, 30 days, or 90 days.

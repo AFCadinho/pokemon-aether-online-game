@@ -1503,6 +1503,12 @@ func _build_guild_bank() -> Control:
 		if is_loading_guild_bank
 		else _t("ui.guild.bank.status.ready")
 	))
+	var rank_rights_button := Button.new()
+	rank_rights_button.name = "GuildBankRankRightsButton"
+	_set_localized_property(rank_rights_button, "text", "ui.guild.bank.rank_rights.action")
+	rank_rights_button.pressed.connect(_on_guild_bank_category_opened.bind("rights"))
+	_apply_button_style(rank_rights_button)
+	header.add_child(rank_rights_button)
 	var access_summary := _label(_guild_bank_access_summary(), 10, UI_ACCENT)
 	access_summary.name = "GuildBankPermissionSummary"
 	access_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1699,9 +1705,11 @@ func _guild_bank_total_item_quantity(items: Array) -> int:
 
 
 func _on_guild_bank_category_opened(category: String) -> void:
+	if category not in ["funds", "pokemon", "items", "resources", "rights"]:
+		return
 	active_guild_bank_category = category
 	_render_guild_home()
-	if guild_bank_state.is_empty() and not is_debug_preview:
+	if category != "rights" and guild_bank_state.is_empty() and not is_debug_preview:
 		_load_guild_bank_async.call_deferred()
 
 
@@ -1726,23 +1734,28 @@ func _build_guild_bank_workspace() -> Control:
 	back.pressed.connect(_on_guild_bank_back_pressed)
 	_apply_button_style(back)
 	header.add_child(back)
-	var title_key := "ui.guild.bank.%s.title" % active_guild_bank_category
+	var title_key := (
+		"ui.guild.bank.rank_rights.title"
+		if active_guild_bank_category == "rights"
+		else "ui.guild.bank.%s.title" % active_guild_bank_category
+	)
 	var title := _localized_label(title_key, 17, UI_TEXT)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(title)
-	var refresh := Button.new()
-	refresh.name = "GuildBankRefreshButton"
-	_set_localized_property(refresh, "text", "ui.guild.bank.refresh")
-	refresh.disabled = is_loading_guild_bank or is_guild_bank_action_in_flight
-	refresh.pressed.connect(_load_guild_bank_async)
-	_apply_button_style(refresh)
-	header.add_child(refresh)
-	var log_button := Button.new()
-	log_button.name = "GuildBank%sLogButton" % active_guild_bank_category.capitalize()
-	_set_localized_property(log_button, "text", "ui.guild.log.view")
-	log_button.pressed.connect(_open_guild_log.bind(active_guild_bank_category))
-	_apply_button_style(log_button)
-	header.add_child(log_button)
+	if active_guild_bank_category != "rights":
+		var refresh := Button.new()
+		refresh.name = "GuildBankRefreshButton"
+		_set_localized_property(refresh, "text", "ui.guild.bank.refresh")
+		refresh.disabled = is_loading_guild_bank or is_guild_bank_action_in_flight
+		refresh.pressed.connect(_load_guild_bank_async)
+		_apply_button_style(refresh)
+		header.add_child(refresh)
+		var log_button := Button.new()
+		log_button.name = "GuildBank%sLogButton" % active_guild_bank_category.capitalize()
+		_set_localized_property(log_button, "text", "ui.guild.log.view")
+		log_button.pressed.connect(_open_guild_log.bind(active_guild_bank_category))
+		_apply_button_style(log_button)
+		header.add_child(log_button)
 	if is_loading_guild_bank and guild_bank_state.is_empty():
 		var loading := _localized_label("ui.guild.bank.loading", 13, UI_MUTED)
 		loading.custom_minimum_size = Vector2(0, 180)
@@ -1759,6 +1772,69 @@ func _build_guild_bank_workspace() -> Control:
 			content.add_child(_build_guild_items_workspace())
 		"resources":
 			content.add_child(_build_guild_resources_workspace())
+		"rights":
+			content.add_child(_build_guild_bank_rank_rights_workspace())
+	return panel
+
+
+func _build_guild_bank_rank_rights_workspace() -> Control:
+	var content := VBoxContainer.new()
+	content.name = "GuildBankRankRightsWorkspace"
+	content.add_theme_constant_override("separation", 10)
+	var hint := _localized_label("ui.guild.bank.rank_rights.hint", 10, UI_MUTED)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(hint)
+	var table := GridContainer.new()
+	table.name = "GuildBankRankRightsTable"
+	table.columns = 5
+	table.add_theme_constant_override("h_separation", 6)
+	table.add_theme_constant_override("v_separation", 6)
+	content.add_child(table)
+	table.add_child(_guild_bank_rank_rights_cell(
+		_t("ui.guild.bank.rank_rights.permission"), UI_ACCENT, true
+	))
+	var roles: Array[String] = ["recruit", "member", "captain", "leader"]
+	var own_role := str(_dictionary(guild_home.get("membership", {})).get("role", "recruit"))
+	for role: String in roles:
+		table.add_child(_guild_bank_rank_rights_cell(
+			_membership_role_label(role),
+			UI_GOLD if role == own_role else UI_TEXT,
+			true
+		))
+	var rank_permissions := _dictionary(guild_home.get("rankPermissions", {}))
+	for permission: String in GUILD_BANK_PERMISSIONS:
+		table.add_child(_guild_bank_rank_rights_cell(
+			_t("ui.guild.permission.%s" % permission), UI_TEXT, false
+		))
+		for role: String in roles:
+			var allowed := _array_from_value(rank_permissions.get(role, [])).has(permission)
+			table.add_child(_guild_bank_rank_rights_cell(
+				_t("ui.guild.bank.rank_rights.allowed" if allowed else "ui.guild.bank.rank_rights.blocked"),
+				UI_SUCCESS if allowed else UI_MUTED,
+				false
+			))
+	var override_hint := _localized_label("ui.guild.bank.rank_rights.override_hint", 10, UI_ACCENT)
+	override_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(override_hint)
+	return content
+
+
+func _guild_bank_rank_rights_cell(text: String, color: Color, is_header: bool) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(150 if is_header else 0, 40)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(UI_INPUT if is_header else Color("#07131ff2"), UI_BORDER_INNER, 6, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 8, 6, 8, 6)
+	panel.add_child(margin)
+	var label := _label(text, 10, color)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	margin.add_child(label)
 	return panel
 
 
@@ -1786,9 +1862,9 @@ func _build_guild_funds_workspace() -> Control:
 	content.add_child(transfer)
 	var amount := SpinBox.new()
 	amount.name = "GuildBankMoneyAmount"
-	amount.min_value = 1
+	amount.min_value = 0
 	amount.max_value = 2147483647
-	amount.value = 1000
+	amount.value = 0
 	amount.step = 1
 	amount.update_on_text_changed = true
 	_set_localized_property(amount, "tooltip_text", "ui.guild.bank.funds.amount_hint")
@@ -2666,6 +2742,7 @@ func _load_guild_bank_async() -> void:
 func _on_guild_bank_money_action(action: String, amount_input: SpinBox) -> void:
 	var amount := int(amount_input.value) if amount_input != null else 0
 	if amount <= 0:
+		_set_member_status(_t("ui.guild.bank.funds.amount_required"), true)
 		return
 	if action == "deposit":
 		_confirm_guild_bank_donation(
@@ -2860,13 +2937,20 @@ func _build_member_roster(can_invite: bool = false) -> Control:
 	_set_localized_property(history_button, "text", "ui.guild.log.history.view")
 	history_button.pressed.connect(_open_guild_log.bind("guild"))
 	_apply_button_style(history_button)
-	heading_row.add_child(history_button)
 	heading_row.add_child(_label(
 		_t("ui.guild.roster.summary", {"online": online_count, "total": members.size()}),
 		10,
 		UI_MUTED
 	))
-	content.add_child(_build_guild_roster_toolbar(can_invite))
+	if can_invite:
+		var invite_button := Button.new()
+		invite_button.name = "OpenGuildInviteDialogButton"
+		_set_localized_property(invite_button, "text", "ui.guild.invite.action")
+		invite_button.pressed.connect(_open_guild_invite_dialog)
+		_apply_button_style(invite_button, "primary")
+		heading_row.add_child(invite_button)
+	heading_row.add_child(history_button)
+	content.add_child(_build_guild_roster_toolbar())
 	if can_invite:
 		_render_pending_invitations(content)
 	var own_role := str(_dictionary(guild_home.get("membership", {})).get("role", "recruit"))
@@ -2885,10 +2969,9 @@ func _build_member_roster(can_invite: bool = false) -> Control:
 	return panel
 
 
-func _build_guild_roster_toolbar(can_invite: bool) -> Control:
-	var toolbar := HBoxContainer.new()
+func _build_guild_roster_toolbar() -> Control:
+	var toolbar := VBoxContainer.new()
 	toolbar.name = "GuildMemberRosterToolbar"
-	toolbar.add_theme_constant_override("separation", 8)
 	member_search_input = LineEdit.new()
 	member_search_input.name = "GuildMemberSearchInput"
 	_set_localized_property(
@@ -2901,14 +2984,6 @@ func _build_guild_roster_toolbar(can_invite: bool) -> Control:
 	member_search_input.text_changed.connect(_filter_guild_member_cards)
 	_apply_line_edit_style(member_search_input)
 	toolbar.add_child(member_search_input)
-	if not can_invite:
-		return toolbar
-	var invite_button := Button.new()
-	invite_button.name = "OpenGuildInviteDialogButton"
-	_set_localized_property(invite_button, "text", "ui.guild.invite.send")
-	invite_button.pressed.connect(_open_guild_invite_dialog)
-	_apply_button_style(invite_button, "primary")
-	toolbar.add_child(invite_button)
 	return toolbar
 
 

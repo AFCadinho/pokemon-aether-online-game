@@ -266,6 +266,22 @@ func _run() -> void:
 	)
 	var permission_summary := popup.find_child("GuildBankPermissionSummary", true, false) as Label
 	_check(permission_summary != null and permission_summary.text.contains("allowed"), "Guild Bank shows the leader's transaction rights")
+	var rank_rights_action := popup.find_child("GuildBankRankRightsButton", true, false) as Button
+	_check(rank_rights_action != null, "every Guild member can open the rank-rights page")
+	if rank_rights_action != null:
+		rank_rights_action.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildBankRankRightsWorkspace", true, false) != null, "Guild Bank rank rights open in a dedicated page")
+	var rank_rights_table := popup.find_child("GuildBankRankRightsTable", true, false) as GridContainer
+	_check(
+		rank_rights_table != null and rank_rights_table.columns == 5 and rank_rights_table.get_child_count() == 35,
+		"rank-rights page compares all six Bank permissions across all four ranks"
+	)
+	var rank_rights_back := popup.find_child("GuildBankBackButton", true, false) as Button
+	if rank_rights_back != null:
+		rank_rights_back.pressed.emit()
+		await process_frame
+	pokemon_action = popup.find_child("GuildBankPokemonAction", true, false) as Button
 	if pokemon_action != null:
 		pokemon_action.pressed.emit()
 		await process_frame
@@ -375,8 +391,22 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankMoneyWithdrawButton", true, false) != null, "Guild funds can be withdrawn")
 	var money_amount := popup.find_child("GuildBankMoneyAmount", true, false) as SpinBox
 	_check(
-		money_amount != null and money_amount.step == 1.0 and money_amount.update_on_text_changed,
-		"Guild money accepts exact whole amounts without Enter"
+		money_amount != null
+		and money_amount.min_value == 0.0
+		and money_amount.value == 0.0
+		and money_amount.step == 1.0
+		and money_amount.update_on_text_changed,
+		"Guild money starts at zero and accepts exact whole amounts without Enter"
+	)
+	var money_deposit := popup.find_child("GuildBankMoneyDepositButton", true, false) as Button
+	if money_deposit != null:
+		money_deposit.pressed.emit()
+		await process_frame
+	_check(
+		popup.member_status_label != null
+		and popup.member_status_label.text.contains("$1")
+		and popup.find_child("GuildBankDonationConfirmationDialog", true, false) == null,
+		"a zero money transfer shows minimum validation without opening confirmation"
 	)
 	if money_amount != null:
 		var money_line_edit := money_amount.get_line_edit()
@@ -413,6 +443,10 @@ func _run() -> void:
 	_check(popup.find_child("GuildHistoryLogButton", true, false) != null, "member roster has a dedicated Guild history action")
 	var member_search := popup.find_child("GuildMemberSearchInput", true, false) as LineEdit
 	_check(member_search != null, "member roster provides a search field")
+	_check(
+		popup.find_child("GuildMemberRosterToolbar", true, false) is VBoxContainer,
+		"member search occupies its own roster row"
+	)
 	if member_search != null:
 		member_search.text = "pecha"
 		popup._filter_guild_member_cards(member_search.text)
@@ -422,7 +456,13 @@ func _run() -> void:
 		_check(maple_card != null and not maple_card.visible and pecha_card != null and pecha_card.visible, "member search filters current Guild members")
 		member_search.text = ""
 	var invite_action := popup.find_child("OpenGuildInviteDialogButton", true, false) as Button
-	_check(invite_action != null, "member roster exposes a separate invite action")
+	_check(
+		invite_action != null
+		and invite_action.text == "Invite a Player"
+		and member_search != null
+		and invite_action.global_position.y < member_search.global_position.y,
+		"Invite a Player is a separate roster-header action"
+	)
 	if invite_action != null:
 		invite_action.pressed.emit()
 		await process_frame
@@ -728,6 +768,10 @@ func _run() -> void:
 	popup.guild_bank_state["access"]["bankPermissionOverrides"] = {"resource_withdraw": "deny"}
 	popup._show_guild_section("bank")
 	await process_frame
+	_check(
+		popup.find_child("GuildBankRankRightsButton", true, false) != null,
+		"regular members can also review the default rank-rights page"
+	)
 	var blocked_resources_action := popup.find_child("GuildBankResourcesAction", true, false) as Button
 	if blocked_resources_action != null:
 		blocked_resources_action.pressed.emit()
