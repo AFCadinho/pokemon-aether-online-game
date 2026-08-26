@@ -332,6 +332,11 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankItemWithdrawButton_leftovers", true, false) != null, "stored reusable items can be withdrawn")
 	_check(popup.find_child("GuildBankItemDepositButton_exp-share", true, false) != null, "reusable bag items can be deposited")
 	_check(popup.find_child("GuildBankItemIcon_leftovers", true, false) != null, "stored items show an icon")
+	var stored_item_name := popup.find_child("GuildBankItemName_leftovers", true, false) as Label
+	var stored_item_detail := popup.find_child("GuildBankItemDetail_leftovers", true, false) as Label
+	_check(popup.find_child("GuildBankItemRow_leftovers", true, false) is PanelContainer, "stored item information and actions use a distinct card")
+	_check(stored_item_name != null and stored_item_name.text == "Leftovers", "stored item names remain readable without quantity metadata")
+	_check(stored_item_detail != null and stored_item_detail.text.contains("18 stored") and stored_item_detail.text.contains("17 available") and stored_item_detail.text.contains("1 borrowed"), "stored item quantities and loan availability use a dedicated detail line")
 	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
 	if bank_back != null:
 		bank_back.pressed.emit()

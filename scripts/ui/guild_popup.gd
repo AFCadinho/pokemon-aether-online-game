@@ -1917,18 +1917,38 @@ func _build_guild_item_list(title_key: String, items: Array, action: String, is_
 		empty_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		content.add_child(empty_label)
 		return panel
+	var scroll := ScrollContainer.new()
+	scroll.name = "GuildBankItemListScroll"
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	content.add_child(scroll)
+	var rows := VBoxContainer.new()
+	rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rows.add_theme_constant_override("separation", 6)
+	scroll.add_child(rows)
 	for item_value: Variant in items:
 		if not item_value is Dictionary:
 			continue
-		content.add_child(_build_guild_item_row(item_value as Dictionary, action, is_resource))
+		rows.add_child(_build_guild_item_row(item_value as Dictionary, action, is_resource))
 	return panel
 
 
 func _build_guild_item_row(item: Dictionary, action: String, is_resource: bool = false) -> Control:
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 6)
 	var item_id := str(item.get("itemId", ""))
 	var item_name := _guild_bank_item_name(item_id, str(item.get("name", item_id)))
+	var card := PanelContainer.new()
+	card.name = "GuildBankItemRow_%s" % item_id
+	card.add_theme_stylebox_override("panel", _panel_style(UI_INPUT, UI_BORDER_INNER, 7, 1))
+	var card_margin := MarginContainer.new()
+	_set_margins(card_margin, 8, 7, 8, 7)
+	card.add_child(card_margin)
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 6)
+	card_margin.add_child(layout)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 7)
+	layout.add_child(header)
 	var icon := TextureRect.new()
 	icon.name = "GuildBankItemIcon_%s" % item_id
 	icon.custom_minimum_size = Vector2(34, 34)
@@ -1937,23 +1957,40 @@ func _build_guild_item_row(item: Dictionary, action: String, is_resource: bool =
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	row.add_child(icon)
+	header.add_child(icon)
 	var available := int(item.get("availableQuantity", item.get("quantity", 0)))
-	var name := _label(
-		"%s  ×%d (%d available)" % [item_name, int(item.get("quantity", 0)), available],
-		11,
-		UI_TEXT
-	)
-	name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var item_info := VBoxContainer.new()
+	item_info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	item_info.add_theme_constant_override("separation", 1)
+	header.add_child(item_info)
+	var name := _label(item_name, 11, UI_TEXT)
+	name.name = "GuildBankItemName_%s" % item_id
 	name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	row.add_child(name)
+	item_info.add_child(name)
+	var quantity_total := maxi(int(item.get("quantity", 0)), 0)
+	var borrowed := maxi(int(item.get("borrowedQuantity", quantity_total - available)), 0)
+	var detail_key := "ui.guild.bank.items.inventory_detail" if action == "deposit" else (
+		"ui.guild.bank.items.storage_detail_borrowed" if borrowed > 0 else "ui.guild.bank.items.storage_detail"
+	)
+	var detail := _label(_t(detail_key, {
+		"quantity": quantity_total,
+		"available": available,
+		"borrowed": borrowed,
+	}), 9, UI_MUTED)
+	detail.name = "GuildBankItemDetail_%s" % item_id
+	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	item_info.add_child(detail)
+	var controls := HBoxContainer.new()
+	controls.alignment = BoxContainer.ALIGNMENT_END
+	controls.add_theme_constant_override("separation", 6)
+	layout.add_child(controls)
 	var quantity := SpinBox.new()
 	quantity.min_value = 1
 	quantity.max_value = maxi(available if action != "deposit" else int(item.get("quantity", 1)), 1)
 	quantity.value = 1
 	quantity.custom_minimum_size = Vector2(78, 32)
 	_apply_spin_box_style(quantity)
-	row.add_child(quantity)
+	controls.add_child(quantity)
 	var access := _dictionary(guild_bank_state.get("access", {}))
 	var permission := (
 		"resource_deposit" if action == "deposit" else "resource_withdraw"
@@ -1966,7 +2003,7 @@ func _build_guild_item_row(item: Dictionary, action: String, is_resource: bool =
 		"canDeposit" if action == "deposit" else "canWithdraw"
 	)
 	var allowed := bool(access.get(access_key, false))
-	row.add_child(_guild_bank_action_button(
+	controls.add_child(_guild_bank_action_button(
 		"GuildBank%s%sButton_%s" % ["Resource" if is_resource else "Item", action.capitalize(), str(item.get("itemId", "item"))],
 		"ui.guild.bank.donate" if action == "deposit" else "ui.guild.bank.withdraw",
 		allowed,
@@ -1985,14 +2022,14 @@ func _build_guild_item_row(item: Dictionary, action: String, is_resource: bool =
 			and available > 0
 			and bool(item.get("lendable", false))
 		)
-		row.add_child(_guild_bank_action_button(
+		controls.add_child(_guild_bank_action_button(
 			"GuildBankItemBorrowButton_%s" % str(item.get("itemId", "item")),
 			"ui.guild.bank.borrow",
 			can_borrow,
 			_on_guild_bank_item_action.bind("borrow", str(item.get("itemId", "")), quantity),
 			"" if can_borrow else _guild_bank_borrow_tooltip(item)
 		))
-	return row
+	return card
 
 
 func _build_guild_pokemon_workspace() -> Control:
