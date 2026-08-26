@@ -49,11 +49,14 @@ func _init() -> void:
 	var city_script := FileAccess.get_file_as_string(
 		"res://scripts/world/kanto/towns/cerulean_city.gd"
 	)
+	var map_metadata_script := FileAccess.get_file_as_string(
+		"res://scripts/world/map_metadata.gd"
+	)
 	var placeholder_script := FileAccess.get_file_as_string(
 		"res://scripts/world/kanto/open_field_placeholder_map.gd"
 	)
 
-	_check(city_script.contains("MapLayerResolverScript.find_tilemap_layer"), "Cerulean City resolves its nested Collision layer")
+	_check(map_metadata_script.contains('find_map_tilemap_layer("Collision")'), "Cerulean City inherits the shared nested Collision resolver")
 	_check(city_script.contains('"route_24"'), "Cerulean City opens its north collision boundary")
 	_check(city_script.contains('"route_9"'), "Cerulean City opens its east collision boundary")
 	_check(city_script.contains('"route_5"'), "Cerulean City opens its south collision boundary")

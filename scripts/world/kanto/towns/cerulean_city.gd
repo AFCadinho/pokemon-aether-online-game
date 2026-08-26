@@ -1,6 +1,5 @@
 extends "res://scripts/world/map_metadata.gd"
 
-const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
 const MAP_SIZE := Vector2i(75, 70)
 const EXIT_OPENINGS := {
 	"route_4": {
@@ -24,12 +23,6 @@ const EXIT_OPENINGS := {
 		"to": 16,
 	},
 }
-
-@onready var collision: TileMapLayer = MapLayerResolverScript.find_tilemap_layer(
-	self,
-	["Collision"]
-)
-
 
 func _ready() -> void:
 	_open_exterior_connections()

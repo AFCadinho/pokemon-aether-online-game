@@ -22,6 +22,9 @@ func _init() -> void:
 	var cerulean_script := FileAccess.get_file_as_string(
 		"res://scripts/world/kanto/towns/cerulean_city.gd"
 	)
+	var map_metadata_script := FileAccess.get_file_as_string(
+		"res://scripts/world/map_metadata.gd"
+	)
 	var cerulean_visual := FileAccess.get_file_as_string(
 		"res://generated/tiled_visuals/cerulean_city/cerulean_city.visual.tscn"
 	)
@@ -60,7 +63,7 @@ func _init() -> void:
 	_check(cerulean_source.contains('transition_facing_direction = "left"'), "Route 4 return faces west")
 	_check(cerulean_source.contains('[connection signal="body_entered" from="Exits/ToRoute4"'), "Cerulean City listens for the Route 4 exit")
 	_check(cerulean_script.contains('const MAP_SIZE := Vector2i(75, 70)'), "Cerulean City bounds match its imported visual")
-	_check(cerulean_script.contains('MapLayerResolverScript.find_tilemap_layer'), "Cerulean City resolves the imported Collision layer")
+	_check(map_metadata_script.contains('find_map_tilemap_layer("Collision")'), "Cerulean City inherits the shared Collision layer resolver")
 	_check(cerulean_script.contains('"route_4"'), "Cerulean City keeps the Route 4 road open")
 	quit(1 if failed else 0)
 
