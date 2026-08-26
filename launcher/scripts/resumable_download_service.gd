@@ -16,6 +16,8 @@ const DIAGNOSTIC_SAMPLE_INTERVAL_SECONDS := 15.0
 const RETRY_DELAYS_SECONDS: Array[float] = [2.0, 5.0, 15.0, 30.0, 60.0]
 const READ_CHUNK_SIZE := 256 * 1024
 const STALE_PARTIAL_MAX_AGE_SECONDS := 14 * 24 * 60 * 60
+const PARALLEL_CONNECTIONS := 4
+const PARALLEL_MIN_SIZE_BYTES := 8 * 1024 * 1024
 
 enum DownloadState {
 	IDLE,
@@ -62,6 +64,13 @@ var stall_warning_seconds := STALL_WARNING_SECONDS
 var stall_reconnect_seconds := STALL_RECONNECT_SECONDS
 var max_retries := MAX_RETRIES
 var retry_delays_seconds: Array[float] = RETRY_DELAYS_SECONDS.duplicate()
+var parallel_connection_count := PARALLEL_CONNECTIONS
+var parallel_min_size_bytes := PARALLEL_MIN_SIZE_BYTES
+var parallel_mode := false
+var parallel_used := false
+var parallel_fallback_used := false
+var parallel_connections_peak := 0
+var segments: Array[Dictionary] = []
 
 
 func is_active() -> bool:
@@ -80,6 +89,15 @@ func start_download(download_job: Dictionary) -> Error:
 	expected_size = int(job.get("size_bytes", 0))
 	expected_sha256 = str(job.get("sha256", "")).strip_edges().to_lower()
 	request_url = str(job.get("url", "")).strip_edges()
+	parallel_mode = (
+		bool(job.get("parallel", true))
+		and parallel_connection_count > 1
+		and expected_size >= parallel_min_size_bytes
+	)
+	parallel_used = false
+	parallel_fallback_used = false
+	parallel_connections_peak = 0
+	segments.clear()
 	retry_count = 0
 	checksum_retry_count = 0
 	redirect_count = 0
@@ -110,6 +128,8 @@ func start_download(download_job: Dictionary) -> Error:
 	var identity_hash := identity.sha256_text().substr(0, 16)
 	part_path = download_dir.path_join("%s-%s.part" % [safe_id, identity_hash])
 	metadata_path = "%s.json" % part_path
+	if parallel_mode:
+		_initialize_segments()
 
 	_cleanup_stale_partials(download_dir)
 	_prepare_partial_download()
@@ -117,6 +137,7 @@ func start_download(download_job: Dictionary) -> Error:
 		"offset": bytes_received,
 		"expected_size": expected_size,
 		"resumed": bytes_received > 0,
+		"parallel": parallel_mode,
 	})
 	_begin_attempt()
 	return OK
@@ -126,7 +147,7 @@ func cancel() -> void:
 	if not is_active():
 		return
 	_close_connection()
-	_emit_event("download_cancelled", {"downloaded_bytes": bytes_received})
+	_emit_event("download_cancelled", {"downloaded_bytes": _current_downloaded_size()})
 	_reset_runtime()
 
 
@@ -138,6 +159,9 @@ func _process(_delta: float) -> void:
 	if state == DownloadState.WAITING_TO_RETRY:
 		if now >= retry_at_msec:
 			_begin_attempt()
+		return
+	if parallel_mode:
+		_process_parallel(now)
 		return
 
 	if client == null:
@@ -207,8 +231,364 @@ func _process_body() -> void:
 		_schedule_retry("connection ended before the response completed: status %d" % status)
 
 
+func _process_parallel(now: int) -> void:
+	var all_done := true
+	for index in range(segments.size()):
+		var segment: Dictionary = segments[index]
+		if bool(segment.get("done", false)):
+			continue
+		all_done = false
+		var segment_client: HTTPClient = segment.get("client")
+		if segment_client == null:
+			_schedule_retry("parallel segment %d is missing its HTTP client" % index)
+			return
+		var poll_error := segment_client.poll()
+		if poll_error != OK:
+			_schedule_retry("parallel segment %d network poll failed: %s" % [index, error_string(poll_error)])
+			return
+		match int(segment.get("state", DownloadState.CONNECTING)):
+			DownloadState.CONNECTING:
+				_process_parallel_connecting(index)
+			DownloadState.REQUESTING:
+				_process_parallel_requesting(index)
+			DownloadState.READING_BODY:
+				_process_parallel_body(index)
+		if not parallel_mode or state == DownloadState.WAITING_TO_RETRY or job.is_empty():
+			return
+
+	if all_done or _all_parallel_segments_done():
+		_merge_parallel_segments()
+		return
+	_process_parallel_stall_watchdog(now)
+	if parallel_mode and state != DownloadState.WAITING_TO_RETRY:
+		_emit_progress_if_due(now)
+
+
+func _begin_parallel_attempt() -> void:
+	_close_parallel_connections()
+	_initialize_segments()
+	bytes_received = _parallel_downloaded_size()
+	if retry_count > 0 and bytes_received > 0:
+		resumed_bytes = maxi(resumed_bytes, bytes_received)
+	parallel_used = true
+	state = DownloadState.CONNECTING
+	attempt_started_at_msec = Time.get_ticks_msec()
+	last_byte_at_msec = attempt_started_at_msec
+	last_progress_emit_msec = 0
+	last_diagnostic_sample_msec = attempt_started_at_msec
+	speed_sample_at_msec = attempt_started_at_msec
+	speed_sample_bytes = bytes_received
+	recent_bytes_per_second = 0.0
+	stall_reported = false
+
+	var parsed := parse_http_url(request_url)
+	if not bool(parsed.get("valid", false)):
+		_fail_terminal("invalid download URL")
+		return
+
+	var active_connections := 0
+	for index in range(segments.size()):
+		var segment: Dictionary = segments[index]
+		var segment_length := _segment_length(segment)
+		var downloaded := _segment_file_size(segment)
+		if downloaded == segment_length:
+			segment["done"] = true
+			continue
+		if downloaded < 0 or downloaded > segment_length:
+			_reset_partial_download("parallel segment %d has an invalid size" % index)
+			_schedule_retry("invalid parallel partial required a clean restart", 0.0)
+			return
+		segment["downloaded"] = downloaded
+		segment["request_start"] = int(segment.get("start", 0)) + downloaded
+		segment["last_byte_at_msec"] = attempt_started_at_msec
+		segment["stall_reported"] = false
+		segment["state"] = DownloadState.CONNECTING
+		var segment_client := HTTPClient.new()
+		segment_client.read_chunk_size = READ_CHUNK_SIZE
+		segment["client"] = segment_client
+		var tls_options: TLSOptions = null
+		if str(parsed.get("scheme", "")) == "https":
+			tls_options = TLSOptions.client()
+		var connect_error := segment_client.connect_to_host(
+			str(parsed.get("host", "")),
+			int(parsed.get("port", -1)),
+			tls_options
+		)
+		if connect_error != OK:
+			_schedule_retry("parallel segment %d could not connect: %s" % [index, error_string(connect_error)])
+			return
+		active_connections += 1
+
+	parallel_connections_peak = maxi(parallel_connections_peak, active_connections)
+	_emit_event("parallel_download_attempt", {
+		"attempt": retry_count + 1,
+		"connections": active_connections,
+		"downloaded_bytes": bytes_received,
+		"segments": segments.size(),
+	})
+	if active_connections == 0:
+		_merge_parallel_segments()
+
+
+func _process_parallel_connecting(index: int) -> void:
+	var segment: Dictionary = segments[index]
+	var segment_client: HTTPClient = segment.get("client")
+	var status := segment_client.get_status()
+	if status == HTTPClient.STATUS_CONNECTED:
+		_send_parallel_request(index)
+	elif status not in [HTTPClient.STATUS_RESOLVING, HTTPClient.STATUS_CONNECTING]:
+		_schedule_retry("parallel segment %d connection failed: status %d" % [index, status])
+
+
+func _send_parallel_request(index: int) -> void:
+	var segment: Dictionary = segments[index]
+	var parsed := parse_http_url(request_url)
+	var request_start := int(segment.get("request_start", segment.get("start", 0)))
+	var request_end := int(segment.get("end", -1))
+	var headers := PackedStringArray([
+		"User-Agent: PokeAetherLauncher/1.0",
+		"Accept: application/octet-stream",
+		"Accept-Encoding: identity",
+		"Connection: keep-alive",
+		"Range: bytes=%d-%d" % [request_start, request_end],
+	])
+	if not stored_etag.is_empty() and not stored_etag.begins_with("W/"):
+		headers.append("If-Range: %s" % stored_etag)
+	if checksum_retry_count > 0:
+		headers.append("Cache-Control: no-cache")
+		headers.append("Pragma: no-cache")
+	var segment_client: HTTPClient = segment.get("client")
+	var request_error := segment_client.request(
+		HTTPClient.METHOD_GET,
+		str(parsed.get("target", "/")),
+		headers
+	)
+	if request_error != OK:
+		_schedule_retry("parallel segment %d could not send request: %s" % [index, error_string(request_error)])
+		return
+	segment["state"] = DownloadState.REQUESTING
+
+
+func _process_parallel_requesting(index: int) -> void:
+	var segment: Dictionary = segments[index]
+	var segment_client: HTTPClient = segment.get("client")
+	var status := segment_client.get_status()
+	if status in [HTTPClient.STATUS_BODY, HTTPClient.STATUS_CONNECTED] and segment_client.has_response():
+		_handle_parallel_response_headers(index)
+	elif status != HTTPClient.STATUS_REQUESTING:
+		_schedule_retry("parallel segment %d request failed: status %d" % [index, status])
+
+
+func _handle_parallel_response_headers(index: int) -> void:
+	var segment: Dictionary = segments[index]
+	var segment_client: HTTPClient = segment.get("client")
+	var status_code := segment_client.get_response_code()
+	var headers := _normalize_headers(segment_client.get_response_headers_as_dictionary())
+	var segment_edge := _cloudflare_edge(str(headers.get("cf-ray", "")))
+	if not segment_edge.is_empty():
+		edge_code = segment_edge
+
+	if status_code in [301, 302, 303, 307, 308]:
+		_handle_parallel_redirect(str(headers.get("location", "")))
+		return
+	if status_code == 200:
+		_fallback_to_single("server ignored bounded byte ranges")
+		return
+	if status_code != 206:
+		var reason := "parallel segment %d HTTP %d" % [index, status_code]
+		if _is_retriable_status(status_code):
+			_schedule_retry(reason, _retry_after_from_headers(headers))
+		else:
+			_fail_terminal(reason)
+		return
+
+	var content_range := parse_content_range(str(headers.get("content-range", "")))
+	var request_start := int(segment.get("request_start", -1))
+	var request_end := int(segment.get("end", -1))
+	if (
+		not bool(content_range.get("valid", false))
+		or int(content_range.get("start", -1)) != request_start
+		or int(content_range.get("end", -1)) != request_end
+		or int(content_range.get("total", 0)) != expected_size
+	):
+		_fallback_to_single("server returned an incompatible bounded byte range")
+		return
+
+	var response_etag := str(headers.get("etag", ""))
+	if not stored_etag.is_empty() and not response_etag.is_empty() and response_etag != stored_etag:
+		_reset_partial_download("parallel response ETag changed")
+		_schedule_retry("parallel response changed during resume", 0.0)
+		return
+	if stored_etag.is_empty() and not response_etag.is_empty():
+		stored_etag = response_etag
+	if not _open_parallel_segment_for_append(index):
+		_fail_terminal("could not open parallel segment %d for writing" % index)
+		return
+	_write_metadata()
+	segment["state"] = DownloadState.READING_BODY
+	_emit_event("parallel_response_headers", {
+		"segment": index,
+		"status": status_code,
+		"offset": request_start,
+		"content_range": str(headers.get("content-range", "")),
+		"accept_ranges": str(headers.get("accept-ranges", "")),
+		"edge": segment_edge,
+	})
+
+
+func _process_parallel_body(index: int) -> void:
+	var segment: Dictionary = segments[index]
+	var segment_client: HTTPClient = segment.get("client")
+	while segment_client != null and segment_client.get_status() == HTTPClient.STATUS_BODY:
+		var chunk := segment_client.read_response_body_chunk()
+		if chunk.is_empty():
+			break
+		var segment_file: FileAccess = segment.get("file")
+		if segment_file == null:
+			_fail_terminal("parallel segment %d file is not open" % index)
+			return
+		if int(segment.get("downloaded", 0)) + chunk.size() > _segment_length(segment):
+			_fail_terminal("parallel segment %d exceeded its expected size" % index)
+			return
+		segment_file.store_buffer(chunk)
+		if segment_file.get_error() != OK:
+			_fail_terminal("parallel segment %d write failed: %s" % [index, error_string(segment_file.get_error())])
+			return
+		segment["downloaded"] = int(segment.get("downloaded", 0)) + chunk.size()
+		bytes_received += chunk.size()
+		network_bytes_received += chunk.size()
+		var now := Time.get_ticks_msec()
+		if first_byte_at_msec == 0:
+			first_byte_at_msec = now
+		last_byte_at_msec = now
+		segment["last_byte_at_msec"] = now
+		segment["stall_reported"] = false
+
+	if segment_client == null:
+		return
+	var status := segment_client.get_status()
+	if status == HTTPClient.STATUS_CONNECTED:
+		_finish_parallel_segment(index)
+	elif status != HTTPClient.STATUS_BODY:
+		_schedule_retry("parallel segment %d ended before completion: status %d" % [index, status])
+
+
+func _finish_parallel_segment(index: int) -> void:
+	var segment: Dictionary = segments[index]
+	_close_parallel_segment(index)
+	var actual_size := _segment_file_size(segment)
+	if actual_size != _segment_length(segment):
+		_schedule_retry("parallel segment %d ended early at %d bytes" % [index, actual_size])
+		return
+	segment["downloaded"] = actual_size
+	segment["done"] = true
+	_emit_event("parallel_segment_complete", {
+		"segment": index,
+		"segments": segments.size(),
+		"downloaded_bytes": bytes_received,
+	})
+
+
+func _process_parallel_stall_watchdog(now: int) -> void:
+	for index in range(segments.size()):
+		var segment: Dictionary = segments[index]
+		if bool(segment.get("done", false)):
+			continue
+		var stalled_seconds := float(now - int(segment.get("last_byte_at_msec", now))) / 1000.0
+		if stalled_seconds >= stall_warning_seconds and not bool(segment.get("stall_reported", false)):
+			segment["stall_reported"] = true
+			stall_count += 1
+			_emit_event("download_stall", {
+				"segment": index,
+				"seconds_without_bytes": int(stalled_seconds),
+				"downloaded_bytes": bytes_received,
+			})
+		if stalled_seconds >= stall_reconnect_seconds:
+			_schedule_retry("parallel segment %d received no bytes for %d seconds" % [index, int(stalled_seconds)])
+			return
+
+
+func _handle_parallel_redirect(location: String) -> void:
+	var trimmed := location.strip_edges()
+	if trimmed.is_empty():
+		_fail_terminal("parallel redirect response has no Location header")
+		return
+	redirect_count += 1
+	if redirect_count > MAX_REDIRECTS:
+		_fail_terminal("redirect limit reached")
+		return
+	request_url = resolve_redirect_url(request_url, trimmed)
+	if not bool(parse_http_url(request_url).get("valid", false)):
+		_fail_terminal("redirect URL is invalid")
+		return
+	_emit_event("download_redirect", {"redirect": redirect_count, "parallel": true})
+	_schedule_retry("following parallel download redirect", 0.0, false)
+
+
+func _fallback_to_single(reason: String) -> void:
+	_close_parallel_connections()
+	_remove_parallel_segment_files()
+	_remove_file(metadata_path)
+	parallel_mode = false
+	parallel_fallback_used = true
+	bytes_received = 0
+	resumed_bytes = 0
+	stored_etag = ""
+	_emit_event("parallel_download_fallback", {"reason": reason})
+	_begin_attempt()
+
+
+func _merge_parallel_segments() -> void:
+	_close_parallel_connections()
+	for segment: Dictionary in segments:
+		if _segment_file_size(segment) != _segment_length(segment):
+			_schedule_retry("parallel segments were incomplete before merge")
+			return
+	var merged_file := FileAccess.open(part_path, FileAccess.WRITE)
+	if merged_file == null:
+		_fail_terminal("could not create merged parallel download")
+		return
+	for segment: Dictionary in segments:
+		var segment_file := FileAccess.open(str(segment.get("path", "")), FileAccess.READ)
+		if segment_file == null:
+			merged_file.close()
+			_reset_partial_download("parallel segment disappeared before merge")
+			_fail_terminal("could not read parallel segment during merge")
+			return
+		while segment_file.get_position() < segment_file.get_length():
+			var remaining := segment_file.get_length() - segment_file.get_position()
+			var chunk := segment_file.get_buffer(mini(READ_CHUNK_SIZE, remaining))
+			if chunk.is_empty() and remaining > 0:
+				segment_file.close()
+				merged_file.close()
+				_reset_partial_download("parallel segment read failed during merge")
+				_fail_terminal("could not merge parallel segment")
+				return
+			merged_file.store_buffer(chunk)
+			if merged_file.get_error() != OK:
+				segment_file.close()
+				merged_file.close()
+				_reset_partial_download("parallel merged file write failed")
+				_fail_terminal("could not write merged parallel download")
+				return
+		segment_file.close()
+	merged_file.flush()
+	merged_file.close()
+	_remove_parallel_segment_files()
+	parallel_mode = false
+	bytes_received = _partial_file_size()
+	_emit_event("parallel_download_merged", {
+		"connections": parallel_connections_peak,
+		"actual_size": bytes_received,
+	})
+	_verify_completed_download()
+
+
 func _begin_attempt() -> void:
 	_close_connection()
+	if parallel_mode:
+		_begin_parallel_attempt()
+		return
 	state = DownloadState.CONNECTING
 	request_offset = _partial_file_size()
 	bytes_received = request_offset
@@ -467,7 +847,7 @@ func _schedule_retry(reason: String, requested_delay: float = -1.0, count_retry:
 		"max_retries": max_retries,
 		"delay_seconds": snappedf(delay, 0.1),
 		"reason": reason,
-		"resume_offset": _partial_file_size(),
+		"resume_offset": _current_downloaded_size(),
 	})
 
 
@@ -488,7 +868,7 @@ func _build_summary() -> Dictionary:
 		"type": str(job.get("type", "download")),
 		"version": str(job.get("version", "")),
 		"expected_size": expected_size,
-		"downloaded_bytes": _partial_file_size(),
+		"downloaded_bytes": _current_downloaded_size(),
 		"network_bytes_received": network_bytes_received,
 		"duration_seconds": snappedf(duration_seconds, 0.1),
 		"time_to_first_byte_seconds": -1.0 if first_byte_at_msec == 0 else snappedf(float(first_byte_at_msec - started_at_msec) / 1000.0, 0.1),
@@ -498,27 +878,43 @@ func _build_summary() -> Dictionary:
 		"resumed_bytes": resumed_bytes,
 		"edge": edge_code,
 		"last_failure": last_failure_reason,
+		"parallel_used": parallel_used,
+		"parallel_connections": parallel_connections_peak,
+		"parallel_fallback": parallel_fallback_used,
 	}
 
 
 func _prepare_partial_download() -> void:
 	var metadata := _read_metadata()
-	var partial_size := _partial_file_size()
-	if partial_size <= 0:
-		_remove_file(part_path)
-		_remove_file(metadata_path)
-		bytes_received = 0
-		return
-
 	var metadata_matches := (
 		str(metadata.get("identity", "")) == _job_identity()
 		and int(metadata.get("expected_size", -1)) == expected_size
 		and str(metadata.get("sha256", "")).to_lower() == expected_sha256
 		and str(metadata.get("url", "")) == _url_without_query(str(job.get("url", "")))
 	)
+	if parallel_mode and str(metadata.get("mode", "")) == "parallel":
+		if not metadata_matches or not _parallel_layout_matches(metadata):
+			_reset_partial_download("stale or incompatible parallel partial download")
+			return
+		stored_etag = str(metadata.get("etag", ""))
+		bytes_received = _parallel_downloaded_size()
+		resumed_bytes = bytes_received
+		return
+
+	var partial_size := _partial_file_size()
+	if partial_size <= 0:
+		if not metadata.is_empty() or _parallel_downloaded_size() > 0:
+			_reset_partial_download("incomplete download metadata did not match available partials")
+			return
+		_remove_file(part_path)
+		_remove_file(metadata_path)
+		bytes_received = 0
+		return
+
 	if not metadata_matches or (expected_size > 0 and partial_size > expected_size):
 		_reset_partial_download("stale or incompatible partial download")
 		return
+	parallel_mode = false
 	stored_etag = str(metadata.get("etag", ""))
 	bytes_received = partial_size
 	resumed_bytes = partial_size
@@ -544,14 +940,16 @@ func _close_output_file() -> void:
 
 func _close_connection() -> void:
 	_close_output_file()
+	_close_parallel_connections()
 	if client != null:
 		client.close()
 		client = null
 
 
 func _reset_partial_download(reason: String) -> void:
-	_close_output_file()
+	_close_connection()
 	_remove_file(part_path)
+	_remove_parallel_segment_files()
 	_remove_file(metadata_path)
 	bytes_received = 0
 	stored_etag = ""
@@ -568,7 +966,17 @@ func _write_metadata() -> void:
 		"expected_size": expected_size,
 		"sha256": expected_sha256,
 		"etag": stored_etag,
+		"mode": "parallel" if parallel_mode else "single",
 	}
+	if parallel_mode:
+		var metadata_segments: Array[Dictionary] = []
+		for segment: Dictionary in segments:
+			metadata_segments.append({
+				"index": int(segment.get("index", -1)),
+				"start": int(segment.get("start", -1)),
+				"end": int(segment.get("end", -1)),
+			})
+		metadata["segments"] = metadata_segments
 	var temp_path := "%s.tmp" % metadata_path
 	var file := FileAccess.open(temp_path, FileAccess.WRITE)
 	if file == null:
@@ -596,6 +1004,133 @@ func _partial_file_size() -> int:
 	return FileAccess.get_size(part_path)
 
 
+func _current_downloaded_size() -> int:
+	return _parallel_downloaded_size() if parallel_mode else _partial_file_size()
+
+
+func _initialize_segments() -> void:
+	segments.clear()
+	var connection_count := mini(maxi(parallel_connection_count, 2), expected_size)
+	var base_size := int(expected_size / connection_count)
+	var remainder := expected_size % connection_count
+	var start := 0
+	for index in range(connection_count):
+		var length := base_size + (1 if index < remainder else 0)
+		var finish := start + length - 1
+		segments.append({
+			"index": index,
+			"start": start,
+			"end": finish,
+			"path": _segment_path(index),
+			"downloaded": 0,
+			"request_start": start,
+			"client": null,
+			"file": null,
+			"state": DownloadState.IDLE,
+			"done": false,
+			"last_byte_at_msec": 0,
+			"stall_reported": false,
+		})
+		start = finish + 1
+
+
+func _segment_path(index: int) -> String:
+	return "%s.segment-%d.part" % [part_path, index]
+
+
+func _segment_length(segment: Dictionary) -> int:
+	return int(segment.get("end", -1)) - int(segment.get("start", 0)) + 1
+
+
+func _segment_file_size(segment: Dictionary) -> int:
+	var path := str(segment.get("path", ""))
+	if path.is_empty() or not FileAccess.file_exists(path):
+		return 0
+	return FileAccess.get_size(path)
+
+
+func _parallel_downloaded_size() -> int:
+	var total := 0
+	for segment: Dictionary in segments:
+		total += _segment_file_size(segment)
+	return total
+
+
+func _parallel_layout_matches(metadata: Dictionary) -> bool:
+	var metadata_segments: Variant = metadata.get("segments", [])
+	if typeof(metadata_segments) != TYPE_ARRAY or metadata_segments.size() != segments.size():
+		return false
+	for index in range(segments.size()):
+		var saved: Variant = metadata_segments[index]
+		if typeof(saved) != TYPE_DICTIONARY:
+			return false
+		var segment: Dictionary = segments[index]
+		if (
+			int(saved.get("index", -1)) != index
+			or int(saved.get("start", -1)) != int(segment.get("start", -2))
+			or int(saved.get("end", -1)) != int(segment.get("end", -2))
+			or _segment_file_size(segment) > _segment_length(segment)
+		):
+			return false
+	return true
+
+
+func _open_parallel_segment_for_append(index: int) -> bool:
+	_close_parallel_segment_file(index)
+	var segment: Dictionary = segments[index]
+	var path := str(segment.get("path", ""))
+	var segment_file := FileAccess.open(path, FileAccess.READ_WRITE)
+	if segment_file == null:
+		segment_file = FileAccess.open(path, FileAccess.WRITE_READ)
+	if segment_file == null:
+		return false
+	segment_file.seek_end()
+	segment["downloaded"] = segment_file.get_length()
+	segment["file"] = segment_file
+	return true
+
+
+func _close_parallel_segment_file(index: int) -> void:
+	if index < 0 or index >= segments.size():
+		return
+	var segment: Dictionary = segments[index]
+	var segment_file: FileAccess = segment.get("file")
+	if segment_file != null:
+		segment_file.flush()
+		segment_file.close()
+		segment["file"] = null
+
+
+func _close_parallel_segment(index: int) -> void:
+	if index < 0 or index >= segments.size():
+		return
+	_close_parallel_segment_file(index)
+	var segment: Dictionary = segments[index]
+	var segment_client: HTTPClient = segment.get("client")
+	if segment_client != null:
+		segment_client.close()
+		segment["client"] = null
+
+
+func _close_parallel_connections() -> void:
+	for index in range(segments.size()):
+		_close_parallel_segment(index)
+
+
+func _remove_parallel_segment_files() -> void:
+	for index in range(maxi(segments.size(), parallel_connection_count)):
+		_remove_file(_segment_path(index))
+
+
+func _all_parallel_segments_done() -> bool:
+	if segments.is_empty():
+		return false
+	for segment: Dictionary in segments:
+		if not bool(segment.get("done", false)):
+			return false
+	return true
+
+
 func _job_identity() -> String:
 	return "%s:%s:%s" % [
 		str(job.get("type", "download")),
@@ -620,7 +1155,11 @@ func _validate_job(download_job: Dictionary) -> Error:
 
 
 func _retry_after_seconds() -> float:
-	var value := str(response_headers.get("retry-after", "")).strip_edges()
+	return _retry_after_from_headers(response_headers)
+
+
+func _retry_after_from_headers(headers: Dictionary) -> float:
+	var value := str(headers.get("retry-after", "")).strip_edges()
 	if value.is_valid_int():
 		return clampf(float(value.to_int()), 0.0, 300.0)
 	return -1.0
@@ -650,6 +1189,8 @@ func _reset_runtime() -> void:
 	request_url = ""
 	response_headers = {}
 	response_code = 0
+	parallel_mode = false
+	segments.clear()
 
 
 func _remove_file(path: String) -> void:

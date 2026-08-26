@@ -6,11 +6,13 @@ Small Godot launcher project for PokeAether.
 
 1. Downloads `manifest.json`.
 2. Compares remote versions with `user://versions.json`.
-3. Downloads missing or outdated zip files into persistent `.part` files.
-4. Resumes interrupted downloads with validated HTTP byte ranges and bounded retries.
-5. Verifies every completed zip against its manifest size and SHA-256.
-6. Extracts into a staging folder and only replaces the installed game or asset pack after extraction succeeds.
-7. Starts the configured game executable.
+3. Downloads files of at least 8 MiB over four bounded HTTP byte ranges in parallel.
+4. Keeps each segment in a persistent partial file so interrupted parallel downloads resume safely.
+5. Falls back to the single-connection downloader when an origin does not honor bounded ranges.
+6. Resumes interrupted downloads with validated HTTP byte ranges and bounded retries.
+7. Verifies every completed zip against its manifest size and SHA-256.
+8. Extracts into a staging folder and only replaces the installed game or asset pack after extraction succeeds.
+9. Starts the configured game executable.
 
 The launcher records periodic speed samples, stalls, reconnects, resume offsets,
 HTTP range responses, and the Cloudflare edge code in its local diagnostics log.
