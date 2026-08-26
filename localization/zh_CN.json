@@ -1671,7 +1671,7 @@
   "ui.guild.bank.funds.balance": "公会余额：${amount}",
   "ui.guild.bank.pokemon.count": "已存储 {count} / {capacity} 只宝可梦",
   "ui.guild.bank.items.count": "共 {quantity} 个物品 · 已使用 {stacks} / {capacity} 个堆叠栏位",
-  "ui.guild.bank.resources.count": "共享了 {count} 组资源",
+  "ui.guild.bank.resources.count": "已使用 {count} / {capacity} 个资源堆叠栏位",
   "ui.guild.bank.back": "返回",
   "ui.guild.bank.refresh": "刷新",
   "ui.guild.bank.loading": "正在加载公会银行...",
