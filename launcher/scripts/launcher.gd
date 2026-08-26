@@ -10,7 +10,7 @@ const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
 const DEFAULT_DISCORD_URL := "https://discord.com/invite/b6WexWT8HX"
 const DEFAULT_PATCH_NOTES_URL := "https://pokeaether.com/patch-notes"
 const DEFAULT_CREDITS_URL := "https://pokeaether.com/credits"
-const DEFAULT_HEALTH_URL := "https://pokeaether.com/health"
+const DEFAULT_STATUS_URL := "https://pokeaether.com/auth/status"
 const DEFAULT_PRESENCE_URL := "https://admin.pokeaether.com/presence/online-count"
 const LAUNCHER_CONFIG_FILE := "res://config/launcher_config.json"
 const DEFAULT_INSTALL_DIR := "user://game"
@@ -58,6 +58,7 @@ const KNOWN_URL_SCHEMES: Array[String] = ["http://", "https://"]
 const SERVER_ONLINE_COLOR := Color(0.16, 0.94, 0.66, 1.0)
 const SERVER_OFFLINE_COLOR := Color(1.0, 0.38, 0.45, 1.0)
 const SERVER_CHECKING_COLOR := Color(1.0, 0.72, 0.34, 1.0)
+const SERVER_MAINTENANCE_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 
 @onready var shell_panel: PanelContainer = $Shell
 @onready var sidebar_panel: PanelContainer = $Shell/MainSplit/Sidebar
@@ -114,7 +115,7 @@ var current_download: Dictionary = {}
 var update_required := false
 var manifest_url := DEFAULT_MANIFEST_URL
 var news_url := DEFAULT_NEWS_URL
-var health_url := DEFAULT_HEALTH_URL
+var server_status_url := DEFAULT_STATUS_URL
 var presence_url := DEFAULT_PRESENCE_URL
 var discord_url := DEFAULT_DISCORD_URL
 var patch_notes_url := DEFAULT_PATCH_NOTES_URL
@@ -138,6 +139,8 @@ var download_progress_snapshot: Dictionary = {}
 var active_resumable_download_kind := ""
 var manifest_retry_count := 0
 var manifest_request_generation := 0
+var server_access_blocked := false
+var server_access_message := ""
 
 
 func _draw() -> void:
@@ -587,6 +590,13 @@ func download_gen5_animated_sprites() -> void:
 
 
 func launch_game() -> void:
+	if server_access_blocked:
+		_set_status(
+			server_access_message if not server_access_message.is_empty() else "Server maintenance.",
+			"maintenance"
+		)
+		return
+
 	var game_data: Dictionary = _get_dictionary(manifest, "game")
 	var absolute_executable_path := _get_game_executable_path(game_data)
 	if not FileAccess.file_exists(absolute_executable_path):
@@ -2282,20 +2292,20 @@ func _load_launcher_config() -> void:
 	var configured_news_url := str(config.get("newsUrl", ""))
 	if not configured_news_url.is_empty():
 		news_url = configured_news_url
-	var configured_health_url := str(config.get("healthUrl", ""))
-	if not configured_health_url.is_empty():
-		health_url = configured_health_url
+	var configured_status_url := str(config.get("statusUrl", config.get("healthUrl", "")))
+	if not configured_status_url.is_empty():
+		server_status_url = configured_status_url
 	var configured_presence_url := str(config.get("presenceUrl", ""))
 	if not configured_presence_url.is_empty():
 		presence_url = configured_presence_url
 	manifest_url = _normalize_url(manifest_url)
 	news_url = _normalize_url(news_url)
-	health_url = _normalize_url(health_url)
+	server_status_url = _normalize_url(server_status_url)
 	presence_url = _normalize_url(presence_url)
 	if manifest_url.is_empty():
 		manifest_url = DEFAULT_MANIFEST_URL
-	if health_url.is_empty():
-		health_url = DEFAULT_HEALTH_URL
+	if server_status_url.is_empty():
+		server_status_url = DEFAULT_STATUS_URL
 	if presence_url.is_empty():
 		presence_url = DEFAULT_PRESENCE_URL
 
@@ -2508,12 +2518,17 @@ func _refresh_status() -> void:
 	if local_game_version.is_empty():
 		local_game_version = "not installed"
 	version_label.text = _t(local_game_version)
-	play_button.disabled = update_required or not _has_installed_game()
+	play_button.disabled = server_access_blocked or update_required or not _has_installed_game()
 	update_button.disabled = not update_required
 	check_button.disabled = false
 	_refresh_gen5_sprites_button()
 	_refresh_uninstall_button()
-	if update_required:
+	if server_access_blocked:
+		_set_status(
+			server_access_message if not server_access_message.is_empty() else "Server maintenance.",
+			"maintenance"
+		)
+	elif update_required:
 		_set_status("Update available.")
 	elif local_game_version == "" or local_game_version == "not installed":
 		_set_status("Game is not installed.")
@@ -2531,16 +2546,47 @@ func _refresh_launcher_version() -> void:
 
 
 func _refresh_server_health() -> void:
-	var result: Dictionary = await LauncherServerHealthService.check_async(self, health_url)
+	var result: Dictionary = await LauncherServerHealthService.check_async(self, server_status_url)
 	if bool(result.get("online", false)):
+		server_access_blocked = false
+		server_access_message = ""
 		server_online_label.text = _t("Online")
 		server_online_label.add_theme_color_override("font_color", SERVER_ONLINE_COLOR)
 		await _refresh_online_players()
+	elif bool(result.get("maintenance", false)):
+		server_access_blocked = true
+		server_access_message = str(result.get("message", "")).strip_edges()
+		server_online_label.text = _t("Maintenance")
+		server_online_label.add_theme_color_override("font_color", SERVER_MAINTENANCE_COLOR)
+		online_players_label.text = _t("Players online unavailable")
+		online_players_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
 	else:
+		server_access_blocked = false
+		server_access_message = ""
 		server_online_label.text = _t("Offline")
 		server_online_label.add_theme_color_override("font_color", SERVER_OFFLINE_COLOR)
 		online_players_label.text = _t("Players online unavailable")
 		online_players_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
+	_apply_server_access_status()
+
+
+func _apply_server_access_status() -> void:
+	var launcher_task_active := (
+		http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED
+		or (download_service != null and download_service.is_active())
+		or launcher_update_busy
+		or launcher_update_in_progress
+	)
+	play_button.disabled = (
+		launcher_task_active
+		or server_access_blocked
+		or update_required
+		or not _has_installed_game()
+	)
+	if not launcher_task_active:
+		_refresh_status()
+	else:
+		_sync_button_cursors()
 
 
 func _set_server_health_checking() -> void:
@@ -2570,7 +2616,7 @@ func _set_busy(is_busy: bool) -> void:
 	check_button.disabled = locked
 	update_button.disabled = locked or not update_required
 	gen5_sprites_button.disabled = locked or not _can_download_gen5_sprites()
-	play_button.disabled = locked or update_required or not _has_installed_game()
+	play_button.disabled = locked or server_access_blocked or update_required or not _has_installed_game()
 	uninstall_button.disabled = locked or not _has_game_install_folder()
 	_sync_button_cursors()
 
@@ -2726,7 +2772,10 @@ func _get_game_install_dir() -> String:
 func _set_status(message: String, state: String = "") -> void:
 	status_label.text = _t(message)
 	var lowered_message := message.to_lower()
-	if state == "error" or lowered_message.contains("failed") or lowered_message.contains("could not") or lowered_message.contains("missing") or lowered_message.contains("invalid"):
+	if state == "maintenance":
+		status_value_label.text = _t("Maintenance")
+		status_value_label.add_theme_color_override("font_color", SERVER_MAINTENANCE_COLOR)
+	elif state == "error" or lowered_message.contains("failed") or lowered_message.contains("could not") or lowered_message.contains("missing") or lowered_message.contains("invalid"):
 		status_value_label.text = _t("Error")
 		status_value_label.add_theme_color_override("font_color", Color(1.0, 0.38, 0.45))
 	elif state == "not_installed" or lowered_message.contains("not installed"):

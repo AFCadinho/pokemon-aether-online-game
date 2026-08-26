@@ -47,6 +47,10 @@ const PLAYER_PREVIEW_SCALE := Vector2(2.0, 2.0)
 @onready var settings_menu: PanelContainer = $Background/LoginSettingsMenu
 
 var server_online := false
+var server_in_maintenance := false
+var server_access_notice_active := false
+var server_access_notice_message := ""
+var server_access_notice_key := ""
 var is_loading := false
 var player_preview_instance: Node2D
 var news_items: Array[Dictionary] = []
@@ -135,8 +139,8 @@ func set_loading(is_loading: bool) -> void:
 	username_input.editable = not is_loading
 	password_input.editable = not is_loading
 	remember_me_checkbox.disabled = is_loading
-	login_button.disabled = is_loading
-	continue_button.disabled = is_loading
+	login_button.disabled = is_loading or not server_online
+	continue_button.disabled = is_loading or not server_online
 	logout_button.disabled = is_loading
 	language_options_button.disabled = is_loading
 	login_button.text = (
@@ -467,7 +471,10 @@ func _submit_login() -> void:
 		return
 
 	if not server_online:
-		show_status_key("ui.login.error.offline", {}, true)
+		if server_access_notice_active:
+			_apply_server_access_notice()
+		else:
+			show_status_key("ui.login.error.offline", {}, true)
 		_refresh_server_health.call_deferred()
 		return
 
@@ -477,6 +484,13 @@ func _submit_login() -> void:
 	set_loading(false)
 
 	if not bool(result.get("success", false)):
+		var login_error_code := BackendErrorLocalizationService.error_code(result)
+		if int(result.get("status", 0)) == 503 or login_error_code == "server_maintenance":
+			await _refresh_server_health()
+			if server_in_maintenance:
+				password_input.select_all()
+				password_input.grab_focus()
+				return
 		show_status(_get_login_error_message(result), true)
 		password_input.select_all()
 		password_input.grab_focus()
@@ -491,12 +505,57 @@ func _submit_login() -> void:
 func _refresh_server_health() -> void:
 	var result: Dictionary = await ServerHealthService.check_async(self)
 	server_online = bool(result.get("online", false))
+	server_in_maintenance = bool(result.get("maintenance", false))
 	if server_online:
 		_set_server_status("ui.login.server_online", ONLINE_COLOR)
+		_clear_server_access_notice()
 		await _refresh_online_players()
+	elif server_in_maintenance:
+		_set_server_status("ui.login.server_maintenance", CHECKING_COLOR)
+		_set_online_players_status("ui.login.players_unavailable", {}, CHECKING_COLOR)
+		var maintenance_message := str(result.get("message", "")).strip_edges()
+		if maintenance_message.is_empty():
+			_set_server_access_notice("", "ui.login.error.maintenance")
+		else:
+			_set_server_access_notice(maintenance_message)
 	else:
 		_set_server_status("ui.login.server_offline", OFFLINE_COLOR)
 		_set_online_players_status("ui.login.players_unavailable", {}, CHECKING_COLOR)
+		_set_server_access_notice("", "ui.login.error.offline")
+	_apply_server_access_controls()
+
+
+func _set_server_access_notice(message: String = "", key: String = "") -> void:
+	server_access_notice_active = true
+	server_access_notice_message = message
+	server_access_notice_key = key
+	_apply_server_access_notice()
+
+
+func _apply_server_access_notice() -> void:
+	if not server_access_notice_active:
+		return
+	if not server_access_notice_key.is_empty():
+		show_status_key(server_access_notice_key, {}, true)
+		show_saved_status_key(server_access_notice_key, {}, true)
+	else:
+		show_status(server_access_notice_message, true)
+		show_saved_status(server_access_notice_message, true)
+
+
+func _clear_server_access_notice() -> void:
+	if not server_access_notice_active:
+		return
+	server_access_notice_active = false
+	server_access_notice_message = ""
+	server_access_notice_key = ""
+	show_status("")
+	show_saved_status("")
+
+
+func _apply_server_access_controls() -> void:
+	login_button.disabled = is_loading or not server_online
+	continue_button.disabled = is_loading or not server_online
 
 
 func _set_server_status(key: String, color: Color) -> void:
@@ -514,8 +573,10 @@ func _set_online_players_status(key: String, values: Dictionary, color: Color) -
 
 func _set_server_status_checking() -> void:
 	server_online = false
+	server_in_maintenance = false
 	_set_server_status("ui.login.checking_server", CHECKING_COLOR)
 	_set_online_players_status("ui.login.checking_players", {}, CHECKING_COLOR)
+	_apply_server_access_controls()
 
 
 func _refresh_online_players() -> void:
@@ -538,8 +599,9 @@ func _refresh_online_players() -> void:
 func _restore_saved_session() -> void:
 	var result: Dictionary = await AuthService.restore_saved_session()
 	if not bool(result.get("success", false)):
-		if int(result.get("status", 0)) == 503:
-			show_status(_get_login_error_message(result), true)
+		var restore_error_code := BackendErrorLocalizationService.error_code(result)
+		if int(result.get("status", 0)) == 503 or restore_error_code == "server_maintenance":
+			await _refresh_server_health()
 		return
 
 	var username: String = str(AuthService.current_user.get("username", ""))
@@ -618,6 +680,7 @@ func _show_saved_session_card() -> void:
 	_refresh_player_preview()
 	show_status("")
 	show_saved_status("")
+	_apply_server_access_notice()
 	continue_button.grab_focus()
 
 

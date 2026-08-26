@@ -6,7 +6,7 @@
 	"macos": "https://updates.pokeaether.com/manifest-macos.json"
   },
   "newsUrl": "https://updates.pokeaether.com/data/news.json",
-  "healthUrl": "https://pokeaether.com/health",
+  "statusUrl": "https://pokeaether.com/auth/status",
   "presenceUrl": "https://admin.pokeaether.com/presence/online-count",
   "discordUrl": "https://discord.com/invite/b6WexWT8HX",
   "patchNotesUrl": "https://pokeaether.com/patch-notes",
