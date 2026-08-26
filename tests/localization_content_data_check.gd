@@ -227,6 +227,20 @@ func _check_runtime_resolution() -> void:
 		"species presentation resolves from the complete canonical source catalog"
 	)
 
+	localization_manager.call("set_locale", "zh_CN")
+	_check(
+		content_localization.call("type_name", "fighting", "Fighting") == "格斗",
+		"Simplified Chinese uses the official Fighting type name"
+	)
+	_check(
+		content_localization.call("type_name", "psychic", "Psychic") == "超能力",
+		"Simplified Chinese uses the official Psychic type name"
+	)
+	_check(
+		content_localization.call("nature_name", "Adamant", "Adamant") == "固执",
+		"Simplified Chinese uses the official Adamant Nature name"
+	)
+
 
 func _check_independent_name_language() -> void:
 	localization_manager.call("set_locale", "nl")

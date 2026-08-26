@@ -1,16 +1,16 @@
 {
   "types": {
     "normal": {
-      "name": "正常"
+      "name": "一般"
     },
     "fire": {
-      "name": "火灾"
+      "name": "火"
     },
     "water": {
       "name": "水"
     },
     "electric": {
-      "name": "电动"
+      "name": "电"
     },
     "grass": {
       "name": "草"
@@ -19,25 +19,25 @@
       "name": "冰"
     },
     "fighting": {
-      "name": "战斗"
+      "name": "格斗"
     },
     "poison": {
-      "name": "毒药"
+      "name": "毒"
     },
     "ground": {
-      "name": "接地"
+      "name": "地面"
     },
     "flying": {
       "name": "飞行"
     },
     "psychic": {
-      "name": "通灵"
+      "name": "超能力"
     },
     "bug": {
-      "name": "错误"
+      "name": "虫"
     },
     "rock": {
-      "name": "摇滚"
+      "name": "岩石"
     },
     "ghost": {
       "name": "幽灵"
@@ -46,90 +46,90 @@
       "name": "龙"
     },
     "dark": {
-      "name": "黑暗"
+      "name": "恶"
     },
     "steel": {
       "name": "钢"
     },
     "fairy": {
-      "name": "仙女"
+      "name": "妖精"
     }
   },
   "natures": {
     "hardy": {
-      "name": "哈迪"
+      "name": "勤奋"
     },
     "lonely": {
-      "name": "孤独"
+      "name": "怕寂寞"
     },
     "brave": {
       "name": "勇敢"
     },
     "adamant": {
-      "name": "坚定"
+      "name": "固执"
     },
     "naughty": {
-      "name": "淘气"
-    },
-    "bold": {
-      "name": "粗体"
-    },
-    "docile": {
-      "name": "温顺"
-    },
-    "relaxed": {
-      "name": "放松"
-    },
-    "impish": {
       "name": "顽皮"
     },
+    "bold": {
+      "name": "大胆"
+    },
+    "docile": {
+      "name": "坦率"
+    },
+    "relaxed": {
+      "name": "悠闲"
+    },
+    "impish": {
+      "name": "淘气"
+    },
     "lax": {
-      "name": "松懈"
+      "name": "乐天"
     },
     "timid": {
-      "name": "胆怯"
+      "name": "胆小"
     },
     "hasty": {
-      "name": "仓促"
+      "name": "急躁"
     },
     "serious": {
-      "name": "严重"
+      "name": "认真"
     },
     "jolly": {
-      "name": "乔利"
+      "name": "爽朗"
     },
     "naive": {
       "name": "天真"
     },
     "modest": {
-      "name": "谦虚"
+      "name": "内敛"
     },
     "mild": {
-      "name": "轻度"
+      "name": "慢吞吞"
     },
     "quiet": {
-      "name": "安静"
+      "name": "冷静"
     },
     "bashful": {
       "name": "害羞"
     },
     "rash": {
-      "name": "皮疹"
+      "name": "马虎"
     },
     "calm": {
-      "name": "冷静"
+      "name": "温和"
     },
     "gentle": {
-      "name": "温柔"
+      "name": "温顺"
     },
     "sassy": {
-      "name": "时髦"
+      "name": "自大"
     },
     "careful": {
-      "name": "小心"
+      "name": "慎重"
     },
     "quirky": {
-      "name": "古怪"
+      "name": "浮躁"
     }
   },
   "moves": {

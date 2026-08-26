@@ -104,6 +104,18 @@ func _check_runtime_translation(catalogs: Dictionary) -> void:
 	localization_manager.call("set_locale", "zh_CN")
 	_check(localization_manager.call("text", "ui.login.sign_in") == "登录", "Simplified Chinese runtime translation works")
 	_check(
+		localization_manager.call("text", "ui.pokemon_summary.moves.power") == "威力",
+		"Simplified Chinese Pokémon UI uses the official Power term"
+	)
+	_check(
+		localization_manager.call("text", "ui.move_learning.accuracy") == "命中",
+		"Simplified Chinese Pokémon UI uses the official accuracy term"
+	)
+	_check(
+		localization_manager.call("text", "ui.move.category.status") == "变化",
+		"Simplified Chinese Pokémon UI uses the official status-move category"
+	)
+	_check(
 		ThemeDB.fallback_font != null and ThemeDB.fallback_font.has_char("简".unicode_at(0)),
 		"Simplified Chinese activates a bundled font with Chinese glyph coverage"
 	)
