@@ -1442,6 +1442,7 @@ var aether_clash_champion_name := ""
 var aether_clash_champion_refresh_elapsed := 0.0
 var aether_clash_champion_request_active := false
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
+var displayed_world_weekday_id := ""
 var ui_input_mouse_blocker: Control
 var selected_global_buff: Dictionary = {}
 var global_buffs_data: Array = []
@@ -10465,28 +10466,59 @@ func _render_wild_pokemon_metadata(metadata: Dictionary) -> void:
 	var encounter_types: Dictionary = metadata.get("encounterTypes", {}) as Dictionary
 	var encounter_type_ids: Array = encounter_types.keys()
 	encounter_type_ids.sort()
-	var rendered_count := 0
+	var render_groups: Array[Dictionary] = []
+	var has_weekly_rotation_metadata := false
+	var has_active_weekly_rotation := false
 	for encounter_type_value: Variant in encounter_type_ids:
 		var encounter_type := str(encounter_type_value)
 		var encounter_data: Dictionary = encounter_types.get(encounter_type, {}) as Dictionary
 		var pokemon_entries := _array_from_variant(encounter_data.get("pokemon", []))
-		if pokemon_entries.is_empty():
-			continue
+		var active_entries: Array[Dictionary] = []
+		for entry_value: Variant in pokemon_entries:
+			if not entry_value is Dictionary:
+				continue
+			var entry := entry_value as Dictionary
+			var available_days := _weekly_availability_days(entry)
+			if not available_days.is_empty():
+				has_weekly_rotation_metadata = true
+				if not _weekly_availability_is_active_today(available_days):
+					continue
+				has_active_weekly_rotation = true
+			active_entries.append(entry)
+		if not active_entries.is_empty():
+			render_groups.append({
+				"encounter_type": encounter_type,
+				"entries": active_entries,
+			})
 
+	if render_groups.is_empty():
+		_set_wild_pokemon_message_key(
+			"ui.wild.empty_today" if has_weekly_rotation_metadata else "ui.wild.empty",
+			UI_MUTED_TEXT
+		)
+		return
+
+	if has_active_weekly_rotation:
+		var rotation_label := Label.new()
+		rotation_label.name = "WildPokemonRotationStatus"
+		rotation_label.text = LocalizationManager.text("ui.wild.rotation_today", {
+			"day": _weekday_label(_current_world_weekday_id(), false),
+		})
+		rotation_label.add_theme_font_size_override("font_size", 11)
+		rotation_label.add_theme_color_override("font_color", UI_SUCCESS)
+		wild_pokemon_content.add_child(rotation_label)
+
+	for render_group: Dictionary in render_groups:
+		var encounter_type := str(render_group.get("encounter_type", ""))
+		var active_entries: Array = render_group.get("entries", []) as Array
 		var method_label := Label.new()
 		method_label.text = _wild_encounter_method_label(encounter_type)
 		method_label.add_theme_font_size_override("font_size", 13)
 		method_label.add_theme_color_override("font_color", UI_BORDER)
 		wild_pokemon_content.add_child(method_label)
 
-		for entry_value: Variant in pokemon_entries:
-			if not entry_value is Dictionary:
-				continue
+		for entry_value: Variant in active_entries:
 			wild_pokemon_content.add_child(_create_wild_pokemon_row(entry_value as Dictionary))
-			rendered_count += 1
-
-	if rendered_count == 0:
-		_set_wild_pokemon_message_key("ui.wild.empty", UI_MUTED_TEXT)
 
 func _create_wild_pokemon_row(entry: Dictionary) -> Control:
 	var species := str(entry.get("species", "Unknown")).strip_edges()
@@ -10674,16 +10706,23 @@ func _refresh_utc_time_label(delta: float, force := false) -> void:
 	var date_time: Dictionary = WorldTimeService.get_utc_datetime()
 	var hour: int = int(date_time.get("hour", 0))
 	var minute: int = int(date_time.get("minute", 0))
+	var weekday_id := _current_world_weekday_id(date_time)
+	var time_text := ""
 	if LocalizationManager.current_locale != "en":
-		time_label.text = "%02d:%02d" % [hour, minute]
-		_refresh_time_of_day_label(hour)
-		return
-	var period: String = "AM" if hour < 12 else "PM"
-	var display_hour: int = hour % 12
-	if display_hour == 0:
-		display_hour = 12
-	time_label.text = "%02d:%02d %s" % [display_hour, minute, period]
+		time_text = "%02d:%02d" % [hour, minute]
+	else:
+		var period: String = "AM" if hour < 12 else "PM"
+		var display_hour: int = hour % 12
+		if display_hour == 0:
+			display_hour = 12
+		time_text = "%02d:%02d %s" % [display_hour, minute, period]
+	time_label.text = "%s · %s" % [_weekday_label(weekday_id), time_text]
+	time_label.tooltip_text = "%s · %s" % [_weekday_label(weekday_id, false), time_text]
 	_refresh_time_of_day_label(hour)
+	if displayed_world_weekday_id != weekday_id:
+		displayed_world_weekday_id = weekday_id
+		if wild_pokemon_popup != null and wild_pokemon_popup.visible and not wild_pokemon_last_metadata.is_empty():
+			_render_wild_pokemon_metadata(wild_pokemon_last_metadata)
 
 func _refresh_time_of_day_label(hour: int) -> void:
 	if time_of_day_label == null:
@@ -32147,9 +32186,12 @@ func _create_pokedex_location_region_badge(region_id: String) -> Control:
 	return badge
 
 func _pokedex_location_available_days(location: Dictionary) -> Array[String]:
-	var availability_value: Variant = location.get("availability", {})
+	return _weekly_availability_days(location)
+
+func _weekly_availability_days(source: Dictionary) -> Array[String]:
+	var availability_value: Variant = source.get("availability", {})
 	var availability: Dictionary = availability_value if availability_value is Dictionary else {}
-	var days_value: Variant = availability.get("daysOfWeek", location.get("daysOfWeek", []))
+	var days_value: Variant = availability.get("daysOfWeek", source.get("daysOfWeek", []))
 	var normalized_days: Array[String] = []
 	if not days_value is Array:
 		return normalized_days
@@ -32173,12 +32215,15 @@ func _pokedex_location_availability_label(available_days: Array[String]) -> Stri
 	})
 
 func _pokedex_location_is_available_today(available_days: Array[String]) -> bool:
-	return _pokedex_current_weekday_id() in available_days
+	return _weekly_availability_is_active_today(available_days)
+
+func _weekly_availability_is_active_today(available_days: Array[String]) -> bool:
+	return _current_world_weekday_id() in available_days
 
 func _pokedex_location_next_available_day(available_days: Array[String]) -> String:
 	if available_days.is_empty():
 		return ""
-	var current_index := POKEDEX_WEEKDAY_IDS.find(_pokedex_current_weekday_id())
+	var current_index := POKEDEX_WEEKDAY_IDS.find(_current_world_weekday_id())
 	for offset: int in range(1, POKEDEX_WEEKDAY_IDS.size() + 1):
 		var candidate: String = POKEDEX_WEEKDAY_IDS[(current_index + offset) % POKEDEX_WEEKDAY_IDS.size()]
 		if candidate in available_days:
@@ -32186,7 +32231,11 @@ func _pokedex_location_next_available_day(available_days: Array[String]) -> Stri
 	return available_days[0]
 
 func _pokedex_current_weekday_id() -> String:
-	var date_time: Dictionary = WorldTimeService.get_utc_datetime()
+	return _current_world_weekday_id()
+
+func _current_world_weekday_id(date_time: Dictionary = {}) -> String:
+	if date_time.is_empty():
+		date_time = WorldTimeService.get_utc_datetime()
 	var weekday: int = clampi(int(date_time.get("weekday", 0)), 0, POKEDEX_WEEKDAY_IDS.size() - 1)
 	return POKEDEX_WEEKDAY_IDS[weekday]
 
@@ -32197,6 +32246,9 @@ func _pokedex_location_days_text(available_days: Array[String], compact := true)
 	return " · ".join(labels)
 
 func _pokedex_weekday_label(day_id: String, compact := true) -> String:
+	return _weekday_label(day_id, compact)
+
+func _weekday_label(day_id: String, compact := true) -> String:
 	var suffix := "short" if compact else "long"
 	var key := "ui.weekday.%s.%s" % [day_id, suffix]
 	return LocalizationManager.text(key) if LocalizationManager.has_key(key) else _format_identifier_display_name(day_id)

@@ -2762,6 +2762,8 @@
   "ui.wild.loading": "Loading encounters…",
   "ui.wild.load_failed": "Could not load wild Pokémon.",
   "ui.wild.empty": "No wild Pokémon are known for this map.",
+  "ui.wild.empty_today": "No rotation Pokémon are available here today.",
+  "ui.wild.rotation_today": "Daily rotation · {day}",
   "ui.wild.level": "Lv. {level}",
   "ui.wild.level_range": "Lv. {min}–{max}",
   "ui.wild.method.grass": "Tall grass",
