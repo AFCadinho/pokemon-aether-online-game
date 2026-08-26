@@ -160,17 +160,27 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeruleanCave",
 					"tile": {
-						"x": 17,
-						"y": 7
+						"x": 16,
+						"y": 6
 					}
 				},
-				"from_route_24": {
+				"from_route_24_path": {
 					"facingDirection": "down",
-					"label": "Route 24",
+					"label": "Route 24 Path",
 					"safeForStaffTeleport": true,
-					"spawnMarker": "FromRoute24",
+					"spawnMarker": "FromRoute24Path",
 					"tile": {
-						"x": 69,
+						"x": 68,
+						"y": 2
+					}
+				},
+				"from_route_24_water": {
+					"facingDirection": "down",
+					"label": "Route 24 Water",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute24Water",
+					"tile": {
+						"x": 58,
 						"y": 2
 					}
 				},
@@ -190,18 +200,38 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute5",
 					"tile": {
-						"x": 15,
+						"x": 73,
+						"y": 44
+					}
+				},
+				"from_route_9_grass": {
+					"facingDirection": "down",
+					"label": "Route 9 Grass",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute9Grass",
+					"tile": {
+						"x": 17,
 						"y": 68
 					}
 				},
-				"from_route_9": {
+				"from_route_9_left": {
 					"facingDirection": "down",
-					"label": "Route 9",
+					"label": "Route 9 Left",
 					"safeForStaffTeleport": true,
-					"spawnMarker": "FromRoute9",
+					"spawnMarker": "FromRoute9Left",
 					"tile": {
-						"x": 73,
-						"y": 45
+						"x": 12,
+						"y": 68
+					}
+				},
+				"from_route_9_right": {
+					"facingDirection": "down",
+					"label": "Route 9 Right",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute9Right",
+					"tile": {
+						"x": 21,
+						"y": 68
 					}
 				}
 			}
@@ -990,13 +1020,23 @@
 			"sceneAliases": [],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 			"spawnPoints": {
-				"from_cerulean": {
+				"from_cerulean_path": {
 					"facingDirection": "down",
-					"label": "Cerulean",
+					"label": "Cerulean Path",
 					"safeForStaffTeleport": true,
-					"spawnMarker": "FromCerulean",
+					"spawnMarker": "FromCeruleanPath",
 					"tile": {
 						"x": 12,
+						"y": 16
+					}
+				},
+				"from_cerulean_water": {
+					"facingDirection": "down",
+					"label": "Cerulean Water",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromCeruleanWater",
+					"tile": {
+						"x": 4,
 						"y": 16
 					}
 				}
@@ -1248,8 +1288,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCerulean",
 					"tile": {
-						"x": 12,
-						"y": 2
+						"x": 2,
+						"y": 9
 					}
 				}
 			}
@@ -1264,14 +1304,34 @@
 			"sceneAliases": [],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
 			"spawnPoints": {
-				"from_cerulean": {
+				"from_cerulean_grass": {
 					"facingDirection": "down",
-					"label": "Cerulean",
+					"label": "Cerulean Grass",
 					"safeForStaffTeleport": true,
-					"spawnMarker": "FromCerulean",
+					"spawnMarker": "FromCeruleanGrass",
 					"tile": {
-						"x": 2,
-						"y": 9
+						"x": 12,
+						"y": 16
+					}
+				},
+				"from_cerulean_left": {
+					"facingDirection": "down",
+					"label": "Cerulean Left",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromCeruleanLeft",
+					"tile": {
+						"x": 4,
+						"y": 16
+					}
+				},
+				"from_cerulean_right": {
+					"facingDirection": "down",
+					"label": "Cerulean Right",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromCeruleanRight",
+					"tile": {
+						"x": 20,
+						"y": 16
 					}
 				}
 			}
@@ -1562,8 +1622,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
 				"position": {
-					"x": 544.0,
-					"y": 224.0
+					"x": 528.0,
+					"y": 208.0
 				},
 				"spawnMarker": "FromCeruleanCave"
 			},
@@ -1585,7 +1645,7 @@
 			"destinationAreaId": "kanto_cerulean_cave",
 			"sourceMapId": "kanto_cerulean_city"
 		},
-		"kanto_cerulean_city__to_route_24": {
+		"kanto_cerulean_city__to_route_24_path": {
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_route_24",
@@ -1595,7 +1655,22 @@
 					"x": 384.0,
 					"y": 512.0
 				},
-				"spawnMarker": "FromCerulean"
+				"spawnMarker": "FromCeruleanPath"
+			},
+			"destinationAreaId": "kanto_route_24",
+			"sourceMapId": "kanto_cerulean_city"
+		},
+		"kanto_cerulean_city__to_route_24_water": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_route_24",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
+				"position": {
+					"x": 128.0,
+					"y": 512.0
+				},
+				"spawnMarker": "FromCeruleanWater"
 			},
 			"destinationAreaId": "kanto_route_24",
 			"sourceMapId": "kanto_cerulean_city"
@@ -1619,30 +1694,60 @@
 		},
 		"kanto_cerulean_city__to_route_5": {
 			"destination": {
-				"facingDirection": "down",
+				"facingDirection": "right",
 				"mapId": "kanto_route_5",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 				"position": {
-					"x": 384.0,
-					"y": 64.0
+					"x": 64.0,
+					"y": 288.0
 				},
 				"spawnMarker": "FromCerulean"
 			},
 			"destinationAreaId": "kanto_route_5",
 			"sourceMapId": "kanto_cerulean_city"
 		},
-		"kanto_cerulean_city__to_route_9": {
+		"kanto_cerulean_city__to_route_9_grass": {
 			"destination": {
-				"facingDirection": "right",
+				"facingDirection": "down",
 				"mapId": "kanto_route_9",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
 				"position": {
-					"x": 64.0,
-					"y": 288.0
+					"x": 384.0,
+					"y": 512.0
 				},
-				"spawnMarker": "FromCerulean"
+				"spawnMarker": "FromCeruleanGrass"
+			},
+			"destinationAreaId": "kanto_route_9",
+			"sourceMapId": "kanto_cerulean_city"
+		},
+		"kanto_cerulean_city__to_route_9_left": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_9",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+				"position": {
+					"x": 128.0,
+					"y": 512.0
+				},
+				"spawnMarker": "FromCeruleanLeft"
+			},
+			"destinationAreaId": "kanto_route_9",
+			"sourceMapId": "kanto_cerulean_city"
+		},
+		"kanto_cerulean_city__to_route_9_right": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_9",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+				"position": {
+					"x": 640.0,
+					"y": 512.0
+				},
+				"spawnMarker": "FromCeruleanRight"
 			},
 			"destinationAreaId": "kanto_route_9",
 			"sourceMapId": "kanto_cerulean_city"
@@ -2223,7 +2328,7 @@
 			"destinationAreaId": "kanto_viridian_city",
 			"sourceMapId": "kanto_route_22"
 		},
-		"kanto_route_24__to_cerulean_city": {
+		"kanto_route_24__to_cerulean_city_path": {
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_cerulean_city",
@@ -2232,10 +2337,27 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
 				"position": {
-					"x": 2208.0,
-					"y": 64.0
+					"x": 2192.0,
+					"y": 80.0
 				},
-				"spawnMarker": "FromRoute24"
+				"spawnMarker": "FromRoute24Path"
+			},
+			"destinationAreaId": "kanto_cerulean_city",
+			"sourceMapId": "kanto_route_24"
+		},
+		"kanto_route_24__to_cerulean_city_water": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_cerulean_city",
+				"mapSceneAliases": [
+					"uid://dly1ylygogcj3"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+				"position": {
+					"x": 1872.0,
+					"y": 80.0
+				},
+				"spawnMarker": "FromRoute24Water"
 			},
 			"destinationAreaId": "kanto_cerulean_city",
 			"sourceMapId": "kanto_route_24"
@@ -2557,23 +2679,6 @@
 		},
 		"kanto_route_5__to_cerulean_city": {
 			"destination": {
-				"facingDirection": "up",
-				"mapId": "kanto_cerulean_city",
-				"mapSceneAliases": [
-					"uid://dly1ylygogcj3"
-				],
-				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
-				"position": {
-					"x": 496.0,
-					"y": 2176.0
-				},
-				"spawnMarker": "FromRoute5"
-			},
-			"destinationAreaId": "kanto_cerulean_city",
-			"sourceMapId": "kanto_route_5"
-		},
-		"kanto_route_9__to_cerulean_city": {
-			"destination": {
 				"facingDirection": "left",
 				"mapId": "kanto_cerulean_city",
 				"mapSceneAliases": [
@@ -2581,10 +2686,61 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
 				"position": {
-					"x": 2336.0,
-					"y": 1456.0
+					"x": 2352.0,
+					"y": 1424.0
 				},
-				"spawnMarker": "FromRoute9"
+				"spawnMarker": "FromRoute5"
+			},
+			"destinationAreaId": "kanto_cerulean_city",
+			"sourceMapId": "kanto_route_5"
+		},
+		"kanto_route_9__to_cerulean_city_grass": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_cerulean_city",
+				"mapSceneAliases": [
+					"uid://dly1ylygogcj3"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+				"position": {
+					"x": 544.0,
+					"y": 2176.0
+				},
+				"spawnMarker": "FromRoute9Grass"
+			},
+			"destinationAreaId": "kanto_cerulean_city",
+			"sourceMapId": "kanto_route_9"
+		},
+		"kanto_route_9__to_cerulean_city_left": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_cerulean_city",
+				"mapSceneAliases": [
+					"uid://dly1ylygogcj3"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 2176.0
+				},
+				"spawnMarker": "FromRoute9Left"
+			},
+			"destinationAreaId": "kanto_cerulean_city",
+			"sourceMapId": "kanto_route_9"
+		},
+		"kanto_route_9__to_cerulean_city_right": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_cerulean_city",
+				"mapSceneAliases": [
+					"uid://dly1ylygogcj3"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+				"position": {
+					"x": 688.0,
+					"y": 2176.0
+				},
+				"spawnMarker": "FromRoute9Right"
 			},
 			"destinationAreaId": "kanto_cerulean_city",
 			"sourceMapId": "kanto_route_9"
