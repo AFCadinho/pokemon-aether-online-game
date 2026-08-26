@@ -47,7 +47,7 @@ fails without replacing the current feed.
 Update `config/launcher_config.json`.
 
 `statusUrl` points to the public game-login availability endpoint (normally
-`https://pokeaether.com/auth/status`). This is separate from infrastructure
+`https://admin.pokeaether.com/auth/status`). This is separate from infrastructure
 health so planned maintenance can show its player-facing message and disable
 Play without marking the gateway itself unhealthy. `healthUrl` remains a
 legacy configuration fallback.
