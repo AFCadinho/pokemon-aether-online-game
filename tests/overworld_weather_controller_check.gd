@@ -45,16 +45,24 @@ func _init() -> void:
 	ground_layer.name = "Ground"
 	ground_layer.set_meta("tiled_name", "Ground")
 	ground_layer.set_meta("tiled_visual_layer", true)
+	var ground_detail_layer := TileMapLayer.new()
+	ground_detail_layer.name = "GroundDetail"
+	ground_detail_layer.z_index = 2
+	ground_detail_layer.set_meta("tiled_name", "GroundDetail")
+	ground_detail_layer.set_meta("tiled_visual_layer", true)
 	var tree_layer := TileMapLayer.new()
 	tree_layer.name = "TreeTop"
 	tree_layer.set_meta("tiled_name", "TreeTop")
 	tree_layer.set_meta("tiled_visual_layer", true)
 	visual_map.add_child(ground_layer)
+	visual_map.add_child(ground_detail_layer)
 	visual_map.add_child(tree_layer)
 	root.add_child(visual_map)
 	controller.apply_map(visual_map)
-	_check_equal(rain_ground_effects.get_surface_layer_count(), 1, "ground visual layers accept rain impacts")
-	_check_equal(snow_ground_effects.get_surface_layer_count(), 1, "ground visual layers accept snow landings")
+	_check_equal(rain_ground_effects.get_surface_layer_count(), 2, "Ground and GroundDetail accept rain impacts")
+	_check_equal(snow_ground_effects.get_surface_layer_count(), 2, "Ground and GroundDetail accept snow landings")
+	_check_equal(rain_ground_effects.z_index, 3, "rain impacts render above GroundDetail")
+	_check_equal(snow_ground_effects.z_index, 3, "snow landings render above GroundDetail")
 	_check_equal(rain_ground_effects.get_cover_layer_count(), 1, "tree and structure visual layers block rain impacts")
 	_check_equal(snow_ground_effects.get_cover_layer_count(), 1, "tree and structure visual layers block snow landings")
 	var unclassified_visual_map := Node2D.new()

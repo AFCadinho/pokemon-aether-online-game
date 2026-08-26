@@ -291,7 +291,9 @@ func _configure_ground_effect_surfaces(map_node: Node) -> void:
 		surface_z_index = maxi(surface_z_index, layer.z_index)
 	for ground_effects: Node2D in [rain_ground_effects, snow_ground_effects]:
 		ground_effects.set_surface_layers(surface_layers, cover_layers)
-		ground_effects.z_index = surface_z_index
+		# Render impacts above details such as GroundDetail instead of letting the
+		# highest accepted surface layer cover them.
+		ground_effects.z_index = surface_z_index + 1
 
 
 func _collect_ground_effect_layers(
