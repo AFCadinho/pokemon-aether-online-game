@@ -1764,7 +1764,8 @@ func _on_download_diagnostic_event(event: Dictionary) -> void:
 		"average_bytes_per_second", "seconds_without_bytes", "delay_seconds", "reason",
 		"content_range", "accept_ranges", "edge", "duration_seconds", "stalls",
 		"resumed", "resumed_bytes", "expected_size", "actual_size",
-		"time_to_first_byte_seconds", "last_failure",
+		"time_to_first_byte_seconds", "last_failure", "parallel", "parallel_used",
+		"parallel_fallback", "connections", "segment", "segments",
 	]
 	for field_name: String in field_names:
 		if event.has(field_name) and str(event[field_name]) != "":
@@ -1772,7 +1773,7 @@ func _on_download_diagnostic_event(event: Dictionary) -> void:
 	var message := "%s %s" % [event_name, " ".join(fields)]
 	if event_name == "download_failed":
 		_log_error(message)
-	elif event_name in ["download_retry", "download_stall", "partial_reset"]:
+	elif event_name in ["download_retry", "download_stall", "partial_reset", "parallel_download_fallback"]:
 		_log_warning(message)
 	else:
 		_log(message)
