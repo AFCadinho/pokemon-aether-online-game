@@ -66,6 +66,7 @@ func _check_pokedex_runtime_translation() -> void:
 		"Pokédex empty detail renders in Dutch"
 	)
 	_check_evolution_navigation(overlay, detail_stack)
+	_check_location_availability(overlay)
 	_check_eelevate_hover(overlay)
 
 	localization_manager.call("set_locale", "pt_BR")
@@ -87,6 +88,47 @@ func _check_pokedex_runtime_translation() -> void:
 		if loader != null:
 			loader.free()
 	overlay.free()
+
+
+func _check_location_availability(overlay: Node) -> void:
+	localization_manager.call("set_locale", "nl")
+	var permanent_row := overlay.call("_create_pokedex_location_row", {
+		"areaId": "kanto_route_2_south_towards_viridian_city",
+		"areaName": "Kanto Route 2 South Towards Viridian City",
+		"encounterType": "Grass",
+		"minLevel": 3,
+		"maxLevel": 4,
+		"timeOfDay": "day",
+	}) as Control
+	_check(
+		permanent_row != null
+		and _tree_contains_text(permanent_row, "Route 2 South Towards Viridian City")
+		and _tree_contains_text(permanent_row, "Hoog gras · Lv. 3-4 · Overdag")
+		and _tree_contains_text(permanent_row, "Elke dag")
+		and not _tree_contains_text(permanent_row, "Zeldzaamheid: Algemeen"),
+		"Pokédex locations separate localized habitat details from permanent availability"
+	)
+	permanent_row.free()
+
+	var rotation_row := overlay.call("_create_pokedex_location_row", {
+		"areaId": "kanto_route_1",
+		"areaName": "Kanto Route 1",
+		"encounterType": "Grass",
+		"minLevel": 2,
+		"maxLevel": 4,
+		"timeOfDay": "any",
+		"availability": {
+			"type": "weekly_rotation",
+			"daysOfWeek": ["monday", "wednesday", "saturday"],
+		},
+	}) as Control
+	_check(
+		rotation_row != null
+		and _tree_contains_text(rotation_row, "Dagen: Ma · Wo · Za")
+		and rotation_row.find_child("PokedexLocationAvailability", true, false) != null,
+		"Pokédex locations are ready to render future weekly encounter metadata"
+	)
+	rotation_row.free()
 
 
 func _check_eelevate_hover(overlay: Node) -> void:
