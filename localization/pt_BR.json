@@ -2762,6 +2762,8 @@
   "ui.wild.loading": "Carregando encontros…",
   "ui.wild.load_failed": "Não foi possível carregar os Pokémon selvagens.",
   "ui.wild.empty": "Não há Pokémon selvagens conhecidos neste mapa.",
+  "ui.wild.empty_today": "Nenhum Pokémon da rotação está disponível aqui hoje.",
+  "ui.wild.rotation_today": "Rotação diária · {day}",
   "ui.wild.level": "Nv. {level}",
   "ui.wild.level_range": "Nv. {min}–{max}",
   "ui.wild.method.grass": "Grama alta",

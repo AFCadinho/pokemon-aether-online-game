@@ -2762,6 +2762,8 @@
   "ui.wild.loading": "Encounters laden…",
   "ui.wild.load_failed": "Wilde Pokémon konden niet worden geladen.",
   "ui.wild.empty": "Voor deze map zijn geen wilde Pokémon bekend.",
+  "ui.wild.empty_today": "Vandaag zijn hier geen rotatie-Pokémon beschikbaar.",
+  "ui.wild.rotation_today": "Dagrotatie · {day}",
   "ui.wild.level": "Lv. {level}",
   "ui.wild.level_range": "Lv. {min}–{max}",
   "ui.wild.method.grass": "Hoog gras",

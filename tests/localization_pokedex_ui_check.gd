@@ -40,6 +40,7 @@ func _check_pokedex_runtime_translation() -> void:
 	overlay.set("root_control", overlay.get_node_or_null("Control"))
 	localization_manager.call("set_locale", "nl")
 	overlay.call("_setup_pokedex_popup")
+	overlay.call("_setup_wild_pokemon_popup")
 
 	var search := overlay.get("pokedex_search_input") as LineEdit
 	var pokedex_popup := overlay.get("pokedex_popup") as PanelContainer
@@ -67,6 +68,7 @@ func _check_pokedex_runtime_translation() -> void:
 	)
 	_check_evolution_navigation(overlay, detail_stack)
 	_check_location_availability(overlay)
+	_check_wild_rotation_availability(overlay)
 	_check_eelevate_hover(overlay)
 
 	localization_manager.call("set_locale", "pt_BR")
@@ -129,6 +131,68 @@ func _check_location_availability(overlay: Node) -> void:
 		"Pokédex locations are ready to render future weekly encounter metadata"
 	)
 	rotation_row.free()
+
+
+func _check_wild_rotation_availability(overlay: Node) -> void:
+	localization_manager.call("set_locale", "nl")
+	var weekdays := [
+		"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday",
+	]
+	var current_day := str(overlay.call("_current_world_weekday_id"))
+	var other_day := str(weekdays[(weekdays.find(current_day) + 1) % weekdays.size()])
+	overlay.call("_render_wild_pokemon_metadata", {
+		"encounterTypes": {
+			"grass": {
+				"pokemon": [
+					{
+						"species": "Pidgey",
+						"minLevel": 2,
+						"maxLevel": 4,
+						"rarity": "common",
+						"availability": {"daysOfWeek": [current_day]},
+					},
+					{
+						"species": "Rookidee",
+						"minLevel": 2,
+						"maxLevel": 4,
+						"rarity": "common",
+						"availability": {"daysOfWeek": [other_day]},
+					},
+					{
+						"species": "Rattata",
+						"minLevel": 2,
+						"maxLevel": 4,
+						"rarity": "common",
+					},
+				],
+			},
+		},
+	})
+	var content := overlay.get("wild_pokemon_content") as VBoxContainer
+	var rotation_status := content.find_child("WildPokemonRotationStatus", true, false) as Label
+	_check(
+		content != null
+		and rotation_status != null
+		and rotation_status.text.begins_with("Dagrotatie · ")
+		and _tree_contains_text(content, "Pidgey")
+		and _tree_contains_text(content, "Rattata")
+		and not _tree_contains_text(content, "Rookidee"),
+		"Wild radar keeps permanent encounters and only shows today's explicit rotation entries"
+	)
+	overlay.call("_render_wild_pokemon_metadata", {
+		"encounterTypes": {
+			"grass": {
+				"pokemon": [{
+					"species": "Rookidee",
+					"availability": {"daysOfWeek": [other_day]},
+				}],
+			},
+		},
+	})
+	_check(
+		_tree_contains_text(content, "Vandaag zijn hier geen rotatie-Pokémon beschikbaar."),
+		"Wild radar explains when no scheduled encounter is active today"
+	)
 
 
 func _check_eelevate_hover(overlay: Node) -> void:

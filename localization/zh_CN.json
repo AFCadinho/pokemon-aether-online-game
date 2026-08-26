@@ -2759,6 +2759,8 @@
   "ui.wild.loading": "正在加载遭遇……",
   "ui.wild.load_failed": "无法加载野生宝可梦。",
   "ui.wild.empty": "这张地图没有已知的野生宝可梦。",
+  "ui.wild.empty_today": "今天这里没有可遇见的轮换宝可梦。",
+  "ui.wild.rotation_today": "每日轮换 · {day}",
   "ui.wild.level": "Lv. {level}",
   "ui.wild.level_range": "Lv. {min}–{max}",
   "ui.wild.method.grass": "高高的草丛",
