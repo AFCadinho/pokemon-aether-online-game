@@ -117,9 +117,19 @@ func _check_catalogs() -> void:
 		"generated Simplified Chinese machine names use the official move name"
 	)
 	_check(
+		str((generated_chinese.get("tm-flare-blitz", {}) as Dictionary).get("shortDesc", ""))
+		== "让能够学习的宝可梦学会“闪焰冲锋”。",
+		"generated Simplified Chinese machine descriptions use the official move name"
+	)
+	_check(
 		str((generated_chinese.get("adinho-classic-outfit", {}) as Dictionary).get("name", ""))
 		== "Adinho Classic Box",
 		"unverified generated Simplified Chinese item names use the English fallback"
+	)
+	_check(
+		str((generated_chinese.get("adinho-classic-outfit", {}) as Dictionary).get("shortDesc", ""))
+		== str((generated_english.get("adinho-classic-outfit", {}) as Dictionary).get("shortDesc", "")),
+		"unverified generated Simplified Chinese item prose uses the English fallback"
 	)
 	var expected_generated_ids: Array = generated_english.keys()
 	expected_generated_ids.sort()

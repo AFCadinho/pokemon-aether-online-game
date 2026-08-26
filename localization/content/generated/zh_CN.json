@@ -4321,1439 +4321,1439 @@
   "moves": {
     "10-000-000-volt-thunderbolt": {
       "name": "千万伏特",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "戴着帽子的皮卡丘将通过Ｚ力量增强的电击全力释放给对手。容易击中要害。"
     },
     "absorb": {
       "name": "吸取",
-      "shortDesc": "吸收一半的伤害来治疗用户。"
+      "shortDesc": "吸取对手的养分进行攻击。可以回复给予对手伤害的一半ＨＰ。"
     },
     "accelerock": {
       "name": "冲岩",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "迅速撞向对手进行攻击。必定能够先制攻击。"
     },
     "acid": {
       "name": "溶解液",
-      "shortDesc": "有一定几率降低目标特防一级。"
+      "shortDesc": "将强酸泼向对手进行攻击。有时会降低对手的特防。"
     },
     "acid-armor": {
       "name": "溶化",
-      "shortDesc": "使使用者的防御力提升两级。"
+      "shortDesc": "通过细胞的变化进行液化，从而大幅提高自己的防御。"
     },
     "acid-downpour--physical": {
       "name": "强酸剧毒灭绝雨",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量使毒沼涌起，全力让对手沉下去。威力会根据原来的招式而改变。"
     },
     "acid-downpour--special": {
       "name": "强酸剧毒灭绝雨",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "acid-spray": {
       "name": "酸液炸弹",
-      "shortDesc": "降低目标特防两级。"
+      "shortDesc": "喷出能溶化对手的液体进行攻击。大幅降低对手的特防。"
     },
     "acrobatics": {
       "name": "杂技",
-      "shortDesc": "如果用户没有持有物品，则拥有双倍力量。"
+      "shortDesc": "轻巧地攻击对手。自己没有携带道具时，会给予较大的伤害。"
     },
     "acupressure": {
       "name": "点穴",
-      "shortDesc": "随机将一只友方宝可梦的属性提升两个阶段。"
+      "shortDesc": "通过点穴让身体舒筋活络。大幅提高某１项能力。"
     },
     "aerial-ace": {
       "name": "燕返",
-      "shortDesc": "绝不会错过。"
+      "shortDesc": "以敏捷的动作戏弄对手后进行切斩。攻击必定会命中。"
     },
     "aeroblast": {
       "name": "气旋攻击",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "发射空气旋涡进行攻击。容易击中要害。"
     },
     "after-you": {
       "name": "您先请",
-      "shortDesc": "使目标在本回合中进行下一个行动。"
+      "shortDesc": "支援我方或对手的行动，使其紧接着此招式之后行动。"
     },
     "agility": {
       "name": "高速移动",
-      "shortDesc": "将用户的速度提高两个阶段。"
+      "shortDesc": "让身体放松变得轻盈，以便高速移动。大幅提高自己的速度。"
     },
     "air-cutter": {
       "name": "空气利刃",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "用锐利的风切斩对手进行攻击。容易击中要害。"
     },
     "air-slash": {
       "name": "空气斩",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "用连天空也能劈开的空气之刃进行攻击。有时会使对手畏缩。"
     },
     "all-out-pummeling--physical": {
       "name": "全力无双激烈拳",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量制造出能量弹，全力撞向对手。威力会根据原来的招式而改变。"
     },
     "all-out-pummeling--special": {
       "name": "全力无双激烈拳",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "alluring-voice": {
       "name": "魅诱之声",
-      "shortDesc": "用户使用天使般的声音攻击目标。如果目标的统计数据在回合中得到提升，这也会让目标感到困惑。"
+      "shortDesc": "The user attacks the target using its angelic voice. This also confuses the target if its stats have been boosted during the turn."
     },
     "ally-switch": {
       "name": "交换场地",
-      "shortDesc": "用户与对面的友好宝可梦交换位置。"
+      "shortDesc": "用神奇的力量瞬间移动，互换自己和同伴所在的位置。"
     },
     "amnesia": {
       "name": "瞬间失忆",
-      "shortDesc": "使使用者的特防提升两级。"
+      "shortDesc": "将头脑清空，瞬间忘记某事，从而大幅提高自己的特防。"
     },
     "anchor-shot": {
       "name": "掷锚",
-      "shortDesc": "困住目标。"
+      "shortDesc": "将锚缠住对手进行攻击。使对手无法逃走。"
     },
     "ancient-power": {
       "name": "原始之力",
-      "shortDesc": "有几率将使用者的所有属性提升一级。"
+      "shortDesc": "用原始之力进行攻击。有时会提高自己所有的能力。"
     },
     "apple-acid": {
       "name": "苹果酸",
-      "shortDesc": "使用者用酸苹果制成的酸性液体攻击目标。这也会降低目标的 Sp。默认统计数据。"
+      "shortDesc": "使用从酸苹果中提取出来的酸性液体进行攻击。降低对手的特防。"
     },
     "aqua-cutter": {
       "name": "水波刀",
-      "shortDesc": "使用者喷出加压水，像刀片一样切割目标。这一举动增加了致命一击的几率。"
+      "shortDesc": "The user expels pressurized water to cut at the target like a blade. This move has a heightened chance of landing a critical hit."
     },
     "aqua-jet": {
       "name": "水流喷射",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "以迅雷不及掩耳之势扑向对手。必定能够先制攻击。"
     },
     "aqua-ring": {
       "name": "水流环",
-      "shortDesc": "每回合恢复使用者最大生命值的1/16。"
+      "shortDesc": "在自己身体的周围覆盖用水制造的幕。每回合回复ＨＰ。"
     },
     "aqua-step": {
       "name": "流水旋舞",
-      "shortDesc": "用户玩弄目标并使用轻盈流畅的舞步攻击它。这也提高了用户的速度统计数据。"
+      "shortDesc": "The user toys with the target and attacks it using light and fluid dance steps. This also boosts the user's Speed stat."
     },
     "aqua-tail": {
       "name": "水流尾",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "如惊涛骇浪般挥动大尾巴攻击对手。"
     },
     "arm-thrust": {
       "name": "猛推",
-      "shortDesc": "一回合击中2-5次。"
+      "shortDesc": "用张开着的双手猛推对手进行攻击。连续攻击２～５次。"
     },
     "armor-cannon": {
       "name": "铠农炮",
-      "shortDesc": "使用者将自己的装甲作为炽热的射弹射出。这也会降低用户的防御和 Sp。绝对统计数据。"
+      "shortDesc": "熊熊燃烧自己的铠甲，将其做成炮弹射出攻击。自己的防御和特防会降低。"
     },
     "aromatherapy": {
       "name": "芳香治疗",
-      "shortDesc": "治愈整个队伍的主要状态影响。"
+      "shortDesc": "让同伴闻沁人心脾的香气，从而治愈我方全员的异常状态。"
     },
     "aromatic-mist": {
       "name": "芳香薄雾",
-      "shortDesc": "将选定的盟友的特防提升一级。"
+      "shortDesc": "通过神奇的芳香，提高我方宝可梦的特防。"
     },
     "assist": {
       "name": "借助",
-      "shortDesc": "随机选择并使用训练家的其他宝可梦的招式之一。"
+      "shortDesc": "向同伴紧急求助，从我方宝可梦已学会的招式中随机使用１个。"
     },
     "assurance": {
       "name": "恶意追击",
-      "shortDesc": "如果目标本回合已经受到伤害，则力量加倍。"
+      "shortDesc": "如果此回合内对手已经受到伤害的话，招式威力会变成２倍。"
     },
     "astonish": {
       "name": "惊吓",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "用尖叫声等突然惊吓对手进行攻击。有时会使对手畏缩。"
     },
     "astral-barrage": {
       "name": "星碎",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用大量的小灵体向对手发起攻击。"
     },
     "attack-order": {
       "name": "攻击指令",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "召唤手下，让其朝对手发起攻击。容易击中要害。"
     },
     "attract": {
       "name": "迷人",
-      "shortDesc": "目标与异性恋爱，有50%概率拒绝攻击使用者。"
+      "shortDesc": "♂诱惑♀或♀诱惑♂，让对手着迷。对手将很难使出招式。"
     },
     "aura-sphere": {
       "name": "波导弹",
-      "shortDesc": "绝不会错过。"
+      "shortDesc": "从体内产生出波导之力，然后向对手发出。攻击必定会命中。"
     },
     "aura-wheel": {
       "name": "气场轮",
-      "shortDesc": "莫佩科攻击并利用其脸颊中储存的能量提高其速度。该动作的类型根据使用者的形态而变化。"
+      "shortDesc": "用储存在颊囊里的能量进行攻击，并提高自己的速度。其属性会随着莫鲁贝可的样子而改变。"
     },
     "aurora-beam": {
       "name": "极光束",
-      "shortDesc": "有一定几率降低目标攻击一级。"
+      "shortDesc": "向对手发射虹色光束进行攻击。有时会降低对手的攻击。"
     },
     "aurora-veil": {
       "name": "极光幕",
-      "shortDesc": "减少伤害五回合，但必须在冰雹期间使用。"
+      "shortDesc": "在５回合内减弱物理和特殊的伤害。只有冰雹时才能使出。"
     },
     "autotomize": {
       "name": "身体轻量化",
-      "shortDesc": "将用户的速度提高两级并将用户的体重减半。"
+      "shortDesc": "削掉身体上没用的部分。大幅提高自己的速度，同时体重也会变轻。"
     },
     "avalanche": {
       "name": "雪崩",
-      "shortDesc": "如果使用者在本回合攻击前受到伤害，则造成双倍伤害。"
+      "shortDesc": "如果受到对手的招式攻击，就能给予该对手２倍威力的攻击。"
     },
     "axe-kick": {
       "name": "下压踢",
-      "shortDesc": "使用者通过踢向空中并用脚后跟猛击目标来进行攻击。这也可能会让目标感到困惑。如果未命中，用户则会受到伤害。"
+      "shortDesc": "The user attacks by kicking up into the air and slamming its heel down upon the target. This may also confuse the target. If it misses, the user takes damage instead."
     },
     "baby-doll-eyes": {
       "name": "圆瞳",
-      "shortDesc": "使目标的攻击力降低一级。"
+      "shortDesc": "用圆瞳凝视对手，从而降低其攻击。必定能够先制攻击。"
     },
     "baddy-bad": {
       "name": "坏坏领域",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "恶行恶相地进行攻击。制造一道能减弱对手物理攻击的神奇墙壁。"
     },
     "baneful-bunker": {
       "name": "碉堡",
-      "shortDesc": "在回合的剩余时间内为用户提供保护，并毒害任何试图对其使用接触移动的宝可梦。"
+      "shortDesc": "防住对手攻击的同时，让接触到自己的对手中毒。"
     },
     "barb-barrage": {
       "name": "毒千针",
-      "shortDesc": "使用者发射无数有毒的倒刺来造成伤害。这也可能使目标中毒。如果目标处于状态状态，此招式的威力将加倍。"
+      "shortDesc": "The user launches countless toxic barbs to inflict damage. This may also poison the target. This move’s power is doubled if the target has a status condition."
     },
     "barrage": {
       "name": "投球",
-      "shortDesc": "一回合击中2-5次。"
+      "shortDesc": "向对手投掷圆形物体进行攻击。连续攻击２～５次。"
     },
     "barrier": {
       "name": "屏障",
-      "shortDesc": "使使用者的防御力提升两级。"
+      "shortDesc": "制造坚固的壁障，从而大幅提高自己的防御。"
     },
     "baton-pass": {
       "name": "接棒",
-      "shortDesc": "允许训练师切换用户并将效果传递给其替代者。"
+      "shortDesc": "和后备宝可梦进行替换。换上的宝可梦能直接继承其能力的变化。"
     },
     "beak-blast": {
       "name": "鸟嘴加农炮",
-      "shortDesc": "对攻击前接触的所有宝可梦造成灼伤。"
+      "shortDesc": "先加热鸟嘴后再进行攻击。鸟嘴在加热时对手触碰的话，就会使其灼伤。"
     },
     "beat-up": {
       "name": "围攻",
-      "shortDesc": "训练师每拥有一个有意识的宝可梦，就击中一次。"
+      "shortDesc": "我方全员进行攻击。同行的宝可梦越多，招式的攻击次数越多。"
     },
     "behemoth-bash": {
       "name": "巨兽弹",
-      "shortDesc": "使用者变成一面巨大的盾牌并猛击目标。如果目标处于极巨化状态，此移动会造成两倍伤害。"
+      "shortDesc": "变身为巨大的盾，撞击对手。如果对手正处于极巨化状态，则造成的伤害会变为２倍。"
     },
     "behemoth-blade": {
       "name": "巨兽斩",
-      "shortDesc": "使用者变成一把巨大的剑并切割目标。如果目标处于极巨化状态，此移动会造成两倍伤害。"
+      "shortDesc": "变身为巨大的剑，挥斩对手。如果对手正处于极巨化状态，则造成的伤害会变为２倍。"
     },
     "belch": {
       "name": "打嗝",
-      "shortDesc": "只能在用户吃完浆果后使用。"
+      "shortDesc": "朝着对手打嗝，并给予伤害。如果不吃树果则无法使出。"
     },
     "belly-drum": {
       "name": "腹鼓",
-      "shortDesc": "用户支付最大生命值的一半来最大化其攻击力。"
+      "shortDesc": "将自己的ＨＰ减少到最大ＨＰ的一半，从而最大限度提高自己的攻击。"
     },
     "bestow": {
       "name": "传递礼物",
-      "shortDesc": "将用户持有的物品交给目标。"
+      "shortDesc": "当对手未携带道具时，能够将自己携带的道具交给对手。"
     },
     "bide": {
       "name": "忍耐",
-      "shortDesc": "用户等待两回合，然后进行反击，造成两倍的伤害。"
+      "shortDesc": "在２回合内忍受攻击，受到的伤害会２倍返还给对手。"
     },
     "bind": {
       "name": "绑紧",
-      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+      "shortDesc": "使用长长的身体或藤蔓等，在４～５回合内绑紧对手进行攻击。"
     },
     "bite": {
       "name": "咬住",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "用尖锐的牙咬住对手进行攻击。有时会使对手畏缩。"
     },
     "bitter-blade": {
       "name": "悔念剑",
-      "shortDesc": "使用者将其对生者世界的苦涩感情集中在猛烈攻击上。使用者的生命值恢复最多为目标所受伤害的一半。"
+      "shortDesc": "将对世间的留恋聚集于剑尖，并斩击对手。可以回复给予对手伤害的一半HP。"
     },
     "bitter-malice": {
       "name": "冤冤相报",
-      "shortDesc": "使用者以令人毛骨悚然的怨恨攻击其目标。这也可能使目标冻伤。如果目标处于状态状态，此招式的威力将加倍。"
+      "shortDesc": "The user attacks its target with spine-chilling resentment. This may also leave the target with frostbite. This move's power is doubled if the target has a status condition."
     },
     "black-hole-eclipse--physical": {
       "name": "黑洞吞噬万物灭",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量收集恶能量，全力将对手吸入。威力会根据原来的招式而改变。"
     },
     "black-hole-eclipse--special": {
       "name": "黑洞吞噬万物灭",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "blast-burn": {
       "name": "爆炸烈焰",
-      "shortDesc": "用户放弃下一轮充值。"
+      "shortDesc": "用爆炸的火焰烧尽对手进行攻击。下一回合自己将无法动弹。"
     },
     "blaze-kick": {
       "name": "火焰踢",
-      "shortDesc": "增加致命一击的几率以及燃烧目标的几率。"
+      "shortDesc": "攻击对手后，有时会使其陷入灼伤状态。也容易击中要害。"
     },
     "blazing-torque": {
       "name": "灼热暴冲",
-      "shortDesc": "没有可用的附加效果信息。"
+      "shortDesc": "No additional effect information available."
     },
     "bleakwind-storm": {
       "name": "枯叶风暴",
-      "shortDesc": "使用者用狂暴的寒风攻击，使身体和精神都颤抖。这也可能使目标冻伤。"
+      "shortDesc": "The user attacks with savagely cold winds that cause both body and spirit to tremble. This may also leave the target with frostbite."
     },
     "blizzard": {
       "name": "暴风雪",
-      "shortDesc": "有几率冻结目标。"
+      "shortDesc": "将猛烈的暴风雪刮向对手进行攻击。有时会让对手陷入冰冻状态。"
     },
     "block": {
       "name": "挡路",
-      "shortDesc": "阻止目标离开战斗。"
+      "shortDesc": "张开双手进行阻挡，封住对手的退路，使其不能逃走。"
     },
     "blood-moon": {
       "name": "血月",
-      "shortDesc": "使用者从一轮如血般闪耀的满月中释放出其灵魂的全部冲击力。这个动作不能连续使用两次。"
+      "shortDesc": "The user unleashes the full brunt of its spirit from a full moon that shines as red as blood. This move can't be used twice in a row."
     },
     "bloom-doom--physical": {
       "name": "绚烂缤纷花怒放",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量借助花草的能量，全力攻击对手。威力会根据原来的招式而改变。"
     },
     "bloom-doom--special": {
       "name": "绚烂缤纷花怒放",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "blue-flare": {
       "name": "青焰",
-      "shortDesc": "有几率燃烧目标。"
+      "shortDesc": "用美丽而激烈的青焰包裹住对手进行攻击。有时会让对手陷入灼伤状态。"
     },
     "body-press": {
       "name": "扑击",
-      "shortDesc": "使用者通过将身体猛烈撞击目标来进行攻击。用户的防御越高，对目标造成的伤害就越大。"
+      "shortDesc": "用身体撞向对手进行攻击。防御越高，给予的伤害就越高。"
     },
     "body-slam": {
       "name": "泰山压顶",
-      "shortDesc": "有几率使目标瘫痪。"
+      "shortDesc": "用整个身体压住对手进行攻击。有时会让对手陷入麻痹状态。"
     },
     "bolt-beak": {
       "name": "电喙",
-      "shortDesc": "使用者用带电的喙刺伤目标。如果使用者在目标之前攻击，则该招式的威力会加倍。"
+      "shortDesc": "用带电的喙啄刺对手。如果比对手先出手攻击，招式的威力会变成２倍。"
     },
     "bolt-strike": {
       "name": "雷击",
-      "shortDesc": "有几率使目标瘫痪。"
+      "shortDesc": "让强大的电流覆盖全身，猛撞向对手进行攻击。有时会让对手陷入麻痹状态。"
     },
     "bone-club": {
       "name": "骨棒",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "用手中的骨头殴打对手进行攻击。有时会使对手畏缩。"
     },
     "bone-rush": {
       "name": "骨棒乱打",
-      "shortDesc": "一回合击中2-5次。"
+      "shortDesc": "用坚硬的骨头殴打对手进行攻击。连续攻击２～５次。"
     },
     "bonemerang": {
       "name": "骨头回力镖",
-      "shortDesc": "一回合击中两次。"
+      "shortDesc": "用手中的骨头投掷对手，来回连续２次给予伤害。"
     },
     "boomburst": {
       "name": "爆音波",
-      "shortDesc": "造成常规伤害。"
+      "shortDesc": "通过震耳欲聋的爆炸声产生的破坏力，攻击自己周围所有的宝可梦。"
     },
     "bounce": {
       "name": "弹跳",
-      "shortDesc": "使用者弹到空中，躲避所有攻击，并在下一回合命中。"
+      "shortDesc": "弹跳到高高的空中，第２回合攻击对手。有时会让对手陷入麻痹状态。"
     },
     "bouncy-bubble": {
       "name": "活活气泡",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "投掷水球进行攻击。吸水后能回复等同于造成的伤害一半的HP。"
     },
     "branch-poke": {
       "name": "木枝突刺",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "使用尖锐的树枝刺向对手进行攻击。"
     },
     "brave-bird": {
       "name": "勇鸟猛攻",
-      "shortDesc": "用户受到后坐力造成的伤害的 1/3。"
+      "shortDesc": "收拢翅膀，通过低空飞行突击对手。自己也会受到不小的伤害。"
     },
     "breaking-swipe": {
       "name": "广域破坏",
-      "shortDesc": "造成伤害后，目标攻击力降低一级。"
+      "shortDesc": "用坚韧的尾巴猛扫对手进行攻击，从而降低对手的攻击。"
     },
     "breakneck-blitz--physical": {
       "name": "究极无敌大冲撞",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量气势猛烈地全力撞上对手。威力会根据原来的招式而改变。"
     },
     "breakneck-blitz--special": {
       "name": "究极无敌大冲撞",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "brick-break": {
       "name": "劈瓦",
-      "shortDesc": "摧毁反射屏和光屏。"
+      "shortDesc": "将手刀猛烈地挥下攻击对手。还可以破坏光墙和反射壁等。"
     },
     "brine": {
       "name": "盐水",
-      "shortDesc": "对剩余最大生命值一半以下的宝可梦拥有双倍力量。"
+      "shortDesc": "当对手的ＨＰ负伤到一半左右时，招式威力会变成２倍。"
     },
     "brutal-swing": {
       "name": "狂舞挥打",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用自己的身体狂舞挥打，给予对手伤害。"
     },
     "bubble": {
       "name": "泡沫",
-      "shortDesc": "有一定几率使目标速度降低一级。"
+      "shortDesc": "向对手用力吹起无数泡泡进行攻击。有时会降低对手的速度。"
     },
     "bubble-beam": {
       "name": "泡沫光线",
-      "shortDesc": "有一定几率使目标速度降低一级。"
+      "shortDesc": "向对手猛烈地喷射泡沫进行攻击。有时会降低对手的速度。"
     },
     "bug-bite": {
       "name": "虫咬",
-      "shortDesc": "如果目标有浆果，造成双倍伤害并使用浆果。"
+      "shortDesc": "咬住进行攻击。当对手携带树果时，可以食用并获得其效果。"
     },
     "bug-buzz": {
       "name": "虫鸣",
-      "shortDesc": "有一定几率降低目标特防一级。"
+      "shortDesc": "利用振动发出音波进行攻击。有时会降低对手的特防。"
     },
     "bulk-up": {
       "name": "健美",
-      "shortDesc": "使使用者的攻击力和防御力提升一级。"
+      "shortDesc": "使出全身力气绷紧肌肉，从而提高自己的攻击和防御。"
     },
     "bulldoze": {
       "name": "重踏",
-      "shortDesc": "有一定几率使目标速度降低一级。"
+      "shortDesc": "用力踩踏地面并攻击自己周围所有的宝可梦。降低对方的速度。"
     },
     "bullet-punch": {
       "name": "子弹拳",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "向对手使出如子弹般快速而坚硬的拳头。必定能够先制攻击。"
     },
     "bullet-seed": {
       "name": "种子机关枪",
-      "shortDesc": "一回合击中2-5次。"
+      "shortDesc": "向对手猛烈地发射种子进行攻击。连续攻击２～５次。"
     },
     "burn-up": {
       "name": "燃尽",
-      "shortDesc": "造成伤害后移除用户的火焰类型。"
+      "shortDesc": "将自己全身燃烧起火焰来，给予对手大大的伤害。自己的火属性将会消失。"
     },
     "burning-bulwark": {
       "name": "火焰守护",
-      "shortDesc": "使用者炽热的毛皮可以保护其免受攻击，并会烧伤任何与其直接接触的攻击者。"
+      "shortDesc": "The user's intensely hot fur protects it from attacks and also burns any attacker that makes direct contact with it."
     },
     "burning-jealousy": {
       "name": "妒火",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用嫉妒的能量攻击对手。会让在该回合内能力有所提高的宝可梦陷入灼伤状态。"
     },
     "buzzy-buzz": {
       "name": "麻麻电击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "放出电击攻击对手。让对手陷入麻痹状态。"
     },
     "calm-mind": {
       "name": "冥想",
-      "shortDesc": "使使用者的特攻和特防提升一级。"
+      "shortDesc": "静心凝神，从而提高自己的特攻和特防。"
     },
     "camouflage": {
       "name": "保护色",
-      "shortDesc": "用户的类型会发生变化以匹配地形。"
+      "shortDesc": "根据所在场所不同，如水边、草丛和洞窟等，可以改变自己的属性。"
     },
     "captivate": {
       "name": "诱惑",
-      "shortDesc": "如果目标是异性，则其特攻降低两级。"
+      "shortDesc": "♂诱惑♀或♀诱惑♂，从而大幅降低对手的特攻。"
     },
     "catastropika": {
       "name": "皮卡皮卡必杀击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量，皮卡丘全身覆盖最强电力，全力猛扑对手。"
     },
     "ceaseless-edge": {
       "name": "秘剑・千重涛",
-      "shortDesc": "使用者将其炮弹刀片砍向目标，旨在造成致命一击。这次攻击留下的炮弹碎片将继续对目标造成几个回合的伤害。"
+      "shortDesc": "The user slashes its shell blade at the target, aiming to land a critical hit. Shell splinters left behind by this attack will continue to damage the target for several turns."
     },
     "celebrate": {
       "name": "庆祝",
-      "shortDesc": "不执行任何操作。"
+      "shortDesc": "宝可梦为十分开心的你庆祝。"
     },
     "charge": {
       "name": "充电",
-      "shortDesc": "使使用者的特防提升一级。用户的电动动作下回合威力加倍。"
+      "shortDesc": "提高下一回合使出的电属性的招式威力。自己的特防也会提高。"
     },
     "charge-beam": {
       "name": "充电光束",
-      "shortDesc": "有一定几率使自身特攻提升一级。"
+      "shortDesc": "向对手发射电击光束。由于蓄满电流，有时会提高自己的特攻。"
     },
     "charm": {
       "name": "撒娇",
-      "shortDesc": "降低目标攻击力两级。"
+      "shortDesc": "可爱地凝视，诱使对手疏忽大意，从而大幅降低对手的攻击。"
     },
     "chatter": {
       "name": "喋喋不休",
-      "shortDesc": "录制的声音越大，迷惑目标的几率越高。"
+      "shortDesc": "用非常烦人的，喋喋不休的音波攻击对手。使对手混乱。"
     },
     "chilling-water": {
       "name": "泼冷水",
-      "shortDesc": "用户通过向目标喷洒水来攻击目标，水的温度太低，会削弱目标的力量。这也会降低目标的攻击统计数据。"
+      "shortDesc": "The user attacks the target by showering it with water that's so cold it saps the target's power. This also lowers the target's Attack stat."
     },
     "chilly-reception": {
       "name": "冷笑话",
-      "shortDesc": "用户在与等待的队伍宝可梦交换位置之前讲了一个令人毛骨悚然的糟糕笑话。这会召唤一场持续五回合的暴风雪。"
+      "shortDesc": "The user tells a chillingly bad joke before switching places with a party Pokémon in waiting. This summons a snowstorm lasting five turns."
     },
     "chip-away": {
       "name": "逐步击破",
-      "shortDesc": "忽略目标的统计修正。"
+      "shortDesc": "看准机会稳步攻击。无视对手的能力变化，直接给予伤害。"
     },
     "chloroblast": {
       "name": "叶绿爆震",
-      "shortDesc": "使用者发射其积累的叶绿素对目标造成伤害。这也会损害使用者并降低使用者的动作速度。"
+      "shortDesc": "The user launches its amassed chlorophyll to inflict damage on the target. This also damages the user and lowers the user's action speed."
     },
     "circle-throw": {
       "name": "巴投",
-      "shortDesc": "结束狂野的战斗。强制训练师更换宝可梦。"
+      "shortDesc": "扔飞对手，强制拉后备宝可梦上场。如果对手为野生宝可梦，战斗将直接结束。"
     },
     "clamp": {
       "name": "贝壳夹击",
-      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+      "shortDesc": "用非常坚固且厚实的贝壳，在４～５回合内夹住对手进行攻击。"
     },
     "clanging-scales": {
       "name": "鳞片噪音",
-      "shortDesc": "造成伤害后，使使用者的防御降低一级。"
+      "shortDesc": "摩擦全身鳞片，发出响亮的声音进行攻击。攻击后自己的防御会降低。"
     },
     "clangorous-soul": {
       "name": "魂舞烈音爆",
-      "shortDesc": "用户通过使用部分生命值来提升所有属性。"
+      "shortDesc": "削减少许自己的ＨＰ，使所有能力都提高。"
     },
     "clangorous-soulblaze": {
       "name": "炽魂热舞烈音爆",
-      "shortDesc": "对敌方所有宝可梦造成伤害，并使自己的攻击力、防御力、特攻力、特防力、速度各增加一级。"
+      "shortDesc": "得到Ｚ力量的杖尾鳞甲龙将全力攻击对手。并且自己的能力会提高。"
     },
     "clear-smog": {
       "name": "清除之烟",
-      "shortDesc": "移除目标的所有统计修正值。"
+      "shortDesc": "向对手投掷特殊的泥块进行攻击。使其能力变回原点。"
     },
     "close-combat": {
       "name": "近身战",
-      "shortDesc": "造成伤害后，使使用者的防御和特防降低一级。"
+      "shortDesc": "放弃守护，向对手的怀里突击。自己的防御和特防会降低。"
     },
     "coaching": {
       "name": "指导",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过进行正确合理的指导，提高我方全员的攻击和防御。"
     },
     "coil": {
       "name": "盘蜷",
-      "shortDesc": "使使用者的攻击力、防御力、准确度各提升一级。"
+      "shortDesc": "盘蜷着集中精神。提高自己的攻击、防御和命中率。"
     },
     "collision-course": {
       "name": "全开猛撞",
-      "shortDesc": "使用者变形并坠落到地面，引起巨大的史前爆炸。如果这是一次超级有效的打击，那么该招式的威力会比平时增强更多。"
+      "shortDesc": "The user transforms and crashes to the ground, causing a massive prehistoric explosion. This move's power is boosted more than usual if it’s a supereffective hit."
     },
     "combat-torque": {
       "name": "格斗暴冲",
-      "shortDesc": "没有可用的附加效果信息。"
+      "shortDesc": "No additional effect information available."
     },
     "comet-punch": {
       "name": "连续拳",
-      "shortDesc": "一回合击中2-5次。"
+      "shortDesc": "用拳头怒涛般的殴打对手进行攻击。连续攻击２～５次。"
     },
     "comeuppance": {
       "name": "复仇",
-      "shortDesc": "使用者以更大的力量对最后对其造成伤害的对手进行报复。"
+      "shortDesc": "The user retaliates with much greater force against the opponent that last inflicted damage on it."
     },
     "confide": {
       "name": "密语",
-      "shortDesc": "使目标的特攻降低一级。"
+      "shortDesc": "和对手进行密语，使其失去集中力，从而降低对手的特攻。"
     },
     "confuse-ray": {
       "name": "奇异之光",
-      "shortDesc": "迷惑目标。"
+      "shortDesc": "显示奇怪的光，扰乱对手。使对手混乱。"
     },
     "confusion": {
       "name": "念力",
-      "shortDesc": "有一定几率迷惑目标。"
+      "shortDesc": "向对手发送微弱的念力进行攻击。有时会使对手混乱。"
     },
     "constrict": {
       "name": "缠绕",
-      "shortDesc": "有一定几率使目标速度降低一级。"
+      "shortDesc": "用触手或青藤等缠绕进行攻击。有时会降低对手的速度。"
     },
     "continental-crush--physical": {
       "name": "毁天灭地巨岩坠",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量召唤大大的岩山，全力撞向对手。威力会根据原来的招式而改变。"
     },
     "continental-crush--special": {
       "name": "毁天灭地巨岩坠",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "conversion": {
       "name": "纹理",
-      "shortDesc": "用户的类型随机改变为其某一动作的类型。"
+      "shortDesc": "将自己的属性转换成和已学会的招式中第一个招式相同的属性。"
     },
     "conversion-2": {
       "name": "纹理２",
-      "shortDesc": "将用户的类型更改为随机类型，可以抵抗或免疫对其使用的最后一步。"
+      "shortDesc": "为了可以抵抗对手最后使用的招式，从而使自己的属性发生变化。"
     },
     "copycat": {
       "name": "仿效",
-      "shortDesc": "使用目标最后使用的动作。"
+      "shortDesc": "模仿对手刚才使出的招式，并使出相同招式。如果对手还没出招则会失败。"
     },
     "core-enforcer": {
       "name": "核心惩罚者",
-      "shortDesc": "如果目标提前移动，则其能力无效。"
+      "shortDesc": "如果给予过伤害的对手已经结束行动，其特性就会被消除。"
     },
     "corkscrew-crash--physical": {
       "name": "超绝螺旋连击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量进行高速旋转，全力撞上对手。威力会根据原来的招式而改变。"
     },
     "corkscrew-crash--special": {
       "name": "超绝螺旋连击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "corrosive-gas": {
       "name": "腐蚀气体",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用具有强酸性的气体包裹住自己周围所有的宝可梦，并融化其所携带的道具。"
     },
     "cosmic-power": {
       "name": "宇宙力量",
-      "shortDesc": "使使用者的防御和特防提升一级。"
+      "shortDesc": "汲取宇宙中神秘的力量，从而提高自己的防御和特防。"
     },
     "cotton-guard": {
       "name": "棉花防守",
-      "shortDesc": "使使用者的防御力提升三个阶段。"
+      "shortDesc": "用软绵绵的绒毛包裹住自己的身体进行守护。巨幅提高自己的防御。"
     },
     "cotton-spore": {
       "name": "棉孢子",
-      "shortDesc": "将目标的速度降低两级。"
+      "shortDesc": "将棉花般柔软的孢子紧贴对手，从而大幅降低对手的速度。"
     },
     "counter": {
       "name": "双倍奉还",
-      "shortDesc": "造成的伤害是用户上次物理攻击所受到的伤害的两倍。"
+      "shortDesc": "从对手那里受到物理攻击的伤害将以２倍返还给同一个对手。"
     },
     "court-change": {
       "name": "换场",
-      "shortDesc": "凭借其神秘的力量，使用者可以交换场地两侧的效果。"
+      "shortDesc": "用神奇的力量交换双方的场地效果。"
     },
     "covet": {
       "name": "渴望",
-      "shortDesc": "取得目标的物品。"
+      "shortDesc": "一边可爱地撒娇，一边靠近对手进行攻击，还能夺取对手携带的道具。"
     },
     "crabhammer": {
       "name": "蟹钳锤",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "用大钳子敲打对手进行攻击。容易击中要害。"
     },
     "crafty-shield": {
       "name": "戏法防守",
-      "shortDesc": "保护所有友方宝可梦免受非伤害性动作的伤害。"
+      "shortDesc": "使用神奇的力量防住攻击我方的变化招式。但无法防住伤害招式的攻击。"
     },
     "cross-chop": {
       "name": "十字劈",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "用两手呈十字劈打对手进行攻击。容易击中要害。"
     },
     "cross-poison": {
       "name": "十字毒刃",
-      "shortDesc": "暴击几率增加，并且有几率使目标中毒。"
+      "shortDesc": "用毒刃劈开对手。有时会让对手陷入中毒状态，也容易击中要害。"
     },
     "crunch": {
       "name": "咬碎",
-      "shortDesc": "有一定几率降低目标防御一级。"
+      "shortDesc": "用利牙咬碎对手进行攻击。有时会降低对手的防御。"
     },
     "crush-claw": {
       "name": "撕裂爪",
-      "shortDesc": "有一定几率降低目标防御一级。"
+      "shortDesc": "用坚硬的锐爪劈开对手进行攻击。有时会降低对手的防御。"
     },
     "crush-grip": {
       "name": "捏碎",
-      "shortDesc": "针对剩余 HP 较多的目标，力量会增加，最多可达 121 力量。"
+      "shortDesc": "用骇人的力量捏碎对手。对手剩余的ＨＰ越多，威力越大。"
     },
     "curse": {
       "name": "诅咒",
-      "shortDesc": "幽灵每回合支付最大生命值一半的伤害来伤害目标。其他人会降低速度，但会提高攻击力和防御力。"
+      "shortDesc": "使用该招式的宝可梦，其属性是幽灵属性或其他属性时，效果会不一样。"
     },
     "cut": {
       "name": "居合斩",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用镰刀或爪子等切斩对手进行攻击。"
     },
     "dark-pulse": {
       "name": "恶之波动",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "从体内发出充满恶意的恐怖气场。有时会使对手畏缩。"
     },
     "dark-void": {
       "name": "暗黑洞",
-      "shortDesc": "让目标进入睡眠状态。"
+      "shortDesc": "将对手强制拖入黑暗的世界，从而让对手陷入睡眠状态。"
     },
     "darkest-lariat": {
       "name": "ＤＤ金勾臂",
-      "shortDesc": "忽略目标的统计修正。"
+      "shortDesc": "旋转双臂打向对手。无视对手的能力变化，直接给予伤害。"
     },
     "dazzling-gleam": {
       "name": "魔法闪耀",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "向对手发射强光，并给予伤害。"
     },
     "decorate": {
       "name": "装饰",
-      "shortDesc": "用户大幅提升目标的攻击力和SP。通过装饰目标来统计攻击力。"
+      "shortDesc": "通过装饰，大幅提高对方的攻击和特攻。"
     },
     "defend-order": {
       "name": "防御指令",
-      "shortDesc": "使使用者的防御和特防提升一级。"
+      "shortDesc": "召唤手下，让其附在自己的身体上。可以提高自己的防御和特防。"
     },
     "defense-curl": {
       "name": "变圆",
-      "shortDesc": "使使用者的防御力提升一级。"
+      "shortDesc": "将身体蜷曲变圆，从而提高自己的防御。"
     },
     "defog": {
       "name": "清除浓雾",
-      "shortDesc": "使目标的回避率降低一级。消除敌方场上的场效应。"
+      "shortDesc": "用强风吹开对手的反射壁或光墙等。也会降低对手的闪避率。"
     },
     "destiny-bond": {
       "name": "同命",
-      "shortDesc": "如果用户本回合晕倒，目标也会自动晕倒。"
+      "shortDesc": "使出招式后，当受到对手攻击陷入濒死时，对手也会一同濒死。连续使出则会失败。"
     },
     "detect": {
       "name": "看穿",
-      "shortDesc": "防止本回合任何动作击中用户。"
+      "shortDesc": "完全抵挡对手的攻击。连续使出则容易失败。"
     },
     "devastating-drake--physical": {
       "name": "究极巨龙震天地",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量将气场实体化，向对手全力发动袭击。威力会根据原来的招式而改变。"
     },
     "devastating-drake--special": {
       "name": "究极巨龙震天地",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "diamond-storm": {
       "name": "钻石风暴",
-      "shortDesc": "每击中一个目标，就有一定几率提升使用者两段防御。"
+      "shortDesc": "掀起钻石风暴给予伤害。有时会大幅提高自己的防御。"
     },
     "dig": {
       "name": "挖洞",
-      "shortDesc": "使用者在地下挖掘，躲避所有攻击，并在下一回合命中。"
+      "shortDesc": "第１回合钻入，第２回合攻击对手。"
     },
     "dire-claw": {
       "name": "克命爪",
-      "shortDesc": "使用者用毁灭性的利爪攻击目标，旨在造成致命一击。这也可能导致目标中毒、瘫痪或昏昏欲睡。"
+      "shortDesc": "The user lashes out at the target with ruinous claws, aiming to land a critical hit. This may also leave the target poisoned, paralyzed, or drowsy."
     },
     "disable": {
       "name": "定身法",
-      "shortDesc": "禁用目标最后使用的动作 1-8 回合。"
+      "shortDesc": "阻碍对手行动，之前使出的招式将在４回合内无法使用。"
     },
     "disarming-voice": {
       "name": "魅惑之声",
-      "shortDesc": "绝不会错过。"
+      "shortDesc": "发出魅惑的叫声，给予对手精神上的伤害。攻击必定会命中。"
     },
     "discharge": {
       "name": "放电",
-      "shortDesc": "有几率使目标瘫痪。"
+      "shortDesc": "用耀眼的电击攻击自己周围所有的宝可梦。有时会陷入麻痹状态。"
     },
     "dive": {
       "name": "潜水",
-      "shortDesc": "使用者潜入水下，躲避所有攻击，并在下一回合命中。"
+      "shortDesc": "第１回合潜入，第２回合浮上来进行攻击。"
     },
     "dizzy-punch": {
       "name": "迷昏拳",
-      "shortDesc": "有一定几率迷惑目标。"
+      "shortDesc": "有节奏地出拳攻击对手。有时会使对手混乱。"
     },
     "doodle": {
       "name": "描绘",
-      "shortDesc": "用户在草图中捕捉到目标的本质。这会将用户及其盟友宝可梦的能力更改为目标的能力。"
+      "shortDesc": "The user captures the very essence of the target in a sketch. This changes the Abilities of the user and its ally Pokémon to that of the target."
     },
     "doom-desire": {
       "name": "破灭之愿",
-      "shortDesc": "两回合后击中目标。"
+      "shortDesc": "使用招式２回合后，会用无数道光束攻击对手。"
     },
     "double-edge": {
       "name": "舍身冲撞",
-      "shortDesc": "用户受到后坐力造成的伤害的 1/3。"
+      "shortDesc": "拼命地猛撞向对手进行攻击。自己也会受到不小的伤害。"
     },
     "double-hit": {
       "name": "二连击",
-      "shortDesc": "一回合击中两次。"
+      "shortDesc": "使用尾巴等拍打对手进行攻击。连续２次给予伤害。"
     },
     "double-iron-bash": {
       "name": "钢拳双击",
-      "shortDesc": "一回合击中两次。"
+      "shortDesc": "以胸口的螺帽为中心旋转，并连续２次挥动手臂打击对手。有时会使对手畏缩。"
     },
     "double-kick": {
       "name": "二连踢",
-      "shortDesc": "一回合击中两次。"
+      "shortDesc": "用２只脚踢飞对手进行攻击。连续２次给予伤害。"
     },
     "double-shock": {
       "name": "电光双击",
-      "shortDesc": "使用者释放体内所有的电力来进行高伤害攻击。使用此招式后，使用者将不再是电属性。"
+      "shortDesc": "The user discharges all the electricity from its body to perform a high-damage attack. After using this move, the user will no longer be Electric type."
     },
     "double-slap": {
       "name": "连环巴掌",
-      "shortDesc": "一回合击中2-5次。"
+      "shortDesc": "用连环巴掌拍打对手进行攻击。连续攻击２～５次。"
     },
     "double-team": {
       "name": "影子分身",
-      "shortDesc": "使使用者的回避率提高一级。"
+      "shortDesc": "通过快速移动来制造分身，扰乱对手，从而提高闪避率。"
     },
     "draco-meteor": {
       "name": "流星群",
-      "shortDesc": "造成伤害后，使使用者的特攻降低两级。"
+      "shortDesc": "从天空中向对手落下陨石。使用之后因为反作用力，自己的特攻会大幅降低。"
     },
     "dragon-ascent": {
       "name": "画龙点睛",
-      "shortDesc": "造成伤害后，使使用者的防御和特防降低一级。"
+      "shortDesc": "从天空中急速下降攻击对手。自己的防御和特防会降低。"
     },
     "dragon-breath": {
       "name": "龙息",
-      "shortDesc": "有几率使目标瘫痪。"
+      "shortDesc": "将强烈的气息吹向对手进行攻击。有时会让对手陷入麻痹状态。"
     },
     "dragon-cheer": {
       "name": "龙声鼓舞",
-      "shortDesc": "使用者通过龙吟般的叫喊来提高盟友的士气，这样他们未来的攻击就有更大的机会获得暴击。这激发了更多的龙类型。"
+      "shortDesc": "The user raises its allies’ morale with a draconic cry so that their future attacks have a heightened chance of landing critical hits. This rouses Dragon types more."
     },
     "dragon-claw": {
       "name": "龙爪",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用尖锐的巨爪劈开对手进行攻击。"
     },
     "dragon-dance": {
       "name": "龙之舞",
-      "shortDesc": "使使用者的攻击力和速度提升一级。"
+      "shortDesc": "激烈地跳起神秘且强有力的舞蹈。从而提高自己的攻击和速度。"
     },
     "dragon-darts": {
       "name": "龙箭",
-      "shortDesc": "用户使用 Dreepy 攻击两次。如果有两个目标，则该动作对每个目标命中一次。"
+      "shortDesc": "让多龙梅西亚进行２次攻击。如果对手有２只宝可梦，则对它们各进行１次攻击。"
     },
     "dragon-energy": {
       "name": "巨龙威能",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "把生命力转换为力量攻击对手。自己的ＨＰ越少，招式的威力越小。"
     },
     "dragon-hammer": {
       "name": "龙锤",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "将身体当作锤子，向对手发动袭击，给予伤害。"
     },
     "dragon-pulse": {
       "name": "龙之波动",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "从大大的口中掀起冲击波攻击对手。"
     },
     "dragon-rage": {
       "name": "龙之怒",
-      "shortDesc": "造成 40 点伤害。"
+      "shortDesc": "将愤怒的冲击波撞向对手进行攻击。必定会给予40的伤害。"
     },
     "dragon-rush": {
       "name": "龙之俯冲",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "释放出骇人的杀气，一边威慑一边撞击对手。有时会使对手畏缩。"
     },
     "dragon-tail": {
       "name": "龙尾",
-      "shortDesc": "结束狂野的战斗。强制训练师更换宝可梦。"
+      "shortDesc": "弹飞对手，强制拉后备宝可梦上场。如果对手为野生宝可梦，战斗将直接结束。"
     },
     "drain-punch": {
       "name": "吸取拳",
-      "shortDesc": "吸收一半的伤害来治疗用户。"
+      "shortDesc": "用拳头吸取对手的力量。可以回复给予对手伤害的一半ＨＰ。"
     },
     "draining-kiss": {
       "name": "吸取之吻",
-      "shortDesc": "吸收 75% 的伤害来治疗使用者。"
+      "shortDesc": "用一个吻吸取对手的ＨＰ。回复给予对手伤害的一半以上的ＨＰ。"
     },
     "dream-eater": {
       "name": "食梦",
-      "shortDesc": "仅适用于睡眠的宝可梦。吸收一半的伤害来治疗使用者。"
+      "shortDesc": "吃掉正在睡觉的对手的梦进行攻击。回复对手所受到伤害的一半ＨＰ。"
     },
     "drill-peck": {
       "name": "啄钻",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "一边旋转，一边将尖喙刺入对手进行攻击。"
     },
     "drill-run": {
       "name": "直冲钻",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "像钢钻一样，一边旋转身体一边撞击对手。容易击中要害。"
     },
     "drum-beating": {
       "name": "鼓击",
-      "shortDesc": "有一定几率使目标速度降低一级。"
+      "shortDesc": "用鼓点来控制鼓的根部进行攻击，从而降低对手的速度。"
     },
     "dual-chop": {
       "name": "二连劈",
-      "shortDesc": "一回合击中两次。"
+      "shortDesc": "用身体坚硬的部分拍打对手进行攻击。连续２次给予伤害。"
     },
     "dual-wingbeat": {
       "name": "双翼",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "将翅膀撞向对手进行攻击。连续２次给予伤害。"
     },
     "dynamax-cannon": {
       "name": "极巨炮",
-      "shortDesc": "在造成伤害后，在场地的用户一侧设置光幕。"
+      "shortDesc": "从核心放出光束进行攻击。如果对手正处于极巨化状态，则造成的伤害会变为２倍。"
     },
     "dynamic-punch": {
       "name": "爆裂拳",
-      "shortDesc": "有一定几率迷惑目标。"
+      "shortDesc": "使出浑身力气出拳进行攻击。必定会使对手混乱。"
     },
     "earth-power": {
       "name": "大地之力",
-      "shortDesc": "有一定几率降低目标特防一级。"
+      "shortDesc": "向对手脚下释放出大地之力。有时会降低对手的特防。"
     },
     "earthquake": {
       "name": "地震",
-      "shortDesc": "造成常规伤害并能击中 Dig 用户。"
+      "shortDesc": "利用地震的冲击，攻击自己周围所有的宝可梦。"
     },
     "echoed-voice": {
       "name": "回声",
-      "shortDesc": "任何友方宝可梦每次连续使用，力量都会增加 100%，最多可达 200。"
+      "shortDesc": "用回声攻击对手。如果每回合都有宝可梦接着使用该招式，威力就会提高。"
     },
     "eerie-impulse": {
       "name": "怪异电波",
-      "shortDesc": "使目标的特攻降低两级。"
+      "shortDesc": "从身体放射出怪异电波，让对手沐浴其中，从而大幅降低其特攻。"
     },
     "eerie-spell": {
       "name": "诡异咒语",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用强大的精神力量攻击。让对手最后使用的招式减少３ＰＰ。"
     },
     "egg-bomb": {
       "name": "炸蛋",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "向对手用力投掷大大的蛋进行攻击。"
     },
     "electric-terrain": {
       "name": "电气场地",
-      "shortDesc": "5回合内，使地面上的所有宝可梦无法休眠，并将电招式强化至1.5倍。"
+      "shortDesc": "在５回合内变成电气场地。地面上的宝可梦将无法入眠。电属性的招式威力还会提高。"
     },
     "electrify": {
       "name": "输电",
-      "shortDesc": "如果目标本回合尚未移动，则将其移动类型更改为电动。"
+      "shortDesc": "对手使出招式前，如果输电，则该回合对手的招式变成电属性。"
     },
     "electro-ball": {
       "name": "电球",
-      "shortDesc": "当用户比目标更快时，力量会增加，最高可达 150。"
+      "shortDesc": "用电气团撞向对手。自己比对手速度越快，威力越大。"
     },
     "electro-drift": {
       "name": "闪电猛冲",
-      "shortDesc": "使用者以超快的速度向前奔跑，用未来的电力刺穿目标。如果是超级有效的打击，此招式的威力会比平常增强更多。"
+      "shortDesc": "The user races forward at ultrafast speeds, piercing its target with futuristic electricity. This move's power is boosted more than usual if it's a supereffective hit."
     },
     "electro-shot": {
       "name": "电光束",
-      "shortDesc": "使用者在第一回合收集电力，提升其Sp。攻击力统计，然后在下一回合发射高压射击。在雨中将立即开枪。"
+      "shortDesc": "The user gathers electricity on the first turn, boosting its Sp. Atk stat, then fires a high-voltage shot on the next turn. The shot will be fired immediately in rain."
     },
     "electroweb": {
       "name": "电网",
-      "shortDesc": "将目标的速度降低一级。"
+      "shortDesc": "用电网捉住对手进行攻击。降低对手的速度。"
     },
     "embargo": {
       "name": "查封",
-      "shortDesc": "目标不能使用持有的物品。"
+      "shortDesc": "让对手在５回合内不能使用宝可梦携带的道具。训练家也不能给那只宝可梦使用道具。"
     },
     "ember": {
       "name": "火花",
-      "shortDesc": "有几率燃烧目标。"
+      "shortDesc": "向对手发射小型火焰进行攻击。有时会让对手陷入灼伤状态。"
     },
     "encore": {
       "name": "再来一次",
-      "shortDesc": "强制目标每回合重复上次使用的动作，持续 2 到 6 回合。"
+      "shortDesc": "让对手接受再来一次，连续３次使出最后使用的招式。"
     },
     "endeavor": {
       "name": "蛮干",
-      "shortDesc": "降低目标的生命值以等于用户的生命值。"
+      "shortDesc": "给予伤害，使对手的ＨＰ变得和自己的ＨＰ一样。"
     },
     "endure": {
       "name": "挺住",
-      "shortDesc": "防止本回合使用者的HP低于1。"
+      "shortDesc": "即使受到攻击，也至少会留下１ＨＰ。连续使出则容易失败。"
     },
     "energy-ball": {
       "name": "能量球",
-      "shortDesc": "有一定几率降低目标特防一级。"
+      "shortDesc": "发射从自然收集的生命力量。有时会降低对手的特防。"
     },
     "entrainment": {
       "name": "找伙伴",
-      "shortDesc": "将用户的能力复制到目标上。"
+      "shortDesc": "用神奇的节奏跳舞。使对手模仿自己的动作，从而将特性变成一样。"
     },
     "eruption": {
       "name": "喷火",
-      "shortDesc": "当用户剩余生命值较多时，会造成更多伤害，最大伤害为 150。"
+      "shortDesc": "爆发怒火攻击对手。自己的ＨＰ越少，招式的威力越小。"
     },
     "esper-wing": {
       "name": "气场之翼",
-      "shortDesc": "使用者用光环丰富的翅膀猛击目标。这也提高了用户的动作速度。这一举动增加了致命一击的几率。"
+      "shortDesc": "The user slashes the target with aura-enriched wings. This also raises the user's action speed. This move has a heightened chance of landing a critical hit."
     },
     "eternabeam": {
       "name": "无极光束",
-      "shortDesc": "用户放弃下一轮充值。"
+      "shortDesc": "无极汰那变回原来的样子后，发动的最强攻击。下一回合自己将无法动弹。"
     },
     "expanding-force": {
       "name": "广域战力",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "利用精神力量攻击对手。在精神场地上威力会有所提高，能对所有对手造成伤害。"
     },
     "explosion": {
       "name": "大爆炸",
-      "shortDesc": "用户晕倒。"
+      "shortDesc": "引发大爆炸，攻击自己周围所有的宝可梦。使用后自己会陷入濒死。"
     },
     "extrasensory": {
       "name": "神通力",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "发出看不见的神奇力量进行攻击。有时会使对手畏缩。"
     },
     "extreme-evoboost": {
       "name": "九彩升华齐聚顶",
-      "shortDesc": "将用户的所有属性提高两个阶段。"
+      "shortDesc": "得到Ｚ力量的伊布将借助进化后伙伴们的力量，大幅提高能力。"
     },
     "extreme-speed": {
       "name": "神速",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "以迅雷不及掩耳之势猛撞向对手进行攻击。必定能够先制攻击。"
     },
     "facade": {
       "name": "硬撑",
-      "shortDesc": "如果用户被烧伤、瘫痪或中毒，力量会加倍。"
+      "shortDesc": "当自己处于中毒、麻痹、灼伤状态时，向对手使出此招式的话，威力会变成２倍。"
     },
     "fairy-lock": {
       "name": "妖精之锁",
-      "shortDesc": "防止所有宝可梦在下一回合逃跑或切换。"
+      "shortDesc": "通过封锁，下一回合所有的宝可梦都无法逃走。"
     },
     "fairy-wind": {
       "name": "妖精之风",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "刮起妖精之风，吹向对手进行攻击。"
     },
     "fake-out": {
       "name": "击掌奇袭",
-      "shortDesc": "只能作为用户进入战斗后的第一招。导致目标退缩。"
+      "shortDesc": "进行先制攻击，使对手畏缩。要在出场后立刻使出才能成功。"
     },
     "fake-tears": {
       "name": "假哭",
-      "shortDesc": "降低目标特防两级。"
+      "shortDesc": "装哭流泪。使对手不知所措，从而大幅降低对手的特防。"
     },
     "false-surrender": {
       "name": "假跪真撞",
-      "shortDesc": "绝不会错过。"
+      "shortDesc": "装作低头认错的样子，用凌乱的头发进行突刺。攻击必定会命中。"
     },
     "false-swipe": {
       "name": "点到为止",
-      "shortDesc": "无法将目标的生命值降低到1以下。"
+      "shortDesc": "对手的ＨＰ至少会留下１ＨＰ，如此般手下留情地攻击。"
     },
     "feather-dance": {
       "name": "羽毛舞",
-      "shortDesc": "降低目标攻击力两级。"
+      "shortDesc": "撒出羽毛，笼罩在对手的周围。大幅降低对手的攻击。"
     },
     "feint": {
       "name": "佯攻",
-      "shortDesc": "通过保护和检测命中。"
+      "shortDesc": "能够攻击正在使用守住或看穿等招式的对手。解除其守护效果。"
     },
     "feint-attack": {
       "name": "出奇一击",
-      "shortDesc": "绝不会错过。"
+      "shortDesc": "悄悄地靠近对手，趁其不备进行殴打。攻击必定会命中。"
     },
     "fell-stinger": {
       "name": "致命针刺",
-      "shortDesc": "击倒目标后，攻击力提升两级。"
+      "shortDesc": "如果使用此招式打倒对手，攻击会巨幅提高。"
     },
     "fickle-beam": {
       "name": "随机光",
-      "shortDesc": "用户发射光束造成伤害。有时，所有使用者的头部会同时发射光束，使招式的威力加倍。"
+      "shortDesc": "The user shoots a beam of light to inflict damage. Sometimes all the user's heads shoot beams in unison, doubling the move's power."
     },
     "fiery-dance": {
       "name": "火之舞",
-      "shortDesc": "有一定几率使自身特攻提升一级。"
+      "shortDesc": "让火焰覆盖全身，振翅攻击对手。有时会提高自己的特攻。"
     },
     "fiery-wrath": {
       "name": "怒火中烧",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "将愤怒转化为火焰般的气场进行攻击。有时会使对手畏缩。"
     },
     "fillet-away": {
       "name": "甩肉",
-      "shortDesc": "用户大幅提升其攻击 Sp。使用自身的 HP 来统计攻击力和速度。"
+      "shortDesc": "The user sharply boosts its Attack, Sp. Atk, and Speed stats by using its own HP."
     },
     "final-gambit": {
       "name": "搏命",
-      "shortDesc": "造成与使用者剩余生命值相同的伤害。用户晕倒。"
+      "shortDesc": "拼命攻击对手。虽然自己陷入濒死，但会给予对手和自己目前ＨＰ等量的伤害。"
     },
     "fire-blast": {
       "name": "大字爆炎",
-      "shortDesc": "有几率燃烧目标。"
+      "shortDesc": "用大字形状的火焰烧尽对手。有时会让对手陷入灼伤状态。"
     },
     "fire-fang": {
       "name": "火焰牙",
-      "shortDesc": "有一定几率燃烧目标，也有一定几率使目标退缩。"
+      "shortDesc": "用覆盖着火焰的牙齿咬住对手。有时会使对手畏缩或陷入灼伤状态。"
     },
     "fire-lash": {
       "name": "火焰鞭",
-      "shortDesc": "造成伤害后，目标防御力降低一级。"
+      "shortDesc": "用燃烧的鞭子抽打对手。受到攻击的对手防御会降低。"
     },
     "fire-pledge": {
       "name": "火之誓约",
-      "shortDesc": "水之誓约使友方宝可梦的招式效果概率翻倍，持续四回合。"
+      "shortDesc": "用火柱进行攻击。如果和草组合，威力就会提高，周围会变成火海。"
     },
     "fire-punch": {
       "name": "火焰拳",
-      "shortDesc": "有几率燃烧目标。"
+      "shortDesc": "用充满火焰的拳头攻击对手。有时会让对手陷入灼伤状态。"
     },
     "fire-spin": {
       "name": "火焰旋涡",
-      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+      "shortDesc": "将对手困在激烈的火焰旋涡中，在４～５回合内进行攻击。"
     },
     "first-impression": {
       "name": "迎头一击",
-      "shortDesc": "只能作为用户进入战斗后的第一步。"
+      "shortDesc": "威力很高的招式，但只有在出场战斗时，立刻使出才能成功。"
     },
     "fishious-rend": {
       "name": "鳃咬",
-      "shortDesc": "使用者用坚硬的鳃撕裂目标。如果使用者在目标之前攻击，则该招式的威力会加倍。"
+      "shortDesc": "用坚硬的腮咬住对手。如果比对手先出手攻击，招式的威力会变成２倍。"
     },
     "fissure": {
       "name": "地裂",
-      "shortDesc": "造成一击KO。"
+      "shortDesc": "让对手掉落于地裂的裂缝中进行攻击。只要命中就会一击濒死。"
     },
     "flail": {
       "name": "抓狂",
-      "shortDesc": "当用户剩余生命值较少时造成更多伤害，最大伤害为 200。"
+      "shortDesc": "抓狂般乱打进行攻击。自己的ＨＰ越少，招式的威力越大。"
     },
     "flame-burst": {
       "name": "烈焰溅射",
-      "shortDesc": "对目标旁边的宝可梦造成溅射伤害。"
+      "shortDesc": "如果击中，爆裂的火焰会攻击到对手。爆裂出的火焰还会飞溅到旁边的对手。"
     },
     "flame-charge": {
       "name": "蓄能焰袭",
-      "shortDesc": "造成常规伤害。将使用者的速度提升一级。"
+      "shortDesc": "让火焰覆盖全身，攻击对手。积蓄力量并提高自己的速度。"
     },
     "flame-wheel": {
       "name": "火焰轮",
-      "shortDesc": "有几率燃烧目标。让冰冻的宝可梦自行解冻。"
+      "shortDesc": "让火焰覆盖全身，猛撞向对手进行攻击。有时会让对手陷入灼伤状态。"
     },
     "flamethrower": {
       "name": "喷射火焰",
-      "shortDesc": "有几率燃烧目标。"
+      "shortDesc": "向对手发射烈焰进行攻击。有时会让对手陷入灼伤状态。"
     },
     "flare-blitz": {
       "name": "闪焰冲锋",
-      "shortDesc": "使用者承受反冲造成的伤害的 1/3。有一定几率燃烧目标。"
+      "shortDesc": "让火焰覆盖全身猛撞向对手。自己也会受到不小的伤害。有时会让对手陷入灼伤状态。"
     },
     "flash": {
       "name": "闪光",
-      "shortDesc": "将目标精度降低一级。"
+      "shortDesc": "使出耀眼光芒，从而降低对手的命中率。"
     },
     "flash-cannon": {
       "name": "加农光炮",
-      "shortDesc": "有一定几率降低目标特防一级。"
+      "shortDesc": "将身体的光芒聚集在一点释放出去。有时会降低对手的特防。"
     },
     "flatter": {
       "name": "吹捧",
-      "shortDesc": "使目标特攻提升一级并迷惑目标。"
+      "shortDesc": "吹捧对手，使其混乱。同时还会提高对手的特攻。"
     },
     "fleur-cannon": {
       "name": "花朵加农炮",
-      "shortDesc": "造成伤害后，使使用者的特攻降低两级。"
+      "shortDesc": "放出强力光束后，自己的特攻会大幅降低。"
     },
     "fling": {
       "name": "投掷",
-      "shortDesc": "将持有的物品扔向目标；功率取决于项目。"
+      "shortDesc": "快速投掷携带的道具进行攻击。根据道具不同，威力和效果会改变。"
     },
     "flip-turn": {
       "name": "快速折返",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "在攻击之后急速返回，和后备宝可梦进行替换。"
     },
     "floaty-fall": {
       "name": "飘飘坠落",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "轻飘飘地浮起来后，再猛地俯冲下去进行攻击。有时会使对手畏缩。"
     },
     "floral-healing": {
       "name": "花疗",
-      "shortDesc": "治疗目标最大生命值的 1/2，在草地上则为 2/3。"
+      "shortDesc": "回复对手最大ＨＰ的一半。在青草场地时，效果会提高。"
     },
     "flower-shield": {
       "name": "鲜花防守",
-      "shortDesc": "提高战斗中所有草系宝可梦的防御力。"
+      "shortDesc": "使用神奇的力量提高在场的所有草属性宝可梦的防御。"
     },
     "flower-trick": {
       "name": "千变万花",
-      "shortDesc": "用户向目标投掷一束经过操纵的花束。这种攻击绝不会失手，而且总是能造成致命一击。"
+      "shortDesc": "The user throws a rigged bouquet of flowers at the target. This attack never misses and always lands a critical hit."
     },
     "fly": {
       "name": "飞翔",
-      "shortDesc": "使用者飞到空中，躲避所有攻击，并在下一回合命中。"
+      "shortDesc": "第１回合飞上天空，第２回合攻击对手。"
     },
     "flying-press": {
       "name": "飞身重压",
-      "shortDesc": "造成战斗型和飞行型伤害。"
+      "shortDesc": "从空中俯冲向对手。此招式同时带有格斗属性和飞行属性。"
     },
     "focus-blast": {
       "name": "真气弹",
-      "shortDesc": "有一定几率降低目标特防一级。"
+      "shortDesc": "提高气势，释放出全部力量。有时会降低对手的特防。"
     },
     "focus-energy": {
       "name": "聚气",
-      "shortDesc": "增加用户获得暴击的机会。"
+      "shortDesc": "深深地吸口气，集中精神。自己的攻击会变得容易击中要害。"
     },
     "focus-punch": {
       "name": "真气拳",
-      "shortDesc": "如果用户在攻击前受到伤害，则攻击被取消。"
+      "shortDesc": "集中精神出拳。在招式使出前若受到攻击则会失败。"
     },
     "follow-me": {
       "name": "看我嘛",
-      "shortDesc": "本回合将目标的单体效果重定向至使用者。"
+      "shortDesc": "引起对手的注意，将对手的攻击全部转移到自己身上。"
     },
     "force-palm": {
       "name": "发劲",
-      "shortDesc": "有几率使目标瘫痪。"
+      "shortDesc": "向对手的身体发出冲击波进行攻击。有时会让对手陷入麻痹状态。"
     },
     "foresight": {
       "name": "识破",
-      "shortDesc": "强制目标无法闪避，即使是幽灵也可以被普通招式和战斗招式击中。"
+      "shortDesc": "使出后对幽灵属性宝可梦没有效果的招式以及闪避率高的对手，变得能够打中。"
     },
     "forests-curse": {
       "name": "森林诅咒",
-      "shortDesc": "将草添加到目标的类型中。"
+      "shortDesc": "向对手施加森林诅咒。中了诅咒的对手会被追加草属性。"
     },
     "foul-play": {
       "name": "欺诈",
-      "shortDesc": "根据目标的攻击力计算伤害。"
+      "shortDesc": "利用对手的力量进行攻击。正和自己战斗的对手，其攻击越高，伤害越大。"
     },
     "freeze-dry": {
       "name": "冷冻干燥",
-      "shortDesc": "对水超级有效。"
+      "shortDesc": "急剧冷冻对手，有时会让对手陷入冰冻状态。对于水属性宝可梦也是效果绝佳。"
     },
     "freeze-shock": {
       "name": "冰冻伏特",
-      "shortDesc": "攻击前需要一回合冲锋。有一定几率使目标麻痹。"
+      "shortDesc": "用覆盖着电流的冰块，在第２回合撞向对手。有时会让对手陷入麻痹状态。"
     },
     "freezing-glare": {
       "name": "冰冷视线",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "从双眼发射精神力量进行攻击。有时会让对手陷入冰冻状态。"
     },
     "freezy-frost": {
       "name": "冰冰霜冻",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "利用冰冷的黑雾结晶进行攻击。使全体宝可梦的能力变回原点。"
     },
     "frenzy-plant": {
       "name": "疯狂植物",
-      "shortDesc": "用户放弃下一轮充值。"
+      "shortDesc": "用大树摔打对手进行攻击。下一回合自己将无法动弹。"
     },
     "frost-breath": {
       "name": "冰息",
-      "shortDesc": "总是能获得暴击。"
+      "shortDesc": "将冰冷的气息吹向对手进行攻击。必定会击中要害。"
     },
     "frustration": {
       "name": "迁怒",
-      "shortDesc": "力量随着幸福度的降低而增加，最高可达 102。"
+      "shortDesc": "为了发泄不满而全力攻击对手。亲密度越低，威力越大。"
     },
     "fury-attack": {
       "name": "乱击",
-      "shortDesc": "一回合击中2-5次。"
+      "shortDesc": "用角或喙刺向对手进行攻击。连续攻击２～５次。"
     },
     "fury-cutter": {
       "name": "连斩",
-      "shortDesc": "在第一个动作之后连续使用此动作，每回合力量都会翻倍，五回合后达到最大。"
+      "shortDesc": "用镰刀或爪子等切斩对手进行攻击。连续击中，威力就会提高。"
     },
     "fury-swipes": {
       "name": "乱抓",
-      "shortDesc": "一回合击中2-5次。"
+      "shortDesc": "用爪子或镰刀等抓对手进行攻击。连续攻击２～５次。"
     },
     "fusion-bolt": {
       "name": "交错闪电",
-      "shortDesc": "使用融合耀斑，造成双倍伤害。"
+      "shortDesc": "释放出巨大的闪电。受到巨大的火焰影响时，招式威力会提高。"
     },
     "fusion-flare": {
       "name": "交错火焰",
-      "shortDesc": "使用融合箭，造成双倍伤害。"
+      "shortDesc": "释放出巨大的火焰。受到巨大的闪电影响时，招式威力会提高。"
     },
     "future-sight": {
       "name": "预知未来",
-      "shortDesc": "两回合后击中目标。"
+      "shortDesc": "在使用招式２回合后，向对手发送一团念力进行攻击。"
     },
     "gastro-acid": {
       "name": "胃液",
-      "shortDesc": "使目标的能力无效直至其离开战斗。"
+      "shortDesc": "将胃液吐向对手的身体。沾上的胃液会消除对手的特性效果。"
     },
     "gear-grind": {
       "name": "齿轮飞盘",
-      "shortDesc": "一回合击中两次。"
+      "shortDesc": "向对手投掷钢铁齿轮进行攻击。连续２次给予伤害。"
     },
     "gear-up": {
       "name": "辅助齿轮",
-      "shortDesc": "使所有友方正负宝可梦的攻击力和特攻力提高一级。"
+      "shortDesc": "启动齿轮，提高特性为正电和负电的宝可梦的攻击和特攻。"
     },
     "genesis-supernova": {
       "name": "起源超新星大爆炸",
-      "shortDesc": "造成伤害后将地形更改为心灵地形。"
+      "shortDesc": "得到Ｚ力量的梦幻将全力攻击对手。脚下会变成精神场地。"
     },
     "geomancy": {
       "name": "大地掌控",
-      "shortDesc": "冲锋一回合，使自身特攻、特防、速度提升两级。"
+      "shortDesc": "第１回合吸收能量，第２回合大幅提高特攻、特防和速度。"
     },
     "giga-drain": {
       "name": "终极吸取",
-      "shortDesc": "吸收一半的伤害来治疗用户。"
+      "shortDesc": "吸取对手的养分进行攻击。可以回复给予对手伤害的一半ＨＰ。"
     },
     "giga-impact": {
       "name": "终极冲击",
-      "shortDesc": "用户放弃下一轮充值。"
+      "shortDesc": "使出自己浑身力量突击对手。下一回合自己将无法动弹。"
     },
     "gigaton-hammer": {
       "name": "巨力锤",
-      "shortDesc": "使用者挥舞全身，用巨大的锤子进行攻击。这个动作不能连续使用两次。"
+      "shortDesc": "The user swings its whole body around to attack with its huge hammer. This move can't be used twice in a row."
     },
     "gigavolt-havoc--physical": {
       "name": "终极伏特狂雷闪",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量将蓄积的强大电流全力撞向对手。威力会根据原来的招式而改变。"
     },
     "gigavolt-havoc--special": {
       "name": "终极伏特狂雷闪",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "glacial-lance": {
       "name": "雪矛",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "向对手投掷掀起暴风雪的冰矛进行攻击。"
     },
     "glaciate": {
       "name": "冰封世界",
-      "shortDesc": "将目标的速度降低一级。"
+      "shortDesc": "将冰冻的冷气吹向对手进行攻击。会降低对手的速度。"
     },
     "glaive-rush": {
       "name": "巨剑突击",
-      "shortDesc": "使用者将其整个身体投入鲁莽的冲锋中。使用此招式后，对使用者的攻击不会失手，并且会造成双倍伤害，直到使用者的下一个回合。"
+      "shortDesc": "The user throws its entire body into a reckless charge. After this move is used, attacks on the user cannot miss and will inflict double damage until the user’s next turn."
     },
     "glare": {
       "name": "大蛇瞪眼",
-      "shortDesc": "麻痹目标。"
+      "shortDesc": "用腹部的花纹使对手害怕，从而让其陷入麻痹状态。"
     },
     "glitzy-glow": {
       "name": "哗哗气场",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "利用念力强攻，粉碎对方信心。制造一道能减弱对手特殊攻击的神奇墙壁。"
     },
     "grass-knot": {
       "name": "打草结",
-      "shortDesc": "对较重的目标造成更多伤害，最大伤害为 120 点。"
+      "shortDesc": "用草缠住并绊倒对手。对手越重，威力越大。"
     },
     "grass-pledge": {
       "name": "草之誓约",
-      "shortDesc": "使用火誓约，每回合对对方宝可梦造成最大生命值 1/8 的伤害，持续 4 回合。"
+      "shortDesc": "用草柱进行攻击。如果和水组合，威力就会提高，周围会变成湿地。"
     },
     "grass-whistle": {
       "name": "草笛",
-      "shortDesc": "让目标进入睡眠状态。"
+      "shortDesc": "让对手听舒适的笛声，从而陷入睡眠状态。"
     },
     "grassy-glide": {
       "name": "青草滑梯",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "仿佛在地面上滑行般地攻击对手。在青草场地上，必定能够先制攻击。"
     },
     "grassy-terrain": {
       "name": "青草场地",
-      "shortDesc": "5回合内，每回合回复地面上所有宝可梦1/16最大生命值，并将草招强化至1.5倍。"
+      "shortDesc": "在５回合内变成青草场地。地面上的宝可梦每回合都能回复。草属性的招式威力还会提高。"
     },
     "grav-apple": {
       "name": "万有引力",
-      "shortDesc": "造成伤害后，目标防御力降低一级。"
+      "shortDesc": "从高处落下苹果，给予对手伤害。可降低对手的防御。"
     },
     "gravity": {
       "name": "重力",
-      "shortDesc": "禁用涉及飞行或悬浮的动作和免疫五回合。"
+      "shortDesc": "在５回合内，飘浮特性和飞行属性的宝可梦会被地面属性的招式击中。飞向空中的招式也将无法使用。"
     },
     "growl": {
       "name": "叫声",
-      "shortDesc": "使目标的攻击力降低一级。"
+      "shortDesc": "让对手听可爱的叫声，引开注意力使其疏忽，从而降低对手的攻击。"
     },
     "growth": {
       "name": "生长",
-      "shortDesc": "使使用者的攻击力和特攻力提升一级。"
+      "shortDesc": "让身体一下子长大，从而提高攻击和特攻。"
     },
     "grudge": {
       "name": "怨念",
-      "shortDesc": "如果使用者本回合昏倒，则昏倒动作的PP会降至0。"
+      "shortDesc": "因对手的招式而陷入濒死时给对手施加怨念，让该招式的ＰＰ变成０。"
     },
     "guard-split": {
       "name": "防守平分",
-      "shortDesc": "与目标平均防御和特防。"
+      "shortDesc": "利用超能力将自己和对手的防御和特防相加，再进行平分。"
     },
     "guard-swap": {
       "name": "防守互换",
-      "shortDesc": "用户与目标交换防御和特防变化。"
+      "shortDesc": "利用超能力互换自己和对手的防御以及特防的能力变化。"
     },
     "guardian-of-alola": {
       "name": "巨人卫士・阿罗拉",
-      "shortDesc": "对目标造成相当于其剩余生命值 75% 的伤害。"
+      "shortDesc": "通过Ｚ力量得到阿罗拉之力的土地神宝可梦将全力进行攻击。对手的剩余HP会减少很多。"
     },
     "guillotine": {
       "name": "断头钳",
-      "shortDesc": "造成一击KO。"
+      "shortDesc": "用大钳子或剪刀等夹断对手进行攻击。只要命中就会一击濒死。"
     },
     "gunk-shot": {
       "name": "垃圾射击",
-      "shortDesc": "有几率使目标中毒。"
+      "shortDesc": "用肮脏的垃圾撞向对手进行攻击。有时会让对手陷入中毒状态。"
     },
     "gust": {
       "name": "起风",
-      "shortDesc": "造成常规伤害，并且可以击中空中的宝可梦。"
+      "shortDesc": "用翅膀将刮起的狂风袭向对手进行攻击。"
     },
     "gyro-ball": {
       "name": "陀螺球",
-      "shortDesc": "当用户速度较低时，力量会增加，最多可达 150。"
+      "shortDesc": "让身体高速旋转并撞击对手。速度比对手越慢，威力越大。"
     },
     "hail": {
       "name": "冰雹",
-      "shortDesc": "将天气变为冰雹，持续五回合。"
+      "shortDesc": "在５回合内一直降冰雹，除冰属性的宝可梦以外，给予全体宝可梦伤害。"
     },
     "hammer-arm": {
       "name": "臂锤",
-      "shortDesc": "将用户的速度降低一级。"
+      "shortDesc": "挥舞强力而沉重的拳头，给予对手伤害。自己的速度会降低。"
     },
     "happy-hour": {
       "name": "欢乐时光",
-      "shortDesc": "双打奖金。"
+      "shortDesc": "如果使用欢乐时光，战斗后得到的钱会翻倍。"
     },
     "hard-press": {
       "name": "硬压",
-      "shortDesc": "用手臂、爪子等压碎目标以造成伤害。目标剩余的生命值越多，招式的威力就越大。"
+      "shortDesc": "The target is crushed with an arm, a claw, or the like to inflict damage. The more HP the target has left, the greater the move's power."
     },
     "harden": {
       "name": "变硬",
-      "shortDesc": "使使用者的防御力提升一级。"
+      "shortDesc": "全身使劲，让身体变硬，从而提高自己的防御。"
     },
     "haze": {
       "name": "黑雾",
-      "shortDesc": "重置所有宝可梦的统计数据、准确度和回避率。"
+      "shortDesc": "升起黑雾，将正在场上战斗的全体宝可梦的能力变回原点。"
     },
     "head-charge": {
       "name": "爆炸头突击",
-      "shortDesc": "用户受到后坐力造成的伤害的 1/4。"
+      "shortDesc": "用厉害的爆炸头猛撞向对手进行攻击。自己也会受到少许伤害。"
     },
     "head-smash": {
       "name": "双刃头锤",
-      "shortDesc": "用户受到反冲造成伤害的 1/2。"
+      "shortDesc": "拼命使出浑身力气，向对手进行头锤攻击。自己也会受到非常大的伤害。"
     },
     "headbutt": {
       "name": "头锤",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "将头伸出，笔直地扑向对手进行攻击。有时会使对手畏缩。"
     },
     "headlong-rush": {
       "name": "突飞猛扑",
-      "shortDesc": "用户以全身铲球的方式撞向目标。这也会降低用户的防御统计数据。"
+      "shortDesc": "The user smashes into the target in a full-body tackle. This also lowers the user’s defensive stats."
     },
     "heal-bell": {
       "name": "治愈铃声",
-      "shortDesc": "治愈整个队伍的主要状态影响。"
+      "shortDesc": "让同伴听舒适的铃音，从而治愈我方全员的异常状态。"
     },
     "heal-block": {
       "name": "回复封锁",
-      "shortDesc": "阻止目标恢复生命值五回合。"
+      "shortDesc": "在５回合内无法通过招式、特性或携带的道具来回复HP。"
     },
     "heal-order": {
       "name": "回复指令",
-      "shortDesc": "使使用者恢复最大生命值的一半。"
+      "shortDesc": "召唤手下疗伤。回复自己最大HP的一半。"
     },
     "heal-pulse": {
       "name": "治愈波动",
-      "shortDesc": "治疗目标最大生命值的一半。"
+      "shortDesc": "放出治愈波动，从而回复对手最大ＨＰ的一半。"
     },
     "healing-wish": {
       "name": "治愈之愿",
-      "shortDesc": "用户晕倒。它的替代品的生命值完全恢复，并且所有主要状态效果都被消除。"
+      "shortDesc": "虽然自己陷入濒死，但可以治愈后备上场的宝可梦的异常状态以及回复ＨＰ。"
     },
     "heart-stamp": {
       "name": "爱心印章",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "以可爱的动作使对手疏忽，乘机给出强烈的一击。有时会使对手畏缩。"
     },
     "heart-swap": {
       "name": "心灵互换",
-      "shortDesc": "用户和目标交换统计数据更改。"
+      "shortDesc": "利用超能力互换自己和对手之间的能力变化。"
     },
     "heat-crash": {
       "name": "高温重压",
-      "shortDesc": "当用户超过目标时，力量会增加，最高可达 120。"
+      "shortDesc": "用燃烧的身体撞向对手进行攻击。自己比对手越重，威力越大。"
     },
     "heat-wave": {
       "name": "热风",
-      "shortDesc": "有几率燃烧目标。"
+      "shortDesc": "将炎热的气息吹向对手进行攻击。有时会让对手陷入灼伤状态。"
     },
     "heavy-slam": {
       "name": "重磅冲撞",
-      "shortDesc": "当用户超过目标时，力量会增加，最高可达 120。"
+      "shortDesc": "用沉重的身体撞向对手进行攻击。自己比对手越重，威力越大。"
     },
     "helping-hand": {
       "name": "帮助",
-      "shortDesc": "盟友的下一步行动造成的伤害增加一半。"
+      "shortDesc": "帮助伙伴。被帮助的宝可梦，其招式威力变得比平时大。"
     },
     "hex": {
       "name": "祸不单行",
-      "shortDesc": "如果目标患有严重疾病，则拥有双倍力量。"
+      "shortDesc": "接二连三地进行攻击。对处于异常状态的对手给予较大的伤害。"
     },
     "hidden-power": {
       "name": "觉醒力量",
@@ -5761,2343 +5761,2343 @@
     },
     "high-horsepower": {
       "name": "十万马力",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "使出全身力量，猛攻对手。"
     },
     "high-jump-kick": {
       "name": "飞膝踢",
-      "shortDesc": "如果使用者未命中，则受到后坐力造成的伤害的一半。"
+      "shortDesc": "跳起后用膝盖撞对手进行攻击。如果撞偏则自己会受到伤害。"
     },
     "hold-back": {
       "name": "手下留情",
-      "shortDesc": "无法将目标的生命值降低到1以下。"
+      "shortDesc": "在攻击的时候手下留情，从而使对手的ＨＰ至少会留下１ＨＰ。"
     },
     "hold-hands": {
       "name": "牵手",
-      "shortDesc": "不执行任何操作。"
+      "shortDesc": "我方宝可梦之间牵手。能带来非常幸福的心情。"
     },
     "hone-claws": {
       "name": "磨爪",
-      "shortDesc": "使使用者的攻击力和准确度提升一级。"
+      "shortDesc": "将爪子磨得更加锋利。提高自己的攻击和命中率。"
     },
     "horn-attack": {
       "name": "角撞",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用尖锐的角攻击对手。"
     },
     "horn-drill": {
       "name": "角钻",
-      "shortDesc": "造成一击KO。"
+      "shortDesc": "用旋转的角刺入对手进行攻击。只要命中就会一击濒死。"
     },
     "horn-leech": {
       "name": "木角",
-      "shortDesc": "吸收一半的伤害来治疗用户。"
+      "shortDesc": "将角刺入，吸取对手的养分。可以回复给予对手伤害的一半ＨＰ。"
     },
     "howl": {
       "name": "长嚎",
-      "shortDesc": "使使用者的攻击力提升一级。"
+      "shortDesc": "大声吼叫提高气势，从而提高自己和同伴的攻击。"
     },
     "hurricane": {
       "name": "暴风",
-      "shortDesc": "有一定几率迷惑目标。"
+      "shortDesc": "用强烈的风席卷对手进行攻击。有时会使对手混乱。"
     },
     "hydro-cannon": {
       "name": "加农水炮",
-      "shortDesc": "用户放弃下一轮充值。"
+      "shortDesc": "向对手喷射水炮进行攻击。下一回合自己将无法动弹。"
     },
     "hydro-pump": {
       "name": "水炮",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "向对手猛烈地喷射大量水流进行攻击。"
     },
     "hydro-steam": {
       "name": "水蒸气",
-      "shortDesc": "使用者用滚烫的热水喷射目标。此招式的威力在强烈阳光下不但没有降低，反而增强了百分之五十。"
+      "shortDesc": "The user blasts the target with boiling-hot water. This move's power is not lowered in harsh sunlight but rather boosted by 50 percent."
     },
     "hydro-vortex--physical": {
       "name": "超级水流大漩涡",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量制造大大的潮旋，全力吞没对手。威力会根据原来的招式而改变。"
     },
     "hydro-vortex--special": {
       "name": "超级水流大漩涡",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "hyper-beam": {
       "name": "破坏光线",
-      "shortDesc": "用户放弃下一轮充值。"
+      "shortDesc": "向对手发射强烈的光线进行攻击。下一回合自己将无法动弹。"
     },
     "hyper-drill": {
       "name": "强力钻",
-      "shortDesc": "使用者高速旋转身体的尖部刺穿目标。此攻击可以使用“保护”或“检测”等移动来击中目标。"
+      "shortDesc": "The user spins the pointed part of its body at high speed to pierce the target. This attack can hit a target using a move such as Protect or Detect."
     },
     "hyper-fang": {
       "name": "必杀门牙",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "用锋利的门牙牢牢地咬住对手进行攻击。有时会使对手畏缩。"
     },
     "hyper-voice": {
       "name": "巨声",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "给予对手又吵又响的巨大震动进行攻击。"
     },
     "hyperspace-fury": {
       "name": "异次元猛攻",
-      "shortDesc": "忽略并破坏保护效果。"
+      "shortDesc": "用许多手臂，无视对手的守住或看穿等招式进行连续攻击，自己的防御会降低。"
     },
     "hyperspace-hole": {
       "name": "异次元洞",
-      "shortDesc": "忽略并破坏保护效果。"
+      "shortDesc": "通过异次元洞，突然出现在对手的侧面进行攻击。还可以无视守住和看穿等招式。"
     },
     "hypnosis": {
       "name": "催眠术",
-      "shortDesc": "让目标进入睡眠状态。"
+      "shortDesc": "施以诱导睡意的暗示，让对手陷入睡眠状态。"
     },
     "ice-ball": {
       "name": "冰球",
-      "shortDesc": "每次连续使用，功率加倍，最多五圈。"
+      "shortDesc": "在５回合内攻击对手。招式每次击中，威力就会提高。"
     },
     "ice-beam": {
       "name": "冰冻光束",
-      "shortDesc": "有几率冻结目标。"
+      "shortDesc": "向对手发射冰冻光束进行攻击。有时会让对手陷入冰冻状态。"
     },
     "ice-burn": {
       "name": "极寒冷焰",
-      "shortDesc": "攻击前需要一回合冲锋。有一定几率燃烧目标。"
+      "shortDesc": "用能够冻结一切的强烈冷气，在第２回合包裹住对手。有时会让对手陷入灼伤状态。"
     },
     "ice-fang": {
       "name": "冰冻牙",
-      "shortDesc": "有一定几率冻结目标，也有一定几率使目标退缩。"
+      "shortDesc": "用藏有冷气的牙齿咬住对手。有时会使对手畏缩或陷入冰冻状态。"
     },
     "ice-hammer": {
       "name": "冰锤",
-      "shortDesc": "将用户的速度降低一级。"
+      "shortDesc": "挥舞强力而沉重的拳头，给予对手伤害。自己的速度会降低。"
     },
     "ice-punch": {
       "name": "冰冻拳",
-      "shortDesc": "有几率冻结目标。"
+      "shortDesc": "用充满寒气的拳头攻击对手。有时会让对手陷入冰冻状态。"
     },
     "ice-shard": {
       "name": "冰砾",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "瞬间制作冰块，快速地扔向对手。必定能够先制攻击。"
     },
     "ice-spinner": {
       "name": "冰旋",
-      "shortDesc": "使用者用薄冰覆盖双脚并旋转，猛烈撞击目标。此移动的旋转运动也会破坏地形。"
+      "shortDesc": "The user covers its feet in thin ice and twirls around, slamming into the target. This move's spinning motion also destroys the terrain."
     },
     "icicle-crash": {
       "name": "冰柱坠击",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "用大冰柱激烈地撞向对手进行攻击。有时会使对手畏缩。"
     },
     "icicle-spear": {
       "name": "冰锥",
-      "shortDesc": "一回合击中2-5次。"
+      "shortDesc": "向对手发射锋利的冰柱进行攻击。连续攻击２～５次。"
     },
     "icy-wind": {
       "name": "冰冻之风",
-      "shortDesc": "有一定几率使目标速度降低一级。"
+      "shortDesc": "将结冰的冷气吹向对手进行攻击。会降低对手的速度。"
     },
     "imprison": {
       "name": "封印",
-      "shortDesc": "防止目标使用用户也知道的任何动作。"
+      "shortDesc": "如果对手有和自己相同的招式，那么只有对手无法使用该招式。"
     },
     "incinerate": {
       "name": "烧尽",
-      "shortDesc": "摧毁目标持有的浆果。"
+      "shortDesc": "用火焰攻击对手。对手携带树果等时，会烧掉，使其不能使用。"
     },
     "infernal-parade": {
       "name": "群魔乱舞",
-      "shortDesc": "使用者用无数火球攻击。这也可能使目标被烧伤。如果目标处于状态状态，此招式的威力将加倍。"
+      "shortDesc": "The user attacks with myriad fireballs. This may also leave the target with a burn. This move's power is doubled if the target has a status condition."
     },
     "inferno": {
       "name": "炼狱",
-      "shortDesc": "有几率燃烧目标。"
+      "shortDesc": "用烈焰包裹住对手进行攻击。让对手陷入灼伤状态。"
     },
     "inferno-overdrive--physical": {
       "name": "超强极限爆焰弹",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量喷出熊熊烈火，全力撞向对手。威力会根据原来的招式而改变。"
     },
     "inferno-overdrive--special": {
       "name": "超强极限爆焰弹",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "infestation": {
       "name": "死缠烂打",
-      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+      "shortDesc": "在４～５回合内死缠烂打地进行攻击。在此期间对手将无法逃走。"
     },
     "ingrain": {
       "name": "扎根",
-      "shortDesc": "阻止用户离开战斗。使用者每回合恢复最大生命值的1/16。"
+      "shortDesc": "在大地上扎根，每回合回复自己的ＨＰ。因为扎根了，所以不能替换宝可梦。"
     },
     "instruct": {
       "name": "号令",
-      "shortDesc": "强制目标重复其上次使用的动作。"
+      "shortDesc": "向对手下达指示，让其再次使出刚才的招式。"
     },
     "ion-deluge": {
       "name": "等离子浴",
-      "shortDesc": "在本回合的剩余时间内将所有普通动作更改为电动动作。"
+      "shortDesc": "将带电粒子扩散开来，使一般属性的招式变成电属性。"
     },
     "iron-defense": {
       "name": "铁壁",
-      "shortDesc": "使使用者的防御力提升两级。"
+      "shortDesc": "将皮肤变得坚硬如铁，从而大幅提高自己的防御。"
     },
     "iron-head": {
       "name": "铁头",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "用钢铁般坚硬的头部进行攻击。有时会使对手畏缩。"
     },
     "iron-tail": {
       "name": "铁尾",
-      "shortDesc": "有一定几率降低目标防御一级。"
+      "shortDesc": "使用坚硬的尾巴摔打对手进行攻击。有时会降低对手的防御。"
     },
     "ivy-cudgel": {
       "name": "棘藤棒",
-      "shortDesc": "使用者用一根常春藤包裹的棍棒进行攻击。该招式的类型根据使用者佩戴的面具而变化，并且获得暴击的几率更高。"
+      "shortDesc": "The user strikes with an ivy-wrapped cudgel. This move's type changes depending on the mask worn by the user, and it has a heightened chance of landing a critical hit."
     },
     "jaw-lock": {
       "name": "紧咬不放",
-      "shortDesc": "在造成伤害后为目标播种。"
+      "shortDesc": "使双方直到一方濒死为止无法替换宝可梦。其中一方退场则可以解除效果。"
     },
     "jet-punch": {
       "name": "喷射拳",
-      "shortDesc": "使用者在拳头周围召唤一股洪流，并以令人眼花缭乱的速度出拳。这个动作总是先进行。"
+      "shortDesc": "The user summons a torrent around its fist and punches at blinding speed. This move always goes first."
     },
     "judgment": {
       "name": "制裁光砾",
-      "shortDesc": "如果用户持有适当的板或驱动器，则造成的伤害将与其相匹配。"
+      "shortDesc": "向对手放出无数的光弹。属性会根据自己携带的石板不同而改变。"
     },
     "jump-kick": {
       "name": "飞踢",
-      "shortDesc": "如果使用者未命中，则受到后坐力造成的伤害的一半。"
+      "shortDesc": "使出高高的腾空踢攻击对手。如果踢偏则自己会受到伤害。"
     },
     "jungle-healing": {
       "name": "丛林治疗",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "与丛林融为一体，回复自己和场上同伴的ＨＰ和状态。"
     },
     "karate-chop": {
       "name": "空手劈",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "用锋利的手刀劈向对手进行攻击。容易击中要害。"
     },
     "kinesis": {
       "name": "折弯汤匙",
-      "shortDesc": "将目标精度降低一级。"
+      "shortDesc": "折弯汤匙引开注意，从而降低对手的命中率。"
     },
     "kings-shield": {
       "name": "王者盾牌",
-      "shortDesc": "格挡伤害性攻击，并在接触时将攻击宝可梦的攻击力降低两个阶段。将神盾斩切换为盾阵。"
+      "shortDesc": "防住对手攻击的同时，自己变为防御姿态。能够降低所接触到的对手的攻击。"
     },
     "knock-off": {
       "name": "拍落",
-      "shortDesc": "目标掉落其持有的物品。"
+      "shortDesc": "拍落对手的持有物，直到战斗结束都不能使用。对手携带道具时会增加伤害。"
     },
     "kowtow-cleave": {
       "name": "仆刀",
-      "shortDesc": "使用者在向目标磕头后挥砍，使目标放松警惕。这次攻击绝不会失手。"
+      "shortDesc": "The user slashes at the target after kowtowing to make the target let down its guard. This attack never misses."
     },
     "lands-wrath": {
       "name": "大地神力",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "聚集大地的力量，将此力量集中攻击对手，并给予伤害。"
     },
     "laser-focus": {
       "name": "磨砺",
-      "shortDesc": "保证用户的下一步动作会造成致命一击。"
+      "shortDesc": "集中精神，下次攻击必定会击中要害。"
     },
     "lash-out": {
       "name": "泄愤",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "攻击对手以发泄对其感到的恼怒情绪。如果在该回合内自身能力遭到降低，招式的威力会变成２倍。"
     },
     "last-resort": {
       "name": "珍藏",
-      "shortDesc": "只能在用户的所有其他动作都已使用后才能使用。"
+      "shortDesc": "当战斗中已学会的招式全部使用过后，才能开始使出珍藏的招式。"
     },
     "last-respects": {
       "name": "扫墓",
-      "shortDesc": "用户攻击是为了为其盟友报仇。使用者队伍中被击败的盟友越多，该招式的威力就越大。"
+      "shortDesc": "The user attacks to avenge its allies. The more defeated allies there are in the user's party, the greater the move's power."
     },
     "lava-plume": {
       "name": "喷烟",
-      "shortDesc": "有几率燃烧目标。"
+      "shortDesc": "用熊熊烈火攻击自己周围所有的宝可梦。有时会陷入灼伤状态。"
     },
     "leaf-blade": {
       "name": "叶刃",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "像用剑一般操纵叶片切斩对手进行攻击。容易击中要害。"
     },
     "leaf-storm": {
       "name": "飞叶风暴",
-      "shortDesc": "造成伤害后，使使用者的特攻降低两级。"
+      "shortDesc": "用尖尖的叶片向对手卷起风暴。使用之后因为反作用力自己的特攻会大幅降低。"
     },
     "leaf-tornado": {
       "name": "青草搅拌器",
-      "shortDesc": "有一定几率降低目标精准度一级。"
+      "shortDesc": "用锋利的叶片包裹住对手进行攻击。有时会降低对手的命中率。"
     },
     "leafage": {
       "name": "树叶",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "将叶片打向对手，进行攻击。"
     },
     "leech-life": {
       "name": "吸血",
-      "shortDesc": "吸收一半的伤害来治疗用户。"
+      "shortDesc": "吸取血液攻击对手。可以回复给予对手伤害的一半ＨＰ。"
     },
     "leech-seed": {
       "name": "寄生种子",
-      "shortDesc": "播种目标，每回合窃取其生命值。"
+      "shortDesc": "植入寄生种子后，将在每回合一点一点吸取对手的ＨＰ，从而用来回复自己的ＨＰ。"
     },
     "leer": {
       "name": "瞪眼",
-      "shortDesc": "降低目标防御一级。"
+      "shortDesc": "用犀利的眼神使其害怕，从而降低对手的防御。"
     },
     "lets-snuggle-forever": {
       "name": "亲密无间大乱揍",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "得到Ｚ力量的谜拟Ｑ将全力进行乱揍攻击。"
     },
     "lick": {
       "name": "舌舔",
-      "shortDesc": "有几率使目标瘫痪。"
+      "shortDesc": "用长长的舌头，舔遍对手进行攻击。有时会让对手陷入麻痹状态。"
     },
     "life-dew": {
       "name": "生命水滴",
-      "shortDesc": "使用者向周围散布神秘之水，并在战斗中恢复自身及其盟友宝可梦的生命值。"
+      "shortDesc": "喷洒出神奇的水，回复自己和场上同伴的ＨＰ。"
     },
     "light-of-ruin": {
       "name": "破灭之光",
-      "shortDesc": "用户受到反冲造成伤害的 1/2。"
+      "shortDesc": "借用永恒之花的力量，发射出强力光线。自己也会受到不小的伤害。"
     },
     "light-screen": {
       "name": "光墙",
-      "shortDesc": "减少特殊攻击伤害，持续五回合。"
+      "shortDesc": "利用神奇的墙壁，在５回合内减弱从对手那里受到的特殊攻击的伤害。"
     },
     "light-that-burns-the-sky": {
       "name": "焚天灭世炽光爆",
-      "shortDesc": "使用攻击或特殊攻击统计数据（以较高者为准）造成伤害。"
+      "shortDesc": "奈克洛兹玛会无视对手的特性效果，在攻击和特攻之间，用数值相对较高的一项给予对方伤害。"
     },
     "liquidation": {
       "name": "水流裂破",
-      "shortDesc": "有一定几率降低目标防御一级。"
+      "shortDesc": "用水之力量撞向对手进行攻击。有时会降低对手的防御。"
     },
     "lock-on": {
       "name": "锁定",
-      "shortDesc": "确保用户的下一步动作将击中目标。"
+      "shortDesc": "紧紧瞄准对手，下次攻击必定会打中。"
     },
     "lovely-kiss": {
       "name": "恶魔之吻",
-      "shortDesc": "让目标进入睡眠状态。"
+      "shortDesc": "用恐怖的脸强吻对手。让对手陷入睡眠状态。"
     },
     "low-kick": {
       "name": "踢倒",
-      "shortDesc": "对较重的目标造成更多伤害，最大伤害为 120 点。"
+      "shortDesc": "用力踢对手的脚，使其摔倒进行攻击。对手越重，威力越大。"
     },
     "low-sweep": {
       "name": "下盘踢",
-      "shortDesc": "将目标的速度降低一级。"
+      "shortDesc": "以敏捷的动作瞄准对手的脚进行攻击。降低对手的速度。"
     },
     "lucky-chant": {
       "name": "幸运咒语",
-      "shortDesc": "阻止目标在五回合内获得暴击。"
+      "shortDesc": "向天许愿，从而在５回合内不会被对手的攻击打中要害。"
     },
     "lumina-crash": {
       "name": "琉光冲激",
-      "shortDesc": "使用者释放出甚至影响心灵的特殊光芒进行攻击。这也会严重降低目标的 Sp。默认统计数据。"
+      "shortDesc": "The user attacks by unleashing a peculiar light that even affects the mind. This also harshly lowers the target's Sp. Def stat."
     },
     "lunar-blessing": {
       "name": "新月祈祷",
-      "shortDesc": "使用者治愈自身状态并恢复生命值。接下来的动作也变得更有可能错过。"
+      "shortDesc": "The user heals its own status conditions and restores its HP. Incoming moves also become more likely to miss."
     },
     "lunar-dance": {
       "name": "新月舞",
-      "shortDesc": "使用者晕倒，其替代者已完全治愈。"
+      "shortDesc": "虽然自己陷入濒死，但可以治愈后备上场的宝可梦的全部状态。"
     },
     "lunge": {
       "name": "猛扑",
-      "shortDesc": "造成伤害后，目标攻击力降低一级。"
+      "shortDesc": "全力猛扑对手进行攻击。从而降低对手的攻击。"
     },
     "luster-purge": {
       "name": "洁净光芒",
-      "shortDesc": "有一定几率降低目标特防一级。"
+      "shortDesc": "释放耀眼的光芒进行攻击。有时会降低对手的特防。"
     },
     "mach-punch": {
       "name": "音速拳",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "以迅雷不及掩耳之势出拳。必定能够先制攻击。"
     },
     "magic-coat": {
       "name": "魔法反射",
-      "shortDesc": "反射回用户本回合使用的第一个效果动作。"
+      "shortDesc": "当对手使出会变成异常状态的招式或寄生种子等时，会将对手的招式反射回去。"
     },
     "magic-powder": {
       "name": "魔法粉",
-      "shortDesc": "使用者散布一团魔法粉末，将目标转变为心灵类型。"
+      "shortDesc": "向对手喷洒魔法粉，使对手变为超能力属性。"
     },
     "magic-room": {
       "name": "魔法空间",
-      "shortDesc": "使持有的物品无效五回合。"
+      "shortDesc": "制造出离奇的空间。在５回合内所有宝可梦携带道具的效果都会消失。"
     },
     "magical-leaf": {
       "name": "魔法叶",
-      "shortDesc": "绝不会错过。"
+      "shortDesc": "散落可以追踪对手的神奇叶片。攻击必定会命中。"
     },
     "magical-torque": {
       "name": "魔法暴冲",
-      "shortDesc": "没有可用的附加效果信息。"
+      "shortDesc": "No additional effect information available."
     },
     "magma-storm": {
       "name": "熔岩风暴",
-      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+      "shortDesc": "将对手困在熊熊燃烧的火焰中，在４～５回合内进行攻击。"
     },
     "magnet-bomb": {
       "name": "磁铁炸弹",
-      "shortDesc": "绝不会错过。"
+      "shortDesc": "发射吸住对手的钢铁炸弹。攻击必定会命中。"
     },
     "magnet-rise": {
       "name": "电磁飘浮",
-      "shortDesc": "使用者在五回合内免疫地面招式和效果。"
+      "shortDesc": "利用电气产生的磁力浮在空中。在５回合内可以飘浮。"
     },
     "magnetic-flux": {
       "name": "磁场操控",
-      "shortDesc": "使所有友方正负宝可梦的防御力和特防力提高一级。"
+      "shortDesc": "通过操控磁场，会提高特性为正电和负电的宝可梦的防御和特防。"
     },
     "magnitude": {
       "name": "震级",
-      "shortDesc": "功率在 10 到 150 之间随机变化。"
+      "shortDesc": "晃动地面，攻击自己周围所有的宝可梦。招式的威力会有各种变化。"
     },
     "make-it-rain": {
       "name": "淘金潮",
-      "shortDesc": "用户通过扔出大量硬币进行攻击。这也会降低用户的 Sp。攻击力统计。战斗结束后就能赚到钱。"
+      "shortDesc": "The user attacks by throwing out a mass of coins. This also lowers the user's Sp. Atk stat. Money is earned after the battle."
     },
     "malicious-moonsault": {
       "name": "极恶飞跃粉碎击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量得到强壮肉体的炽焰咆哮虎将全力撞向对手进行攻击。"
     },
     "malignant-chain": {
       "name": "邪毒锁链",
-      "shortDesc": "使用者将毒素包裹在有毒、腐蚀性的链条中，将毒素注入目标体内。这也可能使目标严重中毒。"
+      "shortDesc": "The user pours toxins into the target by wrapping them in a toxic, corrosive chain. This may also leave the target badly poisoned."
     },
     "mat-block": {
       "name": "掀榻榻米",
-      "shortDesc": "保护所有友方宝可梦免受伤害性动作。仅在用户被送出后的第一回合有效。"
+      "shortDesc": "将掀起来的榻榻米当作盾牌，防住自己和同伴免受招式伤害。变化招式无法防住。"
     },
     "matcha-gotcha": {
       "name": "刷刷茶炮",
-      "shortDesc": "用户喷射出混合好的茶。使用者的生命值恢复最多为目标所受伤害的一半。这也可能使目标被烧伤。"
+      "shortDesc": "The user fires a blast of tea that it mixed. The user's HP is restored by up to half the damage taken by the target. This may also leave the target with a burn."
     },
     "max-airstream": {
       "name": "极巨飞冲",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的飞行属性攻击。会提高我方的速度。"
     },
     "max-darkness": {
       "name": "极巨恶霸",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的恶属性攻击。会降低对手的特防。"
     },
     "max-flare": {
       "name": "极巨火爆",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的火属性攻击。可在５回合内让日照变得强烈。"
     },
     "max-flutterby": {
       "name": "极巨虫蛊",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的虫属性攻击。会降低对手的特攻。"
     },
     "max-geyser": {
       "name": "极巨水流",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的水属性攻击。可在５回合内降下大雨。"
     },
     "max-guard": {
       "name": "极巨防壁",
-      "shortDesc": "防止本回合任何动作击中用户。"
+      "shortDesc": "完全抵挡对手的攻击。连续使出则容易失败。"
     },
     "max-hailstorm": {
       "name": "极巨寒冰",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦才能使出的冰属性攻击。在５回合内会降下冰雹。"
     },
     "max-knuckle": {
       "name": "极巨拳斗",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的格斗属性攻击。会提高我方的攻击。"
     },
     "max-lightning": {
       "name": "极巨闪电",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的电属性攻击。可在５回合内将脚下变成电气场地。"
     },
     "max-mindstorm": {
       "name": "极巨超能",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的超能力属性攻击。可在５回合内将脚下变成精神场地。"
     },
     "max-ooze": {
       "name": "极巨酸毒",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的毒属性攻击。会提高我方的特攻。"
     },
     "max-overgrowth": {
       "name": "极巨草原",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的草属性攻击。可在５回合内将脚下变成青草场地。"
     },
     "max-phantasm": {
       "name": "极巨幽魂",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的幽灵属性攻击。会降低对手的防御。"
     },
     "max-quake": {
       "name": "极巨大地",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的地面属性攻击。会提高我方的特防。"
     },
     "max-rockfall": {
       "name": "极巨岩石",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的岩石属性攻击。可在５回合内卷起沙暴。"
     },
     "max-starfall": {
       "name": "极巨妖精",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的妖精属性攻击。可在５回合内将脚下变成薄雾场地。"
     },
     "max-steelspike": {
       "name": "极巨钢铁",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的钢属性攻击。会提高我方的防御。"
     },
     "max-strike": {
       "name": "极巨攻击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的一般属性攻击。会降低对手的速度。"
     },
     "max-wyrmwind": {
       "name": "极巨龙骑",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "极巨化宝可梦使出的龙属性攻击。会降低对手的攻击。"
     },
     "me-first": {
       "name": "抢先一步",
-      "shortDesc": "在攻击前使用目标的招式对抗它，威力增加一半。"
+      "shortDesc": "提高威力，抢先使出对手想要使出的招式。如果不先使出则会失败。"
     },
     "mean-look": {
       "name": "黑色目光",
-      "shortDesc": "阻止目标离开战斗。"
+      "shortDesc": "用好似要勾人心魂的黑色目光一动不动地凝视对手，使其不能从战斗中逃走。"
     },
     "meditate": {
       "name": "瑜伽姿势",
-      "shortDesc": "使使用者的攻击力提升一级。"
+      "shortDesc": "唤醒身体深处沉睡的力量，从而提高自己的攻击。"
     },
     "mega-drain": {
       "name": "超级吸取",
-      "shortDesc": "吸收一半的伤害来治疗用户。"
+      "shortDesc": "吸取对手的养分进行攻击。可以回复给予对手伤害的一半ＨＰ。"
     },
     "mega-kick": {
       "name": "百万吨重踢",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "使出力大无穷的重踢踢飞对手进行攻击。"
     },
     "mega-punch": {
       "name": "百万吨重拳",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用充满力量的拳头攻击对手。"
     },
     "megahorn": {
       "name": "超级角击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用坚硬且华丽的角狠狠地刺入对手进行攻击。"
     },
     "memento": {
       "name": "临别礼物",
-      "shortDesc": "使目标的攻击力和特攻力降低两级。用户晕倒。"
+      "shortDesc": "虽然会使自己陷入濒死，但是能够大幅降低对手的攻击和特攻。"
     },
     "menacing-moonraze-maelstrom": {
       "name": "月华飞溅落灵霄",
-      "shortDesc": "不会被技能打乱。"
+      "shortDesc": "得到Ｚ力量的露奈雅拉将全力进行攻击。可以无视对手的特性效果。"
     },
     "metal-burst": {
       "name": "金属爆炸",
-      "shortDesc": "以1.5倍伤害反击本回合最后击中使用者的宝可梦。"
+      "shortDesc": "使出招式前，将最后受到的招式的伤害大力返还给对手。"
     },
     "metal-claw": {
       "name": "金属爪",
-      "shortDesc": "有一定几率使自身攻击力提升一级。"
+      "shortDesc": "用钢铁之爪劈开对手进行攻击。有时会提高自己的攻击。"
     },
     "metal-sound": {
       "name": "金属音",
-      "shortDesc": "降低目标特防两级。"
+      "shortDesc": "让对手听摩擦金属般讨厌的声音。大幅降低对手的特防。"
     },
     "meteor-assault": {
       "name": "流星突击",
-      "shortDesc": "用户放弃下一轮充值。"
+      "shortDesc": "大力挥舞粗壮的茎进行攻击。但同时自己也会被晃晕，下一回合自己将无法动弹。"
     },
     "meteor-beam": {
       "name": "流星光束",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "第１回合聚集宇宙之力提高特攻，第２回合攻击对手。"
     },
     "meteor-mash": {
       "name": "彗星拳",
-      "shortDesc": "有一定几率使自身攻击力提升一级。"
+      "shortDesc": "使出彗星般的拳头攻击对手。有时会提高自己的攻击。"
     },
     "metronome": {
       "name": "挥指",
-      "shortDesc": "随机选择并使用游戏中的任意动作。"
+      "shortDesc": "挥动手指刺激自己的大脑，从所有的招式中任意使出１个。"
     },
     "mighty-cleave": {
       "name": "强刃攻击",
-      "shortDesc": "使用者挥动头顶积聚的光来劈开目标。即使目标保护自己，这一招也会命中。"
+      "shortDesc": "The user wields the light that has accumulated atop its head to cleave the target. This move hits even if the target protects itself."
     },
     "milk-drink": {
       "name": "喝牛奶",
-      "shortDesc": "使使用者恢复最大生命值的一半。"
+      "shortDesc": "回复自己最大ＨＰ的一半。"
     },
     "mimic": {
       "name": "模仿",
-      "shortDesc": "复制目标最后使用的动作。"
+      "shortDesc": "可以将对手最后使用的招式，在战斗内变成自己的招式。"
     },
     "mind-blown": {
       "name": "惊爆大头",
-      "shortDesc": "造成伤害，使用者受到最大生命值一半的伤害，向上舍入。"
+      "shortDesc": "让自己的头爆炸，来攻击周围的一切。自己也会受到伤害。"
     },
     "mind-reader": {
       "name": "心之眼",
-      "shortDesc": "确保用户的下一步动作将击中目标。"
+      "shortDesc": "用心感受对手的行动，下次攻击必定会击中对手。"
     },
     "minimize": {
       "name": "变小",
-      "shortDesc": "使使用者的回避率提高两个阶段。"
+      "shortDesc": "蜷缩身体显得很小，从而大幅提高自己的闪避率。"
     },
     "miracle-eye": {
       "name": "奇迹之眼",
-      "shortDesc": "强制目标无法闪避，即使是黑暗也能被念力招式击中。"
+      "shortDesc": "使出后对恶属性宝可梦没有效果的招式以及闪避率高的对手，变得能够打中。"
     },
     "mirror-coat": {
       "name": "镜面反射",
-      "shortDesc": "返回上次收到的特殊命中造成的伤害的两倍。"
+      "shortDesc": "从对手那里受到特殊攻击的伤害将以２倍返还给同一个对手。"
     },
     "mirror-move": {
       "name": "鹦鹉学舌",
-      "shortDesc": "使用目标最后使用的动作。"
+      "shortDesc": "模仿对手使用的招式，自己也使用相同招式。"
     },
     "mirror-shot": {
       "name": "镜光射击",
-      "shortDesc": "有一定几率降低目标精准度一级。"
+      "shortDesc": "抛光自己的身体，向对手释放出闪光之力。有时会降低对手的命中率。"
     },
     "mist": {
       "name": "白雾",
-      "shortDesc": "保护用户的统计数据不被敌人的动作改变。"
+      "shortDesc": "用白雾覆盖身体。在５回合内不会让对手降低自己的能力。"
     },
     "mist-ball": {
       "name": "薄雾球",
-      "shortDesc": "有一定几率使目标特攻降低一级。"
+      "shortDesc": "用围绕着雾状羽毛的球进行攻击。有时会降低对手的特攻。"
     },
     "misty-explosion": {
       "name": "薄雾炸裂",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "对自己周围的所有宝可梦进行攻击，但使出后，自己会陷入濒死。在薄雾场地上，招式威力会提高。"
     },
     "misty-terrain": {
       "name": "薄雾场地",
-      "shortDesc": "持续五回合，保护地面上的所有宝可梦免受严重异常状态和混乱的影响，并将传入的龙招式的威力减半。"
+      "shortDesc": "在５回合内，地面上的宝可梦不会陷入异常状态。龙属性招式的伤害也会减半。"
     },
     "moonblast": {
       "name": "月亮之力",
-      "shortDesc": "有一定几率使目标特攻降低一级。"
+      "shortDesc": "借用月亮的力量攻击对手。有时会降低对手的特攻。"
     },
     "moongeist-beam": {
       "name": "暗影之光",
-      "shortDesc": "不会被技能打乱。"
+      "shortDesc": "放出奇怪的光线攻击对手。可以无视对手的特性进行攻击。"
     },
     "moonlight": {
       "name": "月光",
-      "shortDesc": "治疗使用者；数量取决于天气。"
+      "shortDesc": "回复自己的ＨＰ。根据天气的不同，回复量也会有所变化。"
     },
     "morning-sun": {
       "name": "晨光",
-      "shortDesc": "治疗使用者；数量取决于天气。"
+      "shortDesc": "回复自己的ＨＰ。根据天气的不同，回复量也会有所变化。"
     },
     "mortal-spin": {
       "name": "晶光转转",
-      "shortDesc": "用户执行旋转攻击，也可以消除“束缚”、“包裹”和“吸血种子”等动作的效果。这也会使敌对的宝可梦中毒。"
+      "shortDesc": "The user performs a spin attack that can also eliminate the effects of such moves as Bind, Wrap, and Leech Seed. This also poisons opposing Pokémon."
     },
     "mountain-gale": {
       "name": "冰山风",
-      "shortDesc": "使用者向目标投掷巨大的冰块以造成伤害。"
+      "shortDesc": "The user hurls giant chunks of ice at the target to inflict damage."
     },
     "mud-bomb": {
       "name": "泥巴炸弹",
-      "shortDesc": "有一定几率降低目标精准度一级。"
+      "shortDesc": "向对手发射坚硬的泥弹进行攻击。有时会降低对手的命中率。"
     },
     "mud-shot": {
       "name": "泥巴射击",
-      "shortDesc": "有一定几率使目标速度降低一级。"
+      "shortDesc": "向对手投掷泥块进行攻击。同时降低对手的速度。"
     },
     "mud-slap": {
       "name": "掷泥",
-      "shortDesc": "有一定几率降低目标精准度一级。"
+      "shortDesc": "向对手的脸等投掷泥块进行攻击。会降低对手的命中率。"
     },
     "mud-sport": {
       "name": "玩泥巴",
-      "shortDesc": "所有电系伤害减半。"
+      "shortDesc": "一旦使用此招式，周围就会弄得到处是泥。在５回合内减弱电属性的招式。"
     },
     "muddy-water": {
       "name": "浊流",
-      "shortDesc": "有一定几率降低目标精准度一级。"
+      "shortDesc": "向对手喷射浑浊的水进行攻击。有时会降低对手的命中率。"
     },
     "multi-attack": {
       "name": "多属性攻击",
-      "shortDesc": "如果用户持有适当的板或驱动器，则造成的伤害将与其相匹配。"
+      "shortDesc": "一边覆盖高能量，一边撞向对手进行攻击。根据存储碟不同，属性会改变。"
     },
     "mystical-fire": {
       "name": "魔法火焰",
-      "shortDesc": "有一定几率使目标特攻降低一级。"
+      "shortDesc": "从口中喷出特别灼热的火焰进行攻击。降低对手的特攻。"
     },
     "mystical-power": {
       "name": "神秘之力",
-      "shortDesc": "使用者用神秘的力量强化自己。如果进攻出色，进攻数据就会提高。如果防守出色，其防守数据就会提高。"
+      "shortDesc": "The user strengthens itself with a mysterious power. If it excels in offense, its offensive stats are raised. If it excels in defense, its defensive stats are raised."
     },
     "nasty-plot": {
       "name": "诡计",
-      "shortDesc": "将使用者的特攻提升两级。"
+      "shortDesc": "谋划诡计，激活头脑。大幅提高自己的特攻。"
     },
     "natural-gift": {
       "name": "自然之恩",
-      "shortDesc": "力量和类型取决于所持有的浆果。"
+      "shortDesc": "从树果上获得力量进行攻击。根据携带的树果，招式属性和威力会改变。"
     },
     "nature-power": {
       "name": "自然之力",
-      "shortDesc": "使用取决于地形的移动。"
+      "shortDesc": "用自然之力进行攻击。根据所使用场所的不同，使出的招式也会有所变化。"
     },
     "natures-madness": {
       "name": "自然之怒",
-      "shortDesc": "对目标造成生命值一半的伤害。"
+      "shortDesc": "向对手释放自然之怒。对手的ＨＰ会减半。"
     },
     "needle-arm": {
       "name": "尖刺臂",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "用带刺的手臂猛烈地挥舞进行攻击。有时会使对手畏缩。"
     },
     "never-ending-nightmare--physical": {
       "name": "无尽暗夜之诱惑",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量召唤强烈的怨念，全力降临到对手身上。威力会根据原来的招式而改变。"
     },
     "never-ending-nightmare--special": {
       "name": "无尽暗夜之诱惑",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "night-daze": {
       "name": "暗黑爆破",
-      "shortDesc": "有一定几率降低目标精准度一级。"
+      "shortDesc": "放出黑暗的冲击波攻击对手。有时会降低对手的命中率。"
     },
     "night-shade": {
       "name": "黑夜魔影",
-      "shortDesc": "造成等同于使用者等级的伤害。"
+      "shortDesc": "显示恐怖幻影，只给予对手和自己等级相同的伤害。"
     },
     "night-slash": {
       "name": "暗袭要害",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "抓住瞬间的空隙切斩对手。容易击中要害。"
     },
     "nightmare": {
       "name": "恶梦",
-      "shortDesc": "只要目标处于睡眠状态，每回合都会损失最大生命值的1/4。"
+      "shortDesc": "让在睡眠状态下的对手做恶梦，每回合会缓缓减少HP。"
     },
     "no-retreat": {
       "name": "背水一战",
-      "shortDesc": "一回合命中两次，有一定几率使目标退缩。"
+      "shortDesc": "提高自己的所有能力，但无法替换或逃走。"
     },
     "noble-roar": {
       "name": "战吼",
-      "shortDesc": "使目标的攻击力和特攻力降低一级。"
+      "shortDesc": "发出战吼威吓对手，从而降低对手的攻击和特攻。"
     },
     "noxious-torque": {
       "name": "剧毒暴冲",
-      "shortDesc": "没有可用的附加效果信息。"
+      "shortDesc": "No additional effect information available."
     },
     "nuzzle": {
       "name": "蹭蹭脸颊",
-      "shortDesc": "有几率使目标瘫痪。"
+      "shortDesc": "将带电的脸颊蹭蹭对手进行攻击。让对手陷入麻痹状态。"
     },
     "oblivion-wing": {
       "name": "死亡之翼",
-      "shortDesc": "吸收 75% 的伤害来治疗使用者。"
+      "shortDesc": "从锁定的对手身上吸取ＨＰ。回复给予对手伤害的一半以上的ＨＰ。"
     },
     "obstruct": {
       "name": "拦堵",
-      "shortDesc": "此举动使用户能够保护自己免受所有攻击。如果连续使用，失败的几率会增加。直接接触会严重降低攻击者的防御统计数据。"
+      "shortDesc": "完全抵挡对手的攻击。连续使出则容易失败。一旦触碰，防御就会大幅降低。"
     },
     "oceanic-operetta": {
       "name": "海神庄严交响乐",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量召唤大量水的西狮海壬将全力攻击对手。"
     },
     "octazooka": {
       "name": "章鱼桶炮",
-      "shortDesc": "有一定几率降低目标精准度一级。"
+      "shortDesc": "向对手的脸等喷出墨汁进行攻击。有时会降低对手的命中率。"
     },
     "octolock": {
       "name": "蛸固",
-      "shortDesc": "用户锁定目标并防止其逃跑。此动作还会降低目标的防御力和 Sp。定义每个回合。"
+      "shortDesc": "让对手无法逃走。对手被固定后，每回合都会降低防御和特防。"
     },
     "odor-sleuth": {
       "name": "气味侦测",
-      "shortDesc": "强制目标无法闪避，即使是幽灵也可以被普通招式和战斗招式击中。"
+      "shortDesc": "使出后对幽灵属性宝可梦没有效果的招式以及闪避率高的对手，变得能够打中。"
     },
     "ominous-wind": {
       "name": "奇异之风",
-      "shortDesc": "有几率将使用者的所有属性提升一级。"
+      "shortDesc": "突然刮起毛骨悚然的暴风攻击对手。有时会提高自己的全部能力。"
     },
     "order-up": {
       "name": "上菜",
-      "shortDesc": "使用者以优雅的姿态进行攻击。如果用户嘴里含着龙切，这一举动会根据龙切的形态提升用户的一项统计数据。"
+      "shortDesc": "The user attacks with elegant poise. If the user has a Tatsugiri in its mouth, this move boosts one of the user's stats based on the Tatsugiri's form."
     },
     "origin-pulse": {
       "name": "根源波动",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用无数青白色且闪耀的光线攻击对手。"
     },
     "outrage": {
       "name": "逆鳞",
-      "shortDesc": "每回合都会命中 2-3 回合，然后迷惑使用者。"
+      "shortDesc": "在２～３回合内，乱打一气地进行攻击。大闹一番后自己会陷入混乱。"
     },
     "overdrive": {
       "name": "破音",
-      "shortDesc": "使用者通过弹奏吉他或低音吉他来攻击敌对的宝可梦，引起巨大的回声和强烈的振动。"
+      "shortDesc": "奏响吉他和贝斯，释放出发出巨响的剧烈震动攻击对手。"
     },
     "overheat": {
       "name": "过热",
-      "shortDesc": "造成伤害后，使使用者的特攻降低两级。"
+      "shortDesc": "使出全部力量攻击对手。使用之后会因为反作用力，自己的特攻大幅降低。"
     },
     "pain-split": {
       "name": "分担痛楚",
-      "shortDesc": "平均用户和目标的当前 HP。"
+      "shortDesc": "将自己的ＨＰ和对手的ＨＰ相加，然后自己和对手友好地平分。"
     },
     "parabolic-charge": {
       "name": "抛物面充电",
-      "shortDesc": "治疗用户的伤害是对所有目标造成的总伤害的一半。"
+      "shortDesc": "给周围全体宝可梦造成伤害。可以回复给予伤害的一半HP。"
     },
     "parting-shot": {
       "name": "抛下狠话",
-      "shortDesc": "所有目标的攻击力和特攻力降低一级。使用户退出。"
+      "shortDesc": "抛下狠话威吓对手，降低攻击和特攻后，和后备宝可梦进行替换。"
     },
     "pay-day": {
       "name": "聚宝功",
-      "shortDesc": "将价值五倍于用户等级的金钱撒在地上。"
+      "shortDesc": "向对手的身体投掷小金币进行攻击。战斗后可以拿到钱。"
     },
     "payback": {
       "name": "以牙还牙",
-      "shortDesc": "如果目标本回合已经移动，则力量加倍。"
+      "shortDesc": "蓄力攻击。如果能在对手之后攻击，招式的威力会变成２倍。"
     },
     "peck": {
       "name": "啄",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用尖锐的喙或角刺向对手进行攻击。"
     },
     "perish-song": {
       "name": "灭亡之歌",
-      "shortDesc": "三回合后用户和目标都晕倒了。"
+      "shortDesc": "倾听歌声的宝可梦经过３回合陷入濒死。替换后效果消失。"
     },
     "petal-blizzard": {
       "name": "落英缤纷",
-      "shortDesc": "造成常规伤害。"
+      "shortDesc": "猛烈地刮起飞雪般的落花，攻击周围所有的宝可梦，并给予伤害。"
     },
     "petal-dance": {
       "name": "花瓣舞",
-      "shortDesc": "每回合都会命中 2-3 回合，然后迷惑使用者。"
+      "shortDesc": "在２～３回合内，散落花瓣攻击对手。之后自己会陷入混乱。"
     },
     "phantom-force": {
       "name": "潜灵奇袭",
-      "shortDesc": "使用者消失，躲避所有攻击，并在下一回合命中。通过保护和检测命中。"
+      "shortDesc": "第１回合消失在某处，第２回合攻击对手。可以无视守护进行攻击。"
     },
     "photon-geyser": {
       "name": "光子喷涌",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用光柱来进行攻击。比较自己的攻击和特攻，用数值相对较高的一项给予对方伤害。"
     },
     "pika-papow": {
       "name": "闪闪雷光",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "皮卡丘越喜欢训练家，电击的威力就越强。攻击必定会命中。"
     },
     "pin-missile": {
       "name": "飞弹针",
-      "shortDesc": "一回合击中2-5次。"
+      "shortDesc": "向对手发射锐针进行攻击。连续攻击２～５次。"
     },
     "plasma-fists": {
       "name": "等离子闪电拳",
-      "shortDesc": "造成伤害后，在回合剩余时间内所有普通属性招式变为电属性。"
+      "shortDesc": "用覆盖着电流的拳头进行攻击。使一般属性的招式变成电属性。"
     },
     "play-nice": {
       "name": "和睦相处",
-      "shortDesc": "使目标的攻击力降低一级。"
+      "shortDesc": "和对手和睦相处，使其失去战斗的气力，从而降低对手的攻击。"
     },
     "play-rough": {
       "name": "嬉闹",
-      "shortDesc": "有一定几率降低目标攻击一级。"
+      "shortDesc": "与对手嬉闹并攻击。有时会降低对手的攻击。"
     },
     "pluck": {
       "name": "啄食",
-      "shortDesc": "如果目标有浆果，造成双倍伤害并使用浆果。"
+      "shortDesc": "用喙进行攻击。当对手携带树果时，可以食用并获得其效果。"
     },
     "poison-fang": {
       "name": "剧毒牙",
-      "shortDesc": "有几率使目标严重中毒。"
+      "shortDesc": "用有毒的牙齿咬住对手进行攻击。有时会使对手中剧毒。"
     },
     "poison-gas": {
       "name": "毒瓦斯",
-      "shortDesc": "使目标中毒。"
+      "shortDesc": "将毒瓦斯吹到对手的脸上，从而让对手陷入中毒状态。"
     },
     "poison-jab": {
       "name": "毒击",
-      "shortDesc": "有几率使目标中毒。"
+      "shortDesc": "用带毒的触手或手臂刺入对手。有时会让对手陷入中毒状态。"
     },
     "poison-powder": {
       "name": "毒粉",
-      "shortDesc": "使目标中毒。"
+      "shortDesc": "撒出毒粉，从而让对手陷入中毒状态。"
     },
     "poison-sting": {
       "name": "毒针",
-      "shortDesc": "有几率使目标中毒。"
+      "shortDesc": "将有毒的针刺入对手进行攻击。有时会让对手陷入中毒状态。"
     },
     "poison-tail": {
       "name": "毒尾",
-      "shortDesc": "暴击几率增加，并且有几率使目标中毒。"
+      "shortDesc": "用尾巴拍打。有时会让对手陷入中毒状态，也容易击中要害。"
     },
     "pollen-puff": {
       "name": "花粉团",
-      "shortDesc": "伤害对手，但治疗盟友最大生命值的 50%。"
+      "shortDesc": "对敌人使用是会爆炸的团子。对我方使用则是给予回复的团子。"
     },
     "poltergeist": {
       "name": "灵骚",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "操纵对手的持有物进行攻击。当对手没有携带道具时，使出此招式时便会失败。"
     },
     "population-bomb": {
       "name": "鼠数儿",
-      "shortDesc": "使用者的同伴成群结队地进行连击，连续攻击目标1到10次。"
+      "shortDesc": "The user’s fellows gather in droves to perform a combo attack that hits the target one to ten times in a row."
     },
     "pounce": {
       "name": "虫扑",
-      "shortDesc": "用户通过猛扑目标进行攻击。这也会降低目标的速度统计数据。"
+      "shortDesc": "The user attacks by pouncing on the target. This also lowers the target's Speed stat."
     },
     "pound": {
       "name": "拍击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "使用长长的尾巴或手等拍打对手进行攻击。"
     },
     "powder": {
       "name": "粉尘",
-      "shortDesc": "如果目标本回合使用火系招式，则会爆炸，造成其最大生命值 1/4 的伤害并阻止该招式。"
+      "shortDesc": "如果被撒到粉尘的对手使用火招式，则会爆炸并给予伤害。"
     },
     "powder-snow": {
       "name": "细雪",
-      "shortDesc": "有几率冻结目标。"
+      "shortDesc": "将冰冷的细雪吹向对手进行攻击。有时会让对手陷入冰冻状态。"
     },
     "power-gem": {
       "name": "力量宝石",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "发射如宝石般闪耀的光芒攻击对手。"
     },
     "power-shift": {
       "name": "力量转换",
-      "shortDesc": "用户交换其进攻和防守统计数据。"
+      "shortDesc": "The user swaps its offensive and defensive stats."
     },
     "power-split": {
       "name": "力量平分",
-      "shortDesc": "使目标的攻击力和特攻力平均。"
+      "shortDesc": "利用超能力将自己和对手的攻击和特攻相加，再进行平分。"
     },
     "power-swap": {
       "name": "力量互换",
-      "shortDesc": "用户与目标交换攻击和特殊攻击的变化。"
+      "shortDesc": "利用超能力互换自己和对手的攻击以及特攻的能力变化。"
     },
     "power-trick": {
       "name": "力量戏法",
-      "shortDesc": "用户交换攻击和防御。"
+      "shortDesc": "利用超能力交换自己的攻击和防御的力量。"
     },
     "power-trip": {
       "name": "嚣张",
-      "shortDesc": "用户的属性提升得越多，力量就越高，最多可达31倍。"
+      "shortDesc": "耀武扬威地攻击对手，自己的能力提高得越多，威力就越大。"
     },
     "power-up-punch": {
       "name": "增强拳",
-      "shortDesc": "造成伤害后，使使用者的攻击力提升一级。"
+      "shortDesc": "通过反复击打对手，使自己的拳头慢慢变硬。打中对手攻击就会提高。"
     },
     "power-whip": {
       "name": "强力鞭打",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "激烈地挥舞青藤或触手摔打对手进行攻击。"
     },
     "precipice-blades": {
       "name": "断崖之剑",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "将大地的力量变化为利刃攻击对手。"
     },
     "present": {
       "name": "礼物",
-      "shortDesc": "随机造成40至120点伤害或治疗目标最大生命值1/4。"
+      "shortDesc": "递给对手设有圈套的盒子进行攻击。也有可能回复对手ＨＰ。"
     },
     "prismatic-laser": {
       "name": "棱镜镭射",
-      "shortDesc": "用户放弃下一轮充值。"
+      "shortDesc": "用棱镜的力量发射强烈光线。下一回合自己将无法动弹。"
     },
     "protect": {
       "name": "守住",
-      "shortDesc": "防止本回合任何动作击中用户。"
+      "shortDesc": "完全抵挡对手的攻击。连续使出则容易失败。"
     },
     "psybeam": {
       "name": "幻象光线",
-      "shortDesc": "有一定几率迷惑目标。"
+      "shortDesc": "向对手发射神奇的光线进行攻击。有时会使对手混乱。"
     },
     "psyblade": {
       "name": "精神剑",
-      "shortDesc": "使用者用空灵之刃撕裂目标。如果用户处于电动地形上，此招式的威力会增加 50%。"
+      "shortDesc": "The user rends the target with an ethereal blade. This move's power is boosted by 50 percent if the user is on Electric Terrain."
     },
     "psych-up": {
       "name": "自我暗示",
-      "shortDesc": "放弃用户的统计数据更改并复制目标的统计数据更改。"
+      "shortDesc": "向自己施以自我暗示，将能力变化的状态变得和对手一样。"
     },
     "psychic": {
       "name": "精神强念",
-      "shortDesc": "有一定几率降低目标特防一级。"
+      "shortDesc": "向对手发送强大的念力进行攻击。有时会降低对手的特防。"
     },
     "psychic-fangs": {
       "name": "精神之牙",
-      "shortDesc": "摧毁反射屏和光屏。"
+      "shortDesc": "利用精神力量咬住对手进行攻击。还可以破坏光墙和反射壁等。"
     },
     "psychic-noise": {
       "name": "精神噪音",
-      "shortDesc": "使用者用令人不快的声波攻击目标。在两回合内，目标无法通过移动、技能或持有的物品恢复生命值。"
+      "shortDesc": "The user attacks the target with unpleasant sound waves. For two turns, the target is prevented from recovering HP through moves, Abilities, or held items."
     },
     "psychic-terrain": {
       "name": "精神场地",
-      "shortDesc": "保护地面上的宝可梦免受优先招式的伤害，并将其心灵招式的威力提高 50%。"
+      "shortDesc": "在５回合内，地面上的宝可梦不会受到先制招式的攻击。超能力属性的招式威力会提高。"
     },
     "psycho-boost": {
       "name": "精神突进",
-      "shortDesc": "造成伤害后，使使用者的特攻降低两级。"
+      "shortDesc": "使出全部力量攻击对手。使用之后会因为反作用力，自己的特攻大幅降低。"
     },
     "psycho-cut": {
       "name": "精神利刃",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "用实体化的心之利刃劈开对手。容易击中要害。"
     },
     "psycho-shift": {
       "name": "精神转移",
-      "shortDesc": "将用户的主要状态效果转移给目标。"
+      "shortDesc": "利用超能力施以暗示，从而将自己受到的异常状态转移给对手。"
     },
     "psyshield-bash": {
       "name": "屏障猛攻",
-      "shortDesc": "使用者将自己隐藏在灵能能量中，猛烈撞击目标。这也可能会提高用户的防御统计数据。"
+      "shortDesc": "Cloaking itself in psychic energy, the user slams into the target. This may also raise the user’s defensive stats."
     },
     "psyshock": {
       "name": "精神冲击",
-      "shortDesc": "根据目标的防御而非特防造成伤害。"
+      "shortDesc": "将神奇的念波实体化攻击对手。给予物理伤害。"
     },
     "psystrike": {
       "name": "精神击破",
-      "shortDesc": "根据目标的防御而非特防造成伤害。"
+      "shortDesc": "将神奇的念波实体化攻击对手。给予物理伤害。"
     },
     "psywave": {
       "name": "精神波",
-      "shortDesc": "根据用户的等级造成不同的伤害。"
+      "shortDesc": "向对手发射神奇的念波进行攻击。每次使用，伤害都会改变。"
     },
     "pulverizing-pancake": {
       "name": "认真起来大爆击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量使得认真起来的卡比兽跃动巨大身躯，全力向对手发动袭击。"
     },
     "punishment": {
       "name": "惩罚",
-      "shortDesc": "针对属性提升较多的目标，力量会增加，最多可达 200。"
+      "shortDesc": "根据能力变化，对手提高的力量越大，招式的威力越大。"
     },
     "purify": {
       "name": "净化",
-      "shortDesc": "治愈目标的严重状态异常，并治愈使用者最大生命值的 50%。"
+      "shortDesc": "治愈对手的异常状态。治愈后可以回复自己的ＨＰ。"
     },
     "pursuit": {
       "name": "追打",
-      "shortDesc": "对试图切换的宝可梦具有双倍力量，并且可以击中它们。"
+      "shortDesc": "当对手替换宝可梦上场时使出此招式的话，能够以２倍的威力进行攻击。"
     },
     "pyro-ball": {
       "name": "火焰球",
-      "shortDesc": "有几率燃烧目标。"
+      "shortDesc": "点燃小石子，形成火球攻击对手。有时会使对手陷入灼伤状态。"
     },
     "quash": {
       "name": "延后",
-      "shortDesc": "使目标本回合最后行动。"
+      "shortDesc": "压制对手，从而将其行动顺序放到最后。"
     },
     "quick-attack": {
       "name": "电光一闪",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "以迅雷不及掩耳之势扑向对手。必定能够先制攻击。"
     },
     "quick-guard": {
       "name": "快速防守",
-      "shortDesc": "本回合阻止任何优先动作击中友方宝可梦。"
+      "shortDesc": "守护自己和同伴，以防对手的先制攻击。"
     },
     "quiver-dance": {
       "name": "蝶舞",
-      "shortDesc": "使使用者的特攻、特防、速度各提升一级。"
+      "shortDesc": "轻巧地跳起神秘而又美丽的舞蹈。提高自己的特攻、特防和速度。"
     },
     "rage": {
       "name": "愤怒",
-      "shortDesc": "如果使用者在使用此招式后被击中，其攻击力会上升一级。"
+      "shortDesc": "如果在使出招式后受到攻击的话，会因愤怒的力量而提高攻击。"
     },
     "rage-fist": {
       "name": "愤怒之拳",
-      "shortDesc": "使用者将愤怒转化为能量进行攻击。使用者受到攻击的次数越多，招式的威力就越大。"
+      "shortDesc": "The user converts its rage into energy to attack. The more times the user has been hit by attacks, the greater the move's power."
     },
     "rage-powder": {
       "name": "愤怒粉",
-      "shortDesc": "本回合将目标的单体效果重定向至使用者。"
+      "shortDesc": "将令人烦躁的粉末撒在自己身上，用以吸引对手的注意。使对手的攻击全部指向自己。"
     },
     "raging-bull": {
       "name": "怒牛",
-      "shortDesc": "用户像愤怒的公牛一样进行铲球。此动作的类型取决于用户的形式。它还可以打破障碍，例如光幕和反射。"
+      "shortDesc": "The user performs a tackle like a raging bull. This move's type depends on the user's form. It can also break barriers, such as Light Screen and Reflect."
     },
     "raging-fury": {
       "name": "大愤慨",
-      "shortDesc": "使用者狂暴并喷出恶毒火焰对目标造成伤害，然后专注于使用此招式。"
+      "shortDesc": "The user rampages and spews vicious flames to inflict damage on the target, then becomes fixated on using this move."
     },
     "rain-dance": {
       "name": "求雨",
-      "shortDesc": "将天气改为下雨五回合。"
+      "shortDesc": "在５回合内一直降雨，从而提高水属性的招式威力。火属性的招式威力则降低。"
     },
     "rapid-spin": {
       "name": "高速旋转",
-      "shortDesc": "使用户摆脱束缚动作，移除水蛭种子，并吹走尖刺。"
+      "shortDesc": "通过旋转来攻击对手。可以摆脱绑紧、紧束、寄生种子等招式。还能提高自己的速度。"
     },
     "razor-leaf": {
       "name": "飞叶快刀",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "飞出叶片，切斩对手进行攻击。容易击中要害。"
     },
     "razor-shell": {
       "name": "贝壳刃",
-      "shortDesc": "有一定几率降低目标防御一级。"
+      "shortDesc": "用锋利的贝壳切斩对手进行攻击。有时会降低对手的防御。"
     },
     "razor-wind": {
       "name": "旋风刀",
-      "shortDesc": "攻击前需要一回合冲锋。"
+      "shortDesc": "制造风之刃，于第２回合攻击对手。容易击中要害。"
     },
     "recover": {
       "name": "自我再生",
-      "shortDesc": "使使用者恢复最大生命值的一半。"
+      "shortDesc": "让细胞再生，从而回复自己最大ＨＰ的一半。"
     },
     "recycle": {
       "name": "回收利用",
-      "shortDesc": "用户恢复上次用完的物品。"
+      "shortDesc": "使战斗中已经消耗掉的自己的持有物再生，并可以再次使用。"
     },
     "reflect": {
       "name": "反射壁",
-      "shortDesc": "物理攻击造成的伤害减半。"
+      "shortDesc": "利用神奇的墙壁，在５回合内减弱从对手那里受到的物理攻击的伤害。"
     },
     "reflect-type": {
       "name": "镜面属性",
-      "shortDesc": "用户成为目标类型。"
+      "shortDesc": "反射对手的属性，让自己也变成一样的属性。"
     },
     "refresh": {
       "name": "焕然一新",
-      "shortDesc": "净化使用者的烧伤、麻痹或中毒。"
+      "shortDesc": "让身体休息，治愈自己身上所中的毒、麻痹、灼伤的异常状态。"
     },
     "relic-song": {
       "name": "古老之歌",
-      "shortDesc": "有机会使目标进入睡眠状态。"
+      "shortDesc": "让对手听古老之歌，打动对手的内心进行攻击。有时会让对手陷入睡眠状态。"
     },
     "rest": {
       "name": "睡觉",
-      "shortDesc": "使用者睡眠两回合并完全治愈自己。"
+      "shortDesc": "连续睡上２回合。回复自己的全部ＨＰ以及治愈所有异常状态。"
     },
     "retaliate": {
       "name": "报仇",
-      "shortDesc": "如果友方宝可梦上回合晕倒，则拥有双倍力量。"
+      "shortDesc": "为倒下的同伴报仇。如果上一回合有同伴倒下，威力就会提高。"
     },
     "return": {
       "name": "报恩",
-      "shortDesc": "力量随着幸福度的增加而增加，最高可达102。"
+      "shortDesc": "为了训练家而全力攻击对手。亲密度越高，威力越大。"
     },
     "revelation-dance": {
       "name": "觉醒之舞",
-      "shortDesc": "与用户具有相同的类型。"
+      "shortDesc": "全力跳舞进行攻击。此招式的属性将变得和自己的属性相同。"
     },
     "revenge": {
       "name": "报复",
-      "shortDesc": "如果使用者在本回合攻击前受到伤害，则造成双倍伤害。"
+      "shortDesc": "如果受到对手的招式攻击，就能给予对手２倍的伤害。"
     },
     "reversal": {
       "name": "起死回生",
-      "shortDesc": "当用户剩余生命值较少时造成更多伤害，最大伤害为 200。"
+      "shortDesc": "竭尽全力进行攻击。自己的ＨＰ越少，招式的威力越大。"
     },
     "revival-blessing": {
       "name": "复生祈祷",
-      "shortDesc": "使用者给予爱心祝福，使昏倒的队伍宝可梦复活，并恢复该宝可梦最大生命值的一半。"
+      "shortDesc": "The user bestows a loving blessing, reviving a party Pokémon that has fainted and restoring half that Pokémon's max HP."
     },
     "rising-voltage": {
       "name": "电力上升",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用从地面升腾而起的电击进行攻击。当对手处于电气场地上时，招式威力会变成２倍。"
     },
     "roar": {
       "name": "吼叫",
-      "shortDesc": "立即结束狂野战斗。强制训练师更换宝可梦。"
+      "shortDesc": "放走对手，强制拉后备宝可梦上场。如果对手为野生宝可梦，战斗将直接结束。"
     },
     "roar-of-time": {
       "name": "时光咆哮",
-      "shortDesc": "用户放弃下一轮充值。"
+      "shortDesc": "释放出扭曲时间般的强大力量攻击对手。下一回合自己将无法动弹。"
     },
     "rock-blast": {
       "name": "岩石爆击",
-      "shortDesc": "一回合击中2-5次。"
+      "shortDesc": "向对手发射坚硬的岩石进行攻击。连续攻击２～５次。"
     },
     "rock-climb": {
       "name": "攀岩",
-      "shortDesc": "有一定几率迷惑目标。"
+      "shortDesc": "用尽全力扑向对手进行攻击。有时会使对手混乱。"
     },
     "rock-polish": {
       "name": "岩石打磨",
-      "shortDesc": "将用户的速度提高两个阶段。"
+      "shortDesc": "打磨自己的身体，减少空气阻力。可以大幅提高自己的速度。"
     },
     "rock-slide": {
       "name": "岩崩",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "将大岩石猛烈地撞向对手进行攻击。有时会使对手畏缩。"
     },
     "rock-smash": {
       "name": "碎岩",
-      "shortDesc": "有一定几率降低目标防御一级。"
+      "shortDesc": "用拳头进行攻击。有时会降低对手的防御。"
     },
     "rock-throw": {
       "name": "落石",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "拿起小岩石，投掷对手进行攻击。"
     },
     "rock-tomb": {
       "name": "岩石封锁",
-      "shortDesc": "有一定几率使目标速度降低一级。"
+      "shortDesc": "投掷岩石进行攻击。封住对手的行动，从而降低速度。"
     },
     "rock-wrecker": {
       "name": "岩石炮",
-      "shortDesc": "用户放弃下一轮充值。"
+      "shortDesc": "向对手发射巨大的岩石进行攻击。下一回合自己将无法动弹。"
     },
     "role-play": {
       "name": "扮演",
-      "shortDesc": "复制目标的能力。"
+      "shortDesc": "扮演对手，让自己的特性变得和对手相同。"
     },
     "rolling-kick": {
       "name": "回旋踢",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "一边使身体快速旋转，一边踢飞对手进行攻击。有时会使对手畏缩。"
     },
     "rollout": {
       "name": "滚动",
-      "shortDesc": "每次连续使用，功率加倍，最多五圈。"
+      "shortDesc": "在５回合内连续滚动攻击对手。招式每次击中，威力就会提高。"
     },
     "roost": {
       "name": "羽栖",
-      "shortDesc": "使使用者恢复最大生命值的一半。"
+      "shortDesc": "降到地面，使身体休息。回复自己最大ＨＰ的一半。"
     },
     "rototiller": {
       "name": "耕地",
-      "shortDesc": "提高战斗中所有草系宝可梦的攻击力和特攻力。"
+      "shortDesc": "翻耕土地，使草木更容易成长。会提高草属性宝可梦的攻击和特攻。"
     },
     "round": {
       "name": "轮唱",
-      "shortDesc": "如果每回合使用多次，则拥有双倍力量。"
+      "shortDesc": "用歌声攻击对手。同伴还可以接着使出轮唱招式，威力也会提高。"
     },
     "ruination": {
       "name": "大灾难",
-      "shortDesc": "使用者召唤了毁灭性的灾难。这会将目标的生命值减少一半。"
+      "shortDesc": "The user summons a ruinous disaster. This cuts the target’s HP in half."
     },
     "sacred-fire": {
       "name": "神圣之火",
-      "shortDesc": "有几率燃烧目标。让冰冻的宝可梦自行解冻。"
+      "shortDesc": "用神秘的火焰烧尽对手进行攻击。有时会让对手陷入灼伤状态。"
     },
     "sacred-sword": {
       "name": "圣剑",
-      "shortDesc": "忽略目标的统计修正。"
+      "shortDesc": "用长角切斩对手进行攻击。无视对手的能力变化，直接给予伤害。"
     },
     "safeguard": {
       "name": "神秘守护",
-      "shortDesc": "保护使用者的领域免受重大状态异常和混乱的影响，持续五回合。"
+      "shortDesc": "在５回合内被神奇的力量守护，从而不会陷入异常状态。"
     },
     "salt-cure": {
       "name": "盐腌",
-      "shortDesc": "用户盐治疗目标，每回合造成伤害。钢铁和水利类型受这一举措的影响更为强烈。"
+      "shortDesc": "The user salt cures the target, inflicting damage every turn. Steel and Water types are more strongly affected by this move."
     },
     "sand-attack": {
       "name": "泼沙",
-      "shortDesc": "将目标精度降低一级。"
+      "shortDesc": "向对手脸上泼沙子，从而降低命中率。"
     },
     "sand-tomb": {
       "name": "流沙地狱",
-      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+      "shortDesc": "将对手困在铺天盖地的沙暴中，在４～５回合内进行攻击。"
     },
     "sandsear-storm": {
       "name": "热沙风暴",
-      "shortDesc": "使用者将目标包裹在狂风和灼热的沙子中进行攻击。这也会使目标被烧伤。"
+      "shortDesc": "The user attacks by wrapping the target in fierce winds and searingly hot sand. This also leaves the target with a burn."
     },
     "sandstorm": {
       "name": "沙暴",
-      "shortDesc": "将天气变为沙尘暴，持续五回合。"
+      "shortDesc": "在５回合内扬起沙暴，除岩石、地面和钢属性以外的宝可梦，都会受到伤害。岩石属性的特防还会提高。"
     },
     "sappy-seed": {
       "name": "茁茁轰炸",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "长出巨大的藤蔓，播撒种子进行攻击。种子每回合都会吸取对手的HP。"
     },
     "savage-spin-out--physical": {
       "name": "绝对捕食回旋斩",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量将吐出的丝线全力束缚对手。威力会根据原来的招式而改变。"
     },
     "savage-spin-out--special": {
       "name": "绝对捕食回旋斩",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "scald": {
       "name": "热水",
-      "shortDesc": "有几率燃烧目标。"
+      "shortDesc": "向对手喷射煮得翻滚的开水进行攻击。有时会让对手陷入灼伤状态。"
     },
     "scale-shot": {
       "name": "鳞射",
-      "shortDesc": "连续造成2~5次伤害后，速度提升一级，防御降低一级。"
+      "shortDesc": "发射鳞片进行攻击。连续攻击２～５次。速度会提高但防御会降低。"
     },
     "scary-face": {
       "name": "鬼面",
-      "shortDesc": "将目标的速度降低两级。"
+      "shortDesc": "用恐怖的表情瞪着对手，使其害怕，从而大幅降低对手的速度。"
     },
     "scorching-sands": {
       "name": "热沙大地",
-      "shortDesc": "有几率燃烧目标。"
+      "shortDesc": "将滚烫的沙子砸向对手进行攻击。有时会让对手陷入灼伤状态。"
     },
     "scratch": {
       "name": "抓",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用坚硬且无比锋利的爪子抓对手进行攻击。"
     },
     "screech": {
       "name": "刺耳声",
-      "shortDesc": "降低目标防御力两级。"
+      "shortDesc": "发出不由自主想要捂起耳朵的刺耳声，从而大幅降低对手的防御。"
     },
     "searing-shot": {
       "name": "火焰弹",
-      "shortDesc": "有几率燃烧目标。"
+      "shortDesc": "用熊熊烈火攻击自己周围所有的宝可梦。有时会陷入灼伤状态。"
     },
     "searing-sunraze-smash": {
       "name": "日光回旋下苍穹",
-      "shortDesc": "不会被技能打乱。"
+      "shortDesc": "得到Ｚ力量的索尔迦雷欧将全力进行攻击。可以无视对手的特性效果。"
     },
     "secret-power": {
       "name": "秘密之力",
-      "shortDesc": "有机会造成取决于地形的状态效果。"
+      "shortDesc": "根据使用场所不同，该招式的追加效果也会有所变化。"
     },
     "secret-sword": {
       "name": "神秘之剑",
-      "shortDesc": "根据目标的防御而非特防造成伤害。"
+      "shortDesc": "用长角切斩对手进行攻击。角上拥有的神奇力量将给予物理伤害。"
     },
     "seed-bomb": {
       "name": "种子炸弹",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "将外壳坚硬的大种子，从上方砸下攻击对手。"
     },
     "seed-flare": {
       "name": "种子闪光",
-      "shortDesc": "有一定几率降低目标特防两级。"
+      "shortDesc": "从身体里产生冲击波。有时会大幅降低对手的特防。"
     },
     "seismic-toss": {
       "name": "地球上投",
-      "shortDesc": "造成等同于使用者等级的伤害。"
+      "shortDesc": "利用引力将对手甩飞出去。给予对手和自己等级相同的伤害。"
     },
     "self-destruct": {
       "name": "自爆",
-      "shortDesc": "用户晕倒。"
+      "shortDesc": "引发爆炸，攻击自己周围所有的宝可梦。使用后陷入濒死。"
     },
     "shadow-ball": {
       "name": "暗影球",
-      "shortDesc": "有一定几率降低目标特防一级。"
+      "shortDesc": "投掷一团黑影进行攻击。有时会降低对手的特防。"
     },
     "shadow-bone": {
       "name": "暗影之骨",
-      "shortDesc": "有一定几率降低目标防御一级。"
+      "shortDesc": "用附有灵魂的骨头殴打对手进行攻击。有时会降低对手的防御。"
     },
     "shadow-claw": {
       "name": "暗影爪",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "以影子做成的锐爪，劈开对手。容易击中要害。"
     },
     "shadow-force": {
       "name": "暗影潜袭",
-      "shortDesc": "使用者消失，躲避所有攻击，并在下一回合命中。通过保护和检测命中。"
+      "shortDesc": "第１回合消失踪影，第２回合攻击对手。即使对手正受保护，也能击中。"
     },
     "shadow-punch": {
       "name": "暗影拳",
-      "shortDesc": "绝不会错过。"
+      "shortDesc": "使出混影之拳。攻击必定会命中。"
     },
     "shadow-sneak": {
       "name": "影子偷袭",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "伸长影子，从对手的背后进行攻击。必定能够先制攻击。"
     },
     "sharpen": {
       "name": "棱角化",
-      "shortDesc": "使使用者的攻击力提升一级。"
+      "shortDesc": "增加身体的角，变得棱棱角角，从而提高自己的攻击。"
     },
     "shattered-psyche--physical": {
       "name": "至高精神破坏波",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量操纵对手，全力使其感受到痛苦。威力会根据原来的招式而改变。"
     },
     "shattered-psyche--special": {
       "name": "至高精神破坏波",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "shed-tail": {
       "name": "断尾",
-      "shortDesc": "用户在与等待的队伍宝可梦交换位置之前，使用自己的生命值为自己创建一个替代品。"
+      "shortDesc": "The user creates a substitute for itself using its own HP before switching places with a party Pokémon in waiting."
     },
     "sheer-cold": {
       "name": "绝对零度",
-      "shortDesc": "造成一击KO。"
+      "shortDesc": "给对手一击濒死。如果是冰属性以外的宝可梦使用，就会难以打中。"
     },
     "shell-side-arm": {
       "name": "臂贝武器",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "从物理攻击和特殊攻击中选择可造成较多伤害的方式进行攻击。有时会让对手陷入中毒状态。"
     },
     "shell-smash": {
       "name": "破壳",
-      "shortDesc": "使用户的攻击力、特攻力、速度提升两级。降低自身防御和特防一级。"
+      "shortDesc": "打破外壳，降低自己的防御和特防，但大幅提高攻击、特攻和速度。"
     },
     "shell-trap": {
       "name": "陷阱甲壳",
-      "shortDesc": "仅当用户本回合被物理移动击中时才会造成伤害。"
+      "shortDesc": "设下甲壳陷阱。如果对手使出物理招式，陷阱就会爆炸并给予对手伤害。"
     },
     "shelter": {
       "name": "闭关",
-      "shortDesc": "使皮肤坚硬如铁盾，防御力提升。接下来的动作也变得更有可能错过。"
+      "shortDesc": "The user makes its skin as hard as an iron shield, raising its defensive stats. Incoming moves also become more likely to miss."
     },
     "shift-gear": {
       "name": "换档",
-      "shortDesc": "使使用者的攻击力提升一级，速度提升两级。"
+      "shortDesc": "转动齿轮，不仅提高自己的攻击，还会大幅提高速度。"
     },
     "shock-wave": {
       "name": "电击波",
-      "shortDesc": "绝不会错过。"
+      "shortDesc": "向对手快速发出电击。攻击必定会命中。"
     },
     "shore-up": {
       "name": "集沙",
-      "shortDesc": "治疗使用者最大生命值的 1/2，或沙尘暴期间的 2/3。"
+      "shortDesc": "回复自己最大ＨＰ的一半。在沙暴中回复得更多。"
     },
     "signal-beam": {
       "name": "信号光束",
-      "shortDesc": "有一定几率迷惑目标。"
+      "shortDesc": "发射神奇的光线进行攻击。有时会使对手混乱。"
     },
     "silk-trap": {
       "name": "线阱",
-      "shortDesc": "用户旋转一个丝绸陷阱，保护自己免受伤害，同时降低任何直接接触的攻击者的速度统计数据。"
+      "shortDesc": "The user spins a silken trap, protecting itself from damage while lowering the Speed stat of any attacker that makes direct contact."
     },
     "silver-wind": {
       "name": "银色旋风",
-      "shortDesc": "有几率将使用者的所有属性提升一级。"
+      "shortDesc": "在风中掺入鳞粉攻击对手。有时会提高自己的全部能力。"
     },
     "simple-beam": {
       "name": "单纯光束",
-      "shortDesc": "将目标的能力更改为简单。"
+      "shortDesc": "向对手发送谜之念波。接收到念波的对手，其特性会变为单纯。"
     },
     "sing": {
       "name": "唱歌",
-      "shortDesc": "让目标进入睡眠状态。"
+      "shortDesc": "让对手听舒适、美妙的歌声，从而陷入睡眠状态。"
     },
     "sinister-arrow-raid": {
       "name": "遮天蔽日暗影箭",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量制造出无数箭的狙射树枭将全力射穿对手进行攻击。"
     },
     "sizzly-slide": {
       "name": "熊熊火爆",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用燃起大火的身体猛烈地冲撞对手。让对手陷入灼伤状态。"
     },
     "sketch": {
       "name": "写生",
-      "shortDesc": "永久成为目标最后使用的招式。"
+      "shortDesc": "将对手使用的招式变成自己的招式。使用１次后写生消失。"
     },
     "skill-swap": {
       "name": "特性互换",
-      "shortDesc": "用户和目标交换能力。"
+      "shortDesc": "利用超能力互换自己和对手的特性。"
     },
     "skitter-smack": {
       "name": "爬击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "从对手背后爬近后进行攻击。会降低对手的特攻。"
     },
     "skull-bash": {
       "name": "火箭头锤",
-      "shortDesc": "使使用者的防御力提升一级。用户在攻击前蓄力一回合。"
+      "shortDesc": "第１回合把头缩进去，从而提高防御。第２回合攻击对手。"
     },
     "sky-attack": {
       "name": "神鸟猛击",
-      "shortDesc": "用户在攻击前蓄力一回合。有一定几率使目标退缩。"
+      "shortDesc": "第２回合攻击对手。偶尔使对手畏缩。也容易击中要害。"
     },
     "sky-drop": {
       "name": "自由落体",
-      "shortDesc": "将目标带到空中，躲避对任一目标的所有攻击，并在下一回合将其掉落。"
+      "shortDesc": "第１回合将对手带到空中，第２回合将其摔下进行攻击。被带到空中的对手不能动弹。"
     },
     "sky-uppercut": {
       "name": "冲天拳",
-      "shortDesc": "造成常规伤害，并能击中弹跳和飞行用户。"
+      "shortDesc": "用冲向天空般高高的上勾拳顶起对手进行攻击。"
     },
     "slack-off": {
       "name": "偷懒",
-      "shortDesc": "使使用者恢复最大生命值的一半。"
+      "shortDesc": "偷懒休息。回复自己最大ＨＰ的一半。"
     },
     "slam": {
       "name": "摔打",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "使用长长的尾巴或藤蔓等摔打对手进行攻击。"
     },
     "slash": {
       "name": "劈开",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "用爪子或镰刀等劈开对手进行攻击。容易击中要害。"
     },
     "sleep-powder": {
       "name": "催眠粉",
-      "shortDesc": "让目标进入睡眠状态。"
+      "shortDesc": "撒出催眠粉，从而让对手陷入睡眠状态。"
     },
     "sleep-talk": {
       "name": "梦话",
-      "shortDesc": "随机使用用户的其他三个动作之一。仅当用户正在睡觉时才有效。"
+      "shortDesc": "从自己已学会的招式中任意使出１个。只能在自己睡觉时使用。"
     },
     "sludge": {
       "name": "污泥攻击",
-      "shortDesc": "有几率使目标中毒。"
+      "shortDesc": "用污泥投掷对手进行攻击。有时会让对手陷入中毒状态。"
     },
     "sludge-bomb": {
       "name": "污泥炸弹",
-      "shortDesc": "有几率使目标中毒。"
+      "shortDesc": "用污泥投掷对手进行攻击。有时会让对手陷入中毒状态。"
     },
     "sludge-wave": {
       "name": "污泥波",
-      "shortDesc": "有几率使目标中毒。"
+      "shortDesc": "用污泥波攻击自己周围所有的宝可梦。有时会陷入中毒状态。"
     },
     "smack-down": {
       "name": "击落",
-      "shortDesc": "移除对地面伤害的任何免疫力。"
+      "shortDesc": "扔石头或炮弹，攻击飞行的对手。对手会被击落，掉到地面。"
     },
     "smart-strike": {
       "name": "修长之角",
-      "shortDesc": "绝不会错过。"
+      "shortDesc": "用尖尖的角刺入对手进行攻击。攻击必定会命中。"
     },
     "smelling-salts": {
       "name": "清醒",
-      "shortDesc": "如果目标处于麻痹状态，则造成双倍伤害并治愈麻痹状态。"
+      "shortDesc": "对于麻痹状态下的对手，威力会变成２倍。但相反对手的麻痹也会被治愈。"
     },
     "smog": {
       "name": "浊雾",
-      "shortDesc": "有几率使目标中毒。"
+      "shortDesc": "将肮脏的浓雾吹向对手进行攻击。有时会让对手陷入中毒状态。"
     },
     "smokescreen": {
       "name": "烟幕",
-      "shortDesc": "将目标精度降低一级。"
+      "shortDesc": "向对手喷出烟或墨汁等，从而降低对手的命中率。"
     },
     "snap-trap": {
       "name": "捕兽夹",
-      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+      "shortDesc": "使用捕兽夹，在４～５回合内，夹住对手进行攻击。"
     },
     "snarl": {
       "name": "大声咆哮",
-      "shortDesc": "有一定几率使目标特攻降低一级。"
+      "shortDesc": "没完没了地大声斥责，从而降低对手的特攻。"
     },
     "snatch": {
       "name": "抢夺",
-      "shortDesc": "窃取目标的移动（如果目标是自我瞄准的）。"
+      "shortDesc": "将对手打算使用的回复招式或能力变化招式夺为己用。"
     },
     "snipe-shot": {
       "name": "狙击",
-      "shortDesc": "在造成伤害后，在场地的用户一侧设置反射。"
+      "shortDesc": "能无视具有吸引对手招式效果的特性或招式的影响。可以向选定的对手进行攻击。"
     },
     "snore": {
       "name": "打鼾",
-      "shortDesc": "有一定几率使目标退缩。仅当用户正在睡觉时才有效。"
+      "shortDesc": "在自己睡觉时，发出噪音进行攻击。有时会使对手畏缩。"
     },
     "snowscape": {
       "name": "雪景",
-      "shortDesc": "使用者召唤一场持续五回合的暴风雪。这会提高冰系类型的防御统计数据。"
+      "shortDesc": "The user summons a snowstorm lasting five turns. This boosts the Defense stats of Ice types."
     },
     "soak": {
       "name": "浸水",
-      "shortDesc": "将目标类型更改为水。"
+      "shortDesc": "将大量的水泼向对手，从而使其变成水属性。"
     },
     "soft-boiled": {
       "name": "生蛋",
-      "shortDesc": "使使用者恢复最大生命值的一半。"
+      "shortDesc": "回复自己最大ＨＰ的一半。"
     },
     "solar-beam": {
       "name": "日光束",
-      "shortDesc": "攻击前需要一回合冲锋。"
+      "shortDesc": "第１回合收集满满的日光，第２回合发射光束进行攻击。"
     },
     "solar-blade": {
       "name": "日光刃",
-      "shortDesc": "攻击前需要一回合冲锋。"
+      "shortDesc": "第１回合收集满满的日光，第２回合将此力量集中在剑上进行攻击。"
     },
     "sonic-boom": {
       "name": "音爆",
-      "shortDesc": "造成正好 20 点伤害。"
+      "shortDesc": "将冲击波撞向对手进行攻击。必定会给予20的伤害。"
     },
     "soul-stealing-7-star-strike": {
       "name": "七星夺魂腿",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "得到Ｚ力量的玛夏多将全力使出拳头和脚踢的连续招式叩打对手。"
     },
     "spacial-rend": {
       "name": "亚空裂斩",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "将对手连同周围的空间一起撕裂并给予伤害。容易击中要害。"
     },
     "spark": {
       "name": "电光",
-      "shortDesc": "有几率使目标瘫痪。"
+      "shortDesc": "让电流覆盖全身，猛撞向对手进行攻击。有时会让对手陷入麻痹状态。"
     },
     "sparkling-aria": {
       "name": "泡影的咏叹调",
-      "shortDesc": "治疗烧伤目标。"
+      "shortDesc": "随着唱歌会放出很多气球。受到此招式攻击时，灼伤会被治愈。"
     },
     "sparkly-swirl": {
       "name": "亮亮风暴",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "利用芬芳刺鼻的龙卷风吞噬对方。能治愈我方宝可梦的异常状态。"
     },
     "spectral-thief": {
       "name": "暗影偷盗",
-      "shortDesc": "窃取目标的属性提升，然后造成伤害。"
+      "shortDesc": "潜入对手的影子进行攻击。会夺取对手的能力提升。"
     },
     "speed-swap": {
       "name": "速度互换",
-      "shortDesc": "将用户的速度与目标的速度交换。"
+      "shortDesc": "将对手和自己的速度进行互换。"
     },
     "spicy-extract": {
       "name": "辣椒精华",
-      "shortDesc": "使用者发出令人难以置信的辛辣提取物，大幅提升目标的攻击统计数据并大幅降低目标的防御统计数据。"
+      "shortDesc": "The user emits an incredibly spicy extract, sharply boosting the target's Attack stat and harshly lowering the target's Defense stat."
     },
     "spider-web": {
       "name": "蛛网",
-      "shortDesc": "阻止目标离开战斗。"
+      "shortDesc": "将黏糊糊的细丝一层一层缠住对手，使其不能从战斗中逃走。"
     },
     "spike-cannon": {
       "name": "尖刺加农炮",
-      "shortDesc": "一回合击中2-5次。"
+      "shortDesc": "向对手发射锐针进行攻击。连续攻击２～５次。"
     },
     "spikes": {
       "name": "撒菱",
-      "shortDesc": "散布尖刺，伤害切换过来的对方宝可梦。"
+      "shortDesc": "在对手的脚下扔撒菱。对替换出场的对手的宝可梦给予伤害。"
     },
     "spiky-shield": {
       "name": "尖刺防守",
-      "shortDesc": "格挡伤害性攻击并对攻击宝可梦造成最大生命值 1/8 的伤害。"
+      "shortDesc": "防住对手攻击的同时，削减接触到自己的对手的体力。"
     },
     "spin-out": {
       "name": "疾速转轮",
-      "shortDesc": "使用者通过拉紧双腿来猛烈旋转，对目标造成伤害。这也会严重降低用户的速度统计数据。"
+      "shortDesc": "The user spins furiously by straining its legs, inflicting damage on the target. This also harshly lowers the user's Speed stat."
     },
     "spirit-break": {
       "name": "灵魂冲击",
-      "shortDesc": "有一定几率使目标特攻降低一级。"
+      "shortDesc": "用足以让对手一蹶不振的气势进行攻击。会降低对手的特攻。"
     },
     "spirit-shackle": {
       "name": "缝影",
-      "shortDesc": "困住目标。"
+      "shortDesc": "攻击的同时，缝住对手的影子，使其无法逃走。"
     },
     "spit-up": {
       "name": "喷出",
-      "shortDesc": "力量是储存能量的100倍。"
+      "shortDesc": "将积蓄的力量撞向对手进行攻击。积蓄得越多，威力越大。"
     },
     "spite": {
       "name": "怨恨",
-      "shortDesc": "使目标最后使用的招式的PP降低4。"
+      "shortDesc": "对对手最后使用的招式怀有怨恨，减少４ＰＰ该招式。"
     },
     "splash": {
       "name": "跃起",
-      "shortDesc": "不执行任何操作。"
+      "shortDesc": "也不攻击只是一蹦一蹦地跳，什么都不会发生……"
     },
     "splintered-stormshards": {
       "name": "狼啸石牙飓风暴",
-      "shortDesc": "造成伤害并移除战场上存在的任何地形。"
+      "shortDesc": "得到Ｚ力量的鬃岩狼人将全力进行攻击。而且会消除场地状态。"
     },
     "splishy-splash": {
       "name": "滔滔冲浪",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "往巨浪中注入电能后冲撞对手进行攻击。有时会让对手陷入麻痹状态。"
     },
     "spore": {
       "name": "蘑菇孢子",
-      "shortDesc": "让目标进入睡眠状态。"
+      "shortDesc": "沙沙沙地撒满具有催眠效果的孢子，从而让对手陷入睡眠状态。"
     },
     "spotlight": {
       "name": "聚光灯",
-      "shortDesc": "迫使目标的对手在回合剩余时间内瞄准目标。"
+      "shortDesc": "给宝可梦打上聚光灯，该回合只能瞄准该宝可梦。"
     },
     "springtide-storm": {
       "name": "阳春风暴",
-      "shortDesc": "使用者将目标包裹在充满爱与恨的狂风中进行攻击。此招式的附加效果取决于使用者的形态。"
+      "shortDesc": "The user attacks by wrapping the target in fierce winds brimming with love and hate. This move’s additional effects depend on the user’s form."
     },
     "stealth-rock": {
       "name": "隐形岩",
-      "shortDesc": "当对手的宝可梦切换时造成伤害。"
+      "shortDesc": "将无数岩石悬浮在对手的周围，从而对替换出场的对手的宝可梦给予伤害。"
     },
     "steam-eruption": {
       "name": "蒸汽爆炸",
-      "shortDesc": "有几率燃烧目标。"
+      "shortDesc": "将滚烫的蒸汽喷向对手。有时会让对手灼伤。"
     },
     "steamroller": {
       "name": "疯狂滚压",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "旋转揉成团的身体压扁对手。有时会使对手畏缩。"
     },
     "steel-beam": {
       "name": "铁蹄光线",
-      "shortDesc": "造成伤害，使用者受到最大生命值一半的伤害，向上舍入。"
+      "shortDesc": "将从全身聚集的钢铁化为光束，激烈地发射出去。自己也会受到伤害。"
     },
     "steel-roller": {
       "name": "铁滚轮",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "在破坏场地的同时攻击对手。如果脚下没有任何场地状态存在，使出此招式时便会失败。"
     },
     "steel-wing": {
       "name": "钢翼",
-      "shortDesc": "有一定几率提升自身防御一级。"
+      "shortDesc": "用坚硬的翅膀敲打对手进行攻击。有时会提高自己的防御。"
     },
     "sticky-web": {
       "name": "黏黏网",
-      "shortDesc": "覆盖对方场地，切换时降低对方速度一级。"
+      "shortDesc": "在对手周围围上黏黏的网，降低替换出场的对手的速度。"
     },
     "stockpile": {
       "name": "蓄力",
-      "shortDesc": "储存能量最多三倍，用于吐出和吞咽。"
+      "shortDesc": "积蓄力量，提高自己的防御和特防。最多积蓄３次。"
     },
     "stoked-sparksurfer": {
       "name": "驾雷驭电戏冲浪",
-      "shortDesc": "有几率使目标瘫痪。"
+      "shortDesc": "得到Ｚ力量的阿罗拉地区的雷丘将全力进行攻击。从而让对手陷入麻痹状态。"
     },
     "stomp": {
       "name": "踩踏",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "用大脚踩踏对手进行攻击。有时会使对手畏缩。"
     },
     "stomping-tantrum": {
       "name": "跺脚",
-      "shortDesc": "如果用户最后一步失败，则拥有双倍力量。"
+      "shortDesc": "化悔恨为力量进行攻击。如果上一回合招式没有打中，威力就会翻倍。"
     },
     "stone-axe": {
       "name": "岩斧",
-      "shortDesc": "使用者向目标挥舞石斧，旨在造成致命一击。这次攻击留下的石碎片会继续对目标造成数回合的伤害。"
+      "shortDesc": "The user swings its stone axes at the target, aiming to land a critical hit. Stone splinters left behind by this attack continue to damage the target for several turns."
     },
     "stone-edge": {
       "name": "尖石攻击",
-      "shortDesc": "暴击几率增加。"
+      "shortDesc": "用尖尖的岩石刺入对手进行攻击。容易击中要害。"
     },
     "stored-power": {
       "name": "辅助力量",
-      "shortDesc": "用户的属性提升得越多，力量就越高，最多可达31倍。"
+      "shortDesc": "用蓄积起来的力量攻击对手。自己的能力提高得越多，威力就越大。"
     },
     "storm-throw": {
       "name": "山岚摔",
-      "shortDesc": "总是能获得暴击。"
+      "shortDesc": "向对手使出强烈的一击。攻击必定会击中要害。"
     },
     "strange-steam": {
       "name": "神奇蒸汽",
-      "shortDesc": "有一定几率迷惑目标。"
+      "shortDesc": "喷出烟雾攻击对手。有时会使对手混乱。"
     },
     "strength": {
       "name": "怪力",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "使出浑身力气殴打对手进行攻击。"
     },
     "strength-sap": {
       "name": "吸取力量",
-      "shortDesc": "治疗目标当前攻击力的数值，并降低目标攻击力一级。"
+      "shortDesc": "给自己回复和对手攻击力相同数值的ＨＰ，然后降低对手的攻击。"
     },
     "string-shot": {
       "name": "吐丝",
-      "shortDesc": "将目标的速度降低两级。"
+      "shortDesc": "用口中吐出的丝缠绕对手，从而大幅降低对手的速度。"
     },
     "struggle": {
       "name": "挣扎",
-      "shortDesc": "用户在后坐力中承受最大生命值的 1/4。"
+      "shortDesc": "当自己的ＰＰ耗尽时，努力挣扎攻击对手。自己也会受到少许伤害。"
     },
     "struggle-bug": {
       "name": "虫之抵抗",
-      "shortDesc": "有一定几率使目标特攻降低一级。"
+      "shortDesc": "抵抗并攻击对手。降低对手的特攻。"
     },
     "stuff-cheeks": {
       "name": "大快朵颐",
-      "shortDesc": "在造成伤害后治愈全队的主要状态效果。"
+      "shortDesc": "吃掉携带的树果，大幅提高防御。"
     },
     "stun-spore": {
       "name": "麻痹粉",
-      "shortDesc": "麻痹目标。"
+      "shortDesc": "撒出麻痹粉，从而让对手陷入麻痹状态。"
     },
     "submission": {
       "name": "地狱翻滚",
-      "shortDesc": "用户受到后坐力造成的伤害的 1/4。"
+      "shortDesc": "将对手连同自己一起摔向地面进行攻击。自己也会受到少许伤害。"
     },
     "substitute": {
       "name": "替身",
-      "shortDesc": "将用户最大生命值的 1/4 转移到玩偶上，保护用户免受进一步伤害或状态变化，直到玩偶损坏。"
+      "shortDesc": "削减少许自己的ＨＰ，制造分身。分身将成为自己的替身。"
     },
     "subzero-slammer--physical": {
       "name": "激狂大地万里冰",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量急剧降低气温，全力冰冻对手。威力会根据原来的招式而改变。"
     },
     "subzero-slammer--special": {
       "name": "激狂大地万里冰",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "sucker-punch": {
       "name": "突袭",
-      "shortDesc": "仅当目标即将使用伤害性招式时才有效。"
+      "shortDesc": "可以比对手先攻击。对手使出的招式如果不是攻击招式则会失败。"
     },
     "sunny-day": {
       "name": "大晴天",
-      "shortDesc": "将天气改为晴天五回合。"
+      "shortDesc": "在５回合内让日照变得强烈，从而提高火属性的招式威力。水属性的招式威力则降低。"
     },
     "sunsteel-strike": {
       "name": "流星闪冲",
-      "shortDesc": "不会被技能打乱。"
+      "shortDesc": "以流星般的气势猛撞对手。可以无视对手的特性进行攻击。"
     },
     "super-fang": {
       "name": "愤怒门牙",
-      "shortDesc": "对目标造成生命值一半的伤害。"
+      "shortDesc": "用锋利的门牙猛烈地咬住对手进行攻击。对手的ＨＰ减半。"
     },
     "supercell-slam": {
       "name": "闪电强袭",
-      "shortDesc": "使用者使身体带电并掉落到目标上以造成伤害。如果此动作未命中，则使用者会受到伤害。"
+      "shortDesc": "The user electrifies its body and drops onto the target to inflict damage. If this move misses, the user takes damage instead."
     },
     "superpower": {
       "name": "蛮力",
-      "shortDesc": "造成伤害后，使使用者的攻击力和防御力降低一级。"
+      "shortDesc": "发挥惊人的力量攻击对手。自己的攻击和防御会降低。"
     },
     "supersonic": {
       "name": "超音波",
-      "shortDesc": "迷惑目标。"
+      "shortDesc": "从身体发出特殊的音波，从而使对手混乱。"
     },
     "supersonic-skystrike--physical": {
       "name": "极速俯冲轰烈撞",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量猛烈地飞向天空，朝对手全力落下。威力会根据原来的招式而改变。"
     },
     "supersonic-skystrike--special": {
       "name": "极速俯冲轰烈撞",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "surf": {
       "name": "冲浪",
-      "shortDesc": "造成常规伤害并能击中潜水者。"
+      "shortDesc": "利用大浪攻击自己周围所有的宝可梦。"
     },
     "surging-strikes": {
       "name": "水流连打",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "将水之流派修炼至大成的仿若行云流水般的３次连击。必定会击中要害。"
     },
     "swagger": {
       "name": "虚张声势",
-      "shortDesc": "使目标攻击力提升两级并迷惑目标。"
+      "shortDesc": "激怒对手，使其混乱。因为愤怒，对手的攻击会大幅提高。"
     },
     "swallow": {
       "name": "吞下",
-      "shortDesc": "1个储备后恢复1/4生命值，2个储备后恢复1/2生命值，或3个储备后恢复全部生命值。"
+      "shortDesc": "将积蓄的力量吞下，从而回复自己的ＨＰ。积蓄得越多，回复越大。"
     },
     "sweet-kiss": {
       "name": "天使之吻",
-      "shortDesc": "迷惑目标。"
+      "shortDesc": "像天使般可爱地亲吻对手，从而使对手混乱。"
     },
     "sweet-scent": {
       "name": "甜甜香气",
-      "shortDesc": "使目标的闪避降低一级。"
+      "shortDesc": "用香气大幅降低对手的闪避率。"
     },
     "swift": {
       "name": "高速星星",
-      "shortDesc": "绝不会错过。"
+      "shortDesc": "发射星形的光攻击对手。攻击必定会命中。"
     },
     "switcheroo": {
       "name": "掉包",
-      "shortDesc": "用户和目标交换项目。"
+      "shortDesc": "用一闪而过的速度交换自己和对手的持有物。"
     },
     "swords-dance": {
       "name": "剑舞",
-      "shortDesc": "将用户的攻击力提高两个阶段。"
+      "shortDesc": "激烈地跳起战舞提高气势。大幅提高自己的攻击。"
     },
     "synchronoise": {
       "name": "同步干扰",
-      "shortDesc": "击中任何与用户共享类型的宝可梦。"
+      "shortDesc": "用神奇电波对周围所有和自己属性相同的宝可梦给予伤害。"
     },
     "synthesis": {
       "name": "光合作用",
-      "shortDesc": "治疗使用者；数量取决于天气。"
+      "shortDesc": "回复自己的ＨＰ。根据天气的不同，回复量也会有所变化。"
     },
     "syrup-bomb": {
       "name": "糖浆炸弹",
-      "shortDesc": "用户引发粘性糖果糖浆爆炸，覆盖目标并导致目标的速度统计数据每回合下降，持续三回合。"
+      "shortDesc": "The user sets off an explosion of sticky candy syrup, which coats the target and causes the target's Speed stat to drop each turn for three turns."
     },
     "tachyon-cutter": {
       "name": "迅子利刃",
-      "shortDesc": "用户通过连续两次向目标发射粒子刀片进行攻击。这次攻击绝不会失手。"
+      "shortDesc": "The user attacks by launching particle blades at the target twice in a row. This attack never misses."
     },
     "tackle": {
       "name": "撞击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用整个身体撞向对手进行攻击。"
     },
     "tail-glow": {
       "name": "萤火",
-      "shortDesc": "将使用者的特攻提升三级。"
+      "shortDesc": "凝视闪烁的光芒，集中自己的精神，从而巨幅提高特攻。"
     },
     "tail-slap": {
       "name": "扫尾拍打",
-      "shortDesc": "一回合击中2-5次。"
+      "shortDesc": "用坚硬的尾巴拍打对手进行攻击。连续攻击２～５次。"
     },
     "tail-whip": {
       "name": "摇尾巴",
-      "shortDesc": "降低目标防御一级。"
+      "shortDesc": "可爱地左右摇晃尾巴，诱使对手疏忽大意。会降低对手的防御。"
     },
     "tailwind": {
       "name": "顺风",
-      "shortDesc": "三回合内，友方宝可梦的速度加倍。"
+      "shortDesc": "刮起猛烈的旋风，在４回合内提高我方全员的速度。"
     },
     "take-down": {
       "name": "猛撞",
-      "shortDesc": "用户受到后坐力造成的伤害的 1/4。"
+      "shortDesc": "以惊人的气势撞向对手进行攻击。自己也会受到少许伤害。"
     },
     "take-heart": {
       "name": "勇气填充",
-      "shortDesc": "使用者精神振奋，治愈自身状态，提升攻防属性。"
+      "shortDesc": "The user lifts its spirits, healing its own status conditions and raising its offensive and defensive stats."
     },
     "tar-shot": {
       "name": "沥青射击",
-      "shortDesc": "用户将粘性焦油倒在目标上，降低目标的速度统计数据。目标对于火系招式的攻击力会变弱。"
+      "shortDesc": "泼洒黏糊糊的沥青，降低对手的速度，并且使对手的弱点变为火。"
     },
     "taunt": {
       "name": "挑衅",
-      "shortDesc": "在接下来的几个回合中，目标只能使用伤害性招式。"
+      "shortDesc": "使对手愤怒。在３回合内让对手只能使出给予伤害的招式。"
     },
     "tearful-look": {
       "name": "泪眼汪汪",
-      "shortDesc": "使目标的攻击力和特攻力降低一级。"
+      "shortDesc": "变得泪眼汪汪，让对手丧失斗志。从而降低对手的攻击和特攻。"
     },
     "teatime": {
       "name": "茶会",
-      "shortDesc": "用户与战斗中的所有宝可梦一起喝茶。每个宝可梦都会吃掉它持有的浆果。"
+      "shortDesc": "举办一场茶会，场上的所有宝可梦都会吃掉自己携带的树果。"
     },
     "techno-blast": {
       "name": "高科技光炮",
-      "shortDesc": "如果用户持有适当的板或驱动器，则造成的伤害将与其相匹配。"
+      "shortDesc": "向对手放出光弹。属性会根据自己携带的卡带不同而改变。"
     },
     "tectonic-rage--physical": {
       "name": "地隆啸天大终结",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量潜入地里最深处，全力撞上对手。威力会根据原来的招式而改变。"
     },
     "tectonic-rage--special": {
       "name": "地隆啸天大终结",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "teeter-dance": {
       "name": "摇晃舞",
-      "shortDesc": "迷惑目标。"
+      "shortDesc": "摇摇晃晃地跳起舞蹈，让自己周围的宝可梦陷入混乱状态。"
     },
     "telekinesis": {
       "name": "意念移物",
-      "shortDesc": "移动对目标的准确度为 100%，持续三回合。"
+      "shortDesc": "利用超能力使对手浮起来。在３回合内攻击会变得容易打中对手。"
     },
     "teleport": {
       "name": "瞬间移动",
-      "shortDesc": "立即结束狂野战斗。否则没有影响。"
+      "shortDesc": "当有后备宝可梦在时，如果使用就可以进行替换。野生的宝可梦会逃走。"
     },
     "temper-flare": {
       "name": "豁出去",
-      "shortDesc": "在绝望的刺激下，使用者攻击了目标。如果用户之前的动作失败，则该动作的威力加倍。"
+      "shortDesc": "Spurred by desperation, the user attacks the target. This move's power is doubled if the user's previous move failed."
     },
     "tera-blast": {
       "name": "太晶爆发",
-      "shortDesc": "如果用户已Terastallized，它会释放其Tera类型的能量。此动作使用攻击或 Sp 造成伤害。 Atk 统计数据 — 以用户的较高者为准。"
+      "shortDesc": "If the user has Terastallized, it unleashes energy of its Tera Type. This move inflicts damage using the Attack or Sp. Atk stat—whichever is higher for the user."
     },
     "tera-starstorm": {
       "name": "晶光星群",
-      "shortDesc": "使用者利用水晶的力量轰击并消灭目标。当特拉帕戈斯以恒星形态使用时，此招式会对所有敌方宝可梦造成伤害。"
+      "shortDesc": "With the power of its crystals, the user bombards and eliminates the target. When used by Terapagos in its Stellar Form, this move damages all opposing Pokémon."
     },
     "terrain-pulse": {
       "name": "大地波动",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "借助场地的力量进行攻击。视使出招式时场地状态不同，招式的属性和威力会有所变化。"
     },
     "thief": {
       "name": "小偷",
-      "shortDesc": "取得目标的物品。"
+      "shortDesc": "攻击的同时盗取道具。当自己携带道具时，不会去盗取。"
     },
     "thousand-arrows": {
       "name": "千箭齐发",
-      "shortDesc": "使目标接地，甚至击中飞行型或悬浮型宝可梦。"
+      "shortDesc": "可以击中浮在空中的宝可梦。空中的对手被击落后，会掉到地面。"
     },
     "thousand-waves": {
       "name": "千波激荡",
-      "shortDesc": "阻止目标离开战斗。"
+      "shortDesc": "从地面掀起波浪进行攻击。被掀入波浪中的对手，将无法从战斗中逃走。"
     },
     "thrash": {
       "name": "大闹一番",
-      "shortDesc": "每回合都会命中 2-3 回合，然后迷惑使用者。"
+      "shortDesc": "在２～３回合内，乱打一气地攻击对手。大闹一番后自己会陷入混乱。"
     },
     "throat-chop": {
       "name": "地狱突刺",
-      "shortDesc": "防止目标在两回合内使用基于声音的移动。"
+      "shortDesc": "受到此招式攻击的对手，会因为地狱般的痛苦，在２回合内，变得无法使出声音类招式。"
     },
     "thunder": {
       "name": "打雷",
-      "shortDesc": "有几率使目标瘫痪。"
+      "shortDesc": "向对手劈下暴雷进行攻击。有时会让对手陷入麻痹状态。"
     },
     "thunder-cage": {
       "name": "雷电囚笼",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "将对手困在电流四溅的囚笼中，在４～５回合内进行攻击。"
     },
     "thunder-fang": {
       "name": "雷电牙",
-      "shortDesc": "有一定几率使目标麻痹，也有一定几率使目标退缩。"
+      "shortDesc": "用蓄满电流的牙齿咬住对手。有时会使对手畏缩或陷入麻痹状态。"
     },
     "thunder-punch": {
       "name": "雷电拳",
-      "shortDesc": "有几率使目标瘫痪。"
+      "shortDesc": "用充满电流的拳头攻击对手。有时会让对手陷入麻痹状态。"
     },
     "thunder-shock": {
       "name": "电击",
-      "shortDesc": "有几率使目标瘫痪。"
+      "shortDesc": "发出电流刺激对手进行攻击。有时会让对手陷入麻痹状态。"
     },
     "thunder-wave": {
       "name": "电磁波",
-      "shortDesc": "麻痹目标。"
+      "shortDesc": "向对手发出微弱的电击，从而让对手陷入麻痹状态。"
     },
     "thunderbolt": {
       "name": "十万伏特",
-      "shortDesc": "有几率使目标瘫痪。"
+      "shortDesc": "向对手发出强力电击进行攻击。有时会让对手陷入麻痹状态。"
     },
     "thunderclap": {
       "name": "迅雷",
-      "shortDesc": "此招式使使用者能够先用电击进行攻击。如果目标没有准备好攻击，则此移动失败。"
+      "shortDesc": "This move enables the user to attack first with a jolt of electricity. This move fails if the target is not readying an attack."
     },
     "thunderous-kick": {
       "name": "雷鸣蹴击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "以雷电般的动作戏耍对手的同时使出脚踢。可降低对手的防御。"
     },
     "tickle": {
       "name": "挠痒",
-      "shortDesc": "降低目标攻击力和防御力一级。"
+      "shortDesc": "给对手挠痒，使其发笑，从而降低对手的攻击和防御。"
     },
     "tidy-up": {
       "name": "大扫除",
-      "shortDesc": "用户清理并移除尖刺、隐形岩石、粘网、有毒尖刺和替代物的效果。这也提高了用户的攻击和速度统计数据。"
+      "shortDesc": "The user tidies up and removes the effects of Spikes, Stealth Rock, Sticky Web, Toxic Spikes, and Substitute. This also boosts the user’s Attack and Speed stats."
     },
     "topsy-turvy": {
       "name": "颠倒",
-      "shortDesc": "反转目标的统计修正值。"
+      "shortDesc": "颠倒对手身上的所有能力变化，变成和原来相反的状态。"
     },
     "torch-song": {
       "name": "闪焰高歌",
-      "shortDesc": "使用者如同歌唱一般喷出熊熊火焰，将目标烧焦。这也提升了使用者的 Sp。攻击力统计。"
+      "shortDesc": "The user blows out raging flames as if singing a song, scorching the target. This also boosts the user's Sp. Atk stat."
     },
     "torment": {
       "name": "无理取闹",
-      "shortDesc": "防止目标连续两次使用相同的动作。"
+      "shortDesc": "向对手无理取闹，令其不能连续２次使出相同招式。"
     },
     "toxic": {
       "name": "剧毒",
-      "shortDesc": "使目标严重中毒，每回合造成更多伤害。"
+      "shortDesc": "让对手陷入剧毒状态。随着回合的推进，中毒伤害会增加。"
     },
     "toxic-spikes": {
       "name": "毒菱",
-      "shortDesc": "散布有毒的尖刺，使切换进来的对手宝可梦中毒。"
+      "shortDesc": "在对手的脚下撒毒菱。使对手替换出场的宝可梦中毒。"
     },
     "toxic-thread": {
       "name": "毒丝",
-      "shortDesc": "使目标中毒并降低其速度一级。"
+      "shortDesc": "将混有毒的丝吐向对手。使其中毒，从而降低对手的速度。"
     },
     "trailblaze": {
       "name": "起草",
-      "shortDesc": "使用者突然攻击，就像从高高的草丛中跳出来一样。用户灵活的脚步可以提高其速度统计数据。"
+      "shortDesc": "The user attacks suddenly as if leaping out from tall grass. The user's nimble footwork boosts its Speed stat."
     },
     "transform": {
       "name": "变身",
-      "shortDesc": "用户成为目标的复制体，直到目标离开战斗。"
+      "shortDesc": "变身成对手宝可梦的样子，能够使用和对手完全相同的招式。"
     },
     "tri-attack": {
       "name": "三重攻击",
-      "shortDesc": "有几率燃烧、冻结或麻痹目标。"
+      "shortDesc": "用３种光线进行攻击。有时会让对手陷入麻痹、灼伤或冰冻的状态。"
     },
     "trick": {
       "name": "戏法",
-      "shortDesc": "用户和目标交换项目。"
+      "shortDesc": "抓住对手的空隙，交换自己和对手的持有物。"
     },
     "trick-or-treat": {
       "name": "万圣夜",
-      "shortDesc": "将幽灵添加到目标类型中。"
+      "shortDesc": "邀请对手参加万圣夜。使对手被追加幽灵属性。"
     },
     "trick-room": {
       "name": "戏法空间",
-      "shortDesc": "五回合内，较慢的宝可梦会先于较快的宝可梦行动。"
+      "shortDesc": "制造出离奇的空间。在５回合内速度慢的宝可梦可以先行动。"
     },
     "triple-arrows": {
       "name": "三连箭",
-      "shortDesc": "使用者发出斧头踢击，然后发射三支箭。这增加了其未来攻击造成致命一击的几率，同时也降低了目标的防御统计数据。"
+      "shortDesc": "The user delivers an axe kick, then fires three arrows. This raises the chance of its future attacks landing critical hits and also lowers the target's defensive stats."
     },
     "triple-axel": {
       "name": "三旋击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "连续３次踢对手进行攻击。每踢中一次，威力就会提高。"
     },
     "triple-dive": {
       "name": "三连钻",
-      "shortDesc": "用户执行一次完美的三重潜水，连续三次溅起水花击中目标。"
+      "shortDesc": "The user performs a perfectly timed triple dive, hitting the target with splashes of water three times in a row."
     },
     "triple-kick": {
       "name": "三连踢",
-      "shortDesc": "攻击三次，每次攻击成功，威力增加100%。"
+      "shortDesc": "连续３次踢对手进行攻击。每踢中一次，威力就会提高。"
     },
     "trop-kick": {
       "name": "热带踢",
-      "shortDesc": "造成伤害后，目标攻击力降低一级。"
+      "shortDesc": "向对手使出来自南国的火热脚踢。从而降低对手的攻击。"
     },
     "trump-card": {
       "name": "王牌",
-      "shortDesc": "当该招式的PP较少时，力量会增加，最多可达200。"
+      "shortDesc": "王牌招式的剩余PP越少，招式的威力越大。"
     },
     "twin-beam": {
       "name": "双光束",
-      "shortDesc": "使用者从眼睛发射神秘光束来造成伤害。目标连续被击中两次。"
+      "shortDesc": "The user shoots mystical beams from its eyes to inflict damage. The target is hit twice in a row."
     },
     "twineedle": {
       "name": "双针",
-      "shortDesc": "在同一回合中击中两次。有一定几率使目标中毒。"
+      "shortDesc": "将２根针刺入对手，连续２次给予伤害。有时会让对手陷入中毒状态。"
     },
     "twinkle-tackle--physical": {
       "name": "可爱星星飞天撞",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "通过Ｚ力量制造魅惑空间，全力捉弄对手。威力会根据原来的招式而改变。"
     },
     "twinkle-tackle--special": {
       "name": "可爱星星飞天撞",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "ダミーデータ"
     },
     "twister": {
       "name": "龙卷风",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "兴起龙卷风，将对手卷入进行攻击。有时会使对手畏缩。"
     },
     "u-turn": {
       "name": "急速折返",
-      "shortDesc": "用户必须在攻击后退出。"
+      "shortDesc": "在攻击之后急速返回，和后备宝可梦进行替换。"
     },
     "upper-hand": {
       "name": "快手还击",
-      "shortDesc": "使用者对目标的移动做出反应并用手掌根部进行打击，使目标退缩。如果目标未准备好优先移动，则此移动失败。"
+      "shortDesc": "The user reacts to the target's movement and strikes with the heel of its palm, making the target flinch. This move fails if the target is not readying a priority move."
     },
     "uproar": {
       "name": "吵闹",
-      "shortDesc": "被迫使用此招数回合。宝可梦在那段时间无法入睡。"
+      "shortDesc": "在３回合内用骚乱攻击对手。在此期间谁都不能入眠。"
     },
     "v-create": {
       "name": "Ｖ热焰",
-      "shortDesc": "使使用者的防御、特防、速度各降低一级。"
+      "shortDesc": "从前额产生灼热的火焰，舍身撞击对手。防御、特防和速度会降低。"
     },
     "vacuum-wave": {
       "name": "真空波",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "挥动拳头，掀起真空波。必定能够先制攻击。"
     },
     "veevee-volley": {
       "name": "砰砰击破",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "伊布越喜欢训练家，冲撞的威力就越强。攻击必定会命中。"
     },
     "venom-drench": {
       "name": "毒液陷阱",
-      "shortDesc": "如果目标中毒，其攻击力、特攻力和速度都会降低一级。"
+      "shortDesc": "将特殊的毒液泼向对手。对处于中毒状态的对手，其攻击、特攻和速度都会降低。"
     },
     "venoshock": {
       "name": "毒液冲击",
-      "shortDesc": "如果目标中毒，则造成双倍伤害。"
+      "shortDesc": "将特殊的毒液泼向对手。对处于中毒状态的对手，威力会变成２倍。"
     },
     "vice-grip": {
       "name": "夹住",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "将对手从两侧夹住，给予伤害。"
     },
     "victory-dance": {
       "name": "胜利之舞",
-      "shortDesc": "用户跳起舞蹈迎来胜利。这会提高用户的进攻和防御统计数据，并使用户的动作造成的伤害增加 50%。"
+      "shortDesc": "The user performs a dance to usher in victory. This raises the user’s offensive and defensive stats and increases the damage dealt by the user’s moves by 50 percent."
     },
     "vine-whip": {
       "name": "藤鞭",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用如同鞭子般弯曲而细长的藤蔓摔打对手进行攻击。"
     },
     "vital-throw": {
       "name": "借力摔",
-      "shortDesc": "绝不会错过。"
+      "shortDesc": "会在对手之后进行攻击。但是自己的攻击必定会命中。"
     },
     "volt-switch": {
       "name": "伏特替换",
-      "shortDesc": "用户必须在攻击后退出。"
+      "shortDesc": "在攻击之后急速返回，和后备宝可梦进行替换。"
     },
     "volt-tackle": {
       "name": "伏特攻击",
-      "shortDesc": "使用者承受反冲造成的伤害的 1/3。有一定几率使目标麻痹。"
+      "shortDesc": "让电流覆盖全身猛撞向对手。自己也会受到不小的伤害。有时会让对手陷入麻痹状态。"
     },
     "wake-up-slap": {
       "name": "唤醒巴掌",
-      "shortDesc": "如果目标处于睡眠状态，则拥有双倍力量并将其唤醒。"
+      "shortDesc": "给予睡眠状态下的对手较大的伤害。但相反对手会从睡眠中醒过来。"
     },
     "water-gun": {
       "name": "水枪",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "向对手猛烈地喷射水流进行攻击。"
     },
     "water-pledge": {
       "name": "水之誓约",
-      "shortDesc": "通过草之誓约，四回合内对手宝可梦的速度减半。"
+      "shortDesc": "用水柱进行攻击。如果和火组合，威力就会提高，天空中会挂上彩虹。"
     },
     "water-pulse": {
       "name": "水之波动",
-      "shortDesc": "有一定几率迷惑目标。"
+      "shortDesc": "用水的震动攻击对手。有时会使对手混乱。"
     },
     "water-shuriken": {
       "name": "飞水手里剑",
-      "shortDesc": "点击 2-5 次。"
+      "shortDesc": "用粘液制成的手里剑，连续攻击２～５次。必定能够先制攻击。"
     },
     "water-sport": {
       "name": "玩水",
-      "shortDesc": "所有火焰伤害减半。"
+      "shortDesc": "用水湿透周围。在５回合内减弱火属性的招式。"
     },
     "water-spout": {
       "name": "喷水",
-      "shortDesc": "当用户剩余生命值较多时，会造成更多伤害，最大伤害为 150。"
+      "shortDesc": "掀起潮水进行攻击。自己的ＨＰ越少，招式的威力越小。"
     },
     "waterfall": {
       "name": "攀瀑",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "以惊人的气势扑向对手。有时会使对手畏缩。"
     },
     "wave-crash": {
       "name": "波动冲",
-      "shortDesc": "使用者将自己浸入水中并用全身猛击目标造成伤害。这也会对使用者造成伤害，提高使用者的动作速度。"
+      "shortDesc": "The user shrouds itself in water and slams into the target with its whole body to inflict damage. This also damages the user and raises the user’s action speed."
     },
     "weather-ball": {
       "name": "气象球",
-      "shortDesc": "如果有天气，该招式的威力和天气类型都会加倍。"
+      "shortDesc": "根据使用时的天气，招式属性和威力会改变。"
     },
     "whirlpool": {
       "name": "潮旋",
-      "shortDesc": "阻止目标离开战斗，并造成最大生命值1/16的伤害，持续2-5回合。"
+      "shortDesc": "将对手困在激烈的水流旋涡中，在４～５回合内进行攻击。"
     },
     "whirlwind": {
       "name": "吹飞",
-      "shortDesc": "立即结束狂野战斗。强制训练师更换宝可梦。"
+      "shortDesc": "吹飞对手，强制拉后备宝可梦上场。如果对手为野生宝可梦，战斗将直接结束。"
     },
     "wicked-blow": {
       "name": "暗冥强击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "将恶之流派修炼至大成的猛烈一击。必定会击中要害。"
     },
     "wicked-torque": {
       "name": "黑暗暴冲",
-      "shortDesc": "没有可用的附加效果信息。"
+      "shortDesc": "No additional effect information available."
     },
     "wide-guard": {
       "name": "广域防守",
-      "shortDesc": "本回合防止任何多目标动作击中友方宝可梦。"
+      "shortDesc": "在１回合内防住击打我方全员的攻击。"
     },
     "wild-charge": {
       "name": "疯狂伏特",
-      "shortDesc": "用户受到后坐力造成的伤害的 1/4。"
+      "shortDesc": "让电流覆盖全身，撞向对手进行攻击。自己也会受到少许伤害。"
     },
     "wildbolt-storm": {
       "name": "鸣雷风暴",
-      "shortDesc": "使用者召唤雷霆风暴，用闪电和风进行野蛮攻击。这也可能使目标陷入瘫痪。"
+      "shortDesc": "The user summons a thunderous tempest and savagely attacks with lightning and wind. This may also leave the target with paralysis."
     },
     "will-o-wisp": {
       "name": "鬼火",
-      "shortDesc": "燃烧目标。"
+      "shortDesc": "放出怪异的火焰，从而让对手陷入灼伤状态。"
     },
     "wing-attack": {
       "name": "翅膀攻击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "大大地展开美丽的翅膀，将其撞向对手进行攻击。"
     },
     "wish": {
       "name": "祈愿",
-      "shortDesc": "下一回合结束时，使用者将恢复最大生命值的一半。"
+      "shortDesc": "在下一回合回复自己或是替换出场的宝可梦最大ＨＰ的一半。"
     },
     "withdraw": {
       "name": "缩入壳中",
-      "shortDesc": "使使用者的防御力提升一级。"
+      "shortDesc": "缩入壳里保护身体，从而提高自己的防御。"
     },
     "wonder-room": {
       "name": "奇妙空间",
-      "shortDesc": "所有宝可梦的防御和特防互换5回合。"
+      "shortDesc": "制造出离奇的空间。在５回合内互换所有宝可梦的防御和特防。"
     },
     "wood-hammer": {
       "name": "木槌",
-      "shortDesc": "用户受到后坐力造成的伤害的 1/3。"
+      "shortDesc": "用坚硬的躯体撞击对手进行攻击。自己也会受到不小的伤害。"
     },
     "work-up": {
       "name": "自我激励",
-      "shortDesc": "使使用者的攻击力和特攻力各提升一级。"
+      "shortDesc": "激励自己，从而提高攻击和特攻。"
     },
     "worry-seed": {
       "name": "烦恼种子",
-      "shortDesc": "将目标的能力改为失眠。"
+      "shortDesc": "种植心神不宁的种子。使对手不能入眠，并将特性变成不眠。"
     },
     "wrap": {
       "name": "紧束",
-      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+      "shortDesc": "使用长长的身体或藤蔓等，在４～５回合内紧束对手进行攻击。"
     },
     "wring-out": {
       "name": "绞紧",
-      "shortDesc": "针对剩余 HP 较多的目标，力量会增加，最多可达 121 力量。"
+      "shortDesc": "用力勒紧对手进行攻击。对手的HP越多，威力越大。"
     },
     "x-scissor": {
       "name": "十字剪",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "将镰刀或爪子像剪刀般地交叉，顺势劈开对手。"
     },
     "yawn": {
       "name": "哈欠",
-      "shortDesc": "目标在下一回合结束时休眠。"
+      "shortDesc": "打个大哈欠引起睡意。在下一回合让对手陷入睡眠状态。"
     },
     "zap-cannon": {
       "name": "电磁炮",
-      "shortDesc": "有几率使目标瘫痪。"
+      "shortDesc": "发射大炮一样的电流进行攻击。让对手陷入麻痹状态。"
     },
     "zen-headbutt": {
       "name": "意念头锤",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "将思念的力量集中在前额进行攻击。有时会使对手畏缩。"
     },
     "zing-zap": {
       "name": "麻麻刺刺",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "撞向对手，并发出强电，使其感到麻麻刺刺的。有时会使对手畏缩。"
     },
     "zippy-zap": {
       "name": "电电加速",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "迅猛无比的电击。必定能够先制攻击，击中对方的要害。"
     }
   },
   "abilities": {
     "adaptability": {
       "name": "适应力",
-      "shortDesc": "同类型攻击加值从1.5倍增加到2倍。"
+      "shortDesc": "与自身同属性的招式威力会提高。"
     },
     "aerilate": {
       "name": "飞行皮肤",
-      "shortDesc": "将持有者的普通招式转变为飞行招式，并将其威力强化至1.3倍。"
+      "shortDesc": "一般属性的招式会变为飞行属性。威力会少量提高。"
     },
     "aftermath": {
       "name": "引爆",
-      "shortDesc": "当攻击者被接触移动击倒时，对攻击者造成最大生命值 1/4 的伤害。"
+      "shortDesc": "变为濒死时，会对接触到自己的对手造成伤害。"
     },
     "air-lock": {
       "name": "气闸",
-      "shortDesc": "消除天气的所有影响，但不会阻止天气本身。"
+      "shortDesc": "所有天气的影响都会消失。"
     },
     "analytic": {
       "name": "分析",
-      "shortDesc": "最后移动时，将移动强度增强至1.3倍。"
+      "shortDesc": "如果在最后使出招式，招式的威力会提高。"
     },
     "anger-point": {
       "name": "愤怒穴位",
-      "shortDesc": "受到致命一击时，攻击力提升至最多六级。"
+      "shortDesc": "要害被击中时，会大发雷霆，攻击力变为最大。"
     },
     "anger-shell": {
       "name": "愤怒甲壳",
-      "shortDesc": "当宝可梦的生命值低于一半时，愤怒贝壳会降低其防御和特防，但其攻击、特攻和速度会提高。"
+      "shortDesc": "When the Pokémon's HP drops below half, Anger Shell lowers its Defense and Special Defense but its Attack, Special Attack and Speed are raised."
     },
     "anticipation": {
       "name": "危险预知",
-      "shortDesc": "如果对手有超效招式、自毁、爆炸或一击KO招式，则在进入战斗时通知所有训练家。"
+      "shortDesc": "可以察觉到对手拥有的危险招式。"
     },
     "aqua-boost": {
       "name": "Aqua Boost"
     },
     "arena-trap": {
       "name": "沙穴",
-      "shortDesc": "防止对手逃跑或切换。被飞行型和空中的宝可梦躲避。"
+      "shortDesc": "在战斗中让对手无法逃走。"
     },
     "armor-tail": {
       "name": "尾甲",
-      "shortDesc": "阻止对手使用任何优先动作，例如快速攻击。"
+      "shortDesc": "Prevents the opponent from using any moves that have priority, such as Quick Attack."
     },
     "aroma-veil": {
       "name": "芳香幕",
-      "shortDesc": "保护盟友免受影响其精神状态的动作。"
+      "shortDesc": "可以防住向自己和同伴发出的心灵攻击。"
     },
     "as-one-glastrier": {
       "name": "人马一体",
-      "shortDesc": "该能力结合了卡里莱克斯的不安能力和格拉斯特里尔的寒冷嘶鸣能力的效果。"
+      "shortDesc": "兼备蕾冠王的紧张感和雪暴马的苍白嘶鸣这两种特性。"
     },
     "as-one-spectrier": {
       "name": "人马一体",
-      "shortDesc": "该能力结合了卡里克斯的不安能力和幽灵的冷战能力的效果。"
+      "shortDesc": "兼备蕾冠王的紧张感和灵幽马的漆黑嘶鸣这两种特性。"
     },
     "aura-break": {
       "name": "气场破坏",
-      "shortDesc": "使暗黑气场和仙气气场各自类型的招式减弱。"
+      "shortDesc": "让气场的效果发生逆转，降低威力。"
     },
     "bad-dreams": {
       "name": "梦魇",
-      "shortDesc": "每回合后对熟睡的对手造成最大生命值 1/8 的伤害。"
+      "shortDesc": "给予睡眠状态的对手伤害。"
     },
     "ball-fetch": {
       "name": "捡球",
-      "shortDesc": "如果宝可梦没有持有物品，它将从战斗中第一次失败的投掷中获取宝可梦球。"
+      "shortDesc": "没有携带道具时，会拾取第１个投出后捕捉失败的精灵球。"
     },
     "battery": {
       "name": "蓄电池",
-      "shortDesc": "我方宝可梦的招式威力提升至1.3倍。"
+      "shortDesc": "会提高我方的特殊招式的威力。"
     },
     "battle-armor": {
       "name": "战斗盔甲",
-      "shortDesc": "防止致命一击。"
+      "shortDesc": "被坚硬的甲壳守护着，不会被对手的攻击击中要害。"
     },
     "battle-bond": {
       "name": "牵绊变身",
-      "shortDesc": "每场战斗一次，晕倒对手会提高攻击力、SP。攻击力、速度提升一级。"
+      "shortDesc": "打倒对手时，与训练家的牵绊会增强，变为小智版甲贺忍蛙。飞水手里剑的招式威力会增强。"
     },
     "beads-of-ruin": {
       "name": "灾祸之玉",
-      "shortDesc": "降低除自身以外的所有宝可梦的特防。"
+      "shortDesc": "Lowers Special Defense of all Pokémon except itself."
     },
     "beast-boost": {
       "name": "异兽提升",
-      "shortDesc": "当该宝可梦晕倒另一只宝可梦时，该宝可梦的最高属性会提升一级。"
+      "shortDesc": "打倒对手的时候，自己最高的那项能力会提高。"
     },
     "berserk": {
       "name": "怒火冲天",
-      "shortDesc": "每当该宝可梦的生命值低于一半时，该宝可梦的特攻就会提升一级。"
+      "shortDesc": "因对手的攻击ＨＰ变为一半时，特攻会提高。"
     },
     "big-pecks": {
       "name": "健壮胸肌",
-      "shortDesc": "防止防御下降。"
+      "shortDesc": "不会受到防御降低的效果。"
     },
     "black-hole": {
       "name": "Black Hole"
     },
     "blaze": {
       "name": "猛火",
-      "shortDesc": "强化火系招式，最大生命值三分之一以下。"
+      "shortDesc": "ＨＰ减少的时候，火属性的招式威力会提高。"
     },
     "bodyguard": {
       "name": "Bodyguard"
@@ -8107,7 +8107,7 @@
     },
     "bulletproof": {
       "name": "防弹",
-      "shortDesc": "防止基于子弹、球和炸弹的移动。"
+      "shortDesc": "可以防住对手的球和弹类招式。"
     },
     "calming": {
       "name": "Calming"
@@ -8117,46 +8117,46 @@
     },
     "cheek-pouch": {
       "name": "颊囊",
-      "shortDesc": "除了浆果的效果外，吃浆果还会恢复生命值。"
+      "shortDesc": "无论是哪种树果，食用后，ＨＰ都会回复。"
     },
     "chilling-neigh": {
       "name": "苍白嘶鸣",
-      "shortDesc": "击倒宝可梦后提高攻击力。"
+      "shortDesc": "打倒对手时会用冰冷的声音嘶鸣并提高攻击。"
     },
     "chlorophyll": {
       "name": "叶绿素",
-      "shortDesc": "强烈阳光下速度加倍。"
+      "shortDesc": "晴朗天气时，速度会提高。"
     },
     "clear-body": {
       "name": "恒净之躯",
-      "shortDesc": "防止属性被其他宝可梦降低。"
+      "shortDesc": "不会因为对手的招式或特性而被降低能力。"
     },
     "climber": {
       "name": "Climber"
     },
     "cloud-nine": {
       "name": "无关天气",
-      "shortDesc": "消除天气的所有影响，但不会阻止天气本身。"
+      "shortDesc": "任何天气的影响都会消失。"
     },
     "color-change": {
       "name": "变色",
-      "shortDesc": "更改类型以在受到伤害性招式击中时进行匹配。"
+      "shortDesc": "自己的属性会变为从对手处所受招式的属性。"
     },
     "comatose": {
       "name": "绝对睡眠",
-      "shortDesc": "这只宝可梦总是表现得好像睡着了一样。"
+      "shortDesc": "总是半梦半醒的状态，绝对不会醒来。可以就这么睡着进行攻击。"
     },
     "commander": {
       "name": "发号施令",
-      "shortDesc": "如果盟友 Dondozo 在场上，则进入其嘴内。"
+      "shortDesc": "Goes inside the mouth of an ally Dondozo if one is on the field."
     },
     "competitive": {
       "name": "好胜",
-      "shortDesc": "任何属性降低时，特攻提升两级。"
+      "shortDesc": "如果能力被降低，特攻就会大幅提高。"
     },
     "compound-eyes": {
       "name": "复眼",
-      "shortDesc": "移动精度提高至 1.3 倍。"
+      "shortDesc": "因为拥有复眼，招式的命中率会提高。"
     },
     "confidence": {
       "name": "Confidence"
@@ -8166,58 +8166,58 @@
     },
     "contrary": {
       "name": "唱反调",
-      "shortDesc": "反转统计数据变化。"
+      "shortDesc": "能力的变化发生逆转，原本提高时会降低，而原本降低时会提高。"
     },
     "corrosion": {
       "name": "腐蚀",
-      "shortDesc": "该宝可梦可以对毒钢宝可梦造成中毒。"
+      "shortDesc": "可以使钢属性和毒属性的宝可梦也陷入中毒状态。"
     },
     "costar": {
       "name": "同台共演",
-      "shortDesc": "复制盟友进入战斗时的统计变化。"
+      "shortDesc": "Copies ally's stat changes on entering battle."
     },
     "cotton-down": {
       "name": "棉絮",
-      "shortDesc": "当忽略招式和吸引招式的技能时。"
+      "shortDesc": "受到攻击后撒下棉絮，降低除自己以外的所有宝可梦的速度。"
     },
     "cud-chew": {
       "name": "反刍",
-      "shortDesc": "使宝可梦在下一回合结束时重复使用已经消耗的浆果。"
+      "shortDesc": "Causes the Pokémon to reuse an already consumed Berry at the end of the next turn."
     },
     "curious-medicine": {
       "name": "怪药",
-      "shortDesc": "进入战场后重置所有统计数据变化。"
+      "shortDesc": "出场时会从贝壳撒药，将我方的能力变化复原。"
     },
     "cursed-body": {
       "name": "诅咒之躯",
-      "shortDesc": "有 30% 的几率使任何击中宝可梦的动作失效。"
+      "shortDesc": "受到攻击时，有时会把对手的招式变为定身法状态。"
     },
     "cute-charm": {
       "name": "迷人之躯",
-      "shortDesc": "有 30% 的几率在接触时迷惑攻击的宝可梦。"
+      "shortDesc": "有时会让接触到自己的对手着迷。"
     },
     "damp": {
       "name": "湿气",
-      "shortDesc": "防止宝可梦在战斗时自毁、爆炸和余波发挥作用。"
+      "shortDesc": "通过把周围都弄湿，使谁都无法使用自爆等爆炸类的招式。"
     },
     "dancer": {
       "name": "舞者",
-      "shortDesc": "每当其他宝可梦使用舞蹈动作时，该宝可梦会立即使用相同的动作。"
+      "shortDesc": "有谁使出跳舞招式时，自己也能就这么接着使出跳舞招式。"
     },
     "dark-aura": {
       "name": "暗黑气场",
-      "shortDesc": "将所有友方和敌方宝可梦的暗属性强化至 1.33 倍。"
+      "shortDesc": "全体的恶属性招式变强。"
     },
     "dauntless-shield": {
       "name": "不屈之盾",
-      "shortDesc": "提高战斗中的防御力。"
+      "shortDesc": "出场时，防御会提高。"
     },
     "daze": {
       "name": "Daze"
     },
     "dazzling": {
       "name": "鲜艳之躯",
-      "shortDesc": "敌方宝可梦无法使用优先攻击。"
+      "shortDesc": "让对手吓一跳，使其无法对我方使出先制招式。"
     },
     "decoy": {
       "name": "Decoy"
@@ -8227,23 +8227,23 @@
     },
     "defeatist": {
       "name": "软弱",
-      "shortDesc": "最大生命值 50% 或以下时攻击力和特攻力减半。"
+      "shortDesc": "ＨＰ减半时，会变得软弱，攻击和特攻会减半。"
     },
     "defiant": {
       "name": "不服输",
-      "shortDesc": "任何属性降低时攻击力提升两个阶段。"
+      "shortDesc": "能力被降低时，攻击会大幅提高。"
     },
     "delta-stream": {
       "name": "德尔塔气流",
-      "shortDesc": "产生一股神秘的气流，该气流无法替代，并且导致招式对飞行宝可梦永远不会超级有效。"
+      "shortDesc": "变为令飞行属性的弱点消失的天气。"
     },
     "desolate-land": {
       "name": "终结之地",
-      "shortDesc": "产生极其刺眼的阳光，具有晴天的所有属性，无法替代，并导致破坏性的水系招式失败。"
+      "shortDesc": "变为不会受到水属性攻击的天气。"
     },
     "disguise": {
       "name": "画皮",
-      "shortDesc": "防止第一次战斗伤害。"
+      "shortDesc": "通过画皮覆盖住身体，可以防住１次攻击。"
     },
     "disgust": {
       "name": "Disgust"
@@ -8253,220 +8253,220 @@
     },
     "download": {
       "name": "下载",
-      "shortDesc": "进入战斗时，根据对手防御较弱的情况，将攻击力提升一级。"
+      "shortDesc": "比较对手的防御和特防，根据较低的那项能力相应地提高自己的攻击或特攻。"
     },
     "dragonize": {
       "name": "龙皮肤",
-      "shortDesc": "宝可梦的普通属性招式变为龙属性招式，且威力提升20%。"
+      "shortDesc": "The Pokémon's Normal-type moves become Dragon-type moves and their power is boosted by 20%."
     },
     "dragons-maw": {
       "name": "龙颚",
-      "shortDesc": "强化龙类招式。"
+      "shortDesc": "龙属性的招式威力会提高。"
     },
     "drizzle": {
       "name": "降雨",
-      "shortDesc": "召唤进入战斗后无限期持续的降雨。"
+      "shortDesc": "出场时，会将天气变为下雨。"
     },
     "drought": {
       "name": "日照",
-      "shortDesc": "召唤进入战斗后无限期持续的强烈阳光。"
+      "shortDesc": "出场时，会将天气变为晴朗。"
     },
     "dry-skin": {
       "name": "干燥皮肤",
-      "shortDesc": "在强阳光下每回合造成 1/8 最大生命值伤害，但在雨天时可治疗 1/8 最大生命值。火招式伤害增加至 1.25 倍，但吸收水招式，治疗最大生命值 1/4。"
+      "shortDesc": "下雨天气时和受到水属性的招式时，ＨＰ会回复。晴朗天气时和受到火属性的招式时，ＨＰ会减少。"
     },
     "early-bird": {
       "name": "早起",
-      "shortDesc": "使睡眠速度加快两倍。"
+      "shortDesc": "即使变为睡眠状态，也能以２倍的速度提早醒来。"
     },
     "earth-eater": {
       "name": "食土",
-      "shortDesc": "被地属性招式击中时恢复生命值。"
+      "shortDesc": "Restores HP when hit by a Ground-type move."
     },
     "eelevate": {
       "name": "Eelevate",
-      "shortDesc": "免疫地面类型移动和接地进入危险；击倒目标后提升最高属性。"
+      "shortDesc": "Immune to Ground-type moves and grounded entry hazards; raises its highest stat after knocking out a target."
     },
     "effect-spore": {
       "name": "孢子",
-      "shortDesc": "接触攻击的宝可梦时，有 30% 的几率造成麻痹、中毒或睡眠。"
+      "shortDesc": "受到攻击时，有时会把接触到自己的对手变为中毒、麻痹或睡眠状态。"
     },
     "electric-surge": {
       "name": "电气制造者",
-      "shortDesc": "当这只宝可梦进入战斗时，它会将地形更改为电力地形。"
+      "shortDesc": "出场时，会布下电气场地。"
     },
     "electromorphosis": {
       "name": "电力转换",
-      "shortDesc": "受到攻击时，下一次使用的电属性招式的威力翻倍。"
+      "shortDesc": "When hit by an attack, the power of the next Electric-type move it uses is doubled."
     },
     "embody-aspect": {
       "name": "面影辉映",
-      "shortDesc": "体现方面会提升特定的统计数据，具体取决于巨型巨蜥的形态"
+      "shortDesc": "Embody Aspect boosts a particular stat, depending on the form of a Terastallized Ogerpon"
     },
     "embody-aspect-cornerstone": {
       "name": "Embody Aspect (Cornerstone)",
-      "shortDesc": "切换时，该宝可梦的防御力提升1级。"
+      "shortDesc": "On switch-in, this Pokemon's Defense is raised by 1 stage."
     },
     "embody-aspect-hearthflame": {
       "name": "Embody Aspect (Hearthflame)",
-      "shortDesc": "切换时，该宝可梦的攻击力提升1级。"
+      "shortDesc": "On switch-in, this Pokemon's Attack is raised by 1 stage."
     },
     "embody-aspect-teal": {
       "name": "Embody Aspect (Teal)",
-      "shortDesc": "切换时，该宝可梦的速度提升1级。"
+      "shortDesc": "On switch-in, this Pokemon's Speed is raised by 1 stage."
     },
     "embody-aspect-wellspring": {
       "name": "Embody Aspect (Wellspring)",
-      "shortDesc": "切换时，该宝可梦的特防提升1级。"
+      "shortDesc": "On switch-in, this Pokemon's Special Defense is raised by 1 stage."
     },
     "emergency-exit": {
       "name": "危险回避",
-      "shortDesc": "当该宝可梦的生命值低于一半时，该宝可梦会自动切换。"
+      "shortDesc": "ＨＰ变为一半时，为了回避危险，会退回到同行队伍中。"
     },
     "explode": {
       "name": "Explode"
     },
     "fairy-aura": {
       "name": "妖精气场",
-      "shortDesc": "将所有友方和敌方宝可梦的妖精招式强化至 1.33 倍。"
+      "shortDesc": "全体的妖精属性招式变强。"
     },
     "filter": {
       "name": "过滤",
-      "shortDesc": "超级有效招式受到的伤害减少 1/4。"
+      "shortDesc": "受到效果绝佳的攻击时，可以减弱其威力。"
     },
     "flame-body": {
       "name": "火焰之躯",
-      "shortDesc": "有 30% 的几率在接触时燃烧攻击宝可梦。"
+      "shortDesc": "有时会让接触到自己的对手变为灼伤状态。"
     },
     "flame-boost": {
       "name": "Flame Boost"
     },
     "flare-boost": {
       "name": "受热激升",
-      "shortDesc": "燃烧时特攻增加至 1.5 倍。"
+      "shortDesc": "变为灼伤状态时，特殊招式的威力会提高。"
     },
     "flash-fire": {
       "name": "引火",
-      "shortDesc": "防御火系移动。一旦被格挡，宝可梦自身的火焰招式就会造成 1.5 倍的伤害，直到它离开战斗。"
+      "shortDesc": "受到火属性的招式攻击时，吸收火焰，自己使出的火属性招式会变强。"
     },
     "flower-gift": {
       "name": "花之礼",
-      "shortDesc": "在强烈阳光下，友方宝可梦的攻击力和特防提高至 1.5 倍。"
+      "shortDesc": "晴朗天气时，自己与同伴的攻击和特防能力会提高。"
     },
     "flower-veil": {
       "name": "花幕",
-      "shortDesc": "保护友方草宝可梦的统计数据不被其他宝可梦降低。"
+      "shortDesc": "我方的草属性宝可梦能力不会降低，也不会变为异常状态。"
     },
     "fluffy": {
       "name": "毛茸茸",
-      "shortDesc": "接触移动造成的伤害减半。火焰招式造成的伤害加倍。"
+      "shortDesc": "会将对手所给予的接触类招式的伤害减半，但火属性招式的伤害会变为２倍。"
     },
     "forecast": {
       "name": "阴晴不定",
-      "shortDesc": "更改 Castform 的类型和形态以适应天气。"
+      "shortDesc": "受天气的影响，会变为水属性、火属性或冰属性中的某一个。"
     },
     "forewarn": {
       "name": "预知梦",
-      "shortDesc": "进入战斗时揭示对手的最强招式。"
+      "shortDesc": "出场时，只读取１个对手拥有的招式。"
     },
     "fortune": {
       "name": "Fortune"
     },
     "friend-guard": {
       "name": "友情防守",
-      "shortDesc": "将友方宝可梦受到的所有直接伤害降低至 0.75 倍。"
+      "shortDesc": "可以减少我方的伤害。"
     },
     "frighten": {
       "name": "Frighten"
     },
     "frisk": {
       "name": "察觉",
-      "shortDesc": "进入战斗时显示对手持有的物品。"
+      "shortDesc": "出场时，可以察觉对手的持有物。"
     },
     "frostbite": {
       "name": "Frostbite"
     },
     "full-metal-body": {
       "name": "金属防护",
-      "shortDesc": "其他宝可梦无法降低该宝可梦的属性。"
+      "shortDesc": "不会因为对手的招式或特性而被降低能力。"
     },
     "fur-coat": {
       "name": "毛皮大衣",
-      "shortDesc": "物理攻击造成的伤害减半。"
+      "shortDesc": "对手给予的物理招式的伤害会减半。"
     },
     "gale-wings": {
       "name": "疾风之翼",
-      "shortDesc": "飞行招式的优先级提升一级。"
+      "shortDesc": "ＨＰ全满时，飞行属性的招式可以率先使出。"
     },
     "galvanize": {
       "name": "电气皮肤",
-      "shortDesc": "该宝可梦的普通招式是电系，威力提升至1.2倍。"
+      "shortDesc": "一般属性的招式会变为电属性。威力会少量提高。"
     },
     "gluttony": {
       "name": "贪吃鬼",
-      "shortDesc": "使宝可梦吃掉任何因低于其最大生命值 1/2 的低生命值而触发的持有的浆果。"
+      "shortDesc": "原本ＨＰ变得很少时才会吃树果，在ＨＰ还有一半时就会把它吃掉。"
     },
     "good-as-gold": {
       "name": "黄金之躯",
-      "shortDesc": "免疫状态移动。"
+      "shortDesc": "Gives immunity to status moves."
     },
     "gooey": {
       "name": "黏滑",
-      "shortDesc": "接触时，攻击宝可梦的速度降低一级。"
+      "shortDesc": "对于用攻击接触到自己的对手，会降低其速度。"
     },
     "gorilla-tactics": {
       "name": "一猩一意",
-      "shortDesc": "提高宝可梦的攻击力，但只允许使用第一个选定的动作。"
+      "shortDesc": "虽然攻击会提高，但是只能使出一开始所选的招式。"
     },
     "grass-cloak": {
       "name": "Grass Cloak"
     },
     "grass-pelt": {
       "name": "草之毛皮",
-      "shortDesc": "在草地地形生效时提高防御力。"
+      "shortDesc": "在青草场地时，防御会提高。"
     },
     "grassy-surge": {
       "name": "青草制造者",
-      "shortDesc": "当这只宝可梦进入战斗时，它会将地形更改为草地地形。"
+      "shortDesc": "出场时，会布下青草场地。"
     },
     "grim-neigh": {
       "name": "漆黑嘶鸣",
-      "shortDesc": "击倒宝可梦后提高特攻。"
+      "shortDesc": "打倒对手时会用恐怖的声音嘶鸣并提高特攻。"
     },
     "guard-dog": {
       "name": "看门犬",
-      "shortDesc": "在受到威胁时提高攻击力，并防止被迫退出。"
+      "shortDesc": "Boosts Attack if intimidated, and prevents being forced to switch out."
     },
     "gulp": {
       "name": "Gulp"
     },
     "gulp-missile": {
       "name": "一口导弹",
-      "shortDesc": "如果带有吞噬导弹的克拉莫兰特使用冲浪或潜水，它会捕获猎物并根据其剩余生命值改变其形态。"
+      "shortDesc": "冲浪或潜水时会叼来猎物。受到伤害时，会吐出猎物进行攻击。"
     },
     "guts": {
       "name": "毅力",
-      "shortDesc": "受到严重状态影响时攻击力提高 50%。"
+      "shortDesc": "如果变为异常状态，会拿出毅力，攻击会提高。"
     },
     "hadron-engine": {
       "name": "强子引擎",
-      "shortDesc": "进入战斗时创建一个电地形，并在激活时增强特殊攻击力。"
+      "shortDesc": "Creates an Electric Terrain when entering battle, and boosts Special Attack while active."
     },
     "harvest": {
       "name": "收获",
-      "shortDesc": "如果宝可梦在此期间没有持有任何物品，则每回合后有 50% 的几率恢复使用过的浆果。"
+      "shortDesc": "可以多次制作出已被使用掉的树果。"
     },
     "healer": {
       "name": "治愈之心",
-      "shortDesc": "每回合后有 30% 的几率治愈相邻盟友的任何严重状态疾病。"
+      "shortDesc": "有时会治愈异常状态的同伴。"
     },
     "heatproof": {
       "name": "耐热",
-      "shortDesc": "火焰移动和燃烧造成的伤害减半。"
+      "shortDesc": "耐热的体质会让火属性的招式威力减半。"
     },
     "heavy-metal": {
       "name": "重金属",
-      "shortDesc": "宝可梦的重量加倍。"
+      "shortDesc": "自身的重量会变为２倍。"
     },
     "herbivore": {
       "name": "Herbivore"
@@ -8479,78 +8479,78 @@
     },
     "honey-gather": {
       "name": "采蜜",
-      "shortDesc": "宝可梦可能会在战斗后拾取蜂蜜。"
+      "shortDesc": "战斗结束时，有时候会捡来甜甜蜜。"
     },
     "hospitality": {
       "name": "款待",
-      "shortDesc": "热情款待的宝可梦进入战斗时，为我方恢复25%的生命值。"
+      "shortDesc": "When a Pokémon with Hospitality enters a battle, it restores HP for an ally by 25%."
     },
     "hot-blooded": {
       "name": "Hot Blooded"
     },
     "huge-power": {
       "name": "大力士",
-      "shortDesc": "战斗中攻击力加倍。"
+      "shortDesc": "物理攻击的威力会变为２倍。"
     },
     "hunger-switch": {
       "name": "饱了又饿",
-      "shortDesc": "使 Morpeko 每回合改变形态，在饱腹模式和饥饿模式之间交替"
+      "shortDesc": "每回合结束时会在满腹花纹与空腹花纹之间交替改变样子。"
     },
     "hustle": {
       "name": "活力",
-      "shortDesc": "强化物理动作，造成 1.5 倍伤害，但精度降低至 0.8 倍。"
+      "shortDesc": "自己的攻击变高，但命中率会降低。"
     },
     "hydration": {
       "name": "湿润之躯",
-      "shortDesc": "在下雨期间每回合后治愈任何主要状态疾病。"
+      "shortDesc": "下雨天气时，异常状态会治愈。"
     },
     "hyper-cutter": {
       "name": "怪力钳",
-      "shortDesc": "防止其他宝可梦降低攻击力。"
+      "shortDesc": "因为拥有以力量自豪的钳子，不会被对手降低攻击。"
     },
     "ice-body": {
       "name": "冰冻之躯",
-      "shortDesc": "冰雹期间每回合后恢复 1/16 最大生命值。防止冰雹损坏。"
+      "shortDesc": "冰雹天气时，会缓缓回复ＨＰ。"
     },
     "ice-face": {
       "name": "结冻头",
-      "shortDesc": "宝可梦的冰头可以代替物理攻击，但攻击也会改变宝可梦的外观。下雪时冰会恢复原状。"
+      "shortDesc": "头部的冰会代替自己承受物理攻击，但是样子会改变。下冰雹时，冰会恢复原状。"
     },
     "ice-scales": {
       "name": "冰鳞粉",
-      "shortDesc": "特殊动作造成的伤害减半。"
+      "shortDesc": "由于有冰鳞粉的守护，受到的特殊攻击伤害会减半。"
     },
     "illuminate": {
       "name": "发光",
-      "shortDesc": "野外遭遇率加倍。"
+      "shortDesc": "通过让周围变亮，变得容易遇到野生的宝可梦。"
     },
     "illusion": {
       "name": "幻觉",
-      "shortDesc": "被派出时，会呈现最后一个有意识的队伍宝可梦的外观，直到受到伤害性招式击中为止。"
+      "shortDesc": "假扮成同行队伍中的最后一只宝可梦出场，迷惑对手。"
     },
     "immunity": {
       "name": "免疫",
-      "shortDesc": "防止中毒。"
+      "shortDesc": "因为体内拥有免疫能力，不会变为中毒状态。"
     },
     "imposter": {
       "name": "变身者",
-      "shortDesc": "进入战斗时变形。"
+      "shortDesc": "变身为当前面对的宝可梦。"
     },
     "infiltrator": {
       "name": "穿透",
-      "shortDesc": "绕过光幕、反射和防护。"
+      "shortDesc": "可以穿透对手的壁障或替身进行攻击。"
     },
     "innards-out": {
       "name": "飞出的内在物",
-      "shortDesc": "当这只宝可梦因对手的动作而晕倒时，对手将受到这只宝可梦剩余生命值的伤害。"
+      "shortDesc": "被对手打倒的时候，会给予对手相当于ＨＰ剩余量的伤害。"
     },
     "inner-focus": {
       "name": "精神力",
-      "shortDesc": "防止退缩。"
+      "shortDesc": "拥有经过锻炼的精神，而不会因对手的攻击而畏缩。"
     },
     "insomnia": {
       "name": "不眠",
-      "shortDesc": "阻止睡眠。"
+      "shortDesc": "因为有着睡不着的体质，所以不会陷入睡眠状态。"
     },
     "instinct": {
       "name": "Instinct"
@@ -8560,80 +8560,80 @@
     },
     "intimidate": {
       "name": "威吓",
-      "shortDesc": "进入战斗时降低对手攻击一级。"
+      "shortDesc": "出场时威吓对手，让其退缩，降低对手的攻击。"
     },
     "intrepid-sword": {
       "name": "不挠之剑",
-      "shortDesc": "战斗中攻击力提升。"
+      "shortDesc": "出场时，攻击会提高。"
     },
     "iron-barbs": {
       "name": "铁刺",
-      "shortDesc": "对接触的攻击者造成伤害。"
+      "shortDesc": "用铁刺给予接触到自己的对手伤害。"
     },
     "iron-fist": {
       "name": "铁拳",
-      "shortDesc": "将基于拳击的动作强化至其威力的 1.2 倍。"
+      "shortDesc": "使用拳类招式的威力会提高。"
     },
     "jagged-edge": {
       "name": "Jagged Edge"
     },
     "justified": {
       "name": "正义之心",
-      "shortDesc": "受到暗招伤害时攻击力提升一级。"
+      "shortDesc": "受到恶属性的招式攻击时，因为正义感，攻击会提高。"
     },
     "keen-eye": {
       "name": "锐利目光",
-      "shortDesc": "防止精度降低。"
+      "shortDesc": "多亏了锐利的目光，命中率不会被降低。"
     },
     "klutz": {
       "name": "笨拙",
-      "shortDesc": "防止宝可梦在战斗中使用其持有的物品。"
+      "shortDesc": "无法使用持有的道具。"
     },
     "last-bastion": {
       "name": "Last Bastion"
     },
     "leaf-guard": {
       "name": "叶子防守",
-      "shortDesc": "防止强烈阳光照射下的重大疾病。"
+      "shortDesc": "晴朗天气时，不会变为异常状态。"
     },
     "levitate": {
       "name": "飘浮",
-      "shortDesc": "躲避地面移动。"
+      "shortDesc": "从地面浮起，从而不会受到地面属性招式的攻击。"
     },
     "libero": {
       "name": "自由者",
-      "shortDesc": "自由人将宝可梦的类型更改为其之前使用的攻击类型。"
+      "shortDesc": "变为与自己使出的招式相同的属性。"
     },
     "life-force": {
       "name": "Life Force"
     },
     "light-metal": {
       "name": "轻金属",
-      "shortDesc": "宝可梦的重量减半。"
+      "shortDesc": "自身的重量会减半。"
     },
     "lightning-rod": {
       "name": "避雷针",
-      "shortDesc": "在可能的情况下将单目标电招式重定向到该宝可梦。吸收电击，特攻提升一级。"
+      "shortDesc": "将电属性的招式吸引到自己身上，不会受到伤害，而是会提高特攻。"
     },
     "limber": {
       "name": "柔软",
-      "shortDesc": "防止瘫痪。"
+      "shortDesc": "因为身体柔软，不会变为麻痹状态。"
     },
     "lingering-aroma": {
       "name": "甩不掉的气味",
-      "shortDesc": "接触会改变攻击者的余香能力。"
+      "shortDesc": "Contact changes the attacker's Ability to Lingering Aroma."
     },
     "liquid-ooze": {
       "name": "污泥浆",
-      "shortDesc": "使用吸血动作对对手造成伤害，伤害程度与其治疗量相同。"
+      "shortDesc": "吸收了污泥浆的对手会因强烈的恶臭而受到伤害，减少ＨＰ。"
     },
     "liquid-voice": {
       "name": "湿润之声",
-      "shortDesc": "声音类招式变为水类招式。"
+      "shortDesc": "所有的声音招式都变为水属性。"
     },
     "long-reach": {
       "name": "远隔",
-      "shortDesc": "该宝可梦的招式不产生接触。"
+      "shortDesc": "可以不接触对手就使出所有的招式。"
     },
     "lullaby": {
       "name": "Lullaby"
@@ -8643,397 +8643,397 @@
     },
     "magic-bounce": {
       "name": "魔法镜",
-      "shortDesc": "将大多数非伤害性动作反射回其使用者。"
+      "shortDesc": "可以不受到由对手使出的变化招式影响，并将其反弹。"
     },
     "magic-guard": {
       "name": "魔法防守",
-      "shortDesc": "防止并非由移动直接造成的伤害。"
+      "shortDesc": "不会受到攻击以外的伤害。"
     },
     "magician": {
       "name": "魔术师",
-      "shortDesc": "当持有者使用伤害性动作时窃取目标持有的物品。"
+      "shortDesc": "夺走被自己的招式击中的对手的道具。"
     },
     "magma-armor": {
       "name": "熔岩铠甲",
-      "shortDesc": "防止冻结。"
+      "shortDesc": "将炽热的熔岩覆盖在身上，不会变为冰冻状态。"
     },
     "magnet-pull": {
       "name": "磁力",
-      "shortDesc": "防止钢铁对手逃跑或切换。"
+      "shortDesc": "用磁力吸住钢属性的宝可梦，使其无法逃走。"
     },
     "marvel-scale": {
       "name": "神奇鳞片",
-      "shortDesc": "受到严重状态影响时防御力提高 50%。"
+      "shortDesc": "如果变为异常状态，神奇鳞片会发生反应，防御会提高。"
     },
     "medic": {
       "name": "Medic"
     },
     "mega-launcher": {
       "name": "超级发射器",
-      "shortDesc": "增强光环，脉冲移动至其力量的 1.5 倍。"
+      "shortDesc": "波动和波导类招式的威力会提高。"
     },
     "mega-sol": {
       "name": "超级日光",
-      "shortDesc": "宝可梦可以像天气是刺眼的阳光一样使用其招式。"
+      "shortDesc": "The Pokémon can use its moves as if the weather were harsh sunlight."
     },
     "melee": {
       "name": "Melee"
     },
     "merciless": {
       "name": "不仁不义",
-      "shortDesc": "该宝可梦的招式对中毒目标造成致命一击。"
+      "shortDesc": "攻击中毒状态的对手时，必定会击中要害。"
     },
     "mimicry": {
       "name": "拟态",
-      "shortDesc": "根据地形改变类型。"
+      "shortDesc": "宝可梦的属性会根据场地的状态而变化。"
     },
     "mind-s-eye": {
       "name": "Mind's Eye",
-      "shortDesc": "战斗，普通招式击中幽灵。准确率不能降低，忽略回避率。"
+      "shortDesc": "Fighting, Normal moves hit Ghost. Accuracy can't be lowered, ignores evasiveness."
     },
     "minds-eye": {
       "name": "心眼",
-      "shortDesc": "宝可梦无视对手闪避的变化，其准确度不会降低，并且可以用普通和战斗类型的招式攻击幽灵类型。"
+      "shortDesc": "The Pokémon ignores changes to opponents' evasiveness, its accuracy can't be lowered, and it can hit Ghost types with Normal- and Fighting-type moves."
     },
     "minus": {
       "name": "负电",
-      "shortDesc": "当友方宝可梦具有正值或负值时，特攻增加至 1.5 倍。"
+      "shortDesc": "出场的伙伴之间如果有正电或负电特性的宝可梦，自己的特攻会提高。"
     },
     "mirror-armor": {
       "name": "镜甲",
-      "shortDesc": "反映任何统计降低效果。"
+      "shortDesc": "只反弹自己受到的能力降低效果。"
     },
     "misty-surge": {
       "name": "薄雾制造者",
-      "shortDesc": "当这只宝可梦进入战斗时，它会将地形更改为迷雾地形。"
+      "shortDesc": "出场时，会布下薄雾场地。"
     },
     "mold-breaker": {
       "name": "破格",
-      "shortDesc": "如果目标的能力能够阻碍或阻止移动，则绕过目标的能力。"
+      "shortDesc": "可以不受对手特性的干扰，向对手使出招式。"
     },
     "mood-maker": {
       "name": "Mood Maker"
     },
     "moody": {
       "name": "心情不定",
-      "shortDesc": "每回合后提升一个随机属性两级并降低另一级。"
+      "shortDesc": "每一回合，能力中的某项会大幅提高，而某项会降低。"
     },
     "motor-drive": {
       "name": "电气引擎",
-      "shortDesc": "吸收电动，速度提升一级。"
+      "shortDesc": "受到电属性的招式攻击时，不会受到伤害，而是速度会提高。"
     },
     "mountaineer": {
       "name": "Mountaineer"
     },
     "moxie": {
       "name": "自信过度",
-      "shortDesc": "击倒宝可梦后，攻击力提升一级。"
+      "shortDesc": "如果打倒对手，就会充满自信，攻击会提高。"
     },
     "multiscale": {
       "name": "多重鳞片",
-      "shortDesc": "将满生命值造成的伤害减半。"
+      "shortDesc": "ＨＰ全满时，受到的伤害会变少。"
     },
     "multitype": {
       "name": "多属性",
-      "shortDesc": "改变阿尔宙斯的类型和形态以匹配其持有的板甲。"
+      "shortDesc": "自己的属性会根据持有的石板或Ｚ纯晶的属性而改变。"
     },
     "mummy": {
       "name": "木乃伊",
-      "shortDesc": "在接触时将攻击宝可梦的能力更改为木乃伊。"
+      "shortDesc": "被对手接触到后，会将对手变为木乃伊。"
     },
     "mycelium-might": {
       "name": "菌丝之力",
-      "shortDesc": "状态动作最后进行，但不受对手能力的影响。"
+      "shortDesc": "Status moves go last, but are not affected by the opponent's ability."
     },
     "natural-cure": {
       "name": "自然回复",
-      "shortDesc": "解决切换时的主要状态问题。"
+      "shortDesc": "回到同行队伍后，异常状态就会被治愈。"
     },
     "neuroforce": {
       "name": "脑核之力",
-      "shortDesc": "造成的超有效伤害增加至 1.25 倍。"
+      "shortDesc": "效果绝佳的攻击，威力会变得更强。"
     },
     "neutralizing-gas": {
       "name": "化学变化气体",
-      "shortDesc": "无效化战斗中所有宝可梦的能力。"
+      "shortDesc": "特性为化学变化气体的宝可梦在场时，场上所有宝可梦的特性效果都会消失或者无法生效。"
     },
     "no-guard": {
       "name": "无防守",
-      "shortDesc": "确保击中宝可梦时使用的所有动作。"
+      "shortDesc": "由于无防守战术，双方使出的招式都必定会击中。"
     },
     "nomad": {
       "name": "Nomad"
     },
     "normalize": {
       "name": "一般皮肤",
-      "shortDesc": "使宝可梦的招式全部表现为普通型。"
+      "shortDesc": "无论是什么属性的招式，全部会变为一般属性。威力会少量提高。"
     },
     "nurse": {
       "name": "Nurse"
     },
     "oblivious": {
       "name": "迟钝",
-      "shortDesc": "防止迷恋并防止迷惑。"
+      "shortDesc": "因为感觉迟钝，不会变为着迷和被挑衅状态。"
     },
     "omnipotent": {
       "name": "Omnipotent"
     },
     "opportunist": {
       "name": "跟风",
-      "shortDesc": "复制对手的统计提升。"
+      "shortDesc": "Copies stat boosts by the opponent."
     },
     "orichalcum-pulse": {
       "name": "绯红脉动",
-      "shortDesc": "进入战斗时使阳光变得刺眼，并在激活时增强攻击力。"
+      "shortDesc": "Turns the sunlight harsh when entering battle, and boosts Attack while active."
     },
     "overcoat": {
       "name": "防尘",
-      "shortDesc": "防止天气造成的损坏。"
+      "shortDesc": "不会受到沙暴或冰雹等的伤害。不会受到粉末类招式的攻击。"
     },
     "overgrow": {
       "name": "茂盛",
-      "shortDesc": "强化草招式，最大生命值三分之一以下。"
+      "shortDesc": "ＨＰ减少的时候，草属性的招式威力会提高。"
     },
     "own-tempo": {
       "name": "我行我素",
-      "shortDesc": "防止混乱。"
+      "shortDesc": "因为我行我素，不会变为混乱状态。"
     },
     "parental-bond": {
       "name": "亲子爱",
-      "shortDesc": "让持有者以伤害性动作击中两次。第二击威力减半。"
+      "shortDesc": "亲子俩可以合计攻击２次。"
     },
     "parry": {
       "name": "Parry"
     },
     "pastel-veil": {
       "name": "粉彩护幕",
-      "shortDesc": "防止宝可梦及其盟友中毒。"
+      "shortDesc": "自己和同伴都不会陷入中毒的异常状态。"
     },
     "perception": {
       "name": "Perception"
     },
     "perish-body": {
       "name": "灭亡之躯",
-      "shortDesc": "当被直接接触的招式击中时，宝可梦和攻击者将在三回合后昏倒，除非他们退出战斗。"
+      "shortDesc": "受到接触类招式攻击时，双方都会在３回合后变为濒死状态。替换后效果消失。"
     },
     "pickpocket": {
       "name": "顺手牵羊",
-      "shortDesc": "在接触时窃取攻击宝可梦持有的物品。"
+      "shortDesc": "盗取接触到自己的对手的道具。"
     },
     "pickup": {
       "name": "捡拾",
-      "shortDesc": "捡起其他宝可梦用过的和扔出的物品。战斗后也可能拾取物品。"
+      "shortDesc": "有时会捡来对手用过的道具，冒险过程中也会捡到。"
     },
     "piercing-drill": {
       "name": "贯穿钻",
-      "shortDesc": "当宝可梦使用接触动作时，它甚至可以击中正在保护自己的目标。"
+      "shortDesc": "When the Pokémon uses contact moves, it can hit even targets that are protecting themselves."
     },
     "pixilate": {
       "name": "妖精皮肤",
-      "shortDesc": "将持有者的普通招式转变为仙招式，并将其威力强化至1.3倍。"
+      "shortDesc": "一般属性的招式会变为妖精属性。威力会少量提高。"
     },
     "plus": {
       "name": "正电",
-      "shortDesc": "当友方宝可梦具有正值或负值时，特攻增加至 1.5 倍。"
+      "shortDesc": "出场的伙伴之间如果有正电或负电特性的宝可梦，自己的特攻会提高。"
     },
     "poison-heal": {
       "name": "毒疗",
-      "shortDesc": "每回合中毒时恢复 1/8 最大生命值以代替伤害。"
+      "shortDesc": "变为中毒状态时，ＨＰ不会减少，反而会增加起来。"
     },
     "poison-point": {
       "name": "毒刺",
-      "shortDesc": "有 30% 的几率接触到攻击宝可梦时中毒。"
+      "shortDesc": "有时会让接触到自己的对手变为中毒状态。"
     },
     "poison-puppeteer": {
       "name": "毒傀儡",
-      "shortDesc": "被佩查朗的招式中毒的宝可梦也会变得混乱。"
+      "shortDesc": "Pokémon poisoned by Pecharunt's moves will also become confused."
     },
     "poison-touch": {
       "name": "毒手",
-      "shortDesc": "接触时有 30% 的几率使目标宝可梦中毒。"
+      "shortDesc": "只通过接触就有可能让对手变为中毒状态。"
     },
     "power-construct": {
       "name": "群聚变形",
-      "shortDesc": "当生命值低于50%时，将10%或50%的基伽德转化为完整形态。"
+      "shortDesc": "ＨＰ变为一半时，细胞们会赶来支援，变为完全体形态。"
     },
     "power-nap": {
       "name": "Power Nap"
     },
     "power-of-alchemy": {
       "name": "化学之力",
-      "shortDesc": "当盟友晕倒时，这只宝可梦获得其能力。"
+      "shortDesc": "继承被打倒的同伴的特性，变为相同的特性。"
     },
     "power-spot": {
       "name": "能量点",
-      "shortDesc": "只要靠近宝可梦就能增强招式。"
+      "shortDesc": "只要处在相邻位置，招式的威力就会提高。"
     },
     "prankster": {
       "name": "恶作剧之心",
-      "shortDesc": "将非伤害招式的优先级提高一级。"
+      "shortDesc": "可以率先使出变化招式。"
     },
     "pressure": {
       "name": "压迫感",
-      "shortDesc": "使对方的动作额外消耗1点PP。"
+      "shortDesc": "给予对手压迫感，大量减少其使用招式的ＰＰ。"
     },
     "pride": {
       "name": "Pride"
     },
     "primordial-sea": {
       "name": "始源之海",
-      "shortDesc": "制造大雨，具有雨舞的所有属性，无法替代，并导致伤害性火系招式失败。"
+      "shortDesc": "变为不会受到火属性攻击的天气。"
     },
     "prism-armor": {
       "name": "棱镜装甲",
-      "shortDesc": "超级有效伤害降低至0.75倍。"
+      "shortDesc": "受到效果绝佳的攻击时，可以减弱其威力。"
     },
     "propeller-tail": {
       "name": "螺旋尾鳍",
-      "shortDesc": "忽略招式和吸引招式的技能。"
+      "shortDesc": "能无视具有吸引对手招式效果的特性或招式的影响。"
     },
     "protean": {
       "name": "变幻自如",
-      "shortDesc": "更改持有者的类型以匹配其使用的每个动作。"
+      "shortDesc": "变为与自己使出的招式相同的属性。"
     },
     "protosynthesis": {
       "name": "古代活性",
-      "shortDesc": "在强烈阳光下或持有助推器能量时提高最高属性。"
+      "shortDesc": "Raises highest stat in harsh sunlight, or if holding Booster Energy."
     },
     "psychic-surge": {
       "name": "精神制造者",
-      "shortDesc": "当这只宝可梦进入战斗时，它会将地形更改为心灵地形。"
+      "shortDesc": "出场时，会布下精神场地。"
     },
     "punk-rock": {
       "name": "庞克摇滚",
-      "shortDesc": "增强基于声音的动作并将相同动作的伤害减半。"
+      "shortDesc": "声音招式的威力会提高。受到的声音招式伤害会减半。"
     },
     "pure-power": {
       "name": "瑜伽之力",
-      "shortDesc": "战斗中攻击力加倍。"
+      "shortDesc": "因瑜伽的力量，物理攻击的威力会变为２倍。"
     },
     "purifying-salt": {
       "name": "洁净之盐",
-      "shortDesc": "免受状态状况影响并将幽灵类动作造成的伤害减半。"
+      "shortDesc": "Protects from status conditions and halves damage from Ghost-type moves."
     },
     "quark-drive": {
       "name": "夸克充能",
-      "shortDesc": "提高电动地形上的最高统计数据，或者如果持有助推器能量。"
+      "shortDesc": "Raises highest stat on Electric Terrain, or if holding Booster Energy."
     },
     "queenly-majesty": {
       "name": "女王的威严",
-      "shortDesc": "敌方宝可梦无法使用优先攻击。"
+      "shortDesc": "向对手施加威慑力，使其无法对我方使出先制招式。"
     },
     "quick-draw": {
       "name": "速击",
-      "shortDesc": "偶尔让宝可梦先移动。"
+      "shortDesc": "有时能比对手先一步行动。"
     },
     "quick-feet": {
       "name": "飞毛腿",
-      "shortDesc": "严重状态异常时速度提高至 1.5 倍。"
+      "shortDesc": "变为异常状态时，速度会提高。"
     },
     "rain-dish": {
       "name": "雨盘",
-      "shortDesc": "下雨期间每回合后恢复 1/16 最大生命值。"
+      "shortDesc": "下雨天气时，会缓缓回复ＨＰ。"
     },
     "rattled": {
       "name": "胆怯",
-      "shortDesc": "被黑暗、幽灵或虫子招式击中时，速度提高一级。"
+      "shortDesc": "受到恶属性、幽灵属性和虫属性的招式攻击时，会因胆怯而速度提高。"
     },
     "receiver": {
       "name": "接球手",
-      "shortDesc": "当盟友晕倒时，这只宝可梦获得其能力。"
+      "shortDesc": "继承被打倒的同伴的特性，变为相同的特性。"
     },
     "reckless": {
       "name": "舍身",
-      "shortDesc": "后坐力增强至其威力的 1.2 倍。"
+      "shortDesc": "自己会因反作用力受伤的招式，其威力会提高。"
     },
     "refrigerate": {
       "name": "冰冻皮肤",
-      "shortDesc": "将持有者的普通招式转变为冰招式，并将其威力强化至1.3倍。"
+      "shortDesc": "一般属性的招式会变为冰属性。威力会少量提高。"
     },
     "regenerator": {
       "name": "再生力",
-      "shortDesc": "切换时恢复 1/3 最大生命值。"
+      "shortDesc": "退回同行队伍后，ＨＰ会少量回复。"
     },
     "ripen": {
       "name": "熟成",
-      "shortDesc": "使浆果的效果加倍。"
+      "shortDesc": "使树果成熟，效果变为２倍。"
     },
     "rivalry": {
       "name": "斗争心",
-      "shortDesc": "对同性宝可梦造成的伤害增加至1.25倍，但对异性宝可梦造成的伤害减少至0.75倍。"
+      "shortDesc": "面对性别相同的对手，会燃起斗争心，变得更强。而面对性别不同的，则会变弱。"
     },
     "rks-system": {
       "name": "ＡＲ系统",
-      "shortDesc": "更改该宝可梦的类型以匹配其持有的记忆。"
+      "shortDesc": "根据持有的存储碟，自己的属性会改变。"
     },
     "rock-head": {
       "name": "坚硬脑袋",
-      "shortDesc": "防止反冲伤害。"
+      "shortDesc": "即使使出会受反作用力伤害的招式，ＨＰ也不会减少。"
     },
     "rocky-payload": {
       "name": "搬岩",
-      "shortDesc": "增强岩石类型的招式。"
+      "shortDesc": "Powers up Rock-type moves."
     },
     "rough-skin": {
       "name": "粗糙皮肤",
-      "shortDesc": "对接触的攻击者造成伤害。"
+      "shortDesc": "受到攻击时，用粗糙的皮肤弄伤接触到自己的对手。"
     },
     "run-away": {
       "name": "逃跑",
-      "shortDesc": "确保逃离狂野战斗。"
+      "shortDesc": "一定能从野生宝可梦那儿逃走。"
     },
     "run-up": {
       "name": "Run Up"
     },
     "sand-force": {
       "name": "沙之力",
-      "shortDesc": "沙尘暴期间，岩石、地面和钢铁的移动威力增强至 1.3 倍。防止沙尘暴损坏。"
+      "shortDesc": "沙暴天气时，岩石属性、地面属性和钢属性的招式威力会提高。"
     },
     "sand-rush": {
       "name": "拨沙",
-      "shortDesc": "沙尘暴期间速度加倍。防止沙尘暴损坏。"
+      "shortDesc": "沙暴天气时，速度会提高。"
     },
     "sand-spit": {
       "name": "吐沙",
-      "shortDesc": "受到攻击时会产生沙尘暴。"
+      "shortDesc": "受到攻击时，会刮起沙暴。"
     },
     "sand-stream": {
       "name": "扬沙",
-      "shortDesc": "召唤一场进入战斗后无限期持续的沙尘暴。"
+      "shortDesc": "出场时，会把天气变为沙暴。"
     },
     "sand-veil": {
       "name": "沙隐",
-      "shortDesc": "沙尘暴期间回避率增加至 1.25 倍。防止沙尘暴损坏。"
+      "shortDesc": "在沙暴的时候，闪避率会提高。"
     },
     "sandpit": {
       "name": "Sandpit"
     },
     "sap-sipper": {
       "name": "食草",
-      "shortDesc": "吸收草招，攻击力提升一级。"
+      "shortDesc": "受到草属性的招式攻击时，不会受到伤害，而是攻击会提高。"
     },
     "schooling": {
       "name": "鱼群",
-      "shortDesc": "愿望在生命值达到25%或更高时变为学校形式。"
+      "shortDesc": "ＨＰ多的时候会聚起来变强。ＨＰ剩余量变少时，群体会分崩离析。"
     },
     "scrappy": {
       "name": "胆量",
-      "shortDesc": "让宝可梦的普通动作和战斗动作攻击幽灵宝可梦。"
+      "shortDesc": "一般属性和格斗属性的招式可以击中幽灵属性的宝可梦。"
     },
     "screen-cleaner": {
       "name": "除障",
-      "shortDesc": "使光幕、反射和极光面纱的效果无效。"
+      "shortDesc": "出场时，敌方和我方的光墙、反射壁和极光幕的效果会消失。"
     },
     "seed-sower": {
       "name": "掉出种子",
-      "shortDesc": "当宝可梦受到攻击时，将地面变成草地地形。"
+      "shortDesc": "Turns the ground into Grassy Terrain when the Pokémon is hit by an attack."
     },
     "sequence": {
       "name": "Sequence"
     },
     "serene-grace": {
       "name": "天恩",
-      "shortDesc": "额外移动效果的几率加倍。"
+      "shortDesc": "托天恩的福，招式的追加效果容易出现。"
     },
     "shackle": {
       "name": "Shackle"
@@ -9043,96 +9043,96 @@
     },
     "shadow-shield": {
       "name": "幻影防守",
-      "shortDesc": "当这只宝可梦的生命值满时，招式造成的普通伤害减半。"
+      "shortDesc": "ＨＰ全满时，受到的伤害会变少。"
     },
     "shadow-tag": {
       "name": "踩影",
-      "shortDesc": "防止对手逃跑或切换。"
+      "shortDesc": "踩住对手的影子使其无法逃走或替换。"
     },
     "share": {
       "name": "Share"
     },
     "sharpness": {
       "name": "锋锐",
-      "shortDesc": "增强切片动作。"
+      "shortDesc": "Powers up slicing moves."
     },
     "shed-skin": {
       "name": "蜕皮",
-      "shortDesc": "每回合后可以治愈主要状态状况。"
+      "shortDesc": "通过蜕去身上的皮，有时会治愈异常状态。"
     },
     "sheer-force": {
       "name": "强行",
-      "shortDesc": "将具有额外效果的招式强化至其威力的1.3倍，但会阻止其额外效果。"
+      "shortDesc": "招式的追加效果消失，但因此能以更高的威力使出招式。"
     },
     "shell-armor": {
       "name": "硬壳盔甲",
-      "shortDesc": "防止致命一击。"
+      "shortDesc": "被坚硬的壳保护着，对手的攻击不会击中要害。"
     },
     "shield": {
       "name": "Shield"
     },
     "shield-dust": {
       "name": "鳞粉",
-      "shortDesc": "阻止传入动作的附加效果。"
+      "shortDesc": "被鳞粉守护着，不会受到招式的追加效果影响。"
     },
     "shields-down": {
       "name": "界限盾壳",
-      "shortDesc": "在核心形态和流星形态之间变换这个小形态。在流星形态下防止严重的状态疾病和嗜睡。"
+      "shortDesc": "ＨＰ变为一半时，壳会坏掉，变得有攻击性。"
     },
     "simple": {
       "name": "单纯",
-      "shortDesc": "使宝可梦的统计阶段变化加倍。"
+      "shortDesc": "能力变化会变为平时的２倍。"
     },
     "skater": {
       "name": "Skater"
     },
     "skill-link": {
       "name": "连续攻击",
-      "shortDesc": "每次将两到五击的动作和三重踢延伸至完全长度。"
+      "shortDesc": "如果使用连续招式，总是能使出最高次数。"
     },
     "slow-start": {
       "name": "慢启动",
-      "shortDesc": "进入战斗后五回合内攻击力和速度减半。"
+      "shortDesc": "在５回合内，攻击和速度减半。"
     },
     "slush-rush": {
       "name": "拨雪",
-      "shortDesc": "在冰雹期间，该宝可梦的速度为双倍。"
+      "shortDesc": "冰雹天气时，速度会提高。"
     },
     "sniper": {
       "name": "狙击手",
-      "shortDesc": "强化致命一击，造成 3 倍伤害，而不是 2 倍。"
+      "shortDesc": "击中要害时，威力会变得更强。"
     },
     "snow-cloak": {
       "name": "雪隐",
-      "shortDesc": "冰雹期间回避率增加至 1.25 倍。防止冰雹损坏。"
+      "shortDesc": "冰雹天气时，闪避率会提高。"
     },
     "snow-warning": {
       "name": "降雪",
-      "shortDesc": "召唤进入战斗后无限期持续的冰雹。"
+      "shortDesc": "出场时，会将天气变为冰雹。"
     },
     "solar-power": {
       "name": "太阳之力",
-      "shortDesc": "强阳光下，特攻提升至 1.5 倍，但每回合后消耗 1/8 最大生命值。"
+      "shortDesc": "晴朗天气时，特攻会提高，而每回合ＨＰ会减少。"
     },
     "solid-rock": {
       "name": "坚硬岩石",
-      "shortDesc": "超级有效招式受到的伤害减少 1/4。"
+      "shortDesc": "受到效果绝佳的攻击时，可以减弱其威力。"
     },
     "soul-heart": {
       "name": "魂心",
-      "shortDesc": "每当有宝可梦昏倒时，该宝可梦的特攻就会上升一级。"
+      "shortDesc": "宝可梦每次变为濒死状态时，特攻会提高。"
     },
     "soundproof": {
       "name": "隔音",
-      "shortDesc": "防止基于声音的移动。"
+      "shortDesc": "通过屏蔽声音，不受到声音招式的攻击。"
     },
     "speed-boost": {
       "name": "加速",
-      "shortDesc": "每回合后速度提升一级。"
+      "shortDesc": "每一回合速度会变快。"
     },
     "spicy-spray": {
       "name": "辣椒喷发",
-      "shortDesc": "当宝可梦因招式受到伤害时，它会燃烧攻击者。"
+      "shortDesc": "When the Pokémon takes damage from a move, it burns the attacker."
     },
     "spirit": {
       "name": "Spirit"
@@ -9145,305 +9145,305 @@
     },
     "stakeout": {
       "name": "蹲守",
-      "shortDesc": "该宝可梦的招式对本回合中切换的宝可梦具有双倍威力。"
+      "shortDesc": "可以对替换出场的对手以２倍的伤害进行攻击。"
     },
     "stall": {
       "name": "慢出",
-      "shortDesc": "使宝可梦的招式在其招式的优先级范围内排在最后。"
+      "shortDesc": "使出招式的顺序必定会变为最后。"
     },
     "stalwart": {
       "name": "坚毅",
-      "shortDesc": "忽略招式和吸引招式的技能。"
+      "shortDesc": "能无视具有吸引对手招式效果的特性或招式的影响。"
     },
     "stamina": {
       "name": "持久力",
-      "shortDesc": "当这只宝可梦受到招式伤害时，其防御力提升一级。"
+      "shortDesc": "受到攻击时，防御会提高。"
     },
     "stance-change": {
       "name": "战斗切换",
-      "shortDesc": "在使用伤害性招式之前将圣盾斩更改为剑刃形态，或者在使用王之盾之前将盾牌形态更改为盾牌形态。"
+      "shortDesc": "如果使出攻击招式，会变为刀剑形态，如果使出招式“王者盾牌”，会变为盾牌形态。"
     },
     "static": {
       "name": "静电",
-      "shortDesc": "可能会瘫痪进行接触的攻击者。"
+      "shortDesc": "身上带有静电，有时会让接触到的对手麻痹。"
     },
     "steadfast": {
       "name": "不屈之心",
-      "shortDesc": "退缩时速度提高一级。"
+      "shortDesc": "每次畏缩时，不屈之心就会燃起，速度也会提高。"
     },
     "stealth": {
       "name": "Stealth"
     },
     "steam-engine": {
       "name": "蒸汽机",
-      "shortDesc": "当宝可梦被火或水类型的招式击中时，速度属性会大幅提升。"
+      "shortDesc": "受到水属性或火属性的招式攻击时，速度会巨幅提高。"
     },
     "steelworker": {
       "name": "钢能力者",
-      "shortDesc": "该宝可梦的钢招式威力为 1.5 倍。"
+      "shortDesc": "钢属性的招式威力会提高。"
     },
     "steely-spirit": {
       "name": "钢之意志",
-      "shortDesc": "增强我方宝可梦的钢系招式。"
+      "shortDesc": "我方的钢属性攻击威力会提高。"
     },
     "stench": {
       "name": "恶臭",
-      "shortDesc": "每次攻击都有 10% 的几率使目标宝可梦退缩。"
+      "shortDesc": "通过释放臭臭的气味，在攻击的时候，有时会使对手畏缩。"
     },
     "sticky-hold": {
       "name": "黏着",
-      "shortDesc": "防止持有的物品被其他宝可梦移除。"
+      "shortDesc": "因为道具是粘在黏性身体上的，所以不会被对手夺走。"
     },
     "storm-drain": {
       "name": "引水",
-      "shortDesc": "在可能的情况下将单目标水招式重定向到该宝可梦。吸收水系招式，特攻提升一级。"
+      "shortDesc": "将水属性的招式引到自己身上，不会受到伤害，而是会提高特攻。"
     },
     "strong-jaw": {
       "name": "强壮之颚",
-      "shortDesc": "撕咬动作的威力增强至 1.5 倍。"
+      "shortDesc": "因为颚部强壮，啃咬类招式的威力会提高。"
     },
     "sturdy": {
       "name": "结实",
-      "shortDesc": "防止被满HP击倒，留下1 HP。无论 HP 多少，都能防御一击 KO 动作。"
+      "shortDesc": "即使受到对手的招式攻击，也不会被一击打倒。一击必杀的招式也没有效果。"
     },
     "suction-cups": {
       "name": "吸盘",
-      "shortDesc": "防止因其他宝可梦的动作而被迫退出战斗。"
+      "shortDesc": "用吸盘牢牢贴在地面上，让替换宝可梦的招式和道具无效。"
     },
     "super-luck": {
       "name": "超幸运",
-      "shortDesc": "招式暴击率提升一级。"
+      "shortDesc": "因为拥有超幸运，攻击容易击中对手的要害。"
     },
     "supersweet-syrup": {
       "name": "甘露之蜜",
-      "shortDesc": "每场战斗一次，当拥有超甜糖浆的宝可梦进入战斗时，它会使所有相邻对手的回避能力降低一级。"
+      "shortDesc": "Once per battle, when a Pokémon with Supersweet Syrup enters the battle, it lowers the evasion stat of all adjacent opponents by one stage."
     },
     "supreme-overlord": {
       "name": "大将",
-      "shortDesc": "每击败一方宝可梦，攻击力和特攻力都会增强。"
+      "shortDesc": "Attack and Special Attack are boosted for each party Pokémon that has been defeated."
     },
     "surge-surfer": {
       "name": "冲浪之尾",
-      "shortDesc": "使该宝可梦在电动地形上的速度加倍。"
+      "shortDesc": "电气场地时，速度会变为２倍。"
     },
     "swarm": {
       "name": "虫之预感",
-      "shortDesc": "强化虫子动作，在 1/3 最大生命值或以下时造成 1.5 倍伤害。"
+      "shortDesc": "ＨＰ减少的时候，虫属性的招式威力会提高。"
     },
     "sweet-veil": {
       "name": "甜幕",
-      "shortDesc": "阻止友方宝可梦睡觉。"
+      "shortDesc": "我方的宝可梦不会变为睡眠状态。"
     },
     "swift-swim": {
       "name": "悠游自如",
-      "shortDesc": "下雨时速度加倍。"
+      "shortDesc": "下雨天气时，速度会提高。"
     },
     "sword-of-ruin": {
       "name": "灾祸之剑",
-      "shortDesc": "降低除自身以外的所有宝可梦的防御力。"
+      "shortDesc": "Lowers Defense of all Pokémon except itself."
     },
     "symbiosis": {
       "name": "共生",
-      "shortDesc": "当盟友用完其物品时，将持有者持有的物品传递给盟友。"
+      "shortDesc": "同伴使用道具时，会把自己持有的道具传递给同伴。"
     },
     "synchronize": {
       "name": "同步",
-      "shortDesc": "将受到的烧伤、麻痹和中毒复制到造成它们的宝可梦身上。"
+      "shortDesc": "将自己的中毒、麻痹或灼伤状态传染给对手。"
     },
     "tablets-of-ruin": {
       "name": "灾祸之简",
-      "shortDesc": "降低除自身以外的所有宝可梦的攻击力。"
+      "shortDesc": "Lowers Attack of all Pokémon except itself."
     },
     "tangled-feet": {
       "name": "蹒跚",
-      "shortDesc": "困惑时闪避加倍。"
+      "shortDesc": "在混乱状态时，闪避率会提高。"
     },
     "tangling-hair": {
       "name": "卷发",
-      "shortDesc": "当该宝可梦因接触动作而受到常规伤害时，攻击宝可梦的速度会降低一级。"
+      "shortDesc": "对于用攻击接触到自己的对手，会降低其速度。"
     },
     "technician": {
       "name": "技术高手",
-      "shortDesc": "将基础力量 60 或以下的招式强化至其力量的 1.5 倍。"
+      "shortDesc": "攻击时可以将低威力招式的威力提高。"
     },
     "telepathy": {
       "name": "心灵感应",
-      "shortDesc": "防止友方宝可梦的破坏性动作。"
+      "shortDesc": "读取我方的攻击，并闪避其招式伤害。"
     },
     "tenacity": {
       "name": "Tenacity"
     },
     "tera-shell": {
       "name": "太晶甲壳",
-      "shortDesc": "当宝可梦HP满时，所有造成伤害的招式都不会非常有效。"
+      "shortDesc": "All damage-dealing moves that hit the Pokémon when its HP is full will not be very effective."
     },
     "tera-shift": {
       "name": "太晶变形",
-      "shortDesc": "当特拉帕戈斯进入战斗时，它会转变为特拉斯塔形态，直到战斗结束。"
+      "shortDesc": "When Terapagos enters the battle, it turns into its Terastal Form until the end of the battle."
     },
     "teraform-zero": {
       "name": "归零化境",
-      "shortDesc": "一旦特拉帕戈斯呈现出恒星形态，它就会立即抵消天气和地形的影响。"
+      "shortDesc": "As soon as Terapagos assumes its Stellar Form, it will immediately neutralize weather and terrain effects."
     },
     "teravolt": {
       "name": "兆级电压",
-      "shortDesc": "如果目标的能力能够阻碍或阻止移动，则绕过目标的能力。"
+      "shortDesc": "可以不受对手特性的干扰，向对手使出招式。"
     },
     "thermal-exchange": {
       "name": "热交换",
-      "shortDesc": "被火系招式击中时攻击力上升。不能被烧毁。"
+      "shortDesc": "Raises Attack when hit by a Fire-type move. Cannot be burned."
     },
     "thick-fat": {
       "name": "厚脂肪",
-      "shortDesc": "火与冰招式造成的伤害减半。"
+      "shortDesc": "因为被厚厚的脂肪保护着，会让火属性和冰属性的招式伤害减半。"
     },
     "thrust": {
       "name": "Thrust"
     },
     "tinted-lens": {
       "name": "有色眼镜",
-      "shortDesc": "效果不佳的动作造成的伤害加倍。"
+      "shortDesc": "可以将效果不好的招式以通常的威力使出。"
     },
     "torrent": {
       "name": "激流",
-      "shortDesc": "强化水系招式，最大生命值三分之一以下。"
+      "shortDesc": "ＨＰ减少的时候，水属性的招式威力会提高。"
     },
     "tough-claws": {
       "name": "硬爪",
-      "shortDesc": "接触动作的威力增强至1.33倍。"
+      "shortDesc": "接触到对手的招式威力会提高。"
     },
     "toxic-boost": {
       "name": "中毒激升",
-      "shortDesc": "中毒时攻击力增加至 1.5 倍。"
+      "shortDesc": "变为中毒状态时，物理招式的威力会提高。"
     },
     "toxic-chain": {
       "name": "毒锁链",
-      "shortDesc": "当宝可梦用招式击中对手时可能会导致严重中毒。"
+      "shortDesc": "May cause bad poisoning when the Pokémon hits an opponent with a move."
     },
     "toxic-debris": {
       "name": "毒满地",
-      "shortDesc": "当宝可梦因物理动作受到伤害时，在对方队伍的脚下散布毒刺。"
+      "shortDesc": "Scatters poison spikes at the feet of the opposing team when the Pokémon takes damage from physical moves."
     },
     "trace": {
       "name": "复制",
-      "shortDesc": "进入战斗时复制对手的能力。"
+      "shortDesc": "出场时，复制对手的特性，变为与之相同的特性。"
     },
     "transistor": {
       "name": "电晶体",
-      "shortDesc": "启动电动类动作。"
+      "shortDesc": "电属性的招式威力会提高。"
     },
     "triage": {
       "name": "先行治疗",
-      "shortDesc": "该宝可梦的治疗动作的优先级提高 3 级。"
+      "shortDesc": "可以率先使出回复招式。"
     },
     "truant": {
       "name": "懒惰",
-      "shortDesc": "每隔一回合跳过一次。"
+      "shortDesc": "如果使出招式，下一回合就会休息。"
     },
     "turboblaze": {
       "name": "涡轮火焰",
-      "shortDesc": "如果目标的能力能够阻碍或阻止移动，则绕过目标的能力。"
+      "shortDesc": "可以不受对手特性的干扰，向对手使出招式。"
     },
     "unaware": {
       "name": "纯朴",
-      "shortDesc": "忽略其他宝可梦的伤害和准确度计算的统计修正。"
+      "shortDesc": "可以无视对手能力的变化，进行攻击。"
     },
     "unburden": {
       "name": "轻装",
-      "shortDesc": "使用或丢失持有的物品时速度加倍。"
+      "shortDesc": "失去所持有的道具时，速度会提高。"
     },
     "unnerve": {
       "name": "紧张感",
-      "shortDesc": "防止对手的宝可梦吃掉持有的浆果。"
+      "shortDesc": "让对手紧张，使其无法食用树果。"
     },
     "unseen-fist": {
       "name": "无形拳",
-      "shortDesc": "接触移动可以击穿保护/检测。"
+      "shortDesc": "如果使出的是接触到对手的招式，就可以无视守护效果进行攻击。"
     },
     "vanguard": {
       "name": "Vanguard"
     },
     "vessel-of-ruin": {
       "name": "灾祸之鼎",
-      "shortDesc": "降低除自身以外的所有宝可梦的特攻。"
+      "shortDesc": "Lowers Special Attack of all Pokémon except itself."
     },
     "victory-star": {
       "name": "胜利之星",
-      "shortDesc": "将友方宝可梦的招式准确度提高至 1.1 倍。"
+      "shortDesc": "自己和同伴的命中率会提高。"
     },
     "vital-spirit": {
       "name": "干劲",
-      "shortDesc": "阻止睡眠。"
+      "shortDesc": "通过激发出干劲，不会变为睡眠状态。"
     },
     "volt-absorb": {
       "name": "蓄电",
-      "shortDesc": "吸收电击，治疗最大生命值的 1/4。"
+      "shortDesc": "受到电属性的招式攻击时，不会受到伤害，而是会回复。"
     },
     "wandering-spirit": {
       "name": "游魂",
-      "shortDesc": "在接触时与对手交换能力。"
+      "shortDesc": "与使用接触类招式攻击自己的宝可梦互换特性。"
     },
     "warm-blanket": {
       "name": "Warm Blanket"
     },
     "water-absorb": {
       "name": "储水",
-      "shortDesc": "吸收水移动并恢复四分之一最大生命值。"
+      "shortDesc": "受到水属性的招式攻击时，不会受到伤害，而是会回复。"
     },
     "water-bubble": {
       "name": "水泡",
-      "shortDesc": "将火招式的伤害减半，将水招式的伤害加倍，并防止烧伤。"
+      "shortDesc": "降低自己受到的火属性招式的威力，不会灼伤。"
     },
     "water-compaction": {
       "name": "遇水凝固",
-      "shortDesc": "当这只宝可梦被水属性招式击中时，它的防御力会提升两级。"
+      "shortDesc": "受到水属性的招式攻击时，防御会大幅提高。"
     },
     "water-veil": {
       "name": "水幕",
-      "shortDesc": "防止烧伤。"
+      "shortDesc": "将水幕裹在身上，不会变为灼伤状态。"
     },
     "wave-rider": {
       "name": "Wave Rider"
     },
     "weak-armor": {
       "name": "碎裂铠甲",
-      "shortDesc": "被物理招式击中时，速度各提升一级，防御降低一级。"
+      "shortDesc": "如果因物理招式受到伤害，防御会降低，速度会大幅提高。"
     },
     "well-baked-body": {
       "name": "焦香之躯",
-      "shortDesc": "免疫火系招式，防御大幅提升。"
+      "shortDesc": "Immune to Fire-type moves, and Defense is sharply boosted."
     },
     "white-smoke": {
       "name": "白色烟雾",
-      "shortDesc": "防止属性被其他宝可梦降低。"
+      "shortDesc": "被白色烟雾保护着，不会被对手降低能力。"
     },
     "wimp-out": {
       "name": "跃跃欲逃",
-      "shortDesc": "当该宝可梦的生命值低于一半时，该宝可梦会自动切换。"
+      "shortDesc": "ＨＰ变为一半时，会慌慌张张逃走，退回同行队伍中。"
     },
     "wind-power": {
       "name": "风力发电",
-      "shortDesc": "被风系招式击中时，下一个电系招式的威力变为2倍。"
+      "shortDesc": "When hit by a wind move, the power of the next Electric-type move it uses is doubled."
     },
     "wind-rider": {
       "name": "乘风",
-      "shortDesc": "免疫风属性招式，并且受到一只宝可梦攻击时攻击力提升一级。"
+      "shortDesc": "Gives immunity to wind moves, and causes the Pokémon's Attack to increase by one stage when hit by one."
     },
     "wonder-guard": {
       "name": "神奇守护",
-      "shortDesc": "防止不是非常有效的伤害性动作。"
+      "shortDesc": "不可思议的力量，只有效果绝佳的招式才能击中。"
     },
     "wonder-skin": {
       "name": "奇迹皮肤",
-      "shortDesc": "将传入的非伤害性动作的基础准确度降低至 50%。"
+      "shortDesc": "成为不易受到变化招式攻击的身体。"
     },
     "zen-mode": {
       "name": "达摩模式",
-      "shortDesc": "每回合后根据 HP 改变 Darmanitan 的形态：禅宗模式低于 50% 最大 HP，否则为标准模式。"
+      "shortDesc": "ＨＰ变为一半以下时，样子会改变。"
     },
     "zero-to-hero": {
       "name": "全能变身",
-      "shortDesc": "切换时变身为英雄形态。"
+      "shortDesc": "Transforms into its Hero Form when switching out."
     }
   }
 }

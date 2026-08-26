@@ -66,6 +66,10 @@ func _check_catalogs(catalogs: Dictionary) -> void:
 				_placeholders(str(catalog.get(key, ""))) == _placeholders(str(english.get(key, ""))),
 				"%s placeholders match English for %s" % [locale, key]
 			)
+	var chinese: Dictionary = catalogs.get("zh_CN", {})
+	for value: Variant in chinese.values():
+		_check(not str(value).contains("电源"), "Simplified Chinese does not translate Power as power supply")
+		_check(not str(value).contains("加速器"), "Simplified Chinese does not translate accuracy as accelerator")
 
 
 func _check_locale_normalization() -> void:

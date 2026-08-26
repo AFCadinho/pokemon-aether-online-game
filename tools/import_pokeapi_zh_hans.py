@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Import verified Simplified Chinese Pokémon presentation names from PokéAPI."""
+"""Import verified Simplified Chinese Pokémon presentation from PokéAPI."""
 
 from __future__ import annotations
 
@@ -23,13 +23,23 @@ EXPECTED_SHA256 = {
     "ability_names.csv": "c451c060b5075664426fb2b79517f8b1d946d2eb47d6c9d1cd16e3e9e6a7c302",
     "items.csv": "f08cd6dc30b447cb91cbe9232c79052e8521f32f6105bb1489b5bfabf4ca3241",
     "item_names.csv": "7b1b4fe6edf7946110050a5dddabf62c3a1dc3e1616099c4ae97abcb5ebd0f97",
+    "move_flavor_text.csv": "43177df8d76dac477fc837aa19b2a50d74ee2c94e47fb827506768c58b360087",
+    "ability_flavor_text.csv": "2e9111602ae83744e53a1ea3cfd521548673660e0e271bbd25ff2fe3454d0ef9",
+    "item_flavor_text.csv": "f85281c97e4a423fb6ae673a3d2cfab116ac2e7bb9fcdecfb43ac8b1e1fb8676",
+}
+REVIEWED_DESCRIPTION_OVERRIDES = {
+    "moves": {
+        "armor-cannon": "熊熊燃烧自己的铠甲，将其做成炮弹射出攻击。自己的防御和特防会降低。",
+        "bitter-blade": "将对世间的留恋聚集于剑尖，并斩击对手。可以回复给予对手伤害的一半HP。",
+        "hidden-power": "威力固定为 60。属性取决于使用该招式的宝可梦。",
+    },
 }
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Replace machine-translated Pokémon names with the verified zh-hans "
+            "Replace machine-translated Pokémon presentation with verified zh-hans "
             f"values from PokéAPI revision {SOURCE_REVISION}."
         )
     )
@@ -96,6 +106,34 @@ def localized_names(csv_dir: Path, plural: str, singular: str) -> dict[str, str]
     return result
 
 
+def normalized_flavor_text(value: str) -> str:
+    return value.replace("\u00ad", "").replace("\r", "").replace("\n", "").strip()
+
+
+def localized_flavor_texts(csv_dir: Path, plural: str, singular: str) -> dict[str, str]:
+    with (csv_dir / f"{plural}.csv").open(encoding="utf-8", newline="") as handle:
+        identifiers = {
+            row["id"]: row["identifier"]
+            for row in csv.DictReader(handle)
+        }
+
+    selected: dict[str, tuple[int, str]] = {}
+    path = csv_dir / f"{singular}_flavor_text.csv"
+    with path.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            source_id = row.get(f"{singular}_id", "")
+            text = normalized_flavor_text(row.get("flavor_text", ""))
+            if row.get("language_id") != LANGUAGE_ID or source_id not in identifiers or not text:
+                continue
+            if singular == "move" and "无法使用这个招式" in text:
+                continue
+            version_group_id = int(row.get("version_group_id", "0"))
+            identifier = identifiers[source_id]
+            if version_group_id >= selected.get(identifier, (-1, ""))[0]:
+                selected[identifier] = (version_group_id, text)
+    return {identifier: value[1] for identifier, value in selected.items()}
+
+
 def replace_names(
     target: dict[str, Any],
     english: dict[str, Any],
@@ -133,6 +171,41 @@ def replace_overlay_names(
             entry_value["name"] = verified[content_id]
 
 
+def replace_descriptions(
+    target: dict[str, Any],
+    english: dict[str, Any],
+    verified: dict[str, str],
+) -> tuple[int, int]:
+    verified_count = 0
+    fallback_count = 0
+    if set(target) != set(english):
+        raise ValueError("Target and English catalogs do not contain the same IDs")
+    for content_id, target_entry_value in target.items():
+        english_entry_value = english[content_id]
+        if not isinstance(target_entry_value, dict) or not isinstance(english_entry_value, dict):
+            raise ValueError(f"Invalid presentation entry: {content_id}")
+        english_description = str(english_entry_value.get("shortDesc", "")).strip()
+        if not english_description:
+            target_entry_value.pop("shortDesc", None)
+            continue
+        if content_id in verified:
+            target_entry_value["shortDesc"] = verified[content_id]
+            verified_count += 1
+        else:
+            target_entry_value["shortDesc"] = english_description
+            fallback_count += 1
+    return verified_count, fallback_count
+
+
+def replace_overlay_descriptions(
+    target: dict[str, Any],
+    verified: dict[str, str],
+) -> None:
+    for content_id, entry_value in target.items():
+        if content_id in verified and isinstance(entry_value, dict) and "shortDesc" in entry_value:
+            entry_value["shortDesc"] = verified[content_id]
+
+
 def add_machine_item_names(
     item_names: dict[str, str],
     move_names: dict[str, str],
@@ -151,6 +224,23 @@ def add_machine_item_names(
             move_id = item_id.removeprefix(prefix)
             if move_id in move_names:
                 item_names[item_id] = f"{chinese_prefix}：{move_names[move_id]}"
+            break
+
+
+def add_machine_item_descriptions(
+    item_descriptions: dict[str, str],
+    move_names: dict[str, str],
+    english_items: dict[str, Any],
+) -> None:
+    for item_id in english_items:
+        if item_id in item_descriptions:
+            continue
+        for prefix in ("tm-", "hm-"):
+            if not item_id.startswith(prefix):
+                continue
+            move_id = item_id.removeprefix(prefix)
+            if move_id in move_names:
+                item_descriptions[item_id] = f"让能够学习的宝可梦学会“{move_names[move_id]}”。"
             break
 
 
@@ -182,7 +272,8 @@ def main() -> None:
     english_items = read_json(english_items_path)
     reviewed_items = read_json(reviewed_items_path)
 
-    coverage: dict[str, tuple[int, int]] = {}
+    name_coverage: dict[str, tuple[int, int]] = {}
+    description_coverage: dict[str, tuple[int, int]] = {}
     verified_move_names = localized_names(csv_dir, "moves", "move")
     for kind, plural, singular in (
         ("moves", "moves", "move"),
@@ -196,13 +287,29 @@ def main() -> None:
             raise ValueError(f"Missing generated content section: {kind}")
         if not isinstance(reviewed_entries, dict):
             raise ValueError(f"Missing reviewed content section: {kind}")
-        coverage[kind] = replace_names(target_entries, english_entries, verified)
+        name_coverage[kind] = replace_names(target_entries, english_entries, verified)
         replace_overlay_names(reviewed_entries, english_entries, verified)
+        verified_descriptions = localized_flavor_texts(csv_dir, plural, singular)
+        verified_descriptions.update(REVIEWED_DESCRIPTION_OVERRIDES.get(kind, {}))
+        description_coverage[kind] = replace_descriptions(
+            target_entries,
+            english_entries,
+            verified_descriptions,
+        )
+        replace_overlay_descriptions(reviewed_entries, verified_descriptions)
 
     verified_items = localized_names(csv_dir, "items", "item")
     add_machine_item_names(verified_items, verified_move_names, english_items)
-    coverage["items"] = replace_names(generated_items, english_items, verified_items)
+    name_coverage["items"] = replace_names(generated_items, english_items, verified_items)
     replace_overlay_names(reviewed_items, english_items, verified_items)
+    verified_item_descriptions = localized_flavor_texts(csv_dir, "items", "item")
+    add_machine_item_descriptions(verified_item_descriptions, verified_move_names, english_items)
+    description_coverage["items"] = replace_descriptions(
+        generated_items,
+        english_items,
+        verified_item_descriptions,
+    )
+    replace_overlay_descriptions(reviewed_items, verified_item_descriptions)
 
     stage_output(generated_content_path, generated_content, args.check)
     stage_output(reviewed_content_path, reviewed_content, args.check)
@@ -210,11 +317,19 @@ def main() -> None:
     stage_output(reviewed_items_path, reviewed_items, args.check)
 
     mode = "Verified" if args.check else "Imported"
-    summary = " · ".join(
+    name_summary = " · ".join(
         f"{kind}: {verified_count} verified, {fallback_count} English fallback"
-        for kind, (verified_count, fallback_count) in coverage.items()
+        for kind, (verified_count, fallback_count) in name_coverage.items()
     )
-    print(f"{mode} PokéAPI {SOURCE_REVISION} zh-hans names · {summary}")
+    description_summary = " · ".join(
+        f"{kind}: {verified_count} verified, {fallback_count} English fallback"
+        for kind, (verified_count, fallback_count) in description_coverage.items()
+    )
+    print(
+        f"{mode} PokéAPI {SOURCE_REVISION} zh-hans presentation\n"
+        f"Names · {name_summary}\n"
+        f"Descriptions · {description_summary}"
+    )
 
 
 if __name__ == "__main__":

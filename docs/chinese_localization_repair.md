@@ -33,12 +33,20 @@ useful for technical coverage but is not an approved terminology source.
 Canonical game terminology is imported from the PokéAPI CSV data snapshot at commit
 `c40a25c6544b97334a1ae8b1965a378fa3317c28`, using official language ID 12
 (`zh-hans`). The snapshot provides exact identifier coverage for all 919 current move
-IDs, 311 of 377 Ability IDs, and 1,030 of 1,447 item IDs in PokeAether.
+IDs, 311 of 377 Ability IDs, and 1,030 of 1,447 item IDs in PokeAether. A
+deterministic localized machine-name rule covers another 293 TM/HM item IDs.
+
+Official Chinese flavor text covers 826 moves, 267 of the 317 described
+Abilities, and 1,008 items. Reviewed overrides retain PokeAether's current
+Hidden Power mechanics and cover Armor Cannon and Bitter Blade. The same
+TM/HM rule supplies 293 short item descriptions. Remaining generated prose
+uses the English source text instead of an unreviewed Chinese translation.
 
 The raw upstream CSV files are not copied into the game. A deterministic import tool
 reads an explicitly supplied snapshot directory and updates presentation-only fields.
 Entries without a verified Chinese value fall back to English instead of retaining an
-unreviewed machine translation.
+unreviewed machine translation. Existing reviewed PokeAether-specific overlays remain
+authoritative.
 
 ## Safety rules
 

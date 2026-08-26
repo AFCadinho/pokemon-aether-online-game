@@ -164,7 +164,9 @@ async function generateLocale(englishSource, target) {
 		target.locale === "zh_CN"
 			? Promise.resolve(new Map())
 			: translateUniqueStrings(names, target.translationLanguage),
-		translateUniqueStrings(descriptions, target.translationLanguage),
+		target.locale === "zh_CN"
+			? Promise.resolve(new Map())
+			: translateUniqueStrings(descriptions, target.translationLanguage),
 	]);
 	const generated = {
 		species: englishSource.species,
@@ -174,6 +176,9 @@ async function generateLocale(englishSource, target) {
 	for (const kind of ["moves", "abilities"]) {
 		for (const [contentId, sourceEntry] of Object.entries(englishSource[kind])) {
 			const preservedName = String(preservedCatalog[kind]?.[contentId]?.name ?? "").trim();
+			const preservedDescription = String(
+				preservedCatalog[kind]?.[contentId]?.shortDesc ?? "",
+			).trim();
 			const entry = {
 				name: preservedName || (
 					reviewedNames.get(sourceEntry.name)
@@ -182,9 +187,11 @@ async function generateLocale(englishSource, target) {
 				),
 			};
 			if (sourceEntry.shortDesc) {
-				entry.shortDesc = reviewedDescriptions.get(sourceEntry.shortDesc)
+				entry.shortDesc = preservedDescription || (
+					reviewedDescriptions.get(sourceEntry.shortDesc)
 					?? translatedDescriptions.get(sourceEntry.shortDesc)
-					?? sourceEntry.shortDesc;
+					?? sourceEntry.shortDesc
+				);
 			}
 			generated[kind][contentId] = entry;
 		}
@@ -233,20 +240,25 @@ async function generateItemLocale(englishItems, target) {
 		target.locale === "zh_CN"
 			? Promise.resolve(new Map())
 			: translateUniqueStrings(names, target.translationLanguage),
-		translateUniqueStrings(descriptions, target.translationLanguage),
+		target.locale === "zh_CN"
+			? Promise.resolve(new Map())
+			: translateUniqueStrings(descriptions, target.translationLanguage),
 	]);
 	const generatedItems = {};
 	for (const [itemId, sourceEntry] of Object.entries(englishItems)) {
 		const preservedName = String(preservedItems[itemId]?.name ?? "").trim();
+		const preservedDescription = String(preservedItems[itemId]?.shortDesc ?? "").trim();
 		generatedItems[itemId] = {
 			name: preservedName || (
 				reviewedNames.get(sourceEntry.name)
 				?? translatedNames.get(sourceEntry.name)
 				?? sourceEntry.name
 			),
-			shortDesc: reviewedDescriptions.get(sourceEntry.shortDesc)
+			shortDesc: preservedDescription || (
+				reviewedDescriptions.get(sourceEntry.shortDesc)
 				?? translatedDescriptions.get(sourceEntry.shortDesc)
-				?? sourceEntry.shortDesc,
+				?? sourceEntry.shortDesc
+			),
 		};
 	}
 	fs.mkdirSync(generatedItemDir, {recursive: true});

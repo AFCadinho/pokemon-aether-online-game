@@ -123,13 +123,30 @@ func _check_catalogs() -> void:
 	}
 	var generated_chinese: Dictionary = generated_catalogs.get("zh_CN", {})
 	var generated_chinese_moves: Dictionary = generated_chinese.get("moves", {})
+	var generated_english_moves: Dictionary = generated_english.get("moves", {})
 	for move_id: String in verified_chinese_moves:
 		_check(
 			str((generated_chinese_moves.get(move_id, {}) as Dictionary).get("name", ""))
 			== str(verified_chinese_moves.get(move_id, "")),
 			"generated Simplified Chinese %s uses its official move name" % move_id
 		)
+	_check(
+		str((generated_chinese_moves.get("ally-switch", {}) as Dictionary).get("shortDesc", ""))
+		== "用神奇的力量瞬间移动，互换自己和同伴所在的位置。",
+		"generated Simplified Chinese uses the official Ally Switch description"
+	)
+	_check(
+		str((generated_chinese_moves.get("bitter-blade", {}) as Dictionary).get("shortDesc", ""))
+		== "将对世间的留恋聚集于剑尖，并斩击对手。可以回复给予对手伤害的一半HP。",
+		"generated Simplified Chinese uses the reviewed Bitter Blade description"
+	)
+	_check(
+		str((generated_chinese_moves.get("blood-moon", {}) as Dictionary).get("shortDesc", ""))
+		== str((generated_english_moves.get("blood-moon", {}) as Dictionary).get("shortDesc", "")),
+		"moves without verified Chinese prose use the English description fallback"
+	)
 	var generated_chinese_abilities: Dictionary = generated_chinese.get("abilities", {})
+	var generated_english_abilities: Dictionary = generated_english.get("abilities", {})
 	_check(
 		str((generated_chinese_abilities.get("adaptability", {}) as Dictionary).get("name", "")) == "适应力",
 		"generated Simplified Chinese uses the official Adaptability Ability name"
@@ -137,6 +154,11 @@ func _check_catalogs() -> void:
 	_check(
 		str((generated_chinese_abilities.get("black-hole", {}) as Dictionary).get("name", "")) == "Black Hole",
 		"unverified Simplified Chinese Ability names use the English fallback"
+	)
+	_check(
+		str((generated_chinese_abilities.get("anger-shell", {}) as Dictionary).get("shortDesc", ""))
+		== str((generated_english_abilities.get("anger-shell", {}) as Dictionary).get("shortDesc", "")),
+		"Abilities without verified Chinese prose use the English description fallback"
 	)
 	var summary_index_value: Variant = JSON.parse_string(
 		FileAccess.get_file_as_string("res://data/move_summary_index.json")

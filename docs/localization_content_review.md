@@ -8,17 +8,18 @@ mechanical indexes, but contains presentation fields only:
 - 1,439 species and forms;
 - 919 moves;
 - 377 abilities;
-- 1,395 items;
+- 1,447 items;
 - short descriptions for all 919 moves and the 317 abilities whose source index has
   a description;
-- names and short descriptions for all 1,395 canonical items.
+- names and short descriptions for all 1,447 canonical items.
 
 `localization/content/generated/en.json` is the complete English presentation source.
 The Dutch and Brazilian Portuguese files in the same directory are machine-generated
 review drafts. The Simplified Chinese catalogs use verified PokéAPI `zh-hans` names
-where available and English fallback for unverified names; their descriptions remain
-review drafts unless stated otherwise. All generated catalogs make the full catalog
-testable in-game, but automated description coverage is not considered language-reviewed.
+and flavor text where available, reviewed local overrides for documented exceptions,
+and English fallback for unverified presentation. They do not retain automated Chinese
+content drafts. All generated catalogs make the full catalog testable in-game; free
+product prose still requires native-speaker review.
 
 The item equivalents live under `localization/items/generated/`. The generated item
 catalogs contain only `name` and `shortDesc`; quantities, prices, effects, ownership,
@@ -72,8 +73,8 @@ the 69-item pilot catalog.
      --items-only
    ```
 
-   The generator preserves existing Simplified Chinese content names. To verify or
-   refresh those names from the pinned PokéAPI snapshot, run:
+   The generator preserves existing verified Simplified Chinese content presentation.
+   To verify or refresh it from the pinned PokéAPI snapshot, run:
 
    ```bash
    python3 tools/import_pokeapi_zh_hans.py --csv-dir /path/to/pinned/data/v2/csv
