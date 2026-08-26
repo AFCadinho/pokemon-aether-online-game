@@ -123,7 +123,7 @@ func _run() -> void:
 	var scene := load("res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn") as PackedScene
 	_expect(scene != null, "Mt. Moon B2F loads with the expanded cinematic")
 
-	for locale: String in ["en", "nl", "pt_BR"]:
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var catalog := _load_json("res://localization/%s.json" % locale)
 		_expect(catalog.has("story.mt_moon.cutscene.go"), "%s has the summon caption" % locale)
 		_expect(catalog.has("story.mt_moon.cutscene.use_move"), "%s has the attack command" % locale)

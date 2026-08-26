@@ -49,6 +49,31 @@ func _run() -> void:
 			)
 			var part_frames := APPEARANCE.get_part_frames(category, part_id, gender)
 			_check(part_frames != null, "%s renders for %s models" % [part_id, gender])
+		for movement_style: String in [
+			APPEARANCE.BODY_MOVEMENT_FISH,
+			APPEARANCE.BODY_MOVEMENT_RIDE,
+		]:
+			for mysterious_part: Dictionary in [
+				{"category": "top", "id": "Mysterious_Shirt"},
+				{"category": "bottom", "id": "Mysterious_Trousers"},
+				{"category": "shoes", "id": "Mysterious_Shoes"},
+			]:
+				var category := str(mysterious_part.get("category", ""))
+				var part_id := str(mysterious_part.get("id", ""))
+				var movement_texture := APPEARANCE._load_part_texture_for_movement(
+					category,
+					part_id,
+					gender,
+					movement_style
+				)
+				_check(
+					movement_texture != null
+						and movement_texture.resource_path.ends_with(
+							"/%s/%s_%s.png" % [movement_style, part_id, movement_style]
+						),
+					"%s includes its authored %s pose for %s models"
+						% [part_id, movement_style, gender]
+				)
 	_check(APPEARANCE.SKIN_TONE_SWATCHES.size() >= 13, "skin palette includes Default plus twelve curated tones")
 	_check(
 		str(APPEARANCE.SKIN_TONE_SWATCHES[0].get("label", "")) == "Default"

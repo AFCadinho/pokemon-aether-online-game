@@ -5,6 +5,7 @@ const LAUNCHER_CATALOGS := {
 	"en": "res://launcher/localization/en.json",
 	"nl": "res://launcher/localization/nl.json",
 	"pt_BR": "res://launcher/localization/pt_BR.json",
+	"zh_CN": "res://launcher/localization/zh_CN.json",
 }
 
 var failed := false
@@ -63,6 +64,7 @@ func _check_news_fallbacks() -> void:
 			"localizations": {
 				"nl": {"title": "Nederlandse titel", "description": "Nederlandse tekst"},
 				"pt-BR": {"title": "Título em português"},
+				"zh-CN": {"title": "中文标题"},
 			},
 		}],
 	}
@@ -71,6 +73,9 @@ func _check_news_fallbacks() -> void:
 	var portuguese := NewsLocalizationService.resolve_items(localized, "pt-BR")
 	_check(portuguese[0].get("title") == "Título em português", "news selects pt-BR")
 	_check(portuguese[0].get("description") == "English body", "missing localized fields fall back to English")
+	var chinese := NewsLocalizationService.resolve_items(localized, "zh-CN")
+	_check(chinese[0].get("title") == "中文标题", "news selects zh-CN")
+	_check(chinese[0].get("description") == "English body", "missing Chinese news fields fall back to English")
 	var unsupported := NewsLocalizationService.resolve_items(localized, "de-DE")
 	_check(unsupported[0].get("title") == "English title", "unsupported news locale falls back to English")
 

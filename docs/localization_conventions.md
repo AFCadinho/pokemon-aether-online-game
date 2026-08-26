@@ -9,6 +9,7 @@ Date: 2026-07-29
 - English (`en`) is the canonical source and mandatory fallback.
 - Dutch uses `nl`.
 - Brazilian Portuguese uses `pt_BR` inside Godot and `pt-BR` in HTTP.
+- Simplified Chinese uses `zh_CN` inside Godot and `zh-CN` in HTTP.
 - A new key is not complete until all released locale catalogs contain it.
 
 ## Key names
@@ -135,16 +136,16 @@ through approved overlays. Their canonical IDs never change.
 
 Initial recurring terminology:
 
-| English | Dutch | Brazilian Portuguese |
-| --- | --- | --- |
-| Trainer | Trainer | Treinador |
-| Settings | Instellingen | Configurações |
-| Bag | Tas | Bolsa |
-| Party | Team | Equipe |
-| Guild | Guild | Guilda |
-| Battle | Gevecht | Batalha |
-| Aether Gems | Aether Gems | Gemas Aether |
-| Pokédollars | Pokédollars | Pokédollars |
+| English | Dutch | Brazilian Portuguese | Simplified Chinese |
+| --- | --- | --- | --- |
+| Trainer | Trainer | Treinador | 训练家 |
+| Settings | Instellingen | Configurações | 设置 |
+| Bag | Tas | Bolsa | 背包 |
+| Party | Team | Equipe | 队伍 |
+| Guild | Guild | Guilda | 公会 |
+| Battle | Gevecht | Batalha | 对战 |
+| Aether Gems | Aether Gems | Gemas Aether | Aether Gems |
+| Pokédollars | Pokédollars | Pokédollars | 宝可币 |
 
 The glossary is a product rule. If a term changes, update existing catalog entries
 together rather than allowing per-screen variants.

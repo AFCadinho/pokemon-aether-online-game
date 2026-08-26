@@ -5,7 +5,7 @@ const OVERLAY_SCRIPT_PATH := "res://scripts/ui/ui_overlay.gd"
 const PLAYER_STATUS_SCENE_PATH := "res://scenes/interface/player_status_card.tscn"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const VS_SCENE_PATH := "res://scenes/battle/vs_panel_container.tscn"
-const SUPPORTED_LOCALES: Array[String] = ["en", "nl", "pt_BR"]
+const SUPPORTED_LOCALES: Array[String] = ["en", "nl", "pt_BR", "zh_CN"]
 const SUPPORTED_RESOLUTIONS: Array[Vector2i] = [
 	Vector2i(1280, 720),
 	Vector2i(1600, 900),
