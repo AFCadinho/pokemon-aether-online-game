@@ -1689,6 +1689,8 @@
   "ui.guild.bank.items.full_title": "道具仓库",
   "ui.guild.bank.items.selected": "已选道具",
   "ui.guild.bank.items.select_hint": "选择一个道具以查看数量和可用操作。",
+  "ui.guild.bank.item_description": "描述",
+  "ui.guild.bank.item_description_unavailable": "该道具暂无描述。",
   "ui.guild.bank.resources.full_title": "公会资源",
   "ui.guild.bank.resources.selected": "已选资源",
   "ui.guild.bank.resources.select_hint": "选择一个资源以查看数量并取出。",

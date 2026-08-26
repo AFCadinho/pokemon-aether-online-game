@@ -1692,6 +1692,8 @@
   "ui.guild.bank.items.full_title": "ARMAZENAMENTO DE ITENS",
   "ui.guild.bank.items.selected": "ITEM SELECIONADO",
   "ui.guild.bank.items.select_hint": "Selecione um item para ver quantidades e ações disponíveis.",
+  "ui.guild.bank.item_description": "DESCRIÇÃO",
+  "ui.guild.bank.item_description_unavailable": "Não há descrição disponível para este item.",
   "ui.guild.bank.resources.full_title": "RECURSOS DA GUILDA",
   "ui.guild.bank.resources.selected": "RECURSO SELECIONADO",
   "ui.guild.bank.resources.select_hint": "Selecione um recurso para ver a quantidade e retirá-lo.",

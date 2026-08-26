@@ -511,9 +511,11 @@ func _run() -> void:
 	_check(popup.find_child("GuildItemsStorageSlot_leftovers", true, false) is Button, "stored items render as selectable grid slots")
 	var stored_item_name := items_storage_window.find_child("GuildBankItemName_leftovers", true, false) as Label
 	var stored_item_detail := items_storage_window.find_child("GuildBankItemDetail_leftovers", true, false) as Label
+	var stored_item_description := items_storage_window.find_child("GuildItemsStorageSelectedDescription", true, false) as Label
 	_check(items_storage_window.find_child("GuildBankItemRow_leftovers", true, false) is PanelContainer, "selected item information and actions use a distinct card")
 	_check(stored_item_name != null and stored_item_name.text == "Leftovers", "stored item names remain readable without quantity metadata")
 	_check(stored_item_detail != null and stored_item_detail.text.contains("18 stored") and stored_item_detail.text.contains("17 available") and stored_item_detail.text.contains("1 borrowed"), "stored item quantities and loan availability use a dedicated detail line")
+	_check(stored_item_description != null and not stored_item_description.text.is_empty(), "selected Item Storage assets show their localized description")
 	var asset_search := items_storage_window.find_child("GuildItemsStorageSearchInput", true, false) as LineEdit
 	if asset_search != null:
 		asset_search.text = "left"
@@ -588,6 +590,8 @@ func _run() -> void:
 	_check(resources_storage_window != null and resources_storage_window.find_child("GuildBankResourceWithdrawButton_potion", true, false) != null, "selected Guild consumables can be taken")
 	_check(resources_storage_window != null and resources_storage_window.find_child("GuildBankResourceDepositButton_poke-ball", true, false) == null, "full Resources focuses only on Guild supplies")
 	_check(resources_storage_window != null and resources_storage_window.find_child("GuildBankItemBorrowButton_potion", true, false) == null, "Resources never expose borrowing")
+	var resource_description := resources_storage_window.find_child("GuildResourcesStorageSelectedDescription", true, false) as Label
+	_check(resource_description != null and not resource_description.text.is_empty(), "selected Resources show their localized item description")
 	_check(resources_storage_window.find_child("GuildBankResourceWithdrawButton_potion", true, false).tooltip_text == "", "authorized Resources withdrawal is immediately available")
 	var resources_close := resources_storage_window.find_child("GuildResourcesStorageCloseButton", true, false) as Button
 	if resources_close != null:

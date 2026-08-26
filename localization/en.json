@@ -1692,6 +1692,8 @@
   "ui.guild.bank.items.full_title": "ITEM STORAGE",
   "ui.guild.bank.items.selected": "SELECTED ITEM",
   "ui.guild.bank.items.select_hint": "Select an item to review its quantities and available actions.",
+  "ui.guild.bank.item_description": "DESCRIPTION",
+  "ui.guild.bank.item_description_unavailable": "No description is available for this item.",
   "ui.guild.bank.resources.full_title": "GUILD RESOURCES",
   "ui.guild.bank.resources.selected": "SELECTED RESOURCE",
   "ui.guild.bank.resources.select_hint": "Select a Resource to review its quantity and withdraw it.",

@@ -2701,6 +2701,7 @@ func _render_guild_item_storage_selection(detail: VBoxContainer, category: Strin
 		detail.add_child(hint)
 		return
 	detail.add_child(_build_guild_item_row(item, "withdraw", category == "resources"))
+	detail.add_child(_build_guild_item_description(item, category))
 	if category == "items":
 		var selected_loans: Array = []
 		for value: Variant in _array_from_value(guild_bank_state.get("borrowedItems", [])):
@@ -2708,6 +2709,29 @@ func _render_guild_item_storage_selection(detail: VBoxContainer, category: Strin
 				selected_loans.append(value)
 		if not selected_loans.is_empty():
 			detail.add_child(_build_guild_borrowed_item_list(selected_loans))
+
+
+func _build_guild_item_description(item: Dictionary, category: String) -> Control:
+	var prefix := _guild_item_storage_window_prefix(category)
+	var panel := PanelContainer.new()
+	panel.name = "%sSelectedDescriptionPanel" % prefix
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#07131ff2"), UI_BORDER_INNER, 7, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 10, 9, 10, 10)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 5)
+	margin.add_child(content)
+	content.add_child(_localized_label("ui.guild.bank.item_description", 9, UI_ACCENT))
+	var description := _label(_guild_bank_item_description(item), 11, UI_MUTED)
+	description.name = "%sSelectedDescription" % prefix
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.add_child(description)
+	return panel
 
 
 func _guild_bank_item_entry(category: String, item_id: String) -> Dictionary:
@@ -3968,6 +3992,22 @@ func _guild_bank_item_name(item_id: String, fallback: String) -> String:
 	if localization != null and localization.has_method("display_name"):
 		return str(localization.call("display_name", item_id, fallback))
 	return fallback
+
+
+func _guild_bank_item_description(item: Dictionary) -> String:
+	var item_id := str(item.get("itemId", item.get("id", "")))
+	var fallback := str(item.get(
+		"shortDesc",
+		item.get("short_desc", item.get("description", item.get("desc", "")))
+	)).strip_edges()
+	var localization := get_node_or_null("/root/ItemLocalization")
+	if localization != null and localization.has_method("short_description"):
+		var localized := str(localization.call("short_description", item_id, fallback)).strip_edges()
+		if not localized.is_empty():
+			return localized
+	if not fallback.is_empty():
+		return fallback
+	return _t("ui.guild.bank.item_description_unavailable")
 
 
 func _on_guild_lobby_pressed() -> void:

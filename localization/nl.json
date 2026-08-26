@@ -1692,6 +1692,8 @@
   "ui.guild.bank.items.full_title": "ITEMOPSLAG",
   "ui.guild.bank.items.selected": "GESELECTEERD ITEM",
   "ui.guild.bank.items.select_hint": "Selecteer een item om de aantallen en beschikbare acties te bekijken.",
+  "ui.guild.bank.item_description": "BESCHRIJVING",
+  "ui.guild.bank.item_description_unavailable": "Voor dit item is geen beschrijving beschikbaar.",
   "ui.guild.bank.resources.full_title": "GUILD-RESOURCES",
   "ui.guild.bank.resources.selected": "GESELECTEERDE RESOURCE",
   "ui.guild.bank.resources.select_hint": "Selecteer een resource om het aantal te bekijken en deze mee te nemen.",

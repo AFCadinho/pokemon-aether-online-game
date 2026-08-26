@@ -95,6 +95,8 @@ func _init() -> void:
 	_check_contains(popup_source, "GuildBankPokemonIcon_", "Guild Bank Pokémon rows render icons")
 	_check_contains(popup_source, "_open_guild_bank_pokemon_summary", "Guild Bank Pokémon open the read-only Summary")
 	_check_contains(popup_source, "func _show_guild_item_storage_window", "large Guild item stores open separate management windows")
+	_check_contains(popup_source, "func _build_guild_item_description", "selected Guild items and Resources show a dedicated description card")
+	_check_contains(popup_source, 'has_method("short_description")', "Guild item descriptions use the localized item catalog")
 	_check_contains(popup_source, 'return "GuildItemsStorage" if category == "items" else "GuildResourcesStorage"', "Items and Resources receive dedicated full-window browsers")
 	_check_contains(popup_source, 'search.name = "%sSearchInput" % prefix', "full Guild item stores provide search")
 	_check_contains(popup_source, 'filter.name = "%sFilterSelect" % prefix', "full Guild item stores provide filters")
