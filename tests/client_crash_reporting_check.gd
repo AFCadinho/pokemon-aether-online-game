@@ -97,7 +97,7 @@ func _init() -> void:
 	)
 	service.free()
 
-	for locale: String in ["en", "nl", "pt_BR"]:
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var parsed: Variant = JSON.parse_string(
 			FileAccess.get_file_as_string("res://localization/%s.json" % locale)
 		)

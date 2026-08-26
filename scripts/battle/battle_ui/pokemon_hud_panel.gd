@@ -18,11 +18,9 @@ const STATUS_ICON_ROWS := {
 	"frz": 4,
 	"tox": 7,
 }
-
-const GENDER_COLORS := {
-	"M": Color("#64a8ff"),
-	"F": Color("#ff78c8"),
-}
+const POKEMON_GENDER_DISPLAY := preload("res://scripts/ui/pokemon_gender_display.gd")
+const MALE_GENDER_ICON: Texture2D = preload("res://assets/gender/male.png")
+const FEMALE_GENDER_ICON: Texture2D = preload("res://assets/gender/female.png")
 
 var status_icon_texture_cache: Dictionary = {}
 var localization_manager: Node
@@ -192,17 +190,19 @@ func _set_gender(row: Node, gender: String) -> void:
 	if gender_icon == null:
 		return
 
-	var gender_text: String = gender.strip_edges().to_upper()
-	gender_icon.visible = GENDER_COLORS.has(gender_text)
+	var presentation: Dictionary = POKEMON_GENDER_DISPLAY.presentation(gender)
+	gender_icon.visible = bool(presentation.get("visible", false))
 	if not gender_icon.visible:
+		gender_icon.texture = null
+		gender_icon.modulate = Color.WHITE
 		gender_icon.tooltip_text = ""
 		return
 
-	var gender_color: Color = GENDER_COLORS.get(gender_text, Color.WHITE)
-	gender_icon.modulate = gender_color
-	gender_icon.tooltip_text = _t(
-		"battle.gender.male" if gender_text == "M" else "battle.gender.female"
-	)
+	var symbol := str(presentation.get("symbol", ""))
+	gender_icon.texture = MALE_GENDER_ICON if symbol == "♂" else FEMALE_GENDER_ICON
+	# The gender artwork already contains its intended blue or pink color.
+	gender_icon.modulate = Color.WHITE
+	gender_icon.tooltip_text = _t(str(presentation.get("localization_key", "")))
 
 func _set_status(row: Node, status: String) -> void:
 	var status_icon: TextureRect = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/HBoxContainer/StatusIcon") as TextureRect

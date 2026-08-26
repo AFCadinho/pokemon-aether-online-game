@@ -33,8 +33,10 @@ func _init() -> void:
 	_check_contains(router_source, "_play_move_target_hit_flash_if_needed(config, move_target_ident, animation_options)", "moves can flash their target at impact timing")
 	_check_contains(router_source, "func _should_suppress_target_feedback_for_miss", "misses can suppress hit-only target feedback")
 	_check_contains(router_source, "animation_node.heat_wave_config = _with_projectile_endpoint_anchors(", "heat waves receive live attacker and target anchors")
+	_check_contains(router_source, "animation_node.psychic_shards_config = _with_projectile_endpoint_anchors(", "psychic shard volleys receive live attacker and target anchors")
 	_check_contains(router_source, "animation_node.draco_meteor_config = _with_target_effect_anchor(", "Draco Meteor rain follows the live target anchor")
 	_check_contains(router_source, "animation_node.celestial_charge_config = _with_self_effect_anchor(", "Moonblast charge effects follow the live attacker anchor")
+	_check_contains(router_source, "animation_node.explosion_burst_config = _with_projectile_endpoint_anchors(", "explosion waves travel between the live user and target anchors")
 	_check_contains(router_source, "actor_anchor += -center_offset if reverse_battlefield else center_offset", "self-effect offsets remain screen-relative for opposing users")
 	_check_contains(router_source, "target_anchor += -center_offset if reverse_battlefield else center_offset", "target-effect offsets remain screen-relative for opposing users")
 	_check_contains(router_source, "animation_node.focus_aura_config = (config.get(\"focus_aura\", {}) as Dictionary).duplicate(true)", "focus auras are configured through the move catalog")
@@ -61,6 +63,8 @@ func _init() -> void:
 	_check_contains(player_source, "if index < sheet_visible_start_frame:", "sheet impact effects can wait until their projectile arrives")
 	_check_contains(player_source, "func _draw_heat_wave_visual() -> void:", "moves can render a configurable multi-lane heat wave")
 	_check_contains(player_source, "func _draw_energy_blast_launch_ring", "projectiles can leave a configurable launch ring behind")
+	_check_contains(player_source, "func _draw_psychic_shards_visual() -> void:", "Psyshock can render a custom psychic shard volley")
+	_check_contains(player_source, "func _draw_explosion_burst_visual() -> void:", "Explosion can render a synchronized custom blast")
 	_check_contains(player_source, "func _draw_court_change_visual", "Court Change can render a configurable battlefield swap")
 	_check_contains(player_source, "func _draw_sound_wave_visual", "sound moves can send layered rings towards the target")
 	_check_contains(player_source, "func _draw_leaf_rush_visual", "grass moves can send a configurable leaf rush towards the target")
@@ -81,8 +85,47 @@ func _init() -> void:
 	_check_equal(bool(wish_config.get("reverse_battlefield_vertical", true)), false, "opposing Wish preserves its top-to-bottom travel")
 	_check_equal(bool((moves.get("taunt", {}) as Dictionary).get("mirror_sheet_sprites_on_reverse", false)), true, "opposing Taunt points back toward the player")
 	_check_equal(int(((moves.get("taunt", {}) as Dictionary).get("sprite_position_offset", []) as Array)[1]), -28, "Taunt moves symmetrically toward the battlefield center")
+	_check_move_animation_assets(moves, "gigaimpact", true, true, "Giga Impact")
+	_check_move_animation_assets(moves, "psyshock", true, false, "Psyshock")
+	_check_move_animation_assets(moves, "explosion", true, true, "Explosion")
+	_check_move_animation_assets(moves, "watershuriken", true, false, "Water Shuriken")
+	_check_equal(str((moves.get("explosion", {}) as Dictionary).get("static_visual_anchor", "")), "actor", "Explosion smoke follows its user")
+	_check_equal(bool(((moves.get("gigaimpact", {}) as Dictionary).get("actor_motion", {}) as Dictionary).get("enabled", false)), true, "Giga Impact moves its user into the hit")
+	_check_equal(bool((moves.get("gigaimpact", {}) as Dictionary).get("timing_background_persist_until_clear", false)), true, "Giga Impact keeps its background through the impact")
+	var giga_impact_config: Dictionary = moves.get("gigaimpact", {}) as Dictionary
+	var giga_impact_data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(str(giga_impact_config.get("data_path", "")))) as Dictionary
+	_check_equal((giga_impact_data.get("frames", []) as Array).size(), 39, "Giga Impact leaves enough time for its impact sound")
+	var giga_impact_motion_points: Array = ((giga_impact_config.get("actor_motion", {}) as Dictionary).get("points", []) as Array)
+	_check_equal(float((giga_impact_motion_points[3] as Dictionary).get("at", 1.0)), 0.32, "Giga Impact reaches contact on its impact frame")
+	_check_equal(bool(((moves.get("psyshock", {}) as Dictionary).get("psychic_shards", {}) as Dictionary).get("enabled", false)), true, "Psyshock uses its custom psychic shard volley")
+	_check_equal(bool((moves.get("psyshock", {}) as Dictionary).get("show_sheet_sprites", true)), false, "Psyshock hides the imported placeholder sprites")
+	_check_equal(bool(((moves.get("explosion", {}) as Dictionary).get("explosion_burst", {}) as Dictionary).get("enabled", false)), true, "Explosion uses its synchronized custom blast")
+	_check_equal(bool((moves.get("explosion", {}) as Dictionary).get("show_sheet_sprites", true)), false, "Explosion hides the imported smoke-only frames")
+	var explosion_path: Array = (((moves.get("explosion", {}) as Dictionary).get("explosion_burst", {}) as Dictionary).get("path", []) as Array)
+	_check_equal(explosion_path.size(), 2, "Explosion defines a user-to-target blast path")
+	_check_equal(bool(((moves.get("explosion", {}) as Dictionary).get("target_shake", {}) as Dictionary).get("enabled", false)), true, "Explosion shakes the target when its blast front arrives")
+	var water_shuriken_config: Dictionary = moves.get("watershuriken", {}) as Dictionary
+	var water_shuriken_data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(str(water_shuriken_config.get("data_path", "")))) as Dictionary
+	var water_shuriken_frames: Array = water_shuriken_data.get("frames", []) as Array
+	var water_shuriken_start_cell: Dictionary = (water_shuriken_frames[0] as Array)[2] as Dictionary
+	var water_shuriken_impact_cell: Dictionary = (water_shuriken_frames[9] as Array)[2] as Dictionary
+	_check_equal(int(water_shuriken_start_cell.get("y", 999)), 203, "Water Shuriken starts beside its user instead of below it")
+	_check_equal(int(water_shuriken_impact_cell.get("y", 999)), 120, "Water Shuriken retains its tuned impact height")
 
 	quit(1 if failed else 0)
+
+
+func _check_move_animation_assets(moves: Dictionary, move_key: String, expect_sheet: bool, expect_background: bool, label: String) -> void:
+	var config: Dictionary = moves.get(move_key, {}) as Dictionary
+	_check_equal(FileAccess.file_exists(str(config.get("data_path", ""))), true, "%s has animation data" % label)
+	if expect_sheet:
+		_check_equal(FileAccess.file_exists(str(config.get("sheet_path", ""))), true, "%s has a sprite sheet" % label)
+	if expect_background:
+		_check_equal(FileAccess.file_exists(str(config.get("background_path", ""))), true, "%s has a background" % label)
+	var sounds: Dictionary = config.get("sound_paths", {}) as Dictionary
+	_check_equal(sounds.is_empty(), false, "%s has sound effects" % label)
+	for sound_path: Variant in sounds.values():
+		_check_equal(FileAccess.file_exists(str(sound_path)), true, "%s sound effect exists" % label)
 
 
 func _check_contains(source: String, needle: String, label: String) -> void:

@@ -55,6 +55,25 @@ static func find_legacy_grass_visual_source(root: Node) -> Dictionary:
 	return {}
 
 
+static func find_depth_row_at_global_position(root: Node, global_position: Vector2) -> Dictionary:
+	if root == null:
+		return {}
+
+	var layers: Array[TileMapLayer] = []
+	_collect_tilemap_layers(root, layers)
+	for layer: TileMapLayer in layers:
+		if not bool(layer.get_meta(DEPTH_ROW_META, false)):
+			continue
+		var tile_position := layer.local_to_map(layer.to_local(global_position))
+		if layer.get_cell_source_id(tile_position) < 0:
+			continue
+		return {
+			"layer": layer,
+			"tile_position": tile_position,
+		}
+	return {}
+
+
 static func build_depth_rows(
 	grass_layer: TileMapLayer,
 	used_cells: Array[Vector2i],

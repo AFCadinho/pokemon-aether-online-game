@@ -16,23 +16,29 @@ func _init() -> void:
 	var route_script := FileAccess.get_file_as_string(
 		"res://scripts/world/kanto/routes/kanto_route_4.gd"
 	)
+	var route_visual := FileAccess.get_file_as_string(
+		"res://generated/tiled_visuals/route_4/route_4.visual.tscn"
+	)
 	var cerulean_script := FileAccess.get_file_as_string(
 		"res://scripts/world/kanto/towns/cerulean_city.gd"
 	)
 
 	_check(route_source.contains('map_id = "kanto_route_4"'), "Route 4 exposes map metadata")
-	_check(route_source.contains('open_field/open_field.visual.tscn'), "Route 4 uses the open-field visual")
+	_check(route_source.contains('route_4/route_4.visual.tscn'), "Route 4 uses its imported visual")
+	_check(route_visual.contains('"height": 50'), "Route 4 visual preserves the Tiled height")
+	_check(route_visual.contains('"width": 100'), "Route 4 visual preserves the Tiled width")
 	_check(route_source.contains('[node name="FromMtMoon" type="Marker2D" parent="Spawns"'), "Route 4 has a Mt. Moon arrival")
+	_check(route_source.contains('position = Vector2(176, 1280)'), "Mt. Moon arrival is outside the imported cave entrance")
 	_check(route_source.contains('transition_id = "kanto_route_4__to_mt_moon"'), "Route 4 returns to Mt. Moon")
 	_check(route_source.contains('target_spawn_name = "FromRoute4"'), "Route 4 targets the cave return spawn")
 	_check(route_source.contains('transition_facing_direction = "down"'), "Route 4 entry faces the player into Mt. Moon")
 	_check(route_source.contains('[connection signal="body_entered" from="Exits/ToMtMoon"'), "Route 4 listens for the cave return")
 	_check(route_source.contains('[node name="FromCerulean" type="Marker2D" parent="Spawns"'), "Route 4 has a Cerulean City arrival")
+	_check(route_source.contains('position = Vector2(3136, 1216)'), "Cerulean City arrival is on the imported east road")
 	_check(route_source.contains('transition_id = "kanto_route_4__to_cerulean_city"'), "Route 4 exits to Cerulean City")
 	_check(route_source.contains('target_spawn_name = "FromRoute4"'), "Route 4 targets the Cerulean City arrival")
 	_check(route_source.contains('transition_facing_direction = "right"'), "Cerulean City arrival faces east")
-	_check(route_script.contains('const MAP_SIZE := Vector2i(24, 18)'), "Route 4 bounds match its placeholder visual")
-	_check(route_script.contains('if x < ROAD_MIN_X or x > ROAD_MAX_X:'), "Route 4 keeps the entrance road open")
+	_check(route_script.contains('const MAP_SIZE := Vector2i(100, 50)'), "Route 4 bounds match its imported visual")
 	_check(route_script.contains('if y < CERULEAN_ROAD_MIN_Y or y > CERULEAN_ROAD_MAX_Y:'), "Route 4 keeps the Cerulean road open")
 	_check(cave_source.contains('[node name="FromRoute4" type="Marker2D" parent="Spawns"'), "Mt. Moon has a Route 4 return spawn")
 	_check(cave_source.contains('transition_id = "kanto_mt_moon__to_route_4"'), "Mt. Moon exits to Route 4")

@@ -1,6 +1,8 @@
 extends SceneTree
 
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
+const LedgeDirectionResolverScript := preload("res://scripts/world/ledge_direction_resolver.gd")
+const COLLISION_MARKER_TILESET := preload("res://resources/world/collision_marker_tileset.tres")
 const POKEMON_CENTER_TEMPLATE_PATH := "res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn"
 const PLAYER_SCRIPT_PATH := "res://scripts/world/player.gd"
 const NPC_SCRIPT_PATH := "res://scripts/world/npcs/base_npc.gd"
@@ -13,6 +15,7 @@ func _init() -> void:
 	_check_pokemon_center_template_collision()
 	_check_direct_layer_priority()
 	_check_collision_consumers_use_recursive_lookup()
+	_check_multidirectional_ledge_cell()
 	quit(1 if failed else 0)
 
 
@@ -58,6 +61,13 @@ func _check_direct_layer_priority() -> void:
 		MapLayerResolverScript.find_tilemap_layer(map_root, ["Collision"]) == direct_collision,
 		"Direct collision keeps priority over a nested fallback"
 	)
+	var nested_grass := TileMapLayer.new()
+	nested_grass.name = "TallGrass"
+	nested_container.add_child(nested_grass)
+	_check(
+		MapLayerResolverScript.find_tilemap_layer(map_root, ["TallGrass"]) == nested_grass,
+		"Recursive resolver finds a nested TallGrass scene mask"
+	)
 	map_root.free()
 
 
@@ -68,6 +78,16 @@ func _check_collision_consumers_use_recursive_lookup() -> void:
 			'collision_tilemap = _find_tilemap_layer(current_map, ["Collision"])'
 		),
 		"Player refresh resolves nested collision"
+	)
+	_check(
+		player_source.contains(
+			'grass_tilemap = _find_tall_grass_tilemap(current_map)'
+		),
+		"Player refresh uses the TallGrass scene-mask resolver"
+	)
+	_check(
+		player_source.contains('get_node_or_null("Tiles/TallGrass") as TileMapLayer'),
+		"Player prefers the canonical Tiles/TallGrass scene path"
 	)
 	_check(
 		player_source.contains('block_left_tilemap = _find_tilemap_layer(current_map, ["BlockLeft"])')
@@ -88,6 +108,40 @@ func _check_collision_consumers_use_recursive_lookup() -> void:
 		world_source.contains("return MapLayerResolverScript.find_tilemap_layer("),
 		"World position snapping resolves nested map layers"
 	)
+
+
+func _check_multidirectional_ledge_cell() -> void:
+	var map_root := Node2D.new()
+	var ledge_up := TileMapLayer.new()
+	ledge_up.name = "LedgeUp"
+	ledge_up.tile_set = COLLISION_MARKER_TILESET
+	map_root.add_child(ledge_up)
+	var ledge_right := TileMapLayer.new()
+	ledge_right.name = "LedgeRight"
+	ledge_right.tile_set = COLLISION_MARKER_TILESET
+	map_root.add_child(ledge_right)
+
+	var ledge_cell := Vector2i(2, 3)
+	ledge_up.set_cell(ledge_cell, 0, Vector2i.ZERO)
+	ledge_right.set_cell(ledge_cell, 0, Vector2i.ZERO)
+
+	var directions := LedgeDirectionResolverScript.directions_for_tile(
+		ledge_up.map_to_local(ledge_cell),
+		null,
+		ledge_up,
+		null,
+		ledge_right
+	)
+	_check(
+		directions.has(Vector2.UP) and directions.has(Vector2.RIGHT),
+		"One ledge cell can allow both up and right movement"
+	)
+	_check(
+		not directions.has(Vector2.DOWN) and not directions.has(Vector2.LEFT),
+		"A multidirectional ledge cell does not allow unmarked directions"
+	)
+
+	map_root.free()
 
 
 func _check(condition: bool, label: String) -> void:

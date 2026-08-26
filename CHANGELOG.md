@@ -1,14 +1,38 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Added a staff-only Translate Mode language selector for live private-message support conversations.
+- Added Translate Mode to Staff Tools with optional per-message AI refinement for unclear language-chat translations.
+- Giga Impact, Psyshock, Explosion, and Water Shuriken now have their own battle animations and sound effects.
+- Added full Simplified Chinese language support throughout the game and launcher.
+- Staff with the Translate Language Chats permission can translate Chinese and Portuguese chat to and from English in real time.
+
+**Changed**
+
+- Highlight the active staff Translate Mode card in green and describe it generically for all language channels.
+
+**Fixed**
+
+- Pokémon in battle now show the correct blue male or pink female gender icon.
+- Forum announcements now appear in launcher and login news even when the forum omits their preview text.
+
 ## 0.3.63 - 2026-08-25
 
 **Added**
 
+- The Mysterious Outfit Box can now be bought from the Aether Gift Store for 400 Aether Gems.
 - Pokémon Showdown export sets can now be copied from a Pokémon's Summary.
 - A mysterious golden Poké Ball can now be spotted near Master Thief Rook in Viridian City.
+- Added opt-in Chinese and Portuguese community chats under a dedicated Languages tab.
 
 **Changed**
 
+- Route 4 now uses its complete new outdoor layout, with its Mt. Moon and Cerulean City entrances in the correct places.
+- Chat settings now manage community language chats and disclose that moderation may be limited; the main chat tabs keep a fixed order.
+- All chat now includes messages from the community language chats a player has enabled.
 - Main interface hover cards now share a clear, styled appearance across navigation, party, hotbar, status, buffs, and chat controls.
 - Bag hover cards now share a clear, styled appearance across item browsing and use screens.
 - Item Dex hover cards now share a clear, styled appearance.
@@ -19,6 +43,7 @@
 
 **Fixed**
 
+- The Mysterious Outfit now stays visible while fishing, surfing, and riding mounts.
 - Missing translations now reliably fall back to English.
 - Mega Eelektross's Eelevate Ability now explains its Ground and entry-hazard immunity and its highest-stat boost.
 - EV item previews now respect the combined limit of 252 Allocated and Stored EVs per stat.
