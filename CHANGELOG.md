@@ -14,6 +14,7 @@
 
 **Changed**
 
+- Guild history and all Guild Bank logs can now be searched and filtered by action across their complete server-side history.
 - Guild confirmations, logs, filters, dropdowns, and editors now consistently use the Guild interface styling.
 - Redundant Guild chat and member shortcuts were removed from Overview, while leaving a Guild now lives in the low-prominence Guild options menu.
 - Guild teleport actions now occupy the member header instead of a separate travel bar, leaving more room inside every Guild tab.

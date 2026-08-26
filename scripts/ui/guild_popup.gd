@@ -1922,15 +1922,15 @@ func _open_guild_log(category: String) -> void:
 	_show_guild_log_window(category, result)
 
 
-func _request_guild_log(category: String, before_id: int) -> Dictionary:
+func _request_guild_log(category: String, before_id: int, search: String = "", action: String = "") -> Dictionary:
 	var service := get_node_or_null("/root/GuildService")
 	if service == null:
 		return {"success": false, "error": _t("ui.guild.error.service_unavailable")}
 	var response: Variant
 	if category == "guild":
-		response = await service.call("load_history", before_id)
+		response = await service.call("load_history", before_id, search, action)
 	else:
-		response = await service.call("load_bank_log", category, before_id)
+		response = await service.call("load_bank_log", category, before_id, search, action)
 	return _dictionary(response)
 
 
@@ -1938,7 +1938,7 @@ func _show_guild_log_window(category: String, result: Dictionary) -> void:
 	var window := Window.new()
 	window.name = "GuildHistoryLogWindow" if category == "guild" else "Guild%sLogWindow" % category.capitalize()
 	window.title = _t("ui.guild.log.%s.title" % category)
-	window.size = Vector2i(680, 500)
+	window.size = Vector2i(760, 540)
 	window.min_size = Vector2i(520, 360)
 	window.transient = true
 	window.exclusive = true
@@ -1956,6 +1956,30 @@ func _show_guild_log_window(category: String, result: Dictionary) -> void:
 	content.add_theme_constant_override("separation", 10)
 	margin.add_child(content)
 	content.add_child(_localized_label("ui.guild.log.%s.heading" % category, 12, UI_ACCENT))
+	var filters := HBoxContainer.new()
+	filters.name = "GuildLogFilters"
+	filters.add_theme_constant_override("separation", 8)
+	content.add_child(filters)
+	var search := LineEdit.new()
+	search.name = "GuildLogSearchInput"
+	search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	search.custom_minimum_size = Vector2(250, 36)
+	search.clear_button_enabled = true
+	_set_localized_property(search, "placeholder_text", "ui.guild.log.filter.search")
+	_apply_line_edit_style(search)
+	filters.add_child(search)
+	var action_select := _guild_log_action_filter(category)
+	filters.add_child(action_select)
+	var apply := Button.new()
+	apply.name = "GuildLogApplyFiltersButton"
+	_set_localized_property(apply, "text", "ui.guild.log.filter.apply")
+	_apply_button_style(apply, "primary")
+	filters.add_child(apply)
+	var clear := Button.new()
+	clear.name = "GuildLogClearFiltersButton"
+	_set_localized_property(clear, "text", "common.clear")
+	_apply_button_style(clear)
+	filters.add_child(clear)
 	var scroll := ScrollContainer.new()
 	scroll.name = "GuildLogScroll"
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -1969,16 +1993,108 @@ func _show_guild_log_window(category: String, result: Dictionary) -> void:
 	footer.name = "GuildLogFooter"
 	footer.alignment = BoxContainer.ALIGNMENT_CENTER
 	content.add_child(footer)
-	_append_guild_log_page(category, result, entries, footer)
+	apply.pressed.connect(_reload_guild_log.bind(category, search, action_select, entries, footer))
+	search.text_submitted.connect(_reload_guild_log_from_submit.bind(category, search, action_select, entries, footer))
+	clear.pressed.connect(_clear_guild_log_filters.bind(category, search, action_select, entries, footer))
+	_append_guild_log_page(category, result, entries, footer, "", "")
 	window.popup_centered()
 
 
-func _append_guild_log_page(category: String, result: Dictionary, entries: VBoxContainer, footer: HBoxContainer) -> void:
+func _guild_log_action_filter(category: String) -> OptionButton:
+	var select := OptionButton.new()
+	select.name = "GuildLogActionFilter"
+	select.custom_minimum_size = Vector2(170, 36)
+	select.add_item(_t("ui.guild.log.filter.all_actions"))
+	select.set_item_metadata(0, "")
+	var actions: Array[String] = []
+	if category == "guild":
+		actions.assign(["joined", "left", "rank_changed", "bank_permission_changed"])
+	elif category in ["funds", "resources"]:
+		actions.assign(["deposit", "withdraw"])
+	else:
+		actions.assign(["deposit", "withdraw", "borrow", "return", "force_return"])
+	for action: String in actions:
+		select.add_item(_t("ui.guild.log.filter.action.%s" % action))
+		select.set_item_metadata(select.item_count - 1, action)
+	_apply_option_button_style(select)
+	return select
+
+
+func _selected_guild_log_action(select: OptionButton) -> String:
+	if select == null or select.selected < 0:
+		return ""
+	return str(select.get_item_metadata(select.selected))
+
+
+func _reload_guild_log(
+	category: String,
+	search: LineEdit,
+	action_select: OptionButton,
+	entries: VBoxContainer,
+	footer: HBoxContainer
+) -> void:
+	var search_text := search.text.strip_edges() if search != null else ""
+	var action := _selected_guild_log_action(action_select)
+	_clear_guild_log_entries(entries)
+	entries.add_child(_localized_label("ui.guild.bank.loading", 11, UI_MUTED))
+	for child in footer.get_children():
+		child.queue_free()
+	var result := await _request_guild_log(category, 0, search_text, action)
+	_clear_guild_log_entries(entries)
+	if not bool(result.get("success", false)):
+		entries.add_child(_localized_label("ui.guild.log.error", 11, UI_WARNING))
+		return
+	_append_guild_log_page(category, result, entries, footer, search_text, action)
+
+
+func _reload_guild_log_from_submit(
+	_text: String,
+	category: String,
+	search: LineEdit,
+	action_select: OptionButton,
+	entries: VBoxContainer,
+	footer: HBoxContainer
+) -> void:
+	await _reload_guild_log(category, search, action_select, entries, footer)
+
+
+func _clear_guild_log_filters(
+	category: String,
+	search: LineEdit,
+	action_select: OptionButton,
+	entries: VBoxContainer,
+	footer: HBoxContainer
+) -> void:
+	if search != null:
+		search.clear()
+	if action_select != null:
+		action_select.select(0)
+	await _reload_guild_log(category, search, action_select, entries, footer)
+
+
+func _clear_guild_log_entries(entries: VBoxContainer) -> void:
+	for child in entries.get_children():
+		entries.remove_child(child)
+		child.queue_free()
+
+
+func _append_guild_log_page(
+	category: String,
+	result: Dictionary,
+	entries: VBoxContainer,
+	footer: HBoxContainer,
+	search: String,
+	action: String
+) -> void:
 	for child in footer.get_children():
 		child.queue_free()
 	var page_entries := _array_from_value(result.get("entries", []))
 	if entries.get_child_count() == 0 and page_entries.is_empty():
-		entries.add_child(_localized_label("ui.guild.log.empty", 12, UI_MUTED))
+		entries.add_child(_localized_label(
+			"ui.guild.log.filter.empty" if search != "" or action != "" else "ui.guild.log.empty",
+			12,
+			UI_MUTED
+		))
 	for entry_value: Variant in page_entries:
 		if entry_value is Dictionary:
 			entries.add_child(_build_guild_log_entry(category, entry_value as Dictionary))
@@ -1987,19 +2103,26 @@ func _append_guild_log_page(category: String, result: Dictionary, entries: VBoxC
 		var more := Button.new()
 		more.name = "GuildLogLoadMoreButton"
 		_set_localized_property(more, "text", "ui.guild.log.load_more")
-		more.pressed.connect(_load_more_guild_log.bind(category, next_before_id, entries, footer))
+		more.pressed.connect(_load_more_guild_log.bind(category, next_before_id, entries, footer, search, action))
 		_apply_button_style(more)
 		footer.add_child(more)
 
 
-func _load_more_guild_log(category: String, before_id: int, entries: VBoxContainer, footer: HBoxContainer) -> void:
+func _load_more_guild_log(
+	category: String,
+	before_id: int,
+	entries: VBoxContainer,
+	footer: HBoxContainer,
+	search: String,
+	action: String
+) -> void:
 	for child in footer.get_children():
 		child.queue_free()
-	var result := await _request_guild_log(category, before_id)
+	var result := await _request_guild_log(category, before_id, search, action)
 	if not bool(result.get("success", false)):
 		footer.add_child(_localized_label("ui.guild.log.error", 11, UI_WARNING))
 		return
-	_append_guild_log_page(category, result, entries, footer)
+	_append_guild_log_page(category, result, entries, footer, search, action)
 
 
 func _build_guild_log_entry(category: String, entry: Dictionary) -> Control:
