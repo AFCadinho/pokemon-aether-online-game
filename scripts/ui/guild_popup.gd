@@ -131,6 +131,7 @@ var membership: Dictionary = {}
 var guild_home: Dictionary = {}
 var incoming_invitations: Array = []
 var pending_applications: Array = []
+var application_cooldowns: Array = []
 var selected_guild_id := 0
 var active_page := "browse"
 var is_dragging_popup := false
@@ -278,6 +279,7 @@ func show_debug_preview() -> void:
 	is_debug_preview = true
 	membership = {}
 	pending_applications = []
+	application_cooldowns = []
 	set_guilds(DEBUG_GUILDS)
 	if browse_status_label != null:
 		browse_status_label.text = _t("ui.guild.status.preview")
@@ -5402,23 +5404,42 @@ func _render_selected_guild() -> void:
 	var recruitment := str(guild.get("recruitment", "Closed"))
 	var is_own_guild := int(membership.get("guildId", 0)) == int(guild.get("id", 0))
 	var pending_application := _pending_application_for_guild(int(guild.get("id", 0)))
+	var application_cooldown := _application_cooldown_for_guild(int(guild.get("id", 0)))
+	var cooldown_time := (
+		_application_cooldown_time(application_cooldown)
+		if not application_cooldown.is_empty()
+		else ""
+	)
 	if not pending_application.is_empty():
 		var pending_label := _localized_label("ui.guild.application.pending", 11, UI_GOLD)
 		pending_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		pending_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		actions.add_child(pending_label)
+	elif not application_cooldown.is_empty():
+		var cooldown_label := _label(
+			_t("ui.guild.application.cooldown_hint", {"time": cooldown_time}),
+			11,
+			UI_WARNING
+		)
+		cooldown_label.name = "GuildApplicationCooldown"
+		cooldown_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		cooldown_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		actions.add_child(cooldown_label)
 	if is_own_guild:
 		apply_button.text = _t("ui.guild.yours")
 	elif not membership.is_empty():
 		apply_button.text = _t("ui.guild.application.already_member")
 	elif not pending_application.is_empty():
 		apply_button.text = _t("ui.guild.application.cancel")
+	elif not application_cooldown.is_empty():
+		apply_button.text = _t("ui.guild.application.cooldown_button", {"time": cooldown_time})
 	else:
 		apply_button.text = _application_button_text(recruitment)
 	apply_button.disabled = (
 		is_application_action_in_flight
 		or is_own_guild
 		or not membership.is_empty()
+		or not application_cooldown.is_empty()
 		or (pending_application.is_empty() and recruitment.to_lower() in ["closed", "invite only"])
 	)
 	apply_button.custom_minimum_size = Vector2(150, 40)
@@ -5947,6 +5968,7 @@ func _refresh_from_server() -> void:
 	membership = _dictionary(result.get("membership", {})).duplicate(true)
 	incoming_invitations = _array_from_value(result.get("incomingInvitations", [])).duplicate(true)
 	pending_applications = _array_from_value(result.get("pendingApplications", [])).duplicate(true)
+	application_cooldowns = _array_from_value(result.get("applicationCooldowns", [])).duplicate(true)
 	set_guilds(_array_from_value(result.get("guilds", [])))
 	browse_status_label.visible = false
 	if not membership.is_empty():
@@ -6593,6 +6615,34 @@ func _pending_application_for_guild(guild_id: int) -> Dictionary:
 		):
 			return application
 	return {}
+
+
+func _application_cooldown_for_guild(guild_id: int) -> Dictionary:
+	var now := Time.get_unix_time_from_system()
+	for value: Variant in application_cooldowns:
+		if not value is Dictionary:
+			continue
+		var cooldown := value as Dictionary
+		if int(cooldown.get("guildId", 0)) != guild_id:
+			continue
+		if _unix_from_iso_datetime(str(cooldown.get("reapplyAt", ""))) > now:
+			return cooldown
+	return {}
+
+
+func _application_cooldown_time(cooldown: Dictionary) -> String:
+	var remaining := maxi(
+		1,
+		ceili(_unix_from_iso_datetime(str(cooldown.get("reapplyAt", ""))) - Time.get_unix_time_from_system())
+	)
+	var days := int(remaining / 86400)
+	var hours := int((remaining % 86400) / 3600)
+	if days > 0:
+		return _t("ui.guild.application.cooldown.days_hours", {"days": days, "hours": hours})
+	var minutes := maxi(1, int((remaining % 3600 + 59) / 60))
+	if hours > 0:
+		return _t("ui.guild.application.cooldown.hours_minutes", {"hours": hours, "minutes": minutes})
+	return _t("ui.guild.application.cooldown.minutes", {"minutes": minutes})
 
 
 func _upsert_pending_application(application: Dictionary) -> void:

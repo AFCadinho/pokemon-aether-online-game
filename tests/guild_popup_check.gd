@@ -22,6 +22,8 @@ func _init() -> void:
 	_check_contains(popup_source, "func _render_selected_guild", "selected guild has a public information panel")
 	_check_contains(popup_source, "func _apply_to_selected_guild", "guild discovery submits real membership applications")
 	_check_contains(popup_source, "GuildApplicationRequirementsDialog", "applicants review Guild requirements before applying")
+	_check_contains(popup_source, "GuildApplicationCooldown", "declined Guild applications explain their reapply cooldown")
+	_check_contains(popup_source, "func _application_cooldown_for_guild", "Guild discovery evaluates authoritative reapply cooldowns")
 	_check_contains(popup_source, "GuildRequirementsPanel", "configured Guild requirements render as a dedicated profile section")
 	_check_contains(popup_source, "GuildAddRequirementButton", "Guild leaders can add requirements individually")
 	_check_contains(popup_source, "func _on_move_guild_requirement", "Guild leaders can order their requirements")

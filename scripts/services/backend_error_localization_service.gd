@@ -55,6 +55,7 @@ const CODE_TO_KEY: Dictionary = {
 	"guild_application_resolved": "backend.error.guild_application_unavailable",
 	"guild_application_invalid": "backend.error.guild_application_unavailable",
 	"guild_application_forbidden": "backend.error.guild_application_forbidden",
+	"guild_application_cooldown": "backend.error.guild_application_cooldown",
 	"guild_invite_forbidden": "backend.error.guild_invite_forbidden",
 	"guild_invite_target_not_found": "backend.error.trainer_not_found",
 	"guild_invite_self": "ui.guild.error.already_member",

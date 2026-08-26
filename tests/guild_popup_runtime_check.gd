@@ -82,6 +82,21 @@ func _run() -> void:
 	_check(apply_button != null and apply_button.text == "Cancel Application", "pending application can be cancelled")
 	_check(popup.find_child("GuildApplyButton", true, false) != null, "pending application remains actionable")
 	popup.pending_applications.clear()
+	popup.application_cooldowns = [{
+		"guildId": 1,
+		"reapplyAt": Time.get_datetime_string_from_unix_time(
+			int(Time.get_unix_time_from_system()) + 172800,
+			true
+		) + "Z",
+	}]
+	popup._render_guild_list()
+	await process_frame
+	apply_button = popup.find_child("GuildApplyButton", true, false) as Button
+	var cooldown_label := popup.find_child("GuildApplicationCooldown", true, false) as Label
+	_check(apply_button != null and apply_button.disabled, "declined application cooldown disables reapplying")
+	_check(apply_button != null and apply_button.text.contains("Apply in"), "declined application action shows its remaining wait")
+	_check(cooldown_label != null and cooldown_label.text.contains("Application declined"), "declined application cooldown is explained on the Guild profile")
+	popup.application_cooldowns.clear()
 	popup._select_guild(2)
 	await process_frame
 	_check(popup.find_child("GuildCaptainContacts", true, false) == null, "Guild profiles omit an empty Captain contact line")

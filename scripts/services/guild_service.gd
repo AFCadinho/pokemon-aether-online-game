@@ -463,6 +463,7 @@ func _directory_result(value: Variant) -> Dictionary:
 		"announcement": str(body.get("announcement", "")),
 		"incomingInvitations": _array(body.get("incomingInvitations", [])),
 		"pendingApplications": _array(body.get("pendingApplications", [])),
+		"applicationCooldowns": _array(body.get("applicationCooldowns", [])),
 	}
 
 
