@@ -116,6 +116,8 @@ func _init() -> void:
 	_check_contains(popup_source, "amount.step = 1", "Guild Bank money accepts every whole amount")
 	_check_contains(popup_source, "lendingEnabled", "Guild Bank borrowing follows server availability")
 	_check_contains(popup_source, "_guild_bank_borrow_tooltip", "disabled Guild Bank borrowing explains why")
+	_check_contains(popup_source, "func _guild_bank_loan_usage_text", "Guild Bank categories expose personal loan usage")
+	_check_contains(popup_source, "_guild_bank_loan_limit_reached", "Guild borrowing respects the visible personal loan limit")
 	_check_contains(popup_source, "pokemonTradeLevelCap", "Guild Pokémon actions use the player's trade level cap")
 	_check_contains(popup_source, "_guild_bank_pokemon_level_cap_tooltip", "blocked Pokémon transfers explain their level cap")
 	_check_contains(popup_source, "func _on_player_party_changed", "Guild Pokémon storage refreshes after Party changes")

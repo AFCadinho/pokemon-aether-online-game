@@ -27,6 +27,7 @@ func _init() -> void:
 	_check_contains(service_source, "func load_bank", "guild service loads the authoritative Guild Bank")
 	_check_contains(service_source, '"itemCapacity": int(body.get("itemCapacity", 50))', "guild service preserves item bank capacity")
 	_check_contains(service_source, '"pokemonCapacity": int(body.get("pokemonCapacity", 30))', "guild service preserves Pokémon bank capacity")
+	_check_contains(service_source, '"loanUsage": _dictionary', "guild service preserves personal Guild loan usage")
 	_check_contains(service_source, "func load_history", "guild service loads membership and rank history")
 	_check_contains(service_source, "func load_bank_log", "guild service loads categorized bank logs")
 	_check_contains(service_source, '"&search=%s"', "guild service sends server-side log searches")

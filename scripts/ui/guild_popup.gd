@@ -396,6 +396,7 @@ func show_debug_member_preview() -> void:
 		"pokemonCapacity": 32,
 		"access": {"canDeposit": true, "canWithdraw": true, "canDepositFunds": true, "canWithdrawFunds": true, "canDepositResources": true, "canWithdrawResources": true, "lendingEnabled": true, "pokemonTradeLevelCap": 100, "canBorrow": true, "canForceReturn": true},
 		"funds": {"balance": 250000, "playerBalance": 87500},
+		"loanUsage": {"borrowedPokemon": 0, "maxBorrowedPokemon": 6, "borrowedItems": 1, "maxBorrowedItems": 6},
 		"items": [
 			{"itemId": "leftovers", "name": "Leftovers", "category": "Held Items", "quantity": 18, "availableQuantity": 17, "borrowedQuantity": 1, "lendable": true},
 		],
@@ -1601,6 +1602,10 @@ func _build_guild_bank_card(
 	content.add_theme_constant_override("separation", 5)
 	margin.add_child(content)
 	content.add_child(_localized_label(title_key, 13, accent))
+	if category in ["pokemon", "items"]:
+		var loan_usage := _label(_guild_bank_loan_usage_text(category), 10, UI_ACCENT)
+		loan_usage.name = "%sCardLoanUsage" % node_prefix
+		content.add_child(loan_usage)
 	var description := _label(description_text, 10, UI_MUTED)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -1671,7 +1676,39 @@ func _guild_bank_borrow_tooltip(item: Dictionary = {}) -> String:
 	var access := _dictionary(guild_bank_state.get("access", {}))
 	if not bool(access.get("lendingEnabled", false)):
 		return _t("ui.guild.bank.tooltip.borrow_disabled")
+	var category := "items" if not item.is_empty() else "pokemon"
+	if _guild_bank_loan_limit_reached(category):
+		return _t("ui.guild.bank.tooltip.loan_limit.%s" % category, {
+			"limit": _guild_bank_loan_limit(category),
+		})
 	return _t("ui.guild.bank.tooltip.borrow_unavailable")
+
+
+func _guild_bank_loan_count(category: String) -> int:
+	var usage := _dictionary(guild_bank_state.get("loanUsage", {}))
+	return maxi(int(usage.get(
+		"borrowedPokemon" if category == "pokemon" else "borrowedItems",
+		0
+	)), 0)
+
+
+func _guild_bank_loan_limit(category: String) -> int:
+	var usage := _dictionary(guild_bank_state.get("loanUsage", {}))
+	return maxi(int(usage.get(
+		"maxBorrowedPokemon" if category == "pokemon" else "maxBorrowedItems",
+		6
+	)), 1)
+
+
+func _guild_bank_loan_limit_reached(category: String) -> bool:
+	return _guild_bank_loan_count(category) >= _guild_bank_loan_limit(category)
+
+
+func _guild_bank_loan_usage_text(category: String) -> String:
+	return _t("ui.guild.bank.loan_usage", {
+		"used": _guild_bank_loan_count(category),
+		"limit": _guild_bank_loan_limit(category),
+	})
 
 
 func _guild_bank_pokemon_trade_level_cap() -> int:
@@ -1961,6 +1998,10 @@ func _build_guild_bank_category_preview(category: String) -> Control:
 	var hint := _localized_label("ui.guild.bank.preview.%s" % category, 10, UI_MUTED)
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	copy.add_child(hint)
+	if category in ["pokemon", "items"]:
+		var loan_usage := _label(_guild_bank_loan_usage_text(category), 10, UI_ACCENT)
+		loan_usage.name = "GuildBank%sPreviewLoanUsage" % category.capitalize()
+		copy.add_child(loan_usage)
 	var open_button := Button.new()
 	open_button.name = "GuildBank%sOpenFullButton" % category.capitalize()
 	_set_localized_property(open_button, "text", "ui.guild.bank.preview.open_%s" % category)
@@ -2073,6 +2114,9 @@ func _show_guild_pokemon_vault_window() -> void:
 	var count := _label("", 10, UI_MUTED)
 	count.name = "GuildPokemonVaultCount"
 	title_row.add_child(count)
+	var loan_usage := _label(_guild_bank_loan_usage_text("pokemon"), 10, UI_ACCENT)
+	loan_usage.name = "GuildPokemonVaultLoanUsage"
+	title_row.add_child(loan_usage)
 	var refresh := Button.new()
 	refresh.name = "GuildPokemonVaultRefreshButton"
 	_set_localized_property(refresh, "text", "ui.guild.bank.refresh")
@@ -2193,6 +2237,9 @@ func _refresh_guild_pokemon_vault_window() -> void:
 			"count": _array_from_value(guild_bank_state.get("pokemon", [])).size(),
 			"capacity": int(guild_bank_state.get("pokemonCapacity", 30)),
 		})
+	var loan_usage := window.find_child("GuildPokemonVaultLoanUsage", true, false) as Label
+	if loan_usage != null:
+		loan_usage.text = _guild_bank_loan_usage_text("pokemon")
 	var query := search.text.strip_edges().to_lower() if search != null else ""
 	var filter_id := "all"
 	if filter != null and filter.selected >= 0:
@@ -2381,7 +2428,13 @@ func _build_guild_pokemon_vault_actions(entry: Dictionary, pokemon: Dictionary) 
 	)
 	withdraw_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	actions.add_child(withdraw_button)
-	var can_borrow := bool(access.get("lendingEnabled", false)) and bool(access.get("canBorrow", false)) and bool(entry.get("canBorrow", false)) and not exceeds_trade_level_cap
+	var can_borrow := (
+		bool(access.get("lendingEnabled", false))
+		and bool(access.get("canBorrow", false))
+		and bool(entry.get("canBorrow", false))
+		and not exceeds_trade_level_cap
+		and not _guild_bank_loan_limit_reached("pokemon")
+	)
 	var borrow_button := _guild_bank_action_button(
 		"GuildBankPokemonBorrowButton_%d" % pokemon_id,
 		"ui.guild.bank.borrow",
@@ -2474,6 +2527,10 @@ func _show_guild_item_storage_window(category: String) -> void:
 	var count := _label("", 10, UI_MUTED)
 	count.name = "%sCount" % prefix
 	title_row.add_child(count)
+	if category == "items":
+		var loan_usage := _label(_guild_bank_loan_usage_text("items"), 10, UI_ACCENT)
+		loan_usage.name = "%sLoanUsage" % prefix
+		title_row.add_child(loan_usage)
 	var refresh := Button.new()
 	refresh.name = "%sRefreshButton" % prefix
 	_set_localized_property(refresh, "text", "ui.guild.bank.refresh")
@@ -2597,6 +2654,9 @@ func _refresh_guild_item_storage_window(category: String) -> void:
 	var count := window.find_child("%sCount" % prefix, true, false) as Label
 	if count != null:
 		count.text = _guild_bank_card_description(category)
+	var loan_usage := window.find_child("%sLoanUsage" % prefix, true, false) as Label
+	if loan_usage != null and category == "items":
+		loan_usage.text = _guild_bank_loan_usage_text("items")
 	var query := search.text.strip_edges().to_lower() if search != null else ""
 	var filter_id := "all"
 	if filter != null and filter.selected >= 0:
@@ -3071,6 +3131,7 @@ func _build_guild_item_row(
 			and bool(access.get("canBorrow", false))
 			and available > 0
 			and bool(item.get("lendable", false))
+			and not _guild_bank_loan_limit_reached("items")
 		)
 		controls.add_child(_guild_bank_action_button(
 			"GuildBankItemBorrowButton_%s" % str(item.get("itemId", "item")),
@@ -3273,6 +3334,7 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool, readonly: bool =
 		and bool(access.get("canBorrow", false))
 		and bool(entry.get("canBorrow", false))
 		and not exceeds_trade_level_cap
+		and not _guild_bank_loan_limit_reached("pokemon")
 	)
 	row.add_child(_guild_bank_action_button(
 		"GuildBankPokemonBorrowButton_%d" % pokemon_id,

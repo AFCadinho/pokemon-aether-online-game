@@ -284,6 +284,10 @@ func _run() -> void:
 	var item_storage_summary := popup._guild_bank_card_description("items")
 	_check(item_storage_summary.contains("18 total items") and item_storage_summary.contains("1 / 55"), "Item Storage distinguishes total quantity from used stack slots")
 	_check(popup.find_child("GuildBankResourcesCard", true, false) != null, "Guild Bank shows shared consumable resources")
+	var pokemon_card_loan_usage := popup.find_child("GuildBankPokemonCardLoanUsage", true, false) as Label
+	var item_card_loan_usage := popup.find_child("GuildBankItemsCardLoanUsage", true, false) as Label
+	_check(pokemon_card_loan_usage != null and pokemon_card_loan_usage.text.contains("0 / 6"), "Pokémon Vault card shows the player's loan usage and limit")
+	_check(item_card_loan_usage != null and item_card_loan_usage.text.contains("1 / 6"), "Item Storage card shows the player's loan usage and limit")
 	var funds_action := popup.find_child("GuildBankFundsAction", true, false) as Button
 	var pokemon_action := popup.find_child("GuildBankPokemonAction", true, false) as Button
 	var items_action := popup.find_child("GuildBankItemsAction", true, false) as Button
@@ -319,6 +323,8 @@ func _run() -> void:
 		await process_frame
 	_check(popup.find_child("GuildBankWorkspace", true, false) != null, "a bank category opens a dedicated workspace")
 	_check(popup.find_child("GuildBankPokemonPreview", true, false) != null, "Pokémon Vault opens with a scalable donation overview")
+	var pokemon_preview_loan_usage := popup.find_child("GuildBankPokemonPreviewLoanUsage", true, false) as Label
+	_check(pokemon_preview_loan_usage != null and pokemon_preview_loan_usage.text.contains("0 / 6"), "Pokémon Vault overview keeps personal loan capacity visible")
 	_check(popup.find_child("GuildBankPokemonListScroll", true, false) != null, "Pokémon Vault overview remains scrollable at scale")
 	_check(popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) == null, "Pokémon Vault overview keeps Guild withdrawals out of the preview")
 	_check(popup.find_child("GuildBankPokemonDepositButton_22", true, false) != null, "Pokémon Vault overview keeps direct personal donations available")
@@ -337,6 +343,8 @@ func _run() -> void:
 	_check(pokemon_vault_window != null and pokemon_vault_window.find_child("GuildPokemonVaultGrid", true, false) != null, "full Pokémon Vault presents Guild Pokémon in a grid")
 	_check(pokemon_vault_window != null and pokemon_vault_window.find_child("GuildPokemonVaultSearchInput", true, false) != null, "full Pokémon Vault provides search")
 	_check(pokemon_vault_window != null and pokemon_vault_window.find_child("GuildPokemonVaultFilterSelect", true, false) != null, "full Pokémon Vault provides filters")
+	var pokemon_vault_loan_usage := pokemon_vault_window.find_child("GuildPokemonVaultLoanUsage", true, false) as Label
+	_check(pokemon_vault_loan_usage != null and pokemon_vault_loan_usage.text.contains("0 / 6"), "full Pokémon Vault keeps personal loan capacity visible")
 	popup._render_guild_home_with_status("Vault action failed", true)
 	await process_frame
 	var vault_status_panel := pokemon_vault_window.find_child("GuildPokemonVaultStatusPanel", true, false) as PanelContainer
@@ -394,6 +402,18 @@ func _run() -> void:
 	_check(pokemon_withdraw != null and pokemon_withdraw.text == "Withdraw", "authorized ranks retain permanent Guild withdrawal")
 	var pokemon_borrow := popup.find_child("GuildBankPokemonBorrowButton_21", true, false) as Button
 	_check(pokemon_borrow != null and pokemon_borrow.text == "Borrow" and not pokemon_borrow.disabled, "available Guild-owned Pokémon expose borrowing without ownership transfer")
+	popup.guild_bank_state["loanUsage"]["borrowedPokemon"] = 6
+	popup._render_guild_home()
+	await process_frame
+	pokemon_borrow = popup.find_child("GuildBankPokemonBorrowButton_21", true, false) as Button
+	_check(
+		pokemon_borrow != null and pokemon_borrow.disabled
+		and pokemon_borrow.tooltip_text.contains("limit of 6"),
+		"Pokémon borrowing stops at the visible personal Guild loan limit"
+	)
+	popup.guild_bank_state["loanUsage"]["borrowedPokemon"] = 0
+	popup._render_guild_home()
+	await process_frame
 	popup.guild_bank_state["access"]["pokemonTradeLevelCap"] = 5
 	popup.guild_bank_state["pokemon"][0]["canWithdraw"] = false
 	popup.guild_bank_state["pokemon"][0]["canBorrow"] = false
@@ -508,6 +528,8 @@ func _run() -> void:
 	_check(items_storage_window != null and items_storage_window.find_child("GuildBankItemsLogButton", true, false) != null, "Item Storage has a dedicated log action")
 	_check(items_storage_window != null and items_storage_window.find_child("GuildBankItemWithdrawButton_leftovers", true, false) != null, "selected reusable items can be withdrawn")
 	_check(items_storage_window != null and items_storage_window.find_child("GuildBankItemDepositButton_exp-share", true, false) == null, "full Item Storage focuses only on Guild assets")
+	var item_storage_loan_usage := items_storage_window.find_child("GuildItemsStorageLoanUsage", true, false) as Label
+	_check(item_storage_loan_usage != null and item_storage_loan_usage.text.contains("1 / 6"), "full Item Storage keeps personal loan capacity visible")
 	_check(popup.find_child("GuildItemsStorageSlot_leftovers", true, false) is Button, "stored items render as selectable grid slots")
 	var stored_item_name := items_storage_window.find_child("GuildBankItemName_leftovers", true, false) as Label
 	var stored_item_detail := items_storage_window.find_child("GuildBankItemDetail_leftovers", true, false) as Label
@@ -516,6 +538,18 @@ func _run() -> void:
 	_check(stored_item_name != null and stored_item_name.text == "Leftovers", "stored item names remain readable without quantity metadata")
 	_check(stored_item_detail != null and stored_item_detail.text.contains("18 stored") and stored_item_detail.text.contains("17 available") and stored_item_detail.text.contains("1 borrowed"), "stored item quantities and loan availability use a dedicated detail line")
 	_check(stored_item_description != null and not stored_item_description.text.is_empty(), "selected Item Storage assets show their localized description")
+	popup.guild_bank_state["loanUsage"]["borrowedItems"] = 6
+	popup._refresh_guild_item_storage_window("items")
+	await process_frame
+	var item_borrow_at_limit := items_storage_window.find_child("GuildBankItemBorrowButton_leftovers", true, false) as Button
+	_check(
+		item_borrow_at_limit != null and item_borrow_at_limit.disabled
+		and item_borrow_at_limit.tooltip_text.contains("limit of 6"),
+		"item borrowing stops at the visible personal Guild loan limit"
+	)
+	popup.guild_bank_state["loanUsage"]["borrowedItems"] = 1
+	popup._refresh_guild_item_storage_window("items")
+	await process_frame
 	var asset_search := items_storage_window.find_child("GuildItemsStorageSearchInput", true, false) as LineEdit
 	if asset_search != null:
 		asset_search.text = "left"
