@@ -85,6 +85,7 @@ func _init() -> void:
 		"Guild Resources show their stack capacity"
 	)
 	_check_contains(popup_source, "GuildBankPokemonIcon_", "Guild Bank Pokémon rows render icons")
+	_check_contains(popup_source, "_open_guild_bank_pokemon_summary", "Guild Bank Pokémon open the read-only Summary")
 	_check_contains(popup_source, "active_guild_bank_full_view", "large Guild asset stores separate previews from management")
 	_check_contains(popup_source, "GuildBankAssetSearchInput", "full Guild asset stores provide search")
 	_check_contains(popup_source, "GuildBankAssetFilterSelect", "full Guild asset stores provide filters")

@@ -1636,7 +1636,7 @@
   "ui.guild.bank.funds.action": "开放式基金",
   "ui.guild.bank.pokemon.title": "宝可梦宝库",
   "ui.guild.bank.pokemon.description": "将宝可梦捐赠给公会，并让授权等级撤回它们。",
-  "ui.guild.bank.pokemon.action": "打开金库",
+  "ui.guild.bank.pokemon.action": "进入宝库",
   "ui.guild.bank.items.title": "物品存储",
   "ui.guild.bank.items.description": "将有用的物品捐赠到一个共享的公会库存中。",
   "ui.guild.bank.items.action": "开放存储",

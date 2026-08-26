@@ -264,6 +264,7 @@ func _run() -> void:
 		and resources_action != null and not resources_action.disabled,
 		"every Guild member can open each bank category"
 	)
+	_check(pokemon_action != null and pokemon_action.text == "Enter Vault", "Pokémon category uses a distinct entry label")
 	var permission_summary := popup.find_child("GuildBankPermissionSummary", true, false) as Label
 	_check(permission_summary != null and permission_summary.text.contains("allowed"), "Guild Bank shows the leader's transaction rights")
 	var rank_rights_action := popup.find_child("GuildBankRankRightsButton", true, false) as Button
@@ -290,6 +291,11 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankPokemonListScroll", true, false) != null, "Pokémon Vault overview remains scrollable at scale")
 	_check(popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) == null, "Pokémon Vault overview keeps Guild withdrawals out of the preview")
 	_check(popup.find_child("GuildBankPokemonDepositButton_22", true, false) != null, "Pokémon Vault overview keeps direct personal donations available")
+	var stored_pokemon_preview := popup.find_child("GuildBankPokemonIcon_21", true, false) as Button
+	_check(
+		stored_pokemon_preview != null and stored_pokemon_preview.tooltip_text == "Open Summary",
+		"stored Pokémon expose their read-only Summary from the overview icon"
+	)
 	var pokemon_full_action := popup.find_child("GuildBankPokemonOpenFullButton", true, false) as Button
 	_check(pokemon_full_action != null, "Pokémon Vault overview exposes its full management view")
 	if pokemon_full_action != null:
@@ -345,7 +351,7 @@ func _run() -> void:
 	popup.guild_bank_state["pokemon"][0]["canBorrow"] = true
 	popup._render_guild_home()
 	await process_frame
-	_check(popup.find_child("GuildBankPokemonIcon_21", true, false) != null, "stored Pokémon show an icon")
+	_check(popup.find_child("GuildBankPokemonIcon_21", true, false) is Button, "full Pokémon Vault keeps Summary previews available")
 	var bank_back := popup.find_child("GuildBankBackButton", true, false) as Button
 	if bank_back != null:
 		bank_back.pressed.emit()

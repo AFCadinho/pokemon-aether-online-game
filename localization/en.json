@@ -1639,7 +1639,7 @@
   "ui.guild.bank.funds.action": "Open Funds",
   "ui.guild.bank.pokemon.title": "Pokémon Vault",
   "ui.guild.bank.pokemon.description": "Donate Pokémon to the Guild and let authorized ranks withdraw them.",
-  "ui.guild.bank.pokemon.action": "Open Vault",
+  "ui.guild.bank.pokemon.action": "Enter Vault",
   "ui.guild.bank.items.title": "Item Storage",
   "ui.guild.bank.items.description": "Donate useful items to one shared Guild inventory.",
   "ui.guild.bank.items.action": "Open Storage",

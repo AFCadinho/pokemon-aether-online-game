@@ -2403,14 +2403,17 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool, readonly: bool =
 	row.name = "GuildBankPokemonRow_%d" % int(entry.get("pokemonId", 0))
 	row.add_theme_constant_override("separation", 7)
 	var pokemon := _dictionary(entry.get("pokemon", {}))
-	var icon := TextureRect.new()
+	var icon := Button.new()
 	icon.name = "GuildBankPokemonIcon_%d" % int(entry.get("pokemonId", 0))
 	icon.custom_minimum_size = Vector2(44, 44)
-	icon.texture = _guild_bank_pokemon_icon(pokemon)
-	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.icon = _guild_bank_pokemon_icon(pokemon)
+	icon.expand_icon = true
+	icon.flat = true
+	icon.tooltip_text = _t("ui.party.context.summary")
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.focus_mode = Control.FOCUS_NONE
+	icon.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	icon.pressed.connect(_open_guild_bank_pokemon_summary.bind(pokemon))
 	row.add_child(icon)
 	var identity := VBoxContainer.new()
 	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2532,6 +2535,15 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool, readonly: bool =
 		)
 	))
 	return row
+
+
+func _open_guild_bank_pokemon_summary(pokemon: Dictionary) -> void:
+	var payload := pokemon.duplicate(true)
+	if str(payload.get("species", "")).strip_edges() == "":
+		payload["species"] = str(payload.get("speciesId", payload.get("speciesName", payload.get("name", ""))))
+	var overlay := get_tree().get_first_node_in_group("ui_overlay")
+	if overlay != null and overlay.has_method("open_trade_pokemon_summary"):
+		overlay.call("open_trade_pokemon_summary", payload)
 
 
 func _open_guild_log(category: String) -> void:
