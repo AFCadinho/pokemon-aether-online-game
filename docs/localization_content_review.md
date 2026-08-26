@@ -14,18 +14,21 @@ mechanical indexes, but contains presentation fields only:
 - names and short descriptions for all 1,395 canonical items.
 
 `localization/content/generated/en.json` is the complete English presentation source.
-The Dutch, Brazilian Portuguese, and Simplified Chinese files in the same directory are machine-generated
-review drafts. They make the full catalog testable in-game, but are not considered
-language-reviewed.
+The Dutch and Brazilian Portuguese files in the same directory are machine-generated
+review drafts. The Simplified Chinese catalogs use verified PokéAPI `zh-hans` names
+where available and English fallback for unverified names; their descriptions remain
+review drafts unless stated otherwise. All generated catalogs make the full catalog
+testable in-game, but automated description coverage is not considered language-reviewed.
 
 The item equivalents live under `localization/items/generated/`. The generated item
 catalogs contain only `name` and `shortDesc`; quantities, prices, effects, ownership,
 and other mechanics remain in canonical game data.
 
-The initial Simplified Chinese interface, launcher, item, content, sign, and dialogue
-catalogs are complete machine-generated review drafts with a reviewed core glossary.
-They provide full technical coverage and English fallback, but still require
-native-speaker review before language-quality approval is recorded.
+The initial Simplified Chinese interface, launcher, sign, and dialogue catalogs are
+complete machine-generated review drafts with a reviewed core glossary. Pokémon names
+and terminology follow the controlled process in `docs/chinese_localization_repair.md`.
+Free prose still requires native-speaker review before language-quality approval is
+recorded.
 
 The manually reviewed overlays remain:
 
@@ -67,6 +70,14 @@ the 69-item pilot catalog.
    node tools/generate_content_translation_drafts.mjs \
      --accept-machine-translation \
      --items-only
+   ```
+
+   The generator preserves existing Simplified Chinese content names. To verify or
+   refresh those names from the pinned PokéAPI snapshot, run:
+
+   ```bash
+   python3 tools/import_pokeapi_zh_hans.py --csv-dir /path/to/pinned/data/v2/csv
+   python3 tools/import_pokeapi_zh_hans.py --csv-dir /path/to/pinned/data/v2/csv --check
    ```
 
 3. Review entries in-game or against the English source. This includes deciding

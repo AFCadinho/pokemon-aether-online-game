@@ -113,6 +113,31 @@ func _check_catalogs() -> void:
 			str(hidden_power.get("shortDesc", "")) == str(expected_hidden_power_descriptions.get(locale, "")),
 			"generated %s Hidden Power description uses its fixed 60 Power" % locale
 		)
+	var verified_chinese_moves := {
+		"ally-switch": "交换场地",
+		"bitter-blade": "悔念剑",
+		"close-combat": "近身战",
+		"flare-blitz": "闪焰冲锋",
+		"psycho-cut": "精神利刃",
+		"psycho-shift": "精神转移",
+	}
+	var generated_chinese: Dictionary = generated_catalogs.get("zh_CN", {})
+	var generated_chinese_moves: Dictionary = generated_chinese.get("moves", {})
+	for move_id: String in verified_chinese_moves:
+		_check(
+			str((generated_chinese_moves.get(move_id, {}) as Dictionary).get("name", ""))
+			== str(verified_chinese_moves.get(move_id, "")),
+			"generated Simplified Chinese %s uses its official move name" % move_id
+		)
+	var generated_chinese_abilities: Dictionary = generated_chinese.get("abilities", {})
+	_check(
+		str((generated_chinese_abilities.get("adaptability", {}) as Dictionary).get("name", "")) == "适应力",
+		"generated Simplified Chinese uses the official Adaptability Ability name"
+	)
+	_check(
+		str((generated_chinese_abilities.get("black-hole", {}) as Dictionary).get("name", "")) == "Black Hole",
+		"unverified Simplified Chinese Ability names use the English fallback"
+	)
 	var summary_index_value: Variant = JSON.parse_string(
 		FileAccess.get_file_as_string("res://data/move_summary_index.json")
 	)

@@ -106,6 +106,21 @@ func _check_catalogs() -> void:
 				)
 
 	var generated_english: Dictionary = generated_catalogs.get("en", {})
+	var generated_chinese: Dictionary = generated_catalogs.get("zh_CN", {})
+	_check(
+		str((generated_chinese.get("ability-capsule", {}) as Dictionary).get("name", "")) == "特性胶囊",
+		"generated Simplified Chinese uses the official Ability Capsule name"
+	)
+	_check(
+		str((generated_chinese.get("tm-flare-blitz", {}) as Dictionary).get("name", ""))
+		== "招式学习器：闪焰冲锋",
+		"generated Simplified Chinese machine names use the official move name"
+	)
+	_check(
+		str((generated_chinese.get("adinho-classic-outfit", {}) as Dictionary).get("name", ""))
+		== "Adinho Classic Box",
+		"unverified generated Simplified Chinese item names use the English fallback"
+	)
 	var expected_generated_ids: Array = generated_english.keys()
 	expected_generated_ids.sort()
 	for locale: String in GENERATED_CATALOG_PATHS:

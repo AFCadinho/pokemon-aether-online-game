@@ -1,178 +1,178 @@
 {
   "ability-capsule": {
-    "name": "能力胶囊",
+    "name": "特性胶囊",
     "shortDesc": "循环显示宝可梦的可用能力，包括解锁后的隐藏能力。"
   },
   "ability-patch": {
-    "name": "能力补丁",
+    "name": "特性膏药",
     "shortDesc": "永久解锁宝可梦的隐藏能力并激活它。"
   },
   "ability-shield": {
-    "name": "能力护盾",
+    "name": "特性护具",
     "shortDesc": "持有者的能力不能被任何效果改变、抑制或忽略。"
   },
   "abomasite": {
-    "name": "憎恶石",
+    "name": "暴雪王进化石",
     "shortDesc": "持有：允许阿博马斯诺超级进化为超级阿博马斯诺。"
   },
   "absolite": {
-    "name": "绝对",
+    "name": "阿勃梭鲁进化石",
     "shortDesc": "持有：允许阿勃索尔超级进化为超级阿勃索尔。"
   },
   "absolite-z": {
-    "name": "绝对Z",
+    "name": "Absolite Z",
     "shortDesc": "如果由阿勃索尔持有，该物品可以使其在战斗中超级进化为超级阿勃索尔 Z。"
   },
   "absorb-bulb": {
-    "name": "吸收灯泡",
+    "name": "球根",
     "shortDesc": "持有：受到水属性伤害时，持有者的特攻提升一级。"
   },
   "acro-bike": {
-    "name": "杂技自行车",
+    "name": "越野自行车",
     "shortDesc": "比马赫自行车更具机动性，并且允许沿着轨道跳跃。"
   },
   "adamant-crystal": {
-    "name": "精金水晶",
+    "name": "大金刚宝玉",
     "shortDesc": "如果帝牙卢卡持有，其钢系和龙系攻击威力为 1.2 倍。"
   },
   "adamant-mint": {
-    "name": "坚固薄荷",
+    "name": "固执薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的攻击力会更容易增长，但它的 Sp. Atk会增长得更慢。"
   },
   "adamant-orb": {
-    "name": "精金宝珠",
+    "name": "金刚宝珠",
     "shortDesc": "毒气龙系和钢系招式的伤害提高20%。"
   },
   "adinho-chroma-beard": {
-    "name": "阿迪尼奥色度胡子",
+    "name": "Adinho Chroma Beard",
     "shortDesc": "解锁男性专用、可自定义颜色的 Adinho 胡须。"
   },
   "adinho-chroma-glasses": {
-    "name": "Adinho Chroma 眼镜",
+    "name": "Adinho Chroma Glasses",
     "shortDesc": "解锁男性专用、可定制颜色的 Adinho 眼镜。"
   },
   "adinho-chroma-hair": {
-    "name": "Adinho Chroma 头发",
+    "name": "Adinho Chroma Hair",
     "shortDesc": "解锁男性专用的 Adinho Chroma 发型。"
   },
   "adinho-chroma-shirt": {
-    "name": "Adinho Chroma 衬衫",
+    "name": "Adinho Chroma Shirt",
     "shortDesc": "解锁男性专用、颜色可定制的 Adinho 衬衫。"
   },
   "adinho-chroma-shoes": {
-    "name": "Adinho Chroma 鞋",
+    "name": "Adinho Chroma Shoes",
     "shortDesc": "解锁男性专用、颜色可定制的 Adinho 鞋。"
   },
   "adinho-chroma-trousers": {
-    "name": "Adinho Chroma 长裤",
+    "name": "Adinho Chroma Trousers",
     "shortDesc": "解锁男性专用、颜色可定制的 Adinho 裤子。"
   },
   "adinho-classic-outfit": {
-    "name": "阿迪尼奥经典盒",
+    "name": "Adinho Classic Box",
     "shortDesc": "打开这个男性专用装备盒可获得六件单独的 Adinho 化妆品。"
   },
   "adinho-classic-shirt": {
-    "name": "阿迪尼奥经典衬衫",
+    "name": "Adinho Classic Shirt",
     "shortDesc": "将原来的男性专用 Adinho 衬衫移至角色定制中。"
   },
   "adinho-classic-shoes": {
-    "name": "阿迪尼奥经典鞋",
+    "name": "Adinho Classic Shoes",
     "shortDesc": "将原来的男性专用 Adinho 鞋移至角色定制中。"
   },
   "adinho-classic-sunglasses": {
-    "name": "Adinho 经典太阳镜",
+    "name": "Adinho Classic Sunglasses",
     "shortDesc": "将原来的 Adinho 太阳镜移至角色自定义中。"
   },
   "adinho-classic-trousers": {
-    "name": "Adinho 经典长裤",
+    "name": "Adinho Classic Trousers",
     "shortDesc": "将原来的男性专用 Adinho 裤子移至角色定制中。"
   },
   "adrenaline-orb": {
-    "name": "肾上腺素球",
+    "name": "胆怯球",
     "shortDesc": "使野生宝可梦更有可能召唤盟友。持有：受到威吓影响时，持有者的速度提高一级。"
   },
   "adventure-rules": {
-    "name": "冒险指南",
+    "name": "探险心得",
     "shortDesc": "包含基本游戏信息。"
   },
   "aerodactylite": {
-    "name": "风指岩",
+    "name": "化石翼龙进化石",
     "shortDesc": "持有：允许翼龙超级进化为超级翼龙。"
   },
   "aether-blessing-voucher-14-days": {
-    "name": "以太祝福券·14天",
+    "name": "Aether Blessing Voucher · 14 Days",
     "shortDesc": "一张可交易的十四天以太祝福券，赔率×1.05，区域旅行 50% 折扣，以及两个免费锚。"
   },
   "aether-blessing-voucher-3-days": {
-    "name": "以太祝福券·3天",
+    "name": "Aether Blessing Voucher · 3 Days",
     "shortDesc": "三天以太祝福的可交易代金券，赔率×1.05，区域旅行 50% 折扣，以及两个免费锚。"
   },
   "aether-blessing-voucher-30-days": {
-    "name": "以太祝福券·30天",
+    "name": "Aether Blessing Voucher · 30 Days",
     "shortDesc": "一张可交易三十天以太祝福的优惠券，具有 ×1.05 闪亮赔率、50% 区域旅行折扣和两个免费锚。"
   },
   "aether-blessing-voucher-7-days": {
-    "name": "以太祝福券·7天",
+    "name": "Aether Blessing Voucher · 7 Days",
     "shortDesc": "一张可交易的 7 天以太祝福券，赔率 ×1.05，区域旅行 50% 折扣，以及两个免费锚。"
   },
   "aether-blossom-chroma-earrings": {
-    "name": "以太花彩耳环",
+    "name": "Aether Blossom Chroma Earrings",
     "shortDesc": "解锁女性专用、可定制颜色的以太花耳环。"
   },
   "aether-blossom-chroma-hair": {
-    "name": "以太花彩发",
+    "name": "Aether Blossom Chroma Hair",
     "shortDesc": "解锁女性专用、颜色可定制的以太花发型。"
   },
   "aether-blossom-chroma-shoes": {
-    "name": "以太花彩鞋",
+    "name": "Aether Blossom Chroma Shoes",
     "shortDesc": "解锁女性专用、颜色可定制的 Aether Blossom 鞋子。"
   },
   "aether-blossom-dress": {
-    "name": "以太花连衣裙",
+    "name": "Aether Blossom Dress",
     "shortDesc": "将以太花连衣裙移至角色定制中。"
   },
   "aether-blossom-earrings": {
-    "name": "以太花耳环",
+    "name": "Aether Blossom Earrings",
     "shortDesc": "将以太花耳环移至角色定制中。"
   },
   "aether-blossom-hair": {
-    "name": "以太花发",
+    "name": "Aether Blossom Hair",
     "shortDesc": "将以太花发型移至角色定制中。"
   },
   "aether-blossom-outfit": {
-    "name": "以太花盒",
+    "name": "Aether Blossom Box",
     "shortDesc": "打开这个女性专用装备盒可获得四件单独的以太之花化妆品。"
   },
   "aether-blossom-shoes": {
-    "name": "以太花鞋",
+    "name": "Aether Blossom Shoes",
     "shortDesc": "将以太花鞋子移至角色定制中。"
   },
   "aether-female-chroma-hair-1": {
-    "name": "以太彩发 I",
+    "name": "Aether Chroma Hair I",
     "shortDesc": "解锁女性专用、颜色可定制的以太发型。"
   },
   "aether-female-chroma-hair-2": {
-    "name": "以太彩发 II",
+    "name": "Aether Chroma Hair II",
     "shortDesc": "解锁女性专用、颜色可定制的以太发型。"
   },
   "aether-male-chroma-hair-1": {
-    "name": "以太彩发 I",
+    "name": "Aether Chroma Hair I",
     "shortDesc": "解锁男性专用、颜色可定制的以太发型。"
   },
   "aether-male-chroma-hair-2": {
-    "name": "以太彩发 II",
+    "name": "Aether Chroma Hair II",
     "shortDesc": "解锁男性专用、颜色可定制的以太发型。"
   },
   "aether-male-chroma-hair-3": {
-    "name": "以太炫彩头发 III",
+    "name": "Aether Chroma Hair III",
     "shortDesc": "解锁男性专用、颜色可定制的以太发型。"
   },
   "aggronite": {
-    "name": "花岗岩",
+    "name": "波士可多拉进化石",
     "shortDesc": "持有：允许阿格隆超级进化为超级阿格隆。"
   },
   "aguav-berry": {
-    "name": "阿瓜夫浆果",
+    "name": "乐芭果",
     "shortDesc": "持有：消耗最大生命值的1/2，恢复最大生命值的1/8。使不喜欢苦味的宝可梦感到困惑。"
   },
   "air-balloon": {
@@ -180,63 +180,63 @@
     "shortDesc": "持有：免疫地面类招式、尖刺和有毒尖刺。当持有者因移动而受到伤害时消耗。"
   },
   "alakazite": {
-    "name": "阿拉卡石",
+    "name": "胡地进化石",
     "shortDesc": "持有：允许阿拉卡扎姆超级进化为超级阿拉卡扎姆。"
   },
   "aloraichium-z--bag": {
-    "name": "Aloraichium Z",
+    "name": "阿罗雷Ｚ",
     "shortDesc": "XXX aloraichium-z--bag 的新效果"
   },
   "aloraichium-z--held": {
-    "name": "Aloraichium Z",
+    "name": "阿罗雷Ｚ",
     "shortDesc": "持有：允许阿罗拉·雷丘将雷电升级为斯托克火花冲浪者。"
   },
   "altarianite": {
-    "name": "阿尔塔瑞石",
+    "name": "七夕青鸟进化石",
     "shortDesc": "持有：阿尔塔莉雅超级进化为超级阿尔塔莉亚。"
   },
   "amaze-mulch": {
-    "name": "惊奇覆盖物",
+    "name": "超效肥",
     "shortDesc": "使浆果总数增加 2 个，增加浆果突变的几率，并导致土壤在 4 小时内变干。"
   },
   "ampharosite": {
-    "name": "两性铁矿",
+    "name": "电龙进化石",
     "shortDesc": "持有：允许安法罗斯超级进化为超级安法罗斯。"
   },
   "amulet-coin": {
-    "name": "护身符硬币",
+    "name": "护符金币",
     "shortDesc": "持有：从战斗中获得的金钱加倍。不与幸运香叠加。"
   },
   "antidote": {
-    "name": "解毒剂",
+    "name": "解毒药",
     "shortDesc": "治愈中毒。"
   },
   "apicot-berry": {
-    "name": "杏浆果",
+    "name": "杏仔果",
     "shortDesc": "持有：消耗最大生命值 1/4 来提升特防。"
   },
   "apricorn-box": {
-    "name": "杏盒子",
+    "name": "球果盒",
     "shortDesc": "持有杏子。"
   },
   "aqua-suit": {
-    "name": "水色套装",
+    "name": "海洋装",
     "shortDesc": "允许玩家在起源洞穴中骑乘盖欧卡。"
   },
   "armor-fossil": {
-    "name": "铠甲化石",
+    "name": "盾甲化石",
     "shortDesc": "可以复活为盾盾。"
   },
   "armor-pass": {
-    "name": "装甲通行证",
+    "name": "铠甲车票",
     "shortDesc": "前往盔甲岛的通行证。将其出示给韦奇赫斯特车站的铁路工作人员。"
   },
   "armorite-ore": {
-    "name": "甲莫来石矿石",
+    "name": "铠甲矿石",
     "shortDesc": "可以在盔甲岛获得的稀有矿石。如果你把它送给盔甲岛上的收藏家，将会发生一些好事。"
   },
   "aspear-berry": {
-    "name": "阿斯皮尔浆果",
+    "name": "利木果",
     "shortDesc": "持有：冰冻时消耗以治愈冰冻。"
   },
   "assault-vest": {
@@ -244,107 +244,107 @@
     "shortDesc": "持有者特防提升至1.5。阻止持有者选择状态移动。"
   },
   "audinite": {
-    "name": "奥金石",
+    "name": "差不多娃娃进化石",
     "shortDesc": "持有：允许Audino超级进化为Mega Audino。"
   },
   "auroraticket": {
-    "name": "极光票",
+    "name": "AuroraTicket",
     "shortDesc": "允许访问出生岛和代欧奇希斯。"
   },
   "auspicious-armor": {
-    "name": "吉祥铠甲",
+    "name": "庆祝之铠",
     "shortDesc": "使用时将沙卡德进化为阿玛鲁格。"
   },
   "autograph": {
-    "name": "签名",
+    "name": "马志士的签名",
     "shortDesc": "你从朱红城道馆馆长，浪涌中尉那里得到的亲笔签名。他写道：祝你好运！"
   },
   "awakening": {
-    "name": "觉醒",
+    "name": "解眠药",
     "shortDesc": "唤醒沉睡的宝可梦。"
   },
   "azure-flute": {
-    "name": "青笛",
+    "name": "天界之笛",
     "shortDesc": "允许进入起源大厅。未发布。"
   },
   "babiri-berry": {
-    "name": "巴比里浆果",
+    "name": "霹霹果",
     "shortDesc": "持有：被超级有效的钢系攻击击中时消耗，使伤害减半。"
   },
   "bachs-food-tin": {
-    "name": "巴克斯食品罐",
+    "name": "巴哈罐头",
     "shortDesc": "可用于在营地烹饪的众多食材之一。巴赫出售的罐头食品在伽勒尔地区非常受欢迎。"
   },
   "balm-mushroom": {
-    "name": "香脂蘑菇",
+    "name": "芳香蘑菇",
     "shortDesc": "以 25000 Pokedollars 的价格出售给 Hungry Maid。"
   },
   "band-autograph": {
-    "name": "乐队签名",
+    "name": "乐队的签名",
     "shortDesc": "由伽勒尔地区最具魅力的乐队Maximizers的所有成员签名。"
   },
   "banettite": {
-    "name": "班尼特石",
+    "name": "诅咒娃娃进化石",
     "shortDesc": "持有：允许巴内特超级进化为超级巴内特。"
   },
   "barbaracite": {
-    "name": "苦水石",
+    "name": "Barbaracite",
     "shortDesc": "如果被Barbaracle持有，该物品可以使其在战斗中超级进化。"
   },
   "basement-key": {
-    "name": "地下室钥匙",
+    "name": "地下钥匙",
     "shortDesc": "HS：满金城地下隧道的钥匙。第三代：新莫维尔的关键。"
   },
   "basement-key--goldenrod": {
-    "name": "地下室钥匙",
+    "name": "地下钥匙",
     "shortDesc": "XXX地下室钥匙新效果--goldenrod"
   },
   "basement-key--new-mauville": {
-    "name": "地下室钥匙",
+    "name": "地下钥匙",
     "shortDesc": "XXX 地下室钥匙新效果--new-mauville"
   },
   "battle-pocket": {
-    "name": "战斗口袋",
+    "name": "对战口袋",
     "shortDesc": "- - -"
   },
   "baxcalibrite": {
-    "name": "巴克斯校准",
+    "name": "Baxcalibrite",
     "shortDesc": "如果由 Baxcalibur 持有，该物品可以使其在战斗中进行超级进化。"
   },
   "beach-glass": {
-    "name": "沙滩玻璃",
+    "name": "海边的玻璃",
     "shortDesc": "一块彩色玻璃。波浪使它的边缘变得圆润。摸起来有点粗糙。"
   },
   "beast-ball": {
-    "name": "兽球",
+    "name": "究极球",
     "shortDesc": "尝试捕捉野生宝可梦。究极异兽的成功率为 5，所有其他宝可梦的成功率为 0.1。"
   },
   "beedrillite": {
-    "name": "铍石",
+    "name": "大针蜂进化石",
     "shortDesc": "持有：允许大蜂鸟超级进化为超级大蜂鸟。"
   },
   "belue-berry": {
-    "name": "贝鲁贝瑞",
+    "name": "靛莓果",
     "shortDesc": "用于创建 PokeBlock 和 Poffins。"
   },
   "berry-juice": {
-    "name": "浆果汁",
+    "name": "树果汁",
     "shortDesc": "恢复 20 生命值。"
   },
   "berry-pots": {
-    "name": "浆果盆",
+    "name": "树果种植盆",
     "shortDesc": "允许便携式浆果种植。"
   },
   "berry-pouch": {
-    "name": "浆果袋",
+    "name": "Berry Pouch",
     "shortDesc": "持有浆果。"
   },
   "berry-sweet": {
-    "name": "浆果甜",
+    "name": "野莓糖饰",
     "shortDesc": "浆果形状的糖果。当 Milcery 拿着这个时，它会快乐地旋转。"
   },
   "bicycle": {
-    "name": "自行车",
+    "name": "Bicycle",
     "shortDesc": "用于快速交通。"
   },
   "big-malasada": {
@@ -356,7 +356,7 @@
     "shortDesc": "火红和叶绿：交换之前的升级动作。以 2500 Pokedollars 出售，或以 5000 Pokedollars 出售给饥饿女仆。"
   },
   "big-nugget": {
-    "name": "大金块",
+    "name": "巨大金珠",
     "shortDesc": "以 30000 Pokedollars 的价格出售给矿石收集者。"
   },
   "big-pearl": {
@@ -364,11 +364,11 @@
     "shortDesc": "以 3750 Pokedollars 出售，或以 7500 Pokedollars 出售给矿石收集者。"
   },
   "big-root": {
-    "name": "大根",
+    "name": "大根茎",
     "shortDesc": "持有：汲取招式、铭晶和水色戒指恢复的生命值增加 3/10 (30%)。"
   },
   "bike": {
-    "name": "自行车",
+    "name": "Bike",
     "shortDesc": "让玩家移动得更快。"
   },
   "bike--green": {
@@ -380,15 +380,15 @@
     "shortDesc": "XXX自行车新效果--黄色"
   },
   "bike-voucher": {
-    "name": "自行车券",
+    "name": "Bike Voucher",
     "shortDesc": "在 Cerulean 自行车店交易自行车。"
   },
   "binding-band": {
-    "name": "束缚带",
+    "name": "紧绑束带",
     "shortDesc": "持有：多回合诱捕招式的每回合伤害加倍。"
   },
   "black-apricorn": {
-    "name": "黑杏",
+    "name": "黑球果",
     "shortDesc": "用于制作重球。"
   },
   "black-belt": {
@@ -396,7 +396,7 @@
     "shortDesc": "持有：持有者的战斗型动作造成的伤害提高 20%。"
   },
   "black-flute": {
-    "name": "黑笛",
+    "name": "黑色玻璃哨",
     "shortDesc": "野生宝可梦遭遇率减半。"
   },
   "black-glasses": {
@@ -404,7 +404,7 @@
     "shortDesc": "持有：持有者的暗属性招式造成的伤害提高 20%。"
   },
   "black-mane-hair": {
-    "name": "黑鬃毛",
+    "name": "黑色鬃毛",
     "shortDesc": "丰收王的爱马幽灵的鬃毛。头发摸起来非常光滑。"
   },
   "black-sludge": {
@@ -412,19 +412,19 @@
     "shortDesc": "持有：毒属性持有者每回合恢复1/16（6.25%）最大生命值。非毒属性受到 1/8 (12.5%) 最大生命值伤害。"
   },
   "blastoise-guild-emblem-template": {
-    "name": "Blastoise公会徽章",
+    "name": "Blastoise Guild Emblem",
     "shortDesc": "使用此模板为您当前的公会永久解锁它。"
   },
   "blastoisinite": {
-    "name": "芽硅石",
+    "name": "水箭龟进化石",
     "shortDesc": "持有：允许水龟超级进化为超级水龟。"
   },
   "blazikenite": {
-    "name": "镁铜矿",
+    "name": "火焰鸡进化石",
     "shortDesc": "持有：允许布拉兹肯超级进化为超级布拉兹肯。"
   },
   "blue-apricorn": {
-    "name": "蓝杏",
+    "name": "蓝球果",
     "shortDesc": "用于制作诱饵球。"
   },
   "blue-card": {
@@ -432,11 +432,11 @@
     "shortDesc": "跟踪布埃纳斯表演的分数。"
   },
   "blue-flute": {
-    "name": "蓝笛",
+    "name": "蓝色玻璃哨",
     "shortDesc": "唤醒沉睡的宝可梦。"
   },
   "blue-orb": {
-    "name": "蓝色宝珠",
+    "name": "靛蓝色宝珠",
     "shortDesc": "召唤盖欧卡到嵌入之塔。"
   },
   "blue-petal": {
@@ -444,7 +444,7 @@
     "shortDesc": "XXX 蓝花瓣新效果"
   },
   "blue-scarf": {
-    "name": "蓝色围巾",
+    "name": "蓝色头巾",
     "shortDesc": "在比赛中提高持有者的美感。"
   },
   "blue-shard": {
@@ -452,115 +452,115 @@
     "shortDesc": "没有效果。可以用来交换物品或动作。"
   },
   "bluk-berry": {
-    "name": "蓝莓",
+    "name": "墨莓果",
     "shortDesc": "用于创建 PokeBlock 和 Poffins。"
   },
   "blunder-policy": {
-    "name": "错误政策",
+    "name": "打空保险",
     "shortDesc": "当宝可梦因准确性而未命中招式时，速度会急剧提高。"
   },
   "bobs-food-tin": {
-    "name": "鲍勃食品罐",
+    "name": "饱伯罐头",
     "shortDesc": "可用于在营地烹饪的众多食材之一。奇怪的是，鲍勃卖的罐头食品在伽勒尔地区很受欢迎。"
   },
   "boiled-egg": {
-    "name": "煮鸡蛋",
+    "name": "水煮蛋",
     "shortDesc": "可用于在营地烹饪的众多食材之一。即使只是一个煮鸡蛋也可以真正为一道菜增色不少。"
   },
   "bold-mint": {
-    "name": "大胆薄荷色",
+    "name": "大胆薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的防御力会更容易增长，但攻击力会更慢地增长。"
   },
   "boost-mulch": {
-    "name": "增强覆盖物",
+    "name": "劲劲肥",
     "shortDesc": "导致土壤在 4 小时内变干。"
   },
   "booster-energy": {
-    "name": "助推器能量",
+    "name": "驱劲能量",
     "shortDesc": "激活原合成或夸克驱动能力。一次性使用。"
   },
   "bottle-cap": {
-    "name": "瓶盖",
+    "name": "银色王冠",
     "shortDesc": "与超级先生交易以最大化宝可梦基因之一。"
   },
   "brave-mint": {
-    "name": "勇敢的薄荷",
+    "name": "勇敢薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的攻击力会更容易增长，但速度会增长得更慢。"
   },
   "bread": {
-    "name": "面包",
+    "name": "吐司面包",
     "shortDesc": "可用于在营地烹饪的众多食材之一。这是清理盘子上多余咖喱的必备工具。"
   },
   "bridge-mail-d": {
-    "name": "桥接邮件 D",
+    "name": "桥梁邮件Ｈ",
     "shortDesc": "让训练师编写一条消息并通过宝可梦交易发送。"
   },
   "bridge-mail-m": {
-    "name": "桥邮件 M",
+    "name": "桥梁邮件Ｗ",
     "shortDesc": "让训练师编写一条消息并通过宝可梦交易发送。"
   },
   "bridge-mail-s": {
-    "name": "桥接邮件 S",
+    "name": "桥梁邮件Ｓ",
     "shortDesc": "让训练师编写一条消息并通过宝可梦交易发送。"
   },
   "bridge-mail-t": {
-    "name": "桥接邮件 T",
+    "name": "桥梁邮件Ｃ",
     "shortDesc": "让训练师编写一条消息并通过宝可梦交易发送。"
   },
   "bridge-mail-v": {
-    "name": "桥邮件 V",
+    "name": "桥梁邮件Ｖ",
     "shortDesc": "让训练师编写一条消息并通过宝可梦交易发送。"
   },
   "bright-powder": {
-    "name": "亮粉",
+    "name": "光粉",
     "shortDesc": "持有者：持有者的回避率增加 1/9 (11 1/9%)。"
   },
   "brittle-bones": {
-    "name": "骨头脆弱",
+    "name": "细骨",
     "shortDesc": "营地中有多种可用于烹饪的食材之一。从骨头中煮出来的味道肯定会给菜肴带来淡淡的鲜味。"
   },
   "bug-gem": {
-    "name": "虫子宝石",
+    "name": "虫之宝石",
     "shortDesc": "持有：当持有者使用破坏性的虫类招式时，该招式的威力为1.5，该物品会被消耗。"
   },
   "bug-memory": {
-    "name": "错误记忆",
+    "name": "虫子存储碟",
     "shortDesc": "持有：将 Silvally 更改为 Bug 形态。将多重攻击类型更改为错误。"
   },
   "buginium-z--bag": {
-    "name": "Buginium Z",
+    "name": "虫Ｚ",
     "shortDesc": "XXX buginium-z--bag 的新效果"
   },
   "buginium-z--held": {
-    "name": "Buginium Z",
+    "name": "虫Ｚ",
     "shortDesc": "持有：允许宝可梦使用其 Bug 招式的 Z 招式等效项。"
   },
   "bulbasaur-guild-emblem-template": {
-    "name": "妙蛙种子公会徽章",
+    "name": "Bulbasaur Guild Emblem",
     "shortDesc": "使用此模板为您当前的公会永久解锁它。"
   },
   "burn-drive": {
-    "name": "刻录驱动器",
+    "name": "火焰卡带",
     "shortDesc": "赋予盖诺塞克特红色的火焰型科技冲击波。"
   },
   "burn-heal": {
-    "name": "烧伤治疗",
+    "name": "灼伤药",
     "shortDesc": "治愈烧伤。"
   },
   "calcium": {
-    "name": "钙",
+    "name": "特攻增强剂",
     "shortDesc": "提高特攻努力度和幸福度。"
   },
   "calm-mint": {
-    "name": "平静薄荷",
+    "name": "温和薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的 Sp.防御力会更容易增长，但攻击力会增长得更慢。"
   },
   "cameruptite": {
-    "name": "钙钛矿",
+    "name": "喷火驼进化石",
     "shortDesc": "持有：允许Camerupt超级进化为Mega Camerupt。"
   },
   "camping-gear": {
-    "name": "露营装备",
+    "name": "露营组合",
     "shortDesc": "在荒野或露营地搭建帐篷和做饭所需的一切。"
   },
   "candy-jar": {
@@ -568,31 +568,31 @@
     "shortDesc": "- - -"
   },
   "carbos": {
-    "name": "卡波斯",
+    "name": "速度增强剂",
     "shortDesc": "提高速度努力和幸福感。"
   },
   "card-key": {
-    "name": "卡片钥匙",
+    "name": "钥匙卡",
     "shortDesc": "HS：打开无线电塔的门。第三代：解锁 Silph Co 门。"
   },
   "card-key--letsgo": {
-    "name": "卡片钥匙",
+    "name": "钥匙卡",
     "shortDesc": "一把卡钥匙，可以打开位于萨弗伦市的 Silph Co. 总部的门。"
   },
   "careful-mint": {
-    "name": "小心薄荷",
+    "name": "慎重薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的 Sp. Def会更容易成长，但它的Sp。 Atk会增长得更慢。"
   },
   "carrot-seeds": {
-    "name": "胡萝卜种子",
+    "name": "萝卜种子",
     "shortDesc": "种在田里的种子。您将获得的胡萝卜种类取决于您将种子种植在哪块土地上。"
   },
   "casteliacone": {
-    "name": "卡斯泰利亚科内",
+    "name": "飞云冰淇淋",
     "shortDesc": "解决任何状态问题。"
   },
   "catching-charm": {
-    "name": "迷人魅力",
+    "name": "防晃护符",
     "shortDesc": "据说持有它可以增加获得致命一击的机会。奇怪的是，魅力并没有太大动摇。"
   },
   "catching-pocket": {
@@ -600,15 +600,15 @@
     "shortDesc": "- - -"
   },
   "cell-battery": {
-    "name": "电池",
+    "name": "充电电池",
     "shortDesc": "持有：受到电属性伤害时，持有者攻击力提升一级。"
   },
   "chalky-stone": {
-    "name": "白垩石",
+    "name": "粉笔石",
     "shortDesc": "路边捡到的一块白色小石头。"
   },
   "chandelurite": {
-    "name": "枝形吊灯",
+    "name": "Chandelurite",
     "shortDesc": "如果由吊灯持有，该物品可以使其在战斗中超级进化。"
   },
   "charcoal": {
@@ -616,107 +616,107 @@
     "shortDesc": "持有：持有者的火属性动作造成的伤害提高 20%。"
   },
   "charizard-guild-emblem-template": {
-    "name": "喷火龙公会徽章",
+    "name": "Charizard Guild Emblem",
     "shortDesc": "使用此模板为您当前的公会永久解锁它。"
   },
   "charizardite-x": {
-    "name": "火线铜 X",
+    "name": "喷火龙进化石Ｘ",
     "shortDesc": "持有：允许喷火龙超级进化为超级喷火龙X。"
   },
   "charizardite-y": {
-    "name": "火线铜 Y",
+    "name": "喷火龙进化石Ｙ",
     "shortDesc": "持有：允许喷火龙超级进化为超级喷火龙Y。"
   },
   "charmander-guild-emblem-template": {
-    "name": "小火龙公会徽章",
+    "name": "Charmander Guild Emblem",
     "shortDesc": "使用此模板为您当前的公会永久解锁它。"
   },
   "charti-berry": {
-    "name": "查蒂·贝里",
+    "name": "草蚕果",
     "shortDesc": "持有：被超有效的岩石类攻击击中时消耗，使伤害减半。"
   },
   "cheri-berry": {
-    "name": "谢里·贝瑞",
+    "name": "樱子果",
     "shortDesc": "持有：麻痹时消耗以治愈麻痹。"
   },
   "cherish-ball": {
-    "name": "珍惜球",
+    "name": "贵重球",
     "shortDesc": "尝试捕捉野生宝可梦。"
   },
   "chesnaughtite": {
-    "name": "铧铜矿",
+    "name": "Chesnaughtite",
     "shortDesc": "如果由切斯诺特持有，该物品可以使其在战斗中超级进化。"
   },
   "chesto-berry": {
-    "name": "切斯托·贝里",
+    "name": "零余果",
     "shortDesc": "持有：在睡觉时服用以治疗睡眠。"
   },
   "chilan-berry": {
-    "name": "赤兰莓",
+    "name": "灯浆果",
     "shortDesc": "持有：受到普通类型攻击时消耗，伤害减半。"
   },
   "chill-drive": {
-    "name": "冷驱动",
+    "name": "冰冻卡带",
     "shortDesc": "赋予盖诺赛克特白色冰系科技冲击波。"
   },
   "chimechite": {
-    "name": "硅石",
+    "name": "Chimechite",
     "shortDesc": "如果由编钟持有，该物品可以使其在战斗中超级进化。"
   },
   "chipped-pot": {
-    "name": "碎锅",
+    "name": "缺损的茶壶",
     "shortDesc": "一个特殊的茶壶，可以让特定种类的宝可梦进化。它可能会碎裂，但用它泡出来的茶很美味。"
   },
   "choice-band": {
-    "name": "选择乐队",
+    "name": "讲究头带",
     "shortDesc": "提升攻击力，但将持有者锁定为一招。"
   },
   "choice-scarf": {
-    "name": "精选围巾",
+    "name": "讲究围巾",
     "shortDesc": "持有：速度提高 50%，但限制持有者只能移动一次。"
   },
   "choice-specs": {
-    "name": "选择规格",
+    "name": "讲究眼镜",
     "shortDesc": "持有：特攻增加50%，但限制持有者只能进行一招。"
   },
   "chople-berry": {
-    "name": "乔普尔浆果",
+    "name": "莲蒲果",
     "shortDesc": "持有：被超级有效的战斗型攻击击中时消耗，使伤害减半。"
   },
   "claw-fossil": {
-    "name": "爪化石",
+    "name": "爪子化石",
     "shortDesc": "可以复活为阿诺里斯。"
   },
   "cleanse-tag": {
-    "name": "净化标签",
+    "name": "洁净之符",
     "shortDesc": "防止野生遭遇低于你的队伍的领先宝可梦的等级。"
   },
   "clear-amulet": {
-    "name": "透明护身符",
+    "name": "清净坠饰",
     "shortDesc": "防止其他宝可梦降低持有者的属性等级。"
   },
   "clear-bell": {
-    "name": "透明铃",
+    "name": "透明铃铛",
     "shortDesc": "HS：允许和服女孩召唤凤王。 C：召唤水君到锡塔。"
   },
   "clefablite": {
-    "name": "克莱法莱特",
+    "name": "Clefablite",
     "shortDesc": "如果由 Clefable 持有，该物品可以使其在战斗中超级进化。"
   },
   "clever-wing": {
-    "name": "聪明的羽毛",
+    "name": "精神之羽",
     "shortDesc": "特防强度增加1。"
   },
   "clothing-trunk": {
-    "name": "衣服箱",
+    "name": "换装箱",
     "shortDesc": "一个非常轻的行李箱，可以为你和你的宝可梦携带衣服。"
   },
   "clover-sweet": {
-    "name": "三叶草甜",
+    "name": "幸运草糖饰",
     "shortDesc": "三叶草形状的甜点。当 Milcery 拿着这个时，它会快乐地旋转。"
   },
   "coba-berry": {
-    "name": "科巴浆果",
+    "name": "棱瓜果",
     "shortDesc": "持有：被超级有效的飞行系攻击击中时消耗，伤害减半。"
   },
   "coconut-milk": {
@@ -724,15 +724,15 @@
     "shortDesc": "可用于在营地烹饪的众多食材之一。这种椰奶的精致甜味使其很受欢迎。"
   },
   "coin-case": {
-    "name": "零钱盒",
+    "name": "代币盒",
     "shortDesc": "存放游戏角的硬币。"
   },
   "colbur-berry": {
-    "name": "科尔伯浆果",
+    "name": "刺耳果",
     "shortDesc": "持有：被超级有效的黑暗系攻击击中时消耗，使伤害减半。"
   },
   "colress-machine": {
-    "name": "科尔斯机",
+    "name": "阿克罗玛机器",
     "shortDesc": "唤醒海边洞穴中挡路的龟壳。"
   },
   "comet-shard": {
@@ -740,127 +740,127 @@
     "shortDesc": "以 60000 Pokedollars 的价格出售给矿石收集者。"
   },
   "common-stone": {
-    "name": "普通石头",
+    "name": "常见石",
     "shortDesc": "未知。"
   },
   "contest-costume--dress": {
-    "name": "比赛服装",
+    "name": "演出礼裙",
     "shortDesc": "XXX比赛服装新效果--连衣裙"
   },
   "contest-costume--jacket": {
-    "name": "比赛服装",
+    "name": "演出礼服",
     "shortDesc": "在宝可梦大赛期间佩戴。"
   },
   "contest-pass": {
-    "name": "竞赛通行证",
+    "name": "华丽大赛参加证",
     "shortDesc": "允许参加宝可梦大赛。"
   },
   "cornerstone-mask": {
-    "name": "基石面具",
+    "name": "础石面具",
     "shortDesc": "Ogerpon-基石：1.2x 力量攻击； Terastallize 获得体现方面。"
   },
   "cornn-berry": {
-    "name": "玉米浆果",
+    "name": "玉黍果",
     "shortDesc": "用于创建 PokeBlock 和 Poffins。"
   },
   "coupon-1": {
-    "name": "优惠券1",
+    "name": "兑换券１",
     "shortDesc": "用于获得 Poketch 的三张票中的第一张。"
   },
   "coupon-2": {
-    "name": "优惠券2",
+    "name": "兑换券２",
     "shortDesc": "用于获得 Poketch 的三张票中的第二张。"
   },
   "coupon-3": {
-    "name": "优惠券3",
+    "name": "兑换券３",
     "shortDesc": "用于获得 Poketch 的三张票中的最后一张。"
   },
   "courage-candy": {
-    "name": "勇气糖果",
+    "name": "心灵糖果",
     "shortDesc": "一种充满能量的糖果。当给予 Pokemon 时，它会增加 Pokemon Sp。默认统计数据。"
   },
   "courage-candy-l": {
-    "name": "勇气糖果L",
+    "name": "心灵糖果Ｌ",
     "shortDesc": "充满能量的大糖果。当给予 Lv.1 的宝可梦时30或更高，它会增加宝可梦Sp。默认统计数据。"
   },
   "courage-candy-xl": {
-    "name": "勇气糖果XL",
+    "name": "心灵糖果ＸＬ",
     "shortDesc": "充满能量的巨大糖果。当给予 Lv.1 的宝可梦时60或更高，它会增加宝可梦Sp。默认统计数据。"
   },
   "cover-fossil": {
-    "name": "封面化石",
+    "name": "背盖化石",
     "shortDesc": "可以复活为蒂尔图加。"
   },
   "covert-cloak": {
-    "name": "隐秘斗篷",
+    "name": "密探斗篷",
     "shortDesc": "持有者不会受到其他宝可梦攻击的次级效果的影响。被阻止的具有次要效果的攻击包括有几率（甚至100%）麻痹、睡眠、冻结、燃烧、中毒、迷惑、导致持有者退缩、导致持有者的属性等级降低的攻击，以及锚定射击、诡异法术、投掷、心灵噪音、盐疗、精神枷锁、糖浆炸弹和斩喉。如果持有者是唯一目标，则可以阻止闪耀咏叹调的效果。国王之石、剃刀尖牙、毒触、恶臭和毒链能力所添加的次要效果也会对持有者产生阻止作用。"
   },
   "crabominite": {
-    "name": "克拉博米特",
+    "name": "Crabominite",
     "shortDesc": "如果由蟹类持有，该物品可以使其在战斗中超级进化。"
   },
   "cracked-pot": {
-    "name": "破裂的锅",
+    "name": "破裂的茶壶",
     "shortDesc": "一个特殊的茶壶，可以让特定种类的宝可梦进化。它可能会裂开，但用它倒出来的茶很美味。"
   },
   "crown-pass": {
-    "name": "皇冠通行证",
+    "name": "王冠车票",
     "shortDesc": "前往皇冠苔原的通行证。将其出示给韦奇赫斯特车站的铁路工作人员。"
   },
   "custap-berry": {
-    "name": "卡斯塔普浆果",
+    "name": "释陀果",
     "shortDesc": "持有：使用先行动作时消耗最大HP的1/4。"
   },
   "cut-charm": {
-    "name": "切割魅力",
+    "name": "Cut Charm",
     "shortDesc": "让你可以在宝可梦不知情的情况下使用 Cut。"
   },
   "damp-mulch": {
-    "name": "潮湿的覆盖物",
+    "name": "湿湿肥",
     "shortDesc": "浆果的生长时间增加，但土壤干燥速度变慢。"
   },
   "damp-rock": {
-    "name": "潮湿的岩石",
+    "name": "潮湿岩石",
     "shortDesc": "持有：持有者的雨舞持续8轮，而不是5轮。"
   },
   "dark-gem": {
-    "name": "黑暗宝石",
+    "name": "恶之宝石",
     "shortDesc": "持有：当持有者使用伤害性暗系招式时，该招式威力为1.5，该物品会被消耗。"
   },
   "dark-memory": {
-    "name": "黑暗记忆",
+    "name": "黑暗存储碟",
     "shortDesc": "持有：将希尔瓦利变为黑暗形态。将多重攻击类型更改为黑暗。"
   },
   "dark-stone": {
-    "name": "黑暗之石",
+    "name": "黑暗石",
     "shortDesc": "召唤捷克罗姆参加与 N 的最后一战。"
   },
   "darkinium-z--bag": {
-    "name": "达金合金 Z",
+    "name": "恶Ｚ",
     "shortDesc": "XXX darkinium-z--bag 的新效果"
   },
   "darkinium-z--held": {
-    "name": "达金合金 Z",
+    "name": "恶Ｚ",
     "shortDesc": "持有：允许宝可梦使用其黑暗招式的Z招式等价物。"
   },
   "darkranite": {
-    "name": "暗花岗岩",
+    "name": "Darkranite",
     "shortDesc": "如果达克莱伊持有该物品，该物品可以使其在战斗中超级进化。"
   },
   "dawn-stone": {
-    "name": "黎明石",
+    "name": "觉醒之石",
     "shortDesc": "将雄性 Kirlia 进化为 Gallade 或将雌性 Snorunt 进化为 Froslass。"
   },
   "decidium-z--bag": {
-    "name": "决策Z",
+    "name": "狙射树枭Ｚ",
     "shortDesc": "xxx decidium-z--bag 的新效果"
   },
   "decidium-z--held": {
-    "name": "决策Z",
+    "name": "狙射树枭Ｚ",
     "shortDesc": "持有：允许Decidueye将Spirit Shackle升级为Sinister Arrow Raid。"
   },
   "deep-sea-scale": {
-    "name": "深海规模",
+    "name": "深海鳞片",
     "shortDesc": "双打钳子的特殊防御。在 Clamperl 上交易：持有者进化成 Gorebyss。"
   },
   "deep-sea-tooth": {
@@ -868,43 +868,43 @@
     "shortDesc": "双倍钳子特殊攻击。在 Clamperl 上交易：持有者进化为 Hunttail。"
   },
   "defog-charm": {
-    "name": "除雾咒",
+    "name": "Defog Charm",
     "shortDesc": "让你可以在宝可梦不知情的情况下使用除雾。"
   },
   "delphoxite": {
-    "name": "辉磷矿",
+    "name": "Delphoxite",
     "shortDesc": "如果由德尔福克斯持有，该物品可以使其在战斗中超级进化。"
   },
   "destiny-knot": {
-    "name": "命运结",
+    "name": "红线",
     "shortDesc": "持有：当持有者陷入迷恋时，使对方的宝可梦着迷。"
   },
   "devon-goods": {
-    "name": "德文郡商品",
+    "name": "Devon Goods",
     "shortDesc": "包含将交付给斯特恩船长的机械零件。"
   },
   "devon-parts": {
-    "name": "德文郡零件",
+    "name": "得文的物品",
     "shortDesc": "允许斯特恩船长出发进行他的探险。"
   },
   "devon-scope": {
-    "name": "德文郡范围",
+    "name": "得文侦测镜",
     "shortDesc": "允许发现隐形的 Kecleon。"
   },
   "devon-scuba-gear": {
-    "name": "德文郡潜水装备",
+    "name": "得文潜水装备",
     "shortDesc": "玩家在水下时佩戴。"
   },
   "diancite": {
-    "name": "红铁矿",
+    "name": "蒂安希进化石",
     "shortDesc": "持有：允许蒂安西超级进化为超级蒂安西。"
   },
   "dire-hit": {
-    "name": "重击",
+    "name": "要害攻击",
     "shortDesc": "增加战斗中暴击的几率。提升幸福感。"
   },
   "discount-coupon": {
-    "name": "折扣券",
+    "name": "折价券",
     "shortDesc": "可在精品店使用，享受 50% 的折扣。使用一次就消耗掉。"
   },
   "dive-ball": {
@@ -912,115 +912,115 @@
     "shortDesc": "尝试捕捉野生宝可梦。水下、钓鱼或冲浪时的成功率为 3.5。"
   },
   "dive-charm": {
-    "name": "潜水魅力",
+    "name": "Dive Charm",
     "shortDesc": "让你可以在宝可梦不知情的情况下使用潜水。"
   },
   "dna-splicers": {
-    "name": "DNA 拼接器",
+    "name": "基因之楔",
     "shortDesc": "将酋雷姆与莱希拉姆或捷克罗姆融合，或者再次将它们分开。"
   },
   "dna-splicers--merge": {
-    "name": "DNA 拼接器",
+    "name": "基因之楔",
     "shortDesc": "XXX dna-splicers 新效果--合并"
   },
   "dna-splicers--split": {
-    "name": "DNA 拼接器",
+    "name": "基因之楔",
     "shortDesc": "XXX dna 拼接器的新效果--split"
   },
   "dome-fossil": {
-    "name": "圆顶化石",
+    "name": "甲壳化石",
     "shortDesc": "可以复活为兜。"
   },
   "douse-drive": {
-    "name": "杜斯驱动器",
+    "name": "水流卡带",
     "shortDesc": "赋予盖诺塞克特蓝色的水型科技冲击波。"
   },
   "dowsing-machine": {
-    "name": "探矿机",
+    "name": "探宝器",
     "shortDesc": "用于查找场地上的隐藏物品。又称物品查找器。"
   },
   "draco-plate": {
-    "name": "德拉科板甲",
+    "name": "龙之石板",
     "shortDesc": "持有：持有者的龙类招式造成的伤害提高 20%。将阿尔宙斯和审判类型更改为龙。"
   },
   "dragalgite": {
-    "name": "龙铝矿",
+    "name": "Dragalgite",
     "shortDesc": "如果由龙爪持有，该物品可以使其在战斗中超级进化。"
   },
   "dragon-fang": {
-    "name": "龙牙",
+    "name": "龙之牙",
     "shortDesc": "持有：持有者的龙类招式造成的伤害提高 20%。"
   },
   "dragon-gem": {
-    "name": "龙宝石",
+    "name": "龙之宝石",
     "shortDesc": "持有：当持有者使用龙系伤害招式时，该招式威力为1.5，该物品会被消耗。"
   },
   "dragon-memory": {
-    "name": "龙记忆",
+    "name": "龙存储碟",
     "shortDesc": "持有：将希尔瓦利变为龙形态。将多重攻击类型更改为龙。"
   },
   "dragon-scale": {
-    "name": "龙鳞",
+    "name": "龙之鳞片",
     "shortDesc": "在 Seadra 上交易：持有者进化为 Kingdra。"
   },
   "dragon-skull": {
-    "name": "龙头骨",
+    "name": "龙之骨",
     "shortDesc": "返回纳克林城的博物馆。"
   },
   "dragoninite": {
-    "name": "龙岩",
+    "name": "Dragoninite",
     "shortDesc": "如果由快龙持有，该物品可以使其在战斗中超级进化。"
   },
   "dragonium-z--bag": {
-    "name": "龙金Z",
+    "name": "龙Ｚ",
     "shortDesc": "XXX Dragonium-z--bag 的新效果"
   },
   "dragonium-z--held": {
-    "name": "龙金Z",
+    "name": "龙Ｚ",
     "shortDesc": "持有：允许宝可梦使用其龙招式的Z招式等价物。"
   },
   "drampanite": {
-    "name": "透金石",
+    "name": "Drampanite",
     "shortDesc": "如果由Drampa持有，该物品可以使其在战斗中超级进化。"
   },
   "dread-plate": {
-    "name": "恐惧板甲",
+    "name": "恶颜石板",
     "shortDesc": "持有：持有者的暗属性招式造成的伤害提高 20%。将阿尔宙斯和审判类型更改为黑暗。"
   },
   "dream-ball": {
-    "name": "梦想球",
+    "name": "梦境球",
     "shortDesc": "捕捉在梦境世界中发现的宝可梦。"
   },
   "dropped-item": {
-    "name": "掉落的物品",
+    "name": "遗忘物",
     "shortDesc": "作为支线任务的一部分返回到柯蒂斯或扬西。"
   },
   "dropped-item--red": {
-    "name": "掉落的物品",
+    "name": "遗忘物",
     "shortDesc": "XXX 掉落物品的新效果--红色"
   },
   "dropped-item--yellow": {
-    "name": "掉落的物品",
+    "name": "遗忘物",
     "shortDesc": "XXX 掉落物品新效果--黄色"
   },
   "dubious-disc": {
-    "name": "可疑光盘",
+    "name": "可疑补丁",
     "shortDesc": "在 Porygon2 上交易：持有者进化为 Porygon-Z。"
   },
   "durin-berry": {
-    "name": "杜林浆果",
+    "name": "金枕果",
     "shortDesc": "用于创建 PokeBlock 和 Poffins。"
   },
   "dusk-ball": {
-    "name": "黄昏球",
+    "name": "黑暗球",
     "shortDesc": "尝试捕捉野生宝可梦。夜间和洞穴中的成功率为 3.5。"
   },
   "dusk-stone": {
-    "name": "黄昏石",
+    "name": "暗之石",
     "shortDesc": "将灯进化为水晶灯，将误判进化为恶魔，或将暗鸦进化为黑鸦。"
   },
   "dynamax-band": {
-    "name": "Dynamax 乐队",
+    "name": "极巨腕带",
     "shortDesc": "一颗许愿星已贴在其上。当 Pokemon 处于能量点时，它会发出光线，使 Pokemon 能够进行 Dynamax。"
   },
   "dynamax-candy": {
@@ -1028,55 +1028,55 @@
     "shortDesc": "一种充满能量的糖果。食用后，单个宝可梦的极巨等级会提高一级。等级越高意味着 Dynamax 时的生命值越高。"
   },
   "dynite-ore": {
-    "name": "炸金矿矿石",
+    "name": "极矿石",
     "shortDesc": "可以在最大巢穴中获得的神秘矿石。如果你把它送给皇冠苔原的收藏家，将会发生一些好事。"
   },
   "earth-plate": {
-    "name": "地球板",
+    "name": "大地石板",
     "shortDesc": "持有：持有者的地面类型招式造成的伤害提高 20%。将阿尔宙斯和审判类型更改为地面。"
   },
   "eelektrossite": {
-    "name": "电石",
+    "name": "Eelektrossite",
     "shortDesc": "如果由电鳗持有，该物品可以使其在战斗中进行超级进化。"
   },
   "eevium-z--bag": {
-    "name": "Eevium Z",
+    "name": "伊布Ｚ",
     "shortDesc": "eevium-z--bag 的 XXX 新效果"
   },
   "eevium-z--held": {
-    "name": "Eevium Z",
+    "name": "伊布Ｚ",
     "shortDesc": "持有：允许伊布将“最后的手段”升级为“Extreme Evoboost”。"
   },
   "eject-button": {
-    "name": "弹出按钮",
+    "name": "逃脱按键",
     "shortDesc": "持有：当持有者因招式受到伤害时，它会切换为训练家选择的队伍宝可梦。"
   },
   "eject-pack": {
-    "name": "弹出包",
+    "name": "避难背包",
     "shortDesc": "宝可梦持有的物品。当持有者的属性降低时，它将退出战斗。"
   },
   "electirizer": {
-    "name": "静电发生器",
+    "name": "电力增幅器",
     "shortDesc": "在 Electabuzz 上交易：持有者进化为 Electivire。"
   },
   "electric-gem": {
-    "name": "电宝石",
+    "name": "电之宝石",
     "shortDesc": "持有：当持有者使用破坏性的电系招式时，该招式的威力为1.5，该物品会被消耗。"
   },
   "electric-memory": {
-    "name": "电记忆",
+    "name": "电子存储碟",
     "shortDesc": "持有：将席尔瓦利变为电形态。将多重攻击类型更改为电动。"
   },
   "electric-seed": {
-    "name": "电种子",
+    "name": "电气种子",
     "shortDesc": "持有：在电地形上消耗，持有者防御力提升一级。"
   },
   "electrium-z--bag": {
-    "name": "电金 Z",
+    "name": "电Ｚ",
     "shortDesc": "XXX electium-z--bag 新效果"
   },
   "electrium-z--held": {
-    "name": "电金 Z",
+    "name": "电Ｚ",
     "shortDesc": "持有：允许宝可梦使用其电招式的 Z 招式等效项。"
   },
   "elevator-key": {
@@ -1084,59 +1084,59 @@
     "shortDesc": "解锁莱桑德尔实验室的电梯。"
   },
   "elixir": {
-    "name": "灵药",
+    "name": "ＰＰ多项小补剂",
     "shortDesc": "每一步恢复10点PP。"
   },
   "emboarite": {
-    "name": "恩博莱特",
+    "name": "Emboarite",
     "shortDesc": "如果由嵌入者持有，该物品可以使其在战斗中超级进化。"
   },
   "endorsement": {
-    "name": "认可",
+    "name": "推荐函",
     "shortDesc": "参加健身房挑战所需的推荐信。"
   },
   "energy-powder": {
-    "name": "能量粉",
+    "name": "元气粉",
     "shortDesc": "恢复 50 生命值，但降低幸福感。"
   },
   "energy-root": {
-    "name": "能量根",
+    "name": "元气根",
     "shortDesc": "恢复200点生命值，但降低幸福感。"
   },
   "enigma-berry": {
-    "name": "谜莓",
+    "name": "谜芝果",
     "shortDesc": "持有：受到超级有效攻击时消耗，恢复最大HP的1/4。"
   },
   "enigma-stone": {
-    "name": "谜石",
+    "name": "谜之水晶",
     "shortDesc": "S：召唤拉帝亚斯 H：召唤拉帝亚斯。"
   },
   "enigmatic-card": {
-    "name": "神秘卡牌",
+    "name": "奇异卡片",
     "shortDesc": "解锁 8 号公路上的 Lookers 汽车旅馆房间。"
   },
   "eon-flute": {
-    "name": "永恒长笛",
+    "name": "无限之笛",
     "shortDesc": "召唤拉帝亚斯或拉帝欧斯搭乘。"
   },
   "eon-ticket": {
-    "name": "Eon 门票",
+    "name": "无限船票",
     "shortDesc": "提供前往南岛和拉帝亚斯或拉帝奥斯的通道。"
   },
   "escape-rope": {
-    "name": "逃生绳",
+    "name": "离洞绳",
     "shortDesc": "立即逃离洞穴和地牢。"
   },
   "ether": {
-    "name": "以太",
+    "name": "ＰＰ单项小补剂",
     "shortDesc": "一招恢复10点PP。"
   },
   "everstone": {
-    "name": "永恒石",
+    "name": "不变之石",
     "shortDesc": "举行：防止基于等级的进化发生。"
   },
   "eviolite": {
-    "name": "紫堇石",
+    "name": "进化奇石",
     "shortDesc": "持有者：只要其未完全进化，持有者就有1.5点防御和特防。"
   },
   "excadrite": {
@@ -1144,59 +1144,59 @@
     "shortDesc": "如果由 Excadrill 持有，该物品可以使其在战斗中进行超级进化。"
   },
   "exp-candy-l": {
-    "name": "实验。坎迪·L",
+    "name": "经验糖果Ｌ",
     "shortDesc": "充满能量的糖果。消耗后，会给单个宝可梦带来大量经验值。积分。"
   },
   "exp-candy-m": {
-    "name": "实验。糖果M",
+    "name": "经验糖果Ｍ",
     "shortDesc": "充满能量的糖果。消耗后，它将为单个宝可梦提供适量的经验值。积分。"
   },
   "exp-candy-s": {
-    "name": "实验。糖果小号",
+    "name": "经验糖果Ｓ",
     "shortDesc": "一种充满能量的糖果。消耗后，会给单个宝可梦带来少量经验值。积分。"
   },
   "exp-candy-xl": {
-    "name": "实验。糖果XL号",
+    "name": "经验糖果ＸＬ",
     "shortDesc": "一种充满能量的糖果。消耗后，会给单个宝可梦带来大量经验值。积分。"
   },
   "exp-candy-xs": {
-    "name": "实验。糖果XS",
+    "name": "经验糖果ＸＳ",
     "shortDesc": "一种充满能量的糖果。消耗后，它会为单个宝可梦提供非常少量的经验值。积分。"
   },
   "exp-charm": {
-    "name": "实验。魅力",
+    "name": "经验护符",
     "shortDesc": "增加经验值的护身符。宝可梦可以获得的积分。护身符内有一个类似机器的物体。"
   },
   "exp-share": {
-    "name": "实验。分享",
+    "name": "学习装置",
     "shortDesc": "持有：战斗经验的一半由持有该物品的宝可梦分配。"
   },
   "expert-belt": {
-    "name": "专家腰带",
+    "name": "达人带",
     "shortDesc": "持有：持有者超级有效的动作会造成 20% 的额外伤害。"
   },
   "explorer-kit": {
-    "name": "探索者套件",
+    "name": "探险套装",
     "shortDesc": "允许访问地铁。"
   },
   "fairium-z--bag": {
-    "name": "Fairium Z",
+    "name": "妖精Ｚ",
     "shortDesc": "Fairium-z--bag 的 XXX 新效果"
   },
   "fairium-z--held": {
-    "name": "Fairium Z",
+    "name": "妖精Ｚ",
     "shortDesc": "持有：允许宝可梦使用其仙女招式的Z招式等价物。"
   },
   "fairy-feather": {
-    "name": "仙女羽毛",
+    "name": "妖精之羽",
     "shortDesc": "持有者的妖精属性攻击威力变为1.2倍。"
   },
   "fairy-gem": {
-    "name": "精灵宝石",
+    "name": "妖精宝石",
     "shortDesc": "持有：当持有者使用破坏性仙灵招式时，该招式拥有 1.5 点威力，该物品会被消耗。"
   },
   "fairy-memory": {
-    "name": "童话记忆",
+    "name": "妖精存储碟",
     "shortDesc": "持有：将希尔瓦利变为仙女形态。将多重攻击类型更改为仙女。"
   },
   "falinksite": {
@@ -1204,107 +1204,107 @@
     "shortDesc": "如果由 Falinks 持有，该物品可以使其在战斗中超级进化。"
   },
   "fame-checker": {
-    "name": "名誉检查器",
+    "name": "Fame Checker",
     "shortDesc": "记录NPC的信息。"
   },
   "fancy-apple": {
-    "name": "花式苹果",
+    "name": "特选苹果",
     "shortDesc": "可用于在营地烹饪的众多食材之一。一个比其他苹果更重要的苹果。它具有壮观的形状和灿烂的光泽。"
   },
   "fashion-case": {
-    "name": "时尚案例",
+    "name": "饰品盒",
     "shortDesc": "存放用于比赛的宝可梦配件。"
   },
   "fast-ball": {
-    "name": "快球",
+    "name": "速度球",
     "shortDesc": "对基本速度为 100 或更高的宝可梦有 4 种效果。 （第二代：漫游或逃跑的宝可梦）。由杏子制成。"
   },
   "feraligite": {
-    "name": "铁镁石",
+    "name": "Feraligite",
     "shortDesc": "如果由猛虎持有，该物品可以使其在战斗中超级进化。"
   },
   "festival-ticket": {
-    "name": "节日门票",
+    "name": "圆庆票",
     "shortDesc": "在节日广场主持任务。"
   },
   "fighting-gem": {
-    "name": "战斗宝石",
+    "name": "格斗宝石",
     "shortDesc": "持有：当持有者使用伤害性格斗类招式时，该招式威力为1.5，该物品会被消耗。"
   },
   "fighting-memory": {
-    "name": "战斗记忆",
+    "name": "战斗存储碟",
     "shortDesc": "持有：将希尔瓦利变为战斗形态。将多重攻击类型更改为战斗。"
   },
   "fightinium-z--bag": {
-    "name": "战斗 Z",
+    "name": "格斗Ｚ",
     "shortDesc": "XXX Fightinium-z--bag 的新效果"
   },
   "fightinium-z--held": {
-    "name": "战斗 Z",
+    "name": "格斗Ｚ",
     "shortDesc": "持有：允许宝可梦使用其战斗招式的Z招式等效项。"
   },
   "figy-berry": {
-    "name": "无花果浆果",
+    "name": "勿花果",
     "shortDesc": "持有：消耗最大生命值的1/2，恢复最大生命值的1/8。让不喜欢辣味的宝可梦感到困惑。"
   },
   "fire-gem": {
-    "name": "火宝石",
+    "name": "火之宝石",
     "shortDesc": "持有：当持有者使用伤害性火属性招式时，该招式具有1.5力量，并且该物品被消耗。"
   },
   "fire-memory": {
-    "name": "火焰记忆",
+    "name": "火焰存储碟",
     "shortDesc": "持有：将希尔瓦利变为火焰形态。将多重攻击类型更改为火力。"
   },
   "fire-stone": {
-    "name": "火石",
+    "name": "火之石",
     "shortDesc": "进化某些宝可梦。"
   },
   "firium-z--bag": {
-    "name": "Firium Z",
+    "name": "火Ｚ",
     "shortDesc": "Firium-z--bag 的 XXX 新效果"
   },
   "firium-z--held": {
-    "name": "Firium Z",
+    "name": "火Ｚ",
     "shortDesc": "持有：允许宝可梦使用其火招式的Z招式等效项。"
   },
   "fishing-rod": {
-    "name": "钓鱼竿",
+    "name": "钓竿",
     "shortDesc": "允许玩家钓鱼宝可梦。"
   },
   "fishing-rod--galar": {
-    "name": "钓鱼竿",
+    "name": "钓竿",
     "shortDesc": "在水边使用它来钓各种宝可梦。"
   },
   "fist-plate": {
-    "name": "拳头板",
+    "name": "拳头石板",
     "shortDesc": "持有：持有者的战斗型动作造成的伤害提高 20%。将阿尔宙斯和审判类型更改为战斗。"
   },
   "flame-orb": {
-    "name": "火焰球",
+    "name": "火焰宝珠",
     "shortDesc": "持有者：回合结束时对持有者造成灼伤。在发生烧伤伤害后激活。"
   },
   "flame-plate": {
-    "name": "火焰板",
+    "name": "火球石板",
     "shortDesc": "持有：持有者的火系招式造成的伤害提高 20%。将阿尔宙斯和审判类型更改为火。"
   },
   "flash-charm": {
-    "name": "闪光吊饰",
+    "name": "Flash Charm",
     "shortDesc": "让您可以在 Pokémon 不知情的情况下使用 Flash。"
   },
   "float-stone": {
-    "name": "浮石",
+    "name": "轻石",
     "shortDesc": "持有：持有者有 0.5 重量。"
   },
   "floettite": {
-    "name": "浮石",
+    "name": "Floettite",
     "shortDesc": "如果永生花浮女持有该物品，该物品可以使其在战斗中超级进化。"
   },
   "flower-sweet": {
-    "name": "花甜",
+    "name": "花朵糖饰",
     "shortDesc": "花朵形状的糖果。当 Milcery 拿着这个时，它会快乐地旋转。"
   },
   "fluffy-tail": {
-    "name": "毛茸茸的尾巴",
+    "name": "向尾喵的尾巴",
     "shortDesc": "结束一场狂野的战斗。"
   },
   "flying-gem": {
@@ -1312,27 +1312,27 @@
     "shortDesc": "持有：当持有者使用具有伤害性的飞行类招式时，该招式的威力为1.5，该物品会被消耗。"
   },
   "flying-memory": {
-    "name": "飞行记忆",
+    "name": "飞翔存储碟",
     "shortDesc": "持有：将希尔瓦利变为飞行形态。将多重攻击类型更改为飞行。"
   },
   "flyinium-z--bag": {
-    "name": "Flyinium Z",
+    "name": "飞行Ｚ",
     "shortDesc": "Flyinium-z--bag 的 XXX 新效果"
   },
   "flyinium-z--held": {
-    "name": "Flyinium Z",
+    "name": "飞行Ｚ",
     "shortDesc": "持有：允许宝可梦使用其飞行招式的 Z 招式等效项。"
   },
   "focus-band": {
-    "name": "对焦带",
+    "name": "气势头带",
     "shortDesc": "持有：持有者有 10% 的几率在 1 HP 的攻击或自伤中幸存。"
   },
   "focus-sash": {
-    "name": "焦点腰带",
+    "name": "气势披带",
     "shortDesc": "持有：持有者在 1 生命值时能幸存，如果在最大生命值时，则该物品会被消耗。"
   },
   "forage-bag": {
-    "name": "饲料袋",
+    "name": "材料袋",
     "shortDesc": "在锦葵试用期间保存原料。"
   },
   "fossilized-bird": {
@@ -1340,7 +1340,7 @@
     "shortDesc": "曾经翱翔天空的古代宝可梦的化石。它看起来是什么样子是一个谜。"
   },
   "fossilized-dino": {
-    "name": "恐龙化石",
+    "name": "化石海兽",
     "shortDesc": "曾经生活在海里的古代宝可梦的化石。它看起来是什么样子是一个谜。"
   },
   "fossilized-drake": {
@@ -1352,95 +1352,95 @@
     "shortDesc": "曾经生活在海里的古代宝可梦的化石。它看起来是什么样子是一个谜。"
   },
   "fresh-cream": {
-    "name": "鲜奶油",
+    "name": "鲜鲜奶油",
     "shortDesc": "营地中有多种可用于烹饪的食材之一。在辛辣的咖喱中加入一些生奶油，为其增添一些甜味。"
   },
   "fresh-water": {
-    "name": "淡水",
+    "name": "美味之水",
     "shortDesc": "恢复 50 生命值。"
   },
   "fried-food": {
-    "name": "油炸食品",
+    "name": "炸物拼盘",
     "shortDesc": "可用于在营地烹饪的众多食材之一。因为已经炸了好久了，所以有点油腻了。"
   },
   "friend-ball": {
-    "name": "朋友球",
+    "name": "友友球",
     "shortDesc": "捕获的宝可梦开始时有200幸福。由 Grn 杏子制成。"
   },
   "froslassite": {
-    "name": "硅石",
+    "name": "Froslassite",
     "shortDesc": "如果由弗罗斯拉斯持有，该物品可以使其在战斗中超级进化。"
   },
   "fruit-bunch": {
-    "name": "水果束",
+    "name": "袋装果实",
     "shortDesc": "可用于在营地烹饪的众多食材之一。糖浆般的水果散发出浓郁的热带风情。"
   },
   "full-heal": {
-    "name": "全面治疗",
+    "name": "万灵药",
     "shortDesc": "解决任何状态问题。"
   },
   "full-incense": {
-    "name": "全香",
+    "name": "饱腹薰香",
     "shortDesc": "持有：持有者在其优先级括号中最后移动。繁殖：卡氏蜥蜴会产下一只卡氏蜥蜴蛋。"
   },
   "full-restore": {
-    "name": "完全恢复",
+    "name": "全复药",
     "shortDesc": "完全恢复生命值并治愈任何状态状况。"
   },
   "galactic-key": {
-    "name": "银河钥匙",
+    "name": "银河队钥匙",
     "shortDesc": "授予进入面纱城银河总部的权限。"
   },
   "galarica-cuff": {
-    "name": "加拉利卡袖口",
+    "name": "伽勒豆蔻手环",
     "shortDesc": "由加拉里卡树枝编织而成的手镯。把它送给加拉利安呆呆兽会让宝可梦非常高兴。"
   },
   "galarica-twig": {
-    "name": "加拉里卡树枝",
+    "name": "伽勒豆蔻枝",
     "shortDesc": "来自加拉尔地区某些地区生长的加拉尔树种的树枝。是某种宝可梦的饰品材料。"
   },
   "galarica-wreath": {
-    "name": "加拉利卡花环",
+    "name": "伽勒豆蔻花圈",
     "shortDesc": "由加拉里卡树枝编织而成的花环。把它放在加拉利尔呆呆兽的头上会让宝可梦非常高兴。"
   },
   "galladite": {
-    "name": "铅铜矿",
+    "name": "艾路雷朵进化石",
     "shortDesc": "持有：允许加拉德超级进化为超级加拉德。"
   },
   "ganlon-berry": {
-    "name": "甘龙浆果",
+    "name": "龙睛果",
     "shortDesc": "持有：消耗最大生命值 1/4 来提升防御力。"
   },
   "garchompite": {
-    "name": "巨齿鲨",
+    "name": "烈咬陆鲨进化石",
     "shortDesc": "持有：允许咬齿鲨超级进化为超级咬齿鲨。"
   },
   "garchompite-z": {
-    "name": "巨齿鲨 Z",
+    "name": "Garchompite Z",
     "shortDesc": "如果由 Garchomp 持有，该物品可以使其超级进化为 Mega Garchomp Z。"
   },
   "gardevoirite": {
-    "name": "黄檀",
+    "name": "沙奈朵进化石",
     "shortDesc": "持有：允许加德沃超级进化为超级加德沃。"
   },
   "gb-sounds": {
-    "name": "GB 声音",
+    "name": "ＧＢ播放器",
     "shortDesc": "用于收听 GameBoy 时代的音频。"
   },
   "gender-chance-ticket": {
-    "name": "性别变更票",
+    "name": "Gender Chance Ticket",
     "shortDesc": "更改性别并将衣柜化妆品放回您的包中。"
   },
   "gengarite": {
-    "name": "根加利特",
+    "name": "耿鬼进化石",
     "shortDesc": "持有：允许耿鬼超级进化为超级耿鬼。"
   },
   "genius-wing": {
-    "name": "天才羽毛",
+    "name": "智力之羽",
     "shortDesc": "特攻强度增加 1。"
   },
   "gentle-mint": {
-    "name": "温和薄荷",
+    "name": "温顺薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的 Sp.防御力会更容易增长，但防御力会增长得更慢。"
   },
   "ghost-gem": {
@@ -1448,107 +1448,107 @@
     "shortDesc": "持有：当持有者使用具有伤害性的幽灵类招式时，该招式的威力为1.5，该物品会被消耗。"
   },
   "ghost-memory": {
-    "name": "幽灵记忆",
+    "name": "幽灵存储碟",
     "shortDesc": "持有：将希尔瓦利变为幽灵形态。将多重攻击类型更改为幽灵。"
   },
   "ghostium-z--bag": {
-    "name": "鬼魂 Z",
+    "name": "幽灵Ｚ",
     "shortDesc": "XXX Ghostium-z--bag 的新效果"
   },
   "ghostium-z--held": {
-    "name": "鬼魂 Z",
+    "name": "幽灵Ｚ",
     "shortDesc": "持有：允许宝可梦使用其幽灵招式的Z招式等效项。"
   },
   "gigantamix": {
-    "name": "Gigantamix",
+    "name": "超极粉",
     "shortDesc": "可用于在营地烹饪的众多食材之一。一种神秘的香料。即使撒上一点点也能让咖喱变得巨大。"
   },
   "glalitite": {
-    "name": "硅藻土",
+    "name": "冰鬼护进化石",
     "shortDesc": "持有：允许格拉莉超级进化为超级格拉莉。"
   },
   "glimmoranite": {
-    "name": "硅晶石",
+    "name": "Glimmoranite",
     "shortDesc": "如果由微魔拉持有，该物品可以使其在战斗中超级进化。"
   },
   "go-goggles": {
-    "name": "护目镜",
+    "name": "ＧＯＧＯ护目镜",
     "shortDesc": "允许穿过多风的沙漠。"
   },
   "god-stone": {
-    "name": "神石",
+    "name": "god stone",
     "shortDesc": "未知。目前未使用。"
   },
   "gold-bottle-cap": {
-    "name": "金瓶盖",
+    "name": "金色王冠",
     "shortDesc": "与超级先生交易以最大化所有宝可梦基因。"
   },
   "gold-leaf": {
-    "name": "金箔",
+    "name": "金色叶子",
     "shortDesc": "神秘的金箔。尚未发现长有这种叶子的树。"
   },
   "gold-teeth": {
-    "name": "金牙",
+    "name": "金假牙",
     "shortDesc": "Safari Zone Wardens 假牙。交易 HM04（力量）。"
   },
   "golisopite": {
-    "name": "胶云母",
+    "name": "Golisopite",
     "shortDesc": "如果由巨体足类持有，该物品可以使其在战斗中超级进化。"
   },
   "golurkite": {
-    "name": "铜矿",
+    "name": "Golurkite",
     "shortDesc": "如果被古鲁克持有，该物品可以使其在战斗中超级进化。"
   },
   "good-rod": {
-    "name": "好棒",
+    "name": "好钓竿",
     "shortDesc": "用它在水体中捕捉强大的宝可梦。"
   },
   "gooey-mulch": {
-    "name": "粘糊糊的覆盖物",
+    "name": "粘粘肥",
     "shortDesc": "浆果从死亡植物中重新生长的次数增加。"
   },
   "gracidea": {
-    "name": "格拉西迪亚",
+    "name": "葛拉西蒂亚花",
     "shortDesc": "在白天将未冻结的 Shaymin 更改为 Sky Forme。"
   },
   "gram-1": {
-    "name": "克 1",
+    "name": "配送物品１",
     "shortDesc": "获取 TM89 的支线任务的一部分。"
   },
   "gram-2": {
-    "name": "克 2",
+    "name": "配送物品２",
     "shortDesc": "获取 TM89 的支线任务的一部分。"
   },
   "gram-3": {
-    "name": "克 3",
+    "name": "配送物品３",
     "shortDesc": "获取 TM89 的支线任务的一部分。"
   },
   "grass-gem": {
-    "name": "草宝石",
+    "name": "草之宝石",
     "shortDesc": "持有：当持有者使用伤害性的草系招式时，该招式的威力为1.5，该物品会被消耗。"
   },
   "grass-memory": {
-    "name": "草记忆",
+    "name": "青草存储碟",
     "shortDesc": "持有：将希尔瓦利变为草形态。将多重攻击类型更改为草。"
   },
   "grassium-z--bag": {
-    "name": "草Z",
+    "name": "草Ｚ",
     "shortDesc": "XXXgrassium-z--bag 的新效果"
   },
   "grassium-z--held": {
-    "name": "草Z",
+    "name": "草Ｚ",
     "shortDesc": "持有：允许宝可梦使用其草招式的Z招式等效项。"
   },
   "grassy-seed": {
-    "name": "草籽",
+    "name": "青草种子",
     "shortDesc": "持有：在草地上消耗并使持有者防御力提高一级。"
   },
   "great-ball": {
-    "name": "伟大的球",
+    "name": "超级球",
     "shortDesc": "比精灵球更好的球，接球率更高。"
   },
   "green-apricorn": {
-    "name": "绿杏",
+    "name": "绿球果",
     "shortDesc": "用于制作朋友球。"
   },
   "green-petal": {
@@ -1556,7 +1556,7 @@
     "shortDesc": "XXX 绿色花瓣新效果"
   },
   "green-scarf": {
-    "name": "绿围巾",
+    "name": "绿色头巾",
     "shortDesc": "在比赛中提高持有者的聪明度。"
   },
   "green-shard": {
@@ -1564,23 +1564,23 @@
     "shortDesc": "没有效果。可以用来交换物品或动作。"
   },
   "greninjite": {
-    "name": "格林尼吉特",
+    "name": "Greninjite",
     "shortDesc": "如果被甲忍者持有，该物品可以使其在战斗中超级进化。"
   },
   "grepa-berry": {
-    "name": "格雷帕浆果",
+    "name": "萄葡果",
     "shortDesc": "特防努力值降低 10 点并提高幸福感。"
   },
   "grip-claw": {
-    "name": "握爪",
+    "name": "紧缠钩爪",
     "shortDesc": "持有：持有者多回合诱捕动作最后5回合。"
   },
   "griseous-core": {
-    "name": "可怕的核心",
+    "name": "大白金宝玉",
     "shortDesc": "骑拉帝纳持有时，其鬼系、龙系攻击威力变为1.2倍。"
   },
   "griseous-orb": {
-    "name": "可怕的宝珠",
+    "name": "白金宝珠",
     "shortDesc": "骑拉迪纳的龙系、鬼系招式伤害提升20%，并转化为源形态。"
   },
   "ground-gem": {
@@ -1588,435 +1588,435 @@
     "shortDesc": "持有：当持有者使用破坏性的地面类招式时，该招式的威力为1.5，并且该物品会被消耗。"
   },
   "ground-memory": {
-    "name": "地面记忆",
+    "name": "大地存储碟",
     "shortDesc": "持有：将希尔瓦利变为地面形态。将多重攻击类型更改为地面。"
   },
   "groundium-z--bag": {
-    "name": "地金 Z",
+    "name": "地面Ｚ",
     "shortDesc": "XXX groundium-z--bag 的新效果"
   },
   "groundium-z--held": {
-    "name": "地金 Z",
+    "name": "地面Ｚ",
     "shortDesc": "持有：允许宝可梦使用其地面招式的 Z 招式等效项。"
   },
   "growth-mulch": {
-    "name": "生长覆盖物",
+    "name": "速速肥",
     "shortDesc": "浆果的生长时间缩短，但土壤干燥得更快。"
   },
   "grubby-hanky": {
-    "name": "肮脏的手帕",
+    "name": "脏手帕",
     "shortDesc": "周日出现在咖啡厅仓库；周四带着 Patrat 返回给客户。"
   },
   "guard-spec": {
-    "name": "防护规格。",
+    "name": "能力防守",
     "shortDesc": "防止战斗中属性减少。"
   },
   "gyaradosite": {
-    "name": "伽拉多石",
+    "name": "暴鲤龙进化石",
     "shortDesc": "持有：允许暴鲤龙超级进化为超级暴鲤龙。"
   },
   "haban-berry": {
-    "name": "哈班浆果",
+    "name": "莓榴果",
     "shortDesc": "持有：被超级有效的龙类攻击击中时消耗，使伤害减半。"
   },
   "hard-stone": {
-    "name": "坚硬的石头",
+    "name": "硬石头",
     "shortDesc": "持有：持有者的岩石类动作造成的伤害提高 20%。"
   },
   "hasty-mint": {
-    "name": "冬青薄荷",
+    "name": "急躁薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的速度会更容易增长，但它的防御会增长得更慢。"
   },
   "hawluchanite": {
-    "name": "硬铜矿",
+    "name": "Hawluchanite",
     "shortDesc": "如果由Hawlucha持有，该物品可以使其在战斗中超级进化。"
   },
   "heal-ball": {
-    "name": "治疗球",
+    "name": "治愈球",
     "shortDesc": "尝试捕捉野生宝可梦。捕获的宝可梦会立即治愈。"
   },
   "heal-powder": {
-    "name": "治愈粉",
+    "name": "万能粉",
     "shortDesc": "治愈任何状态疾病，但降低幸福感。"
   },
   "health-candy": {
-    "name": "健康糖果",
+    "name": "元气糖果",
     "shortDesc": "一种充满能量的糖果。当给予宝可梦时，它会增加该宝可梦的生命值。"
   },
   "health-candy-l": {
-    "name": "健康糖果L",
+    "name": "元气糖果Ｌ",
     "shortDesc": "充满能量的大糖果。当给予 Lv.1 的宝可梦时30或更高，它会增加该宝可梦的HP。"
   },
   "health-candy-xl": {
-    "name": "健康糖果XL",
+    "name": "元气糖果ＸＬ",
     "shortDesc": "充满能量的巨大糖果。当给予 Lv.1 的宝可梦时60或更高，它会增加该宝可梦的HP。"
   },
   "health-wing": {
-    "name": "健康羽毛",
+    "name": "体力之羽",
     "shortDesc": "HP 努力增加 1。"
   },
   "heart-scale": {
-    "name": "心脏量表",
+    "name": "心之鳞片",
     "shortDesc": "没有效果。可以用来交换之前的升级动作。"
   },
   "hearthflame-mask": {
-    "name": "炉火面具",
+    "name": "火灶面具",
     "shortDesc": "奥格彭-炉火：1.2x 力量攻击； Terastallize 获得体现方面。"
   },
   "heat-rock": {
-    "name": "热岩",
+    "name": "炽热岩石",
     "shortDesc": "持有者：持有者的晴天持续8轮，而不是5轮。"
   },
   "heatranite": {
-    "name": "希特拉石",
+    "name": "Heatranite",
     "shortDesc": "如果由Heatran持有，该物品可以使其在战斗中超级进化。"
   },
   "heavy-ball": {
-    "name": "重球",
+    "name": "沉重球",
     "shortDesc": "根据目标的重量等级，捕获率有固定的奖励或惩罚。由 Blk Apricorn 制成。"
   },
   "heavy-duty-boots": {
-    "name": "重型靴子",
+    "name": "厚底靴",
     "shortDesc": "这些靴子可以防止战场上设置的陷阱的影响。"
   },
   "helix-fossil": {
-    "name": "螺旋化石",
+    "name": "贝壳化石",
     "shortDesc": "可以复活为阿曼人。"
   },
   "heracronite": {
-    "name": "赫拉克朗石",
+    "name": "赫拉克罗斯进化石",
     "shortDesc": "持有：允许赫拉克罗斯超级进化为超级赫拉克罗斯。"
   },
   "hi-tech-earbuds": {
-    "name": "高科技耳塞",
+    "name": "厉害耳塞",
     "shortDesc": "奇怪的耳塞，可以让你自由控制各种声音的音量。"
   },
   "hm-cut": {
-    "name": "HM 剪切",
+    "name": "秘传学习器：居合斩",
     "shortDesc": "教授剪辑到兼容的宝可梦。"
   },
   "hm-defog": {
-    "name": "HM 除雾",
+    "name": "秘传学习器：清除浓雾",
     "shortDesc": "向兼容的宝可梦教授除雾。"
   },
   "hm-dive": {
-    "name": "HM 潜水",
+    "name": "秘传学习器：潜水",
     "shortDesc": "向兼容的宝可梦教授潜水。"
   },
   "hm-flash": {
-    "name": "HM 闪存",
+    "name": "秘传学习器：闪光",
     "shortDesc": "向兼容的宝可梦教授 Flash。"
   },
   "hm-fly": {
-    "name": "HM 飞",
+    "name": "秘传学习器：飞翔",
     "shortDesc": "教飞行到兼容的宝可梦。"
   },
   "hm-rock-climb": {
-    "name": "HM 攀岩",
+    "name": "秘传学习器：攀岩",
     "shortDesc": "教兼容的宝可梦攀岩。"
   },
   "hm-rock-smash": {
-    "name": "HM 摇滚粉碎",
+    "name": "秘传学习器：碎岩",
     "shortDesc": "向兼容的宝可梦教授岩石粉碎。"
   },
   "hm-strength": {
-    "name": "HM 强度",
+    "name": "秘传学习器：怪力",
     "shortDesc": "向兼容的宝可梦传授力量。"
   },
   "hm-surf": {
-    "name": "HM 冲浪",
+    "name": "秘传学习器：冲浪",
     "shortDesc": "向兼容的宝可梦教授冲浪。"
   },
   "hm-waterfall": {
-    "name": "HM瀑布",
+    "name": "秘传学习器：攀瀑",
     "shortDesc": "向兼容的宝可梦教授瀑布。"
   },
   "hm-whirlpool": {
-    "name": "HM 漩涡",
+    "name": "秘传学习器：潮旋",
     "shortDesc": "教漩涡兼容的宝可梦。"
   },
   "holo-caster": {
-    "name": "全息脚轮",
+    "name": "全息影像通讯器",
     "shortDesc": "随着情节的进展显示过场对话。"
   },
   "holo-caster--green": {
-    "name": "全息脚轮",
+    "name": "全息影像通讯器",
     "shortDesc": "XXX Holo-caster 新效果--绿色"
   },
   "holo-caster--red": {
-    "name": "全息脚轮",
+    "name": "全息影像通讯器",
     "shortDesc": "XXX 全息施法者新效果--红色"
   },
   "hondew-berry": {
-    "name": "洪露浆果",
+    "name": "哈密果",
     "shortDesc": "特攻努力值降低 10 点并提高幸福感。"
   },
   "honey": {
-    "name": "亲爱的",
+    "name": "甜甜蜜",
     "shortDesc": "在战斗之外使用：只要训练师位于有野生宝可梦的地方，即在高高的草丛中、在洞穴中或冲浪时，立即触发野生宝可梦战斗。六小时后可以涂在散发着香味的树上以吸引树上的宝可梦。"
   },
   "honor-of-kalos": {
-    "name": "卡洛斯之誉",
+    "name": "卡洛斯勋章",
     "shortDesc": "不执行任何操作，但表示成为冠军。"
   },
   "houndoominite": {
-    "name": "黑金石",
+    "name": "黑鲁加进化石",
     "shortDesc": "持有：允许Houndoom超级进化为Mega Houndoom。"
   },
   "hp-up": {
-    "name": "生命值上升",
+    "name": "ＨＰ增强剂",
     "shortDesc": "提高HP努力值和幸福感。"
   },
   "hyper-potion": {
-    "name": "超级药水",
+    "name": "厉害伤药",
     "shortDesc": "恢复 200 生命值。"
   },
   "iapapa-berry": {
-    "name": "Iapapa 浆果",
+    "name": "芭亚果",
     "shortDesc": "持有：消耗最大生命值的1/2，恢复最大生命值的1/8。使不喜欢酸味的宝可梦感到困惑。"
   },
   "ice-gem": {
-    "name": "冰宝石",
+    "name": "冰之宝石",
     "shortDesc": "持有：当持有者使用具有伤害性的冰属性招式时，该招式具有1.5力量，并且该物品被消耗。"
   },
   "ice-heal": {
-    "name": "冰疗",
+    "name": "解冻药",
     "shortDesc": "解冻冻结的宝可梦。"
   },
   "ice-memory": {
-    "name": "冰记忆",
+    "name": "冰雪存储碟",
     "shortDesc": "持有：将席尔瓦利变为冰雪形态。将多重攻击类型更改为冰。"
   },
   "ice-stone": {
-    "name": "冰石",
+    "name": "冰之石",
     "shortDesc": "将阿罗拉沙鼩进化为阿罗拉沙斩，或将阿罗拉六尾进化为阿罗拉九尾。"
   },
   "iceroot-carrot": {
-    "name": "冰根胡萝卜",
+    "name": "冰萝卜",
     "shortDesc": "丰收王爱马喜欢吃的农产品。它生长在一片被雪覆盖的田野里。"
   },
   "icicle-plate": {
-    "name": "冰柱板",
+    "name": "冰柱石板",
     "shortDesc": "持有：持有者的冰系动作造成的伤害提高 20%。将阿尔宙斯和审判类型更改为冰。"
   },
   "icium-z--bag": {
-    "name": "Iciium Z",
+    "name": "冰Ｚ",
     "shortDesc": "xxx icium-z--bag 的新效果"
   },
   "icium-z--held": {
-    "name": "Iciium Z",
+    "name": "冰Ｚ",
     "shortDesc": "持有：允许宝可梦使用其冰招式的Z招式等价物。"
   },
   "icy-rock": {
-    "name": "冰冷的岩石",
+    "name": "冰冷岩石",
     "shortDesc": "持有者：持有者的冰雹持续8轮而不是5轮。"
   },
   "ilimas-normalium-z": {
-    "name": "伊利马正常Z",
+    "name": "伊利马一般Ｚ",
     "shortDesc": "XXX ilimas-normalium-z 的新效果"
   },
   "impish-mint": {
-    "name": "顽皮薄荷",
+    "name": "淘气薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的防御力会更容易增长，但它的 Sp. Atk会增长得更慢。"
   },
   "incinium-z--bag": {
-    "name": "Incinium Z",
+    "name": "炽焰咆哮虎Ｚ",
     "shortDesc": "XXX incinium-z--bag 的新效果"
   },
   "incinium-z--held": {
-    "name": "Incinium Z",
+    "name": "炽焰咆哮虎Ｚ",
     "shortDesc": "持有：允许焚吼将黑暗套索升级为恶意月索。"
   },
   "insect-plate": {
-    "name": "昆虫盘",
+    "name": "玉虫石板",
     "shortDesc": "持有：持有者的虫类动作造成的伤害提高 20%。将阿尔宙斯和审判类型更改为 Bug。"
   },
   "instant-noodles": {
-    "name": "方便面",
+    "name": "即食面",
     "shortDesc": "可用于在营地烹饪的众多食材之一。它有一种垃圾食品的味道，但很适合搭配咖喱。"
   },
   "intriguing-stone": {
-    "name": "有趣的石头",
+    "name": "似珍石",
     "shortDesc": "在 X 和 Y 中交易太阳石，或在欧米茄红宝石和阿尔法蓝宝石中交易皮乔特。"
   },
   "iron": {
-    "name": "铁",
+    "name": "防御增强剂",
     "shortDesc": "提高防御力和幸福感。"
   },
   "iron-ball": {
-    "name": "铁球",
+    "name": "黑色铁球",
     "shortDesc": "持有：持有者速度减半。取消所有地面类型的免疫，并使飞行类型受到地面类型招式的中性伤害。竞技场陷阱。尖刺和有毒尖刺会影响持有者。"
   },
   "iron-plate": {
-    "name": "铁板",
+    "name": "钢铁石板",
     "shortDesc": "持有：持有者的钢类动作造成的伤害提高 20%。将阿尔宙斯和审判类型更改为钢。"
   },
   "jaboca-berry": {
-    "name": "雅博卡浆果",
+    "name": "嘉珍果",
     "shortDesc": "持有：当持有者受到物理攻击时，消耗给攻击者最大生命值的1/8。"
   },
   "jade-orb": {
-    "name": "玉珠",
+    "name": "草绿色宝珠",
     "shortDesc": "召唤烈空坐到嵌入式塔。"
   },
   "jaw-fossil": {
-    "name": "下颌化石",
+    "name": "颚之化石",
     "shortDesc": "可以复活为暴君。"
   },
   "jolly-mint": {
-    "name": "快乐薄荷",
+    "name": "爽朗薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的速度会更容易增长，但它的 Sp. Atk会增长得更慢。"
   },
   "journal": {
-    "name": "日记",
+    "name": "冒险笔记",
     "shortDesc": "记录玩家之前进行的重要活动。"
   },
   "kangaskhanite": {
-    "name": "坎加斯坎石",
+    "name": "袋兽进化石",
     "shortDesc": "持有：允许袋鼠人超级进化为超级袋鼠人。"
   },
   "kasib-berry": {
-    "name": "卡西布浆果",
+    "name": "佛柑果",
     "shortDesc": "持有：被超有效的幽灵类攻击击中时消耗，使伤害减半。"
   },
   "kebia-berry": {
-    "name": "科比亚贝瑞",
+    "name": "通通果",
     "shortDesc": "持有：被超级有效的毒系攻击击中时消耗，使伤害减半。"
   },
   "kee-berry": {
-    "name": "记贝瑞",
+    "name": "亚开果",
     "shortDesc": "持有：当持有者受到物理攻击时，其防御力增加一级。"
   },
   "kelpsy-berry": {
-    "name": "凯尔西浆果",
+    "name": "藻根果",
     "shortDesc": "攻击努力值降低 10 并提高幸福感。"
   },
   "key-stone": {
-    "name": "钥匙石",
+    "name": "钥石",
     "shortDesc": "允许玩家宝可梦进行超级进化。"
   },
   "key-to-room-1": {
-    "name": "1号房间钥匙",
+    "name": "１号客房的钥匙",
     "shortDesc": "打开Sea Mauville 1号房间的门。"
   },
   "key-to-room-2": {
-    "name": "2号房间钥匙",
+    "name": "２号客房的钥匙",
     "shortDesc": "打开 Sea Mauville 房间 2 的门。"
   },
   "key-to-room-4": {
-    "name": "4号房间钥匙",
+    "name": "４号客房的钥匙",
     "shortDesc": "打开Sea Mauville 4号房间的门。"
   },
   "key-to-room-6": {
-    "name": "6号房间钥匙",
+    "name": "６号客房的钥匙",
     "shortDesc": "打开Sea Mauville 6号房间的门。"
   },
   "kings-rock": {
-    "name": "国王石",
+    "name": "王者之证",
     "shortDesc": "持有：伤害性动作有 10% 的几率使目标退缩。在 Poliwhirl 上交易：持有者演变为 Politoed。在呆呆兽上交易：持有者进化成呆呆王。"
   },
   "kommonium-z--bag": {
-    "name": "共铵 Z",
+    "name": "杖尾鳞甲龙Ｚ",
     "shortDesc": "XXX kommonia-z--bag 新效果"
   },
   "kommonium-z--held": {
-    "name": "共铵 Z",
+    "name": "杖尾鳞甲龙Ｚ",
     "shortDesc": "持有：允许科莫奥使用铿锵的灵魂烈焰。"
   },
   "lagging-tail": {
-    "name": "落后的尾巴",
+    "name": "后攻之尾",
     "shortDesc": "持有：持有者在其优先级括号中最后移动。"
   },
   "lansat-berry": {
-    "name": "兰萨特浆果",
+    "name": "兰萨果",
     "shortDesc": "持有：最大生命值1/4时消耗，暴击率提高两级。"
   },
   "large-leek": {
-    "name": "大韭菜",
+    "name": "粗枝大葱",
     "shortDesc": "可用于在营地烹饪的众多食材之一。这是否是Farfetchd喜欢的那种蔬菜茎就不得而知了。"
   },
   "latiasite": {
-    "name": "拉铁矿",
+    "name": "拉帝亚斯进化石",
     "shortDesc": "持有：允许拉蒂亚斯超级进化为超级拉蒂亚斯。"
   },
   "latiosite": {
-    "name": "拉铁石",
+    "name": "拉帝欧斯进化石",
     "shortDesc": "持有：拉帝欧斯可以超级进化为超级拉帝欧斯。"
   },
   "lava-cookie": {
-    "name": "熔岩饼干",
+    "name": "釜炎仙贝",
     "shortDesc": "解决任何状态问题。"
   },
   "lax-incense": {
-    "name": "松香",
+    "name": "悠闲薰香",
     "shortDesc": "持有者：持有者回避率增加5%。繁殖：Wobbuffet 生成 Wynaut 蛋。"
   },
   "lax-mint": {
-    "name": "宽松薄荷",
+    "name": "乐天薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的防御力会更容易增长，但它的 Sp. Def 会增长得更慢。"
   },
   "leaf-letter--eevee": {
-    "name": "叶信",
+    "name": "树叶信",
     "shortDesc": "写在叶子上的一封信。有些东西是用伊布的脚印写的。"
   },
   "leaf-letter--pikachu": {
-    "name": "叶信",
+    "name": "树叶信",
     "shortDesc": "写在叶子上的一封信。有些东西是用皮卡丘的脚印写的。"
   },
   "leaf-stone": {
-    "name": "叶石",
+    "name": "叶之石",
     "shortDesc": "将 Exeggcute 进化为 Exeggutor，将 Gloom 进化为 Vileplume，将 Nuzleaf 进化为 Shiftry，将 Pansage 进化为 Simisage，或将 Weepinbell 进化为 Victreebel。"
   },
   "left-poke-ball": {
-    "name": "左精灵球",
+    "name": "留下的精灵球",
     "shortDesc": "XXX 左精灵球新效果"
   },
   "leftovers": {
-    "name": "剩菜",
+    "name": "吃剩的东西",
     "shortDesc": "每回合恢复少量生命值。"
   },
   "legendary-clue-1": {
-    "name": "传奇线索1",
+    "name": "传说笔记１",
     "shortDesc": "关于五谷丰登之王的线索。是牡丹写的，附有一张老照片。"
   },
   "legendary-clue-2": {
-    "name": "传奇线索2",
+    "name": "传说笔记２",
     "shortDesc": "关于巨人传说的线索。其作者为牡丹，图画独特。"
   },
   "legendary-clue-3": {
-    "name": "传奇线索3",
+    "name": "传说笔记３",
     "shortDesc": "关于鸟宝可梦传说的线索。其作者为牡丹，绘画独特。"
   },
   "legendary-clue-question": {
-    "name": "传奇线索？",
+    "name": "传说笔记？",
     "shortDesc": "牡丹似乎掉落的神秘线索。附有一张照片，显示麦克斯巢穴上方有一个闪亮的洞。"
   },
   "lemonade": {
-    "name": "柠檬水",
+    "name": "果汁牛奶",
     "shortDesc": "恢复 80 生命值。"
   },
   "lens-case": {
-    "name": "镜头盒",
+    "name": "隐形眼镜盒",
     "shortDesc": "允许玩家改变眼睛的颜色。"
   },
   "leppa-berry": {
-    "name": "莱帕贝瑞",
+    "name": "苹野果",
     "shortDesc": "持有：行动PP耗尽时消耗，恢复10点PP。"
   },
   "letter": {
-    "name": "信",
+    "name": "给大吾的信",
     "shortDesc": "德文公司总裁给史蒂文的一封信。"
   },
   "level-ball": {
-    "name": "水平球",
+    "name": "等级球",
     "shortDesc": "基于分数目标宝可梦的成功率是用户宝可梦的。由红杏制成。"
   },
   "liberty-pass": {
-    "name": "自由通行证",
+    "name": "自由船票",
     "shortDesc": "允许访问自由花园和比克提尼。"
   },
   "liechi-berry": {
-    "name": "荔枝莓",
+    "name": "枝荔果",
     "shortDesc": "持有：消耗最大HP的1/4以增强攻击力。"
   },
   "life-orb": {
@@ -2028,71 +2028,71 @@
     "shortDesc": "操作火箭队青瓷藏身处的电梯。"
   },
   "light-ball": {
-    "name": "光球",
+    "name": "电气球",
     "shortDesc": "皮卡丘攻击力和特攻力加倍。培育皮卡丘或雷丘：皮丘蛋将拥有伏特钓具。"
   },
   "light-clay": {
-    "name": "轻粘土",
+    "name": "光之黏土",
     "shortDesc": "持有：持有者使用的光幕和反射最后 8 轮而不是 5 轮。"
   },
   "light-stone": {
-    "name": "光之石",
+    "name": "光明石",
     "shortDesc": "召唤雷希拉姆参加与 N 的最后一战。"
   },
   "linking-cord": {
-    "name": "连接线",
+    "name": "联系绳",
     "shortDesc": "允许通常由交易触发进化的宝可梦进化"
   },
   "loaded-dice": {
-    "name": "已加载骰子",
+    "name": "机变骰子",
     "shortDesc": "持有者的招式原本会击中2～5次，但现在却击中了4～5次。如果第一次攻击成功，持有者使用三重踢或三重轴会随机攻击 3 次，人口炸弹随机攻击 4 到 10 次。"
   },
   "lock-capsule": {
-    "name": "锁定胶囊",
+    "name": "上锁的容器",
     "shortDesc": "包含 TM95（咆哮）。"
   },
   "lone-earring": {
-    "name": "孤独耳环",
+    "name": "一边的耳环",
     "shortDesc": "有人掉落的一只耳环。"
   },
   "lonely-mint": {
-    "name": "孤独薄荷",
+    "name": "怕寂寞薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的攻击力会更容易增长，但它的防御力会增长得更慢。"
   },
   "looker-ticket": {
-    "name": "观众票",
+    "name": "帅哥券",
     "shortDesc": "推进 Looker 赛后情节。"
   },
   "loot-sack": {
-    "name": "战利品袋",
+    "name": "宝物袋",
     "shortDesc": "携带煤矿战利品。"
   },
   "lopunnite": {
-    "name": "长辉石",
+    "name": "长耳兔进化石",
     "shortDesc": "持有：允许垂耳兔超级进化为超级垂耳兔。"
   },
   "lost-item": {
-    "name": "丢失物品",
+    "name": "遗失物",
     "shortDesc": "被居住在番红花城的山寨猫丢失的 Poke 娃娃。交易通行证。"
   },
   "love-ball": {
-    "name": "爱情球",
+    "name": "甜蜜球",
     "shortDesc": "对活跃宝可梦的异性、同种目标的效果为8。由 Pnk 杏子制成。"
   },
   "love-sweet": {
-    "name": "爱甜蜜",
+    "name": "爱心糖饰",
     "shortDesc": "心形糖果。当 Milcery 拿着这个时，它会快乐地旋转。"
   },
   "lucarionite": {
-    "name": "萤石",
+    "name": "路卡利欧进化石",
     "shortDesc": "持有：路卡利欧超级进化为超级路卡利欧。"
   },
   "lucarionite-z": {
-    "name": "萤光石 Z",
+    "name": "Lucarionite Z",
     "shortDesc": "如果路卡利欧持有该物品，该物品可以使其在战斗中超级进化为超级路卡利欧Z。"
   },
   "luck-incense": {
-    "name": "吉祥香",
+    "name": "幸运薰香",
     "shortDesc": "持有：从战斗中获得的金钱加倍。不与护身符硬币叠加。繁殖：Chansey 和 Blissey 生出一个快乐蛋。"
   },
   "lucky-egg": {
@@ -2100,35 +2100,35 @@
     "shortDesc": "持有：战斗中获得的经验值增加50%。"
   },
   "lucky-punch": {
-    "name": "幸运拳",
+    "name": "吉利拳",
     "shortDesc": "钱西的暴击率提高两级。"
   },
   "lum-berry": {
-    "name": "拉姆浆果",
+    "name": "木子果",
     "shortDesc": "修复按住时的任何状态条件。"
   },
   "luminous-moss": {
-    "name": "发光苔藓",
+    "name": "光苔",
     "shortDesc": "持有者：若持有者受到水系伤害招式击中，其特防提升一级。"
   },
   "lumiose-galette": {
-    "name": "夜光煎饼",
+    "name": "密阿雷格雷派饼",
     "shortDesc": "治愈所有主要的状态疾病和混乱。"
   },
   "lunalium-z--bag": {
-    "name": "月Z",
+    "name": "露奈雅拉Ｚ",
     "shortDesc": "XXX lunalium-z--bag 的新效果"
   },
   "lunalium-z--held": {
-    "name": "月Z",
+    "name": "露奈雅拉Ｚ",
     "shortDesc": "持有：允许露娜拉使用险恶的月泽漩涡。"
   },
   "lunar-wing": {
-    "name": "月翼",
+    "name": "新月之羽",
     "shortDesc": "治愈卡纳拉夫市噩梦般的水手之子。"
   },
   "lure": {
-    "name": "诱饵",
+    "name": "引虫香水",
     "shortDesc": "玻璃瓶香水，可以让稀有宝可梦更容易出现。"
   },
   "lure-ball": {
@@ -2136,27 +2136,27 @@
     "shortDesc": "3 钓鱼时的效果。由 Blu Apricorn 制成。"
   },
   "lustrous-globe": {
-    "name": "光泽地球仪",
+    "name": "大白宝玉",
     "shortDesc": "如果帕路奇亚持有，其水属性和龙属性的攻击威力变为 1.2 倍。"
   },
   "lustrous-orb": {
-    "name": "光泽宝珠",
+    "name": "白玉宝珠",
     "shortDesc": "帕路奇亚斯的龙系和水系招式的伤害提高20%。"
   },
   "luxury-ball": {
-    "name": "豪华舞会",
+    "name": "豪华球",
     "shortDesc": "尝试捕捉野生宝可梦。捕获的宝可梦开始时有 200 点快乐。"
   },
   "lycanium-z--bag": {
-    "name": "狼鳐 Z",
+    "name": "鬃岩狼人Ｚ",
     "shortDesc": "XXX lycanium-z--bag 的新效果"
   },
   "lycanium-z--held": {
-    "name": "狼鳐 Z",
+    "name": "鬃岩狼人Ｚ",
     "shortDesc": "持有：允许狼人使用风暴碎片。"
   },
   "mach-bike": {
-    "name": "马赫自行车",
+    "name": "音速自行车",
     "shortDesc": "比特技自行车更快，可以骑上沙坡和穿过破裂的地板。"
   },
   "machine-part": {
@@ -2164,27 +2164,27 @@
     "shortDesc": "必须在发电厂中更换，为磁体列车提供动力。"
   },
   "macho-brace": {
-    "name": "男子气概支架",
+    "name": "强制锻炼器",
     "shortDesc": "持有：持有者从战斗中获得双倍努力值，但在战斗中速度减半。"
   },
   "magearnite": {
-    "name": "玛磁石",
+    "name": "Magearnite",
     "shortDesc": "如果玛机雅娜持有该物品，该物品可以使其在战斗中超级进化。"
   },
   "magma-emblem": {
-    "name": "岩浆徽章",
+    "name": "Magma Emblem",
     "shortDesc": "可以进入锯齿通道中的岩浆小队藏身处。"
   },
   "magma-stone": {
-    "name": "岩浆石",
+    "name": "火山镇石",
     "shortDesc": "岩浆被密封在里面。"
   },
   "magma-suit": {
-    "name": "岩浆套装",
+    "name": "熔岩装",
     "shortDesc": "允许玩家在起源洞穴中骑乘固拉多。"
   },
   "magmarizer": {
-    "name": "磁化器",
+    "name": "熔岩增幅器",
     "shortDesc": "在 Magmor 上交易：持有者进化为 Magmortar。"
   },
   "magnet": {
@@ -2192,11 +2192,11 @@
     "shortDesc": "持有：持有者的电系动作造成的伤害提高 20%。"
   },
   "mago-berry": {
-    "name": "麻果浆果",
+    "name": "芒芒果",
     "shortDesc": "持有：消耗最大生命值的1/2，恢复最大生命值的1/8。让不喜欢甜味的宝可梦感到困惑。"
   },
   "magost-berry": {
-    "name": "魔蛟浆果",
+    "name": "岳竹果",
     "shortDesc": "用于创建 PokeBlock 和 Poffins。"
   },
   "makeup-bag": {
@@ -2204,35 +2204,35 @@
     "shortDesc": "允许玩家改变口红颜色。"
   },
   "malamarite": {
-    "name": "马拉玛雷特",
+    "name": "Malamarite",
     "shortDesc": "如果由马拉玛持有，该物品可以使其在战斗中超级进化。"
   },
   "malicious-armor": {
-    "name": "恶意装甲",
+    "name": "咒术之铠",
     "shortDesc": "使用时将 Charcadet 进化为 Ceruledge。"
   },
   "manectite": {
-    "name": "锰辉石",
+    "name": "雷电兽进化石",
     "shortDesc": "持有：允许曼尼克克超级进化为超级曼尼克克。"
   },
   "maranga-berry": {
-    "name": "马兰加浆果",
+    "name": "香罗果",
     "shortDesc": "持有：当持有者被必杀技击中时，其特防增加一级。"
   },
   "marble": {
-    "name": "大理石",
+    "name": "弹珠",
     "shortDesc": "圆形玻璃弹珠。您可以在透明大理石内看到彩色玻璃。"
   },
   "mark-charm": {
-    "name": "马克魅力",
+    "name": "证章护符",
     "shortDesc": "一种神秘而独特的魅力，可以增加找到带有标记的宝可梦的机会。"
   },
   "marshadium-z--bag": {
-    "name": "马沙迪姆 Z",
+    "name": "玛夏多Ｚ",
     "shortDesc": "XXX marshadium-z--bag 的新效果"
   },
   "marshadium-z--held": {
-    "name": "马沙迪姆 Z",
+    "name": "玛夏多Ｚ",
     "shortDesc": "持有：允许玛夏多将幽灵窃贼升级为窃魂 7 星击。"
   },
   "master-ball": {
@@ -2240,107 +2240,107 @@
     "shortDesc": "每次捕获一只野生宝可梦。"
   },
   "masterpiece-teacup": {
-    "name": "杰作茶杯",
+    "name": "杰作茶碗",
     "shortDesc": "使用时将 Poltchageist-Artisan 进化为 Sinistcha-Masterpiece。"
   },
   "mawilite": {
-    "name": "马维莱特",
+    "name": "大嘴娃进化石",
     "shortDesc": "持有：允许Mawile超级进化为Mega Mawile。"
   },
   "max-elixir": {
-    "name": "最大灵药",
+    "name": "ＰＰ多项全补剂",
     "shortDesc": "每次移动都会将 PP 恢复满。"
   },
   "max-ether": {
-    "name": "最大以太币",
+    "name": "ＰＰ单项全补剂",
     "shortDesc": "一招将PP恢复满。"
   },
   "max-honey": {
-    "name": "最大蜂蜜",
+    "name": "极巨甜蜜",
     "shortDesc": "Dynamax Vespiquen 生产的蜂蜜。将这种蜂蜜加入到Max Soup中，味道会变得非常顺滑。它也具有与最大复活相同的效果。"
   },
   "max-lure": {
-    "name": "最大诱饵",
+    "name": "黄金香水",
     "shortDesc": "玻璃瓶香水，可以让稀有宝可梦更容易出现。它的持续时间比超级诱饵更长。"
   },
   "max-mushrooms": {
-    "name": "最大蘑菇",
+    "name": "极巨菇菇",
     "shortDesc": "具有改变极巨形态能力的蘑菇。它们在战斗中提升宝可梦的所有属性。"
   },
   "max-potion": {
-    "name": "最大药水",
+    "name": "全满药",
     "shortDesc": "完全恢复宝可梦的生命值。"
   },
   "max-repel": {
-    "name": "最大排斥",
+    "name": "黄金喷雾",
     "shortDesc": "250步，防止野生遭遇低于你的队伍的领先宝可梦的等级。"
   },
   "max-revive": {
-    "name": "最大复活",
+    "name": "活力块",
     "shortDesc": "满血复活。"
   },
   "meadow-plate": {
-    "name": "草地盘",
+    "name": "碧绿石板",
     "shortDesc": "持有：持有者的草类招式造成的伤害提高 20%。将阿尔宙斯和审判类型更改为草。"
   },
   "medal-box": {
-    "name": "奖章箱",
+    "name": "奖牌盒",
     "shortDesc": "保存在奖牌集会上获得的奖牌。"
   },
   "medichamite": {
-    "name": "麦迪查姆",
+    "name": "恰雷姆进化石",
     "shortDesc": "持有：允许麦迪查姆超级进化为超级麦迪查姆。"
   },
   "medicine-pocket": {
-    "name": "药袋",
+    "name": "回复口袋",
     "shortDesc": "- - -"
   },
   "mega-anchor": {
-    "name": "巨型锚",
+    "name": "超级船锚",
     "shortDesc": "未使用的 NPC 钥匙石。"
   },
   "mega-anklet": {
-    "name": "巨型脚链",
+    "name": "超级脚镯",
     "shortDesc": "未使用的 NPC 钥匙石。"
   },
   "mega-bracelet": {
-    "name": "巨型手链",
+    "name": "超级手镯",
     "shortDesc": "允许玩家宝可梦进行超级进化。"
   },
   "mega-charm": {
-    "name": "超级魅力",
+    "name": "超级坠饰",
     "shortDesc": "未使用的钥匙石。"
   },
   "mega-cuff": {
-    "name": "巨型袖口",
+    "name": "超级护腕",
     "shortDesc": "未使用的钥匙石。"
   },
   "mega-glasses": {
-    "name": "巨型眼镜",
+    "name": "超级眼镜",
     "shortDesc": "未使用的 NPC 钥匙石。"
   },
   "mega-glove": {
-    "name": "巨型手套",
+    "name": "超级手套",
     "shortDesc": "未使用的 NPC 钥匙石。"
   },
   "mega-pendant": {
-    "name": "巨型吊坠",
+    "name": "超级吊坠",
     "shortDesc": "未使用的 NPC 钥匙石。"
   },
   "mega-ring": {
-    "name": "巨型戒指",
+    "name": "超级环",
     "shortDesc": "允许玩家宝可梦进行超级进化。"
   },
   "mega-stickpin": {
-    "name": "超级大头针",
+    "name": "超级领针",
     "shortDesc": "未使用的 NPC 钥匙石。"
   },
   "mega-tiara": {
-    "name": "巨型皇冠",
+    "name": "超级头冠",
     "shortDesc": "未使用的 NPC 钥匙石。"
   },
   "meganiumite": {
-    "name": "巨铝矿",
+    "name": "Meganiumite",
     "shortDesc": "如果由 Meganium 持有，该物品可以使其在战斗中进行 Mega Evolve。"
   },
   "member-card": {
@@ -2348,27 +2348,27 @@
     "shortDesc": "允许访问新月岛和达克莱伊。"
   },
   "mental-herb": {
-    "name": "精神药草",
+    "name": "心灵香草",
     "shortDesc": "持有：用于治愈痴情。第五代：还移除了嘲讽、再来一次、折磨、禁用和诅咒之躯。"
   },
   "meowsticite": {
-    "name": "喵铁矿",
+    "name": "Meowsticite",
     "shortDesc": "如果由喵喵持有，该物品可以使其在战斗中超级进化。"
   },
   "metagrossite": {
-    "name": "巨岩",
+    "name": "巨金怪进化石",
     "shortDesc": "持有：允许巨金超级进化为超级巨金。"
   },
   "metal-alloy": {
-    "name": "金属合金",
+    "name": "复合金属",
     "shortDesc": "使用时将 Duraludon 进化为 Archaludon。"
   },
   "metal-coat": {
-    "name": "金属涂层",
+    "name": "金属膜",
     "shortDesc": "交易时增强钢铁移动并进化某些宝可梦。"
   },
   "metal-powder": {
-    "name": "金属粉末",
+    "name": "金属粉",
     "shortDesc": "迪托斯防御和特防提高50%。变形后增益会消失。"
   },
   "meteorite": {
@@ -2396,51 +2396,51 @@
     "shortDesc": "持有：连续使用同一攻击的累积伤害提升10%。最大提升 100%。"
   },
   "mewnium-z--bag": {
-    "name": "Mewnium Z",
+    "name": "梦幻Ｚ",
     "shortDesc": "XXX mewnium-z--bag 的新效果"
   },
   "mewnium-z--held": {
-    "name": "Mewnium Z",
+    "name": "梦幻Ｚ",
     "shortDesc": "持有：允许喵将心灵升级为创世超新星。"
   },
   "mewtwonite-x": {
-    "name": "超锰矿 X",
+    "name": "超梦进化石Ｘ",
     "shortDesc": "持有：允许超梦超级进化为超级超梦X。"
   },
   "mewtwonite-y": {
-    "name": "超锰矿 Y",
+    "name": "超梦进化石Ｙ",
     "shortDesc": "持有：允许超梦超级进化为超级超梦Y。"
   },
   "micle-berry": {
-    "name": "麦克·贝瑞",
+    "name": "奇秘果",
     "shortDesc": "持有：消耗最大HP的1/4，使下一步动作的准确性提高20%。 （第四代：完美的准确性）"
   },
   "mighty-candy": {
-    "name": "强大的糖果",
+    "name": "力量糖果",
     "shortDesc": "一种充满能量的糖果。当给予宝可梦时，它会增加该宝可梦的攻击力。"
   },
   "mighty-candy-l": {
-    "name": "强大的糖果 L",
+    "name": "力量糖果Ｌ",
     "shortDesc": "充满能量的大糖果。当给予 Lv.1 的宝可梦时30或更高，它会增加宝可梦的攻击力。"
   },
   "mighty-candy-xl": {
-    "name": "强力糖果 XL",
+    "name": "力量糖果ＸＬ",
     "shortDesc": "充满能量的巨大糖果。当给予 Lv.1 的宝可梦时60或更高，它会增加宝可梦的攻击力。"
   },
   "mild-mint": {
-    "name": "温和薄荷",
+    "name": "慢吞吞薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的 Sp.攻击力会更容易增长，但防御会增长得更慢。"
   },
   "mimikium-z--bag": {
-    "name": "咪咪 Z",
+    "name": "谜拟ＱＺ",
     "shortDesc": "XXX mimikium-z--bag 的新效果"
   },
   "mimikium-z--held": {
-    "name": "咪咪 Z",
+    "name": "谜拟ＱＺ",
     "shortDesc": "持有：允许咪咪Q使用“永远依偎”。"
   },
   "mind-plate": {
-    "name": "思维板",
+    "name": "神奇石板",
     "shortDesc": "持有：持有者的心灵类型动作造成的伤害提高 20%。将阿尔宙斯和审判类型更改为心灵。"
   },
   "miracle-seed": {
@@ -2448,75 +2448,75 @@
     "shortDesc": "持有：持有者的草类招式造成的伤害提高 20%。"
   },
   "mirror-herb": {
-    "name": "镜草",
+    "name": "模仿香草",
     "shortDesc": "当对手的宝可梦提升属性阶段时，持有者会复制它。一次性使用。"
   },
   "misty-seed": {
-    "name": "迷雾种子",
+    "name": "薄雾种子",
     "shortDesc": "持有：在迷雾之地消耗，持有者特防提升一级。"
   },
   "mixed-mushrooms": {
-    "name": "混合蘑菇",
+    "name": "袋装蕈菇",
     "shortDesc": "可用于在营地烹饪的众多食材之一。蘑菇的耐嚼质地可以改变添加到其中的任何菜肴。"
   },
   "modest-mint": {
-    "name": "适度薄荷",
+    "name": "内敛薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的 Sp.攻击力会更容易增长，但攻击力会增长得更慢。"
   },
   "moomoo-cheese": {
-    "name": "Moomoo 奶酪",
+    "name": "哞哞乳酪",
     "shortDesc": "可用于在营地烹饪的众多食材之一。融化的奶酪确实可以给咖喱带来一些丰富的味道。"
   },
   "moomoo-milk": {
-    "name": "Moomoo 牛奶",
+    "name": "哞哞鲜奶",
     "shortDesc": "恢复 100 生命值。"
   },
   "moon-ball": {
-    "name": "月球",
+    "name": "月亮球",
     "shortDesc": "对具有月光石进化的宝可梦家族有 4 种效果。由 Ylw 杏子制成。"
   },
   "moon-flute": {
-    "name": "月笛",
+    "name": "月亮之笛",
     "shortDesc": "在穆恩祭坛使用时，内比进化为露娜拉。"
   },
   "moon-stone": {
-    "name": "月亮石",
+    "name": "月之石",
     "shortDesc": "将 Clefairy 进化为 Clefable，将 Jigglypuff 进化为 Wigglytuff，将 Munna 进化为 Musharna，将 Nidorina 进化为 Nidoqueen，将 Nidorino 进化为 Nidoking，或将 Skitty 进化为 Delcatty。"
   },
   "muscle-band": {
-    "name": "肌肉带",
+    "name": "力量头带",
     "shortDesc": "持有：持有者使用的物理招式伤害提高10%。"
   },
   "muscle-wing": {
-    "name": "肌肉羽毛",
+    "name": "肌力之羽",
     "shortDesc": "攻击强度增加 1。"
   },
   "mysterious-mask": {
-    "name": "神秘面具",
+    "name": "Mysterious Mask",
     "shortDesc": "将神秘面具移至角色自定义中。"
   },
   "mysterious-outfit": {
-    "name": "神秘装备箱",
+    "name": "Mysterious Outfit Box",
     "shortDesc": "打开此服装盒可获得四件单独的神秘服装化妆品。"
   },
   "mysterious-shirt": {
-    "name": "神秘衬衫",
+    "name": "Mysterious Shirt",
     "shortDesc": "将神秘衬衫和手套移至角色定制中。"
   },
   "mysterious-shoes": {
-    "name": "神秘鞋子",
+    "name": "Mysterious Shoes",
     "shortDesc": "将神秘鞋子移至角色定制中。"
   },
   "mysterious-trousers": {
-    "name": "神秘长裤",
+    "name": "Mysterious Trousers",
     "shortDesc": "将神秘裤子移至角色定制中。"
   },
   "mystery-egg": {
-    "name": "神秘蛋",
+    "name": "神奇蛋",
     "shortDesc": "交给 Elm 教授。"
   },
   "mystic-water": {
-    "name": "神秘之水",
+    "name": "神秘水滴",
     "shortDesc": "持有：持有者的水属性招式造成的伤害提高 20%。"
   },
   "mysticticket": {
@@ -2524,31 +2524,31 @@
     "shortDesc": "允许访问脐岩和洛奇亚或凤王。"
   },
   "n-lunarizer--merge": {
-    "name": "N-月化者",
+    "name": "奈克洛露奈合体器",
     "shortDesc": "XXX n-lunarizer新效果--合并"
   },
   "n-lunarizer--split": {
-    "name": "N-月化者",
+    "name": "奈克洛露奈合体器",
     "shortDesc": "XXX n-lunarizer新效果--split"
   },
   "n-solarizer--merge": {
-    "name": "N-Solarizer",
+    "name": "奈克洛索尔合体器",
     "shortDesc": "XXX n-solarizer 新效果--合并"
   },
   "n-solarizer--split": {
-    "name": "N-Solarizer",
+    "name": "奈克洛索尔合体器",
     "shortDesc": "XXX n-solarizer的新效果--split"
   },
   "naive-mint": {
-    "name": "天真的薄荷",
+    "name": "天真薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的速度会更容易增长，但它的 Sp. Def 会增长得更慢。"
   },
   "name-change-ticket": {
-    "name": "改名票",
+    "name": "Name Change Ticket",
     "shortDesc": "更改您的用户名和公开培训师姓名。"
   },
   "nanab-berry": {
-    "name": "纳纳布·贝瑞",
+    "name": "蕉香果",
     "shortDesc": "用于创建 PokeBlock 和 Poffins。"
   },
   "naughty-mint": {
@@ -2556,119 +2556,119 @@
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的攻击力会更容易增长，但它的 Sp. Def 会增长得更慢。"
   },
   "nest-ball": {
-    "name": "巢球",
+    "name": "巢穴球",
     "shortDesc": "尝试捕捉野生宝可梦。 1级宝可梦的成功率为3.9，在30级时稳定下降至1。"
   },
   "net-ball": {
-    "name": "网球",
+    "name": "捕网球",
     "shortDesc": "尝试捕捉野生宝可梦。水系和虫系宝可梦的成功率为 3。"
   },
   "never-melt-ice": {
-    "name": "永不融化的冰",
+    "name": "不融冰",
     "shortDesc": "持有：持有者的冰系动作造成的伤害提高 20%。"
   },
   "nomel-berry": {
-    "name": "诺梅尔·贝里",
+    "name": "檬柠果",
     "shortDesc": "用于创建 PokeBlock 和 Poffins。"
   },
   "normal-gem": {
-    "name": "普通宝石",
+    "name": "一般宝石",
     "shortDesc": "持有：当持有者使用伤害性普通属性招式时，该招式威力为1.5，该物品会被消耗。"
   },
   "normalium-z--bag": {
-    "name": "正态 Z",
+    "name": "一般Ｚ",
     "shortDesc": "Normalium-z--bag 的 XXX 新效果"
   },
   "normalium-z--held": {
-    "name": "正态 Z",
+    "name": "一般Ｚ",
     "shortDesc": "持有：允许宝可梦使用其普通招式的Z招式等效项。"
   },
   "nugget": {
-    "name": "金块",
+    "name": "金珠",
     "shortDesc": "可以卖钱。"
   },
   "oaks-letter": {
-    "name": "奥克斯信",
+    "name": "大木的信",
     "shortDesc": "允许进入Seabreak路径、花卉天堂和Shaymin。"
   },
   "oaks-parcel": {
-    "name": "盛橡包裹",
+    "name": "Oaks Parcel",
     "shortDesc": "与奥克教授交易图鉴。"
   },
   "occa-berry": {
-    "name": "奥卡浆果",
+    "name": "巧可果",
     "shortDesc": "持有：被超有效的火系攻击击中时消耗，伤害减半。"
   },
   "odd-incense": {
-    "name": "奇香",
+    "name": "奇异薰香",
     "shortDesc": "持有：持有者的灵能类动作造成的伤害提高 20%。繁殖：哑剧先生生出小哑剧蛋。"
   },
   "odd-keystone": {
-    "name": "奇怪的梯形校正",
+    "name": "楔石",
     "shortDesc": "如果你有至少 32 条地下问候语，请在 209 号公路的塔上使用以遭遇 Spiritomb。"
   },
   "old-amber": {
-    "name": "老琥珀",
+    "name": "秘密琥珀",
     "shortDesc": "可以复活为恐龙。"
   },
   "old-charm": {
-    "name": "古老的魅力",
+    "name": "古代护符",
     "shortDesc": "与天国镇的辛西娅祖母交易 HM04（冲浪）。"
   },
   "old-gateau": {
-    "name": "老蛋糕",
+    "name": "森之羊羹",
     "shortDesc": "解决任何状态问题。"
   },
   "old-letter": {
-    "name": "旧信",
+    "name": "陈旧的信",
     "shortDesc": "一封女孩委托给你的信，要转交给男孩。奇怪的是，它对你来说看起来很老。"
   },
   "old-rod": {
-    "name": "老棒",
+    "name": "破旧钓竿",
     "shortDesc": "用它来钓鱼宝可梦。"
   },
   "old-sea-map": {
-    "name": "旧海地图",
+    "name": "Old Sea Map",
     "shortDesc": "允许访问遥远岛和梦幻岛。未在日本以外地区发行。"
   },
   "oran-berry": {
-    "name": "奥兰·贝里",
+    "name": "橙橙果",
     "shortDesc": "持有时恢复 10 HP。"
   },
   "orange-petal": {
-    "name": "橙花瓣",
+    "name": "橙色花瓣",
     "shortDesc": "XXX 橙色花瓣新效果"
   },
   "oval-charm": {
-    "name": "椭圆形吊饰",
+    "name": "圆形护符",
     "shortDesc": "每 255 步，两只宝可梦在托儿所产蛋的几率就会增加一倍。"
   },
   "oval-stone": {
-    "name": "椭圆形石",
+    "name": "浑圆之石",
     "shortDesc": "幸福日期间升级：持有者进化为钱西。"
   },
   "pack-of-potatoes": {
-    "name": "一包土豆",
+    "name": "袋装土豆",
     "shortDesc": "可用于在营地烹饪的众多食材之一。土豆有助于缓和辛辣的味道，使菜肴更加温和。"
   },
   "packaged-curry": {
-    "name": "包装咖喱",
+    "name": "即食咖喱",
     "shortDesc": "可用于在营地烹饪的众多食材之一。使用包装咖喱有助于确保烹饪时不会出现失误。"
   },
   "pair-of-tickets": {
-    "name": "门票一对",
+    "name": "双人票",
     "shortDesc": "允许玩家和他们的母亲观看莫斯迪普航天中心的明星表演。"
   },
   "pal-pad": {
-    "name": "朋友垫",
+    "name": "朋友手册",
     "shortDesc": "用于记录好友代码并检查您自己的。"
   },
   "pamtre-berry": {
-    "name": "帕姆特·贝里",
+    "name": "椰木果",
     "shortDesc": "用于创建 PokeBlock 和 Poffins。"
   },
   "paralyze-heal": {
-    "name": "麻痹治疗",
+    "name": "解麻药",
     "shortDesc": "治愈瘫痪。"
   },
   "parcel": {
@@ -2684,23 +2684,23 @@
     "shortDesc": "每次在伙伴公园捕捉宝可梦。"
   },
   "pass": {
-    "name": "通过",
+    "name": "磁浮列车自由票",
     "shortDesc": "授予在金菊城和番红花城之间乘坐磁力列车的权限。"
   },
   "pass-orb": {
-    "name": "通行球",
+    "name": "释出之玉",
     "shortDesc": "激活通行权。"
   },
   "passho-berry": {
-    "name": "帕绍·贝里",
+    "name": "千香果",
     "shortDesc": "持有：被超级有效的水系攻击击中时消耗，使伤害减半。"
   },
   "pasta": {
-    "name": "面食",
+    "name": "通心粉",
     "shortDesc": "可用于在营地烹饪的众多食材之一。这些面粉面条与咖喱的搭配出奇的好。"
   },
   "payapa-berry": {
-    "name": "帕亚帕浆果",
+    "name": "福禄果",
     "shortDesc": "持有：被超级有效的心灵类型攻击击中时消耗，使伤害减半。"
   },
   "pearl": {
@@ -2708,27 +2708,27 @@
     "shortDesc": "以 700 Pokedollars 出售，或以 1400 Pokedollars 出售给矿石收集者。"
   },
   "pearl-string": {
-    "name": "珍珠串",
+    "name": "丸子珍珠",
     "shortDesc": "以 25000 Pokedollars 的价格出售给矿石收集者。"
   },
   "pecha-berry": {
-    "name": "佩查浆果",
+    "name": "桃桃果",
     "shortDesc": "持有：中毒时食用以解毒。"
   },
   "permit": {
-    "name": "许可",
+    "name": "许可证",
     "shortDesc": "授予进入自然保护区的权限。"
   },
   "persim-berry": {
-    "name": "柿子浆果",
+    "name": "柿仔果",
     "shortDesc": "持有：混乱时消耗以治愈混乱。"
   },
   "petaya-berry": {
-    "name": "芭提雅浆果",
+    "name": "龙火果",
     "shortDesc": "持有：消耗最大HP的1/4以增强特殊攻击力。"
   },
   "pewter-crunchies": {
-    "name": "锡制脆饼",
+    "name": "深灰米果",
     "shortDesc": "锡城著名的脆脆小吃。它们可用于治疗单个宝可梦的所有状态状况。"
   },
   "photo-album": {
@@ -2736,35 +2736,35 @@
     "shortDesc": "存储您的冒险照片。"
   },
   "pidgeotite": {
-    "name": "云杉",
+    "name": "大比鸟进化石",
     "shortDesc": "持有：允许比比鸟超级进化成超级比比鸟。"
   },
   "pikanium-z--bag": {
-    "name": "皮卡金 Z",
+    "name": "皮卡丘Ｚ",
     "shortDesc": "XXX 皮卡尼姆-z--bag 的新效果"
   },
   "pikanium-z--held": {
-    "name": "皮卡金 Z",
+    "name": "皮卡丘Ｚ",
     "shortDesc": "持有：允许皮卡丘将伏特钓具升级为灾难皮卡。"
   },
   "pikashunium-z--bag": {
-    "name": "皮卡丘 Z",
+    "name": "智皮卡Ｚ",
     "shortDesc": "XXX pikashunium-z--bag 的新效果"
   },
   "pikashunium-z--held": {
-    "name": "皮卡丘 Z",
+    "name": "智皮卡Ｚ",
     "shortDesc": "持有：允许戴帽子的皮卡丘将雷霆升级为10,000,000伏雷霆。"
   },
   "pinap-berry": {
-    "name": "菠萝莓",
+    "name": "凰梨果",
     "shortDesc": "用于创建 PokeBlock 和 Poffins。"
   },
   "pink-apricorn": {
-    "name": "粉红杏子",
+    "name": "粉球果",
     "shortDesc": "用于制作爱情球。"
   },
   "pink-nectar": {
-    "name": "粉红花蜜",
+    "name": "桃粉色花蜜",
     "shortDesc": "将 Oricorio 更改为 Pau 风格。"
   },
   "pink-petal": {
@@ -2772,15 +2772,15 @@
     "shortDesc": "XXX 粉色花瓣新效果"
   },
   "pink-scarf": {
-    "name": "粉色围巾",
+    "name": "粉红头巾",
     "shortDesc": "在比赛中提高持有者的可爱度。"
   },
   "pinsirite": {
-    "name": "针硅矿",
+    "name": "凯罗斯进化石",
     "shortDesc": "持有：允许宾西尔超级进化为超级宾西尔。"
   },
   "pixie-plate": {
-    "name": "精灵板",
+    "name": "妖精石板",
     "shortDesc": "持有：持有者的仙类招式造成的伤害提高 20%。将阿尔宙斯和审判类型更改为仙女。"
   },
   "plasma-card": {
@@ -2788,35 +2788,35 @@
     "shortDesc": "需要在等离子护卫舰上取得进展。"
   },
   "plume-fossil": {
-    "name": "羽化石",
+    "name": "羽毛化石",
     "shortDesc": "可以复活为Archen。"
   },
   "poffin-case": {
-    "name": "波芬箱",
+    "name": "宝芬盒",
     "shortDesc": "持有海雀。"
   },
   "point-card": {
-    "name": "点卡",
+    "name": "点数卡",
     "shortDesc": "记录获得的战斗点数。"
   },
   "poison-barb": {
-    "name": "毒倒刺",
+    "name": "毒针",
     "shortDesc": "持有：持有者的毒类招式造成的伤害提高 20%。"
   },
   "poison-gem": {
-    "name": "毒宝石",
+    "name": "毒之宝石",
     "shortDesc": "持有：当持有者使用毒属性伤害招式时，该招式威力为1.5，该物品会被消耗。"
   },
   "poison-memory": {
-    "name": "毒记忆",
+    "name": "毒存储碟",
     "shortDesc": "持有：将席尔瓦利变为毒药形态。将多重攻击类型更改为毒药。"
   },
   "poisonium-z--bag": {
-    "name": "毒Z",
+    "name": "毒Ｚ",
     "shortDesc": "XXX毒药-z--bag的新效果"
   },
   "poisonium-z--held": {
-    "name": "毒Z",
+    "name": "毒Ｚ",
     "shortDesc": "持有：允许宝可梦使用其毒招式的Z招式等价物。"
   },
   "poke-ball": {
@@ -2824,83 +2824,83 @@
     "shortDesc": "用于捕捉野生宝可梦的基本球。"
   },
   "poke-doll": {
-    "name": "戳娃娃",
+    "name": "皮皮玩偶",
     "shortDesc": "结束一场狂野的战斗。"
   },
   "poke-flute": {
-    "name": "戳笛",
+    "name": "宝可梦之笛",
     "shortDesc": "用于唤醒沉睡的宝可梦，包括道路上的卡纳克斯。"
   },
   "poke-radar": {
-    "name": "戳雷达",
+    "name": "宝可追踪",
     "shortDesc": "用于追踪稀有或闪亮的宝可梦。 50步充电。"
   },
   "poke-toy": {
-    "name": "戳玩具",
+    "name": "宝可尾草",
     "shortDesc": "结束一场狂野的战斗。"
   },
   "pokeblock-case": {
-    "name": "精灵块箱",
+    "name": "Pokeblock Case",
     "shortDesc": "持有 Pokeblocks。"
   },
   "pokeblock-kit": {
-    "name": "Pokeblock 套件",
+    "name": "宝可方块套装",
     "shortDesc": "创建并存储 Pokeblock。"
   },
   "pokedex": {
-    "name": "图鉴",
+    "name": "Pokédex",
     "shortDesc": "记录你遇到的宝可梦的信息。"
   },
   "pokemon-box": {
-    "name": "宝可梦盒子链接",
+    "name": "宝可梦盒",
     "shortDesc": "- - -"
   },
   "pokemon-box-link": {
-    "name": "宝可梦盒子链接",
+    "name": "宝可梦盒",
     "shortDesc": "允许您访问宝可梦存储系统的设备。有些地方是行不通的。"
   },
   "polished-mud-ball": {
-    "name": "抛光泥球",
+    "name": "光滑泥球",
     "shortDesc": "一个由泥制成的球。经过这么长时间的打磨，表面非常闪亮。"
   },
   "pomeg-berry": {
-    "name": "柚子浆果",
+    "name": "榴石果",
     "shortDesc": "HP努力值降低10并提高幸福感。"
   },
   "potion": {
-    "name": "药水",
+    "name": "伤药",
     "shortDesc": "恢复 20 生命值。"
   },
   "powder-jar": {
-    "name": "粉罐",
+    "name": "Powder Jar",
     "shortDesc": "储存使用浆果粉碎机制成的浆果粉。"
   },
   "power-anklet": {
-    "name": "动力脚链",
+    "name": "力量护踝",
     "shortDesc": "持有：持有者获得 4 点速度努力值，但在战斗中速度减半。"
   },
   "power-band": {
-    "name": "功率带",
+    "name": "力量束带",
     "shortDesc": "持有：持有者获得 4 点特防努力值，但在战斗中速度减半。"
   },
   "power-belt": {
-    "name": "动力腰带",
+    "name": "力量腰带",
     "shortDesc": "持有：持有者获得 4 点防御努力值，但在战斗中速度减半。"
   },
   "power-bracer": {
-    "name": "动力护腕",
+    "name": "力量护腕",
     "shortDesc": "持有：持有者获得 4 点攻击力值，但在战斗中速度减半。"
   },
   "power-herb": {
-    "name": "强力药草",
+    "name": "强力香草",
     "shortDesc": "持有：两回合冲锋移动的两个回合同时发生。使用时消耗。"
   },
   "power-lens": {
-    "name": "电动镜头",
+    "name": "力量镜",
     "shortDesc": "持有：持有者获得 4 点特殊攻击努力值，但在战斗中速度减半。"
   },
   "power-plant-pass": {
-    "name": "电厂通行证",
+    "name": "发电厂通行证",
     "shortDesc": "允许进入卡洛斯发电厂。"
   },
   "power-up-pocket": {
@@ -2908,87 +2908,87 @@
     "shortDesc": "- - -"
   },
   "power-weight": {
-    "name": "功率重量",
+    "name": "力量负重",
     "shortDesc": "持有：持有者获得 4 点 HP 努力值，但在战斗中速度减半。"
   },
   "pp-max": {
-    "name": "PP 最大",
+    "name": "ＰＰ极限提升剂",
     "shortDesc": "移动最大PP提高60%。"
   },
   "pp-up": {
-    "name": "PP 向上",
+    "name": "ＰＰ提升剂",
     "shortDesc": "移动最大PP提高20%。"
   },
   "precooked-burger": {
-    "name": "预煮汉堡",
+    "name": "即食肉排",
     "shortDesc": "可用于在营地烹饪的众多食材之一。如果您不确定要做什么，吃汉堡绝对不会错。"
   },
   "premier-ball": {
-    "name": "超级球",
+    "name": "纪念球",
     "shortDesc": "尝试捕捉野生宝可梦。"
   },
   "pretty-wing": {
-    "name": "漂亮的羽毛",
+    "name": "美丽之羽",
     "shortDesc": "售价 100 点币。"
   },
   "primarium-z--bag": {
-    "name": "原体Z",
+    "name": "西狮海壬Ｚ",
     "shortDesc": "XXX primarium-z--bag 的新效果"
   },
   "primarium-z--held": {
-    "name": "原体Z",
+    "name": "西狮海壬Ｚ",
     "shortDesc": "举行：允许Primarina将闪闪发光的咏叹调升级为海洋轻歌剧。"
   },
   "prism-scale": {
-    "name": "棱镜刻度",
+    "name": "美丽鳞片",
     "shortDesc": "在 Feebas 上交易：持有者进化为 Milotic。"
   },
   "prison-bottle": {
-    "name": "监狱瓶",
+    "name": "惩戒之壶",
     "shortDesc": "将胡帕转变为不受束缚的形态，持续时间最多三天。"
   },
   "professors-mask": {
-    "name": "教授面具",
+    "name": "博士的面罩",
     "shortDesc": "被库库伊教授丢失。"
   },
   "profs-letter": {
-    "name": "教授信",
+    "name": "博士的信",
     "shortDesc": "与玩家妈妈交易城镇地图和药水。"
   },
   "prop-case": {
-    "name": "道具箱",
+    "name": "物品箱",
     "shortDesc": "存储宝可梦音乐剧的道具。"
   },
   "protective-pads": {
-    "name": "防护垫",
+    "name": "部位护具",
     "shortDesc": "保持：防止在保持器上使用接触移动的副作用。"
   },
   "protector": {
-    "name": "保护者",
+    "name": "护具",
     "shortDesc": "在 Rhydon 上交易：持有者进化为 Rhyperior。"
   },
   "protein": {
-    "name": "蛋白质",
+    "name": "攻击增强剂",
     "shortDesc": "提高攻击力和幸福感。"
   },
   "psychic-gem": {
-    "name": "心灵宝石",
+    "name": "超能力宝石",
     "shortDesc": "持有：当持有者使用破坏性的心灵类招式时，该招式的威力为1.5，并且该物品会被消耗。"
   },
   "psychic-memory": {
-    "name": "心灵记忆",
+    "name": "精神存储碟",
     "shortDesc": "持有：将希尔瓦利转变为心灵形态。将多重攻击类型更改为心灵攻击。"
   },
   "psychic-seed": {
-    "name": "心灵种子",
+    "name": "精神种子",
     "shortDesc": "持有：在心灵地形上消耗，持有者特防提升一级。"
   },
   "psychium-z--bag": {
-    "name": "精神 Z",
+    "name": "超能力Ｚ",
     "shortDesc": "xxx psychium-z--bag 的新效果"
   },
   "psychium-z--held": {
-    "name": "精神 Z",
+    "name": "超能力Ｚ",
     "shortDesc": "持有：允许宝可梦使用其心灵招式的Z招式等效项。"
   },
   "punching-glove": {
@@ -2996,15 +2996,15 @@
     "shortDesc": "持有者基于拳击的攻击具有 1.1 倍威力并且不产生接触。"
   },
   "pungent-root": {
-    "name": "辛辣的根",
+    "name": "水边香草",
     "shortDesc": "可用于在营地烹饪的众多食材之一。尽管采摘不慎，这些香草却能为菜肴增添芳香。"
   },
   "pure-incense": {
-    "name": "纯香",
+    "name": "洁净薰香",
     "shortDesc": "防止野生遭遇低于你的队伍的领先宝可梦的等级。繁殖：Chimecho 生出叮叮蛋。"
   },
   "purple-nectar": {
-    "name": "紫花蜜",
+    "name": "兰紫色花蜜",
     "shortDesc": "将 Oricorio 更改为 Sensu 风格。"
   },
   "purple-petal": {
@@ -3012,111 +3012,111 @@
     "shortDesc": "XXX紫花瓣新效果"
   },
   "pyroarite": {
-    "name": "火山岩",
+    "name": "Pyroarite",
     "shortDesc": "如果火烈鸟持有该物品，该物品可以使其在战斗中超级进化。"
   },
   "qualot-berry": {
-    "name": "夸洛特浆果",
+    "name": "比巴果",
     "shortDesc": "防御努力值降低 10 并提高幸福感。"
   },
   "quick-ball": {
-    "name": "快球",
+    "name": "先机球",
     "shortDesc": "尝试捕捉野生宝可梦。成功率为 4（第五代：5），但仅限第一回合。"
   },
   "quick-candy": {
-    "name": "快速糖果",
+    "name": "敏捷糖果",
     "shortDesc": "一种充满能量的糖果。当给予宝可梦时，它会增加宝可梦的速度统计数据。"
   },
   "quick-candy-l": {
-    "name": "快糖L",
+    "name": "敏捷糖果Ｌ",
     "shortDesc": "充满能量的大糖果。当给予 Lv.1 的宝可梦时30 或更高，它会增加 Pokemons 速度统计数据。"
   },
   "quick-candy-xl": {
-    "name": "快速糖果 XL",
+    "name": "敏捷糖果ＸＬ",
     "shortDesc": "充满能量的巨大糖果。当给予 Lv.1 的宝可梦时60 或更高，它会增加 Pokemons 速度统计数据。"
   },
   "quick-claw": {
-    "name": "快速爪",
+    "name": "先制之爪",
     "shortDesc": "持有：持有者有 3/16 (18.75%) 的几率先移动。"
   },
   "quick-powder": {
-    "name": "速干粉",
+    "name": "速度粉",
     "shortDesc": "按住时速度加倍。变形后增益会消失。"
   },
   "quiet-mint": {
-    "name": "安静薄荷",
+    "name": "冷静薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的 Sp.攻击力会更容易增长，但速度会增长得更慢。"
   },
   "rabuta-berry": {
-    "name": "拉布塔浆果",
+    "name": "茸丹果",
     "shortDesc": "用于创建 PokeBlock 和 Poffins。"
   },
   "radiant-petal": {
-    "name": "光芒四射的花瓣",
+    "name": "光辉花瓣",
     "shortDesc": "丰收王赐予你的一瓣花瓣。它散发出微弱的光芒。"
   },
   "rage-candy-bar": {
-    "name": "愤怒糖果棒",
+    "name": "愤怒馒头",
     "shortDesc": "HS：以 TM64 交易。第二代和第五代：充当药水。"
   },
   "raichunite-x": {
-    "name": "雷春石 X",
+    "name": "Raichunite X",
     "shortDesc": "如果由雷丘持有，该物品可以使其在战斗中超级进化为超级雷丘X。"
   },
   "raichunite-y": {
-    "name": "雷春石 Y",
+    "name": "Raichunite Y",
     "shortDesc": "如果由雷丘持有，该物品可以使其在战斗中超级进化为超级雷丘Y。"
   },
   "rain-dance-charm": {
-    "name": "雨舞符咒",
+    "name": "Rain Dance Charm",
     "shortDesc": "让你在宝可梦不知情的情况下使用雨之舞。"
   },
   "rainbow-flower": {
-    "name": "彩虹花",
+    "name": "虹色之花",
     "shortDesc": "XXX彩虹花新效果"
   },
   "rainbow-pass": {
-    "name": "彩虹通行证",
+    "name": "Rainbow Pass",
     "shortDesc": "授予访问所有塞维群岛的权限。"
   },
   "rainbow-wing": {
-    "name": "彩虹之翼",
+    "name": "虹色之羽",
     "shortDesc": "在钟楼顶部召唤凤王。"
   },
   "rare-bone": {
-    "name": "稀有骨头",
+    "name": "贵重骨头",
     "shortDesc": "以 5000 Pokedollars 出售，或以 10000 Pokedollars 出售给骨人。"
   },
   "rare-candy": {
-    "name": "稀有糖果",
+    "name": "神奇糖果",
     "shortDesc": "导致升级并提高幸福感。"
   },
   "rash-mint": {
-    "name": "皮疹薄荷",
+    "name": "马虎薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的 Sp. Atk会更容易增长，但它的Sp。 Def 会增长得更慢。"
   },
   "rawst-berry": {
-    "name": "生浆果",
+    "name": "莓莓果",
     "shortDesc": "持有：被烧伤时消耗以治疗烧伤。"
   },
   "razor-claw": {
-    "name": "剃刀爪",
+    "name": "锐利之爪",
     "shortDesc": "持有者：持有者的暴击率提高一级。晚上升级时被一只斯内塞尔持有：持有者进化成Weavile。"
   },
   "razor-fang": {
-    "name": "剃刀尖牙",
+    "name": "锐利之牙",
     "shortDesc": "持有：伤害性动作有 10% 的几率使目标退缩。升级时由 Gligar 持有：持有者进化为 Gliscor。"
   },
   "razz-berry": {
-    "name": "莓果",
+    "name": "蔓莓果",
     "shortDesc": "用于创建 PokeBlock 和 Poffins。"
   },
   "reaper-cloth": {
-    "name": "收割者布",
+    "name": "灵界之布",
     "shortDesc": "在 Dusclops 上交易：持有者进化为 Dusknoir。"
   },
   "red-apricorn": {
-    "name": "红杏",
+    "name": "红球果",
     "shortDesc": "用于制作水平球。"
   },
   "red-card": {
@@ -3124,19 +3124,19 @@
     "shortDesc": "持有：当持有者因招式受到伤害时，对手会随机切换到另一只队伍宝可梦。使用后消耗掉。"
   },
   "red-chain": {
-    "name": "红链",
+    "name": "红色锁链",
     "shortDesc": "用于绑定帕路奇犽和帝牙卢卡。"
   },
   "red-flute": {
-    "name": "红笛",
+    "name": "红色玻璃哨",
     "shortDesc": "治愈吸引力。"
   },
   "red-nectar": {
-    "name": "红色花蜜",
+    "name": "朱红色花蜜",
     "shortDesc": "将 Oricorio 更改为 Baile 风格。"
   },
   "red-orb": {
-    "name": "红色宝珠",
+    "name": "朱红色宝珠",
     "shortDesc": "召唤固拉多到嵌入式塔。"
   },
   "red-petal": {
@@ -3144,11 +3144,11 @@
     "shortDesc": "XXX 红花瓣新效果"
   },
   "red-scale": {
-    "name": "红色刻度",
+    "name": "红色鳞片",
     "shortDesc": "与 Pokemon 先生交易以获得经验值。分享。"
   },
   "red-scarf": {
-    "name": "红领巾",
+    "name": "红色头巾",
     "shortDesc": "在比赛中提高持有者的冷静度。"
   },
   "red-shard": {
@@ -3156,47 +3156,47 @@
     "shortDesc": "没有效果。可以用来交换物品或动作。"
   },
   "reins-of-unity": {
-    "name": "团结的缰绳",
+    "name": "牵绊缰绳",
     "shortDesc": "当你将它们放在灯光下时，它们会发光。旧时人们将这些东西献给五谷丰登王以表达谢意。"
   },
   "reins-of-unity--merge": {
-    "name": "团结的缰绳",
+    "name": "牵绊缰绳",
     "shortDesc": "人们献给国王的缰绳。它们增强了卡里克斯获得丰收的力量，并将卡里克斯与其心爱的坐骑联合起来。"
   },
   "reins-of-unity--split": {
-    "name": "团结的缰绳",
+    "name": "牵绊缰绳",
     "shortDesc": "人们献给国王的缰绳。它们使那些有联系的人能够相互沟通。缰绳将卡里克斯和它心爱的战马分开。"
   },
   "relaxed-mint": {
-    "name": "轻松薄荷",
+    "name": "悠闲薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的防御力会更容易增长，但速度会更慢地增长。"
   },
   "relic-band": {
-    "name": "遗物指环",
+    "name": "古代手镯",
     "shortDesc": "以 100000 Pokedollars 的价格出售给别墅主人。"
   },
   "relic-copper": {
-    "name": "遗迹铜",
+    "name": "古代铜币",
     "shortDesc": "以 1000 点币的价格卖给别墅主人。"
   },
   "relic-crown": {
-    "name": "遗物王冠",
+    "name": "古代王冠",
     "shortDesc": "以 300000 Pokedollars 的价格出售给别墅主人。"
   },
   "relic-gold": {
-    "name": "遗物金",
+    "name": "古代金币",
     "shortDesc": "出售给别墅主人 10000 Pokedollars。"
   },
   "relic-silver": {
-    "name": "遗物银",
+    "name": "古代银币",
     "shortDesc": "卖给别墅主人 5000 点币。"
   },
   "relic-statue": {
-    "name": "遗物雕像",
+    "name": "古代石像",
     "shortDesc": "出售给别墅业主 200000 Pokedollars。"
   },
   "relic-vase": {
-    "name": "遗物花瓶",
+    "name": "古代之壶",
     "shortDesc": "出售给别墅主人 50000 Pokedollars。"
   },
   "repeat-ball": {
@@ -3204,63 +3204,63 @@
     "shortDesc": "尝试捕捉野生宝可梦。之前捕获的宝可梦的成功率为 3。"
   },
   "repel": {
-    "name": "击退",
+    "name": "除虫喷雾",
     "shortDesc": "短时间内阻止弱小的野生宝可梦出现。"
   },
   "resist-wing": {
-    "name": "抵抗羽毛",
+    "name": "抵抗之羽",
     "shortDesc": "防御力增加 1。"
   },
   "reveal-glass": {
-    "name": "显示玻璃",
+    "name": "现形镜",
     "shortDesc": "在化身和兽人形态之间切换 Tornadus、Thundurus 和 Landorus。"
   },
   "revival-herb": {
-    "name": "复兴药草",
+    "name": "复活草",
     "shortDesc": "满血复活，但幸福感降低。"
   },
   "revive": {
-    "name": "复活",
+    "name": "活力碎片",
     "shortDesc": "以最大生命值的一半复活昏倒的宝可梦。"
   },
   "ribbon-sweet": {
-    "name": "丝带甜",
+    "name": "蝴蝶结糖饰",
     "shortDesc": "丝带状的糖果。当 Milcery 拿着这个时，它会快乐地旋转。"
   },
   "rich-mulch": {
-    "name": "丰富的覆盖物",
+    "name": "硕果肥",
     "shortDesc": "浆果总数增加 2。"
   },
   "ride-pager": {
-    "name": "乘车寻呼机",
+    "name": "骑行装置",
     "shortDesc": "允许玩家召唤骑乘宝可梦。"
   },
   "rindo-berry": {
-    "name": "林多浆果",
+    "name": "罗子果",
     "shortDesc": "持有：被超级有效的草系攻击击中时消耗，使伤害减半。"
   },
   "ring-target": {
-    "name": "戒指目标",
+    "name": "标靶",
     "shortDesc": "持有：否定持有者类型豁免。技能免疫不会被移除。"
   },
   "rm-1-key": {
-    "name": "室。 1把钥匙",
+    "name": "Rm. 1 Key",
     "shortDesc": "解锁废弃船上的房间 1。"
   },
   "rm-2-key": {
-    "name": "室。 2 键",
+    "name": "Rm. 2 Key",
     "shortDesc": "解锁废弃船上的房间 2。"
   },
   "rm-4-key": {
-    "name": "室。 4键",
+    "name": "Rm. 4 Key",
     "shortDesc": "解锁废弃船上的房间 4。"
   },
   "rm-6-key": {
-    "name": "室。 6键",
+    "name": "Rm. 6 Key",
     "shortDesc": "解锁废弃船上的 6 号房间。"
   },
   "rock-climb-charm": {
-    "name": "攀岩魅力",
+    "name": "Rock Climb Charm",
     "shortDesc": "让你可以在宝可梦不知情的情况下使用攀岩。"
   },
   "rock-gem": {
@@ -3268,31 +3268,31 @@
     "shortDesc": "持有：当持有者使用岩石系伤害招式时，该招式威力为1.5，该物品会被消耗。"
   },
   "rock-incense": {
-    "name": "岩香",
+    "name": "岩石薰香",
     "shortDesc": "持有：持有者的岩石类动作造成的伤害提高 20%。繁殖：Sudowoodo 生出 Bonsly Egg。"
   },
   "rock-memory": {
-    "name": "摇滚记忆",
+    "name": "岩石存储碟",
     "shortDesc": "持有：将席尔瓦利变为岩石形态。将多重攻击类型更改为摇滚。"
   },
   "rock-smash-charm": {
-    "name": "碎岩符咒",
+    "name": "Rock Smash Charm",
     "shortDesc": "让你可以在宝可梦不知情的情况下使用岩石粉碎。"
   },
   "rockium-z--bag": {
-    "name": "Rockium Z",
+    "name": "岩石Ｚ",
     "shortDesc": "XXX rockium-z--bag 的新效果"
   },
   "rockium-z--held": {
-    "name": "Rockium Z",
+    "name": "岩石Ｚ",
     "shortDesc": "持有：允许宝可梦使用其岩石招式的 Z 招式等效项。"
   },
   "rocky-helmet": {
-    "name": "洛基头盔",
+    "name": "凸凸头盔",
     "shortDesc": "持有：当持有者被接触招式击中时，攻击的宝可梦受到其最大生命值1/6的伤害。"
   },
   "roller-skates": {
-    "name": "溜冰鞋",
+    "name": "轮滑鞋",
     "shortDesc": "允许玩家快速移动并脱离网格。"
   },
   "room-service": {
@@ -3300,59 +3300,59 @@
     "shortDesc": "宝可梦持有的物品。 Trick Room 生效时降低速度。"
   },
   "root-fossil": {
-    "name": "根化石",
+    "name": "根状化石",
     "shortDesc": "可以复活为利利普。"
   },
   "rose-incense": {
-    "name": "玫瑰香",
+    "name": "花朵薰香",
     "shortDesc": "持有：持有者的草类招式造成的伤害提高 20%。繁殖：Roselia 或 Roserade 会产生 Budew Egg。"
   },
   "roseli-berry": {
-    "name": "罗塞莉·贝瑞",
+    "name": "洛玫果",
     "shortDesc": "持有：被超级有效的妖精类攻击击中时消耗，使伤害减半。"
   },
   "roto-bargain": {
-    "name": "Roto 讨价还价",
+    "name": "优惠碰碰",
     "shortDesc": "XXX 轮转讨价还价新效果"
   },
   "roto-boost": {
-    "name": "旋转增压",
+    "name": "加油碰碰",
     "shortDesc": "XXX 旋转增强新效果"
   },
   "roto-catch": {
-    "name": "旋转捕捉",
+    "name": "捕捉碰碰",
     "shortDesc": "XXX 旋转捕捉新效果"
   },
   "roto-encounter": {
-    "name": "罗托遭遇",
+    "name": "相遇碰碰",
     "shortDesc": "XXX 旋转遭遇新效果"
   },
   "roto-exp-points": {
-    "name": "Roto 实验。积分",
+    "name": "经验碰碰",
     "shortDesc": "XXX 旋转经验点新效果"
   },
   "roto-friendship": {
-    "name": "罗托友谊",
+    "name": "亲密碰碰",
     "shortDesc": "XXX 旋转友谊新效果"
   },
   "roto-hatch": {
-    "name": "罗托哈奇",
+    "name": "孵蛋碰碰",
     "shortDesc": "XXX 旋转孵化新效果"
   },
   "roto-hp-restore": {
-    "name": "罗托生命值恢复",
+    "name": "ＨＰ回复碰碰",
     "shortDesc": "XXX roto-hp-restore 新效果"
   },
   "roto-pp-restore": {
-    "name": "Roto PP 恢复",
+    "name": "ＰＰ回复碰碰",
     "shortDesc": "XXX roto-pp-restore 新效果"
   },
   "roto-prize-money": {
-    "name": "Roto奖金",
+    "name": "零花钱碰碰",
     "shortDesc": "XXX 旋转奖金新效果"
   },
   "roto-stealth": {
-    "name": "罗托隐身",
+    "name": "隐身碰碰",
     "shortDesc": "XXX 旋转隐形新效果"
   },
   "rotom-bike": {
@@ -3372,31 +3372,31 @@
     "shortDesc": "这辆自行车可以与宝可梦 Rotom 结合使用，不仅可以进行涡轮增压，还可以在水上行驶。"
   },
   "rotom-catalog": {
-    "name": "洛托姆目录",
+    "name": "洛托姆型录",
     "shortDesc": "洛托姆喜欢的装备目录。使用目录让 Rotom 跳进跳出其中列出的各种设备。"
   },
   "rowap-berry": {
-    "name": "罗瓦浆果",
+    "name": "雾莲果",
     "shortDesc": "持有：当持有者受到特殊攻击时，消耗给攻击者最大HP的1/8。"
   },
   "ruby": {
-    "name": "红宝石",
+    "name": "Ruby",
     "shortDesc": "将蓝宝石交给西利奥以激活网络机器并获得彩虹通行证。"
   },
   "rule-book": {
-    "name": "规则手册",
+    "name": "规则书",
     "shortDesc": "战斗类型及其规则列表。"
   },
   "rusted-shield": {
-    "name": "生锈的盾牌",
+    "name": "腐朽的盾",
     "shortDesc": "据说，古代有一位英雄用这面盾牌阻止了一场可怕的灾难。但它已经生锈、磨损了。"
   },
   "rusted-sword": {
-    "name": "生锈的剑",
+    "name": "腐朽的剑",
     "shortDesc": "相传古代有一位英雄用这把剑阻止了一场可怕的灾难。但它已经生锈、磨损了。"
   },
   "sablenite": {
-    "name": "菱镁矿",
+    "name": "勾魂眼进化石",
     "shortDesc": "持有：允许貂眼超级进化为超级貂眼。"
   },
   "sachet": {
@@ -3412,131 +3412,131 @@
     "shortDesc": "尝试在大沼泽或野生动物区捕捉野生宝可梦。成功率为1.5。"
   },
   "safety-goggles": {
-    "name": "安全护目镜",
+    "name": "防尘护目镜",
     "shortDesc": "持有：防止粉末移动造成的伤害以及冰雹和沙尘暴造成的伤害。"
   },
   "sail-fossil": {
-    "name": "风帆化石",
+    "name": "鳍之化石",
     "shortDesc": "可以复活为阿玛乌拉。"
   },
   "salac-berry": {
-    "name": "萨拉克浆果",
+    "name": "沙鳞果",
     "shortDesc": "持有：消耗最大HP的1/4以提高速度。"
   },
   "salad-mix": {
-    "name": "沙拉混合",
+    "name": "袋装蔬菜",
     "shortDesc": "可用于在营地烹饪的众多食材之一。各种各样的蔬菜看起来很吸引人而且很健康。"
   },
   "salamencite": {
-    "name": "萨拉门石",
+    "name": "暴飞龙进化石",
     "shortDesc": "持有：使萨拉曼斯超级进化为超级萨拉曼斯。"
   },
   "sapphire": {
-    "name": "蓝宝石",
+    "name": "Sapphire",
     "shortDesc": "将Ruby交给Celio以激活网络机器并获得Rainbow Pass。"
   },
   "sassy-mint": {
-    "name": "时髦薄荷",
+    "name": "自大薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的 Sp.防御力会更容易增长，但速度会增长得更慢。"
   },
   "sausages": {
-    "name": "香肠",
+    "name": "粗绞肉香肠",
     "shortDesc": "可用于在营地烹饪的众多食材之一。这些香肠应该在食用前煮沸。"
   },
   "scanner": {
-    "name": "扫描仪",
+    "name": "探测器",
     "shortDesc": "与船长斯特恩交易 DeepSeaTooth 或 DeepSeaScale。"
   },
   "sceptilite": {
-    "name": "锂辉石",
+    "name": "蜥蜴王进化石",
     "shortDesc": "持有：允许Sceptile超级进化为Mega Sceptile。"
   },
   "scizorite": {
-    "name": "硅镁石",
+    "name": "巨钳螳螂进化石",
     "shortDesc": "持有：允许巨剪子超级进化为超级巨剪子。"
   },
   "scolipite": {
-    "name": "松石榴石",
+    "name": "Scolipite",
     "shortDesc": "如果被蜈蚣持有，该物品可以使其在战斗中超级进化。"
   },
   "scope-lens": {
-    "name": "瞄准镜",
+    "name": "焦点镜",
     "shortDesc": "持有者：持有者的暴击率提高一级。"
   },
   "scovillainite": {
-    "name": "菱镁矿",
+    "name": "Scovillainite",
     "shortDesc": "如果由 Scovillain 持有，该物品可以使其在战斗中超级进化。"
   },
   "scraftinite": {
-    "name": "黄镁石",
+    "name": "Scraftinite",
     "shortDesc": "如果被狡猾的人持有，该物品可以使其在战斗中超级进化。"
   },
   "sea-incense": {
-    "name": "海香",
+    "name": "海潮薰香",
     "shortDesc": "持有：持有者的水属性招式造成的伤害提高 20%。繁殖：Marill 或 Azumarill 生成 Azurill 蛋。"
   },
   "seal-bag": {
-    "name": "密封袋",
+    "name": "贴纸袋",
     "shortDesc": "可容纳十个精灵球封印。"
   },
   "seal-case": {
-    "name": "密封盒",
+    "name": "贴纸盒",
     "shortDesc": "储存可应用于精灵球胶囊的封印。"
   },
   "secret-key": {
-    "name": "密钥",
+    "name": "秘密钥匙",
     "shortDesc": "第四代：洛托姆斯电器室的钥匙。第三代：朱砂道馆的钥匙。"
   },
   "secret-key--letsgo": {
-    "name": "密钥",
+    "name": "秘密钥匙",
     "shortDesc": "朱砂岛宝可梦道馆前门的钥匙。它有红色装饰。"
   },
   "secret-potion": {
-    "name": "秘密药水",
+    "name": "秘传之药",
     "shortDesc": "用于治愈橄榄石灯塔顶部的安法罗斯。"
   },
   "serious-mint": {
-    "name": "严重薄荷",
+    "name": "认真薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的所有属性都会以相同的速度增长。"
   },
   "shaderoot-carrot": {
-    "name": "影根胡萝卜",
+    "name": "黑萝卜",
     "shortDesc": "丰收王爱马喜欢吃的农产品。它生长在一片阴暗的田野里。"
   },
   "shalour-sable": {
-    "name": "沙鲁尔黑貂",
+    "name": "娑罗沙布蕾",
     "shortDesc": "治愈任何严重的状态疾病和混乱。"
   },
   "sharp-beak": {
-    "name": "锋利的喙",
+    "name": "锐利鸟嘴",
     "shortDesc": "持有：持有者的飞行类动作造成的伤害提高 20%。"
   },
   "sharpedonite": {
-    "name": "尖石",
+    "name": "巨牙鲨进化石",
     "shortDesc": "持有：允许沙佩多超级进化为超级沙佩多。"
   },
   "shed-shell": {
-    "name": "棚壳",
+    "name": "美丽空壳",
     "shortDesc": "持有：持有者可以绕过所有陷阱效果并切换出去。多回合动作仍然无法切换出去。"
   },
   "shell-bell": {
-    "name": "贝壳铃",
+    "name": "贝壳之铃",
     "shortDesc": "持有：持有者受到攻击时造成的伤害的1/8。"
   },
   "shiny-charm": {
-    "name": "闪亮魅力",
+    "name": "闪耀护符",
     "shortDesc": "用于将闪亮遭遇几率提高 10%，持续 7 天。"
   },
   "shiny-stone": {
-    "name": "闪亮的石头",
+    "name": "光之石",
     "shortDesc": "将 Minccino 进化为 Cinccino，将 Roselia 进化为 Roserade，或将 Togetic 进化为 Togekiss。"
   },
   "shiny-tracker": {
-    "name": "闪亮追踪器",
+    "name": "Shiny Tracker",
     "shortDesc": "打开你的闪亮狩猎并遇到统计数据。"
   },
   "shoal-salt": {
-    "name": "浅滩盐",
+    "name": "浅滩海盐",
     "shortDesc": "没有效果。第三代：用四个和四个浅滩贝壳换取贝壳钟。"
   },
   "shoal-shell": {
@@ -3544,23 +3544,23 @@
     "shortDesc": "没有效果。第三代：用四个和四个浅滩盐换取贝壳钟。"
   },
   "shock-drive": {
-    "name": "冲击驱动",
+    "name": "闪电卡带",
     "shortDesc": "赋予盖诺塞克特黄色的电型科技爆炸。"
   },
   "shuca-berry": {
-    "name": "舒卡浆果",
+    "name": "腰木果",
     "shortDesc": "持有：被超级有效的地面类型攻击击中时消耗，使伤害减半。"
   },
   "silk-scarf": {
-    "name": "丝巾",
+    "name": "丝绸围巾",
     "shortDesc": "持有：持有者的普通类型招式造成的伤害提高 20%。"
   },
   "silph-scope": {
-    "name": "西尔夫瞄准镜",
+    "name": "西尔佛检视镜",
     "shortDesc": "用于识别宝可梦塔中鬼魂的真实形态。"
   },
   "silver-leaf": {
-    "name": "银叶",
+    "name": "银色叶子",
     "shortDesc": "神秘的银叶。尚未发现长有这种叶子的树。"
   },
   "silver-powder": {
@@ -3568,67 +3568,67 @@
     "shortDesc": "持有：持有者的虫类动作造成的伤害提高 20%。"
   },
   "silver-wing": {
-    "name": "银翼",
+    "name": "银色之羽",
     "shortDesc": "召唤洛奇亚前往漩涡群岛。"
   },
   "sitrus-berry": {
-    "name": "西特鲁斯浆果",
+    "name": "文柚果",
     "shortDesc": "持有：消耗最大生命值的1/2，恢复最大生命值的1/4。"
   },
   "skarmorite": {
-    "name": "斯卡莫石",
+    "name": "Skarmorite",
     "shortDesc": "如果由 Skarmory 持有，该物品可以使其在战斗中进行超级进化。"
   },
   "skull-fossil": {
-    "name": "头骨化石",
+    "name": "头盖化石",
     "shortDesc": "可以复活为 Cranidos。"
   },
   "sky-plate": {
-    "name": "天空盘",
+    "name": "蓝天石板",
     "shortDesc": "持有：持有者的飞行类动作造成的伤害提高 20%。将阿尔宙斯和审判类型更改为飞行。"
   },
   "slowbronite": {
-    "name": "慢硼石",
+    "name": "呆壳兽进化石",
     "shortDesc": "持有：允许慢兽超级进化成超级慢兽。"
   },
   "slowpoke-tail": {
-    "name": "呆呆尾巴",
+    "name": "美味尾巴",
     "shortDesc": "一条卖高价的美味尾巴。"
   },
   "small-bouquet": {
-    "name": "小花束",
+    "name": "小小花束",
     "shortDesc": "为一位训练家用心制作的小花束。"
   },
   "smart-candy": {
-    "name": "智能糖果",
+    "name": "知识糖果",
     "shortDesc": "一种充满能量的糖果。当给予 Pokemon 时，它会增加 Pokemon Sp。攻击力统计。"
   },
   "smart-candy-l": {
-    "name": "智能糖果L",
+    "name": "知识糖果Ｌ",
     "shortDesc": "充满能量的大糖果。当给予 Lv.1 的宝可梦时30或更高，它会增加宝可梦Sp。攻击力统计。"
   },
   "smart-candy-xl": {
-    "name": "智能糖果XL",
+    "name": "知识糖果ＸＬ",
     "shortDesc": "充满能量的巨大糖果。当给予 Lv.1 的宝可梦时60或更高，它会增加宝可梦Sp。攻击力统计。"
   },
   "smoke-ball": {
-    "name": "烟球",
+    "name": "烟雾球",
     "shortDesc": "持有：允许持有者从任何野外战斗中逃脱。"
   },
   "smoke-poke-tail": {
-    "name": "烟戳尾",
+    "name": "烟熏尾巴",
     "shortDesc": "可用于在营地烹饪的众多食材之一。当呆呆兽的尾巴脱落后，它会很快重新长出来。"
   },
   "smooth-rock": {
-    "name": "光滑的岩石",
+    "name": "沙沙岩石",
     "shortDesc": "持有者：持有者的沙尘暴持续 8 轮，而不是 5 轮。"
   },
   "snorlium-z--bag": {
-    "name": "斯诺鲁姆 Z",
+    "name": "卡比兽Ｚ",
     "shortDesc": "XXX snorlium-z--bag 的新效果"
   },
   "snorlium-z--held": {
-    "name": "斯诺鲁姆 Z",
+    "name": "卡比兽Ｚ",
     "shortDesc": "持有：允许Snorlax将Giga Impact升级为粉碎煎饼。"
   },
   "snowball": {
@@ -3636,99 +3636,99 @@
     "shortDesc": "持有者：如果持有者受到冰系伤害招式击中，则其攻击力提升一级。"
   },
   "snowscape-charm": {
-    "name": "雪景魅力",
+    "name": "Snowscape Charm",
     "shortDesc": "让你可以在宝可梦不知情的情况下使用雪景。"
   },
   "soda-pop": {
-    "name": "汽水",
+    "name": "劲爽汽水",
     "shortDesc": "恢复 60 生命值。"
   },
   "soft-sand": {
-    "name": "软沙",
+    "name": "柔软沙子",
     "shortDesc": "持有：持有者的地面类型招式造成的伤害提高 20%。"
   },
   "solganium-z--bag": {
-    "name": "硫镁 Z",
+    "name": "索尔迦雷欧Ｚ",
     "shortDesc": "XXX solganium-z--bag 的新效果"
   },
   "solganium-z--held": {
-    "name": "硫镁 Z",
+    "name": "索尔迦雷欧Ｚ",
     "shortDesc": "持有：允许索尔迦雷欧使用灼热烈日粉碎。"
   },
   "sonias-book": {
-    "name": "索尼娅书",
+    "name": "索妮亚的书",
     "shortDesc": "Sonias教授发表著作。她对伽勒尔地区传说的新发现都记录在这本令人愉快的读物中。"
   },
   "soot-sack": {
-    "name": "烟灰袋",
+    "name": "集灰袋",
     "shortDesc": "储存 113 号公路的火山灰。"
   },
   "soothe-bell": {
-    "name": "抚慰贝尔",
+    "name": "安抚之铃",
     "shortDesc": "持有：持有者获得的幸福加倍。"
   },
   "soul-dew": {
-    "name": "灵魂露",
+    "name": "心之水滴",
     "shortDesc": "拉帝亚斯、拉帝奥斯的特攻、特防提升50%。"
   },
   "sparkling-stone": {
-    "name": "闪闪发光的石头",
+    "name": "光辉石",
     "shortDesc": "需要获得 Z 形环。"
   },
   "spell-tag": {
-    "name": "法术标签",
+    "name": "诅咒之符",
     "shortDesc": "持有：持有者的幽灵类动作造成的伤害提高 20%。"
   },
   "spelon-berry": {
-    "name": "斯佩隆浆果",
+    "name": "刺角果",
     "shortDesc": "用于创建 PokeBlock 和 Poffins。"
   },
   "spice-mix": {
-    "name": "香料混合",
+    "name": "香料组合",
     "shortDesc": "可用于在营地烹饪的众多食材之一。这种成分的辣味中含有五十多种香料。"
   },
   "splash-plate": {
-    "name": "防溅板",
+    "name": "水滴石板",
     "shortDesc": "持有：持有者的水属性招式造成的伤害提高 20%。将阿尔宙斯和审判类型更改为水。"
   },
   "spooky-plate": {
-    "name": "幽灵板",
+    "name": "妖怪石板",
     "shortDesc": "持有：持有者的幽灵类动作造成的伤害提高 20%。将阿尔宙斯和审判类型更改为幽灵。"
   },
   "sport-ball": {
-    "name": "运动球",
+    "name": "竞赛球",
     "shortDesc": "试图在国家公园的捉虫比赛中捕捉一只宝可梦。 （第二代：公园球）"
   },
   "sprayduck": {
-    "name": "喷雾鸭",
+    "name": "可达鸭喷壶",
     "shortDesc": "用于给浆果浇水。"
   },
   "sprinklotad": {
-    "name": "洒水",
+    "name": "莲叶童子喷壶",
     "shortDesc": "浇灌浆果植物。"
   },
   "squirt-bottle": {
-    "name": "喷射瓶",
+    "name": "杰尼龟喷壶",
     "shortDesc": "在 36 号公路上阻塞道路的 Sudowoodo 上使用。还可以给浆果浇水。"
   },
   "squirtle-guild-emblem-template": {
-    "name": "杰尼龟公会徽章",
+    "name": "Squirtle Guild Emblem",
     "shortDesc": "使用此模板为您当前的公会永久解锁它。"
   },
   "ss-ticket": {
-    "name": "S.S. 票",
+    "name": "船票",
     "shortDesc": "船票。 (RSE: S.S. Tidal LF: S.S. Anne HG: S.S. Aqua)"
   },
   "ss-ticket--hoenn": {
-    "name": "S.S. 票",
+    "name": "船票",
     "shortDesc": "XXX ss-ticket 新效果--hoenn"
   },
   "ss-ticket--letsgo": {
-    "name": "S.S. 票",
+    "name": "船票",
     "shortDesc": "登上安妮号所需的船票。上面有一艘船的图画。"
   },
   "stable-mulch": {
-    "name": "稳定的覆盖物",
+    "name": "久久肥",
     "shortDesc": "浆果在植物上停留的时间比平时更长。"
   },
   "star-piece": {
@@ -3736,179 +3736,179 @@
     "shortDesc": "白金：交易每种颜色碎片一个。黑与白：交易 PP Up。以 4900 Pokedollars 出售，或以 9800 Pokedollars 出售给矿石收藏家。"
   },
   "star-sweet": {
-    "name": "星甜",
+    "name": "星星糖饰",
     "shortDesc": "星形糖果。当 Milcery 拿着这个时，它会快乐地旋转。"
   },
   "staraptite": {
-    "name": "星辉石",
+    "name": "Staraptite",
     "shortDesc": "如果星盗龙持有该物品，该物品可以使其在战斗中超级进化。"
   },
   "stardust": {
-    "name": "星尘",
+    "name": "星星沙子",
     "shortDesc": "可以卖钱。"
   },
   "starf-berry": {
-    "name": "星浆果",
+    "name": "星桃果",
     "shortDesc": "持有：以 1/4 最大生命值消耗，可将随机属性提升两级。"
   },
   "starminite": {
-    "name": "星石",
+    "name": "Starminite",
     "shortDesc": "如果海星持有该物品，该物品可以使其在战斗中超级进化。"
   },
   "steel-gem": {
-    "name": "钢宝石",
+    "name": "钢之宝石",
     "shortDesc": "持有：当持有者使用破坏性的钢系招式时，该招式的威力为1.5，该物品会被消耗。"
   },
   "steel-memory": {
-    "name": "钢铁记忆",
+    "name": "钢铁存储碟",
     "shortDesc": "持有：将希尔瓦利变为钢制形态。将多重攻击类型更改为钢。"
   },
   "steelium-z--bag": {
-    "name": "钢Z",
+    "name": "钢Ｚ",
     "shortDesc": "XXX Steelium-z--bag 的新效果"
   },
   "steelium-z--held": {
-    "name": "钢Z",
+    "name": "钢Ｚ",
     "shortDesc": "持有：允许宝可梦使用其钢招式的 Z 招式等效项。"
   },
   "steelixite": {
-    "name": "钢石",
+    "name": "大钢蛇进化石",
     "shortDesc": "持有：允许 Steelix 超级进化为 Mega Steelix。"
   },
   "stick": {
-    "name": "韭菜",
+    "name": "大葱",
     "shortDesc": "将 Farfetchd 的暴击率提高两个阶段。"
   },
   "sticky-barb": {
-    "name": "粘倒刺",
+    "name": "附着针",
     "shortDesc": "持有：持有者每回合结束时消耗其最大生命值的 1/8 (12.5%)。当持有者被接触招式击中时，攻击的宝可梦会受到其最大生命值 1/8 的伤害，如果没有持有该物品，则会收到该物品。"
   },
   "stone-plate": {
-    "name": "石板",
+    "name": "岩石石板",
     "shortDesc": "持有：持有者的岩石类动作造成的伤害提高 20%。将阿尔宙斯和审判类型更改为岩石。"
   },
   "storage-key": {
-    "name": "存储密钥",
+    "name": "仓库钥匙",
     "shortDesc": "授予访问面纱城银河队仓库的权限。"
   },
   "storage-key--galactic-warehouse": {
-    "name": "存储密钥",
+    "name": "仓库钥匙",
     "shortDesc": "XXX存储密钥新效果--银河仓库"
   },
   "storage-key--sea-mauville": {
-    "name": "存储密钥",
+    "name": "仓库钥匙",
     "shortDesc": "XXX 存储键新效果--sea-mauville"
   },
   "strange-ball": {
-    "name": "奇怪的球",
+    "name": "奇异球",
     "shortDesc": "占位符，如果陷入精灵球而不是当前游戏中。"
   },
   "strange-souvenir": {
-    "name": "奇怪的纪念品",
+    "name": "神秘摆设",
     "shortDesc": "供应商垃圾。"
   },
   "strawberry-sweet": {
-    "name": "草莓甜",
+    "name": "草莓糖饰",
     "shortDesc": "草莓形状的糖果。当Milcery拿着这个时，它会快乐地旋转。"
   },
   "strength-charm": {
-    "name": "力量魅力",
+    "name": "Strength Charm",
     "shortDesc": "让你在宝可梦不知情的情况下使用力量。"
   },
   "stretchy-spring": {
-    "name": "弹性弹簧",
+    "name": "松掉的弹簧",
     "shortDesc": "细细的小弹簧。它完全伸展开来，其用途未知。"
   },
   "style-card": {
-    "name": "风格卡",
+    "name": "时尚名人卡",
     "shortDesc": "一张增加精品店和美发沙龙选择的卡片。"
   },
   "suite-key": {
-    "name": "套件钥匙",
+    "name": "房间钥匙",
     "shortDesc": "打开湖滨度假村一座上锁的建筑。"
   },
   "sun-flute": {
-    "name": "太阳笛",
+    "name": "太阳之笛",
     "shortDesc": "在太阳祭坛使用时，奈比进化为索尔迦雷欧。"
   },
   "sun-stone": {
-    "name": "太阳石",
+    "name": "日之石",
     "shortDesc": "将 Cottonee 进化为 Whimsicott，将 Gloom 进化为 Bellossom，将 Petilil 进化为 Lilligant，或将 Sunkern 进化为 Sunflora。"
   },
   "sunny-day-charm": {
-    "name": "阳光灿烂的日子魅力",
+    "name": "Sunny Day Charm",
     "shortDesc": "让你可以在宝可梦不知情的情况下使用 Sunny Day。"
   },
   "super-lure": {
-    "name": "超级诱饵",
+    "name": "白银香水",
     "shortDesc": "一瓶香水，可以让稀有的宝可梦更容易出现。它比诱饵持续时间更长。"
   },
   "super-potion": {
-    "name": "超级药水",
+    "name": "好伤药",
     "shortDesc": "恢复 50 生命值。"
   },
   "super-repel": {
-    "name": "超级击退",
+    "name": "白银喷雾",
     "shortDesc": "在 200 步内，防止遇到等级低于你队伍的主要宝可梦的野外遭遇。"
   },
   "super-rod": {
-    "name": "超级棒",
+    "name": "厉害钓竿",
     "shortDesc": "用它在水体中捕捉强大的宝可梦。"
   },
   "surf-charm": {
-    "name": "冲浪魅力",
+    "name": "Surf Charm",
     "shortDesc": "让你可以在宝可梦不知情的情况下使用冲浪。"
   },
   "surge-badge": {
-    "name": "激增徽章",
+    "name": "桔色徽章",
     "shortDesc": "XXX 浪涌徽章新效果"
   },
   "surprise-mulch": {
-    "name": "惊喜覆盖物",
+    "name": "吃惊肥",
     "shortDesc": "增加浆果突变的几率。"
   },
   "swampertite": {
-    "name": "沼泽矿",
+    "name": "巨沼怪进化石",
     "shortDesc": "持有：允许沼泽地超级进化为超级沼泽地。"
   },
   "sweet-apple": {
-    "name": "甜苹果",
+    "name": "甜甜苹果",
     "shortDesc": "一种特殊的苹果，可以使特定种类的宝可梦进化。其味道异常甜美。"
   },
   "sweet-heart": {
-    "name": "甜心",
+    "name": "心形甜点",
     "shortDesc": "恢复 20 生命值。"
   },
   "swift-wing": {
-    "name": "迅捷之羽",
+    "name": "瞬发之羽",
     "shortDesc": "速度努力增加 1。"
   },
   "syrupy-apple": {
-    "name": "糖浆苹果",
+    "name": "蜜汁苹果",
     "shortDesc": "使用时将 Applin 进化为 Dipplin。"
   },
   "tamato-berry": {
-    "name": "番茄浆果",
+    "name": "茄番果",
     "shortDesc": "将速度努力值降低 10 并提高幸福感。"
   },
   "tanga-berry": {
-    "name": "坦噶浆果",
+    "name": "扁樱果",
     "shortDesc": "持有：被超级有效的虫类攻击击中时消耗，使伤害减半。"
   },
   "tapunium-z--bag": {
-    "name": "Tapunium Z",
+    "name": "卡璞Ｚ",
     "shortDesc": "XXX Tapunium-z--bag 的新效果"
   },
   "tapunium-z--held": {
-    "name": "Tapunium Z",
+    "name": "卡璞Ｚ",
     "shortDesc": "持有：允许塔普斯将自然疯狂升级为阿罗拉守护者。"
   },
   "tart-apple": {
-    "name": "酸苹果",
+    "name": "酸酸苹果",
     "shortDesc": "一种特殊的苹果，可以使特定种类的宝可梦进化。它特别酸。"
   },
   "tatsugirinite": {
-    "name": "龙堇石",
+    "name": "Tatsugirinite",
     "shortDesc": "如果龙切持有该物品，该物品可以使其在战斗中超级进化。"
   },
   "tea": {
@@ -3916,39 +3916,39 @@
     "shortDesc": "授予访问藏红花城的权限。"
   },
   "teachy-tv": {
-    "name": "教学电视",
+    "name": "Teachy TV",
     "shortDesc": "教师基本培训师建议。"
   },
   "terrain-extender": {
-    "name": "地形扩展器",
+    "name": "大地膜",
     "shortDesc": "持有：将持有者地形效果延长至8回合。"
   },
   "thick-club": {
-    "name": "粗棒",
+    "name": "粗骨头",
     "shortDesc": "使 Cubone 或 Marowaks 的攻击力加倍。"
   },
   "throat-spray": {
-    "name": "喉咙喷雾",
+    "name": "爽喉喷雾",
     "shortDesc": "提高 Sp。当宝可梦使用基于声音的动作时进行攻击。"
   },
   "thunder-stone": {
-    "name": "雷石",
+    "name": "雷之石",
     "shortDesc": "将 Eelektrik 进化为 Eelektross，将 Eevee 进化为 Jolteon，或将皮卡丘进化为 Raichu。"
   },
   "tidal-bell": {
-    "name": "潮汐钟",
+    "name": "海声铃铛",
     "shortDesc": "允许和服女孩召唤洛奇亚。"
   },
   "timer-ball": {
-    "name": "计时器球",
+    "name": "计时球",
     "shortDesc": "尝试捕捉野生宝可梦。每回合成功率增加 0.1（第五代：0.3），最多 4。"
   },
   "timid-mint": {
-    "name": "胆怯的薄荷",
+    "name": "胆小薄荷",
     "shortDesc": "当宝可梦闻到这种薄荷味时，它的速度会更容易增长，但攻击力会增长得更慢。"
   },
   "tin-of-beans": {
-    "name": "豆罐头",
+    "name": "豆子罐头",
     "shortDesc": "可用于在营地烹饪的众多食材之一。慢炖时，豆子的味道会充满菜肴。"
   },
   "tiny-mushroom": {
@@ -3956,1151 +3956,1151 @@
     "shortDesc": "火红和叶绿：用两个换取先前的升级动作。以 250 Pokedollars 出售，或以 500 Pokedollars 出售给饥饿女仆。"
   },
   "tm-acid-spray": {
-    "name": "TM 酸喷雾",
+    "name": "招式学习器：酸液炸弹",
     "shortDesc": "向兼容的宝可梦教授酸性喷雾。"
   },
   "tm-acrobatics": {
-    "name": "TM杂技",
+    "name": "招式学习器：杂技",
     "shortDesc": "向兼容的宝可梦教授杂技。"
   },
   "tm-aerial-ace": {
-    "name": "TM 空中王牌",
+    "name": "招式学习器：燕返",
     "shortDesc": "向兼容的宝可梦教授空中王牌。"
   },
   "tm-agility": {
-    "name": "TM敏捷",
+    "name": "招式学习器：高速移动",
     "shortDesc": "向兼容的宝可梦传授敏捷性。"
   },
   "tm-air-cutter": {
-    "name": "TM 空气切割机",
+    "name": "招式学习器：空气利刃",
     "shortDesc": "向兼容的宝可梦教授空气切割机。"
   },
   "tm-air-slash": {
-    "name": "TM 空气斩",
+    "name": "招式学习器：空气斩",
     "shortDesc": "向兼容的宝可梦教授空气斩。"
   },
   "tm-alluring-voice": {
-    "name": "TM诱人的声音",
+    "name": "招式学习器：魅诱之声",
     "shortDesc": "向兼容的宝可梦教授诱惑之声。"
   },
   "tm-ally-switch": {
-    "name": "TM 盟友开关",
+    "name": "招式学习器：交换场地",
     "shortDesc": "教盟友切换到兼容的宝可梦。"
   },
   "tm-amnesia": {
-    "name": "TM失忆症",
+    "name": "招式学习器：瞬间失忆",
     "shortDesc": "向兼容的宝可梦传授失忆症。"
   },
   "tm-assurance": {
-    "name": "TM 保证",
+    "name": "招式学习器：恶意追击",
     "shortDesc": "向兼容的宝可梦教授保证。"
   },
   "tm-attract": {
-    "name": "TM吸引",
+    "name": "招式学习器：迷人",
     "shortDesc": "教授吸引兼容的宝可梦。"
   },
   "tm-aura-sphere": {
-    "name": "TM灵气球",
+    "name": "招式学习器：波导弹",
     "shortDesc": "向兼容的宝可梦教授光环球。"
   },
   "tm-avalanche": {
-    "name": "TM雪崩",
+    "name": "招式学习器：雪崩",
     "shortDesc": "向兼容的宝可梦教授雪崩。"
   },
   "tm-baton-pass": {
-    "name": "TM 接力棒传球",
+    "name": "招式学习器：接棒",
     "shortDesc": "向兼容的宝可梦教授接力棒传球。"
   },
   "tm-beat-up": {
-    "name": "TM殴打",
+    "name": "招式学习器：围攻",
     "shortDesc": "向兼容的宝可梦教授 Beat Up。"
   },
   "tm-blast-burn": {
-    "name": "TM 爆炸燃烧",
+    "name": "招式学习器：爆炸烈焰",
     "shortDesc": "向兼容的宝可梦教授爆炸燃烧。"
   },
   "tm-blaze-kick": {
-    "name": "TM 火焰踢",
+    "name": "招式学习器：火焰踢",
     "shortDesc": "向兼容的宝可梦教授火焰踢。"
   },
   "tm-blizzard": {
-    "name": "TM暴雪",
+    "name": "招式学习器：暴风雪",
     "shortDesc": "向兼容的宝可梦教授暴雪。"
   },
   "tm-body-press": {
-    "name": "TM 身体按压",
+    "name": "招式学习器：扑击",
     "shortDesc": "向兼容的宝可梦教授身体按压。"
   },
   "tm-body-slam": {
-    "name": "TM身体猛击",
+    "name": "招式学习器：泰山压顶",
     "shortDesc": "向兼容的宝可梦教授身体猛击。"
   },
   "tm-bounce": {
-    "name": "TM 弹跳",
+    "name": "招式学习器：弹跳",
     "shortDesc": "教兼容的宝可梦弹跳。"
   },
   "tm-brave-bird": {
-    "name": "TM勇敢的小鸟",
+    "name": "招式学习器：勇鸟猛攻",
     "shortDesc": "将勇敢的鸟教给兼容的宝可梦。"
   },
   "tm-breaking-swipe": {
-    "name": "TM破击",
+    "name": "招式学习器：广域破坏",
     "shortDesc": "向兼容的宝可梦教授破坏滑动。"
   },
   "tm-brick-break": {
-    "name": "TM 砖块破坏",
+    "name": "招式学习器：劈瓦",
     "shortDesc": "教兼容的宝可梦打砖块。"
   },
   "tm-brine": {
-    "name": "TM盐水",
+    "name": "招式学习器：盐水",
     "shortDesc": "向兼容的宝可梦教授盐水。"
   },
   "tm-brutal-swing": {
-    "name": "TM残酷摇摆",
+    "name": "招式学习器：狂舞挥打",
     "shortDesc": "向兼容的宝可梦教授残酷挥击。"
   },
   "tm-bug-bite": {
-    "name": "TM虫咬",
+    "name": "招式学习器：虫咬",
     "shortDesc": "向兼容的宝可梦教授虫咬。"
   },
   "tm-bug-buzz": {
-    "name": "TM Bug Buzz",
+    "name": "招式学习器：虫鸣",
     "shortDesc": "向兼容的宝可梦传授错误嗡嗡声。"
   },
   "tm-bulk-up": {
-    "name": "TM 散装",
+    "name": "招式学习器：健美",
     "shortDesc": "向兼容的宝可梦教授 Bulk Up。"
   },
   "tm-bulldoze": {
-    "name": "TM 推土机",
+    "name": "招式学习器：重踏",
     "shortDesc": "教推土机兼容的宝可梦。"
   },
   "tm-bullet-seed": {
-    "name": "TM子弹种子",
+    "name": "招式学习器：种子机关枪",
     "shortDesc": "向兼容的宝可梦教授子弹种子。"
   },
   "tm-burning-jealousy": {
-    "name": "TM 燃烧的嫉妒",
+    "name": "招式学习器：妒火",
     "shortDesc": "向兼容的宝可梦教授燃烧嫉妒。"
   },
   "tm-calm-mind": {
-    "name": "TM冷静心态",
+    "name": "招式学习器：冥想",
     "shortDesc": "向兼容的宝可梦传授冷静的头脑。"
   },
   "tm-case": {
-    "name": "TM 案例",
+    "name": "招式学习器盒",
     "shortDesc": "保存 TM。"
   },
   "tm-charge": {
-    "name": "TM收费",
+    "name": "招式学习器：充电",
     "shortDesc": "教兼容的宝可梦冲锋。"
   },
   "tm-charge-beam": {
-    "name": "TM 充电光束",
+    "name": "招式学习器：充电光束",
     "shortDesc": "向兼容的宝可梦教授充电光束。"
   },
   "tm-charm": {
-    "name": "TM魅力",
+    "name": "招式学习器：撒娇",
     "shortDesc": "向兼容的宝可梦传授魅力。"
   },
   "tm-chilling-water": {
-    "name": "TM 冷冻水",
+    "name": "招式学习器：泼冷水",
     "shortDesc": "向兼容的宝可梦教授冷水。"
   },
   "tm-close-combat": {
-    "name": "TM近战",
+    "name": "招式学习器：近身战",
     "shortDesc": "向兼容的宝可梦教授近战格斗。"
   },
   "tm-coaching": {
-    "name": "TM 辅导",
+    "name": "招式学习器：指导",
     "shortDesc": "向兼容的宝可梦教授辅导。"
   },
   "tm-confide": {
-    "name": "TM Confide",
+    "name": "招式学习器：密语",
     "shortDesc": "向兼容的宝可梦教授“倾诉”。"
   },
   "tm-confuse-ray": {
-    "name": "TM 迷惑射线",
+    "name": "招式学习器：奇异之光",
     "shortDesc": "教导兼容的宝可梦使用迷惑雷。"
   },
   "tm-cosmic-power": {
-    "name": "TM宇宙之力",
+    "name": "招式学习器：宇宙力量",
     "shortDesc": "向兼容的宝可梦传授宇宙力量。"
   },
   "tm-cross-poison": {
-    "name": "TM交叉毒药",
+    "name": "招式学习器：十字毒刃",
     "shortDesc": "向兼容的宝可梦传授交叉毒药。"
   },
   "tm-crunch": {
-    "name": "TM 紧缩",
+    "name": "招式学习器：咬碎",
     "shortDesc": "向兼容的宝可梦教授嘎吱声。"
   },
   "tm-curse": {
-    "name": "TM诅咒",
+    "name": "招式学习器：诅咒",
     "shortDesc": "向兼容的宝可梦教授诅咒。"
   },
   "tm-dark-pulse": {
-    "name": "TM暗脉冲",
+    "name": "招式学习器：恶之波动",
     "shortDesc": "向兼容的宝可梦教授黑暗脉冲。"
   },
   "tm-darkest-lariat": {
-    "name": "TM 黑暗套索",
+    "name": "招式学习器：ＤＤ金勾臂",
     "shortDesc": "向兼容的宝可梦教授黑暗套索。"
   },
   "tm-dazzling-gleam": {
-    "name": "TM耀眼光芒",
+    "name": "招式学习器：魔法闪耀",
     "shortDesc": "向兼容的宝可梦教授耀眼光芒。"
   },
   "tm-dig": {
-    "name": "TM挖",
+    "name": "招式学习器：挖洞",
     "shortDesc": "教兼容的宝可梦挖掘。"
   },
   "tm-disarming-voice": {
-    "name": "TM 撤防语音",
+    "name": "招式学习器：魅惑之声",
     "shortDesc": "教兼容的宝可梦解除声音。"
   },
   "tm-double-edge": {
-    "name": "TM 双刃",
+    "name": "招式学习器：舍身冲撞",
     "shortDesc": "向兼容的宝可梦教授双刃剑。"
   },
   "tm-double-team": {
-    "name": "TM双人包夹",
+    "name": "招式学习器：影子分身",
     "shortDesc": "教导兼容的宝可梦包夹。"
   },
   "tm-draco-meteor": {
-    "name": "TM天龙流星",
+    "name": "招式学习器：流星群",
     "shortDesc": "向兼容的宝可梦教授德拉科流星。"
   },
   "tm-dragon-cheer": {
-    "name": "TM龙欢呼",
+    "name": "招式学习器：龙声鼓舞",
     "shortDesc": "向兼容的宝可梦教授龙之欢呼。"
   },
   "tm-dragon-claw": {
-    "name": "TM龙爪",
+    "name": "招式学习器：龙爪",
     "shortDesc": "向兼容的宝可梦教授龙爪。"
   },
   "tm-dragon-dance": {
-    "name": "TM龙舞",
+    "name": "招式学习器：龙之舞",
     "shortDesc": "向兼容的宝可梦教授龙舞。"
   },
   "tm-dragon-pulse": {
-    "name": "TM龙脉",
+    "name": "招式学习器：龙之波动",
     "shortDesc": "向兼容的宝可梦传授龙脉。"
   },
   "tm-dragon-tail": {
-    "name": "TM龙尾",
+    "name": "招式学习器：龙尾",
     "shortDesc": "向兼容的宝可梦教授龙尾。"
   },
   "tm-drain-punch": {
-    "name": "TM 排水冲头",
+    "name": "招式学习器：吸取拳",
     "shortDesc": "向兼容的宝可梦教授排水拳。"
   },
   "tm-draining-kiss": {
-    "name": "TM排水之吻",
+    "name": "招式学习器：吸取之吻",
     "shortDesc": "向兼容的宝可梦教授排水之吻。"
   },
   "tm-dream-eater": {
-    "name": "TM食梦者",
+    "name": "招式学习器：食梦",
     "shortDesc": "向兼容的宝可梦传授食梦者。"
   },
   "tm-drill-run": {
-    "name": "TM 钻运行",
+    "name": "招式学习器：直冲钻",
     "shortDesc": "向兼容的宝可梦教授 Drill Run。"
   },
   "tm-dual-wingbeat": {
-    "name": "TM 双翼拍",
+    "name": "招式学习器：双翼",
     "shortDesc": "向兼容的宝可梦教授双翼拍。"
   },
   "tm-earth-power": {
-    "name": "TM 大地之力",
+    "name": "招式学习器：大地之力",
     "shortDesc": "向兼容的宝可梦传授大地之力。"
   },
   "tm-earthquake": {
-    "name": "TM地震",
+    "name": "招式学习器：地震",
     "shortDesc": "向兼容的宝可梦教授地震。"
   },
   "tm-echoed-voice": {
-    "name": "TM 回声",
+    "name": "招式学习器：回声",
     "shortDesc": "向兼容的宝可梦教授回声之声。"
   },
   "tm-eerie-impulse": {
-    "name": "TM怪异冲动",
+    "name": "招式学习器：怪异电波",
     "shortDesc": "向兼容的宝可梦传授怪异冲动。"
   },
   "tm-electric-terrain": {
-    "name": "TM 电动地形",
+    "name": "招式学习器：电气场地",
     "shortDesc": "向兼容的宝可梦教授电动地形。"
   },
   "tm-electro-ball": {
-    "name": "TM 电球",
+    "name": "招式学习器：电球",
     "shortDesc": "向兼容的宝可梦教授电球。"
   },
   "tm-electroweb": {
-    "name": "TM Electroweb",
+    "name": "招式学习器：电网",
     "shortDesc": "向兼容的宝可梦教授 Electroweb。"
   },
   "tm-embargo": {
-    "name": "TM 禁运",
+    "name": "招式学习器：查封",
     "shortDesc": "向兼容的宝可梦教授禁运。"
   },
   "tm-encore": {
-    "name": "TM 安可",
+    "name": "招式学习器：再来一次",
     "shortDesc": "向兼容的宝可梦教授安可。"
   },
   "tm-endeavor": {
-    "name": "TM努力",
+    "name": "招式学习器：蛮干",
     "shortDesc": "向兼容的宝可梦教授奋进。"
   },
   "tm-endure": {
-    "name": "TM忍耐",
+    "name": "招式学习器：挺住",
     "shortDesc": "向兼容的宝可梦教授耐力。"
   },
   "tm-energy-ball": {
-    "name": "TM能量球",
+    "name": "招式学习器：能量球",
     "shortDesc": "向兼容的宝可梦教授能量球。"
   },
   "tm-expanding-force": {
-    "name": "TM扩张力",
+    "name": "招式学习器：广域战力",
     "shortDesc": "向兼容的宝可梦传授扩张力。"
   },
   "tm-facade": {
-    "name": "TM 外观",
+    "name": "招式学习器：硬撑",
     "shortDesc": "向兼容的宝可梦教授外观。"
   },
   "tm-fake-tears": {
-    "name": "TM假眼泪",
+    "name": "招式学习器：假哭",
     "shortDesc": "向兼容的宝可梦教授假眼泪。"
   },
   "tm-false-swipe": {
-    "name": "TM误刷",
+    "name": "招式学习器：点到为止",
     "shortDesc": "教兼容的宝可梦进行错误滑动。"
   },
   "tm-feather-dance": {
-    "name": "TM羽舞",
+    "name": "招式学习器：羽毛舞",
     "shortDesc": "向兼容的宝可梦教授羽毛舞。"
   },
   "tm-fire-blast": {
-    "name": "TM火爆",
+    "name": "招式学习器：大字爆炎",
     "shortDesc": "向兼容的宝可梦教授火焰冲击。"
   },
   "tm-fire-fang": {
-    "name": "TM火牙",
+    "name": "招式学习器：火焰牙",
     "shortDesc": "向兼容的宝可梦传授火牙。"
   },
   "tm-fire-pledge": {
-    "name": "TM火誓言",
+    "name": "招式学习器：火之誓约",
     "shortDesc": "向兼容的宝可梦传授火焰誓约。"
   },
   "tm-fire-punch": {
-    "name": "TM火拳",
+    "name": "招式学习器：火焰拳",
     "shortDesc": "向兼容的宝可梦教授火拳。"
   },
   "tm-fire-spin": {
-    "name": "TM 火旋",
+    "name": "招式学习器：火焰旋涡",
     "shortDesc": "向兼容的宝可梦教授火旋转。"
   },
   "tm-flame-charge": {
-    "name": "TM 火焰冲锋",
+    "name": "招式学习器：蓄能焰袭",
     "shortDesc": "向兼容的宝可梦教授火焰冲锋。"
   },
   "tm-flamethrower": {
-    "name": "TM 火焰喷射器",
+    "name": "招式学习器：喷射火焰",
     "shortDesc": "向兼容的宝可梦教授火焰喷射器。"
   },
   "tm-flare-blitz": {
-    "name": "TM 耀斑闪电战",
+    "name": "招式学习器：闪焰冲锋",
     "shortDesc": "向兼容的宝可梦教授耀斑闪电战。"
   },
   "tm-flash-cannon": {
-    "name": "TM闪光炮",
+    "name": "招式学习器：加农光炮",
     "shortDesc": "向兼容的宝可梦教授闪光炮。"
   },
   "tm-fling": {
-    "name": "TM 投掷",
+    "name": "招式学习器：投掷",
     "shortDesc": "教兼容的宝可梦进行投掷。"
   },
   "tm-flip-turn": {
-    "name": "TM 翻转",
+    "name": "招式学习器：快速折返",
     "shortDesc": "教翻转转向兼容的宝可梦。"
   },
   "tm-focus-blast": {
-    "name": "TM 焦点爆炸",
+    "name": "招式学习器：真气弹",
     "shortDesc": "向兼容的宝可梦教授焦点爆炸。"
   },
   "tm-focus-energy": {
-    "name": "TM 焦点能量",
+    "name": "招式学习器：聚气",
     "shortDesc": "向兼容的宝可梦传授集中能量。"
   },
   "tm-focus-punch": {
-    "name": "TM 聚焦拳",
+    "name": "招式学习器：真气拳",
     "shortDesc": "向兼容的宝可梦教授集中拳。"
   },
   "tm-foul-play": {
-    "name": "TM犯规",
+    "name": "招式学习器：欺诈",
     "shortDesc": "向兼容的宝可梦传授错误行为。"
   },
   "tm-frenzy-plant": {
-    "name": "TM疯狂植物",
+    "name": "招式学习器：疯狂植物",
     "shortDesc": "向兼容的宝可梦教授疯狂植物。"
   },
   "tm-frustration": {
-    "name": "TM挫败感",
+    "name": "招式学习器：迁怒",
     "shortDesc": "向兼容的宝可梦传授挫败感。"
   },
   "tm-future-sight": {
-    "name": "TM未来之镜",
+    "name": "招式学习器：预知未来",
     "shortDesc": "向兼容的宝可梦传授未来之力。"
   },
   "tm-giga-drain": {
-    "name": "TM 千兆排水",
+    "name": "招式学习器：终极吸取",
     "shortDesc": "向兼容的宝可梦教授 Giga Drain。"
   },
   "tm-giga-impact": {
-    "name": "TM 千兆冲击",
+    "name": "招式学习器：终极冲击",
     "shortDesc": "向兼容的宝可梦传授千兆冲击力。"
   },
   "tm-grass-knot": {
-    "name": "TM草结",
+    "name": "招式学习器：打草结",
     "shortDesc": "向兼容的宝可梦教授草结。"
   },
   "tm-grass-pledge": {
-    "name": "TM草承诺",
+    "name": "招式学习器：草之誓约",
     "shortDesc": "向兼容的宝可梦教授草誓。"
   },
   "tm-grassy-glide": {
-    "name": "TM 草滑翔",
+    "name": "招式学习器：青草滑梯",
     "shortDesc": "向兼容的宝可梦教授草滑翔。"
   },
   "tm-grassy-terrain": {
-    "name": "TM 草地地形",
+    "name": "招式学习器：青草场地",
     "shortDesc": "向兼容的宝可梦教授草地地形。"
   },
   "tm-gravity": {
-    "name": "TM重力",
+    "name": "招式学习器：重力",
     "shortDesc": "向兼容的宝可梦教授重力。"
   },
   "tm-guard-swap": {
-    "name": "TM 防护交换",
+    "name": "招式学习器：防守互换",
     "shortDesc": "教授兼容的宝可梦的守卫交换。"
   },
   "tm-gunk-shot": {
-    "name": "TM 垃圾射击",
+    "name": "招式学习器：垃圾射击",
     "shortDesc": "向兼容的宝可梦教授Gunk Shot。"
   },
   "tm-gyro-ball": {
-    "name": "TM 陀螺球",
+    "name": "招式学习器：陀螺球",
     "shortDesc": "教陀螺球兼容的宝可梦。"
   },
   "tm-hail": {
-    "name": "TM冰雹",
+    "name": "招式学习器：冰雹",
     "shortDesc": "向兼容的宝可梦传授冰雹。"
   },
   "tm-hard-press": {
-    "name": "TM 硬压机",
+    "name": "招式学习器：硬压",
     "shortDesc": "教兼容的宝可梦用力按压。"
   },
   "tm-haze": {
-    "name": "TM 雾霾",
+    "name": "招式学习器：黑雾",
     "shortDesc": "向兼容的宝可梦教授雾霾。"
   },
   "tm-heat-crash": {
-    "name": "TM热崩溃",
+    "name": "招式学习器：高温重压",
     "shortDesc": "向兼容的宝可梦教授热力崩溃。"
   },
   "tm-heat-wave": {
-    "name": "TM热浪",
+    "name": "招式学习器：热风",
     "shortDesc": "向兼容的宝可梦传授热浪。"
   },
   "tm-heavy-slam": {
-    "name": "TM重击",
+    "name": "招式学习器：重磅冲撞",
     "shortDesc": "向兼容的宝可梦教授重击。"
   },
   "tm-helping-hand": {
-    "name": "TM伸出援手",
+    "name": "招式学习器：帮助",
     "shortDesc": "教导兼容的宝可梦伸出援手。"
   },
   "tm-hex": {
-    "name": "TM 十六进制",
+    "name": "招式学习器：祸不单行",
     "shortDesc": "向兼容的宝可梦教授十六进制。"
   },
   "tm-hidden-power": {
-    "name": "TM隐藏力量",
+    "name": "招式学习器：觉醒力量",
     "shortDesc": "向兼容的宝可梦传授隐藏力量。"
   },
   "tm-high-horsepower": {
-    "name": "TM大马力",
+    "name": "招式学习器：十万马力",
     "shortDesc": "向兼容的宝可梦传授高马力。"
   },
   "tm-hurricane": {
-    "name": "TM飓风",
+    "name": "招式学习器：暴风",
     "shortDesc": "向兼容的宝可梦教授飓风。"
   },
   "tm-hydro-cannon": {
-    "name": "TM 水炮",
+    "name": "招式学习器：加农水炮",
     "shortDesc": "向兼容的宝可梦教授水力炮。"
   },
   "tm-hydro-pump": {
-    "name": "TM 液压泵",
+    "name": "招式学习器：水炮",
     "shortDesc": "向兼容的宝可梦教授水泵。"
   },
   "tm-hyper-beam": {
-    "name": "TM 超级光束",
+    "name": "招式学习器：破坏光线",
     "shortDesc": "向兼容的宝可梦教授超级光束。"
   },
   "tm-hyper-voice": {
-    "name": "TM 超级语音",
+    "name": "招式学习器：巨声",
     "shortDesc": "向兼容的宝可梦教授超级语音。"
   },
   "tm-ice-beam": {
-    "name": "TM冰光束",
+    "name": "招式学习器：冰冻光束",
     "shortDesc": "向兼容的宝可梦教授冰束。"
   },
   "tm-ice-fang": {
-    "name": "TM冰牙",
+    "name": "招式学习器：冰冻牙",
     "shortDesc": "向兼容的宝可梦传授冰牙。"
   },
   "tm-ice-punch": {
-    "name": "TM冰拳",
+    "name": "招式学习器：冰冻拳",
     "shortDesc": "向兼容的宝可梦教授冰拳。"
   },
   "tm-ice-spinner": {
-    "name": "TM 冰旋转器",
+    "name": "招式学习器：冰旋",
     "shortDesc": "向兼容的宝可梦教授冰旋。"
   },
   "tm-icicle-spear": {
-    "name": "TM冰柱矛",
+    "name": "招式学习器：冰锥",
     "shortDesc": "向兼容的宝可梦教授冰柱矛。"
   },
   "tm-icy-wind": {
-    "name": "TM冰风",
+    "name": "招式学习器：冰冻之风",
     "shortDesc": "向兼容的宝可梦传授冰冷之风。"
   },
   "tm-imprison": {
-    "name": "TM 监禁",
+    "name": "招式学习器：封印",
     "shortDesc": "向兼容的宝可梦教授监禁。"
   },
   "tm-infestation": {
-    "name": "TM 感染",
+    "name": "招式学习器：死缠烂打",
     "shortDesc": "向兼容的宝可梦教授感染。"
   },
   "tm-iron-defense": {
-    "name": "TM钢铁防御",
+    "name": "招式学习器：铁壁",
     "shortDesc": "向兼容的宝可梦教授钢铁防御。"
   },
   "tm-iron-head": {
-    "name": "TM铁头",
+    "name": "招式学习器：铁头",
     "shortDesc": "教铁头兼容的宝可梦。"
   },
   "tm-iron-tail": {
-    "name": "TM铁尾",
+    "name": "招式学习器：铁尾",
     "shortDesc": "向兼容的宝可梦教授铁尾。"
   },
   "tm-knock-off": {
-    "name": "TM 淘汰",
+    "name": "招式学习器：拍落",
     "shortDesc": "教兼容的宝可梦击倒。"
   },
   "tm-lash-out": {
-    "name": "TM猛烈抨击",
+    "name": "招式学习器：泄愤",
     "shortDesc": "向兼容的宝可梦教授猛击。"
   },
   "tm-leaf-blade": {
-    "name": "TM 叶片",
+    "name": "招式学习器：叶刃",
     "shortDesc": "向兼容的宝可梦教授叶刃。"
   },
   "tm-leaf-storm": {
-    "name": "TM树叶风暴",
+    "name": "招式学习器：飞叶风暴",
     "shortDesc": "向兼容的宝可梦教授叶风暴。"
   },
   "tm-leech-life": {
-    "name": "TM水蛭生命",
+    "name": "招式学习器：吸血",
     "shortDesc": "向兼容的宝可梦教授水蛭生命。"
   },
   "tm-light-screen": {
-    "name": "TM光幕",
+    "name": "招式学习器：光墙",
     "shortDesc": "向兼容的宝可梦教授光幕。"
   },
   "tm-liquidation": {
-    "name": "TM 清算",
+    "name": "招式学习器：水流裂破",
     "shortDesc": "向兼容的宝可梦教授清算。"
   },
   "tm-low-kick": {
-    "name": "TM低踢",
+    "name": "招式学习器：踢倒",
     "shortDesc": "向兼容的宝可梦教授低踢。"
   },
   "tm-low-sweep": {
-    "name": "TM 低扫频",
+    "name": "招式学习器：下盘踢",
     "shortDesc": "向兼容的宝可梦教授低扫。"
   },
   "tm-lunge": {
-    "name": "TM 弓步",
+    "name": "招式学习器：猛扑",
     "shortDesc": "向兼容的宝可梦传授冲刺。"
   },
   "tm-magic-room": {
-    "name": "TM魔法室",
+    "name": "招式学习器：魔法空间",
     "shortDesc": "向兼容的宝可梦教授魔法室。"
   },
   "tm-magical-leaf": {
-    "name": "TM魔法叶",
+    "name": "招式学习器：魔法叶",
     "shortDesc": "向兼容的宝可梦传授魔法叶。"
   },
   "tm-mega-kick": {
-    "name": "TM 超级踢",
+    "name": "招式学习器：百万吨重踢",
     "shortDesc": "向兼容的宝可梦教授超级踢。"
   },
   "tm-mega-punch": {
-    "name": "TM巨拳",
+    "name": "招式学习器：百万吨重拳",
     "shortDesc": "向兼容的宝可梦教授超级拳击。"
   },
   "tm-megahorn": {
-    "name": "TM 巨角",
+    "name": "招式学习器：超级角击",
     "shortDesc": "将巨角教给兼容的宝可梦。"
   },
   "tm-metal-claw": {
-    "name": "TM金属爪",
+    "name": "招式学习器：金属爪",
     "shortDesc": "向兼容的宝可梦教授金属爪。"
   },
   "tm-metal-sound": {
-    "name": "TM金属声音",
+    "name": "招式学习器：金属音",
     "shortDesc": "向兼容的宝可梦教授金属声音。"
   },
   "tm-meteor-beam": {
-    "name": "TM流星光束",
+    "name": "招式学习器：流星光束",
     "shortDesc": "向兼容的宝可梦教授流星光束。"
   },
   "tm-metronome": {
-    "name": "TM 节拍器",
+    "name": "招式学习器：挥指",
     "shortDesc": "向兼容的宝可梦教授节拍器。"
   },
   "tm-misty-explosion": {
-    "name": "TM迷雾爆炸",
+    "name": "招式学习器：薄雾炸裂",
     "shortDesc": "向兼容的宝可梦教授迷雾爆炸。"
   },
   "tm-misty-terrain": {
-    "name": "TM 迷雾地形",
+    "name": "招式学习器：薄雾场地",
     "shortDesc": "向兼容的宝可梦教授迷雾地形。"
   },
   "tm-mud-shot": {
-    "name": "TM泥弹",
+    "name": "招式学习器：泥巴射击",
     "shortDesc": "向兼容的宝可梦教授泥浆射击。"
   },
   "tm-mud-slap": {
-    "name": "TM 拍泥",
+    "name": "招式学习器：掷泥",
     "shortDesc": "向兼容的宝可梦教授拍泥击。"
   },
   "tm-muddy-water": {
-    "name": "TM浑水",
+    "name": "招式学习器：浊流",
     "shortDesc": "将泥水教给兼容的宝可梦。"
   },
   "tm-mystical-fire": {
-    "name": "TM玄火",
+    "name": "招式学习器：魔法火焰",
     "shortDesc": "向兼容的宝可梦传授神秘之火。"
   },
   "tm-nasty-plot": {
-    "name": "TM恶心的阴谋",
+    "name": "招式学习器：诡计",
     "shortDesc": "向兼容的宝可梦传授邪恶阴谋。"
   },
   "tm-nature-power": {
-    "name": "TM 自然力量",
+    "name": "招式学习器：自然之力",
     "shortDesc": "向兼容的宝可梦传授自然力量。"
   },
   "tm-night-shade": {
-    "name": "TM 夜色",
+    "name": "招式学习器：黑夜魔影",
     "shortDesc": "向兼容的宝可梦教授夜色。"
   },
   "tm-outrage": {
-    "name": "TM愤怒",
+    "name": "招式学习器：逆鳞",
     "shortDesc": "向兼容的宝可梦传授愤怒。"
   },
   "tm-overheat": {
-    "name": "TM 过热",
+    "name": "招式学习器：过热",
     "shortDesc": "向兼容的宝可梦教授过热。"
   },
   "tm-pain-split": {
-    "name": "TM痛苦分裂",
+    "name": "招式学习器：分担痛楚",
     "shortDesc": "向兼容的宝可梦教授痛苦分裂。"
   },
   "tm-pay-day": {
-    "name": "TM发薪日",
+    "name": "招式学习器：聚宝功",
     "shortDesc": "向兼容的宝可梦教授发薪日。"
   },
   "tm-payback": {
-    "name": "TM回报",
+    "name": "招式学习器：以牙还牙",
     "shortDesc": "向兼容的宝可梦教授回报。"
   },
   "tm-petal-blizzard": {
-    "name": "TM花瓣暴雪",
+    "name": "招式学习器：落英缤纷",
     "shortDesc": "向兼容的宝可梦教授花瓣暴风雪。"
   },
   "tm-phantom-force": {
-    "name": "TM 幻影之力",
+    "name": "招式学习器：潜灵奇袭",
     "shortDesc": "向兼容的宝可梦传授幻影之力。"
   },
   "tm-pin-missile": {
-    "name": "TM 销导弹",
+    "name": "招式学习器：飞弹针",
     "shortDesc": "向兼容的宝可梦教授别针导弹。"
   },
   "tm-play-rough": {
-    "name": "TM粗暴",
+    "name": "招式学习器：嬉闹",
     "shortDesc": "教兼容的宝可梦玩粗暴游戏。"
   },
   "tm-poison-jab": {
-    "name": "TM毒刺",
+    "name": "招式学习器：毒击",
     "shortDesc": "向兼容的宝可梦教授毒刺。"
   },
   "tm-poison-tail": {
-    "name": "TM毒尾",
+    "name": "招式学习器：毒尾",
     "shortDesc": "向兼容的宝可梦教授毒尾。"
   },
   "tm-pollen-puff": {
-    "name": "TM花粉扑",
+    "name": "招式学习器：花粉团",
     "shortDesc": "向兼容的宝可梦教授花粉泡。"
   },
   "tm-poltergeist": {
-    "name": "TM 恶作剧鬼",
+    "name": "招式学习器：灵骚",
     "shortDesc": "向兼容的宝可梦传授恶作剧之魂。"
   },
   "tm-pounce": {
-    "name": "TM猛扑",
+    "name": "招式学习器：虫扑",
     "shortDesc": "教兼容的宝可梦猛扑。"
   },
   "tm-power-gem": {
-    "name": "TM能量宝石",
+    "name": "招式学习器：力量宝石",
     "shortDesc": "向兼容的宝可梦传授力量宝石。"
   },
   "tm-power-swap": {
-    "name": "TM 电源交换",
+    "name": "招式学习器：力量互换",
     "shortDesc": "教导兼容的宝可梦进行能量交换。"
   },
   "tm-power-whip": {
-    "name": "TM 动力鞭",
+    "name": "招式学习器：强力鞭打",
     "shortDesc": "向兼容的宝可梦教授动力鞭。"
   },
   "tm-protect": {
-    "name": "TM 保护",
+    "name": "招式学习器：守住",
     "shortDesc": "教授兼容的宝可梦的保护。"
   },
   "tm-psybeam": {
-    "name": "TM Psybeam",
+    "name": "招式学习器：幻象光线",
     "shortDesc": "向兼容的宝可梦教授 Psybeam。"
   },
   "tm-psych-up": {
-    "name": "TM 心灵觉醒",
+    "name": "招式学习器：自我暗示",
     "shortDesc": "向兼容的宝可梦教授 Psych Up。"
   },
   "tm-psychic": {
-    "name": "TM 通灵",
+    "name": "招式学习器：精神强念",
     "shortDesc": "向兼容的宝可梦传授通灵能力。"
   },
   "tm-psychic-fangs": {
-    "name": "TM 心灵獠牙",
+    "name": "招式学习器：精神之牙",
     "shortDesc": "向兼容的宝可梦教授心灵尖牙。"
   },
   "tm-psychic-noise": {
-    "name": "TM心灵噪音",
+    "name": "招式学习器：精神噪音",
     "shortDesc": "向兼容的宝可梦传授心灵噪音。"
   },
   "tm-psychic-terrain": {
-    "name": "TM 心灵地形",
+    "name": "招式学习器：精神场地",
     "shortDesc": "向兼容的宝可梦教授心灵地形。"
   },
   "tm-psycho-cut": {
-    "name": "TM 心理剪辑",
+    "name": "招式学习器：精神利刃",
     "shortDesc": "向兼容的宝可梦传授心理剪辑。"
   },
   "tm-psyshock": {
-    "name": "TM 精神冲击",
+    "name": "招式学习器：精神冲击",
     "shortDesc": "向兼容的宝可梦教授 Psyshock。"
   },
   "tm-quash": {
-    "name": "TM 库什",
+    "name": "招式学习器：延后",
     "shortDesc": "向兼容的宝可梦教授奎什。"
   },
   "tm-rain-dance": {
-    "name": "TM雨舞",
+    "name": "招式学习器：求雨",
     "shortDesc": "向兼容的宝可梦教授雨舞。"
   },
   "tm-razor-shell": {
-    "name": "TM 剃须刀外壳",
+    "name": "招式学习器：贝壳刃",
     "shortDesc": "向兼容的宝可梦教授 Razor Shell。"
   },
   "tm-reflect": {
-    "name": "TM 反射",
+    "name": "招式学习器：反射壁",
     "shortDesc": "教导兼容的宝可梦反射。"
   },
   "tm-rest": {
-    "name": "TM休息",
+    "name": "招式学习器：睡觉",
     "shortDesc": "向兼容的宝可梦教授休息。"
   },
   "tm-retaliate": {
-    "name": "TM报复",
+    "name": "招式学习器：报仇",
     "shortDesc": "教导对兼容的宝可梦进行报复。"
   },
   "tm-return": {
-    "name": "TM返回",
+    "name": "招式学习器：报恩",
     "shortDesc": "教导返回兼容的宝可梦。"
   },
   "tm-revenge": {
-    "name": "TM复仇",
+    "name": "招式学习器：报复",
     "shortDesc": "向兼容的宝可梦教授复仇。"
   },
   "tm-reversal": {
-    "name": "TM 逆转",
+    "name": "招式学习器：起死回生",
     "shortDesc": "向兼容的宝可梦教授逆转。"
   },
   "tm-roar": {
-    "name": "TM咆哮",
+    "name": "招式学习器：吼叫",
     "shortDesc": "向兼容的宝可梦教授咆哮。"
   },
   "tm-rock-blast": {
-    "name": "TM 摇滚爆炸",
+    "name": "招式学习器：岩石爆击",
     "shortDesc": "向兼容的宝可梦教授岩石爆炸。"
   },
   "tm-rock-slide": {
-    "name": "TM 岩石滑梯",
+    "name": "招式学习器：岩崩",
     "shortDesc": "向兼容的宝可梦教授岩石滑动。"
   },
   "tm-rock-tomb": {
-    "name": "TM 岩石坟墓",
+    "name": "招式学习器：岩石封锁",
     "shortDesc": "向兼容的宝可梦教授岩石坟墓。"
   },
   "tm-roost": {
-    "name": "TM 栖息地",
+    "name": "招式学习器：羽栖",
     "shortDesc": "教兼容的宝可梦栖息。"
   },
   "tm-round": {
-    "name": "TM回合",
+    "name": "招式学习器：轮唱",
     "shortDesc": "向兼容的宝可梦教授回合。"
   },
   "tm-safeguard": {
-    "name": "TM 保障",
+    "name": "招式学习器：神秘守护",
     "shortDesc": "向兼容的宝可梦教授防护。"
   },
   "tm-sand-tomb": {
-    "name": "TM沙墓",
+    "name": "招式学习器：流沙地狱",
     "shortDesc": "向兼容的宝可梦教授沙墓。"
   },
   "tm-sandstorm": {
-    "name": "TM沙尘暴",
+    "name": "招式学习器：沙暴",
     "shortDesc": "向兼容的宝可梦教授沙暴。"
   },
   "tm-scald": {
-    "name": "TM烫伤",
+    "name": "招式学习器：热水",
     "shortDesc": "向兼容的宝可梦教授烫伤。"
   },
   "tm-scale-shot": {
-    "name": "TM 比例射击",
+    "name": "招式学习器：鳞射",
     "shortDesc": "向兼容的宝可梦教授缩放射击。"
   },
   "tm-scary-face": {
-    "name": "TM恐怖脸",
+    "name": "招式学习器：鬼面",
     "shortDesc": "向兼容的宝可梦教授恐怖面孔。"
   },
   "tm-scorching-sands": {
-    "name": "TM灼热沙",
+    "name": "招式学习器：热沙大地",
     "shortDesc": "向兼容的宝可梦教授灼热沙。"
   },
   "tm-screech": {
-    "name": "TM尖叫",
+    "name": "招式学习器：刺耳声",
     "shortDesc": "向兼容的宝可梦传授尖叫声。"
   },
   "tm-seed-bomb": {
-    "name": "TM种子炸弹",
+    "name": "招式学习器：种子炸弹",
     "shortDesc": "向兼容的宝可梦教授种子炸弹。"
   },
   "tm-self-destruct": {
-    "name": "TM自毁",
+    "name": "招式学习器：自爆",
     "shortDesc": "向兼容的宝可梦教授自毁能力。"
   },
   "tm-shadow-ball": {
-    "name": "TM影子球",
+    "name": "招式学习器：暗影球",
     "shortDesc": "向兼容的宝可梦传授暗影球。"
   },
   "tm-shadow-claw": {
-    "name": "TM暗影爪",
+    "name": "招式学习器：暗影爪",
     "shortDesc": "向兼容的宝可梦教授暗影爪。"
   },
   "tm-skill-swap": {
-    "name": "TM技能互换",
+    "name": "招式学习器：特性互换",
     "shortDesc": "教授兼容的宝可梦的技能交换。"
   },
   "tm-skitter-smack": {
-    "name": "TM 飞掠者 Smack",
+    "name": "招式学习器：爬击",
     "shortDesc": "向兼容的宝可梦教授飞掠拍击。"
   },
   "tm-sleep-talk": {
-    "name": "TM梦话",
+    "name": "招式学习器：梦话",
     "shortDesc": "教兼容的宝可梦说梦话。"
   },
   "tm-sludge-bomb": {
-    "name": "TM污泥炸弹",
+    "name": "招式学习器：污泥炸弹",
     "shortDesc": "向兼容的宝可梦教授污泥炸弹。"
   },
   "tm-sludge-wave": {
-    "name": "TM污泥波",
+    "name": "招式学习器：污泥波",
     "shortDesc": "向兼容的宝可梦教授污泥波。"
   },
   "tm-smack-down": {
-    "name": "TM 击倒",
+    "name": "招式学习器：击落",
     "shortDesc": "教导兼容的宝可梦 Smack Down。"
   },
   "tm-smart-strike": {
-    "name": "TM 智能打击",
+    "name": "招式学习器：修长之角",
     "shortDesc": "向兼容的宝可梦教授智能攻击。"
   },
   "tm-snarl": {
-    "name": "TM咆哮",
+    "name": "招式学习器：大声咆哮",
     "shortDesc": "向兼容的宝可梦教授咆哮。"
   },
   "tm-snore": {
-    "name": "TM 打鼾",
+    "name": "招式学习器：打鼾",
     "shortDesc": "教兼容的宝可梦打鼾​​。"
   },
   "tm-snowscape": {
-    "name": "TM雪景",
+    "name": "招式学习器：雪景",
     "shortDesc": "向兼容的宝可梦教授雪景。"
   },
   "tm-solar-beam": {
-    "name": "TM 太阳光束",
+    "name": "招式学习器：日光束",
     "shortDesc": "向兼容的宝可梦教授太阳光束。"
   },
   "tm-solar-blade": {
-    "name": "TM 太阳能叶片",
+    "name": "招式学习器：日光刃",
     "shortDesc": "向兼容的宝可梦教授太阳之刃。"
   },
   "tm-speed-swap": {
-    "name": "TM 速度交换",
+    "name": "招式学习器：速度互换",
     "shortDesc": "教兼容的宝可梦进行速度切换。"
   },
   "tm-spikes": {
-    "name": "TM 尖刺",
+    "name": "招式学习器：撒菱",
     "shortDesc": "向兼容的宝可梦教授尖刺。"
   },
   "tm-spite": {
-    "name": "TM尽管",
+    "name": "招式学习器：怨恨",
     "shortDesc": "向兼容的宝可梦传授怨恨。"
   },
   "tm-stealth-rock": {
-    "name": "TM隐形岩石",
+    "name": "招式学习器：隐形岩",
     "shortDesc": "向兼容的宝可梦教授隐形岩石。"
   },
   "tm-steel-beam": {
-    "name": "TM 钢梁",
+    "name": "招式学习器：铁蹄光线",
     "shortDesc": "向兼容的宝可梦教授钢束。"
   },
   "tm-steel-wing": {
-    "name": "TM钢翼",
+    "name": "招式学习器：钢翼",
     "shortDesc": "向兼容的宝可梦教授钢翼。"
   },
   "tm-stomping-tantrum": {
-    "name": "TM跺脚发脾气",
+    "name": "招式学习器：跺脚",
     "shortDesc": "向兼容的宝可梦教授跺脚发脾气。"
   },
   "tm-stone-edge": {
-    "name": "TM石刃",
+    "name": "招式学习器：尖石攻击",
     "shortDesc": "向兼容的宝可梦教授石刃。"
   },
   "tm-stored-power": {
-    "name": "TM 储存电量",
+    "name": "招式学习器：辅助力量",
     "shortDesc": "向兼容的宝可梦传授储存能量。"
   },
   "tm-struggle-bug": {
-    "name": "TM奋斗bug",
+    "name": "招式学习器：虫之抵抗",
     "shortDesc": "向兼容的宝可梦教授斗争虫。"
   },
   "tm-substitute": {
-    "name": "TM 替补",
+    "name": "招式学习器：替身",
     "shortDesc": "教授兼容的宝可梦的替代品。"
   },
   "tm-sunny-day": {
-    "name": "TM阳光灿烂的日子",
+    "name": "招式学习器：大晴天",
     "shortDesc": "向兼容的宝可梦教授晴天。"
   },
   "tm-super-fang": {
-    "name": "TM超级牙",
+    "name": "招式学习器：愤怒门牙",
     "shortDesc": "向兼容的宝可梦教授超级牙。"
   },
   "tm-supercell-slam": {
-    "name": "TM Supercell大满贯",
+    "name": "招式学习器：闪电强袭",
     "shortDesc": "向兼容的宝可梦教授 Supercell Slam。"
   },
   "tm-superpower": {
-    "name": "TM超能力",
+    "name": "招式学习器：蛮力",
     "shortDesc": "向兼容的宝可梦传授超能力。"
   },
   "tm-swagger": {
-    "name": "TM 招摇",
+    "name": "招式学习器：虚张声势",
     "shortDesc": "教兼容的宝可梦大摇大摆。"
   },
   "tm-swift": {
-    "name": "TM 斯威夫特",
+    "name": "招式学习器：高速星星",
     "shortDesc": "教 Swift 学习兼容的宝可梦。"
   },
   "tm-swords-dance": {
-    "name": "TM剑舞",
+    "name": "招式学习器：剑舞",
     "shortDesc": "向兼容的宝可梦教授剑舞。"
   },
   "tm-tail-slap": {
-    "name": "TM拍尾巴",
+    "name": "招式学习器：扫尾拍打",
     "shortDesc": "教兼容的宝可梦拍尾。"
   },
   "tm-tailwind": {
-    "name": "TM 顺风",
+    "name": "招式学习器：顺风",
     "shortDesc": "向兼容的宝可梦教授顺风。"
   },
   "tm-take-down": {
-    "name": "TM 拿下",
+    "name": "招式学习器：猛撞",
     "shortDesc": "教导兼容的宝可梦的击倒。"
   },
   "tm-taunt": {
-    "name": "TM嘲讽",
+    "name": "招式学习器：挑衅",
     "shortDesc": "向兼容的宝可梦教授嘲讽。"
   },
   "tm-temper-flare": {
-    "name": "TM 脾气耀斑",
+    "name": "招式学习器：豁出去",
     "shortDesc": "向兼容的宝可梦教授脾气耀斑。"
   },
   "tm-tera-blast": {
-    "name": "TM 万亿爆炸",
+    "name": "招式学习器：太晶爆发",
     "shortDesc": "向兼容的宝可梦教授太拉爆炸。"
   },
   "tm-thief": {
-    "name": "TM小偷",
+    "name": "招式学习器：小偷",
     "shortDesc": "教小偷学会兼容的宝可梦。"
   },
   "tm-throat-chop": {
-    "name": "TM 斩喉",
+    "name": "招式学习器：地狱突刺",
     "shortDesc": "向兼容的宝可梦教授斩喉术。"
   },
   "tm-thunder": {
-    "name": "TM雷霆",
+    "name": "招式学习器：打雷",
     "shortDesc": "向兼容的宝可梦传授雷霆。"
   },
   "tm-thunder-fang": {
-    "name": "TM雷牙",
+    "name": "招式学习器：雷电牙",
     "shortDesc": "将雷牙教给兼容的宝可梦。"
   },
   "tm-thunder-punch": {
-    "name": "TM雷霆拳",
+    "name": "招式学习器：雷电拳",
     "shortDesc": "向兼容的宝可梦教授雷霆拳。"
   },
   "tm-thunder-wave": {
-    "name": "TM雷波",
+    "name": "招式学习器：电磁波",
     "shortDesc": "向兼容的宝可梦传授雷波。"
   },
   "tm-thunderbolt": {
-    "name": "TM迅雷",
+    "name": "招式学习器：十万伏特",
     "shortDesc": "向兼容的宝可梦教授雷电。"
   },
   "tm-torment": {
-    "name": "TM折磨",
+    "name": "招式学习器：无理取闹",
     "shortDesc": "向兼容的宝可梦教授折磨。"
   },
   "tm-toxic": {
-    "name": "TM有毒",
+    "name": "招式学习器：剧毒",
     "shortDesc": "向兼容的宝可梦教授有毒。"
   },
   "tm-toxic-spikes": {
-    "name": "TM有毒尖刺",
+    "name": "招式学习器：毒菱",
     "shortDesc": "向兼容的宝可梦教授有毒尖刺。"
   },
   "tm-trailblaze": {
-    "name": "TM 开拓者",
+    "name": "招式学习器：起草",
     "shortDesc": "向兼容的宝可梦教授开拓者。"
   },
   "tm-tri-attack": {
-    "name": "TM 三重攻击",
+    "name": "招式学习器：三重攻击",
     "shortDesc": "向兼容的宝可梦教授三重攻击。"
   },
   "tm-trick": {
-    "name": "TM戏法",
+    "name": "招式学习器：戏法",
     "shortDesc": "向兼容的宝可梦教授技巧。"
   },
   "tm-trick-room": {
-    "name": "TM恶作剧室",
+    "name": "招式学习器：戏法空间",
     "shortDesc": "向兼容的宝可梦教授 Trick Room。"
   },
   "tm-triple-axel": {
-    "name": "TM 三轴",
+    "name": "招式学习器：三旋击",
     "shortDesc": "向兼容的宝可梦教授三轴。"
   },
   "tm-u-turn": {
-    "name": "TM掉头",
+    "name": "招式学习器：急速折返",
     "shortDesc": "教兼容的宝可梦掉头。"
   },
   "tm-upper-hand": {
-    "name": "TM 上风",
+    "name": "招式学习器：快手还击",
     "shortDesc": "向兼容的宝可梦教授优势。"
   },
   "tm-uproar": {
-    "name": "TM吵闹",
+    "name": "招式学习器：吵闹",
     "shortDesc": "向兼容的宝可梦教授喧闹。"
   },
   "tm-vacuum-wave": {
-    "name": "TM真空波",
+    "name": "招式学习器：真空波",
     "shortDesc": "向兼容的宝可梦教授真空波。"
   },
   "tm-venom-drench": {
-    "name": "TM毒液浸泡",
+    "name": "招式学习器：毒液陷阱",
     "shortDesc": "向兼容的宝可梦教授毒液浸泡。"
   },
   "tm-venoshock": {
-    "name": "TM 静脉休克",
+    "name": "招式学习器：毒液冲击",
     "shortDesc": "向兼容的宝可梦教授毒液震击。"
   },
   "tm-volt-switch": {
-    "name": "TM 电压开关",
+    "name": "招式学习器：伏特替换",
     "shortDesc": "教导兼容的宝可梦使用伏特开关。"
   },
   "tm-water-pledge": {
-    "name": "TM 水承诺",
+    "name": "招式学习器：水之誓约",
     "shortDesc": "向兼容的宝可梦教授水之誓言。"
   },
   "tm-water-pulse": {
-    "name": "TM水脉冲",
+    "name": "招式学习器：水之波动",
     "shortDesc": "向兼容的宝可梦教授水脉冲。"
   },
   "tm-weather-ball": {
-    "name": "TM 天气球",
+    "name": "招式学习器：气象球",
     "shortDesc": "向兼容的宝可梦教授天气球。"
   },
   "tm-wild-charge": {
-    "name": "TM狂野冲锋",
+    "name": "招式学习器：疯狂伏特",
     "shortDesc": "向兼容的宝可梦传授狂野冲锋。"
   },
   "tm-will-o-wisp": {
-    "name": "TM 鬼火",
+    "name": "招式学习器：鬼火",
     "shortDesc": "向兼容的宝可梦传授 Will-O-Wisp。"
   },
   "tm-wonder-room": {
-    "name": "TM奇迹室",
+    "name": "招式学习器：奇妙空间",
     "shortDesc": "向兼容的宝可梦教授神奇房间。"
   },
   "tm-work-up": {
-    "name": "TM 工作",
+    "name": "招式学习器：自我激励",
     "shortDesc": "向兼容的宝可梦教授“Work Up”。"
   },
   "tm-x-scissor": {
-    "name": "TM X-剪刀",
+    "name": "招式学习器：十字剪",
     "shortDesc": "向兼容的宝可梦教授 X 剪刀。"
   },
   "tm-zen-headbutt": {
-    "name": "TM禅头撞",
+    "name": "招式学习器：意念头锤",
     "shortDesc": "向兼容的宝可梦教授禅宗头撞。"
   },
   "tmv-pass": {
-    "name": "TMV 通行证",
+    "name": "ＴＭＶ自由票",
     "shortDesc": "允许进入基卢德市。"
   },
   "tough-candy": {
-    "name": "坚韧的糖果",
+    "name": "守护糖果",
     "shortDesc": "一种充满能量的糖果。当给予宝可梦时，它会增加宝可梦的防御统计数据。"
   },
   "tough-candy-l": {
-    "name": "坚强的糖果 L",
+    "name": "守护糖果Ｌ",
     "shortDesc": "充满能量的大糖果。当给予 Lv.1 的宝可梦时30或更高，它会增加宝可梦的防御统计。"
   },
   "tough-candy-xl": {
-    "name": "坚韧糖果 XL",
+    "name": "守护糖果ＸＬ",
     "shortDesc": "充满能量的巨大糖果。当给予 Lv.1 的宝可梦时60或更高，它会增加宝可梦的防御统计。"
   },
   "town-map": {
@@ -5112,571 +5112,571 @@
     "shortDesc": "持有者：回合结束时对持有者造成毒性。发生中毒伤害后激活。"
   },
   "toxic-plate": {
-    "name": "剧毒板",
+    "name": "剧毒石板",
     "shortDesc": "持有：持有者的毒类招式造成的伤害提高 20%。将阿尔宙斯和审判类型更改为毒药。"
   },
   "tr00": {
-    "name": "TR00",
+    "name": "招式记录００",
     "shortDesc": "振奋斗志的狂热舞蹈。这急剧提高了用户的攻击统计数据。"
   },
   "tr01": {
-    "name": "TR01",
+    "name": "招式记录０１",
     "shortDesc": "用户以其全身重量掉落到目标上。这也可能使目标陷入瘫痪。"
   },
   "tr02": {
-    "name": "TR02",
+    "name": "招式记录０２",
     "shortDesc": "目标被强烈的火焰烧焦。这也可能使目标被烧伤。"
   },
   "tr03": {
-    "name": "TR03",
+    "name": "招式记录０３",
     "shortDesc": "目标被巨大压力下喷出的大量水轰击。"
   },
   "tr04": {
-    "name": "TR04",
+    "name": "招式记录０４",
     "shortDesc": "使用者用巨浪淹没周围环境来攻击周围的一切。"
   },
   "tr05": {
-    "name": "TR05",
+    "name": "招式记录０５",
     "shortDesc": "目标被冰冷的能量束击中。这也可能使目标冻结。"
   },
   "tr06": {
-    "name": "TR06",
+    "name": "招式记录０６",
     "shortDesc": "呼啸的暴风雪被召唤来攻击对方的宝可梦。这也可能会让对方的宝可梦被冻结。"
   },
   "tr07": {
-    "name": "TR07",
+    "name": "招式记录０７",
     "shortDesc": "强力的低踢，使目标摔倒。目标越重，移动威力越大。"
   },
   "tr08": {
-    "name": "TR08",
+    "name": "招式记录０８",
     "shortDesc": "强烈的电击冲击目标。这也可能使目标陷入瘫痪。"
   },
   "tr09": {
-    "name": "TR09",
+    "name": "招式记录０９",
     "shortDesc": "邪恶的雷电落在目标上以造成伤害。这也可能使目标陷入瘫痪。"
   },
   "tr10": {
-    "name": "TR10",
+    "name": "招式记录１０",
     "shortDesc": "用户引发地震，袭击周围的所有宝可梦。"
   },
   "tr11": {
-    "name": "TR11",
+    "name": "招式记录１１",
     "shortDesc": "目标被强大的心灵动力击中。这也可能会降低目标 Sp。默认统计数据。"
   },
   "tr12": {
-    "name": "TR12",
+    "name": "招式记录１２",
     "shortDesc": "用户放松并减轻身体的重量以加快移动速度。这急剧提高了速度统计数据。"
   },
   "tr13": {
-    "name": "TR13",
+    "name": "招式记录１３",
     "shortDesc": "用户深吸一口气并集中注意力，以便暴击更容易落地。"
   },
   "tr14": {
-    "name": "TR14",
+    "name": "招式记录１４",
     "shortDesc": "用户摆动手指并刺激大脑随机使用几乎任何动作。"
   },
   "tr15": {
-    "name": "TR15",
+    "name": "招式记录１５",
     "shortDesc": "目标受到强烈的吞噬一切的火焰攻击。这也可能使目标被烧伤。"
   },
   "tr16": {
-    "name": "TR16",
+    "name": "招式记录１６",
     "shortDesc": "用户冲向目标并可能使其退缩。"
   },
   "tr17": {
-    "name": "TR17",
+    "name": "招式记录１７",
     "shortDesc": "用户暂时清空自己的头脑，忘记自己的担忧。这大大提高了用户 Sp。默认统计数据。"
   },
   "tr18": {
-    "name": "TR18",
+    "name": "招式记录１８",
     "shortDesc": "使用者吸干目标的血液。使用者的生命值恢复为目标所受伤害的一半。"
   },
   "tr19": {
-    "name": "TR19",
+    "name": "招式记录１９",
     "shortDesc": "使用者同时进行三束攻击。这也可能会烧伤、冻结或麻痹目标。"
   },
   "tr20": {
-    "name": "TR20",
+    "name": "招式记录２０",
     "shortDesc": "用户使用自己的一些HP为自己创建一个替代品。替代品充当用户的诱饵。"
   },
   "tr21": {
-    "name": "TR21",
+    "name": "招式记录２１",
     "shortDesc": "全力攻击，HP越低，威力就越强。"
   },
   "tr22": {
-    "name": "TR22",
+    "name": "招式记录２２",
     "shortDesc": "不卫生的污泥被扔向目标。这也可能使目标中毒。"
   },
   "tr23": {
-    "name": "TR23",
+    "name": "招式记录２３",
     "shortDesc": "使用者在对方队伍的脚下放置了一个尖刺陷阱。该陷阱会伤害进入战斗的宝可梦。"
   },
   "tr24": {
-    "name": "TR24",
+    "name": "招式记录２４",
     "shortDesc": "使用者狂暴并攻击两到三回合。然后用户会变得困惑。"
   },
   "tr25": {
-    "name": "TR25",
+    "name": "招式记录２５",
     "shortDesc": "使用者实体化出奇怪的灵能波来攻击目标。这次攻击会造成物理伤害。"
   },
   "tr26": {
-    "name": "TR26",
+    "name": "招式记录２６",
     "shortDesc": "使用者以至少 1 HP 承受任何攻击。如果连续使用，失败的几率会增加。"
   },
   "tr27": {
-    "name": "TR27",
+    "name": "招式记录２７",
     "shortDesc": "当它睡着时，用户随机使用它知道的动作之一。"
   },
   "tr28": {
-    "name": "TR28",
+    "name": "招式记录２８",
     "shortDesc": "使用其坚韧而令人印象深刻的角，使用者毫不松懈地撞向目标。"
   },
   "tr29": {
-    "name": "TR29",
+    "name": "招式记录２９",
     "shortDesc": "用户与等待中的队伍宝可梦交换位置并传递任何统计数据更改。"
   },
   "tr30": {
-    "name": "TR30",
+    "name": "招式记录３０",
     "shortDesc": "用户强迫目标继续使用其所记录的动作三回合。"
   },
   "tr31": {
-    "name": "TR31",
+    "name": "招式记录３１",
     "shortDesc": "目标被钢铁般坚硬的尾巴猛击。这也可能会降低目标的防御统计数据。"
   },
   "tr32": {
-    "name": "TR32",
+    "name": "招式记录３２",
     "shortDesc": "使用者用锋利的尖牙咬碎目标。这也可能会降低目标的防御统计数据。"
   },
   "tr33": {
-    "name": "TR33",
+    "name": "招式记录３３",
     "shortDesc": "用户向目标投掷一个阴影斑点。这也可能会降低目标 Sp。默认统计数据。"
   },
   "tr34": {
-    "name": "TR34",
+    "name": "招式记录３４",
     "shortDesc": "此招式使用后两回合，一大股精神力攻击目标。"
   },
   "tr35": {
-    "name": "TR35",
+    "name": "招式记录３５",
     "shortDesc": "使用者在喧嚣中攻击三回合。在此期间，任何宝可梦都无法入睡。"
   },
   "tr36": {
-    "name": "TR36",
+    "name": "招式记录３６",
     "shortDesc": "使用者通过向对方的宝可梦呼出热气进行攻击。这也可能会让那些宝可梦被烧伤。"
   },
   "tr37": {
-    "name": "TR37",
+    "name": "招式记录３７",
     "shortDesc": "目标被嘲讽为狂怒，使其在三回合内只能使用攻击动作。"
   },
   "tr38": {
-    "name": "TR38",
+    "name": "招式记录３８",
     "shortDesc": "用户在目标措手不及的情况下将其持有的物品与自己的物品交换。"
   },
   "tr39": {
-    "name": "TR39",
+    "name": "招式记录３９",
     "shortDesc": "使用者以强大的力量攻击目标。然而，这也会降低用户的攻击和防御统计数据。"
   },
   "tr40": {
-    "name": "TR40",
+    "name": "招式记录４０",
     "shortDesc": "使用者利用其灵能与目标交换能力。"
   },
   "tr41": {
-    "name": "TR41",
+    "name": "招式记录４１",
     "shortDesc": "用户发射踢腿，更容易造成致命一击。这也可能使目标被烧伤。"
   },
   "tr42": {
-    "name": "TR42",
+    "name": "招式记录４２",
     "shortDesc": "使用者发出可怕的回声喊叫，具有造成伤害的能力。"
   },
   "tr43": {
-    "name": "TR43",
+    "name": "招式记录４３",
     "shortDesc": "用户全力攻击目标。攻击后坐力会严重降低用户的 Sp。攻击力统计。"
   },
   "tr44": {
-    "name": "TR44",
+    "name": "招式记录４４",
     "shortDesc": "使用者从空间吸收神秘力量，提升防御力和SP。绝对统计数据。"
   },
   "tr45": {
-    "name": "TR45",
+    "name": "招式记录４５",
     "shortDesc": "使用者通过向对方的宝可梦射出泥水进行攻击。这也可能会降低他们的准确性。"
   },
   "tr46": {
-    "name": "TR46",
+    "name": "招式记录４６",
     "shortDesc": "使用者身体表面坚硬如铁，防御力大幅提升。"
   },
   "tr47": {
-    "name": "TR47",
+    "name": "招式记录４７",
     "shortDesc": "使用者用巨大锋利的爪子砍击目标。"
   },
   "tr48": {
-    "name": "TR48",
+    "name": "招式记录４８",
     "shortDesc": "使用者绷紧肌肉来增强身体，同时提高攻击力和防御力。"
   },
   "tr49": {
-    "name": "TR49",
+    "name": "招式记录４９",
     "shortDesc": "使用者静静地集中精神，平静精神，提升Sp。 Atk 和 Sp。绝对统计数据。"
   },
   "tr50": {
-    "name": "TR50",
+    "name": "招式记录５０",
     "shortDesc": "使用者像剑一样操纵锋利的叶子并通过切割目标进行攻击。暴击更容易发生。"
   },
   "tr51": {
-    "name": "TR51",
+    "name": "招式记录５１",
     "shortDesc": "使用者剧烈地表演一种神秘而有力的舞蹈，以提高其攻击和速度统计数据。"
   },
   "tr52": {
-    "name": "TR52",
+    "name": "招式记录５２",
     "shortDesc": "用户以高速旋转扑向目标。与目标相比，用户越慢，移动力量就越大。"
   },
   "tr53": {
-    "name": "TR53",
+    "name": "招式记录５３",
     "shortDesc": "使用者在没有保护自己的情况下与目标近距离战斗。这也会降低用户的防御和 Sp。绝对统计数据。"
   },
   "tr54": {
-    "name": "TR54",
+    "name": "招式记录５４",
     "shortDesc": "使用者在对方队伍的脚下放置了毒刺陷阱。尖刺会毒害进入战斗的敌方宝可梦。"
   },
   "tr55": {
-    "name": "TR55",
+    "name": "招式记录５５",
     "shortDesc": "使用者将自己隐藏在火焰中并向目标冲锋。这对用户也造成了很大的伤害。这种攻击可能会使目标被烧伤。"
   },
   "tr56": {
-    "name": "TR56",
+    "name": "招式记录５６",
     "shortDesc": "使用者从身体深处向目标释放出一股光环力量。这次攻击绝不会失手。"
   },
   "tr57": {
-    "name": "TR57",
+    "name": "招式记录５７",
     "shortDesc": "用浸有毒液的触手、手臂等刺伤目标。这也可能使目标中毒。"
   },
   "tr58": {
-    "name": "TR58",
+    "name": "招式记录５８",
     "shortDesc": "使用者释放出充满黑暗思想的可怕光环。这也可能会让目标退缩。"
   },
   "tr59": {
-    "name": "TR59",
+    "name": "招式记录５９",
     "shortDesc": "使用者从上方向目标猛击一连串硬壳种子。"
   },
   "tr60": {
-    "name": "TR60",
+    "name": "招式记录６０",
     "shortDesc": "使用者通过交叉其镰刀或爪子来砍击目标，就好像它们是一把剪刀一样。"
   },
   "tr61": {
-    "name": "TR61",
+    "name": "招式记录６１",
     "shortDesc": "用户通过振动产生破坏性声波。这也可能会降低目标 Sp。默认统计数据。"
   },
   "tr62": {
-    "name": "TR62",
+    "name": "招式记录６２",
     "shortDesc": "目标会受到使用者张开的嘴所产生的冲击波的攻击。"
   },
   "tr63": {
-    "name": "TR63",
+    "name": "招式记录６３",
     "shortDesc": "使用者用一束闪烁着宝石光芒的光芒进行攻击。"
   },
   "tr64": {
-    "name": "TR64",
+    "name": "招式记录６４",
     "shortDesc": "使用者提高精神集中度并释放其力量。这也可能会降低目标 Sp。默认统计数据。"
   },
   "tr65": {
-    "name": "TR65",
+    "name": "招式记录６５",
     "shortDesc": "使用者从自然中汲取力量并向目标发射。这也可能会降低目标 Sp。默认统计数据。"
   },
   "tr66": {
-    "name": "TR66",
+    "name": "招式记录６６",
     "shortDesc": "使用者收起翅膀并从低空冲锋。这对用户也造成了很大的伤害。"
   },
   "tr67": {
-    "name": "TR67",
+    "name": "招式记录６７",
     "shortDesc": "使用者使目标下方的地面爆发出力量。这也可能会降低目标 Sp。默认统计数据。"
   },
   "tr68": {
-    "name": "TR68",
+    "name": "招式记录６８",
     "shortDesc": "用户通过思考不好的想法来刺激大脑。这大大提高了用户 Sp。攻击力统计。"
   },
   "tr69": {
-    "name": "TR69",
+    "name": "招式记录６９",
     "shortDesc": "使用者将意志力集中到头部并攻击目标。这也可能会让目标退缩。"
   },
   "tr70": {
-    "name": "TR70",
+    "name": "招式记录７０",
     "shortDesc": "使用者聚集所有光能并一次性释放。这也可能会降低目标 Sp。默认统计数据。"
   },
   "tr71": {
-    "name": "TR71",
+    "name": "招式记录７１",
     "shortDesc": "使用者在目标周围掀起一阵树叶风暴。攻击后坐力会严重降低用户的 Sp。攻击力统计。"
   },
   "tr72": {
-    "name": "TR72",
+    "name": "招式记录７２",
     "shortDesc": "使用者猛烈地旋转藤蔓、触手等来猛烈地攻击目标。"
   },
   "tr73": {
-    "name": "TR73",
+    "name": "招式记录７３",
     "shortDesc": "用户向目标发射肮脏的垃圾进行攻击。这也可能使目标中毒。"
   },
   "tr74": {
-    "name": "TR74",
+    "name": "招式记录７４",
     "shortDesc": "使用者用其钢铁般坚硬的头部猛击目标。这也可能会让目标退缩。"
   },
   "tr75": {
-    "name": "TR75",
+    "name": "招式记录７５",
     "shortDesc": "使用者用锋利的石头从下方刺向目标。暴击更容易发生。"
   },
   "tr76": {
-    "name": "TR76",
+    "name": "招式记录７６",
     "shortDesc": "使用者在对方队伍周围放置了一个由悬浮石头组成的陷阱。该陷阱会伤害进入战斗的敌方宝可梦。"
   },
   "tr77": {
-    "name": "TR77",
+    "name": "招式记录７７",
     "shortDesc": "使用者用草诱住目标并将其绊倒。目标越重，移动威力越大。"
   },
   "tr78": {
-    "name": "TR78",
+    "name": "招式记录７８",
     "shortDesc": "使用者用巨大的污泥波淹没该区域来打击周围的一切。这也可能使被击中的人中毒。"
   },
   "tr79": {
-    "name": "TR79",
+    "name": "招式记录７９",
     "shortDesc": "使用者用沉重的身体猛击目标。用户超过目标的重量越多，移动的威力就越大。"
   },
   "tr80": {
-    "name": "TR80",
+    "name": "招式记录８０",
     "shortDesc": "用户向目标投掷电球。用户比目标速度越快，移动威力就越大。"
   },
   "tr81": {
-    "name": "TR81",
+    "name": "招式记录８１",
     "shortDesc": "用户将目标的力量转向它。目标攻击力越高，造成的伤害就越大。"
   },
   "tr82": {
-    "name": "TR82",
+    "name": "招式记录８２",
     "shortDesc": "使用者用储存的力量攻击目标。用户的属性越高，移动的威力就越大。"
   },
   "tr83": {
-    "name": "TR83",
+    "name": "招式记录８３",
     "shortDesc": "使用者使用一种奇怪的力量进行传送并与其盟友之一交换位置。"
   },
   "tr84": {
-    "name": "TR84",
+    "name": "招式记录８４",
     "shortDesc": "用户向目标喷射沸腾的热水。这也可能使目标被烧伤。"
   },
   "tr85": {
-    "name": "TR85",
+    "name": "招式记录８５",
     "shortDesc": "使用者被唤醒，其攻击力和 Sp.攻击力统计增加。"
   },
   "tr86": {
-    "name": "TR86",
+    "name": "招式记录８６",
     "shortDesc": "使用者将自己笼罩在电力中并撞向目标。这也对用户造成了一些伤害。"
   },
   "tr87": {
-    "name": "TR87",
+    "name": "招式记录８７",
     "shortDesc": "用户像钻头一样旋转身体，同时撞向目标。暴击更容易发生。"
   },
   "tr88": {
-    "name": "TR88",
+    "name": "招式记录８８",
     "shortDesc": "使用者用被火焰覆盖的身体猛击目标。用户超过目标的重量越多，移动的威力就越大。"
   },
   "tr89": {
-    "name": "TR89",
+    "name": "招式记录８９",
     "shortDesc": "使用者用飞上天空的猛风包裹对手进行攻击。这也可能会让目标感到困惑。"
   },
   "tr90": {
-    "name": "TR90",
+    "name": "招式记录９０",
     "shortDesc": "用户粗暴地对待目标并攻击它。这也可能会降低目标的攻击统计数据。"
   },
   "tr91": {
-    "name": "TR91",
+    "name": "招式记录９１",
     "shortDesc": "敌对的宝可梦被一种奇怪的有毒液体浸透。这会降低攻击力 Sp。中毒目标的攻击力和速度统计数据。"
   },
   "tr92": {
-    "name": "TR92",
+    "name": "招式记录９２",
     "shortDesc": "使用者通过发出强大的闪光来伤害对手的宝可梦。"
   },
   "tr93": {
-    "name": "TR93",
+    "name": "招式记录９３",
     "shortDesc": "使用者挥动双臂并击中目标。目标统计数据的变化不会影响该攻击的伤害。"
   },
   "tr94": {
-    "name": "TR94",
+    "name": "招式记录９４",
     "shortDesc": "使用者用全身猛烈攻击目标。"
   },
   "tr95": {
-    "name": "TR95",
+    "name": "招式记录９５",
     "shortDesc": "使用者攻击目标的喉咙，由此产生的痛苦会阻止目标在两回合内使用发出声音的招式。"
   },
   "tr96": {
-    "name": "TR96",
+    "name": "招式记录９６",
     "shortDesc": "使用者用爆炸的花粉团攻击敌人。如果目标是盟友，它会给盟友喷出花粉，恢复其生命值。"
   },
   "tr97": {
-    "name": "TR97",
+    "name": "招式记录９７",
     "shortDesc": "使用者用其灵能能力咬住目标。这也会破坏光幕和反射。"
   },
   "tr98": {
-    "name": "TR98",
+    "name": "招式记录９８",
     "shortDesc": "使用者使用全力的水流猛击目标。这也可能会降低目标的防御统计数据。"
   },
   "tr99": {
-    "name": "TR99",
+    "name": "招式记录９９",
     "shortDesc": "使用者通过将身体猛烈撞击目标来进行攻击。用户防御越高，对目标造成的伤害就越大。"
   },
   "travel-trunk": {
-    "name": "旅行箱",
+    "name": "衣物箱",
     "shortDesc": "无法获得，但允许玩家在任何地方更换衣服。"
   },
   "tri-pass": {
-    "name": "三通",
+    "name": "Tri-Pass",
     "shortDesc": "授予进入前三个塞维群岛的权限。"
   },
   "tropical-shell": {
-    "name": "热带贝壳",
+    "name": "南国贝壳",
     "shortDesc": "美丽的白色贝壳，可能是从温暖地区的海洋中漂流而来。"
   },
   "twisted-spoon": {
-    "name": "扭勺",
+    "name": "弯曲的汤匙",
     "shortDesc": "持有：持有者的灵能类动作造成的伤害提高 20%。"
   },
   "tyranitarite": {
-    "name": "锥硝石",
+    "name": "班基拉斯进化石",
     "shortDesc": "持有：使霸王龙超级进化为超级霸王龙。"
   },
   "ultra-ball": {
-    "name": "超级球",
+    "name": "高级球",
     "shortDesc": "高性能球，接球率高于 Great Ball。"
   },
   "ultranecrozium-z--bag": {
-    "name": "Ultranecrozium Z",
+    "name": "究极奈克洛Ｚ",
     "shortDesc": "XXX ultranecrozium-z--bag 的新效果"
   },
   "ultranecrozium-z--held": {
-    "name": "Ultranecrozium Z",
+    "name": "究极奈克洛Ｚ",
     "shortDesc": "持有：允许奈克洛兹玛使用燃烧天空之光。"
   },
   "unown-report": {
-    "name": "未知报告",
+    "name": "未知图腾笔记",
     "shortDesc": "跟踪捕获的未知类型。"
   },
   "unremarkable-teacup": {
-    "name": "不起眼的茶杯",
+    "name": "凡作茶碗",
     "shortDesc": "使用时，Poltchageist 会进化为 Sinistcha。"
   },
   "up-grade": {
-    "name": "升级",
+    "name": "升级数据",
     "shortDesc": "在 Porygon 上交易：持有者进化为 Porygon2。"
   },
   "utility-umbrella": {
-    "name": "实用伞",
+    "name": "万能伞",
     "shortDesc": "宝可梦持有的物品。这把坚固的雨伞可以保护持有者免受雨水和强烈阳光的影响。"
   },
   "venusaur-guild-emblem-template": {
-    "name": "妙蛙花公会徽章",
+    "name": "Venusaur Guild Emblem",
     "shortDesc": "使用此模板为您当前的公会永久解锁它。"
   },
   "venusaurite": {
-    "name": "金星石",
+    "name": "妙蛙花进化石",
     "shortDesc": "持有：允许妙蛙花超级进化成超级妙蛙花。"
   },
   "victreebelite": {
-    "name": "维特里贝莱特",
+    "name": "Victreebelite",
     "shortDesc": "如果维克特里贝尔持有该物品，该物品可以使其在战斗中超级进化。"
   },
   "vs-recorder": {
-    "name": "与。录音机",
+    "name": "对战记录器",
     "shortDesc": "记录无线、Wi-Fi 或 Battle Frontier 战斗并存储积分。"
   },
   "vs-seeker": {
-    "name": "与。探索者",
+    "name": "对战搜寻器",
     "shortDesc": "允许屏幕上的训练师重新战斗。 100步充电。"
   },
   "wacan-berry": {
-    "name": "瓦肯浆果",
+    "name": "烛木果",
     "shortDesc": "持有：被超级有效的电系攻击击中时消耗，使伤害减半。"
   },
   "wailmer-pail": {
-    "name": "威尔默桶",
+    "name": "吼吼鲸喷壶",
     "shortDesc": "用于给浆果浇水。"
   },
   "water-gem": {
-    "name": "水宝石",
+    "name": "水之宝石",
     "shortDesc": "持有：当持有者使用伤害性水属性招式时，该招式具有1.5力量，并且该物品被消耗。"
   },
   "water-memory": {
-    "name": "水记忆",
+    "name": "清水存储碟",
     "shortDesc": "持有：将席尔瓦利变为水形态。将多重攻击类型更改为水。"
   },
   "water-stone": {
-    "name": "水石",
+    "name": "水之石",
     "shortDesc": "将伊布进化为 Vaporeon，将 Lombre 进化为 Ludicolo，将 Panpour 进化为 Simipour，将 Poliwhirl 进化为 Poliwrath，将 Shellder 进化为 Cloyster，或者将 Staryu 进化为 Starmie。"
   },
   "waterfall-charm": {
-    "name": "瀑布魅力",
+    "name": "Waterfall Charm",
     "shortDesc": "让你在宝可梦不知情的情况下使用瀑布。"
   },
   "waterium-z--bag": {
-    "name": "Waterium Z",
+    "name": "水Ｚ",
     "shortDesc": "XXX Waterium-z--bag 的新效果"
   },
   "waterium-z--held": {
-    "name": "Waterium Z",
+    "name": "水Ｚ",
     "shortDesc": "持有：允许宝可梦使用其水招式的Z招式等价物。"
   },
   "watmel-berry": {
-    "name": "沃特梅尔浆果",
+    "name": "瓜西果",
     "shortDesc": "用于创建 PokeBlock 和 Poffins。"
   },
   "wave-incense": {
-    "name": "波香",
+    "name": "涟漪薰香",
     "shortDesc": "持有：持有者的水属性招式造成的伤害提高 20%。繁殖：螳螂产下螳螂蛋。"
   },
   "weakness-policy": {
-    "name": "政策弱点",
+    "name": "弱点保险",
     "shortDesc": "持有：当持有者受到超级有效招式击中时，其攻击力和特攻力提升两级。"
   },
   "wellspring-mask": {
-    "name": "泉水面具",
+    "name": "水井面具",
     "shortDesc": "Ogerpon-Wellspring：1.2x 力量攻击； Terastallize 获得体现方面。"
   },
   "wepear-berry": {
-    "name": "梨果",
+    "name": "西梨果",
     "shortDesc": "用于创建 PokeBlock 和 Poffins。"
   },
   "whipped-dream": {
-    "name": "鞭打的梦想",
+    "name": "泡沫奶油",
     "shortDesc": "在 Swirlix 上交易：持有者进化成 Slurpuff。"
   },
   "whirlpool-charm": {
-    "name": "漩涡魅力",
+    "name": "Whirlpool Charm",
     "shortDesc": "让你在宝可梦不知情的情况下使用漩涡。"
   },
   "white-apricorn": {
-    "name": "白杏",
+    "name": "白球果",
     "shortDesc": "用于制作快速球。"
   },
   "white-flute": {
-    "name": "白笛",
+    "name": "白色玻璃哨",
     "shortDesc": "野生宝可梦遭遇率翻倍。"
   },
   "white-herb": {
-    "name": "白色药草",
+    "name": "白色香草",
     "shortDesc": "持有：回合结束时将所有降低的统计数据重置为正常。使用后消耗掉。"
   },
   "white-mane-hair": {
-    "name": "白鬃毛",
+    "name": "白色鬃毛",
     "shortDesc": "丰收之王的心爱坐骑格拉斯特里尔的鬃毛。头发坚韧且非常有弹性。"
   },
   "wide-lens": {
-    "name": "广角镜头",
+    "name": "广角镜",
     "shortDesc": "持有：为持有者提供 1/10 (10%) 的准确度提升。"
   },
   "wiki-berry": {
-    "name": "维基浆果",
+    "name": "异奇果",
     "shortDesc": "持有：消耗最大生命值的1/2，恢复最大生命值的1/8。让不喜欢干味的宝可梦感到困惑。"
   },
   "wise-glasses": {
-    "name": "智慧眼镜",
+    "name": "博识眼镜",
     "shortDesc": "持有：使持有者使用的必杀技伤害提高1/10（10%）。"
   },
   "wishing-chip": {
-    "name": "许愿筹码",
+    "name": "许愿星碎片",
     "shortDesc": "将其中一些扔进宝可梦巢穴，就有机会吸引野生极巨宝可梦。"
   },
   "wishing-piece": {
-    "name": "许愿碎片",
+    "name": "许愿星块",
     "shortDesc": "将一只扔进宝可梦巢穴以吸引野生极巨宝可梦。"
   },
   "wishing-star": {
@@ -5684,63 +5684,63 @@
     "shortDesc": "在伽勒尔地区发现的具有神秘力量的石头。据说，如果你找到一个，你的梦想就会成真。"
   },
   "wooden-crown": {
-    "name": "木冠",
+    "name": "木雕王冠",
     "shortDesc": "一个由木头制成的神秘物体。看来有一部分已经被削掉了。也许它意味着成为某事的一部分。"
   },
   "works-key": {
-    "name": "作品钥匙",
+    "name": "发电厂钥匙",
     "shortDesc": "授予访问 Valley Windworks 的权限。"
   },
   "x-accuracy": {
-    "name": "X 精度",
+    "name": "命中强化",
     "shortDesc": "战斗中准确度提升一级。提升幸福感。"
   },
   "x-attack": {
-    "name": "X 攻击",
+    "name": "力量强化",
     "shortDesc": "战斗中攻击力提升。"
   },
   "x-defense": {
-    "name": "X防御",
+    "name": "防御强化",
     "shortDesc": "战斗中防御力提升一级。提升幸福感。"
   },
   "x-sp-atk": {
-    "name": "X Sp。攻击力",
+    "name": "特攻强化",
     "shortDesc": "战斗中特攻提升一级。提升幸福感。"
   },
   "x-sp-def": {
-    "name": "X Sp。定义",
+    "name": "特防强化",
     "shortDesc": "战斗中特防提升一级。提升幸福感。"
   },
   "x-speed": {
-    "name": "X 速度",
+    "name": "速度强化",
     "shortDesc": "战斗中速度提升一级。提升幸福感。"
   },
   "xtransceiver": {
-    "name": "X收发器",
+    "name": "即时通讯器",
     "shortDesc": "进行四方视频通话。"
   },
   "xtransceiver--red": {
-    "name": "X收发器",
+    "name": "即时通讯器",
     "shortDesc": "XXX xtranceiver 新效果--红色"
   },
   "xtransceiver--yellow": {
-    "name": "X收发器",
+    "name": "即时通讯器",
     "shortDesc": "XXX xtranceiver 新效果--黄色"
   },
   "yache-berry": {
-    "name": "雅车莓果",
+    "name": "番荔果",
     "shortDesc": "持有：被超有效的冰属性攻击击中时消耗，使伤害减半。"
   },
   "yellow-apricorn": {
-    "name": "黄杏",
+    "name": "黄球果",
     "shortDesc": "用于制作月球。"
   },
   "yellow-flute": {
-    "name": "黄笛",
+    "name": "黄色玻璃哨",
     "shortDesc": "消除混乱。"
   },
   "yellow-nectar": {
-    "name": "黄色花蜜",
+    "name": "金黄色花蜜",
     "shortDesc": "将 Oricorio 更改为 Pom-Pom 风格。"
   },
   "yellow-petal": {
@@ -5748,7 +5748,7 @@
     "shortDesc": "XXX 黄花瓣新效果"
   },
   "yellow-scarf": {
-    "name": "黄围巾",
+    "name": "黄色头巾",
     "shortDesc": "在比赛中提高持有者的韧性。"
   },
   "yellow-shard": {
@@ -5756,35 +5756,35 @@
     "shortDesc": "没有效果。可以用来交换物品或动作。"
   },
   "z-power-ring": {
-    "name": "Z-力量戒指",
+    "name": "Ｚ强力手环",
     "shortDesc": "XXX z-power-ring 新效果"
   },
   "z-ring": {
-    "name": "Z 形环",
+    "name": "Ｚ手环",
     "shortDesc": "允许玩家宝可梦使用 Z 招式。"
   },
   "zap-plate": {
-    "name": "电击板",
+    "name": "雷电石板",
     "shortDesc": "持有：持有者的电系动作造成的伤害提高 20%。将阿尔宙斯和审判类型更改为电动。"
   },
   "zeraorite": {
-    "name": "泽奥瑞特",
+    "name": "Zeraorite",
     "shortDesc": "如果泽拉奥拉持有该物品，该物品可以使其在战斗中超级进化。"
   },
   "zinc": {
-    "name": "锌",
+    "name": "特防增强剂",
     "shortDesc": "提高特防和幸福感。"
   },
   "zoom-lens": {
-    "name": "变焦镜头",
+    "name": "对焦镜",
     "shortDesc": "持有：如果持有者在目标后面移动，则准确度提高 1/5 (20%)。"
   },
   "zygarde-cube": {
-    "name": "基加德立方体",
+    "name": "基格尔德多面体",
     "shortDesc": "包含收集的 Zygarde 细胞/核心。可以教授基嘉德的招式。"
   },
   "zygardite": {
-    "name": "锆石",
+    "name": "Zygardite",
     "shortDesc": "如果被完全形态的基加德持有，该物品可以使其在战斗中进行超级进化。"
   }
 }

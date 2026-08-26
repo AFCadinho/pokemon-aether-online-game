@@ -4,7 +4,7 @@
     "shortDesc": "返回您上次访问过的安全室内位置。"
   },
   "escape-rope": {
-    "name": "逃生绳",
+    "name": "离洞绳",
     "shortDesc": "立即逃离洞穴和地牢。"
   },
   "poke-ball": {
@@ -12,71 +12,71 @@
     "shortDesc": "用于捕捉野生宝可梦的基本球。"
   },
   "great-ball": {
-    "name": "伟大的球",
+    "name": "超级球",
     "shortDesc": "比精灵球更好的球，接球率更高。"
   },
   "ultra-ball": {
-    "name": "超级球",
+    "name": "高级球",
     "shortDesc": "高性能球，接球率高于 Great Ball。"
   },
   "potion": {
-    "name": "药水",
+    "name": "伤药",
     "shortDesc": "恢复 20 生命值。"
   },
   "super-potion": {
-    "name": "超级药水",
+    "name": "好伤药",
     "shortDesc": "恢复 50 生命值。"
   },
   "hyper-potion": {
-    "name": "超级药水",
+    "name": "厉害伤药",
     "shortDesc": "恢复 200 生命值。"
   },
   "max-potion": {
-    "name": "最大药水",
+    "name": "全满药",
     "shortDesc": "完全恢复宝可梦的生命值。"
   },
   "full-restore": {
-    "name": "完全恢复",
+    "name": "全复药",
     "shortDesc": "完全恢复生命值并治愈任何状态状况。"
   },
   "antidote": {
-    "name": "解毒剂",
+    "name": "解毒药",
     "shortDesc": "治愈中毒。"
   },
   "paralyze-heal": {
-    "name": "麻痹治疗",
+    "name": "解麻药",
     "shortDesc": "治愈瘫痪。"
   },
   "awakening": {
-    "name": "觉醒",
+    "name": "解眠药",
     "shortDesc": "唤醒沉睡的宝可梦。"
   },
   "burn-heal": {
-    "name": "烧伤治疗",
+    "name": "灼伤药",
     "shortDesc": "治愈烧伤。"
   },
   "ice-heal": {
-    "name": "冰疗",
+    "name": "解冻药",
     "shortDesc": "解冻冻结的宝可梦。"
   },
   "full-heal": {
-    "name": "全面治疗",
+    "name": "万灵药",
     "shortDesc": "解决任何状态问题。"
   },
   "revive": {
-    "name": "复活",
+    "name": "活力碎片",
     "shortDesc": "以最大生命值的一半复活昏倒的宝可梦。"
   },
   "old-rod": {
-    "name": "老棒",
+    "name": "破旧钓竿",
     "shortDesc": "用它来钓鱼宝可梦。"
   },
   "good-rod": {
-    "name": "好棒",
+    "name": "好钓竿",
     "shortDesc": "用它来捕捉水体中的宝可梦。"
   },
   "super-rod": {
-    "name": "超级棒",
+    "name": "厉害钓竿",
     "shortDesc": "用它在水体中捕捉强大的宝可梦。"
   },
   "cut-charm": {
