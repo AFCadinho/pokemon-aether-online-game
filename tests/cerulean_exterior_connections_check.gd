@@ -72,18 +72,24 @@ func _init() -> void:
 	)
 
 	_check(map_metadata_script.contains('find_map_tilemap_layer("Collision")'), "Cerulean City inherits the shared nested Collision resolver")
-	_check(city_script.contains('"route_24_path"') and city_script.contains('"route_24_water"'), "Cerulean City opens both north collision approaches")
+	_check(city_script.contains('"route_24_path"') and city_script.contains('"route_24_bridge"'), "Cerulean City opens both Route 24 foot approaches")
+	_check(city_script.contains('"route_24_water_left"') and city_script.contains('"route_24_water_right"'), "Cerulean City opens both Route 24 water approaches")
+	_check(city_script.contains('"route_4_water"'), "Cerulean City opens the Route 4 water approach")
 	_check(city_script.contains('"route_5"'), "Cerulean City opens its east collision boundary")
 	_check(city_script.contains('"route_5"'), "Cerulean City opens its south collision boundary")
 	_check(placeholder_script.contains("const MAP_SIZE := Vector2i(24, 18)"), "Placeholder boundaries match the open-field visual")
 	_check(placeholder_script.contains("func _is_opening"), "Placeholder boundaries retain their connection opening")
-	_check(placeholder_script.contains("second_opening_from") and placeholder_script.contains("third_opening_from"), "Placeholder maps support multiple edge openings")
+	_check(placeholder_script.contains("second_opening_from") and placeholder_script.contains("fourth_opening_from"), "Placeholder maps support four edge openings")
 	_check(placeholder_script.contains("func _build_water_connection"), "Placeholder maps can mark a Surf connection")
+	_check(placeholder_script.contains("second_water_opening_from"), "Placeholder maps support two Surf connections")
 	_check(player_script.contains("sync_activity_state_for_current_tile") and player_script.contains("_start_surf_activity(false)"), "A water arrival restores Surf automatically")
 	_check(route_24_source.contains('[node name="Water" type="TileMapLayer" parent="Tiles"]'), "Route 24 exposes a semantic Water layer")
 	_check(route_24_source.contains('water_connection_side = "bottom"'), "Route 24 marks its water approach")
-	_check(city_source.contains('[node name="Water" type="TileMapLayer" parent="Tiles"]'), "Cerulean City exposes a semantic Water layer")
-	_check(city_script.contains("_build_route_24_water_connection"), "Cerulean City marks its Route 24 water approach")
+	_check(city_source.contains('[node name="Water" type="TileMapLayer" parent="Tiles"'), "Cerulean City exposes a semantic Water layer")
+	_check(city_script.contains("_build_water_connections"), "Cerulean City marks all water approaches")
+	_check(city_source.contains('[node name="FromRoute4Water" type="Marker2D" parent="Spawns"'), "Cerulean City has the Route 4 water spawn")
+	_check(city_source.contains('[node name="ToRoute4Water" type="Area2D" parent="Exits"'), "Cerulean City has the Route 4 water exit")
+	_check(route_24_source.contains('second_water_opening_from = 13'), "Route 24 marks its second Surf approach")
 
 	for suffix: String in ["Left", "Grass", "Right"]:
 		_check(city_source.contains('[node name="FromRoute9%s" type="Marker2D" parent="Spawns"' % suffix), "Cerulean City has the Route 9 %s spawn" % suffix.to_lower())
@@ -91,7 +97,7 @@ func _init() -> void:
 		_check(route_9_source.contains('[node name="FromCerulean%s" type="Marker2D" parent="Spawns"]' % suffix), "Route 9 has the %s arrival" % suffix.to_lower())
 		_check(route_9_source.contains('[node name="ToCerulean%s" type="Area2D" parent="Exits"]' % suffix), "Route 9 has the %s return exit" % suffix.to_lower())
 
-	for suffix: String in ["Path", "Water"]:
+	for suffix: String in ["Path", "Bridge", "WaterLeft", "WaterRight"]:
 		_check(city_source.contains('[node name="FromRoute24%s" type="Marker2D" parent="Spawns"' % suffix), "Cerulean City has the Route 24 %s spawn" % suffix.to_lower())
 		_check(city_source.contains('[node name="ToRoute24%s" type="Area2D" parent="Exits"' % suffix), "Cerulean City has the Route 24 %s exit" % suffix.to_lower())
 		_check(route_24_source.contains('[node name="FromCerulean%s" type="Marker2D" parent="Spawns"]' % suffix), "Route 24 has the %s arrival" % suffix.to_lower())

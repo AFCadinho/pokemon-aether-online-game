@@ -10,6 +10,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_water_exit"]
+size = Vector2(32, 224)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cave_exit"]
 size = Vector2(96, 32)
 
@@ -17,7 +20,13 @@ size = Vector2(96, 32)
 size = Vector2(160, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_24_water_exit"]
-size = Vector2(224, 32)
+size = Vector2(192, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route_24_bridge_exit"]
+size = Vector2(288, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route_24_water_right_exit"]
+size = Vector2(128, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_9_left_exit"]
 size = Vector2(112, 32)
@@ -115,14 +124,23 @@ music_track_id = "overworld.kanto.cerulean_city"
 [node name="FromRoute4" type="Marker2D" parent="Spawns" unique_id=1976159514]
 position = Vector2(48, 816)
 
+[node name="FromRoute4Water" type="Marker2D" parent="Spawns"]
+position = Vector2(48, 592)
+
 [node name="FromCeruleanCave" type="Marker2D" parent="Spawns" unique_id=1182562427]
 position = Vector2(528, 208)
 
 [node name="FromRoute24Path" type="Marker2D" parent="Spawns" unique_id=686192888]
 position = Vector2(2192, 80)
 
-[node name="FromRoute24Water" type="Marker2D" parent="Spawns" unique_id=1716181807]
-position = Vector2(1872, 80)
+[node name="FromRoute24WaterLeft" type="Marker2D" parent="Spawns" unique_id=1716181807]
+position = Vector2(1584, 80)
+
+[node name="FromRoute24Bridge" type="Marker2D" parent="Spawns"]
+position = Vector2(1808, 80)
+
+[node name="FromRoute24WaterRight" type="Marker2D" parent="Spawns"]
+position = Vector2(2000, 80)
 
 [node name="FromRoute9Left" type="Marker2D" parent="Spawns" unique_id=2084918086]
 position = Vector2(400, 2176)
@@ -152,6 +170,22 @@ shape = SubResource("RectangleShape2D_route_4_exit")
 [node name="RouteTransitionHint" parent="Exits/ToRoute4" unique_id=1425122490 instance=ExtResource("5_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(1, 5)
+flow_direction = "left"
+
+[node name="ToRoute4Water" type="Area2D" parent="Exits"]
+position = Vector2(16, 592)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_4.tscn"
+target_spawn_name = "FromCeruleanWater"
+transition_id = "kanto_cerulean_city__to_route_4_water"
+transition_facing_direction = "left"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute4Water"]
+shape = SubResource("RectangleShape2D_route_4_water_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute4Water" instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 7)
 flow_direction = "left"
 
 [node name="ToCeruleanCave" type="Area2D" parent="Exits" unique_id=1154148418]
@@ -185,21 +219,53 @@ shape = SubResource("RectangleShape2D_route_24_exit")
 z_as_relative = false
 tile_footprint = Vector2i(5, 1)
 
-[node name="ToRoute24Water" type="Area2D" parent="Exits" unique_id=888545413]
+[node name="ToRoute24WaterLeft" type="Area2D" parent="Exits" unique_id=888545413]
 position = Vector2(1584, 16)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
-target_spawn_name = "FromCeruleanWater"
-transition_id = "kanto_cerulean_city__to_route_24_water"
+target_spawn_name = "FromCeruleanWaterLeft"
+transition_id = "kanto_cerulean_city__to_route_24_water_left"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute24Water" unique_id=1769934759]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute24WaterLeft" unique_id=1769934759]
 position = Vector2(-16, -16)
 shape = SubResource("RectangleShape2D_route_24_water_exit")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute24Water" unique_id=1540901010 instance=ExtResource("5_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToRoute24WaterLeft" unique_id=1540901010 instance=ExtResource("5_hint")]
 z_as_relative = false
-tile_footprint = Vector2i(7, 1)
+tile_footprint = Vector2i(6, 1)
+
+[node name="ToRoute24Bridge" type="Area2D" parent="Exits"]
+position = Vector2(1808, 16)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
+target_spawn_name = "FromCeruleanBridge"
+transition_id = "kanto_cerulean_city__to_route_24_bridge"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute24Bridge"]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_route_24_bridge_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute24Bridge" instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(9, 1)
+
+[node name="ToRoute24WaterRight" type="Area2D" parent="Exits"]
+position = Vector2(2016, 16)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
+target_spawn_name = "FromCeruleanWaterRight"
+transition_id = "kanto_cerulean_city__to_route_24_water_right"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute24WaterRight"]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_route_24_water_right_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute24WaterRight" instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(4, 1)
 
 [node name="ToRoute9Left" type="Area2D" parent="Exits" unique_id=1635975885]
 position = Vector2(464, 2224)
@@ -295,9 +361,12 @@ z_index = 4095
 tile_set = ExtResource("7_marker")
 
 [connection signal="body_entered" from="Exits/ToRoute4" to="Exits/ToRoute4" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute4Water" to="Exits/ToRoute4Water" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToCeruleanCave" to="Exits/ToCeruleanCave" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute24Path" to="Exits/ToRoute24Path" method="_on_body_entered"]
-[connection signal="body_entered" from="Exits/ToRoute24Water" to="Exits/ToRoute24Water" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute24WaterLeft" to="Exits/ToRoute24WaterLeft" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute24Bridge" to="Exits/ToRoute24Bridge" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute24WaterRight" to="Exits/ToRoute24WaterRight" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute9Left" to="Exits/ToRoute9Left" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute9Grass" to="Exits/ToRoute9Grass" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute9Right" to="Exits/ToRoute9Right" method="_on_body_entered"]
