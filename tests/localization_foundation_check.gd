@@ -66,6 +66,10 @@ func _check_catalogs(catalogs: Dictionary) -> void:
 				_placeholders(str(catalog.get(key, ""))) == _placeholders(str(english.get(key, ""))),
 				"%s placeholders match English for %s" % [locale, key]
 			)
+	var chinese: Dictionary = catalogs.get("zh_CN", {})
+	for value: Variant in chinese.values():
+		_check(not str(value).contains("电源"), "Simplified Chinese does not translate Power as power supply")
+		_check(not str(value).contains("加速器"), "Simplified Chinese does not translate accuracy as accelerator")
 
 
 func _check_locale_normalization() -> void:
@@ -103,6 +107,18 @@ func _check_runtime_translation(catalogs: Dictionary) -> void:
 	_check(localization_manager.call("text", "ui.login.sign_in") == "Entrar", "Brazilian Portuguese runtime translation works")
 	localization_manager.call("set_locale", "zh_CN")
 	_check(localization_manager.call("text", "ui.login.sign_in") == "登录", "Simplified Chinese runtime translation works")
+	_check(
+		localization_manager.call("text", "ui.pokemon_summary.moves.power") == "威力",
+		"Simplified Chinese Pokémon UI uses the official Power term"
+	)
+	_check(
+		localization_manager.call("text", "ui.move_learning.accuracy") == "命中",
+		"Simplified Chinese Pokémon UI uses the official accuracy term"
+	)
+	_check(
+		localization_manager.call("text", "ui.move.category.status") == "变化",
+		"Simplified Chinese Pokémon UI uses the official status-move category"
+	)
 	_check(
 		ThemeDB.fallback_font != null and ThemeDB.fallback_font.has_char("简".unicode_at(0)),
 		"Simplified Chinese activates a bundled font with Chinese glyph coverage"
