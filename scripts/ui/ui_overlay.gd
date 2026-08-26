@@ -3,6 +3,7 @@ extends CanvasLayer
 const STAFF_PERMISSION_POLICY := preload("res://scripts/ui/staff_permission_policy.gd")
 const LOAN_RETURNS_DIALOG_SCRIPT := preload("res://scripts/ui/loan_returns_dialog.gd")
 const BORROWED_POKEMON_DIALOG_SCRIPT := preload("res://scripts/ui/borrowed_pokemon_dialog.gd")
+const LOAN_SUMMARY_TIME_SCRIPT := preload("res://scripts/ui/loan_summary_time.gd")
 const MAX_PARTY_SIZE := 6
 const PARTY_SLOT_HEIGHT := 68.0
 const PARTY_SLOT_GAP := 5.0
@@ -22765,9 +22766,24 @@ func _pokemon_summary_trainer_and_loan_text(pokemon: Pokemon) -> String:
 	if not pokemon.borrowed:
 		return trainer_text
 	var return_requested := str(pokemon.loan.get("returnRequestedAt", "")) != ""
-	return "%s · %s" % [trainer_text, LocalizationManager.text(
+	var loan_marker := LocalizationManager.text(
 		"ui.lending.marker.summary_return_requested" if return_requested else "ui.lending.marker.summary_borrowed"
-	)]
+	)
+	if not return_requested:
+		var remaining := _pokemon_summary_loan_remaining_text(pokemon)
+		if remaining != "":
+			loan_marker = LocalizationManager.text("ui.lending.marker.summary_borrowed_remaining", {
+				"remaining": remaining,
+			})
+	return "%s · %s" % [trainer_text, loan_marker]
+
+func _pokemon_summary_loan_remaining_text(pokemon: Pokemon, now_unix := -1) -> String:
+	var time_copy: Dictionary = LOAN_SUMMARY_TIME_SCRIPT.remaining_copy(
+		str(pokemon.loan.get("dueAt", "")),
+		now_unix
+	)
+	var key := str(time_copy.get("key", ""))
+	return LocalizationManager.text(key, time_copy.get("params", {})) if key != "" else ""
 
 func _get_pokemon_summary_original_trainer_text(pokemon: Pokemon) -> String:
 	var origin: Dictionary = pokemon.origin
