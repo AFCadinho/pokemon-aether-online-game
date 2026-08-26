@@ -1,0 +1,104 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/open_field/open_field.visual.tscn" id="1_visual"]
+[ext_resource type="Script" path="res://scripts/world/kanto/open_field_placeholder_map.gd" id="2_map"]
+[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_hint"]
+[ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="5_marker"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_path_exit"]
+size = Vector2(128, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_water_exit"]
+size = Vector2(160, 32)
+
+[node name="KantoRoute24" type="Node2D"]
+script = ExtResource("2_map")
+map_id = "kanto_route_24"
+map_region_name = "Kanto"
+map_display_name = "Route 24"
+world_access_group_id = "kanto_route_24"
+world_access_group_label = "Route 24"
+world_access_area_type = "route"
+location_id = "kanto.route_24"
+location_name = "Route 24"
+region_id = "kanto"
+music_profile_id = "kanto.routes_3_10_16_22"
+connection_side = "bottom"
+second_opening_from = 2
+second_opening_to = 6
+water_connection_side = "bottom"
+water_opening_from = 2
+water_opening_to = 6
+water_connection_depth = 5
+
+[node name="OpenFieldVisual" parent="." instance=ExtResource("1_visual")]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromCeruleanPath" type="Marker2D" parent="Spawns"]
+position = Vector2(384, 512)
+
+[node name="FromCeruleanWater" type="Marker2D" parent="Spawns"]
+position = Vector2(128, 512)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="ToCeruleanPath" type="Area2D" parent="Exits"]
+position = Vector2(384, 560)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
+target_spawn_name = "FromRoute24Path"
+transition_id = "kanto_route_24__to_cerulean_city_path"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanPath"]
+shape = SubResource("RectangleShape2D_path_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToCeruleanPath" instance=ExtResource("4_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(4, 1)
+flow_direction = "down"
+
+[node name="ToCeruleanWater" type="Area2D" parent="Exits"]
+position = Vector2(128, 560)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
+target_spawn_name = "FromRoute24Water"
+transition_id = "kanto_route_24__to_cerulean_city_water"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanWater"]
+shape = SubResource("RectangleShape2D_water_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToCeruleanWater" instance=ExtResource("4_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(5, 1)
+flow_direction = "down"
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="Players" type="Node2D" parent="Entities"]
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="Tiles" type="Node2D" parent="."]
+visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Tiles"]
+visible = false
+z_index = 4096
+tile_set = ExtResource("5_marker")
+
+[node name="Water" type="TileMapLayer" parent="Tiles"]
+visible = false
+z_index = 4095
+tile_set = ExtResource("5_marker")
+
+[connection signal="body_entered" from="Exits/ToCeruleanPath" to="Exits/ToCeruleanPath" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToCeruleanWater" to="Exits/ToCeruleanWater" method="_on_body_entered"]

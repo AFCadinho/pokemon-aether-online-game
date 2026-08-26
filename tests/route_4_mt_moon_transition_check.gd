@@ -22,6 +22,12 @@ func _init() -> void:
 	var cerulean_script := FileAccess.get_file_as_string(
 		"res://scripts/world/kanto/towns/cerulean_city.gd"
 	)
+	var map_metadata_script := FileAccess.get_file_as_string(
+		"res://scripts/world/map_metadata.gd"
+	)
+	var cerulean_visual := FileAccess.get_file_as_string(
+		"res://generated/tiled_visuals/cerulean_city/cerulean_city.visual.tscn"
+	)
 
 	_check(route_source.contains('map_id = "kanto_route_4"'), "Route 4 exposes map metadata")
 	_check(route_source.contains('route_4/route_4.visual.tscn'), "Route 4 uses its imported visual")
@@ -45,14 +51,20 @@ func _init() -> void:
 	_check(cave_source.contains('target_spawn_name = "FromMtMoon"'), "Mt. Moon targets the Route 4 arrival")
 	_check(cave_source.contains('[connection signal="body_entered" from="Exits/ToRoute4"'), "Mt. Moon listens for the Route 4 exit")
 	_check(cerulean_source.contains('map_id = "kanto_cerulean_city"'), "Cerulean City exposes map metadata")
-	_check(cerulean_source.contains('open_field/open_field.visual.tscn'), "Cerulean City temporarily uses the open-field visual")
+	_check(cerulean_source.contains('cerulean_city/cerulean_city.visual.tscn'), "Cerulean City uses its imported visual")
+	_check(cerulean_visual.contains('"height": 70'), "Cerulean City visual preserves the Tiled height")
+	_check(cerulean_visual.contains('"width": 75'), "Cerulean City visual preserves the Tiled width")
+	_check(cerulean_visual.contains('metadata/tiled_name = "Doors"'), "Cerulean City visual preserves its door layer")
+	_check(cerulean_visual.contains('metadata/tiled_name = "ObjectsTop"'), "Cerulean City visual preserves its foreground layer")
 	_check(cerulean_source.contains('[node name="FromRoute4" type="Marker2D" parent="Spawns"'), "Cerulean City has a Route 4 arrival")
+	_check(cerulean_source.contains('position = Vector2(48, 816)'), "Route 4 arrival is on the imported west road")
 	_check(cerulean_source.contains('transition_id = "kanto_cerulean_city__to_route_4"'), "Cerulean City returns to Route 4")
 	_check(cerulean_source.contains('target_spawn_name = "FromCerulean"'), "Cerulean City targets the Route 4 arrival")
 	_check(cerulean_source.contains('transition_facing_direction = "left"'), "Route 4 return faces west")
 	_check(cerulean_source.contains('[connection signal="body_entered" from="Exits/ToRoute4"'), "Cerulean City listens for the Route 4 exit")
-	_check(cerulean_script.contains('const MAP_SIZE := Vector2i(24, 18)'), "Cerulean City bounds match its placeholder visual")
-	_check(cerulean_script.contains('if y < ROUTE_4_ROAD_MIN_Y or y > ROUTE_4_ROAD_MAX_Y:'), "Cerulean City keeps the Route 4 road open")
+	_check(cerulean_script.contains('const MAP_SIZE := Vector2i(75, 70)'), "Cerulean City bounds match its imported visual")
+	_check(map_metadata_script.contains('find_map_tilemap_layer("Collision")'), "Cerulean City inherits the shared Collision layer resolver")
+	_check(cerulean_script.contains('"route_4"'), "Cerulean City keeps the Route 4 road open")
 	quit(1 if failed else 0)
 
 

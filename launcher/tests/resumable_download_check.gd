@@ -23,6 +23,10 @@ func _run() -> void:
 	await _run_download_case("drop", "/drop.bin", true, false)
 	await _run_download_case("ignored-range", "/ignore-range.bin", true, true)
 	await _run_download_case("retry-status", "/retry.bin", true, false)
+	await _run_parallel_case()
+	await _run_parallel_retry_case()
+	await _run_parallel_fallback_case()
+	await _run_parallel_restart_case()
 	await _run_stall_case()
 	await _run_bounded_failure_case()
 	await _run_checksum_failure_case()
@@ -67,6 +71,143 @@ func _run_download_case(case_id: String, path: String, expect_retry: bool, expec
 	if expect_reset:
 		_check(_has_event(events, "partial_reset"), "%s safely resets when Range is ignored" % case_id)
 	service.queue_free()
+	await process_frame
+
+
+func _run_parallel_case() -> void:
+	var service := DownloadService.new()
+	service.parallel_min_size_bytes = 1
+	root.add_child(service)
+	var events: Array[Dictionary] = []
+	var result := {"done": false, "failed": false, "path": "", "summary": {}}
+	service.diagnostic_event.connect(func(event: Dictionary) -> void: events.append(event.duplicate(true)))
+	service.download_completed.connect(func(file_path: String, summary: Dictionary) -> void:
+		result["done"] = true
+		result["path"] = file_path
+		result["summary"] = summary
+	)
+	service.download_failed.connect(func(_message: String, summary: Dictionary) -> void:
+		result["done"] = true
+		result["failed"] = true
+		result["summary"] = summary
+	)
+	_check(service.start_download(_job("parallel", "/parallel.bin")) == OK, "parallel download starts")
+	await _wait_until_done(result, 20.0)
+	_check(not bool(result.get("failed", false)), "parallel download succeeds")
+	_check(_event_count(events, "parallel_response_headers") == 4, "parallel download receives four bounded range responses")
+	_check(_event_count(events, "parallel_segment_complete") == 4, "parallel download completes all four segments")
+	_check(_has_event(events, "parallel_download_merged"), "parallel segments are merged before verification")
+	var summary: Dictionary = result.get("summary", {})
+	_check(bool(summary.get("parallel_used", false)), "parallel completion summary records parallel mode")
+	_check(int(summary.get("parallel_connections", 0)) == 4, "parallel completion summary records four connections")
+	_check(not bool(summary.get("parallel_fallback", true)), "parallel download does not fall back unnecessarily")
+	var completed_path := str(result.get("path", ""))
+	if FileAccess.file_exists(completed_path):
+		_check(FileAccess.get_sha256(completed_path) == EXPECTED_SHA256, "parallel result checksum is exact")
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(completed_path))
+	service.queue_free()
+	await process_frame
+
+
+func _run_parallel_retry_case() -> void:
+	var service := DownloadService.new()
+	service.parallel_min_size_bytes = 1
+	service.retry_delays_seconds = [0.0, 0.0, 0.0, 0.0, 0.0]
+	root.add_child(service)
+	var events: Array[Dictionary] = []
+	var result := {"done": false, "failed": false, "path": ""}
+	service.diagnostic_event.connect(func(event: Dictionary) -> void: events.append(event.duplicate(true)))
+	service.download_completed.connect(func(file_path: String, _summary: Dictionary) -> void:
+		result["done"] = true
+		result["path"] = file_path
+	)
+	service.download_failed.connect(func(_message: String, _summary: Dictionary) -> void:
+		result["done"] = true
+		result["failed"] = true
+	)
+	_check(service.start_download(_job("parallel-retry", "/parallel-retry.bin")) == OK, "parallel retry download starts")
+	await _wait_until_done(result, 20.0)
+	_check(not bool(result.get("failed", false)), "parallel retry download succeeds")
+	_check(_has_event(events, "download_retry"), "one failed parallel request restarts unfinished segments")
+	var completed_path := str(result.get("path", ""))
+	if FileAccess.file_exists(completed_path):
+		_check(FileAccess.get_sha256(completed_path) == EXPECTED_SHA256, "parallel retry result checksum is exact")
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(completed_path))
+	service.queue_free()
+	await process_frame
+
+
+func _run_parallel_fallback_case() -> void:
+	var service := DownloadService.new()
+	service.parallel_min_size_bytes = 1
+	root.add_child(service)
+	var events: Array[Dictionary] = []
+	var result := {"done": false, "failed": false, "path": "", "summary": {}}
+	service.diagnostic_event.connect(func(event: Dictionary) -> void: events.append(event.duplicate(true)))
+	service.download_completed.connect(func(file_path: String, summary: Dictionary) -> void:
+		result["done"] = true
+		result["path"] = file_path
+		result["summary"] = summary
+	)
+	service.download_failed.connect(func(_message: String, summary: Dictionary) -> void:
+		result["done"] = true
+		result["failed"] = true
+		result["summary"] = summary
+	)
+	_check(service.start_download(_job("parallel-fallback", "/ignore-bounded-range.bin")) == OK, "parallel fallback download starts")
+	await _wait_until_done(result, 20.0)
+	_check(not bool(result.get("failed", false)), "parallel fallback succeeds with the single connection downloader")
+	_check(_has_event(events, "parallel_download_fallback"), "ignored bounded ranges trigger safe fallback")
+	_check(bool(result.get("summary", {}).get("parallel_fallback", false)), "fallback is recorded in the completion summary")
+	var completed_path := str(result.get("path", ""))
+	if FileAccess.file_exists(completed_path):
+		_check(FileAccess.get_sha256(completed_path) == EXPECTED_SHA256, "parallel fallback checksum is exact")
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(completed_path))
+	service.queue_free()
+	await process_frame
+
+
+func _run_parallel_restart_case() -> void:
+	var first_service := DownloadService.new()
+	first_service.parallel_min_size_bytes = 1
+	root.add_child(first_service)
+	var first_progress := {"bytes": 0}
+	first_service.progress_changed.connect(func(snapshot: Dictionary) -> void:
+		first_progress["bytes"] = int(snapshot.get("downloaded_bytes", 0))
+	)
+	_check(first_service.start_download(_job("parallel-restart", "/parallel-slow.bin")) == OK, "parallel restart download starts")
+	var deadline := Time.get_ticks_msec() + 10000
+	while int(first_progress.get("bytes", 0)) < 256 * 1024 and Time.get_ticks_msec() < deadline:
+		await process_frame
+	var saved_bytes := int(first_progress.get("bytes", 0))
+	_check(saved_bytes >= 256 * 1024, "parallel restart case receives partial segment data")
+	first_service.cancel()
+	first_service.queue_free()
+	await process_frame
+
+	var second_service := DownloadService.new()
+	second_service.parallel_min_size_bytes = 1
+	root.add_child(second_service)
+	var events: Array[Dictionary] = []
+	var result := {"done": false, "failed": false, "path": ""}
+	second_service.diagnostic_event.connect(func(event: Dictionary) -> void: events.append(event.duplicate(true)))
+	second_service.download_completed.connect(func(file_path: String, _summary: Dictionary) -> void:
+		result["done"] = true
+		result["path"] = file_path
+	)
+	second_service.download_failed.connect(func(_message: String, _summary: Dictionary) -> void:
+		result["done"] = true
+		result["failed"] = true
+	)
+	_check(second_service.start_download(_job("parallel-restart", "/parallel-slow.bin")) == OK, "parallel restart resume starts")
+	await _wait_until_done(result, 20.0)
+	_check(not bool(result.get("failed", false)), "parallel restart resume succeeds")
+	_check(_parallel_attempt_has_progress(events), "parallel restart resumes saved segment progress")
+	var completed_path := str(result.get("path", ""))
+	if FileAccess.file_exists(completed_path):
+		_check(FileAccess.get_sha256(completed_path) == EXPECTED_SHA256, "parallel restart result checksum is exact")
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(completed_path))
+	second_service.queue_free()
 	await process_frame
 
 
@@ -183,6 +324,7 @@ func _run_checksum_failure_case() -> void:
 	_check(bool(result.get("failed", false)), "checksum mismatch fails after one clean redownload")
 	_check(_event_count(events, "download_attempt") == 2, "checksum mismatch performs exactly one clean redownload")
 	_check(_has_event(events, "partial_reset"), "checksum mismatch discards corrupt partial data")
+	_check(_checksum_retry_uses_fresh_file(events), "checksum retry uses a guaranteed fresh partial file")
 	service.queue_free()
 	await process_frame
 
@@ -220,6 +362,17 @@ func _event_count(events: Array[Dictionary], event_name: String) -> int:
 	return count
 
 
+func _checksum_retry_uses_fresh_file(events: Array[Dictionary]) -> bool:
+	var saw_fresh_reset := false
+	var attempt_offsets: Array[int] = []
+	for event: Dictionary in events:
+		if str(event.get("event", "")) == "partial_reset" and bool(event.get("fresh_file", false)):
+			saw_fresh_reset = true
+		if str(event.get("event", "")) == "download_attempt":
+			attempt_offsets.append(int(event.get("offset", -1)))
+	return saw_fresh_reset and attempt_offsets.size() == 2 and attempt_offsets[1] == 0
+
+
 func _remove_test_downloads() -> void:
 	var path := ProjectSettings.globalize_path("user://range-test-downloads")
 	var directory := DirAccess.open(path)
@@ -238,6 +391,13 @@ func _remove_test_downloads() -> void:
 func _event_has_positive_offset(events: Array[Dictionary]) -> bool:
 	for event: Dictionary in events:
 		if str(event.get("event", "")) == "download_attempt" and int(event.get("offset", 0)) > 0:
+			return true
+	return false
+
+
+func _parallel_attempt_has_progress(events: Array[Dictionary]) -> bool:
+	for event: Dictionary in events:
+		if str(event.get("event", "")) == "parallel_download_attempt" and int(event.get("downloaded_bytes", 0)) > 0:
 			return true
 	return false
 

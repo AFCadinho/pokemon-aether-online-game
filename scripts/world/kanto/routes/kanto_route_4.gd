@@ -1,14 +1,8 @@
 extends "res://scripts/world/map_metadata.gd"
 
-const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
 const MAP_SIZE := Vector2i(100, 50)
 const CERULEAN_ROAD_MIN_Y := 36
 const CERULEAN_ROAD_MAX_Y := 39
-
-@onready var collision: TileMapLayer = MapLayerResolverScript.find_tilemap_layer(
-	self,
-	["Collision"]
-)
 
 
 func _ready() -> void:
