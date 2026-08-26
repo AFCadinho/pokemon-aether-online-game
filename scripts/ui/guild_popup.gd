@@ -66,6 +66,7 @@ const DEBUG_GUILDS: Array[Dictionary] = [
 		"id": 1,
 		"name": "Aether Vanguard",
 		"leader": "Nova",
+		"captains": ["Maple", "Iris"],
 		"level": 12,
 		"members": 38,
 		"capacity": 50,
@@ -4808,6 +4809,15 @@ func _render_guild_list() -> void:
 	_render_selected_guild()
 
 
+func _guild_captain_names(guild: Dictionary) -> Array[String]:
+	var names: Array[String] = []
+	for value: Variant in _array_from_value(guild.get("captains", [])):
+		var captain_name := str(value).strip_edges()
+		if captain_name != "" and not names.has(captain_name):
+			names.append(captain_name)
+	return names
+
+
 func _guild_row(guild: Dictionary) -> Control:
 	var guild_id := int(guild.get("id", 0))
 	var selected := guild_id == selected_guild_id
@@ -4815,7 +4825,8 @@ func _guild_row(guild: Dictionary) -> Control:
 	var button := Button.new()
 	button.name = "GuildRow_%d" % guild_id
 	button.text = ""
-	button.custom_minimum_size = Vector2(0, 92)
+	var captain_names := _guild_captain_names(guild)
+	button.custom_minimum_size = Vector2(0, 108 if not captain_names.is_empty() else 92)
 	button.add_theme_stylebox_override("normal", _row_style(accent, selected))
 	button.add_theme_stylebox_override("hover", _row_style(Color("#7edfff"), true))
 	button.add_theme_stylebox_override("pressed", _row_style(UI_ACCENT, true, Color("#071624fa")))
@@ -4844,6 +4855,17 @@ func _guild_row(guild: Dictionary) -> Control:
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	info.add_child(name_label)
+	if not captain_names.is_empty():
+		var contacts_text := _t("ui.guild.row.contacts", {
+			"leader": str(guild.get("leader", _t("common.unknown"))),
+			"captains": ", ".join(captain_names),
+		})
+		var contacts := _label(contacts_text, 9, UI_MUTED)
+		contacts.name = "GuildRowContacts_%d" % guild_id
+		contacts.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		contacts.tooltip_text = contacts_text
+		contacts.mouse_filter = Control.MOUSE_FILTER_PASS
+		info.add_child(contacts)
 	var discovery := _label(
 		_t("ui.guild.row.discovery", {
 			"focus": _option_display(str(guild.get("focus", ""))),
@@ -4897,6 +4919,14 @@ func _render_selected_guild() -> void:
 	heading.add_child(_label(_t("ui.guild.led_by", {
 		"leader": str(guild.get("leader", _t("common.unknown"))),
 	}), 12, UI_MUTED))
+	var captain_names := _guild_captain_names(guild)
+	if not captain_names.is_empty():
+		var captain_text := _t("ui.guild.captains", {"captains": ", ".join(captain_names)})
+		var captain_contacts := _label(captain_text, 11, UI_ACCENT)
+		captain_contacts.name = "GuildCaptainContacts"
+		captain_contacts.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		captain_contacts.tooltip_text = captain_text
+		heading.add_child(captain_contacts)
 	header.add_child(_status_pill(str(guild.get("recruitment", "Closed"))))
 	var divider := HSeparator.new()
 	divider.add_theme_color_override("separator", UI_BORDER_INNER)

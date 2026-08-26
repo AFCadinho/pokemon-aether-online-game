@@ -1872,6 +1872,8 @@
   "ui.guild.row.discovery": "{focus} · {language}",
   "ui.guild.row.availability": "{members}/{capacity} 成员 · {recruitment}",
   "ui.guild.led_by": "由 {leader} 领导",
+  "ui.guild.captains": "队长：{captains}",
+  "ui.guild.row.contacts": "会长：{leader} · 队长：{captains}",
   "ui.guild.about": "关于本公会",
   "ui.guild.requirements.title": "加入要求",
   "ui.guild.requirements.manage_title": "招募要求",

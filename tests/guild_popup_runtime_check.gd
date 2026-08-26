@@ -40,8 +40,23 @@ func _run() -> void:
 	_check(popup.find_child("GuildRow_1", true, false) != null, "debug directory renders guild rows")
 	var discovery := popup.find_child("GuildRowDiscovery_1", true, false) as Label
 	var availability := popup.find_child("GuildRowAvailability_1", true, false) as Label
+	var contacts := popup.find_child("GuildRowContacts_1", true, false) as Label
 	_check(discovery != null and discovery.text.contains("PvP") and discovery.text.contains("English"), "guild card shows focus and language")
 	_check(availability != null and availability.text.contains("38/50") and availability.text.contains("Applications"), "guild card shows capacity and recruitment")
+	_check(
+		contacts != null
+		and contacts.text.contains("Nova")
+		and contacts.text.contains("Maple")
+		and contacts.text.contains("Iris"),
+		"guild card names its leader and contact Captains"
+	)
+	var captain_contacts := popup.find_child("GuildCaptainContacts", true, false) as Label
+	_check(
+		captain_contacts != null
+		and captain_contacts.text.contains("Maple")
+		and captain_contacts.text.contains("Iris"),
+		"selected Guild profile names its Captains"
+	)
 	_check(popup.find_child("GuildDetailPanel", true, false) != null, "guild information panel is present")
 	_check(popup.find_child("GuildDetailScroll", true, false) != null, "long Guild profiles remain scrollable")
 	_check(popup.find_child("GuildRequirementsPanel", true, false) != null, "configured requirements render on the Guild profile")
@@ -69,6 +84,7 @@ func _run() -> void:
 	popup.pending_applications.clear()
 	popup._select_guild(2)
 	await process_frame
+	_check(popup.find_child("GuildCaptainContacts", true, false) == null, "Guild profiles omit an empty Captain contact line")
 	_check(popup.find_child("GuildRequirementsPanel", true, false) == null, "Guild profiles hide the requirements section when none are configured")
 	var join_button := popup.find_child("GuildApplyButton", true, false) as Button
 	_check(join_button != null and join_button.text == "Join Guild", "open Guild exposes direct joining")

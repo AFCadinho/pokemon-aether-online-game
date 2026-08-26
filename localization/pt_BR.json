@@ -1875,6 +1875,8 @@
   "ui.guild.row.discovery": "{focus} · {language}",
   "ui.guild.row.availability": "{members}/{capacity} membros · {recruitment}",
   "ui.guild.led_by": "Liderada por {leader}",
+  "ui.guild.captains": "Capitães: {captains}",
+  "ui.guild.row.contacts": "Líder: {leader} · Capitães: {captains}",
   "ui.guild.about": "SOBRE ESTA GUILDA",
   "ui.guild.requirements.title": "REQUISITOS",
   "ui.guild.requirements.manage_title": "REQUISITOS DE RECRUTAMENTO",
