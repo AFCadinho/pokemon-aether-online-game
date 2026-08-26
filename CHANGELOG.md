@@ -4,6 +4,7 @@
 
 **Added**
 
+- Cerulean City now connects to Cerulean Cave and Routes 5, 9, and 24 through new open-field placeholder maps.
 - The Guild Bank now has a comparison page showing what every Guild rank can do.
 - Guild leaders can create a recruitment checklist that applicants see on the Guild profile and before applying.
 - Added Guild Resources, where members can share consumable items. Guild leaders can manage access for individual members.

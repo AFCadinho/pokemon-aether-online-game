@@ -148,6 +148,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/mt_moon_ambush_cinematic_check.gd",
 	"res://tests/mt_moon_transition_facing_check.gd",
 	"res://tests/route_4_mt_moon_transition_check.gd",
+	"res://tests/cerulean_exterior_connections_check.gd",
 	"res://tests/route_4_collision_boundary_check.gd",
 	"res://tests/route_4_tall_grass_visual_check.gd",
 	"res://tests/route_4_encounters_and_trainers_check.gd",
