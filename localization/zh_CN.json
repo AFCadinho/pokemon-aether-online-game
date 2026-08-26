@@ -1833,7 +1833,7 @@
   "ui.guild.member.offline": "离线",
   "ui.guild.member.last_seen": "最后在线 {time}",
   "ui.guild.member.message": "发送私信",
-  "ui.guild.member.actions": "管理  ▾",
+  "ui.guild.member.actions": "操作  ▾",
   "ui.guild.member.actions_tooltip": "联系或管理该公会成员。",
   "ui.guild.member.menu_contact": "联系",
   "ui.guild.member.menu_management": "成员管理",

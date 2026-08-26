@@ -1836,7 +1836,7 @@
   "ui.guild.member.offline": "Offline",
   "ui.guild.member.last_seen": "Última vez online: {time}",
   "ui.guild.member.message": "Enviar mensagem privada",
-  "ui.guild.member.actions": "Gerenciar  ▾",
+  "ui.guild.member.actions": "Ações  ▾",
   "ui.guild.member.actions_tooltip": "Contate ou gerencie este membro da Guilda.",
   "ui.guild.member.menu_contact": "CONTATO",
   "ui.guild.member.menu_management": "GERENCIAR MEMBRO",

@@ -1836,7 +1836,7 @@
   "ui.guild.member.offline": "Offline",
   "ui.guild.member.last_seen": "Laatst online: {time}",
   "ui.guild.member.message": "Privébericht sturen",
-  "ui.guild.member.actions": "Beheren  ▾",
+  "ui.guild.member.actions": "Acties  ▾",
   "ui.guild.member.actions_tooltip": "Neem contact op met dit Guildlid of beheer het lid.",
   "ui.guild.member.menu_contact": "CONTACT",
   "ui.guild.member.menu_management": "LID BEHEREN",

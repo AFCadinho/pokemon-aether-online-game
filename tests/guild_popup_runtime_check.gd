@@ -811,10 +811,10 @@ func _run() -> void:
 	var self_actions := popup.find_child("GuildMemberActionsButton_1", true, false) as MenuButton
 	_check(
 		managed_actions != null
-		and managed_actions.text.contains("Manage")
+		and managed_actions.text.contains("Actions")
 		and managed_actions.icon != null
 		and managed_actions.custom_minimum_size.x >= 132,
-		"managed Guild members expose a clearly labelled management action"
+		"Guild members expose a clearly labelled actions menu"
 	)
 	_check(
 		managed_actions != null and managed_actions.get_popup().min_size.x >= 230,
