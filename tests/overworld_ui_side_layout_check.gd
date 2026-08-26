@@ -162,6 +162,7 @@ func _init() -> void:
 	_check(script_source.contains('staff_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.staff.tools.subtitle"'), "Staff Tools uses the shared compact launcher")
 	_check(script_source.contains('"ui.staff.teleport.action_description"') and script_source.contains('"ui.staff.impersonate.action_description"'), "Staff actions explain Teleport and Impersonate")
 	_check(script_source.contains('"ui.staff.chat.action_description"') and script_source.contains("CHAT_MODERATION_CENTER_SCRIPT.new()"), "Staff Tools opens the compact chat moderation center")
+	_check(script_source.contains('"StaffChatTranslateModeButton"') and script_source.contains('"ui.staff.translate.action_description_off"'), "Staff Tools exposes Translate Mode as a launcher card")
 	_check(script_source.contains('alpha_tools_popup.custom_minimum_size = Vector2(390, 0)') and script_source.contains('"ui.staff.alpha.subtitle"'), "Alpha Tools uses the shared compact launcher")
 	_check(script_source.contains('"ui.staff.alpha.create_description"') and script_source.contains('"ui.staff.alpha.clear_description"'), "Alpha Tools actions explain their scope")
 	_check(scene_source.contains('path="res://assets/ui/alpha_tools.svg" id="15_content_creator"') and script_source.contains('preload("res://assets/ui/alpha_tools.svg")'), "Alpha Tools uses its dedicated validated Alpha icon")

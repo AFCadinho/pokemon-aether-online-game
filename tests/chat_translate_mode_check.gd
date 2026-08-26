@@ -11,6 +11,16 @@ const REQUIRED_KEYS: Array[String] = [
 	"ui.chat.translate.original",
 	"ui.chat.translate.show_original",
 	"ui.chat.translate.show_translation",
+	"ui.chat.translate.ai_action",
+	"ui.chat.translate.ai_tooltip",
+	"ui.chat.translate.ai_loading",
+	"ui.chat.translate.ai_result",
+	"ui.chat.translate.ai_unavailable",
+	"ui.staff.translate.action",
+	"ui.staff.translate.action_on",
+	"ui.staff.translate.action_description_off",
+	"ui.staff.translate.action_description_on",
+	"ui.staff.translate.action_description_unavailable",
 ]
 
 var failures := 0
@@ -33,8 +43,9 @@ func _run() -> void:
 		"Translate Mode visibility is permission-gated in game"
 	)
 	_check(
-		overlay_source.contains("selected_language_chat in LANGUAGE_CHAT_CHANNELS"),
-		"Translate Mode is limited to official language chats"
+		overlay_source.contains('staff_chat_translate_button.name = "StaffChatTranslateModeButton"')
+		and overlay_source.contains('"ui.staff.translate.action_description_off"'),
+		"Translate Mode is exposed as a permission-gated Staff Tools card"
 	)
 	_check(
 		realtime_source.contains('"type": "chat_translation.set"'),
@@ -48,6 +59,16 @@ func _run() -> void:
 		overlay_source.contains('badge.name = "TranslationBadge"')
 		and overlay_source.contains("_toggle_chat_translation_text"),
 		"Machine translations expose a reversible original-text control"
+	)
+	_check(
+		realtime_source.contains('"type": "chat_translation.ai_request"')
+		and realtime_source.contains('message_type == "chat_translation.ai_result"'),
+		"AI translation is an explicit per-message request"
+	)
+	_check(
+		overlay_source.contains('button.name = "AiTranslationButton"')
+		and overlay_source.contains("ChatRealtimeService.request_ai_translation(message_id)"),
+		"Translated messages offer an on-demand AI refinement"
 	)
 
 	for locale: String in LOCALES:
