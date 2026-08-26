@@ -43,9 +43,23 @@ func _run() -> void:
 	_check(discovery != null and discovery.text.contains("PvP") and discovery.text.contains("English"), "guild card shows focus and language")
 	_check(availability != null and availability.text.contains("38/50") and availability.text.contains("Applications"), "guild card shows capacity and recruitment")
 	_check(popup.find_child("GuildDetailPanel", true, false) != null, "guild information panel is present")
+	_check(popup.find_child("GuildDetailScroll", true, false) != null, "long Guild profiles remain scrollable")
+	_check(popup.find_child("GuildRequirementsPanel", true, false) != null, "configured requirements render on the Guild profile")
+	_check(popup.find_child("GuildRequirementRow_0", true, false) != null, "Guild requirements render as distinct readable rows")
+	_check(popup.find_child("GuildRequirementStatus_0", true, false) != null, "objective requirements show the applicant's status")
 	_check(popup.find_child("GuildForumButton", true, false) == null, "unavailable forum action stays out of the Guild profile")
 	var apply_button := popup.find_child("GuildApplyButton", true, false) as Button
 	_check(apply_button != null and apply_button.text == "Apply to Guild", "reviewed Guild exposes its application action")
+	if apply_button != null:
+		apply_button.pressed.emit()
+		await process_frame
+	var requirements_dialog := popup.find_child("GuildApplicationRequirementsDialog", true, false) as ConfirmationDialog
+	_check(requirements_dialog != null and requirements_dialog.visible, "applicants review requirements before applying")
+	_check(requirements_dialog != null and requirements_dialog.dialog_text.contains("Not met"), "the application checklist explains unmet objective requirements")
+	_check_dialog_styled(requirements_dialog, "Guild requirements confirmation")
+	if requirements_dialog != null:
+		requirements_dialog.canceled.emit()
+		await process_frame
 	popup.pending_applications = [{"id": 42, "guildId": 1, "status": "pending"}]
 	popup._render_guild_list()
 	await process_frame
@@ -55,6 +69,7 @@ func _run() -> void:
 	popup.pending_applications.clear()
 	popup._select_guild(2)
 	await process_frame
+	_check(popup.find_child("GuildRequirementsPanel", true, false) == null, "Guild profiles hide the requirements section when none are configured")
 	var join_button := popup.find_child("GuildApplyButton", true, false) as Button
 	_check(join_button != null and join_button.text == "Join Guild", "open Guild exposes direct joining")
 	if join_button != null:
@@ -497,6 +512,26 @@ func _run() -> void:
 	_check(popup.find_child("GuildManagementSection", true, false) != null, "management tab opens guild controls")
 	_check(popup.find_child("GuildSettingsDescription", true, false) != null, "leader settings render")
 	_check(popup.find_child("GuildSettingsAnnouncement", true, false) != null, "leaders can edit the Guild announcement")
+	_check(popup.find_child("GuildSettingsRequirements", true, false) != null, "leaders can manage a dynamic requirement list")
+	_check(popup.find_child("GuildSettingsRequirement_0", true, false) != null, "saved requirements remain editable")
+	var add_requirement := popup.find_child("GuildAddRequirementButton", true, false) as Button
+	_check(add_requirement != null, "leaders can add individual requirements")
+	if add_requirement != null:
+		add_requirement.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildSettingsRequirement_3", true, false) != null, "adding a requirement creates a new editable row")
+	var requirement_type := popup.find_child("GuildRequirementType_3", true, false) as OptionButton
+	_check(requirement_type != null and requirement_type.item_count == 4, "leaders choose the type of each requirement")
+	_check(not bool(popup._validated_settings_requirements().get("success", true)), "incomplete requirements cannot be saved accidentally")
+	var requirement_value := popup.find_child("GuildRequirementValue_3", true, false) as LineEdit
+	if requirement_value != null:
+		requirement_value.text = "Welcome newer Trainers"
+		requirement_value.text_changed.emit(requirement_value.text)
+	_check(bool(popup._validated_settings_requirements().get("success", false)), "complete dynamic requirements validate before saving")
+	popup._on_move_guild_requirement(3, -1)
+	_check(str(popup.settings_requirements[2].get("value", "")) == "Welcome newer Trainers", "leaders can reorder requirements")
+	popup._on_remove_guild_requirement(2)
+	_check(popup.settings_requirements.size() == 3, "leaders can remove requirements")
 	_check(popup.find_child("GuildApplicationsInbox", true, false) == null, "applications no longer crowd Guild settings")
 	_check(popup.find_child("GuildMemberSearchInput", true, false) == null, "member roster tools do not live under management")
 	_check(popup.find_child("GuildEmblemPreview", true, false) == null, "management keeps emblem controls out of settings")

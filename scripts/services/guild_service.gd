@@ -335,7 +335,8 @@ func update_settings(
 	language: String,
 	focus: String,
 	recruitment: String,
-	loan_duration_seconds: int = 86400
+	loan_duration_seconds: int = 86400,
+	requirements: Array = []
 ) -> Dictionary:
 	var response := await _authenticated_request(
 		GUILD_HOME_ENDPOINT + "/settings",
@@ -347,6 +348,7 @@ func update_settings(
 			"focus": focus,
 			"recruitment": recruitment,
 			"loanDurationSeconds": loan_duration_seconds,
+			"requirements": requirements,
 		})
 	)
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))

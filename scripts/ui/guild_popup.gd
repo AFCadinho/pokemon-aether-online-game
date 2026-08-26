@@ -68,6 +68,11 @@ const DEBUG_GUILDS: Array[Dictionary] = [
 		"focus": "PvP & Social",
 		"recruitment": "Applications open",
 		"description": "A competitive but welcoming guild preparing for Aether Clash. We train together, help newer members build teams and organise weekly battles.",
+		"requirements": [
+			{"type": "minimum_badges", "value": "5"},
+			{"type": "activity", "value": "Play together at least twice per week"},
+			{"type": "communication", "value": "Dutch or English"},
+		],
 		"accent": Color("#57c7ff"),
 	},
 	{
@@ -174,6 +179,8 @@ var settings_language_select: OptionButton
 var settings_focus_select: OptionButton
 var settings_recruitment_select: OptionButton
 var settings_loan_duration_select: OptionButton
+var settings_requirements_container: VBoxContainer
+var settings_requirements: Array[Dictionary] = []
 var invite_username_input: LineEdit
 var member_search_input: LineEdit
 var member_cards_container: VBoxContainer
@@ -261,6 +268,11 @@ func show_debug_member_preview() -> void:
 	is_debug_preview = true
 	active_guild_section = "overview"
 	var guild := DEBUG_GUILDS[0].duplicate(true)
+	guild["requirements"] = [
+		{"type": "minimum_badges", "value": "5"},
+		{"type": "activity", "value": "Play together at least twice per week"},
+		{"type": "communication", "value": "Dutch or English"},
+	]
 	guild["members"] = 3
 	guild["maxLevel"] = 20
 	guild["totalExperience"] = 500000
@@ -569,11 +581,17 @@ func _build_browse_page() -> Control:
 	var separator := VSeparator.new()
 	separator.add_theme_color_override("separator", UI_BORDER_INNER)
 	body.add_child(separator)
+	var detail_scroll := ScrollContainer.new()
+	detail_scroll.name = "GuildDetailScroll"
+	detail_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	body.add_child(detail_scroll)
 	detail_content = VBoxContainer.new()
 	detail_content.name = "GuildDetailPanel"
 	detail_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail_content.add_theme_constant_override("separation", 11)
-	body.add_child(detail_content)
+	detail_scroll.add_child(detail_content)
 	return body
 
 
@@ -3081,6 +3099,22 @@ func _build_member_management(guild: Dictionary, is_leader: bool) -> Control:
 		settings_announcement_input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
 		_apply_text_edit_style(settings_announcement_input)
 		content.add_child(settings_announcement_input)
+		content.add_child(_localized_label("ui.guild.requirements.manage_title", 10, UI_ACCENT))
+		var requirements_hint := _localized_label("ui.guild.requirements.manage_hint", 9, UI_MUTED)
+		requirements_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		content.add_child(requirements_hint)
+		settings_requirements = _guild_requirements(guild)
+		settings_requirements_container = VBoxContainer.new()
+		settings_requirements_container.name = "GuildSettingsRequirements"
+		settings_requirements_container.add_theme_constant_override("separation", 6)
+		content.add_child(settings_requirements_container)
+		_render_settings_requirements()
+		var add_requirement := Button.new()
+		add_requirement.name = "GuildAddRequirementButton"
+		_set_localized_property(add_requirement, "text", "ui.guild.requirements.add")
+		add_requirement.pressed.connect(_on_add_guild_requirement)
+		_apply_button_style(add_requirement)
+		content.add_child(add_requirement)
 		var choices := HBoxContainer.new()
 		choices.add_theme_constant_override("separation", 7)
 		content.add_child(choices)
@@ -3109,6 +3143,120 @@ func _build_member_management(guild: Dictionary, is_leader: bool) -> Control:
 	if not is_leader:
 		content.add_child(_localized_label("ui.guild.management.restricted", 12, UI_MUTED))
 	return panel
+
+
+func _render_settings_requirements() -> void:
+	if settings_requirements_container == null:
+		return
+	_clear_children(settings_requirements_container)
+	if settings_requirements.is_empty():
+		var empty := _localized_label("ui.guild.requirements.empty", 10, UI_MUTED)
+		empty.name = "GuildSettingsRequirementsEmpty"
+		settings_requirements_container.add_child(empty)
+		return
+	for index: int in range(settings_requirements.size()):
+		var requirement := settings_requirements[index]
+		var panel := PanelContainer.new()
+		panel.name = "GuildSettingsRequirement_%d" % index
+		panel.add_theme_stylebox_override("panel", _panel_style(UI_INPUT, UI_BORDER_INNER, 7, 1))
+		settings_requirements_container.add_child(panel)
+		var margin := MarginContainer.new()
+		_set_margins(margin, 8, 7, 8, 7)
+		panel.add_child(margin)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 6)
+		margin.add_child(row)
+		var type_select := OptionButton.new()
+		type_select.name = "GuildRequirementType_%d" % index
+		type_select.custom_minimum_size = Vector2(165, 36)
+		type_select.fit_to_longest_item = false
+		for kind: String in ["minimum_badges", "activity", "communication", "custom"]:
+			type_select.add_item(_t("ui.guild.requirements.type.%s" % kind))
+			type_select.set_item_metadata(type_select.item_count - 1, kind)
+			if kind == str(requirement.get("type", "custom")):
+				type_select.select(type_select.item_count - 1)
+		_apply_option_button_style(type_select)
+		type_select.item_selected.connect(_on_guild_requirement_type_selected.bind(index, type_select))
+		row.add_child(type_select)
+		var value_input := LineEdit.new()
+		value_input.name = "GuildRequirementValue_%d" % index
+		value_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		value_input.custom_minimum_size = Vector2(180, 36)
+		value_input.max_length = 3 if str(requirement.get("type", "")) == "minimum_badges" else 120
+		value_input.text = str(requirement.get("value", ""))
+		_set_localized_property(
+			value_input,
+			"placeholder_text",
+			"ui.guild.requirements.placeholder.%s" % str(requirement.get("type", "custom"))
+		)
+		_apply_line_edit_style(value_input)
+		value_input.text_changed.connect(_on_guild_requirement_value_changed.bind(index))
+		row.add_child(value_input)
+		row.add_child(_guild_requirement_order_button("↑", "ui.guild.requirements.move_up", index, -1, index <= 0))
+		row.add_child(_guild_requirement_order_button("↓", "ui.guild.requirements.move_down", index, 1, index >= settings_requirements.size() - 1))
+		var remove := Button.new()
+		remove.name = "GuildRemoveRequirement_%d" % index
+		remove.text = "×"
+		remove.custom_minimum_size = Vector2(36, 36)
+		_set_localized_property(remove, "tooltip_text", "ui.guild.requirements.remove")
+		remove.pressed.connect(_on_remove_guild_requirement.bind(index))
+		_apply_button_style(remove, "danger")
+		row.add_child(remove)
+
+
+func _guild_requirement_order_button(text_value: String, tooltip_key: String, index: int, direction: int, disabled: bool) -> Button:
+	var button := Button.new()
+	button.text = text_value
+	button.custom_minimum_size = Vector2(34, 36)
+	button.disabled = disabled
+	_set_localized_property(button, "tooltip_text", tooltip_key)
+	button.pressed.connect(_on_move_guild_requirement.bind(index, direction))
+	_apply_button_style(button)
+	return button
+
+
+func _on_add_guild_requirement() -> void:
+	if settings_requirements.size() >= 8:
+		_set_member_status(_t("ui.guild.requirements.error.limit"), true)
+		return
+	settings_requirements.append({"type": "custom", "value": ""})
+	_render_settings_requirements()
+
+
+func _on_remove_guild_requirement(index: int) -> void:
+	if index < 0 or index >= settings_requirements.size():
+		return
+	settings_requirements.remove_at(index)
+	_render_settings_requirements()
+
+
+func _on_move_guild_requirement(index: int, direction: int) -> void:
+	var target := index + direction
+	if index < 0 or index >= settings_requirements.size() or target < 0 or target >= settings_requirements.size():
+		return
+	var requirement := settings_requirements[index]
+	settings_requirements[index] = settings_requirements[target]
+	settings_requirements[target] = requirement
+	_render_settings_requirements()
+
+
+func _on_guild_requirement_type_selected(selected: int, index: int, select: OptionButton) -> void:
+	if index < 0 or index >= settings_requirements.size() or select == null or selected < 0:
+		return
+	var kind := str(select.get_item_metadata(selected))
+	var previous_kind := str(settings_requirements[index].get("type", "custom"))
+	settings_requirements[index]["type"] = kind
+	var current_value := str(settings_requirements[index].get("value", ""))
+	if kind == "minimum_badges" and (not current_value.is_valid_int() or int(current_value) <= 0):
+		settings_requirements[index]["value"] = "1"
+	elif previous_kind == "minimum_badges" and kind != "minimum_badges":
+		settings_requirements[index]["value"] = ""
+	_render_settings_requirements()
+
+
+func _on_guild_requirement_value_changed(value: String, index: int) -> void:
+	if index >= 0 and index < settings_requirements.size():
+		settings_requirements[index]["value"] = value
 
 
 func _build_guild_applications() -> Control:
@@ -3596,6 +3744,10 @@ func _render_selected_guild() -> void:
 	metadata.add_child(_metadata_card(_t("ui.guild.field.members"), "%d / %d" % [int(guild.get("members", 0)), int(guild.get("capacity", 0))], UI_SUCCESS))
 	metadata.add_child(_metadata_card(_t("ui.guild.field.language"), _option_display(str(guild.get("language", ""))), UI_ACCENT))
 	metadata.add_child(_metadata_card(_t("ui.guild.field.focus"), _option_display(str(guild.get("focus", ""))), UI_GOLD))
+	var requirements := _guild_requirements(guild)
+	if not requirements.is_empty():
+		detail_content.add_child(_localized_label("ui.guild.requirements.title", 10, UI_ACCENT))
+		detail_content.add_child(_build_guild_requirements_panel(requirements))
 	detail_content.add_child(_localized_label("ui.guild.about", 10, UI_ACCENT))
 
 	var description_panel := PanelContainer.new()
@@ -3642,6 +3794,82 @@ func _render_selected_guild() -> void:
 	apply_button.pressed.connect(_on_application_pressed.bind(guild))
 	_apply_button_style(apply_button, "" if not pending_application.is_empty() else "primary")
 	actions.add_child(apply_button)
+
+
+func _guild_requirements(guild: Dictionary) -> Array[Dictionary]:
+	var normalized: Array[Dictionary] = []
+	for value: Variant in _array_from_value(guild.get("requirements", [])):
+		if not value is Dictionary:
+			continue
+		var requirement := value as Dictionary
+		var kind := str(requirement.get("type", "custom")).strip_edges().to_lower()
+		var requirement_value := str(requirement.get("value", "")).strip_edges()
+		if kind in ["minimum_badges", "activity", "communication", "custom"] and requirement_value != "":
+			normalized.append({"type": kind, "value": requirement_value})
+	return normalized
+
+
+func _build_guild_requirements_panel(requirements: Array[Dictionary]) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildRequirementsPanel"
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#091b2af5"), UI_BORDER_INNER, 9, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 10, 9, 10, 9)
+	panel.add_child(margin)
+	var list := VBoxContainer.new()
+	list.add_theme_constant_override("separation", 6)
+	margin.add_child(list)
+	for index: int in range(requirements.size()):
+		var requirement := requirements[index]
+		var row_panel := PanelContainer.new()
+		row_panel.name = "GuildRequirementRow_%d" % index
+		row_panel.add_theme_stylebox_override("panel", _panel_style(UI_INPUT, UI_BORDER_INNER, 7, 1))
+		list.add_child(row_panel)
+		var row_margin := MarginContainer.new()
+		_set_margins(row_margin, 10, 7, 9, 7)
+		row_panel.add_child(row_margin)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 9)
+		row_margin.add_child(row)
+		var marker := _label("◆", 9, UI_ACCENT)
+		marker.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		row.add_child(marker)
+		var copy := _label(_guild_requirement_text(requirement), 11, UI_TEXT)
+		copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		copy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		row.add_child(copy)
+		row.add_child(_guild_requirement_status(requirement, index))
+	return panel
+
+
+func _guild_requirement_text(requirement: Dictionary) -> String:
+	var value := str(requirement.get("value", "")).strip_edges()
+	match str(requirement.get("type", "custom")):
+		"minimum_badges":
+			return _t("ui.guild.requirements.display.minimum_badges", {"count": int(value)})
+		"activity":
+			return _t("ui.guild.requirements.display.activity", {"value": value})
+		"communication":
+			return _t("ui.guild.requirements.display.communication", {"value": value})
+		_:
+			return value
+
+
+func _guild_requirement_status(requirement: Dictionary, index: int) -> Control:
+	var is_badge_requirement := str(requirement.get("type", "")) == "minimum_badges"
+	var is_met := is_badge_requirement and _player_badge_count() >= int(requirement.get("value", 0))
+	var color := UI_SUCCESS if is_met else (UI_WARNING if is_badge_requirement else UI_MUTED)
+	var key := "ui.guild.requirements.status.met" if is_met else (
+		"ui.guild.requirements.status.not_met" if is_badge_requirement else "ui.guild.requirements.status.review"
+	)
+	var pill := PanelContainer.new()
+	pill.name = "GuildRequirementStatus_%d" % index
+	pill.add_theme_stylebox_override("panel", _panel_style(Color(color, 0.09), Color(color, 0.68), 7, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 8, 4, 8, 4)
+	pill.add_child(margin)
+	margin.add_child(_localized_label(key, 9, color))
+	return pill
 
 
 func _render_empty_detail() -> void:
@@ -3863,7 +4091,40 @@ func _on_application_pressed(guild: Dictionary) -> void:
 		"open":
 			_confirm_open_guild_join(guild)
 		"applications open":
-			_apply_to_selected_guild(guild)
+			_confirm_guild_application(guild)
+
+
+func _confirm_guild_application(guild: Dictionary) -> void:
+	var requirements := _guild_requirements(guild)
+	if requirements.is_empty():
+		_apply_to_selected_guild(guild)
+		return
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "GuildApplicationRequirementsDialog"
+	dialog.title = _t("ui.guild.requirements.application_title")
+	dialog.dialog_text = _t("ui.guild.requirements.application_intro", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+	}) + "\n\n" + _guild_requirements_review_text(requirements) + "\n\n" + _t("ui.guild.requirements.application_footer")
+	dialog.ok_button_text = _t("ui.guild.application.apply")
+	dialog.cancel_button_text = _t("common.cancel")
+	_apply_guild_confirmation_style(dialog, "primary")
+	dialog.confirmed.connect(_apply_to_selected_guild.bind(guild), CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(560, mini(440, 220 + requirements.size() * 30)))
+
+
+func _guild_requirements_review_text(requirements: Array[Dictionary]) -> String:
+	var lines: Array[String] = []
+	for requirement: Dictionary in requirements:
+		var is_badges := str(requirement.get("type", "")) == "minimum_badges"
+		var is_met := is_badges and _player_badge_count() >= int(requirement.get("value", 0))
+		var status := _t("ui.guild.requirements.status.met") if is_met else (
+			_t("ui.guild.requirements.status.not_met") if is_badges else _t("ui.guild.requirements.status.review")
+		)
+		lines.append("• %s — %s" % [_guild_requirement_text(requirement), status])
+	return "\n".join(lines)
 
 
 func _confirm_open_guild_join(guild: Dictionary) -> void:
@@ -3873,6 +4134,11 @@ func _confirm_open_guild_join(guild: Dictionary) -> void:
 	dialog.dialog_text = _t("ui.guild.application.join_confirm", {
 		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
 	})
+	var requirements := _guild_requirements(guild)
+	if not requirements.is_empty():
+		dialog.dialog_text += "\n\n" + _t("ui.guild.requirements.application_intro", {
+			"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
+		}) + "\n\n" + _guild_requirements_review_text(requirements) + "\n\n" + _t("ui.guild.requirements.application_footer")
 	dialog.ok_button_text = _t("ui.guild.application.join")
 	dialog.cancel_button_text = _t("common.cancel")
 	_apply_guild_confirmation_style(dialog, "primary")
@@ -3880,7 +4146,7 @@ func _confirm_open_guild_join(guild: Dictionary) -> void:
 	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
 	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
 	add_child(dialog)
-	dialog.popup_centered(Vector2i(430, 170))
+	dialog.popup_centered(Vector2i(560, mini(440, 200 + requirements.size() * 30)))
 
 
 func _join_selected_guild(guild: Dictionary) -> void:
@@ -4168,6 +4434,10 @@ func _on_save_settings() -> void:
 	if description.length() < 12:
 		_set_member_status(_t("ui.guild.error.description_short"), true)
 		return
+	var requirements_result := _validated_settings_requirements()
+	if not bool(requirements_result.get("success", false)):
+		_set_member_status(str(requirements_result.get("error", "")), true)
+		return
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
 		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
@@ -4180,7 +4450,8 @@ func _on_save_settings() -> void:
 		_selected_option_value(settings_language_select),
 		_selected_option_value(settings_focus_select),
 		_selected_option_value(settings_recruitment_select),
-		_selected_guild_loan_duration()
+		_selected_guild_loan_duration(),
+		_array_from_value(requirements_result.get("requirements", []))
 	)
 	var result := _dictionary(response)
 	if not bool(result.get("success", false)):
@@ -4188,6 +4459,23 @@ func _on_save_settings() -> void:
 		return
 	_apply_home_result(result)
 	_set_member_status(_t("ui.guild.status.settings_saved"), false)
+
+
+func _validated_settings_requirements() -> Dictionary:
+	var normalized: Array[Dictionary] = []
+	for requirement: Dictionary in settings_requirements:
+		var kind := str(requirement.get("type", "custom")).strip_edges().to_lower()
+		var value := str(requirement.get("value", "")).strip_edges()
+		if value == "":
+			return {"success": false, "error": _t("ui.guild.requirements.error.empty")}
+		if kind == "minimum_badges":
+			if not value.is_valid_int() or int(value) < 1 or int(value) > 64:
+				return {"success": false, "error": _t("ui.guild.requirements.error.badges")}
+			value = str(int(value))
+		if not kind in ["minimum_badges", "activity", "communication", "custom"]:
+			kind = "custom"
+		normalized.append({"type": kind, "value": value})
+	return {"success": true, "requirements": normalized}
 
 
 func _on_invite_member(dialog: ConfirmationDialog = null) -> void:

@@ -4,6 +4,7 @@
 
 **Added**
 
+- Guild leaders can build an ordered recruitment-requirement checklist that applicants review on the Guild profile and before applying.
 - Guild Resources provide shared consumable-item stacks that Members can freely donate to or withdraw from, with per-member access controls for Guild leaders.
 - Guild leaders can publish a dedicated announcement that occupies the main Guild overview.
 - Guild application decisions now appear as localized system messages, including decisions received while the applicant was offline.
