@@ -7,6 +7,7 @@ import {fileURLToPath} from "node:url";
 
 const ACCEPT_FLAG = "--accept-machine-translation";
 const ITEMS_ONLY_FLAG = "--items-only";
+const LOCALE_FLAG = "--locale";
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const generatedDir = path.join(projectRoot, "localization/content/generated");
 const englishSourcePath = path.join(generatedDir, "en.json");
@@ -15,6 +16,7 @@ const englishItemSourcePath = path.join(generatedItemDir, "en.json");
 const targets = [
 	{locale: "nl", translationLanguage: "nl"},
 	{locale: "pt_BR", translationLanguage: "pt"},
+	{locale: "zh_CN", translationLanguage: "zh-CN"},
 ];
 const batchSize = 18;
 const concurrency = 4;
@@ -40,6 +42,9 @@ function chunk(values, size) {
 }
 
 function translatedResponseText(payload) {
+	if (Array.isArray(payload) && payload.every((segment) => typeof segment === "string")) {
+		return payload.join("");
+	}
 	return payload[0].map((segment) => String(segment[0] ?? "")).join("");
 }
 
@@ -48,11 +53,10 @@ async function translateBatch(strings, targetLanguage, batchNumber) {
 	const input = strings
 		.map((value, index) => `${markers[index]} ${value.replaceAll("\n", " ")}`)
 		.join("\n");
-	const url = new URL("https://translate.googleapis.com/translate_a/single");
-	url.searchParams.set("client", "gtx");
+	const url = new URL("https://clients5.google.com/translate_a/t");
+	url.searchParams.set("client", "dict-chrome-ex");
 	url.searchParams.set("sl", "en");
 	url.searchParams.set("tl", targetLanguage);
-	url.searchParams.set("dt", "t");
 	url.searchParams.set("q", input);
 
 	let lastError;
@@ -244,9 +248,19 @@ async function generateItemLocale(englishItems, target) {
 	);
 }
 
+const localeFlagIndex = process.argv.indexOf(LOCALE_FLAG);
+const requestedLocale = localeFlagIndex >= 0 ? String(process.argv[localeFlagIndex + 1] ?? "") : "";
+const selectedTargets = requestedLocale
+	? targets.filter((target) => target.locale === requestedLocale)
+	: targets;
+if (requestedLocale && selectedTargets.length === 0) {
+	console.error(`Unknown locale for ${LOCALE_FLAG}: ${requestedLocale}`);
+	process.exit(2);
+}
+
 const englishSource = readJson(englishSourcePath);
 const englishItems = readJson(englishItemSourcePath);
-for (const target of targets) {
+for (const target of selectedTargets) {
 	if (!process.argv.includes(ITEMS_ONLY_FLAG)) {
 		await generateLocale(englishSource, target);
 	}

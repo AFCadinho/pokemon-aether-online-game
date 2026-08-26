@@ -14,6 +14,10 @@ const CATALOG_PATHS: Dictionary = {
 		"res://localization/items/generated/pt_BR.json",
 		"res://localization/items/pt_BR.json",
 	],
+	"zh_CN": [
+		"res://localization/items/generated/zh_CN.json",
+		"res://localization/items/zh_CN.json",
+	],
 }
 const SOURCE_NAME_FIELD := "_i18n_source_name"
 const SOURCE_DESCRIPTION_FIELD := "_i18n_source_short_desc"

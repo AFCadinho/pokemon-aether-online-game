@@ -8,6 +8,7 @@ const SIGN_DIRECTORY_BY_LOCALE: Dictionary = {
 	"en": "en",
 	"nl": "nl",
 	"pt_BR": "pt-BR",
+	"zh_CN": "zh-CN",
 }
 
 var sign_catalog_cache: Dictionary = {}

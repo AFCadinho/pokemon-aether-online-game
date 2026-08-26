@@ -158,7 +158,7 @@ func _check_zoom_scaling() -> void:
 
 
 func _check_localization() -> void:
-	for locale: String in ["en", "nl", "pt_BR"]:
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var path := "res://localization/%s.json" % locale
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 		_check(parsed is Dictionary, "%s localization is valid JSON" % locale)

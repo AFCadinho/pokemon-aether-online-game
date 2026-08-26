@@ -10,6 +10,7 @@ const ITEM_LOCALE_PATHS: Dictionary = {
 	"en": "res://localization/items/generated/en.json",
 	"nl": "res://localization/items/generated/nl.json",
 	"pt_BR": "res://localization/items/generated/pt_BR.json",
+	"zh_CN": "res://localization/items/generated/zh_CN.json",
 }
 var failed := false
 var external_sprite_assets_available := false

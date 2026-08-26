@@ -69,7 +69,7 @@ func _init() -> void:
 	)
 	_check(_read_text(PLAYER_SCENE).contains("zoom = Vector2(1, 1)"), "player camera scene defaults to 1x")
 	_check(_read_text(WORLD_SCENE).contains("texture_filter = 1"), "overworld uses nearest texture filtering")
-	for locale_path: String in ["res://localization/en.json", "res://localization/nl.json", "res://localization/pt_BR.json"]:
+	for locale_path: String in ["res://localization/en.json", "res://localization/nl.json", "res://localization/pt_BR.json", "res://localization/zh_CN.json"]:
 		var locale_text := _read_text(locale_path)
 		_check(
 			locale_text.contains('"ui.settings.world_pixel_scale"')

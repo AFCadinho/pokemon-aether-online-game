@@ -1,0 +1,24 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_pallet_town",
+  "signs": [
+    {
+      "id": "kanto_pallet_town_town_sign",
+      "type": "town",
+      "title": "真新镇",
+      "lines": ["真新镇", "一座宁静的小镇，新的旅程从这里开始。"]
+    },
+    {
+      "id": "kanto_pallet_town_trainer_tips_1",
+      "type": "trainer_tips",
+      "speakerName": "训练家提示",
+      "lines": ["面向人物或告示牌时按下互动键。"]
+    },
+    {
+      "id": "kanto_pallet_town_oaks_lab",
+      "type": "building",
+      "title": "大木研究所",
+      "lines": ["大木博士的宝可梦研究所", "研究宝可梦奥秘的地方。"]
+    }
+  ]
+}
