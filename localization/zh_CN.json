@@ -2252,7 +2252,7 @@
   "ui.staff.tools.subtitle": "审核和玩家协助",
   "ui.staff.translate.action": "翻译模式",
   "ui.staff.translate.action_on": "翻译模式 · 已开启",
-  "ui.staff.translate.action_description_off": "翻译葡萄牙语和简体中文聊天",
+  "ui.staff.translate.action_description_off": "翻译语言频道中的消息",
   "ui.staff.translate.action_description_on": "已启用 · 点击关闭",
   "ui.staff.translate.action_description_unavailable": "翻译服务不可用",
   "ui.staff.chat.action": "审核中心",

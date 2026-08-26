@@ -2255,7 +2255,7 @@
   "ui.staff.tools.subtitle": "Moderation and player assistance",
   "ui.staff.translate.action": "Translate Mode",
   "ui.staff.translate.action_on": "Translate Mode · On",
-  "ui.staff.translate.action_description_off": "Translate Portuguese and Simplified Chinese chat",
+  "ui.staff.translate.action_description_off": "Translate messages in language channels",
   "ui.staff.translate.action_description_on": "Active · Click to turn off",
   "ui.staff.translate.action_description_unavailable": "Translation service is unavailable",
   "ui.staff.chat.action": "Moderation Center",

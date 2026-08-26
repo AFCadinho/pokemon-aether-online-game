@@ -9,6 +9,10 @@
 - Added full Simplified Chinese language support throughout the game and launcher.
 - Staff with the Translate Language Chats permission can translate Chinese and Portuguese chat to and from English in real time.
 
+**Changed**
+
+- Highlight the active staff Translate Mode card in green and describe it generically for all language channels.
+
 **Fixed**
 
 - Pokémon in battle now show the correct blue male or pink female gender icon.

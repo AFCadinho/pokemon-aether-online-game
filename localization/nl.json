@@ -2255,7 +2255,7 @@
   "ui.staff.tools.subtitle": "Moderatie en hulp aan spelers",
   "ui.staff.translate.action": "Vertaalmodus",
   "ui.staff.translate.action_on": "Vertaalmodus · Aan",
-  "ui.staff.translate.action_description_off": "Vertaal Portugese en vereenvoudigd-Chinese chat",
+  "ui.staff.translate.action_description_off": "Vertaal berichten in taalkanalen",
   "ui.staff.translate.action_description_on": "Actief · Klik om uit te schakelen",
   "ui.staff.translate.action_description_unavailable": "Vertaalservice is niet beschikbaar",
   "ui.staff.chat.action": "Moderatiecentrum",

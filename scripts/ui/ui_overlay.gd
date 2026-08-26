@@ -27026,12 +27026,19 @@ func _refresh_chat_translate_mode_ui() -> void:
 	if staff_chat_translate_button == null:
 		return
 	var allowed := _has_user_permission(CHAT_TRANSLATE_PERMISSION)
+	var active := (
+		allowed
+		and ChatRealtimeService.translation_mode_available
+		and ChatRealtimeService.translation_mode_allowed
+		and ChatRealtimeService.translation_mode_enabled
+	)
 	staff_chat_translate_button.visible = allowed
 	staff_chat_translate_button.disabled = (
 		not allowed
 		or not ChatRealtimeService.translation_mode_available
 		or not ChatRealtimeService.translation_mode_allowed
 	)
+	_apply_chat_translate_mode_card_style(active)
 	if staff_chat_translate_button_title != null:
 		staff_chat_translate_button_title.text = LocalizationManager.text(
 			"ui.staff.translate.action_on"
@@ -27054,6 +27061,42 @@ func _refresh_chat_translate_mode_ui() -> void:
 				not ChatRealtimeService.translation_mode_enabled
 				or (entry != null and bool(entry.get_meta("chat_translation_is_ai", false)))
 			)
+
+
+func _apply_chat_translate_mode_card_style(active: bool) -> void:
+	if staff_chat_translate_button == null:
+		return
+	var accent := UI_SUCCESS if active else Color("#67e4ff")
+	var normal_background := Color("#0b2518f2") if active else UI_SURFACE_RAISED
+	var hover_background := Color("#10341ff5") if active else UI_SURFACE_HOVER
+	var pressed_background := Color("#081d13f5") if active else UI_SURFACE_BASE
+	var border_width := 2 if active else 1
+	staff_chat_translate_button.add_theme_stylebox_override(
+		"normal",
+		_make_button_style(
+			normal_background,
+			Color(accent.r, accent.g, accent.b, 0.85 if active else 0.55),
+			10,
+			border_width
+		)
+	)
+	staff_chat_translate_button.add_theme_stylebox_override(
+		"hover", _make_button_style(hover_background, accent, 10, border_width)
+	)
+	staff_chat_translate_button.add_theme_stylebox_override(
+		"pressed", _make_button_style(pressed_background, accent, 10, border_width)
+	)
+	staff_chat_translate_button.add_theme_stylebox_override(
+		"focus", _make_button_style(hover_background, accent if active else UI_BORDER_FOCUS, 10, border_width)
+	)
+	if staff_chat_translate_button_title != null:
+		staff_chat_translate_button_title.add_theme_color_override(
+			"font_color", UI_SUCCESS if active else UI_TEXT
+		)
+	if staff_chat_translate_button_subtitle != null:
+		staff_chat_translate_button_subtitle.add_theme_color_override(
+			"font_color", Color("#a5e9b3") if active else UI_MUTED_TEXT
+		)
 
 
 func _refresh_guild_chat_membership() -> void:
