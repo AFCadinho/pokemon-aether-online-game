@@ -48,6 +48,12 @@ func _run() -> void:
 		"Translate Mode is exposed as a permission-gated Staff Tools card"
 	)
 	_check(
+		overlay_source.contains("func _apply_chat_translate_mode_card_style(active: bool)")
+		and overlay_source.contains('var accent := UI_SUCCESS if active')
+		and overlay_source.contains('var border_width := 2 if active else 1'),
+		"The server-confirmed active Translate Mode card uses a distinct green state"
+	)
+	_check(
 		realtime_source.contains('"type": "chat_translation.set"'),
 		"The client asks the backend to change translation state"
 	)
@@ -79,6 +85,17 @@ func _run() -> void:
 			continue
 		for key: String in REQUIRED_KEYS:
 			_check((parsed as Dictionary).has(key), "%s contains %s" % [locale, key])
+		var description := str((parsed as Dictionary).get(
+			"ui.staff.translate.action_description_off", ""
+		)).to_lower()
+		_check(
+			not description.contains("portugu")
+			and not description.contains("chinese")
+			and not description.contains("chinês")
+			and not description.contains("中文")
+			and not description.contains("simplified"),
+			"%s keeps the Translate Mode description language-agnostic" % locale
+		)
 
 	quit(1 if failures > 0 else 0)
 

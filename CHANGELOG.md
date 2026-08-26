@@ -33,6 +33,7 @@
 - Guild teleport actions now occupy the member header instead of a separate travel bar, leaving more room inside every Guild tab.
 - Members and recruits now need an explicit Guild Bank permission to deposit items or Pokémon; depositing money remains available to every Guild member.
 - Guild members now get Overview, Guild Bank, Members, and authorized management tabs in the top navigation, while Guild discovery is a compact secondary action.
+- Highlight the active staff Translate Mode card in green and describe it generically for all language channels.
 
 **Fixed**
 
