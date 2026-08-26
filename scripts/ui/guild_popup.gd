@@ -2090,6 +2090,17 @@ func _show_guild_pokemon_vault_window() -> void:
 	close.add_theme_font_size_override("font_size", 19)
 	close.pressed.connect(window.queue_free)
 	title_row.add_child(close)
+	var status_panel := PanelContainer.new()
+	status_panel.name = "GuildPokemonVaultStatusPanel"
+	status_panel.visible = false
+	content.add_child(status_panel)
+	var status_margin := MarginContainer.new()
+	_set_margins(status_margin, 11, 7, 11, 7)
+	status_panel.add_child(status_margin)
+	var status_label := _label("", 11, UI_MUTED)
+	status_label.name = "GuildPokemonVaultStatus"
+	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	status_margin.add_child(status_label)
 	var body := HBoxContainer.new()
 	body.name = "GuildPokemonVaultBody"
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -2384,6 +2395,28 @@ func _guild_bank_pokemon_entry(pokemon_id: int) -> Dictionary:
 		if value is Dictionary and int((value as Dictionary).get("pokemonId", 0)) == pokemon_id:
 			return value as Dictionary
 	return {}
+
+
+func _set_guild_pokemon_vault_status(message: String, is_error: bool) -> void:
+	var window := find_child("GuildPokemonVaultWindow", true, false) as Window
+	if window == null:
+		return
+	var panel := window.find_child("GuildPokemonVaultStatusPanel", true, false) as PanelContainer
+	var label := window.find_child("GuildPokemonVaultStatus", true, false) as Label
+	if panel == null or label == null:
+		return
+	panel.visible = not message.is_empty()
+	label.text = message
+	label.add_theme_color_override("font_color", UI_WARNING if is_error else UI_SUCCESS)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(
+			Color("#2a1715ed") if is_error else Color("#0b241bed"),
+			UI_WARNING if is_error else UI_SUCCESS.darkened(0.2),
+			7,
+			1
+		)
+	)
 
 
 func _build_guild_bank_asset_toolbar(category: String) -> Control:
@@ -3457,6 +3490,7 @@ func _confirm_guild_bank_donation(asset_name: String, confirmed_action: Callable
 func _run_guild_bank_action(method: String, arguments: Array, asset_type: String) -> void:
 	if is_guild_bank_action_in_flight:
 		return
+	_set_guild_pokemon_vault_status("", false)
 	is_guild_bank_action_in_flight = true
 	_render_guild_home()
 	var service := get_node_or_null("/root/GuildService")
@@ -5879,6 +5913,7 @@ func _set_member_status(message: String, is_error: bool) -> void:
 func _render_guild_home_with_status(message: String, is_error: bool) -> void:
 	_render_guild_home()
 	_set_member_status(message, is_error)
+	_set_guild_pokemon_vault_status(message, is_error)
 
 
 func _set_browse_status(message: String, is_error: bool) -> void:

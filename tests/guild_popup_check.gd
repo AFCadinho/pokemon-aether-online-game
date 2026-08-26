@@ -93,6 +93,7 @@ func _init() -> void:
 	_check_contains(popup_source, "GuildPokemonVaultWindow", "full Pokémon Vault opens in a dedicated window")
 	_check_contains(popup_source, "GuildPokemonVaultGrid", "full Pokémon Vault presents a PC-like grid")
 	_check_contains(popup_source, "GuildPokemonVaultSelectedActions", "selected Guild Pokémon expose contextual actions")
+	_check_contains(popup_source, "GuildPokemonVaultStatusPanel", "full Pokémon Vault keeps action feedback visible")
 	_check_contains(popup_source, "GuildBankItemListScroll", "Guild item and Resource previews remain scrollable")
 	_check_contains(popup_source, "GuildBankPermissionSummary", "Guild Bank explains the current rank's transaction rights")
 	_check_contains(popup_source, "GuildBankRankRightsWorkspace", "Guild Bank exposes a complete rank-rights page")

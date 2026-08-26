@@ -306,6 +306,25 @@ func _run() -> void:
 	_check(pokemon_vault_window != null and pokemon_vault_window.find_child("GuildPokemonVaultGrid", true, false) != null, "full Pokémon Vault presents Guild Pokémon in a grid")
 	_check(pokemon_vault_window != null and pokemon_vault_window.find_child("GuildPokemonVaultSearchInput", true, false) != null, "full Pokémon Vault provides search")
 	_check(pokemon_vault_window != null and pokemon_vault_window.find_child("GuildPokemonVaultFilterSelect", true, false) != null, "full Pokémon Vault provides filters")
+	popup._render_guild_home_with_status("Vault action failed", true)
+	await process_frame
+	var vault_status_panel := pokemon_vault_window.find_child("GuildPokemonVaultStatusPanel", true, false) as PanelContainer
+	var vault_status := pokemon_vault_window.find_child("GuildPokemonVaultStatus", true, false) as Label
+	_check(
+		vault_status_panel != null and vault_status_panel.visible
+		and vault_status != null and vault_status.text == "Vault action failed"
+		and vault_status.get_theme_color("font_color") == GuildPopup.UI_WARNING,
+		"full Pokémon Vault keeps failed-action feedback visible after refresh"
+	)
+	popup._render_guild_home_with_status("Guild Bank updated.", false)
+	await process_frame
+	_check(
+		vault_status_panel.visible
+		and vault_status.text == "Guild Bank updated."
+		and vault_status.get_theme_color("font_color") == GuildPopup.UI_SUCCESS,
+		"full Pokémon Vault keeps successful-action feedback visible after refresh"
+	)
+	popup._set_guild_pokemon_vault_status("", false)
 	_check(popup.find_child("GuildBankPokemonLogButton", true, false) != null, "Pokémon Vault has a dedicated log action")
 	_check(pokemon_vault_window != null and pokemon_vault_window.find_child("GuildBankPokemonDepositButton_22", true, false) == null, "full Pokémon Vault focuses only on Guild-owned assets")
 	var original_bank_pokemon: Array = popup.guild_bank_state["pokemon"].duplicate(true)
