@@ -57,7 +57,7 @@ func _init() -> void:
 	_check(gideon_source.contains("var greeting: Array[String]"), "Gideon passes a typed greeting array to dialogue resolution")
 	_check(gideon_source.contains("func _resolve_dialogue_lines(dialogue_id: String, fallback: Array)"), "Gideon accepts inline fallback dialogue arrays")
 
-	for locale: String in ["en", "nl", "pt_BR"]:
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))
 		var catalog := parsed as Dictionary if parsed is Dictionary else {}
 		for key: String in REQUIRED_KEYS:

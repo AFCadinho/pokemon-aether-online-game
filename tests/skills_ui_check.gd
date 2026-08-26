@@ -366,6 +366,7 @@ func _run() -> void:
 		"res://localization/en.json",
 		"res://localization/nl.json",
 		"res://localization/pt_BR.json",
+		"res://localization/zh_CN.json",
 	]:
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(locale_path))
 		_check(parsed is Dictionary and (parsed as Dictionary).has("ui.skills.thieving.name"), "%s contains Skills translations" % locale_path)

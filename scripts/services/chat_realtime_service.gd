@@ -10,6 +10,8 @@ signal friend_request_received(request: Dictionary)
 signal authorized_teleport_received(state: Dictionary, reason: String)
 signal connection_changed(connected: bool)
 signal session_invalid(reason: String)
+signal translation_state_changed(available: bool, allowed: bool, enabled: bool)
+signal translation_warning(message: String)
 
 const RECONNECT_DELAY_SECONDS := 4.0
 const SESSION_CHECK_INTERVAL_SECONDS := 10.0
@@ -24,6 +26,10 @@ var reconnect_timer: float = 0.0
 var session_check_timer: float = SESSION_CHECK_INTERVAL_SECONDS
 var session_invalid_handled: bool = false
 var connection_attempt_generation := 0
+var translation_mode_requested := false
+var translation_mode_available := false
+var translation_mode_allowed := false
+var translation_mode_enabled := false
 
 
 func _process(delta: float) -> void:
@@ -39,6 +45,10 @@ func _process(delta: float) -> void:
 	if connected != is_connected:
 		connected = is_connected
 		connection_changed.emit(connected)
+		if connected:
+			_send_translation_mode_request()
+		else:
+			translation_mode_enabled = false
 
 	if ready_state == WebSocketPeer.STATE_OPEN:
 		connecting = false
@@ -144,6 +154,23 @@ func send_chat_message(
 	return error == OK
 
 
+func set_translation_mode_requested(enabled: bool) -> void:
+	translation_mode_requested = enabled
+	_send_translation_mode_request()
+
+
+func _send_translation_mode_request() -> void:
+	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
+		return
+	var payload: Dictionary = {
+		"type": "chat_translation.set",
+		"enabled": translation_mode_requested,
+	}
+	var error := websocket.send_text(JSON.stringify(payload))
+	if error != OK:
+		translation_warning.emit("Translation mode could not be updated.")
+
+
 func _send_session_check() -> void:
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
 		return
@@ -181,6 +208,21 @@ func _process_packets() -> void:
 
 		var message: Dictionary = parsed_body
 		var message_type: String = str(message.get("type", "")).to_lower().strip_edges()
+		if message_type == "chat_translation.state":
+			translation_mode_available = bool(message.get("available", false))
+			translation_mode_allowed = bool(message.get("allowed", false))
+			translation_mode_enabled = bool(message.get("enabled", false))
+			if not translation_mode_enabled and translation_mode_requested:
+				translation_mode_requested = false
+			translation_state_changed.emit(
+				translation_mode_available,
+				translation_mode_allowed,
+				translation_mode_enabled
+			)
+			continue
+		if message_type == "chat_translation.warning":
+			translation_warning.emit(str(message.get("message", "Translation was unavailable.")))
+			continue
 		if message_type == "private_message.received":
 			private_message_received.emit(message)
 			continue

@@ -19,8 +19,15 @@ func _run() -> void:
 
 	_check(manager.normalize_locale("nl-NL") == "nl", "Dutch locale normalization matches the game")
 	_check(manager.normalize_locale("pt-PT") == "pt_BR", "Portuguese locale normalization matches the game")
+	_check(manager.normalize_locale("zh-Hans") == "zh_CN", "Simplified Chinese locale normalization matches the game")
 	_check(manager.normalize_locale("de-DE") == "en", "unsupported launcher locales fall back to English")
 	_check(manager.get_http_locale("pt_BR") == "pt-BR", "launcher maps pt_BR to the HTTP locale")
+	_check(manager.get_http_locale("zh_CN") == "zh-CN", "launcher maps zh_CN to the HTTP locale")
+	manager.set_locale("zh_CN")
+	_check(
+		ThemeDB.fallback_font != null and ThemeDB.fallback_font.has_char("简".unicode_at(0)),
+		"launcher activates the bundled Simplified Chinese font"
+	)
 	_check_language_selector_presentation(manager)
 
 	var scene := load("res://scenes/launcher.tscn") as PackedScene
@@ -146,7 +153,7 @@ func _check_language_selector_presentation(manager: Node) -> void:
 			manager.get_language_name(locale),
 			index
 		)
-	_check(selector.item_count == 3, "launcher styled language selector lists every locale")
+	_check(selector.item_count == 4, "launcher styled language selector lists every locale")
 	for index: int in range(selector.item_count):
 		_check(selector.get_item_icon(index) != null, "launcher language option %d has a flag" % index)
 	_check(selector.has_theme_icon_override("arrow"), "launcher language selector uses its custom chevron")

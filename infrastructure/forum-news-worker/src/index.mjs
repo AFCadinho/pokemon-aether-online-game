@@ -182,7 +182,49 @@ export async function fetchCategoryPayloads(config, fetchImpl = fetch) {
     fetchJson(categoryUrl, fetchImpl),
     fetchJson(topicsUrl, fetchImpl),
   ]);
+  await hydrateMissingExcerpts(categoryPayload, topicsPayload, config, fetchImpl);
   return { categoryPayload, topicsPayload };
+}
+
+async function hydrateMissingExcerpts(categoryPayload, topicsPayload, config, fetchImpl) {
+  const categoryTopicId = categoryTopicIdFromUrl(categoryPayload?.category?.topic_url);
+  const topics = topicsPayload?.topic_list?.topics;
+  if (!Array.isArray(topics)) return;
+
+  const recentTopics = topics
+    .filter((topic) => (
+      topic
+      && typeof topic === "object"
+      && !Array.isArray(topic)
+      && Number.isInteger(topic.id)
+      && topic.id > 0
+      && topic.id !== categoryTopicId
+      && topic.category_id === config.categoryId
+      && topic.visible === true
+      && topic.archetype === "regular"
+    ))
+    .map((topic) => ({ topic, createdAt: parseDiscourseDate(topic.created_at, topic.id) }))
+    .sort((left, right) => (
+      right.createdAt.getTime() - left.createdAt.getTime() || right.topic.id - left.topic.id
+    ))
+    .slice(0, config.maxArticles);
+
+  await Promise.all(recentTopics.map(async ({ topic }) => {
+    if (cleanText(topic.excerpt)) return;
+
+    const topicPayload = await fetchJson(`${config.forumBaseUrl}/t/${topic.id}.json`, fetchImpl);
+    if (topicPayload?.id !== topic.id) {
+      throw new FeedError(`Discourse topic response was for ID ${String(topicPayload?.id)}, expected ${topic.id}`);
+    }
+    const posts = topicPayload?.post_stream?.posts;
+    const firstPost = Array.isArray(posts)
+      ? posts.find((post) => post?.post_number === 1 && post?.topic_id === topic.id)
+      : null;
+    if (!firstPost || !cleanText(firstPost.cooked)) {
+      throw new FeedError(`Discourse topic ${topic.id} has no public first-post content`);
+    }
+    topic.excerpt = firstPost.cooked;
+  }));
 }
 
 export function buildFeed(categoryPayload, topicsPayload, config = DEFAULTS) {

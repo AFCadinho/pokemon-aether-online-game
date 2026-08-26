@@ -5,11 +5,13 @@ const CATALOG_PATHS: Dictionary = {
 	"en": "res://localization/items/en.json",
 	"nl": "res://localization/items/nl.json",
 	"pt_BR": "res://localization/items/pt_BR.json",
+	"zh_CN": "res://localization/items/zh_CN.json",
 }
 const GENERATED_CATALOG_PATHS: Dictionary = {
 	"en": "res://localization/items/generated/en.json",
 	"nl": "res://localization/items/generated/nl.json",
 	"pt_BR": "res://localization/items/generated/pt_BR.json",
+	"zh_CN": "res://localization/items/generated/zh_CN.json",
 }
 const SHOP_CONSUMER_PATHS: Dictionary = {
 	"Aether Atelier": "res://scripts/ui/aether_atelier_popup.gd",
