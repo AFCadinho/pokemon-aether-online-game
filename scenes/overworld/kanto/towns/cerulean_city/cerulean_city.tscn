@@ -20,13 +20,13 @@ size = Vector2(96, 32)
 size = Vector2(160, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_24_water_exit"]
-size = Vector2(192, 32)
+size = Vector2(208, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_24_bridge_exit"]
-size = Vector2(288, 32)
+size = Vector2(192, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_24_water_right_exit"]
-size = Vector2(128, 32)
+size = Vector2(144, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_9_left_exit"]
 size = Vector2(112, 32)
@@ -124,32 +124,32 @@ music_track_id = "overworld.kanto.cerulean_city"
 [node name="FromRoute4" type="Marker2D" parent="Spawns" unique_id=1976159514]
 position = Vector2(48, 816)
 
-[node name="FromRoute4Water" type="Marker2D" parent="Spawns"]
+[node name="FromRoute4Water" type="Marker2D" parent="Spawns" unique_id=376671833]
 position = Vector2(48, 592)
 
 [node name="FromCeruleanCave" type="Marker2D" parent="Spawns" unique_id=1182562427]
 position = Vector2(528, 208)
 
 [node name="FromRoute24Path" type="Marker2D" parent="Spawns" unique_id=686192888]
-position = Vector2(2192, 80)
+position = Vector2(2192, 48)
 
 [node name="FromRoute24WaterLeft" type="Marker2D" parent="Spawns" unique_id=1716181807]
-position = Vector2(1584, 80)
+position = Vector2(1584, 48)
 
-[node name="FromRoute24Bridge" type="Marker2D" parent="Spawns"]
-position = Vector2(1808, 80)
+[node name="FromRoute24Bridge" type="Marker2D" parent="Spawns" unique_id=1495799302]
+position = Vector2(1808, 48)
 
-[node name="FromRoute24WaterRight" type="Marker2D" parent="Spawns"]
-position = Vector2(2000, 80)
+[node name="FromRoute24WaterRight" type="Marker2D" parent="Spawns" unique_id=319986114]
+position = Vector2(2000, 48)
 
 [node name="FromRoute9Left" type="Marker2D" parent="Spawns" unique_id=2084918086]
-position = Vector2(400, 2176)
+position = Vector2(464, 2192)
 
 [node name="FromRoute9Grass" type="Marker2D" parent="Spawns" unique_id=2144826856]
-position = Vector2(544, 2176)
+position = Vector2(656, 2192)
 
 [node name="FromRoute9Right" type="Marker2D" parent="Spawns" unique_id=1440214985]
-position = Vector2(688, 2176)
+position = Vector2(816, 2192)
 
 [node name="FromRoute5" type="Marker2D" parent="Spawns" unique_id=1189067734]
 position = Vector2(2352, 1424)
@@ -172,7 +172,7 @@ z_as_relative = false
 tile_footprint = Vector2i(1, 5)
 flow_direction = "left"
 
-[node name="ToRoute4Water" type="Area2D" parent="Exits"]
+[node name="ToRoute4Water" type="Area2D" parent="Exits" unique_id=1375053531]
 position = Vector2(16, 592)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_4.tscn"
@@ -180,10 +180,10 @@ target_spawn_name = "FromCeruleanWater"
 transition_id = "kanto_cerulean_city__to_route_4_water"
 transition_facing_direction = "left"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute4Water"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute4Water" unique_id=297229048]
 shape = SubResource("RectangleShape2D_route_4_water_exit")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute4Water" instance=ExtResource("5_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToRoute4Water" unique_id=1084339761 instance=ExtResource("5_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(1, 7)
 flow_direction = "left"
@@ -228,14 +228,14 @@ transition_id = "kanto_cerulean_city__to_route_24_water_left"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute24WaterLeft" unique_id=1769934759]
-position = Vector2(-16, -16)
+position = Vector2(-8, -16)
 shape = SubResource("RectangleShape2D_route_24_water_exit")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute24WaterLeft" unique_id=1540901010 instance=ExtResource("5_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(6, 1)
 
-[node name="ToRoute24Bridge" type="Area2D" parent="Exits"]
+[node name="ToRoute24Bridge" type="Area2D" parent="Exits" unique_id=1807341028]
 position = Vector2(1808, 16)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
@@ -243,15 +243,15 @@ target_spawn_name = "FromCeruleanBridge"
 transition_id = "kanto_cerulean_city__to_route_24_bridge"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute24Bridge"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute24Bridge" unique_id=1499522519]
 position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_route_24_bridge_exit")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute24Bridge" instance=ExtResource("5_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToRoute24Bridge" unique_id=1683341300 instance=ExtResource("5_hint")]
 z_as_relative = false
-tile_footprint = Vector2i(9, 1)
+tile_footprint = Vector2i(6, 1)
 
-[node name="ToRoute24WaterRight" type="Area2D" parent="Exits"]
+[node name="ToRoute24WaterRight" type="Area2D" parent="Exits" unique_id=1121918068]
 position = Vector2(2016, 16)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
@@ -259,13 +259,14 @@ target_spawn_name = "FromCeruleanWaterRight"
 transition_id = "kanto_cerulean_city__to_route_24_water_right"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute24WaterRight"]
-position = Vector2(0, -16)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute24WaterRight" unique_id=291057997]
+position = Vector2(-8, -16)
 shape = SubResource("RectangleShape2D_route_24_water_right_exit")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute24WaterRight" instance=ExtResource("5_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToRoute24WaterRight" unique_id=1437726185 instance=ExtResource("5_hint")]
 z_as_relative = false
-tile_footprint = Vector2i(4, 1)
+position = Vector2(-16, 0)
+tile_footprint = Vector2i(5, 1)
 
 [node name="ToRoute9Left" type="Area2D" parent="Exits" unique_id=1635975885]
 position = Vector2(464, 2224)
