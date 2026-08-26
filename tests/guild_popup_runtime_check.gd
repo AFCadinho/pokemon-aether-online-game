@@ -161,6 +161,10 @@ func _run() -> void:
 	_check(popup.find_child("GuildMembersTab", true, false) != null, "guild members tab renders")
 	_check(popup.find_child("GuildManagementTab", true, false) != null, "guild management tab renders for leaders")
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "guild dashboard opens on its overview")
+	var guild_progress := popup.find_child("GuildExperienceProgress", true, false) as ProgressBar
+	_check(guild_progress != null and is_equal_approx(guild_progress.value, 47.5), "guild overview shows authoritative level progress")
+	var guild_progress_label := popup.find_child("GuildExperienceProgressLabel", true, false) as Label
+	_check(guild_progress_label != null and guild_progress_label.text.contains("500,000"), "guild overview shows total Guild EXP")
 	var leader_leave_button := popup.find_child("LeaveGuildButton", true, false) as Button
 	_check(leader_leave_button != null and leader_leave_button.disabled, "Guild leaders must transfer leadership before leaving")
 	_check(popup.find_child("GuildTravelBar", true, false) != null, "guild travel sits above the dashboard content")
@@ -180,6 +184,8 @@ func _run() -> void:
 		members_shortcut.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildMembersSection", true, false) != null, "member roster shortcut opens the roster")
+	var leader_contribution := popup.find_child("GuildMemberContributionLabel_1", true, false) as Label
+	_check(leader_contribution != null and leader_contribution.text == "124,350", "member roster shows contributed Guild EXP")
 	var overview_tab := popup.find_child("GuildOverviewTab", true, false) as Button
 	if overview_tab != null:
 		overview_tab.pressed.emit()

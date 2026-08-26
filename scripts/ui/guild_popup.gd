@@ -244,6 +244,16 @@ func show_debug_member_preview() -> void:
 	active_guild_section = "overview"
 	var guild := DEBUG_GUILDS[0].duplicate(true)
 	guild["members"] = 3
+	guild["maxLevel"] = 20
+	guild["totalExperience"] = 500000
+	guild["currentLevelExperience"] = 405000
+	guild["nextLevelExperience"] = 605000
+	guild["experienceIntoLevel"] = 95000
+	guild["experienceForNextLevel"] = 200000
+	guild["progressPercent"] = 47.5
+	guild["atMaxLevel"] = false
+	guild["bankItemCapacity"] = 55
+	guild["bankPokemonCapacity"] = 32
 	guild["emblem"] = {
 		"version": 1,
 		"size": GUILD_EMBLEM_SIZE,
@@ -274,15 +284,16 @@ func show_debug_member_preview() -> void:
 		"members": [
 			{
 				"userId": 1, "username": "nova", "displayName": "Nova",
-				"role": "leader", "online": true,
+				"role": "leader", "online": true, "contributedExperience": 124350,
 			},
 			{
 				"userId": 2, "username": "maple", "displayName": "Maple",
-				"role": "captain", "online": true,
+				"role": "captain", "online": true, "contributedExperience": 87420,
 			},
 			{
 				"userId": 3, "username": "pecha", "displayName": "Pecha",
 				"role": "member", "online": false,
+				"contributedExperience": 64100,
 				"lastSeenAt": "2026-08-22T16:30:00Z",
 			},
 		],
@@ -314,6 +325,8 @@ func show_debug_member_preview() -> void:
 		},
 	}
 	guild_bank_state = {
+		"itemCapacity": 55,
+		"pokemonCapacity": 32,
 		"access": {"canDeposit": true, "canWithdraw": true, "canDepositFunds": true, "canWithdrawFunds": true, "canBorrow": true, "canForceReturn": true},
 		"funds": {"balance": 250000, "playerBalance": 87500},
 		"items": [
@@ -1111,6 +1124,7 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	))
 	metadata.add_child(_metadata_card(_t("ui.guild.field.language"), _option_display(str(guild.get("language", ""))), UI_GOLD))
 	metadata.add_child(_metadata_card(_t("ui.guild.field.focus"), _option_display(str(guild.get("focus", ""))), UI_ACCENT))
+	overview.add_child(_build_guild_progression(guild))
 	var actions_panel := PanelContainer.new()
 	actions_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	actions_panel.custom_minimum_size = Vector2(0, 150)
@@ -1166,6 +1180,62 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	copy.add_child(action_hint)
 	overview.add_child(actions_panel)
 	return overview
+
+
+func _build_guild_progression(guild: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildProgressionPanel"
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 16, 13, 16, 13)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 8)
+	margin.add_child(content)
+	var heading := HBoxContainer.new()
+	heading.add_theme_constant_override("separation", 10)
+	content.add_child(heading)
+	var title := _localized_label("ui.guild.progression.title", 10, UI_ACCENT)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_child(title)
+	heading.add_child(_label(
+		_t("ui.guild.progression.level", {
+			"level": int(guild.get("level", 1)),
+			"max_level": int(guild.get("maxLevel", 20)),
+		}),
+		11,
+		UI_GOLD
+	))
+	var progress := ProgressBar.new()
+	progress.name = "GuildExperienceProgress"
+	progress.custom_minimum_size.y = 18.0
+	progress.show_percentage = false
+	progress.min_value = 0.0
+	progress.max_value = 100.0
+	progress.value = clampf(float(guild.get("progressPercent", 0.0)), 0.0, 100.0)
+	progress.add_theme_stylebox_override("background", _panel_style(Color("#030810"), Color("#263b50"), 5, 1))
+	progress.add_theme_stylebox_override("fill", _panel_style(Color("#237ca8"), UI_ACCENT, 5, 1))
+	content.add_child(progress)
+	var at_maximum := bool(guild.get("atMaxLevel", false))
+	var progress_text := _t("ui.guild.progression.max", {
+		"total": _format_number(int(guild.get("totalExperience", 0))),
+	}) if at_maximum else _t("ui.guild.progression.progress", {
+		"current": _format_number(int(guild.get("experienceIntoLevel", 0))),
+		"required": _format_number(int(guild.get("experienceForNextLevel", 0))),
+		"total": _format_number(int(guild.get("totalExperience", 0))),
+	})
+	var progress_label := _label(progress_text, 10, UI_MUTED)
+	progress_label.name = "GuildExperienceProgressLabel"
+	progress_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	content.add_child(progress_label)
+	var capacities := _label(_t("ui.guild.progression.capacities", {
+		"members": int(guild.get("capacity", 20)),
+		"items": int(guild.get("bankItemCapacity", 50)),
+		"pokemon": int(guild.get("bankPokemonCapacity", 30)),
+	}), 10, UI_MUTED)
+	capacities.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	content.add_child(capacities)
+	return panel
 
 
 func _confirm_guild_leave(guild: Dictionary) -> void:
@@ -1346,10 +1416,12 @@ func _guild_bank_card_description(category: String) -> String:
 		"pokemon":
 			return _t("ui.guild.bank.pokemon.count", {
 				"count": _array_from_value(guild_bank_state.get("pokemon", [])).size(),
+				"capacity": int(guild_bank_state.get("pokemonCapacity", 30)),
 			}) if not guild_bank_state.is_empty() else _t("ui.guild.bank.pokemon.description")
 		"items":
 			return _t("ui.guild.bank.items.count", {
 				"count": _array_from_value(guild_bank_state.get("items", [])).size(),
+				"capacity": int(guild_bank_state.get("itemCapacity", 50)),
 			}) if not guild_bank_state.is_empty() else _t("ui.guild.bank.items.description")
 	return ""
 
@@ -2175,6 +2247,19 @@ func _build_guild_member_card(member: Dictionary, own_role: String, own_user_id:
 		var role_label := _label(_membership_role_label(member_role).to_upper(), 10, UI_GOLD)
 		role_label.name = "GuildMemberRankLabel_%d" % user_id
 		rank.add_child(role_label)
+
+	var contribution := VBoxContainer.new()
+	contribution.custom_minimum_size = Vector2(135, 0)
+	contribution.add_theme_constant_override("separation", 3)
+	row.add_child(contribution)
+	contribution.add_child(_localized_label("ui.guild.member.contribution", 9, UI_MUTED))
+	var contribution_label := _label(
+		_format_number(int(member.get("contributedExperience", 0))),
+		11,
+		UI_ACCENT
+	)
+	contribution_label.name = "GuildMemberContributionLabel_%d" % user_id
+	contribution.add_child(contribution_label)
 
 	var message_button := Button.new()
 	message_button.name = "GuildMemberPmButton_%d" % user_id
