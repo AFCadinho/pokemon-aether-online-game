@@ -688,6 +688,27 @@ func _run() -> void:
 		"Guild history window uses the Guild window styling"
 	)
 	_check(popup.find_child("GuildLogEntries", true, false) != null, "Guild history renders its activity entries")
+	var highlighted_log_message := popup.find_child("GuildLogMessage", true, false) as RichTextLabel
+	_check(
+		highlighted_log_message != null
+		and highlighted_log_message.get_parsed_text().contains("Maple")
+		and highlighted_log_message.get_meta("highlighted_player_names", []) == ["Maple"],
+		"Guild history highlights the structured Trainer name"
+	)
+	var multi_player_message := popup._build_guild_log_message("guild", {
+		"action": "rank_changed",
+		"actor": "Admin",
+		"target": "Maple",
+		"previousRole": "recruit",
+		"newRole": "member",
+	})
+	_check(
+		multi_player_message.get_meta("highlighted_player_names", []) == ["Admin", "Maple"]
+		and multi_player_message.get_parsed_text().contains("Admin")
+		and multi_player_message.get_parsed_text().contains("Maple"),
+		"Guild history highlights both actor and affected Trainer"
+	)
+	multi_player_message.free()
 	if history_window != null:
 		history_window.queue_free()
 		await process_frame

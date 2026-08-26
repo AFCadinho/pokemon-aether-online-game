@@ -3284,10 +3284,72 @@ func _build_guild_log_entry(category: String, entry: Dictionary) -> Control:
 	var copy := VBoxContainer.new()
 	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(copy)
-	copy.add_child(_label(_guild_log_entry_text(category, entry), 12, UI_TEXT))
+	copy.add_child(_build_guild_log_message(category, entry))
 	var created_at := str(entry.get("createdAt", ""))
 	copy.add_child(_label(_relative_last_seen_text(created_at), 10, UI_MUTED))
 	return card
+
+
+func _build_guild_log_message(category: String, entry: Dictionary) -> RichTextLabel:
+	var message := RichTextLabel.new()
+	message.name = "GuildLogMessage"
+	message.fit_content = true
+	message.scroll_active = false
+	message.bbcode_enabled = false
+	message.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	message.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	message.custom_minimum_size = Vector2(0, 20)
+	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	message.add_theme_font_size_override("normal_font_size", 12)
+	message.add_theme_color_override("default_color", UI_TEXT)
+	var text := _guild_log_entry_text(category, entry)
+	var player_names := _guild_log_player_names(category, entry)
+	message.set_meta("highlighted_player_names", player_names.duplicate())
+	var ranges: Array[Dictionary] = []
+	var next_offset_by_name: Dictionary = {}
+	for player_name: String in player_names:
+		var next_offset := int(next_offset_by_name.get(player_name, 0))
+		var start := text.find(player_name, next_offset)
+		if start < 0:
+			continue
+		next_offset_by_name[player_name] = start + player_name.length()
+		ranges.append({"start": start, "end": start + player_name.length()})
+	ranges.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
+		return int(left.get("start", 0)) < int(right.get("start", 0))
+	)
+	var cursor := 0
+	for highlight_range: Dictionary in ranges:
+		var start := int(highlight_range.get("start", 0))
+		var end := int(highlight_range.get("end", start))
+		if start < cursor or end <= start:
+			continue
+		if start > cursor:
+			message.add_text(text.substr(cursor, start - cursor))
+		message.push_bold()
+		message.push_color(UI_ACCENT)
+		message.add_text(text.substr(start, end - start))
+		message.pop()
+		message.pop()
+		cursor = end
+	if cursor < text.length():
+		message.add_text(text.substr(cursor))
+	return message
+
+
+func _guild_log_player_names(category: String, entry: Dictionary) -> Array[String]:
+	var field_names: Array[String] = []
+	if category == "guild":
+		var action := str(entry.get("action", ""))
+		field_names.assign(["actor", "target"] if action in ["rank_changed", "bank_permission_changed"] else ["target"])
+	else:
+		field_names.assign(["actor"])
+	var names: Array[String] = []
+	for field_name: String in field_names:
+		var player_name := str(entry.get(field_name, "")).strip_edges()
+		if player_name == "" or player_name == _t("common.unknown"):
+			continue
+		names.append(player_name)
+	return names
 
 
 func _guild_log_icon(texture: Texture2D) -> TextureRect:
