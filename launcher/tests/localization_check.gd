@@ -2,6 +2,7 @@ extends SceneTree
 
 const NewsLocalizationService := preload("res://scripts/news_localization_service.gd")
 const LanguageSelectorStyle := preload("res://scripts/language_selector_style.gd")
+const ServerHealthService := preload("res://scripts/server_health_service.gd")
 
 var failed := false
 
@@ -23,6 +24,7 @@ func _run() -> void:
 	_check(manager.normalize_locale("de-DE") == "en", "unsupported launcher locales fall back to English")
 	_check(manager.get_http_locale("pt_BR") == "pt-BR", "launcher maps pt_BR to the HTTP locale")
 	_check(manager.get_http_locale("zh_CN") == "zh-CN", "launcher maps zh_CN to the HTTP locale")
+	_check_server_access_status()
 	manager.set_locale("zh_CN")
 	_check(
 		ThemeDB.fallback_font != null and ThemeDB.fallback_font.has_char("简".unicode_at(0)),
@@ -139,6 +141,34 @@ func _run() -> void:
 	if not failed:
 		print("PASS launcher localization_check")
 	quit(1 if failed else 0)
+
+
+func _check_server_access_status() -> void:
+	var open_status := ServerHealthService.parse_status_response({
+		"available": true,
+		"mode": "open",
+		"message": "",
+		"disconnectAt": null,
+	})
+	_check(bool(open_status.get("online", false)), "launcher allows play while game access is open")
+
+	var maintenance_status := ServerHealthService.parse_status_response({
+		"available": false,
+		"mode": "draining",
+		"message": "Maintenance is starting.",
+		"disconnectAt": "2026-08-26T08:30:00+00:00",
+	})
+	_check(bool(maintenance_status.get("maintenance", false)), "launcher recognizes draining maintenance")
+	_check(not bool(maintenance_status.get("online", true)), "launcher blocks play during maintenance")
+	_check(
+		maintenance_status.get("message") == "Maintenance is starting.",
+		"launcher preserves the public maintenance message"
+	)
+	var launcher_source := FileAccess.get_file_as_string("res://scripts/launcher.gd")
+	_check(
+		launcher_source.contains("server_access_blocked or update_required"),
+		"launcher Play state includes the game-access gate"
+	)
 
 
 func _check_language_selector_presentation(manager: Node) -> void:
