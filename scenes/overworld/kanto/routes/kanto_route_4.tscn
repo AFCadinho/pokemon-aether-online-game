@@ -8,6 +8,10 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="6_overworld_item"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_igkno"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="8_ejrgn"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="9_trainer"]
+[ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="10_picnicker"]
+[ext_resource type="SpriteFrames" uid="uid://csw1c2lg3cyhk" path="res://assets/npcs/classes/bird_keeper_frames.tres" id="11_bird_keeper"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="12_route_rock"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mt_moon_exit"]
 size = Vector2(96, 32)
@@ -375,6 +379,8 @@ world_access_area_type = "route"
 location_id = "kanto.route_4"
 location_name = "Route 4"
 region_id = "kanto"
+encounter_area_id = "kanto_route_4"
+grass_encounter_chance = 0.21
 music_profile_id = "kanto.routes_3_10_16_22"
 
 [node name="Route4Visual" parent="." unique_id=618531668 instance=ExtResource("1_visual")]
@@ -425,6 +431,33 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=208040009]
 
+[node name="PicnickerHope" parent="Entities/NPCs" unique_id=1791261695 instance=ExtResource("9_trainer")]
+position = Vector2(784, 1040)
+trainer_id = "kanto_route_4_picnicker_hope"
+sight_range_tiles = 3
+npc_id = "kanto_route_4_picnicker_hope"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Picnicker Hope"
+npc_sprite_frames = ExtResource("10_picnicker")
+
+[node name="BirdKeeperHank" parent="Entities/NPCs" unique_id=2084058425 instance=ExtResource("9_trainer")]
+position = Vector2(1968, 1200)
+trainer_id = "kanto_route_4_bird_keeper_hank"
+sight_range_tiles = 4
+npc_id = "kanto_route_4_bird_keeper_hank"
+npc_definition_id = "trainer_class_bird_keeper"
+display_name = "Bird Keeper Hank"
+npc_sprite_frames = ExtResource("11_bird_keeper")
+
+[node name="PicnickerSharon" parent="Entities/NPCs" unique_id=959480090 instance=ExtResource("9_trainer")]
+position = Vector2(2480, 912)
+trainer_id = "kanto_route_4_picnicker_sharon"
+npc_id = "kanto_route_4_picnicker_sharon"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Picnicker Sharon"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("10_picnicker")
+
 [node name="Players" type="Node2D" parent="Entities" unique_id=208040010]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=208040011]
@@ -435,6 +468,29 @@ z_index = 5
 position = Vector2(1296, 976)
 pickup_id = "kanto_route_4_tm_roar"
 item_id = "tm-roar"
+
+[node name="RockSmashWest" parent="Entities/Interactables" unique_id=1541727048 instance=ExtResource("12_route_rock")]
+position = Vector2(176, 1040)
+rock_id = "kanto_route_4_rock_west"
+rock_visual_style = 2
+
+[node name="RockSmashCentralWest" parent="Entities/Interactables" unique_id=1753633968 instance=ExtResource("12_route_rock")]
+position = Vector2(944, 592)
+rock_id = "kanto_route_4_rock_central_west"
+rock_variant = 1
+rock_visual_style = 2
+
+[node name="RockSmashCentralEast" parent="Entities/Interactables" unique_id=407381501 instance=ExtResource("12_route_rock")]
+position = Vector2(2256, 560)
+rock_id = "kanto_route_4_rock_central_east"
+rock_variant = 2
+rock_visual_style = 2
+
+[node name="RockSmashEast" parent="Entities/Interactables" unique_id=257099796 instance=ExtResource("12_route_rock")]
+position = Vector2(2608, 784)
+rock_id = "kanto_route_4_rock_east"
+rock_variant = 3
+rock_visual_style = 2
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1671503666]
 visible = false
