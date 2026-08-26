@@ -1,6 +1,8 @@
 extends "res://scripts/world/map_metadata.gd"
 
 const MAP_SIZE := Vector2i(100, 50)
+const CERULEAN_WATER_MIN_Y := 28
+const CERULEAN_WATER_MAX_Y := 34
 const CERULEAN_ROAD_MIN_Y := 36
 const CERULEAN_ROAD_MAX_Y := 39
 
@@ -23,8 +25,15 @@ func _build_map_boundaries() -> void:
 		_set_boundary_cell(Vector2i(x, MAP_SIZE.y - 1), tile_template)
 	for y: int in range(1, MAP_SIZE.y - 1):
 		_set_boundary_cell(Vector2i(0, y), tile_template)
-		if y < CERULEAN_ROAD_MIN_Y or y > CERULEAN_ROAD_MAX_Y:
+		if not _is_cerulean_connection_y(y):
 			_set_boundary_cell(Vector2i(MAP_SIZE.x - 1, y), tile_template)
+
+
+func _is_cerulean_connection_y(y: int) -> bool:
+	return (
+		(y >= CERULEAN_WATER_MIN_Y and y <= CERULEAN_WATER_MAX_Y)
+		or (y >= CERULEAN_ROAD_MIN_Y and y <= CERULEAN_ROAD_MAX_Y)
+	)
 
 
 func _get_collision_tile_template() -> Dictionary:

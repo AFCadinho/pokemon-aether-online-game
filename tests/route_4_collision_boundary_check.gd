@@ -28,6 +28,8 @@ func _init() -> void:
 		not script_source.contains("COLLISION_SOURCE_ID"),
 		"Route 4 derives the boundary tile from its active TileSet"
 	)
+	_check(script_source.contains("CERULEAN_WATER_MIN_Y"), "Route 4 defines its Cerulean water opening")
+	_check(script_source.contains("_is_cerulean_connection_y"), "Route 4 handles both Cerulean openings")
 
 	var route := Route4Script.new()
 	var collision := _build_collision_layer()
@@ -41,10 +43,16 @@ func _init() -> void:
 		Vector2i(0, 49),
 		Vector2i(99, 49),
 		Vector2i(0, 25),
+		Vector2i(99, 27),
 		Vector2i(99, 35),
 		Vector2i(99, 40),
 	]:
 		_check(collision.get_cell_source_id(cell) == 0, "Route 4 closes boundary cell %s" % cell)
+	for water_y: int in range(28, 35):
+		_check(
+			collision.get_cell_source_id(Vector2i(99, water_y)) < 0,
+			"Route 4 leaves Cerulean water cell (99, %d) open" % water_y
+		)
 	for road_y: int in range(36, 40):
 		_check(
 			collision.get_cell_source_id(Vector2i(99, road_y)) < 0,

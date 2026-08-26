@@ -9,6 +9,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_path_exit"]
 size = Vector2(128, 32)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bridge_exit"]
+size = Vector2(128, 32)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_water_exit"]
 size = Vector2(160, 32)
 
@@ -25,11 +28,19 @@ location_name = "Route 24"
 region_id = "kanto"
 music_profile_id = "kanto.routes_3_10_16_22"
 connection_side = "bottom"
+opening_from = 19
+opening_to = 22
 second_opening_from = 2
 second_opening_to = 6
+third_opening_from = 8
+third_opening_to = 11
+fourth_opening_from = 13
+fourth_opening_to = 17
 water_connection_side = "bottom"
 water_opening_from = 2
 water_opening_to = 6
+second_water_opening_from = 13
+second_water_opening_to = 17
 water_connection_depth = 5
 
 [node name="OpenFieldVisual" parent="." instance=ExtResource("1_visual")]
@@ -37,15 +48,21 @@ water_connection_depth = 5
 [node name="Spawns" type="Node2D" parent="."]
 
 [node name="FromCeruleanPath" type="Marker2D" parent="Spawns"]
-position = Vector2(384, 512)
+position = Vector2(672, 512)
 
-[node name="FromCeruleanWater" type="Marker2D" parent="Spawns"]
+[node name="FromCeruleanWaterLeft" type="Marker2D" parent="Spawns"]
 position = Vector2(128, 512)
+
+[node name="FromCeruleanBridge" type="Marker2D" parent="Spawns"]
+position = Vector2(320, 512)
+
+[node name="FromCeruleanWaterRight" type="Marker2D" parent="Spawns"]
+position = Vector2(480, 512)
 
 [node name="Exits" type="Node2D" parent="."]
 
 [node name="ToCeruleanPath" type="Area2D" parent="Exits"]
-position = Vector2(384, 560)
+position = Vector2(672, 560)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 target_spawn_name = "FromRoute24Path"
@@ -60,18 +77,50 @@ z_as_relative = false
 tile_footprint = Vector2i(4, 1)
 flow_direction = "down"
 
-[node name="ToCeruleanWater" type="Area2D" parent="Exits"]
+[node name="ToCeruleanWaterLeft" type="Area2D" parent="Exits"]
 position = Vector2(128, 560)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
-target_spawn_name = "FromRoute24Water"
-transition_id = "kanto_route_24__to_cerulean_city_water"
+target_spawn_name = "FromRoute24WaterLeft"
+transition_id = "kanto_route_24__to_cerulean_city_water_left"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanWater"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanWaterLeft"]
 shape = SubResource("RectangleShape2D_water_exit")
 
-[node name="RouteTransitionHint" parent="Exits/ToCeruleanWater" instance=ExtResource("4_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToCeruleanWaterLeft" instance=ExtResource("4_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(5, 1)
+flow_direction = "down"
+
+[node name="ToCeruleanBridge" type="Area2D" parent="Exits"]
+position = Vector2(320, 560)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
+target_spawn_name = "FromRoute24Bridge"
+transition_id = "kanto_route_24__to_cerulean_city_bridge"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanBridge"]
+shape = SubResource("RectangleShape2D_bridge_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToCeruleanBridge" instance=ExtResource("4_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(4, 1)
+flow_direction = "down"
+
+[node name="ToCeruleanWaterRight" type="Area2D" parent="Exits"]
+position = Vector2(480, 560)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
+target_spawn_name = "FromRoute24WaterRight"
+transition_id = "kanto_route_24__to_cerulean_city_water_right"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanWaterRight"]
+shape = SubResource("RectangleShape2D_water_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToCeruleanWaterRight" instance=ExtResource("4_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(5, 1)
 flow_direction = "down"
@@ -101,4 +150,6 @@ z_index = 4095
 tile_set = ExtResource("5_marker")
 
 [connection signal="body_entered" from="Exits/ToCeruleanPath" to="Exits/ToCeruleanPath" method="_on_body_entered"]
-[connection signal="body_entered" from="Exits/ToCeruleanWater" to="Exits/ToCeruleanWater" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToCeruleanWaterLeft" to="Exits/ToCeruleanWaterLeft" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToCeruleanBridge" to="Exits/ToCeruleanBridge" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToCeruleanWaterRight" to="Exits/ToCeruleanWaterRight" method="_on_body_entered"]

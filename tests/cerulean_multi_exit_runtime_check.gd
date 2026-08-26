@@ -1,6 +1,7 @@
 extends SceneTree
 
 const CITY_SCENE := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
+const ROUTE_4_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_4.tscn"
 const ROUTE_24_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
 const ROUTE_9_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_9.tscn"
 const ROUTE_5_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_5.tscn"
@@ -14,6 +15,7 @@ func _init() -> void:
 
 func _run() -> void:
 	await _check_cerulean_openings()
+	await _check_route_4_openings_and_water()
 	await _check_route_24_openings_and_water()
 	await _check_route_9_openings()
 	await _check_route_5_opening()
@@ -25,15 +27,34 @@ func _check_cerulean_openings() -> void:
 	var collision := city.find_map_tilemap_layer("Collision") as TileMapLayer
 	var water := city.find_map_tilemap_layer("Water") as TileMapLayer
 
-	_check(_is_open(collision, Vector2i(58, 0)) and _is_open(collision, Vector2i(58, -1)), "Cerulean opens the Route 24 water boundary")
+	_check(_is_open(collision, Vector2i(49, 0)) and _is_open(collision, Vector2i(49, -1)), "Cerulean opens the Route 24 left water boundary")
+	_check(_is_open(collision, Vector2i(56, 0)) and _is_open(collision, Vector2i(56, -1)), "Cerulean opens the Route 24 bridge boundary")
+	_check(_is_open(collision, Vector2i(62, 0)) and _is_open(collision, Vector2i(62, -1)), "Cerulean opens the Route 24 right water boundary")
 	_check(_is_open(collision, Vector2i(69, 0)) and _is_open(collision, Vector2i(69, -1)), "Cerulean opens the Route 24 path boundary")
+	_check(_is_open(collision, Vector2i(0, 18)) and _is_open(collision, Vector2i(-1, 18)), "Cerulean opens the Route 4 water boundary")
 	_check(_is_open(collision, Vector2i(12, 69)) and _is_open(collision, Vector2i(12, 70)), "Cerulean opens the Route 9 left path")
 	_check(_is_open(collision, Vector2i(16, 69)) and _is_open(collision, Vector2i(16, 70)), "Cerulean opens the Route 9 grass approach")
 	_check(_is_open(collision, Vector2i(21, 69)) and _is_open(collision, Vector2i(21, 70)), "Cerulean opens the Route 9 right path")
 	_check(_is_open(collision, Vector2i(74, 44)) and _is_open(collision, Vector2i(75, 44)), "Cerulean keeps Route 5 on its separate east boundary")
-	_check(not _is_open(water, Vector2i(58, 2)), "Cerulean marks the Route 24 water spawn as water")
+	_check(not _is_open(water, Vector2i(49, 2)), "Cerulean marks the Route 24 left water spawn as water")
+	_check(_is_open(water, Vector2i(56, 2)), "Cerulean keeps the Route 24 bridge spawn off water")
+	_check(not _is_open(water, Vector2i(62, 2)), "Cerulean marks the Route 24 right water spawn as water")
 	_check(_is_open(water, Vector2i(69, 2)), "Cerulean keeps the Route 24 path spawn off water")
+	_check(not _is_open(water, Vector2i(2, 18)), "Cerulean marks the Route 4 water spawn as water")
+	_check(_is_open(water, Vector2i(2, 25)), "Cerulean keeps the Route 4 road spawn off water")
 	await _free_map(city)
+
+
+func _check_route_4_openings_and_water() -> void:
+	var route := await _instantiate_map(ROUTE_4_SCENE)
+	var collision := route.find_map_tilemap_layer("Collision") as TileMapLayer
+	var water := route.find_map_tilemap_layer("Water") as TileMapLayer
+
+	_check(_is_open(collision, Vector2i(99, 31)), "Route 4 opens its water exit")
+	_check(_is_open(collision, Vector2i(99, 37)), "Route 4 keeps its road exit open")
+	_check(not _is_open(water, Vector2i(99, 31)), "Route 4 water arrival restores Surf")
+	_check(_is_open(water, Vector2i(99, 37)), "Route 4 road arrival remains on foot")
+	await _free_map(route)
 
 
 func _check_route_24_openings_and_water() -> void:
@@ -41,11 +62,16 @@ func _check_route_24_openings_and_water() -> void:
 	var collision := route.find_map_tilemap_layer("Collision") as TileMapLayer
 	var water := route.find_map_tilemap_layer("Water") as TileMapLayer
 
-	_check(_is_open(collision, Vector2i(4, 17)), "Route 24 opens its water exit")
-	_check(_is_open(collision, Vector2i(12, 17)), "Route 24 opens its path exit")
-	_check(not _is_open(collision, Vector2i(8, 17)), "Route 24 keeps the boundary between both exits closed")
-	_check(not _is_open(water, Vector2i(4, 16)), "Route 24 water arrival restores Surf")
-	_check(_is_open(water, Vector2i(12, 16)), "Route 24 path arrival remains on foot")
+	_check(_is_open(collision, Vector2i(4, 17)), "Route 24 opens its left water exit")
+	_check(_is_open(collision, Vector2i(9, 17)), "Route 24 opens its bridge exit")
+	_check(_is_open(collision, Vector2i(15, 17)), "Route 24 opens its right water exit")
+	_check(_is_open(collision, Vector2i(21, 17)), "Route 24 opens its path exit")
+	for separator_x: int in [7, 12, 18]:
+		_check(not _is_open(collision, Vector2i(separator_x, 17)), "Route 24 closes separator x=%d" % separator_x)
+	_check(not _is_open(water, Vector2i(4, 16)), "Route 24 left water arrival restores Surf")
+	_check(_is_open(water, Vector2i(9, 16)), "Route 24 bridge arrival remains on foot")
+	_check(not _is_open(water, Vector2i(15, 16)), "Route 24 right water arrival restores Surf")
+	_check(_is_open(water, Vector2i(21, 16)), "Route 24 path arrival remains on foot")
 	await _free_map(route)
 
 

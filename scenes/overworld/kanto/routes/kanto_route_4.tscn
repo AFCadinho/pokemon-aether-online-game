@@ -19,6 +19,9 @@ size = Vector2(96, 32)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cerulean_exit"]
 size = Vector2(32, 96)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cerulean_water_exit"]
+size = Vector2(32, 224)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_igkno"]
 texture = ExtResource("6_ffp61")
 texture_region_size = Vector2i(32, 32)
@@ -393,6 +396,9 @@ position = Vector2(208, 976)
 [node name="FromCerulean" type="Marker2D" parent="Spawns" unique_id=1691186935]
 position = Vector2(3136, 1216)
 
+[node name="FromCeruleanWater" type="Marker2D" parent="Spawns"]
+position = Vector2(3136, 1008)
+
 [node name="Exits" type="Node2D" parent="." unique_id=208040004]
 
 [node name="ToMtMoon" type="Area2D" parent="Exits" unique_id=208040005]
@@ -424,6 +430,22 @@ shape = SubResource("RectangleShape2D_cerulean_exit")
 [node name="RouteTransitionHint" parent="Exits/ToCerulean" unique_id=953228155 instance=ExtResource("5_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(1, 3)
+flow_direction = "right"
+
+[node name="ToCeruleanWater" type="Area2D" parent="Exits"]
+position = Vector2(3184, 1008)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
+target_spawn_name = "FromRoute4Water"
+transition_id = "kanto_route_4__to_cerulean_city_water"
+transition_facing_direction = "right"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanWater"]
+shape = SubResource("RectangleShape2D_cerulean_water_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToCeruleanWater" instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 7)
 flow_direction = "right"
 
 [node name="Entities" type="Node2D" parent="." unique_id=208040008]
@@ -559,3 +581,4 @@ tile_set = SubResource("TileSet_aaoqf")
 
 [connection signal="body_entered" from="Exits/ToMtMoon" to="Exits/ToMtMoon" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToCerulean" to="Exits/ToCerulean" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToCeruleanWater" to="Exits/ToCeruleanWater" method="_on_body_entered"]
