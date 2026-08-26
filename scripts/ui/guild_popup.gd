@@ -3831,21 +3831,21 @@ func _build_guild_member_card(
 		_panel_style(Color("#081827f2"), UI_ACCENT_SOFT if online else UI_BORDER_INNER, 8, 1)
 	)
 	var margin := MarginContainer.new()
-	_set_margins(margin, 12, 9, 10, 9)
+	_set_margins(margin, 10, 9, 8, 9)
 	card.add_child(margin)
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 14)
+	row.add_theme_constant_override("separation", 9)
 	margin.add_child(row)
 
 	var presence_dot := _label("●", 15, UI_SUCCESS if online else UI_MUTED)
 	presence_dot.name = "GuildMemberPresenceDot_%d" % user_id
-	presence_dot.custom_minimum_size = Vector2(18, 0)
+	presence_dot.custom_minimum_size = Vector2(14, 0)
 	presence_dot.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	row.add_child(presence_dot)
 
 	var identity := VBoxContainer.new()
 	identity.name = "GuildMemberIdentityColumn_%d" % user_id
-	identity.custom_minimum_size = Vector2(225, 0)
+	identity.custom_minimum_size = Vector2(150, 0)
 	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	identity.add_theme_constant_override("separation", 2)
 	row.add_child(identity)
@@ -3858,7 +3858,7 @@ func _build_guild_member_card(
 
 	var presence := VBoxContainer.new()
 	presence.name = "GuildMemberStatusColumn_%d" % user_id
-	presence.custom_minimum_size = Vector2(210, 0)
+	presence.custom_minimum_size = Vector2(135, 0)
 	presence.add_theme_constant_override("separation", 3)
 	row.add_child(presence)
 	presence.add_child(_localized_label("ui.guild.member.status", 9, UI_MUTED))
@@ -3869,7 +3869,7 @@ func _build_guild_member_card(
 
 	var rank := VBoxContainer.new()
 	rank.name = "GuildMemberRankColumn_%d" % user_id
-	rank.custom_minimum_size = Vector2(145, 0)
+	rank.custom_minimum_size = Vector2(125, 0)
 	rank.add_theme_constant_override("separation", 3)
 	row.add_child(rank)
 	rank.add_child(_localized_label("ui.guild.member.rank", 9, UI_MUTED))
@@ -3892,12 +3892,12 @@ func _build_guild_member_card(
 
 	var permissions_slot := CenterContainer.new()
 	permissions_slot.name = "GuildMemberBankPermissionsSlot_%d" % user_id
-	permissions_slot.custom_minimum_size = Vector2(118, 36)
+	permissions_slot.custom_minimum_size = Vector2(105, 36)
 	row.add_child(permissions_slot)
 	if can_manage_permissions and member_role != "leader":
 		var permissions_button := Button.new()
 		permissions_button.name = "GuildMemberBankPermissionsButton_%d" % user_id
-		permissions_button.custom_minimum_size = Vector2(118, 36)
+		permissions_button.custom_minimum_size = Vector2(105, 36)
 		_set_localized_property(permissions_button, "text", "ui.guild.permissions.action")
 		_set_localized_property(permissions_button, "tooltip_text", "ui.guild.permissions.action_tooltip")
 		permissions_button.pressed.connect(_open_guild_member_bank_permissions.bind(member.duplicate(true)))
@@ -3906,7 +3906,7 @@ func _build_guild_member_card(
 
 	var contribution := VBoxContainer.new()
 	contribution.name = "GuildMemberContributionColumn_%d" % user_id
-	contribution.custom_minimum_size = Vector2(135, 0)
+	contribution.custom_minimum_size = Vector2(85, 0)
 	contribution.add_theme_constant_override("separation", 3)
 	row.add_child(contribution)
 	contribution.add_child(_localized_label("ui.guild.member.contribution", 9, UI_MUTED))
@@ -3920,7 +3920,7 @@ func _build_guild_member_card(
 
 	var message_button := Button.new()
 	message_button.name = "GuildMemberPmButton_%d" % user_id
-	message_button.custom_minimum_size = Vector2(92, 36)
+	message_button.custom_minimum_size = Vector2(78, 36)
 	message_button.disabled = user_id == own_user_id or not online
 	_set_localized_property(
 		message_button,

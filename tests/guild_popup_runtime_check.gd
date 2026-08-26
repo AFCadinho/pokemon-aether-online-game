@@ -626,6 +626,14 @@ func _run() -> void:
 		members_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildMembersSection", true, false) != null, "members tab opens the roster")
+	var members_section := popup.find_child("GuildMembersSection", true, false) as Control
+	var widest_member_card := popup.find_child("GuildMemberCard_2", true, false) as Control
+	_check(
+		members_section != null
+		and widest_member_card != null
+		and widest_member_card.get_global_rect().end.x <= members_section.get_global_rect().end.x + 1.0,
+		"managed member roster cards stay inside the Members panel"
+	)
 	var leader_contribution := popup.find_child("GuildMemberContributionLabel_1", true, false) as Label
 	_check(leader_contribution != null and leader_contribution.text == "124,350", "member roster shows contributed Guild EXP")
 	var leader_status_column := popup.find_child("GuildMemberStatusColumn_1", true, false) as Control
