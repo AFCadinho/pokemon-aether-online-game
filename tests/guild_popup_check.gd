@@ -114,6 +114,7 @@ func _init() -> void:
 	_check_contains(popup_source, "_render_guild_home_with_status", "Guild Bank feedback survives workspace refreshes")
 	_check_contains(popup_source, "GuildMemberRoleSelect_", "Guild leaders can assign compact member ranks")
 	_check_contains(popup_source, "GuildMemberBankPermissionsButton_", "permission managers can edit member Guild Bank rights")
+	_check_contains(popup_source, "GuildMemberBankPermissionsSlot_", "member roster reserves a stable Bank-rights column")
 	_check_contains(popup_source, "func _open_guild_member_bank_permissions", "Guild Bank rights open as per-member overrides")
 	_check_contains(popup_source, '"update_member_bank_permissions"', "Guild Bank permission changes use the authoritative service")
 	_check_contains(popup_source, "bankPermissionOverrides", "Guild Bank feedback distinguishes personal permission denials")

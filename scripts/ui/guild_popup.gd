@@ -3807,6 +3807,7 @@ func _build_guild_member_card(
 	row.add_child(presence_dot)
 
 	var identity := VBoxContainer.new()
+	identity.name = "GuildMemberIdentityColumn_%d" % user_id
 	identity.custom_minimum_size = Vector2(225, 0)
 	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	identity.add_theme_constant_override("separation", 2)
@@ -3819,6 +3820,7 @@ func _build_guild_member_card(
 	identity.add_child(_label("@%s" % username if username != "" else "", 10, UI_ACCENT))
 
 	var presence := VBoxContainer.new()
+	presence.name = "GuildMemberStatusColumn_%d" % user_id
 	presence.custom_minimum_size = Vector2(210, 0)
 	presence.add_theme_constant_override("separation", 3)
 	row.add_child(presence)
@@ -3829,6 +3831,7 @@ func _build_guild_member_card(
 	presence.add_child(presence_label)
 
 	var rank := VBoxContainer.new()
+	rank.name = "GuildMemberRankColumn_%d" % user_id
 	rank.custom_minimum_size = Vector2(145, 0)
 	rank.add_theme_constant_override("separation", 3)
 	row.add_child(rank)
@@ -3850,6 +3853,10 @@ func _build_guild_member_card(
 		override_label.name = "GuildMemberPermissionOverrideCount_%d" % user_id
 		rank.add_child(override_label)
 
+	var permissions_slot := CenterContainer.new()
+	permissions_slot.name = "GuildMemberBankPermissionsSlot_%d" % user_id
+	permissions_slot.custom_minimum_size = Vector2(118, 36)
+	row.add_child(permissions_slot)
 	if can_manage_permissions and member_role != "leader":
 		var permissions_button := Button.new()
 		permissions_button.name = "GuildMemberBankPermissionsButton_%d" % user_id
@@ -3858,9 +3865,10 @@ func _build_guild_member_card(
 		_set_localized_property(permissions_button, "tooltip_text", "ui.guild.permissions.action_tooltip")
 		permissions_button.pressed.connect(_open_guild_member_bank_permissions.bind(member.duplicate(true)))
 		_apply_button_style(permissions_button)
-		row.add_child(permissions_button)
+		permissions_slot.add_child(permissions_button)
 
 	var contribution := VBoxContainer.new()
+	contribution.name = "GuildMemberContributionColumn_%d" % user_id
 	contribution.custom_minimum_size = Vector2(135, 0)
 	contribution.add_theme_constant_override("separation", 3)
 	row.add_child(contribution)

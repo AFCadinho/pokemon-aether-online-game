@@ -612,6 +612,30 @@ func _run() -> void:
 	_check(popup.find_child("GuildMembersSection", true, false) != null, "members tab opens the roster")
 	var leader_contribution := popup.find_child("GuildMemberContributionLabel_1", true, false) as Label
 	_check(leader_contribution != null and leader_contribution.text == "124,350", "member roster shows contributed Guild EXP")
+	var leader_status_column := popup.find_child("GuildMemberStatusColumn_1", true, false) as Control
+	var member_status_column := popup.find_child("GuildMemberStatusColumn_2", true, false) as Control
+	var leader_rank_column := popup.find_child("GuildMemberRankColumn_1", true, false) as Control
+	var member_rank_column := popup.find_child("GuildMemberRankColumn_2", true, false) as Control
+	var leader_permissions_slot := popup.find_child("GuildMemberBankPermissionsSlot_1", true, false) as Control
+	var member_permissions_slot := popup.find_child("GuildMemberBankPermissionsSlot_2", true, false) as Control
+	var leader_exp_column := popup.find_child("GuildMemberContributionColumn_1", true, false) as Control
+	var member_exp_column := popup.find_child("GuildMemberContributionColumn_2", true, false) as Control
+	_check(
+		leader_status_column != null and member_status_column != null
+		and is_equal_approx(leader_status_column.global_position.x, member_status_column.global_position.x)
+		and leader_rank_column != null and member_rank_column != null
+		and is_equal_approx(leader_rank_column.global_position.x, member_rank_column.global_position.x)
+		and leader_permissions_slot != null and member_permissions_slot != null
+		and is_equal_approx(leader_permissions_slot.global_position.x, member_permissions_slot.global_position.x)
+		and leader_exp_column != null and member_exp_column != null
+		and is_equal_approx(leader_exp_column.global_position.x, member_exp_column.global_position.x),
+		"Leader and managed-member roster cards keep every information column aligned"
+	)
+	_check(
+		leader_permissions_slot != null and leader_permissions_slot.get_child_count() == 0
+		and member_permissions_slot != null and member_permissions_slot.get_child_count() == 1,
+		"Leader alignment reserves the Bank-rights column without exposing a Leader permission action"
+	)
 	_check(popup.find_child("GuildHistoryLogButton", true, false) != null, "member roster has a dedicated Guild history action")
 	var member_search := popup.find_child("GuildMemberSearchInput", true, false) as LineEdit
 	_check(member_search != null, "member roster provides a search field")

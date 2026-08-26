@@ -22,6 +22,7 @@
 - Pokémon Vault, Item Storage, and Resources now pair scalable read-only Guild previews with direct personal donations, while borrowing and withdrawals use dedicated searchable management views. The full Pokémon Vault opens as a PC-like grid window with selection actions, read-only Summary access, and persistent action feedback.
 - Item Storage filters distinguish available stacks from stacks whose copies are all currently unavailable.
 - Guild member search now occupies its own row, while invitations use a separate, clearly named roster action.
+- Leader and member cards now keep the same aligned roster columns, including rows without a Bank-rights action.
 - Guild money transfers now start at zero and show validation before accepting amounts from one Pokédollar.
 - Guild Management now organizes profile, recruitment, applications, and Guild Bank settings into permission-aware internal tabs.
 - Guild Item Storage rows now separate item names from stored, available, and borrowed quantities.
