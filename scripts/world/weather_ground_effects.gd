@@ -126,6 +126,8 @@ func _draw_rain_impact(event: GroundEvent, progress: float) -> void:
 	var ring_color := effect_color
 	ring_color.a *= fade * sin(progress * PI)
 	var ring_radius := lerpf(1.8, 8.4, progress) * event.size
+	var ring_shadow := Color(0.12, 0.32, 0.46, ring_color.a * 0.48)
+	_draw_ellipse_arc(event.world_position, ring_radius, ring_radius * 0.32, ring_shadow, 1.8)
 	_draw_ellipse_arc(event.world_position, ring_radius, ring_radius * 0.32, ring_color, 1.05)
 	if progress < 0.18:
 		var contact_color := effect_color
@@ -157,16 +159,38 @@ func _draw_rain_impact(event: GroundEvent, progress: float) -> void:
 
 
 func _draw_rain_ripple(event: GroundEvent, progress: float) -> void:
+	var ripple_opacity := (1.0 - smoothstep(0.38, 1.0, progress)) * sin(progress * PI)
 	var ripple_color := effect_color
-	ripple_color.a *= (1.0 - smoothstep(0.3, 1.0, progress)) * sin(progress * PI) * 0.72
-	var ripple_radius := lerpf(2.2, 10.8, progress) * event.size
+	ripple_color.a *= ripple_opacity * 0.92
+	var ripple_shadow := Color(0.12, 0.38, 0.62, ripple_opacity * 0.52)
+	var ripple_radius := lerpf(2.4, 12.4, progress) * event.size
+	_draw_ellipse_arc(
+		event.world_position,
+		ripple_radius,
+		ripple_radius * 0.34,
+		ripple_shadow,
+		1.8
+	)
 	_draw_ellipse_arc(
 		event.world_position,
 		ripple_radius,
 		ripple_radius * 0.34,
 		ripple_color,
-		0.9
+		1.05
 	)
+	if progress >= 0.22:
+		var second_progress := (progress - 0.22) / 0.78
+		var second_opacity := (1.0 - smoothstep(0.3, 1.0, second_progress)) * sin(second_progress * PI)
+		var second_color := effect_color
+		second_color.a *= second_opacity * 0.58
+		var second_radius := lerpf(1.8, 8.2, second_progress) * event.size
+		_draw_ellipse_arc(
+			event.world_position,
+			second_radius,
+			second_radius * 0.34,
+			second_color,
+			0.9
+		)
 	if progress < 0.18:
 		var contact_color := effect_color
 		contact_color.a *= (1.0 - progress / 0.18) * 0.38
