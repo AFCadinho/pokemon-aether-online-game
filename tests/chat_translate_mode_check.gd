@@ -112,6 +112,12 @@ func _run() -> void:
 		and overlay_source.contains("_create_chat_translation_badge("),
 		"Translated PMs retain a reversible original-text control"
 	)
+	var pm_row_source := _function_block(overlay_source, "func _create_pm_message_row(")
+	_check(
+		pm_row_source.contains("_has_user_permission(CHAT_TRANSLATE_PERMISSION)")
+		and pm_row_source.contains("_create_chat_translation_badge("),
+		"PM translation metadata and original-text controls are staff-only"
+	)
 	_check(
 		overlay_source.contains("_escape_bbcode(text)")
 		and overlay_source.contains("_render_chat_sender_message_label(entry)"),
@@ -139,6 +145,14 @@ func _run() -> void:
 		)
 
 	quit(1 if failures > 0 else 0)
+
+
+func _function_block(source: String, function_header: String) -> String:
+	var start := source.find(function_header)
+	if start < 0:
+		return ""
+	var end := source.find("\nfunc ", start + function_header.length())
+	return source.substr(start) if end < 0 else source.substr(start, end - start)
 
 
 func _check(condition: bool, message: String) -> void:

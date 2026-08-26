@@ -27870,7 +27870,12 @@ func _create_pm_message_row(message: Dictionary) -> Control:
 	)
 	header.add_child(message_entry)
 	var original_body := str(message.get("originalBody", "")).strip_edges()
-	if bool(message.get("machineTranslated", false)) and original_body != "" and original_body != body_text:
+	if (
+		_has_user_permission(CHAT_TRANSLATE_PERMISSION)
+		and bool(message.get("machineTranslated", false))
+		and original_body != ""
+		and original_body != body_text
+	):
 		header.add_child(_create_chat_translation_badge(
 			message_entry,
 			original_body,

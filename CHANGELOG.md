@@ -16,6 +16,7 @@
 
 **Fixed**
 
+- Private-message translation labels and original-text controls are now visible only to authorized staff.
 - Pokémon in battle now show the correct blue male or pink female gender icon.
 - Forum announcements now appear in launcher and login news even when the forum omits their preview text.
 
