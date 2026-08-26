@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="9_trainer"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="10_picnicker"]
 [ext_resource type="SpriteFrames" uid="uid://csw1c2lg3cyhk" path="res://assets/npcs/classes/bird_keeper_frames.tres" id="11_bird_keeper"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="12_route_rock"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mt_moon_exit"]
 size = Vector2(96, 32)
@@ -467,6 +468,29 @@ npc_sprite_frames = ExtResource("10_picnicker")
 position = Vector2(1296, 976)
 pickup_id = "kanto_route_4_tm_roar"
 item_id = "tm-roar"
+
+[node name="RockSmashWest" parent="Entities/Interactables" instance=ExtResource("12_route_rock")]
+position = Vector2(400, 1040)
+rock_id = "kanto_route_4_rock_west"
+rock_visual_style = 2
+
+[node name="RockSmashCentralWest" parent="Entities/Interactables" instance=ExtResource("12_route_rock")]
+position = Vector2(1040, 1008)
+rock_id = "kanto_route_4_rock_central_west"
+rock_variant = 1
+rock_visual_style = 2
+
+[node name="RockSmashCentralEast" parent="Entities/Interactables" instance=ExtResource("12_route_rock")]
+position = Vector2(2128, 496)
+rock_id = "kanto_route_4_rock_central_east"
+rock_variant = 2
+rock_visual_style = 2
+
+[node name="RockSmashEast" parent="Entities/Interactables" instance=ExtResource("12_route_rock")]
+position = Vector2(2720, 1232)
+rock_id = "kanto_route_4_rock_east"
+rock_variant = 3
+rock_visual_style = 2
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1671503666]
 visible = false

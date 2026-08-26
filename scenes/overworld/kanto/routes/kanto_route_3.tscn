@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="12_pokecenter_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="15_m5ude"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="16_overworld_item"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="17_route_rock"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nuuyr"]
 texture = ExtResource("2_jmvwp")
@@ -428,6 +429,29 @@ item_id = "oran-berry"
 position = Vector2(2512, 976)
 sign_id = "kanto_route_3_mt_moon_sign"
 sign_type = "road"
+
+[node name="RockSmashWest" parent="Entities/Interactables" instance=ExtResource("17_route_rock")]
+position = Vector2(400, 752)
+rock_id = "kanto_route_3_rock_west"
+rock_visual_style = 2
+
+[node name="RockSmashCentralWest" parent="Entities/Interactables" instance=ExtResource("17_route_rock")]
+position = Vector2(1328, 496)
+rock_id = "kanto_route_3_rock_central_west"
+rock_variant = 1
+rock_visual_style = 2
+
+[node name="RockSmashCentralEast" parent="Entities/Interactables" instance=ExtResource("17_route_rock")]
+position = Vector2(1808, 752)
+rock_id = "kanto_route_3_rock_central_east"
+rock_variant = 2
+rock_visual_style = 2
+
+[node name="RockSmashEast" parent="Entities/Interactables" instance=ExtResource("17_route_rock")]
+position = Vector2(2608, 752)
+rock_id = "kanto_route_3_rock_east"
+rock_variant = 3
+rock_visual_style = 2
 
 [node name="Spawns" type="Node2D" parent="." unique_id=120000001]
 
