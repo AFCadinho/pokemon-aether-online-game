@@ -67,6 +67,7 @@ func _init() -> void:
 	_check_contains(popup_source, "func _build_guild_borrowed_item_list", "Guild Bank lists each borrowed item separately")
 	_check_contains(popup_source, '"ui.guild.bank.force_return"', "Guild Bank exposes the staff force-return action")
 	_check_contains(popup_source, "_selected_guild_loan_duration", "Guild leaders can choose the loan duration")
+	_check_contains(popup_source, 'guild.get("loanDurationSeconds", 3600)', "Guild settings default loans to one hour")
 	_check_contains(popup_source, "GuildHistoryLogButton", "member roster opens its dedicated Guild history")
 	_check_contains(popup_source, '"GuildBank%sLogButton"', "each Guild Bank category opens its own log")
 	_check_contains(popup_source, "GuildLogSearchInput", "every Guild log exposes server-side search")

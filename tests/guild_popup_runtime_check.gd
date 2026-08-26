@@ -934,6 +934,12 @@ func _run() -> void:
 		await process_frame
 	_check(popup.find_child("GuildManagementBankPage", true, false) != null, "Guild Bank rules stay on their own management page")
 	_check(popup.find_child("GuildSaveBankSettingsButton", true, false) != null, "Bank Settings expose an independent save action")
+	var loan_duration_select := popup.find_child("GuildLoanDurationSelect", true, false) as OptionButton
+	_check(
+		loan_duration_select != null
+		and int(loan_duration_select.get_item_metadata(loan_duration_select.selected)) == 3600,
+		"Guild Bank settings default loans to one hour"
+	)
 	_check(popup.find_child("GuildMemberSearchInput", true, false) == null, "member roster tools do not live under management")
 	_check(popup.find_child("GuildEmblemPreview", true, false) == null, "management keeps emblem controls out of settings")
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "leader does not see a redundant Guild emblem edit button")

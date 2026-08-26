@@ -335,7 +335,7 @@ func update_settings(
 	language: String,
 	focus: String,
 	recruitment: String,
-	loan_duration_seconds: int = 86400,
+	loan_duration_seconds: int = 3600,
 	requirements: Array = []
 ) -> Dictionary:
 	var response := await _authenticated_request(
@@ -498,7 +498,7 @@ func _bank_result(value: Variant) -> Dictionary:
 		"pokemon": _array(body.get("pokemon", [])).duplicate(true),
 		"depositablePokemon": _array(body.get("depositablePokemon", [])).duplicate(true),
 		"party": _array(_dictionary(body.get("party", {})).get("party", [])).duplicate(true),
-		"loanDurationSeconds": int(body.get("loanDurationSeconds", 86400)),
+		"loanDurationSeconds": int(body.get("loanDurationSeconds", 3600)),
 		"borrowedItems": _array(body.get("borrowedItems", [])).duplicate(true),
 	}
 

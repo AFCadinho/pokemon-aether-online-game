@@ -4663,12 +4663,13 @@ func _build_management_bank_page(guild: Dictionary) -> Control:
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	content.add_child(hint)
 	settings_loan_duration_select = OptionButton.new()
+	settings_loan_duration_select.name = "GuildLoanDurationSelect"
 	settings_loan_duration_select.custom_minimum_size = Vector2(220, 36)
 	for duration: int in [3600, 10800, 21600, 43200, 86400, 172800, 259200]:
 		settings_loan_duration_select.add_item(_guild_loan_duration_label(duration))
 		settings_loan_duration_select.set_item_metadata(settings_loan_duration_select.item_count - 1, duration)
 	_apply_option_button_style(settings_loan_duration_select)
-	_select_guild_loan_duration(int(guild.get("loanDurationSeconds", 86400)))
+	_select_guild_loan_duration(int(guild.get("loanDurationSeconds", 3600)))
 	content.add_child(_management_select_field("ui.guild.management.loan_duration", settings_loan_duration_select))
 	content.add_child(_management_save_button("GuildSaveBankSettingsButton", _on_save_bank_settings))
 	return content
@@ -6017,7 +6018,7 @@ func _on_save_profile_settings() -> void:
 		_selected_option_value(settings_language_select),
 		_selected_option_value(settings_focus_select),
 		str(guild.get("recruitment", "Applications open")),
-		int(guild.get("loanDurationSeconds", 86400)),
+		int(guild.get("loanDurationSeconds", 3600)),
 		_guild_requirements(guild)
 	)
 
@@ -6034,7 +6035,7 @@ func _on_save_recruitment_settings() -> void:
 		str(guild.get("language", "English")),
 		str(guild.get("focus", "Social")),
 		_selected_option_value(settings_recruitment_select),
-		int(guild.get("loanDurationSeconds", 86400)),
+		int(guild.get("loanDurationSeconds", 3600)),
 		_array_from_value(requirements_result.get("requirements", []))
 	)
 
