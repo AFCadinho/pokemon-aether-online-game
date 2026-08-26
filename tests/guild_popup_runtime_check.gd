@@ -485,24 +485,28 @@ func _run() -> void:
 	if items_full_action != null:
 		items_full_action.pressed.emit()
 		await process_frame
-	_check(popup.find_child("GuildBankItemsWorkspace", true, false) != null, "full Item Storage renders its Guild inventory")
-	_check(popup.find_child("GuildBankItemsLogButton", true, false) != null, "Item Storage has a dedicated log action")
-	_check(popup.find_child("GuildBankItemWithdrawButton_leftovers", true, false) != null, "stored reusable items can be withdrawn")
-	_check(popup.find_child("GuildBankItemDepositButton_exp-share", true, false) == null, "full Item Storage focuses only on Guild assets")
-	_check(popup.find_child("GuildBankItemIcon_leftovers", true, false) != null, "stored items show an icon")
-	var stored_item_name := popup.find_child("GuildBankItemName_leftovers", true, false) as Label
-	var stored_item_detail := popup.find_child("GuildBankItemDetail_leftovers", true, false) as Label
-	_check(popup.find_child("GuildBankItemRow_leftovers", true, false) is PanelContainer, "stored item information and actions use a distinct card")
+	var items_storage_window := popup.find_child("GuildItemsStorageWindow", true, false) as Window
+	var items_storage_grid := popup.find_child("GuildItemsStorageGrid", true, false) as GridContainer
+	_check(items_storage_window != null and items_storage_window.visible, "full Item Storage opens in a dedicated window")
+	_check(items_storage_grid != null and items_storage_grid.columns == 5, "full Item Storage presents a five-column asset grid")
+	_check(popup.find_child("GuildItemsStorageScroll", true, false) is ScrollContainer, "full Item Storage grid remains scrollable")
+	_check(items_storage_window != null and items_storage_window.find_child("GuildBankItemsLogButton", true, false) != null, "Item Storage has a dedicated log action")
+	_check(items_storage_window != null and items_storage_window.find_child("GuildBankItemWithdrawButton_leftovers", true, false) != null, "selected reusable items can be withdrawn")
+	_check(items_storage_window != null and items_storage_window.find_child("GuildBankItemDepositButton_exp-share", true, false) == null, "full Item Storage focuses only on Guild assets")
+	_check(popup.find_child("GuildItemsStorageSlot_leftovers", true, false) is Button, "stored items render as selectable grid slots")
+	var stored_item_name := items_storage_window.find_child("GuildBankItemName_leftovers", true, false) as Label
+	var stored_item_detail := items_storage_window.find_child("GuildBankItemDetail_leftovers", true, false) as Label
+	_check(items_storage_window.find_child("GuildBankItemRow_leftovers", true, false) is PanelContainer, "selected item information and actions use a distinct card")
 	_check(stored_item_name != null and stored_item_name.text == "Leftovers", "stored item names remain readable without quantity metadata")
 	_check(stored_item_detail != null and stored_item_detail.text.contains("18 stored") and stored_item_detail.text.contains("17 available") and stored_item_detail.text.contains("1 borrowed"), "stored item quantities and loan availability use a dedicated detail line")
-	var asset_search := popup.find_child("GuildBankAssetSearchInput", true, false) as LineEdit
+	var asset_search := items_storage_window.find_child("GuildItemsStorageSearchInput", true, false) as LineEdit
 	if asset_search != null:
 		asset_search.text = "left"
 		asset_search.text_changed.emit(asset_search.text)
 		await process_frame
 	_check(
-		popup.find_child("GuildBankItemRow_leftovers", true, false) != null
-		and popup.find_child("GuildBankItemRow_leftovers", true, false).visible,
+		items_storage_window.find_child("GuildItemsStorageSlot_leftovers", true, false) != null
+		and items_storage_window.find_child("GuildItemsStorageSlot_choice-scarf", true, false) == null,
 		"full Item Storage searches Guild assets live"
 	)
 	if asset_search != null:
@@ -510,35 +514,42 @@ func _run() -> void:
 		asset_search.text_changed.emit(asset_search.text)
 		await process_frame
 	_check(
-		popup.find_child("GuildBankFilterEmptyState", true, false).visible,
+		items_storage_window.find_child("GuildItemsStorageSlot_leftovers", true, false) == null
+		and items_storage_window.find_child("GuildItemsStorageGrid", true, false).get_child_count() == 1,
 		"full Item Storage does not mix personal Bag results into Guild search"
 	)
 	if asset_search != null:
 		asset_search.text = ""
 		asset_search.text_changed.emit(asset_search.text)
-	var asset_filter := popup.find_child("GuildBankAssetFilterSelect", true, false) as OptionButton
+		await process_frame
+	var asset_filter := items_storage_window.find_child("GuildItemsStorageFilterSelect", true, false) as OptionButton
 	if asset_filter != null:
 		_check(asset_filter.get_item_text(2) == "Unavailable", "Item Storage names its unavailable filter clearly")
 		asset_filter.select(2)
 		asset_filter.item_selected.emit(2)
 		await process_frame
 	_check(
-		not popup.find_child("GuildBankItemRow_leftovers", true, false).visible
-		and popup.find_child("GuildBankItemRow_choice-scarf", true, false).visible,
+		items_storage_window.find_child("GuildItemsStorageSlot_leftovers", true, false) == null
+		and items_storage_window.find_child("GuildItemsStorageSlot_choice-scarf", true, false) != null,
 		"Item Storage unavailable filter shows stacks with no free copies"
 	)
-	var unavailable_withdraw := popup.find_child("GuildBankItemWithdrawButton_choice-scarf", true, false) as Button
+	var unavailable_withdraw := items_storage_window.find_child("GuildBankItemWithdrawButton_choice-scarf", true, false) as Button
 	_check(
 		unavailable_withdraw != null
 		and unavailable_withdraw.disabled
 		and unavailable_withdraw.tooltip_text.contains("No copies"),
 		"Item Storage disables withdrawal when every copy is unavailable"
 	)
-	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
-	if bank_back != null:
-		bank_back.pressed.emit()
+	popup._set_guild_item_storage_status("items", "Item action failed", true)
+	popup._refresh_guild_item_storage_window("items")
+	var items_status := items_storage_window.find_child("GuildItemsStorageStatus", true, false) as Label
+	_check(items_status != null and items_status.text == "Item action failed" and items_status.visible, "Item Storage keeps action feedback visible while refreshing")
+	var items_close := items_storage_window.find_child("GuildItemsStorageCloseButton", true, false) as Button
+	if items_close != null:
+		items_close.pressed.emit()
 		await process_frame
-	_check(popup.find_child("GuildBankItemsPreview", true, false) != null, "back from full Item Storage returns to its overview")
+	_check(popup.find_child("GuildItemsStorageWindow", true, false) == null, "closing full Item Storage returns to its donation overview")
+	_check(popup.find_child("GuildBankItemsPreview", true, false) != null, "closing full Item Storage preserves its donation overview")
 	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
 	if bank_back != null:
 		bank_back.pressed.emit()
@@ -554,17 +565,21 @@ func _run() -> void:
 	if resources_full_action != null:
 		resources_full_action.pressed.emit()
 		await process_frame
-	_check(popup.find_child("GuildBankResourcesWorkspace", true, false) != null, "Resources opens a dedicated consumable workspace")
-	_check(popup.find_child("GuildBankResourcesLogButton", true, false) != null, "Resources has a dedicated transaction log")
-	_check(popup.find_child("GuildBankResourceWithdrawButton_potion", true, false) != null, "Guild consumables can be taken")
-	_check(popup.find_child("GuildBankResourceDepositButton_poke-ball", true, false) == null, "full Resources focuses only on Guild supplies")
-	_check(popup.find_child("GuildBankItemBorrowButton_potion", true, false) == null, "Resources never expose borrowing")
-	_check(popup.find_child("GuildBankResourceWithdrawButton_potion", true, false).tooltip_text == "", "authorized Resources withdrawal is immediately available")
-	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
-	if bank_back != null:
-		bank_back.pressed.emit()
+	var resources_storage_window := popup.find_child("GuildResourcesStorageWindow", true, false) as Window
+	var resources_storage_grid := popup.find_child("GuildResourcesStorageGrid", true, false) as GridContainer
+	_check(resources_storage_window != null and resources_storage_window.visible, "Resources opens in a dedicated window")
+	_check(resources_storage_grid != null and resources_storage_grid.columns == 5, "Resources presents a five-column asset grid")
+	_check(resources_storage_window != null and resources_storage_window.find_child("GuildBankResourcesLogButton", true, false) != null, "Resources has a dedicated transaction log")
+	_check(resources_storage_window != null and resources_storage_window.find_child("GuildBankResourceWithdrawButton_potion", true, false) != null, "selected Guild consumables can be taken")
+	_check(resources_storage_window != null and resources_storage_window.find_child("GuildBankResourceDepositButton_poke-ball", true, false) == null, "full Resources focuses only on Guild supplies")
+	_check(resources_storage_window != null and resources_storage_window.find_child("GuildBankItemBorrowButton_potion", true, false) == null, "Resources never expose borrowing")
+	_check(resources_storage_window.find_child("GuildBankResourceWithdrawButton_potion", true, false).tooltip_text == "", "authorized Resources withdrawal is immediately available")
+	var resources_close := resources_storage_window.find_child("GuildResourcesStorageCloseButton", true, false) as Button
+	if resources_close != null:
+		resources_close.pressed.emit()
 		await process_frame
-	_check(popup.find_child("GuildBankResourcesPreview", true, false) != null, "back from full Resources returns to its overview")
+	_check(popup.find_child("GuildResourcesStorageWindow", true, false) == null, "closing full Resources returns to its donation overview")
+	_check(popup.find_child("GuildBankResourcesPreview", true, false) != null, "closing full Resources preserves its donation overview")
 	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
 	if bank_back != null:
 		bank_back.pressed.emit()
