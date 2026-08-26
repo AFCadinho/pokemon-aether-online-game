@@ -1,19 +1,19 @@
 extends "res://scripts/world/map_metadata.gd"
 
-const MAP_SIZE := Vector2i(24, 18)
-const ROUTE_4_ROAD_MIN_Y := 8
-const ROUTE_4_ROAD_MAX_Y := 10
+const MAP_SIZE := Vector2i(75, 70)
+const ROUTE_4_ROAD_MIN_Y := 16
+const ROUTE_4_ROAD_MAX_Y := 18
 const COLLISION_SOURCE_ID := 1
 
 @onready var collision: TileMapLayer = $Collision
 
 
 func _ready() -> void:
-	_build_placeholder_boundaries()
+	_build_map_boundaries()
 	super._ready()
 
 
-func _build_placeholder_boundaries() -> void:
+func _build_map_boundaries() -> void:
 	if collision == null:
 		return
 	for x: int in range(MAP_SIZE.x):

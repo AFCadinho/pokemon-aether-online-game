@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dly1ylygogcj3"]
 
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/open_field/open_field.visual.tscn" id="1_visual"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/cerulean_city/cerulean_city.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://q31fuskssd00" path="res://scripts/world/kanto/towns/cerulean_city.gd" id="2_city"]
 [ext_resource type="TileSet" uid="uid://p6ylhm8hwe2y" path="res://generated/tiled_visuals/open_field/open_field.visual.tileset.tres" id="3_collision"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_exit"]
@@ -21,7 +21,7 @@ location_name = "Cerulean City"
 region_id = "kanto"
 music_track_id = "overworld.kanto.cerulean_city"
 
-[node name="OpenField" parent="." instance=ExtResource("1_visual")]
+[node name="CeruleanCityVisual" parent="." instance=ExtResource("1_visual")]
 
 [node name="Collision" type="TileMapLayer" parent="."]
 visible = false
@@ -31,12 +31,12 @@ tile_set = ExtResource("3_collision")
 [node name="Spawns" type="Node2D" parent="."]
 
 [node name="FromRoute4" type="Marker2D" parent="Spawns"]
-position = Vector2(64, 288)
+position = Vector2(64, 544)
 
 [node name="Exits" type="Node2D" parent="."]
 
 [node name="ToRoute4" type="Area2D" parent="Exits"]
-position = Vector2(16, 288)
+position = Vector2(16, 544)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_4.tscn"
 target_spawn_name = "FromCerulean"
