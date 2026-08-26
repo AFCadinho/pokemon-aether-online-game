@@ -7980,6 +7980,17 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_chat_moderation_popup.connect("closed", _on_staff_chat_moderation_closed)
 	root_control.add_child(staff_chat_moderation_popup)
 
+	staff_teleport_button = Button.new()
+	staff_teleport_button.pressed.connect(_on_staff_teleport_button_pressed)
+	tools_layout.add_child(staff_teleport_button)
+	_configure_launcher_card_button(
+		staff_teleport_button,
+		"ui.staff.teleport.action",
+		"ui.staff.teleport.action_description",
+		STAFF_TELEPORT_ICON,
+		Color("#60d3ff")
+	)
+
 	staff_chat_translate_button = Button.new()
 	staff_chat_translate_button.name = "StaffChatTranslateModeButton"
 	staff_chat_translate_button.pressed.connect(_on_chat_translate_mode_toggled)
@@ -7997,17 +8008,6 @@ func _setup_staff_impersonation_tools() -> void:
 	staff_chat_translate_button_subtitle = staff_chat_translate_button.find_child(
 		"LauncherCardSubtitle", true, false
 	) as Label
-
-	staff_teleport_button = Button.new()
-	staff_teleport_button.pressed.connect(_on_staff_teleport_button_pressed)
-	tools_layout.add_child(staff_teleport_button)
-	_configure_launcher_card_button(
-		staff_teleport_button,
-		"ui.staff.teleport.action",
-		"ui.staff.teleport.action_description",
-		STAFF_TELEPORT_ICON,
-		Color("#60d3ff")
-	)
 
 	staff_impersonate_button = Button.new()
 	staff_impersonate_button.pressed.connect(_on_staff_impersonate_button_pressed)

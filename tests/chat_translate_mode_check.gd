@@ -53,6 +53,17 @@ func _run() -> void:
 		and overlay_source.contains('"ui.staff.translate.action_description_off"'),
 		"Translate Mode is exposed as a permission-gated Staff Tools card"
 	)
+	var moderation_position := overlay_source.find("tools_layout.add_child(staff_chat_moderation_button)")
+	var teleport_position := overlay_source.find("tools_layout.add_child(staff_teleport_button)")
+	var translate_position := overlay_source.find("tools_layout.add_child(staff_chat_translate_button)")
+	var impersonate_position := overlay_source.find("tools_layout.add_child(staff_impersonate_button)")
+	_check(
+		moderation_position >= 0
+		and moderation_position < teleport_position
+		and teleport_position < translate_position
+		and translate_position < impersonate_position,
+		"Staff Tools prioritizes Moderation Center and Teleport"
+	)
 	_check(
 		overlay_source.contains("func _apply_chat_translate_mode_card_style(active: bool)")
 		and overlay_source.contains('var accent := UI_SUCCESS if active')
