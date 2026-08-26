@@ -12,6 +12,7 @@
 - Guild leaders can now give individual members explicit Guild Bank permission exceptions while keeping rank permissions as the default.
 - Giga Impact, Psyshock, Explosion, and Water Shuriken now have their own battle animations and sound effects.
 - Added full Simplified Chinese language support throughout the game and launcher.
+- Staff with the Translate Language Chats permission can translate Chinese and Portuguese chat to and from English in real time.
 
 **Changed**
 
