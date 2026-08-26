@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="6_overworld_item"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_igkno"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="8_ejrgn"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="12_route_rock"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mt_moon_exit"]
 size = Vector2(96, 32)
@@ -435,6 +436,29 @@ z_index = 5
 position = Vector2(1296, 976)
 pickup_id = "kanto_route_4_tm_roar"
 item_id = "tm-roar"
+
+[node name="RockSmashWest" parent="Entities/Interactables" instance=ExtResource("12_route_rock")]
+position = Vector2(400, 1040)
+rock_id = "kanto_route_4_rock_west"
+rock_visual_style = 2
+
+[node name="RockSmashCentralWest" parent="Entities/Interactables" instance=ExtResource("12_route_rock")]
+position = Vector2(1040, 1008)
+rock_id = "kanto_route_4_rock_central_west"
+rock_variant = 1
+rock_visual_style = 2
+
+[node name="RockSmashCentralEast" parent="Entities/Interactables" instance=ExtResource("12_route_rock")]
+position = Vector2(2128, 496)
+rock_id = "kanto_route_4_rock_central_east"
+rock_variant = 2
+rock_visual_style = 2
+
+[node name="RockSmashEast" parent="Entities/Interactables" instance=ExtResource("12_route_rock")]
+position = Vector2(2720, 1232)
+rock_id = "kanto_route_4_rock_east"
+rock_variant = 3
+rock_visual_style = 2
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1671503666]
 visible = false
