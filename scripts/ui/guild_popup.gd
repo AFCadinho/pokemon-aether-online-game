@@ -1669,8 +1669,10 @@ func _guild_bank_card_description(category: String) -> String:
 				"capacity": int(guild_bank_state.get("pokemonCapacity", 30)),
 			}) if not guild_bank_state.is_empty() else _t("ui.guild.bank.pokemon.description")
 		"items":
+			var stored_items := _array_from_value(guild_bank_state.get("items", []))
 			return _t("ui.guild.bank.items.count", {
-				"count": _array_from_value(guild_bank_state.get("items", [])).size(),
+				"quantity": _guild_bank_total_item_quantity(stored_items),
+				"stacks": stored_items.size(),
 				"capacity": int(guild_bank_state.get("itemCapacity", 50)),
 			}) if not guild_bank_state.is_empty() else _t("ui.guild.bank.items.description")
 		"resources":
@@ -1678,6 +1680,14 @@ func _guild_bank_card_description(category: String) -> String:
 				"count": _array_from_value(guild_bank_state.get("resources", [])).size(),
 			}) if not guild_bank_state.is_empty() else _t("ui.guild.bank.resources.description")
 	return ""
+
+
+func _guild_bank_total_item_quantity(items: Array) -> int:
+	var total := 0
+	for value: Variant in items:
+		if value is Dictionary:
+			total += maxi(int((value as Dictionary).get("quantity", 0)), 0)
+	return total
 
 
 func _on_guild_bank_category_opened(category: String) -> void:

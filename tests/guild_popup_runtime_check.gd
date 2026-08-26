@@ -240,6 +240,8 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankFundsCard", true, false) != null, "Guild Bank shows shared funds")
 	_check(popup.find_child("GuildBankPokemonCard", true, false) != null, "Guild Bank shows Pokémon storage")
 	_check(popup.find_child("GuildBankItemsCard", true, false) != null, "Guild Bank shows item storage")
+	var item_storage_summary := popup._guild_bank_card_description("items")
+	_check(item_storage_summary.contains("18 total items") and item_storage_summary.contains("1 / 55"), "Item Storage distinguishes total quantity from used stack slots")
 	_check(popup.find_child("GuildBankResourcesCard", true, false) != null, "Guild Bank shows shared consumable resources")
 	var funds_action := popup.find_child("GuildBankFundsAction", true, false) as Button
 	var pokemon_action := popup.find_child("GuildBankPokemonAction", true, false) as Button

@@ -1673,7 +1673,7 @@
   "ui.guild.bank.access_hint": "Everyone can view the vaults and deposit funds. Your rank and personal Guild Bank rights determine whether you can donate, borrow or withdraw other assets.",
   "ui.guild.bank.funds.balance": "Guild balance: ${amount}",
   "ui.guild.bank.pokemon.count": "{count} / {capacity} Pokémon stored",
-  "ui.guild.bank.items.count": "{count} / {capacity} item stacks stored",
+  "ui.guild.bank.items.count": "{quantity} total items · {stacks} / {capacity} stack slots used",
   "ui.guild.bank.resources.count": "{count} resource stacks shared",
   "ui.guild.bank.back": "Back",
   "ui.guild.bank.refresh": "Refresh",

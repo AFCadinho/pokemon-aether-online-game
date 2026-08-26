@@ -1673,7 +1673,7 @@
   "ui.guild.bank.access_hint": "Todos podem ver os cofres e depositar fundos. Seu rank e suas permissões pessoais determinam se você pode doar, pegar emprestado ou retirar outros bens.",
   "ui.guild.bank.funds.balance": "Saldo da Guilda: ${amount}",
   "ui.guild.bank.pokemon.count": "{count} / {capacity} Pokémon armazenados",
-  "ui.guild.bank.items.count": "{count} / {capacity} pilhas de itens armazenadas",
+  "ui.guild.bank.items.count": "{quantity} itens no total · {stacks} / {capacity} espaços de pilha usados",
   "ui.guild.bank.resources.count": "{count} pilhas de recursos compartilhadas",
   "ui.guild.bank.back": "Voltar",
   "ui.guild.bank.refresh": "Atualizar",

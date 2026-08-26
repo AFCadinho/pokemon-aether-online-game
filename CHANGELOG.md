@@ -28,6 +28,7 @@
 
 **Fixed**
 
+- Guild Item Storage now shows total stored item quantity separately from its stack-slot capacity.
 - Pokémon in battle now show the correct blue male or pink female gender icon.
 - Forum announcements now appear in launcher and login news even when the forum omits their preview text.
 

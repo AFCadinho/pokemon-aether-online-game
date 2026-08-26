@@ -1670,7 +1670,7 @@
   "ui.guild.bank.access_hint": "所有成员都可以查看金库并存入资金。你的职位和个人公会银行权限决定能否捐赠、借用或提取其他资产。",
   "ui.guild.bank.funds.balance": "公会余额：${amount}",
   "ui.guild.bank.pokemon.count": "已存储 {count} / {capacity} 只宝可梦",
-  "ui.guild.bank.items.count": "已存储 {count} / {capacity} 个物品堆",
+  "ui.guild.bank.items.count": "共 {quantity} 个物品 · 已使用 {stacks} / {capacity} 个堆叠栏位",
   "ui.guild.bank.resources.count": "共享了 {count} 组资源",
   "ui.guild.bank.back": "返回",
   "ui.guild.bank.refresh": "刷新",

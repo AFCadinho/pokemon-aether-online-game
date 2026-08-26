@@ -77,6 +77,7 @@ func _init() -> void:
 	_check_contains(popup_source, "Time.get_datetime_string_from_unix_time", "Guild log periods use an absolute UTC boundary")
 	_check_contains(popup_source, "GuildBankDonationConfirmationDialog", "donations explain permanent Guild ownership")
 	_check_contains(popup_source, "GuildBankItemIcon_", "Guild Bank item rows render icons")
+	_check_contains(popup_source, "_guild_bank_total_item_quantity", "Guild Item Storage reports total item quantity separately from stack capacity")
 	_check_contains(popup_source, "GuildBankPokemonIcon_", "Guild Bank Pokémon rows render icons")
 	_check_contains(popup_source, "GuildBankPermissionSummary", "Guild Bank explains the current rank's transaction rights")
 	_check_contains(popup_source, "amount.update_on_text_changed = true", "Guild Bank money uses the amount currently typed")

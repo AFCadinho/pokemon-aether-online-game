@@ -1673,7 +1673,7 @@
   "ui.guild.bank.access_hint": "Iedereen kan de kluizen bekijken en geld storten. Je rang en persoonlijke Guildbankrechten bepalen of je andere bezittingen mag doneren, lenen of opnemen.",
   "ui.guild.bank.funds.balance": "Guildsaldo: ${amount}",
   "ui.guild.bank.pokemon.count": "{count} / {capacity} Pokémon opgeslagen",
-  "ui.guild.bank.items.count": "{count} / {capacity} itemstapels opgeslagen",
+  "ui.guild.bank.items.count": "{quantity} items totaal · {stacks} / {capacity} stapelplekken gebruikt",
   "ui.guild.bank.resources.count": "{count} resourcestapels gedeeld",
   "ui.guild.bank.back": "Terug",
   "ui.guild.bank.refresh": "Vernieuwen",
