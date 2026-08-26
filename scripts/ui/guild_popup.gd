@@ -18,6 +18,11 @@ const LEGACY_GUILD_EMBLEM_SIZE := 8
 const EMBLEM_EDITOR_PIXEL_SIZE := 11
 const EMBLEM_EDITOR_POPUP_SIZE := Vector2i(630, 500)
 const DIRECTORY_FILTER_POPUP_SIZE := Vector2i(420, 390)
+const DEBUG_GUILD_LEVEL_THRESHOLDS: Array[int] = [
+	0, 2500, 6250, 12000, 20000, 32500, 51000, 78500, 119000, 180000,
+	270000, 405000, 605000, 905000, 1350000, 2015000, 3005000, 4480000,
+	6680000, 10000000,
+]
 const GUILD_LANGUAGE_OPTIONS: Array[String] = [
 	"English",
 	"Spanish",
@@ -254,6 +259,7 @@ func show_debug_member_preview() -> void:
 	guild["atMaxLevel"] = false
 	guild["bankItemCapacity"] = 55
 	guild["bankPokemonCapacity"] = 32
+	guild["levelRewards"] = _debug_guild_level_rewards()
 	guild["emblem"] = {
 		"version": 1,
 		"size": GUILD_EMBLEM_SIZE,
@@ -355,6 +361,23 @@ func show_debug_member_preview() -> void:
 	_refresh_membership_state()
 	_render_guild_home()
 	_show_page("member")
+
+
+func _debug_guild_level_rewards() -> Array[Dictionary]:
+	var rewards: Array[Dictionary] = []
+	for index in range(DEBUG_GUILD_LEVEL_THRESHOLDS.size()):
+		var level := index + 1
+		rewards.append({
+			"level": level,
+			"requiredTotalExperience": DEBUG_GUILD_LEVEL_THRESHOLDS[index],
+			"memberCapacity": 20 if level == 1 else 23,
+			"bankItemCapacity": 50 if level < 5 else 55,
+			"bankPokemonCapacity": 30 if level < 5 else 32,
+			"memberCapacityIncrease": 20 if level == 1 else (3 if level == 2 else 0),
+			"bankItemCapacityIncrease": 50 if level == 1 else (5 if level == 5 else 0),
+			"bankPokemonCapacityIncrease": 30 if level == 1 else (2 if level == 5 else 0),
+		})
+	return rewards
 
 
 func _input(event: InputEvent) -> void:
@@ -1198,6 +1221,14 @@ func _build_guild_progression(guild: Dictionary) -> Control:
 	var title := _localized_label("ui.guild.progression.title", 10, UI_ACCENT)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.add_child(title)
+	var rewards_button := Button.new()
+	rewards_button.name = "GuildLevelRewardsButton"
+	rewards_button.text = _t("ui.guild.progression.view_levels")
+	rewards_button.custom_minimum_size = Vector2(112, 30)
+	rewards_button.disabled = _array_from_value(guild.get("levelRewards", [])).is_empty()
+	rewards_button.pressed.connect(_show_guild_level_rewards_window.bind(guild))
+	_apply_button_style(rewards_button)
+	heading.add_child(rewards_button)
 	heading.add_child(_label(
 		_t("ui.guild.progression.level", {
 			"level": int(guild.get("level", 1)),
@@ -1236,6 +1267,124 @@ func _build_guild_progression(guild: Dictionary) -> Control:
 	capacities.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	content.add_child(capacities)
 	return panel
+
+
+func _show_guild_level_rewards_window(guild: Dictionary) -> void:
+	var existing := find_child("GuildLevelRewardsWindow", true, false) as Window
+	if existing != null:
+		existing.grab_focus()
+		return
+	var rewards := _array_from_value(guild.get("levelRewards", []))
+	if rewards.is_empty():
+		return
+	var window := Window.new()
+	window.name = "GuildLevelRewardsWindow"
+	window.title = _t("ui.guild.progression.rewards.title")
+	window.size = Vector2i(660, 560)
+	window.min_size = Vector2i(520, 420)
+	window.transient = true
+	window.exclusive = true
+	window.close_requested.connect(window.queue_free)
+	add_child(window)
+	var panel := PanelContainer.new()
+	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER, 10, 1))
+	window.add_child(panel)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 18, 16, 18, 16)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 10)
+	margin.add_child(content)
+	content.add_child(_localized_label("ui.guild.progression.rewards.title", 13, UI_ACCENT))
+	var hint := _localized_label("ui.guild.progression.rewards.hint", 11, UI_MUTED)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(hint)
+	var scroll := ScrollContainer.new()
+	scroll.name = "GuildLevelRewardsScroll"
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content.add_child(scroll)
+	var reward_list := VBoxContainer.new()
+	reward_list.name = "GuildLevelRewardsList"
+	reward_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	reward_list.add_theme_constant_override("separation", 7)
+	scroll.add_child(reward_list)
+	var current_level := int(guild.get("level", 1))
+	for reward_value: Variant in rewards:
+		if reward_value is Dictionary:
+			reward_list.add_child(_build_guild_level_reward_row(reward_value as Dictionary, current_level))
+	var footer := HBoxContainer.new()
+	footer.alignment = BoxContainer.ALIGNMENT_END
+	content.add_child(footer)
+	var close_button := Button.new()
+	close_button.name = "CloseGuildLevelRewardsButton"
+	close_button.text = _t("common.close")
+	close_button.custom_minimum_size = Vector2(110, 34)
+	close_button.pressed.connect(window.queue_free)
+	_apply_button_style(close_button, "primary")
+	footer.add_child(close_button)
+	window.popup_centered()
+
+
+func _build_guild_level_reward_row(reward: Dictionary, current_level: int) -> Control:
+	var level := int(reward.get("level", 1))
+	var panel := PanelContainer.new()
+	panel.name = "GuildLevelRewardRow_%d" % level
+	var is_current := level == current_level
+	var is_unlocked := level <= current_level
+	var background := Color("#102a3df2") if is_current else (Color("#0a1d28ed") if is_unlocked else Color("#07121dee"))
+	var border := UI_ACCENT if is_current else (UI_SUCCESS.darkened(0.25) if is_unlocked else UI_BORDER_INNER)
+	panel.add_theme_stylebox_override("panel", _panel_style(background, border, 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 10, 12, 10)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 14)
+	margin.add_child(row)
+	var level_details := VBoxContainer.new()
+	level_details.custom_minimum_size.x = 175
+	level_details.add_theme_constant_override("separation", 3)
+	row.add_child(level_details)
+	level_details.add_child(_label(_t("ui.guild.progression.level_short", {"level": level}), 12, UI_GOLD))
+	var threshold_text := _t("ui.guild.progression.starting_level") if level == 1 else _t(
+		"ui.guild.progression.required_total",
+		{"experience": _format_number(int(reward.get("requiredTotalExperience", 0)))},
+	)
+	level_details.add_child(_label(threshold_text, 10, UI_MUTED))
+	var reward_details := VBoxContainer.new()
+	reward_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	reward_details.add_theme_constant_override("separation", 3)
+	row.add_child(reward_details)
+	var status_key := "ui.guild.progression.status.current" if is_current else (
+		"ui.guild.progression.status.unlocked" if is_unlocked else "ui.guild.progression.status.locked"
+	)
+	reward_details.add_child(_localized_label(status_key, 9, UI_SUCCESS if is_unlocked else UI_MUTED))
+	var unlocks := _label(_guild_level_reward_text(reward), 11, UI_TEXT if is_unlocked else UI_MUTED)
+	unlocks.name = "GuildLevelRewardUnlocks_%d" % level
+	unlocks.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	reward_details.add_child(unlocks)
+	return panel
+
+
+func _guild_level_reward_text(reward: Dictionary) -> String:
+	var level := int(reward.get("level", 1))
+	if level == 1:
+		return _t("ui.guild.progression.reward.base", {
+			"members": int(reward.get("memberCapacity", 20)),
+			"items": int(reward.get("bankItemCapacity", 50)),
+			"pokemon": int(reward.get("bankPokemonCapacity", 30)),
+		})
+	var unlocks: Array[String] = []
+	var member_increase := int(reward.get("memberCapacityIncrease", 0))
+	var item_increase := int(reward.get("bankItemCapacityIncrease", 0))
+	var pokemon_increase := int(reward.get("bankPokemonCapacityIncrease", 0))
+	if member_increase > 0:
+		unlocks.append(_t("ui.guild.progression.reward.members", {"amount": member_increase}))
+	if item_increase > 0:
+		unlocks.append(_t("ui.guild.progression.reward.items", {"amount": item_increase}))
+	if pokemon_increase > 0:
+		unlocks.append(_t("ui.guild.progression.reward.pokemon", {"amount": pokemon_increase}))
+	return " · ".join(unlocks) if not unlocks.is_empty() else _t("ui.guild.progression.reward.none")
 
 
 func _confirm_guild_leave(guild: Dictionary) -> void:

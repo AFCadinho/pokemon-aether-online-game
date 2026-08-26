@@ -165,6 +165,24 @@ func _run() -> void:
 	_check(guild_progress != null and is_equal_approx(guild_progress.value, 47.5), "guild overview shows authoritative level progress")
 	var guild_progress_label := popup.find_child("GuildExperienceProgressLabel", true, false) as Label
 	_check(guild_progress_label != null and guild_progress_label.text.contains("500,000"), "guild overview shows total Guild EXP")
+	var rewards_button := popup.find_child("GuildLevelRewardsButton", true, false) as Button
+	_check(rewards_button != null and not rewards_button.disabled, "guild overview exposes the level unlock roadmap")
+	if rewards_button != null:
+		rewards_button.pressed.emit()
+		await process_frame
+	var rewards_window := popup.find_child("GuildLevelRewardsWindow", true, false) as Window
+	_check(rewards_window != null and rewards_window.visible, "level unlock roadmap opens in a modal")
+	var rewards_list := popup.find_child("GuildLevelRewardsList", true, false) as VBoxContainer
+	_check(rewards_list != null and rewards_list.get_child_count() == 20, "level unlock roadmap shows all twenty levels")
+	var level_two_unlocks := popup.find_child("GuildLevelRewardUnlocks_2", true, false) as Label
+	_check(level_two_unlocks != null and level_two_unlocks.text.contains("+3"), "level two shows its member capacity unlock")
+	var level_five_unlocks := popup.find_child("GuildLevelRewardUnlocks_5", true, false) as Label
+	_check(level_five_unlocks != null and level_five_unlocks.text.contains("+5") and level_five_unlocks.text.contains("+2"), "level five shows both bank capacity unlocks")
+	var rewards_close := popup.find_child("CloseGuildLevelRewardsButton", true, false) as Button
+	if rewards_close != null:
+		rewards_close.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildLevelRewardsWindow", true, false) == null, "level unlock roadmap closes cleanly")
 	var leader_leave_button := popup.find_child("LeaveGuildButton", true, false) as Button
 	_check(leader_leave_button != null and leader_leave_button.disabled, "Guild leaders must transfer leadership before leaving")
 	_check(popup.find_child("GuildTravelBar", true, false) != null, "guild travel sits above the dashboard content")
