@@ -28,7 +28,7 @@ func _init() -> void:
 	_check(route_visual.contains('"height": 50'), "Route 4 visual preserves the Tiled height")
 	_check(route_visual.contains('"width": 100'), "Route 4 visual preserves the Tiled width")
 	_check(route_source.contains('[node name="FromMtMoon" type="Marker2D" parent="Spawns"'), "Route 4 has a Mt. Moon arrival")
-	_check(route_source.contains('position = Vector2(176, 1280)'), "Mt. Moon arrival is outside the imported cave entrance")
+	_check(route_source.contains('position = Vector2(208, 976)'), "Mt. Moon arrival is outside the imported cave entrance")
 	_check(route_source.contains('transition_id = "kanto_route_4__to_mt_moon"'), "Route 4 returns to Mt. Moon")
 	_check(route_source.contains('target_spawn_name = "FromRoute4"'), "Route 4 targets the cave return spawn")
 	_check(route_source.contains('transition_facing_direction = "down"'), "Route 4 entry faces the player into Mt. Moon")
