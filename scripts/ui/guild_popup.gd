@@ -35,6 +35,9 @@ const GUILD_LANGUAGE_OPTIONS: Array[String] = [
 	"Other",
 ]
 const GUILD_ASSIGNABLE_ROLES: Array[String] = ["recruit", "member", "captain"]
+const GUILD_MEMBER_ACTION_PM := 1
+const GUILD_MEMBER_ACTION_CHANGE_RANK := 2
+const GUILD_MEMBER_ACTION_BANK_RIGHTS := 3
 const GUILD_BANK_PERMISSIONS: Array[String] = [
 	"bank_deposit",
 	"bank_withdraw",
@@ -3874,12 +3877,10 @@ func _build_guild_member_card(
 	row.add_child(rank)
 	rank.add_child(_localized_label("ui.guild.member.rank", 9, UI_MUTED))
 	var member_role := str(member.get("role", "recruit"))
-	if own_role == "leader" and member_role != "leader":
-		rank.add_child(_guild_member_role_select(user_id, member_role))
-	else:
-		var role_label := _label(_membership_role_label(member_role).to_upper(), 10, UI_GOLD)
-		role_label.name = "GuildMemberRankLabel_%d" % user_id
-		rank.add_child(role_label)
+	var role_label := _label(_membership_role_label(member_role).to_upper(), 10, UI_GOLD)
+	role_label.name = "GuildMemberRankLabel_%d" % user_id
+	role_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	rank.add_child(role_label)
 	var overrides := _dictionary(member.get("bankPermissionOverrides", {}))
 	if not overrides.is_empty():
 		var override_label := _label(
@@ -3889,20 +3890,6 @@ func _build_guild_member_card(
 		)
 		override_label.name = "GuildMemberPermissionOverrideCount_%d" % user_id
 		rank.add_child(override_label)
-
-	var permissions_slot := CenterContainer.new()
-	permissions_slot.name = "GuildMemberBankPermissionsSlot_%d" % user_id
-	permissions_slot.custom_minimum_size = Vector2(105, 36)
-	row.add_child(permissions_slot)
-	if can_manage_permissions and member_role != "leader":
-		var permissions_button := Button.new()
-		permissions_button.name = "GuildMemberBankPermissionsButton_%d" % user_id
-		permissions_button.custom_minimum_size = Vector2(105, 36)
-		_set_localized_property(permissions_button, "text", "ui.guild.permissions.action")
-		_set_localized_property(permissions_button, "tooltip_text", "ui.guild.permissions.action_tooltip")
-		permissions_button.pressed.connect(_open_guild_member_bank_permissions.bind(member.duplicate(true)))
-		_apply_button_style(permissions_button)
-		permissions_slot.add_child(permissions_button)
 
 	var contribution := VBoxContainer.new()
 	contribution.name = "GuildMemberContributionColumn_%d" % user_id
@@ -3918,26 +3905,65 @@ func _build_guild_member_card(
 	contribution_label.name = "GuildMemberContributionLabel_%d" % user_id
 	contribution.add_child(contribution_label)
 
-	var message_button := Button.new()
-	message_button.name = "GuildMemberPmButton_%d" % user_id
-	message_button.custom_minimum_size = Vector2(78, 36)
-	message_button.disabled = user_id == own_user_id or not online
-	_set_localized_property(
-		message_button,
-		"text",
-		"ui.guild.member.you" if user_id == own_user_id else "ui.guild.member.message"
-	)
-	_set_localized_property(
-		message_button,
-		"tooltip_text",
-		"ui.guild.member.message_self"
-		if user_id == own_user_id
-		else ("ui.guild.member.message_tooltip" if online else "ui.guild.member.message_offline")
-	)
-	message_button.pressed.connect(_on_guild_member_private_message_pressed.bind(member.duplicate(true)))
-	_apply_button_style(message_button, "primary")
-	row.add_child(message_button)
+	row.add_child(_build_guild_member_actions_button(
+		member,
+		own_role,
+		own_user_id,
+		can_manage_permissions
+	))
 	return card
+
+
+func _build_guild_member_actions_button(
+	member: Dictionary,
+	own_role: String,
+	own_user_id: int,
+	can_manage_permissions: bool
+) -> MenuButton:
+	var user_id := int(member.get("userId", 0))
+	var member_role := str(member.get("role", "recruit"))
+	var online := bool(member.get("online", false))
+	var is_self := user_id == own_user_id
+	var can_change_rank := own_role == "leader" and member_role != "leader" and not is_self
+	var can_edit_bank_rights := can_manage_permissions and member_role != "leader" and not is_self
+	var actions := MenuButton.new()
+	actions.name = "GuildMemberActionsButton_%d" % user_id
+	actions.custom_minimum_size = Vector2(105, 36)
+	_set_localized_property(actions, "text", "ui.guild.member.you" if is_self else "ui.guild.member.actions")
+	_set_localized_property(
+		actions,
+		"tooltip_text",
+		"ui.guild.member.message_self" if is_self else "ui.guild.member.actions_tooltip"
+	)
+	actions.disabled = is_self or (not online and not can_change_rank and not can_edit_bank_rights)
+	_apply_button_style(actions, "primary" if not is_self else "default")
+	var popup := actions.get_popup()
+	_apply_popup_menu_style(popup)
+	if not is_self:
+		popup.add_item(_t("ui.guild.member.message"), GUILD_MEMBER_ACTION_PM)
+		popup.set_item_disabled(popup.get_item_index(GUILD_MEMBER_ACTION_PM), not online)
+		popup.set_item_tooltip(
+			popup.get_item_index(GUILD_MEMBER_ACTION_PM),
+			_t("ui.guild.member.message_tooltip" if online else "ui.guild.member.message_offline")
+		)
+	if can_change_rank or can_edit_bank_rights:
+		popup.add_separator()
+	if can_change_rank:
+		popup.add_item(_t("ui.guild.member.change_rank"), GUILD_MEMBER_ACTION_CHANGE_RANK)
+	if can_edit_bank_rights:
+		popup.add_item(_t("ui.guild.permissions.action"), GUILD_MEMBER_ACTION_BANK_RIGHTS)
+	popup.id_pressed.connect(_on_guild_member_action_selected.bind(member.duplicate(true)))
+	return actions
+
+
+func _on_guild_member_action_selected(action_id: int, member: Dictionary) -> void:
+	match action_id:
+		GUILD_MEMBER_ACTION_PM:
+			_on_guild_member_private_message_pressed(member)
+		GUILD_MEMBER_ACTION_CHANGE_RANK:
+			_open_guild_member_rank_dialog(member)
+		GUILD_MEMBER_ACTION_BANK_RIGHTS:
+			_open_guild_member_bank_permissions(member)
 
 
 func _on_guild_member_private_message_pressed(member: Dictionary) -> void:
@@ -4007,18 +4033,44 @@ func _unix_from_iso_datetime(value: String) -> float:
 	return float(Time.get_unix_time_from_datetime_string(datetime_text))
 
 
-func _guild_member_role_select(user_id: int, current_role: String) -> OptionButton:
+func _open_guild_member_rank_dialog(member: Dictionary) -> void:
+	var user_id := int(member.get("userId", 0))
+	if user_id <= 0 or str(member.get("role", "recruit")) == "leader":
+		return
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "GuildMemberRankDialog_%d" % user_id
+	dialog.title = _t("ui.guild.member.change_rank_title", {
+		"trainer": str(member.get("displayName", member.get("username", _t("common.unknown")))),
+	})
+	dialog.ok_button_text = _t("common.save")
+	dialog.cancel_button_text = _t("common.cancel")
+	_apply_guild_confirmation_style(dialog, "primary")
+	add_child(dialog)
+	var content := VBoxContainer.new()
+	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content.offset_left = 18
+	content.offset_top = 48
+	content.offset_right = -18
+	content.offset_bottom = -62
+	content.add_theme_constant_override("separation", 9)
+	dialog.add_child(content)
+	var hint := _localized_label("ui.guild.member.change_rank_hint", 11, UI_MUTED)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(hint)
 	var select := OptionButton.new()
-	select.name = "GuildMemberRoleSelect_%d" % user_id
-	select.custom_minimum_size = Vector2(125, 30)
+	select.name = "GuildMemberRankSelect_%d" % user_id
+	select.custom_minimum_size = Vector2(0, 36)
+	var current_role := str(member.get("role", "recruit"))
 	for role: String in GUILD_ASSIGNABLE_ROLES:
 		select.add_item(_membership_role_label(role))
 		select.set_item_metadata(select.item_count - 1, role)
 		if role == current_role:
 			select.select(select.item_count - 1)
 	_apply_option_button_style(select)
-	select.item_selected.connect(_on_guild_member_role_selected.bind(user_id, select))
-	return select
+	content.add_child(select)
+	dialog.confirmed.connect(_save_guild_member_rank.bind(user_id, current_role, select, dialog))
+	dialog.canceled.connect(dialog.queue_free)
+	dialog.popup_centered(Vector2i(430, 205))
 
 
 func _open_guild_member_bank_permissions(member: Dictionary) -> void:
@@ -4122,22 +4174,37 @@ func _selected_guild_loan_duration() -> int:
 	return int(settings_loan_duration_select.get_item_metadata(settings_loan_duration_select.selected))
 
 
-func _on_guild_member_role_selected(index: int, user_id: int, select: OptionButton) -> void:
-	if select == null or index < 0 or index >= select.item_count:
+func _save_guild_member_rank(
+	user_id: int,
+	current_role: String,
+	select: OptionButton,
+	dialog: ConfirmationDialog
+) -> void:
+	if select == null or select.selected < 0 or select.selected >= select.item_count:
 		return
-	var role := str(select.get_item_metadata(index))
+	var role := str(select.get_item_metadata(select.selected))
+	if role == current_role:
+		if dialog != null and is_instance_valid(dialog):
+			dialog.queue_free()
+		return
 	select.disabled = true
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
 		select.disabled = false
 		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
+		if dialog != null and is_instance_valid(dialog):
+			dialog.popup_centered(Vector2i(430, 205))
 		return
 	var response: Variant = await guild_service.call("update_member_role", user_id, role)
 	var result := _dictionary(response)
 	if not bool(result.get("success", false)):
 		select.disabled = false
 		_set_member_status(str(result.get("error", _t("ui.guild.error.update_role"))), true)
+		if dialog != null and is_instance_valid(dialog):
+			dialog.popup_centered(Vector2i(430, 205))
 		return
+	if dialog != null and is_instance_valid(dialog):
+		dialog.queue_free()
 	_apply_home_result(result)
 	_set_member_status(_t("ui.guild.status.role_updated"), false)
 

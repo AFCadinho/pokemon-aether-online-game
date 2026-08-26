@@ -640,25 +640,25 @@ func _run() -> void:
 	var member_status_column := popup.find_child("GuildMemberStatusColumn_2", true, false) as Control
 	var leader_rank_column := popup.find_child("GuildMemberRankColumn_1", true, false) as Control
 	var member_rank_column := popup.find_child("GuildMemberRankColumn_2", true, false) as Control
-	var leader_permissions_slot := popup.find_child("GuildMemberBankPermissionsSlot_1", true, false) as Control
-	var member_permissions_slot := popup.find_child("GuildMemberBankPermissionsSlot_2", true, false) as Control
 	var leader_exp_column := popup.find_child("GuildMemberContributionColumn_1", true, false) as Control
 	var member_exp_column := popup.find_child("GuildMemberContributionColumn_2", true, false) as Control
+	var leader_actions_column := popup.find_child("GuildMemberActionsButton_1", true, false) as Control
+	var member_actions_column := popup.find_child("GuildMemberActionsButton_2", true, false) as Control
 	_check(
 		leader_status_column != null and member_status_column != null
 		and is_equal_approx(leader_status_column.global_position.x, member_status_column.global_position.x)
 		and leader_rank_column != null and member_rank_column != null
 		and is_equal_approx(leader_rank_column.global_position.x, member_rank_column.global_position.x)
-		and leader_permissions_slot != null and member_permissions_slot != null
-		and is_equal_approx(leader_permissions_slot.global_position.x, member_permissions_slot.global_position.x)
 		and leader_exp_column != null and member_exp_column != null
-		and is_equal_approx(leader_exp_column.global_position.x, member_exp_column.global_position.x),
+		and is_equal_approx(leader_exp_column.global_position.x, member_exp_column.global_position.x)
+		and leader_actions_column != null and member_actions_column != null
+		and is_equal_approx(leader_actions_column.global_position.x, member_actions_column.global_position.x),
 		"Leader and managed-member roster cards keep every information column aligned"
 	)
 	_check(
-		leader_permissions_slot != null and leader_permissions_slot.get_child_count() == 0
-		and member_permissions_slot != null and member_permissions_slot.get_child_count() == 1,
-		"Leader alignment reserves the Bank-rights column without exposing a Leader permission action"
+		leader_actions_column != null and (leader_actions_column as MenuButton).disabled
+		and member_actions_column != null and not (member_actions_column as MenuButton).disabled,
+		"the current Leader has no self-actions while managed members expose one action menu"
 	)
 	_check(popup.find_child("GuildHistoryLogButton", true, false) != null, "member roster has a dedicated Guild history action")
 	var member_search := popup.find_child("GuildMemberSearchInput", true, false) as LineEdit
@@ -772,16 +772,35 @@ func _run() -> void:
 	if history_window != null:
 		history_window.queue_free()
 		await process_frame
-	_check(popup.find_child("GuildMemberRoleSelect_2", true, false) != null, "leader can assign the Captain's rank")
-	_check(popup.find_child("GuildMemberRoleSelect_3", true, false) != null, "leader can assign a Member's rank")
-	var bank_permissions_button := popup.find_child("GuildMemberBankPermissionsButton_2", true, false) as Button
-	_check(bank_permissions_button != null, "permission managers can edit a member's Guild Bank rights")
+	var managed_actions := popup.find_child("GuildMemberActionsButton_2", true, false) as MenuButton
+	var offline_actions := popup.find_child("GuildMemberActionsButton_3", true, false) as MenuButton
+	var self_actions := popup.find_child("GuildMemberActionsButton_1", true, false) as MenuButton
+	_check(
+		managed_actions != null
+		and managed_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_CHANGE_RANK) >= 0,
+		"leaders can change a member's rank from the action menu"
+	)
+	_check(
+		managed_actions != null
+		and managed_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_BANK_RIGHTS) >= 0,
+		"permission managers can edit Guild Bank rights from the action menu"
+	)
 	_check(
 		popup.find_child("GuildMemberPermissionOverrideCount_2", true, false) != null,
 		"member cards identify custom Guild Bank rights"
 	)
-	if bank_permissions_button != null:
-		bank_permissions_button.pressed.emit()
+	if managed_actions != null:
+		managed_actions.get_popup().id_pressed.emit(GuildPopup.GUILD_MEMBER_ACTION_CHANGE_RANK)
+		await process_frame
+	var rank_dialog := popup.find_child("GuildMemberRankDialog_2", true, false) as ConfirmationDialog
+	_check(rank_dialog != null and rank_dialog.visible, "Change rank opens from the member action menu")
+	_check_dialog_styled(rank_dialog, "Guild member rank dialog")
+	_check(popup.find_child("GuildMemberRankSelect_2", true, false) != null, "rank changes retain every assignable Guild rank")
+	if rank_dialog != null:
+		rank_dialog.canceled.emit()
+		await process_frame
+	if managed_actions != null:
+		managed_actions.get_popup().id_pressed.emit(GuildPopup.GUILD_MEMBER_ACTION_BANK_RIGHTS)
 		await process_frame
 	var bank_permissions_dialog := popup.find_child("GuildMemberBankPermissionsDialog_2", true, false) as ConfirmationDialog
 	_check(bank_permissions_dialog != null and bank_permissions_dialog.visible, "member Guild Bank rights open in a dedicated dialog")
@@ -802,16 +821,24 @@ func _run() -> void:
 	var offline_presence := popup.find_child("GuildMemberPresenceLabel_3", true, false) as Label
 	_check(online_presence != null and online_presence.text == "Online", "online Guild members are clearly marked")
 	_check(offline_presence != null and offline_presence.text.contains("Last online"), "offline Guild members show their last activity")
-	var self_pm := popup.find_child("GuildMemberPmButton_1", true, false) as Button
-	var online_pm := popup.find_child("GuildMemberPmButton_2", true, false) as Button
-	var offline_pm := popup.find_child("GuildMemberPmButton_3", true, false) as Button
-	_check(self_pm != null and self_pm.disabled, "the current player cannot PM themselves")
-	_check(online_pm != null and not online_pm.disabled, "online Guild members expose a PM action")
-	_check(offline_pm != null and offline_pm.disabled, "offline Guild members explain that PM is unavailable")
-	_check(offline_pm != null and offline_pm.tooltip_text.contains("Mail"), "offline Guild PM explains that Mail handles offline messages")
-	if online_pm != null:
+	_check(self_actions != null and self_actions.disabled, "the current player has no action menu for themselves")
+	var online_pm_index := managed_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_PM) if managed_actions != null else -1
+	var offline_pm_index := offline_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_PM) if offline_actions != null else -1
+	_check(
+		online_pm_index >= 0 and not managed_actions.get_popup().is_item_disabled(online_pm_index),
+		"online Guild members expose PM in their action menu"
+	)
+	_check(
+		offline_pm_index >= 0 and offline_actions.get_popup().is_item_disabled(offline_pm_index),
+		"offline Guild members keep PM visibly unavailable"
+	)
+	_check(
+		offline_pm_index >= 0 and offline_actions.get_popup().get_item_tooltip(offline_pm_index).contains("Mail"),
+		"offline Guild PM explains that Mail handles offline messages"
+	)
+	if managed_actions != null:
 		popup.private_message_requested.connect(_on_private_message_requested, CONNECT_ONE_SHOT)
-		online_pm.pressed.emit()
+		managed_actions.get_popup().id_pressed.emit(GuildPopup.GUILD_MEMBER_ACTION_PM)
 	_check(
 		int(private_message_user.get("userId", 0)) == 2
 		and str(private_message_user.get("username", "")) == "maple",
@@ -991,6 +1018,7 @@ func _run() -> void:
 	application_count = popup.find_child("GuildApplicationsPendingCount", true, false) as Label
 	_check(application_count != null and application_count.text.contains("0"), "empty Guild application inbox shows zero waiting")
 	popup.guild_home["membership"] = {
+		"userId": 1,
 		"guildId": 1,
 		"role": "captain",
 		"permissions": ["manage_members"],
@@ -1017,14 +1045,27 @@ func _run() -> void:
 	await process_frame
 	_check(popup.find_child("GuildManagementTab", true, false) == null, "regular members do not see management")
 	_check(popup.find_child("GuildManagementApplicationsTab", true, false) == null, "regular members do not see the staff applications inbox")
-	_check(popup.find_child("GuildMemberRoleSelect_2", true, false) == null, "regular members cannot assign Guild ranks")
-	_check(popup.find_child("GuildMemberBankPermissionsButton_2", true, false) == null, "regular members cannot edit Guild Bank rights")
+	popup._show_guild_section("members")
+	await process_frame
+	var regular_member_actions := popup.find_child("GuildMemberActionsButton_2", true, false) as MenuButton
+	_check(
+		regular_member_actions != null
+		and regular_member_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_CHANGE_RANK) < 0,
+		"regular members cannot assign Guild ranks"
+	)
+	_check(
+		regular_member_actions != null
+		and regular_member_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_BANK_RIGHTS) < 0,
+		"regular members cannot edit Guild Bank rights"
+	)
 	_check(
 		popup._guild_bank_borrow_tooltip().contains("personally disabled"),
 		"personal Guild Bank denials explain that they are not rank restrictions"
 	)
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "regular members cannot edit the Guild emblem")
 	_check(popup.find_child("EditGuildEmblemIconButton", true, false) == null, "regular members cannot edit the Guild emblem icon")
+	popup._show_guild_section("overview")
+	await process_frame
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "regular members return to the overview")
 	popup.guild_bank_state["access"]["canWithdrawResources"] = false
 	popup.guild_bank_state["access"]["bankPermissionOverrides"] = {"resource_withdraw": "deny"}
