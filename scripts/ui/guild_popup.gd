@@ -142,6 +142,7 @@ var active_guild_bank_category := ""
 var active_guild_bank_full_view := false
 var guild_bank_asset_search_query := ""
 var guild_bank_asset_filter := "all"
+var guild_pokemon_vault_selected_id := 0
 var guild_bank_state: Dictionary = {}
 var is_loading_guild_bank := false
 var is_guild_bank_action_in_flight := false
@@ -1059,6 +1060,7 @@ func _render_guild_home() -> void:
 			member_content.add_child(_build_member_management(guild, can_manage_settings, can_review_applications))
 		_:
 			member_content.add_child(_build_guild_overview(guild))
+	_refresh_guild_pokemon_vault_window()
 
 func _build_guild_header_emblem(guild: Dictionary, is_editable: bool) -> Control:
 	if not is_editable:
@@ -2014,10 +2016,374 @@ func _build_guild_bank_category_preview(category: String) -> Control:
 func _open_guild_bank_full_view() -> void:
 	if active_guild_bank_category not in ["pokemon", "items", "resources"]:
 		return
+	if active_guild_bank_category == "pokemon":
+		_show_guild_pokemon_vault_window()
+		return
 	active_guild_bank_full_view = true
 	guild_bank_asset_search_query = ""
 	guild_bank_asset_filter = "all"
 	_render_guild_home()
+
+
+func _show_guild_pokemon_vault_window() -> void:
+	var existing := find_child("GuildPokemonVaultWindow", true, false) as Window
+	if existing != null:
+		existing.grab_focus()
+		return
+	guild_pokemon_vault_selected_id = 0
+	var window := Window.new()
+	window.name = "GuildPokemonVaultWindow"
+	window.title = _t("ui.guild.bank.pokemon.title")
+	window.size = Vector2i(920, 610)
+	window.min_size = Vector2i(760, 500)
+	window.transient = true
+	window.exclusive = false
+	window.borderless = true
+	_apply_guild_window_style(window)
+	window.close_requested.connect(window.queue_free)
+	add_child(window)
+	var panel := PanelContainer.new()
+	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER, 10, 1))
+	window.add_child(panel)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 16, 14, 16, 16)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 10)
+	margin.add_child(content)
+	var title_bar := PanelContainer.new()
+	title_bar.name = "GuildPokemonVaultTitleBar"
+	title_bar.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 8, 1))
+	content.add_child(title_bar)
+	var title_margin := MarginContainer.new()
+	_set_margins(title_margin, 12, 7, 7, 7)
+	title_bar.add_child(title_margin)
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 9)
+	title_margin.add_child(title_row)
+	title_row.add_child(_icon_rect(22, UI_ACCENT))
+	var title := _localized_label("ui.guild.bank.pokemon.full_title", 16, UI_TEXT)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_row.add_child(title)
+	var count := _label("", 10, UI_MUTED)
+	count.name = "GuildPokemonVaultCount"
+	title_row.add_child(count)
+	var refresh := Button.new()
+	refresh.name = "GuildPokemonVaultRefreshButton"
+	_set_localized_property(refresh, "text", "ui.guild.bank.refresh")
+	refresh.pressed.connect(_load_guild_bank_async)
+	_apply_button_style(refresh)
+	title_row.add_child(refresh)
+	var log_button := Button.new()
+	log_button.name = "GuildBankPokemonLogButton"
+	_set_localized_property(log_button, "text", "ui.guild.log.view")
+	log_button.pressed.connect(_open_guild_log.bind("pokemon"))
+	_apply_button_style(log_button)
+	title_row.add_child(log_button)
+	var close := Button.new()
+	close.name = "GuildPokemonVaultCloseButton"
+	close.text = "×"
+	close.custom_minimum_size = Vector2(38, 34)
+	_set_localized_property(close, "tooltip_text", "common.close")
+	_apply_button_style(close, "danger")
+	close.add_theme_font_size_override("font_size", 19)
+	close.pressed.connect(window.queue_free)
+	title_row.add_child(close)
+	var body := HBoxContainer.new()
+	body.name = "GuildPokemonVaultBody"
+	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body.add_theme_constant_override("separation", 12)
+	content.add_child(body)
+	var browser := VBoxContainer.new()
+	browser.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	browser.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	browser.add_theme_constant_override("separation", 8)
+	body.add_child(browser)
+	var toolbar := HBoxContainer.new()
+	toolbar.add_theme_constant_override("separation", 8)
+	browser.add_child(toolbar)
+	var search := LineEdit.new()
+	search.name = "GuildPokemonVaultSearchInput"
+	search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	search.clear_button_enabled = true
+	_set_localized_property(search, "placeholder_text", "ui.guild.bank.search.pokemon")
+	_apply_line_edit_style(search)
+	search.text_changed.connect(_on_guild_pokemon_vault_filters_changed)
+	toolbar.add_child(search)
+	var filter := OptionButton.new()
+	filter.name = "GuildPokemonVaultFilterSelect"
+	filter.custom_minimum_size = Vector2(160, 36)
+	for filter_id: String in ["all", "available", "borrowed"]:
+		filter.add_item(_t("ui.guild.bank.filter.%s" % filter_id))
+		filter.set_item_metadata(filter.item_count - 1, filter_id)
+	_apply_option_button_style(filter)
+	filter.item_selected.connect(_on_guild_pokemon_vault_filters_changed)
+	toolbar.add_child(filter)
+	var grid_panel := PanelContainer.new()
+	grid_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	grid_panel.add_theme_stylebox_override("panel", _panel_style(Color("#06111dee"), UI_BORDER_INNER, 8, 1))
+	browser.add_child(grid_panel)
+	var grid_margin := MarginContainer.new()
+	_set_margins(grid_margin, 9, 9, 9, 9)
+	grid_panel.add_child(grid_margin)
+	var scroll := ScrollContainer.new()
+	scroll.name = "GuildPokemonVaultScroll"
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	grid_margin.add_child(scroll)
+	var grid := GridContainer.new()
+	grid.name = "GuildPokemonVaultGrid"
+	grid.columns = 5
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 7)
+	grid.add_theme_constant_override("v_separation", 7)
+	scroll.add_child(grid)
+	var detail_panel := PanelContainer.new()
+	detail_panel.name = "GuildPokemonVaultSelectionPanel"
+	detail_panel.custom_minimum_size = Vector2(260, 0)
+	detail_panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_BORDER_INNER, 8, 1))
+	body.add_child(detail_panel)
+	var detail_margin := MarginContainer.new()
+	_set_margins(detail_margin, 13, 12, 13, 12)
+	detail_panel.add_child(detail_margin)
+	var detail := VBoxContainer.new()
+	detail.name = "GuildPokemonVaultSelection"
+	detail.add_theme_constant_override("separation", 8)
+	detail_margin.add_child(detail)
+	_refresh_guild_pokemon_vault_window()
+	window.popup_centered()
+
+
+func _on_guild_pokemon_vault_filters_changed(_unused: Variant = null) -> void:
+	_refresh_guild_pokemon_vault_window()
+
+
+func _refresh_guild_pokemon_vault_window() -> void:
+	var window := find_child("GuildPokemonVaultWindow", true, false) as Window
+	if window == null:
+		return
+	var grid := window.find_child("GuildPokemonVaultGrid", true, false) as GridContainer
+	var detail := window.find_child("GuildPokemonVaultSelection", true, false) as VBoxContainer
+	if grid == null or detail == null:
+		return
+	_clear_children(grid)
+	grid.columns = 5
+	var search := window.find_child("GuildPokemonVaultSearchInput", true, false) as LineEdit
+	var filter := window.find_child("GuildPokemonVaultFilterSelect", true, false) as OptionButton
+	var count := window.find_child("GuildPokemonVaultCount", true, false) as Label
+	if count != null:
+		count.text = _t("ui.guild.bank.pokemon.count", {
+			"count": _array_from_value(guild_bank_state.get("pokemon", [])).size(),
+			"capacity": int(guild_bank_state.get("pokemonCapacity", 30)),
+		})
+	var query := search.text.strip_edges().to_lower() if search != null else ""
+	var filter_id := "all"
+	if filter != null and filter.selected >= 0:
+		filter_id = str(filter.get_item_metadata(filter.selected))
+	var visible_entries: Array[Dictionary] = []
+	for value: Variant in _array_from_value(guild_bank_state.get("pokemon", [])):
+		if not value is Dictionary:
+			continue
+		var entry := value as Dictionary
+		var pokemon := _dictionary(entry.get("pokemon", {}))
+		var borrowed := bool(entry.get("isBorrowed", false))
+		var search_text := "%s %s %s %s level %d" % [
+			_guild_bank_pokemon_name(pokemon).to_lower(),
+			str(pokemon.get("speciesName", pokemon.get("species", ""))).to_lower(),
+			str(entry.get("depositedBy", "")).to_lower(),
+			str(entry.get("borrowedBy", "")).to_lower(),
+			int(pokemon.get("level", 1)),
+		]
+		if query != "" and not search_text.contains(query):
+			continue
+		if filter_id == "available" and borrowed:
+			continue
+		if filter_id == "borrowed" and not borrowed:
+			continue
+		visible_entries.append(entry)
+	if not visible_entries.any(func(entry: Dictionary) -> bool: return int(entry.get("pokemonId", 0)) == guild_pokemon_vault_selected_id):
+		guild_pokemon_vault_selected_id = int(visible_entries[0].get("pokemonId", 0)) if not visible_entries.is_empty() else 0
+	for entry: Dictionary in visible_entries:
+		grid.add_child(_build_guild_pokemon_vault_slot(entry))
+	if visible_entries.is_empty():
+		grid.columns = 1
+		var empty := _localized_label("ui.guild.bank.filter.empty", 12, UI_MUTED)
+		empty.custom_minimum_size = Vector2(0, 150)
+		empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		empty.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		grid.add_child(empty)
+	_render_guild_pokemon_vault_selection(detail)
+
+
+func _build_guild_pokemon_vault_slot(entry: Dictionary) -> Button:
+	var pokemon_id := int(entry.get("pokemonId", 0))
+	var pokemon := _dictionary(entry.get("pokemon", {}))
+	var selected := pokemon_id == guild_pokemon_vault_selected_id
+	var button := Button.new()
+	button.name = "GuildPokemonVaultSlot_%d" % pokemon_id
+	button.text = ""
+	button.custom_minimum_size = Vector2(100, 108)
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.tooltip_text = _t("ui.guild.bank.pokemon.select", {"pokemon": _guild_bank_pokemon_name(pokemon)})
+	button.pressed.connect(_select_guild_pokemon_vault_entry.bind(pokemon_id))
+	var background := Color("#102a3df2") if selected else Color("#07131ff2")
+	var border := UI_ACCENT if selected else UI_BORDER_INNER
+	button.add_theme_stylebox_override("normal", _button_style(background, border))
+	button.add_theme_stylebox_override("hover", _button_style(UI_HOVER, UI_ACCENT_SOFT))
+	button.add_theme_stylebox_override("pressed", _button_style(Color("#071624f2"), UI_ACCENT))
+	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	var stack := VBoxContainer.new()
+	stack.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	stack.offset_left = 6
+	stack.offset_top = 5
+	stack.offset_right = -6
+	stack.offset_bottom = -5
+	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 1)
+	button.add_child(stack)
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(52, 52)
+	icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	icon.texture = _guild_bank_pokemon_icon(pokemon)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	stack.add_child(icon)
+	var name := _label(_guild_bank_pokemon_name(pokemon), 10, UI_TEXT)
+	name.custom_minimum_size = Vector2(0, 16)
+	name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name.clip_text = true
+	name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	stack.add_child(name)
+	var status := _t("ui.guild.bank.pokemon.grid_borrowed", {"level": int(pokemon.get("level", 1))}) if bool(entry.get("isBorrowed", false)) else _t("ui.guild.bank.pokemon.grid_level", {"level": int(pokemon.get("level", 1))})
+	var status_label := _label(status, 9, UI_WARNING if bool(entry.get("isBorrowed", false)) else UI_MUTED)
+	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	stack.add_child(status_label)
+	return button
+
+
+func _select_guild_pokemon_vault_entry(pokemon_id: int) -> void:
+	guild_pokemon_vault_selected_id = pokemon_id
+	_refresh_guild_pokemon_vault_window()
+
+
+func _render_guild_pokemon_vault_selection(detail: VBoxContainer) -> void:
+	_clear_children(detail)
+	detail.add_child(_localized_label("ui.guild.bank.pokemon.selected", 10, UI_ACCENT))
+	var entry := _guild_bank_pokemon_entry(guild_pokemon_vault_selected_id)
+	if entry.is_empty():
+		var hint := _localized_label("ui.guild.bank.pokemon.select_hint", 11, UI_MUTED)
+		hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		detail.add_child(hint)
+		return
+	var pokemon := _dictionary(entry.get("pokemon", {}))
+	var icon_button := Button.new()
+	icon_button.name = "GuildPokemonVaultSelectedSummaryButton"
+	icon_button.custom_minimum_size = Vector2(112, 112)
+	icon_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	icon_button.icon = _guild_bank_pokemon_icon(pokemon)
+	icon_button.expand_icon = true
+	icon_button.tooltip_text = _t("ui.party.context.summary")
+	icon_button.pressed.connect(_open_guild_bank_pokemon_summary.bind(pokemon))
+	_apply_button_style(icon_button)
+	detail.add_child(icon_button)
+	var name := _label(_guild_bank_pokemon_name(pokemon), 18, UI_TEXT)
+	name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	detail.add_child(name)
+	var level := _label(_t("ui.guild.bank.pokemon.grid_level", {"level": int(pokemon.get("level", 1))}), 11, UI_MUTED)
+	level.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	detail.add_child(level)
+	var borrowed := bool(entry.get("isBorrowed", false))
+	var ownership := _label(
+		_t("ui.guild.bank.pokemon.borrowed_by", {"trainer": str(entry.get("borrowedBy", _t("common.unknown")))})
+		if borrowed else _t("ui.guild.bank.pokemon.deposited_by", {"trainer": str(entry.get("depositedBy", _t("common.unknown")))}),
+		10,
+		UI_WARNING if borrowed else UI_MUTED
+	)
+	ownership.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ownership.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	detail.add_child(ownership)
+	var summary := Button.new()
+	summary.name = "GuildPokemonVaultOpenSummaryButton"
+	_set_localized_property(summary, "text", "ui.party.context.summary")
+	summary.pressed.connect(_open_guild_bank_pokemon_summary.bind(pokemon))
+	_apply_button_style(summary)
+	detail.add_child(summary)
+	var spacer := Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	detail.add_child(spacer)
+	detail.add_child(_build_guild_pokemon_vault_actions(entry, pokemon))
+
+
+func _build_guild_pokemon_vault_actions(entry: Dictionary, pokemon: Dictionary) -> Control:
+	var actions := VBoxContainer.new()
+	actions.name = "GuildPokemonVaultSelectedActions"
+	actions.add_theme_constant_override("separation", 7)
+	var pokemon_id := int(entry.get("pokemonId", 0))
+	if bool(entry.get("isBorrowed", false)):
+		var loan_asset_id := str(entry.get("loanAssetId", ""))
+		if bool(entry.get("canReturn", false)):
+			var return_button := _guild_bank_action_button(
+				"GuildBankPokemonReturnButton_%d" % pokemon_id,
+				"ui.guild.bank.return",
+				true,
+				_on_guild_bank_loan_action.bind("return", loan_asset_id) if loan_asset_id != "" else _on_guild_bank_pokemon_action.bind("return", pokemon_id, pokemon)
+			)
+			return_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			actions.add_child(return_button)
+		elif bool(entry.get("canForceReturn", false)) and loan_asset_id != "":
+			var force_return_button := _guild_bank_action_button(
+				"GuildBankPokemonForceReturnButton_%d" % pokemon_id,
+				"ui.guild.bank.force_return",
+				true,
+				_on_guild_bank_loan_action.bind("force", loan_asset_id)
+			)
+			force_return_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			actions.add_child(force_return_button)
+		return actions
+	var access := _dictionary(guild_bank_state.get("access", {}))
+	var exceeds_trade_level_cap := _guild_bank_pokemon_exceeds_trade_level_cap(pokemon)
+	var rank_can_withdraw := bool(access.get("canWithdraw", false))
+	var can_withdraw := rank_can_withdraw and not exceeds_trade_level_cap and bool(entry.get("canWithdraw", true))
+	var withdraw_tooltip := ""
+	if not rank_can_withdraw:
+		withdraw_tooltip = _guild_bank_permission_restriction("bank_withdraw", "ui.guild.bank.tooltip.withdraw_rank")
+	elif exceeds_trade_level_cap:
+		withdraw_tooltip = _guild_bank_pokemon_level_cap_tooltip(pokemon)
+	elif not can_withdraw:
+		withdraw_tooltip = _t("ui.guild.bank.tooltip.borrow_unavailable")
+	var withdraw_button := _guild_bank_action_button(
+		"GuildBankPokemonWithdrawButton_%d" % pokemon_id,
+		"ui.guild.bank.withdraw",
+		can_withdraw,
+		_on_guild_bank_pokemon_action.bind("withdraw", pokemon_id, pokemon),
+		withdraw_tooltip
+	)
+	withdraw_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	actions.add_child(withdraw_button)
+	var can_borrow := bool(access.get("lendingEnabled", false)) and bool(access.get("canBorrow", false)) and bool(entry.get("canBorrow", false)) and not exceeds_trade_level_cap
+	var borrow_button := _guild_bank_action_button(
+		"GuildBankPokemonBorrowButton_%d" % pokemon_id,
+		"ui.guild.bank.borrow",
+		can_borrow,
+		_on_guild_bank_pokemon_action.bind("borrow", pokemon_id, pokemon),
+		"" if can_borrow else (_guild_bank_pokemon_level_cap_tooltip(pokemon) if exceeds_trade_level_cap else _guild_bank_borrow_tooltip())
+	)
+	borrow_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	actions.add_child(borrow_button)
+	return actions
+
+
+func _guild_bank_pokemon_entry(pokemon_id: int) -> Dictionary:
+	for value: Variant in _array_from_value(guild_bank_state.get("pokemon", [])):
+		if value is Dictionary and int((value as Dictionary).get("pokemonId", 0)) == pokemon_id:
+			return value as Dictionary
+	return {}
 
 
 func _build_guild_bank_asset_toolbar(category: String) -> Control:

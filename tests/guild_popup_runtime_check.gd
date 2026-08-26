@@ -301,11 +301,45 @@ func _run() -> void:
 	if pokemon_full_action != null:
 		pokemon_full_action.pressed.emit()
 		await process_frame
-	_check(popup.find_child("GuildBankPokemonWorkspace", true, false) != null, "Pokémon storage renders its live workspace")
-	_check(popup.find_child("GuildBankAssetSearchInput", true, false) != null, "full Pokémon Vault provides search")
-	_check(popup.find_child("GuildBankAssetFilterSelect", true, false) != null, "full Pokémon Vault provides filters")
+	var pokemon_vault_window := popup.find_child("GuildPokemonVaultWindow", true, false) as Window
+	_check(pokemon_vault_window != null and pokemon_vault_window.visible, "full Pokémon Vault opens in a dedicated window")
+	_check(pokemon_vault_window != null and pokemon_vault_window.find_child("GuildPokemonVaultGrid", true, false) != null, "full Pokémon Vault presents Guild Pokémon in a grid")
+	_check(pokemon_vault_window != null and pokemon_vault_window.find_child("GuildPokemonVaultSearchInput", true, false) != null, "full Pokémon Vault provides search")
+	_check(pokemon_vault_window != null and pokemon_vault_window.find_child("GuildPokemonVaultFilterSelect", true, false) != null, "full Pokémon Vault provides filters")
 	_check(popup.find_child("GuildBankPokemonLogButton", true, false) != null, "Pokémon Vault has a dedicated log action")
-	_check(popup.find_child("GuildBankPokemonDepositButton_22", true, false) == null, "full Pokémon Vault focuses only on Guild-owned assets")
+	_check(pokemon_vault_window != null and pokemon_vault_window.find_child("GuildBankPokemonDepositButton_22", true, false) == null, "full Pokémon Vault focuses only on Guild-owned assets")
+	var original_bank_pokemon: Array = popup.guild_bank_state["pokemon"].duplicate(true)
+	var scale_bank_pokemon: Array = original_bank_pokemon.duplicate(true)
+	for pokemon_index: int in range(1, 25):
+		scale_bank_pokemon.append({
+			"pokemonId": 100 + pokemon_index,
+			"pokemon": {"name": "Vault Pokémon %d" % pokemon_index, "level": pokemon_index},
+			"depositedBy": "Admin",
+			"isBorrowed": false,
+			"canWithdraw": true,
+			"canBorrow": true,
+		})
+	popup.guild_bank_state["pokemon"] = scale_bank_pokemon
+	popup._render_guild_home()
+	await process_frame
+	var pokemon_grid := pokemon_vault_window.find_child("GuildPokemonVaultGrid", true, false) as GridContainer
+	_check(
+		pokemon_grid != null and pokemon_grid.columns == 5 and pokemon_grid.get_child_count() == 25,
+		"full Pokémon Vault shows a PC-like five-column overview at scale"
+	)
+	var pokemon_vault_search := pokemon_vault_window.find_child("GuildPokemonVaultSearchInput", true, false) as LineEdit
+	if pokemon_vault_search != null:
+		pokemon_vault_search.text = "vault pokémon 24"
+		pokemon_vault_search.text_changed.emit(pokemon_vault_search.text)
+		await process_frame
+	_check(pokemon_grid != null and pokemon_grid.get_child_count() == 1, "full Pokémon Vault searches its grid live")
+	if pokemon_vault_search != null:
+		pokemon_vault_search.text = ""
+		pokemon_vault_search.text_changed.emit("")
+		await process_frame
+	popup.guild_bank_state["pokemon"] = original_bank_pokemon
+	popup._render_guild_home()
+	await process_frame
 	var pokemon_withdraw := popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) as Button
 	_check(pokemon_withdraw != null and pokemon_withdraw.text == "Withdraw", "authorized ranks retain permanent Guild withdrawal")
 	var pokemon_borrow := popup.find_child("GuildBankPokemonBorrowButton_21", true, false) as Button
@@ -351,11 +385,12 @@ func _run() -> void:
 	popup.guild_bank_state["pokemon"][0]["canBorrow"] = true
 	popup._render_guild_home()
 	await process_frame
-	_check(popup.find_child("GuildBankPokemonIcon_21", true, false) is Button, "full Pokémon Vault keeps Summary previews available")
-	var bank_back := popup.find_child("GuildBankBackButton", true, false) as Button
-	if bank_back != null:
-		bank_back.pressed.emit()
+	_check(pokemon_vault_window.find_child("GuildPokemonVaultSelectedSummaryButton", true, false) is Button, "full Pokémon Vault keeps Summary previews available")
+	var vault_close := pokemon_vault_window.find_child("GuildPokemonVaultCloseButton", true, false) as Button
+	if vault_close != null:
+		vault_close.pressed.emit()
 		await process_frame
+	_check(popup.find_child("GuildPokemonVaultWindow", true, false) == null, "full Pokémon Vault closes back to its donation overview")
 	var pokemon_deposit := popup.find_child("GuildBankPokemonDepositButton_22", true, false) as Button
 	if pokemon_deposit != null:
 		pokemon_deposit.pressed.emit()
@@ -366,8 +401,8 @@ func _run() -> void:
 	if donation_dialog != null:
 		donation_dialog.canceled.emit()
 		await process_frame
-	_check(popup.find_child("GuildBankPokemonPreview", true, false) != null, "back from full Pokémon Vault returns to its donation overview")
-	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
+	_check(popup.find_child("GuildBankPokemonPreview", true, false) != null, "closing full Pokémon Vault preserves its donation overview")
+	var bank_back := popup.find_child("GuildBankBackButton", true, false) as Button
 	if bank_back != null:
 		bank_back.pressed.emit()
 		await process_frame
