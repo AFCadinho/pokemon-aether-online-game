@@ -5,9 +5,6 @@ const ROUTE_4_ROAD_MIN_Y := 8
 const ROUTE_4_ROAD_MAX_Y := 10
 const COLLISION_SOURCE_ID := 1
 
-@onready var collision: TileMapLayer = $Collision
-
-
 func _ready() -> void:
 	_build_placeholder_boundaries()
 	super._ready()
