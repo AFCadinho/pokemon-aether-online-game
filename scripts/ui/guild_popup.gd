@@ -2044,7 +2044,7 @@ func _build_guild_bank_asset_toolbar(category: String) -> Control:
 	if category == "pokemon":
 		filters.append("borrowed")
 	elif category == "items":
-		filters.append("lendable")
+		filters.append("unavailable")
 	for filter_id: String in filters:
 		guild_bank_asset_filter_select.add_item(_t("ui.guild.bank.filter.%s" % filter_id))
 		guild_bank_asset_filter_select.set_item_metadata(
@@ -2263,8 +2263,8 @@ func _build_guild_item_row(
 	var filter_states: Array[String] = []
 	if available > 0:
 		filter_states.append("available")
-	if available > 0 and bool(item.get("lendable", false)):
-		filter_states.append("lendable")
+	else:
+		filter_states.append("unavailable")
 	card.set_meta("guild_bank_filter_states", filter_states)
 	var detail_key := "ui.guild.bank.items.inventory_detail" if action == "deposit" else (
 		"ui.guild.bank.items.storage_detail_borrowed" if borrowed > 0 else "ui.guild.bank.items.storage_detail"
@@ -2301,7 +2301,16 @@ func _build_guild_item_row(
 	) if is_resource else (
 		"canDeposit" if action == "deposit" else "canWithdraw"
 	)
-	var allowed := bool(access.get(access_key, false))
+	var has_available_quantity := action == "deposit" or available > 0
+	var allowed := bool(access.get(access_key, false)) and has_available_quantity
+	var unavailable_tooltip := ""
+	if not bool(access.get(access_key, false)):
+		unavailable_tooltip = _guild_bank_permission_restriction(
+			permission,
+			"ui.guild.bank.tooltip.deposit_rank" if action == "deposit" else "ui.guild.bank.tooltip.withdraw_rank"
+		)
+	elif not has_available_quantity:
+		unavailable_tooltip = _t("ui.guild.bank.tooltip.item_unavailable")
 	controls.add_child(_guild_bank_action_button(
 		"GuildBank%s%sButton_%s" % ["Resource" if is_resource else "Item", action.capitalize(), str(item.get("itemId", "item"))],
 		"ui.guild.bank.donate" if action == "deposit" else "ui.guild.bank.withdraw",
@@ -2309,10 +2318,7 @@ func _build_guild_item_row(
 		_on_guild_bank_resource_action.bind(action, str(item.get("itemId", "")), quantity)
 		if is_resource
 		else _on_guild_bank_item_action.bind(action, str(item.get("itemId", "")), quantity),
-		"" if allowed else _guild_bank_permission_restriction(
-			permission,
-			"ui.guild.bank.tooltip.deposit_rank" if action == "deposit" else "ui.guild.bank.tooltip.withdraw_rank"
-		)
+		"" if allowed else unavailable_tooltip
 	))
 	if action == "withdraw" and not is_resource:
 		var can_borrow := (

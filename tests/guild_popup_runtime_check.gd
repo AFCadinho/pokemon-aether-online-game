@@ -398,7 +398,17 @@ func _run() -> void:
 		and popup.get_combined_minimum_size().y <= GuildPopup.POPUP_SIZE.y,
 		"Item Storage remains scrollable and contained with 120 stored stacks"
 	)
-	popup.guild_bank_state["items"] = original_bank_items
+	var filter_test_items := original_bank_items.duplicate(true)
+	filter_test_items.append({
+		"itemId": "choice-scarf",
+		"name": "Choice Scarf",
+		"category": "Held Items",
+		"quantity": 1,
+		"availableQuantity": 0,
+		"borrowedQuantity": 1,
+		"lendable": true,
+	})
+	popup.guild_bank_state["items"] = filter_test_items
 	popup._render_guild_home()
 	await process_frame
 	var items_full_action := popup.find_child("GuildBankItemsOpenFullButton", true, false) as Button
@@ -438,12 +448,21 @@ func _run() -> void:
 		asset_search.text_changed.emit(asset_search.text)
 	var asset_filter := popup.find_child("GuildBankAssetFilterSelect", true, false) as OptionButton
 	if asset_filter != null:
+		_check(asset_filter.get_item_text(2) == "Unavailable", "Item Storage names its unavailable filter clearly")
 		asset_filter.select(2)
 		asset_filter.item_selected.emit(2)
 		await process_frame
 	_check(
-		popup.find_child("GuildBankItemRow_leftovers", true, false).visible,
-		"Item Storage lendable filter focuses on borrowable Guild assets"
+		not popup.find_child("GuildBankItemRow_leftovers", true, false).visible
+		and popup.find_child("GuildBankItemRow_choice-scarf", true, false).visible,
+		"Item Storage unavailable filter shows stacks with no free copies"
+	)
+	var unavailable_withdraw := popup.find_child("GuildBankItemWithdrawButton_choice-scarf", true, false) as Button
+	_check(
+		unavailable_withdraw != null
+		and unavailable_withdraw.disabled
+		and unavailable_withdraw.tooltip_text.contains("No copies"),
+		"Item Storage disables withdrawal when every copy is unavailable"
 	)
 	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
 	if bank_back != null:
