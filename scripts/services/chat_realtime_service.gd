@@ -12,6 +12,8 @@ signal connection_changed(connected: bool)
 signal session_invalid(reason: String)
 signal translation_state_changed(available: bool, allowed: bool, enabled: bool)
 signal translation_warning(message: String)
+signal ai_translation_received(message_id: String, translated_text: String)
+signal ai_translation_failed(message_id: String, message: String)
 
 const RECONNECT_DELAY_SECONDS := 4.0
 const SESSION_CHECK_INTERVAL_SECONDS := 10.0
@@ -28,6 +30,7 @@ var session_invalid_handled: bool = false
 var connection_attempt_generation := 0
 var translation_mode_requested := false
 var translation_mode_available := false
+var ai_translation_available := false
 var translation_mode_allowed := false
 var translation_mode_enabled := false
 
@@ -159,6 +162,21 @@ func set_translation_mode_requested(enabled: bool) -> void:
 	_send_translation_mode_request()
 
 
+func request_ai_translation(message_id: String) -> bool:
+	var normalized_message_id := message_id.strip_edges()
+	if (
+		not translation_mode_enabled
+		or not ai_translation_available
+		or normalized_message_id.length() != 36
+		or websocket.get_ready_state() != WebSocketPeer.STATE_OPEN
+	):
+		return false
+	return websocket.send_text(JSON.stringify({
+		"type": "chat_translation.ai_request",
+		"messageId": normalized_message_id,
+	})) == OK
+
+
 func _send_translation_mode_request() -> void:
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
 		return
@@ -210,6 +228,7 @@ func _process_packets() -> void:
 		var message_type: String = str(message.get("type", "")).to_lower().strip_edges()
 		if message_type == "chat_translation.state":
 			translation_mode_available = bool(message.get("available", false))
+			ai_translation_available = bool(message.get("aiAvailable", false))
 			translation_mode_allowed = bool(message.get("allowed", false))
 			translation_mode_enabled = bool(message.get("enabled", false))
 			if not translation_mode_enabled and translation_mode_requested:
@@ -218,6 +237,18 @@ func _process_packets() -> void:
 				translation_mode_available,
 				translation_mode_allowed,
 				translation_mode_enabled
+			)
+			continue
+		if message_type == "chat_translation.ai_result":
+			ai_translation_received.emit(
+				str(message.get("messageId", "")).strip_edges(),
+				str(message.get("translatedText", "")).strip_edges()
+			)
+			continue
+		if message_type == "chat_translation.ai_error":
+			ai_translation_failed.emit(
+				str(message.get("messageId", "")).strip_edges(),
+				str(message.get("message", "AI translation is unavailable."))
 			)
 			continue
 		if message_type == "chat_translation.warning":

@@ -193,6 +193,7 @@ const RANKED_DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/rank
 const STAFF_TELEPORT_ICON: Texture2D = preload("res://assets/ui/location_waypoint.svg")
 const STAFF_IMPERSONATE_ICON: Texture2D = preload("res://assets/ui/staff_impersonate.svg")
 const STAFF_CHAT_MODERATION_ICON: Texture2D = preload("res://assets/ui/staff_tools.svg")
+const STAFF_CHAT_TRANSLATE_ICON: Texture2D = preload("res://assets/ui/store_chat_flair.svg")
 const CHAT_MODERATION_CENTER_SCRIPT := preload("res://scripts/ui/chat_moderation_center.gd")
 const ALPHA_TOOLS_MENU_ICON: Texture2D = preload("res://assets/ui/alpha_tools.svg")
 const CONTENT_CREATOR_MENU_ICON: Texture2D = preload("res://assets/ui/content_creator.svg")
@@ -910,6 +911,10 @@ var staff_impersonate_button_title: Label
 var staff_impersonate_button_subtitle: Label
 var staff_teleport_button: Button
 var staff_chat_moderation_button: Button
+var staff_chat_translate_button: Button
+var staff_chat_translate_button_title: Label
+var staff_chat_translate_button_subtitle: Label
+var chat_ai_translation_controls: Dictionary = {}
 var staff_chat_moderation_popup: PanelContainer
 var staff_impersonate_popup: PanelContainer
 var staff_impersonate_token_input: LineEdit
@@ -988,7 +993,6 @@ var language_chat_tab_button: Button
 var language_chat_empty_state: CenterContainer
 var language_chat_empty_title_label: Label
 var language_chat_empty_hint_label: Label
-var chat_translate_mode_button: CheckButton
 var selected_general_chat_tab := CHAT_TAB_GENERAL
 var all_chat_tab_button: Button
 var guild_chat_tab_button: Button
@@ -1539,6 +1543,10 @@ func _ready() -> void:
 		ChatRealtimeService.translation_state_changed.connect(_on_chat_translation_state_changed)
 	if not ChatRealtimeService.translation_warning.is_connected(_on_chat_translation_warning):
 		ChatRealtimeService.translation_warning.connect(_on_chat_translation_warning)
+	if not ChatRealtimeService.ai_translation_received.is_connected(_on_chat_ai_translation_received):
+		ChatRealtimeService.ai_translation_received.connect(_on_chat_ai_translation_received)
+	if not ChatRealtimeService.ai_translation_failed.is_connected(_on_chat_ai_translation_failed):
+		ChatRealtimeService.ai_translation_failed.connect(_on_chat_ai_translation_failed)
 	if not WorldPresenceService.weather_changed.is_connected(_on_location_weather_changed):
 		WorldPresenceService.weather_changed.connect(_on_location_weather_changed)
 	ChatRealtimeService.connect_chat.call_deferred()
@@ -2008,6 +2016,7 @@ func _refresh_dev_tools_visibility() -> void:
 		or can_teleport_other
 		or _can_manage_jail()
 		or _can_use_chat_moderation()
+		or _has_user_permission(CHAT_TRANSLATE_PERMISSION)
 	)
 	var has_visible_staff_action: bool = has_staff_tool or can_open_dev_actions or can_use_content_creator_photo_mode or can_use_content_creator_generation
 	PlayerSave.is_staff = _current_player_has_staff_role()
@@ -2080,6 +2089,9 @@ func _refresh_dev_tools_visibility() -> void:
 	if staff_chat_moderation_button != null:
 		staff_chat_moderation_button.visible = _can_use_moderation_center()
 		staff_chat_moderation_button.disabled = not _can_use_moderation_center()
+	if staff_chat_translate_button != null:
+		staff_chat_translate_button.visible = _has_user_permission(CHAT_TRANSLATE_PERMISSION)
+		_refresh_chat_translate_mode_ui()
 	if not has_staff_tool:
 		if staff_tools_popup != null:
 			staff_tools_popup.visible = false
@@ -7957,6 +7969,24 @@ func _setup_staff_impersonation_tools() -> void:
 	)
 	staff_chat_moderation_popup.connect("closed", _on_staff_chat_moderation_closed)
 	root_control.add_child(staff_chat_moderation_popup)
+
+	staff_chat_translate_button = Button.new()
+	staff_chat_translate_button.name = "StaffChatTranslateModeButton"
+	staff_chat_translate_button.pressed.connect(_on_chat_translate_mode_toggled)
+	tools_layout.add_child(staff_chat_translate_button)
+	_configure_launcher_card_button(
+		staff_chat_translate_button,
+		"ui.staff.translate.action",
+		"ui.staff.translate.action_description_off",
+		STAFF_CHAT_TRANSLATE_ICON,
+		Color("#67e4ff")
+	)
+	staff_chat_translate_button_title = staff_chat_translate_button.find_child(
+		"LauncherCardTitle", true, false
+	) as Label
+	staff_chat_translate_button_subtitle = staff_chat_translate_button.find_child(
+		"LauncherCardSubtitle", true, false
+	) as Label
 
 	staff_teleport_button = Button.new()
 	staff_teleport_button.pressed.connect(_on_staff_teleport_button_pressed)
@@ -26984,33 +27014,16 @@ func _setup_language_chat_ui() -> void:
 
 
 func _setup_chat_translate_mode_ui() -> void:
-	if chat_translate_mode_button != null:
-		return
-	chat_translate_mode_button = CheckButton.new()
-	chat_translate_mode_button.name = "ChatTranslateModeButton"
-	chat_translate_mode_button.custom_minimum_size = Vector2(86, 34)
-	chat_translate_mode_button.focus_mode = Control.FOCUS_NONE
-	_set_localized_control_property(
-		chat_translate_mode_button,
-		"text",
-		"ui.chat.translate.toggle"
-	)
-	_set_localized_control_property(
-		chat_translate_mode_button,
-		"tooltip_text",
-		"ui.chat.translate.tooltip"
-	)
-	chat_translate_mode_button.toggled.connect(_on_chat_translate_mode_toggled)
-	chat_input_row.add_child(chat_translate_mode_button)
-	chat_input_row.move_child(chat_translate_mode_button, send_button.get_index())
 	_refresh_chat_translate_mode_ui()
 
 
-func _on_chat_translate_mode_toggled(enabled: bool) -> void:
+func _on_chat_translate_mode_toggled() -> void:
 	if not _has_user_permission(CHAT_TRANSLATE_PERMISSION):
-		chat_translate_mode_button.set_pressed_no_signal(false)
 		return
+	var enabled := not ChatRealtimeService.translation_mode_enabled
 	ChatRealtimeService.set_translation_mode_requested(enabled)
+	if staff_chat_translate_button != null:
+		staff_chat_translate_button.disabled = true
 
 
 func _on_chat_translation_state_changed(
@@ -27018,10 +27031,9 @@ func _on_chat_translation_state_changed(
 	allowed: bool,
 	enabled: bool
 ) -> void:
-	if chat_translate_mode_button == null:
-		return
-	chat_translate_mode_button.set_pressed_no_signal(enabled)
-	chat_translate_mode_button.disabled = not available or not allowed
+	ChatRealtimeService.translation_mode_available = available
+	ChatRealtimeService.translation_mode_allowed = allowed
+	ChatRealtimeService.translation_mode_enabled = enabled
 	_refresh_chat_translate_mode_ui()
 
 
@@ -27034,27 +27046,37 @@ func _on_chat_translation_warning(_message: String) -> void:
 
 
 func _refresh_chat_translate_mode_ui() -> void:
-	if chat_translate_mode_button == null:
+	if staff_chat_translate_button == null:
 		return
-	var in_language_chat := (
-		_active_primary_chat_tab_id() == CHAT_TAB_LANGUAGES
-		and selected_language_chat in LANGUAGE_CHAT_CHANNELS
-	)
-	chat_translate_mode_button.visible = (
-		in_language_chat
-		and _has_user_permission(CHAT_TRANSLATE_PERMISSION)
-	)
-	chat_translate_mode_button.disabled = (
-		not ChatRealtimeService.translation_mode_available
+	var allowed := _has_user_permission(CHAT_TRANSLATE_PERMISSION)
+	staff_chat_translate_button.visible = allowed
+	staff_chat_translate_button.disabled = (
+		not allowed
+		or not ChatRealtimeService.translation_mode_available
 		or not ChatRealtimeService.translation_mode_allowed
 	)
-	_set_localized_control_property(
-		chat_translate_mode_button,
-		"tooltip_text",
-		"ui.chat.translate.tooltip"
-		if not chat_translate_mode_button.disabled
-		else "ui.chat.translate.unavailable"
-	)
+	if staff_chat_translate_button_title != null:
+		staff_chat_translate_button_title.text = LocalizationManager.text(
+			"ui.staff.translate.action_on"
+			if ChatRealtimeService.translation_mode_enabled
+			else "ui.staff.translate.action"
+		)
+	if staff_chat_translate_button_subtitle != null:
+		var description_key := "ui.staff.translate.action_description_off"
+		if staff_chat_translate_button.disabled:
+			description_key = "ui.staff.translate.action_description_unavailable"
+		elif ChatRealtimeService.translation_mode_enabled:
+			description_key = "ui.staff.translate.action_description_on"
+		staff_chat_translate_button_subtitle.text = LocalizationManager.text(description_key)
+	for controls_value: Variant in chat_ai_translation_controls.values():
+		var controls := _dictionary_from_value(controls_value)
+		var entry := controls.get("entry") as RichTextLabel
+		var ai_button := controls.get("button") as Button
+		if ai_button != null:
+			ai_button.disabled = (
+				not ChatRealtimeService.translation_mode_enabled
+				or (entry != null and bool(entry.get_meta("chat_translation_is_ai", false)))
+			)
 
 
 func _refresh_guild_chat_membership() -> void:
@@ -29238,6 +29260,7 @@ func _on_staff_tools_button_pressed() -> void:
 		or _can_teleport_other_player()
 		or _can_manage_jail()
 		or _can_use_chat_moderation()
+		or _has_user_permission(CHAT_TRANSLATE_PERMISSION)
 	):
 		return
 	if staff_tools_popup == null:
@@ -41492,7 +41515,8 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		shiny_hunt_attachment,
 		str(message.get("sentAt", "")),
 		machine_translated,
-		original_text
+		original_text,
+		str(message.get("id", "")).strip_edges()
 	)
 	if channel == CHAT_TAB_GUILD and active_chat_tab != CHAT_TAB_GUILD:
 		guild_chat_has_unread = true
@@ -41754,7 +41778,8 @@ func _add_user_chat_message(
 	shiny_hunt_attachment: Dictionary = {},
 	sent_at: String = "",
 	machine_translated: bool = false,
-	original_text: String = ""
+	original_text: String = "",
+	message_id: String = ""
 ) -> void:
 	var role: Dictionary = _get_primary_visible_chat_role(user)
 	var role_color: String = str(role.get("color", "#d8b767"))
@@ -41818,7 +41843,8 @@ func _add_user_chat_message(
 		message_context,
 		inline_pokemon_attachments,
 		machine_translated,
-		original_text
+		original_text,
+		message_id
 	))
 
 	var has_visual_attachments := (
@@ -41856,7 +41882,8 @@ func _create_chat_sender_message_line(
 	message_context: Dictionary,
 	inline_pokemon_attachments: Control = null,
 	machine_translated: bool = false,
-	original_text: String = ""
+	original_text: String = "",
+	message_id: String = ""
 ) -> Control:
 	var line := PanelContainer.new()
 	line.name = "MessageLine"
@@ -41884,11 +41911,22 @@ func _create_chat_sender_message_line(
 	header.add_child(channel_prefix)
 
 	if machine_translated and original_text != "" and original_text != text:
-		header.add_child(_create_chat_translation_badge(
+		var translation_badge := _create_chat_translation_badge(
 			entry,
 			original_text,
 			text
-		))
+		)
+		header.add_child(translation_badge)
+		if (
+			message_id.length() == 36
+			and _has_user_permission(CHAT_TRANSLATE_PERMISSION)
+			and ChatRealtimeService.ai_translation_available
+		):
+			header.add_child(_create_chat_ai_translation_button(
+				entry,
+				translation_badge,
+				message_id
+			))
 
 	if role_name != "":
 		var role_badge := _create_chat_role_badge(role_name, role_color)
@@ -41936,23 +41974,21 @@ func _create_chat_translation_badge(
 	badge.add_theme_color_override("font_color", Color("#64d7f0"))
 	badge.add_theme_color_override("font_hover_color", Color("#a8f0ff"))
 	badge.set_meta("showing_original", false)
-	badge.pressed.connect(_toggle_chat_translation_text.bind(
-		entry,
-		badge,
-		original_text,
-		translated_text
-	))
+	entry.set_meta("chat_translation_original_text", original_text)
+	entry.set_meta("chat_translation_text", translated_text)
+	entry.set_meta("chat_translation_is_ai", false)
+	badge.pressed.connect(_toggle_chat_translation_text.bind(entry, badge))
 	return badge
 
 
 func _toggle_chat_translation_text(
 	entry: RichTextLabel,
-	badge: Button,
-	original_text: String,
-	translated_text: String
+	badge: Button
 ) -> void:
 	if not is_instance_valid(entry) or not is_instance_valid(badge):
 		return
+	var original_text := str(entry.get_meta("chat_translation_original_text", ""))
+	var translated_text := str(entry.get_meta("chat_translation_text", ""))
 	var showing_original := not bool(badge.get_meta("showing_original", false))
 	var visible_text := original_text if showing_original else translated_text
 	badge.set_meta("showing_original", showing_original)
@@ -41961,7 +41997,11 @@ func _toggle_chat_translation_text(
 		"text",
 		"ui.chat.translate.original"
 		if showing_original
-		else "ui.chat.translate.translated"
+		else (
+			"ui.chat.translate.ai_result"
+			if bool(entry.get_meta("chat_translation_is_ai", false))
+			else "ui.chat.translate.translated"
+		)
 	)
 	_set_localized_control_property(
 		badge,
@@ -41975,6 +42015,76 @@ func _toggle_chat_translation_text(
 	context["text"] = visible_text
 	entry.set_meta("chat_message_context", context)
 	_render_chat_sender_message_label(entry)
+
+
+func _create_chat_ai_translation_button(
+	entry: RichTextLabel,
+	translation_badge: Button,
+	message_id: String
+) -> Button:
+	var button := Button.new()
+	button.name = "AiTranslationButton"
+	_set_localized_control_property(button, "text", "ui.chat.translate.ai_action")
+	_set_localized_control_property(button, "tooltip_text", "ui.chat.translate.ai_tooltip")
+	button.focus_mode = Control.FOCUS_NONE
+	button.flat = true
+	button.add_theme_font_size_override("font_size", 9)
+	button.add_theme_color_override("font_color", Color("#d7b2ff"))
+	button.add_theme_color_override("font_hover_color", Color("#f0dcff"))
+	button.pressed.connect(_request_chat_ai_translation.bind(message_id))
+	chat_ai_translation_controls[message_id] = {
+		"entry": entry,
+		"badge": translation_badge,
+		"button": button,
+	}
+	return button
+
+
+func _request_chat_ai_translation(message_id: String) -> void:
+	var controls := _dictionary_from_value(chat_ai_translation_controls.get(message_id, {}))
+	var button := controls.get("button") as Button
+	if button != null:
+		button.disabled = true
+		_set_localized_control_property(button, "tooltip_text", "ui.chat.translate.ai_loading")
+	if not ChatRealtimeService.request_ai_translation(message_id):
+		_on_chat_ai_translation_failed(message_id, "")
+
+
+func _on_chat_ai_translation_received(message_id: String, translated_text: String) -> void:
+	if translated_text == "":
+		_on_chat_ai_translation_failed(message_id, "")
+		return
+	var controls := _dictionary_from_value(chat_ai_translation_controls.get(message_id, {}))
+	var entry := controls.get("entry") as RichTextLabel
+	var badge := controls.get("badge") as Button
+	var button := controls.get("button") as Button
+	if entry == null or badge == null:
+		return
+	entry.set_meta("chat_translation_text", translated_text)
+	entry.set_meta("chat_translation_is_ai", true)
+	if not bool(badge.get_meta("showing_original", false)):
+		entry.set_meta("chat_message_text", translated_text)
+		var context := _dictionary_from_value(entry.get_meta("chat_message_context", {}))
+		context["text"] = translated_text
+		entry.set_meta("chat_message_context", context)
+		_set_localized_control_property(badge, "text", "ui.chat.translate.ai_result")
+		_render_chat_sender_message_label(entry)
+	if button != null:
+		button.disabled = true
+		_set_localized_control_property(button, "tooltip_text", "ui.chat.translate.ai_result")
+
+
+func _on_chat_ai_translation_failed(message_id: String, _message: String) -> void:
+	var controls := _dictionary_from_value(chat_ai_translation_controls.get(message_id, {}))
+	var button := controls.get("button") as Button
+	if button != null:
+		button.disabled = false
+		_set_localized_control_property(button, "tooltip_text", "ui.chat.translate.ai_tooltip")
+	_add_chat_message(
+		LocalizationManager.text("ui.chat.translate.ai_unavailable"),
+		false,
+		CHAT_CATEGORY_SYSTEM_WARNING
+	)
 
 
 func _create_chat_sender_message_label(
