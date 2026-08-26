@@ -4,6 +4,7 @@
 
 **Added**
 
+- Added a staff-only Translate Mode language selector for live private-message support conversations.
 - Added Translate Mode to Staff Tools with optional per-message AI refinement for unclear language-chat translations.
 - Giga Impact, Psyshock, Explosion, and Water Shuriken now have their own battle animations and sound effects.
 - Added full Simplified Chinese language support throughout the game and launcher.

@@ -21,6 +21,12 @@ const REQUIRED_KEYS: Array[String] = [
 	"ui.staff.translate.action_description_off",
 	"ui.staff.translate.action_description_on",
 	"ui.staff.translate.action_description_unavailable",
+	"ui.chat.pm.translation.tooltip",
+	"ui.chat.pm.translation.off",
+	"ui.chat.pm.translation.language.zh",
+	"ui.chat.pm.translation.language.pb",
+	"ui.chat.pm.translation.unavailable",
+	"ui.chat.pm.translation.failed",
 ]
 
 var failures := 0
@@ -75,6 +81,41 @@ func _run() -> void:
 		overlay_source.contains('button.name = "AiTranslationButton"')
 		and overlay_source.contains("ChatRealtimeService.request_ai_translation(message_id)"),
 		"Translated messages offer an on-demand AI refinement"
+	)
+	_check(
+		overlay_source.contains('pm_translation_language_select.name = "StaffPrivateMessageTranslationLanguage"')
+		and overlay_source.contains("_has_user_permission(CHAT_TRANSLATE_PERMISSION)")
+		and overlay_source.contains("ChatRealtimeService.translation_mode_enabled"),
+		"Active Translate Mode exposes a staff-only PM language selector"
+	)
+	_check(
+		realtime_source.contains('"type": "chat_translation.pm_set"')
+		and realtime_source.contains('"peerUserId": peer_user_id')
+		and realtime_source.contains('"language": normalized_language'),
+		"PM translation selection sends only participant identity and language code"
+	)
+	var pm_request_start := realtime_source.find(
+		"func set_private_message_translation_language("
+	)
+	var pm_request_end := realtime_source.find("\n\nfunc ", pm_request_start + 1)
+	var pm_request_source := realtime_source.substr(
+		pm_request_start,
+		pm_request_end - pm_request_start
+	) if pm_request_start >= 0 and pm_request_end > pm_request_start else ""
+	_check(
+		pm_request_source != "" and not pm_request_source.contains('"body"'),
+		"The PM language selector cannot submit arbitrary text for translation"
+	)
+	_check(
+		overlay_source.contains('str(message.get("originalBody", ""))')
+		and overlay_source.contains('bool(message.get("machineTranslated", false))')
+		and overlay_source.contains("_create_chat_translation_badge("),
+		"Translated PMs retain a reversible original-text control"
+	)
+	_check(
+		overlay_source.contains("_escape_bbcode(text)")
+		and overlay_source.contains("_render_chat_sender_message_label(entry)"),
+		"Original and translated PM text stays inside the escaped chat renderer"
 	)
 
 	for locale: String in LOCALES:
