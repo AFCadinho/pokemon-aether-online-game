@@ -16,6 +16,10 @@ const CATALOG_PATHS: Dictionary = {
 		"res://localization/content/generated/pt_BR.json",
 		"res://localization/content/pt_BR.json",
 	],
+	"zh_CN": [
+		"res://localization/content/generated/zh_CN.json",
+		"res://localization/content/zh_CN.json",
+	],
 }
 const SUPPORTED_KINDS: Array[String] = [
 	"types",

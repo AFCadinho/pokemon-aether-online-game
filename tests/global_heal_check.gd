@@ -69,6 +69,7 @@ func _init() -> void:
 		"res://localization/en.json",
 		"res://localization/nl.json",
 		"res://localization/pt_BR.json",
+		"res://localization/zh_CN.json",
 	]:
 		var catalog_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(locale_path))
 		var catalog: Dictionary = catalog_value as Dictionary if catalog_value is Dictionary else {}

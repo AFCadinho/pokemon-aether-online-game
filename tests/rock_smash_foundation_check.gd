@@ -134,7 +134,7 @@ func _run() -> void:
 		"Mt. Moon rocks retain the natural 4-by-4 cave animation sheet"
 	)
 
-	for locale: String in ["en", "nl", "pt_BR"]:
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var parsed: Variant = JSON.parse_string(
 			FileAccess.get_file_as_string("res://localization/%s.json" % locale)
 		)

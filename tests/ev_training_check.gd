@@ -63,7 +63,7 @@ func _init() -> void:
 		"ui.ev_training.mateo.allocation_instructions",
 		"ui.ev_training.mateo.choose_pokemon",
 	]
-	for locale: String in ["en", "nl", "pt_BR"]:
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var locale_data: Variant = JSON.parse_string(
 			FileAccess.get_file_as_string("res://localization/%s.json" % locale)
 		)

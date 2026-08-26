@@ -4,11 +4,13 @@ class_name GuildServiceNode
 
 signal membership_changed(membership: Dictionary)
 signal guild_changed(guild: Dictionary)
+signal notification_received(notification: Dictionary)
 
 const GUILDS_ENDPOINT := "/game/guilds"
 const GUILD_HOME_ENDPOINT := "/game/guilds/me"
 const GUILD_BANK_ENDPOINT := "/game/guilds/me/bank"
 const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
+const GUILD_NOTIFICATIONS_ENDPOINT := "/game/guild-notifications"
 const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
 const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
 const REQUEST_TIMEOUT_SECONDS := 8.0
@@ -17,6 +19,17 @@ var pending_creation_request_id := ""
 var current_membership: Dictionary = {}
 var current_guild: Dictionary = {}
 var membership_loaded := false
+var notification_poll_in_flight := false
+var delivered_notification_ids: Dictionary = {}
+
+
+func _ready() -> void:
+	var timer := Timer.new()
+	timer.name = "GuildNotificationPollTimer"
+	timer.wait_time = 60.0
+	timer.autostart = true
+	timer.timeout.connect(_poll_notifications)
+	add_child(timer)
 
 
 func load_directory() -> Dictionary:
@@ -25,7 +38,45 @@ func load_directory() -> Dictionary:
 	var response := await _request_json(GUILDS_ENDPOINT, HTTPClient.METHOD_GET, "")
 	if not bool(response.get("success", false)):
 		return response
+	_poll_notifications.call_deferred()
 	return _directory_result(response.get("body", {}))
+
+
+func deliver_notification(notification: Dictionary) -> void:
+	var notification_id := int(notification.get("id", 0))
+	if notification_id <= 0 or delivered_notification_ids.has(notification_id):
+		return
+	delivered_notification_ids[notification_id] = true
+	notification_received.emit(notification.duplicate(true))
+	await _acknowledge_notification(notification_id)
+
+
+func _poll_notifications() -> void:
+	if notification_poll_in_flight or not AuthService.is_authenticated():
+		return
+	notification_poll_in_flight = true
+	var response := await _authenticated_request(
+		GUILD_NOTIFICATIONS_ENDPOINT + "/pending?limit=20",
+		HTTPClient.METHOD_GET,
+		""
+	)
+	notification_poll_in_flight = false
+	if not bool(response.get("success", false)):
+		return
+	var body := _dictionary(response.get("body", {}))
+	for value: Variant in _array(body.get("notifications", [])):
+		if value is Dictionary:
+			await deliver_notification(value as Dictionary)
+
+
+func _acknowledge_notification(notification_id: int) -> void:
+	var response := await _authenticated_request(
+		GUILD_NOTIFICATIONS_ENDPOINT + "/%d/ack" % notification_id,
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	if not bool(response.get("success", false)):
+		delivered_notification_ids.erase(notification_id)
 
 
 func create_guild(
@@ -124,21 +175,37 @@ func load_bank() -> Dictionary:
 	return response if not bool(response.get("success", false)) else _bank_result(response.get("body", {}))
 
 
-func load_history(before_id: int = 0) -> Dictionary:
+func load_history(before_id: int = 0, search: String = "", action: String = "", date_from: String = "", date_to: String = "") -> Dictionary:
 	var path := GUILD_HOME_ENDPOINT + "/history?limit=50"
 	if before_id > 0:
 		path += "&beforeId=%d" % before_id
+	if search.strip_edges() != "":
+		path += "&search=%s" % search.strip_edges().uri_encode()
+	if action.strip_edges() != "":
+		path += "&action=%s" % action.strip_edges().uri_encode()
+	if date_from.strip_edges() != "":
+		path += "&dateFrom=%s" % date_from.strip_edges().uri_encode()
+	if date_to.strip_edges() != "":
+		path += "&dateTo=%s" % date_to.strip_edges().uri_encode()
 	var response := await _authenticated_request(path, HTTPClient.METHOD_GET, "")
 	return response if not bool(response.get("success", false)) else _log_result(response.get("body", {}))
 
 
-func load_bank_log(category: String, before_id: int = 0) -> Dictionary:
+func load_bank_log(category: String, before_id: int = 0, search: String = "", action: String = "", date_from: String = "", date_to: String = "") -> Dictionary:
 	var normalized := category.strip_edges().to_lower()
-	if not normalized in ["funds", "items", "pokemon"]:
+	if not normalized in ["funds", "items", "pokemon", "resources"]:
 		return {"success": false, "error": "Unknown Guild Bank log."}
 	var path := GUILD_BANK_ENDPOINT + "/logs/%s?limit=50" % normalized
 	if before_id > 0:
 		path += "&beforeId=%d" % before_id
+	if search.strip_edges() != "":
+		path += "&search=%s" % search.strip_edges().uri_encode()
+	if action.strip_edges() != "":
+		path += "&action=%s" % action.strip_edges().uri_encode()
+	if date_from.strip_edges() != "":
+		path += "&dateFrom=%s" % date_from.strip_edges().uri_encode()
+	if date_to.strip_edges() != "":
+		path += "&dateTo=%s" % date_to.strip_edges().uri_encode()
 	var response := await _authenticated_request(path, HTTPClient.METHOD_GET, "")
 	return response if not bool(response.get("success", false)) else _log_result(response.get("body", {}))
 
@@ -157,6 +224,14 @@ func deposit_bank_item(item_id: String, quantity: int) -> Dictionary:
 
 func withdraw_bank_item(item_id: String, quantity: int) -> Dictionary:
 	return await _bank_action("/items/withdraw", {"itemId": item_id, "quantity": quantity})
+
+
+func deposit_bank_resource(item_id: String, quantity: int) -> Dictionary:
+	return await _bank_action("/resources/deposit", {"itemId": item_id, "quantity": quantity})
+
+
+func withdraw_bank_resource(item_id: String, quantity: int) -> Dictionary:
+	return await _bank_action("/resources/withdraw", {"itemId": item_id, "quantity": quantity})
 
 
 func borrow_bank_item(item_id: String, quantity: int) -> Dictionary:
@@ -256,20 +331,24 @@ func load_invitations() -> Dictionary:
 
 func update_settings(
 	description: String,
+	announcement: String,
 	language: String,
 	focus: String,
 	recruitment: String,
-	loan_duration_seconds: int = 86400
+	loan_duration_seconds: int = 3600,
+	requirements: Array = []
 ) -> Dictionary:
 	var response := await _authenticated_request(
 		GUILD_HOME_ENDPOINT + "/settings",
 		HTTPClient.METHOD_PUT,
 		JSON.stringify({
 			"description": description.strip_edges(),
+			"announcement": announcement.strip_edges(),
 			"language": language,
 			"focus": focus,
 			"recruitment": recruitment,
 			"loanDurationSeconds": loan_duration_seconds,
+			"requirements": requirements,
 		})
 	)
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
@@ -280,6 +359,24 @@ func update_member_role(user_id: int, role: String) -> Dictionary:
 		GUILD_HOME_ENDPOINT + "/members/%d/role" % user_id,
 		HTTPClient.METHOD_PUT,
 		JSON.stringify({"role": role.strip_edges().to_lower()})
+	)
+	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
+func kick_member(user_id: int) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_HOME_ENDPOINT + "/members/%d" % user_id,
+		HTTPClient.METHOD_DELETE,
+		""
+	)
+	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
+
+
+func update_member_bank_permissions(user_id: int, overrides: Dictionary) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_HOME_ENDPOINT + "/members/%d/bank-permissions" % user_id,
+		HTTPClient.METHOD_PUT,
+		JSON.stringify({"overrides": overrides})
 	)
 	return response if not bool(response.get("success", false)) else _home_result(response.get("body", {}))
 
@@ -363,8 +460,10 @@ func _directory_result(value: Variant) -> Dictionary:
 		"success": true,
 		"guilds": normalized_guilds,
 		"membership": _dictionary(body.get("membership", {})),
+		"announcement": str(body.get("announcement", "")),
 		"incomingInvitations": _array(body.get("incomingInvitations", [])),
 		"pendingApplications": _array(body.get("pendingApplications", [])),
+		"applicationCooldowns": _array(body.get("applicationCooldowns", [])),
 	}
 
 
@@ -398,25 +497,31 @@ func _bank_result(value: Variant) -> Dictionary:
 	return {
 		"success": true,
 		"guildId": int(body.get("guildId", 0)),
+		"itemCapacity": int(body.get("itemCapacity", 50)),
+		"pokemonCapacity": int(body.get("pokemonCapacity", 30)),
 		"access": _dictionary(body.get("access", {})).duplicate(true),
 		"funds": _dictionary(body.get("funds", {})).duplicate(true),
+		"loanUsage": _dictionary(body.get("loanUsage", {})).duplicate(true),
 		"items": _array(body.get("items", [])).duplicate(true),
 		"inventory": _array(body.get("inventory", [])).duplicate(true),
+		"resources": _array(body.get("resources", [])).duplicate(true),
+		"resourceInventory": _array(body.get("resourceInventory", [])).duplicate(true),
 		"pokemon": _array(body.get("pokemon", [])).duplicate(true),
 		"depositablePokemon": _array(body.get("depositablePokemon", [])).duplicate(true),
 		"party": _array(_dictionary(body.get("party", {})).get("party", [])).duplicate(true),
-		"loanDurationSeconds": int(body.get("loanDurationSeconds", 86400)),
+		"loanDurationSeconds": int(body.get("loanDurationSeconds", 3600)),
 		"borrowedItems": _array(body.get("borrowedItems", [])).duplicate(true),
 	}
 
 
 func _log_result(value: Variant) -> Dictionary:
 	var body := _dictionary(value)
+	var next_before_id: Variant = body.get("nextBeforeId")
 	return {
 		"success": true,
 		"category": str(body.get("category", "")),
 		"entries": _array(body.get("entries", [])).duplicate(true),
-		"nextBeforeId": int(body.get("nextBeforeId", 0)),
+		"nextBeforeId": int(next_before_id) if next_before_id != null else 0,
 	}
 
 

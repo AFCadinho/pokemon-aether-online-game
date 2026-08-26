@@ -25,7 +25,7 @@ func _init() -> void:
 	_check(world_source.contains("avatar.call(\"set_interaction_enabled\", players_visible)"), "Hidden players cannot be interacted with")
 	_check(avatar_source.contains("func set_interaction_enabled(enabled: bool)"), "Remote avatars expose interaction visibility")
 
-	for locale: String in ["en", "nl", "pt_BR"]:
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var catalog_value: Variant = JSON.parse_string(
 			FileAccess.get_file_as_string("res://localization/%s.json" % locale)
 		)

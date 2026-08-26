@@ -92,6 +92,11 @@ func _run() -> void:
 		"privacy password errors explain how identity verification failed"
 	)
 	_check(
+		errors.call("message", {"detail": {"code": "pokemon_held_item_locked"}})
+		== "Het meegegenereerde item van deze Pokémon is vergrendeld en kan niet worden afgenomen of vervangen.",
+		"locked generated held items explain why they cannot be changed"
+	)
+	_check(
 		errors.call("message", {
 			"detail": {
 				"code": "pokemon_level_cap_party_ineligible",
@@ -182,7 +187,7 @@ func _run() -> void:
 	)
 	trade_service.free()
 
-	for locale: String in ["en", "nl", "pt_BR"]:
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var catalog: Dictionary = localization.call("get_catalog", locale)
 		for key_value: Variant in errors.call("mapped_translation_keys"):
 			_check(catalog.has(str(key_value)), "%s contains mapped backend key %s" % [locale, key_value])

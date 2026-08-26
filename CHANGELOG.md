@@ -1,14 +1,61 @@
 # Changelog
 
+## 0.3.64 - 2026-08-26
+
+**Added**
+
+- The Guild Bank now has a comparison page showing what every Guild rank can do.
+- Guild leaders can create a recruitment checklist that applicants see on the Guild profile and before applying.
+- Added Guild Resources, where members can share consumable items. Guild leaders can manage access for individual members.
+- Guild leaders can publish a dedicated announcement that occupies the main Guild overview.
+- Guild application decisions now appear in your selected language, including decisions made while you were offline.
+- You can now search the Guild member list and invite Trainers from a separate window.
+- Guild leaders can now adjust Guild Bank permissions for individual members without changing the defaults for their rank.
+- Giga Impact, Psyshock, Explosion, and Water Shuriken now have their own battle animations and sound effects.
+- Added full Simplified Chinese language support throughout the game and launcher.
+
+**Changed**
+
+- The Pokémon Vault, Item Storage, and Guild Resources are now easier to browse, donate to, borrow from, and withdraw from. The full Pokémon Vault uses a familiar PC-style grid and lets you inspect each Pokémon.
+- Item Storage filters now distinguish items you can use from items whose copies are all unavailable.
+- Guild member search and Trainer invitations now have separate, clearly named controls.
+- The Guild member list now lines up more cleanly for every rank.
+- Guild money transfers now start at zero and clearly explain invalid amounts.
+- Guild Management now separates profile, recruitment, applications, and Guild Bank settings into clear tabs.
+- Guild Item Storage now clearly separates stored, available, and borrowed quantities.
+- Guild history and Guild Bank logs can now be limited to the past 24 hours, 7 days, 30 days, or 90 days.
+- Player names are highlighted in Guild History and Guild Bank log messages.
+- Pokémon Summary cards opened for viewing now switch between front and back sprites when clicked.
+- Borrowed Pokémon Summary cards now show how much loan time remains next to their borrowed status.
+- Guild log filters now have clearer labels and a more visible close button.
+- Guild history and Guild Bank logs can now be searched and filtered by action across their complete history.
+- Guild windows and controls now share a more consistent appearance.
+- Unnecessary Guild chat and member shortcuts were removed from Overview. The option to leave a Guild now lives in the Guild options menu.
+- Guild travel now appears in the member header, leaving more room in every Guild tab.
+- Members and recruits now need an explicit Guild Bank permission to deposit items or Pokémon; depositing money remains available to every Guild member.
+- Guild members now see Overview, Guild Bank, Members, and any available management tabs in the main navigation. Finding other Guilds remains available from a smaller button.
+
+**Fixed**
+
+- Guild Item Storage now shows the total number of stored items separately from its stack capacity.
+- Pokémon in battle now show the correct blue male or pink female gender icon.
+- Forum announcements now appear reliably in launcher and login news.
+- Returning from Route 22 to Viridian City now works correctly for Trainers continuing an existing adventure.
+
 ## 0.3.63 - 2026-08-25
 
 **Added**
 
+- The Mysterious Outfit Box can now be bought from the Aether Gift Store for 400 Aether Gems.
 - Pokémon Showdown export sets can now be copied from a Pokémon's Summary.
 - A mysterious golden Poké Ball can now be spotted near Master Thief Rook in Viridian City.
+- Added opt-in Chinese and Portuguese community chats under a dedicated Languages tab.
 
 **Changed**
 
+- Route 4 now uses its complete new outdoor layout, with its Mt. Moon and Cerulean City entrances in the correct places.
+- Chat settings now manage community language chats and disclose that moderation may be limited; the main chat tabs keep a fixed order.
+- All chat now includes messages from the community language chats a player has enabled.
 - Main interface hover cards now share a clear, styled appearance across navigation, party, hotbar, status, buffs, and chat controls.
 - Bag hover cards now share a clear, styled appearance across item browsing and use screens.
 - Item Dex hover cards now share a clear, styled appearance.
@@ -19,6 +66,7 @@
 
 **Fixed**
 
+- The Mysterious Outfit now stays visible while fishing, surfing, and riding mounts.
 - Missing translations now reliably fall back to English.
 - Mega Eelektross's Eelevate Ability now explains its Ground and entry-hazard immunity and its highest-stat boost.
 - EV item previews now respect the combined limit of 252 Allocated and Stored EVs per stat.
@@ -38,7 +86,7 @@
 - Added new options for unrated private battles, including rooms without a tier and Aether OU rooms.
 - Added the Aether Clash Battle Royale, Duel, and waiting-area visuals.
 - Added the unisex Mysterious Outfit with separate clothing pieces.
-- If the game closes unexpectedly, PokeAether now prepares a privacy-safe crash report that can be viewed from the notification or the Support page in Settings.
+- If the game closes unexpectedly, you can now view a helpful crash report from the notification or the Support page in Settings.
 - Launcher and login news now follow official forum announcements.
 
 **Changed**
@@ -166,16 +214,15 @@
 
 **Fixed**
 
-- Fixed Ranked team-validation reasons disappearing after the server finished checking the selected team.
-- Fixed the PvP damage calculator getting stuck when its opening privacy-safe battle snapshot became stale.
-- Fixed Photo Mode zoom using an absolute camera scale that prevented reliable zooming on interior maps and canvas-scaled displays.
+- Ranked team checks now keep showing why a team cannot enter the queue.
+- Fixed the PvP damage calculator sometimes getting stuck while opening.
+- Fixed Photo Mode zoom behaving inconsistently indoors and at some display sizes.
 - Trainer rematches now only start their cooldown after you win.
 - Battle logs now correctly identify your Pokémon during switches and retain NPC Trainer names.
 - Fixed blackout recovery and overworld presence reconnects that could leave a Trainer unable to resume normally.
 - Fixed the inactive Pewter City Aether Beacon and restored encounters for main Kanto caves and landmark areas.
 - Fixed unclear battle stat-stage labels, removed unnecessary EV reward messages, and made a left mouse click advance dialogue like Space.
 - Fixed Global Boost panels occasionally opening at the wrong height or trapping a Trainer after an insufficient-funds message.
-- Developer world-time previews now also control time-based wild encounters.
 - Technical Machines are now consumed after successfully teaching their move; HMs remain reusable.
 - Fixed the Shiny Tracker failing to open before a Trainer had started their first hunt.
 - Active Shiny Tracker hunts now show the target Pokémon sprite.
@@ -222,7 +269,6 @@
 - The Aether Clash Lobby is now shown as a worldwide Aethernet hub. Public travel costs ₽1,000, while Guild members travel there for free.
 - Held items can now be dragged directly from the Bag onto an owned party slot or the held-item slot on a Pokémon Summary Card.
 - Party slots now have a right-click menu for opening the Summary Card, managing held items, and setting the lead Pokémon.
-- Fixed Route 1 Trainers starting overlapping dialogue and battle flows when spoken to as their sight challenge triggered.
 - Regular Trainer battles now select the player's first healthy lead automatically and conceal unrevealed opposing Pokémon behind Pokéball icons. Configured important battles can still use Team Preview.
 - PvE and PvP Trainer battles now keep all six battlefield party slots visible, with empty positions shown as disabled grey slots.
 - Added daily Trainer rematches. Their teams become stronger and can evolve as you progress.
@@ -250,7 +296,8 @@
 
 **Fixed**
 
-- Fixed NPC dialogue helpers rejecting inline or localized fallback lines because Godot inferred them as untyped arrays.
+- Fixed Route 1 Trainers starting overlapping conversations and battles when approached at the same moment they spotted you.
+- Fixed some NPC dialogue or translated fallback text failing to appear.
 - Regular Trainer battles no longer briefly flash the lead-selection phase while automatic leads are being chosen.
 - Gary now waits to appear on Route 22 until Oak's Parcel has been delivered.
 - Fixed evolution choices sometimes appearing twice.
@@ -298,15 +345,14 @@
 - Added Catching Mentor Gideon's Route 22 side quest. Learn how catching works, catch a Mankey, and receive 10 Great Balls as a reward.
 - Added the next part of the opening story: Gary's childhood-rival battle on Route 22, the journey toward Pewter City, and the first Gym challenge. Professor Oak now also gives you 10 Poké Balls with the Pokédex, and Dadinho's training reward is claimed by returning to him.
 - Added richer battle presentation for special Trainer battles, including battle introductions, Pokémon send-out callouts, contextual Trainer banter, and “Dodge!” reactions after genuine misses. These callouts are also visible to spectators.
-- Added the Viridian City jail manager, wanted-level-based bail costs, and staff detention support.
+- Viridian City's jail now has a warden, with bail costs based on your Wanted level.
 
 **Changed**
 
-- Building entrances can now be controlled through world access. Buildings without an interior map remain blocked with a clear “This building is closed.” message.
+- Closed buildings now show a clear “This building is closed.” message when you try to enter.
 - Route guards now appear only when a route is actually blocked for the current Trainer. Story and party requirements still keep the Pallet Town guard in place until you collect a Pokémon from Oak.
 - Improved the battle Bag layout so it sits cleanly above the move controls, and key items no longer clutter the All Items category.
 - Skills now open with a simple overview first, with detailed information shown after selecting an individual skill.
-- Staff teleport tools now close their parent menu automatically, and staff map search uses the standard “Pokémon” spelling.
 - Removed Fearow from Route 22 wild encounters and adjusted the early-route encounter progression.
 
 **Fixed**
@@ -315,8 +361,8 @@
 - Fixed Pokémon move-learning choices failing to save.
 - Fixed early Kanto story progression stopping after the Town Map or after the Route 22 rival battle.
 - Fixed PvP hover information so revealed Pokémon usage history and activated held items are shown consistently.
-- Fixed movement remaining available behind modal shop, Atelier, and other overworld windows, while preserving authorized staff teleports.
-- Fixed duplicate chat reconnect attempts after progress resets and improved NPC battle transition handling.
+- Fixed movement remaining available while shop, Atelier, and other important windows were open.
+- Fixed chat reconnecting more than once after resetting progress and made transitions into Trainer battles more reliable.
 
 ## 0.3.46 - 2026-08-05
 
@@ -376,14 +422,14 @@
 - You can now attach Pokédollars to player mail, alongside items and Pokémon. The amount and sending fee are taken from your Wallet when the mail is sent.
 - Added email verification for new accounts and password recovery for accounts with a verified email address. The login screen now includes a Forgot Password link.
 - New Trainers can now receive a one-time welcome mail, including any starter rewards attached to it.
-- Added a Diagnostics screen to the launcher. It lets you copy useful troubleshooting information or open the log folder when you need help.
+- Added a Support screen to the launcher, where you can copy troubleshooting information or open the log folder when you need help.
 
 **Changed**
 
 - Areas that are closed or still in development now show a clear in-world message when you try to enter them.
 - Important session notices now remain visible and show a countdown when your game session is about to end.
-- The launcher now retries a download once if its safety check fails and gives clearer instructions if the problem continues.
-- Unexpected problems during activities such as Trainer battles, healing, claiming rewards, shopping, or entering another area now show a clearer message and a reference you can share with staff.
+- The launcher now retries a failed download once and gives clearer instructions if the problem continues.
+- Unexpected problems during battles, healing, rewards, shopping, or travel now show a clearer message and a reference you can share when asking for help.
 - Improved the consistency of translated NPC dialogue throughout the world.
 
 **Fixed**
@@ -394,7 +440,7 @@
 
 **Added**
 
-- Completed English, Dutch, and Brazilian Portuguese language support across the game, including battles, Pokémon and item information, NPC dialogue, signs, shops, social features, PvP, trading, storage, progression, and developer tools.
+- Completed English, Dutch, and Brazilian Portuguese language support across the game, including battles, Pokémon and item information, dialogue, signs, shops, social features, PvP, trading, storage, and progression.
 - Added localized names and descriptions for Pokémon content such as moves, Abilities, types, Natures, items, status effects, and encounter information.
 - Added styled language selectors with country flags to the login screen, launcher, and settings. Your selected language is remembered between sessions.
 - Added a separate Pokémon terminology setting so names such as Moves, Abilities, items, Natures, types, and statuses can remain in English while descriptions use the selected interface language.
@@ -404,11 +450,11 @@
 - Redesigned Settings with a clearer two-column layout, compact category navigation, and styling that matches the login screen and in-game interface.
 - Pressing Escape on the login screen now opens Settings. Pressing Escape inside Settings closes the active dialog or Settings itself.
 - Simplified the login screen actions and added a localized notice explaining that PokeAether is an unofficial fan project.
-- Improved localization handling for server messages and errors while keeping externally supplied news in its original language.
+- More messages and errors now appear in your selected language. News remains in the language in which it was published.
 
 **Fixed**
 
-- Fixed interrupted respawn and authorized-teleport acknowledgements remaining stuck across logins. Acknowledgements now send only the server-issued revision, preventing serialized position fields from forcing affected Trainers back to their last healing point.
+- Fixed some Trainers being sent back to their last healing point after logging in again.
 - Fixed chat tooltips showing the resize handle's description after resizing the chat.
 - Removed an incorrect sand overlay from Viridian Forest.
 
@@ -448,7 +494,7 @@
 
 **Fixed**
 
-- Fixed legacy empty values in any saved appearance part or colour preventing the Trainer's current map and tile from being saved. This was likely the cause of affected Trainers returning to their last healing spawn point after logging in again: appearance validation rejected the save before the new location could be stored.
+- Fixed older appearance settings sometimes preventing your current location from being saved and sending you back to your last healing point after logging in.
 - Fixed the first Pokémon Storage info card after logging in sometimes becoming almost as tall as the whole window.
 - Fixed fishing sometimes showing an incorrect error message even when you owned an Old Rod.
 - Fixed fishing poses while Surfing, including duplicate limbs and misplaced hair, headgear, eyes, facial hair, and accessories.
@@ -468,9 +514,8 @@
 ## 0.3.35 - 2026-07-27
 
 **Added**
-- Added an Add Gems button to the Aether Gift Store that clearly marks Gem top-ups as not implemented yet.
 - Added Guild chat with a red unread indicator for Guild members, plus an Invite to Guild action when Guild Leaders or Officers right-click another Trainer.
-- Added a centered overworld nameplate stack with each Trainer's 24×24 Guild emblem, optional staff badge, and anchored name arranged vertically.
+- Guild emblems and Trainer names now appear together in a clearer nameplate above each Trainer.
 
 - Added the Aether Atelier tailor to Pokémon Centers. Its searchable catalog repacks complete outfit sets for ₽1,000 and previews permanent per-item Chroma dyes for ₽2,500.
 - Added catalog search to the Aether Gift Store and direct hex colour entry to Store previews and Trainer Card appearance editing.
@@ -510,7 +555,6 @@
 - Added full Z-Move support to battles against other players, Trainers, and wild Pokémon. Every available Z-Move can now be used, including all special Z-Moves tied to specific Pokémon.
 - Added clear icons for Z-Crystals in the Bag and on Pokémon.
 - Added Aetherite and Battle Points to the Wallet alongside Pokédollars and Aether Gems.
-- Added Alpha Tools that let Alpha players create Alpha Pokémon which are ready to use.
 
 **Changed**
 
@@ -523,7 +567,7 @@
 - Every Pokédex view now shows OT-registered species over the total available species.
 - OT-registered species now show a Poké Ball beside their name in the Pokédex, the map's wild Pokémon list, and wild battles.
 - Ranked matchmaking now clearly shows when the queue is unavailable.
-- Improved the Item Dex, Alpha Tools, Pokémon import, and other tools with clearer layouts and selections.
+- Improved the Item Dex and Pokémon import screens with clearer layouts and choices.
 - Made many messages and tooltips easier to understand across battles, trading, mail, storage, the Store, and the overworld.
 - Refreshed the post-login loading screen with the current Aether styling, a continuous loading spinner, and visible Trainer, Party, and World preparation stages.
 - Updated the music and visuals on several maps and interface screens.
@@ -570,7 +614,6 @@
 - Added new battle animations for Pyro Ball, Court Change, High Jump Kick, Sparkling Aria, Draining Kiss, Psychic Noise, Grassy Glide, Wood Hammer, Drain Punch, Superpower, Psychic Terrain, Grassy Terrain, Electric Terrain, and Misty Terrain.
 - Psychic, Grassy, Electric, and Misty Terrain now have their own animated battlefield effects that remain visible while active.
 - Added chat settings for choosing which main chat tabs are visible and changing their order.
-- Added early previews for the upcoming Quest Log, Aether Store, Redeem Codes, server-wide and personal buffs, and Clan chat. These features are not fully active yet.
 
 **Changed**
 - Added a dedicated All chat tab that combines every available channel, while General now opens Global by default and keeps Global, Trade, and Help as subchannels.
@@ -602,7 +645,7 @@
 - Move buttons now visibly dim and stop showing hover details while waiting for the opponent after submitting a PvP choice.
 
 **Fixed**
-- Fixed the PvP result overlay sometimes showing Defeat for the winning player when the server identified the winner by trainer name.
+- Fixed the PvP result screen sometimes showing Defeat to the winner.
 - Fixed several opposing move animations travelling from the player's side, using inverted vertical offsets, or appearing on the wrong Pokemon.
 - Fixed Kowtow Cleave slicing its source spritesheet at the wrong size, which made its impact animation almost invisible.
 
@@ -627,7 +670,7 @@
 
 **Fixed**
 - Fixed a fainted Pokemon sometimes appearing selectable again after Pursuit interrupted its switch.
-- Fixed a Ranked battle sometimes ending as a server error when a replacement Pokemon was chosen between turns.
+- Fixed Ranked battles sometimes ending unexpectedly when a replacement Pokemon was chosen between turns.
 
 ## 0.3.17 - 2026-07-19
 
@@ -720,29 +763,28 @@
 - Fixed dragged Summary moves appearing behind the Summary window. Dropping a move outside the list now safely restores its previous position.
 - Fixed rain and snow sometimes appearing behind buildings and other map objects.
 - Fixed the collapse button beside the location card being positioned incorrectly.
-- Pokemon created through developer or content creator tools now receive the neutral Hardy Nature when no Nature is selected.
 
 ## 0.3.5 - 2026-07-16
 
 **Added**
 - Added a saved-trainer login view with trainer profile preview, session status, and a direct Continue flow.
-- Added server-synchronized PvP decision timers for both players during Team Preview, move selection, forced switches, waiting states, and reconnect grace periods.
+- Added clear PvP decision timers for Team Preview, move selection, forced switches, waiting, and reconnecting.
 - Added PvP choice confirmations that show the selected lead, move, or incoming switch while waiting for the opponent.
 
 **Changed**
 - Redesigned the login screen with a blue Aether-themed layout, responsive news panel, improved login and saved-session cards, atmospheric login glow, and clearer Remember Me controls.
 - Refreshed the launcher with a blue Aether-themed layout, improved spacing, and clearer server status, update progress, and news panels.
-- PvP timers now show the current decision time instead of exposing the underlying bank, interpolate from server anchors without per-second events, and freeze at the submitted value while waiting.
+- PvP timers now clearly show the time left for the current decision and pause after you submit your choice.
 - Repositioned the PvP timer panels and opponent HUD so names, health, stat changes, sprites, and battlefield animations remain readable.
 
 **Fixed**
-- Fixed news articles not loading in the launcher and login screen when the news feed returns its `articles` collection.
+- Fixed news articles sometimes not loading in the launcher or login screen.
 - Fixed returning from Settings to the login screen ending the saved session and forcing a full username/password login despite Remember Me being enabled.
 - Fixed one player's PvP timer continuing after submitting a move or switch, timers resuming while an opponent was still disconnected, and reconnect countdowns disappearing behind normal turn timers.
-- Fixed PvP Team Preview occasionally waiting twelve seconds after both leads were selected by keeping correlated lead responses on the realtime action path.
-- Fixed automatic lead selection and timeout-forfeit results not reaching both clients consistently, including stale Team Preview screens and missing winner names.
+- Fixed Team Preview occasionally waiting too long after both players selected their lead Pokémon.
+- Fixed automatic lead choices and timeout results not appearing correctly for both players.
 - Fixed repeated and simultaneous disconnect flows so reconnect state remains visible and battles do not resume until both players are connected.
-- Fixed both PvP clients showing different remaining decision times after reconnect; timers now resume from the same refreshed server deadline.
+- Fixed players seeing different remaining decision times after reconnecting.
 
 ## 0.3.4 - 2026-07-12
 
@@ -751,7 +793,7 @@
 - Added a permanent Escape Rope Key Item. It returns you to your latest healing point without healing your party and has a 30-minute cooldown that continues while you are offline.
 - Added an eight-slot hotbar on the left side of the screen. Drag usable Bag items into a chosen slot and activate them by clicking or pressing keys 1–8.
 - Added hotbar item counts, unavailable-item states, highlighted drop targets, slot clearing with right-click, and drag-and-drop swapping between hotbar slots.
-- Added client-side map sign interactions for small and large overworld signs, including local sign text loading, Pallet Town sign placements, text-only dialogue presentation, and validation checks for sign content and scene references.
+- Added readable small and large signs throughout Pallet Town.
 - Added Player Trade. You can request a nearby player, exchange Pokemon, item stacks, and money, then review and confirm the exact exchange together.
 - Added live trade invitations, incoming-request notifications, reconnection recovery, and clear system messages for Pokemon and item transfers.
 - Added draggable trade, invitation, and Pokemon-summary windows so you can arrange them around the game screen.
@@ -768,46 +810,40 @@
 - Trade completion now refreshes your party immediately and closes the workspace once the transfer is complete.
 
 **Fixed**
-- Reduced the delay before Mega Evolution by preloading its battle effect, prewarming and caching available Mega-form sprites, and showing immediate feedback while waiting for server confirmation.
+- Mega Evolution now begins more quickly and gives immediate feedback after you choose it.
 - Fixed Pokemon sometimes receiving EVs but not keeping earned EXP after defeating a wild Pokemon.
 - Fixed EXP bars not updating after battle rewards and added clear system messages showing how much EXP each Pokemon earned.
 - Fixed Escape Rope confirmation and cooldown feedback being inconsistent, and updated its confirmation window to match the game UI.
 - Fixed cleared hotbar slots restoring Escape Rope automatically and fixed dragged item icons appearing behind the hotbar.
-- Improved trade invitation delivery and state recovery so new invitations, acceptances, offers, readiness, and completed trades stay in sync for both players.
+- Trade invitations, offers, confirmations, and completed trades now update more reliably for both players.
 - Fixed trade offers occasionally reverting, appearing late for the other player, or showing stale trade-state errors after quick updates.
 - Fixed money offers resetting while typing or not appearing consistently in the shared offer and final review.
 
 ## 0.3.3 - 2026-07-10
 
 **Added**
-- Added Route 1 visual depth, generated map visuals, tall-grass rustle effects, and water ripple effects.
+- Route 1 now has richer scenery, rustling tall grass, and water ripple effects.
 - Added styled overworld nameplates for the player, remote players, and NPCs.
 - Added route and door transition hint scenes for clearer overworld exits.
-- Added dialogue metadata loading from the game-content service.
-- Added overworld Pokemon NPC support, metadata loading, collision blocking, and Route 1/Pallet Town overworld Pokemon placements.
-- Added boss battle NPC support with difficulty selection.
+- Added more Pokémon and characters to Route 1 and Pallet Town.
+- Special Trainer battles can now offer a choice of difficulty.
 - Added Trainer Red as a Pallet Town boss battle with Easy, Medium, and Hard teams, dialogue, mugshot, and reward content.
-- Added market attendant NPC support, a market service client, and the first market UI flow.
-- Added backend game-content routes for NPCs, dialogues, and overworld Pokemon.
-- Added backend account-service support for standard market purchases and shop item source validation.
+- Added the first Poké Mart attendant and shopping screen.
 
 **Changed**
-- Improved NPC metadata, trainer metadata, dialogue fallback handling, and overworld interaction validation.
-- Updated trainer repository handling and trainer metadata tests for the expanded Trainer Red content.
-- Improved market UI integration in the main overlay and Pallet Town scene.
-- Cleaned up overworld NPC sprite assets and migrated to the newer official overworld sprite pack.
+- Improved dialogue and interactions with overworld characters.
+- Improved the Poké Mart screen and its place in Pallet Town.
+- Updated overworld character sprites.
 
 **Fixed**
 - Fixed Trainer Red's boss battle difficulty overlay blocking clicks in team preview and battle UI after the difficulty choice.
-- Fixed trainer team-preview lead selection staying locked or showing unusable party slots when saved HP data was missing.
-- Fixed party slot HP parsing for battle payloads that include stats or conditions but no explicit `hp` field.
-- Fixed local dialogue validation for Pallet Town Trainer Red dialogue references.
-- Fixed backend Pokemon box handling around market and trainer content updates.
+- Fixed Team Preview sometimes locking the lead choice or showing unusable party slots.
+- Fixed some party slots showing incorrect HP when a battle began.
 
 ## 0.3.1 - 2026-07-08
 
 **Added**
-- Added updated Kanto map visuals, teleport catalog data, and Pallet Town door-opening visuals.
+- Updated Kanto map visuals and added door-opening animations in Pallet Town.
 - Added a Heal NPC that can restore your party from the overworld.
 - Added a Nurse mugshot for Heal NPC dialogue.
 - Added persistent heal-point respawns for wild and NPC battle losses.
@@ -822,31 +858,29 @@
 - Added persistence for non-PvP party status conditions so poisoned, burned, paralyzed, asleep, and frozen Pokemon keep their condition across wild and NPC battles.
 
 **Changed**
-- Party healing now uses the same reusable healing flow across NPCs and developer tools.
+- Healing from NPCs is now more consistent.
 - Heal NPCs now store the player's last heal point for future blackout respawns.
 - Ranked queue close/minimize behavior is now explicit: minimizing keeps the queue active, while closing or logging out leaves the queue unless a match has already been found.
 - PvP now prepares teams by healing the current party before joining a PvP room or ranked queue, and heals the party again after PvP ends.
 - If a Ranked match starts while the player is in a wild or NPC battle, the PvE battle is forfeited and cleaned up before PvP opens.
 - Battle status presentation now separates one-time move animations, continuous status overlays, and end-of-turn residual status damage animations.
 - Taunt, Encore, and confusion presentation now follows the same above-sprite badge style as stat-stage changes instead of using compact abbreviations.
-- Creator-generated Pokemon can now use holdable berries where appropriate.
 
 **Fixed**
-- Fixed the developer Clear Party tool only clearing the local UI, which could make the cleared party reappear and send newly generated Pokemon to PC storage.
 - Blackout respawns now heal the party and no longer let fainted battle state overwrite the healed party.
 - Fixed players remaining queued after closing the Ranked menu.
 - Fixed matched Ranked players getting stuck when the opponent closed the Ranked interface before battle start.
 - Fixed Ranked match-found overlays blocking wild battle actions during the countdown.
 - Fixed stale matched queue state after forfeiting or reconnecting to a previous Ranked match.
-- Fixed Ranked validation being reset by the pre-queue party heal, which could show `Ranked Ready` while join still failed.
+- Fixed Ranked showing `Ranked Ready` even though joining the queue would still fail.
 - Fixed PvP battle damage being written back to the overworld party after PvP ends.
-- Fixed the active player party sometimes staying damaged in the UI after a PvP forfeit before the server heal response finished.
+- Fixed the Party panel sometimes showing damage after a PvP forfeit even though the party had been healed.
 - Fixed lead Booster Energy activations not showing their battle log text, battle text, or Quark Drive/Protosynthesis stat badge before turn one.
 - Fixed hazard switch-in damage logs and HP deltas being merged with following attack damage.
 - Fixed Stealth Rock field markers appearing too transparent or too far from the affected side.
 - Fixed party held item markers drawing above other UI layers.
 - Fixed badly poisoned Pokemon losing their `tox` state when a new wild or NPC battle started.
-- Fixed saved status conditions being shown in the client but not restored inside Showdown battle logic at battle start.
+- Fixed saved status conditions sometimes disappearing when a new battle began.
 - Fixed poison and burn residual animations replaying during normal attack damage on already-statused targets.
 - Fixed the summary card missing the Pokemon's current status condition.
 
@@ -894,7 +928,7 @@
 **Changed**
 - Improved the Friend List layout, spacing, colors, buttons, and confirmation prompts.
 - Offline friends can no longer be opened through the Friend List message button.
-- Private messages now stay realtime-only and are easier to follow visually.
+- Private messages are delivered while both players are online and are now easier to follow visually.
 - Improved the Ranked PvP interface with a draggable window, better tab spacing, clearer team previews, and more readable validation messages.
 - Reordered the top-left options row to Bag, Socials, Aether Exchange, Clan, PvP Interface, and Settings.
 - Updated the Aether Exchange icon.
@@ -969,7 +1003,7 @@
 - Added a redesigned Pokemon summary screen that is easier to read and keeps every tab the same size.
 - Added a front/back sprite toggle in Pokemon summaries.
 - Added a small shiny marker in Pokemon summaries.
-- Added clearer origin info in Pokemon summaries, including where a Pokemon came from, when it was obtained, and whether it was caught or generated.
+- Pokémon summaries now show more clearly where and when a Pokémon was obtained.
 - Added hover descriptions for moves and abilities in Pokemon summaries.
 
 **Changed**
@@ -1000,19 +1034,18 @@
 **Added**
 - Added the first complete wild Pokemon capture flow using Bag Poké Balls during wild battles.
 - Added Gen 4-style Poké Ball capture animations for throw, shake, break-out, and successful catch states.
-- Added backend capture handling that consumes balls, resolves catch success, creates owned Pokemon, and updates party state when space is available.
-- Added pass-turn battle resolution so failed wild capture attempts let the wild Pokemon take its turn.
-- Added stored Poké Ball metadata and an initial Poké Ball summon animation for wild battle player leads.
-- Added Pokemon cry assets and cry playback on Poké Ball release moments.
+- Failed capture attempts now let the wild Pokémon take its turn.
+- Your lead Pokémon now enters wild battles with a Poké Ball summon animation.
+- Pokémon now cry when they emerge from a Poké Ball.
 - Added a summary-card Poké Ball selector for changing owned Pokemon summon ball cosmetics.
 
 **Changed**
-- Wild battle Bag actions now use backend catch results for shake count, success state, inventory updates, and battle completion.
+- Poké Ball shakes, successful catches, and Bag counts now stay in sync during wild battles.
 - Wild battle capture actions now write both item use and capture outcome messages to the battle log.
 - Trainer battle openings now play Poké Ball lead summon animations for both the player and NPC trainer.
 - PvP battle openings now play sequential Poké Ball lead summon animations for both sides.
 - Switch events now use fast Poké Ball recall and release animations without replaying the full throw.
-- PvP opponent switch and summon animations now use public Poké Ball metadata when available.
+- Opponents now use their chosen Poké Ball during switch and summon animations when visible.
 - Switch release animations now leave audio space for future Pokemon cries.
 - Owned Pokemon Poké Ball changes now consume the newly selected ball and return the previously assigned ball to the Bag.
 
@@ -1029,10 +1062,9 @@
 - Added an Electric Terrain battlefield animation with yellow terrain particles and ambient tinting.
 - Added distinct Primordial Sea and Desolate Land battlefield animations using heavier rain, storm haze, harsh sunlight, and heat haze layers.
 - Added a Delta Stream battlefield animation with wind bands, air particles, cloud veil, and cool sky tinting.
-- Added Primal Reversion event handling so Red Orb and Blue Orb transformations can play the mega evolution animation.
+- Primal Groudon and Primal Kyogre now play a transformation animation when their Orbs activate.
 - Added dedicated wild and trainer battle music tracks.
-- Added an explicit follower sprite map so Pokemon forms can resolve to the correct follower sprite assets.
-- Added a follower sprite map validation tool for future form sprite updates.
+- More Pokémon forms now use their correct follower sprite.
 
 **Fixed**
 - Fixed Hidden Power battle move slots showing the wrong type and PP in battle.
@@ -1046,7 +1078,7 @@
 - Delta Stream wind bands now loop with a smooth back-and-forth motion instead of snapping back to the start.
 - Party hover cards now show held item next to HP and nature next to ability.
 - Player sprites now take draw priority over their follower when they overlap at nearly the same height.
-- Follower sprite loading now checks the species-to-asset map before falling back to legacy filename guesses.
+- Followers now choose the correct form sprite more reliably.
 
 ## 0.2.0 - 2026-06-28
 
@@ -1056,6 +1088,3 @@
 **Fixed**
 - Fixed battles breaking when multiple Pokemon of the same species are used on the same team.
 - Fixed all recently reported bugs from the latest test cycle.
-
-**Changed**
-- Releases are now published manually instead of automatically building a new client on every code push.

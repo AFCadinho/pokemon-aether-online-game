@@ -134,6 +134,9 @@ func _find_player_action(action_name: String) -> Button:
 func _check_guild_invite_context_action() -> void:
 	coordinator.guild_membership = {"guildId": 4, "role": "officer"}
 	coordinator.guild_membership_loaded = true
+	coordinator.guild_members.clear()
+	coordinator.guild_members.append({"userId": 9, "username": "brock"})
+	coordinator.guild_members_loaded = true
 	coordinator.social_state_loading = false
 	coordinator._render_context_menu()
 	coordinator._toggle_context_more_actions()
@@ -142,6 +145,24 @@ func _check_guild_invite_context_action() -> void:
 		_find_player_action("Invite to Guild") != null,
 		true,
 		"guild leaders and officers receive the right-click guild invite action"
+	)
+	coordinator.guild_members.clear()
+	coordinator.guild_members.append({"userId": 7, "username": "misty"})
+	coordinator._render_context_menu()
+	await process_frame
+	_check_equal(
+		_find_player_action("Invite to Guild") == null,
+		true,
+		"Trainers who already belong to the current Guild cannot be invited again"
+	)
+	coordinator.guild_members.clear()
+	coordinator.guild_members_loaded = false
+	coordinator._render_context_menu()
+	await process_frame
+	_check_equal(
+		_find_player_action("Invite to Guild") == null,
+		true,
+		"Guild invitations stay hidden until the current roster is known"
 	)
 	coordinator.guild_membership = {"guildId": 4, "role": "member"}
 	coordinator._render_context_menu()

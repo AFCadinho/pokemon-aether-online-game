@@ -1,6 +1,6 @@
-[gd_scene format=4]
+[gd_scene format=4 uid="uid://clgrp2u5771bd"]
 
-[ext_resource type="TileSet" path="res://generated/tiled_visuals/route_1/route_1.visual.tileset.tres" id="1_ql3i8"]
+[ext_resource type="TileSet" uid="uid://byxucuwfvlts5" path="res://generated/tiled_visuals/route_1/route_1.visual.tileset.tres" id="1_ql3i8"]
 
 [node name="Route1" type="Node2D" unique_id=697862575]
 metadata/pao_generated_visual = true

@@ -115,6 +115,17 @@ func _run() -> void:
 	_check(context.get("nickname_button") == null, "read-only Summary does not retain a freed nickname button")
 	_check(context.get("copy_button") == null, "read-only Summary does not expose the export-set copy action")
 	_check(overlay.call("_apply_pokemon_summary_card_context", active_card_key), "read-only Summary context remains safe to reactivate")
+	var sprite_stage := nodes.get("sprite_stage") as Control
+	_check(sprite_stage != null, "read-only Summary exposes its sprite stage")
+	_check(sprite_stage.mouse_default_cursor_shape == Control.CURSOR_POINTING_HAND, "read-only sprite advertises its click interaction")
+	_check(sprite_stage.tooltip_text != "", "read-only sprite explains the front/back interaction")
+	_check(sprite_stage.gui_input.has_connections(), "read-only sprite is connected to the shared front/back handler")
+	_check(str(overlay.get("pokemon_summary_sprite_side")) == "front", "read-only Summary starts with the front sprite")
+	var sprite_click := InputEventMouseButton.new()
+	sprite_click.button_index = MOUSE_BUTTON_LEFT
+	sprite_click.pressed = true
+	overlay.call("_on_pokemon_summary_sprite_frame_gui_input", sprite_click, active_card_key)
+	_check(str(overlay.get("pokemon_summary_sprite_side")) == "back", "clicking a read-only sprite switches to its back view")
 	_check((nodes.get("stat_rows", {}) as Dictionary).size() == 6, "all six stats render at once")
 	var stats_grid := nodes.get("stats_grid") as GridContainer
 	var stats_headings := nodes.get("stats_headings") as Array
