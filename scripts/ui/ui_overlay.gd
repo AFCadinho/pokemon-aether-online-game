@@ -105,6 +105,10 @@ const LANGUAGE_CHAT_LABELS := {
 	CHAT_CHANNEL_LANGUAGE_ZH: "ui.chat.language.zh",
 	CHAT_CHANNEL_LANGUAGE_PT: "ui.chat.language.pt",
 }
+const PM_TRANSLATION_LANGUAGE_LABELS := {
+	"zh": "ui.chat.pm.translation.language.zh",
+	"pb": "ui.chat.pm.translation.language.pb",
+}
 const CHAT_MUTE_PERMISSION := "chat:mute"
 const CHAT_TRANSLATE_PERMISSION := "chat:translate"
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
@@ -1008,6 +1012,8 @@ var chat_context_options: VBoxContainer
 var pm_chat_container: HBoxContainer
 var pm_message_area: PanelContainer
 var pm_active_conversation_label: Label
+var pm_translation_language_select: OptionButton
+var pm_translation_pending_user_id: int = 0
 var pm_message_scroll: ScrollContainer
 var pm_message_list: VBoxContainer
 var pm_empty_state: CenterContainer
@@ -1547,6 +1553,10 @@ func _ready() -> void:
 		ChatRealtimeService.ai_translation_received.connect(_on_chat_ai_translation_received)
 	if not ChatRealtimeService.ai_translation_failed.is_connected(_on_chat_ai_translation_failed):
 		ChatRealtimeService.ai_translation_failed.connect(_on_chat_ai_translation_failed)
+	if not ChatRealtimeService.pm_translation_state_changed.is_connected(_on_pm_translation_state_changed):
+		ChatRealtimeService.pm_translation_state_changed.connect(_on_pm_translation_state_changed)
+	if not ChatRealtimeService.pm_translation_warning.is_connected(_on_pm_translation_warning):
+		ChatRealtimeService.pm_translation_warning.connect(_on_pm_translation_warning)
 	if not WorldPresenceService.weather_changed.is_connected(_on_location_weather_changed):
 		WorldPresenceService.weather_changed.connect(_on_location_weather_changed)
 	ChatRealtimeService.connect_chat.call_deferred()
@@ -26907,13 +26917,36 @@ func _setup_pm_chat_ui() -> void:
 	pm_message_column.add_theme_constant_override("separation", 6)
 	message_margin.add_child(pm_message_column)
 
+	var pm_header := HBoxContainer.new()
+	pm_header.name = "PrivateMessageHeader"
+	pm_header.add_theme_constant_override("separation", 8)
+	pm_message_column.add_child(pm_header)
+
 	pm_active_conversation_label = Label.new()
 	pm_active_conversation_label.clip_text = true
 	pm_active_conversation_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pm_active_conversation_label.custom_minimum_size = Vector2(0, 24)
+	pm_active_conversation_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pm_active_conversation_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pm_active_conversation_label.add_theme_color_override("font_color", CHAT_SYSTEM_LABEL_COLOR)
 	pm_active_conversation_label.add_theme_font_size_override("font_size", 14)
-	pm_message_column.add_child(pm_active_conversation_label)
+	pm_header.add_child(pm_active_conversation_label)
+
+	pm_translation_language_select = OptionButton.new()
+	pm_translation_language_select.name = "StaffPrivateMessageTranslationLanguage"
+	pm_translation_language_select.custom_minimum_size = Vector2(168, 28)
+	pm_translation_language_select.fit_to_longest_item = false
+	pm_translation_language_select.focus_mode = Control.FOCUS_NONE
+	_set_localized_control_property(
+		pm_translation_language_select,
+		"tooltip_text",
+		"ui.chat.pm.translation.tooltip"
+	)
+	pm_translation_language_select.item_selected.connect(
+		_on_pm_translation_language_selected
+	)
+	pm_header.add_child(pm_translation_language_select)
+	_apply_pvp_ranked_dropdown_style(pm_translation_language_select, true)
 
 	var message_body := MarginContainer.new()
 	message_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -27035,6 +27068,7 @@ func _on_chat_translation_state_changed(
 	ChatRealtimeService.translation_mode_allowed = allowed
 	ChatRealtimeService.translation_mode_enabled = enabled
 	_refresh_chat_translate_mode_ui()
+	_refresh_pm_translation_controls()
 
 
 func _on_chat_translation_warning(_message: String) -> void:
@@ -27746,6 +27780,7 @@ func _ensure_pm_conversation(user: Dictionary) -> Dictionary:
 		conversation = {
 			"user": _normalize_pm_user(user),
 			"messages": [],
+			"translationLanguage": "",
 		}
 		pm_conversations_by_user_id[conversation_key] = conversation
 	else:
@@ -27763,6 +27798,7 @@ func _refresh_pm_context_navigation() -> void:
 func _render_active_pm_conversation() -> void:
 	if pm_message_list == null:
 		return
+	_refresh_pm_translation_controls()
 	_clear_children(pm_message_list)
 	var has_conversations := not pm_conversations_by_user_id.is_empty()
 	if pm_empty_state != null:
@@ -27849,7 +27885,20 @@ func _create_pm_message_row(message: Dictionary) -> Control:
 		body_text,
 		str(message.get("sentAt", ""))
 	)
-	header.add_child(_create_chat_sender_message_label(label, name_color, body_text, message_context))
+	var message_entry := _create_chat_sender_message_label(
+		label,
+		name_color,
+		body_text,
+		message_context
+	)
+	header.add_child(message_entry)
+	var original_body := str(message.get("originalBody", "")).strip_edges()
+	if bool(message.get("machineTranslated", false)) and original_body != "" and original_body != body_text:
+		header.add_child(_create_chat_translation_badge(
+			message_entry,
+			original_body,
+			body_text
+		))
 
 	var pokemon_attachments: Array[Dictionary] = _get_chat_pokemon_attachments(message)
 	if not pokemon_attachments.is_empty():
@@ -27875,6 +27924,104 @@ func _on_pm_conversation_selected(user_id: int) -> void:
 	_clear_pm_unread(user_id)
 	_apply_chat_tab_state()
 	chat_input.grab_focus()
+
+
+func _refresh_pm_translation_controls() -> void:
+	if pm_translation_language_select == null:
+		return
+	var allowed := (
+		_has_user_permission(CHAT_TRANSLATE_PERMISSION)
+		and ChatRealtimeService.translation_mode_available
+		and ChatRealtimeService.translation_mode_allowed
+		and ChatRealtimeService.translation_mode_enabled
+		and active_pm_user_id > 0
+		and pm_conversations_by_user_id.has(active_pm_user_id)
+	)
+	pm_translation_language_select.visible = allowed
+	if not allowed:
+		return
+
+	var conversation := _dictionary_from_value(
+		pm_conversations_by_user_id.get(active_pm_user_id, {})
+	)
+	var selected_language := str(conversation.get("translationLanguage", ""))
+	pm_translation_language_select.clear()
+	pm_translation_language_select.add_item(
+		LocalizationManager.text("ui.chat.pm.translation.off")
+	)
+	pm_translation_language_select.set_item_metadata(0, "")
+	var selected_index := 0
+	for language: String in ChatRealtimeService.pm_translation_languages:
+		var label_key := str(PM_TRANSLATION_LANGUAGE_LABELS.get(language, ""))
+		var language_label := (
+			LocalizationManager.text(label_key)
+			if label_key != ""
+			else language.to_upper()
+		)
+		pm_translation_language_select.add_item(language_label)
+		var item_index := pm_translation_language_select.item_count - 1
+		pm_translation_language_select.set_item_metadata(item_index, language)
+		if language == selected_language:
+			selected_index = item_index
+	pm_translation_language_select.select(selected_index)
+	pm_translation_language_select.disabled = pm_translation_pending_user_id == active_pm_user_id
+
+
+func _on_pm_translation_language_selected(index: int) -> void:
+	if (
+		pm_translation_language_select == null
+		or index < 0
+		or index >= pm_translation_language_select.item_count
+		or active_pm_user_id <= 0
+	):
+		return
+	var language := str(
+		pm_translation_language_select.get_item_metadata(index)
+	).strip_edges().to_lower()
+	pm_translation_pending_user_id = active_pm_user_id
+	pm_translation_language_select.disabled = true
+	if not ChatRealtimeService.set_private_message_translation_language(
+		active_pm_user_id,
+		language
+	):
+		pm_translation_pending_user_id = 0
+		_refresh_pm_translation_controls()
+		_add_pm_notice(
+			active_pm_user_id,
+			LocalizationManager.text("ui.chat.pm.translation.unavailable")
+		)
+
+
+func _on_pm_translation_state_changed(
+	peer_user_id: int,
+	language: String,
+	allowed: bool
+) -> void:
+	if pm_translation_pending_user_id == peer_user_id:
+		pm_translation_pending_user_id = 0
+	if peer_user_id <= 0 or not pm_conversations_by_user_id.has(peer_user_id):
+		_refresh_pm_translation_controls()
+		return
+	var conversation := _dictionary_from_value(
+		pm_conversations_by_user_id.get(peer_user_id, {})
+	)
+	conversation["translationLanguage"] = language if allowed else ""
+	pm_conversations_by_user_id[peer_user_id] = conversation
+	_refresh_pm_translation_controls()
+	if not allowed:
+		_add_pm_notice(
+			peer_user_id,
+			LocalizationManager.text("ui.chat.pm.translation.unavailable")
+		)
+
+
+func _on_pm_translation_warning(peer_user_id: int, _message: String) -> void:
+	if peer_user_id <= 0 or not pm_conversations_by_user_id.has(peer_user_id):
+		return
+	_add_pm_notice(
+		peer_user_id,
+		LocalizationManager.text("ui.chat.pm.translation.failed")
+	)
 
 func _clear_pm_unread(user_id: int) -> void:
 	if user_id == 0:
@@ -41691,6 +41838,10 @@ func _on_private_message_received(message: Dictionary) -> void:
 	_append_pm_message(sender_key, {
 		"outgoing": false,
 		"body": body,
+		"originalBody": str(message.get("originalBody", "")),
+		"machineTranslated": bool(message.get("machineTranslated", false)),
+		"translationSourceLanguage": str(message.get("translationSourceLanguage", "")),
+		"translationTargetLanguage": str(message.get("translationTargetLanguage", "")),
 		"pokemonAttachments": pokemon_attachments,
 		"sentAt": str(message.get("sentAt", "")),
 		"username": str(sender.get("username", "")),

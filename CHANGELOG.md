@@ -11,6 +11,7 @@
 - Guild application decisions now appear as localized system messages, including decisions received while the applicant was offline.
 - The Guild member roster now has current-member search and a separate Trainer invite dialog.
 - Guild leaders can now give individual members explicit Guild Bank permission exceptions while keeping rank permissions as the default.
+- Added a staff-only Translate Mode language selector for live private-message support conversations.
 - Added Translate Mode to Staff Tools with optional per-message AI refinement for unclear language-chat translations.
 - Giga Impact, Psyshock, Explosion, and Water Shuriken now have their own battle animations and sound effects.
 - Added full Simplified Chinese language support throughout the game and launcher.

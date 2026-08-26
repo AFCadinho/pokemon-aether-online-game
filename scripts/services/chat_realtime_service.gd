@@ -14,6 +14,8 @@ signal translation_state_changed(available: bool, allowed: bool, enabled: bool)
 signal translation_warning(message: String)
 signal ai_translation_received(message_id: String, translated_text: String)
 signal ai_translation_failed(message_id: String, message: String)
+signal pm_translation_state_changed(peer_user_id: int, language: String, allowed: bool)
+signal pm_translation_warning(peer_user_id: int, message: String)
 
 const RECONNECT_DELAY_SECONDS := 4.0
 const SESSION_CHECK_INTERVAL_SECONDS := 10.0
@@ -33,6 +35,7 @@ var translation_mode_available := false
 var ai_translation_available := false
 var translation_mode_allowed := false
 var translation_mode_enabled := false
+var pm_translation_languages: Array[String] = []
 
 
 func _process(delta: float) -> void:
@@ -177,6 +180,22 @@ func request_ai_translation(message_id: String) -> bool:
 	})) == OK
 
 
+func set_private_message_translation_language(peer_user_id: int, language: String) -> bool:
+	var normalized_language := language.strip_edges().to_lower()
+	if (
+		not translation_mode_enabled
+		or peer_user_id <= 0
+		or (normalized_language != "" and not pm_translation_languages.has(normalized_language))
+		or websocket.get_ready_state() != WebSocketPeer.STATE_OPEN
+	):
+		return false
+	return websocket.send_text(JSON.stringify({
+		"type": "chat_translation.pm_set",
+		"peerUserId": peer_user_id,
+		"language": normalized_language,
+	})) == OK
+
+
 func _send_translation_mode_request() -> void:
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
 		return
@@ -231,6 +250,13 @@ func _process_packets() -> void:
 			ai_translation_available = bool(message.get("aiAvailable", false))
 			translation_mode_allowed = bool(message.get("allowed", false))
 			translation_mode_enabled = bool(message.get("enabled", false))
+			pm_translation_languages.clear()
+			var raw_pm_languages: Variant = message.get("pmLanguages", [])
+			if raw_pm_languages is Array:
+				for language_value: Variant in raw_pm_languages:
+					var language := str(language_value).strip_edges().to_lower()
+					if language != "" and not pm_translation_languages.has(language):
+						pm_translation_languages.append(language)
 			if not translation_mode_enabled and translation_mode_requested:
 				translation_mode_requested = false
 			translation_state_changed.emit(
@@ -249,6 +275,19 @@ func _process_packets() -> void:
 			ai_translation_failed.emit(
 				str(message.get("messageId", "")).strip_edges(),
 				str(message.get("message", "AI translation is unavailable."))
+			)
+			continue
+		if message_type == "chat_translation.pm_state":
+			pm_translation_state_changed.emit(
+				int(message.get("peerUserId", 0)),
+				str(message.get("language", "")).strip_edges().to_lower(),
+				bool(message.get("allowed", false))
+			)
+			continue
+		if message_type == "chat_translation.pm_warning":
+			pm_translation_warning.emit(
+				int(message.get("peerUserId", 0)),
+				str(message.get("message", "Private-message translation is unavailable."))
 			)
 			continue
 		if message_type == "chat_translation.warning":

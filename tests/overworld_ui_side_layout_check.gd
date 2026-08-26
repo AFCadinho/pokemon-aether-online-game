@@ -260,6 +260,7 @@ func _init() -> void:
 	_check(not script_source.contains('"No PMs yet."') and not script_source.contains('"No PM selected"'), "PM removes duplicated empty-state copy")
 	_check(not script_source.contains("pm_conversation_sidebar"), "PM conversation navigation moves out of the permanent sidebar")
 	_check(script_source.contains("pm_message_area.visible = has_conversations"), "PM gives its empty state the full chat width")
+	_check(script_source.contains('"StaffPrivateMessageTranslationLanguage"') and script_source.contains("_refresh_pm_translation_controls"), "PM support exposes a Translate Mode language selector")
 	_check(script_source.contains("chat_input.visible = input_active") and script_source.contains("send_button.visible = input_active"), "message input only appears when the selected context accepts messages")
 	_check(script_source.contains("pm_active_conversation_label.text = _pm_conversation_title(user, 0)"), "active PM header keeps the trainer name concise")
 	_check(script_source.contains("const CHAT_TAB_DEFAULT_ORDER: Array[String] = [") and script_source.contains("CHAT_TAB_GUILD"), "main chat tabs include the Guild context")
