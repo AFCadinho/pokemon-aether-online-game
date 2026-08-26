@@ -295,6 +295,15 @@ const POKEDEX_SHINY_ACCENT_SOFT := Color("#f3cc68aa")
 const POKEDEX_SHINY_ACCENT_FAINT := Color("#f3cc6844")
 const POKEDEX_PAGE_SIZE := 80
 const POKEDEX_LOAD_MORE_THRESHOLD := 128.0
+const POKEDEX_WEEKDAY_IDS := [
+	"sunday",
+	"monday",
+	"tuesday",
+	"wednesday",
+	"thursday",
+	"friday",
+	"saturday",
+]
 const WILD_POKEMON_POPUP_SIZE := Vector2(430, 500)
 const POKEDEX_BASE_STAT_BAR_MAX := 200
 const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
@@ -32002,7 +32011,7 @@ func _build_pokedex_locations_tab() -> void:
 
 func _create_pokedex_location_row(location: Dictionary) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 48)
+	panel.custom_minimum_size = Vector2(0, 68)
 	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 8, 1))
 
 	var margin := MarginContainer.new()
@@ -32012,31 +32021,44 @@ func _create_pokedex_location_row(location: Dictionary) -> Control:
 	margin.add_theme_constant_override("margin_bottom", 7)
 	panel.add_child(margin)
 
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 12)
-	margin.add_child(row)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 4)
+	margin.add_child(content)
 
-	var area_name := str(location.get(
-		"areaName",
-		location.get("areaId", LocalizationManager.text("ui.pokedex.locations.unknown_area"))
-	)).strip_edges()
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	content.add_child(header)
+
+	var area_name := _pokedex_location_display_name(location)
 	var area_label := Label.new()
-	area_label.text = (
-		area_name
-		if area_name != ""
-		else LocalizationManager.text("ui.pokedex.locations.unknown_area")
-	)
-	area_label.custom_minimum_size = Vector2(210, 0)
+	area_label.name = "PokedexLocationName"
+	area_label.text = area_name
+	area_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	area_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	area_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	area_label.add_theme_font_size_override("font_size", 14)
 	area_label.add_theme_color_override("font_color", UI_TEXT)
-	row.add_child(area_label)
+	header.add_child(area_label)
 
-	var encounter_stack := VBoxContainer.new()
-	encounter_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	encounter_stack.add_theme_constant_override("separation", 1)
-	row.add_child(encounter_stack)
+	var region_id := _pokedex_location_region_id(location)
+	if region_id != "":
+		header.add_child(_create_pokedex_location_region_badge(region_id))
+
+	var available_days := _pokedex_location_available_days(location)
+	var availability_label := Label.new()
+	availability_label.name = "PokedexLocationAvailability"
+	availability_label.text = _pokedex_location_availability_label(available_days)
+	availability_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	availability_label.add_theme_font_size_override("font_size", 10)
+	availability_label.add_theme_color_override(
+		"font_color",
+		UI_SUCCESS if available_days.is_empty() or _pokedex_location_is_available_today(available_days) else UI_MUTED_TEXT
+	)
+	header.add_child(availability_label)
+
+	var details_row := HBoxContainer.new()
+	details_row.add_theme_constant_override("separation", 8)
+	content.add_child(details_row)
 
 	var encounter_type := str(location.get(
 		"encounterType",
@@ -32045,29 +32067,139 @@ func _create_pokedex_location_row(location: Dictionary) -> Control:
 	var level_text := _format_pokedex_location_level_range(location)
 	var time_of_day := str(location.get("timeOfDay", "any"))
 	var method_label := Label.new()
-	method_label.text = "%s · %s - %s" % [
-		encounter_type
+	method_label.name = "PokedexLocationDetails"
+	method_label.text = "%s · %s · %s" % [
+		_wild_encounter_method_label(encounter_type)
 		if encounter_type != ""
 		else LocalizationManager.text("ui.pokedex.locations.wild"),
-		_encounter_time_of_day_label(time_of_day),
 		level_text,
+		_encounter_time_of_day_label(time_of_day),
 	]
+	method_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	method_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	method_label.add_theme_font_size_override("font_size", 12)
-	method_label.add_theme_color_override("font_color", UI_TEXT)
-	encounter_stack.add_child(method_label)
+	method_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	details_row.add_child(method_label)
 
-	var rarity_label := Label.new()
-	rarity_label.text = LocalizationManager.text("ui.pokedex.locations.rarity", {
-		"rarity": _get_pokedex_selected_rarity_label(),
-	})
-	rarity_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	rarity_label.add_theme_font_size_override("font_size", 10)
-	rarity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	encounter_stack.add_child(rarity_label)
+	if not available_days.is_empty():
+		var day_list_label := Label.new()
+		day_list_label.name = "PokedexLocationDays"
+		day_list_label.text = LocalizationManager.text("ui.pokedex.locations.days", {
+			"days": _pokedex_location_days_text(available_days),
+		})
+		day_list_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		day_list_label.add_theme_font_size_override("font_size", 10)
+		day_list_label.add_theme_color_override("font_color", POKEDEX_ACCENT_SOFT)
+		details_row.add_child(day_list_label)
 
-	panel.tooltip_text = "%s\n%s\n%s" % [area_label.text, method_label.text, rarity_label.text]
+	var tooltip_lines := [area_label.text, method_label.text, availability_label.text]
+	if not available_days.is_empty():
+		tooltip_lines.append(LocalizationManager.text("ui.pokedex.locations.days", {
+			"days": _pokedex_location_days_text(available_days, false),
+		}))
+	panel.tooltip_text = "\n".join(tooltip_lines)
 	return panel
+
+func _pokedex_location_display_name(location: Dictionary) -> String:
+	var area_name := str(location.get(
+		"locationName",
+		location.get(
+			"areaName",
+			location.get("areaId", LocalizationManager.text("ui.pokedex.locations.unknown_area"))
+		)
+	)).strip_edges()
+	if area_name == "":
+		return LocalizationManager.text("ui.pokedex.locations.unknown_area")
+	var region_id := _pokedex_location_region_id(location)
+	var region_prefix := _format_identifier_display_name(region_id)
+	if region_prefix != "" and area_name.to_lower().begins_with(region_prefix.to_lower() + " "):
+		area_name = area_name.substr(region_prefix.length()).strip_edges()
+	return _format_identifier_display_name(area_name)
+
+func _pokedex_location_region_id(location: Dictionary) -> String:
+	var explicit_region := str(location.get("regionId", location.get("region", ""))).strip_edges().to_lower()
+	if explicit_region != "":
+		return explicit_region
+	var area_id := str(location.get("areaId", "")).strip_edges().to_lower()
+	var separator_index := area_id.find("_")
+	return area_id.left(separator_index) if separator_index > 0 else ""
+
+func _create_pokedex_location_region_badge(region_id: String) -> Control:
+	var badge := PanelContainer.new()
+	badge.name = "PokedexLocationRegion"
+	badge.add_theme_stylebox_override("panel", _make_panel_style(
+		Color(POKEDEX_ACCENT.r, POKEDEX_ACCENT.g, POKEDEX_ACCENT.b, 0.09),
+		POKEDEX_ACCENT_FAINT,
+		6,
+		1
+	))
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 6)
+	margin.add_theme_constant_override("margin_right", 6)
+	margin.add_theme_constant_override("margin_top", 2)
+	margin.add_theme_constant_override("margin_bottom", 2)
+	badge.add_child(margin)
+	var label := Label.new()
+	label.text = _format_identifier_display_name(region_id).to_upper()
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", POKEDEX_ACCENT_SOFT)
+	margin.add_child(label)
+	return badge
+
+func _pokedex_location_available_days(location: Dictionary) -> Array[String]:
+	var availability_value: Variant = location.get("availability", {})
+	var availability: Dictionary = availability_value if availability_value is Dictionary else {}
+	var days_value: Variant = availability.get("daysOfWeek", location.get("daysOfWeek", []))
+	var normalized_days: Array[String] = []
+	if not days_value is Array:
+		return normalized_days
+	for day_value: Variant in days_value:
+		var day_id := str(day_value).strip_edges().to_lower()
+		if day_id in POKEDEX_WEEKDAY_IDS and day_id not in normalized_days:
+			normalized_days.append(day_id)
+	normalized_days.sort_custom(func(left: String, right: String) -> bool:
+		return POKEDEX_WEEKDAY_IDS.find(left) < POKEDEX_WEEKDAY_IDS.find(right)
+	)
+	return normalized_days
+
+func _pokedex_location_availability_label(available_days: Array[String]) -> String:
+	if available_days.is_empty():
+		return LocalizationManager.text("ui.pokedex.locations.every_day")
+	if _pokedex_location_is_available_today(available_days):
+		return LocalizationManager.text("ui.pokedex.locations.available_today")
+	var next_day := _pokedex_location_next_available_day(available_days)
+	return LocalizationManager.text("ui.pokedex.locations.next_day", {
+		"day": _pokedex_weekday_label(next_day, false),
+	})
+
+func _pokedex_location_is_available_today(available_days: Array[String]) -> bool:
+	return _pokedex_current_weekday_id() in available_days
+
+func _pokedex_location_next_available_day(available_days: Array[String]) -> String:
+	if available_days.is_empty():
+		return ""
+	var current_index := POKEDEX_WEEKDAY_IDS.find(_pokedex_current_weekday_id())
+	for offset: int in range(1, POKEDEX_WEEKDAY_IDS.size() + 1):
+		var candidate: String = POKEDEX_WEEKDAY_IDS[(current_index + offset) % POKEDEX_WEEKDAY_IDS.size()]
+		if candidate in available_days:
+			return candidate
+	return available_days[0]
+
+func _pokedex_current_weekday_id() -> String:
+	var date_time: Dictionary = WorldTimeService.get_utc_datetime()
+	var weekday: int = clampi(int(date_time.get("weekday", 0)), 0, POKEDEX_WEEKDAY_IDS.size() - 1)
+	return POKEDEX_WEEKDAY_IDS[weekday]
+
+func _pokedex_location_days_text(available_days: Array[String], compact := true) -> String:
+	var labels: Array[String] = []
+	for day_id: String in available_days:
+		labels.append(_pokedex_weekday_label(day_id, compact))
+	return " · ".join(labels)
+
+func _pokedex_weekday_label(day_id: String, compact := true) -> String:
+	var suffix := "short" if compact else "long"
+	var key := "ui.weekday.%s.%s" % [day_id, suffix]
+	return LocalizationManager.text(key) if LocalizationManager.has_key(key) else _format_identifier_display_name(day_id)
 
 func _format_pokedex_location_level_range(location: Dictionary) -> String:
 	var min_level: int = max(1, int(location.get("minLevel", location.get("min_level", 1))))
