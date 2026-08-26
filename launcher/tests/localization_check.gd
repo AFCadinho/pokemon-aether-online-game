@@ -220,6 +220,32 @@ func _check_transactional_game_install(launcher: Node) -> void:
 	var invalid_error := int(launcher.call("_commit_staged_download", {"type": "game", "id": "game"}, invalid_staging))
 	_check(invalid_error != OK, "launcher rejects an incomplete staged game")
 	_check(FileAccess.file_exists(target_dir.path_join(executable)), "failed staged install preserves the working game")
+	var staged_failure_message := str(launcher.call(
+		"_sanitize_diagnostic_message",
+		launcher.call(
+			"_format_staged_install_failure",
+			{
+				"type": "game",
+				"id": "game",
+				"version": "0.3.64",
+				"build_id": "desktop-test",
+			},
+			"backup_existing_install",
+			FAILED,
+			ProjectSettings.globalize_path(target_dir),
+			"%s.launcher-backup" % ProjectSettings.globalize_path(target_dir)
+		)
+	))
+	_check(
+		staged_failure_message.contains("STG-001 staged_install_failed")
+		and staged_failure_message.contains("phase=backup_existing_install")
+		and staged_failure_message.contains("error_code=%s" % FAILED)
+		and staged_failure_message.contains("version=0.3.64")
+		and staged_failure_message.contains("source_exists=true")
+		and staged_failure_message.contains("source=<private_path>")
+		and not staged_failure_message.contains(ProjectSettings.globalize_path(install_root)),
+		"launcher staged-install diagnostics identify the failed phase and redact install paths"
+	)
 
 	var backup_dir := "%s.launcher-backup" % ProjectSettings.globalize_path(target_dir)
 	DirAccess.rename_absolute(ProjectSettings.globalize_path(target_dir), backup_dir)
