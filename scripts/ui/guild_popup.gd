@@ -9,6 +9,11 @@ signal trainer_card_requested(player: Dictionary)
 
 const POPUP_SIZE := Vector2(1040, 700)
 const GUILD_ICON: Texture2D = preload("res://assets/ui/guild.svg")
+const GUILD_MEMBER_MANAGE_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_manage.svg")
+const GUILD_MEMBER_MESSAGE_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_message.svg")
+const GUILD_MEMBER_RANK_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_rank.svg")
+const GUILD_MEMBER_BANK_RIGHTS_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_bank_rights.svg")
+const GUILD_MEMBER_REMOVE_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_remove.svg")
 const CREATION_COST := 100000
 const REQUIRED_BADGES := 3
 const GUILD_EMBLEM_SIZE := 32
@@ -4255,7 +4260,7 @@ func _build_guild_member_actions_button(
 	)
 	var actions := MenuButton.new()
 	actions.name = "GuildMemberActionsButton_%d" % user_id
-	actions.custom_minimum_size = Vector2(105, 36)
+	actions.custom_minimum_size = Vector2(132, 38)
 	_set_localized_property(actions, "text", "ui.guild.member.you" if is_self else "ui.guild.member.actions")
 	_set_localized_property(
 		actions,
@@ -4263,26 +4268,35 @@ func _build_guild_member_actions_button(
 		"ui.guild.member.message_self" if is_self else "ui.guild.member.actions_tooltip"
 	)
 	actions.disabled = is_self or (not online and not can_change_rank and not can_edit_bank_rights and not can_kick)
+	if not is_self:
+		actions.icon = GUILD_MEMBER_MANAGE_ICON
+		actions.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		actions.expand_icon = true
+		actions.add_theme_constant_override("icon_max_width", 18)
+		actions.add_theme_constant_override("h_separation", 8)
 	_apply_button_style(actions, "primary" if not is_self else "default")
 	var popup := actions.get_popup()
 	_apply_popup_menu_style(popup)
+	popup.min_size = Vector2i(230, 0)
+	popup.add_theme_constant_override("icon_max_width", 20)
 	if not is_self:
-		popup.add_item(_t("ui.guild.member.message"), GUILD_MEMBER_ACTION_PM)
+		popup.add_separator(_t("ui.guild.member.menu_contact"))
+		popup.add_icon_item(GUILD_MEMBER_MESSAGE_ICON, _t("ui.guild.member.message"), GUILD_MEMBER_ACTION_PM)
 		popup.set_item_disabled(popup.get_item_index(GUILD_MEMBER_ACTION_PM), not online)
 		popup.set_item_tooltip(
 			popup.get_item_index(GUILD_MEMBER_ACTION_PM),
 			_t("ui.guild.member.message_tooltip" if online else "ui.guild.member.message_offline")
 		)
 	if can_change_rank or can_edit_bank_rights or can_kick:
-		popup.add_separator()
+		popup.add_separator(_t("ui.guild.member.menu_management"))
 	if can_change_rank:
-		popup.add_item(_t("ui.guild.member.change_rank"), GUILD_MEMBER_ACTION_CHANGE_RANK)
+		popup.add_icon_item(GUILD_MEMBER_RANK_ICON, _t("ui.guild.member.change_rank"), GUILD_MEMBER_ACTION_CHANGE_RANK)
 	if can_edit_bank_rights:
-		popup.add_item(_t("ui.guild.permissions.action"), GUILD_MEMBER_ACTION_BANK_RIGHTS)
+		popup.add_icon_item(GUILD_MEMBER_BANK_RIGHTS_ICON, _t("ui.guild.member.bank_rights"), GUILD_MEMBER_ACTION_BANK_RIGHTS)
 	if can_kick:
 		if can_change_rank or can_edit_bank_rights:
 			popup.add_separator()
-		popup.add_item(_t("ui.guild.member.kick"), GUILD_MEMBER_ACTION_KICK)
+		popup.add_icon_item(GUILD_MEMBER_REMOVE_ICON, _t("ui.guild.member.kick"), GUILD_MEMBER_ACTION_KICK)
 	popup.id_pressed.connect(_on_guild_member_action_selected.bind(member.duplicate(true)))
 	return actions
 
@@ -7002,17 +7016,26 @@ func _apply_guild_popup_panel_style(popup: PopupPanel) -> void:
 func _apply_popup_menu_style(popup: PopupMenu) -> void:
 	if popup == null:
 		return
-	popup.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 8, 1))
+	var panel := _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 9, 1)
+	panel.content_margin_left = 5
+	panel.content_margin_right = 5
+	panel.content_margin_top = 6
+	panel.content_margin_bottom = 6
+	panel.shadow_color = Color(0, 0, 0, 0.58)
+	panel.shadow_size = 14
+	panel.shadow_offset = Vector2(0, 5)
+	popup.add_theme_stylebox_override("panel", panel)
 	popup.add_theme_stylebox_override("hover", _panel_style(UI_HOVER, Color("#7aa7f4"), 5, 1))
 	popup.add_theme_stylebox_override("separator", _panel_style(UI_BORDER_INNER, UI_BORDER_INNER, 0, 0))
 	popup.add_theme_color_override("font_color", UI_TEXT)
 	popup.add_theme_color_override("font_hover_color", UI_TEXT)
 	popup.add_theme_color_override("font_disabled_color", Color(UI_MUTED.r, UI_MUTED.g, UI_MUTED.b, 0.48))
 	popup.add_theme_color_override("font_separator_color", UI_MUTED)
-	popup.add_theme_font_size_override("font_size", 12)
-	popup.add_theme_constant_override("v_separation", 5)
-	popup.add_theme_constant_override("item_start_padding", 10)
-	popup.add_theme_constant_override("item_end_padding", 10)
+	popup.add_theme_font_size_override("font_size", 13)
+	popup.add_theme_font_size_override("separator_font_size", 9)
+	popup.add_theme_constant_override("v_separation", 7)
+	popup.add_theme_constant_override("item_start_padding", 12)
+	popup.add_theme_constant_override("item_end_padding", 14)
 
 
 func _outer_style() -> StyleBoxFlat:

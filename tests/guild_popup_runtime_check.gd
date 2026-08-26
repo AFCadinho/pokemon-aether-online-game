@@ -807,6 +807,17 @@ func _run() -> void:
 	var self_actions := popup.find_child("GuildMemberActionsButton_1", true, false) as MenuButton
 	_check(
 		managed_actions != null
+		and managed_actions.text.contains("Manage")
+		and managed_actions.icon != null
+		and managed_actions.custom_minimum_size.x >= 132,
+		"managed Guild members expose a clearly labelled management action"
+	)
+	_check(
+		managed_actions != null and managed_actions.get_popup().min_size.x >= 230,
+		"Guild member actions open in a readable-width menu"
+	)
+	_check(
+		managed_actions != null
 		and managed_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_CHANGE_RANK) >= 0,
 		"leaders can change a member's rank from the action menu"
 	)
@@ -817,7 +828,10 @@ func _run() -> void:
 	)
 	_check(
 		managed_actions != null
-		and managed_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_KICK) >= 0,
+		and managed_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_KICK) >= 0
+		and managed_actions.get_popup().get_item_icon(
+			managed_actions.get_popup().get_item_index(GuildPopup.GUILD_MEMBER_ACTION_KICK)
+		) != null,
 		"Guild leaders can remove members from the action menu"
 	)
 	_check(
