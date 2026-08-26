@@ -79,6 +79,11 @@ func _init() -> void:
 	_check_contains(popup_source, "GuildBankItemIcon_", "Guild Bank item rows render icons")
 	_check_contains(popup_source, "GuildBankItemDetail_", "Guild Bank item rows separate availability from the item name")
 	_check_contains(popup_source, "_guild_bank_total_item_quantity", "Guild Item Storage reports total item quantity separately from stack capacity")
+	_check_contains(
+		popup_source,
+		'"ui.guild.bank.resources.count", {\n\t\t\t\t"count": _array_from_value(guild_bank_state.get("resources", [])).size(),\n\t\t\t\t"capacity": int(guild_bank_state.get("itemCapacity", 50))',
+		"Guild Resources show their stack capacity"
+	)
 	_check_contains(popup_source, "GuildBankPokemonIcon_", "Guild Bank Pokémon rows render icons")
 	_check_contains(popup_source, "GuildBankPermissionSummary", "Guild Bank explains the current rank's transaction rights")
 	_check_contains(popup_source, "amount.update_on_text_changed = true", "Guild Bank money uses the amount currently typed")

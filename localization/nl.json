@@ -1674,7 +1674,7 @@
   "ui.guild.bank.funds.balance": "Guildsaldo: ${amount}",
   "ui.guild.bank.pokemon.count": "{count} / {capacity} Pokémon opgeslagen",
   "ui.guild.bank.items.count": "{quantity} items totaal · {stacks} / {capacity} stapelplekken gebruikt",
-  "ui.guild.bank.resources.count": "{count} resourcestapels gedeeld",
+  "ui.guild.bank.resources.count": "{count} / {capacity} resourcestapelplekken gebruikt",
   "ui.guild.bank.back": "Terug",
   "ui.guild.bank.refresh": "Vernieuwen",
   "ui.guild.bank.loading": "Guildbank laden...",

@@ -1685,6 +1685,7 @@ func _guild_bank_card_description(category: String) -> String:
 		"resources":
 			return _t("ui.guild.bank.resources.count", {
 				"count": _array_from_value(guild_bank_state.get("resources", [])).size(),
+				"capacity": int(guild_bank_state.get("itemCapacity", 50)),
 			}) if not guild_bank_state.is_empty() else _t("ui.guild.bank.resources.description")
 	return ""
 

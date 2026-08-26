@@ -1674,7 +1674,7 @@
   "ui.guild.bank.funds.balance": "Saldo da Guilda: ${amount}",
   "ui.guild.bank.pokemon.count": "{count} / {capacity} Pokémon armazenados",
   "ui.guild.bank.items.count": "{quantity} itens no total · {stacks} / {capacity} espaços de pilha usados",
-  "ui.guild.bank.resources.count": "{count} pilhas de recursos compartilhadas",
+  "ui.guild.bank.resources.count": "{count} / {capacity} espaços de pilhas de recursos usados",
   "ui.guild.bank.back": "Voltar",
   "ui.guild.bank.refresh": "Atualizar",
   "ui.guild.bank.loading": "Carregando o Banco da Guilda...",
