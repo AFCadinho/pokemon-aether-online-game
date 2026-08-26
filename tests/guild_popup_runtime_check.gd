@@ -286,7 +286,17 @@ func _run() -> void:
 		pokemon_action.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildBankWorkspace", true, false) != null, "a bank category opens a dedicated workspace")
+	_check(popup.find_child("GuildBankPokemonPreview", true, false) != null, "Pokémon Vault opens with a read-only overview")
+	_check(popup.find_child("GuildBankPokemonListScroll", true, false) != null, "Pokémon Vault overview remains scrollable at scale")
+	_check(popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) == null, "Pokémon Vault overview keeps transactions out of the preview")
+	var pokemon_full_action := popup.find_child("GuildBankPokemonOpenFullButton", true, false) as Button
+	_check(pokemon_full_action != null, "Pokémon Vault overview exposes its full management view")
+	if pokemon_full_action != null:
+		pokemon_full_action.pressed.emit()
+		await process_frame
 	_check(popup.find_child("GuildBankPokemonWorkspace", true, false) != null, "Pokémon storage renders its live workspace")
+	_check(popup.find_child("GuildBankAssetSearchInput", true, false) != null, "full Pokémon Vault provides search")
+	_check(popup.find_child("GuildBankAssetFilterSelect", true, false) != null, "full Pokémon Vault provides filters")
 	_check(popup.find_child("GuildBankPokemonLogButton", true, false) != null, "Pokémon Vault has a dedicated log action")
 	_check(popup.find_child("GuildBankPokemonDepositButton_22", true, false) != null, "owned Pokémon can be deposited")
 	var pokemon_withdraw := popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) as Button
@@ -349,9 +359,43 @@ func _run() -> void:
 	if bank_back != null:
 		bank_back.pressed.emit()
 		await process_frame
+	_check(popup.find_child("GuildBankPokemonPreview", true, false) != null, "back from full Pokémon Vault returns to its overview")
+	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
+	if bank_back != null:
+		bank_back.pressed.emit()
+		await process_frame
 	items_action = popup.find_child("GuildBankItemsAction", true, false) as Button
+	var original_bank_items: Array = popup.guild_bank_state["items"].duplicate(true)
+	var scale_bank_items: Array[Dictionary] = []
+	for scale_index: int in range(120):
+		scale_bank_items.append({
+			"itemId": "scale-item-%d" % scale_index,
+			"name": "Scale Item %d" % scale_index,
+			"category": "Held Items",
+			"quantity": scale_index + 1,
+			"availableQuantity": scale_index + 1,
+			"borrowedQuantity": 0,
+			"lendable": true,
+		})
+	popup.guild_bank_state["items"] = scale_bank_items
 	if items_action != null:
 		items_action.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildBankItemsPreview", true, false) != null, "Item Storage opens with a read-only overview")
+	_check(popup.find_child("GuildBankItemWithdrawButton_leftovers", true, false) == null, "Item Storage overview hides transaction controls")
+	var scale_item_scroll := popup.find_child("GuildBankItemListScroll", true, false) as ScrollContainer
+	_check(
+		scale_item_scroll != null
+		and scale_item_scroll.get_v_scroll_bar().max_value > scale_item_scroll.get_v_scroll_bar().page
+		and popup.get_combined_minimum_size().y <= GuildPopup.POPUP_SIZE.y,
+		"Item Storage remains scrollable and contained with 120 stored stacks"
+	)
+	popup.guild_bank_state["items"] = original_bank_items
+	popup._render_guild_home()
+	await process_frame
+	var items_full_action := popup.find_child("GuildBankItemsOpenFullButton", true, false) as Button
+	if items_full_action != null:
+		items_full_action.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildBankItemsWorkspace", true, false) != null, "item storage renders Guild and personal inventories")
 	_check(popup.find_child("GuildBankItemsLogButton", true, false) != null, "Item Storage has a dedicated log action")
@@ -363,6 +407,35 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankItemRow_leftovers", true, false) is PanelContainer, "stored item information and actions use a distinct card")
 	_check(stored_item_name != null and stored_item_name.text == "Leftovers", "stored item names remain readable without quantity metadata")
 	_check(stored_item_detail != null and stored_item_detail.text.contains("18 stored") and stored_item_detail.text.contains("17 available") and stored_item_detail.text.contains("1 borrowed"), "stored item quantities and loan availability use a dedicated detail line")
+	var asset_search := popup.find_child("GuildBankAssetSearchInput", true, false) as LineEdit
+	if asset_search != null:
+		asset_search.text = "exp"
+		asset_search.text_changed.emit(asset_search.text)
+		await process_frame
+	_check(
+		popup.find_child("GuildBankItemRow_leftovers", true, false) != null
+		and not popup.find_child("GuildBankItemRow_leftovers", true, false).visible
+		and popup.find_child("GuildBankItemRow_exp-share", true, false).visible,
+		"full Item Storage filters both Guild storage and the player's Bag live"
+	)
+	if asset_search != null:
+		asset_search.text = ""
+		asset_search.text_changed.emit(asset_search.text)
+	var asset_filter := popup.find_child("GuildBankAssetFilterSelect", true, false) as OptionButton
+	if asset_filter != null:
+		asset_filter.select(2)
+		asset_filter.item_selected.emit(2)
+		await process_frame
+	_check(
+		popup.find_child("GuildBankItemRow_leftovers", true, false).visible
+		and not popup.find_child("GuildBankItemRow_exp-share", true, false).visible,
+		"Item Storage lendable filter focuses on borrowable Guild assets"
+	)
+	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
+	if bank_back != null:
+		bank_back.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildBankItemsPreview", true, false) != null, "back from full Item Storage returns to its overview")
 	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
 	if bank_back != null:
 		bank_back.pressed.emit()
@@ -371,12 +444,23 @@ func _run() -> void:
 	if resources_action != null:
 		resources_action.pressed.emit()
 		await process_frame
+	_check(popup.find_child("GuildBankResourcesPreview", true, false) != null, "Resources opens with a read-only overview")
+	_check(popup.find_child("GuildBankResourceWithdrawButton_potion", true, false) == null, "Resources overview hides transaction controls")
+	var resources_full_action := popup.find_child("GuildBankResourcesOpenFullButton", true, false) as Button
+	if resources_full_action != null:
+		resources_full_action.pressed.emit()
+		await process_frame
 	_check(popup.find_child("GuildBankResourcesWorkspace", true, false) != null, "Resources opens a dedicated consumable workspace")
 	_check(popup.find_child("GuildBankResourcesLogButton", true, false) != null, "Resources has a dedicated transaction log")
 	_check(popup.find_child("GuildBankResourceWithdrawButton_potion", true, false) != null, "Guild consumables can be taken")
 	_check(popup.find_child("GuildBankResourceDepositButton_poke-ball", true, false) != null, "personal consumables can be donated")
 	_check(popup.find_child("GuildBankItemBorrowButton_potion", true, false) == null, "Resources never expose borrowing")
 	_check(popup.find_child("GuildBankResourceWithdrawButton_potion", true, false).tooltip_text == "", "authorized Resources withdrawal is immediately available")
+	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
+	if bank_back != null:
+		bank_back.pressed.emit()
+		await process_frame
+	_check(popup.find_child("GuildBankResourcesPreview", true, false) != null, "back from full Resources returns to its overview")
 	bank_back = popup.find_child("GuildBankBackButton", true, false) as Button
 	if bank_back != null:
 		bank_back.pressed.emit()
@@ -784,6 +868,10 @@ func _run() -> void:
 	var blocked_resources_action := popup.find_child("GuildBankResourcesAction", true, false) as Button
 	if blocked_resources_action != null:
 		blocked_resources_action.pressed.emit()
+		await process_frame
+	var blocked_resources_full := popup.find_child("GuildBankResourcesOpenFullButton", true, false) as Button
+	if blocked_resources_full != null:
+		blocked_resources_full.pressed.emit()
 		await process_frame
 	var blocked_resource_withdraw := popup.find_child("GuildBankResourceWithdrawButton_potion", true, false) as Button
 	_check(

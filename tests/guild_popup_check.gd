@@ -85,6 +85,11 @@ func _init() -> void:
 		"Guild Resources show their stack capacity"
 	)
 	_check_contains(popup_source, "GuildBankPokemonIcon_", "Guild Bank Pokémon rows render icons")
+	_check_contains(popup_source, "active_guild_bank_full_view", "large Guild asset stores separate previews from management")
+	_check_contains(popup_source, "GuildBankAssetSearchInput", "full Guild asset stores provide search")
+	_check_contains(popup_source, "GuildBankAssetFilterSelect", "full Guild asset stores provide filters")
+	_check_contains(popup_source, "GuildBankPokemonListScroll", "Guild Pokémon previews remain scrollable")
+	_check_contains(popup_source, "GuildBankItemListScroll", "Guild item and Resource previews remain scrollable")
 	_check_contains(popup_source, "GuildBankPermissionSummary", "Guild Bank explains the current rank's transaction rights")
 	_check_contains(popup_source, "GuildBankRankRightsWorkspace", "Guild Bank exposes a complete rank-rights page")
 	_check_contains(popup_source, 'guild_home.get("rankPermissions", {})', "Guild rank rights use the authoritative server matrix")
