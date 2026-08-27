@@ -280,6 +280,8 @@ world_access_group_label = "Cerulean City"
 location_id = "kanto.cerulean_city"
 location_name = "Cerulean City"
 region_id = "kanto"
+encounter_area_id = "kanto_cerulean_city"
+grass_encounter_chance = 0.21
 music_track_id = "overworld.kanto.cerulean_city"
 
 [node name="CeruleanCityVisual" parent="." unique_id=1421275817 instance=ExtResource("1_visual")]

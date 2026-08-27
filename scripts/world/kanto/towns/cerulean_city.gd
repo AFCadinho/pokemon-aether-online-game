@@ -60,6 +60,7 @@ const EXIT_OPENINGS := {
 
 const WATER_CONNECTION_DEPTH := 15
 const NORTH_WATER_CLEAR_DEPTH := 21
+@export_range(0.0, 1.0, 0.01) var surf_encounter_chance := 0.1
 const WATER_CONNECTIONS := [
 	{
 		"axis": "top",
@@ -85,6 +86,25 @@ func _ready() -> void:
 	_open_exterior_connections()
 	_build_water_connections()
 	super._ready()
+
+
+func get_wild_encounter_chance(encounter_type: String = "grass") -> float:
+	match encounter_type.strip_edges().to_lower():
+		"grass":
+			return grass_encounter_chance
+		"cave":
+			return cave_encounter_chance
+		"surf":
+			return surf_encounter_chance
+		_:
+			return 0.0
+
+
+func should_trigger_wild_encounter(encounter_type: String = "grass") -> bool:
+	var encounter_chance := get_wild_encounter_chance(encounter_type)
+	if encounter_chance <= 0.0:
+		return false
+	return randf() <= encounter_chance
 
 
 func _open_exterior_connections() -> void:
