@@ -28,6 +28,22 @@ func _check_catalog_and_frames() -> void:
 		texture != null and Vector2i(texture.get_size()) == Vector2i(256, 256),
 		"Cyclizar uses the standard 4x4 grid of 64px mount frames"
 	)
+	var rider_mask := load("res://assets/mounts/cyclizar/rider_mask.png") as Texture2D
+	_check(
+		str(definition.get("riderMaskSheet", ""))
+		== "res://assets/mounts/cyclizar/rider_mask.png"
+		and rider_mask != null
+		and Vector2i(rider_mask.get_size()) == Vector2i(256, 256),
+		"Cyclizar uses its 4x4 rider occlusion mask at the standard mount scale"
+	)
+	_check(
+		MountServiceScript.get_rider_frame_offset("cyclizar", "left", 0) == Vector2i(10, -10)
+		and MountServiceScript.get_rider_frame_offset("cyclizar", "left", 2) == Vector2i(10, -8)
+		and MountServiceScript.get_rider_frame_offset("cyclizar", "right", 0) == Vector2i(-10, -10)
+		and MountServiceScript.get_rider_frame_offset("cyclizar", "right", 2) == Vector2i(-10, -8)
+		and MountServiceScript.get_rider_frame_offset("cyclizar", "up", 3) == Vector2i(2, -4),
+		"Cyclizar rider offsets follow the supplied mounted reference in every animation frame"
+	)
 	var frames := MountServiceScript.get_mount_frames("cyclizar")
 	_check(frames != null, "Cyclizar mount frames load")
 	if frames != null:

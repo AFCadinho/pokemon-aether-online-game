@@ -58,6 +58,7 @@
 
 **Fixed**
 
+- Cyclizar riders now sit in the intended position, with their legs correctly hidden behind the mount in side view.
 - Cerulean City's ambient Rock-type Pokemon now render visibly above the mountain foreground.
 - Cerulean City no longer ends Surf beside the Route 24 bridge by erasing the hand-painted Water mask during map setup.
 - Guild Item Storage now shows the total number of stored items separately from its stack capacity.
