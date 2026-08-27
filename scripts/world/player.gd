@@ -5,6 +5,7 @@ signal overworld_steps_completed(step_count: int)
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
 const RUN_TILE_MOVE_DURATION := 0.14
+const LAND_MOUNT_TILE_MOVE_DURATION := 0.10
 const MOVE_EASE_AMOUNT := 0.0
 const INPUT_BUFFER_DURATION := 0.14
 const CONTINUOUS_MOVE_HOLD_DELAY := 0.0
@@ -15,6 +16,7 @@ const SORT_Z_MAX := 4096
 const IDLE_ANIMATION_SPEED := 5.0
 const WALK_ANIMATION_SPEED := 7.5
 const RUN_WALK_ANIMATION_SPEED := 11.5
+const LAND_MOUNT_WALK_ANIMATION_SPEED := 14.0
 const PLAYER_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_NEAREST
 const MOVE_ACTIONS := ["move_right", "move_left", "move_down", "move_up"]
 const TEXT_INPUT_WINDOW_GROUP := "text_input_windows"
@@ -267,6 +269,7 @@ var fishing_activity_time_left := 0.0
 var fishing_activity_tier := 0
 var fishing_activity_state := FISHING_STATE_NONE
 var surf_activity_active := false
+var land_mount_activity_active := false
 var active_mount_id := ""
 var base_look_position := Vector2.ZERO
 var base_rider_position := Vector2.ZERO
@@ -397,6 +400,9 @@ func is_fishing_activity_active() -> bool:
 func is_surfing_activity_active() -> bool:
 	return surf_activity_active
 
+func is_land_mount_activity_active() -> bool:
+	return land_mount_activity_active
+
 func sync_activity_state_for_current_tile() -> void:
 	refresh_map_layers()
 
@@ -418,7 +424,7 @@ func can_fish_here() -> bool:
 		return false
 	if int(GameState.fishing_tier) <= 0:
 		return false
-	if fishing_activity_active or is_moving:
+	if fishing_activity_active or land_mount_activity_active or is_moving:
 		return false
 	if GameState.is_overworld_input_locked() or _is_ui_typing():
 		return false
@@ -435,6 +441,12 @@ func start_fishing(fishing_tier: int = -1) -> bool:
 	_start_fishing_activity(resolved_tier)
 	return true
 
+func toggle_land_mount() -> bool:
+	if land_mount_activity_active:
+		_finish_land_mount_activity()
+		return true
+	return _start_land_mount_activity()
+
 func can_surf_here() -> bool:
 	return bool(get_surf_check_result().get("allowed", false))
 
@@ -445,6 +457,7 @@ func start_surf() -> bool:
 		return false
 
 	var surf_direction := last_direction
+	_finish_land_mount_activity()
 	_start_surf_activity()
 	var did_start_move := _try_start_move(surf_direction)
 	if not did_start_move:
@@ -637,6 +650,7 @@ func reset_movement_state() -> void:
 	var persistent_position := get_persistent_world_position()
 	_finish_fishing_activity()
 	_finish_surf_activity()
+	_finish_land_mount_activity()
 	is_moving = false
 	story_path_movement_active = false
 	global_position = persistent_position
@@ -655,6 +669,7 @@ func reset_movement_state() -> void:
 func teleport_within_current_map(world_position: Vector2, facing_direction := Vector2.ZERO) -> void:
 	_finish_fishing_activity()
 	_finish_surf_activity()
+	_finish_land_mount_activity()
 	is_moving = false
 	story_path_movement_active = false
 	global_position = _snap_world_position(world_position)
@@ -859,6 +874,17 @@ func _on_world_pixel_scale_changed(_scale: float) -> void:
 
 
 func _on_mount_loadout_changed(movement_mode: String, mount_id: String) -> void:
+	if movement_mode == SettingsManager.MOUNT_MODE_LAND and land_mount_activity_active:
+		active_mount_id = MountService.resolve_mount_id_for_mode(
+			mount_id,
+			SettingsManager.MOUNT_MODE_LAND
+		)
+		if active_mount_id.is_empty() or not _is_mount_owned(active_mount_id):
+			_finish_land_mount_activity()
+			return
+		_sync_mount_visual()
+		_sync_body_sprite_frames_for_movement()
+		return
 	if movement_mode != SettingsManager.MOUNT_MODE_SURF or not surf_activity_active:
 		return
 	active_mount_id = MountService.resolve_mount_id_for_mode(
@@ -911,7 +937,7 @@ func _get_current_map_world_access_area_type() -> String:
 	return ""
 
 func _exit_tree() -> void:
-	var had_activity := fishing_activity_active or surf_activity_active
+	var had_activity := fishing_activity_active or surf_activity_active or land_mount_activity_active
 	var should_unlock_overworld := fishing_activity_active
 
 	fishing_activity_active = false
@@ -920,6 +946,7 @@ func _exit_tree() -> void:
 	fishing_activity_state = FISHING_STATE_NONE
 	_sync_fishing_bite_prompt_visibility()
 	surf_activity_active = false
+	land_mount_activity_active = false
 	active_mount_id = ""
 	_sync_mount_visual()
 	if had_activity:
@@ -1405,6 +1432,9 @@ func _process(delta: float) -> void:
 		_sync_surf_prompt_visibility()
 		return
 
+	if _try_toggle_land_mount_input():
+		return
+
 	if _try_check_surf_interaction_input():
 		return
 
@@ -1584,6 +1614,26 @@ func _try_check_surf_interaction_input() -> bool:
 	return true
 
 
+func _try_toggle_land_mount_input() -> bool:
+	if not Input.is_action_just_pressed("mount"):
+		return false
+	if _is_ui_typing():
+		return false
+	if is_moving or fishing_activity_active or surf_activity_active \
+		or GameState.is_overworld_input_locked():
+		return true
+	if not toggle_land_mount():
+		var message_key := "ui.mounts.interior_blocked" \
+			if _get_current_map_world_access_area_type() == "interior" \
+			else "ui.mounts.unavailable"
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text(message_key)
+		)
+	return true
+
+
 func _has_party_field_move(move_id: String) -> bool:
 	return bool(FieldMoveService.can_use_field_move(move_id).get("success", false))
 
@@ -1660,6 +1710,42 @@ func _start_surf_activity(clear_input := true) -> void:
 	_sync_surf_prompt_visibility()
 	_debug_activity_layer_offsets("surf-start" if clear_input else "surf-resume")
 	_spawn_water_ripple_effect(global_position, "surf_start")
+
+func _start_land_mount_activity() -> bool:
+	if _get_current_map_world_access_area_type() == "interior":
+		return false
+	var mount_id := MountService.resolve_mount_id_for_mode(
+		SettingsManager.get_selected_mount_id(SettingsManager.MOUNT_MODE_LAND),
+		SettingsManager.MOUNT_MODE_LAND
+	)
+	if mount_id.is_empty() or not _is_mount_owned(mount_id):
+		return false
+	land_mount_activity_active = true
+	active_mount_id = mount_id
+	set_activity_style(CharacterAppearanceService.BODY_MOVEMENT_RIDE)
+	_sync_mount_visual()
+	_clear_input_buffer()
+	_clear_held_direction()
+	return true
+
+func _finish_land_mount_activity() -> void:
+	if not land_mount_activity_active:
+		return
+	land_mount_activity_active = false
+	active_mount_id = ""
+	_sync_mount_visual()
+	clear_activity_style()
+
+func _is_mount_owned(mount_id: String) -> bool:
+	var unlock_item_id := MountService.get_mount_unlock_item_id(mount_id)
+	if unlock_item_id.is_empty():
+		return true
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	return (
+		inventory_service != null
+		and inventory_service.has_method("has_item")
+		and bool(inventory_service.call("has_item", unlock_item_id))
+	)
 
 func _finish_surf_activity(reason := "left_water") -> void:
 	if not surf_activity_active:
@@ -1870,6 +1956,8 @@ func _has_reached_target() -> bool:
 	return move_elapsed >= move_duration
 
 func _get_current_tile_move_duration() -> float:
+	if land_mount_activity_active:
+		return LAND_MOUNT_TILE_MOVE_DURATION
 	if surf_activity_active:
 		return RUN_TILE_MOVE_DURATION if GameState.running_shoes_enabled else TILE_MOVE_DURATION
 	if _is_activity_pose_active():
@@ -1877,6 +1965,8 @@ func _get_current_tile_move_duration() -> float:
 	return RUN_TILE_MOVE_DURATION if GameState.running_shoes_enabled else TILE_MOVE_DURATION
 
 func _get_current_walk_animation_speed() -> float:
+	if land_mount_activity_active:
+		return LAND_MOUNT_WALK_ANIMATION_SPEED
 	if surf_activity_active:
 		return RUN_WALK_ANIMATION_SPEED if GameState.running_shoes_enabled else WALK_ANIMATION_SPEED
 	if _is_activity_pose_active():
@@ -2417,11 +2507,7 @@ func _is_inside_exit_area(exit_area: Area2D) -> bool:
 func _resolve_current_map() -> Node:
 	var parent_node := get_parent()
 	while parent_node != null:
-		if (
-			parent_node.get_node_or_null("Collision") != null
-			or parent_node.get_node_or_null("Tiles/TallGrass") != null
-			or parent_node.get_node_or_null("TallGrass") != null
-		):
+		if _find_tilemap_layer(parent_node, ["Collision", "TallGrass"]) != null:
 			return parent_node
 
 		parent_node = parent_node.get_parent()
@@ -2432,7 +2518,11 @@ func _resolve_current_map() -> Node:
 	return null
 
 func _update_sort_z() -> void:
-	z_index = clampi(floori(get_feet_position().y), SORT_Z_MIN, SORT_Z_MAX)
+	var sort_z := floori(get_feet_position().y)
+	var current_map := _resolve_current_map()
+	if current_map != null and current_map.has_method("get_actor_sort_z_floor"):
+		sort_z = maxi(sort_z, int(current_map.call("get_actor_sort_z_floor", global_position)))
+	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
 
 func _cache_appearance_sprites() -> void:
 	appearance_sprites.clear()

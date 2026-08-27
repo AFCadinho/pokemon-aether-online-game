@@ -381,7 +381,7 @@
   },
   "bike-voucher": {
     "name": "Voucher de bicicleta",
-    "shortDesc": "Troque uma bicicleta na loja de bicicletas Cerulean."
+    "shortDesc": "Um voucher vitalício assinado pelo dono da Loja de Bicicletas de Cerulean."
   },
   "binding-band": {
     "name": "Faixa de ligação",
@@ -814,6 +814,10 @@
   "cut-charm": {
     "name": "Amuleto de Cut",
     "shortDesc": "Permite usar Cut sem que um Pokémon conheça o movimento."
+  },
+  "cyclizar-mount": {
+    "name": "Montaria Cyclizar",
+    "shortDesc": "Desbloqueia Cyclizar como montaria terrestre."
   },
   "damp-mulch": {
     "name": "Palha úmida",

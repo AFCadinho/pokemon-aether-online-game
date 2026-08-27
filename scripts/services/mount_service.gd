@@ -55,6 +55,15 @@ static func get_mount_display_name(mount_id: String) -> String:
 	return str(definition.get("displayName", fallback)).strip_edges()
 
 
+static func get_mount_unlock_item_id(mount_id: String) -> String:
+	return str(get_mount_definition(mount_id).get("unlockItemId", "")).strip_edges().to_lower()
+
+
+static func is_mount_unlocked(mount_id: String, owned_item_ids: Array) -> bool:
+	var unlock_item_id := get_mount_unlock_item_id(mount_id)
+	return unlock_item_id.is_empty() or unlock_item_id in owned_item_ids
+
+
 static func get_mount_ids_for_mode(movement_mode: String) -> Array[String]:
 	var normalized_mode := movement_mode.strip_edges().to_lower()
 	if normalized_mode not in AVAILABLE_MOVEMENT_MODES:
@@ -65,6 +74,17 @@ static func get_mount_ids_for_mode(movement_mode: String) -> Array[String]:
 		if mount_id != "" and get_mount_movement_mode(mount_id) == normalized_mode:
 			mount_ids.append(mount_id)
 	mount_ids.sort()
+	return mount_ids
+
+
+static func get_unlocked_mount_ids_for_mode(
+	movement_mode: String,
+	owned_item_ids: Array
+) -> Array[String]:
+	var mount_ids: Array[String] = []
+	for mount_id: String in get_mount_ids_for_mode(movement_mode):
+		if is_mount_unlocked(mount_id, owned_item_ids):
+			mount_ids.append(mount_id)
 	return mount_ids
 
 
@@ -114,10 +134,11 @@ static func get_mount_frames(mount_id: String) -> SpriteFrames:
 	if texture_path == "" or not ResourceLoader.exists(texture_path):
 		return null
 	var texture := ResourceLoader.load(texture_path) as Texture2D
-	if texture == null or Vector2i(texture.get_size()) != DEFAULT_FRAME_SIZE * Vector2i(FRAME_COLUMNS, FRAME_ROWS):
+	var frame_size := _get_mount_frame_size(definition)
+	if texture == null or Vector2i(texture.get_size()) != frame_size * Vector2i(FRAME_COLUMNS, FRAME_ROWS):
 		return null
 
-	var frames := _build_sprite_frames(texture)
+	var frames := _build_sprite_frames(texture, frame_size)
 	_mount_frames_cache[normalized_id] = frames
 	return frames
 
@@ -240,6 +261,16 @@ static func _get_mount_definitions() -> Dictionary:
 	return definitions_value as Dictionary if definitions_value is Dictionary else {}
 
 
+static func _get_mount_frame_size(definition: Dictionary) -> Vector2i:
+	var frame_size_value: Variant = definition.get("frameSize", [])
+	if frame_size_value is Array and (frame_size_value as Array).size() >= 2:
+		var values := frame_size_value as Array
+		var frame_size := Vector2i(int(values[0]), int(values[1]))
+		if frame_size.x > 0 and frame_size.y > 0:
+			return frame_size
+	return DEFAULT_FRAME_SIZE
+
+
 static func _get_mask_image(mount_id: String) -> Image:
 	if _mask_image_cache.has(mount_id):
 		return _mask_image_cache[mount_id] as Image
@@ -305,9 +336,12 @@ static func _foreground_region(regions: Dictionary, direction: String) -> Rect2i
 
 
 static func _extract_foreground(source_image: Image, region: Rect2i) -> Image:
+	var output_size := DEFAULT_FRAME_SIZE
+	if source_image != null:
+		output_size = source_image.get_size()
 	var output := Image.create(
-		DEFAULT_FRAME_SIZE.x,
-		DEFAULT_FRAME_SIZE.y,
+		output_size.x,
+		output_size.y,
 		false,
 		Image.FORMAT_RGBA8
 	)
@@ -318,7 +352,7 @@ static func _extract_foreground(source_image: Image, region: Rect2i) -> Image:
 	if source.get_format() != Image.FORMAT_RGBA8:
 		source = source_image.duplicate()
 		source.convert(Image.FORMAT_RGBA8)
-	var clipped_region := region.intersection(Rect2i(Vector2i.ZERO, DEFAULT_FRAME_SIZE))
+	var clipped_region := region.intersection(Rect2i(Vector2i.ZERO, output_size))
 	if clipped_region.size.x > 0 and clipped_region.size.y > 0:
 		output.blit_rect(source, clipped_region, clipped_region.position)
 	return output
@@ -358,7 +392,7 @@ static func _direction_row(direction: String) -> int:
 			return 0
 
 
-static func _build_sprite_frames(texture: Texture2D) -> SpriteFrames:
+static func _build_sprite_frames(texture: Texture2D, frame_size: Vector2i) -> SpriteFrames:
 	var frames := SpriteFrames.new()
 	if frames.has_animation(&"default"):
 		frames.remove_animation(&"default")
@@ -368,23 +402,28 @@ static func _build_sprite_frames(texture: Texture2D) -> SpriteFrames:
 		frames.add_animation(idle_name)
 		frames.set_animation_speed(idle_name, IDLE_ANIMATION_SPEED)
 		frames.set_animation_loop(idle_name, true)
-		frames.add_frame(idle_name, _make_frame_texture(texture, 0, row))
+		frames.add_frame(idle_name, _make_frame_texture(texture, 0, row, frame_size))
 
 		var walk_name := StringName("walk_%s" % direction)
 		frames.add_animation(walk_name)
 		frames.set_animation_speed(walk_name, WALK_ANIMATION_SPEED)
 		frames.set_animation_loop(walk_name, true)
 		for column: int in range(FRAME_COLUMNS):
-			frames.add_frame(walk_name, _make_frame_texture(texture, column, row))
+			frames.add_frame(walk_name, _make_frame_texture(texture, column, row, frame_size))
 	return frames
 
 
-static func _make_frame_texture(texture: Texture2D, column: int, row: int) -> AtlasTexture:
+static func _make_frame_texture(
+	texture: Texture2D,
+	column: int,
+	row: int,
+	frame_size: Vector2i
+) -> AtlasTexture:
 	var frame := AtlasTexture.new()
 	frame.atlas = texture
 	frame.region = Rect2(
-		Vector2(column * DEFAULT_FRAME_SIZE.x, row * DEFAULT_FRAME_SIZE.y),
-		Vector2(DEFAULT_FRAME_SIZE)
+		Vector2(column * frame_size.x, row * frame_size.y),
+		Vector2(frame_size)
 	)
 	return frame
 

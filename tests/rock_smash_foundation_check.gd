@@ -25,6 +25,14 @@ func _run() -> void:
 		FileAccess.get_file_as_string("res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"),
 		FileAccess.get_file_as_string("res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn"),
 	]
+	var route_scenes := {
+		"kanto_route_3": FileAccess.get_file_as_string(
+			"res://scenes/overworld/kanto/routes/kanto_route_3.tscn"
+		),
+		"kanto_route_4": FileAccess.get_file_as_string(
+			"res://scenes/overworld/kanto/routes/kanto_route_4.tscn"
+		),
+	}
 
 	_check("RockSmashService=" in project, "Rock Smash state is registered as an autoload")
 	_check(
@@ -47,8 +55,8 @@ func _run() -> void:
 		"Cleared rocks defer deletion until the interaction unlocks overworld movement"
 	)
 	_check(
-		"badge" not in field_moves.to_lower(),
-		"Generic field-move use does not require a Gym Badge"
+		'"rock-smash":' not in field_moves,
+		"Rock Smash remains outside the Gen I Kanto Gym Badge gates"
 	)
 	_check(
 		'const QUEST_ID := "learn_rock_smash"' in mentor
@@ -106,6 +114,38 @@ func _run() -> void:
 		and "smashable_rock.tscn" not in combined_mt_moon.replace("daily_smashable_rock.tscn", ""),
 		"Mt. Moon uses nine daily cave rocks with a distinct master rock variant"
 	)
+	var expected_route_rocks := {
+		"kanto_route_3": {
+			"kanto_route_3_rock_west": "position = Vector2(400, 1008)",
+			"kanto_route_3_rock_central_west": "position = Vector2(720, 1040)",
+			"kanto_route_3_rock_central_east": "position = Vector2(464, 1168)",
+			"kanto_route_3_rock_east": "position = Vector2(2704, 752)",
+		},
+		"kanto_route_4": {
+			"kanto_route_4_rock_west": "position = Vector2(176, 1040)",
+			"kanto_route_4_rock_central_west": "position = Vector2(944, 592)",
+			"kanto_route_4_rock_central_east": "position = Vector2(2256, 560)",
+			"kanto_route_4_rock_east": "position = Vector2(2608, 784)",
+		},
+	}
+	for map_id: String in expected_route_rocks:
+		var route_source: String = route_scenes[map_id]
+		var route_rocks: Dictionary = expected_route_rocks[map_id]
+		_check(
+			route_source.count("daily_smashable_rock.tscn") == 1
+			and route_source.count("rock_visual_style = 2") == 4,
+			"%s uses four daily route rocks" % map_id
+		)
+		for rock_id: String in route_rocks:
+			var position_text: String = route_rocks[rock_id]
+			_check(
+				route_source.count(rock_id) == 1 and position_text in route_source,
+				"%s places %s on its reviewed walkable cell" % [map_id, rock_id]
+			)
+	_check(
+		"ROUTE," in obstacle and 'display_name = "Route Rock"' in obstacle,
+		"Outdoor rocks use the natural rock sheet with route-specific interaction text"
+	)
 
 	var rock_scene := load("res://scenes/world/interactables/daily_smashable_rock.tscn") as PackedScene
 	_check(rock_scene != null, "Daily smashable rock scene loads")
@@ -119,6 +159,11 @@ func _run() -> void:
 		"res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
 	]:
 		_check(load(floor_path) is PackedScene, "%s loads with daily cave rocks" % floor_path)
+	for route_path: String in [
+		"res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
+		"res://scenes/overworld/kanto/routes/kanto_route_4.tscn",
+	]:
+		_check(load(route_path) is PackedScene, "%s loads with four daily route rocks" % route_path)
 	var sheet := load(
 		"res://assets/world/field_move_obstacles/object_rock_training_pewter.png"
 	) as Texture2D
@@ -144,8 +189,11 @@ func _run() -> void:
 				(parsed as Dictionary).has("story.kanto.learn_rock_smash.title")
 				and (parsed as Dictionary).has("ui.skills.rock_smash.rocks.reset")
 				and (parsed as Dictionary).has("ui.skills.rock_smash.location.mt_moon_b2f")
+				and (parsed as Dictionary).has("ui.skills.rock_smash.location.route_3")
+				and (parsed as Dictionary).has("ui.skills.rock_smash.location.route_4")
+				and (parsed as Dictionary).has("ui.skills.rock_smash.rock.route_central_east")
 				and (parsed as Dictionary).has("backend.error.rock_smash_too_far"),
-				"Rock Smash quest, Mt. Moon rocks, daily reset, and errors are translated for %s" % locale
+				"Rock Smash quest, cave and route rocks, daily reset, and errors are translated for %s" % locale
 			)
 
 	quit(1 if failed else 0)
