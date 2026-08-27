@@ -34,7 +34,7 @@ size = Vector2(32, 128)
 size = Vector2(32, 224)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route25_south"]
-size = Vector2(32, 192)
+size = Vector2(32, 128)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m4smc"]
 texture = ExtResource("5_3dqwu")
@@ -194,7 +194,7 @@ position = Vector2(1392, 144)
 position = Vector2(1392, 336)
 
 [node name="FromRoute25South" type="Marker2D" parent="Spawns" unique_id=2014612101]
-position = Vector2(1392, 592)
+position = Vector2(1392, 560)
 
 [node name="Exits" type="Node2D" parent="." unique_id=360871628]
 
@@ -312,11 +312,13 @@ transition_id = "kanto_route_24__to_route_25_south"
 transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute25South" unique_id=540038075]
+position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_route25_south")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute25South" unique_id=2128480317 instance=ExtResource("4_hint")]
 z_as_relative = false
-tile_footprint = Vector2i(1, 6)
+position = Vector2(0, -16)
+tile_footprint = Vector2i(1, 4)
 flow_direction = "right"
 
 [node name="Entities" type="Node2D" parent="." unique_id=907207288]
