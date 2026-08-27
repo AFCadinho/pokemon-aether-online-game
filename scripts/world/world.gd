@@ -394,16 +394,24 @@ func cancel_authorized_teleport() -> void:
 	authorized_teleport_locked_overworld = false
 
 
-func play_aethernet_departure_effect() -> void:
+func play_authorized_teleport_departure_effect() -> void:
 	aethernet_teleport_effect_pending = true
 	await _play_local_aethernet_effect("depart", true)
 
 
-func cancel_aethernet_teleport_effect() -> void:
+func cancel_authorized_teleport_effect() -> void:
 	aethernet_teleport_effect_pending = false
 	_clear_local_aethernet_effect(true)
 	_set_aethernet_effect_presence("")
 	cancel_authorized_teleport()
+
+
+func play_aethernet_departure_effect() -> void:
+	await play_authorized_teleport_departure_effect()
+
+
+func cancel_aethernet_teleport_effect() -> void:
+	cancel_authorized_teleport_effect()
 
 
 func _play_local_aethernet_effect(phase: String, play_sound: bool) -> void:
@@ -574,6 +582,13 @@ func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
 			"blockReason": block_reason,
 		}
 	active_remote_authorized_teleport_command_id = command_id
+	authorized_teleport_in_progress = true
+	has_pending_player_position_save = false
+	GameState.lock_overworld_input()
+	authorized_teleport_locked_overworld = true
+	while is_saving_player_position:
+		await get_tree().process_frame
+	await play_authorized_teleport_departure_effect()
 	var result: Dictionary = await apply_authorized_teleport_state(state)
 	active_remote_authorized_teleport_command_id = ""
 	if bool(result.get("success", false)) and command_id != "":

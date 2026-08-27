@@ -30311,10 +30311,10 @@ func _on_staff_teleport_confirm_pressed() -> void:
 	var reason := ""
 	if staff_teleport_self_reason_input != null:
 		reason = staff_teleport_self_reason_input.text.strip_edges()
+	await _play_authorized_teleport_departure_effect(world)
 	var result: Dictionary = await ModeratorTeleportService.teleport_self(map_id, point_id, reason)
 	if not bool(result.get("success", false)):
-		if world.has_method("cancel_authorized_teleport"):
-			world.call("cancel_authorized_teleport")
+		_cancel_authorized_teleport_effect(world)
 		_refresh_modal_overworld_input_lock()
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
@@ -30397,11 +30397,11 @@ func _on_staff_teleport_to_player_pressed() -> void:
 			_add_chat_message("Enter a reason before teleporting to a player.")
 			if staff_teleport_player_reason_input != null:
 				staff_teleport_player_reason_input.grab_focus()
-		return
+			return
+	await _play_authorized_teleport_departure_effect(world)
 	var result: Dictionary = await ModeratorTeleportService.teleport_to_player(target_player_id, reason)
 	if not bool(result.get("success", false)):
-		if world.has_method("cancel_authorized_teleport"):
-			world.call("cancel_authorized_teleport")
+		_cancel_authorized_teleport_effect(world)
 		_refresh_modal_overworld_input_lock()
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
@@ -37988,10 +37988,10 @@ func _on_guild_lobby_teleport_requested() -> void:
 		)))
 		return
 
+	await _play_authorized_teleport_departure_effect(world)
 	var response: Dictionary = await GuildService.teleport_to_lobby()
 	if not bool(response.get("success", false)):
-		if world.has_method("cancel_authorized_teleport"):
-			world.call("cancel_authorized_teleport")
+		_cancel_authorized_teleport_effect(world)
 		guild_lobby_teleport_in_flight = false
 		_add_chat_message(str(response.get(
 			"error",
@@ -38006,6 +38006,18 @@ func _on_guild_lobby_teleport_requested() -> void:
 		_add_chat_message(LocalizationManager.text("ui.guild.lobby.error.apply_failed"))
 		return
 	_add_chat_message(LocalizationManager.text("ui.guild.lobby.success"))
+
+
+func _play_authorized_teleport_departure_effect(world: Node) -> void:
+	if world != null and world.has_method("play_authorized_teleport_departure_effect"):
+		await world.call("play_authorized_teleport_departure_effect")
+
+
+func _cancel_authorized_teleport_effect(world: Node) -> void:
+	if world != null and world.has_method("cancel_authorized_teleport_effect"):
+		world.call("cancel_authorized_teleport_effect")
+	elif world != null and world.has_method("cancel_authorized_teleport"):
+		world.call("cancel_authorized_teleport")
 
 func _on_aether_exchange_button_pressed() -> void:
 	if aether_exchange_popup == null:

@@ -39,6 +39,7 @@ func _run_checks() -> void:
 		"res://scripts/world/npcs/transit_keeper_npc.gd"
 	)
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	var ui_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	var presence_source := FileAccess.get_file_as_string(
 		"res://scripts/services/world_presence_service.gd"
 	)
@@ -51,7 +52,28 @@ func _run_checks() -> void:
 	)
 	_check(
 		world_source.contains('await _play_local_aethernet_effect("arrive", false)'),
-		"authorized Aethernet travel plays the arrival animation"
+		"authorized travel plays the arrival animation"
+	)
+	_check(
+		world_source.contains(
+			"func play_authorized_teleport_departure_effect() -> void:"
+		)
+		and world_source.contains(
+			"await play_authorized_teleport_departure_effect()\n"
+				+ "\tvar result: Dictionary = await apply_authorized_teleport_state(state)"
+		),
+		"forced staff teleports animate the receiving trainer"
+	)
+	_check(
+		ui_source.count(
+			"await _play_authorized_teleport_departure_effect(world)"
+		) >= 3,
+		"staff self, staff-to-player, and guild lobby travel share the departure effect"
+	)
+	_check(
+		ui_source.contains("func _cancel_authorized_teleport_effect(world: Node) -> void:")
+		and ui_source.contains('world.call("cancel_authorized_teleport_effect")'),
+		"failed shared teleports restore the local trainer"
 	)
 	_check(
 		presence_source.contains('"aethernetEffect"'),
