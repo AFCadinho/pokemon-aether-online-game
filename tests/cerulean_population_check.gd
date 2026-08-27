@@ -2,6 +2,7 @@ extends SceneTree
 
 const POPULATION := {
 	"res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn": {
+		"Entities/NPCs/GymAttendant": "kanto_cerulean_city_gym_attendant",
 		"Entities/NPCs/OfficerJenny": "kanto_cerulean_city_patrol_officer",
 		"Entities/NPCs/WaterwayVisitorMaya": "kanto_cerulean_city_waterway_visitor_maya",
 		"Entities/NPCs/BikeEnthusiastTheo": "kanto_cerulean_city_bike_enthusiast_theo",
@@ -92,6 +93,16 @@ func _check_scene(scene_path: String, expected: Dictionary) -> void:
 	if misty != null:
 		_check(str(misty.get("trainer_id")) == "kanto_alpha_gym_misty", "Misty uses the registered Cerulean alpha battle")
 		_check(misty.get("npc_profile") != null, "Misty has her Cascade Badge profile")
+	var gym_attendant := map.get_node_or_null("Entities/NPCs/GymAttendant")
+	if gym_attendant != null:
+		_check(gym_attendant.position == Vector2(1584, 1344), "Gym attendant blocks the Gym doorway")
+		_check(
+			str(gym_attendant.get("visibility_hidden_quest_id")) == "explore_cerulean_city"
+				and str(gym_attendant.get("visibility_hidden_quest_step_id")) == "visit_nugget_bridge"
+				and str(gym_attendant.get("visibility_hidden_quest_status")) == "completed",
+			"Gym attendant leaves after Misty is found"
+		)
+		_check(bool(gym_attendant.get("preload_quest_markers")), "Gym attendant preloads its story marker")
 	map.free()
 
 
