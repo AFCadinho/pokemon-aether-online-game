@@ -630,7 +630,19 @@ npc_definition_id = "trainer_class_policeman"
 display_name = "Officer Jenny"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("14_jenny")
+minimum_sort_z = null
+portrait_id = -4096
 mugshot = SubResource("AtlasTexture_jenny_portrait")
+battle_environment_id = null
+movement_behavior = null
+movement_tiles = "idle"
+movement_wait_seconds = 3
+movement_speed_pixels = 0.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
 [node name="WaterwayVisitorMaya" parent="Entities/NPCs" unique_id=395956463 instance=ExtResource("9_dialogue")]
 position = Vector2(1424, 720)
@@ -638,6 +650,19 @@ npc_id = "kanto_cerulean_city_waterway_visitor_maya"
 npc_definition_id = "trainer_class_lass"
 display_name = "Waterway Visitor Maya"
 npc_sprite_frames = ExtResource("12_lass")
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
+movement_behavior = null
+movement_tiles = "idle"
+movement_wait_seconds = 3
+movement_speed_pixels = 0.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
 [node name="BikeEnthusiastTheo" parent="Entities/NPCs" unique_id=826750557 instance=ExtResource("9_dialogue")]
 position = Vector2(752, 1680)
@@ -646,6 +671,19 @@ npc_definition_id = "trainer_class_youngster"
 display_name = "Bike Enthusiast Theo"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("13_youngster")
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
+movement_behavior = null
+movement_tiles = "idle"
+movement_wait_seconds = 3
+movement_speed_pixels = 0.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
 [node name="AceTrainerLila" parent="Entities/NPCs" unique_id=159174064 instance=ExtResource("9_dialogue")]
 position = Vector2(624, 1200)
@@ -654,6 +692,19 @@ npc_definition_id = "trainer_class_ace_trainer_f"
 display_name = "Ace Trainer Lila"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("15_ace_f")
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
+movement_behavior = null
+movement_tiles = "idle"
+movement_wait_seconds = 3
+movement_speed_pixels = 0.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
 [node name="AceTrainerBram" parent="Entities/NPCs" unique_id=1773113791 instance=ExtResource("9_dialogue")]
 position = Vector2(752, 1200)
@@ -662,6 +713,19 @@ npc_definition_id = "trainer_class_ace_trainer_m"
 display_name = "Ace Trainer Bram"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("16_ace_m")
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
+movement_behavior = null
+movement_tiles = "idle"
+movement_wait_seconds = 3
+movement_speed_pixels = 0.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=419165532]
 
@@ -674,6 +738,19 @@ species_id = "growlithe"
 level = 12
 display_name = "Growlithe"
 facing_direction = Vector2(-1, 0)
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
+movement_behavior = null
+movement_tiles = "idle"
+movement_wait_seconds = 3
+movement_speed_pixels = 0.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
 [node name="WaterPokemon" type="Node2D" parent="Entities/Pokemon" unique_id=1249643878]
 
@@ -685,10 +762,19 @@ species_id = "gyarados"
 level = 30
 display_name = "Gyarados"
 facing_direction = Vector2(1, 0)
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
 movement_behavior = "pace_horizontal"
 movement_tiles = 2
 movement_wait_seconds = 0.8
 movement_speed_pixels = 55.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
 [node name="Goldeen" parent="Entities/Pokemon/WaterPokemon" unique_id=1899759157 instance=ExtResource("10_pokemon")]
 position = Vector2(336, 624)
@@ -697,10 +783,19 @@ species_id = "goldeen"
 level = 15
 display_name = "Goldeen"
 facing_direction = Vector2(1, 0)
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
 movement_behavior = "pace_horizontal"
 movement_tiles = 2
 movement_wait_seconds = 1.0
 movement_speed_pixels = 70.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
 [node name="Poliwag" parent="Entities/Pokemon/WaterPokemon" unique_id=1370913628 instance=ExtResource("10_pokemon")]
 position = Vector2(1648, 208)
@@ -708,57 +803,125 @@ overworld_pokemon_id = "kanto_cerulean_city_poliwag_1"
 species_id = "poliwag"
 level = 12
 display_name = "Poliwag"
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
 movement_behavior = "pace_vertical"
 movement_tiles = 2
 movement_wait_seconds = 1.2
 movement_speed_pixels = 60.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
-[node name="MountainPokemon" type="Node2D" parent="Entities/Pokemon"]
+[node name="MountainPokemon" type="Node2D" parent="Entities/Pokemon" unique_id=246911283]
 
-[node name="Geodude" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("10_pokemon")]
+[node name="Geodude" parent="Entities/Pokemon/MountainPokemon" unique_id=1077233739 instance=ExtResource("10_pokemon")]
 position = Vector2(800, 128)
 overworld_pokemon_id = "kanto_cerulean_city_mountain_geodude_1"
 species_id = "geodude"
 level = 18
 display_name = "Geodude"
-facing_direction = Vector2(0, 1)
-minimum_sort_z = 2053
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
+movement_behavior = null
+movement_tiles = "idle"
+movement_wait_seconds = 3
+movement_speed_pixels = 0.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
-[node name="Nosepass" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("10_pokemon")]
-position = Vector2(96, 1216)
+[node name="Nosepass" parent="Entities/Pokemon/MountainPokemon" unique_id=459947247 instance=ExtResource("10_pokemon")]
+position = Vector2(112, 1456)
 overworld_pokemon_id = "kanto_cerulean_city_mountain_nosepass_1"
 species_id = "nosepass"
 level = 20
 display_name = "Nosepass"
 facing_direction = Vector2(1, 0)
-minimum_sort_z = 2053
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
+movement_behavior = null
+movement_tiles = "idle"
+movement_wait_seconds = 3
+movement_speed_pixels = 0.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
-[node name="Roggenrola" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("10_pokemon")]
-position = Vector2(2144, 1120)
+[node name="Roggenrola" parent="Entities/Pokemon/MountainPokemon" unique_id=825557704 instance=ExtResource("10_pokemon")]
+position = Vector2(2128, 1168)
 overworld_pokemon_id = "kanto_cerulean_city_mountain_roggenrola_1"
 species_id = "roggenrola"
 level = 17
 display_name = "Roggenrola"
 facing_direction = Vector2(-1, 0)
-minimum_sort_z = 2053
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
+movement_behavior = null
+movement_tiles = "idle"
+movement_wait_seconds = 3
+movement_speed_pixels = 0.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
-[node name="Larvitar" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("10_pokemon")]
-position = Vector2(1152, 2048)
+[node name="Larvitar" parent="Entities/Pokemon/MountainPokemon" unique_id=2025605849 instance=ExtResource("10_pokemon")]
+position = Vector2(1712, 2064)
 overworld_pokemon_id = "kanto_cerulean_city_mountain_larvitar_1"
 species_id = "larvitar"
 level = 19
 display_name = "Larvitar"
-facing_direction = Vector2(0, -1)
-minimum_sort_z = 2053
+facing_direction = Vector2(-1, 0)
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
+movement_behavior = null
+movement_tiles = "idle"
+movement_wait_seconds = 3
+movement_speed_pixels = 0.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
-[node name="Rockruff" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("10_pokemon")]
-position = Vector2(2080, 1792)
+[node name="Rockruff" parent="Entities/Pokemon/MountainPokemon" unique_id=204595213 instance=ExtResource("10_pokemon")]
+position = Vector2(2192, 1584)
 overworld_pokemon_id = "kanto_cerulean_city_mountain_rockruff_1"
 species_id = "rockruff"
 level = 16
 display_name = "Rockruff"
 facing_direction = Vector2(-1, 0)
-minimum_sort_z = 2053
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
+movement_behavior = null
+movement_tiles = "idle"
+movement_wait_seconds = 3
+movement_speed_pixels = 0.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
 [node name="BattleDisplay" type="Node2D" parent="Entities/Pokemon" unique_id=1385943621]
 position = Vector2(680, 1216)
@@ -771,6 +934,19 @@ species_id = "onix"
 level = 16
 display_name = "Onix"
 facing_direction = Vector2(1, 0)
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
+movement_behavior = null
+movement_tiles = "idle"
+movement_wait_seconds = 3
+movement_speed_pixels = 0.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
 [node name="Pikachu" parent="Entities/Pokemon/BattleDisplay" unique_id=1960521636 instance=ExtResource("10_pokemon")]
 position = Vector2(40, -16)
@@ -779,6 +955,19 @@ species_id = "pikachu"
 level = 16
 display_name = "Pikachu"
 facing_direction = Vector2(-1, 0)
+minimum_sort_z = null
+portrait_id = -4096
+mugshot = ""
+battle_environment_id = null
+movement_behavior = null
+movement_tiles = "idle"
+movement_wait_seconds = 3
+movement_speed_pixels = 0.0
+preload_quest_markers = 90.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=757893626]
 
