@@ -59,6 +59,9 @@ const EXIT_OPENINGS := {
 }
 
 const WATER_CONNECTION_DEPTH := 15
+const MOUNTAIN_ACTOR_SORT_Z := 2054
+const WEST_MOUNTAIN_SITE := Rect2(0, 1056, 192, 992)
+const EAST_MOUNTAIN_SITE := Rect2(1088, 1568, 1312, 672)
 @export_range(0.0, 1.0, 0.01) var surf_encounter_chance := 0.1
 const WATER_CONNECTIONS := [
 	{
@@ -104,6 +107,12 @@ func should_trigger_wild_encounter(encounter_type: String = "grass") -> bool:
 	if encounter_chance <= 0.0:
 		return false
 	return randf() <= encounter_chance
+
+
+func get_actor_sort_z_floor(world_position: Vector2) -> int:
+	if WEST_MOUNTAIN_SITE.has_point(world_position) or EAST_MOUNTAIN_SITE.has_point(world_position):
+		return MOUNTAIN_ACTOR_SORT_Z
+	return super.get_actor_sort_z_floor(world_position)
 
 
 func _open_exterior_connections() -> void:

@@ -88,6 +88,10 @@ func get_weather_profile() -> String:
 	return weather_profile
 
 
+func get_actor_sort_z_floor(_world_position: Vector2) -> int:
+	return -4096
+
+
 func get_wild_encounter_area_id() -> String:
 	return encounter_area_id
 

@@ -1704,7 +1704,11 @@ func _is_unequipped_appearance_part_sprite(sprite: AnimatedSprite2D) -> bool:
 
 
 func _update_sort_z() -> void:
-	z_index = clampi(floori(global_position.y), SORT_Z_MIN, SORT_Z_MAX)
+	var sort_z := floori(global_position.y)
+	var current_map := GameState.current_map
+	if current_map != null and current_map.has_method("get_actor_sort_z_floor"):
+		sort_z = maxi(sort_z, int(current_map.call("get_actor_sort_z_floor", global_position)))
+	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
 
 
 func _get_idle_animation_name(direction: Vector2) -> StringName:
