@@ -7,6 +7,11 @@
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_3dqwu"]
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="5_m4smc"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="7_yln1f"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="8_trainer"]
+[ext_resource type="Script" uid="uid://bokcw1q7hoc1w" path="res://scripts/world/kanto/routes/nugget_bridge_trainer.gd" id="9_bridge_trainer"]
+[ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="10_youngster"]
+[ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="11_lass"]
+[ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="12_camper"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_path_exit"]
 size = Vector2(128, 16)
@@ -292,6 +297,39 @@ flow_direction = "right"
 z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1432169820]
+
+[node name="NuggetBridge03Timmy" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
+position = Vector2(704, 1664)
+script = ExtResource("9_bridge_trainer")
+trainer_id = "kanto_route_24_nugget_bridge_03_timmy"
+sight_range_tiles = 5
+npc_id = "kanto_route_24_nugget_bridge_03_timmy"
+npc_definition_id = "trainer_class_youngster"
+display_name = "Youngster Timmy"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("10_youngster")
+
+[node name="NuggetBridge04Reli" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
+position = Vector2(704, 1280)
+script = ExtResource("9_bridge_trainer")
+trainer_id = "kanto_route_24_nugget_bridge_04_reli"
+sight_range_tiles = 5
+npc_id = "kanto_route_24_nugget_bridge_04_reli"
+npc_definition_id = "trainer_class_lass"
+display_name = "Lass Reli"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("11_lass")
+
+[node name="NuggetBridge05Ethan" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
+position = Vector2(704, 896)
+script = ExtResource("9_bridge_trainer")
+trainer_id = "kanto_route_24_nugget_bridge_05_ethan"
+sight_range_tiles = 5
+npc_id = "kanto_route_24_nugget_bridge_05_ethan"
+npc_definition_id = "trainer_class_camper"
+display_name = "Camper Ethan"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("12_camper")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=289758416]
 
