@@ -44,6 +44,9 @@ const POPULATION := {
 		"Entities/NPCs/GymGuide": "kanto_cerulean_city_gym_guide",
 		"Entities/NPCs/GymLeaderMisty": "kanto_alpha_gym_misty",
 		"Entities/Pokemon/Staryu": "kanto_cerulean_city_gym_staryu_1",
+		"Entities/Pokemon/Horsea": "kanto_cerulean_city_gym_horsea_1",
+		"Entities/Pokemon/Shellder": "kanto_cerulean_city_gym_shellder_1",
+		"Entities/Pokemon/Goldeen": "kanto_cerulean_city_gym_goldeen_1",
 	},
 }
 

@@ -200,6 +200,30 @@ level = 18
 display_name = "Staryu"
 facing_direction = Vector2(1, 0)
 
+[node name="Horsea" parent="Entities/Pokemon" instance=ExtResource("10_pokemon")]
+position = Vector2(336, 432)
+overworld_pokemon_id = "kanto_cerulean_city_gym_horsea_1"
+species_id = "horsea"
+level = 16
+display_name = "Horsea"
+facing_direction = Vector2(-1, 0)
+
+[node name="Shellder" parent="Entities/Pokemon" instance=ExtResource("10_pokemon")]
+position = Vector2(240, 752)
+overworld_pokemon_id = "kanto_cerulean_city_gym_shellder_1"
+species_id = "shellder"
+level = 16
+display_name = "Shellder"
+facing_direction = Vector2(1, 0)
+
+[node name="Goldeen" parent="Entities/Pokemon" instance=ExtResource("10_pokemon")]
+position = Vector2(656, 880)
+overworld_pokemon_id = "kanto_cerulean_city_gym_goldeen_1"
+species_id = "goldeen"
+level = 17
+display_name = "Goldeen"
+facing_direction = Vector2(-1, 0)
+
 [node name="Spawns" type="Node2D" parent="." unique_id=1733582634]
 
 [node name="FromCeruleanCity" type="Marker2D" parent="Spawns" unique_id=595494790]
