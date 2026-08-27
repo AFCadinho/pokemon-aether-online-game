@@ -45,18 +45,50 @@ func _init() -> void:
 	ground_layer.name = "Ground"
 	ground_layer.set_meta("tiled_name", "Ground")
 	ground_layer.set_meta("tiled_visual_layer", true)
+	var ground_detail_layer := TileMapLayer.new()
+	ground_detail_layer.name = "GroundDetail"
+	ground_detail_layer.z_index = 2
+	ground_detail_layer.set_meta("tiled_name", "GroundDetail")
+	ground_detail_layer.set_meta("tiled_visual_layer", true)
+	var water_layer := _make_test_tile_layer("Water", Vector2i.ZERO)
+	water_layer.z_index = 1
 	var tree_layer := TileMapLayer.new()
 	tree_layer.name = "TreeTop"
 	tree_layer.set_meta("tiled_name", "TreeTop")
 	tree_layer.set_meta("tiled_visual_layer", true)
 	visual_map.add_child(ground_layer)
+	visual_map.add_child(ground_detail_layer)
+	visual_map.add_child(water_layer)
 	visual_map.add_child(tree_layer)
 	root.add_child(visual_map)
 	controller.apply_map(visual_map)
-	_check_equal(rain_ground_effects.get_surface_layer_count(), 1, "ground visual layers accept rain impacts")
-	_check_equal(snow_ground_effects.get_surface_layer_count(), 1, "ground visual layers accept snow landings")
+	_check_equal(rain_ground_effects.get_surface_layer_count(), 2, "Ground and GroundDetail accept rain impacts")
+	_check_equal(snow_ground_effects.get_surface_layer_count(), 2, "Ground and GroundDetail accept snow landings")
+	_check_equal(rain_ground_effects.get_water_layer_count(), 1, "water layers accept rain ripples")
+	_check_equal(snow_ground_effects.get_water_layer_count(), 1, "water layers remain separately classified for snow")
+	_check_equal(rain_ground_effects.z_index, 3, "rain impacts render above GroundDetail")
+	_check_equal(snow_ground_effects.z_index, 3, "snow landings render above GroundDetail")
 	_check_equal(rain_ground_effects.get_cover_layer_count(), 1, "tree and structure visual layers block rain impacts")
 	_check_equal(snow_ground_effects.get_cover_layer_count(), 1, "tree and structure visual layers block snow landings")
+	var water_world_position := water_layer.to_global(water_layer.map_to_local(Vector2i.ZERO))
+	_check_equal(
+		rain_ground_effects._weather_surface_type_at_position(water_world_position),
+		"water",
+		"rain uses a dedicated ripple surface on water"
+	)
+	_check_equal(
+		snow_ground_effects._weather_surface_type_at_position(water_world_position),
+		"",
+		"snow does not reuse rain ripples on water"
+	)
+	var original_rain_spawn_rect: Rect2 = rain_ground_effects.spawn_rect
+	rain_ground_effects.set_spawn_rect(Rect2(water_world_position - Vector2(8.0, 8.0), Vector2(16.0, 16.0)))
+	var water_event = rain_ground_effects._spawn_event()
+	_check_true(water_event != null, "rain can spawn an impact event on water")
+	if water_event != null:
+		_check_equal(water_event.surface_type, "water", "water rain events select the ripple animation")
+	rain_ground_effects.clear()
+	rain_ground_effects.set_spawn_rect(original_rain_spawn_rect)
 	var unclassified_visual_map := Node2D.new()
 	var unclassified_layer := TileMapLayer.new()
 	unclassified_layer.name = "Meadow"
@@ -165,6 +197,23 @@ func _has_allowed_and_covered_surface_points(ground_effects: Node) -> bool:
 			if found_allowed and found_covered:
 				return true
 	return false
+
+
+func _make_test_tile_layer(layer_name: String, cell: Vector2i) -> TileMapLayer:
+	var layer := TileMapLayer.new()
+	layer.name = layer_name
+	var tile_set := TileSet.new()
+	tile_set.tile_size = Vector2i(32, 32)
+	var atlas_source := TileSetAtlasSource.new()
+	atlas_source.texture = ImageTexture.create_from_image(
+		Image.create(32, 32, false, Image.FORMAT_RGBA8)
+	)
+	atlas_source.texture_region_size = Vector2i(32, 32)
+	atlas_source.create_tile(Vector2i.ZERO)
+	tile_set.add_source(atlas_source, 0)
+	layer.tile_set = tile_set
+	layer.set_cell(cell, 0, Vector2i.ZERO)
+	return layer
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:

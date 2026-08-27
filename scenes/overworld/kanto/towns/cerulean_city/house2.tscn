@@ -1,0 +1,76 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/house/blue_house_template.tscn" id="1_house"]
+[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
+[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="3_floor_mask"]
+[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="4_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_hint"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="6_dialogue"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/elder_frames.tres" id="7_elder"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(96, 32)
+
+[node name="House2" type="Node2D"]
+script = ExtResource("2_metadata")
+map_id = "kanto_cerulean_city_house_2"
+map_region_name = "Kanto"
+map_display_name = "Cerulean City House 2"
+world_access_group_id = "kanto_cerulean_city"
+world_access_group_label = "Cerulean City"
+world_access_area_type = "interior"
+location_id = "kanto.cerulean_city.house_2"
+location_name = "Cerulean City House 2"
+region_id = "kanto"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_profile_id = "kanto.cerulean_city"
+
+[node name="BlueHouseTemplate" parent="." instance=ExtResource("1_house")]
+
+[node name="FloorVisibilityMask" type="Node2D" parent="."]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("3_floor_mask")
+floor_regions = {&"ground_floor": Rect2(96, 160, 448, 384)}
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="Resident" parent="Entities/NPCs" instance=ExtResource("6_dialogue")]
+position = Vector2(272, 336)
+npc_id = "kanto_cerulean_city_house_2_resident"
+npc_definition_id = "trainer_class_elder"
+display_name = "Cerulean Resident"
+npc_sprite_frames = ExtResource("7_elder")
+[node name="Players" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Spawns" type="Node2D" parent="."]
+[node name="FromCeruleanCity" type="Marker2D" parent="Spawns"]
+position = Vector2(304, 464)
+
+[node name="Exits" type="Node2D" parent="."]
+[node name="ToCeruleanCity" type="Area2D" parent="Exits"]
+position = Vector2(320, 480)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
+target_spawn_name = "FromHouse2"
+transition_id = "kanto_cerulean_city_house_2__to_outside"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanCity"]
+position = Vector2(-16, 16)
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToCeruleanCity" instance=ExtResource("5_hint")]
+position = Vector2(-16, 16)
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
+
+[connection signal="body_entered" from="Exits/ToCeruleanCity" to="Exits/ToCeruleanCity" method="_on_body_entered"]

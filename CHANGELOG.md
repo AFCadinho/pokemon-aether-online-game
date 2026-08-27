@@ -4,6 +4,14 @@
 
 **Added**
 
+- Cerulean City now has daily Thieving targets, and the especially reckless can pickpocket Officer Jenny for a guaranteed arrest and Wanted reset.
+- Gary now guards the Cerulean City entrance to Nugget Bridge for a mandatory rival battle, then disappears after the defeated map is reloaded.
+- A Cerulean Gym attendant now blocks the closed Gym and quietly directs Trainers through Route 24 and Nugget Bridge toward Bill's house on Route 25.
+- Rhyhorn now joins the Rock-type Pokemon on Cerulean City's southern mountain plateau.
+- Cerulean City's west and south mountain plateaus now have dedicated Staff Teleporter spawn points.
+- Cerulean City's inaccessible mountain plateaus now feature ambient Rock-type Pokemon from multiple generations.
+- Cerulean City is livelier with moving water Pokemon including Gyarados, Officer Jenny and Growlithe, and a friendly practice battle on the Pokemon Center plaza.
+- Cerulean City now connects to Cerulean Cave and Routes 5, 9, and 24 through new open-field placeholder maps, including three Route 9 approaches and separate Route 24 path and Surf crossings.
 - The Guild Bank now has a comparison page showing what every Guild rank can do.
 - Guild leaders can create a recruitment checklist that applicants see on the Guild profile and before applying.
 - Added Guild Resources, where members can share consumable items. Guild leaders can manage access for individual members.
@@ -16,6 +24,7 @@
 
 **Changed**
 
+- Cerulean City's ambient mountain Pokemon now patrol their plateaus instead of standing still.
 - The Pokémon Vault, Item Storage, and Guild Resources are now easier to browse, donate to, borrow from, and withdraw from. The full Pokémon Vault uses a familiar PC-style grid and lets you inspect each Pokémon.
 - Item Storage filters now distinguish items you can use from items whose copies are all unavailable.
 - Guild member search and Trainer invitations now have separate, clearly named controls.
@@ -37,6 +46,8 @@
 
 **Fixed**
 
+- Cerulean City's ambient Rock-type Pokemon now render visibly above the mountain foreground.
+- Cerulean City no longer ends Surf beside the Route 24 bridge by erasing the hand-painted Water mask during map setup.
 - Guild Item Storage now shows the total number of stored items separately from its stack capacity.
 - Pokémon in battle now show the correct blue male or pink female gender icon.
 - Forum announcements now appear reliably in launcher and login news.
@@ -53,6 +64,7 @@
 
 **Changed**
 
+- Cerulean City now uses its complete new city layout, with its Route 4 entrance aligned to the imported map.
 - Route 4 now uses its complete new outdoor layout, with its Mt. Moon and Cerulean City entrances in the correct places.
 - Chat settings now manage community language chats and disclose that moderation may be limited; the main chat tabs keep a fixed order.
 - All chat now includes messages from the community language chats a player has enabled.

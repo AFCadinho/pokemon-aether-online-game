@@ -72,6 +72,12 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var pickpocket_enabled := false
 @export var pickpocket_npc_type := ""
 @export_range(1, 100, 1) var pickpocket_required_level := 1
+## Optional lower bound for actors that must remain above a map foreground layer.
+## Keep this at the end of the inherited property list so open scenes can hot-reload safely.
+@export_range(-4096, 4096, 1) var minimum_sort_z := -4096
+## Allows decorative actors on unreachable terrain to patrol across its blocking mask.
+## Character occupancy checks still apply. Keep new inherited exports at the end of this list.
+@export var ambient_movement_ignores_map_collision := false
 
 const TILE_SIZE := 32
 const MOVE_SPEED := 120.0
@@ -87,8 +93,13 @@ const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 const NAMEPLATE_HORIZONTAL_PADDING := 5.0
 const NAMEPLATE_VERTICAL_PADDING := 2.0
 const NAMEPLATE_CARD_BOTTOM := 20.0
+const NAMEPLATE_OFFSET_TOP := -80.0
 const THIEVING_PROMPT_SIZE := Vector2(30.0, 30.0)
-const THIEVING_PROMPT_POSITION := Vector2(43.0, -91.0)
+const THIEVING_PROMPT_NAMEPLATE_GAP := 6.0
+const THIEVING_PROMPT_POSITION := Vector2(
+	-THIEVING_PROMPT_SIZE.x * 0.5,
+	NAMEPLATE_OFFSET_TOP - THIEVING_PROMPT_SIZE.y - THIEVING_PROMPT_NAMEPLATE_GAP
+)
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
 
 @onready var sprite: AnimatedSprite2D = $Look/AnimatedSprite2D
@@ -469,7 +480,7 @@ func _setup_nameplate() -> void:
 	nameplate.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
 	nameplate.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	nameplate.offset_left = -82.0
-	nameplate.offset_top = -80.0
+	nameplate.offset_top = NAMEPLATE_OFFSET_TOP
 	nameplate.offset_right = 82.0
 	nameplate.offset_bottom = -56.0
 	add_child(nameplate)
@@ -976,7 +987,7 @@ func _can_npc_move_to(world_position: Vector2) -> bool:
 			return false
 
 	var collision_tilemap := MapLayerResolverScript.find_tilemap_layer(current_map, ["Collision"])
-	if collision_tilemap != null:
+	if collision_tilemap != null and not ambient_movement_ignores_map_collision:
 		var local_position := collision_tilemap.to_local(world_position)
 		var tile_position := collision_tilemap.local_to_map(local_position)
 		if collision_tilemap.get_cell_source_id(tile_position) != -1:
@@ -1557,6 +1568,7 @@ func _update_sort_z() -> void:
 			elif npc_feet_y < player_feet_y - PLAYER_OVERLAP_SORT_Y_EPSILON:
 				sort_z = mini(sort_z, player_sort_z - 1)
 
+	sort_z = maxi(sort_z, minimum_sort_z)
 	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
 	if sprite != null:
 		sprite.z_index = sprite_sort_z
