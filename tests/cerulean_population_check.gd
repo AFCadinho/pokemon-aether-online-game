@@ -2,6 +2,7 @@ extends SceneTree
 
 const POPULATION := {
 	"res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn": {
+		"Entities/NPCs/GaryOak": "kanto_route_24_gary_oak",
 		"Entities/NPCs/GymAttendant": "kanto_cerulean_city_gym_attendant",
 		"Entities/NPCs/OfficerJenny": "kanto_cerulean_city_patrol_officer",
 		"Entities/NPCs/WaterwayVisitorMaya": "kanto_cerulean_city_waterway_visitor_maya",
