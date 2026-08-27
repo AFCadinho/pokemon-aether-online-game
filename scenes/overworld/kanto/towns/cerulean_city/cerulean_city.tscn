@@ -736,20 +736,25 @@ npc_id = "kanto_cerulean_city_mountain_guide"
 display_name = "Mountain Guide"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("30_hiker")
+portrait_id = "showdown_hiker_gen6"
 
 [node name="WestMountainGuide" parent="Entities/NPCs" unique_id=1676481674 instance=ExtResource("9_dialogue")]
 position = Vector2(144, 1584)
 script = ExtResource("31_mountain_return")
 destination_position = Vector2(1680, 1904)
 display_name = "Mountain Guide"
-npc_sprite_frames = null
+npc_sprite_frames = ExtResource("30_hiker")
+portrait_id = "showdown_hiker_gen6"
+minimum_sort_z = 2054
 
 [node name="EastMountainGuide" parent="Entities/NPCs" unique_id=1778671423 instance=ExtResource("9_dialogue")]
 position = Vector2(2320, 1872)
 script = ExtResource("31_mountain_return")
 destination_position = Vector2(1680, 1904)
 display_name = "Mountain Guide"
-npc_sprite_frames = null
+npc_sprite_frames = ExtResource("30_hiker")
+portrait_id = "showdown_hiker_gen6"
+minimum_sort_z = 2054
 
 [node name="AceTrainerLila" parent="Entities/NPCs" unique_id=159174064 instance=ExtResource("9_dialogue")]
 position = Vector2(624, 1200)
@@ -798,6 +803,7 @@ npc_definition_id = "trainer_class_veteran"
 display_name = "Veteran Garrick"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("18_veteran")
+portrait_id = "showdown_veteran_gen7"
 
 [node name="TransitKeeper" parent="Entities/NPCs" unique_id=1146061101 instance=ExtResource("19_transit_keeper")]
 position = Vector2(1520, 944)

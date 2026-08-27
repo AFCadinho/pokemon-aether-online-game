@@ -32,6 +32,7 @@ func _run() -> void:
 	var guide := city.get_node_or_null("Entities/NPCs/MountainGuide") as Node2D
 	_check(guide != null and guide.position == Vector2(1712, 1904), "Mountain Guide keeps the edited city position")
 	if guide != null:
+		_check(str(guide.get("portrait_id")) == "showdown_hiker_gen6", "City Mountain Guide uses the Hiker portrait")
 		_check(bool(guide.call("can_access_site", "west", 20)), "West Site opens at Rock Smash level 20")
 		_check(not bool(guide.call("can_access_site", "east", 49)), "East Site stays closed below level 50")
 		_check(bool(guide.call("can_access_site", "east", 50)), "East Site opens at Rock Smash level 50")
@@ -58,11 +59,15 @@ func _run() -> void:
 	_check(west_guide != null and west_guide.position == Vector2(144, 1584), "West Site has a visible Mountain Guide")
 	_check(east_guide != null and east_guide.position == Vector2(2320, 1872), "East Site has a visible Mountain Guide")
 	if west_guide != null:
+		_check(str(west_guide.get("portrait_id")) == "showdown_hiker_gen6", "West Mountain Guide uses the Hiker portrait")
 		_check(int(west_guide.get("minimum_sort_z")) == 2054, "West Mountain Guide renders above the plateau")
 		_check(west_guide.get("destination_position") == Vector2(1680, 1904), "West Mountain Guide returns beside the city guide")
 	if east_guide != null:
+		_check(str(east_guide.get("portrait_id")) == "showdown_hiker_gen6", "East Mountain Guide uses the Hiker portrait")
 		_check(int(east_guide.get("minimum_sort_z")) == 2054, "East Mountain Guide renders above the plateau")
 		_check(east_guide.get("destination_position") == Vector2(1680, 1904), "East Mountain Guide returns beside the city guide")
+	var garrick := city.get_node_or_null("Entities/NPCs/VeteranGarrick")
+	_check(garrick != null and str(garrick.get("portrait_id")) == "showdown_veteran_gen7", "Veteran Garrick uses the elderly Veteran portrait")
 
 	_check(int(city.call("get_actor_sort_z_floor", Vector2(112, 1520))) == 2054, "West Site raises actor depth")
 	_check(int(city.call("get_actor_sort_z_floor", Vector2(1296, 2096))) == 2054, "East Site raises actor depth")
