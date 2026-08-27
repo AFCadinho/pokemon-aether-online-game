@@ -28,10 +28,10 @@ size = Vector2(176, 16)
 size = Vector2(160, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route25_upper"]
-size = Vector2(32, 160)
+size = Vector2(32, 128)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route25_lower"]
-size = Vector2(32, 192)
+size = Vector2(32, 224)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m4smc"]
 texture = ExtResource("5_3dqwu")
@@ -274,8 +274,7 @@ shape = SubResource("RectangleShape2D_route25_upper")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute25Upper" unique_id=1650284853 instance=ExtResource("4_hint")]
 z_as_relative = false
-position = Vector2(-16, 0)
-tile_footprint = Vector2i(1, 5)
+tile_footprint = Vector2i(1, 3)
 flow_direction = "right"
 
 [node name="ToRoute25Lower" type="Area2D" parent="Exits" unique_id=849871836]
@@ -287,12 +286,13 @@ transition_id = "kanto_route_24__to_route_25_lower"
 transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute25Lower" unique_id=1388973083]
+position = Vector2(0, 16)
 shape = SubResource("RectangleShape2D_route25_lower")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute25Lower" unique_id=1743270133 instance=ExtResource("4_hint")]
 z_as_relative = false
-position = Vector2(-16, 0)
-tile_footprint = Vector2i(1, 6)
+position = Vector2(0, 16)
+tile_footprint = Vector2i(1, 5)
 flow_direction = "right"
 
 [node name="Entities" type="Node2D" parent="." unique_id=907207288]
@@ -301,7 +301,7 @@ z_index = 5
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1432169820]
 
 [node name="NuggetBridge03Timmy" parent="Entities/NPCs" unique_id=1766615038 instance=ExtResource("8_trainer")]
-position = Vector2(784, 1616)
+position = Vector2(784, 1808)
 script = ExtResource("9_bridge_trainer")
 challenge_width_tiles = 6
 trainer_id = "kanto_route_24_nugget_bridge_03_timmy"
@@ -312,7 +312,7 @@ facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("10_youngster")
 
 [node name="NuggetBridge04Reli" parent="Entities/NPCs" unique_id=1202630054 instance=ExtResource("8_trainer")]
-position = Vector2(784, 1232)
+position = Vector2(784, 1424)
 script = ExtResource("9_bridge_trainer")
 challenge_width_tiles = 6
 trainer_id = "kanto_route_24_nugget_bridge_04_reli"
@@ -323,7 +323,7 @@ facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("11_lass")
 
 [node name="NuggetBridge05Ethan" parent="Entities/NPCs" unique_id=1412516035 instance=ExtResource("8_trainer")]
-position = Vector2(784, 752)
+position = Vector2(784, 1040)
 script = ExtResource("9_bridge_trainer")
 challenge_width_tiles = 6
 trainer_id = "kanto_route_24_nugget_bridge_05_ethan"
@@ -333,9 +333,11 @@ display_name = "Camper Ethan"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("12_camper")
 
-[node name="NuggetBridgeRocketRecruiter" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
-position = Vector2(784, 464)
+[node name="NuggetBridgeRocketRecruiter" parent="Entities/NPCs" unique_id=530884774 instance=ExtResource("8_trainer")]
+position = Vector2(784, 752)
 script = ExtResource("14_recruiter")
+rocket_sprite_frames = ExtResource("13_rocket_grunt")
+challenge_width_tiles = 6
 trainer_id = "kanto_route_24_rocket_recruiter"
 sight_range_tiles = 0
 npc_id = "kanto_route_24_rocket_recruiter"
@@ -343,7 +345,6 @@ npc_definition_id = "trainer_class_camper"
 display_name = "Bridge Attendant"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("12_camper")
-rocket_sprite_frames = ExtResource("13_rocket_grunt")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=289758416]
 
