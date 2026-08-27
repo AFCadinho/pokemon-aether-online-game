@@ -33,6 +33,9 @@ size = Vector2(32, 128)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route25_lower"]
 size = Vector2(32, 224)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route25_south"]
+size = Vector2(32, 192)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m4smc"]
 texture = ExtResource("5_3dqwu")
 texture_region_size = Vector2i(32, 32)
@@ -149,6 +152,8 @@ additional_opening_from = 2
 additional_opening_to = 6
 second_additional_opening_from = 8
 second_additional_opening_to = 13
+third_additional_opening_from = 16
+third_additional_opening_to = 21
 water_connection_side = "bottom"
 water_opening_from = 12
 water_opening_to = 18
@@ -187,6 +192,9 @@ position = Vector2(1392, 144)
 
 [node name="FromRoute25Lower" type="Marker2D" parent="Spawns" unique_id=599407868]
 position = Vector2(1392, 336)
+
+[node name="FromRoute25South" type="Marker2D" parent="Spawns"]
+position = Vector2(1392, 592)
 
 [node name="Exits" type="Node2D" parent="." unique_id=360871628]
 
@@ -295,6 +303,22 @@ position = Vector2(0, 16)
 tile_footprint = Vector2i(1, 5)
 flow_direction = "right"
 
+[node name="ToRoute25South" type="Area2D" parent="Exits"]
+position = Vector2(1424, 592)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_25.tscn"
+target_spawn_name = "FromRoute24South"
+transition_id = "kanto_route_24__to_route_25_south"
+transition_facing_direction = "right"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute25South"]
+shape = SubResource("RectangleShape2D_route25_south")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute25South" instance=ExtResource("4_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 6)
+flow_direction = "right"
+
 [node name="Entities" type="Node2D" parent="." unique_id=907207288]
 z_index = 5
 
@@ -377,3 +401,4 @@ tile_set = SubResource("TileSet_wqaam")
 [connection signal="body_entered" from="Exits/ToCeruleanWaterRight" to="Exits/ToCeruleanWaterRight" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute25Upper" to="Exits/ToRoute25Upper" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute25Lower" to="Exits/ToRoute25Lower" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute25South" to="Exits/ToRoute25South" method="_on_body_entered"]
