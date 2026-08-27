@@ -23,13 +23,13 @@ func _run_checks() -> void:
 
 	var target := Node2D.new()
 	root.add_child(target)
-	var departure := AethernetTeleportEffectScript.new() as AethernetTeleportEffect
+	var departure := AethernetTeleportEffectScript.new()
 	root.add_child(departure)
 	departure.start(target, "depart", false)
 	await departure.finished
 	_check(target.modulate.a <= 0.01, "departure dissolves the trainer")
 
-	var arrival := AethernetTeleportEffectScript.new() as AethernetTeleportEffect
+	var arrival := AethernetTeleportEffectScript.new()
 	root.add_child(arrival)
 	arrival.start(target, "arrive", false)
 	await arrival.finished
