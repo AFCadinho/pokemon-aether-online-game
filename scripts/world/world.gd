@@ -1127,6 +1127,13 @@ func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 	player.set_idle_frame()
 	player.refresh_map_layers()
 	_sync_player_activity_state_for_current_tile()
+	var saved_mount_id := str(state.get("mountId", "")).strip_edges().to_lower()
+	if (
+		not saved_mount_id.is_empty()
+		and not bool(state.get("teleportAcknowledgementRequired", false))
+		and player.has_method("restore_land_mount")
+	):
+		player.call("restore_land_mount", saved_mount_id)
 	if player.has_method("reset_pokemon_follower_position"):
 		player.call("reset_pokemon_follower_position")
 	GameState.player_position = saved_position
@@ -2110,6 +2117,9 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 	var current_map: Node = GameState.current_map
 	var position: Vector2 = _get_current_player_persistent_position()
 	var appearance_state: Dictionary = _get_confirmed_appearance_state() if use_confirmed_appearance else _get_current_appearance_presence_state()
+	var active_land_mount_id := str(player.call("get_active_land_mount_id")) \
+		if player.has_method("get_active_land_mount_id") \
+		else ""
 	var state: Dictionary = {
 		"mapId": _get_map_id(current_map),
 		"mapScenePath": _get_map_scene_path(current_map),
@@ -2120,6 +2130,7 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 		"gender": PlayerSave.gender,
 		"facingDirection": _direction_to_name(player.last_direction),
 		"spawnMarker": spawn_marker,
+		"mountId": active_land_mount_id,
 		"appearance": appearance_state,
 		"roles": _get_current_role_presence_state(),
 		"selectedRoleBadge": GameState.selected_role_badge,
