@@ -18,6 +18,7 @@
 [ext_resource type="SpriteFrames" uid="uid://cg046cju3kis8" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="15_ace_f"]
 [ext_resource type="SpriteFrames" uid="uid://bewtxeqmv8vls" path="res://assets/npcs/classes/ace_trainer_m_frames.tres" id="16_ace_m"]
 [ext_resource type="Script" uid="uid://3sc142eusmtf" path="res://scripts/world/kanto/towns/cerulean_battle_display.gd" id="17_battle_display"]
+[ext_resource type="SpriteFrames" uid="uid://bxh5nxs12bywr" path="res://assets/npcs/gym_guide_frames.tres" id="18_gym_attendant"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
@@ -628,6 +629,17 @@ position = Vector2(0, 16)
 z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=790832259]
+
+[node name="GymAttendant" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
+position = Vector2(1584, 1344)
+npc_id = "kanto_cerulean_city_gym_attendant"
+display_name = "Cerulean Gym Attendant"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("18_gym_attendant")
+visibility_hidden_quest_id = "explore_cerulean_city"
+visibility_hidden_quest_step_id = "visit_nugget_bridge"
+visibility_hidden_quest_status = "completed"
+preload_quest_markers = true
 
 [node name="OfficerJenny" parent="Entities/NPCs" unique_id=1966720263 instance=ExtResource("9_dialogue")]
 position = Vector2(1040, 1008)
