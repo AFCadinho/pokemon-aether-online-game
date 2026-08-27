@@ -278,6 +278,9 @@ position = Vector2(656, 1680)
 [node name="FromHouse2" type="Marker2D" parent="Spawns" unique_id=1542082403]
 position = Vector2(1168, 1680)
 
+[node name="FromHouse3" type="Marker2D" parent="Spawns"]
+position = Vector2(848, 1360)
+
 [node name="Exits" type="Node2D" parent="." unique_id=921368933]
 
 [node name="ToRoute4" type="Area2D" parent="Exits" unique_id=853400686]
@@ -534,6 +537,21 @@ shape = SubResource("RectangleShape2D_door_exit")
 z_as_relative = false
 position = Vector2(0, 16)
 
+[node name="ToHouse3" type="Area2D" parent="Exits"]
+position = Vector2(848, 1312)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/house3.tscn"
+target_spawn_name = "FromCeruleanCity"
+transition_id = "kanto_cerulean_city__to_house_3"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse3"]
+shape = SubResource("RectangleShape2D_door_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToHouse3" instance=ExtResource("8_door_hint")]
+z_as_relative = false
+position = Vector2(0, 16)
+
 [node name="Entities" type="Node2D" parent="." unique_id=1995162903]
 z_index = 5
 
@@ -781,3 +799,4 @@ position = Vector2(1456, 1296)
 [connection signal="body_entered" from="Exits/ToGym" to="Exits/ToGym" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToBikeStore" to="Exits/ToBikeStore" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToHouse2" to="Exits/ToHouse2" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToHouse3" to="Exits/ToHouse3" method="_on_body_entered"]

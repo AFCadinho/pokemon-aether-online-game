@@ -57,6 +57,17 @@ const INTERIORS := [
 		"template": "BlueHouseTemplate",
 		"spawn_position": Vector2(1168, 1680),
 	},
+	{
+		"id": "house_3",
+		"scene": "res://scenes/overworld/kanto/towns/cerulean_city/house3.tscn",
+		"map_id": "kanto_cerulean_city_house_3",
+		"city_spawn": "FromHouse3",
+		"city_exit": "ToHouse3",
+		"interior_spawn": "FromCeruleanCity",
+		"interior_exit": "ToCeruleanCity",
+		"template": "BlueHouseTemplate",
+		"spawn_position": Vector2(848, 1360),
+	},
 ]
 
 var failed := false
@@ -94,7 +105,7 @@ func _check_catalog_interior_count() -> void:
 			and str(area.get("areaType", "")) == "interior"
 		):
 			cerulean_interiors += 1
-	_check(cerulean_interiors == 5, "Cerulean City exposes exactly five interiors in the world catalog")
+	_check(cerulean_interiors == 6, "Cerulean City exposes exactly six interiors in the world catalog")
 	for interior_value: Variant in INTERIORS:
 		var interior_data := interior_value as Dictionary
 		var map_id := str(interior_data.get("map_id", ""))

@@ -204,6 +204,16 @@
 						"y": 52
 					}
 				},
+				"from_house_3": {
+					"facingDirection": "down",
+					"label": "House 3",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromHouse3",
+					"tile": {
+						"x": 26,
+						"y": 42
+					}
+				},
 				"from_pokemon_center": {
 					"facingDirection": "down",
 					"label": "Pokemon Center",
@@ -367,7 +377,9 @@
 			"locationGroupId": "kanto_cerulean_city",
 			"locationGroupLabel": "Cerulean City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://wub1tyvungcw"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/house1.tscn",
 			"spawnPoints": {
 				"from_cerulean_city": {
@@ -391,6 +403,28 @@
 			"regionName": "Kanto",
 			"sceneAliases": [],
 			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/house2.tscn",
+			"spawnPoints": {
+				"from_cerulean_city": {
+					"facingDirection": "down",
+					"label": "Cerulean City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromCeruleanCity",
+					"tile": {
+						"x": 9,
+						"y": 14
+					}
+				}
+			}
+		},
+		"kanto_cerulean_city_house_3": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Cerulean City House 3",
+			"locationGroupId": "kanto_cerulean_city",
+			"locationGroupLabel": "Cerulean City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/house3.tscn",
 			"spawnPoints": {
 				"from_cerulean_city": {
 					"facingDirection": "down",
@@ -1909,7 +1943,9 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_cerulean_city_house_1",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://wub1tyvungcw"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/house1.tscn",
 				"position": {
 					"x": 304.0,
@@ -1933,6 +1969,21 @@
 				"spawnMarker": "FromCeruleanCity"
 			},
 			"destinationAreaId": "kanto_cerulean_city_house_2",
+			"sourceMapId": "kanto_cerulean_city"
+		},
+		"kanto_cerulean_city__to_house_3": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_cerulean_city_house_3",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/house3.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromCeruleanCity"
+			},
+			"destinationAreaId": "kanto_cerulean_city_house_3",
 			"sourceMapId": "kanto_cerulean_city"
 		},
 		"kanto_cerulean_city__to_pokemon_center": {
@@ -2171,6 +2222,23 @@
 			},
 			"destinationAreaId": "kanto_cerulean_city",
 			"sourceMapId": "kanto_cerulean_city_house_2"
+		},
+		"kanto_cerulean_city_house_3__to_outside": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_cerulean_city",
+				"mapSceneAliases": [
+					"uid://dly1ylygogcj3"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+				"position": {
+					"x": 848.0,
+					"y": 1360.0
+				},
+				"spawnMarker": "FromHouse3"
+			},
+			"destinationAreaId": "kanto_cerulean_city",
+			"sourceMapId": "kanto_cerulean_city_house_3"
 		},
 		"kanto_cerulean_city_pokemon_center__to_outside": {
 			"destination": {
