@@ -329,6 +329,28 @@ func save_current_player_state_now() -> Dictionary:
 	return result
 
 
+func relocate_player_within_current_map(destination: Vector2) -> Dictionary:
+	if is_in_battle or is_loading_map or authorized_teleport_in_progress:
+		return {"success": false, "error": "The trail is unavailable right now."}
+	if player == null or GameState.current_map == null:
+		return {"success": false, "error": "World is not ready."}
+	var origin := player.global_position
+	await _fade_map_transition(MAP_TRANSITION_COVER_ALPHA, MAP_FADE_OUT_SECONDS)
+	player.call("teleport_within_current_map", destination)
+	GameState.player_position = player.global_position
+	GameState.has_player_position = true
+	await get_tree().physics_frame
+	var save_result := await save_current_player_state_now()
+	if not bool(save_result.get("success", false)):
+		player.call("teleport_within_current_map", origin)
+		GameState.player_position = player.global_position
+		await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+		return save_result
+	_publish_world_presence(true)
+	await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+	return {"success": true}
+
+
 func begin_authorized_teleport(
 	ignore_player_movement := false,
 	ignore_existing_overworld_lock := false

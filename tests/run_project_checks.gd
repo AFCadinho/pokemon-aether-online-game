@@ -158,6 +158,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/cerulean_thieving_check.gd",
 	"res://tests/cerulean_lively_population_check.gd",
 	"res://tests/cerulean_mountain_staff_spawns_check.gd",
+	"res://tests/cerulean_rock_smash_sites_check.gd",
 	"res://tests/cerulean_aethernet_check.gd",
 	"res://tests/cerulean_encounter_check.gd",
 	"res://tests/route_4_collision_boundary_check.gd",
