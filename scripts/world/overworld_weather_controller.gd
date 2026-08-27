@@ -296,8 +296,12 @@ func _configure_ground_effect_surfaces(map_node: Node) -> void:
 	for ground_effects: Node2D in [rain_ground_effects, snow_ground_effects]:
 		ground_effects.set_surface_layers(surface_layers, water_layers, cover_layers)
 		# Render impacts above details such as GroundDetail instead of letting the
-		# highest accepted surface layer cover them.
-		ground_effects.z_index = surface_z_index + 1
+		# highest accepted surface layer cover them. Depth-sorted map layers may
+		# already occupy Godot's maximum canvas z-index, so keep the offset valid.
+		ground_effects.z_index = mini(
+			surface_z_index + 1,
+			RenderingServer.CANVAS_ITEM_Z_MAX
+		)
 
 
 func _collect_ground_effect_layers(
