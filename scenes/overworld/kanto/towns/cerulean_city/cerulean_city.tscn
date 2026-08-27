@@ -717,20 +717,20 @@ movement_speed_pixels = 60.0
 position = Vector2(680, 1216)
 script = ExtResource("17_battle_display")
 
-[node name="Pikachu" parent="Entities/Pokemon/BattleDisplay" unique_id=1905551537 instance=ExtResource("10_pokemon")]
+[node name="Onix" parent="Entities/Pokemon/BattleDisplay" unique_id=1905551537 instance=ExtResource("10_pokemon")]
 position = Vector2(-24, -16)
+overworld_pokemon_id = "kanto_cerulean_city_practice_onix_1"
+species_id = "onix"
+level = 16
+display_name = "Onix"
+facing_direction = Vector2(1, 0)
+
+[node name="Pikachu" parent="Entities/Pokemon/BattleDisplay" unique_id=1960521636 instance=ExtResource("10_pokemon")]
+position = Vector2(40, -16)
 overworld_pokemon_id = "kanto_cerulean_city_practice_pikachu_1"
 species_id = "pikachu"
 level = 16
 display_name = "Pikachu"
-facing_direction = Vector2(1, 0)
-
-[node name="Eevee" parent="Entities/Pokemon/BattleDisplay" unique_id=1960521636 instance=ExtResource("10_pokemon")]
-position = Vector2(40, -16)
-overworld_pokemon_id = "kanto_cerulean_city_practice_eevee_1"
-species_id = "eevee"
-level = 16
-display_name = "Eevee"
 facing_direction = Vector2(-1, 0)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=757893626]
