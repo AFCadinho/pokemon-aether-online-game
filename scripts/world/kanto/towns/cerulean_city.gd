@@ -36,22 +36,22 @@ const EXIT_OPENINGS := {
 		"from": 67,
 		"to": 71,
 	},
-	"route_5": {
+	"route_9": {
 		"axis": "right",
 		"from": 42,
 		"to": 47,
 	},
-	"route_9_left": {
+	"route_5_left": {
 		"axis": "bottom",
 		"from": 11,
 		"to": 13,
 	},
-	"route_9_grass": {
+	"route_5_grass": {
 		"axis": "bottom",
 		"from": 15,
 		"to": 18,
 	},
-	"route_9_right": {
+	"route_5_right": {
 		"axis": "bottom",
 		"from": 20,
 		"to": 22,

@@ -17,8 +17,8 @@ func _run() -> void:
 	await _check_cerulean_openings()
 	await _check_route_4_openings_and_water()
 	await _check_route_24_openings_and_water()
-	await _check_route_9_openings()
-	await _check_route_5_opening()
+	await _check_route_5_openings()
+	await _check_route_9_opening()
 	quit(1 if failed else 0)
 
 
@@ -32,10 +32,10 @@ func _check_cerulean_openings() -> void:
 	_check(_is_open(collision, Vector2i(62, 0)) and _is_open(collision, Vector2i(62, -1)), "Cerulean opens the Route 24 right water boundary")
 	_check(_is_open(collision, Vector2i(69, 0)) and _is_open(collision, Vector2i(69, -1)), "Cerulean opens the Route 24 path boundary")
 	_check(_is_open(collision, Vector2i(0, 18)) and _is_open(collision, Vector2i(-1, 18)), "Cerulean opens the Route 4 water boundary")
-	_check(_is_open(collision, Vector2i(12, 69)) and _is_open(collision, Vector2i(12, 70)), "Cerulean opens the Route 9 left path")
-	_check(_is_open(collision, Vector2i(16, 69)) and _is_open(collision, Vector2i(16, 70)), "Cerulean opens the Route 9 grass approach")
-	_check(_is_open(collision, Vector2i(21, 69)) and _is_open(collision, Vector2i(21, 70)), "Cerulean opens the Route 9 right path")
-	_check(_is_open(collision, Vector2i(74, 44)) and _is_open(collision, Vector2i(75, 44)), "Cerulean keeps Route 5 on its separate east boundary")
+	_check(_is_open(collision, Vector2i(12, 69)) and _is_open(collision, Vector2i(12, 70)), "Cerulean opens the Route 5 left path")
+	_check(_is_open(collision, Vector2i(16, 69)) and _is_open(collision, Vector2i(16, 70)), "Cerulean opens the Route 5 grass approach")
+	_check(_is_open(collision, Vector2i(21, 69)) and _is_open(collision, Vector2i(21, 70)), "Cerulean opens the Route 5 right path")
+	_check(_is_open(collision, Vector2i(74, 44)) and _is_open(collision, Vector2i(75, 44)), "Cerulean keeps Route 9 on its separate east boundary")
 	_check(not _is_open(water, Vector2i(49, 2)), "Cerulean marks the Route 24 left water spawn as water")
 	_check(_is_open(water, Vector2i(56, 2)), "Cerulean keeps the Route 24 bridge spawn off water")
 	_check(not _is_open(water, Vector2i(62, 2)), "Cerulean marks the Route 24 right water spawn as water")
@@ -75,24 +75,24 @@ func _check_route_24_openings_and_water() -> void:
 	await _free_map(route)
 
 
-func _check_route_9_openings() -> void:
-	var route := await _instantiate_map(ROUTE_9_SCENE)
-	var collision := route.find_map_tilemap_layer("Collision") as TileMapLayer
-
-	_check(_is_open(collision, Vector2i(4, 17)), "Route 9 opens its left exit")
-	_check(_is_open(collision, Vector2i(12, 17)), "Route 9 opens its grass exit")
-	_check(_is_open(collision, Vector2i(20, 17)), "Route 9 opens its right exit")
-	_check(not _is_open(collision, Vector2i(8, 17)), "Route 9 closes the first gap between exits")
-	_check(not _is_open(collision, Vector2i(16, 17)), "Route 9 closes the second gap between exits")
-	await _free_map(route)
-
-
-func _check_route_5_opening() -> void:
+func _check_route_5_openings() -> void:
 	var route := await _instantiate_map(ROUTE_5_SCENE)
 	var collision := route.find_map_tilemap_layer("Collision") as TileMapLayer
 
-	_check(_is_open(collision, Vector2i(0, 8)), "Route 5 opens its west-facing Cerulean exit")
-	_check(not _is_open(collision, Vector2i(0, 4)), "Route 5 keeps the rest of its west boundary closed")
+	_check(_is_open(collision, Vector2i(4, 17)), "Route 5 opens its left exit")
+	_check(_is_open(collision, Vector2i(12, 17)), "Route 5 opens its grass exit")
+	_check(_is_open(collision, Vector2i(20, 17)), "Route 5 opens its right exit")
+	_check(not _is_open(collision, Vector2i(8, 17)), "Route 5 closes the first gap between exits")
+	_check(not _is_open(collision, Vector2i(16, 17)), "Route 5 closes the second gap between exits")
+	await _free_map(route)
+
+
+func _check_route_9_opening() -> void:
+	var route := await _instantiate_map(ROUTE_9_SCENE)
+	var collision := route.find_map_tilemap_layer("Collision") as TileMapLayer
+
+	_check(_is_open(collision, Vector2i(0, 8)), "Route 9 opens its west-facing Cerulean exit")
+	_check(not _is_open(collision, Vector2i(0, 4)), "Route 9 keeps the rest of its west boundary closed")
 	await _free_map(route)
 
 

@@ -1,0 +1,55 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn" id="1_pewter_gym"]
+[ext_resource type="Script" path="res://scripts/world/kanto/towns/cerulean_gym.gd" id="2_gym"]
+[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_hint"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(96, 32)
+
+[node name="CeruleanGym" type="Node2D"]
+script = ExtResource("2_gym")
+map_id = "kanto_cerulean_city_gym"
+map_region_name = "Kanto"
+map_display_name = "Cerulean City Gym"
+world_access_group_id = "kanto_cerulean_city"
+world_access_group_label = "Cerulean City"
+world_access_area_type = "interior"
+location_id = "kanto.cerulean_city.gym"
+location_name = "Cerulean City Gym"
+region_id = "kanto"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_profile_id = "kanto.cerulean_city"
+
+[node name="PewterGymTemplate" parent="." instance=ExtResource("1_pewter_gym")]
+script = null
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Spawns" type="Node2D" parent="."]
+[node name="FromCeruleanCity" type="Marker2D" parent="Spawns"]
+position = Vector2(528, 912)
+
+[node name="Exits" type="Node2D" parent="."]
+[node name="ToCeruleanCity" type="Area2D" parent="Exits"]
+position = Vector2(528, 944)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
+target_spawn_name = "FromGym"
+transition_id = "kanto_cerulean_city_gym__to_outside"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanCity"]
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToCeruleanCity" instance=ExtResource("4_hint")]
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
+
+[connection signal="body_entered" from="Exits/ToCeruleanCity" to="Exits/ToCeruleanCity" method="_on_body_entered"]
