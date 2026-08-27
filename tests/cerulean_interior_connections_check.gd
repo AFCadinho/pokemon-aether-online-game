@@ -172,6 +172,10 @@ func _check_interior(city: Node, data: Dictionary) -> void:
 		var bike_visual := interior.get_node_or_null("BikeShopVisual")
 		var bike_collision := interior.get_node_or_null("Tiles/Collision") as TileMapLayer
 		var bike_floor_mask := interior.get_node_or_null("FloorVisibilityMask")
+		var bike_shop_owner := interior.get_node_or_null("Entities/NPCs/BikeShopOwner")
+		var owner_interaction_shape := interior.get_node_or_null(
+			"Entities/NPCs/BikeShopOwner/InteractionArea/CollisionShape2D"
+		) as CollisionShape2D
 		_check(
 			bike_visual != null and interior.get_node_or_null("BikeShopVisual/ObjectsTop") != null,
 			"bike_store uses its imported foreground visual layer"
@@ -193,6 +197,16 @@ func _check_interior(city: Node, data: Dictionary) -> void:
 			_check(bike_collision.get_cell_source_id(Vector2i(14, 18)) == -1, "bike_store doorway remains open")
 			_check(bike_collision.get_cell_source_id(Vector2i(14, 20)) != -1, "bike_store preserves its painted collision below the exit")
 			_check(bike_collision.get_cell_source_id(Vector2i(17, 11)) == 0, "bike_store counter blocks movement")
+		_check(
+			bike_shop_owner != null and bike_shop_owner.get("manual_interaction_reach_tiles") == 2,
+			"bike_store owner can interact across the counter"
+		)
+		_check(
+			owner_interaction_shape != null
+			and owner_interaction_shape.shape is RectangleShape2D
+			and (owner_interaction_shape.shape as RectangleShape2D).size == Vector2(160, 32),
+			"bike_store owner interaction area reaches the customer side"
+		)
 	interior.queue_free()
 	await process_frame
 

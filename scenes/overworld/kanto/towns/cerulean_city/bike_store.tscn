@@ -75,6 +75,9 @@ tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_7h5j0")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(128, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_owner_interaction"]
 size = Vector2(160, 32)
 
 [node name="BikeStore" type="Node2D" unique_id=1620940317]
@@ -129,7 +132,15 @@ position = Vector2(592, 336)
 npc_id = "kanto_cerulean_city_bike_store_owner"
 npc_definition_id = "trainer_class_mart_employee"
 display_name = "Bike Shop Owner"
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("7_mart_m")
+manual_interaction_reach_tiles = 2
+
+[node name="InteractionArea" parent="Entities/NPCs/BikeShopOwner" index="1"]
+position = Vector2(-32, 0)
+
+[node name="CollisionShape2D" parent="Entities/NPCs/BikeShopOwner/InteractionArea" index="0"]
+shape = SubResource("RectangleShape2D_owner_interaction")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=5355531]
 
@@ -143,7 +154,7 @@ position = Vector2(464, 560)
 [node name="Exits" type="Node2D" parent="." unique_id=167151200]
 
 [node name="ToCeruleanCity" type="Area2D" parent="Exits" unique_id=1139742395]
-position = Vector2(464, 592)
+position = Vector2(464, 624)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 target_spawn_name = "FromBikeStore"
@@ -151,6 +162,7 @@ transition_id = "kanto_cerulean_city_bike_store__to_outside"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanCity" unique_id=1297752336]
+position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_exit")
 
 [node name="DoorTransitionHint" parent="Exits/ToCeruleanCity" unique_id=719758815 instance=ExtResource("5_hint")]
@@ -159,3 +171,5 @@ tile_footprint = Vector2i(5, 1)
 flow_direction = "down"
 
 [connection signal="body_entered" from="Exits/ToCeruleanCity" to="Exits/ToCeruleanCity" method="_on_body_entered"]
+
+[editable path="Entities/NPCs/BikeShopOwner"]
