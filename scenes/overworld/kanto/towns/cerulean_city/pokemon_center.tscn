@@ -1,6 +1,8 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="2_dialogue"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_m_frames.tres" id="3_scientist"]
 
 [node name="PokemonCenter" instance=ExtResource("1_template")]
 map_id = "kanto_cerulean_city_pokemon_center"
@@ -20,6 +22,14 @@ npc_id = "kanto_cerulean_city_pokemon_center_clerk"
 
 [node name="Clerk2" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="3"]
 npc_id = "kanto_cerulean_city_pokemon_center_clerk_2"
+
+[node name="PartnerMoveTutor" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="5" instance=ExtResource("2_dialogue")]
+position = Vector2(272, 496)
+npc_id = "kanto_cerulean_city_pokemon_center_move_tutor"
+npc_definition_id = "trainer_class_scientist_m"
+display_name = "Partner Move Tutor"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("3_scientist")
 
 [node name="ToOutside" parent="Exits" parent_id_path=PackedInt32Array(1112148501) index="0"]
 target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"

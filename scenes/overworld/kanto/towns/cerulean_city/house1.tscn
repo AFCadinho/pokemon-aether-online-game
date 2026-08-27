@@ -5,6 +5,9 @@
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="3_floor_mask"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_hint"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="6_dialogue"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="7_poke_fan_f"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="8_pokemon"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(96, 32)
@@ -47,9 +50,26 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1207899618]
 
+[node name="OnixTrainer" parent="Entities/NPCs" instance=ExtResource("6_dialogue")]
+position = Vector2(272, 336)
+npc_id = "kanto_cerulean_city_house_1_onix_trainer"
+npc_definition_id = "trainer_class_poke_fan_f"
+display_name = "Onix Trainer"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("7_poke_fan_f")
+
 [node name="Players" type="Node2D" parent="Entities" unique_id=1702875661]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=103129966]
+
+[node name="Onix" parent="Entities/Pokemon" instance=ExtResource("8_pokemon")]
+position = Vector2(400, 368)
+overworld_pokemon_id = "kanto_cerulean_city_house_1_onix_1"
+species_id = "onix"
+level = 14
+display_name = "Onix"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "idle"
 
 [node name="Spawns" type="Node2D" parent="." unique_id=942564376]
 

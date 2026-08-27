@@ -8,6 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="7_bbts1"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="8_door_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="8_ex4qq"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="9_dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="10_pokemon"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/policeman_frames.tres" id="11_policeman"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="12_lass"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="13_youngster"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
@@ -534,9 +539,41 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=790832259]
 
+[node name="PatrolOfficer" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
+position = Vector2(1248, 1024)
+npc_id = "kanto_cerulean_city_patrol_officer"
+npc_definition_id = "trainer_class_policeman"
+display_name = "Cerulean Patrol Officer"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("11_policeman")
+
+[node name="WaterwayVisitorMaya" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
+position = Vector2(1392, 704)
+npc_id = "kanto_cerulean_city_waterway_visitor_maya"
+npc_definition_id = "trainer_class_lass"
+display_name = "Waterway Visitor Maya"
+npc_sprite_frames = ExtResource("12_lass")
+
+[node name="BikeEnthusiastTheo" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
+position = Vector2(816, 1680)
+npc_id = "kanto_cerulean_city_bike_enthusiast_theo"
+npc_definition_id = "trainer_class_youngster"
+display_name = "Bike Enthusiast Theo"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("13_youngster")
+
 [node name="Players" type="Node2D" parent="Entities" unique_id=419165532]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=611880944]
+
+[node name="Squirtle" parent="Entities/Pokemon" instance=ExtResource("10_pokemon")]
+position = Vector2(1312, 1024)
+overworld_pokemon_id = "kanto_cerulean_city_squirtle_1"
+species_id = "squirtle"
+level = 12
+display_name = "Squirtle"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "idle"
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=757893626]
 
