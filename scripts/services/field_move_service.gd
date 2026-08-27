@@ -28,6 +28,7 @@ const DEVELOPER_WEATHER_ENDPOINT := "/world/weather/developer"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var owned_charm_moves: Dictionary = {}
+var owned_hm_item_ids: Dictionary = {}
 
 
 func _ready() -> void:
@@ -44,6 +45,7 @@ func refresh_owned_charms() -> void:
 
 func update_owned_charms_from_inventory(items_value: Variant) -> void:
 	owned_charm_moves.clear()
+	owned_hm_item_ids.clear()
 	if not (items_value is Array):
 		owned_charms_changed.emit()
 		return
@@ -52,9 +54,21 @@ func update_owned_charms_from_inventory(items_value: Variant) -> void:
 		if not (item_value is Dictionary):
 			continue
 		var item: Dictionary = item_value as Dictionary
+		if str(item.get("machineKind", item.get("machine_kind", ""))).strip_edges().to_lower() != "hm":
+			continue
+		var item_id := str(item.get("itemId", item.get("item_id", ""))).strip_edges().to_lower()
+		if item_id != "":
+			owned_hm_item_ids[item_id] = true
+	for item_value: Variant in items:
+		if not (item_value is Dictionary):
+			continue
+		var item: Dictionary = item_value as Dictionary
 		var move_id := _normalize_move_id(str(item.get("fieldMove", item.get("field_move", ""))))
 		if move_id != "":
-			owned_charm_moves[move_id] = str(item.get("name", "Field Move Charm"))
+			owned_charm_moves[move_id] = {
+				"itemName": str(item.get("name", "Field Move Charm")),
+				"requiredHm": str(item.get("requiredHm", item.get("required_hm", ""))).strip_edges().to_lower(),
+			}
 	owned_charms_changed.emit()
 
 func find_party_pokemon_for_move(move_id: String) -> Pokemon:
@@ -70,8 +84,11 @@ func find_party_pokemon_for_move(move_id: String) -> Pokemon:
 
 func can_use_field_move(move_id: String) -> Dictionary:
 	var normalized_move_id := _normalize_move_id(move_id)
-	var charm_name := str(owned_charm_moves.get(normalized_move_id, ""))
-	if charm_name != "":
+	var charm_value: Variant = owned_charm_moves.get(normalized_move_id, {})
+	var charm: Dictionary = charm_value as Dictionary if charm_value is Dictionary else {}
+	var charm_name := str(charm.get("itemName", ""))
+	var required_hm_item_id := str(charm.get("requiredHm", ""))
+	if charm_name != "" and (required_hm_item_id == "" or owned_hm_item_ids.has(required_hm_item_id)):
 		return {
 			"success": true,
 			"source": "charm",
@@ -79,6 +96,15 @@ func can_use_field_move(move_id: String) -> Dictionary:
 		}
 	var pokemon := find_party_pokemon_for_move(move_id)
 	if pokemon == null:
+		if charm_name != "" and required_hm_item_id != "":
+			return {
+				"success": false,
+				"error": LocalizationManager.text(
+					"ui.field_move.error.hm_required",
+					{"hm": _format_hm_name(required_hm_item_id)}
+				),
+				"requiredHm": required_hm_item_id,
+			}
 		return {
 			"success": false,
 			"error": "A Pokemon in your party must know %s or you need its Charm." % _format_move_name(move_id),
@@ -256,3 +282,8 @@ func _normalize_move_id(value: String) -> String:
 
 func _format_move_name(move_id: String) -> String:
 	return _normalize_move_id(move_id).replace("-", " ").capitalize()
+
+
+func _format_hm_name(item_id: String) -> String:
+	var move_name := item_id.strip_edges().to_lower().trim_prefix("hm-").replace("-", " ").capitalize()
+	return "HM %s" % move_name

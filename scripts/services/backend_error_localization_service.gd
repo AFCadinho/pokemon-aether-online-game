@@ -194,6 +194,7 @@ const CODE_TO_KEY: Dictionary = {
 	"pokemon_nickname_not_allowed": "ui.pokemon_summary.nickname.not_allowed",
 	"npc_reward_not_found": "backend.error.reward_unavailable",
 	"field_move_charm_not_owned": "backend.error.item_not_owned",
+	"field_move_hm_required": "backend.error.field_move_hm_required",
 	"field_move_not_known": "backend.error.field_move_unavailable",
 	"field_move_pokemon_not_in_party": "backend.error.field_move_unavailable",
 	"invalid_field_move_binding": "backend.error.field_move_unavailable",
