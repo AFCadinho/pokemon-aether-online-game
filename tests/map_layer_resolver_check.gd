@@ -1,6 +1,7 @@
 extends SceneTree
 
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
+const MapMetadataScript := preload("res://scripts/world/map_metadata.gd")
 const LedgeDirectionResolverScript := preload("res://scripts/world/ledge_direction_resolver.gd")
 const COLLISION_MARKER_TILESET := preload("res://resources/world/collision_marker_tileset.tres")
 const POKEMON_CENTER_TEMPLATE_PATH := "res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn"
@@ -14,6 +15,7 @@ var failed := false
 func _init() -> void:
 	_check_pokemon_center_template_collision()
 	_check_direct_layer_priority()
+	await _check_map_metadata_collision_contract()
 	_check_collision_consumers_use_recursive_lookup()
 	_check_multidirectional_ledge_cell()
 	quit(1 if failed else 0)
@@ -71,6 +73,35 @@ func _check_direct_layer_priority() -> void:
 	map_root.free()
 
 
+func _check_map_metadata_collision_contract() -> void:
+	var direct_map := MapMetadataScript.new()
+	var direct_collision := TileMapLayer.new()
+	direct_collision.name = "Collision"
+	direct_map.add_child(direct_collision)
+	get_root().add_child(direct_map)
+	await process_frame
+	_check(
+		direct_map.collision == direct_collision,
+		"Map metadata resolves a direct Collision layer"
+	)
+	direct_map.free()
+
+	var nested_map := MapMetadataScript.new()
+	var tiles := Node2D.new()
+	tiles.name = "Tiles"
+	nested_map.add_child(tiles)
+	var nested_collision := TileMapLayer.new()
+	nested_collision.name = "Collision"
+	tiles.add_child(nested_collision)
+	get_root().add_child(nested_map)
+	await process_frame
+	_check(
+		nested_map.collision == nested_collision,
+		"Map metadata resolves Tiles/Collision through its nested fallback"
+	)
+	nested_map.free()
+
+
 func _check_collision_consumers_use_recursive_lookup() -> void:
 	var player_source := FileAccess.get_file_as_string(PLAYER_SCRIPT_PATH)
 	_check(
@@ -84,6 +115,12 @@ func _check_collision_consumers_use_recursive_lookup() -> void:
 			'grass_tilemap = _find_tall_grass_tilemap(current_map)'
 		),
 		"Player refresh uses the TallGrass scene-mask resolver"
+	)
+	_check(
+		player_source.contains(
+			'_find_tilemap_layer(parent_node, ["Collision", "TallGrass"])'
+		),
+		"Player map discovery accepts direct and nested collision layers"
 	)
 	_check(
 		player_source.contains('get_node_or_null("Tiles/TallGrass") as TileMapLayer'),
@@ -107,6 +144,15 @@ func _check_collision_consumers_use_recursive_lookup() -> void:
 	_check(
 		world_source.contains("return MapLayerResolverScript.find_tilemap_layer("),
 		"World position snapping resolves nested map layers"
+	)
+	var metadata_source := FileAccess.get_file_as_string(
+		"res://scripts/world/map_metadata.gd"
+	)
+	_check(
+		metadata_source.contains(
+			'@onready var collision: TileMapLayer = find_map_tilemap_layer("Collision")'
+		),
+		"Every standard map inherits the shared collision resolver"
 	)
 
 

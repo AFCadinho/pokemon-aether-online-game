@@ -381,7 +381,7 @@
   },
   "bike-voucher": {
     "name": "Bike Voucher",
-    "shortDesc": "Trade in Cerulean bike shop for a Bicycle."
+    "shortDesc": "A lifetime voucher signed by Cerulean's Bike Shop owner."
   },
   "binding-band": {
     "name": "Binding Band",
@@ -814,6 +814,10 @@
   "cut-charm": {
     "name": "Cut Charm",
     "shortDesc": "Lets you use Cut without a Pokemon knowing it."
+  },
+  "cyclizar-mount": {
+    "name": "Cyclizar Mount",
+    "shortDesc": "Unlocks Cyclizar as a land mount."
   },
   "damp-mulch": {
     "name": "Damp Mulch",
