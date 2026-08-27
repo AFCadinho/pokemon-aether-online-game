@@ -21,9 +21,11 @@ func _init() -> void:
 	)
 	var visual := CeruleanVisualScene.instantiate()
 	root.add_child(visual)
-	var ground := visual.get_node("Ground") as TileMapLayer
-	var ground_detail := visual.get_node("GroundDetail") as TileMapLayer
 	var water_mask := CeruleanWeatherWaterMaskScript.build(visual)
+	var ground := _find_visual_layer(visual, 1)
+	var grass := _find_visual_layer(visual, 6)
+	var ground_detail := _find_visual_layer(visual, 2)
+	_check_true(grass != null, "Cerulean preserves its dedicated Grass visual layer")
 	_check_true(water_mask != null, "Cerulean builds a weather water mask")
 	if water_mask == null:
 		quit(1)
@@ -58,7 +60,7 @@ func _init() -> void:
 	controller.apply_map(visual)
 	var rain = controller.rain_ground_effects
 	var snow = controller.snow_ground_effects
-	_check_equal(rain.get_surface_layer_count(), 2, "Cerulean Ground and GroundDetail accept rain impacts")
+	_check_equal(rain.get_surface_layer_count(), 3, "Cerulean Ground, Grass, and GroundDetail accept rain impacts")
 	_check_equal(rain.get_water_layer_count(), 1, "Cerulean exposes its generated water mask to rain")
 	_check_true(rain.z_index > ground_detail.z_index, "Cerulean rain impacts render above GroundDetail")
 
@@ -86,6 +88,14 @@ func _init() -> void:
 	controller.queue_free()
 	visual.queue_free()
 	quit(1 if failed else 0)
+
+
+func _find_visual_layer(visual: Node, layer_id: int) -> TileMapLayer:
+	for child: Node in visual.get_children():
+		var layer := child as TileMapLayer
+		if layer != null and int(layer.get_meta("tiled_layer_id", -1)) == layer_id:
+			return layer
+	return null
 
 
 func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
