@@ -4,6 +4,7 @@
 
 **Added**
 
+- Gary now waits before Nugget Bridge for a mandatory Route 24 rival battle, using the evolved form of the starter he chose earlier.
 - A Cerulean Gym attendant now blocks the closed Gym and quietly directs Trainers through Route 24 and Nugget Bridge toward Bill's house on Route 25.
 - Rhyhorn now joins the Rock-type Pokemon on Cerulean City's southern mountain plateau.
 - Cerulean City's west and south mountain plateaus now have dedicated Staff Teleporter spawn points.
