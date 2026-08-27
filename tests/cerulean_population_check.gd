@@ -4,6 +4,7 @@ const POPULATION := {
 	"res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn": {
 		"Entities/NPCs/GaryOak": "kanto_route_24_gary_oak",
 		"Entities/NPCs/GymAttendant": "kanto_cerulean_city_gym_attendant",
+		"Entities/NPCs/CeruleanCaveAgent": "kanto_cerulean_city_cave_agent",
 		"Entities/NPCs/OfficerJenny": "kanto_cerulean_city_patrol_officer",
 		"Entities/NPCs/WaterwayVisitorMaya": "kanto_cerulean_city_waterway_visitor_maya",
 		"Entities/NPCs/BikeEnthusiastTheo": "kanto_cerulean_city_bike_enthusiast_theo",
@@ -116,6 +117,24 @@ func _check_scene(scene_path: String, expected: Dictionary) -> void:
 			"Gym attendant leaves after Misty is found"
 		)
 		_check(bool(gym_attendant.get("preload_quest_markers")), "Gym attendant preloads its story marker")
+	var cave_agent := map.get_node_or_null("Entities/NPCs/CeruleanCaveAgent")
+	if cave_agent != null:
+		_check(cave_agent.position == Vector2(528, 208), "Investigation agent blocks the Cerulean Cave entrance")
+		_check(
+			str(cave_agent.get("guard_role")) == "transition_guard"
+				and str(cave_agent.get("guarded_transition_id")) == "kanto_cerulean_city__to_cerulean_cave",
+			"Investigation agent guards the Cerulean Cave transition"
+		)
+		_check(
+			str(cave_agent.get("required_quest_id")) == "cerulean_cave_clearance"
+				and str(cave_agent.get("required_quest_status")) == "completed",
+			"Investigation agent leaves only after the future cave-clearance sidequest"
+		)
+		_check(not bool(cave_agent.get("requires_party_pokemon")), "Cave access is story-gated instead of party-gated")
+		_check(
+			bool(cave_agent.call("guards_world_position", Vector2(528, 176))),
+			"Investigation agent blocks the cave transition while clearance is missing"
+		)
 	map.free()
 
 
