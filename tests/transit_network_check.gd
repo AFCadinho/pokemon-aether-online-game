@@ -23,6 +23,13 @@ const MAP_CONTRACTS := {
 		'interactable_id = "kanto_pewter_city_aether_beacon"',
 		'destination_id = "kanto_pewter_city"',
 	],
+	"res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn": [
+		'position = Vector2(1360, 1488)',
+		'local_destination_id = "kanto_cerulean_city"',
+		'position = Vector2(1392, 1456)',
+		'interactable_id = "kanto_cerulean_city_aether_beacon"',
+		'destination_id = "kanto_cerulean_city"',
+	],
 }
 
 const TILE_CENTER_CONTRACTS := {
@@ -39,6 +46,11 @@ const TILE_CENTER_CONTRACTS := {
 		"TransitArrival": Vector2i(1520, 976),
 		"TransitKeeper": Vector2i(1488, 976),
 		"AetherBeacon": Vector2i(1520, 944),
+	},
+	"res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn": {
+		"TransitArrival": Vector2i(1360, 1488),
+		"TransitKeeper": Vector2i(1328, 1488),
+		"AetherBeacon": Vector2i(1392, 1456),
 	},
 }
 

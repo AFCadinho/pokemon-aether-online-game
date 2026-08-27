@@ -23,11 +23,30 @@ const DIRECT_FIELD_MOVE_DEFINITIONS := {
 	},
 }
 const WEATHER_FIELD_MOVES: Array[String] = ["rain-dance", "snowscape", "sunny-day"]
+const FIELD_MOVE_REQUIRED_HMS := {
+	"cut": "hm-cut",
+	"defog": "hm-defog",
+	"dive": "hm-dive",
+	"flash": "hm-flash",
+	"rock-climb": "hm-rock-climb",
+	"rock-smash": "hm-rock-smash",
+	"strength": "hm-strength",
+	"surf": "hm-surf",
+	"waterfall": "hm-waterfall",
+	"whirlpool": "hm-whirlpool",
+}
+const KANTO_FIELD_MOVE_BADGES := {
+	"flash": "boulder",
+	"cut": "cascade",
+	"strength": "rainbow",
+	"surf": "soul",
+}
 const WEATHER_ACTION_ENDPOINT := "/world/weather/action"
 const DEVELOPER_WEATHER_ENDPOINT := "/world/weather/developer"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var owned_charm_moves: Dictionary = {}
+var owned_hm_item_ids: Dictionary = {}
 
 
 func _ready() -> void:
@@ -44,6 +63,7 @@ func refresh_owned_charms() -> void:
 
 func update_owned_charms_from_inventory(items_value: Variant) -> void:
 	owned_charm_moves.clear()
+	owned_hm_item_ids.clear()
 	if not (items_value is Array):
 		owned_charms_changed.emit()
 		return
@@ -52,9 +72,21 @@ func update_owned_charms_from_inventory(items_value: Variant) -> void:
 		if not (item_value is Dictionary):
 			continue
 		var item: Dictionary = item_value as Dictionary
+		if str(item.get("machineKind", item.get("machine_kind", ""))).strip_edges().to_lower() != "hm":
+			continue
+		var item_id := str(item.get("itemId", item.get("item_id", ""))).strip_edges().to_lower()
+		if item_id != "":
+			owned_hm_item_ids[item_id] = true
+	for item_value: Variant in items:
+		if not (item_value is Dictionary):
+			continue
+		var item: Dictionary = item_value as Dictionary
 		var move_id := _normalize_move_id(str(item.get("fieldMove", item.get("field_move", ""))))
 		if move_id != "":
-			owned_charm_moves[move_id] = str(item.get("name", "Field Move Charm"))
+			owned_charm_moves[move_id] = {
+				"itemName": str(item.get("name", "Field Move Charm")),
+				"requiredHm": str(item.get("requiredHm", item.get("required_hm", ""))).strip_edges().to_lower(),
+			}
 	owned_charms_changed.emit()
 
 func find_party_pokemon_for_move(move_id: String) -> Pokemon:
@@ -70,7 +102,15 @@ func find_party_pokemon_for_move(move_id: String) -> Pokemon:
 
 func can_use_field_move(move_id: String) -> Dictionary:
 	var normalized_move_id := _normalize_move_id(move_id)
-	var charm_name := str(owned_charm_moves.get(normalized_move_id, ""))
+	var badge_error := _required_badge_error(normalized_move_id)
+	if not badge_error.is_empty():
+		return badge_error
+	var hm_error := _required_hm_error(normalized_move_id)
+	if not hm_error.is_empty():
+		return hm_error
+	var charm_value: Variant = owned_charm_moves.get(normalized_move_id, {})
+	var charm: Dictionary = charm_value as Dictionary if charm_value is Dictionary else {}
+	var charm_name := str(charm.get("itemName", ""))
 	if charm_name != "":
 		return {
 			"success": true,
@@ -109,6 +149,12 @@ func can_use_direct_field_move(move_id: String, pokemon_id := 0) -> Dictionary:
 		}
 	if pokemon_id <= 0:
 		return can_use_field_move(normalized_move_id)
+	var badge_error := _required_badge_error(normalized_move_id)
+	if not badge_error.is_empty():
+		return badge_error
+	var hm_error := _required_hm_error(normalized_move_id)
+	if not hm_error.is_empty():
+		return hm_error
 
 	for pokemon: Pokemon in PlayerSave.party:
 		if pokemon == null or pokemon.owned_pokemon_id != pokemon_id:
@@ -256,3 +302,40 @@ func _normalize_move_id(value: String) -> String:
 
 func _format_move_name(move_id: String) -> String:
 	return _normalize_move_id(move_id).replace("-", " ").capitalize()
+
+
+func _format_hm_name(item_id: String) -> String:
+	var move_name := item_id.strip_edges().to_lower().trim_prefix("hm-").replace("-", " ").capitalize()
+	return "HM %s" % move_name
+
+
+func _required_hm_error(move_id: String) -> Dictionary:
+	var required_hm_item_id := str(FIELD_MOVE_REQUIRED_HMS.get(move_id, ""))
+	if required_hm_item_id.is_empty() or owned_hm_item_ids.has(required_hm_item_id):
+		return {}
+	return {
+		"success": false,
+		"errorCode": "field_move_hm_required",
+		"error": LocalizationManager.text(
+			"ui.field_move.error.hm_required",
+			{"hm": _format_hm_name(required_hm_item_id)}
+		),
+		"requiredHm": required_hm_item_id,
+	}
+
+
+func _required_badge_error(move_id: String) -> Dictionary:
+	var badge_id := str(KANTO_FIELD_MOVE_BADGES.get(move_id, ""))
+	if badge_id.is_empty() or PlayerSave.has_gym_badge("kanto", badge_id):
+		return {}
+	var badge_name := LocalizationManager.text("ui.gym_badge.%s" % badge_id)
+	return {
+		"success": false,
+		"errorCode": "field_move_badge_required",
+		"error": LocalizationManager.text(
+			"ui.field_move.error.badge_required",
+			{"badge": badge_name}
+		),
+		"requiredBadge": badge_id,
+		"requiredBadgeRegion": "kanto",
+	}

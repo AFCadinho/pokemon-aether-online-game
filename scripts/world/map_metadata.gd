@@ -1,5 +1,7 @@
 extends Node2D
 
+const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
+
 @export var map_id := ""
 @export var map_region_name := ""
 @export var map_display_name := ""
@@ -22,6 +24,8 @@ extends Node2D
 @export var music_track_id := ""
 @export var music_profile_id := ""
 
+@onready var collision: TileMapLayer = find_map_tilemap_layer("Collision")
+
 
 func _ready() -> void:
 	if encounter_area_id.strip_edges() != "":
@@ -30,6 +34,10 @@ func _ready() -> void:
 
 func get_map_id() -> String:
 	return map_id
+
+
+func find_map_tilemap_layer(layer_name: String) -> TileMapLayer:
+	return MapLayerResolverScript.find_tilemap_layer(self, [layer_name])
 
 
 func get_map_display_name() -> String:
@@ -78,6 +86,10 @@ func get_lighting_profile() -> String:
 
 func get_weather_profile() -> String:
 	return weather_profile
+
+
+func get_actor_sort_z_floor(_world_position: Vector2) -> int:
+	return -4096
 
 
 func get_wild_encounter_area_id() -> String:
