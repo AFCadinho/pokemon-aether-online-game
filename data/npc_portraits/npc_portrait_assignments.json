@@ -34,6 +34,8 @@
     "pokemon_center_nurse": "showdown_pokemoncenterlady",
     "pokemart_buyer": "showdown_pokemonbreeder_gen4",
     "pokemart_seller": "showdown_pokemonbreeder_gen4",
+    "trainer_class_ace_trainer_f": "showdown_acetrainerf_gen6",
+    "trainer_class_ace_trainer_m": "showdown_acetrainer_gen6",
     "trainer_class_blue": "showdown_blue_lgpe",
     "trainer_class_bird_keeper": "showdown_birdkeeper_gen6",
     "trainer_class_bug_catcher": "showdown_bugcatcher_gen6",
