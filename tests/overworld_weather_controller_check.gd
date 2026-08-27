@@ -68,6 +68,26 @@ func _init() -> void:
 	_check_equal(snow_ground_effects.get_water_layer_count(), 1, "water layers remain separately classified for snow")
 	_check_equal(rain_ground_effects.z_index, 3, "rain impacts render above GroundDetail")
 	_check_equal(snow_ground_effects.z_index, 3, "snow landings render above GroundDetail")
+	var maximum_depth_map := Node2D.new()
+	var maximum_depth_ground := TileMapLayer.new()
+	maximum_depth_ground.name = "GroundMaximumDepth"
+	maximum_depth_ground.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
+	maximum_depth_ground.set_meta("tiled_name", "Ground")
+	maximum_depth_ground.set_meta("tiled_visual_layer", true)
+	maximum_depth_map.add_child(maximum_depth_ground)
+	root.add_child(maximum_depth_map)
+	controller.apply_map(maximum_depth_map)
+	_check_equal(
+		rain_ground_effects.z_index,
+		RenderingServer.CANVAS_ITEM_Z_MAX,
+		"rain impacts stay within the canvas z-index limit"
+	)
+	_check_equal(
+		snow_ground_effects.z_index,
+		RenderingServer.CANVAS_ITEM_Z_MAX,
+		"snow landings stay within the canvas z-index limit"
+	)
+	controller.apply_map(visual_map)
 	_check_equal(rain_ground_effects.get_cover_layer_count(), 1, "tree and structure visual layers block rain impacts")
 	_check_equal(snow_ground_effects.get_cover_layer_count(), 1, "tree and structure visual layers block snow landings")
 	var water_world_position := water_layer.to_global(water_layer.map_to_local(Vector2i.ZERO))
