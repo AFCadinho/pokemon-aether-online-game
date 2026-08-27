@@ -1,0 +1,33 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_cerulean_city",
+  "signs": [
+    {
+      "id": "kanto_cerulean_city_town_sign",
+      "type": "town",
+      "title": "Cerulean City",
+      "lines": [
+        "Cerulean City",
+        "A Mysterious Blue Aura Surrounds It"
+      ]
+    },
+    {
+      "id": "kanto_cerulean_city_gym",
+      "type": "building",
+      "title": "Cerulean City Pokémon Gym",
+      "lines": [
+        "Cerulean City Pokémon Gym",
+        "Leader: Misty — The Tomboyish Mermaid. Victory awards the Cascade Badge."
+      ]
+    },
+    {
+      "id": "kanto_cerulean_city_bike_shop",
+      "type": "building",
+      "title": "Cerulean Bike Shop",
+      "lines": [
+        "Cerulean Bike Shop",
+        "Quality bicycles for Trainers ready to hit the road."
+      ]
+    }
+  ]
+}

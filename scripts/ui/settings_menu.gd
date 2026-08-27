@@ -593,6 +593,13 @@ func _build_controls_tab(controls_tab: VBoxContainer) -> void:
 	)
 	_add_input_binding_control(
 		controls_tab,
+		"mount",
+		"Mount",
+		"ui.settings.controls.mount",
+		"ui.settings.controls.mount_hint"
+	)
+	_add_input_binding_control(
+		controls_tab,
 		"pickpocket",
 		"Thieving",
 		"ui.settings.controls.thieving",

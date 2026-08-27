@@ -23,8 +23,16 @@ func _run() -> void:
 		"Surf catalog exposes Lapras to the loadout selector"
 	)
 	_check(
-		MountServiceScript.get_mount_ids_for_mode("land").is_empty(),
-		"land loadout remains empty until a land mount is available"
+		MountServiceScript.get_mount_ids_for_mode("land") == ["cyclizar"],
+		"land catalog contains Cyclizar"
+	)
+	_check(
+		MountServiceScript.get_unlocked_mount_ids_for_mode("land", []).is_empty()
+		and MountServiceScript.get_unlocked_mount_ids_for_mode(
+			"land",
+			["cyclizar-mount"]
+		) == ["cyclizar"],
+		"Cyclizar only appears after its untradeable mount item is owned"
 	)
 	_check(
 		MountServiceScript.get_mount_icon_texture("lapras") != null,
@@ -124,7 +132,14 @@ func _run() -> void:
 	panel.call("_open_selector", "land")
 	_check(
 		selector_options.get_child_count() == 0 and selector_empty_label.visible,
-		"land selector explains that no land mounts are available yet"
+		"land selector hides Cyclizar before it is unlocked"
+	)
+	panel.call("_on_inventory_changed", [{"itemId": "cyclizar-mount", "quantity": 1}])
+	panel.call("_open_selector", "land")
+	_check(
+		selector_options.get_child_count() == 1
+		and (selector_options.get_child(0) as Button).text.contains("Cyclizar"),
+		"land selector lists Cyclizar after the mount item is owned"
 	)
 
 	for locale_path: String in [
