@@ -64,6 +64,7 @@ func _check_visual_scene(root: Node) -> void:
 	_check_equal(hidden.z_index, 1, "hidden z order")
 	_check_equal(overlay.z_index, 2050, "overlay z order")
 	_check_equal(ground.get_cell_source_id(Vector2i(0, 0)), 1, "ground first cell source id")
+	_check_equal(hidden.get_cell_source_id(Vector2i(1, 1)), -1, "stale tileset count cannot create a tile beyond the texture")
 	_check_equal(overlay.get_cell_alternative_tile(Vector2i(0, 0)), ALT_FLIP_H, "horizontal flip flag is preserved")
 
 

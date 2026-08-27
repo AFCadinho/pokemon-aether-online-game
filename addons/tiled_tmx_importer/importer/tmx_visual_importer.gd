@@ -158,13 +158,11 @@ func _materialize_tileset_image_chunks(
 
 	var image_tile_count := columns * int(floor(float(image_height) / float(tile_height)))
 	var tile_count := int(tileset.get("tile_count", 0))
-	# Some Tiled tilesets keep a stale tilecount after the source image grows.
-	# Use the image dimensions as a lower bound so valid cells in the newly
-	# appended rows are not silently dropped during import.
-	if tile_count <= 0:
+	# Tiled tilesets can retain stale counts after their source image changes.
+	# The physical atlas grid is authoritative in both directions: include newly
+	# appended rows and never create phantom tiles beyond the texture boundary.
+	if tile_count != image_tile_count:
 		tile_count = image_tile_count
-	else:
-		tile_count = maxi(tile_count, image_tile_count)
 
 	var max_rows_per_chunk := maxi(1, MAX_GENERATED_TEXTURE_SIZE / tile_height)
 	var total_rows := int(ceil(float(tile_count) / float(columns)))

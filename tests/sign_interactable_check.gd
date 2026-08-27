@@ -11,6 +11,8 @@ const VIRIDIAN_CITY_SCENE := "res://scenes/overworld/kanto/towns/viridian_city/v
 const VIRIDIAN_CITY_SIGN_DATA := "res://data/world_text/signs/en/kanto/viridian_city.json"
 const PEWTER_CITY_SCENE := "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
 const PEWTER_CITY_SIGN_DATA := "res://data/world_text/signs/en/kanto/pewter_city.json"
+const CERULEAN_CITY_SCENE := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
+const CERULEAN_CITY_SIGN_DATA := "res://data/world_text/signs/en/kanto/cerulean_city.json"
 const ROUTE_3_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_3.tscn"
 const ROUTE_SIGN_DATA := "res://data/world_text/signs/en/kanto/routes.json"
 
@@ -34,6 +36,7 @@ func _run() -> void:
 	_check_pallet_town_sign_markers()
 	_check_viridian_city_sign_markers()
 	_check_pewter_city_and_route_3_sign_markers()
+	_check_cerulean_city_sign_markers()
 
 	quit(1 if failed else 0)
 
@@ -201,6 +204,31 @@ func _check_pewter_city_and_route_3_sign_markers() -> void:
 		route_data_text.contains('"kanto_route_3_mt_moon_sign"'),
 		"Route sign data includes the Mt. Moon sign"
 	)
+
+
+func _check_cerulean_city_sign_markers() -> void:
+	var scene_text := _read_text(CERULEAN_CITY_SCENE)
+	var sign_data_text := _read_text(CERULEAN_CITY_SIGN_DATA)
+	var expected_signs := {
+		"kanto_cerulean_city_town_sign": "/large_sign_interactable.tscn",
+		"kanto_cerulean_city_gym": "/sign_interactable.tscn",
+		"kanto_cerulean_city_bike_shop": "/sign_interactable.tscn",
+	}
+
+	for sign_id: String in expected_signs:
+		_check_true(scene_text.contains('sign_id = "%s"' % sign_id), "Cerulean City places %s" % sign_id)
+		_check_true(sign_data_text.contains('"%s"' % sign_id), "Cerulean City sign data includes %s" % sign_id)
+		_check_true(
+			_has_sign_instance(scene_text, sign_id, str(expected_signs[sign_id])),
+			"Cerulean City uses the correct interactable for %s" % sign_id
+		)
+
+	var service: Node = SignTextServiceScript.new()
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+		for sign_id: String in expected_signs:
+			var lines: Array[String] = service.call("get_lines", sign_id, "kanto_cerulean_city", locale)
+			_check_true(not lines.is_empty(), "Cerulean City resolves %s text in %s" % [sign_id, locale])
+	service.free()
 
 
 func _read_text(path: String) -> String:

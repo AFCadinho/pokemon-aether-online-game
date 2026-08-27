@@ -150,6 +150,18 @@ Initial recurring terminology:
 The glossary is a product rule. If a term changes, update existing catalog entries
 together rather than allowing per-screen variants.
 
+Protected Simplified Chinese Pokémon terms live in
+`localization/terminology/zh_CN.json`. New Chinese Pokémon terminology must cite a
+source, carry an approved review status, and declare every catalog target that must
+match it. Do not bypass the glossary by translating a protected display name directly
+inside a UI sentence. Use placeholders for names and resolve them from the canonical
+localized display-name entry.
+
+The terminology check scans every Simplified Chinese catalog for known literal
+mistranslations and is required by the desktop release workflow. When generated
+content changes, update the generator or its source data so the generated catalog
+continues to satisfy the glossary.
+
 ## Server and external content
 
 - Send the normalized HTTP locale only to endpoints that support it.

@@ -27,12 +27,15 @@ var selector_close_button: Button
 var active_mode := ""
 var settings_manager: Node
 var localization_manager: Node
+var inventory_service: Node
+var owned_item_ids: Array[String] = []
 
 
 func _ready() -> void:
 	_build_interface()
 	settings_manager = get_node_or_null("/root/SettingsManager")
 	localization_manager = get_node_or_null("/root/LocalizationManager")
+	inventory_service = get_node_or_null("/root/InventoryService")
 	var loadout_callable := Callable(self, "_on_mount_loadout_changed")
 	if (
 		settings_manager != null
@@ -45,6 +48,14 @@ func _ready() -> void:
 		and not localization_manager.is_connected("locale_changed", locale_callable)
 	):
 		localization_manager.connect("locale_changed", locale_callable)
+	var inventory_callable := Callable(self, "_on_inventory_changed")
+	if (
+		inventory_service != null
+		and not inventory_service.is_connected("inventory_changed", inventory_callable)
+	):
+		inventory_service.connect("inventory_changed", inventory_callable)
+		_on_inventory_changed(inventory_service.get("cached_inventory_items"))
+		_load_mount_ownership.call_deferred()
 	_refresh_localized_content()
 	_refresh_slots()
 
@@ -71,6 +82,7 @@ func open_manager() -> void:
 	_close_selector()
 	_refresh_slots()
 	visible = true
+	_load_mount_ownership.call_deferred()
 
 
 func close_manager() -> void:
@@ -302,7 +314,10 @@ func _populate_selector(movement_mode: String) -> void:
 		selector_options.remove_child(child)
 		child.queue_free()
 
-	var mount_ids := MountServiceScript.get_mount_ids_for_mode(movement_mode)
+	var mount_ids := MountServiceScript.get_unlocked_mount_ids_for_mode(
+		movement_mode,
+		owned_item_ids
+	)
 	selector_empty_label.visible = mount_ids.is_empty()
 	var selected_mount_id := _get_selected_mount_id(movement_mode)
 	for mount_id: String in mount_ids:
@@ -361,14 +376,38 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_localized_content()
 
 
+func _load_mount_ownership() -> void:
+	if inventory_service == null or not inventory_service.has_method("load_inventory"):
+		return
+	await inventory_service.call("load_inventory")
+
+
+func _on_inventory_changed(items: Array) -> void:
+	owned_item_ids.clear()
+	for item_value: Variant in items:
+		if not item_value is Dictionary:
+			continue
+		var item := item_value as Dictionary
+		if int(item.get("quantity", 0)) <= 0:
+			continue
+		var item_id := str(item.get("itemId", item.get("item_id", ""))).strip_edges().to_lower()
+		if not item_id.is_empty() and item_id not in owned_item_ids:
+			owned_item_ids.append(item_id)
+	_refresh_slots()
+	if selector_panel != null and selector_panel.visible and not active_mode.is_empty():
+		_populate_selector(active_mode)
+
+
 func _mode_label(movement_mode: String) -> String:
 	return _text("ui.mounts.%s" % movement_mode)
 
 
 func _get_selected_mount_id(movement_mode: String) -> String:
 	if settings_manager == null:
-		return MountServiceScript.get_default_mount_id(movement_mode)
-	return str(settings_manager.call("get_selected_mount_id", movement_mode))
+		var default_mount_id := MountServiceScript.get_default_mount_id(movement_mode)
+		return default_mount_id if MountServiceScript.is_mount_unlocked(default_mount_id, owned_item_ids) else ""
+	var selected_mount_id := str(settings_manager.call("get_selected_mount_id", movement_mode))
+	return selected_mount_id if MountServiceScript.is_mount_unlocked(selected_mount_id, owned_item_ids) else ""
 
 
 func _text(key: String, replacements: Dictionary = {}) -> String:
