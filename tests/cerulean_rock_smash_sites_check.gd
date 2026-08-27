@@ -1,15 +1,16 @@
 extends SceneTree
 
+const RockSmashLevelPaletteScript := preload("res://scripts/world/interactables/rock_smash_level_palette.gd")
 const CITY_SCENE := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 const EXPECTED_ROCKS := {
-	"WestRockNorth": ["kanto_cerulean_city_west_site_rock_north", Vector2(144, 1104)],
-	"WestRockUpper": ["kanto_cerulean_city_west_site_rock_upper", Vector2(48, 1232)],
-	"WestRockLower": ["kanto_cerulean_city_west_site_rock_lower", Vector2(48, 1744)],
-	"WestRockSouth": ["kanto_cerulean_city_west_site_rock_south", Vector2(144, 1936)],
-	"EastRockNorthwest": ["kanto_cerulean_city_east_site_rock_northwest", Vector2(2128, 1712)],
-	"EastRockNortheast": ["kanto_cerulean_city_east_site_rock_northeast", Vector2(2128, 2096)],
-	"EastRockSouthwest": ["kanto_cerulean_city_east_site_rock_southwest", Vector2(1392, 2192)],
-	"EastRockSoutheast": ["kanto_cerulean_city_east_site_rock_southeast", Vector2(1136, 2096)],
+	"WestRockNorth": ["kanto_cerulean_city_west_site_rock_north", Vector2(144, 1104), 20],
+	"WestRockUpper": ["kanto_cerulean_city_west_site_rock_upper", Vector2(48, 1232), 20],
+	"WestRockLower": ["kanto_cerulean_city_west_site_rock_lower", Vector2(48, 1744), 20],
+	"WestRockSouth": ["kanto_cerulean_city_west_site_rock_south", Vector2(144, 1936), 20],
+	"EastRockNorthwest": ["kanto_cerulean_city_east_site_rock_northwest", Vector2(2128, 1712), 50],
+	"EastRockNortheast": ["kanto_cerulean_city_east_site_rock_northeast", Vector2(2128, 2096), 50],
+	"EastRockSouthwest": ["kanto_cerulean_city_east_site_rock_southwest", Vector2(1392, 2192), 50],
+	"EastRockSoutheast": ["kanto_cerulean_city_east_site_rock_southeast", Vector2(1136, 2096), 50],
 }
 
 var failed := false
@@ -51,6 +52,13 @@ func _run() -> void:
 			if rock != null:
 				_check(str(rock.get("rock_id")) == str(expected[0]), "%s has its authoritative ID" % rock_name)
 				_check(rock.position == expected[1], "%s keeps its mapped position" % rock_name)
+				var required_level := int(expected[2])
+				_check(int(rock.get("required_rock_smash_level")) == required_level, "%s exposes its level %d requirement" % [rock_name, required_level])
+				var sprite := rock.get_node_or_null("Sprite2D") as Sprite2D
+				_check(
+					sprite != null and sprite.self_modulate == RockSmashLevelPaletteScript.color_for_required_level(required_level),
+					"%s uses the level %d rock color" % [rock_name, required_level]
+				)
 				_check(int(rock.get("rock_visual_style")) == 2, "%s uses the route rock visual" % rock_name)
 				_check(rock.z_index == 2054 and not rock.z_as_relative, "%s renders on the plateau" % rock_name)
 				_check(_is_open_land(rock.position, collision, water), "%s stands on open land" % rock_name)

@@ -197,6 +197,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/thieving_mentor_reward_check.gd",
 	"res://tests/thieving_foundation_check.gd",
 	"res://tests/rock_smash_foundation_check.gd",
+	"res://tests/rock_smash_level_colors_check.gd",
 	"res://tests/wild_encounter_error_rules_check.gd",
 	"res://tests/wild_encounter_transition_check.gd",
 	"res://tests/aethernet_teleport_effect_check.gd",
