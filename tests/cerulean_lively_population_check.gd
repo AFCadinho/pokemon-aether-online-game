@@ -103,6 +103,8 @@ func _check_water_pokemon(city: Node, collision: TileMapLayer, water: TileMapLay
 
 func _check_mountain_pokemon(city: Node, collision: TileMapLayer, water: TileMapLayer) -> void:
 	var reachable_tiles := _collect_walkable_tiles(city, collision, water)
+	var mountain_foreground := city.get_node_or_null("CeruleanCityVisual/ObjectsTop") as CanvasItem
+	_check(mountain_foreground != null, "Cerulean exposes its mountain foreground layer")
 	for node_path_value: Variant in MOUNTAIN_POKEMON:
 		var node_path := str(node_path_value)
 		var pokemon := city.get_node_or_null(node_path) as Node2D
@@ -115,6 +117,11 @@ func _check_mountain_pokemon(city: Node, collision: TileMapLayer, water: TileMap
 		)
 		_check(pokemon.get("npc_sprite_frames") != null, "%s resolves its overworld follower sprite" % node_path.get_file())
 		_check(str(pokemon.get("movement_behavior")) == "idle", "%s remains an ambient overworld Pokemon" % node_path.get_file())
+		if mountain_foreground != null:
+			_check(
+				pokemon.z_index > mountain_foreground.z_index,
+				"%s renders above the mountain foreground" % node_path.get_file()
+			)
 		if collision != null:
 			var cell := collision.local_to_map(collision.to_local(pokemon.global_position))
 			_check(not reachable_tiles.has(cell), "%s stays beyond the player's walkable area" % node_path.get_file())

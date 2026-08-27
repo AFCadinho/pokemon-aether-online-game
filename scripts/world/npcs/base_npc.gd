@@ -56,6 +56,8 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var dialogue_lines: Array[String] = []
 @export var npc_sprite_frames: SpriteFrames
 @export var sprite_offset := Vector2(0, -16)
+## Optional lower bound for actors that must remain above a map foreground layer.
+@export_range(-4096, 4096, 1) var minimum_sort_z := -4096
 ## Optional catalog id. Empty values use the central NPC assignment table.
 @export var portrait_id := ""
 @export var mugshot: Texture2D
@@ -1557,6 +1559,7 @@ func _update_sort_z() -> void:
 			elif npc_feet_y < player_feet_y - PLAYER_OVERLAP_SORT_Y_EPSILON:
 				sort_z = mini(sort_z, player_sort_z - 1)
 
+	sort_z = maxi(sort_z, minimum_sort_z)
 	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
 	if sprite != null:
 		sprite.z_index = sprite_sort_z
