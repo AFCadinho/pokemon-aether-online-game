@@ -53,6 +53,7 @@
     "trainer_class_school_kid_m": "showdown_schoolkid_gen6",
     "trainer_class_scientist_f": "showdown_scientistf_gen6",
     "trainer_class_scientist_m": "showdown_scientist_gen6",
+    "trainer_class_veteran": "showdown_veteran_gen6",
     "trainer_class_worker": "showdown_worker_gen6",
     "trainer_class_youngster": "showdown_youngster_gen6"
   },
