@@ -4,6 +4,7 @@
 
 **Added**
 
+- Cerulean City's west and south mountain plateaus now have dedicated Staff Teleporter spawn points.
 - Cerulean City's inaccessible mountain plateaus now feature ambient Rock-type Pokemon from multiple generations.
 - Cerulean City is livelier with moving water Pokemon including Gyarados, Officer Jenny and Growlithe, and a friendly practice battle on the Pokemon Center plaza.
 - Cerulean City now connects to Cerulean Cave and Routes 5, 9, and 24 through new open-field placeholder maps, including three Route 9 approaches and separate Route 24 path and Surf crossings.
