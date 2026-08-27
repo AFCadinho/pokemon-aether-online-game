@@ -541,6 +541,7 @@ z_index = 5
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=757893626]
 
 [node name="Tiles" type="Node2D" parent="." unique_id=426809689]
+visible = false
 
 [node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=1772699322]
 visible = false
