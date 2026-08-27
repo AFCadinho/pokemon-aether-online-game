@@ -12,6 +12,7 @@
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="10_picnicker"]
 [ext_resource type="SpriteFrames" uid="uid://csw1c2lg3cyhk" path="res://assets/npcs/classes/bird_keeper_frames.tres" id="11_bird_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="12_route_rock"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="13_pokemon"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mt_moon_exit"]
 size = Vector2(96, 32)
@@ -483,6 +484,34 @@ npc_sprite_frames = ExtResource("10_picnicker")
 [node name="Players" type="Node2D" parent="Entities" unique_id=208040010]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=208040011]
+
+[node name="Sandshrew" parent="Entities/Pokemon" instance=ExtResource("13_pokemon")]
+position = Vector2(912, 1424)
+overworld_pokemon_id = "kanto_route_4_sandshrew_1"
+species_id = "sandshrew"
+display_name = "Sandshrew"
+facing_direction = Vector2(1, 0)
+
+[node name="Mankey" parent="Entities/Pokemon" instance=ExtResource("13_pokemon")]
+position = Vector2(2256, 1392)
+overworld_pokemon_id = "kanto_route_4_mankey_1"
+species_id = "mankey"
+display_name = "Mankey"
+facing_direction = Vector2(-1, 0)
+
+[node name="Spearow" parent="Entities/Pokemon" instance=ExtResource("13_pokemon")]
+position = Vector2(2960, 624)
+overworld_pokemon_id = "kanto_route_4_spearow_1"
+species_id = "spearow"
+display_name = "Spearow"
+facing_direction = Vector2(-1, 0)
+
+[node name="Tentacool" parent="Entities/Pokemon" instance=ExtResource("13_pokemon")]
+position = Vector2(2832, 1008)
+overworld_pokemon_id = "kanto_route_4_tentacool_1"
+species_id = "tentacool"
+display_name = "Tentacool"
+facing_direction = Vector2(1, 0)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=208040012]
 
