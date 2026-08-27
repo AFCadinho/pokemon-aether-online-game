@@ -11,7 +11,9 @@
 [ext_resource type="Script" uid="uid://bokcw1q7hoc1w" path="res://scripts/world/kanto/routes/nugget_bridge_trainer.gd" id="9_bridge_trainer"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="10_youngster"]
 [ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="11_lass"]
+[ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="12_camper"]
 [ext_resource type="SpriteFrames" uid="uid://ndd4lyovddgq" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="13_rocket_grunt"]
+[ext_resource type="Script" uid="uid://difpptfuv50c0" path="res://scripts/world/kanto/routes/nugget_bridge_recruiter.gd" id="14_recruiter"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_path_exit"]
 size = Vector2(128, 16)
@@ -302,8 +304,6 @@ z_index = 5
 position = Vector2(784, 1616)
 script = ExtResource("9_bridge_trainer")
 challenge_width_tiles = 6
-one_time_challenge = false
-post_victory_quest_id = ""
 trainer_id = "kanto_route_24_nugget_bridge_03_timmy"
 npc_id = "kanto_route_24_nugget_bridge_03_timmy"
 npc_definition_id = "trainer_class_youngster"
@@ -315,8 +315,6 @@ npc_sprite_frames = ExtResource("10_youngster")
 position = Vector2(784, 1232)
 script = ExtResource("9_bridge_trainer")
 challenge_width_tiles = 6
-one_time_challenge = false
-post_victory_quest_id = ""
 trainer_id = "kanto_route_24_nugget_bridge_04_reli"
 npc_id = "kanto_route_24_nugget_bridge_04_reli"
 npc_definition_id = "trainer_class_lass"
@@ -328,14 +326,24 @@ npc_sprite_frames = ExtResource("11_lass")
 position = Vector2(784, 752)
 script = ExtResource("9_bridge_trainer")
 challenge_width_tiles = 6
-one_time_challenge = true
-post_victory_quest_id = "learn_to_pickpocket"
 trainer_id = "kanto_route_24_nugget_bridge_05_ethan"
 npc_id = "kanto_route_24_nugget_bridge_05_ethan"
-npc_definition_id = "trainer_class_rocket_grunt"
-display_name = "Rocket Recruiter Ethan"
+npc_definition_id = "trainer_class_camper"
+display_name = "Camper Ethan"
 facing_direction = Vector2(-1, 0)
-npc_sprite_frames = ExtResource("13_rocket_grunt")
+npc_sprite_frames = ExtResource("12_camper")
+
+[node name="NuggetBridgeRocketRecruiter" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
+position = Vector2(784, 464)
+script = ExtResource("14_recruiter")
+trainer_id = "kanto_route_24_rocket_recruiter"
+sight_range_tiles = 0
+npc_id = "kanto_route_24_rocket_recruiter"
+npc_definition_id = "trainer_class_camper"
+display_name = "Bridge Attendant"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("12_camper")
+rocket_sprite_frames = ExtResource("13_rocket_grunt")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=289758416]
 

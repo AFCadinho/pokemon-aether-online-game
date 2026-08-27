@@ -4,8 +4,6 @@ extends TrainerNPC
 class_name NuggetBridgeTrainer
 
 @export_range(1, 8, 1) var challenge_width_tiles := 6
-@export var one_time_challenge := false
-@export var post_victory_quest_id := ""
 
 
 func _configure_vision_area() -> void:
@@ -50,29 +48,3 @@ func _is_body_in_sight_range(body: Node2D) -> bool:
 func walk_to_player(_body: Node2D) -> void:
 	# Every challenger guards the full bridge width and battles in place.
 	_set_idle_frame(_get_cardinal_direction(facing_direction))
-
-
-func supports_trainer_rematches() -> bool:
-	return not one_time_challenge
-
-
-func _show_post_battle_dialogue() -> void:
-	await super._show_post_battle_dialogue()
-	await show_post_victory_offer()
-
-
-func show_post_victory_offer() -> void:
-	var quest_id := post_victory_quest_id.strip_edges()
-	if quest_id.is_empty():
-		return
-	var quest := StoryService.get_quest(quest_id)
-	if (
-		str(quest.get("questType", "")) != "side"
-		or str(quest.get("status", "")) != "available"
-	):
-		return
-	var dialogue_box := _get_dialogue_box()
-	if dialogue_box == null or not dialogue_box.has_method("start_quest_offer"):
-		return
-	dialogue_box.start_quest_offer(quest, display_name, mugshot)
-	await dialogue_box.quest_offer_resolved

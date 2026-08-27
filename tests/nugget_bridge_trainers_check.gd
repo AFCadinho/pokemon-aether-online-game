@@ -3,6 +3,7 @@ extends SceneTree
 const CITY_SCENE := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 const ROUTE_24_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
 const BRIDGE_SCRIPT := "res://scripts/world/kanto/routes/nugget_bridge_trainer.gd"
+const RECRUITER_SCRIPT := "res://scripts/world/kanto/routes/nugget_bridge_recruiter.gd"
 const CITY_TRAINERS := [
 	{
 		"node": "NuggetBridge01Cale",
@@ -34,7 +35,7 @@ const ROUTE_TRAINERS := [
 		"node": "NuggetBridge05Ethan",
 		"id": "kanto_route_24_nugget_bridge_05_ethan",
 		"position": Vector2(784, 752),
-		"definition": "trainer_class_rocket_grunt",
+		"definition": "trainer_class_camper",
 	},
 ]
 
@@ -55,8 +56,8 @@ func _run() -> void:
 		"Cerulean City owns the first two Nugget Bridge challengers"
 	)
 	_check(
-		_count_bridge_trainers(route_24) == 3,
-		"Route 24 owns the final three Nugget Bridge challengers"
+		_count_bridge_trainers(route_24) == 4,
+		"Route 24 owns three challengers plus the separate Rocket recruiter"
 	)
 	var bridge_source := FileAccess.get_file_as_string(BRIDGE_SCRIPT)
 	_check(
@@ -64,20 +65,44 @@ func _run() -> void:
 		and bridge_source.contains("battles in place"),
 		"Nugget Bridge challengers guard the complete bridge width"
 	)
-	var recruiter := route_24.get_node("Entities/NPCs/NuggetBridge05Ethan")
-	_check(recruiter.one_time_challenge, "Rocket recruiter cannot grant repeat challenge rewards")
+	var recruiter := route_24.get_node("Entities/NPCs/NuggetBridgeRocketRecruiter")
+	_check(recruiter.position == Vector2(784, 464), "Recruiter keeps the reviewed post-bridge tile")
+	_check(recruiter.sight_range_tiles == 0, "Disguised recruiter waits for manual interaction")
+	_check(not recruiter.rematch_marker.visible, "Disguised recruiter shows no trainer challenge marker")
+	_check(recruiter.npc_definition_id == "trainer_class_camper", "Recruiter begins in an ordinary disguise")
+	_check(recruiter.display_name == "Bridge Attendant", "Recruiter hides his identity before the reveal")
 	_check(
-		recruiter.post_victory_quest_id == "learn_to_pickpocket",
-		"Rocket recruiter offers the existing Thieving side quest"
+		recruiter.get_script().resource_path == RECRUITER_SCRIPT,
+		"Recruiter uses the scripted prize and reveal sequence"
 	)
-	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	var collision := route_24.find_map_tilemap_layer("Collision") as TileMapLayer
+	var water := route_24.find_map_tilemap_layer("Water") as TileMapLayer
+	var recruiter_cell := collision.local_to_map(recruiter.position)
+	_check(collision.get_cell_source_id(recruiter_cell) < 0, "Recruiter stands on walkable ground")
+	_check(water == null or water.get_cell_source_id(recruiter_cell) < 0, "Recruiter stands outside water")
+	var recruiter_source := FileAccess.get_file_as_string(RECRUITER_SCRIPT)
 	_check(
-		world_source.contains("_show_trainer_post_victory_offer(reward_trainer_id)"),
-		"Trainer victory flow opens configured post-battle quest offers"
+		recruiter_source.contains("kanto_route_24_nugget_bridge_big_nugget"),
+		"Recruiter claims the one-time Big Nugget prize"
+	)
+	var refusal_position := recruiter_source.find('REFUSAL_DIALOGUE_ID, ["No."]')
+	var reveal_position := recruiter_source.find("_reveal_team_rocket()", refusal_position)
+	var challenge_position := recruiter_source.find("CHALLENGE_DIALOGUE_ID,", reveal_position)
+	var battle_position := recruiter_source.find(
+		"start_trainer_battle(trainer_metadata)",
+		challenge_position
 	)
 	_check(
-		world_source.contains("_notify_trainer_reward_items(reward.get(\"items\", []))"),
-		"Trainer victory flow announces item rewards"
+		refusal_position >= 0
+		and reveal_position > refusal_position
+		and challenge_position > reveal_position
+		and battle_position > challenge_position,
+		"Recruiter auto-refuses before the outfit reveal, threat, and battle"
+	)
+	_check(
+		not recruiter_source.contains("learn_to_pickpocket")
+		and not recruiter_source.contains("start_quest_offer"),
+		"Rocket recruitment scene does not activate a quest"
 	)
 	city.queue_free()
 	route_24.queue_free()
