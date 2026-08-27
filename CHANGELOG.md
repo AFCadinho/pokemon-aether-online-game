@@ -4,6 +4,7 @@
 
 **Added**
 
+- Cerulean City now connects to Cerulean Cave and Routes 5, 9, and 24 through new open-field placeholder maps, including three Route 9 approaches and separate Route 24 path and Surf crossings.
 - The Guild Bank now has a comparison page showing what every Guild rank can do.
 - Guild leaders can create a recruitment checklist that applicants see on the Guild profile and before applying.
 - Added Guild Resources, where members can share consumable items. Guild leaders can manage access for individual members.
@@ -53,6 +54,7 @@
 
 **Changed**
 
+- Cerulean City now uses its complete new city layout, with its Route 4 entrance aligned to the imported map.
 - Route 4 now uses its complete new outdoor layout, with its Mt. Moon and Cerulean City entrances in the correct places.
 - Chat settings now manage community language chats and disclose that moderation may be limited; the main chat tabs keep a fixed order.
 - All chat now includes messages from the community language chats a player has enabled.
