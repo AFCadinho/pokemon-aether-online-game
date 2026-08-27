@@ -4,6 +4,7 @@
 
 **Added**
 
+- Route 4 and Route 24 now feature ambient Pokemon drawn from their local wild encounters and placed in matching grassland and water habitats.
 - Swimmer Luis, Picnicker Diana, and Swimmer Briana now challenge Trainers inside Cerulean Gym.
 - Horsea, Shellder, and Goldeen now join Staryu in Cerulean Gym's pools.
 - Cerulean Gym now uses its complete imported Tiled pool and bridge visual, with the entrance and Gym Guide aligned to the new foyer.

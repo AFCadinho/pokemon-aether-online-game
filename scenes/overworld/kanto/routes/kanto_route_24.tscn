@@ -14,6 +14,7 @@
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="12_camper"]
 [ext_resource type="SpriteFrames" uid="uid://ndd4lyovddgq" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="13_rocket_grunt"]
 [ext_resource type="Script" uid="uid://difpptfuv50c0" path="res://scripts/world/kanto/routes/nugget_bridge_recruiter.gd" id="14_recruiter"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="15_pokemon"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_path_exit"]
 size = Vector2(128, 16)
@@ -377,6 +378,34 @@ npc_sprite_frames = ExtResource("12_camper")
 [node name="Players" type="Node2D" parent="Entities" unique_id=289758416]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=401373030]
+
+[node name="Abra" parent="Entities/Pokemon" instance=ExtResource("15_pokemon")]
+position = Vector2(1296, 176)
+overworld_pokemon_id = "kanto_route_24_abra_1"
+species_id = "abra"
+display_name = "Abra"
+facing_direction = Vector2(-1, 0)
+
+[node name="Oddish" parent="Entities/Pokemon" instance=ExtResource("15_pokemon")]
+position = Vector2(848, 624)
+overworld_pokemon_id = "kanto_route_24_oddish_1"
+species_id = "oddish"
+display_name = "Oddish"
+facing_direction = Vector2(1, 0)
+
+[node name="Squirtle" parent="Entities/Pokemon" instance=ExtResource("15_pokemon")]
+position = Vector2(464, 1040)
+overworld_pokemon_id = "kanto_route_24_squirtle_1"
+species_id = "squirtle"
+display_name = "Squirtle"
+facing_direction = Vector2(1, 0)
+
+[node name="Magikarp" parent="Entities/Pokemon" instance=ExtResource("15_pokemon")]
+position = Vector2(560, 1136)
+overworld_pokemon_id = "kanto_route_24_magikarp_1"
+species_id = "magikarp"
+display_name = "Magikarp"
+facing_direction = Vector2(-1, 0)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=185431822]
 
