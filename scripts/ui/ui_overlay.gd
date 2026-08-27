@@ -331,6 +331,8 @@ const POKEMON_NICKNAME_MAX_LENGTH := 18
 const POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE := Vector2i(263, 180)
 const POKEMON_SUMMARY_SPRITE_MAX_SIZE := Vector2(235, 155)
 const POKEMON_SUMMARY_SPRITE_BASE_SCALE := 1.7
+const POKEDEX_SPRITE_MAX_SIZE := Vector2(126, 104)
+const POKEDEX_SPRITE_BASE_SCALE := 1.5
 const POKEMON_SUMMARY_STATUS_ICON_WIDTH := 44
 const POKEMON_SUMMARY_STATUS_ICON_HEIGHT := 16
 const POKEMON_SUMMARY_STATUS_ICON_ROWS := {
@@ -31558,11 +31560,15 @@ func _get_pokedex_sprite_scale(frames: SpriteFrames) -> Vector2:
 	if normalized_frame_size == Vector2.ZERO:
 		normalized_frame_size = _get_pokedex_sprite_frame_size(frames) / max(render_scale, 1.0)
 	var fit_scale: float = min(
-		126.0 / max(normalized_frame_size.x, 1.0),
-		104.0 / max(normalized_frame_size.y, 1.0)
+		POKEDEX_SPRITE_MAX_SIZE.x / max(normalized_frame_size.x, 1.0),
+		POKEDEX_SPRITE_MAX_SIZE.y / max(normalized_frame_size.y, 1.0)
 	)
-	var scale_value: float = clamp(fit_scale * display_scale_multiplier, 0.65, 2.0)
-	scale_value = round(scale_value * 4.0) / 4.0
+	# Preserve the artwork's natural size differences. Compact Pokémon use the
+	# same baseline presentation while oversized sprites are reduced to fit.
+	var scale_value: float = min(
+		POKEDEX_SPRITE_BASE_SCALE * display_scale_multiplier,
+		fit_scale
+	)
 	var texture_scale: float = scale_value / max(render_scale, 1.0)
 	return Vector2(texture_scale, texture_scale)
 
