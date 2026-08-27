@@ -26,6 +26,7 @@
 [ext_resource type="SpriteFrames" uid="uid://3v3l6agblhvi" path="res://assets/npcs/gary_sprite_frames.tres" id="23_gary_frames"]
 [ext_resource type="Texture2D" path="res://assets/sprites/mugshots/gary.png" id="24_gary_mugshot"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="25_story_hook"]
+[ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="26_gate_npc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
@@ -671,6 +672,18 @@ preload_quest_markers = true
 script = ExtResource("25_story_hook")
 interaction_id = "kanto_cerulean_gym_closed"
 entity_id = "kanto_cerulean_city_gym_attendant"
+
+[node name="CeruleanCaveAgent" parent="Entities/NPCs" instance=ExtResource("26_gate_npc")]
+position = Vector2(528, 208)
+guard_role = "transition_guard"
+guarded_transition_id = "kanto_cerulean_city__to_cerulean_cave"
+requires_party_pokemon = false
+required_quest_id = "cerulean_cave_clearance"
+story_blocked_dialogue_id = "kanto_cerulean_city_cave_agent_blocked"
+blocked_dialogue_id = "kanto_cerulean_city_cave_agent_blocked"
+npc_id = "kanto_cerulean_city_cave_agent"
+display_name = "League Investigation Agent"
+facing_direction = Vector2(0, 1)
 
 [node name="OfficerJenny" parent="Entities/NPCs" unique_id=1966720263 instance=ExtResource("9_dialogue")]
 position = Vector2(1040, 1008)
