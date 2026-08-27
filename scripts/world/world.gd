@@ -2678,6 +2678,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 
 	var player_lead_slot := PlayerSave.get_first_usable_party_slot()
 	if player_lead_slot <= 0:
+		await _blackout_before_trainer_battle(trainer_id)
 		return {
 			"success": false,
 			"code": "no_usable_pokemon",
@@ -2923,6 +2924,13 @@ func _begin_blackout_respawn_transition() -> void:
 	has_pending_player_position_save = false
 	if not GameState.overworld_input_locked:
 		GameState.lock_overworld_input()
+
+
+func _blackout_before_trainer_battle(trainer_id: String) -> void:
+	_begin_blackout_respawn_transition()
+	await _respawn_after_battle_loss()
+	_finish_blackout_respawn_transition()
+	_finish_trainer_battle_npc(trainer_id, false)
 
 
 func _finish_blackout_respawn_transition() -> void:
