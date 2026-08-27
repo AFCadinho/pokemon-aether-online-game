@@ -1,0 +1,28 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
+
+[node name="PokemonCenter" instance=ExtResource("1_template")]
+map_id = "kanto_cerulean_city_pokemon_center"
+map_display_name = "Cerulean City Pokémon Center"
+world_access_group_id = "kanto_cerulean_city"
+world_access_group_label = "Cerulean City"
+world_access_area_type = "interior"
+location_id = "kanto.cerulean_city.pokemon_center"
+location_name = "Cerulean City Pokémon Center"
+
+[node name="NurseJoy" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="0"]
+respawn_point_id = "kanto_cerulean_city_pokemon_center"
+npc_id = "kanto_cerulean_city_pokemon_center_nurse_joy"
+
+[node name="Clerk" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="2"]
+npc_id = "kanto_cerulean_city_pokemon_center_clerk"
+
+[node name="Clerk2" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="3"]
+npc_id = "kanto_cerulean_city_pokemon_center_clerk_2"
+
+[node name="ToOutside" parent="Exits" parent_id_path=PackedInt32Array(1112148501) index="0"]
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
+target_spawn_name = "FromPokemonCenter"
+transition_id = "kanto_cerulean_city_pokemon_center__to_outside"
+transition_facing_direction = "down"
