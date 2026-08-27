@@ -636,15 +636,15 @@ z_index = 5
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=790832259]
 
 [node name="GymAttendant" parent="Entities/NPCs" unique_id=1108117216 instance=ExtResource("9_dialogue")]
-position = Vector2(1584, 1360)
+position = Vector2(1584, 1344)
 npc_id = "kanto_cerulean_city_gym_attendant"
 visibility_hidden_quest_id = "explore_cerulean_city"
 visibility_hidden_quest_step_id = "visit_nugget_bridge"
+visibility_hidden_quest_status = "completed"
 display_name = "Cerulean Gym Attendant"
+facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("18_gym_attendant")
 preload_quest_markers = true
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
 
 [node name="OfficerJenny" parent="Entities/NPCs" unique_id=1966720263 instance=ExtResource("9_dialogue")]
 position = Vector2(1040, 1008)
@@ -654,8 +654,6 @@ display_name = "Officer Jenny"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("14_jenny")
 mugshot = SubResource("AtlasTexture_jenny_portrait")
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
 
 [node name="WaterwayVisitorMaya" parent="Entities/NPCs" unique_id=395956463 instance=ExtResource("9_dialogue")]
 position = Vector2(1424, 720)
@@ -663,8 +661,6 @@ npc_id = "kanto_cerulean_city_waterway_visitor_maya"
 npc_definition_id = "trainer_class_lass"
 display_name = "Waterway Visitor Maya"
 npc_sprite_frames = ExtResource("12_lass")
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
 
 [node name="BikeEnthusiastTheo" parent="Entities/NPCs" unique_id=826750557 instance=ExtResource("9_dialogue")]
 position = Vector2(752, 1680)
@@ -673,8 +669,6 @@ npc_definition_id = "trainer_class_youngster"
 display_name = "Bike Enthusiast Theo"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("13_youngster")
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
 
 [node name="AceTrainerLila" parent="Entities/NPCs" unique_id=159174064 instance=ExtResource("9_dialogue")]
 position = Vector2(624, 1200)
@@ -683,8 +677,6 @@ npc_definition_id = "trainer_class_ace_trainer_f"
 display_name = "Ace Trainer Lila"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("15_ace_f")
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
 
 [node name="AceTrainerBram" parent="Entities/NPCs" unique_id=1773113791 instance=ExtResource("9_dialogue")]
 position = Vector2(752, 1200)
@@ -693,14 +685,10 @@ npc_definition_id = "trainer_class_ace_trainer_m"
 display_name = "Ace Trainer Bram"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("16_ace_m")
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
 
 [node name="TransitKeeper" parent="Entities/NPCs" unique_id=1146061101 instance=ExtResource("19_transit_keeper")]
 position = Vector2(1712, 912)
 local_destination_id = "kanto_cerulean_city"
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=419165532]
 
@@ -713,8 +701,6 @@ species_id = "growlithe"
 level = 12
 display_name = "Growlithe"
 facing_direction = Vector2(-1, 0)
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
 
 [node name="WaterPokemon" type="Node2D" parent="Entities/Pokemon" unique_id=1249643878]
 
@@ -730,8 +716,6 @@ movement_behavior = "pace_horizontal"
 movement_tiles = 2
 movement_wait_seconds = 0.8
 movement_speed_pixels = 55.0
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
 
 [node name="Goldeen" parent="Entities/Pokemon/WaterPokemon" unique_id=1899759157 instance=ExtResource("10_pokemon")]
 position = Vector2(336, 624)
@@ -744,8 +728,6 @@ movement_behavior = "pace_horizontal"
 movement_tiles = 2
 movement_wait_seconds = 1.0
 movement_speed_pixels = 70.0
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
 
 [node name="Poliwag" parent="Entities/Pokemon/WaterPokemon" unique_id=1370913628 instance=ExtResource("10_pokemon")]
 position = Vector2(1648, 208)
@@ -757,8 +739,6 @@ movement_behavior = "pace_vertical"
 movement_tiles = 2
 movement_wait_seconds = 1.2
 movement_speed_pixels = 60.0
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
 
 [node name="MountainPokemon" type="Node2D" parent="Entities/Pokemon" unique_id=246911283]
 
@@ -772,8 +752,8 @@ movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 1.8
 movement_speed_pixels = 30.0
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
+minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
 
 [node name="Nosepass" parent="Entities/Pokemon/MountainPokemon" unique_id=459947247 instance=ExtResource("10_pokemon")]
 position = Vector2(112, 1456)
@@ -786,8 +766,8 @@ movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 2.4
 movement_speed_pixels = 24.0
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
+minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
 
 [node name="Roggenrola" parent="Entities/Pokemon/MountainPokemon" unique_id=825557704 instance=ExtResource("10_pokemon")]
 position = Vector2(2128, 1168)
@@ -800,8 +780,8 @@ movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 1.6
 movement_speed_pixels = 28.0
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
+minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
 
 [node name="Larvitar" parent="Entities/Pokemon/MountainPokemon" unique_id=2025605849 instance=ExtResource("10_pokemon")]
 position = Vector2(1712, 2064)
@@ -814,8 +794,8 @@ movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 1.2
 movement_speed_pixels = 38.0
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
+minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
 
 [node name="Rockruff" parent="Entities/Pokemon/MountainPokemon" unique_id=204595213 instance=ExtResource("10_pokemon")]
 position = Vector2(2192, 1584)
@@ -828,8 +808,8 @@ movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 1.0
 movement_speed_pixels = 46.0
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
+minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
 
 [node name="Rhyhorn" parent="Entities/Pokemon/MountainPokemon" unique_id=2048374653 instance=ExtResource("10_pokemon")]
 position = Vector2(1584, 2032)
@@ -842,8 +822,8 @@ movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 1.5
 movement_speed_pixels = 34.0
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
+minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
 
 [node name="BattleDisplay" type="Node2D" parent="Entities/Pokemon" unique_id=1385943621]
 position = Vector2(680, 1216)
@@ -856,8 +836,6 @@ species_id = "onix"
 level = 16
 display_name = "Onix"
 facing_direction = Vector2(1, 0)
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
 
 [node name="Pikachu" parent="Entities/Pokemon/BattleDisplay" unique_id=1960521636 instance=ExtResource("10_pokemon")]
 position = Vector2(40, -16)
@@ -866,8 +844,6 @@ species_id = "pikachu"
 level = 16
 display_name = "Pikachu"
 facing_direction = Vector2(-1, 0)
-minimum_sort_z = null
-ambient_movement_ignores_map_collision = null
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=757893626]
 

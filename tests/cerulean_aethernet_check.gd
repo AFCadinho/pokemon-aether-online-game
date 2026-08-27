@@ -4,8 +4,8 @@ const CITY_SCENE := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_c
 
 const EXPECTED_POSITIONS := {
 	"Spawns/TransitArrival": Vector2(1360, 1488),
-	"Entities/NPCs/TransitKeeper": Vector2(1328, 1488),
-	"Entities/Interactables/AetherBeacon": Vector2(1392, 1456),
+	"Entities/NPCs/TransitKeeper": Vector2(1712, 912),
+	"Entities/Interactables/AetherBeacon": Vector2(1648, 912),
 }
 
 var failed := false
