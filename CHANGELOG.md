@@ -30,6 +30,7 @@
 
 **Changed**
 
+- Land mounts now travel faster and temporarily recall the player's follower Pokémon until the rider dismounts.
 - Cyclizar's source sprite now uses the same 64-pixel mount-frame scale as Lapras instead of undersized 32-pixel frames.
 - Thieving arrests now play an Officer Jenny confrontation before the jail transfer and a short sentence explanation after arrival.
 - Cerulean City's ambient mountain Pokemon now patrol their plateaus instead of standing still.
