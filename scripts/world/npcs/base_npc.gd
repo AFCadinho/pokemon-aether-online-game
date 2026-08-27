@@ -72,6 +72,9 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var pickpocket_enabled := false
 @export var pickpocket_npc_type := ""
 @export_range(1, 100, 1) var pickpocket_required_level := 1
+## Optional lower bound for actors that must remain above a map foreground layer.
+## Keep this at the end of the inherited property list so open scenes can hot-reload safely.
+@export_range(-4096, 4096, 1) var minimum_sort_z := -4096
 
 const TILE_SIZE := 32
 const MOVE_SPEED := 120.0
@@ -1557,6 +1560,7 @@ func _update_sort_z() -> void:
 			elif npc_feet_y < player_feet_y - PLAYER_OVERLAP_SORT_Y_EPSILON:
 				sort_z = mini(sort_z, player_sort_z - 1)
 
+	sort_z = maxi(sort_z, minimum_sort_z)
 	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
 	if sprite != null:
 		sprite.z_index = sprite_sort_z
