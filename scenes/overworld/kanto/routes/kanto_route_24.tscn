@@ -180,10 +180,10 @@ position = Vector2(704, 1872)
 [node name="FromCeruleanWaterRight" type="Marker2D" parent="Spawns" unique_id=1480509165]
 position = Vector2(912, 1872)
 
-[node name="FromRoute25Upper" type="Marker2D" parent="Spawns"]
+[node name="FromRoute25Upper" type="Marker2D" parent="Spawns" unique_id=1934920880]
 position = Vector2(1392, 144)
 
-[node name="FromRoute25Lower" type="Marker2D" parent="Spawns"]
+[node name="FromRoute25Lower" type="Marker2D" parent="Spawns" unique_id=599407868]
 position = Vector2(1392, 336)
 
 [node name="Exits" type="Node2D" parent="." unique_id=360871628]
@@ -259,7 +259,7 @@ flow_direction = "down"
 position = Vector2(16, 16)
 shape = SubResource("RectangleShape2D_fxetv")
 
-[node name="ToRoute25Upper" type="Area2D" parent="Exits"]
+[node name="ToRoute25Upper" type="Area2D" parent="Exits" unique_id=1465332228]
 position = Vector2(1424, 144)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_25.tscn"
@@ -267,16 +267,16 @@ target_spawn_name = "FromRoute24Upper"
 transition_id = "kanto_route_24__to_route_25_upper"
 transition_facing_direction = "right"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute25Upper"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute25Upper" unique_id=1040143497]
 shape = SubResource("RectangleShape2D_route25_upper")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute25Upper" instance=ExtResource("4_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToRoute25Upper" unique_id=1650284853 instance=ExtResource("4_hint")]
 z_as_relative = false
 position = Vector2(-16, 0)
 tile_footprint = Vector2i(1, 5)
 flow_direction = "right"
 
-[node name="ToRoute25Lower" type="Area2D" parent="Exits"]
+[node name="ToRoute25Lower" type="Area2D" parent="Exits" unique_id=849871836]
 position = Vector2(1424, 336)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_25.tscn"
@@ -284,10 +284,10 @@ target_spawn_name = "FromRoute24Lower"
 transition_id = "kanto_route_24__to_route_25_lower"
 transition_facing_direction = "right"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute25Lower"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute25Lower" unique_id=1388973083]
 shape = SubResource("RectangleShape2D_route25_lower")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute25Lower" instance=ExtResource("4_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToRoute25Lower" unique_id=1743270133 instance=ExtResource("4_hint")]
 z_as_relative = false
 position = Vector2(-16, 0)
 tile_footprint = Vector2i(1, 6)
@@ -298,39 +298,43 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1432169820]
 
-[node name="NuggetBridge03Timmy" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
-position = Vector2(704, 1664)
+[node name="NuggetBridge03Timmy" parent="Entities/NPCs" unique_id=1766615038 instance=ExtResource("8_trainer")]
+position = Vector2(784, 1616)
 script = ExtResource("9_bridge_trainer")
+challenge_width_tiles = 6
+one_time_challenge = false
+post_victory_quest_id = ""
 trainer_id = "kanto_route_24_nugget_bridge_03_timmy"
-sight_range_tiles = 5
 npc_id = "kanto_route_24_nugget_bridge_03_timmy"
 npc_definition_id = "trainer_class_youngster"
 display_name = "Youngster Timmy"
-facing_direction = Vector2(0, 1)
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("10_youngster")
 
-[node name="NuggetBridge04Reli" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
-position = Vector2(704, 1280)
+[node name="NuggetBridge04Reli" parent="Entities/NPCs" unique_id=1202630054 instance=ExtResource("8_trainer")]
+position = Vector2(784, 1232)
 script = ExtResource("9_bridge_trainer")
+challenge_width_tiles = 6
+one_time_challenge = false
+post_victory_quest_id = ""
 trainer_id = "kanto_route_24_nugget_bridge_04_reli"
-sight_range_tiles = 5
 npc_id = "kanto_route_24_nugget_bridge_04_reli"
 npc_definition_id = "trainer_class_lass"
 display_name = "Lass Reli"
-facing_direction = Vector2(0, 1)
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("11_lass")
 
-[node name="NuggetBridge05Ethan" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
-position = Vector2(704, 896)
+[node name="NuggetBridge05Ethan" parent="Entities/NPCs" unique_id=1412516035 instance=ExtResource("8_trainer")]
+position = Vector2(784, 752)
 script = ExtResource("9_bridge_trainer")
-trainer_id = "kanto_route_24_nugget_bridge_05_ethan"
-sight_range_tiles = 5
+challenge_width_tiles = 6
 one_time_challenge = true
 post_victory_quest_id = "learn_to_pickpocket"
+trainer_id = "kanto_route_24_nugget_bridge_05_ethan"
 npc_id = "kanto_route_24_nugget_bridge_05_ethan"
 npc_definition_id = "trainer_class_rocket_grunt"
 display_name = "Rocket Recruiter Ethan"
-facing_direction = Vector2(0, 1)
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("13_rocket_grunt")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=289758416]

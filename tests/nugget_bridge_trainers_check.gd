@@ -7,13 +7,13 @@ const CITY_TRAINERS := [
 	{
 		"node": "NuggetBridge01Cale",
 		"id": "kanto_route_24_nugget_bridge_01_cale",
-		"position": Vector2(1808, 560),
+		"position": Vector2(1872, 464),
 		"definition": "trainer_class_bug_catcher",
 	},
 	{
 		"node": "NuggetBridge02Ali",
 		"id": "kanto_route_24_nugget_bridge_02_ali",
-		"position": Vector2(1808, 304),
+		"position": Vector2(1872, 176),
 		"definition": "trainer_class_lass",
 	},
 ]
@@ -21,19 +21,19 @@ const ROUTE_TRAINERS := [
 	{
 		"node": "NuggetBridge03Timmy",
 		"id": "kanto_route_24_nugget_bridge_03_timmy",
-		"position": Vector2(704, 1664),
+		"position": Vector2(784, 1616),
 		"definition": "trainer_class_youngster",
 	},
 	{
 		"node": "NuggetBridge04Reli",
 		"id": "kanto_route_24_nugget_bridge_04_reli",
-		"position": Vector2(704, 1280),
+		"position": Vector2(784, 1232),
 		"definition": "trainer_class_lass",
 	},
 	{
 		"node": "NuggetBridge05Ethan",
 		"id": "kanto_route_24_nugget_bridge_05_ethan",
-		"position": Vector2(704, 896),
+		"position": Vector2(784, 752),
 		"definition": "trainer_class_rocket_grunt",
 	},
 ]
@@ -100,7 +100,7 @@ func _check_trainers(map: Node, expected_trainers: Array, map_label: String) -> 
 			"%s uses its trainer class" % expected.node
 		)
 		_check(trainer.position == expected.position, "%s keeps its reviewed bridge tile" % expected.node)
-		_check(trainer.facing_direction == Vector2.DOWN, "%s faces approaching players" % expected.node)
+		_check(trainer.facing_direction == Vector2.LEFT, "%s faces approaching players" % expected.node)
 		_check(trainer.sight_range_tiles == 5, "%s has consistent bridge sight range" % expected.node)
 		_check(
 			trainer.get_script().resource_path == BRIDGE_SCRIPT,
