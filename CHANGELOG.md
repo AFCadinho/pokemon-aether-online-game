@@ -4,6 +4,7 @@
 
 **Added**
 
+- Cerulean City's quiet southeast corner now hosts Veteran Garrick and his Dragonite, with Garrick available as a high-level daily Thieving target.
 - Cerulean City now has additional daily Thieving targets around its bridge, canals, and practice platform.
 - Cerulean City now has daily Thieving targets, and the especially reckless can pickpocket Officer Jenny for a guaranteed arrest and Wanted reset.
 - Gary now guards the Cerulean City entrance to Nugget Bridge for a mandatory rival battle, then disappears after the defeated map is reloaded.

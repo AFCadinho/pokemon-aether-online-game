@@ -10,7 +10,9 @@ const POPULATION := {
 		"Entities/NPCs/BikeEnthusiastTheo": "kanto_cerulean_city_bike_enthusiast_theo",
 		"Entities/NPCs/AceTrainerLila": "kanto_cerulean_city_ace_trainer_lila",
 		"Entities/NPCs/AceTrainerBram": "kanto_cerulean_city_ace_trainer_bram",
+		"Entities/NPCs/VeteranGarrick": "kanto_cerulean_city_veteran_garrick",
 		"Entities/Pokemon/Growlithe": "kanto_cerulean_city_growlithe_1",
+		"Entities/Pokemon/Dragonite": "kanto_cerulean_city_dragonite_1",
 		"Entities/Pokemon/WaterPokemon/Gyarados": "kanto_cerulean_city_gyarados_1",
 		"Entities/Pokemon/WaterPokemon/Goldeen": "kanto_cerulean_city_goldeen_1",
 		"Entities/Pokemon/WaterPokemon/Poliwag": "kanto_cerulean_city_poliwag_1",
@@ -97,7 +99,7 @@ func _check_scene(scene_path: String, expected: Dictionary) -> void:
 		_check(misty.get("npc_profile") != null, "Misty has her Cascade Badge profile")
 	var gym_attendant := map.get_node_or_null("Entities/NPCs/GymAttendant")
 	if gym_attendant != null:
-		_check(gym_attendant.position == Vector2(1584, 1344), "Gym attendant blocks the Gym doorway")
+		_check(gym_attendant.position == Vector2(1584, 1360), "Gym attendant blocks the Gym doorway")
 		_check(
 			str(gym_attendant.get("portrait_id")) == "showdown_trialguide",
 			"Gym attendant uses the matching Showdown guide portrait"
@@ -135,6 +137,18 @@ func _check_scene(scene_path: String, expected: Dictionary) -> void:
 			bool(cave_agent.call("guards_world_position", Vector2(528, 176))),
 			"Investigation agent blocks the cave transition while clearance is missing"
 		)
+	var veteran := map.get_node_or_null("Entities/NPCs/VeteranGarrick") as Node2D
+	var dragonite := map.get_node_or_null("Entities/Pokemon/Dragonite") as Node2D
+	if veteran != null and dragonite != null:
+		_check(veteran.position == Vector2(1792, 1664), "Veteran Garrick fills Cerulean's southeast corner")
+		_check(
+			str(veteran.get("npc_definition_id")) == "trainer_class_veteran",
+			"Veteran Garrick uses the veteran trainer presentation"
+		)
+		_check(str(dragonite.get("species_id")) == "dragonite", "Garrick's partner is Dragonite")
+		_check(int(dragonite.get("level")) == 62, "Dragonite reflects Garrick's veteran status")
+		_check(dragonite.position.distance_to(veteran.position) == 64.0, "Dragonite stays beside Garrick")
+		_check(dragonite.get("npc_sprite_frames") != null, "Dragonite resolves its overworld follower sprite")
 	map.free()
 
 

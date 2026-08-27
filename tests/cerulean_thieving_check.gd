@@ -30,6 +30,10 @@ const TARGETS := {
 		"npc_id": "kanto_cerulean_city_canal_picnicker_nia",
 		"behind": Vector2(1488, 752),
 	},
+	"Entities/NPCs/VeteranGarrick": {
+		"npc_id": "kanto_cerulean_city_veteran_garrick",
+		"behind": Vector2(1792, 1696),
+	},
 }
 const LOCALIZATION_KEYS := [
 	"ui.skills.thieving.target.cerulean_theo",
@@ -38,6 +42,7 @@ const LOCALIZATION_KEYS := [
 	"ui.skills.thieving.target.bridge_worker_milo",
 	"ui.skills.thieving.target.canal_researcher_cora",
 	"ui.skills.thieving.target.canal_picnicker_nia",
+	"ui.skills.thieving.target.cerulean_garrick",
 	"ui.skills.thieving.target.officer_jenny",
 	"ui.skills.thieving.location.cerulean_city",
 	"ui.skills.thieving.target_type.law_enforcement",
