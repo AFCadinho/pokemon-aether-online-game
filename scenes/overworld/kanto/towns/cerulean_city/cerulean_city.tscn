@@ -848,7 +848,7 @@ facing_direction = Vector2(-1, 0)
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=757893626]
 
 [node name="AetherBeacon" parent="Entities/Interactables" unique_id=239659690 instance=ExtResource("20_aether_beacon")]
-z_index = 1456
+z_index = 912
 position = Vector2(1648, 912)
 destination_id = "kanto_cerulean_city"
 interactable_id = "kanto_cerulean_city_aether_beacon"
