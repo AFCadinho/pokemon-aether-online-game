@@ -5,6 +5,14 @@
 [ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_hint"]
 [ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="5_marker"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="6_trainer"]
+[ext_resource type="Script" path="res://scripts/world/kanto/routes/route_24_gary.gd" id="7_gary_script"]
+[ext_resource type="SpriteFrames" uid="uid://3v3l6agblhvi" path="res://assets/npcs/gary_sprite_frames.tres" id="8_gary_frames"]
+[ext_resource type="Texture2D" path="res://assets/sprites/mugshots/gary.png" id="9_gary_mugshot"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gary_mugshot"]
+atlas = ExtResource("9_gary_mugshot")
+region = Rect2(80, 0, 387, 387)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_path_exit"]
 size = Vector2(128, 32)
@@ -129,6 +137,18 @@ flow_direction = "down"
 z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="GaryOak" parent="Entities/NPCs" instance=ExtResource("6_trainer")]
+position = Vector2(320, 416)
+script = ExtResource("7_gary_script")
+trainer_id = "kanto_route_24_gary_bulbasaur"
+sight_range_tiles = 3
+npc_id = "kanto_route_24_gary_oak"
+npc_definition_id = "trainer_class_blue"
+display_name = "Gary Oak"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("8_gary_frames")
+mugshot = SubResource("AtlasTexture_gary_mugshot")
 
 [node name="Players" type="Node2D" parent="Entities"]
 
