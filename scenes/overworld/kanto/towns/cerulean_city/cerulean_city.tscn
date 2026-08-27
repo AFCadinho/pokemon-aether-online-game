@@ -13,11 +13,11 @@
 [ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="12_lass"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="13_o6adi"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="13_youngster"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/officer_jenny_frames.tres" id="14_jenny"]
-[ext_resource type="Texture2D" path="res://assets/npcs/classes/officer_jenny.png" id="14_jenny_texture"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="15_ace_f"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ace_trainer_m_frames.tres" id="16_ace_m"]
-[ext_resource type="Script" path="res://scripts/world/kanto/towns/cerulean_battle_display.gd" id="17_battle_display"]
+[ext_resource type="SpriteFrames" uid="uid://bp814sj37edjl" path="res://assets/npcs/classes/officer_jenny_frames.tres" id="14_jenny"]
+[ext_resource type="Texture2D" uid="uid://bflvtep8pflvv" path="res://assets/npcs/classes/officer_jenny.png" id="14_jenny_texture"]
+[ext_resource type="SpriteFrames" uid="uid://cg046cju3kis8" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="15_ace_f"]
+[ext_resource type="SpriteFrames" uid="uid://bewtxeqmv8vls" path="res://assets/npcs/classes/ace_trainer_m_frames.tres" id="16_ace_m"]
+[ext_resource type="Script" uid="uid://3sc142eusmtf" path="res://scripts/world/kanto/towns/cerulean_battle_display.gd" id="17_battle_display"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
@@ -647,16 +647,16 @@ display_name = "Bike Enthusiast Theo"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("13_youngster")
 
-[node name="AceTrainerLila" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
-position = Vector2(624, 1216)
+[node name="AceTrainerLila" parent="Entities/NPCs" unique_id=159174064 instance=ExtResource("9_dialogue")]
+position = Vector2(624, 1200)
 npc_id = "kanto_cerulean_city_ace_trainer_lila"
 npc_definition_id = "trainer_class_ace_trainer_f"
 display_name = "Ace Trainer Lila"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("15_ace_f")
 
-[node name="AceTrainerBram" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
-position = Vector2(736, 1216)
+[node name="AceTrainerBram" parent="Entities/NPCs" unique_id=1773113791 instance=ExtResource("9_dialogue")]
+position = Vector2(752, 1200)
 npc_id = "kanto_cerulean_city_ace_trainer_bram"
 npc_definition_id = "trainer_class_ace_trainer_m"
 display_name = "Ace Trainer Bram"
@@ -675,10 +675,10 @@ level = 12
 display_name = "Growlithe"
 facing_direction = Vector2(-1, 0)
 
-[node name="WaterPokemon" type="Node2D" parent="Entities/Pokemon"]
+[node name="WaterPokemon" type="Node2D" parent="Entities/Pokemon" unique_id=1249643878]
 
-[node name="Gyarados" parent="Entities/Pokemon/WaterPokemon" instance=ExtResource("10_pokemon")]
-position = Vector2(1392, 512)
+[node name="Gyarados" parent="Entities/Pokemon/WaterPokemon" unique_id=156814263 instance=ExtResource("10_pokemon")]
+position = Vector2(1392, 528)
 scale = Vector2(1.2, 1.2)
 overworld_pokemon_id = "kanto_cerulean_city_gyarados_1"
 species_id = "gyarados"
@@ -690,8 +690,8 @@ movement_tiles = 2
 movement_wait_seconds = 0.8
 movement_speed_pixels = 55.0
 
-[node name="Goldeen" parent="Entities/Pokemon/WaterPokemon" instance=ExtResource("10_pokemon")]
-position = Vector2(320, 608)
+[node name="Goldeen" parent="Entities/Pokemon/WaterPokemon" unique_id=1899759157 instance=ExtResource("10_pokemon")]
+position = Vector2(336, 624)
 overworld_pokemon_id = "kanto_cerulean_city_goldeen_1"
 species_id = "goldeen"
 level = 15
@@ -702,32 +702,31 @@ movement_tiles = 2
 movement_wait_seconds = 1.0
 movement_speed_pixels = 70.0
 
-[node name="Poliwag" parent="Entities/Pokemon/WaterPokemon" instance=ExtResource("10_pokemon")]
-position = Vector2(1184, 384)
+[node name="Poliwag" parent="Entities/Pokemon/WaterPokemon" unique_id=1370913628 instance=ExtResource("10_pokemon")]
+position = Vector2(1648, 208)
 overworld_pokemon_id = "kanto_cerulean_city_poliwag_1"
 species_id = "poliwag"
 level = 12
 display_name = "Poliwag"
-facing_direction = Vector2(0, 1)
 movement_behavior = "pace_vertical"
 movement_tiles = 2
 movement_wait_seconds = 1.2
 movement_speed_pixels = 60.0
 
-[node name="BattleDisplay" type="Node2D" parent="Entities/Pokemon"]
+[node name="BattleDisplay" type="Node2D" parent="Entities/Pokemon" unique_id=1385943621]
 position = Vector2(680, 1216)
 script = ExtResource("17_battle_display")
 
-[node name="Pikachu" parent="Entities/Pokemon/BattleDisplay" instance=ExtResource("10_pokemon")]
-position = Vector2(-24, 0)
+[node name="Pikachu" parent="Entities/Pokemon/BattleDisplay" unique_id=1905551537 instance=ExtResource("10_pokemon")]
+position = Vector2(-24, -16)
 overworld_pokemon_id = "kanto_cerulean_city_practice_pikachu_1"
 species_id = "pikachu"
 level = 16
 display_name = "Pikachu"
 facing_direction = Vector2(1, 0)
 
-[node name="Eevee" parent="Entities/Pokemon/BattleDisplay" instance=ExtResource("10_pokemon")]
-position = Vector2(24, 0)
+[node name="Eevee" parent="Entities/Pokemon/BattleDisplay" unique_id=1960521636 instance=ExtResource("10_pokemon")]
+position = Vector2(40, -16)
 overworld_pokemon_id = "kanto_cerulean_city_practice_eevee_1"
 species_id = "eevee"
 level = 16
