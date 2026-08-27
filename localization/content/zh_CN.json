@@ -1,16 +1,16 @@
 {
   "types": {
     "normal": {
-      "name": "正常"
+      "name": "一般"
     },
     "fire": {
-      "name": "火灾"
+      "name": "火"
     },
     "water": {
       "name": "水"
     },
     "electric": {
-      "name": "电动"
+      "name": "电"
     },
     "grass": {
       "name": "草"
@@ -19,25 +19,25 @@
       "name": "冰"
     },
     "fighting": {
-      "name": "战斗"
+      "name": "格斗"
     },
     "poison": {
-      "name": "毒药"
+      "name": "毒"
     },
     "ground": {
-      "name": "接地"
+      "name": "地面"
     },
     "flying": {
       "name": "飞行"
     },
     "psychic": {
-      "name": "通灵"
+      "name": "超能力"
     },
     "bug": {
-      "name": "错误"
+      "name": "虫"
     },
     "rock": {
-      "name": "摇滚"
+      "name": "岩石"
     },
     "ghost": {
       "name": "幽灵"
@@ -46,434 +46,434 @@
       "name": "龙"
     },
     "dark": {
-      "name": "黑暗"
+      "name": "恶"
     },
     "steel": {
       "name": "钢"
     },
     "fairy": {
-      "name": "仙女"
+      "name": "妖精"
     }
   },
   "natures": {
     "hardy": {
-      "name": "哈迪"
+      "name": "勤奋"
     },
     "lonely": {
-      "name": "孤独"
+      "name": "怕寂寞"
     },
     "brave": {
       "name": "勇敢"
     },
     "adamant": {
-      "name": "坚定"
+      "name": "固执"
     },
     "naughty": {
-      "name": "淘气"
-    },
-    "bold": {
-      "name": "粗体"
-    },
-    "docile": {
-      "name": "温顺"
-    },
-    "relaxed": {
-      "name": "放松"
-    },
-    "impish": {
       "name": "顽皮"
     },
+    "bold": {
+      "name": "大胆"
+    },
+    "docile": {
+      "name": "坦率"
+    },
+    "relaxed": {
+      "name": "悠闲"
+    },
+    "impish": {
+      "name": "淘气"
+    },
     "lax": {
-      "name": "松懈"
+      "name": "乐天"
     },
     "timid": {
-      "name": "胆怯"
+      "name": "胆小"
     },
     "hasty": {
-      "name": "仓促"
+      "name": "急躁"
     },
     "serious": {
-      "name": "严重"
+      "name": "认真"
     },
     "jolly": {
-      "name": "乔利"
+      "name": "爽朗"
     },
     "naive": {
       "name": "天真"
     },
     "modest": {
-      "name": "谦虚"
+      "name": "内敛"
     },
     "mild": {
-      "name": "轻度"
+      "name": "慢吞吞"
     },
     "quiet": {
-      "name": "安静"
+      "name": "冷静"
     },
     "bashful": {
       "name": "害羞"
     },
     "rash": {
-      "name": "皮疹"
+      "name": "马虎"
     },
     "calm": {
-      "name": "冷静"
+      "name": "温和"
     },
     "gentle": {
-      "name": "温柔"
+      "name": "温顺"
     },
     "sassy": {
-      "name": "时髦"
+      "name": "自大"
     },
     "careful": {
-      "name": "小心"
+      "name": "慎重"
     },
     "quirky": {
-      "name": "古怪"
+      "name": "浮躁"
     }
   },
   "moves": {
     "air-slash": {
       "name": "空气斩",
-      "shortDesc": "有一定几率使目标退缩。"
+      "shortDesc": "用连天空也能劈开的空气之刃进行攻击。有时会使对手畏缩。"
     },
     "aqua-tail": {
-      "name": "水尾",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "name": "水流尾",
+      "shortDesc": "如惊涛骇浪般挥动大尾巴攻击对手。"
     },
     "aura-sphere": {
-      "name": "光环球",
-      "shortDesc": "绝不会错过。"
+      "name": "波导弹",
+      "shortDesc": "从体内产生出波导之力，然后向对手发出。攻击必定会命中。"
     },
     "bind": {
-      "name": "绑定",
-      "shortDesc": "困住目标并对其造成伤害，持续 2-5 回合。"
+      "name": "绑紧",
+      "shortDesc": "使用长长的身体或藤蔓等，在４～５回合内绑紧对手进行攻击。"
     },
     "bite": {
-      "name": "咬",
-      "shortDesc": "有一定几率使目标退缩。"
+      "name": "咬住",
+      "shortDesc": "用尖锐的牙咬住对手进行攻击。有时会使对手畏缩。"
     },
     "body-slam": {
-      "name": "身体猛击",
-      "shortDesc": "有几率使目标瘫痪。"
+      "name": "泰山压顶",
+      "shortDesc": "用整个身体压住对手进行攻击。有时会让对手陷入麻痹状态。"
     },
     "bubble": {
-      "name": "气泡",
-      "shortDesc": "有一定几率使目标速度降低一级。"
+      "name": "泡沫",
+      "shortDesc": "向对手用力吹起无数泡泡进行攻击。有时会降低对手的速度。"
     },
     "calm-mind": {
-      "name": "冷静的头脑",
-      "shortDesc": "使使用者的特攻和特防提升一级。"
+      "name": "冥想",
+      "shortDesc": "静心凝神，从而提高自己的特攻和特防。"
     },
     "confuse-ray": {
-      "name": "迷惑雷",
-      "shortDesc": "迷惑目标。"
+      "name": "奇异之光",
+      "shortDesc": "显示奇怪的光，扰乱对手。使对手混乱。"
     },
     "crunch": {
-      "name": "紧缩",
-      "shortDesc": "有一定几率降低目标防御一级。"
+      "name": "咬碎",
+      "shortDesc": "用利牙咬碎对手进行攻击。有时会降低对手的防御。"
     },
     "dark-pulse": {
-      "name": "暗脉冲",
-      "shortDesc": "有一定几率使目标退缩。"
+      "name": "恶之波动",
+      "shortDesc": "从体内发出充满恶意的恐怖气场。有时会使对手畏缩。"
     },
     "dazzling-gleam": {
-      "name": "耀眼的光芒",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "name": "魔法闪耀",
+      "shortDesc": "向对手发射强光，并给予伤害。"
     },
     "defense-curl": {
-      "name": "防御弯举",
-      "shortDesc": "使使用者的防御力提升一级。"
+      "name": "变圆",
+      "shortDesc": "将身体蜷曲变圆，从而提高自己的防御。"
     },
     "double-team": {
-      "name": "包夹",
-      "shortDesc": "使使用者的回避率提高一级。"
+      "name": "影子分身",
+      "shortDesc": "通过快速移动来制造分身，扰乱对手，从而提高闪避率。"
     },
     "dragon-claw": {
       "name": "龙爪",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用尖锐的巨爪劈开对手进行攻击。"
     },
     "earthquake": {
       "name": "地震",
-      "shortDesc": "造成常规伤害并能击中 Dig 用户。"
+      "shortDesc": "利用地震的冲击，攻击自己周围所有的宝可梦。"
     },
     "electro-ball": {
       "name": "电球",
-      "shortDesc": "当用户比目标更快时，力量会增加，最高可达 150。"
+      "shortDesc": "用电气团撞向对手。自己比对手速度越快，威力越大。"
     },
     "extreme-speed": {
-      "name": "极速",
-      "shortDesc": "以更高的优先级造成常规伤害。"
+      "name": "神速",
+      "shortDesc": "以迅雷不及掩耳之势猛撞向对手进行攻击。必定能够先制攻击。"
     },
     "flamethrower": {
-      "name": "火焰喷射器",
-      "shortDesc": "有几率燃烧目标。"
+      "name": "喷射火焰",
+      "shortDesc": "向对手发射烈焰进行攻击。有时会让对手陷入灼伤状态。"
     },
     "flash-cannon": {
-      "name": "闪光炮",
-      "shortDesc": "有一定几率降低目标特防一级。"
+      "name": "加农光炮",
+      "shortDesc": "将身体的光芒聚集在一点释放出去。有时会降低对手的特防。"
     },
     "giga-drain": {
-      "name": "千兆排水",
-      "shortDesc": "吸收一半的伤害来治疗用户。"
+      "name": "终极吸取",
+      "shortDesc": "吸取对手的养分进行攻击。可以回复给予对手伤害的一半ＨＰ。"
     },
     "gust": {
-      "name": "阵风",
-      "shortDesc": "造成常规伤害，并且可以击中空中的宝可梦。"
+      "name": "起风",
+      "shortDesc": "用翅膀将刮起的狂风袭向对手进行攻击。"
     },
     "harden": {
-      "name": "哈登",
-      "shortDesc": "使使用者的防御力提升一级。"
+      "name": "变硬",
+      "shortDesc": "全身使劲，让身体变硬，从而提高自己的防御。"
     },
     "heavy-slam": {
-      "name": "重击",
-      "shortDesc": "当用户超过目标时，力量会增加，最高可达 120。"
+      "name": "重磅冲撞",
+      "shortDesc": "用沉重的身体撞向对手进行攻击。自己比对手越重，威力越大。"
     },
     "ice-beam": {
-      "name": "冰光束",
-      "shortDesc": "有几率冻结目标。"
+      "name": "冰冻光束",
+      "shortDesc": "向对手发射冰冻光束进行攻击。有时会让对手陷入冰冻状态。"
     },
     "iron-tail": {
       "name": "铁尾",
-      "shortDesc": "有一定几率降低目标防御一级。"
+      "shortDesc": "使用坚硬的尾巴摔打对手进行攻击。有时会降低对手的防御。"
     },
     "light-screen": {
-      "name": "光幕",
-      "shortDesc": "减少特殊攻击伤害，持续五回合。"
+      "name": "光墙",
+      "shortDesc": "利用神奇的墙壁，在５回合内减弱从对手那里受到的特殊攻击的伤害。"
     },
     "mirror-coat": {
-      "name": "镜面涂层",
-      "shortDesc": "返回上次收到的特殊命中造成的伤害的两倍。"
+      "name": "镜面反射",
+      "shortDesc": "从对手那里受到特殊攻击的伤害将以２倍返还给同一个对手。"
     },
     "pain-split": {
-      "name": "疼痛分裂",
-      "shortDesc": "平均用户和目标的当前 HP。"
+      "name": "分担痛楚",
+      "shortDesc": "将自己的ＨＰ和对手的ＨＰ相加，然后自己和对手友好地平分。"
     },
     "poison-sting": {
-      "name": "毒刺",
-      "shortDesc": "有几率使目标中毒。"
+      "name": "毒针",
+      "shortDesc": "将有毒的针刺入对手进行攻击。有时会让对手陷入中毒状态。"
     },
     "psywave": {
-      "name": "心灵波",
-      "shortDesc": "根据用户的等级造成不同的伤害。"
+      "name": "精神波",
+      "shortDesc": "向对手发射神奇的念波进行攻击。每次使用，伤害都会改变。"
     },
     "quick-attack": {
-      "name": "快速攻击",
-      "shortDesc": "以更高的优先级造成常规伤害。"
+      "name": "电光一闪",
+      "shortDesc": "以迅雷不及掩耳之势扑向对手。必定能够先制攻击。"
     },
     "razor-leaf": {
-      "name": "剃刀叶",
-      "shortDesc": "暴击几率增加。"
+      "name": "飞叶快刀",
+      "shortDesc": "飞出叶片，切斩对手进行攻击。容易击中要害。"
     },
     "recover": {
-      "name": "恢复",
-      "shortDesc": "使使用者恢复最大生命值的一半。"
+      "name": "自我再生",
+      "shortDesc": "让细胞再生，从而回复自己最大ＨＰ的一半。"
     },
     "rest": {
-      "name": "休息",
-      "shortDesc": "使用者睡眠两回合并完全治愈自己。"
+      "name": "睡觉",
+      "shortDesc": "连续睡上２回合。回复自己的全部ＨＰ以及治愈所有异常状态。"
     },
     "rock-throw": {
-      "name": "扔石头",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "name": "落石",
+      "shortDesc": "拿起小岩石，投掷对手进行攻击。"
     },
     "rollout": {
-      "name": "推出",
-      "shortDesc": "每次连续使用，功率加倍，最多五圈。"
+      "name": "滚动",
+      "shortDesc": "在５回合内连续滚动攻击对手。招式每次击中，威力就会提高。"
     },
     "roost": {
-      "name": "栖息地",
-      "shortDesc": "使使用者恢复最大生命值的一半。"
+      "name": "羽栖",
+      "shortDesc": "降到地面，使身体休息。回复自己最大ＨＰ的一半。"
     },
     "sand-attack": {
-      "name": "沙土攻击",
-      "shortDesc": "将目标精度降低一级。"
+      "name": "泼沙",
+      "shortDesc": "向对手脸上泼沙子，从而降低命中率。"
     },
     "scald": {
-      "name": "烫伤",
-      "shortDesc": "有几率燃烧目标。"
+      "name": "热水",
+      "shortDesc": "向对手喷射煮得翻滚的开水进行攻击。有时会让对手陷入灼伤状态。"
     },
     "screech": {
-      "name": "尖叫声",
-      "shortDesc": "降低目标防御力两级。"
+      "name": "刺耳声",
+      "shortDesc": "发出不由自主想要捂起耳朵的刺耳声，从而大幅降低对手的防御。"
     },
     "shadow-ball": {
-      "name": "影子球",
-      "shortDesc": "有一定几率降低目标特防一级。"
+      "name": "暗影球",
+      "shortDesc": "投掷一团黑影进行攻击。有时会降低对手的特防。"
     },
     "shock-wave": {
-      "name": "冲击波",
-      "shortDesc": "绝不会错过。"
+      "name": "电击波",
+      "shortDesc": "向对手快速发出电击。攻击必定会命中。"
     },
     "sing": {
       "name": "唱歌",
-      "shortDesc": "让目标进入睡眠状态。"
+      "shortDesc": "让对手听舒适、美妙的歌声，从而陷入睡眠状态。"
     },
     "slash": {
-      "name": "斜杠",
-      "shortDesc": "暴击几率增加。"
+      "name": "劈开",
+      "shortDesc": "用爪子或镰刀等劈开对手进行攻击。容易击中要害。"
     },
     "sleep-powder": {
-      "name": "睡眠粉",
-      "shortDesc": "让目标进入睡眠状态。"
+      "name": "催眠粉",
+      "shortDesc": "撒出催眠粉，从而让对手陷入睡眠状态。"
     },
     "sludge-bomb": {
       "name": "污泥炸弹",
-      "shortDesc": "有几率使目标中毒。"
+      "shortDesc": "用污泥投掷对手进行攻击。有时会让对手陷入中毒状态。"
     },
     "sonic-boom": {
       "name": "音爆",
-      "shortDesc": "造成正好 20 点伤害。"
+      "shortDesc": "将冲击波撞向对手进行攻击。必定会给予20的伤害。"
     },
     "spark": {
-      "name": "火花",
-      "shortDesc": "有几率使目标瘫痪。"
+      "name": "电光",
+      "shortDesc": "让电流覆盖全身，猛撞向对手进行攻击。有时会让对手陷入麻痹状态。"
     },
     "stone-edge": {
-      "name": "石缘",
-      "shortDesc": "暴击几率增加。"
+      "name": "尖石攻击",
+      "shortDesc": "用尖尖的岩石刺入对手进行攻击。容易击中要害。"
     },
     "string-shot": {
-      "name": "弦乐射击",
-      "shortDesc": "将目标的速度降低两级。"
+      "name": "吐丝",
+      "shortDesc": "用口中吐出的丝缠绕对手，从而大幅降低对手的速度。"
     },
     "surf": {
       "name": "冲浪",
-      "shortDesc": "造成常规伤害并能击中潜水者。"
+      "shortDesc": "利用大浪攻击自己周围所有的宝可梦。"
     },
     "swift": {
-      "name": "斯威夫特",
-      "shortDesc": "绝不会错过。"
+      "name": "高速星星",
+      "shortDesc": "发射星形的光攻击对手。攻击必定会命中。"
     },
     "swords-dance": {
       "name": "剑舞",
-      "shortDesc": "将用户的攻击力提高两个阶段。"
+      "shortDesc": "激烈地跳起战舞提高气势。大幅提高自己的攻击。"
     },
     "synthesis": {
-      "name": "合成",
-      "shortDesc": "治疗使用者；数量取决于天气。"
+      "name": "光合作用",
+      "shortDesc": "回复自己的ＨＰ。根据天气的不同，回复量也会有所变化。"
     },
     "tackle": {
-      "name": "铲球",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "name": "撞击",
+      "shortDesc": "用整个身体撞向对手进行攻击。"
     },
     "tail-whip": {
-      "name": "尾鞭",
-      "shortDesc": "降低目标防御一级。"
+      "name": "摇尾巴",
+      "shortDesc": "可爱地左右摇晃尾巴，诱使对手疏忽大意。会降低对手的防御。"
     },
     "thunder-shock": {
-      "name": "雷霆震击",
-      "shortDesc": "有几率使目标瘫痪。"
+      "name": "电击",
+      "shortDesc": "发出电流刺激对手进行攻击。有时会让对手陷入麻痹状态。"
     },
     "thunder-wave": {
-      "name": "雷霆波动",
-      "shortDesc": "麻痹目标。"
+      "name": "电磁波",
+      "shortDesc": "向对手发出微弱的电击，从而让对手陷入麻痹状态。"
     },
     "thunderbolt": {
-      "name": "雷电",
-      "shortDesc": "有几率使目标瘫痪。"
+      "name": "十万伏特",
+      "shortDesc": "向对手发出强力电击进行攻击。有时会让对手陷入麻痹状态。"
     },
     "vine-whip": {
       "name": "藤鞭",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "用如同鞭子般弯曲而细长的藤蔓摔打对手进行攻击。"
     },
     "water-gun": {
       "name": "水枪",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "shortDesc": "向对手猛烈地喷射水流进行攻击。"
     },
     "water-pulse": {
-      "name": "水脉冲",
-      "shortDesc": "有一定几率迷惑目标。"
+      "name": "水之波动",
+      "shortDesc": "用水的震动攻击对手。有时会使对手混乱。"
     },
     "wing-attack": {
-      "name": "侧翼攻击",
-      "shortDesc": "造成常规伤害，没有额外效果。"
+      "name": "翅膀攻击",
+      "shortDesc": "大大地展开美丽的翅膀，将其撞向对手进行攻击。"
     },
     "withdraw": {
-      "name": "撤回",
-      "shortDesc": "使使用者的防御力提升一级。"
+      "name": "缩入壳中",
+      "shortDesc": "缩入壳里保护身体，从而提高自己的防御。"
     }
   },
   "abilities": {
     "blaze": {
-      "name": "火焰",
-      "shortDesc": "强化火系招式，最大生命值三分之一以下。"
+      "name": "猛火",
+      "shortDesc": "ＨＰ减少的时候，火属性的招式威力会提高。"
     },
     "guts": {
-      "name": "胆量",
-      "shortDesc": "受到严重状态影响时攻击力提高 50%。"
+      "name": "毅力",
+      "shortDesc": "如果变为异常状态，会拿出毅力，攻击会提高。"
     },
     "inner-focus": {
-      "name": "内在焦点",
-      "shortDesc": "防止退缩。"
+      "name": "精神力",
+      "shortDesc": "拥有经过锻炼的精神，而不会因对手的攻击而畏缩。"
     },
     "keen-eye": {
-      "name": "敏锐的目光",
-      "shortDesc": "防止精度降低。"
+      "name": "锐利目光",
+      "shortDesc": "多亏了锐利的目光，命中率不会被降低。"
     },
     "marvel-scale": {
-      "name": "奇迹规模",
-      "shortDesc": "受到严重状态影响时防御力提高 50%。"
+      "name": "神奇鳞片",
+      "shortDesc": "如果变为异常状态，神奇鳞片会发生反应，防御会提高。"
     },
     "natural-cure": {
-      "name": "自然疗法",
-      "shortDesc": "解决切换时的主要状态问题。"
+      "name": "自然回复",
+      "shortDesc": "回到同行队伍后，异常状态就会被治愈。"
     },
     "overgrow": {
-      "name": "过度生长",
-      "shortDesc": "强化草招式，最大生命值三分之一以下。"
+      "name": "茂盛",
+      "shortDesc": "ＨＰ减少的时候，草属性的招式威力会提高。"
     },
     "pressure": {
-      "name": "压力",
-      "shortDesc": "使对方的动作额外消耗1点PP。"
+      "name": "压迫感",
+      "shortDesc": "给予对手压迫感，大量减少其使用招式的ＰＰ。"
     },
     "rock-head": {
-      "name": "岩头",
-      "shortDesc": "防止反冲伤害。"
+      "name": "坚硬脑袋",
+      "shortDesc": "即使使出会受反作用力伤害的招式，ＨＰ也不会减少。"
     },
     "rough-skin": {
-      "name": "皮肤粗糙",
-      "shortDesc": "对接触的攻击者造成伤害。"
+      "name": "粗糙皮肤",
+      "shortDesc": "受到攻击时，用粗糙的皮肤弄伤接触到自己的对手。"
     },
     "run-away": {
       "name": "逃跑",
-      "shortDesc": "确保逃离狂野战斗。"
+      "shortDesc": "一定能从野生宝可梦那儿逃走。"
     },
     "serene-grace": {
-      "name": "宁静的恩典",
-      "shortDesc": "额外移动效果的几率加倍。"
+      "name": "天恩",
+      "shortDesc": "托天恩的福，招式的追加效果容易出现。"
     },
     "shed-skin": {
-      "name": "脱皮",
-      "shortDesc": "每回合后可以治愈主要状态状况。"
+      "name": "蜕皮",
+      "shortDesc": "通过蜕去身上的皮，有时会治愈异常状态。"
     },
     "shield-dust": {
-      "name": "护盾灰尘",
-      "shortDesc": "阻止传入动作的附加效果。"
+      "name": "鳞粉",
+      "shortDesc": "被鳞粉守护着，不会受到招式的追加效果影响。"
     },
     "simple": {
-      "name": "简单",
-      "shortDesc": "使宝可梦的统计阶段变化加倍。"
+      "name": "单纯",
+      "shortDesc": "能力变化会变为平时的２倍。"
     },
     "soundproof": {
       "name": "隔音",
-      "shortDesc": "防止基于声音的移动。"
+      "shortDesc": "通过屏蔽声音，不受到声音招式的攻击。"
     },
     "static": {
-      "name": "静态",
-      "shortDesc": "可能会瘫痪进行接触的攻击者。"
+      "name": "静电",
+      "shortDesc": "身上带有静电，有时会让接触到的对手麻痹。"
     },
     "thick-fat": {
-      "name": "厚厚的脂肪",
-      "shortDesc": "火与冰招式造成的伤害减半。"
+      "name": "厚脂肪",
+      "shortDesc": "因为被厚厚的脂肪保护着，会让火属性和冰属性的招式伤害减半。"
     },
     "torrent": {
       "name": "激流",
-      "shortDesc": "强化水系招式，最大生命值三分之一以下。"
+      "shortDesc": "ＨＰ减少的时候，水属性的招式威力会提高。"
     },
     "water-absorb": {
-      "name": "吸水",
-      "shortDesc": "吸收水移动并恢复四分之一最大生命值。"
+      "name": "储水",
+      "shortDesc": "受到水属性的招式攻击时，不会受到伤害，而是会回复。"
     }
   }
 }
