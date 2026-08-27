@@ -4,6 +4,7 @@
 
 **Added**
 
+- Rhyhorn now joins the Rock-type Pokemon on Cerulean City's southern mountain plateau.
 - Cerulean City's west and south mountain plateaus now have dedicated Staff Teleporter spawn points.
 - Cerulean City's inaccessible mountain plateaus now feature ambient Rock-type Pokemon from multiple generations.
 - Cerulean City is livelier with moving water Pokemon including Gyarados, Officer Jenny and Growlithe, and a friendly practice battle on the Pokemon Center plaza.
@@ -20,6 +21,7 @@
 
 **Changed**
 
+- Cerulean City's ambient mountain Pokemon now patrol their plateaus instead of standing still.
 - The Pokémon Vault, Item Storage, and Guild Resources are now easier to browse, donate to, borrow from, and withdraw from. The full Pokémon Vault uses a familiar PC-style grid and lets you inspect each Pokémon.
 - Item Storage filters now distinguish items you can use from items whose copies are all unavailable.
 - Guild member search and Trainer invitations now have separate, clearly named controls.
