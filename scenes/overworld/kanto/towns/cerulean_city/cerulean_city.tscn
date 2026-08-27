@@ -923,12 +923,18 @@ interactable_id = "kanto_cerulean_city_aether_beacon"
 
 [node name="BikeStoreSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("27_r678c")]
 position = Vector2(560, 1712)
+sign_id = "kanto_cerulean_city_bike_shop"
+sign_type = "building"
 
 [node name="GymSign" parent="Entities/Interactables/Signs" unique_id=619180212 instance=ExtResource("27_r678c")]
 position = Vector2(1648, 1360)
+sign_id = "kanto_cerulean_city_gym"
+sign_type = "building"
 
 [node name="CeruleanCitySign" parent="Entities/Interactables/Signs" unique_id=1338754957 instance=ExtResource("28_6yoej")]
 position = Vector2(464, 784)
+sign_id = "kanto_cerulean_city_town_sign"
+sign_type = "town"
 
 [node name="Tiles" type="Node2D" parent="." unique_id=426809689]
 visible = false
