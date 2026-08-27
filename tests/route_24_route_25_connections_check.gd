@@ -29,6 +29,13 @@ func _run() -> void:
 		"kanto_route_24__to_route_25_lower"
 	)
 	_check_connection(
+		route_24,
+		"South",
+		ROUTE_25_SCENE,
+		"FromRoute24South",
+		"kanto_route_24__to_route_25_south"
+	)
+	_check_connection(
 		route_25,
 		"Upper",
 		ROUTE_24_SCENE,
@@ -42,18 +49,29 @@ func _run() -> void:
 		"FromRoute25Lower",
 		"kanto_route_25__to_route_24_lower"
 	)
+	_check_connection(
+		route_25,
+		"South",
+		ROUTE_24_SCENE,
+		"FromRoute25South",
+		"kanto_route_25__to_route_24_south"
+	)
 
 	var route_24_collision := route_24.find_map_tilemap_layer("Collision") as TileMapLayer
 	_check(_is_open(route_24_collision, Vector2i(44, 4)), "Route 24 opens its upper Route 25 passage")
 	_check(_is_open(route_24_collision, Vector2i(44, 10)), "Route 24 opens its lower Route 25 passage")
+	_check(_is_open(route_24_collision, Vector2i(44, 18)), "Route 24 opens its south Route 25 passage")
 	_check(not _is_open(route_24_collision, Vector2i(44, 7)), "Route 24 separates both Route 25 passages")
-	_check(not _is_open(route_24_collision, Vector2i(44, 14)), "Route 24 keeps the remaining east boundary closed")
+	_check(not _is_open(route_24_collision, Vector2i(44, 14)), "Route 24 separates its lower and south passages")
+	_check(not _is_open(route_24_collision, Vector2i(44, 22)), "Route 24 closes the east boundary below all passages")
 
 	var route_25_collision := route_25.find_map_tilemap_layer("Collision") as TileMapLayer
 	_check(_is_open(route_25_collision, Vector2i(0, 4)), "Route 25 opens its upper Route 24 passage")
 	_check(_is_open(route_25_collision, Vector2i(0, 10)), "Route 25 opens its lower Route 24 passage")
+	_check(_is_open(route_25_collision, Vector2i(0, 15)), "Route 25 opens its south Route 24 passage")
 	_check(not _is_open(route_25_collision, Vector2i(0, 7)), "Route 25 separates both Route 24 passages")
-	_check(not _is_open(route_25_collision, Vector2i(0, 14)), "Route 25 keeps the remaining west boundary closed")
+	_check(not _is_open(route_25_collision, Vector2i(0, 14)), "Route 25 separates its lower and south passages")
+	_check(not _is_open(route_25_collision, Vector2i(0, 17)), "Route 25 closes the west boundary below all passages")
 
 	route_24.queue_free()
 	route_25.queue_free()

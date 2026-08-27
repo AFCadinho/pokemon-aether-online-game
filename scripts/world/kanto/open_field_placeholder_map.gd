@@ -18,6 +18,8 @@ const COLLISION_SOURCE_ID := 0
 @export_range(-1, 255, 1) var additional_opening_to := -1
 @export_range(-1, 255, 1) var second_additional_opening_from := -1
 @export_range(-1, 255, 1) var second_additional_opening_to := -1
+@export_range(-1, 255, 1) var third_additional_opening_from := -1
+@export_range(-1, 255, 1) var third_additional_opening_to := -1
 @export_enum("none", "top", "bottom", "left", "right") var water_connection_side := "none"
 @export_range(0, 255, 1) var water_opening_from := 0
 @export_range(0, 255, 1) var water_opening_to := 0
@@ -72,6 +74,11 @@ func _is_opening(side: String, offset: int) -> bool:
 			offset,
 			second_additional_opening_from,
 			second_additional_opening_to
+		)
+		or _is_offset_in_range(
+			offset,
+			third_additional_opening_from,
+			third_additional_opening_to
 		)
 	)
 

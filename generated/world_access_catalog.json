@@ -417,7 +417,9 @@
 			"locationGroupId": "kanto_cerulean_city",
 			"locationGroupLabel": "Cerulean City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://2yvw11ho6umq"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn",
 			"spawnPoints": {
 				"from_cerulean_city": {
@@ -1368,6 +1370,16 @@
 						"y": 10
 					}
 				},
+				"from_route_25_south": {
+					"facingDirection": "down",
+					"label": "Route 25 South",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute25South",
+					"tile": {
+						"x": 43,
+						"y": 18
+					}
+				},
 				"from_route_25_upper": {
 					"facingDirection": "down",
 					"label": "Route 25 Upper",
@@ -1398,6 +1410,16 @@
 					"tile": {
 						"x": 1,
 						"y": 10
+					}
+				},
+				"from_route_24_south": {
+					"facingDirection": "down",
+					"label": "Route 24 South",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute24South",
+					"tile": {
+						"x": 1,
+						"y": 16
 					}
 				},
 				"from_route_24_upper": {
@@ -2046,7 +2068,9 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_cerulean_city_gym",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://2yvw11ho6umq"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn",
 				"position": {
 					"x": 496.0,
@@ -3042,6 +3066,21 @@
 			"destinationAreaId": "kanto_route_25",
 			"sourceMapId": "kanto_route_24"
 		},
+		"kanto_route_24__to_route_25_south": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_route_25",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_25.tscn",
+				"position": {
+					"x": 48.0,
+					"y": 512.0
+				},
+				"spawnMarker": "FromRoute24South"
+			},
+			"destinationAreaId": "kanto_route_25",
+			"sourceMapId": "kanto_route_24"
+		},
 		"kanto_route_24__to_route_25_upper": {
 			"destination": {
 				"facingDirection": "right",
@@ -3070,6 +3109,23 @@
 					"y": 336.0
 				},
 				"spawnMarker": "FromRoute25Lower"
+			},
+			"destinationAreaId": "kanto_route_24",
+			"sourceMapId": "kanto_route_25"
+		},
+		"kanto_route_25__to_route_24_south": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_route_24",
+				"mapSceneAliases": [
+					"uid://6hdme5cyato7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
+				"position": {
+					"x": 1392.0,
+					"y": 592.0
+				},
+				"spawnMarker": "FromRoute25South"
 			},
 			"destinationAreaId": "kanto_route_24",
 			"sourceMapId": "kanto_route_25"
