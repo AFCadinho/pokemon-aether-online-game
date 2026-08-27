@@ -34,7 +34,7 @@ const ROUTE_TRAINERS := [
 		"node": "NuggetBridge05Ethan",
 		"id": "kanto_route_24_nugget_bridge_05_ethan",
 		"position": Vector2(704, 896),
-		"definition": "trainer_class_camper",
+		"definition": "trainer_class_rocket_grunt",
 	},
 ]
 
@@ -63,6 +63,21 @@ func _run() -> void:
 		bridge_source.contains("challenge_width_tiles")
 		and bridge_source.contains("battles in place"),
 		"Nugget Bridge challengers guard the complete bridge width"
+	)
+	var recruiter := route_24.get_node("Entities/NPCs/NuggetBridge05Ethan")
+	_check(recruiter.one_time_challenge, "Rocket recruiter cannot grant repeat challenge rewards")
+	_check(
+		recruiter.post_victory_quest_id == "learn_to_pickpocket",
+		"Rocket recruiter offers the existing Thieving side quest"
+	)
+	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	_check(
+		world_source.contains("_show_trainer_post_victory_offer(reward_trainer_id)"),
+		"Trainer victory flow opens configured post-battle quest offers"
+	)
+	_check(
+		world_source.contains("_notify_trainer_reward_items(reward.get(\"items\", []))"),
+		"Trainer victory flow announces item rewards"
 	)
 	city.queue_free()
 	route_24.queue_free()
