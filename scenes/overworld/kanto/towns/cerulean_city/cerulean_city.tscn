@@ -660,6 +660,7 @@ position = Vector2(1424, 720)
 npc_id = "kanto_cerulean_city_waterway_visitor_maya"
 npc_definition_id = "trainer_class_lass"
 display_name = "Waterway Visitor Maya"
+facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("12_lass")
 
 [node name="BikeEnthusiastTheo" parent="Entities/NPCs" unique_id=826750557 instance=ExtResource("9_dialogue")]
