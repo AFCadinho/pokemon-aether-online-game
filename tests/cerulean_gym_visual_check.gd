@@ -35,7 +35,7 @@ func _run() -> void:
 	var exit := gym.get_node_or_null("Exits/ToCeruleanCity") as Area2D
 	_check(exit != null and exit.position == Vector2(496, 1264), "Cerulean Gym aligns its exit with the foyer")
 	var guide := gym.get_node_or_null("Entities/NPCs/GymGuide") as Node2D
-	_check(guide != null and guide.position == Vector2(624, 1168), "Cerulean Gym Guide stands in the new foyer")
+	_check(guide != null and guide.position == Vector2(560, 1136), "Cerulean Gym Guide stands in the new foyer")
 	gym.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
