@@ -13,6 +13,29 @@ func _run() -> void:
 	var party: Array = player_save.get("party") as Array
 	var original_party: Array = party.duplicate()
 	party.clear()
+	party.append(Pokemon.new(
+		"Lapras",
+		20,
+		"",
+		"",
+		"Hardy",
+		{},
+		{},
+		{},
+		[{"id": "surf"}]
+	))
+
+	service.call("update_owned_charms_from_inventory", [])
+	var pokemon_without_hm: Dictionary = service.call("can_use_field_move", "surf")
+	_check(not bool(pokemon_without_hm.get("success", false)), "HM field move is unavailable without its HM")
+	_check(pokemon_without_hm.get("requiredHm", "") == "hm-surf", "general field move gate identifies the required HM")
+
+	service.call("update_owned_charms_from_inventory", [
+		{"itemId": "hm-surf", "machineKind": "hm"},
+	])
+	var pokemon_with_hm: Dictionary = service.call("can_use_field_move", "surf")
+	_check(bool(pokemon_with_hm.get("success", false)), "Pokemon can use an HM field move when its HM is owned")
+	_check(pokemon_with_hm.get("source", "") == "pokemon", "Pokemon remains the source without a Charm")
 
 	var surf_charm := {
 		"itemId": "surf-charm",
@@ -22,7 +45,7 @@ func _run() -> void:
 	}
 	service.call("update_owned_charms_from_inventory", [surf_charm])
 	var without_hm: Dictionary = service.call("can_use_field_move", "surf")
-	_check(not bool(without_hm.get("success", false)), "HM Charm is unavailable without its HM")
+	_check(not bool(without_hm.get("success", false)), "HM field move stays unavailable even when its Charm is owned")
 	_check(without_hm.get("requiredHm", "") == "hm-surf", "missing HM result identifies the required item")
 
 	service.call("update_owned_charms_from_inventory", [

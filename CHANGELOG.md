@@ -16,7 +16,7 @@
 
 **Changed**
 
-- Field Move Charms tied to an HM now require that HM before they can replace a Pokémon move; weather Charms remain unaffected.
+- HM field moves now require their corresponding HM regardless of whether a Pokémon or Charm supplies the move; weather moves remain unaffected.
 - The Pokémon Vault, Item Storage, and Guild Resources are now easier to browse, donate to, borrow from, and withdraw from. The full Pokémon Vault uses a familiar PC-style grid and lets you inspect each Pokémon.
 - Item Storage filters now distinguish items you can use from items whose copies are all unavailable.
 - Guild member search and Trainer invitations now have separate, clearly named controls.

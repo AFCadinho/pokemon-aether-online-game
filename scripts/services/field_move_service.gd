@@ -23,6 +23,18 @@ const DIRECT_FIELD_MOVE_DEFINITIONS := {
 	},
 }
 const WEATHER_FIELD_MOVES: Array[String] = ["rain-dance", "snowscape", "sunny-day"]
+const FIELD_MOVE_REQUIRED_HMS := {
+	"cut": "hm-cut",
+	"defog": "hm-defog",
+	"dive": "hm-dive",
+	"flash": "hm-flash",
+	"rock-climb": "hm-rock-climb",
+	"rock-smash": "hm-rock-smash",
+	"strength": "hm-strength",
+	"surf": "hm-surf",
+	"waterfall": "hm-waterfall",
+	"whirlpool": "hm-whirlpool",
+}
 const WEATHER_ACTION_ENDPOINT := "/world/weather/action"
 const DEVELOPER_WEATHER_ENDPOINT := "/world/weather/developer"
 const REQUEST_TIMEOUT_SECONDS := 8.0
@@ -84,11 +96,20 @@ func find_party_pokemon_for_move(move_id: String) -> Pokemon:
 
 func can_use_field_move(move_id: String) -> Dictionary:
 	var normalized_move_id := _normalize_move_id(move_id)
+	var required_hm_item_id := str(FIELD_MOVE_REQUIRED_HMS.get(normalized_move_id, ""))
+	if required_hm_item_id != "" and not owned_hm_item_ids.has(required_hm_item_id):
+		return {
+			"success": false,
+			"error": LocalizationManager.text(
+				"ui.field_move.error.hm_required",
+				{"hm": _format_hm_name(required_hm_item_id)}
+			),
+			"requiredHm": required_hm_item_id,
+		}
 	var charm_value: Variant = owned_charm_moves.get(normalized_move_id, {})
 	var charm: Dictionary = charm_value as Dictionary if charm_value is Dictionary else {}
 	var charm_name := str(charm.get("itemName", ""))
-	var required_hm_item_id := str(charm.get("requiredHm", ""))
-	if charm_name != "" and (required_hm_item_id == "" or owned_hm_item_ids.has(required_hm_item_id)):
+	if charm_name != "":
 		return {
 			"success": true,
 			"source": "charm",
@@ -96,15 +117,6 @@ func can_use_field_move(move_id: String) -> Dictionary:
 		}
 	var pokemon := find_party_pokemon_for_move(move_id)
 	if pokemon == null:
-		if charm_name != "" and required_hm_item_id != "":
-			return {
-				"success": false,
-				"error": LocalizationManager.text(
-					"ui.field_move.error.hm_required",
-					{"hm": _format_hm_name(required_hm_item_id)}
-				),
-				"requiredHm": required_hm_item_id,
-			}
 		return {
 			"success": false,
 			"error": "A Pokemon in your party must know %s or you need its Charm." % _format_move_name(move_id),
