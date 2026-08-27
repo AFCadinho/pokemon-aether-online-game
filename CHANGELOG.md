@@ -30,6 +30,7 @@
 
 **Changed**
 
+- Cyclizar's source sprite now uses the same 64-pixel mount-frame scale as Lapras instead of undersized 32-pixel frames.
 - Thieving arrests now play an Officer Jenny confrontation before the jail transfer and a short sentence explanation after arrival.
 - Cerulean City's ambient mountain Pokemon now patrol their plateaus instead of standing still.
 - HM field moves now require their corresponding HM regardless of whether a Pokémon or Charm supplies the move; weather moves remain unaffected.

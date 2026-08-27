@@ -25,8 +25,8 @@ func _check_catalog_and_frames() -> void:
 	)
 	var texture := load("res://assets/mounts/cyclizar/mount.png") as Texture2D
 	_check(
-		texture != null and Vector2i(texture.get_size()) == Vector2i(128, 128),
-		"Cyclizar keeps its supplied 4x4 grid of 32px frames"
+		texture != null and Vector2i(texture.get_size()) == Vector2i(256, 256),
+		"Cyclizar uses the standard 4x4 grid of 64px mount frames"
 	)
 	var frames := MountServiceScript.get_mount_frames("cyclizar")
 	_check(frames != null, "Cyclizar mount frames load")
@@ -34,16 +34,16 @@ func _check_catalog_and_frames() -> void:
 		_check(frames.get_frame_count(&"walk_down") == 4, "Cyclizar has four down movement frames")
 		var frame_texture := frames.get_frame_texture(&"idle_down", 0)
 		_check(
-			frame_texture != null and Vector2i(frame_texture.get_size()) == Vector2i(32, 32),
-			"Cyclizar frames preserve their native pixel dimensions"
+			frame_texture != null and Vector2i(frame_texture.get_size()) == Vector2i(64, 64),
+			"Cyclizar frames use the standard mount dimensions"
 		)
 	var foreground_frames := MountServiceScript.get_mount_foreground_frames("cyclizar")
 	_check(foreground_frames != null, "Cyclizar has a foreground head layer for its rider")
 	if foreground_frames != null:
 		_check(
 			Vector2i(foreground_frames.get_frame_texture(&"idle_down", 0).get_size())
-			== Vector2i(32, 32),
-			"Cyclizar foreground frames match its native frame size"
+			== Vector2i(64, 64),
+			"Cyclizar foreground frames match its mount frame size"
 		)
 	var bag_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	_check(
