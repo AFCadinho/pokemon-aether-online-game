@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://dvadwpsgy4po5"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/cerulean_gym/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res" id="1_bra4x"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/cerulean_gym/assets/5GEN_TILESET_419699423_003.texture.res" id="2_aias2"]
