@@ -2417,11 +2417,7 @@ func _is_inside_exit_area(exit_area: Area2D) -> bool:
 func _resolve_current_map() -> Node:
 	var parent_node := get_parent()
 	while parent_node != null:
-		if (
-			parent_node.get_node_or_null("Collision") != null
-			or parent_node.get_node_or_null("Tiles/TallGrass") != null
-			or parent_node.get_node_or_null("TallGrass") != null
-		):
+		if _find_tilemap_layer(parent_node, ["Collision", "TallGrass"]) != null:
 			return parent_node
 
 		parent_node = parent_node.get_parent()
