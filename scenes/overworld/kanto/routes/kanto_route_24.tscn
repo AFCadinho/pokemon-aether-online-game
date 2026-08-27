@@ -20,6 +20,12 @@ size = Vector2(176, 16)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fxetv"]
 size = Vector2(160, 20)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route25_upper"]
+size = Vector2(32, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route25_lower"]
+size = Vector2(32, 192)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m4smc"]
 texture = ExtResource("5_3dqwu")
 texture_region_size = Vector2i(32, 32)
@@ -131,6 +137,11 @@ third_opening_from = 20
 third_opening_to = 24
 fourth_opening_from = 26
 fourth_opening_to = 30
+additional_connection_side = "right"
+additional_opening_from = 2
+additional_opening_to = 6
+second_additional_opening_from = 8
+second_additional_opening_to = 13
 water_connection_side = "bottom"
 water_opening_from = 12
 water_opening_to = 18
@@ -163,6 +174,12 @@ position = Vector2(704, 1872)
 
 [node name="FromCeruleanWaterRight" type="Marker2D" parent="Spawns" unique_id=1480509165]
 position = Vector2(912, 1872)
+
+[node name="FromRoute25Upper" type="Marker2D" parent="Spawns"]
+position = Vector2(1392, 144)
+
+[node name="FromRoute25Lower" type="Marker2D" parent="Spawns"]
+position = Vector2(1392, 336)
 
 [node name="Exits" type="Node2D" parent="." unique_id=360871628]
 
@@ -237,6 +254,40 @@ flow_direction = "down"
 position = Vector2(16, 16)
 shape = SubResource("RectangleShape2D_fxetv")
 
+[node name="ToRoute25Upper" type="Area2D" parent="Exits"]
+position = Vector2(1424, 144)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_25.tscn"
+target_spawn_name = "FromRoute24Upper"
+transition_id = "kanto_route_24__to_route_25_upper"
+transition_facing_direction = "right"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute25Upper"]
+shape = SubResource("RectangleShape2D_route25_upper")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute25Upper" instance=ExtResource("4_hint")]
+z_as_relative = false
+position = Vector2(-16, 0)
+tile_footprint = Vector2i(1, 5)
+flow_direction = "right"
+
+[node name="ToRoute25Lower" type="Area2D" parent="Exits"]
+position = Vector2(1424, 336)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_25.tscn"
+target_spawn_name = "FromRoute24Lower"
+transition_id = "kanto_route_24__to_route_25_lower"
+transition_facing_direction = "right"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute25Lower"]
+shape = SubResource("RectangleShape2D_route25_lower")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute25Lower" instance=ExtResource("4_hint")]
+z_as_relative = false
+position = Vector2(-16, 0)
+tile_footprint = Vector2i(1, 6)
+flow_direction = "right"
+
 [node name="Entities" type="Node2D" parent="." unique_id=907207288]
 z_index = 5
 
@@ -271,3 +322,5 @@ tile_set = SubResource("TileSet_wqaam")
 [connection signal="body_entered" from="Exits/ToCeruleanWaterLeft" to="Exits/ToCeruleanWaterLeft" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToCeruleanBridge" to="Exits/ToCeruleanBridge" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToCeruleanWaterRight" to="Exits/ToCeruleanWaterRight" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute25Upper" to="Exits/ToRoute25Upper" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute25Lower" to="Exits/ToRoute25Lower" method="_on_body_entered"]

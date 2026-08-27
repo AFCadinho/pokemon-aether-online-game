@@ -154,13 +154,23 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
 			"spawnPoints": {
+				"east_rock_smash_site": {
+					"facingDirection": "down",
+					"label": "East Rock Smash Site",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "EastRockSmashSite",
+					"tile": {
+						"x": 40,
+						"y": 65
+					}
+				},
 				"from_bike_store": {
 					"facingDirection": "down",
 					"label": "Bike Store",
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromBikeStore",
 					"tile": {
-						"x": 20,
+						"x": 19,
 						"y": 52
 					}
 				},
@@ -324,6 +334,16 @@
 						"y": 44
 					}
 				},
+				"mountain_guide_return": {
+					"facingDirection": "down",
+					"label": "Mountain Guide Return",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "MountainGuideReturn",
+					"tile": {
+						"x": 52,
+						"y": 59
+					}
+				},
 				"south_mountain": {
 					"facingDirection": "down",
 					"label": "South Mountain",
@@ -334,11 +354,31 @@
 						"y": 65
 					}
 				},
+				"transit_arrival": {
+					"facingDirection": "down",
+					"label": "Transit Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "TransitArrival",
+					"tile": {
+						"x": 49,
+						"y": 29
+					}
+				},
 				"west_mountain": {
 					"facingDirection": "down",
 					"label": "West Mountain",
 					"safeForStaffTeleport": true,
 					"spawnMarker": "WestMountain",
+					"tile": {
+						"x": 3,
+						"y": 47
+					}
+				},
+				"west_rock_smash_site": {
+					"facingDirection": "down",
+					"label": "West Rock Smash Site",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "WestRockSmashSite",
 					"tile": {
 						"x": 3,
 						"y": 47
@@ -353,7 +393,9 @@
 			"locationGroupId": "kanto_cerulean_city",
 			"locationGroupLabel": "Cerulean City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://cfpdykr7xgaep"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/bike_store.tscn",
 			"spawnPoints": {
 				"from_cerulean_city": {
@@ -362,8 +404,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeruleanCity",
 					"tile": {
-						"x": 9,
-						"y": 14
+						"x": 14,
+						"y": 17
 					}
 				}
 			}
@@ -384,8 +426,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeruleanCity",
 					"tile": {
-						"x": 16,
-						"y": 28
+						"x": 15,
+						"y": 38
 					}
 				}
 			}
@@ -1271,7 +1313,9 @@
 			"locationGroupId": "kanto_route_24",
 			"locationGroupLabel": "Route 24",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://6hdme5cyato7"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 			"spawnPoints": {
 				"from_cerulean_bridge": {
@@ -1280,8 +1324,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeruleanBridge",
 					"tile": {
-						"x": 10,
-						"y": 16
+						"x": 22,
+						"y": 58
 					}
 				},
 				"from_cerulean_path": {
@@ -1290,8 +1334,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeruleanPath",
 					"tile": {
-						"x": 21,
-						"y": 16
+						"x": 35,
+						"y": 58
 					}
 				},
 				"from_cerulean_water_left": {
@@ -1300,8 +1344,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeruleanWaterLeft",
 					"tile": {
-						"x": 4,
-						"y": 16
+						"x": 15,
+						"y": 58
 					}
 				},
 				"from_cerulean_water_right": {
@@ -1310,8 +1354,60 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeruleanWaterRight",
 					"tile": {
-						"x": 15,
-						"y": 16
+						"x": 28,
+						"y": 58
+					}
+				},
+				"from_route_25_lower": {
+					"facingDirection": "down",
+					"label": "Route 25 Lower",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute25Lower",
+					"tile": {
+						"x": 43,
+						"y": 10
+					}
+				},
+				"from_route_25_upper": {
+					"facingDirection": "down",
+					"label": "Route 25 Upper",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute25Upper",
+					"tile": {
+						"x": 43,
+						"y": 4
+					}
+				}
+			}
+		},
+		"kanto_route_25": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 25",
+			"locationGroupId": "kanto_route_25",
+			"locationGroupLabel": "Route 25",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_25.tscn",
+			"spawnPoints": {
+				"from_route_24_lower": {
+					"facingDirection": "down",
+					"label": "Route 24 Lower",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute24Lower",
+					"tile": {
+						"x": 1,
+						"y": 10
+					}
+				},
+				"from_route_24_upper": {
+					"facingDirection": "down",
+					"label": "Route 24 Upper",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute24Upper",
+					"tile": {
+						"x": 1,
+						"y": 4
 					}
 				}
 			}
@@ -1918,11 +2014,13 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_cerulean_city_bike_store",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cfpdykr7xgaep"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/bike_store.tscn",
 				"position": {
-					"x": 304.0,
-					"y": 464.0
+					"x": 464.0,
+					"y": 560.0
 				},
 				"spawnMarker": "FromCeruleanCity"
 			},
@@ -1951,8 +2049,8 @@
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn",
 				"position": {
-					"x": 528.0,
-					"y": 912.0
+					"x": 496.0,
+					"y": 1232.0
 				},
 				"spawnMarker": "FromCeruleanCity"
 			},
@@ -2025,11 +2123,13 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_route_24",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://6hdme5cyato7"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 				"position": {
-					"x": 320.0,
-					"y": 512.0
+					"x": 704.0,
+					"y": 1872.0
 				},
 				"spawnMarker": "FromCeruleanBridge"
 			},
@@ -2040,11 +2140,13 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_route_24",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://6hdme5cyato7"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 				"position": {
-					"x": 672.0,
-					"y": 512.0
+					"x": 1120.0,
+					"y": 1872.0
 				},
 				"spawnMarker": "FromCeruleanPath"
 			},
@@ -2055,11 +2157,13 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_route_24",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://6hdme5cyato7"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 				"position": {
-					"x": 128.0,
-					"y": 512.0
+					"x": 496.0,
+					"y": 1872.0
 				},
 				"spawnMarker": "FromCeruleanWaterLeft"
 			},
@@ -2070,11 +2174,13 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_route_24",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://6hdme5cyato7"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 				"position": {
-					"x": 480.0,
-					"y": 512.0
+					"x": 912.0,
+					"y": 1872.0
 				},
 				"spawnMarker": "FromCeruleanWaterRight"
 			},
@@ -2184,7 +2290,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
 				"position": {
-					"x": 656.0,
+					"x": 624.0,
 					"y": 1680.0
 				},
 				"spawnMarker": "FromBikeStore"
@@ -2920,6 +3026,70 @@
 			},
 			"destinationAreaId": "kanto_cerulean_city",
 			"sourceMapId": "kanto_route_24"
+		},
+		"kanto_route_24__to_route_25_lower": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_route_25",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_25.tscn",
+				"position": {
+					"x": 48.0,
+					"y": 336.0
+				},
+				"spawnMarker": "FromRoute24Lower"
+			},
+			"destinationAreaId": "kanto_route_25",
+			"sourceMapId": "kanto_route_24"
+		},
+		"kanto_route_24__to_route_25_upper": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_route_25",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_25.tscn",
+				"position": {
+					"x": 48.0,
+					"y": 144.0
+				},
+				"spawnMarker": "FromRoute24Upper"
+			},
+			"destinationAreaId": "kanto_route_25",
+			"sourceMapId": "kanto_route_24"
+		},
+		"kanto_route_25__to_route_24_lower": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_route_24",
+				"mapSceneAliases": [
+					"uid://6hdme5cyato7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
+				"position": {
+					"x": 1392.0,
+					"y": 336.0
+				},
+				"spawnMarker": "FromRoute25Lower"
+			},
+			"destinationAreaId": "kanto_route_24",
+			"sourceMapId": "kanto_route_25"
+		},
+		"kanto_route_25__to_route_24_upper": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_route_24",
+				"mapSceneAliases": [
+					"uid://6hdme5cyato7"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
+				"position": {
+					"x": 1392.0,
+					"y": 144.0
+				},
+				"spawnMarker": "FromRoute25Upper"
+			},
+			"destinationAreaId": "kanto_route_24",
+			"sourceMapId": "kanto_route_25"
 		},
 		"kanto_route_2__to_house": {
 			"destination": {

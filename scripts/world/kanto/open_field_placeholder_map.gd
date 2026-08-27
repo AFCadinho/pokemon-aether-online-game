@@ -13,6 +13,11 @@ const COLLISION_SOURCE_ID := 0
 @export_range(-1, 255, 1) var third_opening_to := -1
 @export_range(-1, 255, 1) var fourth_opening_from := -1
 @export_range(-1, 255, 1) var fourth_opening_to := -1
+@export_enum("none", "top", "bottom", "left", "right") var additional_connection_side := "none"
+@export_range(-1, 255, 1) var additional_opening_from := -1
+@export_range(-1, 255, 1) var additional_opening_to := -1
+@export_range(-1, 255, 1) var second_additional_opening_from := -1
+@export_range(-1, 255, 1) var second_additional_opening_to := -1
 @export_enum("none", "top", "bottom", "left", "right") var water_connection_side := "none"
 @export_range(0, 255, 1) var water_opening_from := 0
 @export_range(0, 255, 1) var water_opening_to := 0
@@ -34,25 +39,40 @@ func _build_map_boundaries() -> void:
 		push_error("Open-field placeholder could not resolve its Collision tile layer.")
 		return
 	for x: int in range(map_size.x):
-		if not _is_opening("top", x):
+		if _is_opening("top", x):
+			collision.erase_cell(Vector2i(x, 0))
+		else:
 			collision.set_cell(Vector2i(x, 0), COLLISION_SOURCE_ID, Vector2i.ZERO)
-		if not _is_opening("bottom", x):
+		if _is_opening("bottom", x):
+			collision.erase_cell(Vector2i(x, map_size.y - 1))
+		else:
 			collision.set_cell(Vector2i(x, map_size.y - 1), COLLISION_SOURCE_ID, Vector2i.ZERO)
 	for y: int in range(1, map_size.y - 1):
-		if not _is_opening("left", y):
+		if _is_opening("left", y):
+			collision.erase_cell(Vector2i(0, y))
+		else:
 			collision.set_cell(Vector2i(0, y), COLLISION_SOURCE_ID, Vector2i.ZERO)
-		if not _is_opening("right", y):
+		if _is_opening("right", y):
+			collision.erase_cell(Vector2i(map_size.x - 1, y))
+		else:
 			collision.set_cell(Vector2i(map_size.x - 1, y), COLLISION_SOURCE_ID, Vector2i.ZERO)
 
 
 func _is_opening(side: String, offset: int) -> bool:
-	if side != connection_side:
-		return false
-	return (
+	if side == connection_side and (
 		_is_offset_in_range(offset, opening_from, opening_to)
 		or _is_offset_in_range(offset, second_opening_from, second_opening_to)
 		or _is_offset_in_range(offset, third_opening_from, third_opening_to)
 		or _is_offset_in_range(offset, fourth_opening_from, fourth_opening_to)
+	):
+		return true
+	return side == additional_connection_side and (
+		_is_offset_in_range(offset, additional_opening_from, additional_opening_to)
+		or _is_offset_in_range(
+			offset,
+			second_additional_opening_from,
+			second_additional_opening_to
+		)
 	)
 
 
