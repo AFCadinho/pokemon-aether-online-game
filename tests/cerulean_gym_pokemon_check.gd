@@ -6,7 +6,6 @@ const GYM_POKEMON := {
 	"Entities/Pokemon/Staryu": {
 		"id": "kanto_cerulean_city_gym_staryu_1",
 		"species": "staryu",
-		"level": 18,
 		"position": Vector2(240, 304),
 	},
 	"Entities/Pokemon/Horsea": {
@@ -50,8 +49,6 @@ func _run() -> void:
 			continue
 		_check(str(pokemon.get("overworld_pokemon_id")) == expected.id, "%s uses its canonical content ID" % node_path)
 		_check(str(pokemon.get("species_id")) == expected.species, "%s uses the intended species" % node_path)
-		if expected.has("level"):
-			_check(int(pokemon.get("level")) == expected.level, "%s uses its intended level" % node_path)
 		_check(pokemon.position == expected.position, "%s occupies its designed pool position" % node_path)
 		_check(str(pokemon.get("movement_behavior")) == "idle", "%s cannot wander onto land" % node_path)
 		if collision != null and water != null:

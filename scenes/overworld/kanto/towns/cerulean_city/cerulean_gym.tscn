@@ -196,7 +196,6 @@ sight_range_tiles = 3
 position = Vector2(240, 304)
 overworld_pokemon_id = "kanto_cerulean_city_gym_staryu_1"
 species_id = "staryu"
-level = 18
 display_name = "Staryu"
 facing_direction = Vector2(1, 0)
 
