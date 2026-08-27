@@ -9,6 +9,7 @@ const OVERWORLD_SCENE_MAP_IDS: Dictionary = {
 	"res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn": "kanto_oaks_lab",
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": "kanto_viridian_city",
 	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": "kanto_pewter_city",
+	"res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn": "kanto_cerulean_city",
 }
 
 const SIGN_SCENE_SUFFIXES: Array[String] = [

@@ -12,6 +12,7 @@ const JAIL_RELEASE_ENDPOINT := "/game/thieving/jail/release"
 const JAIL_DETAINEES_ENDPOINT := "/game/thieving/jail/detainees"
 const JAIL_BAIL_ENDPOINT := "/game/thieving/jail/bail"
 const REQUEST_TIMEOUT_SECONDS := 8.0
+const ThievingArrestPresenterScript := preload("res://scripts/world/thieving_arrest_presenter.gd")
 
 var state: Dictionary = {}
 var state_loaded := false
@@ -47,7 +48,7 @@ func load_state() -> Dictionary:
 	return {"success": true, "state": state.duplicate(true)}
 
 
-func attempt_pickpocket(npc_id: String) -> Dictionary:
+func attempt_pickpocket(npc_id: String, defer_arrest_transfer := false) -> Dictionary:
 	var normalized_npc_id := npc_id.strip_edges().to_lower()
 	if normalized_npc_id == "":
 		return {"success": false, "error": "Missing NPC id."}
@@ -69,7 +70,7 @@ func attempt_pickpocket(npc_id: String) -> Dictionary:
 		await InventoryService.load_inventory()
 	var arrest := _dictionary_from_value(body.get("arrest", {}))
 	if not arrest.is_empty():
-		_apply_arrest(arrest)
+		_apply_arrest(arrest, not defer_arrest_transfer)
 	return {
 		"success": true,
 		"outcome": str(body.get("outcome", "")),
@@ -176,15 +177,34 @@ func _apply_state(next_state: Dictionary) -> void:
 		jail_release_generation += 1
 
 
-func _apply_arrest(arrest: Dictionary) -> void:
+func _apply_arrest(arrest: Dictionary, transfer_immediately := true) -> void:
 	arrested.emit(arrest.duplicate(true))
 	var lost_money: int = maxi(int(arrest.get("lostMoney", 0)), 0)
 	_add_system_message(LocalizationManager.text(
 		"ui.thieving.arrested",
 		{"amount": lost_money}
 	), true)
-	_teleport_to_destination(_dictionary_from_value(arrest.get("destination", {})))
+	if transfer_immediately:
+		_teleport_to_destination(_dictionary_from_value(arrest.get("destination", {})))
 	_schedule_jail_release(max(int(arrest.get("sentenceSeconds", 0)), 0))
+
+
+func complete_deferred_arrest(arrest: Dictionary) -> void:
+	var destination := _dictionary_from_value(arrest.get("destination", {}))
+	var scene_path := str(destination.get("mapScenePath", "")).strip_edges()
+	var spawn_marker := str(destination.get("spawnMarker", "")).strip_edges()
+	if scene_path == "" or spawn_marker == "":
+		return
+	var world := GameState.get_world()
+	if world == null or not world.has_method("load_map"):
+		return
+	await world.call("load_map", scene_path, spawn_marker)
+	var player := world.get_node_or_null("Player") as Node2D
+	if player == null:
+		return
+	GameState.lock_overworld_input()
+	await ThievingArrestPresenterScript.show_jail_arrival(player, arrest)
+	GameState.unlock_overworld_input()
 
 
 func _refresh_wallet() -> bool:

@@ -128,8 +128,8 @@ func _run() -> void:
 	)
 	_expect(
 		str(english_catalog.get("story.kanto.explore_cerulean_city.visit_nugget_bridge", ""))
-		== "Explore Cerulean City. Nugget Bridge to the north is worth visiting.",
-		"the closed Gym points exploration toward Nugget Bridge"
+		== "Head north through Route 24, cross Nugget Bridge, and look for Misty near Bill's house on Route 25.",
+		"the closed Gym directs the player through Route 24 to Bill's house on Route 25"
 	)
 	story_service.apply_story({
 		"revision": 1,

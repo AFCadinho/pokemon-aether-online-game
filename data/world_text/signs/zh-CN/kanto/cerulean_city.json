@@ -1,0 +1,9 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_cerulean_city",
+  "signs": [
+    {"id": "kanto_cerulean_city_town_sign", "type": "town", "title": "华蓝市", "lines": ["华蓝市", "神秘的蓝色光环笼罩着这座城市"]},
+    {"id": "kanto_cerulean_city_gym", "type": "building", "title": "华蓝市宝可梦道馆", "lines": ["华蓝市宝可梦道馆", "馆主：小霞——活力十足的人鱼。获胜即可获得蓝色徽章。"]},
+    {"id": "kanto_cerulean_city_bike_shop", "type": "building", "title": "华蓝自行车店", "lines": ["华蓝自行车店", "为准备踏上旅途的训练家提供优质自行车。"]}
+  ]
+}
