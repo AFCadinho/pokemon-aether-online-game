@@ -19,6 +19,8 @@
 [ext_resource type="SpriteFrames" uid="uid://bewtxeqmv8vls" path="res://assets/npcs/classes/ace_trainer_m_frames.tres" id="16_ace_m"]
 [ext_resource type="Script" uid="uid://3sc142eusmtf" path="res://scripts/world/kanto/towns/cerulean_battle_display.gd" id="17_battle_display"]
 [ext_resource type="SpriteFrames" uid="uid://bxh5nxs12bywr" path="res://assets/npcs/gym_guide_frames.tres" id="18_gym_attendant"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="19_transit_keeper"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="20_aether_beacon"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
@@ -354,6 +356,9 @@ position = Vector2(112, 1520)
 [node name="SouthMountain" type="Marker2D" parent="Spawns" unique_id=2048374652]
 position = Vector2(1584, 2096)
 
+[node name="TransitArrival" type="Marker2D" parent="Spawns"]
+position = Vector2(1360, 1488)
+
 [node name="Exits" type="Node2D" parent="." unique_id=921368933]
 
 [node name="ToRoute4" type="Area2D" parent="Exits" unique_id=853400686]
@@ -681,6 +686,10 @@ display_name = "Ace Trainer Bram"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("16_ace_m")
 
+[node name="TransitKeeper" parent="Entities/NPCs" instance=ExtResource("19_transit_keeper")]
+position = Vector2(1328, 1488)
+local_destination_id = "kanto_cerulean_city"
+
 [node name="Players" type="Node2D" parent="Entities" unique_id=419165532]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=611880944]
@@ -837,6 +846,12 @@ display_name = "Pikachu"
 facing_direction = Vector2(-1, 0)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=757893626]
+
+[node name="AetherBeacon" parent="Entities/Interactables" instance=ExtResource("20_aether_beacon")]
+z_index = 1456
+position = Vector2(1392, 1456)
+destination_id = "kanto_cerulean_city"
+interactable_id = "kanto_cerulean_city_aether_beacon"
 
 [node name="Tiles" type="Node2D" parent="." unique_id=426809689]
 visible = false
