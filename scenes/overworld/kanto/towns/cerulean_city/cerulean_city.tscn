@@ -19,6 +19,9 @@
 [ext_resource type="SpriteFrames" uid="uid://bewtxeqmv8vls" path="res://assets/npcs/classes/ace_trainer_m_frames.tres" id="16_ace_m"]
 [ext_resource type="Script" uid="uid://3sc142eusmtf" path="res://scripts/world/kanto/towns/cerulean_battle_display.gd" id="17_battle_display"]
 [ext_resource type="SpriteFrames" uid="uid://bxh5nxs12bywr" path="res://assets/npcs/gym_guide_frames.tres" id="18_gym_attendant"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="18_worker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_f_frames.tres" id="18_scientist_f"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/picnicker_frames.tres" id="18_picnicker"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="19_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="20_aether_beacon"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="21_trainer"]
@@ -712,6 +715,30 @@ npc_definition_id = "trainer_class_ace_trainer_m"
 display_name = "Ace Trainer Bram"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("16_ace_m")
+
+[node name="BridgeWorkerMilo" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
+position = Vector2(1776, 624)
+npc_id = "kanto_cerulean_city_bridge_worker_milo"
+npc_definition_id = "trainer_class_worker"
+display_name = "Bridge Worker Milo"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("18_worker")
+
+[node name="CanalResearcherCora" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
+position = Vector2(1328, 944)
+npc_id = "kanto_cerulean_city_canal_researcher_cora"
+npc_definition_id = "trainer_class_scientist_f"
+display_name = "Canal Researcher Cora"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("18_scientist_f")
+
+[node name="CanalPicnickerNia" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
+position = Vector2(1520, 752)
+npc_id = "kanto_cerulean_city_canal_picnicker_nia"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Canal Picnicker Nia"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("18_picnicker")
 
 [node name="TransitKeeper" parent="Entities/NPCs" unique_id=1146061101 instance=ExtResource("19_transit_keeper")]
 position = Vector2(1712, 912)
