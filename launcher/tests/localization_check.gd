@@ -144,6 +144,22 @@ func _run() -> void:
 
 
 func _check_server_access_status() -> void:
+	var config_value: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string("res://config/launcher_config.json")
+	)
+	_check(typeof(config_value) == TYPE_DICTIONARY, "launcher production config is valid JSON")
+	var configured_status_url := ""
+	if typeof(config_value) == TYPE_DICTIONARY:
+		configured_status_url = str((config_value as Dictionary).get("statusUrl", ""))
+	_check(
+		configured_status_url == ServerHealthService.DEFAULT_STATUS_URL,
+		"launcher production config uses the shared game-access status URL"
+	)
+	_check(
+		ServerHealthService.DEFAULT_STATUS_URL == "https://admin.pokeaether.com/auth/status",
+		"launcher game-access status uses the production gateway rather than the website"
+	)
+
 	var open_status := ServerHealthService.parse_status_response({
 		"available": true,
 		"mode": "open",
@@ -163,6 +179,11 @@ func _check_server_access_status() -> void:
 	_check(
 		maintenance_status.get("message") == "Maintenance is starting.",
 		"launcher preserves the public maintenance message"
+	)
+	var invalid_status := ServerHealthService.parse_status_response({})
+	_check(
+		not bool(invalid_status.get("valid", true)) and not bool(invalid_status.get("online", true)),
+		"launcher rejects responses without the game-access status contract"
 	)
 	var launcher_source := FileAccess.get_file_as_string("res://scripts/launcher.gd")
 	_check(

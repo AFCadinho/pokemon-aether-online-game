@@ -6,6 +6,7 @@ const REQUIRED_NPC_IDS: Array[String] = [
 	"kanto_alpha_gym_brock",
 	"kanto_alpha_gym_lt_surge",
 	"kanto_alpha_gym_misty",
+	"kanto_cerulean_city_patrol_officer",
 	"kanto_oaklab_oak_1",
 	"kanto_oaks_lab_gary",
 	"kanto_pallet_town_fishing_guru",
@@ -123,6 +124,11 @@ func _init() -> void:
 		catalog.resolve_portrait_id("showdown_red_lgpe", "kanto_oaklab_oak_1", ""),
 		"showdown_red_lgpe",
 		"Scene/profile override takes precedence"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "kanto_cerulean_city_patrol_officer", "trainer_class_policeman"),
+		"",
+		"Officer Jenny preserves her scene-assigned custom portrait"
 	)
 	_check_equal(
 		catalog.resolve_portrait_id("", "kanto_players_house_father", "pokemart_seller"),
