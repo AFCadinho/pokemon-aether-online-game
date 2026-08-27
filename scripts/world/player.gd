@@ -321,6 +321,10 @@ func get_activity_style() -> String:
 func get_active_mount_id() -> String:
 	return active_mount_id
 
+
+func get_active_land_mount_id() -> String:
+	return active_mount_id if land_mount_activity_active else ""
+
 func _sync_mount_visual() -> void:
 	if mount_sprite == null:
 		return
@@ -445,6 +449,21 @@ func toggle_land_mount() -> bool:
 	if land_mount_activity_active:
 		_finish_land_mount_activity()
 		return true
+	return _start_land_mount_activity()
+
+
+func restore_land_mount(mount_id: String) -> bool:
+	var resolved_mount_id := MountService.resolve_mount_id_for_mode(
+		mount_id,
+		SettingsManager.MOUNT_MODE_LAND
+	)
+	if resolved_mount_id.is_empty() or not _is_mount_owned(resolved_mount_id):
+		return false
+	if not SettingsManager.set_selected_mount_id(
+		SettingsManager.MOUNT_MODE_LAND,
+		resolved_mount_id
+	):
+		return false
 	return _start_land_mount_activity()
 
 func can_surf_here() -> bool:

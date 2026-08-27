@@ -88,10 +88,17 @@ func _check_land_mount_runtime_contract() -> void:
 	)
 	_check(
 		player_source.contains("func toggle_land_mount()")
+		and player_source.contains("func restore_land_mount(mount_id: String)")
 		and player_source.contains("LAND_MOUNT_TILE_MOVE_DURATION := 0.065")
 		and player_source.contains("LAND_MOUNT_WALK_ANIMATION_SPEED := 18.0")
 		and player_source.contains("InventoryService"),
 		"the player can toggle an owned, faster land mount"
+	)
+	_check(
+		world_source.contains('"mountId": active_land_mount_id')
+		and world_source.contains('state.get("mountId", "")')
+		and world_source.contains('player.call("restore_land_mount", saved_mount_id)'),
+		"the active owned land mount is saved with player position and restored on login"
 	)
 	_check(
 		player_source.contains("and not land_mount_activity_active")
