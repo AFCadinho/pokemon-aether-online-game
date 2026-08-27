@@ -12,6 +12,10 @@ func _ready() -> void:
 func _build_collision() -> void:
 	if collision == null:
 		return
+	# Preserve collision authored in the Godot scene. The generated fallback is
+	# only for older Bike Shop scenes that do not contain painted collision data.
+	if not collision.get_used_cells().is_empty():
+		return
 	collision.clear()
 
 	var left := ROOM_BOUNDS.position.x

@@ -188,8 +188,10 @@ func _check_interior(city: Node, data: Dictionary) -> void:
 			var ground_floor := floor_regions.get(&"ground_floor", Rect2()) as Rect2
 			_check(ground_floor.end.y >= 640.0, "bike_store keeps its visual exit row inside the visibility mask")
 		if bike_collision != null:
+			_check(bike_collision.get_cell_source_id(Vector2i(4, 8)) != -1, "bike_store preserves its painted left wall collision")
 			_check(bike_collision.get_cell_source_id(Vector2i(14, 17)) == -1, "bike_store arrival remains walkable")
 			_check(bike_collision.get_cell_source_id(Vector2i(14, 18)) == -1, "bike_store doorway remains open")
+			_check(bike_collision.get_cell_source_id(Vector2i(14, 20)) != -1, "bike_store preserves its painted collision below the exit")
 			_check(bike_collision.get_cell_source_id(Vector2i(17, 11)) == 0, "bike_store counter blocks movement")
 	interior.queue_free()
 	await process_frame
