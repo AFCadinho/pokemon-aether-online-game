@@ -8,11 +8,12 @@
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="7_bbts1"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="8_door_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="8_ex4qq"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="9_dialogue"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="10_pokemon"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/policeman_frames.tres" id="11_policeman"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="12_lass"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="13_youngster"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="9_dialogue"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="10_pokemon"]
+[ext_resource type="SpriteFrames" uid="uid://c3damqagxht62" path="res://assets/npcs/classes/policeman_frames.tres" id="11_policeman"]
+[ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="12_lass"]
+[ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="13_o6adi"]
+[ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="13_youngster"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
@@ -214,6 +215,61 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_d577h")
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iogp6"]
+texture = ExtResource("13_o6adi")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+7:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_ewt4e"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_iogp6")
+
 [node name="CeruleanCity" type="Node2D" unique_id=1286302656]
 script = ExtResource("2_city")
 map_id = "kanto_cerulean_city"
@@ -278,7 +334,7 @@ position = Vector2(656, 1680)
 [node name="FromHouse2" type="Marker2D" parent="Spawns" unique_id=1542082403]
 position = Vector2(1168, 1680)
 
-[node name="FromHouse3" type="Marker2D" parent="Spawns"]
+[node name="FromHouse3" type="Marker2D" parent="Spawns" unique_id=1698655635]
 position = Vector2(848, 1360)
 
 [node name="Exits" type="Node2D" parent="." unique_id=921368933]
@@ -537,7 +593,7 @@ shape = SubResource("RectangleShape2D_door_exit")
 z_as_relative = false
 position = Vector2(0, 16)
 
-[node name="ToHouse3" type="Area2D" parent="Exits"]
+[node name="ToHouse3" type="Area2D" parent="Exits" unique_id=994203283]
 position = Vector2(848, 1312)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/house3.tscn"
@@ -545,10 +601,10 @@ target_spawn_name = "FromCeruleanCity"
 transition_id = "kanto_cerulean_city__to_house_3"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse3"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse3" unique_id=331319773]
 shape = SubResource("RectangleShape2D_door_exit")
 
-[node name="DoorTransitionHint" parent="Exits/ToHouse3" instance=ExtResource("8_door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToHouse3" unique_id=1714900849 instance=ExtResource("8_door_hint")]
 z_as_relative = false
 position = Vector2(0, 16)
 
@@ -557,41 +613,40 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=790832259]
 
-[node name="PatrolOfficer" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
-position = Vector2(1248, 1024)
+[node name="PatrolOfficer" parent="Entities/NPCs" unique_id=1966720263 instance=ExtResource("9_dialogue")]
+position = Vector2(1040, 1008)
 npc_id = "kanto_cerulean_city_patrol_officer"
 npc_definition_id = "trainer_class_policeman"
 display_name = "Cerulean Patrol Officer"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("11_policeman")
 
-[node name="WaterwayVisitorMaya" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
-position = Vector2(1392, 704)
+[node name="WaterwayVisitorMaya" parent="Entities/NPCs" unique_id=395956463 instance=ExtResource("9_dialogue")]
+position = Vector2(1424, 720)
 npc_id = "kanto_cerulean_city_waterway_visitor_maya"
 npc_definition_id = "trainer_class_lass"
 display_name = "Waterway Visitor Maya"
 npc_sprite_frames = ExtResource("12_lass")
 
-[node name="BikeEnthusiastTheo" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
-position = Vector2(816, 1680)
+[node name="BikeEnthusiastTheo" parent="Entities/NPCs" unique_id=826750557 instance=ExtResource("9_dialogue")]
+position = Vector2(752, 1680)
 npc_id = "kanto_cerulean_city_bike_enthusiast_theo"
 npc_definition_id = "trainer_class_youngster"
 display_name = "Bike Enthusiast Theo"
-facing_direction = Vector2(-1, 0)
+facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("13_youngster")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=419165532]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=611880944]
 
-[node name="Squirtle" parent="Entities/Pokemon" instance=ExtResource("10_pokemon")]
-position = Vector2(1312, 1024)
+[node name="Squirtle" parent="Entities/Pokemon" unique_id=360414582 instance=ExtResource("10_pokemon")]
+position = Vector2(1104, 1008)
 overworld_pokemon_id = "kanto_cerulean_city_squirtle_1"
 species_id = "squirtle"
 level = 12
 display_name = "Squirtle"
 facing_direction = Vector2(-1, 0)
-movement_behavior = "idle"
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=757893626]
 
@@ -620,6 +675,11 @@ tile_set = SubResource("TileSet_w0tal")
 z_index = 4096
 tile_map_data = PackedByteArray("AAAxABUAAAAEAAAAAAAxABYAAAAEAAAAAAAxABcAAAAEAAAAAAAyABUAAAAEAAAAAAAyABYAAAAEAAAAAAAyAB4AAAAEAAAAAAAyAB8AAAAEAAAAAAAyACAAAAAEAAAAAAArACsAAAAEAAAAAAArACwAAAAEAAAAAAArAC0AAAAEAAAAAAAbADUAAAAEAAAAAAAbADYAAAAEAAAAAAAbADcAAAAEAAAAAAA=")
 tile_set = SubResource("TileSet_w0tal")
+
+[node name="TallGrass" type="TileMapLayer" parent="Tiles" unique_id=849181037]
+z_index = 4096
+tile_map_data = PackedByteArray("AAASAEEAAAAIAAEAAAASAEIAAAAIAAEAAAASAEMAAAAIAAEAAAASAEQAAAAIAAEAAAASAEUAAAAIAAEAAAATAEEAAAAIAAEAAAATAEIAAAAIAAEAAAATAEMAAAAIAAEAAAATAEQAAAAIAAEAAAATAEUAAAAIAAEAAAAUAEEAAAAIAAEAAAAUAEIAAAAIAAEAAAAUAEMAAAAIAAEAAAAUAEQAAAAIAAEAAAAUAEUAAAAIAAEAAAAVAEEAAAAIAAEAAAAVAEIAAAAIAAEAAAAVAEMAAAAIAAEAAAAVAEQAAAAIAAEAAAAVAEUAAAAIAAEAAAA=")
+tile_set = SubResource("TileSet_ewt4e")
 
 [node name="NightLights" type="Node2D" parent="." unique_id=949307689]
 
@@ -678,6 +738,9 @@ position = Vector2(1392, 1744)
 
 [node name="NightLight18" parent="NightLights/Lanterns" unique_id=54431758 instance=ExtResource("8_ex4qq")]
 position = Vector2(560, 1264)
+
+[node name="NightLight19" parent="NightLights/Lanterns" unique_id=155529860 instance=ExtResource("8_ex4qq")]
+position = Vector2(880, 1776)
 
 [node name="Buildings" type="Node2D" parent="NightLights" unique_id=1587897560]
 
@@ -740,6 +803,17 @@ position = Vector2(1136, 1616)
 
 [node name="NightLight6" parent="NightLights/Buildings/Building3" unique_id=1643584209 instance=ExtResource("8_ex4qq")]
 position = Vector2(1200, 1616)
+
+[node name="Building4" type="Node2D" parent="NightLights/Buildings" unique_id=306735835]
+
+[node name="NightLight" parent="NightLights/Buildings/Building4" unique_id=789707390 instance=ExtResource("8_ex4qq")]
+position = Vector2(784, 1296)
+
+[node name="NightLight2" parent="NightLights/Buildings/Building4" unique_id=1283327059 instance=ExtResource("8_ex4qq")]
+position = Vector2(912, 1296)
+
+[node name="NightLight3" parent="NightLights/Buildings/Building4" unique_id=1869688351 instance=ExtResource("8_ex4qq")]
+position = Vector2(848, 1296)
 
 [node name="BikeShop" type="Node2D" parent="NightLights/Buildings" unique_id=1909011619]
 
