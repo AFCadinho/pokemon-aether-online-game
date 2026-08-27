@@ -14,6 +14,9 @@ const POPULATION := {
 	"res://scenes/overworld/kanto/towns/cerulean_city/house2.tscn": {
 		"Entities/NPCs/Resident": "kanto_cerulean_city_house_2_resident",
 	},
+	"res://scenes/overworld/kanto/towns/cerulean_city/house3.tscn": {
+		"Entities/NPCs/ResidentElise": "kanto_cerulean_city_house_3_resident_elise",
+	},
 	"res://scenes/overworld/kanto/towns/cerulean_city/bike_store.tscn": {
 		"Entities/NPCs/BikeShopOwner": "kanto_cerulean_city_bike_store_owner",
 	},
@@ -31,6 +34,7 @@ const COLLISION_PATHS := {
 	"cerulean_city.tscn": "Tiles/Collision",
 	"house1.tscn": "BlueHouseTemplate/Collision",
 	"house2.tscn": "BlueHouseTemplate/Collision",
+	"house3.tscn": "BlueHouseTemplate/Collision",
 	"bike_store.tscn": "BlueHouseTemplate/Collision",
 	"pokemon_center.tscn": "Collision",
 	"cerulean_gym.tscn": "PewterGymTemplate/Collision",
