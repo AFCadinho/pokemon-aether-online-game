@@ -96,6 +96,24 @@ func _init() -> void:
 		"Ace Trainer Victor resolves his Showdown Ace Trainer portrait instead of the default portrait"
 	)
 	_check_equal(
+		catalog.resolve_portrait_id(
+			"",
+			"kanto_cerulean_city_ace_trainer_lila",
+			"trainer_class_ace_trainer_f"
+		),
+		"showdown_acetrainerf_gen6",
+		"Ace Trainer Lila resolves her female Showdown Ace Trainer portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id(
+			"",
+			"kanto_cerulean_city_ace_trainer_bram",
+			"trainer_class_ace_trainer_m"
+		),
+		"showdown_acetrainer_gen6",
+		"Ace Trainer Bram resolves his male Showdown Ace Trainer portrait"
+	)
+	_check_equal(
 		catalog.resolve_portrait_id("", "unlisted_nurse", "pokemon_center_nurse"),
 		"showdown_pokemoncenterlady",
 		"Reusable NPC resolves its profile portrait"
