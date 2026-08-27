@@ -4,6 +4,7 @@
 
 **Added**
 
+- Cerulean City now has additional daily Thieving targets around its bridge, canals, and practice platform.
 - Cerulean City now has daily Thieving targets, and the especially reckless can pickpocket Officer Jenny for a guaranteed arrest and Wanted reset.
 - Gary now guards the Cerulean City entrance to Nugget Bridge for a mandatory rival battle, then disappears after the defeated map is reloaded.
 - A Cerulean Gym attendant now blocks the closed Gym and quietly directs Trainers through Route 24 and Nugget Bridge toward Bill's house on Route 25.

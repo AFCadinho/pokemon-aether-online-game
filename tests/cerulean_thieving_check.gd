@@ -18,11 +18,26 @@ const TARGETS := {
 		"npc_id": "kanto_cerulean_city_ace_trainer_lila",
 		"behind": Vector2(592, 1200),
 	},
+	"Entities/NPCs/BridgeWorkerMilo": {
+		"npc_id": "kanto_cerulean_city_bridge_worker_milo",
+		"behind": Vector2(1776, 656),
+	},
+	"Entities/NPCs/CanalResearcherCora": {
+		"npc_id": "kanto_cerulean_city_canal_researcher_cora",
+		"behind": Vector2(1328, 976),
+	},
+	"Entities/NPCs/CanalPicnickerNia": {
+		"npc_id": "kanto_cerulean_city_canal_picnicker_nia",
+		"behind": Vector2(1488, 752),
+	},
 }
 const LOCALIZATION_KEYS := [
 	"ui.skills.thieving.target.cerulean_theo",
 	"ui.skills.thieving.target.maya",
 	"ui.skills.thieving.target.lila",
+	"ui.skills.thieving.target.bridge_worker_milo",
+	"ui.skills.thieving.target.canal_researcher_cora",
+	"ui.skills.thieving.target.canal_picnicker_nia",
 	"ui.skills.thieving.target.officer_jenny",
 	"ui.skills.thieving.location.cerulean_city",
 	"ui.skills.thieving.target_type.law_enforcement",
