@@ -24,6 +24,7 @@
 
 **Changed**
 
+- Thieving arrests now play an Officer Jenny confrontation before the jail transfer and a short sentence explanation after arrival.
 - Cerulean City's ambient mountain Pokemon now patrol their plateaus instead of standing still.
 - The Pokémon Vault, Item Storage, and Guild Resources are now easier to browse, donate to, borrow from, and withdraw from. The full Pokémon Vault uses a familiar PC-style grid and lets you inspect each Pokémon.
 - Item Storage filters now distinguish items you can use from items whose copies are all unavailable.

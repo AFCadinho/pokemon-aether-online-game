@@ -101,6 +101,7 @@ const THIEVING_PROMPT_POSITION := Vector2(
 	NAMEPLATE_OFFSET_TOP - THIEVING_PROMPT_SIZE.y - THIEVING_PROMPT_NAMEPLATE_GAP
 )
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
+const ThievingArrestPresenterScript := preload("res://scripts/world/thieving_arrest_presenter.gd")
 
 @onready var sprite: AnimatedSprite2D = $Look/AnimatedSprite2D
 @onready var feet_marker: Marker2D = $FeetMarker
@@ -1115,6 +1116,7 @@ func _try_start_pickpocket(body: Node2D) -> void:
 func _start_pickpocket(body: Node2D) -> void:
 	is_interacting = true
 	GameState.lock_overworld_input()
+	var deferred_arrest: Dictionary = {}
 	if body.has_method("face_world_position"):
 		body.face_world_position(get_feet_position())
 
@@ -1136,10 +1138,18 @@ func _start_pickpocket(body: Node2D) -> void:
 				and CharacterAppearanceService.normalize_movement_style(str(body.call("get_activity_style"))) \
 				== CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET:
 			body.call("clear_activity_style")
-		var result: Dictionary = await ThievingService.attempt_pickpocket(target_id)
+		var result: Dictionary = await ThievingService.attempt_pickpocket(target_id, true)
 		if bool(result.get("success", false)):
 			if str(result.get("outcome", "")) == "caught":
 				_face_body(body)
+				await ThievingArrestPresenterScript.show_confrontation(
+					self,
+					body,
+					str(result.get("npcType", "civilian"))
+				)
+				var arrest_value: Variant = result.get("arrest", {})
+				if arrest_value is Dictionary:
+					deferred_arrest = (arrest_value as Dictionary).duplicate(true)
 			await PlayerGameStateService.refresh_story()
 			var experience_awarded := maxi(int(result.get("experienceAwarded", 0)), 0)
 			if experience_awarded > 0:
@@ -1163,6 +1173,8 @@ func _start_pickpocket(body: Node2D) -> void:
 
 	GameState.unlock_overworld_input()
 	is_interacting = false
+	if not deferred_arrest.is_empty():
+		ThievingService.complete_deferred_arrest.call_deferred(deferred_arrest)
 
 
 func _is_player_facing_npc(body: Node2D) -> bool:
