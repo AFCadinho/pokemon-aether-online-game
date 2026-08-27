@@ -2879,7 +2879,6 @@ func _on_battle_ended(result: Dictionary) -> void:
 		var reward_claimed := bool(trainer_reward_result.get("success", false))
 		if reward_claimed and keep_locked_for_outro:
 			await _show_trainer_outro_dialogue(trainer_outro_dialogue_id, trainer_mugshot)
-			await _show_trainer_post_victory_offer(reward_trainer_id)
 		if reward_claimed and bool(trainer_reward_result.get("playItemReceivedSfx", false)):
 			SfxManager.play("item_received")
 	if keep_locked_for_outro:
@@ -3157,7 +3156,6 @@ func _award_trainer_battle_rewards(
 		var reward: Dictionary = reward_result.get("reward", {}) as Dictionary
 		var money_awarded: int = max(int(reward.get("money", max(int(PlayerSave.money), 0) - previous_money)), 0)
 		_notify_trainer_battle_rewards_awarded(trainer_name, money_awarded)
-		_notify_trainer_reward_items(reward.get("items", []))
 		_notify_reward_experience_gains(reward)
 		_notify_reward_level_ups(reward)
 		_notify_gym_badge_award(reward_result.get("gymBadgeAward", {}))
@@ -3202,18 +3200,6 @@ func _show_trainer_outro_dialogue(dialogue_id: String, mugshot: Texture2D) -> vo
 	dialogue_box.start_dialogue(lines, str(metadata.get("speakerName", "")), mugshot)
 	await dialogue_box.dialogue_finished
 
-
-func _show_trainer_post_victory_offer(trainer_id: String) -> void:
-	var normalized_trainer_id := trainer_id.strip_edges()
-	if normalized_trainer_id.is_empty():
-		return
-	for trainer: Node in get_tree().get_nodes_in_group("trainer_npcs"):
-		if (
-			str(trainer.get("trainer_id")).strip_edges() == normalized_trainer_id
-			and trainer.has_method("show_post_victory_offer")
-		):
-			await trainer.call("show_post_victory_offer")
-			return
 
 func _notify_gym_badge_award(value: Variant) -> void:
 	if not (value is Dictionary):
@@ -3334,30 +3320,6 @@ func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded:
 	get_tree().call_group("ui_overlay", "refresh_money_display")
 	get_tree().call_group("ui_overlay", "add_system_message", message)
 
-
-func _notify_trainer_reward_items(value: Variant) -> void:
-	if value is not Array:
-		return
-	var announced_item := false
-	for item_value: Variant in value as Array:
-		if item_value is not Dictionary:
-			continue
-		var item := item_value as Dictionary
-		var item_id := str(item.get("itemId", item.get("id", ""))).strip_edges().to_lower()
-		var quantity := maxi(int(item.get("quantity", 0)), 0)
-		if item_id.is_empty() or quantity <= 0:
-			continue
-		get_tree().call_group(
-			"ui_overlay",
-			"add_system_message",
-			LocalizationManager.text("ui.world.reward.story_item", {
-				"item": ItemLocalization.display_name(item_id),
-				"quantity": quantity,
-			})
-		)
-		announced_item = true
-	if announced_item:
-		SfxManager.play("item_received")
 
 func _notify_story_reward_items(value: Variant) -> void:
 	for message: String in _story_reward_item_messages(value):
