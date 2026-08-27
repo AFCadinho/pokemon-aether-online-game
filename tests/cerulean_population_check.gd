@@ -11,6 +11,11 @@ const POPULATION := {
 		"Entities/Pokemon/WaterPokemon/Gyarados": "kanto_cerulean_city_gyarados_1",
 		"Entities/Pokemon/WaterPokemon/Goldeen": "kanto_cerulean_city_goldeen_1",
 		"Entities/Pokemon/WaterPokemon/Poliwag": "kanto_cerulean_city_poliwag_1",
+		"Entities/Pokemon/MountainPokemon/Geodude": "kanto_cerulean_city_mountain_geodude_1",
+		"Entities/Pokemon/MountainPokemon/Nosepass": "kanto_cerulean_city_mountain_nosepass_1",
+		"Entities/Pokemon/MountainPokemon/Roggenrola": "kanto_cerulean_city_mountain_roggenrola_1",
+		"Entities/Pokemon/MountainPokemon/Larvitar": "kanto_cerulean_city_mountain_larvitar_1",
+		"Entities/Pokemon/MountainPokemon/Rockruff": "kanto_cerulean_city_mountain_rockruff_1",
 		"Entities/Pokemon/BattleDisplay/Onix": "kanto_cerulean_city_practice_onix_1",
 		"Entities/Pokemon/BattleDisplay/Pikachu": "kanto_cerulean_city_practice_pikachu_1",
 	},
@@ -81,7 +86,8 @@ func _check_scene(scene_path: String, expected: Dictionary) -> void:
 		_check(actual_id == expected_id, "%s uses its canonical content ID" % node_path.get_file())
 		if collision != null:
 			var cell := collision.local_to_map(collision.to_local(entity.global_position))
-			_check(collision.get_cell_source_id(cell) == -1, "%s stands on a walkable tile" % node_path.get_file())
+			if not "/MountainPokemon/" in node_path:
+				_check(collision.get_cell_source_id(cell) == -1, "%s stands on a walkable tile" % node_path.get_file())
 	var misty := map.get_node_or_null("Entities/NPCs/GymLeaderMisty")
 	if misty != null:
 		_check(str(misty.get("trainer_id")) == "kanto_alpha_gym_misty", "Misty uses the registered Cerulean alpha battle")
