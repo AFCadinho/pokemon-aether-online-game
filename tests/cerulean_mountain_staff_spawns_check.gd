@@ -26,7 +26,7 @@ func _run() -> void:
 	root.add_child(city)
 	var collision := city.get_node_or_null("Tiles/Collision") as TileMapLayer
 	var water := city.get_node_or_null("Tiles/Water") as TileMapLayer
-	var ground := city.get_node_or_null("CeruleanCityVisual/Ground") as TileMapLayer
+	var ground := _find_visual_layer(city, 1)
 	_check(collision != null and water != null and ground != null, "Cerulean exposes spawn surface layers")
 
 	for spawn_name_value: Variant in MOUNTAIN_SPAWNS:
@@ -51,6 +51,17 @@ func _run() -> void:
 	_check_catalog()
 	city.free()
 	quit(1 if failed else 0)
+
+
+func _find_visual_layer(city: Node, layer_id: int) -> TileMapLayer:
+	var visuals := city.get_node_or_null("CeruleanCityVisual")
+	if visuals == null:
+		return null
+	for child: Node in visuals.get_children():
+		var layer := child as TileMapLayer
+		if layer != null and int(layer.get_meta("tiled_layer_id", -1)) == layer_id:
+			return layer
+	return null
 
 
 func _check_catalog() -> void:

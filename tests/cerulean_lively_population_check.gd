@@ -47,7 +47,7 @@ func _run() -> void:
 	root.add_child(city)
 	var collision := city.get_node_or_null("Tiles/Collision") as TileMapLayer
 	var water := city.get_node_or_null("Tiles/Water") as TileMapLayer
-	var ground := city.get_node_or_null("CeruleanCityVisual/Ground") as TileMapLayer
+	var ground := _find_visual_layer(city, 1)
 	_check(collision != null, "Cerulean exposes collision for population placement")
 	_check(water != null, "Cerulean exposes semantic water for swimming Pokemon")
 	_check(ground != null, "Cerulean exposes Ground for mountain Pokemon movement")
@@ -91,6 +91,17 @@ func _check_growlithe(city: Node) -> void:
 	)
 
 
+func _find_visual_layer(city: Node, layer_id: int) -> TileMapLayer:
+	var visuals := city.get_node_or_null("CeruleanCityVisual")
+	if visuals == null:
+		return null
+	for child: Node in visuals.get_children():
+		var layer := child as TileMapLayer
+		if layer != null and int(layer.get_meta("tiled_layer_id", -1)) == layer_id:
+			return layer
+	return null
+
+
 func _check_water_pokemon(city: Node, collision: TileMapLayer, water: TileMapLayer) -> void:
 	for node_path_value: Variant in WATER_POKEMON:
 		var node_path := str(node_path_value)
@@ -121,7 +132,7 @@ func _check_mountain_pokemon(
 	ground: TileMapLayer
 ) -> void:
 	var reachable_tiles := _collect_walkable_tiles(city, collision, water)
-	var mountain_foreground := city.get_node_or_null("CeruleanCityVisual/ObjectsTop") as CanvasItem
+	var mountain_foreground := _find_visual_layer(city, 4) as CanvasItem
 	_check(mountain_foreground != null, "Cerulean exposes its mountain foreground layer")
 	for node_path_value: Variant in MOUNTAIN_POKEMON:
 		var node_path := str(node_path_value)

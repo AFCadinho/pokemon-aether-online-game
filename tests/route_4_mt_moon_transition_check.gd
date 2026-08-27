@@ -59,7 +59,7 @@ func _init() -> void:
 	_check(cerulean_visual.contains('"height": 70'), "Cerulean City visual preserves the Tiled height")
 	_check(cerulean_visual.contains('"width": 75'), "Cerulean City visual preserves the Tiled width")
 	_check(cerulean_visual.contains('metadata/tiled_name = "Doors"'), "Cerulean City visual preserves its door layer")
-	_check(cerulean_visual.contains('metadata/tiled_name = "ObjectsTop"'), "Cerulean City visual preserves its foreground layer")
+	_check(cerulean_visual.contains('metadata/tiled_layer_id = 4'), "Cerulean City visual preserves its foreground layer")
 	_check(cerulean_source.contains('[node name="FromRoute4" type="Marker2D" parent="Spawns"'), "Cerulean City has a Route 4 arrival")
 	_check(cerulean_source.contains('position = Vector2(48, 816)'), "Route 4 arrival is on the imported west road")
 	_check(cerulean_source.contains('transition_id = "kanto_cerulean_city__to_route_4"'), "Cerulean City returns to Route 4")
