@@ -469,6 +469,7 @@ const BAG_CATEGORIES := [
 	{"id": "charms", "labelKey": "ui.bag.category.charms", "iconItemId": "surf-charm"},
 	{"id": "held_items", "labelKey": "ui.bag.category.held_items", "iconItemId": "leftovers"},
 	{"id": "power_stones", "labelKey": "ui.bag.category.power_stones", "iconItemId": "charizardite-x"},
+	{"id": "mounts", "labelKey": "ui.bag.category.mounts", "iconItemId": "cyclizar-mount"},
 	{"id": "cosmetics", "labelKey": "ui.bag.category.cosmetics", "iconItemId": "blue-canari-plush-lv-1"},
 	{"id": "vouchers", "labelKey": "ui.bag.category.vouchers", "iconItemId": "aether-blessing-voucher-3-days"},
 	{"id": "general", "labelKey": "ui.bag.category.other", "iconItemId": "ability-capsule"},
@@ -19868,6 +19869,8 @@ func _bag_item_detail_description(item: Dictionary) -> String:
 			return LocalizationManager.text("ui.bag.description.held_item")
 		"power_stones":
 			return LocalizationManager.text("ui.bag.description.power_stone")
+		"mounts":
+			return LocalizationManager.text("ui.bag.description.mount")
 		"key_items":
 			return LocalizationManager.text("ui.bag.description.key_item")
 		"charms":
@@ -21054,6 +21057,11 @@ func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_ty
 	)
 	if cosmetic_icon != null:
 		return cosmetic_icon
+	var mount_id := MountService.get_mount_id_for_unlock_item(item_id)
+	if mount_id != "":
+		var mount_icon := MountService.get_mount_icon_texture(mount_id)
+		if mount_icon != null:
+			return mount_icon
 	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
 	var candidates: Array[String] = [
 		BAG_ICON_ROOT + "field_move_charms/" + normalized + ".png",
@@ -21168,6 +21176,7 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"useNotice": use_notice,
 			"useAction": str(item.get("useAction", "")).strip_edges(),
 			"appearanceUnlocks": item.get("appearanceUnlocks", []),
+			"tradable": bool(item.get("tradable", false)),
 		}))
 	for borrowed_value: Variant in InventoryService.cached_borrowed_inventory_items:
 		if borrowed_value is not Dictionary:
@@ -21214,7 +21223,7 @@ func _normalize_backend_bag_category(category: String, item_id: String) -> Strin
 			return "held_items"
 		"poke_balls", "pokeballs":
 			return "pokeball"
-		"medicine", "machines", "charms", "power_stones", "cosmetics", "vouchers", "currency", "key_items":
+		"medicine", "machines", "charms", "power_stones", "mounts", "cosmetics", "vouchers", "currency", "key_items":
 			return normalized
 
 	return _guess_bag_category(item_id)
