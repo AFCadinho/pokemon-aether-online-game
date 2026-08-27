@@ -47,8 +47,8 @@ func _run() -> void:
 		"Cleared rocks defer deletion until the interaction unlocks overworld movement"
 	)
 	_check(
-		"badge" not in field_moves.to_lower(),
-		"Generic field-move use does not require a Gym Badge"
+		'"rock-smash":' not in field_moves,
+		"Rock Smash remains outside the Gen I Kanto Gym Badge gates"
 	)
 	_check(
 		'const QUEST_ID := "learn_rock_smash"' in mentor

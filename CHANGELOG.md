@@ -16,6 +16,7 @@
 
 **Changed**
 
+- Overworld use of Flash, Cut, Strength, and Surf now requires the matching Kanto Gym Badge, following the original Kanto story progression.
 - The Pokémon Vault, Item Storage, and Guild Resources are now easier to browse, donate to, borrow from, and withdraw from. The full Pokémon Vault uses a familiar PC-style grid and lets you inspect each Pokémon.
 - Item Storage filters now distinguish items you can use from items whose copies are all unavailable.
 - Guild member search and Trainer invitations now have separate, clearly named controls.

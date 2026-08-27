@@ -194,6 +194,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/day_night_system_check.gd",
 	"res://tests/night_light_check.gd",
 	"res://tests/field_move_flash_light_check.gd",
+	"res://tests/field_move_badge_requirement_check.gd",
 	"res://tests/overworld_field_interactables_check.gd",
 	"res://tests/overworld_item_interaction_runtime_check.gd",
 	"res://tests/overworld_item_notification_check.gd",

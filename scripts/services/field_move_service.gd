@@ -23,6 +23,12 @@ const DIRECT_FIELD_MOVE_DEFINITIONS := {
 	},
 }
 const WEATHER_FIELD_MOVES: Array[String] = ["rain-dance", "snowscape", "sunny-day"]
+const KANTO_FIELD_MOVE_BADGES := {
+	"flash": "boulder",
+	"cut": "cascade",
+	"strength": "rainbow",
+	"surf": "soul",
+}
 const WEATHER_ACTION_ENDPOINT := "/world/weather/action"
 const DEVELOPER_WEATHER_ENDPOINT := "/world/weather/developer"
 const REQUEST_TIMEOUT_SECONDS := 8.0
@@ -70,6 +76,9 @@ func find_party_pokemon_for_move(move_id: String) -> Pokemon:
 
 func can_use_field_move(move_id: String) -> Dictionary:
 	var normalized_move_id := _normalize_move_id(move_id)
+	var badge_error := _required_badge_error(normalized_move_id)
+	if not badge_error.is_empty():
+		return badge_error
 	var charm_name := str(owned_charm_moves.get(normalized_move_id, ""))
 	if charm_name != "":
 		return {
@@ -109,6 +118,9 @@ func can_use_direct_field_move(move_id: String, pokemon_id := 0) -> Dictionary:
 		}
 	if pokemon_id <= 0:
 		return can_use_field_move(normalized_move_id)
+	var badge_error := _required_badge_error(normalized_move_id)
+	if not badge_error.is_empty():
+		return badge_error
 
 	for pokemon: Pokemon in PlayerSave.party:
 		if pokemon == null or pokemon.owned_pokemon_id != pokemon_id:
@@ -256,3 +268,20 @@ func _normalize_move_id(value: String) -> String:
 
 func _format_move_name(move_id: String) -> String:
 	return _normalize_move_id(move_id).replace("-", " ").capitalize()
+
+
+func _required_badge_error(move_id: String) -> Dictionary:
+	var badge_id := str(KANTO_FIELD_MOVE_BADGES.get(move_id, ""))
+	if badge_id.is_empty() or PlayerSave.has_gym_badge("kanto", badge_id):
+		return {}
+	var badge_name := LocalizationManager.text("ui.gym_badge.%s" % badge_id)
+	return {
+		"success": false,
+		"errorCode": "field_move_badge_required",
+		"error": LocalizationManager.text(
+			"ui.field_move.error.badge_required",
+			{"badge": badge_name}
+		),
+		"requiredBadge": badge_id,
+		"requiredBadgeRegion": "kanto",
+	}
