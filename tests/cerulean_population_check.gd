@@ -11,8 +11,8 @@ const POPULATION := {
 		"Entities/Pokemon/WaterPokemon/Gyarados": "kanto_cerulean_city_gyarados_1",
 		"Entities/Pokemon/WaterPokemon/Goldeen": "kanto_cerulean_city_goldeen_1",
 		"Entities/Pokemon/WaterPokemon/Poliwag": "kanto_cerulean_city_poliwag_1",
+		"Entities/Pokemon/BattleDisplay/Onix": "kanto_cerulean_city_practice_onix_1",
 		"Entities/Pokemon/BattleDisplay/Pikachu": "kanto_cerulean_city_practice_pikachu_1",
-		"Entities/Pokemon/BattleDisplay/Eevee": "kanto_cerulean_city_practice_eevee_1",
 	},
 	"res://scenes/overworld/kanto/towns/cerulean_city/house1.tscn": {
 		"Entities/NPCs/OnixTrainer": "kanto_cerulean_city_house_1_onix_trainer",

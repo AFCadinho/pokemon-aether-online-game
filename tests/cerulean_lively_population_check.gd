@@ -96,19 +96,21 @@ func _check_practice_battle(city: Node, collision: TileMapLayer) -> void:
 	var lila := city.get_node_or_null("Entities/NPCs/AceTrainerLila") as Node2D
 	var bram := city.get_node_or_null("Entities/NPCs/AceTrainerBram") as Node2D
 	var display := city.get_node_or_null("Entities/Pokemon/BattleDisplay") as Node2D
+	var onix := city.get_node_or_null("Entities/Pokemon/BattleDisplay/Onix") as Node2D
 	var pikachu := city.get_node_or_null("Entities/Pokemon/BattleDisplay/Pikachu") as Node2D
-	var eevee := city.get_node_or_null("Entities/Pokemon/BattleDisplay/Eevee") as Node2D
 	_check(lila != null and bram != null, "Two Trainers face each other on the practice platform")
 	_check(display != null and display.get_script() != null, "Practice Pokemon use the battle movement controller")
-	_check(pikachu != null and eevee != null, "Both practice Trainers have a Pokemon")
-	if lila == null or bram == null or display == null or pikachu == null or eevee == null:
+	_check(onix != null and pikachu != null, "Both practice Trainers have a Pokemon")
+	if lila == null or bram == null or display == null or onix == null or pikachu == null:
 		return
 	_check(float(display.get("lunge_distance")) > 0.0, "Practice Pokemon lunge toward and retreat from each other")
-	_check(lila.global_position.x < pikachu.global_position.x, "Lila stands behind Pikachu")
-	_check(bram.global_position.x > eevee.global_position.x, "Bram stands behind Eevee")
-	_check(pikachu.global_position.x < eevee.global_position.x, "Practice Pokemon face across the platform")
+	_check(str(onix.get("species_id")) == "onix", "Lila battles with Onix")
+	_check(str(pikachu.get("species_id")) == "pikachu", "Bram battles with Pikachu")
+	_check(lila.global_position.x < onix.global_position.x, "Lila stands behind Onix")
+	_check(bram.global_position.x > pikachu.global_position.x, "Bram stands behind Pikachu")
+	_check(onix.global_position.x < pikachu.global_position.x, "Practice Pokemon face across the platform")
 	if collision != null:
-		for character: Node2D in [lila, bram, pikachu, eevee]:
+		for character: Node2D in [lila, bram, onix, pikachu]:
 			var cell := collision.local_to_map(collision.to_local(character.global_position))
 			_check(collision.get_cell_source_id(cell) == -1, "%s stands on the open platform" % character.name)
 

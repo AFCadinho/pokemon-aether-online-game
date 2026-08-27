@@ -4,8 +4,8 @@ extends Node2D
 @export_range(0.1, 2.0, 0.05) var movement_duration := 0.55
 @export_range(0.0, 4.0, 0.1) var pose_pause_seconds := 0.8
 
-@onready var left_pokemon: Node2D = $Pikachu
-@onready var right_pokemon: Node2D = $Eevee
+@onready var left_pokemon: Node2D = $Onix
+@onready var right_pokemon: Node2D = $Pikachu
 
 var left_origin := Vector2.ZERO
 var right_origin := Vector2.ZERO
