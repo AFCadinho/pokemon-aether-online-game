@@ -85,6 +85,7 @@ func _check_catalog_interior_count() -> void:
 	if not parsed is Dictionary:
 		return
 	var areas := (parsed as Dictionary).get("areas", {}) as Dictionary
+	var transitions := (parsed as Dictionary).get("transitions", {}) as Dictionary
 	var cerulean_interiors := 0
 	for area_value: Variant in areas.values():
 		var area := area_value as Dictionary
@@ -94,6 +95,23 @@ func _check_catalog_interior_count() -> void:
 		):
 			cerulean_interiors += 1
 	_check(cerulean_interiors == 5, "Cerulean City exposes exactly five interiors in the world catalog")
+	for interior_value: Variant in INTERIORS:
+		var interior_data := interior_value as Dictionary
+		var map_id := str(interior_data.get("map_id", ""))
+		var scene_path := str(interior_data.get("scene", ""))
+		var spawn_marker := str(interior_data.get("interior_spawn", ""))
+		var area := areas.get(map_id, {}) as Dictionary
+		_check(not area.is_empty(), "%s is registered as a world-access area" % map_id)
+		_check(str(area.get("scenePath", "")) == scene_path, "%s exposes its canonical scene path" % map_id)
+		var spawn_points := area.get("spawnPoints", {}) as Dictionary
+		var spawn_point := spawn_points.get(spawn_marker.to_snake_case(), {}) as Dictionary
+		_check(str(spawn_point.get("spawnMarker", "")) == spawn_marker, "%s exposes its arrival marker for teleport" % map_id)
+		_check(bool(spawn_point.get("safeForStaffTeleport", false)), "%s arrival marker is staff-teleport safe" % map_id)
+		var enter_transition_id := "kanto_cerulean_city__to_%s" % str(interior_data.get("id", ""))
+		var enter_transition := transitions.get(enter_transition_id, {}) as Dictionary
+		_check(str(enter_transition.get("destinationAreaId", "")) == map_id, "%s is authorized by the city door transition" % map_id)
+		var return_transition := transitions.get("%s__to_outside" % map_id, {}) as Dictionary
+		_check(str(return_transition.get("destinationAreaId", "")) == "kanto_cerulean_city", "%s is authorized to return outside" % map_id)
 
 
 func _check_interior(city: Node, data: Dictionary) -> void:
