@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://bqa0pfxuwliph"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/cerulean_bike_shop/assets/5GEN_INTERIOR_TILESET_1354810058_000.texture.res" id="1_n1dyb"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/cerulean_bike_shop/assets/5GEN_TILESET_419699423_003.texture.res" id="2_eg2n1"]

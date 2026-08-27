@@ -21,8 +21,8 @@
 [ext_resource type="SpriteFrames" uid="uid://bxh5nxs12bywr" path="res://assets/npcs/gym_guide_frames.tres" id="18_gym_attendant"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="18_picnicker"]
 [ext_resource type="SpriteFrames" uid="uid://ckxh3g37blbkj" path="res://assets/npcs/classes/scientist_f_frames.tres" id="18_scientist_f"]
-[ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="18_worker"]
 [ext_resource type="SpriteFrames" uid="uid://ctgjk0yaqmm8o" path="res://assets/npcs/classes/elder_frames.tres" id="18_veteran"]
+[ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="18_worker"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="19_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="20_aether_beacon"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="21_trainer"]
@@ -33,10 +33,11 @@
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="26_gate_npc"]
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="27_r678c"]
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="28_6yoej"]
-[ext_resource type="Script" path="res://scripts/world/kanto/towns/cerulean_mountain_guide.gd" id="29_mountain_guide"]
+[ext_resource type="Script" uid="uid://cte2y4e4gdmbm" path="res://scripts/world/kanto/towns/cerulean_mountain_guide.gd" id="29_mountain_guide"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="30_hiker"]
-[ext_resource type="Script" path="res://scripts/world/kanto/towns/cerulean_mountain_return.gd" id="31_mountain_return"]
+[ext_resource type="Script" uid="uid://q5hlbf2sfqxo" path="res://scripts/world/kanto/towns/cerulean_mountain_return.gd" id="31_mountain_return"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="32_daily_rock"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/cuttable_tree.tscn" id="34_i2u7v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
@@ -376,13 +377,13 @@ position = Vector2(112, 1520)
 [node name="SouthMountain" type="Marker2D" parent="Spawns" unique_id=2048374652]
 position = Vector2(1584, 2096)
 
-[node name="WestRockSmashSite" type="Marker2D" parent="Spawns"]
+[node name="WestRockSmashSite" type="Marker2D" parent="Spawns" unique_id=1817059196]
 position = Vector2(112, 1520)
 
-[node name="EastRockSmashSite" type="Marker2D" parent="Spawns"]
-position = Vector2(2192, 1776)
+[node name="EastRockSmashSite" type="Marker2D" parent="Spawns" unique_id=1761652555]
+position = Vector2(1296, 2096)
 
-[node name="MountainGuideReturn" type="Marker2D" parent="Spawns"]
+[node name="MountainGuideReturn" type="Marker2D" parent="Spawns" unique_id=1655488040]
 position = Vector2(432, 1520)
 
 [node name="TransitArrival" type="Marker2D" parent="Spawns" unique_id=1815544339]
@@ -726,12 +727,14 @@ display_name = "Bike Enthusiast Theo"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("13_youngster")
 
-[node name="MountainGuide" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
-position = Vector2(432, 1488)
+[node name="MountainGuide" parent="Entities/NPCs" unique_id=1082922359 instance=ExtResource("9_dialogue")]
+position = Vector2(1712, 1904)
 script = ExtResource("29_mountain_guide")
+west_destination_position = Vector2(112, 1520)
+east_destination_position = Vector2(2192, 1776)
 npc_id = "kanto_cerulean_city_mountain_guide"
 display_name = "Mountain Guide"
-facing_direction = Vector2(0, 1)
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("30_hiker")
 
 [node name="AceTrainerLila" parent="Entities/NPCs" unique_id=159174064 instance=ExtResource("9_dialogue")]
@@ -774,12 +777,12 @@ display_name = "Canal Picnicker Nia"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("18_picnicker")
 
-[node name="VeteranGarrick" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
-position = Vector2(1792, 1664)
+[node name="VeteranGarrick" parent="Entities/NPCs" unique_id=747773275 instance=ExtResource("9_dialogue")]
+position = Vector2(1680, 1680)
 npc_id = "kanto_cerulean_city_veteran_garrick"
 npc_definition_id = "trainer_class_veteran"
 display_name = "Veteran Garrick"
-facing_direction = Vector2(0, -1)
+facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("18_veteran")
 
 [node name="TransitKeeper" parent="Entities/NPCs" unique_id=1146061101 instance=ExtResource("19_transit_keeper")]
@@ -798,8 +801,8 @@ level = 12
 display_name = "Growlithe"
 facing_direction = Vector2(-1, 0)
 
-[node name="Dragonite" parent="Entities/Pokemon" instance=ExtResource("10_pokemon")]
-position = Vector2(1856, 1664)
+[node name="Dragonite" parent="Entities/Pokemon" unique_id=877386154 instance=ExtResource("10_pokemon")]
+position = Vector2(1712, 1679.9999)
 scale = Vector2(1.1, 1.1)
 overworld_pokemon_id = "kanto_cerulean_city_dragonite_1"
 species_id = "dragonite"
@@ -975,81 +978,96 @@ position = Vector2(464, 784)
 sign_id = "kanto_cerulean_city_town_sign"
 sign_type = "town"
 
-[node name="MountainRockSmashSites" type="Node2D" parent="Entities/Interactables"]
+[node name="MountainRockSmashSites" type="Node2D" parent="Entities/Interactables" unique_id=962698712]
 
-[node name="WestReturnTrail" type="Node2D" parent="Entities/Interactables/MountainRockSmashSites"]
-position = Vector2(176, 1520)
+[node name="WestReturnTrail" type="Node2D" parent="Entities/Interactables/MountainRockSmashSites" unique_id=871700528]
+position = Vector2(144, 1584)
 script = ExtResource("31_mountain_return")
 interactable_id = "kanto_cerulean_city_west_site_return"
 
-[node name="EastReturnTrail" type="Node2D" parent="Entities/Interactables/MountainRockSmashSites"]
-position = Vector2(2192, 1840)
+[node name="EastReturnTrail" type="Node2D" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1848718920]
+position = Vector2(2320, 1872)
 script = ExtResource("31_mountain_return")
 interactable_id = "kanto_cerulean_city_east_site_return"
 
-[node name="WestRockNorth" parent="Entities/Interactables/MountainRockSmashSites" instance=ExtResource("32_daily_rock")]
-z_as_relative = false
+[node name="WestRockNorth" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1669011993 instance=ExtResource("32_daily_rock")]
 z_index = 2054
-position = Vector2(80, 1168)
+z_as_relative = false
+position = Vector2(144, 1104)
 rock_id = "kanto_cerulean_city_west_site_rock_north"
-rock_variant = 0
 rock_visual_style = 2
 
-[node name="WestRockUpper" parent="Entities/Interactables/MountainRockSmashSites" instance=ExtResource("32_daily_rock")]
-z_as_relative = false
+[node name="WestRockUpper" parent="Entities/Interactables/MountainRockSmashSites" unique_id=640211761 instance=ExtResource("32_daily_rock")]
 z_index = 2054
-position = Vector2(144, 1328)
+z_as_relative = false
+position = Vector2(48, 1232)
 rock_id = "kanto_cerulean_city_west_site_rock_upper"
 rock_variant = 1
 rock_visual_style = 2
 
-[node name="WestRockLower" parent="Entities/Interactables/MountainRockSmashSites" instance=ExtResource("32_daily_rock")]
-z_as_relative = false
+[node name="WestRockLower" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1483051589 instance=ExtResource("32_daily_rock")]
 z_index = 2054
+z_as_relative = false
 position = Vector2(48, 1744)
 rock_id = "kanto_cerulean_city_west_site_rock_lower"
 rock_variant = 2
 rock_visual_style = 2
 
-[node name="WestRockSouth" parent="Entities/Interactables/MountainRockSmashSites" instance=ExtResource("32_daily_rock")]
-z_as_relative = false
+[node name="WestRockSouth" parent="Entities/Interactables/MountainRockSmashSites" unique_id=122883783 instance=ExtResource("32_daily_rock")]
 z_index = 2054
+z_as_relative = false
 position = Vector2(144, 1936)
 rock_id = "kanto_cerulean_city_west_site_rock_south"
 rock_variant = 3
 rock_visual_style = 2
 
-[node name="EastRockNorthwest" parent="Entities/Interactables/MountainRockSmashSites" instance=ExtResource("32_daily_rock")]
-z_as_relative = false
+[node name="EastRockNorthwest" parent="Entities/Interactables/MountainRockSmashSites" unique_id=844945805 instance=ExtResource("32_daily_rock")]
 z_index = 2054
-position = Vector2(2128, 1680)
+z_as_relative = false
+position = Vector2(2128, 1712)
 rock_id = "kanto_cerulean_city_east_site_rock_northwest"
-rock_variant = 0
 rock_visual_style = 2
 
-[node name="EastRockNortheast" parent="Entities/Interactables/MountainRockSmashSites" instance=ExtResource("32_daily_rock")]
-z_as_relative = false
+[node name="EastRockNortheast" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1938575074 instance=ExtResource("32_daily_rock")]
 z_index = 2054
-position = Vector2(2320, 1712)
+z_as_relative = false
+position = Vector2(2128, 2096)
 rock_id = "kanto_cerulean_city_east_site_rock_northeast"
 rock_variant = 1
 rock_visual_style = 2
 
-[node name="EastRockSouthwest" parent="Entities/Interactables/MountainRockSmashSites" instance=ExtResource("32_daily_rock")]
-z_as_relative = false
+[node name="EastRockSouthwest" parent="Entities/Interactables/MountainRockSmashSites" unique_id=55597829 instance=ExtResource("32_daily_rock")]
 z_index = 2054
-position = Vector2(2128, 1904)
+z_as_relative = false
+position = Vector2(1392, 2192)
 rock_id = "kanto_cerulean_city_east_site_rock_southwest"
 rock_variant = 2
 rock_visual_style = 2
 
-[node name="EastRockSoutheast" parent="Entities/Interactables/MountainRockSmashSites" instance=ExtResource("32_daily_rock")]
-z_as_relative = false
+[node name="EastRockSoutheast" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1019663712 instance=ExtResource("32_daily_rock")]
 z_index = 2054
-position = Vector2(2288, 1936)
+z_as_relative = false
+position = Vector2(1136, 2096)
 rock_id = "kanto_cerulean_city_east_site_rock_southeast"
 rock_variant = 3
 rock_visual_style = 2
+
+[node name="CutTrees" type="Node2D" parent="Entities/Interactables" unique_id=232736023]
+
+[node name="CuttableTree" parent="Entities/Interactables/CutTrees" unique_id=745781196 instance=ExtResource("34_i2u7v")]
+position = Vector2(2256, 1360)
+
+[node name="CuttableTree2" parent="Entities/Interactables/CutTrees" unique_id=1054165234 instance=ExtResource("34_i2u7v")]
+position = Vector2(2256, 1392)
+
+[node name="CuttableTree3" parent="Entities/Interactables/CutTrees" unique_id=1481387488 instance=ExtResource("34_i2u7v")]
+position = Vector2(2256, 1424)
+
+[node name="CuttableTree4" parent="Entities/Interactables/CutTrees" unique_id=989778655 instance=ExtResource("34_i2u7v")]
+position = Vector2(2256, 1456)
+
+[node name="CuttableTree5" parent="Entities/Interactables/CutTrees" unique_id=1025756504 instance=ExtResource("34_i2u7v")]
+position = Vector2(2256, 1488)
 
 [node name="Tiles" type="Node2D" parent="." unique_id=426809689]
 visible = false
