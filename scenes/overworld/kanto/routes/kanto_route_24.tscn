@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3]
 
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/open_field/open_field.visual.tscn" id="1_visual"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_24/route_24.visual.tscn" id="1_visual"]
 [ext_resource type="Script" path="res://scripts/world/kanto/open_field_placeholder_map.gd" id="2_map"]
 [ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_hint"]
@@ -26,42 +26,43 @@ location_id = "kanto.route_24"
 location_name = "Route 24"
 region_id = "kanto"
 music_profile_id = "kanto.routes_3_10_16_22"
+map_size = Vector2i(45, 60)
 connection_side = "bottom"
-opening_from = 19
-opening_to = 22
-second_opening_from = 2
-second_opening_to = 6
-third_opening_from = 8
-third_opening_to = 11
-fourth_opening_from = 13
-fourth_opening_to = 17
+opening_from = 33
+opening_to = 37
+second_opening_from = 12
+second_opening_to = 18
+third_opening_from = 20
+third_opening_to = 24
+fourth_opening_from = 26
+fourth_opening_to = 30
 water_connection_side = "bottom"
-water_opening_from = 2
-water_opening_to = 6
-second_water_opening_from = 13
-second_water_opening_to = 17
+water_opening_from = 12
+water_opening_to = 18
+second_water_opening_from = 26
+second_water_opening_to = 30
 water_connection_depth = 5
 
-[node name="OpenFieldVisual" parent="." instance=ExtResource("1_visual")]
+[node name="Route24Visual" parent="." instance=ExtResource("1_visual")]
 
 [node name="Spawns" type="Node2D" parent="."]
 
 [node name="FromCeruleanPath" type="Marker2D" parent="Spawns"]
-position = Vector2(672, 512)
+position = Vector2(1120, 1856)
 
 [node name="FromCeruleanWaterLeft" type="Marker2D" parent="Spawns"]
-position = Vector2(128, 512)
+position = Vector2(480, 1856)
 
 [node name="FromCeruleanBridge" type="Marker2D" parent="Spawns"]
-position = Vector2(320, 512)
+position = Vector2(704, 1856)
 
 [node name="FromCeruleanWaterRight" type="Marker2D" parent="Spawns"]
-position = Vector2(480, 512)
+position = Vector2(896, 1856)
 
 [node name="Exits" type="Node2D" parent="."]
 
 [node name="ToCeruleanPath" type="Area2D" parent="Exits"]
-position = Vector2(672, 560)
+position = Vector2(1120, 1904)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 target_spawn_name = "FromRoute24Path"
@@ -77,7 +78,7 @@ tile_footprint = Vector2i(4, 1)
 flow_direction = "down"
 
 [node name="ToCeruleanWaterLeft" type="Area2D" parent="Exits"]
-position = Vector2(128, 560)
+position = Vector2(480, 1904)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 target_spawn_name = "FromRoute24WaterLeft"
@@ -93,7 +94,7 @@ tile_footprint = Vector2i(5, 1)
 flow_direction = "down"
 
 [node name="ToCeruleanBridge" type="Area2D" parent="Exits"]
-position = Vector2(320, 560)
+position = Vector2(704, 1904)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 target_spawn_name = "FromRoute24Bridge"
@@ -109,7 +110,7 @@ tile_footprint = Vector2i(4, 1)
 flow_direction = "down"
 
 [node name="ToCeruleanWaterRight" type="Area2D" parent="Exits"]
-position = Vector2(480, 560)
+position = Vector2(896, 1904)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 target_spawn_name = "FromRoute24WaterRight"

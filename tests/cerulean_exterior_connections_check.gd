@@ -16,6 +16,7 @@ const CONNECTIONS := {
 	},
 	"route_24": {
 		"scene": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
+		"visual": "res://generated/tiled_visuals/route_24/route_24.visual.tscn",
 		"map_id": "kanto_route_24",
 		"city_spawn": "FromRoute24Path",
 		"city_exit": "ToRoute24Path",
@@ -87,12 +88,14 @@ func _init() -> void:
 	_check(placeholder_script.contains("second_water_opening_from"), "Placeholder maps support two Surf connections")
 	_check(player_script.contains("sync_activity_state_for_current_tile") and player_script.contains("_start_surf_activity(false)"), "A water arrival restores Surf automatically")
 	_check(route_24_source.contains('[node name="Water" type="TileMapLayer" parent="Tiles"]'), "Route 24 exposes a semantic Water layer")
+	_check(route_24_source.contains('route_24/route_24.visual.tscn'), "Route 24 uses its imported Tiled visual")
+	_check(route_24_source.contains('map_size = Vector2i(45, 60)'), "Route 24 bounds match its imported visual")
 	_check(route_24_source.contains('water_connection_side = "bottom"'), "Route 24 marks its water approach")
 	_check(city_source.contains('[node name="Water" type="TileMapLayer" parent="Tiles"'), "Cerulean City exposes a semantic Water layer")
 	_check(city_script.contains("_build_water_connections"), "Cerulean City marks all water approaches")
 	_check(city_source.contains('[node name="FromRoute4Water" type="Marker2D" parent="Spawns"'), "Cerulean City has the Route 4 water spawn")
 	_check(city_source.contains('[node name="ToRoute4Water" type="Area2D" parent="Exits"'), "Cerulean City has the Route 4 water exit")
-	_check(route_24_source.contains('second_water_opening_from = 13'), "Route 24 marks its second Surf approach")
+	_check(route_24_source.contains('second_water_opening_from = 26'), "Route 24 marks its second Surf approach")
 
 	for suffix: String in ["Left", "Grass", "Right"]:
 		_check(city_source.contains('[node name="FromRoute5%s" type="Marker2D" parent="Spawns"' % suffix), "Cerulean City has the Route 5 %s spawn" % suffix.to_lower())
@@ -111,6 +114,7 @@ func _init() -> void:
 		var scene_path := str(connection.get("scene", ""))
 		var scene_source := FileAccess.get_file_as_string(scene_path)
 		var map_id := str(connection.get("map_id", ""))
+		var expected_visual := str(connection.get("visual", OPEN_FIELD_VISUAL))
 		var city_spawn := str(connection.get("city_spawn", ""))
 		var city_exit := str(connection.get("city_exit", ""))
 		var city_transition := str(connection.get("city_transition", ""))
@@ -120,7 +124,7 @@ func _init() -> void:
 		var return_exit_name := str(connection.get("return_exit_name", "ToCerulean"))
 
 		_check(ResourceLoader.exists(scene_path), "%s scene exists" % connection_name)
-		_check(scene_source.contains(OPEN_FIELD_VISUAL), "%s uses the open-field visual" % connection_name)
+		_check(scene_source.contains(expected_visual), "%s uses its expected visual" % connection_name)
 		_check(scene_source.contains('map_id = "%s"' % map_id), "%s exposes map metadata" % connection_name)
 		_check(scene_source.contains('connection_side = "%s"' % connection_side), "%s opens the correct map edge" % connection_name)
 		_check(scene_source.contains('[node name="%s" type="Marker2D" parent="Spawns"]' % arrival_name), "%s has a Cerulean arrival" % connection_name)
