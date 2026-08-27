@@ -160,6 +160,7 @@ func update_position(state: Dictionary) -> bool:
 		"roles": state.get("roles", []),
 		"selectedRoleBadge": str(state.get("selectedRoleBadge", "")),
 		"activityState": str(state.get("activityState", "idle")),
+		"aethernetEffect": state.get("aethernetEffect", {}),
 		"appearanceBody": presence_body,
 		"appearanceHair": str(appearance.get("hair", "")),
 		"appearanceHairStyleIndex": int(appearance.get("hair_style_index", 0)),

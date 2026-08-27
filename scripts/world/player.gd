@@ -2417,11 +2417,7 @@ func _is_inside_exit_area(exit_area: Area2D) -> bool:
 func _resolve_current_map() -> Node:
 	var parent_node := get_parent()
 	while parent_node != null:
-		if (
-			parent_node.get_node_or_null("Collision") != null
-			or parent_node.get_node_or_null("Tiles/TallGrass") != null
-			or parent_node.get_node_or_null("TallGrass") != null
-		):
+		if _find_tilemap_layer(parent_node, ["Collision", "TallGrass"]) != null:
 			return parent_node
 
 		parent_node = parent_node.get_parent()
@@ -2432,7 +2428,11 @@ func _resolve_current_map() -> Node:
 	return null
 
 func _update_sort_z() -> void:
-	z_index = clampi(floori(get_feet_position().y), SORT_Z_MIN, SORT_Z_MAX)
+	var sort_z := floori(get_feet_position().y)
+	var current_map := _resolve_current_map()
+	if current_map != null and current_map.has_method("get_actor_sort_z_floor"):
+		sort_z = maxi(sort_z, int(current_map.call("get_actor_sort_z_floor", global_position)))
+	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
 
 func _cache_appearance_sprites() -> void:
 	appearance_sprites.clear()

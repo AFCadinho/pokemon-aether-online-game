@@ -5,6 +5,7 @@ class_name DailySmashableRock
 enum RockVisualStyle {
 	TRAINING,
 	CAVE,
+	ROUTE,
 }
 
 const TRAINING_ROCK_SHEET: Texture2D = preload(
@@ -23,7 +24,10 @@ var request_pending := false
 
 func _ready() -> void:
 	required_field_move = "rock-smash"
-	if rock_visual_style == RockVisualStyle.CAVE:
+	if rock_visual_style == RockVisualStyle.ROUTE:
+		display_name = "Route Rock"
+		unavailable_message = "This route rock can be smashed with Rock Smash."
+	elif rock_visual_style == RockVisualStyle.CAVE:
 		display_name = "Cave Rock"
 		unavailable_message = "This cave rock can be smashed with Rock Smash."
 	else:
@@ -109,7 +113,7 @@ func _frame_texture(row: int) -> AtlasTexture:
 	var texture := AtlasTexture.new()
 	texture.atlas = (
 		CAVE_ROCK_SHEET
-		if rock_visual_style == RockVisualStyle.CAVE
+		if rock_visual_style != RockVisualStyle.TRAINING
 		else TRAINING_ROCK_SHEET
 	)
 	texture.region = Rect2(rock_variant * 32, row * 32, 32, 32)

@@ -1,0 +1,175 @@
+[gd_scene format=4 uid="uid://cfpdykr7xgaep"]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/cerulean_bike_shop/cerulean_bike_shop.visual.tscn" id="1_visual"]
+[ext_resource type="Script" uid="uid://b5s8fsxk5gaqj" path="res://scripts/world/kanto/towns/cerulean_bike_shop.gd" id="2_bike_shop"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="3_7h5j0"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="3_floor_mask"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_hint"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="6_dialogue"]
+[ext_resource type="SpriteFrames" uid="uid://cdhq6bete0vs8" path="res://assets/npcs/classes/mart_m_frames.tres" id="7_mart_m"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7h5j0"]
+texture = ExtResource("3_7h5j0")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_l1xiu"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_7h5j0")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(128, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_owner_interaction"]
+size = Vector2(160, 32)
+
+[node name="BikeStore" type="Node2D" unique_id=1620940317]
+script = ExtResource("2_bike_shop")
+map_id = "kanto_cerulean_city_bike_store"
+map_region_name = "Kanto"
+map_display_name = "Cerulean City Bike Store"
+world_access_group_id = "kanto_cerulean_city"
+world_access_group_label = "Cerulean City"
+world_access_area_type = "interior"
+location_id = "kanto.cerulean_city.bike_store"
+location_name = "Cerulean City Bike Store"
+region_id = "kanto"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_profile_id = "kanto.cerulean_city"
+
+[node name="BikeShopVisual" parent="." unique_id=267555346 instance=ExtResource("1_visual")]
+
+[node name="Tiles" type="Node2D" parent="." unique_id=1088080647]
+visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=1713706921]
+visible = false
+z_index = 4096
+tile_map_data = PackedByteArray("AAAFABMAAAABAAEAAAAGABMAAAABAAEAAAAHABMAAAABAAEAAAAIABMAAAABAAEAAAAJABMAAAABAAEAAAAKABMAAAABAAEAAAALABMAAAABAAEAAAAMABMAAAABAAEAAAAMABQAAAABAAEAAAANABQAAAABAAEAAAAOABQAAAABAAEAAAAPABQAAAABAAEAAAAQABQAAAABAAEAAAAQABMAAAABAAEAAAARABMAAAABAAEAAAASABMAAAABAAEAAAATABMAAAABAAEAAAAUABMAAAABAAEAAAAVABMAAAABAAEAAAAWABMAAAABAAEAAAAXABMAAAABAAEAAAAXABIAAAABAAEAAAAYABEAAAABAAEAAAAYABAAAAABAAEAAAAYAA8AAAABAAEAAAAYAA4AAAABAAEAAAAYAA0AAAABAAEAAAAYAAwAAAABAAEAAAAYAAsAAAABAAEAAAAYAAoAAAABAAEAAAAYAAkAAAABAAEAAAAYAAgAAAABAAEAAAAXAAgAAAABAAEAAAAXAAcAAAABAAEAAAAWAAcAAAABAAEAAAAVAAcAAAABAAEAAAAUAAcAAAABAAEAAAATAAcAAAABAAEAAAASAAcAAAABAAEAAAARAAcAAAABAAEAAAAQAAcAAAABAAEAAAAPAAcAAAABAAEAAAAOAAcAAAABAAEAAAANAAcAAAABAAEAAAAMAAcAAAABAAEAAAALAAcAAAABAAEAAAAKAAcAAAABAAEAAAAJAAcAAAABAAEAAAAIAAcAAAABAAEAAAAHAAcAAAABAAEAAAAGAAcAAAABAAEAAAAFAAcAAAABAAEAAAAFAAgAAAABAAEAAAAEAAgAAAABAAEAAAAEAAkAAAABAAEAAAAEAAoAAAABAAEAAAAEAAsAAAABAAEAAAAEAAwAAAABAAEAAAAEAA0AAAABAAEAAAAEAA4AAAABAAEAAAAEAA8AAAABAAEAAAAEABAAAAABAAEAAAAEABEAAAABAAEAAAAEABIAAAABAAEAAAAEABMAAAABAAEAAAARABIAAAABAAEAAAASABIAAAABAAEAAAATABIAAAABAAEAAAAUABIAAAABAAEAAAAVABIAAAABAAEAAAAWABIAAAABAAEAAAAXABAAAAABAAEAAAAVABAAAAABAAEAAAATABAAAAABAAEAAAAVAA8AAAABAAEAAAAWAA8AAAABAAEAAAAWAA4AAAABAAEAAAAUAA4AAAABAAEAAAAXAA8AAAABAAEAAAAXAA4AAAABAAEAAAAVAA0AAAABAAEAAAARAAwAAAABAAEAAAASAAwAAAABAAEAAAATAAwAAAABAAEAAAAUAAwAAAABAAEAAAAVAAwAAAABAAEAAAAWAAwAAAABAAEAAAAXAAwAAAABAAEAAAARAAkAAAABAAEAAAARAAoAAAABAAEAAAARAAsAAAABAAEAAAATAAoAAAABAAEAAAAUAAoAAAABAAEAAAAVAAoAAAABAAEAAAAWAAoAAAABAAEAAAAXAAsAAAABAAEAAAAXAAkAAAABAAEAAAAXAAoAAAABAAEAAAAKABIAAAABAAEAAAALABIAAAABAAEAAAAKAA8AAAABAAEAAAAKABAAAAABAAEAAAAKABEAAAABAAEAAAALAA8AAAABAAEAAAALABAAAAABAAEAAAALABEAAAABAAEAAAAGAA8AAAABAAEAAAAGABAAAAABAAEAAAAGABEAAAABAAEAAAAGABIAAAABAAEAAAAHAA8AAAABAAEAAAAHABAAAAABAAEAAAAHABEAAAABAAEAAAAHABIAAAABAAEAAAAGAA0AAAABAAEAAAAHAA0AAAABAAEAAAAIAA0AAAABAAEAAAAJAA0AAAABAAEAAAAKAA0AAAABAAEAAAALAA0AAAABAAEAAAAHAAoAAAABAAEAAAAIAAoAAAABAAEAAAAJAAoAAAABAAEAAAAKAAoAAAABAAEAAAALAAoAAAABAAEAAAAGAAoAAAABAAEAAAAFAAoAAAABAAEAAAAFAAkAAAABAAEAAAAGAAgAAAABAAEAAAAGAAkAAAABAAEAAAAHAAgAAAABAAEAAAAHAAkAAAABAAEAAAAIAAgAAAABAAEAAAAIAAkAAAABAAEAAAAJAAgAAAABAAEAAAAJAAkAAAABAAEAAAAKAAgAAAABAAEAAAAKAAkAAAABAAEAAAALAAgAAAABAAEAAAALAAkAAAABAAEAAAAMAAgAAAABAAEAAAAMAAkAAAABAAEAAAANAAgAAAABAAEAAAANAAkAAAABAAEAAAAOAAgAAAABAAEAAAAOAAkAAAABAAEAAAAPAAgAAAABAAEAAAAPAAkAAAABAAEAAAAQAAgAAAABAAEAAAAQAAkAAAABAAEAAAATAAgAAAABAAEAAAATAAkAAAABAAEAAAAUAAgAAAABAAEAAAAUAAkAAAABAAEAAAAVAAgAAAABAAEAAAAVAAkAAAABAAEAAAAWAAgAAAABAAEAAAAWAAkAAAABAAEAAAARAAgAAAABAAEAAAASAAgAAAABAAEAAAASAAkAAAABAAEAAAAFABIAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_l1xiu")
+
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1848925508]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("3_floor_mask")
+floor_regions = {
+&"ground_floor": Rect2(160, 256, 608, 384)
+}
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=240441434]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=913906058]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1505100304]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1138406812]
+
+[node name="Entities" type="Node2D" parent="." unique_id=1887983272]
+z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=1616788181]
+
+[node name="BikeShopOwner" parent="Entities/NPCs" unique_id=312076903 instance=ExtResource("6_dialogue")]
+position = Vector2(592, 336)
+npc_id = "kanto_cerulean_city_bike_store_owner"
+npc_definition_id = "trainer_class_mart_employee"
+display_name = "Bike Shop Owner"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("7_mart_m")
+manual_interaction_reach_tiles = 2
+
+[node name="InteractionArea" parent="Entities/NPCs/BikeShopOwner" index="1"]
+position = Vector2(-32, 0)
+
+[node name="CollisionShape2D" parent="Entities/NPCs/BikeShopOwner/InteractionArea" index="0"]
+shape = SubResource("RectangleShape2D_owner_interaction")
+
+[node name="Players" type="Node2D" parent="Entities" unique_id=5355531]
+
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=1619540355]
+
+[node name="Spawns" type="Node2D" parent="." unique_id=1911665305]
+
+[node name="FromCeruleanCity" type="Marker2D" parent="Spawns" unique_id=1509078180]
+position = Vector2(464, 560)
+
+[node name="Exits" type="Node2D" parent="." unique_id=167151200]
+
+[node name="ToCeruleanCity" type="Area2D" parent="Exits" unique_id=1139742395]
+position = Vector2(464, 624)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
+target_spawn_name = "FromBikeStore"
+transition_id = "kanto_cerulean_city_bike_store__to_outside"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanCity" unique_id=1297752336]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToCeruleanCity" unique_id=719758815 instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(5, 1)
+flow_direction = "down"
+
+[connection signal="body_entered" from="Exits/ToCeruleanCity" to="Exits/ToCeruleanCity" method="_on_body_entered"]
+
+[editable path="Entities/NPCs/BikeShopOwner"]
