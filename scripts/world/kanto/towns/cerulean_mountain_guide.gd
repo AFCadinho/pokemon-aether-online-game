@@ -33,7 +33,7 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 
 	await show_dialogue([LocalizationManager.text("npc.cerulean_mountain_guide.intro")])
-	var menu := SiteMenu.new() as CeruleanMountainSiteMenu
+	var menu := SiteMenu.new()
 	get_tree().current_scene.add_child(menu)
 	menu.open(level)
 	var site_id: String = await menu.resolved
