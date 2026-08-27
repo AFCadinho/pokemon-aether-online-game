@@ -50,7 +50,7 @@ const COLLISION_PATHS := {
 	"house1.tscn": "BlueHouseTemplate/Collision",
 	"house2.tscn": "BlueHouseTemplate/Collision",
 	"house3.tscn": "BlueHouseTemplate/Collision",
-	"bike_store.tscn": "BlueHouseTemplate/Collision",
+	"bike_store.tscn": "Tiles/Collision",
 	"pokemon_center.tscn": "Collision",
 	"cerulean_gym.tscn": "PewterGymTemplate/Collision",
 }

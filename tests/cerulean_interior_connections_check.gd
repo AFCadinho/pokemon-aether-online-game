@@ -43,7 +43,7 @@ const INTERIORS := [
 		"city_exit": "ToBikeStore",
 		"interior_spawn": "FromCeruleanCity",
 		"interior_exit": "ToCeruleanCity",
-		"template": "BlueHouseTemplate",
+		"template": "BikeShopVisual",
 		"spawn_position": Vector2(656, 1680),
 	},
 	{
@@ -168,6 +168,24 @@ func _check_interior(city: Node, data: Dictionary) -> void:
 		_check(str(interior_exit.get("target_spawn_name")) == city_spawn_name, "%s returns to its matching outside spawn" % label)
 	if label == "gym":
 		_check(interior.get_node_or_null("PewterGymTemplate/Entities") == null, "Cerulean Gym does not inherit Pewter NPC content")
+	if label == "bike_store":
+		var bike_visual := interior.get_node_or_null("BikeShopVisual")
+		var bike_collision := interior.get_node_or_null("Tiles/Collision") as TileMapLayer
+		_check(
+			bike_visual != null and interior.get_node_or_null("BikeShopVisual/ObjectsTop") != null,
+			"bike_store uses its imported foreground visual layer"
+		)
+		_check(
+			bike_collision != null,
+			"bike_store uses collision fitted to the imported shop layout"
+		)
+		if bike_visual != null:
+			var visual_map := bike_visual.get_meta("tiled_visual_map", {}) as Dictionary
+			_check(visual_map.get("width") == 30 and visual_map.get("height") == 25, "bike_store preserves its 30x25 Tiled canvas")
+		if bike_collision != null:
+			_check(bike_collision.get_cell_source_id(Vector2i(14, 17)) == -1, "bike_store arrival remains walkable")
+			_check(bike_collision.get_cell_source_id(Vector2i(14, 18)) == -1, "bike_store doorway remains open")
+			_check(bike_collision.get_cell_source_id(Vector2i(17, 11)) == 0, "bike_store counter blocks movement")
 	interior.queue_free()
 	await process_frame
 
