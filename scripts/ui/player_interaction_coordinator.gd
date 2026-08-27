@@ -66,6 +66,9 @@ var guild_invitation_poll_in_flight := false
 var guild_membership: Dictionary = {}
 var guild_membership_loaded := false
 var guild_membership_loading := false
+var guild_members: Array[Dictionary] = []
+var guild_members_loaded := false
+var guild_members_loading := false
 var guild_action_in_flight := false
 var guild_status_message := ""
 var guild_status_is_error := false
@@ -122,6 +125,11 @@ func open_context_for_player(player_state: Dictionary, screen_position: Vector2)
 		_refresh_trade_capabilities()
 	if not guild_membership_loaded and not guild_membership_loading:
 		_refresh_guild_membership()
+	elif _has_guild_invite_permission() and not guild_members_loading:
+		# Membership can change without changing the local player's own Guild state.
+		# Hide the action until a fresh authoritative roster confirms the target is eligible.
+		guild_members_loaded = false
+		_refresh_guild_members()
 	social_overview.clear()
 	social_state_loading = true
 	social_status_message = ""
@@ -867,9 +875,15 @@ func _refresh_guild_membership() -> void:
 
 
 func _on_guild_membership_changed(membership: Dictionary) -> void:
+	var previous_guild_id := int(guild_membership.get("guildId", 0))
 	guild_membership = membership.duplicate(true)
 	guild_membership_loaded = true
 	guild_membership_loading = false
+	if previous_guild_id != int(guild_membership.get("guildId", 0)):
+		guild_members.clear()
+		guild_members_loaded = false
+	if _has_guild_invite_permission() and not guild_members_loaded and not guild_members_loading:
+		_refresh_guild_members.call_deferred()
 	if guild_invitation_poll_timer != null:
 		if guild_membership.is_empty():
 			if guild_invitation_poll_timer.is_stopped():
@@ -883,8 +897,51 @@ func _on_guild_membership_changed(membership: Dictionary) -> void:
 		_render_context_menu()
 
 
+func _refresh_guild_members() -> void:
+	if guild_members_loading or not _has_guild_invite_permission():
+		return
+	var service := get_node_or_null("/root/GuildService")
+	if service == null:
+		guild_members.clear()
+		guild_members_loaded = false
+		return
+	guild_members_loading = true
+	var result: Dictionary = await service.load_home()
+	guild_members_loading = false
+	guild_members_loaded = bool(result.get("success", false))
+	guild_members.clear()
+	if guild_members_loaded:
+		for value: Variant in result.get("members", []):
+			if value is Dictionary:
+				guild_members.append((value as Dictionary).duplicate(true))
+	if context_menu != null and context_menu.visible:
+		_render_context_menu()
+
+
+func _has_guild_invite_permission() -> bool:
+	var permissions: Variant = guild_membership.get("permissions", [])
+	if permissions is Array and (permissions as Array).has("manage_members"):
+		return true
+	return str(guild_membership.get("role", "")).to_lower() in ["leader", "captain", "officer"]
+
+
+func _target_is_current_guild_member() -> bool:
+	var target_user_id := int(current_target.get("userId", 0))
+	var target_username := str(current_target.get("username", "")).strip_edges().to_lower()
+	for member: Dictionary in guild_members:
+		if target_user_id > 0 and int(member.get("userId", member.get("id", 0))) == target_user_id:
+			return true
+		if target_username != "" and str(member.get("username", "")).strip_edges().to_lower() == target_username:
+			return true
+	return false
+
+
 func _can_invite_to_guild() -> bool:
-	return str(guild_membership.get("role", "")).to_lower() in ["leader", "officer"]
+	return (
+		_has_guild_invite_permission()
+		and guild_members_loaded
+		and not _target_is_current_guild_member()
+	)
 
 
 func _on_guild_invite_pressed() -> void:

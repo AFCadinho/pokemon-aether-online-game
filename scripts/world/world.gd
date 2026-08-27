@@ -976,6 +976,7 @@ func move_player_to_map(map: Node) -> void:
 		player.get_parent().remove_child(player)
 		
 	player_parent.add_child(player)
+	_ensure_remote_players_container(map)
 
 func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position: Vector2) -> void:
 	var spawn_position: Vector2 = fallback_position
@@ -1588,17 +1589,31 @@ func _get_tile_group_bottom_z_index(layer: TileMapLayer, group: Array[Vector2i],
 	return clampi(floori(bottom_y) + z_offset, TREE_LAYER_Z_MIN, TREE_LAYER_Z_MAX)
 
 
-func _ensure_remote_players_container() -> void:
+func _ensure_remote_players_container(map: Node = null) -> void:
+	var target_parent := _get_remote_players_parent(map)
 	if remote_players_container != null and is_instance_valid(remote_players_container):
+		if remote_players_container.get_parent() != target_parent:
+			remote_players_container.reparent(target_parent, true)
 		_order_remote_players_container()
 		_sync_remote_players_visibility()
 		return
 
 	remote_players_container = Node2D.new()
 	remote_players_container.name = "RemotePlayers"
-	add_child(remote_players_container)
+	target_parent.add_child(remote_players_container)
 	_order_remote_players_container()
 	_sync_remote_players_visibility()
+
+
+func _get_remote_players_parent(map: Node = null) -> Node:
+	var active_map := map
+	if active_map == null and GameState.current_map != null and is_instance_valid(GameState.current_map):
+		active_map = GameState.current_map
+	if active_map == null or not is_instance_valid(active_map):
+		return self
+
+	var players := active_map.get_node_or_null("Entities/Players")
+	return players if players != null else active_map
 
 
 func _on_settings_changed() -> void:
@@ -1672,10 +1687,13 @@ func _order_remote_players_container() -> void:
 		return
 	if player == null or not is_instance_valid(player):
 		return
+	var remote_parent := remote_players_container.get_parent()
+	if remote_parent == null or player.get_parent() != remote_parent:
+		return
 
 	# Equal z_index falls back to scene tree order. Keep remote players before
 	# the local player so your own character wins exact overlap ties.
-	move_child(remote_players_container, player.get_index())
+	remote_parent.move_child(remote_players_container, player.get_index())
 
 
 func _connect_world_presence_signals() -> void:
@@ -1864,6 +1882,12 @@ func _clear_remote_players() -> void:
 		if avatar != null and is_instance_valid(avatar):
 			avatar.queue_free()
 	remote_player_avatars.clear()
+	# Keep the reusable container alive while its old map is removed. It will be
+	# attached to the next map's Entities/Players branch by move_player_to_map().
+	if remote_players_container != null \
+		and is_instance_valid(remote_players_container) \
+		and remote_players_container.get_parent() != self:
+		remote_players_container.reparent(self, true)
 
 
 func _remove_remote_player(user_id: int) -> void:

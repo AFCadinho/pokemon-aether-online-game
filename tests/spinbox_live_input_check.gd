@@ -13,6 +13,9 @@ const SCRIPT_EXPECTATIONS := {
 		"money_amount_spinbox.update_on_text_changed = true",
 		"quantity.update_on_text_changed = true",
 	],
+	"res://scripts/ui/guild_popup.gd": [
+		"amount.update_on_text_changed = true",
+	],
 	"res://scripts/ui/ui_overlay.gd": [
 		"dev_item_quantity_spinbox.update_on_text_changed = true",
 		"dev_money_amount_spinbox.update_on_text_changed = true",

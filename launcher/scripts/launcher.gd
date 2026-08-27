@@ -10,7 +10,6 @@ const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
 const DEFAULT_DISCORD_URL := "https://discord.com/invite/b6WexWT8HX"
 const DEFAULT_PATCH_NOTES_URL := "https://pokeaether.com/patch-notes"
 const DEFAULT_CREDITS_URL := "https://pokeaether.com/credits"
-const DEFAULT_HEALTH_URL := "https://pokeaether.com/health"
 const DEFAULT_PRESENCE_URL := "https://admin.pokeaether.com/presence/online-count"
 const LAUNCHER_CONFIG_FILE := "res://config/launcher_config.json"
 const DEFAULT_INSTALL_DIR := "user://game"
@@ -58,6 +57,7 @@ const KNOWN_URL_SCHEMES: Array[String] = ["http://", "https://"]
 const SERVER_ONLINE_COLOR := Color(0.16, 0.94, 0.66, 1.0)
 const SERVER_OFFLINE_COLOR := Color(1.0, 0.38, 0.45, 1.0)
 const SERVER_CHECKING_COLOR := Color(1.0, 0.72, 0.34, 1.0)
+const SERVER_MAINTENANCE_COLOR := Color(1.0, 0.72, 0.34, 1.0)
 
 @onready var shell_panel: PanelContainer = $Shell
 @onready var sidebar_panel: PanelContainer = $Shell/MainSplit/Sidebar
@@ -114,7 +114,7 @@ var current_download: Dictionary = {}
 var update_required := false
 var manifest_url := DEFAULT_MANIFEST_URL
 var news_url := DEFAULT_NEWS_URL
-var health_url := DEFAULT_HEALTH_URL
+var server_status_url := LauncherServerHealthService.DEFAULT_STATUS_URL
 var presence_url := DEFAULT_PRESENCE_URL
 var discord_url := DEFAULT_DISCORD_URL
 var patch_notes_url := DEFAULT_PATCH_NOTES_URL
@@ -138,6 +138,8 @@ var download_progress_snapshot: Dictionary = {}
 var active_resumable_download_kind := ""
 var manifest_retry_count := 0
 var manifest_request_generation := 0
+var server_access_blocked := false
+var server_access_message := ""
 
 
 func _draw() -> void:
@@ -587,6 +589,13 @@ func download_gen5_animated_sprites() -> void:
 
 
 func launch_game() -> void:
+	if server_access_blocked:
+		_set_status(
+			server_access_message if not server_access_message.is_empty() else "Server maintenance.",
+			"maintenance"
+		)
+		return
+
 	var game_data: Dictionary = _get_dictionary(manifest, "game")
 	var absolute_executable_path := _get_game_executable_path(game_data)
 	if not FileAccess.file_exists(absolute_executable_path):
@@ -1676,7 +1685,12 @@ func _handle_download_response() -> void:
 	if install_error != OK:
 		_set_busy(false)
 		_set_status("Could not install extracted update.")
-		_log_error("Staged install failed: %s" % error_string(install_error))
+		_log_error(
+			"Staged install failed: %s (code=%s). See the preceding STG diagnostic for the failed phase." % [
+				error_string(install_error),
+				int(install_error),
+			]
+		)
 		_remove_directory_tree(staging_root)
 		current_download.clear()
 		return
@@ -1750,7 +1764,9 @@ func _on_download_diagnostic_event(event: Dictionary) -> void:
 		"average_bytes_per_second", "seconds_without_bytes", "delay_seconds", "reason",
 		"content_range", "accept_ranges", "edge", "duration_seconds", "stalls",
 		"resumed", "resumed_bytes", "expected_size", "actual_size",
-		"time_to_first_byte_seconds", "last_failure",
+		"time_to_first_byte_seconds", "last_failure", "parallel", "parallel_used",
+		"parallel_fallback", "connections", "segment", "segments",
+		"fresh_file", "corrupt_file_removed",
 	]
 	for field_name: String in field_names:
 		if event.has(field_name) and str(event[field_name]) != "":
@@ -1758,7 +1774,7 @@ func _on_download_diagnostic_event(event: Dictionary) -> void:
 	var message := "%s %s" % [event_name, " ".join(fields)]
 	if event_name == "download_failed":
 		_log_error(message)
-	elif event_name in ["download_retry", "download_stall", "partial_reset"]:
+	elif event_name in ["download_retry", "download_stall", "partial_reset", "parallel_download_fallback"]:
 		_log_warning(message)
 	else:
 		_log(message)
@@ -2098,49 +2114,165 @@ func _commit_staged_download(download: Dictionary, staging_root: String) -> Erro
 		var executable := str(game_data.get("executable", ""))
 		if executable.is_empty():
 			executable = _get_default_game_executable_name()
-		if not FileAccess.file_exists(_globalize_storage_path(staged_source.path_join(executable))):
-			return ERR_FILE_MISSING_DEPENDENCIES
+		var staged_executable := _globalize_storage_path(staged_source.path_join(executable))
+		if not FileAccess.file_exists(staged_executable):
+			return _report_staged_install_failure(
+				download,
+				"validate_game_executable",
+				ERR_FILE_MISSING_DEPENDENCIES,
+				staged_executable,
+				_globalize_storage_path(target)
+			)
 	else:
 		var required_path := str(ASSET_PACK_REQUIRED_PATHS.get(str(download.get("id", "")), ""))
 		if required_path.is_empty():
-			return ERR_INVALID_DATA
+			return _report_staged_install_failure(
+				download,
+				"validate_asset_pack_mapping",
+				ERR_INVALID_DATA,
+				_globalize_storage_path(staged_source),
+				_globalize_storage_path(target)
+			)
 		staged_source = staging_root.path_join(required_path)
 		target = install_dir.path_join(required_path)
 		if not DirAccess.dir_exists_absolute(_globalize_storage_path(staged_source)):
-			return ERR_FILE_MISSING_DEPENDENCIES
+			return _report_staged_install_failure(
+				download,
+				"validate_asset_pack_contents",
+				ERR_FILE_MISSING_DEPENDENCIES,
+				_globalize_storage_path(staged_source),
+				_globalize_storage_path(target)
+			)
 
 	var absolute_source := _globalize_storage_path(staged_source)
 	var absolute_target := _globalize_storage_path(target)
 	var absolute_backup := "%s.launcher-backup" % absolute_target
 	var parent_error := DirAccess.make_dir_recursive_absolute(absolute_target.get_base_dir())
 	if parent_error != OK:
-		return parent_error
+		return _report_staged_install_failure(
+			download,
+			"create_target_parent",
+			parent_error,
+			absolute_source,
+			absolute_target.get_base_dir()
+		)
 	if not DirAccess.dir_exists_absolute(absolute_target) and DirAccess.dir_exists_absolute(absolute_backup):
 		var recovery_error := DirAccess.rename_absolute(absolute_backup, absolute_target)
 		if recovery_error != OK:
-			return recovery_error
+			return _report_staged_install_failure(
+				download,
+				"restore_interrupted_backup",
+				recovery_error,
+				absolute_backup,
+				absolute_target
+			)
 	var cleanup_error := _remove_directory_tree(absolute_backup)
 	if cleanup_error != OK:
-		return cleanup_error
+		return _report_staged_install_failure(
+			download,
+			"remove_stale_backup",
+			cleanup_error,
+			absolute_backup,
+			absolute_target
+		)
 
 	var had_existing_target := DirAccess.dir_exists_absolute(absolute_target)
 	if had_existing_target:
 		var backup_error := DirAccess.rename_absolute(absolute_target, absolute_backup)
 		if backup_error != OK:
-			return backup_error
+			return _report_staged_install_failure(
+				download,
+				"backup_existing_install",
+				backup_error,
+				absolute_target,
+				absolute_backup
+			)
 
 	var promote_error := DirAccess.rename_absolute(absolute_source, absolute_target)
 	if promote_error != OK:
+		_report_staged_install_failure(
+			download,
+			"promote_staging",
+			promote_error,
+			absolute_source,
+			absolute_target
+		)
 		if had_existing_target and DirAccess.dir_exists_absolute(absolute_backup):
-			DirAccess.rename_absolute(absolute_backup, absolute_target)
+			var rollback_error := DirAccess.rename_absolute(absolute_backup, absolute_target)
+			if rollback_error != OK:
+				_report_staged_install_failure(
+					download,
+					"rollback_after_promotion_failure",
+					rollback_error,
+					absolute_backup,
+					absolute_target,
+					"STG-002"
+				)
 		return promote_error
 
 	if had_existing_target:
 		cleanup_error = _remove_directory_tree(absolute_backup)
 		if cleanup_error != OK:
-			_log_warning("Installed update but could not remove backup folder: %s" % error_string(cleanup_error))
+			_log_warning(
+				"STG-003 staged_install_cleanup_failed phase=remove_committed_backup error=%s error_code=%s path=%s path_exists=%s" % [
+					error_string(cleanup_error),
+					int(cleanup_error),
+					absolute_backup,
+					_staged_install_path_exists(absolute_backup),
+				]
+			)
 	_remove_directory_tree(staging_root)
 	return OK
+
+
+func _report_staged_install_failure(
+	download: Dictionary,
+	phase: String,
+	failure: Error,
+	source: String,
+	target: String,
+	diagnostic_code: String = "STG-001"
+) -> Error:
+	_log_error(_format_staged_install_failure(
+		download,
+		phase,
+		failure,
+		source,
+		target,
+		diagnostic_code
+	))
+	return failure
+
+
+func _format_staged_install_failure(
+	download: Dictionary,
+	phase: String,
+	failure: Error,
+	source: String,
+	target: String,
+	diagnostic_code: String = "STG-001"
+) -> String:
+	return "%s staged_install_failed phase=%s type=%s id=%s version=%s build_id=%s error=%s error_code=%s os=%s source=%s source_exists=%s target=%s target_exists=%s" % [
+		diagnostic_code,
+		phase,
+		str(download.get("type", "")),
+		str(download.get("id", "")),
+		str(download.get("version", "")),
+		str(download.get("build_id", "")),
+		error_string(failure),
+		int(failure),
+		OS.get_name(),
+		source,
+		_staged_install_path_exists(source),
+		target,
+		_staged_install_path_exists(target),
+	]
+
+
+func _staged_install_path_exists(path: String) -> bool:
+	if path.is_empty():
+		return false
+	return FileAccess.file_exists(path) or DirAccess.dir_exists_absolute(path)
 
 
 func _is_safe_archive_path(path: String) -> bool:
@@ -2282,20 +2414,20 @@ func _load_launcher_config() -> void:
 	var configured_news_url := str(config.get("newsUrl", ""))
 	if not configured_news_url.is_empty():
 		news_url = configured_news_url
-	var configured_health_url := str(config.get("healthUrl", ""))
-	if not configured_health_url.is_empty():
-		health_url = configured_health_url
+	var configured_status_url := str(config.get("statusUrl", config.get("healthUrl", "")))
+	if not configured_status_url.is_empty():
+		server_status_url = configured_status_url
 	var configured_presence_url := str(config.get("presenceUrl", ""))
 	if not configured_presence_url.is_empty():
 		presence_url = configured_presence_url
 	manifest_url = _normalize_url(manifest_url)
 	news_url = _normalize_url(news_url)
-	health_url = _normalize_url(health_url)
+	server_status_url = _normalize_url(server_status_url)
 	presence_url = _normalize_url(presence_url)
 	if manifest_url.is_empty():
 		manifest_url = DEFAULT_MANIFEST_URL
-	if health_url.is_empty():
-		health_url = DEFAULT_HEALTH_URL
+	if server_status_url.is_empty():
+		server_status_url = LauncherServerHealthService.DEFAULT_STATUS_URL
 	if presence_url.is_empty():
 		presence_url = DEFAULT_PRESENCE_URL
 
@@ -2508,12 +2640,17 @@ func _refresh_status() -> void:
 	if local_game_version.is_empty():
 		local_game_version = "not installed"
 	version_label.text = _t(local_game_version)
-	play_button.disabled = update_required or not _has_installed_game()
+	play_button.disabled = server_access_blocked or update_required or not _has_installed_game()
 	update_button.disabled = not update_required
 	check_button.disabled = false
 	_refresh_gen5_sprites_button()
 	_refresh_uninstall_button()
-	if update_required:
+	if server_access_blocked:
+		_set_status(
+			server_access_message if not server_access_message.is_empty() else "Server maintenance.",
+			"maintenance"
+		)
+	elif update_required:
 		_set_status("Update available.")
 	elif local_game_version == "" or local_game_version == "not installed":
 		_set_status("Game is not installed.")
@@ -2531,16 +2668,47 @@ func _refresh_launcher_version() -> void:
 
 
 func _refresh_server_health() -> void:
-	var result: Dictionary = await LauncherServerHealthService.check_async(self, health_url)
+	var result: Dictionary = await LauncherServerHealthService.check_async(self, server_status_url)
 	if bool(result.get("online", false)):
+		server_access_blocked = false
+		server_access_message = ""
 		server_online_label.text = _t("Online")
 		server_online_label.add_theme_color_override("font_color", SERVER_ONLINE_COLOR)
 		await _refresh_online_players()
+	elif bool(result.get("maintenance", false)):
+		server_access_blocked = true
+		server_access_message = str(result.get("message", "")).strip_edges()
+		server_online_label.text = _t("Maintenance")
+		server_online_label.add_theme_color_override("font_color", SERVER_MAINTENANCE_COLOR)
+		online_players_label.text = _t("Players online unavailable")
+		online_players_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
 	else:
+		server_access_blocked = false
+		server_access_message = ""
 		server_online_label.text = _t("Offline")
 		server_online_label.add_theme_color_override("font_color", SERVER_OFFLINE_COLOR)
 		online_players_label.text = _t("Players online unavailable")
 		online_players_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
+	_apply_server_access_status()
+
+
+func _apply_server_access_status() -> void:
+	var launcher_task_active := (
+		http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED
+		or (download_service != null and download_service.is_active())
+		or launcher_update_busy
+		or launcher_update_in_progress
+	)
+	play_button.disabled = (
+		launcher_task_active
+		or server_access_blocked
+		or update_required
+		or not _has_installed_game()
+	)
+	if not launcher_task_active:
+		_refresh_status()
+	else:
+		_sync_button_cursors()
 
 
 func _set_server_health_checking() -> void:
@@ -2570,7 +2738,7 @@ func _set_busy(is_busy: bool) -> void:
 	check_button.disabled = locked
 	update_button.disabled = locked or not update_required
 	gen5_sprites_button.disabled = locked or not _can_download_gen5_sprites()
-	play_button.disabled = locked or update_required or not _has_installed_game()
+	play_button.disabled = locked or server_access_blocked or update_required or not _has_installed_game()
 	uninstall_button.disabled = locked or not _has_game_install_folder()
 	_sync_button_cursors()
 
@@ -2726,7 +2894,10 @@ func _get_game_install_dir() -> String:
 func _set_status(message: String, state: String = "") -> void:
 	status_label.text = _t(message)
 	var lowered_message := message.to_lower()
-	if state == "error" or lowered_message.contains("failed") or lowered_message.contains("could not") or lowered_message.contains("missing") or lowered_message.contains("invalid"):
+	if state == "maintenance":
+		status_value_label.text = _t("Maintenance")
+		status_value_label.add_theme_color_override("font_color", SERVER_MAINTENANCE_COLOR)
+	elif state == "error" or lowered_message.contains("failed") or lowered_message.contains("could not") or lowered_message.contains("missing") or lowered_message.contains("invalid"):
 		status_value_label.text = _t("Error")
 		status_value_label.add_theme_color_override("font_color", Color(1.0, 0.38, 0.45))
 	elif state == "not_installed" or lowered_message.contains("not installed"):
@@ -2789,8 +2960,9 @@ func _log(message: String) -> void:
 
 func _log_error(message: String) -> void:
 	print("ERROR: %s" % message)
-	has_unseen_diagnostics_error = not diagnostics_card.visible
-	_refresh_diagnostics_button()
+	if diagnostics_card != null:
+		has_unseen_diagnostics_error = not diagnostics_card.visible
+		_refresh_diagnostics_button()
 	_append_diagnostic("ERROR", message)
 
 
@@ -2836,7 +3008,7 @@ func _append_diagnostic(level: String, message: String) -> void:
 	file.seek_end()
 	file.store_line("%s %s: %s" % [_format_diagnostic_timestamp(), level, sanitized_message])
 	file.close()
-	if diagnostics_card.visible:
+	if diagnostics_card != null and diagnostics_card.visible:
 		_refresh_diagnostics_view()
 
 

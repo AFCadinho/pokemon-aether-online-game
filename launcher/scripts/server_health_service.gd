@@ -1,17 +1,17 @@
 extends RefCounted
 
-const DEFAULT_HEALTH_URL := "https://pokeaether.com/health"
+const DEFAULT_STATUS_URL := "https://admin.pokeaether.com/auth/status"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 const USER_AGENT_HEADER := "User-Agent: PokeAetherLauncher/1.0"
 
 
-static func check_async(parent: Node, health_url: String = DEFAULT_HEALTH_URL) -> Dictionary:
+static func check_async(parent: Node, status_url: String = DEFAULT_STATUS_URL) -> Dictionary:
 	var request := HTTPRequest.new()
 	request.timeout = REQUEST_TIMEOUT_SECONDS
 	parent.add_child(request)
 
 	var error: Error = request.request(
-		health_url,
+		status_url,
 		[USER_AGENT_HEADER],
 		HTTPClient.METHOD_GET
 	)
@@ -19,7 +19,7 @@ static func check_async(parent: Node, health_url: String = DEFAULT_HEALTH_URL) -
 		request.queue_free()
 		return {
 			"online": false,
-			"error": "Could not start health request: %s" % error_string(error),
+			"error": "Could not start server status request: %s" % error_string(error),
 		}
 
 	var result: Array = await request.request_completed
@@ -40,7 +40,7 @@ static func check_async(parent: Node, health_url: String = DEFAULT_HEALTH_URL) -
 		return {
 			"online": false,
 			"status": response_code,
-			"error": "Health check returned HTTP %s." % response_code,
+			"error": "Server status returned HTTP %s." % response_code,
 		}
 
 	var parsed_body: Variant = JSON.parse_string(body.get_string_from_utf8())
@@ -48,15 +48,50 @@ static func check_async(parent: Node, health_url: String = DEFAULT_HEALTH_URL) -
 		return {
 			"online": false,
 			"status": response_code,
-			"error": "Health response is invalid.",
+			"error": "Server status response is invalid.",
 		}
 
 	var response: Dictionary = parsed_body
-	var status_text: String = str(response.get("status", "")).strip_edges().to_lower()
+	var status_result := parse_status_response(response)
+	if not bool(status_result.get("valid", false)):
+		return {
+			"online": false,
+			"status": response_code,
+			"error": "Server status response is invalid.",
+		}
+	status_result["status"] = response_code
+	return status_result
+
+
+static func parse_status_response(response: Dictionary) -> Dictionary:
+	if response.has("available"):
+		var mode := str(response.get("mode", "")).strip_edges().to_lower()
+		if typeof(response.get("available")) != TYPE_BOOL or not mode in ["open", "draining", "closed"]:
+			return {"valid": false, "online": false}
+		var available := bool(response.get("available", false))
+		if available != (mode == "open"):
+			return {"valid": false, "online": false}
+		return {
+			"valid": true,
+			"online": available,
+			"reachable": true,
+			"maintenance": not available,
+			"server_status": mode,
+			"message": str(response.get("message", "")).strip_edges(),
+			"disconnect_at": str(response.get("disconnectAt", "")).strip_edges(),
+		}
+
+	# Keep accepting the old infrastructure-health shape for local overrides.
+	var status_text := str(response.get("status", "")).strip_edges().to_lower()
+	if status_text not in ["online", "ok", "degraded"]:
+		return {"valid": false, "online": false}
 	return {
-		"online": status_text == "online",
-		"status": response_code,
+		"valid": true,
+		"online": status_text in ["online", "ok"],
+		"reachable": true,
+		"maintenance": false,
 		"server_status": status_text,
+		"message": "",
 	}
 
 
@@ -130,6 +165,6 @@ static func _request_result_message(result: int) -> String:
 		HTTPRequest.RESULT_TLS_HANDSHAKE_ERROR:
 			return "Server TLS error."
 		HTTPRequest.RESULT_TIMEOUT:
-			return "Server health check timed out."
+			return "Server status check timed out."
 		_:
-			return "Server health check failed: %s." % result
+			return "Server status check failed: %s." % result

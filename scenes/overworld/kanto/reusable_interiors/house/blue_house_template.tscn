@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/cerulean_house_template_blue/cerulean_house_template_blue.visual.tscn" id="1_visual"]
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/house/house_collision_template.tscn" id="2_collision"]
+
+[node name="BlueHouseTemplate" type="Node2D"]
+
+[node name="PokeAetherHouseTemplateBlue" parent="." instance=ExtResource("1_visual")]
+
+[node name="Collision" parent="." instance=ExtResource("2_collision")]
