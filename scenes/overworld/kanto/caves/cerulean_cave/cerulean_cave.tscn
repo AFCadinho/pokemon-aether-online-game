@@ -1,0 +1,73 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/open_field/open_field.visual.tscn" id="1_visual"]
+[ext_resource type="Script" path="res://scripts/world/kanto/open_field_placeholder_map.gd" id="2_map"]
+[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_hint"]
+[ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="5_collision"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_city_exit"]
+size = Vector2(128, 32)
+
+[node name="CeruleanCave" type="Node2D"]
+script = ExtResource("2_map")
+map_id = "kanto_cerulean_cave"
+map_region_name = "Kanto"
+map_display_name = "Cerulean Cave"
+world_access_group_id = "kanto_cerulean_cave"
+world_access_group_label = "Cerulean Cave"
+world_access_area_type = "wilderness"
+location_id = "kanto.cerulean_cave"
+location_name = "Cerulean Cave"
+region_id = "kanto"
+battle_environment_id = "cave"
+lighting_profile = "dark"
+weather_profile = "disabled"
+music_track_id = "overworld.kanto.cave.mt_moon"
+connection_side = "bottom"
+
+[node name="OpenFieldVisual" parent="." instance=ExtResource("1_visual")]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromCerulean" type="Marker2D" parent="Spawns"]
+position = Vector2(384, 512)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="ToCerulean" type="Area2D" parent="Exits"]
+position = Vector2(384, 560)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
+target_spawn_name = "FromCeruleanCave"
+transition_id = "kanto_cerulean_cave__to_cerulean_city"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCerulean"]
+shape = SubResource("RectangleShape2D_city_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToCerulean" instance=ExtResource("4_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(4, 1)
+flow_direction = "down"
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="Players" type="Node2D" parent="Entities"]
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="Tiles" type="Node2D" parent="."]
+visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Tiles"]
+visible = false
+z_index = 4096
+tile_set = ExtResource("5_collision")
+
+[connection signal="body_entered" from="Exits/ToCerulean" to="Exits/ToCerulean" method="_on_body_entered"]
