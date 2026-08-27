@@ -6,6 +6,10 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="5_hint"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_hujw2"]
 [ext_resource type="TileSet" uid="uid://bw4ggkfn67bev" path="res://resources/world/collision_marker_tileset.tres" id="7_marker"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="8_door_hint"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door_exit"]
+size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
@@ -142,17 +146,32 @@ position = Vector2(1808, 48)
 [node name="FromRoute24WaterRight" type="Marker2D" parent="Spawns" unique_id=319986114]
 position = Vector2(2000, 48)
 
-[node name="FromRoute9Left" type="Marker2D" parent="Spawns" unique_id=2084918086]
+[node name="FromRoute5Left" type="Marker2D" parent="Spawns" unique_id=2084918086]
 position = Vector2(464, 2192)
 
-[node name="FromRoute9Grass" type="Marker2D" parent="Spawns" unique_id=2144826856]
+[node name="FromRoute5Grass" type="Marker2D" parent="Spawns" unique_id=2144826856]
 position = Vector2(656, 2192)
 
-[node name="FromRoute9Right" type="Marker2D" parent="Spawns" unique_id=1440214985]
+[node name="FromRoute5Right" type="Marker2D" parent="Spawns" unique_id=1440214985]
 position = Vector2(816, 2192)
 
-[node name="FromRoute5" type="Marker2D" parent="Spawns" unique_id=1189067734]
+[node name="FromRoute9" type="Marker2D" parent="Spawns" unique_id=1189067734]
 position = Vector2(2352, 1424)
+
+[node name="FromHouse1" type="Marker2D" parent="Spawns"]
+position = Vector2(784, 944)
+
+[node name="FromPokemonCenter" type="Marker2D" parent="Spawns"]
+position = Vector2(1072, 1360)
+
+[node name="FromGym" type="Marker2D" parent="Spawns"]
+position = Vector2(1584, 1360)
+
+[node name="FromBikeStore" type="Marker2D" parent="Spawns"]
+position = Vector2(656, 1680)
+
+[node name="FromHouse2" type="Marker2D" parent="Spawns"]
+position = Vector2(1168, 1680)
 
 [node name="Exits" type="Node2D" parent="." unique_id=921368933]
 
@@ -268,73 +287,143 @@ z_as_relative = false
 position = Vector2(-16, 0)
 tile_footprint = Vector2i(5, 1)
 
-[node name="ToRoute9Left" type="Area2D" parent="Exits" unique_id=1635975885]
+[node name="ToRoute5Left" type="Area2D" parent="Exits" unique_id=1635975885]
 position = Vector2(464, 2224)
 script = ExtResource("4_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_9.tscn"
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_5.tscn"
 target_spawn_name = "FromCeruleanLeft"
-transition_id = "kanto_cerulean_city__to_route_9_left"
+transition_id = "kanto_cerulean_city__to_route_5_left"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute9Left" unique_id=117564256]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute5Left" unique_id=117564256]
 position = Vector2(-8, 16)
 shape = SubResource("RectangleShape2D_route_9_left_exit")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute9Left" unique_id=558143365 instance=ExtResource("5_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToRoute5Left" unique_id=558143365 instance=ExtResource("5_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(3, 1)
 flow_direction = "down"
 
-[node name="ToRoute9Grass" type="Area2D" parent="Exits" unique_id=998629003]
+[node name="ToRoute5Grass" type="Area2D" parent="Exits" unique_id=998629003]
 position = Vector2(624, 2224)
 script = ExtResource("4_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_9.tscn"
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_5.tscn"
 target_spawn_name = "FromCeruleanGrass"
-transition_id = "kanto_cerulean_city__to_route_9_grass"
+transition_id = "kanto_cerulean_city__to_route_5_grass"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute9Grass" unique_id=184968355]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute5Grass" unique_id=184968355]
 position = Vector2(16, 16)
 shape = SubResource("RectangleShape2D_route_9_grass_exit")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute9Grass" unique_id=807023227 instance=ExtResource("5_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToRoute5Grass" unique_id=807023227 instance=ExtResource("5_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(5, 1)
 flow_direction = "down"
 
-[node name="ToRoute9Right" type="Area2D" parent="Exits" unique_id=2083879895]
+[node name="ToRoute5Right" type="Area2D" parent="Exits" unique_id=2083879895]
 position = Vector2(816, 2224)
 script = ExtResource("4_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_9.tscn"
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_5.tscn"
 target_spawn_name = "FromCeruleanRight"
-transition_id = "kanto_cerulean_city__to_route_9_right"
+transition_id = "kanto_cerulean_city__to_route_5_right"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute9Right" unique_id=1522826131]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute5Right" unique_id=1522826131]
 position = Vector2(8, 16)
 shape = SubResource("RectangleShape2D_route_9_right_exit")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute9Right" unique_id=1132794842 instance=ExtResource("5_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToRoute5Right" unique_id=1132794842 instance=ExtResource("5_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(5, 1)
 flow_direction = "down"
 
-[node name="ToRoute5" type="Area2D" parent="Exits" unique_id=159942707]
+[node name="ToRoute9" type="Area2D" parent="Exits" unique_id=159942707]
 position = Vector2(2384, 1424)
 script = ExtResource("4_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_5.tscn"
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_9.tscn"
 target_spawn_name = "FromCerulean"
-transition_id = "kanto_cerulean_city__to_route_5"
+transition_id = "kanto_cerulean_city__to_route_9"
 transition_facing_direction = "right"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute5" unique_id=1100155674]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute9" unique_id=1100155674]
 position = Vector2(16, 0)
 shape = SubResource("RectangleShape2D_route_5_exit")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute5" unique_id=865795484 instance=ExtResource("5_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToRoute9" unique_id=865795484 instance=ExtResource("5_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(1, 6)
 flow_direction = "right"
+
+[node name="ToHouse1" type="Area2D" parent="Exits"]
+position = Vector2(784, 912)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/house1.tscn"
+target_spawn_name = "FromCeruleanCity"
+transition_id = "kanto_cerulean_city__to_house_1"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse1"]
+shape = SubResource("RectangleShape2D_door_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToHouse1" instance=ExtResource("8_door_hint")]
+z_as_relative = false
+
+[node name="ToPokemonCenter" type="Area2D" parent="Exits"]
+position = Vector2(1072, 1312)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/pokemon_center.tscn"
+target_spawn_name = "FromOutside"
+transition_id = "kanto_cerulean_city__to_pokemon_center"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokemonCenter"]
+shape = SubResource("RectangleShape2D_door_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToPokemonCenter" instance=ExtResource("8_door_hint")]
+z_as_relative = false
+
+[node name="ToGym" type="Area2D" parent="Exits"]
+position = Vector2(1584, 1312)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn"
+target_spawn_name = "FromCeruleanCity"
+transition_id = "kanto_cerulean_city__to_gym"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGym"]
+shape = SubResource("RectangleShape2D_door_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToGym" instance=ExtResource("8_door_hint")]
+z_as_relative = false
+
+[node name="ToBikeStore" type="Area2D" parent="Exits"]
+position = Vector2(656, 1632)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/bike_store.tscn"
+target_spawn_name = "FromCeruleanCity"
+transition_id = "kanto_cerulean_city__to_bike_store"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToBikeStore"]
+shape = SubResource("RectangleShape2D_door_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToBikeStore" instance=ExtResource("8_door_hint")]
+z_as_relative = false
+
+[node name="ToHouse2" type="Area2D" parent="Exits"]
+position = Vector2(1168, 1632)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/house2.tscn"
+target_spawn_name = "FromCeruleanCity"
+transition_id = "kanto_cerulean_city__to_house_2"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse2"]
+shape = SubResource("RectangleShape2D_door_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToHouse2" instance=ExtResource("8_door_hint")]
+z_as_relative = false
 
 [node name="Entities" type="Node2D" parent="." unique_id=1995162903]
 z_index = 5
@@ -368,7 +457,12 @@ tile_set = ExtResource("7_marker")
 [connection signal="body_entered" from="Exits/ToRoute24WaterLeft" to="Exits/ToRoute24WaterLeft" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute24Bridge" to="Exits/ToRoute24Bridge" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute24WaterRight" to="Exits/ToRoute24WaterRight" method="_on_body_entered"]
-[connection signal="body_entered" from="Exits/ToRoute9Left" to="Exits/ToRoute9Left" method="_on_body_entered"]
-[connection signal="body_entered" from="Exits/ToRoute9Grass" to="Exits/ToRoute9Grass" method="_on_body_entered"]
-[connection signal="body_entered" from="Exits/ToRoute9Right" to="Exits/ToRoute9Right" method="_on_body_entered"]
-[connection signal="body_entered" from="Exits/ToRoute5" to="Exits/ToRoute5" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute5Left" to="Exits/ToRoute5Left" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute5Grass" to="Exits/ToRoute5Grass" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute5Right" to="Exits/ToRoute5Right" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute9" to="Exits/ToRoute9" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToHouse1" to="Exits/ToHouse1" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToPokemonCenter" to="Exits/ToPokemonCenter" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToGym" to="Exits/ToGym" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToBikeStore" to="Exits/ToBikeStore" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToHouse2" to="Exits/ToHouse2" method="_on_body_entered"]

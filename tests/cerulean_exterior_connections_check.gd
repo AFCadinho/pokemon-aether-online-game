@@ -28,24 +28,24 @@ const CONNECTIONS := {
 	"route_9": {
 		"scene": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
 		"map_id": "kanto_route_9",
-		"city_spawn": "FromRoute9Left",
-		"city_exit": "ToRoute9Left",
-		"city_transition": "kanto_cerulean_city__to_route_9_left",
-		"return_transition": "kanto_route_9__to_cerulean_city_left",
-		"connection_side": "bottom",
-		"arrival_name": "FromCeruleanLeft",
-		"return_exit_name": "ToCeruleanLeft",
+		"city_spawn": "FromRoute9",
+		"city_exit": "ToRoute9",
+		"city_transition": "kanto_cerulean_city__to_route_9",
+		"return_transition": "kanto_route_9__to_cerulean_city",
+		"connection_side": "left",
+		"arrival_name": "FromCerulean",
+		"return_exit_name": "ToCerulean",
 	},
 	"route_5": {
 		"scene": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 		"map_id": "kanto_route_5",
-		"city_spawn": "FromRoute5",
-		"city_exit": "ToRoute5",
-		"city_transition": "kanto_cerulean_city__to_route_5",
-		"return_transition": "kanto_route_5__to_cerulean_city",
-		"connection_side": "left",
-		"arrival_name": "FromCerulean",
-		"return_exit_name": "ToCerulean",
+		"city_spawn": "FromRoute5Left",
+		"city_exit": "ToRoute5Left",
+		"city_transition": "kanto_cerulean_city__to_route_5_left",
+		"return_transition": "kanto_route_5__to_cerulean_city_left",
+		"connection_side": "bottom",
+		"arrival_name": "FromCeruleanLeft",
+		"return_exit_name": "ToCeruleanLeft",
 	},
 }
 
@@ -70,13 +70,16 @@ func _init() -> void:
 	var route_9_source := FileAccess.get_file_as_string(
 		"res://scenes/overworld/kanto/routes/kanto_route_9.tscn"
 	)
+	var route_5_source := FileAccess.get_file_as_string(
+		"res://scenes/overworld/kanto/routes/kanto_route_5.tscn"
+	)
 
 	_check(map_metadata_script.contains('find_map_tilemap_layer("Collision")'), "Cerulean City inherits the shared nested Collision resolver")
 	_check(city_script.contains('"route_24_path"') and city_script.contains('"route_24_bridge"'), "Cerulean City opens both Route 24 foot approaches")
 	_check(city_script.contains('"route_24_water_left"') and city_script.contains('"route_24_water_right"'), "Cerulean City opens both Route 24 water approaches")
 	_check(city_script.contains('"route_4_water"'), "Cerulean City opens the Route 4 water approach")
-	_check(city_script.contains('"route_5"'), "Cerulean City opens its east collision boundary")
-	_check(city_script.contains('"route_5"'), "Cerulean City opens its south collision boundary")
+	_check(city_script.contains('"route_9"'), "Cerulean City opens its Route 9 east boundary")
+	_check(city_script.contains('"route_5_left"') and city_script.contains('"route_5_right"'), "Cerulean City opens its Route 5 south boundary")
 	_check(placeholder_script.contains("const MAP_SIZE := Vector2i(24, 18)"), "Placeholder boundaries match the open-field visual")
 	_check(placeholder_script.contains("func _is_opening"), "Placeholder boundaries retain their connection opening")
 	_check(placeholder_script.contains("second_opening_from") and placeholder_script.contains("fourth_opening_from"), "Placeholder maps support four edge openings")
@@ -92,10 +95,10 @@ func _init() -> void:
 	_check(route_24_source.contains('second_water_opening_from = 13'), "Route 24 marks its second Surf approach")
 
 	for suffix: String in ["Left", "Grass", "Right"]:
-		_check(city_source.contains('[node name="FromRoute9%s" type="Marker2D" parent="Spawns"' % suffix), "Cerulean City has the Route 9 %s spawn" % suffix.to_lower())
-		_check(city_source.contains('[node name="ToRoute9%s" type="Area2D" parent="Exits"' % suffix), "Cerulean City has the Route 9 %s exit" % suffix.to_lower())
-		_check(route_9_source.contains('[node name="FromCerulean%s" type="Marker2D" parent="Spawns"]' % suffix), "Route 9 has the %s arrival" % suffix.to_lower())
-		_check(route_9_source.contains('[node name="ToCerulean%s" type="Area2D" parent="Exits"]' % suffix), "Route 9 has the %s return exit" % suffix.to_lower())
+		_check(city_source.contains('[node name="FromRoute5%s" type="Marker2D" parent="Spawns"' % suffix), "Cerulean City has the Route 5 %s spawn" % suffix.to_lower())
+		_check(city_source.contains('[node name="ToRoute5%s" type="Area2D" parent="Exits"' % suffix), "Cerulean City has the Route 5 %s exit" % suffix.to_lower())
+		_check(route_5_source.contains('[node name="FromCerulean%s" type="Marker2D" parent="Spawns"]' % suffix), "Route 5 has the %s arrival" % suffix.to_lower())
+		_check(route_5_source.contains('[node name="ToCerulean%s" type="Area2D" parent="Exits"]' % suffix), "Route 5 has the %s return exit" % suffix.to_lower())
 
 	for suffix: String in ["Path", "Bridge", "WaterLeft", "WaterRight"]:
 		_check(city_source.contains('[node name="FromRoute24%s" type="Marker2D" parent="Spawns"' % suffix), "Cerulean City has the Route 24 %s spawn" % suffix.to_lower())
