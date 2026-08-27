@@ -8,6 +8,7 @@ const REQUIRED_NPC_IDS: Array[String] = [
 	"kanto_alpha_gym_misty",
 	"kanto_cerulean_city_gym_attendant",
 	"kanto_cerulean_city_gym_picnicker_diana",
+	"kanto_cerulean_city_gym_swimmer_briana",
 	"kanto_cerulean_city_gym_swimmer_luis",
 	"kanto_cerulean_city_patrol_officer",
 	"kanto_oaklab_oak_1",

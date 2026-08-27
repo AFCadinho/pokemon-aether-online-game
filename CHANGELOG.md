@@ -4,7 +4,7 @@
 
 **Added**
 
-- Swimmer Luis and Picnicker Diana now challenge Trainers along the bridges inside Cerulean Gym.
+- Swimmer Luis, Picnicker Diana, and Swimmer Briana now challenge Trainers inside Cerulean Gym.
 - Cerulean Gym now uses its complete imported Tiled pool and bridge visual, with the entrance and Gym Guide aligned to the new foyer.
 - The Cerulean Bike Shop now exchanges a lifetime Bike Voucher for Cyclizar, a selectable land mount that can be toggled with the configurable Mount key.
 - Route 24 now uses its complete imported Tiled visual, with the Cerulean City path, bridge, and Surf arrivals aligned to the new map edge.
@@ -59,6 +59,7 @@
 
 **Fixed**
 
+- Swimmer Trainers placed in water no longer walk onto land when they spot a player.
 - Players who log out while riding a land mount now return on that mount when they log back in.
 - Cyclizar riders now sit in the intended position, with their legs correctly hidden behind the mount in side view.
 - Cerulean City's ambient Rock-type Pokemon now render visibly above the mountain foreground.
