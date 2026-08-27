@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_hint"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="6_dialogue"]
 [ext_resource type="SpriteFrames" uid="uid://cdhq6bete0vs8" path="res://assets/npcs/classes/mart_m_frames.tres" id="7_mart_m"]
+[ext_resource type="Script" path="res://scripts/world/kanto/towns/cerulean_bike_shop_owner.gd" id="8_owner"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7h5j0"]
 texture = ExtResource("3_7h5j0")
@@ -129,6 +130,7 @@ z_index = 5
 
 [node name="BikeShopOwner" parent="Entities/NPCs" unique_id=312076903 instance=ExtResource("6_dialogue")]
 position = Vector2(592, 336)
+script = ExtResource("8_owner")
 npc_id = "kanto_cerulean_city_bike_store_owner"
 npc_definition_id = "trainer_class_mart_employee"
 display_name = "Bike Shop Owner"
