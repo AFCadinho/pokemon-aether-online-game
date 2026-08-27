@@ -1,0 +1,33 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_cerulean_city",
+  "signs": [
+    {
+      "id": "kanto_cerulean_city_town_sign",
+      "type": "town",
+      "title": "Cidade de Cerulean",
+      "lines": [
+        "Cidade de Cerulean",
+        "Uma misteriosa aura azul envolve a cidade"
+      ]
+    },
+    {
+      "id": "kanto_cerulean_city_gym",
+      "type": "building",
+      "title": "Ginásio Pokémon de Cerulean City",
+      "lines": [
+        "Ginásio Pokémon de Cerulean City",
+        "Líder: Misty — a Sereia Destemida. A vitória concede a Insígnia da Cascata."
+      ]
+    },
+    {
+      "id": "kanto_cerulean_city_bike_shop",
+      "type": "building",
+      "title": "Loja de Bicicletas de Cerulean",
+      "lines": [
+        "Loja de Bicicletas de Cerulean",
+        "Bicicletas de qualidade para Treinadores prontos para pegar a estrada."
+      ]
+    }
+  ]
+}

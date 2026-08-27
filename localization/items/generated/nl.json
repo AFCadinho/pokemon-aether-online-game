@@ -381,7 +381,7 @@
   },
   "bike-voucher": {
     "name": "Fietsvoucher",
-    "shortDesc": "Ruil Cerulean fietsenwinkel in voor een fiets."
+    "shortDesc": "Een levenslange voucher met de handtekening van de eigenaar van de Bike Shop in Cerulean."
   },
   "binding-band": {
     "name": "Bindband",
@@ -814,6 +814,10 @@
   "cut-charm": {
     "name": "Cut Charm",
     "shortDesc": "Hiermee kun je Cut gebruiken zonder dat een Pokémon de aanval kent."
+  },
+  "cyclizar-mount": {
+    "name": "Cyclizar-mount",
+    "shortDesc": "Ontgrendelt Cyclizar als landmount."
   },
   "damp-mulch": {
     "name": "Vochtige mulch",

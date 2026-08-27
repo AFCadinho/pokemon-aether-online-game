@@ -19,7 +19,7 @@ class RangeTestHandler(BaseHTTPRequestHandler):
         count = self.request_counts.get(path, 0) + 1
         self.request_counts[path] = count
 
-        if path == "/retry.bin" and count == 1:
+        if path in {"/retry.bin", "/parallel-retry.bin"} and count == 1:
             self.send_response(503)
             self.send_header("Content-Length", "0")
             self.send_header("Retry-After", "0")
@@ -34,12 +34,18 @@ class RangeTestHandler(BaseHTTPRequestHandler):
             return
 
         range_header = self.headers.get("Range", "")
-        start = self._range_start(range_header)
-        ignore_range = path == "/ignore-range.bin" and count > 1
-        if start > 0 and not ignore_range:
-            body = PAYLOAD[start:]
+        range_bounds = self._range_bounds(range_header)
+        start = range_bounds[0] if range_bounds is not None else 0
+        requested_end = range_bounds[1] if range_bounds is not None else None
+        ignore_range = (
+            (path == "/ignore-range.bin" and count > 1)
+            or (path == "/ignore-bounded-range.bin" and requested_end is not None)
+        )
+        if range_bounds is not None and not ignore_range:
+            end = len(PAYLOAD) - 1 if requested_end is None else min(requested_end, len(PAYLOAD) - 1)
+            body = PAYLOAD[start : end + 1]
             self.send_response(206)
-            self.send_header("Content-Range", f"bytes {start}-{len(PAYLOAD) - 1}/{len(PAYLOAD)}")
+            self.send_header("Content-Range", f"bytes {start}-{end}/{len(PAYLOAD)}")
         else:
             start = 0
             body = PAYLOAD
@@ -70,11 +76,11 @@ class RangeTestHandler(BaseHTTPRequestHandler):
             self.connection.close()
             return
 
-        if path == "/slow.bin":
+        if path in {"/slow.bin", "/parallel-slow.bin"}:
             for offset in range(0, len(body), 32 * 1024):
                 self.wfile.write(body[offset : offset + 32 * 1024])
                 self.wfile.flush()
-                time.sleep(0.015)
+                time.sleep(0.03 if path == "/parallel-slow.bin" else 0.015)
             return
 
         self.wfile.write(body)
@@ -83,11 +89,19 @@ class RangeTestHandler(BaseHTTPRequestHandler):
         return
 
     @staticmethod
-    def _range_start(value: str) -> int:
-        if not value.startswith("bytes=") or not value.endswith("-"):
-            return 0
-        start_text = value[6:-1]
-        return int(start_text) if start_text.isdigit() else 0
+    def _range_bounds(value: str) -> tuple[int, int | None] | None:
+        if not value.startswith("bytes=") or "," in value:
+            return None
+        bounds = value[6:].split("-", 1)
+        if len(bounds) != 2 or not bounds[0].isdigit():
+            return None
+        if bounds[1] and not bounds[1].isdigit():
+            return None
+        start = int(bounds[0])
+        end = int(bounds[1]) if bounds[1] else None
+        if start >= len(PAYLOAD) or (end is not None and end < start):
+            return None
+        return start, end
 
 
 def main() -> None:
