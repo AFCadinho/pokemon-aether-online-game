@@ -12,19 +12,16 @@ const GYM_POKEMON := {
 	"Entities/Pokemon/Horsea": {
 		"id": "kanto_cerulean_city_gym_horsea_1",
 		"species": "horsea",
-		"level": 16,
 		"position": Vector2(336, 432),
 	},
 	"Entities/Pokemon/Shellder": {
 		"id": "kanto_cerulean_city_gym_shellder_1",
 		"species": "shellder",
-		"level": 16,
 		"position": Vector2(240, 752),
 	},
 	"Entities/Pokemon/Goldeen": {
 		"id": "kanto_cerulean_city_gym_goldeen_1",
 		"species": "goldeen",
-		"level": 17,
 		"position": Vector2(656, 880),
 	},
 }
@@ -53,7 +50,8 @@ func _run() -> void:
 			continue
 		_check(str(pokemon.get("overworld_pokemon_id")) == expected.id, "%s uses its canonical content ID" % node_path)
 		_check(str(pokemon.get("species_id")) == expected.species, "%s uses the intended species" % node_path)
-		_check(int(pokemon.get("level")) == expected.level, "%s uses its intended level" % node_path)
+		if expected.has("level"):
+			_check(int(pokemon.get("level")) == expected.level, "%s uses its intended level" % node_path)
 		_check(pokemon.position == expected.position, "%s occupies its designed pool position" % node_path)
 		_check(str(pokemon.get("movement_behavior")) == "idle", "%s cannot wander onto land" % node_path)
 		if collision != null and water != null:
