@@ -323,6 +323,26 @@
 						"x": 73,
 						"y": 44
 					}
+				},
+				"south_mountain": {
+					"facingDirection": "down",
+					"label": "South Mountain",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "SouthMountain",
+					"tile": {
+						"x": 49,
+						"y": 65
+					}
+				},
+				"west_mountain": {
+					"facingDirection": "down",
+					"label": "West Mountain",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "WestMountain",
+					"tile": {
+						"x": 3,
+						"y": 47
+					}
 				}
 			}
 		},

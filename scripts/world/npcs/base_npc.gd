@@ -56,8 +56,6 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var dialogue_lines: Array[String] = []
 @export var npc_sprite_frames: SpriteFrames
 @export var sprite_offset := Vector2(0, -16)
-## Optional lower bound for actors that must remain above a map foreground layer.
-@export_range(-4096, 4096, 1) var minimum_sort_z := -4096
 ## Optional catalog id. Empty values use the central NPC assignment table.
 @export var portrait_id := ""
 @export var mugshot: Texture2D
@@ -74,6 +72,9 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var pickpocket_enabled := false
 @export var pickpocket_npc_type := ""
 @export_range(1, 100, 1) var pickpocket_required_level := 1
+## Optional lower bound for actors that must remain above a map foreground layer.
+## Keep this at the end of the inherited property list so open scenes can hot-reload safely.
+@export_range(-4096, 4096, 1) var minimum_sort_z := -4096
 
 const TILE_SIZE := 32
 const MOVE_SPEED := 120.0
