@@ -12,6 +12,10 @@ func _run() -> void:
 	var player_save := root.get_node("PlayerSave")
 	var party: Array = player_save.get("party") as Array
 	var original_party: Array = party.duplicate()
+	var badges: Array = player_save.get("earned_gym_badges") as Array
+	var original_badges: Array = badges.duplicate()
+	if not "kanto:soul" in badges:
+		badges.append("kanto:soul")
 	party.clear()
 	party.append(Pokemon.new(
 		"Lapras",
@@ -67,6 +71,7 @@ func _run() -> void:
 
 	party.clear()
 	party.append_array(original_party)
+	badges.assign(original_badges)
 	quit(1 if failed else 0)
 
 

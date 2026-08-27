@@ -28,6 +28,7 @@
 - Thieving arrests now play an Officer Jenny confrontation before the jail transfer and a short sentence explanation after arrival.
 - Cerulean City's ambient mountain Pokemon now patrol their plateaus instead of standing still.
 - HM field moves now require their corresponding HM regardless of whether a Pokémon or Charm supplies the move; weather moves remain unaffected.
+- Overworld use of Flash, Cut, Strength, and Surf now requires the matching Kanto Gym Badge, following the original Kanto story progression.
 - The Pokémon Vault, Item Storage, and Guild Resources are now easier to browse, donate to, borrow from, and withdraw from. The full Pokémon Vault uses a familiar PC-style grid and lets you inspect each Pokémon.
 - Item Storage filters now distinguish items you can use from items whose copies are all unavailable.
 - Guild member search and Trainer invitations now have separate, clearly named controls.
