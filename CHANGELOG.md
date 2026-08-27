@@ -4,6 +4,7 @@
 
 **Added**
 
+- Cerulean City is livelier with moving water Pokemon including Gyarados, Officer Jenny and Growlithe, and a friendly practice battle on the Pokemon Center plaza.
 - Cerulean City now connects to Cerulean Cave and Routes 5, 9, and 24 through new open-field placeholder maps, including three Route 9 approaches and separate Route 24 path and Surf crossings.
 - The Guild Bank now has a comparison page showing what every Guild rank can do.
 - Guild leaders can create a recruitment checklist that applicants see on the Guild profile and before applying.

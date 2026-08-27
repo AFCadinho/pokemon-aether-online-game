@@ -2,10 +2,17 @@ extends SceneTree
 
 const POPULATION := {
 	"res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn": {
-		"Entities/NPCs/PatrolOfficer": "kanto_cerulean_city_patrol_officer",
+		"Entities/NPCs/OfficerJenny": "kanto_cerulean_city_patrol_officer",
 		"Entities/NPCs/WaterwayVisitorMaya": "kanto_cerulean_city_waterway_visitor_maya",
 		"Entities/NPCs/BikeEnthusiastTheo": "kanto_cerulean_city_bike_enthusiast_theo",
-		"Entities/Pokemon/Squirtle": "kanto_cerulean_city_squirtle_1",
+		"Entities/NPCs/AceTrainerLila": "kanto_cerulean_city_ace_trainer_lila",
+		"Entities/NPCs/AceTrainerBram": "kanto_cerulean_city_ace_trainer_bram",
+		"Entities/Pokemon/Growlithe": "kanto_cerulean_city_growlithe_1",
+		"Entities/Pokemon/WaterPokemon/Gyarados": "kanto_cerulean_city_gyarados_1",
+		"Entities/Pokemon/WaterPokemon/Goldeen": "kanto_cerulean_city_goldeen_1",
+		"Entities/Pokemon/WaterPokemon/Poliwag": "kanto_cerulean_city_poliwag_1",
+		"Entities/Pokemon/BattleDisplay/Pikachu": "kanto_cerulean_city_practice_pikachu_1",
+		"Entities/Pokemon/BattleDisplay/Eevee": "kanto_cerulean_city_practice_eevee_1",
 	},
 	"res://scenes/overworld/kanto/towns/cerulean_city/house1.tscn": {
 		"Entities/NPCs/OnixTrainer": "kanto_cerulean_city_house_1_onix_trainer",
