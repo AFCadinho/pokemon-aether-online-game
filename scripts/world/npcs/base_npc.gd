@@ -93,8 +93,13 @@ const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 const NAMEPLATE_HORIZONTAL_PADDING := 5.0
 const NAMEPLATE_VERTICAL_PADDING := 2.0
 const NAMEPLATE_CARD_BOTTOM := 20.0
+const NAMEPLATE_OFFSET_TOP := -80.0
 const THIEVING_PROMPT_SIZE := Vector2(30.0, 30.0)
-const THIEVING_PROMPT_POSITION := Vector2(43.0, -91.0)
+const THIEVING_PROMPT_NAMEPLATE_GAP := 6.0
+const THIEVING_PROMPT_POSITION := Vector2(
+	-THIEVING_PROMPT_SIZE.x * 0.5,
+	NAMEPLATE_OFFSET_TOP - THIEVING_PROMPT_SIZE.y - THIEVING_PROMPT_NAMEPLATE_GAP
+)
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
 
 @onready var sprite: AnimatedSprite2D = $Look/AnimatedSprite2D
@@ -475,7 +480,7 @@ func _setup_nameplate() -> void:
 	nameplate.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
 	nameplate.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	nameplate.offset_left = -82.0
-	nameplate.offset_top = -80.0
+	nameplate.offset_top = NAMEPLATE_OFFSET_TOP
 	nameplate.offset_right = 82.0
 	nameplate.offset_bottom = -56.0
 	add_child(nameplate)

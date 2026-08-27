@@ -17,6 +17,7 @@ func _init() -> void:
 func _run() -> void:
 	var npc_script: Script = load("res://scripts/world/npcs/base_npc.gd")
 	var npc := npc_script.new() as Node2D
+	npc.set("display_name", "Officer Jenny")
 	var look := Node2D.new()
 	look.name = "Look"
 	var sprite := AnimatedSprite2D.new()
@@ -74,10 +75,27 @@ func _run() -> void:
 	thieving_service.set("state_loaded", true)
 	thieving_service.set("state", {"unlocked": true, "level": 1, "attemptedNpcIds": []})
 	player.last_direction = Vector2.DOWN
+	npc.call("_setup_nameplate")
 	npc.call("_setup_thieving_prompt")
 	npc.call("_sync_thieving_prompt")
 	var prompt := npc.get_node_or_null("ThievingPromptButton") as Button
 	_check(prompt != null and prompt.visible, "The clickable Thieving icon appears behind an eligible target")
+	var nameplate := npc.get_node_or_null("Nameplate") as Control
+	_check(
+		prompt != null
+		and nameplate != null
+		and is_equal_approx(
+			prompt.position.x + prompt.size.x * 0.5,
+			nameplate.position.x + nameplate.size.x * 0.5
+		),
+		"The Thieving icon is horizontally centered above the nameplate"
+	)
+	_check(
+		prompt != null
+		and nameplate != null
+		and prompt.position.y + prompt.size.y <= nameplate.position.y - 4.0,
+		"The Thieving icon has clear vertical spacing above the nameplate"
+	)
 
 	player.global_position = Vector2(16.0, 48.0)
 	player.last_direction = Vector2.UP
