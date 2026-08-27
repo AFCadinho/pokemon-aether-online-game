@@ -19,6 +19,10 @@ func _check_catalog_and_frames() -> void:
 		str(definition.get("unlockItemId", "")) == "cyclizar-mount",
 		"Cyclizar requires its server-owned mount item"
 	)
+	_check(
+		MountServiceScript.get_mount_id_for_unlock_item("cyclizar-mount") == "cyclizar",
+		"mount entitlements resolve back to their reusable mount definition"
+	)
 	var texture := load("res://assets/mounts/cyclizar/mount.png") as Texture2D
 	_check(
 		texture != null and Vector2i(texture.get_size()) == Vector2i(128, 128),
@@ -41,6 +45,18 @@ func _check_catalog_and_frames() -> void:
 			== Vector2i(32, 32),
 			"Cyclizar foreground frames match its native frame size"
 		)
+	var bag_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	_check(
+		bag_source.contains('{"id": "mounts", "labelKey": "ui.bag.category.mounts", "iconItemId": "cyclizar-mount"}')
+		and bag_source.contains('"power_stones", "mounts", "cosmetics"')
+		and bag_source.contains("MountService.get_mount_id_for_unlock_item(item_id)"),
+		"mount entitlements have their own visible Bag category and reuse the mount sprite as icon"
+	)
+	var voucher_icon := load("res://assets/items/icons/BIKEVOUCHER.png") as Texture2D
+	_check(
+		voucher_icon != null and Vector2i(voucher_icon.get_size()) == Vector2i(48, 48),
+		"the Bike Voucher has a dedicated 48px pixel-art Bag icon"
+	)
 
 
 func _check_land_mount_runtime_contract() -> void:

@@ -59,6 +59,17 @@ static func get_mount_unlock_item_id(mount_id: String) -> String:
 	return str(get_mount_definition(mount_id).get("unlockItemId", "")).strip_edges().to_lower()
 
 
+static func get_mount_id_for_unlock_item(item_id: String) -> String:
+	var normalized_item_id := item_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+	if normalized_item_id == "":
+		return ""
+	for mount_id_value: Variant in _get_mount_definitions().keys():
+		var mount_id := normalize_mount_id(str(mount_id_value))
+		if mount_id != "" and get_mount_unlock_item_id(mount_id) == normalized_item_id:
+			return mount_id
+	return ""
+
+
 static func is_mount_unlocked(mount_id: String, owned_item_ids: Array) -> bool:
 	var unlock_item_id := get_mount_unlock_item_id(mount_id)
 	return unlock_item_id.is_empty() or unlock_item_id in owned_item_ids
