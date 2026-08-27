@@ -1,0 +1,33 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_cerulean_city",
+  "signs": [
+    {
+      "id": "kanto_cerulean_city_town_sign",
+      "type": "town",
+      "title": "Cerulean City",
+      "lines": [
+        "Cerulean City",
+        "Een mysterieuze blauwe aura omringt de stad"
+      ]
+    },
+    {
+      "id": "kanto_cerulean_city_gym",
+      "type": "building",
+      "title": "Pokémon Gym van Cerulean City",
+      "lines": [
+        "Pokémon Gym van Cerulean City",
+        "Gym Leader: Misty — de pittige zeemeermin. Wie wint, ontvangt de Cascade Badge."
+      ]
+    },
+    {
+      "id": "kanto_cerulean_city_bike_shop",
+      "type": "building",
+      "title": "Fietsenwinkel van Cerulean City",
+      "lines": [
+        "Fietsenwinkel van Cerulean City",
+        "Kwaliteitsfietsen voor Trainers die klaar zijn om op pad te gaan."
+      ]
+    }
+  ]
+}

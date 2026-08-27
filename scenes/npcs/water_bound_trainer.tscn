@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="1_trainer"]
+[ext_resource type="Script" path="res://scripts/world/npcs/water_bound_trainer.gd" id="2_script"]
+
+[node name="WaterBoundTrainer" instance=ExtResource("1_trainer")]
+script = ExtResource("2_script")

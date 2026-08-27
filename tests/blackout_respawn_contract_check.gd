@@ -40,6 +40,24 @@ func _init() -> void:
 		"Forfeit and defeated-party losses share the blackout recovery path"
 	)
 	_expect(
+		world_source.contains(
+			"if player_lead_slot <= 0:\n"
+				+ "\t\tawait _blackout_before_trainer_battle(trainer_id)\n"
+				+ "\t\treturn {"
+		),
+		"Trainer battles without a usable party redirect through blackout recovery"
+	)
+	_expect(
+		world_source.contains(
+			"func _blackout_before_trainer_battle(trainer_id: String) -> void:\n"
+				+ "\t_begin_blackout_respawn_transition()\n"
+				+ "\tawait _respawn_after_battle_loss()\n"
+				+ "\t_finish_blackout_respawn_transition()\n"
+				+ "\t_finish_trainer_battle_npc(trainer_id, false)"
+		),
+		"Rejected trainer battles release their trainer after the blackout teleport"
+	)
+	_expect(
 		world_source.contains("authorized_teleport_in_progress = true")
 		and world_source.contains("authorized_teleport_locked_overworld = true"),
 		"Blackout respawns use the authorized teleport lock"

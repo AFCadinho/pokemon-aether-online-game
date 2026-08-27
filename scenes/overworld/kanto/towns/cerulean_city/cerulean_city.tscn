@@ -1,13 +1,308 @@
-[gd_scene load_steps=7 format=3 uid="uid://dly1ylygogcj3"]
+[gd_scene format=4 uid="uid://dly1ylygogcj3"]
 
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/open_field/open_field.visual.tscn" id="1_visual"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/cerulean_city/cerulean_city.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://q31fuskssd00" path="res://scripts/world/kanto/towns/cerulean_city.gd" id="2_city"]
-[ext_resource type="TileSet" uid="uid://p6ylhm8hwe2y" path="res://generated/tiled_visuals/open_field/open_field.visual.tileset.tres" id="3_collision"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="5_hint"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_hujw2"]
+[ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="7_bbts1"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="8_door_hint"]
+[ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="8_ex4qq"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="9_dialogue"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="10_pokemon"]
+[ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="12_lass"]
+[ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="13_o6adi"]
+[ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="13_youngster"]
+[ext_resource type="SpriteFrames" uid="uid://bp814sj37edjl" path="res://assets/npcs/classes/officer_jenny_frames.tres" id="14_jenny"]
+[ext_resource type="Texture2D" uid="uid://bflvtep8pflvv" path="res://assets/npcs/classes/officer_jenny.png" id="14_jenny_texture"]
+[ext_resource type="SpriteFrames" uid="uid://cg046cju3kis8" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="15_ace_f"]
+[ext_resource type="SpriteFrames" uid="uid://bewtxeqmv8vls" path="res://assets/npcs/classes/ace_trainer_m_frames.tres" id="16_ace_m"]
+[ext_resource type="Script" uid="uid://3sc142eusmtf" path="res://scripts/world/kanto/towns/cerulean_battle_display.gd" id="17_battle_display"]
+[ext_resource type="SpriteFrames" uid="uid://bxh5nxs12bywr" path="res://assets/npcs/gym_guide_frames.tres" id="18_gym_attendant"]
+[ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="18_picnicker"]
+[ext_resource type="SpriteFrames" uid="uid://ckxh3g37blbkj" path="res://assets/npcs/classes/scientist_f_frames.tres" id="18_scientist_f"]
+[ext_resource type="SpriteFrames" uid="uid://ctgjk0yaqmm8o" path="res://assets/npcs/classes/elder_frames.tres" id="18_veteran"]
+[ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="18_worker"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="19_transit_keeper"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="20_aether_beacon"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="21_trainer"]
+[ext_resource type="Script" uid="uid://crlo242fhme2o" path="res://scripts/world/kanto/routes/route_24_gary.gd" id="22_gary_script"]
+[ext_resource type="SpriteFrames" uid="uid://3v3l6agblhvi" path="res://assets/npcs/gary_sprite_frames.tres" id="23_gary_frames"]
+[ext_resource type="Texture2D" uid="uid://d4c0skpe6wmsw" path="res://assets/sprites/mugshots/gary.png" id="24_gary_mugshot"]
+[ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="25_story_hook"]
+[ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="26_gate_npc"]
+[ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="27_r678c"]
+[ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="28_6yoej"]
+[ext_resource type="Script" uid="uid://cte2y4e4gdmbm" path="res://scripts/world/kanto/towns/cerulean_mountain_guide.gd" id="29_mountain_guide"]
+[ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="30_hiker"]
+[ext_resource type="Script" uid="uid://q5hlbf2sfqxo" path="res://scripts/world/kanto/towns/cerulean_mountain_return.gd" id="31_mountain_return"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="32_daily_rock"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/cuttable_tree.tscn" id="34_i2u7v"]
+[ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="35_bug_catcher"]
+[ext_resource type="Script" uid="uid://bokcw1q7hoc1w" path="res://scripts/world/kanto/routes/nugget_bridge_trainer.gd" id="36_bridge_trainer"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
-size = Vector2(32, 96)
+size = Vector2(32, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_water_exit"]
+size = Vector2(32, 224)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cave_exit"]
+size = Vector2(96, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route_24_exit"]
+size = Vector2(160, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route_24_water_exit"]
+size = Vector2(208, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route_24_bridge_exit"]
+size = Vector2(192, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route_24_water_right_exit"]
+size = Vector2(144, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route_9_left_exit"]
+size = Vector2(112, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route_9_grass_exit"]
+size = Vector2(160, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route_9_right_exit"]
+size = Vector2(112, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_route_5_exit"]
+size = Vector2(32, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door_exit"]
+size = Vector2(48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gary_mugshot"]
+atlas = ExtResource("24_gary_mugshot")
+region = Rect2(80, 0, 387, 387)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jenny_portrait"]
+atlas = ExtResource("14_jenny_texture")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_31plc"]
+texture = ExtResource("6_hujw2")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_bbts1"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_31plc")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3ppju"]
+texture = ExtResource("7_bbts1")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_68ko5"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_3ppju")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d577h"]
+texture = ExtResource("6_hujw2")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_w0tal"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_d577h")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iogp6"]
+texture = ExtResource("13_o6adi")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+7:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_ewt4e"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_iogp6")
 
 [node name="CeruleanCity" type="Node2D" unique_id=1286302656]
 script = ExtResource("2_city")
@@ -19,47 +314,1025 @@ world_access_group_label = "Cerulean City"
 location_id = "kanto.cerulean_city"
 location_name = "Cerulean City"
 region_id = "kanto"
+encounter_area_id = "kanto_cerulean_city"
+grass_encounter_chance = 0.21
 music_track_id = "overworld.kanto.cerulean_city"
 
-[node name="OpenField" parent="." instance=ExtResource("1_visual")]
+[node name="CeruleanCityVisual" parent="." unique_id=1421275817 instance=ExtResource("1_visual")]
 
-[node name="Collision" type="TileMapLayer" parent="."]
-visible = false
-z_index = 100
-tile_set = ExtResource("3_collision")
+[node name="Spawns" type="Node2D" parent="." unique_id=2088728124]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="FromRoute4" type="Marker2D" parent="Spawns" unique_id=1976159514]
+position = Vector2(48, 816)
 
-[node name="FromRoute4" type="Marker2D" parent="Spawns"]
-position = Vector2(64, 288)
+[node name="FromRoute4Water" type="Marker2D" parent="Spawns" unique_id=376671833]
+position = Vector2(48, 592)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="FromCeruleanCave" type="Marker2D" parent="Spawns" unique_id=1182562427]
+position = Vector2(528, 208)
 
-[node name="ToRoute4" type="Area2D" parent="Exits"]
-position = Vector2(16, 288)
+[node name="FromRoute24Path" type="Marker2D" parent="Spawns" unique_id=686192888]
+position = Vector2(2192, 48)
+
+[node name="FromRoute24WaterLeft" type="Marker2D" parent="Spawns" unique_id=1716181807]
+position = Vector2(1584, 48)
+
+[node name="FromRoute24Bridge" type="Marker2D" parent="Spawns" unique_id=1495799302]
+position = Vector2(1808, 48)
+
+[node name="FromRoute24WaterRight" type="Marker2D" parent="Spawns" unique_id=319986114]
+position = Vector2(2000, 48)
+
+[node name="FromRoute5Left" type="Marker2D" parent="Spawns" unique_id=2084918086]
+position = Vector2(464, 2192)
+
+[node name="FromRoute5Grass" type="Marker2D" parent="Spawns" unique_id=2144826856]
+position = Vector2(656, 2192)
+
+[node name="FromRoute5Right" type="Marker2D" parent="Spawns" unique_id=1440214985]
+position = Vector2(816, 2192)
+
+[node name="FromRoute9" type="Marker2D" parent="Spawns" unique_id=1189067734]
+position = Vector2(2352, 1424)
+
+[node name="FromHouse1" type="Marker2D" parent="Spawns" unique_id=867294282]
+position = Vector2(784, 944)
+
+[node name="FromPokemonCenter" type="Marker2D" parent="Spawns" unique_id=1886315640]
+position = Vector2(1072, 1360)
+
+[node name="FromGym" type="Marker2D" parent="Spawns" unique_id=136001460]
+position = Vector2(1584, 1360)
+
+[node name="FromBikeStore" type="Marker2D" parent="Spawns" unique_id=884089182]
+position = Vector2(624, 1680)
+
+[node name="FromHouse2" type="Marker2D" parent="Spawns" unique_id=1542082403]
+position = Vector2(1168, 1680)
+
+[node name="FromHouse3" type="Marker2D" parent="Spawns" unique_id=1698655635]
+position = Vector2(848, 1360)
+
+[node name="WestMountain" type="Marker2D" parent="Spawns" unique_id=2048374651]
+position = Vector2(112, 1520)
+
+[node name="SouthMountain" type="Marker2D" parent="Spawns" unique_id=2048374652]
+position = Vector2(1584, 2096)
+
+[node name="WestRockSmashSite" type="Marker2D" parent="Spawns" unique_id=1817059196]
+position = Vector2(112, 1520)
+
+[node name="EastRockSmashSite" type="Marker2D" parent="Spawns" unique_id=1761652555]
+position = Vector2(1296, 2096)
+
+[node name="MountainGuideReturn" type="Marker2D" parent="Spawns" unique_id=1655488040]
+position = Vector2(1680, 1904)
+
+[node name="TransitArrival" type="Marker2D" parent="Spawns" unique_id=1815544339]
+position = Vector2(1584, 944)
+
+[node name="Exits" type="Node2D" parent="." unique_id=921368933]
+
+[node name="ToRoute4" type="Area2D" parent="Exits" unique_id=853400686]
+position = Vector2(16, 816)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_4.tscn"
 target_spawn_name = "FromCerulean"
 transition_id = "kanto_cerulean_city__to_route_4"
 transition_facing_direction = "left"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute4"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute4" unique_id=2121564594]
 shape = SubResource("RectangleShape2D_route_4_exit")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute4" instance=ExtResource("5_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToRoute4" unique_id=1425122490 instance=ExtResource("5_hint")]
 z_as_relative = false
-tile_footprint = Vector2i(1, 3)
+tile_footprint = Vector2i(1, 5)
 flow_direction = "left"
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="ToRoute4Water" type="Area2D" parent="Exits" unique_id=1375053531]
+position = Vector2(16, 592)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_4.tscn"
+target_spawn_name = "FromCeruleanWater"
+transition_id = "kanto_cerulean_city__to_route_4_water"
+transition_facing_direction = "left"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute4Water" unique_id=297229048]
+shape = SubResource("RectangleShape2D_route_4_water_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute4Water" unique_id=1084339761 instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 7)
+flow_direction = "left"
+
+[node name="ToCeruleanCave" type="Area2D" parent="Exits" unique_id=1154148418]
+position = Vector2(528, 176)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn"
+target_spawn_name = "FromCerulean"
+transition_id = "kanto_cerulean_city__to_cerulean_cave"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanCave" unique_id=151379306]
+shape = SubResource("RectangleShape2D_cave_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToCeruleanCave" unique_id=446960736 instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(3, 1)
+
+[node name="ToRoute24Path" type="Area2D" parent="Exits" unique_id=1437830918]
+position = Vector2(2192, 16)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
+target_spawn_name = "FromCeruleanPath"
+transition_id = "kanto_cerulean_city__to_route_24_path"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute24Path" unique_id=1678932295]
+position = Vector2(16, -16)
+shape = SubResource("RectangleShape2D_route_24_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute24Path" unique_id=246062632 instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(5, 1)
+
+[node name="ToRoute24WaterLeft" type="Area2D" parent="Exits" unique_id=888545413]
+position = Vector2(1584, 16)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
+target_spawn_name = "FromCeruleanWaterLeft"
+transition_id = "kanto_cerulean_city__to_route_24_water_left"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute24WaterLeft" unique_id=1769934759]
+position = Vector2(-8, -16)
+shape = SubResource("RectangleShape2D_route_24_water_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute24WaterLeft" unique_id=1540901010 instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(6, 1)
+
+[node name="ToRoute24Bridge" type="Area2D" parent="Exits" unique_id=1807341028]
+position = Vector2(1808, 16)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
+target_spawn_name = "FromCeruleanBridge"
+transition_id = "kanto_cerulean_city__to_route_24_bridge"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute24Bridge" unique_id=1499522519]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_route_24_bridge_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute24Bridge" unique_id=1683341300 instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(6, 1)
+
+[node name="ToRoute24WaterRight" type="Area2D" parent="Exits" unique_id=1121918068]
+position = Vector2(2016, 16)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
+target_spawn_name = "FromCeruleanWaterRight"
+transition_id = "kanto_cerulean_city__to_route_24_water_right"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute24WaterRight" unique_id=291057997]
+position = Vector2(-8, -16)
+shape = SubResource("RectangleShape2D_route_24_water_right_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute24WaterRight" unique_id=1437726185 instance=ExtResource("5_hint")]
+z_as_relative = false
+position = Vector2(-16, 0)
+tile_footprint = Vector2i(5, 1)
+
+[node name="ToRoute5Left" type="Area2D" parent="Exits" unique_id=1635975885]
+position = Vector2(464, 2224)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_5.tscn"
+target_spawn_name = "FromCeruleanLeft"
+transition_id = "kanto_cerulean_city__to_route_5_left"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute5Left" unique_id=117564256]
+position = Vector2(-8, 16)
+shape = SubResource("RectangleShape2D_route_9_left_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute5Left" unique_id=558143365 instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
+
+[node name="ToRoute5Grass" type="Area2D" parent="Exits" unique_id=998629003]
+position = Vector2(624, 2224)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_5.tscn"
+target_spawn_name = "FromCeruleanGrass"
+transition_id = "kanto_cerulean_city__to_route_5_grass"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute5Grass" unique_id=184968355]
+position = Vector2(16, 16)
+shape = SubResource("RectangleShape2D_route_9_grass_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute5Grass" unique_id=807023227 instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(5, 1)
+flow_direction = "down"
+
+[node name="ToRoute5Right" type="Area2D" parent="Exits" unique_id=2083879895]
+position = Vector2(816, 2224)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_5.tscn"
+target_spawn_name = "FromCeruleanRight"
+transition_id = "kanto_cerulean_city__to_route_5_right"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute5Right" unique_id=1522826131]
+position = Vector2(8, 16)
+shape = SubResource("RectangleShape2D_route_9_right_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute5Right" unique_id=1132794842 instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(5, 1)
+flow_direction = "down"
+
+[node name="ToRoute9" type="Area2D" parent="Exits" unique_id=159942707]
+position = Vector2(2384, 1424)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_9.tscn"
+target_spawn_name = "FromCerulean"
+transition_id = "kanto_cerulean_city__to_route_9"
+transition_facing_direction = "right"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute9" unique_id=1100155674]
+position = Vector2(16, 0)
+shape = SubResource("RectangleShape2D_route_5_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute9" unique_id=865795484 instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 6)
+flow_direction = "right"
+
+[node name="ToHouse1" type="Area2D" parent="Exits" unique_id=2133692083]
+position = Vector2(784, 912)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/house1.tscn"
+target_spawn_name = "FromCeruleanCity"
+transition_id = "kanto_cerulean_city__to_house_1"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse1" unique_id=1891421708]
+position = Vector2(8, -16)
+shape = SubResource("RectangleShape2D_door_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToHouse1" unique_id=909563587 instance=ExtResource("8_door_hint")]
+z_as_relative = false
+
+[node name="ToPokemonCenter" type="Area2D" parent="Exits" unique_id=892978814]
+position = Vector2(1072, 1312)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/pokemon_center.tscn"
+target_spawn_name = "FromOutside"
+transition_id = "kanto_cerulean_city__to_pokemon_center"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokemonCenter" unique_id=1907533775]
+shape = SubResource("RectangleShape2D_door_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToPokemonCenter" unique_id=1671865357 instance=ExtResource("8_door_hint")]
+z_as_relative = false
+
+[node name="ToGym" type="Area2D" parent="Exits" unique_id=791741072]
+position = Vector2(1584, 1312)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn"
+target_spawn_name = "FromCeruleanCity"
+transition_id = "kanto_cerulean_city__to_gym"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGym" unique_id=2018569090]
+shape = SubResource("RectangleShape2D_door_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToGym" unique_id=564544897 instance=ExtResource("8_door_hint")]
+z_as_relative = false
+position = Vector2(0, 16)
+
+[node name="ToBikeStore" type="Area2D" parent="Exits" unique_id=1993121338]
+position = Vector2(624, 1648)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/bike_store.tscn"
+target_spawn_name = "FromCeruleanCity"
+transition_id = "kanto_cerulean_city__to_bike_store"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToBikeStore" unique_id=706782338]
+position = Vector2(0, -32)
+shape = SubResource("RectangleShape2D_door_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToBikeStore" unique_id=22415696 instance=ExtResource("8_door_hint")]
+z_as_relative = false
+
+[node name="ToHouse2" type="Area2D" parent="Exits" unique_id=203972224]
+position = Vector2(1168, 1632)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/house2.tscn"
+target_spawn_name = "FromCeruleanCity"
+transition_id = "kanto_cerulean_city__to_house_2"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse2" unique_id=1673443594]
+shape = SubResource("RectangleShape2D_door_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToHouse2" unique_id=1617778932 instance=ExtResource("8_door_hint")]
+z_as_relative = false
+position = Vector2(0, 16)
+
+[node name="ToHouse3" type="Area2D" parent="Exits" unique_id=994203283]
+position = Vector2(848, 1312)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/house3.tscn"
+target_spawn_name = "FromCeruleanCity"
+transition_id = "kanto_cerulean_city__to_house_3"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse3" unique_id=331319773]
+shape = SubResource("RectangleShape2D_door_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToHouse3" unique_id=1714900849 instance=ExtResource("8_door_hint")]
+z_as_relative = false
+position = Vector2(0, 16)
+
+[node name="Entities" type="Node2D" parent="." unique_id=1995162903]
 z_index = 5
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=790832259]
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="GaryOak" parent="Entities/NPCs" unique_id=59407683 instance=ExtResource("21_trainer")]
+position = Vector2(1808, 720)
+script = ExtResource("22_gary_script")
+challenge_width_tiles = 6
+trainer_id = "kanto_route_24_gary_bulbasaur"
+sight_range_tiles = 3
+npc_id = "kanto_route_24_gary_oak"
+npc_definition_id = "trainer_class_blue"
+display_name = "Gary Oak"
+npc_sprite_frames = ExtResource("23_gary_frames")
+mugshot = SubResource("AtlasTexture_gary_mugshot")
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="NuggetBridge01Cale" parent="Entities/NPCs" unique_id=1741835956 instance=ExtResource("21_trainer")]
+position = Vector2(1872, 464)
+script = ExtResource("36_bridge_trainer")
+challenge_width_tiles = 6
+trainer_id = "kanto_route_24_nugget_bridge_01_cale"
+npc_id = "kanto_route_24_nugget_bridge_01_cale"
+npc_definition_id = "trainer_class_bug_catcher"
+display_name = "Bug Catcher Cale"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("35_bug_catcher")
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="NuggetBridge02Ali" parent="Entities/NPCs" unique_id=1685161149 instance=ExtResource("21_trainer")]
+position = Vector2(1872, 176)
+script = ExtResource("36_bridge_trainer")
+challenge_width_tiles = 6
+trainer_id = "kanto_route_24_nugget_bridge_02_ali"
+npc_id = "kanto_route_24_nugget_bridge_02_ali"
+npc_definition_id = "trainer_class_lass"
+display_name = "Lass Ali"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("12_lass")
+
+[node name="GymAttendant" parent="Entities/NPCs" unique_id=1108117216 instance=ExtResource("9_dialogue")]
+position = Vector2(1584, 1360)
+npc_id = "kanto_cerulean_city_gym_attendant"
+visibility_hidden_quest_id = "explore_cerulean_city"
+visibility_hidden_quest_step_id = "visit_nugget_bridge"
+display_name = "Cerulean Gym Attendant"
+npc_sprite_frames = ExtResource("18_gym_attendant")
+preload_quest_markers = true
+
+[node name="GymClosedStoryHook" type="Node" parent="Entities/NPCs/GymAttendant" unique_id=1546666748]
+script = ExtResource("25_story_hook")
+interaction_id = "kanto_cerulean_gym_closed"
+entity_id = "kanto_cerulean_city_gym_attendant"
+
+[node name="CeruleanCaveAgent" parent="Entities/NPCs" unique_id=1438058485 instance=ExtResource("26_gate_npc")]
+position = Vector2(528, 208)
+guard_role = "transition_guard"
+guarded_transition_id = "kanto_cerulean_city__to_cerulean_cave"
+requires_party_pokemon = false
+blocked_dialogue_id = "kanto_cerulean_city_cave_agent_blocked"
+story_blocked_dialogue_id = "kanto_cerulean_city_cave_agent_blocked"
+npc_id = "kanto_cerulean_city_cave_agent"
+required_quest_id = "cerulean_cave_clearance"
+display_name = "League Investigation Agent"
+
+[node name="OfficerJenny" parent="Entities/NPCs" unique_id=1966720263 instance=ExtResource("9_dialogue")]
+position = Vector2(1040, 1008)
+npc_id = "kanto_cerulean_city_patrol_officer"
+npc_definition_id = "trainer_class_policeman"
+display_name = "Officer Jenny"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("14_jenny")
+mugshot = SubResource("AtlasTexture_jenny_portrait")
+
+[node name="WaterwayVisitorMaya" parent="Entities/NPCs" unique_id=395956463 instance=ExtResource("9_dialogue")]
+position = Vector2(1424, 720)
+npc_id = "kanto_cerulean_city_waterway_visitor_maya"
+npc_definition_id = "trainer_class_lass"
+display_name = "Waterway Visitor Maya"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("12_lass")
+
+[node name="BikeEnthusiastTheo" parent="Entities/NPCs" unique_id=826750557 instance=ExtResource("9_dialogue")]
+position = Vector2(752, 1680)
+npc_id = "kanto_cerulean_city_bike_enthusiast_theo"
+npc_definition_id = "trainer_class_youngster"
+display_name = "Bike Enthusiast Theo"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("13_youngster")
+
+[node name="MountainGuide" parent="Entities/NPCs" unique_id=1082922359 instance=ExtResource("9_dialogue")]
+position = Vector2(1712, 1904)
+script = ExtResource("29_mountain_guide")
+west_destination_position = Vector2(112, 1520)
+east_destination_position = Vector2(1296, 2096)
+npc_id = "kanto_cerulean_city_mountain_guide"
+display_name = "Mountain Guide"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("30_hiker")
+portrait_id = "showdown_hiker_gen6"
+
+[node name="WestMountainGuide" parent="Entities/NPCs" unique_id=1676481674 instance=ExtResource("9_dialogue")]
+position = Vector2(144, 1584)
+script = ExtResource("31_mountain_return")
+destination_position = Vector2(1680, 1904)
+display_name = "Mountain Guide"
+npc_sprite_frames = ExtResource("30_hiker")
+portrait_id = "showdown_hiker_gen6"
+minimum_sort_z = 2054
+
+[node name="EastMountainGuide" parent="Entities/NPCs" unique_id=1778671423 instance=ExtResource("9_dialogue")]
+position = Vector2(2320, 1872)
+script = ExtResource("31_mountain_return")
+destination_position = Vector2(1680, 1904)
+display_name = "Mountain Guide"
+npc_sprite_frames = ExtResource("30_hiker")
+portrait_id = "showdown_hiker_gen6"
+minimum_sort_z = 2054
+
+[node name="AceTrainerLila" parent="Entities/NPCs" unique_id=159174064 instance=ExtResource("9_dialogue")]
+position = Vector2(624, 1200)
+npc_id = "kanto_cerulean_city_ace_trainer_lila"
+npc_definition_id = "trainer_class_ace_trainer_f"
+display_name = "Ace Trainer Lila"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("15_ace_f")
+
+[node name="AceTrainerBram" parent="Entities/NPCs" unique_id=1773113791 instance=ExtResource("9_dialogue")]
+position = Vector2(752, 1200)
+npc_id = "kanto_cerulean_city_ace_trainer_bram"
+npc_definition_id = "trainer_class_ace_trainer_m"
+display_name = "Ace Trainer Bram"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("16_ace_m")
+
+[node name="BridgeWorkerMilo" parent="Entities/NPCs" unique_id=501372718 instance=ExtResource("9_dialogue")]
+position = Vector2(1872, 656)
+npc_id = "kanto_cerulean_city_bridge_worker_milo"
+npc_definition_id = "trainer_class_worker"
+display_name = "Bridge Worker Milo"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("18_worker")
+
+[node name="CanalResearcherCora" parent="Entities/NPCs" unique_id=1870570704 instance=ExtResource("9_dialogue")]
+position = Vector2(400, 752)
+npc_id = "kanto_cerulean_city_canal_researcher_cora"
+npc_definition_id = "trainer_class_scientist_f"
+display_name = "Canal Researcher Cora"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("18_scientist_f")
+
+[node name="CanalPicnickerNia" parent="Entities/NPCs" unique_id=1913183852 instance=ExtResource("9_dialogue")]
+position = Vector2(1168, 880)
+npc_id = "kanto_cerulean_city_canal_picnicker_nia"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Canal Picnicker Nia"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("18_picnicker")
+
+[node name="VeteranGarrick" parent="Entities/NPCs" unique_id=747773275 instance=ExtResource("9_dialogue")]
+position = Vector2(1648, 1680)
+npc_id = "kanto_cerulean_city_veteran_garrick"
+npc_definition_id = "trainer_class_veteran"
+display_name = "Veteran Garrick"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("18_veteran")
+portrait_id = "showdown_veteran_gen7"
+
+[node name="TransitKeeper" parent="Entities/NPCs" unique_id=1146061101 instance=ExtResource("19_transit_keeper")]
+position = Vector2(1520, 944)
+local_destination_id = "kanto_cerulean_city"
+
+[node name="Players" type="Node2D" parent="Entities" unique_id=419165532]
+
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=611880944]
+
+[node name="Growlithe" parent="Entities/Pokemon" unique_id=360414582 instance=ExtResource("10_pokemon")]
+position = Vector2(1104, 1008)
+overworld_pokemon_id = "kanto_cerulean_city_growlithe_1"
+species_id = "growlithe"
+level = 12
+display_name = "Growlithe"
+facing_direction = Vector2(-1, 0)
+
+[node name="Dragonite" parent="Entities/Pokemon" unique_id=877386154 instance=ExtResource("10_pokemon")]
+position = Vector2(1712, 1679.9999)
+scale = Vector2(1.1, 1.1)
+overworld_pokemon_id = "kanto_cerulean_city_dragonite_1"
+species_id = "dragonite"
+level = 62
+display_name = "Dragonite"
+facing_direction = Vector2(-1, 0)
+
+[node name="WaterPokemon" type="Node2D" parent="Entities/Pokemon" unique_id=1249643878]
+
+[node name="Gyarados" parent="Entities/Pokemon/WaterPokemon" unique_id=156814263 instance=ExtResource("10_pokemon")]
+position = Vector2(1392, 528)
+scale = Vector2(1.2, 1.2)
+overworld_pokemon_id = "kanto_cerulean_city_gyarados_1"
+species_id = "gyarados"
+level = 30
+display_name = "Gyarados"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 2
+movement_wait_seconds = 0.8
+movement_speed_pixels = 55.0
+
+[node name="Goldeen" parent="Entities/Pokemon/WaterPokemon" unique_id=1899759157 instance=ExtResource("10_pokemon")]
+position = Vector2(336, 624)
+overworld_pokemon_id = "kanto_cerulean_city_goldeen_1"
+species_id = "goldeen"
+level = 15
+display_name = "Goldeen"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 2
+movement_wait_seconds = 1.0
+movement_speed_pixels = 70.0
+
+[node name="Poliwag" parent="Entities/Pokemon/WaterPokemon" unique_id=1370913628 instance=ExtResource("10_pokemon")]
+position = Vector2(1648, 208)
+overworld_pokemon_id = "kanto_cerulean_city_poliwag_1"
+species_id = "poliwag"
+level = 12
+display_name = "Poliwag"
+movement_behavior = "pace_vertical"
+movement_tiles = 2
+movement_wait_seconds = 1.2
+movement_speed_pixels = 60.0
+
+[node name="MountainPokemon" type="Node2D" parent="Entities/Pokemon" unique_id=246911283]
+
+[node name="Geodude" parent="Entities/Pokemon/MountainPokemon" unique_id=1077233739 instance=ExtResource("10_pokemon")]
+position = Vector2(800, 128)
+overworld_pokemon_id = "kanto_cerulean_city_mountain_geodude_1"
+species_id = "geodude"
+level = 18
+display_name = "Geodude"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 30.0
+minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
+
+[node name="Nosepass" parent="Entities/Pokemon/MountainPokemon" unique_id=459947247 instance=ExtResource("10_pokemon")]
+position = Vector2(112, 1456)
+overworld_pokemon_id = "kanto_cerulean_city_mountain_nosepass_1"
+species_id = "nosepass"
+level = 20
+display_name = "Nosepass"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.4
+movement_speed_pixels = 24.0
+minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
+
+[node name="Roggenrola" parent="Entities/Pokemon/MountainPokemon" unique_id=825557704 instance=ExtResource("10_pokemon")]
+position = Vector2(2128, 1168)
+overworld_pokemon_id = "kanto_cerulean_city_mountain_roggenrola_1"
+species_id = "roggenrola"
+level = 17
+display_name = "Roggenrola"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.6
+movement_speed_pixels = 28.0
+minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
+
+[node name="Larvitar" parent="Entities/Pokemon/MountainPokemon" unique_id=2025605849 instance=ExtResource("10_pokemon")]
+position = Vector2(1712, 2064)
+overworld_pokemon_id = "kanto_cerulean_city_mountain_larvitar_1"
+species_id = "larvitar"
+level = 19
+display_name = "Larvitar"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.2
+movement_speed_pixels = 38.0
+minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
+
+[node name="Rockruff" parent="Entities/Pokemon/MountainPokemon" unique_id=204595213 instance=ExtResource("10_pokemon")]
+position = Vector2(2192, 1584)
+overworld_pokemon_id = "kanto_cerulean_city_mountain_rockruff_1"
+species_id = "rockruff"
+level = 16
+display_name = "Rockruff"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.0
+movement_speed_pixels = 46.0
+minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
+
+[node name="Rhyhorn" parent="Entities/Pokemon/MountainPokemon" unique_id=2048374653 instance=ExtResource("10_pokemon")]
+position = Vector2(1584, 2032)
+overworld_pokemon_id = "kanto_cerulean_city_mountain_rhyhorn_1"
+species_id = "rhyhorn"
+level = 22
+display_name = "Rhyhorn"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 34.0
+minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
+
+[node name="BattleDisplay" type="Node2D" parent="Entities/Pokemon" unique_id=1385943621]
+position = Vector2(680, 1216)
+script = ExtResource("17_battle_display")
+
+[node name="Onix" parent="Entities/Pokemon/BattleDisplay" unique_id=1905551537 instance=ExtResource("10_pokemon")]
+position = Vector2(-24, -16)
+overworld_pokemon_id = "kanto_cerulean_city_practice_onix_1"
+species_id = "onix"
+level = 16
+display_name = "Onix"
+facing_direction = Vector2(1, 0)
+
+[node name="Pikachu" parent="Entities/Pokemon/BattleDisplay" unique_id=1960521636 instance=ExtResource("10_pokemon")]
+position = Vector2(40, -16)
+overworld_pokemon_id = "kanto_cerulean_city_practice_pikachu_1"
+species_id = "pikachu"
+level = 16
+display_name = "Pikachu"
+facing_direction = Vector2(-1, 0)
+
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=757893626]
+
+[node name="AetherBeacon" parent="Entities/Interactables" unique_id=239659690 instance=ExtResource("20_aether_beacon")]
+z_index = 912
+position = Vector2(1584, 912)
+destination_id = "kanto_cerulean_city"
+interactable_id = "kanto_cerulean_city_aether_beacon"
+
+[node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=948633989]
+
+[node name="BikeStoreSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("27_r678c")]
+position = Vector2(560, 1712)
+sign_id = "kanto_cerulean_city_bike_shop"
+sign_type = "building"
+
+[node name="GymSign" parent="Entities/Interactables/Signs" unique_id=619180212 instance=ExtResource("27_r678c")]
+position = Vector2(1648, 1360)
+sign_id = "kanto_cerulean_city_gym"
+sign_type = "building"
+
+[node name="CeruleanCitySign" parent="Entities/Interactables/Signs" unique_id=1338754957 instance=ExtResource("28_6yoej")]
+position = Vector2(464, 784)
+sign_id = "kanto_cerulean_city_town_sign"
+sign_type = "town"
+
+[node name="MountainRockSmashSites" type="Node2D" parent="Entities/Interactables" unique_id=962698712]
+
+[node name="WestRockNorth" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1669011993 instance=ExtResource("32_daily_rock")]
+z_index = 2054
+z_as_relative = false
+position = Vector2(144, 1104)
+rock_id = "kanto_cerulean_city_west_site_rock_north"
+rock_visual_style = 2
+required_rock_smash_level = 20
+
+[node name="WestRockUpper" parent="Entities/Interactables/MountainRockSmashSites" unique_id=640211761 instance=ExtResource("32_daily_rock")]
+z_index = 2054
+z_as_relative = false
+position = Vector2(48, 1232)
+rock_id = "kanto_cerulean_city_west_site_rock_upper"
+rock_variant = 1
+rock_visual_style = 2
+required_rock_smash_level = 20
+
+[node name="WestRockLower" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1483051589 instance=ExtResource("32_daily_rock")]
+z_index = 2054
+z_as_relative = false
+position = Vector2(48, 1744)
+rock_id = "kanto_cerulean_city_west_site_rock_lower"
+rock_variant = 2
+rock_visual_style = 2
+required_rock_smash_level = 20
+
+[node name="WestRockSouth" parent="Entities/Interactables/MountainRockSmashSites" unique_id=122883783 instance=ExtResource("32_daily_rock")]
+z_index = 2054
+z_as_relative = false
+position = Vector2(144, 1936)
+rock_id = "kanto_cerulean_city_west_site_rock_south"
+rock_variant = 3
+rock_visual_style = 2
+required_rock_smash_level = 20
+
+[node name="EastRockNorthwest" parent="Entities/Interactables/MountainRockSmashSites" unique_id=844945805 instance=ExtResource("32_daily_rock")]
+z_index = 2054
+z_as_relative = false
+position = Vector2(2128, 1712)
+rock_id = "kanto_cerulean_city_east_site_rock_northwest"
+rock_visual_style = 2
+required_rock_smash_level = 50
+
+[node name="EastRockNortheast" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1938575074 instance=ExtResource("32_daily_rock")]
+z_index = 2054
+z_as_relative = false
+position = Vector2(2128, 2096)
+rock_id = "kanto_cerulean_city_east_site_rock_northeast"
+rock_variant = 1
+rock_visual_style = 2
+required_rock_smash_level = 50
+
+[node name="EastRockSouthwest" parent="Entities/Interactables/MountainRockSmashSites" unique_id=55597829 instance=ExtResource("32_daily_rock")]
+z_index = 2054
+z_as_relative = false
+position = Vector2(1392, 2192)
+rock_id = "kanto_cerulean_city_east_site_rock_southwest"
+rock_variant = 2
+rock_visual_style = 2
+required_rock_smash_level = 50
+
+[node name="EastRockSoutheast" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1019663712 instance=ExtResource("32_daily_rock")]
+z_index = 2054
+z_as_relative = false
+position = Vector2(1136, 2096)
+rock_id = "kanto_cerulean_city_east_site_rock_southeast"
+rock_variant = 3
+rock_visual_style = 2
+required_rock_smash_level = 50
+
+[node name="CutTrees" type="Node2D" parent="Entities/Interactables" unique_id=232736023]
+
+[node name="CuttableTree" parent="Entities/Interactables/CutTrees" unique_id=745781196 instance=ExtResource("34_i2u7v")]
+position = Vector2(2256, 1360)
+
+[node name="CuttableTree2" parent="Entities/Interactables/CutTrees" unique_id=1054165234 instance=ExtResource("34_i2u7v")]
+position = Vector2(2256, 1392)
+
+[node name="CuttableTree3" parent="Entities/Interactables/CutTrees" unique_id=1481387488 instance=ExtResource("34_i2u7v")]
+position = Vector2(2256, 1424)
+
+[node name="CuttableTree4" parent="Entities/Interactables/CutTrees" unique_id=989778655 instance=ExtResource("34_i2u7v")]
+position = Vector2(2256, 1456)
+
+[node name="CuttableTree5" parent="Entities/Interactables/CutTrees" unique_id=1025756504 instance=ExtResource("34_i2u7v")]
+position = Vector2(2256, 1488)
+
+[node name="Tiles" type="Node2D" parent="." unique_id=426809689]
+visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=1772699322]
+visible = false
+z_index = 4096
+tile_map_data = PackedByteArray("AAD/////AAABAAEAAAD//wAAAAABAAEAAAD//wEAAAABAAEAAAD//wIAAAABAAEAAAD//wMAAAABAAEAAAD//wQAAAABAAEAAAD//wUAAAABAAEAAAD//wYAAAABAAEAAAD//wcAAAABAAEAAAD//wgAAAABAAEAAAD//wkAAAABAAEAAAD//woAAAABAAEAAAD//wsAAAABAAEAAAD//wwAAAABAAEAAAD//w0AAAABAAEAAAD//w4AAAABAAEAAAD//w8AAAABAAEAAAD//xAAAAABAAEAAAD//xEAAAABAAEAAAD//xIAAAABAAEAAAD//xMAAAABAAEAAAD//xQAAAABAAEAAAD//xUAAAABAAEAAAD//xYAAAABAAEAAAD//xcAAAABAAEAAAD//xgAAAABAAEAAAD//xkAAAABAAEAAAD//xoAAAABAAEAAAD//xsAAAABAAEAAAD//xwAAAABAAEAAAD//x0AAAABAAEAAAD//x4AAAABAAEAAAD//x8AAAABAAEAAAD//yAAAAABAAEAAAD//yEAAAABAAEAAAD//yIAAAABAAEAAAD//yMAAAABAAEAAAD//yQAAAABAAEAAAD//yUAAAABAAEAAAD//yYAAAABAAEAAAD//ycAAAABAAEAAAD//ygAAAABAAEAAAD//ykAAAABAAEAAAD//yoAAAABAAEAAAD//ysAAAABAAEAAAD//ywAAAABAAEAAAD//y0AAAABAAEAAAD//y4AAAABAAEAAAD//y8AAAABAAEAAAD//zAAAAABAAEAAAD//zEAAAABAAEAAAD//zIAAAABAAEAAAD//zMAAAABAAEAAAD//zQAAAABAAEAAAD//zUAAAABAAEAAAD//zYAAAABAAEAAAD//zcAAAABAAEAAAD//zgAAAABAAEAAAD//zkAAAABAAEAAAD//zoAAAABAAEAAAD//zsAAAABAAEAAAD//zwAAAABAAEAAAD//z0AAAABAAEAAAD//z4AAAABAAEAAAD//z8AAAABAAEAAAD//0AAAAABAAEAAAD//0EAAAABAAEAAAD//0IAAAABAAEAAAD//0MAAAABAAEAAAD//0QAAAABAAEAAAD//0UAAAABAAEAAAD//0YAAAABAAEAAAAAAEYAAAABAAEAAAABAEYAAAABAAEAAAACAEYAAAABAAEAAAADAEYAAAABAAEAAAAEAEYAAAABAAEAAAAFAEYAAAABAAEAAAAGAEYAAAABAAEAAAAHAEYAAAABAAEAAAAIAEYAAAABAAEAAAAJAEYAAAABAAEAAAAKAEYAAAABAAEAAAALAEYAAAABAAEAAAAMAEYAAAABAAEAAAANAEYAAAABAAEAAAAOAEYAAAABAAEAAAAPAEYAAAABAAEAAAAQAEYAAAABAAEAAAARAEYAAAABAAEAAAASAEYAAAABAAEAAAATAEYAAAABAAEAAAAUAEYAAAABAAEAAAAVAEYAAAABAAEAAAAWAEYAAAABAAEAAAAXAEYAAAABAAEAAAAYAEYAAAABAAEAAAAZAEYAAAABAAEAAAAaAEYAAAABAAEAAAAbAEYAAAABAAEAAAAcAEYAAAABAAEAAAAdAEYAAAABAAEAAAAeAEYAAAABAAEAAAAfAEYAAAABAAEAAAAgAEYAAAABAAEAAAAhAEYAAAABAAEAAAAiAEYAAAABAAEAAAAjAEYAAAABAAEAAAAkAEYAAAABAAEAAAAlAEYAAAABAAEAAAAmAEYAAAABAAEAAAAnAEYAAAABAAEAAAAoAEYAAAABAAEAAAApAEYAAAABAAEAAAAqAEYAAAABAAEAAAArAEYAAAABAAEAAAAsAEYAAAABAAEAAAAtAEYAAAABAAEAAAAuAEYAAAABAAEAAAAvAEYAAAABAAEAAAAwAEYAAAABAAEAAAAxAEYAAAABAAEAAAAyAEYAAAABAAEAAAAzAEYAAAABAAEAAAA0AEYAAAABAAEAAAA1AEYAAAABAAEAAAA2AEYAAAABAAEAAAA3AEYAAAABAAEAAAA4AEYAAAABAAEAAAA5AEYAAAABAAEAAAA6AEYAAAABAAEAAAA7AEYAAAABAAEAAAA8AEYAAAABAAEAAAA9AEYAAAABAAEAAAA+AEYAAAABAAEAAAA/AEYAAAABAAEAAABAAEYAAAABAAEAAABBAEYAAAABAAEAAABCAEYAAAABAAEAAABDAEYAAAABAAEAAABEAEYAAAABAAEAAABFAEYAAAABAAEAAABGAEYAAAABAAEAAABHAEYAAAABAAEAAABIAEYAAAABAAEAAABJAEYAAAABAAEAAABKAEYAAAABAAEAAABLAEYAAAABAAEAAABLABQAAAABAAEAAABLABUAAAABAAEAAABLABYAAAABAAEAAABLABcAAAABAAEAAABLABgAAAABAAEAAABLABkAAAABAAEAAABLABoAAAABAAEAAABLABsAAAABAAEAAABLABwAAAABAAEAAABLAB0AAAABAAEAAABLAB4AAAABAAEAAABLAB8AAAABAAEAAABLACAAAAABAAEAAABLACEAAAABAAEAAABLACIAAAABAAEAAABLACMAAAABAAEAAABLACQAAAABAAEAAABLACUAAAABAAEAAABLACYAAAABAAEAAABLACcAAAABAAEAAABLACgAAAABAAEAAABLACkAAAABAAEAAABLACoAAAABAAEAAABLACsAAAABAAEAAABLACwAAAABAAEAAABLAC0AAAABAAEAAABLAC4AAAABAAEAAABLAC8AAAABAAEAAABLADAAAAABAAEAAABLADEAAAABAAEAAABLADIAAAABAAEAAABLADMAAAABAAEAAABLADQAAAABAAEAAABLADUAAAABAAEAAABLADYAAAABAAEAAABLADcAAAABAAEAAABLADgAAAABAAEAAABLADkAAAABAAEAAABLADoAAAABAAEAAABLADsAAAABAAEAAABLADwAAAABAAEAAABLAD0AAAABAAEAAABLAD4AAAABAAEAAABLAD8AAAABAAEAAABLAEAAAAABAAEAAABLAEEAAAABAAEAAABLAEIAAAABAAEAAABLAEMAAAABAAEAAABLAEQAAAABAAEAAABLAEUAAAABAAEAAABLAP//AAABAAEAAABLAAAAAAABAAEAAABLAAEAAAABAAEAAABLAAIAAAABAAEAAABLAAMAAAABAAEAAABLAAQAAAABAAEAAABLAAUAAAABAAEAAABLAAYAAAABAAEAAABLAAcAAAABAAEAAABLAAgAAAABAAEAAABLAAkAAAABAAEAAABLAAoAAAABAAEAAABLAAsAAAABAAEAAABLAAwAAAABAAEAAABLAA0AAAABAAEAAABLAA4AAAABAAEAAABLAA8AAAABAAEAAABLABAAAAABAAEAAABLABEAAAABAAEAAABLABIAAAABAAEAAABLABMAAAABAAEAAAAAAP//AAABAAEAAAABAP//AAABAAEAAAACAP//AAABAAEAAAADAP//AAABAAEAAAAEAP//AAABAAEAAAAFAP//AAABAAEAAAAGAP//AAABAAEAAAAHAP//AAABAAEAAAAIAP//AAABAAEAAAAJAP//AAABAAEAAAAKAP//AAABAAEAAAALAP//AAABAAEAAAAMAP//AAABAAEAAAANAP//AAABAAEAAAAOAP//AAABAAEAAAAPAP//AAABAAEAAAAQAP//AAABAAEAAAARAP//AAABAAEAAAASAP//AAABAAEAAAATAP//AAABAAEAAAAUAP//AAABAAEAAAAVAP//AAABAAEAAAAWAP//AAABAAEAAAAXAP//AAABAAEAAAAYAP//AAABAAEAAAAZAP//AAABAAEAAAAaAP//AAABAAEAAAAbAP//AAABAAEAAAAcAP//AAABAAEAAAAdAP//AAABAAEAAAAeAP//AAABAAEAAAAfAP//AAABAAEAAAAgAP//AAABAAEAAAAhAP//AAABAAEAAAAiAP//AAABAAEAAAAjAP//AAABAAEAAAAkAP//AAABAAEAAAAlAP//AAABAAEAAAAmAP//AAABAAEAAAAnAP//AAABAAEAAAAoAP//AAABAAEAAAApAP//AAABAAEAAAAqAP//AAABAAEAAAArAP//AAABAAEAAAAsAP//AAABAAEAAAAtAP//AAABAAEAAAAuAP//AAABAAEAAAAvAP//AAABAAEAAAAwAP//AAABAAEAAAAxAP//AAABAAEAAAAyAP//AAABAAEAAAAzAP//AAABAAEAAAA0AP//AAABAAEAAAA1AP//AAABAAEAAAA2AP//AAABAAEAAAA3AP//AAABAAEAAAA4AP//AAABAAEAAAA5AP//AAABAAEAAAA6AP//AAABAAEAAAA7AP//AAABAAEAAAA8AP//AAABAAEAAAA9AP//AAABAAEAAAA+AP//AAABAAEAAAA/AP//AAABAAEAAABAAP//AAABAAEAAABBAP//AAABAAEAAABCAP//AAABAAEAAABDAP//AAABAAEAAABEAP//AAABAAEAAABFAP//AAABAAEAAABGAP//AAABAAEAAABHAP//AAABAAEAAABIAP//AAABAAEAAABJAP//AAABAAEAAABKAP//AAABAAEAAAAAAAAAAAABAAEAAAAAAAEAAAABAAEAAAAAAAIAAAABAAEAAAAAAAMAAAABAAEAAAAAAAQAAAABAAEAAAAAAAUAAAABAAEAAAAAAAYAAAABAAEAAAAAAAcAAAABAAEAAAAAAAgAAAABAAEAAAAAAAkAAAABAAEAAAAAAAoAAAABAAEAAAAAAAsAAAABAAEAAAAAAAwAAAABAAEAAAAAAA0AAAABAAEAAAAAAA4AAAABAAEAAAAAAA8AAAABAAEAAAABAAAAAAABAAEAAAABAAEAAAABAAEAAAABAAIAAAABAAEAAAABAAMAAAABAAEAAAABAAQAAAABAAEAAAABAAUAAAABAAEAAAABAAYAAAABAAEAAAABAAcAAAABAAEAAAABAAgAAAABAAEAAAABAAkAAAABAAEAAAABAAoAAAABAAEAAAABAAsAAAABAAEAAAABAAwAAAABAAEAAAABAA0AAAABAAEAAAABAA4AAAABAAEAAAABAA8AAAABAAEAAAACAAAAAAABAAEAAAACAAEAAAABAAEAAAACAAIAAAABAAEAAAACAAMAAAABAAEAAAACAAQAAAABAAEAAAACAAUAAAABAAEAAAACAAYAAAABAAEAAAACAAcAAAABAAEAAAACAAgAAAABAAEAAAACAAkAAAABAAEAAAACAAoAAAABAAEAAAACAAsAAAABAAEAAAACAAwAAAABAAEAAAACAA0AAAABAAEAAAACAA4AAAABAAEAAAACAA8AAAABAAEAAAADAAAAAAABAAEAAAADAAEAAAABAAEAAAADAAIAAAABAAEAAAADAAMAAAABAAEAAAADAAQAAAABAAEAAAADAAUAAAABAAEAAAADAAYAAAABAAEAAAADAAcAAAABAAEAAAADAAgAAAABAAEAAAADAAkAAAABAAEAAAADAAoAAAABAAEAAAADAAsAAAABAAEAAAADAAwAAAABAAEAAAADAA0AAAABAAEAAAADAA4AAAABAAEAAAADAA8AAAABAAEAAAAEAAAAAAABAAEAAAAEAAEAAAABAAEAAAAEAAIAAAABAAEAAAAEAAMAAAABAAEAAAAEAAQAAAABAAEAAAAEAAUAAAABAAEAAAAEAAYAAAABAAEAAAAEAAcAAAABAAEAAAAEAAgAAAABAAEAAAAEAAkAAAABAAEAAAAEAAoAAAABAAEAAAAEAAsAAAABAAEAAAAEAAwAAAABAAEAAAAEAA0AAAABAAEAAAAEAA4AAAABAAEAAAAEAA8AAAABAAEAAAAFAAAAAAABAAEAAAAFAAEAAAABAAEAAAAFAAIAAAABAAEAAAAFAAMAAAABAAEAAAAFAAQAAAABAAEAAAAFAAUAAAABAAEAAAAFAAYAAAABAAEAAAAFAAcAAAABAAEAAAAFAAgAAAABAAEAAAAFAAkAAAABAAEAAAAFAAoAAAABAAEAAAAFAAsAAAABAAEAAAAFAAwAAAABAAEAAAAFAA0AAAABAAEAAAAFAA4AAAABAAEAAAAFAA8AAAABAAEAAAAGAAAAAAABAAEAAAAGAAEAAAABAAEAAAAGAAIAAAABAAEAAAAGAAMAAAABAAEAAAAGAAQAAAABAAEAAAAGAAUAAAABAAEAAAAGAAYAAAABAAEAAAAGAAcAAAABAAEAAAAGAAgAAAABAAEAAAAGAAkAAAABAAEAAAAGAAoAAAABAAEAAAAGAAsAAAABAAEAAAAGAAwAAAABAAEAAAAGAA0AAAABAAEAAAAGAA4AAAABAAEAAAAGAA8AAAABAAEAAAAHAAAAAAABAAEAAAAHAAEAAAABAAEAAAAHAAIAAAABAAEAAAAHAAMAAAABAAEAAAAHAAQAAAABAAEAAAAHAAUAAAABAAEAAAAHAAYAAAABAAEAAAAHAAcAAAABAAEAAAAHAAgAAAABAAEAAAAHAAkAAAABAAEAAAAHAAoAAAABAAEAAAAHAAsAAAABAAEAAAAHAAwAAAABAAEAAAAHAA0AAAABAAEAAAAHAA4AAAABAAEAAAAHAA8AAAABAAEAAAAIAAAAAAABAAEAAAAIAAEAAAABAAEAAAAIAAIAAAABAAEAAAAIAAMAAAABAAEAAAAIAAQAAAABAAEAAAAIAAUAAAABAAEAAAAIAAYAAAABAAEAAAAIAAcAAAABAAEAAAAIAAgAAAABAAEAAAAIAAkAAAABAAEAAAAIAAoAAAABAAEAAAAIAAsAAAABAAEAAAAIAAwAAAABAAEAAAAIAA0AAAABAAEAAAAIAA4AAAABAAEAAAAIAA8AAAABAAEAAAAJAAAAAAABAAEAAAAJAAEAAAABAAEAAAAJAAIAAAABAAEAAAAJAAMAAAABAAEAAAAJAAQAAAABAAEAAAAJAAUAAAABAAEAAAAJAAYAAAABAAEAAAAJAAcAAAABAAEAAAAJAAgAAAABAAEAAAAJAAkAAAABAAEAAAAJAAoAAAABAAEAAAAJAAsAAAABAAEAAAAJAAwAAAABAAEAAAAJAA0AAAABAAEAAAAJAA4AAAABAAEAAAAJAA8AAAABAAEAAAAKAAAAAAABAAEAAAAKAAEAAAABAAEAAAAKAAIAAAABAAEAAAAKAAMAAAABAAEAAAAKAAQAAAABAAEAAAAKAAUAAAABAAEAAAAKAAYAAAABAAEAAAAKAAcAAAABAAEAAAAKAAgAAAABAAEAAAAKAAkAAAABAAEAAAAKAAoAAAABAAEAAAAKAAsAAAABAAEAAAAKAAwAAAABAAEAAAAKAA0AAAABAAEAAAAKAA4AAAABAAEAAAAKAA8AAAABAAEAAAALAAAAAAABAAEAAAALAAEAAAABAAEAAAALAAIAAAABAAEAAAALAAMAAAABAAEAAAALAAQAAAABAAEAAAALAAUAAAABAAEAAAALAAYAAAABAAEAAAALAAcAAAABAAEAAAALAAgAAAABAAEAAAALAAkAAAABAAEAAAALAAoAAAABAAEAAAALAAsAAAABAAEAAAALAAwAAAABAAEAAAALAA0AAAABAAEAAAALAA4AAAABAAEAAAALAA8AAAABAAEAAAAMAAAAAAABAAEAAAAMAAEAAAABAAEAAAAMAAIAAAABAAEAAAAMAAMAAAABAAEAAAAMAAQAAAABAAEAAAAMAAUAAAABAAEAAAAMAAYAAAABAAEAAAAMAAcAAAABAAEAAAAMAAgAAAABAAEAAAAMAAkAAAABAAEAAAAMAAoAAAABAAEAAAAMAAsAAAABAAEAAAAMAAwAAAABAAEAAAAMAA0AAAABAAEAAAAMAA4AAAABAAEAAAAMAA8AAAABAAEAAAANAA0AAAABAAEAAAANAA4AAAABAAEAAAAOAA0AAAABAAEAAAAOAA4AAAABAAEAAAAPAA0AAAABAAEAAAAPAA4AAAABAAEAAAAQAA0AAAABAAEAAAAQAA4AAAABAAEAAAARAA0AAAABAAEAAAARAA4AAAABAAEAAAASAA0AAAABAAEAAAASAA4AAAABAAEAAAATAA0AAAABAAEAAAATAA4AAAABAAEAAAAUAA0AAAABAAEAAAAUAA4AAAABAAEAAAAVAA0AAAABAAEAAAAVAA4AAAABAAEAAAAWAA0AAAABAAEAAAAWAA4AAAABAAEAAAAXAA0AAAABAAEAAAAXAA4AAAABAAEAAAAYAA0AAAABAAEAAAAYAA4AAAABAAEAAAAZAA0AAAABAAEAAAAZAA4AAAABAAEAAAAaAA0AAAABAAEAAAAaAA4AAAABAAEAAAAbAA0AAAABAAEAAAAbAA4AAAABAAEAAAAcAA0AAAABAAEAAAAcAA4AAAABAAEAAAAdAA0AAAABAAEAAAAdAA4AAAABAAEAAAAeAA0AAAABAAEAAAAeAA4AAAABAAEAAAANAAsAAAABAAEAAAANAAwAAAABAAEAAAAOAAsAAAABAAEAAAAOAAwAAAABAAEAAAAPAAsAAAABAAEAAAAPAAwAAAABAAEAAAAQAAsAAAABAAEAAAAQAAwAAAABAAEAAAARAAsAAAABAAEAAAARAAwAAAABAAEAAAASAAsAAAABAAEAAAASAAwAAAABAAEAAAATAAsAAAABAAEAAAATAAwAAAABAAEAAAAUAAsAAAABAAEAAAAUAAwAAAABAAEAAAAVAAsAAAABAAEAAAAVAAwAAAABAAEAAAAWAAsAAAABAAEAAAAWAAwAAAABAAEAAAAXAAsAAAABAAEAAAAXAAwAAAABAAEAAAAYAAsAAAABAAEAAAAYAAwAAAABAAEAAAAZAAsAAAABAAEAAAAZAAwAAAABAAEAAAAaAAsAAAABAAEAAAAaAAwAAAABAAEAAAAbAAsAAAABAAEAAAAbAAwAAAABAAEAAAAcAAsAAAABAAEAAAAcAAwAAAABAAEAAAAdAAsAAAABAAEAAAAdAAwAAAABAAEAAAAdAAoAAAABAAEAAAAdAAcAAAABAAEAAAAdAAYAAAABAAEAAAAiAA0AAAABAAEAAAAiAA4AAAABAAEAAAAjAA0AAAABAAEAAAAjAA4AAAABAAEAAAAjAAgAAAABAAEAAAAjAAkAAAABAAEAAAAjAAoAAAABAAEAAAAjAAsAAAABAAEAAAAjAAwAAAABAAEAAAAkAAgAAAABAAEAAAAkAAkAAAABAAEAAAAlAAgAAAABAAEAAAAlAAkAAAABAAEAAAAmAAgAAAABAAEAAAAmAAkAAAABAAEAAAAnAAgAAAABAAEAAAAnAAkAAAABAAEAAAAoAAgAAAABAAEAAAAoAAkAAAABAAEAAAApAAgAAAABAAEAAAApAAkAAAABAAEAAAAqAAgAAAABAAEAAAAqAAkAAAABAAEAAAArAAgAAAABAAEAAAArAAkAAAABAAEAAAAsAAgAAAABAAEAAAAsAAkAAAABAAEAAAAtAAgAAAABAAEAAAAtAAkAAAABAAEAAAAdAAAAAAABAAEAAAAdAAEAAAABAAEAAAAdAAIAAAABAAEAAAAdAAMAAAABAAEAAAAdAAQAAAABAAEAAAAdAAUAAAABAAEAAAAeAAAAAAABAAEAAAAeAAEAAAABAAEAAAAeAAIAAAABAAEAAAAeAAMAAAABAAEAAAAeAAQAAAABAAEAAAAeAAUAAAABAAEAAAAeAAYAAAABAAEAAAAeAAcAAAABAAEAAAAfAAAAAAABAAEAAAAfAAEAAAABAAEAAAAfAAIAAAABAAEAAAAfAAMAAAABAAEAAAAfAAQAAAABAAEAAAAfAAUAAAABAAEAAAAfAAYAAAABAAEAAAAfAAcAAAABAAEAAAAgAAAAAAABAAEAAAAgAAEAAAABAAEAAAAgAAIAAAABAAEAAAAgAAMAAAABAAEAAAAgAAQAAAABAAEAAAAgAAUAAAABAAEAAAAgAAYAAAABAAEAAAAgAAcAAAABAAEAAAAhAAAAAAABAAEAAAAhAAEAAAABAAEAAAAhAAIAAAABAAEAAAAhAAMAAAABAAEAAAAhAAQAAAABAAEAAAAhAAUAAAABAAEAAAAhAAYAAAABAAEAAAAhAAcAAAABAAEAAAAiAAAAAAABAAEAAAAiAAEAAAABAAEAAAAiAAIAAAABAAEAAAAiAAMAAAABAAEAAAAiAAQAAAABAAEAAAAiAAUAAAABAAEAAAAiAAYAAAABAAEAAAAiAAcAAAABAAEAAAAjAAAAAAABAAEAAAAjAAEAAAABAAEAAAAjAAIAAAABAAEAAAAjAAMAAAABAAEAAAAjAAQAAAABAAEAAAAjAAUAAAABAAEAAAAjAAYAAAABAAEAAAAjAAcAAAABAAEAAAAkAAAAAAABAAEAAAAkAAEAAAABAAEAAAAkAAIAAAABAAEAAAAkAAMAAAABAAEAAAAkAAQAAAABAAEAAAAkAAUAAAABAAEAAAAkAAYAAAABAAEAAAAkAAcAAAABAAEAAAAlAAAAAAABAAEAAAAlAAEAAAABAAEAAAAlAAIAAAABAAEAAAAlAAMAAAABAAEAAAAlAAQAAAABAAEAAAAlAAUAAAABAAEAAAAlAAYAAAABAAEAAAAlAAcAAAABAAEAAAAmAAAAAAABAAEAAAAmAAEAAAABAAEAAAAmAAIAAAABAAEAAAAmAAMAAAABAAEAAAAmAAQAAAABAAEAAAAmAAUAAAABAAEAAAAmAAYAAAABAAEAAAAmAAcAAAABAAEAAAAnAAAAAAABAAEAAAAnAAEAAAABAAEAAAAnAAIAAAABAAEAAAAnAAMAAAABAAEAAAAnAAQAAAABAAEAAAAnAAUAAAABAAEAAAAnAAYAAAABAAEAAAAnAAcAAAABAAEAAAAoAAAAAAABAAEAAAAoAAEAAAABAAEAAAAoAAIAAAABAAEAAAAoAAMAAAABAAEAAAAoAAQAAAABAAEAAAAoAAUAAAABAAEAAAAoAAYAAAABAAEAAAAoAAcAAAABAAEAAAApAAAAAAABAAEAAAApAAEAAAABAAEAAAApAAIAAAABAAEAAAApAAMAAAABAAEAAAApAAQAAAABAAEAAAApAAUAAAABAAEAAAApAAYAAAABAAEAAAApAAcAAAABAAEAAAAqAAAAAAABAAEAAAAqAAEAAAABAAEAAAAqAAIAAAABAAEAAAAqAAMAAAABAAEAAAAqAAQAAAABAAEAAAAqAAUAAAABAAEAAAAqAAYAAAABAAEAAAAqAAcAAAABAAEAAAArAAAAAAABAAEAAAArAAEAAAABAAEAAAArAAIAAAABAAEAAAArAAMAAAABAAEAAAArAAQAAAABAAEAAAArAAUAAAABAAEAAAArAAYAAAABAAEAAAArAAcAAAABAAEAAAAsAAAAAAABAAEAAAAsAAEAAAABAAEAAAAsAAIAAAABAAEAAAAsAAMAAAABAAEAAAAsAAQAAAABAAEAAAAsAAUAAAABAAEAAAAsAAYAAAABAAEAAAAsAAcAAAABAAEAAAAtAAAAAAABAAEAAAAtAAEAAAABAAEAAAAtAAIAAAABAAEAAAAtAAMAAAABAAEAAAAtAAQAAAABAAEAAAAtAAUAAAABAAEAAAAtAAYAAAABAAEAAAAtAAcAAAABAAEAAAASAAAAAAABAAEAAAASAAEAAAABAAEAAAASAAIAAAABAAEAAAASAAMAAAABAAEAAAASAAQAAAABAAEAAAASAAUAAAABAAEAAAATAAAAAAABAAEAAAATAAEAAAABAAEAAAATAAIAAAABAAEAAAATAAMAAAABAAEAAAATAAQAAAABAAEAAAATAAUAAAABAAEAAAAUAAAAAAABAAEAAAAUAAEAAAABAAEAAAAUAAIAAAABAAEAAAAUAAMAAAABAAEAAAAUAAQAAAABAAEAAAAUAAUAAAABAAEAAAAVAAAAAAABAAEAAAAVAAEAAAABAAEAAAAVAAIAAAABAAEAAAAVAAMAAAABAAEAAAAVAAQAAAABAAEAAAAVAAUAAAABAAEAAAAWAAAAAAABAAEAAAAWAAEAAAABAAEAAAAWAAIAAAABAAEAAAAWAAMAAAABAAEAAAAWAAQAAAABAAEAAAAWAAUAAAABAAEAAAAXAAAAAAABAAEAAAAXAAEAAAABAAEAAAAXAAIAAAABAAEAAAAXAAMAAAABAAEAAAAXAAQAAAABAAEAAAAXAAUAAAABAAEAAAAYAAAAAAABAAEAAAAYAAEAAAABAAEAAAAYAAIAAAABAAEAAAAYAAMAAAABAAEAAAAYAAQAAAABAAEAAAAYAAUAAAABAAEAAAAZAAAAAAABAAEAAAAZAAEAAAABAAEAAAAZAAIAAAABAAEAAAAZAAMAAAABAAEAAAAZAAQAAAABAAEAAAAZAAUAAAABAAEAAAAaAAAAAAABAAEAAAAaAAEAAAABAAEAAAAaAAIAAAABAAEAAAAaAAMAAAABAAEAAAAaAAQAAAABAAEAAAAaAAUAAAABAAEAAAAbAAAAAAABAAEAAAAbAAEAAAABAAEAAAAbAAIAAAABAAEAAAAbAAMAAAABAAEAAAAbAAQAAAABAAEAAAAbAAUAAAABAAEAAAAcAAAAAAABAAEAAAAcAAEAAAABAAEAAAAcAAIAAAABAAEAAAAcAAMAAAABAAEAAAAcAAQAAAABAAEAAAAcAAUAAAABAAEAAAAOAAEAAAABAAEAAAAOAAIAAAABAAEAAAAOAAMAAAABAAEAAAAOAAQAAAABAAEAAAAOAAUAAAABAAEAAAANAAAAAAABAAEAAAANAAEAAAABAAEAAAANAAIAAAABAAEAAAANAAMAAAABAAEAAAANAAQAAAABAAEAAAANAAUAAAABAAEAAAAOAAAAAAABAAEAAAAPAAAAAAABAAEAAAAPAAEAAAABAAEAAAAPAAIAAAABAAEAAAAPAAMAAAABAAEAAAAQAAAAAAABAAEAAAAQAAEAAAABAAEAAAAQAAIAAAABAAEAAAAQAAMAAAABAAEAAAARAAAAAAABAAEAAAARAAEAAAABAAEAAAARAAIAAAABAAEAAAARAAMAAAABAAEAAAAPAAQAAAABAAEAAAAQAAQAAAABAAEAAAARAAQAAAABAAEAAABAAAMAAAABAAEAAABAAAQAAAABAAEAAABAAAUAAAABAAEAAABAAAYAAAABAAEAAABBAAMAAAABAAEAAABBAAQAAAABAAEAAABBAAUAAAABAAEAAABBAAYAAAABAAEAAABBAAAAAAABAAEAAABBAAEAAAABAAEAAABBAAIAAAABAAEAAABCAAAAAAABAAEAAABCAAEAAAABAAEAAABCAAIAAAABAAEAAABCAAMAAAABAAEAAABHAAAAAAABAAEAAABHAAEAAAABAAEAAABHAAIAAAABAAEAAABHAAMAAAABAAEAAABHAAQAAAABAAEAAABHAAUAAAABAAEAAABIAAAAAAABAAEAAABIAAEAAAABAAEAAABIAAIAAAABAAEAAABIAAMAAAABAAEAAABIAAQAAAABAAEAAABIAAUAAAABAAEAAABJAAAAAAABAAEAAABJAAEAAAABAAEAAABJAAIAAAABAAEAAABJAAMAAAABAAEAAABJAAQAAAABAAEAAABJAAUAAAABAAEAAABKAAAAAAABAAEAAABKAAEAAAABAAEAAABKAAIAAAABAAEAAABKAAMAAAABAAEAAABKAAQAAAABAAEAAABKAAUAAAABAAEAAABGAAUAAAABAAEAAAA9ABUAAAABAAEAAAA9ABYAAAABAAEAAAA9ABcAAAABAAEAAAA9ABgAAAABAAEAAAA9ABkAAAABAAEAAAA9ABoAAAABAAEAAAA9ABsAAAABAAEAAAA9ABwAAAABAAEAAAA+ABUAAAABAAEAAAA+ABYAAAABAAEAAAA+ABcAAAABAAEAAAA+ABgAAAABAAEAAAA+ABkAAAABAAEAAAA+ABoAAAABAAEAAAA+ABsAAAABAAEAAAA+ABwAAAABAAEAAAA/ABUAAAABAAEAAAA/ABYAAAABAAEAAAA/ABcAAAABAAEAAAA/ABgAAAABAAEAAAA/ABkAAAABAAEAAAA/ABoAAAABAAEAAAA/ABsAAAABAAEAAAA/ABwAAAABAAEAAABAABUAAAABAAEAAABAABYAAAABAAEAAABAABcAAAABAAEAAABAABgAAAABAAEAAABAABkAAAABAAEAAABAABoAAAABAAEAAABAABsAAAABAAEAAABAABwAAAABAAEAAABBABUAAAABAAEAAABBABYAAAABAAEAAABBABcAAAABAAEAAABBABgAAAABAAEAAABBABkAAAABAAEAAABBABoAAAABAAEAAABBABsAAAABAAEAAABBABwAAAABAAEAAABCABUAAAABAAEAAABCABYAAAABAAEAAABCABcAAAABAAEAAABCABgAAAABAAEAAABCABkAAAABAAEAAABCABoAAAABAAEAAABCABsAAAABAAEAAABCABwAAAABAAEAAAA8ABYAAAABAAEAAAA8ABcAAAABAAEAAAA8ABgAAAABAAEAAAA8ABkAAAABAAEAAAA8ABoAAAABAAEAAAA8ABsAAAABAAEAAAA0ABUAAAABAAEAAAA0ABYAAAABAAEAAAA0ABcAAAABAAEAAAA0ABgAAAABAAEAAAA0ABkAAAABAAEAAAA0ABoAAAABAAEAAAA0ABsAAAABAAEAAAAXAA8AAAABAAEAAAAYAA8AAAABAAEAAAAZAA8AAAABAAEAAAAaAA8AAAABAAEAAAAbAA8AAAABAAEAAAAcAA8AAAABAAEAAAAAABYAAAABAAEAAAABABYAAAABAAEAAAACABYAAAABAAEAAAADABYAAAABAAEAAAAEABYAAAABAAEAAAAFABYAAAABAAEAAAAGABYAAAABAAEAAAAHABYAAAABAAEAAAAIABYAAAABAAEAAAAJABYAAAABAAEAAAAKABYAAAABAAEAAAALABYAAAABAAEAAAAMABYAAAABAAEAAAANABYAAAABAAEAAAAOABYAAAABAAEAAAAPABYAAAABAAEAAAAQABYAAAABAAEAAAARABYAAAABAAEAAAARABcAAAABAAEAAAARABgAAAABAAEAAAARABkAAAABAAEAAAARABoAAAABAAEAAAARABsAAAABAAEAAAARABwAAAABAAEAAAASABgAAAABAAEAAAASABkAAAABAAEAAAASABoAAAABAAEAAAASABsAAAABAAEAAAASABwAAAABAAEAAAATABgAAAABAAEAAAATABkAAAABAAEAAAATABoAAAABAAEAAAATABsAAAABAAEAAAATABwAAAABAAEAAAAUABgAAAABAAEAAAAUABkAAAABAAEAAAAUABoAAAABAAEAAAAUABsAAAABAAEAAAAUABwAAAABAAEAAAAVABgAAAABAAEAAAAVABkAAAABAAEAAAAVABoAAAABAAEAAAAVABsAAAABAAEAAAAVABwAAAABAAEAAAAWABgAAAABAAEAAAAWABkAAAABAAEAAAAWABoAAAABAAEAAAAWABsAAAABAAEAAAAWABwAAAABAAEAAAAXABgAAAABAAEAAAAXABkAAAABAAEAAAAXABoAAAABAAEAAAAXABsAAAABAAEAAAAXABwAAAABAAEAAAAZABgAAAABAAEAAAAZABkAAAABAAEAAAAZABoAAAABAAEAAAAZABsAAAABAAEAAAAZABwAAAABAAEAAAAaABgAAAABAAEAAAAaABkAAAABAAEAAAAaABoAAAABAAEAAAAaABsAAAABAAEAAAAaABwAAAABAAEAAAAYABgAAAABAAEAAAAYABkAAAABAAEAAAAYABoAAAABAAEAAAAYABsAAAABAAEAAAAcAB0AAAABAAEAAAAdAB0AAAABAAEAAAAeAB0AAAABAAEAAAAbABkAAAABAAEAAAAbABoAAAABAAEAAAAbABsAAAABAAEAAAAmABkAAAABAAEAAAAmABoAAAABAAEAAAAmABsAAAABAAEAAAAcABkAAAABAAEAAAAdABkAAAABAAEAAAAeABkAAAABAAEAAAAfABkAAAABAAEAAAAgABkAAAABAAEAAAAhABkAAAABAAEAAAAiABkAAAABAAEAAAAjABkAAAABAAEAAAAkABkAAAABAAEAAAAlABkAAAABAAEAAAAcABoAAAABAAEAAAAdABoAAAABAAEAAAAeABoAAAABAAEAAAAjABoAAAABAAEAAAAkABoAAAABAAEAAAAlABoAAAABAAEAAAAjAB0AAAABAAEAAAAkAB0AAAABAAEAAAAlAB0AAAABAAEAAAAlABsAAAABAAEAAAAlABwAAAABAAEAAAAcABsAAAABAAEAAAAcABwAAAABAAEAAAAgABsAAAABAAEAAAAhABsAAAABAAEAAAAnABgAAAABAAEAAAAnABkAAAABAAEAAAAnABoAAAABAAEAAAAnABsAAAABAAEAAAAnABwAAAABAAEAAAAoABgAAAABAAEAAAAoABkAAAABAAEAAAAoABoAAAABAAEAAAAoABsAAAABAAEAAAAoABwAAAABAAEAAAApABgAAAABAAEAAAApABkAAAABAAEAAAApABoAAAABAAEAAAApABsAAAABAAEAAAApABwAAAABAAEAAAAqABgAAAABAAEAAAAqABkAAAABAAEAAAAqABoAAAABAAEAAAAqABsAAAABAAEAAAAqABwAAAABAAEAAAArABgAAAABAAEAAAArABkAAAABAAEAAAArABoAAAABAAEAAAArABsAAAABAAEAAAArABwAAAABAAEAAAAsABgAAAABAAEAAAAsABkAAAABAAEAAAAsABoAAAABAAEAAAAsABsAAAABAAEAAAAsABwAAAABAAEAAAAtABgAAAABAAEAAAAtABkAAAABAAEAAAAtABoAAAABAAEAAAAtABsAAAABAAEAAAAtABwAAAABAAEAAAAuABgAAAABAAEAAAAuABkAAAABAAEAAAAuABoAAAABAAEAAAAuABsAAAABAAEAAAAuABwAAAABAAEAAAAvABgAAAABAAEAAAAvABkAAAABAAEAAAAvABoAAAABAAEAAAAvABsAAAABAAEAAAAvABwAAAABAAEAAAAwABgAAAABAAEAAAAwABkAAAABAAEAAAAwABoAAAABAAEAAAAwABsAAAABAAEAAAAwABwAAAABAAEAAAAxABgAAAABAAEAAAAyABcAAAABAAEAAAAyABgAAAABAAEAAAAyABkAAAABAAEAAAAyABoAAAABAAEAAAAyABsAAAABAAEAAAAyABwAAAABAAEAAAAyAB0AAAABAAEAAAAyACEAAAABAAEAAAAxABMAAAABAAEAAAAxABQAAAABAAEAAAAvABQAAAABAAEAAAAvABUAAAABAAEAAAAwABQAAAABAAEAAAAwABUAAAABAAEAAAAyABMAAAABAAEAAAAzABMAAAABAAEAAAA0ABMAAAABAAEAAAA1ABMAAAABAAEAAAA7ABMAAAABAAEAAAA8ABMAAAABAAEAAAA9ABMAAAABAAEAAAA+ABMAAAABAAEAAAA/ABMAAAABAAEAAABAABMAAAABAAEAAABBABMAAAABAAEAAABCABMAAAABAAEAAABGABMAAAABAAEAAABHABMAAAABAAEAAABGABUAAAABAAEAAABGABYAAAABAAEAAABGABcAAAABAAEAAABGABgAAAABAAEAAABGABkAAAABAAEAAABGABoAAAABAAEAAABGABsAAAABAAEAAABGABwAAAABAAEAAABGAB0AAAABAAEAAABGAB4AAAABAAEAAAA8ACkAAAABAAEAAAA9ACkAAAABAAEAAAA+ACkAAAABAAEAAAA/ACkAAAABAAEAAABAACkAAAABAAEAAABBACkAAAABAAEAAABCACkAAAABAAEAAABDACkAAAABAAEAAABEACkAAAABAAEAAABFACkAAAABAAEAAABGACkAAAABAAEAAABHACkAAAABAAEAAABIACkAAAABAAEAAABJACkAAAABAAEAAABKACkAAAABAAEAAAA8AC8AAAABAAEAAAA8ADAAAAABAAEAAAA8ADEAAAABAAEAAAA8ADIAAAABAAEAAAA8ADMAAAABAAEAAAA8ADQAAAABAAEAAAA9AC8AAAABAAEAAAA+AC8AAAABAAEAAAA/AC8AAAABAAEAAABAAC8AAAABAAEAAABBAC8AAAABAAEAAABCAC8AAAABAAEAAABDAC8AAAABAAEAAABEAC8AAAABAAEAAABFAC8AAAABAAEAAABGAC8AAAABAAEAAABHAC8AAAABAAEAAABIAC8AAAABAAEAAABJAC8AAAABAAEAAABKAC8AAAABAAEAAAA+AD0AAAABAAEAAAA2ADoAAAABAAEAAAA2ADsAAAABAAEAAAA2ADwAAAABAAEAAAA2AD0AAAABAAEAAAA3ADoAAAABAAEAAAA3ADsAAAABAAEAAAA3ADwAAAABAAEAAAA3AD0AAAABAAEAAAA4ADoAAAABAAEAAAA4ADsAAAABAAEAAAA4ADwAAAABAAEAAAA4AD0AAAABAAEAAAA5ADoAAAABAAEAAAA5ADsAAAABAAEAAAA5ADwAAAABAAEAAAA5AD0AAAABAAEAAAA6ADoAAAABAAEAAAA6ADsAAAABAAEAAAA6ADwAAAABAAEAAAA6AD0AAAABAAEAAAA7ADoAAAABAAEAAAA7ADsAAAABAAEAAAA7ADwAAAABAAEAAAA7AD0AAAABAAEAAAA8ADoAAAABAAEAAAA8ADsAAAABAAEAAAA8ADwAAAABAAEAAAA8AD0AAAABAAEAAAA9ADoAAAABAAEAAAA9ADsAAAABAAEAAAA9ADwAAAABAAEAAAA9AD0AAAABAAEAAAA+ADoAAAABAAEAAAA+ADsAAAABAAEAAAA+ADwAAAABAAEAAAA8ADUAAAABAAEAAAA8ADYAAAABAAEAAAA8ADcAAAABAAEAAAA8ADgAAAABAAEAAAA8ADkAAAABAAEAAAA9ADAAAAABAAEAAAA9ADEAAAABAAEAAAA9ADIAAAABAAEAAAA9ADMAAAABAAEAAAA9ADQAAAABAAEAAAA9ADUAAAABAAEAAAA9ADYAAAABAAEAAAA9ADcAAAABAAEAAAA9ADgAAAABAAEAAAA9ADkAAAABAAEAAAA+ADAAAAABAAEAAAA+ADEAAAABAAEAAAA+ADIAAAABAAEAAAA+ADMAAAABAAEAAAA+ADQAAAABAAEAAAA+ADUAAAABAAEAAAA+ADYAAAABAAEAAAA+ADcAAAABAAEAAAA+ADgAAAABAAEAAAA+ADkAAAABAAEAAAAsADMAAAABAAEAAAAtADMAAAABAAEAAAAuADMAAAABAAEAAAAvADMAAAABAAEAAAAwADMAAAABAAEAAAAxADMAAAABAAEAAAAyADMAAAABAAEAAAAzADMAAAABAAEAAAA0ADMAAAABAAEAAAA1ADMAAAABAAEAAAA2ADMAAAABAAEAAAAsAC8AAAABAAEAAAAsADAAAAABAAEAAAAsADEAAAABAAEAAAAsADIAAAABAAEAAAA2AC8AAAABAAEAAAA2ADAAAAABAAEAAAA2ADEAAAABAAEAAAA2ADIAAAABAAEAAAAtAC8AAAABAAEAAAAuAC8AAAABAAEAAAAvAC8AAAABAAEAAAAwAC8AAAABAAEAAAAxAC8AAAABAAEAAAAyAC8AAAABAAEAAAAzAC8AAAABAAEAAAA0AC8AAAABAAEAAAA1AC8AAAABAAEAAAAuADAAAAABAAEAAAAuADEAAAABAAEAAAAvADAAAAABAAEAAAAvADEAAAABAAEAAAAwADAAAAABAAEAAAAwADEAAAABAAEAAAAwADIAAAABAAEAAAAxADAAAAABAAEAAAAxADEAAAABAAEAAAAxADIAAAABAAEAAAAtADIAAAABAAEAAAAuADIAAAABAAEAAAAvADIAAAABAAEAAAAyADIAAAABAAEAAAAzADIAAAABAAEAAAA0ADIAAAABAAEAAAA1ADIAAAABAAEAAAAtADAAAAABAAEAAAAtADEAAAABAAEAAAA1ADAAAAABAAEAAAA1ADEAAAABAAEAAAAzADAAAAABAAEAAAAzADEAAAABAAEAAAA0ADAAAAABAAEAAAA0ADEAAAABAAEAAAArADAAAAABAAEAAAArADEAAAABAAEAAAArADIAAAABAAEAAAArADMAAAABAAEAAAAnAC8AAAABAAEAAAAnADAAAAABAAEAAAAoAC8AAAABAAEAAAAoADAAAAABAAEAAAApAC8AAAABAAEAAAApADAAAAABAAEAAAAqAC8AAAABAAEAAAAqADAAAAABAAEAAAArAC8AAAABAAEAAAAnADEAAAABAAEAAAAnADIAAAABAAEAAAAnADMAAAABAAEAAAAoADEAAAABAAEAAAApADEAAAABAAEAAAAqADEAAAABAAEAAAAqADIAAAABAAEAAAAsADkAAAABAAEAAAAtADkAAAABAAEAAAAuADkAAAABAAEAAAAvADkAAAABAAEAAAAwADkAAAABAAEAAAAxADkAAAABAAEAAAAyADkAAAABAAEAAAAzADkAAAABAAEAAAA0ADkAAAABAAEAAAA1ADkAAAABAAEAAAArADgAAAABAAEAAAAXADkAAAABAAEAAAAbADgAAAABAAEAAAAbADkAAAABAAEAAAAQADkAAAABAAEAAAAMADkAAAABAAEAAAARADkAAAABAAEAAAARADoAAAABAAEAAAASADkAAAABAAEAAAASADoAAAABAAEAAAATADkAAAABAAEAAAATADoAAAABAAEAAAAUADkAAAABAAEAAAAUADoAAAABAAEAAAAVADkAAAABAAEAAAAVADoAAAABAAEAAAAWADkAAAABAAEAAAAWADoAAAABAAEAAAA8ACAAAAABAAEAAAA8ACEAAAABAAEAAAA8ACIAAAABAAEAAAA8ACMAAAABAAEAAAA8ACQAAAABAAEAAAA8ACUAAAABAAEAAAA8ACYAAAABAAEAAAA8ACcAAAABAAEAAAA8ACgAAAABAAEAAAA9ACAAAAABAAEAAAA9ACEAAAABAAEAAAA9ACIAAAABAAEAAAA9ACMAAAABAAEAAAA9ACQAAAABAAEAAAA9ACUAAAABAAEAAAA9ACYAAAABAAEAAAA9ACcAAAABAAEAAAA9ACgAAAABAAEAAAA+ACAAAAABAAEAAAA+ACEAAAABAAEAAAA+ACIAAAABAAEAAAA+ACMAAAABAAEAAAA+ACQAAAABAAEAAAA+ACUAAAABAAEAAAA+ACYAAAABAAEAAAA+ACcAAAABAAEAAAA+ACgAAAABAAEAAAA/ACAAAAABAAEAAAA/ACEAAAABAAEAAAA/ACIAAAABAAEAAAA/ACMAAAABAAEAAAA/ACQAAAABAAEAAAA/ACUAAAABAAEAAAA/ACYAAAABAAEAAAA/ACcAAAABAAEAAAA/ACgAAAABAAEAAABAACAAAAABAAEAAABAACEAAAABAAEAAABAACIAAAABAAEAAABAACMAAAABAAEAAABAACQAAAABAAEAAABAACUAAAABAAEAAABAACYAAAABAAEAAABAACcAAAABAAEAAABAACgAAAABAAEAAABBACAAAAABAAEAAABBACEAAAABAAEAAABBACIAAAABAAEAAABBACMAAAABAAEAAABBACQAAAABAAEAAABBACUAAAABAAEAAABBACYAAAABAAEAAABBACcAAAABAAEAAABBACgAAAABAAEAAABCACAAAAABAAEAAABCACEAAAABAAEAAABCACIAAAABAAEAAABCACMAAAABAAEAAABCACQAAAABAAEAAABCACUAAAABAAEAAABCACYAAAABAAEAAABCACcAAAABAAEAAABCACgAAAABAAEAAABDACAAAAABAAEAAABDACEAAAABAAEAAABDACIAAAABAAEAAABDACMAAAABAAEAAABDACQAAAABAAEAAABDACUAAAABAAEAAABDACYAAAABAAEAAABDACcAAAABAAEAAABDACgAAAABAAEAAABEACAAAAABAAEAAABEACEAAAABAAEAAABEACIAAAABAAEAAABEACMAAAABAAEAAABEACQAAAABAAEAAABEACUAAAABAAEAAABEACYAAAABAAEAAABEACcAAAABAAEAAABEACgAAAABAAEAAABFACAAAAABAAEAAABFACEAAAABAAEAAABFACIAAAABAAEAAABFACMAAAABAAEAAABFACQAAAABAAEAAABFACUAAAABAAEAAABFACYAAAABAAEAAABFACcAAAABAAEAAABFACgAAAABAAEAAABGACAAAAABAAEAAABGACEAAAABAAEAAABGACIAAAABAAEAAABGACMAAAABAAEAAABGACQAAAABAAEAAABGACUAAAABAAEAAABGACYAAAABAAEAAABGACcAAAABAAEAAABGACgAAAABAAEAAABHACAAAAABAAEAAABHACEAAAABAAEAAABHACIAAAABAAEAAABHACMAAAABAAEAAABHACQAAAABAAEAAABHACUAAAABAAEAAABHACYAAAABAAEAAABHACcAAAABAAEAAABHACgAAAABAAEAAABIACAAAAABAAEAAABIACEAAAABAAEAAABIACIAAAABAAEAAABIACMAAAABAAEAAABIACQAAAABAAEAAABIACUAAAABAAEAAABIACYAAAABAAEAAABIACcAAAABAAEAAABIACgAAAABAAEAAABJACAAAAABAAEAAABJACEAAAABAAEAAABJACIAAAABAAEAAABJACMAAAABAAEAAABJACQAAAABAAEAAABJACUAAAABAAEAAABJACYAAAABAAEAAABJACcAAAABAAEAAABJACgAAAABAAEAAABKACAAAAABAAEAAABKACEAAAABAAEAAABKACIAAAABAAEAAABKACMAAAABAAEAAABKACQAAAABAAEAAABKACUAAAABAAEAAABKACYAAAABAAEAAABKACcAAAABAAEAAABKACgAAAABAAEAAAA8AB8AAAABAAEAAAA9AB8AAAABAAEAAAA+AB8AAAABAAEAAAA/AB8AAAABAAEAAABAAB8AAAABAAEAAABBAB8AAAABAAEAAABCAB8AAAABAAEAAABDAB8AAAABAAEAAABEAB8AAAABAAEAAABFAB8AAAABAAEAAABGAB8AAAABAAEAAABHAB8AAAABAAEAAABIAB8AAAABAAEAAABJAB8AAAABAAEAAABKAB8AAAABAAEAAABHAB0AAAABAAEAAABHAB4AAAABAAEAAABIAB0AAAABAAEAAABIAB4AAAABAAEAAABJAB0AAAABAAEAAABJAB4AAAABAAEAAABKAB0AAAABAAEAAABKAB4AAAABAAEAAABHABQAAAABAAEAAABHABUAAAABAAEAAABHABYAAAABAAEAAABHABcAAAABAAEAAABHABgAAAABAAEAAABHABkAAAABAAEAAABHABoAAAABAAEAAABHABsAAAABAAEAAABHABwAAAABAAEAAABIABQAAAABAAEAAABIABUAAAABAAEAAABIABYAAAABAAEAAABIABcAAAABAAEAAABIABgAAAABAAEAAABIABkAAAABAAEAAABIABoAAAABAAEAAABIABsAAAABAAEAAABIABwAAAABAAEAAABJABQAAAABAAEAAABJABUAAAABAAEAAABJABYAAAABAAEAAABJABcAAAABAAEAAABJABgAAAABAAEAAABJABkAAAABAAEAAABJABoAAAABAAEAAABJABsAAAABAAEAAABJABwAAAABAAEAAABKABQAAAABAAEAAABKABUAAAABAAEAAABKABYAAAABAAEAAABKABcAAAABAAEAAABKABgAAAABAAEAAABKABkAAAABAAEAAABKABoAAAABAAEAAABKABsAAAABAAEAAABKABwAAAABAAEAAABGABQAAAABAAEAAABHAAwAAAABAAEAAABHAA0AAAABAAEAAABHAA4AAAABAAEAAABHAA8AAAABAAEAAABHABAAAAABAAEAAABHABEAAAABAAEAAABHABIAAAABAAEAAABIAAwAAAABAAEAAABIAA0AAAABAAEAAABIAA4AAAABAAEAAABIAA8AAAABAAEAAABIABAAAAABAAEAAABIABEAAAABAAEAAABIABIAAAABAAEAAABIABMAAAABAAEAAABJAAwAAAABAAEAAABJAA0AAAABAAEAAABJAA4AAAABAAEAAABJAA8AAAABAAEAAABJABAAAAABAAEAAABJABEAAAABAAEAAABJABIAAAABAAEAAABJABMAAAABAAEAAABKAAwAAAABAAEAAABKAA0AAAABAAEAAABKAA4AAAABAAEAAABKAA8AAAABAAEAAABKABAAAAABAAEAAABKABEAAAABAAEAAABKABIAAAABAAEAAABKABMAAAABAAEAAABGAA0AAAABAAEAAABBAA8AAAABAAEAAABBABAAAAABAAEAAABBABEAAAABAAEAAABBABIAAAABAAEAAABCAA8AAAABAAEAAABCABAAAAABAAEAAABCABEAAAABAAEAAABCABIAAAABAAEAAABAAA0AAAABAAEAAABAAA4AAAABAAEAAABBAA0AAAABAAEAAABBAA4AAAABAAEAAAAlAC8AAAABAAEAAAAlADAAAAABAAEAAAAlADEAAAABAAEAAAAlADIAAAABAAEAAAAlADMAAAABAAEAAAAmAC8AAAABAAEAAAAmADAAAAABAAEAAAAmADEAAAABAAEAAAAmADIAAAABAAEAAAAmADMAAAABAAEAAAAiAC8AAAABAAEAAAAiADAAAAABAAEAAAAiADEAAAABAAEAAAAiADIAAAABAAEAAAAiADMAAAABAAEAAAAjAC8AAAABAAEAAAAjADAAAAABAAEAAAAjADEAAAABAAEAAAAjADIAAAABAAEAAAAjADMAAAABAAEAAAAkAC8AAAABAAEAAAAkADAAAAABAAEAAAAkADEAAAABAAEAAAAkADIAAAABAAEAAAAdAC8AAAABAAEAAAAdADAAAAABAAEAAAAdADEAAAABAAEAAAAdADIAAAABAAEAAAAdADMAAAABAAEAAAAeAC8AAAABAAEAAAAeADAAAAABAAEAAAAeADEAAAABAAEAAAAeADIAAAABAAEAAAAeADMAAAABAAEAAAAfAC8AAAABAAEAAAAfADAAAAABAAEAAAAfADEAAAABAAEAAAAfADIAAAABAAEAAAAfADMAAAABAAEAAAAgAC8AAAABAAEAAAAgADAAAAABAAEAAAAgADEAAAABAAEAAAAgADIAAAABAAEAAAAgADMAAAABAAEAAAAhAC8AAAABAAEAAAAhADAAAAABAAEAAAAhADEAAAABAAEAAAAhADIAAAABAAEAAAAhADMAAAABAAEAAAAbAC8AAAABAAEAAAAbADAAAAABAAEAAAAbADEAAAABAAEAAAAbADIAAAABAAEAAAAbADMAAAABAAEAAAAbADQAAAABAAEAAAAcAC8AAAABAAEAAAAcADMAAAABAAEAAAArACIAAAABAAEAAAArACMAAAABAAEAAAArACQAAAABAAEAAAArACUAAAABAAEAAAArACYAAAABAAEAAAArACcAAAABAAEAAAArACgAAAABAAEAAAArACkAAAABAAEAAAArACoAAAABAAEAAAAsACgAAAABAAEAAAArAC4AAAABAAEAAAAcADkAAAABAAEAAAAdADkAAAABAAEAAAAeADkAAAABAAEAAAAfADkAAAABAAEAAAAgADkAAAABAAEAAAAhADkAAAABAAEAAAAiADkAAAABAAEAAAAjADkAAAABAAEAAAAkADkAAAABAAEAAAAlADkAAAABAAEAAAAmADkAAAABAAEAAAAnADkAAAABAAEAAAAbADoAAAABAAEAAAAbADsAAAABAAEAAAAbAD8AAAABAAEAAAAbAEAAAAABAAEAAAAbAEEAAAABAAEAAAAbAEIAAAABAAEAAAAbAEMAAAABAAEAAAAbAEQAAAABAAEAAAAbAEUAAAABAAEAAAAcAEMAAAABAAEAAAAcAEAAAAABAAEAAAAdAD8AAAABAAEAAAAdAEAAAAABAAEAAAAdAEEAAAABAAEAAAAdAEIAAAABAAEAAAAdAEMAAAABAAEAAAAdAEQAAAABAAEAAAAdAEUAAAABAAEAAAAeAD8AAAABAAEAAAAeAEAAAAABAAEAAAAeAEEAAAABAAEAAAAeAEIAAAABAAEAAAAeAEMAAAABAAEAAAAeAEQAAAABAAEAAAAeAEUAAAABAAEAAAAfAD8AAAABAAEAAAAfAEAAAAABAAEAAAAfAEEAAAABAAEAAAAfAEIAAAABAAEAAAAfAEMAAAABAAEAAAAfAEQAAAABAAEAAAAfAEUAAAABAAEAAAAgAD8AAAABAAEAAAAgAEAAAAABAAEAAAAgAEEAAAABAAEAAAAgAEIAAAABAAEAAAAgAEMAAAABAAEAAAAgAEQAAAABAAEAAAAgAEUAAAABAAEAAAAhAD0AAAABAAEAAAAiAD0AAAABAAEAAAAjAD0AAAABAAEAAAAkAD0AAAABAAEAAAAlAD0AAAABAAEAAAAmAD0AAAABAAEAAAAnAD0AAAABAAEAAAAoAD0AAAABAAEAAAApAD0AAAABAAEAAAAqAD0AAAABAAEAAAArAD0AAAABAAEAAAAsAD0AAAABAAEAAAAtAD0AAAABAAEAAAAuAD0AAAABAAEAAAAvAD0AAAABAAEAAAAwAD0AAAABAAEAAAAxAD0AAAABAAEAAAAyAD0AAAABAAEAAAAzAD0AAAABAAEAAAA0AD0AAAABAAEAAAA1AD0AAAABAAEAAAAAAEAAAAABAAEAAAAAAEEAAAABAAEAAAAAAEIAAAABAAEAAAAAAEMAAAABAAEAAAAAAEQAAAABAAEAAAAAAEUAAAABAAEAAAABAEAAAAABAAEAAAABAEEAAAABAAEAAAABAEIAAAABAAEAAAABAEMAAAABAAEAAAABAEQAAAABAAEAAAABAEUAAAABAAEAAAACAEAAAAABAAEAAAACAEEAAAABAAEAAAACAEIAAAABAAEAAAACAEMAAAABAAEAAAACAEQAAAABAAEAAAACAEUAAAABAAEAAAADAEAAAAABAAEAAAADAEEAAAABAAEAAAADAEIAAAABAAEAAAADAEMAAAABAAEAAAADAEQAAAABAAEAAAADAEUAAAABAAEAAAAEAEAAAAABAAEAAAAEAEEAAAABAAEAAAAEAEIAAAABAAEAAAAEAEMAAAABAAEAAAAEAEQAAAABAAEAAAAEAEUAAAABAAEAAAAFAEAAAAABAAEAAAAFAEEAAAABAAEAAAAFAEIAAAABAAEAAAAFAEMAAAABAAEAAAAFAEQAAAABAAEAAAAFAEUAAAABAAEAAAAGAEAAAAABAAEAAAAGAEEAAAABAAEAAAAGAEIAAAABAAEAAAAGAEMAAAABAAEAAAAGAEQAAAABAAEAAAAGAEUAAAABAAEAAAAHAEAAAAABAAEAAAAHAEEAAAABAAEAAAAHAEIAAAABAAEAAAAHAEMAAAABAAEAAAAHAEQAAAABAAEAAAAHAEUAAAABAAEAAAAIAEAAAAABAAEAAAAIAEEAAAABAAEAAAAIAEIAAAABAAEAAAAIAEMAAAABAAEAAAAIAEQAAAABAAEAAAAIAEUAAAABAAEAAAAJAEAAAAABAAEAAAAJAEEAAAABAAEAAAAJAEIAAAABAAEAAAAJAEMAAAABAAEAAAAJAEQAAAABAAEAAAAJAEUAAAABAAEAAAAKADkAAAABAAEAAAAKADoAAAABAAEAAAAKADsAAAABAAEAAAAKADwAAAABAAEAAAAKAD0AAAABAAEAAAAKAD4AAAABAAEAAAAKAD8AAAABAAEAAAAKAEAAAAABAAEAAAAKAEEAAAABAAEAAAAKAEIAAAABAAEAAAAKAEMAAAABAAEAAAAKAEQAAAABAAEAAAAKAEUAAAABAAEAAAALADkAAAABAAEAAAALADoAAAABAAEAAAALADsAAAABAAEAAAALADwAAAABAAEAAAALAD0AAAABAAEAAAALAD4AAAABAAEAAAALAD8AAAABAAEAAAALAEAAAAABAAEAAAALAEEAAAABAAEAAAALAEIAAAABAAEAAAALAEMAAAABAAEAAAALAEQAAAABAAEAAAALAEUAAAABAAEAAAAMADoAAAABAAEAAAAMADsAAAABAAEAAAAMADwAAAABAAEAAAAMAD0AAAABAAEAAAAMAD4AAAABAAEAAAAMAD8AAAABAAEAAAAMAEAAAAABAAEAAAAMAEEAAAABAAEAAAAMAEIAAAABAAEAAAAMAEMAAAABAAEAAAAMAEQAAAABAAEAAAAMAEUAAAABAAEAAAAKABwAAAABAAEAAAAKAB0AAAABAAEAAAAKAB4AAAABAAEAAAAKAB8AAAABAAEAAAAKACAAAAABAAEAAAAKACEAAAABAAEAAAAKACIAAAABAAEAAAAKACMAAAABAAEAAAAKACQAAAABAAEAAAAKACUAAAABAAEAAAAKACYAAAABAAEAAAAKACcAAAABAAEAAAAKACgAAAABAAEAAAAKACkAAAABAAEAAAAKACoAAAABAAEAAAAKACsAAAABAAEAAAAKACwAAAABAAEAAAAKAC0AAAABAAEAAAAKAC4AAAABAAEAAAAKAC8AAAABAAEAAAAKADAAAAABAAEAAAAKADEAAAABAAEAAAAKADIAAAABAAEAAAAKADMAAAABAAEAAAAKADQAAAABAAEAAAAKADUAAAABAAEAAAAKADYAAAABAAEAAAAKADcAAAABAAEAAAAKADgAAAABAAEAAAALABwAAAABAAEAAAALAB0AAAABAAEAAAALAB4AAAABAAEAAAALAB8AAAABAAEAAAALACAAAAABAAEAAAALACEAAAABAAEAAAALACIAAAABAAEAAAALACMAAAABAAEAAAALACQAAAABAAEAAAALACUAAAABAAEAAAALACYAAAABAAEAAAALACcAAAABAAEAAAALACgAAAABAAEAAAALACkAAAABAAEAAAALACoAAAABAAEAAAALACsAAAABAAEAAAALACwAAAABAAEAAAALAC0AAAABAAEAAAALAC4AAAABAAEAAAALAC8AAAABAAEAAAALADAAAAABAAEAAAALADEAAAABAAEAAAALADIAAAABAAEAAAALADMAAAABAAEAAAALADQAAAABAAEAAAALADUAAAABAAEAAAALADYAAAABAAEAAAALADcAAAABAAEAAAALADgAAAABAAEAAAAMABwAAAABAAEAAAAMAB0AAAABAAEAAAAMAB4AAAABAAEAAAAMAB8AAAABAAEAAAAMACAAAAABAAEAAAAMACEAAAABAAEAAAAMACIAAAABAAEAAAAMACMAAAABAAEAAAAMACQAAAABAAEAAAAMACUAAAABAAEAAAAMACYAAAABAAEAAAAMACcAAAABAAEAAAAMACgAAAABAAEAAAAMACkAAAABAAEAAAAMACoAAAABAAEAAAAMACsAAAABAAEAAAAMACwAAAABAAEAAAAMAC0AAAABAAEAAAAMAC4AAAABAAEAAAAMAC8AAAABAAEAAAAMADAAAAABAAEAAAAMADEAAAABAAEAAAAMADIAAAABAAEAAAAMADMAAAABAAEAAAAMADQAAAABAAEAAAAMADUAAAABAAEAAAAMADYAAAABAAEAAAAMADcAAAABAAEAAAAMADgAAAABAAEAAAAGABwAAAABAAEAAAAGAB0AAAABAAEAAAAGAB4AAAABAAEAAAAGAB8AAAABAAEAAAAGACAAAAABAAEAAAAGACEAAAABAAEAAAAGACIAAAABAAEAAAAGACMAAAABAAEAAAAGACQAAAABAAEAAAAGACUAAAABAAEAAAAGACYAAAABAAEAAAAGACcAAAABAAEAAAAGACgAAAABAAEAAAAGACkAAAABAAEAAAAGACoAAAABAAEAAAAGACsAAAABAAEAAAAGACwAAAABAAEAAAAGAC0AAAABAAEAAAAGAC4AAAABAAEAAAAGAC8AAAABAAEAAAAGADAAAAABAAEAAAAGADEAAAABAAEAAAAGADIAAAABAAEAAAAGADMAAAABAAEAAAAGADQAAAABAAEAAAAGADUAAAABAAEAAAAGADYAAAABAAEAAAAGADcAAAABAAEAAAAGADgAAAABAAEAAAAGADkAAAABAAEAAAAGADoAAAABAAEAAAAGADsAAAABAAEAAAAGADwAAAABAAEAAAAGAD0AAAABAAEAAAAGAD4AAAABAAEAAAAGAD8AAAABAAEAAAAHABwAAAABAAEAAAAHAB0AAAABAAEAAAAHAB4AAAABAAEAAAAHAB8AAAABAAEAAAAHACAAAAABAAEAAAAHACEAAAABAAEAAAAHACIAAAABAAEAAAAHACMAAAABAAEAAAAHACQAAAABAAEAAAAHACUAAAABAAEAAAAHACYAAAABAAEAAAAHACcAAAABAAEAAAAHACgAAAABAAEAAAAHACkAAAABAAEAAAAHACoAAAABAAEAAAAHACsAAAABAAEAAAAHACwAAAABAAEAAAAHAC0AAAABAAEAAAAHAC4AAAABAAEAAAAHAC8AAAABAAEAAAAHADAAAAABAAEAAAAHADEAAAABAAEAAAAHADIAAAABAAEAAAAHADMAAAABAAEAAAAHADQAAAABAAEAAAAHADUAAAABAAEAAAAHADYAAAABAAEAAAAHADcAAAABAAEAAAAHADgAAAABAAEAAAAHADkAAAABAAEAAAAHADoAAAABAAEAAAAHADsAAAABAAEAAAAHADwAAAABAAEAAAAHAD0AAAABAAEAAAAHAD4AAAABAAEAAAAHAD8AAAABAAEAAAAIABwAAAABAAEAAAAIAB0AAAABAAEAAAAIAB4AAAABAAEAAAAIAB8AAAABAAEAAAAIACAAAAABAAEAAAAIACEAAAABAAEAAAAIACIAAAABAAEAAAAIACMAAAABAAEAAAAIACQAAAABAAEAAAAIACUAAAABAAEAAAAIACYAAAABAAEAAAAIACcAAAABAAEAAAAIACgAAAABAAEAAAAIACkAAAABAAEAAAAIACoAAAABAAEAAAAIACsAAAABAAEAAAAIACwAAAABAAEAAAAIAC0AAAABAAEAAAAIAC4AAAABAAEAAAAIAC8AAAABAAEAAAAIADAAAAABAAEAAAAIADEAAAABAAEAAAAIADIAAAABAAEAAAAIADMAAAABAAEAAAAIADQAAAABAAEAAAAIADUAAAABAAEAAAAIADYAAAABAAEAAAAIADcAAAABAAEAAAAIADgAAAABAAEAAAAIADkAAAABAAEAAAAIADoAAAABAAEAAAAIADsAAAABAAEAAAAIADwAAAABAAEAAAAIAD0AAAABAAEAAAAIAD4AAAABAAEAAAAIAD8AAAABAAEAAAAJABwAAAABAAEAAAAJAB0AAAABAAEAAAAJAB4AAAABAAEAAAAJAB8AAAABAAEAAAAJACAAAAABAAEAAAAJACEAAAABAAEAAAAJACIAAAABAAEAAAAJACMAAAABAAEAAAAJACQAAAABAAEAAAAJACUAAAABAAEAAAAJACYAAAABAAEAAAAJACcAAAABAAEAAAAJACgAAAABAAEAAAAJACkAAAABAAEAAAAJACoAAAABAAEAAAAJACsAAAABAAEAAAAJACwAAAABAAEAAAAJAC0AAAABAAEAAAAJAC4AAAABAAEAAAAJAC8AAAABAAEAAAAJADAAAAABAAEAAAAJADEAAAABAAEAAAAJADIAAAABAAEAAAAJADMAAAABAAEAAAAJADQAAAABAAEAAAAJADUAAAABAAEAAAAJADYAAAABAAEAAAAJADcAAAABAAEAAAAJADgAAAABAAEAAAAJADkAAAABAAEAAAAJADoAAAABAAEAAAAJADsAAAABAAEAAAAJADwAAAABAAEAAAAJAD0AAAABAAEAAAAJAD4AAAABAAEAAAAJAD8AAAABAAEAAAAAABwAAAABAAEAAAAAAB0AAAABAAEAAAAAAB4AAAABAAEAAAAAAB8AAAABAAEAAAAAACAAAAABAAEAAAABABwAAAABAAEAAAABAB0AAAABAAEAAAABAB4AAAABAAEAAAABAB8AAAABAAEAAAABACAAAAABAAEAAAACABwAAAABAAEAAAACAB0AAAABAAEAAAACAB4AAAABAAEAAAACAB8AAAABAAEAAAACACAAAAABAAEAAAADABwAAAABAAEAAAADAB0AAAABAAEAAAADAB4AAAABAAEAAAADAB8AAAABAAEAAAADACAAAAABAAEAAAAEABwAAAABAAEAAAAEAB0AAAABAAEAAAAEAB4AAAABAAEAAAAEAB8AAAABAAEAAAAEACAAAAABAAEAAAAFABwAAAABAAEAAAAFAB0AAAABAAEAAAAFAB4AAAABAAEAAAAFAB8AAAABAAEAAAAFACAAAAABAAEAAAABACUAAAABAAEAAAACACUAAAABAAEAAAACACYAAAABAAEAAAADACoAAAABAAEAAAAEACoAAAABAAEAAAAAACwAAAABAAEAAAABADIAAAABAAEAAAAAADEAAAABAAEAAAABADEAAAABAAEAAAACADYAAAABAAEAAAADADYAAAABAAEAAAAEADUAAAABAAEAAAACAD4AAAABAAEAAAABAD0AAAABAAEAAAACAD0AAAABAAEAAABIAEUAAAABAAEAAABJAEUAAAABAAEAAAAlAEMAAAABAAEAAAAmAEMAAAABAAEAAAAjAEQAAAABAAEAAAAnAEQAAAABAAEAAAAqAEIAAAABAAEAAAArAEIAAAABAAEAAAAsAEEAAAABAAEAAAAvAEIAAAABAAEAAAAyAEMAAAABAAEAAAAzAEMAAAABAAEAAAA0AEIAAAABAAEAAAA3AEQAAAABAAEAAAA8AEQAAAABAAEAAABAAEMAAAABAAEAAAA7AEMAAAABAAEAAAA8AEMAAAABAAEAAABIAEEAAAABAAEAAABFAEAAAAABAAEAAABKADwAAAABAAEAAABIAD0AAAABAAEAAABJAD0AAAABAAEAAABDAD4AAAABAAEAAABEAD4AAAABAAEAAABBADoAAAABAAEAAABFADoAAAABAAEAAABKADcAAAABAAEAAABJADMAAAABAAEAAABDADMAAAABAAEAAAA/ADAAAAABAAEAAABAADAAAAABAAEAAABBADAAAAABAAEAAABCADAAAAABAAEAAABDADAAAAABAAEAAABEADAAAAABAAEAAABFADAAAAABAAEAAABGADAAAAABAAEAAABHADAAAAABAAEAAABIADAAAAABAAEAAABJADAAAAABAAEAAABKADAAAAABAAEAAAA/ADEAAAABAAEAAAA/ADIAAAABAAEAAAA/ADMAAAABAAEAAAA/ADQAAAABAAEAAAA/ADUAAAABAAEAAAA/ADYAAAABAAEAAAA/ADcAAAABAAEAAAA/ADgAAAABAAEAAAA/ADkAAAABAAEAAAA/ADoAAAABAAEAAAA/ADsAAAABAAEAAAA/ADwAAAABAAEAAAA/AD0AAAABAAEAAAA/AD4AAAABAAEAAAAhAD4AAAABAAEAAAAiAD4AAAABAAEAAAAjAD4AAAABAAEAAAAkAD4AAAABAAEAAAAlAD4AAAABAAEAAAAmAD4AAAABAAEAAAAnAD4AAAABAAEAAAAoAD4AAAABAAEAAAApAD4AAAABAAEAAAAqAD4AAAABAAEAAAArAD4AAAABAAEAAAAsAD4AAAABAAEAAAAtAD4AAAABAAEAAAAuAD4AAAABAAEAAAAvAD4AAAABAAEAAAAwAD4AAAABAAEAAAAxAD4AAAABAAEAAAAyAD4AAAABAAEAAAAzAD4AAAABAAEAAAA0AD4AAAABAAEAAAA1AD4AAAABAAEAAAA2AD4AAAABAAEAAAA3AD4AAAABAAEAAAA4AD4AAAABAAEAAAA5AD4AAAABAAEAAAA6AD4AAAABAAEAAAA7AD4AAAABAAEAAAA8AD4AAAABAAEAAAA9AD4AAAABAAEAAAA+AD4AAAABAAEAAAAhAD8AAAABAAEAAAAhAEAAAAABAAEAAAAhAEEAAAABAAEAAAAhAEIAAAABAAEAAAAhAEMAAAABAAEAAAAhAEQAAAABAAEAAAAhAEUAAAABAAEAAAA2ADkAAAABAAEAAAA3ADkAAAABAAEAAAA4ADkAAAABAAEAAAA5ADkAAAABAAEAAAA6ADkAAAABAAEAAAA7ADkAAAABAAEAAAAyADAAAAABAAEAAAAyADEAAAABAAEAAAAWADMAAAABAAEAAAAXADMAAAABAAEAAAAYADMAAAABAAEAAAAZADMAAAABAAEAAAAZAC8AAAABAAEAAAAZADAAAAABAAEAAAAZADEAAAABAAEAAAAZADIAAAABAAEAAAAWAC8AAAABAAEAAAAXAC8AAAABAAEAAAAYAC8AAAABAAEAAAAVAC8AAAABAAEAAAAVADAAAAABAAEAAAAVADEAAAABAAEAAAAVADIAAAABAAEAAAAVADMAAAABAAEAAAARADAAAAABAAEAAAARADEAAAABAAEAAAARADIAAAABAAEAAAARADMAAAABAAEAAAASADAAAAABAAEAAAASADEAAAABAAEAAAASADIAAAABAAEAAAATADAAAAABAAEAAAATADEAAAABAAEAAAATADIAAAABAAEAAAAUAC8AAAABAAEAAAAUADAAAAABAAEAAAAUADEAAAABAAEAAAAUADIAAAABAAEAAAARAC8AAAABAAEAAAASAC8AAAABAAEAAAATAC8AAAABAAEAAAARADQAAAABAAEAAAAmACEAAAABAAEAAAAcACIAAAABAAEAAAAdACIAAAABAAEAAAAeACIAAAABAAEAAAAfACIAAAABAAEAAAAgACIAAAABAAEAAAAhACIAAAABAAEAAAAiACIAAAABAAEAAAAjACIAAAABAAEAAAAkACIAAAABAAEAAAAlACIAAAABAAEAAAAbACEAAAABAAEAAAAYACIAAAABAAEAAAAZACIAAAABAAEAAAAaACIAAAABAAEAAAASACIAAAABAAEAAAATACIAAAABAAEAAAAUACIAAAABAAEAAAARACIAAAABAAEAAAARACMAAAABAAEAAAARACQAAAABAAEAAAARACEAAAABAAEAAAASACMAAAABAAEAAAASACQAAAABAAEAAAASACgAAAABAAEAAAASACkAAAABAAEAAAARACgAAAABAAEAAAARACkAAAABAAEAAAARACcAAAABAAEAAAASACoAAAABAAEAAAATACoAAAABAAEAAAAUACoAAAABAAEAAAAYACUAAAABAAEAAAAYACYAAAABAAEAAAAYACcAAAABAAEAAAAYACgAAAABAAEAAAAYACkAAAABAAEAAAAZACUAAAABAAEAAAAZACYAAAABAAEAAAAZACcAAAABAAEAAAAZACgAAAABAAEAAAAZACkAAAABAAEAAAAbACUAAAABAAEAAAAbACYAAAABAAEAAAAbACcAAAABAAEAAAAbACgAAAABAAEAAAAbACkAAAABAAEAAAAcACUAAAABAAEAAAAcACYAAAABAAEAAAAcACcAAAABAAEAAAAcACgAAAABAAEAAAAcACkAAAABAAEAAAAaACUAAAABAAEAAAAaACYAAAABAAEAAAAaACcAAAABAAEAAAAaACgAAAABAAEAAAAcACMAAAABAAEAAAAcACQAAAABAAEAAAAdACMAAAABAAEAAAAdACQAAAABAAEAAAAdACUAAAABAAEAAAAdACYAAAABAAEAAAAdACcAAAABAAEAAAAdACgAAAABAAEAAAAeACMAAAABAAEAAAAeACQAAAABAAEAAAAeACUAAAABAAEAAAAeACYAAAABAAEAAAAeACcAAAABAAEAAAAeACgAAAABAAEAAAAfACMAAAABAAEAAAAfACQAAAABAAEAAAAfACUAAAABAAEAAAAfACYAAAABAAEAAAAfACcAAAABAAEAAAAfACgAAAABAAEAAAAjACMAAAABAAEAAAAjACQAAAABAAEAAAAjACUAAAABAAEAAAAjACYAAAABAAEAAAAjACcAAAABAAEAAAAjACgAAAABAAEAAAAjACkAAAABAAEAAAAkACMAAAABAAEAAAAkACQAAAABAAEAAAAkACUAAAABAAEAAAAkACYAAAABAAEAAAAkACcAAAABAAEAAAAkACgAAAABAAEAAAAkACkAAAABAAEAAAAlACMAAAABAAEAAAAlACQAAAABAAEAAAAlACUAAAABAAEAAAAlACYAAAABAAEAAAAlACcAAAABAAEAAAAlACgAAAABAAEAAAAgACMAAAABAAEAAAAgACQAAAABAAEAAAAgACUAAAABAAEAAAAgACYAAAABAAEAAAAgACcAAAABAAEAAAAhACMAAAABAAEAAAAhACQAAAABAAEAAAAhACUAAAABAAEAAAAhACYAAAABAAEAAAAhACcAAAABAAEAAAAiACMAAAABAAEAAAAiACQAAAABAAEAAAAiACUAAAABAAEAAAAiACYAAAABAAEAAAAiACcAAAABAAEAAAAgACgAAAABAAEAAAAgACkAAAABAAEAAAAiACgAAAABAAEAAAAiACkAAAABAAEAAAA2ACgAAAABAAEAAAAzACkAAAABAAEAAAAyACkAAAABAAEAAAAwACkAAAABAAEAAAAtACgAAAABAAEAAAAuACgAAAABAAEAAAAvACgAAAABAAEAAAAwACgAAAABAAEAAAAxACgAAAABAAEAAAAyACgAAAABAAEAAAAzACgAAAABAAEAAAA0ACgAAAABAAEAAAA1ACgAAAABAAEAAAAtACIAAAABAAEAAAAtACMAAAABAAEAAAAtACQAAAABAAEAAAAtACUAAAABAAEAAAAtACYAAAABAAEAAAAtACcAAAABAAEAAAAuACIAAAABAAEAAAAuACMAAAABAAEAAAAuACQAAAABAAEAAAAuACUAAAABAAEAAAAuACYAAAABAAEAAAAuACcAAAABAAEAAAAvACIAAAABAAEAAAAvACMAAAABAAEAAAAvACQAAAABAAEAAAAvACUAAAABAAEAAAAvACYAAAABAAEAAAAvACcAAAABAAEAAAAwACIAAAABAAEAAAAwACMAAAABAAEAAAAwACQAAAABAAEAAAAwACUAAAABAAEAAAAwACYAAAABAAEAAAAwACcAAAABAAEAAAAxACIAAAABAAEAAAAxACMAAAABAAEAAAAxACQAAAABAAEAAAAxACUAAAABAAEAAAAxACYAAAABAAEAAAAxACcAAAABAAEAAAAyACIAAAABAAEAAAAyACMAAAABAAEAAAAyACQAAAABAAEAAAAyACUAAAABAAEAAAAyACYAAAABAAEAAAAyACcAAAABAAEAAAAzACIAAAABAAEAAAAzACMAAAABAAEAAAAzACQAAAABAAEAAAAzACUAAAABAAEAAAAzACYAAAABAAEAAAAzACcAAAABAAEAAAA0ACIAAAABAAEAAAA0ACMAAAABAAEAAAA0ACQAAAABAAEAAAA0ACUAAAABAAEAAAA0ACYAAAABAAEAAAA0ACcAAAABAAEAAAA1ACIAAAABAAEAAAA1ACMAAAABAAEAAAA1ACQAAAABAAEAAAA1ACUAAAABAAEAAAA1ACYAAAABAAEAAAA1ACcAAAABAAEAAAAsACIAAAABAAEAAAAVAAYAAAABAAEAAAAPAAgAAAABAAEAAAANAAgAAAABAAEAAAAOAAgAAAABAAEAAABDADkAAAABAAEAAABEADkAAAABAAEAAABIADgAAAABAAEAAABJADgAAAABAAEAAABGADUAAAABAAEAAABHADUAAAABAAEAAAAmACIAAAABAAEAAAA1AAEAAAABAAEAAAA1AAIAAAABAAEAAAA1AAMAAAABAAEAAAA1AAQAAAABAAEAAAA1AAUAAAABAAEAAAA1AAYAAAABAAEAAAA1AAcAAAABAAEAAAA1AAgAAAABAAEAAAA1AAkAAAABAAEAAAA1AAoAAAABAAEAAAA1AAsAAAABAAEAAAA1AAwAAAABAAEAAAA1AA0AAAABAAEAAAA1AA4AAAABAAEAAAA1AA8AAAABAAEAAAA1ABAAAAABAAEAAAA1ABEAAAABAAEAAAA1ABIAAAABAAEAAAA1AAAAAAABAAEAAAA1ABQAAAABAAEAAAA7ABQAAAABAAEAAAA7AAAAAAABAAEAAAA7AAEAAAABAAEAAAA7AAIAAAABAAEAAAA7AAMAAAABAAEAAAA7AAQAAAABAAEAAAA7AAUAAAABAAEAAAA7AAYAAAABAAEAAAA7AAcAAAABAAEAAAA7AAgAAAABAAEAAAA7AAkAAAABAAEAAAA7AAoAAAABAAEAAAA7AAsAAAABAAEAAAA7AAwAAAABAAEAAAA7AA0AAAABAAEAAAA7AA4AAAABAAEAAAA7AA8AAAABAAEAAAA7ABAAAAABAAEAAAA7ABEAAAABAAEAAAA7ABIAAAABAAEAAAASADMAAAABAAEAAAAUADMAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_bbts1")
+
+[node name="Water" type="TileMapLayer" parent="Tiles" unique_id=731939587]
+z_index = 4095
+tile_map_data = PackedByteArray("AAAAAA8AAAABAAQAAAAAABAAAAABAAQAAAAAABEAAAABAAQAAAAAABIAAAABAAQAAAAAABMAAAABAAQAAAAAABQAAAABAAQAAAAAABUAAAABAAQAAAABAA8AAAABAAQAAAABABAAAAABAAQAAAABABEAAAABAAQAAAABABIAAAABAAQAAAABABMAAAABAAQAAAABABQAAAABAAQAAAABABUAAAABAAQAAAACAA8AAAABAAQAAAACABAAAAABAAQAAAACABEAAAABAAQAAAACABIAAAABAAQAAAACABMAAAABAAQAAAACABQAAAABAAQAAAACABUAAAABAAQAAAADAA8AAAABAAQAAAADABAAAAABAAQAAAADABEAAAABAAQAAAADABIAAAABAAQAAAADABMAAAABAAQAAAADABQAAAABAAQAAAADABUAAAABAAQAAAAEAA8AAAABAAQAAAAEABAAAAABAAQAAAAEABEAAAABAAQAAAAEABIAAAABAAQAAAAEABMAAAABAAQAAAAEABQAAAABAAQAAAAEABUAAAABAAQAAAAFAA8AAAABAAQAAAAFABAAAAABAAQAAAAFABEAAAABAAQAAAAFABIAAAABAAQAAAAFABMAAAABAAQAAAAFABQAAAABAAQAAAAFABUAAAABAAQAAAAGAA8AAAABAAQAAAAGABAAAAABAAQAAAAGABEAAAABAAQAAAAGABIAAAABAAQAAAAGABMAAAABAAQAAAAGABQAAAABAAQAAAAGABUAAAABAAQAAAAHAA8AAAABAAQAAAAHABAAAAABAAQAAAAHABEAAAABAAQAAAAHABIAAAABAAQAAAAHABMAAAABAAQAAAAHABQAAAABAAQAAAAHABUAAAABAAQAAAAIAA8AAAABAAQAAAAIABAAAAABAAQAAAAIABEAAAABAAQAAAAIABIAAAABAAQAAAAIABMAAAABAAQAAAAIABQAAAABAAQAAAAIABUAAAABAAQAAAAJAA8AAAABAAQAAAAJABAAAAABAAQAAAAJABEAAAABAAQAAAAJABIAAAABAAQAAAAJABMAAAABAAQAAAAJABQAAAABAAQAAAAJABUAAAABAAQAAAAKAA8AAAABAAQAAAAKABAAAAABAAQAAAAKABEAAAABAAQAAAAKABIAAAABAAQAAAAKABMAAAABAAQAAAAKABQAAAABAAQAAAAKABUAAAABAAQAAAALAA8AAAABAAQAAAALABAAAAABAAQAAAALABEAAAABAAQAAAALABIAAAABAAQAAAALABMAAAABAAQAAAALABQAAAABAAQAAAALABUAAAABAAQAAAAMAA8AAAABAAQAAAAMABAAAAABAAQAAAAMABEAAAABAAQAAAAMABIAAAABAAQAAAAMABMAAAABAAQAAAAMABQAAAABAAQAAAAMABUAAAABAAQAAAANAA8AAAABAAQAAAANABAAAAABAAQAAAANABEAAAABAAQAAAANABIAAAABAAQAAAANABMAAAABAAQAAAANABQAAAABAAQAAAANABUAAAABAAQAAAAOAA8AAAABAAQAAAAOABAAAAABAAQAAAAOABEAAAABAAQAAAAOABIAAAABAAQAAAAOABMAAAABAAQAAAAOABQAAAABAAQAAAAOABUAAAABAAQAAAAPAA8AAAABAAQAAAAPABAAAAABAAQAAAAPABEAAAABAAQAAAAPABIAAAABAAQAAAAPABMAAAABAAQAAAAPABQAAAABAAQAAAAPABUAAAABAAQAAAAQAA8AAAABAAQAAAAQABAAAAABAAQAAAAQABEAAAABAAQAAAAQABIAAAABAAQAAAAQABMAAAABAAQAAAAQABQAAAABAAQAAAAQABUAAAABAAQAAAARAA8AAAABAAQAAAARABAAAAABAAQAAAARABEAAAABAAQAAAARABIAAAABAAQAAAARABMAAAABAAQAAAARABQAAAABAAQAAAARABUAAAABAAQAAAASAA8AAAABAAQAAAASABAAAAABAAQAAAASABEAAAABAAQAAAASABIAAAABAAQAAAASABMAAAABAAQAAAASABQAAAABAAQAAAASABUAAAABAAQAAAATAA8AAAABAAQAAAATABAAAAABAAQAAAATABEAAAABAAQAAAATABIAAAABAAQAAAATABMAAAABAAQAAAATABQAAAABAAQAAAATABUAAAABAAQAAAAUAA8AAAABAAQAAAAUABAAAAABAAQAAAAUABEAAAABAAQAAAAUABIAAAABAAQAAAAUABMAAAABAAQAAAAUABQAAAABAAQAAAAUABUAAAABAAQAAAAVAA8AAAABAAQAAAAVABAAAAABAAQAAAAVABEAAAABAAQAAAAVABIAAAABAAQAAAAVABMAAAABAAQAAAAVABQAAAABAAQAAAAVABUAAAABAAQAAAAWAA8AAAABAAQAAAAWABAAAAABAAQAAAAWABEAAAABAAQAAAAWABIAAAABAAQAAAAWABMAAAABAAQAAAAWABQAAAABAAQAAAAWABUAAAABAAQAAAAXABAAAAABAAQAAAAXABEAAAABAAQAAAAXABIAAAABAAQAAAAXABMAAAABAAQAAAAXABQAAAABAAQAAAAXABUAAAABAAQAAAAXABYAAAABAAQAAAAXABcAAAABAAQAAAAYABAAAAABAAQAAAAYABEAAAABAAQAAAAYABIAAAABAAQAAAAYABMAAAABAAQAAAAYABQAAAABAAQAAAAYABUAAAABAAQAAAAYABYAAAABAAQAAAAYABcAAAABAAQAAAAZABAAAAABAAQAAAAZABEAAAABAAQAAAAZABIAAAABAAQAAAAZABMAAAABAAQAAAAZABQAAAABAAQAAAAZABUAAAABAAQAAAAZABYAAAABAAQAAAAZABcAAAABAAQAAAAUABYAAAABAAQAAAAUABcAAAABAAQAAAAVABYAAAABAAQAAAAVABcAAAABAAQAAAAWABYAAAABAAQAAAAWABcAAAABAAQAAAASABYAAAABAAQAAAATABYAAAABAAQAAAAaABEAAAABAAQAAAAaABIAAAABAAQAAAAaABMAAAABAAQAAAAaABQAAAABAAQAAAAaABUAAAABAAQAAAAaABYAAAABAAQAAAAaABcAAAABAAQAAAAaABgAAAABAAQAAAAbABEAAAABAAQAAAAbABIAAAABAAQAAAAbABMAAAABAAQAAAAbABQAAAABAAQAAAAbABUAAAABAAQAAAAbABYAAAABAAQAAAAbABcAAAABAAQAAAAbABgAAAABAAQAAAAcABEAAAABAAQAAAAcABIAAAABAAQAAAAcABMAAAABAAQAAAAcABQAAAABAAQAAAAcABUAAAABAAQAAAAcABYAAAABAAQAAAAcABcAAAABAAQAAAAcABgAAAABAAQAAAAdABIAAAABAAQAAAAdABMAAAABAAQAAAAdABQAAAABAAQAAAAdABUAAAABAAQAAAAdABYAAAABAAQAAAAdABcAAAABAAQAAAAdABgAAAABAAQAAAAeABIAAAABAAQAAAAeABMAAAABAAQAAAAeABQAAAABAAQAAAAeABUAAAABAAQAAAAeABYAAAABAAQAAAAeABcAAAABAAQAAAAeABgAAAABAAQAAAAfABIAAAABAAQAAAAfABMAAAABAAQAAAAfABQAAAABAAQAAAAfABUAAAABAAQAAAAfABYAAAABAAQAAAAfABcAAAABAAQAAAAfABgAAAABAAQAAAAgABIAAAABAAQAAAAgABMAAAABAAQAAAAgABQAAAABAAQAAAAgABUAAAABAAQAAAAgABYAAAABAAQAAAAgABcAAAABAAQAAAAgABgAAAABAAQAAAAhABIAAAABAAQAAAAhABMAAAABAAQAAAAhABQAAAABAAQAAAAhABUAAAABAAQAAAAhABYAAAABAAQAAAAhABcAAAABAAQAAAAhABgAAAABAAQAAAAiABIAAAABAAQAAAAiABMAAAABAAQAAAAiABQAAAABAAQAAAAiABUAAAABAAQAAAAiABYAAAABAAQAAAAiABcAAAABAAQAAAAiABgAAAABAAQAAAAjABIAAAABAAQAAAAjABMAAAABAAQAAAAjABQAAAABAAQAAAAjABUAAAABAAQAAAAjABYAAAABAAQAAAAjABcAAAABAAQAAAAjABgAAAABAAQAAAAkABIAAAABAAQAAAAkABMAAAABAAQAAAAkABQAAAABAAQAAAAkABUAAAABAAQAAAAkABYAAAABAAQAAAAkABcAAAABAAQAAAAkABgAAAABAAQAAAAlABIAAAABAAQAAAAlABMAAAABAAQAAAAlABQAAAABAAQAAAAlABUAAAABAAQAAAAlABYAAAABAAQAAAAlABcAAAABAAQAAAAlABgAAAABAAQAAAAhABEAAAABAAQAAAAiABEAAAABAAQAAAAjABEAAAABAAQAAAAkABEAAAABAAQAAAAlABEAAAABAAQAAAAmABEAAAABAAQAAAAmABIAAAABAAQAAAAmABMAAAABAAQAAAAmABQAAAABAAQAAAAmABUAAAABAAQAAAAmABYAAAABAAQAAAAmABcAAAABAAQAAAAnABEAAAABAAQAAAAnABIAAAABAAQAAAAnABMAAAABAAQAAAAnABQAAAABAAQAAAAnABUAAAABAAQAAAAnABYAAAABAAQAAAAnABcAAAABAAQAAAAoABEAAAABAAQAAAAoABIAAAABAAQAAAAoABMAAAABAAQAAAAoABQAAAABAAQAAAAoABUAAAABAAQAAAAoABYAAAABAAQAAAAoABcAAAABAAQAAAAjABAAAAABAAQAAAAkABAAAAABAAQAAAAlABAAAAABAAQAAAAmABAAAAABAAQAAAAnABAAAAABAAQAAAAoABAAAAABAAQAAAApABAAAAABAAQAAAApABEAAAABAAQAAAApABIAAAABAAQAAAApABMAAAABAAQAAAApABQAAAABAAQAAAApABUAAAABAAQAAAApABYAAAABAAQAAAAqABAAAAABAAQAAAAqABEAAAABAAQAAAAqABIAAAABAAQAAAAqABMAAAABAAQAAAAqABQAAAABAAQAAAAqABUAAAABAAQAAAAqABYAAAABAAQAAAArABAAAAABAAQAAAArABEAAAABAAQAAAArABIAAAABAAQAAAArABMAAAABAAQAAAArABQAAAABAAQAAAArABUAAAABAAQAAAArABYAAAABAAQAAAAsABAAAAABAAQAAAAsABEAAAABAAQAAAAsABIAAAABAAQAAAAsABMAAAABAAQAAAAsABQAAAABAAQAAAAsABUAAAABAAQAAAAtABAAAAABAAQAAAAtABEAAAABAAQAAAAtABIAAAABAAQAAAAtABMAAAABAAQAAAAtABQAAAABAAQAAAAtABUAAAABAAQAAAAuABAAAAABAAQAAAAuABEAAAABAAQAAAAuABIAAAABAAQAAAAuABMAAAABAAQAAAAuABQAAAABAAQAAAAuABUAAAABAAQAAAAvABAAAAABAAQAAAAvABEAAAABAAQAAAAvABIAAAABAAQAAAAvABMAAAABAAQAAAAwABAAAAABAAQAAAAwABEAAAABAAQAAAAwABIAAAABAAQAAAAxABAAAAABAAQAAAAxABEAAAABAAQAAAAyABAAAAABAAQAAAAyABEAAAABAAQAAAAzABAAAAABAAQAAAAzABEAAAABAAQAAAA0ABAAAAABAAQAAAA0ABEAAAABAAQAAAAkAAoAAAABAAQAAAAkAAsAAAABAAQAAAAkAAwAAAABAAQAAAAkAA0AAAABAAQAAAAkAA4AAAABAAQAAAAkAA8AAAABAAQAAAAlAAoAAAABAAQAAAAlAAsAAAABAAQAAAAlAAwAAAABAAQAAAAlAA0AAAABAAQAAAAlAA4AAAABAAQAAAAlAA8AAAABAAQAAAAmAAoAAAABAAQAAAAmAAsAAAABAAQAAAAmAAwAAAABAAQAAAAmAA0AAAABAAQAAAAmAA4AAAABAAQAAAAmAA8AAAABAAQAAAAnAAoAAAABAAQAAAAnAAsAAAABAAQAAAAnAAwAAAABAAQAAAAnAA0AAAABAAQAAAAnAA4AAAABAAQAAAAnAA8AAAABAAQAAAAoAAoAAAABAAQAAAAoAAsAAAABAAQAAAAoAAwAAAABAAQAAAAoAA0AAAABAAQAAAAoAA4AAAABAAQAAAAoAA8AAAABAAQAAAApAAoAAAABAAQAAAApAAsAAAABAAQAAAApAAwAAAABAAQAAAApAA0AAAABAAQAAAApAA4AAAABAAQAAAApAA8AAAABAAQAAAAqAAoAAAABAAQAAAAqAAsAAAABAAQAAAAqAAwAAAABAAQAAAAqAA0AAAABAAQAAAAqAA4AAAABAAQAAAAqAA8AAAABAAQAAAArAAoAAAABAAQAAAArAAsAAAABAAQAAAArAAwAAAABAAQAAAArAA0AAAABAAQAAAArAA4AAAABAAQAAAArAA8AAAABAAQAAAAsAAoAAAABAAQAAAAsAAsAAAABAAQAAAAsAAwAAAABAAQAAAAsAA0AAAABAAQAAAAsAA4AAAABAAQAAAAsAA8AAAABAAQAAAAtAAoAAAABAAQAAAAtAAsAAAABAAQAAAAtAAwAAAABAAQAAAAtAA0AAAABAAQAAAAtAA4AAAABAAQAAAAtAA8AAAABAAQAAAAuAAoAAAABAAQAAAAuAAsAAAABAAQAAAAuAAwAAAABAAQAAAAuAA0AAAABAAQAAAAuAA4AAAABAAQAAAAuAA8AAAABAAQAAAAvAAoAAAABAAQAAAAvAAsAAAABAAQAAAAvAAwAAAABAAQAAAAvAA0AAAABAAQAAAAvAA4AAAABAAQAAAAvAA8AAAABAAQAAAAwAAoAAAABAAQAAAAwAAsAAAABAAQAAAAwAAwAAAABAAQAAAAwAA0AAAABAAQAAAAwAA4AAAABAAQAAAAwAA8AAAABAAQAAAAxAAoAAAABAAQAAAAxAAsAAAABAAQAAAAxAAwAAAABAAQAAAAxAA0AAAABAAQAAAAxAA4AAAABAAQAAAAxAA8AAAABAAQAAAAyAAoAAAABAAQAAAAyAAsAAAABAAQAAAAyAAwAAAABAAQAAAAyAA0AAAABAAQAAAAyAA4AAAABAAQAAAAyAA8AAAABAAQAAAAzAAoAAAABAAQAAAAzAAsAAAABAAQAAAAzAAwAAAABAAQAAAAzAA0AAAABAAQAAAAzAA4AAAABAAQAAAAzAA8AAAABAAQAAAA0AAoAAAABAAQAAAA0AAsAAAABAAQAAAA0AAwAAAABAAQAAAA0AA0AAAABAAQAAAA0AA4AAAABAAQAAAA0AA8AAAABAAQAAAA8AA8AAAABAAQAAAA8ABAAAAABAAQAAAA8ABEAAAABAAQAAAA8ABIAAAABAAQAAAA9AA8AAAABAAQAAAA9ABAAAAABAAQAAAA9ABEAAAABAAQAAAA9ABIAAAABAAQAAAA+AA8AAAABAAQAAAA+ABAAAAABAAQAAAA+ABEAAAABAAQAAAA+ABIAAAABAAQAAAA/AA8AAAABAAQAAAA/ABAAAAABAAQAAAA/ABEAAAABAAQAAAA/ABIAAAABAAQAAABAAA8AAAABAAQAAABAABAAAAABAAQAAABAABEAAAABAAQAAABAABIAAAABAAQAAAA8AAcAAAABAAQAAAA8AAgAAAABAAQAAAA8AAkAAAABAAQAAAA8AAoAAAABAAQAAAA8AAsAAAABAAQAAAA8AAwAAAABAAQAAAA8AA0AAAABAAQAAAA8AA4AAAABAAQAAAA9AAcAAAABAAQAAAA9AAgAAAABAAQAAAA9AAkAAAABAAQAAAA9AAoAAAABAAQAAAA9AAsAAAABAAQAAAA9AAwAAAABAAQAAAA9AA0AAAABAAQAAAA9AA4AAAABAAQAAAA+AAcAAAABAAQAAAA+AAgAAAABAAQAAAA+AAkAAAABAAQAAAA+AAoAAAABAAQAAAA+AAsAAAABAAQAAAA+AAwAAAABAAQAAAA+AA0AAAABAAQAAAA+AA4AAAABAAQAAAA/AAcAAAABAAQAAAA/AAgAAAABAAQAAAA/AAkAAAABAAQAAAA/AAoAAAABAAQAAAA/AAsAAAABAAQAAAA/AAwAAAABAAQAAAA/AA0AAAABAAQAAAA/AA4AAAABAAQAAABAAAgAAAABAAQAAABAAAkAAAABAAQAAABAAAoAAAABAAQAAABAAAsAAAABAAQAAABAAAwAAAABAAQAAABBAAgAAAABAAQAAABBAAkAAAABAAQAAABBAAoAAAABAAQAAABBAAsAAAABAAQAAABBAAwAAAABAAQAAABCAAgAAAABAAQAAABCAAkAAAABAAQAAABCAAoAAAABAAQAAABCAAsAAAABAAQAAABCAAwAAAABAAQAAABGAAgAAAABAAQAAABGAAkAAAABAAQAAABGAAoAAAABAAQAAABGAAsAAAABAAQAAABGAAwAAAABAAQAAABGAAYAAAABAAQAAABGAAcAAAABAAQAAABHAAYAAAABAAQAAABHAAcAAAABAAQAAABHAAgAAAABAAQAAABHAAkAAAABAAQAAABHAAoAAAABAAQAAABHAAsAAAABAAQAAABIAAYAAAABAAQAAABIAAcAAAABAAQAAABIAAgAAAABAAQAAABIAAkAAAABAAQAAABIAAoAAAABAAQAAABIAAsAAAABAAQAAABJAAYAAAABAAQAAABJAAcAAAABAAQAAABJAAgAAAABAAQAAABJAAkAAAABAAQAAABJAAoAAAABAAQAAABJAAsAAAABAAQAAABKAAYAAAABAAQAAABKAAcAAAABAAQAAABKAAgAAAABAAQAAABKAAkAAAABAAQAAABKAAoAAAABAAQAAABKAAsAAAABAAQAAABAAAcAAAABAAQAAABBAAcAAAABAAQAAABCAAcAAAABAAQAAAAuAAAAAAABAAQAAAAuAAEAAAABAAQAAAAuAAIAAAABAAQAAAAuAAMAAAABAAQAAAAuAAQAAAABAAQAAAAuAAUAAAABAAQAAAAuAAYAAAABAAQAAAAuAAcAAAABAAQAAAAuAAgAAAABAAQAAAAuAAkAAAABAAQAAAAvAAAAAAABAAQAAAAvAAEAAAABAAQAAAAvAAIAAAABAAQAAAAvAAMAAAABAAQAAAAvAAQAAAABAAQAAAAvAAUAAAABAAQAAAAvAAYAAAABAAQAAAAvAAcAAAABAAQAAAAvAAgAAAABAAQAAAAvAAkAAAABAAQAAAAwAAAAAAABAAQAAAAwAAEAAAABAAQAAAAwAAIAAAABAAQAAAAwAAMAAAABAAQAAAAwAAQAAAABAAQAAAAwAAUAAAABAAQAAAAwAAYAAAABAAQAAAAwAAcAAAABAAQAAAAwAAgAAAABAAQAAAAwAAkAAAABAAQAAAAxAAAAAAABAAQAAAAxAAEAAAABAAQAAAAxAAIAAAABAAQAAAAxAAMAAAABAAQAAAAxAAQAAAABAAQAAAAxAAUAAAABAAQAAAAxAAYAAAABAAQAAAAxAAcAAAABAAQAAAAxAAgAAAABAAQAAAAxAAkAAAABAAQAAAAyAAAAAAABAAQAAAAyAAEAAAABAAQAAAAyAAIAAAABAAQAAAAyAAMAAAABAAQAAAAyAAQAAAABAAQAAAAyAAUAAAABAAQAAAAyAAYAAAABAAQAAAAyAAcAAAABAAQAAAAyAAgAAAABAAQAAAAyAAkAAAABAAQAAAAzAAAAAAABAAQAAAAzAAEAAAABAAQAAAAzAAIAAAABAAQAAAAzAAMAAAABAAQAAAAzAAQAAAABAAQAAAAzAAUAAAABAAQAAAAzAAYAAAABAAQAAAAzAAcAAAABAAQAAAAzAAgAAAABAAQAAAAzAAkAAAABAAQAAAA0AAAAAAABAAQAAAA0AAEAAAABAAQAAAA0AAIAAAABAAQAAAA0AAMAAAABAAQAAAA0AAQAAAABAAQAAAA0AAUAAAABAAQAAAA0AAYAAAABAAQAAAA0AAcAAAABAAQAAAA0AAgAAAABAAQAAAA0AAkAAAABAAQAAAA8AAAAAAABAAQAAAA8AAEAAAABAAQAAAA8AAIAAAABAAQAAAA8AAMAAAABAAQAAAA8AAQAAAABAAQAAAA8AAUAAAABAAQAAAA8AAYAAAABAAQAAAA9AAAAAAABAAQAAAA9AAEAAAABAAQAAAA9AAIAAAABAAQAAAA9AAMAAAABAAQAAAA9AAQAAAABAAQAAAA9AAUAAAABAAQAAAA9AAYAAAABAAQAAAA+AAAAAAABAAQAAAA+AAEAAAABAAQAAAA+AAIAAAABAAQAAAA+AAMAAAABAAQAAAA+AAQAAAABAAQAAAA+AAUAAAABAAQAAAA+AAYAAAABAAQAAAA/AAAAAAABAAQAAAA/AAEAAAABAAQAAAA/AAIAAAABAAQAAAA/AAMAAAABAAQAAAA/AAQAAAABAAQAAAA/AAUAAAABAAQAAAA/AAYAAAABAAQAAABAAAAAAAABAAQAAABAAAEAAAABAAQAAABAAAIAAAABAAQAAAAxABIAAAABAAQAAAAyABIAAAABAAQAAAAzABIAAAABAAQAAAA0ABIAAAABAAQAAAA=")
+tile_set = SubResource("TileSet_68ko5")
+
+[node name="Stairs" type="Node2D" parent="Tiles" unique_id=1506809572]
+
+[node name="StairUpLeft" type="TileMapLayer" parent="Tiles/Stairs" unique_id=2143571481]
+z_index = 4096
+tile_map_data = PackedByteArray("AAAWAAcAAAAEAAAAAAAWAAgAAAAEAAAAAAAdAAgAAAAEAAAAAAAdAAkAAAAEAAAAAAA=")
+tile_set = SubResource("TileSet_w0tal")
+
+[node name="StairUpRight" type="TileMapLayer" parent="Tiles/Stairs" unique_id=342655215]
+z_index = 4096
+tile_map_data = PackedByteArray("AAAxABUAAAAEAAAAAAAxABYAAAAEAAAAAAAxABcAAAAEAAAAAAAyABUAAAAEAAAAAAAyABYAAAAEAAAAAAAyAB4AAAAEAAAAAAAyAB8AAAAEAAAAAAAyACAAAAAEAAAAAAArACsAAAAEAAAAAAArACwAAAAEAAAAAAArAC0AAAAEAAAAAAAbADUAAAAEAAAAAAAbADYAAAAEAAAAAAAbADcAAAAEAAAAAAA=")
+tile_set = SubResource("TileSet_w0tal")
+
+[node name="TallGrass" type="TileMapLayer" parent="Tiles" unique_id=849181037]
+visible = false
+z_index = 4096
+tile_map_data = PackedByteArray("AAASAEEAAAAIAAEAAAASAEIAAAAIAAEAAAASAEMAAAAIAAEAAAASAEQAAAAIAAEAAAASAEUAAAAIAAEAAAATAEEAAAAIAAEAAAATAEIAAAAIAAEAAAATAEMAAAAIAAEAAAATAEQAAAAIAAEAAAATAEUAAAAIAAEAAAAUAEEAAAAIAAEAAAAUAEIAAAAIAAEAAAAUAEMAAAAIAAEAAAAUAEQAAAAIAAEAAAAUAEUAAAAIAAEAAAAVAEEAAAAIAAEAAAAVAEIAAAAIAAEAAAAVAEMAAAAIAAEAAAAVAEQAAAAIAAEAAAAVAEUAAAAIAAEAAAA=")
+tile_set = SubResource("TileSet_ewt4e")
+
+[node name="NightLights" type="Node2D" parent="." unique_id=949307689]
+
+[node name="Lanterns" type="Node2D" parent="NightLights" unique_id=894384987]
+
+[node name="NightLight" parent="NightLights/Lanterns" unique_id=1377921765 instance=ExtResource("8_ex4qq")]
+position = Vector2(560, 1008)
+
+[node name="NightLight2" parent="NightLights/Lanterns" unique_id=1929593808 instance=ExtResource("8_ex4qq")]
+position = Vector2(880, 1008)
+
+[node name="NightLight3" parent="NightLights/Lanterns" unique_id=464543635 instance=ExtResource("8_ex4qq")]
+position = Vector2(1232, 1008)
+
+[node name="NightLight4" parent="NightLights/Lanterns" unique_id=1152938561 instance=ExtResource("8_ex4qq")]
+position = Vector2(880, 816)
+
+[node name="NightLight5" parent="NightLights/Lanterns" unique_id=1297273600 instance=ExtResource("8_ex4qq")]
+position = Vector2(1232, 816)
+
+[node name="NightLight6" parent="NightLights/Lanterns" unique_id=608100003 instance=ExtResource("8_ex4qq")]
+position = Vector2(1680, 656)
+
+[node name="NightLight7" parent="NightLights/Lanterns" unique_id=335959979 instance=ExtResource("8_ex4qq")]
+position = Vector2(1936, 656)
+
+[node name="NightLight8" parent="NightLights/Lanterns" unique_id=1808934221 instance=ExtResource("8_ex4qq")]
+position = Vector2(1680, 816)
+
+[node name="NightLight9" parent="NightLights/Lanterns" unique_id=1810546405 instance=ExtResource("8_ex4qq")]
+position = Vector2(1936, 816)
+
+[node name="NightLight10" parent="NightLights/Lanterns" unique_id=516463062 instance=ExtResource("8_ex4qq")]
+position = Vector2(1424, 1232)
+
+[node name="NightLight11" parent="NightLights/Lanterns" unique_id=1406049304 instance=ExtResource("8_ex4qq")]
+position = Vector2(1744, 1232)
+
+[node name="NightLight12" parent="NightLights/Lanterns" unique_id=1675919005 instance=ExtResource("8_ex4qq")]
+position = Vector2(912, 1584)
+
+[node name="NightLight13" parent="NightLights/Lanterns" unique_id=1820824455 instance=ExtResource("8_ex4qq")]
+position = Vector2(1392, 1584)
+
+[node name="NightLight14" parent="NightLights/Lanterns" unique_id=993773497 instance=ExtResource("8_ex4qq")]
+position = Vector2(400, 1776)
+
+[node name="NightLight15" parent="NightLights/Lanterns" unique_id=1517660583 instance=ExtResource("8_ex4qq")]
+position = Vector2(528, 1776)
+
+[node name="NightLight16" parent="NightLights/Lanterns" unique_id=623283560 instance=ExtResource("8_ex4qq")]
+position = Vector2(752, 1776)
+
+[node name="NightLight17" parent="NightLights/Lanterns" unique_id=741363496 instance=ExtResource("8_ex4qq")]
+position = Vector2(1392, 1744)
+
+[node name="NightLight18" parent="NightLights/Lanterns" unique_id=54431758 instance=ExtResource("8_ex4qq")]
+position = Vector2(560, 1264)
+
+[node name="NightLight19" parent="NightLights/Lanterns" unique_id=155529860 instance=ExtResource("8_ex4qq")]
+position = Vector2(880, 1776)
+
+[node name="Buildings" type="Node2D" parent="NightLights" unique_id=1587897560]
+
+[node name="Building1" type="Node2D" parent="NightLights/Buildings" unique_id=1152137124]
+
+[node name="NightLight" parent="NightLights/Buildings/Building1" unique_id=1400738860 instance=ExtResource("8_ex4qq")]
+position = Vector2(784, 880)
+
+[node name="NightLight2" parent="NightLights/Buildings/Building1" unique_id=1173675914 instance=ExtResource("8_ex4qq")]
+position = Vector2(592, 880)
+
+[node name="NightLight3" parent="NightLights/Buildings/Building1" unique_id=20858697 instance=ExtResource("8_ex4qq")]
+position = Vector2(624, 880)
+
+[node name="NightLight4" parent="NightLights/Buildings/Building1" unique_id=58573855 instance=ExtResource("8_ex4qq")]
+position = Vector2(656, 880)
+
+[node name="NightLight5" parent="NightLights/Buildings/Building1" unique_id=796106306 instance=ExtResource("8_ex4qq")]
+position = Vector2(752, 880)
+
+[node name="NightLight6" parent="NightLights/Buildings/Building1" unique_id=2011539967 instance=ExtResource("8_ex4qq")]
+position = Vector2(816, 880)
+
+[node name="Building2" type="Node2D" parent="NightLights/Buildings" unique_id=682377403]
+
+[node name="NightLight" parent="NightLights/Buildings/Building2" unique_id=139261183 instance=ExtResource("8_ex4qq")]
+position = Vector2(1488, 880)
+
+[node name="NightLight2" parent="NightLights/Buildings/Building2" unique_id=1905618291 instance=ExtResource("8_ex4qq")]
+position = Vector2(1296, 880)
+
+[node name="NightLight3" parent="NightLights/Buildings/Building2" unique_id=934827424 instance=ExtResource("8_ex4qq")]
+position = Vector2(1328, 880)
+
+[node name="NightLight4" parent="NightLights/Buildings/Building2" unique_id=686556267 instance=ExtResource("8_ex4qq")]
+position = Vector2(1360, 880)
+
+[node name="NightLight5" parent="NightLights/Buildings/Building2" unique_id=45489851 instance=ExtResource("8_ex4qq")]
+position = Vector2(1456, 880)
+
+[node name="NightLight6" parent="NightLights/Buildings/Building2" unique_id=849559025 instance=ExtResource("8_ex4qq")]
+position = Vector2(1520, 880)
+
+[node name="Building3" type="Node2D" parent="NightLights/Buildings" unique_id=1570652608]
+
+[node name="NightLight" parent="NightLights/Buildings/Building3" unique_id=842081142 instance=ExtResource("8_ex4qq")]
+position = Vector2(1168, 1616)
+
+[node name="NightLight2" parent="NightLights/Buildings/Building3" unique_id=2140072926 instance=ExtResource("8_ex4qq")]
+position = Vector2(976, 1616)
+
+[node name="NightLight3" parent="NightLights/Buildings/Building3" unique_id=123632489 instance=ExtResource("8_ex4qq")]
+position = Vector2(1008, 1616)
+
+[node name="NightLight4" parent="NightLights/Buildings/Building3" unique_id=1441227914 instance=ExtResource("8_ex4qq")]
+position = Vector2(1040, 1616)
+
+[node name="NightLight5" parent="NightLights/Buildings/Building3" unique_id=2130994157 instance=ExtResource("8_ex4qq")]
+position = Vector2(1136, 1616)
+
+[node name="NightLight6" parent="NightLights/Buildings/Building3" unique_id=1643584209 instance=ExtResource("8_ex4qq")]
+position = Vector2(1200, 1616)
+
+[node name="Building4" type="Node2D" parent="NightLights/Buildings" unique_id=306735835]
+
+[node name="NightLight" parent="NightLights/Buildings/Building4" unique_id=789707390 instance=ExtResource("8_ex4qq")]
+position = Vector2(784, 1296)
+
+[node name="NightLight2" parent="NightLights/Buildings/Building4" unique_id=1283327059 instance=ExtResource("8_ex4qq")]
+position = Vector2(912, 1296)
+
+[node name="NightLight3" parent="NightLights/Buildings/Building4" unique_id=1869688351 instance=ExtResource("8_ex4qq")]
+position = Vector2(848, 1296)
+
+[node name="BikeShop" type="Node2D" parent="NightLights/Buildings" unique_id=1909011619]
+
+[node name="NightLight" parent="NightLights/Buildings/BikeShop" unique_id=1645691337 instance=ExtResource("8_ex4qq")]
+position = Vector2(592, 1616)
+
+[node name="NightLight2" parent="NightLights/Buildings/BikeShop" unique_id=702006269 instance=ExtResource("8_ex4qq")]
+position = Vector2(656, 1616)
+
+[node name="PokemonCenter" type="Node2D" parent="NightLights/Buildings" unique_id=851081229]
+
+[node name="NightLight" parent="NightLights/Buildings/PokemonCenter" unique_id=516187282 instance=ExtResource("8_ex4qq")]
+position = Vector2(976, 1296)
+
+[node name="NightLight2" parent="NightLights/Buildings/PokemonCenter" unique_id=1056265551 instance=ExtResource("8_ex4qq")]
+position = Vector2(1168, 1296)
+
+[node name="NightLight3" parent="NightLights/Buildings/PokemonCenter" unique_id=737656909 instance=ExtResource("8_ex4qq")]
+position = Vector2(1072, 1296)
+
+[node name="NightLight4" parent="NightLights/Buildings/PokemonCenter" unique_id=1263381697 instance=ExtResource("8_ex4qq")]
+position = Vector2(1072, 1200)
+
+[node name="Gym" type="Node2D" parent="NightLights/Buildings" unique_id=594202768]
+
+[node name="NightLight" parent="NightLights/Buildings/Gym" unique_id=810271123 instance=ExtResource("8_ex4qq")]
+position = Vector2(1488, 1264)
+
+[node name="NightLight2" parent="NightLights/Buildings/Gym" unique_id=110077177 instance=ExtResource("8_ex4qq")]
+position = Vector2(1680, 1264)
+
+[node name="NightLight3" parent="NightLights/Buildings/Gym" unique_id=195181594 instance=ExtResource("8_ex4qq")]
+position = Vector2(1584, 1296)
+
+[node name="NightLight4" parent="NightLights/Buildings/Gym" unique_id=1234486331 instance=ExtResource("8_ex4qq")]
+position = Vector2(1584, 1264)
+
+[node name="NightLight5" parent="NightLights/Buildings/Gym" unique_id=135300196 instance=ExtResource("8_ex4qq")]
+position = Vector2(1712, 1296)
+
+[node name="NightLight6" parent="NightLights/Buildings/Gym" unique_id=659755095 instance=ExtResource("8_ex4qq")]
+position = Vector2(1456, 1296)
 
 [connection signal="body_entered" from="Exits/ToRoute4" to="Exits/ToRoute4" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute4Water" to="Exits/ToRoute4Water" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToCeruleanCave" to="Exits/ToCeruleanCave" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute24Path" to="Exits/ToRoute24Path" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute24WaterLeft" to="Exits/ToRoute24WaterLeft" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute24Bridge" to="Exits/ToRoute24Bridge" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute24WaterRight" to="Exits/ToRoute24WaterRight" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute5Left" to="Exits/ToRoute5Left" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute5Grass" to="Exits/ToRoute5Grass" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute5Right" to="Exits/ToRoute5Right" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute9" to="Exits/ToRoute9" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToHouse1" to="Exits/ToHouse1" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToPokemonCenter" to="Exits/ToPokemonCenter" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToGym" to="Exits/ToGym" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToBikeStore" to="Exits/ToBikeStore" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToHouse2" to="Exits/ToHouse2" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToHouse3" to="Exits/ToHouse3" method="_on_body_entered"]

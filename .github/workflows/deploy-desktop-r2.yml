@@ -230,6 +230,9 @@ jobs:
       - name: Verify client crash reporting
         run: ./godot --headless --path . --script res://tests/client_crash_reporting_check.gd
 
+      - name: Verify Simplified Chinese Pokémon terminology
+        run: node tools/check_localization_terminology.mjs
+
       - name: Import launcher assets
         run: |
           cd launcher

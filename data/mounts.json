@@ -4,6 +4,23 @@
     "surf": "lapras"
   },
   "mounts": {
+    "cyclizar": {
+      "displayName": "Cyclizar",
+      "movementMode": "land",
+      "unlockItemId": "cyclizar-mount",
+      "spriteSheet": "res://assets/mounts/cyclizar/mount.png",
+      "riderMaskSheet": "res://assets/mounts/cyclizar/rider_mask.png",
+      "frameSize": [64, 64],
+      "foregroundRegions": {
+        "down": [0, 0, 64, 46]
+      },
+      "riderOffsets": {
+        "down": [[0, -16], [0, -18], [2, -16], [2, -18]],
+        "left": [[10, -10], [10, -12], [10, -8], [10, -10]],
+        "right": [[-10, -10], [-10, -12], [-10, -8], [-10, -10]],
+        "up": [[0, -2], [0, -4], [2, -2], [2, -4]]
+      }
+    },
     "lapras": {
       "displayName": "Lapras",
       "movementMode": "surf",
