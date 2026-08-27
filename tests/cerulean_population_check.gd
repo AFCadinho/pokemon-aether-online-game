@@ -97,6 +97,14 @@ func _check_scene(scene_path: String, expected: Dictionary) -> void:
 	var gym_attendant := map.get_node_or_null("Entities/NPCs/GymAttendant")
 	if gym_attendant != null:
 		_check(gym_attendant.position == Vector2(1584, 1344), "Gym attendant blocks the Gym doorway")
+		var story_hook := gym_attendant.get_node_or_null("GymClosedStoryHook")
+		_check(story_hook != null, "Gym attendant owns the Gym-closed story hook")
+		if story_hook != null:
+			_check(
+				str(story_hook.get("interaction_id")) == "kanto_cerulean_gym_closed"
+					and str(story_hook.get("entity_id")) == "kanto_cerulean_city_gym_attendant",
+				"Gym attendant reports the completed conversation to story progress"
+			)
 		_check(
 			str(gym_attendant.get("visibility_hidden_quest_id")) == "explore_cerulean_city"
 				and str(gym_attendant.get("visibility_hidden_quest_step_id")) == "visit_nugget_bridge"
