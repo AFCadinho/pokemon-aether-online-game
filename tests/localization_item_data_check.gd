@@ -90,7 +90,7 @@ func _check_catalogs() -> void:
 		_check(parsed is Dictionary, "generated %s item catalog is valid JSON" % locale)
 		var catalog: Dictionary = parsed as Dictionary if parsed is Dictionary else {}
 		generated_catalogs[locale] = catalog
-		_check(catalog.size() == 1447, "generated %s item catalog covers the complete source index" % locale)
+		_check(catalog.size() == 1448, "generated %s item catalog covers the complete source index" % locale)
 		for item_id_value: Variant in catalog.keys():
 			var item_id := str(item_id_value)
 			var entry: Dictionary = catalog.get(item_id, {})
@@ -106,6 +106,31 @@ func _check_catalogs() -> void:
 				)
 
 	var generated_english: Dictionary = generated_catalogs.get("en", {})
+	var generated_chinese: Dictionary = generated_catalogs.get("zh_CN", {})
+	_check(
+		str((generated_chinese.get("ability-capsule", {}) as Dictionary).get("name", "")) == "特性胶囊",
+		"generated Simplified Chinese uses the official Ability Capsule name"
+	)
+	_check(
+		str((generated_chinese.get("tm-flare-blitz", {}) as Dictionary).get("name", ""))
+		== "招式学习器：闪焰冲锋",
+		"generated Simplified Chinese machine names use the official move name"
+	)
+	_check(
+		str((generated_chinese.get("tm-flare-blitz", {}) as Dictionary).get("shortDesc", ""))
+		== "让能够学习的宝可梦学会“闪焰冲锋”。",
+		"generated Simplified Chinese machine descriptions use the official move name"
+	)
+	_check(
+		str((generated_chinese.get("adinho-classic-outfit", {}) as Dictionary).get("name", ""))
+		== "Adinho Classic Box",
+		"unverified generated Simplified Chinese item names use the English fallback"
+	)
+	_check(
+		str((generated_chinese.get("adinho-classic-outfit", {}) as Dictionary).get("shortDesc", ""))
+		== str((generated_english.get("adinho-classic-outfit", {}) as Dictionary).get("shortDesc", "")),
+		"unverified generated Simplified Chinese item prose uses the English fallback"
+	)
 	var expected_generated_ids: Array = generated_english.keys()
 	expected_generated_ids.sort()
 	for locale: String in GENERATED_CATALOG_PATHS:
@@ -114,7 +139,7 @@ func _check_catalogs() -> void:
 		localized_ids.sort()
 		_check(localized_ids == expected_generated_ids, "generated %s item IDs match English" % locale)
 		_check(
-			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1448,
+			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1449,
 			"%s complete item catalog plus virtual Escape Rope action loads into the runtime resolver" % locale
 		)
 

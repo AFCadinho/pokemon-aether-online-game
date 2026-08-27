@@ -13,6 +13,7 @@ const generatedDir = path.join(projectRoot, "localization/content/generated");
 const englishSourcePath = path.join(generatedDir, "en.json");
 const generatedItemDir = path.join(projectRoot, "localization/items/generated");
 const englishItemSourcePath = path.join(generatedItemDir, "en.json");
+const terminologyDir = path.join(projectRoot, "localization/terminology");
 const targets = [
 	{locale: "nl", translationLanguage: "nl"},
 	{locale: "pt_BR", translationLanguage: "pt"},
@@ -136,15 +137,45 @@ function knownReviewedTranslations(englishSource, reviewedCatalog, field) {
 	return translations;
 }
 
+function protectedGeneratedContentNames(locale) {
+	const glossaryPath = path.join(terminologyDir, `${locale}.json`);
+	if (!fs.existsSync(glossaryPath)) {
+		return new Map();
+	}
+	const glossary = readJson(glossaryPath);
+	const expectedPath = `res://localization/content/generated/${locale}.json`;
+	const names = new Map();
+	for (const [termId, term] of Object.entries(glossary.terms ?? {})) {
+		for (const target of term.targets ?? []) {
+			const keys = target.keys ?? [];
+			if (
+				target.path === expectedPath
+				&& keys.length === 3
+				&& ["moves", "abilities", "species"].includes(keys[0])
+				&& keys[2] === "name"
+			) {
+				names.set(`${keys[0]}:${keys[1]}`, String(term.value));
+			}
+		}
+		if (!term.value) {
+			throw new Error(`Protected terminology entry ${termId} has no value`);
+		}
+	}
+	return names;
+}
+
 async function generateLocale(englishSource, target) {
 	const reviewedPath = path.join(projectRoot, `localization/content/${target.locale}.json`);
 	const reviewedCatalog = readJson(reviewedPath);
+	const outputPath = path.join(generatedDir, `${target.locale}.json`);
+	const preservedCatalog = target.locale === "zh_CN" ? readJson(outputPath) : {};
 	const reviewedNames = knownReviewedTranslations(englishSource, reviewedCatalog, "name");
 	const reviewedDescriptions = knownReviewedTranslations(
 		englishSource,
 		reviewedCatalog,
 		"shortDesc",
 	);
+	const protectedNames = protectedGeneratedContentNames(target.locale);
 	const names = [];
 	const descriptions = [];
 	for (const kind of ["moves", "abilities"]) {
@@ -159,8 +190,12 @@ async function generateLocale(englishSource, target) {
 	}
 
 	const [translatedNames, translatedDescriptions] = await Promise.all([
-		translateUniqueStrings(names, target.translationLanguage),
-		translateUniqueStrings(descriptions, target.translationLanguage),
+		target.locale === "zh_CN"
+			? Promise.resolve(new Map())
+			: translateUniqueStrings(names, target.translationLanguage),
+		target.locale === "zh_CN"
+			? Promise.resolve(new Map())
+			: translateUniqueStrings(descriptions, target.translationLanguage),
 	]);
 	const generated = {
 		species: englishSource.species,
@@ -169,21 +204,28 @@ async function generateLocale(englishSource, target) {
 	};
 	for (const kind of ["moves", "abilities"]) {
 		for (const [contentId, sourceEntry] of Object.entries(englishSource[kind])) {
+			const preservedName = String(preservedCatalog[kind]?.[contentId]?.name ?? "").trim();
+			const preservedDescription = String(
+				preservedCatalog[kind]?.[contentId]?.shortDesc ?? "",
+			).trim();
 			const entry = {
-				name: reviewedNames.get(sourceEntry.name)
+				name: protectedNames.get(`${kind}:${contentId}`) ?? (preservedName || (
+					reviewedNames.get(sourceEntry.name)
 					?? translatedNames.get(sourceEntry.name)
-					?? sourceEntry.name,
+					?? sourceEntry.name
+				)),
 			};
 			if (sourceEntry.shortDesc) {
-				entry.shortDesc = reviewedDescriptions.get(sourceEntry.shortDesc)
+				entry.shortDesc = preservedDescription || (
+					reviewedDescriptions.get(sourceEntry.shortDesc)
 					?? translatedDescriptions.get(sourceEntry.shortDesc)
-					?? sourceEntry.shortDesc;
+					?? sourceEntry.shortDesc
+				);
 			}
 			generated[kind][contentId] = entry;
 		}
 	}
 
-	const outputPath = path.join(generatedDir, `${target.locale}.json`);
 	fs.writeFileSync(outputPath, `${JSON.stringify(generated, null, 2)}\n`, "utf8");
 	console.log(
 		`Generated ${target.locale} review draft: ` +
@@ -196,6 +238,8 @@ async function generateItemLocale(englishItems, target) {
 	const reviewedItems = readJson(
 		path.join(projectRoot, `localization/items/${target.locale}.json`),
 	);
+	const outputPath = path.join(generatedItemDir, `${target.locale}.json`);
+	const preservedItems = target.locale === "zh_CN" ? readJson(outputPath) : {};
 	const reviewedNames = new Map();
 	const reviewedDescriptions = new Map();
 	for (const [itemId, reviewedEntry] of Object.entries(reviewedItems)) {
@@ -222,23 +266,33 @@ async function generateItemLocale(englishItems, target) {
 		}
 	}
 	const [translatedNames, translatedDescriptions] = await Promise.all([
-		translateUniqueStrings(names, target.translationLanguage),
-		translateUniqueStrings(descriptions, target.translationLanguage),
+		target.locale === "zh_CN"
+			? Promise.resolve(new Map())
+			: translateUniqueStrings(names, target.translationLanguage),
+		target.locale === "zh_CN"
+			? Promise.resolve(new Map())
+			: translateUniqueStrings(descriptions, target.translationLanguage),
 	]);
 	const generatedItems = {};
 	for (const [itemId, sourceEntry] of Object.entries(englishItems)) {
+		const preservedName = String(preservedItems[itemId]?.name ?? "").trim();
+		const preservedDescription = String(preservedItems[itemId]?.shortDesc ?? "").trim();
 		generatedItems[itemId] = {
-			name: reviewedNames.get(sourceEntry.name)
+			name: preservedName || (
+				reviewedNames.get(sourceEntry.name)
 				?? translatedNames.get(sourceEntry.name)
-				?? sourceEntry.name,
-			shortDesc: reviewedDescriptions.get(sourceEntry.shortDesc)
+				?? sourceEntry.name
+			),
+			shortDesc: preservedDescription || (
+				reviewedDescriptions.get(sourceEntry.shortDesc)
 				?? translatedDescriptions.get(sourceEntry.shortDesc)
-				?? sourceEntry.shortDesc,
+				?? sourceEntry.shortDesc
+			),
 		};
 	}
 	fs.mkdirSync(generatedItemDir, {recursive: true});
 	fs.writeFileSync(
-		path.join(generatedItemDir, `${target.locale}.json`),
+		outputPath,
 		`${JSON.stringify(generatedItems, null, 2)}\n`,
 		"utf8",
 	);

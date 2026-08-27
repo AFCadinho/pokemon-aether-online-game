@@ -45,9 +45,14 @@ func interact_with_player(_player: Node2D) -> void:
 	if not bool(begin_result.get("success", false)):
 		await GameErrorDialogService.show_response(begin_result, "backend.error.transit_unavailable")
 		return
+	if world.has_method("play_aethernet_departure_effect"):
+		await world.call("play_aethernet_departure_effect")
 	var travel_result: Dictionary = await TransitService.travel(destination_id)
 	if not bool(travel_result.get("success", false)):
-		world.call("cancel_authorized_teleport")
+		if world.has_method("cancel_aethernet_teleport_effect"):
+			world.call("cancel_aethernet_teleport_effect")
+		else:
+			world.call("cancel_authorized_teleport")
 		await GameErrorDialogService.show_response(travel_result, "backend.error.transit_unavailable")
 		return
 	var body := travel_result.get("body", {}) as Dictionary

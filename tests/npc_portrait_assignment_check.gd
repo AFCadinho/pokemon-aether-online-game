@@ -6,6 +6,11 @@ const REQUIRED_NPC_IDS: Array[String] = [
 	"kanto_alpha_gym_brock",
 	"kanto_alpha_gym_lt_surge",
 	"kanto_alpha_gym_misty",
+	"kanto_cerulean_city_gym_attendant",
+	"kanto_cerulean_city_gym_picnicker_diana",
+	"kanto_cerulean_city_gym_swimmer_briana",
+	"kanto_cerulean_city_gym_swimmer_luis",
+	"kanto_cerulean_city_patrol_officer",
 	"kanto_oaklab_oak_1",
 	"kanto_oaks_lab_gary",
 	"kanto_pallet_town_fishing_guru",
@@ -62,6 +67,11 @@ func _init() -> void:
 		"Lt. Surge resolves his exact Showdown portrait"
 	)
 	_check_equal(
+		catalog.resolve_portrait_id("", "kanto_cerulean_city_gym_attendant", ""),
+		"showdown_trialguide",
+		"Cerulean Gym attendant resolves the matching Showdown guide portrait"
+	)
+	_check_equal(
 		catalog.resolve_portrait_id("", "kanto_pallet_town_north_guard", ""),
 		"showdown_policeman_gen7",
 		"Pallet Town route guard resolves the shared police portrait"
@@ -96,6 +106,24 @@ func _init() -> void:
 		"Ace Trainer Victor resolves his Showdown Ace Trainer portrait instead of the default portrait"
 	)
 	_check_equal(
+		catalog.resolve_portrait_id(
+			"",
+			"kanto_cerulean_city_ace_trainer_lila",
+			"trainer_class_ace_trainer_f"
+		),
+		"showdown_acetrainerf_gen6",
+		"Ace Trainer Lila resolves her female Showdown Ace Trainer portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id(
+			"",
+			"kanto_cerulean_city_ace_trainer_bram",
+			"trainer_class_ace_trainer_m"
+		),
+		"showdown_acetrainer_gen6",
+		"Ace Trainer Bram resolves his male Showdown Ace Trainer portrait"
+	)
+	_check_equal(
 		catalog.resolve_portrait_id("", "unlisted_nurse", "pokemon_center_nurse"),
 		"showdown_pokemoncenterlady",
 		"Reusable NPC resolves its profile portrait"
@@ -123,6 +151,11 @@ func _init() -> void:
 		catalog.resolve_portrait_id("showdown_red_lgpe", "kanto_oaklab_oak_1", ""),
 		"showdown_red_lgpe",
 		"Scene/profile override takes precedence"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "kanto_cerulean_city_patrol_officer", "trainer_class_policeman"),
+		"",
+		"Officer Jenny preserves her scene-assigned custom portrait"
 	)
 	_check_equal(
 		catalog.resolve_portrait_id("", "kanto_players_house_father", "pokemart_seller"),
