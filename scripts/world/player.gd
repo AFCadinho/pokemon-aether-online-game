@@ -5,7 +5,7 @@ signal overworld_steps_completed(step_count: int)
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
 const RUN_TILE_MOVE_DURATION := 0.14
-const LAND_MOUNT_TILE_MOVE_DURATION := 0.08
+const LAND_MOUNT_TILE_MOVE_DURATION := 0.065
 const MOVE_EASE_AMOUNT := 0.0
 const INPUT_BUFFER_DURATION := 0.14
 const CONTINUOUS_MOVE_HOLD_DELAY := 0.0

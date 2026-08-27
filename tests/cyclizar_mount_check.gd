@@ -88,7 +88,7 @@ func _check_land_mount_runtime_contract() -> void:
 	)
 	_check(
 		player_source.contains("func toggle_land_mount()")
-		and player_source.contains("LAND_MOUNT_TILE_MOVE_DURATION := 0.08")
+		and player_source.contains("LAND_MOUNT_TILE_MOVE_DURATION := 0.065")
 		and player_source.contains("LAND_MOUNT_WALK_ANIMATION_SPEED := 18.0")
 		and player_source.contains("InventoryService"),
 		"the player can toggle an owned, faster land mount"
