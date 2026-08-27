@@ -38,6 +38,8 @@
 [ext_resource type="Script" uid="uid://q5hlbf2sfqxo" path="res://scripts/world/kanto/towns/cerulean_mountain_return.gd" id="31_mountain_return"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="32_daily_rock"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/cuttable_tree.tscn" id="34_i2u7v"]
+[ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="35_bug_catcher"]
+[ext_resource type="Script" uid="uid://bokcw1q7hoc1w" path="res://scripts/world/kanto/routes/nugget_bridge_trainer.gd" id="36_bridge_trainer"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
@@ -676,6 +678,28 @@ npc_definition_id = "trainer_class_blue"
 display_name = "Gary Oak"
 npc_sprite_frames = ExtResource("23_gary_frames")
 mugshot = SubResource("AtlasTexture_gary_mugshot")
+
+[node name="NuggetBridge01Cale" parent="Entities/NPCs" instance=ExtResource("21_trainer")]
+position = Vector2(1808, 560)
+script = ExtResource("36_bridge_trainer")
+trainer_id = "kanto_route_24_nugget_bridge_01_cale"
+sight_range_tiles = 5
+npc_id = "kanto_route_24_nugget_bridge_01_cale"
+npc_definition_id = "trainer_class_bug_catcher"
+display_name = "Bug Catcher Cale"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("35_bug_catcher")
+
+[node name="NuggetBridge02Ali" parent="Entities/NPCs" instance=ExtResource("21_trainer")]
+position = Vector2(1808, 304)
+script = ExtResource("36_bridge_trainer")
+trainer_id = "kanto_route_24_nugget_bridge_02_ali"
+sight_range_tiles = 5
+npc_id = "kanto_route_24_nugget_bridge_02_ali"
+npc_definition_id = "trainer_class_lass"
+display_name = "Lass Ali"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("12_lass")
 
 [node name="GymAttendant" parent="Entities/NPCs" unique_id=1108117216 instance=ExtResource("9_dialogue")]
 position = Vector2(1584, 1360)
