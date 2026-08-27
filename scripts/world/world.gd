@@ -659,7 +659,10 @@ func _get_authorized_teleport_block_reason(
 		return "Cannot teleport while moving."
 	if bool(player.get("route_gate_interaction_in_progress")):
 		return "Cannot teleport during a route transition."
-	if bool(player.get("fishing_activity_active")) or bool(player.get("surf_activity_active")):
+	# Surf is a movement mode and must be allowed through water map exits and
+	# teleports. Destination positioning resets it, then restores it only when
+	# the arrival tile is water. Fishing remains a blocking activity.
+	if bool(player.get("fishing_activity_active")):
 		return "Cannot teleport during an overworld activity."
 	return ""
 
