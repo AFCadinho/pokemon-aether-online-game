@@ -97,6 +97,10 @@ func _check_scene(scene_path: String, expected: Dictionary) -> void:
 	var gym_attendant := map.get_node_or_null("Entities/NPCs/GymAttendant")
 	if gym_attendant != null:
 		_check(gym_attendant.position == Vector2(1584, 1344), "Gym attendant blocks the Gym doorway")
+		_check(
+			str(gym_attendant.get("portrait_id")) == "showdown_trialguide",
+			"Gym attendant uses the matching Showdown guide portrait"
+		)
 		var story_hook := gym_attendant.get_node_or_null("GymClosedStoryHook")
 		_check(story_hook != null, "Gym attendant owns the Gym-closed story hook")
 		if story_hook != null:

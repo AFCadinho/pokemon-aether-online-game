@@ -6,6 +6,7 @@ const REQUIRED_NPC_IDS: Array[String] = [
 	"kanto_alpha_gym_brock",
 	"kanto_alpha_gym_lt_surge",
 	"kanto_alpha_gym_misty",
+	"kanto_cerulean_city_gym_attendant",
 	"kanto_cerulean_city_patrol_officer",
 	"kanto_oaklab_oak_1",
 	"kanto_oaks_lab_gary",
@@ -61,6 +62,11 @@ func _init() -> void:
 		catalog.resolve_portrait_id("", "kanto_alpha_gym_lt_surge", ""),
 		"showdown_ltsurge",
 		"Lt. Surge resolves his exact Showdown portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "kanto_cerulean_city_gym_attendant", ""),
+		"showdown_trialguide",
+		"Cerulean Gym attendant resolves the matching Showdown guide portrait"
 	)
 	_check_equal(
 		catalog.resolve_portrait_id("", "kanto_pallet_town_north_guard", ""),
