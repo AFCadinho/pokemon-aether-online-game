@@ -10,10 +10,14 @@
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="8_ex4qq"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="9_dialogue"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="10_pokemon"]
-[ext_resource type="SpriteFrames" uid="uid://c3damqagxht62" path="res://assets/npcs/classes/policeman_frames.tres" id="11_policeman"]
 [ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="12_lass"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="13_o6adi"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="13_youngster"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/officer_jenny_frames.tres" id="14_jenny"]
+[ext_resource type="Texture2D" path="res://assets/npcs/classes/officer_jenny.png" id="14_jenny_texture"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="15_ace_f"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ace_trainer_m_frames.tres" id="16_ace_m"]
+[ext_resource type="Script" path="res://scripts/world/kanto/towns/cerulean_battle_display.gd" id="17_battle_display"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
@@ -50,6 +54,10 @@ size = Vector2(32, 192)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_door_exit"]
 size = Vector2(48, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jenny_portrait"]
+atlas = ExtResource("14_jenny_texture")
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_31plc"]
 texture = ExtResource("6_hujw2")
@@ -615,13 +623,14 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=790832259]
 
-[node name="PatrolOfficer" parent="Entities/NPCs" unique_id=1966720263 instance=ExtResource("9_dialogue")]
+[node name="OfficerJenny" parent="Entities/NPCs" unique_id=1966720263 instance=ExtResource("9_dialogue")]
 position = Vector2(1040, 1008)
 npc_id = "kanto_cerulean_city_patrol_officer"
 npc_definition_id = "trainer_class_policeman"
-display_name = "Cerulean Patrol Officer"
+display_name = "Officer Jenny"
 facing_direction = Vector2(1, 0)
-npc_sprite_frames = ExtResource("11_policeman")
+npc_sprite_frames = ExtResource("14_jenny")
+mugshot = SubResource("AtlasTexture_jenny_portrait")
 
 [node name="WaterwayVisitorMaya" parent="Entities/NPCs" unique_id=395956463 instance=ExtResource("9_dialogue")]
 position = Vector2(1424, 720)
@@ -638,16 +647,91 @@ display_name = "Bike Enthusiast Theo"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("13_youngster")
 
+[node name="AceTrainerLila" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
+position = Vector2(624, 1216)
+npc_id = "kanto_cerulean_city_ace_trainer_lila"
+npc_definition_id = "trainer_class_ace_trainer_f"
+display_name = "Ace Trainer Lila"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("15_ace_f")
+
+[node name="AceTrainerBram" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
+position = Vector2(736, 1216)
+npc_id = "kanto_cerulean_city_ace_trainer_bram"
+npc_definition_id = "trainer_class_ace_trainer_m"
+display_name = "Ace Trainer Bram"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("16_ace_m")
+
 [node name="Players" type="Node2D" parent="Entities" unique_id=419165532]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=611880944]
 
-[node name="Squirtle" parent="Entities/Pokemon" unique_id=360414582 instance=ExtResource("10_pokemon")]
+[node name="Growlithe" parent="Entities/Pokemon" unique_id=360414582 instance=ExtResource("10_pokemon")]
 position = Vector2(1104, 1008)
-overworld_pokemon_id = "kanto_cerulean_city_squirtle_1"
-species_id = "squirtle"
+overworld_pokemon_id = "kanto_cerulean_city_growlithe_1"
+species_id = "growlithe"
 level = 12
-display_name = "Squirtle"
+display_name = "Growlithe"
+facing_direction = Vector2(-1, 0)
+
+[node name="WaterPokemon" type="Node2D" parent="Entities/Pokemon"]
+
+[node name="Gyarados" parent="Entities/Pokemon/WaterPokemon" instance=ExtResource("10_pokemon")]
+position = Vector2(1392, 512)
+scale = Vector2(1.2, 1.2)
+overworld_pokemon_id = "kanto_cerulean_city_gyarados_1"
+species_id = "gyarados"
+level = 30
+display_name = "Gyarados"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 2
+movement_wait_seconds = 0.8
+movement_speed_pixels = 55.0
+
+[node name="Goldeen" parent="Entities/Pokemon/WaterPokemon" instance=ExtResource("10_pokemon")]
+position = Vector2(320, 608)
+overworld_pokemon_id = "kanto_cerulean_city_goldeen_1"
+species_id = "goldeen"
+level = 15
+display_name = "Goldeen"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 2
+movement_wait_seconds = 1.0
+movement_speed_pixels = 70.0
+
+[node name="Poliwag" parent="Entities/Pokemon/WaterPokemon" instance=ExtResource("10_pokemon")]
+position = Vector2(1184, 384)
+overworld_pokemon_id = "kanto_cerulean_city_poliwag_1"
+species_id = "poliwag"
+level = 12
+display_name = "Poliwag"
+facing_direction = Vector2(0, 1)
+movement_behavior = "pace_vertical"
+movement_tiles = 2
+movement_wait_seconds = 1.2
+movement_speed_pixels = 60.0
+
+[node name="BattleDisplay" type="Node2D" parent="Entities/Pokemon"]
+position = Vector2(680, 1216)
+script = ExtResource("17_battle_display")
+
+[node name="Pikachu" parent="Entities/Pokemon/BattleDisplay" instance=ExtResource("10_pokemon")]
+position = Vector2(-24, 0)
+overworld_pokemon_id = "kanto_cerulean_city_practice_pikachu_1"
+species_id = "pikachu"
+level = 16
+display_name = "Pikachu"
+facing_direction = Vector2(1, 0)
+
+[node name="Eevee" parent="Entities/Pokemon/BattleDisplay" instance=ExtResource("10_pokemon")]
+position = Vector2(24, 0)
+overworld_pokemon_id = "kanto_cerulean_city_practice_eevee_1"
+species_id = "eevee"
+level = 16
+display_name = "Eevee"
 facing_direction = Vector2(-1, 0)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=757893626]
