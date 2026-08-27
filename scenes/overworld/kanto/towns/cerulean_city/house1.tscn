@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://wub1tyvungcw"]
 
-[ext_resource type="PackedScene" uid="uid://ogt7khne5kw1" path="res://scenes/overworld/kanto/reusable_interiors/house/brown_house_template.tscn" id="1_house"]
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/house/blue_house_template.tscn" id="1_house"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="3_floor_mask"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_exit"]
@@ -24,7 +24,7 @@ lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "kanto.cerulean_city"
 
-[node name="BrownHouseTemplate" parent="." unique_id=52958376 instance=ExtResource("1_house")]
+[node name="BlueHouseTemplate" parent="." unique_id=52958376 instance=ExtResource("1_house")]
 
 [node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=277279981]
 z_index = 4096

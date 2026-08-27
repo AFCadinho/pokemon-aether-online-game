@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3]
 
-[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/house/brown_house_template.tscn" id="1_house"]
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/house/blue_house_template.tscn" id="1_house"]
 [ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="3_floor_mask"]
 [ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="4_exit"]
@@ -24,7 +24,7 @@ lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "kanto.cerulean_city"
 
-[node name="BrownHouseTemplate" parent="." instance=ExtResource("1_house")]
+[node name="BlueHouseTemplate" parent="." instance=ExtResource("1_house")]
 
 [node name="FloorVisibilityMask" type="Node2D" parent="."]
 z_index = 4096

@@ -10,7 +10,7 @@ const INTERIORS := [
 		"city_exit": "ToHouse1",
 		"interior_spawn": "FromCeruleanCity",
 		"interior_exit": "ToCeruleanCity",
-		"template": "BrownHouseTemplate",
+		"template": "BlueHouseTemplate",
 		"spawn_position": Vector2(784, 944),
 	},
 	{
@@ -43,7 +43,7 @@ const INTERIORS := [
 		"city_exit": "ToBikeStore",
 		"interior_spawn": "FromCeruleanCity",
 		"interior_exit": "ToCeruleanCity",
-		"template": "BrownHouseTemplate",
+		"template": "BlueHouseTemplate",
 		"spawn_position": Vector2(656, 1680),
 	},
 	{
@@ -54,7 +54,7 @@ const INTERIORS := [
 		"city_exit": "ToHouse2",
 		"interior_spawn": "FromCeruleanCity",
 		"interior_exit": "ToCeruleanCity",
-		"template": "BrownHouseTemplate",
+		"template": "BlueHouseTemplate",
 		"spawn_position": Vector2(1168, 1680),
 	},
 ]
@@ -122,6 +122,15 @@ func _check_interior(city: Node, data: Dictionary) -> void:
 	_check(str(interior.get("world_access_group_id")) == "kanto_cerulean_city", "%s belongs to Cerulean City" % label)
 	_check(interior.get_node_or_null(str(data.get("template", ""))) != null, "%s uses its requested visual template" % label)
 	_check(interior.find_map_tilemap_layer("Collision") != null, "%s resolves an interior collision layer" % label)
+	if str(data.get("template", "")) == "BlueHouseTemplate":
+		_check(
+			interior.get_node_or_null("BlueHouseTemplate/PokeAetherHouseTemplateBlue") != null,
+			"%s uses the imported blue house visual" % label
+		)
+		_check(
+			interior.get_node_or_null("BlueHouseTemplate/Collision") != null,
+			"%s uses the shared house collision template" % label
+		)
 	_check(interior.get_node_or_null("Spawns/%s" % interior_spawn_name) != null, "%s has an interior arrival" % label)
 	var interior_exit := interior.get_node_or_null("Exits/%s" % interior_exit_name)
 	_check(interior_exit != null, "%s has a return exit" % label)
