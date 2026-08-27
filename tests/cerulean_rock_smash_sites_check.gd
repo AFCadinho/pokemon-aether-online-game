@@ -2,14 +2,14 @@ extends SceneTree
 
 const CITY_SCENE := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 const EXPECTED_ROCKS := {
-	"WestRockNorth": ["kanto_cerulean_city_west_site_rock_north", Vector2(80, 1168)],
-	"WestRockUpper": ["kanto_cerulean_city_west_site_rock_upper", Vector2(144, 1328)],
+	"WestRockNorth": ["kanto_cerulean_city_west_site_rock_north", Vector2(144, 1104)],
+	"WestRockUpper": ["kanto_cerulean_city_west_site_rock_upper", Vector2(48, 1232)],
 	"WestRockLower": ["kanto_cerulean_city_west_site_rock_lower", Vector2(48, 1744)],
 	"WestRockSouth": ["kanto_cerulean_city_west_site_rock_south", Vector2(144, 1936)],
-	"EastRockNorthwest": ["kanto_cerulean_city_east_site_rock_northwest", Vector2(2128, 1680)],
-	"EastRockNortheast": ["kanto_cerulean_city_east_site_rock_northeast", Vector2(2320, 1712)],
-	"EastRockSouthwest": ["kanto_cerulean_city_east_site_rock_southwest", Vector2(2128, 1904)],
-	"EastRockSoutheast": ["kanto_cerulean_city_east_site_rock_southeast", Vector2(2288, 1936)],
+	"EastRockNorthwest": ["kanto_cerulean_city_east_site_rock_northwest", Vector2(2128, 1712)],
+	"EastRockNortheast": ["kanto_cerulean_city_east_site_rock_northeast", Vector2(2128, 2096)],
+	"EastRockSouthwest": ["kanto_cerulean_city_east_site_rock_southwest", Vector2(1392, 2192)],
+	"EastRockSoutheast": ["kanto_cerulean_city_east_site_rock_southeast", Vector2(1136, 2096)],
 }
 
 var failed := false
@@ -30,7 +30,7 @@ func _run() -> void:
 	root.add_child(city)
 
 	var guide := city.get_node_or_null("Entities/NPCs/MountainGuide") as Node2D
-	_check(guide != null and guide.position == Vector2(432, 1488), "Mountain Guide waits beside the mountain trail")
+	_check(guide != null and guide.position == Vector2(1712, 1904), "Mountain Guide keeps the edited city position")
 	if guide != null:
 		_check(bool(guide.call("can_access_site", "west", 20)), "West Site opens at Rock Smash level 20")
 		_check(not bool(guide.call("can_access_site", "east", 49)), "East Site stays closed below level 50")
@@ -53,14 +53,22 @@ func _run() -> void:
 				_check(int(rock.get("rock_visual_style")) == 2, "%s uses the route rock visual" % rock_name)
 				_check(rock.z_index == 2054 and not rock.z_as_relative, "%s renders on the plateau" % rock_name)
 				_check(_is_open_land(rock.position, collision, water), "%s stands on open land" % rock_name)
-		_check(site_root.get_node_or_null("WestReturnTrail") != null, "West Site has a return trail")
-		_check(site_root.get_node_or_null("EastReturnTrail") != null, "East Site has a return trail")
+	var west_guide := city.get_node_or_null("Entities/NPCs/WestMountainGuide") as Node2D
+	var east_guide := city.get_node_or_null("Entities/NPCs/EastMountainGuide") as Node2D
+	_check(west_guide != null and west_guide.position == Vector2(144, 1584), "West Site has a visible Mountain Guide")
+	_check(east_guide != null and east_guide.position == Vector2(2320, 1872), "East Site has a visible Mountain Guide")
+	if west_guide != null:
+		_check(int(west_guide.get("minimum_sort_z")) == 2054, "West Mountain Guide renders above the plateau")
+		_check(west_guide.get("destination_position") == Vector2(1680, 1904), "West Mountain Guide returns beside the city guide")
+	if east_guide != null:
+		_check(int(east_guide.get("minimum_sort_z")) == 2054, "East Mountain Guide renders above the plateau")
+		_check(east_guide.get("destination_position") == Vector2(1680, 1904), "East Mountain Guide returns beside the city guide")
 
 	_check(int(city.call("get_actor_sort_z_floor", Vector2(112, 1520))) == 2054, "West Site raises actor depth")
-	_check(int(city.call("get_actor_sort_z_floor", Vector2(2192, 1776))) == 2054, "East Site raises actor depth")
+	_check(int(city.call("get_actor_sort_z_floor", Vector2(1296, 2096))) == 2054, "East Site raises actor depth")
 	_check(_is_open_land(Vector2(112, 1520), collision, water), "West Site arrival is safe")
-	_check(_is_open_land(Vector2(2192, 1776), collision, water), "East Site arrival is safe")
-	_check(_is_open_land(Vector2(432, 1520), collision, water), "Mountain Guide return is safe")
+	_check(_is_open_land(Vector2(1296, 2096), collision, water), "East Site arrival is safe")
+	_check(_is_open_land(Vector2(1680, 1904), collision, water), "Mountain Guide return is safe")
 	_check(int(city.call("get_actor_sort_z_floor", Vector2(800, 800))) < 0, "Regular city depth remains unchanged")
 	city.free()
 	quit(1 if failed else 0)

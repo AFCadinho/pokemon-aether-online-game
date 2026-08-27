@@ -384,7 +384,7 @@ position = Vector2(112, 1520)
 position = Vector2(1296, 2096)
 
 [node name="MountainGuideReturn" type="Marker2D" parent="Spawns" unique_id=1655488040]
-position = Vector2(432, 1520)
+position = Vector2(1680, 1904)
 
 [node name="TransitArrival" type="Marker2D" parent="Spawns" unique_id=1815544339]
 position = Vector2(1584, 944)
@@ -731,11 +731,29 @@ npc_sprite_frames = ExtResource("13_youngster")
 position = Vector2(1712, 1904)
 script = ExtResource("29_mountain_guide")
 west_destination_position = Vector2(112, 1520)
-east_destination_position = Vector2(2192, 1776)
+east_destination_position = Vector2(1296, 2096)
 npc_id = "kanto_cerulean_city_mountain_guide"
 display_name = "Mountain Guide"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("30_hiker")
+
+[node name="WestMountainGuide" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
+position = Vector2(144, 1584)
+script = ExtResource("31_mountain_return")
+npc_id = "kanto_cerulean_city_west_mountain_guide"
+display_name = "Mountain Guide"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("30_hiker")
+minimum_sort_z = 2054
+
+[node name="EastMountainGuide" parent="Entities/NPCs" instance=ExtResource("9_dialogue")]
+position = Vector2(2320, 1872)
+script = ExtResource("31_mountain_return")
+npc_id = "kanto_cerulean_city_east_mountain_guide"
+display_name = "Mountain Guide"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("30_hiker")
+minimum_sort_z = 2054
 
 [node name="AceTrainerLila" parent="Entities/NPCs" unique_id=159174064 instance=ExtResource("9_dialogue")]
 position = Vector2(624, 1200)
@@ -979,16 +997,6 @@ sign_id = "kanto_cerulean_city_town_sign"
 sign_type = "town"
 
 [node name="MountainRockSmashSites" type="Node2D" parent="Entities/Interactables" unique_id=962698712]
-
-[node name="WestReturnTrail" type="Node2D" parent="Entities/Interactables/MountainRockSmashSites" unique_id=871700528]
-position = Vector2(144, 1584)
-script = ExtResource("31_mountain_return")
-interactable_id = "kanto_cerulean_city_west_site_return"
-
-[node name="EastReturnTrail" type="Node2D" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1848718920]
-position = Vector2(2320, 1872)
-script = ExtResource("31_mountain_return")
-interactable_id = "kanto_cerulean_city_east_site_return"
 
 [node name="WestRockNorth" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1669011993 instance=ExtResource("32_daily_rock")]
 z_index = 2054
