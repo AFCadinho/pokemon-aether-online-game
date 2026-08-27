@@ -63,6 +63,7 @@ func _check_land_mount_runtime_contract() -> void:
 	var project_source := FileAccess.get_file_as_string("res://project.godot")
 	var settings_source := FileAccess.get_file_as_string("res://scripts/services/settings_manager.gd")
 	var player_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
+	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	_check(project_source.contains("mount={"), "the land mount toggle has an input action")
 	_check(
 		settings_source.contains('"mount": KEY_M')
@@ -71,9 +72,16 @@ func _check_land_mount_runtime_contract() -> void:
 	)
 	_check(
 		player_source.contains("func toggle_land_mount()")
-		and player_source.contains("LAND_MOUNT_TILE_MOVE_DURATION")
+		and player_source.contains("LAND_MOUNT_TILE_MOVE_DURATION := 0.08")
+		and player_source.contains("LAND_MOUNT_WALK_ANIMATION_SPEED := 18.0")
 		and player_source.contains("InventoryService"),
 		"the player can toggle an owned, faster land mount"
+	)
+	_check(
+		player_source.contains("and not land_mount_activity_active")
+		and player_source.count("refresh_pokemon_follower()") >= 4
+		and world_source.contains('player.call("is_land_mount_activity_active")'),
+		"land mounts hide local and remote follower Pokemon until dismounting"
 	)
 
 

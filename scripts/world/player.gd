@@ -5,7 +5,7 @@ signal overworld_steps_completed(step_count: int)
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
 const RUN_TILE_MOVE_DURATION := 0.14
-const LAND_MOUNT_TILE_MOVE_DURATION := 0.10
+const LAND_MOUNT_TILE_MOVE_DURATION := 0.08
 const MOVE_EASE_AMOUNT := 0.0
 const INPUT_BUFFER_DURATION := 0.14
 const CONTINUOUS_MOVE_HOLD_DELAY := 0.0
@@ -16,7 +16,7 @@ const SORT_Z_MAX := 4096
 const IDLE_ANIMATION_SPEED := 5.0
 const WALK_ANIMATION_SPEED := 7.5
 const RUN_WALK_ANIMATION_SPEED := 11.5
-const LAND_MOUNT_WALK_ANIMATION_SPEED := 14.0
+const LAND_MOUNT_WALK_ANIMATION_SPEED := 18.0
 const PLAYER_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_NEAREST
 const MOVE_ACTIONS := ["move_right", "move_left", "move_down", "move_up"]
 const TEXT_INPUT_WINDOW_GROUP := "text_input_windows"
@@ -1506,7 +1506,11 @@ func refresh_pokemon_follower() -> void:
 		return
 
 	var lead_pokemon: Pokemon = null
-	if GameState.show_follower and not PlayerSave.party.is_empty():
+	if (
+		GameState.show_follower
+		and not land_mount_activity_active
+		and not PlayerSave.party.is_empty()
+	):
 		lead_pokemon = PlayerSave.party[0]
 
 	pokemon_follower.set_pokemon(lead_pokemon)
@@ -1722,6 +1726,7 @@ func _start_land_mount_activity() -> bool:
 		return false
 	land_mount_activity_active = true
 	active_mount_id = mount_id
+	refresh_pokemon_follower()
 	set_activity_style(CharacterAppearanceService.BODY_MOVEMENT_RIDE)
 	_sync_mount_visual()
 	_clear_input_buffer()
@@ -1735,6 +1740,8 @@ func _finish_land_mount_activity() -> void:
 	active_mount_id = ""
 	_sync_mount_visual()
 	clear_activity_style()
+	refresh_pokemon_follower()
+	reset_pokemon_follower_position()
 
 func _is_mount_owned(mount_id: String) -> bool:
 	var unlock_item_id := MountService.get_mount_unlock_item_id(mount_id)

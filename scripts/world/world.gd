@@ -2237,7 +2237,15 @@ func _get_current_role_presence_state() -> Array:
 
 
 func _get_current_follower_presence_state() -> Dictionary:
-	if not GameState.show_follower or PlayerSave.party.is_empty():
+	if (
+		not GameState.show_follower
+		or PlayerSave.party.is_empty()
+		or (
+			player != null
+			and player.has_method("is_land_mount_activity_active")
+			and bool(player.call("is_land_mount_activity_active"))
+		)
+	):
 		return {"visible": false}
 
 	var lead_pokemon: Pokemon = PlayerSave.party[0]
