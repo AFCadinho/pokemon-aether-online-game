@@ -727,7 +727,12 @@ overworld_pokemon_id = "kanto_cerulean_city_mountain_geodude_1"
 species_id = "geodude"
 level = 18
 display_name = "Geodude"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 30.0
 minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
 
 [node name="Nosepass" parent="Entities/Pokemon/MountainPokemon" unique_id=459947247 instance=ExtResource("10_pokemon")]
 position = Vector2(112, 1456)
@@ -736,7 +741,12 @@ species_id = "nosepass"
 level = 20
 display_name = "Nosepass"
 facing_direction = Vector2(1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.4
+movement_speed_pixels = 24.0
 minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
 
 [node name="Roggenrola" parent="Entities/Pokemon/MountainPokemon" unique_id=825557704 instance=ExtResource("10_pokemon")]
 position = Vector2(2128, 1168)
@@ -745,7 +755,12 @@ species_id = "roggenrola"
 level = 17
 display_name = "Roggenrola"
 facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.6
+movement_speed_pixels = 28.0
 minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
 
 [node name="Larvitar" parent="Entities/Pokemon/MountainPokemon" unique_id=2025605849 instance=ExtResource("10_pokemon")]
 position = Vector2(1712, 2064)
@@ -754,7 +769,12 @@ species_id = "larvitar"
 level = 19
 display_name = "Larvitar"
 facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.2
+movement_speed_pixels = 38.0
 minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
 
 [node name="Rockruff" parent="Entities/Pokemon/MountainPokemon" unique_id=204595213 instance=ExtResource("10_pokemon")]
 position = Vector2(2192, 1584)
@@ -763,7 +783,26 @@ species_id = "rockruff"
 level = 16
 display_name = "Rockruff"
 facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.0
+movement_speed_pixels = 46.0
 minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
+
+[node name="Rhyhorn" parent="Entities/Pokemon/MountainPokemon" unique_id=2048374653 instance=ExtResource("10_pokemon")]
+position = Vector2(1584, 2032)
+overworld_pokemon_id = "kanto_cerulean_city_mountain_rhyhorn_1"
+species_id = "rhyhorn"
+level = 22
+display_name = "Rhyhorn"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 34.0
+minimum_sort_z = 2053
+ambient_movement_ignores_map_collision = true
 
 [node name="BattleDisplay" type="Node2D" parent="Entities/Pokemon" unique_id=1385943621]
 position = Vector2(680, 1216)

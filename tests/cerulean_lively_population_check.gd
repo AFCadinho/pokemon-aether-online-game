@@ -16,6 +16,16 @@ const MOUNTAIN_POKEMON := {
 	"Entities/Pokemon/MountainPokemon/Roggenrola": "roggenrola",
 	"Entities/Pokemon/MountainPokemon/Larvitar": "larvitar",
 	"Entities/Pokemon/MountainPokemon/Rockruff": "rockruff",
+	"Entities/Pokemon/MountainPokemon/Rhyhorn": "rhyhorn",
+}
+
+const MOUNTAIN_MOVEMENT := {
+	"Entities/Pokemon/MountainPokemon/Geodude": "pace_horizontal",
+	"Entities/Pokemon/MountainPokemon/Nosepass": "pace_vertical",
+	"Entities/Pokemon/MountainPokemon/Roggenrola": "pace_horizontal",
+	"Entities/Pokemon/MountainPokemon/Larvitar": "pace_horizontal",
+	"Entities/Pokemon/MountainPokemon/Rockruff": "pace_horizontal",
+	"Entities/Pokemon/MountainPokemon/Rhyhorn": "pace_horizontal",
 }
 
 var failed := false
@@ -37,13 +47,16 @@ func _run() -> void:
 	root.add_child(city)
 	var collision := city.get_node_or_null("Tiles/Collision") as TileMapLayer
 	var water := city.get_node_or_null("Tiles/Water") as TileMapLayer
+	var ground := city.get_node_or_null("CeruleanCityVisual/Ground") as TileMapLayer
 	_check(collision != null, "Cerulean exposes collision for population placement")
 	_check(water != null, "Cerulean exposes semantic water for swimming Pokemon")
+	_check(ground != null, "Cerulean exposes Ground for mountain Pokemon movement")
 
 	_check_officer_jenny(city)
 	_check_growlithe(city)
 	_check_water_pokemon(city, collision, water)
-	_check_mountain_pokemon(city, collision, water)
+	_check_mountain_pokemon(city, collision, water, ground)
+	_check_decorative_mountain_collision_override(city, collision)
 	_check_practice_battle(city, collision)
 	city.free()
 	quit(1 if failed else 0)
@@ -101,7 +114,12 @@ func _check_water_pokemon(city: Node, collision: TileMapLayer, water: TileMapLay
 	_check(gyarados != null and gyarados.scale.x > 1.0, "Gyarados is visually prominent")
 
 
-func _check_mountain_pokemon(city: Node, collision: TileMapLayer, water: TileMapLayer) -> void:
+func _check_mountain_pokemon(
+	city: Node,
+	collision: TileMapLayer,
+	water: TileMapLayer,
+	ground: TileMapLayer
+) -> void:
 	var reachable_tiles := _collect_walkable_tiles(city, collision, water)
 	var mountain_foreground := city.get_node_or_null("CeruleanCityVisual/ObjectsTop") as CanvasItem
 	_check(mountain_foreground != null, "Cerulean exposes its mountain foreground layer")
@@ -116,7 +134,31 @@ func _check_mountain_pokemon(city: Node, collision: TileMapLayer, water: TileMap
 			"%s uses its intended Rock-type species" % node_path.get_file()
 		)
 		_check(pokemon.get("npc_sprite_frames") != null, "%s resolves its overworld follower sprite" % node_path.get_file())
-		_check(str(pokemon.get("movement_behavior")) == "idle", "%s remains an ambient overworld Pokemon" % node_path.get_file())
+		var movement_behavior := str(pokemon.get("movement_behavior"))
+		_check(
+			movement_behavior == str(MOUNTAIN_MOVEMENT[node_path_value]),
+			"%s patrols along its intended mountain axis" % node_path.get_file()
+		)
+		_check(int(pokemon.get("movement_tiles")) == 1, "%s keeps a short mountain patrol" % node_path.get_file())
+		_check(float(pokemon.get("movement_speed_pixels")) > 0.0, "%s moves at a visible speed" % node_path.get_file())
+		_check(
+			bool(pokemon.get("ambient_movement_ignores_map_collision")),
+			"%s can move over decorative mountain collision" % node_path.get_file()
+		)
+		if ground != null and water != null:
+			var movement_axis := Vector2.RIGHT if movement_behavior == "pace_horizontal" else Vector2.DOWN
+			for offset_tiles: int in [-1, 0, 1]:
+				var sample_position := pokemon.global_position + movement_axis * 32.0 * offset_tiles
+				var ground_cell := ground.local_to_map(ground.to_local(sample_position))
+				var water_cell := water.local_to_map(water.to_local(sample_position))
+				_check(
+					ground.get_cell_source_id(ground_cell) != -1,
+					"%s patrol stays on Ground" % node_path.get_file()
+				)
+				_check(
+					water.get_cell_source_id(water_cell) == -1,
+					"%s patrol stays out of water" % node_path.get_file()
+				)
 		if mountain_foreground != null:
 			_check(
 				pokemon.z_index > mountain_foreground.z_index,
@@ -148,6 +190,26 @@ func _collect_walkable_tiles(city: Node, collision: TileMapLayer, water: TileMap
 		frontier.append(cell + Vector2i.UP)
 		frontier.append(cell + Vector2i.DOWN)
 	return reachable
+
+
+func _check_decorative_mountain_collision_override(city: Node, collision: TileMapLayer) -> void:
+	var geodude := city.get_node_or_null("Entities/Pokemon/MountainPokemon/Geodude") as Node2D
+	var game_state := root.get_node_or_null("GameState")
+	if geodude == null or collision == null or game_state == null:
+		return
+	var previous_map: Node = game_state.get("current_map") as Node
+	game_state.set("current_map", city)
+	var target_position := geodude.global_position + Vector2.RIGHT * 32.0
+	var target_cell := collision.local_to_map(collision.to_local(target_position))
+	_check(collision.get_cell_source_id(target_cell) != -1, "Geodude patrol crosses decorative mountain collision")
+	geodude.set("ambient_movement_ignores_map_collision", false)
+	_check(not bool(geodude.call("_can_npc_move_to", target_position)), "Mountain collision blocks a normal actor")
+	geodude.set("ambient_movement_ignores_map_collision", true)
+	_check(
+		bool(geodude.call("_can_npc_move_to", target_position)),
+		"Decorative mountain movement bypasses its collision mask"
+	)
+	game_state.set("current_map", previous_map)
 
 
 func _check_practice_battle(city: Node, collision: TileMapLayer) -> void:

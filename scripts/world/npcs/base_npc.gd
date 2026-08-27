@@ -75,6 +75,9 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 ## Optional lower bound for actors that must remain above a map foreground layer.
 ## Keep this at the end of the inherited property list so open scenes can hot-reload safely.
 @export_range(-4096, 4096, 1) var minimum_sort_z := -4096
+## Allows decorative actors on unreachable terrain to patrol across its blocking mask.
+## Character occupancy checks still apply. Keep new inherited exports at the end of this list.
+@export var ambient_movement_ignores_map_collision := false
 
 const TILE_SIZE := 32
 const MOVE_SPEED := 120.0
@@ -979,7 +982,7 @@ func _can_npc_move_to(world_position: Vector2) -> bool:
 			return false
 
 	var collision_tilemap := MapLayerResolverScript.find_tilemap_layer(current_map, ["Collision"])
-	if collision_tilemap != null:
+	if collision_tilemap != null and not ambient_movement_ignores_map_collision:
 		var local_position := collision_tilemap.to_local(world_position)
 		var tile_position := collision_tilemap.local_to_map(local_position)
 		if collision_tilemap.get_cell_source_id(tile_position) != -1:
