@@ -21,6 +21,10 @@
 [ext_resource type="SpriteFrames" uid="uid://bxh5nxs12bywr" path="res://assets/npcs/gym_guide_frames.tres" id="18_gym_attendant"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="19_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="20_aether_beacon"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="21_trainer"]
+[ext_resource type="Script" path="res://scripts/world/kanto/routes/route_24_gary.gd" id="22_gary_script"]
+[ext_resource type="SpriteFrames" uid="uid://3v3l6agblhvi" path="res://assets/npcs/gary_sprite_frames.tres" id="23_gary_frames"]
+[ext_resource type="Texture2D" path="res://assets/sprites/mugshots/gary.png" id="24_gary_mugshot"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
@@ -61,6 +65,10 @@ size = Vector2(48, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_jenny_portrait"]
 atlas = ExtResource("14_jenny_texture")
 region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gary_mugshot"]
+atlas = ExtResource("24_gary_mugshot")
+region = Rect2(80, 0, 387, 387)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_31plc"]
 texture = ExtResource("6_hujw2")
@@ -634,6 +642,18 @@ position = Vector2(0, 16)
 z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=790832259]
+
+[node name="GaryOak" parent="Entities/NPCs" instance=ExtResource("21_trainer")]
+position = Vector2(1808, 720)
+script = ExtResource("22_gary_script")
+trainer_id = "kanto_route_24_gary_bulbasaur"
+sight_range_tiles = 3
+npc_id = "kanto_route_24_gary_oak"
+npc_definition_id = "trainer_class_blue"
+display_name = "Gary Oak"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("23_gary_frames")
+mugshot = SubResource("AtlasTexture_gary_mugshot")
 
 [node name="GymAttendant" parent="Entities/NPCs" unique_id=1108117216 instance=ExtResource("9_dialogue")]
 position = Vector2(1584, 1344)
