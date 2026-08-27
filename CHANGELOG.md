@@ -5,6 +5,7 @@
 **Added**
 
 - Swimmer Luis, Picnicker Diana, and Swimmer Briana now challenge Trainers inside Cerulean Gym.
+- Horsea, Shellder, and Goldeen now join Staryu in Cerulean Gym's pools.
 - Cerulean Gym now uses its complete imported Tiled pool and bridge visual, with the entrance and Gym Guide aligned to the new foyer.
 - The Cerulean Bike Shop now exchanges a lifetime Bike Voucher for Cyclizar, a selectable land mount that can be toggled with the configurable Mount key.
 - Route 24 now uses its complete imported Tiled visual, with the Cerulean City path, bridge, and Surf arrivals aligned to the new map edge.
