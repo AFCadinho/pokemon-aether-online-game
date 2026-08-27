@@ -23,6 +23,15 @@ func _run() -> void:
 
 
 func _check_cerulean_openings() -> void:
+	var authored_city := (load(CITY_SCENE) as PackedScene).instantiate()
+	var authored_water := authored_city.get_node("Tiles/Water") as TileMapLayer
+	var authored_lower_north_water := {}
+	for x: int in range(46, 65):
+		for y: int in range(15, 21):
+			var cell := Vector2i(x, y)
+			authored_lower_north_water[cell] = authored_water.get_cell_source_id(cell) != -1
+	authored_city.free()
+
 	var city := await _instantiate_map(CITY_SCENE)
 	var collision := city.find_map_tilemap_layer("Collision") as TileMapLayer
 	var water := city.find_map_tilemap_layer("Water") as TileMapLayer
@@ -42,6 +51,26 @@ func _check_cerulean_openings() -> void:
 	_check(_is_open(water, Vector2i(69, 2)), "Cerulean keeps the Route 24 path spawn off water")
 	_check(not _is_open(water, Vector2i(2, 18)), "Cerulean marks the Route 4 water spawn as water")
 	_check(_is_open(water, Vector2i(2, 25)), "Cerulean keeps the Route 4 road spawn off water")
+	_check(
+		not _is_open(water, Vector2i(49, 15)),
+		"Cerulean preserves water beside the west foot of the Route 24 bridge"
+	)
+	_check(_is_open(water, Vector2i(56, 15)), "Cerulean keeps the lower Route 24 bridge off water")
+	_check(
+		not _is_open(water, Vector2i(62, 15)),
+		"Cerulean preserves water beside the east foot of the Route 24 bridge"
+	)
+	var preserves_authored_water := true
+	for cell_value: Variant in authored_lower_north_water:
+		var cell := cell_value as Vector2i
+		var authored_has_water := bool(authored_lower_north_water[cell_value])
+		if (water.get_cell_source_id(cell) != -1) != authored_has_water:
+			preserves_authored_water = false
+			break
+	_check(
+		preserves_authored_water,
+		"Cerulean preserves the hand-painted Water mask below its Route 24 transition"
+	)
 	await _free_map(city)
 
 

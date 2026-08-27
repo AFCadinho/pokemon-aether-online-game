@@ -59,7 +59,6 @@ const EXIT_OPENINGS := {
 }
 
 const WATER_CONNECTION_DEPTH := 15
-const NORTH_WATER_CLEAR_DEPTH := 21
 @export_range(0.0, 1.0, 0.01) var surf_encounter_chance := 0.1
 const WATER_CONNECTIONS := [
 	{
@@ -137,10 +136,10 @@ func _build_water_connections() -> void:
 		push_error("Cerulean City could not resolve its Water tile layer.")
 		return
 
-	# Clear stale hand-painted markers across the complete north connection so
-	# the bridge remains walkable and only both open-water channels restore Surf.
+	# Rewrite only the off-map transition strip. Water south of this strip is
+	# hand-painted around the irregular shore and must survive map setup.
 	for x: int in range(46, 65):
-		for y: int in range(NORTH_WATER_CLEAR_DEPTH):
+		for y: int in range(WATER_CONNECTION_DEPTH):
 			water.erase_cell(Vector2i(x, y))
 
 	for connection_value: Variant in WATER_CONNECTIONS:
