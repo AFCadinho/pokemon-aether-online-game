@@ -1,5 +1,6 @@
 [gd_scene load_steps=6 format=3]
 
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/cerulean_gym/cerulean_gym.visual.tscn" id="1_visual"]
 [ext_resource type="PackedScene" path="res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn" id="1_pewter_gym"]
 [ext_resource type="Script" path="res://scripts/world/kanto/towns/cerulean_gym.gd" id="2_gym"]
 [ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
@@ -29,6 +30,8 @@ lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "kanto.cerulean_city"
 
+[node name="CeruleanGymVisual" parent="." instance=ExtResource("1_visual")]
+
 [node name="PewterGymTemplate" parent="." instance=ExtResource("1_pewter_gym")]
 script = null
 
@@ -36,7 +39,7 @@ script = null
 z_index = 5
 [node name="NPCs" type="Node2D" parent="Entities"]
 [node name="GymGuide" parent="Entities/NPCs" instance=ExtResource("5_dialogue")]
-position = Vector2(592, 784)
+position = Vector2(624, 1168)
 npc_id = "kanto_cerulean_city_gym_guide"
 display_name = "Cerulean Gym Guide"
 npc_sprite_frames = ExtResource("6_gym_guide")
@@ -61,11 +64,11 @@ movement_behavior = "idle"
 
 [node name="Spawns" type="Node2D" parent="."]
 [node name="FromCeruleanCity" type="Marker2D" parent="Spawns"]
-position = Vector2(528, 912)
+position = Vector2(496, 1232)
 
 [node name="Exits" type="Node2D" parent="."]
 [node name="ToCeruleanCity" type="Area2D" parent="Exits"]
-position = Vector2(528, 944)
+position = Vector2(496, 1264)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 target_spawn_name = "FromGym"

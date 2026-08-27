@@ -32,7 +32,7 @@ const INTERIORS := [
 		"city_exit": "ToGym",
 		"interior_spawn": "FromCeruleanCity",
 		"interior_exit": "ToCeruleanCity",
-		"template": "PewterGymTemplate/Visuals",
+		"template": "CeruleanGymVisual",
 		"spawn_position": Vector2(1584, 1360),
 	},
 	{
@@ -168,6 +168,15 @@ func _check_interior(city: Node, data: Dictionary) -> void:
 		_check(str(interior_exit.get("target_spawn_name")) == city_spawn_name, "%s returns to its matching outside spawn" % label)
 	if label == "gym":
 		_check(interior.get_node_or_null("PewterGymTemplate/Entities") == null, "Cerulean Gym does not inherit Pewter NPC content")
+		_check(interior.get_node_or_null("PewterGymTemplate/Visuals") == null, "Cerulean Gym hides the obsolete Pewter visual")
+		_check(interior.get_node_or_null("PewterGymTemplate/FloorVisibilityMask") == null, "Cerulean Gym removes the Pewter floor mask")
+		_check(interior.get_node_or_null("PewterGymTemplate/Collision") != null, "Cerulean Gym retains its gameplay collision layer")
+		var gym_visual := interior.get_node_or_null("CeruleanGymVisual")
+		var gym_visual_map: Dictionary = {}
+		if gym_visual != null:
+			gym_visual_map = gym_visual.get_meta("tiled_visual_map", {}) as Dictionary
+		_check(gym_visual_map.get("width") == 30, "Cerulean Gym preserves the imported visual width")
+		_check(gym_visual_map.get("height") == 45, "Cerulean Gym preserves the imported visual height")
 	if label == "bike_store":
 		var bike_visual := interior.get_node_or_null("BikeShopVisual")
 		var bike_collision := interior.get_node_or_null("Tiles/Collision") as TileMapLayer
