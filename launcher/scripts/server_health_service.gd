@@ -1,6 +1,6 @@
 extends RefCounted
 
-const DEFAULT_STATUS_URL := "https://pokeaether.com/auth/status"
+const DEFAULT_STATUS_URL := "https://admin.pokeaether.com/auth/status"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 const USER_AGENT_HEADER := "User-Agent: PokeAetherLauncher/1.0"
 

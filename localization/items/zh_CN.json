@@ -4,80 +4,80 @@
     "shortDesc": "返回您上次访问过的安全室内位置。"
   },
   "escape-rope": {
-    "name": "逃生绳",
-    "shortDesc": "立即逃离洞穴和地牢。"
+    "name": "离洞绳",
+    "shortDesc": "结实的长绳。可以从洞窟或迷宫中脱身。能够反复使用。"
   },
   "poke-ball": {
     "name": "精灵球",
-    "shortDesc": "用于捕捉野生宝可梦的基本球。"
+    "shortDesc": "用于投向野生宝可梦并将其捕捉的球。它是胶囊样式的。"
   },
   "great-ball": {
-    "name": "伟大的球",
-    "shortDesc": "比精灵球更好的球，接球率更高。"
+    "name": "超级球",
+    "shortDesc": "比起精灵球来更容易捉到宝可梦的，性能还算不错的球。"
   },
   "ultra-ball": {
-    "name": "超级球",
-    "shortDesc": "高性能球，接球率高于 Great Ball。"
+    "name": "高级球",
+    "shortDesc": "比起超级球来更容易捉到宝可梦的，性能非常不错的球。"
   },
   "potion": {
-    "name": "药水",
-    "shortDesc": "恢复 20 生命值。"
+    "name": "伤药",
+    "shortDesc": "喷雾式伤药。能让１只宝可梦回复２０ＨＰ。"
   },
   "super-potion": {
-    "name": "超级药水",
-    "shortDesc": "恢复 50 生命值。"
+    "name": "好伤药",
+    "shortDesc": "喷雾式伤药。能让１只宝可梦回复６０ＨＰ。"
   },
   "hyper-potion": {
-    "name": "超级药水",
-    "shortDesc": "恢复 200 生命值。"
+    "name": "厉害伤药",
+    "shortDesc": "喷雾式伤药。能让１只宝可梦回复１２０ＨＰ。"
   },
   "max-potion": {
-    "name": "最大药水",
-    "shortDesc": "完全恢复宝可梦的生命值。"
+    "name": "全满药",
+    "shortDesc": "喷雾式伤药。能让１只宝可梦回复所有ＨＰ。"
   },
   "full-restore": {
-    "name": "完全恢复",
-    "shortDesc": "完全恢复生命值并治愈任何状态状况。"
+    "name": "全复药",
+    "shortDesc": "能回复１只宝可梦的所有ＨＰ并治愈所有异常状态。"
   },
   "antidote": {
-    "name": "解毒剂",
-    "shortDesc": "治愈中毒。"
+    "name": "解毒药",
+    "shortDesc": "喷雾式药水。能治愈１只宝可梦的中毒状态。"
   },
   "paralyze-heal": {
-    "name": "麻痹治疗",
-    "shortDesc": "治愈瘫痪。"
+    "name": "解麻药",
+    "shortDesc": "喷雾式药水。能治愈１只宝可梦的麻痹状态。"
   },
   "awakening": {
-    "name": "觉醒",
-    "shortDesc": "唤醒沉睡的宝可梦。"
+    "name": "解眠药",
+    "shortDesc": "喷雾式药水。能治愈１只宝可梦的睡眠状态。"
   },
   "burn-heal": {
-    "name": "烧伤治疗",
-    "shortDesc": "治愈烧伤。"
+    "name": "灼伤药",
+    "shortDesc": "喷雾式药水。能治愈１只宝可梦的灼伤状态。"
   },
   "ice-heal": {
-    "name": "冰疗",
-    "shortDesc": "解冻冻结的宝可梦。"
+    "name": "解冻药",
+    "shortDesc": "喷雾式药水。能治愈１只宝可梦的冰冻状态。"
   },
   "full-heal": {
-    "name": "全面治疗",
-    "shortDesc": "解决任何状态问题。"
+    "name": "万灵药",
+    "shortDesc": "喷雾式药水。能治愈１只宝可梦的所有异常状态。"
   },
   "revive": {
-    "name": "复活",
-    "shortDesc": "以最大生命值的一半复活昏倒的宝可梦。"
+    "name": "活力碎片",
+    "shortDesc": "能让１只陷入濒死的宝可梦重获生机，并回复一半ＨＰ。"
   },
   "old-rod": {
-    "name": "老棒",
-    "shortDesc": "用它来钓鱼宝可梦。"
+    "name": "破旧钓竿",
+    "shortDesc": "又破又旧的钓竿。在有水的地方使用的话，可以钓到宝可梦。"
   },
   "good-rod": {
-    "name": "好棒",
-    "shortDesc": "用它来捕捉水体中的宝可梦。"
+    "name": "好钓竿",
+    "shortDesc": "不错的新钓竿。在有水的地方使用的话，可以钓到宝可梦。"
   },
   "super-rod": {
-    "name": "超级棒",
-    "shortDesc": "用它在水体中捕捉强大的宝可梦。"
+    "name": "厉害钓竿",
+    "shortDesc": "最新的厉害钓竿。在有水的地方使用的话，可以钓到宝可梦。"
   },
   "cut-charm": {
     "name": "切割魅力",

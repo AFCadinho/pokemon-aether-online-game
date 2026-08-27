@@ -44,6 +44,8 @@ func _init() -> void:
 	_check(script_source.contains('"ui.world.time.afternoon"'), "afternoon has a localized readable status")
 	_check(script_source.contains('"ui.world.time.evening"'), "evening has a localized readable status")
 	_check(script_source.contains('"ui.world.time.night"'), "night has a localized readable status")
+	_check(script_source.contains('time_label.text = "%s · %s"'), "location time includes the localized weekday")
+	_check(script_source.contains("_current_world_weekday_id(date_time)"), "location weekday follows the shared authoritative world clock")
 
 	quit(1 if failed else 0)
 
