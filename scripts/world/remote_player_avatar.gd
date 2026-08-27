@@ -11,6 +11,7 @@ const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
+const AethernetTeleportEffectScript := preload("res://scripts/world/aethernet_teleport_effect.gd")
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
 const SORT_Z_MIN := -4096
@@ -189,6 +190,8 @@ var has_position := false
 var presence_state: Dictionary = {}
 var creator_nameplate_visibility_override_active := false
 var creator_nameplate_visible := true
+var last_aethernet_effect_sequence := -1
+var active_aethernet_effect: Node
 
 
 func _ready() -> void:
@@ -235,6 +238,7 @@ func apply_state(state: Dictionary) -> void:
 	selected_role_badge = str(state.get("selectedRoleBadge", selected_role_badge)).strip_edges().to_lower()
 	_apply_guild_emblem(_dictionary_from_value(state.get("guildEmblem", {})))
 	_update_nameplate()
+	_apply_aethernet_effect_state(_dictionary_from_value(state.get("aethernetEffect", {})))
 
 	var position_data := _dictionary_from_value(state.get("position", {}))
 	var new_target_position := Vector2(
@@ -277,6 +281,40 @@ func apply_state(state: Dictionary) -> void:
 	_sync_mount_visual()
 	_apply_follower_state(_dictionary_from_value(state.get("follower", {})))
 	_update_sort_z()
+
+
+func _apply_aethernet_effect_state(effect_state: Dictionary) -> void:
+	var phase := str(effect_state.get("phase", "")).strip_edges().to_lower()
+	if phase not in ["depart", "arrive"]:
+		if active_aethernet_effect != null and is_instance_valid(active_aethernet_effect):
+			active_aethernet_effect.call("cancel_and_restore")
+		active_aethernet_effect = null
+		var restored_modulate := modulate
+		restored_modulate.a = 1.0
+		modulate = restored_modulate
+		return
+	var sequence := int(effect_state.get("sequence", -1))
+	if sequence < 0 or sequence == last_aethernet_effect_sequence:
+		return
+	last_aethernet_effect_sequence = sequence
+	_play_aethernet_effect.call_deferred(phase)
+
+
+func _play_aethernet_effect(phase: String) -> void:
+	if active_aethernet_effect != null and is_instance_valid(active_aethernet_effect):
+		active_aethernet_effect.call("cancel_and_restore")
+	if get_parent() == null:
+		return
+	var effect_value: Variant = AethernetTeleportEffectScript.new()
+	if not effect_value is Node2D:
+		return
+	var effect := effect_value as Node2D
+	get_parent().add_child(effect)
+	active_aethernet_effect = effect
+	effect.call("start", self, phase, false)
+	await effect.finished
+	if active_aethernet_effect == effect:
+		active_aethernet_effect = null
 
 
 func _resolve_state_gender(state: Dictionary, appearance_state: Dictionary) -> String:

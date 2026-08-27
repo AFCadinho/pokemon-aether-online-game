@@ -21,6 +21,7 @@
 - You can now search the Guild member list and invite Trainers from a separate window.
 - Guild leaders can now adjust Guild Bank permissions for individual members without changing the defaults for their rank.
 - Giga Impact, Psyshock, Explosion, and Water Shuriken now have their own battle animations and sound effects.
+- Aethernet travel now surrounds departing and arriving Trainers with a purple teleport animation. Nearby Trainers see the effect without hearing its sound.
 - Added full Simplified Chinese language support throughout the game and launcher.
 
 **Changed**
