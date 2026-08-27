@@ -4,6 +4,7 @@
 
 **Added**
 
+- The Cerulean Bike Shop now exchanges a lifetime Bike Voucher for Cyclizar, a selectable land mount that can be toggled with the configurable Mount key.
 - Route 24 now uses its complete imported Tiled visual, with the Cerulean City path, bridge, and Surf arrivals aligned to the new map edge.
 - Cerulean City's quiet southeast corner now hosts Veteran Garrick and his Dragonite, with Garrick available as a high-level daily Thieving target.
 - Cerulean City now has additional daily Thieving targets around its bridge, canals, and practice platform.

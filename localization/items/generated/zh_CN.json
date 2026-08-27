@@ -380,8 +380,8 @@
     "shortDesc": "能比跑步鞋跑得还快的折叠式自行车。"
   },
   "bike-voucher": {
-    "name": "Bike Voucher",
-    "shortDesc": "Trade in Cerulean bike shop for a Bicycle."
+    "name": "自行车兑换券",
+    "shortDesc": "由华蓝市自行车店老板签名的终身有效兑换券。"
   },
   "binding-band": {
     "name": "紧绑束带",
@@ -814,6 +814,10 @@
   "cut-charm": {
     "name": "Cut Charm",
     "shortDesc": "Lets you use Cut without a Pokemon knowing it."
+  },
+  "cyclizar-mount": {
+    "name": "摩托蜥坐骑",
+    "shortDesc": "解锁摩托蜥作为陆地坐骑。"
   },
   "damp-mulch": {
     "name": "湿湿肥",
