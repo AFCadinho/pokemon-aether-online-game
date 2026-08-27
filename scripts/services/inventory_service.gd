@@ -344,6 +344,8 @@ func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:
 		"quantity": maxi(int(body.get("quantity", 1)), 1),
 		"turnedIn": bool(body.get("turnedIn", false)),
 		"alreadyTurnedIn": bool(body.get("alreadyTurnedIn", false)),
+		"rewardItemId": str(body.get("rewardItemId", "")),
+		"rewardQuantity": maxi(int(body.get("rewardQuantity", 0)), 0),
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
 		"storyRefreshSuccess": bool(story_result.get("success", false)),
 	}
