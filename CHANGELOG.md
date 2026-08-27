@@ -24,6 +24,7 @@
 
 **Changed**
 
+- Thieving arrests now play an Officer Jenny confrontation before the jail transfer and a short sentence explanation after arrival.
 - Cerulean City's ambient mountain Pokemon now patrol their plateaus instead of standing still.
 - Field Move Charms tied to an HM now require that HM before they can replace a Pokémon move; weather Charms remain unaffected.
 - The Pokémon Vault, Item Storage, and Guild Resources are now easier to browse, donate to, borrow from, and withdraw from. The full Pokémon Vault uses a familiar PC-style grid and lets you inspect each Pokémon.
