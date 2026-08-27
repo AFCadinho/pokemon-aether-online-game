@@ -172,8 +172,8 @@ func _check_mountain_pokemon(
 				)
 		if mountain_foreground != null:
 			_check(
-				pokemon.z_index > mountain_foreground.z_index,
-				"%s renders above the mountain foreground" % node_path.get_file()
+				pokemon.z_index >= mountain_foreground.z_index,
+				"%s does not render behind the mountain foreground" % node_path.get_file()
 			)
 		if collision != null:
 			var cell := collision.local_to_map(collision.to_local(pokemon.global_position))
