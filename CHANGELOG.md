@@ -16,6 +16,7 @@
 
 **Changed**
 
+- Simplified Chinese Pokémon terminology now follows a source-backed glossary enforced during project checks and desktop releases, including the official Kanto Badge and HM move names.
 - The Pokémon Vault, Item Storage, and Guild Resources are now easier to browse, donate to, borrow from, and withdraw from. The full Pokémon Vault uses a familiar PC-style grid and lets you inspect each Pokémon.
 - Item Storage filters now distinguish items you can use from items whose copies are all unavailable.
 - Guild member search and Trainer invitations now have separate, clearly named controls.

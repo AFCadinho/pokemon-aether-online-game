@@ -13,6 +13,7 @@ const generatedDir = path.join(projectRoot, "localization/content/generated");
 const englishSourcePath = path.join(generatedDir, "en.json");
 const generatedItemDir = path.join(projectRoot, "localization/items/generated");
 const englishItemSourcePath = path.join(generatedItemDir, "en.json");
+const terminologyDir = path.join(projectRoot, "localization/terminology");
 const targets = [
 	{locale: "nl", translationLanguage: "nl"},
 	{locale: "pt_BR", translationLanguage: "pt"},
@@ -136,6 +137,33 @@ function knownReviewedTranslations(englishSource, reviewedCatalog, field) {
 	return translations;
 }
 
+function protectedGeneratedContentNames(locale) {
+	const glossaryPath = path.join(terminologyDir, `${locale}.json`);
+	if (!fs.existsSync(glossaryPath)) {
+		return new Map();
+	}
+	const glossary = readJson(glossaryPath);
+	const expectedPath = `res://localization/content/generated/${locale}.json`;
+	const names = new Map();
+	for (const [termId, term] of Object.entries(glossary.terms ?? {})) {
+		for (const target of term.targets ?? []) {
+			const keys = target.keys ?? [];
+			if (
+				target.path === expectedPath
+				&& keys.length === 3
+				&& ["moves", "abilities", "species"].includes(keys[0])
+				&& keys[2] === "name"
+			) {
+				names.set(`${keys[0]}:${keys[1]}`, String(term.value));
+			}
+		}
+		if (!term.value) {
+			throw new Error(`Protected terminology entry ${termId} has no value`);
+		}
+	}
+	return names;
+}
+
 async function generateLocale(englishSource, target) {
 	const reviewedPath = path.join(projectRoot, `localization/content/${target.locale}.json`);
 	const reviewedCatalog = readJson(reviewedPath);
@@ -145,6 +173,7 @@ async function generateLocale(englishSource, target) {
 		reviewedCatalog,
 		"shortDesc",
 	);
+	const protectedNames = protectedGeneratedContentNames(target.locale);
 	const names = [];
 	const descriptions = [];
 	for (const kind of ["moves", "abilities"]) {
@@ -170,7 +199,8 @@ async function generateLocale(englishSource, target) {
 	for (const kind of ["moves", "abilities"]) {
 		for (const [contentId, sourceEntry] of Object.entries(englishSource[kind])) {
 			const entry = {
-				name: reviewedNames.get(sourceEntry.name)
+				name: protectedNames.get(`${kind}:${contentId}`)
+					?? reviewedNames.get(sourceEntry.name)
 					?? translatedNames.get(sourceEntry.name)
 					?? sourceEntry.name,
 			};

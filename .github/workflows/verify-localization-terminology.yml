@@ -1,0 +1,32 @@
+name: Verify localization terminology
+
+on:
+  pull_request:
+    paths:
+      - "localization/**"
+      - "tools/check_localization_terminology.mjs"
+      - "tools/generate_content_translation_drafts.mjs"
+      - ".github/workflows/verify-localization-terminology.yml"
+  push:
+    branches:
+      - main
+      - development
+    paths:
+      - "localization/**"
+      - "tools/check_localization_terminology.mjs"
+      - "tools/generate_content_translation_drafts.mjs"
+      - ".github/workflows/verify-localization-terminology.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  protected-terminology:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify Simplified Chinese Pokémon terminology
+        run: node tools/check_localization_terminology.mjs

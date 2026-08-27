@@ -71,6 +71,8 @@ the 69-item pilot catalog.
 
 3. Review entries in-game or against the English source. This includes deciding
    terminology policy, such as whether move names should remain English.
+   Protected Chinese names from `localization/terminology/zh_CN.json` are reapplied
+   automatically after machine translation and must not be overridden in the draft.
 4. Copy approved `name` and `shortDesc` fields into the matching manual locale file.
 5. Run `res://tests/localization_content_data_check.gd`,
    `res://tests/localization_item_data_check.gd`, and the complete project checks.
