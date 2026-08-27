@@ -171,6 +171,7 @@ func _check_interior(city: Node, data: Dictionary) -> void:
 	if label == "bike_store":
 		var bike_visual := interior.get_node_or_null("BikeShopVisual")
 		var bike_collision := interior.get_node_or_null("Tiles/Collision") as TileMapLayer
+		var bike_floor_mask := interior.get_node_or_null("FloorVisibilityMask")
 		_check(
 			bike_visual != null and interior.get_node_or_null("BikeShopVisual/ObjectsTop") != null,
 			"bike_store uses its imported foreground visual layer"
@@ -182,6 +183,10 @@ func _check_interior(city: Node, data: Dictionary) -> void:
 		if bike_visual != null:
 			var visual_map := bike_visual.get_meta("tiled_visual_map", {}) as Dictionary
 			_check(visual_map.get("width") == 30 and visual_map.get("height") == 25, "bike_store preserves its 30x25 Tiled canvas")
+		if bike_floor_mask != null:
+			var floor_regions := bike_floor_mask.get("floor_regions") as Dictionary
+			var ground_floor := floor_regions.get(&"ground_floor", Rect2()) as Rect2
+			_check(ground_floor.end.y >= 640.0, "bike_store keeps its visual exit row inside the visibility mask")
 		if bike_collision != null:
 			_check(bike_collision.get_cell_source_id(Vector2i(14, 17)) == -1, "bike_store arrival remains walkable")
 			_check(bike_collision.get_cell_source_id(Vector2i(14, 18)) == -1, "bike_store doorway remains open")
