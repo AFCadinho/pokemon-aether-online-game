@@ -1029,6 +1029,7 @@ z_index = 2054
 z_as_relative = false
 position = Vector2(144, 1104)
 rock_id = "kanto_cerulean_city_west_site_rock_north"
+required_rock_smash_level = 20
 rock_visual_style = 2
 
 [node name="WestRockUpper" parent="Entities/Interactables/MountainRockSmashSites" unique_id=640211761 instance=ExtResource("32_daily_rock")]
@@ -1036,6 +1037,7 @@ z_index = 2054
 z_as_relative = false
 position = Vector2(48, 1232)
 rock_id = "kanto_cerulean_city_west_site_rock_upper"
+required_rock_smash_level = 20
 rock_variant = 1
 rock_visual_style = 2
 
@@ -1044,6 +1046,7 @@ z_index = 2054
 z_as_relative = false
 position = Vector2(48, 1744)
 rock_id = "kanto_cerulean_city_west_site_rock_lower"
+required_rock_smash_level = 20
 rock_variant = 2
 rock_visual_style = 2
 
@@ -1052,6 +1055,7 @@ z_index = 2054
 z_as_relative = false
 position = Vector2(144, 1936)
 rock_id = "kanto_cerulean_city_west_site_rock_south"
+required_rock_smash_level = 20
 rock_variant = 3
 rock_visual_style = 2
 
@@ -1060,6 +1064,7 @@ z_index = 2054
 z_as_relative = false
 position = Vector2(2128, 1712)
 rock_id = "kanto_cerulean_city_east_site_rock_northwest"
+required_rock_smash_level = 50
 rock_visual_style = 2
 
 [node name="EastRockNortheast" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1938575074 instance=ExtResource("32_daily_rock")]
@@ -1067,6 +1072,7 @@ z_index = 2054
 z_as_relative = false
 position = Vector2(2128, 2096)
 rock_id = "kanto_cerulean_city_east_site_rock_northeast"
+required_rock_smash_level = 50
 rock_variant = 1
 rock_visual_style = 2
 
@@ -1075,6 +1081,7 @@ z_index = 2054
 z_as_relative = false
 position = Vector2(1392, 2192)
 rock_id = "kanto_cerulean_city_east_site_rock_southwest"
+required_rock_smash_level = 50
 rock_variant = 2
 rock_visual_style = 2
 
@@ -1083,6 +1090,7 @@ z_index = 2054
 z_as_relative = false
 position = Vector2(1136, 2096)
 rock_id = "kanto_cerulean_city_east_site_rock_southeast"
+required_rock_smash_level = 50
 rock_variant = 3
 rock_visual_style = 2
 

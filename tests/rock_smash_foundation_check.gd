@@ -110,7 +110,7 @@ func _run() -> void:
 	_check(
 		combined_mt_moon.count("daily_smashable_rock.tscn") == 3
 		and combined_mt_moon.count("rock_visual_style = 1") == 9
-		and 'rock_id = "kanto_mt_moon_b2f_rock_south"\nrock_variant = 3' in combined_mt_moon
+		and 'rock_id = "kanto_mt_moon_b2f_rock_south"\nrequired_rock_smash_level = 75\nrock_variant = 3' in combined_mt_moon
 		and "smashable_rock.tscn" not in combined_mt_moon.replace("daily_smashable_rock.tscn", ""),
 		"Mt. Moon uses nine daily cave rocks with a distinct master rock variant"
 	)

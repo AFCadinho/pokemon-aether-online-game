@@ -456,20 +456,24 @@ movement_speed_pixels = 48.0
 [node name="TrainingRockNorth" parent="Entities/Interactables" unique_id=1250324814 instance=ExtResource("32_daily_rock")]
 position = Vector2(528, 144)
 rock_id = "kanto_pewter_city_training_rock_north"
+required_rock_smash_level = 1
 
 [node name="TrainingRockEast" parent="Entities/Interactables" unique_id=397845433 instance=ExtResource("32_daily_rock")]
 position = Vector2(656, 144)
 rock_id = "kanto_pewter_city_training_rock_east"
+required_rock_smash_level = 1
 rock_variant = 1
 
 [node name="TrainingRockSouth" parent="Entities/Interactables" unique_id=1759308269 instance=ExtResource("32_daily_rock")]
 position = Vector2(656, 208)
 rock_id = "kanto_pewter_city_training_rock_south"
+required_rock_smash_level = 1
 rock_variant = 2
 
 [node name="TrainingRockWest" parent="Entities/Interactables" unique_id=1074151323 instance=ExtResource("32_daily_rock")]
 position = Vector2(528, 208)
 rock_id = "kanto_pewter_city_training_rock_west"
+required_rock_smash_level = 1
 rock_variant = 3
 
 [node name="AetherBeacon" parent="Entities/Interactables" unique_id=697101251 instance=ExtResource("27_aether_beacon")]

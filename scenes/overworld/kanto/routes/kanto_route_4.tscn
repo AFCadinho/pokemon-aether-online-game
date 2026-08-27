@@ -494,23 +494,27 @@ item_id = "tm-roar"
 [node name="RockSmashWest" parent="Entities/Interactables" unique_id=1541727048 instance=ExtResource("12_route_rock")]
 position = Vector2(176, 1040)
 rock_id = "kanto_route_4_rock_west"
+required_rock_smash_level = 5
 rock_visual_style = 2
 
 [node name="RockSmashCentralWest" parent="Entities/Interactables" unique_id=1753633968 instance=ExtResource("12_route_rock")]
 position = Vector2(944, 592)
 rock_id = "kanto_route_4_rock_central_west"
+required_rock_smash_level = 10
 rock_variant = 1
 rock_visual_style = 2
 
 [node name="RockSmashCentralEast" parent="Entities/Interactables" unique_id=407381501 instance=ExtResource("12_route_rock")]
 position = Vector2(2256, 560)
 rock_id = "kanto_route_4_rock_central_east"
+required_rock_smash_level = 20
 rock_variant = 2
 rock_visual_style = 2
 
 [node name="RockSmashEast" parent="Entities/Interactables" unique_id=257099796 instance=ExtResource("12_route_rock")]
 position = Vector2(2608, 784)
 rock_id = "kanto_route_4_rock_east"
+required_rock_smash_level = 50
 rock_variant = 3
 rock_visual_style = 2
 

@@ -433,23 +433,27 @@ sign_type = "road"
 [node name="RockSmashWest" parent="Entities/Interactables" unique_id=1629026967 instance=ExtResource("17_route_rock")]
 position = Vector2(400, 1008)
 rock_id = "kanto_route_3_rock_west"
+required_rock_smash_level = 5
 rock_visual_style = 2
 
 [node name="RockSmashCentralWest" parent="Entities/Interactables" unique_id=1064707054 instance=ExtResource("17_route_rock")]
 position = Vector2(720, 1040)
 rock_id = "kanto_route_3_rock_central_west"
+required_rock_smash_level = 5
 rock_variant = 1
 rock_visual_style = 2
 
 [node name="RockSmashCentralEast" parent="Entities/Interactables" unique_id=926898807 instance=ExtResource("17_route_rock")]
 position = Vector2(464, 1168)
 rock_id = "kanto_route_3_rock_central_east"
+required_rock_smash_level = 10
 rock_variant = 2
 rock_visual_style = 2
 
 [node name="RockSmashEast" parent="Entities/Interactables" unique_id=1763742464 instance=ExtResource("17_route_rock")]
 position = Vector2(2704, 752)
 rock_id = "kanto_route_3_rock_east"
+required_rock_smash_level = 20
 rock_variant = 3
 rock_visual_style = 2
 

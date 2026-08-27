@@ -470,17 +470,20 @@ item_id = "moon-stone"
 [node name="RockSmash01" parent="Entities/Interactables" unique_id=1155397083 instance=ExtResource("15_rock")]
 position = Vector2(400, 720)
 rock_id = "kanto_mt_moon_1f_rock_west"
+required_rock_smash_level = 5
 rock_visual_style = 1
 
 [node name="RockSmash02" parent="Entities/Interactables" unique_id=1318206778 instance=ExtResource("15_rock")]
 position = Vector2(720, 688)
 rock_id = "kanto_mt_moon_1f_rock_central"
+required_rock_smash_level = 5
 rock_variant = 1
 rock_visual_style = 1
 
 [node name="RockSmash03" parent="Entities/Interactables" unique_id=938321987 instance=ExtResource("15_rock")]
 position = Vector2(2416, 1104)
 rock_id = "kanto_mt_moon_1f_rock_east"
+required_rock_smash_level = 5
 rock_variant = 2
 rock_visual_style = 1
 

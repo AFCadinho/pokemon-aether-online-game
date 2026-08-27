@@ -334,17 +334,20 @@ item_id = "antidote"
 [node name="RockSmash01" parent="Entities/Interactables" unique_id=1823731415 instance=ExtResource("9_rock")]
 position = Vector2(784, 336)
 rock_id = "kanto_mt_moon_b2f_rock_north"
+required_rock_smash_level = 20
 rock_visual_style = 1
 
 [node name="RockSmash02" parent="Entities/Interactables" unique_id=130650846 instance=ExtResource("9_rock")]
 position = Vector2(1456, 1296)
 rock_id = "kanto_mt_moon_b2f_rock_central"
+required_rock_smash_level = 50
 rock_variant = 1
 rock_visual_style = 1
 
 [node name="RockSmash03" parent="Entities/Interactables" unique_id=1251392957 instance=ExtResource("9_rock")]
 position = Vector2(816, 2192)
 rock_id = "kanto_mt_moon_b2f_rock_south"
+required_rock_smash_level = 75
 rock_variant = 3
 rock_visual_style = 1
 

@@ -2,6 +2,8 @@ extends FieldMoveObstacle
 
 class_name DailySmashableRock
 
+const LevelPalette := preload("res://scripts/world/interactables/rock_smash_level_palette.gd")
+
 enum RockVisualStyle {
 	TRAINING,
 	CAVE,
@@ -14,10 +16,10 @@ const TRAINING_ROCK_SHEET: Texture2D = preload(
 const CAVE_ROCK_SHEET: Texture2D = preload(
 	"res://assets/world/field_move_obstacles/object_rock.png"
 )
-
 @export var rock_id := ""
 @export_range(0, 3) var rock_variant := 0
 @export var rock_visual_style := RockVisualStyle.TRAINING
+@export_range(1, 100, 1) var required_rock_smash_level := 1
 
 var request_pending := false
 
@@ -103,6 +105,7 @@ func _apply_daily_state() -> void:
 func _configure_variant_frames() -> void:
 	if obstacle_sprite == null:
 		return
+	obstacle_sprite.self_modulate = LevelPalette.color_for_required_level(required_rock_smash_level)
 	obstacle_sprite.texture = _frame_texture(0)
 	clear_frames = []
 	for row in range(1, 4):
