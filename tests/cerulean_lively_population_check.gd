@@ -10,6 +10,14 @@ const WATER_POKEMON := {
 	"Entities/Pokemon/WaterPokemon/Poliwag": "pace_vertical",
 }
 
+const MOUNTAIN_POKEMON := {
+	"Entities/Pokemon/MountainPokemon/Geodude": "geodude",
+	"Entities/Pokemon/MountainPokemon/Nosepass": "nosepass",
+	"Entities/Pokemon/MountainPokemon/Roggenrola": "roggenrola",
+	"Entities/Pokemon/MountainPokemon/Larvitar": "larvitar",
+	"Entities/Pokemon/MountainPokemon/Rockruff": "rockruff",
+}
+
 var failed := false
 
 
@@ -35,6 +43,7 @@ func _run() -> void:
 	_check_officer_jenny(city)
 	_check_growlithe(city)
 	_check_water_pokemon(city, collision, water)
+	_check_mountain_pokemon(city, collision, water)
 	_check_practice_battle(city, collision)
 	city.free()
 	quit(1 if failed else 0)
@@ -90,6 +99,48 @@ func _check_water_pokemon(city: Node, collision: TileMapLayer, water: TileMapLay
 			_check(collision.get_cell_source_id(collision_cell) == -1, "%s movement avoids collision" % node_path.get_file())
 	var gyarados := city.get_node_or_null("Entities/Pokemon/WaterPokemon/Gyarados") as Node2D
 	_check(gyarados != null and gyarados.scale.x > 1.0, "Gyarados is visually prominent")
+
+
+func _check_mountain_pokemon(city: Node, collision: TileMapLayer, water: TileMapLayer) -> void:
+	var reachable_tiles := _collect_walkable_tiles(city, collision, water)
+	for node_path_value: Variant in MOUNTAIN_POKEMON:
+		var node_path := str(node_path_value)
+		var pokemon := city.get_node_or_null(node_path) as Node2D
+		_check(pokemon != null, "Cerulean places %s on the mountains" % node_path.get_file())
+		if pokemon == null:
+			continue
+		_check(
+			str(pokemon.get("species_id")) == str(MOUNTAIN_POKEMON[node_path_value]),
+			"%s uses its intended Rock-type species" % node_path.get_file()
+		)
+		_check(pokemon.get("npc_sprite_frames") != null, "%s resolves its overworld follower sprite" % node_path.get_file())
+		_check(str(pokemon.get("movement_behavior")) == "idle", "%s remains an ambient overworld Pokemon" % node_path.get_file())
+		if collision != null:
+			var cell := collision.local_to_map(collision.to_local(pokemon.global_position))
+			_check(not reachable_tiles.has(cell), "%s stays beyond the player's walkable area" % node_path.get_file())
+
+
+func _collect_walkable_tiles(city: Node, collision: TileMapLayer, water: TileMapLayer) -> Dictionary:
+	var reachable := {}
+	if collision == null or water == null:
+		return reachable
+	var spawn := city.get_node_or_null("Spawns/FromPokemonCenter") as Node2D
+	if spawn == null:
+		return reachable
+	var frontier: Array[Vector2i] = [collision.local_to_map(collision.to_local(spawn.global_position))]
+	var map_bounds := Rect2i(Vector2i.ZERO, Vector2i(75, 70))
+	while not frontier.is_empty():
+		var cell: Vector2i = frontier.pop_back()
+		if reachable.has(cell) or not map_bounds.has_point(cell):
+			continue
+		if collision.get_cell_source_id(cell) != -1 or water.get_cell_source_id(cell) != -1:
+			continue
+		reachable[cell] = true
+		frontier.append(cell + Vector2i.LEFT)
+		frontier.append(cell + Vector2i.RIGHT)
+		frontier.append(cell + Vector2i.UP)
+		frontier.append(cell + Vector2i.DOWN)
+	return reachable
 
 
 func _check_practice_battle(city: Node, collision: TileMapLayer) -> void:

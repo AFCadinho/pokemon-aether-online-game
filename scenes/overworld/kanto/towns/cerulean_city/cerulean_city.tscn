@@ -713,6 +713,48 @@ movement_tiles = 2
 movement_wait_seconds = 1.2
 movement_speed_pixels = 60.0
 
+[node name="MountainPokemon" type="Node2D" parent="Entities/Pokemon"]
+
+[node name="Geodude" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("10_pokemon")]
+position = Vector2(800, 128)
+overworld_pokemon_id = "kanto_cerulean_city_mountain_geodude_1"
+species_id = "geodude"
+level = 18
+display_name = "Geodude"
+facing_direction = Vector2(0, 1)
+
+[node name="Nosepass" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("10_pokemon")]
+position = Vector2(96, 1216)
+overworld_pokemon_id = "kanto_cerulean_city_mountain_nosepass_1"
+species_id = "nosepass"
+level = 20
+display_name = "Nosepass"
+facing_direction = Vector2(1, 0)
+
+[node name="Roggenrola" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("10_pokemon")]
+position = Vector2(2144, 1120)
+overworld_pokemon_id = "kanto_cerulean_city_mountain_roggenrola_1"
+species_id = "roggenrola"
+level = 17
+display_name = "Roggenrola"
+facing_direction = Vector2(-1, 0)
+
+[node name="Larvitar" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("10_pokemon")]
+position = Vector2(1152, 2048)
+overworld_pokemon_id = "kanto_cerulean_city_mountain_larvitar_1"
+species_id = "larvitar"
+level = 19
+display_name = "Larvitar"
+facing_direction = Vector2(0, -1)
+
+[node name="Rockruff" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("10_pokemon")]
+position = Vector2(2080, 1792)
+overworld_pokemon_id = "kanto_cerulean_city_mountain_rockruff_1"
+species_id = "rockruff"
+level = 16
+display_name = "Rockruff"
+facing_direction = Vector2(-1, 0)
+
 [node name="BattleDisplay" type="Node2D" parent="Entities/Pokemon" unique_id=1385943621]
 position = Vector2(680, 1216)
 script = ExtResource("17_battle_display")
