@@ -156,6 +156,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/cerulean_interior_connections_check.gd",
 	"res://tests/cerulean_multi_exit_runtime_check.gd",
 	"res://tests/route_25_visual_check.gd",
+	"res://tests/route_25_wild_encounter_check.gd",
 	"res://tests/bills_house_route_25_transition_check.gd",
 	"res://tests/route_24_route_25_connections_check.gd",
 	"res://tests/nugget_bridge_trainers_check.gd",

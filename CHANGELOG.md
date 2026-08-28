@@ -4,6 +4,7 @@
 
 **Changed**
 
+- Route 25 now has wild Pokémon encounters in tall grass, while surfing, and with every fishing rod, including different daytime and nighttime species.
 - Alpha Tools now include the same protected Reset / New Game action as Developer Tools.
 - The New Game warning now clearly explains what happens to unclaimed mail attachments, other active sessions, Aether Gems, and paid items.
 - Cerulean City now has one Rock Smash mountain destination, with all eight daily rocks gathered at the East Site.
