@@ -707,7 +707,7 @@ flow_direction = "down"
 [node name="ToRoute2" type="Area2D" parent="Exits" unique_id=56275373]
 position = Vector2(864, 32)
 script = ExtResource("3_route1")
-target_scene_path = "uid://cnbfksossjfg7"
+target_scene_path = "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn"
 target_spawn_name = "FromViridianCity"
 transition_id = "kanto_viridian_city__to_route_2"
 

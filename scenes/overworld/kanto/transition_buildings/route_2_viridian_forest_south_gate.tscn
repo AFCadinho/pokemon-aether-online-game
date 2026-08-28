@@ -22,5 +22,5 @@ target_scene_path = "res://scenes/overworld/kanto/routes/viridian_forest.tscn"
 target_spawn_name = "FromRoute2South"
 
 [node name="ToSouth" parent="Exits" index="1"]
-target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_2.tscn"
+target_scene_path = "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn"
 target_spawn_name = "FromViridianForestSouth"

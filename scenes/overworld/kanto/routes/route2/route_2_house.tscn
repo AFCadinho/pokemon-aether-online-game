@@ -61,7 +61,7 @@ position = Vector2(304, 464)
 [node name="ToRoute2" type="Area2D" parent="Exits"]
 position = Vector2(320, 480)
 script = ExtResource("4_map_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_2.tscn"
+target_scene_path = "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn"
 target_spawn_name = "FromHouse"
 transition_facing_direction = "down"
 

@@ -18,7 +18,7 @@ display_name = "Forest Gate Attendant"
 requires_party_pokemon = false
 
 [node name="ToNorth" parent="Exits" index="0"]
-target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_2.tscn"
+target_scene_path = "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn"
 target_spawn_name = "FromViridianForestNorth"
 
 [node name="ToSouth" parent="Exits" index="1"]
