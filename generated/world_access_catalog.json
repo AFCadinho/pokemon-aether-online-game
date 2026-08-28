@@ -154,6 +154,16 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
 			"spawnPoints": {
+				"east_rock_smash_site": {
+					"facingDirection": "down",
+					"label": "East Rock Smash Site",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "EastRockSmashSite",
+					"tile": {
+						"x": 40,
+						"y": 65
+					}
+				},
 				"from_bike_store": {
 					"facingDirection": "down",
 					"label": "Bike Store",
@@ -359,16 +369,6 @@
 					"label": "West Mountain",
 					"safeForStaffTeleport": true,
 					"spawnMarker": "WestMountain",
-					"tile": {
-						"x": 3,
-						"y": 47
-					}
-				},
-				"west_rock_smash_site": {
-					"facingDirection": "down",
-					"label": "West Rock Smash Site",
-					"safeForStaffTeleport": true,
-					"spawnMarker": "WestRockSmashSite",
 					"tile": {
 						"x": 3,
 						"y": 47
