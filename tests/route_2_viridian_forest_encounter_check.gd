@@ -5,7 +5,7 @@ const MapMetadataScript := preload("res://scripts/world/map_metadata.gd")
 
 const MAP_CASES: Array[Dictionary] = [
 	{
-		"scene_path": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+		"scene_path": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
 		"area_id": "kanto_route_2",
 		"label": "Route 2",
 	},

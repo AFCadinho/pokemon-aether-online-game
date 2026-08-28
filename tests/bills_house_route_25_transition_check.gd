@@ -1,7 +1,7 @@
 extends SceneTree
 
-const ROUTE_25_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_25.tscn"
-const BILLS_HOUSE_SCENE := "res://scenes/overworld/kanto/routes/bills_house.tscn"
+const ROUTE_25_SCENE := "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn"
+const BILLS_HOUSE_SCENE := "res://scenes/overworld/kanto/routes/route25/bills_house.tscn"
 
 var failed := false
 
@@ -42,7 +42,10 @@ func _run() -> void:
 
 	var collision := bills_house.find_map_tilemap_layer("Collision") as TileMapLayer
 	_check(collision != null, "Bill's House has a collision layer ready for editing")
-	_check(collision != null and collision.get_used_cells().is_empty(), "Bill's House collision layer is intentionally empty")
+	_check(
+		collision != null and not collision.get_used_cells().is_empty(),
+		"Bill's House collision layer contains its imported collision"
+	)
 
 	var catalog_value: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	var catalog := catalog_value as Dictionary if catalog_value is Dictionary else {}

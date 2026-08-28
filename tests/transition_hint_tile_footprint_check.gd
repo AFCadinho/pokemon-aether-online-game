@@ -9,7 +9,7 @@ const MAP_SCENES: Array[String] = [
 	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
 	"res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
-	"res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+	"res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
 	"res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
 	"res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
 ]

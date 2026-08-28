@@ -1,6 +1,6 @@
 extends SceneTree
 
-const ROUTE_2_PATH := "res://scenes/overworld/kanto/routes/kanto_route_2.tscn"
+const ROUTE_2_PATH := "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn"
 const VIRIDIAN_FOREST_PATH := "res://scenes/overworld/kanto/routes/viridian_forest.tscn"
 const NORTH_GATE_PATH := "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_north_gate.tscn"
 const SOUTH_GATE_PATH := "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_south_gate.tscn"

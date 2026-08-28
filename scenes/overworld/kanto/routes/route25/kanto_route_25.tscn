@@ -244,7 +244,7 @@ flow_direction = "left"
 [node name="ToBillsHouse" type="Area2D" parent="Exits" unique_id=757639741]
 position = Vector2(1616, 432)
 script = ExtResource("3_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/bills_house.tscn"
+target_scene_path = "res://scenes/overworld/kanto/routes/route25/bills_house.tscn"
 target_spawn_name = "FromRoute25"
 transition_id = "kanto_route_25__to_bills_house"
 transition_facing_direction = "up"

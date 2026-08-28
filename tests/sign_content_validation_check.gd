@@ -2,7 +2,7 @@ extends SceneTree
 
 const OVERWORLD_SCENE_MAP_IDS: Dictionary = {
 	"res://scenes/overworld/kanto/routes/kanto_route_1.tscn": "kanto_route_1",
-	"res://scenes/overworld/kanto/routes/kanto_route_2.tscn": "kanto_route_2",
+	"res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn": "kanto_route_2",
 	"res://scenes/overworld/kanto/routes/kanto_route_22.tscn": "kanto_route_22",
 	"res://scenes/overworld/kanto/routes/kanto_route_3.tscn": "kanto_route_3",
 	"res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn": "kanto_pallet_town",

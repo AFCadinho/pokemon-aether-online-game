@@ -1190,7 +1190,7 @@
 			"sceneAliases": [
 				"uid://cnbfksossjfg7"
 			],
-			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+			"scenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
 			"spawnPoints": {
 				"from_house": {
 					"facingDirection": "down",
@@ -1316,7 +1316,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeruleanBridge",
 					"tile": {
-						"x": 22,
+						"x": 31,
 						"y": 58
 					}
 				},
@@ -1326,7 +1326,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeruleanPath",
 					"tile": {
-						"x": 35,
+						"x": 43,
 						"y": 58
 					}
 				},
@@ -1336,7 +1336,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeruleanWaterLeft",
 					"tile": {
-						"x": 15,
+						"x": 24,
 						"y": 58
 					}
 				},
@@ -1346,7 +1346,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeruleanWaterRight",
 					"tile": {
-						"x": 28,
+						"x": 37,
 						"y": 58
 					}
 				},
@@ -1356,8 +1356,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute25Lower",
 					"tile": {
-						"x": 43,
-						"y": 10
+						"x": 58,
+						"y": 11
 					}
 				},
 				"from_route_25_south": {
@@ -1366,8 +1366,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute25South",
 					"tile": {
-						"x": 43,
-						"y": 17
+						"x": 58,
+						"y": 18
 					}
 				},
 				"from_route_25_upper": {
@@ -1376,7 +1376,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute25Upper",
 					"tile": {
-						"x": 43,
+						"x": 58,
 						"y": 4
 					}
 				}
@@ -1389,8 +1389,10 @@
 			"locationGroupId": "kanto_route_25",
 			"locationGroupLabel": "Route 25",
 			"regionName": "Kanto",
-			"sceneAliases": [],
-			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_25.tscn",
+			"sceneAliases": [
+				"uid://dvt4jeeew5it3"
+			],
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
 			"spawnPoints": {
 				"from_bills_house": {
 					"facingDirection": "down",
@@ -1409,7 +1411,7 @@
 					"spawnMarker": "FromRoute24Lower",
 					"tile": {
 						"x": 1,
-						"y": 10
+						"y": 23
 					}
 				},
 				"from_route_24_south": {
@@ -1419,7 +1421,7 @@
 					"spawnMarker": "FromRoute24South",
 					"tile": {
 						"x": 1,
-						"y": 16
+						"y": 29
 					}
 				},
 				"from_route_24_upper": {
@@ -1429,7 +1431,7 @@
 					"spawnMarker": "FromRoute24Upper",
 					"tile": {
 						"x": 1,
-						"y": 4
+						"y": 16
 					}
 				}
 			}
@@ -1441,8 +1443,10 @@
 			"locationGroupId": "kanto_route_25",
 			"locationGroupLabel": "Route 25",
 			"regionName": "Kanto",
-			"sceneAliases": [],
-			"scenePath": "res://scenes/overworld/kanto/routes/bills_house.tscn",
+			"sceneAliases": [
+				"uid://cc7uihagjtdgm"
+			],
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/bills_house.tscn",
 			"spawnPoints": {
 				"from_route_25": {
 					"facingDirection": "down",
@@ -1496,7 +1500,7 @@
 			"locationGroupLabel": "Route 2",
 			"regionName": "Kanto",
 			"sceneAliases": [],
-			"scenePath": "res://scenes/overworld/kanto/routes/route_2_house.tscn",
+			"scenePath": "res://scenes/overworld/kanto/routes/route2/route_2_house.tscn",
 			"spawnPoints": {
 				"from_route_2": {
 					"facingDirection": "down",
@@ -2174,7 +2178,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 				"position": {
-					"x": 704.0,
+					"x": 1008.0,
 					"y": 1872.0
 				},
 				"spawnMarker": "FromCeruleanBridge"
@@ -2191,7 +2195,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 				"position": {
-					"x": 1120.0,
+					"x": 1392.0,
 					"y": 1872.0
 				},
 				"spawnMarker": "FromCeruleanPath"
@@ -2208,7 +2212,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 				"position": {
-					"x": 496.0,
+					"x": 784.0,
 					"y": 1872.0
 				},
 				"spawnMarker": "FromCeruleanWaterLeft"
@@ -2225,7 +2229,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 				"position": {
-					"x": 912.0,
+					"x": 1200.0,
 					"y": 1872.0
 				},
 				"spawnMarker": "FromCeruleanWaterRight"
@@ -2851,7 +2855,7 @@
 				"mapSceneAliases": [
 					"uid://cnbfksossjfg7"
 				],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
 				"position": {
 					"x": 1488.0,
 					"y": 48.0
@@ -3077,11 +3081,13 @@
 			"destination": {
 				"facingDirection": "right",
 				"mapId": "kanto_route_25",
-				"mapSceneAliases": [],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_25.tscn",
+				"mapSceneAliases": [
+					"uid://dvt4jeeew5it3"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
 				"position": {
 					"x": 48.0,
-					"y": 336.0
+					"y": 752.0
 				},
 				"spawnMarker": "FromRoute24Lower"
 			},
@@ -3092,11 +3098,13 @@
 			"destination": {
 				"facingDirection": "right",
 				"mapId": "kanto_route_25",
-				"mapSceneAliases": [],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_25.tscn",
+				"mapSceneAliases": [
+					"uid://dvt4jeeew5it3"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
 				"position": {
 					"x": 48.0,
-					"y": 512.0
+					"y": 944.0
 				},
 				"spawnMarker": "FromRoute24South"
 			},
@@ -3107,11 +3115,13 @@
 			"destination": {
 				"facingDirection": "right",
 				"mapId": "kanto_route_25",
-				"mapSceneAliases": [],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_25.tscn",
+				"mapSceneAliases": [
+					"uid://dvt4jeeew5it3"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
 				"position": {
 					"x": 48.0,
-					"y": 144.0
+					"y": 528.0
 				},
 				"spawnMarker": "FromRoute24Upper"
 			},
@@ -3122,8 +3132,10 @@
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_route_25_bills_house",
-				"mapSceneAliases": [],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/bills_house.tscn",
+				"mapSceneAliases": [
+					"uid://cc7uihagjtdgm"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route25/bills_house.tscn",
 				"position": {
 					"x": 400.0,
 					"y": 464.0
@@ -3142,8 +3154,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 				"position": {
-					"x": 1392.0,
-					"y": 336.0
+					"x": 1872.0,
+					"y": 368.0
 				},
 				"spawnMarker": "FromRoute25Lower"
 			},
@@ -3159,8 +3171,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 				"position": {
-					"x": 1392.0,
-					"y": 560.0
+					"x": 1872.0,
+					"y": 592.0
 				},
 				"spawnMarker": "FromRoute25South"
 			},
@@ -3176,7 +3188,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 				"position": {
-					"x": 1392.0,
+					"x": 1872.0,
 					"y": 144.0
 				},
 				"spawnMarker": "FromRoute25Upper"
@@ -3188,8 +3200,10 @@
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_route_25",
-				"mapSceneAliases": [],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_25.tscn",
+				"mapSceneAliases": [
+					"uid://dvt4jeeew5it3"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
 				"position": {
 					"x": 1616.0,
 					"y": 464.0
@@ -3204,7 +3218,7 @@
 				"facingDirection": "up",
 				"mapId": "kanto_route_2_house",
 				"mapSceneAliases": [],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/route_2_house.tscn",
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route2/route_2_house.tscn",
 				"position": {
 					"x": 304.0,
 					"y": 464.0
@@ -3308,7 +3322,7 @@
 				"mapSceneAliases": [
 					"uid://cnbfksossjfg7"
 				],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
 				"position": {
 					"x": 1376.0,
 					"y": 784.0
@@ -3324,7 +3338,7 @@
 				"mapSceneAliases": [
 					"uid://cnbfksossjfg7"
 				],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
 				"position": {
 					"x": 1376.0,
 					"y": 1136.0
@@ -3341,7 +3355,7 @@
 				"mapSceneAliases": [
 					"uid://cnbfksossjfg7"
 				],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
 				"position": {
 					"x": 1424.0,
 					"y": 560.0
@@ -3357,7 +3371,7 @@
 				"mapSceneAliases": [
 					"uid://cnbfksossjfg7"
 				],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
 				"position": {
 					"x": 368.0,
 					"y": 528.0
@@ -3405,7 +3419,7 @@
 				"mapSceneAliases": [
 					"uid://cnbfksossjfg7"
 				],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
 				"position": {
 					"x": 336.0,
 					"y": 1296.0
@@ -3653,7 +3667,7 @@
 				"mapSceneAliases": [
 					"uid://cnbfksossjfg7"
 				],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
 				"position": {
 					"x": 592.0,
 					"y": 2352.0

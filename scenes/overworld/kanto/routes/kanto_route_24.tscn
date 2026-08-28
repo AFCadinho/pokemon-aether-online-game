@@ -330,7 +330,7 @@ shape = SubResource("RectangleShape2D_fxetv")
 [node name="ToRoute25Upper" type="Area2D" parent="Exits" unique_id=1465332228]
 position = Vector2(1904, 144)
 script = ExtResource("3_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_25.tscn"
+target_scene_path = "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn"
 target_spawn_name = "FromRoute24Upper"
 transition_id = "kanto_route_24__to_route_25_upper"
 transition_facing_direction = "right"
@@ -348,7 +348,7 @@ flow_direction = "right"
 [node name="ToRoute25Lower" type="Area2D" parent="Exits" unique_id=849871836]
 position = Vector2(1904, 368)
 script = ExtResource("3_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_25.tscn"
+target_scene_path = "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn"
 target_spawn_name = "FromRoute24Lower"
 transition_id = "kanto_route_24__to_route_25_lower"
 transition_facing_direction = "right"
@@ -366,7 +366,7 @@ flow_direction = "right"
 [node name="ToRoute25South" type="Area2D" parent="Exits" unique_id=678266389]
 position = Vector2(1904, 624)
 script = ExtResource("3_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_25.tscn"
+target_scene_path = "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn"
 target_spawn_name = "FromRoute24South"
 transition_id = "kanto_route_24__to_route_25_south"
 transition_facing_direction = "right"
