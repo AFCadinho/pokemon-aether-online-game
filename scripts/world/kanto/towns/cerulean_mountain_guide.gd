@@ -3,10 +3,10 @@ extends DialogueNPC
 
 class_name CeruleanMountainGuide
 
-const WEST_SITE := "west"
-const WEST_LEVEL := 20
+const EAST_SITE := "east"
+const EAST_ACCESS_LEVEL := 20
 
-@export var west_destination_position := Vector2(112, 1520)
+@export var east_destination_position := Vector2(1296, 2096)
 
 
 func _loads_pickpocket_profile_from_npc_metadata() -> bool:
@@ -24,8 +24,8 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 	var state := state_result.get("state", {}) as Dictionary
 	var level := int(state.get("level", 0))
-	if not bool(state.get("unlocked", false)) or level < WEST_LEVEL:
-		await show_dialogue([LocalizationManager.text("npc.cerulean_mountain_guide.level_locked", {"level": WEST_LEVEL})])
+	if not bool(state.get("unlocked", false)) or level < EAST_ACCESS_LEVEL:
+		await show_dialogue([LocalizationManager.text("npc.cerulean_mountain_guide.level_locked", {"level": EAST_ACCESS_LEVEL})])
 		return
 
 	await show_dialogue([LocalizationManager.text("npc.cerulean_mountain_guide.intro")])
@@ -33,10 +33,10 @@ func interact_with_player(_player: Node2D) -> void:
 	if world == null or not world.has_method("relocate_player_within_current_map"):
 		await show_dialogue([LocalizationManager.text("npc.cerulean_mountain_guide.travel_failed")])
 		return
-	var result: Dictionary = await world.call("relocate_player_within_current_map", west_destination_position)
+	var result: Dictionary = await world.call("relocate_player_within_current_map", east_destination_position)
 	if not bool(result.get("success", false)):
 		await GameErrorDialogService.show_response(result, "backend.error.rock_smash_unavailable")
 
 
 func can_access_site(site_id: String, rock_smash_level: int) -> bool:
-	return site_id == WEST_SITE and rock_smash_level >= WEST_LEVEL
+	return site_id == EAST_SITE and rock_smash_level >= EAST_ACCESS_LEVEL

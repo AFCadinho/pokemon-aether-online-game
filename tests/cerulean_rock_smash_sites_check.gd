@@ -3,14 +3,14 @@ extends SceneTree
 const RockSmashLevelPaletteScript := preload("res://scripts/world/interactables/rock_smash_level_palette.gd")
 const CITY_SCENE := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 const EXPECTED_ROCKS := {
-	"WestRockNorth": ["kanto_cerulean_city_west_site_rock_north", Vector2(144, 1104), 20],
-	"WestRockUpper": ["kanto_cerulean_city_west_site_rock_upper", Vector2(48, 1232), 20],
-	"WestRockLower": ["kanto_cerulean_city_west_site_rock_lower", Vector2(48, 1744), 20],
-	"WestRockSouth": ["kanto_cerulean_city_west_site_rock_south", Vector2(144, 1936), 20],
-	"WestRockNorthwest": ["kanto_cerulean_city_east_site_rock_northwest", Vector2(48, 1104), 50],
-	"WestRockNortheast": ["kanto_cerulean_city_east_site_rock_northeast", Vector2(144, 1328), 50],
-	"WestRockSouthwest": ["kanto_cerulean_city_east_site_rock_southwest", Vector2(144, 1648), 50],
-	"WestRockSoutheast": ["kanto_cerulean_city_east_site_rock_southeast", Vector2(48, 1840), 50],
+	"EastRockNorth": ["kanto_cerulean_city_west_site_rock_north", Vector2(2192, 1712), 20],
+	"EastRockUpper": ["kanto_cerulean_city_west_site_rock_upper", Vector2(2192, 2096), 20],
+	"EastRockLower": ["kanto_cerulean_city_west_site_rock_lower", Vector2(1456, 2192), 20],
+	"EastRockSouth": ["kanto_cerulean_city_west_site_rock_south", Vector2(1200, 2096), 20],
+	"EastRockNorthwest": ["kanto_cerulean_city_east_site_rock_northwest", Vector2(2128, 1712), 50],
+	"EastRockNortheast": ["kanto_cerulean_city_east_site_rock_northeast", Vector2(2128, 2096), 50],
+	"EastRockSouthwest": ["kanto_cerulean_city_east_site_rock_southwest", Vector2(1392, 2192), 50],
+	"EastRockSoutheast": ["kanto_cerulean_city_east_site_rock_southeast", Vector2(1136, 2096), 50],
 }
 
 var failed := false
@@ -34,10 +34,12 @@ func _run() -> void:
 	_check(guide != null and guide.position == Vector2(1712, 1904), "Mountain Guide keeps the edited city position")
 	if guide != null:
 		_check(str(guide.get("portrait_id")) == "showdown_hiker_gen6", "City Mountain Guide uses the Hiker portrait")
-		_check(not bool(guide.call("can_access_site", "west", 19)), "West Site stays closed below Rock Smash level 20")
-		_check(bool(guide.call("can_access_site", "west", 20)), "West Site opens at Rock Smash level 20")
-		_check(not bool(guide.call("can_access_site", "east", 50)), "Removed East Site cannot be selected")
-	_check(city.get_node_or_null("Spawns/EastRockSmashSite") == null, "Cerulean exposes only one player Rock Smash destination")
+		_check(not bool(guide.call("can_access_site", "east", 19)), "East Site stays closed below Rock Smash level 20")
+		_check(bool(guide.call("can_access_site", "east", 20)), "East Site opens at Rock Smash level 20")
+		_check(not bool(guide.call("can_access_site", "west", 50)), "Removed West Site cannot be selected")
+	_check(city.get_node_or_null("Spawns/WestRockSmashSite") == null, "Cerulean exposes only one player Rock Smash destination")
+	var east_site_marker := city.get_node_or_null("Spawns/EastRockSmashSite") as Node2D
+	_check(east_site_marker != null and east_site_marker.position == Vector2(1296, 2096), "East Site is the player Rock Smash destination")
 
 	var site_root := city.get_node_or_null("Entities/Interactables/MountainRockSmashSites")
 	var west_depth_zone := city.get_node_or_null(
@@ -79,19 +81,19 @@ func _run() -> void:
 				_check(_is_open_land(rock.position, collision, water), "%s stands on open land" % rock_name)
 	var west_guide := city.get_node_or_null("Entities/NPCs/WestMountainGuide") as Node2D
 	var east_guide := city.get_node_or_null("Entities/NPCs/EastMountainGuide") as Node2D
-	_check(west_guide != null and west_guide.position == Vector2(144, 1584), "West Site has a visible Mountain Guide")
-	_check(east_guide == null, "Removed East Site no longer has a return guide")
-	if west_guide != null:
-		_check(str(west_guide.get("portrait_id")) == "showdown_hiker_gen6", "West Mountain Guide uses the Hiker portrait")
-		_check(int(west_guide.get("minimum_sort_z")) == 2054, "West Mountain Guide renders above the plateau")
-		_check(west_guide.get("destination_position") == Vector2(1680, 1904), "West Mountain Guide returns beside the city guide")
+	_check(west_guide == null, "Removed West Site no longer has a return guide")
+	_check(east_guide != null and east_guide.position == Vector2(2320, 1872), "East Site has a visible Mountain Guide")
+	if east_guide != null:
+		_check(str(east_guide.get("portrait_id")) == "showdown_hiker_gen6", "East Mountain Guide uses the Hiker portrait")
+		_check(int(east_guide.get("minimum_sort_z")) == 2054, "East Mountain Guide renders above the plateau")
+		_check(east_guide.get("destination_position") == Vector2(1680, 1904), "East Mountain Guide returns beside the city guide")
 	var garrick := city.get_node_or_null("Entities/NPCs/VeteranGarrick")
 	_check(garrick != null and str(garrick.get("portrait_id")) == "showdown_veteran_gen7", "Veteran Garrick uses the elderly Veteran portrait")
 
 	_check(int(city.call("get_actor_sort_z_floor", Vector2(112, 1520))) == 2054, "West Site raises actor depth")
 	_check(int(city.call("get_actor_sort_z_floor", Vector2(1296, 2096))) == 2054, "South mountain raises actor depth")
 	_check(int(city.call("get_actor_sort_z_floor", Vector2(2192, 1712))) == 2054, "East mountain raises actor depth")
-	_check(_is_open_land(Vector2(112, 1520), collision, water), "West Site arrival is safe")
+	_check(_is_open_land(Vector2(1296, 2096), collision, water), "East Site arrival is safe")
 	_check(_is_open_land(Vector2(1680, 1904), collision, water), "Mountain Guide return is safe")
 	_check(
 		int(city.call("get_actor_sort_z_floor", Vector2(1680, 1904))) < 0,
