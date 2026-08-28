@@ -4,6 +4,7 @@
 
 **Changed**
 
+- Cerulean City now has one Rock Smash mountain destination, with all eight daily rocks gathered at the West Site.
 - Outdoor maps now use 2x zoom by default. The zoom can still be changed in the graphics settings.
 - Cerulean City now uses its latest visual layout.
 - Pallet Town and Cerulean Gym now use their latest visual layouts.
