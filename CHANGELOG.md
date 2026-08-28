@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Fixed**
+
+- Players now appear behind hedges, lamps, and other foreground objects in southern Cerulean City.
+
 ## 0.3.66 - 2026-08-28
 
 **Added**
