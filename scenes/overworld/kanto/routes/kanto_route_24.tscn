@@ -407,6 +407,36 @@ species_id = "magikarp"
 display_name = "Magikarp"
 facing_direction = Vector2(-1, 0)
 
+[node name="MountainPokemon" type="Node2D" parent="Entities/Pokemon"]
+
+[node name="Corvisquire" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("15_pokemon")]
+position = Vector2(176, 400)
+overworld_pokemon_id = "kanto_route_24_mountain_corvisquire_1"
+species_id = "corvisquire"
+display_name = "Corvisquire"
+facing_direction = Vector2(1, 0)
+
+[node name="Mudbray" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("15_pokemon")]
+position = Vector2(176, 1264)
+overworld_pokemon_id = "kanto_route_24_mountain_mudbray_1"
+species_id = "mudbray"
+display_name = "Mudbray"
+facing_direction = Vector2(-1, 0)
+
+[node name="Rolycoly" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("15_pokemon")]
+position = Vector2(1296, 656)
+overworld_pokemon_id = "kanto_route_24_mountain_rolycoly_1"
+species_id = "rolycoly"
+display_name = "Rolycoly"
+facing_direction = Vector2(-1, 0)
+
+[node name="Tinkatink" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("15_pokemon")]
+position = Vector2(1136, 1520)
+overworld_pokemon_id = "kanto_route_24_mountain_tinkatink_1"
+species_id = "tinkatink"
+display_name = "Tinkatink"
+facing_direction = Vector2(1, 0)
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=185431822]
 
 [node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=348208063]

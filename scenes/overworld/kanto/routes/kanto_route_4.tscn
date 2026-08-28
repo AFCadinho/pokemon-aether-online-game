@@ -513,6 +513,36 @@ species_id = "tentacool"
 display_name = "Tentacool"
 facing_direction = Vector2(1, 0)
 
+[node name="MountainPokemon" type="Node2D" parent="Entities/Pokemon"]
+
+[node name="Rookidee" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("13_pokemon")]
+position = Vector2(1136, 112)
+overworld_pokemon_id = "kanto_route_4_mountain_rookidee_1"
+species_id = "rookidee"
+display_name = "Rookidee"
+facing_direction = Vector2(1, 0)
+
+[node name="Aron" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("13_pokemon")]
+position = Vector2(1616, 112)
+overworld_pokemon_id = "kanto_route_4_mountain_aron_1"
+species_id = "aron"
+display_name = "Aron"
+facing_direction = Vector2(-1, 0)
+
+[node name="Drilbur" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("13_pokemon")]
+position = Vector2(2224, 112)
+overworld_pokemon_id = "kanto_route_4_mountain_drilbur_1"
+species_id = "drilbur"
+display_name = "Drilbur"
+facing_direction = Vector2(1, 0)
+
+[node name="Rockruff" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("13_pokemon")]
+position = Vector2(2832, 112)
+overworld_pokemon_id = "kanto_route_4_mountain_rockruff_1"
+species_id = "rockruff"
+display_name = "Rockruff"
+facing_direction = Vector2(-1, 0)
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=208040012]
 
 [node name="TM05Roar" parent="Entities/Interactables" unique_id=260838565 instance=ExtResource("6_overworld_item")]
