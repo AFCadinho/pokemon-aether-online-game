@@ -22,6 +22,9 @@
   logs, local databases, or machine-specific configuration between checkouts.
 - Run Godot commands through `game/ops/worktrees/slot-env SLOT -- COMMAND` so
   userdata, configuration, cache, and test logs remain local to the slot.
+- Run only the directly relevant Godot check scripts while developing a task.
+  Reserve `tests/run_project_checks.gd` for the complete development batch or
+  an explicitly useful full verification.
 
 ## Branches and handoff
 
