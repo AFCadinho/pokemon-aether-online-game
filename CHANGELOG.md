@@ -5,6 +5,7 @@
 **Added**
 
 - Gym interiors now have their own background music.
+- Gym Leader battles now have their own background music.
 
 **Fixed**
 
