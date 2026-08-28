@@ -6,22 +6,26 @@ const GYM_POKEMON := {
 	"Entities/Pokemon/Staryu": {
 		"id": "kanto_cerulean_city_gym_staryu_1",
 		"species": "staryu",
-		"position": Vector2(240, 304),
+		"position": Vector2(304, 304),
+		"habitat": "pool",
 	},
 	"Entities/Pokemon/Horsea": {
 		"id": "kanto_cerulean_city_gym_horsea_1",
 		"species": "horsea",
-		"position": Vector2(336, 432),
+		"position": Vector2(304, 432),
+		"habitat": "pool",
 	},
 	"Entities/Pokemon/Shellder": {
 		"id": "kanto_cerulean_city_gym_shellder_1",
 		"species": "shellder",
-		"position": Vector2(240, 752),
+		"position": Vector2(400, 720),
+		"habitat": "pool_deck",
 	},
 	"Entities/Pokemon/Goldeen": {
 		"id": "kanto_cerulean_city_gym_goldeen_1",
 		"species": "goldeen",
-		"position": Vector2(656, 880),
+		"position": Vector2(720, 880),
+		"habitat": "pool",
 	},
 }
 
@@ -55,7 +59,10 @@ func _run() -> void:
 			var collision_cell := collision.local_to_map(collision.to_local(pokemon.global_position))
 			var water_cell := water.local_to_map(water.to_local(pokemon.global_position))
 			_check(collision.get_cell_source_id(collision_cell) < 0, "%s does not block a walkway" % node_path)
-			_check(water.get_cell_source_id(water_cell) >= 0, "%s stays inside a Gym pool" % node_path)
+			if expected.habitat == "pool_deck":
+				_check(water.get_cell_source_id(water_cell) < 0, "%s rests on the dry pool deck" % node_path)
+			else:
+				_check(water.get_cell_source_id(water_cell) >= 0, "%s stays inside a Gym pool" % node_path)
 
 	gym.queue_free()
 	await process_frame

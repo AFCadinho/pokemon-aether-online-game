@@ -16,7 +16,7 @@
 [ext_resource type="SpriteFrames" uid="uid://dta57j6dhidtv" path="res://assets/npcs/classes/swimmer_m_frames.tres" id="14_swimmer"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="15_picnicker"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="16_trainer"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/swimmer_f_frames.tres" id="17_swimmer_f"]
+[ext_resource type="SpriteFrames" uid="uid://brop6u80ud8n0" path="res://assets/npcs/classes/swimmer_f_frames.tres" id="17_swimmer_f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(96, 32)
@@ -177,44 +177,44 @@ facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("15_picnicker")
 battle_environment_id = "water"
 
-[node name="SwimmerBriana" parent="Entities/NPCs" instance=ExtResource("13_water_trainer")]
+[node name="SwimmerBriana" parent="Entities/NPCs" unique_id=145664590 instance=ExtResource("13_water_trainer")]
 position = Vector2(432, 880)
 trainer_id = "kanto_cerulean_city_gym_swimmer_briana"
+sight_range_tiles = 3
 npc_id = "kanto_cerulean_city_gym_swimmer_briana"
 npc_definition_id = "trainer_class_swimmer_f"
 display_name = "Swimmer Briana"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("17_swimmer_f")
 battle_environment_id = "water"
-sight_range_tiles = 3
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=2100558889]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1535209439]
 
 [node name="Staryu" parent="Entities/Pokemon" unique_id=1824564197 instance=ExtResource("10_pokemon")]
-position = Vector2(240, 304)
+position = Vector2(304, 304)
 overworld_pokemon_id = "kanto_cerulean_city_gym_staryu_1"
 species_id = "staryu"
 display_name = "Staryu"
 facing_direction = Vector2(1, 0)
 
-[node name="Horsea" parent="Entities/Pokemon" instance=ExtResource("10_pokemon")]
-position = Vector2(336, 432)
+[node name="Horsea" parent="Entities/Pokemon" unique_id=1170112755 instance=ExtResource("10_pokemon")]
+position = Vector2(304, 432)
 overworld_pokemon_id = "kanto_cerulean_city_gym_horsea_1"
 species_id = "horsea"
 display_name = "Horsea"
 facing_direction = Vector2(-1, 0)
 
-[node name="Shellder" parent="Entities/Pokemon" instance=ExtResource("10_pokemon")]
-position = Vector2(240, 752)
+[node name="Shellder" parent="Entities/Pokemon" unique_id=1078704561 instance=ExtResource("10_pokemon")]
+position = Vector2(400, 720)
 overworld_pokemon_id = "kanto_cerulean_city_gym_shellder_1"
 species_id = "shellder"
 display_name = "Shellder"
 facing_direction = Vector2(1, 0)
 
-[node name="Goldeen" parent="Entities/Pokemon" instance=ExtResource("10_pokemon")]
-position = Vector2(656, 880)
+[node name="Goldeen" parent="Entities/Pokemon" unique_id=373751986 instance=ExtResource("10_pokemon")]
+position = Vector2(720, 880)
 overworld_pokemon_id = "kanto_cerulean_city_gym_goldeen_1"
 species_id = "goldeen"
 display_name = "Goldeen"

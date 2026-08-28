@@ -397,7 +397,7 @@ position = Vector2(208, 976)
 [node name="FromCerulean" type="Marker2D" parent="Spawns" unique_id=1691186935]
 position = Vector2(3136, 1216)
 
-[node name="FromCeruleanWater" type="Marker2D" parent="Spawns"]
+[node name="FromCeruleanWater" type="Marker2D" parent="Spawns" unique_id=142318829]
 position = Vector2(3136, 1008)
 
 [node name="Exits" type="Node2D" parent="." unique_id=208040004]
@@ -433,7 +433,7 @@ z_as_relative = false
 tile_footprint = Vector2i(1, 3)
 flow_direction = "right"
 
-[node name="ToCeruleanWater" type="Area2D" parent="Exits"]
+[node name="ToCeruleanWater" type="Area2D" parent="Exits" unique_id=1098463311]
 position = Vector2(3184, 1008)
 script = ExtResource("4_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
@@ -441,10 +441,10 @@ target_spawn_name = "FromRoute4Water"
 transition_id = "kanto_route_4__to_cerulean_city_water"
 transition_facing_direction = "right"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanWater"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCeruleanWater" unique_id=1308716006]
 shape = SubResource("RectangleShape2D_cerulean_water_exit")
 
-[node name="RouteTransitionHint" parent="Exits/ToCeruleanWater" instance=ExtResource("5_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToCeruleanWater" unique_id=1987953874 instance=ExtResource("5_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(1, 7)
 flow_direction = "right"
@@ -485,29 +485,29 @@ npc_sprite_frames = ExtResource("10_picnicker")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=208040011]
 
-[node name="Sandshrew" parent="Entities/Pokemon" instance=ExtResource("13_pokemon")]
-position = Vector2(912, 1424)
+[node name="Sandshrew" parent="Entities/Pokemon" unique_id=566181274 instance=ExtResource("13_pokemon")]
+position = Vector2(1744, 624)
 overworld_pokemon_id = "kanto_route_4_sandshrew_1"
 species_id = "sandshrew"
 display_name = "Sandshrew"
 facing_direction = Vector2(1, 0)
 
-[node name="Mankey" parent="Entities/Pokemon" instance=ExtResource("13_pokemon")]
-position = Vector2(2256, 1392)
+[node name="Mankey" parent="Entities/Pokemon" unique_id=961368208 instance=ExtResource("13_pokemon")]
+position = Vector2(2512, 1328)
 overworld_pokemon_id = "kanto_route_4_mankey_1"
 species_id = "mankey"
 display_name = "Mankey"
 facing_direction = Vector2(-1, 0)
 
-[node name="Spearow" parent="Entities/Pokemon" instance=ExtResource("13_pokemon")]
-position = Vector2(2960, 624)
+[node name="Spearow" parent="Entities/Pokemon" unique_id=702896188 instance=ExtResource("13_pokemon")]
+position = Vector2(2992, 656)
 overworld_pokemon_id = "kanto_route_4_spearow_1"
 species_id = "spearow"
 display_name = "Spearow"
 facing_direction = Vector2(-1, 0)
 
-[node name="Tentacool" parent="Entities/Pokemon" instance=ExtResource("13_pokemon")]
-position = Vector2(2832, 1008)
+[node name="Tentacool" parent="Entities/Pokemon" unique_id=648339577 instance=ExtResource("13_pokemon")]
+position = Vector2(2896, 1040)
 overworld_pokemon_id = "kanto_route_4_tentacool_1"
 species_id = "tentacool"
 display_name = "Tentacool"
@@ -523,29 +523,29 @@ item_id = "tm-roar"
 [node name="RockSmashWest" parent="Entities/Interactables" unique_id=1541727048 instance=ExtResource("12_route_rock")]
 position = Vector2(176, 1040)
 rock_id = "kanto_route_4_rock_west"
-required_rock_smash_level = 5
 rock_visual_style = 2
+required_rock_smash_level = 5
 
 [node name="RockSmashCentralWest" parent="Entities/Interactables" unique_id=1753633968 instance=ExtResource("12_route_rock")]
 position = Vector2(944, 592)
 rock_id = "kanto_route_4_rock_central_west"
-required_rock_smash_level = 10
 rock_variant = 1
 rock_visual_style = 2
+required_rock_smash_level = 10
 
 [node name="RockSmashCentralEast" parent="Entities/Interactables" unique_id=407381501 instance=ExtResource("12_route_rock")]
 position = Vector2(2256, 560)
 rock_id = "kanto_route_4_rock_central_east"
-required_rock_smash_level = 20
 rock_variant = 2
 rock_visual_style = 2
+required_rock_smash_level = 20
 
 [node name="RockSmashEast" parent="Entities/Interactables" unique_id=257099796 instance=ExtResource("12_route_rock")]
 position = Vector2(2608, 784)
 rock_id = "kanto_route_4_rock_east"
-required_rock_smash_level = 50
 rock_variant = 3
 rock_visual_style = 2
+required_rock_smash_level = 50
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1671503666]
 visible = false
