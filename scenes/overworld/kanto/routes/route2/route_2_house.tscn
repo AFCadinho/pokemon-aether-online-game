@@ -1,10 +1,13 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/house/brown_house_template.tscn" id="1_house"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_map_meta"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="3_floor_mask"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_map_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_transition_hint"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="6_dialogue_npc"]
+[ext_resource type="SpriteFrames" uid="uid://yluab5wp1usc" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="7_poke_fan_m"]
+[ext_resource type="SpriteFrames" uid="uid://b8fh81or510qb" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="8_school_kid_m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_house_exit"]
 size = Vector2(96, 32)
@@ -46,6 +49,21 @@ z_index = 5
 y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="PokeFanMiles" parent="Entities/NPCs" instance=ExtResource("6_dialogue_npc")]
+position = Vector2(272, 336)
+npc_id = "kanto_route_2_house_poke_fan_miles"
+npc_definition_id = "trainer_class_poke_fan_m"
+display_name = "Poke Fan Miles"
+npc_sprite_frames = ExtResource("7_poke_fan_m")
+
+[node name="SchoolKidNolan" parent="Entities/NPCs" instance=ExtResource("6_dialogue_npc")]
+position = Vector2(400, 368)
+npc_id = "kanto_route_2_house_school_kid_nolan"
+npc_definition_id = "trainer_class_school_kid_m"
+display_name = "School Kid Nolan"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("8_school_kid_m")
 
 [node name="Players" type="Node2D" parent="Entities"]
 
