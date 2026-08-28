@@ -14,6 +14,11 @@ const MAP_CASES: Array[Dictionary] = [
 		"area_id": "kanto_viridian_forest",
 		"label": "Viridian Forest",
 	},
+	{
+		"scene_path": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
+		"area_id": "kanto_route_24",
+		"label": "Route 24",
+	},
 ]
 
 var failed := false
@@ -34,6 +39,15 @@ func _check_map_encounter(map_case: Dictionary) -> void:
 	var expected_area_assignment := 'encounter_area_id = "%s"' % map_case["area_id"]
 	_check_true(scene_source.contains(expected_area_assignment), "%s scene should configure its encounter area" % map_case["label"])
 	_check_true(scene_source.contains("grass_encounter_chance = 0.21"), "%s scene should configure its fallback encounter chance" % map_case["label"])
+	if str(map_case["area_id"]) == "kanto_route_24":
+		_check_true(
+			scene_source.contains('[node name="TallGrass" type="TileMapLayer" parent="Tiles"'),
+			"Route 24 should expose a TallGrass encounter mask"
+		)
+		_check_true(
+			scene_source.contains('[node name="Water" type="TileMapLayer" parent="Tiles"'),
+			"Route 24 should retain its semantic Water layer for Surf and fishing"
+		)
 	if str(map_case["area_id"]) == "kanto_route_2":
 		_check_true(
 			scene_source.contains('[node name="NPCs" type="Node2D" parent="Entities"'),

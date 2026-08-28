@@ -1,5 +1,32 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Cerulean City, Route 24, and Cerulean Gym now have complete new layouts with more places and Pokémon to discover.
+- Routes 4 and 24, Cerulean City, and Cerulean Gym now feel livelier with more roaming Pokémon and a practice battle near the Pokémon Center.
+- Gary now challenges Trainers before they can cross Nugget Bridge. Afterward, the story continues toward Bill's house on Route 25.
+- Swimmer Luis, Picnicker Diana, and Swimmer Briana can now be battled in Cerulean Gym.
+- A Bike Voucher can now be exchanged for Cyclizar at the Cerulean Bike Shop. Cyclizar can be ridden by using the configurable Mount key.
+- Cerulean City now has more daily Thieving targets, including Veteran Garrick. Pickpocketing Officer Jenny leads to an immediate arrest.
+- Aethernet travel now shows a purple teleport effect when Trainers depart and arrive.
+
+**Changed**
+
+- Land mounts now move faster. Follower Pokémon temporarily return to their Poké Ball while you are riding.
+- Flash, Cut, Strength, and Surf now require both the matching HM and the correct Kanto Gym Badge.
+- Thieving arrests now include an Officer Jenny encounter and a short explanation of the sentence.
+- Simplified Chinese translations now use official Pokémon terms for moves, Abilities, items, types, Natures, Gym Badges, and descriptions where available. Unverified translations now fall back to English.
+
+**Fixed**
+
+- Swimmer Trainers in Cerulean Gym no longer walk onto land when starting a battle.
+- Your active land mount is now restored after logging out and back in.
+- Cyclizar's size and rider position now display correctly.
+- Surf no longer ends unexpectedly beside the Route 24 bridge in Cerulean City.
+- Pokémon on Cerulean City's mountain plateaus now remain visible and patrol correctly.
+
 ## 0.3.64 - 2026-08-26
 
 **Added**

@@ -7,6 +7,7 @@ var failed := false
 
 func _init() -> void:
 	_check_water_position_restores_surf_without_rechecking_entitlement()
+	_check_surf_can_cross_authorized_transitions()
 	_check_presence_payload_and_signature_include_activity_style()
 	_check_remote_avatar_resolves_replicated_surf_pose()
 	_check_remote_surf_render_matches_local_pose_rules()
@@ -27,6 +28,34 @@ func _check_water_position_restores_surf_without_rechecking_entitlement() -> voi
 		not function_source.contains("_has_party_field_move")
 		and not function_source.contains("surf_unlocked"),
 		"Surf restoration does not repeat the asynchronous entry entitlement check"
+	)
+
+
+func _check_surf_can_cross_authorized_transitions() -> void:
+	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	var block_source := _function_source(world_source, "_get_authorized_teleport_block_reason")
+	_expect(
+		block_source.contains('if bool(player.get("fishing_activity_active")):'),
+		"active Fishing still blocks an authorized transition"
+	)
+	_expect(
+		not block_source.contains('player.get("surf_activity_active")'),
+		"active Surf may enter water map exits and authorized teleporters"
+	)
+
+	var map_exit_source := FileAccess.get_file_as_string("res://scripts/world/map_exit.gd")
+	var transition_source := _function_source(map_exit_source, "_enter_authorized_transition")
+	_expect(
+		transition_source.contains('begin_authorized_teleport", true'),
+		"map exits start their authorized transition while the player completes a tile move"
+	)
+
+	var apply_source := _function_source(world_source, "apply_authorized_teleport_state")
+	var position_source := _function_source(world_source, "_position_player_at_authorized_teleport_state")
+	_expect(
+		apply_source.contains("player.call(\"reset_movement_state\")")
+		and position_source.contains("_sync_player_activity_state_for_current_tile()"),
+		"authorized arrivals reset the old activity and restore Surf only on water"
 	)
 
 

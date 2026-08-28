@@ -12,7 +12,8 @@ const WEATHER_PROFILE_OUTDOOR := "outdoor"
 const WEATHER_PROFILE_DISABLED := "disabled"
 const GROUND_EFFECT_SURFACE_META := "pao_rain_surface"
 const GROUND_EFFECT_SURFACE_NAMES: Array[String] = ["ground", "grass", "sand", "floor", "terrain"]
-const GROUND_EFFECT_COVER_MASK_NAMES: Array[String] = ["water", "townsigns"]
+const GROUND_EFFECT_WATER_NAMES: Array[String] = ["water"]
+const GROUND_EFFECT_COVER_MASK_NAMES: Array[String] = ["townsigns"]
 
 @export_range(0.0, 2.0, 0.05) var transition_duration := 0.45
 
@@ -284,19 +285,29 @@ func _move_ground_effects_to_world_canvas() -> void:
 
 func _configure_ground_effect_surfaces(map_node: Node) -> void:
 	var surface_layers: Array[TileMapLayer] = []
+	var water_layers: Array[TileMapLayer] = []
 	var cover_layers: Array[TileMapLayer] = []
-	_collect_ground_effect_layers(map_node, surface_layers, cover_layers)
+	_collect_ground_effect_layers(map_node, surface_layers, water_layers, cover_layers)
 	var surface_z_index := 0
 	for layer: TileMapLayer in surface_layers:
 		surface_z_index = maxi(surface_z_index, layer.z_index)
+	for layer: TileMapLayer in water_layers:
+		surface_z_index = maxi(surface_z_index, layer.z_index)
 	for ground_effects: Node2D in [rain_ground_effects, snow_ground_effects]:
-		ground_effects.set_surface_layers(surface_layers, cover_layers)
-		ground_effects.z_index = surface_z_index
+		ground_effects.set_surface_layers(surface_layers, water_layers, cover_layers)
+		# Render impacts above details such as GroundDetail instead of letting the
+		# highest accepted surface layer cover them. Depth-sorted map layers may
+		# already occupy Godot's maximum canvas z-index, so keep the offset valid.
+		ground_effects.z_index = mini(
+			surface_z_index + 1,
+			RenderingServer.CANVAS_ITEM_Z_MAX
+		)
 
 
 func _collect_ground_effect_layers(
 	node: Node,
 	surface_layers: Array[TileMapLayer],
+	water_layers: Array[TileMapLayer],
 	cover_layers: Array[TileMapLayer]
 ) -> void:
 	if node == null:
@@ -306,29 +317,38 @@ func _collect_ground_effect_layers(
 		var surface_policy := _ground_effect_surface_policy(layer)
 		if surface_policy == "ground":
 			surface_layers.append(layer)
+		elif surface_policy == "water":
+			water_layers.append(layer)
 		elif surface_policy == "cover":
 			cover_layers.append(layer)
 	for child: Node in node.get_children():
-		_collect_ground_effect_layers(child, surface_layers, cover_layers)
+		_collect_ground_effect_layers(child, surface_layers, water_layers, cover_layers)
 
 
 func _ground_effect_surface_policy(layer: TileMapLayer) -> String:
 	var explicit_policy := str(layer.get_meta(GROUND_EFFECT_SURFACE_META, "")).strip_edges().to_lower()
 	if explicit_policy in ["ground", "surface", "allow"]:
 		return "ground"
-	if explicit_policy in ["cover", "none", "block", "water"]:
+	if explicit_policy == "water":
+		return "water"
+	if explicit_policy in ["cover", "none", "block"]:
 		return "cover"
 
 	var tiled_name := str(layer.get_meta("tiled_name", layer.name))
 	var normalized_name := tiled_name.to_lower().replace(" ", "").replace("_", "").replace("-", "")
 	var is_visual_layer := bool(layer.get_meta("tiled_visual_layer", false))
 	if is_visual_layer:
+		for water_name: String in GROUND_EFFECT_WATER_NAMES:
+			if normalized_name.contains(water_name):
+				return "water"
 		if normalized_name.contains("tallgrass"):
 			return "cover"
 		for surface_name: String in GROUND_EFFECT_SURFACE_NAMES:
 			if normalized_name.contains(surface_name):
 				return "ground"
 		return "cover"
+	if normalized_name in GROUND_EFFECT_WATER_NAMES:
+		return "water"
 	if normalized_name in GROUND_EFFECT_COVER_MASK_NAMES:
 		return "cover"
 	return ""

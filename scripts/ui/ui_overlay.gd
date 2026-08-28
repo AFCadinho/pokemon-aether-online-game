@@ -295,6 +295,15 @@ const POKEDEX_SHINY_ACCENT_SOFT := Color("#f3cc68aa")
 const POKEDEX_SHINY_ACCENT_FAINT := Color("#f3cc6844")
 const POKEDEX_PAGE_SIZE := 80
 const POKEDEX_LOAD_MORE_THRESHOLD := 128.0
+const POKEDEX_WEEKDAY_IDS := [
+	"sunday",
+	"monday",
+	"tuesday",
+	"wednesday",
+	"thursday",
+	"friday",
+	"saturday",
+]
 const WILD_POKEMON_POPUP_SIZE := Vector2(430, 500)
 const POKEDEX_BASE_STAT_BAR_MAX := 200
 const POKEMON_SUMMARY_SIZE := Vector2(620, 380)
@@ -322,6 +331,8 @@ const POKEMON_NICKNAME_MAX_LENGTH := 18
 const POKEMON_SUMMARY_SPRITE_VIEWPORT_SIZE := Vector2i(263, 180)
 const POKEMON_SUMMARY_SPRITE_MAX_SIZE := Vector2(235, 155)
 const POKEMON_SUMMARY_SPRITE_BASE_SCALE := 1.7
+const POKEDEX_SPRITE_MAX_SIZE := Vector2(126, 104)
+const POKEDEX_SPRITE_BASE_SCALE := 1.5
 const POKEMON_SUMMARY_STATUS_ICON_WIDTH := 44
 const POKEMON_SUMMARY_STATUS_ICON_HEIGHT := 16
 const POKEMON_SUMMARY_STATUS_ICON_ROWS := {
@@ -460,6 +471,7 @@ const BAG_CATEGORIES := [
 	{"id": "charms", "labelKey": "ui.bag.category.charms", "iconItemId": "surf-charm"},
 	{"id": "held_items", "labelKey": "ui.bag.category.held_items", "iconItemId": "leftovers"},
 	{"id": "power_stones", "labelKey": "ui.bag.category.power_stones", "iconItemId": "charizardite-x"},
+	{"id": "mounts", "labelKey": "ui.bag.category.mounts", "iconItemId": "cyclizar-mount"},
 	{"id": "cosmetics", "labelKey": "ui.bag.category.cosmetics", "iconItemId": "blue-canari-plush-lv-1"},
 	{"id": "vouchers", "labelKey": "ui.bag.category.vouchers", "iconItemId": "aether-blessing-voucher-3-days"},
 	{"id": "general", "labelKey": "ui.bag.category.other", "iconItemId": "ability-capsule"},
@@ -1433,6 +1445,7 @@ var aether_clash_champion_name := ""
 var aether_clash_champion_refresh_elapsed := 0.0
 var aether_clash_champion_request_active := false
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
+var displayed_world_weekday_id := ""
 var ui_input_mouse_blocker: Control
 var selected_global_buff: Dictionary = {}
 var global_buffs_data: Array = []
@@ -10456,28 +10469,59 @@ func _render_wild_pokemon_metadata(metadata: Dictionary) -> void:
 	var encounter_types: Dictionary = metadata.get("encounterTypes", {}) as Dictionary
 	var encounter_type_ids: Array = encounter_types.keys()
 	encounter_type_ids.sort()
-	var rendered_count := 0
+	var render_groups: Array[Dictionary] = []
+	var has_weekly_rotation_metadata := false
+	var has_active_weekly_rotation := false
 	for encounter_type_value: Variant in encounter_type_ids:
 		var encounter_type := str(encounter_type_value)
 		var encounter_data: Dictionary = encounter_types.get(encounter_type, {}) as Dictionary
 		var pokemon_entries := _array_from_variant(encounter_data.get("pokemon", []))
-		if pokemon_entries.is_empty():
-			continue
+		var active_entries: Array[Dictionary] = []
+		for entry_value: Variant in pokemon_entries:
+			if not entry_value is Dictionary:
+				continue
+			var entry := entry_value as Dictionary
+			var available_days := _weekly_availability_days(entry)
+			if not available_days.is_empty():
+				has_weekly_rotation_metadata = true
+				if not _weekly_availability_is_active_today(available_days):
+					continue
+				has_active_weekly_rotation = true
+			active_entries.append(entry)
+		if not active_entries.is_empty():
+			render_groups.append({
+				"encounter_type": encounter_type,
+				"entries": active_entries,
+			})
 
+	if render_groups.is_empty():
+		_set_wild_pokemon_message_key(
+			"ui.wild.empty_today" if has_weekly_rotation_metadata else "ui.wild.empty",
+			UI_MUTED_TEXT
+		)
+		return
+
+	if has_active_weekly_rotation:
+		var rotation_label := Label.new()
+		rotation_label.name = "WildPokemonRotationStatus"
+		rotation_label.text = LocalizationManager.text("ui.wild.rotation_today", {
+			"day": _weekday_label(_current_world_weekday_id(), false),
+		})
+		rotation_label.add_theme_font_size_override("font_size", 11)
+		rotation_label.add_theme_color_override("font_color", UI_SUCCESS)
+		wild_pokemon_content.add_child(rotation_label)
+
+	for render_group: Dictionary in render_groups:
+		var encounter_type := str(render_group.get("encounter_type", ""))
+		var active_entries: Array = render_group.get("entries", []) as Array
 		var method_label := Label.new()
 		method_label.text = _wild_encounter_method_label(encounter_type)
 		method_label.add_theme_font_size_override("font_size", 13)
 		method_label.add_theme_color_override("font_color", UI_BORDER)
 		wild_pokemon_content.add_child(method_label)
 
-		for entry_value: Variant in pokemon_entries:
-			if not entry_value is Dictionary:
-				continue
+		for entry_value: Variant in active_entries:
 			wild_pokemon_content.add_child(_create_wild_pokemon_row(entry_value as Dictionary))
-			rendered_count += 1
-
-	if rendered_count == 0:
-		_set_wild_pokemon_message_key("ui.wild.empty", UI_MUTED_TEXT)
 
 func _create_wild_pokemon_row(entry: Dictionary) -> Control:
 	var species := str(entry.get("species", "Unknown")).strip_edges()
@@ -10665,16 +10709,23 @@ func _refresh_utc_time_label(delta: float, force := false) -> void:
 	var date_time: Dictionary = WorldTimeService.get_utc_datetime()
 	var hour: int = int(date_time.get("hour", 0))
 	var minute: int = int(date_time.get("minute", 0))
+	var weekday_id := _current_world_weekday_id(date_time)
+	var time_text := ""
 	if LocalizationManager.current_locale != "en":
-		time_label.text = "%02d:%02d" % [hour, minute]
-		_refresh_time_of_day_label(hour)
-		return
-	var period: String = "AM" if hour < 12 else "PM"
-	var display_hour: int = hour % 12
-	if display_hour == 0:
-		display_hour = 12
-	time_label.text = "%02d:%02d %s" % [display_hour, minute, period]
+		time_text = "%02d:%02d" % [hour, minute]
+	else:
+		var period: String = "AM" if hour < 12 else "PM"
+		var display_hour: int = hour % 12
+		if display_hour == 0:
+			display_hour = 12
+		time_text = "%02d:%02d %s" % [display_hour, minute, period]
+	time_label.text = "%s · %s" % [_weekday_label(weekday_id), time_text]
+	time_label.tooltip_text = "%s · %s" % [_weekday_label(weekday_id, false), time_text]
 	_refresh_time_of_day_label(hour)
+	if displayed_world_weekday_id != weekday_id:
+		displayed_world_weekday_id = weekday_id
+		if wild_pokemon_popup != null and wild_pokemon_popup.visible and not wild_pokemon_last_metadata.is_empty():
+			_render_wild_pokemon_metadata(wild_pokemon_last_metadata)
 
 func _refresh_time_of_day_label(hour: int) -> void:
 	if time_of_day_label == null:
@@ -19820,6 +19871,8 @@ func _bag_item_detail_description(item: Dictionary) -> String:
 			return LocalizationManager.text("ui.bag.description.held_item")
 		"power_stones":
 			return LocalizationManager.text("ui.bag.description.power_stone")
+		"mounts":
+			return LocalizationManager.text("ui.bag.description.mount")
 		"key_items":
 			return LocalizationManager.text("ui.bag.description.key_item")
 		"charms":
@@ -21006,6 +21059,11 @@ func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_ty
 	)
 	if cosmetic_icon != null:
 		return cosmetic_icon
+	var mount_id := MountService.get_mount_id_for_unlock_item(item_id)
+	if mount_id != "":
+		var mount_icon := MountService.get_mount_icon_texture(mount_id)
+		if mount_icon != null:
+			return mount_icon
 	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
 	var candidates: Array[String] = [
 		BAG_ICON_ROOT + "field_move_charms/" + normalized + ".png",
@@ -21120,6 +21178,7 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"useNotice": use_notice,
 			"useAction": str(item.get("useAction", "")).strip_edges(),
 			"appearanceUnlocks": item.get("appearanceUnlocks", []),
+			"tradable": bool(item.get("tradable", false)),
 		}))
 	for borrowed_value: Variant in InventoryService.cached_borrowed_inventory_items:
 		if borrowed_value is not Dictionary:
@@ -21166,7 +21225,7 @@ func _normalize_backend_bag_category(category: String, item_id: String) -> Strin
 			return "held_items"
 		"poke_balls", "pokeballs":
 			return "pokeball"
-		"medicine", "machines", "charms", "power_stones", "cosmetics", "vouchers", "currency", "key_items":
+		"medicine", "machines", "charms", "power_stones", "mounts", "cosmetics", "vouchers", "currency", "key_items":
 			return normalized
 
 	return _guess_bag_category(item_id)
@@ -30254,10 +30313,10 @@ func _on_staff_teleport_confirm_pressed() -> void:
 	var reason := ""
 	if staff_teleport_self_reason_input != null:
 		reason = staff_teleport_self_reason_input.text.strip_edges()
+	await _play_authorized_teleport_departure_effect(world)
 	var result: Dictionary = await ModeratorTeleportService.teleport_self(map_id, point_id, reason)
 	if not bool(result.get("success", false)):
-		if world.has_method("cancel_authorized_teleport"):
-			world.call("cancel_authorized_teleport")
+		_cancel_authorized_teleport_effect(world)
 		_refresh_modal_overworld_input_lock()
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
@@ -30340,11 +30399,11 @@ func _on_staff_teleport_to_player_pressed() -> void:
 			_add_chat_message("Enter a reason before teleporting to a player.")
 			if staff_teleport_player_reason_input != null:
 				staff_teleport_player_reason_input.grab_focus()
-		return
+			return
+	await _play_authorized_teleport_departure_effect(world)
 	var result: Dictionary = await ModeratorTeleportService.teleport_to_player(target_player_id, reason)
 	if not bool(result.get("success", false)):
-		if world.has_method("cancel_authorized_teleport"):
-			world.call("cancel_authorized_teleport")
+		_cancel_authorized_teleport_effect(world)
 		_refresh_modal_overworld_input_lock()
 		staff_teleport_in_flight = false
 		if staff_teleport_confirm_button != null:
@@ -31501,11 +31560,15 @@ func _get_pokedex_sprite_scale(frames: SpriteFrames) -> Vector2:
 	if normalized_frame_size == Vector2.ZERO:
 		normalized_frame_size = _get_pokedex_sprite_frame_size(frames) / max(render_scale, 1.0)
 	var fit_scale: float = min(
-		126.0 / max(normalized_frame_size.x, 1.0),
-		104.0 / max(normalized_frame_size.y, 1.0)
+		POKEDEX_SPRITE_MAX_SIZE.x / max(normalized_frame_size.x, 1.0),
+		POKEDEX_SPRITE_MAX_SIZE.y / max(normalized_frame_size.y, 1.0)
 	)
-	var scale_value: float = clamp(fit_scale * display_scale_multiplier, 0.65, 2.0)
-	scale_value = round(scale_value * 4.0) / 4.0
+	# Preserve the artwork's natural size differences. Compact Pokémon use the
+	# same baseline presentation while oversized sprites are reduced to fit.
+	var scale_value: float = min(
+		POKEDEX_SPRITE_BASE_SCALE * display_scale_multiplier,
+		fit_scale
+	)
 	var texture_scale: float = scale_value / max(render_scale, 1.0)
 	return Vector2(texture_scale, texture_scale)
 
@@ -32002,7 +32065,7 @@ func _build_pokedex_locations_tab() -> void:
 
 func _create_pokedex_location_row(location: Dictionary) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 48)
+	panel.custom_minimum_size = Vector2(0, 68)
 	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 8, 1))
 
 	var margin := MarginContainer.new()
@@ -32012,31 +32075,44 @@ func _create_pokedex_location_row(location: Dictionary) -> Control:
 	margin.add_theme_constant_override("margin_bottom", 7)
 	panel.add_child(margin)
 
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 12)
-	margin.add_child(row)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 4)
+	margin.add_child(content)
 
-	var area_name := str(location.get(
-		"areaName",
-		location.get("areaId", LocalizationManager.text("ui.pokedex.locations.unknown_area"))
-	)).strip_edges()
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	content.add_child(header)
+
+	var area_name := _pokedex_location_display_name(location)
 	var area_label := Label.new()
-	area_label.text = (
-		area_name
-		if area_name != ""
-		else LocalizationManager.text("ui.pokedex.locations.unknown_area")
-	)
-	area_label.custom_minimum_size = Vector2(210, 0)
+	area_label.name = "PokedexLocationName"
+	area_label.text = area_name
+	area_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	area_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	area_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	area_label.add_theme_font_size_override("font_size", 14)
 	area_label.add_theme_color_override("font_color", UI_TEXT)
-	row.add_child(area_label)
+	header.add_child(area_label)
 
-	var encounter_stack := VBoxContainer.new()
-	encounter_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	encounter_stack.add_theme_constant_override("separation", 1)
-	row.add_child(encounter_stack)
+	var region_id := _pokedex_location_region_id(location)
+	if region_id != "":
+		header.add_child(_create_pokedex_location_region_badge(region_id))
+
+	var available_days := _pokedex_location_available_days(location)
+	var availability_label := Label.new()
+	availability_label.name = "PokedexLocationAvailability"
+	availability_label.text = _pokedex_location_availability_label(available_days)
+	availability_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	availability_label.add_theme_font_size_override("font_size", 10)
+	availability_label.add_theme_color_override(
+		"font_color",
+		UI_SUCCESS if available_days.is_empty() or _pokedex_location_is_available_today(available_days) else UI_MUTED_TEXT
+	)
+	header.add_child(availability_label)
+
+	var details_row := HBoxContainer.new()
+	details_row.add_theme_constant_override("separation", 8)
+	content.add_child(details_row)
 
 	var encounter_type := str(location.get(
 		"encounterType",
@@ -32045,29 +32121,152 @@ func _create_pokedex_location_row(location: Dictionary) -> Control:
 	var level_text := _format_pokedex_location_level_range(location)
 	var time_of_day := str(location.get("timeOfDay", "any"))
 	var method_label := Label.new()
-	method_label.text = "%s · %s - %s" % [
-		encounter_type
+	method_label.name = "PokedexLocationDetails"
+	method_label.text = "%s · %s · %s" % [
+		_wild_encounter_method_label(encounter_type)
 		if encounter_type != ""
 		else LocalizationManager.text("ui.pokedex.locations.wild"),
-		_encounter_time_of_day_label(time_of_day),
 		level_text,
+		_encounter_time_of_day_label(time_of_day),
 	]
+	method_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	method_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	method_label.add_theme_font_size_override("font_size", 12)
-	method_label.add_theme_color_override("font_color", UI_TEXT)
-	encounter_stack.add_child(method_label)
+	method_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	details_row.add_child(method_label)
 
-	var rarity_label := Label.new()
-	rarity_label.text = LocalizationManager.text("ui.pokedex.locations.rarity", {
-		"rarity": _get_pokedex_selected_rarity_label(),
-	})
-	rarity_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	rarity_label.add_theme_font_size_override("font_size", 10)
-	rarity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	encounter_stack.add_child(rarity_label)
+	if not available_days.is_empty():
+		var day_list_label := Label.new()
+		day_list_label.name = "PokedexLocationDays"
+		day_list_label.text = LocalizationManager.text("ui.pokedex.locations.days", {
+			"days": _pokedex_location_days_text(available_days),
+		})
+		day_list_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		day_list_label.add_theme_font_size_override("font_size", 10)
+		day_list_label.add_theme_color_override("font_color", POKEDEX_ACCENT_SOFT)
+		details_row.add_child(day_list_label)
 
-	panel.tooltip_text = "%s\n%s\n%s" % [area_label.text, method_label.text, rarity_label.text]
+	var tooltip_lines := [area_label.text, method_label.text, availability_label.text]
+	if not available_days.is_empty():
+		tooltip_lines.append(LocalizationManager.text("ui.pokedex.locations.days", {
+			"days": _pokedex_location_days_text(available_days, false),
+		}))
+	panel.tooltip_text = "\n".join(tooltip_lines)
 	return panel
+
+func _pokedex_location_display_name(location: Dictionary) -> String:
+	var area_name := str(location.get(
+		"locationName",
+		location.get(
+			"areaName",
+			location.get("areaId", LocalizationManager.text("ui.pokedex.locations.unknown_area"))
+		)
+	)).strip_edges()
+	if area_name == "":
+		return LocalizationManager.text("ui.pokedex.locations.unknown_area")
+	var region_id := _pokedex_location_region_id(location)
+	var region_prefix := _format_identifier_display_name(region_id)
+	if region_prefix != "" and area_name.to_lower().begins_with(region_prefix.to_lower() + " "):
+		area_name = area_name.substr(region_prefix.length()).strip_edges()
+	return _format_identifier_display_name(area_name)
+
+func _pokedex_location_region_id(location: Dictionary) -> String:
+	var explicit_region := str(location.get("regionId", location.get("region", ""))).strip_edges().to_lower()
+	if explicit_region != "":
+		return explicit_region
+	var area_id := str(location.get("areaId", "")).strip_edges().to_lower()
+	var separator_index := area_id.find("_")
+	return area_id.left(separator_index) if separator_index > 0 else ""
+
+func _create_pokedex_location_region_badge(region_id: String) -> Control:
+	var badge := PanelContainer.new()
+	badge.name = "PokedexLocationRegion"
+	badge.add_theme_stylebox_override("panel", _make_panel_style(
+		Color(POKEDEX_ACCENT.r, POKEDEX_ACCENT.g, POKEDEX_ACCENT.b, 0.09),
+		POKEDEX_ACCENT_FAINT,
+		6,
+		1
+	))
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 6)
+	margin.add_theme_constant_override("margin_right", 6)
+	margin.add_theme_constant_override("margin_top", 2)
+	margin.add_theme_constant_override("margin_bottom", 2)
+	badge.add_child(margin)
+	var label := Label.new()
+	label.text = _format_identifier_display_name(region_id).to_upper()
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", POKEDEX_ACCENT_SOFT)
+	margin.add_child(label)
+	return badge
+
+func _pokedex_location_available_days(location: Dictionary) -> Array[String]:
+	return _weekly_availability_days(location)
+
+func _weekly_availability_days(source: Dictionary) -> Array[String]:
+	var availability_value: Variant = source.get("availability", {})
+	var availability: Dictionary = availability_value if availability_value is Dictionary else {}
+	var days_value: Variant = availability.get("daysOfWeek", source.get("daysOfWeek", []))
+	var normalized_days: Array[String] = []
+	if not days_value is Array:
+		return normalized_days
+	for day_value: Variant in days_value:
+		var day_id := str(day_value).strip_edges().to_lower()
+		if day_id in POKEDEX_WEEKDAY_IDS and day_id not in normalized_days:
+			normalized_days.append(day_id)
+	normalized_days.sort_custom(func(left: String, right: String) -> bool:
+		return POKEDEX_WEEKDAY_IDS.find(left) < POKEDEX_WEEKDAY_IDS.find(right)
+	)
+	return normalized_days
+
+func _pokedex_location_availability_label(available_days: Array[String]) -> String:
+	if available_days.is_empty():
+		return LocalizationManager.text("ui.pokedex.locations.every_day")
+	if _pokedex_location_is_available_today(available_days):
+		return LocalizationManager.text("ui.pokedex.locations.available_today")
+	var next_day := _pokedex_location_next_available_day(available_days)
+	return LocalizationManager.text("ui.pokedex.locations.next_day", {
+		"day": _pokedex_weekday_label(next_day, false),
+	})
+
+func _pokedex_location_is_available_today(available_days: Array[String]) -> bool:
+	return _weekly_availability_is_active_today(available_days)
+
+func _weekly_availability_is_active_today(available_days: Array[String]) -> bool:
+	return _current_world_weekday_id() in available_days
+
+func _pokedex_location_next_available_day(available_days: Array[String]) -> String:
+	if available_days.is_empty():
+		return ""
+	var current_index := POKEDEX_WEEKDAY_IDS.find(_current_world_weekday_id())
+	for offset: int in range(1, POKEDEX_WEEKDAY_IDS.size() + 1):
+		var candidate: String = POKEDEX_WEEKDAY_IDS[(current_index + offset) % POKEDEX_WEEKDAY_IDS.size()]
+		if candidate in available_days:
+			return candidate
+	return available_days[0]
+
+func _pokedex_current_weekday_id() -> String:
+	return _current_world_weekday_id()
+
+func _current_world_weekday_id(date_time: Dictionary = {}) -> String:
+	if date_time.is_empty():
+		date_time = WorldTimeService.get_utc_datetime()
+	var weekday: int = clampi(int(date_time.get("weekday", 0)), 0, POKEDEX_WEEKDAY_IDS.size() - 1)
+	return POKEDEX_WEEKDAY_IDS[weekday]
+
+func _pokedex_location_days_text(available_days: Array[String], compact := true) -> String:
+	var labels: Array[String] = []
+	for day_id: String in available_days:
+		labels.append(_pokedex_weekday_label(day_id, compact))
+	return " · ".join(labels)
+
+func _pokedex_weekday_label(day_id: String, compact := true) -> String:
+	return _weekday_label(day_id, compact)
+
+func _weekday_label(day_id: String, compact := true) -> String:
+	var suffix := "short" if compact else "long"
+	var key := "ui.weekday.%s.%s" % [day_id, suffix]
+	return LocalizationManager.text(key) if LocalizationManager.has_key(key) else _format_identifier_display_name(day_id)
 
 func _format_pokedex_location_level_range(location: Dictionary) -> String:
 	var min_level: int = max(1, int(location.get("minLevel", location.get("min_level", 1))))
@@ -37795,10 +37994,10 @@ func _on_guild_lobby_teleport_requested() -> void:
 		)))
 		return
 
+	await _play_authorized_teleport_departure_effect(world)
 	var response: Dictionary = await GuildService.teleport_to_lobby()
 	if not bool(response.get("success", false)):
-		if world.has_method("cancel_authorized_teleport"):
-			world.call("cancel_authorized_teleport")
+		_cancel_authorized_teleport_effect(world)
 		guild_lobby_teleport_in_flight = false
 		_add_chat_message(str(response.get(
 			"error",
@@ -37813,6 +38012,18 @@ func _on_guild_lobby_teleport_requested() -> void:
 		_add_chat_message(LocalizationManager.text("ui.guild.lobby.error.apply_failed"))
 		return
 	_add_chat_message(LocalizationManager.text("ui.guild.lobby.success"))
+
+
+func _play_authorized_teleport_departure_effect(world: Node) -> void:
+	if world != null and world.has_method("play_authorized_teleport_departure_effect"):
+		await world.call("play_authorized_teleport_departure_effect")
+
+
+func _cancel_authorized_teleport_effect(world: Node) -> void:
+	if world != null and world.has_method("cancel_authorized_teleport_effect"):
+		world.call("cancel_authorized_teleport_effect")
+	elif world != null and world.has_method("cancel_authorized_teleport"):
+		world.call("cancel_authorized_teleport")
 
 func _on_aether_exchange_button_pressed() -> void:
 	if aether_exchange_popup == null:

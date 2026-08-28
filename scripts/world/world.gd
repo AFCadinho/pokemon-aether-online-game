@@ -3,6 +3,7 @@ extends Node2D
 const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
 const BATTLE_SCENE: PackedScene = preload(BATTLE_SCENE_PATH)
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
+const AETHERNET_TELEPORT_EFFECT_SCRIPT: Script = preload("res://scripts/world/aethernet_teleport_effect.gd")
 const MAP_TRANSITION_INDICATOR_SCRIPT: Script = preload("res://scripts/ui/map_transition_indicator.gd")
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
 const BattleEnvironmentResolverScript := preload("res://scripts/battle/battle_environment_resolver.gd")
@@ -79,6 +80,10 @@ var pending_happiness_walk_steps := 0
 var authorized_teleport_in_progress := false
 var authorized_teleport_locked_overworld := false
 var authorized_teleport_apply_failed_autosave_blocked := false
+var aethernet_teleport_effect_pending := false
+var aethernet_effect_phase := ""
+var aethernet_effect_sequence := 0
+var active_local_aethernet_effect: Node
 var account_switch_in_progress := false
 var current_teleport_revision := 0
 var pending_remote_authorized_teleport_state: Dictionary = {}
@@ -324,6 +329,28 @@ func save_current_player_state_now() -> Dictionary:
 	return result
 
 
+func relocate_player_within_current_map(destination: Vector2) -> Dictionary:
+	if is_in_battle or is_loading_map or authorized_teleport_in_progress:
+		return {"success": false, "error": "The trail is unavailable right now."}
+	if player == null or GameState.current_map == null:
+		return {"success": false, "error": "World is not ready."}
+	var origin := player.global_position
+	await _fade_map_transition(MAP_TRANSITION_COVER_ALPHA, MAP_FADE_OUT_SECONDS)
+	player.call("teleport_within_current_map", destination)
+	GameState.player_position = player.global_position
+	GameState.has_player_position = true
+	await get_tree().physics_frame
+	var save_result := await save_current_player_state_now()
+	if not bool(save_result.get("success", false)):
+		player.call("teleport_within_current_map", origin)
+		GameState.player_position = player.global_position
+		await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+		return save_result
+	_publish_world_presence(true)
+	await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+	return {"success": true}
+
+
 func begin_authorized_teleport(
 	ignore_player_movement := false,
 	ignore_existing_overworld_lock := false
@@ -365,6 +392,61 @@ func cancel_authorized_teleport() -> void:
 	if authorized_teleport_locked_overworld:
 		GameState.unlock_overworld_input()
 	authorized_teleport_locked_overworld = false
+
+
+func play_authorized_teleport_departure_effect() -> void:
+	aethernet_teleport_effect_pending = true
+	await _play_local_aethernet_effect("depart", true)
+
+
+func cancel_authorized_teleport_effect() -> void:
+	aethernet_teleport_effect_pending = false
+	_clear_local_aethernet_effect(true)
+	_set_aethernet_effect_presence("")
+	cancel_authorized_teleport()
+
+
+func play_aethernet_departure_effect() -> void:
+	await play_authorized_teleport_departure_effect()
+
+
+func cancel_aethernet_teleport_effect() -> void:
+	cancel_authorized_teleport_effect()
+
+
+func _play_local_aethernet_effect(phase: String, play_sound: bool) -> void:
+	_clear_local_aethernet_effect(true)
+	_set_aethernet_effect_presence(phase)
+	var effect_value: Variant = AETHERNET_TELEPORT_EFFECT_SCRIPT.new()
+	if not effect_value is Node2D or player == null or player.get_parent() == null:
+		return
+	var effect := effect_value as Node2D
+	player.get_parent().add_child(effect)
+	active_local_aethernet_effect = effect
+	effect.call("start", player, phase, play_sound)
+	await effect.finished
+	if active_local_aethernet_effect == effect:
+		active_local_aethernet_effect = null
+
+
+func _clear_local_aethernet_effect(restore_player: bool) -> void:
+	if active_local_aethernet_effect != null and is_instance_valid(active_local_aethernet_effect):
+		if restore_player and active_local_aethernet_effect.has_method("cancel_and_restore"):
+			active_local_aethernet_effect.call("cancel_and_restore")
+		else:
+			active_local_aethernet_effect.queue_free()
+	active_local_aethernet_effect = null
+	if restore_player and player != null:
+		var restored_modulate := player.modulate
+		restored_modulate.a = 1.0
+		player.modulate = restored_modulate
+
+
+func _set_aethernet_effect_presence(phase: String) -> void:
+	aethernet_effect_phase = phase
+	aethernet_effect_sequence += 1
+	last_presence_position_signature = ""
+	_publish_world_presence(true)
 
 
 func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
@@ -461,6 +543,10 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 			"success": false,
 			"error": str(ack_result.get("error", "Could not acknowledge authorized teleport.")),
 		}
+	if aethernet_teleport_effect_pending:
+		await _play_local_aethernet_effect("arrive", false)
+		aethernet_teleport_effect_pending = false
+		_set_aethernet_effect_presence("")
 	last_saved_position_signature = _get_current_player_position_signature(true)
 	authorized_teleport_apply_failed_autosave_blocked = false
 	authorized_teleport_in_progress = false
@@ -496,6 +582,13 @@ func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
 			"blockReason": block_reason,
 		}
 	active_remote_authorized_teleport_command_id = command_id
+	authorized_teleport_in_progress = true
+	has_pending_player_position_save = false
+	GameState.lock_overworld_input()
+	authorized_teleport_locked_overworld = true
+	while is_saving_player_position:
+		await get_tree().process_frame
+	await play_authorized_teleport_departure_effect()
 	var result: Dictionary = await apply_authorized_teleport_state(state)
 	active_remote_authorized_teleport_command_id = ""
 	if bool(result.get("success", false)) and command_id != "":
@@ -581,7 +674,10 @@ func _get_authorized_teleport_block_reason(
 		return "Cannot teleport while moving."
 	if bool(player.get("route_gate_interaction_in_progress")):
 		return "Cannot teleport during a route transition."
-	if bool(player.get("fishing_activity_active")) or bool(player.get("surf_activity_active")):
+	# Surf is a movement mode and must be allowed through water map exits and
+	# teleports. Destination positioning resets it, then restores it only when
+	# the arrival tile is water. Fishing remains a blocking activity.
+	if bool(player.get("fishing_activity_active")):
 		return "Cannot teleport during an overworld activity."
 	return ""
 
@@ -591,6 +687,10 @@ func _mark_authorized_teleport_apply_failed() -> void:
 	authorized_teleport_in_progress = false
 	authorized_teleport_apply_failed_autosave_blocked = true
 	has_pending_player_position_save = false
+	if aethernet_teleport_effect_pending:
+		aethernet_teleport_effect_pending = false
+		_clear_local_aethernet_effect(true)
+		_set_aethernet_effect_presence("")
 	if authorized_teleport_locked_overworld:
 		GameState.unlock_overworld_input()
 	authorized_teleport_locked_overworld = false
@@ -1045,6 +1145,13 @@ func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 	player.set_idle_frame()
 	player.refresh_map_layers()
 	_sync_player_activity_state_for_current_tile()
+	var saved_mount_id := str(state.get("mountId", "")).strip_edges().to_lower()
+	if (
+		not saved_mount_id.is_empty()
+		and not bool(state.get("teleportAcknowledgementRequired", false))
+		and player.has_method("restore_land_mount")
+	):
+		player.call("restore_land_mount", saved_mount_id)
 	if player.has_method("reset_pokemon_follower_position"):
 		player.call("reset_pokemon_follower_position")
 	GameState.player_position = saved_position
@@ -1831,7 +1938,10 @@ func _sort_remote_player_avatar_nodes() -> void:
 	if remote_players_container == null or not is_instance_valid(remote_players_container):
 		return
 
-	var avatars := remote_players_container.get_children()
+	var avatars: Array[Node] = []
+	for child: Node in remote_players_container.get_children():
+		if child.get_script() == REMOTE_PLAYER_AVATAR_SCRIPT:
+			avatars.append(child)
 	avatars.sort_custom(_compare_remote_player_avatar_nodes)
 	for index in avatars.size():
 		remote_players_container.move_child(avatars[index], index)
@@ -2025,6 +2135,9 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 	var current_map: Node = GameState.current_map
 	var position: Vector2 = _get_current_player_persistent_position()
 	var appearance_state: Dictionary = _get_confirmed_appearance_state() if use_confirmed_appearance else _get_current_appearance_presence_state()
+	var active_land_mount_id := str(player.call("get_active_land_mount_id")) \
+		if player.has_method("get_active_land_mount_id") \
+		else ""
 	var state: Dictionary = {
 		"mapId": _get_map_id(current_map),
 		"mapScenePath": _get_map_scene_path(current_map),
@@ -2035,6 +2148,7 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 		"gender": PlayerSave.gender,
 		"facingDirection": _direction_to_name(player.last_direction),
 		"spawnMarker": spawn_marker,
+		"mountId": active_land_mount_id,
 		"appearance": appearance_state,
 		"roles": _get_current_role_presence_state(),
 		"selectedRoleBadge": GameState.selected_role_badge,
@@ -2043,6 +2157,11 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 		"teleportRevision": current_teleport_revision,
 		"walkSteps": mini(pending_happiness_walk_steps, 512),
 	}
+	if not aethernet_effect_phase.is_empty():
+		state["aethernetEffect"] = {
+			"phase": aethernet_effect_phase,
+			"sequence": aethernet_effect_sequence,
+		}
 	if player.has_method("get_network_movement_state"):
 		state["movement"] = player.call("get_network_movement_state")
 	state["follower"] = _get_current_follower_presence_state()
@@ -2147,7 +2266,15 @@ func _get_current_role_presence_state() -> Array:
 
 
 func _get_current_follower_presence_state() -> Dictionary:
-	if not GameState.show_follower or PlayerSave.party.is_empty():
+	if (
+		not GameState.show_follower
+		or PlayerSave.party.is_empty()
+		or (
+			player != null
+			and player.has_method("is_land_mount_activity_active")
+			and bool(player.call("is_land_mount_activity_active"))
+		)
+	):
 		return {"visible": false}
 
 	var lead_pokemon: Pokemon = PlayerSave.party[0]
@@ -2566,6 +2693,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 
 	var player_lead_slot := PlayerSave.get_first_usable_party_slot()
 	if player_lead_slot <= 0:
+		await _blackout_before_trainer_battle(trainer_id)
 		return {
 			"success": false,
 			"code": "no_usable_pokemon",
@@ -2811,6 +2939,13 @@ func _begin_blackout_respawn_transition() -> void:
 	has_pending_player_position_save = false
 	if not GameState.overworld_input_locked:
 		GameState.lock_overworld_input()
+
+
+func _blackout_before_trainer_battle(trainer_id: String) -> void:
+	_begin_blackout_respawn_transition()
+	await _respawn_after_battle_loss()
+	_finish_blackout_respawn_transition()
+	_finish_trainer_battle_npc(trainer_id, false)
 
 
 func _finish_blackout_respawn_transition() -> void:
@@ -3102,6 +3237,7 @@ func _show_trainer_outro_dialogue(dialogue_id: String, mugshot: Texture2D) -> vo
 	dialogue_box.start_dialogue(lines, str(metadata.get("speakerName", "")), mugshot)
 	await dialogue_box.dialogue_finished
 
+
 func _notify_gym_badge_award(value: Variant) -> void:
 	if not (value is Dictionary):
 		return
@@ -3220,6 +3356,7 @@ func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded:
 	})
 	get_tree().call_group("ui_overlay", "refresh_money_display")
 	get_tree().call_group("ui_overlay", "add_system_message", message)
+
 
 func _notify_story_reward_items(value: Variant) -> void:
 	for message: String in _story_reward_item_messages(value):

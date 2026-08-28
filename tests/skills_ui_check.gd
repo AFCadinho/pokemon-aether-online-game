@@ -132,6 +132,8 @@ func _run() -> void:
 				{"rockId": "kanto_pewter_city_training_rock_west", "nameKey": "ui.skills.rock_smash.rock.training_west", "townKey": "ui.skills.rock_smash.location.pewter_city", "locationKey": "ui.skills.rock_smash.location.karate_yard", "requiredLevel": 1, "unlocked": true, "smashedToday": false, "availableToday": true},
 				{"rockId": "kanto_mt_moon_1f_rock_west", "nameKey": "ui.skills.rock_smash.rock.cave_west", "townKey": "ui.skills.rock_smash.location.mt_moon", "locationKey": "ui.skills.rock_smash.location.mt_moon_1f", "requiredLevel": 5, "unlocked": true, "smashedToday": false, "availableToday": true},
 				{"rockId": "kanto_mt_moon_b2f_rock_north", "nameKey": "ui.skills.rock_smash.rock.cave_north", "townKey": "ui.skills.rock_smash.location.mt_moon", "locationKey": "ui.skills.rock_smash.location.mt_moon_b2f", "requiredLevel": 50, "unlocked": false, "smashedToday": false, "availableToday": false},
+				{"rockId": "kanto_route_3_rock_west", "nameKey": "ui.skills.rock_smash.rock.route_west", "townKey": "ui.skills.rock_smash.location.route_3", "locationKey": "ui.skills.rock_smash.location.route_3", "requiredLevel": 5, "unlocked": true, "smashedToday": false, "availableToday": true},
+				{"rockId": "kanto_route_4_rock_east", "nameKey": "ui.skills.rock_smash.rock.route_east", "townKey": "ui.skills.rock_smash.location.route_4", "locationKey": "ui.skills.rock_smash.location.route_4", "requiredLevel": 50, "unlocked": false, "smashedToday": false, "availableToday": false},
 			],
 		},
 	]
@@ -296,7 +298,7 @@ func _run() -> void:
 	_check((panel.get("targets_section") as VBoxContainer).visible, "Rock Smash has a dedicated daily Rocks tab")
 	_check((panel.get("catalog_tab_button") as Button).text == "Rocks", "Rock Smash labels its secondary tab for rocks")
 	area_selector = panel.get("area_selector") as OptionButton
-	_check(area_selector.visible and area_selector.item_count == 2, "Rock Smash offers one compact dropdown entry per area")
+	_check(area_selector.visible and area_selector.item_count == 4, "Rock Smash offers one compact dropdown entry per area")
 	_check(area_selector.get_item_text(0).contains("Pewter City") and area_selector.get_item_text(0).contains("1/4"), "Rock Smash area options include their daily smash progress")
 	await process_frame
 	panel.call("_fit_area_popup", area_selector)
@@ -317,6 +319,20 @@ func _run() -> void:
 	await process_frame
 	var mt_moon_rock_height := ((panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer).size.y
 	_check(is_equal_approx(pewter_rock_height, mt_moon_rock_height) and pewter_rock_height <= 55.0, "Pewter and Mt. Moon use the same compact rock cards")
+	area_selector.select(2)
+	panel.call("_select_area", 2)
+	_check(
+		str(panel.get("selected_target_town_key")) == "ui.skills.rock_smash.location.route_3"
+		and (panel.get("targets_container") as GridContainer).get_child_count() == 1,
+		"Route 3 rocks receive their own area group"
+	)
+	area_selector.select(3)
+	panel.call("_select_area", 3)
+	_check(
+		str(panel.get("selected_target_town_key")) == "ui.skills.rock_smash.location.route_4"
+		and (panel.get("targets_container") as GridContainer).get_child_count() == 1,
+		"Route 4 rocks receive their own area group"
+	)
 	area_selector.select(0)
 	panel.call("_select_area", 0)
 	_check((panel.get("targets_container") as GridContainer).columns == 2, "wide Rock Smash lists use two columns")
@@ -325,7 +341,7 @@ func _run() -> void:
 	_check((panel.get("targets_container") as GridContainer).columns == 1, "narrow Rock Smash lists collapse to one readable column")
 	panel.size.x = 760.0
 	panel.call("_on_window_resized")
-	_check((panel.get("targets_summary_label") as Label).text.contains("4") and (panel.get("targets_summary_label") as Label).text.contains("1/6"), "the rock summary shows available and smashed counts")
+	_check((panel.get("targets_summary_label") as Label).text.contains("5") and (panel.get("targets_summary_label") as Label).text.contains("1/8"), "the rock summary shows available and smashed counts")
 	var first_rock := (panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer
 	var first_rock_status := ((first_rock.get_child(0) as HBoxContainer).get_child(1) as Label)
 	_check(first_rock_status.text == "Smashed today", "a completed rock has a clear daily status")

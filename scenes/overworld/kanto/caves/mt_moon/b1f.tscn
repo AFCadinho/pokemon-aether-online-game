@@ -391,17 +391,20 @@ z_index = 5
 [node name="RockSmash01" parent="Entities/Interactables" unique_id=1034659227 instance=ExtResource("6_rock")]
 position = Vector2(208, 560)
 rock_id = "kanto_mt_moon_b1f_rock_west"
+required_rock_smash_level = 10
 rock_visual_style = 1
 
 [node name="RockSmash02" parent="Entities/Interactables" unique_id=200584177 instance=ExtResource("6_rock")]
 position = Vector2(2288, 336)
 rock_id = "kanto_mt_moon_b1f_rock_east"
+required_rock_smash_level = 10
 rock_variant = 1
 rock_visual_style = 1
 
 [node name="RockSmash03" parent="Entities/Interactables" unique_id=1088471145 instance=ExtResource("6_rock")]
 position = Vector2(1872, 2128)
 rock_id = "kanto_mt_moon_b1f_rock_south"
+required_rock_smash_level = 10
 rock_variant = 2
 rock_visual_style = 1
 
