@@ -66,8 +66,8 @@ func _init() -> void:
 	_check_equal(snow_ground_effects.get_surface_layer_count(), 2, "Ground and GroundDetail accept snow landings")
 	_check_equal(rain_ground_effects.get_water_layer_count(), 1, "water layers accept rain ripples")
 	_check_equal(snow_ground_effects.get_water_layer_count(), 1, "water layers remain separately classified for snow")
-	_check_equal(rain_ground_effects.z_index, 3, "rain impacts render above GroundDetail")
-	_check_equal(snow_ground_effects.z_index, 3, "snow landings render above GroundDetail")
+	_check_equal(rain_ground_effects.z_index, 2, "rain impacts share GroundDetail depth without covering Objects")
+	_check_equal(snow_ground_effects.z_index, 2, "snow landings share GroundDetail depth without covering Objects")
 	var maximum_depth_map := Node2D.new()
 	var maximum_depth_ground := TileMapLayer.new()
 	maximum_depth_ground.name = "GroundMaximumDepth"

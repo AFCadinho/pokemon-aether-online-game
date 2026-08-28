@@ -39,9 +39,19 @@ func _run() -> void:
 		_check(bool(guide.call("can_access_site", "east", 50)), "East Site opens at Rock Smash level 50")
 
 	var site_root := city.get_node_or_null("Entities/Interactables/MountainRockSmashSites")
+	var west_depth_zone := city.get_node_or_null(
+		"MountainDepthZones/WestMountain/CollisionPolygon2D"
+	) as CollisionPolygon2D
+	var east_depth_zone := city.get_node_or_null(
+		"MountainDepthZones/EastAndSouthMountain/CollisionPolygon2D"
+	) as CollisionPolygon2D
 	var collision := city.get_node_or_null("Tiles/Collision") as TileMapLayer
 	var water := city.get_node_or_null("Tiles/Water") as TileMapLayer
 	_check(site_root != null, "Cerulean exposes the mountain Rock Smash site group")
+	_check(
+		west_depth_zone != null and east_depth_zone != null,
+		"Cerulean exposes editor-draggable mountain depth polygons"
+	)
 	_check(collision != null and water != null, "Cerulean exposes collision and water data for safe placement")
 	if site_root != null:
 		for rock_name_value: Variant in EXPECTED_ROCKS:
@@ -61,6 +71,10 @@ func _run() -> void:
 				)
 				_check(int(rock.get("rock_visual_style")) == 2, "%s uses the route rock visual" % rock_name)
 				_check(rock.z_index == 2054 and not rock.z_as_relative, "%s renders on the plateau" % rock_name)
+				_check(
+					int(city.call("get_actor_sort_z_floor", rock.position)) == 2054,
+					"%s stays inside an editor-draggable mountain depth zone" % rock_name
+				)
 				_check(_is_open_land(rock.position, collision, water), "%s stands on open land" % rock_name)
 	var west_guide := city.get_node_or_null("Entities/NPCs/WestMountainGuide") as Node2D
 	var east_guide := city.get_node_or_null("Entities/NPCs/EastMountainGuide") as Node2D
@@ -79,9 +93,14 @@ func _run() -> void:
 
 	_check(int(city.call("get_actor_sort_z_floor", Vector2(112, 1520))) == 2054, "West Site raises actor depth")
 	_check(int(city.call("get_actor_sort_z_floor", Vector2(1296, 2096))) == 2054, "East Site raises actor depth")
+	_check(int(city.call("get_actor_sort_z_floor", Vector2(2192, 1712))) == 2054, "East mountain raises actor depth")
 	_check(_is_open_land(Vector2(112, 1520), collision, water), "West Site arrival is safe")
 	_check(_is_open_land(Vector2(1296, 2096), collision, water), "East Site arrival is safe")
 	_check(_is_open_land(Vector2(1680, 1904), collision, water), "Mountain Guide return is safe")
+	_check(
+		int(city.call("get_actor_sort_z_floor", Vector2(1680, 1904))) < 0,
+		"the regular city garden keeps normal object depth sorting"
+	)
 	_check(int(city.call("get_actor_sort_z_floor", Vector2(800, 800))) < 0, "Regular city depth remains unchanged")
 	city.free()
 	quit(1 if failed else 0)
