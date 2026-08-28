@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Fixed**
+
+- Rain splashes now stay on the ground beneath trees, Trainers, Pokémon, and other map objects.
+
 ## 0.3.66 - 2026-08-28
 
 **Added**
