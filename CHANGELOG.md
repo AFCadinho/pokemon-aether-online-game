@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+**Added**
+
+- Route 25 now has its nine classic Trainers on the way to Bill's house.
+
 **Changed**
 
 - Route 25 now has wild Pokémon encounters in tall grass, while surfing, and with every fishing rod, including different daytime and nighttime species.
