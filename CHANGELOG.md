@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+**Changed**
+
+- Route 24 now uses its latest expanded visual layout.
+
 **Fixed**
 
 - Rain splashes now stay on the ground beneath trees, Trainers, Pokémon, and other map objects.
