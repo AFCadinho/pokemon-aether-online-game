@@ -370,7 +370,10 @@ func _check_settings_persistence_contract() -> void:
 		project_source.contains('LocalizationManager="*res://scripts/services/localization_manager.gd"'),
 		"localization manager is registered as an autoload"
 	)
-	_check(project_source.contains('locale/fallback="en"'), "project declares English fallback")
+	_check(
+		str(ProjectSettings.get_setting("internationalization/locale/fallback", "")) == "en",
+		"project uses the English runtime fallback"
+	)
 
 
 func _placeholders(value: String) -> Array[String]:
