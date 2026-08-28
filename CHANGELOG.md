@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Changed**
+
+- Pallet Town and Cerulean Gym now use their latest visual layouts.
+
 ## 0.3.66 - 2026-08-28
 
 **Added**
