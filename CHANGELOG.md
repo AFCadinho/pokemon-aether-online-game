@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Changed**
+
+- Route 24 now uses its latest expanded visual layout.
+
 ## 0.3.66 - 2026-08-28
 
 **Added**
