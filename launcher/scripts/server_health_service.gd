@@ -2,10 +2,23 @@ extends RefCounted
 
 const DEFAULT_STATUS_URL := "https://admin.pokeaether.com/auth/status"
 const REQUEST_TIMEOUT_SECONDS := 8.0
+const RETRY_DELAYS_SECONDS: Array[float] = [0.5, 1.5]
 const USER_AGENT_HEADER := "User-Agent: PokeAetherLauncher/1.0"
 
 
 static func check_async(parent: Node, status_url: String = DEFAULT_STATUS_URL) -> Dictionary:
+	var last_result: Dictionary = {}
+	for attempt: int in range(RETRY_DELAYS_SECONDS.size() + 1):
+		last_result = await _check_once_async(parent, status_url)
+		last_result["attempts"] = attempt + 1
+		if bool(last_result.get("reachable", false)):
+			return last_result
+		if attempt < RETRY_DELAYS_SECONDS.size():
+			await parent.get_tree().create_timer(RETRY_DELAYS_SECONDS[attempt]).timeout
+	return last_result
+
+
+static func _check_once_async(parent: Node, status_url: String) -> Dictionary:
 	var request := HTTPRequest.new()
 	request.timeout = REQUEST_TIMEOUT_SECONDS
 	parent.add_child(request)

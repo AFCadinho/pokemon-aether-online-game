@@ -2740,7 +2740,10 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 		}
 
 	_prepare_battle_instance_reveal()
-	MusicManager.play_trainer_battle_music()
+	var battle_music_track_id := str(
+		battle_trainer_data.get("_battle_music_track_id", "")
+	).strip_edges()
+	MusicManager.play_trainer_battle_music(battle_music_track_id)
 	var battle_environment_id := _resolve_battle_environment_id("trainer", battle_trainer_data)
 
 	await battle_instance.setup_trainer_battle_from_response(

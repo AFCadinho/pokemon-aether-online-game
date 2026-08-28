@@ -5,6 +5,7 @@ class_name GymLeaderNPC
 
 const GymLeaderDefinitionResource := preload("res://scripts/world/npcs/gym_leader_definition.gd")
 const DEFAULT_GYM_BATTLE_ENVIRONMENT_ID := "pvp_stadium"
+const GYM_LEADER_BATTLE_MUSIC_ID := "battle.gym_leader.kanto_remaster_zame"
 
 var badge_region := "kanto"
 var badge_id := ""
@@ -41,6 +42,12 @@ func _apply_npc_profile() -> void:
 
 func supports_trainer_rematches() -> bool:
 	return false
+
+
+func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
+	var battle_metadata := super.build_battle_trainer_metadata(metadata)
+	battle_metadata["_battle_music_track_id"] = GYM_LEADER_BATTLE_MUSIC_ID
+	return battle_metadata
 
 
 func has_existing_trainer_completion() -> bool:

@@ -143,7 +143,7 @@ location_id = "kanto.pewter_city.gym"
 location_name = "Pewter City Gym"
 lighting_profile = "indoor"
 weather_profile = "disabled"
-music_profile_id = "kanto.pewter_city"
+music_profile_id = "gym.interior"
 
 [node name="Visuals" parent="." unique_id=1388065419 instance=ExtResource("1_1d7kq")]
 

@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.3.66 - 2026-08-28
+
+**Added**
+
+- Gym interiors now have their own background music.
+- Gym Leader battles now have their own background music.
+- Cut, Rock Smash, and weather-changing field moves now play matching sound effects.
+
+**Fixed**
+
+- The launcher now retries and automatically rechecks server status, so a brief connection problem no longer leaves an online server marked as offline.
+
 ## 0.3.65 - 2026-08-28
 
 **Added**

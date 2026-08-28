@@ -3,6 +3,13 @@ extends Node
 const PokemonCryResolver := preload("res://scripts/services/pokemon_cry_resolver.gd")
 const DEFAULT_BUS := SettingsManager.SFX_BUS
 const POKEMON_CRY_VOLUME_DB := -7.0
+const FIELD_MOVE_SOUND_IDS := {
+	"cut": "field_move_cut",
+	"rock-smash": "field_move_rock_smash",
+	"rain-dance": "field_move_rain_dance",
+	"snowscape": "field_move_snowscape",
+	"sunny-day": "field_move_sunny_day",
+}
 const SOUND_DATA := {
 	"battle_item_use": {
 		"path": "res://assets/audio/sfx/battle/battle_item_use.ogg",
@@ -56,6 +63,26 @@ const SOUND_DATA := {
 		"path": "res://assets/battles/animations/teleport/PRSFX- Teleport.wav",
 		"volume_db": -3.0,
 	},
+	"field_move_cut": {
+		"path": "res://assets/battles/animations/razorleaf/PRSFX- Razor Leaf1.wav",
+		"volume_db": -4.0,
+	},
+	"field_move_rock_smash": {
+		"path": "res://assets/battles/animations/rocksmash/PRSFX- Rock Smash.wav",
+		"volume_db": -4.0,
+	},
+	"field_move_rain_dance": {
+		"path": "res://assets/battles/animations/weatherball/PRSFX- Weather Ball1.wav",
+		"volume_db": -5.0,
+	},
+	"field_move_snowscape": {
+		"path": "res://assets/battles/animations/powdersnow/PRSFX- Powder Snow1.wav",
+		"volume_db": -5.0,
+	},
+	"field_move_sunny_day": {
+		"path": "res://assets/battles/animations/charge/PRSFX- Solar Beam1.wav",
+		"volume_db": -5.0,
+	},
 }
 
 var stream_cache: Dictionary = {}
@@ -83,6 +110,13 @@ func play(sound_id: String, volume_offset_db: float = 0.0, pitch_scale: float = 
 	player.finished.connect(player.queue_free)
 	add_child(player)
 	player.play()
+
+
+func play_field_move(move_id: String) -> void:
+	var normalized_move_id := move_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+	var sound_id := str(FIELD_MOVE_SOUND_IDS.get(normalized_move_id, ""))
+	if sound_id != "":
+		play(sound_id)
 
 
 func play_pokemon_cry(species: String, volume_offset_db: float = 0.0, pitch_scale: float = 1.0) -> void:

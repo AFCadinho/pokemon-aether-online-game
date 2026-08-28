@@ -18,21 +18,11 @@ on:
         required: false
         type: boolean
         default: false
-      announce_discord:
-        description: Post a Discord release announcement after a successful R2 upload.
-        required: false
-        type: boolean
-        default: false
       cleanup_r2:
         description: Remove obsolete immutable game and asset objects after publication.
         required: false
         type: boolean
         default: true
-      release_notes:
-        description: Optional release notes for the Discord announcement.
-        required: false
-        type: string
-        default: ""
 
 concurrency:
   group: deploy-desktop-r2
@@ -85,9 +75,9 @@ env:
   POKEMON_GEN5_SHINY_FRONT_ASSET_SHA256: 5240c4f6a20c05bc3819845c399869a5834129e0c01297d7c549b5b3ae75edfb
   POKEMON_GEN5_SHINY_BACK_ASSET_SIZE: 251502026
   POKEMON_GEN5_SHINY_BACK_ASSET_SHA256: 09014aa218b89759167fc5d4413011592fe4d07d7ddac55437d38d469e09532c
-  MUSIC_ASSET_VERSION: music-5ac6cea38758
-  MUSIC_ASSET_SIZE: 32002758
-  MUSIC_ASSET_SHA256: 9719b285443dae2271675c298784107adc8a5d1cb155d5567e741c92fd11f6ff
+  MUSIC_ASSET_VERSION: music-4f47b06adc92
+  MUSIC_ASSET_SIZE: 43036612
+  MUSIC_ASSET_SHA256: 50fc4f9609047690145660e9c0cc36ec77d6abca438376a61ff9dccfec08f750
   UPDATE_BASE_URL: https://updates.pokeaether.com
   MAX_LAUNCHER_GAME_ZIP_BYTES: 1000000000
   R2_RELEASE_RETENTION_PREVIOUS: 1
@@ -219,7 +209,7 @@ jobs:
           PY
 
       - name: Cache Godot imported assets
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .godot/imported
           key: ${{ runner.os }}-godot-import-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', 'export_presets.cfg', 'assets/followers/**/*.png', 'assets/followers_shiny/**/*.png', 'assets/player/male/body/**/*.png', 'assets/player/female/body/**/*.png') }}
@@ -628,24 +618,3 @@ jobs:
             --minimum-age-hours "${R2_RELEASE_MINIMUM_AGE_HOURS}" \
             --max-delete 200 \
             --apply
-
-      - name: Post release announcement to Discord
-        if: steps.upload_r2.outputs.published == 'true' && inputs.announce_discord
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          RELEASE_NOTES: ${{ inputs.release_notes }}
-        run: |
-          if [ -z "${DISCORD_WEBHOOK_URL}" ]; then
-            echo "Skipping Discord announcement because DISCORD_WEBHOOK_URL is not configured."
-            exit 0
-          fi
-
-          python3 tools/build_discord_release_payload.py \
-            --version "${LAUNCHER_RELEASE_VERSION}" \
-            --release-notes "${RELEASE_NOTES}" \
-            > discord_payload.json
-
-          curl -sS \
-            -H "Content-Type: application/json" \
-            -d @discord_payload.json \
-            "${DISCORD_WEBHOOK_URL}"

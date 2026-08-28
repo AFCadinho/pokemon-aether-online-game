@@ -214,6 +214,7 @@ func _use_weather_field_move(move_id: String, availability: Dictionary) -> Dicti
 	var body: Dictionary = body_value as Dictionary if body_value is Dictionary else {}
 	var weather_value: Variant = body.get("weather", {})
 	var weather: Dictionary = weather_value as Dictionary if weather_value is Dictionary else {}
+	SfxManager.play_field_move(move_id)
 	return {
 		"success": true,
 		"message": "%s changed the map weather to %s." % [
