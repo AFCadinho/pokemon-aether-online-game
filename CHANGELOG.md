@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Changed**
+
+- Cerulean City now uses its latest visual layout.
+
 ## 0.3.66 - 2026-08-28
 
 **Added**
