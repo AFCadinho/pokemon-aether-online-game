@@ -4,6 +4,7 @@
 
 **Added**
 
+- Route 25 now has roaming Pokémon in its grass, water, and mountain areas.
 - Route 25 now has its nine classic Trainers on the way to Bill's house.
 
 **Changed**
