@@ -4,6 +4,7 @@
 
 **Added**
 
+- Ambient Pokemon on Routes 4 and 24 and inside Cerulean Gym now move along short habitat-safe patrols.
 - Later-generation Flying, Rock, Ground, and Steel Pokemon now inhabit the isolated mountain ledges along Routes 4 and 24.
 - Route 4 and Route 24 now feature ambient Pokemon drawn from their local wild encounters and placed in matching grassland and water habitats.
 - Swimmer Luis, Picnicker Diana, and Swimmer Briana now challenge Trainers inside Cerulean Gym.

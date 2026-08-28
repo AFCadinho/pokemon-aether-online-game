@@ -4,19 +4,19 @@ const ROUTES := {
 	"res://scenes/overworld/kanto/routes/kanto_route_4.tscn": {
 		"bounds": Rect2i(0, 0, 101, 50),
 		"pokemon": {
-			"Entities/Pokemon/MountainPokemon/Rookidee": ["kanto_route_4_mountain_rookidee_1", "rookidee", Vector2(1136, 112), 302],
-			"Entities/Pokemon/MountainPokemon/Aron": ["kanto_route_4_mountain_aron_1", "aron", Vector2(1616, 112), 302],
-			"Entities/Pokemon/MountainPokemon/Drilbur": ["kanto_route_4_mountain_drilbur_1", "drilbur", Vector2(2224, 112), 302],
-			"Entities/Pokemon/MountainPokemon/Rockruff": ["kanto_route_4_mountain_rockruff_1", "rockruff", Vector2(2832, 112), 302],
+			"Entities/Pokemon/MountainPokemon/Rookidee": ["kanto_route_4_mountain_rookidee_1", "rookidee", Vector2(464, 656), 0, "pace_horizontal", true],
+			"Entities/Pokemon/MountainPokemon/Aron": ["kanto_route_4_mountain_aron_1", "aron", Vector2(1488, 176), 302, "pace_horizontal", false],
+			"Entities/Pokemon/MountainPokemon/Drilbur": ["kanto_route_4_mountain_drilbur_1", "drilbur", Vector2(2288, 176), 302, "pace_horizontal", false],
+			"Entities/Pokemon/MountainPokemon/Rockruff": ["kanto_route_4_mountain_rockruff_1", "rockruff", Vector2(2864, 176), 302, "pace_horizontal", false],
 		},
 	},
 	"res://scenes/overworld/kanto/routes/kanto_route_24.tscn": {
 		"bounds": Rect2i(0, 0, 45, 60),
 		"pokemon": {
-			"Entities/Pokemon/MountainPokemon/Corvisquire": ["kanto_route_24_mountain_corvisquire_1", "corvisquire", Vector2(176, 400), 268],
-			"Entities/Pokemon/MountainPokemon/Mudbray": ["kanto_route_24_mountain_mudbray_1", "mudbray", Vector2(176, 1264), 268],
-			"Entities/Pokemon/MountainPokemon/Rolycoly": ["kanto_route_24_mountain_rolycoly_1", "rolycoly", Vector2(1296, 656), 295],
-			"Entities/Pokemon/MountainPokemon/Tinkatink": ["kanto_route_24_mountain_tinkatink_1", "tinkatink", Vector2(1136, 1520), 295],
+			"Entities/Pokemon/MountainPokemon/Corvisquire": ["kanto_route_24_mountain_corvisquire_1", "corvisquire", Vector2(176, 336), 268, "pace_horizontal", false],
+			"Entities/Pokemon/MountainPokemon/Mudbray": ["kanto_route_24_mountain_mudbray_1", "mudbray", Vector2(144, 1264), 268, "pace_vertical", false],
+			"Entities/Pokemon/MountainPokemon/Rolycoly": ["kanto_route_24_mountain_rolycoly_1", "rolycoly", Vector2(1360, 688), 295, "pace_horizontal", false],
+			"Entities/Pokemon/MountainPokemon/Tinkatink": ["kanto_route_24_mountain_tinkatink_1", "tinkatink", Vector2(1392, 1168), 7, "pace_vertical", false],
 		},
 	},
 }
@@ -47,18 +47,25 @@ func _run() -> void:
 			_check(str(pokemon.get("overworld_pokemon_id")) == expected[0], "%s uses its canonical content ID" % node_path)
 			_check(str(pokemon.get("species_id")) == expected[1], "%s uses the intended later-generation species" % node_path)
 			_check(pokemon.position == expected[2], "%s remains at its designed mountain position" % node_path)
-			_check(str(pokemon.get("movement_behavior")) == "idle", "%s cannot wander off its ledge" % node_path)
+			_check(str(pokemon.get("movement_behavior")) == expected[4], "%s moves along its designed ledge axis" % node_path)
+			_check(int(pokemon.get("movement_tiles")) == 1, "%s uses a short one-tile patrol" % node_path)
+			_check(bool(pokemon.get("ambient_movement_ignores_map_collision")) == expected[5], "%s uses the intended collision policy" % node_path)
 
-			var collision_cell := collision.local_to_map(collision.to_local(pokemon.global_position))
-			var grass_cell := tall_grass.local_to_map(tall_grass.to_local(pokemon.global_position))
-			var water_cell := water.local_to_map(water.to_local(pokemon.global_position))
-			_check(collision.get_cell_source_id(collision_cell) < 0, "%s stands on open ledge ground" % node_path)
-			_check(tall_grass.get_cell_source_id(grass_cell) < 0, "%s stands outside the wild grass habitat" % node_path)
-			_check(water.get_cell_source_id(water_cell) < 0, "%s stands outside water" % node_path)
-			_check(
-				_land_component_size(collision_cell, route_data.bounds, collision, water) == expected[3],
-				"%s stands on its isolated mountain landmass" % node_path,
-			)
+			var center_cell := collision.local_to_map(collision.to_local(pokemon.global_position))
+			var axis := Vector2i.RIGHT if expected[4] == "pace_horizontal" else Vector2i.DOWN
+			for offset in range(-1, 2):
+				var patrol_cell: Vector2i = center_cell + axis * offset
+				_check(tall_grass.get_cell_source_id(patrol_cell) < 0, "%s patrol remains outside wild grass" % node_path)
+				_check(water.get_cell_source_id(patrol_cell) < 0, "%s patrol remains outside water" % node_path)
+				if expected[5]:
+					_check(collision.get_cell_source_id(patrol_cell) >= 0, "%s flight remains over the marked cliff" % node_path)
+				else:
+					_check(collision.get_cell_source_id(patrol_cell) < 0, "%s patrol remains on open ledge ground" % node_path)
+			if not expected[5]:
+				_check(
+					_land_component_size(center_cell, route_data.bounds, collision, water) == expected[3],
+					"%s stands on its isolated mountain landmass" % node_path,
+				)
 
 		route.queue_free()
 		await process_frame

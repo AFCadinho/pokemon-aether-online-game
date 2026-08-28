@@ -2,16 +2,16 @@ extends SceneTree
 
 const ROUTES := {
 	"res://scenes/overworld/kanto/routes/kanto_route_4.tscn": {
-		"Entities/Pokemon/Sandshrew": ["kanto_route_4_sandshrew_1", "sandshrew", Vector2(1744, 624), "ground"],
-		"Entities/Pokemon/Mankey": ["kanto_route_4_mankey_1", "mankey", Vector2(2512, 1328), "ground"],
-		"Entities/Pokemon/Spearow": ["kanto_route_4_spearow_1", "spearow", Vector2(2992, 656), "grass"],
-		"Entities/Pokemon/Tentacool": ["kanto_route_4_tentacool_1", "tentacool", Vector2(2896, 1040), "water"],
+		"Entities/Pokemon/Sandshrew": ["kanto_route_4_sandshrew_1", "sandshrew", Vector2(1744, 624), "ground", "pace_horizontal"],
+		"Entities/Pokemon/Mankey": ["kanto_route_4_mankey_1", "mankey", Vector2(2512, 1328), "ground", "pace_horizontal"],
+		"Entities/Pokemon/Spearow": ["kanto_route_4_spearow_1", "spearow", Vector2(2992, 656), "grass", "pace_horizontal"],
+		"Entities/Pokemon/Tentacool": ["kanto_route_4_tentacool_1", "tentacool", Vector2(2896, 1040), "water", "pace_horizontal"],
 	},
 	"res://scenes/overworld/kanto/routes/kanto_route_24.tscn": {
-		"Entities/Pokemon/Abra": ["kanto_route_24_abra_1", "abra", Vector2(1296, 176), "grass"],
-		"Entities/Pokemon/Oddish": ["kanto_route_24_oddish_1", "oddish", Vector2(880, 592), "grass"],
-		"Entities/Pokemon/Squirtle": ["kanto_route_24_squirtle_1", "squirtle", Vector2(432, 1168), "grass"],
-		"Entities/Pokemon/Magikarp": ["kanto_route_24_magikarp_1", "magikarp", Vector2(496, 1296), "water"],
+		"Entities/Pokemon/Abra": ["kanto_route_24_abra_1", "abra", Vector2(1296, 176), "grass", "pace_horizontal"],
+		"Entities/Pokemon/Oddish": ["kanto_route_24_oddish_1", "oddish", Vector2(880, 592), "grass", "pace_horizontal"],
+		"Entities/Pokemon/Squirtle": ["kanto_route_24_squirtle_1", "squirtle", Vector2(432, 1168), "grass", "pace_vertical"],
+		"Entities/Pokemon/Magikarp": ["kanto_route_24_magikarp_1", "magikarp", Vector2(496, 1296), "water", "pace_vertical"],
 	},
 }
 
@@ -40,20 +40,22 @@ func _run() -> void:
 			_check(str(pokemon.get("overworld_pokemon_id")) == expected[0], "%s uses its canonical content ID" % node_path)
 			_check(str(pokemon.get("species_id")) == expected[1], "%s uses the intended species" % node_path)
 			_check(pokemon.position == expected[2], "%s remains at its designed position" % node_path)
-			_check(str(pokemon.get("movement_behavior")) == "idle", "%s cannot wander out of its habitat" % node_path)
+			_check(str(pokemon.get("movement_behavior")) == expected[4], "%s uses its designed patrol axis" % node_path)
+			_check(int(pokemon.get("movement_tiles")) == 1, "%s uses a short one-tile patrol" % node_path)
 
-			var collision_cell := collision.local_to_map(collision.to_local(pokemon.global_position))
-			var grass_cell := tall_grass.local_to_map(tall_grass.to_local(pokemon.global_position))
-			var water_cell := water.local_to_map(water.to_local(pokemon.global_position))
-			if expected[3] == "grass":
-				_check(collision.get_cell_source_id(collision_cell) < 0, "%s stands on walkable ground" % node_path)
-				_check(tall_grass.get_cell_source_id(grass_cell) >= 0, "%s stands in local tall grass" % node_path)
-				_check(water.get_cell_source_id(water_cell) < 0, "%s does not stand in water" % node_path)
-			elif expected[3] == "water":
-				_check(water.get_cell_source_id(water_cell) >= 0, "%s stands in local water" % node_path)
-			else:
-				_check(collision.get_cell_source_id(collision_cell) < 0, "%s stands on walkable ground" % node_path)
-				_check(water.get_cell_source_id(water_cell) < 0, "%s does not stand in water" % node_path)
+			var center_cell := collision.local_to_map(collision.to_local(pokemon.global_position))
+			var axis := Vector2i.RIGHT if expected[4] == "pace_horizontal" else Vector2i.DOWN
+			for offset in range(-1, 2):
+				var patrol_cell: Vector2i = center_cell + axis * offset
+				if expected[3] == "grass":
+					_check(collision.get_cell_source_id(patrol_cell) < 0, "%s patrol remains on walkable ground" % node_path)
+					_check(tall_grass.get_cell_source_id(patrol_cell) >= 0, "%s patrol remains in local tall grass" % node_path)
+					_check(water.get_cell_source_id(patrol_cell) < 0, "%s patrol remains outside water" % node_path)
+				elif expected[3] == "water":
+					_check(water.get_cell_source_id(patrol_cell) >= 0, "%s patrol remains in local water" % node_path)
+				else:
+					_check(collision.get_cell_source_id(patrol_cell) < 0, "%s patrol remains on walkable ground" % node_path)
+					_check(water.get_cell_source_id(patrol_cell) < 0, "%s patrol remains outside water" % node_path)
 
 		route.queue_free()
 		await process_frame

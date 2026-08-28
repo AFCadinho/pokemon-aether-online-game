@@ -491,6 +491,10 @@ overworld_pokemon_id = "kanto_route_4_sandshrew_1"
 species_id = "sandshrew"
 display_name = "Sandshrew"
 facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
 
 [node name="Mankey" parent="Entities/Pokemon" unique_id=961368208 instance=ExtResource("13_pokemon")]
 position = Vector2(2512, 1328)
@@ -498,6 +502,10 @@ overworld_pokemon_id = "kanto_route_4_mankey_1"
 species_id = "mankey"
 display_name = "Mankey"
 facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.2
+movement_speed_pixels = 48.0
 
 [node name="Spearow" parent="Entities/Pokemon" unique_id=702896188 instance=ExtResource("13_pokemon")]
 position = Vector2(2992, 656)
@@ -505,6 +513,10 @@ overworld_pokemon_id = "kanto_route_4_spearow_1"
 species_id = "spearow"
 display_name = "Spearow"
 facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 44.0
 
 [node name="Tentacool" parent="Entities/Pokemon" unique_id=648339577 instance=ExtResource("13_pokemon")]
 position = Vector2(2896, 1040)
@@ -512,36 +524,57 @@ overworld_pokemon_id = "kanto_route_4_tentacool_1"
 species_id = "tentacool"
 display_name = "Tentacool"
 facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.2
+movement_speed_pixels = 32.0
 
-[node name="MountainPokemon" type="Node2D" parent="Entities/Pokemon"]
+[node name="MountainPokemon" type="Node2D" parent="Entities/Pokemon" unique_id=1366314324]
 
-[node name="Rookidee" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("13_pokemon")]
-position = Vector2(1136, 112)
+[node name="Rookidee" parent="Entities/Pokemon/MountainPokemon" unique_id=722528914 instance=ExtResource("13_pokemon")]
+position = Vector2(464, 656)
 overworld_pokemon_id = "kanto_route_4_mountain_rookidee_1"
 species_id = "rookidee"
 display_name = "Rookidee"
 facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.4
+movement_speed_pixels = 44.0
+ambient_movement_ignores_map_collision = true
 
-[node name="Aron" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("13_pokemon")]
-position = Vector2(1616, 112)
+[node name="Aron" parent="Entities/Pokemon/MountainPokemon" unique_id=1498729262 instance=ExtResource("13_pokemon")]
+position = Vector2(1488, 176)
 overworld_pokemon_id = "kanto_route_4_mountain_aron_1"
 species_id = "aron"
 display_name = "Aron"
 facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 32.0
 
-[node name="Drilbur" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("13_pokemon")]
-position = Vector2(2224, 112)
+[node name="Drilbur" parent="Entities/Pokemon/MountainPokemon" unique_id=1298170101 instance=ExtResource("13_pokemon")]
+position = Vector2(2288, 176)
 overworld_pokemon_id = "kanto_route_4_mountain_drilbur_1"
 species_id = "drilbur"
 display_name = "Drilbur"
 facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.4
+movement_speed_pixels = 44.0
 
-[node name="Rockruff" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("13_pokemon")]
-position = Vector2(2832, 112)
+[node name="Rockruff" parent="Entities/Pokemon/MountainPokemon" unique_id=426032723 instance=ExtResource("13_pokemon")]
+position = Vector2(2864, 176)
 overworld_pokemon_id = "kanto_route_4_mountain_rockruff_1"
 species_id = "rockruff"
 display_name = "Rockruff"
 facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.6
+movement_speed_pixels = 42.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=208040012]
 

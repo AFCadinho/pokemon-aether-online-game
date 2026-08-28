@@ -198,6 +198,10 @@ overworld_pokemon_id = "kanto_cerulean_city_gym_staryu_1"
 species_id = "staryu"
 display_name = "Staryu"
 facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
 
 [node name="Horsea" parent="Entities/Pokemon" unique_id=1170112755 instance=ExtResource("10_pokemon")]
 position = Vector2(304, 432)
@@ -205,6 +209,10 @@ overworld_pokemon_id = "kanto_cerulean_city_gym_horsea_1"
 species_id = "horsea"
 display_name = "Horsea"
 facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 34.0
 
 [node name="Shellder" parent="Entities/Pokemon" unique_id=1078704561 instance=ExtResource("10_pokemon")]
 position = Vector2(400, 720)
@@ -212,6 +220,10 @@ overworld_pokemon_id = "kanto_cerulean_city_gym_shellder_1"
 species_id = "shellder"
 display_name = "Shellder"
 facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.4
+movement_speed_pixels = 28.0
 
 [node name="Goldeen" parent="Entities/Pokemon" unique_id=373751986 instance=ExtResource("10_pokemon")]
 position = Vector2(720, 880)
@@ -219,6 +231,10 @@ overworld_pokemon_id = "kanto_cerulean_city_gym_goldeen_1"
 species_id = "goldeen"
 display_name = "Goldeen"
 facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.6
+movement_speed_pixels = 40.0
 
 [node name="Spawns" type="Node2D" parent="." unique_id=1733582634]
 
