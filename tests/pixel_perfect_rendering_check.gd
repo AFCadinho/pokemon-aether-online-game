@@ -16,7 +16,7 @@ func _init() -> void:
 		PixelPerfectRenderingScript.AVAILABLE_SCALES == [1.0, 1.5, 2.0],
 		"settings expose only 1x, 1.5x, and 2x"
 	)
-	_check(PixelPerfectRenderingScript.validate_scale(-1) == 1.0, "invalid scale falls back to 1x")
+	_check(PixelPerfectRenderingScript.validate_scale(-1) == 2.0, "invalid scale falls back to the 2x outdoor default")
 	_check(PixelPerfectRenderingScript.resolve_scale(1.0, Vector2i(1920, 1080)) == 1.0, "explicit 1x remains exact")
 	_check(PixelPerfectRenderingScript.resolve_scale(1.5, Vector2i(1280, 720)) == 1.5, "explicit 1.5x remains exact")
 	_check(PixelPerfectRenderingScript.resolve_scale(2.0, Vector2i(1920, 1080)) == 2.0, "explicit 2x remains exact")
@@ -29,8 +29,8 @@ func _init() -> void:
 		and PixelPerfectRenderingScript.resolve_world_scale_for_area(1.0, "cave") == 1.0,
 		"non-interior maps preserve the configured outdoor zoom"
 	)
-	_check(PixelPerfectRenderingScript.validate_scale(0) == 1.0, "legacy automatic scale migrates to 1x")
-	_check(PixelPerfectRenderingScript.validate_scale(3) == 1.0, "legacy 3x scale migrates to 1x")
+	_check(PixelPerfectRenderingScript.validate_scale(0) == 2.0, "legacy automatic scale migrates to the 2x outdoor default")
+	_check(PixelPerfectRenderingScript.validate_scale(3) == 2.0, "legacy 3x scale migrates to the 2x outdoor default")
 	_check(
 		PixelPerfectRenderingScript.camera_zoom_for_output_scale(1.5, Vector2(5.0 / 6.0, 5.0 / 6.0)).is_equal_approx(Vector2(1.8, 1.8)),
 		"balanced camera zoom compensates for 1920-to-1600 canvas stretch"
@@ -49,7 +49,7 @@ func _init() -> void:
 		settings_text.contains("DEFAULT_WORLD_PIXEL_SCALE := PixelPerfectRendering.DEFAULT_SCALE")
 		and settings_text.contains('"world_pixel_scale": world_pixel_scale')
 		and settings_text.contains("func set_world_pixel_scale(value: float)"),
-		"world zoom defaults to 1x and persists"
+		"outdoor world zoom defaults to 2x and persists"
 	)
 	_check(
 		menu_text.contains("WorldPixelScaleOptionsButton")
@@ -67,7 +67,7 @@ func _init() -> void:
 		and player_text.contains("PixelPerfectRenderingScript.apply_to_camera"),
 		"player camera applies map scaling without overwriting active Photo Mode zoom"
 	)
-	_check(_read_text(PLAYER_SCENE).contains("zoom = Vector2(1, 1)"), "player camera scene defaults to 1x")
+	_check(_read_text(PLAYER_SCENE).contains("zoom = Vector2(1, 1)"), "generic player camera stays neutral before the map zoom is applied")
 	_check(_read_text(WORLD_SCENE).contains("texture_filter = 1"), "overworld uses nearest texture filtering")
 	for locale_path: String in ["res://localization/en.json", "res://localization/nl.json", "res://localization/pt_BR.json", "res://localization/zh_CN.json"]:
 		var locale_text := _read_text(locale_path)

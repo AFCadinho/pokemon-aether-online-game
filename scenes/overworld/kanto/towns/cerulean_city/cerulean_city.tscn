@@ -385,6 +385,27 @@ music_track_id = "overworld.kanto.cerulean_city"
 
 [node name="CeruleanCityVisual" parent="." unique_id=1421275817 instance=ExtResource("1_visual")]
 
+[node name="MountainDepthZones" type="Node2D" parent="."]
+editor_description = "Select either CollisionPolygon2D child and drag its points to match the visible mountain terrain. These zones only control actor depth sorting."
+
+[node name="WestMountain" type="Area2D" parent="MountainDepthZones"]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="MountainDepthZones/WestMountain"]
+polygon = PackedVector2Array(0, 1056, 192, 1056, 192, 2048, 0, 2048)
+
+[node name="EastAndSouthMountain" type="Area2D" parent="MountainDepthZones"]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="MountainDepthZones/EastAndSouthMountain"]
+polygon = PackedVector2Array(2016, 1536, 2400, 1536, 2400, 2240, 1088, 2240, 1088, 2016, 2016, 2016)
+
 [node name="Spawns" type="Node2D" parent="." unique_id=2088728124]
 
 [node name="FromRoute4" type="Marker2D" parent="Spawns" unique_id=1976159514]

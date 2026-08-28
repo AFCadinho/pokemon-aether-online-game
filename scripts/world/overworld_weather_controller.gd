@@ -288,20 +288,40 @@ func _configure_ground_effect_surfaces(map_node: Node) -> void:
 	var water_layers: Array[TileMapLayer] = []
 	var cover_layers: Array[TileMapLayer] = []
 	_collect_ground_effect_layers(map_node, surface_layers, water_layers, cover_layers)
-	var surface_z_index := 0
-	for layer: TileMapLayer in surface_layers:
-		surface_z_index = maxi(surface_z_index, layer.z_index)
-	for layer: TileMapLayer in water_layers:
-		surface_z_index = maxi(surface_z_index, layer.z_index)
+	var surface_z_index := _get_ground_effect_render_z_index(surface_layers, water_layers)
 	for ground_effects: Node2D in [rain_ground_effects, snow_ground_effects]:
 		ground_effects.set_surface_layers(surface_layers, water_layers, cover_layers)
-		# Render impacts above details such as GroundDetail instead of letting the
-		# highest accepted surface layer cover them. Depth-sorted map layers may
-		# already occupy Godot's maximum canvas z-index, so keep the offset valid.
-		ground_effects.z_index = mini(
-			surface_z_index + 1,
-			RenderingServer.CANVAS_ITEM_Z_MAX
-		)
+		# Ground effects are appended after the map, so sharing the highest visible
+		# surface depth keeps them above GroundDetail while leaving Objects and
+		# depth-sorted actors in front. Hidden gameplay masks may still identify
+		# valid surfaces, but must never lift visual effects to their technical z.
+		ground_effects.z_index = surface_z_index
+
+
+func _get_ground_effect_render_z_index(
+	surface_layers: Array[TileMapLayer],
+	water_layers: Array[TileMapLayer]
+) -> int:
+	var render_z_index := 0
+	var found_visible_surface := false
+	for layer: TileMapLayer in surface_layers + water_layers:
+		if not _is_canvas_item_effectively_visible(layer):
+			continue
+		if not found_visible_surface:
+			render_z_index = layer.z_index
+			found_visible_surface = true
+		else:
+			render_z_index = maxi(render_z_index, layer.z_index)
+	return render_z_index
+
+
+func _is_canvas_item_effectively_visible(item: CanvasItem) -> bool:
+	var current_item := item
+	while current_item != null:
+		if not current_item.visible:
+			return false
+		current_item = current_item.get_parent() as CanvasItem
+	return true
 
 
 func _collect_ground_effect_layers(
