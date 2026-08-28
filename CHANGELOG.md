@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+**Changed**
+
+- Alpha Tools now include the same protected Reset / New Game action as Developer Tools.
+- The New Game warning now clearly explains what happens to unclaimed mail attachments, other active sessions, Aether Gems, and paid items.
+
 ## 0.3.66 - 2026-08-28
 
 **Added**
