@@ -123,6 +123,10 @@ func _check_sources() -> void:
 	_check(overlay_source.contains("content_creator_photo_mode_button"), "Creator menu exposes Photo Mode")
 	_check(overlay_source.contains("content_creator_tools_popup"), "Content Creator Tools owns a separate popup")
 	_check(overlay_source.contains("alpha_tools_popup"), "Alpha Tools keeps its separate popup")
+	_check(
+		overlay_source.contains("alpha_reset_game_button = _add_gameplay_reset_button("),
+		"Alpha Tools exposes the shared Reset / New Game action"
+	)
 	_check(overlay_scene_source.contains('[node name="ContentCreatorToolsSlot"'), "Content Creator Tools has its own action slot")
 	_check(overlay_scene_source.contains('[node name="AlphaToolsSlot"'), "Alpha Tools has its own action slot")
 	_check(overlay_scene_source.contains("assets/ui/content_creator.svg"), "Content Creator Tools uses its own icon")

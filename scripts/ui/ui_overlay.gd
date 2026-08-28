@@ -113,6 +113,7 @@ const CHAT_MUTE_PERMISSION := "chat:mute"
 const CHAT_TRANSLATE_PERMISSION := "chat:translate"
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
+const GAMEPLAY_RESET_PERMISSION := "gameplay:reset"
 const DEV_ITEM_GENERATING_PERMISSION := "items:generating"
 const DEV_POKEMON_GENERATING_PERMISSION := "pokemon:generating"
 const DIRECT_BATTLE_FORM_GENERATING_PERMISSION := "pokemon:direct-battle-form:generating"
@@ -135,6 +136,9 @@ const POKEMON_GENDER_DISPLAY := preload("res://scripts/ui/pokemon_gender_display
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
 const HELD_ITEM_DROP_TARGET_BUTTON_SCRIPT := preload("res://scripts/ui/held_item_drop_target_button.gd")
 const ALPHA_TOOLS_ERROR_FEEDBACK := preload("res://scripts/services/alpha_tools_error_feedback.gd")
+const GAMEPLAY_RESET_TITLE := "Reset / New Game"
+const GAMEPLAY_RESET_DESCRIPTION := "Return this trainer to first-login gameplay state"
+const GAMEPLAY_RESET_CONFIRM_TEXT := "This permanently resets your location, party, boxes, regular inventory, money, playtime and gameplay unlocks. Unclaimed mail attachments are permanently removed, and your other active sessions are signed out.\n\nYour account, roles, friends, mail history, PvP history, Aether Gems and paid items remain."
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
 const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")
@@ -775,6 +779,7 @@ var evolution_prompt_review_total := 0
 var evolution_prompt_review_index := 0
 var dev_clear_menu_popup: PanelContainer
 var dev_clear_menu_close_button: Button
+var dev_reset_game_button: Button
 var pvp_mode_menu: PanelContainer
 var pvp_mode_ranked_button: Button
 var pvp_mode_tournaments_button: Button
@@ -1339,6 +1344,7 @@ var content_creator_tools_popup: PanelContainer
 var content_creator_photo_mode_button: Button
 var alpha_create_pokemon_button: Button
 var alpha_clear_party_button: Button
+var alpha_reset_game_button: Button
 var alpha_tools_close_button: Button
 var dev_add_button: Button
 var dev_quick_actions_label: Label
@@ -1898,6 +1904,9 @@ func _play_mail_notification_sound() -> void:
 func _can_use_dev_tools() -> bool:
 	return _has_user_permission(DEV_TOOLS_PERMISSION)
 
+func _can_reset_gameplay() -> bool:
+	return _has_user_permission(GAMEPLAY_RESET_PERMISSION)
+
 func _can_generate_dev_items() -> bool:
 	return _has_user_permission(DEV_ITEM_GENERATING_PERMISSION)
 
@@ -2059,6 +2068,9 @@ func _refresh_dev_tools_visibility() -> void:
 	if alpha_clear_party_button != null:
 		alpha_clear_party_button.visible = can_use_content_creator_generation
 		alpha_clear_party_button.disabled = not can_use_content_creator_generation
+	if alpha_reset_game_button != null:
+		alpha_reset_game_button.visible = _can_reset_gameplay()
+		alpha_reset_game_button.disabled = not _can_reset_gameplay()
 	dev_actions_slot.visible = can_show_staff_action_bar and can_open_dev_actions
 	dev_actions_button.visible = can_show_staff_action_bar and can_open_dev_actions
 	dev_actions_button.disabled = not can_open_dev_actions
@@ -5380,17 +5392,42 @@ func _setup_dev_clear_menu_popup() -> void:
 		Color("#ef7085")
 	)
 
-	var reset_game_button := Button.new()
-	reset_game_button.name = "ResetNewGameButton"
-	reset_game_button.pressed.connect(_on_dev_reset_game_option_pressed)
-	layout.add_child(reset_game_button)
-	_configure_tool_tile_button(
-		reset_game_button,
-		"Reset / New Game",
-		"Return this trainer to first-login gameplay state",
-		TOOL_CLEAR_DATA_ICON,
-		Color("#ef405d")
+	dev_reset_game_button = _add_gameplay_reset_button(
+		layout,
+		Callable(self, "_hide_dev_clear_menu_popup"),
+		false
 	)
+
+
+func _add_gameplay_reset_button(
+	layout: Container,
+	close_owner: Callable,
+	use_launcher_card: bool
+) -> Button:
+	var button := Button.new()
+	button.name = "ResetNewGameButton"
+	button.pressed.connect(
+		Callable(self, "_on_gameplay_reset_option_pressed").bind(close_owner)
+	)
+	layout.add_child(button)
+	if use_launcher_card:
+		_configure_launcher_card_button(
+			button,
+			GAMEPLAY_RESET_TITLE,
+			GAMEPLAY_RESET_DESCRIPTION,
+			TOOL_CLEAR_DATA_ICON,
+			Color("#ef405d")
+		)
+	else:
+		_configure_tool_tile_button(
+			button,
+			GAMEPLAY_RESET_TITLE,
+			GAMEPLAY_RESET_DESCRIPTION,
+			TOOL_CLEAR_DATA_ICON,
+			Color("#ef405d")
+		)
+	return button
+
 
 func _setup_pvp_room_popup() -> void:
 	pvp_room_popup = PanelContainer.new()
@@ -7275,6 +7312,12 @@ func _setup_alpha_tools_popup() -> void:
 		"ui.staff.alpha.clear_description",
 		TOOL_CLEAR_DATA_ICON,
 		Color("#ef7085")
+	)
+
+	alpha_reset_game_button = _add_gameplay_reset_button(
+		layout,
+		Callable(self, "_hide_alpha_tools_popup"),
+		true
 	)
 
 func _setup_content_creator_tools_popup() -> void:
@@ -34112,23 +34155,24 @@ func _on_dev_clear_inventory_option_pressed() -> void:
 		true
 	)
 
-func _on_dev_reset_game_option_pressed() -> void:
-	if not _can_use_dev_tools():
+func _on_gameplay_reset_option_pressed(close_owner: Callable) -> void:
+	if not _can_reset_gameplay():
 		return
 
-	dev_clear_menu_popup.visible = false
+	if close_owner.is_valid():
+		close_owner.call()
 	_show_ui_confirm_popup(
-		"Reset / New Game",
-		"This permanently resets your location, party, boxes, inventory, money, playtime and gameplay unlocks.\n\nYour account, roles, friends, mail history and PvP history remain.",
+		GAMEPLAY_RESET_TITLE,
+		GAMEPLAY_RESET_CONFIRM_TEXT,
 		"Reset Everything",
-		Callable(self, "_on_dev_reset_game_confirmed"),
+		Callable(self, "_on_gameplay_reset_confirmed"),
 		Vector2i(540, 0),
 		true
 	)
 
 
-func _on_dev_reset_game_confirmed() -> void:
-	if not _can_use_dev_tools():
+func _on_gameplay_reset_confirmed() -> void:
+	if not _can_reset_gameplay():
 		return
 	var world := GameState.get_world()
 	if world == null or not world.has_method("prepare_for_gameplay_reset"):
