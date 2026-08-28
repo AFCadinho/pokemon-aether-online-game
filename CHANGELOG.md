@@ -17,7 +17,7 @@
 - Land mounts now move faster. Follower Pokémon temporarily return to their Poké Ball while you are riding.
 - Flash, Cut, Strength, and Surf now require both the matching HM and the correct Kanto Gym Badge.
 - Thieving arrests now include an Officer Jenny encounter and a short explanation of the sentence.
-- Simplified Chinese now uses the official names for Kanto Gym Badges and HM moves.
+- Simplified Chinese translations now use official Pokémon terms for moves, Abilities, items, types, Natures, Gym Badges, and descriptions where available. Unverified translations now fall back to English.
 
 **Fixed**
 
