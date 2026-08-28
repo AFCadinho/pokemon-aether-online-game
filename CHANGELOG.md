@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Cut, Rock Smash, and weather-changing field moves now play matching sound effects.
+
 ## 0.3.65 - 2026-08-28
 
 **Added**
