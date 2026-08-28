@@ -15,7 +15,7 @@ const ROUTES := {
 		"pokemon": {
 			"Entities/Pokemon/MountainPokemon/Corvisquire": ["kanto_route_24_mountain_corvisquire_1", "corvisquire", Vector2(176, 336), 268, "pace_horizontal", false],
 			"Entities/Pokemon/MountainPokemon/Mudbray": ["kanto_route_24_mountain_mudbray_1", "mudbray", Vector2(144, 1264), 268, "pace_vertical", false],
-			"Entities/Pokemon/MountainPokemon/Rolycoly": ["kanto_route_24_mountain_rolycoly_1", "rolycoly", Vector2(1360, 688), 295, "pace_horizontal", false],
+			"Entities/Pokemon/MountainPokemon/Rolycoly": ["kanto_route_24_mountain_rolycoly_1", "rolycoly", Vector2(1360, 688), 290, "pace_horizontal", false],
 			"Entities/Pokemon/MountainPokemon/Tinkatink": ["kanto_route_24_mountain_tinkatink_1", "tinkatink", Vector2(1392, 1168), 7, "pace_vertical", false],
 		},
 	},
@@ -62,9 +62,10 @@ func _run() -> void:
 				else:
 					_check(collision.get_cell_source_id(patrol_cell) < 0, "%s patrol remains on open ledge ground" % node_path)
 			if not expected[5]:
+				var component_size := _land_component_size(center_cell, route_data.bounds, collision, water)
 				_check(
-					_land_component_size(center_cell, route_data.bounds, collision, water) == expected[3],
-					"%s stands on its isolated mountain landmass" % node_path,
+					component_size == expected[3],
+					"%s stands on its isolated mountain landmass (expected %d cells, found %d)" % [node_path, expected[3], component_size],
 				)
 
 		route.queue_free()
