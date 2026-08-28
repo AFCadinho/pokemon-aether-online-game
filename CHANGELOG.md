@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Fixed**
+
+- The launcher now retries and automatically rechecks server status, so a brief connection problem no longer leaves an online server marked as offline.
+
 ## 0.3.65 - 2026-08-28
 
 **Added**
