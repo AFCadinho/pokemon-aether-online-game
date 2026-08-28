@@ -10,6 +10,7 @@
 **Fixed**
 
 - Rain splashes now stay on the ground beneath trees, Trainers, Pokémon, and other map objects.
+- Players now appear behind hedges, lamps, and other foreground objects in southern Cerulean City.
 
 ## 0.3.66 - 2026-08-28
 

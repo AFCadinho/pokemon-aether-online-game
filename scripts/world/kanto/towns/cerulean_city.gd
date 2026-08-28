@@ -60,8 +60,7 @@ const EXIT_OPENINGS := {
 
 const WATER_CONNECTION_DEPTH := 15
 const MOUNTAIN_ACTOR_SORT_Z := 2054
-const WEST_MOUNTAIN_SITE := Rect2(0, 1056, 192, 992)
-const EAST_MOUNTAIN_SITE := Rect2(1088, 1568, 1312, 672)
+const MOUNTAIN_DEPTH_ZONES_PATH := NodePath("MountainDepthZones")
 @export_range(0.0, 1.0, 0.01) var surf_encounter_chance := 0.1
 const WATER_CONNECTIONS := [
 	{
@@ -110,9 +109,24 @@ func should_trigger_wild_encounter(encounter_type: String = "grass") -> bool:
 
 
 func get_actor_sort_z_floor(world_position: Vector2) -> int:
-	if WEST_MOUNTAIN_SITE.has_point(world_position) or EAST_MOUNTAIN_SITE.has_point(world_position):
+	if _is_inside_mountain_depth_zone(world_position):
 		return MOUNTAIN_ACTOR_SORT_Z
 	return super.get_actor_sort_z_floor(world_position)
+
+
+func _is_inside_mountain_depth_zone(world_position: Vector2) -> bool:
+	var depth_zones := get_node_or_null(MOUNTAIN_DEPTH_ZONES_PATH)
+	if depth_zones == null:
+		return false
+	for area_node: Node in depth_zones.get_children():
+		for child_node: Node in area_node.get_children():
+			var polygon := child_node as CollisionPolygon2D
+			if polygon != null and Geometry2D.is_point_in_polygon(
+				polygon.to_local(world_position),
+				polygon.polygon
+			):
+				return true
+	return false
 
 
 func _open_exterior_connections() -> void:
