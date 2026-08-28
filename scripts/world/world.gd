@@ -10,6 +10,7 @@ const BattleEnvironmentResolverScript := preload("res://scripts/battle/battle_en
 const TallGrassDepthSortingScript := preload("res://scripts/world/tall_grass_depth_sorting.gd")
 const AetherClashJailDepthScript := preload("res://scripts/world/aether_clash_jail_depth.gd")
 const MapDepthSortingScript := preload("res://scripts/world/map_depth_sorting.gd")
+const SavedMapScenePathResolver := preload("res://scripts/world/saved_map_scene_path_resolver.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
 const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.06
 const POSITION_SAVE_EPSILON := 1.0
@@ -1182,7 +1183,9 @@ func _setup_initial_world_state() -> void:
 			push_warning("World: player position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
 
 	var initial_map: Node = first_map
-	var saved_scene_path: String = str(saved_state.get("mapScenePath", ""))
+	var saved_scene_path := _resolve_saved_map_scene_path(
+		str(saved_state.get("mapScenePath", ""))
+	)
 	if saved_scene_path != "" and saved_scene_path != _get_map_scene_path(first_map):
 		var saved_map: Node = _instantiate_map(saved_scene_path)
 		if saved_map != null:
@@ -1227,6 +1230,10 @@ func _setup_initial_world_state() -> void:
 	await _save_player_activity_state("idle")
 	WorldPresenceService.connect_presence.call_deferred()
 	_publish_world_presence.call_deferred(true)
+
+
+func _resolve_saved_map_scene_path(scene_path: String) -> String:
+	return SavedMapScenePathResolver.resolve(scene_path)
 
 
 func _apply_day_night_for_map(map_node: Node) -> void:

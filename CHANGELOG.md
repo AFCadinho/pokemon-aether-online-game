@@ -16,7 +16,7 @@
 
 **Fixed**
 
-- Route 2, Route 25, and Bill's House remain connected after their scene files were reorganized.
+- Route 2, Route 25, and Bill's House remain connected, including when loading an existing save from before their scene files were reorganized.
 - Trainers, Pokémon, rocks, and foreground objects now pass in front of and behind each other correctly on Cerulean City's mountain plateaus.
 - Rain splashes now stay on the ground beneath trees, Trainers, Pokémon, and other map objects.
 - Players now appear behind hedges, lamps, and other foreground objects in southern Cerulean City.
