@@ -4,6 +4,7 @@
 
 **Changed**
 
+- Cerulean City now uses its latest visual layout.
 - Pallet Town and Cerulean Gym now use their latest visual layouts.
 - Route 24 now uses its latest expanded visual layout.
 
