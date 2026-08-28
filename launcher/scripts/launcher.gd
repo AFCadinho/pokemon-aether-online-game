@@ -22,6 +22,7 @@ const MAX_ERROR_LOG_BYTES := 1024 * 1024
 const MAX_CHECKSUM_RETRIES := 1
 const MAX_MANIFEST_RETRIES := 3
 const MANIFEST_RETRY_DELAYS_SECONDS: Array[float] = [1.0, 3.0, 8.0]
+const SERVER_HEALTH_REFRESH_SECONDS := 30.0
 const TEMP_DIR := "user://downloads"
 const INSTALL_STAGING_DIR_NAME := ".launcher-staging"
 const EXTRACT_PROGRESS_BATCH_SIZE := 25
@@ -140,6 +141,9 @@ var manifest_retry_count := 0
 var manifest_request_generation := 0
 var server_access_blocked := false
 var server_access_message := ""
+var server_health_check_in_progress := false
+var server_health_failure_logged := false
+var server_health_refresh_timer: Timer
 
 
 func _draw() -> void:
@@ -239,6 +243,11 @@ func _ready() -> void:
 	http_request.timeout = 30.0
 	download_service = LauncherResumableDownloadService.new()
 	add_child(download_service)
+	server_health_refresh_timer = Timer.new()
+	server_health_refresh_timer.wait_time = SERVER_HEALTH_REFRESH_SECONDS
+	server_health_refresh_timer.autostart = true
+	server_health_refresh_timer.timeout.connect(_refresh_server_health)
+	add_child(server_health_refresh_timer)
 	download_service.progress_changed.connect(_on_download_progress_changed)
 	download_service.diagnostic_event.connect(_on_download_diagnostic_event)
 	download_service.download_completed.connect(_on_resumable_download_completed)
@@ -2668,14 +2677,20 @@ func _refresh_launcher_version() -> void:
 
 
 func _refresh_server_health() -> void:
+	if server_health_check_in_progress:
+		return
+	server_health_check_in_progress = true
 	var result: Dictionary = await LauncherServerHealthService.check_async(self, server_status_url)
+	server_health_check_in_progress = false
 	if bool(result.get("online", false)):
+		_log_server_health_recovery_if_needed(result)
 		server_access_blocked = false
 		server_access_message = ""
 		server_online_label.text = _t("Online")
 		server_online_label.add_theme_color_override("font_color", SERVER_ONLINE_COLOR)
 		await _refresh_online_players()
 	elif bool(result.get("maintenance", false)):
+		_log_server_health_recovery_if_needed(result)
 		server_access_blocked = true
 		server_access_message = str(result.get("message", "")).strip_edges()
 		server_online_label.text = _t("Maintenance")
@@ -2683,6 +2698,14 @@ func _refresh_server_health() -> void:
 		online_players_label.text = _t("Players online unavailable")
 		online_players_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
 	else:
+		if not server_health_failure_logged:
+			_log_error(
+				"Server status check failed after %d attempt(s): %s" % [
+					int(result.get("attempts", 1)),
+					str(result.get("error", "unknown error")),
+				]
+			)
+			server_health_failure_logged = true
 		server_access_blocked = false
 		server_access_message = ""
 		server_online_label.text = _t("Offline")
@@ -2690,6 +2713,13 @@ func _refresh_server_health() -> void:
 		online_players_label.text = _t("Players online unavailable")
 		online_players_label.add_theme_color_override("font_color", SERVER_CHECKING_COLOR)
 	_apply_server_access_status()
+
+
+func _log_server_health_recovery_if_needed(result: Dictionary) -> void:
+	if not server_health_failure_logged:
+		return
+	_log("Server status check recovered after %d attempt(s)." % int(result.get("attempts", 1)))
+	server_health_failure_logged = false
 
 
 func _apply_server_access_status() -> void:

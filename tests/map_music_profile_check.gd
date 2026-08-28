@@ -8,6 +8,8 @@ const POKEMON_CENTER_TEMPLATE_PATH := "res://scenes/overworld/kanto/reusable_int
 const ROUTE_3_SCENE_PATH := "res://scenes/overworld/kanto/routes/kanto_route_3.tscn"
 const ROUTE_22_SCENE_PATH := "res://scenes/overworld/kanto/routes/kanto_route_22.tscn"
 const CERULEAN_CITY_SCENE_PATH := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
+const PEWTER_GYM_SCENE_PATH := "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn"
+const CERULEAN_GYM_SCENE_PATH := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn"
 const MT_MOON_SCENE_PATHS := [
 	"res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
 	"res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
@@ -20,12 +22,15 @@ const KANTO_ROUTE_GROUP_PROFILE_ID := "kanto.routes_3_10_16_22"
 const KANTO_ROUTE_GROUP_TRACK_ID := "overworld.kanto.routes_3_10_16_22"
 const MT_MOON_TRACK_ID := "overworld.kanto.cave.mt_moon"
 const CERULEAN_CITY_TRACK_ID := "overworld.kanto.cerulean_city"
+const GYM_PROFILE_ID := "gym.interior"
+const GYM_TRACK_ID := "overworld.gym.black_white_remastered_zame"
 const PALLET_TOWN_TRACK := "res://assets/music/overworld/kanto/towns/pallet_town.ogg"
 const OAKS_LAB_TRACK := "res://assets/music/overworld/kanto/interiors/oaks_lab.ogg"
 const POKEMON_CENTER_TRACK := "res://assets/music/overworld/kanto/interiors/pokemon_center.ogg"
 const KANTO_ROUTE_GROUP_TRACK := "res://assets/music/overworld/kanto/routes/kanto_routes_3_10_16_22.ogg"
 const MT_MOON_TRACK := "res://assets/music/overworld/kanto/caves/mt_moon.ogg"
 const CERULEAN_CITY_TRACK := "res://assets/music/overworld/kanto/towns/cerulean_city.ogg"
+const GYM_TRACK := "res://assets/music/overworld/gyms/black_white_gym_theme_remastered_zame.ogg"
 
 var failed := false
 
@@ -56,13 +61,21 @@ func _init() -> void:
 		_check_scene_track(scene_path, 'music_track_id = "%s"' % MT_MOON_TRACK_ID, "%s uses the dedicated Mt. Moon track" % scene_path)
 	_check_equal(str((tracks.get(CERULEAN_CITY_TRACK_ID, {}) as Dictionary).get("path", "")), CERULEAN_CITY_TRACK, "Cerulean City catalog track has the expected path")
 	_check_scene_track(CERULEAN_CITY_SCENE_PATH, 'music_track_id = "%s"' % CERULEAN_CITY_TRACK_ID, "Cerulean City uses its dedicated catalog track")
+	_check_equal(str(profiles.get(GYM_PROFILE_ID, "")), GYM_TRACK_ID, "Gym interior profile resolves to its catalog track")
+	_check_equal(str((tracks.get(GYM_TRACK_ID, {}) as Dictionary).get("path", "")), GYM_TRACK, "Gym catalog track has the expected path")
+	_check_scene_track(PEWTER_GYM_SCENE_PATH, 'music_profile_id = "%s"' % GYM_PROFILE_ID, "Pewter Gym uses the shared gym interior profile")
+	_check_scene_track(CERULEAN_GYM_SCENE_PATH, 'music_profile_id = "%s"' % GYM_PROFILE_ID, "Cerulean Gym uses the shared gym interior profile")
 	_check(FileAccess.file_exists(OAKS_LAB_TRACK), "Oak's Lab OGG is included in the project")
 	_check(FileAccess.file_exists(POKEMON_CENTER_TRACK), "Pokémon Center OGG is included in the project")
 	_check(FileAccess.file_exists(MT_MOON_TRACK), "Mt. Moon OGG is included in the project")
 	_check(FileAccess.file_exists(CERULEAN_CITY_TRACK), "Cerulean City OGG is included in the project")
+	_check(FileAccess.file_exists(GYM_TRACK), "Gym OGG is included in the project")
 	_check(ResourceLoader.exists(CERULEAN_CITY_TRACK), "Godot recognizes the Cerulean City OGG resource")
 	var cerulean_stream := load(CERULEAN_CITY_TRACK) as AudioStream
 	_check(cerulean_stream != null and cerulean_stream.get_length() > 130.0, "Cerulean City OGG decodes as a complete audio stream")
+	_check(ResourceLoader.exists(GYM_TRACK), "Godot recognizes the gym OGG resource")
+	var gym_stream := load(GYM_TRACK) as AudioStream
+	_check(gym_stream != null and gym_stream.get_length() > 70.0, "Gym OGG decodes as a complete audio stream")
 
 	inherited_interior.free()
 	quit(1 if failed else 0)

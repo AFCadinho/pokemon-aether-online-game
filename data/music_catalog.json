@@ -13,6 +13,10 @@
       "label": "Pokémon Center",
       "path": "res://assets/music/overworld/kanto/interiors/pokemon_center.ogg"
     },
+    "overworld.gym.black_white_remastered_zame": {
+      "label": "Pokémon Black & White Gym Theme (Remastered) - Zame",
+      "path": "res://assets/music/overworld/gyms/black_white_gym_theme_remastered_zame.ogg"
+    },
     "overworld.kanto.cave.mt_moon": {
       "label": "Mt. Moon",
       "path": "res://assets/music/overworld/kanto/caves/mt_moon.ogg"
@@ -59,6 +63,7 @@
     }
   },
   "map_profiles": {
+    "gym.interior": "overworld.gym.black_white_remastered_zame",
     "kanto.pallet_town": "overworld.kanto.pallet_town",
     "kanto.viridian_city": "overworld.kanto.viridian_city",
     "kanto.pewter_city": "overworld.kanto.viridian_city",
