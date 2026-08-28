@@ -154,16 +154,6 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
 			"spawnPoints": {
-				"east_rock_smash_site": {
-					"facingDirection": "down",
-					"label": "East Rock Smash Site",
-					"safeForStaffTeleport": true,
-					"spawnMarker": "EastRockSmashSite",
-					"tile": {
-						"x": 40,
-						"y": 65
-					}
-				},
 				"from_bike_store": {
 					"facingDirection": "down",
 					"label": "Bike Store",

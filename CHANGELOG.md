@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Changed**
+
+- Cerulean City now has one Rock Smash mountain destination, with all eight daily rocks gathered at the West Site.
+
 ## 0.3.66 - 2026-08-28
 
 **Added**
