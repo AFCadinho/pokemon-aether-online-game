@@ -294,10 +294,14 @@ const CHECK_SCRIPTS: Array[String] = [
 const DEFAULT_LOG_DIR := "/tmp/pokeaether_project_checks"
 
 var failed := false
+var passed_count := 0
+var failed_count := 0
+var verbose := false
 var log_dir := DEFAULT_LOG_DIR
 
 
 func _init() -> void:
+	verbose = OS.get_environment("POKEAETHER_TEST_VERBOSE").strip_edges().to_lower() in ["1", "true", "yes"]
 	var configured_log_dir := OS.get_environment("POKEAETHER_TEST_LOG_DIR").strip_edges()
 	if not configured_log_dir.is_empty():
 		if not configured_log_dir.is_absolute_path():
@@ -319,6 +323,7 @@ func _init() -> void:
 	for script_path in CHECK_SCRIPTS:
 		_run_check(executable, project_path, script_path)
 
+	print("Project checks: %d passed, %d failed. Logs: %s" % [passed_count, failed_count, log_dir])
 	quit(1 if failed else 0)
 
 
@@ -342,10 +347,13 @@ func _run_check(executable: String, project_path: String, script_path: String) -
 	)
 
 	if exit_code == 0:
-		print("PASS %s" % script_path)
+		passed_count += 1
+		if verbose:
+			print("PASS %s" % script_path)
 		return
 
 	failed = true
+	failed_count += 1
 	push_error(
 		"FAIL %s exit_code=%d log=%s\n%s" % [script_path, exit_code, log_file, _format_output(output)]
 	)

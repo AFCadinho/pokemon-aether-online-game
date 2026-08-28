@@ -4,7 +4,7 @@
 
 - Agents may develop only in an explicitly assigned frontend worktree under
   `game/.worktrees/slot-a`, `slot-b`, or `slot-c`.
-- Never edit the normal `pokemon-aether-online` main checkout. It is reserved
+- Never edit the normal `pokemon-aether-online` checkout. It is reserved
   for integration, final tests, releases, comparison, review, and recovery.
 - A task that also changes the backend must use the backend worktree from the
   same assigned slot. One slot belongs exclusively to one task or agent.
@@ -22,11 +22,15 @@
   logs, local databases, or machine-specific configuration between checkouts.
 - Run Godot commands through `game/ops/worktrees/slot-env SLOT -- COMMAND` so
   userdata, configuration, cache, and test logs remain local to the slot.
+- Run only the directly relevant Godot check scripts while developing a task.
+  Reserve `tests/run_project_checks.gd` for the complete development batch or
+  an explicitly useful full verification.
 
 ## Branches and handoff
 
-- Task branches start from the local `main`, not automatically from
-  `origin/main`.
+- Task branches start from the current local `development`, never from
+  `origin/main`. They are merged back into `development` as part of the next
+  complete release batch.
 - Do not merge into `main`, push `main`, publish builds, or trigger releases
   unless the user explicitly requests it.
 - Commit all intended changes, or clearly identify deliberately uncommitted
