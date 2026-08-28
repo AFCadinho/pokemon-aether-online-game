@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Changed**
+
+- Outdoor maps now use 2x zoom by default. The zoom can still be changed in the graphics settings.
+
 ## 0.3.66 - 2026-08-28
 
 **Added**
