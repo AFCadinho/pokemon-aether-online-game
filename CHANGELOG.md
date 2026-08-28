@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+**Added**
+
+- Gym interiors now have their own background music.
+
 **Fixed**
 
 - The launcher now retries and automatically rechecks server status, so a brief connection problem no longer leaves an online server marked as offline.
