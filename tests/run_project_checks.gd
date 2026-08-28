@@ -159,6 +159,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/route_25_visual_check.gd",
 	"res://tests/route_25_trainers_check.gd",
 	"res://tests/route_25_wild_encounter_check.gd",
+	"res://tests/route_25_overworld_pokemon_check.gd",
 	"res://tests/bills_house_route_25_transition_check.gd",
 	"res://tests/route_24_route_25_connections_check.gd",
 	"res://tests/nugget_bridge_trainers_check.gd",
