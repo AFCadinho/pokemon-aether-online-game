@@ -190,6 +190,11 @@ func _check_server_access_status() -> void:
 		launcher_source.contains("server_access_blocked or update_required"),
 		"launcher Play state includes the game-access gate"
 	)
+	_check(
+		launcher_source.contains("SERVER_HEALTH_REFRESH_SECONDS")
+		and launcher_source.contains("server_health_check_in_progress"),
+		"launcher periodically rechecks server access without overlapping requests"
+	)
 
 
 func _check_language_selector_presentation(manager: Node) -> void:
