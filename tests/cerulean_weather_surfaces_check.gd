@@ -25,6 +25,7 @@ func _init() -> void:
 	var ground := _find_visual_layer(visual, 1)
 	var grass := _find_visual_layer(visual, 6)
 	var ground_detail := _find_visual_layer(visual, 2)
+	var objects := _find_visual_layer(visual, 3)
 	_check_true(grass != null, "Cerulean preserves its dedicated Grass visual layer")
 	_check_true(water_mask != null, "Cerulean builds a weather water mask")
 	if water_mask == null:
@@ -40,6 +41,15 @@ func _init() -> void:
 		CeruleanWeatherWaterMaskScript.build(visual) == water_mask,
 		"Cerulean water mask construction is idempotent"
 	)
+	var gameplay_tiles := Node2D.new()
+	gameplay_tiles.name = "Tiles"
+	gameplay_tiles.visible = false
+	var gameplay_water := TileMapLayer.new()
+	gameplay_water.name = "Water"
+	gameplay_water.z_index = 4095
+	gameplay_water.tile_set = ground.tile_set
+	gameplay_tiles.add_child(gameplay_water)
+	visual.add_child(gameplay_tiles)
 
 	for cell: Vector2i in water_mask.get_used_cells():
 		_check_equal(
@@ -61,8 +71,20 @@ func _init() -> void:
 	var rain = controller.rain_ground_effects
 	var snow = controller.snow_ground_effects
 	_check_equal(rain.get_surface_layer_count(), 3, "Cerulean Ground, Grass, and GroundDetail accept rain impacts")
-	_check_equal(rain.get_water_layer_count(), 1, "Cerulean exposes its generated water mask to rain")
-	_check_true(rain.z_index > ground_detail.z_index, "Cerulean rain impacts render above GroundDetail")
+	_check_equal(rain.get_water_layer_count(), 2, "Cerulean recognizes its visual mask and hidden gameplay water")
+	_check_equal(
+		rain.z_index,
+		ground_detail.z_index,
+		"hidden gameplay water does not lift Cerulean rain above the visible ground"
+	)
+	_check_true(
+		rain.z_index < objects.z_index,
+		"Cerulean rain impacts stay beneath trees and other Objects"
+	)
+	_check_true(
+		rain.z_index < 32,
+		"Cerulean rain impacts stay beneath the lowest regular actor depth"
+	)
 
 	var water_cell: Vector2i = water_mask.get_used_cells()[0]
 	var water_position := water_mask.to_global(water_mask.map_to_local(water_cell))
