@@ -58,12 +58,12 @@ func _run() -> void:
 	)
 
 	var route_24_collision := route_24.find_map_tilemap_layer("Collision") as TileMapLayer
-	_check(_is_open(route_24_collision, Vector2i(44, 4)), "Route 24 opens its upper Route 25 passage")
-	_check(_is_open(route_24_collision, Vector2i(44, 10)), "Route 24 opens its lower Route 25 passage")
-	_check(_is_open(route_24_collision, Vector2i(44, 18)), "Route 24 opens its south Route 25 passage")
-	_check(not _is_open(route_24_collision, Vector2i(44, 7)), "Route 24 separates both Route 25 passages")
-	_check(not _is_open(route_24_collision, Vector2i(44, 14)), "Route 24 separates its lower and south passages")
-	_check(not _is_open(route_24_collision, Vector2i(44, 22)), "Route 24 closes the east boundary below all passages")
+	_check(_is_open(route_24_collision, Vector2i(59, 4)), "Route 24 opens its upper Route 25 passage")
+	_check(_is_open(route_24_collision, Vector2i(59, 11)), "Route 24 opens its lower Route 25 passage")
+	_check(_is_open(route_24_collision, Vector2i(59, 18)), "Route 24 opens its south Route 25 passage")
+	_check(not _is_open(route_24_collision, Vector2i(59, 7)), "Route 24 separates both Route 25 passages")
+	_check(not _is_open(route_24_collision, Vector2i(59, 15)), "Route 24 separates its lower and south passages")
+	_check(not _is_open(route_24_collision, Vector2i(59, 20)), "Route 24 closes the east boundary below all passages")
 
 	var route_25_collision := route_25.find_map_tilemap_layer("Collision") as TileMapLayer
 	_check(_is_open(route_25_collision, Vector2i(0, 4)), "Route 25 opens its upper Route 24 passage")

@@ -89,13 +89,13 @@ func _init() -> void:
 	_check(player_script.contains("sync_activity_state_for_current_tile") and player_script.contains("_start_surf_activity(false)"), "A water arrival restores Surf automatically")
 	_check(route_24_source.contains('[node name="Water" type="TileMapLayer" parent="Tiles"'), "Route 24 exposes a semantic Water layer")
 	_check(route_24_source.contains('route_24/route_24.visual.tscn'), "Route 24 uses its imported Tiled visual")
-	_check(route_24_source.contains('map_size = Vector2i(45, 60)'), "Route 24 bounds match its imported visual")
+	_check(route_24_source.contains('map_size = Vector2i(60, 60)'), "Route 24 bounds match its imported visual")
 	_check(route_24_source.contains('water_connection_side = "bottom"'), "Route 24 marks its water approach")
 	_check(city_source.contains('[node name="Water" type="TileMapLayer" parent="Tiles"'), "Cerulean City exposes a semantic Water layer")
 	_check(city_script.contains("_build_water_connections"), "Cerulean City marks all water approaches")
 	_check(city_source.contains('[node name="FromRoute4Water" type="Marker2D" parent="Spawns"'), "Cerulean City has the Route 4 water spawn")
 	_check(city_source.contains('[node name="ToRoute4Water" type="Area2D" parent="Exits"'), "Cerulean City has the Route 4 water exit")
-	_check(route_24_source.contains('second_water_opening_from = 26'), "Route 24 marks its second Surf approach")
+	_check(route_24_source.contains('second_water_opening_from = 35'), "Route 24 marks its second Surf approach")
 
 	for suffix: String in ["Left", "Grass", "Right"]:
 		_check(city_source.contains('[node name="FromRoute5%s" type="Marker2D" parent="Spawns"' % suffix), "Cerulean City has the Route 5 %s spawn" % suffix.to_lower())

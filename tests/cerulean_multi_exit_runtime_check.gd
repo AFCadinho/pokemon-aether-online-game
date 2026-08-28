@@ -91,16 +91,16 @@ func _check_route_24_openings_and_water() -> void:
 	var collision := route.find_map_tilemap_layer("Collision") as TileMapLayer
 	var water := route.find_map_tilemap_layer("Water") as TileMapLayer
 
-	_check(_is_open(collision, Vector2i(15, 59)), "Route 24 opens its left water exit")
-	_check(_is_open(collision, Vector2i(22, 59)), "Route 24 opens its bridge exit")
-	_check(_is_open(collision, Vector2i(28, 59)), "Route 24 opens its right water exit")
-	_check(_is_open(collision, Vector2i(35, 59)), "Route 24 opens its path exit")
-	for separator_x: int in [11, 19, 25, 31, 38]:
+	_check(_is_open(collision, Vector2i(24, 59)), "Route 24 opens its left water exit")
+	_check(_is_open(collision, Vector2i(31, 59)), "Route 24 opens its bridge exit")
+	_check(_is_open(collision, Vector2i(37, 59)), "Route 24 opens its right water exit")
+	_check(_is_open(collision, Vector2i(43, 59)), "Route 24 opens its path exit")
+	for separator_x: int in [20, 28, 34, 40, 46]:
 		_check(not _is_open(collision, Vector2i(separator_x, 59)), "Route 24 closes separator x=%d" % separator_x)
-	_check(not _is_open(water, Vector2i(15, 58)), "Route 24 left water arrival restores Surf")
-	_check(_is_open(water, Vector2i(22, 58)), "Route 24 bridge arrival remains on foot")
-	_check(not _is_open(water, Vector2i(28, 58)), "Route 24 right water arrival restores Surf")
-	_check(_is_open(water, Vector2i(35, 58)), "Route 24 path arrival remains on foot")
+	_check(not _is_open(water, Vector2i(24, 58)), "Route 24 left water arrival restores Surf")
+	_check(_is_open(water, Vector2i(31, 58)), "Route 24 bridge arrival remains on foot")
+	_check(not _is_open(water, Vector2i(37, 58)), "Route 24 right water arrival restores Surf")
+	_check(_is_open(water, Vector2i(43, 58)), "Route 24 path arrival remains on foot")
 	await _free_map(route)
 
 
