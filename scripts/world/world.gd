@@ -460,7 +460,9 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 			"error": "World player is not ready.",
 		}
 
-	var target_scene_path := str(state.get("mapScenePath", "")).strip_edges()
+	var target_scene_path := _resolve_saved_map_scene_path(
+		str(state.get("mapScenePath", ""))
+	)
 	if target_scene_path == "":
 		_mark_authorized_teleport_apply_failed()
 		return {
