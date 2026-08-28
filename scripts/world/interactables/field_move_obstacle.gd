@@ -49,6 +49,7 @@ func clear_obstacle() -> void:
 		interaction_area.monitoring = false
 		interaction_area.monitorable = false
 
+	SfxManager.play_field_move(required_field_move)
 	await _play_clear_animation()
 	blocks_movement = false
 	var tween := create_tween()

@@ -6,6 +6,7 @@
 
 - Gym interiors now have their own background music.
 - Gym Leader battles now have their own background music.
+- Cut, Rock Smash, and weather-changing field moves now play matching sound effects.
 
 **Fixed**
 
