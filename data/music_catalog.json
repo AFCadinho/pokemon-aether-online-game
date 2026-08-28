@@ -49,6 +49,10 @@
       "label": "Kalos Trainer Battle",
       "path": "res://assets/music/battle/trainer/Kalos Trainer Battle.ogg"
     },
+    "battle.gym_leader.kanto_remaster_zame": {
+      "label": "Battle! Kanto Gym Leader Remaster - Zame",
+      "path": "res://assets/music/battle/gym/kanto_gym_leader_remaster_zame.ogg"
+    },
     "battle.pvp.lysandre_remix_pokemon_legends_z_a_zame": {
       "label": "Lysandre Remix Pokémon Legends Z-A Zame",
       "path": "res://assets/music/battle/pvp/lysandre_remix_pokemon_legends_z_a_zame.ogg"

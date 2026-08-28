@@ -52,8 +52,11 @@ func play_battle_music() -> void:
 func play_wild_battle_music() -> void:
 	play_music(get_music_track_path(DEFAULT_WILD_BATTLE_MUSIC_ID))
 
-func play_trainer_battle_music() -> void:
-	play_music(get_music_track_path(DEFAULT_TRAINER_BATTLE_MUSIC_ID))
+func play_trainer_battle_music(track_id: String = "") -> void:
+	var resolved_track_id := track_id.strip_edges()
+	if resolved_track_id == "":
+		resolved_track_id = DEFAULT_TRAINER_BATTLE_MUSIC_ID
+	play_music(get_music_track_path(resolved_track_id))
 
 
 func play_pvp_battle_music() -> void:
