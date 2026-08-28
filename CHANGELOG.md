@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Gym interiors now have their own background music.
+
 ## 0.3.65 - 2026-08-28
 
 **Added**

@@ -133,7 +133,7 @@ location_name = "Cerulean City Gym"
 region_id = "kanto"
 lighting_profile = "indoor"
 weather_profile = "disabled"
-music_profile_id = "kanto.cerulean_city"
+music_profile_id = "gym.interior"
 
 [node name="CeruleanGymVisual" parent="." unique_id=971541075 instance=ExtResource("1_visual")]
 
