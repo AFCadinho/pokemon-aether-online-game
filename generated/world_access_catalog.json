@@ -1392,6 +1392,16 @@
 			"sceneAliases": [],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_25.tscn",
 			"spawnPoints": {
+				"from_bills_house": {
+					"facingDirection": "down",
+					"label": "Bills House",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromBillsHouse",
+					"tile": {
+						"x": 50,
+						"y": 14
+					}
+				},
 				"from_route_24_lower": {
 					"facingDirection": "down",
 					"label": "Route 24 Lower",
@@ -1420,6 +1430,28 @@
 					"tile": {
 						"x": 1,
 						"y": 4
+					}
+				}
+			}
+		},
+		"kanto_route_25_bills_house": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Bill's House",
+			"locationGroupId": "kanto_route_25",
+			"locationGroupLabel": "Route 25",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/bills_house.tscn",
+			"spawnPoints": {
+				"from_route_25": {
+					"facingDirection": "down",
+					"label": "Route 25",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute25",
+					"tile": {
+						"x": 12,
+						"y": 14
 					}
 				}
 			}
@@ -3086,6 +3118,21 @@
 			"destinationAreaId": "kanto_route_25",
 			"sourceMapId": "kanto_route_24"
 		},
+		"kanto_route_25__to_bills_house": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_route_25_bills_house",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/bills_house.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromRoute25"
+			},
+			"destinationAreaId": "kanto_route_25_bills_house",
+			"sourceMapId": "kanto_route_25"
+		},
 		"kanto_route_25__to_route_24_lower": {
 			"destination": {
 				"facingDirection": "left",
@@ -3136,6 +3183,21 @@
 			},
 			"destinationAreaId": "kanto_route_24",
 			"sourceMapId": "kanto_route_25"
+		},
+		"kanto_route_25_bills_house__to_route_25": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_route_25",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_25.tscn",
+				"position": {
+					"x": 1616.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromBillsHouse"
+			},
+			"destinationAreaId": "kanto_route_25",
+			"sourceMapId": "kanto_route_25_bills_house"
 		},
 		"kanto_route_2__to_house": {
 			"destination": {

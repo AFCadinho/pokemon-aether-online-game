@@ -12,6 +12,7 @@
 - Pallet Town and Cerulean Gym now use their latest visual layouts.
 - Route 24 now uses its latest expanded visual layout.
 - Route 25 now uses its complete visual layout.
+- Bill's House now has its visual layout and is connected to Route 25.
 
 **Fixed**
 
