@@ -385,6 +385,27 @@ music_track_id = "overworld.kanto.cerulean_city"
 
 [node name="CeruleanCityVisual" parent="." unique_id=1421275817 instance=ExtResource("1_visual")]
 
+[node name="MountainDepthZones" type="Node2D" parent="."]
+editor_description = "Select either CollisionPolygon2D child and drag its points to match the visible mountain terrain. These zones only control actor depth sorting."
+
+[node name="WestMountain" type="Area2D" parent="MountainDepthZones"]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="MountainDepthZones/WestMountain"]
+polygon = PackedVector2Array(0, 1056, 192, 1056, 192, 2048, 0, 2048)
+
+[node name="EastAndSouthMountain" type="Area2D" parent="MountainDepthZones"]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="MountainDepthZones/EastAndSouthMountain"]
+polygon = PackedVector2Array(2016, 1536, 2400, 1536, 2400, 2240, 1088, 2240, 1088, 2016, 2016, 2016)
+
 [node name="Spawns" type="Node2D" parent="." unique_id=2088728124]
 
 [node name="FromRoute4" type="Marker2D" parent="Spawns" unique_id=1976159514]
@@ -446,9 +467,6 @@ position = Vector2(1584, 2096)
 
 [node name="WestRockSmashSite" type="Marker2D" parent="Spawns" unique_id=1817059196]
 position = Vector2(112, 1520)
-
-[node name="EastRockSmashSite" type="Marker2D" parent="Spawns" unique_id=1761652555]
-position = Vector2(1296, 2096)
 
 [node name="MountainGuideReturn" type="Marker2D" parent="Spawns" unique_id=1655488040]
 position = Vector2(1680, 1904)
@@ -820,7 +838,6 @@ npc_sprite_frames = ExtResource("13_youngster")
 position = Vector2(1712, 1904)
 script = ExtResource("29_mountain_guide")
 west_destination_position = Vector2(112, 1520)
-east_destination_position = Vector2(1296, 2096)
 npc_id = "kanto_cerulean_city_mountain_guide"
 display_name = "Mountain Guide"
 facing_direction = Vector2(-1, 0)
@@ -829,15 +846,6 @@ portrait_id = "showdown_hiker_gen6"
 
 [node name="WestMountainGuide" parent="Entities/NPCs" unique_id=1676481674 instance=ExtResource("9_dialogue")]
 position = Vector2(144, 1584)
-script = ExtResource("31_mountain_return")
-destination_position = Vector2(1680, 1904)
-display_name = "Mountain Guide"
-npc_sprite_frames = ExtResource("30_hiker")
-portrait_id = "showdown_hiker_gen6"
-minimum_sort_z = 2054
-
-[node name="EastMountainGuide" parent="Entities/NPCs" unique_id=1778671423 instance=ExtResource("9_dialogue")]
-position = Vector2(2320, 1872)
 script = ExtResource("31_mountain_return")
 destination_position = Vector2(1680, 1904)
 display_name = "Mountain Guide"
@@ -1124,36 +1132,36 @@ rock_variant = 3
 rock_visual_style = 2
 required_rock_smash_level = 20
 
-[node name="EastRockNorthwest" parent="Entities/Interactables/MountainRockSmashSites" unique_id=844945805 instance=ExtResource("32_daily_rock")]
+[node name="WestRockNorthwest" parent="Entities/Interactables/MountainRockSmashSites" unique_id=844945805 instance=ExtResource("32_daily_rock")]
 z_index = 2054
 z_as_relative = false
-position = Vector2(2128, 1712)
+position = Vector2(48, 1104)
 rock_id = "kanto_cerulean_city_east_site_rock_northwest"
 rock_visual_style = 2
 required_rock_smash_level = 50
 
-[node name="EastRockNortheast" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1938575074 instance=ExtResource("32_daily_rock")]
+[node name="WestRockNortheast" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1938575074 instance=ExtResource("32_daily_rock")]
 z_index = 2054
 z_as_relative = false
-position = Vector2(2128, 2096)
+position = Vector2(144, 1328)
 rock_id = "kanto_cerulean_city_east_site_rock_northeast"
 rock_variant = 1
 rock_visual_style = 2
 required_rock_smash_level = 50
 
-[node name="EastRockSouthwest" parent="Entities/Interactables/MountainRockSmashSites" unique_id=55597829 instance=ExtResource("32_daily_rock")]
+[node name="WestRockSouthwest" parent="Entities/Interactables/MountainRockSmashSites" unique_id=55597829 instance=ExtResource("32_daily_rock")]
 z_index = 2054
 z_as_relative = false
-position = Vector2(1392, 2192)
+position = Vector2(144, 1648)
 rock_id = "kanto_cerulean_city_east_site_rock_southwest"
 rock_variant = 2
 rock_visual_style = 2
 required_rock_smash_level = 50
 
-[node name="EastRockSoutheast" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1019663712 instance=ExtResource("32_daily_rock")]
+[node name="WestRockSoutheast" parent="Entities/Interactables/MountainRockSmashSites" unique_id=1019663712 instance=ExtResource("32_daily_rock")]
 z_index = 2054
 z_as_relative = false
-position = Vector2(1136, 2096)
+position = Vector2(48, 1840)
 rock_id = "kanto_cerulean_city_east_site_rock_southeast"
 rock_variant = 3
 rock_visual_style = 2

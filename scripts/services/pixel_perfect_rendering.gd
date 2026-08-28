@@ -5,7 +5,7 @@ class_name PixelPerfectRendering
 const SCALE_OVERVIEW := 1.0
 const SCALE_BALANCED := 1.5
 const SCALE_CLOSE := 2.0
-const DEFAULT_SCALE := SCALE_OVERVIEW
+const DEFAULT_SCALE := SCALE_CLOSE
 const AVAILABLE_SCALES: Array[float] = [SCALE_OVERVIEW, SCALE_BALANCED, SCALE_CLOSE]
 
 
