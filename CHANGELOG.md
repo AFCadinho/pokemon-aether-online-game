@@ -8,6 +8,7 @@
 
 **Changed**
 
+- Route 25 now has wild Pokémon encounters in tall grass, while surfing, and with every fishing rod, including different daytime and nighttime species.
 - Alpha Tools now include the same protected Reset / New Game action as Developer Tools.
 - The New Game warning now clearly explains what happens to unclaimed mail attachments, other active sessions, Aether Gems, and paid items.
 - Cerulean City now has one Rock Smash mountain destination, with all eight daily rocks gathered at the East Site.
@@ -20,6 +21,7 @@
 
 **Fixed**
 
+- Route 2, Route 25, and Bill's House remain connected after their scene files were reorganized.
 - Trainers, Pokémon, rocks, and foreground objects now pass in front of and behind each other correctly on Cerulean City's mountain plateaus.
 - Rain splashes now stay on the ground beneath trees, Trainers, Pokémon, and other map objects.
 - Players now appear behind hedges, lamps, and other foreground objects in southern Cerulean City.

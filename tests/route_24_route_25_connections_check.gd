@@ -1,7 +1,7 @@
 extends SceneTree
 
 const ROUTE_24_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
-const ROUTE_25_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_25.tscn"
+const ROUTE_25_SCENE := "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn"
 
 var failed := false
 

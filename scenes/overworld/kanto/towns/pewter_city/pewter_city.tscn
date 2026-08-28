@@ -263,7 +263,7 @@ position = Vector2(1520, 976)
 [node name="ToRoute2" type="Area2D" parent="Exits" unique_id=1956639696]
 position = Vector2(848, 1904)
 script = ExtResource("2_jtxgn")
-target_scene_path = "uid://cnbfksossjfg7"
+target_scene_path = "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn"
 target_spawn_name = "FromPewterCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2" unique_id=56126881]

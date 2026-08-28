@@ -5,7 +5,7 @@ const MAP_PICKUPS := {
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": [
 		["kanto_viridian_city_potion", "potion", Vector2i(528, 1520)],
 	],
-	"res://scenes/overworld/kanto/routes/kanto_route_2.tscn": [
+	"res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn": [
 		["kanto_route_2_ether", "ether", Vector2i(848, 1616)],
 		["kanto_route_2_paralyze_heal", "paralyze-heal", Vector2i(688, 1296)],
 	],

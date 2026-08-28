@@ -20,7 +20,7 @@ const MAP_POKEMON := {
 		"Mankey": "mankey",
 		"Spearow": "spearow",
 	},
-	"res://scenes/overworld/kanto/routes/kanto_route_2.tscn": {
+	"res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn": {
 		"Caterpie": "caterpie",
 		"Pidgey": "pidgey",
 	},

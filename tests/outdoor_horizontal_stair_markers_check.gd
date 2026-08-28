@@ -3,7 +3,7 @@ extends SceneTree
 const OUTDOOR_MAP_SCENES: Array[String] = [
 	"res://scenes/overworld/aether_clash/aether_clash_lobby.tscn",
 	"res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
-	"res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+	"res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
 	"res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
 	"res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
 	"res://scenes/overworld/kanto/routes/viridian_forest.tscn",

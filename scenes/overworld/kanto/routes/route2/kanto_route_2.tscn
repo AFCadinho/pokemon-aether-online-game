@@ -476,7 +476,7 @@ tile_footprint = Vector2i(3, 2)
 [node name="ToHouse" type="Area2D" parent="Exits" unique_id=2031672591]
 position = Vector2(1424, 528)
 script = ExtResource("6_3mgn4")
-target_scene_path = "res://scenes/overworld/kanto/routes/route_2_house.tscn"
+target_scene_path = "res://scenes/overworld/kanto/routes/route2/route_2_house.tscn"
 target_spawn_name = "FromRoute2"
 transition_facing_direction = "up"
 
