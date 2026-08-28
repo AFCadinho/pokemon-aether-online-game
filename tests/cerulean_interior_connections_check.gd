@@ -44,7 +44,7 @@ const INTERIORS := [
 		"interior_spawn": "FromCeruleanCity",
 		"interior_exit": "ToCeruleanCity",
 		"template": "BikeShopVisual",
-		"spawn_position": Vector2(656, 1680),
+		"spawn_position": Vector2(624, 1680),
 	},
 	{
 		"id": "house_2",
@@ -170,7 +170,7 @@ func _check_interior(city: Node, data: Dictionary) -> void:
 		_check(interior.get_node_or_null("PewterGymTemplate/Entities") == null, "Cerulean Gym does not inherit Pewter NPC content")
 		_check(interior.get_node_or_null("PewterGymTemplate/Visuals") == null, "Cerulean Gym hides the obsolete Pewter visual")
 		_check(interior.get_node_or_null("PewterGymTemplate/FloorVisibilityMask") == null, "Cerulean Gym removes the Pewter floor mask")
-		_check(interior.get_node_or_null("PewterGymTemplate/Collision") != null, "Cerulean Gym retains its gameplay collision layer")
+		_check(interior.get_node_or_null("Tiles/Collision") != null, "Cerulean Gym retains its gameplay collision layer")
 		var gym_visual := interior.get_node_or_null("CeruleanGymVisual")
 		var gym_visual_map: Dictionary = {}
 		if gym_visual != null:

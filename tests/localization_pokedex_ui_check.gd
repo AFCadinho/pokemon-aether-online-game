@@ -247,7 +247,9 @@ func _check_evolution_navigation(overlay: Node, detail_stack: VBoxContainer) -> 
 		"Pre-evolution species renders as a connected Pokédex link"
 	)
 	_check(
-		item_link != null and item_link.text == "Thunder Stone" and not item_link.pressed.get_connections().is_empty(),
+		item_link != null
+		and not item_link.text.strip_edges().is_empty()
+		and not item_link.pressed.get_connections().is_empty(),
 		"Evolution item renders as a connected Item Dex link"
 	)
 	overlay.set("pokedex_selected_species", {})

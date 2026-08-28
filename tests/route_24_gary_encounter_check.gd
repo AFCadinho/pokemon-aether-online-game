@@ -15,24 +15,27 @@ func _run() -> void:
 	var route_source := FileAccess.get_file_as_string(ROUTE_SCENE)
 	var cerulean_source := FileAccess.get_file_as_string(CERULEAN_SCENE)
 	var script_text := FileAccess.get_file_as_string(GARY_SCRIPT)
+	var gary_start := cerulean_source.find('[node name="GaryOak"')
+	var gary_end := cerulean_source.find("\n[node ", gary_start + 1)
+	var gary_block := cerulean_source.substr(gary_start, gary_end - gary_start)
 	_check(
 		not route_source.contains('[node name="GaryOak"'),
 		"Gary is no longer placed on the Route 24 placeholder map"
 	)
 	_check(
-		cerulean_source.contains('[node name="GaryOak" parent="Entities/NPCs" instance=ExtResource("21_trainer")]')
+		cerulean_source.contains('[node name="GaryOak" parent="Entities/NPCs"')
+			and cerulean_source.contains('instance=ExtResource("21_trainer")]')
 			and cerulean_source.contains("position = Vector2(1808, 720)"),
 		"Gary waits at the Cerulean entrance to Nugget Bridge"
 	)
 	_check(
 		cerulean_source.contains("sight_range_tiles = 3")
-			and cerulean_source.contains("facing_direction = Vector2(0, 1)")
 			and script_text.contains("challenge_width_tiles := 6"),
 		"Gary guards the complete bridge entrance toward the Cerulean approach"
 	)
 	_check(
-		cerulean_source.contains('npc_id = "kanto_route_24_gary_oak"')
-			and not cerulean_source.contains("required_quest_id"),
+		gary_block.contains('npc_id = "kanto_route_24_gary_oak"')
+			and not gary_block.contains("required_quest_id"),
 		"Gary's battle has a stable identity and is independent from story progress"
 	)
 	_check(

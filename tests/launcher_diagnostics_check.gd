@@ -34,7 +34,8 @@ func _init() -> void:
 	)
 	_check(
 		download_source.contains("checksum_retry_count < 1")
-		and download_source.contains('_reset_partial_download("checksum mismatch")')
+		and download_source.contains("_prepare_clean_checksum_retry()")
+		and download_source.contains('"checksum mismatch required a clean restart"')
 		and download_source.contains('headers.append("Cache-Control: no-cache")')
 		and download_source.contains('headers.append("Pragma: no-cache")'),
 		"checksum failures clean up and retry once with cache revalidation"

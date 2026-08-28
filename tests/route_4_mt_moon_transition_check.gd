@@ -44,7 +44,7 @@ func _init() -> void:
 	_check(route_source.contains('transition_id = "kanto_route_4__to_cerulean_city"'), "Route 4 exits to Cerulean City")
 	_check(route_source.contains('target_spawn_name = "FromRoute4"'), "Route 4 targets the Cerulean City arrival")
 	_check(route_source.contains('transition_facing_direction = "right"'), "Cerulean City arrival faces east")
-	_check(route_source.contains('[node name="FromCeruleanWater" type="Marker2D" parent="Spawns"]'), "Route 4 has a Cerulean water arrival")
+	_check(route_source.contains('[node name="FromCeruleanWater" type="Marker2D" parent="Spawns"'), "Route 4 has a Cerulean water arrival")
 	_check(route_source.contains('position = Vector2(3136, 1008)'), "Cerulean water arrival is on the imported east water")
 	_check(route_source.contains('transition_id = "kanto_route_4__to_cerulean_city_water"'), "Route 4 water exits to Cerulean City")
 	_check(route_source.contains('target_spawn_name = "FromRoute4Water"'), "Route 4 water targets the Cerulean water arrival")

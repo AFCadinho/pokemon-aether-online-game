@@ -41,7 +41,7 @@ func _check_map_encounter(map_case: Dictionary) -> void:
 	_check_true(scene_source.contains("grass_encounter_chance = 0.21"), "%s scene should configure its fallback encounter chance" % map_case["label"])
 	if str(map_case["area_id"]) == "kanto_route_24":
 		_check_true(
-			scene_source.contains('[node name="TallGrass" type="TileMapLayer" parent="Tiles"]'),
+			scene_source.contains('[node name="TallGrass" type="TileMapLayer" parent="Tiles"'),
 			"Route 24 should expose a TallGrass encounter mask"
 		)
 		_check_true(

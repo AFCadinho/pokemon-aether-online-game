@@ -1377,7 +1377,7 @@
 					"spawnMarker": "FromRoute25South",
 					"tile": {
 						"x": 43,
-						"y": 18
+						"y": 17
 					}
 				},
 				"from_route_25_upper": {
@@ -3123,7 +3123,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 				"position": {
 					"x": 1392.0,
-					"y": 592.0
+					"y": 560.0
 				},
 				"spawnMarker": "FromRoute25South"
 			},

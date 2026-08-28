@@ -68,8 +68,14 @@ func _init() -> void:
 		for rock_id_value: Variant in expected:
 			var rock_id := str(rock_id_value)
 			var required_level := int(expected[rock_id_value])
+			var rock_start := source.find('rock_id = "%s"' % rock_id)
+			var next_node := source.find("\n[node ", rock_start)
+			var rock_block := source.substr(
+				rock_start,
+				next_node - rock_start if next_node >= 0 else source.length() - rock_start
+			)
 			_check(
-				'rock_id = "%s"\nrequired_rock_smash_level = %d' % [rock_id, required_level] in source,
+				rock_start >= 0 and 'required_rock_smash_level = %d' % required_level in rock_block,
 				"%s uses the level %d color contract" % [rock_id, required_level]
 			)
 

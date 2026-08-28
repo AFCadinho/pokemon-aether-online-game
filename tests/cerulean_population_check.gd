@@ -57,7 +57,7 @@ const COLLISION_PATHS := {
 	"house3.tscn": "BlueHouseTemplate/Collision",
 	"bike_store.tscn": "Tiles/Collision",
 	"pokemon_center.tscn": "Collision",
-	"cerulean_gym.tscn": "PewterGymTemplate/Collision",
+	"cerulean_gym.tscn": "Tiles/Collision",
 }
 
 var failed := false
@@ -143,7 +143,7 @@ func _check_scene(scene_path: String, expected: Dictionary) -> void:
 	var veteran := map.get_node_or_null("Entities/NPCs/VeteranGarrick") as Node2D
 	var dragonite := map.get_node_or_null("Entities/Pokemon/Dragonite") as Node2D
 	if veteran != null and dragonite != null:
-		_check(veteran.position == Vector2(1792, 1664), "Veteran Garrick fills Cerulean's southeast corner")
+		_check(veteran.position == Vector2(1648, 1680), "Veteran Garrick fills Cerulean's southeast corner")
 		_check(
 			str(veteran.get("npc_definition_id")) == "trainer_class_veteran",
 			"Veteran Garrick uses the veteran trainer presentation"

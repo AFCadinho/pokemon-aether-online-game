@@ -87,7 +87,7 @@ func _init() -> void:
 	_check(placeholder_script.contains("func _build_water_connection"), "Placeholder maps can mark a Surf connection")
 	_check(placeholder_script.contains("second_water_opening_from"), "Placeholder maps support two Surf connections")
 	_check(player_script.contains("sync_activity_state_for_current_tile") and player_script.contains("_start_surf_activity(false)"), "A water arrival restores Surf automatically")
-	_check(route_24_source.contains('[node name="Water" type="TileMapLayer" parent="Tiles"]'), "Route 24 exposes a semantic Water layer")
+	_check(route_24_source.contains('[node name="Water" type="TileMapLayer" parent="Tiles"'), "Route 24 exposes a semantic Water layer")
 	_check(route_24_source.contains('route_24/route_24.visual.tscn'), "Route 24 uses its imported Tiled visual")
 	_check(route_24_source.contains('map_size = Vector2i(45, 60)'), "Route 24 bounds match its imported visual")
 	_check(route_24_source.contains('water_connection_side = "bottom"'), "Route 24 marks its water approach")
@@ -106,8 +106,8 @@ func _init() -> void:
 	for suffix: String in ["Path", "Bridge", "WaterLeft", "WaterRight"]:
 		_check(city_source.contains('[node name="FromRoute24%s" type="Marker2D" parent="Spawns"' % suffix), "Cerulean City has the Route 24 %s spawn" % suffix.to_lower())
 		_check(city_source.contains('[node name="ToRoute24%s" type="Area2D" parent="Exits"' % suffix), "Cerulean City has the Route 24 %s exit" % suffix.to_lower())
-		_check(route_24_source.contains('[node name="FromCerulean%s" type="Marker2D" parent="Spawns"]' % suffix), "Route 24 has the %s arrival" % suffix.to_lower())
-		_check(route_24_source.contains('[node name="ToCerulean%s" type="Area2D" parent="Exits"]' % suffix), "Route 24 has the %s return exit" % suffix.to_lower())
+		_check(route_24_source.contains('[node name="FromCerulean%s" type="Marker2D" parent="Spawns"' % suffix), "Route 24 has the %s arrival" % suffix.to_lower())
+		_check(route_24_source.contains('[node name="ToCerulean%s" type="Area2D" parent="Exits"' % suffix), "Route 24 has the %s return exit" % suffix.to_lower())
 
 	for connection_name: String in CONNECTIONS:
 		var connection: Dictionary = CONNECTIONS[connection_name]
@@ -127,7 +127,7 @@ func _init() -> void:
 		_check(scene_source.contains(expected_visual), "%s uses its expected visual" % connection_name)
 		_check(scene_source.contains('map_id = "%s"' % map_id), "%s exposes map metadata" % connection_name)
 		_check(scene_source.contains('connection_side = "%s"' % connection_side), "%s opens the correct map edge" % connection_name)
-		_check(scene_source.contains('[node name="%s" type="Marker2D" parent="Spawns"]' % arrival_name), "%s has a Cerulean arrival" % connection_name)
+		_check(scene_source.contains('[node name="%s" type="Marker2D" parent="Spawns"' % arrival_name), "%s has a Cerulean arrival" % connection_name)
 		_check(scene_source.contains('target_spawn_name = "%s"' % city_spawn), "%s returns to its Cerulean spawn" % connection_name)
 		_check(scene_source.contains('transition_id = "%s"' % return_transition), "%s has a stable return transition" % connection_name)
 		_check(scene_source.contains('[connection signal="body_entered" from="Exits/%s"' % return_exit_name), "%s listens for its return exit" % connection_name)

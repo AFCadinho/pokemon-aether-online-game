@@ -55,7 +55,7 @@ func _init() -> void:
 		"action bar exposes a clickable rod selector"
 	)
 	_check(
-		settings_manager_source.contains('CONFIGURABLE_INPUT_ACTIONS: Array[String] = ["fish", "pickpocket"]')
+		settings_manager_source.contains('CONFIGURABLE_INPUT_ACTIONS: Array[String] = ["fish", "mount", "pickpocket"]')
 		and settings_manager_source.contains('"input_bindings": input_bindings')
 		and settings_manager_source.contains("InputMap.action_erase_events(action)")
 		and settings_manager_source.contains("func get_input_binding_label(action: String)"),
