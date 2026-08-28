@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3]
 
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/open_field/open_field.visual.tscn" id="1_visual"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_25/route_25.visual.tscn" id="1_visual"]
 [ext_resource type="Script" path="res://scripts/world/kanto/open_field_placeholder_map.gd" id="2_map"]
 [ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_hint"]
@@ -34,8 +34,9 @@ second_opening_from = 8
 second_opening_to = 13
 third_opening_from = 15
 third_opening_to = 16
+map_size = Vector2i(80, 50)
 
-[node name="OpenFieldVisual" parent="." instance=ExtResource("1_visual")]
+[node name="Route25Visual" parent="." instance=ExtResource("1_visual")]
 
 [node name="Spawns" type="Node2D" parent="."]
 
