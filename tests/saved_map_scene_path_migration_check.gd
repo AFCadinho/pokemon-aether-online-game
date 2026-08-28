@@ -23,6 +23,10 @@ func _init() -> void:
 		"World setup resolves legacy paths before loading a saved map"
 	)
 	_check(
+		world_source.contains("var target_scene_path := _resolve_saved_map_scene_path("),
+		"Authorized teleports resolve legacy paths before validating and loading a map"
+	)
+	_check(
 		world_source.contains("return SavedMapScenePathResolver.resolve(scene_path)"),
 		"World setup delegates saved paths to the migration resolver"
 	)
