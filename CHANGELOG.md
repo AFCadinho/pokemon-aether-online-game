@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+**Added**
+
+- Route 25 now has its nine classic Trainers on the way to Bill's house.
+
 **Changed**
 
 - Alpha Tools now include the same protected Reset / New Game action as Developer Tools.

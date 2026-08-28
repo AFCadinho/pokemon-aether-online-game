@@ -6,6 +6,12 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="6_door_hint"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_pr1c4"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="7_trainer"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/hiker_frames.tres" id="8_hiker"]
+[ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="9_youngster"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/picnicker_frames.tres" id="10_picnicker"]
+[ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="11_camper"]
+[ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="12_lass"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_upper_exit"]
 size = Vector2(32, 128)
@@ -260,6 +266,96 @@ z_as_relative = false
 z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=2105577003]
+
+[node name="HikerFranklin" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(336, 528)
+trainer_id = "kanto_route_25_hiker_franklin"
+sight_range_tiles = 4
+npc_id = "kanto_route_25_hiker_franklin"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Franklin"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("8_hiker")
+
+[node name="YoungsterJoey" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(560, 368)
+trainer_id = "kanto_route_25_youngster_joey"
+sight_range_tiles = 2
+npc_id = "kanto_route_25_youngster_joey"
+npc_definition_id = "trainer_class_youngster"
+display_name = "Youngster Joey"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("9_youngster")
+
+[node name="HikerWayne" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(496, 720)
+trainer_id = "kanto_route_25_hiker_wayne"
+sight_range_tiles = 2
+npc_id = "kanto_route_25_hiker_wayne"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Wayne"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("8_hiker")
+
+[node name="YoungsterDan" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(624, 656)
+trainer_id = "kanto_route_25_youngster_dan"
+sight_range_tiles = 2
+npc_id = "kanto_route_25_youngster_dan"
+npc_definition_id = "trainer_class_youngster"
+display_name = "Youngster Dan"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("9_youngster")
+
+[node name="PicnickerKelsey" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(976, 592)
+trainer_id = "kanto_route_25_picnicker_kelsey"
+sight_range_tiles = 2
+npc_id = "kanto_route_25_picnicker_kelsey"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Picnicker Kelsey"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("10_picnicker")
+
+[node name="HikerNob" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(1104, 752)
+trainer_id = "kanto_route_25_hiker_nob"
+sight_range_tiles = 3
+npc_id = "kanto_route_25_hiker_nob"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Nob"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("8_hiker")
+
+[node name="CamperFlint" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(1264, 464)
+trainer_id = "kanto_route_25_camper_flint"
+sight_range_tiles = 3
+npc_id = "kanto_route_25_camper_flint"
+npc_definition_id = "trainer_class_camper"
+display_name = "Camper Flint"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("11_camper")
+
+[node name="YoungsterChad" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(1808, 624)
+trainer_id = "kanto_route_25_youngster_chad"
+sight_range_tiles = 2
+npc_id = "kanto_route_25_youngster_chad"
+npc_definition_id = "trainer_class_youngster"
+display_name = "Youngster Chad"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("9_youngster")
+
+[node name="LassHaley" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(1776, 528)
+trainer_id = "kanto_route_25_lass_haley"
+sight_range_tiles = 3
+npc_id = "kanto_route_25_lass_haley"
+npc_definition_id = "trainer_class_lass"
+display_name = "Lass Haley"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("12_lass")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=958131778]
 
