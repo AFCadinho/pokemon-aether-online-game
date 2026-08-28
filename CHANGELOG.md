@@ -1,27 +1,36 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+
+- Cerulean City, Route 24, and Cerulean Gym now have complete new layouts with more places and Pokémon to discover.
+- Routes 4 and 24, Cerulean City, and Cerulean Gym now feel livelier with more roaming Pokémon and a practice battle near the Pokémon Center.
+- Gary now challenges Trainers before they can cross Nugget Bridge. Afterward, the story continues toward Bill's house on Route 25.
+- Swimmer Luis, Picnicker Diana, and Swimmer Briana can now be battled in Cerulean Gym.
+- A Bike Voucher can now be exchanged for Cyclizar at the Cerulean Bike Shop. Cyclizar can be ridden by using the configurable Mount key.
+- Cerulean City now has more daily Thieving targets, including Veteran Garrick. Pickpocketing Officer Jenny leads to an immediate arrest.
+- Aethernet travel now shows a purple teleport effect when Trainers depart and arrive.
+
+**Changed**
+
+- Land mounts now move faster. Follower Pokémon temporarily return to their Poké Ball while you are riding.
+- Flash, Cut, Strength, and Surf now require both the matching HM and the correct Kanto Gym Badge.
+- Thieving arrests now include an Officer Jenny encounter and a short explanation of the sentence.
+- Simplified Chinese now uses the official names for Kanto Gym Badges and HM moves.
+
+**Fixed**
+
+- Swimmer Trainers in Cerulean Gym no longer walk onto land when starting a battle.
+- Your active land mount is now restored after logging out and back in.
+- Cyclizar's size and rider position now display correctly.
+- Surf no longer ends unexpectedly beside the Route 24 bridge in Cerulean City.
+- Pokémon on Cerulean City's mountain plateaus now remain visible and patrol correctly.
+
 ## 0.3.64 - 2026-08-26
 
 **Added**
 
-- Ambient Pokemon on Routes 4 and 24 and inside Cerulean Gym now move along short habitat-safe patrols.
-- Later-generation Flying, Rock, Ground, and Steel Pokemon now inhabit the isolated mountain ledges along Routes 4 and 24.
-- Route 4 and Route 24 now feature ambient Pokemon drawn from their local wild encounters and placed in matching grassland and water habitats.
-- Swimmer Luis, Picnicker Diana, and Swimmer Briana now challenge Trainers inside Cerulean Gym.
-- Horsea, Shellder, and Goldeen now join Staryu in Cerulean Gym's pools.
-- Cerulean Gym now uses its complete imported Tiled pool and bridge visual, with the entrance and Gym Guide aligned to the new foyer.
-- The Cerulean Bike Shop now exchanges a lifetime Bike Voucher for Cyclizar, a selectable land mount that can be toggled with the configurable Mount key.
-- Route 24 now uses its complete imported Tiled visual, with the Cerulean City path, bridge, and Surf arrivals aligned to the new map edge.
-- Cerulean City's quiet southeast corner now hosts Veteran Garrick and his Dragonite, with Garrick available as a high-level daily Thieving target.
-- Cerulean City now has additional daily Thieving targets around its bridge, canals, and practice platform.
-- Cerulean City now has daily Thieving targets, and the especially reckless can pickpocket Officer Jenny for a guaranteed arrest and Wanted reset.
-- Gary now guards the Cerulean City entrance to Nugget Bridge for a mandatory rival battle, then disappears after the defeated map is reloaded.
-- A Cerulean Gym attendant now blocks the closed Gym and quietly directs Trainers through Route 24 and Nugget Bridge toward Bill's house on Route 25.
-- Rhyhorn now joins the Rock-type Pokemon on Cerulean City's southern mountain plateau.
-- Cerulean City's west and south mountain plateaus now have dedicated Staff Teleporter spawn points.
-- Cerulean City's inaccessible mountain plateaus now feature ambient Rock-type Pokemon from multiple generations.
-- Cerulean City is livelier with moving water Pokemon including Gyarados, Officer Jenny and Growlithe, and a friendly practice battle on the Pokemon Center plaza.
-- Cerulean City now connects to Cerulean Cave and Routes 5, 9, and 24 through new open-field placeholder maps, including three Route 9 approaches and separate Route 24 path and Surf crossings.
 - The Guild Bank now has a comparison page showing what every Guild rank can do.
 - Guild leaders can create a recruitment checklist that applicants see on the Guild profile and before applying.
 - Added Guild Resources, where members can share consumable items. Guild leaders can manage access for individual members.
@@ -30,18 +39,10 @@
 - You can now search the Guild member list and invite Trainers from a separate window.
 - Guild leaders can now adjust Guild Bank permissions for individual members without changing the defaults for their rank.
 - Giga Impact, Psyshock, Explosion, and Water Shuriken now have their own battle animations and sound effects.
-- Aethernet travel now surrounds departing and arriving Trainers with a purple teleport animation. Nearby Trainers see the effect without hearing its sound.
 - Added full Simplified Chinese language support throughout the game and launcher.
 
 **Changed**
 
-- Land mounts now travel even faster and temporarily recall the player's follower Pokémon until the rider dismounts.
-- Cyclizar's source sprite now uses the same 64-pixel mount-frame scale as Lapras instead of undersized 32-pixel frames.
-- Thieving arrests now play an Officer Jenny confrontation before the jail transfer and a short sentence explanation after arrival.
-- Cerulean City's ambient mountain Pokemon now patrol their plateaus instead of standing still.
-- HM field moves now require their corresponding HM regardless of whether a Pokémon or Charm supplies the move; weather moves remain unaffected.
-- Overworld use of Flash, Cut, Strength, and Surf now requires the matching Kanto Gym Badge, following the original Kanto story progression.
-- Simplified Chinese Pokémon terminology now follows a source-backed glossary enforced during project checks and desktop releases, including the official Kanto Badge and HM move names.
 - The Pokémon Vault, Item Storage, and Guild Resources are now easier to browse, donate to, borrow from, and withdraw from. The full Pokémon Vault uses a familiar PC-style grid and lets you inspect each Pokémon.
 - Item Storage filters now distinguish items you can use from items whose copies are all unavailable.
 - Guild member search and Trainer invitations now have separate, clearly named controls.
@@ -63,11 +64,6 @@
 
 **Fixed**
 
-- Swimmer Trainers placed in water no longer walk onto land when they spot a player.
-- Players who log out while riding a land mount now return on that mount when they log back in.
-- Cyclizar riders now sit in the intended position, with their legs correctly hidden behind the mount in side view.
-- Cerulean City's ambient Rock-type Pokemon now render visibly above the mountain foreground.
-- Cerulean City no longer ends Surf beside the Route 24 bridge by erasing the hand-painted Water mask during map setup.
 - Guild Item Storage now shows the total number of stored items separately from its stack capacity.
 - Pokémon in battle now show the correct blue male or pink female gender icon.
 - Forum announcements now appear reliably in launcher and login news.
@@ -84,7 +80,6 @@
 
 **Changed**
 
-- Cerulean City now uses its complete new city layout, with its Route 4 entrance aligned to the imported map.
 - Route 4 now uses its complete new outdoor layout, with its Mt. Moon and Cerulean City entrances in the correct places.
 - Chat settings now manage community language chats and disclose that moderation may be limited; the main chat tabs keep a fixed order.
 - All chat now includes messages from the community language chats a player has enabled.
