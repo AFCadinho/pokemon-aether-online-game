@@ -18,21 +18,11 @@ on:
         required: false
         type: boolean
         default: false
-      announce_discord:
-        description: Post a Discord release announcement after a successful R2 upload.
-        required: false
-        type: boolean
-        default: false
       cleanup_r2:
         description: Remove obsolete immutable game and asset objects after publication.
         required: false
         type: boolean
         default: true
-      release_notes:
-        description: Optional release notes for the Discord announcement.
-        required: false
-        type: string
-        default: ""
 
 concurrency:
   group: deploy-desktop-r2
@@ -628,24 +618,3 @@ jobs:
             --minimum-age-hours "${R2_RELEASE_MINIMUM_AGE_HOURS}" \
             --max-delete 200 \
             --apply
-
-      - name: Post release announcement to Discord
-        if: steps.upload_r2.outputs.published == 'true' && inputs.announce_discord
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          RELEASE_NOTES: ${{ inputs.release_notes }}
-        run: |
-          if [ -z "${DISCORD_WEBHOOK_URL}" ]; then
-            echo "Skipping Discord announcement because DISCORD_WEBHOOK_URL is not configured."
-            exit 0
-          fi
-
-          python3 tools/build_discord_release_payload.py \
-            --version "${LAUNCHER_RELEASE_VERSION}" \
-            --release-notes "${RELEASE_NOTES}" \
-            > discord_payload.json
-
-          curl -sS \
-            -H "Content-Type: application/json" \
-            -d @discord_payload.json \
-            "${DISCORD_WEBHOOK_URL}"
