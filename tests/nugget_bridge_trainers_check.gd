@@ -22,19 +22,19 @@ const ROUTE_TRAINERS := [
 	{
 		"node": "NuggetBridge03Timmy",
 		"id": "kanto_route_24_nugget_bridge_03_timmy",
-		"position": Vector2(784, 1808),
+		"position": Vector2(1072, 1808),
 		"definition": "trainer_class_youngster",
 	},
 	{
 		"node": "NuggetBridge04Reli",
 		"id": "kanto_route_24_nugget_bridge_04_reli",
-		"position": Vector2(784, 1424),
+		"position": Vector2(1072, 1424),
 		"definition": "trainer_class_lass",
 	},
 	{
 		"node": "NuggetBridge05Ethan",
 		"id": "kanto_route_24_nugget_bridge_05_ethan",
-		"position": Vector2(784, 1040),
+		"position": Vector2(1072, 1040),
 		"definition": "trainer_class_camper",
 	},
 ]
@@ -66,7 +66,7 @@ func _run() -> void:
 		"Nugget Bridge challengers guard the complete bridge width"
 	)
 	var recruiter := route_24.get_node("Entities/NPCs/NuggetBridgeRocketRecruiter")
-	_check(recruiter.position == Vector2(784, 752), "Recruiter keeps the reviewed post-bridge tile")
+	_check(recruiter.position == Vector2(1072, 752), "Recruiter keeps the reviewed post-bridge tile")
 	_check(recruiter.sight_range_tiles == 0, "Disguised recruiter waits for manual interaction")
 	_check(not recruiter.rematch_marker.visible, "Disguised recruiter shows no trainer challenge marker")
 	_check(recruiter.npc_definition_id == "trainer_class_camper", "Recruiter begins in an ordinary disguise")
