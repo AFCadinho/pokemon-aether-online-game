@@ -1,6 +1,7 @@
 extends SceneTree
 
 const RockSmashLevelPaletteScript := preload("res://scripts/world/interactables/rock_smash_level_palette.gd")
+const MapDepthSortingScript := preload("res://scripts/world/map_depth_sorting.gd")
 const CITY_SCENE := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 const EXPECTED_ROCKS := {
 	"EastRockNorth": ["kanto_cerulean_city_west_site_rock_north", Vector2(2192, 1712), 20],
@@ -73,9 +74,13 @@ func _run() -> void:
 					"%s uses the level %d rock color" % [rock_name, required_level]
 				)
 				_check(int(rock.get("rock_visual_style")) == 2, "%s uses the route rock visual" % rock_name)
-				_check(rock.z_index == 2054 and not rock.z_as_relative, "%s renders on the plateau" % rock_name)
+				var rock_sort_z := int(city.call("get_actor_sort_z_floor", rock.position))
 				_check(
-					int(city.call("get_actor_sort_z_floor", rock.position)) == 2054,
+					rock.z_index == rock_sort_z and not rock.z_as_relative,
+					"%s shares the plateau's local Y depth" % rock_name
+				)
+				_check(
+					rock_sort_z > 2054,
 					"%s stays inside an editor-draggable mountain depth zone" % rock_name
 				)
 				_check(_is_open_land(rock.position, collision, water), "%s stands on open land" % rock_name)
@@ -90,9 +95,15 @@ func _run() -> void:
 	var garrick := city.get_node_or_null("Entities/NPCs/VeteranGarrick")
 	_check(garrick != null and str(garrick.get("portrait_id")) == "showdown_veteran_gen7", "Veteran Garrick uses the elderly Veteran portrait")
 
-	_check(int(city.call("get_actor_sort_z_floor", Vector2(112, 1520))) == 2054, "West Site raises actor depth")
-	_check(int(city.call("get_actor_sort_z_floor", Vector2(1296, 2096))) == 2054, "South mountain raises actor depth")
-	_check(int(city.call("get_actor_sort_z_floor", Vector2(2192, 1712))) == 2054, "East mountain raises actor depth")
+	_check(int(city.call("get_actor_sort_z_floor", Vector2(112, 1520))) == 2518, "West Site retains local Y depth above its plateau")
+	_check(int(city.call("get_actor_sort_z_floor", Vector2(1296, 2096))) == 2614, "South mountain retains local Y depth above its plateau")
+	_check(int(city.call("get_actor_sort_z_floor", Vector2(2192, 1712))) == 2230, "East mountain retains local Y depth above its plateau")
+	_check(
+		int(city.call("get_structure_top_sort_z_floor", Vector2(2192, 1712)))
+		== int(city.call("get_actor_sort_z_floor", Vector2(2192, 1712))),
+		"East mountain actors and ObjectsTop use the same depth scale"
+	)
+	_check_mountain_object_top_depth(city)
 	_check(_is_open_land(Vector2(1296, 2096), collision, water), "East Site arrival is safe")
 	_check(_is_open_land(Vector2(1680, 1904), collision, water), "Mountain Guide return is safe")
 	_check(
@@ -102,6 +113,56 @@ func _run() -> void:
 	_check(int(city.call("get_actor_sort_z_floor", Vector2(800, 800))) < 0, "Regular city depth remains unchanged")
 	city.free()
 	quit(1 if failed else 0)
+
+
+func _check_mountain_object_top_depth(city: Node) -> void:
+	var objects_top := city.get_node_or_null("CeruleanCityVisual/ObjectsTop") as TileMapLayer
+	_check(objects_top != null, "Cerulean exposes its ObjectsTop visual layer")
+	if objects_top == null:
+		return
+
+	var found_mountain_group := false
+	var tile_size := Vector2(objects_top.tile_set.tile_size)
+	for cell: Vector2i in objects_top.get_used_cells():
+		var cell_bottom_position := objects_top.to_global(
+			objects_top.map_to_local(cell) + Vector2(0.0, tile_size.y * 0.5)
+		)
+		var expected_group_z := MapDepthSortingScript.get_structure_top_group_z_floor(
+			city,
+			objects_top,
+			[cell],
+			-4096,
+			4096
+		)
+		if expected_group_z < 2054:
+			continue
+
+		found_mountain_group = true
+		_check(
+			expected_group_z
+			== int(city.call("get_structure_top_sort_z_floor", cell_bottom_position)),
+			"Mountain ObjectsTop uses the plateau's local Y depth"
+		)
+		var actor_behind_z := int(city.call(
+			"get_actor_sort_z_floor",
+			cell_bottom_position - Vector2(0.0, 1.0)
+		))
+		var actor_in_front_z := int(city.call(
+			"get_actor_sort_z_floor",
+			cell_bottom_position + Vector2(0.0, 1.0)
+		))
+		if actor_behind_z >= 2054 and actor_in_front_z >= 2054:
+			_check(
+				actor_behind_z < expected_group_z,
+				"An actor behind mountain ObjectsTop renders behind it"
+			)
+			_check(
+				actor_in_front_z > expected_group_z,
+				"An actor in front of mountain ObjectsTop renders in front of it"
+			)
+			break
+
+	_check(found_mountain_group, "Cerulean has ObjectsTop groups inside a mountain depth zone")
 
 
 func _is_open_land(position: Vector2, collision: TileMapLayer, water: TileMapLayer) -> bool:
