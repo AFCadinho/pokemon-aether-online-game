@@ -9,6 +9,7 @@ const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.
 const BattleEnvironmentResolverScript := preload("res://scripts/battle/battle_environment_resolver.gd")
 const TallGrassDepthSortingScript := preload("res://scripts/world/tall_grass_depth_sorting.gd")
 const AetherClashJailDepthScript := preload("res://scripts/world/aether_clash_jail_depth.gd")
+const MapDepthSortingScript := preload("res://scripts/world/map_depth_sorting.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
 const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.06
 const POSITION_SAVE_EPSILON := 1.0
@@ -1607,6 +1608,16 @@ func _build_structure_top_visual_depth_groups(map: Node) -> void:
 				AetherClashJailDepthScript.get_objects_top_overlay_z_floor(
 					structure_layer,
 					group
+				)
+			)
+			group_z_index = maxi(
+				group_z_index,
+				MapDepthSortingScript.get_structure_top_group_z_floor(
+					map,
+					structure_layer,
+					group,
+					TREE_LAYER_Z_MIN,
+					TREE_LAYER_Z_MAX
 				)
 			)
 			group_layer.z_index = group_z_index

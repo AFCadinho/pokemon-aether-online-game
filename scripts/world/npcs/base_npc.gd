@@ -1565,7 +1565,8 @@ func _add_system_warning(message: String) -> void:
 
 
 func _update_sort_z() -> void:
-	var npc_feet_y: float = get_feet_position().y
+	var npc_feet_position := get_feet_position()
+	var npc_feet_y: float = npc_feet_position.y
 	var sort_z := floori(npc_feet_y)
 	var sprite_sort_z := 0
 	var player_for_sorting := _get_player_for_sorting()
@@ -1581,6 +1582,12 @@ func _update_sort_z() -> void:
 				sort_z = mini(sort_z, player_sort_z - 1)
 
 	sort_z = maxi(sort_z, minimum_sort_z)
+	var current_map := GameState.current_map
+	if current_map != null and current_map.has_method("get_actor_sort_z_floor"):
+		sort_z = maxi(
+			sort_z,
+			int(current_map.call("get_actor_sort_z_floor", npc_feet_position))
+		)
 	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
 	if sprite != null:
 		sprite.z_index = sprite_sort_z
