@@ -5,6 +5,7 @@
 **Added**
 
 - Staff system announcements now appear both in System chat and as a temporary on-screen notice.
+- Added the male-only IronFanton Outfit Box to the Aether Gift Store, containing Chroma Hair, Chroma Beard and a Shirt.
 - Rescuing Bill now starts the Cerulean Gym challenge, and the attendant keeps the entrance closed until Bill is safe.
 - The S.S. Ticket now has its own pixel-art Bag icon.
 - Developer Tools now include a Help Bill story checkpoint for testing Bill's House directly.
@@ -34,6 +35,7 @@
 
 **Fixed**
 
+- The IronFanton jacket now keeps its undershirt instead of exposing the Trainer's bare torso.
 - Clefairy-form Bill and his computer no longer show Professor Oak's portrait, while human Bill's portrait now appears only after separation.
 - Bill's transformed form is now labeled and positioned as Clefairy, and the Cell Separation System's interaction matches its visible computer tile.
 

@@ -53,6 +53,7 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(_find_label(popup, "Natuurlijke kleuren") != null, "Appearance colors render in Dutch")
 	_check(badge_option != null and badge_option.get_item_text(0) == "Geen", "Trainer Card badge fallback renders in Dutch")
 	_check(overlay.call("_format_appearance_option_name", "body", "Gen4_Base_v1") == "Standaard", "Appearance option renders in Dutch")
+	_check(overlay.call("_format_appearance_option_name", "hair", "IronFanton_Hair") == "IronFanton-haar", "IronFanton hair renders in Dutch")
 	_check(overlay.call("_format_appearance_swatch_name", "Dark Brown") == "Donkerbruin", "Appearance swatch renders in Dutch")
 
 	overlay.set("trainer_card_has_unsaved_appearance_changes", true)
@@ -74,6 +75,7 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(save_button != null and save_button.text == "Salvar", "Appearance save action updates to Portuguese")
 	_check(status_label != null and status_label.text.begins_with("Alterações"), "Appearance status updates to Portuguese")
 	_check(overlay.call("_format_appearance_swatch_name", "Dark Brown") == "Marrom-escuro", "Appearance swatch updates to Portuguese")
+	_check(overlay.call("_format_appearance_option_name", "top", "IronFanton_Shirt") == "Camisa IronFanton", "IronFanton shirt updates to Portuguese")
 
 	if popup != null:
 		var minimum_size := popup.get_combined_minimum_size()
