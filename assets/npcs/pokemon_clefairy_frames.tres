@@ -1,6 +1,6 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://d3ql2vabyc7ep"]
 
-[ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/Pokemon_Clefairy.png" id="1_clefairy"]
+[ext_resource type="Texture2D" uid="uid://bbnumav5w7oer" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/Pokemon_Clefairy.png" id="1_clefairy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_clefairy"]
 atlas = ExtResource("1_clefairy")
