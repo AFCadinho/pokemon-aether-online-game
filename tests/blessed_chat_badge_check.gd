@@ -133,8 +133,8 @@ func _init() -> void:
 	_check(
 		local_overworld_badge_source.contains('"staff":\n\t\t\treturn "Chat Mod"')
 		and remote_overworld_badge_source.contains('"staff":\n\t\t\treturn "Chat Mod"')
-		and not chat_badge_source.contains('"staff":'),
-		"Chat Moderators use the shorter Chat Mod nameplate without changing chat labels"
+		and overlay_source.contains('"staff":\n\t\t\treturn "Chat Mod"'),
+		"Chat Moderators use the shorter Chat Mod label above characters and in chat"
 	)
 
 	quit(1 if failures > 0 else 0)
