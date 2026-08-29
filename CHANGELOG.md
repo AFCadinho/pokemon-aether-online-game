@@ -15,6 +15,7 @@
 
 **Fixed**
 
+- Follower Pokémon now consistently leave one full tile between themselves and their Trainer in every direction.
 - Newly added Game Master emblems no longer prevent the player scene from opening before Godot finishes importing them.
 - Reward cards now remain visible in front of the rest of the game interface.
 - Grass and item Poké Balls in Viridian Forest now appear in the correct visual layer.
