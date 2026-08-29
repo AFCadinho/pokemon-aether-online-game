@@ -29,6 +29,11 @@ func _init() -> void:
 	)
 	_check(overlay.contains('message_type == "system.global_heal_requested"'), "realtime Global Heal broadcasts reach the UI")
 	_check(
+		overlay.contains('_receive_global_heal_request(message, true)')
+			and overlay.contains('func _show_global_heal_activation_notification'),
+		"realtime Global Heal broadcasts show a deduplicated activation card"
+	)
+	_check(
 		overlay.contains('func _apply_global_heal_cooldown_state(state: Dictionary)')
 			and overlay.contains('_apply_global_heal_cooldown_state(message)'),
 		"realtime Global Heal broadcasts synchronize the cooldown UI"
@@ -87,6 +92,11 @@ func _init() -> void:
 		_check(
 			str(catalog.get("ui.buff.global_heal.no_aetherite", "")).strip_edges() != "",
 			"%s explains that Global Heal awards no Aetherite" % locale_path.get_file()
+		)
+		_check(
+			str(catalog.get("ui.reward_card.global_buff_activated", "")).strip_edges() != ""
+				and str(catalog.get("ui.reward_card.global_heal_activated_by", "")).strip_edges() != "",
+			"%s contains localized global buff card labels" % locale_path.get_file()
 		)
 
 	quit(1 if failed else 0)

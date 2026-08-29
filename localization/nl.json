@@ -2897,6 +2897,8 @@
   "ui.world.capture.caught_party": "Je hebt {pokemon} gevangen! Toegevoegd aan je party.",
   "ui.reward_card.level_up": "Level omhoog",
   "ui.reward_card.caught": "Gevangen",
+  "ui.reward_card.global_buff_activated": "Geactiveerd",
+  "ui.reward_card.global_heal_activated_by": "Geactiveerd door {player}",
   "ui.world.reward.badge_earned": "Je hebt de {badge} verdiend!",
   "ui.world.reward.preceding_badge": "de voorgaande Gym Badge",
   "ui.world.reward.badge_required": "Geen Gym Badge toegekend. Behaal eerst {badge}.",

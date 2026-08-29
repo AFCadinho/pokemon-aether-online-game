@@ -39,6 +39,22 @@ func _run() -> void:
 	pokemon_stack.set("auto_expire", false)
 	root.add_child(pokemon_stack)
 	pokemon_stack.call(
+		"show_event",
+		"global-buff:exp:test",
+		"Global EXP Boost",
+		"Activated",
+		null,
+		"1h",
+		"",
+		Color("#d8b767")
+	)
+	var buff_card := pokemon_stack.get_child(0) as PanelContainer
+	_check(_label_text(buff_card, "RewardTitle") == "Global EXP Boost", "generic event cards show a title")
+	_check(_label_text(buff_card, "RewardSubtitle") == "Activated", "generic event cards show a subtitle")
+	_check(_detail_text(buff_card) == "1h", "generic event cards show a duration")
+	pokemon_stack.remove_child(buff_card)
+	buff_card.free()
+	pokemon_stack.call(
 		"show_pokemon_event",
 		"pokemon-level:owned:42",
 		"Sparky",
@@ -107,6 +123,8 @@ func _run() -> void:
 	_check(overlay_source.contains("func add_pokemon_level_reward_notification("), "overlay exposes level-up cards")
 	_check(overlay_source.contains("func add_pokemon_move_reward_notification("), "overlay exposes learned-move cards")
 	_check(overlay_source.contains("func add_caught_pokemon_reward_notification("), "overlay exposes caught-Pokemon cards")
+	_check(overlay_source.contains("func _show_global_boost_activation_notification("), "overlay exposes global boost activation cards")
+	_check(overlay_source.contains("func _show_global_heal_activation_notification("), "overlay exposes Global Heal activation cards")
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	_check(
 		world_source.contains('"add_money_reward_notification", money_awarded'),

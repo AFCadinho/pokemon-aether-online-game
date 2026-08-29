@@ -2894,6 +2894,8 @@
   "ui.world.capture.caught_party": "你抓住了 {pokemon}！添加到您的聚会。",
   "ui.reward_card.level_up": "等级提升",
   "ui.reward_card.caught": "已捕获",
+  "ui.reward_card.global_buff_activated": "已激活",
+  "ui.reward_card.global_heal_activated_by": "由 {player} 激活",
   "ui.world.reward.badge_earned": "您赢得了 {badge}！",
   "ui.world.reward.preceding_badge": "前面的道馆徽章",
   "ui.world.reward.badge_required": "未授予道馆徽章。首先赚取{badge}。",

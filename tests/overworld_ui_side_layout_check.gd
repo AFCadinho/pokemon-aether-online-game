@@ -452,13 +452,17 @@ func _init() -> void:
 	_check(script_source.contains('message_type == "system.global_exp_boost_contribution"'), "global EXP contributions appear as realtime system messages")
 	_check(script_source.contains('message_type == "system.global_ev_boost_contribution"'), "global EV contributions appear as realtime system messages")
 	_check(script_source.contains('message_type == "system.global_rare_encounter_boost_contribution"'), "rare encounter contributions appear as realtime system messages")
-	_check(script_source.contains('_load_global_boost_state.call_deferred("global_exp")'), "global EXP contribution events refresh authoritative boost state")
-	_check(script_source.contains('_load_global_boost_state.call_deferred("global_ev")'), "global EV contribution events refresh authoritative boost state")
-	_check(script_source.contains('_load_global_boost_state.call_deferred("global_rare_encounter")'), "rare encounter contribution events refresh authoritative boost state")
-	_check(script_source.contains('_load_global_boost_state.call_deferred("global_shiny")'), "global Shiny contribution events refresh authoritative boost state")
+	_check(script_source.contains('_load_global_boost_state.call_deferred("global_exp", true)'), "global EXP contribution events refresh authoritative boost state and activation cards")
+	_check(script_source.contains('_load_global_boost_state.call_deferred("global_ev", true)'), "global EV contribution events refresh authoritative boost state and activation cards")
+	_check(script_source.contains('_load_global_boost_state.call_deferred("global_rare_encounter", true)'), "rare encounter contribution events refresh authoritative boost state and activation cards")
+	_check(script_source.contains('_load_global_boost_state.call_deferred("global_shiny", true)'), "global Shiny contribution events refresh authoritative boost state and activation cards")
 	_check(script_source.contains('await _load_global_boost_state(selected_boost_id)'), "stale contribution conflicts recover the authoritative boost state")
 	_check(script_source.contains('if int(response.get("status", 0)) == 409:') and script_source.contains('else:\n\t\t\t_add_chat_message'), "stale boost conflicts refresh without showing a misleading payment error")
-	_check(script_source.contains('buff["activeUntil"] = str(state.get("activeUntil", ""))'), "active global buffs retain their authoritative expiry")
+	_check(
+		script_source.contains('var active_until := str(state.get("activeUntil", "")).strip_edges() if is_active else ""')
+			and script_source.contains('buff["activeUntil"] = active_until'),
+		"active global buffs retain their authoritative expiry"
+	)
 	_check(script_source.contains("_refresh_global_buffs_if_needed(delta)"), "active global buff countdowns refresh while the overlay remains open")
 	_check(not script_source.contains('GameErrorDialogService.show_response(response, "backend.error.transit_unavailable")'), "global EXP contribution errors stay inside the boost flow")
 	_check(script_source.contains("const MINIMUM_GLOBAL_BUFF_CONTRIBUTION := 10_000"), "global buff contributions enforce the 10,000 Pokédollar minimum")
