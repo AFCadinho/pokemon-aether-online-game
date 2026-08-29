@@ -16,6 +16,12 @@ func _init() -> void:
 	_check(source.contains("panel.z_index = UI_BASE_Z_INDEX"), "Closed interfaces return to the base layer")
 	_check(source.contains("panel.move_to_front()"), "Windows on the same layer retain click-to-front ordering")
 	_check(source.contains("const UI_DRAG_Z_INDEX := 1100") and source.contains("const UI_MODAL_Z_INDEX := 2000"), "Drag previews and modal dialogs remain above regular windows")
+	_check(
+		source.contains("const UI_REWARD_NOTIFICATION_Z_INDEX := UI_MODAL_Z_INDEX + 60")
+		and source.contains("reward_notification_stack.z_index = UI_REWARD_NOTIFICATION_Z_INDEX")
+		and source.contains("reward_notification_stack.z_as_relative = false"),
+		"Reward cards render in front of the complete HUD"
+	)
 
 	quit(1 if failures > 0 else 0)
 

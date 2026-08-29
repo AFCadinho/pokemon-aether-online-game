@@ -30,6 +30,7 @@ const UI_WINDOW_Z_INDEX := UI_CHAT_TABS_Z_INDEX + 1
 const UI_BAG_Z_INDEX := UI_WINDOW_Z_INDEX
 const UI_DRAG_Z_INDEX := 1100
 const UI_MODAL_Z_INDEX := 2000
+const UI_REWARD_NOTIFICATION_Z_INDEX := UI_MODAL_Z_INDEX + 60
 const UI_OVERLAY_BASE_LAYER := 1
 const UI_OVERLAY_FOCUSED_LAYER := 20
 const CHAT_MIN_SIZE := Vector2(360, 190)
@@ -41907,7 +41908,8 @@ func _setup_reward_notification_stack() -> void:
 	reward_notification_stack.offset_top = 72.0
 	reward_notification_stack.offset_right = -16.0
 	reward_notification_stack.offset_bottom = 352.0
-	reward_notification_stack.z_index = 80
+	reward_notification_stack.z_index = UI_REWARD_NOTIFICATION_Z_INDEX
+	reward_notification_stack.z_as_relative = false
 	root_control.add_child(reward_notification_stack)
 
 
