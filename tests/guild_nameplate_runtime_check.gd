@@ -2,6 +2,7 @@ extends SceneTree
 
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
+const RoleBadgeTexture := preload("res://scripts/ui/role_badge_texture.gd")
 
 var failed := false
 
@@ -18,17 +19,36 @@ func _init() -> void:
 	)
 	_check(
 		player_scene_source.contains('[node name="RoleBadgeIcon" type="TextureRect" parent="Nameplate"]')
-		and player_scene_source.contains('path="res://assets/ui/gamemaster_emblem.png"')
-		and player_scene_source.contains('texture = ExtResource("2_gm_badge")'),
-		"player nameplate contains the dedicated Game Master pixel emblem"
+		and not player_scene_source.contains('path="res://assets/ui/gamemaster_emblem_readable.png"')
+		and not player_scene_source.contains('path="res://assets/ui/developer_emblem.png"'),
+		"player scene opens without depending on role badge PNG import metadata"
 	)
-	var gm_badge_texture := load("res://assets/ui/gamemaster_emblem.png") as Texture2D
-	var gm_badge_image := gm_badge_texture.get_image() if gm_badge_texture != null else null
+	var role_badge_texture_source := FileAccess.get_file_as_string("res://scripts/ui/role_badge_texture.gd")
+	_check(
+		role_badge_texture_source.contains('"gamemaster": "res://assets/ui/gamemaster_emblem_readable.png"')
+		and role_badge_texture_source.contains('"developer": "res://assets/ui/developer_emblem.png"')
+		and role_badge_texture_source.contains("ResourceLoader.exists")
+		and role_badge_texture_source.contains("Image.load_from_file"),
+		"role emblems support imported textures and fresh-checkout PNG loading"
+	)
+	var gm_badge_image := Image.load_from_file(
+		ProjectSettings.globalize_path("res://assets/ui/gamemaster_emblem_readable.png")
+	)
 	_check(
 		gm_badge_image != null
-		and gm_badge_image.get_size() == Vector2i(20, 20)
+		and gm_badge_image.get_size() == Vector2i(28, 28)
 		and gm_badge_image.detect_alpha() != Image.ALPHA_NONE,
-		"Game Master shield emblem has the intended compact size and transparent pixels"
+		"Game Master shield emblem has readable dimensions and transparent pixels"
+	)
+	var developer_badge_image := Image.load_from_file(
+		ProjectSettings.globalize_path("res://assets/ui/developer_emblem.png")
+	)
+	_check(
+		developer_badge_image != null
+		and developer_badge_image.get_size() == Vector2i(28, 28)
+		and developer_badge_image.detect_alpha() != Image.ALPHA_NONE
+		and RoleBadgeTexture.get_role_badge_texture("developer") != null,
+		"Developer shield emblem has readable dimensions and transparent pixels"
 	)
 	_check(
 		player_scene_source.contains("offset_left = 9.0")
@@ -44,14 +64,19 @@ func _init() -> void:
 	var remote_source := FileAccess.get_file_as_string("res://scripts/world/remote_player_avatar.gd")
 	var npc_source := FileAccess.get_file_as_string("res://scripts/world/npcs/base_npc.gd")
 	_check(
+		player_source.contains("RoleBadgeTexture.get_role_badge_texture(normalized_role_id)")
+		and remote_source.contains("RoleBadgeTexture.get_role_badge_texture(normalized_role_id)"),
+		"local and remote players assign the selected resilient role texture"
+	)
+	_check(
 		_has_adjacent_guild_emblem(player_source)
 		and _has_adjacent_guild_emblem(remote_source),
 		"nameplate places the guild emblem in a separate badge beside the name card"
 	)
 	_check(
-		_uses_game_master_pixel_badge(player_source)
-		and _uses_game_master_pixel_badge(remote_source),
-		"local and remote Game Masters use the pixel badge without replacing guild emblems"
+		_uses_pixel_role_badge(player_source)
+		and _uses_pixel_role_badge(remote_source),
+		"local and remote Game Masters and Developers use pixel badges without replacing guild emblems"
 	)
 	_check(
 		_uses_content_sized_name_card(player_source)
@@ -176,10 +201,10 @@ func _uses_content_sized_name_card(source: String) -> bool:
 	)
 
 
-func _uses_game_master_pixel_badge(source: String) -> bool:
+func _uses_pixel_role_badge(source: String) -> bool:
 	return (
-		source.contains('const GM_ROLE_BADGE_ID := "gamemaster"')
-		and source.contains("role_badge_icon.visible = use_gm_icon")
+		source.contains("RoleBadgeTexture.has_role_badge(normalized_role_id)")
+		and source.contains("role_badge_icon.visible = use_role_icon")
 		and source.contains("if uses_role_icon:")
 		and source.contains("ROLE_BADGE_ICON_SIZE")
 	)

@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://eh1d243t3uvl"]
 
 [ext_resource type="Script" uid="uid://dgvg8ufaw2fbs" path="res://scripts/world/player.gd" id="1_qhqgy"]
-[ext_resource type="Texture2D" path="res://assets/ui/gamemaster_emblem.png" id="2_gm_badge"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_role_badge"]
 bg_color = Color(0.025, 0.18, 0.165, 0.92)
@@ -141,13 +140,12 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_role_badge")
 [node name="RoleBadgeIcon" type="TextureRect" parent="Nameplate"]
 visible = false
 layout_mode = 0
-offset_left = 72.0
-offset_top = 0.0
-offset_right = 92.0
+offset_left = 68.0
+offset_top = -8.0
+offset_right = 96.0
 offset_bottom = 20.0
 mouse_filter = 2
 texture_filter = 1
-texture = ExtResource("2_gm_badge")
 expand_mode = 1
 stretch_mode = 5
 

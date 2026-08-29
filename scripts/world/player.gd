@@ -45,6 +45,7 @@ const LedgeDirectionResolverScript := preload("res://scripts/world/ledge_directi
 const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
+const RoleBadgeTexture := preload("res://scripts/ui/role_badge_texture.gd")
 const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/OLDROD.png")
 const SURF_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/WAVEINCENSE.png")
 const APPEARANCE_PART_SPRITES := {
@@ -68,11 +69,10 @@ const ROLE_BADGE_COLORS := {
 }
 const STAFF_ROLE_CATEGORY := "staff"
 const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
-const GM_ROLE_BADGE_ID := "gamemaster"
 const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
 const ROLE_BADGE_TEXT_HEIGHT := 13.0
-const ROLE_BADGE_ICON_SIZE := Vector2(20.0, 20.0)
+const ROLE_BADGE_ICON_SIZE := Vector2(28.0, 28.0)
 const ROLE_BADGE_DEFAULT_WIDTH := 30.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 const NAMEPLATE_LAYER_GAP := 2.0
@@ -626,15 +626,16 @@ func set_role_badge(role_badge: String, role_color: Color = Color(0.847, 0.718, 
 		return
 
 	role_badge_label.text = role_badge.strip_edges()
-	var use_gm_icon := (
-		role_badge_label.text != ""
-		and role_id.strip_edges().to_lower() == GM_ROLE_BADGE_ID
-	)
+	var normalized_role_id := role_id.strip_edges().to_lower()
+	var use_role_icon := role_badge_label.text != "" and RoleBadgeTexture.has_role_badge(normalized_role_id)
+	if use_role_icon and role_badge_icon != null:
+		role_badge_icon.texture = RoleBadgeTexture.get_role_badge_texture(normalized_role_id)
+	use_role_icon = use_role_icon and role_badge_icon != null and role_badge_icon.texture != null
 	if role_badge_panel != null:
-		role_badge_panel.visible = role_badge_label.text != "" and not use_gm_icon
+		role_badge_panel.visible = role_badge_label.text != "" and not use_role_icon
 		role_badge_panel.add_theme_stylebox_override("panel", _make_role_badge_style(role_id, role_color))
 	if role_badge_icon != null:
-		role_badge_icon.visible = use_gm_icon
+		role_badge_icon.visible = use_role_icon
 	role_badge_label.add_theme_color_override("font_color", role_color)
 	role_badge_label.add_theme_font_size_override("font_size", 8)
 	_sync_nameplate_visibility(nameplate_label != null and nameplate_label.text != "")

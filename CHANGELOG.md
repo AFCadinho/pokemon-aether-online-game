@@ -10,11 +10,12 @@
 **Changed**
 
 - Pokémon level-up reward cards now play a dedicated sound once per reward batch.
-- Game Masters now have a blue-and-gold pixel-art shield above their character; Guild emblems remain visible beside their name.
+- Game Masters and Developers now have readable pixel-art role shields above their character; Guild emblems remain visible beside their name.
 - Viridian Forest now uses its latest visual layout.
 
 **Fixed**
 
+- Newly added Game Master emblems no longer prevent the player scene from opening before Godot finishes importing them.
 - Reward cards now remain visible in front of the rest of the game interface.
 - Grass and item Poké Balls in Viridian Forest now appear in the correct visual layer.
 
