@@ -791,13 +791,6 @@ static func get_tinted_part_frames(
 		tint_color,
 		preserve_luminance and normalized_part_id != BASE_HAIR_ID
 	)
-	if normalized_category == HAIR_CATEGORY and normalized_part_id != BASE_HAIR_ID:
-		tinted_frames = _add_base_hair_underlay(
-			tinted_frames,
-			normalized_gender,
-			normalized_movement_style,
-			tint_color
-		)
 	_tinted_part_frames_cache[cache_key] = tinted_frames
 	return tinted_frames
 
@@ -1247,106 +1240,6 @@ static func _build_tinted_sprite_frames(base_frames: SpriteFrames, tint_color: C
 			sprite_frames.add_frame(animation_name, tinted_texture, frame_duration)
 
 	return sprite_frames
-
-
-static func _add_base_hair_underlay(
-	hairstyle_frames: SpriteFrames,
-	gender: String,
-	movement_style: String,
-	hair_color: Color
-) -> SpriteFrames:
-	if hairstyle_frames == null:
-		return null
-
-	var base_hair_frames := get_part_frames(
-		HAIR_CATEGORY,
-		BASE_HAIR_ID,
-		gender,
-		movement_style
-	)
-	if base_hair_frames == null:
-		return hairstyle_frames
-
-	var tinted_base_hair_frames := _build_tinted_sprite_frames(
-		base_hair_frames,
-		hair_color,
-		false
-	)
-	return _build_layered_sprite_frames(tinted_base_hair_frames, hairstyle_frames)
-
-
-static func _build_layered_sprite_frames(
-	underlay_frames: SpriteFrames,
-	overlay_frames: SpriteFrames
-) -> SpriteFrames:
-	if underlay_frames == null:
-		return overlay_frames
-	if overlay_frames == null:
-		return underlay_frames
-
-	var sprite_frames := SpriteFrames.new()
-	if sprite_frames.has_animation(&"default"):
-		sprite_frames.remove_animation(&"default")
-
-	for animation_name_text: String in overlay_frames.get_animation_names():
-		var animation_name := StringName(animation_name_text)
-		sprite_frames.add_animation(animation_name)
-		sprite_frames.set_animation_speed(
-			animation_name,
-			overlay_frames.get_animation_speed(animation_name)
-		)
-		sprite_frames.set_animation_loop(
-			animation_name,
-			overlay_frames.get_animation_loop(animation_name)
-		)
-
-		var overlay_frame_count := overlay_frames.get_frame_count(animation_name)
-		var underlay_frame_count := (
-			underlay_frames.get_frame_count(animation_name)
-			if underlay_frames.has_animation(animation_name)
-			else 0
-		)
-		for frame_index: int in range(overlay_frame_count):
-			var overlay_texture := overlay_frames.get_frame_texture(animation_name, frame_index)
-			var layered_texture := overlay_texture
-			if frame_index < underlay_frame_count:
-				layered_texture = _make_layered_texture(
-					underlay_frames.get_frame_texture(animation_name, frame_index),
-					overlay_texture
-				)
-			sprite_frames.add_frame(
-				animation_name,
-				layered_texture,
-				overlay_frames.get_frame_duration(animation_name, frame_index)
-			)
-
-	return sprite_frames
-
-
-static func _make_layered_texture(
-	underlay_texture: Texture2D,
-	overlay_texture: Texture2D
-) -> Texture2D:
-	var underlay_image := _get_texture_image(underlay_texture)
-	var overlay_image := _get_texture_image(overlay_texture)
-	if underlay_image == null or overlay_image == null:
-		return overlay_texture
-	if underlay_image.get_size() != overlay_image.get_size():
-		return overlay_texture
-
-	var layered_image := underlay_image.duplicate()
-	if layered_image.get_format() != Image.FORMAT_RGBA8:
-		layered_image.convert(Image.FORMAT_RGBA8)
-	var source_image := overlay_image
-	if source_image.get_format() != Image.FORMAT_RGBA8:
-		source_image = overlay_image.duplicate()
-		source_image.convert(Image.FORMAT_RGBA8)
-	layered_image.blend_rect(
-		source_image,
-		Rect2i(Vector2i.ZERO, source_image.get_size()),
-		Vector2i.ZERO
-	)
-	return ImageTexture.create_from_image(layered_image)
 
 
 static func _build_skin_tinted_sprite_frames(base_frames: SpriteFrames, skin_tone: Color) -> SpriteFrames:
