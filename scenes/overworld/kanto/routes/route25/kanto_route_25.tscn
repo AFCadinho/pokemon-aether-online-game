@@ -528,13 +528,14 @@ tile_map_data = PackedByteArray("AAAvABcAAAAAAAAAAAAwABcAAAAAAAAAAAAxABcAAAAAAAA
 tile_set = SubResource("TileSet_nsp63")
 
 [node name="Stairs" type="Node2D" parent="Tiles" unique_id=21800028]
+visible = false
 
-[node name="StairLeftUp" type="TileMapLayer" parent="Tiles/Stairs" unique_id=760579555]
+[node name="StairUpLeft" type="TileMapLayer" parent="Tiles/Stairs" unique_id=760579555]
 z_index = 4096
 tile_map_data = PackedByteArray("AAAiACQAAAAEAAAAAAAiACMAAAAEAAAAAAAuAB0AAAAEAAAAAAAuAB4AAAAEAAAAAAAuABwAAAAEAAAAAAA=")
 tile_set = SubResource("TileSet_8pbi0")
 
-[node name="StairRightUp" type="TileMapLayer" parent="Tiles/Stairs" unique_id=461498844]
+[node name="StairUpRight" type="TileMapLayer" parent="Tiles/Stairs" unique_id=461498844]
 z_index = 4096
 tile_map_data = PackedByteArray("AAAcACQAAAAEAAAAAAAcACMAAAAEAAAAAAAvACQAAAAEAAAAAAAvACMAAAAEAAAAAAAvACIAAAAEAAAAAAA=")
 tile_set = SubResource("TileSet_8pbi0")
