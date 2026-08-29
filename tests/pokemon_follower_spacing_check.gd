@@ -37,7 +37,7 @@ func _init() -> void:
 func _run() -> void:
 	_check_reset_spacing_in_every_direction()
 	_check_visual_offset_in_every_direction()
-	_check_trail_keeps_adjacent_spacing()
+	_check_trail_keeps_one_open_tile()
 	_check_remote_player_exposes_active_step_target()
 	quit(1 if failed else 0)
 
@@ -59,8 +59,8 @@ func _check_reset_spacing_in_every_direction() -> void:
 	get_root().add_child(follower)
 	follower.call("setup", player)
 	_check(
-		follow_distance_tiles == 1,
-		"follower uses the adjacent trailing tile"
+		follow_distance_tiles == 2,
+		"follower leaves one open trailing tile"
 	)
 
 	for direction: Vector2 in CARDINAL_DIRECTIONS:
@@ -69,7 +69,11 @@ func _check_reset_spacing_in_every_direction() -> void:
 		var expected_position := player.global_position - direction * tile_size * follow_distance_tiles
 		_check(
 			follower.global_position.is_equal_approx(expected_position),
-			"reset keeps adjacent spacing when facing %s" % direction
+			"reset leaves one open tile when facing %s" % direction
+		)
+		_check(
+			(follower.get("position_history") as Array).size() == follow_distance_tiles + 1,
+			"reset seeds every trailing tile when facing %s" % direction
 		)
 
 	follower.free()
@@ -87,8 +91,8 @@ func _check_visual_offset_in_every_direction() -> void:
 	var expected_offsets := {
 		Vector2.UP: Vector2(0.0, -16.0),
 		Vector2.DOWN: Vector2(0.0, -16.0),
-		Vector2.LEFT: Vector2(8.0, -16.0),
-		Vector2.RIGHT: Vector2(-8.0, -16.0),
+		Vector2.LEFT: Vector2(0.0, -16.0),
+		Vector2.RIGHT: Vector2(0.0, -16.0),
 	}
 	for direction: Vector2 in CARDINAL_DIRECTIONS:
 		var offset: Vector2 = follower.call("_get_sprite_visual_offset", direction)
@@ -100,7 +104,7 @@ func _check_visual_offset_in_every_direction() -> void:
 	follower.free()
 
 
-func _check_trail_keeps_adjacent_spacing() -> void:
+func _check_trail_keeps_one_open_tile() -> void:
 	var follower_script := load(FOLLOWER_SCRIPT_PATH) as Script
 	_check(follower_script != null, "follower script loads for trail movement")
 	if follower_script == null:
@@ -131,8 +135,8 @@ func _check_trail_keeps_adjacent_spacing() -> void:
 			"follower starts moving immediately toward %s" % direction
 		)
 		_check(
-			is_equal_approx(follower.global_position.distance_to(player.global_position), tile_size),
-			"walking toward %s preserves idle spacing" % direction
+			is_equal_approx(follower.global_position.distance_to(player.global_position), tile_size * 2.0),
+			"walking toward %s preserves one open tile" % direction
 		)
 
 		follower.free()
