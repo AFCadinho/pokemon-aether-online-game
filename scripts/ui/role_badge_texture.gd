@@ -4,7 +4,7 @@ class_name RoleBadgeTexture
 
 const ROLE_BADGE_PATHS := {
 	"gamemaster": "res://assets/ui/gamemaster_emblem_readable.png",
-	"developer": "res://assets/ui/developer_emblem.png",
+	"developer": "res://assets/ui/developer_emblem_readable.png",
 }
 
 static var _texture_cache: Dictionary = {}
