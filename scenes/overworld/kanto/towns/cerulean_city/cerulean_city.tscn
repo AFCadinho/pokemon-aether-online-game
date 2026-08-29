@@ -765,7 +765,6 @@ mugshot = SubResource("AtlasTexture_gary_mugshot")
 [node name="NuggetBridge01Cale" parent="Entities/NPCs" unique_id=1741835956 instance=ExtResource("21_trainer")]
 position = Vector2(1872, 464)
 script = ExtResource("36_bridge_trainer")
-challenge_width_tiles = 6
 trainer_id = "kanto_route_24_nugget_bridge_01_cale"
 npc_id = "kanto_route_24_nugget_bridge_01_cale"
 npc_definition_id = "trainer_class_bug_catcher"
@@ -776,7 +775,6 @@ npc_sprite_frames = ExtResource("35_bug_catcher")
 [node name="NuggetBridge02Ali" parent="Entities/NPCs" unique_id=1685161149 instance=ExtResource("21_trainer")]
 position = Vector2(1872, 176)
 script = ExtResource("36_bridge_trainer")
-challenge_width_tiles = 6
 trainer_id = "kanto_route_24_nugget_bridge_02_ali"
 npc_id = "kanto_route_24_nugget_bridge_02_ali"
 npc_definition_id = "trainer_class_lass"
