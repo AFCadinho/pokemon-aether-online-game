@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Changed**
+
+- Viridian Forest now uses its latest visual layout.
+
 ## 0.3.68 - 2026-08-29
 
 **Fixed**
