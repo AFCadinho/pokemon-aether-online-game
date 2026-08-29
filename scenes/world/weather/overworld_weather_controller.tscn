@@ -5,7 +5,7 @@
 
 [sub_resource type="Gradient" id="Gradient_rain"]
 offsets = PackedFloat32Array(0, 0.18, 0.82, 1)
-colors = PackedColorArray(0.65, 0.84, 1, 0, 0.72, 0.88, 1, 0.72, 0.58, 0.78, 1, 0.62, 0.5, 0.7, 1, 0)
+colors = PackedColorArray(0.65, 0.84, 1, 0, 0.72, 0.88, 1, 0.56, 0.58, 0.78, 1, 0.48, 0.5, 0.7, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture_rain"]
 gradient = SubResource("Gradient_rain")
@@ -58,7 +58,7 @@ script = ExtResource("1_weather")
 [node name="RainParticles" type="GPUParticles2D" parent="."]
 visible = false
 emitting = false
-amount = 760
+amount = 560
 lifetime = 1.55
 preprocess = 1.55
 local_coords = false
@@ -69,6 +69,8 @@ process_material = SubResource("ParticleMaterial_rain")
 [node name="RainGroundEffects" type="Node2D" parent="."]
 visible = false
 script = ExtResource("2_ground_effects")
+events_per_second = 40.0
+effect_color = Color(0.66, 0.84, 1, 0.68)
 
 [node name="SnowGroundEffects" type="Node2D" parent="."]
 visible = false
