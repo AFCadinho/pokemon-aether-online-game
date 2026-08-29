@@ -133,6 +133,21 @@ func _run() -> void:
 	_check(overlay_source.contains("func add_caught_pokemon_reward_notification("), "overlay exposes caught-Pokemon cards")
 	_check(overlay_source.contains("func _show_global_boost_activation_notification("), "overlay exposes global boost activation cards")
 	_check(overlay_source.contains("func _show_global_heal_activation_notification("), "overlay exposes Global Heal activation cards")
+	var overlay_script := load("res://scripts/ui/ui_overlay.gd") as Script
+	var overlay: Node = overlay_script.new() if overlay_script != null else null
+	_check(overlay != null, "reward icon checks can load the overlay")
+	if overlay != null:
+		_check(
+			overlay.call("_machine_item_icon_path", "tm-thief", "", "")
+				== "res://assets/items/icons/machine_DARK.png",
+			"TM reward icons infer their move type without waiting for Bag metadata"
+		)
+		_check(
+			overlay.call("_machine_item_icon_path", "hm-surf", "", "")
+				== "res://assets/items/icons/machine_tr_WATER.png",
+			"HM reward icons infer their move type without waiting for Bag metadata"
+		)
+		overlay.free()
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	_check(
 		world_source.contains('"add_money_reward_notification", money_awarded'),

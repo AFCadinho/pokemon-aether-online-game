@@ -21534,14 +21534,27 @@ func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_ty
 func _machine_item_icon_path(item_id: String, machine_kind: String, machine_move_type: String) -> String:
 	var resolved_kind := machine_kind.strip_edges().to_lower()
 	var resolved_move_type := machine_move_type.strip_edges().to_upper()
+	var normalized_item_id := _normalize_item_id(item_id)
 	if resolved_kind == "" or resolved_move_type == "":
-		var normalized_item_id := _normalize_item_id(item_id)
 		for inventory_item: Dictionary in bag_inventory_items:
 			if _normalize_item_id(str(inventory_item.get("id", ""))) != normalized_item_id:
 				continue
 			resolved_kind = str(inventory_item.get("machineKind", "")).strip_edges().to_lower()
 			resolved_move_type = str(inventory_item.get("machineMoveType", "")).strip_edges().to_upper()
 			break
+	if resolved_kind == "" or resolved_move_type == "":
+		var inferred_kind := ""
+		if normalized_item_id.begins_with("tm-"):
+			inferred_kind = "tm"
+		elif normalized_item_id.begins_with("hm-"):
+			inferred_kind = "hm"
+		if inferred_kind != "":
+			if resolved_kind == "":
+				resolved_kind = inferred_kind
+			if resolved_move_type == "":
+				resolved_move_type = _get_summary_move_type(
+					normalized_item_id.trim_prefix("%s-" % inferred_kind)
+				).strip_edges().to_upper()
 	if resolved_kind not in ["tm", "hm"] or resolved_move_type == "":
 		return ""
 	var icon_prefix := "machine_tr_" if resolved_kind == "hm" else "machine_"
