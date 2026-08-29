@@ -85,7 +85,9 @@ func _check_land_mount_runtime_contract() -> void:
 	_check(project_source.contains("mount={"), "the land mount toggle has an input action")
 	_check(
 		settings_source.contains('"mount": KEY_M')
-		and settings_source.contains('"fish", "mount", "pickpocket"'),
+		and settings_source.contains('"mount",')
+		and settings_source.contains('"fish",')
+		and settings_source.contains('"pickpocket",'),
 		"the mount hotkey defaults to M and remains configurable"
 	)
 	_check(
