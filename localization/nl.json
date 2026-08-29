@@ -632,6 +632,7 @@
   "ui.session.logout_cancelled": "De geplande uitlogactie is geannuleerd.",
   "ui.session.signed_out": "Je sessie is beëindigd. Log opnieuw in.",
   "ui.session.warning.title": "BELANGRIJKE MELDING",
+  "ui.system_announcement.title": "SYSTEEMBERICHT",
   "ui.session.warning.default_message": "Je gamesessie wordt binnenkort beëindigd.",
   "ui.session.warning.timer": "UITLOGGEN OVER {time}",
   "ui.login.error.sign_in": "Inloggen is mislukt. Probeer het opnieuw.",

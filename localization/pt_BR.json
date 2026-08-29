@@ -632,6 +632,7 @@
   "ui.session.logout_cancelled": "A desconexão programada foi cancelada.",
   "ui.session.signed_out": "Sua sessão terminou. Entre novamente.",
   "ui.session.warning.title": "AVISO IMPORTANTE",
+  "ui.system_announcement.title": "MENSAGEM DO SISTEMA",
   "ui.session.warning.default_message": "Sua sessão de jogo será encerrada em breve.",
   "ui.session.warning.timer": "SAINDO EM {time}",
   "ui.login.error.sign_in": "Não foi possível entrar. Tente novamente.",

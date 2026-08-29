@@ -4,6 +4,7 @@
 
 **Added**
 
+- Staff system announcements now appear both in System chat and as a temporary on-screen notice.
 - Added the male-only IronFanton Outfit Box to the Aether Gift Store, containing Chroma Hair, Chroma Beard and a Shirt.
 - Rescuing Bill now starts the Cerulean Gym challenge, and the attendant keeps the entrance closed until Bill is safe.
 - The S.S. Ticket now has its own pixel-art Bag icon.
