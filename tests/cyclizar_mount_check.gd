@@ -126,6 +126,28 @@ func _check_bike_shop_owner_contract() -> void:
 		and owner_source.contains("turn_in_npc_quest_item"),
 		"the owner exchanges the Bike Voucher for the Cyclizar entitlement"
 	)
+	_check(
+		owner_source.contains("MENTOR_TOPIC_MENU")
+		and owner_source.contains("await _show_mount_guide()")
+		and owner_source.contains("func _show_mount_guide()")
+		and owner_source.contains('"id": "selecting"')
+		and owner_source.contains('"id": "riding"')
+		and owner_source.contains('"id": "purpose"'),
+		"the owner becomes a reusable mount guide after Cyclizar is owned"
+	)
+	for locale_path: String in [
+		"res://localization/en.json",
+		"res://localization/nl.json",
+		"res://localization/pt_BR.json",
+		"res://localization/zh_CN.json",
+	]:
+		var locale_source := FileAccess.get_file_as_string(locale_path)
+		_check(
+			locale_source.contains('"mentor.bike_seller.help.topic.selecting"')
+			and locale_source.contains('"mentor.bike_seller.help.topic.riding"')
+			and locale_source.contains('"mentor.bike_seller.help.topic.purpose"'),
+			"%s contains the Bike Seller mount guide" % locale_path
+		)
 
 
 func _check(condition: bool, message: String) -> void:

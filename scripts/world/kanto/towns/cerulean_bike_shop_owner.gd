@@ -3,6 +3,8 @@ extends DialogueNPC
 
 class_name CeruleanBikeShopOwner
 
+const MENTOR_TOPIC_MENU := preload("res://scripts/ui/mentor_topic_menu.gd")
+
 @export var voucher_item_id := "bike-voucher"
 @export var voucher_turn_in_id := "kanto_cerulean_city_bike_voucher"
 @export var mount_item_id := "cyclizar-mount"
@@ -48,7 +50,7 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 
 	if bool(inventory_service.call("has_item", mount_item_id)):
-		await show_dialogue(await _resolve_lines(mount_owned_dialogue_id, OWNED_FALLBACK_LINES))
+		await _show_mount_guide()
 		return
 	if not bool(inventory_service.call("has_item", voucher_item_id)):
 		await show_dialogue()
@@ -86,7 +88,67 @@ func interact_with_player(_player: Node2D) -> void:
 		)
 		SfxManager.play("item_received")
 		return
+	await _show_mount_guide()
+
+
+func _show_mount_guide() -> void:
 	await show_dialogue(await _resolve_lines(mount_owned_dialogue_id, OWNED_FALLBACK_LINES))
+	while true:
+		var topic_id := await _choose_mount_help_topic()
+		if topic_id.is_empty():
+			return
+		await show_dialogue(_mount_help_lines(topic_id), display_name)
+
+
+func _choose_mount_help_topic() -> String:
+	var menu := MENTOR_TOPIC_MENU.new()
+	add_child(menu)
+	var topic_id: String = await menu.choose_topic(
+		LocalizationManager.text("mentor.bike_seller.help.title"),
+		LocalizationManager.text("mentor.bike_seller.help.prompt"),
+		[
+			{
+				"id": "selecting",
+				"label": LocalizationManager.text("mentor.bike_seller.help.topic.selecting"),
+			},
+			{
+				"id": "riding",
+				"label": LocalizationManager.text("mentor.bike_seller.help.topic.riding"),
+			},
+			{
+				"id": "purpose",
+				"label": LocalizationManager.text("mentor.bike_seller.help.topic.purpose"),
+			},
+		],
+		LocalizationManager.text("ui.mentor_help.eyebrow"),
+		LocalizationManager.text("common.close")
+	)
+	menu.queue_free()
+	return topic_id
+
+
+func _mount_help_lines(topic_id: String) -> Array[String]:
+	var keys: Array[String] = []
+	match topic_id:
+		"selecting":
+			keys = [
+				"mentor.bike_seller.help.selecting.1",
+				"mentor.bike_seller.help.selecting.2",
+			]
+		"riding":
+			keys = [
+				"mentor.bike_seller.help.riding.1",
+				"mentor.bike_seller.help.riding.2",
+			]
+		"purpose":
+			keys = [
+				"mentor.bike_seller.help.purpose.1",
+				"mentor.bike_seller.help.purpose.2",
+			]
+	var lines: Array[String] = []
+	for key: String in keys:
+		lines.append(LocalizationManager.text(key))
+	return lines
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:
