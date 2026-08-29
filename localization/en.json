@@ -632,6 +632,7 @@
   "ui.session.logout_cancelled": "The planned logout was cancelled.",
   "ui.session.signed_out": "Your session ended. Please sign in again.",
   "ui.session.warning.title": "IMPORTANT NOTICE",
+  "ui.system_announcement.title": "SYSTEM MESSAGE",
   "ui.session.warning.default_message": "Your game session will end shortly.",
   "ui.session.warning.timer": "LOGOUT IN {time}",
   "ui.login.error.sign_in": "Could not sign in. Please try again.",

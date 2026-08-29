@@ -4,6 +4,7 @@ const STAFF_PERMISSION_POLICY := preload("res://scripts/ui/staff_permission_poli
 const LOAN_RETURNS_DIALOG_SCRIPT := preload("res://scripts/ui/loan_returns_dialog.gd")
 const BORROWED_POKEMON_DIALOG_SCRIPT := preload("res://scripts/ui/borrowed_pokemon_dialog.gd")
 const LOAN_SUMMARY_TIME_SCRIPT := preload("res://scripts/ui/loan_summary_time.gd")
+const SYSTEM_NOTICE_BANNER_SCRIPT := preload("res://scripts/ui/system_notice_banner.gd")
 const MAX_PARTY_SIZE := 6
 const PARTY_SLOT_HEIGHT := 68.0
 const PARTY_SLOT_GAP := 5.0
@@ -807,6 +808,7 @@ var pvp_match_countdown_status_label: Label
 var session_logout_banner: Control
 var session_logout_banner_message_label: Label
 var session_logout_banner_timer_label: Label
+var system_notice_banner: Control
 var pvp_bans_status_label: Label
 var pvp_bans_metadata_list: VBoxContainer
 var pvp_bans_list: VBoxContainer
@@ -1514,6 +1516,7 @@ func _ready() -> void:
 	_setup_pvp_queue_compact_panel()
 	_setup_pvp_match_countdown_overlay()
 	_setup_session_logout_banner()
+	_setup_system_notice_banner()
 	_setup_ui_input_mouse_blocker()
 	_setup_pvp_mode_menu()
 	_setup_dev_add_item_tools()
@@ -1735,6 +1738,8 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_pc_localized_ui()
 	_refresh_pvp_localized_ui()
 	_refresh_session_logout_banner()
+	if system_notice_banner != null:
+		system_notice_banner.call("refresh_localized_ui")
 	_refresh_trainer_card_localized_ui()
 	_refresh_chat_localized_ui()
 	_refresh_buffs_localized_ui()
@@ -10193,6 +10198,7 @@ func _process(delta: float) -> void:
 	_refresh_pvp_ranked_queue_availability(delta)
 	_refresh_pvp_match_countdown(delta)
 	_refresh_session_logout_countdown()
+	_refresh_system_notice_banner_position()
 	_refresh_player_status_card_if_needed()
 	_refresh_trainer_card_playtime_if_needed()
 	_refresh_location_label_if_needed()
@@ -12391,6 +12397,23 @@ func _setup_session_logout_banner() -> void:
 	session_logout_banner_timer_label.add_theme_font_size_override("font_size", 20)
 	session_logout_banner_timer_label.add_theme_color_override("font_color", UI_DANGER)
 	row.add_child(session_logout_banner_timer_label)
+
+func _setup_system_notice_banner() -> void:
+	if system_notice_banner != null:
+		return
+	system_notice_banner = SYSTEM_NOTICE_BANNER_SCRIPT.new()
+	system_notice_banner.name = "SystemNoticeBanner"
+	root_control.add_child(system_notice_banner)
+
+func _refresh_system_notice_banner_position() -> void:
+	if system_notice_banner == null:
+		return
+	var offset := 132.0 if pvp_match_countdown_overlay != null and pvp_match_countdown_overlay.visible else 16.0
+	if session_logout_banner != null and session_logout_banner.visible:
+		var warning_panel := session_logout_banner.get_node_or_null("WarningPanel") as PanelContainer
+		if warning_panel != null:
+			offset = maxf(offset, warning_panel.position.y + warning_panel.size.y + 10.0)
+	system_notice_banner.call("set_top_offset", offset)
 
 func _position_session_logout_banner() -> void:
 	if session_logout_banner == null or not session_logout_banner.visible:
@@ -41882,6 +41905,10 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		return
 	if message_type == "system.force_logout":
 		_force_session_logout(str(message.get("message", "")))
+		return
+	if message_type == "system.staff_announcement":
+		if system_notice_banner != null and bool(system_notice_banner.call("enqueue_notice", message)):
+			add_system_message(str(message.get("message", "")).strip_edges())
 		return
 	if message_type == "system.thieving_arrest":
 		add_system_message(LocalizationManager.text(

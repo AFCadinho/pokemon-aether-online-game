@@ -632,6 +632,7 @@
   "ui.session.logout_cancelled": "计划的注销已取消。",
   "ui.session.signed_out": "您的会话结束。请重新登录。",
   "ui.session.warning.title": "重要通知",
+  "ui.system_announcement.title": "系统消息",
   "ui.session.warning.default_message": "您的游戏会话即将结束。",
   "ui.session.warning.timer": "退出 {time}",
   "ui.login.error.sign_in": "无法登录。请重试。",

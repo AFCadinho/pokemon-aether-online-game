@@ -4,6 +4,7 @@
 
 **Added**
 
+- Staff system announcements now appear both in System chat and as a temporary on-screen notice.
 - Rescuing Bill now starts the Cerulean Gym challenge, and the attendant keeps the entrance closed until Bill is safe.
 - The S.S. Ticket now has its own pixel-art Bag icon.
 - Developer Tools now include a Help Bill story checkpoint for testing Bill's House directly.
