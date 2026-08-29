@@ -37,13 +37,9 @@ func _run() -> void:
 	await process_frame
 	_check(overlay.get_node_or_null("Control/SkillsButton") is Button, "the runtime overlay exposes the Skills button")
 	_check(overlay.get("skills_panel") is Control, "the runtime overlay creates the Skills window")
-	var visible_priority_overlays: PackedStringArray = overlay.call(
-		"_visible_priority_overlay_debug_names"
-	)
 	_check(
-		visible_priority_overlays.is_empty(),
-		"a newly opened overworld has no priority overlay blockers: %s"
-		% ",".join(visible_priority_overlays)
+		not bool(overlay.call("_has_visible_priority_overlay_panel")),
+		"a newly opened overworld has no priority overlay blockers"
 	)
 	var game_state := root.get_node("GameState")
 	var original_current_map: Variant = game_state.get("current_map")

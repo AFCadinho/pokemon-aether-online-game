@@ -64,7 +64,6 @@ const CHAT_TAB_PM := "pm"
 const CHAT_TAB_GUILD := "guild"
 const CHAT_TAB_LANGUAGES := "languages"
 const TEXT_INPUT_WINDOW_GROUP := "text_input_windows"
-const RUNNING_SHOES_INPUT_DEBUG := true
 const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
 	CHAT_TAB_ALL,
 	CHAT_TAB_GENERAL,
@@ -3403,15 +3402,6 @@ func _priority_overlay_panels() -> Array[Control]:
 		if summary_panel != null:
 			panels.append(summary_panel)
 	return panels
-
-
-func _visible_priority_overlay_debug_names() -> PackedStringArray:
-	var names := PackedStringArray()
-	for panel: Control in _priority_overlay_panels():
-		if panel == null or not panel.is_visible_in_tree():
-			continue
-		names.append("%s(in_tree=%s)" % [str(panel.name), str(panel.is_visible_in_tree())])
-	return names
 
 func _activate_ui_panel(panel: Control) -> void:
 	if panel == null:
@@ -10808,7 +10798,6 @@ func _refresh_time_of_day_label(hour: int) -> void:
 		time_of_day_label.add_theme_color_override("font_color", Color("#7aa7f4"))
 
 func _input(event: InputEvent) -> void:
-	_debug_running_shoes_input_event(event)
 	if _try_handle_running_shoes_shortcut(event):
 		return
 
@@ -10914,18 +10903,10 @@ func _try_handle_running_shoes_shortcut(event: InputEvent) -> bool:
 		return false
 	if event is InputEventKey and (event as InputEventKey).echo:
 		return false
-	var block_reason := _running_shoes_shortcut_block_reason()
-	if block_reason != "":
-		if RUNNING_SHOES_INPUT_DEBUG:
-			print("[RunningShoesDebug][UIOverlay] blocked reason=%s" % block_reason)
+	if not _can_toggle_running_shoes_from_shortcut():
 		return false
 
 	var enabled := not GameState.running_shoes_enabled
-	if RUNNING_SHOES_INPUT_DEBUG:
-		print(
-			"[RunningShoesDebug][UIOverlay] toggling from=%s to=%s"
-			% [str(GameState.running_shoes_enabled), str(enabled)]
-		)
 	running_shoes_button.set_pressed_no_signal(enabled)
 	_on_running_shoes_toggled(enabled)
 	get_viewport().set_input_as_handled()
@@ -10948,45 +10929,12 @@ func _running_shoes_shortcut_block_reason() -> String:
 	if _is_world_battle_active():
 		return "battle_active"
 	if _has_visible_priority_overlay_panel():
-		return "priority_overlay_visible:%s" % ",".join(_visible_priority_overlay_debug_names())
+		return "priority_overlay_visible"
 	if _is_text_input_focused():
 		return "text_input_focused"
 	if _is_overlay_pointer_interaction_active():
 		return "pointer_interaction_active"
 	return ""
-
-
-func _debug_running_shoes_input_event(event: InputEvent) -> void:
-	if not RUNNING_SHOES_INPUT_DEBUG or not (event is InputEventKey):
-		return
-	var key_event := event as InputEventKey
-	if not key_event.pressed or key_event.echo:
-		return
-	var is_x := key_event.physical_keycode == KEY_X or key_event.keycode == KEY_X
-	var action_matches := event.is_action_pressed("toggle_running_shoes", false)
-	if not is_x and not action_matches:
-		return
-	var focus_owner := get_viewport().gui_get_focus_owner()
-	var focus_name := "none"
-	if focus_owner != null:
-		focus_name = "%s:%s" % [focus_owner.get_class(), focus_owner.name]
-	var map_name := "none"
-	if GameState.current_map != null and is_instance_valid(GameState.current_map):
-		map_name = str(GameState.current_map.name)
-	var message := (
-		"[RunningShoesDebug][UIOverlay] key_received physical=%s keycode=%s "
-		+ "action_match=%s configured=%s focus=%s map=%s block_reason=%s"
-	) % [
-			str(key_event.physical_keycode),
-			str(key_event.keycode),
-			str(action_matches),
-			SettingsManager.get_input_binding_label("toggle_running_shoes"),
-			focus_name,
-			map_name,
-			_running_shoes_shortcut_block_reason(),
-		]
-	print(message)
-
 
 func _is_overlay_pointer_interaction_active() -> bool:
 	return (
