@@ -4,6 +4,9 @@ extends Node2D
 class_name BaseNPC
 
 const NpcDefinitionResource := preload("res://scripts/world/npcs/npc_definition.gd")
+const TrainerBattleMusicResolverScript := preload(
+	"res://scripts/world/npcs/trainer_battle_music_resolver.gd"
+)
 const THIEVING_PROMPT_ICON: Texture2D = preload("res://assets/ui/thieving.svg")
 
 const MISSING_DIALOGUE_LINES: Array[String] = [
@@ -244,6 +247,9 @@ func set_story_sprite_offset(value: Vector2) -> void:
 
 func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
 	var battle_metadata := metadata.duplicate(true)
+	var battle_music_track_id: String = TrainerBattleMusicResolverScript.resolve_track_id(metadata)
+	if not battle_music_track_id.is_empty():
+		battle_metadata["_battle_music_track_id"] = battle_music_track_id
 	if npc_sprite_frames != null:
 		# Resources stay client-local; the battle API receives the original
 		# metadata before this visual-only enrichment is added.
