@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Moomoo Milk received during the Route 25 quest can now be used from the Bag to restore 100 HP outside battles.
 - The undercover Team Rocket recruiter now stops players automatically at the end of Nugget Bridge.
 - Nugget Bridge trainers no longer spot players one tile below their intended sight lanes.
 
