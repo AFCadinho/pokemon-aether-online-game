@@ -37,6 +37,7 @@ const MOUNT_MODE_SURF := MountServiceScript.MOVEMENT_MODE_SURF
 const DEFAULT_CURSOR_SCALE := 75.0
 const MIN_CURSOR_SCALE := 50.0
 const MAX_CURSOR_SCALE := 150.0
+const RUNNING_SHOES_INPUT_DEBUG := true
 const CONFIGURABLE_INPUT_ACTIONS: Array[String] = [
 	"toggle_running_shoes",
 	"fish",
@@ -84,6 +85,28 @@ func _ready() -> void:
 	_ensure_audio_buses()
 	load_settings()
 	_apply_runtime_settings()
+
+
+func _input(event: InputEvent) -> void:
+	if not RUNNING_SHOES_INPUT_DEBUG or not (event is InputEventKey):
+		return
+	var key_event := event as InputEventKey
+	if not key_event.pressed or key_event.echo:
+		return
+	var is_x := key_event.physical_keycode == KEY_X or key_event.keycode == KEY_X
+	var action_matches := event.is_action_pressed("toggle_running_shoes", false)
+	if not is_x and not action_matches:
+		return
+	print(
+		"[RunningShoesDebug][SettingsManager] key_received physical=%s keycode=%s " \
+		+ "action_match=%s configured=%s"
+		% [
+			str(key_event.physical_keycode),
+			str(key_event.keycode),
+			str(action_matches),
+			get_input_binding_label("toggle_running_shoes"),
+		]
+	)
 
 
 func load_settings() -> void:
