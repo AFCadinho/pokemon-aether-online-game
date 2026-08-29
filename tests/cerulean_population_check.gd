@@ -38,7 +38,7 @@ const POPULATION := {
 		"Entities/NPCs/BikeShopOwner": "kanto_cerulean_city_bike_store_owner",
 	},
 	"res://scenes/overworld/kanto/towns/cerulean_city/pokemon_center.tscn": {
-		"Entities/NPCs/SwimmerMarina": "kanto_cerulean_city_pokemon_center_swimmer_marina",
+		"Entities/NPCs/TrainerMarina": "kanto_cerulean_city_pokemon_center_trainer_marina",
 		"Entities/NPCs/CamperFinn": "kanto_cerulean_city_pokemon_center_camper_finn",
 		"Entities/Pokemon/Psyduck": "kanto_cerulean_city_pokemon_center_psyduck_1",
 		"Entities/Pokemon/Squirtle": "kanto_cerulean_city_pokemon_center_squirtle_1",
@@ -160,12 +160,12 @@ func _check_scene(scene_path: String, expected: Dictionary) -> void:
 			map.get_node_or_null("Entities/NPCs/PartnerMoveTutor") == null,
 			"Cerulean Pokemon Center no longer places the partner Move Tutor"
 		)
-		var marina := map.get_node_or_null("Entities/NPCs/SwimmerMarina") as Node2D
+		var marina := map.get_node_or_null("Entities/NPCs/TrainerMarina") as Node2D
 		var finn := map.get_node_or_null("Entities/NPCs/CamperFinn") as Node2D
 		var psyduck := map.get_node_or_null("Entities/Pokemon/Psyduck") as Node2D
 		var squirtle := map.get_node_or_null("Entities/Pokemon/Squirtle") as Node2D
 		if marina != null and psyduck != null:
-			_check(str(marina.get("npc_definition_id")) == "trainer_class_swimmer_f", "Marina uses the swimmer presentation")
+			_check(str(marina.get("npc_definition_id")) == "trainer_class_poke_fan_f", "Marina uses an indoor-appropriate Trainer presentation")
 			_check(str(psyduck.get("species_id")) == "psyduck", "Marina's partner is Psyduck")
 			_check(psyduck.position.distance_to(marina.position) == 64.0, "Psyduck stays beside Marina")
 			_check(psyduck.get("npc_sprite_frames") != null, "Psyduck resolves its overworld follower sprite")

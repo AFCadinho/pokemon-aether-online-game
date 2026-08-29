@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="2_dialogue"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="3_overworld_pokemon"]
-[ext_resource type="SpriteFrames" uid="uid://brop6u80ud8n0" path="res://assets/npcs/classes/swimmer_f_frames.tres" id="4_swimmer_f"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="4_poke_fan_f"]
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="5_camper"]
 
 [node name="PokemonCenter" instance=ExtResource("1_template")]
@@ -25,13 +25,13 @@ npc_id = "kanto_cerulean_city_pokemon_center_clerk"
 [node name="Clerk2" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="3"]
 npc_id = "kanto_cerulean_city_pokemon_center_clerk_2"
 
-[node name="SwimmerMarina" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="5" instance=ExtResource("2_dialogue")]
+[node name="TrainerMarina" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="5" instance=ExtResource("2_dialogue")]
 position = Vector2(336, 816)
-npc_id = "kanto_cerulean_city_pokemon_center_swimmer_marina"
-npc_definition_id = "trainer_class_swimmer_f"
-display_name = "Swimmer Marina"
+npc_id = "kanto_cerulean_city_pokemon_center_trainer_marina"
+npc_definition_id = "trainer_class_poke_fan_f"
+display_name = "Trainer Marina"
 facing_direction = Vector2(1, 0)
-npc_sprite_frames = ExtResource("4_swimmer_f")
+npc_sprite_frames = ExtResource("4_poke_fan_f")
 
 [node name="CamperFinn" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="6" instance=ExtResource("2_dialogue")]
 position = Vector2(560, 784)
