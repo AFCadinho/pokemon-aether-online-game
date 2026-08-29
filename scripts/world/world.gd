@@ -3377,6 +3377,12 @@ func _notify_fishing_treasure_award(value: Variant) -> void:
 				"item": ItemLocalization.display_name(item_id),
 			})
 		)
+		get_tree().call_group(
+			"ui_overlay",
+			"add_item_reward_notification",
+			item_id,
+			maxi(int(item.get("quantity", 1)), 1)
+		)
 		SfxManager.play("item_found")
 		return
 
@@ -3396,6 +3402,7 @@ func _notify_wild_battle_money_awarded(pokemon_species: String, money_awarded: i
 	})
 	get_tree().call_group("ui_overlay", "refresh_money_display")
 	get_tree().call_group("ui_overlay", "add_system_message", message)
+	get_tree().call_group("ui_overlay", "add_money_reward_notification", money_awarded)
 
 func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded: int) -> void:
 	if money_awarded <= 0:
@@ -3411,11 +3418,44 @@ func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded:
 	})
 	get_tree().call_group("ui_overlay", "refresh_money_display")
 	get_tree().call_group("ui_overlay", "add_system_message", message)
+	get_tree().call_group("ui_overlay", "add_money_reward_notification", money_awarded)
 
 
 func _notify_story_reward_items(value: Variant) -> void:
 	for message: String in _story_reward_item_messages(value):
 		get_tree().call_group("ui_overlay", "add_system_message", message)
+	for grant: Dictionary in _story_reward_item_grants(value):
+		get_tree().call_group(
+			"ui_overlay",
+			"add_item_reward_notification",
+			str(grant.get("itemId", "")),
+			int(grant.get("quantity", 0))
+		)
+
+
+func _story_reward_item_grants(value: Variant) -> Array[Dictionary]:
+	var grants: Array[Dictionary] = []
+	if value is not Array:
+		return grants
+	for effect_value: Variant in value as Array:
+		if effect_value is not Dictionary:
+			continue
+		var effect := effect_value as Dictionary
+		if bool(effect.get("alreadyGranted", false)):
+			continue
+		var grants_value: Variant = effect.get("grants", [])
+		if grants_value is not Array:
+			continue
+		for grant_value: Variant in grants_value as Array:
+			if grant_value is not Dictionary:
+				continue
+			var grant := grant_value as Dictionary
+			var item_id := str(grant.get("itemId", "")).strip_edges().to_lower()
+			var quantity := maxi(int(grant.get("quantity", 0)), 0)
+			if item_id == "" or quantity <= 0:
+				continue
+			grants.append({"itemId": item_id, "quantity": quantity})
+	return grants
 
 func _story_reward_item_messages(value: Variant) -> Array[String]:
 	var messages: Array[String] = []

@@ -103,6 +103,12 @@ func _init() -> void:
 	_check(source.contains("lockedRevision") and source.contains("snapshotHash"), "confirmation references immutable review")
 	_check(not source.contains("or not realtime.connected"), "websocket status does not block authoritative trade commands")
 	_check(not source.contains("owner_user_id"), "client does not perform ownership settlement")
+	_check(
+		source.contains("_notify_received_reward_cards")
+		and source.contains('"add_item_reward_notification"')
+		and source.contains('"add_money_reward_notification"'),
+		"received trade items and money use reward cards"
+	)
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	_check(overlay_source.contains("_try_offer_party_drag_to_trade"), "party drag delegates offer drops before party reordering")
 	_check(overlay_source.contains("party_drag_workspace_preview"), "party drag preview is hosted above the trade window")

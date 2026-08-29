@@ -1868,6 +1868,36 @@ func _notify_trade_completion(snapshot: Dictionary) -> void:
 	notified_completed_trade_ids[trade_id] = true
 	overlay.call("add_system_message", str(messages.get("removed", "")))
 	overlay.call("add_system_message", str(messages.get("received", "")))
+	_notify_received_reward_cards(snapshot, _current_user_id(), overlay)
+
+
+func _notify_received_reward_cards(snapshot: Dictionary, user_id: int, overlay: Node) -> void:
+	var result: Dictionary = snapshot.get("completionResult", {}) if snapshot.get("completionResult", {}) is Dictionary else {}
+	var item_transfers: Variant = result.get("itemTransfers", [])
+	if item_transfers is Array and overlay.has_method("add_item_reward_notification"):
+		for transfer_value: Variant in item_transfers as Array:
+			if transfer_value is not Dictionary:
+				continue
+			var transfer := transfer_value as Dictionary
+			if int(transfer.get("toUserId", 0)) != user_id:
+				continue
+			overlay.call(
+				"add_item_reward_notification",
+				str(transfer.get("itemId", transfer.get("id", ""))),
+				maxi(int(transfer.get("quantity", 0)), 0)
+			)
+	var money_transfers: Variant = result.get("moneyTransfers", [])
+	if money_transfers is Array and overlay.has_method("add_money_reward_notification"):
+		for transfer_value: Variant in money_transfers as Array:
+			if transfer_value is not Dictionary:
+				continue
+			var transfer := transfer_value as Dictionary
+			if int(transfer.get("toUserId", 0)) != user_id:
+				continue
+			overlay.call(
+				"add_money_reward_notification",
+				maxi(int(transfer.get("amount", 0)), 0)
+			)
 
 
 static func completion_transfer_messages(snapshot: Dictionary, user_id: int) -> Dictionary:

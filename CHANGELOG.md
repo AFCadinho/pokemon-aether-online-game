@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+**Added**
+
+- Items and currency you receive now appear in compact, stacked reward cards with their icon and amount.
+
 **Changed**
 
 - Viridian Forest now uses its latest visual layout.

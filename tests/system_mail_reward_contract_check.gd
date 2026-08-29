@@ -24,6 +24,11 @@ func _init() -> void:
 		overlay_source.contains('in ["system", "admin"]'),
 		"System mail cannot be replied to"
 	)
+	_check(
+		overlay_source.contains("add_currency_reward_notification(currency_id, amount)")
+		and overlay_source.contains("add_item_reward_notification(item_id, quantity)"),
+		"Claimed mail items and currency use reward cards"
+	)
 
 	if failures == 0:
 		print("System mail reward contract checks passed.")

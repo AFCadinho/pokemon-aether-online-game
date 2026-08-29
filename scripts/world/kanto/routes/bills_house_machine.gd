@@ -98,6 +98,7 @@ func _present_ticket_reward(effects_value: Variant) -> bool:
 			"quantity": quantity,
 		})
 	)
+	get_tree().call_group("ui_overlay", "add_item_reward_notification", "ss-ticket", quantity)
 	SfxManager.play("item_received")
 	return true
 

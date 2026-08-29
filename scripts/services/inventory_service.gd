@@ -4,6 +4,7 @@ class_name InventoryServiceNode
 
 signal inventory_changed(items: Array)
 signal world_pickup_state_changed
+signal item_received(item_id: String, quantity: int)
 
 const INVENTORY_ENDPOINT := "/game/inventory"
 const FISHING_PROGRESSION_ENDPOINT := "/game/fishing/progression"
@@ -199,11 +200,15 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 	var wallet_result: Dictionary = await PlayerWalletService.load_wallet()
 	PlayerWalletService.apply_wallet_result(wallet_result)
 	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
+	var item_id := str(body.get("itemId", "")).strip_edges().to_lower()
+	var quantity := maxi(int(body.get("quantity", 1)), 1)
+	if bool(body.get("claimed", false)) and item_id != "":
+		item_received.emit(item_id, quantity)
 	return {
 		"success": true,
 		"rewardId": str(body.get("rewardId", normalized_reward_id)),
-		"itemId": str(body.get("itemId", "")),
-		"quantity": maxi(int(body.get("quantity", 1)), 1),
+		"itemId": item_id,
+		"quantity": quantity,
 		"claimed": bool(body.get("claimed", false)),
 		"alreadyOwned": bool(body.get("alreadyOwned", false)),
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
@@ -306,11 +311,15 @@ func claim_world_pickup(pickup_id: String) -> Dictionary:
 	var inventory_result := await load_inventory()
 	if story_value is Dictionary:
 		StoryService.apply_story_if_not_stale(story_value)
+	var item_id := str(body.get("itemId", "")).strip_edges().to_lower()
+	var quantity := maxi(int(body.get("quantity", 1)), 1)
+	if bool(body.get("claimed", false)) and item_id != "":
+		item_received.emit(item_id, quantity)
 	return {
 		"success": true,
 		"pickupId": str(body.get("pickupId", normalized_pickup_id)),
-		"itemId": str(body.get("itemId", "")),
-		"quantity": maxi(int(body.get("quantity", 1)), 1),
+		"itemId": item_id,
+		"quantity": quantity,
 		"claimed": bool(body.get("claimed", false)),
 		"alreadyCollected": bool(body.get("alreadyCollected", false)),
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
