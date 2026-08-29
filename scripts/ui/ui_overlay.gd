@@ -21216,7 +21216,6 @@ func _refresh_bag_inventory_for_machine_selection() -> void:
 	await _load_bag_inventory()
 
 func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
-	FieldMoveService.update_owned_charms_from_inventory(items_value)
 	var normalized_items: Array[Dictionary] = []
 	if typeof(items_value) != TYPE_ARRAY:
 		items_value = []
