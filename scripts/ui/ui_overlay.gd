@@ -3354,6 +3354,13 @@ func focus_battle_ui_layer() -> void:
 	layer = UI_OVERLAY_BASE_LAYER
 
 func _has_visible_priority_overlay_panel() -> bool:
+	for panel: Control in _priority_overlay_panels():
+		if panel != null and panel.is_visible_in_tree():
+			return true
+	return false
+
+
+func _priority_overlay_panels() -> Array[Control]:
 	var panels: Array[Control] = [
 		global_buff_details_panel,
 		chat_settings_popup,
@@ -3390,15 +3397,21 @@ func _has_visible_priority_overlay_panel() -> bool:
 	]
 	if quest_journal_view != null:
 		panels.append(quest_journal_view.get_journal_panel())
-	for panel: Control in panels:
-		if panel != null and panel.visible:
-			return true
 	for context_value: Variant in pokemon_summary_open_cards.values():
 		var context: Dictionary = context_value as Dictionary
 		var summary_panel: Control = context.get("popup") as Control
-		if summary_panel != null and summary_panel.visible:
-			return true
-	return false
+		if summary_panel != null:
+			panels.append(summary_panel)
+	return panels
+
+
+func _visible_priority_overlay_debug_names() -> PackedStringArray:
+	var names := PackedStringArray()
+	for panel: Control in _priority_overlay_panels():
+		if panel == null or not panel.is_visible_in_tree():
+			continue
+		names.append("%s(in_tree=%s)" % [str(panel.name), str(panel.is_visible_in_tree())])
+	return names
 
 func _activate_ui_panel(panel: Control) -> void:
 	if panel == null:
@@ -10935,7 +10948,7 @@ func _running_shoes_shortcut_block_reason() -> String:
 	if _is_world_battle_active():
 		return "battle_active"
 	if _has_visible_priority_overlay_panel():
-		return "priority_overlay_visible"
+		return "priority_overlay_visible:%s" % ",".join(_visible_priority_overlay_debug_names())
 	if _is_text_input_focused():
 		return "text_input_focused"
 	if _is_overlay_pointer_interaction_active():
@@ -10960,10 +10973,10 @@ func _debug_running_shoes_input_event(event: InputEvent) -> void:
 	var map_name := "none"
 	if GameState.current_map != null and is_instance_valid(GameState.current_map):
 		map_name = str(GameState.current_map.name)
-	print(
-		"[RunningShoesDebug][UIOverlay] key_received physical=%s keycode=%s " \
+	var message := (
+		"[RunningShoesDebug][UIOverlay] key_received physical=%s keycode=%s "
 		+ "action_match=%s configured=%s focus=%s map=%s block_reason=%s"
-		% [
+	) % [
 			str(key_event.physical_keycode),
 			str(key_event.keycode),
 			str(action_matches),
@@ -10972,7 +10985,7 @@ func _debug_running_shoes_input_event(event: InputEvent) -> void:
 			map_name,
 			_running_shoes_shortcut_block_reason(),
 		]
-	)
+	print(message)
 
 
 func _is_overlay_pointer_interaction_active() -> bool:

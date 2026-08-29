@@ -37,6 +37,45 @@ func _run() -> void:
 	await process_frame
 	_check(overlay.get_node_or_null("Control/SkillsButton") is Button, "the runtime overlay exposes the Skills button")
 	_check(overlay.get("skills_panel") is Control, "the runtime overlay creates the Skills window")
+	var visible_priority_overlays: PackedStringArray = overlay.call(
+		"_visible_priority_overlay_debug_names"
+	)
+	_check(
+		visible_priority_overlays.is_empty(),
+		"a newly opened overworld has no priority overlay blockers: %s"
+		% ",".join(visible_priority_overlays)
+	)
+	var game_state := root.get_node("GameState")
+	var original_current_map: Variant = game_state.get("current_map")
+	var original_running_shoes_enabled := bool(game_state.get("running_shoes_enabled"))
+	var original_input_locked := bool(game_state.get("input_locked"))
+	var original_overworld_input_locked := bool(game_state.get("overworld_input_locked"))
+	var original_ui_input_locked := bool(game_state.get("ui_input_locked"))
+	var test_map := Node.new()
+	test_map.name = "RunningShoesInputTestMap"
+	root.add_child(test_map)
+	game_state.set("current_map", test_map)
+	game_state.set("input_locked", false)
+	game_state.set("overworld_input_locked", false)
+	game_state.set("ui_input_locked", false)
+	var running_shoes_event := InputEventAction.new()
+	running_shoes_event.action = "toggle_running_shoes"
+	running_shoes_event.pressed = true
+	var running_shoes_handled := bool(overlay.call(
+		"_try_handle_running_shoes_shortcut",
+		running_shoes_event
+	))
+	_check(
+		running_shoes_handled
+		and bool(game_state.get("running_shoes_enabled")) != original_running_shoes_enabled,
+		"the live overworld overlay accepts the configured Running Shoes action"
+	)
+	game_state.set("running_shoes_enabled", original_running_shoes_enabled)
+	game_state.set("current_map", original_current_map)
+	game_state.set("input_locked", original_input_locked)
+	game_state.set("overworld_input_locked", original_overworld_input_locked)
+	game_state.set("ui_input_locked", original_ui_input_locked)
+	test_map.queue_free()
 	overlay.queue_free()
 	await process_frame
 

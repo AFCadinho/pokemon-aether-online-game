@@ -202,14 +202,16 @@ func _init() -> void:
 		and script_source.contains('return "overworld_input_locked"')
 		and script_source.contains('return "ui_input_locked"')
 		and script_source.contains('return "battle_active"')
-		and script_source.contains('return "priority_overlay_visible"')
+		and script_source.contains('return "priority_overlay_visible:%s"')
 		and script_source.contains('return "text_input_focused"')
+		and script_source.contains("panel.is_visible_in_tree()")
 		and script_source.contains("func _is_overlay_pointer_interaction_active()"),
 		"Running Shoes shortcut is limited to unlocked overworld input outside battles, menus, and text entry"
 	)
 	_check(
 		script_source.contains("[RunningShoesDebug][UIOverlay]")
-		and script_source.contains("func _running_shoes_shortcut_block_reason()"),
+		and script_source.contains("func _running_shoes_shortcut_block_reason()")
+		and script_source.contains("func _visible_priority_overlay_debug_names()"),
 		"Running Shoes shortcut reports key routing, configured binding, and the exact blocking gate"
 	)
 	_check(scene_source.contains('path="res://assets/ui/town_map_navigation.svg" id="3_riyyd"'), "Town Map uses a navigation-focused map icon")
