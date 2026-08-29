@@ -39,7 +39,12 @@ func _run() -> void:
 		var heart := date.get_node_or_null("Heart") as Label
 		_check(heart != null and heart.text == "♥", "a heart floats above the couple")
 		_check(heart != null and heart.get_theme_font_size("font_size") == 28, "the heart is readable at overworld scale")
-		_check(heart != null and heart.offset_bottom <= -112.0, "the heart stays above player nameplates")
+		var nameplate := date.get_node_or_null("Nameplate") as Control
+		var nameplate_background := date.get_node_or_null("Nameplate/NameplateBackground") as Panel
+		var heart_bottom := heart.position.y + heart.size.y if heart != null else 0.0
+		var nameplate_top := nameplate.position.y + nameplate_background.position.y if nameplate != null and nameplate_background != null else 0.0
+		_check(nameplate != null and nameplate_background != null, "Dadinho displays his nameplate")
+		_check(heart != null and heart_bottom <= nameplate_top and nameplate_top - heart_bottom <= 16.0, "the heart sits directly above Dadinho's nameplate")
 
 		var story_hook: Node = date.get_node_or_null("StoryHook")
 		_check(story_hook != null, "Dadinho exposes the story interaction")
@@ -58,6 +63,21 @@ func _run() -> void:
 					if water.get_cell_source_id(standing_cell + direction * distance) >= 0:
 						water_is_nearby = true
 			_check(water_is_nearby, "the couple stands beside the water's shoreline")
+
+		var date_script := date.get_script() as Script
+		var departure_offsets: Array = date_script.get_script_constant_map().get("MISTY_DEPARTURE_OFFSETS", [])
+		_check(departure_offsets.size() == 2, "Misty uses a short two-part departure toward Cerulean")
+		var departure_position := misty.global_position
+		for offset_value: Variant in departure_offsets:
+			var offset := offset_value as Vector2
+			var step_count := int(maxf(absf(offset.x), absf(offset.y)) / 32.0)
+			var step_direction := offset.normalized() * 32.0
+			for _step: int in range(step_count):
+				departure_position += step_direction
+				var departure_cell := collision.local_to_map(departure_position)
+				_check(collision.get_cell_source_id(departure_cell) < 0, "Misty's departure stays on walkable ground")
+				_check(water.get_cell_source_id(departure_cell) < 0, "Misty's departure avoids the water")
+		_check(departure_position.x < misty.global_position.x, "Misty leaves west toward Route 24 and Cerulean Gym")
 
 	route.queue_free()
 	await process_frame

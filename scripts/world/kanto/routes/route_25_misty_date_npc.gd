@@ -6,6 +6,7 @@ const PLAYER_DIALOGUE_STAGES: Array[int] = [0, 3, 6, 11, 13]
 const MISTY_DIALOGUE_STAGES: Array[int] = [1, 4, 7, 9]
 const DADINHO_DIALOGUE_STAGES: Array[int] = [2, 5, 8, 10, 12, 14]
 const MISTY_PORTRAIT_ID := "showdown_misty_lgpe"
+const MISTY_DEPARTURE_OFFSETS: Array[Vector2] = [Vector2(0, -64), Vector2(-128, 0)]
 
 @export var misty_path: NodePath
 @export var heart_path: NodePath
@@ -90,14 +91,14 @@ func _break_date_pose() -> void:
 func _misty_storms_off() -> void:
 	if misty == null or not misty.visible:
 		return
-	_set_misty_animation(&"walk_down")
-	var downward_tween := create_tween()
-	downward_tween.tween_property(misty, "position", misty.position + Vector2(0, 64), 0.45)
-	await downward_tween.finished
+	_set_misty_animation(&"walk_up")
+	var upward_tween := create_tween()
+	upward_tween.tween_property(misty, "position", misty.position + MISTY_DEPARTURE_OFFSETS[0], 0.45)
+	await upward_tween.finished
 
-	_set_misty_animation(&"walk_right")
+	_set_misty_animation(&"walk_left")
 	var exit_tween := create_tween()
-	exit_tween.tween_property(misty, "position", misty.position + Vector2(128, 0), 0.8)
+	exit_tween.tween_property(misty, "position", misty.position + MISTY_DEPARTURE_OFFSETS[1], 0.8)
 	await exit_tween.finished
 	misty.visible = false
 
