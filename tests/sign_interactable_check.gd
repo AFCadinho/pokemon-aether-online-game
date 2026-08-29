@@ -168,7 +168,12 @@ func _check_sign_interactable_contract() -> void:
 	_check_true(text.contains("@export_enum(\"facing_target_tile\", \"standing_tile\")"), "SignInteractable exports interaction modes")
 	_check_true(text.contains("@export_enum(\"any\", \"up\", \"down\", \"left\", \"right\")"), "SignInteractable exports facing directions")
 	_check_true(text.contains("/root/SignTextService"), "SignInteractable resolves local text through SignTextService autoload")
-	_check_true(text.contains("SignPortraitCatalog.get_portrait(sign_id)"), "SignInteractable resolves its location preview by sign ID")
+	_check_true(
+		text.contains('preload("res://scripts/services/sign_portrait_catalog.gd")'),
+		"SignInteractable explicitly preloads its portrait catalog for runtime parsing"
+	)
+	_check_true(text.contains("SignPortraitCatalogScript.get_portrait(sign_id)"), "SignInteractable resolves its location preview by sign ID")
+	_check_true(text.contains("var portrait: Texture2D"), "SignInteractable gives resolved location previews an explicit texture type")
 	_check_true(text.contains("portrait, portrait != null"), "SignInteractable shows available location previews and safely hides missing ones")
 	_check_true(text.contains("func _is_player_on_interaction_tile(player: Node2D) -> bool:"), "SignInteractable supports standing tile interaction")
 	_check_true(text.contains("func _get_interaction_area_rect() -> Rect2:"), "SignInteractable supports shaped standing areas")
