@@ -10794,6 +10794,9 @@ func _refresh_time_of_day_label(hour: int) -> void:
 		time_of_day_label.add_theme_color_override("font_color", Color("#7aa7f4"))
 
 func _input(event: InputEvent) -> void:
+	if _try_handle_running_shoes_shortcut(event):
+		return
+
 	if pc_box_title_editor != null and pc_box_title_editor.visible and event is InputEventMouseButton:
 		var rename_mouse_event := event as InputEventMouseButton
 		if rename_mouse_event.button_index == MOUSE_BUTTON_LEFT and rename_mouse_event.pressed and not pc_box_title_editor.get_global_rect().has_point(rename_mouse_event.position):
@@ -10891,18 +10894,19 @@ func _input(event: InputEvent) -> void:
 	chat_input.release_focus()
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _try_handle_running_shoes_shortcut(event: InputEvent) -> bool:
 	if event == null or not event.is_action_pressed("toggle_running_shoes", false):
-		return
+		return false
 	if event is InputEventKey and (event as InputEventKey).echo:
-		return
+		return false
 	if not _can_toggle_running_shoes_from_shortcut():
-		return
+		return false
 
 	var enabled := not GameState.running_shoes_enabled
 	running_shoes_button.set_pressed_no_signal(enabled)
 	_on_running_shoes_toggled(enabled)
 	get_viewport().set_input_as_handled()
+	return true
 
 
 func _can_toggle_running_shoes_from_shortcut() -> bool:
@@ -10914,7 +10918,27 @@ func _can_toggle_running_shoes_from_shortcut() -> bool:
 		return false
 	if _has_visible_priority_overlay_panel() or _is_text_input_focused():
 		return false
+	if _is_overlay_pointer_interaction_active():
+		return false
 	return true
+
+
+func _is_overlay_pointer_interaction_active() -> bool:
+	return (
+		pc_dragging
+		or pc_popup_dragging
+		or party_dragging
+		or chat_resize_dragging
+		or trainer_card_dragging
+		or bag_dragging
+		or pokemon_summary_dragging_card_key != ""
+		or mail_dragging
+		or item_dex_dragging
+		or pokedex_dragging
+		or pvp_room_dragging
+		or staff_teleport_dragging
+		or hotkey_sidebar_dragging
+	)
 
 
 func _is_text_input_focused() -> bool:
