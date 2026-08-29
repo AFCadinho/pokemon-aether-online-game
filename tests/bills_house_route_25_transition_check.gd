@@ -92,6 +92,7 @@ func _run() -> void:
 	_check(computer != null, "Bill's computer can activate the Cell Separation System")
 	if trapped_bill != null:
 		_check(trapped_bill.visible, "Clefairy-form Bill is visible while the rescue is active")
+		_check(str(trapped_bill.get("display_name")) == "Clefairy", "Bill's transformed form is labeled Clefairy")
 		_check(str(trapped_bill.get("visibility_required_quest_id")) == "help_bill", "trapped Bill follows the active rescue quest")
 		var hook := trapped_bill.get_node_or_null("StoryHook")
 		_check(hook != null and str(hook.get("interaction_id")) == "kanto_bills_house_meet_bill", "talking to trapped Bill advances the first rescue step")

@@ -10,7 +10,7 @@
 [ext_resource type="SpriteFrames" path="res://assets/npcs/pokemon_clefairy_frames.tres" id="8_clefairy_frames"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/named/bill_frames.tres" id="9_bill_frames"]
 [ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/bill.png" id="10_bill_mugshot"]
-[ext_resource type="Script" uid="uid://gwc23r8lqera" path="res://scripts/world/story/story_hook.gd" id="11_story_hook"]
+[ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="11_story_hook"]
 [ext_resource type="Script" path="res://scripts/world/kanto/routes/bills_house_machine.gd" id="12_bill_machine"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
@@ -125,7 +125,7 @@ visibility_required_quest_id = "help_bill"
 visibility_required_quest_status = "active"
 visibility_hidden_quest_id = "help_bill"
 dialogue_id = "kanto_bills_house_bill_waiting"
-display_name = "Bill?"
+display_name = "Clefairy"
 facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("8_clefairy_frames")
 preload_quest_markers = true

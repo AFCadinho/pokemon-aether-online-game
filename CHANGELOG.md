@@ -29,6 +29,8 @@
 
 **Fixed**
 
+- Bill's transformed form is now labeled Clefairy, and Bill's House no longer reports an invalid story-hook resource UID.
+
 - Trainer battle start errors no longer trap players in a repeating automatic dialogue, including Gary at Nugget Bridge.
 - Route 25's horizontal stairs now play their elevation effect when crossed.
 - The guide inside Cerulean Gym now shows his matching Trainer portrait instead of Professor Oak.
