@@ -3,6 +3,7 @@ extends RefCounted
 class_name RoleBadgeTexture
 
 const ROLE_BADGE_PATHS := {
+	"alpha": "res://assets/ui/alpha_crystal_emblem.png",
 	"gamemaster": "res://assets/ui/gamemaster_emblem_readable.png",
 	"developer": "res://assets/ui/developer_emblem_teal.png",
 	"moderator": "res://assets/ui/moderator_emblem_purple.png",

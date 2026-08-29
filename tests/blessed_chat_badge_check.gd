@@ -78,6 +78,11 @@ func _init() -> void:
 		"non-staff Blessed roles stay hidden above remote characters"
 	)
 	_check(
+		player_source.contains('"gamemaster", "alpha"]')
+		and remote_player_source.contains('"gamemaster", "alpha"]'),
+		"legacy Alpha roles remain visible above local and remote characters"
+	)
+	_check(
 		overlay_source.contains('"blessed":\n\t\t\treturn "Blessed"')
 		and overlay_source.contains('"blessed":\n\t\t\treturn "#b980ff"'),
 		"Blessed has a compact chat label and color fallback"
