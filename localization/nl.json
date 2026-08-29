@@ -2840,6 +2840,7 @@
   "ui.field_move.pokemon_used": "{pokemon} gebruikte {move}!",
   "ui.field_move.error.in_battle": "Field moves kunnen niet tijdens een gevecht worden gebruikt.",
   "ui.field_move.error.hm_required": "Je hebt {hm} nodig om deze field move te gebruiken.",
+  "ui.field_move.error.unavailable": "Een Pokémon in je team moet {move} kennen, of je hebt de bijbehorende Charm nodig.",
   "ui.field_move.error.map_loading": "Wacht tot de map volledig is geladen.",
   "ui.field_move.error.badge_required": "Je hebt de {badge} nodig om deze field move te gebruiken.",
   "ui.field_move.error.not_implemented": "Die directe field move is niet geïmplementeerd.",
