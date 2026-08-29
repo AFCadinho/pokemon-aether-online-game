@@ -45,6 +45,7 @@ const LedgeDirectionResolverScript := preload("res://scripts/world/ledge_directi
 const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
+const RoleBadgeTexture := preload("res://scripts/ui/role_badge_texture.gd")
 const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/OLDROD.png")
 const SURF_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/WAVEINCENSE.png")
 const APPEARANCE_PART_SPRITES := {
@@ -630,6 +631,9 @@ func set_role_badge(role_badge: String, role_color: Color = Color(0.847, 0.718, 
 		role_badge_label.text != ""
 		and role_id.strip_edges().to_lower() == GM_ROLE_BADGE_ID
 	)
+	if use_gm_icon and role_badge_icon != null and role_badge_icon.texture == null:
+		role_badge_icon.texture = RoleBadgeTexture.get_gm_badge_texture()
+	use_gm_icon = use_gm_icon and role_badge_icon != null and role_badge_icon.texture != null
 	if role_badge_panel != null:
 		role_badge_panel.visible = role_badge_label.text != "" and not use_gm_icon
 		role_badge_panel.add_theme_stylebox_override("panel", _make_role_badge_style(role_id, role_color))

@@ -9,6 +9,7 @@ const CharacterAppearanceService := preload("res://scripts/services/character_ap
 const MountService := preload("res://scripts/services/mount_service.gd")
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
+const RoleBadgeTexture := preload("res://scripts/ui/role_badge_texture.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
 const AethernetTeleportEffectScript := preload("res://scripts/world/aethernet_teleport_effect.gd")
@@ -927,6 +928,9 @@ func _update_role_badge() -> void:
 		role_badge_label.text != ""
 		and role_id.strip_edges().to_lower() == GM_ROLE_BADGE_ID
 	)
+	if use_gm_icon and role_badge_icon != null and role_badge_icon.texture == null:
+		role_badge_icon.texture = RoleBadgeTexture.get_gm_badge_texture()
+	use_gm_icon = use_gm_icon and role_badge_icon != null and role_badge_icon.texture != null
 	if role_badge_panel != null:
 		role_badge_panel.visible = role_badge_label.text != "" and not use_gm_icon
 	if role_badge_icon != null:

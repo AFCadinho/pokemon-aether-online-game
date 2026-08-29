@@ -14,6 +14,7 @@
 
 **Fixed**
 
+- Newly added Game Master emblems no longer prevent the player scene from opening before Godot finishes importing them.
 - Reward cards now remain visible in front of the rest of the game interface.
 - Grass and item Poké Balls in Viridian Forest now appear in the correct visual layer.
 
