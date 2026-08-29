@@ -40,6 +40,10 @@ func interact_with_player(_player: Node2D) -> void:
 	await _run_recruitment_sequence()
 
 
+func show_intro_dialogue() -> void:
+	await _run_recruitment_sequence()
+
+
 func _run_recruitment_sequence() -> void:
 	var reward_result: Dictionary = await InventoryService.claim_npc_item_reward(REWARD_ID)
 	if not bool(reward_result.get("success", false)):
