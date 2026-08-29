@@ -659,6 +659,8 @@
   "ui.settings.section.audio_mix_subtitle": "为游戏的每个部分设置单独的级别",
   "ui.settings.section.controls": "热键",
   "ui.settings.section.controls_subtitle": "选择用于主世界操作的按键",
+  "ui.settings.controls.running_shoes": "跑步鞋 — 切换跑步",
+  "ui.settings.controls.running_shoes_hint": "探索主世界时切换跑步鞋。输入文字或使用菜单时，此快捷键不会生效。",
   "ui.settings.controls.fishing": "钓鱼 — 抛竿或卷线",
   "ui.settings.controls.fishing_hint": "相同的键在可钓鱼的水旁边施放并在 ! 时收线。出现。",
   "ui.settings.controls.mount": "坐骑 — 骑乘或下马",

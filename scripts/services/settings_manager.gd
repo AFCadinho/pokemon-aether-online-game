@@ -37,8 +37,14 @@ const MOUNT_MODE_SURF := MountServiceScript.MOVEMENT_MODE_SURF
 const DEFAULT_CURSOR_SCALE := 75.0
 const MIN_CURSOR_SCALE := 50.0
 const MAX_CURSOR_SCALE := 150.0
-const CONFIGURABLE_INPUT_ACTIONS: Array[String] = ["fish", "mount", "pickpocket"]
+const CONFIGURABLE_INPUT_ACTIONS: Array[String] = [
+	"toggle_running_shoes",
+	"fish",
+	"mount",
+	"pickpocket",
+]
 const DEFAULT_INPUT_BINDINGS: Dictionary = {
+	"toggle_running_shoes": KEY_X,
 	"fish": KEY_F,
 	"mount": KEY_M,
 	"pickpocket": KEY_T,

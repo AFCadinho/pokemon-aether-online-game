@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Running Shoes can now be toggled with X by default, with a rebindable Controls shortcut that stays inactive during chat, battles, transitions, and menus.
 - Developer Tools now include a Challenge Misty story checkpoint after Bill's rescue.
 - Moomoo Milk received during the Route 25 quest can now be used from the Bag to restore 100 HP outside battles.
 - The undercover Team Rocket recruiter now stops players automatically at the end of Nugget Bridge.

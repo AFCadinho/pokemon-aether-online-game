@@ -659,6 +659,8 @@
   "ui.settings.section.audio_mix_subtitle": "Stel het volume van ieder onderdeel afzonderlijk in",
   "ui.settings.section.controls": "Hotkeys",
   "ui.settings.section.controls_subtitle": "Kies de toetsen voor acties in de spelwereld",
+  "ui.settings.controls.running_shoes": "Running Shoes — rennen aan- of uitzetten",
+  "ui.settings.controls.running_shoes_hint": "Zet Running Shoes aan of uit tijdens het verkennen. Deze sneltoets werkt niet tijdens typen of in menu's.",
   "ui.settings.controls.fishing": "Fishing — uitwerpen of binnenhalen",
   "ui.settings.controls.fishing_hint": "Dezelfde toets werpt uit naast visbaar water en haalt binnen wanneer het ! verschijnt.",
   "ui.settings.controls.mount": "Mount — opstappen of afstappen",
