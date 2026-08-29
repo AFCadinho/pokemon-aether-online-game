@@ -38,7 +38,10 @@ const POPULATION := {
 		"Entities/NPCs/BikeShopOwner": "kanto_cerulean_city_bike_store_owner",
 	},
 	"res://scenes/overworld/kanto/towns/cerulean_city/pokemon_center.tscn": {
-		"Entities/NPCs/PartnerMoveTutor": "kanto_cerulean_city_pokemon_center_move_tutor",
+		"Entities/NPCs/SwimmerMarina": "kanto_cerulean_city_pokemon_center_swimmer_marina",
+		"Entities/NPCs/CamperFinn": "kanto_cerulean_city_pokemon_center_camper_finn",
+		"Entities/Pokemon/Psyduck": "kanto_cerulean_city_pokemon_center_psyduck_1",
+		"Entities/Pokemon/Squirtle": "kanto_cerulean_city_pokemon_center_squirtle_1",
 	},
 	"res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn": {
 		"Entities/NPCs/GymGuide": "kanto_cerulean_city_gym_guide",
@@ -152,6 +155,25 @@ func _check_scene(scene_path: String, expected: Dictionary) -> void:
 		_check(int(dragonite.get("level")) == 62, "Dragonite reflects Garrick's veteran status")
 		_check(dragonite.position.distance_to(veteran.position) == 64.0, "Dragonite stays beside Garrick")
 		_check(dragonite.get("npc_sprite_frames") != null, "Dragonite resolves its overworld follower sprite")
+	if scene_path.ends_with("/pokemon_center.tscn"):
+		_check(
+			map.get_node_or_null("Entities/NPCs/PartnerMoveTutor") == null,
+			"Cerulean Pokemon Center no longer places the partner Move Tutor"
+		)
+		var marina := map.get_node_or_null("Entities/NPCs/SwimmerMarina") as Node2D
+		var finn := map.get_node_or_null("Entities/NPCs/CamperFinn") as Node2D
+		var psyduck := map.get_node_or_null("Entities/Pokemon/Psyduck") as Node2D
+		var squirtle := map.get_node_or_null("Entities/Pokemon/Squirtle") as Node2D
+		if marina != null and psyduck != null:
+			_check(str(marina.get("npc_definition_id")) == "trainer_class_swimmer_f", "Marina uses the swimmer presentation")
+			_check(str(psyduck.get("species_id")) == "psyduck", "Marina's partner is Psyduck")
+			_check(psyduck.position.distance_to(marina.position) == 64.0, "Psyduck stays beside Marina")
+			_check(psyduck.get("npc_sprite_frames") != null, "Psyduck resolves its overworld follower sprite")
+		if finn != null and squirtle != null:
+			_check(str(finn.get("npc_definition_id")) == "trainer_class_camper", "Finn uses the camper presentation")
+			_check(str(squirtle.get("species_id")) == "squirtle", "Finn's partner is Squirtle")
+			_check(squirtle.position.distance_to(finn.position) == 64.0, "Squirtle stays beside Finn")
+			_check(squirtle.get("npc_sprite_frames") != null, "Squirtle resolves its overworld follower sprite")
 	map.free()
 
 
