@@ -705,6 +705,7 @@ func _is_player_position_save_blocked_by_teleport(allow_gameplay_reset := false)
 	return (
 		(GameState.gameplay_reset_in_progress and not allow_gameplay_reset)
 		or account_switch_in_progress
+		or ThievingService.is_arrest_transfer_pending()
 		or authorized_teleport_in_progress
 		or authorized_teleport_apply_failed_autosave_blocked
 	)
@@ -715,6 +716,8 @@ func _get_player_position_save_block_reason(allow_gameplay_reset := false) -> St
 		return "Gameplay reset is in progress."
 	if account_switch_in_progress:
 		return "Account switch is in progress."
+	if ThievingService.is_arrest_transfer_pending():
+		return "Arrest transfer is pending."
 	if authorized_teleport_apply_failed_autosave_blocked:
 		return "A server-authorized teleport did not finish locally; position autosave is blocked to protect the new server position."
 	return "Authorized teleport is in progress."
@@ -2161,7 +2164,8 @@ func _save_current_player_position(
 	else:
 		if str(result.get("error", "")) == "FORCED_TELEPORT_PENDING":
 			_mark_authorized_teleport_apply_failed()
-		push_warning("World: player position save failed: %s" % str(result.get("error", "Unknown error")))
+		if not ThievingService.is_arrest_transfer_pending():
+			push_warning("World: player position save failed: %s" % str(result.get("error", "Unknown error")))
 	is_saving_player_position = false
 	if has_pending_player_position_save:
 		has_pending_player_position_save = false
