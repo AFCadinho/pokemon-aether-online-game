@@ -115,8 +115,9 @@ func _reset_position_history() -> void:
 
 func _update_position_history() -> void:
 	var player_position: Vector2 = _get_player_follow_position()
+	var trail_position: Vector2 = _get_player_trail_position()
 	if position_history.is_empty():
-		position_history.append(player_position)
+		position_history.append(trail_position)
 		global_position = player_position
 		return
 
@@ -125,10 +126,10 @@ func _update_position_history() -> void:
 		_reset_position_history()
 		return
 
-	if last_position.distance_to(player_position) < TILE_SIZE * 0.9:
+	if last_position.distance_to(trail_position) < TILE_SIZE * 0.9:
 		return
 
-	position_history.append(player_position)
+	position_history.append(trail_position)
 	while position_history.size() > MAX_HISTORY_SIZE:
 		position_history.remove_at(0)
 
@@ -251,6 +252,15 @@ func _get_player_follow_position() -> Vector2:
 		if feet_position is Vector2:
 			return feet_position as Vector2
 	return player.global_position
+
+func _get_player_trail_position() -> Vector2:
+	if player == null or not is_instance_valid(player):
+		return global_position
+	if player.has_method("get_target_feet_position"):
+		var target_feet_position: Variant = player.call("get_target_feet_position")
+		if target_feet_position is Vector2:
+			return target_feet_position as Vector2
+	return _get_player_follow_position()
 
 func _update_sort_z() -> void:
 	var follower_sort_y := global_position.y
