@@ -34,6 +34,7 @@
 
 **Fixed**
 
+- The IronFanton jacket now keeps its undershirt instead of exposing the Trainer's bare torso.
 - Clefairy-form Bill and his computer no longer show Professor Oak's portrait, while human Bill's portrait now appears only after separation.
 - Bill's transformed form is now labeled and positioned as Clefairy, and the Cell Separation System's interaction matches its visible computer tile.
 
