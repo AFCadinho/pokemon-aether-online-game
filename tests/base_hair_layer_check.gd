@@ -53,39 +53,10 @@ func _run() -> void:
 			"%s resolves unequipped hair to the standard base layer" % renderer_path
 		)
 
-	var authored_adinho_frames := APPEARANCE.get_part_frames("hair", "Adinho_Hair", "male")
-	var previous_adinho_render := APPEARANCE._build_tinted_sprite_frames(
-		authored_adinho_frames,
-		TEST_HAIR_COLOR,
-		true
-	)
-	var layered_adinho_render := APPEARANCE.get_tinted_part_frames(
-		"hair",
-		"Adinho_Hair",
-		"male",
-		APPEARANCE.BODY_MOVEMENT_DEFAULT,
-		TEST_HAIR_COLOR,
-		true
-	)
-	_check(
-		_frames_preserve_opaque_overlay(previous_adinho_render, layered_adinho_render),
-		"the base-hair layer cannot alter existing Adinho hairstyle pixels"
-	)
-	_check(
-		_count_added_opaque_pixels(previous_adinho_render, layered_adinho_render) > 0,
-		"the base-hair layer fills the transparent gap in the Adinho hairstyle"
-	)
-	_check(
-		_added_pixels_match_color(
-			previous_adinho_render,
-			layered_adinho_render,
-			TEST_HAIR_COLOR
-		),
-		"newly filled base-hair pixels use the selected hair colour"
-	)
-
 	for hairstyle: Dictionary in [
 		{"gender": "male", "id": "Hair", "color": Color("#5a3728")},
+		{"gender": "male", "id": "Adinho_Hair", "color": Color("#813a2f")},
+		{"gender": "male", "id": "IronFanton_Hair", "color": Color("#d6b66b")},
 		{"gender": "male", "id": "Aether_Male_Hair_01", "color": Color("#813a2f")},
 		{"gender": "male", "id": "Aether_Male_Hair_02", "color": Color("#d6b66b")},
 		{"gender": "male", "id": "Aether_Male_Hair_03", "color": Color("#2b5f64")},
@@ -103,7 +74,7 @@ func _run() -> void:
 			hair_color,
 			true
 		)
-		var layered_render := APPEARANCE.get_tinted_part_frames(
+		var rendered_frames := APPEARANCE.get_tinted_part_frames(
 			"hair",
 			hairstyle_id,
 			gender,
@@ -112,24 +83,9 @@ func _run() -> void:
 			true
 		)
 		_check(
-			_frames_are_equal(previous_render, layered_render),
-			"%s remains pixel-identical where it already covers the base layer" % hairstyle_id
+			_frames_are_equal(previous_render, rendered_frames),
+			"%s renders without pixels from the hidden bald hairstyle" % hairstyle_id
 		)
-
-	var fixed_blossom_frames := APPEARANCE.get_part_frames(
-		"hair",
-		"Aether_Blossom_Hair",
-		"female"
-	)
-	var female_base_hair_frames := APPEARANCE.get_part_frames(
-		"hair",
-		APPEARANCE.BASE_HAIR_ID,
-		"female"
-	)
-	_check(
-		_underlay_is_fully_covered(female_base_hair_frames, fixed_blossom_frames),
-		"the fixed-colour Blossom hairstyle already fully covers the base layer"
-	)
 
 	for gender: String in ["male", "female"]:
 		var body_id := (
@@ -162,100 +118,10 @@ func _run() -> void:
 				TEST_HAIR_COLOR,
 				true
 			) != null,
-			"base-hair composition renders for %s movement" % movement_style
+			"custom hair renders for %s movement" % movement_style
 		)
 
 	quit(1 if failed else 0)
-
-
-func _frames_preserve_opaque_overlay(overlay_frames: SpriteFrames, layered_frames: SpriteFrames) -> bool:
-	if overlay_frames == null or layered_frames == null:
-		return false
-	for animation_name_text: String in overlay_frames.get_animation_names():
-		var animation_name := StringName(animation_name_text)
-		if not layered_frames.has_animation(animation_name):
-			return false
-		if (
-			overlay_frames.get_frame_count(animation_name)
-			!= layered_frames.get_frame_count(animation_name)
-		):
-			return false
-		for frame_index: int in range(overlay_frames.get_frame_count(animation_name)):
-			var overlay_image := APPEARANCE._get_texture_image(
-				overlay_frames.get_frame_texture(animation_name, frame_index)
-			)
-			var layered_image := APPEARANCE._get_texture_image(
-				layered_frames.get_frame_texture(animation_name, frame_index)
-			)
-			if not _image_preserves_opaque_overlay(overlay_image, layered_image):
-				return false
-	return true
-
-
-func _image_preserves_opaque_overlay(overlay_image: Image, layered_image: Image) -> bool:
-	if overlay_image == null or layered_image == null:
-		return false
-	if overlay_image.get_size() != layered_image.get_size():
-		return false
-	for y: int in range(overlay_image.get_height()):
-		for x: int in range(overlay_image.get_width()):
-			var overlay_pixel := overlay_image.get_pixel(x, y)
-			if overlay_pixel.a <= 0.001:
-				continue
-			if not overlay_pixel.is_equal_approx(layered_image.get_pixel(x, y)):
-				return false
-	return true
-
-
-func _count_added_opaque_pixels(overlay_frames: SpriteFrames, layered_frames: SpriteFrames) -> int:
-	if overlay_frames == null or layered_frames == null:
-		return 0
-	var added_pixels := 0
-	for animation_name_text: String in overlay_frames.get_animation_names():
-		var animation_name := StringName(animation_name_text)
-		for frame_index: int in range(overlay_frames.get_frame_count(animation_name)):
-			var overlay_image := APPEARANCE._get_texture_image(
-				overlay_frames.get_frame_texture(animation_name, frame_index)
-			)
-			var layered_image := APPEARANCE._get_texture_image(
-				layered_frames.get_frame_texture(animation_name, frame_index)
-			)
-			for y: int in range(overlay_image.get_height()):
-				for x: int in range(overlay_image.get_width()):
-					if (
-						overlay_image.get_pixel(x, y).a <= 0.001
-						and layered_image.get_pixel(x, y).a > 0.001
-					):
-						added_pixels += 1
-	return added_pixels
-
-
-func _added_pixels_match_color(
-	overlay_frames: SpriteFrames,
-	layered_frames: SpriteFrames,
-	expected_color: Color
-) -> bool:
-	if overlay_frames == null or layered_frames == null:
-		return false
-	for animation_name_text: String in overlay_frames.get_animation_names():
-		var animation_name := StringName(animation_name_text)
-		for frame_index: int in range(overlay_frames.get_frame_count(animation_name)):
-			var overlay_image := APPEARANCE._get_texture_image(
-				overlay_frames.get_frame_texture(animation_name, frame_index)
-			)
-			var layered_image := APPEARANCE._get_texture_image(
-				layered_frames.get_frame_texture(animation_name, frame_index)
-			)
-			for y: int in range(overlay_image.get_height()):
-				for x: int in range(overlay_image.get_width()):
-					if overlay_image.get_pixel(x, y).a > 0.001:
-						continue
-					var layered_pixel := layered_image.get_pixel(x, y)
-					if layered_pixel.a <= 0.001:
-						continue
-					if not layered_pixel.is_equal_approx(expected_color):
-						return false
-	return true
 
 
 func _frames_are_equal(first_frames: SpriteFrames, second_frames: SpriteFrames) -> bool:
@@ -304,33 +170,6 @@ func _opaque_pixels_match_color(frames: SpriteFrames, expected_color: Color) -> 
 					if not pixel.is_equal_approx(expected_color):
 						return false
 	return found_opaque_pixel
-
-
-func _underlay_is_fully_covered(
-	underlay_frames: SpriteFrames,
-	overlay_frames: SpriteFrames
-) -> bool:
-	if underlay_frames == null or overlay_frames == null:
-		return false
-	for animation_name_text: String in underlay_frames.get_animation_names():
-		var animation_name := StringName(animation_name_text)
-		if not overlay_frames.has_animation(animation_name):
-			return false
-		for frame_index: int in range(underlay_frames.get_frame_count(animation_name)):
-			var underlay_image := APPEARANCE._get_texture_image(
-				underlay_frames.get_frame_texture(animation_name, frame_index)
-			)
-			var overlay_image := APPEARANCE._get_texture_image(
-				overlay_frames.get_frame_texture(animation_name, frame_index)
-			)
-			for y: int in range(underlay_image.get_height()):
-				for x: int in range(underlay_image.get_width()):
-					if (
-						underlay_image.get_pixel(x, y).a > 0.001
-						and overlay_image.get_pixel(x, y).a <= 0.001
-					):
-						return false
-	return true
 
 
 func _body_uses_skin_under_base_hair(

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.68 - 2026-08-29
+
+**Fixed**
+
+- Custom hairstyles no longer show a stray hair-coloured dot on the forehead.
+
 ## 0.3.67 - 2026-08-29
 
 **Added**
