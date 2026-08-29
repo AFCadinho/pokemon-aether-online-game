@@ -27,6 +27,18 @@ func _run() -> void:
 	trainer.set("is_interacting", false)
 	_check(bool(trainer.call("_can_auto_challenge")), "vision challenge remains available outside a manual interaction")
 
+	trainer.set("battle_in_progress", true)
+	trainer.set("triggered", true)
+	var vision_candidate := Node2D.new()
+	trainer.set("vision_candidate", vision_candidate)
+	trainer.call("_release_failed_battle_start")
+	_check(not bool(trainer.get("battle_in_progress")), "failed battle start releases battle ownership")
+	_check(not bool(trainer.get("triggered")), "failed first encounter releases its trigger")
+	_check(bool(trainer.get("auto_trigger_failed")), "failed battle start blocks an immediate vision retry")
+	_check(trainer.get("vision_candidate") == null, "failed battle start clears the vision candidate")
+	_check(not bool(trainer.call("_can_auto_challenge")), "rejected trainer battle cannot enter an automatic dialogue loop")
+
+	vision_candidate.free()
 	trainer.free()
 	quit(1 if failures > 0 else 0)
 

@@ -148,15 +148,24 @@ func _show_battle_dialogue(is_rematch: bool) -> void:
 	battle_metadata["_is_rematch"] = is_rematch
 	var battle_result: Dictionary = await start_trainer_battle(battle_metadata)
 	if not bool(battle_result.get("success", false)):
-		battle_in_progress = false
-		if trainer_progress_state == STATE_FIRST_ENCOUNTER:
-			triggered = false
-		_refresh_rematch_marker()
+		_release_failed_battle_start()
 		await GameErrorDialogService.show_response(
 			battle_result,
 			"backend.error.trainer_battle_start",
 			dialogue_box
 		)
+
+
+func _release_failed_battle_start() -> void:
+	battle_in_progress = false
+	# A player who remains inside a Trainer's vision after a rejected start
+	# must be able to read the error and regain control without retriggering
+	# the intro every frame. Manual interaction remains available for retries.
+	auto_trigger_failed = true
+	vision_candidate = null
+	if trainer_progress_state == STATE_FIRST_ENCOUNTER:
+		triggered = false
+	_refresh_rematch_marker()
 
 
 func _resolve_rematch_dialogue_lines(trainer_metadata: Dictionary) -> Array[String]:

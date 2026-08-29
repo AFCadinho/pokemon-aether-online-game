@@ -29,6 +29,7 @@
 
 **Fixed**
 
+- Trainer battle start errors no longer trap players in a repeating automatic dialogue, including Gary at Nugget Bridge.
 - Route 25's horizontal stairs now play their elevation effect when crossed.
 - The guide inside Cerulean Gym now shows his matching Trainer portrait instead of Professor Oak.
 - Receiving Moomoo Milk during the Route 25 date now shows a System message and plays the item-received sound.
