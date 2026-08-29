@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Route 24 terrain collision and tall grass rendering have been corrected.
 - Rival battles now use a dedicated Blue and Green remix by Zame.
 - Running Shoes can now be toggled reliably with X by default, with a rebindable Controls shortcut that stays inactive during chat, battles, transitions, and menus.
 - Developer Tools now include a Challenge Misty story checkpoint after Bill's rescue.

@@ -126,8 +126,8 @@ visibility_required_quest_status = "active"
 visibility_hidden_quest_id = "help_bill"
 dialogue_id = "kanto_bills_house_bill_waiting"
 display_name = "Clefairy"
-dialogue_portrait_visible = false
 npc_sprite_frames = ExtResource("8_clefairy_frames")
+dialogue_portrait_visible = false
 preload_quest_markers = true
 
 [node name="StoryHook" type="Node" parent="Entities/NPCs/TrappedBill" unique_id=321472904]
@@ -138,7 +138,6 @@ entity_id = "kanto_bills_house_bill_transformed"
 [node name="Bill" parent="Entities/NPCs" unique_id=823906529 instance=ExtResource("7_dialogue_npc")]
 position = Vector2(400, 304)
 visibility_required_quest_id = "help_bill"
-visibility_required_quest_status = "completed"
 dialogue_id = "kanto_bills_house_bill_after_rescue"
 display_name = "Bill"
 npc_sprite_frames = ExtResource("9_bill_frames")
