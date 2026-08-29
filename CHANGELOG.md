@@ -26,6 +26,8 @@
 
 **Fixed**
 
+- Receiving Moomoo Milk during the Route 25 date now shows a System message and plays the item-received sound.
+- The player's lines during Misty and Dadinho's Route 25 encounter now show their current trainer mugshot.
 - Misty now has her own nameplate, blocks her tile, and can start the shared Route 25 date dialogue when spoken to directly.
 - Dadinho now faces Misty during their Route 25 date, their heart clears his nameplate, and Misty leaves toward Cerulean Gym without crossing the water.
 - Route 24's expanded layout now keeps its Cerulean and Route 25 passages aligned with the visible map.

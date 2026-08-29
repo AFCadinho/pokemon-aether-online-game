@@ -182,6 +182,10 @@ func _test_hook_and_api_integration_contract() -> void:
 		"client API uses the resolve and complete interaction endpoints"
 	)
 	_expect(
+		hook.contains('"effects": completion_result.get("effects", [])'),
+		"story hooks forward authoritative completion effects to their interaction host"
+	)
+	_expect(
 		service.contains('"mapId": map_id.strip_edges()')
 		and service.contains('"entityId": entity_id.strip_edges()')
 		and service.contains('"trigger": trigger.strip_edges()')

@@ -19,6 +19,9 @@ var _story_player: Node2D
 var _heart_origin := Vector2.ZERO
 var _heart_tween: Tween
 var _misty_nameplate: Control
+var _portrait_overlay_layer: CanvasLayer
+var _portrait_overlay_root: Control
+var _player_portrait_renderer: TrainerHeadPortrait
 
 
 func _ready() -> void:
@@ -32,6 +35,8 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	if _heart_tween != null and _heart_tween.is_valid():
 		_heart_tween.kill()
+	if is_instance_valid(_portrait_overlay_layer):
+		_portrait_overlay_layer.queue_free()
 
 
 func set_story_player(player: Node2D) -> void:
@@ -42,6 +47,42 @@ func set_story_player(player: Node2D) -> void:
 func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictionary:
 	set_story_player(body)
 	return await super._run_story_or_legacy_interaction(body, trigger)
+
+
+func _after_story_interaction(_player: Node2D, result: Dictionary) -> void:
+	_present_moomoo_milk_reward(result.get("effects", []))
+
+
+func _present_moomoo_milk_reward(effects_value: Variant) -> bool:
+	var quantity := 0
+	if effects_value is Array:
+		for effect_value: Variant in effects_value as Array:
+			if effect_value is not Dictionary:
+				continue
+			var effect := effect_value as Dictionary
+			if bool(effect.get("alreadyGranted", false)):
+				continue
+			var grants_value: Variant = effect.get("grants", [])
+			if grants_value is not Array:
+				continue
+			for grant_value: Variant in grants_value as Array:
+				if grant_value is not Dictionary:
+					continue
+				var grant := grant_value as Dictionary
+				if str(grant.get("itemId", "")).strip_edges().to_lower() == "moomoo-milk":
+					quantity += maxi(int(grant.get("quantity", 0)), 0)
+	if quantity <= 0:
+		return false
+	get_tree().call_group(
+		"ui_overlay",
+		"add_system_message",
+		LocalizationManager.text("ui.world.reward.story_item", {
+			"item": ItemLocalization.display_name("moomoo-milk"),
+			"quantity": quantity,
+		})
+	)
+	SfxManager.play("item_received")
+	return true
 
 
 func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bool:
@@ -61,7 +102,7 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bo
 	var speaker_name := speaker_name_override.strip_edges()
 	if current_stage in PLAYER_DIALOGUE_STAGES:
 		speaker_name = _player_speaker_name()
-	var portrait := _dialogue_portrait(current_stage, speaker_name)
+	var portrait := await _dialogue_portrait(current_stage, speaker_name)
 	dialogue_box.call(
 		"start_dialogue",
 		lines,
@@ -167,11 +208,46 @@ func _setup_misty_nameplate() -> void:
 
 
 func _dialogue_portrait(stage: int, speaker_name: String) -> Texture2D:
+	if stage in PLAYER_DIALOGUE_STAGES:
+		return await _player_mugshot()
 	if stage in MISTY_DIALOGUE_STAGES:
 		return TrainerPortraitCatalog.get_texture(MISTY_PORTRAIT_ID)
 	if stage in DADINHO_DIALOGUE_STAGES or speaker_name == "Dadinho":
 		return mugshot
 	return null
+
+
+func _player_mugshot() -> Texture2D:
+	if not is_instance_valid(_player_portrait_renderer):
+		_ensure_portrait_overlay()
+		_player_portrait_renderer = TrainerHeadPortrait.new()
+		_player_portrait_renderer.name = "PlayerDialoguePortrait"
+		_player_portrait_renderer.head_only = false
+		_player_portrait_renderer.render_scale = 1.25
+		_player_portrait_renderer.custom_minimum_size = Vector2(64, 64)
+		_player_portrait_renderer.size = Vector2(64, 64)
+		_player_portrait_renderer.position = Vector2(-128, -128)
+		_player_portrait_renderer.appearance_state = PlayerSave.to_appearance_state()
+		_portrait_overlay_root.add_child(_player_portrait_renderer)
+		await get_tree().process_frame
+	if _player_portrait_renderer.viewport == null:
+		return null
+	return _player_portrait_renderer.viewport.get_texture()
+
+
+func _ensure_portrait_overlay() -> void:
+	if is_instance_valid(_portrait_overlay_root):
+		return
+	_portrait_overlay_layer = CanvasLayer.new()
+	_portrait_overlay_layer.layer = 80
+	var overlay_host := get_tree().current_scene
+	if overlay_host == null:
+		overlay_host = get_tree().root
+	overlay_host.add_child(_portrait_overlay_layer)
+	_portrait_overlay_root = Control.new()
+	_portrait_overlay_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_portrait_overlay_layer.add_child(_portrait_overlay_root)
+	_portrait_overlay_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 
 func _player_speaker_name() -> String:
