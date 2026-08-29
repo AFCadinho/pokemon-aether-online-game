@@ -199,11 +199,18 @@ func _init() -> void:
 		script_source.contains('event.is_action_pressed("toggle_running_shoes", false)')
 		and script_source.contains("if _try_handle_running_shoes_shortcut(event):")
 		and script_source.contains("func _can_toggle_running_shoes_from_shortcut()")
-		and script_source.contains("GameState.is_overworld_input_locked()")
-		and script_source.contains("GameState.is_ui_input_locked() or _is_world_battle_active()")
-		and script_source.contains("_has_visible_priority_overlay_panel() or _is_text_input_focused()")
+		and script_source.contains('return "overworld_input_locked"')
+		and script_source.contains('return "ui_input_locked"')
+		and script_source.contains('return "battle_active"')
+		and script_source.contains('return "priority_overlay_visible"')
+		and script_source.contains('return "text_input_focused"')
 		and script_source.contains("func _is_overlay_pointer_interaction_active()"),
 		"Running Shoes shortcut is limited to unlocked overworld input outside battles, menus, and text entry"
+	)
+	_check(
+		script_source.contains("[RunningShoesDebug][UIOverlay]")
+		and script_source.contains("func _running_shoes_shortcut_block_reason()"),
+		"Running Shoes shortcut reports key routing, configured binding, and the exact blocking gate"
 	)
 	_check(scene_source.contains('path="res://assets/ui/town_map_navigation.svg" id="3_riyyd"'), "Town Map uses a navigation-focused map icon")
 	_check(scene_source.contains('path="res://assets/ui/item_dex.svg" id="12_item_dex"') and script_source.contains('const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")'), "Item Dex uses its dedicated item catalogue icon")
