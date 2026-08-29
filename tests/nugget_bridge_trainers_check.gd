@@ -67,7 +67,8 @@ func _run() -> void:
 	)
 	var recruiter := route_24.get_node("Entities/NPCs/NuggetBridgeRocketRecruiter")
 	_check(recruiter.position == Vector2(1072, 752), "Recruiter keeps the reviewed post-bridge tile")
-	_check(recruiter.sight_range_tiles == 0, "Disguised recruiter waits for manual interaction")
+	_check(recruiter.sight_range_tiles == 5, "Disguised recruiter stops players automatically")
+	_check_bridge_sight_lane(recruiter, "NuggetBridgeRocketRecruiter")
 	_check(not recruiter.rematch_marker.visible, "Disguised recruiter shows no trainer challenge marker")
 	_check(recruiter.npc_definition_id == "trainer_class_camper", "Recruiter begins in an ordinary disguise")
 	_check(recruiter.display_name == "Bridge Attendant", "Recruiter hides his identity before the reveal")
@@ -81,6 +82,11 @@ func _run() -> void:
 	_check(collision.get_cell_source_id(recruiter_cell) < 0, "Recruiter stands on walkable ground")
 	_check(water == null or water.get_cell_source_id(recruiter_cell) < 0, "Recruiter stands outside water")
 	var recruiter_source := FileAccess.get_file_as_string(RECRUITER_SCRIPT)
+	_check(
+		recruiter_source.contains("func show_intro_dialogue()")
+		and recruiter_source.contains("await _run_recruitment_sequence()"),
+		"Recruiter vision starts the prize and reveal sequence"
+	)
 	_check(
 		recruiter_source.contains("kanto_route_24_nugget_bridge_big_nugget"),
 		"Recruiter claims the one-time Big Nugget prize"

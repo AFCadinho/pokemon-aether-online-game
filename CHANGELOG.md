@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- The undercover Team Rocket recruiter now stops players automatically at the end of Nugget Bridge.
 - Nugget Bridge trainers no longer spot players one tile below their intended sight lanes.
 
 - Fossils now appear under Other in the Bag and can no longer be equipped as held items.
