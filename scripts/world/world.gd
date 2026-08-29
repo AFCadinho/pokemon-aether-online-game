@@ -1648,6 +1648,16 @@ func _build_structure_top_visual_depth_groups(map: Node) -> void:
 					TREE_LAYER_Z_MAX
 				)
 			)
+			group_z_index = maxi(
+				group_z_index,
+				MapDepthSortingScript.get_tall_grass_overlap_z_floor(
+					map,
+					structure_layer,
+					group,
+					TREE_LAYER_Z_MIN,
+					TREE_LAYER_Z_MAX
+				)
+			)
 			group_layer.z_index = group_z_index
 			group_layer.set_meta(STRUCTURE_TOP_DEPTH_GROUP_META, true)
 			group_root.add_child(group_layer)
