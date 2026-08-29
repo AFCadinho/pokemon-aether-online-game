@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Rival battles now use a dedicated Blue and Green remix by Zame.
 - Developer Tools now include a Challenge Misty story checkpoint after Bill's rescue.
 - Moomoo Milk received during the Route 25 quest can now be used from the Bag to restore 100 HP outside battles.
 - The undercover Team Rocket recruiter now stops players automatically at the end of Nugget Bridge.

@@ -140,6 +140,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/players_house_visual_depth_check.gd",
 	"res://tests/players_house_location_label_check.gd",
 	"res://tests/map_music_profile_check.gd",
+	"res://tests/rival_battle_music_check.gd",
 	"res://tests/map_layer_resolver_check.gd",
 	"res://tests/horizontal_stair_elevation_check.gd",
 	"res://tests/outdoor_horizontal_stair_markers_check.gd",
