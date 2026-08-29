@@ -125,6 +125,14 @@ func _check_service_falls_back_to_english() -> void:
 
 
 func _check_sign_portrait_catalog() -> void:
+	var catalog_text := _read_text(SIGN_PORTRAIT_CATALOG_SCRIPT)
+	_check_true(
+		not catalog_text.contains('preload("res://assets/sprites/sign_previews/'),
+		"Sign portraits do not require imported textures while scripts are parsed"
+	)
+	_check_true(catalog_text.contains("ResourceLoader.exists"), "Sign portraits prefer normal imported resources")
+	_check_true(catalog_text.contains("Image.load_from_file"), "Sign portraits support editor fallback before asset import")
+
 	var expected_sign_ids: Array[String] = [
 		"kanto_pallet_town_town_sign",
 		"kanto_pallet_town_oaks_lab",
@@ -147,11 +155,10 @@ func _check_sign_portrait_catalog() -> void:
 	for sign_id: String in expected_sign_ids:
 		var portrait: Texture2D = SignPortraitCatalogScript.get_portrait(sign_id)
 		_check_true(portrait != null, "%s has a location preview portrait" % sign_id)
-		if portrait != null:
-			_check_true(
-				portrait.resource_path.begins_with("res://assets/sprites/sign_previews/"),
-				"%s uses the sign preview asset directory" % sign_id
-			)
+		_check_true(
+			SignPortraitCatalogScript.get_portrait_path(sign_id).begins_with("res://assets/sprites/sign_previews/"),
+			"%s uses the sign preview asset directory" % sign_id
+		)
 
 
 func _check_sign_interactable_contract() -> void:
