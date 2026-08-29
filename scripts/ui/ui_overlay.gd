@@ -154,6 +154,8 @@ const GLOBAL_EV_BUFF_ICON: Texture2D = preload("res://assets/ui/global_ev_boost.
 const GLOBAL_SHINY_BUFF_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
 const GLOBAL_RARE_ENCOUNTER_BUFF_ICON: Texture2D = preload("res://assets/ui/global_rare_encounter_boost.svg")
 const GLOBAL_HEAL_ICON: Texture2D = preload("res://assets/ui/tool_heal_party.svg")
+const GLOBAL_BUFF_NOTIFICATION_DISPLAY_SECONDS := 6.0
+const GLOBAL_BUFF_NOTIFICATION_SOUND_BATCH_SECONDS := 0.25
 const REDEEM_CODE_ICON: Texture2D = preload("res://assets/ui/redeem_code.svg")
 const PVP_MODE_RANKED_ICON: Texture2D = preload("res://assets/ui/pvp_battles.svg")
 const PVP_MODE_CUSTOM_ICON: Texture2D = preload("res://assets/ui/pvp_custom_battle.svg")
@@ -1476,6 +1478,7 @@ var staff_tools_visibility_key := ""
 var reward_notification_stack: VBoxContainer
 var reward_notification_event_sequence := 0
 var global_buff_notification_tokens: Dictionary = {}
+var global_buff_activation_sound_pending := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -12320,8 +12323,13 @@ func _show_global_boost_activation_notification(buff: Dictionary, remaining_seco
 		_global_buff_icon_for(buff),
 		_format_global_buff_notification_duration(remaining_seconds),
 		"",
-		_global_buff_notification_accent(boost_id)
+		_global_buff_notification_accent(boost_id),
+		null,
+		0,
+		0,
+		GLOBAL_BUFF_NOTIFICATION_DISPLAY_SECONDS
 	)
+	_queue_global_buff_activation_sound()
 
 
 func _show_global_heal_activation_notification(message: Dictionary) -> void:
@@ -12342,8 +12350,35 @@ func _show_global_heal_activation_notification(message: Dictionary) -> void:
 		_global_buff_icon_for(buff),
 		_format_global_buff_notification_duration(remaining_seconds),
 		"",
-		_global_buff_notification_accent("global_heal")
+		_global_buff_notification_accent("global_heal"),
+		null,
+		0,
+		0,
+		GLOBAL_BUFF_NOTIFICATION_DISPLAY_SECONDS
 	)
+	_queue_global_buff_activation_sound()
+
+
+func _queue_global_buff_activation_sound() -> void:
+	if global_buff_activation_sound_pending:
+		return
+	if not is_inside_tree():
+		return
+	global_buff_activation_sound_pending = true
+	_play_global_buff_activation_sound.call_deferred()
+
+
+func _play_global_buff_activation_sound() -> void:
+	if not is_inside_tree():
+		global_buff_activation_sound_pending = false
+		return
+	var tree := get_tree()
+	if tree == null:
+		global_buff_activation_sound_pending = false
+		return
+	await tree.create_timer(GLOBAL_BUFF_NOTIFICATION_SOUND_BATCH_SECONDS).timeout
+	global_buff_activation_sound_pending = false
+	SfxManager.play("global_buff_activated")
 
 
 func _global_buff_data_by_id(buff_id: String) -> Dictionary:
@@ -42256,7 +42291,8 @@ func _show_event_notification(
 	accent_color: Color = Color("#d8b767"),
 	trailing_icon: Texture2D = null,
 	previous_level: int = 0,
-	current_level: int = 0
+	current_level: int = 0,
+	display_seconds_override: float = 0.0
 ) -> void:
 	if reward_notification_stack == null:
 		_setup_reward_notification_stack()
@@ -42273,7 +42309,8 @@ func _show_event_notification(
 		accent_color,
 		trailing_icon,
 		previous_level,
-		current_level
+		current_level,
+		display_seconds_override
 	)
 
 

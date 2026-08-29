@@ -46,12 +46,20 @@ func _run() -> void:
 		null,
 		"1h",
 		"",
-		Color("#d8b767")
+		Color("#d8b767"),
+		null,
+		0,
+		0,
+		6.0
 	)
 	var buff_card := pokemon_stack.get_child(0) as PanelContainer
 	_check(_label_text(buff_card, "RewardTitle") == "Global EXP Boost", "generic event cards show a title")
 	_check(_label_text(buff_card, "RewardSubtitle") == "Activated", "generic event cards show a subtitle")
 	_check(_detail_text(buff_card) == "1h", "generic event cards show a duration")
+	_check(
+		is_equal_approx(float(buff_card.get_meta("display_seconds", 0.0)), 6.0),
+		"generic event cards can override their display duration"
+	)
 	pokemon_stack.remove_child(buff_card)
 	buff_card.free()
 	pokemon_stack.call(

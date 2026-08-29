@@ -68,7 +68,8 @@ func show_event(
 	accent_color: Color = BORDER_COLOR,
 	trailing_icon: Texture2D = null,
 	previous_level: int = 0,
-	current_level: int = 0
+	current_level: int = 0,
+	display_seconds_override: float = 0.0
 ) -> void:
 	var normalized_key := reward_key.strip_edges().to_lower()
 	var clean_title := title.strip_edges()
@@ -99,6 +100,8 @@ func show_event(
 	if current_level > 0:
 		card.set_meta("level_start", maxi(previous_level, 0))
 		card.set_meta("level_end", current_level)
+	if display_seconds_override > 0.0:
+		card.set_meta("display_seconds", display_seconds_override)
 	add_child(card)
 	move_child(card, 0)
 	_trim_oldest_cards()
@@ -330,11 +333,12 @@ func _schedule_expiry(card: PanelContainer) -> void:
 	if not auto_expire:
 		return
 	var revision := int(card.get_meta("revision", 0))
-	_expire_card(card, revision)
+	var card_display_seconds := maxf(float(card.get_meta("display_seconds", display_seconds)), 0.1)
+	_expire_card(card, revision, card_display_seconds)
 
 
-func _expire_card(card: PanelContainer, revision: int) -> void:
-	await get_tree().create_timer(display_seconds).timeout
+func _expire_card(card: PanelContainer, revision: int, card_display_seconds: float) -> void:
+	await get_tree().create_timer(card_display_seconds).timeout
 	if (
 		not is_instance_valid(card)
 		or card.get_parent() != self
