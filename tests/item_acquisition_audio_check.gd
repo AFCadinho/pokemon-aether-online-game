@@ -9,6 +9,7 @@ const MARKET_ATTENDANT_NPC := "res://scripts/world/npcs/market_attendant_npc.gd"
 const MATEO_NPC := "res://scripts/world/kanto/towns/ev_training_expert_mateo.gd"
 const GIDEON_NPC := "res://scripts/world/kanto/towns/catching_mentor_gideon.gd"
 const DADINHO_NPC := "res://scripts/world/kanto/routes/dadinho_training_npc.gd"
+const ROUTE_25_DATE_NPC := "res://scripts/world/kanto/routes/route_25_misty_date_npc.gd"
 const UI_OVERLAY := "res://scripts/ui/ui_overlay.gd"
 const OAK_SCRIPT := "res://scripts/world/kanto/towns/pallet_town/oak.gd"
 const WORLD_SCRIPT := "res://scripts/world/world.gd"
@@ -26,6 +27,7 @@ func _init() -> void:
 	var mateo_source := FileAccess.get_file_as_string(MATEO_NPC)
 	var gideon_source := FileAccess.get_file_as_string(GIDEON_NPC)
 	var dadinho_source := FileAccess.get_file_as_string(DADINHO_NPC)
+	var route_25_date_source := FileAccess.get_file_as_string(ROUTE_25_DATE_NPC)
 	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY)
 	var oak_source := FileAccess.get_file_as_string(OAK_SCRIPT)
 	var world_source := FileAccess.get_file_as_string(WORLD_SCRIPT)
@@ -51,6 +53,12 @@ func _init() -> void:
 	_check_received_sound_after(mateo_source, "quest_reward_received_dialogue_id", "Mateo's quest reward")
 	_check_received_sound_after(gideon_source, "quest_reward_received_dialogue_id", "Gideon's quest reward")
 	_check_received_sound_after(dadinho_source, "quest_reward_received_dialogue_id", "Dadinho's quest reward")
+	var milk_message_index := route_25_date_source.find('LocalizationManager.text("ui.world.reward.story_item"')
+	var milk_sound_index := route_25_date_source.find('SfxManager.play("item_received")', milk_message_index)
+	_check(
+		milk_message_index >= 0 and milk_sound_index > milk_message_index,
+		"Moomoo Milk shows its System message before the received-item jingle"
+	)
 	_check_received_sound_after(oak_source, "quest_turn_in_completed_dialogue_id", "Oak's Pokedex reward")
 	var brock_outro_index := world_source.find("await _show_trainer_outro_dialogue")
 	var brock_sound_index := world_source.find('SfxManager.play("item_received")', brock_outro_index)

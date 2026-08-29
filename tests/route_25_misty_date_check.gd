@@ -12,11 +12,21 @@ class DummyPlayer extends CharacterBody2D:
 		return global_position
 
 
+class SystemMessageOverlay extends Node:
+	var messages: Array[String] = []
+
+	func add_system_message(message: String) -> void:
+		messages.append(message)
+
+
 func _init() -> void:
 	call_deferred("_run")
 
 
 func _run() -> void:
+	var system_overlay := SystemMessageOverlay.new()
+	system_overlay.add_to_group("ui_overlay")
+	root.add_child(system_overlay)
 	var packed := load(ROUTE_SCENE) as PackedScene
 	_check(packed != null, "Route 25 scene loads with the Misty date encounter")
 	if packed == null:
@@ -46,6 +56,17 @@ func _run() -> void:
 		var misty_name_label := date.get_node_or_null("MistyNameplate/NameLabel") as Label
 		_check(misty_nameplate != null and misty_nameplate.visible, "Misty displays her own nameplate")
 		_check(misty_name_label != null and misty_name_label.text == "Misty", "Misty's nameplate identifies her")
+		var player_portrait: Texture2D = await date.call("_dialogue_portrait", 0, "")
+		_check(player_portrait != null, "the player's opening line uses their current trainer mugshot")
+		_check(player_portrait != null and player_portrait.get_size() == Vector2(64, 64), "the player mugshot uses the dialogue portrait size")
+		var milk_effects := [{
+			"alreadyGranted": false,
+			"grants": [{"itemId": "moomoo-milk", "quantity": 1}],
+		}]
+		_check(bool(date.call("_present_moomoo_milk_reward", milk_effects)), "a new Moomoo Milk story grant is presented")
+		_check(system_overlay.messages.size() == 1 and system_overlay.messages[0].contains("Moomoo Milk"), "Moomoo Milk produces a localized system message")
+		milk_effects[0]["alreadyGranted"] = true
+		_check(not bool(date.call("_present_moomoo_milk_reward", milk_effects)) and system_overlay.messages.size() == 1, "an idempotent Moomoo Milk replay does not notify twice")
 
 		var heart := date.get_node_or_null("Heart") as Label
 		_check(heart != null and heart.text == "♥", "a heart floats above the couple")
@@ -115,6 +136,7 @@ func _run() -> void:
 		_check(departure_position.x < misty.global_position.x, "Misty leaves west toward Route 24 and Cerulean Gym")
 
 	route.queue_free()
+	system_overlay.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
 
