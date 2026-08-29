@@ -116,10 +116,10 @@ func _check_scene(scene_path: String, expected: Dictionary) -> void:
 				"Gym attendant reports the completed conversation to story progress"
 			)
 		_check(
-			str(gym_attendant.get("visibility_hidden_quest_id")) == "explore_cerulean_city"
-				and str(gym_attendant.get("visibility_hidden_quest_step_id")) == "visit_nugget_bridge"
+			str(gym_attendant.get("visibility_hidden_quest_id")) == "help_bill"
+				and str(gym_attendant.get("visibility_hidden_quest_step_id")).is_empty()
 				and str(gym_attendant.get("visibility_hidden_quest_status")) == "completed",
-			"Gym attendant leaves after Misty is found"
+			"Gym attendant leaves only after Bill is rescued"
 		)
 		_check(bool(gym_attendant.get("preload_quest_markers")), "Gym attendant preloads its story marker")
 	var cave_agent := map.get_node_or_null("Entities/NPCs/CeruleanCaveAgent")
