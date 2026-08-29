@@ -9,10 +9,10 @@ const LOCAL_POKEMON := {
 	"Entities/Pokemon/Poliwag": ["kanto_route_25_poliwag_1", "poliwag", Vector2(2256, 1040), "pace_horizontal", "water"],
 }
 const MOUNTAIN_POKEMON := {
-	"Entities/Pokemon/MountainPokemon/Nacli": ["kanto_route_25_mountain_nacli_1", "nacli", Vector2(1104, 112), 598],
-	"Entities/Pokemon/MountainPokemon/Noibat": ["kanto_route_25_mountain_noibat_1", "noibat", Vector2(2192, 112), 598],
-	"Entities/Pokemon/MountainPokemon/Gligar": ["kanto_route_25_mountain_gligar_1", "gligar", Vector2(336, 1296), 409],
-	"Entities/Pokemon/MountainPokemon/Pawniard": ["kanto_route_25_mountain_pawniard_1", "pawniard", Vector2(1328, 1456), 409],
+	"Entities/Pokemon/MountainPokemon/Nacli": ["kanto_route_25_mountain_nacli_1", "nacli", Vector2(1040, 176), 598],
+	"Entities/Pokemon/MountainPokemon/Noibat": ["kanto_route_25_mountain_noibat_1", "noibat", Vector2(2128, 656), 598],
+	"Entities/Pokemon/MountainPokemon/Gligar": ["kanto_route_25_mountain_gligar_1", "gligar", Vector2(240, 1072), 409],
+	"Entities/Pokemon/MountainPokemon/Pawniard": ["kanto_route_25_mountain_pawniard_1", "pawniard", Vector2(1008, 1360), 409],
 }
 
 var failed := false

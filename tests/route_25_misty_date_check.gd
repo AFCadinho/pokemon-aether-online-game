@@ -23,7 +23,7 @@ func _run() -> void:
 	var date := route.get_node_or_null("Entities/NPCs/MistyDate") as Node2D
 	_check(date != null, "Route 25 places Dadinho and Misty by the water")
 	if date != null:
-		_check(date.position == Vector2(1776, 784), "the date uses its designed waterside position")
+		_check(date.position == Vector2(1840, 1040), "the date uses its designed waterside position")
 		_check(str(date.get("npc_id")) == "kanto_route_25_dadinho_date", "Dadinho keeps the server-authorized story identity")
 		_check(str(date.get("dialogue_id")) == "kanto_route_25_dadinho_after_date", "Dadinho retains localized guidance toward Bill")
 		_check(str(date.get("visibility_required_quest_id")) == "explore_cerulean_city", "the couple only appears during the Cerulean search")
@@ -50,9 +50,10 @@ func _run() -> void:
 			var standing_cell := collision.local_to_map(world_position)
 			_check(collision.get_cell_source_id(standing_cell) < 0, "the couple stands on walkable ground")
 			var water_is_nearby := false
-			for distance: int in range(1, 5):
-				if water.get_cell_source_id(standing_cell + Vector2i.LEFT * distance) >= 0:
-					water_is_nearby = true
+			for direction: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+				for distance: int in range(1, 5):
+					if water.get_cell_source_id(standing_cell + direction * distance) >= 0:
+						water_is_nearby = true
 			_check(water_is_nearby, "the couple stands beside the water's shoreline")
 
 	route.queue_free()

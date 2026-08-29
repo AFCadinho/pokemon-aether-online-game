@@ -530,7 +530,7 @@ movement_speed_pixels = 38.0
 [node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=348208063]
 
 [node name="Route24Sign" parent="Entities/Interactables/Signs" unique_id=647439293 instance=ExtResource("5_m4smc")]
-position = Vector2(848, 336)
+position = Vector2(1136, 336)
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1702258853]
 visible = false

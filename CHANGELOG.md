@@ -10,6 +10,7 @@
 
 **Changed**
 
+- Route 24's sign and Route 25's waterside couple and mountain Pokémon now use their updated positions.
 - Route 25's Trainers now use their updated positions along the route.
 - Route 25 now has wild Pokémon encounters in tall grass, while surfing, and with every fishing rod, including different daytime and nighttime species.
 - Alpha Tools now include the same protected Reset / New Game action as Developer Tools.
