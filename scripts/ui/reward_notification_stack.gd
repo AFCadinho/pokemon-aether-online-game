@@ -58,7 +58,7 @@ func show_reward(
 	_schedule_expiry(card)
 
 
-func show_pokemon_event(
+func show_event(
 	reward_key: String,
 	title: String,
 	subtitle: String,
@@ -104,6 +104,32 @@ func show_pokemon_event(
 	_trim_oldest_cards()
 	_animate_card_in.call_deferred(card)
 	_schedule_expiry(card)
+
+
+func show_pokemon_event(
+	reward_key: String,
+	title: String,
+	subtitle: String,
+	icon_texture: Texture2D = null,
+	detail: String = "",
+	badge_text: String = "",
+	accent_color: Color = BORDER_COLOR,
+	trailing_icon: Texture2D = null,
+	previous_level: int = 0,
+	current_level: int = 0
+) -> void:
+	show_event(
+		reward_key,
+		title,
+		subtitle,
+		icon_texture,
+		detail,
+		badge_text,
+		accent_color,
+		trailing_icon,
+		previous_level,
+		current_level
+	)
 
 
 func _create_card(

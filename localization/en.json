@@ -2897,6 +2897,8 @@
   "ui.world.capture.caught_party": "You caught {pokemon}! Added to your party.",
   "ui.reward_card.level_up": "Level up",
   "ui.reward_card.caught": "Caught",
+  "ui.reward_card.global_buff_activated": "Activated",
+  "ui.reward_card.global_heal_activated_by": "Activated by {player}",
   "ui.world.reward.badge_earned": "You earned the {badge}!",
   "ui.world.reward.preceding_badge": "the preceding Gym Badge",
   "ui.world.reward.badge_required": "No Gym Badge was awarded. First earn {badge}.",

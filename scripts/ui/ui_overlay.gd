@@ -1475,6 +1475,7 @@ var global_heal_request_busy := false
 var staff_tools_visibility_key := ""
 var reward_notification_stack: VBoxContainer
 var reward_notification_event_sequence := 0
+var global_buff_notification_tokens: Dictionary = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -11952,44 +11953,60 @@ func _on_global_buff_contribute_pressed() -> void:
 			"boost": _localized_buff_name(selected_global_buff),
 		}
 		))
-	_apply_global_boost_state(body, selected_boost_id)
+	_apply_global_boost_state(body, selected_boost_id, true)
 	_render_global_buff_details()
 
 
-func _load_global_exp_boost() -> void:
+func _load_global_exp_boost(show_activation_notification: bool = false) -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_exp_boost()
 	if bool(response.get("success", false)):
-		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_exp")
+		_apply_global_boost_state(
+			response.get("body", {}) as Dictionary,
+			"global_exp",
+			show_activation_notification
+		)
 
 
-func _load_global_ev_boost() -> void:
+func _load_global_ev_boost(show_activation_notification: bool = false) -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_ev_boost()
 	if bool(response.get("success", false)):
-		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_ev")
+		_apply_global_boost_state(
+			response.get("body", {}) as Dictionary,
+			"global_ev",
+			show_activation_notification
+		)
 
 
-func _load_global_shiny_boost() -> void:
+func _load_global_shiny_boost(show_activation_notification: bool = false) -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_shiny_boost()
 	if bool(response.get("success", false)):
-		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_shiny")
+		_apply_global_boost_state(
+			response.get("body", {}) as Dictionary,
+			"global_shiny",
+			show_activation_notification
+		)
 
 
-func _load_global_rare_encounter_boost() -> void:
+func _load_global_rare_encounter_boost(show_activation_notification: bool = false) -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_rare_encounter_boost()
 	if bool(response.get("success", false)):
-		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_rare_encounter")
+		_apply_global_boost_state(
+			response.get("body", {}) as Dictionary,
+			"global_rare_encounter",
+			show_activation_notification
+		)
 
 
-func _load_global_boost_state(boost_id: String) -> void:
+func _load_global_boost_state(boost_id: String, show_activation_notification: bool = false) -> void:
 	match boost_id:
 		"global_exp":
-			await _load_global_exp_boost()
+			await _load_global_exp_boost(show_activation_notification)
 		"global_ev":
-			await _load_global_ev_boost()
+			await _load_global_ev_boost(show_activation_notification)
 		"global_shiny":
-			await _load_global_shiny_boost()
+			await _load_global_shiny_boost(show_activation_notification)
 		"global_rare_encounter":
-			await _load_global_rare_encounter_boost()
+			await _load_global_rare_encounter_boost(show_activation_notification)
 
 
 func _load_global_heal() -> void:
@@ -11998,7 +12015,7 @@ func _load_global_heal() -> void:
 		_apply_global_heal_state(response.get("body", {}) as Dictionary)
 
 
-func _apply_global_heal_state(state: Dictionary) -> void:
+func _apply_global_heal_state(state: Dictionary, show_activation_notification: bool = false) -> void:
 	if bool(state.get("eventActive", false)):
 		_receive_global_heal_request({
 			"eventId": str(state.get("eventId", "")),
@@ -12007,7 +12024,7 @@ func _apply_global_heal_state(state: Dictionary) -> void:
 			"cooldownUntil": str(state.get("cooldownUntil", "")),
 			"cost": maxi(int(state.get("cost", 25000)), 1),
 			"available": bool(state.get("available", false)),
-		})
+		}, show_activation_notification)
 		return
 	_apply_global_heal_cooldown_state(state)
 
@@ -12094,7 +12111,7 @@ func _activate_global_heal() -> void:
 		return
 	var body := response.get("body", {}) as Dictionary
 	PlayerWalletService.apply_wallet_result({"success": true, "wallet": body.get("wallet", {})})
-	_apply_global_heal_state(body)
+	_apply_global_heal_state(body, true)
 	refresh_money_display()
 	add_system_message(LocalizationManager.text("ui.buff.global_heal.activated"))
 
@@ -12133,13 +12150,20 @@ func _prepare_confirmation_dialog_focus(dialog: ConfirmationDialog) -> void:
 		cancel_button.focus_mode = Control.FOCUS_ALL
 
 
-func _receive_global_heal_request(message: Dictionary) -> void:
+func _receive_global_heal_request(
+	message: Dictionary,
+	show_activation_notification: bool = false
+) -> void:
 	_apply_global_heal_cooldown_state(message)
-	if not GameState.global_heal_requests_enabled:
-		return
 	var event_id := str(message.get("eventId", "")).strip_edges()
 	var expires_at := str(message.get("expiresAt", "")).strip_edges()
 	if event_id.is_empty() or _global_buff_remaining_seconds(expires_at) <= 0:
+		return
+	if show_activation_notification:
+		_show_global_heal_activation_notification(message)
+	else:
+		global_buff_notification_tokens["global_heal"] = event_id
+	if not GameState.global_heal_requests_enabled:
 		return
 	pending_global_heal_request = {
 		"eventId": event_id,
@@ -12244,22 +12268,37 @@ func _on_global_heal_request_declined() -> void:
 	await _save_toggle_preferences()
 
 
-func _apply_global_boost_state(state: Dictionary, boost_id: String) -> void:
+func _apply_global_boost_state(
+	state: Dictionary,
+	boost_id: String,
+	show_activation_notification: bool = false
+) -> void:
 	for index: int in range(global_buffs_data.size()):
 		var buff := global_buffs_data[index] as Dictionary
 		if str(buff.get("id", "")) != boost_id:
 			continue
+		var is_active := bool(state.get("active", false))
+		var active_until := str(state.get("activeUntil", "")).strip_edges() if is_active else ""
+		var known_token := str(global_buff_notification_tokens.get(boost_id, ""))
 		buff["current"] = int(state.get("current", 0))
 		buff["goal"] = int(state.get("goal", 100000))
-		buff["state"] = "active" if bool(state.get("active", false)) else "funding"
-		buff["activeUntil"] = str(state.get("activeUntil", "")) if bool(state.get("active", false)) else ""
+		buff["state"] = "active" if is_active else "funding"
+		buff["activeUntil"] = active_until
 		var remaining_seconds := _global_buff_remaining_seconds(str(buff.get("activeUntil", "")))
 		buff["remaining"] = (
 			_format_global_buff_remaining(remaining_seconds)
-			if bool(state.get("active", false)) and remaining_seconds > 0
+			if is_active and remaining_seconds > 0
 			else ""
 		)
 		global_buffs_data[index] = buff
+		if (
+			show_activation_notification
+			and is_active
+			and active_until != ""
+			and active_until != known_token
+		):
+			_show_global_boost_activation_notification(buff, remaining_seconds)
+		global_buff_notification_tokens[boost_id] = active_until
 		var selected := str(selected_global_buff.get("id", "")) == boost_id
 		if selected:
 			selected_global_buff = buff.duplicate(true)
@@ -12267,6 +12306,76 @@ func _apply_global_boost_state(state: Dictionary, boost_id: String) -> void:
 		if selected:
 			_render_global_buff_details()
 		return
+
+
+func _show_global_boost_activation_notification(buff: Dictionary, remaining_seconds: int) -> void:
+	var boost_id := str(buff.get("id", "")).strip_edges()
+	var active_until := str(buff.get("activeUntil", "")).strip_edges()
+	if boost_id == "" or active_until == "":
+		return
+	_show_event_notification(
+		"global-buff:%s:%s" % [boost_id, active_until],
+		_localized_buff_name(buff),
+		LocalizationManager.text("ui.reward_card.global_buff_activated"),
+		_global_buff_icon_for(buff),
+		_format_global_buff_notification_duration(remaining_seconds),
+		"",
+		_global_buff_notification_accent(boost_id)
+	)
+
+
+func _show_global_heal_activation_notification(message: Dictionary) -> void:
+	var event_id := str(message.get("eventId", "")).strip_edges()
+	if event_id == "" or str(global_buff_notification_tokens.get("global_heal", "")) == event_id:
+		return
+	global_buff_notification_tokens["global_heal"] = event_id
+	var buff := _global_buff_data_by_id("global_heal")
+	var display_name := str(message.get("displayName", "Trainer")).strip_edges()
+	var remaining_seconds := _global_buff_remaining_seconds(str(message.get("expiresAt", "")))
+	_show_event_notification(
+		"global-buff:global-heal:%s" % event_id,
+		_localized_buff_name(buff),
+		LocalizationManager.text(
+			"ui.reward_card.global_heal_activated_by",
+			{"player": display_name if display_name != "" else "Trainer"}
+		),
+		_global_buff_icon_for(buff),
+		_format_global_buff_notification_duration(remaining_seconds),
+		"",
+		_global_buff_notification_accent("global_heal")
+	)
+
+
+func _global_buff_data_by_id(buff_id: String) -> Dictionary:
+	for buff_value: Variant in global_buffs_data:
+		var buff := buff_value as Dictionary
+		if str(buff.get("id", "")) == buff_id:
+			return buff
+	return {"id": buff_id}
+
+
+func _global_buff_notification_accent(buff_id: String) -> Color:
+	match buff_id:
+		"global_exp":
+			return Color("#d8b767")
+		"global_ev":
+			return Color("#5fb8df")
+		"global_shiny":
+			return Color("#e788ff")
+		"global_rare_encounter":
+			return Color("#73d98b")
+		"global_heal":
+			return Color("#56cce8")
+	return Color("#d8b767")
+
+
+func _format_global_buff_notification_duration(total_seconds: int) -> String:
+	var safe_seconds := maxi(total_seconds, 0)
+	if safe_seconds >= 86400:
+		return "%dd" % maxi(int(ceil(float(safe_seconds) / 86400.0)), 1)
+	if safe_seconds >= 3600:
+		return "%dh" % maxi(int(ceil(float(safe_seconds) / 3600.0)), 1)
+	return _format_global_buff_remaining(safe_seconds)
 
 
 func _global_buff_accepts_contributions(buff: Dictionary) -> bool:
@@ -42088,7 +42197,7 @@ func add_pokemon_level_reward_notification(level_up: Dictionary) -> void:
 	if current_level <= 0:
 		return
 	var identity := _pokemon_reward_identity(level_up)
-	_show_pokemon_reward_notification(
+	_show_event_notification(
 		"pokemon-level:%s" % str(identity.get("key", "pokemon")),
 		str(identity.get("title", LocalizationManager.text("pokemon.generic"))),
 		LocalizationManager.text("ui.reward_card.level_up"),
@@ -42110,7 +42219,7 @@ func add_pokemon_move_reward_notification(pokemon_context: Dictionary, move_valu
 	var move_type := _get_summary_move_type(move_value).strip_edges()
 	var badge_text := _localized_type_name(move_type).to_upper() if move_type != "" else ""
 	var accent := TypeColors.get_slot_border(move_type, Color("#5f83a8"))
-	_show_pokemon_reward_notification(
+	_show_event_notification(
 		_next_pokemon_reward_key("pokemon-move:%s" % str(identity.get("key", "pokemon"))),
 		str(identity.get("title", LocalizationManager.text("pokemon.generic"))),
 		move_name,
@@ -42125,7 +42234,7 @@ func add_caught_pokemon_reward_notification(pokemon_payload: Dictionary, ball_it
 	if pokemon_payload.is_empty():
 		return
 	var identity := _pokemon_reward_identity(pokemon_payload)
-	_show_pokemon_reward_notification(
+	_show_event_notification(
 		_next_pokemon_reward_key("pokemon-caught:%s" % str(identity.get("key", "pokemon"))),
 		str(identity.get("title", LocalizationManager.text("pokemon.generic"))),
 		LocalizationManager.text("ui.reward_card.caught"),
@@ -42137,7 +42246,7 @@ func add_caught_pokemon_reward_notification(pokemon_payload: Dictionary, ball_it
 	)
 
 
-func _show_pokemon_reward_notification(
+func _show_event_notification(
 	reward_key: String,
 	title: String,
 	subtitle: String,
@@ -42154,7 +42263,7 @@ func _show_pokemon_reward_notification(
 	if reward_notification_stack == null:
 		return
 	reward_notification_stack.call(
-		"show_pokemon_event",
+		"show_event",
 		reward_key,
 		title,
 		subtitle,
@@ -42385,22 +42494,22 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		return
 	if message_type == "system.global_exp_boost_contribution":
 		add_system_message(_global_exp_boost_contribution_message(message))
-		_load_global_boost_state.call_deferred("global_exp")
+		_load_global_boost_state.call_deferred("global_exp", true)
 		return
 	if message_type == "system.global_ev_boost_contribution":
 		add_system_message(_global_ev_boost_contribution_message(message))
-		_load_global_boost_state.call_deferred("global_ev")
+		_load_global_boost_state.call_deferred("global_ev", true)
 		return
 	if message_type == "system.global_rare_encounter_boost_contribution":
 		add_system_message(_global_rare_encounter_boost_contribution_message(message))
-		_load_global_boost_state.call_deferred("global_rare_encounter")
+		_load_global_boost_state.call_deferred("global_rare_encounter", true)
 		return
 	if message_type == "system.global_shiny_boost_contribution":
 		add_system_message(_global_shiny_boost_contribution_message(message))
-		_load_global_boost_state.call_deferred("global_shiny")
+		_load_global_boost_state.call_deferred("global_shiny", true)
 		return
 	if message_type == "system.global_heal_requested":
-		_receive_global_heal_request(message)
+		_receive_global_heal_request(message, true)
 		return
 	if message_type == "chat.mute.updated":
 		var remaining_seconds := maxi(int(message.get("remainingSeconds", 0)), 0)
