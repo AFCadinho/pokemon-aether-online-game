@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fossils now appear under Other in the Bag and can no longer be equipped as held items.
 - Cerulean City's Pokémon Center now gives Psyduck's Trainer an indoor-appropriate appearance.
 - Land mounts now stay active when changing to another outdoor map.
 - Land mounts now stay active after returning from wild and Trainer battles.
