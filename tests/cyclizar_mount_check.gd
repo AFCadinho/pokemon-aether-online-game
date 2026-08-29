@@ -80,6 +80,8 @@ func _check_land_mount_runtime_contract() -> void:
 	var settings_source := FileAccess.get_file_as_string("res://scripts/services/settings_manager.gd")
 	var player_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	var loading_source := FileAccess.get_file_as_string("res://scripts/ui/loading_screen.gd")
+	var settings_menu_source := FileAccess.get_file_as_string("res://scripts/ui/settings_menu.gd")
 	_check(project_source.contains("mount={"), "the land mount toggle has an input action")
 	_check(
 		settings_source.contains('"mount": KEY_M')
@@ -99,6 +101,17 @@ func _check_land_mount_runtime_contract() -> void:
 		and world_source.contains('state.get("mountId", "")')
 		and world_source.contains('player.call("restore_land_mount", saved_mount_id)'),
 		"the active owned land mount is saved with player position and restored on login"
+	)
+	var loading_prepare_source := _function_source(loading_source, "_prepare_world")
+	var logout_source := _function_source(settings_menu_source, "_logout_confirmed")
+	_check(
+		loading_prepare_source.contains("await InventoryService.load_inventory()")
+		and loading_prepare_source.find("await InventoryService.load_inventory()")
+		< loading_prepare_source.find("GameState.set_prepared_world_state")
+		and logout_source.contains('world.call("prepare_for_account_switch")')
+		and logout_source.find('world.call("prepare_for_account_switch")')
+		< logout_source.find("change_scene_to_file(LOGIN_SCENE_PATH)"),
+		"logout saves the active mount and login loads its entitlement before restoring it"
 	)
 	var load_map_source := _function_source(world_source, "load_map")
 	_check(
