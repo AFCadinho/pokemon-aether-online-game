@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Officer Jenny now finishes her arrest dialogue before taking a caught pickpocket to jail.
+- Arrest scenes now use Cerulean City's Officer Jenny portrait and pause position saves until the jail transfer finishes.
 
 **Added**
 

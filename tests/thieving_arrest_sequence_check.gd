@@ -65,7 +65,9 @@ func _run() -> void:
 	_check(
 		officer_frames != null
 		and officer_frames.resource_path == "res://assets/npcs/classes/officer_jenny_frames.tres"
-		and officer.get("mugshot") != null,
+		and officer.get("mugshot") != null
+		and (officer.get("mugshot") as Texture2D).resource_path \
+			== "res://assets/npcs/classes/officer_jenny.png",
 		"The temporary officer uses Officer Jenny's overworld visual and a police portrait"
 	)
 	game_state.set("current_map", null)
@@ -107,6 +109,7 @@ func _run() -> void:
 	var service := FileAccess.get_file_as_string("res://scripts/services/thieving_service.gd")
 	var npc := FileAccess.get_file_as_string("res://scripts/world/npcs/base_npc.gd")
 	var presenter := FileAccess.get_file_as_string("res://scripts/world/thieving_arrest_presenter.gd")
+	var world := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	_check(
 		"defer_arrest_transfer" in service
 		and "complete_deferred_arrest" in service
@@ -135,6 +138,28 @@ func _run() -> void:
 		"await dialogue_box.dialogue_finished" in presenter
 		and 'call("show_dialogue"' not in presenter,
 		"Jail transfer waits for the arrest dialogue to be dismissed"
+	)
+	_check(
+		"arrest_transfer_pending = true" in service
+		and "func is_arrest_transfer_pending" in service
+		and "arrest_transfer_pending = false" in service,
+		"Deferred arrests expose their pending transfer boundary"
+	)
+	var thieving_service := get_root().get_node("ThievingService")
+	thieving_service.set("arrest_transfer_pending", true)
+	_check(
+		bool(thieving_service.call("is_arrest_transfer_pending")),
+		"The Thieving service reports an active arrest transfer"
+	)
+	thieving_service.set("arrest_transfer_pending", false)
+	_check(
+		not bool(thieving_service.call("is_arrest_transfer_pending")),
+		"The Thieving service clears a completed arrest transfer"
+	)
+	_check(
+		"or ThievingService.is_arrest_transfer_pending()" in world
+		and "if not ThievingService.is_arrest_transfer_pending():" in world,
+		"Position autosave pauses quietly while an arrest transfer is pending"
 	)
 
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:

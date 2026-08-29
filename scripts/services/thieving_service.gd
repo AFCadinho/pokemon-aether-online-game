@@ -18,6 +18,7 @@ var state: Dictionary = {}
 var state_loaded := false
 var jail_release_generation := 0
 var was_authenticated := false
+var arrest_transfer_pending := false
 
 
 func _ready() -> void:
@@ -33,6 +34,7 @@ func _process(_delta: float) -> void:
 	elif not authenticated and was_authenticated:
 		state.clear()
 		state_loaded = false
+		arrest_transfer_pending = false
 		jail_release_generation += 1
 		state_changed.emit({})
 	was_authenticated = authenticated
@@ -63,12 +65,14 @@ func attempt_pickpocket(npc_id: String, defer_arrest_transfer := false) -> Dicti
 	if not bool(response.get("success", false)):
 		return response
 	var body := _dictionary_from_value(response.get("body", {}))
+	var arrest := _dictionary_from_value(body.get("arrest", {}))
+	if defer_arrest_transfer and not arrest.is_empty():
+		arrest_transfer_pending = true
 	_apply_state(_dictionary_from_value(body.get("state", {})))
 	var reward_item := _dictionary_from_value(body.get("rewardItem", {}))
 	await _refresh_wallet()
 	if not reward_item.is_empty():
 		await InventoryService.load_inventory()
-	var arrest := _dictionary_from_value(body.get("arrest", {}))
 	if not arrest.is_empty():
 		_apply_arrest(arrest, not defer_arrest_transfer)
 	return {
@@ -186,6 +190,8 @@ func _apply_arrest(arrest: Dictionary, transfer_immediately := true) -> void:
 	), true)
 	if transfer_immediately:
 		_teleport_to_destination(_dictionary_from_value(arrest.get("destination", {})))
+	else:
+		arrest_transfer_pending = true
 	_schedule_jail_release(max(int(arrest.get("sentenceSeconds", 0)), 0))
 
 
@@ -194,17 +200,24 @@ func complete_deferred_arrest(arrest: Dictionary) -> void:
 	var scene_path := str(destination.get("mapScenePath", "")).strip_edges()
 	var spawn_marker := str(destination.get("spawnMarker", "")).strip_edges()
 	if scene_path == "" or spawn_marker == "":
+		arrest_transfer_pending = false
 		return
 	var world := GameState.get_world()
 	if world == null or not world.has_method("load_map"):
+		arrest_transfer_pending = false
 		return
 	await world.call("load_map", scene_path, spawn_marker)
+	arrest_transfer_pending = false
 	var player := world.get_node_or_null("Player") as Node2D
 	if player == null:
 		return
 	GameState.lock_overworld_input()
 	await ThievingArrestPresenterScript.show_jail_arrival(player, arrest)
 	GameState.unlock_overworld_input()
+
+
+func is_arrest_transfer_pending() -> bool:
+	return arrest_transfer_pending
 
 
 func _refresh_wallet() -> bool:
