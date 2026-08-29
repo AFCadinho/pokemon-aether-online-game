@@ -659,6 +659,8 @@
   "ui.settings.section.audio_mix_subtitle": "Set separate levels for every part of the game",
   "ui.settings.section.controls": "Hotkeys",
   "ui.settings.section.controls_subtitle": "Choose the keys used for overworld actions",
+  "ui.settings.controls.running_shoes": "Running Shoes — toggle running",
+  "ui.settings.controls.running_shoes_hint": "Toggle Running Shoes while exploring the overworld. This shortcut is disabled while typing or using menus.",
   "ui.settings.controls.fishing": "Fishing — cast or reel",
   "ui.settings.controls.fishing_hint": "The same key casts beside fishable water and reels in when the ! appears.",
   "ui.settings.controls.mount": "Mount — mount or dismount",

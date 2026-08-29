@@ -586,6 +586,13 @@ func _create_cursor_scale_control() -> void:
 func _build_controls_tab(controls_tab: VBoxContainer) -> void:
 	_add_input_binding_control(
 		controls_tab,
+		"toggle_running_shoes",
+		"RunningShoes",
+		"ui.settings.controls.running_shoes",
+		"ui.settings.controls.running_shoes_hint"
+	)
+	_add_input_binding_control(
+		controls_tab,
 		"fish",
 		"Fishing",
 		"ui.settings.controls.fishing",

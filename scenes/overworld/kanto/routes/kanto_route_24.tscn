@@ -389,7 +389,6 @@ z_index = 5
 [node name="NuggetBridge03Timmy" parent="Entities/NPCs" unique_id=1766615038 instance=ExtResource("8_trainer")]
 position = Vector2(1072, 1808)
 script = ExtResource("9_bridge_trainer")
-challenge_width_tiles = 6
 trainer_id = "kanto_route_24_nugget_bridge_03_timmy"
 npc_id = "kanto_route_24_nugget_bridge_03_timmy"
 npc_definition_id = "trainer_class_youngster"
@@ -400,7 +399,6 @@ npc_sprite_frames = ExtResource("10_youngster")
 [node name="NuggetBridge04Reli" parent="Entities/NPCs" unique_id=1202630054 instance=ExtResource("8_trainer")]
 position = Vector2(1072, 1424)
 script = ExtResource("9_bridge_trainer")
-challenge_width_tiles = 6
 trainer_id = "kanto_route_24_nugget_bridge_04_reli"
 npc_id = "kanto_route_24_nugget_bridge_04_reli"
 npc_definition_id = "trainer_class_lass"
@@ -411,7 +409,6 @@ npc_sprite_frames = ExtResource("11_lass")
 [node name="NuggetBridge05Ethan" parent="Entities/NPCs" unique_id=1412516035 instance=ExtResource("8_trainer")]
 position = Vector2(1072, 1040)
 script = ExtResource("9_bridge_trainer")
-challenge_width_tiles = 6
 trainer_id = "kanto_route_24_nugget_bridge_05_ethan"
 npc_id = "kanto_route_24_nugget_bridge_05_ethan"
 npc_definition_id = "trainer_class_camper"
@@ -423,7 +420,6 @@ npc_sprite_frames = ExtResource("12_camper")
 position = Vector2(1072, 752)
 script = ExtResource("14_recruiter")
 rocket_sprite_frames = ExtResource("13_rocket_grunt")
-challenge_width_tiles = 6
 trainer_id = "kanto_route_24_rocket_recruiter"
 npc_id = "kanto_route_24_rocket_recruiter"
 npc_definition_id = "trainer_class_camper"
