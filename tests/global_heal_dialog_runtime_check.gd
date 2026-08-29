@@ -56,6 +56,35 @@ func _run() -> void:
 		"the request panel, actions, and opt-out replace default Godot styling"
 	)
 
+	var game_state := root.get_node_or_null("GameState")
+	_check(game_state != null, "Global Heal cooldown sync check can access GameState")
+	var original_requests_enabled := bool(game_state.get("global_heal_requests_enabled"))
+	game_state.set("global_heal_requests_enabled", false)
+	overlay_instance.set("global_buffs_data", [{
+		"id": "global_heal",
+		"state": "available",
+		"cost": 25000,
+		"cooldownUntil": "",
+	}])
+	overlay_instance.call("_receive_global_heal_request", {
+		"eventId": "event-sync-test",
+		"displayName": "Admin",
+		"expiresAt": "2099-08-29T22:00:00+00:00",
+		"cooldownUntil": "2099-08-29T22:00:00+00:00",
+	})
+	var synced_buffs: Array = overlay_instance.get("global_buffs_data") as Array
+	var synced_heal: Dictionary = synced_buffs[0] as Dictionary
+	_check(
+		str(synced_heal.get("state", "")) == "cooldown"
+		and int(synced_heal.get("cooldownSeconds", 0)) > 0,
+		"realtime Global Heal requests immediately synchronize the cooldown UI"
+	)
+	_check(
+		(overlay_instance.get("pending_global_heal_request") as Dictionary).is_empty(),
+		"cooldown synchronization does not force a disabled heal prompt"
+	)
+	game_state.set("global_heal_requests_enabled", original_requests_enabled)
+
 	dialog_host.free()
 	overlay_instance.free()
 	quit(1 if failed else 0)

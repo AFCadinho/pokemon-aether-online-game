@@ -12004,20 +12004,37 @@ func _apply_global_heal_state(state: Dictionary) -> void:
 			"eventId": str(state.get("eventId", "")),
 			"displayName": str(state.get("eventDisplayName", "Trainer")),
 			"expiresAt": str(state.get("eventExpiresAt", "")),
+			"cooldownUntil": str(state.get("cooldownUntil", "")),
+			"cost": maxi(int(state.get("cost", 25000)), 1),
+			"available": bool(state.get("available", false)),
 		})
+		return
+	_apply_global_heal_cooldown_state(state)
+
+
+func _apply_global_heal_cooldown_state(state: Dictionary) -> void:
+	if not state.has("cooldownUntil") and not state.has("available"):
+		return
+	var cooldown_until := str(state.get("cooldownUntil", "")).strip_edges()
+	var cooldown_seconds := _global_buff_remaining_seconds(cooldown_until)
+	var available := bool(state.get("available", cooldown_seconds <= 0))
 	for index: int in range(global_buffs_data.size()):
 		var buff := global_buffs_data[index] as Dictionary
 		if str(buff.get("id", "")) != "global_heal":
 			continue
 		buff["cost"] = maxi(int(state.get("cost", 25000)), 1)
-		buff["cooldownUntil"] = str(state.get("cooldownUntil", ""))
-		buff["cooldownSeconds"] = _global_buff_remaining_seconds(str(buff.get("cooldownUntil", "")))
-		buff["state"] = "available" if bool(state.get("available", false)) else "cooldown"
+		buff["cooldownUntil"] = cooldown_until
+		buff["cooldownSeconds"] = cooldown_seconds
+		buff["state"] = "available" if available else "cooldown"
 		global_buffs_data[index] = buff
 		if str(selected_global_buff.get("id", "")) == "global_heal":
 			selected_global_buff = buff.duplicate(true)
-		set_global_buffs(global_buffs_data)
-		if str(selected_global_buff.get("id", "")) == "global_heal":
+		if global_buffs_panel != null and global_buff_slots != null:
+			set_global_buffs(global_buffs_data)
+		if (
+			str(selected_global_buff.get("id", "")) == "global_heal"
+			and global_buff_details_status != null
+		):
 			_render_global_buff_details()
 		return
 
@@ -12117,6 +12134,7 @@ func _prepare_confirmation_dialog_focus(dialog: ConfirmationDialog) -> void:
 
 
 func _receive_global_heal_request(message: Dictionary) -> void:
+	_apply_global_heal_cooldown_state(message)
 	if not GameState.global_heal_requests_enabled:
 		return
 	var event_id := str(message.get("eventId", "")).strip_edges()
@@ -12204,6 +12222,8 @@ func _on_global_heal_request_confirmed() -> void:
 		await _save_toggle_preferences()
 	if bool(response.get("success", false)):
 		add_system_message(LocalizationManager.text("ui.buff.global_heal.healed"))
+		if not bool(response.get("alreadyAccepted", false)):
+			SfxManager.play("pokemon_recovery")
 		return
 	if (
 		int(response.get("status", 0)) == 409
