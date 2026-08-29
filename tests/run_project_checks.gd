@@ -283,6 +283,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/global_heal_check.gd",
 	"res://tests/global_heal_dialog_runtime_check.gd",
 	"res://tests/adinho_appearance_unlock_check.gd",
+	"res://tests/ironfanton_appearance_unlock_check.gd",
 	"res://tests/base_hair_layer_check.gd",
 	"res://tests/appearance_color_system_check.gd",
 	"res://tests/donator_store_cosmetic_subtabs_check.gd",

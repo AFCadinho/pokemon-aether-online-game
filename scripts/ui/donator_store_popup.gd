@@ -260,6 +260,23 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "6-ITEM BOX",
 	},
 	{
+		"id": "ironfanton-outfit",
+		"name": "IronFanton Outfit Box",
+		"description": "Tradeable male-only outfit box. Open it in your Bag to receive Chroma Hair, Chroma Beard and the Shirt as separate tradeable items.",
+		"price": 300,
+		"icon": STYLE_ICON,
+		"categories": ["featured", "cosmetics"],
+		"cosmetic_subcategory": "outfits",
+		"appearance_slots": ["hair", "facial_hair", "top"],
+		"preview_parts": [
+			{"slot": "hair", "appearance_id": "IronFanton_Hair", "tint": "hair_color"},
+			{"slot": "facial_hair", "appearance_id": "IronFanton_Beard", "tint": "hair_color"},
+			{"slot": "top", "appearance_id": "IronFanton_Shirt"},
+		],
+		"genders": ["male"],
+		"badge": "3-ITEM BOX",
+	},
+	{
 		"id": "aether-blossom-outfit",
 		"name": "Aether Blossom Box",
 		"description": "Tradeable female-only outfit box. Open it in your Bag to receive all four cosmetic components as separate tradeable items.",

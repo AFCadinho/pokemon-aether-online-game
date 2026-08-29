@@ -43,6 +43,7 @@ const DEFAULT_FEMALE_EYEBROWS_ID := "Eyebrows"
 const EYEBROWS_BY_HAIR_ID := {
 	"male:Hair": DEFAULT_MALE_EYEBROWS_ID,
 	"male:Adinho_Hair": "Adinho_Eyebrows",
+	"male:IronFanton_Hair": DEFAULT_MALE_EYEBROWS_ID,
 	"male:Aether_Male_Hair_01": DEFAULT_MALE_EYEBROWS_ID,
 	"male:Aether_Male_Hair_02": DEFAULT_MALE_EYEBROWS_ID,
 	"male:Aether_Male_Hair_03": DEFAULT_MALE_EYEBROWS_ID,
@@ -350,6 +351,29 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 		"adinho-chroma-shoes":
 			layers = [
 				{"category": SHOES_CATEGORY, "id": "Adinho_Shoes_Chroma", "tint": Color("#e77ba8"), "preserve": true},
+			]
+		"ironfanton-outfit":
+			layers = [
+				{"kind": "body"},
+				{"category": BOTTOM_CATEGORY, "id": get_default_part_id(BOTTOM_CATEGORY, normalized_gender)},
+				{"category": SHOES_CATEGORY, "id": get_default_part_id(SHOES_CATEGORY, normalized_gender)},
+				{"category": TOP_CATEGORY, "id": "IronFanton_Shirt"},
+				{"category": EYEBROWS_CATEGORY, "id": DEFAULT_MALE_EYEBROWS_ID, "tint": Color(DEFAULT_MALE_HAIR_COLOR), "preserve": true},
+				{"category": EYES_CATEGORY, "id": get_default_part_id(EYES_CATEGORY, normalized_gender), "tint": Color(DEFAULT_MALE_EYE_COLOR)},
+				{"category": HAIR_CATEGORY, "id": "IronFanton_Hair", "tint": Color(DEFAULT_MALE_HAIR_COLOR), "preserve": true},
+				{"category": FACIAL_HAIR_CATEGORY, "id": "IronFanton_Beard", "tint": Color(DEFAULT_MALE_HAIR_COLOR), "preserve": true},
+			]
+		"ironfanton-chroma-hair":
+			layers = [
+				{"category": HAIR_CATEGORY, "id": "IronFanton_Hair", "tint": Color(DEFAULT_MALE_HAIR_COLOR), "preserve": true},
+			]
+		"ironfanton-chroma-beard":
+			layers = [
+				{"category": FACIAL_HAIR_CATEGORY, "id": "IronFanton_Beard", "tint": Color(DEFAULT_MALE_HAIR_COLOR), "preserve": true},
+			]
+		"ironfanton-shirt":
+			layers = [
+				{"category": TOP_CATEGORY, "id": "IronFanton_Shirt"},
 			]
 		_:
 			return null

@@ -141,6 +141,15 @@ func _run() -> void:
 	_check(mysterious_preview.get("bottom", "") == "Mysterious_Trousers", "Mysterious preview includes the trousers")
 	_check(mysterious_preview.get("shoes", "") == "Mysterious_Shoes", "Mysterious preview includes the shoes")
 	_check(store.product_buttons.has("adinho-classic-outfit"), "Outfits lists Adinho Classic as one six-item box")
+	_check(store.product_buttons.has("ironfanton-outfit"), "Outfits lists IronFanton as one three-item box")
+	store.call("_select_product", "ironfanton-outfit")
+	var ironfanton_item: Dictionary = store.call("_catalog_item", "ironfanton-outfit")
+	_check(ironfanton_item.get("price", 0) == 300, "IronFanton Outfit uses the three-component set price")
+	_check(ironfanton_item.get("badge", "") == "3-ITEM BOX", "IronFanton Outfit communicates its three loose contents")
+	var ironfanton_preview: Dictionary = store.call("_current_character_preview_appearance")
+	_check(ironfanton_preview.get("hair", "") == "IronFanton_Hair", "IronFanton preview includes the hairstyle")
+	_check(ironfanton_preview.get("facial_hair", "") == "IronFanton_Beard", "IronFanton preview includes the beard")
+	_check(ironfanton_preview.get("top", "") == "IronFanton_Shirt", "IronFanton preview includes the shirt")
 	_check(not store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom stays hidden for male models")
 	store.call("_select_product", "adinho-classic-outfit")
 	var classic_item: Dictionary = store.call("_catalog_item", "adinho-classic-outfit")
@@ -165,6 +174,7 @@ func _run() -> void:
 	store.set_trainer_gender("female")
 	_check(store.product_buttons.has("mysterious-outfit"), "unisex Mysterious Outfit stays available for female models")
 	_check(not store.product_buttons.has("adinho-classic-outfit"), "male-only Adinho Classic stays hidden for female models")
+	_check(not store.product_buttons.has("ironfanton-outfit"), "male-only IronFanton stays hidden for female models")
 	_check(store.product_buttons.has("aether-blossom-outfit"), "Aether Blossom is listed for compatible female models")
 	store.call("_select_product", "aether-blossom-outfit")
 	var blossom_item: Dictionary = store.call("_catalog_item", "aether-blossom-outfit")
@@ -321,6 +331,7 @@ func _run() -> void:
 		"mysterious-outfit": 400,
 		"adinho-classic-outfit": 500,
 		"aether-blossom-outfit": 400,
+		"ironfanton-outfit": 300,
 		"aether-blossom-chroma-hair": 100,
 		"aether-blossom-chroma-earrings": 100,
 		"aether-blossom-chroma-shoes": 75,
