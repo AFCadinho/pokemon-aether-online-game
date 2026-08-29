@@ -197,10 +197,12 @@ func _init() -> void:
 	_check(scene_source.contains('path="res://assets/ui/running_shoes_toggle.svg" id="11_running_shoe"'), "Running Shoes use a dedicated speed-toggle icon")
 	_check(
 		script_source.contains('event.is_action_pressed("toggle_running_shoes", false)')
+		and script_source.contains("if _try_handle_running_shoes_shortcut(event):")
 		and script_source.contains("func _can_toggle_running_shoes_from_shortcut()")
 		and script_source.contains("GameState.is_overworld_input_locked()")
 		and script_source.contains("GameState.is_ui_input_locked() or _is_world_battle_active()")
-		and script_source.contains("_has_visible_priority_overlay_panel() or _is_text_input_focused()"),
+		and script_source.contains("_has_visible_priority_overlay_panel() or _is_text_input_focused()")
+		and script_source.contains("func _is_overlay_pointer_interaction_active()"),
 		"Running Shoes shortcut is limited to unlocked overworld input outside battles, menus, and text entry"
 	)
 	_check(scene_source.contains('path="res://assets/ui/town_map_navigation.svg" id="3_riyyd"'), "Town Map uses a navigation-focused map icon")
