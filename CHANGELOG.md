@@ -24,6 +24,7 @@
 
 **Fixed**
 
+- TM and HM reward cards now show their type-colored machine icon instead of a question mark.
 - Global Heal now immediately shows its shared cooldown for every online player and plays the recovery sound after healing.
 - Follower Pokémon now consistently leave one full tile between themselves and their Trainer while idle and walking in every direction.
 - Newly added Game Master emblems no longer prevent the player scene from opening before Godot finishes importing them.
