@@ -13,6 +13,12 @@
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="11_camper"]
 [ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="12_lass"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="13_pokemon"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="14_dialogue_npc"]
+[ext_resource type="SpriteFrames" uid="uid://cqxh37chx4v8a" path="res://assets/npcs/custom/adinho_dad_frames.tres" id="15_dadinho_frames"]
+[ext_resource type="SpriteFrames" uid="uid://wgkh3id1848j" path="res://assets/npcs/gym_leaders/alpha_misty_frames.tres" id="16_misty_frames"]
+[ext_resource type="Texture2D" uid="uid://cxbfneavbrouo" path="res://assets/sprites/mugshots/dadinho_mugshot.png" id="17_dadinho_mugshot"]
+[ext_resource type="Script" uid="uid://diueg43o4xvic" path="res://scripts/world/kanto/routes/route_25_misty_date_npc.gd" id="18_misty_date"]
+[ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="20_story_hook"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_upper_exit"]
 size = Vector2(32, 128)
@@ -269,6 +275,47 @@ z_as_relative = false
 z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=2105577003]
+
+[node name="MistyDate" parent="Entities/NPCs" instance=ExtResource("14_dialogue_npc")]
+position = Vector2(1776, 784)
+script = ExtResource("18_misty_date")
+npc_id = "kanto_route_25_dadinho_date"
+dialogue_id = "kanto_route_25_dadinho_after_date"
+visibility_required_quest_id = "explore_cerulean_city"
+visibility_required_quest_step_id = "visit_nugget_bridge"
+visibility_required_quest_status = "active"
+visibility_hidden_quest_id = "explore_cerulean_city"
+defer_story_hide_until_reload = true
+display_name = "Dadinho"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("15_dadinho_frames")
+mugshot = ExtResource("17_dadinho_mugshot")
+misty_path = NodePath("Misty")
+heart_path = NodePath("Heart")
+
+[node name="Misty" type="AnimatedSprite2D" parent="Entities/NPCs/MistyDate"]
+position = Vector2(32, -16)
+sprite_frames = ExtResource("16_misty_frames")
+animation = &"idle_left"
+
+[node name="Heart" type="Label" parent="Entities/NPCs/MistyDate"]
+z_index = 8
+offset_left = -8.0
+offset_top = -88.0
+offset_right = 40.0
+offset_bottom = -48.0
+theme_override_colors/font_color = Color(1, 0.235294, 0.501961, 1)
+theme_override_colors/font_outline_color = Color(0.35, 0.035, 0.12, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "♥"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StoryHook" type="Node" parent="Entities/NPCs/MistyDate"]
+script = ExtResource("20_story_hook")
+interaction_id = "kanto_route_25_misty_found"
+entity_id = "kanto_route_25_dadinho_date"
 
 [node name="HikerFranklin" parent="Entities/NPCs" unique_id=98883287 instance=ExtResource("7_trainer")]
 position = Vector2(272, 464)

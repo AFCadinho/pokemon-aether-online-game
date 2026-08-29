@@ -45,7 +45,11 @@ func _run() -> void:
 			var trainer_cell := collision.local_to_map(trainer.position)
 			_check(collision.get_cell_source_id(trainer_cell) < 0, "%s stands on a walkable tile" % node_name)
 
-	_check(route.get_node("Entities/NPCs").get_child_count() == EXPECTED_TRAINERS.size(), "Route 25 has exactly its nine canonical battle Trainers")
+	var trainer_count := 0
+	for npc: Node in route.get_node("Entities/NPCs").get_children():
+		if EXPECTED_TRAINERS.has(npc.name):
+			trainer_count += 1
+	_check(trainer_count == EXPECTED_TRAINERS.size(), "Route 25 retains all nine canonical battle Trainers")
 	route.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
