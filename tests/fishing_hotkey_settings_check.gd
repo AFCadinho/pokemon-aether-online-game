@@ -19,6 +19,23 @@ func _run() -> void:
 		return
 
 	var expected_label := str(settings_manager.call("get_input_binding_label", "fish"))
+	var running_shoes_keycode := int(settings_manager.call(
+		"get_input_binding_keycode",
+		"toggle_running_shoes"
+	))
+	var settings_constants: Dictionary = settings_manager.get_script().get_script_constant_map()
+	var default_bindings: Dictionary = settings_constants.get("DEFAULT_INPUT_BINDINGS", {})
+	var running_shoes_events := InputMap.action_get_events("toggle_running_shoes")
+	_expect(
+		int(default_bindings.get("toggle_running_shoes", KEY_NONE)) == int(KEY_X),
+		"Running Shoes defaults to X"
+	)
+	_expect(
+		not running_shoes_events.is_empty()
+		and running_shoes_events[0] is InputEventKey
+		and int((running_shoes_events[0] as InputEventKey).physical_keycode) == running_shoes_keycode,
+		"Saved Running Shoes hotkey is applied to the live Input Map"
+	)
 	var configured_keycode := int(settings_manager.call("get_input_binding_keycode", "fish"))
 	var events := InputMap.action_get_events("fish")
 	_expect(
@@ -40,6 +57,14 @@ func _run() -> void:
 	root.add_child(menu)
 	await process_frame
 	var binding_button := menu.find_child("FishingBindingButton", true, false) as Button
+	var running_shoes_button := menu.find_child("RunningShoesBindingButton", true, false) as Button
+	_expect(running_shoes_button != null, "Controls tab exposes the Running Shoes hotkey button")
+	_expect(
+		running_shoes_button != null
+		and running_shoes_button.text
+		== str(settings_manager.call("get_input_binding_label", "toggle_running_shoes")),
+		"Running Shoes hotkey button displays the active binding"
+	)
 	_expect(binding_button != null, "Controls tab exposes the Fishing hotkey button")
 	_expect(
 		binding_button != null and binding_button.text == expected_label,

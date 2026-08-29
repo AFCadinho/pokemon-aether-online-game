@@ -659,6 +659,8 @@
   "ui.settings.section.audio_mix_subtitle": "Defina volumes separados para cada parte do jogo",
   "ui.settings.section.controls": "Atalhos",
   "ui.settings.section.controls_subtitle": "Escolha as teclas usadas nas ações do mundo",
+  "ui.settings.controls.running_shoes": "Tênis de Corrida — ativar corrida",
+  "ui.settings.controls.running_shoes_hint": "Ative ou desative os Tênis de Corrida enquanto explora o mundo. Este atalho não funciona ao digitar ou usar menus.",
   "ui.settings.controls.fishing": "Pesca — lançar ou recolher",
   "ui.settings.controls.fishing_hint": "A mesma tecla lança perto de águas pescáveis e recolhe quando o ! aparece.",
   "ui.settings.controls.mount": "Montaria — montar ou desmontar",

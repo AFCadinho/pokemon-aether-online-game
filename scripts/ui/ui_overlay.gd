@@ -63,6 +63,7 @@ const CHAT_TAB_SYSTEM := "system"
 const CHAT_TAB_PM := "pm"
 const CHAT_TAB_GUILD := "guild"
 const CHAT_TAB_LANGUAGES := "languages"
+const TEXT_INPUT_WINDOW_GROUP := "text_input_windows"
 const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
 	CHAT_TAB_ALL,
 	CHAT_TAB_GENERAL,
@@ -10888,6 +10889,49 @@ func _input(event: InputEvent) -> void:
 		return
 
 	chat_input.release_focus()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event == null or not event.is_action_pressed("toggle_running_shoes", false):
+		return
+	if event is InputEventKey and (event as InputEventKey).echo:
+		return
+	if not _can_toggle_running_shoes_from_shortcut():
+		return
+
+	var enabled := not GameState.running_shoes_enabled
+	running_shoes_button.set_pressed_no_signal(enabled)
+	_on_running_shoes_toggled(enabled)
+	get_viewport().set_input_as_handled()
+
+
+func _can_toggle_running_shoes_from_shortcut() -> bool:
+	if running_shoes_button == null or not running_shoes_button.is_visible_in_tree():
+		return false
+	if GameState.current_map == null or GameState.is_overworld_input_locked():
+		return false
+	if GameState.is_ui_input_locked() or _is_world_battle_active():
+		return false
+	if _has_visible_priority_overlay_panel() or _is_text_input_focused():
+		return false
+	return true
+
+
+func _is_text_input_focused() -> bool:
+	var focus_owner := get_viewport().gui_get_focus_owner()
+	if focus_owner is LineEdit or focus_owner is TextEdit:
+		return true
+
+	for node: Node in get_tree().get_nodes_in_group(TEXT_INPUT_WINDOW_GROUP):
+		if not (node is Window):
+			continue
+		var window := node as Window
+		if not window.visible:
+			continue
+		var window_focus_owner := window.gui_get_focus_owner()
+		if window_focus_owner is LineEdit or window_focus_owner is TextEdit:
+			return true
+	return false
 
 func _handle_chat_resize_drag(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
