@@ -12,6 +12,7 @@ const DEFAULT_PLAYER_VISUAL_SORT_DEPTH := 8
 const PLAYER_OVERLAP_SORT_Y_EPSILON := 8.0
 const SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_NEAREST
 const FOLLOWER_SPRITE_VISUAL_OFFSET := Vector2(0.0, -16.0)
+const HORIZONTAL_FOLLOWER_SEPARATION := 8.0
 const BASE_FOLLOWER_FRAME_HEIGHT := 64.0
 const SHINY_SPARKLE_COLOR := Color(1.0, 0.82, 0.22, 0.88)
 const SHINY_SPARKLE_CENTER_OFFSET := Vector2(0.0, -20.0)
@@ -209,9 +210,14 @@ func _update_sprite_visual_offset(direction: Vector2) -> void:
 func _get_shiny_sparkle_center() -> Vector2:
 	return _get_sprite_visual_offset(last_animation_direction) + SHINY_SPARKLE_CENTER_OFFSET
 
-func _get_sprite_visual_offset(_direction: Vector2) -> Vector2:
+func _get_sprite_visual_offset(direction: Vector2) -> Vector2:
 	var large_sprite_offset := Vector2(0.0, -maxf(_get_current_frame_size().y - BASE_FOLLOWER_FRAME_HEIGHT, 0.0) * 0.5)
-	return FOLLOWER_SPRITE_VISUAL_OFFSET + large_sprite_offset
+	var horizontal_separation := 0.0
+	if direction == Vector2.RIGHT:
+		horizontal_separation = -HORIZONTAL_FOLLOWER_SEPARATION
+	elif direction == Vector2.LEFT:
+		horizontal_separation = HORIZONTAL_FOLLOWER_SEPARATION
+	return FOLLOWER_SPRITE_VISUAL_OFFSET + Vector2(horizontal_separation, 0.0) + large_sprite_offset
 
 func _get_current_frame_size() -> Vector2:
 	if sprite == null or sprite.sprite_frames == null:
