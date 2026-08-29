@@ -84,12 +84,18 @@ func _check_visual_offset_in_every_direction() -> void:
 
 	var follower := follower_script.new() as Node2D
 	get_root().add_child(follower)
-	var expected_offset := Vector2(0.0, -16.0)
+	var expected_offsets := {
+		Vector2.UP: Vector2(0.0, -16.0),
+		Vector2.DOWN: Vector2(0.0, -16.0),
+		Vector2.LEFT: Vector2(8.0, -16.0),
+		Vector2.RIGHT: Vector2(-8.0, -16.0),
+	}
 	for direction: Vector2 in CARDINAL_DIRECTIONS:
 		var offset: Vector2 = follower.call("_get_sprite_visual_offset", direction)
+		var expected_offset: Vector2 = expected_offsets[direction]
 		_check(
 			offset.is_equal_approx(expected_offset),
-			"follower uses the same visual anchor when facing %s" % direction
+			"follower uses the intended visual spacing when facing %s" % direction
 		)
 	follower.free()
 
