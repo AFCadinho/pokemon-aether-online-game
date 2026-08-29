@@ -100,6 +100,16 @@ func _check_land_mount_runtime_contract() -> void:
 		and world_source.contains('player.call("restore_land_mount", saved_mount_id)'),
 		"the active owned land mount is saved with player position and restored on login"
 	)
+	var load_map_source := _function_source(world_source, "load_map")
+	_check(
+		load_map_source.contains('player.call("get_active_land_mount_id")')
+		and load_map_source.contains('player.call("restore_land_mount", land_mount_id_to_restore)')
+		and load_map_source.find('player.call("get_active_land_mount_id")')
+		< load_map_source.find("player.get_parent().remove_child(player)")
+		and load_map_source.find("GameState.current_map = new_map")
+		< load_map_source.find('player.call("restore_land_mount", land_mount_id_to_restore)'),
+		"ordinary map changes preserve land mounts when the destination permits them"
+	)
 	_check(
 		player_source.contains("and not land_mount_activity_active")
 		and player_source.count("refresh_pokemon_follower()") >= 4
@@ -148,6 +158,15 @@ func _check_bike_shop_owner_contract() -> void:
 			and locale_source.contains('"mentor.bike_seller.help.topic.purpose"'),
 			"%s contains the Bike Seller mount guide" % locale_path
 		)
+
+
+func _function_source(source: String, function_name: String) -> String:
+	var marker := "func %s(" % function_name
+	var start := source.find(marker)
+	if start < 0:
+		return ""
+	var next_function := source.find("\nfunc ", start + marker.length())
+	return source.substr(start) if next_function < 0 else source.substr(start, next_function - start)
 
 
 func _check(condition: bool, message: String) -> void:

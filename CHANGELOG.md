@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Land mounts now stay active when changing to another outdoor map.
+
 **Added**
 
 - Small and large overworld signs now show illustrated previews of their referenced routes, towns, caves, Gyms, and landmarks.
