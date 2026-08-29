@@ -787,8 +787,7 @@ npc_sprite_frames = ExtResource("12_lass")
 [node name="GymAttendant" parent="Entities/NPCs" unique_id=1108117216 instance=ExtResource("9_dialogue")]
 position = Vector2(1584, 1360)
 npc_id = "kanto_cerulean_city_gym_attendant"
-visibility_hidden_quest_id = "explore_cerulean_city"
-visibility_hidden_quest_step_id = "visit_nugget_bridge"
+visibility_hidden_quest_id = "help_bill"
 display_name = "Cerulean Gym Attendant"
 npc_sprite_frames = ExtResource("18_gym_attendant")
 preload_quest_markers = true
