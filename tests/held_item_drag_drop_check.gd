@@ -45,6 +45,28 @@ func _run() -> void:
 	var invalid_drag: Variant = invalid_source._get_drag_data(Vector2.ZERO)
 	_check(not target._can_drop_data(Vector2.ZERO, invalid_drag), "held-item targets reject ordinary Bag items")
 
+	var fossil_source := HotbarBagItemSlot.new()
+	fossil_source.hotbar_item = {
+		"id": "helix-fossil",
+		"category": "held_items",
+		"isHoldable": true,
+	}
+	host.add_child(fossil_source)
+	var fossil_drag: Variant = fossil_source._get_drag_data(Vector2.ZERO)
+	_check(
+		not target._can_drop_data(Vector2.ZERO, fossil_drag),
+		"held-item targets reject fossils even when stale metadata marks them holdable"
+	)
+	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	_check(
+		overlay_source.contains('false if _is_fossil_item_id(item_id) else bool(item.get("isHoldable", false))'),
+		"Bag normalization never exposes fossils as holdable items"
+	)
+	_check(
+		overlay_source.contains('if _is_fossil_item_id(item_id):\n\t\treturn "general"'),
+		"Bag places fossils in Other even with stale backend categories"
+	)
+
 	var party_scene := load("res://scenes/interface/party_slot.tscn") as PackedScene
 	var party_slot := party_scene.instantiate()
 	host.add_child(party_slot)

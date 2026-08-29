@@ -21237,7 +21237,7 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"name": str(item.get("name", _format_item_name_from_id(item_id))),
 			"category": _normalize_backend_bag_category(backend_category, item_id),
 			"shortDesc": str(item.get("shortDesc", item.get("description", ""))).strip_edges(),
-			"isHoldable": bool(item.get("isHoldable", false)),
+			"isHoldable": false if _is_fossil_item_id(item_id) else bool(item.get("isHoldable", false)),
 			"quantity": max(int(item.get("quantity", 1)), 1),
 			"machineMove": str(item.get("machineMove", "")).strip_edges(),
 			"machineKind": str(item.get("machineKind", "")).strip_edges().to_lower(),
@@ -21289,6 +21289,8 @@ func _bag_item_key(item: Dictionary) -> String:
 	return "loan:%s" % loan_asset_id if bool(item.get("borrowed", false)) and loan_asset_id != "" else "owned:%s" % item_id
 
 func _normalize_backend_bag_category(category: String, item_id: String) -> String:
+	if _is_fossil_item_id(item_id):
+		return "general"
 	if _is_power_stone_item_id(item_id):
 		return "power_stones"
 	var normalized := category.strip_edges().to_lower().replace("-", "_")
@@ -21301,6 +21303,12 @@ func _normalize_backend_bag_category(category: String, item_id: String) -> Strin
 			return normalized
 
 	return _guess_bag_category(item_id)
+
+func _is_fossil_item_id(item_id: String) -> bool:
+	var normalized := _normalize_item_id(item_id)
+	return normalized == "old-amber" \
+		or normalized.ends_with("-fossil") \
+		or normalized.begins_with("fossilized-")
 
 func _item_name_from_id(item_id: String) -> String:
 	var normalized_item_id := _normalize_item_id(item_id)

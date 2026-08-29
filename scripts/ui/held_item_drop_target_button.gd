@@ -28,10 +28,12 @@ static func item_from_drag_data(data: Variant) -> Dictionary:
 
 
 static func _is_holdable_item(item: Dictionary) -> bool:
+	var item_id := str(item.get("id", "")).strip_edges().to_lower().replace("_", "-")
+	if item_id == "old-amber" or item_id.ends_with("-fossil") or item_id.begins_with("fossilized-"):
+		return false
 	if bool(item.get("isHoldable", false)):
 		return true
 	var category := str(item.get("category", "")).strip_edges().to_lower()
-	var item_id := str(item.get("id", "")).strip_edges().to_lower().replace("_", "-")
 	return (
 		item_id in ["blue-orb", "red-orb"]
 		or category in ["held_items", "power_stones"]
