@@ -19,6 +19,7 @@ func _init() -> void:
 	)
 	_check(
 		player_scene_source.contains('[node name="RoleBadgeIcon" type="TextureRect" parent="Nameplate"]')
+		and not player_scene_source.contains('path="res://assets/ui/alpha_crystal_emblem.png"')
 		and not player_scene_source.contains('path="res://assets/ui/gamemaster_emblem_readable.png"')
 		and not player_scene_source.contains('path="res://assets/ui/developer_emblem_teal.png"')
 		and not player_scene_source.contains('path="res://assets/ui/moderator_emblem_purple.png"'),
@@ -26,12 +27,23 @@ func _init() -> void:
 	)
 	var role_badge_texture_source := FileAccess.get_file_as_string("res://scripts/ui/role_badge_texture.gd")
 	_check(
-		role_badge_texture_source.contains('"gamemaster": "res://assets/ui/gamemaster_emblem_readable.png"')
+		role_badge_texture_source.contains('"alpha": "res://assets/ui/alpha_crystal_emblem.png"')
+		and role_badge_texture_source.contains('"gamemaster": "res://assets/ui/gamemaster_emblem_readable.png"')
 		and role_badge_texture_source.contains('"developer": "res://assets/ui/developer_emblem_teal.png"')
 		and role_badge_texture_source.contains('"moderator": "res://assets/ui/moderator_emblem_purple.png"')
 		and role_badge_texture_source.contains("ResourceLoader.exists")
 		and role_badge_texture_source.contains("Image.load_from_file"),
 		"role emblems support imported textures and fresh-checkout PNG loading"
+	)
+	var alpha_badge_image := Image.load_from_file(
+		ProjectSettings.globalize_path("res://assets/ui/alpha_crystal_emblem.png")
+	)
+	_check(
+		alpha_badge_image != null
+		and alpha_badge_image.get_size() == Vector2i(28, 28)
+		and alpha_badge_image.detect_alpha() != Image.ALPHA_NONE
+		and RoleBadgeTexture.get_role_badge_texture("alpha") != null,
+		"Alpha crystal emblem has readable dimensions and transparent pixels"
 	)
 	var gm_badge_image := Image.load_from_file(
 		ProjectSettings.globalize_path("res://assets/ui/gamemaster_emblem_readable.png")

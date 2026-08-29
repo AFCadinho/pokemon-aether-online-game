@@ -68,7 +68,7 @@ const ROLE_BADGE_COLORS := {
 	"moderator": Color(0.482, 0.173, 0.749),
 }
 const STAFF_ROLE_CATEGORY := "staff"
-const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
+const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster", "alpha"]
 const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
 const ROLE_BADGE_TEXT_HEIGHT := 13.0

@@ -14,6 +14,7 @@
 - The Trainer Card badge selector now uses the same navy-and-gold styling as the rest of the card.
 - Pokémon level-up reward cards now play a dedicated sound once per reward batch.
 - Game Masters, Developers, and Moderators now share a balanced pixel-art shield design with clear role lettering and distinct role colors above their character; Guild emblems remain visible beside their name.
+- Alpha players now have a distinct purple crystal pixel-art badge with a clear `A` above their character.
 - Chat Moderators now use the shorter `Chat Mod` badge above their character and in chat, with sharper text at close camera zoom.
 - Viridian Forest now uses its latest visual layout.
 
