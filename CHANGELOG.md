@@ -25,7 +25,7 @@
 
 **Fixed**
 
-- Dadinho now faces Misty during their date on Route 25.
+- Dadinho now faces Misty during their Route 25 date, with their heart visible above player nameplates.
 - Route 24's expanded layout now keeps its Cerulean and Route 25 passages aligned with the visible map.
 - Poke Fan Miles and School Kid Nolan are visible again inside the Route 2 house.
 - Saved and staff teleports continue to work after Route 2, Route 25, and their houses were reorganized.

@@ -39,6 +39,7 @@ func _run() -> void:
 		var heart := date.get_node_or_null("Heart") as Label
 		_check(heart != null and heart.text == "♥", "a heart floats above the couple")
 		_check(heart != null and heart.get_theme_font_size("font_size") == 28, "the heart is readable at overworld scale")
+		_check(heart != null and heart.offset_bottom <= -112.0, "the heart stays above player nameplates")
 
 		var story_hook: Node = date.get_node_or_null("StoryHook")
 		_check(story_hook != null, "Dadinho exposes the story interaction")
