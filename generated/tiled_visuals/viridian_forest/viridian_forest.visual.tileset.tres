@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://bjudxj70bvcj2"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/viridian_forest/assets/5GEN_TILESET_2109830053_000.texture.res" id="1_0xha7"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/viridian_forest/assets/5GEN_TILESET_2109830053_005.texture.res" id="2_kkmax"]
