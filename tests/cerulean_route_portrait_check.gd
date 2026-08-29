@@ -95,9 +95,13 @@ func _check_scene_source(scene_path: String) -> void:
 			and bool(portrait_catalog.call("has_portrait", resolved_portrait_id))
 		)
 		var has_custom_mugshot := _has_property(block, "mugshot")
+		var intentionally_hides_portrait := (
+			npc_name == "TrappedBill"
+			and block.contains("\ndialogue_portrait_visible = false\n")
+		)
 		_check(
-			has_catalog_portrait or has_custom_mugshot,
-			"%s/%s resolves a non-default mugshot (npc_id=%s, definition=%s)" % [
+			has_catalog_portrait or has_custom_mugshot or intentionally_hides_portrait,
+			"%s/%s resolves a non-default mugshot or intentionally hides it (npc_id=%s, definition=%s)" % [
 				scene_path,
 				npc_name,
 				npc_id,
