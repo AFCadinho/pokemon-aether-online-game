@@ -17,6 +17,20 @@ func _init() -> void:
 		"player nameplate contains a guild emblem"
 	)
 	_check(
+		player_scene_source.contains('[node name="RoleBadgeIcon" type="TextureRect" parent="Nameplate"]')
+		and player_scene_source.contains('path="res://assets/ui/role_badges/gamemaster.png"')
+		and player_scene_source.contains('texture = ExtResource("2_gm_badge")'),
+		"player nameplate contains the dedicated Game Master pixel badge"
+	)
+	var gm_badge_texture := load("res://assets/ui/role_badges/gamemaster.png") as Texture2D
+	var gm_badge_image := gm_badge_texture.get_image() if gm_badge_texture != null else null
+	_check(
+		gm_badge_image != null
+		and gm_badge_image.get_size() == Vector2i(30, 15)
+		and gm_badge_image.detect_alpha() != Image.ALPHA_NONE,
+		"Game Master badge has the intended compact size and transparent pixels"
+	)
+	_check(
 		player_scene_source.contains("offset_left = 9.0")
 		and player_scene_source.contains("offset_right = 33.0")
 		and player_scene_source.contains("offset_bottom = 65.0"),
@@ -33,6 +47,11 @@ func _init() -> void:
 		_has_adjacent_guild_emblem(player_source)
 		and _has_adjacent_guild_emblem(remote_source),
 		"nameplate places the guild emblem in a separate badge beside the name card"
+	)
+	_check(
+		_uses_game_master_pixel_badge(player_source)
+		and _uses_game_master_pixel_badge(remote_source),
+		"local and remote Game Masters use the pixel badge without replacing guild emblems"
 	)
 	_check(
 		_uses_content_sized_name_card(player_source)
@@ -154,6 +173,15 @@ func _uses_content_sized_name_card(source: String) -> bool:
 		and source.contains("NameplateLayout.calculate_name_card(name_size")
 		and source.contains("label.label_settings.font_size")
 		and not source.contains("NAMEPLATE_MIN_NAME_WIDTH")
+	)
+
+
+func _uses_game_master_pixel_badge(source: String) -> bool:
+	return (
+		source.contains('const GM_ROLE_BADGE_ID := "gamemaster"')
+		and source.contains("role_badge_icon.visible = use_gm_icon")
+		and source.contains("if uses_role_icon:")
+		and source.contains("ROLE_BADGE_ICON_SIZE")
 	)
 
 
