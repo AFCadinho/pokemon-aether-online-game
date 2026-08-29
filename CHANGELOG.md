@@ -4,6 +4,7 @@
 
 - Land mounts now stay active when changing to another outdoor map.
 - Land mounts now stay active after returning from wild and Trainer battles.
+- Active land mounts are now saved and restored when returning through the login screen.
 
 **Added**
 

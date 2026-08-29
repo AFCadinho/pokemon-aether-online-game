@@ -166,6 +166,14 @@ func _prepare_world() -> void:
 		elif not bool(position_response.get("success", false)):
 			push_warning("LoadingScreen: player position load failed: %s" % str(position_response.get("error", "Unknown error")))
 
+	# Mount restoration validates the saved mount against the account inventory.
+	# Hydrate that entitlement cache before the World consumes savedState.
+	var inventory_response: Dictionary = await InventoryService.load_inventory()
+	if not bool(inventory_response.get("success", false)):
+		push_warning("LoadingScreen: inventory load failed: %s" % str(
+			inventory_response.get("error", "Unknown error")
+		))
+
 	GameState.set_prepared_world_state({
 		"savedState": saved_state,
 		"hasSavedState": not saved_state.is_empty(),
