@@ -30,6 +30,7 @@ const UI_WINDOW_Z_INDEX := UI_CHAT_TABS_Z_INDEX + 1
 const UI_BAG_Z_INDEX := UI_WINDOW_Z_INDEX
 const UI_DRAG_Z_INDEX := 1100
 const UI_MODAL_Z_INDEX := 2000
+const UI_REWARD_NOTIFICATION_Z_INDEX := UI_MODAL_Z_INDEX + 60
 const UI_OVERLAY_BASE_LAYER := 1
 const UI_OVERLAY_FOCUSED_LAYER := 20
 const CHAT_MIN_SIZE := Vector2(360, 190)
@@ -153,6 +154,8 @@ const GLOBAL_EV_BUFF_ICON: Texture2D = preload("res://assets/ui/global_ev_boost.
 const GLOBAL_SHINY_BUFF_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
 const GLOBAL_RARE_ENCOUNTER_BUFF_ICON: Texture2D = preload("res://assets/ui/global_rare_encounter_boost.svg")
 const GLOBAL_HEAL_ICON: Texture2D = preload("res://assets/ui/tool_heal_party.svg")
+const GLOBAL_BUFF_NOTIFICATION_DISPLAY_SECONDS := 6.0
+const GLOBAL_BUFF_NOTIFICATION_SOUND_BATCH_SECONDS := 0.25
 const REDEEM_CODE_ICON: Texture2D = preload("res://assets/ui/redeem_code.svg")
 const PVP_MODE_RANKED_ICON: Texture2D = preload("res://assets/ui/pvp_battles.svg")
 const PVP_MODE_CUSTOM_ICON: Texture2D = preload("res://assets/ui/pvp_custom_battle.svg")
@@ -463,6 +466,7 @@ const SPECIAL_HOLDABLE_ITEM_IDS := {
 	"red-orb": true,
 }
 const BAG_ICON_ROOT := "res://assets/items/icons/"
+const REWARD_NOTIFICATION_STACK_SCRIPT := preload("res://scripts/ui/reward_notification_stack.gd")
 const BAG_INTERFACE_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
 const MARKET_INTERFACE_ICON: Texture2D = preload("res://assets/ui/market_shop.svg")
 const AETHER_ATELIER_POPUP_SCENE := preload("res://scenes/interface/aether_atelier_popup.tscn")
@@ -1471,6 +1475,10 @@ var global_heal_request_dialog: AetherConfirmationDialog
 var global_heal_request_disable_checkbox: CheckBox
 var global_heal_request_busy := false
 var staff_tools_visibility_key := ""
+var reward_notification_stack: VBoxContainer
+var reward_notification_event_sequence := 0
+var global_buff_notification_tokens: Dictionary = {}
+var global_buff_activation_sound_pending := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -1478,9 +1486,12 @@ func _ready() -> void:
 	layer = UI_OVERLAY_BASE_LAYER
 	root_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root_control.theme = _make_main_ui_tooltip_theme()
+	_setup_reward_notification_stack()
 	_setup_pvp_queue_ball_spin()
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
+	if not InventoryService.item_received.is_connected(_on_inventory_item_received):
+		InventoryService.item_received.connect(_on_inventory_item_received)
 	LocalizationManager.localize_tree(self)
 	_setup_player_status_card()
 	_setup_quest_journal_ui()
@@ -4659,6 +4670,10 @@ func _announce_evolution_moves(
 					"ui.move_learning.result.learned",
 					{"pokemon": species_name, "move": move_name}
 				))
+				add_pokemon_move_reward_notification(
+					{"pokemonId": pokemon_id, "species": target_species_id},
+					learned_move
+				)
 
 	var candidates_value: Variant = result.get("moveLearnCandidates", [])
 	if not (candidates_value is Array):
@@ -5223,7 +5238,13 @@ func _submit_move_learn_choice(replace_slot: int, skip: bool) -> void:
 		_set_move_learn_controls_disabled(false)
 		return
 
-	_emit_move_learn_result_message(result, str(move_learn_active_prompt.get("species", "Pokemon")), move_name, skip)
+	_emit_move_learn_result_message(
+		result,
+		str(move_learn_active_prompt.get("species", "Pokemon")),
+		move_name,
+		skip,
+		move_learn_active_prompt
+	)
 
 	move_learn_popup.visible = false
 	_hide_move_learn_hover_panel()
@@ -5234,7 +5255,13 @@ func _submit_move_learn_choice(replace_slot: int, skip: bool) -> void:
 	_refresh_open_pokemon_summary_cards()
 	_show_next_move_learn_prompt()
 
-func _emit_move_learn_result_message(result: Dictionary, fallback_species: String, fallback_move_name: String, fallback_skipped: bool) -> void:
+func _emit_move_learn_result_message(
+	result: Dictionary,
+	fallback_species: String,
+	fallback_move_name: String,
+	fallback_skipped: bool,
+	pokemon_context: Dictionary = {}
+) -> void:
 	var source_species := fallback_species.strip_edges()
 	if source_species == "":
 		source_species = "Pokemon"
@@ -5268,6 +5295,11 @@ func _emit_move_learn_result_message(result: Dictionary, fallback_species: Strin
 			"ui.move_learning.result.learned",
 			{"pokemon": species, "move": learned_name}
 		))
+	var notification_context := pokemon_context.duplicate(true)
+	if str(notification_context.get("species", "")).strip_edges() == "":
+		notification_context["species"] = source_species
+	var notification_move: Variant = learned_move if not learned_move.is_empty() else pokemon_context
+	add_pokemon_move_reward_notification(notification_context, notification_move)
 
 func _move_learn_result_move_name(move_value: Variant, fallback_name: String) -> String:
 	if move_value is Dictionary:
@@ -11924,44 +11956,60 @@ func _on_global_buff_contribute_pressed() -> void:
 			"boost": _localized_buff_name(selected_global_buff),
 		}
 		))
-	_apply_global_boost_state(body, selected_boost_id)
+	_apply_global_boost_state(body, selected_boost_id, true)
 	_render_global_buff_details()
 
 
-func _load_global_exp_boost() -> void:
+func _load_global_exp_boost(show_activation_notification: bool = false) -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_exp_boost()
 	if bool(response.get("success", false)):
-		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_exp")
+		_apply_global_boost_state(
+			response.get("body", {}) as Dictionary,
+			"global_exp",
+			show_activation_notification
+		)
 
 
-func _load_global_ev_boost() -> void:
+func _load_global_ev_boost(show_activation_notification: bool = false) -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_ev_boost()
 	if bool(response.get("success", false)):
-		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_ev")
+		_apply_global_boost_state(
+			response.get("body", {}) as Dictionary,
+			"global_ev",
+			show_activation_notification
+		)
 
 
-func _load_global_shiny_boost() -> void:
+func _load_global_shiny_boost(show_activation_notification: bool = false) -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_shiny_boost()
 	if bool(response.get("success", false)):
-		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_shiny")
+		_apply_global_boost_state(
+			response.get("body", {}) as Dictionary,
+			"global_shiny",
+			show_activation_notification
+		)
 
 
-func _load_global_rare_encounter_boost() -> void:
+func _load_global_rare_encounter_boost(show_activation_notification: bool = false) -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_rare_encounter_boost()
 	if bool(response.get("success", false)):
-		_apply_global_boost_state(response.get("body", {}) as Dictionary, "global_rare_encounter")
+		_apply_global_boost_state(
+			response.get("body", {}) as Dictionary,
+			"global_rare_encounter",
+			show_activation_notification
+		)
 
 
-func _load_global_boost_state(boost_id: String) -> void:
+func _load_global_boost_state(boost_id: String, show_activation_notification: bool = false) -> void:
 	match boost_id:
 		"global_exp":
-			await _load_global_exp_boost()
+			await _load_global_exp_boost(show_activation_notification)
 		"global_ev":
-			await _load_global_ev_boost()
+			await _load_global_ev_boost(show_activation_notification)
 		"global_shiny":
-			await _load_global_shiny_boost()
+			await _load_global_shiny_boost(show_activation_notification)
 		"global_rare_encounter":
-			await _load_global_rare_encounter_boost()
+			await _load_global_rare_encounter_boost(show_activation_notification)
 
 
 func _load_global_heal() -> void:
@@ -11970,26 +12018,43 @@ func _load_global_heal() -> void:
 		_apply_global_heal_state(response.get("body", {}) as Dictionary)
 
 
-func _apply_global_heal_state(state: Dictionary) -> void:
+func _apply_global_heal_state(state: Dictionary, show_activation_notification: bool = false) -> void:
 	if bool(state.get("eventActive", false)):
 		_receive_global_heal_request({
 			"eventId": str(state.get("eventId", "")),
 			"displayName": str(state.get("eventDisplayName", "Trainer")),
 			"expiresAt": str(state.get("eventExpiresAt", "")),
-		})
+			"cooldownUntil": str(state.get("cooldownUntil", "")),
+			"cost": maxi(int(state.get("cost", 25000)), 1),
+			"available": bool(state.get("available", false)),
+		}, show_activation_notification)
+		return
+	_apply_global_heal_cooldown_state(state)
+
+
+func _apply_global_heal_cooldown_state(state: Dictionary) -> void:
+	if not state.has("cooldownUntil") and not state.has("available"):
+		return
+	var cooldown_until := str(state.get("cooldownUntil", "")).strip_edges()
+	var cooldown_seconds := _global_buff_remaining_seconds(cooldown_until)
+	var available := bool(state.get("available", cooldown_seconds <= 0))
 	for index: int in range(global_buffs_data.size()):
 		var buff := global_buffs_data[index] as Dictionary
 		if str(buff.get("id", "")) != "global_heal":
 			continue
 		buff["cost"] = maxi(int(state.get("cost", 25000)), 1)
-		buff["cooldownUntil"] = str(state.get("cooldownUntil", ""))
-		buff["cooldownSeconds"] = _global_buff_remaining_seconds(str(buff.get("cooldownUntil", "")))
-		buff["state"] = "available" if bool(state.get("available", false)) else "cooldown"
+		buff["cooldownUntil"] = cooldown_until
+		buff["cooldownSeconds"] = cooldown_seconds
+		buff["state"] = "available" if available else "cooldown"
 		global_buffs_data[index] = buff
 		if str(selected_global_buff.get("id", "")) == "global_heal":
 			selected_global_buff = buff.duplicate(true)
-		set_global_buffs(global_buffs_data)
-		if str(selected_global_buff.get("id", "")) == "global_heal":
+		if global_buffs_panel != null and global_buff_slots != null:
+			set_global_buffs(global_buffs_data)
+		if (
+			str(selected_global_buff.get("id", "")) == "global_heal"
+			and global_buff_details_status != null
+		):
 			_render_global_buff_details()
 		return
 
@@ -12049,7 +12114,7 @@ func _activate_global_heal() -> void:
 		return
 	var body := response.get("body", {}) as Dictionary
 	PlayerWalletService.apply_wallet_result({"success": true, "wallet": body.get("wallet", {})})
-	_apply_global_heal_state(body)
+	_apply_global_heal_state(body, true)
 	refresh_money_display()
 	add_system_message(LocalizationManager.text("ui.buff.global_heal.activated"))
 
@@ -12088,12 +12153,20 @@ func _prepare_confirmation_dialog_focus(dialog: ConfirmationDialog) -> void:
 		cancel_button.focus_mode = Control.FOCUS_ALL
 
 
-func _receive_global_heal_request(message: Dictionary) -> void:
-	if not GameState.global_heal_requests_enabled:
-		return
+func _receive_global_heal_request(
+	message: Dictionary,
+	show_activation_notification: bool = false
+) -> void:
+	_apply_global_heal_cooldown_state(message)
 	var event_id := str(message.get("eventId", "")).strip_edges()
 	var expires_at := str(message.get("expiresAt", "")).strip_edges()
 	if event_id.is_empty() or _global_buff_remaining_seconds(expires_at) <= 0:
+		return
+	if show_activation_notification:
+		_show_global_heal_activation_notification(message)
+	else:
+		global_buff_notification_tokens["global_heal"] = event_id
+	if not GameState.global_heal_requests_enabled:
 		return
 	pending_global_heal_request = {
 		"eventId": event_id,
@@ -12176,6 +12249,8 @@ func _on_global_heal_request_confirmed() -> void:
 		await _save_toggle_preferences()
 	if bool(response.get("success", false)):
 		add_system_message(LocalizationManager.text("ui.buff.global_heal.healed"))
+		if not bool(response.get("alreadyAccepted", false)):
+			SfxManager.play("pokemon_recovery")
 		return
 	if (
 		int(response.get("status", 0)) == 409
@@ -12196,22 +12271,37 @@ func _on_global_heal_request_declined() -> void:
 	await _save_toggle_preferences()
 
 
-func _apply_global_boost_state(state: Dictionary, boost_id: String) -> void:
+func _apply_global_boost_state(
+	state: Dictionary,
+	boost_id: String,
+	show_activation_notification: bool = false
+) -> void:
 	for index: int in range(global_buffs_data.size()):
 		var buff := global_buffs_data[index] as Dictionary
 		if str(buff.get("id", "")) != boost_id:
 			continue
+		var is_active := bool(state.get("active", false))
+		var active_until := str(state.get("activeUntil", "")).strip_edges() if is_active else ""
+		var known_token := str(global_buff_notification_tokens.get(boost_id, ""))
 		buff["current"] = int(state.get("current", 0))
 		buff["goal"] = int(state.get("goal", 100000))
-		buff["state"] = "active" if bool(state.get("active", false)) else "funding"
-		buff["activeUntil"] = str(state.get("activeUntil", "")) if bool(state.get("active", false)) else ""
+		buff["state"] = "active" if is_active else "funding"
+		buff["activeUntil"] = active_until
 		var remaining_seconds := _global_buff_remaining_seconds(str(buff.get("activeUntil", "")))
 		buff["remaining"] = (
 			_format_global_buff_remaining(remaining_seconds)
-			if bool(state.get("active", false)) and remaining_seconds > 0
+			if is_active and remaining_seconds > 0
 			else ""
 		)
 		global_buffs_data[index] = buff
+		if (
+			show_activation_notification
+			and is_active
+			and active_until != ""
+			and active_until != known_token
+		):
+			_show_global_boost_activation_notification(buff, remaining_seconds)
+		global_buff_notification_tokens[boost_id] = active_until
 		var selected := str(selected_global_buff.get("id", "")) == boost_id
 		if selected:
 			selected_global_buff = buff.duplicate(true)
@@ -12219,6 +12309,108 @@ func _apply_global_boost_state(state: Dictionary, boost_id: String) -> void:
 		if selected:
 			_render_global_buff_details()
 		return
+
+
+func _show_global_boost_activation_notification(buff: Dictionary, remaining_seconds: int) -> void:
+	var boost_id := str(buff.get("id", "")).strip_edges()
+	var active_until := str(buff.get("activeUntil", "")).strip_edges()
+	if boost_id == "" or active_until == "":
+		return
+	_show_event_notification(
+		"global-buff:%s:%s" % [boost_id, active_until],
+		_localized_buff_name(buff),
+		LocalizationManager.text("ui.reward_card.global_buff_activated"),
+		_global_buff_icon_for(buff),
+		_format_global_buff_notification_duration(remaining_seconds),
+		"",
+		_global_buff_notification_accent(boost_id),
+		null,
+		0,
+		0,
+		GLOBAL_BUFF_NOTIFICATION_DISPLAY_SECONDS
+	)
+	_queue_global_buff_activation_sound()
+
+
+func _show_global_heal_activation_notification(message: Dictionary) -> void:
+	var event_id := str(message.get("eventId", "")).strip_edges()
+	if event_id == "" or str(global_buff_notification_tokens.get("global_heal", "")) == event_id:
+		return
+	global_buff_notification_tokens["global_heal"] = event_id
+	var buff := _global_buff_data_by_id("global_heal")
+	var display_name := str(message.get("displayName", "Trainer")).strip_edges()
+	var remaining_seconds := _global_buff_remaining_seconds(str(message.get("expiresAt", "")))
+	_show_event_notification(
+		"global-buff:global-heal:%s" % event_id,
+		_localized_buff_name(buff),
+		LocalizationManager.text(
+			"ui.reward_card.global_heal_activated_by",
+			{"player": display_name if display_name != "" else "Trainer"}
+		),
+		_global_buff_icon_for(buff),
+		_format_global_buff_notification_duration(remaining_seconds),
+		"",
+		_global_buff_notification_accent("global_heal"),
+		null,
+		0,
+		0,
+		GLOBAL_BUFF_NOTIFICATION_DISPLAY_SECONDS
+	)
+	_queue_global_buff_activation_sound()
+
+
+func _queue_global_buff_activation_sound() -> void:
+	if global_buff_activation_sound_pending:
+		return
+	if not is_inside_tree():
+		return
+	global_buff_activation_sound_pending = true
+	_play_global_buff_activation_sound.call_deferred()
+
+
+func _play_global_buff_activation_sound() -> void:
+	if not is_inside_tree():
+		global_buff_activation_sound_pending = false
+		return
+	var tree := get_tree()
+	if tree == null:
+		global_buff_activation_sound_pending = false
+		return
+	await tree.create_timer(GLOBAL_BUFF_NOTIFICATION_SOUND_BATCH_SECONDS).timeout
+	global_buff_activation_sound_pending = false
+	SfxManager.play("global_buff_activated")
+
+
+func _global_buff_data_by_id(buff_id: String) -> Dictionary:
+	for buff_value: Variant in global_buffs_data:
+		var buff := buff_value as Dictionary
+		if str(buff.get("id", "")) == buff_id:
+			return buff
+	return {"id": buff_id}
+
+
+func _global_buff_notification_accent(buff_id: String) -> Color:
+	match buff_id:
+		"global_exp":
+			return Color("#d8b767")
+		"global_ev":
+			return Color("#5fb8df")
+		"global_shiny":
+			return Color("#e788ff")
+		"global_rare_encounter":
+			return Color("#73d98b")
+		"global_heal":
+			return Color("#56cce8")
+	return Color("#d8b767")
+
+
+func _format_global_buff_notification_duration(total_seconds: int) -> String:
+	var safe_seconds := maxi(total_seconds, 0)
+	if safe_seconds >= 86400:
+		return "%dd" % maxi(int(ceil(float(safe_seconds) / 86400.0)), 1)
+	if safe_seconds >= 3600:
+		return "%dh" % maxi(int(ceil(float(safe_seconds) / 3600.0)), 1)
+	return _format_global_buff_remaining(safe_seconds)
 
 
 func _global_buff_accepts_contributions(buff: Dictionary) -> bool:
@@ -12299,6 +12491,10 @@ func _on_donator_store_purchase_requested(item_id: String, chroma_colors: Dictio
 		"ui.store.purchase.system_success",
 		{"item": purchased_item_name}
 	))
+	add_item_reward_notification(
+		purchased_item_id,
+		maxi(int(purchase.get("quantity", 1)), 1)
+	)
 
 func _hide_donator_store_popup() -> void:
 	if donator_store_popup == null:
@@ -13803,10 +13999,35 @@ func _submit_trainer_card_gift_code() -> void:
 	_refresh_player_status_card()
 	var summary := _gift_code_reward_summary(result.get("rewards", []))
 	add_system_message(LocalizationManager.text("ui.gift_code.success", {"rewards": summary}))
+	_show_gift_code_reward_notifications(result.get("rewards", []))
 	var public_message := str(result.get("publicMessage", "")).strip_edges()
 	if public_message != "":
 		add_system_message(public_message)
 	_hide_trainer_card_redeem_popup()
+
+
+func _show_gift_code_reward_notifications(rewards_value: Variant) -> void:
+	if rewards_value is not Array:
+		return
+	for reward_value: Variant in rewards_value as Array:
+		if reward_value is not Dictionary:
+			continue
+		var reward := reward_value as Dictionary
+		var payload_value: Variant = reward.get("payload", {})
+		if payload_value is not Dictionary:
+			continue
+		var payload := payload_value as Dictionary
+		match str(reward.get("type", "")).strip_edges().to_lower():
+			"item":
+				add_item_reward_notification(
+					str(payload.get("itemId", "")),
+					int(payload.get("quantity", 0))
+				)
+			"currency":
+				add_currency_reward_notification(
+					str(payload.get("currency", "")),
+					int(payload.get("amount", 0))
+				)
 
 func _gift_code_reward_summary(rewards_value: Variant) -> String:
 	var labels: Array[String] = []
@@ -13984,6 +14205,7 @@ func _create_trainer_card_badge_row() -> Control:
 	return row
 
 func _apply_trainer_card_badge_option_style(option: OptionButton) -> void:
+	option.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	var normal := _make_button_style(UI_SURFACE_INTERACTIVE, UI_BORDER_SUBTLE, 6, 1)
 	normal.content_margin_left = 10
 	normal.content_margin_right = 24
@@ -14006,7 +14228,73 @@ func _apply_trainer_card_badge_option_style(option: OptionButton) -> void:
 	option.add_theme_color_override("font_color", UI_TEXT)
 	option.add_theme_color_override("font_hover_color", UI_TEXT)
 	option.add_theme_color_override("font_pressed_color", UI_TEXT)
+	option.add_theme_color_override("font_focus_color", UI_TEXT)
+	option.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT, 0.5))
 	option.add_theme_font_size_override("font_size", 14)
+	option.add_theme_constant_override("arrow_margin", 9)
+	option.add_theme_icon_override("arrow", RANKED_DROPDOWN_ARROW)
+	var disabled := _make_button_style(Color("#07111bc4"), Color("#263b4999"), 6, 1)
+	disabled.content_margin_left = 10
+	disabled.content_margin_right = 24
+	disabled.content_margin_top = 2
+	disabled.content_margin_bottom = 2
+	option.add_theme_stylebox_override("disabled", disabled)
+
+	var popup := option.get_popup()
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.add_theme_font_size_override("font_size", 13)
+	popup.add_theme_color_override("font_color", UI_TEXT)
+	popup.add_theme_color_override("font_hover_color", Color("#fff5cc"))
+	popup.add_theme_color_override("font_disabled_color", Color("#657487"))
+	popup.add_theme_color_override("font_separator_color", TRAINER_CARD_ACCENT)
+	popup.add_theme_color_override("font_outline_color", Color("#02070b"))
+	popup.add_theme_constant_override("outline_size", 1)
+	popup.add_theme_constant_override("item_start_padding", 10)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 5)
+	popup.add_theme_stylebox_override("panel", _make_trainer_card_badge_popup_style())
+	popup.add_theme_stylebox_override(
+		"hover",
+		_make_trainer_card_badge_popup_item_style(Color("#17283bf8"), TRAINER_CARD_ACCENT)
+	)
+	popup.add_theme_stylebox_override(
+		"separator",
+		_make_trainer_card_badge_popup_item_style(Color.TRANSPARENT, Color("#685a3566"), 0)
+	)
+	popup.add_theme_icon_override("radio_checked", RANKED_DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked", RANKED_DROPDOWN_RADIO_UNCHECKED)
+	popup.add_theme_icon_override("radio_checked_disabled", RANKED_DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked_disabled", RANKED_DROPDOWN_RADIO_UNCHECKED)
+
+
+func _make_trainer_card_badge_popup_style() -> StyleBoxFlat:
+	var style := _make_trainer_card_badge_popup_item_style(
+		Color("#050e18fc"),
+		TRAINER_CARD_ACCENT_SOFT,
+		8
+	)
+	style.content_margin_left = 5
+	style.content_margin_top = 6
+	style.content_margin_right = 5
+	style.content_margin_bottom = 6
+	style.shadow_color = Color("#00000099")
+	style.shadow_size = 12
+	style.shadow_offset = Vector2(0, 5)
+	return style
+
+
+func _make_trainer_card_badge_popup_item_style(
+	background: Color,
+	border: Color,
+	radius: int = 5
+) -> StyleBoxFlat:
+	var style := _make_panel_style(background, border, radius, 1)
+	style.content_margin_left = 8
+	style.content_margin_top = 4
+	style.content_margin_right = 8
+	style.content_margin_bottom = 4
+	return style
 
 func _populate_trainer_card_badge_option() -> void:
 	if trainer_card_badge_option == null:
@@ -18870,6 +19158,7 @@ func _on_aether_atelier_bundle_created(result: Dictionary) -> void:
 		_refresh_bag_items()
 	var box_item_id := str(result.get("createdBoxItemId", "outfit-box"))
 	_add_chat_message("%s was packed into a tradeable box." % _item_name_from_id(box_item_id))
+	add_item_reward_notification(box_item_id, 1)
 
 func _on_aether_atelier_chroma_dyed(result: Dictionary) -> void:
 	PlayerWalletService.apply_wallet_result(result)
@@ -19536,7 +19825,13 @@ func _on_market_buy_pressed() -> void:
 		{"quantity": transacted_quantity, "item": item_name},
 	))
 	if player_is_selling:
+		add_currency_reward_notification(
+			str(transaction.get("currency", "money")),
+			maxi(int(transaction.get("totalPrice", 0)), 0)
+		)
 		_update_market_sell_items_from_inventory(inventory_value)
+	else:
+		add_item_reward_notification(item_id, transacted_quantity)
 	_refresh_market_purchase_state()
 
 
@@ -21239,14 +21534,27 @@ func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_ty
 func _machine_item_icon_path(item_id: String, machine_kind: String, machine_move_type: String) -> String:
 	var resolved_kind := machine_kind.strip_edges().to_lower()
 	var resolved_move_type := machine_move_type.strip_edges().to_upper()
+	var normalized_item_id := _normalize_item_id(item_id)
 	if resolved_kind == "" or resolved_move_type == "":
-		var normalized_item_id := _normalize_item_id(item_id)
 		for inventory_item: Dictionary in bag_inventory_items:
 			if _normalize_item_id(str(inventory_item.get("id", ""))) != normalized_item_id:
 				continue
 			resolved_kind = str(inventory_item.get("machineKind", "")).strip_edges().to_lower()
 			resolved_move_type = str(inventory_item.get("machineMoveType", "")).strip_edges().to_upper()
 			break
+	if resolved_kind == "" or resolved_move_type == "":
+		var inferred_kind := ""
+		if normalized_item_id.begins_with("tm-"):
+			inferred_kind = "tm"
+		elif normalized_item_id.begins_with("hm-"):
+			inferred_kind = "hm"
+		if inferred_kind != "":
+			if resolved_kind == "":
+				resolved_kind = inferred_kind
+			if resolved_move_type == "":
+				resolved_move_type = _get_summary_move_type(
+					normalized_item_id.trim_prefix("%s-" % inferred_kind)
+				).strip_edges().to_upper()
 	if resolved_kind not in ["tm", "hm"] or resolved_move_type == "":
 		return ""
 	var icon_prefix := "machine_tr_" if resolved_kind == "hm" else "machine_"
@@ -36992,6 +37300,7 @@ func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictio
 					amount,
 					LocalizationManager.text("ui.trainer_card.wallet.%s" % currency_id),
 				])
+				add_currency_reward_notification(currency_id, amount)
 			"item":
 				var item_id := str(payload.get("itemId", ""))
 				var item_name: String = ItemLocalization.display_name(
@@ -37003,6 +37312,7 @@ func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictio
 					"quantity": quantity,
 					"item": item_name,
 				}))
+				add_item_reward_notification(item_id, quantity)
 			"pokemon":
 				var pokemon_payload: Dictionary = {}
 				var pokemon_value: Variant = payload.get("pokemon", {})
@@ -41853,6 +42163,228 @@ func add_system_message(text: String) -> void:
 	_add_chat_message(text)
 
 
+func _setup_reward_notification_stack() -> void:
+	if reward_notification_stack != null:
+		return
+	reward_notification_stack = REWARD_NOTIFICATION_STACK_SCRIPT.new() as VBoxContainer
+	reward_notification_stack.name = "RewardNotificationStack"
+	reward_notification_stack.anchor_left = 1.0
+	reward_notification_stack.anchor_right = 1.0
+	reward_notification_stack.offset_left = -304.0
+	reward_notification_stack.offset_top = 72.0
+	reward_notification_stack.offset_right = -16.0
+	reward_notification_stack.offset_bottom = 352.0
+	reward_notification_stack.z_index = UI_REWARD_NOTIFICATION_Z_INDEX
+	reward_notification_stack.z_as_relative = false
+	root_control.add_child(reward_notification_stack)
+
+
+func add_reward_notification(
+	reward_key: String,
+	title: String,
+	icon_texture: Texture2D = null,
+	amount: int = 0,
+	amount_prefix: String = "",
+	amount_suffix: String = "",
+	detail: String = ""
+) -> void:
+	if reward_notification_stack == null:
+		_setup_reward_notification_stack()
+	if reward_notification_stack == null:
+		return
+	reward_notification_stack.call(
+		"show_reward",
+		reward_key,
+		title,
+		icon_texture,
+		amount,
+		amount_prefix,
+		amount_suffix,
+		detail
+	)
+
+
+func add_item_reward_notification(item_id: String, quantity: int) -> void:
+	var normalized_item_id := item_id.strip_edges().to_lower()
+	var safe_quantity := maxi(quantity, 0)
+	if normalized_item_id == "" or safe_quantity <= 0:
+		return
+	add_reward_notification(
+		"item:%s" % normalized_item_id,
+		ItemLocalization.display_name(normalized_item_id, normalized_item_id.capitalize()),
+		_load_item_icon(normalized_item_id),
+		safe_quantity,
+		"×"
+	)
+
+
+func add_currency_reward_notification(currency_id: String, amount: int) -> void:
+	var normalized_currency_id := currency_id.strip_edges().to_lower()
+	var safe_amount := maxi(amount, 0)
+	if normalized_currency_id == "" or safe_amount <= 0:
+		return
+	var currency_name := LocalizationManager.text(
+		"ui.trainer_card.wallet.%s" % normalized_currency_id
+	)
+	var amount_prefix := "₽" if normalized_currency_id == "money" else "×"
+	add_reward_notification(
+		"currency:%s" % normalized_currency_id,
+		currency_name,
+		_mail_currency_icon(normalized_currency_id),
+		safe_amount,
+		amount_prefix
+	)
+
+
+func add_money_reward_notification(amount: int) -> void:
+	add_currency_reward_notification("money", amount)
+
+
+func add_pokemon_level_reward_notification(level_up: Dictionary) -> void:
+	var current_level := maxi(int(level_up.get("level", 0)), 0)
+	if current_level <= 0:
+		return
+	var identity := _pokemon_reward_identity(level_up)
+	_show_event_notification(
+		"pokemon-level:%s" % str(identity.get("key", "pokemon")),
+		str(identity.get("title", LocalizationManager.text("pokemon.generic"))),
+		LocalizationManager.text("ui.reward_card.level_up"),
+		_pokemon_reward_icon(identity),
+		"",
+		"",
+		Color("#d8b767"),
+		null,
+		maxi(int(level_up.get("previousLevel", 0)), 0),
+		current_level
+	)
+
+
+func add_pokemon_move_reward_notification(pokemon_context: Dictionary, move_value: Variant) -> void:
+	var move_name := _get_summary_move_name(move_value).strip_edges()
+	if move_name == "":
+		return
+	var identity := _pokemon_reward_identity(pokemon_context)
+	var move_type := _get_summary_move_type(move_value).strip_edges()
+	var badge_text := _localized_type_name(move_type).to_upper() if move_type != "" else ""
+	var accent := TypeColors.get_slot_border(move_type, Color("#5f83a8"))
+	_show_event_notification(
+		_next_pokemon_reward_key("pokemon-move:%s" % str(identity.get("key", "pokemon"))),
+		str(identity.get("title", LocalizationManager.text("pokemon.generic"))),
+		move_name,
+		_pokemon_reward_icon(identity),
+		"",
+		badge_text,
+		accent
+	)
+
+
+func add_caught_pokemon_reward_notification(pokemon_payload: Dictionary, ball_item_id: String = "poke-ball") -> void:
+	if pokemon_payload.is_empty():
+		return
+	var identity := _pokemon_reward_identity(pokemon_payload)
+	_show_event_notification(
+		_next_pokemon_reward_key("pokemon-caught:%s" % str(identity.get("key", "pokemon"))),
+		str(identity.get("title", LocalizationManager.text("pokemon.generic"))),
+		LocalizationManager.text("ui.reward_card.caught"),
+		_pokemon_reward_icon(identity),
+		"",
+		"",
+		Color("#73d98b"),
+		_load_item_icon(ball_item_id.strip_edges().to_lower())
+	)
+
+
+func _show_event_notification(
+	reward_key: String,
+	title: String,
+	subtitle: String,
+	icon_texture: Texture2D,
+	detail: String = "",
+	badge_text: String = "",
+	accent_color: Color = Color("#d8b767"),
+	trailing_icon: Texture2D = null,
+	previous_level: int = 0,
+	current_level: int = 0,
+	display_seconds_override: float = 0.0
+) -> void:
+	if reward_notification_stack == null:
+		_setup_reward_notification_stack()
+	if reward_notification_stack == null:
+		return
+	reward_notification_stack.call(
+		"show_event",
+		reward_key,
+		title,
+		subtitle,
+		icon_texture,
+		detail,
+		badge_text,
+		accent_color,
+		trailing_icon,
+		previous_level,
+		current_level,
+		display_seconds_override
+	)
+
+
+func _pokemon_reward_identity(source: Dictionary) -> Dictionary:
+	var payload := source
+	var nested_value: Variant = source.get("pokemon", {})
+	if nested_value is Dictionary:
+		payload = nested_value as Dictionary
+	var pokemon_id := 0
+	for key: String in ["pokemonId", "ownedPokemonId", "owned_pokemon_id", "id"]:
+		pokemon_id = int(payload.get(key, source.get(key, 0)))
+		if pokemon_id > 0:
+			break
+	var party_pokemon := _find_party_pokemon_by_owned_id(pokemon_id)
+	var species := ""
+	var nickname := ""
+	var shiny := false
+	if party_pokemon != null:
+		species = party_pokemon.species.strip_edges()
+		nickname = party_pokemon.nickname.strip_edges()
+		shiny = party_pokemon.shiny
+	else:
+		for key: String in ["speciesId", "species_id", "species", "displaySpecies"]:
+			species = str(payload.get(key, source.get(key, ""))).strip_edges()
+			if species != "":
+				break
+		for key: String in ["nickname", "nickName", "displayName", "display_name"]:
+			nickname = str(payload.get(key, source.get(key, ""))).strip_edges()
+			if nickname != "":
+				break
+		shiny = bool(payload.get("shiny", source.get("shiny", false)))
+	var title := nickname
+	if title == "":
+		title = _localized_species_name(species, species)
+	if title == "":
+		title = LocalizationManager.text("pokemon.generic")
+	var identity_key := "owned:%d" % pokemon_id if pokemon_id > 0 else "species:%s" % species.to_lower()
+	return {
+		"key": identity_key,
+		"title": title,
+		"species": species,
+		"shiny": shiny,
+	}
+
+
+func _pokemon_reward_icon(identity: Dictionary) -> Texture2D:
+	var species := str(identity.get("species", "")).strip_edges()
+	if species == "":
+		return null
+	return PokemonAssets.load_home_sprite(species, bool(identity.get("shiny", false)))
+
+
+func _next_pokemon_reward_key(prefix: String) -> String:
+	reward_notification_event_sequence += 1
+	return "%s:%d" % [prefix, reward_notification_event_sequence]
+
+
+func _on_inventory_item_received(item_id: String, quantity: int) -> void:
+	add_item_reward_notification(item_id, quantity)
+
+
 func _on_guild_notification_received(notification: Dictionary) -> void:
 	var kind := str(notification.get("kind", ""))
 	var key := ""
@@ -42012,22 +42544,22 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		return
 	if message_type == "system.global_exp_boost_contribution":
 		add_system_message(_global_exp_boost_contribution_message(message))
-		_load_global_boost_state.call_deferred("global_exp")
+		_load_global_boost_state.call_deferred("global_exp", true)
 		return
 	if message_type == "system.global_ev_boost_contribution":
 		add_system_message(_global_ev_boost_contribution_message(message))
-		_load_global_boost_state.call_deferred("global_ev")
+		_load_global_boost_state.call_deferred("global_ev", true)
 		return
 	if message_type == "system.global_rare_encounter_boost_contribution":
 		add_system_message(_global_rare_encounter_boost_contribution_message(message))
-		_load_global_boost_state.call_deferred("global_rare_encounter")
+		_load_global_boost_state.call_deferred("global_rare_encounter", true)
 		return
 	if message_type == "system.global_shiny_boost_contribution":
 		add_system_message(_global_shiny_boost_contribution_message(message))
-		_load_global_boost_state.call_deferred("global_shiny")
+		_load_global_boost_state.call_deferred("global_shiny", true)
 		return
 	if message_type == "system.global_heal_requested":
-		_receive_global_heal_request(message)
+		_receive_global_heal_request(message, true)
 		return
 	if message_type == "chat.mute.updated":
 		var remaining_seconds := maxi(int(message.get("remainingSeconds", 0)), 0)
@@ -43587,6 +44119,8 @@ func _get_legacy_chat_role_badge(role_id: String) -> String:
 			return "DEV"
 		"moderator":
 			return "MOD"
+		"staff":
+			return "Chat Mod"
 		"blessed":
 			return "Blessed"
 		_:

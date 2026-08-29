@@ -81,6 +81,7 @@ func _present_moomoo_milk_reward(effects_value: Variant) -> bool:
 			"quantity": quantity,
 		})
 	)
+	get_tree().call_group("ui_overlay", "add_item_reward_notification", "moomoo-milk", quantity)
 	SfxManager.play("item_received")
 	return true
 

@@ -1,5 +1,31 @@
 extends RefCounted
 
+const TallGrassDepthSortingScript := preload("res://scripts/world/tall_grass_depth_sorting.gd")
+
+
+static func get_tall_grass_overlap_z_floor(
+	map: Node,
+	layer: TileMapLayer,
+	group: Array[Vector2i],
+	minimum_z: int,
+	maximum_z: int
+) -> int:
+	if map == null or layer == null:
+		return minimum_z
+
+	var sort_z_floor := minimum_z
+	for cell: Vector2i in group:
+		var cell_center_position := layer.to_global(layer.map_to_local(cell))
+		var grass_match := TallGrassDepthSortingScript.find_depth_row_at_global_position(
+			map,
+			cell_center_position
+		)
+		var grass_row := grass_match.get("layer") as TileMapLayer
+		if grass_row == null:
+			continue
+		sort_z_floor = maxi(sort_z_floor, grass_row.z_index + 1)
+	return clampi(sort_z_floor, minimum_z, maximum_z)
+
 
 static func get_structure_top_group_z_floor(
 	map: Node,

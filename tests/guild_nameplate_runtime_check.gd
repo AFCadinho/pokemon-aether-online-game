@@ -2,6 +2,7 @@ extends SceneTree
 
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
+const RoleBadgeTexture := preload("res://scripts/ui/role_badge_texture.gd")
 
 var failed := false
 
@@ -17,6 +18,75 @@ func _init() -> void:
 		"player nameplate contains a guild emblem"
 	)
 	_check(
+		player_scene_source.contains('[node name="RoleBadgeIcon" type="TextureRect" parent="Nameplate"]')
+		and not player_scene_source.contains('path="res://assets/ui/alpha_crystal_emblem_large.png"')
+		and not player_scene_source.contains('path="res://assets/ui/patreon_emblem.png"')
+		and not player_scene_source.contains('path="res://assets/ui/gamemaster_emblem_readable.png"')
+		and not player_scene_source.contains('path="res://assets/ui/developer_emblem_teal.png"')
+		and not player_scene_source.contains('path="res://assets/ui/moderator_emblem_purple.png"'),
+		"player scene opens without depending on role badge PNG import metadata"
+	)
+	var role_badge_texture_source := FileAccess.get_file_as_string("res://scripts/ui/role_badge_texture.gd")
+	_check(
+		role_badge_texture_source.contains('"alpha": "res://assets/ui/alpha_crystal_emblem_large.png"')
+		and role_badge_texture_source.contains('"patreon": "res://assets/ui/patreon_emblem.png"')
+		and role_badge_texture_source.contains('"gamemaster": "res://assets/ui/gamemaster_emblem_readable.png"')
+		and role_badge_texture_source.contains('"developer": "res://assets/ui/developer_emblem_teal.png"')
+		and role_badge_texture_source.contains('"moderator": "res://assets/ui/moderator_emblem_purple.png"')
+		and role_badge_texture_source.contains("ResourceLoader.exists")
+		and role_badge_texture_source.contains("Image.load_from_file"),
+		"role emblems support imported textures and fresh-checkout PNG loading"
+	)
+	var alpha_badge_image := Image.load_from_file(
+		ProjectSettings.globalize_path("res://assets/ui/alpha_crystal_emblem_large.png")
+	)
+	_check(
+		alpha_badge_image != null
+		and alpha_badge_image.get_size() == Vector2i(28, 28)
+		and alpha_badge_image.detect_alpha() != Image.ALPHA_NONE
+		and RoleBadgeTexture.get_role_badge_texture("alpha") != null,
+		"Alpha crystal emblem has readable dimensions and transparent pixels"
+	)
+	var patreon_badge_image := Image.load_from_file(
+		ProjectSettings.globalize_path("res://assets/ui/patreon_emblem.png")
+	)
+	_check(
+		patreon_badge_image != null
+		and patreon_badge_image.get_size() == Vector2i(28, 28)
+		and patreon_badge_image.detect_alpha() != Image.ALPHA_NONE
+		and RoleBadgeTexture.get_role_badge_texture("patreon") != null,
+		"Patreon emblem has readable dimensions and transparent pixels"
+	)
+	var gm_badge_image := Image.load_from_file(
+		ProjectSettings.globalize_path("res://assets/ui/gamemaster_emblem_readable.png")
+	)
+	_check(
+		gm_badge_image != null
+		and gm_badge_image.get_size() == Vector2i(28, 28)
+		and gm_badge_image.detect_alpha() != Image.ALPHA_NONE,
+		"Game Master shield emblem has readable dimensions and transparent pixels"
+	)
+	var developer_badge_image := Image.load_from_file(
+		ProjectSettings.globalize_path("res://assets/ui/developer_emblem_teal.png")
+	)
+	_check(
+		developer_badge_image != null
+		and developer_badge_image.get_size() == Vector2i(28, 28)
+		and developer_badge_image.detect_alpha() != Image.ALPHA_NONE
+		and RoleBadgeTexture.get_role_badge_texture("developer") != null,
+		"Developer shield emblem has readable dimensions and transparent pixels"
+	)
+	var moderator_badge_image := Image.load_from_file(
+		ProjectSettings.globalize_path("res://assets/ui/moderator_emblem_purple.png")
+	)
+	_check(
+		moderator_badge_image != null
+		and moderator_badge_image.get_size() == Vector2i(28, 28)
+		and moderator_badge_image.detect_alpha() != Image.ALPHA_NONE
+		and RoleBadgeTexture.get_role_badge_texture("moderator") != null,
+		"Moderator shield emblem has readable dimensions and transparent pixels"
+	)
+	_check(
 		player_scene_source.contains("offset_left = 9.0")
 		and player_scene_source.contains("offset_right = 33.0")
 		and player_scene_source.contains("offset_bottom = 65.0"),
@@ -26,13 +96,27 @@ func _init() -> void:
 		player_scene_source.contains("texture_filter = 1"),
 		"guild emblem keeps pixel art crisp"
 	)
+	_check(
+		_node_source(player_scene_source, "RoleBadge").contains("texture_filter = 1"),
+		"text role badges stay crisp at integer camera zoom"
+	)
 	var player_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
 	var remote_source := FileAccess.get_file_as_string("res://scripts/world/remote_player_avatar.gd")
 	var npc_source := FileAccess.get_file_as_string("res://scripts/world/npcs/base_npc.gd")
 	_check(
+		player_source.contains("RoleBadgeTexture.get_role_badge_texture(normalized_role_id)")
+		and remote_source.contains("RoleBadgeTexture.get_role_badge_texture(normalized_role_id)"),
+		"local and remote players assign the selected resilient role texture"
+	)
+	_check(
 		_has_adjacent_guild_emblem(player_source)
 		and _has_adjacent_guild_emblem(remote_source),
 		"nameplate places the guild emblem in a separate badge beside the name card"
+	)
+	_check(
+		_uses_pixel_role_badge(player_source)
+		and _uses_pixel_role_badge(remote_source),
+		"local and remote Game Masters, Developers, and Moderators use pixel badges without replacing guild emblems"
 	)
 	_check(
 		_uses_content_sized_name_card(player_source)
@@ -155,6 +239,25 @@ func _uses_content_sized_name_card(source: String) -> bool:
 		and source.contains("label.label_settings.font_size")
 		and not source.contains("NAMEPLATE_MIN_NAME_WIDTH")
 	)
+
+
+func _uses_pixel_role_badge(source: String) -> bool:
+	return (
+		source.contains("RoleBadgeTexture.has_role_badge(normalized_role_id)")
+		and source.contains("role_badge_icon.visible = use_role_icon")
+		and source.contains("if uses_role_icon:")
+		and source.contains("ROLE_BADGE_ICON_SIZE")
+	)
+
+
+func _node_source(source: String, node_name: String) -> String:
+	var start := source.find('[node name="%s"' % node_name)
+	if start < 0:
+		return ""
+	var next_node := source.find("\n[node ", start + 1)
+	if next_node < 0:
+		return source.substr(start)
+	return source.substr(start, next_node - start)
 
 
 func _check(condition: bool, label: String) -> void:

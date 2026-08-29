@@ -78,6 +78,11 @@ func _init() -> void:
 		"non-staff Blessed roles stay hidden above remote characters"
 	)
 	_check(
+		player_source.contains('"gamemaster", "alpha", "patreon"]')
+		and remote_player_source.contains('"gamemaster", "alpha", "patreon"]'),
+		"legacy Alpha and Patreon roles remain visible above local and remote characters"
+	)
+	_check(
 		overlay_source.contains('"blessed":\n\t\t\treturn "Blessed"')
 		and overlay_source.contains('"blessed":\n\t\t\treturn "#b980ff"'),
 		"Blessed has a compact chat label and color fallback"
@@ -129,6 +134,12 @@ func _init() -> void:
 		and local_overworld_badge_width_source.contains("normalized_badge.length()")
 		and remote_overworld_badge_width_source.contains("normalized_badge.length()"),
 		"all selected staff roles retain a nameplate label through world presence"
+	)
+	_check(
+		local_overworld_badge_source.contains('"staff":\n\t\t\treturn "Chat Mod"')
+		and remote_overworld_badge_source.contains('"staff":\n\t\t\treturn "Chat Mod"')
+		and overlay_source.contains('"staff":\n\t\t\treturn "Chat Mod"'),
+		"Chat Moderators use the shorter Chat Mod label above characters and in chat"
 	)
 
 	quit(1 if failures > 0 else 0)

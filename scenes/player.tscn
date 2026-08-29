@@ -137,6 +137,18 @@ offset_bottom = 15.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_role_badge")
 
+[node name="RoleBadgeIcon" type="TextureRect" parent="Nameplate"]
+visible = false
+layout_mode = 0
+offset_left = 68.0
+offset_top = -8.0
+offset_right = 96.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+
 [node name="GuildEmblemBackground" type="Panel" parent="Nameplate"]
 visible = false
 layout_mode = 0
@@ -164,6 +176,7 @@ layout_mode = 0
 offset_left = 1.0
 offset_right = 19.0
 offset_bottom = 11.0
+texture_filter = 1
 label_settings = SubResource("LabelSettings_nameplate_role")
 horizontal_alignment = 1
 vertical_alignment = 1

@@ -3,16 +3,15 @@ extends Node2D
 class_name PokemonFollower
 
 const TILE_SIZE := 32.0
-const FOLLOW_DISTANCE_TILES := 1
+const FOLLOW_DISTANCE_TILES := 2
 const MAX_HISTORY_SIZE := 16
-const TELEPORT_DISTANCE := 96.0
+const TELEPORT_DISTANCE := TILE_SIZE * (FOLLOW_DISTANCE_TILES + 2)
 const SORT_Z_MIN := -4096
 const SORT_Z_MAX := 4096
 const DEFAULT_PLAYER_VISUAL_SORT_DEPTH := 8
 const PLAYER_OVERLAP_SORT_Y_EPSILON := 8.0
 const SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_NEAREST
-const SIDE_SPRITE_VISUAL_OFFSET := Vector2(0.0, -16.0)
-const VERTICAL_SPRITE_VISUAL_OFFSET := Vector2(0.0, -12.0)
+const FOLLOWER_SPRITE_VISUAL_OFFSET := Vector2(0.0, -16.0)
 const BASE_FOLLOWER_FRAME_HEIGHT := 64.0
 const SHINY_SPARKLE_COLOR := Color(1.0, 0.82, 0.22, 0.88)
 const SHINY_SPARKLE_CENTER_OFFSET := Vector2(0.0, -20.0)
@@ -109,15 +108,17 @@ func _reset_position_history() -> void:
 	last_animation_direction = direction
 	var player_position: Vector2 = _get_player_follow_position()
 	var follower_position: Vector2 = player_position - (direction * TILE_SIZE * FOLLOW_DISTANCE_TILES)
-	position_history.append(follower_position)
-	position_history.append(player_position)
+	for tile_index: int in range(FOLLOW_DISTANCE_TILES + 1):
+		var tiles_behind := FOLLOW_DISTANCE_TILES - tile_index
+		position_history.append(player_position - direction * TILE_SIZE * tiles_behind)
 	global_position = follower_position
 	_update_sort_z()
 
 func _update_position_history() -> void:
 	var player_position: Vector2 = _get_player_follow_position()
+	var trail_position: Vector2 = _get_player_trail_position()
 	if position_history.is_empty():
-		position_history.append(player_position)
+		position_history.append(trail_position)
 		global_position = player_position
 		return
 
@@ -126,10 +127,10 @@ func _update_position_history() -> void:
 		_reset_position_history()
 		return
 
-	if last_position.distance_to(player_position) < TILE_SIZE * 0.9:
+	if last_position.distance_to(trail_position) < TILE_SIZE * 0.9:
 		return
 
-	position_history.append(player_position)
+	position_history.append(trail_position)
 	while position_history.size() > MAX_HISTORY_SIZE:
 		position_history.remove_at(0)
 
@@ -209,11 +210,9 @@ func _update_sprite_visual_offset(direction: Vector2) -> void:
 func _get_shiny_sparkle_center() -> Vector2:
 	return _get_sprite_visual_offset(last_animation_direction) + SHINY_SPARKLE_CENTER_OFFSET
 
-func _get_sprite_visual_offset(direction: Vector2) -> Vector2:
+func _get_sprite_visual_offset(_direction: Vector2) -> Vector2:
 	var large_sprite_offset := Vector2(0.0, -maxf(_get_current_frame_size().y - BASE_FOLLOWER_FRAME_HEIGHT, 0.0) * 0.5)
-	if direction == Vector2.LEFT or direction == Vector2.RIGHT:
-		return SIDE_SPRITE_VISUAL_OFFSET + large_sprite_offset
-	return VERTICAL_SPRITE_VISUAL_OFFSET + large_sprite_offset
+	return FOLLOWER_SPRITE_VISUAL_OFFSET + large_sprite_offset
 
 func _get_current_frame_size() -> Vector2:
 	if sprite == null or sprite.sprite_frames == null:
@@ -254,6 +253,15 @@ func _get_player_follow_position() -> Vector2:
 		if feet_position is Vector2:
 			return feet_position as Vector2
 	return player.global_position
+
+func _get_player_trail_position() -> Vector2:
+	if player == null or not is_instance_valid(player):
+		return global_position
+	if player.has_method("get_target_feet_position"):
+		var target_feet_position: Variant = player.call("get_target_feet_position")
+		if target_feet_position is Vector2:
+			return target_feet_position as Vector2
+	return _get_player_follow_position()
 
 func _update_sort_z() -> void:
 	var follower_sort_y := global_position.y

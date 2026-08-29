@@ -28,6 +28,16 @@ func _init() -> void:
 		"Global Heal lights up during cooldown and stays subdued while available"
 	)
 	_check(overlay.contains('message_type == "system.global_heal_requested"'), "realtime Global Heal broadcasts reach the UI")
+	_check(
+		overlay.contains('_receive_global_heal_request(message, true)')
+			and overlay.contains('func _show_global_heal_activation_notification'),
+		"realtime Global Heal broadcasts show a deduplicated activation card"
+	)
+	_check(
+		overlay.contains('func _apply_global_heal_cooldown_state(state: Dictionary)')
+			and overlay.contains('_apply_global_heal_cooldown_state(message)'),
+		"realtime Global Heal broadcasts synchronize the cooldown UI"
+	)
 	_check(overlay.contains('bool(state.get("eventActive", false))'), "active requests are recovered after reconnecting")
 	_check(overlay.contains("if _is_world_battle_active():") and overlay.contains("pending_global_heal_request"), "requests remain pending during battles")
 	_check(
@@ -39,6 +49,11 @@ func _init() -> void:
 	_check(not overlay.contains("get_vbox()"), "the request dialog uses supported Godot dialog APIs")
 	_check(wallet_service.contains('GLOBAL_HEAL_ENDPOINT := "/game/global-heal"'), "wallet service exposes Global Heal state and activation")
 	_check(heal_service.contains('func accept_global_heal(event_id: String)'), "party heal service accepts an individual event")
+	_check(
+		overlay.contains('SfxManager.play("pokemon_recovery")')
+			and overlay.contains('response.get("alreadyAccepted", false)'),
+		"a newly accepted Global Heal plays the recovery sound once"
+	)
 	_check(
 		heal_service.contains('func acknowledge_global_heal(event_id: String)')
 			and overlay.contains('await PartyHealService.acknowledge_global_heal(event_id)'),
@@ -77,6 +92,11 @@ func _init() -> void:
 		_check(
 			str(catalog.get("ui.buff.global_heal.no_aetherite", "")).strip_edges() != "",
 			"%s explains that Global Heal awards no Aetherite" % locale_path.get_file()
+		)
+		_check(
+			str(catalog.get("ui.reward_card.global_buff_activated", "")).strip_edges() != ""
+				and str(catalog.get("ui.reward_card.global_heal_activated_by", "")).strip_edges() != "",
+			"%s contains localized global buff card labels" % locale_path.get_file()
 		)
 
 	quit(1 if failed else 0)

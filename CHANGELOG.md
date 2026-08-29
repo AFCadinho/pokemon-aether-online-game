@@ -1,5 +1,36 @@
 # Changelog
 
+## Unreleased
+
+- Officer Jenny now finishes her arrest dialogue before taking a caught pickpocket to jail.
+- Arrest scenes now use Cerulean City's cropped Officer Jenny portrait and pause position saves until the jail transfer finishes.
+
+**Added**
+
+- Items and currency you receive now appear in compact, stacked reward cards with their icon and amount.
+- Pokémon level-ups, newly learned moves, and catches now appear in reward cards with their Pokémon HOME icon.
+- Activated global boosts and Global Heal now appear in the same stacked notification cards.
+
+**Changed**
+
+- Global buff activation cards now stay visible longer and play one subtle sound per activation batch.
+- The Trainer Card badge selector now uses the same navy-and-gold styling as the rest of the card.
+- Pokémon level-up reward cards now play a dedicated sound once per reward batch.
+- Game Masters, Developers, and Moderators now share a balanced pixel-art shield design with clear role lettering and distinct role colors above their character; Guild emblems remain visible beside their name.
+- Alpha players now have a larger purple crystal pixel-art badge with a clear `A` above their character.
+- Patreon supporters now have a distinct coral pixel-art Patreon badge above their character.
+- Chat Moderators now use the shorter `Chat Mod` badge above their character and in chat, with sharper text at close camera zoom.
+- Viridian Forest now uses its latest visual layout.
+
+**Fixed**
+
+- TM and HM reward cards now show their type-colored machine icon instead of a question mark.
+- Global Heal now immediately shows its shared cooldown for every online player and plays the recovery sound after healing.
+- Follower Pokémon now consistently leave one full tile between themselves and their Trainer while idle and walking in every direction.
+- Newly added Game Master emblems no longer prevent the player scene from opening before Godot finishes importing them.
+- Reward cards now remain visible in front of the rest of the game interface.
+- Grass and item Poké Balls in Viridian Forest now appear in the correct visual layer.
+
 ## 0.3.68 - 2026-08-29
 
 **Fixed**
@@ -35,6 +66,7 @@
 
 **Fixed**
 
+- Existing Pokémon with compact battle move IDs can now use their moves in overworld field actions.
 - Route 24 now has correct boundaries, grass, and connections to Cerulean City and Route 25.
 - Newly received HMs now work immediately without reopening the Bag or changing areas.
 - Moomoo Milk received on Route 25 can now be used from the Bag to restore 100 HP outside battle. Receiving it also shows a System message and plays a sound.

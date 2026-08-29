@@ -705,6 +705,7 @@ func _is_player_position_save_blocked_by_teleport(allow_gameplay_reset := false)
 	return (
 		(GameState.gameplay_reset_in_progress and not allow_gameplay_reset)
 		or account_switch_in_progress
+		or ThievingService.is_arrest_transfer_pending()
 		or authorized_teleport_in_progress
 		or authorized_teleport_apply_failed_autosave_blocked
 	)
@@ -715,6 +716,8 @@ func _get_player_position_save_block_reason(allow_gameplay_reset := false) -> St
 		return "Gameplay reset is in progress."
 	if account_switch_in_progress:
 		return "Account switch is in progress."
+	if ThievingService.is_arrest_transfer_pending():
+		return "Arrest transfer is pending."
 	if authorized_teleport_apply_failed_autosave_blocked:
 		return "A server-authorized teleport did not finish locally; position autosave is blocked to protect the new server position."
 	return "Authorized teleport is in progress."
@@ -1648,6 +1651,16 @@ func _build_structure_top_visual_depth_groups(map: Node) -> void:
 					TREE_LAYER_Z_MAX
 				)
 			)
+			group_z_index = maxi(
+				group_z_index,
+				MapDepthSortingScript.get_tall_grass_overlap_z_floor(
+					map,
+					structure_layer,
+					group,
+					TREE_LAYER_Z_MIN,
+					TREE_LAYER_Z_MAX
+				)
+			)
 			group_layer.z_index = group_z_index
 			group_layer.set_meta(STRUCTURE_TOP_DEPTH_GROUP_META, true)
 			group_root.add_child(group_layer)
@@ -2151,7 +2164,8 @@ func _save_current_player_position(
 	else:
 		if str(result.get("error", "")) == "FORCED_TELEPORT_PENDING":
 			_mark_authorized_teleport_apply_failed()
-		push_warning("World: player position save failed: %s" % str(result.get("error", "Unknown error")))
+		if not ThievingService.is_arrest_transfer_pending():
+			push_warning("World: player position save failed: %s" % str(result.get("error", "Unknown error")))
 	is_saving_player_position = false
 	if has_pending_player_position_save:
 		has_pending_player_position_save = false
@@ -3151,6 +3165,12 @@ func _notify_caught_pokemon_if_needed(result: Dictionary) -> void:
 		)
 
 	get_tree().call_group("ui_overlay", "add_system_pokemon_message", message, [pokemon_payload])
+	get_tree().call_group(
+		"ui_overlay",
+		"add_caught_pokemon_reward_notification",
+		pokemon_payload,
+		str(result.get("itemId", "poke-ball"))
+	)
 
 func _extract_caught_pokemon_chat_payload(value: Variant) -> Dictionary:
 	if not value is Dictionary:
@@ -3367,6 +3387,12 @@ func _notify_fishing_treasure_award(value: Variant) -> void:
 				"item": ItemLocalization.display_name(item_id),
 			})
 		)
+		get_tree().call_group(
+			"ui_overlay",
+			"add_item_reward_notification",
+			item_id,
+			maxi(int(item.get("quantity", 1)), 1)
+		)
 		SfxManager.play("item_found")
 		return
 
@@ -3386,6 +3412,7 @@ func _notify_wild_battle_money_awarded(pokemon_species: String, money_awarded: i
 	})
 	get_tree().call_group("ui_overlay", "refresh_money_display")
 	get_tree().call_group("ui_overlay", "add_system_message", message)
+	get_tree().call_group("ui_overlay", "add_money_reward_notification", money_awarded)
 
 func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded: int) -> void:
 	if money_awarded <= 0:
@@ -3401,11 +3428,44 @@ func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded:
 	})
 	get_tree().call_group("ui_overlay", "refresh_money_display")
 	get_tree().call_group("ui_overlay", "add_system_message", message)
+	get_tree().call_group("ui_overlay", "add_money_reward_notification", money_awarded)
 
 
 func _notify_story_reward_items(value: Variant) -> void:
 	for message: String in _story_reward_item_messages(value):
 		get_tree().call_group("ui_overlay", "add_system_message", message)
+	for grant: Dictionary in _story_reward_item_grants(value):
+		get_tree().call_group(
+			"ui_overlay",
+			"add_item_reward_notification",
+			str(grant.get("itemId", "")),
+			int(grant.get("quantity", 0))
+		)
+
+
+func _story_reward_item_grants(value: Variant) -> Array[Dictionary]:
+	var grants: Array[Dictionary] = []
+	if value is not Array:
+		return grants
+	for effect_value: Variant in value as Array:
+		if effect_value is not Dictionary:
+			continue
+		var effect := effect_value as Dictionary
+		if bool(effect.get("alreadyGranted", false)):
+			continue
+		var grants_value: Variant = effect.get("grants", [])
+		if grants_value is not Array:
+			continue
+		for grant_value: Variant in grants_value as Array:
+			if grant_value is not Dictionary:
+				continue
+			var grant := grant_value as Dictionary
+			var item_id := str(grant.get("itemId", "")).strip_edges().to_lower()
+			var quantity := maxi(int(grant.get("quantity", 0)), 0)
+			if item_id == "" or quantity <= 0:
+				continue
+			grants.append({"itemId": item_id, "quantity": quantity})
+	return grants
 
 func _story_reward_item_messages(value: Variant) -> Array[String]:
 	var messages: Array[String] = []
@@ -3560,6 +3620,7 @@ func _notify_reward_level_ups(reward_value: Variant) -> void:
 	if not (level_ups_value is Array):
 		return
 
+	var has_level_up := false
 	for level_up_value: Variant in level_ups_value:
 		if not (level_up_value is Dictionary):
 			continue
@@ -3575,6 +3636,7 @@ func _notify_reward_level_ups(reward_value: Variant) -> void:
 		var level := int(level_up.get("level", 0))
 		if level <= 0:
 			continue
+		has_level_up = true
 
 		var message := LocalizationManager.text(
 			"ui.world.reward.level_up",
@@ -3587,16 +3649,29 @@ func _notify_reward_level_ups(reward_value: Variant) -> void:
 				"level": level,
 			})
 		get_tree().call_group("ui_overlay", "add_system_message", message)
+		get_tree().call_group("ui_overlay", "add_pokemon_level_reward_notification", level_up)
 		_notify_reward_level_up_moves(species, level_up)
 
+	if has_level_up:
+		SfxManager.play("pokemon_level_up")
 	get_tree().call_group("ui_overlay", "queue_reward_move_learn_candidates", reward)
 
 func _notify_reward_level_up_moves(species: String, level_up: Dictionary) -> void:
+	var learned_moves_value: Variant = level_up.get("learnedMoves", [])
 	_notify_reward_move_messages(
 		species,
-		level_up.get("learnedMoves", []),
+		learned_moves_value,
 		"ui.world.reward.move_learned"
 	)
+	if learned_moves_value is Array:
+		for learned_move_value: Variant in learned_moves_value as Array:
+			if learned_move_value is Dictionary:
+				get_tree().call_group(
+					"ui_overlay",
+					"add_pokemon_move_reward_notification",
+					level_up,
+					learned_move_value
+				)
 	_notify_reward_move_messages(
 		species,
 		level_up.get("moveLearnCandidates", []),

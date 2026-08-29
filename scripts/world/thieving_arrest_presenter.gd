@@ -7,9 +7,7 @@ const LAW_ENFORCEMENT_NPC_TYPE := "law_enforcement"
 const OFFICER_NAME := "Officer Jenny"
 const OFFICER_SCENE: PackedScene = preload("res://scenes/npcs/dialogue_npc.tscn")
 const OFFICER_FRAMES: SpriteFrames = preload("res://assets/npcs/classes/officer_jenny_frames.tres")
-const OFFICER_PORTRAIT: Texture2D = preload(
-	"res://assets/sprites/trainer_cards/showdown/policeman-gen7.png"
-)
+const OFFICER_PORTRAIT: Texture2D = preload("res://assets/npcs/classes/officer_jenny_portrait.tres")
 
 
 static func show_confrontation(source_npc: Node2D, player: Node2D, npc_type: String) -> void:
@@ -18,10 +16,9 @@ static func show_confrontation(source_npc: Node2D, player: Node2D, npc_type: Str
 	if npc_type.strip_edges().to_lower() == LAW_ENFORCEMENT_NPC_TYPE:
 		source_npc.call("face_world_position", player.global_position)
 		player.call("face_world_position", source_npc.global_position)
-		await source_npc.call(
-			"show_dialogue",
-			[LocalizationManager.text("ui.thieving.arrest.officer_confrontation")],
-			OFFICER_NAME
+		await _show_officer_dialogue(
+			player,
+			LocalizationManager.text("ui.thieving.arrest.officer_confrontation")
 		)
 		return
 
@@ -34,10 +31,9 @@ static func show_confrontation(source_npc: Node2D, player: Node2D, npc_type: Str
 	await player.get_tree().process_frame
 	officer.call("face_world_position", player.global_position)
 	player.call("face_world_position", officer.global_position)
-	await officer.call(
-		"show_dialogue",
-		[LocalizationManager.text("ui.thieving.arrest.civilian_confrontation")],
-		OFFICER_NAME
+	await _show_officer_dialogue(
+		player,
+		LocalizationManager.text("ui.thieving.arrest.civilian_confrontation")
 	)
 	if is_instance_valid(officer):
 		officer.queue_free()
@@ -52,16 +48,29 @@ static func show_jail_arrival(player: Node2D, arrest: Dictionary) -> void:
 	await player.get_tree().process_frame
 	officer.call("face_world_position", player.global_position)
 	player.call("face_world_position", officer.global_position)
-	await officer.call(
-		"show_dialogue",
-		[LocalizationManager.text("ui.thieving.arrest.jail_arrival", {
+	await _show_officer_dialogue(
+		player,
+		LocalizationManager.text("ui.thieving.arrest.jail_arrival", {
 			"amount": maxi(int(arrest.get("lostMoney", 0)), 0),
 			"minutes": maxi(ceili(float(arrest.get("sentenceSeconds", 0)) / 60.0), 1),
-		})],
-		OFFICER_NAME
+		})
 	)
 	if is_instance_valid(officer):
 		officer.queue_free()
+
+
+static func _show_officer_dialogue(player: Node2D, line: String) -> void:
+	var scene_tree := player.get_tree()
+	var current_scene := scene_tree.current_scene
+	if current_scene == null:
+		push_warning("ThievingArrestPresenter: current scene is unavailable for arrest dialogue.")
+		return
+	var dialogue_box := current_scene.get_node_or_null("DialogueBox/Box")
+	if dialogue_box == null or not dialogue_box.has_method("start_dialogue"):
+		push_warning("ThievingArrestPresenter: DialogueBox/Box not found.")
+		return
+	dialogue_box.call("start_dialogue", [line], OFFICER_NAME, OFFICER_PORTRAIT, true)
+	await dialogue_box.dialogue_finished
 
 
 static func get_position_behind_player(player_position: Vector2, player_direction: Vector2) -> Vector2:

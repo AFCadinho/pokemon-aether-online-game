@@ -9,6 +9,7 @@ const CharacterAppearanceService := preload("res://scripts/services/character_ap
 const MountService := preload("res://scripts/services/mount_service.gd")
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
+const RoleBadgeTexture := preload("res://scripts/ui/role_badge_texture.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
 const AethernetTeleportEffectScript := preload("res://scripts/world/aethernet_teleport_effect.gd")
@@ -31,10 +32,11 @@ const ROLE_BADGE_COLORS := {
 	"moderator": Color(0.482, 0.173, 0.749),
 }
 const STAFF_ROLE_CATEGORY := "staff"
-const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster"]
+const LEGACY_STAFF_ROLE_IDS := ["staff", "owner", "senior_staff", "developer", "moderator", "gamemaster", "alpha", "patreon"]
 const NAMEPLATE_WIDTH := 164.0
 const NAMEPLATE_CENTER_X := NAMEPLATE_WIDTH * 0.5
 const ROLE_BADGE_TEXT_HEIGHT := 13.0
+const ROLE_BADGE_ICON_SIZE := Vector2(28.0, 28.0)
 const ROLE_BADGE_DEFAULT_WIDTH := 30.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 const NAMEPLATE_LAYER_GAP := 2.0
@@ -173,6 +175,7 @@ var guild_emblem_background: Panel
 var guild_emblem: TextureRect
 var role_badge_panel: Panel
 var role_badge_label: Label
+var role_badge_icon: TextureRect
 var map_chat_bubble: PanelContainer
 var interaction_hit_area: Area2D
 var pokemon_follower: PokemonFollower
@@ -412,6 +415,10 @@ func _resolve_activity_style(state: Dictionary, movement_state: Dictionary) -> S
 
 func get_feet_position() -> Vector2:
 	return global_position
+
+
+func get_target_feet_position() -> Vector2:
+	return tile_move_target_position if is_replaying_tile_move else global_position
 
 
 func get_current_move_duration() -> float:
@@ -838,6 +845,7 @@ func _create_nameplate_from_player_scene(player_instance: Node) -> void:
 	guild_emblem = nameplate.get_node_or_null("GuildEmblem") as TextureRect
 	nameplate_background = nameplate.get_node_or_null("NameplateBackground") as Panel
 	role_badge_panel = nameplate.get_node_or_null("RoleBadgePanel") as Panel
+	role_badge_icon = nameplate.get_node_or_null("RoleBadgeIcon") as TextureRect
 	if role_badge_panel != null:
 		role_badge_label = role_badge_panel.get_node_or_null("RoleBadge") as Label
 	if nameplate_label == null:
@@ -913,12 +921,21 @@ func _update_role_badge() -> void:
 		role_badge_label.text = ""
 		if role_badge_panel != null:
 			role_badge_panel.visible = false
+		if role_badge_icon != null:
+			role_badge_icon.visible = false
 		return
 
 	var role_id: String = str(primary_role.get("id", ""))
 	role_badge_label.text = str(primary_role.get("badge", ""))
+	var normalized_role_id := role_id.strip_edges().to_lower()
+	var use_role_icon := role_badge_label.text != "" and RoleBadgeTexture.has_role_badge(normalized_role_id)
+	if use_role_icon and role_badge_icon != null:
+		role_badge_icon.texture = RoleBadgeTexture.get_role_badge_texture(normalized_role_id)
+	use_role_icon = use_role_icon and role_badge_icon != null and role_badge_icon.texture != null
 	if role_badge_panel != null:
-		role_badge_panel.visible = role_badge_label.text != ""
+		role_badge_panel.visible = role_badge_label.text != "" and not use_role_icon
+	if role_badge_icon != null:
+		role_badge_icon.visible = use_role_icon
 	var role_color := _get_role_color(role_id, str(primary_role.get("color", "")))
 	if role_badge_panel != null:
 		role_badge_panel.add_theme_stylebox_override("panel", _make_role_badge_style(role_id, role_color))
@@ -930,7 +947,8 @@ func _sync_nameplate_layout() -> void:
 	if nameplate_label == null:
 		return
 
-	var has_role_badge: bool = role_badge_panel != null and role_badge_label != null and role_badge_label.text.strip_edges() != ""
+	var has_role_badge: bool = role_badge_label != null and role_badge_label.text.strip_edges() != ""
+	var uses_role_icon: bool = role_badge_icon != null and role_badge_icon.visible
 	var has_guild_emblem: bool = guild_emblem != null and guild_emblem.texture != null
 	var name_size := _get_label_text_size(nameplate_label)
 	name_size.x = minf(name_size.x, NAMEPLATE_MAX_NAME_WIDTH)
@@ -963,16 +981,26 @@ func _sync_nameplate_layout() -> void:
 
 	var next_layer_bottom := background_rect.position.y - NAMEPLATE_LAYER_GAP
 	if has_role_badge:
-		var badge_width: float = _get_role_badge_width(role_badge_label.text)
+		var badge_width: float = (
+			ROLE_BADGE_ICON_SIZE.x
+			if uses_role_icon
+			else _get_role_badge_width(role_badge_label.text)
+		)
 		var start_x := NAMEPLATE_CENTER_X - (badge_width * 0.5)
-		role_badge_panel.offset_left = start_x
-		role_badge_panel.offset_right = start_x + badge_width
-		role_badge_panel.offset_bottom = next_layer_bottom
-		role_badge_panel.offset_top = role_badge_panel.offset_bottom - ROLE_BADGE_TEXT_HEIGHT
-		role_badge_label.offset_left = 1.0
-		role_badge_label.offset_right = badge_width - 1.0
-		role_badge_label.offset_top = 0.0
-		role_badge_label.offset_bottom = ROLE_BADGE_TEXT_HEIGHT
+		if uses_role_icon:
+			role_badge_icon.offset_left = start_x
+			role_badge_icon.offset_right = start_x + ROLE_BADGE_ICON_SIZE.x
+			role_badge_icon.offset_bottom = next_layer_bottom
+			role_badge_icon.offset_top = next_layer_bottom - ROLE_BADGE_ICON_SIZE.y
+		else:
+			role_badge_panel.offset_left = start_x
+			role_badge_panel.offset_right = start_x + badge_width
+			role_badge_panel.offset_bottom = next_layer_bottom
+			role_badge_panel.offset_top = role_badge_panel.offset_bottom - ROLE_BADGE_TEXT_HEIGHT
+			role_badge_label.offset_left = 1.0
+			role_badge_label.offset_right = badge_width - 1.0
+			role_badge_label.offset_top = 0.0
+			role_badge_label.offset_bottom = ROLE_BADGE_TEXT_HEIGHT
 
 
 func _get_label_text_size(label: Label) -> Vector2:
@@ -1086,6 +1114,8 @@ func _get_role_badge(role: Dictionary) -> String:
 			return "DEV"
 		"moderator":
 			return "MOD"
+		"staff":
+			return "Chat Mod"
 	var display_name := str(
 		role.get("displayName", role.get("label", role.get("name", "")))
 	).strip_edges()
