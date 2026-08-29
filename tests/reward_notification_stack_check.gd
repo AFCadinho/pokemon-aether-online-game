@@ -129,6 +129,21 @@ func _run() -> void:
 		and world_source.contains('"add_caught_pokemon_reward_notification"'),
 		"Pokemon progression events use reward cards"
 	)
+	var sfx_source := FileAccess.get_file_as_string("res://scripts/services/sfx_manager.gd")
+	_check(
+		load("res://assets/audio/sfx/overworld/pokemon_level_up.ogg") is AudioStream,
+		"level-up cards use an importable Ogg sound"
+	)
+	_check(
+		sfx_source.contains('"pokemon_level_up"')
+		and sfx_source.contains('"path": "res://assets/audio/sfx/overworld/pokemon_level_up.ogg"'),
+		"the level-up sound is registered with the SFX manager"
+	)
+	_check(
+		world_source.count('SfxManager.play("pokemon_level_up")') == 1
+		and world_source.contains("if has_level_up:"),
+		"a reward batch plays the level-up sound only once"
+	)
 
 	pokemon_stack.free()
 	stack.free()

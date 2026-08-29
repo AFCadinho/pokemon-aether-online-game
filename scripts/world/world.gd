@@ -3616,6 +3616,7 @@ func _notify_reward_level_ups(reward_value: Variant) -> void:
 	if not (level_ups_value is Array):
 		return
 
+	var has_level_up := false
 	for level_up_value: Variant in level_ups_value:
 		if not (level_up_value is Dictionary):
 			continue
@@ -3631,6 +3632,7 @@ func _notify_reward_level_ups(reward_value: Variant) -> void:
 		var level := int(level_up.get("level", 0))
 		if level <= 0:
 			continue
+		has_level_up = true
 
 		var message := LocalizationManager.text(
 			"ui.world.reward.level_up",
@@ -3646,6 +3648,8 @@ func _notify_reward_level_ups(reward_value: Variant) -> void:
 		get_tree().call_group("ui_overlay", "add_pokemon_level_reward_notification", level_up)
 		_notify_reward_level_up_moves(species, level_up)
 
+	if has_level_up:
+		SfxManager.play("pokemon_level_up")
 	get_tree().call_group("ui_overlay", "queue_reward_move_learn_candidates", reward)
 
 func _notify_reward_level_up_moves(species: String, level_up: Dictionary) -> void:
