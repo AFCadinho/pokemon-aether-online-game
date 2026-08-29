@@ -8,7 +8,7 @@
 
 **Changed**
 
-- Game Masters now have a pixel-art GM badge above their character; Guild emblems remain visible beside their name.
+- Game Masters now have a blue-and-gold pixel-art shield above their character; Guild emblems remain visible beside their name.
 - Viridian Forest now uses its latest visual layout.
 
 **Fixed**
