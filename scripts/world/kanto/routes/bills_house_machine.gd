@@ -41,7 +41,7 @@ func show_dialogue(
 	_story_dialogue_stage += 1
 	if current_stage == 2:
 		await _play_cell_separation()
-	var portrait := BILL_MUGSHOT if current_stage >= 1 else mugshot_override
+	var portrait := BILL_MUGSHOT if current_stage >= 2 else mugshot_override
 	return await super.show_dialogue(lines, speaker_name_override, portrait)
 
 

@@ -31,6 +31,7 @@
 
 **Fixed**
 
+- Clefairy-form Bill and his computer no longer show Professor Oak's portrait, while human Bill's portrait now appears only after separation.
 - Bill's transformed form is now labeled and positioned as Clefairy, and the Cell Separation System's interaction matches its visible computer tile.
 
 - Trainer battle start errors no longer trap players in a repeating automatic dialogue, including Gary at Nugget Bridge.
