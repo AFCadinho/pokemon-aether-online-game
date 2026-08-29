@@ -9,6 +9,7 @@ func _init() -> void:
 
 func _run() -> void:
 	var service := root.get_node("FieldMoveService")
+	var inventory_service := root.get_node("InventoryService")
 	var player_save := root.get_node("PlayerSave")
 	var party: Array = player_save.get("party") as Array
 	var original_party: Array = party.duplicate()
@@ -34,11 +35,15 @@ func _run() -> void:
 	_check(not bool(pokemon_without_hm.get("success", false)), "HM field move is unavailable without its HM")
 	_check(pokemon_without_hm.get("requiredHm", "") == "hm-surf", "general field move gate identifies the required HM")
 
-	service.call("update_owned_charms_from_inventory", [
-		{"itemId": "hm-surf", "machineKind": "hm"},
-	])
+	_check(
+		inventory_service.inventory_changed.is_connected(service.update_owned_charms_from_inventory),
+		"field move ownership follows centralized inventory changes"
+	)
+	inventory_service.call("apply_inventory_state", {
+		"items": [{"itemId": "hm-surf", "machineKind": "hm"}],
+	})
 	var pokemon_with_hm: Dictionary = service.call("can_use_field_move", "surf")
-	_check(bool(pokemon_with_hm.get("success", false)), "Pokemon can use an HM field move when its HM is owned")
+	_check(bool(pokemon_with_hm.get("success", false)), "a newly received HM is usable in the same session")
 	_check(pokemon_with_hm.get("source", "") == "pokemon", "Pokemon remains the source without a Charm")
 
 	var surf_charm := {

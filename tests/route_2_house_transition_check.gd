@@ -1,7 +1,7 @@
 extends SceneTree
 
-const ROUTE_PATH := "res://scenes/overworld/kanto/routes/kanto_route_2.tscn"
-const HOUSE_PATH := "res://scenes/overworld/kanto/routes/route_2_house.tscn"
+const ROUTE_PATH := "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn"
+const HOUSE_PATH := "res://scenes/overworld/kanto/routes/route2/route_2_house.tscn"
 
 var failed := false
 
@@ -34,14 +34,16 @@ func _check_house(source: String) -> void:
 	_check(source.contains('weather_profile = "disabled"'), "Route 2 house disables outdoor weather")
 	_check(source.contains('[node name="BrownHouseTemplate" parent="." instance='), "Route 2 house reuses the brown-house template")
 	_check(source.contains('[node name="Players" type="Node2D" parent="Entities"]'), "Route 2 house provides the multiplayer player container")
+	_check(source.contains('npc_id = "kanto_route_2_house_poke_fan_miles"'), "Route 2 house contains Poke Fan Miles")
+	_check(source.contains('npc_id = "kanto_route_2_house_school_kid_nolan"'), "Route 2 house contains School Kid Nolan")
+	_check(source.contains('npc_sprite_frames = ExtResource("7_poke_fan_m")'), "Miles uses the Poke Fan overworld sprite")
+	_check(source.contains('npc_sprite_frames = ExtResource("8_school_kid_m")'), "Nolan uses the School Kid overworld sprite")
 	_check(source.contains('[node name="FromRoute2" type="Marker2D" parent="Spawns"]\nposition = Vector2(304, 464)'), "Route 2 house has a safe indoor arrival")
 	var exit := _node_block(source, "ToRoute2")
 	_check(not exit.is_empty(), "Route 2 house has an exit back to the route")
 	_check(exit.contains('target_scene_path = "%s"' % ROUTE_PATH), "Route 2 house returns to Route 2")
 	_check(exit.contains('target_spawn_name = "FromHouse"'), "Route 2 house targets the outdoor arrival")
 	_check(exit.contains('transition_facing_direction = "down"'), "Leaving the house faces the player onto the route")
-
-
 func _node_block(source: String, node_name: String) -> String:
 	var start := source.find('[node name="%s"' % node_name)
 	if start < 0:

@@ -50,15 +50,18 @@ var owned_hm_item_ids: Dictionary = {}
 
 
 func _ready() -> void:
-	refresh_owned_charms.call_deferred()
+	if not InventoryService.inventory_changed.is_connected(update_owned_charms_from_inventory):
+		InventoryService.inventory_changed.connect(update_owned_charms_from_inventory)
+	if InventoryService.inventory_loaded:
+		update_owned_charms_from_inventory(InventoryService.cached_inventory_items)
+	else:
+		refresh_owned_charms.call_deferred()
 
 
 func refresh_owned_charms() -> void:
 	if not AuthService.is_authenticated():
 		return
-	var result: Dictionary = await InventoryService.load_inventory()
-	if bool(result.get("success", false)):
-		update_owned_charms_from_inventory(result.get("items", []))
+	await InventoryService.load_inventory()
 
 
 func update_owned_charms_from_inventory(items_value: Variant) -> void:

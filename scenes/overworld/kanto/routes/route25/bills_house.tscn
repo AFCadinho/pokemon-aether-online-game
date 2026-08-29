@@ -1,0 +1,209 @@
+[gd_scene format=4 uid="uid://cc7uihagjtdgm"]
+
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="1_0nww8"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/bills_house/bills_house.visual.tscn" id="2_ljpb3"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="3_1rs2v"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_irx7w"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_wiio0"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_0nww8"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="7_dialogue_npc"]
+[ext_resource type="SpriteFrames" uid="uid://d3ql2vabyc7ep" path="res://assets/npcs/pokemon_clefairy_frames.tres" id="8_clefairy_frames"]
+[ext_resource type="SpriteFrames" uid="uid://b23n3aeydx7y7" path="res://assets/npcs/named/bill_frames.tres" id="9_bill_frames"]
+[ext_resource type="Texture2D" uid="uid://c7fdfmwrjjayc" path="res://assets/sprites/trainer_cards/showdown/bill.png" id="10_bill_mugshot"]
+[ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="11_story_hook"]
+[ext_resource type="Script" uid="uid://djft3wt5nu7lg" path="res://scripts/world/kanto/routes/bills_house_machine.gd" id="12_bill_machine"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(96, 32)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ljpb3"]
+texture = ExtResource("6_0nww8")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_1rs2v"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_ljpb3")
+
+[node name="BillsHouse" type="Node2D" unique_id=390496218]
+script = ExtResource("1_0nww8")
+map_id = "kanto_route_25_bills_house"
+map_region_name = "Kanto"
+map_display_name = "Bill's House"
+world_access_group_id = "kanto_route_25"
+world_access_group_label = "Route 25"
+world_access_area_type = "interior"
+location_id = "kanto.route_25.bills_house"
+location_name = "Bill's House"
+region_id = "kanto"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_profile_id = "kanto.routes_3_10_16_22"
+
+[node name="BillsHouseVisual" parent="." unique_id=564844879 instance=ExtResource("2_ljpb3")]
+
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1583288989]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("3_1rs2v")
+floor_regions = {
+&"ground_floor": Rect2(192, 128, 416, 384)
+}
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1425558691]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1397742016]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=2093017521]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=424545930]
+
+[node name="Entities" type="Node2D" parent="." unique_id=1641179086]
+z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=214098142]
+
+[node name="TrappedBill" parent="Entities/NPCs" unique_id=1144563394 instance=ExtResource("7_dialogue_npc")]
+position = Vector2(464, 272)
+visibility_required_quest_id = "help_bill"
+visibility_required_quest_status = "active"
+visibility_hidden_quest_id = "help_bill"
+dialogue_id = "kanto_bills_house_bill_waiting"
+display_name = "Clefairy"
+npc_sprite_frames = ExtResource("8_clefairy_frames")
+dialogue_portrait_visible = false
+preload_quest_markers = true
+
+[node name="StoryHook" type="Node" parent="Entities/NPCs/TrappedBill" unique_id=321472904]
+script = ExtResource("11_story_hook")
+interaction_id = "kanto_bills_house_meet_bill"
+entity_id = "kanto_bills_house_bill_transformed"
+
+[node name="Bill" parent="Entities/NPCs" unique_id=823906529 instance=ExtResource("7_dialogue_npc")]
+position = Vector2(400, 304)
+visibility_required_quest_id = "help_bill"
+dialogue_id = "kanto_bills_house_bill_after_rescue"
+display_name = "Bill"
+npc_sprite_frames = ExtResource("9_bill_frames")
+mugshot = ExtResource("10_bill_mugshot")
+
+[node name="Players" type="Node2D" parent="Entities" unique_id=1393898599]
+
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=1030037644]
+
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=359294040]
+
+[node name="CellSeparatorComputer" type="Node2D" parent="Entities/Interactables" unique_id=1251522531]
+position = Vector2(272, 288)
+script = ExtResource("12_bill_machine")
+trapped_bill_path = NodePath("../../NPCs/TrappedBill")
+restored_bill_path = NodePath("../../NPCs/Bill")
+machine_flash_path = NodePath("MachineFlash")
+interactable_id = "kanto_bills_house_cell_separator_computer"
+interactable_kind = "computer"
+display_name = "Cell Separation System"
+blocked_tile_offset = Vector2i(-1, 0)
+blocked_tile_footprint = Vector2i(2, 1)
+
+[node name="MachineFlash" type="Polygon2D" parent="Entities/Interactables/CellSeparatorComputer" unique_id=1836470941]
+visible = false
+z_index = 2052
+color = Color(0.45, 0.9, 1, 0.75)
+polygon = PackedVector2Array(40, -96, 240, -96, 240, 0, 40, 0)
+
+[node name="StoryHook" type="Node" parent="Entities/Interactables/CellSeparatorComputer" unique_id=1810110522]
+script = ExtResource("11_story_hook")
+interaction_id = "kanto_bills_house_activate_cell_separator"
+entity_id = "kanto_bills_house_cell_separator_computer"
+
+[node name="Spawns" type="Node2D" parent="." unique_id=1991390614]
+
+[node name="FromRoute25" type="Marker2D" parent="Spawns" unique_id=1251044191]
+position = Vector2(400, 464)
+
+[node name="Exits" type="Node2D" parent="." unique_id=742599615]
+
+[node name="ToRoute25" type="Area2D" parent="Exits" unique_id=670039352]
+position = Vector2(416, 480)
+script = ExtResource("4_irx7w")
+target_scene_path = "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn"
+target_spawn_name = "FromBillsHouse"
+transition_id = "kanto_route_25_bills_house__to_route_25"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute25" unique_id=1672784787]
+position = Vector2(-16, 16)
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToRoute25" unique_id=476420142 instance=ExtResource("5_wiio0")]
+z_as_relative = false
+position = Vector2(-16, 16)
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
+
+[node name="Tiles" type="Node2D" parent="." unique_id=856090575]
+visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=92840543]
+visible = false
+z_index = 4096
+tile_map_data = PackedByteArray("AAAFAAYAAAABAAEAAAAFAAcAAAABAAEAAAAFAAgAAAABAAEAAAAFAAkAAAABAAEAAAAFAAoAAAABAAEAAAAFAAsAAAABAAEAAAAFAAwAAAABAAEAAAAFAA0AAAABAAEAAAAFAA4AAAABAAEAAAAGAA4AAAABAAEAAAAGAA8AAAABAAEAAAAHAA8AAAABAAEAAAAIAA8AAAABAAEAAAAJAA8AAAABAAEAAAAKAA8AAAABAAEAAAAKABAAAAABAAEAAAALABAAAAABAAEAAAAMABAAAAABAAEAAAANABAAAAABAAEAAAAOABAAAAABAAEAAAAOAA8AAAABAAEAAAAPAA8AAAABAAEAAAAQAA8AAAABAAEAAAARAA8AAAABAAEAAAASAA8AAAABAAEAAAASAA4AAAABAAEAAAATAAYAAAABAAEAAAATAAcAAAABAAEAAAATAAgAAAABAAEAAAATAAkAAAABAAEAAAATAAoAAAABAAEAAAATAAsAAAABAAEAAAATAAwAAAABAAEAAAATAA0AAAABAAEAAAASAAYAAAABAAEAAAAQAAUAAAABAAEAAAARAAUAAAABAAEAAAASAAUAAAABAAEAAAAQAAQAAAABAAEAAAAIAAQAAAABAAEAAAAJAAQAAAABAAEAAAAKAAQAAAABAAEAAAALAAQAAAABAAEAAAAMAAQAAAABAAEAAAANAAQAAAABAAEAAAAOAAQAAAABAAEAAAAPAAQAAAABAAEAAAAIAAUAAAABAAEAAAAGAAUAAAABAAEAAAAHAAUAAAABAAEAAAAGAAYAAAABAAEAAAARAA4AAAABAAEAAAAJAA4AAAABAAEAAAAKAA4AAAABAAEAAAASAA0AAAABAAEAAAAGAA0AAAABAAEAAAAIAAkAAAABAAEAAAAIAAoAAAABAAEAAAAIAAsAAAABAAEAAAAHAAoAAAABAAEAAAAGAAkAAAABAAEAAAAHAAkAAAABAAEAAAAHAAYAAAABAAEAAAAHAAcAAAABAAEAAAAHAAgAAAABAAEAAAAIAAYAAAABAAEAAAAIAAcAAAABAAEAAAAIAAgAAAABAAEAAAAGAAgAAAABAAEAAAAGAAcAAAABAAEAAAAJAAgAAAABAAEAAAAKAAgAAAABAAEAAAALAAgAAAABAAEAAAAMAAgAAAABAAEAAAANAAgAAAABAAEAAAAOAAgAAAABAAEAAAAPAAgAAAABAAEAAAAQAAgAAAABAAEAAAARAAgAAAABAAEAAAAJAAYAAAABAAEAAAAJAAcAAAABAAEAAAAKAAYAAAABAAEAAAAKAAcAAAABAAEAAAALAAYAAAABAAEAAAALAAcAAAABAAEAAAAMAAYAAAABAAEAAAAMAAcAAAABAAEAAAANAAYAAAABAAEAAAANAAcAAAABAAEAAAAOAAYAAAABAAEAAAAOAAcAAAABAAEAAAAPAAYAAAABAAEAAAAPAAcAAAABAAEAAAAQAAYAAAABAAEAAAAQAAcAAAABAAEAAAARAAYAAAABAAEAAAARAAcAAAABAAEAAAAJAAUAAAABAAEAAAAKAAUAAAABAAEAAAALAAUAAAABAAEAAAAMAAUAAAABAAEAAAANAAUAAAABAAEAAAAOAAUAAAABAAEAAAAPAAUAAAABAAEAAAASAAcAAAABAAEAAAASAAgAAAABAAEAAAANAAsAAAABAAEAAAANAAwAAAABAAEAAAAOAAsAAAABAAEAAAAOAAwAAAABAAEAAAAPAAsAAAABAAEAAAAPAAwAAAABAAEAAAAKAAwAAAABAAEAAAAGAAsAAAABAAEAAAAGAAwAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_1rs2v")
+
+[connection signal="body_entered" from="Exits/ToRoute25" to="Exits/ToRoute25" method="_on_body_entered"]

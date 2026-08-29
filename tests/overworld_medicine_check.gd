@@ -28,6 +28,7 @@ func _check_preview_and_eligibility() -> void:
 	pokemon.stats["hp"] = 90
 	var potion := _gameplay("up_to_requested", [{"type":"heal_hp", "mode":"fixed", "amount":20}])
 	var super_potion := _gameplay("up_to_requested", [{"type":"heal_hp", "mode":"fixed", "amount":50}])
+	var moomoo_milk := _gameplay("up_to_requested", [{"type":"heal_hp", "mode":"fixed", "amount":100}])
 	var max_potion := _gameplay("single", [{"type":"heal_hp", "mode":"full"}])
 
 	_check(Preview.supports(potion), "generic medicine gameplay is recognized")
@@ -37,6 +38,7 @@ func _check_preview_and_eligibility() -> void:
 	_check_equal(multi_preview.get("usedQuantity"), 3, "Potion preview caps useful quantity")
 	_check_equal(multi_preview.get("currentHp"), 90, "multiple Potions cap at maximum HP")
 	_check_equal(Preview.preview(pokemon, super_potion, 1).get("currentHp"), 90, "Super Potion preview uses 50 HP")
+	_check_equal(Preview.preview(pokemon, moomoo_milk, 1).get("currentHp"), 90, "Moomoo Milk preview uses 100 HP")
 	_check_equal(Preview.preview(pokemon, max_potion, 5).get("usedQuantity"), 1, "full healing consumes at most one")
 
 	pokemon.current_hp = 90

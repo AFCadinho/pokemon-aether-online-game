@@ -2544,10 +2544,11 @@ func _resolve_current_map() -> Node:
 	return null
 
 func _update_sort_z() -> void:
-	var sort_z := floori(get_feet_position().y)
+	var sort_position := get_feet_position()
+	var sort_z := floori(sort_position.y)
 	var current_map := _resolve_current_map()
 	if current_map != null and current_map.has_method("get_actor_sort_z_floor"):
-		sort_z = maxi(sort_z, int(current_map.call("get_actor_sort_z_floor", global_position)))
+		sort_z = maxi(sort_z, int(current_map.call("get_actor_sort_z_floor", sort_position)))
 	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
 
 func _cache_appearance_sprites() -> void:

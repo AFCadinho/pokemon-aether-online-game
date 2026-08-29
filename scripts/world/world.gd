@@ -9,6 +9,8 @@ const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.
 const BattleEnvironmentResolverScript := preload("res://scripts/battle/battle_environment_resolver.gd")
 const TallGrassDepthSortingScript := preload("res://scripts/world/tall_grass_depth_sorting.gd")
 const AetherClashJailDepthScript := preload("res://scripts/world/aether_clash_jail_depth.gd")
+const MapDepthSortingScript := preload("res://scripts/world/map_depth_sorting.gd")
+const SavedMapScenePathResolver := preload("res://scripts/world/saved_map_scene_path_resolver.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
 const POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS := 0.06
 const POSITION_SAVE_EPSILON := 1.0
@@ -112,6 +114,7 @@ var active_trainer_name := ""
 var active_trainer_outro_dialogue_id := ""
 var active_trainer_mugshot: Texture2D
 var active_trainer_is_rematch := false
+var land_mount_id_before_battle := ""
 var map_transition_layer: CanvasLayer
 var map_transition_snapshot: TextureRect
 var map_transition_rect: ColorRect
@@ -458,7 +461,9 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 			"error": "World player is not ready.",
 		}
 
-	var target_scene_path := str(state.get("mapScenePath", "")).strip_edges()
+	var target_scene_path := _resolve_saved_map_scene_path(
+		str(state.get("mapScenePath", ""))
+	)
 	if target_scene_path == "":
 		_mark_authorized_teleport_apply_failed()
 		return {
@@ -762,6 +767,13 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 		GameState.unlock_overworld_input()
 		return
 
+	# Reparenting the player makes it leave the scene tree, which intentionally
+	# clears transient activities. Remember a land mount so an allowed target
+	# map can restore it after the new map metadata and spawn are active.
+	var land_mount_id_to_restore := str(player.call("get_active_land_mount_id")) \
+		if player.has_method("get_active_land_mount_id") \
+		else ""
+
 	await _fade_map_transition(MAP_TRANSITION_COVER_ALPHA, MAP_FADE_OUT_SECONDS)
 
 	var target_scene := await _load_map_scene_threaded(target_scene_path)
@@ -795,6 +807,17 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 
 	move_player_to_map(new_map)
 	_position_player_at_spawn(new_map, target_spawn_name, Vector2.ZERO)
+	if (
+		not land_mount_id_to_restore.is_empty()
+		and player.has_method("restore_land_mount")
+		and (
+			not player.has_method("is_surfing_activity_active")
+			or not bool(player.call("is_surfing_activity_active"))
+		)
+	):
+		# restore_land_mount applies the destination map's mount restrictions, so
+		# exterior arrivals stay mounted while interior arrivals remain on foot.
+		player.call("restore_land_mount", land_mount_id_to_restore)
 	_apply_camera_limits_for_map(new_map)
 	await _refresh_fishing_progression()
 
@@ -1181,7 +1204,9 @@ func _setup_initial_world_state() -> void:
 			push_warning("World: player position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
 
 	var initial_map: Node = first_map
-	var saved_scene_path: String = str(saved_state.get("mapScenePath", ""))
+	var saved_scene_path := _resolve_saved_map_scene_path(
+		str(saved_state.get("mapScenePath", ""))
+	)
 	if saved_scene_path != "" and saved_scene_path != _get_map_scene_path(first_map):
 		var saved_map: Node = _instantiate_map(saved_scene_path)
 		if saved_map != null:
@@ -1226,6 +1251,10 @@ func _setup_initial_world_state() -> void:
 	await _save_player_activity_state("idle")
 	WorldPresenceService.connect_presence.call_deferred()
 	_publish_world_presence.call_deferred(true)
+
+
+func _resolve_saved_map_scene_path(scene_path: String) -> String:
+	return SavedMapScenePathResolver.resolve(scene_path)
 
 
 func _apply_day_night_for_map(map_node: Node) -> void:
@@ -1607,6 +1636,16 @@ func _build_structure_top_visual_depth_groups(map: Node) -> void:
 				AetherClashJailDepthScript.get_objects_top_overlay_z_floor(
 					structure_layer,
 					group
+				)
+			)
+			group_z_index = maxi(
+				group_z_index,
+				MapDepthSortingScript.get_structure_top_group_z_floor(
+					map,
+					structure_layer,
+					group,
+					TREE_LAYER_Z_MIN,
+					TREE_LAYER_Z_MAX
 				)
 			)
 			group_layer.z_index = group_z_index
@@ -2863,6 +2902,9 @@ func end_wild_battle(keep_overworld_locked := false) -> void:
 	active_trainer_is_rematch = false
 	_save_player_activity_state_deferred("idle")
 	if keep_overworld_locked:
+		# A blackout moves the player to a recovery location, so it should not
+		# restore the mount from the map where the lost battle started.
+		land_mount_id_before_battle = ""
 		if player.has_method("reset_movement_state"):
 			player.reset_movement_state()
 		_sync_player_activity_state_for_current_tile()
@@ -3648,6 +3690,8 @@ func _is_player_battle_winner(winner: String) -> bool:
 
 func _lock_overworld_for_battle() -> void:
 	GameState.lock_overworld_input()
+	if land_mount_id_before_battle.is_empty() and player.has_method("get_active_land_mount_id"):
+		land_mount_id_before_battle = str(player.call("get_active_land_mount_id"))
 	if player.has_method("reset_movement_state"):
 		player.reset_movement_state()
 	_sync_player_activity_state_for_current_tile()
@@ -3658,6 +3702,17 @@ func _unlock_overworld_after_battle() -> void:
 	if player.has_method("reset_movement_state"):
 		player.reset_movement_state()
 	_sync_player_activity_state_for_current_tile()
+	var mount_id_to_restore := land_mount_id_before_battle
+	land_mount_id_before_battle = ""
+	if (
+		not mount_id_to_restore.is_empty()
+		and player.has_method("restore_land_mount")
+		and (
+			not player.has_method("is_surfing_activity_active")
+			or not bool(player.call("is_surfing_activity_active"))
+		)
+	):
+		player.call("restore_land_mount", mount_id_to_restore)
 	player.set_process(true)
 	player.set_physics_process(true)
 	GameState.unlock_overworld_input()

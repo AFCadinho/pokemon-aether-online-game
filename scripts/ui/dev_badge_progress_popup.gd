@@ -46,6 +46,8 @@ const STORY_CHECKPOINTS: Array[Dictionary] = [
 	{"id": "mt_moon_rescue", "chapter_id": "mt_moon", "label_key": "ui.staff.story_checkpoint.mt_moon_rescue"},
 	{"id": "cerulean_gym", "chapter_id": "cerulean", "label_key": "ui.staff.story_checkpoint.cerulean_gym"},
 	{"id": "cerulean_nugget_bridge", "chapter_id": "cerulean", "label_key": "ui.staff.story_checkpoint.cerulean_nugget_bridge"},
+	{"id": "help_bill", "chapter_id": "cerulean", "label_key": "ui.staff.story_checkpoint.help_bill"},
+	{"id": "challenge_misty", "chapter_id": "cerulean", "label_key": "ui.staff.story_checkpoint.challenge_misty"},
 ]
 const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "pallet", "label_key": "ui.staff.story_chapter.pallet"},

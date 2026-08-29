@@ -37,9 +37,37 @@ func _ready() -> void:
 		unavailable_message = "This training rock can be smashed with Rock Smash."
 	_configure_variant_frames()
 	super._ready()
+	_update_sort_z()
 	if not RockSmashService.state_changed.is_connected(_on_rock_smash_state_changed):
 		RockSmashService.state_changed.connect(_on_rock_smash_state_changed)
 	_refresh_daily_state.call_deferred()
+
+
+func _update_sort_z() -> void:
+	var current_map := _resolve_current_map()
+	if current_map == null or not current_map.has_method("get_actor_sort_z_floor"):
+		return
+	var sort_z_floor := int(current_map.call("get_actor_sort_z_floor", global_position))
+	if sort_z_floor <= z_index:
+		return
+	z_as_relative = false
+	z_index = clampi(
+		sort_z_floor,
+		RenderingServer.CANVAS_ITEM_Z_MIN,
+		RenderingServer.CANVAS_ITEM_Z_MAX
+	)
+
+
+func _resolve_current_map() -> Node:
+	var parent_node := get_parent()
+	while parent_node != null:
+		if parent_node.has_method("get_actor_sort_z_floor"):
+			return parent_node
+		parent_node = parent_node.get_parent()
+
+	if GameState.current_map != null and is_instance_valid(GameState.current_map):
+		return GameState.current_map
+	return null
 
 
 func interact_with_player(_player: Node2D) -> void:

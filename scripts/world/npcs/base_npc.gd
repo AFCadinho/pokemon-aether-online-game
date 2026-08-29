@@ -4,6 +4,9 @@ extends Node2D
 class_name BaseNPC
 
 const NpcDefinitionResource := preload("res://scripts/world/npcs/npc_definition.gd")
+const TrainerBattleMusicResolverScript := preload(
+	"res://scripts/world/npcs/trainer_battle_music_resolver.gd"
+)
 const THIEVING_PROMPT_ICON: Texture2D = preload("res://assets/ui/thieving.svg")
 
 const MISSING_DIALOGUE_LINES: Array[String] = [
@@ -59,6 +62,7 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 ## Optional catalog id. Empty values use the central NPC assignment table.
 @export var portrait_id := ""
 @export var mugshot: Texture2D
+@export var dialogue_portrait_visible := true
 @export_group("Battle")
 @export_enum("inherit", "grass", "water", "cave", "pvp_stadium") var battle_environment_id := "inherit"
 @export_group("")
@@ -243,6 +247,9 @@ func set_story_sprite_offset(value: Vector2) -> void:
 
 func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
 	var battle_metadata := metadata.duplicate(true)
+	var battle_music_track_id: String = TrainerBattleMusicResolverScript.resolve_track_id(metadata)
+	if not battle_music_track_id.is_empty():
+		battle_metadata["_battle_music_track_id"] = battle_music_track_id
 	if npc_sprite_frames != null:
 		# Resources stay client-local; the battle API receives the original
 		# metadata before this visual-only enrichment is added.
@@ -1286,7 +1293,7 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bo
 	if speaker_name.is_empty():
 		speaker_name = name
 
-	dialogue_box.start_dialogue(valid_dialogue_lines, speaker_name, mugshot)
+	dialogue_box.start_dialogue(valid_dialogue_lines, speaker_name, mugshot, dialogue_portrait_visible)
 	await dialogue_box.dialogue_finished
 	return true
 
@@ -1565,7 +1572,8 @@ func _add_system_warning(message: String) -> void:
 
 
 func _update_sort_z() -> void:
-	var npc_feet_y: float = get_feet_position().y
+	var npc_feet_position := get_feet_position()
+	var npc_feet_y: float = npc_feet_position.y
 	var sort_z := floori(npc_feet_y)
 	var sprite_sort_z := 0
 	var player_for_sorting := _get_player_for_sorting()
@@ -1581,6 +1589,12 @@ func _update_sort_z() -> void:
 				sort_z = mini(sort_z, player_sort_z - 1)
 
 	sort_z = maxi(sort_z, minimum_sort_z)
+	var current_map := GameState.current_map
+	if current_map != null and current_map.has_method("get_actor_sort_z_floor"):
+		sort_z = maxi(
+			sort_z,
+			int(current_map.call("get_actor_sort_z_floor", npc_feet_position))
+		)
 	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
 	if sprite != null:
 		sprite.z_index = sprite_sort_z

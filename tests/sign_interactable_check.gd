@@ -2,6 +2,7 @@ extends SceneTree
 
 const PROJECT_CONFIG := "res://project.godot"
 const SIGN_TEXT_SERVICE_SCRIPT := "res://scripts/services/sign_text_service.gd"
+const SIGN_PORTRAIT_CATALOG_SCRIPT := "res://scripts/services/sign_portrait_catalog.gd"
 const SIGN_INTERACTABLE_SCRIPT := "res://scripts/world/interactables/sign_interactable.gd"
 const SIGN_INTERACTABLE_SCENE := "res://scenes/world/interactables/sign_interactable.tscn"
 const LARGE_SIGN_INTERACTABLE_SCENE := "res://scenes/world/interactables/large_sign_interactable.tscn"
@@ -14,9 +15,12 @@ const PEWTER_CITY_SIGN_DATA := "res://data/world_text/signs/en/kanto/pewter_city
 const CERULEAN_CITY_SCENE := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 const CERULEAN_CITY_SIGN_DATA := "res://data/world_text/signs/en/kanto/cerulean_city.json"
 const ROUTE_3_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_3.tscn"
+const ROUTE_24_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
+const ROUTE_25_SCENE := "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn"
 const ROUTE_SIGN_DATA := "res://data/world_text/signs/en/kanto/routes.json"
 
 const SignTextServiceScript := preload(SIGN_TEXT_SERVICE_SCRIPT)
+const SignPortraitCatalogScript := preload(SIGN_PORTRAIT_CATALOG_SCRIPT)
 const SignInteractableScript := preload(SIGN_INTERACTABLE_SCRIPT)
 
 var failed := false
@@ -31,12 +35,14 @@ func _run() -> void:
 	_check_service_loads_local_sign_catalog()
 	_check_service_uses_global_locale()
 	_check_service_falls_back_to_english()
+	_check_sign_portrait_catalog()
 	_check_sign_interactable_contract()
 	_check_sign_scene_contract()
 	_check_pallet_town_sign_markers()
 	_check_viridian_city_sign_markers()
 	_check_pewter_city_and_route_3_sign_markers()
 	_check_cerulean_city_sign_markers()
+	_check_cerulean_route_sign_markers()
 
 	quit(1 if failed else 0)
 
@@ -118,6 +124,43 @@ func _check_service_falls_back_to_english() -> void:
 	service.free()
 
 
+func _check_sign_portrait_catalog() -> void:
+	var catalog_text := _read_text(SIGN_PORTRAIT_CATALOG_SCRIPT)
+	_check_true(
+		not catalog_text.contains('preload("res://assets/sprites/sign_previews/'),
+		"Sign portraits do not require imported textures while scripts are parsed"
+	)
+	_check_true(catalog_text.contains("ResourceLoader.exists"), "Sign portraits prefer normal imported resources")
+	_check_true(catalog_text.contains("Image.load_from_file"), "Sign portraits support editor fallback before asset import")
+
+	var expected_sign_ids: Array[String] = [
+		"kanto_pallet_town_town_sign",
+		"kanto_pallet_town_oaks_lab",
+		"kanto_viridian_city_town_sign",
+		"kanto_viridian_city_jail",
+		"kanto_viridian_city_trainer_school",
+		"kanto_viridian_city_gym",
+		"kanto_pewter_city_gym",
+		"kanto_cerulean_city_town_sign",
+		"kanto_cerulean_city_gym",
+		"kanto_cerulean_city_bike_shop",
+		"kanto_route_1_route_sign",
+		"kanto_route_1_viridian_city_sign",
+		"kanto_route_2_digletts_cave",
+		"kanto_route_22_route_sign",
+		"kanto_route_3_mt_moon_sign",
+		"kanto_route_24_route_sign",
+		"kanto_route_25_route_sign",
+	]
+	for sign_id: String in expected_sign_ids:
+		var portrait: Texture2D = SignPortraitCatalogScript.get_portrait(sign_id)
+		_check_true(portrait != null, "%s has a location preview portrait" % sign_id)
+		_check_true(
+			SignPortraitCatalogScript.get_portrait_path(sign_id).begins_with("res://assets/sprites/sign_previews/"),
+			"%s uses the sign preview asset directory" % sign_id
+		)
+
+
 func _check_sign_interactable_contract() -> void:
 	var sign := SignInteractableScript.new()
 	_check_true(sign is WorldInteractable, "SignInteractable extends WorldInteractable")
@@ -132,7 +175,13 @@ func _check_sign_interactable_contract() -> void:
 	_check_true(text.contains("@export_enum(\"facing_target_tile\", \"standing_tile\")"), "SignInteractable exports interaction modes")
 	_check_true(text.contains("@export_enum(\"any\", \"up\", \"down\", \"left\", \"right\")"), "SignInteractable exports facing directions")
 	_check_true(text.contains("/root/SignTextService"), "SignInteractable resolves local text through SignTextService autoload")
-	_check_true(text.contains("dialogue_box.start_dialogue(valid_dialogue_lines, speaker, null, false)"), "SignInteractable suppresses mugshots for sign text")
+	_check_true(
+		text.contains('preload("res://scripts/services/sign_portrait_catalog.gd")'),
+		"SignInteractable explicitly preloads its portrait catalog for runtime parsing"
+	)
+	_check_true(text.contains("SignPortraitCatalogScript.get_portrait(sign_id)"), "SignInteractable resolves its location preview by sign ID")
+	_check_true(text.contains("var portrait: Texture2D"), "SignInteractable gives resolved location previews an explicit texture type")
+	_check_true(text.contains("portrait, portrait != null"), "SignInteractable shows available location previews and safely hides missing ones")
 	_check_true(text.contains("func _is_player_on_interaction_tile(player: Node2D) -> bool:"), "SignInteractable supports standing tile interaction")
 	_check_true(text.contains("func _get_interaction_area_rect() -> Rect2:"), "SignInteractable supports shaped standing areas")
 	_check_true(text.contains("func _get_standing_area_size(fallback_size: Vector2) -> Vector2:"), "SignInteractable derives standing area from sign size")
@@ -228,6 +277,30 @@ func _check_cerulean_city_sign_markers() -> void:
 		for sign_id: String in expected_signs:
 			var lines: Array[String] = service.call("get_lines", sign_id, "kanto_cerulean_city", locale)
 			_check_true(not lines.is_empty(), "Cerulean City resolves %s text in %s" % [sign_id, locale])
+	service.free()
+
+
+func _check_cerulean_route_sign_markers() -> void:
+	var route_data_text := _read_text(ROUTE_SIGN_DATA)
+	var expected_signs := {
+		"kanto_route_24_route_sign": [ROUTE_24_SCENE, "kanto_route_24"],
+		"kanto_route_25_route_sign": [ROUTE_25_SCENE, "kanto_route_25"],
+	}
+
+	var service: Node = SignTextServiceScript.new()
+	for sign_id: String in expected_signs:
+		var scene_path: String = expected_signs[sign_id][0]
+		var map_id: String = expected_signs[sign_id][1]
+		var scene_text := _read_text(scene_path)
+		_check_true(scene_text.contains('sign_id = "%s"' % sign_id), "%s places its route sign" % map_id)
+		_check_true(route_data_text.contains('"%s"' % sign_id), "Route sign data includes %s" % sign_id)
+		_check_true(
+			_has_sign_instance(scene_text, sign_id, "/large_sign_interactable.tscn"),
+			"%s uses the large sign interactable" % map_id
+		)
+		for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+			var lines: Array[String] = service.call("get_lines", sign_id, map_id, locale)
+			_check_true(not lines.is_empty(), "%s resolves text in %s" % [map_id, locale])
 	service.free()
 
 

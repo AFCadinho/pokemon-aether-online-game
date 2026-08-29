@@ -3,9 +3,10 @@ extends SceneTree
 const OUTDOOR_MAP_SCENES: Array[String] = [
 	"res://scenes/overworld/aether_clash/aether_clash_lobby.tscn",
 	"res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
-	"res://scenes/overworld/kanto/routes/kanto_route_2.tscn",
+	"res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
 	"res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
 	"res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
+	"res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
 	"res://scenes/overworld/kanto/routes/viridian_forest.tscn",
 	"res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
 	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
@@ -27,7 +28,7 @@ func _check_map_stair_markers(scene_path: String) -> void:
 	if source.is_empty():
 		return
 
-	var stairs_block := _node_block(source, "Stairs", ".")
+	var stairs_block := _node_block(source, "Stairs", "")
 	var up_left_block := _node_block(source, "StairUpLeft", "Stairs")
 	var up_right_block := _node_block(source, "StairUpRight", "Stairs")
 	_check(not stairs_block.is_empty(), "%s has a Stairs marker container" % scene_path)
@@ -56,13 +57,26 @@ func _node_block(source: String, node_name: String, parent_name: String) -> Stri
 		if line_end < 0:
 			line_end = source.length()
 		var header := source.substr(start, line_end - start)
-		if header.contains('parent="%s"' % parent_name):
+		if parent_name.is_empty() or _header_parent_matches(header, parent_name):
 			var block_end := source.find("\n[node ", line_end)
 			if block_end < 0:
 				block_end = source.length()
 			return source.substr(start, block_end - start)
 		start = source.find(marker, line_end)
 	return ""
+
+
+func _header_parent_matches(header: String, parent_name: String) -> bool:
+	var prefix := 'parent="'
+	var parent_start := header.find(prefix)
+	if parent_start < 0:
+		return false
+	parent_start += prefix.length()
+	var parent_end := header.find('"', parent_start)
+	if parent_end < parent_start:
+		return false
+	var actual_parent := header.substr(parent_start, parent_end - parent_start)
+	return actual_parent == parent_name or actual_parent.ends_with("/" + parent_name)
 
 
 func _tile_cells(node_block: String) -> Array[Vector2i]:

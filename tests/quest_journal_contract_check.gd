@@ -87,6 +87,13 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"story.kanto.explore_cerulean_city.title",
 	"story.kanto.explore_cerulean_city.summary",
 	"story.kanto.explore_cerulean_city.visit_nugget_bridge",
+	"story.kanto.help_bill.title",
+	"story.kanto.help_bill.summary",
+	"story.kanto.help_bill.meet_bill",
+	"story.kanto.help_bill.activate_cell_separator",
+	"story.kanto.challenge_cerulean_gym.title",
+	"story.kanto.challenge_cerulean_gym.summary",
+	"story.kanto.challenge_cerulean_gym.challenge_misty",
 ]
 
 var failed := false

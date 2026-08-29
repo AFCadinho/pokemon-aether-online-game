@@ -195,6 +195,19 @@ func _init() -> void:
 	_check(scene_source.contains('path="res://assets/ui/guild.svg" id="16_guild"') and scene_source.contains('tooltip_text = "ui.navigation.guilds"'), "Guilds use the guild hall icon with a localized tooltip")
 	_check(scene_source.contains('path="res://assets/ui/follower_toggle.svg" id="10_follower"'), "Follower toggle shows a trainer and companion")
 	_check(scene_source.contains('path="res://assets/ui/running_shoes_toggle.svg" id="11_running_shoe"'), "Running Shoes use a dedicated speed-toggle icon")
+	_check(
+		script_source.contains('event.is_action_pressed("toggle_running_shoes", false)')
+		and script_source.contains("if _try_handle_running_shoes_shortcut(event):")
+		and script_source.contains("func _can_toggle_running_shoes_from_shortcut()")
+		and script_source.contains('return "overworld_input_locked"')
+		and script_source.contains('return "ui_input_locked"')
+		and script_source.contains('return "battle_active"')
+		and script_source.contains('return "priority_overlay_visible"')
+		and script_source.contains('return "text_input_focused"')
+		and script_source.contains("panel.is_visible_in_tree()")
+		and script_source.contains("func _is_overlay_pointer_interaction_active()"),
+		"Running Shoes shortcut is limited to unlocked overworld input outside battles, menus, and text entry"
+	)
 	_check(scene_source.contains('path="res://assets/ui/town_map_navigation.svg" id="3_riyyd"'), "Town Map uses a navigation-focused map icon")
 	_check(scene_source.contains('path="res://assets/ui/item_dex.svg" id="12_item_dex"') and script_source.contains('const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")'), "Item Dex uses its dedicated item catalogue icon")
 	_check(script_source.contains("item_dex_popup.theme = _make_item_dex_tooltip_theme()"), "Every Item Dex hover card inherits the Item Dex tooltip theme")

@@ -2,7 +2,9 @@
 
 [ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="2_dialogue"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_m_frames.tres" id="3_scientist"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="3_overworld_pokemon"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="4_poke_fan_f"]
+[ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="5_camper"]
 
 [node name="PokemonCenter" instance=ExtResource("1_template")]
 map_id = "kanto_cerulean_city_pokemon_center"
@@ -23,13 +25,47 @@ npc_id = "kanto_cerulean_city_pokemon_center_clerk"
 [node name="Clerk2" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="3"]
 npc_id = "kanto_cerulean_city_pokemon_center_clerk_2"
 
-[node name="PartnerMoveTutor" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="5" instance=ExtResource("2_dialogue")]
-position = Vector2(272, 496)
-npc_id = "kanto_cerulean_city_pokemon_center_move_tutor"
-npc_definition_id = "trainer_class_scientist_m"
-display_name = "Partner Move Tutor"
+[node name="TrainerMarina" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="5" instance=ExtResource("2_dialogue")]
+position = Vector2(336, 816)
+npc_id = "kanto_cerulean_city_pokemon_center_trainer_marina"
+npc_definition_id = "trainer_class_poke_fan_f"
+display_name = "Trainer Marina"
 facing_direction = Vector2(1, 0)
-npc_sprite_frames = ExtResource("3_scientist")
+npc_sprite_frames = ExtResource("4_poke_fan_f")
+
+[node name="CamperFinn" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="6" instance=ExtResource("2_dialogue")]
+position = Vector2(560, 784)
+npc_id = "kanto_cerulean_city_pokemon_center_camper_finn"
+npc_definition_id = "trainer_class_camper"
+display_name = "Camper Finn"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("5_camper")
+
+[node name="Pokemon" type="Node2D" parent="Entities" parent_id_path=PackedInt32Array(1761485951) index="3"]
+
+[node name="Psyduck" parent="Entities/Pokemon" index="0" instance=ExtResource("3_overworld_pokemon")]
+position = Vector2(400, 816)
+overworld_pokemon_id = "kanto_cerulean_city_pokemon_center_psyduck_1"
+species_id = "psyduck"
+level = 15
+display_name = "Psyduck"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 40.0
+
+[node name="Squirtle" parent="Entities/Pokemon" index="1" instance=ExtResource("3_overworld_pokemon")]
+position = Vector2(624, 784)
+overworld_pokemon_id = "kanto_cerulean_city_pokemon_center_squirtle_1"
+species_id = "squirtle"
+level = 14
+display_name = "Squirtle"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 38.0
 
 [node name="ToOutside" parent="Exits" parent_id_path=PackedInt32Array(1112148501) index="0"]
 target_scene_path = "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"

@@ -22,19 +22,19 @@ const ROUTE_TRAINERS := [
 	{
 		"node": "NuggetBridge03Timmy",
 		"id": "kanto_route_24_nugget_bridge_03_timmy",
-		"position": Vector2(784, 1808),
+		"position": Vector2(1072, 1808),
 		"definition": "trainer_class_youngster",
 	},
 	{
 		"node": "NuggetBridge04Reli",
 		"id": "kanto_route_24_nugget_bridge_04_reli",
-		"position": Vector2(784, 1424),
+		"position": Vector2(1072, 1424),
 		"definition": "trainer_class_lass",
 	},
 	{
 		"node": "NuggetBridge05Ethan",
 		"id": "kanto_route_24_nugget_bridge_05_ethan",
-		"position": Vector2(784, 1040),
+		"position": Vector2(1072, 1040),
 		"definition": "trainer_class_camper",
 	},
 ]
@@ -61,13 +61,15 @@ func _run() -> void:
 	)
 	var bridge_source := FileAccess.get_file_as_string(BRIDGE_SCRIPT)
 	_check(
-		bridge_source.contains("challenge_width_tiles")
-		and bridge_source.contains("battles in place"),
-		"Nugget Bridge challengers guard the complete bridge width"
+		not bridge_source.contains("challenge_width_tiles")
+		and not bridge_source.contains("func _is_body_in_sight_range")
+		and bridge_source.contains("hold their reviewed positions"),
+		"Nugget Bridge challengers use standard straight-line trainer sight"
 	)
 	var recruiter := route_24.get_node("Entities/NPCs/NuggetBridgeRocketRecruiter")
-	_check(recruiter.position == Vector2(784, 752), "Recruiter keeps the reviewed post-bridge tile")
-	_check(recruiter.sight_range_tiles == 0, "Disguised recruiter waits for manual interaction")
+	_check(recruiter.position == Vector2(1072, 752), "Recruiter keeps the reviewed post-bridge tile")
+	_check(recruiter.sight_range_tiles == 5, "Disguised recruiter stops players automatically")
+	_check_bridge_sight_lane(recruiter, "NuggetBridgeRocketRecruiter")
 	_check(not recruiter.rematch_marker.visible, "Disguised recruiter shows no trainer challenge marker")
 	_check(recruiter.npc_definition_id == "trainer_class_camper", "Recruiter begins in an ordinary disguise")
 	_check(recruiter.display_name == "Bridge Attendant", "Recruiter hides his identity before the reveal")
@@ -81,6 +83,11 @@ func _run() -> void:
 	_check(collision.get_cell_source_id(recruiter_cell) < 0, "Recruiter stands on walkable ground")
 	_check(water == null or water.get_cell_source_id(recruiter_cell) < 0, "Recruiter stands outside water")
 	var recruiter_source := FileAccess.get_file_as_string(RECRUITER_SCRIPT)
+	_check(
+		recruiter_source.contains("func show_intro_dialogue()")
+		and recruiter_source.contains("await _run_recruitment_sequence()"),
+		"Recruiter vision starts the prize and reveal sequence"
+	)
 	_check(
 		recruiter_source.contains("kanto_route_24_nugget_bridge_big_nugget"),
 		"Recruiter claims the one-time Big Nugget prize"
@@ -129,11 +136,36 @@ func _check_trainers(map: Node, expected_trainers: Array, map_label: String) -> 
 		_check(trainer.sight_range_tiles == 5, "%s has consistent bridge sight range" % expected.node)
 		_check(
 			trainer.get_script().resource_path == BRIDGE_SCRIPT,
-			"%s uses the bridge-wide challenge behavior" % expected.node
+			"%s uses the bridge challenge behavior" % expected.node
 		)
+		_check_bridge_sight_lane(trainer, expected.node)
 		var cell := collision.local_to_map(trainer.position)
 		_check(collision.get_cell_source_id(cell) < 0, "%s stands on walkable bridge flooring" % expected.node)
 		_check(water == null or water.get_cell_source_id(cell) < 0, "%s stands outside the water mask" % expected.node)
+
+
+func _check_bridge_sight_lane(trainer: Node2D, trainer_name: String) -> void:
+	var player := Node2D.new()
+	trainer.add_sibling(player)
+	var feet_position: Vector2 = trainer.get_feet_position()
+	var vision_shape := trainer.vision_collision_shape.shape as RectangleShape2D
+	_check(
+		vision_shape != null
+		and vision_shape.size.y == 32.0
+		and trainer.vision_collision_shape.position.y == 0.0,
+		"%s has a one-tile-high physical sight lane" % trainer_name
+	)
+	player.global_position = feet_position + Vector2(-32, 0)
+	_check(
+		bool(trainer.call("_is_body_in_sight_range", player)),
+		"%s sees a player directly ahead" % trainer_name
+	)
+	player.global_position = feet_position + Vector2(-32, 32)
+	_check(
+		not bool(trainer.call("_is_body_in_sight_range", player)),
+		"%s does not challenge a player one tile below its line of sight" % trainer_name
+	)
+	player.queue_free()
 
 
 func _count_bridge_trainers(map: Node) -> int:

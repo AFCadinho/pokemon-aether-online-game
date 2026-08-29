@@ -134,6 +134,7 @@ func try_handle_interaction(host: Node, player: Node2D, trigger: String) -> Dict
 		"handled": true,
 		"status": "completed",
 		"requestId": request_id,
+		"effects": completion_result.get("effects", []),
 	})
 
 

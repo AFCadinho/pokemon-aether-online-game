@@ -53,6 +53,10 @@
       "label": "Kalos Trainer Battle",
       "path": "res://assets/music/battle/trainer/Kalos Trainer Battle.ogg"
     },
+    "battle.rival.blue_green_remix_zame": {
+      "label": "Battle! Rival Blue (Green) Remix - Zame",
+      "path": "res://assets/music/battle/rival/rival_blue_green_remix_zame.ogg"
+    },
     "battle.gym_leader.kanto_remaster_zame": {
       "label": "Battle! Kanto Gym Leader Remaster - Zame",
       "path": "res://assets/music/battle/gym/kanto_gym_leader_remaster_zame.ogg"

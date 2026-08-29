@@ -75,6 +75,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/localization_zh_cn_terminology_check.gd",
 	"res://tests/localization_backend_error_check.gd",
 	"res://tests/server_access_status_check.gd",
+	"res://tests/system_staff_announcement_check.gd",
 	"res://tests/account_email_login_check.gd",
 	"res://tests/privacy_account_controls_check.gd",
 	"res://tests/client_version_contract_check.gd",
@@ -105,6 +106,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pokemon_pc_interactable_check.gd",
 	"res://tests/pc_hover_summary_check.gd",
 	"res://tests/new_player_spawn_check.gd",
+	"res://tests/saved_map_scene_path_migration_check.gd",
 	"res://tests/map_transition_fade_check.gd",
 	"res://tests/blackout_respawn_contract_check.gd",
 	"res://tests/world_area_access_contract_check.gd",
@@ -138,6 +140,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/players_house_visual_depth_check.gd",
 	"res://tests/players_house_location_label_check.gd",
 	"res://tests/map_music_profile_check.gd",
+	"res://tests/rival_battle_music_check.gd",
 	"res://tests/map_layer_resolver_check.gd",
 	"res://tests/horizontal_stair_elevation_check.gd",
 	"res://tests/outdoor_horizontal_stair_markers_check.gd",
@@ -155,10 +158,16 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/cerulean_gym_trainers_check.gd",
 	"res://tests/cerulean_interior_connections_check.gd",
 	"res://tests/cerulean_multi_exit_runtime_check.gd",
+	"res://tests/route_25_visual_check.gd",
+	"res://tests/route_25_trainers_check.gd",
+	"res://tests/route_25_wild_encounter_check.gd",
+	"res://tests/route_25_overworld_pokemon_check.gd",
+	"res://tests/bills_house_route_25_transition_check.gd",
 	"res://tests/route_24_route_25_connections_check.gd",
 	"res://tests/nugget_bridge_trainers_check.gd",
 	"res://tests/cerulean_weather_surfaces_check.gd",
 	"res://tests/cerulean_population_check.gd",
+	"res://tests/cerulean_route_portrait_check.gd",
 	"res://tests/cerulean_thieving_check.gd",
 	"res://tests/cerulean_lively_population_check.gd",
 	"res://tests/cerulean_mountain_staff_spawns_check.gd",
@@ -276,6 +285,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/global_heal_check.gd",
 	"res://tests/global_heal_dialog_runtime_check.gd",
 	"res://tests/adinho_appearance_unlock_check.gd",
+	"res://tests/ironfanton_appearance_unlock_check.gd",
 	"res://tests/base_hair_layer_check.gd",
 	"res://tests/appearance_color_system_check.gd",
 	"res://tests/donator_store_cosmetic_subtabs_check.gd",
@@ -293,10 +303,14 @@ const CHECK_SCRIPTS: Array[String] = [
 const DEFAULT_LOG_DIR := "/tmp/pokeaether_project_checks"
 
 var failed := false
+var passed_count := 0
+var failed_count := 0
+var verbose := false
 var log_dir := DEFAULT_LOG_DIR
 
 
 func _init() -> void:
+	verbose = OS.get_environment("POKEAETHER_TEST_VERBOSE").strip_edges().to_lower() in ["1", "true", "yes"]
 	var configured_log_dir := OS.get_environment("POKEAETHER_TEST_LOG_DIR").strip_edges()
 	if not configured_log_dir.is_empty():
 		if not configured_log_dir.is_absolute_path():
@@ -318,6 +332,7 @@ func _init() -> void:
 	for script_path in CHECK_SCRIPTS:
 		_run_check(executable, project_path, script_path)
 
+	print("Project checks: %d passed, %d failed. Logs: %s" % [passed_count, failed_count, log_dir])
 	quit(1 if failed else 0)
 
 
@@ -341,10 +356,13 @@ func _run_check(executable: String, project_path: String, script_path: String) -
 	)
 
 	if exit_code == 0:
-		print("PASS %s" % script_path)
+		passed_count += 1
+		if verbose:
+			print("PASS %s" % script_path)
 		return
 
 	failed = true
+	failed_count += 1
 	push_error(
 		"FAIL %s exit_code=%d log=%s\n%s" % [script_path, exit_code, log_file, _format_output(output)]
 	)

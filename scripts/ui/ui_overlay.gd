@@ -4,6 +4,7 @@ const STAFF_PERMISSION_POLICY := preload("res://scripts/ui/staff_permission_poli
 const LOAN_RETURNS_DIALOG_SCRIPT := preload("res://scripts/ui/loan_returns_dialog.gd")
 const BORROWED_POKEMON_DIALOG_SCRIPT := preload("res://scripts/ui/borrowed_pokemon_dialog.gd")
 const LOAN_SUMMARY_TIME_SCRIPT := preload("res://scripts/ui/loan_summary_time.gd")
+const SYSTEM_NOTICE_BANNER_SCRIPT := preload("res://scripts/ui/system_notice_banner.gd")
 const MAX_PARTY_SIZE := 6
 const PARTY_SLOT_HEIGHT := 68.0
 const PARTY_SLOT_GAP := 5.0
@@ -62,6 +63,7 @@ const CHAT_TAB_SYSTEM := "system"
 const CHAT_TAB_PM := "pm"
 const CHAT_TAB_GUILD := "guild"
 const CHAT_TAB_LANGUAGES := "languages"
+const TEXT_INPUT_WINDOW_GROUP := "text_input_windows"
 const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
 	CHAT_TAB_ALL,
 	CHAT_TAB_GENERAL,
@@ -113,6 +115,7 @@ const CHAT_MUTE_PERMISSION := "chat:mute"
 const CHAT_TRANSLATE_PERMISSION := "chat:translate"
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
+const GAMEPLAY_RESET_PERMISSION := "gameplay:reset"
 const DEV_ITEM_GENERATING_PERMISSION := "items:generating"
 const DEV_POKEMON_GENERATING_PERMISSION := "pokemon:generating"
 const DIRECT_BATTLE_FORM_GENERATING_PERMISSION := "pokemon:direct-battle-form:generating"
@@ -135,6 +138,9 @@ const POKEMON_GENDER_DISPLAY := preload("res://scripts/ui/pokemon_gender_display
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
 const HELD_ITEM_DROP_TARGET_BUTTON_SCRIPT := preload("res://scripts/ui/held_item_drop_target_button.gd")
 const ALPHA_TOOLS_ERROR_FEEDBACK := preload("res://scripts/services/alpha_tools_error_feedback.gd")
+const GAMEPLAY_RESET_TITLE := "Reset / New Game"
+const GAMEPLAY_RESET_DESCRIPTION := "Return this trainer to first-login gameplay state"
+const GAMEPLAY_RESET_CONFIRM_TEXT := "This permanently resets your location, party, boxes, regular inventory, money, playtime and gameplay unlocks. Unclaimed mail attachments are permanently removed, and your other active sessions are signed out.\n\nYour account, roles, friends, mail history, PvP history, Aether Gems and paid items remain."
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
 const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")
@@ -775,6 +781,7 @@ var evolution_prompt_review_total := 0
 var evolution_prompt_review_index := 0
 var dev_clear_menu_popup: PanelContainer
 var dev_clear_menu_close_button: Button
+var dev_reset_game_button: Button
 var pvp_mode_menu: PanelContainer
 var pvp_mode_ranked_button: Button
 var pvp_mode_tournaments_button: Button
@@ -802,6 +809,7 @@ var pvp_match_countdown_status_label: Label
 var session_logout_banner: Control
 var session_logout_banner_message_label: Label
 var session_logout_banner_timer_label: Label
+var system_notice_banner: Control
 var pvp_bans_status_label: Label
 var pvp_bans_metadata_list: VBoxContainer
 var pvp_bans_list: VBoxContainer
@@ -1339,6 +1347,7 @@ var content_creator_tools_popup: PanelContainer
 var content_creator_photo_mode_button: Button
 var alpha_create_pokemon_button: Button
 var alpha_clear_party_button: Button
+var alpha_reset_game_button: Button
 var alpha_tools_close_button: Button
 var dev_add_button: Button
 var dev_quick_actions_label: Label
@@ -1508,6 +1517,7 @@ func _ready() -> void:
 	_setup_pvp_queue_compact_panel()
 	_setup_pvp_match_countdown_overlay()
 	_setup_session_logout_banner()
+	_setup_system_notice_banner()
 	_setup_ui_input_mouse_blocker()
 	_setup_pvp_mode_menu()
 	_setup_dev_add_item_tools()
@@ -1729,6 +1739,8 @@ func _on_locale_changed(_locale: String) -> void:
 	_refresh_pc_localized_ui()
 	_refresh_pvp_localized_ui()
 	_refresh_session_logout_banner()
+	if system_notice_banner != null:
+		system_notice_banner.call("refresh_localized_ui")
 	_refresh_trainer_card_localized_ui()
 	_refresh_chat_localized_ui()
 	_refresh_buffs_localized_ui()
@@ -1898,6 +1910,9 @@ func _play_mail_notification_sound() -> void:
 func _can_use_dev_tools() -> bool:
 	return _has_user_permission(DEV_TOOLS_PERMISSION)
 
+func _can_reset_gameplay() -> bool:
+	return _has_user_permission(GAMEPLAY_RESET_PERMISSION)
+
 func _can_generate_dev_items() -> bool:
 	return _has_user_permission(DEV_ITEM_GENERATING_PERMISSION)
 
@@ -2059,6 +2074,9 @@ func _refresh_dev_tools_visibility() -> void:
 	if alpha_clear_party_button != null:
 		alpha_clear_party_button.visible = can_use_content_creator_generation
 		alpha_clear_party_button.disabled = not can_use_content_creator_generation
+	if alpha_reset_game_button != null:
+		alpha_reset_game_button.visible = _can_reset_gameplay()
+		alpha_reset_game_button.disabled = not _can_reset_gameplay()
 	dev_actions_slot.visible = can_show_staff_action_bar and can_open_dev_actions
 	dev_actions_button.visible = can_show_staff_action_bar and can_open_dev_actions
 	dev_actions_button.disabled = not can_open_dev_actions
@@ -3335,6 +3353,13 @@ func focus_battle_ui_layer() -> void:
 	layer = UI_OVERLAY_BASE_LAYER
 
 func _has_visible_priority_overlay_panel() -> bool:
+	for panel: Control in _priority_overlay_panels():
+		if panel != null and panel.is_visible_in_tree():
+			return true
+	return false
+
+
+func _priority_overlay_panels() -> Array[Control]:
 	var panels: Array[Control] = [
 		global_buff_details_panel,
 		chat_settings_popup,
@@ -3371,15 +3396,12 @@ func _has_visible_priority_overlay_panel() -> bool:
 	]
 	if quest_journal_view != null:
 		panels.append(quest_journal_view.get_journal_panel())
-	for panel: Control in panels:
-		if panel != null and panel.visible:
-			return true
 	for context_value: Variant in pokemon_summary_open_cards.values():
 		var context: Dictionary = context_value as Dictionary
 		var summary_panel: Control = context.get("popup") as Control
-		if summary_panel != null and summary_panel.visible:
-			return true
-	return false
+		if summary_panel != null:
+			panels.append(summary_panel)
+	return panels
 
 func _activate_ui_panel(panel: Control) -> void:
 	if panel == null:
@@ -5380,17 +5402,42 @@ func _setup_dev_clear_menu_popup() -> void:
 		Color("#ef7085")
 	)
 
-	var reset_game_button := Button.new()
-	reset_game_button.name = "ResetNewGameButton"
-	reset_game_button.pressed.connect(_on_dev_reset_game_option_pressed)
-	layout.add_child(reset_game_button)
-	_configure_tool_tile_button(
-		reset_game_button,
-		"Reset / New Game",
-		"Return this trainer to first-login gameplay state",
-		TOOL_CLEAR_DATA_ICON,
-		Color("#ef405d")
+	dev_reset_game_button = _add_gameplay_reset_button(
+		layout,
+		Callable(self, "_hide_dev_clear_menu_popup"),
+		false
 	)
+
+
+func _add_gameplay_reset_button(
+	layout: Container,
+	close_owner: Callable,
+	use_launcher_card: bool
+) -> Button:
+	var button := Button.new()
+	button.name = "ResetNewGameButton"
+	button.pressed.connect(
+		Callable(self, "_on_gameplay_reset_option_pressed").bind(close_owner)
+	)
+	layout.add_child(button)
+	if use_launcher_card:
+		_configure_launcher_card_button(
+			button,
+			GAMEPLAY_RESET_TITLE,
+			GAMEPLAY_RESET_DESCRIPTION,
+			TOOL_CLEAR_DATA_ICON,
+			Color("#ef405d")
+		)
+	else:
+		_configure_tool_tile_button(
+			button,
+			GAMEPLAY_RESET_TITLE,
+			GAMEPLAY_RESET_DESCRIPTION,
+			TOOL_CLEAR_DATA_ICON,
+			Color("#ef405d")
+		)
+	return button
+
 
 func _setup_pvp_room_popup() -> void:
 	pvp_room_popup = PanelContainer.new()
@@ -7275,6 +7322,12 @@ func _setup_alpha_tools_popup() -> void:
 		"ui.staff.alpha.clear_description",
 		TOOL_CLEAR_DATA_ICON,
 		Color("#ef7085")
+	)
+
+	alpha_reset_game_button = _add_gameplay_reset_button(
+		layout,
+		Callable(self, "_hide_alpha_tools_popup"),
+		true
 	)
 
 func _setup_content_creator_tools_popup() -> void:
@@ -10150,6 +10203,7 @@ func _process(delta: float) -> void:
 	_refresh_pvp_ranked_queue_availability(delta)
 	_refresh_pvp_match_countdown(delta)
 	_refresh_session_logout_countdown()
+	_refresh_system_notice_banner_position()
 	_refresh_player_status_card_if_needed()
 	_refresh_trainer_card_playtime_if_needed()
 	_refresh_location_label_if_needed()
@@ -10744,6 +10798,9 @@ func _refresh_time_of_day_label(hour: int) -> void:
 		time_of_day_label.add_theme_color_override("font_color", Color("#7aa7f4"))
 
 func _input(event: InputEvent) -> void:
+	if _try_handle_running_shoes_shortcut(event):
+		return
+
 	if pc_box_title_editor != null and pc_box_title_editor.visible and event is InputEventMouseButton:
 		var rename_mouse_event := event as InputEventMouseButton
 		if rename_mouse_event.button_index == MOUSE_BUTTON_LEFT and rename_mouse_event.pressed and not pc_box_title_editor.get_global_rect().has_point(rename_mouse_event.position):
@@ -10839,6 +10896,79 @@ func _input(event: InputEvent) -> void:
 		return
 
 	chat_input.release_focus()
+
+
+func _try_handle_running_shoes_shortcut(event: InputEvent) -> bool:
+	if event == null or not event.is_action_pressed("toggle_running_shoes", false):
+		return false
+	if event is InputEventKey and (event as InputEventKey).echo:
+		return false
+	if not _can_toggle_running_shoes_from_shortcut():
+		return false
+
+	var enabled := not GameState.running_shoes_enabled
+	running_shoes_button.set_pressed_no_signal(enabled)
+	_on_running_shoes_toggled(enabled)
+	get_viewport().set_input_as_handled()
+	return true
+
+
+func _can_toggle_running_shoes_from_shortcut() -> bool:
+	return _running_shoes_shortcut_block_reason() == ""
+
+
+func _running_shoes_shortcut_block_reason() -> String:
+	if running_shoes_button == null or not running_shoes_button.is_visible_in_tree():
+		return "button_missing_or_hidden"
+	if GameState.current_map == null:
+		return "current_map_missing"
+	if GameState.is_overworld_input_locked():
+		return "overworld_input_locked"
+	if GameState.is_ui_input_locked():
+		return "ui_input_locked"
+	if _is_world_battle_active():
+		return "battle_active"
+	if _has_visible_priority_overlay_panel():
+		return "priority_overlay_visible"
+	if _is_text_input_focused():
+		return "text_input_focused"
+	if _is_overlay_pointer_interaction_active():
+		return "pointer_interaction_active"
+	return ""
+
+func _is_overlay_pointer_interaction_active() -> bool:
+	return (
+		pc_dragging
+		or pc_popup_dragging
+		or party_dragging
+		or chat_resize_dragging
+		or trainer_card_dragging
+		or bag_dragging
+		or pokemon_summary_dragging_card_key != ""
+		or mail_dragging
+		or item_dex_dragging
+		or pokedex_dragging
+		or pvp_room_dragging
+		or staff_teleport_dragging
+		or hotkey_sidebar_dragging
+	)
+
+
+func _is_text_input_focused() -> bool:
+	var focus_owner := get_viewport().gui_get_focus_owner()
+	if focus_owner is LineEdit or focus_owner is TextEdit:
+		return true
+
+	for node: Node in get_tree().get_nodes_in_group(TEXT_INPUT_WINDOW_GROUP):
+		if not (node is Window):
+			continue
+		var window := node as Window
+		if not window.visible:
+			continue
+		var window_focus_owner := window.gui_get_focus_owner()
+		if window_focus_owner is LineEdit or window_focus_owner is TextEdit:
+			return true
+	return false
 
 func _handle_chat_resize_drag(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -12348,6 +12478,23 @@ func _setup_session_logout_banner() -> void:
 	session_logout_banner_timer_label.add_theme_font_size_override("font_size", 20)
 	session_logout_banner_timer_label.add_theme_color_override("font_color", UI_DANGER)
 	row.add_child(session_logout_banner_timer_label)
+
+func _setup_system_notice_banner() -> void:
+	if system_notice_banner != null:
+		return
+	system_notice_banner = SYSTEM_NOTICE_BANNER_SCRIPT.new()
+	system_notice_banner.name = "SystemNoticeBanner"
+	root_control.add_child(system_notice_banner)
+
+func _refresh_system_notice_banner_position() -> void:
+	if system_notice_banner == null:
+		return
+	var offset := 132.0 if pvp_match_countdown_overlay != null and pvp_match_countdown_overlay.visible else 16.0
+	if session_logout_banner != null and session_logout_banner.visible:
+		var warning_panel := session_logout_banner.get_node_or_null("WarningPanel") as PanelContainer
+		if warning_panel != null:
+			offset = maxf(offset, warning_panel.position.y + warning_panel.size.y + 10.0)
+	system_notice_banner.call("set_top_offset", offset)
 
 func _position_session_logout_banner() -> void:
 	if session_logout_banner == null or not session_logout_banner.visible:
@@ -14997,6 +15144,12 @@ func _format_appearance_option_name(category_id: String, part_id: String) -> Str
 				return LocalizationManager.text("ui.appearance.option.adinho_shoes")
 			"Adinho_Shoes_Chroma":
 				return LocalizationManager.text("ui.appearance.option.adinho_chroma_shoes")
+			"IronFanton_Hair":
+				return LocalizationManager.text("ui.appearance.option.ironfanton_hair")
+			"IronFanton_Beard":
+				return LocalizationManager.text("ui.appearance.option.ironfanton_beard")
+			"IronFanton_Shirt":
+				return LocalizationManager.text("ui.appearance.option.ironfanton_shirt")
 			"Aether_Blossom_Hair":
 				return LocalizationManager.text("ui.appearance.option.blossom_hair")
 			"Aether_Blossom_Earrings":
@@ -21144,7 +21297,6 @@ func _refresh_bag_inventory_for_machine_selection() -> void:
 	await _load_bag_inventory()
 
 func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
-	FieldMoveService.update_owned_charms_from_inventory(items_value)
 	var normalized_items: Array[Dictionary] = []
 	if typeof(items_value) != TYPE_ARRAY:
 		items_value = []
@@ -21165,7 +21317,7 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"name": str(item.get("name", _format_item_name_from_id(item_id))),
 			"category": _normalize_backend_bag_category(backend_category, item_id),
 			"shortDesc": str(item.get("shortDesc", item.get("description", ""))).strip_edges(),
-			"isHoldable": bool(item.get("isHoldable", false)),
+			"isHoldable": false if _is_fossil_item_id(item_id) else bool(item.get("isHoldable", false)),
 			"quantity": max(int(item.get("quantity", 1)), 1),
 			"machineMove": str(item.get("machineMove", "")).strip_edges(),
 			"machineKind": str(item.get("machineKind", "")).strip_edges().to_lower(),
@@ -21217,6 +21369,8 @@ func _bag_item_key(item: Dictionary) -> String:
 	return "loan:%s" % loan_asset_id if bool(item.get("borrowed", false)) and loan_asset_id != "" else "owned:%s" % item_id
 
 func _normalize_backend_bag_category(category: String, item_id: String) -> String:
+	if _is_fossil_item_id(item_id):
+		return "general"
 	if _is_power_stone_item_id(item_id):
 		return "power_stones"
 	var normalized := category.strip_edges().to_lower().replace("-", "_")
@@ -21229,6 +21383,12 @@ func _normalize_backend_bag_category(category: String, item_id: String) -> Strin
 			return normalized
 
 	return _guess_bag_category(item_id)
+
+func _is_fossil_item_id(item_id: String) -> bool:
+	var normalized := _normalize_item_id(item_id)
+	return normalized == "old-amber" \
+		or normalized.ends_with("-fossil") \
+		or normalized.begins_with("fossilized-")
 
 func _item_name_from_id(item_id: String) -> String:
 	var normalized_item_id := _normalize_item_id(item_id)
@@ -34112,23 +34272,24 @@ func _on_dev_clear_inventory_option_pressed() -> void:
 		true
 	)
 
-func _on_dev_reset_game_option_pressed() -> void:
-	if not _can_use_dev_tools():
+func _on_gameplay_reset_option_pressed(close_owner: Callable) -> void:
+	if not _can_reset_gameplay():
 		return
 
-	dev_clear_menu_popup.visible = false
+	if close_owner.is_valid():
+		close_owner.call()
 	_show_ui_confirm_popup(
-		"Reset / New Game",
-		"This permanently resets your location, party, boxes, inventory, money, playtime and gameplay unlocks.\n\nYour account, roles, friends, mail history and PvP history remain.",
+		GAMEPLAY_RESET_TITLE,
+		GAMEPLAY_RESET_CONFIRM_TEXT,
 		"Reset Everything",
-		Callable(self, "_on_dev_reset_game_confirmed"),
+		Callable(self, "_on_gameplay_reset_confirmed"),
 		Vector2i(540, 0),
 		true
 	)
 
 
-func _on_dev_reset_game_confirmed() -> void:
-	if not _can_use_dev_tools():
+func _on_gameplay_reset_confirmed() -> void:
+	if not _can_reset_gameplay():
 		return
 	var world := GameState.get_world()
 	if world == null or not world.has_method("prepare_for_gameplay_reset"):
@@ -41838,6 +41999,10 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		return
 	if message_type == "system.force_logout":
 		_force_session_logout(str(message.get("message", "")))
+		return
+	if message_type == "system.staff_announcement":
+		if system_notice_banner != null and bool(system_notice_banner.call("enqueue_notice", message)):
+			add_system_message(str(message.get("message", "")).strip_edges())
 		return
 	if message_type == "system.thieving_arrest":
 		add_system_message(LocalizationManager.text(

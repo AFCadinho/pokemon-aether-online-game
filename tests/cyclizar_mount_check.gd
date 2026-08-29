@@ -80,10 +80,14 @@ func _check_land_mount_runtime_contract() -> void:
 	var settings_source := FileAccess.get_file_as_string("res://scripts/services/settings_manager.gd")
 	var player_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	var loading_source := FileAccess.get_file_as_string("res://scripts/ui/loading_screen.gd")
+	var settings_menu_source := FileAccess.get_file_as_string("res://scripts/ui/settings_menu.gd")
 	_check(project_source.contains("mount={"), "the land mount toggle has an input action")
 	_check(
 		settings_source.contains('"mount": KEY_M')
-		and settings_source.contains('"fish", "mount", "pickpocket"'),
+		and settings_source.contains('"mount",')
+		and settings_source.contains('"fish",')
+		and settings_source.contains('"pickpocket",'),
 		"the mount hotkey defaults to M and remains configurable"
 	)
 	_check(
@@ -99,6 +103,48 @@ func _check_land_mount_runtime_contract() -> void:
 		and world_source.contains('state.get("mountId", "")')
 		and world_source.contains('player.call("restore_land_mount", saved_mount_id)'),
 		"the active owned land mount is saved with player position and restored on login"
+	)
+	var loading_prepare_source := _function_source(loading_source, "_prepare_world")
+	var logout_source := _function_source(settings_menu_source, "_logout_confirmed")
+	_check(
+		loading_prepare_source.contains("await InventoryService.load_inventory()")
+		and loading_prepare_source.find("await InventoryService.load_inventory()")
+		< loading_prepare_source.find("GameState.set_prepared_world_state")
+		and logout_source.contains('world.call("prepare_for_account_switch")')
+		and logout_source.find('world.call("prepare_for_account_switch")')
+		< logout_source.find("change_scene_to_file(LOGIN_SCENE_PATH)"),
+		"logout saves the active mount and login loads its entitlement before restoring it"
+	)
+	var load_map_source := _function_source(world_source, "load_map")
+	_check(
+		load_map_source.contains('player.call("get_active_land_mount_id")')
+		and load_map_source.contains('player.call("restore_land_mount", land_mount_id_to_restore)')
+		and load_map_source.find('player.call("get_active_land_mount_id")')
+		< load_map_source.find("player.get_parent().remove_child(player)")
+		and load_map_source.find("GameState.current_map = new_map")
+		< load_map_source.find('player.call("restore_land_mount", land_mount_id_to_restore)'),
+		"ordinary map changes preserve land mounts when the destination permits them"
+	)
+	var battle_lock_source := _function_source(world_source, "_lock_overworld_for_battle")
+	var battle_unlock_source := _function_source(world_source, "_unlock_overworld_after_battle")
+	_check(
+		battle_lock_source.contains('player.call("get_active_land_mount_id")')
+		and battle_lock_source.find('player.call("get_active_land_mount_id")')
+		< battle_lock_source.find("player.reset_movement_state()")
+		and battle_unlock_source.contains(
+			'player.call("restore_land_mount", mount_id_to_restore)'
+		)
+		and battle_unlock_source.find("player.reset_movement_state()")
+		< battle_unlock_source.find('player.call("restore_land_mount", mount_id_to_restore)'),
+		"wild and Trainer battle returns restore the land mount active before battle"
+	)
+	var battle_end_source := _function_source(world_source, "end_wild_battle")
+	_check(
+		battle_end_source.contains(
+			'if keep_overworld_locked:\n\t\t# A blackout moves the player to a recovery location'
+		)
+		and battle_end_source.contains('land_mount_id_before_battle = ""'),
+		"blackout respawns discard the pre-battle land mount"
 	)
 	_check(
 		player_source.contains("and not land_mount_activity_active")
@@ -126,6 +172,37 @@ func _check_bike_shop_owner_contract() -> void:
 		and owner_source.contains("turn_in_npc_quest_item"),
 		"the owner exchanges the Bike Voucher for the Cyclizar entitlement"
 	)
+	_check(
+		owner_source.contains("MENTOR_TOPIC_MENU")
+		and owner_source.contains("await _show_mount_guide()")
+		and owner_source.contains("func _show_mount_guide()")
+		and owner_source.contains('"id": "selecting"')
+		and owner_source.contains('"id": "riding"')
+		and owner_source.contains('"id": "purpose"'),
+		"the owner becomes a reusable mount guide after Cyclizar is owned"
+	)
+	for locale_path: String in [
+		"res://localization/en.json",
+		"res://localization/nl.json",
+		"res://localization/pt_BR.json",
+		"res://localization/zh_CN.json",
+	]:
+		var locale_source := FileAccess.get_file_as_string(locale_path)
+		_check(
+			locale_source.contains('"mentor.bike_seller.help.topic.selecting"')
+			and locale_source.contains('"mentor.bike_seller.help.topic.riding"')
+			and locale_source.contains('"mentor.bike_seller.help.topic.purpose"'),
+			"%s contains the Bike Seller mount guide" % locale_path
+		)
+
+
+func _function_source(source: String, function_name: String) -> String:
+	var marker := "func %s(" % function_name
+	var start := source.find(marker)
+	if start < 0:
+		return ""
+	var next_function := source.find("\nfunc ", start + marker.length())
+	return source.substr(start) if next_function < 0 else source.substr(start, next_function - start)
 
 
 func _check(condition: bool, message: String) -> void:

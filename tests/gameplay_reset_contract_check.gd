@@ -35,6 +35,22 @@ func _init() -> void:
 		"the reset remains input-locked until its initial position save has completed"
 	)
 	_expect(overlay.contains('"Reset / New Game"'), "Developer Tools exposes Reset / New Game")
+	_expect(
+		overlay.contains("func _add_gameplay_reset_button(")
+		and overlay.contains('Callable(self, "_hide_dev_clear_menu_popup")')
+		and overlay.contains('Callable(self, "_hide_alpha_tools_popup")'),
+		"Developer Tools and Alpha Tools use one shared reset button factory"
+	)
+	_expect(
+		overlay.contains('const GAMEPLAY_RESET_PERMISSION := "gameplay:reset"')
+		and overlay.contains("func _can_reset_gameplay() -> bool:"),
+		"both reset launchers use the dedicated gameplay reset permission"
+	)
+	_expect(
+		overlay.contains("Unclaimed mail attachments are permanently removed")
+		and overlay.contains("your other active sessions are signed out"),
+		"the destructive confirmation explains mail attachment loss and session revocation"
+	)
 	_expect(overlay.contains("await PlayerGameplayResetService.reset_gameplay()"), "Developer Tools awaits the server transaction")
 	_expect(overlay.contains("change_scene_to_file(LOADING_SCENE_PATH)"), "successful reset reloads authoritative state")
 	_expect(

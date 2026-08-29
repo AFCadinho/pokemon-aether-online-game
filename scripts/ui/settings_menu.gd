@@ -586,6 +586,13 @@ func _create_cursor_scale_control() -> void:
 func _build_controls_tab(controls_tab: VBoxContainer) -> void:
 	_add_input_binding_control(
 		controls_tab,
+		"toggle_running_shoes",
+		"RunningShoes",
+		"ui.settings.controls.running_shoes",
+		"ui.settings.controls.running_shoes_hint"
+	)
+	_add_input_binding_control(
+		controls_tab,
 		"fish",
 		"Fishing",
 		"ui.settings.controls.fishing",
@@ -2212,18 +2219,33 @@ func _logout_confirmed() -> void:
 		await _stop_impersonation_confirmed()
 		return
 	await _leave_ranked_queue_before_logout()
+	var world := GameState.get_world()
+	if world == null or not world.has_method("prepare_for_account_switch"):
+		_restore_account_return_controls()
+		_set_account_status("Could not save your current game before returning to login.", true)
+		return
+	var prepare_value: Variant = await world.call("prepare_for_account_switch")
+	var prepare_result: Dictionary = (
+		prepare_value as Dictionary if prepare_value is Dictionary else {}
+	)
+	if not bool(prepare_result.get("success", false)):
+		_restore_account_return_controls()
+		_set_account_status(
+			str(prepare_result.get(
+				"error",
+				"Could not save your current game before returning to login."
+			)),
+			true
+		)
+		return
 	# This action only returns to the login scene. Keep AuthService and its
 	# remember-me session intact; the explicit Logout action on the login screen
 	# is responsible for ending the session and clearing the saved token.
 	var error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
 	if error != OK:
-		logging_out = false
-		logout_button.disabled = false
-		close_button.disabled = false
-		if logout_confirm_return_button != null:
-			logout_confirm_return_button.disabled = false
-		if logout_confirm_cancel_button != null:
-			logout_confirm_cancel_button.disabled = false
+		if world.has_method("cancel_account_switch"):
+			world.call("cancel_account_switch")
+		_restore_account_return_controls()
 		push_warning("Could not return to login screen: %s" % error_string(error))
 
 

@@ -2,6 +2,8 @@ extends WorldInteractable
 
 class_name SignInteractable
 
+const SignPortraitCatalogScript := preload("res://scripts/services/sign_portrait_catalog.gd")
+
 @export var sign_id := ""
 @export_enum("road", "town", "building", "trainer_tips", "notice", "generic") var sign_type := "generic"
 @export_enum("local", "inline", "remote") var content_source := "local"
@@ -103,7 +105,8 @@ func _show_sign_dialogue(lines: Array[String], speaker: String) -> void:
 	if valid_dialogue_lines.is_empty():
 		valid_dialogue_lines = MISSING_DIALOGUE_LINES
 
-	dialogue_box.start_dialogue(valid_dialogue_lines, speaker, null, false)
+	var portrait: Texture2D = SignPortraitCatalogScript.get_portrait(sign_id)
+	dialogue_box.start_dialogue(valid_dialogue_lines, speaker, portrait, portrait != null)
 	await dialogue_box.dialogue_finished
 
 

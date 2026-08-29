@@ -7,6 +7,8 @@
     {"id": "kanto_route_2_route_sign", "type": "road", "mapId": "kanto_route_2", "title": "Route 2", "lines": ["Route 2", "Viridian City ↔ Pewter City."]},
     {"id": "kanto_route_2_digletts_cave", "type": "road", "mapId": "kanto_route_2", "title": "Diglett's Cave", "lines": ["Diglett's Cave", "A tunnel connecting Route 2 and Vermilion City."]},
     {"id": "kanto_route_22_route_sign", "type": "road", "mapId": "kanto_route_22", "title": "Route 22", "lines": ["Route 22", "Viridian City ↔ Indigo Plateau."]},
-    {"id": "kanto_route_3_mt_moon_sign", "type": "road", "mapId": "kanto_route_3", "title": "Mt. Moon Entrance", "lines": ["Mt. Moon Entrance", "Cerulean City lies beyond the cave. Travelers should heal at the nearby Pokémon Center before entering."]}
+    {"id": "kanto_route_3_mt_moon_sign", "type": "road", "mapId": "kanto_route_3", "title": "Mt. Moon Entrance", "lines": ["Mt. Moon Entrance", "Cerulean City lies beyond the cave. Travelers should heal at the nearby Pokémon Center before entering."]},
+    {"id": "kanto_route_24_route_sign", "type": "road", "mapId": "kanto_route_24", "title": "Route 24", "lines": ["Route 24", "Nugget Bridge links Cerulean City with Route 25."]},
+    {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "Route 25", "lines": ["Route 25", "Follow the road east to Bill's house."]}
   ]
 }
