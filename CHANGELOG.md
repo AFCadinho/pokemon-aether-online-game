@@ -13,6 +13,7 @@
 
 **Changed**
 
+- Signs in Cerulean City and on Routes 24 and 25 now provide local directions and location information.
 - Misty and Dadinho's Route 25 confrontation now has shorter, more natural dialogue and addresses the player by name.
 - After giving you Cyclizar, the Cerulean Bike Seller now offers a reusable guide to selecting, riding, and understanding mounts.
 - Overworld rain is now less visually intense at the default 2x zoom.

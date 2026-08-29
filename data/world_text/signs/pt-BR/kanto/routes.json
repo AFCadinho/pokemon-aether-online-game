@@ -7,6 +7,8 @@
     {"id": "kanto_route_2_route_sign", "type": "road", "mapId": "kanto_route_2", "title": "Rota 2", "lines": ["Rota 2", "Viridian City ↔ Pewter City."]},
     {"id": "kanto_route_2_digletts_cave", "type": "road", "mapId": "kanto_route_2", "title": "Caverna dos Diglett", "lines": ["Caverna dos Diglett", "Um túnel que conecta a Rota 2 à Cidade de Vermilion."]},
     {"id": "kanto_route_22_route_sign", "type": "road", "mapId": "kanto_route_22", "title": "Rota 22", "lines": ["Rota 22", "Viridian City ↔ Indigo Plateau."]},
-    {"id": "kanto_route_3_mt_moon_sign", "type": "road", "mapId": "kanto_route_3", "title": "Entrada do Mt. Moon", "lines": ["Entrada do Mt. Moon", "Cerulean City fica além da caverna. Recomenda-se que os viajantes curem seus Pokémon no Pokémon Center próximo antes de entrar."]}
+    {"id": "kanto_route_3_mt_moon_sign", "type": "road", "mapId": "kanto_route_3", "title": "Entrada do Mt. Moon", "lines": ["Entrada do Mt. Moon", "Cerulean City fica além da caverna. Recomenda-se que os viajantes curem seus Pokémon no Pokémon Center próximo antes de entrar."]},
+    {"id": "kanto_route_24_route_sign", "type": "road", "mapId": "kanto_route_24", "title": "Rota 24", "lines": ["Rota 24", "A Ponte Nugget liga a Cidade de Cerulean à Rota 25."]},
+    {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "Rota 25", "lines": ["Rota 25", "Siga a estrada para leste até a casa de Bill."]}
   ]
 }

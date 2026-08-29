@@ -14,6 +14,8 @@ const PEWTER_CITY_SIGN_DATA := "res://data/world_text/signs/en/kanto/pewter_city
 const CERULEAN_CITY_SCENE := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 const CERULEAN_CITY_SIGN_DATA := "res://data/world_text/signs/en/kanto/cerulean_city.json"
 const ROUTE_3_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_3.tscn"
+const ROUTE_24_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
+const ROUTE_25_SCENE := "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn"
 const ROUTE_SIGN_DATA := "res://data/world_text/signs/en/kanto/routes.json"
 
 const SignTextServiceScript := preload(SIGN_TEXT_SERVICE_SCRIPT)
@@ -37,6 +39,7 @@ func _run() -> void:
 	_check_viridian_city_sign_markers()
 	_check_pewter_city_and_route_3_sign_markers()
 	_check_cerulean_city_sign_markers()
+	_check_cerulean_route_sign_markers()
 
 	quit(1 if failed else 0)
 
@@ -228,6 +231,30 @@ func _check_cerulean_city_sign_markers() -> void:
 		for sign_id: String in expected_signs:
 			var lines: Array[String] = service.call("get_lines", sign_id, "kanto_cerulean_city", locale)
 			_check_true(not lines.is_empty(), "Cerulean City resolves %s text in %s" % [sign_id, locale])
+	service.free()
+
+
+func _check_cerulean_route_sign_markers() -> void:
+	var route_data_text := _read_text(ROUTE_SIGN_DATA)
+	var expected_signs := {
+		"kanto_route_24_route_sign": [ROUTE_24_SCENE, "kanto_route_24"],
+		"kanto_route_25_route_sign": [ROUTE_25_SCENE, "kanto_route_25"],
+	}
+
+	var service: Node = SignTextServiceScript.new()
+	for sign_id: String in expected_signs:
+		var scene_path: String = expected_signs[sign_id][0]
+		var map_id: String = expected_signs[sign_id][1]
+		var scene_text := _read_text(scene_path)
+		_check_true(scene_text.contains('sign_id = "%s"' % sign_id), "%s places its route sign" % map_id)
+		_check_true(route_data_text.contains('"%s"' % sign_id), "Route sign data includes %s" % sign_id)
+		_check_true(
+			_has_sign_instance(scene_text, sign_id, "/large_sign_interactable.tscn"),
+			"%s uses the large sign interactable" % map_id
+		)
+		for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+			var lines: Array[String] = service.call("get_lines", sign_id, map_id, locale)
+			_check_true(not lines.is_empty(), "%s resolves text in %s" % [map_id, locale])
 	service.free()
 
 
