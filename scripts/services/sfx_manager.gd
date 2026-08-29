@@ -59,6 +59,10 @@ const SOUND_DATA := {
 		"path": "res://assets/audio/sfx/overworld/pokemon_recovery.ogg",
 		"volume_db": 0.0,
 	},
+	"pokemon_level_up": {
+		"path": "res://assets/audio/sfx/overworld/pokemon_level_up.ogg",
+		"volume_db": 0.0,
+	},
 	"aethernet_teleport": {
 		"path": "res://assets/battles/animations/teleport/PRSFX- Teleport.wav",
 		"volume_db": -3.0,

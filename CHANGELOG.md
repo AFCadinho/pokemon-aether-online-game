@@ -9,6 +9,7 @@
 
 **Changed**
 
+- Pokémon level-up reward cards now play a dedicated sound once per reward batch.
 - Game Masters now have a blue-and-gold pixel-art shield above their character; Guild emblems remain visible beside their name.
 - Viridian Forest now uses its latest visual layout.
 
