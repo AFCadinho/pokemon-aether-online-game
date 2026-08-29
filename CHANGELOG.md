@@ -4,6 +4,7 @@
 
 **Added**
 
+- Bill now needs your help operating his Cell Separation System and rewards the rescue with an S.S. Ticket.
 - Misty and Dadinho now have a story encounter by the water on Route 25, including Dadinho's long-overdue milk delivery and an introduction to Bill.
 - Route 25 now has roaming Pokémon in its grass, water, and mountain areas.
 - Route 25 now has its nine classic Trainers on the way to Bill's house.
