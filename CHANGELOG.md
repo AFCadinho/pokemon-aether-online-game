@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Land mounts now stay active when changing to another outdoor map.
+- Land mounts now stay active after returning from wild and Trainer battles.
 
 **Added**
 

@@ -110,6 +110,27 @@ func _check_land_mount_runtime_contract() -> void:
 		< load_map_source.find('player.call("restore_land_mount", land_mount_id_to_restore)'),
 		"ordinary map changes preserve land mounts when the destination permits them"
 	)
+	var battle_lock_source := _function_source(world_source, "_lock_overworld_for_battle")
+	var battle_unlock_source := _function_source(world_source, "_unlock_overworld_after_battle")
+	_check(
+		battle_lock_source.contains('player.call("get_active_land_mount_id")')
+		and battle_lock_source.find('player.call("get_active_land_mount_id")')
+		< battle_lock_source.find("player.reset_movement_state()")
+		and battle_unlock_source.contains(
+			'player.call("restore_land_mount", mount_id_to_restore)'
+		)
+		and battle_unlock_source.find("player.reset_movement_state()")
+		< battle_unlock_source.find('player.call("restore_land_mount", mount_id_to_restore)'),
+		"wild and Trainer battle returns restore the land mount active before battle"
+	)
+	var battle_end_source := _function_source(world_source, "end_wild_battle")
+	_check(
+		battle_end_source.contains(
+			'if keep_overworld_locked:\n\t\t# A blackout moves the player to a recovery location'
+		)
+		and battle_end_source.contains('land_mount_id_before_battle = ""'),
+		"blackout respawns discard the pre-battle land mount"
+	)
 	_check(
 		player_source.contains("and not land_mount_activity_active")
 		and player_source.count("refresh_pokemon_follower()") >= 4

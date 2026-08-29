@@ -114,6 +114,7 @@ var active_trainer_name := ""
 var active_trainer_outro_dialogue_id := ""
 var active_trainer_mugshot: Texture2D
 var active_trainer_is_rematch := false
+var land_mount_id_before_battle := ""
 var map_transition_layer: CanvasLayer
 var map_transition_snapshot: TextureRect
 var map_transition_rect: ColorRect
@@ -2901,6 +2902,9 @@ func end_wild_battle(keep_overworld_locked := false) -> void:
 	active_trainer_is_rematch = false
 	_save_player_activity_state_deferred("idle")
 	if keep_overworld_locked:
+		# A blackout moves the player to a recovery location, so it should not
+		# restore the mount from the map where the lost battle started.
+		land_mount_id_before_battle = ""
 		if player.has_method("reset_movement_state"):
 			player.reset_movement_state()
 		_sync_player_activity_state_for_current_tile()
@@ -3686,6 +3690,8 @@ func _is_player_battle_winner(winner: String) -> bool:
 
 func _lock_overworld_for_battle() -> void:
 	GameState.lock_overworld_input()
+	if land_mount_id_before_battle.is_empty() and player.has_method("get_active_land_mount_id"):
+		land_mount_id_before_battle = str(player.call("get_active_land_mount_id"))
 	if player.has_method("reset_movement_state"):
 		player.reset_movement_state()
 	_sync_player_activity_state_for_current_tile()
@@ -3696,6 +3702,17 @@ func _unlock_overworld_after_battle() -> void:
 	if player.has_method("reset_movement_state"):
 		player.reset_movement_state()
 	_sync_player_activity_state_for_current_tile()
+	var mount_id_to_restore := land_mount_id_before_battle
+	land_mount_id_before_battle = ""
+	if (
+		not mount_id_to_restore.is_empty()
+		and player.has_method("restore_land_mount")
+		and (
+			not player.has_method("is_surfing_activity_active")
+			or not bool(player.call("is_surfing_activity_active"))
+		)
+	):
+		player.call("restore_land_mount", mount_id_to_restore)
 	player.set_process(true)
 	player.set_physics_process(true)
 	GameState.unlock_overworld_input()
