@@ -3,6 +3,8 @@ extends TrainerNPC
 
 class_name NuggetBridgeTrainer
 
+const CHALLENGE_LANE_Y_OFFSET_TILES := -1
+
 @export_range(1, 8, 1) var challenge_width_tiles := 6
 
 
@@ -16,6 +18,7 @@ func _configure_vision_area() -> void:
 	var direction := _get_cardinal_direction(facing_direction)
 	if direction.x != 0:
 		shape.size.y = float(challenge_width_tiles * TILE_SIZE)
+		vision_collision_shape.position.y = float(CHALLENGE_LANE_Y_OFFSET_TILES * TILE_SIZE)
 	else:
 		shape.size.x = float(challenge_width_tiles * TILE_SIZE)
 
@@ -31,11 +34,12 @@ func _is_body_in_sight_range(body: Node2D) -> bool:
 	var lower_width := ceili(float(challenge_width_tiles - 1) * 0.5)
 	var upper_width := floori(float(challenge_width_tiles - 1) * 0.5)
 	if direction.x != 0:
+		var lane_delta_y := delta.y - CHALLENGE_LANE_Y_OFFSET_TILES
 		return (
 			delta.x * int(direction.x) >= 1
 			and delta.x * int(direction.x) <= range_tiles
-			and delta.y >= -lower_width
-			and delta.y <= upper_width
+			and lane_delta_y >= -lower_width
+			and lane_delta_y <= upper_width
 		)
 	return (
 		delta.y * int(direction.y) >= 1
