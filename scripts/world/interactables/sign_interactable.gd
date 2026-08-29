@@ -103,7 +103,8 @@ func _show_sign_dialogue(lines: Array[String], speaker: String) -> void:
 	if valid_dialogue_lines.is_empty():
 		valid_dialogue_lines = MISSING_DIALOGUE_LINES
 
-	dialogue_box.start_dialogue(valid_dialogue_lines, speaker, null, false)
+	var portrait := SignPortraitCatalog.get_portrait(sign_id)
+	dialogue_box.start_dialogue(valid_dialogue_lines, speaker, portrait, portrait != null)
 	await dialogue_box.dialogue_finished
 
 

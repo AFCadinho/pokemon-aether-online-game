@@ -2,6 +2,7 @@ extends SceneTree
 
 const PROJECT_CONFIG := "res://project.godot"
 const SIGN_TEXT_SERVICE_SCRIPT := "res://scripts/services/sign_text_service.gd"
+const SIGN_PORTRAIT_CATALOG_SCRIPT := "res://scripts/services/sign_portrait_catalog.gd"
 const SIGN_INTERACTABLE_SCRIPT := "res://scripts/world/interactables/sign_interactable.gd"
 const SIGN_INTERACTABLE_SCENE := "res://scenes/world/interactables/sign_interactable.tscn"
 const LARGE_SIGN_INTERACTABLE_SCENE := "res://scenes/world/interactables/large_sign_interactable.tscn"
@@ -19,6 +20,7 @@ const ROUTE_25_SCENE := "res://scenes/overworld/kanto/routes/route25/kanto_route
 const ROUTE_SIGN_DATA := "res://data/world_text/signs/en/kanto/routes.json"
 
 const SignTextServiceScript := preload(SIGN_TEXT_SERVICE_SCRIPT)
+const SignPortraitCatalogScript := preload(SIGN_PORTRAIT_CATALOG_SCRIPT)
 const SignInteractableScript := preload(SIGN_INTERACTABLE_SCRIPT)
 
 var failed := false
@@ -33,6 +35,7 @@ func _run() -> void:
 	_check_service_loads_local_sign_catalog()
 	_check_service_uses_global_locale()
 	_check_service_falls_back_to_english()
+	_check_sign_portrait_catalog()
 	_check_sign_interactable_contract()
 	_check_sign_scene_contract()
 	_check_pallet_town_sign_markers()
@@ -121,6 +124,36 @@ func _check_service_falls_back_to_english() -> void:
 	service.free()
 
 
+func _check_sign_portrait_catalog() -> void:
+	var expected_sign_ids: Array[String] = [
+		"kanto_pallet_town_town_sign",
+		"kanto_pallet_town_oaks_lab",
+		"kanto_viridian_city_town_sign",
+		"kanto_viridian_city_jail",
+		"kanto_viridian_city_trainer_school",
+		"kanto_viridian_city_gym",
+		"kanto_pewter_city_gym",
+		"kanto_cerulean_city_town_sign",
+		"kanto_cerulean_city_gym",
+		"kanto_cerulean_city_bike_shop",
+		"kanto_route_1_route_sign",
+		"kanto_route_1_viridian_city_sign",
+		"kanto_route_2_digletts_cave",
+		"kanto_route_22_route_sign",
+		"kanto_route_3_mt_moon_sign",
+		"kanto_route_24_route_sign",
+		"kanto_route_25_route_sign",
+	]
+	for sign_id: String in expected_sign_ids:
+		var portrait: Texture2D = SignPortraitCatalogScript.get_portrait(sign_id)
+		_check_true(portrait != null, "%s has a location preview portrait" % sign_id)
+		if portrait != null:
+			_check_true(
+				portrait.resource_path.begins_with("res://assets/sprites/sign_previews/"),
+				"%s uses the sign preview asset directory" % sign_id
+			)
+
+
 func _check_sign_interactable_contract() -> void:
 	var sign := SignInteractableScript.new()
 	_check_true(sign is WorldInteractable, "SignInteractable extends WorldInteractable")
@@ -135,7 +168,8 @@ func _check_sign_interactable_contract() -> void:
 	_check_true(text.contains("@export_enum(\"facing_target_tile\", \"standing_tile\")"), "SignInteractable exports interaction modes")
 	_check_true(text.contains("@export_enum(\"any\", \"up\", \"down\", \"left\", \"right\")"), "SignInteractable exports facing directions")
 	_check_true(text.contains("/root/SignTextService"), "SignInteractable resolves local text through SignTextService autoload")
-	_check_true(text.contains("dialogue_box.start_dialogue(valid_dialogue_lines, speaker, null, false)"), "SignInteractable suppresses mugshots for sign text")
+	_check_true(text.contains("SignPortraitCatalog.get_portrait(sign_id)"), "SignInteractable resolves its location preview by sign ID")
+	_check_true(text.contains("portrait, portrait != null"), "SignInteractable shows available location previews and safely hides missing ones")
 	_check_true(text.contains("func _is_player_on_interaction_tile(player: Node2D) -> bool:"), "SignInteractable supports standing tile interaction")
 	_check_true(text.contains("func _get_interaction_area_rect() -> Rect2:"), "SignInteractable supports shaped standing areas")
 	_check_true(text.contains("func _get_standing_area_size(fallback_size: Vector2) -> Vector2:"), "SignInteractable derives standing area from sign size")
