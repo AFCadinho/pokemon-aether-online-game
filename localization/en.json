@@ -2895,6 +2895,8 @@
   "npc.trainer.rematch.defeated": "You got me this time. I'll keep training.",
   "ui.world.capture.caught": "You caught {pokemon}!",
   "ui.world.capture.caught_party": "You caught {pokemon}! Added to your party.",
+  "ui.reward_card.level_up": "Level up",
+  "ui.reward_card.caught": "Caught",
   "ui.world.reward.badge_earned": "You earned the {badge}!",
   "ui.world.reward.preceding_badge": "the preceding Gym Badge",
   "ui.world.reward.badge_required": "No Gym Badge was awarded. First earn {badge}.",

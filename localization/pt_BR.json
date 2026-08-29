@@ -2895,6 +2895,8 @@
   "npc.trainer.rematch.defeated": "Você me venceu desta vez. Vou continuar treinando.",
   "ui.world.capture.caught": "Você capturou {pokemon}!",
   "ui.world.capture.caught_party": "Você capturou {pokemon}! Adicionado à sua equipe.",
+  "ui.reward_card.level_up": "Subiu de nível",
+  "ui.reward_card.caught": "Capturado",
   "ui.world.reward.badge_earned": "Você conquistou a {badge}!",
   "ui.world.reward.preceding_badge": "a Insígnia de Ginásio anterior",
   "ui.world.reward.badge_required": "Nenhuma Insígnia de Ginásio foi concedida. Primeiro conquiste {badge}.",

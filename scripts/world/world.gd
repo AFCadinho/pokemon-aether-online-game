@@ -3161,6 +3161,12 @@ func _notify_caught_pokemon_if_needed(result: Dictionary) -> void:
 		)
 
 	get_tree().call_group("ui_overlay", "add_system_pokemon_message", message, [pokemon_payload])
+	get_tree().call_group(
+		"ui_overlay",
+		"add_caught_pokemon_reward_notification",
+		pokemon_payload,
+		str(result.get("itemId", "poke-ball"))
+	)
 
 func _extract_caught_pokemon_chat_payload(value: Variant) -> Dictionary:
 	if not value is Dictionary:
@@ -3637,16 +3643,27 @@ func _notify_reward_level_ups(reward_value: Variant) -> void:
 				"level": level,
 			})
 		get_tree().call_group("ui_overlay", "add_system_message", message)
+		get_tree().call_group("ui_overlay", "add_pokemon_level_reward_notification", level_up)
 		_notify_reward_level_up_moves(species, level_up)
 
 	get_tree().call_group("ui_overlay", "queue_reward_move_learn_candidates", reward)
 
 func _notify_reward_level_up_moves(species: String, level_up: Dictionary) -> void:
+	var learned_moves_value: Variant = level_up.get("learnedMoves", [])
 	_notify_reward_move_messages(
 		species,
-		level_up.get("learnedMoves", []),
+		learned_moves_value,
 		"ui.world.reward.move_learned"
 	)
+	if learned_moves_value is Array:
+		for learned_move_value: Variant in learned_moves_value as Array:
+			if learned_move_value is Dictionary:
+				get_tree().call_group(
+					"ui_overlay",
+					"add_pokemon_move_reward_notification",
+					level_up,
+					learned_move_value
+				)
 	_notify_reward_move_messages(
 		species,
 		level_up.get("moveLearnCandidates", []),

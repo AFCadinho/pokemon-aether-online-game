@@ -1474,6 +1474,7 @@ var global_heal_request_disable_checkbox: CheckBox
 var global_heal_request_busy := false
 var staff_tools_visibility_key := ""
 var reward_notification_stack: VBoxContainer
+var reward_notification_event_sequence := 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -4665,6 +4666,10 @@ func _announce_evolution_moves(
 					"ui.move_learning.result.learned",
 					{"pokemon": species_name, "move": move_name}
 				))
+				add_pokemon_move_reward_notification(
+					{"pokemonId": pokemon_id, "species": target_species_id},
+					learned_move
+				)
 
 	var candidates_value: Variant = result.get("moveLearnCandidates", [])
 	if not (candidates_value is Array):
@@ -5229,7 +5234,13 @@ func _submit_move_learn_choice(replace_slot: int, skip: bool) -> void:
 		_set_move_learn_controls_disabled(false)
 		return
 
-	_emit_move_learn_result_message(result, str(move_learn_active_prompt.get("species", "Pokemon")), move_name, skip)
+	_emit_move_learn_result_message(
+		result,
+		str(move_learn_active_prompt.get("species", "Pokemon")),
+		move_name,
+		skip,
+		move_learn_active_prompt
+	)
 
 	move_learn_popup.visible = false
 	_hide_move_learn_hover_panel()
@@ -5240,7 +5251,13 @@ func _submit_move_learn_choice(replace_slot: int, skip: bool) -> void:
 	_refresh_open_pokemon_summary_cards()
 	_show_next_move_learn_prompt()
 
-func _emit_move_learn_result_message(result: Dictionary, fallback_species: String, fallback_move_name: String, fallback_skipped: bool) -> void:
+func _emit_move_learn_result_message(
+	result: Dictionary,
+	fallback_species: String,
+	fallback_move_name: String,
+	fallback_skipped: bool,
+	pokemon_context: Dictionary = {}
+) -> void:
 	var source_species := fallback_species.strip_edges()
 	if source_species == "":
 		source_species = "Pokemon"
@@ -5274,6 +5291,11 @@ func _emit_move_learn_result_message(result: Dictionary, fallback_species: Strin
 			"ui.move_learning.result.learned",
 			{"pokemon": species, "move": learned_name}
 		))
+	var notification_context := pokemon_context.duplicate(true)
+	if str(notification_context.get("species", "")).strip_edges() == "":
+		notification_context["species"] = source_species
+	var notification_move: Variant = learned_move if not learned_move.is_empty() else pokemon_context
+	add_pokemon_move_reward_notification(notification_context, notification_move)
 
 func _move_learn_result_move_name(move_value: Variant, fallback_name: String) -> String:
 	if move_value is Dictionary:
@@ -41972,6 +41994,145 @@ func add_currency_reward_notification(currency_id: String, amount: int) -> void:
 
 func add_money_reward_notification(amount: int) -> void:
 	add_currency_reward_notification("money", amount)
+
+
+func add_pokemon_level_reward_notification(level_up: Dictionary) -> void:
+	var current_level := maxi(int(level_up.get("level", 0)), 0)
+	if current_level <= 0:
+		return
+	var identity := _pokemon_reward_identity(level_up)
+	_show_pokemon_reward_notification(
+		"pokemon-level:%s" % str(identity.get("key", "pokemon")),
+		str(identity.get("title", LocalizationManager.text("pokemon.generic"))),
+		LocalizationManager.text("ui.reward_card.level_up"),
+		_pokemon_reward_icon(identity),
+		"",
+		"",
+		Color("#d8b767"),
+		null,
+		maxi(int(level_up.get("previousLevel", 0)), 0),
+		current_level
+	)
+
+
+func add_pokemon_move_reward_notification(pokemon_context: Dictionary, move_value: Variant) -> void:
+	var move_name := _get_summary_move_name(move_value).strip_edges()
+	if move_name == "":
+		return
+	var identity := _pokemon_reward_identity(pokemon_context)
+	var move_type := _get_summary_move_type(move_value).strip_edges()
+	var badge_text := _localized_type_name(move_type).to_upper() if move_type != "" else ""
+	var accent := TypeColors.get_slot_border(move_type, Color("#5f83a8"))
+	_show_pokemon_reward_notification(
+		_next_pokemon_reward_key("pokemon-move:%s" % str(identity.get("key", "pokemon"))),
+		str(identity.get("title", LocalizationManager.text("pokemon.generic"))),
+		move_name,
+		_pokemon_reward_icon(identity),
+		"",
+		badge_text,
+		accent
+	)
+
+
+func add_caught_pokemon_reward_notification(pokemon_payload: Dictionary, ball_item_id: String = "poke-ball") -> void:
+	if pokemon_payload.is_empty():
+		return
+	var identity := _pokemon_reward_identity(pokemon_payload)
+	_show_pokemon_reward_notification(
+		_next_pokemon_reward_key("pokemon-caught:%s" % str(identity.get("key", "pokemon"))),
+		str(identity.get("title", LocalizationManager.text("pokemon.generic"))),
+		LocalizationManager.text("ui.reward_card.caught"),
+		_pokemon_reward_icon(identity),
+		"",
+		"",
+		Color("#73d98b"),
+		_load_item_icon(ball_item_id.strip_edges().to_lower())
+	)
+
+
+func _show_pokemon_reward_notification(
+	reward_key: String,
+	title: String,
+	subtitle: String,
+	icon_texture: Texture2D,
+	detail: String = "",
+	badge_text: String = "",
+	accent_color: Color = Color("#d8b767"),
+	trailing_icon: Texture2D = null,
+	previous_level: int = 0,
+	current_level: int = 0
+) -> void:
+	if reward_notification_stack == null:
+		_setup_reward_notification_stack()
+	if reward_notification_stack == null:
+		return
+	reward_notification_stack.call(
+		"show_pokemon_event",
+		reward_key,
+		title,
+		subtitle,
+		icon_texture,
+		detail,
+		badge_text,
+		accent_color,
+		trailing_icon,
+		previous_level,
+		current_level
+	)
+
+
+func _pokemon_reward_identity(source: Dictionary) -> Dictionary:
+	var payload := source
+	var nested_value: Variant = source.get("pokemon", {})
+	if nested_value is Dictionary:
+		payload = nested_value as Dictionary
+	var pokemon_id := 0
+	for key: String in ["pokemonId", "ownedPokemonId", "owned_pokemon_id", "id"]:
+		pokemon_id = int(payload.get(key, source.get(key, 0)))
+		if pokemon_id > 0:
+			break
+	var party_pokemon := _find_party_pokemon_by_owned_id(pokemon_id)
+	var species := ""
+	var nickname := ""
+	var shiny := false
+	if party_pokemon != null:
+		species = party_pokemon.species.strip_edges()
+		nickname = party_pokemon.nickname.strip_edges()
+		shiny = party_pokemon.shiny
+	else:
+		for key: String in ["speciesId", "species_id", "species", "displaySpecies"]:
+			species = str(payload.get(key, source.get(key, ""))).strip_edges()
+			if species != "":
+				break
+		for key: String in ["nickname", "nickName", "displayName", "display_name"]:
+			nickname = str(payload.get(key, source.get(key, ""))).strip_edges()
+			if nickname != "":
+				break
+		shiny = bool(payload.get("shiny", source.get("shiny", false)))
+	var title := nickname
+	if title == "":
+		title = _localized_species_name(species, species)
+	if title == "":
+		title = LocalizationManager.text("pokemon.generic")
+	var identity_key := "owned:%d" % pokemon_id if pokemon_id > 0 else "species:%s" % species.to_lower()
+	return {
+		"key": identity_key,
+		"title": title,
+		"species": species,
+		"shiny": shiny,
+	}
+
+
+func _pokemon_reward_icon(identity: Dictionary) -> Texture2D:
+	var species := str(identity.get("species", "")).strip_edges()
+	if species == "":
+		return null
+	return PokemonAssets.load_home_sprite(species, bool(identity.get("shiny", false)))
+
+
+func _next_pokemon_reward_key(prefix: String) -> String:
+	reward_notification_event_sequence += 1
+	return "%s:%d" % [prefix, reward_notification_event_sequence]
 
 
 func _on_inventory_item_received(item_id: String, quantity: int) -> void:
