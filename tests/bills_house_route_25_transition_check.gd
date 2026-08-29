@@ -93,6 +93,7 @@ func _run() -> void:
 	if trapped_bill != null:
 		_check(trapped_bill.visible, "Clefairy-form Bill is visible while the rescue is active")
 		_check(str(trapped_bill.get("display_name")) == "Clefairy", "Bill's transformed form is labeled Clefairy")
+		_check(trapped_bill.position == Vector2(464, 272), "Clefairy uses the edited machine position")
 		_check(str(trapped_bill.get("visibility_required_quest_id")) == "help_bill", "trapped Bill follows the active rescue quest")
 		var hook := trapped_bill.get_node_or_null("StoryHook")
 		_check(hook != null and str(hook.get("interaction_id")) == "kanto_bills_house_meet_bill", "talking to trapped Bill advances the first rescue step")
@@ -102,6 +103,7 @@ func _run() -> void:
 		_check(restored_bill.get("mugshot") is Texture2D, "human Bill has his dialogue mugshot")
 	if computer != null:
 		_check(str(computer.get("interactable_id")) == "kanto_bills_house_cell_separator_computer", "the computer uses its server story identity")
+		_check(computer.get("blocked_tile_offset") == Vector2i(-1, 0), "the computer interaction follows its tile one cell to the left")
 		var hook := computer.get_node_or_null("StoryHook")
 		_check(hook != null and str(hook.get("interaction_id")) == "kanto_bills_house_activate_cell_separator", "the computer completes the separation step")
 		_check(computer.get_node_or_null("MachineFlash") is Polygon2D, "the separation machine has a visible activation flash")

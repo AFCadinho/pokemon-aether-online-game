@@ -7,11 +7,11 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_wiio0"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_0nww8"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="7_dialogue_npc"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/pokemon_clefairy_frames.tres" id="8_clefairy_frames"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/named/bill_frames.tres" id="9_bill_frames"]
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/bill.png" id="10_bill_mugshot"]
+[ext_resource type="SpriteFrames" uid="uid://d3ql2vabyc7ep" path="res://assets/npcs/pokemon_clefairy_frames.tres" id="8_clefairy_frames"]
+[ext_resource type="SpriteFrames" uid="uid://b23n3aeydx7y7" path="res://assets/npcs/named/bill_frames.tres" id="9_bill_frames"]
+[ext_resource type="Texture2D" uid="uid://c7fdfmwrjjayc" path="res://assets/sprites/trainer_cards/showdown/bill.png" id="10_bill_mugshot"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="11_story_hook"]
-[ext_resource type="Script" path="res://scripts/world/kanto/routes/bills_house_machine.gd" id="12_bill_machine"]
+[ext_resource type="Script" uid="uid://djft3wt5nu7lg" path="res://scripts/world/kanto/routes/bills_house_machine.gd" id="12_bill_machine"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(96, 32)
@@ -119,29 +119,27 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=214098142]
 
-[node name="TrappedBill" parent="Entities/NPCs" instance=ExtResource("7_dialogue_npc")]
-position = Vector2(352, 272)
+[node name="TrappedBill" parent="Entities/NPCs" unique_id=1144563394 instance=ExtResource("7_dialogue_npc")]
+position = Vector2(464, 272)
 visibility_required_quest_id = "help_bill"
 visibility_required_quest_status = "active"
 visibility_hidden_quest_id = "help_bill"
 dialogue_id = "kanto_bills_house_bill_waiting"
 display_name = "Clefairy"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("8_clefairy_frames")
 preload_quest_markers = true
 
-[node name="StoryHook" type="Node" parent="Entities/NPCs/TrappedBill"]
+[node name="StoryHook" type="Node" parent="Entities/NPCs/TrappedBill" unique_id=321472904]
 script = ExtResource("11_story_hook")
 interaction_id = "kanto_bills_house_meet_bill"
 entity_id = "kanto_bills_house_bill_transformed"
 
-[node name="Bill" parent="Entities/NPCs" instance=ExtResource("7_dialogue_npc")]
+[node name="Bill" parent="Entities/NPCs" unique_id=823906529 instance=ExtResource("7_dialogue_npc")]
 position = Vector2(400, 304)
 visibility_required_quest_id = "help_bill"
 visibility_required_quest_status = "completed"
 dialogue_id = "kanto_bills_house_bill_after_rescue"
 display_name = "Bill"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("9_bill_frames")
 mugshot = ExtResource("10_bill_mugshot")
 
@@ -151,7 +149,7 @@ mugshot = ExtResource("10_bill_mugshot")
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=359294040]
 
-[node name="CellSeparatorComputer" type="Node2D" parent="Entities/Interactables"]
+[node name="CellSeparatorComputer" type="Node2D" parent="Entities/Interactables" unique_id=1251522531]
 position = Vector2(272, 288)
 script = ExtResource("12_bill_machine")
 trapped_bill_path = NodePath("../../NPCs/TrappedBill")
@@ -160,15 +158,16 @@ machine_flash_path = NodePath("MachineFlash")
 interactable_id = "kanto_bills_house_cell_separator_computer"
 interactable_kind = "computer"
 display_name = "Cell Separation System"
+blocked_tile_offset = Vector2i(-1, 0)
 blocked_tile_footprint = Vector2i(2, 1)
 
-[node name="MachineFlash" type="Polygon2D" parent="Entities/Interactables/CellSeparatorComputer"]
+[node name="MachineFlash" type="Polygon2D" parent="Entities/Interactables/CellSeparatorComputer" unique_id=1836470941]
 visible = false
 z_index = 2052
-polygon = PackedVector2Array(40, -96, 240, -96, 240, 0, 40, 0)
 color = Color(0.45, 0.9, 1, 0.75)
+polygon = PackedVector2Array(40, -96, 240, -96, 240, 0, 40, 0)
 
-[node name="StoryHook" type="Node" parent="Entities/Interactables/CellSeparatorComputer"]
+[node name="StoryHook" type="Node" parent="Entities/Interactables/CellSeparatorComputer" unique_id=1810110522]
 script = ExtResource("11_story_hook")
 interaction_id = "kanto_bills_house_activate_cell_separator"
 entity_id = "kanto_bills_house_cell_separator_computer"

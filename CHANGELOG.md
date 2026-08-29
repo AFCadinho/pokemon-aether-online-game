@@ -29,7 +29,7 @@
 
 **Fixed**
 
-- Bill's transformed form is now labeled Clefairy, and Bill's House no longer reports an invalid story-hook resource UID.
+- Bill's transformed form is now labeled and positioned as Clefairy, and the Cell Separation System's interaction matches its visible computer tile.
 
 - Trainer battle start errors no longer trap players in a repeating automatic dialogue, including Gary at Nugget Bridge.
 - Route 25's horizontal stairs now play their elevation effect when crossed.
