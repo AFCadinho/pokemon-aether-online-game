@@ -26,6 +26,7 @@ func _run() -> void:
 			"displayName": "Developer",
 			"color": "#00d8b4",
 			"priority": 100,
+			"display": {},
 		}],
 		"selectedRoleBadge": "developer",
 		"mapId": "kanto_pallet_town",
