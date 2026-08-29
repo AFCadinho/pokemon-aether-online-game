@@ -66,6 +66,10 @@ func _run() -> void:
 	var boost_card := stack.get_child(0) as PanelContainer
 	_check(_label_text(boost_card, "RewardSubtitle") != "", "global boost cards show their activation status")
 	_check(_detail_text(boost_card) == "1h", "global boost cards show a compact duration")
+	_check(
+		is_equal_approx(float(boost_card.get_meta("display_seconds", 0.0)), 6.0),
+		"global boost cards stay visible for six seconds"
+	)
 	overlay.call("_apply_global_boost_state", active_boost, "global_exp", true)
 	_check(stack.get_child_count() == 1, "the same global boost activation is deduplicated")
 
@@ -86,8 +90,25 @@ func _run() -> void:
 		_label_text(heal_card, "RewardSubtitle").contains("Nurse Joy"),
 		"Global Heal cards identify the activating Trainer"
 	)
+	_check(
+		is_equal_approx(float(heal_card.get_meta("display_seconds", 0.0)), 6.0),
+		"Global Heal cards stay visible for six seconds"
+	)
 	overlay.call("_receive_global_heal_request", heal_message, true)
 	_check(stack.get_child_count() == 2, "the same Global Heal event is deduplicated")
+	var overlay_source := FileAccess.get_file_as_string(OVERLAY_SCRIPT_PATH)
+	var sfx_source := FileAccess.get_file_as_string("res://scripts/services/sfx_manager.gd")
+	_check(
+		overlay_source.count('SfxManager.play("global_buff_activated")') == 1
+			and overlay_source.contains("GLOBAL_BUFF_NOTIFICATION_SOUND_BATCH_SECONDS"),
+		"global buff activations batch one sound call"
+	)
+	_check(
+		sfx_source.contains('"global_buff_activated"')
+			and sfx_source.contains('"path": "res://assets/audio/sfx/battle/capture_success.ogg"')
+			and load("res://assets/audio/sfx/battle/capture_success.ogg") is AudioStream,
+		"the subtle global buff sound is registered and importable"
+	)
 	game_state.set("global_heal_requests_enabled", original_requests_enabled)
 
 	stack.free()
