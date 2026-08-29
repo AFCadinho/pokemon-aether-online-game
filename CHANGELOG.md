@@ -6,6 +6,10 @@
 
 - Viridian Forest now uses its latest visual layout.
 
+**Fixed**
+
+- Grass and item Poké Balls in Viridian Forest now appear in the correct visual layer.
+
 ## 0.3.68 - 2026-08-29
 
 **Fixed**

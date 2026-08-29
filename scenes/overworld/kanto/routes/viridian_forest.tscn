@@ -487,6 +487,7 @@ position = Vector2(1264, 2192)
 position = Vector2(368, 272)
 
 [node name="Entities" type="Node2D" parent="." unique_id=1962237010]
+z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=685946019]
 
