@@ -6,11 +6,40 @@ const BILLS_HOUSE_SCENE := "res://scenes/overworld/kanto/routes/route25/bills_ho
 var failed := false
 
 
+class SystemMessageOverlay extends Node:
+	var messages: Array[String] = []
+
+	func add_system_message(message: String) -> void:
+		messages.append(message)
+
+
 func _init() -> void:
 	call_deferred("_run")
 
 
 func _run() -> void:
+	var system_overlay := SystemMessageOverlay.new()
+	system_overlay.add_to_group("ui_overlay")
+	root.add_child(system_overlay)
+	root.get_node("StoryService").call("apply_story", {
+		"revision": 1,
+		"quests": [{
+			"questId": "help_bill",
+			"storylineId": "kanto_main",
+			"definitionVersion": 1,
+			"questType": "main",
+			"titleKey": "story.kanto.help_bill.title",
+			"summaryKey": "story.kanto.help_bill.summary",
+			"status": "active",
+			"steps": [{
+				"stepId": "meet_bill",
+				"objectiveKey": "story.kanto.help_bill.meet_bill",
+				"status": "active",
+				"currentValue": 0,
+				"targetValue": 1,
+			}],
+		}],
+	})
 	var route_25 := await _instantiate_map(ROUTE_25_SCENE)
 	var bills_house := await _instantiate_map(BILLS_HOUSE_SCENE)
 
@@ -55,8 +84,41 @@ func _run() -> void:
 	_check(transitions.has("kanto_route_25__to_bills_house"), "World access catalog includes the entrance transition")
 	_check(transitions.has("kanto_route_25_bills_house__to_route_25"), "World access catalog includes the return transition")
 
+	var trapped_bill := bills_house.get_node_or_null("Entities/NPCs/TrappedBill")
+	var restored_bill := bills_house.get_node_or_null("Entities/NPCs/Bill")
+	var computer := bills_house.get_node_or_null("Entities/Interactables/CellSeparatorComputer")
+	_check(trapped_bill != null, "Bill begins the rescue inside a Clefairy body")
+	_check(restored_bill != null, "Bill's human form is ready for the completed rescue state")
+	_check(computer != null, "Bill's computer can activate the Cell Separation System")
+	if trapped_bill != null:
+		_check(trapped_bill.visible, "Clefairy-form Bill is visible while the rescue is active")
+		_check(str(trapped_bill.get("visibility_required_quest_id")) == "help_bill", "trapped Bill follows the active rescue quest")
+		var hook := trapped_bill.get_node_or_null("StoryHook")
+		_check(hook != null and str(hook.get("interaction_id")) == "kanto_bills_house_meet_bill", "talking to trapped Bill advances the first rescue step")
+	if restored_bill != null:
+		_check(not restored_bill.visible, "human Bill stays hidden before separation")
+		_check(str(restored_bill.get("visibility_required_quest_status")) == "completed", "human Bill appears after the rescue")
+		_check(restored_bill.get("mugshot") is Texture2D, "human Bill has his dialogue mugshot")
+	if computer != null:
+		_check(str(computer.get("interactable_id")) == "kanto_bills_house_cell_separator_computer", "the computer uses its server story identity")
+		var hook := computer.get_node_or_null("StoryHook")
+		_check(hook != null and str(hook.get("interaction_id")) == "kanto_bills_house_activate_cell_separator", "the computer completes the separation step")
+		_check(computer.get_node_or_null("MachineFlash") is Polygon2D, "the separation machine has a visible activation flash")
+		await computer.call("_play_cell_separation")
+		_check(
+			trapped_bill != null and restored_bill != null and not trapped_bill.visible and restored_bill.visible,
+			"the machine replaces Clefairy-form Bill with human Bill"
+		)
+		var ticket_effects := [{
+			"alreadyGranted": false,
+			"grants": [{"itemId": "ss-ticket", "quantity": 1}],
+		}]
+		_check(bool(computer.call("_present_ticket_reward", ticket_effects)), "a new S.S. Ticket grant is presented")
+		_check(system_overlay.messages.size() == 1 and system_overlay.messages[0].contains("S.S. Ticket"), "the S.S. Ticket produces a localized System message")
+
 	route_25.queue_free()
 	bills_house.queue_free()
+	system_overlay.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
 
