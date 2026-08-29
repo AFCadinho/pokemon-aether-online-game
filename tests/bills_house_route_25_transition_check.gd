@@ -118,6 +118,8 @@ func _run() -> void:
 		}]
 		_check(bool(computer.call("_present_ticket_reward", ticket_effects)), "a new S.S. Ticket grant is presented")
 		_check(system_overlay.messages.size() == 1 and system_overlay.messages[0].contains("S.S. Ticket"), "the S.S. Ticket produces a localized System message")
+		var ticket_icon := load("res://assets/items/icons/SSTICKET.png") as Texture2D
+		_check(ticket_icon != null and ticket_icon.get_size() == Vector2(48, 48), "the S.S. Ticket has a dedicated 48px pixel-art Bag icon")
 
 	route_25.queue_free()
 	bills_house.queue_free()

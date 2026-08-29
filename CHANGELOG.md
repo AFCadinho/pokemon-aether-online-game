@@ -4,6 +4,7 @@
 
 **Added**
 
+- The S.S. Ticket now has its own pixel-art Bag icon.
 - Developer Tools now include a Help Bill story checkpoint for testing Bill's House directly.
 - Bill now needs your help operating his Cell Separation System and rewards the rescue with an S.S. Ticket.
 - Misty and Dadinho now have a story encounter by the water on Route 25, including Dadinho's long-overdue milk delivery and an introduction to Bill.
