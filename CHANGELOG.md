@@ -7,6 +7,7 @@
 
 **Added**
 
+- The Cerulean City Pokémon Center now has two visiting Trainers with their partner Pokémon.
 - Small and large overworld signs now show illustrated previews of their referenced routes, towns, caves, Gyms, and landmarks.
 - Staff system announcements now appear both in System chat and as a temporary on-screen notice.
 - Added the male-only IronFanton Outfit Box to the Aether Gift Store, containing Chroma Hair, Chroma Beard and a Shirt.
