@@ -69,7 +69,12 @@ func show_dialogue(
 	if speaker_name.is_empty():
 		speaker_name = "Sign" if interactable_kind == "road_sign" else name
 
-	dialogue_box.start_dialogue(valid_dialogue_lines, speaker_name, mugshot_override)
+	dialogue_box.start_dialogue(
+		valid_dialogue_lines,
+		speaker_name,
+		mugshot_override,
+		mugshot_override != null
+	)
 	await dialogue_box.dialogue_finished
 	return true
 

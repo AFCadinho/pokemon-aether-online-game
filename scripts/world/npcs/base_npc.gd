@@ -59,6 +59,7 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 ## Optional catalog id. Empty values use the central NPC assignment table.
 @export var portrait_id := ""
 @export var mugshot: Texture2D
+@export var dialogue_portrait_visible := true
 @export_group("Battle")
 @export_enum("inherit", "grass", "water", "cave", "pvp_stadium") var battle_environment_id := "inherit"
 @export_group("")
@@ -1286,7 +1287,7 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bo
 	if speaker_name.is_empty():
 		speaker_name = name
 
-	dialogue_box.start_dialogue(valid_dialogue_lines, speaker_name, mugshot)
+	dialogue_box.start_dialogue(valid_dialogue_lines, speaker_name, mugshot, dialogue_portrait_visible)
 	await dialogue_box.dialogue_finished
 	return true
 

@@ -93,6 +93,7 @@ func _run() -> void:
 	if trapped_bill != null:
 		_check(trapped_bill.visible, "Clefairy-form Bill is visible while the rescue is active")
 		_check(str(trapped_bill.get("display_name")) == "Clefairy", "Bill's transformed form is labeled Clefairy")
+		_check(not bool(trapped_bill.get("dialogue_portrait_visible")), "Clefairy-form Bill does not fall back to Professor Oak's portrait")
 		_check(trapped_bill.position == Vector2(464, 272), "Clefairy uses the edited machine position")
 		_check(str(trapped_bill.get("visibility_required_quest_id")) == "help_bill", "trapped Bill follows the active rescue quest")
 		var hook := trapped_bill.get_node_or_null("StoryHook")
@@ -107,6 +108,10 @@ func _run() -> void:
 		var hook := computer.get_node_or_null("StoryHook")
 		_check(hook != null and str(hook.get("interaction_id")) == "kanto_bills_house_activate_cell_separator", "the computer completes the separation step")
 		_check(computer.get_node_or_null("MachineFlash") is Polygon2D, "the separation machine has a visible activation flash")
+		var machine_source := FileAccess.get_file_as_string("res://scripts/world/kanto/routes/bills_house_machine.gd")
+		_check(machine_source.contains("current_stage >= 2"), "Bill's human portrait only appears after cell separation")
+		var interactable_source := FileAccess.get_file_as_string("res://scripts/world/interactables/world_interactable.gd")
+		_check(interactable_source.contains("mugshot_override != null"), "the computer hides the default portrait when no mugshot is supplied")
 		await computer.call("_play_cell_separation")
 		_check(
 			trapped_bill != null and restored_bill != null and not trapped_bill.visible and restored_bill.visible,

@@ -126,6 +126,7 @@ visibility_required_quest_status = "active"
 visibility_hidden_quest_id = "help_bill"
 dialogue_id = "kanto_bills_house_bill_waiting"
 display_name = "Clefairy"
+dialogue_portrait_visible = false
 npc_sprite_frames = ExtResource("8_clefairy_frames")
 preload_quest_markers = true
 
