@@ -44106,6 +44106,8 @@ func _get_legacy_chat_role_badge(role_id: String) -> String:
 			return "DEV"
 		"moderator":
 			return "MOD"
+		"staff":
+			return "Chat Mod"
 		"blessed":
 			return "Blessed"
 		_:
