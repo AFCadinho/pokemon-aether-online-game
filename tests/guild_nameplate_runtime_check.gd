@@ -21,14 +21,14 @@ func _init() -> void:
 		player_scene_source.contains('[node name="RoleBadgeIcon" type="TextureRect" parent="Nameplate"]')
 		and not player_scene_source.contains('path="res://assets/ui/gamemaster_emblem_readable.png"')
 		and not player_scene_source.contains('path="res://assets/ui/developer_emblem_teal.png"')
-		and not player_scene_source.contains('path="res://assets/ui/moderator_emblem_medium.png"'),
+		and not player_scene_source.contains('path="res://assets/ui/moderator_emblem_gm_style.png"'),
 		"player scene opens without depending on role badge PNG import metadata"
 	)
 	var role_badge_texture_source := FileAccess.get_file_as_string("res://scripts/ui/role_badge_texture.gd")
 	_check(
 		role_badge_texture_source.contains('"gamemaster": "res://assets/ui/gamemaster_emblem_readable.png"')
 		and role_badge_texture_source.contains('"developer": "res://assets/ui/developer_emblem_teal.png"')
-		and role_badge_texture_source.contains('"moderator": "res://assets/ui/moderator_emblem_medium.png"')
+		and role_badge_texture_source.contains('"moderator": "res://assets/ui/moderator_emblem_gm_style.png"')
 		and role_badge_texture_source.contains("ResourceLoader.exists")
 		and role_badge_texture_source.contains("Image.load_from_file"),
 		"role emblems support imported textures and fresh-checkout PNG loading"
@@ -53,7 +53,7 @@ func _init() -> void:
 		"Developer shield emblem has readable dimensions and transparent pixels"
 	)
 	var moderator_badge_image := Image.load_from_file(
-		ProjectSettings.globalize_path("res://assets/ui/moderator_emblem_medium.png")
+		ProjectSettings.globalize_path("res://assets/ui/moderator_emblem_gm_style.png")
 	)
 	_check(
 		moderator_badge_image != null
