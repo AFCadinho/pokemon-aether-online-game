@@ -7,6 +7,8 @@
     {"id": "kanto_route_2_route_sign", "type": "road", "mapId": "kanto_route_2", "title": "Route 2", "lines": ["Route 2", "Viridian City ↔ Pewter City."]},
     {"id": "kanto_route_2_digletts_cave", "type": "road", "mapId": "kanto_route_2", "title": "Diglett's grot", "lines": ["Diglett's grot", "Een tunnel die Route 2 met Vermilion City verbindt."]},
     {"id": "kanto_route_22_route_sign", "type": "road", "mapId": "kanto_route_22", "title": "Route 22", "lines": ["Route 22", "Viridian City ↔ Indigo Plateau."]},
-    {"id": "kanto_route_3_mt_moon_sign", "type": "road", "mapId": "kanto_route_3", "title": "Ingang van Mt. Moon", "lines": ["Ingang van Mt. Moon", "Aan de andere kant van de grot ligt Cerulean City. Reizigers wordt aangeraden eerst te genezen in het nabijgelegen Pokémon Center."]}
+    {"id": "kanto_route_3_mt_moon_sign", "type": "road", "mapId": "kanto_route_3", "title": "Ingang van Mt. Moon", "lines": ["Ingang van Mt. Moon", "Aan de andere kant van de grot ligt Cerulean City. Reizigers wordt aangeraden eerst te genezen in het nabijgelegen Pokémon Center."]},
+    {"id": "kanto_route_24_route_sign", "type": "road", "mapId": "kanto_route_24", "title": "Route 24", "lines": ["Route 24", "Nugget Bridge verbindt Cerulean City met Route 25."]},
+    {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "Route 25", "lines": ["Route 25", "Volg de weg naar het oosten tot Bill's huis."]}
   ]
 }

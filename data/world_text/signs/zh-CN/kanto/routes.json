@@ -7,6 +7,8 @@
     {"id": "kanto_route_2_route_sign", "type": "road", "mapId": "kanto_route_2", "title": "2号道路", "lines": ["2号道路", "常磐市 ↔ 深灰市。"]},
     {"id": "kanto_route_2_digletts_cave", "type": "road", "mapId": "kanto_route_2", "title": "地鼠洞穴", "lines": ["地鼠洞穴", "连接2号道路与枯叶市的隧道。"]},
     {"id": "kanto_route_22_route_sign", "type": "road", "mapId": "kanto_route_22", "title": "22号道路", "lines": ["22号道路", "常磐市 ↔ 石英高原。"]},
-    {"id": "kanto_route_3_mt_moon_sign", "type": "road", "mapId": "kanto_route_3", "title": "月见山入口", "lines": ["月见山入口", "穿过洞穴即可抵达华蓝市。进入前，旅行者应先在附近的宝可梦中心恢复队伍。"]}
+    {"id": "kanto_route_3_mt_moon_sign", "type": "road", "mapId": "kanto_route_3", "title": "月见山入口", "lines": ["月见山入口", "穿过洞穴即可抵达华蓝市。进入前，旅行者应先在附近的宝可梦中心恢复队伍。"]},
+    {"id": "kanto_route_24_route_sign", "type": "road", "mapId": "kanto_route_24", "title": "24号道路", "lines": ["24号道路", "金块大桥连接华蓝市与25号道路。"]},
+    {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "25号道路", "lines": ["25号道路", "沿道路向东前往正辉的家。"]}
   ]
 }

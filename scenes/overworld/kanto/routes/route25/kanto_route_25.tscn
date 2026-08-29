@@ -18,6 +18,7 @@
 [ext_resource type="SpriteFrames" uid="uid://wgkh3id1848j" path="res://assets/npcs/gym_leaders/alpha_misty_frames.tres" id="16_misty_frames"]
 [ext_resource type="Texture2D" uid="uid://cxbfneavbrouo" path="res://assets/sprites/mugshots/dadinho_mugshot.png" id="17_dadinho_mugshot"]
 [ext_resource type="Script" uid="uid://diueg43o4xvic" path="res://scripts/world/kanto/routes/route_25_misty_date_npc.gd" id="18_misty_date"]
+[ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="19_gxnmn"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="20_story_hook"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_upper_exit"]
@@ -505,6 +506,13 @@ movement_wait_seconds = 2.0
 movement_speed_pixels = 34.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=39924103]
+
+[node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=1894774309]
+
+[node name="Route25Sign" parent="Entities/Interactables/Signs" unique_id=1676249868 instance=ExtResource("19_gxnmn")]
+position = Vector2(432, 688)
+sign_id = "kanto_route_25_route_sign"
+sign_type = "road"
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1376569678]
 visible = false
