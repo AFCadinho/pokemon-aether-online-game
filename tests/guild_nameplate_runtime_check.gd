@@ -18,17 +18,17 @@ func _init() -> void:
 	)
 	_check(
 		player_scene_source.contains('[node name="RoleBadgeIcon" type="TextureRect" parent="Nameplate"]')
-		and player_scene_source.contains('path="res://assets/ui/role_badges/gamemaster.png"')
+		and player_scene_source.contains('path="res://assets/ui/gamemaster_emblem.png"')
 		and player_scene_source.contains('texture = ExtResource("2_gm_badge")'),
-		"player nameplate contains the dedicated Game Master pixel badge"
+		"player nameplate contains the dedicated Game Master pixel emblem"
 	)
-	var gm_badge_texture := load("res://assets/ui/role_badges/gamemaster.png") as Texture2D
+	var gm_badge_texture := load("res://assets/ui/gamemaster_emblem.png") as Texture2D
 	var gm_badge_image := gm_badge_texture.get_image() if gm_badge_texture != null else null
 	_check(
 		gm_badge_image != null
-		and gm_badge_image.get_size() == Vector2i(30, 15)
+		and gm_badge_image.get_size() == Vector2i(20, 20)
 		and gm_badge_image.detect_alpha() != Image.ALPHA_NONE,
-		"Game Master badge has the intended compact size and transparent pixels"
+		"Game Master shield emblem has the intended compact size and transparent pixels"
 	)
 	_check(
 		player_scene_source.contains("offset_left = 9.0")
