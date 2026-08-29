@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Officer Jenny now finishes her arrest dialogue before taking a caught pickpocket to jail.
+
 **Added**
 
 - Items and currency you receive now appear in compact, stacked reward cards with their icon and amount.
