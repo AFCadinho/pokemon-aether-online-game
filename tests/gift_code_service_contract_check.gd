@@ -16,6 +16,11 @@ func _init() -> void:
 	_check(overlay_source.contains("GiftCodeService.redeem(code)"), "Trainer Card submits through the gift code service")
 	_check(overlay_source.contains("bag_inventory_items = _normalize_bag_inventory_items"), "Redeemed Bag rewards refresh immediately")
 	_check(overlay_source.contains("add_system_message"), "Successful redemption produces a System message")
+	_check(
+		overlay_source.contains("_show_gift_code_reward_notifications")
+		and overlay_source.contains("add_currency_reward_notification("),
+		"Redeemed items and currency use reward cards"
+	)
 
 	if failures == 0:
 		print("Gift code service contract checks passed.")

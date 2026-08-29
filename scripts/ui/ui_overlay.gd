@@ -463,6 +463,7 @@ const SPECIAL_HOLDABLE_ITEM_IDS := {
 	"red-orb": true,
 }
 const BAG_ICON_ROOT := "res://assets/items/icons/"
+const REWARD_NOTIFICATION_STACK_SCRIPT := preload("res://scripts/ui/reward_notification_stack.gd")
 const BAG_INTERFACE_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
 const MARKET_INTERFACE_ICON: Texture2D = preload("res://assets/ui/market_shop.svg")
 const AETHER_ATELIER_POPUP_SCENE := preload("res://scenes/interface/aether_atelier_popup.tscn")
@@ -1471,6 +1472,7 @@ var global_heal_request_dialog: AetherConfirmationDialog
 var global_heal_request_disable_checkbox: CheckBox
 var global_heal_request_busy := false
 var staff_tools_visibility_key := ""
+var reward_notification_stack: VBoxContainer
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -1478,9 +1480,12 @@ func _ready() -> void:
 	layer = UI_OVERLAY_BASE_LAYER
 	root_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root_control.theme = _make_main_ui_tooltip_theme()
+	_setup_reward_notification_stack()
 	_setup_pvp_queue_ball_spin()
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
+	if not InventoryService.item_received.is_connected(_on_inventory_item_received):
+		InventoryService.item_received.connect(_on_inventory_item_received)
 	LocalizationManager.localize_tree(self)
 	_setup_player_status_card()
 	_setup_quest_journal_ui()
@@ -12299,6 +12304,10 @@ func _on_donator_store_purchase_requested(item_id: String, chroma_colors: Dictio
 		"ui.store.purchase.system_success",
 		{"item": purchased_item_name}
 	))
+	add_item_reward_notification(
+		purchased_item_id,
+		maxi(int(purchase.get("quantity", 1)), 1)
+	)
 
 func _hide_donator_store_popup() -> void:
 	if donator_store_popup == null:
@@ -13803,10 +13812,35 @@ func _submit_trainer_card_gift_code() -> void:
 	_refresh_player_status_card()
 	var summary := _gift_code_reward_summary(result.get("rewards", []))
 	add_system_message(LocalizationManager.text("ui.gift_code.success", {"rewards": summary}))
+	_show_gift_code_reward_notifications(result.get("rewards", []))
 	var public_message := str(result.get("publicMessage", "")).strip_edges()
 	if public_message != "":
 		add_system_message(public_message)
 	_hide_trainer_card_redeem_popup()
+
+
+func _show_gift_code_reward_notifications(rewards_value: Variant) -> void:
+	if rewards_value is not Array:
+		return
+	for reward_value: Variant in rewards_value as Array:
+		if reward_value is not Dictionary:
+			continue
+		var reward := reward_value as Dictionary
+		var payload_value: Variant = reward.get("payload", {})
+		if payload_value is not Dictionary:
+			continue
+		var payload := payload_value as Dictionary
+		match str(reward.get("type", "")).strip_edges().to_lower():
+			"item":
+				add_item_reward_notification(
+					str(payload.get("itemId", "")),
+					int(payload.get("quantity", 0))
+				)
+			"currency":
+				add_currency_reward_notification(
+					str(payload.get("currency", "")),
+					int(payload.get("amount", 0))
+				)
 
 func _gift_code_reward_summary(rewards_value: Variant) -> String:
 	var labels: Array[String] = []
@@ -18870,6 +18904,7 @@ func _on_aether_atelier_bundle_created(result: Dictionary) -> void:
 		_refresh_bag_items()
 	var box_item_id := str(result.get("createdBoxItemId", "outfit-box"))
 	_add_chat_message("%s was packed into a tradeable box." % _item_name_from_id(box_item_id))
+	add_item_reward_notification(box_item_id, 1)
 
 func _on_aether_atelier_chroma_dyed(result: Dictionary) -> void:
 	PlayerWalletService.apply_wallet_result(result)
@@ -19536,7 +19571,13 @@ func _on_market_buy_pressed() -> void:
 		{"quantity": transacted_quantity, "item": item_name},
 	))
 	if player_is_selling:
+		add_currency_reward_notification(
+			str(transaction.get("currency", "money")),
+			maxi(int(transaction.get("totalPrice", 0)), 0)
+		)
 		_update_market_sell_items_from_inventory(inventory_value)
+	else:
+		add_item_reward_notification(item_id, transacted_quantity)
 	_refresh_market_purchase_state()
 
 
@@ -36992,6 +37033,7 @@ func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictio
 					amount,
 					LocalizationManager.text("ui.trainer_card.wallet.%s" % currency_id),
 				])
+				add_currency_reward_notification(currency_id, amount)
 			"item":
 				var item_id := str(payload.get("itemId", ""))
 				var item_name: String = ItemLocalization.display_name(
@@ -37003,6 +37045,7 @@ func _emit_mail_claim_messages(previous_attachments: Array, claimed_mail: Dictio
 					"quantity": quantity,
 					"item": item_name,
 				}))
+				add_item_reward_notification(item_id, quantity)
 			"pokemon":
 				var pokemon_payload: Dictionary = {}
 				var pokemon_value: Variant = payload.get("pokemon", {})
@@ -41851,6 +41894,86 @@ func _add_chat_message(
 
 func add_system_message(text: String) -> void:
 	_add_chat_message(text)
+
+
+func _setup_reward_notification_stack() -> void:
+	if reward_notification_stack != null:
+		return
+	reward_notification_stack = REWARD_NOTIFICATION_STACK_SCRIPT.new() as VBoxContainer
+	reward_notification_stack.name = "RewardNotificationStack"
+	reward_notification_stack.anchor_left = 1.0
+	reward_notification_stack.anchor_right = 1.0
+	reward_notification_stack.offset_left = -304.0
+	reward_notification_stack.offset_top = 72.0
+	reward_notification_stack.offset_right = -16.0
+	reward_notification_stack.offset_bottom = 352.0
+	reward_notification_stack.z_index = 80
+	root_control.add_child(reward_notification_stack)
+
+
+func add_reward_notification(
+	reward_key: String,
+	title: String,
+	icon_texture: Texture2D = null,
+	amount: int = 0,
+	amount_prefix: String = "",
+	amount_suffix: String = "",
+	detail: String = ""
+) -> void:
+	if reward_notification_stack == null:
+		_setup_reward_notification_stack()
+	if reward_notification_stack == null:
+		return
+	reward_notification_stack.call(
+		"show_reward",
+		reward_key,
+		title,
+		icon_texture,
+		amount,
+		amount_prefix,
+		amount_suffix,
+		detail
+	)
+
+
+func add_item_reward_notification(item_id: String, quantity: int) -> void:
+	var normalized_item_id := item_id.strip_edges().to_lower()
+	var safe_quantity := maxi(quantity, 0)
+	if normalized_item_id == "" or safe_quantity <= 0:
+		return
+	add_reward_notification(
+		"item:%s" % normalized_item_id,
+		ItemLocalization.display_name(normalized_item_id, normalized_item_id.capitalize()),
+		_load_item_icon(normalized_item_id),
+		safe_quantity,
+		"×"
+	)
+
+
+func add_currency_reward_notification(currency_id: String, amount: int) -> void:
+	var normalized_currency_id := currency_id.strip_edges().to_lower()
+	var safe_amount := maxi(amount, 0)
+	if normalized_currency_id == "" or safe_amount <= 0:
+		return
+	var currency_name := LocalizationManager.text(
+		"ui.trainer_card.wallet.%s" % normalized_currency_id
+	)
+	var amount_prefix := "₽" if normalized_currency_id == "money" else "×"
+	add_reward_notification(
+		"currency:%s" % normalized_currency_id,
+		currency_name,
+		_mail_currency_icon(normalized_currency_id),
+		safe_amount,
+		amount_prefix
+	)
+
+
+func add_money_reward_notification(amount: int) -> void:
+	add_currency_reward_notification("money", amount)
+
+
+func _on_inventory_item_received(item_id: String, quantity: int) -> void:
+	add_item_reward_notification(item_id, quantity)
 
 
 func _on_guild_notification_received(notification: Dictionary) -> void:

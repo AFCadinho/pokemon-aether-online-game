@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+**Added**
+
+- Items and currency you receive now appear in compact, stacked reward cards with their icon and amount.
+
 **Changed**
 
 - Game Masters now have a pixel-art GM badge above their character; Guild emblems remain visible beside their name.
