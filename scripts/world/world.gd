@@ -766,6 +766,13 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 		GameState.unlock_overworld_input()
 		return
 
+	# Reparenting the player makes it leave the scene tree, which intentionally
+	# clears transient activities. Remember a land mount so an allowed target
+	# map can restore it after the new map metadata and spawn are active.
+	var land_mount_id_to_restore := str(player.call("get_active_land_mount_id")) \
+		if player.has_method("get_active_land_mount_id") \
+		else ""
+
 	await _fade_map_transition(MAP_TRANSITION_COVER_ALPHA, MAP_FADE_OUT_SECONDS)
 
 	var target_scene := await _load_map_scene_threaded(target_scene_path)
@@ -799,6 +806,17 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 
 	move_player_to_map(new_map)
 	_position_player_at_spawn(new_map, target_spawn_name, Vector2.ZERO)
+	if (
+		not land_mount_id_to_restore.is_empty()
+		and player.has_method("restore_land_mount")
+		and (
+			not player.has_method("is_surfing_activity_active")
+			or not bool(player.call("is_surfing_activity_active"))
+		)
+	):
+		# restore_land_mount applies the destination map's mount restrictions, so
+		# exterior arrivals stay mounted while interior arrivals remain on foot.
+		player.call("restore_land_mount", land_mount_id_to_restore)
 	_apply_camera_limits_for_map(new_map)
 	await _refresh_fishing_progression()
 
