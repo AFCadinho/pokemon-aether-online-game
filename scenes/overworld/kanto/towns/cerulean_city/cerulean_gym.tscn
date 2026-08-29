@@ -147,6 +147,7 @@ position = Vector2(560, 1136)
 npc_id = "kanto_cerulean_city_gym_guide"
 display_name = "Cerulean Gym Guide"
 npc_sprite_frames = ExtResource("6_gym_guide")
+portrait_id = "showdown_trialguide"
 
 [node name="GymLeaderMisty" parent="Entities/NPCs" unique_id=1535630842 instance=ExtResource("7_gym_leader")]
 position = Vector2(496, 240)
