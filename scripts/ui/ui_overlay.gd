@@ -12004,20 +12004,37 @@ func _apply_global_heal_state(state: Dictionary) -> void:
 			"eventId": str(state.get("eventId", "")),
 			"displayName": str(state.get("eventDisplayName", "Trainer")),
 			"expiresAt": str(state.get("eventExpiresAt", "")),
+			"cooldownUntil": str(state.get("cooldownUntil", "")),
+			"cost": maxi(int(state.get("cost", 25000)), 1),
+			"available": bool(state.get("available", false)),
 		})
+		return
+	_apply_global_heal_cooldown_state(state)
+
+
+func _apply_global_heal_cooldown_state(state: Dictionary) -> void:
+	if not state.has("cooldownUntil") and not state.has("available"):
+		return
+	var cooldown_until := str(state.get("cooldownUntil", "")).strip_edges()
+	var cooldown_seconds := _global_buff_remaining_seconds(cooldown_until)
+	var available := bool(state.get("available", cooldown_seconds <= 0))
 	for index: int in range(global_buffs_data.size()):
 		var buff := global_buffs_data[index] as Dictionary
 		if str(buff.get("id", "")) != "global_heal":
 			continue
 		buff["cost"] = maxi(int(state.get("cost", 25000)), 1)
-		buff["cooldownUntil"] = str(state.get("cooldownUntil", ""))
-		buff["cooldownSeconds"] = _global_buff_remaining_seconds(str(buff.get("cooldownUntil", "")))
-		buff["state"] = "available" if bool(state.get("available", false)) else "cooldown"
+		buff["cooldownUntil"] = cooldown_until
+		buff["cooldownSeconds"] = cooldown_seconds
+		buff["state"] = "available" if available else "cooldown"
 		global_buffs_data[index] = buff
 		if str(selected_global_buff.get("id", "")) == "global_heal":
 			selected_global_buff = buff.duplicate(true)
-		set_global_buffs(global_buffs_data)
-		if str(selected_global_buff.get("id", "")) == "global_heal":
+		if global_buffs_panel != null and global_buff_slots != null:
+			set_global_buffs(global_buffs_data)
+		if (
+			str(selected_global_buff.get("id", "")) == "global_heal"
+			and global_buff_details_status != null
+		):
 			_render_global_buff_details()
 		return
 
@@ -12117,6 +12134,7 @@ func _prepare_confirmation_dialog_focus(dialog: ConfirmationDialog) -> void:
 
 
 func _receive_global_heal_request(message: Dictionary) -> void:
+	_apply_global_heal_cooldown_state(message)
 	if not GameState.global_heal_requests_enabled:
 		return
 	var event_id := str(message.get("eventId", "")).strip_edges()
@@ -12204,6 +12222,8 @@ func _on_global_heal_request_confirmed() -> void:
 		await _save_toggle_preferences()
 	if bool(response.get("success", false)):
 		add_system_message(LocalizationManager.text("ui.buff.global_heal.healed"))
+		if not bool(response.get("alreadyAccepted", false)):
+			SfxManager.play("pokemon_recovery")
 		return
 	if (
 		int(response.get("status", 0)) == 409
@@ -14041,6 +14061,7 @@ func _create_trainer_card_badge_row() -> Control:
 	return row
 
 func _apply_trainer_card_badge_option_style(option: OptionButton) -> void:
+	option.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	var normal := _make_button_style(UI_SURFACE_INTERACTIVE, UI_BORDER_SUBTLE, 6, 1)
 	normal.content_margin_left = 10
 	normal.content_margin_right = 24
@@ -14063,7 +14084,73 @@ func _apply_trainer_card_badge_option_style(option: OptionButton) -> void:
 	option.add_theme_color_override("font_color", UI_TEXT)
 	option.add_theme_color_override("font_hover_color", UI_TEXT)
 	option.add_theme_color_override("font_pressed_color", UI_TEXT)
+	option.add_theme_color_override("font_focus_color", UI_TEXT)
+	option.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT, 0.5))
 	option.add_theme_font_size_override("font_size", 14)
+	option.add_theme_constant_override("arrow_margin", 9)
+	option.add_theme_icon_override("arrow", RANKED_DROPDOWN_ARROW)
+	var disabled := _make_button_style(Color("#07111bc4"), Color("#263b4999"), 6, 1)
+	disabled.content_margin_left = 10
+	disabled.content_margin_right = 24
+	disabled.content_margin_top = 2
+	disabled.content_margin_bottom = 2
+	option.add_theme_stylebox_override("disabled", disabled)
+
+	var popup := option.get_popup()
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.add_theme_font_size_override("font_size", 13)
+	popup.add_theme_color_override("font_color", UI_TEXT)
+	popup.add_theme_color_override("font_hover_color", Color("#fff5cc"))
+	popup.add_theme_color_override("font_disabled_color", Color("#657487"))
+	popup.add_theme_color_override("font_separator_color", TRAINER_CARD_ACCENT)
+	popup.add_theme_color_override("font_outline_color", Color("#02070b"))
+	popup.add_theme_constant_override("outline_size", 1)
+	popup.add_theme_constant_override("item_start_padding", 10)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 5)
+	popup.add_theme_stylebox_override("panel", _make_trainer_card_badge_popup_style())
+	popup.add_theme_stylebox_override(
+		"hover",
+		_make_trainer_card_badge_popup_item_style(Color("#17283bf8"), TRAINER_CARD_ACCENT)
+	)
+	popup.add_theme_stylebox_override(
+		"separator",
+		_make_trainer_card_badge_popup_item_style(Color.TRANSPARENT, Color("#685a3566"), 0)
+	)
+	popup.add_theme_icon_override("radio_checked", RANKED_DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked", RANKED_DROPDOWN_RADIO_UNCHECKED)
+	popup.add_theme_icon_override("radio_checked_disabled", RANKED_DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked_disabled", RANKED_DROPDOWN_RADIO_UNCHECKED)
+
+
+func _make_trainer_card_badge_popup_style() -> StyleBoxFlat:
+	var style := _make_trainer_card_badge_popup_item_style(
+		Color("#050e18fc"),
+		TRAINER_CARD_ACCENT_SOFT,
+		8
+	)
+	style.content_margin_left = 5
+	style.content_margin_top = 6
+	style.content_margin_right = 5
+	style.content_margin_bottom = 6
+	style.shadow_color = Color("#00000099")
+	style.shadow_size = 12
+	style.shadow_offset = Vector2(0, 5)
+	return style
+
+
+func _make_trainer_card_badge_popup_item_style(
+	background: Color,
+	border: Color,
+	radius: int = 5
+) -> StyleBoxFlat:
+	var style := _make_panel_style(background, border, radius, 1)
+	style.content_margin_left = 8
+	style.content_margin_top = 4
+	style.content_margin_right = 8
+	style.content_margin_bottom = 4
+	return style
 
 func _populate_trainer_card_badge_option() -> void:
 	if trainer_card_badge_option == null:

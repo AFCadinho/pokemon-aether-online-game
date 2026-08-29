@@ -9,12 +9,14 @@
 
 **Changed**
 
+- The Trainer Card badge selector now uses the same navy-and-gold styling as the rest of the card.
 - Pokémon level-up reward cards now play a dedicated sound once per reward batch.
 - Game Masters and Developers now have matching, readable lettered pixel-art role shields above their character; Guild emblems remain visible beside their name.
 - Viridian Forest now uses its latest visual layout.
 
 **Fixed**
 
+- Global Heal now immediately shows its shared cooldown for every online player and plays the recovery sound after healing.
 - Follower Pokémon now keep the same visual distance from their Trainer while idle and walking in every direction.
 - Newly added Game Master emblems no longer prevent the player scene from opening before Godot finishes importing them.
 - Reward cards now remain visible in front of the rest of the game interface.
