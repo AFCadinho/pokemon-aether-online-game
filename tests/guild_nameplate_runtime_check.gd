@@ -18,12 +18,19 @@ func _init() -> void:
 	)
 	_check(
 		player_scene_source.contains('[node name="RoleBadgeIcon" type="TextureRect" parent="Nameplate"]')
-		and player_scene_source.contains('path="res://assets/ui/gamemaster_emblem_readable.png"')
-		and player_scene_source.contains('texture = ExtResource("2_gm_badge")'),
-		"player nameplate contains the dedicated Game Master pixel emblem"
+		and not player_scene_source.contains('path="res://assets/ui/gamemaster_emblem_readable.png"'),
+		"player scene opens without depending on Game Master PNG import metadata"
 	)
-	var gm_badge_texture := load("res://assets/ui/gamemaster_emblem_readable.png") as Texture2D
-	var gm_badge_image := gm_badge_texture.get_image() if gm_badge_texture != null else null
+	var role_badge_texture_source := FileAccess.get_file_as_string("res://scripts/ui/role_badge_texture.gd")
+	_check(
+		role_badge_texture_source.contains('const GM_BADGE_PATH := "res://assets/ui/gamemaster_emblem_readable.png"')
+		and role_badge_texture_source.contains("ResourceLoader.exists")
+		and role_badge_texture_source.contains("Image.load_from_file"),
+		"Game Master emblem supports imported textures and fresh-checkout PNG loading"
+	)
+	var gm_badge_image := Image.load_from_file(
+		ProjectSettings.globalize_path("res://assets/ui/gamemaster_emblem_readable.png")
+	)
 	_check(
 		gm_badge_image != null
 		and gm_badge_image.get_size() == Vector2i(28, 28)
@@ -43,6 +50,11 @@ func _init() -> void:
 	var player_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
 	var remote_source := FileAccess.get_file_as_string("res://scripts/world/remote_player_avatar.gd")
 	var npc_source := FileAccess.get_file_as_string("res://scripts/world/npcs/base_npc.gd")
+	_check(
+		player_source.contains("RoleBadgeTexture.get_gm_badge_texture()")
+		and remote_source.contains("RoleBadgeTexture.get_gm_badge_texture()"),
+		"local and remote players assign the resilient Game Master texture"
+	)
 	_check(
 		_has_adjacent_guild_emblem(player_source)
 		and _has_adjacent_guild_emblem(remote_source),
