@@ -5,6 +5,8 @@ const OVERWORLD_SCENE_MAP_IDS: Dictionary = {
 	"res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn": "kanto_route_2",
 	"res://scenes/overworld/kanto/routes/kanto_route_22.tscn": "kanto_route_22",
 	"res://scenes/overworld/kanto/routes/kanto_route_3.tscn": "kanto_route_3",
+	"res://scenes/overworld/kanto/routes/kanto_route_24.tscn": "kanto_route_24",
+	"res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn": "kanto_route_25",
 	"res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn": "kanto_pallet_town",
 	"res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn": "kanto_oaks_lab",
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": "kanto_viridian_city",
@@ -17,6 +19,7 @@ const SIGN_SCENE_SUFFIXES: Array[String] = [
 	"/scenes/world/interactables/large_sign_interactable.tscn",
 ]
 const SIGN_DATA_ROOT := "res://data/world_text/signs"
+const SIGN_PORTRAIT_CATALOG_SCRIPT := preload("res://scripts/services/sign_portrait_catalog.gd")
 const SUPPORTED_LOCALES: Array[String] = ["en", "nl", "pt-br", "zh-cn"]
 const LOCAL_CONTENT_SOURCES: Array[String] = ["", "local"]
 const VALID_CONTENT_SOURCES: Dictionary = {
@@ -110,6 +113,10 @@ func _check_placed_signs() -> void:
 			var sign_id := str(properties.get("sign_id", "")).strip_edges()
 			_check_true(sign_id != "", "%s has sign_id" % context)
 			_check_true(_is_snake_case_id(sign_id), "%s sign_id is valid snake_case: %s" % [context, sign_id])
+			_check_true(
+				SIGN_PORTRAIT_CATALOG_SCRIPT.has_portrait(sign_id),
+				"%s has a location preview portrait: %s" % [context, sign_id]
+			)
 
 			var default_catalog: Dictionary = sign_catalogs.get("en", {})
 			var catalog_entry: Dictionary = default_catalog.get(sign_id, {})
