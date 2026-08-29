@@ -62,13 +62,17 @@ func _run() -> void:
 		"The temporary arrest officer is visibly spawned in the active NPC layer"
 	)
 	var officer_frames := officer.get("npc_sprite_frames") as SpriteFrames if officer != null else null
+	var officer_portrait := officer.get("mugshot") as AtlasTexture if officer != null else null
 	_check(
 		officer_frames != null
 		and officer_frames.resource_path == "res://assets/npcs/classes/officer_jenny_frames.tres"
-		and officer.get("mugshot") != null
-		and (officer.get("mugshot") as Texture2D).resource_path \
+		and officer_portrait != null
+		and officer_portrait.resource_path \
+			== "res://assets/npcs/classes/officer_jenny_portrait.tres"
+		and officer_portrait.region == Rect2(0, 0, 64, 64)
+		and officer_portrait.atlas.resource_path \
 			== "res://assets/npcs/classes/officer_jenny.png",
-		"The temporary officer uses Officer Jenny's overworld visual and a police portrait"
+		"The temporary officer uses Officer Jenny's overworld visual and cropped portrait"
 	)
 	game_state.set("current_map", null)
 	current_map.queue_free()

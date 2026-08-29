@@ -7,7 +7,7 @@ const LAW_ENFORCEMENT_NPC_TYPE := "law_enforcement"
 const OFFICER_NAME := "Officer Jenny"
 const OFFICER_SCENE: PackedScene = preload("res://scenes/npcs/dialogue_npc.tscn")
 const OFFICER_FRAMES: SpriteFrames = preload("res://assets/npcs/classes/officer_jenny_frames.tres")
-const OFFICER_PORTRAIT: Texture2D = preload("res://assets/npcs/classes/officer_jenny.png")
+const OFFICER_PORTRAIT: Texture2D = preload("res://assets/npcs/classes/officer_jenny_portrait.tres")
 
 
 static func show_confrontation(source_npc: Node2D, player: Node2D, npc_type: String) -> void:

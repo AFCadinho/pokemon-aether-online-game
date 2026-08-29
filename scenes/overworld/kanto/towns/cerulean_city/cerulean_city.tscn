@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="13_o6adi"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="13_youngster"]
 [ext_resource type="SpriteFrames" uid="uid://bp814sj37edjl" path="res://assets/npcs/classes/officer_jenny_frames.tres" id="14_jenny"]
-[ext_resource type="Texture2D" uid="uid://bflvtep8pflvv" path="res://assets/npcs/classes/officer_jenny.png" id="14_jenny_texture"]
+[ext_resource type="Texture2D" path="res://assets/npcs/classes/officer_jenny_portrait.tres" id="14_jenny_portrait"]
 [ext_resource type="SpriteFrames" uid="uid://cg046cju3kis8" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="15_ace_f"]
 [ext_resource type="SpriteFrames" uid="uid://bewtxeqmv8vls" path="res://assets/npcs/classes/ace_trainer_m_frames.tres" id="16_ace_m"]
 [ext_resource type="Script" uid="uid://3sc142eusmtf" path="res://scripts/world/kanto/towns/cerulean_battle_display.gd" id="17_battle_display"]
@@ -80,10 +80,6 @@ size = Vector2(48, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_gary_mugshot"]
 atlas = ExtResource("24_gary_mugshot")
 region = Rect2(80, 0, 387, 387)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jenny_portrait"]
-atlas = ExtResource("14_jenny_texture")
-region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_31plc"]
 texture = ExtResource("6_hujw2")
@@ -813,7 +809,7 @@ npc_definition_id = "trainer_class_policeman"
 display_name = "Officer Jenny"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("14_jenny")
-mugshot = SubResource("AtlasTexture_jenny_portrait")
+mugshot = ExtResource("14_jenny_portrait")
 
 [node name="WaterwayVisitorMaya" parent="Entities/NPCs" unique_id=395956463 instance=ExtResource("9_dialogue")]
 position = Vector2(1424, 720)
