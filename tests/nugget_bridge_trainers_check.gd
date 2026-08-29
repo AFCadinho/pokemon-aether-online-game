@@ -131,9 +131,27 @@ func _check_trainers(map: Node, expected_trainers: Array, map_label: String) -> 
 			trainer.get_script().resource_path == BRIDGE_SCRIPT,
 			"%s uses the bridge-wide challenge behavior" % expected.node
 		)
+		_check_bridge_sight_lane(trainer, expected.node)
 		var cell := collision.local_to_map(trainer.position)
 		_check(collision.get_cell_source_id(cell) < 0, "%s stands on walkable bridge flooring" % expected.node)
 		_check(water == null or water.get_cell_source_id(cell) < 0, "%s stands outside the water mask" % expected.node)
+
+
+func _check_bridge_sight_lane(trainer: Node2D, trainer_name: String) -> void:
+	var player := Node2D.new()
+	trainer.add_sibling(player)
+	var feet_position: Vector2 = trainer.get_feet_position()
+	player.global_position = feet_position + Vector2(-32, 32)
+	_check(
+		bool(trainer.call("_is_body_in_sight_range", player)),
+		"%s sees the intended lower bridge lane" % trainer_name
+	)
+	player.global_position = feet_position + Vector2(-32, 64)
+	_check(
+		not bool(trainer.call("_is_body_in_sight_range", player)),
+		"%s does not challenge one tile below its sight lane" % trainer_name
+	)
+	player.queue_free()
 
 
 func _count_bridge_trainers(map: Node) -> int:
