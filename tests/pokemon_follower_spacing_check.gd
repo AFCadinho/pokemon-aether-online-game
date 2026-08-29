@@ -1,6 +1,7 @@
 extends SceneTree
 
 const FOLLOWER_SCRIPT_PATH := "res://scripts/world/pokemon_follower.gd"
+const REMOTE_PLAYER_SCRIPT_PATH := "res://scripts/world/remote_player_avatar.gd"
 const CARDINAL_DIRECTIONS: Array[Vector2] = [
 	Vector2.UP,
 	Vector2.DOWN,
@@ -13,9 +14,17 @@ var failed := false
 
 class TestPlayer extends Node2D:
 	var last_direction := Vector2.DOWN
+	var target_position := Vector2.ZERO
+	var is_moving := false
 
 	func get_feet_position() -> Vector2:
 		return global_position
+
+	func get_target_feet_position() -> Vector2:
+		return target_position if is_moving else global_position
+
+	func is_tile_moving() -> bool:
+		return is_moving
 
 	func get_current_move_duration() -> float:
 		return 0.22
@@ -29,6 +38,7 @@ func _run() -> void:
 	_check_reset_spacing_in_every_direction()
 	_check_visual_offset_in_every_direction()
 	_check_trail_keeps_adjacent_spacing()
+	_check_remote_player_exposes_active_step_target()
 	quit(1 if failed else 0)
 
 
@@ -42,6 +52,7 @@ func _check_reset_spacing_in_every_direction() -> void:
 	var follow_distance_tiles := int(constants.get("FOLLOW_DISTANCE_TILES", 0))
 	var player := TestPlayer.new()
 	player.global_position = Vector2(320.0, 256.0)
+	player.target_position = player.global_position
 	get_root().add_child(player)
 
 	var follower := follower_script.new() as Node2D
@@ -89,25 +100,54 @@ func _check_trail_keeps_adjacent_spacing() -> void:
 	if follower_script == null:
 		return
 	var tile_size := float(follower_script.get_script_constant_map().get("TILE_SIZE", 0.0))
-	var player := TestPlayer.new()
-	player.global_position = Vector2(320.0, 256.0)
-	player.last_direction = Vector2.RIGHT
-	get_root().add_child(player)
+	var frame_delta := 0.05
+	var step_distance := tile_size / 0.22 * frame_delta
 
-	var follower := follower_script.new() as Node2D
-	get_root().add_child(follower)
-	follower.call("setup", player)
+	for direction: Vector2 in CARDINAL_DIRECTIONS:
+		var player := TestPlayer.new()
+		player.global_position = Vector2(320.0, 256.0)
+		player.target_position = player.global_position
+		player.last_direction = direction
+		get_root().add_child(player)
 
-	player.global_position += Vector2.RIGHT * tile_size
-	follower.call("_update_position_history")
-	follower.call("_follow_target", 1.0)
+		var follower := follower_script.new() as Node2D
+		get_root().add_child(follower)
+		follower.call("setup", player)
+
+		var initial_follower_position := follower.global_position
+		player.target_position = player.global_position + direction * tile_size
+		player.is_moving = true
+		follower.call("_update_position_history")
+		player.global_position += direction * step_distance
+		follower.call("_follow_target", frame_delta)
+		_check(
+			not follower.global_position.is_equal_approx(initial_follower_position),
+			"follower starts moving immediately toward %s" % direction
+		)
+		_check(
+			is_equal_approx(follower.global_position.distance_to(player.global_position), tile_size),
+			"walking toward %s preserves idle spacing" % direction
+		)
+
+		follower.free()
+		player.free()
+
+
+func _check_remote_player_exposes_active_step_target() -> void:
+	var remote_player_script := load(REMOTE_PLAYER_SCRIPT_PATH) as Script
+	_check(remote_player_script != null, "remote player script loads for follower trail movement")
+	if remote_player_script == null:
+		return
+
+	var remote_player := remote_player_script.new() as Node2D
+	remote_player.global_position = Vector2(320.0, 256.0)
+	remote_player.set("tile_move_target_position", Vector2(352.0, 256.0))
+	remote_player.set("is_replaying_tile_move", true)
 	_check(
-		follower.global_position.is_equal_approx(Vector2(320.0, 256.0)),
-		"follower advances to the Trainer's previous tile"
+		remote_player.call("get_target_feet_position") == Vector2(352.0, 256.0),
+		"remote followers use the active replay step instead of a later queued position"
 	)
-
-	follower.free()
-	player.free()
+	remote_player.free()
 
 
 func _check(condition: bool, message: String) -> void:

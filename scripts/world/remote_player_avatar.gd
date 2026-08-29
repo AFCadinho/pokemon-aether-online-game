@@ -417,6 +417,10 @@ func get_feet_position() -> Vector2:
 	return global_position
 
 
+func get_target_feet_position() -> Vector2:
+	return tile_move_target_position if is_replaying_tile_move else global_position
+
+
 func get_current_move_duration() -> float:
 	return tile_move_duration if is_replaying_tile_move else TILE_MOVE_DURATION
 
