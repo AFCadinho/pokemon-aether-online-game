@@ -105,7 +105,7 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bo
 	var portrait := await _dialogue_portrait(current_stage, speaker_name)
 	dialogue_box.call(
 		"start_dialogue",
-		lines,
+		_format_story_lines(lines),
 		speaker_name,
 		portrait,
 		portrait != null
@@ -253,6 +253,14 @@ func _ensure_portrait_overlay() -> void:
 func _player_speaker_name() -> String:
 	var player_name := str(PlayerSave.player_name).strip_edges()
 	return player_name if not player_name.is_empty() else "Player"
+
+
+func _format_story_lines(lines: Array[String]) -> Array[String]:
+	var formatted_lines: Array[String] = []
+	var player_name := _player_speaker_name()
+	for line: String in lines:
+		formatted_lines.append(line.replace("{player_name}", player_name))
+	return formatted_lines
 
 
 func _set_misty_animation(animation_name: StringName) -> void:

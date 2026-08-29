@@ -59,6 +59,13 @@ func _run() -> void:
 		var player_portrait: Texture2D = await date.call("_dialogue_portrait", 0, "")
 		_check(player_portrait != null, "the player's opening line uses their current trainer mugshot")
 		_check(player_portrait != null and player_portrait.get_size() == Vector2(64, 64), "the player mugshot uses the dialogue portrait size")
+		var player_save := root.get_node("PlayerSave")
+		var original_player_name := str(player_save.get("player_name"))
+		player_save.set("player_name", "Admin")
+		var story_lines: Array[String] = ["{player_name}, look what you've done."]
+		var formatted_lines: Array = date.call("_format_story_lines", story_lines)
+		player_save.set("player_name", original_player_name)
+		_check(formatted_lines == ["Admin, look what you've done."], "Dadinho can address the player by their current name")
 		var milk_effects := [{
 			"alreadyGranted": false,
 			"grants": [{"itemId": "moomoo-milk", "quantity": 1}],
