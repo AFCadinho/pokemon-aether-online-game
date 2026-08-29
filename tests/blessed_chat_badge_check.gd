@@ -130,6 +130,12 @@ func _init() -> void:
 		and remote_overworld_badge_width_source.contains("normalized_badge.length()"),
 		"all selected staff roles retain a nameplate label through world presence"
 	)
+	_check(
+		local_overworld_badge_source.contains('"staff":\n\t\t\treturn "Chat Mod"')
+		and remote_overworld_badge_source.contains('"staff":\n\t\t\treturn "Chat Mod"')
+		and not chat_badge_source.contains('"staff":'),
+		"Chat Moderators use the shorter Chat Mod nameplate without changing chat labels"
+	)
 
 	quit(1 if failures > 0 else 0)
 

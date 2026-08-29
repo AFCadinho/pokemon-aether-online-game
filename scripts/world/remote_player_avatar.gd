@@ -1114,6 +1114,8 @@ func _get_role_badge(role: Dictionary) -> String:
 			return "DEV"
 		"moderator":
 			return "MOD"
+		"staff":
+			return "Chat Mod"
 	var display_name := str(
 		role.get("displayName", role.get("label", role.get("name", "")))
 	).strip_edges()
