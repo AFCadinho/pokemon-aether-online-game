@@ -176,6 +176,7 @@ layout_mode = 0
 offset_left = 1.0
 offset_right = 19.0
 offset_bottom = 11.0
+texture_filter = 1
 label_settings = SubResource("LabelSettings_nameplate_role")
 horizontal_alignment = 1
 vertical_alignment = 1

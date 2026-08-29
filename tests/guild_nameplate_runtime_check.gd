@@ -72,6 +72,10 @@ func _init() -> void:
 		player_scene_source.contains("texture_filter = 1"),
 		"guild emblem keeps pixel art crisp"
 	)
+	_check(
+		_node_source(player_scene_source, "RoleBadge").contains("texture_filter = 1"),
+		"text role badges stay crisp at integer camera zoom"
+	)
 	var player_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
 	var remote_source := FileAccess.get_file_as_string("res://scripts/world/remote_player_avatar.gd")
 	var npc_source := FileAccess.get_file_as_string("res://scripts/world/npcs/base_npc.gd")
@@ -220,6 +224,16 @@ func _uses_pixel_role_badge(source: String) -> bool:
 		and source.contains("if uses_role_icon:")
 		and source.contains("ROLE_BADGE_ICON_SIZE")
 	)
+
+
+func _node_source(source: String, node_name: String) -> String:
+	var start := source.find('[node name="%s"' % node_name)
+	if start < 0:
+		return ""
+	var next_node := source.find("\n[node ", start + 1)
+	if next_node < 0:
+		return source.substr(start)
+	return source.substr(start, next_node - start)
 
 
 func _check(condition: bool, label: String) -> void:
