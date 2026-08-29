@@ -98,7 +98,11 @@ func _run() -> void:
 		_check(cerulean_index >= 0, "story chapter selector includes Cerulean City")
 		story_chapter_select.select(cerulean_index)
 		popup.call("_on_story_chapter_selected", cerulean_index)
-		_check(story_checkpoint_select.item_count == 2, "Cerulean chapter includes its two planned phases")
+		_check(story_checkpoint_select.item_count == 3, "Cerulean chapter includes the Gym, Misty, and Bill phases")
+		var cerulean_checkpoint_ids: Array[String] = []
+		for checkpoint_index in story_checkpoint_select.item_count:
+			cerulean_checkpoint_ids.append(str(story_checkpoint_select.get_item_metadata(checkpoint_index)))
+		_check("help_bill" in cerulean_checkpoint_ids, "Cerulean checkpoints include Bill's rescue")
 		_check(story_chapter_select.has_theme_icon_override("arrow"), "story chapter selector uses the custom dropdown arrow")
 		var checkpoint_menu := story_checkpoint_select.get_popup()
 		_check(
