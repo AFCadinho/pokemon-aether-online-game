@@ -89,6 +89,22 @@ func _check_runtime_copy() -> void:
 	)
 	_check(world.call("_format_effort_stat_label", "spe") == "SNELHEID", "Reward stat labels render in Dutch")
 	_check(
+		localization_manager.call("text", "ui.reward_card.level_up") == "Level omhoog"
+		and localization_manager.call("text", "ui.reward_card.caught") == "Gevangen",
+		"Pokemon reward-card events render in Dutch"
+	)
+	var reward_identity: Dictionary = overlay.call("_pokemon_reward_identity", {
+		"species": "Pikachu",
+		"nickname": "Sparky",
+		"shiny": true,
+	})
+	_check(
+		str(reward_identity.get("title", "")) == "Sparky"
+		and str(reward_identity.get("species", "")) == "Pikachu"
+		and bool(reward_identity.get("shiny", false)),
+		"Pokemon reward cards preserve nickname, species, and Shiny identity"
+	)
+	_check(
 		localization_manager.call("text", "ui.evolution.available", {"from": "Pidgey", "to": "Pidgeotto"})
 			== "Pidgey kan evolueren in Pidgeotto.",
 		"Evolution prompt renders in Dutch"
@@ -115,6 +131,11 @@ func _check_runtime_copy() -> void:
 		localization_manager.call("text", "ui.world.capture.caught_party", {"pokemon": "Pikachu"})
 			== "Você capturou Pikachu! Adicionado à sua equipe.",
 		"Capture feedback updates to Portuguese"
+	)
+	_check(
+		localization_manager.call("text", "ui.reward_card.level_up") == "Subiu de nível"
+		and localization_manager.call("text", "ui.reward_card.caught") == "Capturado",
+		"Pokemon reward-card events update to Portuguese"
 	)
 
 	fishing.free()

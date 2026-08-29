@@ -2892,6 +2892,8 @@
   "npc.trainer.rematch.defeated": "这次你抓住了我。我会继续训练。",
   "ui.world.capture.caught": "你抓住了 {pokemon}！",
   "ui.world.capture.caught_party": "你抓住了 {pokemon}！添加到您的聚会。",
+  "ui.reward_card.level_up": "等级提升",
+  "ui.reward_card.caught": "已捕获",
   "ui.world.reward.badge_earned": "您赢得了 {badge}！",
   "ui.world.reward.preceding_badge": "前面的道馆徽章",
   "ui.world.reward.badge_required": "未授予道馆徽章。首先赚取{badge}。",

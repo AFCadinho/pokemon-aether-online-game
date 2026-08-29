@@ -5,6 +5,7 @@
 **Added**
 
 - Items and currency you receive now appear in compact, stacked reward cards with their icon and amount.
+- Pokémon level-ups, newly learned moves, and catches now appear in reward cards with their Pokémon HOME icon.
 
 **Changed**
 

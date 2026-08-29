@@ -35,11 +35,78 @@ func _run() -> void:
 	_check(stack.get_child_count() == 4, "stack keeps at most four cards")
 	_check(_find_reward(stack, "item:potion") == null, "oldest card is removed when the stack is full")
 
+	var pokemon_stack := REWARD_NOTIFICATION_STACK_SCRIPT.new() as VBoxContainer
+	pokemon_stack.set("auto_expire", false)
+	root.add_child(pokemon_stack)
+	pokemon_stack.call(
+		"show_pokemon_event",
+		"pokemon-level:owned:42",
+		"Sparky",
+		"Level omhoog",
+		null,
+		"",
+		"",
+		Color("#d8b767"),
+		null,
+		23,
+		24
+	)
+	var level_card := pokemon_stack.get_child(0) as PanelContainer
+	_check(_label_text(level_card, "RewardTitle") == "Sparky", "Pokemon cards show the nickname")
+	_check(_label_text(level_card, "RewardSubtitle") == "Level omhoog", "level cards show their event")
+	_check(_detail_text(level_card) == "Lv. 24", "a single level-up shows the new level")
+	pokemon_stack.call(
+		"show_pokemon_event",
+		"pokemon-level:owned:42",
+		"Sparky",
+		"Level omhoog",
+		null,
+		"",
+		"",
+		Color("#d8b767"),
+		null,
+		24,
+		26
+	)
+	_check(pokemon_stack.get_child_count() == 1, "quick level-ups for the same Pokemon merge")
+	_check(_detail_text(level_card) == "Lv. 23 → 26", "merged level-ups retain the full level range")
+	pokemon_stack.call(
+		"show_pokemon_event",
+		"pokemon-move:owned:42:1",
+		"Sparky",
+		"Thunderbolt",
+		null,
+		"",
+		"ELECTRIC",
+		Color("#f0d44b")
+	)
+	var move_card := pokemon_stack.get_child(0) as PanelContainer
+	_check(_label_text(move_card, "RewardSubtitle") == "Thunderbolt", "move cards show the learned move")
+	_check(_label_text(move_card, "RewardBadgeLabel") == "ELECTRIC", "move cards show a type badge")
+	var ball_icon := GradientTexture1D.new()
+	pokemon_stack.call(
+		"show_pokemon_event",
+		"pokemon-caught:owned:99:2",
+		"Pikachu",
+		"Gevangen",
+		null,
+		"",
+		"",
+		Color("#73d98b"),
+		ball_icon
+	)
+	var caught_card := pokemon_stack.get_child(0) as PanelContainer
+	_check(_label_text(caught_card, "RewardSubtitle") == "Gevangen", "caught cards identify the event")
+	_check(caught_card.find_child("RewardTrailingIcon", true, false) != null, "caught cards show the used ball")
+
 	var inventory_source := FileAccess.get_file_as_string("res://scripts/services/inventory_service.gd")
 	_check(inventory_source.contains("signal item_received"), "inventory rewards expose structured item events")
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	_check(overlay_source.contains("func add_reward_notification("), "overlay exposes a reusable reward-card API")
 	_check(overlay_source.contains("func add_currency_reward_notification("), "reward cards support currencies")
+	_check(overlay_source.contains("func add_pokemon_level_reward_notification("), "overlay exposes level-up cards")
+	_check(overlay_source.contains("func add_pokemon_move_reward_notification("), "overlay exposes learned-move cards")
+	_check(overlay_source.contains("func add_caught_pokemon_reward_notification("), "overlay exposes caught-Pokemon cards")
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	_check(
 		world_source.contains('"add_money_reward_notification", money_awarded'),
@@ -56,7 +123,14 @@ func _run() -> void:
 		and overlay_source.contains("add_item_reward_notification(item_id, transacted_quantity)"),
 		"purchased and crafted items use reward cards"
 	)
+	_check(
+		world_source.contains('"add_pokemon_level_reward_notification", level_up')
+		and world_source.contains('"add_pokemon_move_reward_notification"')
+		and world_source.contains('"add_caught_pokemon_reward_notification"'),
+		"Pokemon progression events use reward cards"
+	)
 
+	pokemon_stack.free()
 	stack.free()
 	quit(1 if failed else 0)
 
@@ -66,6 +140,13 @@ func _detail_text(card: PanelContainer) -> String:
 		return ""
 	var detail := card.find_child("RewardDetail", true, false) as Label
 	return detail.text if detail != null else ""
+
+
+func _label_text(card: PanelContainer, node_name: String) -> String:
+	if card == null:
+		return ""
+	var label := card.find_child(node_name, true, false) as Label
+	return label.text if label != null else ""
 
 
 func _find_reward(stack: VBoxContainer, reward_key: String) -> Control:
