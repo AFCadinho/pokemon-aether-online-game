@@ -17,7 +17,7 @@
 **Fixed**
 
 - Global Heal now immediately shows its shared cooldown for every online player and plays the recovery sound after healing.
-- Follower Pokémon now keep comfortable, consistent spacing from their Trainer while idle and walking in every direction.
+- Follower Pokémon now consistently leave one full tile between themselves and their Trainer while idle and walking in every direction.
 - Newly added Game Master emblems no longer prevent the player scene from opening before Godot finishes importing them.
 - Reward cards now remain visible in front of the rest of the game interface.
 - Grass and item Poké Balls in Viridian Forest now appear in the correct visual layer.
