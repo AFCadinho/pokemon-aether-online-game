@@ -29,10 +29,12 @@ func _run() -> void:
 		_check(str(date.get("visibility_required_quest_id")) == "explore_cerulean_city", "the couple only appears during the Cerulean search")
 		_check(str(date.get("visibility_required_quest_step_id")) == "visit_nugget_bridge", "the date belongs to the active Misty-search step")
 		_check(bool(date.get("defer_story_hide_until_reload")), "Dadinho remains long enough to finish the scene after completion")
+		_check(date.get("facing_direction") == Vector2.RIGHT, "Dadinho faces Misty during their date")
 
 		var misty := date.get_node_or_null("Misty") as AnimatedSprite2D
 		_check(misty != null and misty.sprite_frames != null, "Misty uses her overworld animation frames")
 		_check(misty != null and misty.position == Vector2(32, -16), "Misty stands beside Dadinho")
+		_check(misty != null and misty.animation == &"idle_left", "Misty faces Dadinho during their date")
 
 		var heart := date.get_node_or_null("Heart") as Label
 		_check(heart != null and heart.text == "♥", "a heart floats above the couple")

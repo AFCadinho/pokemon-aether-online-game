@@ -289,7 +289,7 @@ visibility_hidden_quest_id = "explore_cerulean_city"
 defer_story_hide_until_reload = true
 dialogue_id = "kanto_route_25_dadinho_after_date"
 display_name = "Dadinho"
-facing_direction = Vector2(-1, 0)
+facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("15_dadinho_frames")
 mugshot = ExtResource("17_dadinho_mugshot")
 
