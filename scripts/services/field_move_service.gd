@@ -2,6 +2,8 @@ extends Node
 
 class_name FieldMoveServiceNode
 
+const MoveIdResolverScript := preload("res://scripts/data/move_id_resolver.gd")
+
 signal owned_charms_changed
 
 const DIRECT_FIELD_MOVE_DEFINITIONS := {
@@ -122,9 +124,18 @@ func can_use_field_move(move_id: String) -> Dictionary:
 		}
 	var pokemon := find_party_pokemon_for_move(move_id)
 	if pokemon == null:
+		var move_name := ContentLocalization.display_name(
+			"moves",
+			normalized_move_id,
+			_format_move_name(normalized_move_id)
+		)
 		return {
 			"success": false,
-			"error": "A Pokemon in your party must know %s or you need its Charm." % _format_move_name(move_id),
+			"errorCode": "field_move_not_known",
+			"error": LocalizationManager.text(
+				"ui.field_move.error.unavailable",
+				{"move": move_name}
+			),
 		}
 	return {
 		"success": true,
@@ -292,16 +303,13 @@ func _request_json(url: String, body: String) -> Dictionary:
 
 func _pokemon_knows_move(pokemon: Pokemon, move_id: String) -> bool:
 	for move_value: Variant in pokemon.moves:
-		if not (move_value is Dictionary):
-			continue
-		var move_data: Dictionary = move_value as Dictionary
-		if _normalize_move_id(str(move_data.get("id", move_data.get("move", "")))) == move_id:
+		if MoveIdResolverScript.value_matches(move_value, move_id):
 			return true
 	return false
 
 
 func _normalize_move_id(value: String) -> String:
-	return value.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+	return MoveIdResolverScript.normalize(value)
 
 
 func _format_move_name(move_id: String) -> String:

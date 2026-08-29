@@ -2837,6 +2837,7 @@
   "ui.field_move.pokemon_used": "{pokemon} 使用了 {move}！",
   "ui.field_move.error.in_battle": "战斗中不能使用野外移动。",
   "ui.field_move.error.hm_required": "需要有 {hm} 才能在对战外使用这个招式。",
+  "ui.field_move.error.unavailable": "队伍中的宝可梦必须会使用{move}，否则你需要对应的护符。",
   "ui.field_move.error.map_loading": "等待地图加载完成。",
   "ui.field_move.error.badge_required": "需要获得{badge}才能在对战外使用这个招式。",
   "ui.field_move.error.not_implemented": "未实现直接字段移动。",

@@ -45,6 +45,7 @@
 
 **Fixed**
 
+- Existing Pokémon with compact battle move IDs can now use their moves in overworld field actions.
 - Route 24 now has correct boundaries, grass, and connections to Cerulean City and Route 25.
 - Newly received HMs now work immediately without reopening the Bag or changing areas.
 - Moomoo Milk received on Route 25 can now be used from the Bag to restore 100 HP outside battle. Receiving it also shows a System message and plays a sound.
