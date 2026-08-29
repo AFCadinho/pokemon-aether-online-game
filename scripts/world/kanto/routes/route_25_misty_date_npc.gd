@@ -18,10 +18,12 @@ var _dialogue_stage := 0
 var _story_player: Node2D
 var _heart_origin := Vector2.ZERO
 var _heart_tween: Tween
+var _misty_nameplate: Control
 
 
 func _ready() -> void:
 	super._ready()
+	_setup_misty_nameplate()
 	if heart != null:
 		_heart_origin = heart.position
 		_start_heart_animation()
@@ -101,6 +103,67 @@ func _misty_storms_off() -> void:
 	exit_tween.tween_property(misty, "position", misty.position + MISTY_DEPARTURE_OFFSETS[1], 0.8)
 	await exit_tween.finished
 	misty.visible = false
+	if _misty_nameplate != null:
+		_misty_nameplate.visible = false
+
+
+func blocks_world_position(world_position: Vector2) -> bool:
+	if super.blocks_world_position(world_position):
+		return true
+	return (
+		is_visible_in_tree()
+		and misty != null
+		and misty.visible
+		and _to_tile(world_position) == _to_tile(_misty_feet_position())
+	)
+
+
+func _is_player_facing_npc(body: Node2D) -> bool:
+	if super._is_player_facing_npc(body):
+		return true
+	if body == null or misty == null or not misty.visible:
+		return false
+	var direction_value: Variant = body.get("last_direction")
+	if not direction_value is Vector2:
+		return false
+	var direction := direction_value as Vector2
+	if direction == Vector2.ZERO:
+		return false
+	var player_tile := _to_tile(_get_body_feet_position(body))
+	var facing_tile := player_tile + Vector2i(roundi(direction.x), roundi(direction.y))
+	return facing_tile == _to_tile(_misty_feet_position())
+
+
+func _misty_feet_position() -> Vector2:
+	return misty.global_position + Vector2(0, 16)
+
+
+func _setup_misty_nameplate() -> void:
+	if nameplate == null or _misty_nameplate != null:
+		return
+	_misty_nameplate = nameplate.duplicate() as Control
+	if _misty_nameplate == null:
+		return
+	_misty_nameplate.name = "MistyNameplate"
+	nameplate.position.x -= 20.0
+	_misty_nameplate.position.x += 52.0
+	add_child(_misty_nameplate)
+	var label := _misty_nameplate.get_node_or_null("NameLabel") as Label
+	var background := _misty_nameplate.get_node_or_null("NameplateBackground") as Panel
+	if label == null or background == null:
+		return
+	label.text = "Misty"
+	var name_size := _get_nameplate_label_text_size(label)
+	name_size.x = minf(name_size.x, NAMEPLATE_MAX_NAME_WIDTH)
+	var card_top := NAMEPLATE_CARD_BOTTOM - name_size.y - (NAMEPLATE_VERTICAL_PADDING * 2.0)
+	label.offset_left = NAMEPLATE_CENTER_X - (name_size.x * 0.5)
+	label.offset_right = label.offset_left + name_size.x
+	label.offset_top = card_top + NAMEPLATE_VERTICAL_PADDING
+	label.offset_bottom = label.offset_top + name_size.y
+	background.offset_left = label.offset_left - NAMEPLATE_HORIZONTAL_PADDING
+	background.offset_right = label.offset_right + NAMEPLATE_HORIZONTAL_PADDING
+	background.offset_top = card_top
+	background.offset_bottom = NAMEPLATE_CARD_BOTTOM
 
 
 func _dialogue_portrait(stage: int, speaker_name: String) -> Texture2D:
