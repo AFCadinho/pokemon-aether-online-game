@@ -97,16 +97,16 @@ func _input(event: InputEvent) -> void:
 	var action_matches := event.is_action_pressed("toggle_running_shoes", false)
 	if not is_x and not action_matches:
 		return
-	print(
-		"[RunningShoesDebug][SettingsManager] key_received physical=%s keycode=%s " \
+	var message := (
+		"[RunningShoesDebug][SettingsManager] key_received physical=%s keycode=%s "
 		+ "action_match=%s configured=%s"
-		% [
+	) % [
 			str(key_event.physical_keycode),
 			str(key_event.keycode),
 			str(action_matches),
 			get_input_binding_label("toggle_running_shoes"),
 		]
-	)
+	print(message)
 
 
 func load_settings() -> void:
