@@ -28,6 +28,7 @@
 
 **Fixed**
 
+- The guide inside Cerulean Gym now shows his matching Trainer portrait instead of Professor Oak.
 - Receiving Moomoo Milk during the Route 25 date now shows a System message and plays the item-received sound.
 - The player's lines during Misty and Dadinho's Route 25 encounter now show their current trainer mugshot.
 - Misty now has her own nameplate, blocks her tile, and can start the shared Route 25 date dialogue when spoken to directly.
