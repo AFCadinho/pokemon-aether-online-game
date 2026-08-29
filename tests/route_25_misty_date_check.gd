@@ -5,6 +5,13 @@ const ROUTE_SCENE := "res://scenes/overworld/kanto/routes/route25/kanto_route_25
 var failed := false
 
 
+class DummyPlayer extends CharacterBody2D:
+	var last_direction := Vector2.LEFT
+
+	func get_feet_position() -> Vector2:
+		return global_position
+
+
 func _init() -> void:
 	call_deferred("_run")
 
@@ -35,6 +42,10 @@ func _run() -> void:
 		_check(misty != null and misty.sprite_frames != null, "Misty uses her overworld animation frames")
 		_check(misty != null and misty.position == Vector2(32, -16), "Misty stands beside Dadinho")
 		_check(misty != null and misty.animation == &"idle_left", "Misty faces Dadinho during their date")
+		var misty_nameplate := date.get_node_or_null("MistyNameplate") as Control
+		var misty_name_label := date.get_node_or_null("MistyNameplate/NameLabel") as Label
+		_check(misty_nameplate != null and misty_nameplate.visible, "Misty displays her own nameplate")
+		_check(misty_name_label != null and misty_name_label.text == "Misty", "Misty's nameplate identifies her")
 
 		var heart := date.get_node_or_null("Heart") as Label
 		_check(heart != null and heart.text == "♥", "a heart floats above the couple")
@@ -63,6 +74,30 @@ func _run() -> void:
 					if water.get_cell_source_id(standing_cell + direction * distance) >= 0:
 						water_is_nearby = true
 			_check(water_is_nearby, "the couple stands beside the water's shoreline")
+
+		var misty_feet := date.position + Vector2(32, 0)
+		date.set("story_visibility_active", true)
+		date.visible = true
+		var date_interaction_area := date.get_node("InteractionArea") as Area2D
+		var date_interaction_shape := date.get_node("InteractionArea/CollisionShape2D") as CollisionShape2D
+		date_interaction_area.monitoring = true
+		date_interaction_area.monitorable = true
+		_check(date_interaction_shape.shape is RectangleShape2D and (date_interaction_shape.shape as RectangleShape2D).size == Vector2(96, 64), "the shared interaction area covers both sides of the couple")
+		_check(bool(date.call("blocks_world_position", misty_feet)), "Misty blocks players from walking through her")
+		var player := DummyPlayer.new()
+		player.name = "Player"
+		player.position = misty_feet + Vector2(32, 0)
+		var player_collision := CollisionShape2D.new()
+		var player_shape := RectangleShape2D.new()
+		player_shape.size = Vector2(32, 32)
+		player_collision.shape = player_shape
+		player.add_child(player_collision)
+		route.add_child(player)
+		await physics_frame
+		await physics_frame
+		_check(bool(date.get("player_nearby")), "Misty's side is covered by the shared interaction area")
+		_check(bool(date.call("_is_player_facing_npc", player)), "the shared date interaction can be started while facing Misty")
+		player.queue_free()
 
 		var date_script := date.get_script() as Script
 		var departure_offsets: Array = date_script.get_script_constant_map().get("MISTY_DEPARTURE_OFFSETS", [])
