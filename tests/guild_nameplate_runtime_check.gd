@@ -20,13 +20,15 @@ func _init() -> void:
 	_check(
 		player_scene_source.contains('[node name="RoleBadgeIcon" type="TextureRect" parent="Nameplate"]')
 		and not player_scene_source.contains('path="res://assets/ui/gamemaster_emblem_readable.png"')
-		and not player_scene_source.contains('path="res://assets/ui/developer_emblem_teal.png"'),
+		and not player_scene_source.contains('path="res://assets/ui/developer_emblem_teal.png"')
+		and not player_scene_source.contains('path="res://assets/ui/moderator_emblem.png"'),
 		"player scene opens without depending on role badge PNG import metadata"
 	)
 	var role_badge_texture_source := FileAccess.get_file_as_string("res://scripts/ui/role_badge_texture.gd")
 	_check(
 		role_badge_texture_source.contains('"gamemaster": "res://assets/ui/gamemaster_emblem_readable.png"')
 		and role_badge_texture_source.contains('"developer": "res://assets/ui/developer_emblem_teal.png"')
+		and role_badge_texture_source.contains('"moderator": "res://assets/ui/moderator_emblem.png"')
 		and role_badge_texture_source.contains("ResourceLoader.exists")
 		and role_badge_texture_source.contains("Image.load_from_file"),
 		"role emblems support imported textures and fresh-checkout PNG loading"
@@ -49,6 +51,16 @@ func _init() -> void:
 		and developer_badge_image.detect_alpha() != Image.ALPHA_NONE
 		and RoleBadgeTexture.get_role_badge_texture("developer") != null,
 		"Developer shield emblem has readable dimensions and transparent pixels"
+	)
+	var moderator_badge_image := Image.load_from_file(
+		ProjectSettings.globalize_path("res://assets/ui/moderator_emblem.png")
+	)
+	_check(
+		moderator_badge_image != null
+		and moderator_badge_image.get_size() == Vector2i(28, 28)
+		and moderator_badge_image.detect_alpha() != Image.ALPHA_NONE
+		and RoleBadgeTexture.get_role_badge_texture("moderator") != null,
+		"Moderator shield emblem has readable dimensions and transparent pixels"
 	)
 	_check(
 		player_scene_source.contains("offset_left = 9.0")
@@ -76,7 +88,7 @@ func _init() -> void:
 	_check(
 		_uses_pixel_role_badge(player_source)
 		and _uses_pixel_role_badge(remote_source),
-		"local and remote Game Masters and Developers use pixel badges without replacing guild emblems"
+		"local and remote Game Masters, Developers, and Moderators use pixel badges without replacing guild emblems"
 	)
 	_check(
 		_uses_content_sized_name_card(player_source)
