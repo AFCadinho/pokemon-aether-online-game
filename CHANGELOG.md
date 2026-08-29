@@ -1,75 +1,48 @@
 # Changelog
 
-## Unreleased
-
-- Route 24 terrain collision and tall grass rendering have been corrected.
-- Rival battles now use a dedicated Blue and Green remix by Zame.
-- Running Shoes can now be toggled reliably with X by default, with a rebindable Controls shortcut that stays inactive during chat, battles, transitions, and menus.
-- Developer Tools now include a Challenge Misty story checkpoint after Bill's rescue.
-- Moomoo Milk received during the Route 25 quest can now be used from the Bag to restore 100 HP outside battles.
-- The undercover Team Rocket recruiter now stops players automatically at the end of Nugget Bridge.
-- Nugget Bridge trainers now only challenge players directly in their line of sight.
-
-- Fossils now appear under Other in the Bag and can no longer be equipped as held items.
-- Cerulean City's Pokémon Center now gives Psyduck's Trainer an indoor-appropriate appearance.
-- Land mounts now stay active when changing to another outdoor map.
-- Land mounts now stay active after returning from wild and Trainer battles.
-- Active land mounts are now saved and restored when returning through the login screen.
+## 0.3.67 - 2026-08-29
 
 **Added**
 
+- Rival battles now feature a special Blue and Green remix by Zame.
+- Running Shoes can now be turned on or off with X. This key can be changed in the Controls settings.
 - The Cerulean City Pokémon Center now has two visiting Trainers with their partner Pokémon.
-- Small and large overworld signs now show illustrated previews of their referenced routes, towns, caves, Gyms, and landmarks.
-- Staff system announcements now appear both in System chat and as a temporary on-screen notice.
-- Added the male-only IronFanton Outfit Box to the Aether Gift Store, containing Chroma Hair, Chroma Beard and a Shirt.
-- Rescuing Bill now starts the Cerulean Gym challenge, and the attendant keeps the entrance closed until Bill is safe.
-- The S.S. Ticket now has its own pixel-art Bag icon.
-- Developer Tools now include a Help Bill story checkpoint for testing Bill's House directly.
-- Bill now needs your help operating his Cell Separation System and rewards the rescue with an S.S. Ticket.
-- Misty and Dadinho now have a story encounter by the water on Route 25, including Dadinho's long-overdue milk delivery and an introduction to Bill.
-- Route 25 now has roaming Pokémon in its grass, water, and mountain areas.
-- Route 25 now has its nine classic Trainers on the way to Bill's house.
+- Signs can now show illustrated previews of routes, towns, caves, Gyms, and landmarks.
+- Staff announcements now appear in System chat and briefly on screen.
+- The male-only IronFanton Outfit Box is now available in the Aether Gift Store. It contains Chroma Hair, Chroma Beard, and a Shirt.
+- Bill now needs help with his Cell Separation System and rewards you with an S.S. Ticket. Rescuing him also unlocks the Cerulean Gym challenge.
+- Misty and Dadinho now have a story encounter on Route 25 that introduces Bill.
+- Route 25 now has nine Trainers, roaming Pokémon, and wild encounters in grass, water, and mountain areas. Available Pokémon can differ by time of day and fishing rod.
+- The S.S. Ticket now has its own Bag icon.
 
 **Changed**
 
-- Signs in Cerulean City and on Routes 24 and 25 now provide local directions and location information.
-- Misty and Dadinho's Route 25 confrontation now has shorter, more natural dialogue and addresses the player by name.
-- After giving you Cyclizar, the Cerulean Bike Seller now offers a reusable guide to selecting, riding, and understanding mounts.
-- Overworld rain is now less visually intense at the default 2x zoom.
-- Route 24's sign and Route 25's waterside couple and mountain Pokémon now use their updated positions.
-- Route 25's Trainers now use their updated positions along the route.
-- Route 25 now has wild Pokémon encounters in tall grass, while surfing, and with every fishing rod, including different daytime and nighttime species.
-- Alpha Tools now include the same protected Reset / New Game action as Developer Tools.
-- The New Game warning now clearly explains what happens to unclaimed mail attachments, other active sessions, Aether Gems, and paid items.
-- Cerulean City now has one Rock Smash mountain destination, with all eight daily rocks gathered at the East Site.
-- Outdoor maps now use 2x zoom by default. The zoom can still be changed in the graphics settings.
-- Cerulean City now uses its latest visual layout.
-- Pallet Town and Cerulean Gym now use their latest visual layouts.
-- Route 24 now uses its latest expanded visual layout.
-- Route 25 now uses its complete visual layout.
-- Bill's House now has its visual layout and is connected to Route 25.
+- Signs in Cerulean City and on Routes 24 and 25 now give clearer directions and local information.
+- The Route 25 conversation with Misty and Dadinho is now shorter, more natural, and uses your name.
+- The Cerulean Bike Seller now offers a reusable guide to choosing and riding mounts after giving you Cyclizar.
+- Land mounts now remain active when moving between outdoor areas, returning from battles, or logging back in.
+- Rain is now less intense at the default outdoor zoom. Outdoor areas now use 2x zoom by default, which can still be changed in the graphics settings.
+- The New Game warning now explains what happens to unclaimed mail, other active sessions, Aether Gems, and paid items.
+- Cerulean City's eight daily Rock Smash rocks are now gathered at one mountain location in the East Site.
+- Cerulean City, Pallet Town, Cerulean Gym, Routes 24 and 25, and Bill's House now use their updated layouts.
+- Fossils now appear under Other in the Bag and can no longer be equipped as held items.
 
 **Fixed**
 
-- Newly received HMs now work for field moves immediately, without reopening the Bag or changing maps.
-- The IronFanton jacket now keeps its undershirt instead of exposing the Trainer's bare torso.
-- Clefairy-form Bill and his computer no longer show Professor Oak's portrait, while human Bill's portrait now appears only after separation.
-- Bill's transformed form is now labeled and positioned as Clefairy, and the Cell Separation System's interaction matches its visible computer tile.
-
-- Trainer battle start errors no longer trap players in a repeating automatic dialogue, including Gary at Nugget Bridge.
-- Route 25's horizontal stairs now play their elevation effect when crossed.
-- The guide inside Cerulean Gym now shows his matching Trainer portrait instead of Professor Oak.
-- Receiving Moomoo Milk during the Route 25 date now shows a System message and plays the item-received sound.
-- The player's lines during Misty and Dadinho's Route 25 encounter now show their current trainer mugshot.
-- Misty now has her own nameplate, blocks her tile, and can start the shared Route 25 date dialogue when spoken to directly.
-- Dadinho now faces Misty during their Route 25 date, their heart clears his nameplate, and Misty leaves toward Cerulean Gym without crossing the water.
-- Route 24's expanded layout now keeps its Cerulean and Route 25 passages aligned with the visible map.
-- Poke Fan Miles and School Kid Nolan are visible again inside the Route 2 house.
-- Saved and staff teleports continue to work after Route 2, Route 25, and their houses were reorganized.
-- Route 2, Route 25, and Bill's House remain connected, including when loading an existing save from before their scene files were reorganized.
-- Trainers, Pokémon, rocks, and foreground objects now pass in front of and behind each other correctly on Cerulean City's mountain plateaus.
-- Rain splashes now stay on the ground beneath trees, Trainers, Pokémon, and other map objects.
-- Players now appear behind hedges, lamps, and other foreground objects in southern Cerulean City.
+- Route 24 now has correct boundaries, grass, and connections to Cerulean City and Route 25.
+- Newly received HMs now work immediately without reopening the Bag or changing areas.
+- Moomoo Milk received on Route 25 can now be used from the Bag to restore 100 HP outside battle. Receiving it also shows a System message and plays a sound.
+- The undercover Team Rocket recruiter now stops you at the end of Nugget Bridge, while other Nugget Bridge Trainers only challenge you when you are directly in front of them.
+- Trainer battle errors no longer trap you in repeating dialogue, including during Gary's Nugget Bridge encounter.
+- The IronFanton jacket now keeps its undershirt visible.
+- Bill and his Cell Separation System now use the correct names, portraits, positions, and interactions before and after his rescue.
+- Misty and Dadinho now use the correct portraits, positions, and movements during their Route 25 encounter.
+- The stairs on Route 25 now display their height effect correctly.
+- The Cerulean Gym guide now shows the correct Trainer portrait.
+- Psyduck's Trainer in the Cerulean City Pokémon Center now wears an outfit suited for indoors.
+- Poke Fan Miles and School Kid Nolan are visible again in the Route 2 house.
+- Routes 2 and 25 and Bill's House remain correctly connected when loading older saves or using saved teleports.
+- Trainers, Pokémon, rocks, rain, hedges, lamps, and other objects now overlap correctly in Cerulean City.
 
 ## 0.3.66 - 2026-08-28
 
