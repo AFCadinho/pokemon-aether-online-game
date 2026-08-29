@@ -52,6 +52,27 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(_find_label(popup, "Trade-limiet") != null, "Trainer Card trade cap renders in Dutch")
 	_check(_find_label(popup, "Natuurlijke kleuren") != null, "Appearance colors render in Dutch")
 	_check(badge_option != null and badge_option.get_item_text(0) == "Geen", "Trainer Card badge fallback renders in Dutch")
+	var badge_popup := badge_option.get_popup() if badge_option != null else null
+	_check(
+		badge_option != null
+		and badge_option.has_theme_icon_override("arrow")
+		and badge_option.has_theme_stylebox_override("disabled"),
+		"Trainer Card badge selector styles its arrow and disabled state"
+	)
+	_check(
+		badge_popup != null
+		and badge_popup.transparent_bg
+		and badge_popup.borderless
+		and badge_popup.has_theme_stylebox_override("panel")
+		and badge_popup.has_theme_stylebox_override("hover"),
+		"Trainer Card badge dropdown uses a dedicated popup surface"
+	)
+	_check(
+		badge_popup != null
+		and badge_popup.has_theme_icon_override("radio_checked")
+		and badge_popup.has_theme_icon_override("radio_unchecked"),
+		"Trainer Card badge dropdown replaces the default Godot selection icons"
+	)
 	_check(overlay.call("_format_appearance_option_name", "body", "Gen4_Base_v1") == "Standaard", "Appearance option renders in Dutch")
 	_check(overlay.call("_format_appearance_option_name", "hair", "IronFanton_Hair") == "IronFanton-haar", "IronFanton hair renders in Dutch")
 	_check(overlay.call("_format_appearance_swatch_name", "Dark Brown") == "Donkerbruin", "Appearance swatch renders in Dutch")

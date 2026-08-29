@@ -9,6 +9,7 @@
 
 **Changed**
 
+- The Trainer Card badge selector now uses the same navy-and-gold styling as the rest of the card.
 - Pokémon level-up reward cards now play a dedicated sound once per reward batch.
 - Game Masters and Developers now have matching, readable lettered pixel-art role shields above their character; Guild emblems remain visible beside their name.
 - Viridian Forest now uses its latest visual layout.
