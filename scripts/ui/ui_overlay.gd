@@ -2728,7 +2728,7 @@ func _setup_pc_ui() -> void:
 	pc_loan_returns_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pc_loan_returns_button, "tooltip_text", "ui.storage.loan_returns.tooltip")
 	pc_loan_returns_button.pressed.connect(_on_pc_loan_returns_pressed)
-	_apply_button_style(pc_loan_returns_button, "primary")
+	_apply_pc_action_button_style(pc_loan_returns_button, "secondary")
 	header.add_child(pc_loan_returns_button)
 
 	pc_loan_returns_dialog = LOAN_RETURNS_DIALOG_SCRIPT.new()
@@ -2743,7 +2743,7 @@ func _setup_pc_ui() -> void:
 	pc_borrowed_pokemon_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pc_borrowed_pokemon_button, "tooltip_text", "ui.storage.borrowed.tooltip")
 	pc_borrowed_pokemon_button.pressed.connect(_on_pc_borrowed_pokemon_pressed)
-	_apply_button_style(pc_borrowed_pokemon_button)
+	_apply_pc_action_button_style(pc_borrowed_pokemon_button, "secondary")
 	header.add_child(pc_borrowed_pokemon_button)
 
 	pc_borrowed_pokemon_dialog = BORROWED_POKEMON_DIALOG_SCRIPT.new()
@@ -2758,14 +2758,14 @@ func _setup_pc_ui() -> void:
 	pc_release_mode_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pc_release_mode_button, "tooltip_text", "ui.storage.release.choose")
 	pc_release_mode_button.pressed.connect(_on_pc_release_mode_button_pressed)
-	_apply_button_style(pc_release_mode_button, "warning")
+	_apply_pc_action_button_style(pc_release_mode_button, "secondary")
 	pc_close_button = Button.new()
 	pc_close_button.text = "×"
 	pc_close_button.custom_minimum_size = Vector2(36, 34)
 	pc_close_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pc_close_button, "tooltip_text", "ui.storage.close")
 	pc_close_button.pressed.connect(_on_pc_close_button_pressed)
-	_apply_button_style(pc_close_button, "danger")
+	_apply_pc_action_button_style(pc_close_button, "close")
 	header.add_child(pc_close_button)
 
 	var body := HBoxContainer.new()
@@ -2852,7 +2852,7 @@ func _setup_pc_ui() -> void:
 	pc_box_tab_prev_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pc_box_tab_prev_button, "tooltip_text", "ui.storage.box.previous")
 	pc_box_tab_prev_button.pressed.connect(_on_pc_box_step_pressed.bind(-1))
-	_apply_button_style(pc_box_tab_prev_button)
+	_apply_pc_action_button_style(pc_box_tab_prev_button, "icon")
 	box_header.add_child(pc_box_tab_prev_button)
 
 	pc_box_selector_button = Button.new()
@@ -2861,7 +2861,7 @@ func _setup_pc_ui() -> void:
 	pc_box_selector_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pc_box_selector_button, "tooltip_text", "ui.storage.box.show_all")
 	pc_box_selector_button.pressed.connect(_toggle_pc_box_selector)
-	_apply_button_style(pc_box_selector_button, "primary")
+	_apply_pc_action_button_style(pc_box_selector_button, "primary")
 	box_header.add_child(pc_box_selector_button)
 
 	pc_box_title_editor = LineEdit.new()
@@ -2879,7 +2879,7 @@ func _setup_pc_ui() -> void:
 	pc_box_tab_next_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pc_box_tab_next_button, "tooltip_text", "ui.storage.box.next")
 	pc_box_tab_next_button.pressed.connect(_on_pc_box_step_pressed.bind(1))
-	_apply_button_style(pc_box_tab_next_button)
+	_apply_pc_action_button_style(pc_box_tab_next_button, "icon")
 	box_header.add_child(pc_box_tab_next_button)
 
 	pc_box_rename_button = Button.new()
@@ -2888,7 +2888,7 @@ func _setup_pc_ui() -> void:
 	pc_box_rename_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pc_box_rename_button, "tooltip_text", "ui.storage.box.rename")
 	pc_box_rename_button.pressed.connect(_begin_pc_box_inline_rename)
-	_apply_button_style(pc_box_rename_button)
+	_apply_pc_action_button_style(pc_box_rename_button, "icon")
 	box_header.add_child(pc_box_rename_button)
 
 	var box_header_spacer := Control.new()
@@ -2927,7 +2927,7 @@ func _setup_pc_ui() -> void:
 	pc_filter_button.toggle_mode = true
 	_set_localized_control_property(pc_filter_button, "tooltip_text", "ui.storage.filter_tooltip")
 	pc_filter_button.toggled.connect(_on_pc_filter_toggled)
-	_apply_button_style(pc_filter_button)
+	_apply_pc_action_button_style(pc_filter_button, "secondary")
 	search_row.add_child(pc_filter_button)
 
 	var search_scope_panel := PanelContainer.new()
@@ -2980,7 +2980,7 @@ func _setup_pc_ui() -> void:
 	pc_filter_clear_button.custom_minimum_size = Vector2(82, 26)
 	pc_filter_clear_button.focus_mode = Control.FOCUS_NONE
 	pc_filter_clear_button.pressed.connect(_on_pc_clear_filters_pressed)
-	_apply_button_style(pc_filter_clear_button)
+	_apply_pc_action_button_style(pc_filter_clear_button, "ghost")
 	filter_header.add_child(pc_filter_clear_button)
 
 	var filter_grid := GridContainer.new()
@@ -3157,6 +3157,97 @@ func _make_pc_status_style() -> StyleBoxFlat:
 	style.border_width_left = 0
 	style.border_color = Color("#28496355")
 	return style
+
+
+func _apply_pc_action_button_style(button: Button, role: String) -> void:
+	if button == null:
+		return
+	var normal_bg := Color("#0a1927e6")
+	var hover_bg := Color("#102a3cf2")
+	var pressed_bg := Color("#07111cf2")
+	var normal_border := Color("#2c4d65b8")
+	var hover_border := PC_ACCENT_SOFT
+	var font_color := Color("#dfeaf5")
+	var hover_font_color := Color.WHITE
+	var normal_border_width := 1
+	var compact := false
+	var font_size := 13
+
+	match role:
+		"primary":
+			normal_bg = Color("#176887e8")
+			hover_bg = Color("#1d7ea3f2")
+			pressed_bg = Color("#104963f2")
+			normal_border = PC_ACCENT
+			hover_border = Color("#a6eeff")
+			font_color = Color.WHITE
+		"icon":
+			normal_bg = Color.TRANSPARENT
+			hover_bg = Color("#123149c4")
+			pressed_bg = Color("#091b2be8")
+			normal_border = Color.TRANSPARENT
+			hover_border = PC_ACCENT_SOFT
+			font_color = Color("#9fb3c5")
+			hover_font_color = PC_ACCENT
+			normal_border_width = 0
+			compact = true
+			font_size = 16
+		"ghost":
+			normal_bg = Color.TRANSPARENT
+			hover_bg = Color("#102638b8")
+			pressed_bg = Color("#081521d9")
+			normal_border = Color.TRANSPARENT
+			hover_border = Color("#395c73a8")
+			font_color = UI_MUTED_TEXT
+			normal_border_width = 0
+			compact = true
+			font_size = 11
+		"close":
+			normal_bg = Color.TRANSPARENT
+			hover_bg = Color("#35131ad9")
+			pressed_bg = Color("#210a10ed")
+			normal_border = Color.TRANSPARENT
+			hover_border = Color("#7a2b33")
+			font_color = Color("#9fb0c0")
+			hover_font_color = UI_DANGER
+			normal_border_width = 0
+			compact = true
+			font_size = 16
+		"danger":
+			normal_bg = Color("#521821ed")
+			hover_bg = Color("#6b1f2bf2")
+			pressed_bg = Color("#300d14f2")
+			normal_border = UI_DANGER
+			hover_border = Color("#ff9aa2")
+			font_color = Color("#ffe3e6")
+			font_size = 12
+
+	var normal_style := _make_button_style(normal_bg, normal_border, 7, normal_border_width)
+	var hover_style := _make_button_style(hover_bg, hover_border, 7, 1)
+	var pressed_style := _make_button_style(pressed_bg, hover_border, 7, 1)
+	var disabled_style := _make_button_style(Color("#08131d73"), Color("#2136475c"), 7, 1)
+	if compact:
+		for style: StyleBoxFlat in [normal_style, hover_style, pressed_style, disabled_style]:
+			style.content_margin_left = 7
+			style.content_margin_right = 7
+			style.content_margin_top = 4
+			style.content_margin_bottom = 4
+
+	button.add_theme_color_override("font_color", font_color)
+	button.add_theme_color_override("font_hover_color", hover_font_color)
+	button.add_theme_color_override("font_pressed_color", hover_font_color)
+	button.add_theme_color_override("font_focus_color", hover_font_color)
+	button.add_theme_color_override(
+		"font_disabled_color",
+		Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.38)
+	)
+	button.add_theme_font_size_override("font_size", font_size)
+	button.add_theme_stylebox_override("normal", normal_style)
+	button.add_theme_stylebox_override("hover", hover_style)
+	button.add_theme_stylebox_override("pressed", pressed_style)
+	button.add_theme_stylebox_override("focus", hover_style)
+	button.add_theme_stylebox_override("disabled", disabled_style)
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
 func _setup_mail_compose_help_button() -> void:
@@ -35981,7 +36072,7 @@ func _build_pc_box_selector_panel() -> void:
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	close_button.pressed.connect(_close_pc_box_selector)
-	_apply_button_style(close_button)
+	_apply_pc_action_button_style(close_button, "close")
 	header.add_child(close_button)
 
 	pc_box_selector_count_label = Label.new()
@@ -36932,7 +37023,7 @@ func _refresh_pc_filter_control() -> void:
 	)
 	var expanded := pc_filter_panel != null and pc_filter_panel.visible
 	pc_filter_button.set_pressed_no_signal(expanded)
-	_apply_button_style(pc_filter_button, "primary" if expanded or active_count > 0 else "secondary")
+	_apply_pc_action_button_style(pc_filter_button, "primary" if expanded or active_count > 0 else "secondary")
 	if pc_filter_clear_button != null:
 		pc_filter_clear_button.disabled = active_count == 0
 		pc_filter_clear_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if active_count == 0 else Control.CURSOR_POINTING_HAND
@@ -37396,7 +37487,7 @@ func _refresh_pc_release_controls() -> void:
 		pc_release_mode_button.tooltip_text = LocalizationManager.text(
 			"ui.storage.release.stop" if pc_release_mode_active else "ui.storage.release.choose"
 		)
-		_apply_button_style(pc_release_mode_button, "danger" if pc_release_mode_active else "secondary")
+		_apply_pc_action_button_style(pc_release_mode_button, "danger" if pc_release_mode_active else "secondary")
 		pc_release_mode_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if pc_release_in_progress else Control.CURSOR_POINTING_HAND
 	pc_release_hint_label.text = LocalizationManager.text(
 		"ui.storage.release.releasing"
