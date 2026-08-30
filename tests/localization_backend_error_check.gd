@@ -87,6 +87,12 @@ func _run() -> void:
 		"Guild Lobby attunement requirement displays in Dutch"
 	)
 	_check(
+		errors.call("message", {
+			"detail": {"code": "aether_clash_target_guild_required"}
+		}) == "Die Trainer zit niet in een Guild die je kunt uitdagen.",
+		"right-click Clash target errors display in Dutch"
+	)
+	_check(
 		errors.call("message", {"detail": {"code": "current_password_incorrect"}})
 		== "Het huidige wachtwoord is onjuist.",
 		"privacy password errors explain how identity verification failed"

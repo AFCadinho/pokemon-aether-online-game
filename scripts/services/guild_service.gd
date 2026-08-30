@@ -14,6 +14,7 @@ const GUILD_NOTIFICATIONS_ENDPOINT := "/game/guild-notifications"
 const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
 const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
 const AETHER_CLASH_CHALLENGES_ENDPOINT := "/game/aether-clash/challenges"
+const AETHER_CLASH_PLAYER_CHALLENGES_ENDPOINT := "/game/aether-clash/player-challenges"
 const AETHER_CLASH_PORTAL_SESSIONS_ENDPOINT := "/game/aether-clash/portal-sessions"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
@@ -326,6 +327,23 @@ func create_aether_clash_challenge(
 		HTTPClient.METHOD_POST,
 		JSON.stringify({
 			"challengedGuildId": challenged_guild_id,
+			"spectatorAccess": spectator_access,
+		})
+	)
+	return _aether_clash_action_result(response)
+
+
+func create_aether_clash_player_challenge(
+	target_user_id: int,
+	spectator_access := "public"
+) -> Dictionary:
+	if target_user_id <= 0:
+		return {"success": false, "error": "Aether Clash target was missing."}
+	var response := await _authenticated_request(
+		AETHER_CLASH_PLAYER_CHALLENGES_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		JSON.stringify({
+			"targetUserId": target_user_id,
 			"spectatorAccess": spectator_access,
 		})
 	)

@@ -88,6 +88,7 @@ func _check_trade_context_action() -> void:
 	_check_equal(trade_button != null and trade_button.disabled, true, "authoritatively disabled trading remains visible but cannot start")
 
 	await _check_guild_invite_context_action()
+	await _check_aether_clash_context_action()
 	_check_chat_moderation_context_action()
 	await _check_live_localization()
 	coordinator.close_context_menu()
@@ -171,6 +172,67 @@ func _check_guild_invite_context_action() -> void:
 		_find_player_action("Invite to Guild") == null,
 		true,
 		"regular guild members do not receive the invite action"
+	)
+
+
+func _check_aether_clash_context_action() -> void:
+	coordinator.guild_membership = {
+		"guildId": 4,
+		"role": "captain",
+		"permissions": ["challenge_aether_clash"],
+	}
+	coordinator.guild_membership_loaded = true
+	coordinator.current_target = {
+		"userId": 7,
+		"username": "misty",
+		"displayName": "Misty",
+	}
+	coordinator.social_state_loading = true
+	coordinator.context_more_actions_expanded = false
+	coordinator._render_context_menu()
+	await process_frame
+	var challenge_button := _find_player_action("Challenge to Aether Clash")
+	_check_equal(
+		challenge_button != null and not challenge_button.disabled,
+		true,
+		"Guild Captains receive an independent right-click Aether Clash action"
+	)
+	if challenge_button != null:
+		challenge_button.pressed.emit()
+	await process_frame
+	var dialog := coordinator.host.find_child(
+		"AetherClashPlayerChallengeDialog",
+		true,
+		false
+	) as ConfirmationDialog
+	_check_equal(dialog != null, true, "right-click challenge requires confirmation")
+	var spectator_access := (
+		dialog.find_child("AetherClashPlayerSpectatorAccess", true, false) as OptionButton
+		if dialog != null
+		else null
+	)
+	_check_equal(
+		spectator_access != null
+		and spectator_access.get_item_metadata(0) == "public"
+		and spectator_access.get_item_metadata(1) == "guilds_only",
+		true,
+		"right-click challenge configures public or Guild-only spectators"
+	)
+	if dialog != null:
+		dialog.canceled.emit()
+	await process_frame
+	coordinator.guild_membership = {
+		"guildId": 4,
+		"role": "member",
+		"permissions": [],
+	}
+	coordinator.social_state_loading = false
+	coordinator._render_context_menu()
+	await process_frame
+	_check_equal(
+		_find_player_action("Challenge to Aether Clash") == null,
+		true,
+		"regular Guild members cannot send right-click Aether Clash challenges"
 	)
 
 
@@ -268,6 +330,7 @@ func _check_phase_scope_contract() -> void:
 	_check_equal(source.contains("WorldPresenceService"), true, "canonical roster dependency")
 	_check_equal(source.contains("_social_action(\"load_socials\")"), true, "authoritative social refresh")
 	_check_equal(source.contains("service.invite_member(username)"), true, "guild action uses the authoritative invitation endpoint")
+	_check_equal(source.contains("create_aether_clash_player_challenge"), true, "right-click Clash action uses the authoritative player endpoint")
 	_check_equal(source.contains("load_map_players"), false, "no secondary map-player projection")
 
 func _check_remote_avatar_interaction_contract() -> void:
