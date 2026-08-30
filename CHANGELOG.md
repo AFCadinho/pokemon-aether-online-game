@@ -19,6 +19,7 @@
 - Guild vs Guild Aether Clash entry now uses the red lobby portal; the purple portal is reserved for Battle Royale.
 - Teaching a fifth move now asks which current move to forget after pressing Teach move.
 - The move-forgetting dialog now previews the new move and shows its full details on hover.
+- The Move Mentor's move list now displays PP, base power, and accuracy for direct comparison.
 
 **Fixed**
 

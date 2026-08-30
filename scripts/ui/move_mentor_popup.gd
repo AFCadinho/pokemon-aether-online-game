@@ -443,9 +443,13 @@ func _refresh_move_list() -> void:
 		var level := int(candidate.get("level", 0))
 		if level > 0:
 			meta_row.add_child(_text_label(_t("ui.move_mentor.level", {"level": level}), 9, UI_MUTED))
-		var stats := _move_stats_text(metadata)
+		var stats := _move_stats_text(metadata, false, true)
 		if not stats.is_empty():
-			var stats_label := _text_label(stats, 9, UI_MUTED)
+			var stats_label := _text_label(stats, 10, Color("#b7c8d7"))
+			stats_label.name = "MoveStats_%s" % move_id
+			stats_label.custom_minimum_size = Vector2(142, 0)
+			stats_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			stats_label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 			meta_row.add_child(stats_label)
 		var category_icon := _category_icon(category)
 		if category_icon != null:
@@ -639,7 +643,7 @@ func _build_new_move_preview() -> Control:
 	details.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(details)
 	details.add_child(_text_label(_move_name(candidate), 14, UI_TEXT))
-	var stats := _move_stats_text(metadata)
+	var stats := _move_stats_text(metadata, false, true)
 	if not stats.is_empty():
 		details.add_child(_text_label(stats, 9, UI_MUTED))
 	if not source.is_empty():
@@ -781,7 +785,7 @@ func _move_metadata(move_id: String, fallback: Dictionary = {}) -> Dictionary:
 	return metadata
 
 
-func _move_stats_text(metadata: Dictionary, include_current_pp := false) -> String:
+func _move_stats_text(metadata: Dictionary, include_current_pp := false, include_empty_values := false) -> String:
 	var parts: Array[String] = []
 	var pp := int(metadata.get("pp", 0))
 	var max_pp := int(metadata.get("maxPp", metadata.get("maxpp", pp)))
@@ -792,9 +796,13 @@ func _move_stats_text(metadata: Dictionary, include_current_pp := false) -> Stri
 	var power_value: Variant = metadata.get("basePower", null)
 	if power_value != null and int(power_value) > 0:
 		parts.append("BP %d" % int(power_value))
+	elif include_empty_values:
+		parts.append("BP —")
 	var accuracy_value: Variant = metadata.get("accuracy", null)
-	if accuracy_value != null and int(accuracy_value) > 0:
+	if accuracy_value != null and not accuracy_value is bool and int(accuracy_value) > 0:
 		parts.append("ACC %d" % int(accuracy_value))
+	elif include_empty_values:
+		parts.append("ACC —")
 	return "  ·  ".join(parts)
 
 
