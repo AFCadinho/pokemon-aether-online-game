@@ -2,7 +2,17 @@
 
 ## Unreleased
 
-- New installations now choose a clearer default outdoor zoom based on the game window size, while keeping player-selected zoom settings unchanged.
+- Pokémon Storage actions now use clearer visual hierarchy, with one primary box control, quieter icon actions and danger colors only when needed.
+
+- Pokémon Storage now has simpler box navigation, quieter empty slots, clearer filters and hover cards that stay out of the controls.
+
+- Prepared one searchable Battle Point vendor for competitive held items, with alphabetical and BP-price sorting and planned availability shown in the Item Dex.
+
+- Pokémon stat labels and values are now easier to distinguish on PC Box hover cards.
+
+- Outdoor zoom now defaults to Auto, which switches between 1× and 2× as the game window changes size; fixed zoom choices remain available.
+
+- The Guild interface now shows a neutral membership-loading state on its first open instead of briefly flashing the Guild browser for existing members.
 
 - Reworked the Aether Clash tab with clean Overview, Challenges, and History navigation while keeping an active Clash and its lobby timer visible.
 
@@ -63,6 +73,7 @@
 **Fixed**
 
 - Rotating Guild Duel Master Balls now use a camera-aware click fallback and trace every spectate step when native world-object input is intercepted.
+- Failing to catch a wild Pokémon no longer leaves the party selector frozen when the counterattack knocks out the active Pokémon.
 - The upper Guild Duel jail portal now renders in front of the jail artwork without covering players standing at the jail spawn.
 - Guild Duel staging and jail portals now sit in their intended walkable positions, with matching collision openings.
 - Guild Duel exit portals now render on their proper world-depth layer, keeping the Red staging portal and both jail portals visible instead of leaving only their glow.

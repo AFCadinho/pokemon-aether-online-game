@@ -5,6 +5,7 @@ class_name PartyHoverCard
 const TYPE_ICON_PATH := "res://assets/sprites/types/%s.png"
 const CARD_WIDTH := 300.0
 const STORAGE_CARD_HEIGHT := 261.0
+const STORAGE_STAT_VALUE_SEPARATION := 4
 const IV_STAT_ENTRIES: Array[Array] = [
 	["HP", "hp"],
 	["Atk", "atk"],
@@ -133,6 +134,14 @@ func _apply_storage_visuals() -> void:
 	add_theme_stylebox_override("panel", style)
 	name_label.add_theme_font_size_override("font_size", 19)
 	($MarginContainer/VBoxContainer as VBoxContainer).add_theme_constant_override("separation", 3)
+	for stat_row: HBoxContainer in [
+		$MarginContainer/VBoxContainer/StatsBoxContainer/AttackContainer,
+		$MarginContainer/VBoxContainer/StatsBoxContainer/DefContainer,
+		$MarginContainer/VBoxContainer/StatsBoxContainer/SpAContainer,
+		$MarginContainer/VBoxContainer/StatsBoxContainer/SpDContainer,
+		$MarginContainer/VBoxContainer/StatsBoxContainer/SpeContainer,
+	]:
+		stat_row.add_theme_constant_override("separation", STORAGE_STAT_VALUE_SEPARATION)
 	custom_minimum_size.y = STORAGE_CARD_HEIGHT
 	size.y = STORAGE_CARD_HEIGHT
 
@@ -247,6 +256,33 @@ func position_near_rect(anchor_rect: Rect2, viewport_size: Vector2) -> void:
 		target_position.x = padding
 	target_position.y = clampf(target_position.y, padding, maxf(padding, viewport_size.y - card_size.y - padding))
 
+	global_position = target_position
+
+
+func position_beside_rect_within(anchor_rect: Rect2, bounds_rect: Rect2) -> void:
+	var padding := 10.0
+	custom_minimum_size.x = CARD_WIDTH
+	custom_minimum_size.y = STORAGE_CARD_HEIGHT if storage_visuals else 0.0
+	size.y = 0.0
+	reset_size()
+	size.x = minf(CARD_WIDTH, maxf(1.0, bounds_rect.size.x - padding * 2.0))
+	var card_size := size
+	var target_position := Vector2(
+		anchor_rect.end.x + padding,
+		anchor_rect.get_center().y - card_size.y * 0.5
+	)
+	if target_position.x + card_size.x > bounds_rect.end.x - padding:
+		target_position.x = anchor_rect.position.x - card_size.x - padding
+	target_position.x = clampf(
+		target_position.x,
+		bounds_rect.position.x + padding,
+		maxf(bounds_rect.position.x + padding, bounds_rect.end.x - card_size.x - padding)
+	)
+	target_position.y = clampf(
+		target_position.y,
+		bounds_rect.position.y + padding,
+		maxf(bounds_rect.position.y + padding, bounds_rect.end.y - card_size.y - padding)
+	)
 	global_position = target_position
 
 

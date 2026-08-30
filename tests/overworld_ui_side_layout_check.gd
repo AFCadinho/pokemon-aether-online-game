@@ -215,7 +215,9 @@ func _init() -> void:
 	_check(
 		script_source.contains("func _create_item_dex_source_card")
 		and script_source.contains("func _format_item_dex_source_chance")
-		and script_source.contains("availabilityStatus"),
+		and script_source.contains("availabilityStatus")
+		and script_source.contains('source.get("available", true)')
+		and script_source.contains('"ui.item_dex.sources.vendor_unplaced"'),
 		"Item Dex presents acquisition methods as detailed cards with chances and availability"
 	)
 	_check(scene_source.contains('path="res://assets/ui/staff_tools.svg" id="13_staff_tools"'), "Staff tools use a moderation shield instead of a rank crown")

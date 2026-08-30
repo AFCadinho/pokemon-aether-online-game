@@ -20,7 +20,7 @@ func _init() -> void:
 	_check(ui.contains("BAG_ITEM_EFFECT_PREVIEW.supports"), "medicine target selection remains effect-driven")
 	_check(ui.contains("func _is_pokemon_usable_item_id"), "unsupported target filtering remains centralized")
 	_check(ui.contains("InventoryService.use_pokemon_item"), "supported Bag use remains server-authoritative")
-	_check(ui.contains("MarketService.purchase_standard_item"), "market purchases remain server-backed")
+	_check(ui.contains("MarketService.purchase_item"), "named market purchases remain server-backed")
 	quit(1 if failures > 0 else 0)
 
 

@@ -934,7 +934,7 @@ func _apply_world_pixel_scale() -> void:
 	if world_camera == null:
 		return
 	var effective_scale := PixelPerfectRenderingScript.resolve_world_scale_for_area(
-		SettingsManager.world_pixel_scale,
+		SettingsManager.get_effective_world_pixel_scale(get_window().size),
 		_get_current_map_world_access_area_type()
 	)
 	var canvas_scale := world_camera.get_viewport().get_screen_transform().get_scale()

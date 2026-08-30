@@ -35,13 +35,16 @@ func _check_endpoints() -> void:
 	_check_true(text.contains("STANDARD_MARKET_ENDPOINT := \"/game/markets/standard\""), "catalog endpoint")
 	_check_true(text.contains("STANDARD_MARKET_PURCHASE_ENDPOINT := \"/game/markets/standard/purchase\""), "purchase endpoint")
 	_check_true(text.contains("STANDARD_MARKET_SALE_ENDPOINT := \"/game/markets/standard/sell\""), "sale endpoint")
+	_check_true(text.contains("MARKET_ENDPOINT_TEMPLATE := \"/game/markets/%s\""), "named catalog endpoint")
+	_check_true(text.contains("MARKET_PURCHASE_ENDPOINT_TEMPLATE := \"/game/markets/%s/purchase\""), "named purchase endpoint")
 
 
 func _check_market_selection() -> void:
 	var text := _read_text(MARKET_SERVICE_SCRIPT)
 	_check_true(text.contains("func load_market(market_id: String) -> Dictionary:"), "market selection entrypoint")
 	_check_true(text.contains('"standard", "standard_pokemart":'), "standard market aliases")
-	_check_true(text.contains("Unsupported market id:"), "unsupported markets fail explicitly")
+	_check_true(text.contains("return await _load_named_market(normalized_market_id)"), "named NPC markets load through the generic endpoint")
+	_check_true(text.contains("func purchase_item(market_id: String, item_id: String"), "named NPC markets use a generic purchase entrypoint")
 
 
 func _check_purchase_payload() -> void:
