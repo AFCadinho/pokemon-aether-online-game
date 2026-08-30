@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.69 - 2026-08-30
+
 - Officer Jenny now finishes her arrest dialogue before taking a caught pickpocket to jail.
 - Arrest scenes now use Cerulean City's cropped Officer Jenny portrait and pause position saves until the jail transfer finishes.
 
