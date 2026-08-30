@@ -37,6 +37,7 @@
 
 **Changed**
 
+- The Guild Duel arena now uses the latest visual layout from its Tiled source map.
 - Guild Duel overworld names now stay hidden from opponents until that Trainer has entered a battle; the discovered identity is then shared with the opposing Guild for the rest of the Duel.
 - Guild Duels now use the red Duel portal as an interactive exit in both staging areas and both jail areas; late lobby-portal entrants always arrive in jail as spectators after the countdown.
 - Once an Aether Clash challenge is accepted, every member of both Guilds now receives a persistent on-screen gathering timer directing them to the red Guild Duel portal.
