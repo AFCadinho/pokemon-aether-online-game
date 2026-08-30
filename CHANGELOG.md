@@ -4,6 +4,7 @@
 
 **Added**
 
+- Every Pokémon Center now has a Move Mentor who can freely teach compatible relearn, Egg, tutor, special, event, legacy, and pre-evolution moves.
 - Guild Leaders and Captains can now send, accept, decline, and cancel Guild vs Guild Aether Clash challenges from the Guild screen. Multiple challenges may remain pending, while accepting one reserves both Guilds and opens a timed lobby-entry window for every member.
 
 ## 0.3.69 - 2026-08-30
