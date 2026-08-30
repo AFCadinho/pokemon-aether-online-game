@@ -245,9 +245,48 @@ func _run() -> void:
 	_check(popup.find_child("GuildAetherClashWorkspace", true, false) != null, "Aether Clash workspace opens")
 	_check(popup.find_child("GuildAetherClashDuelModeTab", true, false) != null, "Guild Duel has a dedicated mode tab")
 	_check(popup.find_child("GuildAetherClashBattleRoyaleModeTab", true, false) != null, "Battle Royale has a dedicated mode tab")
+	_check(popup.find_child("GuildAetherClashDuelNavigation", true, false) != null, "Guild Duel exposes compact workspace navigation")
+	_check(popup.find_child("GuildAetherClashOverviewTab", true, false) != null, "Guild Duel has an Overview workspace")
+	_check(popup.find_child("GuildAetherClashChallengesTab", true, false) != null, "Guild Duel has a Challenges workspace")
+	_check(popup.find_child("GuildAetherClashHistoryTab", true, false) != null, "Guild Duel has a History workspace")
 	_check(popup.find_child("GuildAetherClashDuelStats", true, false) != null, "Guild Duel record renders")
 	var duel_wins := popup.find_child("GuildAetherClashWins", true, false) as PanelContainer
 	_check(duel_wins != null, "Guild Duel win statistic renders")
+	_check(popup.find_child("GuildAetherClashDuelHistory", true, false) == null, "Overview stays focused on current status")
+	popup._set_aether_clash_duel_section("challenges")
+	await process_frame
+	_check(popup.find_child("GuildAetherClashIncomingGroup", true, false) != null, "Challenges separates the incoming queue")
+	_check(popup.find_child("GuildAetherClashOutgoingGroup", true, false) != null, "Challenges separates the outgoing queue")
+	_check(popup.find_child("GuildAetherClashDuelStats", true, false) == null, "Challenges stays free of unrelated statistics")
+	popup.aether_clash_state["pendingIncoming"] = [{
+		"id": "leader-incoming",
+		"challengerGuild": {"id": 2, "name": "Midnight League"},
+		"challengedGuild": {"id": 1, "name": "Aether Vanguard"},
+		"createdBy": "Umbra",
+		"expiresAt": Time.get_datetime_string_from_unix_time(int(Time.get_unix_time_from_system()) + 60),
+	}]
+	popup.aether_clash_state["pendingOutgoing"] = [{
+		"id": "leader-outgoing",
+		"challengerGuild": {"id": 1, "name": "Aether Vanguard"},
+		"challengedGuild": {"id": 3, "name": "Silver Guard"},
+		"createdBy": "Nova",
+		"expiresAt": Time.get_datetime_string_from_unix_time(int(Time.get_unix_time_from_system()) + 60),
+	}]
+	popup._render_guild_home()
+	await process_frame
+	var challenge_section_tab := popup.find_child("GuildAetherClashChallengesTab", true, false) as Button
+	_check(challenge_section_tab != null and challenge_section_tab.text.contains("2"), "Challenges navigation shows the pending total")
+	_check(popup.find_child("AcceptGuildAetherClashButton", true, false) != null, "authorized staff can accept from the Challenges workspace")
+	_check(popup.find_child("DeclineGuildAetherClashButton", true, false) != null, "authorized staff can decline from the Challenges workspace")
+	_check(popup.find_child("CancelGuildAetherClashChallengeButton", true, false) != null, "authorized staff can cancel an outgoing challenge from its workspace")
+	popup.aether_clash_state["pendingIncoming"] = []
+	popup.aether_clash_state["pendingOutgoing"] = []
+	popup._render_guild_home()
+	await process_frame
+	popup._set_aether_clash_duel_section("history")
+	await process_frame
+	_check(popup.find_child("GuildAetherClashDuelStats", true, false) == null, "History does not repeat the statistic dashboard")
+	_check(popup.find_child("GuildCurrentAetherClash", true, false) != null, "the active Clash stays visible while browsing history")
 	_check(popup.find_child("GuildAetherClashHistoryEntry", true, false) != null, "recent Guild Duel history renders")
 	var own_roster := popup.find_child("GuildAetherClashHistoryOwnRoster", true, false) as Label
 	var opponent_roster := popup.find_child("GuildAetherClashHistoryOpponentRoster", true, false) as Label
@@ -265,6 +304,8 @@ func _run() -> void:
 		and opponent_roster.text.contains("0"),
 		"Guild Duel history shows the opponent's locked roster and survivors"
 	)
+	popup._set_aether_clash_duel_section("overview")
+	await process_frame
 	_check(popup.find_child("GuildAetherClashHeader", true, false) != null, "Aether Clash uses the shared workspace heading")
 	var clash_refresh := popup.find_child("RefreshGuildAetherClashButton", true, false) as Button
 	_check(
@@ -272,6 +313,8 @@ func _run() -> void:
 		"Aether Clash refresh is visually secondary to challenge actions"
 	)
 	_check(popup.find_child("GuildCurrentAetherClash", true, false) != null, "accepted Guild clash is visible")
+	var clash_status_label := popup.find_child("GuildAetherClashStatusLabel", true, false) as Label
+	_check(clash_status_label != null and clash_status_label.text == "Accepted", "active Clash uses a compact status badge")
 	var clash_countdown := popup.find_child("GuildAetherClashEntryCountdown", true, false) as Label
 	_check(clash_countdown != null and clash_countdown.text.contains(":"), "accepted Guild clash shows a running portal countdown")
 	_check(popup.find_child("CancelCurrentGuildAetherClashButton", true, false) != null, "authorized staff can cancel an accepted clash")
@@ -1324,13 +1367,19 @@ func _run() -> void:
 	await process_frame
 	_check(popup.find_child("GuildCurrentAetherClash", true, false) != null, "regular members can see the accepted Aether Clash")
 	_check(popup.find_child("GuildAetherClashDuelStats", true, false) != null, "regular members can see the Guild Duel record")
-	_check(popup.find_child("GuildAetherClashDuelHistory", true, false) != null, "regular members can see Guild Duel history")
-	_check(popup.find_child("IncomingGuildAetherClashChallenge", true, false) == null, "short-lived incoming challenges stay out of the statistics workspace")
-	_check(popup.find_child("OutgoingGuildAetherClashChallenge", true, false) == null, "short-lived outgoing challenges stay out of the statistics workspace")
 	_check(popup.find_child("CancelCurrentGuildAetherClashButton", true, false) == null, "regular members cannot manage the accepted Aether Clash")
+	popup._set_aether_clash_duel_section("challenges")
+	await process_frame
+	_check(popup.find_child("GuildAetherClashChallengesWorkspace", true, false) != null, "regular members can open pending challenges")
+	_check(popup.find_child("GuildCurrentAetherClash", true, false) != null, "the active Clash stays visible while reviewing challenges")
+	_check(popup.find_child("IncomingGuildAetherClashChallenge", true, false) != null, "incoming challenges remain easy to find after their popup closes")
+	_check(popup.find_child("OutgoingGuildAetherClashChallenge", true, false) != null, "outgoing challenges remain easy to review")
 	_check(popup.find_child("AcceptGuildAetherClashButton", true, false) == null, "regular members cannot accept pending Aether Clash challenges")
 	_check(popup.find_child("DeclineGuildAetherClashButton", true, false) == null, "regular members cannot decline pending Aether Clash challenges")
 	_check(popup.find_child("CancelGuildAetherClashChallengeButton", true, false) == null, "regular members cannot cancel pending Aether Clash challenges")
+	popup._set_aether_clash_duel_section("history")
+	await process_frame
+	_check(popup.find_child("GuildAetherClashDuelHistory", true, false) != null, "regular members can navigate to Guild Duel history")
 	popup._show_guild_section("members")
 	await process_frame
 	var regular_member_actions := popup.find_child("GuildMemberActionsButton_2", true, false) as MenuButton
