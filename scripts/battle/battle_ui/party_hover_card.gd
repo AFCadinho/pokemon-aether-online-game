@@ -5,6 +5,7 @@ class_name PartyHoverCard
 const TYPE_ICON_PATH := "res://assets/sprites/types/%s.png"
 const CARD_WIDTH := 300.0
 const STORAGE_CARD_HEIGHT := 261.0
+const STORAGE_STAT_VALUE_SEPARATION := 4
 const IV_STAT_ENTRIES: Array[Array] = [
 	["HP", "hp"],
 	["Atk", "atk"],
@@ -133,6 +134,14 @@ func _apply_storage_visuals() -> void:
 	add_theme_stylebox_override("panel", style)
 	name_label.add_theme_font_size_override("font_size", 19)
 	($MarginContainer/VBoxContainer as VBoxContainer).add_theme_constant_override("separation", 3)
+	for stat_row: HBoxContainer in [
+		$MarginContainer/VBoxContainer/StatsBoxContainer/AttackContainer,
+		$MarginContainer/VBoxContainer/StatsBoxContainer/DefContainer,
+		$MarginContainer/VBoxContainer/StatsBoxContainer/SpAContainer,
+		$MarginContainer/VBoxContainer/StatsBoxContainer/SpDContainer,
+		$MarginContainer/VBoxContainer/StatsBoxContainer/SpeContainer,
+	]:
+		stat_row.add_theme_constant_override("separation", STORAGE_STAT_VALUE_SEPARATION)
 	custom_minimum_size.y = STORAGE_CARD_HEIGHT
 	size.y = STORAGE_CARD_HEIGHT
 

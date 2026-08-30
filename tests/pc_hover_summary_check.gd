@@ -19,6 +19,13 @@ func _init() -> void:
 	) as Control
 	_check(iv_details != null and not iv_details.visible, "Storage hover cards hide IV details")
 	_check(ev_details != null and not ev_details.visible, "Storage hover cards hide EV details")
+	var stats := card.get_node("MarginContainer/VBoxContainer/StatsBoxContainer")
+	for stat_row_name: String in ["AttackContainer", "DefContainer", "SpAContainer", "SpDContainer", "SpeContainer"]:
+		var stat_row := stats.get_node(stat_row_name) as HBoxContainer
+		_check(
+			stat_row.get_theme_constant("separation") == PartyHoverCard.STORAGE_STAT_VALUE_SEPARATION,
+			"Storage hover %s separates its stat label and value" % stat_row_name
+		)
 
 	card.show_for_pokemon({
 		"species": "Blastoise",
