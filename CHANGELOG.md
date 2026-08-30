@@ -18,6 +18,7 @@
 
 **Fixed**
 
+- Aether Clash challenges sent by right-clicking another Trainer now use the themed Aether modal instead of an unstyled system dialog.
 - The game interface now loads reliably when the Move Mentor is first added to a fresh Godot project cache.
 
 ## 0.3.69 - 2026-08-30
