@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3]
-
-[ext_resource type="PackedScene" path="res://scenes/npcs/market_attendant_npc.tscn" id="1_market_attendant"]
-
-[node name="PvPTacticsSpecialistNPC" instance=ExtResource("1_market_attendant")]
-npc_definition_id = "pvp_tactics_specialist"
-display_name = "PvP Tactics Specialist"
-market_id = "pvp_tactics_exchange"
-market_mode = "player_buys"
