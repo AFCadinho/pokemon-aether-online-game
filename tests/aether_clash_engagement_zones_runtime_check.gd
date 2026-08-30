@@ -31,6 +31,8 @@ func _run() -> void:
 
 	var zones = duel.get_node_or_null("ArenaZones")
 	_check(zones != null, "Duel owns visible staging and exit zones")
+	var arena_hud = duel.get_node_or_null("ArenaHud")
+	_check(arena_hud != null and int(arena_hud.get("layer")) < 10, "Battle UI renders above the Guild Duel arena HUD")
 	var blue_zone: Rect2 = zones.call("get_zone_rect", "blue")
 	var red_zone: Rect2 = zones.call("get_zone_rect", "red")
 	_check(blue_zone.get_center() == Vector2(1456, 208), "Blue staging zone follows its editable spawn marker")
@@ -52,6 +54,11 @@ func _run() -> void:
 	root.add_child(remote_actor)
 
 	duel.call("_apply_arena_state", _payload("entry_open", "blue"))
+	arena_hud.call("set_battle_overlay_active", true)
+	duel.call("_apply_arena_state", _payload("entry_open", "blue"))
+	_check(not arena_hud.visible, "Arena HUD stays hidden while a local battle overlay is active")
+	arena_hud.call("set_battle_overlay_active", false)
+	_check(arena_hud.visible, "Arena HUD returns after the local battle overlay closes")
 	_check(
 		not bool(duel.call("is_world_actor_step_blocked", Vector2(512, 512), Vector2(544, 512))),
 		"Players may overlap while the staging countdown is open"
@@ -161,6 +168,11 @@ func _run() -> void:
 		and duel_source.contains('"engagement_request_completed"')
 		and duel_source.contains('"arena_state_failed"'),
 		"Collision requests and arena-state failures emit structured Aether Clash traces"
+	)
+	_check(
+		duel_source.contains("var engagement_battle_attempts: Dictionary")
+		and duel_source.contains('"engagement_already_started_locally"'),
+		"Arena refreshes cannot repeatedly start the same local engagement"
 	)
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	_check(

@@ -14,6 +14,8 @@ class_name AetherClashArenaHud
 
 var arena_payload: Dictionary = {}
 var server_clock_offset_seconds := 0.0
+var battle_overlay_active := false
+var arena_display_requested := false
 
 
 func _ready() -> void:
@@ -32,7 +34,8 @@ func _process(_delta: float) -> void:
 
 
 func show_syncing() -> void:
-	visible = true
+	arena_display_requested = true
+	visible = not battle_overlay_active
 	challenger_side_label.text = _text("ui.aether_clash.arena.blue_side", "BLUE SIDE")
 	challenged_side_label.text = _text("ui.aether_clash.arena.red_side", "RED SIDE")
 	challenger_name_label.text = _text("ui.aether_clash.arena.guild_one", "Guild 1")
@@ -49,9 +52,15 @@ func show_syncing() -> void:
 
 func apply_arena_state(payload: Dictionary) -> void:
 	arena_payload = payload.duplicate(true)
+	arena_display_requested = true
 	server_clock_offset_seconds = _server_clock_offset(str(payload.get("serverNow", "")))
-	visible = true
+	visible = not battle_overlay_active
 	_render()
+
+
+func set_battle_overlay_active(is_active: bool) -> void:
+	battle_overlay_active = is_active
+	visible = not battle_overlay_active and arena_display_requested
 
 
 func _render() -> void:
