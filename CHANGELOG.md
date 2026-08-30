@@ -4,7 +4,8 @@
 
 **Added**
 
-- Every Pokémon Center now has a Move Mentor who can freely teach compatible relearn, Egg, tutor, special, event, legacy, and pre-evolution moves.
+- Every Pokémon Center now has a Move Maniac who can freely teach compatible relearn, Egg, tutor, special, event, legacy, and pre-evolution moves.
+- Every Pokémon Center now has a separate Move Deleter who can safely remove any move except a Pokémon's last one.
 - Guild Leaders and Captains can now send, accept, decline, and cancel Guild vs Guild Aether Clash challenges from the Guild screen. Multiple challenges may remain pending, while accepting one reserves both Guilds and opens a timed lobby-entry window for every member.
 - The Aether Clash Lobby now has mode-specific portals. The Guild Duel portal sends on-time Guild members to their arena side, late entrants and allowed outsiders to jail as spectators, and lets challengers choose whether outside spectators may attend.
 - Guild Leaders and Captains can now right-click another Trainer to challenge that Trainer's Guild to an Aether Clash.
@@ -14,20 +15,20 @@
 
 - Wild battles now open with both Pokémon ready, letting queued move or Run input start sooner without an opening summon animation.
 - Wild victories no longer pause on the winner message; disabling Move Animations also removes the remaining terminal presentation waits while still applying every result and reward.
-- The Move Mentor now stands behind the Pokémon Center desk and can be spoken to across it.
-- The Move Mentor interface now uses Pokémon portraits, move-type and damage-category icons, clearer move details, and a fully themed source filter.
+- The Move Maniac now stands behind the Pokémon Center desk and can be spoken to across it.
+- The Move Maniac interface now uses Pokémon portraits, move-type and damage-category icons, clearer move details, and a fully themed source filter.
 - Guild vs Guild Aether Clash entry now uses the red lobby portal; the purple portal is reserved for Battle Royale.
 - Teaching a fifth move now asks which current move to forget after pressing Teach move.
 - The move-forgetting dialog now previews the new move and shows its full details on hover.
-- The Move Mentor's move list now displays PP, base power, and accuracy for direct comparison.
-- Move Mentor lessons now produce a system message and a top-right learned-move card.
+- The Move Maniac's move list now displays PP, base power, and accuracy for direct comparison.
+- Move Maniac lessons now produce a system message and a top-right learned-move card.
 
 **Fixed**
 
 - Guild vs Guild participants now arrive directly before the arena portal assigned to their Guild side.
 - Aether Clash challenges sent by right-clicking another Trainer now use the themed Aether modal instead of an unstyled system dialog.
 - Aether Clash entry now saves the player's exact portal position and waits for server approval before playing the teleport effect.
-- The game interface now loads reliably when the Move Mentor is first added to a fresh Godot project cache.
+- The game interface now loads reliably when the Move Maniac is first added to a fresh Godot project cache.
 
 ## 0.3.69 - 2026-08-30
 

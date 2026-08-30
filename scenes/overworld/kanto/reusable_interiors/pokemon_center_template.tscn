@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://cm7fo281e44an" path="res://scripts/world/npcs/heal_machine_effect.gd" id="9_heal_effect"]
 [ext_resource type="Texture2D" uid="uid://bb62an6t47c7m" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_044_Beauty.png" id="10_k6grd"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/move_mentor_npc.tscn" id="11_move_mentor"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/move_deleter_npc.tscn" id="12_move_deleter"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="20_transition_hint"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y5qkb"]
@@ -137,10 +138,14 @@ position = Vector2(304, 880)
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = SubResource("SpriteFrames_hwrcd")
 
-[node name="MoveMentor" parent="Entities/NPCs" unique_id=1484831813 instance=ExtResource("11_move_mentor")]
+[node name="MoveManiac" parent="Entities/NPCs" unique_id=1484831813 instance=ExtResource("11_move_mentor")]
 position = Vector2(368, 400)
 facing_direction = Vector2(0, 1)
 manual_interaction_reach_tiles = 2
+
+[node name="MoveDeleter" parent="Entities/NPCs" instance=ExtResource("12_move_deleter")]
+position = Vector2(624, 592)
+facing_direction = Vector2(-1, 0)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1615845431]
 

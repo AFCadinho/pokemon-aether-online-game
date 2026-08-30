@@ -58,38 +58,40 @@ func _check_center_instances() -> void:
 		if packed == null:
 			continue
 		var center := packed.instantiate()
-		var mentor := center.get_node_or_null("Entities/NPCs/MoveMentor")
+		var mentor := center.get_node_or_null("Entities/NPCs/MoveManiac")
 		_check(
 			mentor != null
 				and mentor.get_script() != null
 				and str(mentor.get_script().resource_path) == "res://scripts/world/npcs/move_mentor_npc.gd",
-			"%s inherits the Move Mentor" % path
+			"%s inherits the Move Maniac" % path
 		)
 		_check(
 			mentor != null
 				and mentor.position == Vector2(368, 400)
 				and mentor.get("facing_direction") == Vector2.DOWN
 				and int(mentor.get("manual_interaction_reach_tiles")) == 2,
-			"%s keeps the Move Mentor reachable across the desk" % path
+			"%s keeps the Move Maniac reachable across the desk" % path
 		)
 		center.free()
 
 
 func _check_npc_scene() -> void:
+	var scene_source := FileAccess.get_file_as_string(NPC_PATH)
+	_check(scene_source.contains("NPC_084_Poke_Maniac.png"), "Move Maniac uses the official Poké Maniac overworld look")
 	var packed := load(NPC_PATH) as PackedScene
-	_check(packed != null, "Move Mentor NPC scene loads")
+	_check(packed != null, "Move Maniac NPC scene loads")
 	if packed == null:
 		return
 	var npc := packed.instantiate()
-	_check(npc != null, "Move Mentor NPC uses its dedicated behavior")
+	_check(npc != null, "Move Maniac NPC uses its dedicated behavior")
 	if npc != null:
-		_check(str(npc.get("npc_definition_id")) == "pokemon_center_move_mentor", "Move Mentor uses shared NPC metadata")
+		_check(str(npc.get("npc_definition_id")) == "pokemon_center_move_mentor", "Move Maniac uses shared NPC metadata")
 		var interaction_shape := npc.get_node_or_null("InteractionArea/CollisionShape2D") as CollisionShape2D
 		_check(
 			interaction_shape != null
 				and interaction_shape.shape is RectangleShape2D
 				and (interaction_shape.shape as RectangleShape2D).size.y >= 96.0,
-			"Move Mentor detects players across a two-tile-deep desk"
+			"Move Maniac detects players across a two-tile-deep desk"
 		)
 		npc.free()
 
