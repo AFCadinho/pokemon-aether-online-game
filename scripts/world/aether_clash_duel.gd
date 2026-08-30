@@ -20,9 +20,9 @@ const STAGING_EJECTION_GRACE_MSEC := 2000
 const LEAVE_DIALOG_INPUT_OWNER: StringName = &"aether_clash_leave_dialog"
 const SPECTATOR_CAMERA_INPUT_OWNER: StringName = &"aether_clash_spectator_camera"
 const PARTICIPANT_WORLD_SCALE := 2.0
-const SPECTATOR_CAMERA_DEFAULT_ZOOM := 1.25
-const SPECTATOR_CAMERA_MIN_ZOOM := 0.75
-const SPECTATOR_CAMERA_MAX_ZOOM := 2.0
+const SPECTATOR_CAMERA_DEFAULT_ZOOM := 0.75
+const SPECTATOR_CAMERA_MIN_ZOOM := 0.7
+const SPECTATOR_CAMERA_MAX_ZOOM := 1.5
 const SPECTATOR_CAMERA_MOVE_SPEED := 620.0
 const SPECTATOR_CAMERA_FAST_MULTIPLIER := 1.75
 
@@ -60,6 +60,7 @@ var spectator_camera_active := false
 var spectator_camera_bounds := Rect2()
 var spectator_camera_player_camera: Camera2D
 var spectator_camera_player_was_enabled := true
+var spectator_camera_dragging := false
 var participant_zoom_applied := false
 var participant_zoom_camera: Camera2D
 var spectator_battle_request_active := false
@@ -70,6 +71,10 @@ func _ready() -> void:
 	engagement_contact_requested.connect(_on_engagement_contact_requested)
 	if not spectator_camera_hud.return_requested.is_connected(_deactivate_spectator_camera):
 		spectator_camera_hud.return_requested.connect(_deactivate_spectator_camera)
+	if not spectator_camera_hud.region_requested.is_connected(_on_spectator_region_requested):
+		spectator_camera_hud.region_requested.connect(_on_spectator_region_requested)
+	if not spectator_camera_hud.zoom_requested.is_connected(_on_spectator_zoom_requested):
+		spectator_camera_hud.zoom_requested.connect(_on_spectator_zoom_requested)
 	if not ChatRealtimeService.message_received.is_connected(_on_realtime_message_received):
 		ChatRealtimeService.message_received.connect(_on_realtime_message_received)
 	arena_state_timer = Timer.new()
@@ -164,7 +169,17 @@ func can_launch_projectile() -> bool:
 func can_view_overworld_identity(user_id: int) -> bool:
 	if instance_session_id.is_empty():
 		return true
-	return user_id > 0 and visible_identity_user_ids.has(user_id)
+	if user_id <= 0:
+		return false
+	if user_id == _local_user_id():
+		return true
+	# Arena opponents stay anonymous for the entire Duel. Even if a stale or
+	# modified server payload includes an opponent id, the overworld client will
+	# only reveal active players from its own side. Battle UI owns battle names.
+	var arena_side := str(arena_players.get(user_id, ""))
+	if arena_side in ["blue", "red"]:
+		return arena_side == viewer_side and visible_identity_user_ids.has(user_id)
+	return visible_identity_user_ids.has(user_id)
 
 
 func is_world_barrier_step_blocked(from_position: Vector2, to_position: Vector2) -> bool:
@@ -187,6 +202,10 @@ func is_world_barrier_step_blocked(from_position: Vector2, to_position: Vector2)
 
 
 func is_world_actor_step_blocked(from_position: Vector2, to_position: Vector2) -> bool:
+	if instance_session_id.is_empty():
+		return false
+	if viewer_role == "spectator":
+		return _is_spectator_actor_step_blocked(from_position, to_position)
 	if not is_clash_active() or not _is_local_active_participant():
 		return false
 
@@ -217,6 +236,27 @@ func is_world_actor_step_blocked(from_position: Vector2, to_position: Vector2) -
 			and not engaged_player_ids.has(user_id)
 		):
 			_emit_engagement_contact(local_user_id, user_id, "player_contact")
+		return true
+	return false
+
+
+func _is_spectator_actor_step_blocked(from_position: Vector2, to_position: Vector2) -> bool:
+	if str(arena_session.get("status", "")) not in [
+		"entry_open", "roster_locked", "active", "finishing",
+	]:
+		return false
+	var local_actor := _actor_for_user_id(_local_user_id())
+	for actor: Node2D in _all_player_actors():
+		if actor == local_actor:
+			continue
+		var from_distance := from_position.distance_to(actor.global_position)
+		var to_distance := to_position.distance_to(actor.global_position)
+		if to_distance > ENGAGEMENT_CONTACT_DISTANCE:
+			continue
+		# Jail occupants physically block each other, but can always step away
+		# from an existing overlap. Spectator contact never starts a battle.
+		if from_distance <= ENGAGEMENT_CONTACT_DISTANCE and to_distance > from_distance:
+			continue
 		return true
 	return false
 
@@ -491,7 +531,7 @@ func _sync_identity_nameplates() -> void:
 			continue
 		var user_id_value: Variant = node.get("user_id")
 		var user_id := int(user_id_value) if user_id_value != null else 0
-		var identity_visible := user_id > 0 and visible_identity_user_ids.has(user_id)
+		var identity_visible := can_view_overworld_identity(user_id)
 		if node.has_method("set_gameplay_identity_masked"):
 			node.call("set_gameplay_nameplate_visible", true)
 			node.call("set_gameplay_identity_masked", not identity_visible, "???")
@@ -598,6 +638,7 @@ func _activate_spectator_camera(fallback_position: Vector2) -> void:
 	var start_position := player.global_position if player != null else fallback_position
 	spectator_camera.global_position = _clamp_spectator_camera_position(start_position)
 	spectator_camera.zoom = Vector2.ONE * SPECTATOR_CAMERA_DEFAULT_ZOOM
+	spectator_camera_hud.set_zoom_value(SPECTATOR_CAMERA_DEFAULT_ZOOM)
 	_apply_spectator_camera_limits()
 	spectator_camera_player_camera = player_camera
 	spectator_camera_player_was_enabled = player_camera.enabled
@@ -620,6 +661,7 @@ func _activate_spectator_camera(fallback_position: Vector2) -> void:
 func _deactivate_spectator_camera() -> void:
 	var was_active := spectator_camera_active
 	spectator_camera_active = false
+	spectator_camera_dragging = false
 	if spectator_camera != null:
 		spectator_camera.enabled = false
 	if spectator_camera_hud != null:
@@ -639,6 +681,8 @@ func _deactivate_spectator_camera() -> void:
 func _process_spectator_camera(delta: float) -> void:
 	if not spectator_camera_active or _world_battle_active():
 		return
+	if spectator_camera_dragging and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		spectator_camera_dragging = false
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	if direction == Vector2.ZERO:
 		return
@@ -658,9 +702,26 @@ func _unhandled_input(event: InputEvent) -> void:
 		_deactivate_spectator_camera()
 		get_viewport().set_input_as_handled()
 		return
+	if event is InputEventScreenDrag:
+		_pan_spectator_camera((event as InputEventScreenDrag).relative)
+		get_viewport().set_input_as_handled()
+		return
+	if event is InputEventScreenTouch:
+		if not (event as InputEventScreenTouch).pressed:
+			spectator_camera_dragging = false
+		return
+	if event is InputEventMouseMotion:
+		if spectator_camera_dragging:
+			_pan_spectator_camera((event as InputEventMouseMotion).relative)
+			get_viewport().set_input_as_handled()
+		return
 	if not event is InputEventMouseButton:
 		return
 	var mouse_event := event as InputEventMouseButton
+	if mouse_event.button_index == MOUSE_BUTTON_LEFT:
+		spectator_camera_dragging = mouse_event.pressed
+		get_viewport().set_input_as_handled()
+		return
 	if not mouse_event.pressed or mouse_event.button_index not in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
 		return
 	var next_zoom: float = spectator_camera.zoom.x
@@ -668,11 +729,52 @@ func _unhandled_input(event: InputEvent) -> void:
 		next_zoom *= 1.15
 	else:
 		next_zoom /= 1.15
-	next_zoom = clampf(next_zoom, SPECTATOR_CAMERA_MIN_ZOOM, SPECTATOR_CAMERA_MAX_ZOOM)
+	_set_spectator_zoom(next_zoom)
+	get_viewport().set_input_as_handled()
+
+
+func _pan_spectator_camera(screen_delta: Vector2) -> void:
+	var zoom_scale := maxf(absf(spectator_camera.zoom.x), 0.1)
+	spectator_camera.global_position = _clamp_spectator_camera_position(
+		spectator_camera.global_position - screen_delta / zoom_scale
+	)
+
+
+func _on_spectator_zoom_requested(value: float) -> void:
+	if spectator_camera_active:
+		_set_spectator_zoom(value)
+
+
+func _set_spectator_zoom(value: float) -> void:
+	var next_zoom := clampf(value, SPECTATOR_CAMERA_MIN_ZOOM, SPECTATOR_CAMERA_MAX_ZOOM)
 	spectator_camera.zoom = Vector2.ONE * next_zoom
+	spectator_camera_hud.set_zoom_value(next_zoom)
 	spectator_camera.global_position = _clamp_spectator_camera_position(spectator_camera.global_position)
 	spectator_camera.force_update_scroll()
-	get_viewport().set_input_as_handled()
+
+
+func _on_spectator_region_requested(region_id: String) -> void:
+	if not spectator_camera_active or spectator_camera_bounds.size == Vector2.ZERO:
+		return
+	var region_positions := {
+		"north_west": Vector2(0.17, 0.17),
+		"north": Vector2(0.5, 0.17),
+		"north_east": Vector2(0.83, 0.17),
+		"west": Vector2(0.17, 0.5),
+		"center": Vector2(0.5, 0.5),
+		"east": Vector2(0.83, 0.5),
+		"south_west": Vector2(0.17, 0.83),
+		"south": Vector2(0.5, 0.83),
+		"south_east": Vector2(0.83, 0.83),
+	}
+	if not region_positions.has(region_id):
+		return
+	var normalized_position: Vector2 = region_positions[region_id]
+	spectator_camera.global_position = _clamp_spectator_camera_position(
+		spectator_camera_bounds.position + spectator_camera_bounds.size * normalized_position
+	)
+	spectator_camera.reset_smoothing()
+	spectator_camera.force_update_scroll()
 
 
 func _arena_visual_bounds() -> Rect2:

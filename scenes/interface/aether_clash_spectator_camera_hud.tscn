@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/aether_clash_spectator_camera_hud.gd" id="1_script"]
 
@@ -17,7 +17,31 @@ shadow_color = Color(0, 0, 0, 0.45)
 shadow_size = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
-bg_color = Color(0.047, 0.29, 0.42, 1)
+bg_color = Color(0.035, 0.12, 0.19, 0.98)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.22, 0.55, 0.72, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_hover"]
+bg_color = Color(0.055, 0.31, 0.43, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.48, 0.91, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_pressed"]
+bg_color = Color(0.018, 0.18, 0.28, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -27,6 +51,25 @@ corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider"]
+bg_color = Color(0.012, 0.035, 0.06, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.18, 0.37, 0.52, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider_fill"]
+bg_color = Color(0.16, 0.69, 0.88, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="AetherClashSpectatorCameraHud" type="CanvasLayer"]
 layer = 10
@@ -47,10 +90,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -355.0
-offset_top = -86.0
-offset_right = 355.0
-offset_bottom = -18.0
+offset_left = -530.0
+offset_top = -152.0
+offset_right = 530.0
+offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
@@ -58,18 +101,144 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 [node name="Margin" type="MarginContainer" parent="Root/Panel"]
 layout_mode = 2
 theme_override_constants/margin_left = 14
-theme_override_constants/margin_top = 9
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 9
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
 
 [node name="Content" type="HBoxContainer" parent="Root/Panel/Margin"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 16
+
+[node name="Navigation" type="VBoxContainer" parent="Root/Panel/Margin/Content"]
+custom_minimum_size = Vector2(310, 0)
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Root/Panel/Margin/Content/Navigation"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.84, 0.98, 1)
+theme_override_font_sizes/font_size = 11
+text = "Jump to"
+
+[node name="Grid" type="GridContainer" parent="Root/Panel/Margin/Content/Navigation"]
+layout_mode = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+columns = 3
+
+[node name="NorthWest" type="Button" parent="Root/Panel/Margin/Content/Navigation/Grid"]
+custom_minimum_size = Vector2(98, 25)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.86, 0.95, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+text = "North West"
+
+[node name="North" type="Button" parent="Root/Panel/Margin/Content/Navigation/Grid"]
+custom_minimum_size = Vector2(98, 25)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.86, 0.95, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+text = "North"
+
+[node name="NorthEast" type="Button" parent="Root/Panel/Margin/Content/Navigation/Grid"]
+custom_minimum_size = Vector2(98, 25)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.86, 0.95, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+text = "North East"
+
+[node name="West" type="Button" parent="Root/Panel/Margin/Content/Navigation/Grid"]
+custom_minimum_size = Vector2(98, 25)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.86, 0.95, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+text = "West"
+
+[node name="Center" type="Button" parent="Root/Panel/Margin/Content/Navigation/Grid"]
+custom_minimum_size = Vector2(98, 25)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.86, 0.95, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+text = "Center"
+
+[node name="East" type="Button" parent="Root/Panel/Margin/Content/Navigation/Grid"]
+custom_minimum_size = Vector2(98, 25)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.86, 0.95, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+text = "East"
+
+[node name="SouthWest" type="Button" parent="Root/Panel/Margin/Content/Navigation/Grid"]
+custom_minimum_size = Vector2(98, 25)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.86, 0.95, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+text = "South West"
+
+[node name="South" type="Button" parent="Root/Panel/Margin/Content/Navigation/Grid"]
+custom_minimum_size = Vector2(98, 25)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.86, 0.95, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+text = "South"
+
+[node name="SouthEast" type="Button" parent="Root/Panel/Margin/Content/Navigation/Grid"]
+custom_minimum_size = Vector2(98, 25)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.86, 0.95, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+text = "South East"
 
 [node name="Copy" type="VBoxContainer" parent="Root/Panel/Margin/Content"]
+custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 2
+theme_override_constants/separation = 5
 
 [node name="Title" type="Label" parent="Root/Panel/Margin/Content/Copy"]
 layout_mode = 2
@@ -81,15 +250,53 @@ text = "AETHER VIEW"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.72, 0.8, 0.88, 1)
 theme_override_font_sizes/font_size = 11
-text = "Move with WASD or the arrow keys · Mouse wheel zooms · Click a Master Ball to watch its battle"
+text = "Hold and drag to look around · Click a Master Ball to watch its battle"
 text_overrun_behavior = 3
 
-[node name="ReturnButton" type="Button" parent="Root/Panel/Margin/Content"]
-custom_minimum_size = Vector2(126, 42)
+[node name="Spacer" type="Control" parent="Root/Panel/Margin/Content/Copy"]
+custom_minimum_size = Vector2(0, 7)
 layout_mode = 2
+
+[node name="ZoomRow" type="HBoxContainer" parent="Root/Panel/Margin/Content/Copy"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Root/Panel/Margin/Content/Copy/ZoomRow"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.88, 0.94, 1)
+theme_override_font_sizes/font_size = 11
+text = "Zoom"
+
+[node name="Slider" type="HSlider" parent="Root/Panel/Margin/Content/Copy/ZoomRow"]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_styles/slider = SubResource("StyleBoxFlat_slider")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_slider_fill")
+min_value = 0.7
+max_value = 1.5
+step = 0.05
+value = 0.75
+
+[node name="Value" type="Label" parent="Root/Panel/Margin/Content/Copy/ZoomRow"]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.84, 0.98, 1)
+theme_override_font_sizes/font_size = 11
+text = "0.75x"
+horizontal_alignment = 2
+
+[node name="ReturnButton" type="Button" parent="Root/Panel/Margin/Content"]
+custom_minimum_size = Vector2(138, 58)
+layout_mode = 2
+size_flags_vertical = 4
 focus_mode = 0
 theme_override_colors/font_color = Color(0.92, 0.98, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
 text = "Return to Jail"
