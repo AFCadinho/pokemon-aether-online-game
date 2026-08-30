@@ -148,7 +148,6 @@ func is_world_actor_step_blocked(from_position: Vector2, to_position: Vector2) -
 
 	for exit_side: String in ["blue", "red"]:
 		if _enters_rect(from_position, to_position, _zone_rect(exit_side)):
-			_request_leave_confirmation.call_deferred()
 			return true
 
 	var local_user_id := _local_user_id()
@@ -437,8 +436,33 @@ func _process_staging_ejection() -> void:
 	player.call("teleport_within_current_map", exit_point, facing)
 
 
+func request_portal_exit(
+	mode_id: String,
+	_player: Node2D,
+	_portal: Node
+) -> Dictionary:
+	if mode_id != "guild_duel" or instance_session_id.is_empty():
+		return {
+			"success": false,
+			"error": _text(
+				"ui.aether_clash.leave.unavailable",
+				"Leaving the Clash is unavailable right now."
+			),
+		}
+	if str(arena_session.get("status", "")) not in ["entry_open", "active", "completed", "no_show"]:
+		return {
+			"success": false,
+			"error": _text(
+				"ui.aether_clash.leave.unavailable",
+				"Leaving the Clash is unavailable right now."
+			),
+		}
+	_request_leave_confirmation()
+	return {"success": true}
+
+
 func _request_leave_confirmation() -> void:
-	if leave_request_active or leave_confirmation != null or not _is_local_active_participant():
+	if leave_request_active or leave_confirmation != null:
 		return
 	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate()
 	if dialog == null:
@@ -448,9 +472,23 @@ func _request_leave_confirmation() -> void:
 	# Keep arena confirmations in the HUD canvas. A world-space parent can place
 	# an otherwise visible Control behind the map while its input lock remains.
 	arena_hud.add_child(dialog)
+	var leave_message := _text(
+		"ui.aether_clash.leave.spectator_message",
+		"Return to the Aether Clash Lobby and stop spectating this Clash?"
+	)
+	if str(arena_session.get("status", "")) == "entry_open" and viewer_role == "participant":
+		leave_message = _text(
+			"ui.aether_clash.leave.staging_message",
+			"Leave the staging area? You will not join the locked roster unless you enter again before the countdown ends."
+		)
+	elif _is_local_active_participant():
+		leave_message = _text(
+			"ui.aether_clash.leave.message",
+			"Leaving eliminates you immediately. You cannot return to this Clash."
+		)
 	dialog.configure(
 		_text("ui.aether_clash.leave.title", "Leave Aether Clash?"),
-		_text("ui.aether_clash.leave.message", "Leaving eliminates you immediately. You cannot return to this Clash."),
+		leave_message,
 		_text("ui.aether_clash.leave.confirm", "Leave Clash"),
 		_text("common.cancel", "Cancel")
 	)

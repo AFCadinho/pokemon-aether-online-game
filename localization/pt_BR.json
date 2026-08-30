@@ -606,6 +606,8 @@
   "ui.aether_clash.arena.red_side": "LADO VERMELHO",
   "ui.aether_clash.leave.title": "Sair do Aether Clash?",
   "ui.aether_clash.leave.message": "Sair elimina você imediatamente. Não será possível voltar a este Clash.",
+  "ui.aether_clash.leave.staging_message": "Sair da área de preparação? Você só entrará na lista bloqueada se voltar antes do fim da contagem regressiva.",
+  "ui.aether_clash.leave.spectator_message": "Voltar ao Lobby do Aether Clash e parar de assistir a este Clash?",
   "ui.aether_clash.leave.confirm": "Sair do Clash",
   "ui.aether_clash.leave.unavailable": "Não é possível sair do Clash agora.",
   "ui.aether_clash.result.title.victory": "Vitória no Duelo de Guildas!",

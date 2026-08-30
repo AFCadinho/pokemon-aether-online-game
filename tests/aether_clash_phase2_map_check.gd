@@ -13,6 +13,12 @@ const EXPECTED_ARENA_SPAWN_POSITIONS := {
 	"Guild1ArenaSpawn": Vector2(1456, 208),
 	"Guild2ArenaSpawn": Vector2(1072, 4752),
 }
+const EXPECTED_EXIT_PORTALS := {
+	"BlueStagingExitPortal": Vector2(1456, 288),
+	"RedStagingExitPortal": Vector2(1072, 4672),
+	"Guild1JailExitPortal": Vector2(2288, 2416),
+	"Guild2JailExitPortal": Vector2(2288, 2672),
+}
 
 var failed := false
 
@@ -71,6 +77,25 @@ func _run() -> void:
 		if spawn_name != "SpectatorJailSpawn":
 			distinct_positions[spawn.position] = true
 	_check(distinct_positions.size() == 4, "Both teams have distinct arena and jail arrivals")
+	for portal_name: String in EXPECTED_EXIT_PORTALS:
+		var portal := duel.get_node_or_null("Entities/Interactables/%s" % portal_name) as Node2D
+		_check(portal != null, "Duel exposes %s" % portal_name)
+		if portal == null:
+			continue
+		_check(portal.position == EXPECTED_EXIT_PORTALS[portal_name], "%s is at its editable arena location" % portal_name)
+		_check(str(portal.get("mode_id")) == "guild_duel", "%s uses Guild Duel mode" % portal_name)
+		_check(str(portal.get("portal_action")) == "exit", "%s is an arena exit" % portal_name)
+		_check(bool(portal.get("entry_open")), "%s remains interactable throughout the Duel" % portal_name)
+		var sprite := portal.get_node_or_null("PortalSprite") as Sprite2D
+		_check(
+			sprite != null and sprite.texture.resource_path.ends_with("clash_portal_red.png"),
+			"%s reuses the red lobby portal art" % portal_name
+		)
+		var tile := Vector2i(floori(portal.position.x / 32.0), floori(portal.position.y / 32.0))
+		_check(
+			collision != null and collision.get_cell_source_id(tile) == -1,
+			"%s stands on a walkable interaction tile" % portal_name
+		)
 	var duel_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_duel.gd")
 	_check(
 		duel_source.contains("load_aether_clash_arena_state"),

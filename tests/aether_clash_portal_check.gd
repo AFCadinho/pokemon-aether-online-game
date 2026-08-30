@@ -51,6 +51,18 @@ func _init() -> void:
 		"Battle Royale portal uses a purple glow"
 	)
 	royale_portal.queue_free()
+	var exit_portal := packed.instantiate()
+	exit_portal.set("portal_action", "exit")
+	exit_portal.set("entry_open", true)
+	root.add_child(exit_portal)
+	_check(exit_portal.get("interactable_kind") == "aether_clash_exit_portal", "Arena copies use exit interaction semantics")
+	var portal_source := FileAccess.get_file_as_string("res://scripts/world/interactables/aether_clash_portal.gd")
+	_check(
+		portal_source.contains('controller_group = "aether_clash_duel_controller"')
+		and portal_source.contains('controller_method = "request_portal_exit"'),
+		"Arena copies dispatch to the Duel exit controller"
+	)
+	exit_portal.queue_free()
 	portal.queue_free()
 	quit(1 if failed else 0)
 

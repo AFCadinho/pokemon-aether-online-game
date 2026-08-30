@@ -28,6 +28,7 @@ func _run() -> void:
 	var duel := packed.instantiate()
 	root.add_child(duel)
 	await process_frame
+	duel.set("instance_session_id", "engagement-runtime-test")
 
 	var zones = duel.get_node_or_null("ArenaZones")
 	_check(zones != null, "Duel owns visible staging and exit zones")
@@ -118,8 +119,14 @@ func _run() -> void:
 		"The opposite-colored exit zone stops the movement step"
 	)
 	await process_frame
+	_check(
+		duel.get_node_or_null("ArenaHud/AetherClashLeaveConfirmation") == null,
+		"Exit-zone borders wait for an intentional portal interaction"
+	)
+	var red_exit_portal := duel.get_node_or_null("Entities/Interactables/RedStagingExitPortal")
+	duel.call("request_portal_exit", "guild_duel", local_actor, red_exit_portal)
 	var red_exit_dialog := duel.get_node_or_null("ArenaHud/AetherClashLeaveConfirmation")
-	_check(red_exit_dialog != null and red_exit_dialog.visible, "Either team may use the opposite-colored exit zone")
+	_check(red_exit_dialog != null and red_exit_dialog.visible, "Either team may use the opposite staging portal")
 	_check(red_exit_dialog != null and red_exit_dialog.get_parent() == duel.get_node("ArenaHud"), "Leave confirmation renders in the HUD canvas")
 	if red_exit_dialog != null:
 		red_exit_dialog.call("_cancel")
@@ -140,8 +147,14 @@ func _run() -> void:
 		"Entering the own active exit zone stops the movement step"
 	)
 	await process_frame
+	_check(
+		duel.get_node_or_null("ArenaHud/AetherClashLeaveConfirmation") == null,
+		"Blocked staging re-entry does not open a leave dialog by itself"
+	)
+	var blue_exit_portal := duel.get_node_or_null("Entities/Interactables/BlueStagingExitPortal")
+	duel.call("request_portal_exit", "guild_duel", local_actor, blue_exit_portal)
 	var leave_dialog := duel.get_node_or_null("ArenaHud/AetherClashLeaveConfirmation")
-	_check(leave_dialog != null and leave_dialog.visible, "Own exit zone opens the themed leave confirmation")
+	_check(leave_dialog != null and leave_dialog.visible, "Own staging portal opens the themed leave confirmation")
 	if leave_dialog != null:
 		leave_dialog.call("_cancel")
 	await process_frame
@@ -155,7 +168,13 @@ func _run() -> void:
 	var duel_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_duel.gd")
 	_check(
 		duel_source.contains("GuildService.leave_aether_clash_arena(instance_session_id)"),
-		"Own exit-zone confirmation uses the authoritative leave operation"
+		"Arena portal confirmation uses the authoritative leave operation"
+	)
+	_check(
+		duel_source.contains("func request_portal_exit(")
+		and duel_source.contains('"ui.aether_clash.leave.staging_message"')
+		and duel_source.contains('"ui.aether_clash.leave.spectator_message"'),
+		"Staging players and spectators receive portal-specific leave confirmation"
 	)
 	_check(
 		duel_source.contains("GuildService.create_aether_clash_engagement(")

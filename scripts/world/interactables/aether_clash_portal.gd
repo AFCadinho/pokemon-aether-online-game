@@ -4,6 +4,7 @@ extends WorldInteractable
 class_name AetherClashPortal
 
 signal entry_requested(mode_id: String, player: Node2D)
+signal exit_requested(mode_id: String, player: Node2D)
 signal portal_state_changed(open: bool)
 
 const PURPLE_PORTAL_TEXTURE := preload("res://assets/world/aether_clash/clash_portal_purple.png")
@@ -15,6 +16,7 @@ const RED_LIGHT_COLOR := Color("ff3829")
 	set(value):
 		mode_id = value
 		_apply_mode_visuals()
+@export_enum("entry", "exit") var portal_action := "entry"
 @export var entry_open := false:
 	set(value):
 		if entry_open == value:
@@ -32,7 +34,11 @@ var _portal_sprite_origin := Vector2.ZERO
 
 
 func _ready() -> void:
-	interactable_kind = "aether_clash_portal"
+	interactable_kind = (
+		"aether_clash_exit_portal"
+		if portal_action == "exit"
+		else "aether_clash_portal"
+	)
 	requires_facing = false
 	blocks_movement = true
 	interaction_shape_size = Vector2(104, 104)
@@ -67,30 +73,41 @@ func interact_with_player(player: Node2D) -> void:
 		)
 		return
 
-	entry_requested.emit(mode_id, player)
-	for controller: Node in get_tree().get_nodes_in_group("aether_clash_war_controller"):
-		if not controller.has_method("request_portal_entry"):
+	var controller_group := "aether_clash_war_controller"
+	var controller_method := "request_portal_entry"
+	if portal_action == "exit":
+		exit_requested.emit(mode_id, player)
+		controller_group = "aether_clash_duel_controller"
+		controller_method = "request_portal_exit"
+	else:
+		entry_requested.emit(mode_id, player)
+	for controller: Node in get_tree().get_nodes_in_group(controller_group):
+		if not controller.has_method(controller_method):
 			continue
 		var result: Variant = await controller.call(
-			"request_portal_entry",
+			controller_method,
 			mode_id,
 			player,
 			self
 		)
 		if result is Dictionary and not bool((result as Dictionary).get("success", false)):
-			var error_dialog_service := get_node_or_null("/root/GameErrorDialogService")
-			if error_dialog_service != null and error_dialog_service.has_method("show_response"):
-				await error_dialog_service.call(
-					"show_response",
-					result as Dictionary,
-					"backend.error.aether_clash_unavailable"
-				)
+			await _show_response_error(result as Dictionary)
 		return
 
 	await show_dialogue(
 		[_text("world.aether_clash.portal.unavailable")],
 		display_name
 	)
+
+
+func _show_response_error(result: Dictionary) -> void:
+	var error_dialog_service := get_node_or_null("/root/GameErrorDialogService")
+	if error_dialog_service != null and error_dialog_service.has_method("show_response"):
+		await error_dialog_service.call(
+			"show_response",
+			result,
+			"backend.error.aether_clash_unavailable"
+		)
 
 
 func _apply_portal_state() -> void:

@@ -35,6 +35,7 @@
 
 **Changed**
 
+- Guild Duels now use the red Duel portal as an interactive exit in both staging areas and both jail areas; late lobby-portal entrants always arrive in jail as spectators after the countdown.
 - Once an Aether Clash challenge is accepted, every member of both Guilds now receives a persistent on-screen gathering timer directing them to the red Guild Duel portal.
 - Guild Duel match history now shows how many players each Guild locked in after the countdown and how many remained at the end.
 - Guild Duel teams are now presented as the Blue Side and Red Side while the HUD continues to show both actual Guild names; either team may use either exit zone to leave.

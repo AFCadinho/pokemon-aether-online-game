@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/aether_clash_start_barrier.tscn" id="4_barrier"]
 [ext_resource type="PackedScene" path="res://scenes/interface/aether_clash_arena_hud.tscn" id="5_hud"]
 [ext_resource type="Script" path="res://scripts/world/aether_clash_arena_zones.gd" id="6_zones"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_clash_portal.tscn" id="7_clash_portal"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xcqrr"]
 texture = ExtResource("2_wwok8")
@@ -225,6 +226,30 @@ position = Vector2(1280, 2560)
 
 [node name="ArenaZones" type="Node2D" parent="."]
 script = ExtResource("6_zones")
+
+[node name="Entities" type="Node2D" parent="."]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="BlueStagingExitPortal" parent="Entities/Interactables" instance=ExtResource("7_clash_portal")]
+position = Vector2(1456, 288)
+portal_action = "exit"
+entry_open = true
+
+[node name="RedStagingExitPortal" parent="Entities/Interactables" instance=ExtResource("7_clash_portal")]
+position = Vector2(1072, 4672)
+portal_action = "exit"
+entry_open = true
+
+[node name="Guild1JailExitPortal" parent="Entities/Interactables" instance=ExtResource("7_clash_portal")]
+position = Vector2(2288, 2416)
+portal_action = "exit"
+entry_open = true
+
+[node name="Guild2JailExitPortal" parent="Entities/Interactables" instance=ExtResource("7_clash_portal")]
+position = Vector2(2288, 2672)
+portal_action = "exit"
+entry_open = true
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1254204188]
 visible = false
