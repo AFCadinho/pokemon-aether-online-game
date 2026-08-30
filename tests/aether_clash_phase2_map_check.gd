@@ -86,6 +86,11 @@ func _run() -> void:
 		_check(str(portal.get("mode_id")) == "guild_duel", "%s uses Guild Duel mode" % portal_name)
 		_check(str(portal.get("portal_action")) == "exit", "%s is an arena exit" % portal_name)
 		_check(bool(portal.get("entry_open")), "%s remains interactable throughout the Duel" % portal_name)
+		_check(
+			not portal.z_as_relative
+			and portal.z_index == clampi(floori(portal.global_position.y), -4096, 4096),
+			"%s renders on its world-depth layer instead of behind map artwork" % portal_name
+		)
 		var sprite := portal.get_node_or_null("PortalSprite") as Sprite2D
 		_check(
 			sprite != null and sprite.texture.resource_path.ends_with("clash_portal_red.png"),
