@@ -19,6 +19,11 @@ func _init() -> void:
 	_check(not bool(portal.get("entry_open")), "Portal entry starts locked outside a war")
 	var sprite := portal.get_node_or_null("PortalSprite") as Sprite2D
 	var light := portal.get_node_or_null("PortalLight") as PointLight2D
+	_check(
+		sprite != null and sprite.texture.resource_path.ends_with("clash_portal_red.png"),
+		"Guild vs Guild mode receives the red portal art"
+	)
+	_check(light != null and light.color == Color("ff3829"), "Guild vs Guild portal uses a red glow")
 	_check(light != null and light.enabled, "Portal remains visibly energized while entry is locked")
 	portal.set("_animation_time", 0.25)
 	portal.call("_animate_portal")
@@ -34,13 +39,17 @@ func _init() -> void:
 	royale_portal.set("mode_id", "battle_royale")
 	root.add_child(royale_portal)
 	await process_frame
-	var red_sprite := royale_portal.get_node_or_null("PortalSprite") as Sprite2D
+	var purple_sprite := royale_portal.get_node_or_null("PortalSprite") as Sprite2D
 	_check(
-		red_sprite != null and red_sprite.texture.resource_path.ends_with("clash_portal_red.png"),
-		"Battle Royale mode receives the red portal art"
+		purple_sprite != null
+		and purple_sprite.texture.resource_path.ends_with("clash_portal_purple.png"),
+		"Battle Royale mode receives the purple portal art"
 	)
-	var red_light := royale_portal.get_node_or_null("PortalLight") as PointLight2D
-	_check(red_light != null and red_light.color == Color("ff3829"), "Battle Royale portal uses a red glow")
+	var purple_light := royale_portal.get_node_or_null("PortalLight") as PointLight2D
+	_check(
+		purple_light != null and purple_light.color == Color("a647ff"),
+		"Battle Royale portal uses a purple glow"
+	)
 	royale_portal.queue_free()
 	portal.queue_free()
 	quit(1 if failed else 0)
