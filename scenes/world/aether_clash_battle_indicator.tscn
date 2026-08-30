@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/aether_clash_battle_indicator.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/items/icons/MASTERBALL.png" id="2_master_ball"]
+
+[sub_resource type="Gradient" id="Gradient_glow"]
+offsets = PackedFloat32Array(0, 0.55, 1)
+colors = PackedColorArray(0.78, 0.35, 1, 0.58, 0.46, 0.12, 0.8, 0.2, 0.2, 0.03, 0.4, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_glow"]
+gradient = SubResource("Gradient_glow")
+width = 64
+height = 64
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_click"]
+radius = 27.0
+
+[node name="AetherClashBattleIndicator" type="Node2D"]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("1_script")
+
+[node name="GlowSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -142)
+texture = SubResource("GradientTexture2D_glow")
+
+[node name="BallSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -142)
+texture_filter = 1
+texture = ExtResource("2_master_ball")
+scale = Vector2(0.72, 0.72)
+
+[node name="ClickArea" type="Area2D" parent="."]
+position = Vector2(0, -142)
+collision_layer = 128
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea"]
+shape = SubResource("CircleShape2D_click")

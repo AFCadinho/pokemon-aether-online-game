@@ -22,6 +22,7 @@
 
 **Added**
 
+- Eliminated Guild Duel players and other spectators can now use jail orbs to freely scan the arena, click rotating Master Balls above active battles to spectate them, and return to jail at any time.
 - Live Events started by staff now appear immediately in System chat, boost details, and top-right event cards with their event name and remaining time.
 - Trainers can now fund a ₽100,000 Global Skill EXP Boost together for one hour of double Fishing, Thieving, and Rock Smash experience, with a dedicated skill icon and live contribution updates.
 - Every Pokémon Center now has a Move Maniac who can teach compatible relearn, Egg, tutor, special, event, legacy, and pre-evolution moves in exchange for gathered resources.
@@ -37,6 +38,7 @@
 
 **Changed**
 
+- Guild Duel participants now play at a forced 2× world zoom, while the independent spectator camera has its own bounded movement and zoom controls.
 - The Guild Duel arena now uses the latest visual layout from its Tiled source map.
 - Undiscovered Guild Duel opponents now appear as `???` while keeping their Guild emblem visible; after a battle, their real name is shared with the opposing Guild for the rest of the Duel.
 - Guild Duels now use the red Duel portal as an interactive exit in both staging areas and both jail areas; late lobby-portal entrants always arrive in jail as spectators after the countdown.

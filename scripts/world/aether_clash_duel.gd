@@ -8,6 +8,8 @@ const INSTANCE_MAP_PREFIX := "aether_clash_duel:"
 const ARENA_STATE_REFRESH_SECONDS := 1.0
 const START_BARRIER_HALF_HEIGHT := 24.0
 const ENGAGEMENT_RING_SCRIPT: Script = preload("res://scripts/world/aether_clash_engagement_ring.gd")
+const BATTLE_INDICATOR_SCENE: PackedScene = preload("res://scenes/world/aether_clash_battle_indicator.tscn")
+const PIXEL_PERFECT_RENDERING: Script = preload("res://scripts/services/pixel_perfect_rendering.gd")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const ENGAGEMENT_RADIUS := 28.0
 const ENGAGEMENT_CONTACT_DISTANCE := ENGAGEMENT_RADIUS * 2.0
@@ -16,12 +18,21 @@ const ENGAGEMENT_SYNC_SECONDS := 0.1
 const ENGAGEMENT_CONTACT_COOLDOWN_MSEC := 750
 const STAGING_EJECTION_GRACE_MSEC := 2000
 const LEAVE_DIALOG_INPUT_OWNER: StringName = &"aether_clash_leave_dialog"
+const SPECTATOR_CAMERA_INPUT_OWNER: StringName = &"aether_clash_spectator_camera"
+const PARTICIPANT_WORLD_SCALE := 2.0
+const SPECTATOR_CAMERA_DEFAULT_ZOOM := 1.25
+const SPECTATOR_CAMERA_MIN_ZOOM := 0.75
+const SPECTATOR_CAMERA_MAX_ZOOM := 2.0
+const SPECTATOR_CAMERA_MOVE_SPEED := 620.0
+const SPECTATOR_CAMERA_FAST_MULTIPLIER := 1.75
 
 # Keep these references untyped: this map can be hot-loaded before Godot has
 # refreshed its global class cache for the newly added child scripts.
 @onready var start_barrier = $StartBarrier
 @onready var arena_hud = $ArenaHud
 @onready var arena_zones = $ArenaZones
+@onready var spectator_camera = $SpectatorCamera
+@onready var spectator_camera_hud = $SpectatorCameraHud
 
 var instance_session_id := ""
 var arena_session: Dictionary = {}
@@ -34,6 +45,7 @@ var arena_players: Dictionary = {}
 var identified_enemy_user_ids: Dictionary = {}
 var visible_identity_user_ids: Dictionary = {}
 var engaged_player_ids: Dictionary = {}
+var engaged_player_room_codes: Dictionary = {}
 var engagement_requests_in_flight: Dictionary = {}
 var engagement_battle_attempts: Dictionary = {}
 var engagement_sync_elapsed := 0.0
@@ -44,11 +56,20 @@ var leave_confirmation = null
 var leave_request_active := false
 var last_trace_arena_state_fingerprint := ""
 var last_trace_arena_error_fingerprint := ""
+var spectator_camera_active := false
+var spectator_camera_bounds := Rect2()
+var spectator_camera_player_camera: Camera2D
+var spectator_camera_player_was_enabled := true
+var participant_zoom_applied := false
+var participant_zoom_camera: Camera2D
+var spectator_battle_request_active := false
 
 
 func _ready() -> void:
 	add_to_group("aether_clash_duel_controller")
 	engagement_contact_requested.connect(_on_engagement_contact_requested)
+	if not spectator_camera_hud.return_requested.is_connected(_deactivate_spectator_camera):
+		spectator_camera_hud.return_requested.connect(_deactivate_spectator_camera)
 	if not ChatRealtimeService.message_received.is_connected(_on_realtime_message_received):
 		ChatRealtimeService.message_received.connect(_on_realtime_message_received)
 	arena_state_timer = Timer.new()
@@ -59,16 +80,21 @@ func _ready() -> void:
 	# The canonical scene is also used as a staff preview. Runtime state is only
 	# enabled after world.gd assigns an isolated aether_clash_duel:<session> id.
 	arena_hud.visible = false
+	spectator_camera.enabled = false
+	spectator_camera_hud.set_camera_active(false)
 	start_barrier.set_barrier_raised(false, false)
 	arena_zones.set_phase("entry_open")
 
 
 func _process(delta: float) -> void:
 	_sync_arena_hud_battle_visibility()
+	_sync_local_camera_mode()
+	_process_spectator_camera(delta)
 	engagement_sync_elapsed += delta
 	if engagement_sync_elapsed >= ENGAGEMENT_SYNC_SECONDS:
 		engagement_sync_elapsed = 0.0
 		_sync_engagement_rings()
+		_sync_battle_indicators()
 		_sync_identity_nameplates()
 		_release_separated_player_contact_pairs()
 	_process_staging_ejection()
@@ -82,7 +108,10 @@ func _exit_tree() -> void:
 		"viewerRole": viewer_role,
 	})
 	_clear_engagement_rings()
+	_clear_battle_indicators()
 	_clear_identity_nameplate_overrides()
+	_deactivate_spectator_camera()
+	_restore_participant_zoom()
 	GameState.release_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
 	_free_leave_confirmation()
 
@@ -102,6 +131,7 @@ func configure_aether_clash_instance(instance_map_id: String) -> void:
 	identified_enemy_user_ids.clear()
 	visible_identity_user_ids.clear()
 	engaged_player_ids.clear()
+	engaged_player_room_codes.clear()
 	engagement_requests_in_flight.clear()
 	engagement_battle_attempts.clear()
 	latched_player_contact_pairs.clear()
@@ -110,6 +140,8 @@ func configure_aether_clash_instance(instance_map_id: String) -> void:
 	has_received_arena_state = false
 	last_trace_arena_state_fingerprint = ""
 	last_trace_arena_error_fingerprint = ""
+	spectator_battle_request_active = false
+	_deactivate_spectator_camera()
 	_trace_aether_clash("duel_configured", {
 		"sessionId": instance_session_id,
 		"mapId": map_id,
@@ -305,13 +337,20 @@ func _apply_arena_state(payload: Dictionary) -> void:
 	if next_status in ["roster_locked", "active", "finishing"] and previous_status not in ["roster_locked", "active", "finishing"]:
 		staging_ejection_deadline_msec = Time.get_ticks_msec() + STAGING_EJECTION_GRACE_MSEC
 	_sync_engagement_rings()
+	_sync_battle_indicators()
 	_sync_identity_nameplates()
+	if spectator_camera_active and (
+		viewer_role != "spectator"
+		or next_status not in ["entry_open", "roster_locked", "active", "finishing"]
+	):
+		_deactivate_spectator_camera()
 	arena_state_changed.emit(payload.duplicate(true))
 
 
 func _apply_arena_players(value: Variant) -> void:
 	arena_players.clear()
 	engaged_player_ids.clear()
+	engaged_player_room_codes.clear()
 	if not value is Array:
 		return
 	var resumable_engagement: Dictionary = {}
@@ -327,6 +366,10 @@ func _apply_arena_players(value: Variant) -> void:
 			var engagement_id := str(engagement_value).strip_edges() if engagement_value != null else ""
 			if not engagement_id.is_empty():
 				engaged_player_ids[user_id] = engagement_id
+				var room_value: Variant = player_state.get("engagementRoomCode")
+				var room_code := str(room_value).strip_edges().to_upper() if room_value != null else ""
+				if not room_code.is_empty():
+					engaged_player_room_codes[user_id] = room_code
 				var match_value: Variant = player_state.get("engagementMatchId")
 				var match_id := str(match_value).strip_edges() if match_value != null else ""
 				if (
@@ -390,6 +433,54 @@ func _clear_engagement_rings() -> void:
 			continue
 		if int(ring.get_meta("aether_clash_controller_id", 0)) == controller_id:
 			ring.queue_free()
+
+
+func _sync_battle_indicators() -> void:
+	var active_phase := is_clash_active()
+	for actor_value: Variant in _all_player_actors():
+		var actor := actor_value as Node2D
+		if actor == null:
+			continue
+		var user_id := _actor_user_id(actor)
+		var room_code := str(engaged_player_room_codes.get(user_id, "")).strip_edges()
+		var should_show := (
+			active_phase
+			and engaged_player_ids.has(user_id)
+			and not room_code.is_empty()
+		)
+		var indicator := actor.get_node_or_null("AetherClashBattleIndicator")
+		if not should_show:
+			if indicator != null:
+				indicator.queue_free()
+			continue
+		if indicator == null:
+			indicator = BATTLE_INDICATOR_SCENE.instantiate()
+			if indicator == null:
+				continue
+			indicator.name = "AetherClashBattleIndicator"
+			actor.add_child(indicator)
+			indicator.set_meta("aether_clash_controller_id", get_instance_id())
+			var spectate_callable := Callable(self, "_on_battle_indicator_spectate_requested")
+			if indicator.has_signal("spectate_requested") and not indicator.is_connected("spectate_requested", spectate_callable):
+				indicator.connect("spectate_requested", spectate_callable)
+		if indicator.has_method("configure"):
+			indicator.call(
+				"configure",
+				user_id,
+				room_code,
+				viewer_role == "spectator" and spectator_camera_active
+			)
+
+
+func _clear_battle_indicators() -> void:
+	var controller_id := get_instance_id()
+	for actor_value: Variant in _all_player_actors():
+		var actor := actor_value as Node2D
+		if actor == null:
+			continue
+		var indicator := actor.get_node_or_null("AetherClashBattleIndicator")
+		if indicator != null and int(indicator.get_meta("aether_clash_controller_id", 0)) == controller_id:
+			indicator.queue_free()
 
 
 func _sync_identity_nameplates() -> void:
@@ -459,6 +550,237 @@ func _is_local_active_participant() -> bool:
 		and local_user_id > 0
 		and arena_players.has(local_user_id)
 	)
+
+
+func request_spectator_orb(_player: Node2D, orb: Node) -> Dictionary:
+	if instance_session_id.is_empty() or viewer_role != "spectator":
+		return {
+			"success": false,
+			"error": _text(
+				"ui.aether_clash.spectator.spectators_only",
+				"Only eliminated players and spectators can use this orb."
+			),
+		}
+	if str(arena_session.get("status", "")) not in [
+		"entry_open", "roster_locked", "active", "finishing",
+	]:
+		return {
+			"success": false,
+			"error": _text(
+				"ui.aether_clash.spectator.unavailable",
+				"The Aether view is unavailable right now."
+			),
+		}
+	if _world_battle_active():
+		return {
+			"success": false,
+			"error": _text(
+				"ui.aether_clash.spectator.finish_battle",
+				"Leave the battle you are watching before reopening the Aether view."
+			),
+		}
+	_activate_spectator_camera(orb.global_position if orb is Node2D else Vector2.ZERO)
+	return {"success": spectator_camera_active}
+
+
+func _activate_spectator_camera(fallback_position: Vector2) -> void:
+	if spectator_camera_active or viewer_role != "spectator":
+		return
+	var player := _actor_for_user_id(_local_user_id())
+	var player_camera := player.get_node_or_null("Camera2D") as Camera2D if player != null else null
+	if player_camera == null:
+		_show_system_message(_text(
+			"ui.aether_clash.spectator.unavailable",
+			"The Aether view is unavailable right now."
+		))
+		return
+	spectator_camera_bounds = _arena_visual_bounds()
+	var start_position := player.global_position if player != null else fallback_position
+	spectator_camera.global_position = _clamp_spectator_camera_position(start_position)
+	spectator_camera.zoom = Vector2.ONE * SPECTATOR_CAMERA_DEFAULT_ZOOM
+	_apply_spectator_camera_limits()
+	spectator_camera_player_camera = player_camera
+	spectator_camera_player_was_enabled = player_camera.enabled
+	player_camera.enabled = false
+	spectator_camera.enabled = true
+	spectator_camera_active = true
+	spectator_camera_hud.set_camera_active(true)
+	GameState.acquire_overworld_input_lock(SPECTATOR_CAMERA_INPUT_OWNER)
+	_sync_battle_indicators()
+	_trace_aether_clash("spectator_camera_activated", {
+		"sessionId": instance_session_id,
+		"localUserId": _local_user_id(),
+		"position": {
+			"x": spectator_camera.global_position.x,
+			"y": spectator_camera.global_position.y,
+		},
+	})
+
+
+func _deactivate_spectator_camera() -> void:
+	var was_active := spectator_camera_active
+	spectator_camera_active = false
+	if spectator_camera != null:
+		spectator_camera.enabled = false
+	if spectator_camera_hud != null:
+		spectator_camera_hud.set_camera_active(false)
+	if spectator_camera_player_camera != null and is_instance_valid(spectator_camera_player_camera):
+		spectator_camera_player_camera.enabled = spectator_camera_player_was_enabled
+	spectator_camera_player_camera = null
+	GameState.release_overworld_input_lock(SPECTATOR_CAMERA_INPUT_OWNER)
+	if was_active:
+		_sync_battle_indicators()
+		_trace_aether_clash("spectator_camera_deactivated", {
+			"sessionId": instance_session_id,
+			"localUserId": _local_user_id(),
+		})
+
+
+func _process_spectator_camera(delta: float) -> void:
+	if not spectator_camera_active or _world_battle_active():
+		return
+	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	if direction == Vector2.ZERO:
+		return
+	var speed := SPECTATOR_CAMERA_MOVE_SPEED
+	if Input.is_key_pressed(KEY_SHIFT):
+		speed *= SPECTATOR_CAMERA_FAST_MULTIPLIER
+	var zoom_scale := maxf(absf(spectator_camera.zoom.x), 0.1)
+	spectator_camera.global_position = _clamp_spectator_camera_position(
+		spectator_camera.global_position + direction * speed * delta / zoom_scale
+	)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not spectator_camera_active or _world_battle_active():
+		return
+	if event.is_action_pressed("ui_cancel"):
+		_deactivate_spectator_camera()
+		get_viewport().set_input_as_handled()
+		return
+	if not event is InputEventMouseButton:
+		return
+	var mouse_event := event as InputEventMouseButton
+	if not mouse_event.pressed or mouse_event.button_index not in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
+		return
+	var next_zoom: float = spectator_camera.zoom.x
+	if mouse_event.button_index == MOUSE_BUTTON_WHEEL_UP:
+		next_zoom *= 1.15
+	else:
+		next_zoom /= 1.15
+	next_zoom = clampf(next_zoom, SPECTATOR_CAMERA_MIN_ZOOM, SPECTATOR_CAMERA_MAX_ZOOM)
+	spectator_camera.zoom = Vector2.ONE * next_zoom
+	spectator_camera.global_position = _clamp_spectator_camera_position(spectator_camera.global_position)
+	spectator_camera.force_update_scroll()
+	get_viewport().set_input_as_handled()
+
+
+func _arena_visual_bounds() -> Rect2:
+	var visuals := get_node_or_null("ClanWarsMap") as Node2D
+	if visuals == null or not visuals.has_meta("tiled_visual_map"):
+		return Rect2(Vector2.ZERO, Vector2(2560, 5120))
+	var metadata := _dictionary(visuals.get_meta("tiled_visual_map"))
+	var width := int(metadata.get("width", 0))
+	var height := int(metadata.get("height", 0))
+	var tile_width := int(metadata.get("tile_width", 0))
+	var tile_height := int(metadata.get("tile_height", 0))
+	if width <= 0 or height <= 0 or tile_width <= 0 or tile_height <= 0:
+		return Rect2(Vector2.ZERO, Vector2(2560, 5120))
+	return Rect2(visuals.global_position, Vector2(width * tile_width, height * tile_height))
+
+
+func _apply_spectator_camera_limits() -> void:
+	if spectator_camera_bounds.size == Vector2.ZERO:
+		return
+	spectator_camera.limit_left = floori(spectator_camera_bounds.position.x)
+	spectator_camera.limit_top = floori(spectator_camera_bounds.position.y)
+	spectator_camera.limit_right = ceili(spectator_camera_bounds.end.x)
+	spectator_camera.limit_bottom = ceili(spectator_camera_bounds.end.y)
+	spectator_camera.reset_smoothing()
+	spectator_camera.force_update_scroll()
+
+
+func _clamp_spectator_camera_position(next_position: Vector2) -> Vector2:
+	if spectator_camera_bounds.size == Vector2.ZERO:
+		return next_position
+	return Vector2(
+		clampf(next_position.x, spectator_camera_bounds.position.x, spectator_camera_bounds.end.x),
+		clampf(next_position.y, spectator_camera_bounds.position.y, spectator_camera_bounds.end.y)
+	)
+
+
+func _sync_local_camera_mode() -> void:
+	if spectator_camera_active:
+		return
+	if not _is_local_active_participant():
+		_restore_participant_zoom()
+		return
+	var player := _actor_for_user_id(_local_user_id())
+	var camera := player.get_node_or_null("Camera2D") as Camera2D if player != null else null
+	if camera == null:
+		return
+	var canvas_scale := camera.get_viewport().get_screen_transform().get_scale()
+	var desired_zoom: Vector2 = PIXEL_PERFECT_RENDERING.camera_zoom_for_output_scale(
+		PARTICIPANT_WORLD_SCALE,
+		canvas_scale
+	)
+	if camera != participant_zoom_camera or not camera.zoom.is_equal_approx(desired_zoom):
+		PIXEL_PERFECT_RENDERING.apply_to_camera(
+			camera,
+			PARTICIPANT_WORLD_SCALE,
+			get_window().size
+		)
+	participant_zoom_camera = camera
+	participant_zoom_applied = true
+
+
+func _restore_participant_zoom() -> void:
+	if not participant_zoom_applied:
+		return
+	participant_zoom_applied = false
+	if participant_zoom_camera != null and is_instance_valid(participant_zoom_camera):
+		var player := participant_zoom_camera.get_parent()
+		if player != null and player.has_method("_apply_world_pixel_scale"):
+			player.call("_apply_world_pixel_scale")
+	participant_zoom_camera = null
+
+
+func _world_battle_active() -> bool:
+	var world := get_tree().get_first_node_in_group("world")
+	return world != null and bool(world.get("is_in_battle"))
+
+
+func _on_battle_indicator_spectate_requested(user_id: int, room_code: String) -> void:
+	var normalized_room_code := room_code.strip_edges().to_upper()
+	if (
+		spectator_battle_request_active
+		or viewer_role != "spectator"
+		or not spectator_camera_active
+		or _world_battle_active()
+		or not engaged_player_ids.has(user_id)
+		or str(engaged_player_room_codes.get(user_id, "")).strip_edges().to_upper() != normalized_room_code
+	):
+		return
+	spectator_battle_request_active = true
+	_trace_aether_clash("spectator_battle_requested", {
+		"sessionId": instance_session_id,
+		"localUserId": _local_user_id(),
+		"targetUserId": user_id,
+		"roomCode": normalized_room_code,
+	})
+	var started := false
+	for overlay_value: Variant in get_tree().get_nodes_in_group("ui_overlay"):
+		var overlay := overlay_value as Node
+		if overlay != null and overlay.has_method("start_aether_clash_pvp_spectate"):
+			started = bool(await overlay.call("start_aether_clash_pvp_spectate", normalized_room_code))
+			break
+	spectator_battle_request_active = false
+	if not started:
+		_show_system_message(_text(
+			"ui.aether_clash.spectator.battle_unavailable",
+			"That battle can no longer be spectated."
+		))
+		_refresh_arena_state.call_deferred()
 
 
 func _zone_rect(side: String) -> Rect2:

@@ -42586,6 +42586,39 @@ func start_aether_clash_pvp_match(match_id: String, engagement_id: String) -> bo
 	return started
 
 
+func start_aether_clash_pvp_spectate(room_code: String) -> bool:
+	var normalized_room_code := room_code.strip_edges().to_upper()
+	if normalized_room_code.is_empty() or pvp_battle_starting:
+		return false
+	_trace_aether_clash("battle_spectate_requested", {
+		"roomCode": normalized_room_code,
+	})
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.spectate_pvp_room(
+		request,
+		normalized_room_code
+	)
+	request.queue_free()
+	_trace_aether_clash("battle_spectate_response", {
+		"roomCode": normalized_room_code,
+		"success": bool(response.get("success", false)),
+		"httpStatus": int(response.get("status", 0)),
+		"errorCode": BackendErrorLocalizationService.error_code(response),
+	})
+	if not bool(response.get("success", false)) or not _spectator_response_has_public_teams(response):
+		return false
+	if str(response.get("roomCode", "")).strip_edges().is_empty():
+		response["roomCode"] = normalized_room_code
+	pvp_active_room_code = normalized_room_code
+	await _start_pvp_battle_from_response(response)
+	var world := get_tree().get_first_node_in_group("world")
+	return (
+		world != null
+		and bool(world.get("is_in_battle"))
+		and str(world.get("active_battle_kind")) == "pvp"
+	)
+
+
 func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	if pvp_battle_starting:
 		return
