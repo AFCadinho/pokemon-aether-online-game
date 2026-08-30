@@ -18,6 +18,10 @@ var failed := false
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
 	var packed := load(DUEL_SCENE) as PackedScene
 	_check(packed != null, "Aether Clash duel runtime scene loads")
 	if packed == null:
@@ -33,6 +37,21 @@ func _init() -> void:
 	)
 	var collision := duel.find_child("Collision", true, false) as TileMapLayer
 	_check(collision != null, "Duel exposes collision for portal arrivals")
+	var barrier := duel.get_node_or_null("StartBarrier") as Node2D
+	_check(barrier != null, "Duel exposes its temporary center barrier")
+	_check(
+		barrier != null and barrier.position == Vector2(1280, 2560),
+		"Duel barrier divides the north and south halves"
+	)
+	var barrier_collision := duel.get_node_or_null(
+		"StartBarrier/BarrierBody/CollisionShape2D"
+	) as CollisionShape2D
+	var barrier_shape := barrier_collision.shape as RectangleShape2D if barrier_collision != null else null
+	_check(
+		barrier_shape != null and barrier_shape.size == Vector2(2560, 48),
+		"Duel barrier collision spans the complete map width"
+	)
+	_check(duel.get_node_or_null("ArenaHud") != null, "Duel owns its dedicated match HUD")
 	var distinct_positions := {}
 	for spawn_name: String in EXPECTED_SPAWNS:
 		var spawn := duel.get_node_or_null("Spawns/%s" % spawn_name) as Marker2D
@@ -52,6 +71,15 @@ func _init() -> void:
 		if spawn_name != "SpectatorJailSpawn":
 			distinct_positions[spawn.position] = true
 	_check(distinct_positions.size() == 4, "Both teams have distinct arena and jail arrivals")
+	var duel_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_duel.gd")
+	_check(
+		duel_source.contains("load_aether_clash_arena_state"),
+		"Duel refreshes its server-authoritative arena state"
+	)
+	_check(
+		duel_source.contains("func can_launch_projectile"),
+		"Duel exposes its active phase for the later projectile system"
+	)
 	duel.queue_free()
 	quit(1 if failed else 0)
 

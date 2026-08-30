@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/aether_clash_start_barrier.gd" id="1_barrier"]
+[ext_resource type="Script" path="res://scripts/world/aether_clash_barrier_visual.gd" id="2_visual"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_barrier"]
+size = Vector2(2560, 48)
+
+[node name="AetherClashStartBarrier" type="Node2D"]
+z_index = 1900
+script = ExtResource("1_barrier")
+
+[node name="BarrierBody" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BarrierBody"]
+shape = SubResource("RectangleShape2D_barrier")
+
+[node name="BarrierVisual" type="Node2D" parent="."]
+script = ExtResource("2_visual")
+
