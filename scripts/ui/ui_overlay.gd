@@ -496,8 +496,6 @@ const TRAINER_CARD_ACCENT := Color("#d8b767")
 const TRAINER_CARD_ACCENT_SOFT := Color("#d8b76766")
 const TRAINER_CARD_SECTION_BORDER := Color("#2d4b66b3")
 const UTC_TIME_REFRESH_INTERVAL_SECONDS := 1.0
-const AETHER_CLASH_CHAMPION_REFRESH_INTERVAL_SECONDS := 30.0
-const AETHER_CLASH_LOBBY_MAP_ID := "aether_clash_lobby"
 const AETHER_CLASH_DUEL_MAP_PREFIX := "aether_clash_duel:"
 const UI_SURFACE_BASE := Color("#050b14ed")
 const UI_SURFACE_RAISED := Color("#081522eb")
@@ -569,7 +567,6 @@ var donator_store_popup: DonatorStorePopup
 @onready var global_heal_requests_toggle: CheckButton = $Control/GlobalBuffDetailsPanel/MarginContainer/Content/GlobalHealSection/RequestsToggle
 @onready var region_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/RegionBadge/RegionLabel
 @onready var location_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/HeaderRow/LocationLabel
-@onready var aether_clash_champion_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/AetherClashChampionLabel
 @onready var time_of_day_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/TimeOfDayLabel
 @onready var weather_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/WeatherLabel
 @onready var time_label: Label = $Control/LocationPanel/MarginContainer/VBoxContainer/StatusRow/TimeLabel
@@ -1464,9 +1461,6 @@ var displayed_money: int = -1
 var player_status_panel_hovered := false
 var displayed_location_map: Node
 var displayed_location_name := ""
-var aether_clash_champion_name := ""
-var aether_clash_champion_refresh_elapsed := 0.0
-var aether_clash_champion_request_active := false
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
 var displayed_world_weekday_id := ""
 var ui_input_mouse_blocker: Control
@@ -10279,7 +10273,6 @@ func _process(delta: float) -> void:
 	_refresh_player_status_card_if_needed()
 	_refresh_trainer_card_playtime_if_needed()
 	_refresh_location_label_if_needed()
-	_refresh_aether_clash_champion_if_needed(delta)
 	_refresh_utc_time_label(delta)
 	_refresh_global_buffs_if_needed(delta)
 	_try_show_pending_global_heal_request()
@@ -10360,7 +10353,6 @@ func _refresh_location_label() -> void:
 		var display_name := displayed_location_name
 		location_label.text = display_name
 		location_label.tooltip_text = display_name
-	_refresh_aether_clash_champion_visibility()
 	var has_wild_pokemon := _get_current_encounter_area_id() != ""
 	if wild_pokemon_button != null:
 		wild_pokemon_button.visible = has_wild_pokemon
@@ -10368,62 +10360,6 @@ func _refresh_location_label() -> void:
 	_position_collapsible_button("location")
 	if wild_pokemon_popup != null and wild_pokemon_popup.visible:
 		_hide_wild_pokemon_popup()
-
-
-func _refresh_aether_clash_champion_visibility() -> void:
-	if aether_clash_champion_label == null:
-		return
-	var in_lobby := _is_in_aether_clash_lobby()
-	aether_clash_champion_label.visible = in_lobby
-	if not in_lobby:
-		aether_clash_champion_refresh_elapsed = 0.0
-		return
-	_render_aether_clash_champion()
-	aether_clash_champion_refresh_elapsed = 0.0
-
-
-func _refresh_aether_clash_champion_if_needed(delta: float) -> void:
-	if not _is_in_aether_clash_lobby() or aether_clash_champion_request_active:
-		return
-	aether_clash_champion_refresh_elapsed -= delta
-	if aether_clash_champion_refresh_elapsed > 0.0:
-		return
-	aether_clash_champion_refresh_elapsed = AETHER_CLASH_CHAMPION_REFRESH_INTERVAL_SECONDS
-	_load_aether_clash_champion.call_deferred()
-
-
-func _load_aether_clash_champion() -> void:
-	if aether_clash_champion_request_active or not _is_in_aether_clash_lobby():
-		return
-	aether_clash_champion_request_active = true
-	var result: Dictionary = await GuildService.load_aether_clash_champion()
-	aether_clash_champion_request_active = false
-	if not _is_in_aether_clash_lobby() or not bool(result.get("success", false)):
-		return
-	aether_clash_champion_name = str(result.get("guildName", "")).strip_edges()
-	_render_aether_clash_champion()
-
-
-func _render_aether_clash_champion() -> void:
-	if aether_clash_champion_label == null:
-		return
-	var guild_name := aether_clash_champion_name
-	if guild_name.is_empty():
-		guild_name = LocalizationManager.text("ui.aether_clash.reigning_guild.none")
-	aether_clash_champion_label.text = LocalizationManager.text(
-		"ui.aether_clash.reigning_guild",
-		{"guild": guild_name}
-	)
-	aether_clash_champion_label.tooltip_text = aether_clash_champion_label.text
-
-
-func _is_in_aether_clash_lobby() -> bool:
-	var current_map := GameState.current_map as Node
-	return (
-		current_map != null
-		and current_map.has_method("get_map_id")
-		and str(current_map.call("get_map_id")) == AETHER_CLASH_LOBBY_MAP_ID
-	)
 
 
 func _is_in_aether_clash_duel() -> bool:
