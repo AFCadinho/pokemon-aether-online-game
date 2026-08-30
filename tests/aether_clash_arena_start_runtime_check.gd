@@ -24,12 +24,12 @@ func _run() -> void:
 	root.add_child(duel)
 	await process_frame
 
-	var barrier := duel.get_node("StartBarrier") as AetherClashStartBarrier
+	var barrier = duel.get_node("StartBarrier")
 	var collision := duel.get_node(
 		"StartBarrier/BarrierBody/CollisionShape2D"
 	) as CollisionShape2D
 	var visual := duel.get_node("StartBarrier/BarrierVisual") as Node2D
-	var hud := duel.get_node("ArenaHud") as AetherClashArenaHud
+	var hud = duel.get_node("ArenaHud")
 	_check(not hud.visible, "Canonical staff preview keeps the match HUD hidden")
 	_check(not barrier.is_barrier_raised(), "Canonical staff preview keeps the barrier lowered")
 
@@ -53,6 +53,45 @@ func _run() -> void:
 	_check(hud.challenger_count_label.text == "3", "Countdown HUD shows north arrivals")
 	_check(hud.challenged_count_label.text == "5", "Countdown HUD shows south arrivals")
 	_check(hud.countdown_label.text.contains(":"), "Countdown HUD shows synchronized time")
+	_check(
+		bool(duel.call(
+			"is_world_barrier_step_blocked",
+			Vector2(100, 2544),
+			Vector2(100, 2576)
+		)),
+		"Raised barrier blocks a grid step between Guild halves"
+	)
+	_check(
+		not bool(duel.call(
+			"is_world_barrier_step_blocked",
+			Vector2(100, 2544),
+			Vector2(132, 2544)
+		)),
+		"Raised barrier still allows movement along a Guild half"
+	)
+	_check(
+		not bool(duel.call(
+			"is_world_barrier_step_blocked",
+			Vector2(100, 2544),
+			Vector2(100, 2512)
+		)),
+		"Player touching the barrier can move back toward their Guild side"
+	)
+	var game_state := root.get_node("GameState")
+	var original_current_map: Variant = game_state.get("current_map")
+	game_state.set("current_map", duel)
+	var player_script := load("res://scripts/world/player.gd") as Script
+	var player = player_script.new()
+	_check(
+		bool(player.call(
+			"_is_world_barrier_step_blocked",
+			Vector2(100, 2544),
+			Vector2(100, 2576)
+		)),
+		"Player grid movement receives the raised map barrier"
+	)
+	player.free()
+	game_state.set("current_map", original_current_map)
 
 	duel.call("_apply_arena_state", _arena_payload("active", 3, 5))
 	await physics_frame
@@ -62,11 +101,32 @@ func _run() -> void:
 	_check(not visual.visible, "Roster lock finishes the visual lowering animation")
 	_check(bool(duel.call("is_clash_active")), "Controller exposes the active Clash phase")
 	_check(bool(duel.call("can_launch_projectile")), "Active phase is ready for later projectiles")
+	_check(
+		not bool(duel.call(
+			"is_world_barrier_step_blocked",
+			Vector2(100, 2544),
+			Vector2(100, 2576)
+		)),
+		"Lowered barrier allows movement between Guild halves"
+	)
 
 	var overlay_source := FileAccess.get_file_as_string(OVERLAY_SCRIPT)
 	_check(
 		overlay_source.contains('"location", not _is_in_aether_clash_duel()'),
 		"Dedicated match HUD replaces the normal location panel in a duel"
+	)
+	var duel_source := FileAccess.get_file_as_string(
+		"res://scripts/world/aether_clash_duel.gd"
+	)
+	_check(
+		not duel_source.contains(": AetherClashStartBarrier")
+		and not duel_source.contains(": AetherClashArenaHud"),
+		"Duel controller does not depend on a pre-warmed global class cache"
+	)
+	var player_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
+	_check(
+		player_source.contains("_is_world_barrier_step_blocked(global_position"),
+		"Grid movement consults the map-owned Aether barrier"
 	)
 
 	localization_manager.call("set_locale", original_locale)

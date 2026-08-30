@@ -27,6 +27,7 @@
 
 **Fixed**
 
+- Guild Duel arenas now synchronize reliably after a hot reload, show the real Guild names and countdown, and physically block players at the raised center barrier.
 - Guild vs Guild participants now arrive directly before the arena portal assigned to their Guild side.
 - Aether Clash challenges sent by right-clicking another Trainer now use the themed Aether modal instead of an unstyled system dialog.
 - Aether Clash entry now saves the player's exact portal position and waits for server approval before playing the teleport effect.
