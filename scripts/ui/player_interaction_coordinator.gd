@@ -4,6 +4,7 @@ class_name PlayerInteractionCoordinator
 
 const TradeInvitationDialogScript := preload("res://scripts/ui/trade_invitation_dialog.gd")
 const GuildInvitationDialogScript := preload("res://scripts/ui/guild_invitation_dialog.gd")
+const AetherConfirmationDialogScene := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const NEARBY_TRAINERS_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 const GUILD_INVITATION_POLL_SECONDS := 10.0
 
@@ -1006,24 +1007,26 @@ func _on_aether_clash_challenge_pressed() -> void:
 	if target_user_id <= 0 or host == null:
 		return
 	var target_name := _player_primary_name(current_target)
-	var dialog := ConfirmationDialog.new()
+	var dialog := AetherConfirmationDialogScene.instantiate() as AetherConfirmationDialog
 	dialog.name = "AetherClashPlayerChallengeDialog"
-	dialog.title = _t("ui.guild.aether_clash.challenge_title")
-	dialog.dialog_text = _t("ui.nearby.aether_clash.challenge_confirm", {
-		"trainer": target_name,
-	})
-	dialog.ok_button_text = _t("ui.guild.aether_clash.challenge")
-	dialog.cancel_button_text = _t("common.cancel")
+	host.add_child(dialog)
+	dialog.configure(
+		_t("ui.guild.aether_clash.challenge_title"),
+		_t("ui.nearby.aether_clash.challenge_confirm", {
+			"trainer": target_name,
+		}),
+		_t("ui.guild.aether_clash.challenge"),
+		_t("common.cancel")
+	)
 	var spectator_access := OptionButton.new()
 	spectator_access.name = "AetherClashPlayerSpectatorAccess"
-	spectator_access.position = Vector2(20, 112)
-	spectator_access.size = Vector2(460, 38)
+	spectator_access.custom_minimum_size = Vector2(0, 42)
 	spectator_access.add_item(_t("ui.guild.aether_clash.spectators.public"))
 	spectator_access.set_item_metadata(0, "public")
 	spectator_access.add_item(_t("ui.guild.aether_clash.spectators.guilds_only"))
 	spectator_access.set_item_metadata(1, "guilds_only")
-	dialog.add_child(spectator_access)
-	host.add_child(dialog)
+	dialog.style_option_button(spectator_access)
+	dialog.add_custom_control(spectator_access)
 	dialog.confirmed.connect(
 		_send_aether_clash_player_challenge.bind(
 			target_user_id,
@@ -1033,7 +1036,7 @@ func _on_aether_clash_challenge_pressed() -> void:
 	)
 	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
 	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
-	dialog.popup_centered(Vector2i(500, 270))
+	dialog.popup_centered(Vector2i(540, 330))
 
 
 func _send_aether_clash_player_challenge(

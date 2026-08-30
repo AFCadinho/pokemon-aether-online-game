@@ -204,8 +204,13 @@ func _check_aether_clash_context_action() -> void:
 		"AetherClashPlayerChallengeDialog",
 		true,
 		false
-	) as ConfirmationDialog
-	_check_equal(dialog != null, true, "right-click challenge requires confirmation")
+	) as AetherConfirmationDialog
+	_check_equal(dialog != null, true, "right-click challenge uses the shared Aether confirmation")
+	_check_equal(
+		dialog != null and dialog.get_node("Shade").visible,
+		true,
+		"right-click challenge dims the world behind its custom modal"
+	)
 	var spectator_access := (
 		dialog.find_child("AetherClashPlayerSpectatorAccess", true, false) as OptionButton
 		if dialog != null
@@ -218,8 +223,14 @@ func _check_aether_clash_context_action() -> void:
 		true,
 		"right-click challenge configures public or Guild-only spectators"
 	)
+	_check_equal(
+		spectator_access != null
+		and spectator_access.get_theme_stylebox("normal") is StyleBoxFlat,
+		true,
+		"right-click challenge styles the spectator selector"
+	)
 	if dialog != null:
-		dialog.canceled.emit()
+		dialog.cancel_button.pressed.emit()
 	await process_frame
 	coordinator.guild_membership = {
 		"guildId": 4,
