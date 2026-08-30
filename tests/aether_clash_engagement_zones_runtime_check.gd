@@ -46,8 +46,8 @@ func _run() -> void:
 	_check(arena_hud != null and int(arena_hud.get("layer")) < 10, "Battle UI renders above the Guild Duel arena HUD")
 	var blue_zone: Rect2 = zones.call("get_zone_rect", "blue")
 	var red_zone: Rect2 = zones.call("get_zone_rect", "red")
-	_check(blue_zone.get_center() == Vector2(1456, 208), "Blue staging zone follows its editable spawn marker")
-	_check(red_zone.get_center() == Vector2(1072, 4752), "Red staging zone follows its editable spawn marker")
+	_check(blue_zone.get_center() == Vector2(1456, 176), "Blue staging zone follows its editable spawn marker")
+	_check(red_zone.get_center() == Vector2(1072, 4816), "Red staging zone follows its editable spawn marker")
 
 	var player_save := root.get_node("PlayerSave")
 	var original_player_id := str(player_save.get("player_id"))
@@ -161,7 +161,7 @@ func _run() -> void:
 	duel.set("staging_ejection_deadline_msec", Time.get_ticks_msec() - 1)
 	duel.call("_process_staging_ejection")
 	_check(
-		local_actor.global_position == Vector2(1456, 336),
+		local_actor.global_position == Vector2(1456, 304),
 		"A player still in staging after the grace period is moved onto the arena side"
 	)
 	_check(

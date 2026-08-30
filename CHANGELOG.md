@@ -60,6 +60,7 @@
 
 **Fixed**
 
+- Guild Duel staging and jail portals now sit in their intended walkable positions, with matching collision openings.
 - Guild Duel exit portals now render on their proper world-depth layer, keeping the Red staging portal and both jail portals visible instead of leaving only their glow.
 - The shared Aether Clash Lobby no longer presents a Guild Duel winner as the reigning Guild; that title is reserved for Battle Royale.
 - Right-click Aether Clash challenges now remain available but clearly explain when the selected Trainer is not a Leader or Captain, without redirecting the challenge to someone else.
