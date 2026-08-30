@@ -2990,7 +2990,7 @@
   "ui.move_deleter.error.delete": "Não foi possível esquecer o golpe.",
   "ui.move_deleter.result.deleted": "{pokemon} esqueceu {move}.",
   "ui.move_deleter.confirm.title": "Esquecer este golpe?",
-  "ui.move_deleter.confirm.message": "Tem certeza de que {pokemon} deve esquecer {move}? Um golpe compatível pode ser reaprendido com o Maníaco por Golpes.",
+  "ui.move_deleter.confirm.message": "Tem certeza de que {pokemon} deve esquecer {move}? Esta ação não pode ser desfeita. Se quiser usar este golpe novamente, você precisará ensiná-lo de novo.",
   "ui.move_deleter.confirm.delete": "Esquecer golpe",
   "ui.move_deleter.npc.records_unavailable": "Meus registros de golpes não estão disponíveis agora.",
   "ui.move_deleter.npc.service_unavailable": "Meu serviço de exclusão não está disponível agora.",

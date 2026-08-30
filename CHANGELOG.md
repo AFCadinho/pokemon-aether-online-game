@@ -27,6 +27,7 @@
 
 **Fixed**
 
+- The Move Deleter confirmation now clearly warns that forgetting a move cannot be undone and that using it again requires teaching it again.
 - Guild vs Guild participants now arrive directly before the arena portal assigned to their Guild side.
 - Aether Clash challenges sent by right-clicking another Trainer now use the themed Aether modal instead of an unstyled system dialog.
 - Aether Clash entry now saves the player's exact portal position and waits for server approval before playing the teleport effect.
