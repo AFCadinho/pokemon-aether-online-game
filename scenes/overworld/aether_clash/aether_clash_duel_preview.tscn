@@ -24,6 +24,12 @@ music_track_id = "login.lugia_theme_lofi"
 [node name="PreviewSpawn" type="Marker2D" parent="Spawns"]
 position = Vector2(336, 496)
 
+[node name="Guild1ArenaSpawn" type="Marker2D" parent="Spawns"]
+position = Vector2(1456, 208)
+
+[node name="Guild2ArenaSpawn" type="Marker2D" parent="Spawns"]
+position = Vector2(1072, 4752)
+
 [node name="Guild1JailSpawn" type="Marker2D" parent="Spawns"]
 position = Vector2(2224, 2416)
 
