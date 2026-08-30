@@ -51,7 +51,7 @@
 - Guild Duel participants now play at a forced 2× world zoom, while the independent spectator camera has its own bounded movement and zoom controls.
 - The Guild Duel arena now uses the latest visual layout from its Tiled source map.
 - Guild Duel opponents now remain `???` throughout the overworld match while keeping their Guild emblem visible; their Trainer name is only revealed inside a battle.
-- Aether View spectators can now drag the arena camera with mouse or touch, jump between nine map regions, adjust zoom with a slider, and physically block other players inside jail.
+- Aether View spectators can now drag the arena camera with mouse or touch, jump between nine map regions, and adjust zoom with a slider; jail spectators can move through each other.
 - Guild Duels now use the red Duel portal as an interactive exit in both staging areas and both jail areas; late lobby-portal entrants always arrive in jail as spectators after the countdown.
 - Once an Aether Clash challenge is accepted, every member of both Guilds now receives a persistent on-screen gathering timer directing them to the red Guild Duel portal.
 - Guild Duel match history now shows how many players each Guild locked in after the countdown and how many remained at the end.

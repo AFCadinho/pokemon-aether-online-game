@@ -93,12 +93,12 @@ func _run() -> void:
 		jail_engagement_requests["count"] = int(jail_engagement_requests["count"]) + 1
 	)
 	_check(
-		bool(duel.call(
+		not bool(duel.call(
 			"is_world_actor_step_blocked",
 			Vector2(2224, 2416),
 			Vector2(2256, 2416)
 		)),
-		"Jail spectators physically block each other's movement"
+		"Jail spectators can move through each other"
 	)
 	_check(
 		not bool(duel.call(
@@ -108,7 +108,7 @@ func _run() -> void:
 		)),
 		"An overlapping jail spectator can still move away"
 	)
-	_check(jail_engagement_requests["count"] == 0, "Jail collision never starts an engagement")
+	_check(jail_engagement_requests["count"] == 0, "Overlapping jail spectators never start an engagement")
 	var blue_indicator := remote_blue.get_node_or_null("AetherClashBattleIndicator")
 	var red_indicator := remote_red.get_node_or_null("AetherClashBattleIndicator")
 	_check(blue_indicator != null and red_indicator != null, "Every engaged player receives a rotating battle indicator")

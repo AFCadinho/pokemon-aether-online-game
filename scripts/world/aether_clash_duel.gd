@@ -205,7 +205,7 @@ func is_world_actor_step_blocked(from_position: Vector2, to_position: Vector2) -
 	if instance_session_id.is_empty():
 		return false
 	if viewer_role == "spectator":
-		return _is_spectator_actor_step_blocked(from_position, to_position)
+		return false
 	if not is_clash_active() or not _is_local_active_participant():
 		return false
 
@@ -236,27 +236,6 @@ func is_world_actor_step_blocked(from_position: Vector2, to_position: Vector2) -
 			and not engaged_player_ids.has(user_id)
 		):
 			_emit_engagement_contact(local_user_id, user_id, "player_contact")
-		return true
-	return false
-
-
-func _is_spectator_actor_step_blocked(from_position: Vector2, to_position: Vector2) -> bool:
-	if str(arena_session.get("status", "")) not in [
-		"entry_open", "roster_locked", "active", "finishing",
-	]:
-		return false
-	var local_actor := _actor_for_user_id(_local_user_id())
-	for actor: Node2D in _all_player_actors():
-		if actor == local_actor:
-			continue
-		var from_distance := from_position.distance_to(actor.global_position)
-		var to_distance := to_position.distance_to(actor.global_position)
-		if to_distance > ENGAGEMENT_CONTACT_DISTANCE:
-			continue
-		# Jail occupants physically block each other, but can always step away
-		# from an existing overlap. Spectator contact never starts a battle.
-		if from_distance <= ENGAGEMENT_CONTACT_DISTANCE and to_distance > from_distance:
-			continue
 		return true
 	return false
 
