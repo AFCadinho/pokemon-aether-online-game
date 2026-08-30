@@ -10,8 +10,8 @@ const EXPECTED_SPAWNS := [
 	"SpectatorJailSpawn",
 ]
 const EXPECTED_ARENA_SPAWN_POSITIONS := {
-	"Guild1ArenaSpawn": Vector2(400, 2544),
-	"Guild2ArenaSpawn": Vector2(1488, 2544),
+	"Guild1ArenaSpawn": Vector2(1456, 208),
+	"Guild2ArenaSpawn": Vector2(1072, 4752),
 }
 
 var failed := false

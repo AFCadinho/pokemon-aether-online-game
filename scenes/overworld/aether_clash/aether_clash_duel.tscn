@@ -250,10 +250,10 @@ tile_set = SubResource("TileSet_sg8c7")
 [node name="Spawns" type="Node2D" parent="."]
 
 [node name="Guild1ArenaSpawn" type="Marker2D" parent="Spawns"]
-position = Vector2(400, 2544)
+position = Vector2(1456, 208)
 
 [node name="Guild2ArenaSpawn" type="Marker2D" parent="Spawns"]
-position = Vector2(1488, 2544)
+position = Vector2(1072, 4752)
 
 [node name="Guild1JailSpawn" type="Marker2D" parent="Spawns"]
 position = Vector2(2224, 2416)
