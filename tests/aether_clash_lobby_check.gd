@@ -14,6 +14,7 @@ func _init() -> void:
 
 	var lobby := packed.instantiate()
 	root.add_child(lobby)
+	await process_frame
 	_check(lobby.has_method("get_map_id"), "Lobby exposes overworld map metadata")
 	_check(lobby.call("get_map_id") == "aether_clash_lobby", "Lobby has its canonical map id")
 	_check(
@@ -44,11 +45,29 @@ func _init() -> void:
 	_check(royale_portal != null and royale_portal.position == Vector2(1088, 624), "Battle Royale portal fills the east portal bay")
 	_check(guild_portal != null and guild_portal.get("mode_id") == "guild_duel", "West portal represents Guild vs Guild")
 	_check(royale_portal != null and royale_portal.get("mode_id") == "battle_royale", "East portal represents Battle Royale")
-	var red_portal_sprite := royale_portal.get_node_or_null("PortalSprite") as Sprite2D if royale_portal != null else null
+	var red_portal_sprite := guild_portal.get_node_or_null("PortalSprite") as Sprite2D if guild_portal != null else null
 	_check(
 		red_portal_sprite != null
 		and red_portal_sprite.texture.resource_path.ends_with("clash_portal_red.png"),
-		"Battle Royale portal uses the red portal art"
+		"Guild vs Guild uses the red portal art"
+	)
+	var purple_portal_sprite := royale_portal.get_node_or_null("PortalSprite") as Sprite2D if royale_portal != null else null
+	_check(
+		purple_portal_sprite != null
+		and purple_portal_sprite.texture.resource_path.ends_with("clash_portal_purple.png"),
+		"Battle Royale keeps the purple portal art"
+	)
+	var lobby_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_lobby.gd")
+	var save_index := lobby_source.find('world.call("save_current_player_state_now")')
+	var enter_index := lobby_source.find('guild_service.call("enter_aether_clash_portal", challenge_id)')
+	var effect_index := lobby_source.find('world.call("play_authorized_teleport_departure_effect")')
+	_check(
+		save_index >= 0 and enter_index > save_index and effect_index > enter_index,
+		"portal entry saves position and waits for server authorization before its teleport effect"
+	)
+	_check(
+		lobby_source.contains("AETHER_CONFIRMATION_DIALOG_SCENE.instantiate()"),
+		"multi-session portal selection uses the themed Aether modal"
 	)
 	var collision := lobby.get_node_or_null("Collision") as TileMapLayer
 	_check(collision != null and not collision.get_used_cells().is_empty(), "Lobby includes gameplay collision")

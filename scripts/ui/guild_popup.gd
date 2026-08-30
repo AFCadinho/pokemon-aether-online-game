@@ -14,6 +14,7 @@ const GUILD_MEMBER_MESSAGE_ICON: Texture2D = preload("res://assets/ui/icons/guil
 const GUILD_MEMBER_RANK_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_rank.svg")
 const GUILD_MEMBER_BANK_RIGHTS_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_bank_rights.svg")
 const GUILD_MEMBER_REMOVE_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_remove.svg")
+const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const CREATION_COST := 100000
 const REQUIRED_BADGES := 3
 const GUILD_EMBLEM_SIZE := 32
@@ -6280,32 +6281,33 @@ func _confirm_aether_clash_challenge(guild: Dictionary) -> void:
 	var guild_id := int(guild.get("id", 0))
 	if guild_id <= 0:
 		return
-	var dialog := ConfirmationDialog.new()
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
 	dialog.name = "GuildAetherClashChallengeDialog"
-	dialog.title = _t("ui.guild.aether_clash.challenge_title")
-	dialog.dialog_text = _t("ui.guild.aether_clash.challenge_confirm", {
-		"guild": str(guild.get("name", _t("ui.guild.fallback.guild"))),
-	})
+	add_child(dialog)
+	dialog.configure(
+		_t("ui.guild.aether_clash.challenge_title"),
+		_t("ui.guild.aether_clash.challenge_confirm", {
+			"guild": str(guild.get("name", _t("ui.guild.fallback.guild"))),
+		}),
+		_t("ui.guild.aether_clash.challenge"),
+		_t("common.cancel")
+	)
 	var spectator_access := OptionButton.new()
 	spectator_access.name = "GuildAetherClashSpectatorAccess"
-	spectator_access.position = Vector2(20, 112)
-	spectator_access.size = Vector2(460, 38)
+	spectator_access.custom_minimum_size = Vector2(0, 42)
 	spectator_access.add_item(_t("ui.guild.aether_clash.spectators.public"))
 	spectator_access.set_item_metadata(0, "public")
 	spectator_access.add_item(_t("ui.guild.aether_clash.spectators.guilds_only"))
 	spectator_access.set_item_metadata(1, "guilds_only")
-	dialog.add_child(spectator_access)
-	dialog.ok_button_text = _t("ui.guild.aether_clash.challenge")
-	dialog.cancel_button_text = _t("common.cancel")
-	_apply_guild_confirmation_style(dialog, "primary")
-	add_child(dialog)
+	dialog.style_option_button(spectator_access)
+	dialog.add_custom_control(spectator_access)
 	dialog.confirmed.connect(
 		_create_aether_clash_challenge.bind(guild_id, spectator_access),
 		CONNECT_ONE_SHOT
 	)
 	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
 	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
-	dialog.popup_centered(Vector2i(500, 270))
+	dialog.popup_centered(Vector2i(540, 330))
 
 
 func _create_aether_clash_challenge(

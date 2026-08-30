@@ -107,12 +107,12 @@ func _apply_mode_visuals() -> void:
 	if sprite == null:
 		sprite = get_node_or_null("PortalSprite") as Sprite2D
 	if sprite != null:
-		sprite.texture = RED_PORTAL_TEXTURE if mode_id == "battle_royale" else PURPLE_PORTAL_TEXTURE
+		sprite.texture = RED_PORTAL_TEXTURE if mode_id == "guild_duel" else PURPLE_PORTAL_TEXTURE
 	var light := portal_light
 	if light == null:
 		light = get_node_or_null("PortalLight") as PointLight2D
 	if light != null:
-		light.color = RED_LIGHT_COLOR if mode_id == "battle_royale" else PURPLE_LIGHT_COLOR
+		light.color = RED_LIGHT_COLOR if mode_id == "guild_duel" else PURPLE_LIGHT_COLOR
 
 
 func _animate_portal() -> void:

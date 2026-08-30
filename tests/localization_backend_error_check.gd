@@ -93,6 +93,12 @@ func _run() -> void:
 		"right-click Clash target errors display in Dutch"
 	)
 	_check(
+		errors.call("message", {
+			"detail": {"code": "aether_clash_portal_required"}
+		}) == "Ga dichter bij de rode Guild vs Guild-portal in de Aether Clash Lobby staan.",
+		"Aether Clash portal distance errors explain the required portal"
+	)
+	_check(
 		errors.call("message", {"detail": {"code": "current_password_incorrect"}})
 		== "Het huidige wachtwoord is onjuist.",
 		"privacy password errors explain how identity verification failed"
