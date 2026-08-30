@@ -94,6 +94,21 @@ func _check_localized_helpers() -> void:
 		"Global buff countdown rounds remaining time up to whole minutes"
 	)
 	_check(
+		overlay.call("_global_live_event_message", {
+			"action": "activated",
+			"eventName": "Dubbele EXP-weekend",
+		}) == "Live-event gestart: Dubbele EXP-weekend.",
+		"Admin live events render as localized Dutch system messages"
+	)
+	_check(
+		str(localization_manager.call(
+			"text",
+			"ui.buff.server_event_remaining",
+			{"event": "Dubbele EXP-weekend", "remaining": "48 min"}
+		)).contains("Dubbele EXP-weekend"),
+		"The active boost details retain the player-facing live event name"
+	)
+	_check(
 		overlay.call("_global_exp_boost_contribution_message", {
 			"displayName": "Misty",
 			"amount": 25_000,

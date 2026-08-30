@@ -11360,9 +11360,13 @@ func _refresh_global_buffs_if_needed(delta: float) -> void:
 		var remaining_seconds := _global_buff_remaining_seconds(expires_at)
 		if remaining_seconds <= 0:
 			buff["state"] = "funding"
-			buff["current"] = 0
+			if str(buff.get("activationSource", "")) != "admin":
+				buff["current"] = 0
 			buff["activeUntil"] = ""
 			buff["remaining"] = ""
+			buff["activationSource"] = ""
+			buff["eventName"] = ""
+			buff["eventId"] = ""
 		elif str(buff.get("remaining", "")) != _format_global_buff_remaining(remaining_seconds):
 			buff["remaining"] = _format_global_buff_remaining(remaining_seconds)
 		else:
@@ -11684,6 +11688,9 @@ func _global_buff_tooltip(buff: Dictionary) -> String:
 		lines.append(LocalizationManager.text("ui.buff.click_details"))
 		return "\n".join(lines)
 	if str(buff.get("state", "funding")) == "active":
+		var event_name := str(buff.get("eventName", "")).strip_edges()
+		if event_name != "":
+			lines.append(event_name)
 		lines.append(LocalizationManager.text(
 			"ui.buff.active_remaining",
 			{"remaining": str(buff.get("remaining", ""))}
@@ -11870,8 +11877,11 @@ func _render_global_buff_details() -> void:
 	global_buff_details_progress.value = 100.0 if active else progress
 	global_buff_details_progress_label.text = "$%s / $%s" % [_format_money(current), _format_money(goal)]
 	global_buff_details_percent_label.text = "%d%%" % roundi(100.0 if active else progress)
-	global_buff_details_status.text = LocalizationManager.text(
-		"ui.buff.active_server" if active else "ui.buff.community_goal"
+	var event_name := str(selected_global_buff.get("eventName", "")).strip_edges()
+	global_buff_details_status.text = (
+		event_name.to_upper()
+		if active and event_name != ""
+		else LocalizationManager.text("ui.buff.active_server" if active else "ui.buff.community_goal")
 	)
 	global_buff_details_status.add_theme_color_override(
 		"font_color",
@@ -11888,8 +11898,11 @@ func _render_global_buff_details() -> void:
 	)
 	global_buff_details_active_label.visible = active
 	global_buff_details_active_label.text = LocalizationManager.text(
-		"ui.buff.server_remaining",
-		{"remaining": str(selected_global_buff.get("remaining", ""))}
+		"ui.buff.server_event_remaining" if event_name != "" else "ui.buff.server_remaining",
+		{
+			"event": event_name,
+			"remaining": str(selected_global_buff.get("remaining", "")),
+		}
 	)
 	global_buff_donation_section.visible = not active and _global_buff_accepts_contributions(selected_global_buff)
 	_refresh_global_buff_contribution_input()
@@ -12669,6 +12682,9 @@ func _apply_global_boost_state(
 		buff["goal"] = int(state.get("goal", 100000))
 		buff["state"] = "active" if is_active else "funding"
 		buff["activeUntil"] = active_until
+		buff["activationSource"] = str(state.get("activationSource", "")).strip_edges()
+		buff["eventName"] = str(state.get("eventName", "")).strip_edges() if is_active else ""
+		buff["eventId"] = str(state.get("eventId", "")).strip_edges() if is_active else ""
 		var remaining_seconds := _global_buff_remaining_seconds(str(buff.get("activeUntil", "")))
 		buff["remaining"] = (
 			_format_global_buff_remaining(remaining_seconds)
@@ -12700,7 +12716,7 @@ func _show_global_boost_activation_notification(buff: Dictionary, remaining_seco
 		return
 	_show_event_notification(
 		"global-buff:%s:%s" % [boost_id, active_until],
-		_localized_buff_name(buff),
+		str(buff.get("eventName", "")).strip_edges() if str(buff.get("eventName", "")).strip_edges() != "" else _localized_buff_name(buff),
 		LocalizationManager.text("ui.reward_card.global_buff_activated"),
 		_global_buff_icon_for(buff),
 		_format_global_buff_notification_duration(remaining_seconds),
@@ -43107,6 +43123,22 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		add_system_message(_global_shiny_boost_contribution_message(message))
 		_load_global_boost_state.call_deferred("global_shiny", true)
 		return
+	if message_type == "system.global_boost_state_changed":
+		add_system_message(_global_live_event_message(message))
+		var action := str(message.get("action", "")).strip_edges().to_lower()
+		var boost_ids_value: Variant = message.get("boostIds", [])
+		if boost_ids_value is Array:
+			for boost_id_value: Variant in boost_ids_value:
+				var boost_id := str(boost_id_value).strip_edges()
+				if boost_id in [
+					"global_exp",
+					"global_skill_exp",
+					"global_ev",
+					"global_rare_encounter",
+					"global_shiny",
+				]:
+					_load_global_boost_state.call_deferred(boost_id, action != "ended")
+		return
 	if message_type == "system.global_heal_requested":
 		_receive_global_heal_request(message, true)
 		return
@@ -43216,6 +43248,19 @@ func _global_rare_encounter_boost_contribution_message(message: Dictionary) -> S
 
 func _global_shiny_boost_contribution_message(message: Dictionary) -> String:
 	return _global_boost_contribution_message(message, "ui.buff.global_shiny.contribution_message")
+
+
+func _global_live_event_message(message: Dictionary) -> String:
+	var action := str(message.get("action", "")).strip_edges().to_lower()
+	var event_name := str(message.get("eventName", "Live Event")).strip_edges()
+	if event_name == "":
+		event_name = "Live Event"
+	var key := "ui.buff.live_event.activated"
+	if action == "extended":
+		key = "ui.buff.live_event.extended"
+	elif action == "ended":
+		key = "ui.buff.live_event.ended"
+	return LocalizationManager.text(key, {"event": event_name})
 
 
 func _global_boost_contribution_message(message: Dictionary, localization_key: String) -> String:
