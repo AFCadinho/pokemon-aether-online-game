@@ -46,6 +46,10 @@ func _run() -> void:
 	_check(hud.challenger_count_label.text == "4", "HUD shows north active players")
 	_check(hud.challenged_count_label.text == "2", "HUD shows south active players")
 	_check(hud.countdown_label.text == "FIGHT!", "Active arena HUD shows the fight phase")
+	_check(
+		hud.barrier_hint_label.text == "Duel time: 02:05",
+		"Active arena HUD shows synchronized elapsed duel time"
+	)
 
 	duel.call("_apply_arena_state", _arena_payload("entry_open", 3, 5))
 	await physics_frame
@@ -148,6 +152,7 @@ func _arena_payload(status: String, challenger_count: int, challenged_count: int
 			"id": "runtime-test",
 			"status": status,
 			"entryClosesAt": Time.get_datetime_string_from_unix_time(now + 90, true) + "Z",
+			"startedAt": Time.get_datetime_string_from_unix_time(now - 125, true) + "Z",
 			"challengerGuild": {"id": 1, "name": "North Stars"},
 			"challengedGuild": {"id": 2, "name": "South Guard"},
 			"entryCounts": {

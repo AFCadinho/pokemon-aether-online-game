@@ -597,6 +597,7 @@
   "ui.aether_clash.arena.finished": "CLASH ENCERRADO",
   "ui.aether_clash.arena.barrier_raised": "A barreira de Aether separa as duas Guildas",
   "ui.aether_clash.arena.barrier_lowered": "A barreira de Aether foi baixada",
+  "ui.aether_clash.arena.duel_time": "Tempo de duelo: {time}",
   "ui.aether_clash.arena.blue_side": "LADO AZUL",
   "ui.aether_clash.arena.red_side": "LADO VERMELHO",
   "ui.aether_clash.leave.title": "Sair do Aether Clash?",

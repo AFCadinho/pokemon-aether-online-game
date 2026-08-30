@@ -597,6 +597,7 @@
   "ui.aether_clash.arena.finished": "对决已结束",
   "ui.aether_clash.arena.barrier_raised": "以太屏障将双方公会隔开",
   "ui.aether_clash.arena.barrier_lowered": "以太屏障已降下",
+  "ui.aether_clash.arena.duel_time": "对决时间：{time}",
   "ui.aether_clash.arena.blue_side": "蓝方",
   "ui.aether_clash.arena.red_side": "红方",
   "ui.aether_clash.leave.title": "退出以太冲突？",
