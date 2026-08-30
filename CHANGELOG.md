@@ -10,6 +10,7 @@
 - The Aether Clash Lobby now has mode-specific portals. The Guild Duel portal sends on-time Guild members to their arena side, late entrants and allowed outsiders to jail as spectators, and lets challengers choose whether outside spectators may attend.
 - Guild Leaders and Captains can now right-click another Trainer to challenge that Trainer's Guild to an Aether Clash.
 - Incoming Aether Clash challenges now open a direct accept-or-decline popup with a live response countdown.
+- Guild Duel arenas now show both Guilds' live player counts and a synchronized start countdown behind a temporary center barrier.
 
 **Changed**
 
