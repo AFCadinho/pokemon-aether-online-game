@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Polished every Guild tab with consistent workspace headings, clearer supporting actions, safer long-text handling, and a useful no-results state for member searches.
+
 - Refined the Guild Overview with whole-number levels, clearer EXP and capacity displays, compact announcements, rank badges, and online-member context.
 
 - The Guild Pokémon Vault now shows unavailable Pokémon in red and explains why they cannot be donated.
