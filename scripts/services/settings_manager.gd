@@ -90,6 +90,9 @@ func load_settings() -> void:
 		locale = LocalizationManager.get_preferred_system_locale()
 		_apply_launcher_locale_argument()
 		content_name_language = _default_content_name_language(locale)
+		world_pixel_scale = PixelPerfectRendering.default_scale_for_viewport(
+			_default_world_pixel_scale_viewport_size()
+		)
 		save_settings()
 		return
 
@@ -97,6 +100,9 @@ func load_settings() -> void:
 	var parsed_data: Variant = JSON.parse_string(settings_text)
 	if not parsed_data is Dictionary:
 		_apply_launcher_locale_argument()
+		world_pixel_scale = PixelPerfectRendering.default_scale_for_viewport(
+			_default_world_pixel_scale_viewport_size()
+		)
 		save_settings()
 		return
 
@@ -109,9 +115,13 @@ func load_settings() -> void:
 	sprite_style = _validated_sprite_style(str(data.get("sprite_style", sprite_style)))
 	fullscreen = bool(data.get("fullscreen", fullscreen))
 	window_resolution = _validated_window_resolution(data.get("window_resolution", window_resolution))
-	world_pixel_scale = PixelPerfectRendering.validate_scale(
-		data.get("world_pixel_scale", world_pixel_scale)
-	)
+	var has_world_pixel_scale := data.has("world_pixel_scale")
+	if has_world_pixel_scale:
+		world_pixel_scale = PixelPerfectRendering.validate_scale(data.get("world_pixel_scale"))
+	else:
+		world_pixel_scale = PixelPerfectRendering.default_scale_for_viewport(
+			_default_world_pixel_scale_viewport_size()
+		)
 	selected_land_mount_id = MountServiceScript.resolve_mount_id_for_mode(
 		str(data.get("selected_land_mount_id", selected_land_mount_id)),
 		MOUNT_MODE_LAND,
@@ -146,7 +156,7 @@ func load_settings() -> void:
 	var launcher_changed := _apply_launcher_locale_argument()
 	if not has_content_name_language:
 		content_name_language = _default_content_name_language(locale)
-	if launcher_changed or not has_content_name_language:
+	if launcher_changed or not has_content_name_language or not has_world_pixel_scale:
 		save_settings()
 	_apply_runtime_settings()
 
@@ -572,6 +582,14 @@ func _closest_available_resolution(resolution: Vector2i) -> Vector2i:
 			return available_resolution
 
 	return DEFAULT_WINDOW_RESOLUTION
+
+
+func _default_world_pixel_scale_viewport_size() -> Vector2i:
+	if OS.has_feature("web"):
+		return Vector2i(get_viewport().get_visible_rect().size)
+	if fullscreen:
+		return DisplayServer.screen_get_size(DisplayServer.window_get_current_screen())
+	return window_resolution
 
 
 func _ensure_audio_buses() -> void:
