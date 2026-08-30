@@ -108,6 +108,7 @@
   "backend.error.aether_clash_activity_blocked": "Termine sua atividade atual antes de entrar no Aether Clash.",
   "backend.error.aether_clash_presence_required": "Sua conexão com o mundo ainda não está pronta. Tente o portal novamente.",
   "backend.error.aether_clash_target_guild": "Esse Treinador não está em uma Guilda que você possa desafiar.",
+  "backend.error.aether_clash_target_rank": "Você só pode desafiar um Líder ou Capitão da Guilda adversária.",
   "backend.error.aether_clash_player_in_battle": "Um desses Treinadores ainda está vinculado a outra batalha PvP. Aguarde até dois minutos, afaste-se e encoste novamente.",
   "backend.error.aether_clash_contact_sync_pending": "As posições dos jogadores ainda estão sendo sincronizadas. Afaste-se e encoste novamente.",
   "backend.error.aether_clash_contact_out_of_range": "Esses Treinadores não estão mais perto o suficiente para iniciar uma batalha.",
