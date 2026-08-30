@@ -594,6 +594,8 @@
   "ui.aether_clash.arena.finished": "CLASH AFGELOPEN",
   "ui.aether_clash.arena.barrier_raised": "De Aether-muur houdt beide guilds gescheiden",
   "ui.aether_clash.arena.barrier_lowered": "De Aether-muur is neergelaten",
+  "ui.aether_clash.arena.blue_side": "BLAUWE KANT",
+  "ui.aether_clash.arena.red_side": "RODE KANT",
   "ui.aether_clash.leave.title": "Aether Clash verlaten?",
   "ui.aether_clash.leave.message": "Als je vertrekt, ben je direct uitgeschakeld. Je kunt niet terugkeren naar deze Clash.",
   "ui.aether_clash.leave.confirm": "Clash verlaten",

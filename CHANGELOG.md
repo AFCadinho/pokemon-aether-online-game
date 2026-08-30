@@ -15,6 +15,7 @@
 
 **Changed**
 
+- Guild Duel teams are now presented as the Blue Side and Red Side while the HUD continues to show both actual Guild names; either team may use either exit zone to leave.
 - The Move Maniac and Move Deleter now use matching trainer portraits in dialogue, and the Move Deleter has moved to a more natural spot in Pokémon Centers.
 - Wild battles now open with both Pokémon ready, letting queued move or Run input start sooner without an opening summon animation.
 - Wild victories no longer pause on the winner message; disabling Move Animations also removes the remaining terminal presentation waits while still applying every result and reward.

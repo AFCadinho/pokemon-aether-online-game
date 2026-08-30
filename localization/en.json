@@ -594,6 +594,8 @@
   "ui.aether_clash.arena.finished": "CLASH FINISHED",
   "ui.aether_clash.arena.barrier_raised": "The Aether barrier separates both Guilds",
   "ui.aether_clash.arena.barrier_lowered": "The Aether barrier is down",
+  "ui.aether_clash.arena.blue_side": "BLUE SIDE",
+  "ui.aether_clash.arena.red_side": "RED SIDE",
   "ui.aether_clash.leave.title": "Leave Aether Clash?",
   "ui.aether_clash.leave.message": "Leaving eliminates you immediately. You cannot return to this Clash.",
   "ui.aether_clash.leave.confirm": "Leave Clash",

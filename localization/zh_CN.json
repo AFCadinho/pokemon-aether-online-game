@@ -594,6 +594,8 @@
   "ui.aether_clash.arena.finished": "对决已结束",
   "ui.aether_clash.arena.barrier_raised": "以太屏障将双方公会隔开",
   "ui.aether_clash.arena.barrier_lowered": "以太屏障已降下",
+  "ui.aether_clash.arena.blue_side": "蓝方",
+  "ui.aether_clash.arena.red_side": "红方",
   "ui.aether_clash.leave.title": "退出以太冲突？",
   "ui.aether_clash.leave.message": "退出会立即淘汰你，并且无法重新加入本场对决。",
   "ui.aether_clash.leave.confirm": "退出对决",
