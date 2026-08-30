@@ -76,6 +76,13 @@ func _run() -> void:
 		"Enemy engagement circles stop the movement step"
 	)
 	_check(contact["count"] == 1 and contact["method"] == "player_contact", "Enemy circle contact emits the shared engagement request")
+	duel.set("engaged_player_ids", {1: "engagement-1", 2: "engagement-1"})
+	_check(
+		bool(duel.call("is_world_actor_step_blocked", Vector2(512, 512), Vector2(544, 512))),
+		"Reserved players continue to block movement"
+	)
+	_check(contact["count"] == 1, "Reserved players cannot emit a second contact challenge")
+	duel.set("engaged_player_ids", {})
 	var projectile_target := int(duel.call(
 		"request_projectile_engagement",
 		Vector2(512, 512),
@@ -132,6 +139,18 @@ func _run() -> void:
 	_check(
 		duel_source.contains("GuildService.leave_aether_clash_arena(instance_session_id)"),
 		"Own exit-zone confirmation uses the authoritative leave operation"
+	)
+	_check(
+		duel_source.contains("GuildService.create_aether_clash_engagement(")
+		and duel_source.contains('"aether_clash.engagement.started"')
+		and duel_source.contains('player_state.get("engagementMatchId")'),
+		"Enemy contact, realtime delivery, and reconnect recovery share the authoritative engagement flow"
+	)
+	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	_check(
+		overlay_source.contains("func start_aether_clash_pvp_match(")
+		and overlay_source.contains("BattleApiClient.start_pvp_match_battle("),
+		"Aether Clash engagements reuse the existing PvP battle start path"
 	)
 	var zone_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_arena_zones.gd")
 	_check(

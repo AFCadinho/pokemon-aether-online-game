@@ -930,6 +930,7 @@ var pvp_poll_in_flight := false
 var pvp_polling_active := false
 var pvp_poll_elapsed := 0.0
 var pvp_battle_starting := false
+var aether_clash_started_engagements: Dictionary = {}
 var pvp_room_status_translation_key := "ui.pvp.room.casual_ready"
 var pvp_room_status_translation_values: Dictionary = {}
 var pvp_queue_status_translation_key := "ui.pvp.queue.ready"
@@ -42157,6 +42158,46 @@ func _on_pvp_room_poll_completed(
 
 	_set_pvp_status_key("ui.pvp.room.opponent_joined")
 	await _start_pvp_battle_from_response(response)
+
+func start_aether_clash_pvp_match(match_id: String, engagement_id: String) -> bool:
+	var normalized_match_id := match_id.strip_edges()
+	var normalized_engagement_id := engagement_id.strip_edges()
+	if normalized_match_id.is_empty() or normalized_engagement_id.is_empty():
+		return false
+	if aether_clash_started_engagements.has(normalized_engagement_id):
+		return true
+	if pvp_battle_starting:
+		return false
+
+	aether_clash_started_engagements[normalized_engagement_id] = true
+	var world := get_tree().get_first_node_in_group("world")
+	if world != null and world.has_method("begin_pvp_battle_transition"):
+		world.call("begin_pvp_battle_transition")
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.start_pvp_match_battle(
+		request,
+		normalized_match_id
+	)
+	request.queue_free()
+	if not bool(response.get("success", false)):
+		aether_clash_started_engagements.erase(normalized_engagement_id)
+		if world != null and world.has_method("cancel_pvp_battle_transition"):
+			await world.call("cancel_pvp_battle_transition")
+		add_system_message(str(response.get("error", "The Aether Clash battle could not start.")))
+		return false
+
+	if str(response.get("roomCode", "")).strip_edges().is_empty():
+		response["roomCode"] = normalized_match_id.to_upper()
+	await _start_pvp_battle_from_response(response)
+	var started := (
+		world != null
+		and bool(world.get("is_in_battle"))
+		and str(world.get("active_battle_kind")) == "pvp"
+	)
+	if not started:
+		aether_clash_started_engagements.erase(normalized_engagement_id)
+	return started
+
 
 func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	if pvp_battle_starting:
