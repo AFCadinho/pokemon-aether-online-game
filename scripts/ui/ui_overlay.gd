@@ -42165,11 +42165,11 @@ func start_aether_clash_pvp_match(match_id: String, engagement_id: String) -> bo
 	if normalized_match_id.is_empty() or normalized_engagement_id.is_empty():
 		return false
 	if aether_clash_started_engagements.has(normalized_engagement_id):
-		return true
+		return str(aether_clash_started_engagements[normalized_engagement_id]) != "failed"
 	if pvp_battle_starting:
 		return false
 
-	aether_clash_started_engagements[normalized_engagement_id] = true
+	aether_clash_started_engagements[normalized_engagement_id] = "starting"
 	var world := get_tree().get_first_node_in_group("world")
 	if world != null and world.has_method("begin_pvp_battle_transition"):
 		world.call("begin_pvp_battle_transition")
@@ -42180,7 +42180,7 @@ func start_aether_clash_pvp_match(match_id: String, engagement_id: String) -> bo
 	)
 	request.queue_free()
 	if not bool(response.get("success", false)):
-		aether_clash_started_engagements.erase(normalized_engagement_id)
+		aether_clash_started_engagements[normalized_engagement_id] = "failed"
 		if world != null and world.has_method("cancel_pvp_battle_transition"):
 			await world.call("cancel_pvp_battle_transition")
 		add_system_message(str(response.get("error", "The Aether Clash battle could not start.")))
@@ -42194,8 +42194,7 @@ func start_aether_clash_pvp_match(match_id: String, engagement_id: String) -> bo
 		and bool(world.get("is_in_battle"))
 		and str(world.get("active_battle_kind")) == "pvp"
 	)
-	if not started:
-		aether_clash_started_engagements.erase(normalized_engagement_id)
+	aether_clash_started_engagements[normalized_engagement_id] = "started" if started else "failed"
 	return started
 
 
