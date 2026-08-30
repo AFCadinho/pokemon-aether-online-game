@@ -1147,6 +1147,7 @@ var market_title_label: Label
 var market_subtitle_label: Label
 var market_money_label: Label
 var market_search_input: LineEdit
+var market_sort_select: OptionButton
 var market_catalog_summary_label: Label
 var market_catalog_caption_label: Label
 var market_item_list: VBoxContainer
@@ -19310,15 +19311,31 @@ func _setup_market_popup() -> void:
 	market_catalog_summary_label.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.78))
 	catalog_header.add_child(market_catalog_summary_label)
 
+	var catalog_tools := HBoxContainer.new()
+	catalog_tools.name = "CatalogTools"
+	catalog_tools.add_theme_constant_override("separation", 8)
+	catalog_layout.add_child(catalog_tools)
+
 	market_search_input = LineEdit.new()
 	market_search_input.name = "MarketSearch"
 	_set_localized_control_property(market_search_input, "placeholder_text", "ui.market.search.buy")
 	market_search_input.clear_button_enabled = true
 	market_search_input.custom_minimum_size = Vector2(0, 36)
+	market_search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	market_search_input.focus_mode = Control.FOCUS_ALL
 	market_search_input.text_changed.connect(_on_market_search_changed)
 	_apply_line_edit_style(market_search_input)
-	catalog_layout.add_child(market_search_input)
+	catalog_tools.add_child(market_search_input)
+
+	market_sort_select = OptionButton.new()
+	market_sort_select.name = "MarketSort"
+	market_sort_select.custom_minimum_size = Vector2(154, 36)
+	market_sort_select.focus_mode = Control.FOCUS_NONE
+	market_sort_select.tooltip_text = LocalizationManager.text("ui.market.sort.tooltip")
+	market_sort_select.item_selected.connect(_on_market_sort_selected)
+	_apply_trainer_card_badge_option_style(market_sort_select)
+	catalog_tools.add_child(market_sort_select)
+	_populate_market_sort_options()
 
 	var scroll := ScrollContainer.new()
 	scroll.name = "CatalogScroll"
@@ -19535,6 +19552,7 @@ func open_market(market: Dictionary, requested_mode: String = "player_buys", inv
 	market_mode = requested_mode if requested_mode in ["player_buys", "player_sells"] else "player_buys"
 	var player_is_selling := market_mode == "player_sells"
 	market_context = {
+		"id": str(market.get("id", "standard_pokemart")).strip_edges(),
 		"name": str(market.get("name", "")).strip_edges(),
 		"location": str(market.get("locationName", "")).strip_edges(),
 		"region": str(market.get("region", "")).strip_edges(),
@@ -19552,6 +19570,8 @@ func open_market(market: Dictionary, requested_mode: String = "player_buys", inv
 	market_quantity_spinbox.max_value = max(int(market_selected_item.get("quantity", 1)), 1) if player_is_selling else 99
 	market_quantity_spinbox.value = 1
 	market_search_input.text = ""
+	if market_sort_select != null:
+		market_sort_select.select(0)
 	if market_search_input.is_inside_tree():
 		market_search_input.release_focus()
 	market_popup.visible = true
@@ -19871,6 +19891,7 @@ func _apply_market_context_copy() -> void:
 	market_search_input.placeholder_text = LocalizationManager.text(
 		"ui.market.search.sell" if player_is_selling else "ui.market.search.buy"
 	)
+	_populate_market_sort_options()
 
 
 func _market_sell_items(catalog_items: Array[Dictionary], inventory_items: Array) -> Array[Dictionary]:
@@ -19972,13 +19993,8 @@ func _refresh_market_items() -> void:
 	_refresh_market_purchase_state()
 
 func _filtered_market_items() -> Array[Dictionary]:
-	if market_search_input == null:
-		return market_items.duplicate(true)
-	var query := market_search_input.text.strip_edges().to_lower()
-	if query == "":
-		return market_items.duplicate(true)
-
 	var filtered: Array[Dictionary] = []
+	var query := market_search_input.text.strip_edges().to_lower() if market_search_input != null else ""
 	for item: Dictionary in market_items:
 		var haystack := " ".join([
 			str(item.get("name", "")),
@@ -19986,11 +20002,43 @@ func _filtered_market_items() -> Array[Dictionary]:
 			str(item.get("category", "")),
 			str(item.get("shortDesc", "")),
 		]).to_lower()
-		if haystack.contains(query):
+		if query.is_empty() or haystack.contains(query):
 			filtered.append(item)
-	return filtered
+	return _sort_market_items(filtered)
+
+
+func _sort_market_items(items: Array[Dictionary]) -> Array[Dictionary]:
+	var sorted_items := items.duplicate(true)
+	var sort_mode := market_sort_select.selected if market_sort_select != null else 0
+	sorted_items.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
+		var left_name := str(left.get("name", left.get("id", "")))
+		var right_name := str(right.get("name", right.get("id", "")))
+		if sort_mode == 1 or sort_mode == 2:
+			var left_price := int(left.get("price", 0))
+			var right_price := int(right.get("price", 0))
+			if left_price != right_price:
+				return left_price < right_price if sort_mode == 1 else left_price > right_price
+		return left_name.naturalnocasecmp_to(right_name) < 0
+	)
+	return sorted_items
+
+
+func _populate_market_sort_options() -> void:
+	if market_sort_select == null:
+		return
+	var previous_selection := market_sort_select.selected
+	market_sort_select.clear()
+	market_sort_select.add_item(LocalizationManager.text("ui.market.sort.name"))
+	market_sort_select.add_item(LocalizationManager.text("ui.market.sort.price_low"))
+	market_sort_select.add_item(LocalizationManager.text("ui.market.sort.price_high"))
+	market_sort_select.select(clampi(previous_selection, 0, market_sort_select.item_count - 1))
+	market_sort_select.tooltip_text = LocalizationManager.text("ui.market.sort.tooltip")
 
 func _on_market_search_changed(_new_text: String) -> void:
+	_refresh_market_items()
+
+
+func _on_market_sort_selected(_index: int) -> void:
 	_refresh_market_items()
 
 func _create_market_item_button(item: Dictionary) -> Control:

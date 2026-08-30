@@ -6,7 +6,7 @@
 
 - Pokémon Storage now has simpler box navigation, quieter empty slots, clearer filters and hover cards that stay out of the controls.
 
-- Prepared two PvP item specialists for future placement, with named-market checkout support and planned vendors shown clearly in the Item Dex.
+- Prepared one searchable Battle Point vendor for competitive held items, with alphabetical and BP-price sorting and planned availability shown in the Item Dex.
 
 - Pokémon stat labels and values are now easier to distinguish on PC Box hover cards.
 
