@@ -59,6 +59,7 @@
 
 **Fixed**
 
+- The upper Guild Duel jail portal now renders in front of the jail artwork without covering players standing at the jail spawn.
 - Guild Duel staging and jail portals now sit in their intended walkable positions, with matching collision openings.
 - Guild Duel exit portals now render on their proper world-depth layer, keeping the Red staging portal and both jail portals visible instead of leaving only their glow.
 - The shared Aether Clash Lobby no longer presents a Guild Duel winner as the reigning Guild; that title is reserved for Battle Royale.

@@ -249,11 +249,12 @@ interactable_kind = "aether_clash_exit_portal"
 display_name = "Guild Duel Portal"
 
 [node name="Guild1JailExitPortal" parent="Entities/Interactables" unique_id=256099837 instance=ExtResource("7_clash_portal")]
-z_index = 2416
+z_index = 2401
 z_as_relative = false
 position = Vector2(2240, 2368)
 portal_action = "exit"
 entry_open = true
+sort_z_offset = 33
 interactable_kind = "aether_clash_exit_portal"
 display_name = "Guild Duel Portal"
 
