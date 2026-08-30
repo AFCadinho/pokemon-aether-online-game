@@ -20,12 +20,14 @@
 - Trainers can now fund a ₽100,000 Global Skill EXP Boost together for one hour of double Fishing, Thieving, and Rock Smash experience, with a dedicated skill icon and live contribution updates.
 - Every Pokémon Center now has a Move Maniac who can teach compatible relearn, Egg, tutor, special, event, legacy, and pre-evolution moves in exchange for gathered resources.
 - Every Pokémon Center now has a separate Move Deleter who can safely remove any move except a Pokémon's last one.
-- Guild Leaders and Captains can now send, accept, decline, and cancel Guild vs Guild Aether Clash challenges from the Guild screen. Multiple challenges may remain pending, while accepting one reserves both Guilds and opens a timed lobby-entry window for every member.
+- Guild Leaders and Captains can now send, accept, decline, and cancel Guild vs Guild Aether Clash challenges. Multiple challenges may remain pending, while accepting one reserves both Guilds and opens a timed lobby-entry window for every member.
 - The Aether Clash Lobby now has mode-specific portals. The Guild Duel portal sends on-time Guild members to their arena side, late entrants and allowed outsiders to jail as spectators, and lets challengers choose whether outside spectators may attend.
 - Guild Leaders and Captains can now right-click another Trainer to challenge that Trainer's Guild to an Aether Clash.
 - Incoming Aether Clash challenges now open a direct accept-or-decline popup with a live response countdown.
 - Guild Duel arenas now show both Guilds' live player counts and a synchronized start countdown behind a temporary center barrier.
 - Guild Duel arenas now mark each Guild's staging and exit zone and show engagement circles around active players. Friendly circles block movement, while enemy circles automatically start a PvP battle without an accept popup.
+- The Guild Aether Clash screen now separates Guild Duel and Battle Royale, with Guild Duel wins, losses, win rate, and recent match history.
+- Finished Guild Duels now clearly show every participant whether their Guild won or lost, including the winner, survivor counts, and duel duration.
 
 **Changed**
 
@@ -53,7 +55,8 @@
 - Aether Clash contact failures now explain position synchronization and existing PvP battles instead of showing a generic error.
 - A failed Guild Duel contact-battle start now stops after one attempt instead of repeatedly replaying the battle transition.
 - Temporary PvP authority outages during an Aether Clash now show a clear service-unavailable message instead of a generic error.
-- Engagement circles no longer follow players out of a Guild Duel arena, and all Guild members can now view their Guild's pending Aether Clash challenges without receiving staff-only controls.
+- Engagement circles no longer follow players out of a Guild Duel arena, and all Guild members can view their active Clash and Guild Duel record without receiving staff-only controls.
+- Aether Clash challenge controls are now strictly limited to Guild Leaders and Captains.
 - Guild Duel engagement circles are now clearly larger than player sprites, and exit confirmations render above the arena instead of leaving movement locked behind an unseen dialog.
 - Guild Duel arenas now synchronize reliably after a hot reload, show the real Guild names and countdown, and physically block players at the raised center barrier.
 - The Move Deleter confirmation now clearly warns that forgetting a move cannot be undone and that using it again requires teaching it again.

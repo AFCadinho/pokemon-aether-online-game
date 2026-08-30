@@ -592,6 +592,13 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 			"teleportRevision": current_teleport_revision,
 			"teleportCommandId": str(state.get("teleportCommandId", "")),
 		})
+	var aether_clash_result := _dictionary_from_value(state.get("aetherClashResult", {}))
+	if not aether_clash_result.is_empty():
+		get_tree().call_group(
+			"ui_overlay",
+			"show_aether_clash_result",
+			aether_clash_result.duplicate(true)
+		)
 	return {"success": true}
 
 

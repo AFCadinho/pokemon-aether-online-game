@@ -994,10 +994,7 @@ func _on_guild_invite_pressed() -> void:
 func _can_challenge_aether_clash() -> bool:
 	if not guild_membership_loaded or guild_membership.is_empty():
 		return false
-	var permissions: Variant = guild_membership.get("permissions", [])
-	if permissions is Array and (permissions as Array).has("challenge_aether_clash"):
-		return true
-	return str(guild_membership.get("role", "")).to_lower() in ["leader", "captain", "officer"]
+	return str(guild_membership.get("role", "")).strip_edges().to_lower() in ["leader", "captain"]
 
 
 func _on_aether_clash_challenge_pressed() -> void:

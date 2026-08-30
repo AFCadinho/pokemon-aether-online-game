@@ -108,6 +108,33 @@ func _run() -> void:
 	})
 	_check(not entry_callout.visible, "gathering callout closes when portal entry expires")
 
+	overlay_instance.call("show_aether_clash_result", {
+		"sessionId": "result-dialog-test",
+		"outcome": "victory",
+		"challengerGuild": {"id": 7, "name": "AFC squad"},
+		"challengedGuild": {"id": 8, "name": "Godz"},
+		"winnerGuild": {"id": 7, "name": "AFC squad"},
+		"remainingCounts": {"challenger": 2, "challenged": 0},
+		"durationSeconds": 428,
+	})
+	await process_frame
+	await process_frame
+	var result_dialog := dialog_host.find_child("AetherClashResultDialog", true, false) as AetherConfirmationDialog
+	_check(result_dialog != null and result_dialog.visible, "finished Guild Duel opens a result modal")
+	_check(
+		result_dialog != null
+		and result_dialog.title_label.text.contains("victory")
+		and result_dialog.message_label.text.contains("AFC squad")
+		and result_dialog.message_label.text.contains("07:08"),
+		"result modal identifies the winner and duel duration"
+	)
+	_check(result_dialog != null and not result_dialog.cancel_button.visible, "result modal has one clear continuation action")
+	_check(
+		result_dialog != null
+		and result_dialog.panel.get_theme_stylebox("panel") is StyleBoxFlat,
+		"result modal uses the themed Aether styling"
+	)
+
 	var overlay_source := FileAccess.get_file_as_string(OVERLAY_PATH)
 	_check(
 		overlay_source.contains('notification.get("aetherClashSessionId"'),
@@ -127,6 +154,8 @@ func _run() -> void:
 		dialog.free()
 	if entry_callout != null and is_instance_valid(entry_callout):
 		entry_callout.free()
+	if result_dialog != null and is_instance_valid(result_dialog):
+		result_dialog.free()
 	dialog = null
 	countdown = null
 	spectator_policy = null
@@ -134,6 +163,7 @@ func _run() -> void:
 	entry_title = null
 	entry_countdown = null
 	entry_hint = null
+	result_dialog = null
 	dialog_host.free()
 	overlay_instance.free()
 	overlay_script = null
