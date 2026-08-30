@@ -52,6 +52,7 @@
 
 **Fixed**
 
+- The shared Aether Clash Lobby no longer presents a Guild Duel winner as the reigning Guild; that title is reserved for Battle Royale.
 - Right-click Aether Clash challenges now remain available but clearly explain when the selected Trainer is not a Leader or Captain, without redirecting the challenge to someone else.
 - The Rare Encounter community boost now shows its funding progress bar in the overworld boost tray.
 - Guild Duel battles now place the battle interface above the arena HUD, keeping Team Preview and battle controls clickable.

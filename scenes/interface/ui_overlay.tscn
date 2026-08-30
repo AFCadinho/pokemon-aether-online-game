@@ -903,14 +903,6 @@ texture_normal = ExtResource("21_wild_radar")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="AetherClashChampionLabel" type="Label" parent="Control/LocationPanel/MarginContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
-theme_override_font_sizes/font_size = 11
-text = "ui.aether_clash.reigning_guild"
-text_overrun_behavior = 3
-
 [node name="StatusRow" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 6
