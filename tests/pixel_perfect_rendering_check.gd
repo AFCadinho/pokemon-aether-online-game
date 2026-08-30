@@ -104,13 +104,33 @@ func _run() -> void:
 	)
 	_check(
 		player_text.contains("SettingsManager.world_pixel_scale_changed.connect")
-		and player_text.contains("SettingsManager.get_effective_world_pixel_scale(get_window().size)")
+		and player_text.contains("var window := get_window()")
+		and player_text.contains("var viewport := world_camera.get_viewport()")
+		and player_text.contains("if window == null or viewport == null:")
+		and player_text.contains("SettingsManager.get_effective_world_pixel_scale(window_size)")
 		and player_text.contains("resolve_world_scale_for_area")
 		and player_text.contains("_get_current_map_world_access_area_type")
 		and player_text.contains("apply_camera_baseline_zoom")
 		and player_text.contains("PixelPerfectRenderingScript.apply_to_camera"),
-		"player camera applies map scaling without overwriting active Photo Mode zoom"
+		"player camera applies map scaling safely during teardown without overwriting active Photo Mode zoom"
 	)
+	var player_scene := load(PLAYER_SCENE) as PackedScene
+	var detached_player := player_scene.instantiate() if player_scene != null else null
+	var detached_camera := (
+		detached_player.get_node_or_null("Camera2D") as Camera2D
+		if detached_player != null
+		else null
+	)
+	_check(detached_player != null and detached_camera != null, "player teardown regression fixture loads")
+	if detached_player != null and detached_camera != null:
+		detached_camera.zoom = Vector2(1.23, 1.23)
+		detached_player.set("world_camera", detached_camera)
+		detached_player.call("_apply_world_pixel_scale")
+		_check(
+			detached_camera.zoom.is_equal_approx(Vector2(1.23, 1.23)),
+			"a player detached from every Window safely skips world zoom restoration"
+		)
+		detached_player.free()
 	_check(_read_text(PLAYER_SCENE).contains("zoom = Vector2(1, 1)"), "generic player camera stays neutral before the map zoom is applied")
 	_check(_read_text(WORLD_SCENE).contains("texture_filter = 1"), "overworld uses nearest texture filtering")
 	for locale_path: String in ["res://localization/en.json", "res://localization/nl.json", "res://localization/pt_BR.json", "res://localization/zh_CN.json"]:
