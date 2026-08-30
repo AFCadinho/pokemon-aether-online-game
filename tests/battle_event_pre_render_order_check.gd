@@ -15,7 +15,7 @@ func _init() -> void:
 	_check_initial_event_seq_cursor_tracks_start_event_boundary()
 	_check_initial_start_events_include_booster_energy_item_events()
 	_check_initial_setup_keeps_specific_form_species()
-	_check_wild_player_lead_waits_for_summon_reveal()
+	_check_wild_player_lead_is_ready_on_entry()
 	_check_wild_player_lead_uses_authoritative_active_slot()
 	_check_team_preview_lead_selection_unlocks_party_grid()
 	_check_initial_shiny_lead_uses_entrance_identity()
@@ -357,7 +357,7 @@ func _check_initial_setup_keeps_specific_form_species() -> void:
 	)
 
 
-func _check_wild_player_lead_waits_for_summon_reveal() -> void:
+func _check_wild_player_lead_is_ready_on_entry() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	var prepare_index := source.find("func prepare_wild_battle_from_response(")
 	var prepare_next_index := source.find("\nfunc ", prepare_index + 1)
@@ -365,9 +365,9 @@ func _check_wild_player_lead_waits_for_summon_reveal() -> void:
 
 	_check_equal(prepare_index >= 0, true, "wild battle preparation exists")
 	_check_equal(
-		prepare_source.find("_show_original_player_lead_before_initial_events") < prepare_source.find("player_sprite_box.visible = false"),
+		prepare_source.find("_show_original_player_lead_before_initial_events") < prepare_source.find("player_sprite_box.visible = true"),
 		true,
-		"wild lead sprite is prepared but stays hidden until its Poké Ball summon releases it"
+		"wild lead sprite is prepared and visible before the covered battle scene is revealed"
 	)
 
 
@@ -376,10 +376,6 @@ func _check_wild_player_lead_uses_authoritative_active_slot() -> void:
 	var prepare_index := source.find("func prepare_wild_battle_from_response(")
 	var prepare_next_index := source.find("\nfunc ", prepare_index + 1)
 	var prepare_source := source.substr(prepare_index, prepare_next_index - prepare_index)
-	var intro_index := source.find("func play_wild_battle_intro(")
-	var intro_next_index := source.find("\nfunc ", intro_index + 1)
-	var intro_source := source.substr(intro_index, intro_next_index - intro_index)
-
 	_check_equal(
 		prepare_source.find("_apply_initial_battle_response(api_response)")
 			< prepare_source.find('battle_state.get_active_player_pokemon("p1")'),
@@ -397,10 +393,10 @@ func _check_wild_player_lead_uses_authoritative_active_slot() -> void:
 		"wild lead sprite is prepared from the auto-selected usable party member"
 	)
 	_check_equal(
-		intro_source.contains("var player_lead_pokemon := active_player_pokemon if active_player_pokemon != null else player_pokemon")
-			and intro_source.contains('player_lead_pokemon.ball_item_id'),
+		prepare_source.find("active_player_pokemon = response_player_pokemon")
+			< prepare_source.find("_show_original_player_lead_before_initial_events(player_species, player_lead_pokemon)"),
 		true,
-		"wild summon keeps the authoritative lead sprite, cry, and Poke Ball identity"
+		"wild entry stages the authoritative usable lead before the battle is revealed"
 	)
 
 
