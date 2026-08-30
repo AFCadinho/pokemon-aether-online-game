@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="skill-core" x1="17" y1="48" x2="47" y2="16" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#36c9e8"/>
+      <stop offset="1" stop-color="#a8f6ff"/>
+    </linearGradient>
+  </defs>
+  <path fill="#10243b" stroke="#69ddf2" stroke-linejoin="round" stroke-width="3" d="M32 5 54 18v28L32 59 10 46V18z"/>
+  <path fill="#15384c" stroke="#b6f8ff" stroke-linejoin="round" stroke-width="2" d="m32 11 16 10v21L32 52 16 42V21z"/>
+  <path fill="url(#skill-core)" stroke="#e0fcff" stroke-width="2" d="m32 18 4 2 4-1 2 4 4 2-1 4 2 4-3 3v5h-6v-5H26v5h-6v-5l-3-3 2-4-1-4 4-2 2-4 4 1z"/>
+  <circle cx="32" cy="28" r="6" fill="#10243b" stroke="#e0fcff" stroke-width="2"/>
+  <path fill="none" stroke="#fff1a3" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="m25 48 7-7 7 7m-14-8 7-7 7 7"/>
+</svg>

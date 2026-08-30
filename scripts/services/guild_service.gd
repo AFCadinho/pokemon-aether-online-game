@@ -743,6 +743,10 @@ func _bank_result(value: Variant) -> Dictionary:
 		"resourceInventory": _array(body.get("resourceInventory", [])).duplicate(true),
 		"pokemon": _array(body.get("pokemon", [])).duplicate(true),
 		"depositablePokemon": _array(body.get("depositablePokemon", [])).duplicate(true),
+		"pokemonCandidates": _array(body.get(
+			"pokemonCandidates",
+			body.get("depositablePokemon", [])
+		)).duplicate(true),
 		"party": _array(_dictionary(body.get("party", {})).get("party", [])).duplicate(true),
 		"loanDurationSeconds": int(body.get("loanDurationSeconds", 3600)),
 		"borrowedItems": _array(body.get("borrowedItems", [])).duplicate(true),

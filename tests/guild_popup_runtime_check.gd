@@ -211,6 +211,11 @@ func _run() -> void:
 	_check(popup.find_child("GuildAetherClashTab", true, false) != null, "Aether Clash tab renders for Guild members")
 	_check(popup.find_child("GuildMembersTab", true, false) != null, "guild members tab renders")
 	_check(popup.find_child("GuildManagementTab", true, false) != null, "guild management tab renders for leaders")
+	var active_overview_tab := popup.find_child("GuildOverviewTab", true, false) as Button
+	_check(
+		_button_background_is(active_overview_tab, Color("#123650f2")),
+		"active Guild tab uses a clearly filled accent surface"
+	)
 	var section_navigation := popup.find_child("GuildSectionNavigation", true, false) as HBoxContainer
 	var member_browse_button := popup.find_child("BrowseGuildsButton", true, false) as Button
 	_check(
@@ -224,7 +229,17 @@ func _run() -> void:
 		member_browse_button != null and member_browse_button.custom_minimum_size.x <= 150.0,
 		"Guild discovery becomes a compact secondary action for members"
 	)
+	_check(
+		_button_background_is(member_browse_button, GuildPopup.UI_SECONDARY_BACKGROUND),
+		"Guild discovery uses the softer cyan secondary action style"
+	)
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "guild dashboard opens on its overview")
+	_check(
+		popup.find_child("GuildOverviewWorkspaceHeader", true, false) != null,
+		"Guild Overview uses the shared workspace heading"
+	)
+	var overview_level := popup.find_child("GuildOverviewLevelValue", true, false) as Label
+	_check(overview_level != null and overview_level.text == "12", "guild overview omits decimal zeroes from levels")
 	popup._show_guild_section("aether_clash")
 	await process_frame
 	_check(popup.find_child("GuildAetherClashWorkspace", true, false) != null, "Aether Clash workspace opens")
@@ -234,6 +249,12 @@ func _run() -> void:
 	var duel_wins := popup.find_child("GuildAetherClashWins", true, false) as PanelContainer
 	_check(duel_wins != null, "Guild Duel win statistic renders")
 	_check(popup.find_child("GuildAetherClashHistoryEntry", true, false) != null, "recent Guild Duel history renders")
+	_check(popup.find_child("GuildAetherClashHeader", true, false) != null, "Aether Clash uses the shared workspace heading")
+	var clash_refresh := popup.find_child("RefreshGuildAetherClashButton", true, false) as Button
+	_check(
+		_button_background_is(clash_refresh, GuildPopup.UI_SECONDARY_BACKGROUND),
+		"Aether Clash refresh is visually secondary to challenge actions"
+	)
 	_check(popup.find_child("GuildCurrentAetherClash", true, false) != null, "accepted Guild clash is visible")
 	var clash_countdown := popup.find_child("GuildAetherClashEntryCountdown", true, false) as Label
 	_check(clash_countdown != null and clash_countdown.text.contains(":"), "accepted Guild clash shows a running portal countdown")
@@ -247,16 +268,57 @@ func _run() -> void:
 	await process_frame
 	var announcement_text := popup.find_child("GuildAnnouncementText", true, false) as Label
 	_check(announcement_text != null and announcement_text.text.contains("Aether Clash practice"), "guild overview displays the current announcement")
+	var role_badge := popup.find_child("GuildRoleBadgeLabel", true, false) as Label
+	_check(role_badge != null and role_badge.text == "Leader", "guild header shows the member rank as a compact badge")
+	var header_description := popup.find_child("GuildHeaderDescription", true, false) as Label
+	_check(
+		header_description != null
+		and header_description.max_lines_visible == 2
+		and header_description.text_overrun_behavior == TextServer.OVERRUN_TRIM_ELLIPSIS,
+		"guild header constrains long descriptions to two readable lines"
+	)
+	var presence_summary := popup.find_child("GuildPresenceSummary", true, false) as Label
+	_check(
+		presence_summary != null and presence_summary.text.contains("2 / 3"),
+		"guild overview uses available member data for a live presence summary"
+	)
+	var original_announcement: String = str(popup.guild_home.get("announcement", ""))
+	popup.guild_home["announcement"] = ""
+	var empty_announcement := popup._build_guild_announcement_panel()
+	popup.add_child(empty_announcement)
+	await process_frame
+	_check(
+		empty_announcement.custom_minimum_size.y <= 80.0,
+		"empty Guild announcements collapse to a compact state"
+	)
+	empty_announcement.queue_free()
+	popup.guild_home["announcement"] = original_announcement
 	var leader_options := popup.find_child("GuildOptionsMenuButton", true, false) as MenuButton
 	_check(leader_options != null and leader_options.get_popup().is_item_disabled(0), "Guild leaders cannot leave through Guild options")
 	var header_travel := popup.find_child("GuildHeaderTravelActions", true, false) as VBoxContainer
 	_check(header_travel != null, "guild travel occupies the member header")
+	var guild_lobby_action := popup.find_child("GuildLobbyTeleportButton", true, false) as Button
+	_check(
+		_button_background_is(guild_lobby_action, GuildPopup.UI_PRIMARY_BACKGROUND),
+		"Guild lobby travel uses the prominent primary action colour"
+	)
 	var guild_progress := popup.find_child("GuildExperienceProgress", true, false) as ProgressBar
 	_check(guild_progress != null and is_equal_approx(guild_progress.value, 47.5), "guild overview shows authoritative level progress")
+	_check(guild_progress != null and guild_progress.custom_minimum_size.y >= 24.0, "guild EXP bar is prominent enough to scan")
 	var guild_progress_label := popup.find_child("GuildExperienceProgressLabel", true, false) as Label
 	_check(guild_progress_label != null and guild_progress_label.text.contains("500,000"), "guild overview shows total Guild EXP")
+	_check(
+		popup.find_child("GuildMemberCapacity", true, false) != null
+		and popup.find_child("GuildItemCapacity", true, false) != null
+		and popup.find_child("GuildPokemonCapacity", true, false) != null,
+		"guild capacities use three separate visual indicators"
+	)
 	var rewards_button := popup.find_child("GuildLevelRewardsButton", true, false) as Button
 	_check(rewards_button != null and not rewards_button.disabled, "guild overview exposes the level unlock roadmap")
+	_check(
+		_button_background_is(rewards_button, GuildPopup.UI_GOLD_BACKGROUND),
+		"Guild level roadmap uses its distinct gold action accent"
+	)
 	if rewards_button != null:
 		rewards_button.pressed.emit()
 		await process_frame
@@ -299,6 +361,7 @@ func _run() -> void:
 		bank_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildBankSection", true, false) != null, "Guild Bank opens in its own workspace")
+	_check(popup.find_child("GuildBankHeader", true, false) != null, "Guild Bank uses the shared workspace heading")
 	_check(popup.find_child("GuildBankFundsCard", true, false) != null, "Guild Bank shows shared funds")
 	_check(popup.find_child("GuildBankPokemonCard", true, false) != null, "Guild Bank shows Pokémon storage")
 	_check(popup.find_child("GuildBankItemsCard", true, false) != null, "Guild Bank shows item storage")
@@ -321,10 +384,18 @@ func _run() -> void:
 		"every Guild member can open each bank category"
 	)
 	_check(pokemon_action != null and pokemon_action.text == "Enter Vault", "Pokémon category uses a distinct entry label")
+	_check(
+		_button_background_is(pokemon_action, GuildPopup.UI_SECONDARY_BACKGROUND),
+		"Guild Bank category entry actions use the secondary accent"
+	)
 	var permission_summary := popup.find_child("GuildBankPermissionSummary", true, false) as Label
 	_check(permission_summary != null and permission_summary.text.contains("allowed"), "Guild Bank shows the leader's transaction rights")
 	var rank_rights_action := popup.find_child("GuildBankRankRightsButton", true, false) as Button
 	_check(rank_rights_action != null, "every Guild member can open the rank-rights page")
+	_check(
+		_button_background_is(rank_rights_action, GuildPopup.UI_SECONDARY_BACKGROUND),
+		"Guild Bank rank rights reads as a supporting action"
+	)
 	if rank_rights_action != null:
 		rank_rights_action.pressed.emit()
 		await process_frame
@@ -349,6 +420,20 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankPokemonListScroll", true, false) != null, "Pokémon Vault overview remains scrollable at scale")
 	_check(popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) == null, "Pokémon Vault overview keeps Guild withdrawals out of the preview")
 	_check(popup.find_child("GuildBankPokemonDepositButton_22", true, false) != null, "Pokémon Vault overview keeps direct personal donations available")
+	var ineligible_pokemon := popup.find_child("GuildBankPokemonEligibility_23", true, false) as Label
+	var ineligible_deposit := popup.find_child("GuildBankPokemonDepositButton_23", true, false) as Button
+	_check(
+		ineligible_pokemon != null
+		and ineligible_pokemon.text.contains("held item")
+		and ineligible_pokemon.get_theme_color("font_color") == GuildPopup.UI_ERROR,
+		"Pokémon Vault shows an ineligible Pokémon in red with its reason"
+	)
+	_check(
+		ineligible_deposit != null
+		and ineligible_deposit.disabled
+		and ineligible_deposit.tooltip_text.contains("held item"),
+		"ineligible Pokémon remain impossible to donate from the client"
+	)
 	var stored_pokemon_preview := popup.find_child("GuildBankPokemonIcon_21", true, false) as Button
 	_check(
 		stored_pokemon_preview != null and stored_pokemon_preview.tooltip_text == "Open Summary",
@@ -715,6 +800,8 @@ func _run() -> void:
 		members_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildMembersSection", true, false) != null, "members tab opens the roster")
+	_check(popup.find_child("GuildMembersWorkspaceHeader", true, false) != null, "Members uses the shared workspace heading")
+	_check(popup.find_child("GuildMemberRosterSummary", true, false) != null, "Members keeps the online summary in its heading")
 	var members_section := popup.find_child("GuildMembersSection", true, false) as Control
 	var widest_member_card := popup.find_child("GuildMemberCard_2", true, false) as Control
 	_check(
@@ -763,7 +850,13 @@ func _run() -> void:
 		var maple_card := popup.find_child("GuildMemberCard_2", true, false) as Control
 		var pecha_card := popup.find_child("GuildMemberCard_3", true, false) as Control
 		_check(maple_card != null and not maple_card.visible and pecha_card != null and pecha_card.visible, "member search filters current Guild members")
+		member_search.text = "no-trainer-has-this-name"
+		popup._filter_guild_member_cards(member_search.text)
+		await process_frame
+		var member_filter_empty := popup.find_child("GuildMemberFilterEmptyState", true, false) as Control
+		_check(member_filter_empty != null and member_filter_empty.visible, "member search explains when no Trainers match")
 		member_search.text = ""
+		popup._filter_guild_member_cards(member_search.text)
 	var invite_action := popup.find_child("OpenGuildInviteDialogButton", true, false) as Button
 	_check(
 		invite_action != null
@@ -987,6 +1080,7 @@ func _run() -> void:
 		management_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildManagementNavigation", true, false) != null, "Management opens an organized secondary navigation")
+	_check(popup.find_child("GuildManagementWorkspaceHeader", true, false) != null, "Management uses the shared workspace heading")
 	_check(popup.find_child("GuildManagementProfileTab", true, false) != null, "leaders receive a Guild Profile management page")
 	_check(popup.find_child("GuildManagementRecruitmentTab", true, false) != null, "leaders receive a Recruitment management page")
 	var applications_tab := popup.find_child("GuildManagementApplicationsTab", true, false) as Button
@@ -1031,6 +1125,10 @@ func _run() -> void:
 	_check(popup.find_child("GuildSettingsRequirement_0", true, false) != null, "saved requirements remain editable")
 	var add_requirement := popup.find_child("GuildAddRequirementButton", true, false) as Button
 	_check(add_requirement != null, "leaders can add individual requirements")
+	_check(
+		_button_background_is(add_requirement, GuildPopup.UI_SECONDARY_BACKGROUND),
+		"adding a recruitment requirement reads as a supporting action"
+	)
 	if add_requirement != null:
 		add_requirement.pressed.emit()
 		await process_frame
@@ -1352,6 +1450,13 @@ func _check_dialog_styled(dialog: ConfirmationDialog, label: String) -> void:
 		and dialog.get_cancel_button().has_theme_stylebox_override("normal"),
 		"%s uses styled action buttons" % label
 	)
+
+
+func _button_background_is(button: Button, expected: Color) -> bool:
+	if button == null:
+		return false
+	var style := button.get_theme_stylebox("normal") as StyleBoxFlat
+	return style != null and style.bg_color.is_equal_approx(expected)
 
 
 func _check(condition: bool, label: String) -> void:

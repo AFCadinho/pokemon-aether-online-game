@@ -58,6 +58,8 @@ func _init() -> void:
 	_check_contains(popup_source, "GuildAnnouncementPanel", "guild overview is dedicated to Guild announcements")
 	_check_contains(popup_source, "GuildOptionsMenuButton", "Guild departure lives in a low-prominence options menu")
 	_check_contains(popup_source, "GuildProgressionPanel", "guild overview renders shared level progression")
+	_check_contains(popup_source, 'str(int(guild.get("level", 1)))', "guild overview displays whole-number Guild levels")
+	_check_contains(popup_source, "GuildPresencePanel", "guild overview summarizes currently online members")
 	_check_contains(popup_source, "GuildExperienceProgress", "guild overview renders the Guild EXP progress bar")
 	_check_contains(popup_source, "GuildLevelRewardsButton", "guild progression exposes the complete level roadmap")
 	_check_contains(popup_source, "GuildLevelRewardsWindow", "guild level roadmap opens in a dedicated modal")

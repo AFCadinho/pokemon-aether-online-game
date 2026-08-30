@@ -64,11 +64,18 @@ const UI_BORDER_INNER := Color("#29445f")
 const UI_ACCENT := Color("#60d3ff")
 const UI_ACCENT_SOFT := Color("#3d7596")
 const UI_GOLD := Color("#e3bd68")
+const UI_PRIMARY_BACKGROUND := Color("#126589f5")
+const UI_PRIMARY_HOVER := Color("#1685b0fa")
+const UI_PRIMARY_PRESSED := Color("#0d4b68f5")
+const UI_SECONDARY_BACKGROUND := Color("#0d2b40f2")
+const UI_SECONDARY_HOVER := Color("#143b55f5")
+const UI_GOLD_BACKGROUND := Color("#332812f2")
+const UI_GOLD_HOVER := Color("#49391af5")
 const UI_TEXT := Color("#f4f0de")
 const UI_MUTED := Color("#aeb8c5")
 const UI_SUCCESS := Color("#79e49b")
 const UI_WARNING := Color("#f0c875")
-const UI_DANGER := Color("#ff7893")
+const UI_ERROR := Color("#ff8f9b")
 
 # Preview-only data used by the isolated interface checks. Normal gameplay always
 # loads the authoritative directory from the guild service.
@@ -216,6 +223,7 @@ var guild_bank_filter_empty_state: Label
 var invite_username_input: LineEdit
 var member_search_input: LineEdit
 var member_cards_container: VBoxContainer
+var member_filter_empty_state: Control
 var emblem_editor_popup: PopupPanel
 var emblem_grid: GridContainer
 var emblem_pixel_buttons: Array[Button] = []
@@ -307,6 +315,7 @@ func show_debug_member_preview() -> void:
 	is_debug_preview = true
 	active_guild_section = "overview"
 	var guild := DEBUG_GUILDS[0].duplicate(true)
+	guild["level"] = 12.0
 	guild["requirements"] = [
 		{"type": "minimum_badges", "value": "5"},
 		{"type": "activity", "value": "Play together at least twice per week"},
@@ -470,7 +479,11 @@ func show_debug_member_preview() -> void:
 			},
 		],
 		"depositablePokemon": [
-			{"pokemonId": 22, "pokemon": {"name": "Venusaur", "level": 48}},
+			{"pokemonId": 22, "pokemon": {"name": "Venusaur", "level": 48}, "canDeposit": true, "eligibility": "eligible"},
+		],
+		"pokemonCandidates": [
+			{"pokemonId": 22, "pokemon": {"name": "Venusaur", "level": 48}, "canDeposit": true, "eligibility": "eligible"},
+			{"pokemonId": 23, "pokemon": {"name": "Charizard", "level": 50}, "canDeposit": false, "eligibility": "holding_item"},
 		],
 		"party": [],
 	}
@@ -1092,20 +1105,22 @@ func _render_guild_home() -> void:
 	header.add_child(_build_guild_header_emblem(guild, is_leader))
 	var heading := VBoxContainer.new()
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_theme_constant_override("separation", 5)
 	header.add_child(heading)
-	heading.add_child(_label(str(guild.get("name", "Your Guild")), 25, UI_TEXT))
-	var role_row := HBoxContainer.new()
-	role_row.add_theme_constant_override("separation", 9)
-	heading.add_child(role_row)
-	var role_label := _label(
-		_t("ui.guild.membership.role", {"role": _membership_role_label(role)}),
-		12,
-		UI_ACCENT
-	)
-	role_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	role_row.add_child(role_label)
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 10)
+	heading.add_child(title_row)
+	var guild_name := _label(str(guild.get("name", "Your Guild")), 25, UI_TEXT)
+	guild_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	guild_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title_row.add_child(guild_name)
+	title_row.add_child(_build_guild_role_badge(role))
 	var description := _label(str(guild.get("description", "")), 12, UI_MUTED)
+	description.name = "GuildHeaderDescription"
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.max_lines_visible = 2
+	description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	description.custom_minimum_size.y = 34.0
 	heading.add_child(description)
 	header.add_child(_build_guild_header_travel_actions(guild, is_leader))
 
@@ -1128,6 +1143,27 @@ func _render_guild_home() -> void:
 	_refresh_guild_pokemon_vault_window()
 	_refresh_guild_item_storage_window("items")
 	_refresh_guild_item_storage_window("resources")
+
+
+func _build_guild_role_badge(role: String) -> Control:
+	var badge := PanelContainer.new()
+	badge.name = "GuildRoleBadge"
+	badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	badge.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#0b3045e8"), Color(UI_ACCENT.r, UI_ACCENT.g, UI_ACCENT.b, 0.72), 8, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 9, 3, 9, 3)
+	badge.add_child(margin)
+	var normalized_role := role.to_lower()
+	var role_key := "ui.guild.role.member"
+	if normalized_role in GUILD_ASSIGNABLE_ROLES or normalized_role == "leader":
+		role_key = "ui.guild.role.%s" % normalized_role
+	var role_label := _localized_label(role_key, 10, UI_ACCENT)
+	role_label.name = "GuildRoleBadgeLabel"
+	margin.add_child(role_label)
+	return badge
 
 func _build_guild_header_emblem(guild: Dictionary, is_editable: bool) -> Control:
 	if not is_editable:
@@ -1295,11 +1331,24 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	var overview := VBoxContainer.new()
 	overview.name = "GuildOverviewSection"
 	overview.add_theme_constant_override("separation", 10)
+	var overview_header := _build_guild_workspace_header(
+		"ui.guild.overview",
+		"ui.guild.overview.hint"
+	)
+	overview_header.name = "GuildOverviewWorkspaceHeader"
+	overview.add_child(overview_header)
 	var metadata := GridContainer.new()
 	metadata.columns = 4
 	metadata.add_theme_constant_override("h_separation", 8)
 	overview.add_child(metadata)
-	metadata.add_child(_metadata_card(_t("ui.guild.field.level"), str(guild.get("level", 1)), UI_ACCENT))
+	var level_card := _metadata_card(
+		_t("ui.guild.field.level"),
+		str(int(guild.get("level", 1))),
+		UI_ACCENT,
+		"GuildOverviewLevelValue"
+	)
+	level_card.name = "GuildOverviewLevelCard"
+	metadata.add_child(level_card)
 	metadata.add_child(_metadata_card(
 		_t("ui.guild.field.members"),
 		"%d / %d" % [_array_from_value(guild_home.get("members", [])).size(), int(guild.get("capacity", 50))],
@@ -1308,10 +1357,19 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	metadata.add_child(_metadata_card(_t("ui.guild.field.language"), _option_display(str(guild.get("language", ""))), UI_GOLD))
 	metadata.add_child(_metadata_card(_t("ui.guild.field.focus"), _option_display(str(guild.get("focus", ""))), UI_ACCENT))
 	overview.add_child(_build_guild_progression(guild))
+	var overview_details := HBoxContainer.new()
+	overview_details.name = "GuildOverviewDetails"
+	overview_details.add_theme_constant_override("separation", 10)
+	overview.add_child(overview_details)
+	overview_details.add_child(_build_guild_announcement_panel())
+	overview_details.add_child(_build_guild_presence_panel())
+	return overview
+
+
+func _build_guild_announcement_panel() -> Control:
 	var announcement_panel := PanelContainer.new()
 	announcement_panel.name = "GuildAnnouncementPanel"
-	announcement_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	announcement_panel.custom_minimum_size = Vector2(0, 150)
+	announcement_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	announcement_panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
 	var margin := MarginContainer.new()
 	_set_margins(margin, 16, 14, 16, 14)
@@ -1321,6 +1379,7 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	margin.add_child(copy)
 	copy.add_child(_localized_label("ui.guild.announcement.title", 10, UI_ACCENT))
 	var announcement := str(guild_home.get("announcement", "")).strip_edges()
+	announcement_panel.custom_minimum_size = Vector2(0, 104 if announcement != "" else 78)
 	var announcement_label := _label(
 		announcement if announcement != "" else _t("ui.guild.announcement.empty"),
 		14 if announcement != "" else 12,
@@ -1328,10 +1387,54 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	)
 	announcement_label.name = "GuildAnnouncementText"
 	announcement_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	announcement_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	announcement_label.max_lines_visible = 3
+	announcement_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	copy.add_child(announcement_label)
-	overview.add_child(announcement_panel)
-	return overview
+	return announcement_panel
+
+
+func _build_guild_presence_panel() -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildPresencePanel"
+	panel.custom_minimum_size = Vector2(250, 0)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#091a25f2"), Color(UI_SUCCESS.r, UI_SUCCESS.g, UI_SUCCESS.b, 0.45), 9, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 14, 12, 14, 12)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 7)
+	margin.add_child(content)
+	content.add_child(_localized_label("ui.guild.overview.presence.title", 10, UI_SUCCESS))
+	var members := _array_from_value(guild_home.get("members", []))
+	var online_names: Array[String] = []
+	for member_value: Variant in members:
+		if not member_value is Dictionary or not bool((member_value as Dictionary).get("online", false)):
+			continue
+		online_names.append(str((member_value as Dictionary).get(
+			"displayName",
+			(member_value as Dictionary).get("username", _t("common.unknown"))
+		)))
+	var summary := _label(_t("ui.guild.overview.presence.summary", {
+		"online": online_names.size(),
+		"total": members.size(),
+	}), 13, UI_TEXT)
+	summary.name = "GuildPresenceSummary"
+	content.add_child(summary)
+	var names_text := _t("ui.guild.overview.presence.none")
+	if not online_names.is_empty():
+		names_text = _t("ui.guild.overview.presence.online_names", {
+			"names": ", ".join(online_names.slice(0, 3)),
+		})
+	var names := _label(names_text, 10, UI_MUTED)
+	names.name = "GuildPresenceNames"
+	names.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	names.max_lines_visible = 2
+	names.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	content.add_child(names)
+	return panel
 
 
 func _build_aether_clash_workspace() -> Control:
@@ -1339,24 +1442,19 @@ func _build_aether_clash_workspace() -> Control:
 	workspace.name = "GuildAetherClashWorkspace"
 	workspace.add_theme_constant_override("separation", 10)
 
-	var heading := HBoxContainer.new()
-	heading.add_theme_constant_override("separation", 8)
-	workspace.add_child(heading)
-	var title_stack := VBoxContainer.new()
-	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_stack.add_theme_constant_override("separation", 2)
-	heading.add_child(title_stack)
-	title_stack.add_child(_localized_label("ui.guild.aether_clash.title", 20, UI_TEXT))
-	var intro := _localized_label("ui.guild.aether_clash.intro", 11, UI_MUTED)
-	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title_stack.add_child(intro)
 	var refresh_button := Button.new()
 	refresh_button.name = "RefreshGuildAetherClashButton"
 	_set_localized_property(refresh_button, "text", "ui.guild.aether_clash.refresh")
 	refresh_button.disabled = is_aether_clash_action_in_flight
 	refresh_button.pressed.connect(_refresh_aether_clash_from_server)
-	_apply_button_style(refresh_button)
-	heading.add_child(refresh_button)
+	_apply_button_style(refresh_button, "secondary")
+	var heading := _build_guild_workspace_header(
+		"ui.guild.aether_clash.title",
+		"ui.guild.aether_clash.intro",
+		[refresh_button]
+	)
+	heading.name = "GuildAetherClashHeader"
+	workspace.add_child(heading)
 
 	var mode_tabs := HBoxContainer.new()
 	mode_tabs.name = "GuildAetherClashModeTabs"
@@ -1450,7 +1548,7 @@ func _build_aether_clash_duel_stats() -> Control:
 			"name": "GuildAetherClashLosses",
 			"key": "ui.guild.aether_clash.stats.losses",
 			"value": str(int(stats.get("losses", 0))),
-			"color": UI_DANGER,
+			"color": UI_ERROR,
 		},
 		{
 			"name": "GuildAetherClashWinRate",
@@ -1521,7 +1619,7 @@ func _build_aether_clash_history_entry(entry: Dictionary) -> Control:
 	if result == "win":
 		result_color = UI_SUCCESS
 	elif result == "loss":
-		result_color = UI_DANGER
+		result_color = UI_ERROR
 	var result_label := _label(
 		_t("ui.guild.aether_clash.history.result.%s" % result),
 		12,
@@ -1577,14 +1675,18 @@ func _build_current_aether_clash_card(challenge: Dictionary) -> Control:
 	margin.add_child(content)
 	content.add_child(_localized_label("ui.guild.aether_clash.current", 10, UI_GOLD))
 	var guild_names := _aether_clash_guild_names(challenge)
-	content.add_child(_label(
+	var matchup := _label(
 		_t("ui.guild.aether_clash.matchup", {
 			"challenger": guild_names.get("challenger", "Guild"),
 			"challenged": guild_names.get("challenged", "Guild"),
 		}),
 		18,
 		UI_TEXT
-	))
+	)
+	matchup.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	matchup.max_lines_visible = 2
+	matchup.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	content.add_child(matchup)
 	var status := str(challenge.get("status", "entry_open"))
 	content.add_child(_label(_aether_clash_status_text(status), 11, UI_SUCCESS))
 	content.add_child(_label(
@@ -1637,7 +1739,9 @@ func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -
 	copy.add_theme_constant_override("separation", 3)
 	row.add_child(copy)
 	var opponent := _aether_clash_opponent(challenge)
-	copy.add_child(_label(str(opponent.get("name", _t("ui.guild.fallback.guild"))), 14, UI_TEXT))
+	var opponent_name := _label(str(opponent.get("name", _t("ui.guild.fallback.guild"))), 14, UI_TEXT)
+	opponent_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	copy.add_child(opponent_name)
 	copy.add_child(_label(
 		_t(
 			"ui.guild.aether_clash.received_from"
@@ -1699,15 +1803,7 @@ func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -
 
 
 func _build_aether_clash_message_panel(message: String, color: Color) -> Control:
-	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", _panel_style(UI_INPUT, UI_BORDER_INNER, 8, 1))
-	var margin := MarginContainer.new()
-	_set_margins(margin, 12, 9, 12, 9)
-	panel.add_child(margin)
-	var label := _label(message, 11, color)
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	margin.add_child(label)
-	return panel
+	return _build_guild_message_panel(message, color)
 
 
 func _aether_clash_opponent(challenge: Dictionary) -> Dictionary:
@@ -1806,7 +1902,7 @@ func _build_guild_progression(guild: Dictionary) -> Control:
 	rewards_button.custom_minimum_size = Vector2(112, 30)
 	rewards_button.disabled = _array_from_value(guild.get("levelRewards", [])).is_empty()
 	rewards_button.pressed.connect(_show_guild_level_rewards_window.bind(guild))
-	_apply_button_style(rewards_button)
+	_apply_button_style(rewards_button, "gold")
 	heading.add_child(rewards_button)
 	heading.add_child(_label(
 		_t("ui.guild.progression.level", {
@@ -1818,33 +1914,92 @@ func _build_guild_progression(guild: Dictionary) -> Control:
 	))
 	var progress := ProgressBar.new()
 	progress.name = "GuildExperienceProgress"
-	progress.custom_minimum_size.y = 18.0
+	progress.custom_minimum_size.y = 26.0
 	progress.show_percentage = false
 	progress.min_value = 0.0
 	progress.max_value = 100.0
 	progress.value = clampf(float(guild.get("progressPercent", 0.0)), 0.0, 100.0)
 	progress.add_theme_stylebox_override("background", _panel_style(Color("#030810"), Color("#263b50"), 5, 1))
 	progress.add_theme_stylebox_override("fill", _panel_style(Color("#237ca8"), UI_ACCENT, 5, 1))
-	content.add_child(progress)
 	var at_maximum := bool(guild.get("atMaxLevel", false))
+	var total_experience := int(guild.get("totalExperience", 0))
 	var progress_text := _t("ui.guild.progression.max", {
-		"total": _format_number(int(guild.get("totalExperience", 0))),
-	}) if at_maximum else _t("ui.guild.progression.progress", {
-		"current": _format_number(int(guild.get("experienceIntoLevel", 0))),
-		"required": _format_number(int(guild.get("experienceForNextLevel", 0))),
-		"total": _format_number(int(guild.get("totalExperience", 0))),
-	})
-	var progress_label := _label(progress_text, 10, UI_MUTED)
+		"total": _format_number(total_experience),
+	}) if at_maximum else _t(
+		"ui.guild.progression.progress_with_total"
+		if total_experience > 0
+		else "ui.guild.progression.progress_compact",
+		{
+			"current": _format_number(int(guild.get("experienceIntoLevel", 0))),
+			"required": _format_number(int(guild.get("experienceForNextLevel", 0))),
+			"total": _format_number(total_experience),
+		}
+	)
+	var progress_label := _label(progress_text, 11, UI_TEXT)
 	progress_label.name = "GuildExperienceProgressLabel"
-	progress_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	content.add_child(progress_label)
-	var capacities := _label(_t("ui.guild.progression.capacities", {
-		"members": int(guild.get("capacity", 20)),
-		"items": int(guild.get("bankItemCapacity", 50)),
-		"pokemon": int(guild.get("bankPokemonCapacity", 30)),
-	}), 10, UI_MUTED)
-	capacities.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	content.add_child(capacities)
+	content.add_child(progress)
+	content.add_child(_build_guild_capacity_indicators(guild))
+	return panel
+
+
+func _build_guild_capacity_indicators(guild: Dictionary) -> Control:
+	var indicators := HBoxContainer.new()
+	indicators.name = "GuildCapacityIndicators"
+	indicators.add_theme_constant_override("separation", 8)
+	indicators.add_child(_guild_capacity_indicator(
+		"GuildMemberCapacity",
+		"ui.guild.progression.capacity.members",
+		int(guild.get("capacity", 20)),
+		UI_SUCCESS
+	))
+	indicators.add_child(_guild_capacity_indicator(
+		"GuildItemCapacity",
+		"ui.guild.progression.capacity.items",
+		int(guild.get("bankItemCapacity", 50)),
+		UI_GOLD
+	))
+	indicators.add_child(_guild_capacity_indicator(
+		"GuildPokemonCapacity",
+		"ui.guild.progression.capacity.pokemon",
+		int(guild.get("bankPokemonCapacity", 30)),
+		UI_ACCENT
+	))
+	return indicators
+
+
+func _guild_capacity_indicator(
+	control_name: String,
+	label_key: String,
+	value: int,
+	accent: Color
+) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = control_name
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color(accent.r, accent.g, accent.b, 0.07), Color(accent.r, accent.g, accent.b, 0.46), 7, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 10, 6, 10, 6)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+	var marker := ColorRect.new()
+	marker.custom_minimum_size = Vector2(4, 24)
+	marker.color = accent
+	marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(marker)
+	var label := _localized_label(label_key, 9, UI_MUTED)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(label)
+	var value_label := _label(str(value), 13, accent)
+	value_label.name = "%sValue" % control_name
+	value_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(value_label)
 	return panel
 
 
@@ -2032,27 +2187,24 @@ func _build_guild_bank() -> Control:
 	var content := VBoxContainer.new()
 	content.add_theme_constant_override("separation", 9)
 	margin.add_child(content)
-	var header := HBoxContainer.new()
-	content.add_child(header)
-	var title_stack := VBoxContainer.new()
-	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_stack.add_theme_constant_override("separation", 2)
-	header.add_child(title_stack)
-	title_stack.add_child(_localized_label("ui.guild.bank.title", 16, UI_TEXT))
-	var description := _localized_label("ui.guild.bank.description", 11, UI_MUTED)
-	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title_stack.add_child(description)
-	header.add_child(_status_pill(
+	var bank_status := _status_pill(
 		_t("ui.guild.bank.status.loading")
 		if is_loading_guild_bank
 		else _t("ui.guild.bank.status.ready")
-	))
+	)
+	bank_status.name = "GuildBankStatusPill"
 	var rank_rights_button := Button.new()
 	rank_rights_button.name = "GuildBankRankRightsButton"
 	_set_localized_property(rank_rights_button, "text", "ui.guild.bank.rank_rights.action")
 	rank_rights_button.pressed.connect(_on_guild_bank_category_opened.bind("rights"))
-	_apply_button_style(rank_rights_button)
-	header.add_child(rank_rights_button)
+	_apply_button_style(rank_rights_button, "secondary")
+	var header := _build_guild_workspace_header(
+		"ui.guild.bank.title",
+		"ui.guild.bank.description",
+		[bank_status, rank_rights_button]
+	)
+	header.name = "GuildBankHeader"
+	content.add_child(header)
 	var access_summary := _label(_guild_bank_access_summary(), 10, UI_ACCENT)
 	access_summary.name = "GuildBankPermissionSummary"
 	access_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -2126,6 +2278,8 @@ func _build_guild_bank_card(
 		content.add_child(loan_usage)
 	var description := _label(description_text, 10, UI_MUTED)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.max_lines_visible = 3
+	description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	content.add_child(description)
 	var action := Button.new()
@@ -2133,7 +2287,7 @@ func _build_guild_bank_card(
 	_set_localized_property(action, "text", action_key)
 	action.disabled = is_loading_guild_bank
 	action.pressed.connect(_on_guild_bank_category_opened.bind(category))
-	_apply_button_style(action)
+	_apply_button_style(action, "secondary")
 	content.add_child(action)
 	return panel
 
@@ -2538,6 +2692,10 @@ func _build_guild_bank_category_preview(category: String) -> Control:
 	workspace.add_child(columns)
 	match category:
 		"pokemon":
+			var player_pokemon := _array_from_value(guild_bank_state.get(
+				"pokemonCandidates",
+				guild_bank_state.get("depositablePokemon", [])
+			))
 			columns.add_child(_build_guild_pokemon_list(
 				"ui.guild.bank.pokemon.stored",
 				_array_from_value(guild_bank_state.get("pokemon", [])),
@@ -2546,7 +2704,7 @@ func _build_guild_bank_category_preview(category: String) -> Control:
 			))
 			columns.add_child(_build_guild_pokemon_list(
 				"ui.guild.bank.pokemon.yours",
-				_array_from_value(guild_bank_state.get("depositablePokemon", [])),
+				player_pokemon,
 				false
 			))
 		"items":
@@ -3698,7 +3856,7 @@ func _build_guild_pokemon_list(
 		if not is_bank:
 			var can_deposit := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
 			if can_deposit:
-				empty_key = "ui.guild.bank.empty.pokemon_eligible"
+				empty_key = "ui.guild.bank.empty.pokemon_owned"
 			elif _guild_bank_permission_is_personally_denied("bank_deposit"):
 				empty_key = "ui.guild.bank.empty.deposit_personal_deny"
 			else:
@@ -3781,14 +3939,31 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool, readonly: bool =
 		))
 		return row
 	if not is_bank:
-		identity.add_child(_localized_label("ui.guild.bank.pokemon.ready_to_deposit", 9, UI_MUTED))
-		var can_deposit := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
+		var eligibility := str(entry.get("eligibility", "eligible"))
+		var candidate_can_deposit := bool(entry.get("canDeposit", eligibility == "eligible"))
+		var status_key := _guild_bank_pokemon_eligibility_key(eligibility)
+		var eligibility_label := _localized_label(
+			status_key,
+			9,
+			UI_MUTED if candidate_can_deposit else UI_ERROR
+		)
+		eligibility_label.name = "GuildBankPokemonEligibility_%d" % pokemon_id
+		identity.add_child(eligibility_label)
+		if not candidate_can_deposit:
+			row.modulate = Color("#ffb2ba")
+		var has_permission := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
+		var can_deposit := has_permission and candidate_can_deposit
+		var unavailable_tooltip := ""
+		if not candidate_can_deposit:
+			unavailable_tooltip = _t(status_key)
+		elif not has_permission:
+			unavailable_tooltip = _guild_bank_permission_restriction("bank_deposit", "ui.guild.bank.tooltip.deposit_rank")
 		row.add_child(_guild_bank_action_button(
 			"GuildBankPokemonDepositButton_%d" % pokemon_id,
 			"ui.guild.bank.donate",
 			can_deposit,
 			_on_guild_bank_pokemon_action.bind("deposit", pokemon_id, pokemon),
-			"" if can_deposit else _guild_bank_permission_restriction("bank_deposit", "ui.guild.bank.tooltip.deposit_rank")
+			unavailable_tooltip
 		))
 		return row
 	if is_borrowed:
@@ -3866,6 +4041,20 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool, readonly: bool =
 		)
 	))
 	return row
+
+
+func _guild_bank_pokemon_eligibility_key(eligibility: String) -> String:
+	match eligibility:
+		"not_owned":
+			return "ui.guild.bank.pokemon.ineligible.not_owned"
+		"not_shareable":
+			return "ui.guild.bank.pokemon.ineligible.not_shareable"
+		"holding_item":
+			return "ui.guild.bank.pokemon.ineligible.holding_item"
+		"last_party_pokemon":
+			return "ui.guild.bank.pokemon.ineligible.last_party_pokemon"
+		_:
+			return "ui.guild.bank.pokemon.ready_to_deposit"
 
 
 func _open_guild_bank_pokemon_summary(pokemon: Dictionary) -> void:
@@ -4613,20 +4802,19 @@ func _build_member_roster(can_invite: bool = false) -> Control:
 			online_count += 1
 	var heading_row := HBoxContainer.new()
 	heading_row.add_theme_constant_override("separation", 10)
-	content.add_child(heading_row)
-	var roster_heading := _localized_label("ui.guild.roster", 10, UI_ACCENT)
-	roster_heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	heading_row.add_child(roster_heading)
 	var history_button := Button.new()
 	history_button.name = "GuildHistoryLogButton"
 	_set_localized_property(history_button, "text", "ui.guild.log.history.view")
 	history_button.pressed.connect(_open_guild_log.bind("guild"))
-	_apply_button_style(history_button)
-	heading_row.add_child(_label(
+	_apply_button_style(history_button, "secondary")
+	var roster_summary := _label(
 		_t("ui.guild.roster.summary", {"online": online_count, "total": members.size()}),
 		10,
 		UI_MUTED
-	))
+	)
+	roster_summary.name = "GuildMemberRosterSummary"
+	roster_summary.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	heading_row.add_child(roster_summary)
 	if can_invite:
 		var invite_button := Button.new()
 		invite_button.name = "OpenGuildInviteDialogButton"
@@ -4635,6 +4823,13 @@ func _build_member_roster(can_invite: bool = false) -> Control:
 		_apply_button_style(invite_button, "primary")
 		heading_row.add_child(invite_button)
 	heading_row.add_child(history_button)
+	var roster_header := _build_guild_workspace_header(
+		"ui.guild.roster",
+		"ui.guild.roster.hint",
+		[heading_row]
+	)
+	roster_header.name = "GuildMembersWorkspaceHeader"
+	content.add_child(roster_header)
 	content.add_child(_build_guild_roster_toolbar())
 	if can_invite:
 		_render_pending_invitations(content)
@@ -4651,6 +4846,13 @@ func _build_member_roster(can_invite: bool = false) -> Control:
 			continue
 		var member := member_value as Dictionary
 		member_cards_container.add_child(_build_guild_member_card(member, own_role, own_user_id, can_manage_permissions))
+	member_filter_empty_state = _build_guild_message_panel(
+		_t("ui.guild.roster.empty_search"),
+		UI_MUTED,
+		"GuildMemberFilterEmptyState"
+	)
+	member_filter_empty_state.visible = false
+	content.add_child(member_filter_empty_state)
 	return panel
 
 
@@ -4676,10 +4878,16 @@ func _filter_guild_member_cards(query: String) -> void:
 	if member_cards_container == null:
 		return
 	var normalized := query.strip_edges().to_lower()
+	var visible_count := 0
 	for child: Node in member_cards_container.get_children():
 		if child is Control:
 			var haystack := str(child.get_meta("member_search_text", ""))
-			(child as Control).visible = normalized == "" or haystack.contains(normalized)
+			var is_visible := normalized == "" or haystack.contains(normalized)
+			(child as Control).visible = is_visible
+			if is_visible:
+				visible_count += 1
+	if member_filter_empty_state != null:
+		member_filter_empty_state.visible = normalized != "" and visible_count == 0
 
 
 func _open_guild_invite_dialog() -> void:
@@ -4802,7 +5010,9 @@ func _build_guild_member_card(
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	identity.add_child(name_label)
 	var username := str(member.get("username", "")).strip_edges()
-	identity.add_child(_label("@%s" % username if username != "" else "", 10, UI_ACCENT))
+	var username_label := _label("@%s" % username if username != "" else "", 10, UI_ACCENT)
+	username_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	identity.add_child(username_label)
 
 	var presence := VBoxContainer.new()
 	presence.name = "GuildMemberStatusColumn_%d" % user_id
@@ -5223,6 +5433,12 @@ func _build_member_management(guild: Dictionary, can_manage_settings: bool, can_
 	var content := VBoxContainer.new()
 	content.add_theme_constant_override("separation", 10)
 	margin.add_child(content)
+	var management_header := _build_guild_workspace_header(
+		"ui.guild.management.title",
+		"ui.guild.management.hint"
+	)
+	management_header.name = "GuildManagementWorkspaceHeader"
+	content.add_child(management_header)
 	var available_sections: Array[String] = []
 	if can_manage_settings:
 		available_sections.assign(["profile", "recruitment", "bank"])
@@ -5338,7 +5554,7 @@ func _build_management_recruitment_page(guild: Dictionary) -> Control:
 	add_requirement.name = "GuildAddRequirementButton"
 	_set_localized_property(add_requirement, "text", "ui.guild.requirements.add")
 	add_requirement.pressed.connect(_on_add_guild_requirement)
-	_apply_button_style(add_requirement)
+	_apply_button_style(add_requirement, "secondary")
 	content.add_child(add_requirement)
 	content.add_child(_management_save_button("GuildSaveRecruitmentButton", _on_save_recruitment_settings))
 	return content
@@ -6301,7 +6517,12 @@ func _status_pill(status: String) -> Control:
 	return panel
 
 
-func _metadata_card(caption: String, value: String, accent: Color) -> Control:
+func _metadata_card(
+	caption: String,
+	value: String,
+	accent: Color,
+	value_name: String = ""
+) -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 60)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -6314,6 +6535,8 @@ func _metadata_card(caption: String, value: String, accent: Color) -> Control:
 	margin.add_child(stack)
 	stack.add_child(_label(caption, 9, UI_MUTED))
 	var value_label := _label(value, 14, accent)
+	if not value_name.is_empty():
+		value_label.name = value_name
 	value_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	stack.add_child(value_label)
 	return panel
@@ -7606,6 +7829,47 @@ func _localized_label(key: String, font_size: int, color: Color) -> Label:
 	return label
 
 
+func _build_guild_workspace_header(
+	title_key: String,
+	intro_key: String,
+	actions: Array = []
+) -> Control:
+	var heading := HBoxContainer.new()
+	heading.add_theme_constant_override("separation", 12)
+	var title_stack := VBoxContainer.new()
+	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_stack.add_theme_constant_override("separation", 3)
+	heading.add_child(title_stack)
+	var title := _localized_label(title_key, 18, UI_TEXT)
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title_stack.add_child(title)
+	var intro := _localized_label(intro_key, 10, UI_MUTED)
+	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	intro.max_lines_visible = 2
+	intro.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title_stack.add_child(intro)
+	for action_value: Variant in actions:
+		if action_value is Control:
+			var action := action_value as Control
+			action.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			heading.add_child(action)
+	return heading
+
+
+func _build_guild_message_panel(message: String, color: Color, panel_name: String = "") -> Control:
+	var panel := PanelContainer.new()
+	if not panel_name.is_empty():
+		panel.name = panel_name
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_INPUT, UI_BORDER_INNER, 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 9, 12, 9)
+	panel.add_child(margin)
+	var label := _label(message, 11, color)
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	margin.add_child(label)
+	return panel
+
+
 func _set_localized_property(control: Control, property_name: String, key: String) -> void:
 	control.set_meta("i18n_source_%s" % property_name, key)
 	control.set(property_name, _t(key))
@@ -7724,7 +7988,7 @@ func _icon_rect(icon_size: int, color: Color) -> TextureRect:
 func _apply_tab_style(button: Button, selected: bool) -> void:
 	if button == null:
 		return
-	var background := UI_RAISED if selected else Color("#07111edc")
+	var background := Color("#123650f2") if selected else Color("#07111edc")
 	var border := UI_ACCENT if selected else UI_BORDER
 	button.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
@@ -7744,11 +8008,23 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	var border := UI_BORDER
 	var hover_border := Color("#7aa7f4")
 	if variant == "primary":
-		normal_bg = Color("#0b2235f2")
-		hover_bg = Color("#12334df2")
-		pressed_bg = Color("#071624f2")
-		border = Color("#4b9dc4cc")
-		hover_border = Color("#79d9ff")
+		normal_bg = UI_PRIMARY_BACKGROUND
+		hover_bg = UI_PRIMARY_HOVER
+		pressed_bg = UI_PRIMARY_PRESSED
+		border = UI_ACCENT
+		hover_border = Color("#a1eaff")
+	elif variant == "secondary":
+		normal_bg = UI_SECONDARY_BACKGROUND
+		hover_bg = UI_SECONDARY_HOVER
+		pressed_bg = Color("#091d2bf2")
+		border = UI_ACCENT_SOFT
+		hover_border = UI_ACCENT
+	elif variant == "gold":
+		normal_bg = UI_GOLD_BACKGROUND
+		hover_bg = UI_GOLD_HOVER
+		pressed_bg = Color("#251d0df2")
+		border = Color(UI_GOLD.r, UI_GOLD.g, UI_GOLD.b, 0.78)
+		hover_border = UI_GOLD.lightened(0.12)
 	elif variant == "danger":
 		normal_bg = Color("#35151bf2")
 		hover_bg = Color("#512029f2")

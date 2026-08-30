@@ -2,8 +2,20 @@
 
 ## Unreleased
 
+- The Item Dex now shows detailed acquisition cards with shops, locations, effective drop chances, skill requirements, costs, and one-time or repeatable availability.
+
+- Polished every Guild tab with consistent workspace headings, clearer supporting actions, safer long-text handling, and a useful no-results state for member searches.
+
+- Refined the Guild Overview with whole-number levels, clearer EXP and capacity displays, compact announcements, rank badges, and online-member context.
+
+- The Guild Pokémon Vault now shows unavailable Pokémon in red and explains why they cannot be donated.
+
+- Important Guild actions now use clearer primary, secondary, active-tab, and level-progression colours.
+
 **Added**
 
+- Live Events started by staff now appear immediately in System chat, boost details, and top-right event cards with their event name and remaining time.
+- Trainers can now fund a ₽100,000 Global Skill EXP Boost together for one hour of double Fishing, Thieving, and Rock Smash experience, with a dedicated skill icon and live contribution updates.
 - Every Pokémon Center now has a Move Maniac who can teach compatible relearn, Egg, tutor, special, event, legacy, and pre-evolution moves in exchange for gathered resources.
 - Every Pokémon Center now has a separate Move Deleter who can safely remove any move except a Pokémon's last one.
 - Guild Leaders and Captains can now send, accept, decline, and cancel Guild vs Guild Aether Clash challenges. Multiple challenges may remain pending, while accepting one reserves both Guilds and opens a timed lobby-entry window for every member.
@@ -35,6 +47,7 @@
 
 **Fixed**
 
+- The Rare Encounter community boost now shows its funding progress bar in the overworld boost tray.
 - Guild Duel battles now place the battle interface above the arena HUD, keeping Team Preview and battle controls clickable.
 - Guild Duel collisions now use live arena positions, recover abandoned pre-battle matches after two minutes, and require players to separate before another collision attempt.
 - Aether Clash contact failures now explain position synchronization and existing PvP battles instead of showing a generic error.

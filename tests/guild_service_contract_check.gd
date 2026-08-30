@@ -68,6 +68,7 @@ func _init() -> void:
 	_check_contains(service_source, "func force_return_bank_loan_asset", "guild service exposes authorized force returns")
 	_check_contains(service_source, "func deposit_bank_pokemon", "guild service deposits or returns Guild Pokémon")
 	_check_contains(service_source, "func withdraw_bank_pokemon", "guild service withdraws Guild-owned Pokémon")
+	_check_contains(service_source, '"pokemonCandidates": _array', "guild service preserves visible Pokémon donation eligibility")
 	_check_contains(service_source, 'GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"', "guild service uses the dedicated Lobby endpoint")
 	_check_contains(service_source, "func update_settings", "guild service updates leader settings")
 	_check_contains(service_source, '"requirements": requirements', "guild service persists the leader's ordered requirement list")
