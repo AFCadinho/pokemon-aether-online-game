@@ -42589,6 +42589,11 @@ func start_aether_clash_pvp_match(match_id: String, engagement_id: String) -> bo
 func start_aether_clash_pvp_spectate(room_code: String) -> bool:
 	var normalized_room_code := room_code.strip_edges().to_upper()
 	if normalized_room_code.is_empty() or pvp_battle_starting:
+		_trace_aether_clash("battle_spectate_skipped", {
+			"roomCode": normalized_room_code,
+			"reason": "missing_room_code" if normalized_room_code.is_empty() else "battle_start_already_active",
+			"pvpBattleStarting": pvp_battle_starting,
+		})
 		return false
 	_trace_aether_clash("battle_spectate_requested", {
 		"roomCode": normalized_room_code,
@@ -42599,24 +42604,34 @@ func start_aether_clash_pvp_spectate(room_code: String) -> bool:
 		normalized_room_code
 	)
 	request.queue_free()
+	var has_public_teams := _spectator_response_has_public_teams(response)
 	_trace_aether_clash("battle_spectate_response", {
 		"roomCode": normalized_room_code,
 		"success": bool(response.get("success", false)),
 		"httpStatus": int(response.get("status", 0)),
 		"errorCode": BackendErrorLocalizationService.error_code(response),
+		"hasPublicTeams": has_public_teams,
 	})
-	if not bool(response.get("success", false)) or not _spectator_response_has_public_teams(response):
+	if not bool(response.get("success", false)) or not has_public_teams:
 		return false
 	if str(response.get("roomCode", "")).strip_edges().is_empty():
 		response["roomCode"] = normalized_room_code
 	pvp_active_room_code = normalized_room_code
 	await _start_pvp_battle_from_response(response)
 	var world := get_tree().get_first_node_in_group("world")
-	return (
+	var started := (
 		world != null
 		and bool(world.get("is_in_battle"))
 		and str(world.get("active_battle_kind")) == "pvp"
 	)
+	_trace_aether_clash("battle_spectate_finished", {
+		"roomCode": normalized_room_code,
+		"started": started,
+		"worldFound": world != null,
+		"worldIsInBattle": bool(world.get("is_in_battle")) if world != null else false,
+		"worldBattleKind": str(world.get("active_battle_kind")) if world != null else "",
+	})
+	return started
 
 
 func _start_pvp_battle_from_response(response: Dictionary) -> void:

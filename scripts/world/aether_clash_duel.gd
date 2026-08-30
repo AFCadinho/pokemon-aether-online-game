@@ -686,7 +686,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 	if event is InputEventScreenTouch:
-		if not (event as InputEventScreenTouch).pressed:
+		var touch_event := event as InputEventScreenTouch
+		if touch_event.pressed and _try_spectate_indicator_at_screen_position(
+			touch_event.position,
+			"controller_touch_hit_test"
+		):
+			get_viewport().set_input_as_handled()
+			return
+		if not touch_event.pressed:
 			spectator_camera_dragging = false
 		return
 	if event is InputEventMouseMotion:
@@ -698,6 +705,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	var mouse_event := event as InputEventMouseButton
 	if mouse_event.button_index == MOUSE_BUTTON_LEFT:
+		if mouse_event.pressed and _try_spectate_indicator_at_screen_position(
+			mouse_event.position,
+			"controller_mouse_hit_test"
+		):
+			spectator_camera_dragging = false
+			get_viewport().set_input_as_handled()
+			return
 		spectator_camera_dragging = mouse_event.pressed
 		get_viewport().set_input_as_handled()
 		return
@@ -710,6 +724,47 @@ func _unhandled_input(event: InputEvent) -> void:
 		next_zoom /= 1.15
 	_set_spectator_zoom(next_zoom)
 	get_viewport().set_input_as_handled()
+
+
+func _try_spectate_indicator_at_screen_position(screen_position: Vector2, source: String) -> bool:
+	var canvas_transform := get_viewport().get_canvas_transform()
+	var world_position := canvas_transform.affine_inverse() * screen_position
+	var indicator := _battle_indicator_at_world_position(world_position)
+	_trace_aether_clash("spectator_pointer_pressed", {
+		"sessionId": instance_session_id,
+		"localUserId": _local_user_id(),
+		"source": source,
+		"screenPosition": {"x": screen_position.x, "y": screen_position.y},
+		"worldPosition": {"x": world_position.x, "y": world_position.y},
+		"indicatorFound": indicator != null,
+		"targetUserId": int(indicator.get("player_user_id")) if indicator != null else 0,
+		"roomCode": str(indicator.get("room_code")) if indicator != null else "",
+	})
+	return (
+		indicator != null
+		and indicator.has_method("request_spectate")
+		and bool(indicator.call("request_spectate", source))
+	)
+
+
+func _battle_indicator_at_world_position(world_position: Vector2) -> Node:
+	var closest_indicator: Node
+	var closest_distance := INF
+	for actor: Node2D in _all_player_actors():
+		var indicator := actor.get_node_or_null("AetherClashBattleIndicator")
+		if (
+			indicator == null
+			or int(indicator.get_meta("aether_clash_controller_id", 0)) != get_instance_id()
+			or not indicator.has_method("contains_world_point")
+			or not bool(indicator.call("contains_world_point", world_position))
+		):
+			continue
+		var click_position: Vector2 = indicator.call("get_click_world_position")
+		var distance := click_position.distance_to(world_position)
+		if distance < closest_distance:
+			closest_distance = distance
+			closest_indicator = indicator
+	return closest_indicator
 
 
 func _pan_spectator_camera(screen_delta: Vector2) -> void:
@@ -833,14 +888,28 @@ func _world_battle_active() -> bool:
 
 func _on_battle_indicator_spectate_requested(user_id: int, room_code: String) -> void:
 	var normalized_room_code := room_code.strip_edges().to_upper()
-	if (
-		spectator_battle_request_active
-		or viewer_role != "spectator"
-		or not spectator_camera_active
-		or _world_battle_active()
-		or not engaged_player_ids.has(user_id)
-		or str(engaged_player_room_codes.get(user_id, "")).strip_edges().to_upper() != normalized_room_code
-	):
+	var rejection_reason := ""
+	if spectator_battle_request_active:
+		rejection_reason = "request_already_active"
+	elif viewer_role != "spectator":
+		rejection_reason = "viewer_not_spectator"
+	elif not spectator_camera_active:
+		rejection_reason = "spectator_camera_inactive"
+	elif _world_battle_active():
+		rejection_reason = "world_battle_active"
+	elif not engaged_player_ids.has(user_id):
+		rejection_reason = "player_not_engaged"
+	elif str(engaged_player_room_codes.get(user_id, "")).strip_edges().to_upper() != normalized_room_code:
+		rejection_reason = "room_code_mismatch"
+	_trace_aether_clash("spectator_battle_request_received", {
+		"sessionId": instance_session_id,
+		"localUserId": _local_user_id(),
+		"targetUserId": user_id,
+		"roomCode": normalized_room_code,
+		"accepted": rejection_reason.is_empty(),
+		"rejectionReason": rejection_reason,
+	})
+	if not rejection_reason.is_empty():
 		return
 	spectator_battle_request_active = true
 	_trace_aether_clash("spectator_battle_requested", {
@@ -850,12 +919,22 @@ func _on_battle_indicator_spectate_requested(user_id: int, room_code: String) ->
 		"roomCode": normalized_room_code,
 	})
 	var started := false
+	var overlay_found := false
 	for overlay_value: Variant in get_tree().get_nodes_in_group("ui_overlay"):
 		var overlay := overlay_value as Node
 		if overlay != null and overlay.has_method("start_aether_clash_pvp_spectate"):
+			overlay_found = true
 			started = bool(await overlay.call("start_aether_clash_pvp_spectate", normalized_room_code))
 			break
 	spectator_battle_request_active = false
+	_trace_aether_clash("spectator_battle_request_completed", {
+		"sessionId": instance_session_id,
+		"localUserId": _local_user_id(),
+		"targetUserId": user_id,
+		"roomCode": normalized_room_code,
+		"overlayFound": overlay_found,
+		"started": started,
+	})
 	if not started:
 		_show_system_message(_text(
 			"ui.aether_clash.spectator.battle_unavailable",

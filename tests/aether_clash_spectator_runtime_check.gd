@@ -187,8 +187,21 @@ func _run() -> void:
 	)
 	blue_indicator = remote_blue.get_node_or_null("AetherClashBattleIndicator")
 	_check(blue_indicator != null and bool(blue_indicator.get("clickable")), "Master Balls become clickable for an active jail spectator")
-	await duel.call("_on_battle_indicator_spectate_requested", 2, "ACROOM123")
-	_check(overlay.requested_room_codes == ["ACROOM123"], "Clicking a Master Ball opens the existing PvP spectator flow")
+	var master_ball_world_position: Vector2 = blue_indicator.call("get_click_world_position")
+	spectator_camera.global_position = master_ball_world_position
+	spectator_camera.reset_smoothing()
+	spectator_camera.force_update_scroll()
+	await process_frame
+	var master_ball_click := InputEventMouseButton.new()
+	master_ball_click.button_index = MOUSE_BUTTON_LEFT
+	master_ball_click.pressed = true
+	master_ball_click.position = root.get_viewport().get_canvas_transform() * master_ball_world_position
+	duel.call("_unhandled_input", master_ball_click)
+	await process_frame
+	_check(
+		overlay.requested_room_codes == ["ACROOM123"],
+		"Controller hit-testing makes a visible Master Ball click open the existing PvP spectator flow"
+	)
 
 	return_button.emit_signal("pressed")
 	_check(not spectator_camera.enabled and player_camera.enabled, "Returning to jail restores the player camera")
@@ -223,8 +236,10 @@ func _run() -> void:
 	)
 	_check(
 		overlay_source.contains("func start_aether_clash_pvp_spectate(")
-		and overlay_source.contains("BattleApiClient.spectate_pvp_room("),
-		"Arena battle clicks reuse the existing authoritative PvP spectator endpoint"
+		and overlay_source.contains("BattleApiClient.spectate_pvp_room(")
+		and overlay_source.contains('"battle_spectate_response"')
+		and indicator_source.contains('"battle_indicator_area_input"'),
+		"Arena battle clicks reuse the authoritative PvP spectator endpoint with end-to-end debug traces"
 	)
 
 	duel.queue_free()
