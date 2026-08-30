@@ -89,9 +89,52 @@ func _check_popup_scene() -> void:
 	var popup := packed.instantiate()
 	root.add_child(popup)
 	await process_frame
+	var player_save := root.get_node_or_null("PlayerSave")
+	var created_player_save := false
+	if player_save == null:
+		player_save = load("res://scripts/data/player_data.gd").new()
+		player_save.name = "PlayerSave"
+		root.add_child(player_save)
+		created_player_save = true
+	var original_party: Array = (player_save.get("party") as Array).duplicate()
+	var preview_pokemon := Pokemon.new("Greninja", 26)
+	preview_pokemon.types = ["water", "dark"]
+	preview_pokemon.moves = [{"id": "water-shuriken", "name": "Water Shuriken", "pp": 20, "maxPp": 20}]
+	var preview_party := player_save.get("party") as Array
+	preview_party.clear()
+	preview_party.append(preview_pokemon)
+	popup.set("selected_party_index", 0)
+	popup.call("_refresh_party_list")
+	popup.call("_refresh_current_moves")
+	await process_frame
 	var source_filter := popup.get("source_filter") as OptionButton
 	var learn_button := popup.get("learn_button") as Button
+	var party_list := popup.get("party_list") as VBoxContainer
+	var current_moves_list := popup.get("current_moves_list") as VBoxContainer
+	_check(
+		party_list != null and _count_texture_rects(party_list) >= 3,
+		"Move Mentor party cards show Pokémon portraits and type icons"
+	)
+	_check(
+		current_moves_list != null and _count_texture_rects(current_moves_list) >= 2,
+		"Move Mentor current-move cards show type and damage-category icons"
+	)
 	_check(source_filter != null and source_filter.item_count == REQUIRED_SOURCES.size() + 1, "Move Mentor lists every source filter")
+	_check(
+		source_filter != null
+			and source_filter.get_theme_icon("arrow") != null
+			and source_filter.get_popup().get_theme_stylebox("panel") is StyleBoxFlat,
+		"Move Mentor source filter uses the themed dropdown and popup"
+	)
+	var preview_candidates: Array = popup.get("candidates") as Array
+	preview_candidates.append({"moveId": "water-pulse", "name": "Water Pulse", "source": "tutor"})
+	popup.call("_refresh_move_list")
+	await process_frame
+	var move_list := popup.get("move_list") as VBoxContainer
+	_check(
+		move_list != null and _count_texture_rects(move_list) >= 2,
+		"Move Mentor move cards show type and damage-category icons"
+	)
 	var popup_source := FileAccess.get_file_as_string("res://scripts/ui/move_mentor_popup.gd")
 	for source: String in REQUIRED_SOURCES:
 		_check(popup_source.contains('\t"%s",' % source), "Move Mentor includes %s moves" % source)
@@ -99,8 +142,19 @@ func _check_popup_scene() -> void:
 	popup.visible = true
 	_check(popup.visible, "Move Mentor popup opens")
 	_check(learn_button != null and learn_button.disabled, "Move Mentor requires a Pokémon and move selection")
+	preview_party.clear()
+	preview_party.append_array(original_party)
+	if created_player_save:
+		player_save.queue_free()
 	popup.queue_free()
 	await process_frame
+
+
+func _count_texture_rects(node: Node) -> int:
+	var count := 1 if node is TextureRect else 0
+	for child: Node in node.get_children():
+		count += _count_texture_rects(child)
+	return count
 
 
 func _check_service_contract() -> void:
