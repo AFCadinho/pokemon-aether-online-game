@@ -70,17 +70,71 @@ func _run() -> void:
 		"incoming challenge replaces default Godot styling"
 	)
 
+	overlay_instance.call("_setup_aether_clash_entry_callout")
+	overlay_instance.call("_set_aether_clash_entry_callout", {
+		"id": "entry-callout-test",
+		"status": "entry_open",
+		"challengerGuild": {"id": 7, "name": "AFC squad"},
+		"challengedGuild": {"id": 8, "name": "Godz"},
+		"entryClosesAt": Time.get_datetime_string_from_unix_time(
+			int(Time.get_unix_time_from_system()) + 90,
+			true
+		) + "Z",
+	})
+	await process_frame
+	var entry_callout := overlay_instance.get("aether_clash_entry_callout") as PanelContainer
+	var entry_title := overlay_instance.get("aether_clash_entry_title_label") as Label
+	var entry_countdown := overlay_instance.get("aether_clash_entry_countdown_label") as Label
+	var entry_hint := overlay_instance.get("aether_clash_entry_hint_label") as Label
+	_check(entry_callout != null and entry_callout.visible, "accepted Aether Clash opens a persistent gathering callout")
+	_check(
+		entry_title != null and entry_title.text.contains("AFC squad") and entry_title.text.contains("Godz"),
+		"gathering callout identifies both participating Guilds"
+	)
+	_check(entry_countdown != null and entry_countdown.text.contains(":"), "gathering callout shows the live portal timer")
+	_check(entry_hint != null and entry_hint.text.to_lower().contains("red"), "gathering callout directs members to the red Guild Duel portal")
+	_check(
+		entry_callout != null
+		and entry_callout.mouse_filter == Control.MOUSE_FILTER_IGNORE
+		and entry_title.mouse_filter == Control.MOUSE_FILTER_IGNORE
+		and entry_countdown.mouse_filter == Control.MOUSE_FILTER_IGNORE
+		and entry_hint.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+		"gathering callout does not block movement toward the portal"
+	)
+	overlay_instance.call("_set_aether_clash_entry_callout", {
+		"id": "expired-entry-callout-test",
+		"status": "entry_open",
+		"entryClosesAt": "2000-01-01T00:00:00Z",
+	})
+	_check(not entry_callout.visible, "gathering callout closes when portal entry expires")
+
 	var overlay_source := FileAccess.get_file_as_string(OVERLAY_PATH)
 	_check(
 		overlay_source.contains('notification.get("aetherClashSessionId"'),
 		"realtime notification identifies the exact authoritative challenge"
 	)
+	_check(
+		overlay_source.contains('kind == "aether_clash_accepted"')
+		and overlay_source.contains("_refresh_aether_clash_entry_callout_from_server.call_deferred()"),
+		"accepted challenge notifications activate the gathering callout for every notified Guild member"
+	)
+	_check(
+		overlay_source.contains('_set_aether_clash_entry_callout(_dictionary_from_value(result.get("challenge", {})))'),
+		"the accepting Guild staff member sees the gathering callout immediately"
+	)
 	localization_manager.call("set_locale", original_locale)
+	if dialog != null and is_instance_valid(dialog):
+		dialog.free()
+	if entry_callout != null and is_instance_valid(entry_callout):
+		entry_callout.free()
 	dialog = null
 	countdown = null
 	spectator_policy = null
-	dialog_host.queue_free()
-	await process_frame
+	entry_callout = null
+	entry_title = null
+	entry_countdown = null
+	entry_hint = null
+	dialog_host.free()
 	overlay_instance.free()
 	overlay_script = null
 	await process_frame
