@@ -2,8 +2,8 @@ extends Node2D
 
 
 const ZONE_SIZE := Vector2(224.0, 224.0)
-const NORTH_COLOR := Color("f4c34fff")
-const SOUTH_COLOR := Color("70b7ffff")
+const BLUE_COLOR := Color("58b8ffff")
+const RED_COLOR := Color("ff6678ff")
 
 var phase := "entry_open"
 var pulse_elapsed := 0.0
@@ -36,16 +36,16 @@ func get_arena_exit_point(side: String) -> Vector2:
 	var spawn := _spawn_for_side(side)
 	if spawn == null:
 		return Vector2.ZERO
-	var direction := Vector2.DOWN if side == "challenger" else Vector2.UP
+	var direction := Vector2.DOWN if side == "blue" else Vector2.UP
 	return spawn.position + direction * (ZONE_SIZE.y * 0.5 + 16.0)
 
 
 func _draw() -> void:
-	for side: String in ["challenger", "challenged"]:
+	for side: String in ["blue", "red"]:
 		var zone := get_zone_rect(side)
 		if zone.size == Vector2.ZERO:
 			continue
-		var color := NORTH_COLOR if side == "challenger" else SOUTH_COLOR
+		var color := BLUE_COLOR if side == "blue" else RED_COLOR
 		var pulse := (sin(pulse_elapsed * 3.0) + 1.0) * 0.5
 		var fill_alpha := 0.11 + pulse * 0.035
 		if phase in ["roster_locked", "active", "finishing"]:
@@ -57,5 +57,5 @@ func _draw() -> void:
 
 
 func _spawn_for_side(side: String) -> Marker2D:
-	var spawn_name := "Guild1ArenaSpawn" if side == "challenger" else "Guild2ArenaSpawn"
+	var spawn_name := "Guild1ArenaSpawn" if side == "blue" else "Guild2ArenaSpawn"
 	return get_parent().get_node_or_null("Spawns/%s" % spawn_name) as Marker2D

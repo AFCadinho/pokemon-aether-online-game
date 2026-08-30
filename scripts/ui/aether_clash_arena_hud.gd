@@ -3,8 +3,10 @@ extends CanvasLayer
 class_name AetherClashArenaHud
 
 @onready var challenger_name_label: Label = $Root/Panel/Margin/Main/Matchup/Challenger/Name
+@onready var challenger_side_label: Label = $Root/Panel/Margin/Main/Matchup/Challenger/Side
 @onready var challenger_count_label: Label = $Root/Panel/Margin/Main/Matchup/Challenger/Count
 @onready var challenged_name_label: Label = $Root/Panel/Margin/Main/Matchup/Challenged/Name
+@onready var challenged_side_label: Label = $Root/Panel/Margin/Main/Matchup/Challenged/Side
 @onready var challenged_count_label: Label = $Root/Panel/Margin/Main/Matchup/Challenged/Count
 @onready var phase_label: Label = $Root/Panel/Margin/Main/Matchup/Center/Phase
 @onready var countdown_label: Label = $Root/Panel/Margin/Main/Matchup/Center/Countdown
@@ -26,6 +28,8 @@ func _process(_delta: float) -> void:
 
 func show_syncing() -> void:
 	visible = true
+	challenger_side_label.text = _text("ui.aether_clash.arena.blue_side", "BLUE SIDE")
+	challenged_side_label.text = _text("ui.aether_clash.arena.red_side", "RED SIDE")
 	challenger_name_label.text = _text("ui.aether_clash.arena.guild_one", "Guild 1")
 	challenged_name_label.text = _text("ui.aether_clash.arena.guild_two", "Guild 2")
 	challenger_count_label.text = "0"
