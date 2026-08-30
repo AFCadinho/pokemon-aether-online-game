@@ -157,6 +157,23 @@ func _check_popup_scene() -> void:
 	var replacement_dialog := popup.get_node_or_null("MoveMentorReplacementDialog") as AetherConfirmationDialog
 	_check(replacement_dialog != null and replacement_dialog.visible, "A full moveset opens the replacement dialog")
 	if replacement_dialog != null:
+		var new_move_preview := replacement_dialog.find_child("NewMovePreview", true, false) as VBoxContainer
+		var new_move_card := replacement_dialog.find_child("NewMoveHoverCard", true, false) as Button
+		_check(
+			new_move_preview != null
+				and new_move_card != null
+				and _count_texture_rects(new_move_preview) >= 2,
+			"Replacement dialog previews the new move with type and category icons"
+		)
+		_check(
+			new_move_card != null
+				and new_move_card.tooltip_text.contains("Water Pulse")
+				and new_move_card.tooltip_text.contains("Type:")
+				and new_move_card.tooltip_text.contains("Category:")
+				and new_move_card.tooltip_text.contains("Source:")
+				and new_move_card.tooltip_text.contains("PP "),
+			"Hovering the new move exposes its complete move details"
+		)
 		var replacement_grid := replacement_dialog.find_child("ReplacementMoveGrid", true, false) as GridContainer
 		_check(
 			replacement_grid != null and replacement_grid.get_child_count() == 4,
@@ -220,7 +237,9 @@ func _check_localization() -> void:
 			"ui.move_mentor.title",
 			"ui.move_mentor.replace_dialog.title",
 			"ui.move_mentor.replace_dialog.message",
+			"ui.move_mentor.replace_dialog.new_move",
 			"ui.move_mentor.replace_dialog.confirm",
+			"ui.move_mentor.tooltip.source",
 			"ui.move_mentor.status.learned",
 			"ui.move_mentor.source.relearn",
 			"ui.move_mentor.npc.service_unavailable",
