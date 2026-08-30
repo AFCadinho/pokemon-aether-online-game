@@ -22,7 +22,12 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if visible and str(_session().get("status", "")) == "entry_open":
+	if visible and str(_session().get("status", "")) in [
+		"entry_open",
+		"roster_locked",
+		"active",
+		"finishing",
+	]:
 		_render_phase()
 
 
@@ -82,9 +87,9 @@ func _render_phase() -> void:
 			phase_label.text = _text("ui.aether_clash.arena.active", "CLASH ACTIVE")
 			countdown_label.text = _text("ui.aether_clash.arena.fight", "FIGHT!")
 			barrier_hint_label.text = _text(
-				"ui.aether_clash.arena.barrier_lowered",
-				"The Aether barrier is down"
-			)
+				"ui.aether_clash.arena.duel_time",
+				"Duel time: {time}"
+			).replace("{time}", _format_duration(_duel_seconds_elapsed(session)))
 		"completed", "no_show", "cancelled":
 			phase_label.text = _text("ui.aether_clash.arena.finished", "CLASH FINISHED")
 			countdown_label.text = "—"
@@ -116,6 +121,25 @@ func _entry_seconds_remaining(session: Dictionary) -> int:
 func _format_countdown(seconds_remaining: int) -> String:
 	var minutes := int(seconds_remaining / 60)
 	var seconds := seconds_remaining % 60
+	return "%02d:%02d" % [minutes, seconds]
+
+
+func _duel_seconds_elapsed(session: Dictionary) -> int:
+	var started_at := _timestamp_to_unix(str(session.get("startedAt", "")))
+	if started_at <= 0.0:
+		return 0
+	return maxi(
+		0,
+		int(floor(Time.get_unix_time_from_system() + server_clock_offset_seconds - started_at))
+	)
+
+
+func _format_duration(seconds_elapsed: int) -> String:
+	var hours := int(seconds_elapsed / 3600)
+	var minutes := int(seconds_elapsed / 60) % 60
+	var seconds := seconds_elapsed % 60
+	if hours > 0:
+		return "%02d:%02d:%02d" % [hours, minutes, seconds]
 	return "%02d:%02d" % [minutes, seconds]
 
 
