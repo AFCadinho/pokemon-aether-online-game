@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+**Added**
+
+- Guild Leaders and Captains can now send, accept, decline, and cancel Guild vs Guild Aether Clash challenges from the Guild screen. Multiple challenges may remain pending, while accepting one reserves both Guilds and opens a timed lobby-entry window for every member.
+
 ## 0.3.69 - 2026-08-30
 
 - Officer Jenny now finishes her arrest dialogue before taking a caught pickpocket to jail.

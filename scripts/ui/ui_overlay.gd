@@ -42397,6 +42397,14 @@ func _on_guild_notification_received(notification: Dictionary) -> void:
 			key = "ui.guild.notification.member_left"
 		"guild_member_kicked":
 			key = "ui.guild.notification.member_kicked"
+		"aether_clash_received":
+			key = "ui.guild.notification.aether_clash_received"
+		"aether_clash_accepted":
+			key = "ui.guild.notification.aether_clash_accepted"
+		"aether_clash_declined":
+			key = "ui.guild.notification.aether_clash_declined"
+		"aether_clash_cancelled":
+			key = "ui.guild.notification.aether_clash_cancelled"
 		_:
 			return
 	add_system_message(LocalizationManager.text(key, {
@@ -42406,12 +42414,19 @@ func _on_guild_notification_received(notification: Dictionary) -> void:
 	}))
 	if kind == "guild_member_kicked":
 		_refresh_after_guild_membership_notification.call_deferred()
+	elif kind.begins_with("aether_clash_"):
+		_refresh_after_aether_clash_notification.call_deferred()
 
 
 func _refresh_after_guild_membership_notification() -> void:
 	await GuildService.load_directory()
 	if guild_popup != null and guild_popup.visible:
 		await guild_popup._refresh_from_server()
+
+
+func _refresh_after_aether_clash_notification() -> void:
+	if guild_popup != null and guild_popup.visible:
+		await guild_popup._refresh_aether_clash_from_server()
 
 
 func add_system_warning(text: String) -> void:

@@ -208,6 +208,7 @@ func _run() -> void:
 	_check(popup.find_child("GuildMemberDashboard", true, false) != null, "member dashboard renders")
 	_check(popup.find_child("GuildOverviewTab", true, false) != null, "guild overview tab renders")
 	_check(popup.find_child("GuildBankTab", true, false) != null, "guild bank tab renders")
+	_check(popup.find_child("GuildAetherClashTab", true, false) != null, "Aether Clash tab renders for Guild members")
 	_check(popup.find_child("GuildMembersTab", true, false) != null, "guild members tab renders")
 	_check(popup.find_child("GuildManagementTab", true, false) != null, "guild management tab renders for leaders")
 	var section_navigation := popup.find_child("GuildSectionNavigation", true, false) as HBoxContainer
@@ -224,6 +225,15 @@ func _run() -> void:
 		"Guild discovery becomes a compact secondary action for members"
 	)
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "guild dashboard opens on its overview")
+	popup._show_guild_section("aether_clash")
+	await process_frame
+	_check(popup.find_child("GuildAetherClashWorkspace", true, false) != null, "Aether Clash workspace opens")
+	_check(popup.find_child("GuildCurrentAetherClash", true, false) != null, "accepted Guild clash is visible")
+	var clash_countdown := popup.find_child("GuildAetherClashEntryCountdown", true, false) as Label
+	_check(clash_countdown != null and clash_countdown.text.contains(":"), "accepted Guild clash shows a running portal countdown")
+	_check(popup.find_child("CancelCurrentGuildAetherClashButton", true, false) != null, "authorized staff can cancel an accepted clash")
+	popup._show_guild_section("overview")
+	await process_frame
 	var announcement_text := popup.find_child("GuildAnnouncementText", true, false) as Label
 	_check(announcement_text != null and announcement_text.text.contains("Aether Clash practice"), "guild overview displays the current announcement")
 	var leader_options := popup.find_child("GuildOptionsMenuButton", true, false) as MenuButton
@@ -1164,6 +1174,10 @@ func _run() -> void:
 	await process_frame
 	_check(popup.find_child("GuildManagementTab", true, false) == null, "regular members do not see management")
 	_check(popup.find_child("GuildManagementApplicationsTab", true, false) == null, "regular members do not see the staff applications inbox")
+	popup._show_guild_section("aether_clash")
+	await process_frame
+	_check(popup.find_child("GuildCurrentAetherClash", true, false) != null, "regular members can see the accepted Aether Clash")
+	_check(popup.find_child("CancelCurrentGuildAetherClashButton", true, false) == null, "regular members cannot manage the accepted Aether Clash")
 	popup._show_guild_section("members")
 	await process_frame
 	var regular_member_actions := popup.find_child("GuildMemberActionsButton_2", true, false) as MenuButton

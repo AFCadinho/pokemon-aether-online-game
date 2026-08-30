@@ -137,6 +137,7 @@ var guild_home: Dictionary = {}
 var incoming_invitations: Array = []
 var pending_applications: Array = []
 var application_cooldowns: Array = []
+var aether_clash_state: Dictionary = {}
 var selected_guild_id := 0
 var active_page := "browse"
 var is_dragging_popup := false
@@ -144,6 +145,7 @@ var is_debug_preview := false
 var is_loading_guilds := false
 var is_creating_guild := false
 var is_application_action_in_flight := false
+var is_aether_clash_action_in_flight := false
 var is_leaving_guild := false
 var directory_request_generation := 0
 var has_explicit_page_selection := false
@@ -203,6 +205,7 @@ var settings_focus_select: OptionButton
 var settings_recruitment_select: OptionButton
 var settings_loan_duration_select: OptionButton
 var settings_requirements_container: VBoxContainer
+var aether_clash_countdown_label: Label
 var settings_requirements: Array[Dictionary] = []
 var guild_bank_asset_search_input: LineEdit
 var guild_bank_asset_filter_select: OptionButton
@@ -232,6 +235,12 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	add_theme_stylebox_override("panel", _outer_style())
 	_build_ui()
+	var aether_clash_timer := Timer.new()
+	aether_clash_timer.name = "AetherClashCountdownTimer"
+	aether_clash_timer.wait_time = 1.0
+	aether_clash_timer.autostart = true
+	aether_clash_timer.timeout.connect(_refresh_aether_clash_countdown)
+	add_child(aether_clash_timer)
 	var localization_manager := get_node_or_null("/root/LocalizationManager")
 	if localization_manager != null:
 		var locale_callable := Callable(self, "_on_locale_changed")
@@ -335,6 +344,7 @@ func show_debug_member_preview() -> void:
 			"bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return",
 			"resource_deposit", "resource_withdraw",
 			"manage_members", "manage_guild", "manage_permissions",
+			"challenge_aether_clash",
 		],
 		"bankPermissionOverrides": {},
 	}
@@ -389,6 +399,22 @@ func show_debug_member_preview() -> void:
 			"captain": ["bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return", "resource_deposit", "resource_withdraw", "manage_members"],
 			"member": ["bank_borrow", "resource_deposit", "resource_withdraw"],
 			"recruit": [],
+		},
+	}
+	aether_clash_state = {
+		"success": true,
+		"canManage": true,
+		"pendingIncoming": [],
+		"pendingOutgoing": [],
+		"currentSession": {
+			"id": "debug-aether-clash",
+			"status": "entry_open",
+			"challengerGuild": {"id": 1, "name": "Aether Vanguard"},
+			"challengedGuild": {"id": 3, "name": "Midnight League"},
+			"acceptedBy": "Umbra",
+			"entryClosesAt": Time.get_datetime_string_from_unix_time(
+				int(Time.get_unix_time_from_system()) + 300
+			),
 		},
 	}
 	guild_bank_state = {
@@ -1068,6 +1094,8 @@ func _render_guild_home() -> void:
 	match active_guild_section:
 		"bank":
 			member_content.add_child(_build_guild_bank())
+		"aether_clash":
+			member_content.add_child(_build_aether_clash_workspace())
 		"members":
 			member_content.add_child(_build_member_roster(can_invite))
 		"management":
@@ -1109,6 +1137,11 @@ func _build_guild_section_navigation(can_open_management: bool) -> Control:
 	var sections: Array[Dictionary] = [
 		{"id": "overview", "label_key": "ui.guild.section.overview", "name": "GuildOverviewTab"},
 		{"id": "bank", "label_key": "ui.guild.section.bank", "name": "GuildBankTab"},
+		{
+			"id": "aether_clash",
+			"label_key": "ui.guild.section.aether_clash",
+			"name": "GuildAetherClashTab",
+		},
 		{"id": "members", "label_key": "ui.guild.section.members", "name": "GuildMembersTab"},
 	]
 	if can_open_management:
@@ -1132,12 +1165,18 @@ func _build_guild_section_navigation(can_open_management: bool) -> Control:
 		navigation.add_child(button)
 		if section_id == "management" and _pending_application_count() > 0:
 			_add_application_notification_badge(button, _pending_application_count(), "GuildManagementNotificationBadge")
+		if section_id == "aether_clash" and _pending_aether_clash_count() > 0:
+			_add_application_notification_badge(
+				button,
+				_pending_aether_clash_count(),
+				"GuildAetherClashNotificationBadge"
+			)
 		guild_section_buttons[section_id] = button
 	return navigation
 
 
 func _show_guild_section(section: String) -> void:
-	if section not in ["overview", "bank", "members", "management"]:
+	if section not in ["overview", "bank", "aether_clash", "members", "management"]:
 		return
 	active_guild_section = section
 	if section != "bank":
@@ -1153,6 +1192,12 @@ func _show_guild_section(section: String) -> void:
 
 func _pending_application_count() -> int:
 	return _array_from_value(guild_home.get("pendingApplications", [])).size()
+
+
+func _pending_aether_clash_count() -> int:
+	if not _can_manage_aether_clash():
+		return 0
+	return _array_from_value(aether_clash_state.get("pendingIncoming", [])).size()
 
 
 func _add_application_notification_badge(button: Button, count: int, badge_name: String = "GuildApplicationsNotificationBadge") -> void:
@@ -1264,6 +1309,295 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	copy.add_child(announcement_label)
 	overview.add_child(announcement_panel)
 	return overview
+
+
+func _build_aether_clash_workspace() -> Control:
+	var workspace := VBoxContainer.new()
+	workspace.name = "GuildAetherClashWorkspace"
+	workspace.add_theme_constant_override("separation", 10)
+
+	var heading := HBoxContainer.new()
+	heading.add_theme_constant_override("separation", 8)
+	workspace.add_child(heading)
+	var title_stack := VBoxContainer.new()
+	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_stack.add_theme_constant_override("separation", 2)
+	heading.add_child(title_stack)
+	title_stack.add_child(_localized_label("ui.guild.aether_clash.title", 20, UI_TEXT))
+	var intro := _localized_label("ui.guild.aether_clash.intro", 11, UI_MUTED)
+	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	title_stack.add_child(intro)
+	var refresh_button := Button.new()
+	refresh_button.name = "RefreshGuildAetherClashButton"
+	_set_localized_property(refresh_button, "text", "ui.guild.aether_clash.refresh")
+	refresh_button.disabled = is_aether_clash_action_in_flight
+	refresh_button.pressed.connect(_refresh_aether_clash_from_server)
+	_apply_button_style(refresh_button)
+	heading.add_child(refresh_button)
+
+	if aether_clash_state.is_empty():
+		workspace.add_child(_build_aether_clash_message_panel(
+			_t("ui.guild.aether_clash.loading"),
+			UI_MUTED
+		))
+		return workspace
+
+	var current_session := _dictionary(aether_clash_state.get("currentSession", {}))
+	if current_session.is_empty():
+		workspace.add_child(_build_aether_clash_message_panel(
+			_t("ui.guild.aether_clash.no_current"),
+			UI_MUTED
+		))
+	else:
+		workspace.add_child(_build_current_aether_clash_card(current_session))
+
+	if not _can_manage_aether_clash():
+		workspace.add_child(_build_aether_clash_message_panel(
+			_t("ui.guild.aether_clash.member_hint"),
+			UI_MUTED
+		))
+		return workspace
+
+	var incoming := _array_from_value(aether_clash_state.get("pendingIncoming", []))
+	var outgoing := _array_from_value(aether_clash_state.get("pendingOutgoing", []))
+	workspace.add_child(_label(
+		_t("ui.guild.aether_clash.incoming", {"count": incoming.size()}),
+		11,
+		UI_ACCENT
+	))
+	if incoming.is_empty():
+		workspace.add_child(_build_aether_clash_message_panel(
+			_t("ui.guild.aether_clash.incoming_empty"),
+			UI_MUTED
+		))
+	else:
+		for challenge_value: Variant in incoming:
+			if challenge_value is Dictionary:
+				workspace.add_child(_build_aether_clash_challenge_card(
+					challenge_value as Dictionary,
+					true
+				))
+
+	workspace.add_child(_label(
+		_t("ui.guild.aether_clash.outgoing", {"count": outgoing.size()}),
+		11,
+		UI_ACCENT
+	))
+	if outgoing.is_empty():
+		workspace.add_child(_build_aether_clash_message_panel(
+			_t("ui.guild.aether_clash.outgoing_empty"),
+			UI_MUTED
+		))
+	else:
+		for challenge_value: Variant in outgoing:
+			if challenge_value is Dictionary:
+				workspace.add_child(_build_aether_clash_challenge_card(
+					challenge_value as Dictionary,
+					false
+				))
+	return workspace
+
+
+func _build_current_aether_clash_card(challenge: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildCurrentAetherClash"
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#10233af5"), UI_ACCENT_SOFT, 10, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 14, 12, 14, 12)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 7)
+	margin.add_child(content)
+	content.add_child(_localized_label("ui.guild.aether_clash.current", 10, UI_GOLD))
+	var guild_names := _aether_clash_guild_names(challenge)
+	content.add_child(_label(
+		_t("ui.guild.aether_clash.matchup", {
+			"challenger": guild_names.get("challenger", "Guild"),
+			"challenged": guild_names.get("challenged", "Guild"),
+		}),
+		18,
+		UI_TEXT
+	))
+	var status := str(challenge.get("status", "entry_open"))
+	content.add_child(_label(_aether_clash_status_text(status), 11, UI_SUCCESS))
+	if status == "entry_open":
+		aether_clash_countdown_label = _label("", 14, UI_GOLD)
+		aether_clash_countdown_label.name = "GuildAetherClashEntryCountdown"
+		content.add_child(aether_clash_countdown_label)
+		_refresh_aether_clash_countdown()
+	var accepted_by := str(challenge.get("acceptedBy", "")).strip_edges()
+	if accepted_by != "":
+		content.add_child(_label(
+			_t("ui.guild.aether_clash.accepted_by", {"trainer": accepted_by}),
+			10,
+			UI_MUTED
+		))
+	if _can_manage_aether_clash() and status == "entry_open":
+		var actions := HBoxContainer.new()
+		actions.alignment = BoxContainer.ALIGNMENT_END
+		content.add_child(actions)
+		var cancel_button := Button.new()
+		cancel_button.name = "CancelCurrentGuildAetherClashButton"
+		_set_localized_property(cancel_button, "text", "ui.guild.aether_clash.cancel_clash")
+		cancel_button.disabled = is_aether_clash_action_in_flight
+		cancel_button.pressed.connect(_confirm_aether_clash_cancel.bind(challenge.duplicate(true)))
+		_apply_button_style(cancel_button, "danger")
+		actions.add_child(cancel_button)
+	return panel
+
+
+func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = (
+		"IncomingGuildAetherClashChallenge"
+		if incoming
+		else "OutgoingGuildAetherClashChallenge"
+	)
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 10, 12, 10)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.add_theme_constant_override("separation", 3)
+	row.add_child(copy)
+	var opponent := _aether_clash_opponent(challenge)
+	copy.add_child(_label(str(opponent.get("name", _t("ui.guild.fallback.guild"))), 14, UI_TEXT))
+	copy.add_child(_label(
+		_t(
+			"ui.guild.aether_clash.received_from"
+			if incoming
+			else "ui.guild.aether_clash.sent_to",
+			{"trainer": str(challenge.get("createdBy", _t("common.unknown"))) }
+		),
+		10,
+		UI_MUTED
+	))
+	copy.add_child(_label(
+		_t("ui.guild.aether_clash.expires", {
+			"time": _format_aether_clash_remaining(str(challenge.get("expiresAt", ""))),
+		}),
+		10,
+		UI_WARNING
+	))
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 6)
+	row.add_child(actions)
+	var challenge_id := str(challenge.get("id", ""))
+	if incoming:
+		var accept_button := Button.new()
+		accept_button.name = "AcceptGuildAetherClashButton"
+		_set_localized_property(accept_button, "text", "common.accept")
+		accept_button.disabled = is_aether_clash_action_in_flight
+		accept_button.pressed.connect(
+			_run_aether_clash_action.bind("accept_aether_clash_challenge", challenge_id)
+		)
+		_apply_button_style(accept_button, "primary")
+		actions.add_child(accept_button)
+		var decline_button := Button.new()
+		decline_button.name = "DeclineGuildAetherClashButton"
+		_set_localized_property(decline_button, "text", "common.decline")
+		decline_button.disabled = is_aether_clash_action_in_flight
+		decline_button.pressed.connect(
+			_run_aether_clash_action.bind("decline_aether_clash_challenge", challenge_id)
+		)
+		_apply_button_style(decline_button)
+		actions.add_child(decline_button)
+	else:
+		var cancel_button := Button.new()
+		cancel_button.name = "CancelGuildAetherClashChallengeButton"
+		_set_localized_property(cancel_button, "text", "common.cancel")
+		cancel_button.disabled = is_aether_clash_action_in_flight
+		cancel_button.pressed.connect(
+			_run_aether_clash_action.bind("cancel_aether_clash_challenge", challenge_id)
+		)
+		_apply_button_style(cancel_button)
+		actions.add_child(cancel_button)
+	return panel
+
+
+func _build_aether_clash_message_panel(message: String, color: Color) -> Control:
+	var panel := PanelContainer.new()
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_INPUT, UI_BORDER_INNER, 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 9, 12, 9)
+	panel.add_child(margin)
+	var label := _label(message, 11, color)
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	margin.add_child(label)
+	return panel
+
+
+func _aether_clash_opponent(challenge: Dictionary) -> Dictionary:
+	var own_guild_id := int(membership.get("guildId", 0))
+	var challenger := _dictionary(challenge.get("challengerGuild", {}))
+	var challenged := _dictionary(challenge.get("challengedGuild", {}))
+	return challenged if int(challenger.get("id", 0)) == own_guild_id else challenger
+
+
+func _aether_clash_guild_names(challenge: Dictionary) -> Dictionary:
+	return {
+		"challenger": str(_dictionary(challenge.get("challengerGuild", {})).get(
+			"name", _t("ui.guild.fallback.guild")
+		)),
+		"challenged": str(_dictionary(challenge.get("challengedGuild", {})).get(
+			"name", _t("ui.guild.fallback.guild")
+		)),
+	}
+
+
+func _aether_clash_status_text(status: String) -> String:
+	match status:
+		"entry_open":
+			return _t("ui.guild.aether_clash.status.entry_open")
+		"roster_locked":
+			return _t("ui.guild.aether_clash.status.roster_locked")
+		"active":
+			return _t("ui.guild.aether_clash.status.active")
+		"finishing":
+			return _t("ui.guild.aether_clash.status.finishing")
+		_:
+			return status.replace("_", " ").capitalize()
+
+
+func _refresh_aether_clash_countdown() -> void:
+	if not is_instance_valid(aether_clash_countdown_label):
+		return
+	var current_session := _dictionary(aether_clash_state.get("currentSession", {}))
+	var closes_at := str(current_session.get("entryClosesAt", ""))
+	var remaining := maxi(
+		0,
+		int(_unix_from_iso_datetime(closes_at) - Time.get_unix_time_from_system())
+	)
+	if remaining <= 0:
+		aether_clash_countdown_label.text = _t("ui.guild.aether_clash.entry_closed")
+		return
+	aether_clash_countdown_label.text = _t("ui.guild.aether_clash.entry_countdown", {
+		"time": _format_duration_short(remaining),
+	})
+
+
+func _format_aether_clash_remaining(value: String) -> String:
+	var remaining := maxi(
+		0,
+		int(_unix_from_iso_datetime(value) - Time.get_unix_time_from_system())
+	)
+	return _format_duration_short(remaining)
+
+
+func _format_duration_short(total_seconds: int) -> String:
+	var hours := int(total_seconds / 3600)
+	var minutes := int(total_seconds % 3600 / 60)
+	var seconds := total_seconds % 60
+	if hours > 0:
+		return "%d:%02d:%02d" % [hours, minutes, seconds]
+	return "%02d:%02d" % [minutes, seconds]
 
 
 func _build_guild_progression(guild: Dictionary) -> Control:
@@ -5515,12 +5849,11 @@ func _render_selected_guild() -> void:
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 8)
 	detail_content.add_child(actions)
-	var apply_button := Button.new()
-	apply_button.name = "GuildApplyButton"
 	var recruitment := str(guild.get("recruitment", "Closed"))
-	var is_own_guild := int(membership.get("guildId", 0)) == int(guild.get("id", 0))
-	var pending_application := _pending_application_for_guild(int(guild.get("id", 0)))
-	var application_cooldown := _application_cooldown_for_guild(int(guild.get("id", 0)))
+	var guild_id := int(guild.get("id", 0))
+	var is_own_guild := int(membership.get("guildId", 0)) == guild_id
+	var pending_application := _pending_application_for_guild(guild_id)
+	var application_cooldown := _application_cooldown_for_guild(guild_id)
 	var cooldown_time := (
 		_application_cooldown_time(application_cooldown)
 		if not application_cooldown.is_empty()
@@ -5541,6 +5874,24 @@ func _render_selected_guild() -> void:
 		cooldown_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		cooldown_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		actions.add_child(cooldown_label)
+	if _can_manage_aether_clash() and not is_own_guild:
+		var clash_button := Button.new()
+		clash_button.name = "GuildAetherClashChallengeButton"
+		var outgoing_challenge := _pending_outgoing_aether_clash_for_guild(guild_id)
+		var incoming_challenge := _pending_incoming_aether_clash_for_guild(guild_id)
+		if not outgoing_challenge.is_empty():
+			clash_button.text = _t("ui.guild.aether_clash.cancel_challenge")
+		elif not incoming_challenge.is_empty():
+			clash_button.text = _t("ui.guild.aether_clash.review_challenge")
+		else:
+			clash_button.text = _t("ui.guild.aether_clash.challenge")
+		clash_button.disabled = is_aether_clash_action_in_flight
+		clash_button.custom_minimum_size = Vector2(150, 40)
+		clash_button.pressed.connect(_on_aether_clash_directory_pressed.bind(guild.duplicate(true)))
+		_apply_button_style(clash_button, "secondary")
+		actions.add_child(clash_button)
+	var apply_button := Button.new()
+	apply_button.name = "GuildApplyButton"
 	if is_own_guild:
 		apply_button.text = _t("ui.guild.yours")
 	elif not membership.is_empty():
@@ -5562,6 +5913,34 @@ func _render_selected_guild() -> void:
 	apply_button.pressed.connect(_on_application_pressed.bind(guild))
 	_apply_button_style(apply_button, "" if not pending_application.is_empty() else "primary")
 	actions.add_child(apply_button)
+
+
+func _can_manage_aether_clash() -> bool:
+	var permissions := _array_from_value(membership.get("permissions", []))
+	return (
+		permissions.has("challenge_aether_clash")
+		or str(membership.get("role", "")).to_lower() in ["leader", "captain"]
+	)
+
+
+func _pending_outgoing_aether_clash_for_guild(guild_id: int) -> Dictionary:
+	for value: Variant in _array_from_value(aether_clash_state.get("pendingOutgoing", [])):
+		if not value is Dictionary:
+			continue
+		var challenge := value as Dictionary
+		if int(_dictionary(challenge.get("challengedGuild", {})).get("id", 0)) == guild_id:
+			return challenge
+	return {}
+
+
+func _pending_incoming_aether_clash_for_guild(guild_id: int) -> Dictionary:
+	for value: Variant in _array_from_value(aether_clash_state.get("pendingIncoming", [])):
+		if not value is Dictionary:
+			continue
+		var challenge := value as Dictionary
+		if int(_dictionary(challenge.get("challengerGuild", {})).get("id", 0)) == guild_id:
+			return challenge
+	return {}
 
 
 func _guild_requirements(guild: Dictionary) -> Array[Dictionary]:
@@ -5862,6 +6241,134 @@ func _on_application_pressed(guild: Dictionary) -> void:
 			_confirm_guild_application(guild)
 
 
+func _on_aether_clash_directory_pressed(guild: Dictionary) -> void:
+	if is_aether_clash_action_in_flight or not _can_manage_aether_clash():
+		return
+	var guild_id := int(guild.get("id", 0))
+	var outgoing := _pending_outgoing_aether_clash_for_guild(guild_id)
+	if not outgoing.is_empty():
+		await _run_aether_clash_action(
+			"cancel_aether_clash_challenge",
+			str(outgoing.get("id", ""))
+		)
+		return
+	if not _pending_incoming_aether_clash_for_guild(guild_id).is_empty():
+		_show_guild_section("aether_clash")
+		return
+	_confirm_aether_clash_challenge(guild)
+
+
+func _confirm_aether_clash_challenge(guild: Dictionary) -> void:
+	var guild_id := int(guild.get("id", 0))
+	if guild_id <= 0:
+		return
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "GuildAetherClashChallengeDialog"
+	dialog.title = _t("ui.guild.aether_clash.challenge_title")
+	dialog.dialog_text = _t("ui.guild.aether_clash.challenge_confirm", {
+		"guild": str(guild.get("name", _t("ui.guild.fallback.guild"))),
+	})
+	dialog.ok_button_text = _t("ui.guild.aether_clash.challenge")
+	dialog.cancel_button_text = _t("common.cancel")
+	_apply_guild_confirmation_style(dialog, "primary")
+	add_child(dialog)
+	dialog.confirmed.connect(_create_aether_clash_challenge.bind(guild_id), CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(500, 220))
+
+
+func _create_aether_clash_challenge(guild_id: int) -> void:
+	if is_aether_clash_action_in_flight:
+		return
+	is_aether_clash_action_in_flight = true
+	_render_guild_list()
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		is_aether_clash_action_in_flight = false
+		_set_aether_clash_feedback(_t("ui.guild.error.service_unavailable"), true)
+		_render_guild_list()
+		return
+	var result := _dictionary(await guild_service.call(
+		"create_aether_clash_challenge",
+		guild_id
+	))
+	is_aether_clash_action_in_flight = false
+	if not bool(result.get("success", false)):
+		_set_aether_clash_feedback(str(result.get(
+			"error", _t("ui.guild.aether_clash.action_error")
+		)), true)
+		_render_guild_list()
+		return
+	await _refresh_aether_clash_from_server()
+	_set_aether_clash_feedback(_t("ui.guild.aether_clash.challenge_sent"), false)
+
+
+func _confirm_aether_clash_cancel(challenge: Dictionary) -> void:
+	var opponent := _aether_clash_opponent(challenge)
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "CancelCurrentGuildAetherClashDialog"
+	dialog.title = _t("ui.guild.aether_clash.cancel_clash_title")
+	dialog.dialog_text = _t("ui.guild.aether_clash.cancel_clash_confirm", {
+		"guild": str(opponent.get("name", _t("ui.guild.fallback.guild"))),
+	})
+	dialog.ok_button_text = _t("ui.guild.aether_clash.cancel_clash")
+	dialog.cancel_button_text = _t("common.cancel")
+	_apply_guild_confirmation_style(dialog, "danger")
+	add_child(dialog)
+	dialog.confirmed.connect(
+		_run_aether_clash_action.bind(
+			"cancel_aether_clash_challenge",
+			str(challenge.get("id", ""))
+		),
+		CONNECT_ONE_SHOT
+	)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(520, 230))
+
+
+func _run_aether_clash_action(method_name: String, challenge_id: String) -> void:
+	if is_aether_clash_action_in_flight or challenge_id.strip_edges() == "":
+		return
+	is_aether_clash_action_in_flight = true
+	_render_guild_home()
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		is_aether_clash_action_in_flight = false
+		_set_aether_clash_feedback(_t("ui.guild.error.service_unavailable"), true)
+		_render_guild_home()
+		return
+	var result := _dictionary(await guild_service.call(method_name, challenge_id))
+	is_aether_clash_action_in_flight = false
+	if not bool(result.get("success", false)):
+		_set_aether_clash_feedback(str(result.get(
+			"error", _t("ui.guild.aether_clash.action_error")
+		)), true)
+		_render_guild_home()
+		_render_guild_list()
+		return
+	await _refresh_aether_clash_from_server()
+	var success_key := "ui.guild.aether_clash.challenge_cancelled"
+	if method_name == "accept_aether_clash_challenge":
+		success_key = "ui.guild.aether_clash.challenge_accepted"
+		_show_guild_section("aether_clash")
+	elif method_name == "decline_aether_clash_challenge":
+		success_key = "ui.guild.aether_clash.challenge_declined"
+	_set_aether_clash_feedback(_t(success_key), false)
+
+
+func _set_aether_clash_feedback(message: String, is_error: bool) -> void:
+	_set_member_status(message, is_error)
+	if active_page == "browse" and browse_status_label != null:
+		browse_status_label.text = message
+		browse_status_label.add_theme_color_override(
+			"font_color",
+			Color("#ff8e94") if is_error else UI_SUCCESS
+		)
+		browse_status_label.visible = true
+
+
 func _confirm_guild_application(guild: Dictionary) -> void:
 	var requirements := _guild_requirements(guild)
 	if requirements.is_empty():
@@ -6089,10 +6596,12 @@ func _refresh_from_server() -> void:
 	browse_status_label.visible = false
 	if not membership.is_empty():
 		await _refresh_home_from_server()
+		await _refresh_aether_clash_from_server()
 		if visible and not has_explicit_page_selection:
 			_show_page("member")
 	else:
 		guild_home.clear()
+		aether_clash_state.clear()
 		_render_guild_home()
 
 
@@ -6112,6 +6621,25 @@ func _refresh_home_from_server() -> void:
 		_set_member_status(str(result.get("error", _t("ui.guild.error.load_home"))), true)
 		return
 	_apply_home_result(result)
+
+
+func _refresh_aether_clash_from_server() -> void:
+	if membership.is_empty():
+		aether_clash_state.clear()
+		return
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		return
+	var result := _dictionary(await guild_service.call("load_aether_clash_challenges"))
+	if not bool(result.get("success", false)):
+		if active_guild_section == "aether_clash":
+			_set_member_status(str(result.get(
+				"error", _t("ui.guild.aether_clash.load_error")
+			)), true)
+		return
+	aether_clash_state = result.duplicate(true)
+	_render_guild_home()
+	_render_guild_list()
 
 
 func _apply_home_result(result: Dictionary) -> void:
