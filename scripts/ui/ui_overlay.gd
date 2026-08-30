@@ -1486,6 +1486,13 @@ var aether_clash_challenge_queue: Array[String] = []
 var active_aether_clash_challenge: Dictionary = {}
 var aether_clash_challenge_loading := false
 var aether_clash_challenge_action_in_flight := false
+var aether_clash_entry_callout: PanelContainer
+var aether_clash_entry_title_label: Label
+var aether_clash_entry_countdown_label: Label
+var aether_clash_entry_hint_label: Label
+var aether_clash_entry_session: Dictionary = {}
+var aether_clash_entry_request_active := false
+var aether_clash_entry_refresh_pending := false
 var staff_tools_visibility_key := ""
 var reward_notification_stack: VBoxContainer
 var reward_notification_event_sequence := 0
@@ -2643,6 +2650,7 @@ func _setup_pc_ui() -> void:
 	_build_pc_box_selector_panel()
 
 	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margin.add_theme_constant_override("margin_left", 16)
 	margin.add_theme_constant_override("margin_top", 15)
 	margin.add_theme_constant_override("margin_right", 16)
@@ -11184,6 +11192,7 @@ func _setup_status_docks() -> void:
 	global_heal_requests_toggle.toggled.connect(_on_global_heal_requests_toggled)
 	_setup_global_heal_request_dialog()
 	_setup_aether_clash_challenge_dialog()
+	_setup_aether_clash_entry_callout()
 	_set_localized_control_property(personal_buffs_empty_label, "text", "ui.buff.none")
 	_set_localized_control_property(global_buff_details_close_button, "tooltip_text", "common.close")
 	var contribution_hint := global_buff_donation_section.get_node_or_null("HintLabel") as Label
@@ -12197,6 +12206,148 @@ func _setup_aether_clash_challenge_dialog() -> void:
 	add_child(timer)
 
 
+func _setup_aether_clash_entry_callout() -> void:
+	if aether_clash_entry_callout != null:
+		return
+	aether_clash_entry_callout = PanelContainer.new()
+	aether_clash_entry_callout.name = "AetherClashEntryCallout"
+	aether_clash_entry_callout.visible = false
+	aether_clash_entry_callout.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	aether_clash_entry_callout.z_index = 3500
+	aether_clash_entry_callout.anchor_left = 0.5
+	aether_clash_entry_callout.anchor_right = 0.5
+	aether_clash_entry_callout.offset_left = -330.0
+	aether_clash_entry_callout.offset_top = 76.0
+	aether_clash_entry_callout.offset_right = 330.0
+	aether_clash_entry_callout.offset_bottom = 190.0
+	var panel_style := StyleBoxFlat.new()
+	panel_style.bg_color = Color("07101cf2")
+	panel_style.border_color = Color("69d8e7")
+	panel_style.set_border_width_all(2)
+	panel_style.set_corner_radius_all(12)
+	panel_style.shadow_color = Color(0, 0, 0, 0.48)
+	panel_style.shadow_size = 10
+	panel_style.shadow_offset = Vector2(0, 4)
+	aether_clash_entry_callout.add_theme_stylebox_override("panel", panel_style)
+	root_control.add_child(aether_clash_entry_callout)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 18)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 18)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	aether_clash_entry_callout.add_child(margin)
+	var content := VBoxContainer.new()
+	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content.add_theme_constant_override("separation", 4)
+	margin.add_child(content)
+	aether_clash_entry_title_label = Label.new()
+	aether_clash_entry_title_label.name = "AetherClashEntryTitle"
+	aether_clash_entry_title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	aether_clash_entry_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	aether_clash_entry_title_label.add_theme_color_override("font_color", Color("eef8ff"))
+	aether_clash_entry_title_label.add_theme_font_size_override("font_size", 16)
+	content.add_child(aether_clash_entry_title_label)
+	aether_clash_entry_countdown_label = Label.new()
+	aether_clash_entry_countdown_label.name = "AetherClashEntryCountdown"
+	aether_clash_entry_countdown_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	aether_clash_entry_countdown_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	aether_clash_entry_countdown_label.add_theme_color_override("font_color", Color("f2c66d"))
+	aether_clash_entry_countdown_label.add_theme_font_size_override("font_size", 20)
+	content.add_child(aether_clash_entry_countdown_label)
+	aether_clash_entry_hint_label = Label.new()
+	aether_clash_entry_hint_label.name = "AetherClashEntryHint"
+	aether_clash_entry_hint_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	aether_clash_entry_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	aether_clash_entry_hint_label.add_theme_color_override("font_color", Color("9eb3c5"))
+	aether_clash_entry_hint_label.add_theme_font_size_override("font_size", 12)
+	aether_clash_entry_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(aether_clash_entry_hint_label)
+
+	var timer := Timer.new()
+	timer.name = "AetherClashEntryCalloutTimer"
+	timer.wait_time = 0.25
+	timer.autostart = true
+	timer.timeout.connect(_refresh_aether_clash_entry_callout)
+	add_child(timer)
+	_refresh_aether_clash_entry_callout_from_server.call_deferred()
+
+
+func _set_aether_clash_entry_callout(session: Dictionary) -> void:
+	if (
+		str(session.get("status", "")) != "entry_open"
+		or str(session.get("entryClosesAt", "")).strip_edges().is_empty()
+	):
+		_clear_aether_clash_entry_callout()
+		return
+	aether_clash_entry_session = session.duplicate(true)
+	_refresh_aether_clash_entry_callout()
+
+
+func _refresh_aether_clash_entry_callout_from_server() -> void:
+	if aether_clash_entry_request_active:
+		aether_clash_entry_refresh_pending = true
+		return
+	if not AuthService.is_authenticated():
+		return
+	aether_clash_entry_request_active = true
+	var result: Dictionary = await GuildService.load_aether_clash_challenges()
+	aether_clash_entry_request_active = false
+	if bool(result.get("success", false)):
+		_set_aether_clash_entry_callout(_dictionary_from_value(result.get("currentSession", {})))
+	if aether_clash_entry_refresh_pending:
+		aether_clash_entry_refresh_pending = false
+		_refresh_aether_clash_entry_callout_from_server.call_deferred()
+
+
+func _refresh_aether_clash_entry_callout() -> void:
+	if aether_clash_entry_callout == null or aether_clash_entry_session.is_empty():
+		return
+	if _is_in_aether_clash_duel():
+		_clear_aether_clash_entry_callout()
+		return
+	var expires_at := str(aether_clash_entry_session.get("entryClosesAt", ""))
+	var remaining := maxi(
+		0,
+		int(ceil(
+			_pvp_iso_timestamp_to_unix_time(expires_at.replace("+00:00", "Z"))
+			- Time.get_unix_time_from_system()
+		))
+	)
+	if remaining <= 0:
+		_clear_aether_clash_entry_callout()
+		return
+	var challenger := _dictionary_from_value(aether_clash_entry_session.get("challengerGuild", {}))
+	var challenged := _dictionary_from_value(aether_clash_entry_session.get("challengedGuild", {}))
+	aether_clash_entry_title_label.text = LocalizationManager.text(
+		"ui.aether_clash.entry_callout.title",
+		{
+			"challenger": str(challenger.get("name", LocalizationManager.text("ui.guild.fallback.guild"))),
+			"challenged": str(challenged.get("name", LocalizationManager.text("ui.guild.fallback.guild"))),
+		}
+	)
+	aether_clash_entry_countdown_label.text = LocalizationManager.text(
+		"ui.aether_clash.entry_callout.countdown",
+		{"time": "%02d:%02d" % [int(remaining / 60), remaining % 60]}
+	)
+	aether_clash_entry_hint_label.text = LocalizationManager.text(
+		"ui.aether_clash.entry_callout.hint"
+	)
+	aether_clash_entry_callout.visible = true
+
+
+func _clear_aether_clash_entry_callout(challenge_id := "") -> void:
+	var normalized_id := str(challenge_id).strip_edges()
+	if (
+		not normalized_id.is_empty()
+		and str(aether_clash_entry_session.get("id", "")) != normalized_id
+	):
+		return
+	aether_clash_entry_session.clear()
+	if aether_clash_entry_callout != null:
+		aether_clash_entry_callout.visible = false
+
+
 func _queue_aether_clash_challenge(notification: Dictionary) -> void:
 	var challenge_id := str(notification.get("aetherClashSessionId", "")).strip_edges()
 	if challenge_id == "":
@@ -12335,6 +12486,7 @@ func _resolve_aether_clash_challenge(method_name: String) -> void:
 	aether_clash_challenge_queue.erase(challenge_id)
 	if method_name == "accept_aether_clash_challenge":
 		aether_clash_challenge_queue.clear()
+		_set_aether_clash_entry_callout(_dictionary_from_value(result.get("challenge", {})))
 	_refresh_after_aether_clash_notification.call_deferred()
 	_try_show_next_aether_clash_challenge.call_deferred()
 
@@ -42657,6 +42809,20 @@ func _on_guild_notification_received(notification: Dictionary) -> void:
 	}))
 	if kind == "aether_clash_received":
 		_queue_aether_clash_challenge(notification)
+	elif kind == "aether_clash_accepted":
+		aether_clash_challenge_queue.clear()
+		active_aether_clash_challenge.clear()
+		if aether_clash_challenge_dialog != null:
+			aether_clash_challenge_dialog.hide_dialog()
+		_refresh_aether_clash_entry_callout_from_server.call_deferred()
+	elif kind == "aether_clash_cancelled":
+		var challenge_id := str(notification.get("aetherClashSessionId", "")).strip_edges()
+		aether_clash_challenge_queue.erase(challenge_id)
+		if str(active_aether_clash_challenge.get("id", "")) == challenge_id:
+			active_aether_clash_challenge.clear()
+			if aether_clash_challenge_dialog != null:
+				aether_clash_challenge_dialog.hide_dialog()
+		_clear_aether_clash_entry_callout(challenge_id)
 	if kind == "guild_member_kicked":
 		_refresh_after_guild_membership_notification.call_deferred()
 	elif kind.begins_with("aether_clash_"):
