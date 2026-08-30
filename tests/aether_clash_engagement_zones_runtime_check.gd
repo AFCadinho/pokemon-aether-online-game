@@ -154,17 +154,17 @@ func _run() -> void:
 	_check(projectile_target == 2, "Projectile paths target the same enemy engagement circle")
 	_check(contact["count"] == 3 and contact["method"] == "projectile", "Projectile contact uses the shared engagement request")
 
-	var discovered_payload := _payload("active", "red", [1, 2], [2])
-	duel.call("_apply_arena_state", discovered_payload)
+	var stale_discovery_payload := _payload("active", "red", [1, 2], [2])
+	duel.call("_apply_arena_state", stale_discovery_payload)
 	_check(
 		remote_actor.gameplay_nameplate_visible
-		and not remote_actor.gameplay_identity_masked
-		and remote_actor.displayed_name == "Opponent"
-		and remote_actor.role_badge_visible,
-		"A battled enemy identity becomes visible for the viewer's Guild"
+		and remote_actor.gameplay_identity_masked
+		and remote_actor.displayed_name == "???"
+		and not remote_actor.role_badge_visible,
+		"A battled enemy remains anonymous in the overworld even with stale discovery data"
 	)
-	_check(bool(duel.call("can_view_overworld_identity", 2)), "Discovered enemies regain overworld trainer interactions")
-	var neutral_payload := discovered_payload.duplicate(true)
+	_check(not bool(duel.call("can_view_overworld_identity", 2)), "Battle discovery never restores overworld identity interactions")
+	var neutral_payload := stale_discovery_payload.duplicate(true)
 	neutral_payload["viewerRole"] = "spectator"
 	neutral_payload["viewerSide"] = ""
 	neutral_payload["identifiedEnemyUserIds"] = []
@@ -177,7 +177,7 @@ func _run() -> void:
 		and remote_actor.guild_emblem_visible,
 		"A public spectator sees Guild emblems but no undiscovered Trainer identity"
 	)
-	duel.call("_apply_arena_state", discovered_payload)
+	duel.call("_apply_arena_state", stale_discovery_payload)
 
 	_check(
 		bool(duel.call(

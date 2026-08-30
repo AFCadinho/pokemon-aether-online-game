@@ -70,8 +70,10 @@ func _run() -> void:
 	root.add_child(local_actor)
 	var remote_blue := _remote_actor(2, Vector2(1200, 2200))
 	var remote_red := _remote_actor(3, Vector2(1300, 2200))
+	var remote_jail_spectator := _remote_actor(4, Vector2(2288, 2416))
 	root.add_child(remote_blue)
 	root.add_child(remote_red)
+	root.add_child(remote_jail_spectator)
 	var overlay := FakeOverlay.new()
 	overlay.add_to_group("ui_overlay")
 	root.add_child(overlay)
@@ -86,6 +88,27 @@ func _run() -> void:
 	)
 
 	duel.call("_apply_arena_state", _spectator_payload())
+	var jail_engagement_requests := {"count": 0}
+	duel.engagement_contact_requested.connect(func(_source: int, _target: int, _method: String) -> void:
+		jail_engagement_requests["count"] = int(jail_engagement_requests["count"]) + 1
+	)
+	_check(
+		bool(duel.call(
+			"is_world_actor_step_blocked",
+			Vector2(2224, 2416),
+			Vector2(2256, 2416)
+		)),
+		"Jail spectators physically block each other's movement"
+	)
+	_check(
+		not bool(duel.call(
+			"is_world_actor_step_blocked",
+			Vector2(2224, 2416),
+			Vector2(2192, 2416)
+		)),
+		"An overlapping jail spectator can still move away"
+	)
+	_check(jail_engagement_requests["count"] == 0, "Jail collision never starts an engagement")
 	var blue_indicator := remote_blue.get_node_or_null("AetherClashBattleIndicator")
 	var red_indicator := remote_red.get_node_or_null("AetherClashBattleIndicator")
 	_check(blue_indicator != null and red_indicator != null, "Every engaged player receives a rotating battle indicator")
@@ -99,9 +122,21 @@ func _run() -> void:
 	var orb_result: Dictionary = duel.call("request_spectator_orb", local_actor, upper_orb)
 	_check(bool(orb_result.get("success", false)), "A jail spectator can activate the orb")
 	var spectator_camera := duel.get_node("SpectatorCamera") as Camera2D
+	var spectator_hud := duel.get_node("SpectatorCameraHud")
 	var player_camera := local_actor.get_node("Camera2D") as Camera2D
 	_check(spectator_camera.enabled and not player_camera.enabled, "The free camera takes over without moving the jailed player")
-	_check(duel.get_node("SpectatorCameraHud").visible, "Aether View shows its movement and return controls")
+	_check(spectator_hud.visible, "Aether View shows its movement and return controls")
+	_check(spectator_camera.zoom.is_equal_approx(Vector2(0.75, 0.75)), "Aether View starts with a wider arena overview")
+	var zoom_slider := spectator_hud.get_node_or_null("Root/Panel/Margin/Content/Copy/ZoomRow/Slider") as HSlider
+	var return_button := spectator_hud.get_node_or_null("Root/Panel/Margin/Content/ReturnButton") as Button
+	var navigation_grid := spectator_hud.get_node_or_null("Root/Panel/Margin/Content/Navigation/Grid") as GridContainer
+	_check(zoom_slider != null and is_equal_approx(float(zoom_slider.value), 0.75), "A styled zoom slider mirrors the spectator camera")
+	_check(navigation_grid != null and navigation_grid.get_child_count() == 9, "Aether View offers all nine arena region shortcuts")
+	_check(
+		return_button != null
+		and return_button.get_theme_stylebox("normal") != return_button.get_theme_stylebox("hover"),
+		"Return to Jail has a distinct hover state"
+	)
 	_check(bool(root.get_node("GameState").call("is_overworld_input_locked")), "Aether View locks character movement")
 	_check(
 		int(spectator_camera.limit_left) == 0
@@ -114,12 +149,48 @@ func _run() -> void:
 		duel.call("_clamp_spectator_camera_position", Vector2(-200, 9000)) == Vector2(0, 5120),
 		"Free-camera movement cannot escape the arena bounds"
 	)
+	var north_west_button := navigation_grid.get_node_or_null("NorthWest") as Button
+	north_west_button.emit_signal("pressed")
+	_check(
+		spectator_camera.global_position.is_equal_approx(Vector2(435.2, 870.4)),
+		"Region buttons move the Aether viewport to the requested arena section"
+	)
+	zoom_slider.value = 1.1
+	_check(
+		spectator_camera.zoom.is_equal_approx(Vector2(1.1, 1.1))
+		and is_equal_approx(float(zoom_slider.value), 1.1),
+		"The zoom slider and camera stay synchronized"
+	)
+	var before_drag := spectator_camera.global_position
+	var mouse_press := InputEventMouseButton.new()
+	mouse_press.button_index = MOUSE_BUTTON_LEFT
+	mouse_press.pressed = true
+	duel.call("_unhandled_input", mouse_press)
+	var mouse_drag := InputEventMouseMotion.new()
+	mouse_drag.relative = Vector2(55, 30)
+	duel.call("_unhandled_input", mouse_drag)
+	_check(
+		spectator_camera.global_position.is_equal_approx(
+			before_drag - mouse_drag.relative / spectator_camera.zoom.x
+		),
+		"Holding the left mouse button and dragging pans the Aether viewport"
+	)
+	var before_touch_drag := spectator_camera.global_position
+	var touch_drag := InputEventScreenDrag.new()
+	touch_drag.relative = Vector2(-22, 11)
+	duel.call("_unhandled_input", touch_drag)
+	_check(
+		spectator_camera.global_position.is_equal_approx(
+			before_touch_drag - touch_drag.relative / spectator_camera.zoom.x
+		),
+		"Touch dragging uses the same mobile-friendly camera movement"
+	)
 	blue_indicator = remote_blue.get_node_or_null("AetherClashBattleIndicator")
 	_check(blue_indicator != null and bool(blue_indicator.get("clickable")), "Master Balls become clickable for an active jail spectator")
 	await duel.call("_on_battle_indicator_spectate_requested", 2, "ACROOM123")
 	_check(overlay.requested_room_codes == ["ACROOM123"], "Clicking a Master Ball opens the existing PvP spectator flow")
 
-	duel.call("_deactivate_spectator_camera")
+	return_button.emit_signal("pressed")
 	_check(not spectator_camera.enabled and player_camera.enabled, "Returning to jail restores the player camera")
 	_check(not duel.get_node("SpectatorCameraHud").visible, "Returning to jail closes the Aether View controls")
 	_check(not bool(root.get_node("GameState").call("is_overworld_input_locked")), "Returning to jail restores overworld input")
@@ -168,6 +239,7 @@ func _run() -> void:
 	local_actor.queue_free()
 	remote_blue.queue_free()
 	remote_red.queue_free()
+	remote_jail_spectator.queue_free()
 	overlay.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
