@@ -11,7 +11,7 @@
 - Guild Leaders and Captains can now right-click another Trainer to challenge that Trainer's Guild to an Aether Clash.
 - Incoming Aether Clash challenges now open a direct accept-or-decline popup with a live response countdown.
 - Guild Duel arenas now show both Guilds' live player counts and a synchronized start countdown behind a temporary center barrier.
-- Guild Duel arenas now mark each Guild's staging and exit zone and show engagement circles around active players. Friendly circles block movement, while enemy contact is reserved for battle engagement.
+- Guild Duel arenas now mark each Guild's staging and exit zone and show engagement circles around active players. Friendly circles block movement, while enemy circles automatically start a PvP battle without an accept popup.
 
 **Changed**
 

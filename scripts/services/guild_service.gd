@@ -412,6 +412,32 @@ func load_aether_clash_arena_state(challenge_id: String) -> Dictionary:
 	}
 
 
+func create_aether_clash_engagement(
+	challenge_id: String,
+	target_user_id: int,
+	method: String = "player_contact"
+) -> Dictionary:
+	var normalized_id := challenge_id.strip_edges()
+	var normalized_method := method.strip_edges().to_lower()
+	if normalized_id.is_empty() or target_user_id <= 0:
+		return {"success": false, "error": "Aether Clash engagement was missing."}
+	if normalized_method not in ["player_contact", "projectile"]:
+		normalized_method = "player_contact"
+	var response := await _authenticated_request(
+		AETHER_CLASH_SESSIONS_ENDPOINT + "/%s/engagements" % normalized_id.uri_encode(),
+		HTTPClient.METHOD_POST,
+		JSON.stringify({
+			"targetUserId": target_user_id,
+			"method": normalized_method,
+		})
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var engagement := _dictionary(response.get("body", {})).duplicate(true)
+	engagement["success"] = true
+	return engagement
+
+
 func leave_aether_clash_arena(challenge_id: String) -> Dictionary:
 	var normalized_id := challenge_id.strip_edges()
 	if normalized_id.is_empty():

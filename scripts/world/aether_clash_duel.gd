@@ -30,6 +30,8 @@ var arena_state_timer: Timer
 var viewer_role := "spectator"
 var viewer_side := ""
 var arena_players: Dictionary = {}
+var engaged_player_ids: Dictionary = {}
+var engagement_requests_in_flight: Dictionary = {}
 var engagement_sync_elapsed := 0.0
 var last_engagement_contact_msec: Dictionary = {}
 var staging_ejection_deadline_msec := 0
@@ -39,6 +41,9 @@ var leave_request_active := false
 
 func _ready() -> void:
 	add_to_group("aether_clash_duel_controller")
+	engagement_contact_requested.connect(_on_engagement_contact_requested)
+	if not ChatRealtimeService.message_received.is_connected(_on_realtime_message_received):
+		ChatRealtimeService.message_received.connect(_on_realtime_message_received)
 	arena_state_timer = Timer.new()
 	arena_state_timer.name = "ArenaStateRefreshTimer"
 	arena_state_timer.wait_time = ARENA_STATE_REFRESH_SECONDS
@@ -77,6 +82,8 @@ func configure_aether_clash_instance(instance_map_id: String) -> void:
 	instance_session_id = session_id
 	arena_session.clear()
 	arena_players.clear()
+	engaged_player_ids.clear()
+	engagement_requests_in_flight.clear()
 	viewer_role = "spectator"
 	viewer_side = ""
 	has_received_arena_state = false
@@ -139,7 +146,11 @@ func is_world_actor_step_blocked(from_position: Vector2, to_position: Vector2) -
 		if from_distance <= ENGAGEMENT_CONTACT_DISTANCE and to_distance > from_distance:
 			continue
 		var other_side := str(arena_players.get(user_id, ""))
-		if other_side != viewer_side:
+		if (
+			other_side != viewer_side
+			and not engaged_player_ids.has(local_user_id)
+			and not engaged_player_ids.has(user_id)
+		):
 			_emit_engagement_contact(local_user_id, user_id, "player_contact")
 		return true
 	return false
@@ -157,7 +168,12 @@ func request_projectile_engagement(
 	var nearest_progress := INF
 	for user_id_value: Variant in arena_players.keys():
 		var user_id := int(user_id_value)
-		if user_id == source_user_id or str(arena_players.get(user_id, "")) == source_side:
+		if (
+			user_id == source_user_id
+			or str(arena_players.get(user_id, "")) == source_side
+			or engaged_player_ids.has(source_user_id)
+			or engaged_player_ids.has(user_id)
+		):
 			continue
 		var actor := _actor_for_user_id(user_id)
 		if actor == null:
@@ -215,8 +231,10 @@ func _apply_arena_state(payload: Dictionary) -> void:
 
 func _apply_arena_players(value: Variant) -> void:
 	arena_players.clear()
+	engaged_player_ids.clear()
 	if not value is Array:
 		return
+	var resumable_engagement: Dictionary = {}
 	for player_value: Variant in value:
 		if not player_value is Dictionary:
 			continue
@@ -225,6 +243,20 @@ func _apply_arena_players(value: Variant) -> void:
 		var side := str(player_state.get("side", ""))
 		if user_id > 0 and side in ["blue", "red"]:
 			arena_players[user_id] = side
+			var engagement_value: Variant = player_state.get("engagementId")
+			var engagement_id := str(engagement_value).strip_edges() if engagement_value != null else ""
+			if not engagement_id.is_empty():
+				engaged_player_ids[user_id] = engagement_id
+				var match_value: Variant = player_state.get("engagementMatchId")
+				var match_id := str(match_value).strip_edges() if match_value != null else ""
+				if user_id == _local_user_id() and not match_id.is_empty():
+					resumable_engagement = {
+						"id": engagement_id,
+						"matchId": match_id,
+						"sourceUserId": user_id,
+					}
+	if not resumable_engagement.is_empty():
+		_begin_engagement_battle.call_deferred(resumable_engagement)
 
 
 func _sync_engagement_rings() -> void:
@@ -410,6 +442,82 @@ func _leave_failed(message: String) -> void:
 
 func _show_system_message(message: String) -> void:
 	get_tree().call_group("ui_overlay", "add_system_message", message)
+
+
+func _on_engagement_contact_requested(
+	source_user_id: int,
+	target_user_id: int,
+	method: String
+) -> void:
+	if (
+		instance_session_id.is_empty()
+		or source_user_id != _local_user_id()
+		or engaged_player_ids.has(source_user_id)
+		or engaged_player_ids.has(target_user_id)
+	):
+		return
+	var pair_key := "%d:%d" % [mini(source_user_id, target_user_id), maxi(source_user_id, target_user_id)]
+	if engagement_requests_in_flight.has(pair_key):
+		return
+	engagement_requests_in_flight[pair_key] = true
+	var result: Dictionary = await GuildService.create_aether_clash_engagement(
+		instance_session_id,
+		target_user_id,
+		method
+	)
+	engagement_requests_in_flight.erase(pair_key)
+	if not bool(result.get("success", false)):
+		_refresh_arena_state.call_deferred()
+		var error_code := _response_error_code(result)
+		if error_code not in [
+			"aether_clash_contact_out_of_range",
+			"aether_clash_player_engaged",
+			"aether_clash_player_unavailable",
+			"aether_clash_player_not_in_arena",
+		]:
+			_show_system_message(str(result.get("error", "The Aether Clash battle could not start.")))
+		return
+	await _begin_engagement_battle(result)
+
+
+func _on_realtime_message_received(message: Dictionary) -> void:
+	if str(message.get("type", "")).strip_edges().to_lower() != "aether_clash.engagement.started":
+		return
+	var engagement := _dictionary(message.get("engagement", {})).duplicate(true)
+	if str(engagement.get("sessionId", "")).strip_edges() != instance_session_id:
+		return
+	await _begin_engagement_battle(engagement)
+
+
+func _begin_engagement_battle(engagement: Dictionary) -> void:
+	var engagement_id := str(engagement.get("id", "")).strip_edges()
+	var match_id := str(engagement.get("matchId", "")).strip_edges()
+	var source_user_id := int(engagement.get("sourceUserId", 0))
+	var target_user_id := int(engagement.get("targetUserId", 0))
+	if engagement_id.is_empty() or match_id.is_empty():
+		return
+	if source_user_id <= 0 and target_user_id <= 0:
+		return
+	if _local_user_id() not in [source_user_id, target_user_id]:
+		return
+	if source_user_id > 0:
+		engaged_player_ids[source_user_id] = engagement_id
+	if target_user_id > 0:
+		engaged_player_ids[target_user_id] = engagement_id
+	for overlay_value: Variant in get_tree().get_nodes_in_group("ui_overlay"):
+		var overlay := overlay_value as Node
+		if overlay != null and overlay.has_method("start_aether_clash_pvp_match"):
+			await overlay.call("start_aether_clash_pvp_match", match_id, engagement_id)
+			return
+	_show_system_message("The Aether Clash battle interface is unavailable.")
+
+
+func _response_error_code(response: Dictionary) -> String:
+	var body := _dictionary(response.get("body", {}))
+	var detail: Variant = body.get("detail", {})
+	if detail is Dictionary:
+		return str((detail as Dictionary).get("code", "")).strip_edges().to_lower()
+	return str(body.get("code", "")).strip_edges().to_lower()
 
 
 func _emit_engagement_contact(source_user_id: int, target_user_id: int, method: String) -> void:
