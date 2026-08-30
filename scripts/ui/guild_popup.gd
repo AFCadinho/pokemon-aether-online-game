@@ -159,6 +159,7 @@ var is_application_action_in_flight := false
 var is_aether_clash_action_in_flight := false
 var is_leaving_guild := false
 var directory_request_generation := 0
+var has_resolved_initial_membership := false
 var has_explicit_page_selection := false
 var active_guild_section := "overview"
 var active_management_section := "profile"
@@ -186,6 +187,9 @@ var primary_navigation_spacer: Control
 var browse_page: Control
 var member_page: Control
 var create_page: Control
+var initial_loading_page: Control
+var initial_loading_status_label: Label
+var initial_loading_retry_button: Button
 var search_input: LineEdit
 var guild_list: VBoxContainer
 var guild_count_label: Label
@@ -266,13 +270,22 @@ func _ready() -> void:
 
 
 func open() -> void:
-	visible = true
 	has_explicit_page_selection = false
 	_center_in_viewport()
 	_clamp_to_viewport()
 	_refresh_creation_requirements()
 	_render_guild_list()
-	_show_page("member" if not membership.is_empty() else "browse")
+	var needs_initial_membership := (
+		not is_debug_preview
+		and not has_resolved_initial_membership
+		and membership.is_empty()
+	)
+	if needs_initial_membership:
+		_prepare_initial_guild_loading()
+	else:
+		_set_initial_guild_loading(false)
+		_show_page("member" if not membership.is_empty() else "browse")
+	visible = true
 	if not is_debug_preview:
 		call_deferred("_refresh_from_server")
 
@@ -573,7 +586,95 @@ func _build_ui() -> void:
 	create_page = _build_create_page()
 	create_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	pages.add_child(create_page)
+	initial_loading_page = _build_initial_guild_loading_page()
+	initial_loading_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	pages.add_child(initial_loading_page)
 	_show_page("browse")
+	initial_loading_page.visible = false
+
+
+func _build_initial_guild_loading_page() -> Control:
+	var center := CenterContainer.new()
+	center.name = "GuildInitialLoadingPage"
+	center.mouse_filter = Control.MOUSE_FILTER_STOP
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(440, 176)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#091927f2"), Color(UI_ACCENT.r, UI_ACCENT.g, UI_ACCENT.b, 0.48), 10, 1)
+	)
+	center.add_child(panel)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 24, 20, 24, 20)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.alignment = BoxContainer.ALIGNMENT_CENTER
+	content.add_theme_constant_override("separation", 9)
+	margin.add_child(content)
+	var icon_center := CenterContainer.new()
+	icon_center.add_child(_icon_rect(36, UI_ACCENT))
+	content.add_child(icon_center)
+	var title := _localized_label("ui.guild.initial_load.title", 18, UI_TEXT)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	content.add_child(title)
+	initial_loading_status_label = _localized_label("ui.guild.status.loading_home", 11, UI_MUTED)
+	initial_loading_status_label.name = "GuildInitialLoadingStatus"
+	initial_loading_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	initial_loading_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(initial_loading_status_label)
+	var retry_center := CenterContainer.new()
+	content.add_child(retry_center)
+	initial_loading_retry_button = Button.new()
+	initial_loading_retry_button.name = "GuildInitialLoadingRetryButton"
+	_set_localized_property(initial_loading_retry_button, "text", "ui.guild.initial_load.retry")
+	initial_loading_retry_button.custom_minimum_size = Vector2(130, 34)
+	initial_loading_retry_button.visible = false
+	initial_loading_retry_button.pressed.connect(_retry_initial_guild_load)
+	_apply_button_style(initial_loading_retry_button, "primary")
+	retry_center.add_child(initial_loading_retry_button)
+	return center
+
+
+func _prepare_initial_guild_loading() -> void:
+	if initial_loading_status_label != null:
+		initial_loading_status_label.set_meta("i18n_source_text", "ui.guild.status.loading_home")
+		initial_loading_status_label.text = _t("ui.guild.status.loading_home")
+		initial_loading_status_label.add_theme_color_override("font_color", UI_MUTED)
+	if initial_loading_retry_button != null:
+		initial_loading_retry_button.visible = false
+	_set_initial_guild_loading(true)
+
+
+func _set_initial_guild_loading(active: bool) -> void:
+	if initial_loading_page != null:
+		initial_loading_page.visible = active
+	if primary_navigation != null:
+		primary_navigation.visible = not active
+	if not active:
+		return
+	if browse_page != null:
+		browse_page.visible = false
+	if member_page != null:
+		member_page.visible = false
+	if create_page != null:
+		create_page.visible = false
+
+
+func _show_initial_guild_load_error(message: String) -> void:
+	_set_initial_guild_loading(true)
+	if initial_loading_status_label != null:
+		initial_loading_status_label.remove_meta("i18n_source_text")
+		initial_loading_status_label.text = message
+		initial_loading_status_label.add_theme_color_override("font_color", UI_ERROR)
+	if initial_loading_retry_button != null:
+		initial_loading_retry_button.visible = true
+
+
+func _retry_initial_guild_load() -> void:
+	if is_loading_guilds:
+		return
+	_prepare_initial_guild_loading()
+	call_deferred("_refresh_from_server")
 
 
 func _build_header() -> Control:
@@ -7208,7 +7309,10 @@ func _refresh_from_server() -> void:
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
 		is_loading_guilds = false
-		browse_status_label.text = _t("ui.guild.error.service_unavailable")
+		var service_error := _t("ui.guild.error.service_unavailable")
+		browse_status_label.text = service_error
+		if initial_loading_page != null and initial_loading_page.visible:
+			_show_initial_guild_load_error(service_error)
 		return
 	var response: Variant = await guild_service.call("load_directory")
 	var result := _dictionary(response)
@@ -7216,9 +7320,13 @@ func _refresh_from_server() -> void:
 		return
 	is_loading_guilds = false
 	if not bool(result.get("success", false)):
-		browse_status_label.text = str(result.get("error", _t("ui.guild.error.load_directory")))
+		var load_error := str(result.get("error", _t("ui.guild.error.load_directory")))
+		browse_status_label.text = load_error
 		browse_status_label.visible = true
+		if initial_loading_page != null and initial_loading_page.visible:
+			_show_initial_guild_load_error(load_error)
 		return
+	has_resolved_initial_membership = true
 	membership = _dictionary(result.get("membership", {})).duplicate(true)
 	incoming_invitations = _array_from_value(result.get("incomingInvitations", [])).duplicate(true)
 	pending_applications = _array_from_value(result.get("pendingApplications", [])).duplicate(true)
@@ -7227,13 +7335,17 @@ func _refresh_from_server() -> void:
 	browse_status_label.visible = false
 	if not membership.is_empty():
 		await _refresh_home_from_server()
-		await _refresh_aether_clash_from_server()
+		_set_initial_guild_loading(false)
 		if visible and not has_explicit_page_selection:
 			_show_page("member")
+		await _refresh_aether_clash_from_server()
 	else:
 		guild_home.clear()
 		aether_clash_state.clear()
 		_render_guild_home()
+		_set_initial_guild_loading(false)
+		if visible and not has_explicit_page_selection:
+			_show_page("browse")
 
 
 func _refresh_home_from_server() -> void:

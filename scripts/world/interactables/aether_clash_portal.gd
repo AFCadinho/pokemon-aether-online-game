@@ -11,6 +11,8 @@ const PURPLE_PORTAL_TEXTURE := preload("res://assets/world/aether_clash/clash_po
 const RED_PORTAL_TEXTURE := preload("res://assets/world/aether_clash/clash_portal_red.png")
 const PURPLE_LIGHT_COLOR := Color("a647ff")
 const RED_LIGHT_COLOR := Color("ff3829")
+const SORT_Z_MIN := -4096
+const SORT_Z_MAX := 4096
 
 @export_enum("guild_duel", "battle_royale") var mode_id := "guild_duel":
 	set(value):
@@ -34,6 +36,8 @@ var _portal_sprite_origin := Vector2.ZERO
 
 
 func _ready() -> void:
+	z_as_relative = false
+	_update_sort_z()
 	interactable_kind = (
 		"aether_clash_exit_portal"
 		if portal_action == "exit"
@@ -51,6 +55,10 @@ func _ready() -> void:
 		_portal_sprite_origin = portal_sprite.position
 	_apply_mode_visuals()
 	_apply_portal_state()
+
+
+func _update_sort_z() -> void:
+	z_index = clampi(floori(global_position.y), SORT_Z_MIN, SORT_Z_MAX)
 
 
 func _process(delta: float) -> void:

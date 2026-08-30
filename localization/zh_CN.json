@@ -1643,6 +1643,8 @@
   "ui.nearby.error.refresh_social": "无法刷新社交状态。",
   "ui.nearby.error.social_unavailable": "社会服务不可用。",
   "ui.guild.title": "公会",
+  "ui.guild.initial_load.title": "正在检查公会成员身份",
+  "ui.guild.initial_load.retry": "重试",
   "ui.guild.subtitle": "在以太世界中找到自己的位置",
   "ui.guild.close": "关闭公会",
   "ui.guild.tab.browse": "⌕ 浏览公会",

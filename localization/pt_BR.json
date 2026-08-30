@@ -1646,6 +1646,8 @@
   "ui.nearby.error.refresh_social": "Não foi possível atualizar o estado social.",
   "ui.nearby.error.social_unavailable": "O serviço social está indisponível.",
   "ui.guild.title": "Guildas",
+  "ui.guild.initial_load.title": "Verificando vínculo com a Guilda",
+  "ui.guild.initial_load.retry": "Tentar novamente",
   "ui.guild.subtitle": "Encontre seu lugar no mundo de Aether",
   "ui.guild.close": "Fechar Guildas",
   "ui.guild.tab.browse": "⌕  Explorar Guildas",

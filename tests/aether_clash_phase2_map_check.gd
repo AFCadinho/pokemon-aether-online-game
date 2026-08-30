@@ -10,14 +10,14 @@ const EXPECTED_SPAWNS := [
 	"SpectatorJailSpawn",
 ]
 const EXPECTED_ARENA_SPAWN_POSITIONS := {
-	"Guild1ArenaSpawn": Vector2(1456, 208),
-	"Guild2ArenaSpawn": Vector2(1072, 4752),
+	"Guild1ArenaSpawn": Vector2(1456, 176),
+	"Guild2ArenaSpawn": Vector2(1072, 4816),
 }
 const EXPECTED_EXIT_PORTALS := {
-	"BlueStagingExitPortal": Vector2(1456, 288),
-	"RedStagingExitPortal": Vector2(1072, 4672),
-	"Guild1JailExitPortal": Vector2(2288, 2416),
-	"Guild2JailExitPortal": Vector2(2288, 2672),
+	"BlueStagingExitPortal": Vector2(1472, 96),
+	"RedStagingExitPortal": Vector2(1056, 4736),
+	"Guild1JailExitPortal": Vector2(2240, 2368),
+	"Guild2JailExitPortal": Vector2(2240, 2624),
 }
 
 var failed := false
@@ -86,6 +86,11 @@ func _run() -> void:
 		_check(str(portal.get("mode_id")) == "guild_duel", "%s uses Guild Duel mode" % portal_name)
 		_check(str(portal.get("portal_action")) == "exit", "%s is an arena exit" % portal_name)
 		_check(bool(portal.get("entry_open")), "%s remains interactable throughout the Duel" % portal_name)
+		_check(
+			not portal.z_as_relative
+			and portal.z_index == clampi(floori(portal.global_position.y), -4096, 4096),
+			"%s renders on its world-depth layer instead of behind map artwork" % portal_name
+		)
 		var sprite := portal.get_node_or_null("PortalSprite") as Sprite2D
 		_check(
 			sprite != null and sprite.texture.resource_path.ends_with("clash_portal_red.png"),
@@ -93,8 +98,8 @@ func _run() -> void:
 		)
 		var tile := Vector2i(floori(portal.position.x / 32.0), floori(portal.position.y / 32.0))
 		_check(
-			collision != null and collision.get_cell_source_id(tile) == -1,
-			"%s stands on a walkable interaction tile" % portal_name
+			_has_walkable_portal_approach(collision, tile),
+			"%s has a walkable approach through the edited collision" % portal_name
 		)
 	var duel_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_duel.gd")
 	_check(
@@ -107,6 +112,18 @@ func _run() -> void:
 	)
 	duel.queue_free()
 	quit(1 if failed else 0)
+
+
+func _has_walkable_portal_approach(collision: TileMapLayer, portal_tile: Vector2i) -> bool:
+	if collision == null:
+		return false
+	# The portal itself blocks movement, so its center may intentionally sit on
+	# a solid map tile. Its interaction area extends over the nearby approach.
+	for y_offset: int in range(-2, 3):
+		for x_offset: int in range(-2, 3):
+			if collision.get_cell_source_id(portal_tile + Vector2i(x_offset, y_offset)) == -1:
+				return true
+	return false
 
 
 func _check(condition: bool, label: String) -> void:

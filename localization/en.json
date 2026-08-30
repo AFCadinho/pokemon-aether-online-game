@@ -1646,6 +1646,8 @@
   "ui.nearby.error.refresh_social": "Could not refresh social state.",
   "ui.nearby.error.social_unavailable": "Social service is unavailable.",
   "ui.guild.title": "Guilds",
+  "ui.guild.initial_load.title": "Checking Guild membership",
+  "ui.guild.initial_load.retry": "Try Again",
   "ui.guild.subtitle": "Find your place in the world of Aether",
   "ui.guild.close": "Close Guilds",
   "ui.guild.tab.browse": "⌕  Browse Guilds",

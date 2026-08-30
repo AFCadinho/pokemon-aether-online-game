@@ -16,6 +16,78 @@ func _run() -> void:
 		quit(1)
 		return
 
+	var first_open_popup := packed.instantiate() as GuildPopup
+	root.add_child(first_open_popup)
+	await process_frame
+	first_open_popup.open()
+	var initial_loading_page := first_open_popup.find_child(
+		"GuildInitialLoadingPage",
+		true,
+		false
+	) as Control
+	_check(
+		initial_loading_page != null
+		and initial_loading_page.visible
+		and not first_open_popup.browse_page.visible,
+		"first Guild open shows a neutral loading state instead of flashing Browse"
+	)
+	_check(
+		first_open_popup.primary_navigation != null
+		and not first_open_popup.primary_navigation.visible,
+		"membership-dependent Guild navigation stays hidden during the first load"
+	)
+	await process_frame
+	var initial_retry := first_open_popup.find_child(
+		"GuildInitialLoadingRetryButton",
+		true,
+		false
+	) as Button
+	_check(
+		initial_loading_page != null
+		and initial_loading_page.visible
+		and initial_retry != null
+		and initial_retry.visible
+		and not first_open_popup.browse_page.visible,
+		"an initial load failure remains neutral and offers retry without showing Browse"
+	)
+	first_open_popup.membership = {
+		"userId": 1,
+		"guildId": 1,
+		"role": "member",
+		"permissions": [],
+	}
+	first_open_popup.guild_home = {
+		"guild": {
+			"id": 1,
+			"name": "First Open Guild",
+			"level": 1,
+			"capacity": 20,
+			"language": "English",
+			"focus": "Social",
+		},
+		"membership": first_open_popup.membership.duplicate(true),
+		"members": [],
+	}
+	first_open_popup.has_resolved_initial_membership = true
+	first_open_popup._set_initial_guild_loading(false)
+	first_open_popup._show_page("member")
+	_check(
+		first_open_popup.member_page.visible
+		and not first_open_popup.browse_page.visible
+		and not first_open_popup.initial_loading_page.visible,
+		"a resolved Guild member transitions directly from loading to the Guild dashboard"
+	)
+	first_open_popup.close()
+	first_open_popup.open()
+	_check(
+		first_open_popup.member_page.visible
+		and not first_open_popup.initial_loading_page.visible,
+		"later Guild opens immediately reuse the resolved membership"
+	)
+	first_open_popup.close()
+	first_open_popup.queue_free()
+	await process_frame
+
 	var popup := packed.instantiate() as GuildPopup
 	root.add_child(popup)
 	await process_frame

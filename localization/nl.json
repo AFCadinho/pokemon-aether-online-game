@@ -1646,6 +1646,8 @@
   "ui.nearby.error.refresh_social": "Sociale status vernieuwen mislukt.",
   "ui.nearby.error.social_unavailable": "De sociale service is niet beschikbaar.",
   "ui.guild.title": "Guilds",
+  "ui.guild.initial_load.title": "Guildlidmaatschap controleren",
+  "ui.guild.initial_load.retry": "Opnieuw proberen",
   "ui.guild.subtitle": "Vind jouw plek in de wereld van Aether",
   "ui.guild.close": "Guilds sluiten",
   "ui.guild.tab.browse": "⌕  Guilds bekijken",

@@ -4,6 +4,8 @@
 
 - Outdoor zoom now defaults to Auto, which switches between 1× and 2× as the game window changes size; fixed zoom choices remain available.
 
+- The Guild interface now shows a neutral membership-loading state on its first open instead of briefly flashing the Guild browser for existing members.
+
 - Reworked the Aether Clash tab with clean Overview, Challenges, and History navigation while keeping an active Clash and its lobby timer visible.
 
 - Staff can now select Dutch for private-message translation without enabling a separate Dutch language chatroom.
@@ -58,6 +60,8 @@
 
 **Fixed**
 
+- Guild Duel staging and jail portals now sit in their intended walkable positions, with matching collision openings.
+- Guild Duel exit portals now render on their proper world-depth layer, keeping the Red staging portal and both jail portals visible instead of leaving only their glow.
 - The shared Aether Clash Lobby no longer presents a Guild Duel winner as the reigning Guild; that title is reserved for Battle Royale.
 - Right-click Aether Clash challenges now remain available but clearly explain when the selected Trainer is not a Leader or Captain, without redirecting the challenge to someone else.
 - The Rare Encounter community boost now shows its funding progress bar in the overworld boost tray.
