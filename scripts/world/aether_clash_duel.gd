@@ -9,7 +9,7 @@ const ARENA_STATE_REFRESH_SECONDS := 1.0
 const START_BARRIER_HALF_HEIGHT := 24.0
 const ENGAGEMENT_RING_SCRIPT: Script = preload("res://scripts/world/aether_clash_engagement_ring.gd")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
-const ENGAGEMENT_RADIUS := 18.0
+const ENGAGEMENT_RADIUS := 28.0
 const ENGAGEMENT_CONTACT_DISTANCE := ENGAGEMENT_RADIUS * 2.0
 const ENGAGEMENT_SYNC_SECONDS := 0.1
 const ENGAGEMENT_CONTACT_COOLDOWN_MSEC := 750
@@ -331,12 +331,10 @@ func _request_leave_confirmation() -> void:
 	if dialog == null:
 		return
 	leave_confirmation = dialog
-	GameState.acquire_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
 	dialog.name = "AetherClashLeaveConfirmation"
-	var dialog_parent := get_tree().current_scene
-	if dialog_parent == null:
-		dialog_parent = self
-	dialog_parent.add_child(dialog)
+	# Keep arena confirmations in the HUD canvas. A world-space parent can place
+	# an otherwise visible Control behind the map while its input lock remains.
+	arena_hud.add_child(dialog)
 	dialog.configure(
 		_text("ui.aether_clash.leave.title", "Leave Aether Clash?"),
 		_text("ui.aether_clash.leave.message", "Leaving eliminates you immediately. You cannot return to this Clash."),
@@ -346,6 +344,7 @@ func _request_leave_confirmation() -> void:
 	dialog.confirmed.connect(_confirm_leave_arena)
 	dialog.canceled.connect(_close_leave_confirmation)
 	dialog.popup_centered(Vector2i(560, 260))
+	GameState.acquire_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
 
 
 func _confirm_leave_arena() -> void:

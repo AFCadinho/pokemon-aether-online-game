@@ -1,7 +1,7 @@
 extends Node2D
 
 
-const RADIUS := 18.0
+const RADIUS := 28.0
 const BLUE_COLOR := Color("58b8ffff")
 const RED_COLOR := Color("ff6678ff")
 
