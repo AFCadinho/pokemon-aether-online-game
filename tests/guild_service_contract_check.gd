@@ -35,6 +35,8 @@ func _init() -> void:
 	_check_contains(service_source, "func load_aether_clash_portal_sessions", "guild service loads accessible portal sessions")
 	_check_contains(service_source, "func enter_aether_clash_portal", "guild service requests server-owned portal entry")
 	_check_contains(service_source, "func load_aether_clash_arena_state", "guild service loads live Aether Clash arena state")
+	_check_contains(service_source, '"identifiedEnemyUserIds": _array', "arena state preserves Guild-shared enemy identity intel")
+	_check_contains(service_source, '"visibleIdentityUserIds": _array', "arena state preserves server-authoritative nameplate visibility")
 	_check_contains(service_source, "func leave_aether_clash_arena", "guild service exposes authoritative voluntary Clash departure")
 	_check_contains(service_source, 'AETHER_CLASH_SESSIONS_ENDPOINT + "/%s/leave"', "voluntary Clash departure uses the session leave endpoint")
 	_check_contains(service_source, "func accept_aether_clash_challenge", "target Guild staff can accept a clash")

@@ -193,6 +193,8 @@ var has_position := false
 var presence_state: Dictionary = {}
 var creator_nameplate_visibility_override_active := false
 var creator_nameplate_visible := true
+var gameplay_nameplate_visibility_override_active := false
+var gameplay_nameplate_visible := true
 var last_aethernet_effect_sequence := -1
 var active_aethernet_effect: Node
 
@@ -886,6 +888,8 @@ func _update_nameplate() -> void:
 	var should_show_nameplate := name_text != ""
 	if creator_nameplate_visibility_override_active:
 		should_show_nameplate = creator_nameplate_visible and name_text != ""
+	if gameplay_nameplate_visibility_override_active:
+		should_show_nameplate = should_show_nameplate and gameplay_nameplate_visible
 	nameplate_label.visible = should_show_nameplate
 	_update_role_badge()
 	_sync_nameplate_layout()
@@ -901,6 +905,18 @@ func set_creator_nameplate_visible(visible: bool) -> void:
 
 func clear_creator_nameplate_visibility_override() -> void:
 	creator_nameplate_visibility_override_active = false
+	_update_nameplate()
+
+
+func set_gameplay_nameplate_visible(visible: bool) -> void:
+	gameplay_nameplate_visibility_override_active = true
+	gameplay_nameplate_visible = visible
+	_update_nameplate()
+
+
+func clear_gameplay_nameplate_visibility_override() -> void:
+	gameplay_nameplate_visibility_override_active = false
+	gameplay_nameplate_visible = true
 	_update_nameplate()
 
 

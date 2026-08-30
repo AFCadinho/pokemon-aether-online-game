@@ -45,6 +45,14 @@ func _run() -> void:
 	_check(badge_panel != null and not badge_panel.visible, "text badge panel stays hidden for an icon badge")
 	_check(badge_label != null and badge_label.text == "DEV", "remote role selection resolves to DEV")
 
+	var nameplate := avatar.get_node_or_null("Nameplate") as Control
+	avatar.call("set_gameplay_nameplate_visible", false)
+	_check(nameplate != null and not nameplate.visible, "gameplay identity rules hide the complete remote nameplate")
+	avatar.call("set_creator_nameplate_visible", true)
+	_check(nameplate != null and not nameplate.visible, "creator visibility cannot bypass gameplay identity hiding")
+	avatar.call("clear_gameplay_nameplate_visibility_override")
+	_check(nameplate != null and nameplate.visible, "clearing gameplay identity rules restores normal nameplate visibility")
+
 	avatar.queue_free()
 	quit(failures)
 

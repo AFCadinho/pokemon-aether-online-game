@@ -31,6 +31,8 @@ var arena_state_timer: Timer
 var viewer_role := "spectator"
 var viewer_side := ""
 var arena_players: Dictionary = {}
+var identified_enemy_user_ids: Dictionary = {}
+var visible_identity_user_ids: Dictionary = {}
 var engaged_player_ids: Dictionary = {}
 var engagement_requests_in_flight: Dictionary = {}
 var engagement_battle_attempts: Dictionary = {}
@@ -67,6 +69,7 @@ func _process(delta: float) -> void:
 	if engagement_sync_elapsed >= ENGAGEMENT_SYNC_SECONDS:
 		engagement_sync_elapsed = 0.0
 		_sync_engagement_rings()
+		_sync_identity_nameplates()
 		_release_separated_player_contact_pairs()
 	_process_staging_ejection()
 
@@ -79,6 +82,7 @@ func _exit_tree() -> void:
 		"viewerRole": viewer_role,
 	})
 	_clear_engagement_rings()
+	_clear_identity_nameplate_overrides()
 	GameState.release_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
 	_free_leave_confirmation()
 
@@ -95,6 +99,8 @@ func configure_aether_clash_instance(instance_map_id: String) -> void:
 	instance_session_id = session_id
 	arena_session.clear()
 	arena_players.clear()
+	identified_enemy_user_ids.clear()
+	visible_identity_user_ids.clear()
 	engaged_player_ids.clear()
 	engagement_requests_in_flight.clear()
 	engagement_battle_attempts.clear()
@@ -121,6 +127,12 @@ func is_clash_active() -> bool:
 
 func can_launch_projectile() -> bool:
 	return is_clash_active() and not start_barrier.is_barrier_raised()
+
+
+func can_view_overworld_identity(user_id: int) -> bool:
+	if instance_session_id.is_empty():
+		return true
+	return user_id > 0 and visible_identity_user_ids.has(user_id)
 
 
 func is_world_barrier_step_blocked(from_position: Vector2, to_position: Vector2) -> bool:
@@ -260,13 +272,17 @@ func _apply_arena_state(payload: Dictionary) -> void:
 	viewer_role = str(payload.get("viewerRole", "spectator"))
 	viewer_side = str(payload.get("viewerSide", ""))
 	_apply_arena_players(payload.get("arenaPlayers", []))
+	identified_enemy_user_ids = _user_id_set(payload.get("identifiedEnemyUserIds", []))
+	visible_identity_user_ids = _user_id_set(payload.get("visibleIdentityUserIds", []))
 	var local_user_id := _local_user_id()
-	var state_fingerprint := "%s:%s:%s:%s:%s" % [
+	var state_fingerprint := "%s:%s:%s:%s:%s:%s:%s" % [
 		next_status,
 		viewer_role,
 		viewer_side,
 		str(arena_players.keys()),
 		str(engaged_player_ids.keys()),
+		str(identified_enemy_user_ids.keys()),
+		str(visible_identity_user_ids.keys()),
 	]
 	if state_fingerprint != last_trace_arena_state_fingerprint:
 		last_trace_arena_state_fingerprint = state_fingerprint
@@ -279,6 +295,8 @@ func _apply_arena_state(payload: Dictionary) -> void:
 			"localPlayerActive": arena_players.has(local_user_id),
 			"arenaPlayerIds": arena_players.keys(),
 			"engagedPlayerIds": engaged_player_ids.keys(),
+			"identifiedEnemyUserIds": identified_enemy_user_ids.keys(),
+			"visibleIdentityUserIds": visible_identity_user_ids.keys(),
 		})
 	start_barrier.set_barrier_raised(barrier_should_be_raised, animate_lowering)
 	arena_zones.set_phase(next_status)
@@ -287,6 +305,7 @@ func _apply_arena_state(payload: Dictionary) -> void:
 	if next_status in ["roster_locked", "active", "finishing"] and previous_status not in ["roster_locked", "active", "finishing"]:
 		staging_ejection_deadline_msec = Time.get_ticks_msec() + STAGING_EJECTION_GRACE_MSEC
 	_sync_engagement_rings()
+	_sync_identity_nameplates()
 	arena_state_changed.emit(payload.duplicate(true))
 
 
@@ -322,6 +341,17 @@ func _apply_arena_players(value: Variant) -> void:
 					}
 	if not resumable_engagement.is_empty():
 		_begin_engagement_battle.call_deferred(resumable_engagement)
+
+
+func _user_id_set(value: Variant) -> Dictionary:
+	var result: Dictionary = {}
+	if not value is Array:
+		return result
+	for user_id_value: Variant in value:
+		var user_id := int(user_id_value)
+		if user_id > 0:
+			result[user_id] = true
+	return result
 
 
 func _sync_engagement_rings() -> void:
@@ -360,6 +390,26 @@ func _clear_engagement_rings() -> void:
 			continue
 		if int(ring.get_meta("aether_clash_controller_id", 0)) == controller_id:
 			ring.queue_free()
+
+
+func _sync_identity_nameplates() -> void:
+	if instance_session_id.is_empty():
+		return
+	for node: Node in get_tree().get_nodes_in_group("remote_player_avatar"):
+		if not node.has_method("set_gameplay_nameplate_visible"):
+			continue
+		var user_id_value: Variant = node.get("user_id")
+		var user_id := int(user_id_value) if user_id_value != null else 0
+		node.call(
+			"set_gameplay_nameplate_visible",
+			user_id > 0 and visible_identity_user_ids.has(user_id)
+		)
+
+
+func _clear_identity_nameplate_overrides() -> void:
+	for node: Node in get_tree().get_nodes_in_group("remote_player_avatar"):
+		if node.has_method("clear_gameplay_nameplate_visibility_override"):
+			node.call("clear_gameplay_nameplate_visibility_override")
 
 
 func _all_player_actors() -> Array[Node2D]:
