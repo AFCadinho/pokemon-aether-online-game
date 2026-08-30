@@ -186,6 +186,7 @@ func _check_aether_clash_context_action() -> void:
 		"userId": 7,
 		"username": "misty",
 		"displayName": "Misty",
+		"guildRole": "captain",
 	}
 	coordinator.social_state_loading = true
 	coordinator.context_more_actions_expanded = false
@@ -232,6 +233,15 @@ func _check_aether_clash_context_action() -> void:
 	if dialog != null:
 		dialog.cancel_button.pressed.emit()
 	await process_frame
+	coordinator.current_target["guildRole"] = "member"
+	coordinator._render_context_menu()
+	await process_frame
+	_check_equal(
+		_find_player_action("Challenge to Aether Clash") == null,
+		true,
+		"Members and Recruits of the target Guild cannot be challenged directly"
+	)
+	coordinator.current_target["guildRole"] = "captain"
 	coordinator.guild_membership = {
 		"guildId": 4,
 		"role": "member",

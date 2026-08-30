@@ -50,6 +50,7 @@
 
 **Fixed**
 
+- Right-click Aether Clash challenges now appear only for opposing Guild Leaders and Captains instead of redirecting a Member's challenge to someone else.
 - The Rare Encounter community boost now shows its funding progress bar in the overworld boost tray.
 - Guild Duel battles now place the battle interface above the arena HUD, keeping Team Preview and battle controls clickable.
 - Guild Duel collisions now use live arena positions, recover abandoned pre-battle matches after two minutes, and require players to separate before another collision attempt.

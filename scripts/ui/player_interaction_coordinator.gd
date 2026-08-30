@@ -994,7 +994,12 @@ func _on_guild_invite_pressed() -> void:
 func _can_challenge_aether_clash() -> bool:
 	if not guild_membership_loaded or guild_membership.is_empty():
 		return false
-	return str(guild_membership.get("role", "")).strip_edges().to_lower() in ["leader", "captain"]
+	var own_role := str(guild_membership.get("role", "")).strip_edges().to_lower()
+	var target_role := str(current_target.get("guildRole", "")).strip_edges().to_lower()
+	return (
+		own_role in ["leader", "captain"]
+		and target_role in ["leader", "captain"]
+	)
 
 
 func _on_aether_clash_challenge_pressed() -> void:
