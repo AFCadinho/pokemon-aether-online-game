@@ -10,6 +10,7 @@
 **Changed**
 
 - Wild battles now open with both Pokémon ready, letting queued move or Run input start sooner without an opening summon animation.
+- The Move Mentor now stands behind the Pokémon Center desk and can be spoken to across it.
 
 **Fixed**
 

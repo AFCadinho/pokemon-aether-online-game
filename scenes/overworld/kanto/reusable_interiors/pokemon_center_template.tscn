@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://bfy37wf81vi6g"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/pokemon_center/pokemon_center.visual.tscn" id="1_7j0le"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_ehdw6"]
+[ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_ehdw6"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="3_map_meta"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_map_exit"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="5_floor_mask"]
@@ -61,7 +61,7 @@ sources/1 = SubResource("TileSetAtlasSource_y5qkb")
 atlas = ExtResource("10_k6grd")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_k6grd"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_hwrcd"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -135,10 +135,12 @@ position = Vector2(592, 976)
 [node name="AetherAtelier" parent="Entities/NPCs" unique_id=1024286238 instance=ExtResource("7_atelier")]
 position = Vector2(304, 880)
 facing_direction = Vector2(1, 0)
-npc_sprite_frames = SubResource("SpriteFrames_k6grd")
+npc_sprite_frames = SubResource("SpriteFrames_hwrcd")
 
-[node name="MoveMentor" parent="Entities/NPCs" instance=ExtResource("11_move_mentor")]
-position = Vector2(304, 976)
+[node name="MoveMentor" parent="Entities/NPCs" unique_id=1484831813 instance=ExtResource("11_move_mentor")]
+position = Vector2(368, 400)
+facing_direction = Vector2(0, 1)
+manual_interaction_reach_tiles = 2
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1615845431]
 
@@ -162,7 +164,8 @@ script = ExtResource("4_map_exit")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToOutside" unique_id=1579254416]
 shape = SubResource("RectangleShape2D_center_exit")
 
-[node name="DoorTransitionHint" parent="Exits/ToOutside" instance=ExtResource("20_transition_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToOutside" unique_id=290374689 instance=ExtResource("20_transition_hint")]
+z_as_relative = false
 flow_direction = "down"
 
 [connection signal="heal_sequence_started" from="Entities/NPCs/NurseJoy" to="Entities/NPCs/HealMachineEffect" method="play_heal_sequence"]

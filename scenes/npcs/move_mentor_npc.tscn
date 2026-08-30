@@ -44,7 +44,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_move_mentor"]
-size = Vector2(96, 32)
+size = Vector2(96, 97)
 
 [node name="MoveMentorNPC" type="Node2D"]
 script = ExtResource("1_move_mentor")
