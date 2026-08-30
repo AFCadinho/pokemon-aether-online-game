@@ -1494,6 +1494,7 @@ var aether_clash_entry_hint_label: Label
 var aether_clash_entry_session: Dictionary = {}
 var aether_clash_entry_request_active := false
 var aether_clash_entry_refresh_pending := false
+var shown_aether_clash_result_sessions: Dictionary = {}
 var staff_tools_visibility_key := ""
 var reward_notification_stack: VBoxContainer
 var reward_notification_event_sequence := 0
@@ -12205,6 +12206,62 @@ func _setup_aether_clash_challenge_dialog() -> void:
 	timer.autostart = true
 	timer.timeout.connect(_refresh_aether_clash_challenge_dialog)
 	add_child(timer)
+
+
+func show_aether_clash_result(result: Dictionary) -> void:
+	var session_id := str(result.get("sessionId", "")).strip_edges()
+	if session_id == "" or shown_aether_clash_result_sessions.has(session_id):
+		return
+	shown_aether_clash_result_sessions[session_id] = true
+	var outcome := str(result.get("outcome", "no_contest")).strip_edges().to_lower()
+	if outcome not in ["victory", "defeat", "no_contest"]:
+		outcome = "no_contest"
+	var challenger := _dictionary_from_value(result.get("challengerGuild", {}))
+	var challenged := _dictionary_from_value(result.get("challengedGuild", {}))
+	var winner := _dictionary_from_value(result.get("winnerGuild", {}))
+	var remaining := _dictionary_from_value(result.get("remainingCounts", {}))
+	var winner_name := str(winner.get(
+		"name",
+		LocalizationManager.text("ui.aether_clash.result.no_winner")
+	)).strip_edges()
+	if winner_name == "":
+		winner_name = LocalizationManager.text("ui.aether_clash.result.no_winner")
+	var duration_seconds := maxi(0, int(result.get("durationSeconds", 0)))
+	var duration := "%02d:%02d" % [
+		int(duration_seconds / 60),
+		duration_seconds % 60,
+	]
+	var title := LocalizationManager.text("ui.aether_clash.result.title.%s" % outcome)
+	var message := LocalizationManager.text(
+		"ui.aether_clash.result.message",
+		{
+			"challenger": str(challenger.get("name", "Guild")),
+			"challenged": str(challenged.get("name", "Guild")),
+			"winner": winner_name,
+			"blue": int(remaining.get("challenger", 0)),
+			"red": int(remaining.get("challenged", 0)),
+			"duration": duration,
+		}
+	)
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	dialog.name = "AetherClashResultDialog"
+	var host: Node = root_control if root_control != null else self
+	host.add_child(dialog)
+	dialog.configure(
+		title,
+		message,
+		LocalizationManager.text("common.continue"),
+		LocalizationManager.text("common.close")
+	)
+	dialog.cancel_button.visible = false
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(590, 330))
+	if message_entry_template != null and message_list != null:
+		add_system_message(LocalizationManager.text(
+			"ui.aether_clash.result.system.%s" % outcome,
+			{"winner": winner_name}
+		))
 
 
 func _setup_aether_clash_entry_callout() -> void:

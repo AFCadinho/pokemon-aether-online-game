@@ -194,6 +194,11 @@ func _run() -> void:
 		and world_source.contains('"teleport_apply_finished"'),
 		"Arena position-save failures and teleport application emit structured traces"
 	)
+	_check(
+		world_source.contains('state.get("aetherClashResult", {})')
+		and world_source.contains('"show_aether_clash_result"'),
+		"Completed Clash teleports forward their authoritative result to the HUD"
+	)
 	var zone_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_arena_zones.gd")
 	_check(
 		zone_source.contains('for side: String in ["blue", "red"]')

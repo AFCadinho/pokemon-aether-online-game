@@ -661,12 +661,30 @@ func _aether_clash_challenges_result(value: Variant) -> Dictionary:
 		if challenge_value is Dictionary:
 			outgoing.append(_normalize_aether_clash_session(challenge_value))
 	var current_session := _normalize_aether_clash_session(body.get("currentSession", {}))
+	var stats := _dictionary(body.get("duelStats", {})).duplicate(true)
+	stats["wins"] = int(stats.get("wins", 0))
+	stats["losses"] = int(stats.get("losses", 0))
+	stats["noContests"] = int(stats.get("noContests", 0))
+	stats["totalMatches"] = int(stats.get("totalMatches", 0))
+	stats["decidedMatches"] = int(stats.get("decidedMatches", 0))
+	stats["winRate"] = float(stats.get("winRate", 0.0))
+	var history: Array[Dictionary] = []
+	for history_value: Variant in _array(body.get("duelHistory", [])):
+		if not history_value is Dictionary:
+			continue
+		var entry := (history_value as Dictionary).duplicate(true)
+		entry["opponentGuild"] = _dictionary(entry.get("opponentGuild", {})).duplicate(true)
+		entry["participantCounts"] = _dictionary(entry.get("participantCounts", {})).duplicate(true)
+		entry["remainingCounts"] = _dictionary(entry.get("remainingCounts", {})).duplicate(true)
+		history.append(entry)
 	return {
 		"success": true,
 		"canManage": bool(body.get("canManage", false)),
 		"pendingIncoming": incoming,
 		"pendingOutgoing": outgoing,
 		"currentSession": current_session,
+		"duelStats": stats,
+		"duelHistory": history,
 	}
 
 
