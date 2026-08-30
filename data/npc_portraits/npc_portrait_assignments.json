@@ -35,6 +35,8 @@
   "npc_definition_ids": {
     "aether_atelier_tailor": "showdown_beauty_gen6",
     "kanto_rivals_house_daisy": "showdown_daisy",
+    "pokemon_center_move_deleter": "showdown_gentleman_gen6",
+    "pokemon_center_move_mentor": "showdown_pokemaniac_gen6",
     "pokemon_center_nurse": "showdown_pokemoncenterlady",
     "pokemart_buyer": "showdown_pokemonbreeder_gen4",
     "pokemart_seller": "showdown_pokemonbreeder_gen4",

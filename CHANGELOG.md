@@ -14,6 +14,7 @@
 
 **Changed**
 
+- The Move Maniac and Move Deleter now use matching trainer portraits in dialogue, and the Move Deleter has moved to a more natural spot in Pokémon Centers.
 - Wild battles now open with both Pokémon ready, letting queued move or Run input start sooner without an opening summon animation.
 - Wild victories no longer pause on the winner message; disabling Move Animations also removes the remaining terminal presentation waits while still applying every result and reward.
 - The Move Maniac now stands behind the Pokémon Center desk and can be spoken to across it.

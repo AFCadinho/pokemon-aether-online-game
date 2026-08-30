@@ -37,9 +37,9 @@ func _check_center_instances() -> void:
 		var deleter := center.get_node_or_null("Entities/NPCs/MoveDeleter")
 		_check(
 			deleter != null
-				and deleter.position == Vector2(624, 592)
+				and deleter.position == Vector2(656, 464)
 				and deleter.get("facing_direction") == Vector2.LEFT,
-			"%s places the Move Deleter separately and directly approachable" % path
+			"%s keeps the editor-positioned Move Deleter separately approachable" % path
 		)
 		center.free()
 

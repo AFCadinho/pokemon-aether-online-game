@@ -64,7 +64,7 @@ func _init() -> void:
 	_check(
 		template_source.contains('path="res://scenes/npcs/move_deleter_npc.tscn"')
 			and template_source.contains('[node name="MoveDeleter" parent="Entities/NPCs"')
-			and template_source.contains("position = Vector2(624, 592)"),
+			and template_source.contains("position = Vector2(656, 464)"),
 		"Pokémon Center template provides a separate directly approachable Move Deleter"
 	)
 	var first_clerk_start := template_source.find('[node name="Clerk" parent="Entities/NPCs"')
