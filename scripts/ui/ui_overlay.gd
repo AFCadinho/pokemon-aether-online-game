@@ -470,6 +470,7 @@ const REWARD_NOTIFICATION_STACK_SCRIPT := preload("res://scripts/ui/reward_notif
 const BAG_INTERFACE_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
 const MARKET_INTERFACE_ICON: Texture2D = preload("res://assets/ui/market_shop.svg")
 const AETHER_ATELIER_POPUP_SCENE := preload("res://scenes/interface/aether_atelier_popup.tscn")
+const MOVE_MENTOR_POPUP_SCENE := preload("res://scenes/interface/move_mentor_popup.tscn")
 const SHINY_TRACKER_POPUP_SCENE := preload("res://scenes/interface/shiny_tracker_popup.tscn")
 const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")
 const BAG_CATEGORIES := [
@@ -1136,6 +1137,7 @@ var trainer_name_change_status_label: Label
 var trainer_name_change_confirm_button: Button
 var trainer_name_change_in_progress := false
 var aether_atelier_popup: AetherAtelierPopup
+var move_mentor_popup: MoveMentorPopup
 var shiny_tracker_popup: ShinyTrackerPopup
 var market_popup: PanelContainer
 var market_title_label: Label
@@ -1504,6 +1506,7 @@ func _ready() -> void:
 	_setup_market_popup()
 	_setup_aether_exchange_popup()
 	_setup_aether_atelier_popup()
+	_setup_move_mentor_popup()
 	_setup_shiny_tracker_popup()
 	_setup_bag_item_use_popup()
 	_setup_pokemon_summary_ev_allocate_popup()
@@ -3328,6 +3331,7 @@ func _apply_ui_z_index_policy() -> void:
 		wild_pokemon_popup,
 		settings_menu,
 		guild_popup,
+		move_mentor_popup,
 	]
 	for context_value: Variant in pokemon_summary_open_cards.values():
 		var context: Dictionary = context_value as Dictionary
@@ -3404,6 +3408,7 @@ func _priority_overlay_panels() -> Array[Control]:
 		mail_compose_popup,
 		pc_popup,
 		guild_popup,
+		move_mentor_popup,
 	]
 	if quest_journal_view != null:
 		panels.append(quest_journal_view.get_journal_panel())
@@ -19079,6 +19084,13 @@ func _setup_aether_atelier_popup() -> void:
 	aether_atelier_popup.bundle_created.connect(_on_aether_atelier_bundle_created)
 	aether_atelier_popup.chroma_dyed.connect(_on_aether_atelier_chroma_dyed)
 
+func _setup_move_mentor_popup() -> void:
+	move_mentor_popup = MOVE_MENTOR_POPUP_SCENE.instantiate() as MoveMentorPopup
+	if move_mentor_popup == null:
+		return
+	root_control.add_child(move_mentor_popup)
+	move_mentor_popup.closed.connect(_hide_move_mentor)
+
 func _setup_aether_exchange_popup() -> void:
 	aether_exchange_popup = AETHER_EXCHANGE_POPUP_SCENE.instantiate() as AetherExchangePopup
 	if aether_exchange_popup == null:
@@ -19141,6 +19153,19 @@ func open_aether_atelier() -> void:
 	aether_atelier_popup.visible = true
 	_activate_ui_panel(aether_atelier_popup)
 	aether_atelier_popup.open_atelier()
+
+func open_move_mentor() -> void:
+	if move_mentor_popup == null:
+		return
+	move_mentor_popup.visible = true
+	_activate_ui_panel(move_mentor_popup)
+	move_mentor_popup.open_mentor()
+
+func _hide_move_mentor() -> void:
+	if move_mentor_popup == null:
+		return
+	move_mentor_popup.visible = false
+	_deactivate_ui_panel(move_mentor_popup)
 
 func _hide_aether_atelier() -> void:
 	if aether_atelier_popup == null:
@@ -26859,6 +26884,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": dev_badge_progress_popup, "close": Callable(self, "_hide_dev_badge_progress_popup_for_escape")},
 		{"panel": dev_actions_popup, "close": Callable(self, "_hide_dev_actions_popup_for_escape")},
 		{"panel": aether_atelier_popup, "close": Callable(self, "_hide_aether_atelier")},
+		{"panel": move_mentor_popup, "close": Callable(self, "_hide_move_mentor")},
 		{"panel": bag_popup, "close": Callable(self, "_hide_bag_popup_for_escape")},
 		{"panel": public_trainer_card_popup, "close": Callable(self, "_hide_public_trainer_card")},
 		{"panel": trainer_card_popup, "close": Callable(self, "_hide_trainer_card_for_escape")},
