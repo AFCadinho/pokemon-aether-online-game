@@ -606,6 +606,8 @@
   "ui.aether_clash.arena.red_side": "RODE KANT",
   "ui.aether_clash.leave.title": "Aether Clash verlaten?",
   "ui.aether_clash.leave.message": "Als je vertrekt, ben je direct uitgeschakeld. Je kunt niet terugkeren naar deze Clash.",
+  "ui.aether_clash.leave.staging_message": "Staginggebied verlaten? Je komt alleen in de vaste spelerslijst als je vóór het einde van de countdown opnieuw naar binnen gaat.",
+  "ui.aether_clash.leave.spectator_message": "Terugkeren naar de Aether Clash-lobby en stoppen met spectaten?",
   "ui.aether_clash.leave.confirm": "Clash verlaten",
   "ui.aether_clash.leave.unavailable": "Je kunt de Clash op dit moment niet verlaten.",
   "ui.aether_clash.result.title.victory": "Guild Duel gewonnen!",

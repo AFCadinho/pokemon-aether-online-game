@@ -606,6 +606,8 @@
   "ui.aether_clash.arena.red_side": "RED SIDE",
   "ui.aether_clash.leave.title": "Leave Aether Clash?",
   "ui.aether_clash.leave.message": "Leaving eliminates you immediately. You cannot return to this Clash.",
+  "ui.aether_clash.leave.staging_message": "Leave the staging area? You will only join the locked roster if you enter again before the countdown ends.",
+  "ui.aether_clash.leave.spectator_message": "Return to the Aether Clash Lobby and stop spectating this Clash?",
   "ui.aether_clash.leave.confirm": "Leave Clash",
   "ui.aether_clash.leave.unavailable": "Leaving the Clash is unavailable right now.",
   "ui.aether_clash.result.title.victory": "Guild Duel victory!",

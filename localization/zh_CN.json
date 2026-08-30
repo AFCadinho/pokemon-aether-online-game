@@ -606,6 +606,8 @@
   "ui.aether_clash.arena.red_side": "红方",
   "ui.aether_clash.leave.title": "退出以太冲突？",
   "ui.aether_clash.leave.message": "退出会立即淘汰你，并且无法重新加入本场对决。",
+  "ui.aether_clash.leave.staging_message": "离开准备区？只有在倒计时结束前重新进入，你才会加入锁定阵容。",
+  "ui.aether_clash.leave.spectator_message": "返回以太冲突大厅并停止观战本场对决？",
   "ui.aether_clash.leave.confirm": "退出对决",
   "ui.aether_clash.leave.unavailable": "目前无法退出这场对决。",
   "ui.aether_clash.result.title.victory": "公会决斗胜利！",
