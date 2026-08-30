@@ -429,6 +429,7 @@ func show_debug_member_preview() -> void:
 		"duelHistory": [{
 			"sessionId": "debug-history-1",
 			"opponentGuild": {"id": 3, "name": "Midnight League"},
+			"ownSide": "challenger",
 			"result": "win",
 			"completedAt": Time.get_datetime_string_from_unix_time(
 				int(Time.get_unix_time_from_system()) - 3600,
@@ -1648,15 +1649,35 @@ func _build_aether_clash_history_entry(entry: Dictionary) -> Control:
 		9,
 		UI_MUTED
 	))
+	var participants := _dictionary(entry.get("participantCounts", {}))
 	var remaining := _dictionary(entry.get("remainingCounts", {}))
-	copy.add_child(_label(
-		_t("ui.guild.aether_clash.history.survivors", {
-			"blue": int(remaining.get("challenger", 0)),
-			"red": int(remaining.get("challenged", 0)),
+	var own_side := str(entry.get("ownSide", "challenger")).strip_edges().to_lower()
+	if own_side not in ["challenger", "challenged"]:
+		own_side = "challenger"
+	var opponent_side := "challenged" if own_side == "challenger" else "challenger"
+	var own_guild := _dictionary(guild_home.get("guild", {}))
+	var own_roster := _label(
+		_t("ui.guild.aether_clash.history.roster", {
+			"guild": str(own_guild.get("name", _t("ui.guild.fallback.guild"))),
+			"started": int(participants.get(own_side, 0)),
+			"remaining": int(remaining.get(own_side, 0)),
+		}),
+		9,
+		UI_ACCENT
+	)
+	own_roster.name = "GuildAetherClashHistoryOwnRoster"
+	copy.add_child(own_roster)
+	var opponent_roster := _label(
+		_t("ui.guild.aether_clash.history.roster", {
+			"guild": str(opponent.get("name", _t("ui.guild.fallback.guild"))),
+			"started": int(participants.get(opponent_side, 0)),
+			"remaining": int(remaining.get(opponent_side, 0)),
 		}),
 		9,
 		UI_MUTED
-	))
+	)
+	opponent_roster.name = "GuildAetherClashHistoryOpponentRoster"
+	copy.add_child(opponent_roster)
 	return panel
 
 

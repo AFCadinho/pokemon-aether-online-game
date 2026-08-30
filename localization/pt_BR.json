@@ -1699,7 +1699,7 @@
   "ui.guild.aether_clash.history.result.no_contest": "SEM RESULTADO",
   "ui.guild.aether_clash.history.vs": "contra {guild}",
   "ui.guild.aether_clash.history.details": "{time} · {duration}",
-  "ui.guild.aether_clash.history.survivors": "Sobreviventes · Azul {blue} / Vermelho {red}",
+  "ui.guild.aether_clash.history.roster": "{guild}: {started} no início → {remaining} restantes",
   "ui.guild.aether_clash.refresh": "Atualizar",
   "ui.guild.aether_clash.loading": "Carregando desafios do Aether Clash...",
   "ui.guild.aether_clash.no_current": "Sua Guilda não tem um Aether Clash aceito no momento.",

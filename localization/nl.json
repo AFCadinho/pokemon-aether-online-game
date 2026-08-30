@@ -1699,7 +1699,7 @@
   "ui.guild.aether_clash.history.result.no_contest": "ONGELDIG",
   "ui.guild.aether_clash.history.vs": "tegen {guild}",
   "ui.guild.aether_clash.history.details": "{time} · {duration}",
-  "ui.guild.aether_clash.history.survivors": "Overlevenden · Blauw {blue} / Rood {red}",
+  "ui.guild.aether_clash.history.roster": "{guild}: {started} gestart → {remaining} over",
   "ui.guild.aether_clash.refresh": "Vernieuwen",
   "ui.guild.aether_clash.loading": "Aether Clash-challenges laden...",
   "ui.guild.aether_clash.no_current": "Je Guild heeft momenteel geen geaccepteerde Aether Clash.",

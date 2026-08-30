@@ -44,6 +44,7 @@ func _init() -> void:
 	_check_contains(service_source, '"currentSession": current_session', "guild service preserves the current reserved clash")
 	_check_contains(service_source, '"duelStats": stats', "guild service preserves the Guild Duel record")
 	_check_contains(service_source, '"duelHistory": history', "guild service preserves Guild Duel match history")
+	_check_contains(service_source, 'entry["ownSide"]', "Guild Duel history preserves which side belongs to the current Guild")
 	_check_contains(service_source, "func load_bank", "guild service loads the authoritative Guild Bank")
 	_check_contains(service_source, '"itemCapacity": int(body.get("itemCapacity", 50))', "guild service preserves item bank capacity")
 	_check_contains(service_source, '"pokemonCapacity": int(body.get("pokemonCapacity", 30))', "guild service preserves Pokémon bank capacity")

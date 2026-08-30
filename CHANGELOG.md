@@ -32,6 +32,7 @@
 **Changed**
 
 - Once an Aether Clash challenge is accepted, every member of both Guilds now receives a persistent on-screen gathering timer directing them to the red Guild Duel portal.
+- Guild Duel match history now shows how many players each Guild locked in after the countdown and how many remained at the end.
 - Guild Duel teams are now presented as the Blue Side and Red Side while the HUD continues to show both actual Guild names; either team may use either exit zone to leave.
 - Once the barrier drops, the Guild Duel HUD now shows the synchronized elapsed duel time.
 - Move Maniac lessons now consume Heart Scales, Mushrooms, or the original Resonite Ore material based on how the move is learned, with compact prices beside each move and full owned quantities shown on selection.
