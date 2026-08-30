@@ -94,8 +94,9 @@ func _run() -> void:
 		"The opposite-colored exit zone stops the movement step"
 	)
 	await process_frame
-	var red_exit_dialog := duel.get_node_or_null("AetherClashLeaveConfirmation")
+	var red_exit_dialog := duel.get_node_or_null("ArenaHud/AetherClashLeaveConfirmation")
 	_check(red_exit_dialog != null and red_exit_dialog.visible, "Either team may use the opposite-colored exit zone")
+	_check(red_exit_dialog != null and red_exit_dialog.get_parent() == duel.get_node("ArenaHud"), "Leave confirmation renders in the HUD canvas")
 	if red_exit_dialog != null:
 		red_exit_dialog.call("_cancel")
 	await process_frame
@@ -115,7 +116,7 @@ func _run() -> void:
 		"Entering the own active exit zone stops the movement step"
 	)
 	await process_frame
-	var leave_dialog := duel.get_node_or_null("AetherClashLeaveConfirmation")
+	var leave_dialog := duel.get_node_or_null("ArenaHud/AetherClashLeaveConfirmation")
 	_check(leave_dialog != null and leave_dialog.visible, "Own exit zone opens the themed leave confirmation")
 	if leave_dialog != null:
 		leave_dialog.call("_cancel")
@@ -138,6 +139,12 @@ func _run() -> void:
 		and zone_source.contains("BLUE_COLOR")
 		and zone_source.contains("RED_COLOR"),
 		"Staging and exit areas use explicit Blue Side and Red Side colors"
+	)
+	var ring_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_engagement_ring.gd")
+	_check(
+		ring_source.contains("const RADIUS := 28.0")
+		and duel_source.contains("const ENGAGEMENT_RADIUS := 28.0"),
+		"Visible and mechanical engagement circles share the larger radius"
 	)
 
 	player_save.set("player_id", original_player_id)
