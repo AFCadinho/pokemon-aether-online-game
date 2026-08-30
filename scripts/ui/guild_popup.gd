@@ -148,6 +148,7 @@ var pending_applications: Array = []
 var application_cooldowns: Array = []
 var aether_clash_state: Dictionary = {}
 var active_aether_clash_mode_tab := "duel"
+var active_aether_clash_duel_section := "overview"
 var selected_guild_id := 0
 var active_page := "browse"
 var is_dragging_popup := false
@@ -1460,6 +1461,7 @@ func _build_aether_clash_workspace() -> Control:
 	var mode_tabs := HBoxContainer.new()
 	mode_tabs.name = "GuildAetherClashModeTabs"
 	mode_tabs.add_theme_constant_override("separation", 6)
+	mode_tabs.alignment = BoxContainer.ALIGNMENT_CENTER
 	workspace.add_child(mode_tabs)
 	for tab_definition: Dictionary in [
 		{
@@ -1478,11 +1480,11 @@ func _build_aether_clash_workspace() -> Control:
 		mode_button.text = _t(str(tab_definition.get("key", "")))
 		mode_button.toggle_mode = true
 		mode_button.button_pressed = active_aether_clash_mode_tab == str(tab_definition.get("id", "duel"))
-		mode_button.custom_minimum_size = Vector2(150, 34)
+		mode_button.custom_minimum_size = Vector2(190, 34)
 		mode_button.pressed.connect(
 			_set_aether_clash_mode_tab.bind(str(tab_definition.get("id", "duel")))
 		)
-		_apply_button_style(mode_button, "primary" if mode_button.button_pressed else "")
+		_apply_tab_style(mode_button, mode_button.button_pressed)
 		mode_tabs.add_child(mode_button)
 
 	if active_aether_clash_mode_tab == "battle_royale":
@@ -1501,24 +1503,19 @@ func _build_aether_clash_workspace() -> Control:
 		))
 		return workspace
 
-	workspace.add_child(_build_aether_clash_duel_stats())
-
+	var incoming := _array_from_value(aether_clash_state.get("pendingIncoming", []))
+	var outgoing := _array_from_value(aether_clash_state.get("pendingOutgoing", []))
 	var current_session := _dictionary(aether_clash_state.get("currentSession", {}))
-	if current_session.is_empty():
-		workspace.add_child(_build_aether_clash_message_panel(
-			_t("ui.guild.aether_clash.no_current"),
-			UI_MUTED
-		))
-	else:
+	if not current_session.is_empty():
 		workspace.add_child(_build_current_aether_clash_card(current_session))
-
-	var can_manage := _can_manage_aether_clash()
-	if not can_manage:
-		workspace.add_child(_build_aether_clash_message_panel(
-			_t("ui.guild.aether_clash.member_hint"),
-			UI_MUTED
-		))
-	workspace.add_child(_build_aether_clash_duel_history())
+	workspace.add_child(_build_aether_clash_duel_navigation(incoming.size() + outgoing.size()))
+	match active_aether_clash_duel_section:
+		"challenges":
+			workspace.add_child(_build_aether_clash_challenges_workspace(incoming, outgoing))
+		"history":
+			workspace.add_child(_build_aether_clash_duel_history())
+		_:
+			workspace.add_child(_build_aether_clash_duel_overview())
 	return workspace
 
 
@@ -1531,6 +1528,144 @@ func _set_aether_clash_mode_tab(mode: String) -> void:
 	active_aether_clash_mode_tab = normalized_mode
 	if active_guild_section == "aether_clash":
 		_render_guild_home()
+
+
+func _build_aether_clash_duel_navigation(pending_count: int) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildAetherClashDuelNavigationPanel"
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 6, 6, 6, 6)
+	panel.add_child(margin)
+	var navigation := HBoxContainer.new()
+	navigation.name = "GuildAetherClashDuelNavigation"
+	navigation.add_theme_constant_override("separation", 6)
+	margin.add_child(navigation)
+	for definition: Dictionary in [
+		{
+			"id": "overview",
+			"name": "GuildAetherClashOverviewTab",
+			"text": _t("ui.guild.aether_clash.section.overview"),
+		},
+		{
+			"id": "challenges",
+			"name": "GuildAetherClashChallengesTab",
+			"text": _t("ui.guild.aether_clash.section.challenges", {"count": pending_count}),
+		},
+		{
+			"id": "history",
+			"name": "GuildAetherClashHistoryTab",
+			"text": _t("ui.guild.aether_clash.section.history"),
+		},
+	]:
+		var button := Button.new()
+		button.name = str(definition.get("name", "GuildAetherClashSectionTab"))
+		button.text = str(definition.get("text", ""))
+		button.custom_minimum_size = Vector2(155, 34)
+		var section_id := str(definition.get("id", "overview"))
+		button.pressed.connect(_set_aether_clash_duel_section.bind(section_id))
+		_apply_tab_style(button, active_aether_clash_duel_section == section_id)
+		navigation.add_child(button)
+	return panel
+
+
+func _set_aether_clash_duel_section(section: String) -> void:
+	var normalized_section := section.strip_edges().to_lower()
+	if normalized_section not in ["overview", "challenges", "history"]:
+		return
+	if active_aether_clash_duel_section == normalized_section:
+		return
+	active_aether_clash_duel_section = normalized_section
+	active_aether_clash_mode_tab = "duel"
+	if active_guild_section == "aether_clash":
+		_render_guild_home()
+
+
+func _build_aether_clash_duel_overview() -> Control:
+	var content := VBoxContainer.new()
+	content.name = "GuildAetherClashDuelOverview"
+	content.add_theme_constant_override("separation", 10)
+	content.add_child(_build_aether_clash_duel_stats())
+	var current_session := _dictionary(aether_clash_state.get("currentSession", {}))
+	if current_session.is_empty():
+		content.add_child(_build_aether_clash_message_panel(
+			_t("ui.guild.aether_clash.no_current"),
+			UI_MUTED
+		))
+	return content
+
+
+func _build_aether_clash_challenges_workspace(incoming: Array, outgoing: Array) -> Control:
+	var content := VBoxContainer.new()
+	content.name = "GuildAetherClashChallengesWorkspace"
+	content.add_theme_constant_override("separation", 9)
+	if not _can_manage_aether_clash():
+		content.add_child(_build_aether_clash_message_panel(
+			_t("ui.guild.aether_clash.member_hint"),
+			UI_MUTED
+		))
+	var columns := HBoxContainer.new()
+	columns.name = "GuildAetherClashChallengeColumns"
+	columns.add_theme_constant_override("separation", 10)
+	content.add_child(columns)
+	columns.add_child(_build_aether_clash_challenge_group(
+		"ui.guild.aether_clash.incoming",
+		"ui.guild.aether_clash.incoming_empty",
+		incoming,
+		true,
+		UI_WARNING
+	))
+	columns.add_child(_build_aether_clash_challenge_group(
+		"ui.guild.aether_clash.outgoing",
+		"ui.guild.aether_clash.outgoing_empty",
+		outgoing,
+		false,
+		UI_ACCENT
+	))
+	return content
+
+
+func _build_aether_clash_challenge_group(
+	title_key: String,
+	empty_key: String,
+	challenges: Array,
+	incoming: bool,
+	accent: Color
+) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = (
+		"GuildAetherClashIncomingGroup"
+		if incoming
+		else "GuildAetherClashOutgoingGroup"
+	)
+	panel.custom_minimum_size.y = 138
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(UI_RAISED, Color(accent.r, accent.g, accent.b, 0.48), 9, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 10, 12, 12)
+	panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 8)
+	margin.add_child(stack)
+	stack.add_child(_label(_t(title_key, {"count": challenges.size()}), 11, accent))
+	if challenges.is_empty():
+		var empty := _localized_label(empty_key, 10, UI_MUTED)
+		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		stack.add_child(empty)
+		return panel
+	for challenge_value: Variant in challenges:
+		if challenge_value is Dictionary:
+			stack.add_child(_build_aether_clash_challenge_card(
+				challenge_value as Dictionary,
+				incoming
+			))
+	return panel
 
 
 func _build_aether_clash_duel_stats() -> Control:
@@ -1694,7 +1829,15 @@ func _build_current_aether_clash_card(challenge: Dictionary) -> Control:
 	var content := VBoxContainer.new()
 	content.add_theme_constant_override("separation", 7)
 	margin.add_child(content)
-	content.add_child(_localized_label("ui.guild.aether_clash.current", 10, UI_GOLD))
+	var status := str(challenge.get("status", "entry_open"))
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	content.add_child(header)
+	var eyebrow := _localized_label("ui.guild.aether_clash.current", 10, UI_GOLD)
+	eyebrow.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	eyebrow.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	header.add_child(eyebrow)
+	header.add_child(_build_aether_clash_status_pill(status))
 	var guild_names := _aether_clash_guild_names(challenge)
 	var matchup := _label(
 		_t("ui.guild.aether_clash.matchup", {
@@ -1708,21 +1851,24 @@ func _build_current_aether_clash_card(challenge: Dictionary) -> Control:
 	matchup.max_lines_visible = 2
 	matchup.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	content.add_child(matchup)
-	var status := str(challenge.get("status", "entry_open"))
-	content.add_child(_label(_aether_clash_status_text(status), 11, UI_SUCCESS))
-	content.add_child(_label(
+	var details := HBoxContainer.new()
+	details.add_theme_constant_override("separation", 14)
+	content.add_child(details)
+	var spectator_access := _label(
 		_aether_clash_spectator_access_text(str(challenge.get("spectatorAccess", "public"))),
 		10,
 		UI_MUTED
-	))
+	)
+	spectator_access.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details.add_child(spectator_access)
 	if status == "entry_open":
 		aether_clash_countdown_label = _label("", 14, UI_GOLD)
 		aether_clash_countdown_label.name = "GuildAetherClashEntryCountdown"
-		content.add_child(aether_clash_countdown_label)
+		details.add_child(aether_clash_countdown_label)
 		_refresh_aether_clash_countdown()
 	var accepted_by := str(challenge.get("acceptedBy", "")).strip_edges()
 	if accepted_by != "":
-		content.add_child(_label(
+		details.add_child(_label(
 			_t("ui.guild.aether_clash.accepted_by", {"trainer": accepted_by}),
 			10,
 			UI_MUTED
@@ -1741,6 +1887,40 @@ func _build_current_aether_clash_card(challenge: Dictionary) -> Control:
 	return panel
 
 
+func _build_aether_clash_status_pill(status: String) -> Control:
+	var color := UI_SUCCESS
+	if status == "active":
+		color = UI_WARNING
+	elif status == "roster_locked":
+		color = UI_ACCENT
+	elif status == "finishing":
+		color = UI_MUTED
+	var panel := PanelContainer.new()
+	panel.name = "GuildAetherClashStatusPill"
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(
+			Color(color.r, color.g, color.b, 0.10),
+			Color(color.r, color.g, color.b, 0.58),
+			9,
+			1
+		)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 9, 4, 9, 4)
+	panel.add_child(margin)
+	var short_status_key := "ui.guild.aether_clash.status_short.%s" % status
+	var short_status := _t(short_status_key)
+	var status_label := _label(
+		_aether_clash_status_text(status) if short_status == short_status_key else short_status,
+		10,
+		color
+	)
+	status_label.name = "GuildAetherClashStatusLabel"
+	margin.add_child(status_label)
+	return panel
+
+
 func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -> Control:
 	var panel := PanelContainer.new()
 	panel.name = (
@@ -1748,22 +1928,33 @@ func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -
 		if incoming
 		else "OutgoingGuildAetherClashChallenge"
 	)
-	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+	var accent := UI_WARNING if incoming else UI_ACCENT
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#07131ff2"), Color(accent.r, accent.g, accent.b, 0.42), 8, 1)
+	)
 	var margin := MarginContainer.new()
 	_set_margins(margin, 12, 10, 12, 10)
 	panel.add_child(margin)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-	margin.add_child(row)
-	var copy := VBoxContainer.new()
-	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	copy.add_theme_constant_override("separation", 3)
-	row.add_child(copy)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 5)
+	margin.add_child(content)
+	var top_row := HBoxContainer.new()
+	top_row.add_theme_constant_override("separation", 8)
+	content.add_child(top_row)
 	var opponent := _aether_clash_opponent(challenge)
 	var opponent_name := _label(str(opponent.get("name", _t("ui.guild.fallback.guild"))), 14, UI_TEXT)
+	opponent_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	opponent_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	copy.add_child(opponent_name)
-	copy.add_child(_label(
+	top_row.add_child(opponent_name)
+	top_row.add_child(_label(
+		_t("ui.guild.aether_clash.expires", {
+			"time": _format_aether_clash_remaining(str(challenge.get("expiresAt", ""))),
+		}),
+		10,
+		UI_WARNING
+	))
+	content.add_child(_label(
 		_t(
 			"ui.guild.aether_clash.received_from"
 			if incoming
@@ -1773,14 +1964,7 @@ func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -
 		10,
 		UI_MUTED
 	))
-	copy.add_child(_label(
-		_t("ui.guild.aether_clash.expires", {
-			"time": _format_aether_clash_remaining(str(challenge.get("expiresAt", ""))),
-		}),
-		10,
-		UI_WARNING
-	))
-	copy.add_child(_label(
+	content.add_child(_label(
 		_aether_clash_spectator_access_text(str(challenge.get("spectatorAccess", "public"))),
 		10,
 		UI_MUTED
@@ -1789,7 +1973,8 @@ func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -
 		return panel
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 6)
-	row.add_child(actions)
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	content.add_child(actions)
 	var challenge_id := str(challenge.get("id", ""))
 	if incoming:
 		var accept_button := Button.new()
@@ -1808,7 +1993,7 @@ func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -
 		decline_button.pressed.connect(
 			_run_aether_clash_action.bind("decline_aether_clash_challenge", challenge_id)
 		)
-		_apply_button_style(decline_button)
+		_apply_button_style(decline_button, "danger")
 		actions.add_child(decline_button)
 	else:
 		var cancel_button := Button.new()
@@ -1818,7 +2003,7 @@ func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -
 		cancel_button.pressed.connect(
 			_run_aether_clash_action.bind("cancel_aether_clash_challenge", challenge_id)
 		)
-		_apply_button_style(cancel_button)
+		_apply_button_style(cancel_button, "secondary")
 		actions.add_child(cancel_button)
 	return panel
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reworked the Aether Clash tab with clean Overview, Challenges, and History navigation while keeping an active Clash and its lobby timer visible.
+
 - Staff Translate Mode can now choose Libre or AI separately for each private conversation, and PM translation settings recover after reconnecting.
 
 - The Item Dex now shows detailed acquisition cards with shops, locations, effective drop chances, skill requirements, costs, and one-time or repeatable availability.
