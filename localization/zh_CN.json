@@ -1696,7 +1696,7 @@
   "ui.guild.aether_clash.history.result.no_contest": "无结果",
   "ui.guild.aether_clash.history.vs": "对阵 {guild}",
   "ui.guild.aether_clash.history.details": "{time} · {duration}",
-  "ui.guild.aether_clash.history.survivors": "幸存者 · 蓝方 {blue} / 红方 {red}",
+  "ui.guild.aether_clash.history.roster": "{guild}：{started} 人开始 → {remaining} 人剩余",
   "ui.guild.aether_clash.refresh": "刷新",
   "ui.guild.aether_clash.loading": "正在加载 Aether Clash 挑战……",
   "ui.guild.aether_clash.no_current": "你的公会目前没有已接受的 Aether Clash。",

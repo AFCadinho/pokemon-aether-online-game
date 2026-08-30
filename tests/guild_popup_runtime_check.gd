@@ -249,6 +249,22 @@ func _run() -> void:
 	var duel_wins := popup.find_child("GuildAetherClashWins", true, false) as PanelContainer
 	_check(duel_wins != null, "Guild Duel win statistic renders")
 	_check(popup.find_child("GuildAetherClashHistoryEntry", true, false) != null, "recent Guild Duel history renders")
+	var own_roster := popup.find_child("GuildAetherClashHistoryOwnRoster", true, false) as Label
+	var opponent_roster := popup.find_child("GuildAetherClashHistoryOpponentRoster", true, false) as Label
+	_check(
+		own_roster != null
+		and own_roster.text.contains("Aether Vanguard")
+		and own_roster.text.contains("3")
+		and own_roster.text.contains("2"),
+		"Guild Duel history shows the own Guild's locked roster and survivors"
+	)
+	_check(
+		opponent_roster != null
+		and opponent_roster.text.contains("Midnight League")
+		and opponent_roster.text.contains("2")
+		and opponent_roster.text.contains("0"),
+		"Guild Duel history shows the opponent's locked roster and survivors"
+	)
 	_check(popup.find_child("GuildAetherClashHeader", true, false) != null, "Aether Clash uses the shared workspace heading")
 	var clash_refresh := popup.find_child("RefreshGuildAetherClashButton", true, false) as Button
 	_check(

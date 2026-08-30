@@ -674,6 +674,7 @@ func _aether_clash_challenges_result(value: Variant) -> Dictionary:
 			continue
 		var entry := (history_value as Dictionary).duplicate(true)
 		entry["opponentGuild"] = _dictionary(entry.get("opponentGuild", {})).duplicate(true)
+		entry["ownSide"] = str(entry.get("ownSide", "challenger")).strip_edges().to_lower()
 		entry["participantCounts"] = _dictionary(entry.get("participantCounts", {})).duplicate(true)
 		entry["remainingCounts"] = _dictionary(entry.get("remainingCounts", {})).duplicate(true)
 		history.append(entry)
