@@ -7,6 +7,7 @@ const SCALE_BALANCED := 1.5
 const SCALE_CLOSE := 2.0
 const DEFAULT_SCALE := SCALE_CLOSE
 const AVAILABLE_SCALES: Array[float] = [SCALE_OVERVIEW, SCALE_BALANCED, SCALE_CLOSE]
+const LARGE_VIEWPORT_THRESHOLD := Vector2i(1600, 900)
 
 
 static func validate_scale(value: Variant) -> float:
@@ -15,6 +16,15 @@ static func validate_scale(value: Variant) -> float:
 		if is_equal_approx(scale, available_scale):
 			return available_scale
 	return DEFAULT_SCALE
+
+
+static func default_scale_for_viewport(viewport_size: Vector2i) -> float:
+	if (
+		viewport_size.x > LARGE_VIEWPORT_THRESHOLD.x
+		and viewport_size.y > LARGE_VIEWPORT_THRESHOLD.y
+	):
+		return SCALE_CLOSE
+	return SCALE_OVERVIEW
 
 
 static func resolve_scale(configured_scale: Variant, _viewport_size: Vector2i) -> float:

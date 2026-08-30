@@ -17,6 +17,18 @@ func _init() -> void:
 		"settings expose only 1x, 1.5x, and 2x"
 	)
 	_check(PixelPerfectRenderingScript.validate_scale(-1) == 2.0, "invalid scale falls back to the 2x outdoor default")
+	_check(
+		PixelPerfectRenderingScript.default_scale_for_viewport(Vector2i(1600, 900)) == 1.0,
+		"windowed play up to 1600x900 defaults to the 1x outdoor overview"
+	)
+	_check(
+		PixelPerfectRenderingScript.default_scale_for_viewport(Vector2i(1920, 1080)) == 2.0,
+		"larger viewports default to the 2x outdoor close view"
+	)
+	_check(
+		PixelPerfectRenderingScript.default_scale_for_viewport(Vector2i(1920, 900)) == 1.0,
+		"short ultrawide viewports retain the 1x outdoor overview"
+	)
 	_check(PixelPerfectRenderingScript.resolve_scale(1.0, Vector2i(1920, 1080)) == 1.0, "explicit 1x remains exact")
 	_check(PixelPerfectRenderingScript.resolve_scale(1.5, Vector2i(1280, 720)) == 1.5, "explicit 1.5x remains exact")
 	_check(PixelPerfectRenderingScript.resolve_scale(2.0, Vector2i(1920, 1080)) == 2.0, "explicit 2x remains exact")
@@ -48,8 +60,10 @@ func _init() -> void:
 	_check(
 		settings_text.contains("DEFAULT_WORLD_PIXEL_SCALE := PixelPerfectRendering.DEFAULT_SCALE")
 		and settings_text.contains('"world_pixel_scale": world_pixel_scale')
+		and settings_text.contains('data.has("world_pixel_scale")')
+		and settings_text.contains("default_scale_for_viewport")
 		and settings_text.contains("func set_world_pixel_scale(value: float)"),
-		"outdoor world zoom defaults to 2x and persists"
+		"outdoor world zoom receives a viewport-aware first default and persists"
 	)
 	_check(
 		menu_text.contains("WorldPixelScaleOptionsButton")
