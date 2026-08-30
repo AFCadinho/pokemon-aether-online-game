@@ -12,6 +12,10 @@ var failed := false
 
 
 func _init() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
 	_check(
 		PixelPerfectRenderingScript.AVAILABLE_SCALES == [1.0, 1.5, 2.0],
 		"settings expose only 1x, 1.5x, and 2x"
@@ -29,6 +33,27 @@ func _init() -> void:
 		PixelPerfectRenderingScript.default_scale_for_viewport(Vector2i(1920, 900)) == 1.0,
 		"short ultrawide viewports retain the 1x outdoor overview"
 	)
+	var settings_manager := root.get_node_or_null("SettingsManager")
+	_check(settings_manager != null, "automatic outdoor zoom can access settings")
+	if settings_manager == null:
+		quit(1)
+		return
+	var original_mode: Variant = settings_manager.get("world_pixel_scale_mode")
+	var original_scale: Variant = settings_manager.get("world_pixel_scale")
+	settings_manager.set("world_pixel_scale_mode", "auto")
+	_check(
+		settings_manager.call("get_effective_world_pixel_scale", Vector2i(1600, 900)) == 1.0
+		and settings_manager.call("get_effective_world_pixel_scale", Vector2i(1920, 1080)) == 2.0,
+		"automatic outdoor zoom follows the current viewport size"
+	)
+	settings_manager.set("world_pixel_scale_mode", "fixed")
+	settings_manager.set("world_pixel_scale", 1.5)
+	_check(
+		settings_manager.call("get_effective_world_pixel_scale", Vector2i(1920, 1080)) == 1.5,
+		"a fixed outdoor zoom overrides automatic viewport sizing"
+	)
+	settings_manager.set("world_pixel_scale_mode", original_mode)
+	settings_manager.set("world_pixel_scale", original_scale)
 	_check(PixelPerfectRenderingScript.resolve_scale(1.0, Vector2i(1920, 1080)) == 1.0, "explicit 1x remains exact")
 	_check(PixelPerfectRenderingScript.resolve_scale(1.5, Vector2i(1280, 720)) == 1.5, "explicit 1.5x remains exact")
 	_check(PixelPerfectRenderingScript.resolve_scale(2.0, Vector2i(1920, 1080)) == 2.0, "explicit 2x remains exact")
@@ -60,14 +85,18 @@ func _init() -> void:
 	_check(
 		settings_text.contains("DEFAULT_WORLD_PIXEL_SCALE := PixelPerfectRendering.DEFAULT_SCALE")
 		and settings_text.contains('"world_pixel_scale": world_pixel_scale')
-		and settings_text.contains('data.has("world_pixel_scale")')
-		and settings_text.contains("default_scale_for_viewport")
+		and settings_text.contains('"world_pixel_scale_mode": world_pixel_scale_mode')
+		and settings_text.contains("func set_world_pixel_scale_auto()")
+		and settings_text.contains("func is_world_pixel_scale_auto()")
+		and settings_text.contains("PixelPerfectRendering.default_scale_for_viewport")
 		and settings_text.contains("func set_world_pixel_scale(value: float)"),
-		"outdoor world zoom receives a viewport-aware first default and persists"
+		"outdoor world zoom supports persistent automatic and fixed modes"
 	)
 	_check(
 		menu_text.contains("WorldPixelScaleOptionsButton")
+		and menu_text.contains("SettingsManager.set_world_pixel_scale_auto")
 		and menu_text.contains("SettingsManager.set_world_pixel_scale")
+		and menu_text.contains('"ui.settings.world_pixel_scale_auto"')
 		and menu_text.contains('"ui.settings.world_pixel_scale_overview"')
 		and menu_text.contains('"ui.settings.world_pixel_scale_balanced"')
 		and menu_text.contains('"ui.settings.world_pixel_scale_close"'),
@@ -75,6 +104,7 @@ func _init() -> void:
 	)
 	_check(
 		player_text.contains("SettingsManager.world_pixel_scale_changed.connect")
+		and player_text.contains("SettingsManager.get_effective_world_pixel_scale(get_window().size)")
 		and player_text.contains("resolve_world_scale_for_area")
 		and player_text.contains("_get_current_map_world_access_area_type")
 		and player_text.contains("apply_camera_baseline_zoom")
@@ -87,6 +117,7 @@ func _init() -> void:
 		var locale_text := _read_text(locale_path)
 		_check(
 			locale_text.contains('"ui.settings.world_pixel_scale"')
+			and locale_text.contains('"ui.settings.world_pixel_scale_auto"')
 			and locale_text.contains('"ui.settings.world_pixel_scale_overview"')
 			and locale_text.contains('"ui.settings.world_pixel_scale_balanced"')
 			and locale_text.contains('"ui.settings.world_pixel_scale_close"')

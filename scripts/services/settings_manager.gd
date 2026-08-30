@@ -32,6 +32,8 @@ const CONTENT_NAME_LANGUAGE_LOCALIZED := "localized"
 const DEFAULT_WINDOW_RESOLUTION := Vector2i(1600, 900)
 const DEFAULT_WORLD_PIXEL_SCALE := PixelPerfectRendering.DEFAULT_SCALE
 const AVAILABLE_WORLD_PIXEL_SCALES: Array[float] = PixelPerfectRendering.AVAILABLE_SCALES
+const WORLD_PIXEL_SCALE_MODE_AUTO := "auto"
+const WORLD_PIXEL_SCALE_MODE_FIXED := "fixed"
 const MOUNT_MODE_LAND := MountServiceScript.MOVEMENT_MODE_LAND
 const MOUNT_MODE_SURF := MountServiceScript.MOVEMENT_MODE_SURF
 const DEFAULT_CURSOR_SCALE := 75.0
@@ -64,6 +66,7 @@ var sprite_style := SPRITE_STYLE_ANIMATED
 var fullscreen := false
 var window_resolution := DEFAULT_WINDOW_RESOLUTION
 var world_pixel_scale := DEFAULT_WORLD_PIXEL_SCALE
+var world_pixel_scale_mode := WORLD_PIXEL_SCALE_MODE_AUTO
 var selected_land_mount_id := MountServiceScript.get_default_mount_id(MOUNT_MODE_LAND)
 var selected_surf_mount_id := MountServiceScript.get_default_mount_id(MOUNT_MODE_SURF)
 var cursor_scale := DEFAULT_CURSOR_SCALE
@@ -90,9 +93,6 @@ func load_settings() -> void:
 		locale = LocalizationManager.get_preferred_system_locale()
 		_apply_launcher_locale_argument()
 		content_name_language = _default_content_name_language(locale)
-		world_pixel_scale = PixelPerfectRendering.default_scale_for_viewport(
-			_default_world_pixel_scale_viewport_size()
-		)
 		save_settings()
 		return
 
@@ -100,9 +100,6 @@ func load_settings() -> void:
 	var parsed_data: Variant = JSON.parse_string(settings_text)
 	if not parsed_data is Dictionary:
 		_apply_launcher_locale_argument()
-		world_pixel_scale = PixelPerfectRendering.default_scale_for_viewport(
-			_default_world_pixel_scale_viewport_size()
-		)
 		save_settings()
 		return
 
@@ -116,12 +113,16 @@ func load_settings() -> void:
 	fullscreen = bool(data.get("fullscreen", fullscreen))
 	window_resolution = _validated_window_resolution(data.get("window_resolution", window_resolution))
 	var has_world_pixel_scale := data.has("world_pixel_scale")
-	if has_world_pixel_scale:
-		world_pixel_scale = PixelPerfectRendering.validate_scale(data.get("world_pixel_scale"))
-	else:
-		world_pixel_scale = PixelPerfectRendering.default_scale_for_viewport(
-			_default_world_pixel_scale_viewport_size()
+	world_pixel_scale = PixelPerfectRendering.validate_scale(
+		data.get("world_pixel_scale", world_pixel_scale)
+	)
+	var has_world_pixel_scale_mode := data.has("world_pixel_scale_mode")
+	world_pixel_scale_mode = _validated_world_pixel_scale_mode(
+		data.get(
+			"world_pixel_scale_mode",
+			WORLD_PIXEL_SCALE_MODE_FIXED if has_world_pixel_scale else WORLD_PIXEL_SCALE_MODE_AUTO
 		)
+	)
 	selected_land_mount_id = MountServiceScript.resolve_mount_id_for_mode(
 		str(data.get("selected_land_mount_id", selected_land_mount_id)),
 		MOUNT_MODE_LAND,
@@ -156,7 +157,7 @@ func load_settings() -> void:
 	var launcher_changed := _apply_launcher_locale_argument()
 	if not has_content_name_language:
 		content_name_language = _default_content_name_language(locale)
-	if launcher_changed or not has_content_name_language or not has_world_pixel_scale:
+	if launcher_changed or not has_content_name_language or not has_world_pixel_scale_mode:
 		save_settings()
 	_apply_runtime_settings()
 
@@ -185,6 +186,7 @@ func save_settings() -> void:
 			"height": window_resolution.y,
 		},
 		"world_pixel_scale": world_pixel_scale,
+		"world_pixel_scale_mode": world_pixel_scale_mode,
 		"selected_land_mount_id": selected_land_mount_id,
 		"selected_surf_mount_id": selected_surf_mount_id,
 		"cursor_scale": cursor_scale,
@@ -286,18 +288,33 @@ func set_window_resolution(resolution: Vector2i) -> void:
 
 func set_world_pixel_scale(value: float) -> void:
 	var validated_scale := PixelPerfectRendering.validate_scale(value)
-	if world_pixel_scale == validated_scale:
+	if world_pixel_scale_mode == WORLD_PIXEL_SCALE_MODE_FIXED and world_pixel_scale == validated_scale:
 		return
 
 	world_pixel_scale = validated_scale
+	world_pixel_scale_mode = WORLD_PIXEL_SCALE_MODE_FIXED
 	world_pixel_scale_changed.emit(world_pixel_scale)
 	_save_and_emit()
+
+
+func set_world_pixel_scale_auto() -> void:
+	if world_pixel_scale_mode == WORLD_PIXEL_SCALE_MODE_AUTO:
+		return
+	world_pixel_scale_mode = WORLD_PIXEL_SCALE_MODE_AUTO
+	world_pixel_scale_changed.emit(get_effective_world_pixel_scale())
+	_save_and_emit()
+
+
+func is_world_pixel_scale_auto() -> bool:
+	return world_pixel_scale_mode == WORLD_PIXEL_SCALE_MODE_AUTO
 
 
 func get_effective_world_pixel_scale(viewport_size: Vector2i = Vector2i.ZERO) -> float:
 	var resolved_viewport_size := viewport_size
 	if resolved_viewport_size == Vector2i.ZERO and get_tree() != null:
-		resolved_viewport_size = Vector2i(get_tree().root.get_visible_rect().size)
+		resolved_viewport_size = get_window().size
+	if is_world_pixel_scale_auto():
+		return PixelPerfectRendering.default_scale_for_viewport(resolved_viewport_size)
 	return PixelPerfectRendering.resolve_scale(world_pixel_scale, resolved_viewport_size)
 
 
@@ -533,6 +550,14 @@ func _validated_cursor_scale(value: Variant) -> float:
 	return clampf(float(value), MIN_CURSOR_SCALE, MAX_CURSOR_SCALE)
 
 
+func _validated_world_pixel_scale_mode(value: Variant) -> String:
+	return (
+		WORLD_PIXEL_SCALE_MODE_AUTO
+		if str(value) == WORLD_PIXEL_SCALE_MODE_AUTO
+		else WORLD_PIXEL_SCALE_MODE_FIXED
+	)
+
+
 func _validated_language_chats(value: Variant) -> Array[String]:
 	var channels: Array[String] = []
 	if value is Array:
@@ -582,14 +607,6 @@ func _closest_available_resolution(resolution: Vector2i) -> Vector2i:
 			return available_resolution
 
 	return DEFAULT_WINDOW_RESOLUTION
-
-
-func _default_world_pixel_scale_viewport_size() -> Vector2i:
-	if OS.has_feature("web"):
-		return Vector2i(get_viewport().get_visible_rect().size)
-	if fullscreen:
-		return DisplayServer.screen_get_size(DisplayServer.window_get_current_screen())
-	return window_resolution
 
 
 func _ensure_audio_buses() -> void:
