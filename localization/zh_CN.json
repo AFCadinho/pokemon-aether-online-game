@@ -2987,7 +2987,7 @@
   "ui.move_deleter.error.delete": "无法遗忘该招式。",
   "ui.move_deleter.result.deleted": "{pokemon}遗忘了{move}。",
   "ui.move_deleter.confirm.title": "遗忘这个招式？",
-  "ui.move_deleter.confirm.message": "确定要让{pokemon}遗忘{move}吗？兼容的招式之后可以从招式狂人处重新学习。",
+  "ui.move_deleter.confirm.message": "确定要让{pokemon}遗忘{move}吗？此操作无法撤销。如果以后还想使用这个招式，就必须重新让宝可梦学习。",
   "ui.move_deleter.confirm.delete": "遗忘招式",
   "ui.move_deleter.npc.records_unavailable": "我的招式记录目前无法使用。",
   "ui.move_deleter.npc.service_unavailable": "我的遗忘服务目前无法使用。",

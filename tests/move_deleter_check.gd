@@ -111,6 +111,7 @@ func _check_popup_scene() -> void:
 	_check(confirmation != null and confirmation.visible, "Move deletion always opens a confirmation dialog")
 	if confirmation != null:
 		_check(confirmation.message_label.text.contains("Water Shuriken"), "Confirmation names the move being forgotten")
+		_check(confirmation.message_label.text.contains("cannot be undone"), "Confirmation warns that forgetting cannot be undone")
 		confirmation.canceled.emit()
 		await process_frame
 	preview_pokemon.moves = [{"id": "dark-pulse", "name": "Dark Pulse", "pp": 15, "maxPp": 15}]

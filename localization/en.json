@@ -2990,7 +2990,7 @@
   "ui.move_deleter.error.delete": "The move could not be forgotten.",
   "ui.move_deleter.result.deleted": "{pokemon} forgot {move}.",
   "ui.move_deleter.confirm.title": "Forget this move?",
-  "ui.move_deleter.confirm.message": "Are you sure {pokemon} should forget {move}? This can be relearned from the Move Maniac when compatible.",
+  "ui.move_deleter.confirm.message": "Are you sure {pokemon} should forget {move}? This action cannot be undone. If you want to use this move again, you will need to teach it again.",
   "ui.move_deleter.confirm.delete": "Forget move",
   "ui.move_deleter.npc.records_unavailable": "My move records are unavailable right now.",
   "ui.move_deleter.npc.service_unavailable": "My deletion service is unavailable right now.",

@@ -2990,7 +2990,7 @@
   "ui.move_deleter.error.delete": "De move kon niet worden vergeten.",
   "ui.move_deleter.result.deleted": "{pokemon} is {move} vergeten.",
   "ui.move_deleter.confirm.title": "Deze move vergeten?",
-  "ui.move_deleter.confirm.message": "Weet je zeker dat {pokemon} {move} moet vergeten? Een compatibele move kan later opnieuw bij de Move Maniac worden geleerd.",
+  "ui.move_deleter.confirm.message": "Weet je zeker dat {pokemon} {move} moet vergeten? Deze actie kan niet ongedaan worden gemaakt. Als je deze move later weer wilt gebruiken, moet je hem opnieuw leren.",
   "ui.move_deleter.confirm.delete": "Move vergeten",
   "ui.move_deleter.npc.records_unavailable": "Mijn movegegevens zijn nu niet beschikbaar.",
   "ui.move_deleter.npc.service_unavailable": "Mijn verwijderdienst is nu niet beschikbaar.",
