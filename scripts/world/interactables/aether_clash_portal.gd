@@ -27,6 +27,11 @@ const SORT_Z_MAX := 4096
 		_apply_portal_state()
 		portal_state_changed.emit(entry_open)
 @export_range(0.2, 3.0, 0.1) var pulse_speed := 1.0
+@export_range(-512, 512, 1) var sort_z_offset := 0:
+	set(value):
+		sort_z_offset = value
+		if is_node_ready():
+			_update_sort_z()
 
 @onready var portal_sprite: Sprite2D = get_node_or_null("PortalSprite")
 @onready var portal_light: PointLight2D = get_node_or_null("PortalLight")
@@ -58,7 +63,7 @@ func _ready() -> void:
 
 
 func _update_sort_z() -> void:
-	z_index = clampi(floori(global_position.y), SORT_Z_MIN, SORT_Z_MAX)
+	z_index = clampi(floori(global_position.y) + sort_z_offset, SORT_Z_MIN, SORT_Z_MAX)
 
 
 func _process(delta: float) -> void:

@@ -34,6 +34,9 @@ func _init() -> void:
 	portal.call("configure_mode_available", false)
 	_check(not bool(portal.get("entry_open")), "Unavailable mode closes portal entry")
 	_check(light != null and light.enabled, "Closing entry does not deactivate the portal visuals")
+	portal.position = Vector2(64, 128)
+	portal.set("sort_z_offset", 33)
+	_check(portal.z_index == 161, "Portal supports a small per-instance world-depth offset")
 
 	var royale_portal := packed.instantiate()
 	royale_portal.set("mode_id", "battle_royale")

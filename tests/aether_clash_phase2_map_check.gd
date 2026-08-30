@@ -19,6 +19,9 @@ const EXPECTED_EXIT_PORTALS := {
 	"Guild1JailExitPortal": Vector2(2240, 2368),
 	"Guild2JailExitPortal": Vector2(2240, 2624),
 }
+const EXPECTED_EXIT_PORTAL_SORT_OFFSETS := {
+	"Guild1JailExitPortal": 33,
+}
 
 var failed := false
 
@@ -86,9 +89,15 @@ func _run() -> void:
 		_check(str(portal.get("mode_id")) == "guild_duel", "%s uses Guild Duel mode" % portal_name)
 		_check(str(portal.get("portal_action")) == "exit", "%s is an arena exit" % portal_name)
 		_check(bool(portal.get("entry_open")), "%s remains interactable throughout the Duel" % portal_name)
+		var sort_z_offset := int(EXPECTED_EXIT_PORTAL_SORT_OFFSETS.get(portal_name, 0))
+		_check(int(portal.get("sort_z_offset")) == sort_z_offset, "%s uses its intended depth offset" % portal_name)
 		_check(
 			not portal.z_as_relative
-			and portal.z_index == clampi(floori(portal.global_position.y), -4096, 4096),
+			and portal.z_index == clampi(
+				floori(portal.global_position.y) + sort_z_offset,
+				-4096,
+				4096
+			),
 			"%s renders on its world-depth layer instead of behind map artwork" % portal_name
 		)
 		var sprite := portal.get_node_or_null("PortalSprite") as Sprite2D
@@ -101,6 +110,17 @@ func _run() -> void:
 			_has_walkable_portal_approach(collision, tile),
 			"%s has a walkable approach through the edited collision" % portal_name
 		)
+	var upper_jail_portal := duel.get_node_or_null(
+		"Entities/Interactables/Guild1JailExitPortal"
+	) as Node2D
+	var upper_jail_spawn := duel.get_node_or_null("Spawns/Guild1JailSpawn") as Marker2D
+	_check(
+		upper_jail_portal != null
+		and upper_jail_spawn != null
+		and upper_jail_portal.z_index == 2401
+		and upper_jail_portal.z_index < floori(upper_jail_spawn.position.y),
+		"Upper jail portal renders above the jail foreground but below its player spawn"
+	)
 	var duel_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_duel.gd")
 	_check(
 		duel_source.contains("load_aether_clash_arena_state"),
