@@ -287,7 +287,6 @@ const PC_POPUP_SIZE := Vector2(1160, 720)
 const PC_BOX_SLOTS_PER_ROW := 6
 const PC_BOX_SLOT_SIZE := Vector2(118, 80)
 const PC_PARTY_SLOT_SIZE := Vector2(232, 68)
-const PC_BOX_TABS_VISIBLE := 5
 const PC_ACCENT := Color("#60d3ff")
 const PC_ACCENT_SOFT := Color("#60d3ff88")
 const PC_ACCENT_FAINT := Color("#60d3ff33")
@@ -1194,7 +1193,6 @@ var play_existing_friend_request_notification_on_next_socials_load: bool = true
 var mail_compose_help_button: Button
 var mail_compose_help_popup: PanelContainer
 var pc_popup: PanelContainer
-var pc_box_tab_bar: HBoxContainer
 var pc_box_tab_prev_button: Button
 var pc_box_tab_next_button: Button
 var pc_box_selector_button: Button
@@ -1205,6 +1203,7 @@ var pc_box_rename_button: Button
 var pc_box_title_editor: LineEdit
 var pc_search_input: LineEdit
 var pc_filter_button: Button
+var pc_filter_clear_button: Button
 var pc_filter_panel: PanelContainer
 var pc_filter_species_input: LineEdit
 var pc_filter_type_input: LineEdit
@@ -1217,7 +1216,6 @@ var pc_party_list: VBoxContainer
 var pc_party_count_label: Label
 var pc_box_scroll: ScrollContainer
 var pc_box_grid: GridContainer
-var pc_box_title_label: Label
 var pc_box_capacity_label: Label
 var pc_status_label: Label
 var pc_pokemon_hover_card: PartyHoverCard
@@ -1231,7 +1229,6 @@ var pc_borrowed_pokemon_dialog: Window
 var pc_release_drop_panel: PanelContainer
 var pc_release_hint_label: Label
 var pc_selected_box_index := 0
-var pc_box_tab_page_start := 0
 var pc_box_count := 0
 var pc_slots_per_box := 30
 var pc_current_box: Dictionary = {}
@@ -1864,7 +1861,8 @@ func _refresh_pc_localized_ui() -> void:
 		)
 
 	_refresh_pc_release_controls()
-	_refresh_pc_box_tabs()
+	_refresh_pc_filter_control()
+	_refresh_pc_box_navigation()
 	_update_pc_box_header()
 	if pc_box_selector_panel != null and pc_box_selector_panel.visible:
 		_refresh_pc_box_selector()
@@ -2756,13 +2754,11 @@ func _setup_pc_ui() -> void:
 
 	pc_release_mode_button = Button.new()
 	_set_localized_control_property(pc_release_mode_button, "text", "ui.storage.release")
-	pc_release_mode_button.custom_minimum_size = Vector2(90, 34)
+	pc_release_mode_button.custom_minimum_size = Vector2(84, 24)
 	pc_release_mode_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pc_release_mode_button, "tooltip_text", "ui.storage.release.choose")
 	pc_release_mode_button.pressed.connect(_on_pc_release_mode_button_pressed)
 	_apply_button_style(pc_release_mode_button, "warning")
-	header.add_child(pc_release_mode_button)
-
 	pc_close_button = Button.new()
 	pc_close_button.text = "×"
 	pc_close_button.custom_minimum_size = Vector2(36, 34)
@@ -2845,51 +2841,10 @@ func _setup_pc_ui() -> void:
 	box_header.add_theme_constant_override("separation", 8)
 	box_stack.add_child(box_header)
 
-	var box_heading_stack := VBoxContainer.new()
-	box_heading_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box_heading_stack.add_theme_constant_override("separation", 0)
-	box_header.add_child(box_heading_stack)
-
-	pc_box_title_label = Label.new()
-	pc_box_title_label.text = LocalizationManager.text("ui.storage.box.default", {"number": 1})
-	pc_box_title_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	pc_box_title_label.mouse_filter = Control.MOUSE_FILTER_STOP
-	pc_box_title_label.gui_input.connect(_on_pc_box_title_gui_input)
-	pc_box_title_label.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	pc_box_title_label.add_theme_font_size_override("font_size", 17)
-	pc_box_title_label.add_theme_color_override("font_color", UI_TEXT)
-	var box_title_row := HBoxContainer.new()
-	box_title_row.add_theme_constant_override("separation", 4)
-	box_heading_stack.add_child(box_title_row)
-	box_title_row.add_child(pc_box_title_label)
-
-	pc_box_title_editor = LineEdit.new()
-	pc_box_title_editor.visible = false
-	pc_box_title_editor.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	pc_box_title_editor.custom_minimum_size = Vector2(220, 30)
-	pc_box_title_editor.max_length = 32
-	pc_box_title_editor.text_submitted.connect(_on_pc_box_title_submitted)
-	pc_box_title_editor.focus_exited.connect(_on_pc_box_title_focus_exited)
-	_apply_line_edit_style(pc_box_title_editor)
-	box_title_row.add_child(pc_box_title_editor)
-
-	pc_box_rename_button = Button.new()
-	pc_box_rename_button.text = "✎"
-	pc_box_rename_button.custom_minimum_size = Vector2(30, 30)
-	pc_box_rename_button.focus_mode = Control.FOCUS_NONE
-	_set_localized_control_property(pc_box_rename_button, "tooltip_text", "ui.storage.box.rename")
-	pc_box_rename_button.pressed.connect(_begin_pc_box_inline_rename)
-	_apply_button_style(pc_box_rename_button)
-	box_title_row.add_child(pc_box_rename_button)
-
-	pc_box_capacity_label = Label.new()
-	pc_box_capacity_label.text = LocalizationManager.text(
-		"ui.storage.capacity",
-		{"occupied": 0, "capacity": 30}
-	)
-	pc_box_capacity_label.add_theme_font_size_override("font_size", 10)
-	pc_box_capacity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	box_heading_stack.add_child(pc_box_capacity_label)
+	var boxes_caption := _create_pc_section_caption("ui.storage.section.boxes")
+	boxes_caption.custom_minimum_size = Vector2(48, 0)
+	boxes_caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	box_header.add_child(boxes_caption)
 
 	pc_box_tab_prev_button = Button.new()
 	pc_box_tab_prev_button.text = "‹"
@@ -2900,6 +2855,24 @@ func _setup_pc_ui() -> void:
 	_apply_button_style(pc_box_tab_prev_button)
 	box_header.add_child(pc_box_tab_prev_button)
 
+	pc_box_selector_button = Button.new()
+	pc_box_selector_button.text = "%s  ▾" % LocalizationManager.text("ui.storage.box.default", {"number": 1})
+	pc_box_selector_button.custom_minimum_size = Vector2(210, 32)
+	pc_box_selector_button.focus_mode = Control.FOCUS_NONE
+	_set_localized_control_property(pc_box_selector_button, "tooltip_text", "ui.storage.box.show_all")
+	pc_box_selector_button.pressed.connect(_toggle_pc_box_selector)
+	_apply_button_style(pc_box_selector_button, "primary")
+	box_header.add_child(pc_box_selector_button)
+
+	pc_box_title_editor = LineEdit.new()
+	pc_box_title_editor.visible = false
+	pc_box_title_editor.custom_minimum_size = Vector2(210, 32)
+	pc_box_title_editor.max_length = 32
+	pc_box_title_editor.text_submitted.connect(_on_pc_box_title_submitted)
+	pc_box_title_editor.focus_exited.connect(_on_pc_box_title_focus_exited)
+	_apply_line_edit_style(pc_box_title_editor)
+	box_header.add_child(pc_box_title_editor)
+
 	pc_box_tab_next_button = Button.new()
 	pc_box_tab_next_button.text = "›"
 	pc_box_tab_next_button.custom_minimum_size = Vector2(34, 32)
@@ -2909,29 +2882,28 @@ func _setup_pc_ui() -> void:
 	_apply_button_style(pc_box_tab_next_button)
 	box_header.add_child(pc_box_tab_next_button)
 
-	pc_box_selector_button = Button.new()
-	pc_box_selector_button.text = "☷"
-	pc_box_selector_button.custom_minimum_size = Vector2(34, 32)
-	pc_box_selector_button.focus_mode = Control.FOCUS_NONE
-	_set_localized_control_property(pc_box_selector_button, "tooltip_text", "ui.storage.box.show_all")
-	pc_box_selector_button.pressed.connect(_toggle_pc_box_selector)
-	_apply_button_style(pc_box_selector_button)
-	box_header.add_child(pc_box_selector_button)
+	pc_box_rename_button = Button.new()
+	pc_box_rename_button.text = "✎"
+	pc_box_rename_button.custom_minimum_size = Vector2(30, 30)
+	pc_box_rename_button.focus_mode = Control.FOCUS_NONE
+	_set_localized_control_property(pc_box_rename_button, "tooltip_text", "ui.storage.box.rename")
+	pc_box_rename_button.pressed.connect(_begin_pc_box_inline_rename)
+	_apply_button_style(pc_box_rename_button)
+	box_header.add_child(pc_box_rename_button)
 
-	var box_tabs_row := HBoxContainer.new()
-	box_tabs_row.name = "BoxTabsRow"
-	box_tabs_row.add_theme_constant_override("separation", 8)
-	box_stack.add_child(box_tabs_row)
+	var box_header_spacer := Control.new()
+	box_header_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box_header.add_child(box_header_spacer)
 
-	var boxes_caption := _create_pc_section_caption("ui.storage.section.boxes")
-	boxes_caption.custom_minimum_size = Vector2(42, 0)
-	boxes_caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	box_tabs_row.add_child(boxes_caption)
-
-	pc_box_tab_bar = HBoxContainer.new()
-	pc_box_tab_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pc_box_tab_bar.add_theme_constant_override("separation", 4)
-	box_tabs_row.add_child(pc_box_tab_bar)
+	pc_box_capacity_label = Label.new()
+	pc_box_capacity_label.text = LocalizationManager.text(
+		"ui.storage.capacity",
+		{"occupied": 0, "capacity": 30}
+	)
+	pc_box_capacity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pc_box_capacity_label.add_theme_font_size_override("font_size", 10)
+	pc_box_capacity_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	box_header.add_child(pc_box_capacity_label)
 
 	var search_row := HBoxContainer.new()
 	search_row.name = "StorageSearchRow"
@@ -2958,14 +2930,26 @@ func _setup_pc_ui() -> void:
 	_apply_button_style(pc_filter_button)
 	search_row.add_child(pc_filter_button)
 
+	var search_scope_panel := PanelContainer.new()
+	search_scope_panel.name = "SearchScopeBadge"
+	search_scope_panel.custom_minimum_size = Vector2(88, 38)
+	search_scope_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#091a29d9"), Color("#2949638c"), 7, 1)
+	)
+	search_row.add_child(search_scope_panel)
+	var search_scope_margin := MarginContainer.new()
+	search_scope_margin.add_theme_constant_override("margin_left", 8)
+	search_scope_margin.add_theme_constant_override("margin_right", 8)
+	search_scope_panel.add_child(search_scope_margin)
+
 	pc_search_results_label = Label.new()
 	_set_localized_control_property(pc_search_results_label, "text", "ui.storage.all_boxes")
-	pc_search_results_label.custom_minimum_size = Vector2(78, 0)
-	pc_search_results_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	pc_search_results_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pc_search_results_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pc_search_results_label.add_theme_font_size_override("font_size", 10)
 	pc_search_results_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	search_row.add_child(pc_search_results_label)
+	search_scope_margin.add_child(pc_search_results_label)
 
 	pc_filter_panel = PanelContainer.new()
 	pc_filter_panel.name = "StorageFilterPanel"
@@ -2978,11 +2962,32 @@ func _setup_pc_ui() -> void:
 	filter_margin.add_theme_constant_override("margin_right", 10)
 	filter_margin.add_theme_constant_override("margin_bottom", 8)
 	pc_filter_panel.add_child(filter_margin)
+	var filter_stack := VBoxContainer.new()
+	filter_stack.add_theme_constant_override("separation", 7)
+	filter_margin.add_child(filter_stack)
+	var filter_header := HBoxContainer.new()
+	filter_header.add_theme_constant_override("separation", 8)
+	filter_stack.add_child(filter_header)
+	var filter_title := Label.new()
+	_set_localized_control_property(filter_title, "text", "ui.storage.filter.title")
+	filter_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	filter_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	filter_title.add_theme_font_size_override("font_size", 11)
+	filter_title.add_theme_color_override("font_color", UI_TEXT)
+	filter_header.add_child(filter_title)
+	pc_filter_clear_button = Button.new()
+	_set_localized_control_property(pc_filter_clear_button, "text", "ui.storage.filter.clear")
+	pc_filter_clear_button.custom_minimum_size = Vector2(82, 26)
+	pc_filter_clear_button.focus_mode = Control.FOCUS_NONE
+	pc_filter_clear_button.pressed.connect(_on_pc_clear_filters_pressed)
+	_apply_button_style(pc_filter_clear_button)
+	filter_header.add_child(pc_filter_clear_button)
+
 	var filter_grid := GridContainer.new()
 	filter_grid.columns = 3
 	filter_grid.add_theme_constant_override("h_separation", 8)
 	filter_grid.add_theme_constant_override("v_separation", 6)
-	filter_margin.add_child(filter_grid)
+	filter_stack.add_child(filter_grid)
 	pc_filter_species_input = _create_pc_filter_input("ui.storage.filter.species")
 	pc_filter_type_input = _create_pc_filter_input("ui.storage.filter.type")
 	pc_filter_nature_input = _create_pc_filter_input("ui.storage.filter.nature")
@@ -3077,6 +3082,7 @@ func _setup_pc_ui() -> void:
 	status_panel.add_child(status_margin)
 
 	var status_row := HBoxContainer.new()
+	status_row.name = "StorageStatusRow"
 	status_row.add_theme_constant_override("separation", 7)
 	status_margin.add_child(status_row)
 
@@ -3094,6 +3100,8 @@ func _setup_pc_ui() -> void:
 	pc_status_label.clip_text = true
 	pc_status_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	status_row.add_child(pc_status_label)
+	status_row.add_child(pc_release_mode_button)
+	_refresh_pc_filter_control()
 
 	pc_popup.gui_input.connect(_on_focusable_overlay_panel_gui_input.bind(pc_popup))
 
@@ -35875,7 +35883,7 @@ func _refresh_pc_state(load_all_boxes: bool = false) -> void:
 			pc_slots_per_box = max(int(box_result.get("slotsPerBox", 30)), 1)
 			var boxes: Array = _array_from_variant(box_result.get("boxes", []))
 			pc_all_boxes = boxes
-			_refresh_pc_box_tabs()
+			_refresh_pc_box_navigation()
 			pc_current_box = _box_state_from_boxes(boxes, pc_selected_box_index)
 		else:
 			_set_pc_status("ui.storage.error.load_boxes")
@@ -35891,7 +35899,7 @@ func _refresh_pc_state(load_all_boxes: bool = false) -> void:
 			pc_slots_per_box = max(int(box_result.get("slotsPerBox", pc_slots_per_box)), 1)
 			pc_current_box = _dictionary_from_value(box_result.get("box", {}))
 			_update_pc_all_boxes_cache(pc_current_box)
-			_refresh_pc_box_tabs()
+			_refresh_pc_box_navigation()
 		else:
 			_set_pc_status("ui.storage.error.load_box")
 			_add_chat_message(LocalizationManager.text("ui.storage.error.load_box"))
@@ -35919,31 +35927,10 @@ func _update_pc_all_boxes_cache(box_state: Dictionary) -> void:
 	pc_all_boxes.append(box_state)
 
 
-func _refresh_pc_box_tabs() -> void:
-	if pc_box_tab_bar == null:
-		return
+func _refresh_pc_box_navigation() -> void:
 	var count: int = max(pc_box_count, 1)
 	pc_selected_box_index = clampi(pc_selected_box_index, 0, count - 1)
-	var max_start: int = max(count - PC_BOX_TABS_VISIBLE, 0)
-	if pc_selected_box_index < pc_box_tab_page_start or pc_selected_box_index >= pc_box_tab_page_start + PC_BOX_TABS_VISIBLE:
-		pc_box_tab_page_start = int(floor(float(pc_selected_box_index) / float(PC_BOX_TABS_VISIBLE))) * PC_BOX_TABS_VISIBLE
-	pc_box_tab_page_start = clampi(pc_box_tab_page_start, 0, max_start)
-
-	_clear_children(pc_box_tab_bar)
-	var visible_end: int = min(pc_box_tab_page_start + PC_BOX_TABS_VISIBLE, count)
-	for index in range(pc_box_tab_page_start, visible_end):
-		var button := Button.new()
-		button.text = _pc_box_display_name(index)
-		button.custom_minimum_size = Vector2(76, 30)
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.focus_mode = Control.FOCUS_NONE
-		button.tooltip_text = LocalizationManager.text("ui.storage.box.tab_tooltip", {
-			"number": index + 1,
-			"box": _pc_box_display_name(index),
-		})
-		button.pressed.connect(_on_pc_box_selected.bind(index))
-		_apply_pc_box_tab_style(button, index == pc_selected_box_index)
-		pc_box_tab_bar.add_child(button)
+	_update_pc_box_header()
 
 	if pc_box_tab_prev_button != null:
 		pc_box_tab_prev_button.disabled = pc_selected_box_index <= 0
@@ -36072,7 +36059,7 @@ func _refresh_pc_box_selector() -> void:
 			{"box": _pc_box_display_name(index)}
 		)
 		button.pressed.connect(_on_pc_selector_box_selected.bind(index))
-		_apply_pc_box_tab_style(button, index == pc_selected_box_index)
+		_apply_pc_box_selector_item_style(button, index == pc_selected_box_index)
 		pc_box_selector_list.add_child(button)
 
 
@@ -36108,33 +36095,28 @@ func _pc_box_display_name(box_index: int) -> String:
 
 
 func _update_pc_box_header() -> void:
-	if pc_box_title_label == null:
+	if pc_box_selector_button == null:
 		return
-	pc_box_title_label.text = _pc_box_display_name(pc_selected_box_index)
+	var box_name := _pc_box_display_name(pc_selected_box_index)
+	pc_box_selector_button.text = "%s  ▾" % box_name
+	pc_box_selector_button.tooltip_text = LocalizationManager.text("ui.storage.box.show_all")
 	if pc_box_rename_button != null:
 		pc_box_rename_button.tooltip_text = LocalizationManager.text(
 			"ui.storage.box.rename_named",
-			{"box": pc_box_title_label.text}
+			{"box": box_name}
 		)
 
 
 func _begin_pc_box_inline_rename() -> void:
 	if pc_box_title_editor == null or pc_box_title_editor.visible:
 		return
-	pc_box_title_label.visible = false
+	_close_pc_box_selector()
+	pc_box_selector_button.visible = false
 	pc_box_title_editor.visible = true
 	pc_box_title_editor.text = _pc_box_display_name(pc_selected_box_index)
 	pc_box_rename_button.disabled = true
 	pc_box_title_editor.grab_focus()
 	pc_box_title_editor.select_all()
-
-
-func _on_pc_box_title_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		var mouse_event := event as InputEventMouseButton
-		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
-			_begin_pc_box_inline_rename()
-			get_viewport().set_input_as_handled()
 
 
 func _on_pc_box_title_submitted(_text: String) -> void:
@@ -36150,7 +36132,7 @@ func _finish_pc_box_inline_rename() -> void:
 		return
 	var new_name := pc_box_title_editor.text.strip_edges()
 	pc_box_title_editor.visible = false
-	pc_box_title_label.visible = true
+	pc_box_selector_button.visible = true
 	pc_box_rename_button.disabled = false
 	var result: Dictionary = await PokemonStorageService.rename_box(pc_selected_box_index, new_name)
 	if not bool(result.get("success", false)):
@@ -36162,12 +36144,12 @@ func _finish_pc_box_inline_rename() -> void:
 	var renamed_box := _dictionary_from_value(result.get("box", {}))
 	_update_pc_all_boxes_cache(renamed_box)
 	pc_current_box = renamed_box
-	_refresh_pc_box_tabs()
+	_refresh_pc_box_navigation()
 	_update_pc_box_header()
 	_set_pc_status("ui.storage.box.renamed")
 
 
-func _apply_pc_box_tab_style(button: Button, selected: bool) -> void:
+func _apply_pc_box_selector_item_style(button: Button, selected: bool) -> void:
 	var normal_bg := Color("#10283cf2") if selected else Color("#07111e99")
 	var hover_bg := UI_SURFACE_HOVER
 	var pressed_bg := UI_SURFACE_PRESSED
@@ -36264,8 +36246,6 @@ func _render_pc_box_search_results(search_query: String) -> void:
 	if result_count == 0:
 		pc_box_grid.columns = 1
 		pc_box_grid.add_child(_create_pc_search_empty_state(search_query))
-	if pc_box_title_label != null:
-		pc_box_title_label.text = LocalizationManager.text("ui.storage.search_results")
 	if pc_box_capacity_label != null:
 		pc_box_capacity_label.text = LocalizationManager.plural(
 			"ui.storage.search_across.one",
@@ -36283,8 +36263,7 @@ func _render_pc_box_search_results(search_query: String) -> void:
 
 
 func _refresh_pc_box_overview(occupied_count: int) -> void:
-	if pc_box_title_label != null:
-		_update_pc_box_header()
+	_update_pc_box_header()
 	if pc_box_capacity_label != null:
 		pc_box_capacity_label.text = LocalizationManager.text("ui.storage.capacity", {
 			"occupied": occupied_count,
@@ -36493,7 +36472,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	button.mouse_default_cursor_shape = Control.CURSOR_DRAG if occupied else Control.CURSOR_ARROW
 	_apply_pc_pokemon_slot_style(button, occupied, selected, types)
 	if not occupied:
-		button.modulate = Color(1.0, 1.0, 1.0, 0.76)
+		button.modulate = Color(1.0, 1.0, 1.0, 0.50)
 
 	var stack := VBoxContainer.new()
 	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -36520,7 +36499,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	badge.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	badge.add_theme_font_size_override("font_size", 9)
-	badge.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.82 if occupied else 0.48))
+	badge.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.82 if occupied else 0.32))
 	meta_row.add_child(badge)
 
 	if occupied and shiny:
@@ -36543,7 +36522,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture = texture if texture != null else PokemonAssets.load_unknown_icon()
-	icon.modulate = Color.WHITE if occupied else Color(1, 1, 1, 0.08)
+	icon.modulate = Color.WHITE if occupied else Color(1, 1, 1, 0.04)
 	stack.add_child(icon)
 
 	var footer := HBoxContainer.new()
@@ -36589,7 +36568,7 @@ func _create_pc_pokemon_slot_button(title_text: String, subtitle_text: String, s
 	button.mouse_default_cursor_shape = Control.CURSOR_DRAG if occupied else Control.CURSOR_ARROW
 	_apply_pc_pokemon_slot_style(button, occupied, selected, types)
 	if not occupied:
-		button.modulate = Color(1.0, 1.0, 1.0, 0.76)
+		button.modulate = Color(1.0, 1.0, 1.0, 0.68)
 
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -36776,7 +36755,7 @@ func _show_pc_pokemon_hover(button: PcPokemonSlotButton, pokemon_data: Dictionar
 	pc_pokemon_hover_generation += 1
 	var hover_generation := pc_pokemon_hover_generation
 	pc_pokemon_hover_card.show_for_pokemon(pokemon_data)
-	pc_pokemon_hover_card.position_near_rect(button.get_global_rect(), get_viewport().get_visible_rect().size)
+	_position_pc_pokemon_hover_card(button)
 	call_deferred("_deferred_position_pc_pokemon_hover", button, hover_generation)
 
 
@@ -36787,7 +36766,24 @@ func _deferred_position_pc_pokemon_hover(button: Control, hover_generation: int)
 		return
 	if pc_pokemon_hover_card == null or not pc_pokemon_hover_card.visible or not is_instance_valid(button):
 		return
-	pc_pokemon_hover_card.position_near_rect(button.get_global_rect(), get_viewport().get_visible_rect().size)
+	_position_pc_pokemon_hover_card(button)
+
+
+func _position_pc_pokemon_hover_card(button: Control) -> void:
+	if pc_pokemon_hover_card == null or pc_popup == null or button == null:
+		return
+	var popup_rect := pc_popup.get_global_rect()
+	var safe_top := popup_rect.position.y + 72.0
+	var safe_bottom := popup_rect.end.y - 46.0
+	if pc_box_scroll != null:
+		var grid_rect := pc_box_scroll.get_global_rect()
+		safe_top = grid_rect.position.y
+		safe_bottom = minf(grid_rect.end.y, safe_bottom)
+	var safe_bounds := Rect2(
+		Vector2(popup_rect.position.x + 8.0, safe_top),
+		Vector2(popup_rect.size.x - 16.0, maxf(safe_bottom - safe_top, 1.0))
+	)
+	pc_pokemon_hover_card.position_beside_rect_within(button.get_global_rect(), safe_bounds)
 
 
 func _hide_pc_pokemon_hover() -> void:
@@ -36797,8 +36793,8 @@ func _hide_pc_pokemon_hover() -> void:
 
 
 func _apply_pc_pokemon_slot_style(button: Button, occupied: bool, selected: bool, types: Array) -> void:
-	var background := UI_SURFACE_INSET if not occupied else UI_SURFACE_INTERACTIVE
-	var border := Color("#223d54a3") if not occupied else UI_BORDER_SUBTLE
+	var background := Color("#06101a80") if not occupied else UI_SURFACE_INTERACTIVE
+	var border := Color("#1c32456b") if not occupied else UI_BORDER_SUBTLE
 	if occupied and not types.is_empty():
 		var primary_type: String = str(types[0]).strip_edges()
 		if primary_type != "":
@@ -36909,18 +36905,49 @@ func _set_pc_status(key: String, values: Dictionary = {}) -> void:
 func _on_pc_filter_toggled(active: bool) -> void:
 	if pc_filter_panel != null:
 		pc_filter_panel.visible = active
+	_refresh_pc_filter_control()
 	_render_pc_box()
 
 
 func _on_pc_filter_text_changed(_text: String) -> void:
+	_refresh_pc_filter_control()
 	_render_pc_box()
 
 
-func _pc_has_active_filter() -> bool:
+func _on_pc_clear_filters_pressed() -> void:
+	for filter_input: LineEdit in [pc_filter_species_input, pc_filter_type_input, pc_filter_nature_input, pc_filter_ability_input, pc_filter_move_input, pc_filter_item_input]:
+		if filter_input != null:
+			filter_input.set_text("")
+	_refresh_pc_filter_control()
+	_render_pc_box()
+
+
+func _refresh_pc_filter_control() -> void:
+	if pc_filter_button == null:
+		return
+	var active_count := _pc_active_filter_count()
+	pc_filter_button.text = LocalizationManager.text(
+		"ui.storage.filter.active" if active_count > 0 else "ui.storage.filter",
+		{"count": active_count}
+	)
+	var expanded := pc_filter_panel != null and pc_filter_panel.visible
+	pc_filter_button.set_pressed_no_signal(expanded)
+	_apply_button_style(pc_filter_button, "primary" if expanded or active_count > 0 else "secondary")
+	if pc_filter_clear_button != null:
+		pc_filter_clear_button.disabled = active_count == 0
+		pc_filter_clear_button.mouse_default_cursor_shape = Control.CURSOR_ARROW if active_count == 0 else Control.CURSOR_POINTING_HAND
+
+
+func _pc_active_filter_count() -> int:
+	var active_count := 0
 	for filter_input: LineEdit in [pc_filter_species_input, pc_filter_type_input, pc_filter_nature_input, pc_filter_ability_input, pc_filter_move_input, pc_filter_item_input]:
 		if filter_input != null and filter_input.text.strip_edges() != "":
-			return true
-	return false
+			active_count += 1
+	return active_count
+
+
+func _pc_has_active_filter() -> bool:
+	return _pc_active_filter_count() > 0
 
 
 func _pc_pokemon_matches_filters(pokemon_response: Dictionary) -> bool:
@@ -37268,12 +37295,16 @@ func _set_pc_storage_drag_cursor_state(active: bool) -> void:
 				continue
 			if not active:
 				button.mouse_default_cursor_shape = Control.CURSOR_DRAG if not button.drag_source.is_empty() else Control.CURSOR_ARROW
+				button.self_modulate = Color.WHITE
 			elif button.drop_target.is_empty():
 				button.mouse_default_cursor_shape = Control.CURSOR_ARROW
+				button.self_modulate = Color(1.0, 1.0, 1.0, 0.58)
 			elif _pc_locations_match(pc_drag_source, button.drop_target):
 				button.mouse_default_cursor_shape = Control.CURSOR_DRAG
+				button.self_modulate = Color(1.0, 1.0, 1.0, 0.72)
 			else:
 				button.mouse_default_cursor_shape = Control.CURSOR_CAN_DROP
+				button.self_modulate = Color("#c9f4ff")
 	if pc_release_drop_panel != null:
 		var release_cursor := Control.CURSOR_CAN_DROP if active and pc_release_mode_active else Control.CURSOR_ARROW
 		_set_pc_control_tree_cursor(pc_release_drop_panel, release_cursor)

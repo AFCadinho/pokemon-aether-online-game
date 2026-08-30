@@ -259,6 +259,33 @@ func position_near_rect(anchor_rect: Rect2, viewport_size: Vector2) -> void:
 	global_position = target_position
 
 
+func position_beside_rect_within(anchor_rect: Rect2, bounds_rect: Rect2) -> void:
+	var padding := 10.0
+	custom_minimum_size.x = CARD_WIDTH
+	custom_minimum_size.y = STORAGE_CARD_HEIGHT if storage_visuals else 0.0
+	size.y = 0.0
+	reset_size()
+	size.x = minf(CARD_WIDTH, maxf(1.0, bounds_rect.size.x - padding * 2.0))
+	var card_size := size
+	var target_position := Vector2(
+		anchor_rect.end.x + padding,
+		anchor_rect.get_center().y - card_size.y * 0.5
+	)
+	if target_position.x + card_size.x > bounds_rect.end.x - padding:
+		target_position.x = anchor_rect.position.x - card_size.x - padding
+	target_position.x = clampf(
+		target_position.x,
+		bounds_rect.position.x + padding,
+		maxf(bounds_rect.position.x + padding, bounds_rect.end.x - card_size.x - padding)
+	)
+	target_position.y = clampf(
+		target_position.y,
+		bounds_rect.position.y + padding,
+		maxf(bounds_rect.position.y + padding, bounds_rect.end.y - card_size.y - padding)
+	)
+	global_position = target_position
+
+
 func _set_pokemon_data(pokemon_data: Dictionary) -> void:
 	current_pokemon_data = pokemon_data.duplicate(true)
 	name_label.text = _get_name_and_level(pokemon_data)

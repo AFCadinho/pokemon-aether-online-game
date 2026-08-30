@@ -40,8 +40,9 @@ func _check_storage_runtime_translation() -> void:
 	var close_button := overlay.get("pc_close_button") as Button
 	var search_input := overlay.get("pc_search_input") as LineEdit
 	var filter_button := overlay.get("pc_filter_button") as Button
+	var filter_clear_button := overlay.get("pc_filter_clear_button") as Button
 	var species_filter := overlay.get("pc_filter_species_input") as LineEdit
-	var box_title := overlay.get("pc_box_title_label") as Label
+	var box_selector := overlay.get("pc_box_selector_button") as Button
 	var status := overlay.get("pc_status_label") as Label
 
 	_check(popup != null, "Pokémon Storage popup is constructed")
@@ -51,9 +52,16 @@ func _check_storage_runtime_translation() -> void:
 	_check(close_button != null and close_button.get_theme_color("font_color") == Color("#ff6b74"), "Storage close action uses its danger color")
 	_check(search_input != null and search_input.placeholder_text.begins_with("Doorzoek"), "Storage search renders in Dutch")
 	_check(filter_button != null and filter_button.text == "Filteren", "Storage filter action renders in Dutch")
+	_check(filter_clear_button != null and filter_clear_button.disabled, "Storage clear-filters action starts quiet and disabled")
 	_check(species_filter != null and species_filter.placeholder_text == "Soort", "Storage species filter renders in Dutch")
-	_check(box_title != null and box_title.text == "Box 1", "Storage default box name renders in Dutch")
+	_check(box_selector != null and box_selector.text.begins_with("Box 1"), "Storage default box name renders in Dutch")
 	_check(status != null and status.text.begins_with("Slepen"), "Storage status renders in Dutch")
+	species_filter.text = "Pikachu"
+	overlay.call("_on_pc_filter_text_changed", species_filter.text)
+	_check(filter_button.text == "Filters (1)", "Storage toolbar reports active filters")
+	_check(not filter_clear_button.disabled, "Storage enables clearing when a filter is active")
+	overlay.call("_on_pc_clear_filters_pressed")
+	_check(species_filter.text == "" and filter_clear_button.disabled, "Storage clears all advanced filters in one action")
 
 	overlay.call("_set_pc_release_mode_active", true)
 	_check(release_button != null and release_button.text == "Annuleren", "Storage release mode updates in Dutch")
