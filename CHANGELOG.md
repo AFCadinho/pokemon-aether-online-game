@@ -8,6 +8,7 @@
 
 **Added**
 
+- Live Events started by staff now appear immediately in System chat, boost details, and top-right event cards with their event name and remaining time.
 - Trainers can now fund a ₽100,000 Global Skill EXP Boost together for one hour of double Fishing, Thieving, and Rock Smash experience, with a dedicated skill icon and live contribution updates.
 - Every Pokémon Center now has a Move Maniac who can teach compatible relearn, Egg, tutor, special, event, legacy, and pre-evolution moves in exchange for gathered resources.
 - Every Pokémon Center now has a separate Move Deleter who can safely remove any move except a Pokémon's last one.
