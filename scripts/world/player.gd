@@ -931,13 +931,21 @@ func _on_render_viewport_size_changed() -> void:
 	_apply_world_pixel_scale()
 
 func _apply_world_pixel_scale() -> void:
-	if world_camera == null:
+	if world_camera == null or not is_instance_valid(world_camera):
 		return
+	var window := get_window()
+	var viewport := world_camera.get_viewport()
+	# Map teardown removes the player and its camera from the active Window
+	# before Aether Clash restores its temporary zoom. The next map reapplies
+	# the correct baseline, so a detached player must simply skip this update.
+	if window == null or viewport == null:
+		return
+	var window_size := window.size
 	var effective_scale := PixelPerfectRenderingScript.resolve_world_scale_for_area(
-		SettingsManager.get_effective_world_pixel_scale(get_window().size),
+		SettingsManager.get_effective_world_pixel_scale(window_size),
 		_get_current_map_world_access_area_type()
 	)
-	var canvas_scale := world_camera.get_viewport().get_screen_transform().get_scale()
+	var canvas_scale := viewport.get_screen_transform().get_scale()
 	var baseline_zoom := PixelPerfectRenderingScript.camera_zoom_for_output_scale(
 		effective_scale,
 		canvas_scale
@@ -952,7 +960,7 @@ func _apply_world_pixel_scale() -> void:
 	PixelPerfectRenderingScript.apply_to_camera(
 		world_camera,
 		effective_scale,
-		get_window().size
+		window_size
 	)
 
 

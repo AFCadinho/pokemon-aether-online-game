@@ -74,6 +74,7 @@
 
 **Fixed**
 
+- Leaving a Guild Duel no longer tries to read a detached game window while restoring the normal world zoom.
 - Rotating Guild Duel Master Balls now use a camera-aware click fallback and trace every spectate step when native world-object input is intercepted.
 - Failing to catch a wild Pokémon no longer leaves the party selector frozen when the counterattack knocks out the active Pokémon.
 - The upper Guild Duel jail portal now renders in front of the jail artwork without covering players standing at the jail spawn.
