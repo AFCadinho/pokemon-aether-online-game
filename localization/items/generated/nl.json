@@ -231,10 +231,6 @@
     "name": "Armorpas",
     "shortDesc": "Een pas om naar het Isle of Armor te gaan. Laat het zien aan het spoorwegpersoneel op Wedgehurst Station."
   },
-  "armorite-ore": {
-    "name": "Armorieterts",
-    "shortDesc": "Zeldzaam erts dat kan worden verkregen op het Isle of Armor. Er zal iets goeds gebeuren als je het aan een verzamelaar op het Isle of Armor geeft."
-  },
   "aspear-berry": {
     "name": "Aspeerbes",
     "shortDesc": "Vastgehouden: wordt geconsumeerd wanneer het bevroren is om het bevroren te genezen."
@@ -3214,6 +3210,10 @@
   "resist-wing": {
     "name": "Weersta veren",
     "shortDesc": "Verhoogt de verdedigingsinspanning met 1."
+  },
+  "resonite-ore": {
+    "name": "Resonieterts",
+    "shortDesc": "Een donker mineraal met een kristallen kern die resoneert met het gevechtsinstinct van een Pokémon."
   },
   "reveal-glass": {
     "name": "Onthul glas",

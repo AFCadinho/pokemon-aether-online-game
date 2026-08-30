@@ -231,10 +231,6 @@
     "name": "Armor Pass",
     "shortDesc": "A pass to go to the Isle of Armor. Show it to the rail staff at Wedgehurst Station."
   },
-  "armorite-ore": {
-    "name": "Armorite Ore",
-    "shortDesc": "Rare ore that can be obtained on the Isle of Armor. Something good will happen if you give it to a collector on the Isle of Armor."
-  },
   "aspear-berry": {
     "name": "Aspear Berry",
     "shortDesc": "Held: Consumed when frozen to cure frozen."
@@ -3214,6 +3210,10 @@
   "resist-wing": {
     "name": "Resist Feather",
     "shortDesc": "Increases Defense effort by 1."
+  },
+  "resonite-ore": {
+    "name": "Resonite Ore",
+    "shortDesc": "A dark mineral with a crystalline core that resonates with a Pokémon's battle instincts."
   },
   "reveal-glass": {
     "name": "Reveal Glass",
