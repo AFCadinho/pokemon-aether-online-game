@@ -94,6 +94,12 @@ func _run() -> void:
 	)
 	_check(
 		errors.call("message", {
+			"detail": {"code": "aether_clash_target_rank_required"}
+		}) == "Je kunt alleen een Guildleider of Captain van de andere Guild uitdagen.",
+		"right-click Clash target rank errors provide clear Dutch feedback"
+	)
+	_check(
+		errors.call("message", {
 			"detail": {"code": "aether_clash_portal_required"}
 		}) == "Ga dichter bij de rode Guild vs Guild-portal in de Aether Clash Lobby staan.",
 		"Aether Clash portal distance errors explain the required portal"
