@@ -2096,6 +2096,8 @@ func _try_start_move(direction: Vector2) -> bool:
 		return false
 	if not can_move_to(movement_target_position):
 		return false
+	if _is_world_actor_step_blocked(global_position, movement_target_position):
+		return false
 
 	target_position = _snap_world_position(movement_target_position)
 	move_start_position = _snap_world_position(global_position)
@@ -2194,6 +2196,21 @@ func _is_world_barrier_step_blocked(from_position: Vector2, to_position: Vector2
 		and bool(
 			current_map.call(
 				"is_world_barrier_step_blocked",
+				from_position,
+				to_position
+			)
+		)
+	)
+
+
+func _is_world_actor_step_blocked(from_position: Vector2, to_position: Vector2) -> bool:
+	var current_map := _resolve_current_map()
+	return (
+		current_map != null
+		and current_map.has_method("is_world_actor_step_blocked")
+		and bool(
+			current_map.call(
+				"is_world_actor_step_blocked",
 				from_position,
 				to_position
 			)

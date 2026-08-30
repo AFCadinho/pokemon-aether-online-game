@@ -198,6 +198,7 @@ var active_aethernet_effect: Node
 
 
 func _ready() -> void:
+	add_to_group("remote_player_avatar")
 	z_as_relative = false
 	y_sort_enabled = true
 	_create_visual()

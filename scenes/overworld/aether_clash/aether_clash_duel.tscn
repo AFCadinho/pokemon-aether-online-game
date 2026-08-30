@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/world/aether_clash_duel.gd" id="3_metadata"]
 [ext_resource type="PackedScene" path="res://scenes/world/aether_clash_start_barrier.tscn" id="4_barrier"]
 [ext_resource type="PackedScene" path="res://scenes/interface/aether_clash_arena_hud.tscn" id="5_hud"]
+[ext_resource type="Script" path="res://scripts/world/aether_clash_arena_zones.gd" id="6_zones"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xcqrr"]
 texture = ExtResource("2_wwok8")
@@ -221,6 +222,9 @@ music_track_id = "login.lugia_theme_lofi"
 position = Vector2(1280, 2560)
 
 [node name="ArenaHud" parent="." instance=ExtResource("5_hud")]
+
+[node name="ArenaZones" type="Node2D" parent="."]
+script = ExtResource("6_zones")
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1254204188]
 visible = false
