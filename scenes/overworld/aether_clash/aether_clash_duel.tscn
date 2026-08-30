@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" path="res://scenes/interface/aether_clash_arena_hud.tscn" id="5_hud"]
 [ext_resource type="Script" uid="uid://bpjph62v1wpv6" path="res://scripts/world/aether_clash_arena_zones.gd" id="6_zones"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_clash_portal.tscn" id="7_clash_portal"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_clash_spectator_orb.tscn" id="8_spectator_orb"]
+[ext_resource type="PackedScene" path="res://scenes/interface/aether_clash_spectator_camera_hud.tscn" id="9_spectator_hud"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xcqrr"]
 texture = ExtResource("2_wwok8")
@@ -223,6 +225,14 @@ position = Vector2(1280, 2560)
 
 [node name="ArenaHud" parent="." unique_id=1005651117 instance=ExtResource("5_hud")]
 
+[node name="SpectatorCamera" type="Camera2D" parent="."]
+enabled = false
+zoom = Vector2(1.25, 1.25)
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="SpectatorCameraHud" parent="." instance=ExtResource("9_spectator_hud")]
+
 [node name="ArenaZones" type="Node2D" parent="." unique_id=1422114966]
 script = ExtResource("6_zones")
 
@@ -266,6 +276,12 @@ portal_action = "exit"
 entry_open = true
 interactable_kind = "aether_clash_exit_portal"
 display_name = "Guild Duel Portal"
+
+[node name="Guild1SpectatorOrb" parent="Entities/Interactables" instance=ExtResource("8_spectator_orb")]
+position = Vector2(2144, 2416)
+
+[node name="Guild2SpectatorOrb" parent="Entities/Interactables" instance=ExtResource("8_spectator_orb")]
+position = Vector2(2144, 2672)
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1254204188]
 visible = false

@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/interactables/aether_clash_spectator_orb.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/items/icons/BLUEORB.png" id="2_orb"]
+
+[sub_resource type="Gradient" id="Gradient_orb"]
+offsets = PackedFloat32Array(0, 0.45, 1)
+colors = PackedColorArray(0.35, 0.9, 1, 0.62, 0.14, 0.48, 1, 0.22, 0.06, 0.18, 0.8, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_orb"]
+gradient = SubResource("Gradient_orb")
+width = 96
+height = 96
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_orb"]
+size = Vector2(96, 112)
+
+[node name="AetherClashSpectatorOrb" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_script")
+interactable_kind = "aether_clash_spectator_orb"
+blocks_movement = true
+requires_facing = false
+interaction_shape_size = Vector2(96, 112)
+
+[node name="OrbSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -28)
+texture_filter = 1
+texture = ExtResource("2_orb")
+scale = Vector2(1.12, 1.12)
+
+[node name="OrbLight" type="PointLight2D" parent="."]
+position = Vector2(0, -28)
+color = Color(0.29, 0.78, 1, 1)
+energy = 0.9
+texture = SubResource("GradientTexture2D_orb")
+texture_scale = 1.5
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -12)
+shape = SubResource("RectangleShape_orb")
