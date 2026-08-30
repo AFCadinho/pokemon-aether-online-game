@@ -1,5 +1,18 @@
 extends SceneTree
 
+class NotificationOverlay extends Node:
+	var system_messages: Array[String] = []
+	var move_notifications: Array[Dictionary] = []
+
+	func add_system_message(message: String) -> void:
+		system_messages.append(message)
+
+	func add_pokemon_move_reward_notification(pokemon_context: Dictionary, move_value: Variant) -> void:
+		move_notifications.append({
+			"pokemon": pokemon_context.duplicate(true),
+			"move": (move_value as Dictionary).duplicate(true) if move_value is Dictionary else {},
+		})
+
 const CENTER_PATHS: Array[String] = [
 	"res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn",
 	"res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn",
@@ -194,6 +207,32 @@ func _check_popup_scene() -> void:
 			_check(not replacement_dialog.confirm_button.disabled, "Choosing a current move enables confirmation")
 		replacement_dialog.canceled.emit()
 		await process_frame
+	var notification_overlay := NotificationOverlay.new()
+	notification_overlay.add_to_group("ui_overlay")
+	root.add_child(notification_overlay)
+	popup.call(
+		"_announce_learned_move",
+		{"pokemonId": 42, "species": "Greninja", "nickname": "Ninja", "shiny": false},
+		{"moveId": "water-pulse", "name": "Water Pulse", "type": "water"},
+		{"id": "water-shuriken", "name": "Water Shuriken"},
+		"Ninja",
+		"Water Pulse"
+	)
+	_check(
+		notification_overlay.system_messages.size() == 1
+			and notification_overlay.system_messages[0].contains("Ninja")
+			and notification_overlay.system_messages[0].contains("Water Pulse")
+			and notification_overlay.system_messages[0].contains("Water Shuriken"),
+		"Move Mentor replacement adds a system message"
+	)
+	_check(
+		notification_overlay.move_notifications.size() == 1
+			and int(notification_overlay.move_notifications[0].pokemon.get("pokemonId", 0)) == 42
+			and str(notification_overlay.move_notifications[0].move.get("moveId", "")) == "water-pulse"
+			and str(notification_overlay.move_notifications[0].move.get("type", "")) == "water",
+		"Move Mentor lesson adds a top-right learned-move card"
+	)
+	notification_overlay.queue_free()
 	var popup_source := FileAccess.get_file_as_string("res://scripts/ui/move_mentor_popup.gd")
 	for source: String in REQUIRED_SOURCES:
 		_check(popup_source.contains('\t"%s",' % source), "Move Mentor includes %s moves" % source)

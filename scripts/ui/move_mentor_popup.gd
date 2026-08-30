@@ -683,6 +683,17 @@ func _teach_selected_move(replace_slot: int) -> void:
 	_refresh_action_state()
 	_set_status(_t("ui.move_mentor.status.saving"), false)
 	var learned_name := _selected_move_name()
+	var pokemon_name := _pokemon_name(pokemon)
+	var pokemon_notification := {
+		"pokemonId": pokemon.owned_pokemon_id,
+		"species": pokemon.species,
+		"nickname": pokemon.nickname,
+		"shiny": pokemon.shiny,
+	}
+	var learned_move_notification := _move_metadata(selected_move_id, _selected_move_candidate())
+	learned_move_notification["id"] = selected_move_id
+	learned_move_notification["moveId"] = selected_move_id
+	learned_move_notification["name"] = learned_name
 	var party_service := get_node_or_null("/root/PlayerPartyStateService")
 	if party_service == null:
 		request_in_progress = false
@@ -703,11 +714,51 @@ func _teach_selected_move(replace_slot: int) -> void:
 		_set_status(str(result.get("error", _t("ui.move_mentor.error.learn"))), true)
 		_refresh_action_state()
 		return
+	var learned_move_value: Variant = result.get("learnedMove", {})
+	if learned_move_value is Dictionary:
+		learned_move_notification.merge(learned_move_value as Dictionary, true)
+	var replaced_move: Dictionary = {}
+	var replaced_move_value: Variant = result.get("replacedMove", {})
+	if replaced_move_value is Dictionary:
+		replaced_move = replaced_move_value as Dictionary
+	_announce_learned_move(
+		pokemon_notification,
+		learned_move_notification,
+		replaced_move,
+		pokemon_name,
+		learned_name
+	)
 	selected_move_id = ""
 	selected_replace_slot = -1
 	_refresh_party_list()
 	await _load_selected_catalog()
 	_set_status(_t("ui.move_mentor.status.learned", {"pokemon": _pokemon_name(_selected_pokemon()), "move": learned_name}), false, UI_GREEN)
+
+
+func _announce_learned_move(
+	pokemon_context: Dictionary,
+	learned_move: Dictionary,
+	replaced_move: Dictionary,
+	pokemon_name: String,
+	learned_name: String
+) -> void:
+	var message := _t("ui.move_learning.result.learned", {
+		"pokemon": pokemon_name,
+		"move": learned_name,
+	})
+	if not replaced_move.is_empty():
+		message = _t("ui.move_learning.result.replaced", {
+			"pokemon": pokemon_name,
+			"forgotten": _move_name_from_value(replaced_move),
+			"learned": learned_name,
+		})
+	get_tree().call_group("ui_overlay", "add_system_message", message)
+	get_tree().call_group(
+		"ui_overlay",
+		"add_pokemon_move_reward_notification",
+		pokemon_context,
+		learned_move
+	)
 
 
 func _refresh_action_state() -> void:
