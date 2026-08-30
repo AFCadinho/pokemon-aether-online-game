@@ -1170,6 +1170,27 @@ func _run() -> void:
 		"bankPermissionOverrides": {"bank_borrow": "deny"},
 	}
 	popup.membership = popup.guild_home["membership"]
+	popup.aether_clash_state["canManage"] = false
+	popup.aether_clash_state["pendingIncoming"] = [{
+		"id": "member-visible-incoming",
+		"status": "pending",
+		"challengerGuild": {"id": 2, "name": "Midnight League"},
+		"challengedGuild": {"id": 1, "name": "Aether Vanguard"},
+		"createdBy": "Umbra",
+		"expiresAt": Time.get_datetime_string_from_unix_time(
+			int(Time.get_unix_time_from_system()) + 60
+		),
+	}]
+	popup.aether_clash_state["pendingOutgoing"] = [{
+		"id": "member-visible-outgoing",
+		"status": "pending",
+		"challengerGuild": {"id": 1, "name": "Aether Vanguard"},
+		"challengedGuild": {"id": 3, "name": "Silver Guard"},
+		"createdBy": "Nova",
+		"expiresAt": Time.get_datetime_string_from_unix_time(
+			int(Time.get_unix_time_from_system()) + 45
+		),
+	}]
 	popup._render_guild_home()
 	await process_frame
 	_check(popup.find_child("GuildManagementTab", true, false) == null, "regular members do not see management")
@@ -1177,7 +1198,12 @@ func _run() -> void:
 	popup._show_guild_section("aether_clash")
 	await process_frame
 	_check(popup.find_child("GuildCurrentAetherClash", true, false) != null, "regular members can see the accepted Aether Clash")
+	_check(popup.find_child("IncomingGuildAetherClashChallenge", true, false) != null, "regular members can see incoming pending Aether Clash challenges")
+	_check(popup.find_child("OutgoingGuildAetherClashChallenge", true, false) != null, "regular members can see outgoing pending Aether Clash challenges")
 	_check(popup.find_child("CancelCurrentGuildAetherClashButton", true, false) == null, "regular members cannot manage the accepted Aether Clash")
+	_check(popup.find_child("AcceptGuildAetherClashButton", true, false) == null, "regular members cannot accept pending Aether Clash challenges")
+	_check(popup.find_child("DeclineGuildAetherClashButton", true, false) == null, "regular members cannot decline pending Aether Clash challenges")
+	_check(popup.find_child("CancelGuildAetherClashChallengeButton", true, false) == null, "regular members cannot cancel pending Aether Clash challenges")
 	popup._show_guild_section("members")
 	await process_frame
 	var regular_member_actions := popup.find_child("GuildMemberActionsButton_2", true, false) as MenuButton

@@ -1673,7 +1673,7 @@
   "ui.guild.aether_clash.refresh": "Refresh",
   "ui.guild.aether_clash.loading": "Loading Aether Clash challenges...",
   "ui.guild.aether_clash.no_current": "Your Guild does not currently have an accepted Aether Clash.",
-  "ui.guild.aether_clash.member_hint": "Guild Leaders and Captains manage challenges. Every member can see an accepted Clash here.",
+  "ui.guild.aether_clash.member_hint": "Guild Leaders and Captains manage challenges. Every member can view pending and accepted Clashes here.",
   "ui.guild.aether_clash.incoming": "INCOMING CHALLENGES ({count})",
   "ui.guild.aether_clash.incoming_empty": "No Guild is currently challenging you.",
   "ui.guild.aether_clash.outgoing": "OUTGOING CHALLENGES ({count})",

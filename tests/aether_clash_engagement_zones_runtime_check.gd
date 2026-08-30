@@ -43,13 +43,13 @@ func _run() -> void:
 	local_actor.name = "FakeLocalClashPlayer"
 	local_actor.global_position = Vector2(512, 512)
 	local_actor.add_to_group("player")
-	duel.add_child(local_actor)
+	root.add_child(local_actor)
 	var remote_actor := FakeRemoteActor.new()
 	remote_actor.name = "FakeRemoteClashPlayer"
 	remote_actor.user_id = 2
 	remote_actor.global_position = Vector2(576, 512)
 	remote_actor.add_to_group("remote_player_avatar")
-	duel.add_child(remote_actor)
+	root.add_child(remote_actor)
 
 	duel.call("_apply_arena_state", _payload("entry_open", "blue"))
 	_check(
@@ -149,6 +149,14 @@ func _run() -> void:
 
 	player_save.set("player_id", original_player_id)
 	duel.queue_free()
+	await process_frame
+	_check(
+		local_actor.get_node_or_null("AetherClashEngagementRing") == null
+		and remote_actor.get_node_or_null("AetherClashEngagementRing") == null,
+		"Engagement circles are removed when the duel map closes"
+	)
+	local_actor.queue_free()
+	remote_actor.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
 

@@ -1673,7 +1673,7 @@
   "ui.guild.aether_clash.refresh": "Vernieuwen",
   "ui.guild.aether_clash.loading": "Aether Clash-challenges laden...",
   "ui.guild.aether_clash.no_current": "Je Guild heeft momenteel geen geaccepteerde Aether Clash.",
-  "ui.guild.aether_clash.member_hint": "Guildleiders en Captains beheren challenges. Ieder lid kan hier een geaccepteerde Clash zien.",
+  "ui.guild.aether_clash.member_hint": "Guildleiders en Captains beheren challenges. Ieder lid kan hier openstaande en geaccepteerde Clashes zien.",
   "ui.guild.aether_clash.incoming": "INKOMENDE CHALLENGES ({count})",
   "ui.guild.aether_clash.incoming_empty": "Geen enkele Guild daagt jullie momenteel uit.",
   "ui.guild.aether_clash.outgoing": "UITGAANDE CHALLENGES ({count})",
