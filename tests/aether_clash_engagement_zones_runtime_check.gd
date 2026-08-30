@@ -146,6 +146,12 @@ func _run() -> void:
 		and duel_source.contains('player_state.get("engagementMatchId")'),
 		"Enemy contact, realtime delivery, and reconnect recovery share the authoritative engagement flow"
 	)
+	_check(
+		duel_source.contains('"engagement_contact_emitted"')
+		and duel_source.contains('"engagement_request_completed"')
+		and duel_source.contains('"arena_state_failed"'),
+		"Collision requests and arena-state failures emit structured Aether Clash traces"
+	)
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	_check(
 		overlay_source.contains("func start_aether_clash_pvp_match(")
@@ -153,6 +159,18 @@ func _run() -> void:
 		and overlay_source.contains('aether_clash_started_engagements[normalized_engagement_id] = "failed"')
 		and not overlay_source.contains("aether_clash_started_engagements.erase(normalized_engagement_id)"),
 		"Aether Clash engagements reuse PvP start once without an automatic failure loop"
+	)
+	_check(
+		overlay_source.contains('"battle_start_response"')
+		and overlay_source.contains('"authorized_teleport_received"'),
+		"Battle-start responses and authoritative Aether Clash teleports are traced"
+	)
+	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	_check(
+		world_source.contains('"position_save_failed"')
+		and world_source.contains('"remote_teleport_received"')
+		and world_source.contains('"teleport_apply_finished"'),
+		"Arena position-save failures and teleport application emit structured traces"
 	)
 	var zone_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_arena_zones.gd")
 	_check(

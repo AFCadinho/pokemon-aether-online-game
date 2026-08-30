@@ -452,7 +452,31 @@ func _set_aethernet_effect_presence(phase: String) -> void:
 	_publish_world_presence(true)
 
 
+func _is_aether_clash_map_id(value: String) -> bool:
+	return value.strip_edges().begins_with("aether_clash_duel:")
+
+
+func _trace_aether_clash(event: String, fields: Dictionary = {}) -> void:
+	var payload := fields.duplicate(true)
+	payload["event"] = event
+	print("[AetherClashTrace] %s" % JSON.stringify(payload))
+
+
 func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
+	var current_map_id := _get_map_id(GameState.current_map)
+	var target_map_id := str(state.get("mapId", "")).strip_edges()
+	var trace_aether_clash := (
+		_is_aether_clash_map_id(current_map_id)
+		or _is_aether_clash_map_id(target_map_id)
+	)
+	if trace_aether_clash:
+		_trace_aether_clash("teleport_apply_started", {
+			"currentMapId": current_map_id,
+			"targetMapId": target_map_id,
+			"targetScenePath": str(state.get("mapScenePath", "")),
+			"teleportRevision": int(state.get("teleportRevision", 0)),
+			"teleportCommandId": str(state.get("teleportCommandId", "")),
+		})
 	authorized_teleport_in_progress = true
 	if player == null:
 		_mark_authorized_teleport_apply_failed()
@@ -561,6 +585,13 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	if authorized_teleport_locked_overworld:
 		GameState.unlock_overworld_input()
 	authorized_teleport_locked_overworld = false
+	if trace_aether_clash:
+		_trace_aether_clash("teleport_apply_finished", {
+			"currentMapId": _get_map_id(GameState.current_map),
+			"targetMapId": target_map_id,
+			"teleportRevision": current_teleport_revision,
+			"teleportCommandId": str(state.get("teleportCommandId", "")),
+		})
 	return {"success": true}
 
 
@@ -572,7 +603,26 @@ func _configure_authorized_map_instance(map: Node, state: Dictionary) -> void:
 
 func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	var command_id := _optional_string(state.get("teleportCommandId"))
+	var current_map_id := _get_map_id(GameState.current_map)
+	var target_map_id := str(state.get("mapId", "")).strip_edges()
+	var trace_aether_clash := (
+		_is_aether_clash_map_id(current_map_id)
+		or _is_aether_clash_map_id(target_map_id)
+	)
+	if trace_aether_clash:
+		_trace_aether_clash("remote_teleport_received", {
+			"currentMapId": current_map_id,
+			"targetMapId": target_map_id,
+			"teleportRevision": int(state.get("teleportRevision", 0)),
+			"teleportCommandId": command_id,
+		})
 	if command_id != "" and completed_remote_authorized_teleport_commands.has(command_id):
+		if trace_aether_clash:
+			_trace_aether_clash("remote_teleport_skipped", {
+				"reason": "completed_duplicate",
+				"targetMapId": target_map_id,
+				"teleportCommandId": command_id,
+			})
 		return {"success": true, "applied": true, "duplicate": true}
 	if (
 		command_id != ""
@@ -583,11 +633,23 @@ func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
 			).strip_edges()
 		)
 	):
+		if trace_aether_clash:
+			_trace_aether_clash("remote_teleport_skipped", {
+				"reason": "active_duplicate",
+				"targetMapId": target_map_id,
+				"teleportCommandId": command_id,
+			})
 		return {"success": true, "queued": true, "duplicate": true}
 	var block_reason := _get_authorized_teleport_block_reason(false, true)
 	if block_reason != "":
 		pending_remote_authorized_teleport_state = state.duplicate(true)
 		remote_authorized_teleport_retry_elapsed = 0.0
+		if trace_aether_clash:
+			_trace_aether_clash("remote_teleport_queued", {
+				"targetMapId": target_map_id,
+				"teleportCommandId": command_id,
+				"blockReason": block_reason,
+			})
 		return {
 			"success": true,
 			"queued": true,
@@ -603,6 +665,13 @@ func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	await play_authorized_teleport_departure_effect()
 	var result: Dictionary = await apply_authorized_teleport_state(state)
 	active_remote_authorized_teleport_command_id = ""
+	if trace_aether_clash:
+		_trace_aether_clash("remote_teleport_completed", {
+			"targetMapId": target_map_id,
+			"teleportCommandId": command_id,
+			"success": bool(result.get("success", false)),
+			"error": str(result.get("error", "")),
+		})
 	if bool(result.get("success", false)) and command_id != "":
 		_remember_completed_remote_authorized_teleport(command_id)
 	return result
@@ -2172,6 +2241,30 @@ func _save_current_player_position(
 	else:
 		if str(result.get("error", "")) == "FORCED_TELEPORT_PENDING":
 			_mark_authorized_teleport_apply_failed()
+		var attempted_map_id := str(state.get("mapId", "")).strip_edges()
+		var current_map_id := _get_map_id(GameState.current_map)
+		var pending_target_map_id := str(
+			pending_remote_authorized_teleport_state.get("mapId", "")
+		).strip_edges()
+		var error_code := BackendErrorLocalizationService.error_code(result)
+		if (
+			_is_aether_clash_map_id(attempted_map_id)
+			or _is_aether_clash_map_id(current_map_id)
+			or _is_aether_clash_map_id(pending_target_map_id)
+			or error_code == "forced_teleport_pending"
+			or str(result.get("error", "")) == "FORCED_TELEPORT_PENDING"
+		):
+			_trace_aether_clash("position_save_failed", {
+				"attemptedMapId": attempted_map_id,
+				"currentMapId": current_map_id,
+				"httpStatus": int(result.get("status", 0)),
+				"errorCode": error_code,
+				"error": str(result.get("diagnosticError", result.get("error", ""))),
+				"teleportRevision": current_teleport_revision,
+				"authorizedTeleportInProgress": authorized_teleport_in_progress,
+				"activeTeleportCommandId": active_remote_authorized_teleport_command_id,
+				"pendingTargetMapId": pending_target_map_id,
+			})
 		if not ThievingService.is_arrest_transfer_pending():
 			push_warning("World: player position save failed: %s" % str(result.get("error", "Unknown error")))
 	is_saving_player_position = false

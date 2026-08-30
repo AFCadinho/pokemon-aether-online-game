@@ -42159,17 +42159,43 @@ func _on_pvp_room_poll_completed(
 	_set_pvp_status_key("ui.pvp.room.opponent_joined")
 	await _start_pvp_battle_from_response(response)
 
+func _trace_aether_clash(event: String, fields: Dictionary = {}) -> void:
+	var payload := fields.duplicate(true)
+	payload["event"] = event
+	print("[AetherClashTrace] %s" % JSON.stringify(payload))
+
+
 func start_aether_clash_pvp_match(match_id: String, engagement_id: String) -> bool:
 	var normalized_match_id := match_id.strip_edges()
 	var normalized_engagement_id := engagement_id.strip_edges()
 	if normalized_match_id.is_empty() or normalized_engagement_id.is_empty():
+		_trace_aether_clash("battle_start_skipped", {
+			"reason": "missing_identifiers",
+			"matchId": normalized_match_id,
+			"engagementId": normalized_engagement_id,
+		})
 		return false
 	if aether_clash_started_engagements.has(normalized_engagement_id):
+		_trace_aether_clash("battle_start_skipped", {
+			"reason": "engagement_already_attempted",
+			"matchId": normalized_match_id,
+			"engagementId": normalized_engagement_id,
+			"attemptState": str(aether_clash_started_engagements[normalized_engagement_id]),
+		})
 		return str(aether_clash_started_engagements[normalized_engagement_id]) != "failed"
 	if pvp_battle_starting:
+		_trace_aether_clash("battle_start_skipped", {
+			"reason": "another_pvp_battle_starting",
+			"matchId": normalized_match_id,
+			"engagementId": normalized_engagement_id,
+		})
 		return false
 
 	aether_clash_started_engagements[normalized_engagement_id] = "starting"
+	_trace_aether_clash("battle_start_requested", {
+		"matchId": normalized_match_id,
+		"engagementId": normalized_engagement_id,
+	})
 	var world := get_tree().get_first_node_in_group("world")
 	if world != null and world.has_method("begin_pvp_battle_transition"):
 		world.call("begin_pvp_battle_transition")
@@ -42179,11 +42205,26 @@ func start_aether_clash_pvp_match(match_id: String, engagement_id: String) -> bo
 		normalized_match_id
 	)
 	request.queue_free()
+	_trace_aether_clash("battle_start_response", {
+		"matchId": normalized_match_id,
+		"engagementId": normalized_engagement_id,
+		"success": bool(response.get("success", false)),
+		"httpStatus": int(response.get("status", 0)),
+		"errorCode": BackendErrorLocalizationService.error_code(response),
+		"error": str(response.get("diagnosticError", response.get("error", ""))),
+		"battleId": str(response.get("battleId", "")),
+		"roomCode": str(response.get("roomCode", "")),
+	})
 	if not bool(response.get("success", false)):
 		aether_clash_started_engagements[normalized_engagement_id] = "failed"
 		if world != null and world.has_method("cancel_pvp_battle_transition"):
 			await world.call("cancel_pvp_battle_transition")
 		add_system_message(str(response.get("error", "The Aether Clash battle could not start.")))
+		_trace_aether_clash("battle_start_failed", {
+			"matchId": normalized_match_id,
+			"engagementId": normalized_engagement_id,
+			"worldMapId": str(GameState.current_map.call("get_map_id")) if GameState.current_map != null and GameState.current_map.has_method("get_map_id") else "",
+		})
 		return false
 
 	if str(response.get("roomCode", "")).strip_edges().is_empty():
@@ -42195,6 +42236,14 @@ func start_aether_clash_pvp_match(match_id: String, engagement_id: String) -> bo
 		and str(world.get("active_battle_kind")) == "pvp"
 	)
 	aether_clash_started_engagements[normalized_engagement_id] = "started" if started else "failed"
+	_trace_aether_clash("battle_start_finished", {
+		"matchId": normalized_match_id,
+		"engagementId": normalized_engagement_id,
+		"started": started,
+		"worldIsInBattle": bool(world.get("is_in_battle")) if world != null else false,
+		"worldBattleKind": str(world.get("active_battle_kind")) if world != null else "",
+		"worldBattleId": str(world.get("active_battle_id")) if world != null else "",
+	})
 	return started
 
 
@@ -43195,8 +43244,16 @@ func _on_realtime_mail_received(mail_id: int) -> void:
 		await _refresh_mail_attention_from_inbox()
 
 
-func _on_authorized_teleport_received(state: Dictionary, _reason: String) -> void:
+func _on_authorized_teleport_received(state: Dictionary, reason: String) -> void:
 	var world := GameState.get_world()
+	if reason.to_lower().contains("aether clash"):
+		_trace_aether_clash("authorized_teleport_received", {
+			"reason": reason,
+			"targetMapId": str(state.get("mapId", "")),
+			"targetScenePath": str(state.get("mapScenePath", "")),
+			"teleportRevision": int(state.get("teleportRevision", 0)),
+			"teleportCommandId": str(state.get("teleportCommandId", "")),
+		})
 	if world == null:
 		_add_chat_message("A staff teleport was received, but the world is not ready. Please reload.")
 		return

@@ -37,6 +37,8 @@ var last_engagement_contact_msec: Dictionary = {}
 var staging_ejection_deadline_msec := 0
 var leave_confirmation = null
 var leave_request_active := false
+var last_trace_arena_state_fingerprint := ""
+var last_trace_arena_error_fingerprint := ""
 
 
 func _ready() -> void:
@@ -65,6 +67,12 @@ func _process(delta: float) -> void:
 
 
 func _exit_tree() -> void:
+	_trace_aether_clash("duel_exit_tree", {
+		"sessionId": instance_session_id,
+		"mapId": map_id,
+		"sessionStatus": str(arena_session.get("status", "")),
+		"viewerRole": viewer_role,
+	})
 	_clear_engagement_rings()
 	GameState.release_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
 	_free_leave_confirmation()
@@ -87,6 +95,13 @@ func configure_aether_clash_instance(instance_map_id: String) -> void:
 	viewer_role = "spectator"
 	viewer_side = ""
 	has_received_arena_state = false
+	last_trace_arena_state_fingerprint = ""
+	last_trace_arena_error_fingerprint = ""
+	_trace_aether_clash("duel_configured", {
+		"sessionId": instance_session_id,
+		"mapId": map_id,
+		"localUserId": _local_user_id(),
+	})
 	arena_hud.show_syncing()
 	start_barrier.set_barrier_raised(true, false)
 	arena_state_timer.start()
@@ -198,8 +213,26 @@ func _refresh_arena_state() -> void:
 	arena_state_request_active = true
 	var result: Dictionary = await GuildService.load_aether_clash_arena_state(instance_session_id)
 	arena_state_request_active = false
-	if instance_session_id.is_empty() or not bool(result.get("success", false)):
+	if instance_session_id.is_empty():
 		return
+	if not bool(result.get("success", false)):
+		var error_code := _response_error_code(result)
+		var error_fingerprint := "%s:%s:%s" % [
+			str(result.get("status", 0)),
+			error_code,
+			str(result.get("error", "")),
+		]
+		if error_fingerprint != last_trace_arena_error_fingerprint:
+			last_trace_arena_error_fingerprint = error_fingerprint
+			_trace_aether_clash("arena_state_failed", {
+				"sessionId": instance_session_id,
+				"mapId": map_id,
+				"httpStatus": int(result.get("status", 0)),
+				"errorCode": error_code,
+				"error": str(result.get("diagnosticError", result.get("error", ""))),
+			})
+		return
+	last_trace_arena_error_fingerprint = ""
 	_apply_arena_state(result)
 
 
@@ -219,6 +252,26 @@ func _apply_arena_state(payload: Dictionary) -> void:
 	viewer_role = str(payload.get("viewerRole", "spectator"))
 	viewer_side = str(payload.get("viewerSide", ""))
 	_apply_arena_players(payload.get("arenaPlayers", []))
+	var local_user_id := _local_user_id()
+	var state_fingerprint := "%s:%s:%s:%s:%s" % [
+		next_status,
+		viewer_role,
+		viewer_side,
+		str(arena_players.keys()),
+		str(engaged_player_ids.keys()),
+	]
+	if state_fingerprint != last_trace_arena_state_fingerprint:
+		last_trace_arena_state_fingerprint = state_fingerprint
+		_trace_aether_clash("arena_state_applied", {
+			"sessionId": instance_session_id,
+			"status": next_status,
+			"viewerRole": viewer_role,
+			"viewerSide": viewer_side,
+			"localUserId": local_user_id,
+			"localPlayerActive": arena_players.has(local_user_id),
+			"arenaPlayerIds": arena_players.keys(),
+			"engagedPlayerIds": engaged_player_ids.keys(),
+		})
 	start_barrier.set_barrier_raised(barrier_should_be_raised, animate_lowering)
 	arena_zones.set_phase(next_status)
 	arena_hud.apply_arena_state(payload)
@@ -449,23 +502,59 @@ func _on_engagement_contact_requested(
 	target_user_id: int,
 	method: String
 ) -> void:
-	if (
-		instance_session_id.is_empty()
-		or source_user_id != _local_user_id()
-		or engaged_player_ids.has(source_user_id)
-		or engaged_player_ids.has(target_user_id)
-	):
+	var skip_reason := ""
+	if instance_session_id.is_empty():
+		skip_reason = "missing_session"
+	elif source_user_id != _local_user_id():
+		skip_reason = "non_local_source"
+	elif engaged_player_ids.has(source_user_id):
+		skip_reason = "source_already_engaged"
+	elif engaged_player_ids.has(target_user_id):
+		skip_reason = "target_already_engaged"
+	if not skip_reason.is_empty():
+		_trace_aether_clash("engagement_request_skipped", {
+			"sessionId": instance_session_id,
+			"sourceUserId": source_user_id,
+			"targetUserId": target_user_id,
+			"method": method,
+			"reason": skip_reason,
+		})
 		return
 	var pair_key := "%d:%d" % [mini(source_user_id, target_user_id), maxi(source_user_id, target_user_id)]
 	if engagement_requests_in_flight.has(pair_key):
+		_trace_aether_clash("engagement_request_skipped", {
+			"sessionId": instance_session_id,
+			"sourceUserId": source_user_id,
+			"targetUserId": target_user_id,
+			"method": method,
+			"reason": "request_in_flight",
+		})
 		return
 	engagement_requests_in_flight[pair_key] = true
+	_trace_aether_clash("engagement_request_started", {
+		"sessionId": instance_session_id,
+		"sourceUserId": source_user_id,
+		"targetUserId": target_user_id,
+		"method": method,
+	})
 	var result: Dictionary = await GuildService.create_aether_clash_engagement(
 		instance_session_id,
 		target_user_id,
 		method
 	)
 	engagement_requests_in_flight.erase(pair_key)
+	_trace_aether_clash("engagement_request_completed", {
+		"sessionId": instance_session_id,
+		"sourceUserId": source_user_id,
+		"targetUserId": target_user_id,
+		"method": method,
+		"success": bool(result.get("success", false)),
+		"httpStatus": int(result.get("status", 0)),
+		"errorCode": _response_error_code(result),
+		"error": str(result.get("diagnosticError", result.get("error", ""))),
+		"engagementId": str(result.get("id", "")),
+		"matchId": str(result.get("matchId", "")),
+	})
 	if not bool(result.get("success", false)):
 		_refresh_arena_state.call_deferred()
 		var error_code := _response_error_code(result)
@@ -486,6 +575,13 @@ func _on_realtime_message_received(message: Dictionary) -> void:
 	var engagement := _dictionary(message.get("engagement", {})).duplicate(true)
 	if str(engagement.get("sessionId", "")).strip_edges() != instance_session_id:
 		return
+	_trace_aether_clash("engagement_realtime_received", {
+		"sessionId": instance_session_id,
+		"engagementId": str(engagement.get("id", "")),
+		"matchId": str(engagement.get("matchId", "")),
+		"sourceUserId": int(engagement.get("sourceUserId", 0)),
+		"targetUserId": int(engagement.get("targetUserId", 0)),
+	})
 	await _begin_engagement_battle(engagement)
 
 
@@ -494,11 +590,22 @@ func _begin_engagement_battle(engagement: Dictionary) -> void:
 	var match_id := str(engagement.get("matchId", "")).strip_edges()
 	var source_user_id := int(engagement.get("sourceUserId", 0))
 	var target_user_id := int(engagement.get("targetUserId", 0))
+	_trace_aether_clash("engagement_battle_begin", {
+		"sessionId": instance_session_id,
+		"engagementId": engagement_id,
+		"matchId": match_id,
+		"sourceUserId": source_user_id,
+		"targetUserId": target_user_id,
+		"localUserId": _local_user_id(),
+	})
 	if engagement_id.is_empty() or match_id.is_empty():
+		_trace_aether_clash("engagement_battle_skipped", {"reason": "missing_identifiers"})
 		return
 	if source_user_id <= 0 and target_user_id <= 0:
+		_trace_aether_clash("engagement_battle_skipped", {"reason": "missing_players"})
 		return
 	if _local_user_id() not in [source_user_id, target_user_id]:
+		_trace_aether_clash("engagement_battle_skipped", {"reason": "local_player_not_in_engagement"})
 		return
 	if source_user_id > 0:
 		engaged_player_ids[source_user_id] = engagement_id
@@ -507,8 +614,15 @@ func _begin_engagement_battle(engagement: Dictionary) -> void:
 	for overlay_value: Variant in get_tree().get_nodes_in_group("ui_overlay"):
 		var overlay := overlay_value as Node
 		if overlay != null and overlay.has_method("start_aether_clash_pvp_match"):
-			await overlay.call("start_aether_clash_pvp_match", match_id, engagement_id)
+			var started: bool = bool(await overlay.call("start_aether_clash_pvp_match", match_id, engagement_id))
+			_trace_aether_clash("engagement_battle_result", {
+				"sessionId": instance_session_id,
+				"engagementId": engagement_id,
+				"matchId": match_id,
+				"started": started,
+			})
 			return
+	_trace_aether_clash("engagement_battle_skipped", {"reason": "overlay_unavailable"})
 	_show_system_message("The Aether Clash battle interface is unavailable.")
 
 
@@ -528,7 +642,27 @@ func _emit_engagement_contact(source_user_id: int, target_user_id: int, method: 
 	if now - int(last_engagement_contact_msec.get(pair, -ENGAGEMENT_CONTACT_COOLDOWN_MSEC)) < ENGAGEMENT_CONTACT_COOLDOWN_MSEC:
 		return
 	last_engagement_contact_msec[pair] = now
+	var source_actor := _actor_for_user_id(source_user_id)
+	var target_actor := _actor_for_user_id(target_user_id)
+	var source_position := (source_actor as Node2D).global_position if source_actor is Node2D else Vector2.ZERO
+	var target_position := (target_actor as Node2D).global_position if target_actor is Node2D else Vector2.ZERO
+	_trace_aether_clash("engagement_contact_emitted", {
+		"sessionId": instance_session_id,
+		"sessionStatus": str(arena_session.get("status", "")),
+		"sourceUserId": source_user_id,
+		"targetUserId": target_user_id,
+		"method": method,
+		"sourcePosition": {"x": source_position.x, "y": source_position.y},
+		"targetPosition": {"x": target_position.x, "y": target_position.y},
+		"distance": source_position.distance_to(target_position),
+	})
 	engagement_contact_requested.emit(source_user_id, target_user_id, method)
+
+
+func _trace_aether_clash(event: String, fields: Dictionary = {}) -> void:
+	var payload := fields.duplicate(true)
+	payload["event"] = event
+	print("[AetherClashTrace] %s" % JSON.stringify(payload))
 
 
 func _segment_circle_hit_progress(start: Vector2, finish: Vector2, center: Vector2, radius: float) -> float:
