@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Item Dex now shows detailed acquisition cards with shops, locations, effective drop chances, skill requirements, costs, and one-time or repeatable availability.
+
 - Refined the Guild Overview with whole-number levels, clearer EXP and capacity displays, compact announcements, rank badges, and online-member context.
 
 - The Guild Pokémon Vault now shows unavailable Pokémon in red and explains why they cannot be donated.
