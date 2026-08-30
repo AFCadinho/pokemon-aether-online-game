@@ -18,6 +18,10 @@ const UI_GOLD := Color("#f3cf70")
 const UI_PURPLE := Color("#c694ff")
 const MOVE_SUMMARY_INDEX_PATH := "res://data/move_summary_index.json"
 const TYPE_ICON_ROOT := "res://assets/sprites/types/small/"
+const ITEM_ICON_ROOT := "res://assets/items/icons/"
+const ITEM_ICON_ALIASES := {
+	"armorite-ore": "SKARMORITE",
+}
 const CATEGORY_ICON_PATHS := {
 	"physical": "res://assets/battles/physical_move.png",
 	"special": "res://assets/battles/special_move.png",
@@ -452,6 +456,9 @@ func _refresh_move_list() -> void:
 			stats_label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 			meta_row.add_child(stats_label)
 		var category_icon := _category_icon(category)
+		var cost_badge := _cost_badge(candidate)
+		if cost_badge != null:
+			row.add_child(cost_badge)
 		if category_icon != null:
 			row.add_child(category_icon)
 		move_list.add_child(button)
@@ -489,6 +496,7 @@ func _on_move_selected(move_id: String) -> void:
 	selected_move_id = move_id
 	_refresh_move_list()
 	_refresh_action_state()
+	_set_selected_cost_status()
 
 
 func _refresh_current_moves() -> void:
@@ -648,6 +656,9 @@ func _build_new_move_preview() -> Control:
 		details.add_child(_text_label(stats, 9, UI_MUTED))
 	if not source.is_empty():
 		row.add_child(_source_badge(source))
+	var cost_badge := _cost_badge(candidate)
+	if cost_badge != null:
+		row.add_child(cost_badge)
 	var category_icon := _category_icon(str(metadata.get("category", "")))
 	if category_icon != null:
 		row.add_child(category_icon)
@@ -659,7 +670,7 @@ func _on_dialog_replace_slot_selected(index: int, buttons: Array[Button], dialog
 	selected_replace_slot = index
 	for button_index in range(buttons.size()):
 		_apply_selectable_style(buttons[button_index], button_index == selected_replace_slot)
-	dialog.confirm_button.disabled = false
+	dialog.confirm_button.disabled = not _selected_move_is_affordable()
 
 
 func _confirm_replacement(dialog: AetherConfirmationDialog) -> void:
@@ -765,11 +776,63 @@ func _refresh_action_state() -> void:
 	if learn_button == null:
 		return
 	var pokemon := _selected_pokemon()
+	var cost := _selected_move_cost()
+	if cost.is_empty():
+		learn_button.text = _t("ui.move_mentor.learn")
+		learn_button.icon = null
+		learn_button.tooltip_text = ""
+	else:
+		var item_id := str(cost.get("itemId", ""))
+		var quantity := maxi(int(cost.get("quantity", 0)), 0)
+		var owned := maxi(int(cost.get("ownedQuantity", 0)), 0)
+		var item_name := _item_name(item_id)
+		learn_button.text = _t("ui.move_mentor.learn_cost", {"quantity": quantity})
+		learn_button.icon = _item_icon_texture(item_id)
+		learn_button.tooltip_text = _t("ui.move_mentor.cost.tooltip", {
+			"item": item_name,
+			"required": quantity,
+			"owned": owned,
+		})
 	learn_button.disabled = (
 		request_in_progress
 		or pokemon == null
 		or selected_move_id == ""
+		or not _selected_move_is_affordable()
 	)
+
+
+func _selected_move_cost() -> Dictionary:
+	var candidate := _selected_move_candidate()
+	var value: Variant = candidate.get("cost", {})
+	return value as Dictionary if value is Dictionary else {}
+
+
+func _selected_move_is_affordable() -> bool:
+	var cost := _selected_move_cost()
+	if cost.is_empty():
+		return false
+	return int(cost.get("quantity", 0)) > 0 and int(cost.get("ownedQuantity", 0)) >= int(cost.get("quantity", 0))
+
+
+func _set_selected_cost_status() -> void:
+	var cost := _selected_move_cost()
+	if cost.is_empty():
+		return
+	var item_name := _item_name(str(cost.get("itemId", "")))
+	var required := maxi(int(cost.get("quantity", 0)), 0)
+	var owned := maxi(int(cost.get("ownedQuantity", 0)), 0)
+	if owned < required:
+		_set_status(_t("ui.move_mentor.status.resource_required", {
+			"item": item_name,
+			"required": required,
+			"owned": owned,
+		}), true)
+	else:
+		_set_status(_t("ui.move_mentor.status.cost", {
+			"item": item_name,
+			"required": required,
+			"owned": owned,
+		}), false, UI_GOLD)
 
 
 func _selected_pokemon() -> Pokemon:
@@ -940,6 +1003,72 @@ func _category_icon(category: String) -> TextureRect:
 	icon.tooltip_text = _format_id(normalized)
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return icon
+
+
+func _cost_badge(candidate: Dictionary) -> Control:
+	var value: Variant = candidate.get("cost", {})
+	if not value is Dictionary:
+		return null
+	var cost := value as Dictionary
+	var item_id := str(cost.get("itemId", ""))
+	var required := maxi(int(cost.get("quantity", 0)), 0)
+	var owned := maxi(int(cost.get("ownedQuantity", 0)), 0)
+	if item_id.is_empty() or required <= 0:
+		return null
+	var affordable := owned >= required
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(66, 30)
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.tooltip_text = _t("ui.move_mentor.cost.tooltip", {
+		"item": _item_name(item_id),
+		"required": required,
+		"owned": owned,
+	})
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(
+			Color(UI_GREEN if affordable else UI_DANGER, 0.11),
+			Color(UI_GREEN if affordable else UI_DANGER, 0.72),
+			6,
+			1
+		)
+	)
+	var row := HBoxContainer.new()
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 3)
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(row)
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(21, 21)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.texture = _item_icon_texture(item_id)
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(icon)
+	row.add_child(_text_label(
+		_t("ui.move_mentor.cost.inventory", {"owned": owned, "required": required}),
+		10,
+		UI_GREEN if affordable else UI_DANGER
+	))
+	return panel
+
+
+func _item_icon_texture(item_id: String) -> Texture2D:
+	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
+	var aliased := str(ITEM_ICON_ALIASES.get(item_id.strip_edges().to_lower(), normalized))
+	for path: String in [
+		"%s%s.png" % [ITEM_ICON_ROOT, aliased],
+		"%s%s.png" % [ITEM_ICON_ROOT, normalized],
+		"%s000.png" % ITEM_ICON_ROOT,
+	]:
+		if ResourceLoader.exists(path):
+			return load(path) as Texture2D
+	return null
+
+
+func _item_name(item_id: String) -> String:
+	return _localized_content_name("items", item_id, _format_id(item_id))
 
 
 func _source_badge(source: String) -> Label:

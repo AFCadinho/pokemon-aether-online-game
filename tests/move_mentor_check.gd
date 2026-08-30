@@ -142,7 +142,12 @@ func _check_popup_scene() -> void:
 		"Move Mentor source filter uses the themed dropdown and popup"
 	)
 	var preview_candidates: Array = popup.get("candidates") as Array
-	preview_candidates.append({"moveId": "water-pulse", "name": "Water Pulse", "source": "tutor"})
+	preview_candidates.append({
+		"moveId": "water-pulse",
+		"name": "Water Pulse",
+		"source": "tutor",
+		"cost": {"itemId": "armorite-ore", "quantity": 1, "ownedQuantity": 1},
+	})
 	popup.call("_refresh_move_list")
 	await process_frame
 	var move_list := popup.get("move_list") as VBoxContainer
@@ -169,6 +174,12 @@ func _check_popup_scene() -> void:
 	popup.call("_on_move_selected", "water-pulse")
 	await process_frame
 	_check(not learn_button.disabled, "Move Mentor enables Teach move before choosing a replacement")
+	_check(
+		learn_button.text.contains("1")
+			and learn_button.icon != null
+			and learn_button.icon.resource_path.ends_with("SKARMORITE.png"),
+		"Move Mentor Teach button shows the selected resource cost"
+	)
 	var first_current_move := current_moves_list.get_child(0) as Button
 	_check(
 		first_current_move != null
@@ -266,6 +277,15 @@ func _check_service_contract() -> void:
 			and service_source.contains('payload["learnSource"] = learn_source'),
 		"party service loads the mentor catalog and submits the explicit mentor source"
 	)
+	var error_service_source := FileAccess.get_file_as_string(
+		"res://scripts/services/backend_error_localization_service.gd"
+	)
+	_check(
+		error_service_source.contains(
+			'"move_mentor_resource_required": "backend.error.move_mentor_resource_required"'
+		),
+		"Move Mentor resource errors use the localized backend error path"
+	)
 	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
 	_check(load(UI_OVERLAY_PATH) != null, "UI overlay parses with the Move Mentor integration")
 	_check(
@@ -291,6 +311,9 @@ func _check_localization() -> void:
 			"ui.move_mentor.replace_dialog.confirm",
 			"ui.move_mentor.tooltip.source",
 			"ui.move_mentor.status.learned",
+			"ui.move_mentor.status.cost",
+			"ui.move_mentor.status.resource_required",
+			"ui.move_mentor.cost.tooltip",
 			"ui.move_mentor.source.relearn",
 			"ui.move_mentor.npc.service_unavailable",
 		]:
