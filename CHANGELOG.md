@@ -12,6 +12,7 @@
 
 - Wild battles now open with both Pokémon ready, letting queued move or Run input start sooner without an opening summon animation.
 - The Move Mentor now stands behind the Pokémon Center desk and can be spoken to across it.
+- The Move Mentor interface now uses Pokémon portraits, move-type and damage-category icons, clearer move details, and a fully themed source filter.
 
 **Fixed**
 
