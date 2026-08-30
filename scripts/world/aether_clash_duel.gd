@@ -60,6 +60,7 @@ func _process(delta: float) -> void:
 
 
 func _exit_tree() -> void:
+	_clear_engagement_rings()
 	GameState.release_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
 	_free_leave_confirmation()
 
@@ -246,8 +247,22 @@ func _sync_engagement_rings() -> void:
 			ring = ring_value as Node2D
 			ring.name = "AetherClashEngagementRing"
 			actor.add_child(ring)
+		ring.set_meta("aether_clash_controller_id", get_instance_id())
 		if ring.has_method("configure"):
 			ring.call("configure", str(arena_players.get(user_id, "blue")))
+
+
+func _clear_engagement_rings() -> void:
+	var controller_id := get_instance_id()
+	for actor_value: Variant in _all_player_actors():
+		var actor := actor_value as Node2D
+		if actor == null:
+			continue
+		var ring := actor.get_node_or_null("AetherClashEngagementRing")
+		if ring == null:
+			continue
+		if int(ring.get_meta("aether_clash_controller_id", 0)) == controller_id:
+			ring.queue_free()
 
 
 func _all_player_actors() -> Array[Node2D]:

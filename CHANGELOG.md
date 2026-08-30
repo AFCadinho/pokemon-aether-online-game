@@ -31,6 +31,7 @@
 
 **Fixed**
 
+- Engagement circles no longer follow players out of a Guild Duel arena, and all Guild members can now view their Guild's pending Aether Clash challenges without receiving staff-only controls.
 - Guild Duel engagement circles are now clearly larger than player sprites, and exit confirmations render above the arena instead of leaving movement locked behind an unseen dialog.
 - Guild Duel arenas now synchronize reliably after a hot reload, show the real Guild names and countdown, and physically block players at the raised center barrier.
 - The Move Deleter confirmation now clearly warns that forgetting a move cannot be undone and that using it again requires teaching it again.

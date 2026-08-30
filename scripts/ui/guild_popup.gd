@@ -1352,12 +1352,12 @@ func _build_aether_clash_workspace() -> Control:
 	else:
 		workspace.add_child(_build_current_aether_clash_card(current_session))
 
-	if not _can_manage_aether_clash():
+	var can_manage := _can_manage_aether_clash()
+	if not can_manage:
 		workspace.add_child(_build_aether_clash_message_panel(
 			_t("ui.guild.aether_clash.member_hint"),
 			UI_MUTED
 		))
-		return workspace
 
 	var incoming := _array_from_value(aether_clash_state.get("pendingIncoming", []))
 	var outgoing := _array_from_value(aether_clash_state.get("pendingOutgoing", []))
@@ -1497,6 +1497,8 @@ func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -
 		10,
 		UI_MUTED
 	))
+	if not _can_manage_aether_clash():
+		return panel
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 6)
 	row.add_child(actions)

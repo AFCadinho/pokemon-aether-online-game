@@ -14,6 +14,14 @@ func _ready() -> void:
 	queue_redraw()
 
 
+func _exit_tree() -> void:
+	# Player actors are reused across overworld maps. The arena ring is not.
+	# Queue it for deletion whenever its actor leaves the current scene tree so
+	# it cannot be reparented into the next map with that actor.
+	if not is_queued_for_deletion():
+		queue_free()
+
+
 func configure(next_side: String) -> void:
 	side = next_side
 	queue_redraw()

@@ -1670,7 +1670,7 @@
   "ui.guild.aether_clash.refresh": "刷新",
   "ui.guild.aether_clash.loading": "正在加载 Aether Clash 挑战……",
   "ui.guild.aether_clash.no_current": "你的公会目前没有已接受的 Aether Clash。",
-  "ui.guild.aether_clash.member_hint": "公会领袖和队长负责管理挑战。所有成员都能在这里查看已接受的 Clash。",
+  "ui.guild.aether_clash.member_hint": "公会领袖和队长负责管理挑战。所有成员都能在这里查看待处理和已接受的 Clash。",
   "ui.guild.aether_clash.incoming": "收到的挑战（{count}）",
   "ui.guild.aether_clash.incoming_empty": "目前没有公会向你们发起挑战。",
   "ui.guild.aether_clash.outgoing": "发出的挑战（{count}）",
