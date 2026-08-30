@@ -1017,8 +1017,9 @@ func _cost_badge(candidate: Dictionary) -> Control:
 		return null
 	var affordable := owned >= required
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(66, 30)
-	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.name = "MoveCost_%s" % str(candidate.get("moveId", "unknown"))
+	panel.custom_minimum_size = Vector2(48, 28)
+	panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	panel.tooltip_text = _t("ui.move_mentor.cost.tooltip", {
 		"item": _item_name(item_id),
 		"required": required,
@@ -1035,22 +1036,20 @@ func _cost_badge(candidate: Dictionary) -> Control:
 	)
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	row.add_theme_constant_override("separation", 3)
+	row.add_theme_constant_override("separation", 2)
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_child(row)
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(21, 21)
+	icon.custom_minimum_size = Vector2(18, 18)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	icon.texture = _item_icon_texture(item_id)
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(icon)
-	row.add_child(_text_label(
-		_t("ui.move_mentor.cost.inventory", {"owned": owned, "required": required}),
-		10,
-		UI_GREEN if affordable else UI_DANGER
-	))
+	var price := _text_label("×%d" % required, 10, UI_GREEN if affordable else UI_DANGER)
+	price.name = "MoveCostPrice"
+	row.add_child(price)
 	return panel
 
 

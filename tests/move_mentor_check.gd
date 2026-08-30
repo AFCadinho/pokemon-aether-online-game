@@ -164,6 +164,20 @@ func _check_popup_scene() -> void:
 			and catalog_stats.custom_minimum_size.x >= 140.0,
 		"Move Mentor catalog keeps PP, base power, and accuracy visibly readable"
 	)
+	var catalog_cost := move_list.find_child("MoveCost_water-pulse", true, false) as PanelContainer
+	var catalog_price := (
+		catalog_cost.find_child("MoveCostPrice", true, false) as Label
+		if catalog_cost != null
+		else null
+	)
+	_check(
+		catalog_cost != null
+			and catalog_cost.custom_minimum_size.x <= 48.0
+			and catalog_price != null
+			and catalog_price.text == "×1"
+			and catalog_cost.tooltip_text.contains("Armorite Ore"),
+		"Move Mentor catalog shows a compact price beside every move"
+	)
 	preview_pokemon.moves = [
 		{"id": "water-shuriken", "name": "Water Shuriken", "pp": 20, "maxPp": 20},
 		{"id": "hydro-pump", "name": "Hydro Pump", "pp": 5, "maxPp": 5},
