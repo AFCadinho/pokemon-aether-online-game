@@ -26,6 +26,7 @@ const CATEGORY_ICON_PATHS := {
 const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
 const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
 const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
+const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 
 const SOURCE_ORDER: Array[String] = [
 	"relearn",
@@ -510,10 +511,9 @@ func _refresh_current_moves() -> void:
 			var move_id := _move_id_from_value(move_value)
 			var move_data := (move_value as Dictionary) if move_value is Dictionary else {}
 			var metadata := _move_metadata(move_id, move_data)
-			button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+			button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			button.tooltip_text = str(metadata.get("shortDesc", metadata.get("desc", "")))
-			button.pressed.connect(_on_replace_slot_selected.bind(index))
-			_apply_selectable_style(button, index == selected_replace_slot)
+			_apply_selectable_style(button, false)
 			var row := _button_content(button, 8, 7, 8, 7)
 			var type_icon := _type_icon(str(metadata.get("type", "")), Vector2(28, 28))
 			if type_icon != null:
@@ -539,20 +539,99 @@ func _refresh_current_moves() -> void:
 	_refresh_action_state()
 
 
-func _on_replace_slot_selected(index: int) -> void:
-	if request_in_progress:
-		return
-	selected_replace_slot = index
-	_refresh_current_moves()
-
-
 func _on_learn_pressed() -> void:
 	var pokemon := _selected_pokemon()
 	if request_in_progress or pokemon == null or selected_move_id == "":
 		return
-	var replace_slot := selected_replace_slot if pokemon.moves.size() >= 4 else -1
-	if pokemon.moves.size() >= 4 and replace_slot < 0:
-		_set_status(_t("ui.move_mentor.status.choose_replacement"), true)
+	if pokemon.moves.size() >= 4:
+		_open_replacement_dialog(pokemon)
+		return
+	await _teach_selected_move(-1)
+
+
+func _open_replacement_dialog(pokemon: Pokemon) -> void:
+	selected_replace_slot = -1
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	dialog.name = "MoveMentorReplacementDialog"
+	add_child(dialog)
+	dialog.configure(
+		_t("ui.move_mentor.replace_dialog.title"),
+		_t("ui.move_mentor.replace_dialog.message", {
+			"pokemon": _pokemon_name(pokemon),
+			"move": _selected_move_name(),
+		}),
+		_t("ui.move_mentor.replace_dialog.confirm"),
+		_t("common.cancel")
+	)
+	var grid := GridContainer.new()
+	grid.name = "ReplacementMoveGrid"
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 8)
+	grid.add_theme_constant_override("v_separation", 8)
+	var buttons: Array[Button] = []
+	for index in range(mini(4, pokemon.moves.size())):
+		var move_value: Variant = pokemon.moves[index]
+		var move_id := _move_id_from_value(move_value)
+		var move_data := (move_value as Dictionary) if move_value is Dictionary else {}
+		var metadata := _move_metadata(move_id, move_data)
+		var button := Button.new()
+		button.name = "ReplacementMove%d" % index
+		button.custom_minimum_size = Vector2(250, 62)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.focus_mode = Control.FOCUS_NONE
+		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		button.tooltip_text = str(metadata.get("shortDesc", metadata.get("desc", "")))
+		_apply_selectable_style(button, false)
+		var row := _button_content(button, 8, 7, 8, 7)
+		var type_icon := _type_icon(str(metadata.get("type", "")), Vector2(30, 30))
+		if type_icon != null:
+			row.add_child(type_icon)
+		var details := VBoxContainer.new()
+		details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		details.alignment = BoxContainer.ALIGNMENT_CENTER
+		details.add_theme_constant_override("separation", 2)
+		details.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		row.add_child(details)
+		details.add_child(_text_label(_move_name_from_value(move_value), 13, UI_TEXT))
+		var stats := _move_stats_text(metadata, true)
+		if not stats.is_empty():
+			details.add_child(_text_label(stats, 9, UI_MUTED))
+		var category_icon := _category_icon(str(metadata.get("category", "")))
+		if category_icon != null:
+			row.add_child(category_icon)
+		buttons.append(button)
+		button.pressed.connect(_on_dialog_replace_slot_selected.bind(index, buttons, dialog))
+		grid.add_child(button)
+	dialog.add_custom_control(grid)
+	dialog.confirm_button.disabled = true
+	dialog.confirmed.connect(_confirm_replacement.bind(dialog), CONNECT_ONE_SHOT)
+	dialog.canceled.connect(_cancel_replacement.bind(dialog), CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(620, 430))
+
+
+func _on_dialog_replace_slot_selected(index: int, buttons: Array[Button], dialog: AetherConfirmationDialog) -> void:
+	selected_replace_slot = index
+	for button_index in range(buttons.size()):
+		_apply_selectable_style(buttons[button_index], button_index == selected_replace_slot)
+	dialog.confirm_button.disabled = false
+
+
+func _confirm_replacement(dialog: AetherConfirmationDialog) -> void:
+	var replace_slot := selected_replace_slot
+	dialog.queue_free()
+	if replace_slot < 0:
+		return
+	await _teach_selected_move(replace_slot)
+
+
+func _cancel_replacement(dialog: AetherConfirmationDialog) -> void:
+	selected_replace_slot = -1
+	dialog.queue_free()
+
+
+func _teach_selected_move(replace_slot: int) -> void:
+	var pokemon := _selected_pokemon()
+	if request_in_progress or pokemon == null or selected_move_id == "":
 		return
 	request_in_progress = true
 	_refresh_action_state()
@@ -593,7 +672,6 @@ func _refresh_action_state() -> void:
 		request_in_progress
 		or pokemon == null
 		or selected_move_id == ""
-		or (pokemon.moves.size() >= 4 and selected_replace_slot < 0)
 	)
 
 
