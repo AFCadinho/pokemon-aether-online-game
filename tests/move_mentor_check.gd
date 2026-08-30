@@ -135,13 +135,48 @@ func _check_popup_scene() -> void:
 		move_list != null and _count_texture_rects(move_list) >= 2,
 		"Move Mentor move cards show type and damage-category icons"
 	)
+	preview_pokemon.moves = [
+		{"id": "water-shuriken", "name": "Water Shuriken", "pp": 20, "maxPp": 20},
+		{"id": "hydro-pump", "name": "Hydro Pump", "pp": 5, "maxPp": 5},
+		{"id": "ice-beam", "name": "Ice Beam", "pp": 10, "maxPp": 10},
+		{"id": "dark-pulse", "name": "Dark Pulse", "pp": 15, "maxPp": 15},
+	]
+	popup.call("_refresh_current_moves")
+	popup.call("_on_move_selected", "water-pulse")
+	await process_frame
+	_check(not learn_button.disabled, "Move Mentor enables Teach move before choosing a replacement")
+	var first_current_move := current_moves_list.get_child(0) as Button
+	_check(
+		first_current_move != null
+			and first_current_move.mouse_filter == Control.MOUSE_FILTER_IGNORE
+			and first_current_move.pressed.get_connections().is_empty(),
+		"Current moves remain informational until Teach move is pressed"
+	)
+	popup.call("_on_learn_pressed")
+	await process_frame
+	var replacement_dialog := popup.get_node_or_null("MoveMentorReplacementDialog") as AetherConfirmationDialog
+	_check(replacement_dialog != null and replacement_dialog.visible, "A full moveset opens the replacement dialog")
+	if replacement_dialog != null:
+		var replacement_grid := replacement_dialog.find_child("ReplacementMoveGrid", true, false) as GridContainer
+		_check(
+			replacement_grid != null and replacement_grid.get_child_count() == 4,
+			"Replacement dialog offers all four current moves"
+		)
+		_check(replacement_dialog.confirm_button.disabled, "Replacement confirmation starts disabled")
+		if replacement_grid != null and replacement_grid.get_child_count() > 0:
+			(replacement_grid.get_child(0) as Button).pressed.emit()
+			_check(not replacement_dialog.confirm_button.disabled, "Choosing a current move enables confirmation")
+		replacement_dialog.canceled.emit()
+		await process_frame
 	var popup_source := FileAccess.get_file_as_string("res://scripts/ui/move_mentor_popup.gd")
 	for source: String in REQUIRED_SOURCES:
 		_check(popup_source.contains('\t"%s",' % source), "Move Mentor includes %s moves" % source)
 	_check(not popup_source.contains('\t"tm",'), "Move Mentor keeps TM moves in the machine flow")
 	popup.visible = true
 	_check(popup.visible, "Move Mentor popup opens")
-	_check(learn_button != null and learn_button.disabled, "Move Mentor requires a Pokémon and move selection")
+	popup.set("selected_move_id", "")
+	popup.call("_refresh_action_state")
+	_check(learn_button != null and learn_button.disabled, "Move Mentor requires a move selection")
 	preview_party.clear()
 	preview_party.append_array(original_party)
 	if created_player_save:
@@ -183,6 +218,9 @@ func _check_localization() -> void:
 		var catalog := parsed as Dictionary
 		for key: String in [
 			"ui.move_mentor.title",
+			"ui.move_mentor.replace_dialog.title",
+			"ui.move_mentor.replace_dialog.message",
+			"ui.move_mentor.replace_dialog.confirm",
 			"ui.move_mentor.status.learned",
 			"ui.move_mentor.source.relearn",
 			"ui.move_mentor.npc.service_unavailable",

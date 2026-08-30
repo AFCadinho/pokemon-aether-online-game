@@ -15,6 +15,7 @@
 - Wild victories no longer pause on the winner message; disabling Move Animations also removes the remaining terminal presentation waits while still applying every result and reward.
 - The Move Mentor now stands behind the Pokémon Center desk and can be spoken to across it.
 - The Move Mentor interface now uses Pokémon portraits, move-type and damage-category icons, clearer move details, and a fully themed source filter.
+- Teaching a fifth move now asks which current move to forget after pressing Teach move.
 
 **Fixed**
 
