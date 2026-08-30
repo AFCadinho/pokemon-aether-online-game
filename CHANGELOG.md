@@ -23,6 +23,7 @@
 
 **Fixed**
 
+- Guild vs Guild participants now arrive directly before the arena portal assigned to their Guild side.
 - Aether Clash challenges sent by right-clicking another Trainer now use the themed Aether modal instead of an unstyled system dialog.
 - Aether Clash entry now saves the player's exact portal position and waits for server approval before playing the teleport effect.
 - The game interface now loads reliably when the Move Mentor is first added to a fresh Godot project cache.
