@@ -806,6 +806,8 @@ func _is_story_grid_step_blocked(
 ) -> bool:
 	if not _has_story_movement_context():
 		return true
+	if _is_world_barrier_step_blocked(current_position, next_position):
+		return true
 	if direction == Vector2.DOWN and _tilemap_has_tile_at(block_down_tilemap, current_position):
 		return true
 	if direction == Vector2.UP and _tilemap_has_tile_at(block_up_tilemap, current_position):
@@ -2090,6 +2092,8 @@ func _try_start_move(direction: Vector2) -> bool:
 
 	# Check eerst of de target tile vrij is.
 	# Alleen als can_move_to true teruggeeft, starten we de beweging.
+	if _is_world_barrier_step_blocked(global_position, movement_target_position):
+		return false
 	if not can_move_to(movement_target_position):
 		return false
 
@@ -2180,6 +2184,21 @@ func can_move_to(check_position: Vector2) -> bool:
 	var tile_data := collision_tilemap.get_cell_tile_data(tile_position)
 
 	return tile_data == null
+
+
+func _is_world_barrier_step_blocked(from_position: Vector2, to_position: Vector2) -> bool:
+	var current_map := _resolve_current_map()
+	return (
+		current_map != null
+		and current_map.has_method("is_world_barrier_step_blocked")
+		and bool(
+			current_map.call(
+				"is_world_barrier_step_blocked",
+				from_position,
+				to_position
+			)
+		)
+	)
 
 func _is_direction_blocked_by_current_tile(direction: Vector2) -> bool:
 	if direction == Vector2.DOWN:

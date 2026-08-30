@@ -5,9 +5,12 @@ signal arena_state_changed(state: Dictionary)
 
 const INSTANCE_MAP_PREFIX := "aether_clash_duel:"
 const ARENA_STATE_REFRESH_SECONDS := 1.0
+const START_BARRIER_HALF_HEIGHT := 24.0
 
-@onready var start_barrier: AetherClashStartBarrier = $StartBarrier
-@onready var arena_hud: AetherClashArenaHud = $ArenaHud
+# Keep these references untyped: this map can be hot-loaded before Godot has
+# refreshed its global class cache for the newly added child scripts.
+@onready var start_barrier = $StartBarrier
+@onready var arena_hud = $ArenaHud
 
 var instance_session_id := ""
 var arena_session: Dictionary = {}
@@ -53,6 +56,25 @@ func is_clash_active() -> bool:
 
 func can_launch_projectile() -> bool:
 	return is_clash_active() and not start_barrier.is_barrier_raised()
+
+
+func is_world_barrier_step_blocked(from_position: Vector2, to_position: Vector2) -> bool:
+	if not start_barrier.is_barrier_raised():
+		return false
+	if is_equal_approx(from_position.y, to_position.y):
+		return false
+	var barrier_y: float = float(start_barrier.global_position.y)
+	var from_distance: float = absf(from_position.y - barrier_y)
+	var to_distance: float = absf(to_position.y - barrier_y)
+	if from_distance <= START_BARRIER_HALF_HEIGHT:
+		# A player already touching the barrier may back away, but cannot pass
+		# through to the equally close tile on the other side.
+		return to_distance <= from_distance
+	var crosses_center: bool = (
+		(from_position.y < barrier_y and to_position.y > barrier_y)
+		or (from_position.y > barrier_y and to_position.y < barrier_y)
+	)
+	return crosses_center or to_distance <= START_BARRIER_HALF_HEIGHT
 
 
 func _refresh_arena_state() -> void:
