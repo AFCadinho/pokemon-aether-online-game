@@ -119,4 +119,3 @@ theme_override_colors/font_color = Color(0.627451, 0.717647, 0.8, 1)
 theme_override_font_sizes/font_size = 11
 text = "The Aether barrier separates both Guilds"
 horizontal_alignment = 1
-

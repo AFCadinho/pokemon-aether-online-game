@@ -64,4 +64,3 @@ func _on_lowering_finished() -> void:
 	lowering_tween = null
 	barrier_visual.visible = false
 	barrier_lowered.emit()
-

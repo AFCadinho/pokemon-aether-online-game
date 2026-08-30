@@ -142,4 +142,3 @@ func _text(key: String, fallback: String) -> String:
 		if translated != key:
 			return translated
 	return fallback
-
