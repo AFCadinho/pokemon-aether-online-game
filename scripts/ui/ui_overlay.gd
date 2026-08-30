@@ -1137,7 +1137,7 @@ var trainer_name_change_status_label: Label
 var trainer_name_change_confirm_button: Button
 var trainer_name_change_in_progress := false
 var aether_atelier_popup: AetherAtelierPopup
-var move_mentor_popup: MoveMentorPopup
+var move_mentor_popup
 var shiny_tracker_popup: ShinyTrackerPopup
 var market_popup: PanelContainer
 var market_title_label: Label
@@ -19085,7 +19085,7 @@ func _setup_aether_atelier_popup() -> void:
 	aether_atelier_popup.chroma_dyed.connect(_on_aether_atelier_chroma_dyed)
 
 func _setup_move_mentor_popup() -> void:
-	move_mentor_popup = MOVE_MENTOR_POPUP_SCENE.instantiate() as MoveMentorPopup
+	move_mentor_popup = MOVE_MENTOR_POPUP_SCENE.instantiate()
 	if move_mentor_popup == null:
 		return
 	root_control.add_child(move_mentor_popup)

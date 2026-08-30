@@ -11,6 +11,10 @@
 
 - Wild battles now open with both Pokémon ready, letting queued move or Run input start sooner without an opening summon animation.
 
+**Fixed**
+
+- The game interface now loads reliably when the Move Mentor is first added to a fresh Godot project cache.
+
 ## 0.3.69 - 2026-08-30
 
 - Officer Jenny now finishes her arrest dialogue before taking a caught pickpocket to jail.

@@ -97,6 +97,7 @@ func _check_service_contract() -> void:
 		"party service loads the mentor catalog and submits the explicit mentor source"
 	)
 	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
+	_check(load(UI_OVERLAY_PATH) != null, "UI overlay parses with the Move Mentor integration")
 	_check(
 		overlay_source.contains("func open_move_mentor()")
 			and overlay_source.contains("_activate_ui_panel(move_mentor_popup)"),
