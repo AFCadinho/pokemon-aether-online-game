@@ -150,6 +150,7 @@ const OVERWORLD_MOVE_ACTION_ICON := preload("res://assets/ui/icons/overworld_mov
 const POKEMON_SUMMARY_COPY_ICON: Texture2D = preload("res://assets/ui/icons/clipboard_copy.svg")
 const CHAT_RESIZE_ICON: Texture2D = preload("res://assets/ui/chat_resize.svg")
 const GLOBAL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_exp_boost.svg")
+const GLOBAL_SKILL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_skill_exp_boost.svg")
 const GLOBAL_EV_BUFF_ICON: Texture2D = preload("res://assets/ui/global_ev_boost.svg")
 const GLOBAL_SHINY_BUFF_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
 const GLOBAL_RARE_ENCOUNTER_BUFF_ICON: Texture2D = preload("res://assets/ui/global_rare_encounter_boost.svg")
@@ -11231,6 +11232,16 @@ func _setup_status_docks() -> void:
 			"active_duration": "1h",
 		},
 		{
+			"id": "global_skill_exp",
+			"icon": GLOBAL_SKILL_EXP_BUFF_ICON,
+			"name_key": "ui.buff.global_skill_exp.name",
+			"description_key": "ui.buff.global_skill_exp.description",
+			"state": "funding",
+			"current": 0,
+			"goal": 100000,
+			"active_duration": "1h",
+		},
+		{
 			"id": "global_ev",
 			"icon": GLOBAL_EV_BUFF_ICON,
 			"name_key": "ui.buff.global_ev.name",
@@ -11272,6 +11283,7 @@ func _setup_status_docks() -> void:
 	])
 	set_personal_buffs([])
 	_load_global_exp_boost.call_deferred()
+	_load_global_skill_exp_boost.call_deferred()
 	_load_global_ev_boost.call_deferred()
 	_load_global_shiny_boost.call_deferred()
 	_load_global_rare_encounter_boost.call_deferred()
@@ -11752,6 +11764,8 @@ func _global_buff_icon_for(buff: Dictionary) -> Texture2D:
 	match str(buff.get("id", "")):
 		"global_exp":
 			return GLOBAL_EXP_BUFF_ICON
+		"global_skill_exp":
+			return GLOBAL_SKILL_EXP_BUFF_ICON
 		"global_ev":
 			return GLOBAL_EV_BUFF_ICON
 		"global_shiny":
@@ -11969,6 +11983,8 @@ func _on_global_buff_contribute_pressed() -> void:
 	var response: Dictionary = {}
 	if selected_boost_id == "global_exp":
 		response = await PlayerWalletService.contribute_to_global_exp_boost(selected_global_buff_contribution)
+	elif selected_boost_id == "global_skill_exp":
+		response = await PlayerWalletService.contribute_to_global_skill_exp_boost(selected_global_buff_contribution)
 	elif selected_boost_id == "global_ev":
 		response = await PlayerWalletService.contribute_to_global_ev_boost(selected_global_buff_contribution)
 	elif selected_boost_id == "global_shiny":
@@ -12009,6 +12025,16 @@ func _load_global_exp_boost(show_activation_notification: bool = false) -> void:
 		)
 
 
+func _load_global_skill_exp_boost(show_activation_notification: bool = false) -> void:
+	var response: Dictionary = await PlayerWalletService.load_global_skill_exp_boost()
+	if bool(response.get("success", false)):
+		_apply_global_boost_state(
+			response.get("body", {}) as Dictionary,
+			"global_skill_exp",
+			show_activation_notification
+		)
+
+
 func _load_global_ev_boost(show_activation_notification: bool = false) -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_ev_boost()
 	if bool(response.get("success", false)):
@@ -12043,6 +12069,8 @@ func _load_global_boost_state(boost_id: String, show_activation_notification: bo
 	match boost_id:
 		"global_exp":
 			await _load_global_exp_boost(show_activation_notification)
+		"global_skill_exp":
+			await _load_global_skill_exp_boost(show_activation_notification)
 		"global_ev":
 			await _load_global_ev_boost(show_activation_notification)
 		"global_shiny":
@@ -12747,6 +12775,8 @@ func _global_buff_notification_accent(buff_id: String) -> Color:
 	match buff_id:
 		"global_exp":
 			return Color("#d8b767")
+		"global_skill_exp":
+			return Color("#58d6e9")
 		"global_ev":
 			return Color("#5fb8df")
 		"global_shiny":
@@ -12768,7 +12798,7 @@ func _format_global_buff_notification_duration(total_seconds: int) -> String:
 
 
 func _global_buff_accepts_contributions(buff: Dictionary) -> bool:
-	return str(buff.get("id", "")) in ["global_exp", "global_ev", "global_shiny", "global_rare_encounter"]
+	return str(buff.get("id", "")) in ["global_exp", "global_skill_exp", "global_ev", "global_shiny", "global_rare_encounter"]
 
 func _hide_global_buff_details() -> void:
 	global_buff_details_panel.visible = false
@@ -43013,6 +43043,10 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		add_system_message(_global_exp_boost_contribution_message(message))
 		_load_global_boost_state.call_deferred("global_exp", true)
 		return
+	if message_type == "system.global_skill_exp_boost_contribution":
+		add_system_message(_global_skill_exp_boost_contribution_message(message))
+		_load_global_boost_state.call_deferred("global_skill_exp", true)
+		return
 	if message_type == "system.global_ev_boost_contribution":
 		add_system_message(_global_ev_boost_contribution_message(message))
 		_load_global_boost_state.call_deferred("global_ev", true)
@@ -43118,6 +43152,10 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 
 func _global_exp_boost_contribution_message(message: Dictionary) -> String:
 	return _global_boost_contribution_message(message, "ui.buff.global_exp.contribution_message")
+
+
+func _global_skill_exp_boost_contribution_message(message: Dictionary) -> String:
+	return _global_boost_contribution_message(message, "ui.buff.global_skill_exp.contribution_message")
 
 
 func _global_ev_boost_contribution_message(message: Dictionary) -> String:

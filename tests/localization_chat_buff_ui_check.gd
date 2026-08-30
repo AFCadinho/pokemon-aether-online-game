@@ -101,6 +101,13 @@ func _check_localized_helpers() -> void:
 		"Global EXP contributions render as localized Dutch system messages"
 	)
 	_check(
+		overlay.call("_global_skill_exp_boost_contribution_message", {
+			"displayName": "Misty",
+			"amount": 10_000,
+		}) == "Misty heeft ₽10,000 bijgedragen aan de Wereldwijde Skill-EXP-boost!",
+		"Global Skill EXP contributions render as localized Dutch system messages"
+	)
+	_check(
 		overlay.call("_global_ev_boost_contribution_message", {
 			"displayName": "Misty",
 			"amount": 10_000,

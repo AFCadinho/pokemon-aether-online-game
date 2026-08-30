@@ -10,6 +10,7 @@ const DEV_ADD_BATTLE_POINTS_ENDPOINT := "/game/dev/wallet/battle-points"
 const WILD_BATTLE_REWARD_ENDPOINT := "/game/wallet/rewards/wild-battle"
 const TRAINER_BATTLE_REWARD_ENDPOINT := "/game/wallet/rewards/trainer-battle"
 const GLOBAL_EXP_BOOST_ENDPOINT := "/game/global-boosts/exp"
+const GLOBAL_SKILL_EXP_BOOST_ENDPOINT := "/game/global-boosts/skill-exp"
 const GLOBAL_EV_BOOST_ENDPOINT := "/game/global-boosts/ev"
 const GLOBAL_RARE_ENCOUNTER_BOOST_ENDPOINT := "/game/global-boosts/rare-encounter"
 const GLOBAL_SHINY_BOOST_ENDPOINT := "/game/global-boosts/shiny"
@@ -46,6 +47,24 @@ func load_global_exp_boost() -> Dictionary:
 func contribute_to_global_exp_boost(amount: int) -> Dictionary:
 	return await _request_json(
 		(await GatewayApiConfig.get_base_url()) + GLOBAL_EXP_BOOST_ENDPOINT + "/contributions",
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"amount": amount})
+	)
+
+
+func load_global_skill_exp_boost() -> Dictionary:
+	return await _request_json(
+		(await GatewayApiConfig.get_base_url()) + GLOBAL_SKILL_EXP_BOOST_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+
+
+func contribute_to_global_skill_exp_boost(amount: int) -> Dictionary:
+	return await _request_json(
+		(await GatewayApiConfig.get_base_url()) + GLOBAL_SKILL_EXP_BOOST_ENDPOINT + "/contributions",
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify({"amount": amount})
