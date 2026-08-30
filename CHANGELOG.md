@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon stat labels and values are now easier to distinguish on PC Box hover cards.
+
 - Outdoor zoom now defaults to Auto, which switches between 1× and 2× as the game window changes size; fixed zoom choices remain available.
 
 - The Guild interface now shows a neutral membership-loading state on its first open instead of briefly flashing the Guild browser for existing members.
