@@ -45,6 +45,7 @@
 
 **Fixed**
 
+- The Rare Encounter community boost now shows its funding progress bar in the overworld boost tray.
 - Guild Duel battles now place the battle interface above the arena HUD, keeping Team Preview and battle controls clickable.
 - Guild Duel collisions now use live arena positions, recover abandoned pre-battle matches after two minutes, and require players to separate before another collision attempt.
 - Aether Clash contact failures now explain position synchronization and existing PvP battles instead of showing a generic error.

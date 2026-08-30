@@ -1112,19 +1112,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_global_buff_slot_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_global_buff_slot_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_global_buff_slot_hover")
 
-[node name="BuffSlot6" type="Button" parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots"]
-custom_minimum_size = Vector2(42, 40)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-icon = ExtResource("27_global_skill_exp")
-icon_max_width = 30
-expand_icon = true
-theme_override_styles/normal = SubResource("StyleBoxFlat_global_buff_slot")
-theme_override_styles/hover = SubResource("StyleBoxFlat_global_buff_slot_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_global_buff_slot_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_global_buff_slot_hover")
-
-[node name="ProgressBar" type="ProgressBar" parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot6"]
+[node name="ProgressBar" type="ProgressBar" parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot5"]
 layout_mode = 1
 anchors_preset = 12
 anchor_right = 1.0
@@ -1140,6 +1128,18 @@ value = 0.0
 show_percentage = false
 theme_override_styles/background = SubResource("StyleBoxFlat_global_buff_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_global_buff_progress_fill")
+
+[node name="BuffSlot6" type="Button" parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots"]
+custom_minimum_size = Vector2(42, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+icon = ExtResource("27_global_skill_exp")
+icon_max_width = 30
+expand_icon = true
+theme_override_styles/normal = SubResource("StyleBoxFlat_global_buff_slot")
+theme_override_styles/hover = SubResource("StyleBoxFlat_global_buff_slot_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_global_buff_slot_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_global_buff_slot_hover")
 
 [node name="GlobalBuffDetailsPanel" type="PanelContainer" parent="Control"]
 visible = false
