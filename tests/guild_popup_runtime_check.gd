@@ -211,6 +211,11 @@ func _run() -> void:
 	_check(popup.find_child("GuildAetherClashTab", true, false) != null, "Aether Clash tab renders for Guild members")
 	_check(popup.find_child("GuildMembersTab", true, false) != null, "guild members tab renders")
 	_check(popup.find_child("GuildManagementTab", true, false) != null, "guild management tab renders for leaders")
+	var active_overview_tab := popup.find_child("GuildOverviewTab", true, false) as Button
+	_check(
+		_button_background_is(active_overview_tab, Color("#123650f2")),
+		"active Guild tab uses a clearly filled accent surface"
+	)
 	var section_navigation := popup.find_child("GuildSectionNavigation", true, false) as HBoxContainer
 	var member_browse_button := popup.find_child("BrowseGuildsButton", true, false) as Button
 	_check(
@@ -223,6 +228,10 @@ func _run() -> void:
 	_check(
 		member_browse_button != null and member_browse_button.custom_minimum_size.x <= 150.0,
 		"Guild discovery becomes a compact secondary action for members"
+	)
+	_check(
+		_button_background_is(member_browse_button, GuildPopup.UI_SECONDARY_BACKGROUND),
+		"Guild discovery uses the softer cyan secondary action style"
 	)
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "guild dashboard opens on its overview")
 	popup._show_guild_section("aether_clash")
@@ -240,12 +249,21 @@ func _run() -> void:
 	_check(leader_options != null and leader_options.get_popup().is_item_disabled(0), "Guild leaders cannot leave through Guild options")
 	var header_travel := popup.find_child("GuildHeaderTravelActions", true, false) as VBoxContainer
 	_check(header_travel != null, "guild travel occupies the member header")
+	var guild_lobby_action := popup.find_child("GuildLobbyTeleportButton", true, false) as Button
+	_check(
+		_button_background_is(guild_lobby_action, GuildPopup.UI_PRIMARY_BACKGROUND),
+		"Guild lobby travel uses the prominent primary action colour"
+	)
 	var guild_progress := popup.find_child("GuildExperienceProgress", true, false) as ProgressBar
 	_check(guild_progress != null and is_equal_approx(guild_progress.value, 47.5), "guild overview shows authoritative level progress")
 	var guild_progress_label := popup.find_child("GuildExperienceProgressLabel", true, false) as Label
 	_check(guild_progress_label != null and guild_progress_label.text.contains("500,000"), "guild overview shows total Guild EXP")
 	var rewards_button := popup.find_child("GuildLevelRewardsButton", true, false) as Button
 	_check(rewards_button != null and not rewards_button.disabled, "guild overview exposes the level unlock roadmap")
+	_check(
+		_button_background_is(rewards_button, GuildPopup.UI_GOLD_BACKGROUND),
+		"Guild level roadmap uses its distinct gold action accent"
+	)
 	if rewards_button != null:
 		rewards_button.pressed.emit()
 		await process_frame
@@ -1339,6 +1357,13 @@ func _check_dialog_styled(dialog: ConfirmationDialog, label: String) -> void:
 		and dialog.get_cancel_button().has_theme_stylebox_override("normal"),
 		"%s uses styled action buttons" % label
 	)
+
+
+func _button_background_is(button: Button, expected: Color) -> bool:
+	if button == null:
+		return false
+	var style := button.get_theme_stylebox("normal") as StyleBoxFlat
+	return style != null and style.bg_color.is_equal_approx(expected)
 
 
 func _check(condition: bool, label: String) -> void:

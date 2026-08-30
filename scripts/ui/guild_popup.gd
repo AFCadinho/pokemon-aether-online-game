@@ -64,6 +64,13 @@ const UI_BORDER_INNER := Color("#29445f")
 const UI_ACCENT := Color("#60d3ff")
 const UI_ACCENT_SOFT := Color("#3d7596")
 const UI_GOLD := Color("#e3bd68")
+const UI_PRIMARY_BACKGROUND := Color("#126589f5")
+const UI_PRIMARY_HOVER := Color("#1685b0fa")
+const UI_PRIMARY_PRESSED := Color("#0d4b68f5")
+const UI_SECONDARY_BACKGROUND := Color("#0d2b40f2")
+const UI_SECONDARY_HOVER := Color("#143b55f5")
+const UI_GOLD_BACKGROUND := Color("#332812f2")
+const UI_GOLD_HOVER := Color("#49391af5")
 const UI_TEXT := Color("#f4f0de")
 const UI_MUTED := Color("#aeb8c5")
 const UI_SUCCESS := Color("#79e49b")
@@ -1643,7 +1650,7 @@ func _build_guild_progression(guild: Dictionary) -> Control:
 	rewards_button.custom_minimum_size = Vector2(112, 30)
 	rewards_button.disabled = _array_from_value(guild.get("levelRewards", [])).is_empty()
 	rewards_button.pressed.connect(_show_guild_level_rewards_window.bind(guild))
-	_apply_button_style(rewards_button)
+	_apply_button_style(rewards_button, "gold")
 	heading.add_child(rewards_button)
 	heading.add_child(_label(
 		_t("ui.guild.progression.level", {
@@ -7565,7 +7572,7 @@ func _icon_rect(icon_size: int, color: Color) -> TextureRect:
 func _apply_tab_style(button: Button, selected: bool) -> void:
 	if button == null:
 		return
-	var background := UI_RAISED if selected else Color("#07111edc")
+	var background := Color("#123650f2") if selected else Color("#07111edc")
 	var border := UI_ACCENT if selected else UI_BORDER
 	button.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
@@ -7585,11 +7592,23 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	var border := UI_BORDER
 	var hover_border := Color("#7aa7f4")
 	if variant == "primary":
-		normal_bg = Color("#0b2235f2")
-		hover_bg = Color("#12334df2")
-		pressed_bg = Color("#071624f2")
-		border = Color("#4b9dc4cc")
-		hover_border = Color("#79d9ff")
+		normal_bg = UI_PRIMARY_BACKGROUND
+		hover_bg = UI_PRIMARY_HOVER
+		pressed_bg = UI_PRIMARY_PRESSED
+		border = UI_ACCENT
+		hover_border = Color("#a1eaff")
+	elif variant == "secondary":
+		normal_bg = UI_SECONDARY_BACKGROUND
+		hover_bg = UI_SECONDARY_HOVER
+		pressed_bg = Color("#091d2bf2")
+		border = UI_ACCENT_SOFT
+		hover_border = UI_ACCENT
+	elif variant == "gold":
+		normal_bg = UI_GOLD_BACKGROUND
+		hover_bg = UI_GOLD_HOVER
+		pressed_bg = Color("#251d0df2")
+		border = Color(UI_GOLD.r, UI_GOLD.g, UI_GOLD.b, 0.78)
+		hover_border = UI_GOLD.lightened(0.12)
 	elif variant == "danger":
 		normal_bg = Color("#35151bf2")
 		hover_bg = Color("#512029f2")
