@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Guild interface now shows a neutral membership-loading state on its first open instead of briefly flashing the Guild browser for existing members.
+
 - New installations now choose a clearer default outdoor zoom based on the game window size, while keeping player-selected zoom settings unchanged.
 
 - Reworked the Aether Clash tab with clean Overview, Challenges, and History navigation while keeping an active Clash and its lobby timer visible.
