@@ -25,6 +25,7 @@ const REQUIRED_KEYS: Array[String] = [
 	"ui.chat.pm.translation.off",
 	"ui.chat.pm.translation.language.zh",
 	"ui.chat.pm.translation.language.pb",
+	"ui.chat.pm.translation.language.nl",
 	"ui.chat.pm.translation.mode.tooltip",
 	"ui.chat.pm.translation.mode.libre",
 	"ui.chat.pm.translation.mode.ai",

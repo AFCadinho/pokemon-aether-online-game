@@ -111,6 +111,7 @@ const LANGUAGE_CHAT_LABELS := {
 const PM_TRANSLATION_LANGUAGE_LABELS := {
 	"zh": "ui.chat.pm.translation.language.zh",
 	"pb": "ui.chat.pm.translation.language.pb",
+	"nl": "ui.chat.pm.translation.language.nl",
 }
 const CHAT_MUTE_PERMISSION := "chat:mute"
 const CHAT_TRANSLATE_PERMISSION := "chat:translate"
