@@ -1,0 +1,165 @@
+extends SceneTree
+
+
+const DUEL_SCENE := "res://scenes/overworld/aether_clash/aether_clash_duel.tscn"
+
+var failed := false
+
+
+class FakeRemoteActor extends Node2D:
+	var user_id := 0
+
+
+class FakeLocalActor extends Node2D:
+	func teleport_within_current_map(world_position: Vector2, _facing := Vector2.ZERO) -> void:
+		global_position = world_position
+
+
+func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
+	var packed := load(DUEL_SCENE) as PackedScene
+	_check(packed != null, "Aether Clash engagement scene loads")
+	if packed == null:
+		quit(1)
+		return
+	var duel := packed.instantiate()
+	root.add_child(duel)
+	await process_frame
+
+	var zones = duel.get_node_or_null("ArenaZones")
+	_check(zones != null, "Duel owns visible staging and exit zones")
+	var north_zone: Rect2 = zones.call("get_zone_rect", "challenger")
+	var south_zone: Rect2 = zones.call("get_zone_rect", "challenged")
+	_check(north_zone.get_center() == Vector2(1456, 208), "North staging zone follows its editable spawn marker")
+	_check(south_zone.get_center() == Vector2(1072, 4752), "South staging zone follows its editable spawn marker")
+
+	var player_save := root.get_node("PlayerSave")
+	var original_player_id := str(player_save.get("player_id"))
+	player_save.set("player_id", "1")
+	var local_actor := FakeLocalActor.new()
+	local_actor.name = "FakeLocalClashPlayer"
+	local_actor.global_position = Vector2(512, 512)
+	local_actor.add_to_group("player")
+	duel.add_child(local_actor)
+	var remote_actor := FakeRemoteActor.new()
+	remote_actor.name = "FakeRemoteClashPlayer"
+	remote_actor.user_id = 2
+	remote_actor.global_position = Vector2(576, 512)
+	remote_actor.add_to_group("remote_player_avatar")
+	duel.add_child(remote_actor)
+
+	duel.call("_apply_arena_state", _payload("entry_open", "challenger"))
+	_check(
+		not bool(duel.call("is_world_actor_step_blocked", Vector2(512, 512), Vector2(544, 512))),
+		"Players may overlap while the staging countdown is open"
+	)
+
+	duel.call("_apply_arena_state", _payload("active", "challenger"))
+	_check(
+		bool(duel.call("is_world_actor_step_blocked", Vector2(512, 512), Vector2(544, 512))),
+		"Friendly engagement circles block movement after the countdown"
+	)
+	_check(local_actor.get_node_or_null("AetherClashEngagementRing") != null, "Local active player receives an engagement circle")
+	_check(remote_actor.get_node_or_null("AetherClashEngagementRing") != null, "Remote active player receives an engagement circle")
+
+	var contact := {"count": 0, "method": ""}
+	duel.engagement_contact_requested.connect(func(_source: int, _target: int, method: String) -> void:
+		contact["count"] = int(contact["count"]) + 1
+		contact["method"] = method
+	)
+	duel.call("_apply_arena_state", _payload("active", "challenged"))
+	_check(
+		bool(duel.call("is_world_actor_step_blocked", Vector2(512, 512), Vector2(544, 512))),
+		"Enemy engagement circles stop the movement step"
+	)
+	_check(contact["count"] == 1 and contact["method"] == "player_contact", "Enemy circle contact emits the shared engagement request")
+	var projectile_target := int(duel.call(
+		"request_projectile_engagement",
+		Vector2(512, 512),
+		Vector2(608, 512),
+		1
+	))
+	_check(projectile_target == 2, "Projectile paths target the same enemy engagement circle")
+	_check(contact["count"] == 2 and contact["method"] == "projectile", "Projectile contact uses the shared engagement request")
+
+	_check(
+		bool(duel.call(
+			"is_world_actor_step_blocked",
+			south_zone.position - Vector2(0, 32),
+			south_zone.get_center()
+		)),
+		"A participant cannot enter the opposing Guild's exit zone"
+	)
+	local_actor.global_position = north_zone.get_center()
+	duel.set("staging_ejection_deadline_msec", Time.get_ticks_msec() - 1)
+	duel.call("_process_staging_ejection")
+	_check(
+		local_actor.global_position == Vector2(1456, 336),
+		"A player still in staging after the grace period is moved onto the arena side"
+	)
+	_check(
+		bool(duel.call(
+			"is_world_actor_step_blocked",
+			local_actor.global_position,
+			north_zone.get_center()
+		)),
+		"Entering the own active exit zone stops the movement step"
+	)
+	await process_frame
+	var leave_dialog := duel.get_node_or_null("AetherClashLeaveConfirmation")
+	_check(leave_dialog != null and leave_dialog.visible, "Own exit zone opens the themed leave confirmation")
+	if leave_dialog != null:
+		leave_dialog.call("_cancel")
+	await process_frame
+	_check(not bool(root.get_node("GameState").call("is_overworld_input_locked")), "Canceling the exit dialog restores arena movement")
+
+	var player_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
+	_check(
+		player_source.contains("_is_world_actor_step_blocked(global_position, movement_target_position)"),
+		"Grid movement consults Aether Clash actor and exit-zone rules"
+	)
+	var duel_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_duel.gd")
+	_check(
+		duel_source.contains("GuildService.leave_aether_clash_arena(instance_session_id)"),
+		"Own exit-zone confirmation uses the authoritative leave operation"
+	)
+
+	player_save.set("player_id", original_player_id)
+	duel.queue_free()
+	await process_frame
+	quit(1 if failed else 0)
+
+
+func _payload(status: String, remote_side: String) -> Dictionary:
+	var now := int(Time.get_unix_time_from_system())
+	return {
+		"success": true,
+		"serverNow": Time.get_datetime_string_from_unix_time(now, true) + "Z",
+		"viewerRole": "participant",
+		"viewerSide": "challenger",
+		"arenaPlayers": [
+			{"userId": 1, "side": "challenger"},
+			{"userId": 2, "side": remote_side},
+		],
+		"session": {
+			"id": "engagement-runtime-test",
+			"status": status,
+			"entryClosesAt": Time.get_datetime_string_from_unix_time(now + 90, true) + "Z",
+			"challengerGuild": {"id": 1, "name": "North Stars"},
+			"challengedGuild": {"id": 2, "name": "South Guard"},
+			"entryCounts": {"challenger": 1, "challenged": 1},
+			"participantCounts": {"challenger": 1, "challenged": 1},
+			"activeCounts": {"challenger": 1, "challenged": 1},
+		},
+	}
+
+
+func _check(condition: bool, label: String) -> void:
+	if condition:
+		print("PASS %s" % label)
+		return
+	failed = true
+	push_error("FAIL %s" % label)

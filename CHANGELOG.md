@@ -11,6 +11,7 @@
 - Guild Leaders and Captains can now right-click another Trainer to challenge that Trainer's Guild to an Aether Clash.
 - Incoming Aether Clash challenges now open a direct accept-or-decline popup with a live response countdown.
 - Guild Duel arenas now show both Guilds' live player counts and a synchronized start countdown behind a temporary center barrier.
+- Guild Duel arenas now mark each Guild's staging and exit zone and show engagement circles around active players. Friendly circles block movement, while enemy contact is reserved for battle engagement.
 
 **Changed**
 
@@ -20,6 +21,7 @@
 - The Move Maniac now stands behind the Pokémon Center desk and can be spoken to across it.
 - The Move Maniac interface now uses Pokémon portraits, move-type and damage-category icons, clearer move details, and a fully themed source filter.
 - Guild vs Guild Aether Clash entry now uses the red lobby portal; the purple portal is reserved for Battle Royale.
+- Active Guild Duel players can leave through their own exit zone after confirming; leaving immediately removes them from the Clash and returns them to the lobby.
 - Teaching a fifth move now asks which current move to forget after pressing Teach move.
 - The move-forgetting dialog now previews the new move and shows its full details on hover.
 - The Move Maniac's move list now displays PP, base power, and accuracy for direct comparison.

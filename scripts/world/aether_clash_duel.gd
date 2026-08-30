@@ -2,21 +2,39 @@ extends "res://scripts/world/map_metadata.gd"
 
 
 signal arena_state_changed(state: Dictionary)
+signal engagement_contact_requested(source_user_id: int, target_user_id: int, method: String)
 
 const INSTANCE_MAP_PREFIX := "aether_clash_duel:"
 const ARENA_STATE_REFRESH_SECONDS := 1.0
 const START_BARRIER_HALF_HEIGHT := 24.0
+const ENGAGEMENT_RING_SCRIPT: Script = preload("res://scripts/world/aether_clash_engagement_ring.gd")
+const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
+const ENGAGEMENT_RADIUS := 18.0
+const ENGAGEMENT_CONTACT_DISTANCE := ENGAGEMENT_RADIUS * 2.0
+const ENGAGEMENT_SYNC_SECONDS := 0.1
+const ENGAGEMENT_CONTACT_COOLDOWN_MSEC := 750
+const STAGING_EJECTION_GRACE_MSEC := 2000
+const LEAVE_DIALOG_INPUT_OWNER: StringName = &"aether_clash_leave_dialog"
 
 # Keep these references untyped: this map can be hot-loaded before Godot has
 # refreshed its global class cache for the newly added child scripts.
 @onready var start_barrier = $StartBarrier
 @onready var arena_hud = $ArenaHud
+@onready var arena_zones = $ArenaZones
 
 var instance_session_id := ""
 var arena_session: Dictionary = {}
 var arena_state_request_active := false
 var has_received_arena_state := false
 var arena_state_timer: Timer
+var viewer_role := "spectator"
+var viewer_side := ""
+var arena_players: Dictionary = {}
+var engagement_sync_elapsed := 0.0
+var last_engagement_contact_msec: Dictionary = {}
+var staging_ejection_deadline_msec := 0
+var leave_confirmation = null
+var leave_request_active := false
 
 
 func _ready() -> void:
@@ -30,6 +48,20 @@ func _ready() -> void:
 	# enabled after world.gd assigns an isolated aether_clash_duel:<session> id.
 	arena_hud.visible = false
 	start_barrier.set_barrier_raised(false, false)
+	arena_zones.set_phase("entry_open")
+
+
+func _process(delta: float) -> void:
+	engagement_sync_elapsed += delta
+	if engagement_sync_elapsed >= ENGAGEMENT_SYNC_SECONDS:
+		engagement_sync_elapsed = 0.0
+		_sync_engagement_rings()
+	_process_staging_ejection()
+
+
+func _exit_tree() -> void:
+	GameState.release_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
+	_free_leave_confirmation()
 
 
 func configure_aether_clash_instance(instance_map_id: String) -> void:
@@ -43,6 +75,9 @@ func configure_aether_clash_instance(instance_map_id: String) -> void:
 	location_id = normalized_id
 	instance_session_id = session_id
 	arena_session.clear()
+	arena_players.clear()
+	viewer_role = "spectator"
+	viewer_side = ""
 	has_received_arena_state = false
 	arena_hud.show_syncing()
 	start_barrier.set_barrier_raised(true, false)
@@ -77,6 +112,73 @@ func is_world_barrier_step_blocked(from_position: Vector2, to_position: Vector2)
 	return crosses_center or to_distance <= START_BARRIER_HALF_HEIGHT
 
 
+func is_world_actor_step_blocked(from_position: Vector2, to_position: Vector2) -> bool:
+	if not is_clash_active() or not _is_local_active_participant():
+		return false
+
+	var own_zone := _zone_rect(viewer_side)
+	var opposing_side := "challenged" if viewer_side == "challenger" else "challenger"
+	var opposing_zone := _zone_rect(opposing_side)
+	if _enters_rect(from_position, to_position, opposing_zone):
+		return true
+	if _enters_rect(from_position, to_position, own_zone):
+		_request_leave_confirmation.call_deferred()
+		return true
+
+	var local_user_id := _local_user_id()
+	for user_id_value: Variant in arena_players.keys():
+		var user_id := int(user_id_value)
+		if user_id == local_user_id:
+			continue
+		var actor := _actor_for_user_id(user_id)
+		if actor == null:
+			continue
+		var actor_position := (actor as Node2D).global_position
+		var from_distance := from_position.distance_to(actor_position)
+		var to_distance := to_position.distance_to(actor_position)
+		if to_distance > ENGAGEMENT_CONTACT_DISTANCE:
+			continue
+		# Let overlapping players back away instead of permanently pinning them.
+		if from_distance <= ENGAGEMENT_CONTACT_DISTANCE and to_distance > from_distance:
+			continue
+		var other_side := str(arena_players.get(user_id, ""))
+		if other_side != viewer_side:
+			_emit_engagement_contact(local_user_id, user_id, "player_contact")
+		return true
+	return false
+
+
+func request_projectile_engagement(
+	from_position: Vector2,
+	to_position: Vector2,
+	source_user_id: int
+) -> int:
+	if not is_clash_active() or not arena_players.has(source_user_id):
+		return 0
+	var source_side := str(arena_players.get(source_user_id, ""))
+	var nearest_user_id := 0
+	var nearest_progress := INF
+	for user_id_value: Variant in arena_players.keys():
+		var user_id := int(user_id_value)
+		if user_id == source_user_id or str(arena_players.get(user_id, "")) == source_side:
+			continue
+		var actor := _actor_for_user_id(user_id)
+		if actor == null:
+			continue
+		var hit_progress := _segment_circle_hit_progress(
+			from_position,
+			to_position,
+			(actor as Node2D).global_position,
+			ENGAGEMENT_RADIUS
+		)
+		if hit_progress >= 0.0 and hit_progress < nearest_progress:
+			nearest_progress = hit_progress
+			nearest_user_id = user_id
+	if nearest_user_id > 0:
+		_emit_engagement_contact(source_user_id, nearest_user_id, "projectile")
+	return nearest_user_id
+
+
 func _refresh_arena_state() -> void:
 	if arena_state_request_active or instance_session_id.is_empty():
 		return
@@ -101,10 +203,233 @@ func _apply_arena_state(payload: Dictionary) -> void:
 		and not barrier_should_be_raised
 	)
 	arena_session = next_session
+	viewer_role = str(payload.get("viewerRole", "spectator"))
+	viewer_side = str(payload.get("viewerSide", ""))
+	_apply_arena_players(payload.get("arenaPlayers", []))
 	start_barrier.set_barrier_raised(barrier_should_be_raised, animate_lowering)
+	arena_zones.set_phase(next_status)
 	arena_hud.apply_arena_state(payload)
 	has_received_arena_state = true
+	if next_status in ["roster_locked", "active", "finishing"] and previous_status not in ["roster_locked", "active", "finishing"]:
+		staging_ejection_deadline_msec = Time.get_ticks_msec() + STAGING_EJECTION_GRACE_MSEC
+	_sync_engagement_rings()
 	arena_state_changed.emit(payload.duplicate(true))
+
+
+func _apply_arena_players(value: Variant) -> void:
+	arena_players.clear()
+	if not value is Array:
+		return
+	for player_value: Variant in value:
+		if not player_value is Dictionary:
+			continue
+		var player_state := player_value as Dictionary
+		var user_id := int(player_state.get("userId", 0))
+		var side := str(player_state.get("side", ""))
+		if user_id > 0 and side in ["challenger", "challenged"]:
+			arena_players[user_id] = side
+
+
+func _sync_engagement_rings() -> void:
+	var active_phase := is_clash_active()
+	for actor_value: Variant in _all_player_actors():
+		var actor := actor_value as Node2D
+		if actor == null:
+			continue
+		var user_id := _actor_user_id(actor)
+		var should_show := active_phase and arena_players.has(user_id)
+		var ring := actor.get_node_or_null("AetherClashEngagementRing")
+		if not should_show:
+			if ring != null:
+				ring.queue_free()
+			continue
+		if ring == null:
+			var ring_value: Variant = ENGAGEMENT_RING_SCRIPT.new()
+			if not ring_value is Node2D:
+				continue
+			ring = ring_value as Node2D
+			ring.name = "AetherClashEngagementRing"
+			actor.add_child(ring)
+		if ring.has_method("configure"):
+			ring.call("configure", str(arena_players.get(user_id, "challenger")))
+
+
+func _all_player_actors() -> Array[Node2D]:
+	var actors: Array[Node2D] = []
+	for node: Node in get_tree().get_nodes_in_group("player"):
+		if node is Node2D:
+			actors.append(node as Node2D)
+	for node: Node in get_tree().get_nodes_in_group("remote_player_avatar"):
+		if node is Node2D:
+			actors.append(node as Node2D)
+	return actors
+
+
+func _actor_for_user_id(user_id: int) -> Node2D:
+	if user_id <= 0:
+		return null
+	if user_id == _local_user_id():
+		for node: Node in get_tree().get_nodes_in_group("player"):
+			if node is Node2D:
+				return node as Node2D
+	for node: Node in get_tree().get_nodes_in_group("remote_player_avatar"):
+		if node is Node2D and int(node.get("user_id")) == user_id:
+			return node as Node2D
+	return null
+
+
+func _actor_user_id(actor: Node) -> int:
+	if actor.is_in_group("player"):
+		return _local_user_id()
+	var value: Variant = actor.get("user_id")
+	return int(value) if value != null else 0
+
+
+func _local_user_id() -> int:
+	return int(str(PlayerSave.player_id).strip_edges())
+
+
+func _is_local_active_participant() -> bool:
+	var local_user_id := _local_user_id()
+	return (
+		viewer_role == "participant"
+		and viewer_side in ["challenger", "challenged"]
+		and local_user_id > 0
+		and arena_players.has(local_user_id)
+	)
+
+
+func _zone_rect(side: String) -> Rect2:
+	if arena_zones != null and arena_zones.has_method("get_zone_rect"):
+		var value: Variant = arena_zones.call("get_zone_rect", side)
+		if value is Rect2:
+			return value as Rect2
+	return Rect2()
+
+
+func _enters_rect(from_position: Vector2, to_position: Vector2, rect: Rect2) -> bool:
+	return rect.size != Vector2.ZERO and not rect.has_point(from_position) and rect.has_point(to_position)
+
+
+func _process_staging_ejection() -> void:
+	if staging_ejection_deadline_msec <= 0 or Time.get_ticks_msec() < staging_ejection_deadline_msec:
+		return
+	staging_ejection_deadline_msec = 0
+	if not _is_local_active_participant():
+		return
+	var player := _actor_for_user_id(_local_user_id())
+	var zone := _zone_rect(viewer_side)
+	if player == null or not zone.has_point(player.global_position):
+		return
+	if not arena_zones.has_method("get_arena_exit_point") or not player.has_method("teleport_within_current_map"):
+		return
+	var exit_point: Vector2 = arena_zones.call("get_arena_exit_point", viewer_side)
+	var facing := Vector2.DOWN if viewer_side == "challenger" else Vector2.UP
+	player.call("teleport_within_current_map", exit_point, facing)
+
+
+func _request_leave_confirmation() -> void:
+	if leave_request_active or leave_confirmation != null or not _is_local_active_participant():
+		return
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate()
+	if dialog == null:
+		return
+	leave_confirmation = dialog
+	GameState.acquire_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
+	dialog.name = "AetherClashLeaveConfirmation"
+	var dialog_parent := get_tree().current_scene
+	if dialog_parent == null:
+		dialog_parent = self
+	dialog_parent.add_child(dialog)
+	dialog.configure(
+		_text("ui.aether_clash.leave.title", "Leave Aether Clash?"),
+		_text("ui.aether_clash.leave.message", "Leaving eliminates you immediately. You cannot return to this Clash."),
+		_text("ui.aether_clash.leave.confirm", "Leave Clash"),
+		_text("common.cancel", "Cancel")
+	)
+	dialog.confirmed.connect(_confirm_leave_arena)
+	dialog.canceled.connect(_close_leave_confirmation)
+	dialog.popup_centered(Vector2i(560, 260))
+
+
+func _confirm_leave_arena() -> void:
+	if leave_request_active:
+		return
+	leave_request_active = true
+	_free_leave_confirmation()
+	GameState.release_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
+	var world := get_tree().get_first_node_in_group("world")
+	if world == null:
+		_leave_failed(_text("ui.aether_clash.leave.unavailable", "Leaving the Clash is unavailable right now."))
+		return
+	var begin_result: Dictionary = await world.call("begin_authorized_teleport", true, true)
+	if not bool(begin_result.get("success", false)):
+		_leave_failed(str(begin_result.get("error", "Leaving the Clash is unavailable right now.")))
+		return
+	var result: Dictionary = await GuildService.leave_aether_clash_arena(instance_session_id)
+	if not bool(result.get("success", false)):
+		if world.has_method("cancel_authorized_teleport_effect"):
+			world.call("cancel_authorized_teleport_effect")
+		else:
+			world.call("cancel_authorized_teleport")
+		_leave_failed(str(result.get("error", "Leaving the Clash failed.")))
+		return
+	if world.has_method("play_authorized_teleport_departure_effect"):
+		await world.call("play_authorized_teleport_departure_effect")
+	var apply_result: Dictionary = await world.call("apply_authorized_teleport_state", result.get("state", {}))
+	if not bool(apply_result.get("success", false)):
+		_show_system_message(str(apply_result.get("error", "The lobby teleport could not be applied.")))
+	leave_request_active = false
+
+
+func _close_leave_confirmation() -> void:
+	_free_leave_confirmation()
+	GameState.release_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
+
+
+func _free_leave_confirmation() -> void:
+	if leave_confirmation != null and is_instance_valid(leave_confirmation):
+		leave_confirmation.queue_free()
+	leave_confirmation = null
+
+
+func _leave_failed(message: String) -> void:
+	leave_request_active = false
+	_show_system_message(message)
+
+
+func _show_system_message(message: String) -> void:
+	get_tree().call_group("ui_overlay", "add_system_message", message)
+
+
+func _emit_engagement_contact(source_user_id: int, target_user_id: int, method: String) -> void:
+	if source_user_id <= 0 or target_user_id <= 0:
+		return
+	var pair := "%d:%d:%s" % [mini(source_user_id, target_user_id), maxi(source_user_id, target_user_id), method]
+	var now := Time.get_ticks_msec()
+	if now - int(last_engagement_contact_msec.get(pair, -ENGAGEMENT_CONTACT_COOLDOWN_MSEC)) < ENGAGEMENT_CONTACT_COOLDOWN_MSEC:
+		return
+	last_engagement_contact_msec[pair] = now
+	engagement_contact_requested.emit(source_user_id, target_user_id, method)
+
+
+func _segment_circle_hit_progress(start: Vector2, finish: Vector2, center: Vector2, radius: float) -> float:
+	var segment := finish - start
+	var length_squared := segment.length_squared()
+	if length_squared <= 0.001:
+		return 0.0 if start.distance_to(center) <= radius else -1.0
+	var progress := clampf((center - start).dot(segment) / length_squared, 0.0, 1.0)
+	var closest := start + segment * progress
+	return progress if closest.distance_to(center) <= radius else -1.0
+
+
+func _text(key: String, fallback: String) -> String:
+	var manager := get_node_or_null("/root/LocalizationManager")
+	if manager != null and manager.has_method("text"):
+		var translated := str(manager.call("text", key))
+		if translated != key:
+			return translated
+	return fallback
 
 
 func _dictionary(value: Variant) -> Dictionary:

@@ -407,7 +407,27 @@ func load_aether_clash_arena_state(challenge_id: String) -> Dictionary:
 		"session": _normalize_aether_clash_session(body.get("session", {})),
 		"viewerRole": str(body.get("viewerRole", "spectator")),
 		"viewerSide": str(body.get("viewerSide", "")),
+		"arenaPlayers": _array(body.get("arenaPlayers", [])).duplicate(true),
 		"serverNow": str(body.get("serverNow", "")),
+	}
+
+
+func leave_aether_clash_arena(challenge_id: String) -> Dictionary:
+	var normalized_id := challenge_id.strip_edges()
+	if normalized_id.is_empty():
+		return {"success": false, "error": "Aether Clash session was missing."}
+	var response := await _authenticated_request(
+		AETHER_CLASH_SESSIONS_ENDPOINT + "/%s/leave" % normalized_id.uri_encode(),
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	return {
+		"success": true,
+		"session": _normalize_aether_clash_session(body.get("session", {})),
+		"state": _dictionary(body.get("state", {})).duplicate(true),
 	}
 
 
