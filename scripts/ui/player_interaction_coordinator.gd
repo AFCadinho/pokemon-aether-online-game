@@ -122,7 +122,11 @@ func open_players_on_map(anchor_rect: Rect2) -> void:
 
 func open_context_for_player(player_state: Dictionary, screen_position: Vector2) -> void:
 	var normalized := _normalized_player(player_state)
-	if normalized.is_empty() or _is_self(normalized):
+	if (
+		normalized.is_empty()
+		or _is_self(normalized)
+		or not _can_view_overworld_identity(int(normalized.get("userId", 0)))
+	):
 		return
 	current_target = normalized
 	if not trade_capabilities_loaded and not trade_capabilities_loading:
@@ -1180,10 +1184,21 @@ func _current_map_players() -> Array[Dictionary]:
 		return players
 	for state_value: Variant in roster_value:
 		var player := _normalized_player(_dictionary_from_value(state_value))
-		if not player.is_empty() and not _is_self(player):
+		if (
+			not player.is_empty()
+			and not _is_self(player)
+			and _can_view_overworld_identity(int(player.get("userId", 0)))
+		):
 			players.append(player)
 	players.sort_custom(_compare_players)
 	return players
+
+
+func _can_view_overworld_identity(user_id: int) -> bool:
+	for controller: Node in get_tree().get_nodes_in_group("aether_clash_duel_controller"):
+		if controller.has_method("can_view_overworld_identity"):
+			return bool(controller.call("can_view_overworld_identity", user_id))
+	return true
 
 
 func _normalized_player(player: Dictionary) -> Dictionary:

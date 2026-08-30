@@ -6,6 +6,12 @@ const WorldPresenceServiceScript := preload("res://scripts/services/world_presen
 class FakeAuthService extends Node:
 	var current_user: Dictionary = {}
 
+class FakeAetherClashDuelController extends Node:
+	var visible_user_ids: Dictionary = {}
+
+	func can_view_overworld_identity(user_id: int) -> bool:
+		return visible_user_ids.has(user_id)
+
 var failed := false
 var coordinator: Node
 var auth_service: Node
@@ -25,6 +31,7 @@ func _init() -> void:
 	await _check_trade_context_action()
 	_check_player_normalization()
 	_check_self_exclusion_and_roster_ordering()
+	_check_aether_clash_identity_filtering()
 	_check_deterministic_player_ordering()
 	_check_social_state_matching()
 	_check_phase_scope_contract()
@@ -330,6 +337,29 @@ func _check_self_exclusion_and_roster_ordering() -> void:
 	_check_equal(players[0].get("userId", 0), 9, "roster alphabetical first")
 	_check_equal(players[1].get("userId", 0), 2, "roster alphabetical second")
 
+func _check_aether_clash_identity_filtering() -> void:
+	var duel_controller := FakeAetherClashDuelController.new()
+	duel_controller.visible_user_ids = {9: true}
+	duel_controller.add_to_group("aether_clash_duel_controller")
+	root.add_child(duel_controller)
+	var visible_players: Array[Dictionary] = coordinator._current_map_players()
+	_check_equal(visible_players.size(), 1, "Guild Duel roster omits hidden enemy identities")
+	_check_equal(visible_players[0].get("userId", 0), 9, "Guild Duel roster retains allowed identities")
+	coordinator.close_context_menu()
+	coordinator.open_context_for_player(
+		{"userId": 2, "username": "misty", "displayName": "Misty"},
+		Vector2(400, 200)
+	)
+	_check_equal(coordinator.current_target.is_empty(), true, "hidden Duel enemies cannot leak through right-click actions")
+	coordinator.open_context_for_player(
+		{"userId": 9, "username": "brock", "displayName": "Brock"},
+		Vector2(400, 200)
+	)
+	_check_equal(coordinator.current_target.get("userId", 0), 9, "allowed Duel identities retain trainer actions")
+	coordinator.close_context_menu()
+	root.remove_child(duel_controller)
+	duel_controller.free()
+
 func _check_social_state_matching() -> void:
 	coordinator.social_overview = {
 		"friends": [{"user": {"id": 8, "username": "misty"}}],
@@ -349,6 +379,7 @@ func _check_phase_scope_contract() -> void:
 	_check_equal(source.contains("_social_action(\"load_socials\")"), true, "authoritative social refresh")
 	_check_equal(source.contains("service.invite_member(username)"), true, "guild action uses the authoritative invitation endpoint")
 	_check_equal(source.contains("create_aether_clash_player_challenge"), true, "right-click Clash action uses the authoritative player endpoint")
+	_check_equal(source.contains("_can_view_overworld_identity"), true, "Duel identity intel gates roster and right-click name exposure")
 	_check_equal(source.contains("load_map_players"), false, "no secondary map-player projection")
 
 func _check_remote_avatar_interaction_contract() -> void:

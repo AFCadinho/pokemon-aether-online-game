@@ -408,6 +408,8 @@ func load_aether_clash_arena_state(challenge_id: String) -> Dictionary:
 		"viewerRole": str(body.get("viewerRole", "spectator")),
 		"viewerSide": str(body.get("viewerSide", "")),
 		"arenaPlayers": _array(body.get("arenaPlayers", [])).duplicate(true),
+		"identifiedEnemyUserIds": _array(body.get("identifiedEnemyUserIds", [])).duplicate(true),
+		"visibleIdentityUserIds": _array(body.get("visibleIdentityUserIds", [])).duplicate(true),
 		"serverNow": str(body.get("serverNow", "")),
 	}
 

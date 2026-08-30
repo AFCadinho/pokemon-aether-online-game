@@ -8,6 +8,16 @@ var failed := false
 
 class FakeRemoteActor extends Node2D:
 	var user_id := 0
+	var gameplay_nameplate_visibility_override_active := false
+	var gameplay_nameplate_visible := true
+
+	func set_gameplay_nameplate_visible(visible: bool) -> void:
+		gameplay_nameplate_visibility_override_active = true
+		gameplay_nameplate_visible = visible
+
+	func clear_gameplay_nameplate_visibility_override() -> void:
+		gameplay_nameplate_visibility_override_active = false
+		gameplay_nameplate_visible = true
 
 
 class FakeLocalActor extends Node2D:
@@ -55,6 +65,7 @@ func _run() -> void:
 	root.add_child(remote_actor)
 
 	duel.call("_apply_arena_state", _payload("entry_open", "blue"))
+	_check(remote_actor.gameplay_nameplate_visible, "Own Guild identities stay visible during staging")
 	arena_hud.call("set_battle_overlay_active", true)
 	duel.call("_apply_arena_state", _payload("entry_open", "blue"))
 	_check(not arena_hud.visible, "Arena HUD stays hidden while a local battle overlay is active")
@@ -79,6 +90,8 @@ func _run() -> void:
 		contact["method"] = method
 	)
 	duel.call("_apply_arena_state", _payload("active", "red"))
+	_check(not remote_actor.gameplay_nameplate_visible, "An undiscovered enemy nameplate is hidden in the arena")
+	_check(not bool(duel.call("can_view_overworld_identity", 2)), "Undiscovered enemies are hidden from other overworld identity surfaces")
 	_check(
 		bool(duel.call("is_world_actor_step_blocked", Vector2(512, 512), Vector2(544, 512))),
 		"Enemy engagement circles stop the movement step"
@@ -109,6 +122,19 @@ func _run() -> void:
 	))
 	_check(projectile_target == 2, "Projectile paths target the same enemy engagement circle")
 	_check(contact["count"] == 3 and contact["method"] == "projectile", "Projectile contact uses the shared engagement request")
+
+	var discovered_payload := _payload("active", "red", [1, 2], [2])
+	duel.call("_apply_arena_state", discovered_payload)
+	_check(remote_actor.gameplay_nameplate_visible, "A battled enemy identity becomes visible for the viewer's Guild")
+	_check(bool(duel.call("can_view_overworld_identity", 2)), "Discovered enemies regain overworld trainer interactions")
+	var neutral_payload := discovered_payload.duplicate(true)
+	neutral_payload["viewerRole"] = "spectator"
+	neutral_payload["viewerSide"] = ""
+	neutral_payload["identifiedEnemyUserIds"] = []
+	neutral_payload["visibleIdentityUserIds"] = []
+	duel.call("_apply_arena_state", neutral_payload)
+	_check(not remote_actor.gameplay_nameplate_visible, "A public spectator receives no overworld identities")
+	duel.call("_apply_arena_state", discovered_payload)
 
 	_check(
 		bool(duel.call(
@@ -240,19 +266,34 @@ func _run() -> void:
 		and remote_actor.get_node_or_null("AetherClashEngagementRing") == null,
 		"Engagement circles are removed when the duel map closes"
 	)
+	_check(
+		not remote_actor.gameplay_nameplate_visibility_override_active
+		and remote_actor.gameplay_nameplate_visible,
+		"Duel identity hiding is cleared when the arena closes"
+	)
 	local_actor.queue_free()
 	remote_actor.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
 
 
-func _payload(status: String, remote_side: String) -> Dictionary:
+func _payload(
+	status: String,
+	remote_side: String,
+	visible_ids_value: Variant = null,
+	identified_ids: Array = []
+) -> Dictionary:
 	var now := int(Time.get_unix_time_from_system())
+	var visible_ids: Array = [1, 2] if remote_side == "blue" else [1]
+	if visible_ids_value is Array:
+		visible_ids = (visible_ids_value as Array).duplicate(true)
 	return {
 		"success": true,
 		"serverNow": Time.get_datetime_string_from_unix_time(now, true) + "Z",
 		"viewerRole": "participant",
 		"viewerSide": "blue",
+		"identifiedEnemyUserIds": identified_ids.duplicate(true),
+		"visibleIdentityUserIds": visible_ids,
 		"arenaPlayers": [
 			{"userId": 1, "side": "blue"},
 			{"userId": 2, "side": remote_side},
