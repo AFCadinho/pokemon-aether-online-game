@@ -6,6 +6,7 @@
 
 **Added**
 
+- Trainers can now fund a ₽100,000 Global Skill EXP Boost together for one hour of double Fishing, Thieving, and Rock Smash experience, with a dedicated skill icon and live contribution updates.
 - Every Pokémon Center now has a Move Maniac who can teach compatible relearn, Egg, tutor, special, event, legacy, and pre-evolution moves in exchange for gathered resources.
 - Every Pokémon Center now has a separate Move Deleter who can safely remove any move except a Pokémon's last one.
 - Guild Leaders and Captains can now send, accept, decline, and cancel Guild vs Guild Aether Clash challenges from the Guild screen. Multiple challenges may remain pending, while accepting one reserves both Guilds and opens a timed lobby-entry window for every member.
