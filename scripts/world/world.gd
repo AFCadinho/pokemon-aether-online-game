@@ -2710,10 +2710,7 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 	MusicManager.play_wild_battle_music()
 	await _reveal_prepared_wild_battle()
 
-	await battle_instance.play_wild_battle_intro(
-		PlayerSave.party[0],
-		response
-	)
+	await battle_instance.play_wild_battle_intro(response)
 
 
 func _show_wild_encounter_start_error(response: Dictionary) -> void:
