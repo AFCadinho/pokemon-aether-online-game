@@ -12,7 +12,28 @@ static func should_fast_finish_win(
 	local_player_id: String = "p1",
 	local_display_name: String = ""
 ) -> bool:
-	if not is_wild_battle or is_pvp_battle or battle_animations_enabled or not battle_ended:
+	return (
+		not battle_animations_enabled
+		and is_confirmed_local_win(
+			is_wild_battle,
+			is_pvp_battle,
+			battle_ended,
+			winner,
+			local_player_id,
+			local_display_name
+		)
+	)
+
+
+static func is_confirmed_local_win(
+	is_wild_battle: bool,
+	is_pvp_battle: bool,
+	battle_ended: bool,
+	winner: Variant,
+	local_player_id: String = "p1",
+	local_display_name: String = ""
+) -> bool:
+	if not is_wild_battle or is_pvp_battle or not battle_ended:
 		return false
 
 	return _is_local_winner(winner, local_player_id, local_display_name)
