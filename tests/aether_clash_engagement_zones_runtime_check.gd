@@ -149,8 +149,10 @@ func _run() -> void:
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	_check(
 		overlay_source.contains("func start_aether_clash_pvp_match(")
-		and overlay_source.contains("BattleApiClient.start_pvp_match_battle("),
-		"Aether Clash engagements reuse the existing PvP battle start path"
+		and overlay_source.contains("BattleApiClient.start_pvp_match_battle(")
+		and overlay_source.contains('aether_clash_started_engagements[normalized_engagement_id] = "failed"')
+		and not overlay_source.contains("aether_clash_started_engagements.erase(normalized_engagement_id)"),
+		"Aether Clash engagements reuse PvP start once without an automatic failure loop"
 	)
 	var zone_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_arena_zones.gd")
 	_check(
