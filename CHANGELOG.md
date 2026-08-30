@@ -43,6 +43,7 @@
 
 **Fixed**
 
+- Guild Duel battles now place the battle interface above the arena HUD, keeping Team Preview and battle controls clickable.
 - Guild Duel collisions now use live arena positions, recover abandoned pre-battle matches after two minutes, and require players to separate before another collision attempt.
 - Aether Clash contact failures now explain position synchronization and existing PvP battles instead of showing a generic error.
 - A failed Guild Duel contact-battle start now stops after one attempt instead of repeatedly replaying the battle transition.

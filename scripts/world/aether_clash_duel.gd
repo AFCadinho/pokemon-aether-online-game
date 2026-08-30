@@ -33,6 +33,7 @@ var viewer_side := ""
 var arena_players: Dictionary = {}
 var engaged_player_ids: Dictionary = {}
 var engagement_requests_in_flight: Dictionary = {}
+var engagement_battle_attempts: Dictionary = {}
 var engagement_sync_elapsed := 0.0
 var last_engagement_contact_msec: Dictionary = {}
 var latched_player_contact_pairs: Dictionary = {}
@@ -61,6 +62,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	_sync_arena_hud_battle_visibility()
 	engagement_sync_elapsed += delta
 	if engagement_sync_elapsed >= ENGAGEMENT_SYNC_SECONDS:
 		engagement_sync_elapsed = 0.0
@@ -95,6 +97,7 @@ func configure_aether_clash_instance(instance_map_id: String) -> void:
 	arena_players.clear()
 	engaged_player_ids.clear()
 	engagement_requests_in_flight.clear()
+	engagement_battle_attempts.clear()
 	latched_player_contact_pairs.clear()
 	viewer_role = "spectator"
 	viewer_side = ""
@@ -308,7 +311,11 @@ func _apply_arena_players(value: Variant) -> void:
 				engaged_player_ids[user_id] = engagement_id
 				var match_value: Variant = player_state.get("engagementMatchId")
 				var match_id := str(match_value).strip_edges() if match_value != null else ""
-				if user_id == _local_user_id() and not match_id.is_empty():
+				if (
+					user_id == _local_user_id()
+					and not match_id.is_empty()
+					and not engagement_battle_attempts.has(engagement_id)
+				):
 					resumable_engagement = {
 						"id": engagement_id,
 						"matchId": match_id,
@@ -607,12 +614,22 @@ func _begin_engagement_battle(engagement: Dictionary) -> void:
 	if engagement_id.is_empty() or match_id.is_empty():
 		_trace_aether_clash("engagement_battle_skipped", {"reason": "missing_identifiers"})
 		return
+	if engagement_battle_attempts.has(engagement_id):
+		_trace_aether_clash("engagement_battle_skipped", {
+			"reason": "engagement_already_started_locally",
+			"engagementId": engagement_id,
+			"attemptState": str(engagement_battle_attempts.get(engagement_id, "")),
+		})
+		return
 	if source_user_id <= 0 and target_user_id <= 0:
 		_trace_aether_clash("engagement_battle_skipped", {"reason": "missing_players"})
 		return
 	if _local_user_id() not in [source_user_id, target_user_id]:
 		_trace_aether_clash("engagement_battle_skipped", {"reason": "local_player_not_in_engagement"})
 		return
+	engagement_battle_attempts[engagement_id] = "starting"
+	if arena_hud != null and arena_hud.has_method("set_battle_overlay_active"):
+		arena_hud.call("set_battle_overlay_active", true)
 	if source_user_id > 0:
 		engaged_player_ids[source_user_id] = engagement_id
 	if target_user_id > 0:
@@ -621,15 +638,29 @@ func _begin_engagement_battle(engagement: Dictionary) -> void:
 		var overlay := overlay_value as Node
 		if overlay != null and overlay.has_method("start_aether_clash_pvp_match"):
 			var started: bool = bool(await overlay.call("start_aether_clash_pvp_match", match_id, engagement_id))
+			engagement_battle_attempts[engagement_id] = "started" if started else "failed"
 			_trace_aether_clash("engagement_battle_result", {
 				"sessionId": instance_session_id,
 				"engagementId": engagement_id,
 				"matchId": match_id,
 				"started": started,
 			})
+			if not started:
+				_sync_arena_hud_battle_visibility()
 			return
+	engagement_battle_attempts[engagement_id] = "failed"
 	_trace_aether_clash("engagement_battle_skipped", {"reason": "overlay_unavailable"})
+	_sync_arena_hud_battle_visibility()
 	_show_system_message("The Aether Clash battle interface is unavailable.")
+
+
+func _sync_arena_hud_battle_visibility() -> void:
+	if arena_hud == null or not arena_hud.has_method("set_battle_overlay_active"):
+		return
+	var world := get_tree().get_first_node_in_group("world")
+	var battle_start_pending := engagement_battle_attempts.values().has("starting")
+	var battle_active := battle_start_pending or (world != null and bool(world.get("is_in_battle")))
+	arena_hud.call("set_battle_overlay_active", battle_active)
 
 
 func _response_error_code(response: Dictionary) -> String:
