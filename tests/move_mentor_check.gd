@@ -135,6 +135,15 @@ func _check_popup_scene() -> void:
 		move_list != null and _count_texture_rects(move_list) >= 2,
 		"Move Mentor move cards show type and damage-category icons"
 	)
+	var catalog_stats := move_list.find_child("MoveStats_water-pulse", true, false) as Label
+	_check(
+		catalog_stats != null
+			and catalog_stats.text.contains("PP 20")
+			and catalog_stats.text.contains("BP 60")
+			and catalog_stats.text.contains("ACC 100")
+			and catalog_stats.custom_minimum_size.x >= 140.0,
+		"Move Mentor catalog keeps PP, base power, and accuracy visibly readable"
+	)
 	preview_pokemon.moves = [
 		{"id": "water-shuriken", "name": "Water Shuriken", "pp": 20, "maxPp": 20},
 		{"id": "hydro-pump", "name": "Hydro Pump", "pp": 5, "maxPp": 5},
