@@ -1598,6 +1598,9 @@ func _on_world_pixel_scale_selected(index: int) -> void:
 		return
 
 	var scale_metadata: Variant = world_pixel_scale_options_button.get_item_metadata(index)
+	if scale_metadata is String and scale_metadata == SettingsManager.WORLD_PIXEL_SCALE_MODE_AUTO:
+		SettingsManager.set_world_pixel_scale_auto()
+		return
 	if not scale_metadata is float and not scale_metadata is int:
 		return
 
@@ -2486,13 +2489,25 @@ func _apply_world_pixel_scale_options_to_control() -> void:
 	world_pixel_scale_options_button.clear()
 
 	var selected_index := 0
+	world_pixel_scale_options_button.add_item(
+		LocalizationManager.text("ui.settings.world_pixel_scale_auto"),
+		0
+	)
+	world_pixel_scale_options_button.set_item_metadata(
+		0,
+		SettingsManager.WORLD_PIXEL_SCALE_MODE_AUTO
+	)
 	for index: int in range(SettingsManager.AVAILABLE_WORLD_PIXEL_SCALES.size()):
 		var scale: float = SettingsManager.AVAILABLE_WORLD_PIXEL_SCALES[index]
 		var option_text := _world_pixel_scale_option_text(scale)
-		world_pixel_scale_options_button.add_item(option_text, index)
-		world_pixel_scale_options_button.set_item_metadata(index, scale)
-		if is_equal_approx(scale, SettingsManager.world_pixel_scale):
-			selected_index = index
+		var item_index := index + 1
+		world_pixel_scale_options_button.add_item(option_text, item_index)
+		world_pixel_scale_options_button.set_item_metadata(item_index, scale)
+		if (
+			not SettingsManager.is_world_pixel_scale_auto()
+			and is_equal_approx(scale, SettingsManager.world_pixel_scale)
+		):
+			selected_index = item_index
 
 	if world_pixel_scale_options_button.item_count > 0:
 		world_pixel_scale_options_button.select(selected_index)
