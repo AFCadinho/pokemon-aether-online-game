@@ -234,6 +234,8 @@ func _run() -> void:
 		"Guild discovery uses the softer cyan secondary action style"
 	)
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "guild dashboard opens on its overview")
+	var overview_level := popup.find_child("GuildOverviewLevelValue", true, false) as Label
+	_check(overview_level != null and overview_level.text == "12", "guild overview omits decimal zeroes from levels")
 	popup._show_guild_section("aether_clash")
 	await process_frame
 	_check(popup.find_child("GuildAetherClashWorkspace", true, false) != null, "Aether Clash workspace opens")
@@ -245,6 +247,31 @@ func _run() -> void:
 	await process_frame
 	var announcement_text := popup.find_child("GuildAnnouncementText", true, false) as Label
 	_check(announcement_text != null and announcement_text.text.contains("Aether Clash practice"), "guild overview displays the current announcement")
+	var role_badge := popup.find_child("GuildRoleBadgeLabel", true, false) as Label
+	_check(role_badge != null and role_badge.text == "Leader", "guild header shows the member rank as a compact badge")
+	var header_description := popup.find_child("GuildHeaderDescription", true, false) as Label
+	_check(
+		header_description != null
+		and header_description.max_lines_visible == 2
+		and header_description.text_overrun_behavior == TextServer.OVERRUN_TRIM_ELLIPSIS,
+		"guild header constrains long descriptions to two readable lines"
+	)
+	var presence_summary := popup.find_child("GuildPresenceSummary", true, false) as Label
+	_check(
+		presence_summary != null and presence_summary.text.contains("2 / 3"),
+		"guild overview uses available member data for a live presence summary"
+	)
+	var original_announcement: String = str(popup.guild_home.get("announcement", ""))
+	popup.guild_home["announcement"] = ""
+	var empty_announcement := popup._build_guild_announcement_panel()
+	popup.add_child(empty_announcement)
+	await process_frame
+	_check(
+		empty_announcement.custom_minimum_size.y <= 80.0,
+		"empty Guild announcements collapse to a compact state"
+	)
+	empty_announcement.queue_free()
+	popup.guild_home["announcement"] = original_announcement
 	var leader_options := popup.find_child("GuildOptionsMenuButton", true, false) as MenuButton
 	_check(leader_options != null and leader_options.get_popup().is_item_disabled(0), "Guild leaders cannot leave through Guild options")
 	var header_travel := popup.find_child("GuildHeaderTravelActions", true, false) as VBoxContainer
@@ -256,8 +283,15 @@ func _run() -> void:
 	)
 	var guild_progress := popup.find_child("GuildExperienceProgress", true, false) as ProgressBar
 	_check(guild_progress != null and is_equal_approx(guild_progress.value, 47.5), "guild overview shows authoritative level progress")
+	_check(guild_progress != null and guild_progress.custom_minimum_size.y >= 24.0, "guild EXP bar is prominent enough to scan")
 	var guild_progress_label := popup.find_child("GuildExperienceProgressLabel", true, false) as Label
 	_check(guild_progress_label != null and guild_progress_label.text.contains("500,000"), "guild overview shows total Guild EXP")
+	_check(
+		popup.find_child("GuildMemberCapacity", true, false) != null
+		and popup.find_child("GuildItemCapacity", true, false) != null
+		and popup.find_child("GuildPokemonCapacity", true, false) != null,
+		"guild capacities use three separate visual indicators"
+	)
 	var rewards_button := popup.find_child("GuildLevelRewardsButton", true, false) as Button
 	_check(rewards_button != null and not rewards_button.disabled, "guild overview exposes the level unlock roadmap")
 	_check(
