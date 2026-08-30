@@ -1042,6 +1042,7 @@ var pm_chat_container: HBoxContainer
 var pm_message_area: PanelContainer
 var pm_active_conversation_label: Label
 var pm_translation_language_select: OptionButton
+var pm_translation_mode_select: OptionButton
 var pm_translation_pending_user_id: int = 0
 var pm_message_scroll: ScrollContainer
 var pm_message_list: VBoxContainer
@@ -27926,6 +27927,22 @@ func _setup_pm_chat_ui() -> void:
 	pm_header.add_child(pm_translation_language_select)
 	_apply_pvp_ranked_dropdown_style(pm_translation_language_select, true)
 
+	pm_translation_mode_select = OptionButton.new()
+	pm_translation_mode_select.name = "StaffPrivateMessageTranslationMode"
+	pm_translation_mode_select.custom_minimum_size = Vector2(92, 28)
+	pm_translation_mode_select.fit_to_longest_item = false
+	pm_translation_mode_select.focus_mode = Control.FOCUS_NONE
+	_set_localized_control_property(
+		pm_translation_mode_select,
+		"tooltip_text",
+		"ui.chat.pm.translation.mode.tooltip"
+	)
+	pm_translation_mode_select.item_selected.connect(
+		_on_pm_translation_mode_selected
+	)
+	pm_header.add_child(pm_translation_mode_select)
+	_apply_pvp_ranked_dropdown_style(pm_translation_mode_select, true)
+
 	var message_body := MarginContainer.new()
 	message_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	message_body.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -28759,6 +28776,7 @@ func _ensure_pm_conversation(user: Dictionary) -> Dictionary:
 			"user": _normalize_pm_user(user),
 			"messages": [],
 			"translationLanguage": "",
+			"translationMode": "libre",
 		}
 		pm_conversations_by_user_id[conversation_key] = conversation
 	else:
@@ -28910,7 +28928,7 @@ func _on_pm_conversation_selected(user_id: int) -> void:
 
 
 func _refresh_pm_translation_controls() -> void:
-	if pm_translation_language_select == null:
+	if pm_translation_language_select == null or pm_translation_mode_select == null:
 		return
 	var allowed := (
 		_has_user_permission(CHAT_TRANSLATE_PERMISSION)
@@ -28921,6 +28939,7 @@ func _refresh_pm_translation_controls() -> void:
 		and pm_conversations_by_user_id.has(active_pm_user_id)
 	)
 	pm_translation_language_select.visible = allowed
+	pm_translation_mode_select.visible = false
 	if not allowed:
 		return
 
@@ -28949,6 +28968,24 @@ func _refresh_pm_translation_controls() -> void:
 	pm_translation_language_select.select(selected_index)
 	pm_translation_language_select.disabled = pm_translation_pending_user_id == active_pm_user_id
 
+	var selected_mode := str(conversation.get("translationMode", "libre"))
+	pm_translation_mode_select.clear()
+	pm_translation_mode_select.add_item(
+		LocalizationManager.text("ui.chat.pm.translation.mode.libre")
+	)
+	pm_translation_mode_select.set_item_metadata(0, "libre")
+	var selected_mode_index := 0
+	if ChatRealtimeService.ai_translation_available:
+		pm_translation_mode_select.add_item(
+			LocalizationManager.text("ui.chat.pm.translation.mode.ai")
+		)
+		pm_translation_mode_select.set_item_metadata(1, "ai")
+		if selected_mode == "ai":
+			selected_mode_index = 1
+	pm_translation_mode_select.select(selected_mode_index)
+	pm_translation_mode_select.visible = selected_language != ""
+	pm_translation_mode_select.disabled = pm_translation_pending_user_id == active_pm_user_id
+
 
 func _on_pm_translation_language_selected(index: int) -> void:
 	if (
@@ -28961,11 +28998,48 @@ func _on_pm_translation_language_selected(index: int) -> void:
 	var language := str(
 		pm_translation_language_select.get_item_metadata(index)
 	).strip_edges().to_lower()
+	var conversation := _dictionary_from_value(
+		pm_conversations_by_user_id.get(active_pm_user_id, {})
+	)
+	var mode := str(conversation.get("translationMode", "libre"))
+	if language == "" or (mode == "ai" and not ChatRealtimeService.ai_translation_available):
+		mode = "libre"
 	pm_translation_pending_user_id = active_pm_user_id
 	pm_translation_language_select.disabled = true
-	if not ChatRealtimeService.set_private_message_translation_language(
+	pm_translation_mode_select.disabled = true
+	if not ChatRealtimeService.set_private_message_translation(
 		active_pm_user_id,
-		language
+		language,
+		mode
+	):
+		pm_translation_pending_user_id = 0
+		_refresh_pm_translation_controls()
+		_add_pm_notice(
+			active_pm_user_id,
+			LocalizationManager.text("ui.chat.pm.translation.unavailable")
+		)
+
+
+func _on_pm_translation_mode_selected(index: int) -> void:
+	if (
+		pm_translation_mode_select == null
+		or index < 0
+		or index >= pm_translation_mode_select.item_count
+		or active_pm_user_id <= 0
+	):
+		return
+	var conversation := _dictionary_from_value(
+		pm_conversations_by_user_id.get(active_pm_user_id, {})
+	)
+	var language := str(conversation.get("translationLanguage", ""))
+	var mode := str(pm_translation_mode_select.get_item_metadata(index))
+	pm_translation_pending_user_id = active_pm_user_id
+	pm_translation_language_select.disabled = true
+	pm_translation_mode_select.disabled = true
+	if not ChatRealtimeService.set_private_message_translation(
+		active_pm_user_id,
+		language,
+		mode
 	):
 		pm_translation_pending_user_id = 0
 		_refresh_pm_translation_controls()
@@ -28978,6 +29052,7 @@ func _on_pm_translation_language_selected(index: int) -> void:
 func _on_pm_translation_state_changed(
 	peer_user_id: int,
 	language: String,
+	mode: String,
 	allowed: bool
 ) -> void:
 	if pm_translation_pending_user_id == peer_user_id:
@@ -28989,6 +29064,7 @@ func _on_pm_translation_state_changed(
 		pm_conversations_by_user_id.get(peer_user_id, {})
 	)
 	conversation["translationLanguage"] = language if allowed else ""
+	conversation["translationMode"] = mode if allowed and mode != "" else "libre"
 	pm_conversations_by_user_id[peer_user_id] = conversation
 	_refresh_pm_translation_controls()
 	if not allowed:

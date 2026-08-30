@@ -25,6 +25,9 @@ const REQUIRED_KEYS: Array[String] = [
 	"ui.chat.pm.translation.off",
 	"ui.chat.pm.translation.language.zh",
 	"ui.chat.pm.translation.language.pb",
+	"ui.chat.pm.translation.mode.tooltip",
+	"ui.chat.pm.translation.mode.libre",
+	"ui.chat.pm.translation.mode.ai",
 	"ui.chat.pm.translation.unavailable",
 	"ui.chat.pm.translation.failed",
 ]
@@ -95,18 +98,20 @@ func _run() -> void:
 	)
 	_check(
 		overlay_source.contains('pm_translation_language_select.name = "StaffPrivateMessageTranslationLanguage"')
+		and overlay_source.contains('pm_translation_mode_select.name = "StaffPrivateMessageTranslationMode"')
 		and overlay_source.contains("_has_user_permission(CHAT_TRANSLATE_PERMISSION)")
 		and overlay_source.contains("ChatRealtimeService.translation_mode_enabled"),
-		"Active Translate Mode exposes a staff-only PM language selector"
+		"Active Translate Mode exposes staff-only PM language and engine selectors"
 	)
 	_check(
 		realtime_source.contains('"type": "chat_translation.pm_set"')
 		and realtime_source.contains('"peerUserId": peer_user_id')
-		and realtime_source.contains('"language": normalized_language'),
-		"PM translation selection sends only participant identity and language code"
+		and realtime_source.contains('"language": language')
+		and realtime_source.contains('"mode": mode'),
+		"PM translation selection sends participant identity, language, and engine"
 	)
 	var pm_request_start := realtime_source.find(
-		"func set_private_message_translation_language("
+		"func set_private_message_translation("
 	)
 	var pm_request_end := realtime_source.find("\n\nfunc ", pm_request_start + 1)
 	var pm_request_source := realtime_source.substr(
@@ -116,6 +121,16 @@ func _run() -> void:
 	_check(
 		pm_request_source != "" and not pm_request_source.contains('"body"'),
 		"The PM language selector cannot submit arbitrary text for translation"
+	)
+	_check(
+		realtime_source.contains("pm_translation_preferences_requested")
+		and realtime_source.contains("_resend_private_message_translation_preferences()"),
+		"PM translation preferences are restored after a chat reconnect"
+	)
+	_check(
+		overlay_source.contains('conversation.get("translationMode", "libre")')
+		and overlay_source.contains("_on_pm_translation_mode_selected"),
+		"AI mode is selected independently for each PM conversation"
 	)
 	_check(
 		overlay_source.contains('str(message.get("originalBody", ""))')
