@@ -160,13 +160,13 @@ func _check_resolver_fallback_and_mechanics() -> void:
 	_check(dutch.get("quantity") == 4, "item localization preserves quantity")
 	_check(dutch.get("gameplay") == {"target": "pokemon"}, "item localization preserves mechanics")
 	var generated_dutch: Dictionary = item_localization.call("localize_item", {
-		"itemId": "armorite-ore",
-		"name": "Armorite Ore",
+		"itemId": "resonite-ore",
+		"name": "Resonite Ore",
 		"shortDesc": "Server-provided English description.",
 		"quantity": 7,
 		"sellPrice": 5,
 	})
-	_check(generated_dutch.get("name") == "Armorieterts", "Dutch generated catalog covers an item outside the reviewed pilot")
+	_check(generated_dutch.get("name") == "Resonieterts", "Dutch generated catalog covers an item outside the reviewed pilot")
 	_check(generated_dutch.get("quantity") == 7, "generated item localization preserves quantity")
 	_check(generated_dutch.get("sellPrice") == 5, "generated item localization preserves price mechanics")
 	var mega_stone_dutch: Dictionary = item_localization.call("localize_item", {
@@ -216,12 +216,12 @@ func _check_independent_name_language() -> void:
 	settings_manager.set("locale", "nl")
 	settings_manager.set("content_name_language", "english")
 	var english_names: Dictionary = item_localization.call("localize_item", {
-		"itemId": "armorite-ore",
-		"name": "Armorite Ore",
+		"itemId": "resonite-ore",
+		"name": "Resonite Ore",
 		"shortDesc": "Server-provided English description.",
 	})
 	_check(
-		english_names.get("name") == "Armorite Ore",
+		english_names.get("name") == "Resonite Ore",
 		"Dutch interface can keep English item names"
 	)
 	_check(

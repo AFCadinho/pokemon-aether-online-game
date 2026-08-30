@@ -146,7 +146,7 @@ func _check_popup_scene() -> void:
 		"moveId": "water-pulse",
 		"name": "Water Pulse",
 		"source": "tutor",
-		"cost": {"itemId": "armorite-ore", "quantity": 1, "ownedQuantity": 1},
+		"cost": {"itemId": "resonite-ore", "quantity": 1, "ownedQuantity": 1},
 	})
 	popup.call("_refresh_move_list")
 	await process_frame
@@ -175,7 +175,7 @@ func _check_popup_scene() -> void:
 			and catalog_cost.custom_minimum_size.x <= 48.0
 			and catalog_price != null
 			and catalog_price.text == "×1"
-			and catalog_cost.tooltip_text.contains("Armorite Ore"),
+			and catalog_cost.tooltip_text.contains("Resonite Ore"),
 		"Move Mentor catalog shows a compact price beside every move"
 	)
 	preview_pokemon.moves = [
@@ -191,7 +191,8 @@ func _check_popup_scene() -> void:
 	_check(
 		learn_button.text.contains("1")
 			and learn_button.icon != null
-			and learn_button.icon.resource_path.ends_with("SKARMORITE.png"),
+			and learn_button.icon.resource_path.ends_with("RESONITEORE.png")
+			and learn_button.icon.get_size() == Vector2(32, 32),
 		"Move Mentor Teach button shows the selected resource cost"
 	)
 	var first_current_move := current_moves_list.get_child(0) as Button
