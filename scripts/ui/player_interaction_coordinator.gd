@@ -72,6 +72,9 @@ var guild_members_loading := false
 var guild_action_in_flight := false
 var guild_status_message := ""
 var guild_status_is_error := false
+var aether_clash_action_in_flight := false
+var aether_clash_status_message := ""
+var aether_clash_status_is_error := false
 var chat_moderation_state_loading := false
 var chat_target_is_muted := false
 
@@ -510,6 +513,14 @@ func _render_context_menu() -> void:
 		"default",
 		not _target_is_on_current_map()
 	)
+	if _can_challenge_aether_clash():
+		_add_context_action(
+			"Challenge to Aether Clash",
+			_t("ui.nearby.action.aether_clash.description"),
+			_on_aether_clash_challenge_pressed,
+			"default",
+			aether_clash_action_in_flight
+		)
 	_add_context_more_actions_toggle()
 	if context_more_actions_expanded:
 		context_actions.add_child(_context_section_label(_t("ui.nearby.more_actions")))
@@ -616,6 +627,17 @@ func _refresh_context_status() -> void:
 		context_status_label.text = _t("ui.nearby.status.sending_guild")
 		context_status_label.add_theme_color_override("font_color", UI_ACCENT)
 		return
+	if aether_clash_action_in_flight:
+		context_status_label.text = _t("ui.nearby.status.sending_aether_clash")
+		context_status_label.add_theme_color_override("font_color", UI_ACCENT)
+		return
+	if aether_clash_status_message != "":
+		context_status_label.text = aether_clash_status_message
+		context_status_label.add_theme_color_override(
+			"font_color",
+			UI_DANGER if aether_clash_status_is_error else Color("#6fe49a")
+		)
+		return
 	if guild_status_message != "":
 		context_status_label.text = guild_status_message
 		context_status_label.add_theme_color_override(
@@ -658,6 +680,7 @@ func _add_context_action(
 				"Send Mail",
 				"Mute Player",
 				"Unmute Player",
+				"Challenge to Aether Clash",
 			]
 			and (social_action_in_flight or social_state_loading)
 		)
@@ -967,6 +990,91 @@ func _on_guild_invite_pressed() -> void:
 		_render_context_menu()
 
 
+func _can_challenge_aether_clash() -> bool:
+	if not guild_membership_loaded or guild_membership.is_empty():
+		return false
+	var permissions: Variant = guild_membership.get("permissions", [])
+	if permissions is Array and (permissions as Array).has("challenge_aether_clash"):
+		return true
+	return str(guild_membership.get("role", "")).to_lower() in ["leader", "captain", "officer"]
+
+
+func _on_aether_clash_challenge_pressed() -> void:
+	if current_target.is_empty() or aether_clash_action_in_flight or not _can_challenge_aether_clash():
+		return
+	var target_user_id := int(current_target.get("userId", 0))
+	if target_user_id <= 0 or host == null:
+		return
+	var target_name := _player_primary_name(current_target)
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "AetherClashPlayerChallengeDialog"
+	dialog.title = _t("ui.guild.aether_clash.challenge_title")
+	dialog.dialog_text = _t("ui.nearby.aether_clash.challenge_confirm", {
+		"trainer": target_name,
+	})
+	dialog.ok_button_text = _t("ui.guild.aether_clash.challenge")
+	dialog.cancel_button_text = _t("common.cancel")
+	var spectator_access := OptionButton.new()
+	spectator_access.name = "AetherClashPlayerSpectatorAccess"
+	spectator_access.position = Vector2(20, 112)
+	spectator_access.size = Vector2(460, 38)
+	spectator_access.add_item(_t("ui.guild.aether_clash.spectators.public"))
+	spectator_access.set_item_metadata(0, "public")
+	spectator_access.add_item(_t("ui.guild.aether_clash.spectators.guilds_only"))
+	spectator_access.set_item_metadata(1, "guilds_only")
+	dialog.add_child(spectator_access)
+	host.add_child(dialog)
+	dialog.confirmed.connect(
+		_send_aether_clash_player_challenge.bind(
+			target_user_id,
+			spectator_access
+		),
+		CONNECT_ONE_SHOT
+	)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(500, 270))
+
+
+func _send_aether_clash_player_challenge(
+	target_user_id: int,
+	spectator_access_selector: OptionButton
+) -> void:
+	if aether_clash_action_in_flight:
+		return
+	var spectator_access := "public"
+	if spectator_access_selector != null and spectator_access_selector.selected >= 0:
+		spectator_access = str(spectator_access_selector.get_item_metadata(
+			spectator_access_selector.selected
+		))
+	aether_clash_action_in_flight = true
+	aether_clash_status_message = ""
+	aether_clash_status_is_error = false
+	_render_context_menu()
+	var service := get_node_or_null("/root/GuildService")
+	var result: Dictionary = {}
+	if service != null and service.has_method("create_aether_clash_player_challenge"):
+		result = _dictionary_from_value(await service.call(
+			"create_aether_clash_player_challenge",
+			target_user_id,
+			spectator_access
+		))
+	else:
+		result = {
+			"success": false,
+			"error": _t("ui.guild.error.service_unavailable"),
+		}
+	aether_clash_action_in_flight = false
+	aether_clash_status_is_error = not bool(result.get("success", false))
+	aether_clash_status_message = (
+		_t("ui.guild.aether_clash.challenge_sent")
+		if not aether_clash_status_is_error
+		else str(result.get("error", _t("ui.guild.aether_clash.action_error")))
+	)
+	if context_menu != null and context_menu.visible:
+		_render_context_menu()
+
+
 func _on_friend_pressed() -> void:
 	if current_target.is_empty() or social_action_in_flight:
 		return
@@ -1057,6 +1165,9 @@ func close_context_menu() -> void:
 	guild_action_in_flight = false
 	guild_status_message = ""
 	guild_status_is_error = false
+	aether_clash_action_in_flight = false
+	aether_clash_status_message = ""
+	aether_clash_status_is_error = false
 
 
 func _current_map_players() -> Array[Dictionary]:
@@ -1278,6 +1389,7 @@ func _context_action_label_key(label_text: String) -> String:
 		"View Trainer Card": "ui.nearby.action.trainer_card",
 		"Send Mail": "ui.nearby.action.mail",
 		"Invite to Guild": "ui.nearby.action.guild",
+		"Challenge to Aether Clash": "ui.nearby.action.aether_clash",
 		"Remove Friend": "ui.nearby.action.remove_friend",
 		"Add Friend": "ui.nearby.action.add_friend",
 		"Unblock": "ui.nearby.action.unblock",
@@ -1295,6 +1407,7 @@ func _on_locale_changed(_locale: String) -> void:
 			localization_manager.call("localize_tree", context_menu)
 	social_status_message = ""
 	guild_status_message = ""
+	aether_clash_status_message = ""
 	_render_players()
 	if not current_target.is_empty():
 		_render_context_menu()

@@ -104,6 +104,7 @@ const CODE_TO_KEY: Dictionary = {
 	"aether_clash_action_forbidden": "backend.error.aether_clash_permission",
 	"aether_clash_guild_not_found": "backend.error.aether_clash_unavailable",
 	"aether_clash_guild_unavailable": "backend.error.aether_clash_unavailable",
+	"aether_clash_target_guild_required": "backend.error.aether_clash_target_guild",
 	"aether_clash_challenge_not_found": "backend.error.aether_clash_unavailable",
 	"aether_clash_self_challenge": "backend.error.aether_clash_self",
 	"aether_clash_challenge_pending": "backend.error.aether_clash_pending",
