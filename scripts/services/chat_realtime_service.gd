@@ -14,7 +14,7 @@ signal translation_state_changed(available: bool, allowed: bool, enabled: bool)
 signal translation_warning(message: String)
 signal ai_translation_received(message_id: String, translated_text: String)
 signal ai_translation_failed(message_id: String, message: String)
-signal pm_translation_state_changed(peer_user_id: int, language: String, allowed: bool)
+signal pm_translation_state_changed(peer_user_id: int, language: String, mode: String, allowed: bool)
 signal pm_translation_warning(peer_user_id: int, message: String)
 
 const RECONNECT_DELAY_SECONDS := 4.0
@@ -36,6 +36,7 @@ var ai_translation_available := false
 var translation_mode_allowed := false
 var translation_mode_enabled := false
 var pm_translation_languages: Array[String] = []
+var pm_translation_preferences_requested: Dictionary = {}
 
 
 func _process(delta: float) -> void:
@@ -181,19 +182,67 @@ func request_ai_translation(message_id: String) -> bool:
 
 
 func set_private_message_translation_language(peer_user_id: int, language: String) -> bool:
+	var existing := _dictionary_from_value(
+		pm_translation_preferences_requested.get(peer_user_id, {})
+	)
+	return set_private_message_translation(
+		peer_user_id,
+		language,
+		str(existing.get("mode", "libre"))
+	)
+
+
+func set_private_message_translation(peer_user_id: int, language: String, mode: String) -> bool:
 	var normalized_language := language.strip_edges().to_lower()
+	var normalized_mode := mode.strip_edges().to_lower()
 	if (
 		not translation_mode_enabled
 		or peer_user_id <= 0
 		or (normalized_language != "" and not pm_translation_languages.has(normalized_language))
+		or normalized_mode not in ["libre", "ai"]
+		or (normalized_mode == "ai" and not ai_translation_available)
 		or websocket.get_ready_state() != WebSocketPeer.STATE_OPEN
 	):
 		return false
+	if normalized_language == "":
+		pm_translation_preferences_requested.erase(peer_user_id)
+	else:
+		pm_translation_preferences_requested[peer_user_id] = {
+			"language": normalized_language,
+			"mode": normalized_mode,
+		}
+	return _send_private_message_translation_preference(
+		peer_user_id,
+		normalized_language,
+		normalized_mode
+	)
+
+
+func _send_private_message_translation_preference(
+	peer_user_id: int,
+	language: String,
+	mode: String
+) -> bool:
 	return websocket.send_text(JSON.stringify({
 		"type": "chat_translation.pm_set",
 		"peerUserId": peer_user_id,
-		"language": normalized_language,
+		"language": language,
+		"mode": mode,
 	})) == OK
+
+
+func _resend_private_message_translation_preferences() -> void:
+	if not translation_mode_enabled or websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
+		return
+	for peer_value: Variant in pm_translation_preferences_requested.keys():
+		var peer_user_id := int(peer_value)
+		var preference := _dictionary_from_value(
+			pm_translation_preferences_requested.get(peer_value, {})
+		)
+		var language := str(preference.get("language", "")).strip_edges().to_lower()
+		var mode := str(preference.get("mode", "libre")).strip_edges().to_lower()
+		if peer_user_id > 0 and language != "":
+			_send_private_message_translation_preference(peer_user_id, language, mode)
 
 
 func _send_translation_mode_request() -> void:
@@ -257,13 +306,15 @@ func _process_packets() -> void:
 					var language := str(language_value).strip_edges().to_lower()
 					if language != "" and not pm_translation_languages.has(language):
 						pm_translation_languages.append(language)
-			if not translation_mode_enabled and translation_mode_requested:
+			if not translation_mode_allowed and translation_mode_requested:
 				translation_mode_requested = false
 			translation_state_changed.emit(
 				translation_mode_available,
 				translation_mode_allowed,
 				translation_mode_enabled
 			)
+			if translation_mode_enabled:
+				_resend_private_message_translation_preferences()
 			continue
 		if message_type == "chat_translation.ai_result":
 			ai_translation_received.emit(
@@ -278,10 +329,23 @@ func _process_packets() -> void:
 			)
 			continue
 		if message_type == "chat_translation.pm_state":
+			var peer_user_id := int(message.get("peerUserId", 0))
+			var language := str(message.get("language", "")).strip_edges().to_lower()
+			var mode := str(message.get("mode", "libre")).strip_edges().to_lower()
+			var allowed := bool(message.get("allowed", false))
+			if peer_user_id > 0:
+				if allowed and language != "":
+					pm_translation_preferences_requested[peer_user_id] = {
+						"language": language,
+						"mode": mode,
+					}
+				else:
+					pm_translation_preferences_requested.erase(peer_user_id)
 			pm_translation_state_changed.emit(
-				int(message.get("peerUserId", 0)),
-				str(message.get("language", "")).strip_edges().to_lower(),
-				bool(message.get("allowed", false))
+				peer_user_id,
+				language,
+				mode,
+				allowed
 			)
 			continue
 		if message_type == "chat_translation.pm_warning":

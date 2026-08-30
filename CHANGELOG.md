@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Staff Translate Mode can now choose Libre or AI separately for each private conversation, and PM translation settings recover after reconnecting.
+
 - The Item Dex now shows detailed acquisition cards with shops, locations, effective drop chances, skill requirements, costs, and one-time or repeatable availability.
 
 - Polished every Guild tab with consistent workspace headings, clearer supporting actions, safer long-text handling, and a useful no-results state for member searches.
