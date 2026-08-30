@@ -105,7 +105,7 @@ func _check_animated_forme_change_is_prepared_before_render() -> void:
 	var next_function_index := source.find("\nfunc ", render_index + 1)
 	var render_source := source.substr(render_index, next_function_index - render_index)
 	var animated_form_index := render_source.find("var apply_forme_change_after_render :=")
-	var render_event_index := render_source.find("await event_renderer.render_event(event_data, presentation)")
+	var render_event_index := render_source.find("await event_renderer.render_event(event_data, presentation, suppress_presentation_waits)")
 	var deferred_form_index := render_source.find("if apply_forme_change_after_render:", render_event_index)
 	_check_equal(
 		animated_form_index >= 0 and animated_form_index < render_event_index,
@@ -794,8 +794,8 @@ func _check_pvp_restore_keeps_rendered_hp_and_field_events() -> void:
 	var render_events_source := source.substr(render_events_index, render_events_next_index - render_events_index)
 	_check_equal(render_events_source.contains("var defer_field_effect_end :="), true, "field-ending presentation has an explicit event boundary")
 	_check_equal(
-		render_events_source.find("await event_renderer.render_event(event_data, presentation)")
-			< render_events_source.find("if defer_field_effect_end:", render_events_source.find("await event_renderer.render_event(event_data, presentation)")),
+		render_events_source.find("await event_renderer.render_event(event_data, presentation, suppress_presentation_waits)")
+			< render_events_source.find("if defer_field_effect_end:", render_events_source.find("await event_renderer.render_event(event_data, presentation, suppress_presentation_waits)")),
 		true,
 		"weather and terrain disappear only after their ordered end event is presented"
 	)

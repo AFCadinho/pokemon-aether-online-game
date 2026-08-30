@@ -11,6 +11,7 @@
 **Changed**
 
 - Wild battles now open with both Pokémon ready, letting queued move or Run input start sooner without an opening summon animation.
+- Winning a wild battle now returns you to the overworld immediately when Move Animations are disabled, while still applying every battle result and reward.
 - The Move Mentor now stands behind the Pokémon Center desk and can be spoken to across it.
 
 **Fixed**

@@ -29,6 +29,7 @@ const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_sup
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
 const BATTLE_OWNED_FORM_PROJECTION := preload("res://scripts/battle/battle_owned_form_projection.gd")
 const OPPONENT_PARTY_REVEAL_POLICY := preload("res://scripts/battle/opponent_party_reveal_policy.gd")
+const WILD_BATTLE_PRESENTATION_POLICY := preload("res://scripts/battle/wild_battle_presentation_policy.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
 const OGERPON_BATTLE_FORM := preload("res://scripts/battle/ogerpon_battle_form.gd")
@@ -8235,13 +8236,18 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 	if _is_pvp_battle():
 		return
 
-	if not await _render_resolved_player_choice_response(player_response, pending_player_choice_events):
+	var fast_finish_wild_win := _should_fast_finish_wild_win()
+	if not await _render_resolved_player_choice_response(
+		player_response,
+		pending_player_choice_events,
+		fast_finish_wild_win
+	):
 		_clear_pending_mega_species_for_events(pending_player_choice_events)
 		_show_moves()
 		_set_battle_input_locked(false)
 		return
 
-	if await _finish_if_battle_ended():
+	if await _finish_if_battle_ended({}, fast_finish_wild_win):
 		return
 
 	if await _auto_force_switch_opponent_if_needed():
@@ -8599,7 +8605,12 @@ func _warn_if_pvp_species_change_outside_batch(sprite_box: Node, species: String
 	push_warning("PvP sprite species changed outside active render batch. %s" % details)
 	_log_pvp_realtime("PvP sprite species changed outside active render batch", details)
 
-func _render_battle_events(events: Array, render_turn_headers := true, source := "") -> void:
+func _render_battle_events(
+	events: Array,
+	render_turn_headers := true,
+	source := "",
+	suppress_presentation_waits := false
+) -> void:
 	if not _guard_pvp_render_runner(source):
 		return
 	var ordered_events: Array = _order_switch_out_heals_before_switches(
@@ -8712,7 +8723,7 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				event_type,
 				_summarize_hp_event_for_order_debug(event_data),
 			])
-		await event_renderer.render_event(event_data, presentation)
+		await event_renderer.render_event(event_data, presentation, suppress_presentation_waits)
 		if defer_field_effect_end:
 			# Keep weather and terrain visible while their public end message is
 			# being presented. The visual state changes only at that event's
@@ -10879,7 +10890,10 @@ func _player_active_fainted_with_available_switch(player_id: String) -> bool:
 
 	return false
 
-func _finish_if_battle_ended(result_overrides: Dictionary = {}) -> bool:
+func _finish_if_battle_ended(
+	result_overrides: Dictionary = {},
+	skip_result_hold := false
+) -> bool:
 	if not battle_state.is_battle_ended():
 		return false
 
@@ -10889,9 +10903,21 @@ func _finish_if_battle_ended(result_overrides: Dictionary = {}) -> bool:
 	}
 	finish_result.merge(result_overrides, true)
 	_add_pvp_victory_message_if_needed(finish_result)
-	await get_tree().create_timer(BATTLE_END_RESULT_HOLD_SECONDS).timeout
+	if not skip_result_hold:
+		await get_tree().create_timer(BATTLE_END_RESULT_HOLD_SECONDS).timeout
 	_finish_battle(finish_result)
 	return true
+
+func _should_fast_finish_wild_win() -> bool:
+	return WILD_BATTLE_PRESENTATION_POLICY.should_fast_finish_win(
+		battle_type == BattleType.WILD,
+		_is_pvp_battle(),
+		SettingsManager.battle_animations,
+		battle_state.is_battle_ended(),
+		battle_state.get_winner(),
+		_get_local_state_player_id(),
+		_get_player_display_name("p1")
+	)
 
 func _submit_player_choice(
 	choice_type: String,
@@ -14458,13 +14484,19 @@ func _submit_npc_choice_and_render(
 
 func _render_resolved_player_choice_response(
 	resolved_response: Dictionary,
-	pending_player_choice_events: Array = []
+	pending_player_choice_events: Array = [],
+	suppress_presentation_waits := false
 ) -> bool:
 	if not bool(resolved_response.get("success", false)):
 		_clear_ordered_response_display_species()
 		return false
 
-	await _render_opponent_response(resolved_response, {}, pending_player_choice_events)
+	await _render_opponent_response(
+		resolved_response,
+		{},
+		pending_player_choice_events,
+		suppress_presentation_waits
+	)
 	await _hold_opponent_response_message()
 	return true
 
@@ -14566,7 +14598,8 @@ func _preserve_terminal_presentation_requests(response: Dictionary) -> void:
 func _render_opponent_response(
 	opponent_response: Dictionary,
 	rendered_event_keys: Dictionary = {},
-	pending_player_choice_events: Array = []
+	pending_player_choice_events: Array = [],
+	suppress_presentation_waits := false
 ) -> void:
 	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
 	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys, opponent_response)
@@ -14577,7 +14610,12 @@ func _render_opponent_response(
 	_update_battle_presentation_before_event_render(opponent_events)
 	_rewind_active_hud_hp_for_events(opponent_events)
 	_rewind_party_slots_for_events(opponent_events)
-	await _render_battle_events(opponent_events, true, "opponent_response_non_pvp")
+	await _render_battle_events(
+		opponent_events,
+		true,
+		"opponent_response_non_pvp",
+		suppress_presentation_waits
+	)
 	_mark_non_pvp_response_events_rendered(opponent_response, filtered_events)
 	defer_force_switch_active_hide = false
 	_clear_ordered_response_display_species()
