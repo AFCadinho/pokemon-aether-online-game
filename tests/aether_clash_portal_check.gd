@@ -15,7 +15,7 @@ func _init() -> void:
 	var portal := packed.instantiate()
 	root.add_child(portal)
 	await process_frame
-	_check(portal.get("team_id") == "purple", "Portal defaults to the purple team")
+	_check(portal.get("mode_id") == "guild_duel", "Portal defaults to Guild vs Guild mode")
 	_check(not bool(portal.get("entry_open")), "Portal entry starts locked outside a war")
 	var sprite := portal.get_node_or_null("PortalSprite") as Sprite2D
 	var light := portal.get_node_or_null("PortalLight") as PointLight2D
@@ -23,26 +23,25 @@ func _init() -> void:
 	portal.set("_animation_time", 0.25)
 	portal.call("_animate_portal")
 	_check(sprite != null and sprite.scale != Vector2.ONE, "Portal continuously pulses")
-	_check(portal.has_method("configure_war"), "Portal exposes the war-state hook")
-	portal.call("configure_war", "war-test", true)
-	_check(bool(portal.get("entry_open")), "Active war opens the portal")
-	_check(portal.get("active_war_id") == "war-test", "Portal retains its authoritative war id")
-	portal.call("clear_war")
-	_check(not bool(portal.get("entry_open")), "Clearing the war closes the portal")
+	_check(portal.has_method("configure_mode_available"), "Portal exposes the mode availability hook")
+	portal.call("configure_mode_available", true)
+	_check(bool(portal.get("entry_open")), "An available Guild duel opens the portal")
+	portal.call("configure_mode_available", false)
+	_check(not bool(portal.get("entry_open")), "Unavailable mode closes portal entry")
 	_check(light != null and light.enabled, "Closing entry does not deactivate the portal visuals")
 
-	var red_portal := packed.instantiate()
-	red_portal.set("team_id", "red")
-	root.add_child(red_portal)
+	var royale_portal := packed.instantiate()
+	royale_portal.set("mode_id", "battle_royale")
+	root.add_child(royale_portal)
 	await process_frame
-	var red_sprite := red_portal.get_node_or_null("PortalSprite") as Sprite2D
+	var red_sprite := royale_portal.get_node_or_null("PortalSprite") as Sprite2D
 	_check(
 		red_sprite != null and red_sprite.texture.resource_path.ends_with("clash_portal_red.png"),
-		"Red team always receives the red portal art"
+		"Battle Royale mode receives the red portal art"
 	)
-	var red_light := red_portal.get_node_or_null("PortalLight") as PointLight2D
-	_check(red_light != null and red_light.color == Color("ff3829"), "Red portal uses a red glow")
-	red_portal.queue_free()
+	var red_light := royale_portal.get_node_or_null("PortalLight") as PointLight2D
+	_check(red_light != null and red_light.color == Color("ff3829"), "Battle Royale portal uses a red glow")
+	royale_portal.queue_free()
 	portal.queue_free()
 	quit(1 if failed else 0)
 

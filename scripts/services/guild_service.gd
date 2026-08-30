@@ -14,6 +14,7 @@ const GUILD_NOTIFICATIONS_ENDPOINT := "/game/guild-notifications"
 const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
 const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
 const AETHER_CLASH_CHALLENGES_ENDPOINT := "/game/aether-clash/challenges"
+const AETHER_CLASH_PORTAL_SESSIONS_ENDPOINT := "/game/aether-clash/portal-sessions"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var pending_creation_request_id := ""
@@ -316,13 +317,58 @@ func load_aether_clash_challenges() -> Dictionary:
 	)
 
 
-func create_aether_clash_challenge(challenged_guild_id: int) -> Dictionary:
+func create_aether_clash_challenge(
+	challenged_guild_id: int,
+	spectator_access := "public"
+) -> Dictionary:
 	var response := await _authenticated_request(
 		AETHER_CLASH_CHALLENGES_ENDPOINT,
 		HTTPClient.METHOD_POST,
-		JSON.stringify({"challengedGuildId": challenged_guild_id})
+		JSON.stringify({
+			"challengedGuildId": challenged_guild_id,
+			"spectatorAccess": spectator_access,
+		})
 	)
 	return _aether_clash_action_result(response)
+
+
+func load_aether_clash_portal_sessions() -> Dictionary:
+	var response := await _authenticated_request(
+		AETHER_CLASH_PORTAL_SESSIONS_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var sessions: Array[Dictionary] = []
+	var body := _dictionary(response.get("body", {}))
+	for value: Variant in _array(body.get("sessions", [])):
+		if not value is Dictionary:
+			continue
+		var item := (value as Dictionary).duplicate(true)
+		item["session"] = _normalize_aether_clash_session(item.get("session", {}))
+		sessions.append(item)
+	return {"success": true, "sessions": sessions}
+
+
+func enter_aether_clash_portal(challenge_id: String) -> Dictionary:
+	var normalized_id := challenge_id.strip_edges()
+	if normalized_id.is_empty():
+		return {"success": false, "error": "Aether Clash session was missing."}
+	var response := await _authenticated_request(
+		AETHER_CLASH_PORTAL_SESSIONS_ENDPOINT + "/%s/enter" % normalized_id.uri_encode(),
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	return {
+		"success": true,
+		"role": str(body.get("role", "spectator")),
+		"session": _normalize_aether_clash_session(body.get("session", {})),
+		"state": _dictionary(body.get("state", {})).duplicate(true),
+	}
 
 
 func accept_aether_clash_challenge(challenge_id: String) -> Dictionary:
