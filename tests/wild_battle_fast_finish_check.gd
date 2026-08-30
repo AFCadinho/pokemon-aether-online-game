@@ -16,6 +16,18 @@ func _init() -> void:
 
 func _check_policy_boundaries() -> void:
 	_check(
+		Policy.is_confirmed_local_win(true, false, true, "p1"),
+		"confirmed local wild wins can skip their winner message"
+	)
+	_check(
+		not Policy.is_confirmed_local_win(false, false, true, "p1"),
+		"Trainer wins cannot skip the wild winner message"
+	)
+	_check(
+		not Policy.is_confirmed_local_win(true, true, true, "p1"),
+		"PvP wins cannot skip the wild winner message"
+	)
+	_check(
 		Policy.should_fast_finish_win(true, false, false, true, "p1"),
 		"disabled animations fast-finish a confirmed local wild win"
 	)
@@ -56,39 +68,48 @@ func _check_policy_boundaries() -> void:
 func _check_battle_flow_contract() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	var move_source := _function_source(source, "func _on_moves_grid_move_selected(")
-	var policy_source := _function_source(source, "func _should_fast_finish_wild_win(")
+	var fast_policy_source := _function_source(source, "func _should_fast_finish_wild_win(")
+	var result_policy_source := _function_source(source, "func _should_skip_wild_win_result(")
 	var resolved_source := _function_source(source, "func _render_resolved_player_choice_response(")
 	var response_source := _function_source(source, "func _render_opponent_response(")
 	var render_source := _function_source(source, "func _render_battle_events(")
 	var finish_source := _function_source(source, "func _finish_if_battle_ended(")
 
 	_check(
-		move_source.contains("var fast_finish_wild_win := _should_fast_finish_wild_win()")
-			and move_source.contains("pending_player_choice_events,\n\t\tfast_finish_wild_win")
-			and move_source.contains("_finish_if_battle_ended({}, fast_finish_wild_win)"),
-		"move responses select one fast terminal mode for rendering and completion"
+		move_source.contains("var skip_wild_win_result := _should_skip_wild_win_result()")
+			and move_source.contains("var fast_finish_wild_win := _should_fast_finish_wild_win()")
+			and move_source.contains("fast_finish_wild_win,\n\t\tskip_wild_win_result")
+			and move_source.contains("_finish_if_battle_ended({}, skip_wild_win_result)"),
+		"move responses independently select wait suppression and winner-message removal"
 	)
 	_check(
-		policy_source.contains("battle_type == BattleType.WILD")
-			and policy_source.contains("_is_pvp_battle()")
-			and policy_source.contains("SettingsManager.battle_animations")
-			and policy_source.contains("battle_state.is_battle_ended()")
-			and policy_source.contains("battle_state.get_winner()"),
-		"battle controller derives fast mode only from scoped authoritative state"
+		fast_policy_source.contains("battle_type == BattleType.WILD")
+			and fast_policy_source.contains("_is_pvp_battle()")
+			and fast_policy_source.contains("SettingsManager.battle_animations")
+			and fast_policy_source.contains("battle_state.is_battle_ended()")
+			and fast_policy_source.contains("battle_state.get_winner()")
+			and result_policy_source.contains("battle_type == BattleType.WILD")
+			and result_policy_source.contains("_is_pvp_battle()")
+			and result_policy_source.contains("battle_state.is_battle_ended()")
+			and result_policy_source.contains("battle_state.get_winner()"),
+		"battle controller derives both terminal modes from scoped authoritative state"
 	)
 	_check(
 		resolved_source.contains("suppress_presentation_waits := false")
-			and resolved_source.contains("pending_player_choice_events,\n\t\tsuppress_presentation_waits"),
-		"resolved move rendering forwards the optional wait suppression"
+			and resolved_source.contains("suppress_terminal_win_presentation := false")
+			and resolved_source.contains("suppress_presentation_waits,\n\t\tsuppress_terminal_win_presentation"),
+		"resolved move rendering forwards both optional terminal presentation controls"
 	)
 	_check(
 		response_source.contains("suppress_presentation_waits := false")
-			and response_source.contains("\"opponent_response_non_pvp\",\n\t\tsuppress_presentation_waits"),
+			and response_source.contains("suppress_terminal_win_presentation := false")
+			and response_source.contains("suppress_presentation_waits,\n\t\tsuppress_terminal_win_presentation"),
 		"non-PvP event rendering keeps full state processing in fast mode"
 	)
 	_check(
-		render_source.contains("event_renderer.render_event(event_data, presentation, suppress_presentation_waits)"),
-		"fast mode suppresses only event presentation waits"
+		render_source.contains("if not (suppress_terminal_win_presentation and event_type == \"win\"):")
+			and render_source.contains("event_renderer.render_event(event_data, presentation, suppress_presentation_waits)"),
+		"confirmed wild wins skip only the terminal winner presentation"
 	)
 	_check(
 		finish_source.contains("skip_result_hold := false")
