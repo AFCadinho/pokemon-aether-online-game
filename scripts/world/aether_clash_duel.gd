@@ -11,6 +11,7 @@ const ENGAGEMENT_RING_SCRIPT: Script = preload("res://scripts/world/aether_clash
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const ENGAGEMENT_RADIUS := 28.0
 const ENGAGEMENT_CONTACT_DISTANCE := ENGAGEMENT_RADIUS * 2.0
+const ENGAGEMENT_CONTACT_RELEASE_DISTANCE := ENGAGEMENT_CONTACT_DISTANCE + 32.0
 const ENGAGEMENT_SYNC_SECONDS := 0.1
 const ENGAGEMENT_CONTACT_COOLDOWN_MSEC := 750
 const STAGING_EJECTION_GRACE_MSEC := 2000
@@ -34,6 +35,7 @@ var engaged_player_ids: Dictionary = {}
 var engagement_requests_in_flight: Dictionary = {}
 var engagement_sync_elapsed := 0.0
 var last_engagement_contact_msec: Dictionary = {}
+var latched_player_contact_pairs: Dictionary = {}
 var staging_ejection_deadline_msec := 0
 var leave_confirmation = null
 var leave_request_active := false
@@ -63,6 +65,7 @@ func _process(delta: float) -> void:
 	if engagement_sync_elapsed >= ENGAGEMENT_SYNC_SECONDS:
 		engagement_sync_elapsed = 0.0
 		_sync_engagement_rings()
+		_release_separated_player_contact_pairs()
 	_process_staging_ejection()
 
 
@@ -92,6 +95,7 @@ func configure_aether_clash_instance(instance_map_id: String) -> void:
 	arena_players.clear()
 	engaged_player_ids.clear()
 	engagement_requests_in_flight.clear()
+	latched_player_contact_pairs.clear()
 	viewer_role = "spectator"
 	viewer_side = ""
 	has_received_arena_state = false
@@ -242,6 +246,8 @@ func _apply_arena_state(payload: Dictionary) -> void:
 		return
 	var previous_status := str(arena_session.get("status", ""))
 	var next_status := str(next_session.get("status", ""))
+	if next_status not in ["roster_locked", "active", "finishing"]:
+		latched_player_contact_pairs.clear()
 	var barrier_should_be_raised := next_status == "entry_open"
 	var animate_lowering := (
 		has_received_arena_state
@@ -637,11 +643,22 @@ func _response_error_code(response: Dictionary) -> String:
 func _emit_engagement_contact(source_user_id: int, target_user_id: int, method: String) -> void:
 	if source_user_id <= 0 or target_user_id <= 0:
 		return
+	var player_pair := "%d:%d" % [mini(source_user_id, target_user_id), maxi(source_user_id, target_user_id)]
+	if method == "player_contact" and latched_player_contact_pairs.has(player_pair):
+		return
 	var pair := "%d:%d:%s" % [mini(source_user_id, target_user_id), maxi(source_user_id, target_user_id), method]
 	var now := Time.get_ticks_msec()
-	if now - int(last_engagement_contact_msec.get(pair, -ENGAGEMENT_CONTACT_COOLDOWN_MSEC)) < ENGAGEMENT_CONTACT_COOLDOWN_MSEC:
+	if (
+		method != "player_contact"
+		and now - int(last_engagement_contact_msec.get(pair, -ENGAGEMENT_CONTACT_COOLDOWN_MSEC)) < ENGAGEMENT_CONTACT_COOLDOWN_MSEC
+	):
 		return
 	last_engagement_contact_msec[pair] = now
+	if method == "player_contact":
+		latched_player_contact_pairs[player_pair] = {
+			"sourceUserId": source_user_id,
+			"targetUserId": target_user_id,
+		}
 	var source_actor := _actor_for_user_id(source_user_id)
 	var target_actor := _actor_for_user_id(target_user_id)
 	var source_position := (source_actor as Node2D).global_position if source_actor is Node2D else Vector2.ZERO
@@ -657,6 +674,31 @@ func _emit_engagement_contact(source_user_id: int, target_user_id: int, method: 
 		"distance": source_position.distance_to(target_position),
 	})
 	engagement_contact_requested.emit(source_user_id, target_user_id, method)
+
+
+func _release_separated_player_contact_pairs() -> void:
+	for pair_value: Variant in latched_player_contact_pairs.keys():
+		var pair := str(pair_value)
+		var contact := _dictionary(latched_player_contact_pairs.get(pair, {}))
+		var source_user_id := int(contact.get("sourceUserId", 0))
+		var target_user_id := int(contact.get("targetUserId", 0))
+		var source_actor := _actor_for_user_id(source_user_id)
+		var target_actor := _actor_for_user_id(target_user_id)
+		if not source_actor is Node2D or not target_actor is Node2D:
+			latched_player_contact_pairs.erase(pair)
+			continue
+		var distance := (source_actor as Node2D).global_position.distance_to(
+			(target_actor as Node2D).global_position
+		)
+		if distance <= ENGAGEMENT_CONTACT_RELEASE_DISTANCE:
+			continue
+		latched_player_contact_pairs.erase(pair)
+		_trace_aether_clash("engagement_contact_rearmed", {
+			"sessionId": instance_session_id,
+			"sourceUserId": source_user_id,
+			"targetUserId": target_user_id,
+			"distance": distance,
+		})
 
 
 func _trace_aether_clash(event: String, fields: Dictionary = {}) -> void:

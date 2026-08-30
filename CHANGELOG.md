@@ -33,6 +33,8 @@
 
 **Fixed**
 
+- Guild Duel collisions now use live arena positions, recover abandoned pre-battle matches after two minutes, and require players to separate before another collision attempt.
+- Aether Clash contact failures now explain position synchronization and existing PvP battles instead of showing a generic error.
 - A failed Guild Duel contact-battle start now stops after one attempt instead of repeatedly replaying the battle transition.
 - Temporary PvP authority outages during an Aether Clash now show a clear service-unavailable message instead of a generic error.
 - Engagement circles no longer follow players out of a Guild Duel arena, and all Guild members can now view their Guild's pending Aether Clash challenges without receiving staff-only controls.
