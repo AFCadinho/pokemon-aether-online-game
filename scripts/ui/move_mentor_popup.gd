@@ -563,6 +563,7 @@ func _open_replacement_dialog(pokemon: Pokemon) -> void:
 		_t("ui.move_mentor.replace_dialog.confirm"),
 		_t("common.cancel")
 	)
+	dialog.add_custom_control(_build_new_move_preview())
 	var grid := GridContainer.new()
 	grid.name = "ReplacementMoveGrid"
 	grid.columns = 2
@@ -606,7 +607,48 @@ func _open_replacement_dialog(pokemon: Pokemon) -> void:
 	dialog.confirm_button.disabled = true
 	dialog.confirmed.connect(_confirm_replacement.bind(dialog), CONNECT_ONE_SHOT)
 	dialog.canceled.connect(_cancel_replacement.bind(dialog), CONNECT_ONE_SHOT)
-	dialog.popup_centered(Vector2i(620, 430))
+	dialog.popup_centered(Vector2i(620, 520))
+
+
+func _build_new_move_preview() -> Control:
+	var candidate := _selected_move_candidate()
+	var move_id := str(candidate.get("moveId", selected_move_id))
+	var source := str(candidate.get("source", ""))
+	var metadata := _move_metadata(move_id, candidate)
+	var preview := VBoxContainer.new()
+	preview.name = "NewMovePreview"
+	preview.add_theme_constant_override("separation", 5)
+	var heading := _text_label(_t("ui.move_mentor.replace_dialog.new_move"), 11, UI_CYAN)
+	heading.text = heading.text.to_upper()
+	preview.add_child(heading)
+	var card := Button.new()
+	card.name = "NewMoveHoverCard"
+	card.custom_minimum_size = Vector2(0, 62)
+	card.focus_mode = Control.FOCUS_NONE
+	card.mouse_default_cursor_shape = Control.CURSOR_HELP
+	card.tooltip_text = _move_detail_tooltip(candidate, metadata)
+	_apply_selectable_style(card, true)
+	var row := _button_content(card, 10, 7, 10, 7)
+	var type_icon := _type_icon(str(metadata.get("type", "")), Vector2(32, 32))
+	if type_icon != null:
+		row.add_child(type_icon)
+	var details := VBoxContainer.new()
+	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details.alignment = BoxContainer.ALIGNMENT_CENTER
+	details.add_theme_constant_override("separation", 2)
+	details.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(details)
+	details.add_child(_text_label(_move_name(candidate), 14, UI_TEXT))
+	var stats := _move_stats_text(metadata)
+	if not stats.is_empty():
+		details.add_child(_text_label(stats, 9, UI_MUTED))
+	if not source.is_empty():
+		row.add_child(_source_badge(source))
+	var category_icon := _category_icon(str(metadata.get("category", "")))
+	if category_icon != null:
+		row.add_child(category_icon)
+	preview.add_child(card)
+	return preview
 
 
 func _on_dialog_replace_slot_selected(index: int, buttons: Array[Button], dialog: AetherConfirmationDialog) -> void:
@@ -683,10 +725,17 @@ func _selected_pokemon() -> Pokemon:
 
 
 func _selected_move_name() -> String:
+	var candidate := _selected_move_candidate()
+	if not candidate.is_empty():
+		return _move_name(candidate)
+	return _format_id(selected_move_id)
+
+
+func _selected_move_candidate() -> Dictionary:
 	for candidate: Dictionary in candidates:
 		if str(candidate.get("moveId", "")) == selected_move_id:
-			return _move_name(candidate)
-	return _format_id(selected_move_id)
+			return candidate
+	return {}
 
 
 func _move_name(candidate: Dictionary) -> String:
@@ -747,6 +796,32 @@ func _move_stats_text(metadata: Dictionary, include_current_pp := false) -> Stri
 	if accuracy_value != null and int(accuracy_value) > 0:
 		parts.append("ACC %d" % int(accuracy_value))
 	return "  ·  ".join(parts)
+
+
+func _move_detail_tooltip(candidate: Dictionary, metadata: Dictionary) -> String:
+	var lines: Array[String] = [_move_name(candidate)]
+	var traits: Array[String] = []
+	var move_type := str(metadata.get("type", ""))
+	if not move_type.is_empty():
+		traits.append("%s: %s" % [_t("ui.pokedex.moves.type"), _format_id(move_type)])
+	var category := str(metadata.get("category", ""))
+	if not category.is_empty():
+		traits.append("%s: %s" % [
+			_t("ui.pokedex.moves.category"),
+			_t("ui.move.category.%s" % category.to_lower()),
+		])
+	var source := str(candidate.get("source", ""))
+	if not source.is_empty():
+		traits.append("%s: %s" % [_t("ui.move_mentor.tooltip.source"), _source_name(source)])
+	if not traits.is_empty():
+		lines.append("  ·  ".join(traits))
+	var stats := _move_stats_text(metadata)
+	if not stats.is_empty():
+		lines.append(stats)
+	var description := str(metadata.get("shortDesc", metadata.get("desc", ""))).strip_edges()
+	if not description.is_empty():
+		lines.append(description)
+	return "\n".join(lines)
 
 
 func _button_content(button: Button, left: int, top: int, right: int, bottom: int) -> HBoxContainer:
