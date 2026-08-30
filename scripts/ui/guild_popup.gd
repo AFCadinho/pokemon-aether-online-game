@@ -222,6 +222,7 @@ var guild_bank_filter_empty_state: Label
 var invite_username_input: LineEdit
 var member_search_input: LineEdit
 var member_cards_container: VBoxContainer
+var member_filter_empty_state: Control
 var emblem_editor_popup: PopupPanel
 var emblem_grid: GridContainer
 var emblem_pixel_buttons: Array[Button] = []
@@ -1309,6 +1310,12 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	var overview := VBoxContainer.new()
 	overview.name = "GuildOverviewSection"
 	overview.add_theme_constant_override("separation", 10)
+	var overview_header := _build_guild_workspace_header(
+		"ui.guild.overview",
+		"ui.guild.overview.hint"
+	)
+	overview_header.name = "GuildOverviewWorkspaceHeader"
+	overview.add_child(overview_header)
 	var metadata := GridContainer.new()
 	metadata.columns = 4
 	metadata.add_theme_constant_override("h_separation", 8)
@@ -1414,24 +1421,19 @@ func _build_aether_clash_workspace() -> Control:
 	workspace.name = "GuildAetherClashWorkspace"
 	workspace.add_theme_constant_override("separation", 10)
 
-	var heading := HBoxContainer.new()
-	heading.add_theme_constant_override("separation", 8)
-	workspace.add_child(heading)
-	var title_stack := VBoxContainer.new()
-	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_stack.add_theme_constant_override("separation", 2)
-	heading.add_child(title_stack)
-	title_stack.add_child(_localized_label("ui.guild.aether_clash.title", 20, UI_TEXT))
-	var intro := _localized_label("ui.guild.aether_clash.intro", 11, UI_MUTED)
-	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title_stack.add_child(intro)
 	var refresh_button := Button.new()
 	refresh_button.name = "RefreshGuildAetherClashButton"
 	_set_localized_property(refresh_button, "text", "ui.guild.aether_clash.refresh")
 	refresh_button.disabled = is_aether_clash_action_in_flight
 	refresh_button.pressed.connect(_refresh_aether_clash_from_server)
-	_apply_button_style(refresh_button)
-	heading.add_child(refresh_button)
+	_apply_button_style(refresh_button, "secondary")
+	var heading := _build_guild_workspace_header(
+		"ui.guild.aether_clash.title",
+		"ui.guild.aether_clash.intro",
+		[refresh_button]
+	)
+	heading.name = "GuildAetherClashHeader"
+	workspace.add_child(heading)
 
 	if aether_clash_state.is_empty():
 		workspace.add_child(_build_aether_clash_message_panel(
@@ -1511,14 +1513,18 @@ func _build_current_aether_clash_card(challenge: Dictionary) -> Control:
 	margin.add_child(content)
 	content.add_child(_localized_label("ui.guild.aether_clash.current", 10, UI_GOLD))
 	var guild_names := _aether_clash_guild_names(challenge)
-	content.add_child(_label(
+	var matchup := _label(
 		_t("ui.guild.aether_clash.matchup", {
 			"challenger": guild_names.get("challenger", "Guild"),
 			"challenged": guild_names.get("challenged", "Guild"),
 		}),
 		18,
 		UI_TEXT
-	))
+	)
+	matchup.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	matchup.max_lines_visible = 2
+	matchup.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	content.add_child(matchup)
 	var status := str(challenge.get("status", "entry_open"))
 	content.add_child(_label(_aether_clash_status_text(status), 11, UI_SUCCESS))
 	content.add_child(_label(
@@ -1571,7 +1577,9 @@ func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -
 	copy.add_theme_constant_override("separation", 3)
 	row.add_child(copy)
 	var opponent := _aether_clash_opponent(challenge)
-	copy.add_child(_label(str(opponent.get("name", _t("ui.guild.fallback.guild"))), 14, UI_TEXT))
+	var opponent_name := _label(str(opponent.get("name", _t("ui.guild.fallback.guild"))), 14, UI_TEXT)
+	opponent_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	copy.add_child(opponent_name)
 	copy.add_child(_label(
 		_t(
 			"ui.guild.aether_clash.received_from"
@@ -1633,15 +1641,7 @@ func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -
 
 
 func _build_aether_clash_message_panel(message: String, color: Color) -> Control:
-	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", _panel_style(UI_INPUT, UI_BORDER_INNER, 8, 1))
-	var margin := MarginContainer.new()
-	_set_margins(margin, 12, 9, 12, 9)
-	panel.add_child(margin)
-	var label := _label(message, 11, color)
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	margin.add_child(label)
-	return panel
+	return _build_guild_message_panel(message, color)
 
 
 func _aether_clash_opponent(challenge: Dictionary) -> Dictionary:
@@ -2025,27 +2025,24 @@ func _build_guild_bank() -> Control:
 	var content := VBoxContainer.new()
 	content.add_theme_constant_override("separation", 9)
 	margin.add_child(content)
-	var header := HBoxContainer.new()
-	content.add_child(header)
-	var title_stack := VBoxContainer.new()
-	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_stack.add_theme_constant_override("separation", 2)
-	header.add_child(title_stack)
-	title_stack.add_child(_localized_label("ui.guild.bank.title", 16, UI_TEXT))
-	var description := _localized_label("ui.guild.bank.description", 11, UI_MUTED)
-	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title_stack.add_child(description)
-	header.add_child(_status_pill(
+	var bank_status := _status_pill(
 		_t("ui.guild.bank.status.loading")
 		if is_loading_guild_bank
 		else _t("ui.guild.bank.status.ready")
-	))
+	)
+	bank_status.name = "GuildBankStatusPill"
 	var rank_rights_button := Button.new()
 	rank_rights_button.name = "GuildBankRankRightsButton"
 	_set_localized_property(rank_rights_button, "text", "ui.guild.bank.rank_rights.action")
 	rank_rights_button.pressed.connect(_on_guild_bank_category_opened.bind("rights"))
-	_apply_button_style(rank_rights_button)
-	header.add_child(rank_rights_button)
+	_apply_button_style(rank_rights_button, "secondary")
+	var header := _build_guild_workspace_header(
+		"ui.guild.bank.title",
+		"ui.guild.bank.description",
+		[bank_status, rank_rights_button]
+	)
+	header.name = "GuildBankHeader"
+	content.add_child(header)
 	var access_summary := _label(_guild_bank_access_summary(), 10, UI_ACCENT)
 	access_summary.name = "GuildBankPermissionSummary"
 	access_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -2119,6 +2116,8 @@ func _build_guild_bank_card(
 		content.add_child(loan_usage)
 	var description := _label(description_text, 10, UI_MUTED)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.max_lines_visible = 3
+	description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	content.add_child(description)
 	var action := Button.new()
@@ -2126,7 +2125,7 @@ func _build_guild_bank_card(
 	_set_localized_property(action, "text", action_key)
 	action.disabled = is_loading_guild_bank
 	action.pressed.connect(_on_guild_bank_category_opened.bind(category))
-	_apply_button_style(action)
+	_apply_button_style(action, "secondary")
 	content.add_child(action)
 	return panel
 
@@ -4641,20 +4640,19 @@ func _build_member_roster(can_invite: bool = false) -> Control:
 			online_count += 1
 	var heading_row := HBoxContainer.new()
 	heading_row.add_theme_constant_override("separation", 10)
-	content.add_child(heading_row)
-	var roster_heading := _localized_label("ui.guild.roster", 10, UI_ACCENT)
-	roster_heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	heading_row.add_child(roster_heading)
 	var history_button := Button.new()
 	history_button.name = "GuildHistoryLogButton"
 	_set_localized_property(history_button, "text", "ui.guild.log.history.view")
 	history_button.pressed.connect(_open_guild_log.bind("guild"))
-	_apply_button_style(history_button)
-	heading_row.add_child(_label(
+	_apply_button_style(history_button, "secondary")
+	var roster_summary := _label(
 		_t("ui.guild.roster.summary", {"online": online_count, "total": members.size()}),
 		10,
 		UI_MUTED
-	))
+	)
+	roster_summary.name = "GuildMemberRosterSummary"
+	roster_summary.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	heading_row.add_child(roster_summary)
 	if can_invite:
 		var invite_button := Button.new()
 		invite_button.name = "OpenGuildInviteDialogButton"
@@ -4663,6 +4661,13 @@ func _build_member_roster(can_invite: bool = false) -> Control:
 		_apply_button_style(invite_button, "primary")
 		heading_row.add_child(invite_button)
 	heading_row.add_child(history_button)
+	var roster_header := _build_guild_workspace_header(
+		"ui.guild.roster",
+		"ui.guild.roster.hint",
+		[heading_row]
+	)
+	roster_header.name = "GuildMembersWorkspaceHeader"
+	content.add_child(roster_header)
 	content.add_child(_build_guild_roster_toolbar())
 	if can_invite:
 		_render_pending_invitations(content)
@@ -4679,6 +4684,13 @@ func _build_member_roster(can_invite: bool = false) -> Control:
 			continue
 		var member := member_value as Dictionary
 		member_cards_container.add_child(_build_guild_member_card(member, own_role, own_user_id, can_manage_permissions))
+	member_filter_empty_state = _build_guild_message_panel(
+		_t("ui.guild.roster.empty_search"),
+		UI_MUTED,
+		"GuildMemberFilterEmptyState"
+	)
+	member_filter_empty_state.visible = false
+	content.add_child(member_filter_empty_state)
 	return panel
 
 
@@ -4704,10 +4716,16 @@ func _filter_guild_member_cards(query: String) -> void:
 	if member_cards_container == null:
 		return
 	var normalized := query.strip_edges().to_lower()
+	var visible_count := 0
 	for child: Node in member_cards_container.get_children():
 		if child is Control:
 			var haystack := str(child.get_meta("member_search_text", ""))
-			(child as Control).visible = normalized == "" or haystack.contains(normalized)
+			var is_visible := normalized == "" or haystack.contains(normalized)
+			(child as Control).visible = is_visible
+			if is_visible:
+				visible_count += 1
+	if member_filter_empty_state != null:
+		member_filter_empty_state.visible = normalized != "" and visible_count == 0
 
 
 func _open_guild_invite_dialog() -> void:
@@ -4830,7 +4848,9 @@ func _build_guild_member_card(
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	identity.add_child(name_label)
 	var username := str(member.get("username", "")).strip_edges()
-	identity.add_child(_label("@%s" % username if username != "" else "", 10, UI_ACCENT))
+	var username_label := _label("@%s" % username if username != "" else "", 10, UI_ACCENT)
+	username_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	identity.add_child(username_label)
 
 	var presence := VBoxContainer.new()
 	presence.name = "GuildMemberStatusColumn_%d" % user_id
@@ -5251,6 +5271,12 @@ func _build_member_management(guild: Dictionary, can_manage_settings: bool, can_
 	var content := VBoxContainer.new()
 	content.add_theme_constant_override("separation", 10)
 	margin.add_child(content)
+	var management_header := _build_guild_workspace_header(
+		"ui.guild.management.title",
+		"ui.guild.management.hint"
+	)
+	management_header.name = "GuildManagementWorkspaceHeader"
+	content.add_child(management_header)
 	var available_sections: Array[String] = []
 	if can_manage_settings:
 		available_sections.assign(["profile", "recruitment", "bank"])
@@ -5366,7 +5392,7 @@ func _build_management_recruitment_page(guild: Dictionary) -> Control:
 	add_requirement.name = "GuildAddRequirementButton"
 	_set_localized_property(add_requirement, "text", "ui.guild.requirements.add")
 	add_requirement.pressed.connect(_on_add_guild_requirement)
-	_apply_button_style(add_requirement)
+	_apply_button_style(add_requirement, "secondary")
 	content.add_child(add_requirement)
 	content.add_child(_management_save_button("GuildSaveRecruitmentButton", _on_save_recruitment_settings))
 	return content
@@ -7643,6 +7669,47 @@ func _localized_label(key: String, font_size: int, color: Color) -> Label:
 	var label := _label(_t(key), font_size, color)
 	label.set_meta("i18n_source_text", key)
 	return label
+
+
+func _build_guild_workspace_header(
+	title_key: String,
+	intro_key: String,
+	actions: Array = []
+) -> Control:
+	var heading := HBoxContainer.new()
+	heading.add_theme_constant_override("separation", 12)
+	var title_stack := VBoxContainer.new()
+	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_stack.add_theme_constant_override("separation", 3)
+	heading.add_child(title_stack)
+	var title := _localized_label(title_key, 18, UI_TEXT)
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title_stack.add_child(title)
+	var intro := _localized_label(intro_key, 10, UI_MUTED)
+	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	intro.max_lines_visible = 2
+	intro.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title_stack.add_child(intro)
+	for action_value: Variant in actions:
+		if action_value is Control:
+			var action := action_value as Control
+			action.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			heading.add_child(action)
+	return heading
+
+
+func _build_guild_message_panel(message: String, color: Color, panel_name: String = "") -> Control:
+	var panel := PanelContainer.new()
+	if not panel_name.is_empty():
+		panel.name = panel_name
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_INPUT, UI_BORDER_INNER, 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 9, 12, 9)
+	panel.add_child(margin)
+	var label := _label(message, 11, color)
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	margin.add_child(label)
+	return panel
 
 
 func _set_localized_property(control: Control, property_name: String, key: String) -> void:
