@@ -10,6 +10,11 @@ class FakeRemoteActor extends Node2D:
 	var user_id := 0
 	var gameplay_nameplate_visibility_override_active := false
 	var gameplay_nameplate_visible := true
+	var gameplay_identity_mask_override_active := false
+	var gameplay_identity_masked := false
+	var displayed_name := "Opponent"
+	var guild_emblem_visible := true
+	var role_badge_visible := true
 
 	func set_gameplay_nameplate_visible(visible: bool) -> void:
 		gameplay_nameplate_visibility_override_active = true
@@ -18,6 +23,18 @@ class FakeRemoteActor extends Node2D:
 	func clear_gameplay_nameplate_visibility_override() -> void:
 		gameplay_nameplate_visibility_override_active = false
 		gameplay_nameplate_visible = true
+
+	func set_gameplay_identity_masked(masked: bool, placeholder := "???") -> void:
+		gameplay_identity_mask_override_active = true
+		gameplay_identity_masked = masked
+		displayed_name = str(placeholder) if masked else "Opponent"
+		role_badge_visible = not masked
+
+	func clear_gameplay_identity_mask_override() -> void:
+		gameplay_identity_mask_override_active = false
+		gameplay_identity_masked = false
+		displayed_name = "Opponent"
+		role_badge_visible = true
 
 
 class FakeLocalActor extends Node2D:
@@ -65,7 +82,12 @@ func _run() -> void:
 	root.add_child(remote_actor)
 
 	duel.call("_apply_arena_state", _payload("entry_open", "blue"))
-	_check(remote_actor.gameplay_nameplate_visible, "Own Guild identities stay visible during staging")
+	_check(
+		remote_actor.gameplay_nameplate_visible
+		and not remote_actor.gameplay_identity_masked
+		and remote_actor.displayed_name == "Opponent",
+		"Own Guild identities stay visible during staging"
+	)
 	arena_hud.call("set_battle_overlay_active", true)
 	duel.call("_apply_arena_state", _payload("entry_open", "blue"))
 	_check(not arena_hud.visible, "Arena HUD stays hidden while a local battle overlay is active")
@@ -90,7 +112,16 @@ func _run() -> void:
 		contact["method"] = method
 	)
 	duel.call("_apply_arena_state", _payload("active", "red"))
-	_check(not remote_actor.gameplay_nameplate_visible, "An undiscovered enemy nameplate is hidden in the arena")
+	_check(
+		remote_actor.gameplay_nameplate_visible
+		and remote_actor.gameplay_identity_masked
+		and remote_actor.displayed_name == "???",
+		"An undiscovered enemy keeps a masked nameplate in the arena"
+	)
+	_check(
+		remote_actor.guild_emblem_visible and not remote_actor.role_badge_visible,
+		"A masked enemy keeps its Guild emblem without revealing role information"
+	)
 	_check(not bool(duel.call("can_view_overworld_identity", 2)), "Undiscovered enemies are hidden from other overworld identity surfaces")
 	_check(
 		bool(duel.call("is_world_actor_step_blocked", Vector2(512, 512), Vector2(544, 512))),
@@ -125,7 +156,13 @@ func _run() -> void:
 
 	var discovered_payload := _payload("active", "red", [1, 2], [2])
 	duel.call("_apply_arena_state", discovered_payload)
-	_check(remote_actor.gameplay_nameplate_visible, "A battled enemy identity becomes visible for the viewer's Guild")
+	_check(
+		remote_actor.gameplay_nameplate_visible
+		and not remote_actor.gameplay_identity_masked
+		and remote_actor.displayed_name == "Opponent"
+		and remote_actor.role_badge_visible,
+		"A battled enemy identity becomes visible for the viewer's Guild"
+	)
 	_check(bool(duel.call("can_view_overworld_identity", 2)), "Discovered enemies regain overworld trainer interactions")
 	var neutral_payload := discovered_payload.duplicate(true)
 	neutral_payload["viewerRole"] = "spectator"
@@ -133,7 +170,13 @@ func _run() -> void:
 	neutral_payload["identifiedEnemyUserIds"] = []
 	neutral_payload["visibleIdentityUserIds"] = []
 	duel.call("_apply_arena_state", neutral_payload)
-	_check(not remote_actor.gameplay_nameplate_visible, "A public spectator receives no overworld identities")
+	_check(
+		remote_actor.gameplay_nameplate_visible
+		and remote_actor.gameplay_identity_masked
+		and remote_actor.displayed_name == "???"
+		and remote_actor.guild_emblem_visible,
+		"A public spectator sees Guild emblems but no undiscovered Trainer identity"
+	)
 	duel.call("_apply_arena_state", discovered_payload)
 
 	_check(
@@ -268,8 +311,11 @@ func _run() -> void:
 	)
 	_check(
 		not remote_actor.gameplay_nameplate_visibility_override_active
-		and remote_actor.gameplay_nameplate_visible,
-		"Duel identity hiding is cleared when the arena closes"
+		and remote_actor.gameplay_nameplate_visible
+		and not remote_actor.gameplay_identity_mask_override_active
+		and not remote_actor.gameplay_identity_masked
+		and remote_actor.displayed_name == "Opponent",
+		"Duel identity masking is cleared when the arena closes"
 	)
 	local_actor.queue_free()
 	remote_actor.queue_free()

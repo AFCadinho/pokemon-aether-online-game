@@ -195,6 +195,9 @@ var creator_nameplate_visibility_override_active := false
 var creator_nameplate_visible := true
 var gameplay_nameplate_visibility_override_active := false
 var gameplay_nameplate_visible := true
+var gameplay_identity_mask_override_active := false
+var gameplay_identity_masked := false
+var gameplay_identity_placeholder := "???"
 var last_aethernet_effect_sequence := -1
 var active_aethernet_effect: Node
 
@@ -884,7 +887,7 @@ func _update_nameplate() -> void:
 	var name_text: String = display_name.strip_edges()
 	if name_text == "":
 		name_text = username.strip_edges()
-	nameplate_label.text = name_text
+	nameplate_label.text = gameplay_identity_placeholder if gameplay_identity_masked else name_text
 	var should_show_nameplate := name_text != ""
 	if creator_nameplate_visibility_override_active:
 		should_show_nameplate = creator_nameplate_visible and name_text != ""
@@ -920,6 +923,22 @@ func clear_gameplay_nameplate_visibility_override() -> void:
 	_update_nameplate()
 
 
+func set_gameplay_identity_masked(masked: bool, placeholder := "???") -> void:
+	gameplay_identity_mask_override_active = true
+	gameplay_identity_masked = masked
+	gameplay_identity_placeholder = str(placeholder).strip_edges()
+	if gameplay_identity_placeholder.is_empty():
+		gameplay_identity_placeholder = "???"
+	_update_nameplate()
+
+
+func clear_gameplay_identity_mask_override() -> void:
+	gameplay_identity_mask_override_active = false
+	gameplay_identity_masked = false
+	gameplay_identity_placeholder = "???"
+	_update_nameplate()
+
+
 func _apply_guild_emblem(emblem: Dictionary) -> void:
 	if guild_emblem == null:
 		return
@@ -931,6 +950,13 @@ func _apply_guild_emblem(emblem: Dictionary) -> void:
 
 func _update_role_badge() -> void:
 	if role_badge_label == null:
+		return
+	if gameplay_identity_masked:
+		role_badge_label.text = ""
+		if role_badge_panel != null:
+			role_badge_panel.visible = false
+		if role_badge_icon != null:
+			role_badge_icon.visible = false
 		return
 
 	var primary_role: Dictionary = _get_primary_visible_role(roles, selected_role_badge)

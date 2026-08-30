@@ -400,14 +400,18 @@ func _sync_identity_nameplates() -> void:
 			continue
 		var user_id_value: Variant = node.get("user_id")
 		var user_id := int(user_id_value) if user_id_value != null else 0
-		node.call(
-			"set_gameplay_nameplate_visible",
-			user_id > 0 and visible_identity_user_ids.has(user_id)
-		)
+		var identity_visible := user_id > 0 and visible_identity_user_ids.has(user_id)
+		if node.has_method("set_gameplay_identity_masked"):
+			node.call("set_gameplay_nameplate_visible", true)
+			node.call("set_gameplay_identity_masked", not identity_visible, "???")
+		else:
+			node.call("set_gameplay_nameplate_visible", identity_visible)
 
 
 func _clear_identity_nameplate_overrides() -> void:
 	for node: Node in get_tree().get_nodes_in_group("remote_player_avatar"):
+		if node.has_method("clear_gameplay_identity_mask_override"):
+			node.call("clear_gameplay_identity_mask_override")
 		if node.has_method("clear_gameplay_nameplate_visibility_override"):
 			node.call("clear_gameplay_nameplate_visibility_override")
 
