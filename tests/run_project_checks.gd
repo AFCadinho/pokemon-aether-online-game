@@ -286,6 +286,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/overworld_ui_side_layout_check.gd",
 	"res://tests/global_heal_check.gd",
 	"res://tests/global_heal_dialog_runtime_check.gd",
+	"res://tests/aether_clash_invitation_dialog_runtime_check.gd",
 	"res://tests/adinho_appearance_unlock_check.gd",
 	"res://tests/ironfanton_appearance_unlock_check.gd",
 	"res://tests/base_hair_layer_check.gd",

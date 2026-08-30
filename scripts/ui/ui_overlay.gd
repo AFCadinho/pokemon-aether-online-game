@@ -1476,6 +1476,13 @@ var pending_global_heal_request: Dictionary = {}
 var global_heal_request_dialog: AetherConfirmationDialog
 var global_heal_request_disable_checkbox: CheckBox
 var global_heal_request_busy := false
+var aether_clash_challenge_dialog: AetherConfirmationDialog
+var aether_clash_challenge_countdown_label: Label
+var aether_clash_challenge_spectator_label: Label
+var aether_clash_challenge_queue: Array[String] = []
+var active_aether_clash_challenge: Dictionary = {}
+var aether_clash_challenge_loading := false
+var aether_clash_challenge_action_in_flight := false
 var staff_tools_visibility_key := ""
 var reward_notification_stack: VBoxContainer
 var reward_notification_event_sequence := 0
@@ -11160,6 +11167,7 @@ func _setup_status_docks() -> void:
 	global_heal_activate_button.pressed.connect(_on_global_heal_activate_pressed)
 	global_heal_requests_toggle.toggled.connect(_on_global_heal_requests_toggled)
 	_setup_global_heal_request_dialog()
+	_setup_aether_clash_challenge_dialog()
 	_set_localized_control_property(personal_buffs_empty_label, "text", "ui.buff.none")
 	_set_localized_control_property(global_buff_details_close_button, "tooltip_text", "common.close")
 	var contribution_hint := global_buff_donation_section.get_node_or_null("HintLabel") as Label
@@ -12145,6 +12153,176 @@ func _setup_global_heal_request_dialog() -> void:
 	global_heal_request_disable_checkbox.name = "DisableFutureGlobalHealRequests"
 
 
+func _setup_aether_clash_challenge_dialog() -> void:
+	if aether_clash_challenge_dialog != null:
+		return
+	aether_clash_challenge_dialog = AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	aether_clash_challenge_dialog.name = "IncomingAetherClashChallengeDialog"
+	root_control.add_child(aether_clash_challenge_dialog)
+	aether_clash_challenge_countdown_label = Label.new()
+	aether_clash_challenge_countdown_label.name = "IncomingAetherClashCountdown"
+	aether_clash_challenge_countdown_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	aether_clash_challenge_countdown_label.add_theme_color_override("font_color", Color("69d8e7"))
+	aether_clash_challenge_countdown_label.add_theme_font_size_override("font_size", 18)
+	aether_clash_challenge_dialog.add_custom_control(aether_clash_challenge_countdown_label)
+	aether_clash_challenge_spectator_label = Label.new()
+	aether_clash_challenge_spectator_label.name = "IncomingAetherClashSpectatorPolicy"
+	aether_clash_challenge_spectator_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	aether_clash_challenge_spectator_label.add_theme_color_override("font_color", Color("9eb3c5"))
+	aether_clash_challenge_spectator_label.add_theme_font_size_override("font_size", 13)
+	aether_clash_challenge_dialog.add_custom_control(aether_clash_challenge_spectator_label)
+	aether_clash_challenge_dialog.confirmed.connect(_on_aether_clash_challenge_accepted)
+	aether_clash_challenge_dialog.canceled.connect(_on_aether_clash_challenge_declined)
+	var timer := Timer.new()
+	timer.name = "IncomingAetherClashCountdownTimer"
+	timer.wait_time = 1.0
+	timer.autostart = true
+	timer.timeout.connect(_refresh_aether_clash_challenge_dialog)
+	add_child(timer)
+
+
+func _queue_aether_clash_challenge(notification: Dictionary) -> void:
+	var challenge_id := str(notification.get("aetherClashSessionId", "")).strip_edges()
+	if challenge_id == "":
+		return
+	if (
+		not aether_clash_challenge_queue.has(challenge_id)
+		and str(active_aether_clash_challenge.get("id", "")) != challenge_id
+	):
+		aether_clash_challenge_queue.append(challenge_id)
+	_try_show_next_aether_clash_challenge.call_deferred()
+
+
+func _try_show_next_aether_clash_challenge() -> void:
+	if (
+		aether_clash_challenge_dialog == null
+		or aether_clash_challenge_loading
+		or aether_clash_challenge_action_in_flight
+		or not active_aether_clash_challenge.is_empty()
+		or aether_clash_challenge_dialog.visible
+		or aether_clash_challenge_queue.is_empty()
+		or _is_world_battle_active()
+		or (global_heal_request_dialog != null and global_heal_request_dialog.visible)
+	):
+		return
+	aether_clash_challenge_loading = true
+	var result: Dictionary = await GuildService.load_aether_clash_challenges()
+	aether_clash_challenge_loading = false
+	if not bool(result.get("success", false)):
+		return
+	var incoming: Array = result.get("pendingIncoming", []) as Array
+	while not aether_clash_challenge_queue.is_empty():
+		var challenge_id := aether_clash_challenge_queue[0]
+		var challenge: Dictionary = {}
+		for value: Variant in incoming:
+			if value is Dictionary and str((value as Dictionary).get("id", "")) == challenge_id:
+				challenge = (value as Dictionary).duplicate(true)
+				break
+		if challenge.is_empty():
+			aether_clash_challenge_queue.pop_front()
+			continue
+		active_aether_clash_challenge = challenge
+		_render_aether_clash_challenge_dialog()
+		return
+
+
+func _render_aether_clash_challenge_dialog() -> void:
+	if active_aether_clash_challenge.is_empty() or aether_clash_challenge_dialog == null:
+		return
+	var challenger := _dictionary_from_value(
+		active_aether_clash_challenge.get("challengerGuild", {})
+	)
+	var guild_name := str(challenger.get("name", LocalizationManager.text("ui.guild.fallback.guild")))
+	var trainer_name := str(active_aether_clash_challenge.get(
+		"createdBy",
+		LocalizationManager.text("ui.guild.fallback.member")
+	))
+	aether_clash_challenge_dialog.configure(
+		LocalizationManager.text("ui.guild.aether_clash.invitation_title"),
+		LocalizationManager.text("ui.guild.aether_clash.invitation_message", {
+			"guild": guild_name,
+			"trainer": trainer_name,
+		}),
+		LocalizationManager.text("common.accept"),
+		LocalizationManager.text("common.decline")
+	)
+	aether_clash_challenge_spectator_label.text = LocalizationManager.text(
+		"ui.guild.aether_clash.spectators.guilds_only"
+		if str(active_aether_clash_challenge.get("spectatorAccess", "public")) == "guilds_only"
+		else "ui.guild.aether_clash.spectators.public"
+	)
+	_refresh_aether_clash_challenge_dialog()
+	if active_aether_clash_challenge.is_empty():
+		return
+	aether_clash_challenge_dialog.popup_centered(Vector2i(560, 350))
+
+
+func _refresh_aether_clash_challenge_dialog() -> void:
+	if active_aether_clash_challenge.is_empty():
+		if not aether_clash_challenge_queue.is_empty():
+			_try_show_next_aether_clash_challenge.call_deferred()
+		return
+	var expires_at := str(active_aether_clash_challenge.get("expiresAt", ""))
+	var remaining := maxi(
+		0,
+		int(ceil(
+			_pvp_iso_timestamp_to_unix_time(expires_at.replace("+00:00", "Z"))
+			- Time.get_unix_time_from_system()
+		))
+	)
+	if remaining <= 0:
+		var expired_id := str(active_aether_clash_challenge.get("id", ""))
+		aether_clash_challenge_queue.erase(expired_id)
+		active_aether_clash_challenge.clear()
+		aether_clash_challenge_dialog.hide_dialog()
+		_try_show_next_aether_clash_challenge.call_deferred()
+		return
+	var hours := int(remaining / 3600)
+	var minutes := int(remaining % 3600 / 60)
+	var seconds := remaining % 60
+	var formatted_time := (
+		"%d:%02d:%02d" % [hours, minutes, seconds]
+		if hours > 0
+		else "%02d:%02d" % [minutes, seconds]
+	)
+	aether_clash_challenge_countdown_label.text = LocalizationManager.text(
+		"ui.guild.aether_clash.invitation_countdown",
+		{"time": formatted_time}
+	)
+
+
+func _on_aether_clash_challenge_accepted() -> void:
+	await _resolve_aether_clash_challenge("accept_aether_clash_challenge")
+
+
+func _on_aether_clash_challenge_declined() -> void:
+	await _resolve_aether_clash_challenge("decline_aether_clash_challenge")
+
+
+func _resolve_aether_clash_challenge(method_name: String) -> void:
+	if active_aether_clash_challenge.is_empty() or aether_clash_challenge_action_in_flight:
+		return
+	var challenge_id := str(active_aether_clash_challenge.get("id", ""))
+	if challenge_id == "" or not GuildService.has_method(method_name):
+		return
+	aether_clash_challenge_action_in_flight = true
+	var result: Dictionary = await GuildService.call(method_name, challenge_id)
+	aether_clash_challenge_action_in_flight = false
+	active_aether_clash_challenge.clear()
+	if not bool(result.get("success", false)):
+		add_system_warning(str(result.get(
+			"error",
+			LocalizationManager.text("ui.guild.aether_clash.action_error")
+		)))
+		_try_show_next_aether_clash_challenge.call_deferred()
+		return
+	aether_clash_challenge_queue.erase(challenge_id)
+	if method_name == "accept_aether_clash_challenge":
+		aether_clash_challenge_queue.clear()
+	_refresh_after_aether_clash_notification.call_deferred()
+	_try_show_next_aether_clash_challenge.call_deferred()
+
+
 func _prepare_confirmation_dialog_focus(dialog: ConfirmationDialog) -> void:
 	if dialog == null:
 		return
@@ -12183,6 +12361,8 @@ func _receive_global_heal_request(
 
 func _try_show_pending_global_heal_request() -> void:
 	if pending_global_heal_request.is_empty() or global_heal_request_busy:
+		return
+	if aether_clash_challenge_dialog != null and aether_clash_challenge_dialog.visible:
 		return
 	if not GameState.global_heal_requests_enabled:
 		pending_global_heal_request.clear()
@@ -42438,6 +42618,8 @@ func _on_guild_notification_received(notification: Dictionary) -> void:
 		"actor": str(notification.get("actorName", "Guild staff")),
 		"trainer": str(notification.get("actorName", "Trainer")),
 	}))
+	if kind == "aether_clash_received":
+		_queue_aether_clash_challenge(notification)
 	if kind == "guild_member_kicked":
 		_refresh_after_guild_membership_notification.call_deferred()
 	elif kind.begins_with("aether_clash_"):

@@ -2,6 +2,7 @@ extends "res://scripts/world/map_metadata.gd"
 
 
 const PORTAL_REFRESH_SECONDS := 5.0
+const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 
 var portal_refresh_in_flight := false
 
@@ -55,13 +56,15 @@ func request_portal_entry(
 		world == null
 		or not world.has_method("begin_authorized_teleport")
 		or not world.has_method("apply_authorized_teleport_state")
+		or not world.has_method("save_current_player_state_now")
 	):
 		return {"success": false, "error": _text("world.aether_clash.portal.unavailable")}
+	var save_result: Dictionary = await world.call("save_current_player_state_now")
+	if not bool(save_result.get("success", false)):
+		return save_result
 	var begin_result: Dictionary = await world.call("begin_authorized_teleport", true, true)
 	if not bool(begin_result.get("success", false)):
 		return begin_result
-	if world.has_method("play_authorized_teleport_departure_effect"):
-		await world.call("play_authorized_teleport_departure_effect")
 	var enter_result: Dictionary = await guild_service.call("enter_aether_clash_portal", challenge_id)
 	if not bool(enter_result.get("success", false)):
 		if world.has_method("cancel_authorized_teleport_effect"):
@@ -69,6 +72,8 @@ func request_portal_entry(
 		else:
 			world.call("cancel_authorized_teleport")
 		return enter_result
+	if world.has_method("play_authorized_teleport_departure_effect"):
+		await world.call("play_authorized_teleport_departure_effect")
 	var apply_result: Dictionary = await world.call(
 		"apply_authorized_teleport_state",
 		enter_result.get("state", {})
@@ -104,13 +109,18 @@ func _refresh_portals() -> void:
 
 
 func _select_session(sessions: Array[Dictionary]) -> Dictionary:
-	var dialog := ConfirmationDialog.new()
-	dialog.title = _text("world.aether_clash.portal.choose_title")
-	dialog.dialog_text = _text("world.aether_clash.portal.choose_hint")
-	dialog.ok_button_text = _text("world.aether_clash.portal.enter")
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	dialog.name = "AetherClashPortalSessionDialog"
+	get_tree().current_scene.add_child(dialog)
+	dialog.configure(
+		_text("world.aether_clash.portal.choose_title"),
+		_text("world.aether_clash.portal.choose_hint"),
+		_text("world.aether_clash.portal.enter"),
+		_text("common.cancel")
+	)
 	var choices := OptionButton.new()
-	choices.position = Vector2(20, 100)
-	choices.size = Vector2(520, 40)
+	choices.name = "AetherClashPortalSessionSelect"
+	choices.custom_minimum_size = Vector2(0, 42)
 	for item: Dictionary in sessions:
 		var challenge := item.get("session", {}) as Dictionary
 		var challenger := challenge.get("challengerGuild", {}) as Dictionary
@@ -121,12 +131,18 @@ func _select_session(sessions: Array[Dictionary]) -> Dictionary:
 			str(challenged.get("name", "Guild")),
 			_text("world.aether_clash.portal.role.%s" % role),
 		])
-	dialog.add_child(choices)
-	get_tree().current_scene.add_child(dialog)
-	var resolution := {"confirmed": false}
-	dialog.confirmed.connect(func() -> void: resolution["confirmed"] = true)
-	dialog.popup_centered(Vector2i(560, 240))
+	dialog.style_option_button(choices)
+	dialog.add_custom_control(choices)
+	var resolution := {"finished": false, "confirmed": false}
+	dialog.confirmed.connect(func() -> void:
+		resolution["confirmed"] = true
+		resolution["finished"] = true
+	)
+	dialog.canceled.connect(func() -> void: resolution["finished"] = true)
+	dialog.popup_centered(Vector2i(580, 320))
 	await dialog.visibility_changed
+	while not bool(resolution["finished"]):
+		await get_tree().process_frame
 	var selected: Dictionary = {}
 	if bool(resolution["confirmed"]) and choices.selected >= 0:
 		selected = sessions[choices.selected].duplicate(true)

@@ -50,6 +50,7 @@ func _init() -> void:
 	_check_contains(popup_source, "GuildCurrentAetherClash", "every Guild member can see the reserved clash")
 	_check_contains(popup_source, "GuildAetherClashEntryCountdown", "accepted clashes show the lobby entry countdown")
 	_check_contains(popup_source, "GuildAetherClashSpectatorAccess", "challenge creators configure spectator access")
+	_check_contains(popup_source, "AETHER_CONFIRMATION_DIALOG_SCENE.instantiate()", "Guild challenge confirmation uses the themed Aether modal")
 	_check_contains(popup_source, '_aether_clash_spectator_access_text(str(challenge.get("spectatorAccess", "public")))', "challenge cards show their spectator policy")
 	_check_contains(popup_source, "challenge_aether_clash", "challenge controls honor the dedicated Guild permission")
 	_check_contains(popup_source, "GuildAnnouncementPanel", "guild overview is dedicated to Guild announcements")
@@ -185,6 +186,10 @@ func _init() -> void:
 	_check_contains(overlay_source, '"ui.guild.notification.member_left"', "Guild departures become system messages")
 	_check_contains(overlay_source, '"ui.guild.notification.member_kicked"', "removed Guild members receive a system message")
 	_check_contains(overlay_source, '"ui.guild.notification.aether_clash_received"', "Aether Clash challenges become system messages")
+	_check_contains(overlay_source, "IncomingAetherClashChallengeDialog", "incoming Aether Clash challenges open a direct response modal")
+	_check_contains(overlay_source, "IncomingAetherClashCountdown", "incoming Aether Clash modal shows its response deadline")
+	_check_contains(overlay_source, "accept_aether_clash_challenge", "incoming Aether Clash modal can accept directly")
+	_check_contains(overlay_source, "decline_aether_clash_challenge", "incoming Aether Clash modal can decline directly")
 	_check_contains(overlay_source, "_refresh_after_aether_clash_notification", "Aether Clash notifications refresh an open Guild screen")
 	_check_contains(overlay_source, "_on_guild_lobby_teleport_requested", "main overlay applies the authorized Lobby teleport")
 

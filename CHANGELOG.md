@@ -8,6 +8,7 @@
 - Guild Leaders and Captains can now send, accept, decline, and cancel Guild vs Guild Aether Clash challenges from the Guild screen. Multiple challenges may remain pending, while accepting one reserves both Guilds and opens a timed lobby-entry window for every member.
 - The Aether Clash Lobby now has mode-specific portals. The Guild Duel portal sends on-time Guild members to their arena side, late entrants and allowed outsiders to jail as spectators, and lets challengers choose whether outside spectators may attend.
 - Guild Leaders and Captains can now right-click another Trainer to challenge that Trainer's Guild to an Aether Clash.
+- Incoming Aether Clash challenges now open a direct accept-or-decline popup with a live response countdown.
 
 **Changed**
 
@@ -15,11 +16,13 @@
 - Wild victories no longer pause on the winner message; disabling Move Animations also removes the remaining terminal presentation waits while still applying every result and reward.
 - The Move Mentor now stands behind the Pokémon Center desk and can be spoken to across it.
 - The Move Mentor interface now uses Pokémon portraits, move-type and damage-category icons, clearer move details, and a fully themed source filter.
+- Guild vs Guild Aether Clash entry now uses the red lobby portal; the purple portal is reserved for Battle Royale.
 - Teaching a fifth move now asks which current move to forget after pressing Teach move.
 
 **Fixed**
 
 - Aether Clash challenges sent by right-clicking another Trainer now use the themed Aether modal instead of an unstyled system dialog.
+- Aether Clash entry now saves the player's exact portal position and waits for server approval before playing the teleport effect.
 - The game interface now loads reliably when the Move Mentor is first added to a fresh Godot project cache.
 
 ## 0.3.69 - 2026-08-30
