@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Important Guild actions now use clearer primary, secondary, active-tab, and level-progression colours.
+
 **Added**
 
 - Every Pokémon Center now has a Move Maniac who can teach compatible relearn, Egg, tutor, special, event, legacy, and pre-evolution moves in exchange for gathered resources.
