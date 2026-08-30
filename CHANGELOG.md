@@ -4,6 +4,8 @@
 
 - The Item Dex now shows detailed acquisition cards with shops, locations, effective drop chances, skill requirements, costs, and one-time or repeatable availability.
 
+- Polished every Guild tab with consistent workspace headings, clearer supporting actions, safer long-text handling, and a useful no-results state for member searches.
+
 - Refined the Guild Overview with whole-number levels, clearer EXP and capacity displays, compact announcements, rank badges, and online-member context.
 
 - The Guild Pokémon Vault now shows unavailable Pokémon in red and explains why they cannot be donated.
@@ -43,6 +45,7 @@
 
 **Fixed**
 
+- Guild Duel battles now place the battle interface above the arena HUD, keeping Team Preview and battle controls clickable.
 - Guild Duel collisions now use live arena positions, recover abandoned pre-battle matches after two minutes, and require players to separate before another collision attempt.
 - Aether Clash contact failures now explain position synchronization and existing PvP battles instead of showing a generic error.
 - A failed Guild Duel contact-battle start now stops after one attempt instead of repeatedly replaying the battle transition.
