@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Staff can now select Dutch for private-message translation without enabling a separate Dutch language chatroom.
+
 - Staff Translate Mode can now choose Libre or AI separately for each private conversation, and PM translation settings recover after reconnecting.
 
 - The Item Dex now shows detailed acquisition cards with shops, locations, effective drop chances, skill requirements, costs, and one-time or repeatable availability.

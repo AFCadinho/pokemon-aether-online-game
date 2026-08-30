@@ -4506,6 +4506,7 @@
   "ui.chat.pm.translation.off": "Vertaling: uit",
   "ui.chat.pm.translation.language.zh": "Vereenvoudigd Chinees",
   "ui.chat.pm.translation.language.pb": "Braziliaans Portugees",
+  "ui.chat.pm.translation.language.nl": "Nederlands",
   "ui.chat.pm.translation.mode.tooltip": "Vertaalservice voor dit privégesprek",
   "ui.chat.pm.translation.mode.libre": "Libre",
   "ui.chat.pm.translation.mode.ai": "AI",
