@@ -99,6 +99,12 @@ func _run() -> void:
 		"Aether Clash portal distance errors explain the required portal"
 	)
 	_check(
+		errors.call("message", {
+			"detail": {"code": "CIRCUIT_BREAKER_OPEN"}
+		}) == "Deze dienst is tijdelijk niet beschikbaar.",
+		"temporarily fenced PvP authority displays a clear service message"
+	)
+	_check(
 		errors.call("message", {"detail": {"code": "current_password_incorrect"}})
 		== "Het huidige wachtwoord is onjuist.",
 		"privacy password errors explain how identity verification failed"

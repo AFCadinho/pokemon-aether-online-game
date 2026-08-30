@@ -239,6 +239,7 @@ const CODE_TO_KEY: Dictionary = {
 	"gift_code_rate_limited": "backend.error.rate_limited",
 	"request_timeout": "backend.error.timeout",
 	"service_unavailable": "backend.error.unavailable",
+	"circuit_breaker_open": "backend.error.unavailable",
 	"test_form_not_allowed": "backend.error.mega_test_form_not_allowed",
 	"mega_direct_form_not_allowed": "backend.error.mega_direct_form_not_allowed",
 	"mega_catalog_disabled": "backend.error.mega_catalog_disabled",

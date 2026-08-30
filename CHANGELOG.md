@@ -33,6 +33,7 @@
 
 **Fixed**
 
+- Temporary PvP authority outages during an Aether Clash now show a clear service-unavailable message instead of a generic error.
 - Engagement circles no longer follow players out of a Guild Duel arena, and all Guild members can now view their Guild's pending Aether Clash challenges without receiving staff-only controls.
 - Guild Duel engagement circles are now clearly larger than player sprites, and exit confirmations render above the arena instead of leaving movement locked behind an unseen dialog.
 - Guild Duel arenas now synchronize reliably after a hot reload, show the real Guild names and countdown, and physically block players at the raised center barrier.
