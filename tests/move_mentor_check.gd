@@ -52,6 +52,13 @@ func _check_center_instances() -> void:
 				and str(mentor.get_script().resource_path) == "res://scripts/world/npcs/move_mentor_npc.gd",
 			"%s inherits the Move Mentor" % path
 		)
+		_check(
+			mentor != null
+				and mentor.position == Vector2(368, 400)
+				and mentor.get("facing_direction") == Vector2.DOWN
+				and int(mentor.get("manual_interaction_reach_tiles")) == 2,
+			"%s keeps the Move Mentor reachable across the desk" % path
+		)
 		center.free()
 
 
@@ -64,6 +71,13 @@ func _check_npc_scene() -> void:
 	_check(npc != null, "Move Mentor NPC uses its dedicated behavior")
 	if npc != null:
 		_check(str(npc.get("npc_definition_id")) == "pokemon_center_move_mentor", "Move Mentor uses shared NPC metadata")
+		var interaction_shape := npc.get_node_or_null("InteractionArea/CollisionShape2D") as CollisionShape2D
+		_check(
+			interaction_shape != null
+				and interaction_shape.shape is RectangleShape2D
+				and (interaction_shape.shape as RectangleShape2D).size.y >= 96.0,
+			"Move Mentor detects players across a two-tile-deep desk"
+		)
 		npc.free()
 
 
