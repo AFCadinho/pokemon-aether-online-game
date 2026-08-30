@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepared two PvP item specialists for future placement, with named-market checkout support and planned vendors shown clearly in the Item Dex.
+
 - Pokémon stat labels and values are now easier to distinguish on PC Box hover cards.
 
 - Outdoor zoom now defaults to Auto, which switches between 1× and 2× as the game window changes size; fixed zoom choices remain available.

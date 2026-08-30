@@ -28,6 +28,7 @@ const CODE_TO_KEY: Dictionary = {
 	"not_enough_money": "backend.error.not_enough_money",
 	"not_enough_aetherite": "backend.error.not_enough_aetherite",
 	"not_enough_battle_points": "backend.error.not_enough_battle_points",
+	"market_not_active": "backend.error.market_not_active",
 	"global_heal_cooldown_active": "backend.error.global_heal_cooldown",
 	"global_heal_broadcast_failed": "backend.error.global_heal_broadcast",
 	"global_heal_not_found": "backend.error.global_heal_unavailable",

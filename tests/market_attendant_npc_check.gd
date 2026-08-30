@@ -4,6 +4,8 @@ const MARKET_ATTENDANT_SCRIPT := "res://scripts/world/npcs/market_attendant_npc.
 const MARKET_ATTENDANT_SCENE := "res://scenes/npcs/market_attendant_npc.tscn"
 const MARKET_SELLER_SCENE := "res://scenes/npcs/market_seller_npc.tscn"
 const MARKET_BUYER_SCENE := "res://scenes/npcs/market_buyer_npc.tscn"
+const PVP_OFFENSE_SCENE := "res://scenes/npcs/pvp_offense_specialist_npc.tscn"
+const PVP_TACTICS_SCENE := "res://scenes/npcs/pvp_tactics_specialist_npc.tscn"
 const PALLET_TOWN_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
 const VIRIDIAN_POKEMON_CENTER_SCENE := "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn"
 
@@ -52,6 +54,18 @@ func _check_market_attendant_scene() -> void:
 	_check_true(seller_source.contains('market_mode = "player_buys"'), "Seller scene opens player buying")
 	_check_true(buyer_source.contains('npc_definition_id = "pokemart_buyer"'), "Buyer scene uses the generic buyer definition")
 	_check_true(buyer_source.contains('market_mode = "player_sells"'), "Buyer scene opens player selling")
+	var offense_source := _read_text(PVP_OFFENSE_SCENE)
+	var tactics_source := _read_text(PVP_TACTICS_SCENE)
+	_check_true(
+		offense_source.contains('npc_definition_id = "pvp_offense_specialist"')
+		and offense_source.contains('market_id = "pvp_offense_exchange"'),
+		"PvP offense specialist scene is ready for later placement"
+	)
+	_check_true(
+		tactics_source.contains('npc_definition_id = "pvp_tactics_specialist"')
+		and tactics_source.contains('market_id = "pvp_tactics_exchange"'),
+		"PvP tactics specialist scene is ready for later placement"
+	)
 
 	var pallet_source := _read_text(PALLET_TOWN_SCENE)
 	_check_true(

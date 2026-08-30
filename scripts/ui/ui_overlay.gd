@@ -20240,7 +20240,11 @@ func _on_market_buy_pressed() -> void:
 	if player_is_selling:
 		result = await MarketService.sell_standard_item(item_id, quantity)
 	else:
-		result = await MarketService.purchase_standard_item(item_id, quantity)
+		result = await MarketService.purchase_item(
+			str(market_context.get("id", "standard_pokemart")),
+			item_id,
+			quantity
+		)
 	market_purchase_in_progress = false
 	if not bool(result.get("success", false)):
 		_set_market_status(
@@ -34561,9 +34565,15 @@ func _item_dex_source_type_rank(source_type: String) -> int:
 func _create_item_dex_source_card(source: Dictionary) -> PanelContainer:
 	var card := PanelContainer.new()
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var source_available := bool(source.get("available", true))
 	card.add_theme_stylebox_override(
 		"panel",
-		_make_panel_style(Color("#151b22e8"), Color("#354553"), 8, 1)
+		_make_panel_style(
+			Color("#151b22e8"),
+			Color("#354553") if source_available else Color("#8f6a3f"),
+			8,
+			1
+		)
 	)
 	var content := VBoxContainer.new()
 	content.add_theme_constant_override("separation", 4)
@@ -34575,6 +34585,17 @@ func _create_item_dex_source_card(source: Dictionary) -> PanelContainer:
 	title.add_theme_font_size_override("font_size", 13)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	content.add_child(title)
+	if not source_available:
+		var placement_status := str(source.get("placement_status", "")).strip_edges().to_lower()
+		_add_item_dex_source_card_line(
+			content,
+			LocalizationManager.text(
+				"ui.item_dex.sources.vendor_unplaced"
+				if placement_status == "unplaced"
+				else "ui.item_dex.sources.vendor_closed"
+			),
+			Color("#e4b56a")
+		)
 
 	var facts: Array[String] = []
 	var chance_text := _format_item_dex_source_chance(
@@ -34623,6 +34644,12 @@ func _item_dex_source_title(source: Dictionary) -> String:
 	var source_type := str(source.get("type", "other")).strip_edges().to_lower()
 	match source_type:
 		"shop":
+			var shop_id := str(source.get("shop_id", "")).strip_edges().to_lower()
+			if shop_id != "":
+				var shop_key := "ui.item_dex.shop.%s" % shop_id
+				var localized_shop := LocalizationManager.text(shop_key)
+				if localized_shop != shop_key:
+					return localized_shop
 			return str(source.get("shop_name", source.get("name", LocalizationManager.text("ui.item_dex.source.shop"))))
 		"pickup", "rock_smash", "default_grant":
 			return LocalizationManager.text("ui.item_dex.source_title.%s" % source_type)

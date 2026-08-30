@@ -5,6 +5,8 @@ class_name MarketServiceNode
 const STANDARD_MARKET_ENDPOINT := "/game/markets/standard"
 const STANDARD_MARKET_PURCHASE_ENDPOINT := "/game/markets/standard/purchase"
 const STANDARD_MARKET_SALE_ENDPOINT := "/game/markets/standard/sell"
+const MARKET_ENDPOINT_TEMPLATE := "/game/markets/%s"
+const MARKET_PURCHASE_ENDPOINT_TEMPLATE := "/game/markets/%s/purchase"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
@@ -14,7 +16,25 @@ func load_market(market_id: String) -> Dictionary:
 		"", "standard", "standard_pokemart":
 			return await load_standard_market()
 		_:
-			return _validation_error("Unsupported market id: %s" % market_id)
+			return await _load_named_market(normalized_market_id)
+
+
+func _load_named_market(market_id: String) -> Dictionary:
+	if not _is_authenticated():
+		return _auth_error()
+
+	var gateway := _gateway_api_config()
+	if gateway == null:
+		return _validation_error("Gateway API config is unavailable.")
+
+	var base_url: String = await gateway.call("get_base_url")
+	var response: Dictionary = await _request_json(
+		base_url + MARKET_ENDPOINT_TEMPLATE % market_id.uri_encode(),
+		HTTPClient.METHOD_GET,
+		gateway.call("get_accept_headers"),
+		""
+	)
+	return parse_market_catalog_response(response)
 
 
 func load_standard_market() -> Dictionary:
@@ -36,18 +56,30 @@ func load_standard_market() -> Dictionary:
 
 
 func purchase_standard_item(item_id: String, quantity: int = 1) -> Dictionary:
+	return await purchase_item("standard_pokemart", item_id, quantity)
+
+
+func purchase_item(market_id: String, item_id: String, quantity: int = 1) -> Dictionary:
 	if not _is_authenticated():
 		return _auth_error()
 	if item_id.strip_edges() == "":
 		return _validation_error("Missing item id.")
+	var normalized_market_id := market_id.strip_edges().to_lower()
+	if normalized_market_id in ["", "standard"]:
+		normalized_market_id = "standard_pokemart"
 
 	var gateway := _gateway_api_config()
 	if gateway == null:
 		return _validation_error("Gateway API config is unavailable.")
 
 	var base_url: String = await gateway.call("get_base_url")
+	var endpoint := (
+		STANDARD_MARKET_PURCHASE_ENDPOINT
+		if normalized_market_id == "standard_pokemart"
+		else MARKET_PURCHASE_ENDPOINT_TEMPLATE % normalized_market_id.uri_encode()
+	)
 	var response: Dictionary = await _request_json(
-		base_url + STANDARD_MARKET_PURCHASE_ENDPOINT,
+		base_url + endpoint,
 		HTTPClient.METHOD_POST,
 		gateway.call("get_json_headers"),
 		JSON.stringify(build_purchase_payload(item_id, quantity))
