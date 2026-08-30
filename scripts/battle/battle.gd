@@ -3590,6 +3590,7 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 		if await _finish_if_battle_ended():
 			return
 		if _show_force_switch_if_needed():
+			_set_battle_input_locked(false)
 			return
 
 	_set_battle_input_locked(false)

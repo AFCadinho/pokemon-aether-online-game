@@ -227,6 +227,11 @@ func _check_scene_structure() -> void:
 		"Bag closes before the capture request can delay the throw presentation"
 	)
 	_check_contains(capture_block, "_restore_bag_after_capture_error()", "Rejected capture attempts restore the Bag for another choice")
+	_check_contains(
+		capture_block,
+		"if _show_force_switch_if_needed():\n\t\t\t_set_battle_input_locked(false)\n\t\t\treturn",
+		"A failed capture that faints the active Pokemon unlocks forced-switch selection"
+	)
 	_check_contains(scene_source, "[node name=\"MechanicsPanel\" type=\"PanelContainer\" parent=\"HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage\"", "mechanics live beside the battlefield moves")
 	_check_contains(scene_source, "[node name=\"CalcLogButton\" type=\"Button\" parent=\"HBoxContainer/BattleLogRail/ActionChoices", "Damage Calc lives below the battle log")
 	_check_contains(scene_source, "[node name=\"UtilityActions\" type=\"PanelContainer\" parent=\"HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage\"", "battlefield has a shared segmented utility bar")
