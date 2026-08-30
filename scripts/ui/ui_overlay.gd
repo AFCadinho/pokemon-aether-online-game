@@ -77,6 +77,8 @@ const PARTY_CONTEXT_SUMMARY := 0
 const PARTY_CONTEXT_GIVE_ITEM := 1
 const PARTY_CONTEXT_TAKE_ITEM := 2
 const PARTY_CONTEXT_SET_LEAD := 3
+const PC_CONTEXT_SUMMARY := 0
+const PC_CONTEXT_TAKE_ITEM := 1
 const CHAT_CONTEXT_COPY_TEXT := 100
 const CHAT_CONTEXT_COPY_FULL := 101
 const CHAT_CONTEXT_OPEN_PM := 200
@@ -1220,6 +1222,9 @@ var pc_box_capacity_label: Label
 var pc_status_label: Label
 var pc_pokemon_hover_card: PartyHoverCard
 var pc_pokemon_hover_generation := 0
+var pc_slot_context_menu: PopupMenu
+var pc_slot_context_source: Dictionary = {}
+var pc_slot_context_payload: Dictionary = {}
 var pc_close_button: Button
 var pc_release_mode_button: Button
 var pc_loan_returns_button: Button
@@ -2629,6 +2634,17 @@ func _setup_pc_ui() -> void:
 	pc_popup.offset_bottom = PC_POPUP_SIZE.y / 2.0
 	pc_popup.add_theme_stylebox_override("panel", _make_pc_outer_style())
 	root_control.add_child(pc_popup)
+
+	pc_slot_context_menu = PopupMenu.new()
+	pc_slot_context_menu.name = "PcSlotContextMenu"
+	pc_slot_context_menu.min_size = Vector2i(220, 0)
+	pc_slot_context_menu.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_FOCUS, 8, 1)
+	)
+	pc_slot_context_menu.id_pressed.connect(_on_pc_slot_context_action)
+	pc_slot_context_menu.popup_hide.connect(_clear_pc_slot_context)
+	root_control.add_child(pc_slot_context_menu)
 
 	pc_pokemon_hover_card = PC_PARTY_HOVER_CARD_SCENE.instantiate() as PartyHoverCard
 	pc_pokemon_hover_card.name = "PcPokemonHoverCard"
@@ -35825,6 +35841,7 @@ func _on_pc_close_button_pressed() -> void:
 	if pc_popup == null:
 		return
 	_hide_pc_pokemon_hover()
+	_close_pc_slot_context_menu()
 	pc_popup.visible = false
 	if pc_loan_returns_dialog != null:
 		pc_loan_returns_dialog.hide()
@@ -36499,6 +36516,7 @@ func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, po
 				"slotIndex": slot_index,
 				"pokemonId": pokemon_id,
 			}
+			button.set_meta("pc_pokemon_payload", payload.duplicate(true))
 	button.drop_target = PokemonStorageService.box_location(box_index, slot_index)
 	if occupied:
 		_connect_pc_pokemon_hover(button, payload)
@@ -37271,6 +37289,14 @@ func _on_pc_slot_button_gui_input(event: InputEvent, button: PcPokemonSlotButton
 		return
 
 	var mouse_event: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_event.button_index == MOUSE_BUTTON_RIGHT and mouse_event.pressed:
+		if str(button.drag_source.get("type", "")) != "box":
+			return
+		var payload_value: Variant = button.get_meta("pc_pokemon_payload", {})
+		var payload: Dictionary = payload_value if payload_value is Dictionary else {}
+		_open_pc_slot_context_menu(button.drag_source, payload, mouse_event.global_position)
+		get_viewport().set_input_as_handled()
+		return
 	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
 		return
 
@@ -37284,6 +37310,86 @@ func _on_pc_slot_button_gui_input(event: InputEvent, button: PcPokemonSlotButton
 	if pc_dragging:
 		await _finish_pc_drag(mouse_event.global_position)
 		get_viewport().set_input_as_handled()
+
+
+func _open_pc_slot_context_menu(source: Dictionary, payload: Dictionary, global_position: Vector2) -> void:
+	if pc_slot_context_menu == null or source.is_empty() or int(source.get("pokemonId", 0)) <= 0:
+		return
+	_hide_pc_pokemon_hover()
+	pc_slot_context_source = source.duplicate(true)
+	pc_slot_context_payload = payload.duplicate(true)
+	_populate_pc_slot_context_menu(payload)
+	var viewport_size := get_viewport().get_visible_rect().size
+	var menu_position := global_position
+	menu_position.x = minf(menu_position.x, viewport_size.x - 240.0)
+	menu_position.y = minf(menu_position.y, viewport_size.y - 120.0)
+	pc_slot_context_menu.position = Vector2i(menu_position.max(Vector2.ZERO))
+	pc_slot_context_menu.popup()
+
+
+func _populate_pc_slot_context_menu(payload: Dictionary) -> void:
+	if pc_slot_context_menu == null:
+		return
+	pc_slot_context_menu.clear()
+	pc_slot_context_menu.add_item(LocalizationManager.text("ui.storage.context.summary"), PC_CONTEXT_SUMMARY)
+	var held_item_id := _pc_payload_held_item_id(payload)
+	if held_item_id != "":
+		pc_slot_context_menu.add_item(
+			LocalizationManager.text("ui.storage.context.take_item", {
+				"item": _item_name_from_id(held_item_id),
+			}),
+			PC_CONTEXT_TAKE_ITEM
+		)
+
+
+func _on_pc_slot_context_action(action_id: int) -> void:
+	var source := pc_slot_context_source.duplicate(true)
+	var payload := pc_slot_context_payload.duplicate(true)
+	_clear_pc_slot_context()
+	match action_id:
+		PC_CONTEXT_SUMMARY:
+			_open_pc_drag_source_summary(source)
+		PC_CONTEXT_TAKE_ITEM:
+			await _take_pc_box_pokemon_held_item(source, payload)
+
+
+func _take_pc_box_pokemon_held_item(source: Dictionary, payload: Dictionary) -> void:
+	var pokemon_id := int(source.get("pokemonId", 0))
+	var held_item_id := _pc_payload_held_item_id(payload)
+	if pokemon_id <= 0 or held_item_id == "" or pc_move_in_progress:
+		return
+	var item_name := _item_name_from_id(held_item_id)
+	pc_move_in_progress = true
+	_set_pc_status("ui.storage.item.taking", {"item": item_name})
+	var result: Dictionary = await PlayerPartyStateService.take_pokemon_held_item(pokemon_id)
+	if not bool(result.get("success", false)):
+		pc_move_in_progress = false
+		var error := str(result.get("error", LocalizationManager.text("common.unknown_error")))
+		_set_pc_status("ui.storage.item.take_failed")
+		_add_chat_message(LocalizationManager.text("ui.storage.item.take_failed_detail", {
+			"item": item_name,
+			"error": error,
+		}))
+		return
+	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
+	bag_inventory_loaded = true
+	_refresh_open_pokemon_summary_cards()
+	if bag_popup != null and bag_popup.visible:
+		_refresh_bag_items()
+	await _refresh_pc_state(true)
+	pc_move_in_progress = false
+	_set_pc_status("ui.storage.item.taken", {"item": item_name})
+
+
+func _close_pc_slot_context_menu() -> void:
+	if pc_slot_context_menu != null:
+		pc_slot_context_menu.hide()
+	_clear_pc_slot_context()
+
+
+func _clear_pc_slot_context() -> void:
+	pc_slot_context_source = {}
+	pc_slot_context_payload = {}
 
 
 func _start_pc_drag(button: PcPokemonSlotButton, global_position: Vector2) -> void:

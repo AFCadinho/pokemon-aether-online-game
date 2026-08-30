@@ -45,6 +45,7 @@ func _check_storage_runtime_translation() -> void:
 	var species_filter := overlay.get("pc_filter_species_input") as LineEdit
 	var box_selector := overlay.get("pc_box_selector_button") as Button
 	var status := overlay.get("pc_status_label") as Label
+	var slot_context_menu := overlay.get("pc_slot_context_menu") as PopupMenu
 
 	_check(popup != null, "Pokémon Storage popup is constructed")
 	_check(release_button != null and release_button.text == "Vrijlaten", "Storage release action renders in Dutch")
@@ -62,6 +63,18 @@ func _check_storage_runtime_translation() -> void:
 	var previous_style := box_previous_button.get_theme_stylebox("normal") as StyleBoxFlat
 	_check(previous_style != null and previous_style.bg_color.a == 0.0 and previous_style.border_width_left == 0, "Storage arrow navigation uses a quiet icon style")
 	_check(status != null and status.text.begins_with("Slepen"), "Storage status renders in Dutch")
+	_check(status != null and status.text.contains("Rechtsklik"), "Storage status teaches the box context action")
+	_check(slot_context_menu != null and slot_context_menu.min_size.x >= 220, "Storage creates a readable slot context menu")
+	_check(
+		localization_manager.call("text", "ui.storage.context.take_item", {"item": "Restjes"}) == "Restjes afnemen",
+		"Storage take-item action renders in Dutch"
+	)
+	overlay.call("_populate_pc_slot_context_menu", {"heldItemId": "leftovers"})
+	_check(slot_context_menu.item_count == 2, "Held items add one focused action to the Storage context menu")
+	_check(slot_context_menu.get_item_text(0) == "Pokémon bekijken", "Storage context summary renders in Dutch")
+	_check(slot_context_menu.get_item_text(1) == "Leftovers afnemen", "Storage context take-item action includes the localized item name")
+	overlay.call("_populate_pc_slot_context_menu", {})
+	_check(slot_context_menu.item_count == 1, "Storage omits the take action when a Pokémon holds no item")
 	species_filter.text = "Pikachu"
 	overlay.call("_on_pc_filter_text_changed", species_filter.text)
 	_check(filter_button.text == "Filters (1)", "Storage toolbar reports active filters")
@@ -82,6 +95,10 @@ func _check_storage_runtime_translation() -> void:
 	_check(search_input != null and search_input.placeholder_text.begins_with("Buscar"), "Storage search updates to Portuguese")
 	_check(species_filter != null and species_filter.placeholder_text == "Espécie", "Storage species filter updates to Portuguese")
 	_check(status != null and status.text.contains("Box 2"), "Dynamic Storage status updates to Portuguese")
+	_check(
+		localization_manager.call("text", "ui.storage.context.take_item", {"item": "Restos"}) == "Retirar Restos",
+		"Storage take-item action updates to Portuguese"
+	)
 
 	if popup != null:
 		var minimum_size := popup.get_combined_minimum_size()

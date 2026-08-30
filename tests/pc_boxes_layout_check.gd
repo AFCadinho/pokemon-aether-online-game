@@ -60,6 +60,12 @@ func _init() -> void:
 	_check(source.contains("PokemonStorageService.move_pokemon("), "Storage revamp preserves moving Pokémon")
 	_check(source.contains("PokemonStorageService.release_pokemon("), "Storage revamp preserves releasing Pokémon")
 	_check(source.contains("_open_pc_box_pokemon_summary("), "Storage revamp preserves Pokémon summaries")
+	_check(source.contains("MOUSE_BUTTON_RIGHT"), "Occupied box slots expose right-click actions")
+	_check(source.contains("func _open_pc_slot_context_menu("), "Storage owns a focused Pokémon context menu")
+	_check(source.contains("PlayerPartyStateService.take_pokemon_held_item(pokemon_id)"), "Storage reuses the atomic held-item service action")
+	_check(source.contains('button.set_meta("pc_pokemon_payload"'), "Box actions retain the exact Pokémon held-item payload")
+	_check(source.contains("bag_inventory_items = _normalize_bag_inventory_items(result.get(\"inventory\", []))"), "Taking an item refreshes the local Bag state")
+	_check(source.contains("await _refresh_pc_state(true)"), "Taking an item reloads authoritative box state")
 	_check(source.contains("PcPokemonHoverCard"), "Storage exposes battle-style Pokémon information on hover")
 	_check_storage_hover_surface()
 

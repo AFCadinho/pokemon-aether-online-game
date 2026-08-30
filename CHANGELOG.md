@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon in PC boxes can now have their held item moved directly to the Bag from a right-click menu.
+
 - Pokémon Storage actions now use clearer visual hierarchy, with one primary box control, quieter icon actions and danger colors only when needed.
 
 - Pokémon Storage now has simpler box navigation, quieter empty slots, clearer filters and hover cards that stay out of the controls.
