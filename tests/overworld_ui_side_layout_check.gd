@@ -230,6 +230,15 @@ func _init() -> void:
 	_check(scene_source.contains('icon = ExtResource("27_global_skill_exp")'), "global Skill EXP goal uses its own icon")
 	_check(scene_source.contains('icon = ExtResource("26_global_rare")'), "rare encounter goal uses its own icon")
 	_check(scene_source.count('[node name="ProgressBar" type="ProgressBar" parent="Control/GlobalBuffsPanel') == 5, "each community goal includes compact funding progress")
+	for slot_number: int in range(1, 6):
+		_check(
+			scene_source.contains('[node name="ProgressBar" type="ProgressBar" parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot%d"]' % slot_number),
+			"community goal slot %d includes compact funding progress" % slot_number
+		)
+	_check(
+		not scene_source.contains('[node name="ProgressBar" type="ProgressBar" parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot6"]'),
+		"Global Heal does not reserve an unused funding progress bar"
+	)
 	_check(scene_source.contains('[node name="GlobalHealSection" type="VBoxContainer" parent="Control/GlobalBuffDetailsPanel'), "Global Heal has a dedicated action section")
 	_check(scene_source.contains('text = "ui.buff.global_heal.receive_requests"'), "Global Heal exposes its request preference beside the action")
 	_check(global_buff_details_block.contains("visible = false"), "global buff details start closed")

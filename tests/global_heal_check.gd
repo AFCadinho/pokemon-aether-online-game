@@ -18,7 +18,7 @@ func _init() -> void:
 	var game_state := FileAccess.get_file_as_string(GAME_STATE_PATH)
 	var loading_screen := FileAccess.get_file_as_string(LOADING_SCREEN_PATH)
 
-	_check(scene.contains('[node name="BuffSlot5"'), "Global Heal has a fifth global action slot")
+	_check(scene.contains('[node name="BuffSlot6"'), "Global Heal has a sixth global action slot after five community goals")
 	_check(scene.contains('[node name="GlobalHealSection"'), "Global Heal has dedicated activation controls")
 	_check(scene.contains('text = "ui.buff.global_heal.receive_requests"'), "activation controls expose the request preference")
 	_check(overlay.contains('"cost": 25000'), "Global Heal defaults to the requested 25,000 price")
