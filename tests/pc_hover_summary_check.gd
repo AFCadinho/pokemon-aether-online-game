@@ -52,6 +52,16 @@ func _init() -> void:
 		is_equal_approx(populated_height, PartyHoverCard.STORAGE_CARD_HEIGHT),
 		"A fully populated Storage hover card stays at the fixed height"
 	)
+	var safe_bounds := Rect2(100, 100, 640, 320)
+	card.position_beside_rect_within(Rect2(210, 210, 118, 80), safe_bounds)
+	var positioned_rect := card.get_global_rect()
+	_check(
+		positioned_rect.position.x >= safe_bounds.position.x
+			and positioned_rect.position.y >= safe_bounds.position.y
+			and positioned_rect.end.x <= safe_bounds.end.x
+			and positioned_rect.end.y <= safe_bounds.end.y,
+		"Storage hover cards stay inside their navigation-safe bounds"
+	)
 
 	card.show_for_pokemon({
 		"species": "Blastoise",
