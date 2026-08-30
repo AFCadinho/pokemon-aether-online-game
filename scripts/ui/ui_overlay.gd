@@ -1398,7 +1398,8 @@ var item_dex_effect_section_label: Control
 var item_dex_effect_label: Label
 var item_dex_capture_section_label: Control
 var item_dex_capture_label: Label
-var item_dex_sources_label: Label
+var item_dex_availability_label: Label
+var item_dex_sources_list: VBoxContainer
 var item_dex_search_request_id := 0
 var item_dex_selected_item_id := ""
 var item_dex_selected_item: Dictionary = {}
@@ -9551,18 +9552,26 @@ func _setup_item_dex_popup() -> void:
 
 	summary_layout.add_child(_create_item_dex_section_title("ui.item_dex.sources"))
 
+	item_dex_availability_label = Label.new()
+	_set_localized_control_property(
+		item_dex_availability_label,
+		"text",
+		"ui.item_dex.availability.select"
+	)
+	item_dex_availability_label.add_theme_font_size_override("font_size", 12)
+	item_dex_availability_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	summary_layout.add_child(item_dex_availability_label)
+
 	var sources_scroll := ScrollContainer.new()
 	sources_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	sources_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	summary_layout.add_child(sources_scroll)
 
-	item_dex_sources_label = Label.new()
-	_set_localized_control_property(item_dex_sources_label, "text", "ui.item_dex.sources_empty")
-	item_dex_sources_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	item_dex_sources_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	item_dex_sources_label.add_theme_font_size_override("font_size", 12)
-	item_dex_sources_label.add_theme_color_override("font_color", UI_TEXT)
-	sources_scroll.add_child(item_dex_sources_label)
+	item_dex_sources_list = VBoxContainer.new()
+	item_dex_sources_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	item_dex_sources_list.add_theme_constant_override("separation", 8)
+	sources_scroll.add_child(item_dex_sources_list)
+	_add_item_dex_source_message("ui.item_dex.sources_empty")
 
 	_apply_button_style(close_button)
 	_apply_line_edit_style(item_dex_search_input)
@@ -34214,7 +34223,7 @@ func _on_item_dex_result_selected(item: Dictionary) -> void:
 	if item_dex_capture_label != null:
 		item_dex_capture_label.text = capture_text
 		item_dex_capture_label.visible = capture_text != ""
-	item_dex_sources_label.text = _format_item_dex_sources(localized_item)
+	_rebuild_item_dex_sources(localized_item)
 
 func _format_item_dex_meta(item: Dictionary) -> String:
 	var category_text := _format_item_dex_category_label(item)
@@ -34408,47 +34417,260 @@ func _format_item_dex_multiplier(value: float) -> String:
 		return str(int(rounded))
 	return "%.1f" % value
 
-func _format_item_dex_sources(item: Dictionary) -> String:
-	var summary_value: Variant = item.get("sourceSummary", [])
-	if typeof(summary_value) != TYPE_ARRAY:
-		return LocalizationManager.text("ui.item_dex.sources.none")
+func _rebuild_item_dex_sources(item: Dictionary) -> void:
+	if item_dex_sources_list == null:
+		return
+	for child: Node in item_dex_sources_list.get_children():
+		child.queue_free()
 
-	var summaries: Array = summary_value
-	if summaries.is_empty():
-		return LocalizationManager.text("ui.item_dex.sources.none")
+	var status := str(item.get("availabilityStatus", "unavailable")).strip_edges().to_lower()
+	if status not in ["available", "unavailable", "unreleased"]:
+		status = "unavailable"
+	item_dex_availability_label.text = LocalizationManager.text(
+		"ui.item_dex.availability.%s" % status
+	)
+	item_dex_availability_label.add_theme_color_override(
+		"font_color",
+		Color("#76d7a0") if status == "available" else Color("#e4b56a")
+	)
 
-	var lines: Array[String] = []
-	for summary_value_item: Variant in summaries:
-		if typeof(summary_value_item) != TYPE_DICTIONARY:
-			continue
-		var summary: Dictionary = summary_value_item
-		var raw_label := str(summary.get("label", summary.get("type", ""))).strip_edges()
-		var label := (
-			LocalizationManager.text("ui.item_dex.sources.source")
-			if raw_label == ""
-			else _localized_item_dex_term("source", raw_label)
+	var sources_value: Variant = item.get("sources", [])
+	if typeof(sources_value) != TYPE_ARRAY or (sources_value as Array).is_empty():
+		_add_item_dex_source_message(
+			"ui.item_dex.sources.unreleased"
+			if status == "unreleased"
+			else "ui.item_dex.sources.unavailable"
 		)
-		var count: int = int(summary.get("count", 0))
-		lines.append(LocalizationManager.text(
-			"ui.item_dex.sources.count",
-			{"source": label, "count": count}
-		))
+		return
 
-		var preview_value: Variant = summary.get("preview", [])
-		if typeof(preview_value) != TYPE_ARRAY:
+	var grouped: Dictionary = {}
+	for source_value: Variant in sources_value as Array:
+		if typeof(source_value) != TYPE_DICTIONARY:
 			continue
+		var source: Dictionary = source_value
+		var source_type := str(source.get("type", "other")).strip_edges().to_lower()
+		if not grouped.has(source_type):
+			grouped[source_type] = []
+		(grouped[source_type] as Array).append(source)
 
-		var previews: Array = preview_value
-		for preview_item: Variant in previews:
-			lines.append("- %s" % str(preview_item))
+	var source_types: Array = grouped.keys()
+	source_types.sort_custom(func(left: Variant, right: Variant) -> bool:
+		return _item_dex_source_type_rank(str(left)) < _item_dex_source_type_rank(str(right))
+	)
+	for source_type_value: Variant in source_types:
+		var source_type := str(source_type_value)
+		var heading := Label.new()
+		heading.text = LocalizationManager.text("ui.item_dex.source.%s" % source_type)
+		if heading.text == "ui.item_dex.source.%s" % source_type:
+			heading.text = source_type.replace("_", " ").capitalize()
+		heading.add_theme_font_size_override("font_size", 13)
+		heading.add_theme_color_override("font_color", ITEM_DEX_ACCENT)
+		item_dex_sources_list.add_child(heading)
+		for source_value: Variant in grouped[source_type]:
+			item_dex_sources_list.add_child(_create_item_dex_source_card(source_value as Dictionary))
 
-		var hidden_count: int = count - previews.size()
-		if hidden_count > 0:
-			lines.append(LocalizationManager.text(
-				"ui.item_dex.sources.more",
-				{"count": hidden_count}
-			))
-	return "\n".join(lines)
+func _add_item_dex_source_message(localization_key: String) -> void:
+	if item_dex_sources_list == null:
+		return
+	var message := Label.new()
+	message.text = LocalizationManager.text(localization_key)
+	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	message.add_theme_font_size_override("font_size", 12)
+	message.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	item_dex_sources_list.add_child(message)
+
+func _item_dex_source_type_rank(source_type: String) -> int:
+	var order := [
+		"shop", "quest_reward", "npc_reward", "pickup", "bundle", "default_grant",
+		"wild_drop", "wild_hold", "rock_smash", "fishing_treasure", "thieving",
+		"trainer_reward", "event",
+	]
+	var index := order.find(source_type)
+	return index if index >= 0 else order.size()
+
+func _create_item_dex_source_card(source: Dictionary) -> PanelContainer:
+	var card := PanelContainer.new()
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#151b22e8"), Color("#354553"), 8, 1)
+	)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 4)
+	card.add_child(content)
+
+	var title := Label.new()
+	title.text = _item_dex_source_title(source)
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	title.add_theme_font_size_override("font_size", 13)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	content.add_child(title)
+
+	var facts: Array[String] = []
+	var chance_text := _format_item_dex_source_chance(
+		source.get("chance", null),
+		str(source.get("chance_context", ""))
+	)
+	if chance_text != "":
+		facts.append(chance_text)
+	if source.has("repeatable"):
+		facts.append(LocalizationManager.text(
+			"ui.item_dex.sources.repeatable"
+			if bool(source.get("repeatable", false))
+			else "ui.item_dex.sources.one_time"
+		))
+	var quantity := int(source.get("quantity", 0))
+	if quantity > 0:
+		facts.append(LocalizationManager.text("ui.item_dex.sources.quantity", {"quantity": quantity}))
+	var source_count := int(source.get("source_count", 0))
+	if source_count > 1:
+		facts.append(LocalizationManager.text("ui.item_dex.sources.pickup_count", {"count": source_count}))
+	_add_item_dex_source_card_line(content, " · ".join(facts), Color("#f2cf78"))
+
+	var locations := _item_dex_source_locations(source)
+	if not locations.is_empty():
+		_add_item_dex_source_card_line(content, LocalizationManager.text(
+			"ui.item_dex.sources.locations",
+			{"locations": ", ".join(locations)}
+		), UI_MUTED_TEXT)
+
+	var requirement_lines := _item_dex_source_requirements(source.get("requirements", []))
+	if not requirement_lines.is_empty():
+		_add_item_dex_source_card_line(content, LocalizationManager.text(
+			"ui.item_dex.sources.requires",
+			{"requirements": ", ".join(requirement_lines)}
+		), UI_MUTED_TEXT)
+
+	var costs_text := _format_item_dex_source_costs(source.get("costs", []))
+	if costs_text != "":
+		_add_item_dex_source_card_line(content, LocalizationManager.text(
+			"ui.item_dex.sources.cost",
+			{"cost": costs_text}
+		), UI_MUTED_TEXT)
+	return card
+
+func _item_dex_source_title(source: Dictionary) -> String:
+	var source_type := str(source.get("type", "other")).strip_edges().to_lower()
+	match source_type:
+		"shop":
+			return str(source.get("shop_name", source.get("name", LocalizationManager.text("ui.item_dex.source.shop"))))
+		"pickup", "rock_smash", "default_grant":
+			return LocalizationManager.text("ui.item_dex.source_title.%s" % source_type)
+		"wild_drop", "wild_hold":
+			var species_id := str(source.get("species_id", "")).strip_edges()
+			if species_id != "":
+				return LocalizationManager.text("ui.item_dex.source_title.wild_species", {
+					"species": _localized_species_name(species_id, str(source.get("species_name", "")))
+				})
+		"fishing_treasure":
+			var rod_id := str(source.get("rod_id", "")).strip_edges()
+			if rod_id != "":
+				return LocalizationManager.text("ui.item_dex.source_title.fishing", {
+					"rod": LocalizationManager.text("ui.item_dex.rod.%s" % rod_id)
+				})
+		"thieving":
+			var target_type := str(source.get("target_type", "")).strip_edges()
+			if target_type != "":
+				return LocalizationManager.text("ui.item_dex.source_title.thieving", {
+					"target": LocalizationManager.text("ui.item_dex.thieving_target.%s" % target_type)
+				})
+	return str(source.get(
+		"name",
+		source.get("location_name", LocalizationManager.text("ui.item_dex.sources.source"))
+	))
+
+func _add_item_dex_source_card_line(content: VBoxContainer, text: String, color: Color) -> void:
+	if text == "":
+		return
+	var label := Label.new()
+	label.text = text
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.add_theme_font_size_override("font_size", 11)
+	label.add_theme_color_override("font_color", color)
+	content.add_child(label)
+
+func _format_item_dex_source_chance(chance_value: Variant, context: String = "") -> String:
+	if typeof(chance_value) != TYPE_DICTIONARY:
+		return ""
+	var chance: Dictionary = chance_value
+	if bool(chance.get("conditional", false)):
+		return LocalizationManager.text("ui.item_dex.sources.chance_conditional")
+	if not chance.has("minimum"):
+		return ""
+	var minimum := float(chance.get("minimum", 0.0)) * 100.0
+	var maximum := float(chance.get("maximum", minimum / 100.0)) * 100.0
+	var rendered := ""
+	if is_equal_approx(minimum, maximum):
+		rendered = LocalizationManager.text("ui.item_dex.sources.chance", {"chance": _format_item_dex_percent(minimum)})
+	else:
+		rendered = LocalizationManager.text("ui.item_dex.sources.chance_range", {
+		"minimum": _format_item_dex_percent(minimum),
+		"maximum": _format_item_dex_percent(maximum),
+		})
+	if context != "":
+		rendered += " " + LocalizationManager.text("ui.item_dex.chance_context.%s" % context)
+	return rendered
+
+func _format_item_dex_percent(value: float) -> String:
+	if value >= 10.0 or is_equal_approx(value, roundf(value)):
+		return "%d%%" % int(roundf(value))
+	if value >= 1.0:
+		return "%.1f%%" % value
+	return "%.2f%%" % value
+
+func _item_dex_source_locations(source: Dictionary) -> Array[String]:
+	var result: Array[String] = []
+	var single := str(source.get("location_name", "")).strip_edges()
+	if single != "":
+		result.append(single)
+	var multiple_value: Variant = source.get("location_names", [])
+	if typeof(multiple_value) == TYPE_ARRAY:
+		for location_value: Variant in multiple_value as Array:
+			var location := str(location_value).strip_edges()
+			if location != "" and location not in result:
+				result.append(location)
+	return result
+
+func _item_dex_source_requirements(requirements_value: Variant) -> Array[String]:
+	var result: Array[String] = []
+	if typeof(requirements_value) != TYPE_ARRAY:
+		return result
+	for requirement_value: Variant in requirements_value as Array:
+		if typeof(requirement_value) != TYPE_DICTIONARY:
+			continue
+		var requirement: Dictionary = requirement_value
+		var requirement_type := str(requirement.get("type", "")).strip_edges().to_lower()
+		var minimum := int(requirement.get("minimum", requirement.get("amount", 0)))
+		var maximum := int(requirement.get("maximum", 0))
+		var requirement_name := str(requirement.get("name", "")).strip_edges()
+		var key := "ui.item_dex.requirement.%s" % requirement_type
+		var rendered := LocalizationManager.text(key, {
+			"minimum": minimum,
+			"maximum": maximum,
+			"name": requirement_name,
+		})
+		if rendered == key:
+			rendered = requirement_type.replace("_", " ").capitalize()
+		result.append(rendered)
+	return result
+
+func _format_item_dex_source_costs(costs_value: Variant) -> String:
+	if typeof(costs_value) != TYPE_ARRAY:
+		return ""
+	var rendered: Array[String] = []
+	for cost_value: Variant in costs_value as Array:
+		if typeof(cost_value) != TYPE_DICTIONARY:
+			continue
+		var cost: Dictionary = cost_value
+		var currency := str(cost.get("currency", "")).strip_edges().to_lower()
+		var amount := int(cost.get("amount", 0))
+		if currency == "" or amount <= 0:
+			continue
+		rendered.append(LocalizationManager.text(
+			"ui.item_dex.currency.%s" % currency,
+			{"amount": _format_money(amount)}
+		))
+	return " + ".join(rendered)
 
 func _on_dev_add_pokemon_button_pressed() -> void:
 	if not _can_generate_dev_pokemon():
@@ -34793,6 +35015,7 @@ func _normalize_dev_item_results(items_value: Variant) -> Array[Dictionary]:
 			"machineMoveType": str(item.get("machineMoveType", "")).strip_edges().to_lower(),
 			"sources": item.get("sources", []),
 			"sourceSummary": item.get("sourceSummary", []),
+			"availabilityStatus": str(item.get("availabilityStatus", "unavailable")),
 		}))
 	return normalized_items
 

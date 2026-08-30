@@ -212,6 +212,12 @@ func _init() -> void:
 	_check(scene_source.contains('path="res://assets/ui/item_dex.svg" id="12_item_dex"') and script_source.contains('const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")'), "Item Dex uses its dedicated item catalogue icon")
 	_check(script_source.contains("item_dex_popup.theme = _make_item_dex_tooltip_theme()"), "Every Item Dex hover card inherits the Item Dex tooltip theme")
 	_check(item_dex_tooltip_theme_block.contains('tooltip_theme.set_stylebox("panel", "TooltipPanel"'), "Item Dex hover cards use a styled panel instead of the Godot default")
+	_check(
+		script_source.contains("func _create_item_dex_source_card")
+		and script_source.contains("func _format_item_dex_source_chance")
+		and script_source.contains("availabilityStatus"),
+		"Item Dex presents acquisition methods as detailed cards with chances and availability"
+	)
 	_check(scene_source.contains('path="res://assets/ui/staff_tools.svg" id="13_staff_tools"'), "Staff tools use a moderation shield instead of a rank crown")
 	_check(hotkey_sidebar_scene_source.contains("border_width_left = 2") and hotkey_sidebar_scene_source.contains("0.92941177)"), "hotbar rail uses the shared stable-opacity frame")
 	_check(script_source.contains('const UI_SURFACE_BASE := Color("#050b14ed")'), "overworld UI declares one semantic base surface")
