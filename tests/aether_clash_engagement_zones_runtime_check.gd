@@ -76,12 +76,22 @@ func _run() -> void:
 		"Enemy engagement circles stop the movement step"
 	)
 	_check(contact["count"] == 1 and contact["method"] == "player_contact", "Enemy circle contact emits the shared engagement request")
+	_check(
+		bool(duel.call("is_world_actor_step_blocked", Vector2(512, 512), Vector2(544, 512))),
+		"Continued enemy-circle contact still blocks movement"
+	)
+	_check(contact["count"] == 1, "Continued contact does not repeat the engagement request")
+	local_actor.global_position = Vector2(480, 512)
+	duel.call("_release_separated_player_contact_pairs")
+	local_actor.global_position = Vector2(512, 512)
+	duel.call("is_world_actor_step_blocked", Vector2(512, 512), Vector2(544, 512))
+	_check(contact["count"] == 2, "Separating from an opponent rearms contact engagement")
 	duel.set("engaged_player_ids", {1: "engagement-1", 2: "engagement-1"})
 	_check(
 		bool(duel.call("is_world_actor_step_blocked", Vector2(512, 512), Vector2(544, 512))),
 		"Reserved players continue to block movement"
 	)
-	_check(contact["count"] == 1, "Reserved players cannot emit a second contact challenge")
+	_check(contact["count"] == 2, "Reserved players cannot emit a second contact challenge")
 	duel.set("engaged_player_ids", {})
 	var projectile_target := int(duel.call(
 		"request_projectile_engagement",
@@ -90,7 +100,7 @@ func _run() -> void:
 		1
 	))
 	_check(projectile_target == 2, "Projectile paths target the same enemy engagement circle")
-	_check(contact["count"] == 2 and contact["method"] == "projectile", "Projectile contact uses the shared engagement request")
+	_check(contact["count"] == 3 and contact["method"] == "projectile", "Projectile contact uses the shared engagement request")
 
 	_check(
 		bool(duel.call(
