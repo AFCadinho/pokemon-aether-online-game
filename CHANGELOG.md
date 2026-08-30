@@ -16,7 +16,7 @@
 **Changed**
 
 - Guild Duel teams are now presented as the Blue Side and Red Side while the HUD continues to show both actual Guild names; either team may use either exit zone to leave.
-- Move Maniac lessons now consume Heart Scales, Mushrooms, or Armorite Ore based on how the move is learned, with compact prices beside each move and full owned quantities shown on selection.
+- Move Maniac lessons now consume Heart Scales, Mushrooms, or the original Resonite Ore material based on how the move is learned, with compact prices beside each move and full owned quantities shown on selection.
 - The Move Maniac and Move Deleter now use matching trainer portraits in dialogue, and the Move Deleter has moved to a more natural spot in Pokémon Centers.
 - Wild battles now open with both Pokémon ready, letting queued move or Run input start sooner without an opening summon animation.
 - Wild victories no longer pause on the winner message; disabling Move Animations also removes the remaining terminal presentation waits while still applying every result and reward.

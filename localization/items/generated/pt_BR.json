@@ -231,10 +231,6 @@
     "name": "Passe de Armadura",
     "shortDesc": "Um passe para ir para a Ilha da Armadura. Mostre-o ao pessoal ferroviário da estação Wedgehurst."
   },
-  "armorite-ore": {
-    "name": "Minério de Armorita",
-    "shortDesc": "Minério raro que pode ser obtido na Ilha da Armadura. Algo de bom acontecerá se você entregá-lo a um colecionador na Ilha da Armadura."
-  },
   "aspear-berry": {
     "name": "Aspear Berry",
     "shortDesc": "Realizado: Consumido quando congelado para curar o congelamento."
@@ -3214,6 +3210,10 @@
   "resist-wing": {
     "name": "Resistir Pena",
     "shortDesc": "Aumenta o esforço de Defesa em 1."
+  },
+  "resonite-ore": {
+    "name": "Minério de Resonita",
+    "shortDesc": "Um mineral escuro com um núcleo cristalino que ressoa com os instintos de batalha de um Pokémon."
   },
   "reveal-glass": {
     "name": "Vidro Revelador",

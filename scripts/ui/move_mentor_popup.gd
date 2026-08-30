@@ -19,9 +19,6 @@ const UI_PURPLE := Color("#c694ff")
 const MOVE_SUMMARY_INDEX_PATH := "res://data/move_summary_index.json"
 const TYPE_ICON_ROOT := "res://assets/sprites/types/small/"
 const ITEM_ICON_ROOT := "res://assets/items/icons/"
-const ITEM_ICON_ALIASES := {
-	"armorite-ore": "SKARMORITE",
-}
 const CATEGORY_ICON_PATHS := {
 	"physical": "res://assets/battles/physical_move.png",
 	"special": "res://assets/battles/special_move.png",
@@ -1055,9 +1052,7 @@ func _cost_badge(candidate: Dictionary) -> Control:
 
 func _item_icon_texture(item_id: String) -> Texture2D:
 	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
-	var aliased := str(ITEM_ICON_ALIASES.get(item_id.strip_edges().to_lower(), normalized))
 	for path: String in [
-		"%s%s.png" % [ITEM_ICON_ROOT, aliased],
 		"%s%s.png" % [ITEM_ICON_ROOT, normalized],
 		"%s000.png" % ITEM_ICON_ROOT,
 	]:
