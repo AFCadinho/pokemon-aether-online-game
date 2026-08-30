@@ -3,7 +3,7 @@ extends WorldInteractable
 
 class_name AetherClashPortal
 
-signal entry_requested(team_id: String, war_id: String, player: Node2D)
+signal entry_requested(mode_id: String, player: Node2D)
 signal portal_state_changed(open: bool)
 
 const PURPLE_PORTAL_TEXTURE := preload("res://assets/world/aether_clash/clash_portal_purple.png")
@@ -11,11 +11,10 @@ const RED_PORTAL_TEXTURE := preload("res://assets/world/aether_clash/clash_porta
 const PURPLE_LIGHT_COLOR := Color("a647ff")
 const RED_LIGHT_COLOR := Color("ff3829")
 
-@export_enum("purple", "red") var team_id := "purple":
+@export_enum("guild_duel", "battle_royale") var mode_id := "guild_duel":
 	set(value):
-		team_id = value
-		_apply_team_visuals()
-@export var active_war_id := ""
+		mode_id = value
+		_apply_mode_visuals()
 @export var entry_open := false:
 	set(value):
 		if entry_open == value:
@@ -38,13 +37,13 @@ func _ready() -> void:
 	blocks_movement = true
 	interaction_shape_size = Vector2(104, 104)
 	if Engine.is_editor_hint():
-		display_name = "%s Clash Portal" % team_id.capitalize()
+		display_name = "%s Portal" % mode_id.replace("_", " ").capitalize()
 	else:
-		display_name = _text("world.aether_clash.portal.%s.name" % team_id)
+		display_name = _text("world.aether_clash.portal.%s.name" % mode_id)
 	super._ready()
 	if portal_sprite != null:
 		_portal_sprite_origin = portal_sprite.position
-	_apply_team_visuals()
+	_apply_mode_visuals()
 	_apply_portal_state()
 
 
@@ -55,34 +54,26 @@ func _process(delta: float) -> void:
 		await super._process(delta)
 
 
-func configure_war(war_id: String, open: bool) -> void:
-	active_war_id = war_id.strip_edges()
-	entry_open = open and not active_war_id.is_empty()
-	_apply_portal_state()
-
-
-func clear_war() -> void:
-	active_war_id = ""
-	entry_open = false
+func configure_mode_available(available: bool) -> void:
+	entry_open = available
 	_apply_portal_state()
 
 
 func interact_with_player(player: Node2D) -> void:
-	if not entry_open or active_war_id.strip_edges().is_empty():
+	if not entry_open:
 		await show_dialogue(
 			[_text("world.aether_clash.portal.inactive")],
 			display_name
 		)
 		return
 
-	entry_requested.emit(team_id, active_war_id, player)
+	entry_requested.emit(mode_id, player)
 	for controller: Node in get_tree().get_nodes_in_group("aether_clash_war_controller"):
 		if not controller.has_method("request_portal_entry"):
 			continue
 		var result: Variant = await controller.call(
 			"request_portal_entry",
-			team_id,
-			active_war_id,
+			mode_id,
 			player,
 			self
 		)
@@ -111,17 +102,17 @@ func _apply_portal_state() -> void:
 		portal_light.enabled = true
 
 
-func _apply_team_visuals() -> void:
+func _apply_mode_visuals() -> void:
 	var sprite := portal_sprite
 	if sprite == null:
 		sprite = get_node_or_null("PortalSprite") as Sprite2D
 	if sprite != null:
-		sprite.texture = RED_PORTAL_TEXTURE if team_id == "red" else PURPLE_PORTAL_TEXTURE
+		sprite.texture = RED_PORTAL_TEXTURE if mode_id == "battle_royale" else PURPLE_PORTAL_TEXTURE
 	var light := portal_light
 	if light == null:
 		light = get_node_or_null("PortalLight") as PointLight2D
 	if light != null:
-		light.color = RED_LIGHT_COLOR if team_id == "red" else PURPLE_LIGHT_COLOR
+		light.color = RED_LIGHT_COLOR if mode_id == "battle_royale" else PURPLE_LIGHT_COLOR
 
 
 func _animate_portal() -> void:

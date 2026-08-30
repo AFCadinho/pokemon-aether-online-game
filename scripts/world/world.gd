@@ -516,6 +516,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 		_apply_weather_for_map(target_map)
 		MusicManager.play_map_music(target_map)
 
+	_configure_authorized_map_instance(target_map, state)
 	move_player_to_map(target_map)
 	if player.has_method("reset_movement_state"):
 		player.call("reset_movement_state")
@@ -561,6 +562,12 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 		GameState.unlock_overworld_input()
 	authorized_teleport_locked_overworld = false
 	return {"success": true}
+
+
+func _configure_authorized_map_instance(map: Node, state: Dictionary) -> void:
+	if map == null or not map.has_method("configure_aether_clash_instance"):
+		return
+	map.call("configure_aether_clash_instance", str(state.get("mapId", "")))
 
 
 func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
@@ -1219,6 +1226,7 @@ func _setup_initial_world_state() -> void:
 		else:
 			push_warning("World: saved map '%s' could not be loaded. Falling back to initial map." % saved_scene_path)
 
+	_configure_authorized_map_instance(initial_map, saved_state)
 	GameState.current_map = initial_map
 	_normalize_map_tree_layer_z_indices(initial_map)
 	_apply_day_night_for_map(initial_map)

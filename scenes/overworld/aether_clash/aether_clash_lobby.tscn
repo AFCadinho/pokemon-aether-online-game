@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/lobby/lobby.visual.tscn" id="1_stnl8"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_tauxp"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="3_7psnb"]
-[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="4_map_meta"]
+[ext_resource type="Script" path="res://scripts/world/aether_clash_lobby.gd" id="4_map_meta"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="5_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="6_o8e3w"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_clash_portal.tscn" id="7_clash_portal"]
@@ -212,14 +212,14 @@ npc_id = "aether_clash_lobby_transit_keeper"
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1814140839]
 
-[node name="PurpleClashPortal" parent="Entities/Interactables" unique_id=445435609 instance=ExtResource("7_clash_portal")]
+[node name="GuildDuelPortal" parent="Entities/Interactables" unique_id=445435609 instance=ExtResource("7_clash_portal")]
 position = Vector2(864, 624)
-display_name = "Purple Clash Portal"
+display_name = "Guild vs Guild Portal"
 
-[node name="RedClashPortal" parent="Entities/Interactables" unique_id=2137196691 instance=ExtResource("7_clash_portal")]
+[node name="BattleRoyalePortal" parent="Entities/Interactables" unique_id=2137196691 instance=ExtResource("7_clash_portal")]
 position = Vector2(1088, 624)
-team_id = "red"
-display_name = "Red Clash Portal"
+mode_id = "battle_royale"
+display_name = "Multi-Guild Battle Royale Portal"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1428557043]
 visible = false

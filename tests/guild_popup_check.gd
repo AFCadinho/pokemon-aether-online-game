@@ -49,6 +49,8 @@ func _init() -> void:
 	_check_contains(popup_source, "OutgoingGuildAetherClashChallenge", "multiple outgoing clashes remain visible")
 	_check_contains(popup_source, "GuildCurrentAetherClash", "every Guild member can see the reserved clash")
 	_check_contains(popup_source, "GuildAetherClashEntryCountdown", "accepted clashes show the lobby entry countdown")
+	_check_contains(popup_source, "GuildAetherClashSpectatorAccess", "challenge creators configure spectator access")
+	_check_contains(popup_source, '_aether_clash_spectator_access_text(str(challenge.get("spectatorAccess", "public")))', "challenge cards show their spectator policy")
 	_check_contains(popup_source, "challenge_aether_clash", "challenge controls honor the dedicated Guild permission")
 	_check_contains(popup_source, "GuildAnnouncementPanel", "guild overview is dedicated to Guild announcements")
 	_check_contains(popup_source, "GuildOptionsMenuButton", "Guild departure lives in a low-prominence options menu")

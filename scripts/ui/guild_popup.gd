@@ -1423,6 +1423,11 @@ func _build_current_aether_clash_card(challenge: Dictionary) -> Control:
 	))
 	var status := str(challenge.get("status", "entry_open"))
 	content.add_child(_label(_aether_clash_status_text(status), 11, UI_SUCCESS))
+	content.add_child(_label(
+		_aether_clash_spectator_access_text(str(challenge.get("spectatorAccess", "public"))),
+		10,
+		UI_MUTED
+	))
 	if status == "entry_open":
 		aether_clash_countdown_label = _label("", 14, UI_GOLD)
 		aether_clash_countdown_label.name = "GuildAetherClashEntryCountdown"
@@ -1485,6 +1490,11 @@ func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -
 		}),
 		10,
 		UI_WARNING
+	))
+	copy.add_child(_label(
+		_aether_clash_spectator_access_text(str(challenge.get("spectatorAccess", "public"))),
+		10,
+		UI_MUTED
 	))
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 6)
@@ -1564,6 +1574,14 @@ func _aether_clash_status_text(status: String) -> String:
 			return _t("ui.guild.aether_clash.status.finishing")
 		_:
 			return status.replace("_", " ").capitalize()
+
+
+func _aether_clash_spectator_access_text(access: String) -> String:
+	return _t(
+		"ui.guild.aether_clash.spectators.guilds_only"
+		if access == "guilds_only"
+		else "ui.guild.aether_clash.spectators.public"
+	)
 
 
 func _refresh_aether_clash_countdown() -> void:
@@ -6268,17 +6286,32 @@ func _confirm_aether_clash_challenge(guild: Dictionary) -> void:
 	dialog.dialog_text = _t("ui.guild.aether_clash.challenge_confirm", {
 		"guild": str(guild.get("name", _t("ui.guild.fallback.guild"))),
 	})
+	var spectator_access := OptionButton.new()
+	spectator_access.name = "GuildAetherClashSpectatorAccess"
+	spectator_access.position = Vector2(20, 112)
+	spectator_access.size = Vector2(460, 38)
+	spectator_access.add_item(_t("ui.guild.aether_clash.spectators.public"))
+	spectator_access.set_item_metadata(0, "public")
+	spectator_access.add_item(_t("ui.guild.aether_clash.spectators.guilds_only"))
+	spectator_access.set_item_metadata(1, "guilds_only")
+	dialog.add_child(spectator_access)
 	dialog.ok_button_text = _t("ui.guild.aether_clash.challenge")
 	dialog.cancel_button_text = _t("common.cancel")
 	_apply_guild_confirmation_style(dialog, "primary")
 	add_child(dialog)
-	dialog.confirmed.connect(_create_aether_clash_challenge.bind(guild_id), CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(
+		_create_aether_clash_challenge.bind(guild_id, spectator_access),
+		CONNECT_ONE_SHOT
+	)
 	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
 	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
-	dialog.popup_centered(Vector2i(500, 220))
+	dialog.popup_centered(Vector2i(500, 270))
 
 
-func _create_aether_clash_challenge(guild_id: int) -> void:
+func _create_aether_clash_challenge(
+	guild_id: int,
+	spectator_access_selector: OptionButton = null
+) -> void:
 	if is_aether_clash_action_in_flight:
 		return
 	is_aether_clash_action_in_flight = true
@@ -6289,9 +6322,15 @@ func _create_aether_clash_challenge(guild_id: int) -> void:
 		_set_aether_clash_feedback(_t("ui.guild.error.service_unavailable"), true)
 		_render_guild_list()
 		return
+	var spectator_access := "public"
+	if spectator_access_selector != null and spectator_access_selector.selected >= 0:
+		spectator_access = str(spectator_access_selector.get_item_metadata(
+			spectator_access_selector.selected
+		))
 	var result := _dictionary(await guild_service.call(
 		"create_aether_clash_challenge",
-		guild_id
+		guild_id,
+		spectator_access
 	))
 	is_aether_clash_action_in_flight = false
 	if not bool(result.get("success", false)):

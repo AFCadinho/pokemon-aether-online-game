@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/aether_clash_duel/aether_clash_duel.visual.tscn" id="1_mwxug"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="2_wwok8"]
+[ext_resource type="Script" path="res://scripts/world/aether_clash_duel.gd" id="3_metadata"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xcqrr"]
 texture = ExtResource("2_wwok8")
@@ -199,6 +200,18 @@ tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_tjimy")
 
 [node name="AetherClashDuel" type="Node2D" unique_id=15080590]
+script = ExtResource("3_metadata")
+map_id = "aether_clash_duel"
+map_region_name = "Aether Clash"
+map_display_name = "Aether Clash Guild Duel"
+world_access_group_id = "aether_clash"
+world_access_group_label = "Aether Clash"
+world_access_area_type = "exterior"
+location_id = "aether_clash.duel"
+location_name = "Aether Clash Guild Duel"
+region_id = "aether_clash"
+weather_profile = "disabled"
+music_track_id = "login.lugia_theme_lofi"
 
 [node name="ClanWarsMap" parent="." unique_id=320525915 instance=ExtResource("1_mwxug")]
 
@@ -236,8 +249,17 @@ tile_set = SubResource("TileSet_sg8c7")
 
 [node name="Spawns" type="Node2D" parent="."]
 
+[node name="Guild1ArenaSpawn" type="Marker2D" parent="Spawns"]
+position = Vector2(336, 496)
+
+[node name="Guild2ArenaSpawn" type="Marker2D" parent="Spawns"]
+position = Vector2(2288, 496)
+
 [node name="Guild1JailSpawn" type="Marker2D" parent="Spawns"]
 position = Vector2(2224, 2416)
 
 [node name="Guild2JailSpawn" type="Marker2D" parent="Spawns"]
 position = Vector2(2224, 2672)
+
+[node name="SpectatorJailSpawn" type="Marker2D" parent="Spawns"]
+position = Vector2(2224, 2416)
