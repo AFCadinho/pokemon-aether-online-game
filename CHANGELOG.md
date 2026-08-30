@@ -4,7 +4,7 @@
 
 **Added**
 
-- Every Pokémon Center now has a Move Maniac who can freely teach compatible relearn, Egg, tutor, special, event, legacy, and pre-evolution moves.
+- Every Pokémon Center now has a Move Maniac who can teach compatible relearn, Egg, tutor, special, event, legacy, and pre-evolution moves in exchange for gathered resources.
 - Every Pokémon Center now has a separate Move Deleter who can safely remove any move except a Pokémon's last one.
 - Guild Leaders and Captains can now send, accept, decline, and cancel Guild vs Guild Aether Clash challenges from the Guild screen. Multiple challenges may remain pending, while accepting one reserves both Guilds and opens a timed lobby-entry window for every member.
 - The Aether Clash Lobby now has mode-specific portals. The Guild Duel portal sends on-time Guild members to their arena side, late entrants and allowed outsiders to jail as spectators, and lets challengers choose whether outside spectators may attend.
@@ -16,6 +16,7 @@
 **Changed**
 
 - Guild Duel teams are now presented as the Blue Side and Red Side while the HUD continues to show both actual Guild names; either team may use either exit zone to leave.
+- Move Maniac lessons now consume Heart Scales, Mushrooms, or Armorite Ore based on how the move is learned, with costs and owned quantities shown directly in the interface.
 - The Move Maniac and Move Deleter now use matching trainer portraits in dialogue, and the Move Deleter has moved to a more natural spot in Pokémon Centers.
 - Wild battles now open with both Pokémon ready, letting queued move or Run input start sooner without an opening summon animation.
 - Wild victories no longer pause on the winner message; disabling Move Animations also removes the remaining terminal presentation waits while still applying every result and reward.

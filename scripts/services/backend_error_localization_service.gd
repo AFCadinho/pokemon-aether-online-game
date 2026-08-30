@@ -39,6 +39,7 @@ const CODE_TO_KEY: Dictionary = {
 	"transit_attunement_distance_invalid": "backend.error.transit_too_far",
 	"item_not_found": "backend.error.item_not_found",
 	"item_not_owned": "backend.error.item_not_owned",
+	"move_mentor_resource_required": "backend.error.move_mentor_resource_required",
 	"item_not_usable": "backend.error.item_not_usable",
 	"item_no_effect": "backend.error.item_no_effect",
 	"item_unsupported": "backend.error.item_unsupported",
