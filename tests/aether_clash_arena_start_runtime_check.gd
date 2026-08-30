@@ -41,6 +41,8 @@ func _run() -> void:
 	_check(not visual.visible, "Reconnect skips an obsolete lowering animation")
 	_check(hud.challenger_name_label.text == "North Stars", "HUD names the north Guild")
 	_check(hud.challenged_name_label.text == "South Guard", "HUD names the south Guild")
+	_check(hud.challenger_side_label.text == "BLUE SIDE", "HUD identifies the north Guild as Blue Side")
+	_check(hud.challenged_side_label.text == "RED SIDE", "HUD identifies the south Guild as Red Side")
 	_check(hud.challenger_count_label.text == "4", "HUD shows north active players")
 	_check(hud.challenged_count_label.text == "2", "HUD shows south active players")
 	_check(hud.countdown_label.text == "FIGHT!", "Active arena HUD shows the fight phase")
@@ -141,7 +143,7 @@ func _arena_payload(status: String, challenger_count: int, challenged_count: int
 		"success": true,
 		"serverNow": Time.get_datetime_string_from_unix_time(now, true) + "Z",
 		"viewerRole": "participant",
-		"viewerSide": "challenger",
+		"viewerSide": "blue",
 		"session": {
 			"id": "runtime-test",
 			"status": status,

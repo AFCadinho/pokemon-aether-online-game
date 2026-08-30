@@ -31,10 +31,10 @@ func _run() -> void:
 
 	var zones = duel.get_node_or_null("ArenaZones")
 	_check(zones != null, "Duel owns visible staging and exit zones")
-	var north_zone: Rect2 = zones.call("get_zone_rect", "challenger")
-	var south_zone: Rect2 = zones.call("get_zone_rect", "challenged")
-	_check(north_zone.get_center() == Vector2(1456, 208), "North staging zone follows its editable spawn marker")
-	_check(south_zone.get_center() == Vector2(1072, 4752), "South staging zone follows its editable spawn marker")
+	var blue_zone: Rect2 = zones.call("get_zone_rect", "blue")
+	var red_zone: Rect2 = zones.call("get_zone_rect", "red")
+	_check(blue_zone.get_center() == Vector2(1456, 208), "Blue staging zone follows its editable spawn marker")
+	_check(red_zone.get_center() == Vector2(1072, 4752), "Red staging zone follows its editable spawn marker")
 
 	var player_save := root.get_node("PlayerSave")
 	var original_player_id := str(player_save.get("player_id"))
@@ -51,13 +51,13 @@ func _run() -> void:
 	remote_actor.add_to_group("remote_player_avatar")
 	duel.add_child(remote_actor)
 
-	duel.call("_apply_arena_state", _payload("entry_open", "challenger"))
+	duel.call("_apply_arena_state", _payload("entry_open", "blue"))
 	_check(
 		not bool(duel.call("is_world_actor_step_blocked", Vector2(512, 512), Vector2(544, 512))),
 		"Players may overlap while the staging countdown is open"
 	)
 
-	duel.call("_apply_arena_state", _payload("active", "challenger"))
+	duel.call("_apply_arena_state", _payload("active", "blue"))
 	_check(
 		bool(duel.call("is_world_actor_step_blocked", Vector2(512, 512), Vector2(544, 512))),
 		"Friendly engagement circles block movement after the countdown"
@@ -70,7 +70,7 @@ func _run() -> void:
 		contact["count"] = int(contact["count"]) + 1
 		contact["method"] = method
 	)
-	duel.call("_apply_arena_state", _payload("active", "challenged"))
+	duel.call("_apply_arena_state", _payload("active", "red"))
 	_check(
 		bool(duel.call("is_world_actor_step_blocked", Vector2(512, 512), Vector2(544, 512))),
 		"Enemy engagement circles stop the movement step"
@@ -88,12 +88,18 @@ func _run() -> void:
 	_check(
 		bool(duel.call(
 			"is_world_actor_step_blocked",
-			south_zone.position - Vector2(0, 32),
-			south_zone.get_center()
+			red_zone.position - Vector2(0, 32),
+			red_zone.get_center()
 		)),
-		"A participant cannot enter the opposing Guild's exit zone"
+		"The opposite-colored exit zone stops the movement step"
 	)
-	local_actor.global_position = north_zone.get_center()
+	await process_frame
+	var red_exit_dialog := duel.get_node_or_null("AetherClashLeaveConfirmation")
+	_check(red_exit_dialog != null and red_exit_dialog.visible, "Either team may use the opposite-colored exit zone")
+	if red_exit_dialog != null:
+		red_exit_dialog.call("_cancel")
+	await process_frame
+	local_actor.global_position = blue_zone.get_center()
 	duel.set("staging_ejection_deadline_msec", Time.get_ticks_msec() - 1)
 	duel.call("_process_staging_ejection")
 	_check(
@@ -104,7 +110,7 @@ func _run() -> void:
 		bool(duel.call(
 			"is_world_actor_step_blocked",
 			local_actor.global_position,
-			north_zone.get_center()
+			blue_zone.get_center()
 		)),
 		"Entering the own active exit zone stops the movement step"
 	)
@@ -126,6 +132,13 @@ func _run() -> void:
 		duel_source.contains("GuildService.leave_aether_clash_arena(instance_session_id)"),
 		"Own exit-zone confirmation uses the authoritative leave operation"
 	)
+	var zone_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_arena_zones.gd")
+	_check(
+		zone_source.contains('for side: String in ["blue", "red"]')
+		and zone_source.contains("BLUE_COLOR")
+		and zone_source.contains("RED_COLOR"),
+		"Staging and exit areas use explicit Blue Side and Red Side colors"
+	)
 
 	player_save.set("player_id", original_player_id)
 	duel.queue_free()
@@ -139,9 +152,9 @@ func _payload(status: String, remote_side: String) -> Dictionary:
 		"success": true,
 		"serverNow": Time.get_datetime_string_from_unix_time(now, true) + "Z",
 		"viewerRole": "participant",
-		"viewerSide": "challenger",
+		"viewerSide": "blue",
 		"arenaPlayers": [
-			{"userId": 1, "side": "challenger"},
+			{"userId": 1, "side": "blue"},
 			{"userId": 2, "side": remote_side},
 		],
 		"session": {

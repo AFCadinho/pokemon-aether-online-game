@@ -116,14 +116,10 @@ func is_world_actor_step_blocked(from_position: Vector2, to_position: Vector2) -
 	if not is_clash_active() or not _is_local_active_participant():
 		return false
 
-	var own_zone := _zone_rect(viewer_side)
-	var opposing_side := "challenged" if viewer_side == "challenger" else "challenger"
-	var opposing_zone := _zone_rect(opposing_side)
-	if _enters_rect(from_position, to_position, opposing_zone):
-		return true
-	if _enters_rect(from_position, to_position, own_zone):
-		_request_leave_confirmation.call_deferred()
-		return true
+	for exit_side: String in ["blue", "red"]:
+		if _enters_rect(from_position, to_position, _zone_rect(exit_side)):
+			_request_leave_confirmation.call_deferred()
+			return true
 
 	var local_user_id := _local_user_id()
 	for user_id_value: Variant in arena_players.keys():
@@ -226,7 +222,7 @@ func _apply_arena_players(value: Variant) -> void:
 		var player_state := player_value as Dictionary
 		var user_id := int(player_state.get("userId", 0))
 		var side := str(player_state.get("side", ""))
-		if user_id > 0 and side in ["challenger", "challenged"]:
+		if user_id > 0 and side in ["blue", "red"]:
 			arena_players[user_id] = side
 
 
@@ -251,7 +247,7 @@ func _sync_engagement_rings() -> void:
 			ring.name = "AetherClashEngagementRing"
 			actor.add_child(ring)
 		if ring.has_method("configure"):
-			ring.call("configure", str(arena_players.get(user_id, "challenger")))
+			ring.call("configure", str(arena_players.get(user_id, "blue")))
 
 
 func _all_player_actors() -> Array[Node2D]:
@@ -293,7 +289,7 @@ func _is_local_active_participant() -> bool:
 	var local_user_id := _local_user_id()
 	return (
 		viewer_role == "participant"
-		and viewer_side in ["challenger", "challenged"]
+		and viewer_side in ["blue", "red"]
 		and local_user_id > 0
 		and arena_players.has(local_user_id)
 	)
@@ -324,7 +320,7 @@ func _process_staging_ejection() -> void:
 	if not arena_zones.has_method("get_arena_exit_point") or not player.has_method("teleport_within_current_map"):
 		return
 	var exit_point: Vector2 = arena_zones.call("get_arena_exit_point", viewer_side)
-	var facing := Vector2.DOWN if viewer_side == "challenger" else Vector2.UP
+	var facing := Vector2.DOWN if viewer_side == "blue" else Vector2.UP
 	player.call("teleport_within_current_map", exit_point, facing)
 
 
