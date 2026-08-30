@@ -13,6 +13,7 @@ const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
 const GUILD_NOTIFICATIONS_ENDPOINT := "/game/guild-notifications"
 const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
 const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
+const AETHER_CLASH_CHALLENGES_ENDPOINT := "/game/aether-clash/challenges"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var pending_creation_request_id := ""
@@ -302,6 +303,40 @@ func load_aether_clash_champion() -> Dictionary:
 	return normalize_aether_clash_champion(response.get("body", {}))
 
 
+func load_aether_clash_challenges() -> Dictionary:
+	var response := await _authenticated_request(
+		AETHER_CLASH_CHALLENGES_ENDPOINT,
+		HTTPClient.METHOD_GET,
+		""
+	)
+	return (
+		response
+		if not bool(response.get("success", false))
+		else _aether_clash_challenges_result(response.get("body", {}))
+	)
+
+
+func create_aether_clash_challenge(challenged_guild_id: int) -> Dictionary:
+	var response := await _authenticated_request(
+		AETHER_CLASH_CHALLENGES_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		JSON.stringify({"challengedGuildId": challenged_guild_id})
+	)
+	return _aether_clash_action_result(response)
+
+
+func accept_aether_clash_challenge(challenge_id: String) -> Dictionary:
+	return await _aether_clash_action(challenge_id, "accept")
+
+
+func decline_aether_clash_challenge(challenge_id: String) -> Dictionary:
+	return await _aether_clash_action(challenge_id, "decline")
+
+
+func cancel_aether_clash_challenge(challenge_id: String) -> Dictionary:
+	return await _aether_clash_action(challenge_id, "cancel")
+
+
 static func normalize_aether_clash_champion(value: Variant) -> Dictionary:
 	var body := value as Dictionary if value is Dictionary else {}
 	var guild_id_value: Variant = body.get("guildId")
@@ -481,6 +516,56 @@ func _home_result(value: Variant) -> Dictionary:
 		"emblemTemplates": _array(body.get("emblemTemplates", [])),
 		"rankPermissions": _dictionary(body.get("rankPermissions", {})),
 	}
+
+
+func _aether_clash_challenges_result(value: Variant) -> Dictionary:
+	var body := _dictionary(value)
+	var incoming: Array[Dictionary] = []
+	for challenge_value: Variant in _array(body.get("pendingIncoming", [])):
+		if challenge_value is Dictionary:
+			incoming.append(_normalize_aether_clash_session(challenge_value))
+	var outgoing: Array[Dictionary] = []
+	for challenge_value: Variant in _array(body.get("pendingOutgoing", [])):
+		if challenge_value is Dictionary:
+			outgoing.append(_normalize_aether_clash_session(challenge_value))
+	var current_session := _normalize_aether_clash_session(body.get("currentSession", {}))
+	return {
+		"success": true,
+		"canManage": bool(body.get("canManage", false)),
+		"pendingIncoming": incoming,
+		"pendingOutgoing": outgoing,
+		"currentSession": current_session,
+	}
+
+
+func _aether_clash_action(challenge_id: String, action: String) -> Dictionary:
+	var normalized_id := challenge_id.strip_edges()
+	if normalized_id == "":
+		return {"success": false, "error": "Aether Clash challenge was missing."}
+	var response := await _authenticated_request(
+		AETHER_CLASH_CHALLENGES_ENDPOINT + "/%s/%s" % [normalized_id.uri_encode(), action],
+		HTTPClient.METHOD_POST,
+		"{}"
+	)
+	return _aether_clash_action_result(response)
+
+
+func _aether_clash_action_result(response: Dictionary) -> Dictionary:
+	if not bool(response.get("success", false)):
+		return response
+	return {
+		"success": true,
+		"challenge": _normalize_aether_clash_session(response.get("body", {})),
+	}
+
+
+func _normalize_aether_clash_session(value: Variant) -> Dictionary:
+	if not value is Dictionary:
+		return {}
+	var challenge := (value as Dictionary).duplicate(true)
+	challenge["challengerGuild"] = _dictionary(challenge.get("challengerGuild", {})).duplicate(true)
+	challenge["challengedGuild"] = _dictionary(challenge.get("challengedGuild", {})).duplicate(true)
+	return challenge
 
 
 func _bank_action(path: String, payload: Dictionary) -> Dictionary:
