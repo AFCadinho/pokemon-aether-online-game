@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Guild Pokémon Vault now shows unavailable Pokémon in red and explains why they cannot be donated.
+
 - Important Guild actions now use clearer primary, secondary, active-tab, and level-progression colours.
 
 **Added**

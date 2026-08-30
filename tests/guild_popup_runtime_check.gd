@@ -356,6 +356,20 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankPokemonListScroll", true, false) != null, "Pokémon Vault overview remains scrollable at scale")
 	_check(popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) == null, "Pokémon Vault overview keeps Guild withdrawals out of the preview")
 	_check(popup.find_child("GuildBankPokemonDepositButton_22", true, false) != null, "Pokémon Vault overview keeps direct personal donations available")
+	var ineligible_pokemon := popup.find_child("GuildBankPokemonEligibility_23", true, false) as Label
+	var ineligible_deposit := popup.find_child("GuildBankPokemonDepositButton_23", true, false) as Button
+	_check(
+		ineligible_pokemon != null
+		and ineligible_pokemon.text.contains("held item")
+		and ineligible_pokemon.get_theme_color("font_color") == GuildPopup.UI_ERROR,
+		"Pokémon Vault shows an ineligible Pokémon in red with its reason"
+	)
+	_check(
+		ineligible_deposit != null
+		and ineligible_deposit.disabled
+		and ineligible_deposit.tooltip_text.contains("held item"),
+		"ineligible Pokémon remain impossible to donate from the client"
+	)
 	var stored_pokemon_preview := popup.find_child("GuildBankPokemonIcon_21", true, false) as Button
 	_check(
 		stored_pokemon_preview != null and stored_pokemon_preview.tooltip_text == "Open Summary",

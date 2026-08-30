@@ -75,6 +75,7 @@ const UI_TEXT := Color("#f4f0de")
 const UI_MUTED := Color("#aeb8c5")
 const UI_SUCCESS := Color("#79e49b")
 const UI_WARNING := Color("#f0c875")
+const UI_ERROR := Color("#ff8f9b")
 
 # Preview-only data used by the isolated interface checks. Normal gameplay always
 # loads the authoritative directory from the guild service.
@@ -455,7 +456,11 @@ func show_debug_member_preview() -> void:
 			},
 		],
 		"depositablePokemon": [
-			{"pokemonId": 22, "pokemon": {"name": "Venusaur", "level": 48}},
+			{"pokemonId": 22, "pokemon": {"name": "Venusaur", "level": 48}, "canDeposit": true, "eligibility": "eligible"},
+		],
+		"pokemonCandidates": [
+			{"pokemonId": 22, "pokemon": {"name": "Venusaur", "level": 48}, "canDeposit": true, "eligibility": "eligible"},
+			{"pokemonId": 23, "pokemon": {"name": "Charizard", "level": 50}, "canDeposit": false, "eligibility": "holding_item"},
 		],
 		"party": [],
 	}
@@ -2382,6 +2387,10 @@ func _build_guild_bank_category_preview(category: String) -> Control:
 	workspace.add_child(columns)
 	match category:
 		"pokemon":
+			var player_pokemon := _array_from_value(guild_bank_state.get(
+				"pokemonCandidates",
+				guild_bank_state.get("depositablePokemon", [])
+			))
 			columns.add_child(_build_guild_pokemon_list(
 				"ui.guild.bank.pokemon.stored",
 				_array_from_value(guild_bank_state.get("pokemon", [])),
@@ -2390,7 +2399,7 @@ func _build_guild_bank_category_preview(category: String) -> Control:
 			))
 			columns.add_child(_build_guild_pokemon_list(
 				"ui.guild.bank.pokemon.yours",
-				_array_from_value(guild_bank_state.get("depositablePokemon", [])),
+				player_pokemon,
 				false
 			))
 		"items":
@@ -3542,7 +3551,7 @@ func _build_guild_pokemon_list(
 		if not is_bank:
 			var can_deposit := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
 			if can_deposit:
-				empty_key = "ui.guild.bank.empty.pokemon_eligible"
+				empty_key = "ui.guild.bank.empty.pokemon_owned"
 			elif _guild_bank_permission_is_personally_denied("bank_deposit"):
 				empty_key = "ui.guild.bank.empty.deposit_personal_deny"
 			else:
@@ -3625,14 +3634,31 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool, readonly: bool =
 		))
 		return row
 	if not is_bank:
-		identity.add_child(_localized_label("ui.guild.bank.pokemon.ready_to_deposit", 9, UI_MUTED))
-		var can_deposit := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
+		var eligibility := str(entry.get("eligibility", "eligible"))
+		var candidate_can_deposit := bool(entry.get("canDeposit", eligibility == "eligible"))
+		var status_key := _guild_bank_pokemon_eligibility_key(eligibility)
+		var eligibility_label := _localized_label(
+			status_key,
+			9,
+			UI_MUTED if candidate_can_deposit else UI_ERROR
+		)
+		eligibility_label.name = "GuildBankPokemonEligibility_%d" % pokemon_id
+		identity.add_child(eligibility_label)
+		if not candidate_can_deposit:
+			row.modulate = Color("#ffb2ba")
+		var has_permission := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
+		var can_deposit := has_permission and candidate_can_deposit
+		var unavailable_tooltip := ""
+		if not candidate_can_deposit:
+			unavailable_tooltip = _t(status_key)
+		elif not has_permission:
+			unavailable_tooltip = _guild_bank_permission_restriction("bank_deposit", "ui.guild.bank.tooltip.deposit_rank")
 		row.add_child(_guild_bank_action_button(
 			"GuildBankPokemonDepositButton_%d" % pokemon_id,
 			"ui.guild.bank.donate",
 			can_deposit,
 			_on_guild_bank_pokemon_action.bind("deposit", pokemon_id, pokemon),
-			"" if can_deposit else _guild_bank_permission_restriction("bank_deposit", "ui.guild.bank.tooltip.deposit_rank")
+			unavailable_tooltip
 		))
 		return row
 	if is_borrowed:
@@ -3710,6 +3736,20 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool, readonly: bool =
 		)
 	))
 	return row
+
+
+func _guild_bank_pokemon_eligibility_key(eligibility: String) -> String:
+	match eligibility:
+		"not_owned":
+			return "ui.guild.bank.pokemon.ineligible.not_owned"
+		"not_shareable":
+			return "ui.guild.bank.pokemon.ineligible.not_shareable"
+		"holding_item":
+			return "ui.guild.bank.pokemon.ineligible.holding_item"
+		"last_party_pokemon":
+			return "ui.guild.bank.pokemon.ineligible.last_party_pokemon"
+		_:
+			return "ui.guild.bank.pokemon.ready_to_deposit"
 
 
 func _open_guild_bank_pokemon_summary(pokemon: Dictionary) -> void:
