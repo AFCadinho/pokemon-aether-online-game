@@ -496,6 +496,7 @@ const TRAINER_CARD_SECTION_BORDER := Color("#2d4b66b3")
 const UTC_TIME_REFRESH_INTERVAL_SECONDS := 1.0
 const AETHER_CLASH_CHAMPION_REFRESH_INTERVAL_SECONDS := 30.0
 const AETHER_CLASH_LOBBY_MAP_ID := "aether_clash_lobby"
+const AETHER_CLASH_DUEL_MAP_PREFIX := "aether_clash_duel:"
 const UI_SURFACE_BASE := Color("#050b14ed")
 const UI_SURFACE_RAISED := Color("#081522eb")
 const UI_SURFACE_INTERACTIVE := Color("#0b1a2bea")
@@ -10330,6 +10331,7 @@ func _refresh_location_label_if_needed() -> void:
 func _refresh_location_label() -> void:
 	displayed_location_map = GameState.current_map as Node
 	displayed_location_name = _get_current_map_display_name()
+	_set_collapsible_panel_available("location", not _is_in_aether_clash_duel())
 	if region_label != null:
 		region_label.text = _get_current_map_region_name().to_upper()
 	if location_label != null:
@@ -10399,6 +10401,15 @@ func _is_in_aether_clash_lobby() -> bool:
 		current_map != null
 		and current_map.has_method("get_map_id")
 		and str(current_map.call("get_map_id")) == AETHER_CLASH_LOBBY_MAP_ID
+	)
+
+
+func _is_in_aether_clash_duel() -> bool:
+	var current_map := GameState.current_map as Node
+	return (
+		current_map != null
+		and current_map.has_method("get_map_id")
+		and str(current_map.call("get_map_id")).begins_with(AETHER_CLASH_DUEL_MAP_PREFIX)
 	)
 
 func _on_location_weather_changed(weather_state: Dictionary) -> void:

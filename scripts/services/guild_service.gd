@@ -16,6 +16,7 @@ const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
 const AETHER_CLASH_CHALLENGES_ENDPOINT := "/game/aether-clash/challenges"
 const AETHER_CLASH_PLAYER_CHALLENGES_ENDPOINT := "/game/aether-clash/player-challenges"
 const AETHER_CLASH_PORTAL_SESSIONS_ENDPOINT := "/game/aether-clash/portal-sessions"
+const AETHER_CLASH_SESSIONS_ENDPOINT := "/game/aether-clash/sessions"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var pending_creation_request_id := ""
@@ -386,6 +387,27 @@ func enter_aether_clash_portal(challenge_id: String) -> Dictionary:
 		"role": str(body.get("role", "spectator")),
 		"session": _normalize_aether_clash_session(body.get("session", {})),
 		"state": _dictionary(body.get("state", {})).duplicate(true),
+	}
+
+
+func load_aether_clash_arena_state(challenge_id: String) -> Dictionary:
+	var normalized_id := challenge_id.strip_edges()
+	if normalized_id.is_empty():
+		return {"success": false, "error": "Aether Clash session was missing."}
+	var response := await _authenticated_request(
+		AETHER_CLASH_SESSIONS_ENDPOINT + "/%s/arena-state" % normalized_id.uri_encode(),
+		HTTPClient.METHOD_GET,
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	return {
+		"success": true,
+		"session": _normalize_aether_clash_session(body.get("session", {})),
+		"viewerRole": str(body.get("viewerRole", "spectator")),
+		"viewerSide": str(body.get("viewerSide", "")),
+		"serverNow": str(body.get("serverNow", "")),
 	}
 
 
