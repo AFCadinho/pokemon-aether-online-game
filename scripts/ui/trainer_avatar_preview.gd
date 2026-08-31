@@ -6,7 +6,7 @@ const TRAINER_HEAD_PORTRAIT_SCRIPT := preload("res://scripts/ui/trainer_head_por
 
 var trainer_state: Dictionary = {}
 var fallback_text := "?"
-var portrait: TrainerHeadPortrait
+var portrait
 var fallback_label: Label
 
 
@@ -31,7 +31,7 @@ func set_trainer_state(state: Dictionary, fallback: String = "?") -> void:
 func _build_visuals() -> void:
 	if portrait != null and is_instance_valid(portrait):
 		return
-	portrait = TRAINER_HEAD_PORTRAIT_SCRIPT.new() as TrainerHeadPortrait
+	portrait = TRAINER_HEAD_PORTRAIT_SCRIPT.new()
 	portrait.name = "SpritePortrait"
 	portrait.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	portrait.custom_minimum_size = Vector2.ZERO

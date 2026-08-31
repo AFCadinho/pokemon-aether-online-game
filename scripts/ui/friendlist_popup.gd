@@ -953,7 +953,7 @@ func _create_user_avatar(user: Dictionary, online: bool, blocked: bool = false) 
 		_make_panel_style(Color("#0a1b2be8"), border_color, 10, 1)
 	)
 
-	var avatar_preview := TrainerAvatarPreviewScript.new() as TrainerAvatarPreview
+	var avatar_preview = TrainerAvatarPreviewScript.new()
 	avatar_preview.name = "TrainerAvatarPreview"
 	avatar_preview.set_trainer_state(user, _user_initials(user))
 	if blocked:

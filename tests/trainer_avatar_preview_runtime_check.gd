@@ -10,9 +10,22 @@ func _init() -> void:
 
 
 func _run() -> void:
+	for script_path: String in [
+		"res://scripts/ui/friendlist_popup.gd",
+		"res://scripts/ui/guild_popup.gd",
+		"res://scripts/ui/player_interaction_coordinator.gd",
+		"res://scripts/ui/trainer_avatar_preview.gd",
+	]:
+		var source := FileAccess.get_file_as_string(script_path)
+		_check(
+			not source.contains("as TrainerAvatarPreview")
+			and not source.contains(": TrainerAvatarPreview"),
+			"%s loads the preview through its preloaded script without relying on the global class cache" % script_path.get_file()
+		)
+
 	var host := Control.new()
 	root.add_child(host)
-	var preview := TRAINER_AVATAR_PREVIEW_SCRIPT.new() as TrainerAvatarPreview
+	var preview = TRAINER_AVATAR_PREVIEW_SCRIPT.new()
 	preview.size = Vector2(46, 46)
 	preview.set_trainer_state({
 		"gender": "female",
