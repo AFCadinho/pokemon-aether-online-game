@@ -148,6 +148,8 @@ var incoming_invitations: Array = []
 var pending_applications: Array = []
 var application_cooldowns: Array = []
 var aether_clash_state: Dictionary = {}
+var aether_clash_load_error := ""
+var is_aether_clash_loading := false
 var active_aether_clash_mode_tab := "duel"
 var active_aether_clash_duel_section := "overview"
 var selected_guild_id := 0
@@ -1550,7 +1552,7 @@ func _build_aether_clash_workspace() -> Control:
 	var refresh_button := Button.new()
 	refresh_button.name = "RefreshGuildAetherClashButton"
 	_set_localized_property(refresh_button, "text", "ui.guild.aether_clash.refresh")
-	refresh_button.disabled = is_aether_clash_action_in_flight
+	refresh_button.disabled = is_aether_clash_action_in_flight or is_aether_clash_loading
 	refresh_button.pressed.connect(_refresh_aether_clash_from_server)
 	_apply_button_style(refresh_button, "secondary")
 	var heading := _build_guild_workspace_header(
@@ -1600,10 +1602,24 @@ func _build_aether_clash_workspace() -> Control:
 		return workspace
 
 	if aether_clash_state.is_empty():
-		workspace.add_child(_build_aether_clash_message_panel(
-			_t("ui.guild.aether_clash.loading"),
-			UI_MUTED
-		))
+		if not aether_clash_load_error.is_empty():
+			var error_stack := VBoxContainer.new()
+			error_stack.name = "GuildAetherClashLoadError"
+			error_stack.add_theme_constant_override("separation", 8)
+			error_stack.add_child(_build_aether_clash_message_panel(aether_clash_load_error, UI_ERROR))
+			var retry_button := Button.new()
+			retry_button.name = "RetryGuildAetherClashButton"
+			retry_button.text = _t("ui.guild.aether_clash.retry")
+			retry_button.disabled = is_aether_clash_loading
+			retry_button.pressed.connect(_refresh_aether_clash_from_server)
+			_apply_button_style(retry_button, "primary")
+			error_stack.add_child(retry_button)
+			workspace.add_child(error_stack)
+		else:
+			workspace.add_child(_build_aether_clash_message_panel(
+				_t("ui.guild.aether_clash.loading"),
+				UI_MUTED
+			))
 		return workspace
 
 	var incoming := _array_from_value(aether_clash_state.get("pendingIncoming", []))
@@ -7847,17 +7863,34 @@ func _refresh_home_from_server() -> void:
 func _refresh_aether_clash_from_server() -> void:
 	if membership.is_empty():
 		aether_clash_state.clear()
+		aether_clash_load_error = ""
+		is_aether_clash_loading = false
 		return
+	if is_aether_clash_loading:
+		return
+	is_aether_clash_loading = true
+	aether_clash_load_error = ""
+	if active_guild_section == "aether_clash":
+		_render_guild_home()
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
+		is_aether_clash_loading = false
+		aether_clash_load_error = _t("ui.guild.error.service_unavailable")
+		if active_guild_section == "aether_clash":
+			_render_guild_home()
 		return
 	var result := _dictionary(await guild_service.call("load_aether_clash_challenges"))
+	is_aether_clash_loading = false
 	if not bool(result.get("success", false)):
+		aether_clash_state.clear()
+		aether_clash_load_error = str(result.get(
+			"error", _t("ui.guild.aether_clash.load_error")
+		))
 		if active_guild_section == "aether_clash":
-			_set_member_status(str(result.get(
-				"error", _t("ui.guild.aether_clash.load_error")
-			)), true)
+			_set_member_status(aether_clash_load_error, true)
+			_render_guild_home()
 		return
+	aether_clash_load_error = ""
 	aether_clash_state = result.duplicate(true)
 	_render_guild_home()
 	_render_guild_list()

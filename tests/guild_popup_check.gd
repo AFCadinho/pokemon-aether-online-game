@@ -58,6 +58,8 @@ func _init() -> void:
 	_check_contains(popup_source, "GuildAetherClashSpectatorAccess", "challenge creators configure spectator access")
 	_check_contains(popup_source, "GuildAetherClashTier", "challenge creators choose the canonical battle tier")
 	_check_contains(popup_source, "GuildAetherClashStakeAmount", "challenge creators can fund a stake from both Guild Banks")
+	_check_contains(popup_source, "RetryGuildAetherClashButton", "failed Aether Clash loading exposes an explicit retry action")
+	_check_contains(popup_source, "aether_clash_load_error", "failed Aether Clash loading replaces the indefinite loading state")
 	_check_contains(popup_source, "AETHER_CONFIRMATION_DIALOG_SCENE.instantiate()", "Guild challenge confirmation uses the themed Aether modal")
 	_check_contains(popup_source, '_aether_clash_spectator_access_text(str(challenge.get("spectatorAccess", "public")))', "challenge cards show their spectator policy")
 	_check_contains(popup_source, "_aether_clash_contract_text(challenge)", "challenge cards show tier, stake and pot")
