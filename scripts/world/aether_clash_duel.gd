@@ -5,6 +5,7 @@ signal arena_state_changed(state: Dictionary)
 signal engagement_contact_requested(source_user_id: int, target_user_id: int, method: String)
 
 const INSTANCE_MAP_PREFIX := "aether_clash_duel:"
+const AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE := "POKEAETHER_AETHER_CLASH_TRACE"
 const ARENA_STATE_REFRESH_SECONDS := 1.0
 const START_BARRIER_HALF_HEIGHT := 24.0
 const ENGAGEMENT_RING_SCRIPT: Script = preload("res://scripts/world/aether_clash_engagement_ring.gd")
@@ -1364,6 +1365,8 @@ func _release_separated_player_contact_pairs() -> void:
 
 
 func _trace_aether_clash(event: String, fields: Dictionary = {}) -> void:
+	if OS.get_environment(AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE) != "1":
+		return
 	var payload := fields.duplicate(true)
 	payload["event"] = event
 	print("[AetherClashTrace] %s" % JSON.stringify(payload))

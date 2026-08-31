@@ -1,6 +1,7 @@
 extends Node2D
 
 const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
+const AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE := "POKEAETHER_AETHER_CLASH_TRACE"
 const BATTLE_SCENE: PackedScene = preload(BATTLE_SCENE_PATH)
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const AETHERNET_TELEPORT_EFFECT_SCRIPT: Script = preload("res://scripts/world/aethernet_teleport_effect.gd")
@@ -457,6 +458,8 @@ func _is_aether_clash_map_id(value: String) -> bool:
 
 
 func _trace_aether_clash(event: String, fields: Dictionary = {}) -> void:
+	if OS.get_environment(AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE) != "1":
+		return
 	var payload := fields.duplicate(true)
 	payload["event"] = event
 	print("[AetherClashTrace] %s" % JSON.stringify(payload))
