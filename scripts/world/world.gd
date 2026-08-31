@@ -3343,6 +3343,7 @@ func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> voi
 		_notify_reward_level_ups(reward)
 		_notify_fishing_treasure_award(reward.get("items", []))
 		_notify_wild_item_drop_awards(reward.get("items", []))
+		_notify_wild_currency_drop_awards(reward.get("currencies", []))
 		await _notify_fishing_experience_award(reward.get("fishingProgression", {}))
 		var tutorial := _dictionary_from_value(reward.get("evTrainingTutorial", {}))
 		if not tutorial.is_empty():
@@ -3536,6 +3537,27 @@ func _notify_wild_item_drop_awards(value: Variant) -> void:
 			})
 		)
 		get_tree().call_group("ui_overlay", "add_item_reward_notification", item_id, quantity)
+		SfxManager.play("item_found")
+
+func _notify_wild_currency_drop_awards(value: Variant) -> void:
+	if value is not Array:
+		return
+	for currency_value: Variant in value as Array:
+		if currency_value is not Dictionary:
+			continue
+		var currency := currency_value as Dictionary
+		if str(currency.get("source", "")).strip_edges().to_lower() != "wild_pokemon_drop":
+			continue
+		var currency_id := str(currency.get("currency", "")).strip_edges().to_lower()
+		var amount := maxi(int(currency.get("amount", 0)), 0)
+		if currency_id != "aetherite" or amount <= 0:
+			continue
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.world.reward.wild_aetherite_drop", {"amount": amount})
+		)
+		get_tree().call_group("ui_overlay", "add_currency_reward_notification", currency_id, amount)
 		SfxManager.play("item_found")
 
 func _notify_wild_battle_money_awarded(pokemon_species: String, money_awarded: int) -> void:
