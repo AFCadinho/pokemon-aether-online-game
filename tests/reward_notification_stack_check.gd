@@ -125,6 +125,11 @@ func _run() -> void:
 
 	var inventory_source := FileAccess.get_file_as_string("res://scripts/services/inventory_service.gd")
 	_check(inventory_source.contains("signal item_received"), "inventory rewards expose structured item events")
+	_check(
+		inventory_source.contains("_notify_story_currency_rewards")
+		and inventory_source.contains('"walletRefreshSuccess"'),
+		"trusted NPC and pickup quest rewards refresh and announce Aetherite"
+	)
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
 	_check(overlay_source.contains("func add_reward_notification("), "overlay exposes a reusable reward-card API")
 	_check(overlay_source.contains("func add_currency_reward_notification("), "reward cards support currencies")
@@ -162,6 +167,11 @@ func _run() -> void:
 		world_source.contains("_story_reward_item_grants")
 		and world_source.contains('"add_item_reward_notification"'),
 		"story and fishing items use reward cards"
+	)
+	_check(
+		world_source.contains("_story_reward_aetherite_amount")
+		and world_source.contains('"ui.world.reward.quest_aetherite"'),
+		"trainer quest Aetherite uses localized currency reward cards"
 	)
 	_check(
 		overlay_source.contains("purchased_item_id,")
