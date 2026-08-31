@@ -113,14 +113,24 @@ func _check_mega_stone_drops(overlay: Node, detail_stack: VBoxContainer) -> void
 	var item_link := overlay.find_child("PokedexDropItem_charizardite-x", true, false) as LinkButton
 	_check(
 		detail_stack != null
-		and _tree_contains_text(detail_stack, "MEGA STONE-DROPS")
 		and _tree_contains_text(detail_stack, "2% per voltooide encounter")
 		and _tree_contains_text(detail_stack, "Verhandelbaar · Versla of vang deze Pokémon"),
-		"Pokédex renders the shared effective Mega Stone chance for defeat or capture"
+		"Pokédex renders the shared effective item-drop chance without a redundant category heading"
 	)
 	_check(
 		item_link != null and not item_link.pressed.get_connections().is_empty(),
 		"Pokédex Mega Stone drops link to the Item Dex"
+	)
+	overlay.set("pokedex_selected_species", {
+		"id": "rattata",
+		"wildDrops": [],
+		"wildDropCatalogId": "mega-stone-wild-drops-v1",
+	})
+	overlay.call("_refresh_pokedex_detail")
+	_check(
+		detail_stack != null
+		and _tree_contains_text(detail_stack, "Deze Pokémon heeft geen bekende itemdrops."),
+		"Pokédex uses a generic empty item-drop message"
 	)
 	overlay.set("pokedex_selected_species", {})
 	overlay.set("pokedex_active_tab", "general")

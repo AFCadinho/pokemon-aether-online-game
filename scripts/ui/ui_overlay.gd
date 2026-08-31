@@ -32771,6 +32771,13 @@ func _on_pokedex_species_selected(species_id: String) -> void:
 	var detail_request_id := pokedex_detail_request_id
 	_set_pokedex_detail_message(LocalizationManager.text("ui.pokedex.loading_species"))
 	var detail_result: Dictionary = await PokedexService.get_species_detail(normalized_species_id)
+	var cached_species: Variant = detail_result.get("species", {})
+	if (
+		bool(detail_result.get("success", false))
+		and cached_species is Dictionary
+		and not (cached_species as Dictionary).has("wildDropCatalogId")
+	):
+		detail_result = await PokedexService.get_species_detail(normalized_species_id, true)
 	if detail_request_id != pokedex_detail_request_id:
 		return
 	if not bool(detail_result.get("success", false)):
@@ -32811,7 +32818,20 @@ func _on_pokedex_tab_pressed(tab_id: String) -> void:
 		return
 	pokedex_active_tab = tab_id
 	_refresh_pokedex_tab_buttons()
+	if tab_id == "drops" and not pokedex_selected_species.has("wildDropCatalogId"):
+		await _refresh_selected_pokedex_drop_contract()
 	_refresh_pokedex_detail()
+
+func _refresh_selected_pokedex_drop_contract() -> void:
+	var species_id := pokedex_selected_species_id.strip_edges()
+	if species_id == "":
+		return
+	var detail_result: Dictionary = await PokedexService.get_species_detail(species_id, true)
+	if not bool(detail_result.get("success", false)):
+		return
+	var species_value: Variant = detail_result.get("species", {})
+	if species_value is Dictionary:
+		pokedex_selected_species = species_value as Dictionary
 
 func _refresh_pokedex_tab_buttons() -> void:
 	for tab_id_value: Variant in pokedex_tab_buttons.keys():
@@ -33470,9 +33490,6 @@ func _build_pokedex_placeholder_tab(title_text: String, entries: Array) -> void:
 		pokedex_detail_stack.add_child(_create_pokedex_muted_message(str(entry_value)))
 
 func _build_pokedex_drops_tab() -> void:
-	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title(
-		LocalizationManager.text("ui.pokedex.drops.title")
-	))
 	var drops := _array_from_variant(pokedex_selected_species.get("wildDrops", []))
 	if drops.is_empty():
 		pokedex_detail_stack.add_child(_create_pokedex_muted_message(

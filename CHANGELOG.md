@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Pokédex Drops tab now presents item drops directly without a redundant Mega Stone category heading.
+
 - Ranked now shows the Preseason Elo leaderboard, provisional status, and each Trainer's rating change in battle results and match history.
 
 - Aether Clash server announcements now load reliably after a live client update without breaking the overworld interface.
