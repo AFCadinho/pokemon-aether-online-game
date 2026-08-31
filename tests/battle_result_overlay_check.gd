@@ -28,6 +28,9 @@ func _init() -> void:
 	_check(source.contains("PvpBattleRealtimeService.is_local_terminal_winner("), "result screen resolves both winner sides and Showdown display names")
 	_check(source.contains("func _refresh_pvp_battle_rating(match_id: String) -> void:"), "rated PvP completion fetches the committed rating change")
 	_check(source.contains('BattleApiClient.get_pvp_match_summary(request, normalized_match_id)'), "rating presentation reads the participant-authorized match summary")
+	_check(source.contains('match.get("battlePointRewards", [])'), "Ranked completion reads the committed Battle Point reward")
+	_check(source.contains('_t("battle.result.battle_points_reward"'), "Ranked completion presents the Battle Point payout")
+	_check(source.contains("PlayerWalletService.load_wallet()") and source.contains("PlayerWalletService.apply_wallet_result(wallet_result)"), "Ranked completion refreshes the authoritative wallet balance")
 	quit(1 if failed else 0)
 
 

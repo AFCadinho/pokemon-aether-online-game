@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Completed Ranked battles can now award 1,000 Battle Points for a win and 500 for a loss, with the active server policy shown in Rewards and the payout shown after battle.
+
 - Current Kanto quests now award a balanced 1,325 Aetherite across main and side progression, with localized wallet notifications and safe one-time rewards for existing completions.
 
 - The Clash Coordinator now uses its local guide content without making a failing server NPC metadata request when approached.
