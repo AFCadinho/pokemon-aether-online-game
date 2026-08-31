@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer Cards now use a cleaner Overview-first layout, while other Trainers' cards offer simple Overview, Badges, and PvP tabs with a direct message action.
+
 - Aether Clash now waits until Trainers close their previous battle result screen before allowing another collision or automatic match.
 
 - Character Customization now shows wardrobe cosmetics with their real sprite thumbnails, while unequipping and returning an item to the Bag use clear contextual actions outside the item grid.

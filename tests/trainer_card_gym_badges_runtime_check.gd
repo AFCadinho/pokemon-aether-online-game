@@ -26,6 +26,7 @@ func _run() -> void:
 		quit(1)
 		return
 	var overlay := overlay_script.new() as CanvasLayer
+	var overview := overlay.call("_create_trainer_card_stats_tab") as Control
 	var boulder := {
 		"id": "boulder",
 		"name": "Boulder Badge",
@@ -34,12 +35,14 @@ func _run() -> void:
 	player_save.call("apply_gym_badge_state", {"badges": []})
 	var local_slot := overlay.call("_create_trainer_card_badge_slot", boulder) as PanelContainer
 	_check(local_slot != null and local_slot.tooltip_text.contains("Locked"), "local Trainer Card starts an unearned badge locked")
+	_check(_find_label(overview, "0 / 8") != null, "local Trainer Card overview starts with the current badge total")
 
 	player_save.call("apply_gym_badge_state", {
 		"badges": [{"region": "kanto", "badgeId": "boulder", "earned": true}],
 	})
 	overlay.call("_refresh_trainer_card_gym_badges")
 	_check(local_slot != null and local_slot.tooltip_text.contains("Earned"), "local Trainer Card refreshes an earned badge")
+	_check(_find_label(overview, "1 / 8") != null, "local Trainer Card overview refreshes its badge total")
 
 	var public_panel := overlay.call("_create_public_trainer_gym_badges_panel", {
 		"badges": {
@@ -55,6 +58,8 @@ func _run() -> void:
 
 	if local_slot != null:
 		local_slot.free()
+	if overview != null:
+		overview.free()
 	if public_panel != null:
 		public_panel.free()
 	overlay.free()
