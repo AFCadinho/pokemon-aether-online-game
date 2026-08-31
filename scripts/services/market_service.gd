@@ -59,7 +59,12 @@ func purchase_standard_item(item_id: String, quantity: int = 1) -> Dictionary:
 	return await purchase_item("standard_pokemart", item_id, quantity)
 
 
-func purchase_item(market_id: String, item_id: String, quantity: int = 1) -> Dictionary:
+func purchase_item(
+	market_id: String,
+	item_id: String,
+	quantity: int = 1,
+	request_id: String = ""
+) -> Dictionary:
 	if not _is_authenticated():
 		return _auth_error()
 	if item_id.strip_edges() == "":
@@ -67,6 +72,11 @@ func purchase_item(market_id: String, item_id: String, quantity: int = 1) -> Dic
 	var normalized_market_id := market_id.strip_edges().to_lower()
 	if normalized_market_id in ["", "standard"]:
 		normalized_market_id = "standard_pokemart"
+	var normalized_request_id := request_id.strip_edges().to_lower()
+	if normalized_request_id == "":
+		normalized_request_id = _new_request_id()
+	if normalized_request_id == "":
+		return _validation_error("Could not create a purchase request id.")
 
 	var gateway := _gateway_api_config()
 	if gateway == null:
@@ -82,7 +92,7 @@ func purchase_item(market_id: String, item_id: String, quantity: int = 1) -> Dic
 		base_url + endpoint,
 		HTTPClient.METHOD_POST,
 		gateway.call("get_json_headers"),
-		JSON.stringify(build_purchase_payload(item_id, quantity))
+		JSON.stringify(build_purchase_payload(item_id, quantity, normalized_request_id))
 	)
 	return parse_purchase_response(response)
 
@@ -107,15 +117,26 @@ func sell_standard_item(item_id: String, quantity: int = 1) -> Dictionary:
 	return parse_sale_response(response)
 
 
-func build_purchase_payload(item_id: String, quantity: int = 1) -> Dictionary:
+func build_purchase_payload(
+	item_id: String,
+	quantity: int = 1,
+	request_id: String = ""
+) -> Dictionary:
+	var normalized_request_id := request_id.strip_edges().to_lower()
+	if normalized_request_id == "":
+		normalized_request_id = _new_request_id()
 	return {
 		"itemId": item_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-"),
 		"quantity": max(quantity, 1),
+		"requestId": normalized_request_id,
 	}
 
 
 func build_sale_payload(item_id: String, quantity: int = 1) -> Dictionary:
-	return build_purchase_payload(item_id, quantity)
+	return {
+		"itemId": item_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-"),
+		"quantity": max(quantity, 1),
+	}
 
 
 func parse_market_catalog_response(response: Dictionary) -> Dictionary:
@@ -186,8 +207,28 @@ func normalize_market_item(value: Variant) -> Dictionary:
 		"sellPrice": max(int(item.get("sellPrice", 0)), 0),
 		"requiredBadges": max(int(item.get("requiredBadges", 0)), 0),
 		"available": bool(item.get("available", true)),
+		"accountUnique": bool(item.get("accountUnique", false)),
+		"accountBound": bool(item.get("accountBound", false)),
+		"owned": bool(item.get("owned", false)),
+		"maxPurchaseQuantity": clampi(int(item.get("maxPurchaseQuantity", 99)), 1, 99),
 		"costs": normalize_costs(item.get("costs", [])),
 	}
+
+
+func _new_request_id() -> String:
+	var bytes := Crypto.new().generate_random_bytes(16)
+	if bytes.size() != 16:
+		return ""
+	bytes[6] = (bytes[6] & 0x0f) | 0x40
+	bytes[8] = (bytes[8] & 0x3f) | 0x80
+	var value := bytes.hex_encode()
+	return "%s-%s-%s-%s-%s" % [
+		value.substr(0, 8),
+		value.substr(8, 4),
+		value.substr(12, 4),
+		value.substr(16, 4),
+		value.substr(20, 12),
+	]
 
 
 func normalize_costs(value: Variant) -> Array:

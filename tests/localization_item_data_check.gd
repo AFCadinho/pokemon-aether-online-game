@@ -266,6 +266,10 @@ func _check_overlay_integration() -> void:
 		"shortDesc": "Restores 20 HP.",
 		"costs": [{"currency": "money", "amount": 300}],
 		"available": true,
+		"accountUnique": true,
+		"accountBound": true,
+		"owned": true,
+		"maxPurchaseQuantity": 1,
 	}, {
 		"itemId": "ultra-ball",
 		"name": "Ultra Ball",
@@ -277,6 +281,13 @@ func _check_overlay_integration() -> void:
 	_check(
 		market_items.size() == 2 and (market_items[0] as Dictionary).get("shortDesc") == "Herstelt 20 HP.",
 		"Market normalization reuses the item resolver"
+	)
+	_check(
+		bool((market_items[0] as Dictionary).get("accountUnique", false))
+		and bool((market_items[0] as Dictionary).get("accountBound", false))
+		and bool((market_items[0] as Dictionary).get("owned", false))
+		and int((market_items[0] as Dictionary).get("maxPurchaseQuantity", 0)) == 1,
+		"Market normalization preserves account-bound ownership"
 	)
 	var available_market_items: Array = overlay.call("_market_available_buy_items", market_items)
 	_check(
