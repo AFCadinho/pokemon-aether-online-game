@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Obsolete bicycle and Rotom Bike items, consumable Repels, Roto Powers, unused imports, and duplicate Bag-side Z-Crystals have been removed from item search and localization, while Escape Rope remains a reusable Key Item and Mega/Z activation items remain available.
+
 - The Quest Log now shows item, currency, and skill-XP rewards in each quest's full detail view while keeping the overworld tracker compact.
 
 - The in-arena Clash status now stays compact by default and opens the Guild player roster only when requested.

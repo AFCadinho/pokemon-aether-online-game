@@ -13,6 +13,7 @@ func _init() -> void:
 	_check(source.contains("panel.z_index = UI_WINDOW_Z_INDEX"), "Refocusing the Bag preserves its window priority")
 	_check(source.contains("var bag_shell_style := _make_glass_panel_style(14)"), "Bag uses the shared modern glass shell")
 	_check(source.contains('"id": "all", "labelKey": "ui.bag.category.all"'), "Bag starts with a localized complete inventory category")
+	_check(source.contains('"id": "key_items", "labelKey": "ui.bag.category.key_items", "iconItemId": "mount-license"'), "Key Items use an active permanent item instead of the retired Bicycle icon")
 	_check(source.contains('category_panel.custom_minimum_size = Vector2(178, 0)'), "Bag categories use a compact left sidebar")
 	_check(source.contains('_set_localized_control_property(bag_search_input, "placeholder_text", "ui.bag.search")'), "Bag keeps localized item search prominent")
 	_check(source.contains("bag_item_grid.columns = 5"), "Bag uses a readable five-column item grid")

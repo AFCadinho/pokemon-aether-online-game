@@ -27,10 +27,6 @@
     "name": "Absorb Bulb",
     "shortDesc": "Held: Raises the holders Special Attack by one stage when it takes Water-type damage."
   },
-  "acro-bike": {
-    "name": "Acro Bike",
-    "shortDesc": "More maneuverable than the Mach Bike, and allows hopping along rails."
-  },
   "adamant-crystal": {
     "name": "Adamant Crystal",
     "shortDesc": "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power."
@@ -182,10 +178,6 @@
   "alakazite": {
     "name": "Alakazite",
     "shortDesc": "Held: Allows Alakazam to Mega Evolve into Mega Alakazam."
-  },
-  "aloraichium-z--bag": {
-    "name": "Aloraichium Z",
-    "shortDesc": "XXX new effect for aloraichium-z--bag"
   },
   "aloraichium-z--held": {
     "name": "Aloraichium Z",
@@ -339,10 +331,6 @@
     "name": "Berry Sweet",
     "shortDesc": "A berry-shaped sweet. When a Milcery holds this, it spins around happily."
   },
-  "bicycle": {
-    "name": "Bicycle",
-    "shortDesc": "Use for fast transit."
-  },
   "big-malasada": {
     "name": "Big Malasada",
     "shortDesc": "Cures major status ailments and confusion."
@@ -362,18 +350,6 @@
   "big-root": {
     "name": "Big Root",
     "shortDesc": "Held: Increases HP recovered from draining moves, Ingrain, and Aqua Ring by 3/10 (30%)."
-  },
-  "bike": {
-    "name": "Bike",
-    "shortDesc": "Lets the player travel faster."
-  },
-  "bike--green": {
-    "name": "Bike",
-    "shortDesc": "XXX new effect for bike--green"
-  },
-  "bike--yellow": {
-    "name": "Bike",
-    "shortDesc": "XXX new effect for bike--yellow"
   },
   "bike-voucher": {
     "name": "Bike Voucher",
@@ -522,10 +498,6 @@
   "bug-memory": {
     "name": "Bug Memory",
     "shortDesc": "Held: Changes Silvally to its Bug form. Changes Multi-Attacks type to Bug."
-  },
-  "buginium-z--bag": {
-    "name": "Buginium Z",
-    "shortDesc": "XXX new effect for buginium-z--bag"
   },
   "buginium-z--held": {
     "name": "Buginium Z",
@@ -839,10 +811,6 @@
     "name": "Dark Stone",
     "shortDesc": "Summons Zekrom for the final battle against N."
   },
-  "darkinium-z--bag": {
-    "name": "Darkinium Z",
-    "shortDesc": "XXX new effect for darkinium-z--bag"
-  },
   "darkinium-z--held": {
     "name": "Darkinium Z",
     "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Dark moves."
@@ -854,10 +822,6 @@
   "dawn-stone": {
     "name": "Dawn Stone",
     "shortDesc": "Evolves a male Kirlia into Gallade or a female Snorunt into Froslass."
-  },
-  "decidium-z--bag": {
-    "name": "Decidium Z",
-    "shortDesc": "XXX new effect for decidium-z--bag"
   },
   "decidium-z--held": {
     "name": "Decidium Z",
@@ -975,10 +939,6 @@
     "name": "Dragoninite",
     "shortDesc": "If held by a Dragonite, this item allows it to Mega Evolve in battle."
   },
-  "dragonium-z--bag": {
-    "name": "Dragonium Z",
-    "shortDesc": "XXX new effect for dragonium-z--bag"
-  },
   "dragonium-z--held": {
     "name": "Dragonium Z",
     "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Dragon moves."
@@ -1043,10 +1003,6 @@
     "name": "Eelektrossite",
     "shortDesc": "If held by an Eelektross, this item allows it to Mega Evolve in battle."
   },
-  "eevium-z--bag": {
-    "name": "Eevium Z",
-    "shortDesc": "XXX new effect for eevium-z--bag"
-  },
   "eevium-z--held": {
     "name": "Eevium Z",
     "shortDesc": "Held: Allows Eevee to upgrade Last Resort into Extreme Evoboost."
@@ -1074,10 +1030,6 @@
   "electric-seed": {
     "name": "Electric Seed",
     "shortDesc": "Held: Consumed on Electric Terrain and raises the holders Defense by one stage."
-  },
-  "electrium-z--bag": {
-    "name": "Electrium Z",
-    "shortDesc": "XXX new effect for electrium-z--bag"
   },
   "electrium-z--held": {
     "name": "Electrium Z",
@@ -1183,10 +1135,6 @@
     "name": "Explorer Kit",
     "shortDesc": "Allows visiting the Underground."
   },
-  "fairium-z--bag": {
-    "name": "Fairium Z",
-    "shortDesc": "XXX new effect for fairium-z--bag"
-  },
   "fairium-z--held": {
     "name": "Fairium Z",
     "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Fairy moves."
@@ -1239,10 +1187,6 @@
     "name": "Fighting Memory",
     "shortDesc": "Held: Changes Silvally to its Fighting form. Changes Multi-Attacks type to Fighting."
   },
-  "fightinium-z--bag": {
-    "name": "Fightinium Z",
-    "shortDesc": "XXX new effect for fightinium-z--bag"
-  },
   "fightinium-z--held": {
     "name": "Fightinium Z",
     "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Fighting moves."
@@ -1262,10 +1206,6 @@
   "fire-stone": {
     "name": "Fire Stone",
     "shortDesc": "Evolves certain Pokemon."
-  },
-  "firium-z--bag": {
-    "name": "Firium Z",
-    "shortDesc": "XXX new effect for firium-z--bag"
   },
   "firium-z--held": {
     "name": "Firium Z",
@@ -1318,10 +1258,6 @@
   "flying-memory": {
     "name": "Flying Memory",
     "shortDesc": "Held: Changes Silvally to its Flying form. Changes Multi-Attacks type to Flying."
-  },
-  "flyinium-z--bag": {
-    "name": "Flyinium Z",
-    "shortDesc": "XXX new effect for flyinium-z--bag"
   },
   "flyinium-z--held": {
     "name": "Flyinium Z",
@@ -1455,10 +1391,6 @@
     "name": "Ghost Memory",
     "shortDesc": "Held: Changes Silvally to its Ghost form. Changes Multi-Attacks type to Ghost."
   },
-  "ghostium-z--bag": {
-    "name": "Ghostium Z",
-    "shortDesc": "XXX new effect for ghostium-z--bag"
-  },
   "ghostium-z--held": {
     "name": "Ghostium Z",
     "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Ghost moves."
@@ -1478,10 +1410,6 @@
   "go-goggles": {
     "name": "Go-Goggles",
     "shortDesc": "Allows passage through windy deserts."
-  },
-  "god-stone": {
-    "name": "god stone",
-    "shortDesc": "Unknown. Currently unused."
   },
   "gold-bottle-cap": {
     "name": "Gold Bottle Cap",
@@ -1534,10 +1462,6 @@
   "grass-memory": {
     "name": "Grass Memory",
     "shortDesc": "Held: Changes Silvally to its Grass form. Changes Multi-Attacks type to Grass."
-  },
-  "grassium-z--bag": {
-    "name": "Grassium Z",
-    "shortDesc": "XXX new effect for grassium-z--bag"
   },
   "grassium-z--held": {
     "name": "Grassium Z",
@@ -1594,10 +1518,6 @@
   "ground-memory": {
     "name": "Ground Memory",
     "shortDesc": "Held: Changes Silvally to its Ground form. Changes Multi-Attacks type to Ground."
-  },
-  "groundium-z--bag": {
-    "name": "Groundium Z",
-    "shortDesc": "XXX new effect for groundium-z--bag"
   },
   "groundium-z--held": {
     "name": "Groundium Z",
@@ -1803,10 +1723,6 @@
     "name": "Icicle Plate",
     "shortDesc": "Held: Ice-Type moves from holder do 20% more damage. Changes Arceuss and Judgments type to Ice."
   },
-  "icium-z--bag": {
-    "name": "Icium Z",
-    "shortDesc": "XXX new effect for icium-z--bag"
-  },
   "icium-z--held": {
     "name": "Icium Z",
     "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Ice moves."
@@ -1822,10 +1738,6 @@
   "impish-mint": {
     "name": "Impish Mint",
     "shortDesc": "When a Pokemon smells this mint, its Defense will grow more easily, but its Sp. Atk will grow more slowly."
-  },
-  "incinium-z--bag": {
-    "name": "Incinium Z",
-    "shortDesc": "XXX new effect for incinium-z--bag"
   },
   "incinium-z--held": {
     "name": "Incinium Z",
@@ -1919,10 +1831,6 @@
     "name": "Kings Rock",
     "shortDesc": "Held: Damaging moves gain a 10% chance to make their target flinch. Traded on a Poliwhirl: Holder evolves into Politoed. Traded on a Slowpoke: Holder evolves into Slowking."
   },
-  "kommonium-z--bag": {
-    "name": "Kommonium Z",
-    "shortDesc": "XXX new effect for kommonium-z--bag"
-  },
   "kommonium-z--held": {
     "name": "Kommonium Z",
     "shortDesc": "Held: Allows Kommo-o to use Clangorous Soulblaze."
@@ -1970,10 +1878,6 @@
   "leaf-stone": {
     "name": "Leaf Stone",
     "shortDesc": "Evolves an Exeggcute into Exeggutor, a Gloom into Vileplume, a Nuzleaf into Shiftry, a Pansage into Simisage, or a Weepinbell into Victreebel."
-  },
-  "left-poke-ball": {
-    "name": "Left Poke Ball",
-    "shortDesc": "XXX new effect for left-poke-ball"
   },
   "leftovers": {
     "name": "Leftovers",
@@ -2067,10 +1971,6 @@
     "name": "Looker Ticket",
     "shortDesc": "Advances the Looker postgame plot."
   },
-  "loot-sack": {
-    "name": "Loot Sack",
-    "shortDesc": "Carries coal mine loot."
-  },
   "lopunnite": {
     "name": "Lopunnite",
     "shortDesc": "Held: Allows Lopunny to Mega Evolve into Mega Lopunny."
@@ -2119,10 +2019,6 @@
     "name": "Lumiose Galette",
     "shortDesc": "Cures all major status ailments and confusion."
   },
-  "lunalium-z--bag": {
-    "name": "Lunalium Z",
-    "shortDesc": "XXX new effect for lunalium-z--bag"
-  },
   "lunalium-z--held": {
     "name": "Lunalium Z",
     "shortDesc": "Held: Allows Lunala to use Menacing Moonraze Maelstrom."
@@ -2151,17 +2047,9 @@
     "name": "Luxury Ball",
     "shortDesc": "Tries to catch a wild Pokemon. Caught Pokemon start with 200 happiness."
   },
-  "lycanium-z--bag": {
-    "name": "Lycanium Z",
-    "shortDesc": "XXX new effect for lycanium-z--bag"
-  },
   "lycanium-z--held": {
     "name": "Lycanium Z",
     "shortDesc": "Held: Allows Lycanroc to use Splintered Stormshards."
-  },
-  "mach-bike": {
-    "name": "Mach Bike",
-    "shortDesc": "Faster than the Acro Bike, and can ride up sandy slopes and across cracked floors."
   },
   "machine-part": {
     "name": "Machine Part",
@@ -2231,10 +2119,6 @@
     "name": "Mark Charm",
     "shortDesc": "A mysterious and unique charm that increases the chance of finding a Pokemon with a mark."
   },
-  "marshadium-z--bag": {
-    "name": "Marshadium Z",
-    "shortDesc": "XXX new effect for marshadium-z--bag"
-  },
   "marshadium-z--held": {
     "name": "Marshadium Z",
     "shortDesc": "Held: Allows Marshadow to upgrade Spectral Thief into Soul-Stealing 7 Star Strike."
@@ -2274,10 +2158,6 @@
   "max-potion": {
     "name": "Max Potion",
     "shortDesc": "Restores HP to full."
-  },
-  "max-repel": {
-    "name": "Max Repel",
-    "shortDesc": "For 250 steps, prevents wild encounters of level lower than your partys lead Pokemon."
   },
   "max-revive": {
     "name": "Max Revive",
@@ -2399,10 +2279,6 @@
     "name": "Metronome",
     "shortDesc": "Held: Consectutive uses of the same attack have a cumulative damage boost of 10%. Maximum 100% boost."
   },
-  "mewnium-z--bag": {
-    "name": "Mewnium Z",
-    "shortDesc": "XXX new effect for mewnium-z--bag"
-  },
   "mewnium-z--held": {
     "name": "Mewnium Z",
     "shortDesc": "Held: Allows Mew to upgrade Psychic into Genesis Supernova."
@@ -2434,10 +2310,6 @@
   "mild-mint": {
     "name": "Mild Mint",
     "shortDesc": "When a Pokemon smells this mint, its Sp. Atk will grow more easily, but its Defense will grow more slowly."
-  },
-  "mimikium-z--bag": {
-    "name": "Mimikium Z",
-    "shortDesc": "XXX new effect for mimikium-z--bag"
   },
   "mimikium-z--held": {
     "name": "Mimikium Z",
@@ -2578,10 +2450,6 @@
   "normal-gem": {
     "name": "Normal Gem",
     "shortDesc": "Held: When the holder uses a damaging Normal-type move, the move has 1.5 power and this item is consumed."
-  },
-  "normalium-z--bag": {
-    "name": "Normalium Z",
-    "shortDesc": "XXX new effect for normalium-z--bag"
   },
   "normalium-z--held": {
     "name": "Normalium Z",
@@ -2743,17 +2611,9 @@
     "name": "Pidgeotite",
     "shortDesc": "Held: Allows Pidgeot to Mega Evolve into Mega Pidgeot."
   },
-  "pikanium-z--bag": {
-    "name": "Pikanium Z",
-    "shortDesc": "XXX new effect for pikanium-z--bag"
-  },
   "pikanium-z--held": {
     "name": "Pikanium Z",
     "shortDesc": "Held: Allows Pikachu to upgrade Volt Tackle into Catastropika."
-  },
-  "pikashunium-z--bag": {
-    "name": "Pikashunium Z",
-    "shortDesc": "XXX new effect for pikashunium-z--bag"
   },
   "pikashunium-z--held": {
     "name": "Pikashunium Z",
@@ -2814,10 +2674,6 @@
   "poison-memory": {
     "name": "Poison Memory",
     "shortDesc": "Held: Changes Silvally to its Poison form. Changes Multi-Attacks type to Poison."
-  },
-  "poisonium-z--bag": {
-    "name": "Poisonium Z",
-    "shortDesc": "XXX new effect for poisonium-z--bag"
   },
   "poisonium-z--held": {
     "name": "Poisonium Z",
@@ -2935,10 +2791,6 @@
     "name": "Pretty Feather",
     "shortDesc": "Sell for 100 Pokedollars."
   },
-  "primarium-z--bag": {
-    "name": "Primarium Z",
-    "shortDesc": "XXX new effect for primarium-z--bag"
-  },
   "primarium-z--held": {
     "name": "Primarium Z",
     "shortDesc": "Held: Allows Primarina to upgrade Sparkling Aria into Oceanic Operetta."
@@ -2986,10 +2838,6 @@
   "psychic-seed": {
     "name": "Psychic Seed",
     "shortDesc": "Held: Consumed on Psychic Terrain and raises the holders Special Defense by one stage."
-  },
-  "psychium-z--bag": {
-    "name": "Psychium Z",
-    "shortDesc": "XXX new effect for psychium-z--bag"
   },
   "psychium-z--held": {
     "name": "Psychium Z",
@@ -3207,10 +3055,6 @@
     "name": "Repeat Ball",
     "shortDesc": "Tries to catch a wild Pokemon. Success rate is 3 for previously-caught Pokemon."
   },
-  "repel": {
-    "name": "Repel",
-    "shortDesc": "Prevents weak wild Pokemon from appearing for a short time."
-  },
   "resist-wing": {
     "name": "Resist Feather",
     "shortDesc": "Increases Defense effort by 1."
@@ -3287,10 +3131,6 @@
     "name": "Rock Smash Charm",
     "shortDesc": "Lets you use Rock Smash without a Pokemon knowing it."
   },
-  "rockium-z--bag": {
-    "name": "Rockium Z",
-    "shortDesc": "XXX new effect for rockium-z--bag"
-  },
   "rockium-z--held": {
     "name": "Rockium Z",
     "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Rock moves."
@@ -3298,10 +3138,6 @@
   "rocky-helmet": {
     "name": "Rocky Helmet",
     "shortDesc": "Held: When the holder is hit by a contact move, the attacking Pokemon takes 1/6 its max HP in damage."
-  },
-  "roller-skates": {
-    "name": "Roller Skates",
-    "shortDesc": "Allows the player to move quickly and off the grid."
   },
   "room-service": {
     "name": "Room Service",
@@ -3319,66 +3155,6 @@
     "name": "Roseli Berry",
     "shortDesc": "Held: Consumed when struck by a super-effective Fairy-type attack to halve the damage."
   },
-  "roto-bargain": {
-    "name": "Roto Bargain",
-    "shortDesc": "XXX new effect for roto-bargain"
-  },
-  "roto-boost": {
-    "name": "Roto Boost",
-    "shortDesc": "XXX new effect for roto-boost"
-  },
-  "roto-catch": {
-    "name": "Roto Catch",
-    "shortDesc": "XXX new effect for roto-catch"
-  },
-  "roto-encounter": {
-    "name": "Roto Encounter",
-    "shortDesc": "XXX new effect for roto-encounter"
-  },
-  "roto-exp-points": {
-    "name": "Roto Exp. Points",
-    "shortDesc": "XXX new effect for roto-exp-points"
-  },
-  "roto-friendship": {
-    "name": "Roto Friendship",
-    "shortDesc": "XXX new effect for roto-friendship"
-  },
-  "roto-hatch": {
-    "name": "Roto Hatch",
-    "shortDesc": "XXX new effect for roto-hatch"
-  },
-  "roto-hp-restore": {
-    "name": "Roto HP Restore",
-    "shortDesc": "XXX new effect for roto-hp-restore"
-  },
-  "roto-pp-restore": {
-    "name": "Roto PP Restore",
-    "shortDesc": "XXX new effect for roto-pp-restore"
-  },
-  "roto-prize-money": {
-    "name": "Roto Prize Money",
-    "shortDesc": "XXX new effect for roto-prize-money"
-  },
-  "roto-stealth": {
-    "name": "Roto Stealth",
-    "shortDesc": "XXX new effect for roto-stealth"
-  },
-  "rotom-bike": {
-    "name": "Rotom Bike",
-    "shortDesc": "This bike can be combined with the Pokemon Rotom to use a turbo boost."
-  },
-  "rotom-bike--glistening-black": {
-    "name": "Rotom Bike",
-    "shortDesc": "This bike can do a turbo boost and run on the water using Rotoms power. Its a glistening black that shines reddish-black."
-  },
-  "rotom-bike--sparkling-white": {
-    "name": "Rotom Bike",
-    "shortDesc": "This bike can do a turbo boost and run on the water using Rotoms power. Its a sparkling white that shines brilliantly."
-  },
-  "rotom-bike--water-mode": {
-    "name": "Rotom Bike",
-    "shortDesc": "This bike can be combined with the Pokemon Rotom to not only do a turbo boost but also run on the water."
-  },
   "rotom-catalog": {
     "name": "Rotom Catalog",
     "shortDesc": "A catalog of devices that Rotom like. Use the catalog to have Rotom hop in and out of the various devices listed within."
@@ -3390,10 +3166,6 @@
   "ruby": {
     "name": "Ruby",
     "shortDesc": "Give to Celio with Sapphire to activate Network Machine and get Rainbow Pass."
-  },
-  "rule-book": {
-    "name": "Rule Book",
-    "shortDesc": "List of battle types and their rules."
   },
   "rusted-shield": {
     "name": "Rusted Shield",
@@ -3482,10 +3254,6 @@
   "sea-incense": {
     "name": "Sea Incense",
     "shortDesc": "Held: Water-Type moves from holder do 20% more damage. Breeding: Marill or Azumarill beget an Azurill Egg."
-  },
-  "seal-bag": {
-    "name": "Seal Bag",
-    "shortDesc": "Holds ten Seals for Poke Balls."
   },
   "seal-case": {
     "name": "Seal Case",
@@ -3631,10 +3399,6 @@
     "name": "Smooth Rock",
     "shortDesc": "Held: Sandstorm by the holder lasts 8 rounds instead of 5."
   },
-  "snorlium-z--bag": {
-    "name": "Snorlium Z",
-    "shortDesc": "XXX new effect for snorlium-z--bag"
-  },
   "snorlium-z--held": {
     "name": "Snorlium Z",
     "shortDesc": "Held: Allows Snorlax to upgrade Giga Impact into Pulverizing Pancake."
@@ -3654,10 +3418,6 @@
   "soft-sand": {
     "name": "Soft Sand",
     "shortDesc": "Held: Ground-Type moves from holder do 20% more damage."
-  },
-  "solganium-z--bag": {
-    "name": "Solganium Z",
-    "shortDesc": "XXX new effect for solganium-z--bag"
   },
   "solganium-z--held": {
     "name": "Solganium Z",
@@ -3771,10 +3531,6 @@
     "name": "Steel Memory",
     "shortDesc": "Held: Changes Silvally to its Steel form. Changes Multi-Attacks type to Steel."
   },
-  "steelium-z--bag": {
-    "name": "Steelium Z",
-    "shortDesc": "XXX new effect for steelium-z--bag"
-  },
   "steelium-z--held": {
     "name": "Steelium Z",
     "shortDesc": "Held: Allows a Pokemon to use the Z-move equivalents of its Steel moves."
@@ -3855,10 +3611,6 @@
     "name": "Super Potion",
     "shortDesc": "Restores 50 HP."
   },
-  "super-repel": {
-    "name": "Super Repel",
-    "shortDesc": "For 200 steps, prevents wild encounters of level lower than your partys lead Pokemon."
-  },
   "super-rod": {
     "name": "Super Rod",
     "shortDesc": "Used to catch Pokemon in bodies of water."
@@ -3902,10 +3654,6 @@
   "tanga-berry": {
     "name": "Tanga Berry",
     "shortDesc": "Held: Consumed when struck by a super-effective Bug-type attack to halve the damage."
-  },
-  "tapunium-z--bag": {
-    "name": "Tapunium Z",
-    "shortDesc": "XXX new effect for tapunium-z--bag"
   },
   "tapunium-z--held": {
     "name": "Tapunium Z",
@@ -5547,10 +5295,6 @@
     "name": "Ultra Ball",
     "shortDesc": "Tries to catch a wild Pokemon. Success rate is 2."
   },
-  "ultranecrozium-z--bag": {
-    "name": "Ultranecrozium Z",
-    "shortDesc": "XXX new effect for ultranecrozium-z--bag"
-  },
   "ultranecrozium-z--held": {
     "name": "Ultranecrozium Z",
     "shortDesc": "Held: Allows Necrozma to use Light That Burns the Sky."
@@ -5614,10 +5358,6 @@
   "waterfall-charm": {
     "name": "Waterfall Charm",
     "shortDesc": "Lets you use Waterfall without a Pokemon knowing it."
-  },
-  "waterium-z--bag": {
-    "name": "Waterium Z",
-    "shortDesc": "XXX new effect for waterium-z--bag"
   },
   "waterium-z--held": {
     "name": "Waterium Z",
