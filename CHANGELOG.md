@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Character Customization now shows wardrobe cosmetics with their real sprite thumbnails, while unequipping and returning an item to the Bag use clear contextual actions outside the item grid.
+
 - Revamped Settings with clearer page headings, compact toggles and hotkeys, improved keyboard focus, a roomier layout, and simpler access to Support, About, and session actions.
 
 - Trainer Card Appearance now uses a larger full-body preview, calmer category navigation, clearer natural-color controls, and save feedback that only appears when needed.

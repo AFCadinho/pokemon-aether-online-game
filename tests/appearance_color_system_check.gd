@@ -288,6 +288,50 @@ func _run() -> void:
 			== APPEARANCE.get_cosmetic_item_icon("adinho-chroma-shirt", "male"),
 		"cosmetic frame icons are cached"
 	)
+	for wardrobe_part: Dictionary in [
+		{"category": "top", "id": "Shirt"},
+		{"category": "top", "id": "IronFanton_Shirt"},
+		{"category": "hair", "id": "IronFanton_Hair"},
+	]:
+		var wardrobe_icon := APPEARANCE.get_appearance_part_icon(
+			str(wardrobe_part.get("category", "")),
+			str(wardrobe_part.get("id", "")),
+			"male"
+		)
+		_check(wardrobe_icon != null, "%s has a wardrobe thumbnail" % str(wardrobe_part.get("id", "")))
+		if wardrobe_icon != null:
+			var wardrobe_image := wardrobe_icon.get_image()
+			_check(
+				wardrobe_image.get_width() <= 64 and wardrobe_image.get_height() <= 64,
+				"wardrobe thumbnails use one cropped character frame"
+			)
+	var missing_wardrobe_icons: Array[String] = []
+	for wardrobe_gender: String in ["male", "female"]:
+		for wardrobe_category: String in [
+			"hair",
+			"headgear",
+			"facial_hair",
+			"facegear",
+			"top",
+			"bottom",
+			"shoes",
+		]:
+			for wardrobe_part_id: String in APPEARANCE.get_available_part_ids(
+				wardrobe_category,
+				wardrobe_gender
+			):
+				if APPEARANCE.get_appearance_part_icon(
+					wardrobe_category,
+					wardrobe_part_id,
+					wardrobe_gender
+				) == null:
+					missing_wardrobe_icons.append(
+						"%s:%s:%s" % [wardrobe_gender, wardrobe_category, wardrobe_part_id]
+					)
+	_check(
+		missing_wardrobe_icons.is_empty(),
+		"every selectable wardrobe cosmetic has a thumbnail: %s" % ", ".join(missing_wardrobe_icons)
+	)
 	_check(
 		APPEARANCE.resolve_cosmetic_icon_gender("male", ["female"]) == "female",
 		"gender-specific cosmetic icons use the item's compatible model"
@@ -338,9 +382,19 @@ func _run() -> void:
 		"Bag can open the Classic box and refresh its granted component items"
 	)
 	_check(
-		ui_source.contains('return_button.text = "×"')
+		ui_source.contains("CharacterAppearanceService.get_appearance_part_icon(")
+			and ui_source.contains('part_button.add_theme_constant_override("icon_max_width", 42)'),
+		"Character Customization renders real sprite thumbnails in wardrobe options"
+	)
+	_check(
+		ui_source.contains('trainer_card_appearance_unequip_button.name = "AppearanceUnequipButton"')
+			and not ui_source.contains('trainer_card_part_buttons["%s:" % normalized_category]'),
+		"Character Customization keeps unequip outside the cosmetic item grid"
+	)
+	_check(
+		ui_source.contains('trainer_card_appearance_return_button.name = "AppearanceReturnToBagButton"')
 			and ui_source.contains("InventoryService.return_appearance_item(source_item_id)"),
-		"Character Customization exposes a return-to-Bag cross"
+		"Character Customization labels the selected cosmetic return action"
 	)
 	_check(
 		ui_source.contains("const DEFAULT_APPEARANCE_SLOT_LIMIT := 8")

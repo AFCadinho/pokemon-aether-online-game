@@ -1089,7 +1089,8 @@ var trainer_card_name_label: Label
 var trainer_card_body_buttons: Dictionary = {}
 var trainer_card_part_buttons: Dictionary = {}
 var trainer_card_part_rows: Dictionary = {}
-var trainer_card_part_return_buttons: Dictionary = {}
+var trainer_card_appearance_unequip_button: Button
+var trainer_card_appearance_return_button: Button
 var trainer_card_color_buttons: Dictionary = {}
 var trainer_card_hex_inputs: Dictionary = {}
 var trainer_card_natural_color_summary_buttons: Dictionary = {}
@@ -15442,6 +15443,8 @@ func _create_trainer_card_stat_row(
 func _create_trainer_card_appearance_tab() -> Control:
 	trainer_card_active_appearance_category = "body"
 	trainer_card_appearance_capacity_label = null
+	trainer_card_appearance_unequip_button = null
+	trainer_card_appearance_return_button = null
 	var tab := MarginContainer.new()
 	tab.name = "Appearance"
 	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.appearance")
@@ -15953,7 +15956,8 @@ func _on_trainer_card_appearance_category_selected(button: Button, content_stack
 		content_scroll.scroll_vertical = 0
 	trainer_card_part_buttons.clear()
 	trainer_card_part_rows.clear()
-	trainer_card_part_return_buttons.clear()
+	trainer_card_appearance_unequip_button = null
+	trainer_card_appearance_return_button = null
 	trainer_card_color_buttons.clear()
 	trainer_card_hex_inputs.clear()
 	trainer_card_natural_color_summary_buttons.clear()
@@ -16180,9 +16184,52 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 		"ui.appearance.part_description"
 	)
 
+	var wardrobe_toolbar := HBoxContainer.new()
+	wardrobe_toolbar.name = "AppearanceWardrobeToolbar"
+	wardrobe_toolbar.add_theme_constant_override("separation", 6)
+	content_stack.add_child(wardrobe_toolbar)
+
 	trainer_card_appearance_capacity_label = Label.new()
+	trainer_card_appearance_capacity_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	trainer_card_appearance_capacity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	trainer_card_appearance_capacity_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	trainer_card_appearance_capacity_label.add_theme_font_size_override("font_size", 12)
-	content_stack.add_child(trainer_card_appearance_capacity_label)
+	wardrobe_toolbar.add_child(trainer_card_appearance_capacity_label)
+
+	trainer_card_appearance_unequip_button = Button.new()
+	trainer_card_appearance_unequip_button.name = "AppearanceUnequipButton"
+	_set_localized_control_property(
+		trainer_card_appearance_unequip_button,
+		"text",
+		"ui.appearance.unequip"
+	)
+	_set_localized_control_property(
+		trainer_card_appearance_unequip_button,
+		"tooltip_text",
+		"ui.appearance.unequip_tooltip"
+	)
+	trainer_card_appearance_unequip_button.custom_minimum_size = Vector2(74, 28)
+	trainer_card_appearance_unequip_button.focus_mode = Control.FOCUS_NONE
+	trainer_card_appearance_unequip_button.pressed.connect(
+		_on_trainer_card_part_selected.bind(normalized_category, "")
+	)
+	_apply_button_style(trainer_card_appearance_unequip_button)
+	wardrobe_toolbar.add_child(trainer_card_appearance_unequip_button)
+
+	trainer_card_appearance_return_button = Button.new()
+	trainer_card_appearance_return_button.name = "AppearanceReturnToBagButton"
+	_set_localized_control_property(
+		trainer_card_appearance_return_button,
+		"text",
+		"ui.appearance.return_to_bag"
+	)
+	trainer_card_appearance_return_button.custom_minimum_size = Vector2(92, 28)
+	trainer_card_appearance_return_button.focus_mode = Control.FOCUS_NONE
+	trainer_card_appearance_return_button.pressed.connect(
+		_on_trainer_card_return_selected_pressed.bind(normalized_category)
+	)
+	_apply_button_style(trainer_card_appearance_return_button, "warning")
+	wardrobe_toolbar.add_child(trainer_card_appearance_return_button)
 	_refresh_trainer_card_appearance_capacity_label()
 
 	var available_part_ids := CharacterAppearanceService.get_available_part_ids(
@@ -16201,53 +16248,31 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 	grid.add_theme_constant_override("v_separation", 8)
 	content_stack.add_child(grid)
 
-	var none_row := HBoxContainer.new()
-	none_row.add_theme_constant_override("separation", 6)
-	grid.add_child(none_row)
-	var none_button := Button.new()
-	_set_localized_control_property(none_button, "text", "common.none")
-	none_button.focus_mode = Control.FOCUS_NONE
-	none_button.custom_minimum_size = Vector2(0, 34)
-	none_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	none_button.toggle_mode = true
-	none_button.pressed.connect(_on_trainer_card_part_selected.bind(normalized_category, ""))
-	none_row.add_child(none_button)
-	trainer_card_part_buttons["%s:" % normalized_category] = none_button
-	trainer_card_part_rows["%s:" % normalized_category] = none_row
-
 	for part_id: String in available_part_ids:
 		var option_key := "%s:%s" % [normalized_category, part_id]
-		var option_row := HBoxContainer.new()
-		option_row.add_theme_constant_override("separation", 6)
-		grid.add_child(option_row)
-
 		var part_button := Button.new()
 		part_button.text = _format_appearance_option_name(normalized_category, part_id)
+		part_button.tooltip_text = part_button.text
 		part_button.focus_mode = Control.FOCUS_NONE
-		part_button.custom_minimum_size = Vector2(0, 34)
+		part_button.custom_minimum_size = Vector2(0, 58)
 		part_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		part_button.toggle_mode = true
+		part_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		part_button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		part_button.expand_icon = true
+		part_button.add_theme_constant_override("icon_max_width", 42)
+		part_button.add_theme_constant_override("icon_separation", 8)
+		part_button.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		part_button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		part_button.icon = CharacterAppearanceService.get_appearance_part_icon(
+			normalized_category,
+			part_id,
+			PlayerSave.gender
+		)
 		part_button.pressed.connect(_on_trainer_card_part_selected.bind(normalized_category, part_id))
-		option_row.add_child(part_button)
+		grid.add_child(part_button)
 		trainer_card_part_buttons[option_key] = part_button
-		trainer_card_part_rows[option_key] = option_row
-
-		var return_button := Button.new()
-		return_button.text = "×"
-		_set_localized_control_property(
-			return_button,
-			"tooltip_text",
-			"ui.appearance.return_cosmetic_tooltip"
-		)
-		return_button.custom_minimum_size = Vector2(30, 30)
-		return_button.focus_mode = Control.FOCUS_NONE
-		return_button.visible = false
-		return_button.pressed.connect(
-			_on_trainer_card_return_appearance_pressed.bind(normalized_category, part_id)
-		)
-		_apply_button_style(return_button, "danger")
-		option_row.add_child(return_button)
-		trainer_card_part_return_buttons[option_key] = return_button
+		trainer_card_part_rows[option_key] = part_button
 
 	_refresh_trainer_card_part_buttons()
 
@@ -16549,7 +16574,7 @@ func _filter_trainer_card_part_buttons(search_text: String) -> void:
 			continue
 		var category_id: String = key.substr(0, separator_index)
 		var part_id: String = key.substr(separator_index + 1)
-		var label_text: String = LocalizationManager.text("common.none") if part_id == "" else _format_appearance_option_name(category_id, part_id)
+		var label_text := _format_appearance_option_name(category_id, part_id)
 		var row := trainer_card_part_rows.get(key) as Control
 		var should_show := _is_appearance_part_owned(category_id, part_id) \
 			and _matches_appearance_search(label_text, part_id, search_text)
@@ -16597,7 +16622,8 @@ func _refresh_trainer_card_part_buttons() -> void:
 		var category_id: String = key.substr(0, separator_index)
 		var part_id: String = key.substr(separator_index + 1)
 		var selected_part_id: String = _get_preview_part_id(category_id)
-		var display_name: String = LocalizationManager.text("common.none") if part_id == "" else _format_appearance_option_name(category_id, part_id)
+		var display_name := _format_appearance_option_name(category_id, part_id)
+		button.tooltip_text = display_name
 		button.button_pressed = part_id == selected_part_id
 		var is_owned := _is_appearance_part_owned(category_id, part_id)
 		var row := trainer_card_part_rows.get(key) as Control
@@ -16605,22 +16631,32 @@ func _refresh_trainer_card_part_buttons() -> void:
 			row.visible = is_owned
 		else:
 			button.visible = is_owned
-		var return_button := trainer_card_part_return_buttons.get(key) as Button
-		if return_button != null:
-			var source_item_id := _appearance_source_item_for_part(category_id, part_id)
-			return_button.visible = is_owned and source_item_id != ""
-			return_button.disabled = appearance_inventory_returning
-			if source_item_id != "":
-				return_button.tooltip_text = LocalizationManager.text(
-					"ui.appearance.return_item_tooltip",
-					{"item": _item_name_from_id(source_item_id)}
-				)
 		if part_id == selected_part_id:
 			button.text = "%s  *" % display_name
 			_apply_button_style(button, "primary")
 		else:
 			button.text = display_name
 			_apply_button_style(button)
+	_refresh_trainer_card_appearance_actions()
+
+func _refresh_trainer_card_appearance_actions() -> void:
+	var category := CharacterAppearanceService.normalize_part_category(
+		trainer_card_active_appearance_category
+	)
+	var selected_part_id := _get_preview_part_id(category)
+	if trainer_card_appearance_unequip_button != null:
+		trainer_card_appearance_unequip_button.visible = selected_part_id != ""
+		trainer_card_appearance_unequip_button.disabled = appearance_inventory_returning
+	if trainer_card_appearance_return_button == null:
+		return
+	var source_item_id := _appearance_source_item_for_part(category, selected_part_id)
+	trainer_card_appearance_return_button.visible = source_item_id != ""
+	trainer_card_appearance_return_button.disabled = appearance_inventory_returning
+	if source_item_id != "":
+		trainer_card_appearance_return_button.tooltip_text = LocalizationManager.text(
+			"ui.appearance.return_item_tooltip",
+			{"item": _item_name_from_id(source_item_id)}
+		)
 
 func _apply_color_swatch_button_style(button: Button, color: Color, selected: bool) -> void:
 	var border_color := Color("#f4d78a") if selected else Color("#4b5872")
@@ -17059,6 +17095,14 @@ func _on_trainer_card_part_selected(category_id: String, part_id: String) -> voi
 	_refresh_trainer_card_part_buttons()
 	_refresh_avatar_previews()
 	_mark_trainer_card_appearance_dirty()
+
+
+func _on_trainer_card_return_selected_pressed(category_id: String) -> void:
+	var normalized_category := CharacterAppearanceService.normalize_part_category(category_id)
+	var selected_part_id := _get_preview_part_id(normalized_category)
+	if selected_part_id == "":
+		return
+	await _on_trainer_card_return_appearance_pressed(normalized_category, selected_part_id)
 
 
 func _on_trainer_card_return_appearance_pressed(category_id: String, part_id: String) -> void:
@@ -32736,7 +32780,8 @@ func _rebuild_trainer_card_popup(keep_visible: bool) -> void:
 	trainer_card_body_buttons.clear()
 	trainer_card_part_buttons.clear()
 	trainer_card_part_rows.clear()
-	trainer_card_part_return_buttons.clear()
+	trainer_card_appearance_unequip_button = null
+	trainer_card_appearance_return_button = null
 	trainer_card_color_buttons.clear()
 	trainer_card_gym_badge_slots.clear()
 	trainer_card_appearance_save_button = null
