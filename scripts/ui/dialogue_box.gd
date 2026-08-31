@@ -3,6 +3,8 @@ extends Control
 const ITEM_ICON_ROOT := "res://assets/items/icons/"
 const TRAINER_CARD_TEXTURE_ROOT := "res://assets/sprites/trainer_cards/"
 const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
+const SYSTEM_SPEAKER_NAME := "system"
+const SYSTEM_MUGSHOT := preload("res://assets/sprites/mugshots/aether_system_core.png")
 
 static var reward_move_type_index: Dictionary = {}
 static var reward_move_type_index_loaded := false
@@ -92,7 +94,7 @@ func start_dialogue(new_lines: Array, speaker_name := "", mugshot: Texture2D = n
 	name_label.visible = speaker_name != ""
 	portrait_panel.visible = show_mugshot
 	if show_mugshot:
-		_set_portrait_texture(mugshot if mugshot != null else default_mugshot)
+		_set_portrait_texture(_resolve_mugshot(speaker_name, mugshot))
 	else:
 		_set_portrait_texture(null)
 	
@@ -114,7 +116,7 @@ func start_quest_offer(quest: Dictionary, speaker_name := "", mugshot: Texture2D
 	name_label.text = speaker_name
 	name_label.visible = not speaker_name.is_empty()
 	portrait_panel.visible = true
-	_set_portrait_texture(mugshot if mugshot != null else default_mugshot)
+	_set_portrait_texture(_resolve_mugshot(speaker_name, mugshot))
 	_populate_quest_offer(offered_quest)
 	text_label.visible = false
 	quest_offer_content.visible = true
@@ -136,12 +138,25 @@ func start_quest_offer(quest: Dictionary, speaker_name := "", mugshot: Texture2D
 func _set_portrait_texture(texture: Texture2D) -> void:
 	npc_sprite.texture = texture
 	var is_trainer_card := texture != null and texture.resource_path.begins_with(TRAINER_CARD_TEXTURE_ROOT)
-	if is_trainer_card:
+	var is_system_mugshot := texture == SYSTEM_MUGSHOT
+	if is_trainer_card or is_system_mugshot:
 		npc_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		npc_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		npc_sprite.texture_filter = (
+			CanvasItem.TEXTURE_FILTER_NEAREST
+			if is_trainer_card
+			else CanvasItem.TEXTURE_FILTER_LINEAR
+		)
 	else:
 		npc_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		npc_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+
+
+func _resolve_mugshot(speaker_name: String, mugshot: Texture2D) -> Texture2D:
+	if mugshot != null:
+		return mugshot
+	if speaker_name.strip_edges().to_lower() == SYSTEM_SPEAKER_NAME:
+		return SYSTEM_MUGSHOT
+	return default_mugshot
 	
 func show_current_line() -> void:
 	text_label.text = str(lines[current_line_index])

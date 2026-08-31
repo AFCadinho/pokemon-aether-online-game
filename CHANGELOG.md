@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- System and error dialogue now uses a dedicated neutral Aether Core portrait instead of Professor Oak.
+
 - Aether Clash stake fields now accept a full amount immediately, while their arrow buttons continue to adjust the stake in ₽1,000 steps.
 
 - Land mounts now require a regional Mount License; Cerulean's Bike Seller registers Kanto, explains the license in his guide, and gives it a dedicated Key Item with a viewable registration list.
