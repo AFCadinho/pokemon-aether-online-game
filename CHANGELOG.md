@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Ready Guild Duel players now see an available opponent's remaining search timer instead of an incorrect waiting message.
+
 - Already-owned permanent shop items now appear disabled in catalog lists instead of looking like active purchase options.
 
 - Live Ranked battles now use compact battle cards with clearer matchups, status details, a prominent Spectate action, and a quieter Refresh control.

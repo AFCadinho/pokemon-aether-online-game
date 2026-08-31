@@ -86,6 +86,21 @@ func _run() -> void:
 		"Paused matchmaking clearly waits for another free opponent"
 	)
 
+	var opponent_searching_payload := _arena_payload("active", 4, 2)
+	opponent_searching_payload["matchmaking"] = {
+		"status": "opponent_searching",
+		"secondsRemaining": 37,
+		"searchSeconds": 60,
+		"warningSeconds": 15,
+	}
+	duel.call("_apply_arena_state", opponent_searching_payload)
+	await physics_frame
+	_check(
+		hud.matchmaking_hint_label.text
+		== "POTENTIAL OPPONENT FOUND — Automatic matchmaking in 00:37",
+		"A ready player sees the available opponent's remaining search time"
+	)
+
 	var starting_payload := _arena_payload("active", 4, 2)
 	starting_payload["matchmaking"] = {
 		"status": "starting",
