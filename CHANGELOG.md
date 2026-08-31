@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Revamped Settings with clearer page headings, compact toggles and hotkeys, improved keyboard focus, a roomier layout, and simpler access to Support, About, and session actions.
+
 - Aether Gift Store outfit previews now keep the Trainer's complete body and shoes visible.
 
 - The Aether Gift Store now uses a cleaner three-column catalog with curated Featured items and one unified product preview, detail, price, and checkout panel.
