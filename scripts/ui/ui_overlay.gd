@@ -1,5 +1,6 @@
 extends CanvasLayer
 
+const AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE := "POKEAETHER_AETHER_CLASH_TRACE"
 const STAFF_PERMISSION_POLICY := preload("res://scripts/ui/staff_permission_policy.gd")
 const LOAN_RETURNS_DIALOG_SCRIPT := preload("res://scripts/ui/loan_returns_dialog.gd")
 const BORROWED_POKEMON_DIALOG_SCRIPT := preload("res://scripts/ui/borrowed_pokemon_dialog.gd")
@@ -43958,6 +43959,8 @@ func _on_pvp_room_poll_completed(
 	await _start_pvp_battle_from_response(response)
 
 func _trace_aether_clash(event: String, fields: Dictionary = {}) -> void:
+	if OS.get_environment(AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE) != "1":
+		return
 	var payload := fields.duplicate(true)
 	payload["event"] = event
 	print("[AetherClashTrace] %s" % JSON.stringify(payload))
