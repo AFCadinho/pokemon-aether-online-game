@@ -34,6 +34,8 @@ func _check_market_popup_contract() -> void:
 	_check_true(text.contains('inventory_item.get(\n\t\t\t"sellPrice"'), "Market buyer uses the server-authoritative item sale price")
 	_check_true(text.contains("PlayerWalletService.apply_wallet_result(result)"), "UIOverlay applies wallet updates")
 	_check_true(text.contains('market_selected_item.get("owned", false)'), "UIOverlay disables purchases for owned account-unique items")
+	_check_true(text.contains('"canonicalItemId": canonical_item_id') and text.contains('"ownershipVariant"'), "Market and Bag preserve hidden Mega Stone provenance")
+	_check_true(text.contains("func _group_mega_stone_bag_items") and text.contains('ui.bag.mega_marker.both'), "Bag groups bound and tradeable Mega Stones without combining them into x2")
 	_check_true(text.contains("_market_item_max_purchase_quantity"), "UIOverlay enforces server-provided purchase quantity caps")
 	_check_true(text.contains("_mark_market_item_owned(item_id)"), "UIOverlay marks a unique item owned after purchase")
 	_check_true(text.contains('"ui.market.account_bound"'), "UIOverlay labels account-bound catalog items")

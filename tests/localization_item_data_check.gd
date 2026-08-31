@@ -253,11 +253,30 @@ func _check_overlay_integration() -> void:
 		"isHoldable": true,
 		"quantity": 1,
 		"assignmentMode": "account_entitlement",
+	}, {
+		"itemId": "abomasite-bound",
+		"canonicalItemId": "abomasite",
+		"ownershipVariant": "account_bound",
+		"name": "Abomasite",
+		"category": "held-items",
+		"isHoldable": true,
+		"quantity": 1,
+		"tradable": false,
+	}, {
+		"itemId": "abomasite",
+		"canonicalItemId": "abomasite",
+		"ownershipVariant": "tradeable",
+		"name": "Abomasite",
+		"category": "held-items",
+		"isHoldable": true,
+		"quantity": 1,
+		"tradable": true,
 	}])
-	_check(normalized.size() == 3, "Bag normalization retains inventory plus virtual Escape Rope")
+	_check(normalized.size() == 4, "Bag normalization groups Mega provenance plus virtual Escape Rope")
 	var potion: Dictionary = normalized[0]
 	var normalium: Dictionary = normalized[1]
-	var escape_rope: Dictionary = normalized[2]
+	var abomasite: Dictionary = normalized[2]
+	var escape_rope: Dictionary = normalized[3]
 	_check(potion.get("shortDesc") == "Herstelt 20 HP.", "Bag normalization applies Dutch item data")
 	_check(
 		normalium.get("assignmentMode") == "account_entitlement",
@@ -266,6 +285,16 @@ func _check_overlay_integration() -> void:
 	_check(
 		overlay.call("_bag_item_quantity_marker", normalium) == "∞",
 		"account entitlements use the infinite assignment marker"
+	)
+	_check(
+		abomasite.get("id") == "abomasite-bound"
+		and int(abomasite.get("boundQuantity", 0)) == 1
+		and int(abomasite.get("tradeableQuantity", 0)) == 1,
+		"Bag groups bound and tradeable Mega Stones while preferring the bound copy for assignment"
+	)
+	_check(
+		overlay.call("_bag_item_quantity_marker", abomasite) == "G+R1",
+		"grouped Mega Stones show provenance instead of a misleading x2"
 	)
 	_check(
 		escape_rope.get("name") == "Escape Rope · Belangrijk item",

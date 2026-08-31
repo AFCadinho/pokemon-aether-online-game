@@ -6,6 +6,7 @@ const MARKET_SELLER_SCENE := "res://scenes/npcs/market_seller_npc.tscn"
 const MARKET_BUYER_SCENE := "res://scenes/npcs/market_buyer_npc.tscn"
 const BATTLE_POINT_VENDOR_SCENE := "res://scenes/npcs/battle_point_vendor_npc.tscn"
 const Z_CRYSTAL_VENDOR_SCENE := "res://scenes/npcs/z_crystal_vendor_npc.tscn"
+const MEGA_STONE_VENDOR_SCENE := "res://scenes/npcs/mega_stone_vendor_npc.tscn"
 const PALLET_TOWN_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
 const VIRIDIAN_POKEMON_CENTER_SCENE := "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn"
 
@@ -16,6 +17,7 @@ func _init() -> void:
 	_check_market_attendant_script()
 	_check_market_attendant_scene()
 	_check_z_crystal_vendor_localization()
+	_check_mega_stone_vendor_localization()
 
 	quit(1 if failed else 0)
 
@@ -73,6 +75,14 @@ func _check_market_attendant_scene() -> void:
 		and z_crystal_vendor_source.contains("res://assets/sprites/mugshots/market_attendance.png"),
 		"One reusable Z-Crystal vendor scene backs the temporary lobby placement"
 	)
+	var mega_stone_vendor_source := _read_text(MEGA_STONE_VENDOR_SCENE)
+	_check_true(
+		mega_stone_vendor_source.contains('npc_definition_id = "mega_stone_vendor"')
+		and mega_stone_vendor_source.contains('market_id = "mega_stone_shop"')
+		and mega_stone_vendor_source.contains('market_mode = "player_buys"')
+		and mega_stone_vendor_source.contains("res://assets/sprites/mugshots/market_attendance.png"),
+		"One reusable Mega Stone vendor scene backs the temporary lobby placement"
+	)
 
 	var pallet_source := _read_text(PALLET_TOWN_SCENE)
 	_check_true(
@@ -106,6 +116,26 @@ func _check_z_crystal_vendor_localization() -> void:
 				"zh_CN": "Z纯晶商人",
 			}[locale],
 			"Z-Crystal Seller has an Item Dex name in %s" % locale
+		)
+
+
+func _check_mega_stone_vendor_localization() -> void:
+	for locale in {
+		"en": "Mega Stone Seller",
+		"nl": "Mega Stone-verkoper",
+		"pt_BR": "Vendedor de Mega Stones",
+		"zh_CN": "超级石商人",
+	}:
+		var catalog_value: Variant = JSON.parse_string(_read_text("res://localization/%s.json" % locale))
+		var catalog: Dictionary = catalog_value if catalog_value is Dictionary else {}
+		_check_true(
+			str(catalog.get("ui.item_dex.shop.mega_stone_shop", "")) == {
+				"en": "Mega Stone Seller",
+				"nl": "Mega Stone-verkoper",
+				"pt_BR": "Vendedor de Mega Stones",
+				"zh_CN": "超级石商人",
+			}[locale],
+			"Mega Stone Seller has an Item Dex name in %s" % locale
 		)
 
 

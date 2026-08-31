@@ -131,7 +131,12 @@ func _normalized_name_locale(locale: String) -> String:
 
 
 func _item_id(item: Dictionary) -> String:
-	return _normalize_item_id(str(item.get("itemId", item.get("id", ""))))
+	var canonical_item_id := str(item.get("canonicalItemId", "")).strip_edges()
+	return _normalize_item_id(
+		canonical_item_id
+		if not canonical_item_id.is_empty()
+		else str(item.get("itemId", item.get("id", "")))
+	)
 
 
 func _normalize_item_id(item_id: String) -> String:
