@@ -19,6 +19,8 @@ func _check_market_popup_contract() -> void:
 	_check_true(text.contains("_setup_market_popup()"), "UIOverlay sets up market popup")
 	_check_true(text.contains('func open_market(market: Dictionary, requested_mode: String = "player_buys"'), "UIOverlay exposes mode-aware open_market")
 	_check_true(text.contains("func _apply_market_item_row_style"), "UIOverlay styles market item rows")
+	_check_true(text.contains("func _is_market_item_row_disabled") and text.contains('market_mode != "player_sells" and bool(item.get("owned", false))'), "UIOverlay treats owned buy rows as disabled catalog options")
+	_check_true(text.contains("Control.MOUSE_FILTER_IGNORE if disabled") and text.contains("UI_MUTED_TEXT if disabled else UI_MONEY"), "Owned catalog rows are non-interactive and visually muted")
 	_check_true(text.contains("func _market_item_subtitle"), "UIOverlay shows market item subtitles")
 	_check_true(text.contains("func _refresh_market_detail"), "UIOverlay refreshes selected item details")
 	_check_true(text.contains("func _on_market_search_changed"), "UIOverlay supports catalog search")
