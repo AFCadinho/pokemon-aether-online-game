@@ -103,6 +103,7 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(overlay.call("_format_appearance_option_name", "body", "Gen4_Base_v1") == "Standaard", "Appearance option renders in Dutch")
 	_check(overlay.call("_format_appearance_option_name", "hair", "IronFanton_Hair") == "IronFanton-haar", "IronFanton hair renders in Dutch")
 	_check(overlay.call("_format_appearance_swatch_name", "Dark Brown") == "Donkerbruin", "Appearance swatch renders in Dutch")
+	overlay.set("appearance_inventory_slot_counts", {"top": 1})
 	var top_category_button := category_rail.get_child(6) as Button if category_rail != null else null
 	if top_category_button != null and content_stack != null:
 		overlay.call(
@@ -115,6 +116,9 @@ func _check_trainer_card_runtime_translation() -> void:
 	var starter_shirt_button := part_buttons.get("top:Shirt") as Button
 	var unequip_button := overlay.get("trainer_card_appearance_unequip_button") as Button
 	var return_button := overlay.get("trainer_card_appearance_return_button") as Button
+	var wardrobe_toolbar := popup.find_child("AppearanceWardrobeToolbar", true, false) as VBoxContainer if popup != null else null
+	var wardrobe_capacity := popup.find_child("AppearanceWardrobeCapacity", true, false) as Label if popup != null else null
+	var wardrobe_actions := popup.find_child("AppearanceWardrobeActions", true, false) as HBoxContainer if popup != null else null
 	_check(not part_buttons.has("top:"), "Appearance no longer presents None as a wardrobe item")
 	_check(
 		starter_shirt_button != null
@@ -124,6 +128,20 @@ func _check_trainer_card_runtime_translation() -> void:
 	)
 	_check(unequip_button != null and unequip_button.text == "Uittrekken", "Unequip is a compact Dutch category action")
 	_check(return_button != null and return_button.text == "Naar Bag", "Return to Bag is clearly labeled in Dutch")
+	_check(
+		wardrobe_toolbar != null
+		and wardrobe_capacity != null
+		and wardrobe_capacity.get_parent() == wardrobe_toolbar
+		and wardrobe_actions != null
+		and wardrobe_actions.get_parent() == wardrobe_toolbar,
+		"Appearance keeps wardrobe capacity on its own readable row"
+	)
+	_check(
+		wardrobe_capacity != null
+		and wardrobe_capacity.text.contains("1/8")
+		and wardrobe_capacity.tooltip_text == wardrobe_capacity.text,
+		"Appearance keeps the complete wardrobe capacity available"
+	)
 	var body_category_button := category_rail.get_child(1) as Button if category_rail != null else null
 	if body_category_button != null and content_stack != null:
 		overlay.call(
