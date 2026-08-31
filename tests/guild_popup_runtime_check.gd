@@ -394,6 +394,7 @@ func _run() -> void:
 		"completedAt": Time.get_datetime_string_from_system(true) + "Z",
 		"durationSeconds": 428,
 		"tierName": "Aether OU",
+		"stakeAmount": 100000,
 		"stakePotAmount": 200000,
 		"participantCounts": {"challenger": 1, "challenged": 1},
 		"remainingCounts": {"challenger": 1, "challenged": 0},
@@ -432,6 +433,11 @@ func _run() -> void:
 	_check(
 		detail_window.find_child("GuildAetherClashHistoryBattle_1", true, false) != null,
 		"Guild Duel details render the chronological battle timeline"
+	)
+	_check(
+		_find_label_with_text(detail_window, "₽100,000") != null
+		and _find_label_with_text(detail_window, "₽200,000") != null,
+		"Guild Duel details distinguish the per-Guild stake from the total prize pot"
 	)
 	detail_window.queue_free()
 	popup._set_aether_clash_duel_section("overview")
@@ -1656,6 +1662,14 @@ func _button_background_is(button: Button, expected: Color) -> bool:
 		return false
 	var style := button.get_theme_stylebox("normal") as StyleBoxFlat
 	return style != null and style.bg_color.is_equal_approx(expected)
+
+
+func _find_label_with_text(root_node: Node, expected: String) -> Label:
+	for child: Node in root_node.find_children("*", "Label", true, false):
+		var label := child as Label
+		if label != null and label.text == expected:
+			return label
+	return null
 
 
 func _check(condition: bool, label: String) -> void:

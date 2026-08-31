@@ -2065,7 +2065,7 @@ func _render_aether_clash_history_detail(
 	for definition: Dictionary in [
 		{
 			"label": "ui.guild.aether_clash.history.detail.completed",
-			"value": _relative_last_seen_text(str(detail.get("completedAt", ""))),
+			"value": _format_aether_clash_history_datetime(str(detail.get("completedAt", ""))),
 			"color": UI_ACCENT,
 		},
 		{
@@ -2077,6 +2077,11 @@ func _render_aether_clash_history_detail(
 			"label": "ui.guild.aether_clash.history.detail.tier",
 			"value": str(detail.get("tierName", "Aether OU")),
 			"color": UI_ACCENT,
+		},
+		{
+			"label": "ui.guild.aether_clash.history.detail.stake",
+			"value": "₽%s" % _format_number(int(detail.get("stakeAmount", 0))),
+			"color": UI_GOLD,
 		},
 		{
 			"label": "ui.guild.aether_clash.history.detail.pot",
@@ -2133,6 +2138,20 @@ func _aether_clash_history_summary_card(definition: Dictionary) -> Control:
 		value_color
 	))
 	return panel
+
+
+func _format_aether_clash_history_datetime(value: String) -> String:
+	var timestamp := int(_unix_from_iso_datetime(value))
+	if timestamp <= 0:
+		return _t("common.unknown")
+	var datetime := Time.get_datetime_dict_from_unix_time(timestamp)
+	return _t("ui.guild.aether_clash.history.detail.datetime", {
+		"year": int(datetime.get("year", 0)),
+		"month": "%02d" % int(datetime.get("month", 0)),
+		"day": "%02d" % int(datetime.get("day", 0)),
+		"hour": "%02d" % int(datetime.get("hour", 0)),
+		"minute": "%02d" % int(datetime.get("minute", 0)),
+	})
 
 
 func _build_aether_clash_history_roster(
