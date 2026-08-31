@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer Cards now keep regional Gym Badge progress exclusively in the Badges tab, both for your own card and cards viewed from other Trainers.
+
 - Aether Clash battles now leave the waiting screen when the 7.5-minute limit decides the result, and blocked forced-switch selections no longer trigger a script error.
 
 - Your own Trainer Card now keeps PvP games, wins, losses, and win rate visible on its Overview.

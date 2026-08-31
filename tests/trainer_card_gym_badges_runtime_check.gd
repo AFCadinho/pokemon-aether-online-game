@@ -46,18 +46,21 @@ func _run() -> void:
 		"texture": "res://assets/gym_badges/kanto_badges/Boulder_Badge.png",
 	}
 	player_save.call("apply_gym_badge_state", {"badges": []})
-	var local_slot := overlay.call("_create_trainer_card_badge_slot", boulder) as PanelContainer
+	var local_badges_tab := overlay.call("_create_trainer_card_badges_tab") as Control
+	var local_slot := _find_tooltip(local_badges_tab, "Boulder Badge · Locked") as PanelContainer
 	_check(local_slot != null and local_slot.tooltip_text.contains("Locked"), "local Trainer Card starts an unearned badge locked")
-	_check(_find_label(overview, "0 / 8") != null, "local Trainer Card overview starts with the current badge total")
+	_check(
+		_find_label(overview, "Gym Badges") == null and _find_label(overview, "0 / 8") == null,
+		"local Trainer Card keeps Gym Badges out of Overview"
+	)
 
 	player_save.call("apply_gym_badge_state", {
 		"badges": [{"region": "kanto", "badgeId": "boulder", "earned": true}],
 	})
 	overlay.call("_refresh_trainer_card_gym_badges")
 	_check(local_slot != null and local_slot.tooltip_text.contains("Earned"), "local Trainer Card refreshes an earned badge")
-	_check(_find_label(overview, "1 / 8") != null, "local Trainer Card overview refreshes its badge total")
 
-	var public_panel := overlay.call("_create_public_trainer_gym_badges_panel", {
+	var public_badges_tab := overlay.call("_create_public_trainer_badges_tab", {
 		"badges": {
 			"badges": [
 				{"region": "kanto", "badgeId": "boulder", "earned": true},
@@ -65,16 +68,16 @@ func _run() -> void:
 			],
 		},
 	}) as Control
-	_check(_find_label(public_panel, "GYM BADGES · 1/8") != null, "public Trainer Card reports the correct earned badge count")
-	_check(_find_tooltip(public_panel, "Boulder Badge · Earned") != null, "public Trainer Card shows another trainer's earned badge")
-	_check(_find_tooltip(public_panel, "Cascade Badge · Locked") != null, "public Trainer Card keeps another trainer's unearned badge locked")
+	_check(_find_label(public_badges_tab, "GYM BADGES · 1/8") != null, "public Badges tab reports the correct earned badge count")
+	_check(_find_tooltip(public_badges_tab, "Boulder Badge · Earned") != null, "public Badges tab shows another trainer's earned badge")
+	_check(_find_tooltip(public_badges_tab, "Cascade Badge · Locked") != null, "public Badges tab keeps another trainer's unearned badge locked")
 
-	if local_slot != null:
-		local_slot.free()
+	if local_badges_tab != null:
+		local_badges_tab.free()
 	if overview != null:
 		overview.free()
-	if public_panel != null:
-		public_panel.free()
+	if public_badges_tab != null:
+		public_badges_tab.free()
 	overlay.free()
 	player_save.call("apply_gym_badge_state", {"badges": []})
 	localization_manager.call("set_locale", original_locale)
