@@ -219,10 +219,7 @@ const PVP_RANKED_DEFAULT_FORMAT_KEY := "aether-ou"
 const PVP_RANKED_DEFAULT_FORMAT_NAME := "Aether OU"
 const PVP_MATCH_COUNTDOWN_SECONDS := 10.0
 const PVP_LEADERBOARD_SCOPES: Array[Dictionary] = [
-	{"id": "daily", "label_key": "ui.pvp.leaderboard.scope.daily"},
-	{"id": "weekly", "label_key": "ui.pvp.leaderboard.scope.weekly"},
-	{"id": "monthly", "label_key": "ui.pvp.leaderboard.scope.monthly"},
-	{"id": "all_time", "label_key": "ui.pvp.leaderboard.scope.all_time"},
+	{"id": "season", "label_key": "ui.pvp.leaderboard.scope.season"},
 ]
 const FRIENDLIST_POPUP_SCENE: PackedScene = preload("res://scenes/interface/friendlist_popup.tscn")
 const GUILD_POPUP_SCENE: PackedScene = preload("res://scenes/interface/guild_popup.tscn")
@@ -914,7 +911,7 @@ var pvp_leaderboard_in_flight := false
 var pvp_leaderboard_loaded := false
 var pvp_leaderboard_entries: Array = []
 var pvp_leaderboard_scope_select: OptionButton
-var pvp_active_leaderboard_scope := "all_time"
+var pvp_active_leaderboard_scope := "season"
 var pvp_history_in_flight := false
 var pvp_history_loaded := false
 var pvp_history_matches: Array = []
@@ -6584,7 +6581,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_leaderboard_status_label = Label.new()
 	pvp_leaderboard_status_label.text = LocalizationManager.text(
 		"ui.pvp.leaderboard.status",
-		{"period": _pvp_leaderboard_scope_label("all_time"), "win": "+10", "loss": "-10"}
+		{"period": _pvp_leaderboard_scope_label("season"), "system": "Elo", "initial": 1000}
 	)
 	pvp_leaderboard_status_label.add_theme_font_size_override("font_size", 11)
 	pvp_leaderboard_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -6646,7 +6643,7 @@ func _setup_pvp_room_popup() -> void:
 	leaderboard_table_layout.add_child(leaderboard_columns)
 	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.rank", 54, HORIZONTAL_ALIGNMENT_CENTER))
 	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.player", 0, HORIZONTAL_ALIGNMENT_LEFT, true))
-	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.points", 96, HORIZONTAL_ALIGNMENT_RIGHT))
+	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.rating", 96, HORIZONTAL_ALIGNMENT_RIGHT))
 	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.record", 104, HORIZONTAL_ALIGNMENT_RIGHT))
 	leaderboard_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.leaderboard.column.win_rate", 86, HORIZONTAL_ALIGNMENT_RIGHT))
 
@@ -41799,16 +41796,14 @@ func _refresh_pvp_leaderboard(force: bool = false) -> void:
 	pvp_leaderboard_loaded = true
 	if pvp_leaderboard_status_label != null:
 		scope_label = str(response.get("scopeLabel", scope_label)).strip_edges()
-		var policy_value: Variant = response.get("pointsPolicy", {})
-		var points_policy: Dictionary = policy_value as Dictionary if policy_value is Dictionary else {}
-		var win_points := _pvp_history_variant_to_int(points_policy.get("win", 10))
-		var loss_points := _pvp_history_variant_to_int(points_policy.get("loss", -10))
+		var system_value: Variant = response.get("ratingSystem", {})
+		var rating_system: Dictionary = system_value as Dictionary if system_value is Dictionary else {}
 		pvp_leaderboard_status_label.text = LocalizationManager.text(
 			"ui.pvp.leaderboard.status",
 			{
 				"period": scope_label,
-				"win": _pvp_leaderboard_point_delta(win_points),
-				"loss": _pvp_leaderboard_point_delta(loss_points),
+				"system": str(rating_system.get("name", "Elo")),
+				"initial": _pvp_history_variant_to_int(rating_system.get("initialRating", 1000)),
 			}
 		)
 	_render_pvp_leaderboard(entries)
@@ -41818,7 +41813,7 @@ func _pvp_leaderboard_scope_index(scope: String) -> int:
 	for index in range(PVP_LEADERBOARD_SCOPES.size()):
 		if str(PVP_LEADERBOARD_SCOPES[index].get("id", "")).strip_edges() == normalized_scope:
 			return index
-	return 3
+	return 0
 
 func _pvp_leaderboard_scope_label(scope: String) -> String:
 	var normalized_scope := scope.strip_edges()
@@ -41826,9 +41821,9 @@ func _pvp_leaderboard_scope_label(scope: String) -> String:
 		if str(entry.get("id", "")).strip_edges() == normalized_scope:
 			return LocalizationManager.text(str(entry.get(
 				"label_key",
-				"ui.pvp.leaderboard.scope.all_time"
+				"ui.pvp.leaderboard.scope.season"
 			)))
-	return LocalizationManager.text("ui.pvp.leaderboard.scope.all_time")
+	return LocalizationManager.text("ui.pvp.leaderboard.scope.season")
 
 func _apply_pvp_leaderboard_scope_style(option: OptionButton) -> void:
 	_apply_pvp_ranked_dropdown_style(option, true)
@@ -41994,7 +41989,7 @@ func _create_pvp_leaderboard_row(entry: Dictionary) -> Control:
 	var games_played := _pvp_history_variant_to_int(entry.get("gamesPlayed", 0))
 	var wins := _pvp_history_variant_to_int(entry.get("wins", 0))
 	var losses := _pvp_history_variant_to_int(entry.get("losses", 0))
-	var points := _pvp_history_variant_to_int(entry.get("points", 0))
+	var rating := _pvp_history_variant_to_int(entry.get("rating", entry.get("points", 1000)))
 
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 56 if rank > 0 and rank <= 3 else 50)
@@ -42005,7 +42000,7 @@ func _create_pvp_leaderboard_row(entry: Dictionary) -> Control:
 		{
 			"player": _pvp_leaderboard_display_name(entry),
 			"rank": rank,
-			"points": points,
+			"rating": rating,
 			"wins": wins,
 			"losses": losses,
 			"battles": games_played,
@@ -42027,10 +42022,10 @@ func _create_pvp_leaderboard_row(entry: Dictionary) -> Control:
 	row.add_child(_create_pvp_leaderboard_rank_cell(rank))
 	row.add_child(_create_pvp_leaderboard_player_cell(entry, games_played, is_current_player))
 	row.add_child(_create_pvp_leaderboard_value_label(
-		"%d" % points,
+		"%d" % rating,
 		96,
 		HORIZONTAL_ALIGNMENT_RIGHT,
-		_pvp_leaderboard_points_color(points)
+		_pvp_leaderboard_rating_color(rating)
 	))
 	row.add_child(_create_pvp_leaderboard_value_label(
 		LocalizationManager.text(
@@ -42132,6 +42127,13 @@ func _create_pvp_leaderboard_player_cell(entry: Dictionary, games_played: int, i
 		you_label.add_theme_color_override("font_color", Color("#8fe7ff"))
 		you_margin.add_child(you_label)
 
+	if bool(entry.get("provisional", games_played < 10)):
+		var provisional_label := Label.new()
+		provisional_label.text = LocalizationManager.text("ui.pvp.leaderboard.provisional")
+		provisional_label.add_theme_font_size_override("font_size", 9)
+		provisional_label.add_theme_color_override("font_color", Color("#f5df9a"))
+		name_row.add_child(provisional_label)
+
 	var name_spacer := Control.new()
 	name_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name_row.add_child(name_spacer)
@@ -42158,15 +42160,15 @@ func _pvp_leaderboard_rank_color(rank: int) -> Color:
 		_:
 			return UI_MUTED_TEXT
 
-func _pvp_leaderboard_points_color(points: int) -> Color:
-	if points > 0:
+func _pvp_leaderboard_rating_color(rating: int) -> Color:
+	if rating > 1000:
 		return Color("#65e38b")
-	if points < 0:
+	if rating < 1000:
 		return Color("#ff7b83")
-	return UI_MUTED_TEXT
+	return Color("#f5df9a")
 
-func _pvp_leaderboard_point_delta(points: int) -> String:
-	return "+%d" % points if points > 0 else "%d" % points
+func _pvp_leaderboard_rating_delta(delta: int) -> String:
+	return "+%d" % delta if delta > 0 else "%d" % delta
 
 func _create_pvp_leaderboard_header_label(text: String, width: float, alignment: HorizontalAlignment, expand: bool = false) -> Label:
 	var label := _create_pvp_leaderboard_value_label(text, width, alignment, UI_MUTED_TEXT, expand)
@@ -42490,9 +42492,31 @@ func _pvp_history_pokemon_fainted(pokemon_data: Dictionary) -> bool:
 func _pvp_history_outcome_summary(match: Dictionary, user_id: int) -> String:
 	var reason := _pvp_history_reason_label(match)
 	var parts: Array[String] = []
+	var rating_change := _pvp_history_rating_change(match, user_id)
+	if not rating_change.is_empty():
+		var rating_after := _pvp_history_variant_to_int(rating_change.get("ratingAfter", 0))
+		var rating_delta := _pvp_history_variant_to_int(rating_change.get("ratingDelta", 0))
+		parts.append(LocalizationManager.text(
+			"ui.pvp.history.rating_change",
+			{
+				"rating": rating_after,
+				"delta": _pvp_leaderboard_rating_delta(rating_delta),
+			}
+		))
 	if reason != "":
 		parts.append(reason)
 	return " · ".join(parts) if not parts.is_empty() else LocalizationManager.text("ui.pvp.history.fallback_match")
+
+func _pvp_history_rating_change(match: Dictionary, user_id: int) -> Dictionary:
+	if user_id <= 0:
+		return {}
+	var changes := _array_from_variant(match.get("ratingChanges", []))
+	for change_value: Variant in changes:
+		if change_value is Dictionary:
+			var change: Dictionary = change_value as Dictionary
+			if _pvp_history_variant_to_user_id(change.get("userId", 0)) == user_id:
+				return change
+	return {}
 
 func _pvp_history_title(match: Dictionary, user_id: int) -> String:
 	var opponent_name := _pvp_history_opponent_name(match, user_id)

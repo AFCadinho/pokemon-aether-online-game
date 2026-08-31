@@ -190,7 +190,7 @@ func get_pvp_leaderboard(
 	limit: int = 50,
 	offset: int = 0,
 	format_key: String = "",
-	scope: String = "all_time"
+	scope: String = "season"
 ) -> Dictionary:
 	var query := "/account/pvp/leaderboard?limit=%d&offset=%d" % [
 		max(1, limit),
@@ -229,6 +229,15 @@ func get_pvp_match_history(request_node: HTTPRequest, limit: int = 20, offset: i
 	return await send_get_request(
 		request_node,
 		query
+	)
+
+func get_pvp_match_summary(request_node: HTTPRequest, match_id: String) -> Dictionary:
+	var normalized_match_id := match_id.strip_edges()
+	if normalized_match_id == "":
+		return {"success": false, "error": "Missing PvP match id."}
+	return await send_get_request(
+		request_node,
+		"/account/pvp/matches/%s/summary" % normalized_match_id.uri_encode()
 	)
 
 func get_pvp_ranked_banlists(request_node: HTTPRequest, format_key: String = "") -> Dictionary:

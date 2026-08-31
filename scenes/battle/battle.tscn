@@ -1947,6 +1947,14 @@ theme_override_colors/font_color = Color(0.5686275, 0.6509804, 0.78431374, 1)
 theme_override_font_sizes/font_size = 15
 horizontal_alignment = 1
 
+[node name="BattleResultRating" type="Label" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.396078, 0.890196, 0.545098, 1)
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+
 [node name="BattleResultContinueButton" type="Button" parent="HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage/BattleResultOverlay/CenterContainer/ResultPanel/MarginContainer/VBoxContainer" unique_id=683998306]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 48)
