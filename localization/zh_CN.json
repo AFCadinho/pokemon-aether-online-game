@@ -3007,6 +3007,7 @@
   "ui.item_dex.sources.vendor_unplaced": "计划中的商人——地点尚未公布",
   "ui.item_dex.sources.vendor_closed": "该商人尚未营业",
   "ui.item_dex.shop.battle_point_exchange": "对战点数商人",
+  "ui.item_dex.shop.z_crystal_shop": "Z纯晶商人",
   "ui.item_dex.requirement.badges": "{minimum}枚徽章",
   "ui.item_dex.requirement.aethernet_beacon": "至少激活一个以太网络信标",
   "ui.item_dex.requirement.rock_smash_level": "碎岩等级{minimum}–{maximum}",

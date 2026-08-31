@@ -5,6 +5,7 @@ const MARKET_ATTENDANT_SCENE := "res://scenes/npcs/market_attendant_npc.tscn"
 const MARKET_SELLER_SCENE := "res://scenes/npcs/market_seller_npc.tscn"
 const MARKET_BUYER_SCENE := "res://scenes/npcs/market_buyer_npc.tscn"
 const BATTLE_POINT_VENDOR_SCENE := "res://scenes/npcs/battle_point_vendor_npc.tscn"
+const Z_CRYSTAL_VENDOR_SCENE := "res://scenes/npcs/z_crystal_vendor_npc.tscn"
 const PALLET_TOWN_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
 const VIRIDIAN_POKEMON_CENTER_SCENE := "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn"
 
@@ -14,6 +15,7 @@ var failed := false
 func _init() -> void:
 	_check_market_attendant_script()
 	_check_market_attendant_scene()
+	_check_z_crystal_vendor_localization()
 
 	quit(1 if failed else 0)
 
@@ -63,6 +65,14 @@ func _check_market_attendant_scene() -> void:
 		and not battle_point_vendor_source.contains("showdown_pokefan_gen6"),
 		"One reusable Battle Point vendor scene backs the lobby placement"
 	)
+	var z_crystal_vendor_source := _read_text(Z_CRYSTAL_VENDOR_SCENE)
+	_check_true(
+		z_crystal_vendor_source.contains('npc_definition_id = "z_crystal_vendor"')
+		and z_crystal_vendor_source.contains('market_id = "z_crystal_shop"')
+		and z_crystal_vendor_source.contains('market_mode = "player_buys"')
+		and z_crystal_vendor_source.contains("res://assets/sprites/mugshots/market_attendance.png"),
+		"One reusable Z-Crystal vendor scene backs the temporary lobby placement"
+	)
 
 	var pallet_source := _read_text(PALLET_TOWN_SCENE)
 	_check_true(
@@ -77,6 +87,26 @@ func _check_market_attendant_scene() -> void:
 		and viridian_center_source.contains("preload_quest_markers = true"),
 		"Viridian item seller loads its parcel metadata and quest marker"
 	)
+
+
+func _check_z_crystal_vendor_localization() -> void:
+	for locale in {
+		"en": "Z-Crystal Seller",
+		"nl": "Z-Crystal-verkoper",
+		"pt_BR": "Vendedor de Cristais Z",
+		"zh_CN": "Z纯晶商人",
+	}:
+		var catalog_value: Variant = JSON.parse_string(_read_text("res://localization/%s.json" % locale))
+		var catalog: Dictionary = catalog_value if catalog_value is Dictionary else {}
+		_check_true(
+			str(catalog.get("ui.item_dex.shop.z_crystal_shop", "")) == {
+				"en": "Z-Crystal Seller",
+				"nl": "Z-Crystal-verkoper",
+				"pt_BR": "Vendedor de Cristais Z",
+				"zh_CN": "Z纯晶商人",
+			}[locale],
+			"Z-Crystal Seller has an Item Dex name in %s" % locale
+		)
 
 
 func _read_text(path: String) -> String:

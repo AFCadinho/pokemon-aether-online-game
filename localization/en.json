@@ -3010,6 +3010,7 @@
   "ui.item_dex.sources.vendor_unplaced": "Planned vendor — location not yet announced",
   "ui.item_dex.sources.vendor_closed": "This vendor is not open yet",
   "ui.item_dex.shop.battle_point_exchange": "Battle Point Vendor",
+  "ui.item_dex.shop.z_crystal_shop": "Z-Crystal Seller",
   "ui.item_dex.requirement.badges": "{minimum} badges",
   "ui.item_dex.requirement.aethernet_beacon": "Activate at least one Aethernet Beacon",
   "ui.item_dex.requirement.rock_smash_level": "Rock Smash Lv. {minimum}–{maximum}",

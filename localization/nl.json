@@ -3010,6 +3010,7 @@
   "ui.item_dex.sources.vendor_unplaced": "Geplande verkoper — locatie nog niet bekendgemaakt",
   "ui.item_dex.sources.vendor_closed": "Deze verkoper is nog niet geopend",
   "ui.item_dex.shop.battle_point_exchange": "Battle Point-verkoper",
+  "ui.item_dex.shop.z_crystal_shop": "Z-Crystal-verkoper",
   "ui.item_dex.requirement.badges": "{minimum} badges",
   "ui.item_dex.requirement.aethernet_beacon": "Activeer minstens één Aethernet Beacon",
   "ui.item_dex.requirement.rock_smash_level": "Rock Smash lv. {minimum}–{maximum}",

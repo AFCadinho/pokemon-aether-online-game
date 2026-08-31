@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The account-bound Z-Crystal Seller is now temporarily available in the Aether Clash Lobby.
+
 - Item Dex item art now stays crisp at its native pixel size, and special-currency prices display normally instead of showing localization keys.
 
 - Guild Duel participants now see their authoritative 60-second automatic-matchmaking countdown, paused opponent waiting, final warning, and forced-battle start state in the arena HUD.
