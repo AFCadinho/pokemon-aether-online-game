@@ -4,6 +4,10 @@
 
 - The Clash Coordinator now explains every Guild Duel timer, including entry and matchmaking clocks, battle decision limits, the personal time bank, timeout consequences, and the 7.5-minute battle tiebreak.
 
+- The Aether Exchange now includes item wishlists: escrow a fixed-price offer, browse items other Trainers want, fulfill complete requests, or cancel your own order for a full refund.
+
+- The Kanto Mount License now also works in the Aether Clash Lobby and its minigame maps.
+
 - Aether Clash battles now show one synchronized 7.5-minute Clash timer in both the regular battle header and the Damage Calculator, with clear final-minute and tiebreak warnings.
 
 - Aethernet travel now separates available and locked destinations, uses full-row selection, and keeps one clear travel action with each fare shown beside its destination.
