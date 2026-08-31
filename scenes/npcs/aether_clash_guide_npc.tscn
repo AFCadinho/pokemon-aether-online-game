@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/world/npcs/aether_clash_guide_npc.gd" id="2_script"]
+[ext_resource type="SpriteFrames" uid="uid://cg046cju3kis8" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="3_frames"]
+
+[node name="AetherClashGuideNPC" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+npc_definition_id = "trainer_class_ace_trainer_f"
+display_name = "Clash Coordinator"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("3_frames")
+portrait_id = "showdown_acetrainerf_gen6"
+manual_interaction_reach_tiles = 2

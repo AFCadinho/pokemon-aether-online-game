@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Aether Clash Lobby now has a Clash Coordinator with categorized help for Guild Duels, battles, rules, entry, spectating, and the future Battle Royale format.
+
 - Aether Clash arenas now replace the quest tracker and hotkey bar with a private Guild status panel, spectator guidance, live battle counts, and anonymous elimination notifications.
 
 - Wild Pokémon now show their rarity-based Aetherite rewards in the Pokédex, and successful drops update the wallet with a localized currency notification.
