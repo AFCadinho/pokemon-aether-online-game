@@ -35177,6 +35177,11 @@ func _item_dex_source_title(source: Dictionary) -> String:
 		"pickup", "rock_smash", "default_grant":
 			return LocalizationManager.text("ui.item_dex.source_title.%s" % source_type)
 		"wild_drop", "wild_hold":
+			var family_id := str(source.get("family_id", "")).strip_edges()
+			if family_id != "":
+				return LocalizationManager.text("ui.item_dex.source_title.wild_evolution_line", {
+					"species": _localized_species_name(family_id, str(source.get("family_name", "")))
+				})
 			var species_id := str(source.get("species_id", "")).strip_edges()
 			if species_id != "":
 				return LocalizationManager.text("ui.item_dex.source_title.wild_species", {

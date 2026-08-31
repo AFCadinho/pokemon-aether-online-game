@@ -3048,6 +3048,7 @@
   "ui.item_dex.source_title.pickup": "在世界中拾取",
   "ui.item_dex.source_title.rock_smash": "击碎每日岩石",
   "ui.item_dex.source_title.default_grant": "授予每位玩家",
+  "ui.item_dex.source_title.wild_evolution_line": "{species}进化链",
   "ui.item_dex.source_title.wild_species": "击败{species}",
   "ui.item_dex.source_title.fishing": "使用{rod}发现宝藏",
   "ui.item_dex.source_title.thieving": "从{target}处偷取",
