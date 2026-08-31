@@ -708,6 +708,9 @@ func _apply_timer_projection_from_battle_response(message: Dictionary) -> bool:
 
 
 func apply_initial_timer_response(response: Dictionary) -> void:
+	var timer_value: Variant = response.get("timerState", {})
+	if timer_value is Dictionary and timer_projection.apply_snapshot(timer_value as Dictionary):
+		timer_state_changed.emit(timer_projection)
 	var timers_value: Variant = response.get("pvpTimers", [])
 	var enabled := bool(response.get("timerEnabled", false))
 	if timer_projection.apply_legacy_snapshot(timers_value, enabled):
