@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Live Ranked battles now use compact battle cards with clearer matchups, status details, and a dedicated spectate button.
+
 - Z-Crystals now display an ∞ marker in the Bag and held-item picker to show that they can be assigned without being consumed.
 
 - Open-field placeholders now inherit drawn boundary collision from a reusable scene template instead of generating collision in code.
