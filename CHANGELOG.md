@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aether Gift Store outfit previews now keep the Trainer's complete body and shoes visible.
+
 - The Aether Gift Store now uses a cleaner three-column catalog with curated Featured items and one unified product preview, detail, price, and checkout panel.
 
 - The Aether Exchange now uses three clear destinations with compact contextual selectors, making market browsing and order management calmer and easier to navigate.

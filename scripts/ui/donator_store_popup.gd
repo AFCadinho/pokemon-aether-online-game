@@ -48,8 +48,8 @@ const UI_GOLD := Color("#f0cc70")
 const UI_CYAN := Color("#60d3ff")
 const UI_DANGER := Color("#ef7085")
 const PREVIEW_VIEWPORT_SIZE := Vector2i(258, 174)
-const PREVIEW_AVATAR_POSITION := Vector2(129, 119)
-const PREVIEW_AVATAR_SCALE := Vector2(2.5, 2.5)
+const PREVIEW_AVATAR_POSITION := Vector2(129, 91)
+const PREVIEW_AVATAR_SCALE := Vector2(2.25, 2.25)
 const PREVIEW_DIRECTIONS: Array[Dictionary] = [
 	{"id": "down", "label": "Front"},
 	{"id": "left", "label": "Left"},
