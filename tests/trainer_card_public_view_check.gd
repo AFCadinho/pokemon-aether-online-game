@@ -52,6 +52,8 @@ func _run() -> void:
 
 	var popup := overlay.get("public_trainer_card_popup") as PanelContainer
 	var tabs := popup.find_child("PublicTrainerCardTabs", true, false) as TabContainer if popup != null else null
+	var overview_tab := tabs.get_node_or_null("Overview") as Control if tabs != null else null
+	var badges_tab := tabs.get_node_or_null("Badges") as Control if tabs != null else null
 	_check(popup != null, "public Trainer Card opens as a dedicated view")
 	_check(
 		popup != null
@@ -73,7 +75,14 @@ func _run() -> void:
 	)
 	_check(_find_label(popup, "Misty") != null, "public Trainer Card leads with trainer identity")
 	_check(_find_label(popup, "Cerulean Waves") != null, "public Trainer Card shows Guild identity")
-	_check(_find_label(popup, "2 / 8") != null, "public Trainer Card summarizes badge progress")
+	_check(
+		_find_label(overview_tab, "Gym Badges") == null and _find_label(overview_tab, "2 / 8") == null,
+		"public Trainer Card keeps Gym Badges out of Overview"
+	)
+	_check(
+		_find_label(badges_tab, "GYM BADGES · 2/8") != null,
+		"public Trainer Card keeps Gym Badge progress in the Badges tab"
+	)
 	_check(_find_label(popup, "80%") != null, "public Trainer Card presents the PvP win rate")
 	_check(
 		_find_label(popup, "private_internal_map_id") == null,
