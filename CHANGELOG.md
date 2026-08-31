@@ -10,6 +10,8 @@
 
 - The searchable Battle Point vendor is now open in the Aether Clash Lobby, with alphabetical and BP-price sorting and its Aethernet access shown in the Item Dex.
 
+- The Battle Point vendor now stands at its intended market spot in the Aether Clash Lobby.
+
 - Pokémon stat labels and values are now easier to distinguish on PC Box hover cards.
 
 - Outdoor zoom now defaults to Auto, which switches between 1× and 2× as the game window changes size; fixed zoom choices remain available.
