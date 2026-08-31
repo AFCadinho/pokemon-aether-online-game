@@ -3,6 +3,8 @@ extends Node
 class_name AetherExchangeServiceNode
 
 const LISTINGS_ENDPOINT := "/game/exchange/listings"
+const WISHES_ENDPOINT := "/game/exchange/wishes"
+const WISHLIST_CATALOG_ENDPOINT := "/game/exchange/wishlist/catalog"
 const PORTFOLIO_ENDPOINT := "/game/exchange/me"
 const REQUEST_TIMEOUT_SECONDS := 10.0
 
@@ -43,9 +45,51 @@ func load_portfolio() -> Dictionary:
 		"success": true,
 		"wallet": _dictionary(body.get("wallet", {})),
 		"listings": _listing_array(body.get("listings", [])),
+		"wishes": _wish_array(body.get("wishes", [])),
 		"sellableItems": _array(body.get("sellableItems", [])),
 		"sellablePokemon": _array(body.get("sellablePokemon", [])),
 		"activeListingLimit": maxi(int(body.get("activeListingLimit", 20)), 1),
+		"activeWishLimit": maxi(int(body.get("activeWishLimit", 20)), 1),
+	}
+
+
+func load_wishes(query := "", limit := 50, offset := 0) -> Dictionary:
+	if not _is_authenticated():
+		return _auth_error()
+	var endpoint := WISHES_ENDPOINT + "?limit=%d&offset=%d" % [clampi(limit, 1, 100), maxi(offset, 0)]
+	var normalized_query := str(query).strip_edges()
+	if not normalized_query.is_empty():
+		endpoint += "&query=%s" % normalized_query.uri_encode()
+	var response := await _request(endpoint, HTTPClient.METHOD_GET, {})
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	return {
+		"success": true,
+		"wishes": _wish_array(body.get("wishes", [])),
+		"total": maxi(int(body.get("total", 0)), 0),
+		"limit": maxi(int(body.get("limit", 50)), 1),
+		"offset": maxi(int(body.get("offset", 0)), 0),
+	}
+
+
+func load_wishlist_catalog(query := "", limit := 50, offset := 0) -> Dictionary:
+	if not _is_authenticated():
+		return _auth_error()
+	var endpoint := WISHLIST_CATALOG_ENDPOINT + "?limit=%d&offset=%d" % [clampi(limit, 1, 100), maxi(offset, 0)]
+	var normalized_query := str(query).strip_edges()
+	if not normalized_query.is_empty():
+		endpoint += "&query=%s" % normalized_query.uri_encode()
+	var response := await _request(endpoint, HTTPClient.METHOD_GET, {})
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	return {
+		"success": true,
+		"items": _array(body.get("items", [])),
+		"total": maxi(int(body.get("total", 0)), 0),
+		"limit": maxi(int(body.get("limit", 50)), 1),
+		"offset": maxi(int(body.get("offset", 0)), 0),
 	}
 
 
@@ -83,6 +127,29 @@ func cancel_listing(listing_id: String, request_id := "") -> Dictionary:
 	)
 
 
+func create_wish(item_id: String, quantity: int, unit_price: int, request_id := "") -> Dictionary:
+	return await _mutate_wish(WISHES_ENDPOINT, {
+		"requestId": _request_id(request_id),
+		"itemId": item_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-"),
+		"quantity": maxi(quantity, 1),
+		"unitPrice": maxi(unit_price, 1),
+	})
+
+
+func fulfill_wish(wish_id: String, request_id := "") -> Dictionary:
+	return await _mutate_wish(
+		WISHES_ENDPOINT + "/%s/fulfill" % wish_id.strip_edges().uri_encode(),
+		{"requestId": _request_id(request_id)}
+	)
+
+
+func cancel_wish(wish_id: String, request_id := "") -> Dictionary:
+	return await _mutate_wish(
+		WISHES_ENDPOINT + "/%s/cancel" % wish_id.strip_edges().uri_encode(),
+		{"requestId": _request_id(request_id)}
+	)
+
+
 func _mutate(endpoint: String, payload: Dictionary) -> Dictionary:
 	if not _is_authenticated():
 		return _auth_error()
@@ -93,6 +160,20 @@ func _mutate(endpoint: String, payload: Dictionary) -> Dictionary:
 	return {
 		"success": true,
 		"listing": normalize_listing(body.get("listing", {})),
+		"wallet": _dictionary(body.get("wallet", {})),
+	}
+
+
+func _mutate_wish(endpoint: String, payload: Dictionary) -> Dictionary:
+	if not _is_authenticated():
+		return _auth_error()
+	var response := await _request(endpoint, HTTPClient.METHOD_POST, payload)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	return {
+		"success": true,
+		"wish": normalize_wish(body.get("wish", {})),
 		"wallet": _dictionary(body.get("wallet", {})),
 	}
 
@@ -124,6 +205,22 @@ static func normalize_listing(value: Variant) -> Dictionary:
 		"createdAt": str(listing.get("createdAt", "")),
 		"soldAt": str(listing.get("soldAt", "")),
 		"cancelledAt": str(listing.get("cancelledAt", "")),
+	}
+
+
+static func normalize_wish(value: Variant) -> Dictionary:
+	var wish := _dictionary(value)
+	return {
+		"id": str(wish.get("id", "")),
+		"item": _dictionary(wish.get("item", {})),
+		"quantity": maxi(int(wish.get("quantity", 1)), 1),
+		"unitPrice": maxi(int(wish.get("unitPrice", 1)), 1),
+		"totalPrice": maxi(int(wish.get("totalPrice", 1)), 1),
+		"status": str(wish.get("status", "active")),
+		"isMine": bool(wish.get("isMine", false)),
+		"createdAt": str(wish.get("createdAt", "")),
+		"fulfilledAt": str(wish.get("fulfilledAt", "")),
+		"cancelledAt": str(wish.get("cancelledAt", "")),
 	}
 
 
@@ -188,6 +285,13 @@ static func _listing_array(value: Variant) -> Array:
 	var result: Array = []
 	for entry: Variant in _array(value):
 		result.append(normalize_listing(entry))
+	return result
+
+
+static func _wish_array(value: Variant) -> Array:
+	var result: Array = []
+	for entry: Variant in _array(value):
+		result.append(normalize_wish(entry))
 	return result
 
 

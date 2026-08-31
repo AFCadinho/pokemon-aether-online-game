@@ -40,7 +40,10 @@ const POKEMON_NATURES: Array[String] = [
 var active_tab := "browse"
 var asset_filter := "item"
 var browse_listings: Array = []
+var browse_wishes: Array = []
+var wishlist_catalog: Array = []
 var my_listings: Array = []
+var my_wishes: Array = []
 var sellable_items: Array = []
 var sellable_pokemon: Array = []
 var selected_entry: Dictionary = {}
@@ -130,7 +133,7 @@ func _ready() -> void:
 	search_timer = Timer.new()
 	search_timer.one_shot = true
 	search_timer.wait_time = 0.3
-	search_timer.timeout.connect(_refresh_browse)
+	search_timer.timeout.connect(_refresh_search_results)
 	add_child(search_timer)
 	var localization := get_node_or_null("/root/LocalizationManager")
 	if localization != null and not localization.locale_changed.is_connected(_on_locale_changed):
@@ -375,7 +378,7 @@ func _build_header() -> Control:
 func _build_tabs() -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
-	for tab: String in ["browse", "sell", "mine"]:
+	for tab: String in ["browse", "wanted", "wishlist", "sell", "mine"]:
 		var button := Button.new()
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.custom_minimum_size = Vector2(0, 38)
@@ -753,14 +756,19 @@ func _on_tab_pressed(tab: String) -> void:
 		return
 	active_tab = tab
 	_normalize_filter_for_tab()
-	if active_tab != "browse":
+	if active_tab not in ["browse", "wanted", "wishlist"]:
 		_hide_advanced_filter_panel()
 	selected_entry.clear()
 	selected_kind = ""
-	if active_tab == "browse":
-		await _refresh_browse()
-	else:
-		_render_current_list()
+	match active_tab:
+		"browse":
+			await _refresh_browse()
+		"wanted":
+			await _refresh_wishes()
+		"wishlist":
+			await _refresh_wishlist_catalog()
+		_:
+			_render_current_list()
 	_refresh_controls()
 
 
@@ -841,10 +849,20 @@ func _refresh_browse_sort_button() -> void:
 
 
 func _on_search_changed(_value: String) -> void:
-	if active_tab == "browse":
+	if active_tab in ["browse", "wanted", "wishlist"]:
 		search_timer.start()
 	else:
 		_render_current_list()
+
+
+func _refresh_search_results() -> void:
+	match active_tab:
+		"browse":
+			await _refresh_browse()
+		"wanted":
+			await _refresh_wishes()
+		"wishlist":
+			await _refresh_wishlist_catalog()
 
 
 func _toggle_advanced_filter_panel() -> void:
@@ -1092,10 +1110,15 @@ func _refresh_current_tab() -> void:
 	request_busy = true
 	_refresh_controls()
 	var refreshed: bool
-	if active_tab == "browse":
-		refreshed = await _load_browse()
-	else:
-		refreshed = await _load_portfolio()
+	match active_tab:
+		"browse":
+			refreshed = await _load_browse()
+		"wanted":
+			refreshed = await _load_wishes()
+		"wishlist":
+			refreshed = await _load_wishlist_catalog()
+		_:
+			refreshed = await _load_portfolio()
 	request_busy = false
 	_render_current_list()
 	_refresh_controls()
@@ -1109,6 +1132,28 @@ func _refresh_browse() -> void:
 	request_busy = true
 	_refresh_controls()
 	await _load_browse()
+	request_busy = false
+	_render_current_list()
+	_refresh_controls()
+
+
+func _refresh_wishes() -> void:
+	if request_busy or active_tab != "wanted":
+		return
+	request_busy = true
+	_refresh_controls()
+	await _load_wishes()
+	request_busy = false
+	_render_current_list()
+	_refresh_controls()
+
+
+func _refresh_wishlist_catalog() -> void:
+	if request_busy or active_tab != "wishlist":
+		return
+	request_busy = true
+	_refresh_controls()
+	await _load_wishlist_catalog()
 	request_busy = false
 	_render_current_list()
 	_refresh_controls()
@@ -1136,6 +1181,46 @@ func _load_browse() -> bool:
 	return true
 
 
+func _load_wishes() -> bool:
+	var service := get_node_or_null("/root/AetherExchangeService")
+	var result: Dictionary = (
+		await service.call(
+			"load_wishes",
+			search_input.text if search_input != null else "",
+			50,
+			0,
+		)
+		if service != null
+		else {"success": false, "error": _t("ui.exchange.error.load")}
+	)
+	if not bool(result.get("success", false)):
+		browse_wishes.clear()
+		_set_status(str(result.get("error", _t("ui.exchange.error.load"))), UI_DANGER)
+		return false
+	browse_wishes = _array(result.get("wishes", [])).duplicate(true)
+	return true
+
+
+func _load_wishlist_catalog() -> bool:
+	var service := get_node_or_null("/root/AetherExchangeService")
+	var result: Dictionary = (
+		await service.call(
+			"load_wishlist_catalog",
+			search_input.text if search_input != null else "",
+			50,
+			0,
+		)
+		if service != null
+		else {"success": false, "error": _t("ui.exchange.error.load")}
+	)
+	if not bool(result.get("success", false)):
+		wishlist_catalog.clear()
+		_set_status(str(result.get("error", _t("ui.exchange.error.load"))), UI_DANGER)
+		return false
+	wishlist_catalog = _array(result.get("items", [])).duplicate(true)
+	return true
+
+
 func _load_portfolio() -> bool:
 	var service := get_node_or_null("/root/AetherExchangeService")
 	var result: Dictionary = (
@@ -1145,11 +1230,13 @@ func _load_portfolio() -> bool:
 	)
 	if not bool(result.get("success", false)):
 		my_listings.clear()
+		my_wishes.clear()
 		sellable_items.clear()
 		sellable_pokemon.clear()
 		_set_status(str(result.get("error", _t("ui.exchange.error.load"))), UI_DANGER)
 		return false
 	my_listings = _array(result.get("listings", [])).duplicate(true)
+	my_wishes = _array(result.get("wishes", [])).duplicate(true)
 	sellable_items = _array(result.get("sellableItems", [])).duplicate(true)
 	sellable_pokemon = _array(result.get("sellablePokemon", [])).duplicate(true)
 	wallet_money = maxi(int(_dictionary(result.get("wallet", {})).get("money", 0)), 0)
@@ -1162,6 +1249,12 @@ func _render_current_list() -> void:
 	var entries: Array = []
 	var kind := "listing"
 	match active_tab:
+		"wanted":
+			kind = "wish"
+			entries = browse_wishes
+		"wishlist":
+			kind = "wish_catalog"
+			entries = wishlist_catalog
 		"sell":
 			kind = "sell"
 			if asset_filter != "pokemon":
@@ -1169,16 +1262,24 @@ func _render_current_list() -> void:
 			if asset_filter != "item":
 				entries.append_array(sellable_pokemon)
 		"mine":
-			entries = my_listings.filter(func(value: Variant) -> bool:
-				return asset_filter.is_empty() or str(_dictionary(value).get("assetType", "")) == asset_filter
-			)
+			for value: Variant in my_listings:
+				var listing := _dictionary(value).duplicate(true)
+				listing["_exchangeKind"] = "listing"
+				if str(listing.get("assetType", "")) == asset_filter:
+					entries.append(listing)
+			if asset_filter == "item":
+				for value: Variant in my_wishes:
+					var wish := _dictionary(value).duplicate(true)
+					wish["_exchangeKind"] = "wish"
+					entries.append(wish)
 		_:
 			entries = browse_listings
 
 	var query := search_input.text.strip_edges().to_lower()
 	if active_tab != "browse" and not query.is_empty():
 		entries = entries.filter(func(value: Variant) -> bool:
-			return _entry_name(_dictionary(value), kind).to_lower().contains(query)
+			var entry := _dictionary(value)
+			return _entry_name(entry, str(entry.get("_exchangeKind", kind))).to_lower().contains(query)
 		)
 
 	rendered_list_entry_count = entries.size()
@@ -1199,7 +1300,7 @@ func _render_current_list() -> void:
 		_update_list_grid_columns()
 		for value: Variant in entries:
 			var entry := _dictionary(value)
-			list_container.add_child(_entry_button(entry, kind))
+			list_container.add_child(_entry_button(entry, str(entry.get("_exchangeKind", kind))))
 	if not _selection_still_visible(entries):
 		selected_entry.clear()
 		selected_kind = ""
@@ -1224,7 +1325,7 @@ func _update_list_grid_columns() -> void:
 
 func _entry_button(entry: Dictionary, kind: String) -> Button:
 	var button := Button.new()
-	var browse_card := active_tab == "browse" and kind == "listing"
+	var browse_card := active_tab in ["browse", "wanted", "wishlist"] and kind in ["listing", "wish", "wish_catalog"]
 	button.custom_minimum_size = Vector2(
 		BROWSE_CARD_MIN_WIDTH if browse_card else 0.0,
 		BROWSE_CARD_HEIGHT if browse_card else 70,
@@ -1301,9 +1402,13 @@ func _build_browse_card_content(button: Button, entry: Dictionary, kind: String)
 
 	var price := Label.new()
 	price.name = "BrowseCardPrice"
-	price.text = _t(
-		"ui.exchange.total",
-		{"amount": _format_money(int(entry.get("totalPrice", 0)))},
+	price.text = (
+		_t("ui.exchange.wishlist.choose")
+		if kind == "wish_catalog"
+		else _t(
+			"ui.exchange.total",
+			{"amount": _format_money(int(entry.get("totalPrice", 0)))},
+		)
 	)
 	price.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	price.add_theme_font_size_override("font_size", 13)
@@ -1343,6 +1448,10 @@ func _render_detail() -> void:
 
 	if selected_kind == "sell":
 		_build_sell_controls(asset)
+	elif selected_kind == "wish_catalog":
+		_build_wishlist_controls()
+	elif selected_kind == "wish":
+		_build_wish_controls()
 	else:
 		_build_listing_controls()
 
@@ -1687,6 +1796,91 @@ func _build_sell_controls(asset: Dictionary) -> void:
 	_update_sell_total(0)
 
 
+func _build_wishlist_controls() -> void:
+	quantity_spin = SpinBox.new()
+	quantity_spin.min_value = 1
+	quantity_spin.max_value = 999
+	quantity_spin.value = 1
+	quantity_spin.update_on_text_changed = true
+	quantity_spin.value_changed.connect(_update_sell_total)
+	detail_stack.add_child(_labeled_control(_t("ui.exchange.quantity"), quantity_spin))
+	price_spin = SpinBox.new()
+	price_spin.min_value = 1
+	price_spin.max_value = MAX_PRICE
+	price_spin.value = 100
+	price_spin.step = 1
+	price_spin.update_on_text_changed = true
+	price_spin.value_changed.connect(_update_sell_total)
+	detail_stack.add_child(_labeled_control(_t("ui.exchange.unit_price"), price_spin))
+	total_price_label = Label.new()
+	total_price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	total_price_label.add_theme_font_size_override("font_size", 16)
+	total_price_label.add_theme_color_override("font_color", UI_GOLD)
+	detail_stack.add_child(total_price_label)
+	var create_button := Button.new()
+	create_button.name = "ExchangeCreateWishButton"
+	create_button.custom_minimum_size = Vector2(0, 42)
+	create_button.text = _t("ui.exchange.action.add_wish")
+	create_button.pressed.connect(_confirm_create_wish)
+	_apply_primary_button_style(create_button)
+	detail_stack.add_child(create_button)
+	var escrow_note := Label.new()
+	escrow_note.text = _t("ui.exchange.wishlist.escrow_note")
+	escrow_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	escrow_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	escrow_note.add_theme_font_size_override("font_size", 10)
+	escrow_note.add_theme_color_override("font_color", UI_MUTED)
+	detail_stack.add_child(escrow_note)
+	_update_sell_total(0)
+
+
+func _build_wish_controls() -> void:
+	var status := str(selected_entry.get("status", "active"))
+	var footer := PanelContainer.new()
+	footer.name = "ExchangeWishFooter"
+	footer.add_theme_stylebox_override("panel", _compact_panel_style(Color("#07111dcc"), Color("#806d34aa"), 8, 1, 8, 5))
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 5)
+	footer.add_child(content)
+	var price_row := HBoxContainer.new()
+	price_row.add_theme_constant_override("separation", 8)
+	content.add_child(price_row)
+	var price := Label.new()
+	price.text = _t("ui.exchange.wishlist.offer", {"amount": _format_money(int(selected_entry.get("totalPrice", 0)))})
+	price.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	price.add_theme_font_size_override("font_size", 19)
+	price.add_theme_color_override("font_color", UI_GOLD)
+	price_row.add_child(price)
+	var state := Label.new()
+	state.text = "●  %s" % _t("ui.exchange.wishlist.state.%s" % status)
+	state.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	state.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	state.add_theme_color_override("font_color", UI_GREEN if status in ["active", "fulfilled"] else UI_MUTED)
+	price_row.add_child(state)
+	if status == "active":
+		var action := Button.new()
+		action.name = "ExchangeWishActionButton"
+		action.custom_minimum_size = Vector2(0, 40)
+		if bool(selected_entry.get("isMine", false)):
+			action.text = _t("ui.exchange.action.cancel_wish")
+			action.pressed.connect(_confirm_cancel_wish)
+			_apply_danger_button_style(action)
+		else:
+			var required := maxi(int(selected_entry.get("quantity", 1)), 1)
+			var item_id := str(_dictionary(selected_entry.get("item", {})).get("itemId", ""))
+			var available := _available_item_quantity(item_id)
+			action.text = _t("ui.exchange.action.fulfill_wish")
+			action.disabled = available < required
+			action.tooltip_text = _t(
+				"ui.exchange.wishlist.need_items",
+				{"required": required, "available": available},
+			) if action.disabled else ""
+			action.pressed.connect(_confirm_fulfill_wish)
+			_apply_primary_button_style(action)
+		content.add_child(action)
+	detail_stack.add_child(footer)
+
+
 func _build_listing_controls() -> void:
 	var status := str(selected_entry.get("status", "active"))
 	var footer := PanelContainer.new()
@@ -1760,6 +1954,49 @@ func _confirm_cancel_selected() -> void:
 		_t("ui.exchange.confirm.cancel_title"),
 		_t("ui.exchange.confirm.cancel", {"name": _entry_name(selected_entry, selected_kind)}),
 		Callable(self, "_cancel_selected").bind(str(selected_entry.get("id", "")), _new_request_id("cancel")),
+		true
+	)
+
+
+func _confirm_create_wish() -> void:
+	var quantity := int(quantity_spin.value) if quantity_spin != null else 1
+	var unit_price := int(price_spin.value) if price_spin != null else 0
+	var total := quantity * unit_price
+	_show_confirmation(
+		_t("ui.exchange.confirm.wish_title"),
+		_t("ui.exchange.confirm.wish", {
+			"name": _entry_name(selected_entry, selected_kind),
+			"quantity": quantity,
+			"amount": _format_money(total),
+		}),
+		Callable(self, "_create_wish_selected").bind(quantity, unit_price, _new_request_id("wish"))
+	)
+
+
+func _confirm_fulfill_wish() -> void:
+	_show_confirmation(
+		_t("ui.exchange.confirm.fulfill_wish_title"),
+		_t("ui.exchange.confirm.fulfill_wish", {
+			"name": _entry_name(selected_entry, selected_kind),
+			"quantity": int(selected_entry.get("quantity", 1)),
+			"amount": _format_money(int(selected_entry.get("totalPrice", 0))),
+		}),
+		Callable(self, "_fulfill_wish_selected").bind(
+			str(selected_entry.get("id", "")), _new_request_id("fulfill-wish")
+		)
+	)
+
+
+func _confirm_cancel_wish() -> void:
+	_show_confirmation(
+		_t("ui.exchange.confirm.cancel_wish_title"),
+		_t("ui.exchange.confirm.cancel_wish", {
+			"name": _entry_name(selected_entry, selected_kind),
+			"amount": _format_money(int(selected_entry.get("totalPrice", 0))),
+		}),
+		Callable(self, "_cancel_wish_selected").bind(
+			str(selected_entry.get("id", "")), _new_request_id("cancel-wish")
+		),
 		true
 	)
 
@@ -1852,6 +2089,78 @@ func _cancel_selected(listing_id: String, request_id: String) -> void:
 	)
 
 
+func _create_wish_selected(quantity: int, unit_price: int, request_id: String) -> void:
+	if request_busy:
+		return
+	request_busy = true
+	_refresh_controls()
+	_set_status(_t("ui.exchange.status.creating_wish"), UI_MUTED)
+	var service := get_node_or_null("/root/AetherExchangeService")
+	var item_id := str(selected_entry.get("itemId", ""))
+	await _finish_wish_mutation(
+		await service.call("create_wish", item_id, quantity, unit_price, request_id)
+		if service != null
+		else {"success": false, "error": _t("ui.exchange.error.action")},
+		"ui.exchange.status.wish_created"
+	)
+
+
+func _fulfill_wish_selected(wish_id: String, request_id: String) -> void:
+	if request_busy:
+		return
+	request_busy = true
+	_refresh_controls()
+	_set_status(_t("ui.exchange.status.fulfilling_wish"), UI_MUTED)
+	var service := get_node_or_null("/root/AetherExchangeService")
+	await _finish_wish_mutation(
+		await service.call("fulfill_wish", wish_id, request_id)
+		if service != null
+		else {"success": false, "error": _t("ui.exchange.error.action")},
+		"ui.exchange.status.wish_fulfilled"
+	)
+
+
+func _cancel_wish_selected(wish_id: String, request_id: String) -> void:
+	if request_busy:
+		return
+	request_busy = true
+	_refresh_controls()
+	_set_status(_t("ui.exchange.status.cancelling_wish"), UI_MUTED)
+	var service := get_node_or_null("/root/AetherExchangeService")
+	await _finish_wish_mutation(
+		await service.call("cancel_wish", wish_id, request_id)
+		if service != null
+		else {"success": false, "error": _t("ui.exchange.error.action")},
+		"ui.exchange.status.wish_cancelled"
+	)
+
+
+func _finish_wish_mutation(result: Dictionary, success_key: String) -> void:
+	if not bool(result.get("success", false)):
+		request_busy = false
+		_refresh_controls()
+		_set_status(str(result.get("error", _t("ui.exchange.error.action"))), UI_DANGER)
+		return
+	var wallet := _dictionary(result.get("wallet", {}))
+	wallet_money = maxi(int(wallet.get("money", wallet_money)), 0)
+	var wallet_service := get_node_or_null("/root/PlayerWalletService")
+	if wallet_service != null:
+		wallet_service.call("apply_wallet_result", {"success": true, "wallet": wallet})
+	wallet_changed.emit()
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	if inventory_service != null:
+		await inventory_service.call("load_inventory")
+	var portfolio_loaded := await _load_portfolio()
+	var wishes_loaded := await _load_wishes()
+	request_busy = false
+	selected_entry.clear()
+	selected_kind = ""
+	_render_current_list()
+	_refresh_controls()
+	if portfolio_loaded and wishes_loaded:
+		_set_status(_t(success_key), UI_GREEN)
+
+
 func _finish_mutation(result: Dictionary, success_key: String) -> void:
 	if not bool(result.get("success", false)):
 		request_busy = false
@@ -1906,12 +2215,16 @@ func _refresh_controls() -> void:
 		_apply_button_style(button, str(key) == active_tab)
 	for key: Variant in filter_buttons:
 		var button := filter_buttons[key] as Button
-		button.visible = not (active_tab == "sell" and str(key).is_empty())
+		button.visible = active_tab in ["browse", "sell", "mine"]
 		var label_key := "all" if str(key).is_empty() else str(key)
 		button.text = _t("ui.exchange.filter.%s" % label_key)
 		button.disabled = request_busy
 		_apply_button_style(button, str(key) == asset_filter)
 	search_input.editable = not request_busy
+	search_input.placeholder_text = _t(
+		"ui.exchange.search_wishlist" if active_tab == "wishlist"
+		else ("ui.exchange.search_wanted" if active_tab == "wanted" else "ui.exchange.search")
+	)
 	if advanced_filter_button != null:
 		var filter_count := _active_advanced_filter_count()
 		advanced_filter_button.text = _t(
@@ -1940,6 +2253,9 @@ func _refresh_controls() -> void:
 
 
 func _normalize_filter_for_tab() -> void:
+	if active_tab in ["wanted", "wishlist"]:
+		asset_filter = "item"
+		return
 	if asset_filter not in ["item", "pokemon"]:
 		asset_filter = "item"
 
@@ -2001,6 +2317,8 @@ func _entry_name(entry: Dictionary, kind: String) -> String:
 
 func _entry_subtitle(entry: Dictionary, kind: String) -> String:
 	var asset := _entry_asset(entry, kind)
+	if kind == "wish_catalog":
+		return _t("ui.exchange.wishlist.choose")
 	if kind == "sell":
 		if _entry_asset_type(entry, kind) == "pokemon":
 			return _t("ui.exchange.pokemon_summary", {
@@ -2009,6 +2327,11 @@ func _entry_subtitle(entry: Dictionary, kind: String) -> String:
 			})
 		return _t("ui.exchange.owned", {"quantity": int(asset.get("quantity", 1))})
 	var status := str(entry.get("status", "active"))
+	if kind == "wish":
+		return "%s  •  %s" % [
+			_t("ui.exchange.wishlist.offer", {"amount": _format_money(int(entry.get("totalPrice", 0)))}),
+			_t("ui.exchange.wishlist.state.%s" % status),
+		]
 	return "%s  •  %s" % [
 		_t("ui.exchange.total", {"amount": _format_money(int(entry.get("totalPrice", 0)))}),
 		_t("ui.exchange.state.%s" % status),
@@ -2016,13 +2339,28 @@ func _entry_subtitle(entry: Dictionary, kind: String) -> String:
 
 
 func _entry_asset(entry: Dictionary, kind: String) -> Dictionary:
-	return entry if kind == "sell" else _dictionary(entry.get("asset", {}))
+	if kind in ["sell", "wish_catalog"]:
+		return entry
+	if kind == "wish":
+		return _dictionary(entry.get("item", {}))
+	return _dictionary(entry.get("asset", {}))
 
 
 func _entry_asset_type(entry: Dictionary, kind: String) -> String:
+	if kind in ["wish", "wish_catalog"]:
+		return "item"
 	if kind != "sell":
 		return str(entry.get("assetType", "item"))
 	return "pokemon" if entry.has("pokemonId") or entry.has("speciesId") or entry.has("speciesName") else "item"
+
+
+func _available_item_quantity(item_id: String) -> int:
+	var normalized := item_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+	for value: Variant in sellable_items:
+		var item := _dictionary(value)
+		if str(item.get("itemId", "")).strip_edges().to_lower() == normalized:
+			return maxi(int(item.get("quantity", 0)), 0)
+	return 0
 
 
 func _asset_detail_text(asset: Dictionary, asset_type: String) -> String:
@@ -2085,6 +2423,10 @@ func _entry_matches_selection(entry: Dictionary, kind: String) -> bool:
 
 
 func _entry_selection_key(entry: Dictionary, kind: String) -> String:
+	if kind == "wish_catalog":
+		return "wish-catalog:%s" % _optional_text(entry.get("itemId"))
+	if kind == "wish":
+		return "wish:%s" % _optional_text(entry.get("id"))
 	if kind != "sell":
 		return "listing:%s" % _optional_text(entry.get("id"))
 	if _entry_asset_type(entry, kind) == "pokemon":
