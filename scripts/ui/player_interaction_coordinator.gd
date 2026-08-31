@@ -47,7 +47,7 @@ var context_title: Label
 var context_username_label: Label
 var context_status_dot: Label
 var context_status_label: Label
-var context_avatar_preview: TrainerAvatarPreview
+var context_avatar_preview
 var context_actions: VBoxContainer
 var context_more_actions_expanded := false
 var context_requested_position := Vector2.ZERO
@@ -312,7 +312,7 @@ func _build_ui() -> void:
 		_panel_style(Color("#071c29e8"), UI_ACCENT_SOFT, 10)
 	)
 	context_header.add_child(identity_badge)
-	context_avatar_preview = TrainerAvatarPreviewScript.new() as TrainerAvatarPreview
+	context_avatar_preview = TrainerAvatarPreviewScript.new()
 	context_avatar_preview.name = "TrainerAvatarPreview"
 	context_avatar_preview.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	identity_badge.add_child(context_avatar_preview)
@@ -411,7 +411,7 @@ func _create_player_row(player: Dictionary) -> Button:
 		_panel_style(Color("#071c29d9"), UI_ACCENT_FAINT, 10)
 	)
 	content.add_child(identity_badge)
-	var avatar_preview := TrainerAvatarPreviewScript.new() as TrainerAvatarPreview
+	var avatar_preview = TrainerAvatarPreviewScript.new()
 	avatar_preview.name = "TrainerAvatarPreview"
 	avatar_preview.set_trainer_state(player, _player_initial(player))
 	identity_badge.add_child(avatar_preview)

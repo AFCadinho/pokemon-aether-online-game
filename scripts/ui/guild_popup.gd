@@ -5313,7 +5313,7 @@ func _build_guild_member_card(
 	avatar_overlay.custom_minimum_size = Vector2(42, 42)
 	avatar_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	avatar_frame.add_child(avatar_overlay)
-	var avatar_preview := TrainerAvatarPreviewScript.new() as TrainerAvatarPreview
+	var avatar_preview = TrainerAvatarPreviewScript.new()
 	avatar_preview.name = "TrainerAvatarPreview"
 	avatar_preview.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var fallback_source := str(member.get("displayName", member.get("username", "?"))).strip_edges()
