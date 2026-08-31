@@ -321,7 +321,9 @@ func load_aether_clash_challenges() -> Dictionary:
 
 func create_aether_clash_challenge(
 	challenged_guild_id: int,
-	spectator_access := "public"
+	spectator_access := "public",
+	tier_id := "aether-ou",
+	stake_amount := 0
 ) -> Dictionary:
 	var response := await _authenticated_request(
 		AETHER_CLASH_CHALLENGES_ENDPOINT,
@@ -329,6 +331,8 @@ func create_aether_clash_challenge(
 		JSON.stringify({
 			"challengedGuildId": challenged_guild_id,
 			"spectatorAccess": spectator_access,
+			"tierId": tier_id,
+			"stakeAmount": maxi(int(stake_amount), 0),
 		})
 	)
 	return _aether_clash_action_result(response)
@@ -336,7 +340,9 @@ func create_aether_clash_challenge(
 
 func create_aether_clash_player_challenge(
 	target_user_id: int,
-	spectator_access := "public"
+	spectator_access := "public",
+	tier_id := "aether-ou",
+	stake_amount := 0
 ) -> Dictionary:
 	if target_user_id <= 0:
 		return {"success": false, "error": "Aether Clash target was missing."}
@@ -346,6 +352,8 @@ func create_aether_clash_player_challenge(
 		JSON.stringify({
 			"targetUserId": target_user_id,
 			"spectatorAccess": spectator_access,
+			"tierId": tier_id,
+			"stakeAmount": maxi(int(stake_amount), 0),
 		})
 	)
 	return _aether_clash_action_result(response)
@@ -680,6 +688,8 @@ func _aether_clash_challenges_result(value: Variant) -> Dictionary:
 		entry["ownSide"] = str(entry.get("ownSide", "challenger")).strip_edges().to_lower()
 		entry["participantCounts"] = _dictionary(entry.get("participantCounts", {})).duplicate(true)
 		entry["remainingCounts"] = _dictionary(entry.get("remainingCounts", {})).duplicate(true)
+		entry["stakeAmount"] = maxi(int(entry.get("stakeAmount", 0)), 0)
+		entry["stakePotAmount"] = maxi(int(entry.get("stakePotAmount", 0)), 0)
 		history.append(entry)
 	return {
 		"success": true,
@@ -719,6 +729,8 @@ func _normalize_aether_clash_session(value: Variant) -> Dictionary:
 	var challenge := (value as Dictionary).duplicate(true)
 	challenge["challengerGuild"] = _dictionary(challenge.get("challengerGuild", {})).duplicate(true)
 	challenge["challengedGuild"] = _dictionary(challenge.get("challengedGuild", {})).duplicate(true)
+	challenge["stakeAmount"] = maxi(int(challenge.get("stakeAmount", 0)), 0)
+	challenge["stakePotAmount"] = maxi(int(challenge.get("stakePotAmount", 0)), 0)
 	return challenge
 
 

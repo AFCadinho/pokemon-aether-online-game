@@ -85,6 +85,25 @@ func style_option_button(select: OptionButton) -> void:
 	popup.add_theme_stylebox_override("hover", _make_style(COLOR_SURFACE_HOVER, COLOR_ACCENT, 6, 1))
 
 
+func style_spin_box(input: SpinBox) -> void:
+	if input == null:
+		return
+	var line_edit := input.get_line_edit()
+	if line_edit == null:
+		return
+	line_edit.add_theme_color_override("font_color", COLOR_TEXT)
+	line_edit.add_theme_color_override("caret_color", COLOR_ACCENT)
+	line_edit.add_theme_font_size_override("font_size", 14)
+	line_edit.add_theme_stylebox_override(
+		"normal",
+		_select_style(COLOR_SURFACE, COLOR_BORDER)
+	)
+	line_edit.add_theme_stylebox_override(
+		"focus",
+		_select_style(COLOR_SURFACE_HOVER, COLOR_ACCENT)
+	)
+
+
 func popup_centered(requested_size: Vector2i = Vector2i.ZERO) -> void:
 	_fit_to_viewport()
 	var target_size := Vector2(requested_size)
