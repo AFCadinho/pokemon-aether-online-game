@@ -380,6 +380,25 @@ func _init() -> void:
 	service._apply_timer_projection_from_battle_response({"response":{"timerState":{"timerContractVersion":1,"authority":"BATTLE_BANK_V1_SHADOW","timerRevision":1,"battleEventSeq":41,"serverNowMs":1,"participants":{}}}})
 	_check_equal(service.last_battle_event_seq, 3, "newer timer snapshot cannot skip unapplied durable terminal events")
 
+	var initial_timer_service := PvpBattleRealtimeServiceNode.new()
+	initial_timer_service.apply_initial_timer_response({
+		"timerState": {
+			"timerContractVersion": 1,
+			"authority": "BATTLE_BANK_V1_SHADOW",
+			"timerRevision": 1,
+			"serverNowMs": 1000,
+			"participants": {},
+			"battleLimit": {
+				"durationMs": 450000,
+				"startedAtMs": 1000,
+				"deadlineAtMs": 451000,
+				"status": "ACTIVE",
+			},
+		},
+	})
+	_check_equal(initial_timer_service.timer_projection.contract_enabled, true, "initial battle response enables the timer contract before realtime join")
+	_check_equal(initial_timer_service.timer_projection.battle_limit.get("durationMs"), 450000, "initial battle response preserves the Clash battle limit")
+
 	var legacy_service := PvpBattleRealtimeServiceNode.new()
 	legacy_service.timer_projection.apply_legacy_snapshot([{
 		"activeSide": "p1", "phase": "team_preview", "status": "active",
