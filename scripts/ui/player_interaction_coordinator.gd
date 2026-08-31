@@ -44,6 +44,7 @@ var players_status_label: Label
 var context_menu: PanelContainer
 var context_title: Label
 var context_username_label: Label
+var context_status_dot: Label
 var context_status_label: Label
 var context_actions: VBoxContainer
 var context_more_actions_expanded := false
@@ -169,6 +170,16 @@ func close_topmost() -> bool:
 func close_for_map_transition() -> void:
 	close_context_menu()
 	close_players_panel()
+
+
+func _input(event: InputEvent) -> void:
+	if context_menu == null or not context_menu.visible or not (event is InputEventMouseButton):
+		return
+	var mouse_event := event as InputEventMouseButton
+	if not mouse_event.pressed or context_menu.get_global_rect().has_point(mouse_event.global_position):
+		return
+	close_context_menu()
+	get_viewport().set_input_as_handled()
 
 
 func _build_ui() -> void:
@@ -322,24 +333,25 @@ func _build_ui() -> void:
 	context_username_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	context_username_label.add_theme_font_size_override("font_size", 10)
 	context_identity.add_child(context_username_label)
+	var context_status_row := HBoxContainer.new()
+	context_status_row.add_theme_constant_override("separation", 5)
+	context_identity.add_child(context_status_row)
+	context_status_dot = Label.new()
+	context_status_dot.text = "●"
+	context_status_dot.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	context_status_dot.add_theme_font_size_override("font_size", 7)
+	context_status_dot.add_theme_color_override("font_color", Color("#6fe49a"))
+	context_status_row.add_child(context_status_dot)
+	context_status_label = Label.new()
+	context_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	context_status_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	context_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	context_status_label.add_theme_font_size_override("font_size", 9)
+	context_status_row.add_child(context_status_label)
 
 	var context_close_button := _compact_close_button()
 	context_close_button.pressed.connect(close_context_menu)
 	context_header.add_child(context_close_button)
-
-	var status_panel := PanelContainer.new()
-	status_panel.add_theme_stylebox_override(
-		"panel",
-		_panel_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 8)
-	)
-	context_root.add_child(status_panel)
-	var status_margin := _margin_container(8)
-	status_panel.add_child(status_margin)
-	context_status_label = Label.new()
-	context_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	context_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	context_status_label.add_theme_font_size_override("font_size", 10)
-	status_margin.add_child(context_status_label)
 
 	context_actions = VBoxContainer.new()
 	context_actions.add_theme_constant_override("separation", 6)
@@ -500,8 +512,15 @@ func _render_context_menu() -> void:
 		initial_label.text = _player_initial(current_target)
 	_refresh_context_status()
 	_clear_children(context_actions)
-	# Keep the default right-click card focused on the two actions trainers use
-	# most. Everything else stays one deliberate click away.
+	if context_more_actions_expanded:
+		_render_context_secondary_actions()
+	else:
+		_render_context_primary_actions()
+	_schedule_context_menu_content_fit()
+	_focus_first_context_action.call_deferred()
+
+
+func _render_context_primary_actions() -> void:
 	_add_context_action("Message", _t("ui.nearby.action.message.description"), _on_message_pressed)
 	var trade_enabled := bool(trade_capabilities.get("enabled", false))
 	_add_context_action(
@@ -527,60 +546,77 @@ func _render_context_menu() -> void:
 			aether_clash_action_in_flight
 		)
 	_add_context_more_actions_toggle()
-	if context_more_actions_expanded:
-		context_actions.add_child(_context_section_label(_t("ui.nearby.more_actions")))
+
+
+func _render_context_secondary_actions() -> void:
+	_add_context_back_button()
+	context_actions.add_child(_context_section_label(_t("ui.nearby.more_actions")))
+	_add_context_action(
+		"View Trainer Card",
+		_t("ui.nearby.action.trainer_card.description"),
+		_on_trainer_card_pressed,
+		"default",
+		false,
+		true
+	)
+	_add_context_action(
+		"Send Mail",
+		_t("ui.nearby.action.mail.description"),
+		_on_mail_pressed,
+		"default",
+		false,
+		true
+	)
+	if _can_invite_to_guild():
 		_add_context_action(
-			"View Trainer Card",
-			_t("ui.nearby.action.trainer_card.description"),
-			_on_trainer_card_pressed
+			"Invite to Guild",
+			_t("ui.nearby.action.guild.description"),
+			_on_guild_invite_pressed,
+			"default",
+			guild_action_in_flight,
+			true
 		)
+	_add_context_action(
+		"Remove Friend" if _is_friend(current_target) else "Add Friend",
+		_t("ui.nearby.action.friend.description"),
+		_on_friend_pressed,
+		"default",
+		false,
+		true
+	)
+	context_actions.add_child(_context_section_label(_t("ui.nearby.safety"), UI_DANGER))
+	_add_context_action(
+		"Unblock" if _is_blocked(current_target) else "Block",
+		_t(
+			"ui.nearby.action.unblock.description"
+			if _is_blocked(current_target)
+			else "ui.nearby.action.block.description"
+		),
+		_on_block_pressed,
+		"default" if _is_blocked(current_target) else "danger",
+		false,
+		true
+	)
+	if _can_moderate_chat():
 		_add_context_action(
-			"Send Mail",
-			_t("ui.nearby.action.mail.description"),
-			_on_mail_pressed
-		)
-		if _can_invite_to_guild():
-			_add_context_action(
-				"Invite to Guild",
-				_t("ui.nearby.action.guild.description"),
-				_on_guild_invite_pressed,
-				"default",
-				guild_action_in_flight
-			)
-		_add_context_action(
-			"Remove Friend" if _is_friend(current_target) else "Add Friend",
-			_t("ui.nearby.action.friend.description"),
-			_on_friend_pressed
-		)
-		_add_context_action(
-			"Unblock" if _is_blocked(current_target) else "Block",
+			"Unmute Player" if chat_target_is_muted else "Mute Player",
 			_t(
-				"ui.nearby.action.unblock.description"
-				if _is_blocked(current_target)
-				else "ui.nearby.action.block.description"
+				"ui.nearby.action.unmute_player.description"
+				if chat_target_is_muted
+				else "ui.nearby.action.mute_player.description"
 			),
-			_on_block_pressed,
-			"default" if _is_blocked(current_target) else "danger"
+			_on_chat_moderation_pressed,
+			"default" if chat_target_is_muted else "danger",
+			false,
+			true
 		)
-		if _can_moderate_chat():
-			_add_context_action(
-				"Unmute Player" if chat_target_is_muted else "Mute Player",
-				_t(
-					"ui.nearby.action.unmute_player.description"
-					if chat_target_is_muted
-					else "ui.nearby.action.mute_player.description"
-				),
-				_on_chat_moderation_pressed,
-				"default" if chat_target_is_muted else "danger"
-			)
-	_schedule_context_menu_content_fit()
 
 
 func _add_context_more_actions_toggle() -> void:
 	var button := Button.new()
 	button.set_meta("player_action", "More actions")
 	button.text = _t("ui.nearby.more_actions_toggle", {
-		"indicator": "▴" if context_more_actions_expanded else "▾",
+		"indicator": "›",
 	})
 	button.tooltip_text = _t("ui.nearby.more_actions_tooltip")
 	button.custom_minimum_size = Vector2(0, 34)
@@ -591,6 +627,26 @@ func _add_context_more_actions_toggle() -> void:
 	button.add_theme_stylebox_override("normal", _button_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 8))
 	button.add_theme_stylebox_override("hover", _button_style(UI_SURFACE_HOVER, UI_ACCENT_SOFT, 8))
 	button.add_theme_stylebox_override("pressed", _button_style(UI_SURFACE_PRESSED, UI_BORDER_FOCUS, 8))
+	button.add_theme_stylebox_override("focus", _button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8))
+	button.pressed.connect(_toggle_context_more_actions)
+	context_actions.add_child(button)
+
+
+func _add_context_back_button() -> void:
+	var button := Button.new()
+	button.set_meta("player_action", "Back to quick actions")
+	button.text = "‹  %s" % _t("ui.nearby.back_to_quick_actions")
+	button.tooltip_text = _t("ui.nearby.back_to_quick_actions")
+	button.custom_minimum_size = Vector2(0, 36)
+	button.focus_mode = Control.FOCUS_ALL
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.add_theme_font_size_override("font_size", 11)
+	button.add_theme_color_override("font_color", UI_ACCENT)
+	button.add_theme_stylebox_override("normal", _button_style(UI_SURFACE_INSET, UI_BORDER_SUBTLE, 8))
+	button.add_theme_stylebox_override("hover", _button_style(UI_SURFACE_HOVER, UI_ACCENT_SOFT, 8))
+	button.add_theme_stylebox_override("pressed", _button_style(UI_SURFACE_PRESSED, UI_BORDER_FOCUS, 8))
+	button.add_theme_stylebox_override("focus", _button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8))
 	button.pressed.connect(_toggle_context_more_actions)
 	context_actions.add_child(button)
 
@@ -621,51 +677,43 @@ func _refresh_context_status() -> void:
 	if context_status_label == null:
 		return
 	if social_state_loading:
-		context_status_label.text = _t("ui.nearby.status.checking_social")
-		context_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		_set_context_status(_t("ui.nearby.status.checking_social"), UI_MUTED_TEXT, UI_ACCENT)
 		return
 	if social_action_in_flight:
-		context_status_label.text = _t("ui.nearby.status.updating_social")
-		context_status_label.add_theme_color_override("font_color", UI_ACCENT)
+		_set_context_status(_t("ui.nearby.status.updating_social"), UI_ACCENT, UI_ACCENT)
 		return
 	if guild_action_in_flight:
-		context_status_label.text = _t("ui.nearby.status.sending_guild")
-		context_status_label.add_theme_color_override("font_color", UI_ACCENT)
+		_set_context_status(_t("ui.nearby.status.sending_guild"), UI_ACCENT, UI_ACCENT)
 		return
 	if aether_clash_action_in_flight:
-		context_status_label.text = _t("ui.nearby.status.sending_aether_clash")
-		context_status_label.add_theme_color_override("font_color", UI_ACCENT)
+		_set_context_status(_t("ui.nearby.status.sending_aether_clash"), UI_ACCENT, UI_ACCENT)
 		return
 	if aether_clash_status_message != "":
-		context_status_label.text = aether_clash_status_message
-		context_status_label.add_theme_color_override(
-			"font_color",
-			UI_DANGER if aether_clash_status_is_error else Color("#6fe49a")
-		)
+		var clash_color := UI_DANGER if aether_clash_status_is_error else Color("#6fe49a")
+		_set_context_status(aether_clash_status_message, clash_color, clash_color)
 		return
 	if guild_status_message != "":
-		context_status_label.text = guild_status_message
-		context_status_label.add_theme_color_override(
-			"font_color",
-			UI_DANGER if guild_status_is_error else Color("#6fe49a")
-		)
+		var guild_color := UI_DANGER if guild_status_is_error else Color("#6fe49a")
+		_set_context_status(guild_status_message, guild_color, guild_color)
 		return
 	if social_status_message != "":
-		context_status_label.text = social_status_message
-		context_status_label.add_theme_color_override(
-			"font_color",
-			UI_DANGER if social_status_is_error else UI_MUTED_TEXT
-		)
+		var social_color := UI_DANGER if social_status_is_error else UI_MUTED_TEXT
+		_set_context_status(social_status_message, social_color, social_color)
 		return
 	if _is_blocked(current_target):
-		context_status_label.text = _t("ui.nearby.status.blocked")
-		context_status_label.add_theme_color_override("font_color", UI_DANGER)
+		_set_context_status(_t("ui.nearby.status.blocked"), UI_DANGER, UI_DANGER)
 	elif _is_friend(current_target):
-		context_status_label.text = _t("ui.nearby.status.friend")
-		context_status_label.add_theme_color_override("font_color", Color("#6fe49a"))
+		_set_context_status(_t("ui.nearby.status.friend"), Color("#6fe49a"), Color("#6fe49a"))
 	else:
-		context_status_label.text = _t("ui.nearby.status.active")
-		context_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		_set_context_status(_t("ui.nearby.status.active"), UI_MUTED_TEXT, Color("#6fe49a"))
+
+
+func _set_context_status(text: String, text_color: Color, dot_color: Color) -> void:
+	context_status_label.text = text
+	context_status_label.tooltip_text = text
+	context_status_label.add_theme_color_override("font_color", text_color)
+	if context_status_dot != null:
+		context_status_dot.add_theme_color_override("font_color", dot_color)
 
 
 func _add_context_action(
@@ -673,9 +721,10 @@ func _add_context_action(
 	description: String,
 	action: Callable,
 	variant: String = "default",
-	force_disabled := false
+	force_disabled := false,
+	compact := false
 ) -> void:
-	var button := _context_action_button(label, description, variant)
+	var button := _context_action_button(label, description, variant, compact)
 	button.disabled = (
 		force_disabled
 		or (
@@ -1160,6 +1209,7 @@ func close_players_panel() -> void:
 func close_context_menu() -> void:
 	if context_menu != null:
 		context_menu.visible = false
+	context_more_actions_expanded = false
 	current_target.clear()
 	social_request_serial += 1
 	social_action_in_flight = false
@@ -1326,32 +1376,33 @@ func _compact_close_button() -> Button:
 	return button
 
 
-func _context_section_label(text: String) -> Label:
+func _context_section_label(text: String, color: Color = UI_ACCENT) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.add_theme_font_size_override("font_size", 9)
-	label.add_theme_color_override("font_color", UI_ACCENT)
+	label.add_theme_color_override("font_color", color)
 	return label
 
 
-func _context_action_button(label_text: String, description_text: String, variant: String) -> Button:
+func _context_action_button(label_text: String, description_text: String, variant: String, compact := false) -> Button:
 	var button := Button.new()
 	button.set_meta("player_action", label_text)
-	button.custom_minimum_size = Vector2(0, 50)
+	button.custom_minimum_size = Vector2(0, 44 if compact else 50)
 	button.focus_mode = Control.FOCUS_ALL
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 	var normal_background := UI_SURFACE_INTERACTIVE
 	var normal_border := UI_BORDER_SUBTLE
+	var hover_background := UI_SURFACE_HOVER
 	var hover_border := UI_ACCENT_SOFT
 	var title_color := UI_TEXT
 	if variant == "danger":
-		normal_background = Color("#241016e8")
-		normal_border = Color("#7a2b33aa")
+		normal_border = Color("#7a2b3366")
+		hover_background = Color("#2a1118f2")
 		hover_border = UI_DANGER
-		title_color = Color("#ff9aa2")
+		title_color = Color("#f3c5c9")
 	button.add_theme_stylebox_override("normal", _button_style(normal_background, normal_border, 8))
-	button.add_theme_stylebox_override("hover", _button_style(UI_SURFACE_HOVER, hover_border, 8))
+	button.add_theme_stylebox_override("hover", _button_style(hover_background, hover_border, 8))
 	button.add_theme_stylebox_override("pressed", _button_style(UI_SURFACE_PRESSED, hover_border, 8))
 	button.add_theme_stylebox_override("focus", _button_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8))
 
@@ -1359,15 +1410,37 @@ func _context_action_button(label_text: String, description_text: String, varian
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	margin.add_theme_constant_override("margin_left", 10)
-	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_top", 4 if compact else 6)
 	margin.add_theme_constant_override("margin_right", 10)
-	margin.add_theme_constant_override("margin_bottom", 6)
+	margin.add_theme_constant_override("margin_bottom", 4 if compact else 6)
 	button.add_child(margin)
 
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_theme_constant_override("separation", 8)
 	margin.add_child(row)
+	var icon_frame := PanelContainer.new()
+	icon_frame.name = "ActionIconFrame"
+	icon_frame.custom_minimum_size = Vector2(26, 26)
+	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_theme_stylebox_override(
+		"panel",
+		_panel_style(
+			Color("#251118c9") if variant == "danger" else UI_SURFACE_INSET,
+			Color("#7a2b3380") if variant == "danger" else UI_BORDER_SUBTLE,
+			6
+		)
+	)
+	row.add_child(icon_frame)
+	var icon := Label.new()
+	icon.name = "ActionIcon"
+	icon.text = _context_action_icon(label_text)
+	icon.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	icon.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.add_theme_font_size_override("font_size", 12)
+	icon.add_theme_color_override("font_color", UI_DANGER if variant == "danger" else UI_ACCENT)
+	icon_frame.add_child(icon)
 	var copy := VBoxContainer.new()
 	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	copy.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -1376,15 +1449,18 @@ func _context_action_button(label_text: String, description_text: String, varian
 	row.add_child(copy)
 	var title := Label.new()
 	title.text = _t(_context_action_label_key(label_text))
+	title.clip_text = true
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title.add_theme_font_size_override("font_size", 12)
+	title.add_theme_font_size_override("font_size", 11 if compact else 12)
 	title.add_theme_color_override("font_color", title_color)
 	copy.add_child(title)
 	var description := Label.new()
 	description.text = description_text
+	description.clip_text = true
 	description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	description.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	description.add_theme_font_size_override("font_size", 9)
+	description.add_theme_font_size_override("font_size", 8 if compact else 9)
 	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	copy.add_child(description)
 	var chevron := Label.new()
@@ -1395,6 +1471,24 @@ func _context_action_button(label_text: String, description_text: String, varian
 	chevron.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	row.add_child(chevron)
 	return button
+
+
+func _context_action_icon(label_text: String) -> String:
+	return str({
+		"Message": "✉",
+		"Trade": "⇄",
+		"Lend": "↗",
+		"Challenge to Aether Clash": "⚔",
+		"View Trainer Card": "▣",
+		"Send Mail": "✉",
+		"Invite to Guild": "+",
+		"Remove Friend": "−",
+		"Add Friend": "+",
+		"Unblock": "○",
+		"Block": "⊘",
+		"Mute Player": "×",
+		"Unmute Player": "✓",
+	}.get(label_text, "•"))
 
 func _context_action_label_key(label_text: String) -> String:
 	return str({
