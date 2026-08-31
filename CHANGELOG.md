@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Quest Log now shows item, currency, and skill-XP rewards in each quest's full detail view while keeping the overworld tracker compact.
+
 - Current Kanto quests now award a balanced 1,325 Aetherite across main and side progression, with localized wallet notifications and safe one-time rewards for existing completions.
 
 - The Clash Coordinator now uses its local guide content without making a failing server NPC metadata request when approached.
