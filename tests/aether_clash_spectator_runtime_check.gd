@@ -203,10 +203,32 @@ func _run() -> void:
 		"Controller hit-testing makes a visible Master Ball click open the existing PvP spectator flow"
 	)
 
+	# A real spectator battle can be closed while the original setup coroutine
+	# is awaiting the freed Battle node. Reproduce its stale guard and prove
+	# that returning to the orb permits the same live battle to be opened again.
+	duel.set("spectator_battle_request_active", true)
 	return_button.emit_signal("pressed")
 	_check(not spectator_camera.enabled and player_camera.enabled, "Returning to jail restores the player camera")
 	_check(not duel.get_node("SpectatorCameraHud").visible, "Returning to jail closes the Aether View controls")
 	_check(not bool(root.get_node("GameState").call("is_overworld_input_locked")), "Returning to jail restores overworld input")
+	var reopened_orb_result: Dictionary = duel.call("request_spectator_orb", local_actor, upper_orb)
+	_check(bool(reopened_orb_result.get("success", false)), "A spectator can reopen Aether View after leaving a battle")
+	_check(
+		not bool(duel.get("spectator_battle_request_active")),
+		"Reopening Aether View clears an abandoned spectator battle request"
+	)
+	spectator_camera.global_position = master_ball_world_position
+	spectator_camera.reset_smoothing()
+	spectator_camera.force_update_scroll()
+	await process_frame
+	master_ball_click.position = root.get_viewport().get_canvas_transform() * master_ball_world_position
+	duel.call("_unhandled_input", master_ball_click)
+	await process_frame
+	_check(
+		overlay.requested_room_codes == ["ACROOM123", "ACROOM123"],
+		"The same active Master Ball can be used again after leaving spectator mode"
+	)
+	return_button.emit_signal("pressed")
 
 	duel.call("_apply_arena_state", _participant_payload())
 	duel.call("_sync_local_camera_mode")
@@ -238,6 +260,7 @@ func _run() -> void:
 		overlay_source.contains("func start_aether_clash_pvp_spectate(")
 		and overlay_source.contains("BattleApiClient.spectate_pvp_room(")
 		and overlay_source.contains('"battle_spectate_response"')
+		and overlay_source.contains("_clear_stale_aether_clash_pvp_spectate_start()")
 		and indicator_source.contains('"battle_indicator_area_input"'),
 		"Arena battle clicks reuse the authoritative PvP spectator endpoint with end-to-end debug traces"
 	)

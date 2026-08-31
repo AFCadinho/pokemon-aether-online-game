@@ -50,6 +50,7 @@
 
 **Changed**
 
+- Aether View can now reopen the same ongoing battle after a spectator leaves its battle screen.
 - Guild Duel participants now play at a forced 2× world zoom, while the independent spectator camera has its own bounded movement and zoom controls.
 - The Guild Duel arena now uses the latest visual layout from its Tiled source map.
 - Guild Duel opponents now remain `???` throughout the overworld match while keeping their Guild emblem visible; their Trainer name is only revealed inside a battle.
