@@ -33231,7 +33231,7 @@ func _refresh_pokedex_detail() -> void:
 		"evolutions":
 			_build_pokedex_evolutions_tab()
 		"drops":
-			_build_pokedex_placeholder_tab(LocalizationManager.text("ui.pokedex.tab.drops"), [])
+			_build_pokedex_drops_tab()
 		_:
 			_build_pokedex_moves_tab()
 
@@ -33468,6 +33468,82 @@ func _build_pokedex_placeholder_tab(title_text: String, entries: Array) -> void:
 		return
 	for entry_value: Variant in entries:
 		pokedex_detail_stack.add_child(_create_pokedex_muted_message(str(entry_value)))
+
+func _build_pokedex_drops_tab() -> void:
+	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title(
+		LocalizationManager.text("ui.pokedex.drops.title")
+	))
+	var drops := _array_from_variant(pokedex_selected_species.get("wildDrops", []))
+	if drops.is_empty():
+		pokedex_detail_stack.add_child(_create_pokedex_muted_message(
+			LocalizationManager.text("ui.pokedex.drops.empty")
+		))
+		return
+	for drop_value: Variant in drops:
+		if drop_value is Dictionary:
+			pokedex_detail_stack.add_child(_create_pokedex_drop_row(drop_value as Dictionary))
+
+func _create_pokedex_drop_row(drop: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 76)
+	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_RAISED, UI_BORDER_SUBTLE, 8, 1))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 7)
+	panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	margin.add_child(row)
+
+	var item_id := str(drop.get("itemId", "")).strip_edges().to_lower()
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(52, 52)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.texture = _load_item_icon(item_id)
+	row.add_child(icon)
+
+	var details := VBoxContainer.new()
+	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details.add_theme_constant_override("separation", 3)
+	row.add_child(details)
+
+	var item_button := LinkButton.new()
+	item_button.name = "PokedexDropItem_%s" % item_id
+	item_button.text = ItemLocalization.display_name(item_id, _format_identifier_display_name(item_id))
+	item_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	item_button.add_theme_font_size_override("font_size", 14)
+	item_button.add_theme_color_override("font_color", ITEM_DEX_ACCENT)
+	item_button.add_theme_color_override("font_hover_color", ITEM_DEX_ACCENT.lightened(0.2))
+	item_button.disabled = item_id == ""
+	if item_id != "":
+		item_button.pressed.connect(_open_item_dex_item_from_pokedex.bind(item_id))
+	details.add_child(item_button)
+
+	var drop_chance := clampf(float(drop.get("chance", 0.0)), 0.0, 1.0)
+	var chance_label := Label.new()
+	chance_label.text = LocalizationManager.text("ui.pokedex.drops.chance", {
+		"chance": _format_item_dex_percent(drop_chance * 100.0),
+	})
+	chance_label.add_theme_font_size_override("font_size", 12)
+	chance_label.add_theme_color_override("font_color", UI_TEXT)
+	details.add_child(chance_label)
+
+	var details_label := Label.new()
+	details_label.text = LocalizationManager.text(
+		"ui.pokedex.drops.tradeable_trigger"
+		if bool(drop.get("tradeable", false))
+		else "ui.pokedex.drops.trigger"
+	)
+	details_label.add_theme_font_size_override("font_size", 10)
+	details_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	details.add_child(details_label)
+	return panel
 
 func _build_pokedex_locations_tab() -> void:
 	pokedex_detail_stack.add_child(_create_pokedex_detail_section_title(

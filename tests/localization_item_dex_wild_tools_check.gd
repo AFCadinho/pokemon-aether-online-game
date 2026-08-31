@@ -69,6 +69,14 @@ func _check_runtime_copy() -> void:
 		) == "Kans: 0.75%–1.2%, afhankelijk van level per gewonnen fishing-gevecht",
 		"Item Dex renders effective chance ranges in Dutch"
 	)
+	_check(
+		overlay.call(
+			"_format_item_dex_source_chance",
+			{"minimum": 0.02, "maximum": 0.02},
+			"completed_wild_encounter"
+		) == "Kans: 2% per verslagen of gevangen Pokémon",
+		"Item Dex explains that Mega Stone chances apply to defeat and capture"
+	)
 	var dutch_requirements: Array[String] = overlay.call(
 		"_item_dex_source_requirements",
 		[{"type": "rock_smash_level", "minimum": 25, "maximum": 49}]

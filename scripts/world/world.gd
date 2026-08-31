@@ -3313,7 +3313,7 @@ func _should_claim_wild_battle_reward(result: Dictionary) -> bool:
 		return false
 	var reason := str(result.get("reason", "")).strip_edges().to_lower()
 	if reason == "caught":
-		return active_wild_encounter_type in ["old_rod", "good_rod", "super_rod"]
+		return true
 	if reason != "win":
 		return false
 	if not _is_player_battle_winner(str(result.get("winner", ""))):
@@ -3342,6 +3342,7 @@ func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> voi
 		_notify_reward_experience_gains(reward)
 		_notify_reward_level_ups(reward)
 		_notify_fishing_treasure_award(reward.get("items", []))
+		_notify_wild_item_drop_awards(reward.get("items", []))
 		await _notify_fishing_experience_award(reward.get("fishingProgression", {}))
 		var tutorial := _dictionary_from_value(reward.get("evTrainingTutorial", {}))
 		if not tutorial.is_empty():
@@ -3513,6 +3514,29 @@ func _notify_fishing_treasure_award(value: Variant) -> void:
 		)
 		SfxManager.play("item_found")
 		return
+
+func _notify_wild_item_drop_awards(value: Variant) -> void:
+	if value is not Array:
+		return
+	for item_value: Variant in value as Array:
+		if item_value is not Dictionary:
+			continue
+		var item := item_value as Dictionary
+		if str(item.get("source", "")).strip_edges().to_lower() != "wild_pokemon_drop":
+			continue
+		var item_id := str(item.get("itemId", item.get("id", ""))).strip_edges().to_lower()
+		if item_id.is_empty():
+			continue
+		var quantity := maxi(int(item.get("quantity", 1)), 1)
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.world.reward.wild_item_drop", {
+				"item": ItemLocalization.display_name(item_id),
+			})
+		)
+		get_tree().call_group("ui_overlay", "add_item_reward_notification", item_id, quantity)
+		SfxManager.play("item_found")
 
 func _notify_wild_battle_money_awarded(pokemon_species: String, money_awarded: int) -> void:
 	if money_awarded <= 0:
