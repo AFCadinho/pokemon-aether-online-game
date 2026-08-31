@@ -3010,6 +3010,7 @@
   "ui.item_dex.sources.vendor_unplaced": "Vendedor planejado — local ainda não anunciado",
   "ui.item_dex.sources.vendor_closed": "Este vendedor ainda não abriu",
   "ui.item_dex.shop.battle_point_exchange": "Vendedor de Pontos de Batalha",
+  "ui.item_dex.shop.z_crystal_shop": "Vendedor de Cristais Z",
   "ui.item_dex.requirement.badges": "{minimum} insígnias",
   "ui.item_dex.requirement.aethernet_beacon": "Ative pelo menos um Farol de Aethernet",
   "ui.item_dex.requirement.rock_smash_level": "Rock Smash nv. {minimum}–{maximum}",

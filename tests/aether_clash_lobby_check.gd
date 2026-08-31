@@ -43,11 +43,23 @@ func _init() -> void:
 		and battle_point_vendor.position == Vector2(1584, 944),
 		"Battle Point vendor uses the updated lobby market location"
 	)
+	var z_crystal_vendor := lobby.get_node_or_null("Entities/NPCs/ZCrystalVendor")
+	_check(z_crystal_vendor != null, "Lobby places the Z-Crystal Seller")
+	_check(
+		z_crystal_vendor != null
+		and z_crystal_vendor.position == Vector2(1328, 944),
+		"Z-Crystal Seller uses the temporary lobby market location"
+	)
 	var lobby_scene_source := FileAccess.get_file_as_string(LOBBY_SCENE)
 	_check(
 		lobby_scene_source.contains("res://scenes/npcs/battle_point_vendor_npc.tscn")
 		and lobby_scene_source.contains('[node name="BattlePointVendor"'),
 		"Lobby placement instantiates the reusable Battle Point vendor scene"
+	)
+	_check(
+		lobby_scene_source.contains("res://scenes/npcs/z_crystal_vendor_npc.tscn")
+		and lobby_scene_source.contains('[node name="ZCrystalVendor"'),
+		"Lobby placement instantiates the reusable Z-Crystal Seller scene"
 	)
 	var night_lights := lobby.get_node_or_null("NightLights")
 	_check(night_lights != null, "Lobby owns a hand-maintained night-light layer")
@@ -91,6 +103,10 @@ func _init() -> void:
 	_check(
 		collision != null and collision.get_cell_source_id(Vector2i(49, 29)) == -1,
 		"Battle Point vendor placement tile is available"
+	)
+	_check(
+		collision != null and collision.get_cell_source_id(Vector2i(41, 29)) == -1,
+		"Z-Crystal Seller placement tile is available"
 	)
 	lobby.queue_free()
 	quit(1 if failed else 0)
