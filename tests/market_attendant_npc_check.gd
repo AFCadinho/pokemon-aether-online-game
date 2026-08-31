@@ -58,8 +58,9 @@ func _check_market_attendant_scene() -> void:
 	_check_true(
 		battle_point_vendor_source.contains('npc_definition_id = "battle_point_vendor"')
 		and battle_point_vendor_source.contains('market_id = "battle_point_exchange"')
-		and battle_point_vendor_source.contains("res://assets/npcs/classes/poke_fan_m_frames.tres")
-		and battle_point_vendor_source.contains('portrait_id = "showdown_pokefan_gen6"'),
+		and battle_point_vendor_source.contains("res://assets/sprites/mugshots/market_attendance.png")
+		and not battle_point_vendor_source.contains("npc_sprite_frames =")
+		and not battle_point_vendor_source.contains("showdown_pokefan_gen6"),
 		"One reusable Battle Point vendor scene backs the lobby placement"
 	)
 

@@ -1,12 +1,11 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/npcs/market_attendant_npc.tscn" id="1_market_attendant"]
-[ext_resource type="SpriteFrames" uid="uid://yluab5wp1usc" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="2_poke_fan"]
+[ext_resource type="Texture2D" path="res://assets/sprites/mugshots/market_attendance.png" id="2_mugshot"]
 
 [node name="BattlePointVendorNPC" instance=ExtResource("1_market_attendant")]
 npc_definition_id = "battle_point_vendor"
 display_name = "Battle Point Vendor"
-npc_sprite_frames = ExtResource("2_poke_fan")
-portrait_id = "showdown_pokefan_gen6"
+mugshot = ExtResource("2_mugshot")
 market_id = "battle_point_exchange"
 market_mode = "player_buys"
