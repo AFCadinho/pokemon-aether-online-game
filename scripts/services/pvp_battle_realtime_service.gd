@@ -787,7 +787,13 @@ static func should_defer_authoritative_terminal_until_render(
 
 
 static func is_animation_free_authoritative_terminal_reason(end_reason: String) -> bool:
-	return end_reason.strip_edges().to_lower() in ["timeout", "disconnect", "forfeit"]
+	return end_reason.strip_edges().to_lower() in [
+		"timeout",
+		"disconnect",
+		"forfeit",
+		"battle_time_limit",
+		"battle_time_limit_draw",
+	]
 
 
 static func classify_action_timeout_recovery(

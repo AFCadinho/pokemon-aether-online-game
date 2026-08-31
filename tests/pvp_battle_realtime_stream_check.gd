@@ -756,6 +756,16 @@ func _init() -> void:
 		"forfeit is recognized as animation-free terminal work"
 	)
 	_check_equal(
+		PvpBattleRealtimeServiceNode.is_animation_free_authoritative_terminal_reason("battle_time_limit"),
+		true,
+		"Aether Clash battle limit is recognized as animation-free terminal work"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_animation_free_authoritative_terminal_reason("battle_time_limit_draw"),
+		true,
+		"Aether Clash battle limit draw is recognized as animation-free terminal work"
+	)
+	_check_equal(
 		PvpBattleRealtimeServiceNode.is_animation_free_authoritative_terminal_reason("battle_end"),
 		false,
 		"normal battle end still waits for its final mechanical projection"
