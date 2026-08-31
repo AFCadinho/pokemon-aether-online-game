@@ -1085,8 +1085,9 @@ var trainer_card_aether_gems_label: Label
 var trainer_card_aetherite_label: Label
 var trainer_card_battle_points_label: Label
 var trainer_card_playtime_label: Label
-var trainer_card_gym_badge_count_label: Label
 var trainer_card_guild_label: Label
+var trainer_card_pvp_value_labels: Dictionary = {}
+var trainer_card_pvp_request_generation := 0
 var trainer_card_level_cap_label: Label
 var trainer_card_trade_level_cap_label: Label
 var trainer_card_name_label: Label
@@ -14455,13 +14456,10 @@ func _create_public_trainer_overview_tab(card: Dictionary) -> Control:
 		{"label_key": "ui.trainer_card.field.guild", "value": guild_name},
 	]
 	details.add_child(_create_public_trainer_info_panel("ui.trainer_card.profile_section", identity_rows))
-	var badge_count := _get_public_trainer_gym_badge_count(card)
 	var adventure_rows: Array[Dictionary] = [
 		{"label_key": "ui.trainer_card.field.playtime", "value": _format_playtime(int(card.get("playtimeSeconds", 0)))},
-		{"label_key": "ui.trainer_card.field.gym_badges", "value": "%d / %d" % [badge_count, KANTO_BADGES.size()]},
 	]
 	details.add_child(_create_public_trainer_info_panel("ui.trainer_card.adventure", adventure_rows))
-	details.add_child(_create_public_trainer_gym_badges_panel(card))
 	return tab
 
 
@@ -14619,61 +14617,6 @@ func _get_public_trainer_gym_badge_count(card: Dictionary) -> int:
 func _on_public_trainer_message_pressed(card: Dictionary) -> void:
 	_hide_public_trainer_card()
 	open_private_message_conversation(card)
-
-func _create_public_trainer_gym_badges_panel(card: Dictionary) -> Control:
-	var panel := PanelContainer.new()
-	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
-
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 8)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 8)
-	panel.add_child(margin)
-
-	var stack := VBoxContainer.new()
-	stack.add_theme_constant_override("separation", 5)
-	margin.add_child(stack)
-
-	var badge_state := _dictionary_from_value(card.get("badges", {}))
-	var earned_count := 0
-	for badge_value: Variant in KANTO_BADGES:
-		if not (badge_value is Dictionary):
-			continue
-		var badge := badge_value as Dictionary
-		if _gym_badge_state_has(
-			badge_state,
-			str(badge.get("region", "kanto")),
-			str(badge.get("id", ""))
-		):
-			earned_count += 1
-
-	var heading := Label.new()
-	heading.text = LocalizationManager.text(
-		"ui.trainer_card.gym_badges",
-		{"earned": earned_count, "total": KANTO_BADGES.size()}
-	)
-	heading.add_theme_font_size_override("font_size", 11)
-	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
-	stack.add_child(heading)
-
-	var badge_row := HBoxContainer.new()
-	badge_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	badge_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	badge_row.add_theme_constant_override("separation", 5)
-	stack.add_child(badge_row)
-	for badge_value: Variant in KANTO_BADGES:
-		if not (badge_value is Dictionary):
-			continue
-		var badge := badge_value as Dictionary
-		var earned := _gym_badge_state_has(
-			badge_state,
-			str(badge.get("region", "kanto")),
-			str(badge.get("id", ""))
-		)
-		badge_row.add_child(_create_public_trainer_gym_badge_icon(badge, earned))
-	return panel
 
 func _create_public_trainer_gym_badge_icon(badge: Dictionary, earned: bool) -> Control:
 	var icon_center := CenterContainer.new()
@@ -14903,38 +14846,32 @@ func _create_trainer_card_stats_tab() -> Control:
 	var adventure_rows: Array[Dictionary] = [
 		{"id": "join_date", "label_key": "ui.trainer_card.field.join_date", "value": _get_formatted_trainer_stat_text("join_date", "-")},
 		{"id": "playtime", "label_key": "ui.trainer_card.field.playtime", "value": _format_playtime(PlayerSave.playtime_seconds)},
-		{
-			"id": "gym_badges",
-			"label_key": "ui.trainer_card.field.gym_badges",
-			"value": "%d / %d" % [_get_local_trainer_gym_badge_count(), KANTO_BADGES.size()],
-		},
 	]
+	var stats_row := HBoxContainer.new()
+	stats_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stats_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	stats_row.add_theme_constant_override("separation", 12)
+	layout.add_child(stats_row)
+
 	var adventure_panel := _create_trainer_card_stat_panel(
 		"ui.trainer_card.stats.adventure",
 		adventure_rows
 	)
-	adventure_panel.custom_minimum_size = Vector2(0, 112)
-	layout.add_child(adventure_panel)
+	stats_row.add_child(adventure_panel)
+
+	var pvp_rows: Array[Dictionary] = [
+		{"id": "pvp_games", "label_key": "ui.trainer_card.pvp.games", "value": "0"},
+		{"id": "pvp_wins", "label_key": "ui.trainer_card.pvp.wins", "value": "0"},
+		{"id": "pvp_losses", "label_key": "ui.trainer_card.pvp.losses", "value": "0"},
+		{"id": "pvp_win_rate", "label_key": "ui.trainer_card.pvp.win_rate", "value": "0%"},
+	]
+	stats_row.add_child(_create_trainer_card_stat_panel("ui.trainer_card.pvp.title", pvp_rows))
 
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_child(spacer)
 
 	return tab
-
-
-func _get_local_trainer_gym_badge_count() -> int:
-	var earned_count := 0
-	for badge_value: Variant in KANTO_BADGES:
-		if badge_value is not Dictionary:
-			continue
-		var badge := badge_value as Dictionary
-		if PlayerSave.has_gym_badge(
-			str(badge.get("region", "kanto")),
-			str(badge.get("id", ""))
-		):
-			earned_count += 1
-	return earned_count
 
 
 func _create_trainer_card_wallet_tab() -> Control:
@@ -15669,6 +15606,8 @@ func _create_trainer_card_stat_row(
 	row.add_child(label)
 
 	var value := Label.new()
+	if field_id != "":
+		value.name = "TrainerCardValue_%s" % field_id
 	value.text = value_text
 	value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -15680,10 +15619,10 @@ func _create_trainer_card_stat_row(
 		trainer_card_money_label = value
 	elif field_id == "playtime":
 		trainer_card_playtime_label = value
-	elif field_id == "gym_badges":
-		trainer_card_gym_badge_count_label = value
 	elif field_id == "guild":
 		trainer_card_guild_label = value
+	elif field_id.begins_with("pvp_"):
+		trainer_card_pvp_value_labels[field_id] = value
 
 	return row
 
@@ -15984,13 +15923,6 @@ func _refresh_trainer_card_gym_badges() -> void:
 			str(slot_data.get("name", badge.get("name", "Badge"))),
 			PlayerSave.has_gym_badge(region, badge_id)
 		)
-	if trainer_card_gym_badge_count_label != null:
-		trainer_card_gym_badge_count_label.text = "%d / %d" % [
-			_get_local_trainer_gym_badge_count(),
-			KANTO_BADGES.size(),
-		]
-
-
 func _refresh_trainer_card_identity_values() -> void:
 	if trainer_card_guild_label == null:
 		return
@@ -17092,6 +17024,43 @@ func _show_trainer_card() -> void:
 	_update_trainer_card_appearance_save_state()
 	trainer_card_popup.visible = true
 	_activate_ui_panel(trainer_card_popup)
+	_refresh_own_trainer_card_pvp()
+
+
+func _refresh_own_trainer_card_pvp() -> void:
+	trainer_card_pvp_request_generation += 1
+	var request_generation := trainer_card_pvp_request_generation
+	_apply_own_trainer_card_pvp({})
+	var user_id := int(str(PlayerSave.player_id).strip_edges())
+	if user_id <= 0:
+		return
+	var result: Dictionary = await PlayerGameStateService.load_public_trainer_card(user_id)
+	if request_generation != trainer_card_pvp_request_generation:
+		return
+	if not bool(result.get("success", false)):
+		push_warning(
+			"Trainer Card PvP stats failed to load: %s"
+			% str(result.get("error", "Unknown error"))
+		)
+		return
+	var card := _dictionary_from_value(result.get("card", {}))
+	_apply_own_trainer_card_pvp(_dictionary_from_value(card.get("pvp", {})))
+
+
+func _apply_own_trainer_card_pvp(pvp: Dictionary) -> void:
+	var values := {
+		"pvp_games": str(pvp.get("gamesPlayed", 0)),
+		"pvp_wins": str(pvp.get("wins", 0)),
+		"pvp_losses": str(pvp.get("losses", 0)),
+		"pvp_win_rate": "%s%%" % (
+			("%.1f" % float(pvp.get("winRate", 0.0))).trim_suffix(".0")
+		),
+	}
+	for field_id_value: Variant in values.keys():
+		var field_id := str(field_id_value)
+		var label := trainer_card_pvp_value_labels.get(field_id) as Label
+		if is_instance_valid(label):
+			label.text = str(values.get(field_id, "0"))
 
 func _load_owned_appearance_parts() -> void:
 	if appearance_inventory_loading:

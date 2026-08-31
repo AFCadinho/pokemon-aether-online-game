@@ -13,14 +13,22 @@ func _ready() -> void:
 	clash_battle.battle_ended.connect(_capture_result)
 	clash_battle.pvp_room_code = "clash-auto-continue"
 	clash_battle.pvp_battle_purpose = "aether_clash"
-	clash_battle.pending_battle_end_result = {
-		"winner": "p1",
-		"reason": "win",
-		"localPartyDefeated": false,
-	}
-	clash_battle.battle_result_overlay.visible = true
-	clash_battle._start_battle_result_auto_continue()
+	clash_battle.action_flow.set_local_player_id("p1")
+	clash_battle._finish_pvp_authoritative_terminal({
+		"type": "pvp.authoritative_terminal",
+		"battleId": "clash-auto-continue",
+		"winnerSide": "p1",
+		"loserSide": "p2",
+		"endReason": "battle_time_limit",
+		"source": "BATTLE_LIMIT",
+	})
 
+	_check(clash_battle.battle_finished, "battle-limit terminal finishes an active client battle")
+	_check(clash_battle.battle_result_overlay.visible, "battle-limit terminal opens the result overlay")
+	_check(
+		str(clash_battle.pending_battle_end_result.get("reason", "")) == "battle_time_limit",
+		"battle-limit terminal preserves its canonical end reason"
+	)
 	_check(
 		clash_battle.battle_result_auto_continue_seconds_remaining == 5,
 		"Aether Clash result starts at five seconds"

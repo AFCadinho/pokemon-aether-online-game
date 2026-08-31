@@ -4,6 +4,14 @@
 
 - Added Aether UU to Ranked matchmaking, team validation, Casual rooms, banlist browsing, leaderboards, match history, live battles, and Aether Clash challenges.
 
+- Public Trainer Cards now load follower previews without a setup error.
+
+- Trainer Cards now keep regional Gym Badge progress exclusively in the Badges tab, both for your own card and cards viewed from other Trainers.
+
+- Aether Clash battles now leave the waiting screen when the 7.5-minute limit decides the result, and blocked forced-switch selections no longer trigger a script error.
+
+- Your own Trainer Card now keeps PvP games, wins, losses, and win rate visible on its Overview.
+
 - Trainer Cards now use a cleaner Overview-first layout, while other Trainers' cards offer simple Overview, Badges, and PvP tabs with a direct message action.
 
 - Choosing no hair now shows a consistent natural bald head in previews and the overworld, without the old stray scalp pixel.
