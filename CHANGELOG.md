@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aether Clash now waits until Trainers close their previous battle result screen before allowing another collision or automatic match.
+
 - Character Customization now shows wardrobe cosmetics with their real sprite thumbnails, while unequipping and returning an item to the Bag use clear contextual actions outside the item grid.
 
 - Revamped Settings with clearer page headings, compact toggles and hotkeys, improved keyboard focus, a roomier layout, and simpler access to Support, About, and session actions.

@@ -113,7 +113,7 @@
   "backend.error.aether_clash_presence_required": "Je live wereldverbinding is nog niet gereed. Probeer de portal opnieuw.",
   "backend.error.aether_clash_target_guild": "Die Trainer zit niet in een Guild die je kunt uitdagen.",
   "backend.error.aether_clash_target_rank": "Je kunt alleen een Guildleider of Captain van de andere Guild uitdagen.",
-  "backend.error.aether_clash_player_in_battle": "Eén van deze Trainers is nog aan een andere PvP-battle gekoppeld. Wacht maximaal twee minuten, loop uit elkaar en bots daarna opnieuw.",
+  "backend.error.aether_clash_player_in_battle": "Eén van deze Trainers rondt nog een andere battle af. Wacht tot diegene terug is in de arena, loop uit elkaar en bots daarna opnieuw.",
   "backend.error.aether_clash_contact_sync_pending": "De spelersposities worden nog gesynchroniseerd. Loop uit elkaar en bots daarna opnieuw.",
   "backend.error.aether_clash_contact_out_of_range": "Deze Trainers staan niet meer dicht genoeg bij elkaar om een battle te starten.",
   "backend.error.aether_clash_tier_unsupported": "Die battle-tier is niet beschikbaar voor Aether Clash.",
