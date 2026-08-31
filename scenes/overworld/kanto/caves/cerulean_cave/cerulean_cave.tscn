@@ -11,6 +11,7 @@ size = Vector2(128, 32)
 
 [node name="CeruleanCave" type="Node2D"]
 script = ExtResource("2_map")
+placeholder_runtime_generation_enabled = true
 map_id = "kanto_cerulean_cave"
 map_region_name = "Kanto"
 map_display_name = "Cerulean Cave"

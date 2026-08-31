@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Finished maps now keep their boundary and water collision in the scene instead of rebuilding it from placeholder settings at runtime.
+
 - Route 25's lower and south passages to Route 24 are no longer blocked by stray collision tiles.
 
 - Guild Duel challenge dialogs now show the battle tier, fixed rule contract, and an optional per-Guild Bank stake with the full prize pot visible before acceptance.

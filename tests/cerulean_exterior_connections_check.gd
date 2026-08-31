@@ -17,6 +17,7 @@ const CONNECTIONS := {
 	"route_24": {
 		"scene": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
 		"visual": "res://generated/tiled_visuals/route_24/route_24.visual.tscn",
+		"placeholder": false,
 		"map_id": "kanto_route_24",
 		"city_spawn": "FromRoute24Path",
 		"city_exit": "ToRoute24Path",
@@ -86,16 +87,16 @@ func _init() -> void:
 	_check(placeholder_script.contains("second_opening_from") and placeholder_script.contains("fourth_opening_from"), "Placeholder maps support four edge openings")
 	_check(placeholder_script.contains("func _build_water_connection"), "Placeholder maps can mark a Surf connection")
 	_check(placeholder_script.contains("second_water_opening_from"), "Placeholder maps support two Surf connections")
+	_check(placeholder_script.contains("placeholder_runtime_generation_enabled := false"), "Placeholder runtime generation requires explicit prototype opt-in")
 	_check(player_script.contains("sync_activity_state_for_current_tile") and player_script.contains("_start_surf_activity(false)"), "A water arrival restores Surf automatically")
 	_check(route_24_source.contains('[node name="Water" type="TileMapLayer" parent="Tiles"'), "Route 24 exposes a semantic Water layer")
 	_check(route_24_source.contains('route_24/route_24.visual.tscn'), "Route 24 uses its imported Tiled visual")
-	_check(route_24_source.contains('map_size = Vector2i(60, 60)'), "Route 24 bounds match its imported visual")
-	_check(route_24_source.contains('water_connection_side = "bottom"'), "Route 24 marks its water approach")
+	_check(route_24_source.contains('res://scripts/world/map_metadata.gd'), "Route 24 uses non-mutating map metadata")
+	_check(not route_24_source.contains('open_field_placeholder_map.gd'), "Route 24 no longer uses placeholder runtime generation")
 	_check(city_source.contains('[node name="Water" type="TileMapLayer" parent="Tiles"'), "Cerulean City exposes a semantic Water layer")
 	_check(city_script.contains("_build_water_connections"), "Cerulean City marks all water approaches")
 	_check(city_source.contains('[node name="FromRoute4Water" type="Marker2D" parent="Spawns"'), "Cerulean City has the Route 4 water spawn")
 	_check(city_source.contains('[node name="ToRoute4Water" type="Area2D" parent="Exits"'), "Cerulean City has the Route 4 water exit")
-	_check(route_24_source.contains('second_water_opening_from = 35'), "Route 24 marks its second Surf approach")
 
 	for suffix: String in ["Left", "Grass", "Right"]:
 		_check(city_source.contains('[node name="FromRoute5%s" type="Marker2D" parent="Spawns"' % suffix), "Cerulean City has the Route 5 %s spawn" % suffix.to_lower())
@@ -126,7 +127,8 @@ func _init() -> void:
 		_check(ResourceLoader.exists(scene_path), "%s scene exists" % connection_name)
 		_check(scene_source.contains(expected_visual), "%s uses its expected visual" % connection_name)
 		_check(scene_source.contains('map_id = "%s"' % map_id), "%s exposes map metadata" % connection_name)
-		_check(scene_source.contains('connection_side = "%s"' % connection_side), "%s opens the correct map edge" % connection_name)
+		if bool(connection.get("placeholder", true)):
+			_check(scene_source.contains('connection_side = "%s"' % connection_side), "%s opens the correct placeholder edge" % connection_name)
 		_check(scene_source.contains('[node name="%s" type="Marker2D" parent="Spawns"' % arrival_name), "%s has a Cerulean arrival" % connection_name)
 		_check(scene_source.contains('target_spawn_name = "%s"' % city_spawn), "%s returns to its Cerulean spawn" % connection_name)
 		_check(scene_source.contains('transition_id = "%s"' % return_transition), "%s has a stable return transition" % connection_name)
