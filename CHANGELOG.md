@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aether Clash stake fields now accept a full amount immediately, while their arrow buttons continue to adjust the stake in ₽1,000 steps.
+
 - Land mounts now require a regional Mount License; Cerulean's Bike Seller registers Kanto, explains the license in his guide, and gives it a dedicated Key Item with a viewable registration list.
 
 - Aether Clash now explains which frozen tier rule blocks portal entry, so Trainers can fix and revalidate their team before the gathering window closes.

@@ -15,6 +15,12 @@ const SCRIPT_EXPECTATIONS := {
 	],
 	"res://scripts/ui/guild_popup.gd": [
 		"amount.update_on_text_changed = true",
+		"stake_amount.step = 1",
+		"stake_amount.custom_arrow_step = 1000",
+	],
+	"res://scripts/ui/player_interaction_coordinator.gd": [
+		"stake_amount.step = 1",
+		"stake_amount.custom_arrow_step = 1000",
 	],
 	"res://scripts/ui/ui_overlay.gd": [
 		"dev_item_quantity_spinbox.update_on_text_changed = true",

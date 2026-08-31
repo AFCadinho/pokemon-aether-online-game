@@ -18,7 +18,18 @@ func _init() -> void:
 	var dialog := packed.instantiate() as AetherConfirmationDialog
 	screen_layer.add_child(dialog)
 	dialog.configure("Set Aether Anchor", "Set Pewter City as your Aether Anchor?", "Confirm", "Cancel")
+	var stake_input := SpinBox.new()
+	stake_input.min_value = 0
+	stake_input.max_value = 2147483647
+	stake_input.step = 1
+	stake_input.custom_arrow_step = 1000
+	stake_input.value = 0
+	stake_input.update_on_text_changed = true
+	dialog.style_spin_box(stake_input)
+	dialog.add_custom_control(stake_input)
 	dialog.popup_centered()
+	dialog.focus_spin_box(stake_input)
+	await process_frame
 	await process_frame
 
 	_check(dialog.visible, "Aether confirmation dialog opens as a modal overlay")
@@ -57,6 +68,20 @@ func _init() -> void:
 		panel_center.is_equal_approx(viewport_center),
 		"Aether confirmation panel is centered on its first opening"
 	)
+	var stake_line_edit := stake_input.get_line_edit()
+	_check(stake_input.editable, "Aether numeric inputs are directly editable")
+	_check(
+		stake_input.step == 1.0 and stake_input.custom_arrow_step == 1000.0,
+		"Aether stake input accepts exact amounts while arrows retain thousand-unit jumps"
+	)
+	_check(
+		stake_line_edit.has_focus() and stake_line_edit.get_selected_text() == "0",
+		"Aether stake input opens focused with its initial value selected"
+	)
+	stake_line_edit.text = "100000"
+	stake_line_edit.text_changed.emit(stake_line_edit.text)
+	await process_frame
+	_check(int(stake_input.value) == 100000, "Aether stake input accepts a typed amount immediately")
 	screen_layer.queue_free()
 	quit(1 if failed else 0)
 

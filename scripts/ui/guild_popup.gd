@@ -7057,7 +7057,8 @@ func _confirm_aether_clash_challenge(guild: Dictionary) -> void:
 	stake_amount.name = "GuildAetherClashStakeAmount"
 	stake_amount.min_value = 0
 	stake_amount.max_value = 2147483647
-	stake_amount.step = 1000
+	stake_amount.step = 1
+	stake_amount.custom_arrow_step = 1000
 	stake_amount.value = 0
 	stake_amount.update_on_text_changed = true
 	stake_amount.prefix = "₽"
@@ -7081,6 +7082,7 @@ func _confirm_aether_clash_challenge(guild: Dictionary) -> void:
 	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
 	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
 	dialog.popup_centered(Vector2i(560, 490))
+	dialog.focus_spin_box(stake_amount)
 
 
 func _create_aether_clash_challenge(
