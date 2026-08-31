@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Other Trainers' Overview now fills its space with a centered avatar and a compact profile grid for Trainer ID, join date, Guild, and playtime, without showing their overworld follower.
+
 - Direct player Aether Clash challenges now offer Aether UU alongside Aether OU.
 
 - Aether Clash battles now leave the waiting screen reliably when the 7.5-minute tiebreak overtakes an already-submitted move.
