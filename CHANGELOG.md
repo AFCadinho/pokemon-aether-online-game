@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Clash Coordinator now explains every Guild Duel timer, including entry and matchmaking clocks, battle decision limits, the personal time bank, timeout consequences, and the 7.5-minute battle tiebreak.
+
 - The Aether Exchange now includes item wishlists: escrow a fixed-price offer, browse items other Trainers want, fulfill complete requests, or cancel your own order for a full refund.
 
 - The Kanto Mount License now also works in the Aether Clash Lobby and its minigame maps.
