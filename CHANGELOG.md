@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aethernet travel now separates available and locked destinations, uses full-row selection, and keeps one clear travel action with each fare shown beside its destination.
+
 - Completed Ranked battles can now award 1,000 Battle Points for a win and 500 for a loss, with the active server policy shown in Rewards and the payout shown after battle.
 
 - The Quest Log now shows item, currency, and skill-XP rewards in each quest's full detail view while keeping the overworld tracker compact.

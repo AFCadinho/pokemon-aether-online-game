@@ -212,6 +212,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/rock_smash_level_colors_check.gd",
 	"res://tests/wild_encounter_error_rules_check.gd",
 	"res://tests/wild_encounter_transition_check.gd",
+	"res://tests/transit_menu_runtime_check.gd",
 	"res://tests/aethernet_teleport_effect_check.gd",
 	"res://tests/pallet_town_encounter_check.gd",
 	"res://tests/pallet_town_play_family_check.gd",
