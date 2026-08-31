@@ -4,6 +4,8 @@
 
 - Route 25's lower and south passages to Route 24 are no longer blocked by stray collision tiles.
 
+- Guild Duel challenge dialogs now show the battle tier, fixed rule contract, and an optional per-Guild Bank stake with the full prize pot visible before acceptance.
+
 - The account-bound Z-Crystal Seller is now temporarily available in the Aether Clash Lobby.
 
 - Item Dex item art now stays crisp at its native pixel size, and special-currency prices display normally instead of showing localization keys.

@@ -486,6 +486,8 @@ func _check_phase_scope_contract() -> void:
 	_check_equal(source.contains("_social_action(\"load_socials\")"), true, "authoritative social refresh")
 	_check_equal(source.contains("service.invite_member(username)"), true, "guild action uses the authoritative invitation endpoint")
 	_check_equal(source.contains("create_aether_clash_player_challenge"), true, "right-click Clash action uses the authoritative player endpoint")
+	_check_equal(source.contains("AetherClashPlayerTier"), true, "right-click Clash challenges choose a battle tier")
+	_check_equal(source.contains("AetherClashPlayerStakeAmount"), true, "right-click Clash challenges configure a Guild Bank stake")
 	_check_equal(source.contains("_can_view_overworld_identity"), true, "Duel identity intel gates roster and right-click name exposure")
 	_check_equal(source.contains("_exchange_actions_allowed"), true, "Duel instances gate Trade and Lend actions")
 	_check_equal(source.contains("load_map_players"), false, "no secondary map-player projection")

@@ -118,6 +118,8 @@ const CODE_TO_KEY: Dictionary = {
 	"aether_clash_guild_busy": "backend.error.aether_clash_busy",
 	"aether_clash_challenge_unavailable": "backend.error.aether_clash_challenge_unavailable",
 	"aether_clash_challenge_expired": "backend.error.aether_clash_challenge_unavailable",
+	"aether_clash_tier_unsupported": "backend.error.aether_clash_tier_unsupported",
+	"aether_clash_stake_funds_required": "backend.error.aether_clash_stake_funds_required",
 	"aether_clash_entry_closed": "backend.error.aether_clash_entry_closed",
 	"aether_clash_spectating_forbidden": "backend.error.aether_clash_spectating_forbidden",
 	"aether_clash_portal_required": "backend.error.aether_clash_portal_required",

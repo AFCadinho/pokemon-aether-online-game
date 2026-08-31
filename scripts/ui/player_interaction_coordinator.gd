@@ -1075,22 +1075,51 @@ func _on_aether_clash_challenge_pressed() -> void:
 	spectator_access.add_item(_t("ui.guild.aether_clash.spectators.guilds_only"))
 	spectator_access.set_item_metadata(1, "guilds_only")
 	dialog.style_option_button(spectator_access)
+	var tier_selector := OptionButton.new()
+	tier_selector.name = "AetherClashPlayerTier"
+	tier_selector.custom_minimum_size = Vector2(0, 42)
+	tier_selector.add_item(_t("ui.guild.aether_clash.tier.aether_ou"))
+	tier_selector.set_item_metadata(0, "aether-ou")
+	dialog.style_option_button(tier_selector)
+	dialog.add_custom_control(_aether_clash_dialog_field(
+		_t("ui.guild.aether_clash.tier_label"),
+		tier_selector
+	))
+	var stake_amount := SpinBox.new()
+	stake_amount.name = "AetherClashPlayerStakeAmount"
+	stake_amount.min_value = 0
+	stake_amount.max_value = 2147483647
+	stake_amount.step = 1000
+	stake_amount.value = 0
+	stake_amount.update_on_text_changed = true
+	stake_amount.prefix = "₽"
+	stake_amount.custom_minimum_size = Vector2(0, 42)
+	dialog.style_spin_box(stake_amount)
+	dialog.add_custom_control(_aether_clash_dialog_field(
+		_t("ui.guild.aether_clash.stake_label"),
+		stake_amount,
+		_t("ui.guild.aether_clash.stake_hint")
+	))
 	dialog.add_custom_control(spectator_access)
 	dialog.confirmed.connect(
 		_send_aether_clash_player_challenge.bind(
 			target_user_id,
-			spectator_access
+			spectator_access,
+			tier_selector,
+			stake_amount
 		),
 		CONNECT_ONE_SHOT
 	)
 	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
 	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
-	dialog.popup_centered(Vector2i(540, 330))
+	dialog.popup_centered(Vector2i(560, 490))
 
 
 func _send_aether_clash_player_challenge(
 	target_user_id: int,
-	spectator_access_selector: OptionButton
+	spectator_access_selector: OptionButton,
+	tier_selector: OptionButton,
+	stake_selector: SpinBox
 ) -> void:
 	if aether_clash_action_in_flight:
 		return
@@ -1099,6 +1128,10 @@ func _send_aether_clash_player_challenge(
 		spectator_access = str(spectator_access_selector.get_item_metadata(
 			spectator_access_selector.selected
 		))
+	var tier_id := "aether-ou"
+	if tier_selector != null and tier_selector.selected >= 0:
+		tier_id = str(tier_selector.get_item_metadata(tier_selector.selected))
+	var stake_amount := maxi(int(stake_selector.value), 0) if stake_selector != null else 0
 	aether_clash_action_in_flight = true
 	aether_clash_status_message = ""
 	aether_clash_status_is_error = false
@@ -1109,7 +1142,9 @@ func _send_aether_clash_player_challenge(
 		result = _dictionary_from_value(await service.call(
 			"create_aether_clash_player_challenge",
 			target_user_id,
-			spectator_access
+			spectator_access,
+			tier_id,
+			stake_amount
 		))
 	else:
 		result = {
@@ -1125,6 +1160,29 @@ func _send_aether_clash_player_challenge(
 	)
 	if context_menu != null and context_menu.visible:
 		_render_context_menu()
+
+
+func _aether_clash_dialog_field(
+	caption: String,
+	control: Control,
+	hint := ""
+) -> Control:
+	var field := VBoxContainer.new()
+	field.add_theme_constant_override("separation", 4)
+	var caption_label := Label.new()
+	caption_label.text = caption
+	caption_label.add_theme_color_override("font_color", UI_ACCENT)
+	caption_label.add_theme_font_size_override("font_size", 11)
+	field.add_child(caption_label)
+	field.add_child(control)
+	if not hint.is_empty():
+		var hint_label := Label.new()
+		hint_label.text = hint
+		hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		hint_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		hint_label.add_theme_font_size_override("font_size", 9)
+		field.add_child(hint_label)
+	return field
 
 
 func _on_friend_pressed() -> void:

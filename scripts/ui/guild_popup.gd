@@ -1886,6 +1886,7 @@ func _build_aether_clash_history_entry(entry: Dictionary) -> Control:
 		9,
 		UI_MUTED
 	))
+	copy.add_child(_label(_aether_clash_contract_text(entry), 9, UI_GOLD))
 	var participants := _dictionary(entry.get("participantCounts", {}))
 	var remaining := _dictionary(entry.get("remainingCounts", {}))
 	var own_side := str(entry.get("ownSide", "challenger")).strip_edges().to_lower()
@@ -1956,12 +1957,14 @@ func _build_current_aether_clash_card(challenge: Dictionary) -> Control:
 	var details := HBoxContainer.new()
 	details.add_theme_constant_override("separation", 14)
 	content.add_child(details)
+	var contract := _label(_aether_clash_contract_text(challenge), 10, UI_GOLD)
+	contract.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details.add_child(contract)
 	var spectator_access := _label(
 		_aether_clash_spectator_access_text(str(challenge.get("spectatorAccess", "public"))),
 		10,
 		UI_MUTED
 	)
-	spectator_access.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	details.add_child(spectator_access)
 	if status == "entry_open":
 		aether_clash_countdown_label = _label("", 14, UI_GOLD)
@@ -2067,6 +2070,11 @@ func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -
 		UI_MUTED
 	))
 	content.add_child(_label(
+		_aether_clash_contract_text(challenge),
+		10,
+		UI_GOLD
+	))
+	content.add_child(_label(
 		_aether_clash_spectator_access_text(str(challenge.get("spectatorAccess", "public"))),
 		10,
 		UI_MUTED
@@ -2152,6 +2160,30 @@ func _aether_clash_spectator_access_text(access: String) -> String:
 		if access == "guilds_only"
 		else "ui.guild.aether_clash.spectators.public"
 	)
+
+
+func _aether_clash_contract_text(challenge: Dictionary) -> String:
+	return _t("ui.guild.aether_clash.contract", {
+		"tier": str(challenge.get("tierName", "Aether OU")),
+		"stake": _format_number(maxi(int(challenge.get("stakeAmount", 0)), 0)),
+		"pot": _format_number(maxi(int(challenge.get("stakePotAmount", 0)), 0)),
+	})
+
+
+func _aether_clash_dialog_field(
+	caption: String,
+	control: Control,
+	hint := ""
+) -> Control:
+	var field := VBoxContainer.new()
+	field.add_theme_constant_override("separation", 4)
+	field.add_child(_label(caption, 11, UI_ACCENT))
+	field.add_child(control)
+	if not hint.is_empty():
+		var hint_label := _label(hint, 9, UI_MUTED)
+		hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		field.add_child(hint_label)
+	return field
 
 
 func _refresh_aether_clash_countdown() -> void:
@@ -4526,7 +4558,9 @@ func _guild_log_action_filter(category: String) -> OptionButton:
 	var actions: Array[String] = []
 	if category == "guild":
 		actions.assign(["joined", "left", "kicked", "rank_changed", "bank_permission_changed"])
-	elif category in ["funds", "resources"]:
+	elif category == "funds":
+		actions.assign(["deposit", "withdraw", "clash_stake_hold", "clash_stake_refund", "clash_stake_payout"])
+	elif category == "resources":
 		actions.assign(["deposit", "withdraw"])
 	else:
 		actions.assign(["deposit", "withdraw", "borrow", "return", "force_return"])
@@ -4814,6 +4848,10 @@ func _guild_log_entry_text(category: String, entry: Dictionary) -> String:
 			})
 		return _t("ui.guild.log.guild.generic", {"trainer": str(entry.get("target", _t("common.unknown")))})
 	var actor := str(entry.get("actor", _t("common.unknown")))
+	if category == "funds" and action in ["clash_stake_hold", "clash_stake_refund", "clash_stake_payout"]:
+		return _t("ui.guild.log.aether_clash.%s" % action, {
+			"amount": _format_number(int(entry.get("amount", 0))),
+		})
 	var action_group := "funds" if category == "funds" else "asset"
 	var action_text := _t("ui.guild.log.action.%s.%s" % [action_group, action])
 	if category == "funds":
@@ -7017,19 +7055,51 @@ func _confirm_aether_clash_challenge(guild: Dictionary) -> void:
 	spectator_access.add_item(_t("ui.guild.aether_clash.spectators.guilds_only"))
 	spectator_access.set_item_metadata(1, "guilds_only")
 	dialog.style_option_button(spectator_access)
+	var tier_selector := OptionButton.new()
+	tier_selector.name = "GuildAetherClashTier"
+	tier_selector.custom_minimum_size = Vector2(0, 42)
+	tier_selector.add_item(_t("ui.guild.aether_clash.tier.aether_ou"))
+	tier_selector.set_item_metadata(0, "aether-ou")
+	dialog.style_option_button(tier_selector)
+	dialog.add_custom_control(_aether_clash_dialog_field(
+		_t("ui.guild.aether_clash.tier_label"),
+		tier_selector
+	))
+	var stake_amount := SpinBox.new()
+	stake_amount.name = "GuildAetherClashStakeAmount"
+	stake_amount.min_value = 0
+	stake_amount.max_value = 2147483647
+	stake_amount.step = 1000
+	stake_amount.value = 0
+	stake_amount.update_on_text_changed = true
+	stake_amount.prefix = "₽"
+	stake_amount.custom_minimum_size = Vector2(0, 42)
+	dialog.style_spin_box(stake_amount)
+	dialog.add_custom_control(_aether_clash_dialog_field(
+		_t("ui.guild.aether_clash.stake_label"),
+		stake_amount,
+		_t("ui.guild.aether_clash.stake_hint")
+	))
 	dialog.add_custom_control(spectator_access)
 	dialog.confirmed.connect(
-		_create_aether_clash_challenge.bind(guild_id, spectator_access),
+		_create_aether_clash_challenge.bind(
+			guild_id,
+			spectator_access,
+			tier_selector,
+			stake_amount
+		),
 		CONNECT_ONE_SHOT
 	)
 	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
 	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
-	dialog.popup_centered(Vector2i(540, 330))
+	dialog.popup_centered(Vector2i(560, 490))
 
 
 func _create_aether_clash_challenge(
 	guild_id: int,
-	spectator_access_selector: OptionButton = null
+	spectator_access_selector: OptionButton = null,
+	tier_selector: OptionButton = null,
+	stake_selector: SpinBox = null
 ) -> void:
 	if is_aether_clash_action_in_flight:
 		return
@@ -7046,10 +7116,16 @@ func _create_aether_clash_challenge(
 		spectator_access = str(spectator_access_selector.get_item_metadata(
 			spectator_access_selector.selected
 		))
+	var tier_id := "aether-ou"
+	if tier_selector != null and tier_selector.selected >= 0:
+		tier_id = str(tier_selector.get_item_metadata(tier_selector.selected))
+	var stake_amount := maxi(int(stake_selector.value), 0) if stake_selector != null else 0
 	var result := _dictionary(await guild_service.call(
 		"create_aether_clash_challenge",
 		guild_id,
-		spectator_access
+		spectator_access,
+		tier_id,
+		stake_amount
 	))
 	is_aether_clash_action_in_flight = false
 	if not bool(result.get("success", false)):

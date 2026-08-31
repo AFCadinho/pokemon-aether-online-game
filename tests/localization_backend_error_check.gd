@@ -106,6 +106,16 @@ func _run() -> void:
 	)
 	_check(
 		errors.call("message", {
+			"detail": {
+				"code": "aether_clash_stake_funds_required",
+				"requiredAmount": 100000,
+				"availableAmount": 25000,
+			}
+		}) == "De Guild Bank heeft ₽100000 nodig voor deze inzet, maar bevat momenteel ₽25000.",
+		"Aether Clash stake errors show the required and available Guild Bank funds"
+	)
+	_check(
+		errors.call("message", {
 			"detail": {"code": "CIRCUIT_BREAKER_OPEN"}
 		}) == "Deze dienst is tijdelijk niet beschikbaar.",
 		"temporarily fenced PvP authority displays a clear service message"

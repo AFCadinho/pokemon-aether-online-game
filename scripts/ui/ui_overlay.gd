@@ -1488,6 +1488,7 @@ var global_heal_request_busy := false
 var aether_clash_challenge_dialog: AetherConfirmationDialog
 var aether_clash_challenge_countdown_label: Label
 var aether_clash_challenge_spectator_label: Label
+var aether_clash_challenge_contract_label: Label
 var aether_clash_challenge_queue: Array[String] = []
 var active_aether_clash_challenge: Dictionary = {}
 var aether_clash_challenge_loading := false
@@ -12336,6 +12337,12 @@ func _setup_aether_clash_challenge_dialog() -> void:
 	aether_clash_challenge_countdown_label.add_theme_color_override("font_color", Color("69d8e7"))
 	aether_clash_challenge_countdown_label.add_theme_font_size_override("font_size", 18)
 	aether_clash_challenge_dialog.add_custom_control(aether_clash_challenge_countdown_label)
+	aether_clash_challenge_contract_label = Label.new()
+	aether_clash_challenge_contract_label.name = "IncomingAetherClashContract"
+	aether_clash_challenge_contract_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	aether_clash_challenge_contract_label.add_theme_color_override("font_color", Color("f2c66d"))
+	aether_clash_challenge_contract_label.add_theme_font_size_override("font_size", 14)
+	aether_clash_challenge_dialog.add_custom_control(aether_clash_challenge_contract_label)
 	aether_clash_challenge_spectator_label = Label.new()
 	aether_clash_challenge_spectator_label.name = "IncomingAetherClashSpectatorPolicy"
 	aether_clash_challenge_spectator_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -12620,10 +12627,18 @@ func _render_aether_clash_challenge_dialog() -> void:
 		if str(active_aether_clash_challenge.get("spectatorAccess", "public")) == "guilds_only"
 		else "ui.guild.aether_clash.spectators.public"
 	)
+	aether_clash_challenge_contract_label.text = LocalizationManager.text(
+		"ui.guild.aether_clash.contract",
+		{
+			"tier": str(active_aether_clash_challenge.get("tierName", "Aether OU")),
+			"stake": _format_money(maxi(int(active_aether_clash_challenge.get("stakeAmount", 0)), 0)),
+			"pot": _format_money(maxi(int(active_aether_clash_challenge.get("stakePotAmount", 0)), 0)),
+		}
+	)
 	_refresh_aether_clash_challenge_dialog()
 	if active_aether_clash_challenge.is_empty():
 		return
-	aether_clash_challenge_dialog.popup_centered(Vector2i(560, 350))
+	aether_clash_challenge_dialog.popup_centered(Vector2i(580, 390))
 
 
 func _refresh_aether_clash_challenge_dialog() -> void:
