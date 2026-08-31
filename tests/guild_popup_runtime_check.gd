@@ -315,6 +315,12 @@ func _run() -> void:
 	popup._show_guild_section("aether_clash")
 	await process_frame
 	_check(popup.find_child("GuildAetherClashWorkspace", true, false) != null, "Aether Clash workspace opens")
+	_check(
+		GuildPopup.AETHER_CLASH_TIERS.size() == 2
+		and str(GuildPopup.AETHER_CLASH_TIERS[0].get("id", "")) == "aether-ou"
+		and str(GuildPopup.AETHER_CLASH_TIERS[1].get("id", "")) == "aether-uu",
+		"Aether Clash challenges offer both Aether OU and Aether UU"
+	)
 	_check(popup.find_child("GuildAetherClashDuelModeTab", true, false) != null, "Guild Duel has a dedicated mode tab")
 	_check(popup.find_child("GuildAetherClashBattleRoyaleModeTab", true, false) != null, "Battle Royale has a dedicated mode tab")
 	_check(popup.find_child("GuildAetherClashDuelNavigation", true, false) != null, "Guild Duel exposes compact workspace navigation")

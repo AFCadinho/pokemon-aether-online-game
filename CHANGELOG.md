@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added Aether UU to Ranked matchmaking, team validation, Casual rooms, banlist browsing, leaderboards, match history, live battles, and Aether Clash challenges.
+
 - Trainer Cards now use a cleaner Overview-first layout, while other Trainers' cards offer simple Overview, Badges, and PvP tabs with a direct message action.
 
 - Choosing no hair now shows a consistent natural bald head in previews and the overworld, without the old stray scalp pixel.
