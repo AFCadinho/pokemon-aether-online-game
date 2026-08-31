@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Quest Log now shows item, currency, and skill-XP rewards in each quest's full detail view while keeping the overworld tracker compact.
+
 - The in-arena Clash status now stays compact by default and opens the Guild player roster only when requested.
 
 - Current Kanto quests now award a balanced 1,325 Aetherite across main and side progression, with localized wallet notifications and safe one-time rewards for existing completions.

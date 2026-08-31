@@ -149,6 +149,19 @@ func _run() -> void:
 			"titleKey": "story.kanto.choose_starter.title",
 			"summaryKey": "story.kanto.choose_starter.summary",
 			"status": "active",
+			"rewardPreviews": [{
+				"type": "item",
+				"itemId": "exp-share",
+				"quantity": 1,
+			}, {
+				"type": "currency",
+				"currency": "aetherite",
+				"amount": 250,
+			}, {
+				"type": "skill_experience",
+				"skillId": "fishing",
+				"experience": 130,
+			}],
 			"steps": [
 				{
 					"stepId": "talk_to_father",
@@ -259,6 +272,10 @@ func _run() -> void:
 	_expect(
 		view.tracker_objective_label.text == "› Go downstairs and speak with your father.",
 		"HUD tracker resolves the objective localization key"
+	)
+	_expect(
+		view.tracker_panel.find_child("QuestRewardEntry", true, false) == null,
+		"compact HUD tracker stays focused on the current objective"
 	)
 	_expect(
 		view.side_tracker_panel.visible
@@ -382,6 +399,38 @@ func _run() -> void:
 	localization_manager.set_locale("en")
 	await process_frame
 	_expect(view.detail_steps.get_child_count() == 1, "journal renders only revealed objectives")
+	_expect(
+		view.detail_rewards_heading.visible
+		and view.detail_rewards_heading.text == "REWARDS"
+		and view.detail_reward_entries.get_child_count() == 3,
+		"full quest detail lists every promised reward"
+	)
+	var item_reward: PanelContainer = _find_reward_entry(view.detail_reward_entries, "item", "exp-share")
+	var aetherite_reward: PanelContainer = _find_reward_entry(
+		view.detail_reward_entries,
+		"currency",
+		"aetherite"
+	)
+	var skill_reward: PanelContainer = _find_reward_entry(
+		view.detail_reward_entries,
+		"skill_experience",
+		"fishing"
+	)
+	_expect(
+		_reward_row_text(item_reward, "QuestRewardTitle") == "Exp. Share"
+		and _reward_row_text(item_reward, "QuestRewardAmount") == "×1",
+		"quest detail localizes item rewards and shows their quantity"
+	)
+	_expect(
+		_reward_row_text(aetherite_reward, "QuestRewardTitle") == "Aetherite"
+		and _reward_row_text(aetherite_reward, "QuestRewardAmount") == "×250",
+		"quest detail makes Aetherite rewards explicit"
+	)
+	_expect(
+		_reward_row_text(skill_reward, "QuestRewardTitle") == "Fishing"
+		and _reward_row_text(skill_reward, "QuestRewardAmount") == "+130 XP",
+		"quest detail supports localized skill-experience rewards"
+	)
 	_expect(view.filter_buttons["all"].text == "All  3", "all filter includes accepted quests only")
 	_expect(view.filter_buttons["main"].text == "Main  1", "main filter reports its quest count")
 	_expect(view.filter_buttons["side"].text == "Side  2", "side filter includes accepted side quests")
@@ -463,6 +512,12 @@ func _run() -> void:
 		"side tracker disappears when no active side quest remains"
 	)
 	_expect(view.detail_steps.get_child_count() == 2, "journal retains completed objective history")
+	_expect(
+		not view.detail_rewards_heading.visible
+		and not view.detail_reward_entries.visible
+		and not view.detail_rewards_divider.visible,
+		"quests without reward previews do not leave an empty reward section"
+	)
 
 	story_service.apply_story({
 		"revision": 3,
@@ -522,6 +577,27 @@ func _verify_integration_contract() -> void:
 		and not overlay.contains("Quest Log is not implemented yet."),
 		"HUD quest integration opens the journal and keeps the compact hotbar below quest cards"
 	)
+
+
+func _find_reward_entry(
+	entries: VBoxContainer,
+	reward_type: String,
+	reward_id: String
+) -> PanelContainer:
+	for child: Node in entries.get_children():
+		if (
+			str(child.get_meta("reward_type", "")) == reward_type
+			and str(child.get_meta("reward_id", "")) == reward_id
+		):
+			return child as PanelContainer
+	return null
+
+
+func _reward_row_text(entry: PanelContainer, node_name: String) -> String:
+	if entry == null:
+		return ""
+	var label := entry.find_child(node_name, true, false) as Label
+	return label.text if label != null else ""
 
 
 func _expect(condition: bool, label: String) -> void:

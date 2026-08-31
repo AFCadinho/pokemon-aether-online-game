@@ -19,6 +19,13 @@ const SIDE_QUEST_ACCENT := Color("#d8b767")
 const SUCCESS := Color("#73d98b")
 const DANGER := Color("#ff6b74")
 const JOURNAL_FILTERS: Array[String] = ["all", "main", "side", "completed"]
+const ITEM_ICON_ROOT := "res://assets/items/icons/"
+const ITEM_REWARD_FALLBACK_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
+const SKILL_REWARD_ICON: Texture2D = preload("res://assets/ui/skills.svg")
+const MONEY_REWARD_ICON: Texture2D = preload("res://assets/items/icons/COINCASE.png")
+const GEMS_REWARD_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
+const AETHERITE_REWARD_ICON: Texture2D = preload("res://assets/ui/aetherite.svg")
+const BATTLE_POINTS_REWARD_ICON: Texture2D = preload("res://assets/ui/battle_points.svg")
 
 var tracker_panel: PanelContainer
 var tracker_type_label: Label
@@ -65,17 +72,22 @@ var detail_offer_accept_button: Button
 var detail_offer_decline_button: Button
 var detail_objective_heading: Label
 var detail_steps: VBoxContainer
+var detail_rewards_divider: HSeparator
+var detail_rewards_heading: Label
+var detail_reward_entries: VBoxContainer
 
 var selected_quest_id := ""
 var selected_filter := "all"
 var side_offer_pending := false
 var localization_manager: Node
+var item_localization: Node
 
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	localization_manager = get_node_or_null("/root/LocalizationManager")
+	item_localization = get_node_or_null("/root/ItemLocalization")
 	_build_tracker()
 	_build_journal()
 	var journal_service := _journal_service()
@@ -473,6 +485,16 @@ func _build_journal() -> void:
 	detail_steps = VBoxContainer.new()
 	detail_steps.add_theme_constant_override("separation", 8)
 	detail_content.add_child(detail_steps)
+	detail_rewards_divider = HSeparator.new()
+	detail_rewards_divider.name = "QuestRewardDivider"
+	detail_content.add_child(detail_rewards_divider)
+	detail_rewards_heading = _label(12, SIDE_QUEST_ACCENT)
+	detail_rewards_heading.name = "QuestRewardsHeading"
+	detail_content.add_child(detail_rewards_heading)
+	detail_reward_entries = VBoxContainer.new()
+	detail_reward_entries.name = "QuestRewardEntries"
+	detail_reward_entries.add_theme_constant_override("separation", 7)
+	detail_content.add_child(detail_reward_entries)
 
 
 func _refresh_tracker() -> void:
@@ -620,6 +642,7 @@ func _refresh_journal() -> void:
 	close_button.text = localization_manager.text("common.close")
 	list_heading_label.text = localization_manager.text("ui.quest.list_heading").to_upper()
 	detail_objective_heading.text = localization_manager.text("ui.quest.objectives").to_upper()
+	detail_rewards_heading.text = localization_manager.text("ui.quest.rewards").to_upper()
 	detail_offer_prompt_label.text = localization_manager.text("ui.quest.offer_prompt")
 	detail_offer_hint_label.text = localization_manager.text("ui.quest.offer_decline_hint")
 	detail_offer_accept_button.text = localization_manager.text("common.accept")
@@ -708,6 +731,7 @@ func _show_quest_detail(quest: Dictionary) -> void:
 		str(quest.get("summaryKey", "")),
 		str(quest.get("questId", ""))
 	)
+	_refresh_detail_rewards(quest.get("rewardPreviews", []))
 	var is_side_offer := quest_type == "side" and str(quest.get("status", "")) == "available"
 	detail_offer_panel.visible = is_side_offer
 	detail_offer_accept_button.disabled = side_offer_pending
@@ -752,6 +776,163 @@ func _show_empty_detail() -> void:
 	detail_objective_heading.visible = false
 	detail_offer_panel.visible = false
 	_clear_children_except(detail_steps)
+	_refresh_detail_rewards([])
+
+
+func _refresh_detail_rewards(rewards_value: Variant) -> void:
+	_clear_children_except(detail_reward_entries)
+	var rewards: Array = rewards_value as Array if rewards_value is Array else []
+	for reward_value: Variant in rewards:
+		if reward_value is Dictionary:
+			var entry := _create_reward_entry(reward_value as Dictionary)
+			if entry != null:
+				detail_reward_entries.add_child(entry)
+	var has_rewards := detail_reward_entries.get_child_count() > 0
+	detail_rewards_divider.visible = has_rewards
+	detail_rewards_heading.visible = has_rewards
+	detail_reward_entries.visible = has_rewards
+
+
+func _create_reward_entry(reward: Dictionary) -> PanelContainer:
+	var presentation := _reward_presentation(reward)
+	if presentation.is_empty():
+		return null
+	var panel := PanelContainer.new()
+	panel.name = "QuestRewardEntry"
+	panel.custom_minimum_size = Vector2(0, 48)
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.set_meta("reward_type", str(presentation.get("type", "")))
+	panel.set_meta("reward_id", str(presentation.get("id", "")))
+	panel.add_theme_stylebox_override(
+		"panel",
+		_style(Color("#1a140b99"), Color("#8a7045"), 7, 1)
+	)
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_set_margins(margin, 10, 6, 12, 6)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 10)
+	margin.add_child(row)
+	var icon := TextureRect.new()
+	icon.name = "QuestRewardIcon"
+	icon.custom_minimum_size = Vector2(34, 34)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.texture = presentation.get("icon", null) as Texture2D
+	row.add_child(icon)
+	var title := _label(14, TEXT)
+	title.name = "QuestRewardTitle"
+	title.text = str(presentation.get("title", ""))
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(title)
+	var amount := _label(14, Color("#ffd45a"))
+	amount.name = "QuestRewardAmount"
+	amount.text = str(presentation.get("amount", ""))
+	amount.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	amount.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	amount.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(amount)
+	return panel
+
+
+func _reward_presentation(reward: Dictionary) -> Dictionary:
+	match str(reward.get("type", "")).strip_edges().to_lower():
+		"item":
+			var item_id := str(reward.get("itemId", "")).strip_edges().to_lower()
+			if item_id.is_empty():
+				return {}
+			return {
+				"type": "item",
+				"id": item_id,
+				"title": _localized_item_name(item_id),
+				"amount": "×%d" % maxi(int(reward.get("quantity", 1)), 1),
+				"icon": _quest_reward_item_icon(item_id),
+			}
+		"currency":
+			var currency_id := str(reward.get("currency", "")).strip_edges().to_lower()
+			if currency_id.is_empty():
+				return {}
+			var amount := maxi(int(reward.get("amount", 1)), 1)
+			var formatted_amount := _format_reward_amount(amount)
+			return {
+				"type": "currency",
+				"id": currency_id,
+				"title": _localized_or_fallback(
+					"ui.trainer_card.wallet.%s" % currency_id,
+					currency_id.replace("_", " ").capitalize()
+				),
+				"amount": "₽%s" % formatted_amount if currency_id == "money" else "×%s" % formatted_amount,
+				"icon": _quest_reward_currency_icon(currency_id),
+			}
+		"skill_experience":
+			var skill_id := str(reward.get("skillId", "")).strip_edges().to_lower()
+			if skill_id.is_empty():
+				return {}
+			return {
+				"type": "skill_experience",
+				"id": skill_id,
+				"title": _localized_or_fallback(
+					"ui.skills.%s.name" % skill_id,
+					skill_id.replace("_", " ").capitalize()
+				),
+				"amount": "+%s XP" % _format_reward_amount(
+					maxi(int(reward.get("experience", 1)), 1)
+				),
+				"icon": SKILL_REWARD_ICON,
+			}
+	return {}
+
+
+func _quest_reward_item_icon(item_id: String) -> Texture2D:
+	var normalized := item_id.to_upper().replace("-", "").replace("_", "").replace(" ", "")
+	for icon_path: String in [
+		ITEM_ICON_ROOT + normalized + ".png",
+		ITEM_ICON_ROOT + item_id + ".png",
+	]:
+		if ResourceLoader.exists(icon_path):
+			return load(icon_path) as Texture2D
+	return ITEM_REWARD_FALLBACK_ICON
+
+
+func _quest_reward_currency_icon(currency_id: String) -> Texture2D:
+	match currency_id:
+		"money":
+			return MONEY_REWARD_ICON
+		"gems":
+			return GEMS_REWARD_ICON
+		"aetherite":
+			return AETHERITE_REWARD_ICON
+		"battle_points":
+			return BATTLE_POINTS_REWARD_ICON
+	return ITEM_REWARD_FALLBACK_ICON
+
+
+func _format_reward_amount(amount: int) -> String:
+	var raw := str(maxi(amount, 0))
+	var parts: Array[String] = []
+	while raw.length() > 3:
+		parts.push_front(raw.right(3))
+		raw = raw.left(raw.length() - 3)
+	parts.push_front(raw)
+	return ",".join(parts)
+
+
+func _localized_or_fallback(key: String, fallback: String) -> String:
+	return localization_manager.text(key) if localization_manager.has_key(key) else fallback
+
+
+func _localized_item_name(item_id: String) -> String:
+	var fallback := item_id.replace("-", " ").replace("_", " ").capitalize()
+	if item_localization != null and item_localization.has_method("display_name"):
+		return str(item_localization.call("display_name", item_id, fallback))
+	return fallback
 
 
 func set_filter(filter_id: String) -> void:
