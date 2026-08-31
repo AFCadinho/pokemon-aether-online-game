@@ -77,6 +77,14 @@ func _check_runtime_copy() -> void:
 		dutch_requirements == ["Rock Smash lv. 25–49"],
 		"Item Dex renders acquisition requirements in Dutch"
 	)
+	var aethernet_requirements: Array[String] = overlay.call(
+		"_item_dex_source_requirements",
+		[{"type": "aethernet_beacon", "amount": 1}]
+	)
+	_check(
+		aethernet_requirements == ["Activeer minstens één Aethernet Beacon"],
+		"Item Dex explains access to the Battle Point vendor"
+	)
 
 	localization_manager.call("set_locale", "pt_BR")
 	var portuguese_meta := str(overlay.call("_format_item_dex_meta", medicine))

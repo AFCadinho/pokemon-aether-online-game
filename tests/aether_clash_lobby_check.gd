@@ -36,6 +36,19 @@ func _init() -> void:
 		and posmod(int(arrival.position.y), 32) == 16,
 		"Guild arrival marker is centered on a map tile"
 	)
+	var battle_point_vendor := lobby.get_node_or_null("Entities/NPCs/BattlePointVendor")
+	_check(battle_point_vendor != null, "Lobby places the Battle Point vendor")
+	_check(
+		battle_point_vendor != null
+		and battle_point_vendor.position == Vector2(912, 1424),
+		"Battle Point vendor uses the protected lobby market location"
+	)
+	var lobby_scene_source := FileAccess.get_file_as_string(LOBBY_SCENE)
+	_check(
+		lobby_scene_source.contains("res://scenes/npcs/battle_point_vendor_npc.tscn")
+		and lobby_scene_source.contains('[node name="BattlePointVendor"'),
+		"Lobby placement instantiates the reusable Battle Point vendor scene"
+	)
 	var night_lights := lobby.get_node_or_null("NightLights")
 	_check(night_lights != null, "Lobby owns a hand-maintained night-light layer")
 	_check(night_lights != null and night_lights.get_child_count() == 22, "Lobby lanterns and portals have night lights")
@@ -74,6 +87,10 @@ func _init() -> void:
 	_check(
 		collision != null and collision.get_cell_source_id(Vector2i(29, 50)) == -1,
 		"Guild arrival tile is walkable"
+	)
+	_check(
+		collision != null and collision.get_cell_source_id(Vector2i(28, 44)) == -1,
+		"Battle Point vendor placement tile is available"
 	)
 	lobby.queue_free()
 	quit(1 if failed else 0)

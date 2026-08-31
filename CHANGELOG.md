@@ -8,7 +8,7 @@
 
 - Pokémon Storage now has simpler box navigation, quieter empty slots, clearer filters and hover cards that stay out of the controls.
 
-- Prepared one searchable Battle Point vendor for competitive held items, with alphabetical and BP-price sorting and planned availability shown in the Item Dex.
+- The searchable Battle Point vendor is now open in the Aether Clash Lobby, with alphabetical and BP-price sorting and its Aethernet access shown in the Item Dex.
 
 - Pokémon stat labels and values are now easier to distinguish on PC Box hover cards.
 

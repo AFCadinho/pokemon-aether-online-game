@@ -26,6 +26,7 @@ var quest_reward_received_dialogue_id := ""
 
 
 func interact_with_player(_player: Node2D) -> void:
+	await _save_market_interaction_position()
 	var access: Dictionary = await ThievingService.use_public_service("market")
 	if not bool(access.get("success", false)):
 		await GameErrorDialogService.show_response(access, "backend.error.market_load")
@@ -79,6 +80,12 @@ func interact_with_player(_player: Node2D) -> void:
 
 	var items: Array = _array_from_value(market.get("items", []))
 	await show_dialogue([loaded_dialogue_template % items.size()])
+
+
+func _save_market_interaction_position() -> void:
+	var world := GameState.get_world()
+	if world != null and world.has_method("save_current_player_state_now"):
+		await world.call("save_current_player_state_now")
 
 
 func _apply_npc_metadata(metadata: Dictionary) -> void:

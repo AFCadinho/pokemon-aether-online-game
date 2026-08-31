@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="5_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="6_o8e3w"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_clash_portal.tscn" id="7_clash_portal"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/battle_point_vendor_npc.tscn" id="8_bp_vendor"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t1icv"]
 texture = ExtResource("2_tauxp")
@@ -209,6 +210,9 @@ z_index = 5
 position = Vector2(1040, 1424)
 local_destination_id = ""
 npc_id = "aether_clash_lobby_transit_keeper"
+
+[node name="BattlePointVendor" parent="Entities/NPCs" instance=ExtResource("8_bp_vendor")]
+position = Vector2(912, 1424)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1814140839]
 
