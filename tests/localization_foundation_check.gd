@@ -220,7 +220,7 @@ func _check_settings_scene_translation() -> void:
 		_check(dropdown_popup.has_theme_stylebox_override("panel"), "%s popup replaces the default Godot panel" % styled_dropdown.name)
 		_check(dropdown_popup.has_theme_stylebox_override("hover"), "%s popup has a custom hover state" % styled_dropdown.name)
 		_check(dropdown_popup.has_theme_icon_override("radio_checked"), "%s popup uses a custom selection marker" % styled_dropdown.name)
-	_check(tabs != null and tabs.get_tab_title(0) == "Algemeen", "dynamic tab title renders in Dutch")
+	_check(tabs != null and tabs.get_tab_title(0) == "Gameplay", "dynamic tab title renders in Dutch")
 	_check(tabs != null and tabs.get_tab_title(1) == "Taal", "language settings use a dedicated localized tab")
 	_check(tabs != null and tabs.get_tab_title(4) == "Besturing", "Fishing hotkeys use a dedicated Controls tab")
 	_check(
@@ -238,8 +238,13 @@ func _check_settings_scene_translation() -> void:
 		tabs != null and not tabs.tabs_visible and workspace != null and navigation != null,
 		"settings use the two-column navigation layout"
 	)
+	var navigation_domain_count := 0
+	if navigation != null:
+		for navigation_child: Node in navigation.get_children():
+			if navigation_child.has_meta("settings_tab_index"):
+				navigation_domain_count += 1
 	_check(
-		navigation != null and navigation.get_child_count() == tabs.get_tab_count(),
+		tabs != null and navigation_domain_count == tabs.get_tab_count(),
 		"settings navigation exposes every functional domain"
 	)
 	if menu.has_method("open"):
@@ -255,7 +260,7 @@ func _check_settings_scene_translation() -> void:
 		_check(not menu.visible, "Escape closes an open settings menu")
 	var dutch_minimum_size := (menu as Control).get_combined_minimum_size()
 	_check(
-		dutch_minimum_size.x <= 720.0 and dutch_minimum_size.y <= 720.0,
+		dutch_minimum_size.x <= 960.0 and dutch_minimum_size.y <= 720.0,
 		"Dutch settings fit a 1280x720 viewport (minimum %s)" % dutch_minimum_size
 	)
 
@@ -265,10 +270,10 @@ func _check_settings_scene_translation() -> void:
 		title != null and title.text == "Configurações",
 		"static settings text updates at runtime (received %s)" % str(title.text if title != null else "<missing>")
 	)
-	_check(tabs != null and tabs.get_tab_title(0) == "Geral", "dynamic tab title updates at runtime")
+	_check(tabs != null and tabs.get_tab_title(0) == "Jogabilidade", "dynamic tab title updates at runtime")
 	var portuguese_minimum_size := (menu as Control).get_combined_minimum_size()
 	_check(
-		portuguese_minimum_size.x <= 720.0 and portuguese_minimum_size.y <= 720.0,
+		portuguese_minimum_size.x <= 960.0 and portuguese_minimum_size.y <= 720.0,
 		"Brazilian Portuguese settings fit a 1280x720 viewport (minimum %s)" % portuguese_minimum_size
 	)
 

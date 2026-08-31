@@ -37,7 +37,7 @@ func _init() -> void:
 		"the next start offers a one-click copyable crash report"
 	)
 	_check(
-		settings_source.contains('_create_tab_content("Support", "ui.settings.tab.support")')
+		settings_source.contains('"Support", "ui.settings.tab.support", "ui.settings.support.description"')
 		and settings_source.contains("_on_view_crash_report_pressed")
 		and settings_source.contains("_on_copy_crash_report_pressed"),
 		"Settings keeps the latest report easy to view and copy"

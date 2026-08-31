@@ -4,6 +4,18 @@
 
 - Aether Clash now waits until Trainers close their previous battle result screen before allowing another collision or automatic match.
 
+- Character Customization now shows wardrobe cosmetics with their real sprite thumbnails, while unequipping and returning an item to the Bag use clear contextual actions outside the item grid.
+
+- Revamped Settings with clearer page headings, compact toggles and hotkeys, improved keyboard focus, a roomier layout, and simpler access to Support, About, and session actions.
+
+- Trainer Card Appearance now uses a larger full-body preview, calmer category navigation, readable wardrobe capacity, clearer natural-color controls, and save feedback that only appears when needed.
+
+- Aether Gift Store outfit previews now keep the Trainer's complete body and shoes visible.
+
+- The Aether Gift Store now uses a cleaner three-column catalog with curated Featured items and one unified product preview, detail, price, and checkout panel.
+
+- The Aether Exchange now uses three clear destinations with compact contextual selectors, making market browsing and order management calmer and easier to navigate.
+
 - The Clash Coordinator now explains every Guild Duel timer, including entry and matchmaking clocks, battle decision limits, the personal time bank, timeout consequences, and the 7.5-minute battle tiebreak.
 
 - The Aether Exchange now includes item wishlists: escrow a fixed-price offer, browse items other Trainers want, fulfill complete requests, or cancel your own order for a full refund.
