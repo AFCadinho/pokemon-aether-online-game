@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Open-field placeholders now inherit drawn boundary collision from a reusable scene template instead of generating collision in code.
+
+- Route 4, Cerulean City, and the Cerulean Bike Store now keep their static collision and water markings in their scenes.
+
 - Finished maps now keep their boundary and water collision in the scene instead of rebuilding it from placeholder settings at runtime.
 
 - Route 25's lower and south passages to Route 24 are no longer blocked by stray collision tiles.
