@@ -4,6 +4,7 @@ class_name AetherClashBattleIndicator
 
 signal spectate_requested(user_id: int, room_code: String)
 
+const AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE := "POKEAETHER_AETHER_CLASH_TRACE"
 const BASE_POSITION := Vector2(0, -142)
 const FALLBACK_CLICK_RADIUS := 38.0
 
@@ -135,6 +136,8 @@ func _exit_tree() -> void:
 
 
 func _trace(event: String, fields: Dictionary = {}) -> void:
+	if OS.get_environment(AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE) != "1":
+		return
 	var payload := fields.duplicate(true)
 	payload["event"] = event
 	print("[AetherClashTrace] %s" % JSON.stringify(payload))

@@ -254,8 +254,9 @@ func _run() -> void:
 	_check(
 		duel_source.contains('"engagement_contact_emitted"')
 		and duel_source.contains('"engagement_request_completed"')
-		and duel_source.contains('"arena_state_failed"'),
-		"Collision requests and arena-state failures emit structured Aether Clash traces"
+		and duel_source.contains('"arena_state_failed"')
+		and duel_source.contains('"POKEAETHER_AETHER_CLASH_TRACE"'),
+		"Collision and arena diagnostics remain available behind the explicit Aether Clash trace flag"
 	)
 	_check(
 		duel_source.contains("var engagement_battle_attempts: Dictionary")
@@ -272,15 +273,27 @@ func _run() -> void:
 	)
 	_check(
 		overlay_source.contains('"battle_start_response"')
-		and overlay_source.contains('"authorized_teleport_received"'),
-		"Battle-start responses and authoritative Aether Clash teleports are traced"
+		and overlay_source.contains('"authorized_teleport_received"')
+		and overlay_source.contains('"POKEAETHER_AETHER_CLASH_TRACE"'),
+		"Battle-start and authoritative teleport diagnostics use the opt-in trace flag"
 	)
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	_check(
 		world_source.contains('"position_save_failed"')
 		and world_source.contains('"remote_teleport_received"')
-		and world_source.contains('"teleport_apply_finished"'),
-		"Arena position-save failures and teleport application emit structured traces"
+		and world_source.contains('"teleport_apply_finished"')
+		and world_source.contains('"POKEAETHER_AETHER_CLASH_TRACE"'),
+		"Arena position-save and teleport diagnostics use the opt-in trace flag"
+	)
+	var battle_indicator_source := FileAccess.get_file_as_string(
+		"res://scripts/world/aether_clash_battle_indicator.gd"
+	)
+	_check(
+		battle_indicator_source.contains('"POKEAETHER_AETHER_CLASH_TRACE"')
+		and battle_indicator_source.contains(
+			"OS.get_environment(AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE) != \"1\""
+		),
+		"Battle-indicator hover and click diagnostics are silent unless tracing is explicitly enabled"
 	)
 	_check(
 		world_source.contains('state.get("aetherClashResult", {})')
