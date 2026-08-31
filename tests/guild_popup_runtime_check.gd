@@ -359,7 +359,12 @@ func _run() -> void:
 	await process_frame
 	_check(popup.find_child("GuildAetherClashDuelStats", true, false) == null, "History does not repeat the statistic dashboard")
 	_check(popup.find_child("GuildCurrentAetherClash", true, false) != null, "the active Clash stays visible while browsing history")
-	_check(popup.find_child("GuildAetherClashHistoryEntry", true, false) != null, "recent Guild Duel history renders")
+	var history_entry := popup.find_child("GuildAetherClashHistoryEntry", true, false) as Button
+	_check(history_entry != null, "recent Guild Duel history renders as a clickable entry")
+	_check(
+		history_entry != null and history_entry.mouse_default_cursor_shape == Control.CURSOR_POINTING_HAND,
+		"Guild Duel history advertises its detailed view on hover"
+	)
 	var own_roster := popup.find_child("GuildAetherClashHistoryOwnRoster", true, false) as Label
 	var opponent_roster := popup.find_child("GuildAetherClashHistoryOpponentRoster", true, false) as Label
 	_check(
@@ -376,6 +381,65 @@ func _run() -> void:
 		and opponent_roster.text.contains("0"),
 		"Guild Duel history shows the opponent's locked roster and survivors"
 	)
+	var detail_window := Window.new()
+	var detail_content := VBoxContainer.new()
+	detail_window.add_child(detail_content)
+	popup.add_child(detail_window)
+	popup._render_aether_clash_history_detail(detail_content, detail_window, {
+		"sessionId": "runtime-history",
+		"status": "completed",
+		"challengerGuild": {"id": 1, "name": "Aether Vanguard"},
+		"challengedGuild": {"id": 3, "name": "Midnight League"},
+		"winnerGuild": {"id": 1, "name": "Aether Vanguard"},
+		"completedAt": Time.get_datetime_string_from_system(true) + "Z",
+		"durationSeconds": 428,
+		"tierName": "Aether OU",
+		"stakeAmount": 100000,
+		"stakePotAmount": 200000,
+		"participantCounts": {"challenger": 1, "challenged": 1},
+		"remainingCounts": {"challenger": 1, "challenged": 0},
+		"participants": [
+			{
+				"userId": 1, "username": "nova", "displayName": "Nova",
+				"guildId": 1, "side": "challenger", "battles": 1,
+				"wins": 1, "losses": 0, "finalStatus": "survived",
+				"eliminatedBy": {},
+			},
+			{
+				"userId": 2, "username": "umbra", "displayName": "Umbra",
+				"guildId": 3, "side": "challenged", "battles": 1,
+				"wins": 0, "losses": 1, "finalStatus": "eliminated",
+				"eliminatedBy": {
+					"userId": 1, "username": "nova", "displayName": "Nova",
+					"guildId": 1, "side": "challenger",
+				},
+			},
+		],
+		"battles": [{
+			"sequence": 1, "method": "automatic", "result": "completed",
+			"completedAt": Time.get_datetime_string_from_system(true) + "Z",
+			"source": {"displayName": "Nova"},
+			"target": {"displayName": "Umbra"},
+			"winner": {"displayName": "Nova"},
+			"loser": {"displayName": "Umbra"},
+		}],
+	})
+	await process_frame
+	_check(
+		detail_window.find_child("GuildAetherClashHistoryParticipant_1", true, false) != null
+		and detail_window.find_child("GuildAetherClashHistoryParticipant_2", true, false) != null,
+		"Guild Duel details render both completed rosters"
+	)
+	_check(
+		detail_window.find_child("GuildAetherClashHistoryBattle_1", true, false) != null,
+		"Guild Duel details render the chronological battle timeline"
+	)
+	_check(
+		_find_label_with_text(detail_window, "₽100,000") != null
+		and _find_label_with_text(detail_window, "₽200,000") != null,
+		"Guild Duel details distinguish the per-Guild stake from the total prize pot"
+	)
+	detail_window.queue_free()
 	popup._set_aether_clash_duel_section("overview")
 	await process_frame
 	_check(popup.find_child("GuildAetherClashHeader", true, false) != null, "Aether Clash uses the shared workspace heading")
@@ -1598,6 +1662,14 @@ func _button_background_is(button: Button, expected: Color) -> bool:
 		return false
 	var style := button.get_theme_stylebox("normal") as StyleBoxFlat
 	return style != null and style.bg_color.is_equal_approx(expected)
+
+
+func _find_label_with_text(root_node: Node, expected: String) -> Label:
+	for child: Node in root_node.find_children("*", "Label", true, false):
+		var label := child as Label
+		if label != null and label.text == expected:
+			return label
+	return null
 
 
 func _check(condition: bool, label: String) -> void:
