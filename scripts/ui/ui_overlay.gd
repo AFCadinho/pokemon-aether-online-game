@@ -183,6 +183,7 @@ const PVP_ROOM_TIER_MEGA_Z_TEST := "pokeaether-mega-z-test"
 const PVP_ROOM_TIERS: Array[Dictionary] = [
 	{"id": PVP_ROOM_TIER_NONE, "format_id": "gen9nationaldex", "label": "ui.pvp.room.tier.none"},
 	{"id": "aether-ou", "format_id": "gen9nationaldex", "label": "ui.pvp.room.tier.aether_ou"},
+	{"id": "aether-uu", "format_id": "gen9nationaldex", "label": "ui.pvp.room.tier.aether_uu"},
 	{"id": PVP_ROOM_TIER_MEGA_Z_TEST, "format_id": "pokeaether-mega-z-test-v1", "label": "ui.pvp.room.tier.mega_z_test"},
 ]
 const SOCIALS_FRIENDS_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")
@@ -924,6 +925,7 @@ var pvp_banlist_category_search: Dictionary = {}
 var pvp_leaderboard_in_flight := false
 var pvp_leaderboard_loaded := false
 var pvp_leaderboard_entries: Array = []
+var pvp_leaderboard_title_label: Label
 var pvp_leaderboard_scope_select: OptionButton
 var pvp_active_leaderboard_scope := "season"
 var pvp_history_in_flight := false
@@ -1916,6 +1918,8 @@ func _refresh_pvp_localized_ui() -> void:
 	for tab_container: TabContainer in [pvp_ranked_tabs, pvp_ranked_rules_tabs, pvp_ranked_battles_tabs, pvp_ranked_rewards_tabs]:
 		_refresh_pvp_tab_titles(tab_container)
 	_refresh_pvp_leaderboard_scope_options()
+	if pvp_leaderboard_title_label != null:
+		pvp_leaderboard_title_label.text = LocalizationManager.text("ui.pvp.leaderboard.title", {"format": pvp_active_format_name})
 	_refresh_pvp_ranked_objectives_filter_options()
 	_refresh_pvp_ranked_rewards_state()
 	_render_pvp_team_preview()
@@ -6596,11 +6600,11 @@ func _setup_pvp_room_popup() -> void:
 	leaderboard_heading.add_theme_constant_override("separation", 2)
 	leaderboard_header.add_child(leaderboard_heading)
 
-	var leaderboard_title := Label.new()
-	_set_localized_control_property(leaderboard_title, "text", "ui.pvp.leaderboard.title")
-	leaderboard_title.add_theme_font_size_override("font_size", 18)
-	leaderboard_title.add_theme_color_override("font_color", UI_TEXT)
-	leaderboard_heading.add_child(leaderboard_title)
+	pvp_leaderboard_title_label = Label.new()
+	pvp_leaderboard_title_label.text = LocalizationManager.text("ui.pvp.leaderboard.title", {"format": pvp_active_format_name})
+	pvp_leaderboard_title_label.add_theme_font_size_override("font_size", 18)
+	pvp_leaderboard_title_label.add_theme_color_override("font_color", UI_TEXT)
+	leaderboard_heading.add_child(pvp_leaderboard_title_label)
 
 	pvp_leaderboard_status_label = Label.new()
 	pvp_leaderboard_status_label.text = LocalizationManager.text(
@@ -42117,11 +42121,15 @@ func _update_pvp_active_format_from_queue_id(queue_id: String) -> void:
 	if queue.is_empty():
 		pvp_active_format_key = PVP_RANKED_DEFAULT_FORMAT_KEY
 		pvp_active_format_name = PVP_RANKED_DEFAULT_FORMAT_NAME
+		if pvp_leaderboard_title_label != null:
+			pvp_leaderboard_title_label.text = LocalizationManager.text("ui.pvp.leaderboard.title", {"format": pvp_active_format_name})
 		if pvp_active_format_key != previous_format_key:
 			_invalidate_pvp_ranked_lazy_data()
 		return
 	pvp_active_format_key = _pvp_queue_format_key(queue)
 	pvp_active_format_name = _pvp_queue_format_name(queue)
+	if pvp_leaderboard_title_label != null:
+		pvp_leaderboard_title_label.text = LocalizationManager.text("ui.pvp.leaderboard.title", {"format": pvp_active_format_name})
 	if pvp_active_format_key != previous_format_key:
 		_invalidate_pvp_ranked_lazy_data()
 

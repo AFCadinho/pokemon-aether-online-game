@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added Aether UU to Ranked matchmaking, team validation, Casual rooms, banlist browsing, leaderboards, match history, live battles, and Aether Clash challenges.
+
 - Public Trainer Cards now load follower previews without a setup error.
 
 - Trainer Cards now keep regional Gym Badge progress exclusively in the Badges tab, both for your own card and cards viewed from other Trainers.
