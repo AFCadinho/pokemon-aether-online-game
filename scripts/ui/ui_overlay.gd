@@ -6726,7 +6726,7 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_leave_queue_button)
 	_apply_button_style(pvp_reconnect_battle_button)
 	_apply_button_style(pvp_bans_refresh_button)
-	_apply_button_style(pvp_live_refresh_button)
+	_apply_pvp_live_refresh_button_style(pvp_live_refresh_button)
 	_apply_button_style(pvp_leaderboard_refresh_button)
 	_apply_button_style(pvp_history_refresh_button)
 	for tab_container: TabContainer in [pvp_ranked_tabs, pvp_ranked_rules_tabs, pvp_ranked_battles_tabs]:
@@ -26975,6 +26975,40 @@ func _apply_pvp_ranked_subtabs_style(tabs: TabContainer) -> void:
 	tabs.add_theme_color_override("font_selected_color", Color("#60d3ff"))
 	tabs.add_theme_stylebox_override("tab_selected", _make_pvp_ranked_tab_style(UI_SURFACE_INTERACTIVE, Color("#60d3ff"), true))
 
+func _apply_pvp_live_refresh_button_style(button: Button) -> void:
+	button.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	button.add_theme_color_override("font_hover_color", Color("#72d8ff"))
+	button.add_theme_color_override("font_pressed_color", Color("#b8edff"))
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.4))
+	button.add_theme_font_size_override("font_size", 12)
+	button.add_theme_stylebox_override("normal", _make_button_style(Color.TRANSPARENT, Color.TRANSPARENT, 7, 0))
+	button.add_theme_stylebox_override("hover", _make_button_style(Color("#102538b8"), Color("#3f789799"), 7, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(Color("#0a1926e8"), Color("#60d3ffbb"), 7, 1))
+	button.add_theme_stylebox_override("focus", _make_button_style(Color("#102538b8"), Color("#60d3ffbb"), 7, 1))
+	button.add_theme_stylebox_override("disabled", _make_button_style(Color.TRANSPARENT, Color.TRANSPARENT, 7, 0))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+func _apply_pvp_spectate_action_style(button: Button) -> void:
+	var normal_style := _make_button_style(Color("#176f9bf2"), Color("#78d9ff"), 8, 1)
+	normal_style.shadow_color = Color("#00000066")
+	normal_style.shadow_size = 5
+	normal_style.shadow_offset = Vector2(0, 2)
+	var hover_style := _make_button_style(Color("#218fc1ff"), Color("#b8edff"), 8, 1)
+	hover_style.shadow_color = Color("#2db7ed55")
+	hover_style.shadow_size = 7
+	hover_style.shadow_offset = Vector2(0, 2)
+	button.add_theme_color_override("font_color", Color("#f5fbff"))
+	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	button.add_theme_color_override("font_pressed_color", Color.WHITE)
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.42))
+	button.add_theme_font_size_override("font_size", 14)
+	button.add_theme_stylebox_override("normal", normal_style)
+	button.add_theme_stylebox_override("hover", hover_style)
+	button.add_theme_stylebox_override("pressed", _make_button_style(Color("#105b80ff"), Color("#78d9ff"), 8, 1))
+	button.add_theme_stylebox_override("focus", hover_style)
+	button.add_theme_stylebox_override("disabled", _make_button_style(Color("#102332cc"), Color("#35526788"), 8, 1))
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
 func _make_pvp_validator_panel_style(state: String) -> StyleBoxFlat:
 	var normalized_state := state.strip_edges().to_lower()
 	var background := Color("#071522e8")
@@ -41452,7 +41486,7 @@ func _create_pvp_live_battle_row(entry: Dictionary) -> Control:
 	live_details.add_child(started_label)
 
 	var watch_button := Button.new()
-	watch_button.text = LocalizationManager.text("ui.pvp.room.spectate")
+	watch_button.text = "▶  %s" % LocalizationManager.text("ui.pvp.room.spectate")
 	watch_button.tooltip_text = LocalizationManager.text(
 		"ui.pvp.live.watch_battle",
 		{"battle": _pvp_live_battle_label(entry, battle_id)}
@@ -41461,7 +41495,7 @@ func _create_pvp_live_battle_row(entry: Dictionary) -> Control:
 	watch_button.focus_mode = Control.FOCUS_NONE
 	watch_button.disabled = match_id == "" or _pvp_live_watch_blocked()
 	watch_button.pressed.connect(_on_pvp_live_watch_pressed.bind(match_id))
-	_apply_button_style(watch_button, "primary")
+	_apply_pvp_spectate_action_style(watch_button)
 	row.add_child(watch_button)
 	return panel
 
