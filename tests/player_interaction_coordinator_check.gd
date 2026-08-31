@@ -69,6 +69,7 @@ func _check_trade_context_action() -> void:
 	if trade_button != null:
 		var viewport_rect := get_root().get_visible_rect()
 		_check_equal(viewport_rect.encloses(trade_button.get_global_rect()), true, "Trade action remains inside the viewport")
+	await _check_context_page_navigation()
 
 	coordinator.trade_capabilities.clear()
 	coordinator.trade_capabilities_loaded = false
@@ -96,10 +97,69 @@ func _check_trade_context_action() -> void:
 
 	await _check_guild_invite_context_action()
 	await _check_aether_clash_context_action()
-	_check_chat_moderation_context_action()
+	await _check_chat_moderation_context_action()
 	await _check_live_localization()
-	coordinator.close_context_menu()
+	await _check_context_outside_click()
 	host.queue_free()
+
+
+func _check_context_page_navigation() -> void:
+	_check_equal(coordinator.context_status_dot != null and coordinator.context_status_dot.text == "●", true, "trainer status uses a compact identity-row indicator")
+	_check_equal(_find_player_action("Message") != null, true, "quick actions page starts with Message")
+	_check_equal(_find_player_action("View Trainer Card") == null, true, "secondary actions stay off the quick page")
+	var message_button := _find_player_action("Message")
+	_check_equal(
+		message_button != null and message_button.find_child("ActionIcon", true, false) != null,
+		true,
+		"quick actions include a consistent scan icon"
+	)
+	var more_button := _find_player_action("More actions")
+	_check_equal(more_button != null, true, "quick actions expose More actions navigation")
+	if more_button != null:
+		more_button.pressed.emit()
+	await process_frame
+	await process_frame
+	var back_button := _find_player_action("Back to quick actions")
+	_check_equal(_find_player_action("Message") == null, true, "secondary page replaces rather than extends quick actions")
+	_check_equal(_find_player_action("View Trainer Card") != null, true, "secondary page exposes Trainer Card")
+	_check_equal(back_button != null, true, "secondary page has an explicit back action")
+	_check_equal(
+		coordinator.context_menu.get_combined_minimum_size().y < 500.0,
+		true,
+		"secondary page stays compact on a standard-height viewport"
+	)
+	_check_equal(
+		back_button != null
+		and back_button.focus_mode == Control.FOCUS_ALL
+		and back_button.get_theme_stylebox("focus") is StyleBoxFlat,
+		true,
+		"back action keeps visible keyboard focus navigation"
+	)
+	if back_button != null:
+		back_button.pressed.emit()
+	await process_frame
+	_check_equal(_find_player_action("Message") != null, true, "back returns to quick actions")
+	_check_equal(_find_player_action("View Trainer Card") == null, true, "back removes secondary actions")
+
+
+func _check_context_outside_click() -> void:
+	coordinator.open_context_for_player(
+		{"userId": 7, "username": "misty", "displayName": "Misty"},
+		Vector2(400, 200)
+	)
+	await process_frame
+	var inside_event := InputEventMouseButton.new()
+	inside_event.button_index = MOUSE_BUTTON_LEFT
+	inside_event.pressed = true
+	inside_event.global_position = coordinator.context_menu.get_global_rect().get_center()
+	coordinator._input(inside_event)
+	_check_equal(coordinator.context_menu.visible, true, "clicking inside keeps the trainer actions open")
+	var outside_event := InputEventMouseButton.new()
+	outside_event.button_index = MOUSE_BUTTON_LEFT
+	outside_event.pressed = true
+	outside_event.global_position = Vector2(2, 2)
+	coordinator._input(outside_event)
+	_check_equal(coordinator.context_menu.visible, false, "clicking outside closes the trainer actions")
 
 func _check_live_localization() -> void:
 	var manager := root.get_node_or_null("LocalizationManager")
@@ -121,6 +181,12 @@ func _check_live_localization() -> void:
 		true,
 		"Nearby actions display Dutch without changing their canonical action id"
 	)
+	coordinator._toggle_context_more_actions()
+	await process_frame
+	var back_button := _find_player_action("Back to quick actions")
+	_check_equal(back_button != null and back_button.text.contains("Terug naar snelle acties"), true, "secondary-page back navigation renders in Dutch")
+	_check_equal(_find_label_with_text(coordinator.context_actions, "VEILIGHEID") != null, true, "Safety section renders in Dutch")
+	coordinator._toggle_context_more_actions()
 	manager.set_locale("en")
 	await process_frame
 
@@ -269,11 +335,17 @@ func _check_chat_moderation_context_action() -> void:
 		"permissions": [],
 	}
 	coordinator.current_target = {"userId": 7, "username": "misty", "displayName": "Misty"}
+	coordinator.guild_membership = {"guildId": 4, "role": "officer"}
+	coordinator.guild_membership_loaded = true
+	coordinator.guild_members.clear()
+	coordinator.guild_members.append({"userId": 9, "username": "brock"})
+	coordinator.guild_members_loaded = true
 	coordinator.context_more_actions_expanded = true
 	coordinator.social_state_loading = true
 	coordinator.chat_moderation_state_loading = true
 	coordinator.chat_target_is_muted = false
 	coordinator._render_context_menu()
+	await process_frame
 	var requested_actions: Array[String] = []
 	var requested_players: Array[Dictionary] = []
 	coordinator.chat_moderation_requested.connect(
@@ -282,11 +354,16 @@ func _check_chat_moderation_context_action() -> void:
 			requested_players.append(player)
 	)
 	var mute_button := _find_player_action("Mute Player")
+	var block_button := _find_player_action("Block")
 	_check_equal(
 		mute_button != null and not mute_button.disabled,
 		true,
 		"Owner can use direct-player mute while unrelated social state is loading"
 	)
+	_check_equal(_find_player_action("Invite to Guild") != null, true, "staff-sized secondary page retains eligible Guild actions")
+	_check_equal(coordinator.context_menu.get_combined_minimum_size().y < 560.0, true, "largest secondary action set stays within a standard viewport")
+	var block_style: StyleBoxFlat = block_button.get_theme_stylebox("normal") as StyleBoxFlat if block_button != null else null
+	_check_equal(block_style != null and block_style.bg_color == Color("#0b1a2bea"), true, "sensitive actions stay visually calm until hover")
 	if mute_button != null:
 		mute_button.pressed.emit()
 	_check_equal(requested_actions, ["mute"], "direct-player mute emits the moderation request")

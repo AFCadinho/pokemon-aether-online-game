@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer right-click actions now use compact quick and secondary pages, clearer icons, and a calmer safety section.
+
 - Pokémon in PC boxes can now move their held item directly to the Bag through one clean, item-focused right-click action.
 
 - Pokémon Storage actions now use clearer visual hierarchy, with one primary box control, quieter icon actions and danger colors only when needed.
