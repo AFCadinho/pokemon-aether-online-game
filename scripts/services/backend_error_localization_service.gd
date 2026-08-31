@@ -120,6 +120,9 @@ const CODE_TO_KEY: Dictionary = {
 	"aether_clash_challenge_expired": "backend.error.aether_clash_challenge_unavailable",
 	"aether_clash_tier_unsupported": "backend.error.aether_clash_tier_unsupported",
 	"aether_clash_stake_funds_required": "backend.error.aether_clash_stake_funds_required",
+	"aether_clash_team_invalid": "backend.error.aether_clash_team_invalid",
+	"aether_clash_team_lock_invalid": "backend.error.aether_clash_team_lock_invalid",
+	"aether_clash_team_lock_changed": "backend.error.aether_clash_team_lock_invalid",
 	"aether_clash_entry_closed": "backend.error.aether_clash_entry_closed",
 	"aether_clash_spectating_forbidden": "backend.error.aether_clash_spectating_forbidden",
 	"aether_clash_portal_required": "backend.error.aether_clash_portal_required",
@@ -297,6 +300,13 @@ static func message(
 ) -> String:
 	var code := error_code(response)
 	var key := str(CODE_TO_KEY.get(code, "")).strip_edges()
+	if code == "aether_clash_team_invalid":
+		var rule_code := _aether_clash_team_rule_code(response)
+		var rule_key := "backend.error.aether_clash_team_invalid.%s" % rule_code
+		if not rule_code.is_empty() and _has_key(rule_key):
+			key = rule_key
+		elif CODE_TO_KEY.has(rule_code):
+			key = str(CODE_TO_KEY.get(rule_code, "")).strip_edges()
 	var format_values := _format_values(response)
 	format_values.merge(values, true)
 	if not key.is_empty() and _has_key(key):
@@ -360,6 +370,15 @@ static func _response_dictionaries(response: Dictionary) -> Array[Dictionary]:
 		if not source.is_empty():
 			sources.append(source)
 	return sources
+
+
+static func _aether_clash_team_rule_code(response: Dictionary) -> String:
+	for source: Dictionary in _response_dictionaries(response):
+		for field: String in ["ruleCode", "rule_code"]:
+			var value := str(source.get(field, "")).strip_edges()
+			if not value.is_empty():
+				return _normalize_code(value)
+	return ""
 
 
 static func _valid_support_id(value: String) -> bool:
