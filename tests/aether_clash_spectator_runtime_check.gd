@@ -45,6 +45,10 @@ class FakeOverlay extends Node:
 		return true
 
 
+class FakeWorld extends Node:
+	var is_in_battle := false
+
+
 func _init() -> void:
 	call_deferred("_run")
 
@@ -77,6 +81,9 @@ func _run() -> void:
 	var overlay := FakeOverlay.new()
 	overlay.add_to_group("ui_overlay")
 	root.add_child(overlay)
+	var fake_world := FakeWorld.new()
+	fake_world.add_to_group("world")
+	root.add_child(fake_world)
 
 	var upper_orb := duel.get_node_or_null("Entities/Interactables/Guild1SpectatorOrb")
 	var lower_orb := duel.get_node_or_null("Entities/Interactables/Guild2SpectatorOrb")
@@ -187,6 +194,25 @@ func _run() -> void:
 	)
 	blue_indicator = remote_blue.get_node_or_null("AetherClashBattleIndicator")
 	_check(blue_indicator != null and bool(blue_indicator.get("clickable")), "Master Balls become clickable for an active jail spectator")
+	var ball_sprite := blue_indicator.get_node("BallSprite") as Sprite2D
+	var glow_sprite := blue_indicator.get_node("GlowSprite") as Sprite2D
+	blue_indicator.call("_on_mouse_exited")
+	blue_indicator.call("_process", 0.0)
+	var resting_ball_scale := ball_sprite.scale.x
+	var resting_glow_scale := glow_sprite.scale.x
+	var resting_glow_alpha := glow_sprite.modulate.a
+	blue_indicator.call("_on_mouse_entered")
+	blue_indicator.call("_process", 0.0)
+	var glow_material := glow_sprite.material as CanvasItemMaterial
+	_check(
+		ball_sprite.scale.x > resting_ball_scale
+		and glow_sprite.scale.x > resting_glow_scale
+		and glow_sprite.modulate.a > resting_glow_alpha
+		and glow_material != null
+		and glow_material.blend_mode == CanvasItemMaterial.BLEND_MODE_ADD,
+		"Hovering a Master Ball adds a larger bright additive glow"
+	)
+	blue_indicator.call("_on_mouse_exited")
 	var master_ball_world_position: Vector2 = blue_indicator.call("get_click_world_position")
 	spectator_camera.global_position = master_ball_world_position
 	spectator_camera.reset_smoothing()
@@ -201,6 +227,29 @@ func _run() -> void:
 	_check(
 		overlay.requested_room_codes == ["ACROOM123"],
 		"Controller hit-testing makes a visible Master Ball click open the existing PvP spectator flow"
+	)
+
+	# The battle scene is freed when a spectator leaves, so the original await
+	# may never resume. Track the observed World battle instead and release the
+	# request guard as soon as that battle closes.
+	duel.set("spectator_battle_request_active", true)
+	fake_world.is_in_battle = true
+	duel.call("_sync_spectator_battle_request_lifecycle")
+	_check(
+		bool(duel.get("spectator_battle_request_observed_world_battle")),
+		"A started spectator battle is observed by the request lifecycle"
+	)
+	fake_world.is_in_battle = false
+	duel.call("_sync_spectator_battle_request_lifecycle")
+	_check(
+		not bool(duel.get("spectator_battle_request_active")),
+		"Leaving a spectator battle immediately releases the active request guard"
+	)
+	duel.call("_unhandled_input", master_ball_click)
+	await process_frame
+	_check(
+		overlay.requested_room_codes == ["ACROOM123", "ACROOM123"],
+		"The same ongoing battle can be reopened without leaving Aether View"
 	)
 
 	# A real spectator battle can be closed while the original setup coroutine
@@ -225,7 +274,7 @@ func _run() -> void:
 	duel.call("_unhandled_input", master_ball_click)
 	await process_frame
 	_check(
-		overlay.requested_room_codes == ["ACROOM123", "ACROOM123"],
+		overlay.requested_room_codes == ["ACROOM123", "ACROOM123", "ACROOM123"],
 		"The same active Master Ball can be used again after leaving spectator mode"
 	)
 	return_button.emit_signal("pressed")
@@ -279,6 +328,7 @@ func _run() -> void:
 	remote_red.queue_free()
 	remote_jail_spectator.queue_free()
 	overlay.queue_free()
+	fake_world.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
 

@@ -15,6 +15,7 @@ var player_user_id := 0
 var room_code := ""
 var clickable := false
 var animation_time := 0.0
+var hover_amount := 0.0
 
 
 func _ready() -> void:
@@ -32,7 +33,11 @@ func _process(delta: float) -> void:
 	ball_sprite.position = BASE_POSITION + Vector2(0, wave * 3.0)
 	ball_sprite.rotation = animation_time * 2.4
 	glow_sprite.position = ball_sprite.position
-	glow_sprite.scale = Vector2.ONE * (0.88 + (wave + 1.0) * 0.04)
+	var pulse_scale := 0.88 + (wave + 1.0) * 0.04
+	glow_sprite.scale = Vector2.ONE * pulse_scale * lerpf(1.0, 1.5, hover_amount)
+	glow_sprite.modulate = Color(1.0, 0.9, 1.0, lerpf(0.58, 1.0, hover_amount))
+	ball_sprite.scale = Vector2.ONE * lerpf(0.72, 0.86, hover_amount)
+	ball_sprite.modulate = Color.WHITE.lerp(Color(1.0, 0.88, 1.0), hover_amount)
 
 
 func configure(user_id: int, next_room_code: String, allow_click: bool) -> void:
@@ -61,6 +66,8 @@ func _apply_clickability() -> void:
 	if click_area == null:
 		return
 	click_area.input_pickable = clickable
+	if not clickable:
+		hover_amount = 0.0
 	modulate = Color.WHITE if clickable else Color(0.88, 0.9, 1.0, 0.92)
 
 
@@ -115,11 +122,11 @@ func request_spectate(source: String) -> bool:
 
 func _on_mouse_entered() -> void:
 	if clickable:
-		ball_sprite.scale = Vector2.ONE * 0.84
+		hover_amount = 1.0
 
 
 func _on_mouse_exited() -> void:
-	ball_sprite.scale = Vector2.ONE * 0.72
+	hover_amount = 0.0
 
 
 func _exit_tree() -> void:
