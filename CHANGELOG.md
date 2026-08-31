@@ -4,6 +4,8 @@
 
 - Ranked now shows the Preseason Elo leaderboard, provisional status, and each Trainer's rating change in battle results and match history.
 
+- Aether Clash server announcements now load reliably after a live client update without breaking the overworld interface.
+
 - The Pokédex now shows Mega Stone drop chances for each eligible evolution line, the Item Dex lists defeat-or-catch sources, and successful wild drops receive an item notification.
 
 - Completed Guild Duels now open into a detailed match history with both rosters, individual records, final statuses, eliminators, and a chronological battle timeline.

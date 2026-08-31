@@ -1,6 +1,9 @@
 extends SceneTree
 
 const OVERLAY_SCRIPT_PATH := "res://scripts/ui/ui_overlay.gd"
+const ANNOUNCEMENT_FORMATTER := preload(
+	"res://scripts/ui/aether_clash_announcement_formatter.gd"
+)
 const LOCALES: Array[String] = ["en", "nl", "pt_BR", "zh_CN"]
 const MESSAGE_KEYS: Array[String] = [
 	"ui.aether_clash.global.started",
@@ -25,7 +28,7 @@ func _run() -> void:
 	_check(overlay_script != null, "UI overlay script loads with the Aether Clash formatter")
 	localization_manager.set_locale("en")
 
-	var started := AetherClashAnnouncementFormatter.format_event({
+	var started: String = ANNOUNCEMENT_FORMATTER.format_event({
 		"phase": "started",
 		"challengerGuildName": "Alpha Guild",
 		"challengedGuildName": "Bravo Guild",
@@ -40,7 +43,7 @@ func _run() -> void:
 		"Staked start announcement includes Guilds, roster, tier and stake"
 	)
 
-	var completed := AetherClashAnnouncementFormatter.format_event({
+	var completed: String = ANNOUNCEMENT_FORMATTER.format_event({
 		"phase": "completed",
 		"winnerGuildName": "Bravo Guild",
 		"loserGuildName": "Alpha Guild",
@@ -54,7 +57,7 @@ func _run() -> void:
 	)
 
 	localization_manager.set_locale("nl")
-	var no_show := AetherClashAnnouncementFormatter.format_event({
+	var no_show: String = ANNOUNCEMENT_FORMATTER.format_event({
 		"phase": "completed",
 		"winnerGuildName": "Bravo Guild",
 		"loserGuildName": "Alpha Guild",
