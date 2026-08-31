@@ -801,6 +801,8 @@ var pvp_root_tabs: TabContainer
 var pvp_ranked_tabs: TabContainer
 var pvp_ranked_battles_tabs: TabContainer
 var pvp_ranked_rules_tabs: TabContainer
+var pvp_ranked_rewards_tabs: TabContainer
+var pvp_ranked_objectives_filter: OptionButton
 var pvp_queue_compact_panel: PanelContainer
 var pvp_queue_compact_status_label: Label
 var pvp_queue_compact_time_label: Label
@@ -1897,9 +1899,10 @@ func _refresh_pvp_localized_ui() -> void:
 	if pvp_match_countdown_overlay != null:
 		LocalizationManager.localize_tree(pvp_match_countdown_overlay)
 
-	for tab_container: TabContainer in [pvp_ranked_tabs, pvp_ranked_rules_tabs, pvp_ranked_battles_tabs]:
+	for tab_container: TabContainer in [pvp_ranked_tabs, pvp_ranked_rules_tabs, pvp_ranked_battles_tabs, pvp_ranked_rewards_tabs]:
 		_refresh_pvp_tab_titles(tab_container)
 	_refresh_pvp_leaderboard_scope_options()
+	_refresh_pvp_ranked_objectives_filter_options()
 	_render_pvp_team_preview()
 	_render_pvp_training_team_preview()
 	_refresh_pvp_team_validator()
@@ -6736,7 +6739,7 @@ func _setup_pvp_room_popup() -> void:
 	_apply_pvp_live_refresh_button_style(pvp_live_refresh_button)
 	_apply_button_style(pvp_leaderboard_refresh_button)
 	_apply_button_style(pvp_history_refresh_button)
-	for tab_container: TabContainer in [pvp_ranked_tabs, pvp_ranked_rules_tabs, pvp_ranked_battles_tabs]:
+	for tab_container: TabContainer in [pvp_ranked_tabs, pvp_ranked_rules_tabs, pvp_ranked_battles_tabs, pvp_ranked_rewards_tabs]:
 		_refresh_pvp_tab_titles(tab_container)
 	_render_pvp_banlists()
 	_render_pvp_banlists.call_deferred()
@@ -7136,7 +7139,106 @@ func _configure_tool_tile_button(
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	labels.add_child(subtitle)
 
-func _create_pvp_ranked_rewards_content() -> ScrollContainer:
+func _create_pvp_ranked_rewards_content() -> TabContainer:
+	pvp_ranked_rewards_tabs = TabContainer.new()
+	pvp_ranked_rewards_tabs.name = "RankedRewardsTabs"
+	pvp_ranked_rewards_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ranked_rewards_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pvp_ranked_rewards_tabs.add_theme_font_size_override("font_size", 12)
+	_apply_pvp_ranked_subtabs_style(pvp_ranked_rewards_tabs)
+
+	var overview_tab_page := _create_pvp_ranked_tab_page("Overview", 8)
+	pvp_ranked_rewards_tabs.add_child(overview_tab_page)
+	overview_tab_page.add_child(_create_pvp_ranked_rewards_overview_content())
+
+	var battle_tab_page := _create_pvp_ranked_tab_page("Battle Rewards", 8)
+	pvp_ranked_rewards_tabs.add_child(battle_tab_page)
+	battle_tab_page.add_child(
+		_create_pvp_ranked_reward_detail_content(
+			_create_pvp_reward_preview_card(
+				"RankedBattleRewardDetailCard",
+				"ui.pvp.rewards.battle.title",
+				"ui.pvp.rewards.status_planned",
+				"ui.pvp.rewards.battle.detail",
+				Color("#58c8ef"),
+				[
+					{"label_key": "ui.pvp.rewards.battle.win", "value_key": "ui.pvp.rewards.battle.win_value"},
+					{"label_key": "ui.pvp.rewards.battle.loss", "value_key": "ui.pvp.rewards.battle.loss_value"},
+				]
+			)
+		)
+	)
+
+	var placements_tab_page := _create_pvp_ranked_tab_page("Placements", 8)
+	pvp_ranked_rewards_tabs.add_child(placements_tab_page)
+	placements_tab_page.add_child(
+		_create_pvp_ranked_reward_detail_content(
+			_create_pvp_reward_preview_card(
+				"RankedPlacementRewardDetailCard",
+				"ui.pvp.rewards.placements.title",
+				"ui.pvp.rewards.status_inactive_short",
+				"ui.pvp.rewards.placements.detail",
+				Color("#bd8eff")
+			)
+		)
+	)
+
+	var objectives_filter_row := HBoxContainer.new()
+	objectives_filter_row.name = "RankedObjectivesFilterRow"
+	objectives_filter_row.add_theme_constant_override("separation", 8)
+	var objectives_filter_label := Label.new()
+	_set_localized_control_property(objectives_filter_label, "text", "ui.pvp.rewards.objectives.filter")
+	objectives_filter_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	objectives_filter_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	objectives_filter_label.add_theme_font_size_override("font_size", 11)
+	objectives_filter_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	objectives_filter_row.add_child(objectives_filter_label)
+	pvp_ranked_objectives_filter = OptionButton.new()
+	pvp_ranked_objectives_filter.name = "RankedObjectivesFilter"
+	pvp_ranked_objectives_filter.custom_minimum_size = Vector2(150, 34)
+	pvp_ranked_objectives_filter.focus_mode = Control.FOCUS_NONE
+	for filter_key: String in [
+		"ui.pvp.rewards.objectives.filter.daily",
+		"ui.pvp.rewards.objectives.filter.weekly",
+		"ui.pvp.rewards.objectives.filter.seasonal",
+	]:
+		pvp_ranked_objectives_filter.add_item(LocalizationManager.text(filter_key))
+		pvp_ranked_objectives_filter.set_item_metadata(pvp_ranked_objectives_filter.item_count - 1, filter_key)
+	_apply_pvp_ranked_dropdown_style(pvp_ranked_objectives_filter, true)
+	objectives_filter_row.add_child(pvp_ranked_objectives_filter)
+
+	var objectives_tab_page := _create_pvp_ranked_tab_page("Objectives", 8)
+	pvp_ranked_rewards_tabs.add_child(objectives_tab_page)
+	objectives_tab_page.add_child(
+		_create_pvp_ranked_reward_detail_content(
+			_create_pvp_reward_preview_card(
+				"RankedObjectivesRewardDetailCard",
+				"ui.pvp.rewards.objectives.title",
+				"ui.pvp.rewards.objectives.empty",
+				"ui.pvp.rewards.objectives.detail",
+				Color("#6fd39a")
+			),
+			objectives_filter_row
+		)
+	)
+
+	var season_tab_page := _create_pvp_ranked_tab_page("Season", 8)
+	pvp_ranked_rewards_tabs.add_child(season_tab_page)
+	season_tab_page.add_child(
+		_create_pvp_ranked_reward_detail_content(
+			_create_pvp_reward_preview_card(
+				"RankedSeasonRewardDetailCard",
+				"ui.pvp.rewards.season.title",
+				"ui.pvp.rewards.season.unconfigured",
+				"ui.pvp.rewards.season.detail",
+				Color("#efbd58")
+			)
+		)
+	)
+	return pvp_ranked_rewards_tabs
+
+
+func _create_pvp_ranked_rewards_overview_content() -> ScrollContainer:
 	var scroll := ScrollContainer.new()
 	scroll.name = "RankedRewardsScroll"
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -7272,6 +7374,40 @@ func _create_pvp_ranked_rewards_content() -> ScrollContainer:
 	return scroll
 
 
+func _create_pvp_ranked_reward_detail_content(
+	card: PanelContainer,
+	leading_control: Control = null
+) -> ScrollContainer:
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+
+	var margin := MarginContainer.new()
+	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	margin.add_theme_constant_override("margin_left", 4)
+	margin.add_theme_constant_override("margin_right", 4)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	scroll.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	layout.add_theme_constant_override("separation", 12)
+	margin.add_child(layout)
+	if leading_control != null:
+		layout.add_child(leading_control)
+	layout.add_child(card)
+
+	var activation_note := Label.new()
+	_set_localized_control_property(activation_note, "text", "ui.pvp.rewards.activation_note")
+	activation_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	activation_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	activation_note.add_theme_font_size_override("font_size", 11)
+	activation_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(activation_note)
+	return scroll
+
+
 func _create_pvp_reward_preview_card(
 	card_name: String,
 	title_key: String,
@@ -7391,6 +7527,16 @@ func _pvp_tab_key(tab_name: String) -> String:
 			return "ui.pvp.tab.leaderboard"
 		"Rewards":
 			return "ui.pvp.tab.rewards"
+		"Overview":
+			return "ui.pvp.tab.overview"
+		"Battle Rewards":
+			return "ui.pvp.tab.battle_rewards"
+		"Placements":
+			return "ui.pvp.tab.placements"
+		"Objectives":
+			return "ui.pvp.tab.objectives"
+		"Season":
+			return "ui.pvp.tab.season"
 		"Format":
 			return "ui.pvp.tab.format"
 		"Banlist":
@@ -7426,6 +7572,14 @@ func _refresh_pvp_leaderboard_scope_options() -> void:
 		)
 		pvp_leaderboard_scope_select.set_item_metadata(index, str(scope.get("id", "")))
 	pvp_leaderboard_scope_select.select(_pvp_leaderboard_scope_index(selected_scope))
+
+
+func _refresh_pvp_ranked_objectives_filter_options() -> void:
+	if pvp_ranked_objectives_filter == null:
+		return
+	for index in range(pvp_ranked_objectives_filter.item_count):
+		var label_key := str(pvp_ranked_objectives_filter.get_item_metadata(index))
+		pvp_ranked_objectives_filter.set_item_text(index, LocalizationManager.text(label_key))
 
 
 func _create_pvp_ruleset_panel() -> Control:
