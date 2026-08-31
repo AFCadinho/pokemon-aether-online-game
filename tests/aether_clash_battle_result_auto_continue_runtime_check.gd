@@ -14,6 +14,15 @@ func _ready() -> void:
 	clash_battle.pvp_room_code = "clash-auto-continue"
 	clash_battle.pvp_battle_purpose = "aether_clash"
 	clash_battle.action_flow.set_local_player_id("p1")
+	# A battle-limit decision can overtake the already-submitted final-turn
+	# acknowledgement. That transport update can never complete the turn after
+	# the server has ended the battle and must not strand the terminal result.
+	clash_battle.pvp_realtime_updates.append({
+		"type": "pvp.battle_update",
+		"action": "choose_move",
+		"playerId": "p1",
+		"response": {"success": true},
+	})
 	clash_battle._finish_pvp_authoritative_terminal({
 		"type": "pvp.authoritative_terminal",
 		"battleId": "clash-auto-continue",
@@ -24,6 +33,10 @@ func _ready() -> void:
 	})
 
 	_check(clash_battle.battle_finished, "battle-limit terminal finishes an active client battle")
+	_check(
+		clash_battle.pvp_realtime_updates.is_empty(),
+		"battle-limit terminal retires the superseded submitted-choice update"
+	)
 	_check(clash_battle.battle_result_overlay.visible, "battle-limit terminal opens the result overlay")
 	_check(
 		str(clash_battle.pending_battle_end_result.get("reason", "")) == "battle_time_limit",
@@ -63,6 +76,14 @@ func _ready() -> void:
 	_check(
 		str(emitted_results[0].get("winner", "")) == "p1",
 		"automatic Continue preserves the terminal battle result"
+	)
+	_check(
+		clash_battle._should_present_pvp_battle_result({"reason": "battle_time_limit_draw"}),
+		"an exactly tied battle-limit result still receives a result screen"
+	)
+	_check(
+		clash_battle._format_battle_result_reason("battle_time_limit") != "",
+		"battle-limit result explains that the battle ended on time"
 	)
 
 	remove_child(clash_battle)
