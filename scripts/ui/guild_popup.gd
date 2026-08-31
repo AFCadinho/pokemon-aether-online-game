@@ -15,6 +15,7 @@ const GUILD_MEMBER_RANK_ICON: Texture2D = preload("res://assets/ui/icons/guild_m
 const GUILD_MEMBER_BANK_RIGHTS_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_bank_rights.svg")
 const GUILD_MEMBER_REMOVE_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_remove.svg")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
+const TrainerAvatarPreviewScript := preload("res://scripts/ui/trainer_avatar_preview.gd")
 const CREATION_COST := 100000
 const REQUIRED_BADGES := 3
 const GUILD_EMBLEM_SIZE := 32
@@ -5300,11 +5301,36 @@ func _build_guild_member_card(
 	row.add_theme_constant_override("separation", 9)
 	margin.add_child(row)
 
-	var presence_dot := _label("●", 15, UI_SUCCESS if online else UI_MUTED)
+	var avatar_frame := PanelContainer.new()
+	avatar_frame.name = "GuildMemberAvatar_%d" % user_id
+	avatar_frame.custom_minimum_size = Vector2(44, 44)
+	avatar_frame.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#071c29e8"), UI_SUCCESS if online else UI_BORDER_INNER, 9, 1)
+	)
+	row.add_child(avatar_frame)
+	var avatar_overlay := Control.new()
+	avatar_overlay.custom_minimum_size = Vector2(42, 42)
+	avatar_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	avatar_frame.add_child(avatar_overlay)
+	var avatar_preview := TrainerAvatarPreviewScript.new() as TrainerAvatarPreview
+	avatar_preview.name = "TrainerAvatarPreview"
+	avatar_preview.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var fallback_source := str(member.get("displayName", member.get("username", "?"))).strip_edges()
+	avatar_preview.set_trainer_state(member, fallback_source.left(1))
+	avatar_overlay.add_child(avatar_preview)
+
+	var presence_dot := _label("●", 11, UI_SUCCESS if online else UI_MUTED)
 	presence_dot.name = "GuildMemberPresenceDot_%d" % user_id
-	presence_dot.custom_minimum_size = Vector2(14, 0)
+	presence_dot.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	presence_dot.position = Vector2(29, 25)
+	presence_dot.size = Vector2(12, 14)
+	presence_dot.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	presence_dot.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	row.add_child(presence_dot)
+	presence_dot.add_theme_color_override("font_shadow_color", Color("#04101b"))
+	presence_dot.add_theme_constant_override("shadow_offset_x", 1)
+	presence_dot.add_theme_constant_override("shadow_offset_y", 1)
+	avatar_overlay.add_child(presence_dot)
 
 	var identity := VBoxContainer.new()
 	identity.name = "GuildMemberIdentityColumn_%d" % user_id

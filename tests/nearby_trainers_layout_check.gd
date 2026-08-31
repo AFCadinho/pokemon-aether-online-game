@@ -14,6 +14,7 @@ func _init() -> void:
 	_check(source.contains('"ui.nearby.subtitle"'), "Header explains the localized roster scope")
 	_check(source.contains("NEARBY_TRAINERS_ICON"), "Roster reuses the dedicated nearby-trainer icon")
 	_check(source.contains("func _create_player_row"), "Roster renders structured trainer cards")
+	_check(source.contains("TrainerAvatarPreviewScript"), "Nearby roster and action cards share sprite-based Trainer portraits")
 	_check(source.contains('nearby_label.text = _t("ui.nearby.badge")'), "Trainer rows expose localized live presence")
 	var open_context_block := source.get_slice("func open_context_for_player", 1).get_slice("func close_topmost", 0)
 	_check(not open_context_block.contains("close_players_panel()"), "Selecting a roster trainer keeps the live list available")

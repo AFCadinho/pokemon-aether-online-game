@@ -18,6 +18,7 @@ func _init() -> void:
 	_check(source.contains("func _refresh_tab_counts("), "Friends, requests and blocked tabs report their counts")
 	_check(source.contains("friends_summary_label.text ="), "Friends view reports total and online trainers")
 	_check(source.contains("func _create_user_avatar("), "Trainer rows have a compact identity avatar")
+	_check(source.contains("TrainerAvatarPreviewScript"), "Friend and request avatars render the Trainer's equipped sprite")
 	_check(source.contains("func _user_initials("), "Avatar placeholders remain readable without profile artwork")
 	_check(source.contains('presence_label.text = _presence_label_text(user).to_upper()'), "Trainer cards retain online and last-seen state")
 	_check(source.contains('username_label.text = "@%s"'), "Trainer cards separate display names from usernames")
