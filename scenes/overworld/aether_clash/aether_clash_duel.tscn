@@ -215,6 +215,7 @@ world_access_group_label = "Aether Clash"
 location_id = "aether_clash.duel"
 location_name = "Aether Clash Guild Duel"
 region_id = "aether_clash"
+mount_license_region_id = "kanto"
 weather_profile = "disabled"
 music_track_id = "login.lugia_theme_lofi"
 
