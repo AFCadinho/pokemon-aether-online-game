@@ -42,6 +42,8 @@ func _init() -> void:
 	_check_contains(service_source, '"matchmaking": _dictionary(body.get("matchmaking", {}))', "guild service preserves personal Aether Clash matchmaking state")
 	_check_contains(service_source, '"identifiedEnemyUserIds": _array', "arena state preserves the backward-compatible empty enemy identity field")
 	_check_contains(service_source, '"visibleIdentityUserIds": _array', "arena state preserves server-authoritative nameplate visibility")
+	_check_contains(service_source, '"viewerRoster": _array', "arena state preserves the privacy-filtered Guild roster")
+	_check_contains(service_source, '"recentEliminations": _array', "arena state preserves privacy-filtered elimination notifications")
 	_check_contains(service_source, "func leave_aether_clash_arena", "guild service exposes authoritative voluntary Clash departure")
 	_check_contains(service_source, 'AETHER_CLASH_SESSIONS_ENDPOINT + "/%s/leave"', "voluntary Clash departure uses the session leave endpoint")
 	_check_contains(service_source, "func accept_aether_clash_challenge", "target Guild staff can accept a clash")

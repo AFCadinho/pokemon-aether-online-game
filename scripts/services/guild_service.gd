@@ -436,6 +436,8 @@ func load_aether_clash_arena_state(challenge_id: String) -> Dictionary:
 		"arenaPlayers": _array(body.get("arenaPlayers", [])).duplicate(true),
 		"identifiedEnemyUserIds": _array(body.get("identifiedEnemyUserIds", [])).duplicate(true),
 		"visibleIdentityUserIds": _array(body.get("visibleIdentityUserIds", [])).duplicate(true),
+		"viewerRoster": _array(body.get("viewerRoster", [])).duplicate(true),
+		"recentEliminations": _array(body.get("recentEliminations", [])).duplicate(true),
 		"matchmaking": _dictionary(body.get("matchmaking", {})).duplicate(true),
 		"serverNow": str(body.get("serverNow", "")),
 	}

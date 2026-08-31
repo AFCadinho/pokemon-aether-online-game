@@ -36,6 +36,7 @@ var side_tracker_position_label: Label
 var tracker_collapse_button: Button
 var tracker_top_offset := 76.0
 var tracker_collapsed := false
+var tracker_available := true
 var has_main_tracker := false
 var has_side_tracker := false
 var tracked_main_quest_id := ""
@@ -118,8 +119,16 @@ func set_tracker_top_offset(top_offset: float) -> void:
 	_layout_trackers()
 
 
+func set_tracker_available(available: bool) -> void:
+	if tracker_available == available:
+		return
+	tracker_available = available
+	_layout_trackers()
+	tracker_layout_changed.emit()
+
+
 func get_visible_tracker_count() -> int:
-	if tracker_collapsed:
+	if tracker_collapsed or not tracker_available:
 		return 0
 	return int(has_main_tracker) + int(has_side_tracker)
 
@@ -542,7 +551,7 @@ func _refresh_tracker() -> void:
 func _layout_trackers() -> void:
 	if tracker_panel == null or side_tracker_panel == null or tracker_collapse_button == null:
 		return
-	var content_visible := not tracker_collapsed
+	var content_visible := tracker_available and not tracker_collapsed
 	var next_top := tracker_top_offset
 	tracker_panel.visible = has_main_tracker and content_visible
 	if has_main_tracker:
@@ -552,7 +561,7 @@ func _layout_trackers() -> void:
 	if has_side_tracker:
 		_set_tracker_vertical_offsets(side_tracker_panel, next_top)
 
-	var has_trackers := has_main_tracker or has_side_tracker
+	var has_trackers := tracker_available and (has_main_tracker or has_side_tracker)
 	tracker_collapse_button.visible = has_trackers
 	if not has_trackers:
 		return

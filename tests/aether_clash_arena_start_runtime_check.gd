@@ -56,6 +56,41 @@ func _run() -> void:
 		and hud.matchmaking_hint_label.text.contains("01:00"),
 		"Initial matchmaking state shows the synchronized 60-second search window"
 	)
+	_check(hud.clash_panel.visible, "Arena state opens the contextual Clash panel")
+	_check(hud.roster_guild_name_label.text == "North Stars", "Clash panel names only the viewer's Guild")
+	_check(hud.roster_list.get_child_count() == 2, "Clash panel lists the viewer's Guild roster")
+	_check(
+		hud.battle_summary_label.text == "1 battle in progress",
+		"Clash panel summarizes live arena battles"
+	)
+
+	var elimination_payload := _arena_payload("active", 3, 1)
+	elimination_payload["viewerRoster"] = [
+		{"userId": 1, "displayName": "Admin", "side": "blue", "status": "active"},
+		{"userId": 4, "displayName": "Blue Captain", "side": "blue", "status": "eliminated"},
+	]
+	elimination_payload["recentEliminations"] = [{
+		"engagementId": "elimination-1",
+		"completedAt": elimination_payload["serverNow"],
+		"winnerUserId": 1,
+		"loserUserId": 7,
+		"winnerSide": "blue",
+		"loserSide": "red",
+		"winnerDisplayName": "Admin",
+		"loserDisplayName": null,
+	}]
+	duel.call("_apply_arena_state", elimination_payload)
+	await process_frame
+	_check(
+		hud.elimination_feed.get_child_count() == 1,
+		"A fresh elimination creates one non-blocking arena notification"
+	)
+	if hud.elimination_feed.get_child_count() > 0:
+		var toast_label := hud.elimination_feed.get_child(0).get_child(0).get_child(0) as Label
+		_check(
+			toast_label != null and toast_label.text == "Admin eliminated an enemy player.",
+			"The winning Guild sees its own player but not the opponent's identity"
+		)
 
 	var warning_payload := _arena_payload("active", 4, 2)
 	var warning_now := int(Time.get_unix_time_from_system())
@@ -117,12 +152,19 @@ func _run() -> void:
 	var disabled_payload := _arena_payload("active", 4, 2)
 	disabled_payload["viewerRole"] = "spectator"
 	disabled_payload["viewerSide"] = ""
+	disabled_payload["viewerRoster"] = []
 	disabled_payload["matchmaking"] = {"status": "disabled"}
 	duel.call("_apply_arena_state", disabled_payload)
 	await physics_frame
 	_check(
 		not hud.matchmaking_hint_label.visible,
 		"Spectators do not receive a participant matchmaking countdown"
+	)
+	_check(not hud.roster_scroll.visible, "Public spectators receive no private Guild roster")
+	_check(
+		hud.context_hint_label.text.contains("Aether View")
+		and hud.context_hint_label.text.contains("Master Ball"),
+		"Spectator Clash panel explains arena and battle spectating"
 	)
 
 	duel.call("_apply_arena_state", _arena_payload("entry_open", 3, 5))
@@ -192,8 +234,10 @@ func _run() -> void:
 
 	var overlay_source := FileAccess.get_file_as_string(OVERLAY_SCRIPT)
 	_check(
-		overlay_source.contains('"location", not _is_in_aether_clash_duel()'),
-		"Dedicated match HUD replaces the normal location panel in a duel"
+		overlay_source.contains('"location", not _is_in_aether_clash_duel()')
+		and overlay_source.contains('_set_collapsible_panel_available("hotkey_sidebar", not next_mode)')
+		and overlay_source.contains('set_tracker_available", not next_mode'),
+		"Dedicated match UI replaces location, hotkey and quest tracker surfaces in a duel"
 	)
 	var duel_source := FileAccess.get_file_as_string(
 		"res://scripts/world/aether_clash_duel.gd"
@@ -222,6 +266,15 @@ func _arena_payload(status: String, challenger_count: int, challenged_count: int
 		"serverNow": Time.get_datetime_string_from_unix_time(now, true) + "Z",
 		"viewerRole": "participant",
 		"viewerSide": "blue",
+		"arenaPlayers": [
+			{"userId": 1, "side": "blue", "engagementId": "battle-1"},
+			{"userId": 7, "side": "red", "engagementId": "battle-1"},
+		],
+		"viewerRoster": [
+			{"userId": 1, "displayName": "Admin", "side": "blue", "status": "in_battle"},
+			{"userId": 4, "displayName": "Blue Captain", "side": "blue", "status": "active"},
+		],
+		"recentEliminations": [],
 		"matchmaking": {
 			"status": "searching",
 			"deadlineAt": Time.get_datetime_string_from_unix_time(now + 60, true) + "Z",
