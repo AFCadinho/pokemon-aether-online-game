@@ -186,7 +186,10 @@ func _run() -> void:
 	_check(store.character_preview_palette.visible, "Classic preview exposes its grayscale hair colour")
 	_check(store.character_preview_viewport.get_child_count() == 1, "character preview renders the current trainer")
 	var preview_visual := store.character_preview_viewport.get_child(0) as Node2D
-	_check(preview_visual.position.y <= 160.0 and preview_visual.scale.y <= 3.0, "preview camera leaves room for the trainer's legs and feet")
+	_check(
+		preview_visual.position.y <= 96.0 and preview_visual.scale.y <= 2.25,
+		"preview camera keeps the trainer visible from head to feet"
+	)
 
 	store.set_trainer_gender("female")
 	_check(store.product_buttons.has("mysterious-outfit"), "unisex Mysterious Outfit stays available for female models")
