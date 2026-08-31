@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/battle_point_vendor_npc.tscn" id="8_bp_vendor"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/z_crystal_vendor_npc.tscn" id="9_z_crystal_vendor"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/mega_stone_vendor_npc.tscn" id="10_mega_stone_vendor"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/aether_clash_guide_npc.tscn" id="11_clash_guide"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t1icv"]
 texture = ExtResource("2_tauxp")
@@ -221,6 +222,10 @@ position = Vector2(1328, 944)
 
 [node name="MegaStoneVendor" parent="Entities/NPCs" instance=ExtResource("10_mega_stone_vendor")]
 position = Vector2(1456, 944)
+
+[node name="ClashCoordinator" parent="Entities/NPCs" instance=ExtResource("11_clash_guide")]
+position = Vector2(784, 1360)
+npc_id = "aether_clash_lobby_clash_coordinator"
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1814140839]
 
