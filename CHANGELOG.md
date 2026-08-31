@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Already-owned permanent shop items now appear disabled in catalog lists instead of looking like active purchase options.
+
 - Live Ranked battles now use compact battle cards with clearer matchups, status details, and a dedicated spectate button.
 
 - Z-Crystals now display an ∞ marker in the Bag and held-item picker to show that they can be assigned without being consumed.

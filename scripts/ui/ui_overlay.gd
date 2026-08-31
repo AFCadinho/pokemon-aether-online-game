@@ -20119,17 +20119,19 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	var currency := str(item.get("currency", "money"))
 	var discount_percent := int(item.get("membershipDiscountPercent", 0))
 	var selected := _is_same_market_item(item, market_selected_item)
+	var disabled := _is_market_item_row_disabled(item)
 	var row := PanelContainer.new()
 	row.name = "MarketItem_%s" % item_id
 	row.custom_minimum_size = Vector2(0, 72)
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.mouse_filter = Control.MOUSE_FILTER_STOP
-	row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE if disabled else Control.MOUSE_FILTER_STOP
+	row.mouse_default_cursor_shape = Control.CURSOR_ARROW if disabled else Control.CURSOR_POINTING_HAND
 	row.tooltip_text = str(item.get("shortDesc", ""))
-	row.gui_input.connect(_on_market_item_row_gui_input.bind(item.duplicate(true)))
-	row.mouse_entered.connect(_on_market_item_row_hovered.bind(row, selected, true))
-	row.mouse_exited.connect(_on_market_item_row_hovered.bind(row, selected, false))
-	_apply_market_item_row_style(row, selected, false)
+	if not disabled:
+		row.gui_input.connect(_on_market_item_row_gui_input.bind(item.duplicate(true)))
+		row.mouse_entered.connect(_on_market_item_row_hovered.bind(row, selected, true, false))
+		row.mouse_exited.connect(_on_market_item_row_hovered.bind(row, selected, false, false))
+	_apply_market_item_row_style(row, selected, false, disabled)
 
 	var margin := MarginContainer.new()
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -20164,6 +20166,7 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	item_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	item_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	item_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	item_icon.modulate = Color(0.68, 0.72, 0.76, 0.65) if disabled else Color.WHITE
 	icon_center.add_child(item_icon)
 
 	var text_stack := VBoxContainer.new()
@@ -20178,7 +20181,7 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	name_label.add_theme_font_size_override("font_size", 14)
-	name_label.add_theme_color_override("font_color", UI_TEXT)
+	name_label.add_theme_color_override("font_color", UI_MUTED_TEXT if disabled else UI_TEXT)
 	text_stack.add_child(name_label)
 
 	var desc_label := Label.new()
@@ -20202,7 +20205,7 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	price_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	price_label.add_theme_font_size_override("font_size", 14)
-	price_label.add_theme_color_override("font_color", UI_MONEY)
+	price_label.add_theme_color_override("font_color", UI_MUTED_TEXT if disabled else UI_MONEY)
 	price_stack.add_child(price_label)
 
 	var each_label := Label.new()
@@ -20235,18 +20238,25 @@ func _on_market_item_row_gui_input(event: InputEvent, item: Dictionary) -> void:
 	_on_market_item_selected(item)
 	get_viewport().set_input_as_handled()
 
-func _on_market_item_row_hovered(row: PanelContainer, selected: bool, hovered: bool) -> void:
+func _on_market_item_row_hovered(row: PanelContainer, selected: bool, hovered: bool, disabled: bool = false) -> void:
 	if is_instance_valid(row):
-		_apply_market_item_row_style(row, selected, hovered)
+		_apply_market_item_row_style(row, selected, hovered, disabled)
 
-func _apply_market_item_row_style(row: PanelContainer, selected: bool, hovered: bool = false) -> void:
+func _is_market_item_row_disabled(item: Dictionary) -> bool:
+	return market_mode != "player_sells" and bool(item.get("owned", false))
+
+
+func _apply_market_item_row_style(row: PanelContainer, selected: bool, hovered: bool = false, disabled: bool = false) -> void:
 	var background := UI_SURFACE_INTERACTIVE if not selected else Color("#102b3ded")
 	var border := Color("#2d4b6688") if not selected else Color("#75d7f2")
-	if hovered and not selected:
+	if disabled:
+		background = Color("#09131bbb")
+		border = Color("#263b4d66")
+	if hovered and not selected and not disabled:
 		background = UI_SURFACE_HOVER
 		border = UI_BORDER_FOCUS
 	var style := _make_panel_style(background, border, 8, 1)
-	if selected:
+	if selected and not disabled:
 		style.border_width_left = 3
 		style.shadow_color = Color("#75d7f226")
 		style.shadow_size = 4
