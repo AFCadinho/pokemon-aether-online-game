@@ -42785,6 +42785,7 @@ func start_aether_clash_pvp_match(match_id: String, engagement_id: String) -> bo
 
 func start_aether_clash_pvp_spectate(room_code: String) -> bool:
 	var normalized_room_code := room_code.strip_edges().to_upper()
+	_clear_stale_aether_clash_pvp_spectate_start()
 	if normalized_room_code.is_empty() or pvp_battle_starting:
 		_trace_aether_clash("battle_spectate_skipped", {
 			"roomCode": normalized_room_code,
@@ -42829,6 +42830,22 @@ func start_aether_clash_pvp_spectate(room_code: String) -> bool:
 		"worldBattleKind": str(world.get("active_battle_kind")) if world != null else "",
 	})
 	return started
+
+
+func _clear_stale_aether_clash_pvp_spectate_start() -> void:
+	if not pvp_battle_starting:
+		return
+	var world := get_tree().get_first_node_in_group("world")
+	if world != null and bool(world.get("is_in_battle")):
+		return
+	var stale_room_code := pvp_active_room_code
+	pvp_battle_starting = false
+	pvp_active_room_code = ""
+	_trace_aether_clash("battle_spectate_stale_start_cleared", {
+		"roomCode": stale_room_code,
+		"worldFound": world != null,
+		"worldIsInBattle": bool(world.get("is_in_battle")) if world != null else false,
+	})
 
 
 func _start_pvp_battle_from_response(response: Dictionary) -> void:

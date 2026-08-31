@@ -605,6 +605,18 @@ func request_spectator_orb(_player: Node2D, orb: Node) -> Dictionary:
 func _activate_spectator_camera(fallback_position: Vector2) -> void:
 	if spectator_camera_active or viewer_role != "spectator":
 		return
+	# Closing a spectator battle frees its Battle node while the original
+	# spectate coroutine can still be awaiting setup on that node. Godot will
+	# then never resume that coroutine, so its request guard cannot clear itself.
+	# Reopening Aether View while World is idle is the authoritative signal that
+	# the old request is stale and a new Master Ball click may be accepted.
+	if spectator_battle_request_active and not _world_battle_active():
+		spectator_battle_request_active = false
+		_trace_aether_clash("spectator_battle_request_stale_cleared", {
+			"sessionId": instance_session_id,
+			"localUserId": _local_user_id(),
+			"source": "spectator_camera_reactivated",
+		})
 	var player := _actor_for_user_id(_local_user_id())
 	var player_camera := player.get_node_or_null("Camera2D") as Camera2D if player != null else null
 	if player_camera == null:
