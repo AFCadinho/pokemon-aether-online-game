@@ -10783,7 +10783,7 @@ func _report_pvp_forced_switch_selection_blocked(selection_gate: String) -> void
 		"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
 		"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
 		"inputLocked": battle_input_locked,
-		"pendingAction": pvp_prechoice_buffer.has_pending(),
+		"pendingAction": pvp_prechoice_buffer.has_choice(),
 		"forceSwitchRequired": true,
 	})
 

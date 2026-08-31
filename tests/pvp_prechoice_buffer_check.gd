@@ -27,6 +27,15 @@ func _check_happy_path_and_choice_replacement() -> void:
 	_check_equal(released.get("decision_id"), "decision-7", "choice remains tied to its private decision identity")
 	_check(not buffer.is_window_open(), "release closes the local window")
 	_check(not buffer.has_choice(), "release consumes the local choice once")
+	var battle_source := FileAccess.get_file_as_string("res://scripts/battle/battle.gd")
+	_check(
+		battle_source.contains('"pendingAction": pvp_prechoice_buffer.has_choice()'),
+		"forced-switch diagnostics use the current prechoice buffer API"
+	)
+	_check(
+		not battle_source.contains("pvp_prechoice_buffer.has_pending()"),
+		"forced-switch diagnostics do not call the removed has_pending API"
+	)
 
 
 func _check_stale_boundaries_are_rejected() -> void:

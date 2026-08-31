@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aether Clash battles now leave the waiting screen when the 7.5-minute limit decides the result, and blocked forced-switch selections no longer trigger a script error.
+
 - Aether Clash battle results now count down on the Continue button and automatically return Trainers to the arena after five seconds.
 
 - Aether Clash now waits until Trainers close their previous battle result screen before allowing another collision or automatic match.
