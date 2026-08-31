@@ -159,6 +159,7 @@ func invalidate_owned_species_cache() -> void:
 	_cache_generation += 1
 	_owned_species_cache.clear()
 	_species_search_cache.clear()
+	_species_detail_cache.clear()
 
 func _owned_cache_key(shiny: bool) -> String:
 	return "shiny" if shiny else "normal"
@@ -174,7 +175,7 @@ func _normalize_species_key(species_id: String) -> String:
 	)
 
 
-func get_species_detail(species_id: String) -> Dictionary:
+func get_species_detail(species_id: String, force_refresh: bool = false) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -188,7 +189,7 @@ func get_species_detail(species_id: String) -> Dictionary:
 			"error": "Missing species.",
 		}
 	var cache_key := _normalize_species_key(trimmed_species_id)
-	if _species_detail_cache.has(cache_key):
+	if not force_refresh and _species_detail_cache.has(cache_key):
 		return (_species_detail_cache.get(cache_key, {}) as Dictionary).duplicate(true)
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
