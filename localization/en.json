@@ -3019,6 +3019,8 @@
   "ui.item_dex.requirement.exclusive_choice": "Choose one reward",
   "ui.item_dex.currency.money": "${amount}",
   "ui.item_dex.currency.gems": "{amount} Gems",
+  "ui.item_dex.currency.aetherite": "{amount} Aetherite",
+  "ui.item_dex.currency.battle_points": "{amount} BP",
   "ui.item_dex.source.battle": "Battle",
   "ui.item_dex.source.other": "Other",
   "ui.wild.title": "Wild Pokémon",
