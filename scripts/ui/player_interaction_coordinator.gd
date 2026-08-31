@@ -4,6 +4,7 @@ class_name PlayerInteractionCoordinator
 
 const TradeInvitationDialogScript := preload("res://scripts/ui/trade_invitation_dialog.gd")
 const GuildInvitationDialogScript := preload("res://scripts/ui/guild_invitation_dialog.gd")
+const TrainerAvatarPreviewScript := preload("res://scripts/ui/trainer_avatar_preview.gd")
 const AetherConfirmationDialogScene := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const NEARBY_TRAINERS_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
 const GUILD_INVITATION_POLL_SECONDS := 10.0
@@ -46,6 +47,7 @@ var context_title: Label
 var context_username_label: Label
 var context_status_dot: Label
 var context_status_label: Label
+var context_avatar_preview: TrainerAvatarPreview
 var context_actions: VBoxContainer
 var context_more_actions_expanded := false
 var context_requested_position := Vector2.ZERO
@@ -310,13 +312,10 @@ func _build_ui() -> void:
 		_panel_style(Color("#071c29e8"), UI_ACCENT_SOFT, 10)
 	)
 	context_header.add_child(identity_badge)
-	var identity_initial := Label.new()
-	identity_initial.name = "Initial"
-	identity_initial.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	identity_initial.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	identity_initial.add_theme_font_size_override("font_size", 18)
-	identity_initial.add_theme_color_override("font_color", UI_ACCENT)
-	identity_badge.add_child(identity_initial)
+	context_avatar_preview = TrainerAvatarPreviewScript.new() as TrainerAvatarPreview
+	context_avatar_preview.name = "TrainerAvatarPreview"
+	context_avatar_preview.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	identity_badge.add_child(context_avatar_preview)
 
 	var context_identity := VBoxContainer.new()
 	context_identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -412,14 +411,10 @@ func _create_player_row(player: Dictionary) -> Button:
 		_panel_style(Color("#071c29d9"), UI_ACCENT_FAINT, 10)
 	)
 	content.add_child(identity_badge)
-	var initial := Label.new()
-	initial.text = _player_initial(player)
-	initial.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	initial.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	initial.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	initial.add_theme_font_size_override("font_size", 17)
-	initial.add_theme_color_override("font_color", UI_ACCENT)
-	identity_badge.add_child(initial)
+	var avatar_preview := TrainerAvatarPreviewScript.new() as TrainerAvatarPreview
+	avatar_preview.name = "TrainerAvatarPreview"
+	avatar_preview.set_trainer_state(player, _player_initial(player))
+	identity_badge.add_child(avatar_preview)
 
 	var identity := VBoxContainer.new()
 	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -507,9 +502,8 @@ func _render_context_menu() -> void:
 		return
 	context_title.text = _player_primary_name(current_target)
 	context_username_label.text = "@%s" % str(current_target.get("username", "")).strip_edges()
-	var initial_label := context_menu.find_child("Initial", true, false) as Label
-	if initial_label != null:
-		initial_label.text = _player_initial(current_target)
+	if context_avatar_preview != null:
+		context_avatar_preview.set_trainer_state(current_target, _player_initial(current_target))
 	_refresh_context_status()
 	_clear_children(context_actions)
 	if context_more_actions_expanded:

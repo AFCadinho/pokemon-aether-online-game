@@ -49,12 +49,29 @@ func _check_trade_context_action() -> void:
 	coordinator.trade_capabilities = {"enabled": true}
 	coordinator.trade_capabilities_loaded = true
 	coordinator.open_context_for_player(
-		{"userId": 7, "username": "misty", "displayName": "Misty"},
+		{
+			"userId": 7,
+			"username": "misty",
+			"displayName": "Misty",
+			"gender": "female",
+			"appearance": {
+				"body": "Gen4_Base_F_v1",
+				"hair": "Aether_Blossom_Hair",
+				"top": "Aether_Blossom_Dress",
+			},
+		},
 		Vector2(400, 200)
 	)
 	await process_frame
 	await process_frame
 	await process_frame
+	_check_equal(
+		coordinator.context_avatar_preview != null
+		and coordinator.context_avatar_preview.portrait != null
+		and coordinator.context_avatar_preview.portrait.visible,
+		true,
+		"trainer context card renders the selected player's sprite portrait"
+	)
 	_check_equal(
 		is_equal_approx(
 			coordinator.context_menu.size.y,
