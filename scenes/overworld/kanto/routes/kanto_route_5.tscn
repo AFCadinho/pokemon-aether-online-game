@@ -17,6 +17,7 @@ size = Vector2(128, 32)
 
 [node name="KantoRoute5" type="Node2D"]
 script = ExtResource("2_map")
+placeholder_runtime_generation_enabled = true
 map_id = "kanto_route_5"
 map_region_name = "Kanto"
 map_display_name = "Route 5"

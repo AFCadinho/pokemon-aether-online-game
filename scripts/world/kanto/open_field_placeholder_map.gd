@@ -3,6 +3,9 @@ extends "res://scripts/world/map_metadata.gd"
 const MAP_SIZE := Vector2i(24, 18)
 const COLLISION_SOURCE_ID := 0
 
+@export_category("Prototype Placeholder")
+@export var placeholder_runtime_generation_enabled := false
+@export_category("")
 @export var map_size := MAP_SIZE
 @export_enum("top", "bottom", "left", "right") var connection_side := "top"
 @export_range(0, 255, 1) var opening_from := 10
@@ -31,6 +34,13 @@ const COLLISION_SOURCE_ID := 0
 
 
 func _ready() -> void:
+	if not placeholder_runtime_generation_enabled:
+		push_error(
+			"Open-field placeholder runtime generation is disabled. "
+			+ "Only explicit prototype maps may enable it."
+		)
+		super._ready()
+		return
 	_build_map_boundaries()
 	_build_water_connection()
 	super._ready()
