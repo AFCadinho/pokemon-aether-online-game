@@ -3941,7 +3941,16 @@ func _should_present_pvp_battle_result(result: Dictionary) -> bool:
 	return (
 		bool(result.get("noContest", false))
 		or str(result.get("winner", "")).strip_edges() != ""
-		or reason in ["win", "ended", "battle_end", "forfeit", "timeout", "disconnect"]
+		or reason in [
+			"win",
+			"ended",
+			"battle_end",
+			"forfeit",
+			"timeout",
+			"disconnect",
+			"battle_time_limit",
+			"battle_time_limit_draw",
+		]
 	)
 
 
@@ -3979,6 +3988,9 @@ func _refresh_pvp_battle_result_copy(result: Dictionary) -> void:
 			if winner_name != ""
 			else _t("battle.result.over")
 		)
+		battle_result_title.modulate = Color("f5df9a")
+	elif winner_name == "":
+		battle_result_title.text = _t("battle.result.over")
 		battle_result_title.modulate = Color("f5df9a")
 	elif local_won:
 		battle_result_title.text = _t("battle.result.victory")
@@ -4098,7 +4110,7 @@ func _format_battle_result_reason(reason: String) -> String:
 	match reason:
 		"forfeit":
 			return _t("battle.result.reason.forfeit")
-		"timeout":
+		"timeout", "battle_time_limit", "battle_time_limit_draw":
 			return _t("battle.result.reason.timeout")
 		"disconnect":
 			return _t("battle.result.reason.disconnect")
@@ -13904,6 +13916,8 @@ func _finish_pvp_authoritative_terminal(message: Dictionary) -> void:
 		pvp_pending_authoritative_terminal = message.duplicate(true)
 		return
 	pvp_pending_authoritative_terminal.clear()
+	if is_animation_free_terminal:
+		_discard_pvp_updates_superseded_by_terminal()
 	var winner_side := _get_pvp_state_player_id_for_raw_player_id(str(message.get("winnerSide", "")))
 	var loser_side := _get_pvp_state_player_id_for_raw_player_id(str(message.get("loserSide", "")))
 	_finish_battle({
@@ -13913,6 +13927,15 @@ func _finish_pvp_authoritative_terminal(message: Dictionary) -> void:
 		"battleEventSeq": message.get("battleEventSeq", -1),
 		"terminalSource": str(message.get("source", "DURABLE_BATTLE_EVENT")),
 	})
+
+
+func _discard_pvp_updates_superseded_by_terminal() -> void:
+	# The durable terminal is ordered after the accepted battle commands. Once no
+	# render batch is active, queued acknowledgements/snapshots cannot add valid
+	# presentation work and must not reopen or retain the action wait.
+	pvp_realtime_updates.clear()
+	pvp_realtime_deferred_updates.clear()
+	pvp_event_queue.pending_updates.clear()
 
 
 func _retry_pending_pvp_authoritative_terminal() -> void:

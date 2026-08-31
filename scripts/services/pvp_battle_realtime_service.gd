@@ -778,12 +778,16 @@ static func should_defer_authoritative_terminal_until_render(
 	has_pending_updates: bool,
 	require_mechanical_state_ended := true
 ) -> bool:
-	return (
-		(require_mechanical_state_ended and not mechanical_state_ended)
-		or queue_is_rendering
-		or current_batch_id.strip_edges() != ""
-		or has_pending_updates
-	)
+	if queue_is_rendering or current_batch_id.strip_edges() != "":
+		return true
+	if not require_mechanical_state_ended:
+		# An animation-free durable terminal (timeout, disconnect, forfeit, or
+		# Clash battle limit) supersedes submitted-choice acknowledgements and
+		# other transport updates that have not started rendering. Those updates
+		# can never advance after the server has closed the battle, so waiting for
+		# the queue to empty would strand both clients on their Waiting screen.
+		return false
+	return not mechanical_state_ended or has_pending_updates
 
 
 static func is_animation_free_authoritative_terminal_reason(end_reason: String) -> bool:
