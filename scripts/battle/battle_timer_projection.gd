@@ -13,8 +13,11 @@ var timer_revision := 0
 var aggregate_revision := 0
 var battle_event_seq := 0
 var participants: Dictionary = {}
+var battle_limit: Dictionary = {}
 var server_anchor_ms := 0
 var monotonic_anchor_ms := 0
+var wall_clock_server_anchor_ms := 0
+var wall_clock_monotonic_anchor_ms := 0
 var contract_enabled := false
 var legacy_enabled := false
 var mechanically_suspended := false
@@ -28,8 +31,11 @@ func reset() -> void:
 	aggregate_revision = 0
 	battle_event_seq = 0
 	participants = {}
+	battle_limit = {}
 	server_anchor_ms = 0
 	monotonic_anchor_ms = 0
+	wall_clock_server_anchor_ms = 0
+	wall_clock_monotonic_anchor_ms = 0
 	contract_enabled = false
 	legacy_enabled = false
 	mechanically_suspended = false
@@ -64,6 +70,8 @@ func apply_snapshot(snapshot: Dictionary, local_monotonic_ms: int = Time.get_tic
 	aggregate_revision = int(snapshot.get("aggregateRevision", aggregate_revision))
 	battle_event_seq = int(snapshot.get("battleEventSeq", battle_event_seq))
 	participants = (snapshot.get("participants", {}) as Dictionary).duplicate(true)
+	var battle_limit_value: Variant = snapshot.get("battleLimit", {})
+	battle_limit = (battle_limit_value as Dictionary).duplicate(true) if battle_limit_value is Dictionary else {}
 	_sample_server_time(_server_ms(snapshot), local_monotonic_ms, true)
 	contract_enabled = authority in [BATTLE_BANK_V1_SHADOW, BATTLE_BANK_V1_AUTHORITY]
 	if contract_enabled:
@@ -191,6 +199,8 @@ func apply_event(event: Dictionary, local_monotonic_ms: int = Time.get_ticks_mse
 		participants[player_id] = current
 	if payload.has("participants") and payload.get("participants") is Dictionary:
 		participants = (payload.get("participants") as Dictionary).duplicate(true)
+	if payload.has("battleLimit") and payload.get("battleLimit") is Dictionary:
+		battle_limit = (payload.get("battleLimit") as Dictionary).duplicate(true)
 	timer_revision = incoming_revision
 	battle_event_seq = max(battle_event_seq, seq)
 	if payload.has("serverNow") or payload.has("serverNowMs"):
@@ -210,6 +220,29 @@ func estimated_server_now_ms(local_monotonic_ms: int = Time.get_ticks_msec()) ->
 	if reconnect_paused:
 		return reconnect_frozen_server_ms
 	return server_anchor_ms + max(local_monotonic_ms - monotonic_anchor_ms, 0)
+
+
+func estimated_wall_clock_server_now_ms(local_monotonic_ms: int = Time.get_ticks_msec()) -> int:
+	return wall_clock_server_anchor_ms + max(local_monotonic_ms - wall_clock_monotonic_anchor_ms, 0)
+
+
+func battle_limit_display(local_monotonic_ms: int = Time.get_ticks_msec()) -> Dictionary:
+	if not contract_enabled or battle_limit.is_empty():
+		return {}
+	var deadline_ms := _timestamp_ms(battle_limit, "deadlineAtMs", "deadlineAt")
+	var duration_ms := maxi(int(battle_limit.get("durationMs", 0)), 0)
+	if deadline_ms <= 0 or duration_ms <= 0:
+		return {}
+	var status := str(battle_limit.get("status", "ACTIVE")).strip_edges().to_upper()
+	if status == "RESOLVED":
+		return {}
+	var remaining_ms := maxi(deadline_ms - estimated_wall_clock_server_now_ms(local_monotonic_ms), 0)
+	return {
+		"state": "TIEBREAK" if remaining_ms <= 0 or status == "RESOLVING" else "ACTIVE",
+		"remainingMs": remaining_ms,
+		"durationMs": duration_ms,
+		"deadlineAtMs": deadline_ms,
+	}
 
 
 func pause_for_reconnect(local_monotonic_ms: int = Time.get_ticks_msec()) -> void:
@@ -318,6 +351,14 @@ func _display_state(timer: Dictionary, now: int, actionable: int, deadline: int)
 func _sample_server_time(server_ms: int, local_ms: int, force_snap: bool) -> void:
 	if server_ms <= 0:
 		return
+	var wall_predicted := estimated_wall_clock_server_now_ms(local_ms) if wall_clock_server_anchor_ms > 0 else server_ms
+	if wall_clock_server_anchor_ms == 0:
+		wall_clock_server_anchor_ms = server_ms
+	else:
+		# The Clash deadline is a wall-clock limit. A delayed snapshot may carry a
+		# slightly older server sample, but it must never make the countdown grow.
+		wall_clock_server_anchor_ms = maxi(wall_predicted, server_ms)
+	wall_clock_monotonic_anchor_ms = local_ms
 	var predicted := estimated_server_now_ms(local_ms) if server_anchor_ms > 0 else server_ms
 	if force_snap or abs(server_ms - predicted) >= LARGE_DRIFT_MS or server_anchor_ms == 0:
 		server_anchor_ms = server_ms

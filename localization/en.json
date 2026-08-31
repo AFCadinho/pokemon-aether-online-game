@@ -3470,6 +3470,8 @@
   "battle.timer.reconnect": "Reconnect {time}",
   "battle.timer.starts": "Starts {time}",
   "battle.timer.time": "Time {time}",
+  "battle.timer.clash_limit": "CLASH {time}",
+  "battle.timer.clash_tiebreak": "TIEBREAK…",
   "battle.timer.choosing": "Choosing",
   "battle.timer.scheduled": "Scheduled",
   "battle.timer.paused": "Paused",

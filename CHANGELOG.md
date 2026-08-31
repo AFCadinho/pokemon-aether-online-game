@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aether Clash battles now show one synchronized 7.5-minute Clash timer in both the regular battle header and the Damage Calculator, with clear final-minute and tiebreak warnings.
+
 - The Quest Log now shows item, currency, and skill-XP rewards in each quest's full detail view while keeping the overworld tracker compact.
 
 - The in-arena Clash status now stays compact by default and opens the Guild player roster only when requested.

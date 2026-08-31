@@ -3467,6 +3467,8 @@
   "battle.timer.reconnect": "重新连接 {time}",
   "battle.timer.starts": "开始 {time}",
   "battle.timer.time": "时间 {time}",
+  "battle.timer.clash_limit": "CLASH {time}",
+  "battle.timer.clash_tiebreak": "判定中…",
   "battle.timer.choosing": "选择",
   "battle.timer.scheduled": "已安排",
   "battle.timer.paused": "已暂停",
