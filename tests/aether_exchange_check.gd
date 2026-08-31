@@ -58,14 +58,20 @@ func _run() -> void:
 	_check(popup.custom_minimum_size == Vector2(1040, 660), "Exchange popup uses the production workspace size")
 	_check(popup.size == Vector2(1040, 660), "Exchange popup starts at its fixed workspace size")
 	_check(popup.call("_get_minimum_size") == Vector2(1040, 660), "Exchange content cannot increase the popup minimum size")
-	_check((popup.get("tab_buttons") as Dictionary).size() == 5, "Exchange popup exposes Browse, Wanted, Wishlist, Sell, and My Exchange")
-	_check((popup.get("filter_buttons") as Dictionary).size() == 2, "Exchange popup exposes only Items and Pokémon filters")
-	_check(not (popup.get("filter_buttons") as Dictionary).has(""), "Browse does not expose a combined All filter")
+	_check((popup.get("tab_buttons") as Dictionary).size() == 3, "Exchange groups navigation into Market, New order, and My orders")
+	var mode_selector := popup.get("mode_selector") as OptionButton
+	var asset_filter_selector := popup.get("asset_filter_selector") as OptionButton
+	_check(mode_selector != null and mode_selector.item_count == 2, "Market choices live in one contextual selector")
+	_check(str(mode_selector.get_item_metadata(0)) == "browse" and str(mode_selector.get_item_metadata(1)) == "wanted", "Market selector separates listings from wanted items")
+	_check(asset_filter_selector != null and asset_filter_selector.item_count == 2, "Asset type uses one compact Items or Pokémon selector")
+	_check(mode_selector.get_theme_icon("arrow").resource_path.ends_with("photo_mode_dropdown_arrow.svg"), "Context selector follows the clean Aether dropdown styling")
+	_check(asset_filter_selector.get_popup().get_theme_stylebox("panel") is StyleBoxFlat, "Asset selector menu uses the shared Aether surface")
 	_check(str(popup.get("asset_filter")) == "item", "Browse defaults to the Items category")
 	var search_input := popup.get("search_input") as LineEdit
 	var refresh_button := popup.get("refresh_button") as Button
 	_check(search_input.get_theme_stylebox("normal") is StyleBoxFlat, "Exchange search field uses the styled input surface")
 	_check(search_input.get_theme_stylebox("focus") is StyleBoxFlat, "Exchange search field has a styled focus state")
+	_check(refresh_button.text == "↻" and refresh_button.custom_minimum_size.x == 38.0, "Refresh stays available as a quiet compact action")
 	_check(refresh_button.get_theme_stylebox("normal") is StyleBoxFlat, "Exchange Refresh action uses the styled button surface")
 	_check(refresh_button.get_theme_stylebox("hover") is StyleBoxFlat, "Exchange Refresh action has a styled hover state")
 	var advanced_filter_button := popup.get("advanced_filter_button") as Button
@@ -167,9 +173,11 @@ func _run() -> void:
 	popup.set("asset_filter", "item")
 	popup.call("_hide_advanced_filter_panel")
 	var fixed_popup_rect := Rect2(popup.position, popup.size)
-	((popup.get("tab_buttons") as Dictionary).get("sell") as Button).pressed.emit()
+	((popup.get("tab_buttons") as Dictionary).get("create") as Button).pressed.emit()
 	await process_frame
 	await process_frame
+	_check(str(popup.get("active_tab")) == "sell", "New order opens directly on the familiar selling flow")
+	_check(mode_selector.item_count == 2 and str(mode_selector.get_item_metadata(1)) == "wishlist", "New order groups selling and item requests contextually")
 	_check(Rect2(popup.position, popup.size) == fixed_popup_rect, "Clicking Sell preserves the complete Exchange window geometry")
 	var list_container := popup.get("list_container") as GridContainer
 	var empty_state := list_container.get_child(0) as Label
@@ -189,9 +197,9 @@ func _run() -> void:
 	popup.set("active_tab", "sell")
 	popup.set("asset_filter", "")
 	popup.call("_refresh_controls")
-	var filter_buttons := popup.get("filter_buttons") as Dictionary
-	_check((filter_buttons.get("item") as Button).visible, "Sell keeps the Items category visible")
-	_check((filter_buttons.get("pokemon") as Button).visible, "Sell keeps the Pokémon category visible")
+	_check(asset_filter_selector.visible, "Sell keeps the compact asset type selector visible")
+	_check(str(asset_filter_selector.get_item_metadata(0)) == "item", "Sell keeps the Items category available")
+	_check(str(asset_filter_selector.get_item_metadata(1)) == "pokemon", "Sell keeps the Pokémon category available")
 	_check(str(popup.get("asset_filter")) == "item", "Sell defaults to the Items category")
 	popup.set("sellable_items", [{
 		"itemId": "poke-ball",

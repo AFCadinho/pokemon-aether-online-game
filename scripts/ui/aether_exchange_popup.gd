@@ -38,6 +38,7 @@ const POKEMON_NATURES: Array[String] = [
 ]
 
 var active_tab := "browse"
+var active_section := "market"
 var asset_filter := "item"
 var browse_listings: Array = []
 var browse_wishes: Array = []
@@ -87,7 +88,8 @@ var title_label: Label
 var subtitle_label: Label
 var money_label: Label
 var tab_buttons: Dictionary = {}
-var filter_buttons: Dictionary = {}
+var mode_selector: OptionButton
+var asset_filter_selector: OptionButton
 var search_input: LineEdit
 var search_timer: Timer
 var refresh_button: Button
@@ -377,26 +379,35 @@ func _build_header() -> Control:
 
 func _build_tabs() -> Control:
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-	for tab: String in ["browse", "wanted", "wishlist", "sell", "mine"]:
+	row.add_theme_constant_override("separation", 6)
+	for section: String in ["market", "create", "mine"]:
 		var button := Button.new()
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.custom_minimum_size = Vector2(0, 38)
-		button.pressed.connect(_on_tab_pressed.bind(tab))
+		button.custom_minimum_size = Vector2(0, 40)
+		button.pressed.connect(_on_section_pressed.bind(section))
 		row.add_child(button)
-		tab_buttons[tab] = button
+		tab_buttons[section] = button
 	return row
 
 
 func _build_filters() -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
+	mode_selector = OptionButton.new()
+	mode_selector.name = "ExchangeModeSelector"
+	mode_selector.custom_minimum_size = Vector2(150, 34)
+	mode_selector.item_selected.connect(_on_mode_selected)
+	_apply_filter_option_style(mode_selector)
+	row.add_child(mode_selector)
+	asset_filter_selector = OptionButton.new()
+	asset_filter_selector.name = "ExchangeAssetTypeSelector"
+	asset_filter_selector.custom_minimum_size = Vector2(125, 34)
 	for filter_id: String in ["item", "pokemon"]:
-		var button := Button.new()
-		button.custom_minimum_size = Vector2(110, 34)
-		button.pressed.connect(_on_filter_pressed.bind(filter_id))
-		row.add_child(button)
-		filter_buttons[filter_id] = button
+		asset_filter_selector.add_item("")
+		asset_filter_selector.set_item_metadata(asset_filter_selector.item_count - 1, filter_id)
+	asset_filter_selector.item_selected.connect(_on_asset_filter_selected)
+	_apply_filter_option_style(asset_filter_selector)
+	row.add_child(asset_filter_selector)
 	search_input = LineEdit.new()
 	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	search_input.custom_minimum_size = Vector2(300, 34)
@@ -423,9 +434,10 @@ func _build_filters() -> Control:
 	_apply_toolbar_accent_style(browse_sort_button, UI_GOLD)
 	row.add_child(browse_sort_button)
 	refresh_button = Button.new()
-	refresh_button.custom_minimum_size = Vector2(105, 34)
+	refresh_button.custom_minimum_size = Vector2(38, 34)
 	refresh_button.pressed.connect(_refresh_current_tab)
 	refresh_button.name = "RefreshButton"
+	refresh_button.text = "↻"
 	_apply_button_style(refresh_button)
 	row.add_child(refresh_button)
 	return row
@@ -755,6 +767,7 @@ func _on_tab_pressed(tab: String) -> void:
 	if request_busy or tab == active_tab:
 		return
 	active_tab = tab
+	active_section = _section_for_tab(tab)
 	_normalize_filter_for_tab()
 	if active_tab not in ["browse", "wanted", "wishlist"]:
 		_hide_advanced_filter_panel()
@@ -770,6 +783,33 @@ func _on_tab_pressed(tab: String) -> void:
 		_:
 			_render_current_list()
 	_refresh_controls()
+
+
+func _on_section_pressed(section: String) -> void:
+	if request_busy or section == active_section:
+		return
+	active_section = section
+	match section:
+		"market":
+			await _on_tab_pressed("browse")
+		"create":
+			await _on_tab_pressed("sell")
+		_:
+			await _on_tab_pressed("mine")
+
+
+func _on_mode_selected(index: int) -> void:
+	if request_busy or mode_selector == null or index < 0 or index >= mode_selector.item_count:
+		return
+	var tab := str(mode_selector.get_item_metadata(index))
+	if not tab.is_empty():
+		await _on_tab_pressed(tab)
+
+
+func _on_asset_filter_selected(index: int) -> void:
+	if request_busy or asset_filter_selector == null or index < 0 or index >= asset_filter_selector.item_count:
+		return
+	await _on_filter_pressed(str(asset_filter_selector.get_item_metadata(index)))
 
 
 func _on_filter_pressed(filter_id: String) -> void:
@@ -2210,16 +2250,11 @@ func _refresh_controls() -> void:
 	_normalize_filter_for_tab()
 	for key: Variant in tab_buttons:
 		var button := tab_buttons[key] as Button
-		button.text = _t("ui.exchange.tab.%s" % str(key))
+		button.text = _t("ui.exchange.nav.%s" % str(key))
 		button.disabled = request_busy
-		_apply_button_style(button, str(key) == active_tab)
-	for key: Variant in filter_buttons:
-		var button := filter_buttons[key] as Button
-		button.visible = active_tab in ["browse", "sell", "mine"]
-		var label_key := "all" if str(key).is_empty() else str(key)
-		button.text = _t("ui.exchange.filter.%s" % label_key)
-		button.disabled = request_busy
-		_apply_button_style(button, str(key) == asset_filter)
+		_apply_button_style(button, str(key) == active_section)
+	_refresh_mode_selector()
+	_refresh_asset_filter_selector()
 	search_input.editable = not request_busy
 	search_input.placeholder_text = _t(
 		"ui.exchange.search_wishlist" if active_tab == "wishlist"
@@ -2247,17 +2282,67 @@ func _refresh_controls() -> void:
 	if advanced_filter_clear_button != null:
 		advanced_filter_clear_button.disabled = request_busy
 	if refresh_button != null:
-		refresh_button.text = _t("ui.exchange.refresh")
+		refresh_button.text = "↻"
+		refresh_button.tooltip_text = _t("ui.exchange.refresh")
 		refresh_button.disabled = request_busy
 	_refresh_money()
 
 
 func _normalize_filter_for_tab() -> void:
+	active_section = _section_for_tab(active_tab)
 	if active_tab in ["wanted", "wishlist"]:
 		asset_filter = "item"
 		return
 	if asset_filter not in ["item", "pokemon"]:
 		asset_filter = "item"
+
+
+func _section_for_tab(tab: String) -> String:
+	if tab in ["browse", "wanted"]:
+		return "market"
+	if tab in ["sell", "wishlist"]:
+		return "create"
+	return "mine"
+
+
+func _refresh_mode_selector() -> void:
+	if mode_selector == null:
+		return
+	var modes: Array[String] = []
+	if active_section == "market":
+		modes.assign(["browse", "wanted"])
+	elif active_section == "create":
+		modes.assign(["sell", "wishlist"])
+	var rebuild := mode_selector.item_count != modes.size()
+	if not rebuild:
+		for index in range(modes.size()):
+			if str(mode_selector.get_item_metadata(index)) != modes[index]:
+				rebuild = true
+				break
+	if rebuild:
+		mode_selector.clear()
+		for mode: String in modes:
+			mode_selector.add_item("")
+			mode_selector.set_item_metadata(mode_selector.item_count - 1, mode)
+	for index in range(mode_selector.item_count):
+		var mode := str(mode_selector.get_item_metadata(index))
+		mode_selector.set_item_text(index, _t("ui.exchange.mode.%s" % mode))
+		if mode == active_tab:
+			mode_selector.select(index)
+	mode_selector.visible = not modes.is_empty()
+	mode_selector.disabled = request_busy
+
+
+func _refresh_asset_filter_selector() -> void:
+	if asset_filter_selector == null:
+		return
+	for index in range(asset_filter_selector.item_count):
+		var filter_id := str(asset_filter_selector.get_item_metadata(index))
+		asset_filter_selector.set_item_text(index, _t("ui.exchange.filter.%s" % filter_id))
+		if filter_id == asset_filter:
+			asset_filter_selector.select(index)
+	asset_filter_selector.visible = active_tab in ["browse", "sell", "mine"]
+	asset_filter_selector.disabled = request_busy
 
 
 func _center_in_parent() -> void:
