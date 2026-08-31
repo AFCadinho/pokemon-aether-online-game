@@ -91,6 +91,8 @@ func _check_pvp_runtime_translation() -> void:
 			"name": "Ranked Queue",
 			"mode": "ranked",
 			"status": "active",
+			"formatKey": "aether-ou",
+			"formatName": "Aether OU",
 			"battlePointRewards": {
 				"enabled": true,
 				"currency": "battle_points",
@@ -99,8 +101,23 @@ func _check_pvp_runtime_translation() -> void:
 				"lossAmount": 500,
 			},
 		},
+		{
+			"id": "ranked_aether_uu_queue_v1",
+			"name": "Aether UU Ranked Queue",
+			"mode": "ranked",
+			"status": "active",
+			"formatKey": "aether-uu",
+			"formatName": "Aether UU",
+			"battlePointRewards": {"enabled": false},
+		},
 	]
 	overlay.call("_populate_pvp_queue_select", active_ranked_queues)
+	_check(format_select.item_count == 2, "Ranked matchmaking exposes both Aether OU and Aether UU")
+	_check(format_select.get_item_text(0) == "Aether OU" and format_select.get_item_text(1) == "Aether UU", "Ranked tier labels come from the server queue catalog")
+	overlay.call("_update_pvp_active_format_from_queue_id", "ranked_aether_uu_queue_v1")
+	var leaderboard_title := overlay.get("pvp_leaderboard_title_label") as Label
+	_check(leaderboard_title != null and leaderboard_title.text == "Aether UU-ranglijst", "Ranked data headings follow the selected tier")
+	overlay.call("_update_pvp_active_format_from_queue_id", "ranked_queue_v1")
 	var rewards_intro := overlay.get("pvp_ranked_rewards_intro_label") as Label
 	var reward_win_labels: Array = overlay.get("pvp_ranked_battle_reward_win_value_labels") as Array
 	_check(rewards_status != null and rewards_status.text == "BATTLE REWARDS ACTIEF", "Ranked reward availability follows the authoritative queue state")
@@ -186,14 +203,18 @@ func _check_pvp_runtime_translation() -> void:
 	room_create_button.emit_signal("pressed")
 	await process_frame
 	_check(room_tier_row != null and room_tier_row.visible, "Room creation exposes the optional battle tier")
-	_check(room_tier_select != null and room_tier_select.item_count == 3, "Players can choose no tier, Aether OU, or Champions ZA")
+	_check(room_tier_select != null and room_tier_select.item_count == 4, "Players can choose no tier, Aether OU, Aether UU, or Champions ZA")
 	_check(str(room_tier_select.get_selected_metadata()) == "none", "No tier is selected by default")
 	_check(room_tier_select.get_item_text(0) == "Geen tier", "The default tier is localized in Dutch")
 	_check(room_tier_select.get_item_text(1) == "Aether OU", "Aether OU is available for unrated rooms")
 	room_tier_select.select(1)
 	_check(overlay.call("_selected_pvp_room_format_id") == "gen9nationaldex", "Aether OU resolves to the reviewed National Dex engine")
 	room_tier_select.select(2)
-	_check(room_tier_select.get_item_text(2) == "Champions ZA", "Champions ZA is available without a developer label")
+	_check(room_tier_select.get_item_text(2) == "Aether UU", "Aether UU is available for unrated rooms")
+	_check(str(room_tier_select.get_selected_metadata()) == "aether-uu", "Aether UU keeps its public tier identity")
+	_check(overlay.call("_selected_pvp_room_format_id") == "gen9nationaldex", "Aether UU resolves to the reviewed National Dex engine")
+	room_tier_select.select(3)
+	_check(room_tier_select.get_item_text(3) == "Champions ZA", "Champions ZA is available without a developer label")
 	_check(str(room_tier_select.get_selected_metadata()) == "pokeaether-mega-z-test", "Champions ZA keeps its bounded room identity")
 	_check(overlay.call("_selected_pvp_room_format_id") == "pokeaether-mega-z-test-v1", "Champions ZA maps to the versioned engine format")
 	_check(room_timer_check != null and room_timer_check.visible, "Training room creation exposes the shared decision timer option")

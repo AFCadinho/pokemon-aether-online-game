@@ -27,6 +27,17 @@ func _init() -> void:
 		bool(CalcdexSnapshot.normalize_response(mega_format_response, revision).get("success", false)),
 		"accepts the exact Champions ZA calculator format"
 	)
+	var uu_format_response: Dictionary = response.duplicate(true)
+	uu_format_response["snapshot"]["format"] = {
+		"formatKey": "aether-uu",
+		"engineFormatId": "gen9nationaldex",
+		"generation": 9,
+		"gameType": "singles",
+	}
+	_check(
+		bool(CalcdexSnapshot.normalize_response(uu_format_response, revision).get("success", false)),
+		"accepts the Aether UU calculator format"
+	)
 	var wire_response: Dictionary = JSON.parse_string(JSON.stringify(response))
 	wire_response["status"] = 200.0
 	var wire_revision: Dictionary = JSON.parse_string(JSON.stringify(revision))

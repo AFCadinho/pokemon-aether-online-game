@@ -42,6 +42,10 @@ const GUILD_LANGUAGE_OPTIONS: Array[String] = [
 	"Other",
 ]
 const GUILD_ASSIGNABLE_ROLES: Array[String] = ["recruit", "member", "captain"]
+const AETHER_CLASH_TIERS: Array[Dictionary] = [
+	{"id": "aether-ou", "label": "ui.guild.aether_clash.tier.aether_ou"},
+	{"id": "aether-uu", "label": "ui.guild.aether_clash.tier.aether_uu"},
+]
 const GUILD_MEMBER_ACTION_PM := 1
 const GUILD_MEMBER_ACTION_CHANGE_RANK := 2
 const GUILD_MEMBER_ACTION_BANK_RIGHTS := 3
@@ -7448,8 +7452,9 @@ func _confirm_aether_clash_challenge(guild: Dictionary) -> void:
 	var tier_selector := OptionButton.new()
 	tier_selector.name = "GuildAetherClashTier"
 	tier_selector.custom_minimum_size = Vector2(0, 42)
-	tier_selector.add_item(_t("ui.guild.aether_clash.tier.aether_ou"))
-	tier_selector.set_item_metadata(0, "aether-ou")
+	for tier: Dictionary in AETHER_CLASH_TIERS:
+		tier_selector.add_item(_t(str(tier.get("label", ""))))
+		tier_selector.set_item_metadata(tier_selector.item_count - 1, str(tier.get("id", "")))
 	dialog.style_option_button(tier_selector)
 	dialog.add_custom_control(_aether_clash_dialog_field(
 		_t("ui.guild.aether_clash.tier_label"),
