@@ -943,6 +943,10 @@ func _run() -> void:
 	)
 	var leader_contribution := popup.find_child("GuildMemberContributionLabel_1", true, false) as Label
 	_check(leader_contribution != null and leader_contribution.text == "124,350", "member roster shows contributed Guild EXP")
+	_check(
+		popup.find_child("GuildMemberPresenceDot_1", true, false) == null,
+		"member avatars avoid a redundant presence dot"
+	)
 	var leader_status_column := popup.find_child("GuildMemberStatusColumn_1", true, false) as Control
 	var member_status_column := popup.find_child("GuildMemberStatusColumn_2", true, false) as Control
 	var leader_rank_column := popup.find_child("GuildMemberRankColumn_1", true, false) as Control
