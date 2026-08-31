@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Clash Coordinator's question menus now use a compact two-column layout so they cover less of the arena view.
+
 - Ranked now has a Rewards tab that previews planned Battle Point payouts and future placement, objective, and season rewards while clearly showing that grants are not active yet.
 
 - The Aether Clash Lobby now has a Clash Coordinator with categorized help for Guild Duels, battles, rules, entry, spectating, and the future Battle Royale format.

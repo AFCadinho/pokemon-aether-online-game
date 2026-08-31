@@ -152,7 +152,9 @@ func _choose_root_topic() -> String:
 		LocalizationManager.text("npc.aether_clash_guide.menu.title"),
 		LocalizationManager.text("npc.aether_clash_guide.menu.prompt"),
 		ROOT_TOPICS,
-		LocalizationManager.text("npc.aether_clash_guide.menu.close")
+		LocalizationManager.text("npc.aether_clash_guide.menu.close"),
+		2,
+		true
 	)
 
 
@@ -166,7 +168,9 @@ func _show_mode_guide(mode_id: String) -> void:
 			LocalizationManager.text(str(guide.get("title_key", ""))),
 			LocalizationManager.text(str(guide.get("prompt_key", ""))),
 			topics,
-			LocalizationManager.text("npc.aether_clash_guide.menu.back")
+			LocalizationManager.text("npc.aether_clash_guide.menu.back"),
+			2,
+			true
 		)
 		if topic_id.is_empty():
 			return
@@ -177,7 +181,9 @@ func _choose_topic(
 	title: String,
 	prompt: String,
 	topic_definitions: Array[Dictionary],
-	close_text: String
+	close_text: String,
+	column_count: int = 1,
+	compact: bool = false
 ) -> String:
 	var menu := MENTOR_TOPIC_MENU.new()
 	add_child(menu)
@@ -186,7 +192,9 @@ func _choose_topic(
 		prompt,
 		_localized_topics(topic_definitions),
 		LocalizationManager.text("npc.aether_clash_guide.menu.eyebrow"),
-		close_text
+		close_text,
+		column_count,
+		compact
 	)
 	menu.queue_free()
 	return topic_id

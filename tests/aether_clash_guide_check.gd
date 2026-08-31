@@ -3,6 +3,7 @@ extends Node
 const GUIDE_SCENE := "res://scenes/npcs/aether_clash_guide_npc.tscn"
 const GUIDE_SCRIPT := "res://scripts/world/npcs/aether_clash_guide_npc.gd"
 const LOBBY_SCENE := "res://scenes/overworld/aether_clash/aether_clash_lobby.tscn"
+const TOPIC_MENU_SCRIPT := "res://scripts/ui/mentor_topic_menu.gd"
 const TILE_SIZE := 32
 
 var failed := false
@@ -99,6 +100,36 @@ func _run() -> void:
 		and guide_source.contains("await menu.choose_topic("),
 		"Guide uses the established themed question menu"
 	)
+	_check(
+		guide_source.contains("\t\t2,\n\t\ttrue\n\t)")
+		and guide_source.contains("\t\t\t2,\n\t\t\ttrue\n\t\t)"),
+		"Root and mode questions request the compact two-column layout"
+	)
+	var topic_menu_script := load(TOPIC_MENU_SCRIPT) as GDScript
+	var topic_menu := topic_menu_script.new() as CanvasLayer if topic_menu_script != null else null
+	_check(topic_menu != null, "Shared mentor topic menu still loads")
+	if topic_menu != null:
+		add_child(topic_menu)
+		topic_menu.call(
+			"_build_menu",
+			"Aether Clash",
+			"What would you like to know?",
+			localized_topics,
+			"CLASH GUIDE",
+			"Close",
+			2,
+			true
+		)
+		await get_tree().process_frame
+		var topic_grid := topic_menu.find_child("TopicGrid", true, false) as GridContainer
+		var topic_panel := topic_menu.find_child("TopicPanel", true, false) as PanelContainer
+		_check(topic_grid != null and topic_grid.columns == 2, "Compact guide questions render in two columns")
+		_check(topic_grid != null and topic_grid.get_child_count() == root_topics.size(), "Compact grid contains every guide question")
+		_check(topic_panel != null and topic_panel.size.y < 360.0, "Compact guide menu leaves most of the screen visible")
+		if topic_grid != null and topic_grid.get_child_count() > 0:
+			var first_button := topic_grid.get_child(0) as Button
+			_check(first_button != null and first_button.custom_minimum_size.y == 38.0, "Compact guide buttons use the reduced height")
+		topic_menu.queue_free()
 	var key_pattern := RegEx.new()
 	key_pattern.compile('"(npc\\.aether_clash_guide\\.[^"]+)"')
 	var required_keys: Dictionary = {}
