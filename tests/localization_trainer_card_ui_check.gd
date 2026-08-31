@@ -103,6 +103,35 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(overlay.call("_format_appearance_option_name", "body", "Gen4_Base_v1") == "Standaard", "Appearance option renders in Dutch")
 	_check(overlay.call("_format_appearance_option_name", "hair", "IronFanton_Hair") == "IronFanton-haar", "IronFanton hair renders in Dutch")
 	_check(overlay.call("_format_appearance_swatch_name", "Dark Brown") == "Donkerbruin", "Appearance swatch renders in Dutch")
+	var top_category_button := category_rail.get_child(6) as Button if category_rail != null else null
+	if top_category_button != null and content_stack != null:
+		overlay.call(
+			"_on_trainer_card_appearance_category_selected",
+			top_category_button,
+			content_stack,
+			"top"
+		)
+	var part_buttons: Dictionary = overlay.get("trainer_card_part_buttons") as Dictionary
+	var starter_shirt_button := part_buttons.get("top:Shirt") as Button
+	var unequip_button := overlay.get("trainer_card_appearance_unequip_button") as Button
+	var return_button := overlay.get("trainer_card_appearance_return_button") as Button
+	_check(not part_buttons.has("top:"), "Appearance no longer presents None as a wardrobe item")
+	_check(
+		starter_shirt_button != null
+		and starter_shirt_button.icon != null
+		and starter_shirt_button.custom_minimum_size.y >= 58.0,
+		"Appearance wardrobe cards show recognizable sprite thumbnails"
+	)
+	_check(unequip_button != null and unequip_button.text == "Uittrekken", "Unequip is a compact Dutch category action")
+	_check(return_button != null and return_button.text == "Naar Bag", "Return to Bag is clearly labeled in Dutch")
+	var body_category_button := category_rail.get_child(1) as Button if category_rail != null else null
+	if body_category_button != null and content_stack != null:
+		overlay.call(
+			"_on_trainer_card_appearance_category_selected",
+			body_category_button,
+			content_stack,
+			"body"
+		)
 
 	overlay.set("trainer_card_has_unsaved_appearance_changes", true)
 	overlay.call("_update_trainer_card_appearance_save_state")
@@ -125,6 +154,17 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(status_label != null and status_label.text.begins_with("Alterações"), "Appearance status updates to Portuguese")
 	_check(overlay.call("_format_appearance_swatch_name", "Dark Brown") == "Marrom-escuro", "Appearance swatch updates to Portuguese")
 	_check(overlay.call("_format_appearance_option_name", "top", "IronFanton_Shirt") == "Camisa IronFanton", "IronFanton shirt updates to Portuguese")
+	if top_category_button != null and content_stack != null:
+		overlay.call(
+			"_on_trainer_card_appearance_category_selected",
+			top_category_button,
+			content_stack,
+			"top"
+		)
+	unequip_button = overlay.get("trainer_card_appearance_unequip_button") as Button
+	return_button = overlay.get("trainer_card_appearance_return_button") as Button
+	_check(unequip_button != null and unequip_button.text == "Retirar", "Unequip action updates to Portuguese")
+	_check(return_button != null and return_button.text == "À Bolsa", "Return-to-Bag action updates to Portuguese")
 
 	if popup != null:
 		var minimum_size := popup.get_combined_minimum_size()
