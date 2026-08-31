@@ -43,6 +43,16 @@ const ROOT_TOPICS: Array[Dictionary] = [
 		],
 	},
 	{
+		"id": "timers",
+		"label_key": "npc.aether_clash_guide.topic.timers",
+		"line_keys": [
+			"npc.aether_clash_guide.answer.timers.1",
+			"npc.aether_clash_guide.answer.timers.2",
+			"npc.aether_clash_guide.answer.timers.3",
+			"npc.aether_clash_guide.answer.timers.4",
+		],
+	},
+	{
 		"id": "joining",
 		"label_key": "npc.aether_clash_guide.topic.joining",
 		"line_keys": [

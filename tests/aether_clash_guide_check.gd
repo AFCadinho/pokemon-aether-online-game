@@ -37,6 +37,14 @@ func _run() -> void:
 	_check(mode_guides.has("guild_duel"), "Guide owns a Guild Duel section")
 	_check(mode_guides.has("battle_royale"), "Guide is already structured for Battle Royale")
 	_check(root_topics.size() >= 6, "Guide exposes concise categorized questions")
+	var timer_topic := guide.call("_topic_by_id", root_topics, "timers") as Dictionary
+	var timer_line_keys := timer_topic.get("line_keys", []) as Array
+	_check(
+		not timer_topic.is_empty()
+		and timer_line_keys.size() == 4
+		and timer_line_keys.has("npc.aether_clash_guide.answer.timers.4"),
+		"Guide provides a dedicated complete timer explanation"
+	)
 	_check(
 		not bool(guide.call("_prefetches_dialogue_metadata_on_approach"))
 		and not bool(guide.call("_loads_pickpocket_profile_from_npc_metadata")),
