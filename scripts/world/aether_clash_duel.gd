@@ -69,6 +69,7 @@ var spectator_battle_request_observed_world_battle := false
 
 func _ready() -> void:
 	add_to_group("aether_clash_duel_controller")
+	get_tree().call_group("aether_clash_exchange_surface", "suppress_for_aether_clash")
 	engagement_contact_requested.connect(_on_engagement_contact_requested)
 	if not spectator_camera_hud.return_requested.is_connected(_deactivate_spectator_camera):
 		spectator_camera_hud.return_requested.connect(_deactivate_spectator_camera)
@@ -490,7 +491,7 @@ func _sync_battle_indicators() -> void:
 				"configure",
 				user_id,
 				room_code,
-				viewer_role == "spectator" and spectator_camera_active
+				viewer_role == "spectator"
 			)
 
 
@@ -685,7 +686,28 @@ func _process_spectator_camera(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not spectator_camera_active or _world_battle_active():
+	if viewer_role != "spectator" or _world_battle_active():
+		return
+	if not spectator_camera_active:
+		if event is InputEventScreenTouch:
+			var jail_touch := event as InputEventScreenTouch
+			if jail_touch.pressed and _try_spectate_indicator_at_screen_position(
+				jail_touch.position,
+				"jail_touch_hit_test"
+			):
+				get_viewport().set_input_as_handled()
+			return
+		if event is InputEventMouseButton:
+			var jail_mouse := event as InputEventMouseButton
+			if (
+				jail_mouse.button_index == MOUSE_BUTTON_LEFT
+				and jail_mouse.pressed
+				and _try_spectate_indicator_at_screen_position(
+					jail_mouse.position,
+					"jail_mouse_hit_test"
+				)
+			):
+				get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed("ui_cancel"):
 		_deactivate_spectator_camera()
@@ -928,8 +950,6 @@ func _on_battle_indicator_spectate_requested(user_id: int, room_code: String) ->
 		rejection_reason = "request_already_active"
 	elif viewer_role != "spectator":
 		rejection_reason = "viewer_not_spectator"
-	elif not spectator_camera_active:
-		rejection_reason = "spectator_camera_inactive"
 	elif _world_battle_active():
 		rejection_reason = "world_battle_active"
 	elif not engaged_player_ids.has(user_id):

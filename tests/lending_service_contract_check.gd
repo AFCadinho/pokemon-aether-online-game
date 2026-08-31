@@ -37,6 +37,7 @@ func _init() -> void:
 	_check(borrowed_pokemon != null and borrowed_pokemon.borrowed and str(borrowed_pokemon.loan.get("lenderUsername", "")) == "misty", "borrowed Pokemon retain loan metadata in runtime cards")
 	_check(workspace_source.contains("_open_attach_menu") and workspace_source.contains("_detach_loan_item"), "borrowed item attach and detach controls")
 	_check(workspace_source.contains("_poll_incoming_offers") and workspace_source.contains("load_loans(\"borrowed\")"), "incoming loan offers are polled for the borrower")
+	_check(workspace_source.contains("_aether_clash_exchange_blocked") and workspace_source.contains("suppress_for_aether_clash"), "Guild Duel entry suppresses direct lending and incoming offer popups")
 	var invitation_source := FileAccess.get_file_as_string("res://scripts/ui/loan_invitation_dialog.gd")
 	_check(invitation_source.contains("accept_loan") and invitation_source.contains("decline_loan"), "incoming offer has direct accept and decline actions")
 	_check(invitation_source.contains("open_trade_pokemon_summary"), "incoming Pokemon can open a read-only summary")

@@ -79,6 +79,7 @@
 
 **Fixed**
 
+- Guild Duel arenas now block Trade and Lend invitations, let jail spectators open visible battles directly, and clearly label each Aether View orb.
 - Aether View spectators can now reopen an ongoing battle immediately after leaving it, and Master Balls glow clearly when hovered.
 - Eliminated Guild Duel players now immediately see stationary arena participants after arriving in jail.
 - Leaving a Guild Duel no longer tries to read a detached game window while restoring the normal world zoom.

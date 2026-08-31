@@ -130,7 +130,7 @@ func open_context_for_player(player_state: Dictionary, screen_position: Vector2)
 	):
 		return
 	current_target = normalized
-	if not trade_capabilities_loaded and not trade_capabilities_loading:
+	if _exchange_actions_allowed() and not trade_capabilities_loaded and not trade_capabilities_loading:
 		_refresh_trade_capabilities()
 	if not guild_membership_loaded and not guild_membership_loading:
 		_refresh_guild_membership()
@@ -522,21 +522,22 @@ func _render_context_menu() -> void:
 
 func _render_context_primary_actions() -> void:
 	_add_context_action("Message", _t("ui.nearby.action.message.description"), _on_message_pressed)
-	var trade_enabled := bool(trade_capabilities.get("enabled", false))
-	_add_context_action(
-		"Trade",
-		_trade_action_description(trade_enabled),
-		_on_trade_pressed,
-		"default",
-		trade_capabilities_loading or (trade_capabilities_loaded and not trade_enabled)
-	)
-	_add_context_action(
-		"Lend",
-		_t("ui.nearby.action.lend.description"),
-		_on_lend_pressed,
-		"default",
-		not _target_is_on_current_map()
-	)
+	if _exchange_actions_allowed():
+		var trade_enabled := bool(trade_capabilities.get("enabled", false))
+		_add_context_action(
+			"Trade",
+			_trade_action_description(trade_enabled),
+			_on_trade_pressed,
+			"default",
+			trade_capabilities_loading or (trade_capabilities_loaded and not trade_enabled)
+		)
+		_add_context_action(
+			"Lend",
+			_t("ui.nearby.action.lend.description"),
+			_on_lend_pressed,
+			"default",
+			not _target_is_on_current_map()
+		)
 	if _can_challenge_aether_clash():
 		_add_context_action(
 			"Challenge to Aether Clash",
@@ -837,6 +838,8 @@ func can_moderate_chat() -> bool:
 
 
 func _on_trade_pressed() -> void:
+	if not _exchange_actions_allowed():
+		return
 	if not bool(trade_capabilities.get("enabled", false)):
 		_refresh_trade_capabilities()
 		return
@@ -848,6 +851,8 @@ func _on_trade_pressed() -> void:
 
 
 func _on_lend_pressed() -> void:
+	if not _exchange_actions_allowed():
+		return
 	if not _target_is_on_current_map():
 		return
 	var username := str(current_target.get("username", "")).strip_edges()
@@ -1249,6 +1254,10 @@ func _can_view_overworld_identity(user_id: int) -> bool:
 		if controller.has_method("can_view_overworld_identity"):
 			return bool(controller.call("can_view_overworld_identity", user_id))
 	return true
+
+
+func _exchange_actions_allowed() -> bool:
+	return get_tree().get_nodes_in_group("aether_clash_duel_controller").is_empty()
 
 
 func _normalized_player(player: Dictionary) -> Dictionary:

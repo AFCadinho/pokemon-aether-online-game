@@ -31,7 +31,6 @@ func _init() -> void:
 	await _check_trade_context_action()
 	_check_player_normalization()
 	_check_self_exclusion_and_roster_ordering()
-	_check_aether_clash_identity_filtering()
 	_check_deterministic_player_ordering()
 	_check_social_state_matching()
 	_check_phase_scope_contract()
@@ -100,6 +99,7 @@ func _check_trade_context_action() -> void:
 	await _check_chat_moderation_context_action()
 	await _check_live_localization()
 	await _check_context_outside_click()
+	await _check_aether_clash_identity_filtering()
 	host.queue_free()
 
 
@@ -402,7 +402,7 @@ func _check_deterministic_player_ordering() -> void:
 
 func _check_self_exclusion_and_roster_ordering() -> void:
 	presence_service._apply_snapshot_message({
-		"rosterRevision": 1,
+		"rosterRevision": 2,
 		"players": [
 			{"userId": 1, "username": "ash"},
 			{"userId": 9, "username": "brock", "displayName": "Brock"},
@@ -415,6 +415,14 @@ func _check_self_exclusion_and_roster_ordering() -> void:
 	_check_equal(players[1].get("userId", 0), 2, "roster alphabetical second")
 
 func _check_aether_clash_identity_filtering() -> void:
+	presence_service._apply_snapshot_message({
+		"rosterRevision": 1,
+		"players": [
+			{"userId": 1, "username": "ash"},
+			{"userId": 9, "username": "brock", "displayName": "Brock"},
+			{"userId": 2, "username": "misty", "displayName": "Misty"},
+		],
+	})
 	var duel_controller := FakeAetherClashDuelController.new()
 	duel_controller.visible_user_ids = {9: true}
 	duel_controller.add_to_group("aether_clash_duel_controller")
@@ -433,6 +441,11 @@ func _check_aether_clash_identity_filtering() -> void:
 		Vector2(400, 200)
 	)
 	_check_equal(coordinator.current_target.get("userId", 0), 9, "allowed Duel identities retain trainer actions")
+	coordinator._render_context_menu()
+	await process_frame
+	_check_equal(_find_player_action("Trade") == null, true, "Guild Duel context menus hide Trade")
+	_check_equal(_find_player_action("Lend") == null, true, "Guild Duel context menus hide Lend")
+	_check_equal(_find_player_action("Message") != null, true, "Guild Duel context menus retain safe social actions")
 	coordinator.close_context_menu()
 	root.remove_child(duel_controller)
 	duel_controller.free()
@@ -457,6 +470,7 @@ func _check_phase_scope_contract() -> void:
 	_check_equal(source.contains("service.invite_member(username)"), true, "guild action uses the authoritative invitation endpoint")
 	_check_equal(source.contains("create_aether_clash_player_challenge"), true, "right-click Clash action uses the authoritative player endpoint")
 	_check_equal(source.contains("_can_view_overworld_identity"), true, "Duel identity intel gates roster and right-click name exposure")
+	_check_equal(source.contains("_exchange_actions_allowed"), true, "Duel instances gate Trade and Lend actions")
 	_check_equal(source.contains("load_map_players"), false, "no secondary map-player projection")
 
 func _check_remote_avatar_interaction_contract() -> void:

@@ -122,8 +122,21 @@ func _run() -> void:
 	_check(
 		blue_indicator != null
 		and str(blue_indicator.get("room_code")) == "ACROOM123"
-		and not bool(blue_indicator.get("clickable")),
-		"Master Balls use the authoritative room and wait for Aether View before accepting clicks"
+		and bool(blue_indicator.get("clickable")),
+		"Jail spectators can use authoritative Master Balls without opening Aether View"
+	)
+	var orb_nameplate := upper_orb.get_node_or_null("Nameplate/Label") as Label
+	_check(orb_nameplate != null and orb_nameplate.text == "AETHER VIEW", "Spectator orbs clearly identify Aether View")
+	var master_ball_world_position: Vector2 = blue_indicator.call("get_click_world_position")
+	var jail_master_ball_click := InputEventMouseButton.new()
+	jail_master_ball_click.button_index = MOUSE_BUTTON_LEFT
+	jail_master_ball_click.pressed = true
+	jail_master_ball_click.position = root.get_viewport().get_canvas_transform() * master_ball_world_position
+	duel.call("_unhandled_input", jail_master_ball_click)
+	await process_frame
+	_check(
+		overlay.requested_room_codes == ["ACROOM123"],
+		"A visible Master Ball opens its battle directly from jail"
 	)
 
 	var orb_result: Dictionary = duel.call("request_spectator_orb", local_actor, upper_orb)
@@ -213,7 +226,6 @@ func _run() -> void:
 		"Hovering a Master Ball adds a larger bright additive glow"
 	)
 	blue_indicator.call("_on_mouse_exited")
-	var master_ball_world_position: Vector2 = blue_indicator.call("get_click_world_position")
 	spectator_camera.global_position = master_ball_world_position
 	spectator_camera.reset_smoothing()
 	spectator_camera.force_update_scroll()
@@ -225,7 +237,7 @@ func _run() -> void:
 	duel.call("_unhandled_input", master_ball_click)
 	await process_frame
 	_check(
-		overlay.requested_room_codes == ["ACROOM123"],
+		overlay.requested_room_codes == ["ACROOM123", "ACROOM123"],
 		"Controller hit-testing makes a visible Master Ball click open the existing PvP spectator flow"
 	)
 
@@ -248,7 +260,7 @@ func _run() -> void:
 	duel.call("_unhandled_input", master_ball_click)
 	await process_frame
 	_check(
-		overlay.requested_room_codes == ["ACROOM123", "ACROOM123"],
+		overlay.requested_room_codes == ["ACROOM123", "ACROOM123", "ACROOM123"],
 		"The same ongoing battle can be reopened without leaving Aether View"
 	)
 
@@ -274,13 +286,20 @@ func _run() -> void:
 	duel.call("_unhandled_input", master_ball_click)
 	await process_frame
 	_check(
-		overlay.requested_room_codes == ["ACROOM123", "ACROOM123", "ACROOM123"],
+		overlay.requested_room_codes == ["ACROOM123", "ACROOM123", "ACROOM123", "ACROOM123"],
 		"The same active Master Ball can be used again after leaving spectator mode"
 	)
 	return_button.emit_signal("pressed")
 
 	duel.call("_apply_arena_state", _participant_payload())
 	duel.call("_sync_local_camera_mode")
+	var spectate_requests_before_participant_click := overlay.requested_room_codes.size()
+	duel.call("_on_battle_indicator_spectate_requested", 2, "ACROOM123")
+	await process_frame
+	_check(
+		overlay.requested_room_codes.size() == spectate_requests_before_participant_click,
+		"Active Guild Duel participants cannot spectate another battle"
+	)
 	var canvas_scale := player_camera.get_viewport().get_screen_transform().get_scale()
 	var expected_participant_zoom := Vector2(
 		2.0 / maxf(canvas_scale.x, 0.001),

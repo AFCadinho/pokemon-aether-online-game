@@ -121,6 +121,8 @@ const CODE_TO_KEY: Dictionary = {
 	"aether_clash_portal_required": "backend.error.aether_clash_portal_required",
 	"aether_clash_teleport_pending": "backend.error.aether_clash_teleport_pending",
 	"aether_clash_activity_blocked": "backend.error.aether_clash_activity_blocked",
+	"aether_clash_exchange_blocked": "backend.error.aether_clash_exchange_blocked",
+	"loan_aether_clash_unavailable": "backend.error.aether_clash_exchange_blocked",
 	"aether_clash_presence_required": "backend.error.aether_clash_presence_required",
 	"aether_clash_player_in_battle": "backend.error.aether_clash_player_in_battle",
 	"aether_clash_contact_sync_pending": "backend.error.aether_clash_contact_sync_pending",
