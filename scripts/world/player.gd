@@ -1818,21 +1818,23 @@ func _has_mount_license_for_current_region() -> bool:
 		and inventory_service.has_method("has_mount_license_for_region")
 		and bool(inventory_service.call(
 			"has_mount_license_for_region",
-			_get_current_map_region_id()
+			_get_current_mount_license_region_id()
 		))
 	)
 
 
-func _get_current_map_region_id() -> String:
+func _get_current_mount_license_region_id() -> String:
 	var current_map := _resolve_current_map()
 	if current_map == null:
 		return ""
 	if current_map.has_method("get_location_metadata"):
 		var metadata_value: Variant = current_map.call("get_location_metadata")
 		if metadata_value is Dictionary:
-			var region_id := str((metadata_value as Dictionary).get("regionId", "")).strip_edges()
-			if not region_id.is_empty():
-				return region_id.to_lower()
+			var metadata := metadata_value as Dictionary
+			for key: String in ["mountLicenseRegionId", "regionId"]:
+				var resolved_region_id := str(metadata.get(key, "")).strip_edges()
+				if not resolved_region_id.is_empty():
+					return resolved_region_id.to_lower()
 	if current_map.has_method("get_map_region_name"):
 		var region_name := str(current_map.call("get_map_region_name")).strip_edges()
 		if not region_name.is_empty():

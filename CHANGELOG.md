@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Kanto Mount License now also works in the Aether Clash Lobby and its minigame maps.
+
 - Aethernet travel now separates available and locked destinations, uses full-row selection, and keeps one clear travel action with each fare shown beside its destination.
 
 - Obsolete bicycle and Rotom Bike items, consumable Repels, Roto Powers, unused imports, and duplicate Bag-side Z-Crystals have been removed from item search and localization, while Escape Rope remains a reusable Key Item and Mega/Z activation items remain available.
