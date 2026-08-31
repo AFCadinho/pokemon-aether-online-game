@@ -3058,6 +3058,7 @@
   "ui.item_dex.source_title.pickup": "Raap op in de wereld",
   "ui.item_dex.source_title.rock_smash": "Breek een dagelijkse rots",
   "ui.item_dex.source_title.default_grant": "Toegekend aan iedere speler",
+  "ui.item_dex.source_title.wild_evolution_line": "{species}-evolutielijn",
   "ui.item_dex.source_title.wild_species": "Versla {species}",
   "ui.item_dex.source_title.fishing": "Vind een schat met {rod}",
   "ui.item_dex.source_title.thieving": "Bestal {target}",

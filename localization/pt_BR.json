@@ -3058,6 +3058,7 @@
   "ui.item_dex.source_title.pickup": "Colete no mundo",
   "ui.item_dex.source_title.rock_smash": "Quebre uma rocha diária",
   "ui.item_dex.source_title.default_grant": "Concedido a todos os jogadores",
+  "ui.item_dex.source_title.wild_evolution_line": "Linha evolutiva de {species}",
   "ui.item_dex.source_title.wild_species": "Derrote {species}",
   "ui.item_dex.source_title.fishing": "Encontre um tesouro com {rod}",
   "ui.item_dex.source_title.thieving": "Furte {target}",

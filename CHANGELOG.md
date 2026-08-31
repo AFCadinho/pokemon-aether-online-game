@@ -6,6 +6,8 @@
 
 - New Aether Clash production safety limits provide localized feedback when intake, stakes, roster size, spectator capacity, or challenge frequency is restricted.
 
+- The Item Dex now presents each Mega Stone's eligible evolution line as one concise wild-drop source instead of repeating every family member.
+
 - The Pokédex Drops tab now presents item drops directly without a redundant Mega Stone category heading.
 
 - Ranked now shows the Preseason Elo leaderboard, provisional status, and each Trainer's rating change in battle results and match history.
