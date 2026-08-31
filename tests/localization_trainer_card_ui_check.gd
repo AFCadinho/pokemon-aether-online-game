@@ -49,7 +49,13 @@ func _check_trainer_card_runtime_translation() -> void:
 	var badge_option := overlay.get("trainer_card_badge_option") as OptionButton
 	var redeem_button := popup.find_child("RedeemCodeButton", true, false) as Button if popup != null else null
 
-	_check(tabs != null and tabs.get_tab_title(1) == "Portemonnee", "Trainer Card tab renders in Dutch")
+	_check(
+		tabs != null
+		and tabs.get_tab_title(0) == "Overzicht"
+		and tabs.get_tab_title(1) == "Badges"
+		and tabs.get_tab_title(3) == "Portemonnee",
+		"Trainer Card navigation renders in the intended Dutch order"
+	)
 	_check(subtitle != null and subtitle.text.begins_with("TRAINERPASPOORT"), "Trainer Card passport renders in Dutch")
 	_check(redeem_button != null and redeem_button.text == "Code inwisselen", "Trainer Card redeem action renders in Dutch")
 	_check(_find_label(popup, "VALUTAPORTEMONNEE") != null, "Trainer Card wallet renders in Dutch")
@@ -68,6 +74,13 @@ func _check_trainer_card_runtime_translation() -> void:
 		and category_rail.get_child_count() == 9
 		and _all_category_buttons_toggle(category_rail),
 		"Appearance category rail stays compact and clearly selectable"
+	)
+	_check(
+		tabs != null
+		and tabs.get_tab_bar().focus_mode == Control.FOCUS_ALL
+		and category_rail != null
+		and _all_category_buttons_focusable(category_rail),
+		"Trainer Card tabs and Appearance categories support keyboard focus"
 	)
 	_check(
 		content_stack != null and _find_line_edit(content_stack) == null,
@@ -142,6 +155,33 @@ func _check_trainer_card_runtime_translation() -> void:
 		and wardrobe_capacity.tooltip_text == wardrobe_capacity.text,
 		"Appearance keeps the complete wardrobe capacity available"
 	)
+	var player_save := root.get_node_or_null("PlayerSave")
+	var original_hair_id := str(player_save.get("appearance_hair_id")) if player_save != null else ""
+	var hair_category_button := category_rail.get_child(2) as Button if category_rail != null else null
+	if hair_category_button != null and content_stack != null:
+		overlay.call(
+			"_on_trainer_card_appearance_category_selected",
+			hair_category_button,
+			content_stack,
+			"hair"
+		)
+	unequip_button = overlay.get("trainer_card_appearance_unequip_button") as Button
+	_check(
+		unequip_button != null
+		and unequip_button.text == "Kaal / Geen haar"
+		and unequip_button.visible
+		and unequip_button.toggle_mode,
+		"Hair uses an explicit Dutch no-hair choice"
+	)
+	if player_save != null:
+		player_save.set("appearance_hair_id", "")
+	overlay.call("_refresh_trainer_card_appearance_actions")
+	_check(
+		unequip_button != null and unequip_button.button_pressed,
+		"The no-hair choice shows its selected state"
+	)
+	if player_save != null:
+		player_save.set("appearance_hair_id", original_hair_id)
 	var body_category_button := category_rail.get_child(1) as Button if category_rail != null else null
 	if body_category_button != null and content_stack != null:
 		overlay.call(
@@ -159,7 +199,13 @@ func _check_trainer_card_runtime_translation() -> void:
 
 	localization_manager.call("set_locale", "pt_BR")
 	overlay.call("_refresh_trainer_card_localized_ui")
-	_check(tabs != null and tabs.get_tab_title(1) == "Carteira", "Trainer Card tab updates to Portuguese")
+	_check(
+		tabs != null
+		and tabs.get_tab_title(0) == "Visão geral"
+		and tabs.get_tab_title(1) == "Insígnias"
+		and tabs.get_tab_title(3) == "Carteira",
+		"Trainer Card navigation updates to Portuguese"
+	)
 	_check(subtitle != null and subtitle.text.begins_with("PASSAPORTE DE TREINADOR"), "Trainer Card passport updates to Portuguese")
 	_check(redeem_button != null and redeem_button.text == "Resgatar código", "Trainer Card redeem action updates to Portuguese")
 	_check(_find_label(popup, "CARTEIRA DE MOEDAS") != null, "Trainer Card wallet updates to Portuguese")
@@ -172,6 +218,18 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(status_label != null and status_label.text.begins_with("Alterações"), "Appearance status updates to Portuguese")
 	_check(overlay.call("_format_appearance_swatch_name", "Dark Brown") == "Marrom-escuro", "Appearance swatch updates to Portuguese")
 	_check(overlay.call("_format_appearance_option_name", "top", "IronFanton_Shirt") == "Camisa IronFanton", "IronFanton shirt updates to Portuguese")
+	if hair_category_button != null and content_stack != null:
+		overlay.call(
+			"_on_trainer_card_appearance_category_selected",
+			hair_category_button,
+			content_stack,
+			"hair"
+		)
+	unequip_button = overlay.get("trainer_card_appearance_unequip_button") as Button
+	_check(
+		unequip_button != null and unequip_button.text == "Careca / Sem cabelo",
+		"No-hair choice updates to Portuguese"
+	)
 	if top_category_button != null and content_stack != null:
 		overlay.call(
 			"_on_trainer_card_appearance_category_selected",
@@ -234,6 +292,13 @@ func _find_line_edit(node: Node) -> LineEdit:
 func _all_category_buttons_toggle(category_rail: VBoxContainer) -> bool:
 	for child: Node in category_rail.get_children():
 		if child is Button and not (child as Button).toggle_mode:
+			return false
+	return true
+
+
+func _all_category_buttons_focusable(category_rail: VBoxContainer) -> bool:
+	for child: Node in category_rail.get_children():
+		if child is Button and (child as Button).focus_mode != Control.FOCUS_ALL:
 			return false
 	return true
 

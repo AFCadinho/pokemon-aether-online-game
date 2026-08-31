@@ -4,6 +4,10 @@
 
 - Aether Clash battles now leave the waiting screen when the 7.5-minute limit decides the result, and blocked forced-switch selections no longer trigger a script error.
 
+- Trainer Cards now use a cleaner Overview-first layout, while other Trainers' cards offer simple Overview, Badges, and PvP tabs with a direct message action.
+
+- Choosing no hair now shows a consistent natural bald head in previews and the overworld, without the old stray scalp pixel.
+
 - Aether Clash battle results now count down on the Continue button and automatically return Trainers to the arena after five seconds.
 
 - Aether Clash now waits until Trainers close their previous battle result screen before allowing another collision or automatic match.
