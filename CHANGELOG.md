@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aether Clash battle results now count down on the Continue button and automatically return Trainers to the arena after five seconds.
+
 - Aether Clash now waits until Trainers close their previous battle result screen before allowing another collision or automatic match.
 
 - Character Customization now shows wardrobe cosmetics with their real sprite thumbnails, while unequipping and returning an item to the Bag use clear contextual actions outside the item grid.
