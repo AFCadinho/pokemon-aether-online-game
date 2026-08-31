@@ -50,6 +50,7 @@ const PVP_OPPONENT_RENDER_RECONCILE_INITIAL_MSEC := 2500
 const PVP_OPPONENT_RENDER_RECONCILE_MAX_MSEC := 5000
 const PVP_IDLE_WAIT_RECONCILE_MSEC := 3000
 const PVP_RENDER_PROGRESS_HEARTBEAT_SECONDS := 1.0
+const AETHER_CLASH_RESULT_AUTO_CONTINUE_SECONDS := 5
 const Z_MOVE_FALLBACK_ICON: Texture2D = preload("res://assets/battles/mechanics/z-move.png")
 const Z_MOVE_TYPE_ICON_PATH := "res://assets/battles/types/%s.svg"
 const Z_CRYSTAL_NAMES := {
@@ -168,6 +169,8 @@ var spectator_sides_swapped := false
 var spectator_latest_raw_response: Dictionary = {}
 var pending_battle_end_result: Dictionary = {}
 var battle_end_signal_emitted := false
+var battle_result_auto_continue_timer: Timer
+var battle_result_auto_continue_seconds_remaining := 0
 var last_rendered_event_seq := -1
 var ordered_response_display_species_hold: Dictionary = {}
 var publicly_revealed_ogerpon_species_by_player: Dictionary = {}
@@ -444,6 +447,11 @@ func _ready() -> void:
 	_connect_forfeit_confirm_dialog_signals()
 	if not battle_result_continue_button.pressed.is_connected(_on_battle_result_continue_pressed):
 		battle_result_continue_button.pressed.connect(_on_battle_result_continue_pressed)
+	battle_result_auto_continue_timer = Timer.new()
+	battle_result_auto_continue_timer.name = "BattleResultAutoContinueTimer"
+	battle_result_auto_continue_timer.wait_time = 1.0
+	battle_result_auto_continue_timer.timeout.connect(_on_battle_result_auto_continue_tick)
+	add_child(battle_result_auto_continue_timer)
 	if not battle_background_video.finished.is_connected(_on_battle_background_video_finished):
 		battle_background_video.finished.connect(_on_battle_background_video_finished)
 	if not calc_panel.defender_assumptions_changed.is_connected(_on_calc_panel_defender_assumptions_changed):
@@ -562,6 +570,7 @@ func _on_locale_changed(_locale: String) -> void:
 		_update_spectator_perspective_label()
 	if battle_result_overlay.visible and not pending_battle_end_result.is_empty():
 		_refresh_pvp_battle_result_copy(pending_battle_end_result)
+	_refresh_battle_result_continue_button()
 
 
 func _setup_battle_ui_position() -> void:
@@ -3945,6 +3954,7 @@ func _show_pvp_battle_result(result: Dictionary) -> void:
 	_refresh_pvp_battle_result_copy(result)
 	battle_result_overlay.visible = true
 	battle_result_overlay.move_to_front()
+	_start_battle_result_auto_continue()
 	battle_result_continue_button.grab_focus.call_deferred()
 	_refresh_pvp_battle_rating.call_deferred(str(result.get("matchId", "")))
 
@@ -4099,13 +4109,65 @@ func _format_battle_result_reason(reason: String) -> String:
 
 
 func _on_battle_result_continue_pressed() -> void:
+	_complete_pvp_battle_result()
+
+
+func _start_battle_result_auto_continue() -> void:
+	_stop_battle_result_auto_continue()
+	if not _is_aether_clash_battle():
+		return
+	battle_result_auto_continue_seconds_remaining = AETHER_CLASH_RESULT_AUTO_CONTINUE_SECONDS
+	_refresh_battle_result_continue_button()
+	battle_result_auto_continue_timer.start()
+
+
+func _stop_battle_result_auto_continue() -> void:
+	if battle_result_auto_continue_timer != null:
+		battle_result_auto_continue_timer.stop()
+	battle_result_auto_continue_seconds_remaining = 0
+	_refresh_battle_result_continue_button()
+
+
+func _refresh_battle_result_continue_button() -> void:
+	if battle_result_continue_button == null:
+		return
+	var continue_text := _t("common.continue")
+	if battle_result_auto_continue_seconds_remaining > 0:
+		continue_text = "%s (%d)" % [
+			continue_text,
+			battle_result_auto_continue_seconds_remaining,
+		]
+	battle_result_continue_button.text = continue_text
+
+
+func _on_battle_result_auto_continue_tick() -> void:
+	if (
+		not battle_result_overlay.visible
+		or pending_battle_end_result.is_empty()
+		or battle_end_signal_emitted
+	):
+		_stop_battle_result_auto_continue()
+		return
+	battle_result_auto_continue_seconds_remaining -= 1
+	if battle_result_auto_continue_seconds_remaining <= 0:
+		_complete_pvp_battle_result()
+		return
+	_refresh_battle_result_continue_button()
+
+
+func _complete_pvp_battle_result() -> void:
+	if pending_battle_end_result.is_empty() or battle_end_signal_emitted:
+		return
+	var completed_result := pending_battle_end_result.duplicate(true)
+	_stop_battle_result_auto_continue()
 	battle_result_overlay.visible = false
-	_emit_battle_ended(pending_battle_end_result)
+	_emit_battle_ended(completed_result)
 
 
 func _emit_battle_ended(result: Dictionary) -> void:
 	if battle_end_signal_emitted:
 		return
+	_stop_battle_result_auto_continue()
 	battle_end_signal_emitted = true
 	pending_battle_end_result.clear()
 	battle_ended.emit(result)
@@ -6969,6 +7031,7 @@ func _prepare_battle_setup(
 	pending_battle_end_result.clear()
 	battle_end_signal_emitted = false
 	battle_result_overlay.visible = false
+	_stop_battle_result_auto_continue()
 	last_rendered_event_seq = -1
 	rendered_non_pvp_event_keys.clear()
 	active_player_pokemon = player_pokemon
@@ -11199,6 +11262,9 @@ func _pvp_response_has_render_batch_metadata(response: Dictionary) -> bool:
 
 func _is_pvp_battle() -> bool:
 	return pvp_room_code.strip_edges() != ""
+
+func _is_aether_clash_battle() -> bool:
+	return _is_pvp_battle() and pvp_battle_purpose == "aether_clash"
 
 func _is_training_room_battle() -> bool:
 	return _is_pvp_battle() and pvp_battle_purpose == "training"
