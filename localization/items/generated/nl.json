@@ -27,10 +27,6 @@
     "name": "Lamp absorberen",
     "shortDesc": "Vastgehouden: verhoogt de speciale aanval van de houder met één fase wanneer deze schade van het type Water oploopt."
   },
-  "acro-bike": {
-    "name": "Acrofiets",
-    "shortDesc": "Wendbaarder dan de Mach Bike, en je kunt over rails springen."
-  },
   "adamant-crystal": {
     "name": "Adamant Kristal",
     "shortDesc": "Indien vastgehouden door een Dialga, hebben zijn aanvallen van het type Steel en Dragon een kracht van 1,2x."
@@ -182,10 +178,6 @@
   "alakazite": {
     "name": "Alakaziet",
     "shortDesc": "Vastgehouden: Hiermee kan Alakazam mega-evolueren naar Mega Alakazam."
-  },
-  "aloraichium-z--bag": {
-    "name": "Aloraichium Z",
-    "shortDesc": "XXX nieuw effect voor aloraichium-z--bag"
   },
   "aloraichium-z--held": {
     "name": "Aloraichium Z",
@@ -339,10 +331,6 @@
     "name": "Bes Zoet",
     "shortDesc": "Een besvormig snoepje. Als een Milcery dit vasthoudt, draait hij vrolijk rond."
   },
-  "bicycle": {
-    "name": "Fiets",
-    "shortDesc": "Gebruiken voor snel openbaar vervoer."
-  },
   "big-malasada": {
     "name": "Grote Malasada",
     "shortDesc": "Geneest ernstige statuskwalen en verwarring."
@@ -362,18 +350,6 @@
   "big-root": {
     "name": "Grote wortel",
     "shortDesc": "Vastgehouden: verhoogt de HP die wordt hersteld van drainerende bewegingen, Ingrain en Aqua Ring met 3/10 (30%)."
-  },
-  "bike": {
-    "name": "Fiets",
-    "shortDesc": "Laat de speler sneller reizen."
-  },
-  "bike--green": {
-    "name": "Fiets",
-    "shortDesc": "XXX nieuw effect voor fiets: groen"
-  },
-  "bike--yellow": {
-    "name": "Fiets",
-    "shortDesc": "XXX nieuw effect voor fiets: geel"
   },
   "bike-voucher": {
     "name": "Fietsvoucher",
@@ -522,10 +498,6 @@
   "bug-memory": {
     "name": "Buggeheugen",
     "shortDesc": "Vastgehouden: verandert Silvally in zijn Bug-vorm. Verandert het type Multi-Aanvallen in Bug."
-  },
-  "buginium-z--bag": {
-    "name": "Buginium Z",
-    "shortDesc": "XXX nieuw effect voor buginium-z--bag"
   },
   "buginium-z--held": {
     "name": "Buginium Z",
@@ -839,10 +811,6 @@
     "name": "Donkere steen",
     "shortDesc": "Roept Zekrom op voor het laatste gevecht tegen N."
   },
-  "darkinium-z--bag": {
-    "name": "Darkinium Z",
-    "shortDesc": "XXX nieuw effect voor darkinium-z--bag"
-  },
   "darkinium-z--held": {
     "name": "Darkinium Z",
     "shortDesc": "Vastgehouden: Hiermee kan een Pokemon de Z-zet-equivalenten van zijn duistere bewegingen gebruiken."
@@ -854,10 +822,6 @@
   "dawn-stone": {
     "name": "Dageraadsteen",
     "shortDesc": "Evolueert een mannelijke Kirlia in Gallade of een vrouwelijke Snorunt in Froslass."
-  },
-  "decidium-z--bag": {
-    "name": "Decidium Z",
-    "shortDesc": "XXX nieuw effect voor decidium-z--bag"
   },
   "decidium-z--held": {
     "name": "Decidium Z",
@@ -975,10 +939,6 @@
     "name": "Dragoniniet",
     "shortDesc": "Als Dragonite dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
-  "dragonium-z--bag": {
-    "name": "Dragonium Z",
-    "shortDesc": "XXX nieuw effect voor dragonium-z--bag"
-  },
   "dragonium-z--held": {
     "name": "Dragonium Z",
     "shortDesc": "Vastgehouden: Hiermee kan een Pokemon de Z-zet-equivalenten van zijn Dragon-bewegingen gebruiken."
@@ -1043,10 +1003,6 @@
     "name": "Eelektrossiet",
     "shortDesc": "Als Eelektross dit item vasthoudt, kan deze Pokémon tijdens een gevecht mega-evolueren."
   },
-  "eevium-z--bag": {
-    "name": "Eevium Z",
-    "shortDesc": "XXX nieuw effect voor eevium-z--bag"
-  },
   "eevium-z--held": {
     "name": "Eevium Z",
     "shortDesc": "Vastgehouden: Hiermee kan Eevee Last Resort upgraden naar Extreme Evoboost."
@@ -1074,10 +1030,6 @@
   "electric-seed": {
     "name": "Elektrisch zaad",
     "shortDesc": "Vastgehouden: wordt verbruikt op elektrisch terrein en verhoogt de verdediging van de houder met één niveau."
-  },
-  "electrium-z--bag": {
-    "name": "Elektrium Z",
-    "shortDesc": "XXX nieuw effect voor electrium-z--bag"
   },
   "electrium-z--held": {
     "name": "Elektrium Z",
@@ -1183,10 +1135,6 @@
     "name": "Ontdekkingsset",
     "shortDesc": "Maakt een bezoek aan de metro mogelijk."
   },
-  "fairium-z--bag": {
-    "name": "Fairium Z",
-    "shortDesc": "XXX nieuw effect voor fairium-z--bag"
-  },
   "fairium-z--held": {
     "name": "Fairium Z",
     "shortDesc": "Vastgehouden: Hiermee kan een Pokemon de Z-zet-equivalenten van zijn Fairy-bewegingen gebruiken."
@@ -1239,10 +1187,6 @@
     "name": "Geheugen bestrijden",
     "shortDesc": "Vastgehouden: verandert Silvally in zijn vechtvorm. Verandert het type Multi-aanvallen in Vechten."
   },
-  "fightinium-z--bag": {
-    "name": "Fightinium Z",
-    "shortDesc": "XXX nieuw effect voor fightinium-z--bag"
-  },
   "fightinium-z--held": {
     "name": "Fightinium Z",
     "shortDesc": "Vastgehouden: Hiermee kan een Pokemon de Z-bewegingsequivalenten van zijn vechtbewegingen gebruiken."
@@ -1262,10 +1206,6 @@
   "fire-stone": {
     "name": "Vuursteen",
     "shortDesc": "Evolueert bepaalde Pokemon."
-  },
-  "firium-z--bag": {
-    "name": "Firium Z",
-    "shortDesc": "XXX nieuw effect voor firium-z--bag"
   },
   "firium-z--held": {
     "name": "Firium Z",
@@ -1318,10 +1258,6 @@
   "flying-memory": {
     "name": "Vliegend geheugen",
     "shortDesc": "Vastgehouden: verandert Silvally in zijn vliegende vorm. Verandert het type Multi-Aanvallen in Vliegen."
-  },
-  "flyinium-z--bag": {
-    "name": "Flyinium Z",
-    "shortDesc": "XXX nieuw effect voor flyinium-z--bag"
   },
   "flyinium-z--held": {
     "name": "Flyinium Z",
@@ -1455,10 +1391,6 @@
     "name": "Spookgeheugen",
     "shortDesc": "Vastgehouden: verandert Silvally in zijn Ghost-vorm. Verandert het type Multi-Attacks in Ghost."
   },
-  "ghostium-z--bag": {
-    "name": "Ghostium Z",
-    "shortDesc": "XXX nieuw effect voor ghostium-z--bag"
-  },
   "ghostium-z--held": {
     "name": "Ghostium Z",
     "shortDesc": "Vastgehouden: Hiermee kan een Pokemon de Z-zet-equivalenten van zijn Ghost-bewegingen gebruiken."
@@ -1478,10 +1410,6 @@
   "go-goggles": {
     "name": "Go-bril",
     "shortDesc": "Maakt doorgang door winderige woestijnen mogelijk."
-  },
-  "god-stone": {
-    "name": "godensteen",
-    "shortDesc": "Onbekend. Momenteel ongebruikt."
   },
   "gold-bottle-cap": {
     "name": "Gouden kroonkurk",
@@ -1534,10 +1462,6 @@
   "grass-memory": {
     "name": "Grasgeheugen",
     "shortDesc": "Vastgehouden: verandert Silvally in zijn grasvorm. Verandert het type Multi-aanvallen in Gras."
-  },
-  "grassium-z--bag": {
-    "name": "Grassium Z",
-    "shortDesc": "XXX nieuw effect voor grassium-z--bag"
   },
   "grassium-z--held": {
     "name": "Grassium Z",
@@ -1594,10 +1518,6 @@
   "ground-memory": {
     "name": "Grondgeheugen",
     "shortDesc": "Vastgehouden: verandert Silvally naar zijn grondvorm. Verandert het type Multi-Aanvallen in Grond."
-  },
-  "groundium-z--bag": {
-    "name": "Groundium Z",
-    "shortDesc": "XXX nieuw effect voor groundium-z--bag"
   },
   "groundium-z--held": {
     "name": "Groundium Z",
@@ -1803,10 +1723,6 @@
     "name": "Ijspegelplaat",
     "shortDesc": "Vastgehouden: IJstype-bewegingen van de houder veroorzaken 20% meer schade. Verandert het type Arceuss en Oordelen in IJs."
   },
-  "icium-z--bag": {
-    "name": "Icium Z",
-    "shortDesc": "XXX nieuw effect voor icium-z--bag"
-  },
   "icium-z--held": {
     "name": "Icium Z",
     "shortDesc": "Vastgehouden: Hiermee kan een Pokemon de Z-zet-equivalenten van zijn ijsbewegingen gebruiken."
@@ -1822,10 +1738,6 @@
   "impish-mint": {
     "name": "Ondeugende munt",
     "shortDesc": "Wanneer een Pokemon deze munt ruikt, zal zijn verdediging gemakkelijker groeien, maar zijn Sp. Atk zal langzamer groeien."
-  },
-  "incinium-z--bag": {
-    "name": "Incinium Z",
-    "shortDesc": "XXX nieuw effect voor incinium-z--bag"
   },
   "incinium-z--held": {
     "name": "Incinium Z",
@@ -1919,10 +1831,6 @@
     "name": "Koningsrots",
     "shortDesc": "Vastgehouden: schadelijke bewegingen krijgen een kans van 10% om hun doelwit te laten terugdeinzen. Verhandeld op een Poliwhirl: Holder evolueert naar Politoed. Verhandeld op een Slowpoke: Holder evolueert naar Slowking."
   },
-  "kommonium-z--bag": {
-    "name": "Kommonium Z",
-    "shortDesc": "XXX nieuw effect voor kommonium-z--bag"
-  },
   "kommonium-z--held": {
     "name": "Kommonium Z",
     "shortDesc": "Vastgehouden: Hiermee kan Kommo-o Clangarous Soulblaze gebruiken."
@@ -1970,10 +1878,6 @@
   "leaf-stone": {
     "name": "Bladsteen",
     "shortDesc": "Evolueert een Exeggcute in Exeggutor, een Gloom in Vileplume, een Nuzleaf in Shiftry, een Pansage in Simisage of een Weepinbell in Victreebel."
-  },
-  "left-poke-ball": {
-    "name": "Linker Pokébal",
-    "shortDesc": "XXX nieuw effect voor linker-poke-ball"
   },
   "leftovers": {
     "name": "Restjes",
@@ -2067,10 +1971,6 @@
     "name": "Looker-ticket",
     "shortDesc": "Verbetert het postgame-plot van Looker."
   },
-  "loot-sack": {
-    "name": "Buitzak",
-    "shortDesc": "Draagt ​​kolenmijnbuit."
-  },
   "lopunnite": {
     "name": "Lopunniet",
     "shortDesc": "Vastgehouden: Hiermee kan Lopunny mega-evolueren naar Mega Lopunny."
@@ -2119,10 +2019,6 @@
     "name": "Lumiose Galette",
     "shortDesc": "Geneest alle belangrijke statuskwalen en verwarring."
   },
-  "lunalium-z--bag": {
-    "name": "Lunalium Z",
-    "shortDesc": "XXX nieuw effect voor lunalium-z--bag"
-  },
   "lunalium-z--held": {
     "name": "Lunalium Z",
     "shortDesc": "Vastgehouden: Hiermee kan Lunala de Menacing Moonraze Maelstrom gebruiken."
@@ -2151,17 +2047,9 @@
     "name": "Luxe bal",
     "shortDesc": "Probeert een wilde Pokemon te vangen. Gevangen Pokemon beginnen met 200 geluk."
   },
-  "lycanium-z--bag": {
-    "name": "Lycanium Z",
-    "shortDesc": "XXX nieuw effect voor lycanium-z--bag"
-  },
   "lycanium-z--held": {
     "name": "Lycanium Z",
     "shortDesc": "Vastgehouden: Hiermee kan Lycanroc Splintered Stormshards gebruiken."
-  },
-  "mach-bike": {
-    "name": "Mach-fiets",
-    "shortDesc": "Sneller dan de Acro Bike en kan over zandhellingen en over gebarsten vloeren rijden."
   },
   "machine-part": {
     "name": "Machineonderdeel",
@@ -2231,10 +2119,6 @@
     "name": "Markeer-bezwering",
     "shortDesc": "Een mysterieuze en unieke charme die de kans vergroot dat je een Pokemon met een merkteken vindt."
   },
-  "marshadium-z--bag": {
-    "name": "Marshadium Z",
-    "shortDesc": "XXX nieuw effect voor marshadium-z--bag"
-  },
   "marshadium-z--held": {
     "name": "Marshadium Z",
     "shortDesc": "Vastgehouden: Hiermee kan Marshadow Spectral Thief upgraden naar Soul-Stealing 7 Star Strike."
@@ -2274,10 +2158,6 @@
   "max-potion": {
     "name": "Max Potion",
     "shortDesc": "Herstelt de HP van een Pokémon volledig."
-  },
-  "max-repel": {
-    "name": "Maximale afstoting",
-    "shortDesc": "Voorkomt gedurende 250 stappen wilde ontmoetingen met een lager niveau dan de leidende Pokemon van je team."
   },
   "max-revive": {
     "name": "Max. herleven",
@@ -2399,10 +2279,6 @@
     "name": "Metronoom",
     "shortDesc": "Vastgehouden: opeenvolgend gebruik van dezelfde aanval levert een cumulatieve schadeboost op van 10%. Maximale boost van 100%."
   },
-  "mewnium-z--bag": {
-    "name": "Mewnium Z",
-    "shortDesc": "XXX nieuw effect voor mewnium-z--bag"
-  },
   "mewnium-z--held": {
     "name": "Mewnium Z",
     "shortDesc": "Vastgehouden: Hiermee kan Mew Psychic upgraden naar Genesis Supernova."
@@ -2434,10 +2310,6 @@
   "mild-mint": {
     "name": "Milde munt",
     "shortDesc": "Wanneer een Pokemon deze munt ruikt, is het Sp. Atk zal gemakkelijker groeien, maar zijn verdediging zal langzamer groeien."
-  },
-  "mimikium-z--bag": {
-    "name": "Mimikium Z",
-    "shortDesc": "XXX nieuw effect voor mimikium-z--bag"
   },
   "mimikium-z--held": {
     "name": "Mimikium Z",
@@ -2578,10 +2450,6 @@
   "normal-gem": {
     "name": "Normale edelsteen",
     "shortDesc": "Vastgehouden: wanneer de houder een schadelijke zet van het type Normaal gebruikt, heeft de zet 1,5 kracht en wordt dit item verbruikt."
-  },
-  "normalium-z--bag": {
-    "name": "Normalium Z",
-    "shortDesc": "XXX nieuw effect voor normalium-z--bag"
   },
   "normalium-z--held": {
     "name": "Normalium Z",
@@ -2743,17 +2611,9 @@
     "name": "Pidgeotiet",
     "shortDesc": "Vastgehouden: Hiermee kan Pidgeot mega-evolueren naar Mega Pidgeot."
   },
-  "pikanium-z--bag": {
-    "name": "Pikanium Z",
-    "shortDesc": "XXX nieuw effect voor pikanium-z--bag"
-  },
   "pikanium-z--held": {
     "name": "Pikanium Z",
     "shortDesc": "Vastgehouden: Hiermee kan Pikachu Volt Tackle upgraden naar Catastropika."
-  },
-  "pikashunium-z--bag": {
-    "name": "Pikashunium Z",
-    "shortDesc": "XXX nieuw effect voor pikashunium-z--bag"
   },
   "pikashunium-z--held": {
     "name": "Pikashunium Z",
@@ -2814,10 +2674,6 @@
   "poison-memory": {
     "name": "Gifgeheugen",
     "shortDesc": "Vastgehouden: verandert Silvally in zijn gifvorm. Verandert het type Multi-aanvallen in Gif."
-  },
-  "poisonium-z--bag": {
-    "name": "Poisonium Z",
-    "shortDesc": "XXX nieuw effect voor gif-z--bag"
   },
   "poisonium-z--held": {
     "name": "Poisonium Z",
@@ -2935,10 +2791,6 @@
     "name": "Mooie veer",
     "shortDesc": "Verkoop voor 100 Pokedollars."
   },
-  "primarium-z--bag": {
-    "name": "Primarium Z",
-    "shortDesc": "XXX nieuw effect voor primarium-z--bag"
-  },
   "primarium-z--held": {
     "name": "Primarium Z",
     "shortDesc": "Vastgehouden: Hiermee kan Primarina Sparkling Aria upgraden naar Oceanic Operette."
@@ -2986,10 +2838,6 @@
   "psychic-seed": {
     "name": "Psychisch zaad",
     "shortDesc": "Gehouden: wordt verbruikt op psychisch terrein en verhoogt de speciale verdediging van de houder met één niveau."
-  },
-  "psychium-z--bag": {
-    "name": "Psychium Z",
-    "shortDesc": "XXX nieuw effect voor psychium-z--bag"
   },
   "psychium-z--held": {
     "name": "Psychium Z",
@@ -3207,10 +3055,6 @@
     "name": "Herhaal bal",
     "shortDesc": "Probeert een wilde Pokemon te vangen. Het succespercentage is 3 voor eerder gevangen Pokemon."
   },
-  "repel": {
-    "name": "Afstoten",
-    "shortDesc": "Voorkomt dat zwakke wilde Pokemon voor een korte tijd verschijnen."
-  },
   "resist-wing": {
     "name": "Weersta veren",
     "shortDesc": "Verhoogt de verdedigingsinspanning met 1."
@@ -3287,10 +3131,6 @@
     "name": "Rock Smash Charm",
     "shortDesc": "Hiermee kun je Rock Smash gebruiken zonder dat een Pokémon de aanval kent."
   },
-  "rockium-z--bag": {
-    "name": "Rockium Z",
-    "shortDesc": "XXX nieuw effect voor rockium-z--bag"
-  },
   "rockium-z--held": {
     "name": "Rockium Z",
     "shortDesc": "Vastgehouden: Hiermee kan een Pokemon de Z-zet-equivalenten van zijn Rock-bewegingen gebruiken."
@@ -3298,10 +3138,6 @@
   "rocky-helmet": {
     "name": "Rocky-helm",
     "shortDesc": "Vastgehouden: wanneer de houder wordt geraakt door een contactbeweging, krijgt de aanvallende Pokemon 1/6 van zijn maximale HP aan schade."
-  },
-  "roller-skates": {
-    "name": "Rolschaatsen",
-    "shortDesc": "Hiermee kan de speler snel en buiten de grid bewegen."
   },
   "room-service": {
     "name": "Roomservice",
@@ -3319,66 +3155,6 @@
     "name": "Roseli-bes",
     "shortDesc": "Vastgehouden: wordt verbruikt wanneer je wordt geraakt door een supereffectieve aanval van het type Fee om de schade te halveren."
   },
-  "roto-bargain": {
-    "name": "Roto-koopje",
-    "shortDesc": "XXX nieuw effect voor roto-koopje"
-  },
-  "roto-boost": {
-    "name": "Roto-boost",
-    "shortDesc": "XXX nieuw effect voor roto-boost"
-  },
-  "roto-catch": {
-    "name": "Roto-vangst",
-    "shortDesc": "XXX nieuw effect voor roto-catch"
-  },
-  "roto-encounter": {
-    "name": "Roto-ontmoeting",
-    "shortDesc": "XXX nieuw effect voor roto-ontmoeting"
-  },
-  "roto-exp-points": {
-    "name": "Roto Exp. Punten",
-    "shortDesc": "XXX nieuw effect voor roto-exp-punten"
-  },
-  "roto-friendship": {
-    "name": "Roto-vriendschap",
-    "shortDesc": "XXX nieuw effect voor roto-vriendschap"
-  },
-  "roto-hatch": {
-    "name": "Rotoluik",
-    "shortDesc": "XXX nieuw effect voor roto-hatch"
-  },
-  "roto-hp-restore": {
-    "name": "Roto HP herstellen",
-    "shortDesc": "XXX nieuw effect voor roto-hp-herstel"
-  },
-  "roto-pp-restore": {
-    "name": "Roto PP herstellen",
-    "shortDesc": "XXX nieuw effect voor roto-pp-herstel"
-  },
-  "roto-prize-money": {
-    "name": "Roto-prijzengeld",
-    "shortDesc": "XXX nieuw effect voor roto-prijzengeld"
-  },
-  "roto-stealth": {
-    "name": "Roto Stealth",
-    "shortDesc": "XXX nieuw effect voor roto-stealth"
-  },
-  "rotom-bike": {
-    "name": "Rotomfiets",
-    "shortDesc": "Deze fiets kan worden gecombineerd met de Pokemon Rotom om een ​​turboboost te gebruiken."
-  },
-  "rotom-bike--glistening-black": {
-    "name": "Rotomfiets",
-    "shortDesc": "Deze fiets kan een turboboost geven en over het water rennen met behulp van Rotoms kracht. Het is een glinsterend zwart dat roodachtig zwart schijnt."
-  },
-  "rotom-bike--sparkling-white": {
-    "name": "Rotomfiets",
-    "shortDesc": "Deze fiets kan een turboboost geven en over het water rennen met behulp van Rotoms kracht. Het is een sprankelend wit dat schitterend glanst."
-  },
-  "rotom-bike--water-mode": {
-    "name": "Rotomfiets",
-    "shortDesc": "Deze fiets kan worden gecombineerd met de Pokemon Rotom om niet alleen een turboboost te geven, maar ook om over het water te rennen."
-  },
   "rotom-catalog": {
     "name": "Rotom-catalogus",
     "shortDesc": "Een catalogus met apparaten die Rotom leuk vindt. Gebruik de catalogus om Rotom in en uit de verschillende apparaten te laten springen die daarin worden vermeld."
@@ -3390,10 +3166,6 @@
   "ruby": {
     "name": "Robijn",
     "shortDesc": "Geef aan Celio met Sapphire om Network Machine te activeren en Rainbow Pass te krijgen."
-  },
-  "rule-book": {
-    "name": "Regelboek",
-    "shortDesc": "Lijst met gevechtstypes en hun regels."
   },
   "rusted-shield": {
     "name": "Verroest schild",
@@ -3482,10 +3254,6 @@
   "sea-incense": {
     "name": "Zeewierook",
     "shortDesc": "Vastgehouden: watertype-bewegingen van de houder veroorzaken 20% meer schade. Kweken: Marill of Azumarill brengen een Azurill-ei voort."
-  },
-  "seal-bag": {
-    "name": "Sealzak",
-    "shortDesc": "Heeft tien zegels voor Poke Balls."
   },
   "seal-case": {
     "name": "Afdichting behuizing",
@@ -3631,10 +3399,6 @@
     "name": "Gladde rots",
     "shortDesc": "Vastgehouden: Zandstorm door de houder duurt 8 ronden in plaats van 5."
   },
-  "snorlium-z--bag": {
-    "name": "Snorlium Z",
-    "shortDesc": "XXX nieuw effect voor snorlium-z--bag"
-  },
   "snorlium-z--held": {
     "name": "Snorlium Z",
     "shortDesc": "Vastgehouden: Hiermee kan Snorlax Giga Impact upgraden naar Pulverizing Pancake."
@@ -3654,10 +3418,6 @@
   "soft-sand": {
     "name": "Zacht zand",
     "shortDesc": "Vastgehouden: grondtypebewegingen van de houder veroorzaken 20% meer schade."
-  },
-  "solganium-z--bag": {
-    "name": "Solganium Z",
-    "shortDesc": "XXX nieuw effect voor solganium-z--bag"
   },
   "solganium-z--held": {
     "name": "Solganium Z",
@@ -3771,10 +3531,6 @@
     "name": "Stalen geheugen",
     "shortDesc": "Vastgehouden: verandert Silvally in zijn stalen vorm. Verandert het type Multi-aanvallen in Staal."
   },
-  "steelium-z--bag": {
-    "name": "Steelium Z",
-    "shortDesc": "XXX nieuw effect voor steelium-z--bag"
-  },
   "steelium-z--held": {
     "name": "Steelium Z",
     "shortDesc": "Vastgehouden: Hiermee kan een Pokemon de Z-zet-equivalenten van zijn Steel-bewegingen gebruiken."
@@ -3855,10 +3611,6 @@
     "name": "Super Potion",
     "shortDesc": "Herstelt 50 HP."
   },
-  "super-repel": {
-    "name": "Superafweer",
-    "shortDesc": "Voorkomt gedurende 200 stappen wilde ontmoetingen met een niveau lager dan de leidende Pokemon van je team."
-  },
   "super-rod": {
     "name": "Super Rod",
     "shortDesc": "Gebruik deze hengel om sterke Pokémon in water te vangen."
@@ -3902,10 +3654,6 @@
   "tanga-berry": {
     "name": "Tangabes",
     "shortDesc": "Vastgehouden: wordt verbruikt wanneer je wordt geraakt door een supereffectieve aanval van het Bug-type om de schade te halveren."
-  },
-  "tapunium-z--bag": {
-    "name": "Tapunium Z",
-    "shortDesc": "XXX nieuw effect voor tapunium-z--bag"
   },
   "tapunium-z--held": {
     "name": "Tapunium Z",
@@ -5547,10 +5295,6 @@
     "name": "Ultra Ball",
     "shortDesc": "Een hoogwaardige bal met een hogere vangkans dan een Great Ball."
   },
-  "ultranecrozium-z--bag": {
-    "name": "Ultranecrozium Z",
-    "shortDesc": "XXX nieuw effect voor ultranecrozium-z--bag"
-  },
   "ultranecrozium-z--held": {
     "name": "Ultranecrozium Z",
     "shortDesc": "Vastgehouden: Hiermee kan Necrozma Light That Burns the Sky gebruiken."
@@ -5614,10 +5358,6 @@
   "waterfall-charm": {
     "name": "Waterfall Charm",
     "shortDesc": "Hiermee kun je Waterfall gebruiken zonder dat een Pokémon de aanval kent."
-  },
-  "waterium-z--bag": {
-    "name": "Waterium Z",
-    "shortDesc": "XXX nieuw effect voor waterium-z--bag"
   },
   "waterium-z--held": {
     "name": "Waterium Z",

@@ -90,7 +90,7 @@ func _check_catalogs() -> void:
 		_check(parsed is Dictionary, "generated %s item catalog is valid JSON" % locale)
 		var catalog: Dictionary = parsed as Dictionary if parsed is Dictionary else {}
 		generated_catalogs[locale] = catalog
-		_check(catalog.size() == 1449, "generated %s item catalog covers the complete source index" % locale)
+		_check(catalog.size() == 1384, "generated %s item catalog covers the cleaned source index" % locale)
 		for item_id_value: Variant in catalog.keys():
 			var item_id := str(item_id_value)
 			var entry: Dictionary = catalog.get(item_id, {})
@@ -107,6 +107,20 @@ func _check_catalogs() -> void:
 
 	var generated_english: Dictionary = generated_catalogs.get("en", {})
 	var generated_chinese: Dictionary = generated_catalogs.get("zh_CN", {})
+	var retired_item_ids: Array[String] = [
+		"acro-bike", "bicycle", "bike", "mach-bike", "roller-skates", "rotom-bike",
+		"bike--green", "bike--yellow", "rotom-bike--glistening-black",
+		"rotom-bike--sparkling-white", "rotom-bike--water-mode",
+		"roto-bargain", "roto-boost", "roto-catch", "roto-encounter",
+		"roto-exp-points", "roto-friendship", "roto-hatch", "roto-hp-restore",
+		"roto-pp-restore", "roto-prize-money", "roto-stealth",
+		"god-stone", "loot-sack", "rule-book", "seal-bag", "left-poke-ball",
+		"repel", "super-repel", "max-repel",
+	]
+	for retired_item_id: String in retired_item_ids:
+		_check(not generated_english.has(retired_item_id), "%s is absent from generated item localization" % retired_item_id)
+	for item_id_value: Variant in generated_english.keys():
+		_check(not str(item_id_value).ends_with("-z--bag"), "duplicate Bag-side Z-Crystals are absent from generated item localization")
 	_check(
 		str((generated_chinese.get("ability-capsule", {}) as Dictionary).get("name", "")) == "特性胶囊",
 		"generated Simplified Chinese uses the official Ability Capsule name"
@@ -139,7 +153,7 @@ func _check_catalogs() -> void:
 		localized_ids.sort()
 		_check(localized_ids == expected_generated_ids, "generated %s item IDs match English" % locale)
 		_check(
-			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1450,
+			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1385,
 			"%s complete item catalog plus virtual Escape Rope action loads into the runtime resolver" % locale
 		)
 
