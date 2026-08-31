@@ -245,11 +245,28 @@ func _check_overlay_integration() -> void:
 		"category": "medicine",
 		"shortDesc": "Restores 20 HP.",
 		"quantity": 2,
+	}, {
+		"itemId": "normalium-z--held",
+		"name": "Normalium Z",
+		"category": "held-items",
+		"shortDesc": "Enables Normal-type Z-Moves.",
+		"isHoldable": true,
+		"quantity": 1,
+		"assignmentMode": "account_entitlement",
 	}])
-	_check(normalized.size() == 2, "Bag normalization retains inventory plus virtual Escape Rope")
+	_check(normalized.size() == 3, "Bag normalization retains inventory plus virtual Escape Rope")
 	var potion: Dictionary = normalized[0]
-	var escape_rope: Dictionary = normalized[1]
+	var normalium: Dictionary = normalized[1]
+	var escape_rope: Dictionary = normalized[2]
 	_check(potion.get("shortDesc") == "Herstelt 20 HP.", "Bag normalization applies Dutch item data")
+	_check(
+		normalium.get("assignmentMode") == "account_entitlement",
+		"Bag normalization preserves account-entitlement assignment mechanics"
+	)
+	_check(
+		overlay.call("_bag_item_quantity_marker", normalium) == "∞",
+		"account entitlements use the infinite assignment marker"
+	)
 	_check(
 		escape_rope.get("name") == "Escape Rope · Belangrijk item",
 		"virtual Escape Rope name renders in Dutch"
