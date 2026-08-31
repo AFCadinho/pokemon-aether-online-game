@@ -6530,14 +6530,6 @@ func _setup_pvp_room_popup() -> void:
 	pvp_live_refresh_button.pressed.connect(_on_pvp_live_refresh_pressed)
 	live_header.add_child(pvp_live_refresh_button)
 
-	var live_columns := HBoxContainer.new()
-	live_columns.add_theme_constant_override("separation", 10)
-	live_tab.add_child(live_columns)
-	live_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.live.column.battle", 0, HORIZONTAL_ALIGNMENT_LEFT, true))
-	live_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.live.column.players", 180, HORIZONTAL_ALIGNMENT_LEFT))
-	live_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.live.column.status", 100, HORIZONTAL_ALIGNMENT_RIGHT))
-	live_columns.add_child(_create_pvp_leaderboard_header_label("ui.pvp.live.column.started", 110, HORIZONTAL_ALIGNMENT_RIGHT))
-
 	var live_scroll := ScrollContainer.new()
 	live_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	live_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -41375,50 +41367,92 @@ func _refresh_pvp_live_battles(force: bool = false) -> void:
 
 func _create_pvp_live_battle_row(entry: Dictionary) -> Control:
 	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 72)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_panel_style(Color("#080d15e8"), Color("#38516baa"), 5, 1)
+		_make_panel_style(Color("#09131ff2"), Color("#3d6686cc"), 10, 1)
 	)
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 8)
-	margin.add_theme_constant_override("margin_top", 5)
-	margin.add_theme_constant_override("margin_right", 8)
-	margin.add_theme_constant_override("margin_bottom", 5)
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 10)
 	panel.add_child(margin)
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 10)
+	row.add_theme_constant_override("separation", 14)
 	margin.add_child(row)
 
 	var match_id := str(entry.get("matchId", "")).strip_edges()
 	var battle_id := str(entry.get("battleId", "")).strip_edges()
+	var battle_summary := VBoxContainer.new()
+	battle_summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	battle_summary.add_theme_constant_override("separation", 2)
+	row.add_child(battle_summary)
+
+	var matchup_label := Label.new()
+	matchup_label.text = _pvp_live_players_label(entry)
+	matchup_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	matchup_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	matchup_label.add_theme_font_size_override("font_size", 16)
+	matchup_label.add_theme_color_override("font_color", UI_TEXT)
+	battle_summary.add_child(matchup_label)
+
+	var battle_metadata := Label.new()
+	battle_metadata.text = _pvp_live_battle_label(entry, battle_id)
+	battle_metadata.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	battle_metadata.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	battle_metadata.add_theme_font_size_override("font_size", 11)
+	battle_metadata.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	battle_summary.add_child(battle_metadata)
+
+	var live_details := VBoxContainer.new()
+	live_details.custom_minimum_size = Vector2(126, 0)
+	live_details.alignment = BoxContainer.ALIGNMENT_CENTER
+	live_details.add_theme_constant_override("separation", 4)
+	row.add_child(live_details)
+
+	var live_badge := PanelContainer.new()
+	live_badge.size_flags_horizontal = Control.SIZE_SHRINK_END
+	live_badge.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#102a22e8"), Color("#48c985aa"), 8, 1)
+	)
+	live_details.add_child(live_badge)
+	var badge_margin := MarginContainer.new()
+	badge_margin.add_theme_constant_override("margin_left", 9)
+	badge_margin.add_theme_constant_override("margin_top", 3)
+	badge_margin.add_theme_constant_override("margin_right", 9)
+	badge_margin.add_theme_constant_override("margin_bottom", 3)
+	live_badge.add_child(badge_margin)
+	var live_label := Label.new()
+	live_label.text = LocalizationManager.text("ui.pvp.live.status.live")
+	live_label.add_theme_font_size_override("font_size", 11)
+	live_label.add_theme_color_override("font_color", Color("#78e6a1"))
+	badge_margin.add_child(live_label)
+
+	var started_label := Label.new()
+	started_label.text = "%s %s" % [
+		LocalizationManager.text("ui.pvp.live.column.started"),
+		_pvp_live_started_label(str(entry.get("startedAt", "")))
+	]
+	started_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	started_label.add_theme_font_size_override("font_size", 10)
+	started_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	live_details.add_child(started_label)
+
 	var watch_button := Button.new()
-	watch_button.text = LocalizationManager.text(
+	watch_button.text = LocalizationManager.text("ui.pvp.room.spectate")
+	watch_button.tooltip_text = LocalizationManager.text(
 		"ui.pvp.live.watch_battle",
 		{"battle": _pvp_live_battle_label(entry, battle_id)}
 	)
-	watch_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	watch_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	watch_button.custom_minimum_size = Vector2(112, 42)
 	watch_button.focus_mode = Control.FOCUS_NONE
 	watch_button.disabled = match_id == "" or _pvp_live_watch_blocked()
 	watch_button.pressed.connect(_on_pvp_live_watch_pressed.bind(match_id))
-	_apply_button_style(watch_button)
+	_apply_button_style(watch_button, "primary")
 	row.add_child(watch_button)
-	row.add_child(_create_pvp_leaderboard_value_label(
-		_pvp_live_players_label(entry), 180, HORIZONTAL_ALIGNMENT_LEFT
-	))
-	row.add_child(_create_pvp_leaderboard_value_label(
-		LocalizationManager.text("ui.pvp.live.status.live"),
-		100,
-		HORIZONTAL_ALIGNMENT_RIGHT,
-		Color("#78e6a1")
-	))
-	row.add_child(_create_pvp_leaderboard_value_label(
-		_pvp_live_started_label(str(entry.get("startedAt", ""))),
-		110,
-		HORIZONTAL_ALIGNMENT_RIGHT,
-		UI_MUTED_TEXT
-	))
 	return panel
 
 func _pvp_live_battle_label(entry: Dictionary, battle_id: String) -> String:

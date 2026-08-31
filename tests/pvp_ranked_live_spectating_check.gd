@@ -26,6 +26,9 @@ func _init() -> void:
 	_check(
 		ui_source.contains("func _create_pvp_live_battle_row(entry: Dictionary) -> Control:") \
 			and ui_source.contains("_on_pvp_live_watch_pressed.bind(match_id)") \
+			and ui_source.contains("matchup_label.text = _pvp_live_players_label(entry)") \
+			and ui_source.contains('watch_button.text = LocalizationManager.text("ui.pvp.room.spectate")') \
+			and ui_source.contains('_apply_button_style(watch_button, "primary")') \
 			and ui_source.contains("BattleApiClient.spectate_ranked_pvp_match(") \
 			and ui_source.contains("func _pvp_live_watch_blocked() -> bool:") \
 			and ui_source.contains('or pvp_active_queue_entry_id != ""'),
