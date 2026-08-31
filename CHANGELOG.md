@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aether Clash now explains which frozen tier rule blocks portal entry, so Trainers can fix and revalidate their team before the gathering window closes.
+
 - Guild member cards no longer show a redundant status dot alongside their status text.
 
 - The Mega Stone Seller is now available in the Aether Clash Lobby, and the Bag distinguishes grouped account-bound and tradeable copies without showing a misleading combined stack count.
