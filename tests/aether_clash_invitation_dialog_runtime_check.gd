@@ -32,6 +32,9 @@ func _run() -> void:
 		"challengedGuild": {"id": 8, "name": "Godz"},
 		"createdBy": "Admin",
 		"spectatorAccess": "guilds_only",
+		"tierName": "Aether OU",
+		"stakeAmount": 100000,
+		"stakePotAmount": 200000,
 		"expiresAt": "2099-08-30T12:00:00+00:00",
 	})
 	overlay_instance.call("_render_aether_clash_challenge_dialog")
@@ -41,6 +44,7 @@ func _run() -> void:
 	var dialog := overlay_instance.get("aether_clash_challenge_dialog") as AetherConfirmationDialog
 	var countdown := overlay_instance.get("aether_clash_challenge_countdown_label") as Label
 	var spectator_policy := overlay_instance.get("aether_clash_challenge_spectator_label") as Label
+	var contract := overlay_instance.get("aether_clash_challenge_contract_label") as Label
 	_check(dialog != null and dialog.visible, "incoming challenge opens a direct response modal")
 	_check(
 		dialog != null and dialog.title_label.text.contains("Aether Clash"),
@@ -56,6 +60,13 @@ func _run() -> void:
 	_check(
 		spectator_policy != null and spectator_policy.text.to_lower().contains("guild"),
 		"incoming challenge shows its spectator policy"
+	)
+	_check(
+		contract != null
+		and contract.text.contains("Aether OU")
+		and contract.text.contains("100,000")
+		and contract.text.contains("200,000"),
+		"incoming challenge shows its immutable tier and Guild Bank stake contract"
 	)
 	_check(
 		dialog != null
