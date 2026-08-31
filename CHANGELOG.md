@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Ranked now has a Rewards tab that previews planned Battle Point payouts and future placement, objective, and season rewards while clearly showing that grants are not active yet.
+
 - Aether Clash arenas now replace the quest tracker and hotkey bar with a private Guild status panel, spectator guidance, live battle counts, and anonymous elimination notifications.
 
 - Wild Pokémon now show their rarity-based Aetherite rewards in the Pokédex, and successful drops update the wallet with a localized currency notification.
