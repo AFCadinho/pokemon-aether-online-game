@@ -9,6 +9,7 @@ signal incoming_friend_requests_changed(count: int)
 
 const POPUP_SIZE := Vector2(880, 620)
 const FRIENDLIST_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")
+const TrainerAvatarPreviewScript := preload("res://scripts/ui/trainer_avatar_preview.gd")
 const UI_BG := Color("#050b14ed")
 const UI_SURFACE_RAISED := Color("#081522eb")
 const UI_SLOT_BG := Color("#0b1a2bea")
@@ -952,14 +953,12 @@ func _create_user_avatar(user: Dictionary, online: bool, blocked: bool = false) 
 		_make_panel_style(Color("#0a1b2be8"), border_color, 10, 1)
 	)
 
-	var initials := Label.new()
-	initials.text = _user_initials(user)
-	initials.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	initials.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	initials.add_theme_font_size_override("font_size", 13)
-	initials.add_theme_color_override("font_color", UI_MUTED_TEXT if blocked else UI_TEXT)
-	initials.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	frame.add_child(initials)
+	var avatar_preview := TrainerAvatarPreviewScript.new() as TrainerAvatarPreview
+	avatar_preview.name = "TrainerAvatarPreview"
+	avatar_preview.set_trainer_state(user, _user_initials(user))
+	if blocked:
+		avatar_preview.modulate = Color(0.68, 0.72, 0.78, 0.82)
+	frame.add_child(avatar_preview)
 	return frame
 
 

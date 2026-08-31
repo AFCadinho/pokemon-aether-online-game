@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nearby Trainers, social actions, Friends and Guild Members now show compact previews of each Trainer's equipped player sprite, with initials as a fallback.
+
 - Trainer right-click actions now use compact quick and secondary pages, clearer icons, and a calmer safety section.
 
 - Pokémon in PC boxes can now move their held item directly to the Bag through one clean, item-focused right-click action.

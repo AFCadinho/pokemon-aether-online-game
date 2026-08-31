@@ -150,6 +150,7 @@ func _init() -> void:
 	_check_contains(popup_source, '"update_member_bank_permissions"', "Guild Bank permission changes use the authoritative service")
 	_check_contains(popup_source, "bankPermissionOverrides", "Guild Bank feedback distinguishes personal permission denials")
 	_check_contains(popup_source, "GuildMemberPresenceLabel_", "Guild member cards show online and last-seen state")
+	_check_contains(popup_source, "GuildMemberAvatar_", "Guild member cards show compact sprite-based Trainer portraits")
 	_check_contains(popup_source, "GuildMemberContributionLabel_", "Guild member cards show contributed Guild EXP")
 	_check_contains(popup_source, "GUILD_MEMBER_ACTION_PM", "Guild member action menus expose private messages")
 	_check_contains(popup_source, "GuildMembersTab", "guild dashboard separates its member roster")
