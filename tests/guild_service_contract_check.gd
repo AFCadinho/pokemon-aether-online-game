@@ -35,6 +35,7 @@ func _init() -> void:
 	_check_contains(service_source, "func load_aether_clash_portal_sessions", "guild service loads accessible portal sessions")
 	_check_contains(service_source, "func enter_aether_clash_portal", "guild service requests server-owned portal entry")
 	_check_contains(service_source, "func load_aether_clash_arena_state", "guild service loads live Aether Clash arena state")
+	_check_contains(service_source, '"matchmaking": _dictionary(body.get("matchmaking", {}))', "guild service preserves personal Aether Clash matchmaking state")
 	_check_contains(service_source, '"identifiedEnemyUserIds": _array', "arena state preserves the backward-compatible empty enemy identity field")
 	_check_contains(service_source, '"visibleIdentityUserIds": _array', "arena state preserves server-authoritative nameplate visibility")
 	_check_contains(service_source, "func leave_aether_clash_arena", "guild service exposes authoritative voluntary Clash departure")

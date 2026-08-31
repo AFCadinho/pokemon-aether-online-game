@@ -50,6 +50,65 @@ func _run() -> void:
 		hud.barrier_hint_label.text == "Duel time: 02:05",
 		"Active arena HUD shows synchronized elapsed duel time"
 	)
+	_check(hud.matchmaking_hint_label.visible, "Active participants see automatic matchmaking status")
+	_check(
+		hud.matchmaking_hint_label.text.contains("OPPONENT AVAILABLE")
+		and hud.matchmaking_hint_label.text.contains("01:00"),
+		"Initial matchmaking state shows the synchronized 60-second search window"
+	)
+
+	var warning_payload := _arena_payload("active", 4, 2)
+	var warning_now := int(Time.get_unix_time_from_system())
+	warning_payload["serverNow"] = Time.get_datetime_string_from_unix_time(warning_now, true) + "Z"
+	warning_payload["matchmaking"]["deadlineAt"] = Time.get_datetime_string_from_unix_time(
+		warning_now + 10,
+		true
+	) + "Z"
+	duel.call("_apply_arena_state", warning_payload)
+	await physics_frame
+	_check(
+		hud.matchmaking_hint_label.get_theme_color("font_color")
+		== Color("#ffb35c"),
+		"The final 15 matchmaking seconds use the warning color"
+	)
+
+	var waiting_payload := _arena_payload("active", 4, 2)
+	waiting_payload["matchmaking"] = {
+		"status": "waiting_for_opponent",
+		"secondsRemaining": 37,
+		"searchSeconds": 60,
+		"warningSeconds": 15,
+	}
+	duel.call("_apply_arena_state", waiting_payload)
+	await physics_frame
+	_check(
+		hud.matchmaking_hint_label.text == "WAITING FOR AN OPPONENT…",
+		"Paused matchmaking clearly waits for another free opponent"
+	)
+
+	var starting_payload := _arena_payload("active", 4, 2)
+	starting_payload["matchmaking"] = {
+		"status": "starting",
+		"secondsRemaining": 0,
+		"searchSeconds": 60,
+		"warningSeconds": 15,
+	}
+	duel.call("_apply_arena_state", starting_payload)
+	await physics_frame
+	_check(
+		hud.matchmaking_hint_label.text == "STARTING FORCED BATTLE…",
+		"An automatic reservation announces the forced battle transition"
+	)
+	var disabled_payload := _arena_payload("active", 4, 2)
+	disabled_payload["viewerRole"] = "spectator"
+	disabled_payload["viewerSide"] = ""
+	disabled_payload["matchmaking"] = {"status": "disabled"}
+	duel.call("_apply_arena_state", disabled_payload)
+	await physics_frame
+	_check(
+		not hud.matchmaking_hint_label.visible,
+		"Spectators do not receive a participant matchmaking countdown"
+	)
 
 	duel.call("_apply_arena_state", _arena_payload("entry_open", 3, 5))
 	await physics_frame
@@ -148,6 +207,13 @@ func _arena_payload(status: String, challenger_count: int, challenged_count: int
 		"serverNow": Time.get_datetime_string_from_unix_time(now, true) + "Z",
 		"viewerRole": "participant",
 		"viewerSide": "blue",
+		"matchmaking": {
+			"status": "searching",
+			"deadlineAt": Time.get_datetime_string_from_unix_time(now + 60, true) + "Z",
+			"secondsRemaining": 60,
+			"searchSeconds": 60,
+			"warningSeconds": 15,
+		},
 		"session": {
 			"id": "runtime-test",
 			"status": status,
