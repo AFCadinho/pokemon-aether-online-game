@@ -30,11 +30,6 @@ const LAYERS: Array[Dictionary] = [
 		"preserve_luminance": true,
 	},
 	{
-		"path": "res://assets/player/hair/Bald_Hair.png",
-		"tint": Color("#201a18"),
-		"preserve_luminance": false,
-	},
-	{
 		"path": "res://assets/player/male/hair/Adinho_Hair.png",
 		"tint": Color("#201a18"),
 		"preserve_luminance": true,

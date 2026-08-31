@@ -4611,6 +4611,8 @@
   "ui.appearance.return_item_tooltip": "Devolva {item} à Bolsa; a tinta Chroma aplicada será removida",
   "ui.appearance.unequip": "Retirar",
   "ui.appearance.unequip_tooltip": "Não usar nada nesta categoria",
+  "ui.appearance.no_hair": "Careca / Sem cabelo",
+  "ui.appearance.no_hair_tooltip": "Use a cabeça naturalmente careca sem uma camada de cabelo",
   "ui.appearance.return_to_bag": "À Bolsa",
   "ui.appearance.wardrobe_capacity": "Guarda-roupa de {category} · {count}/{limit} desbloqueados",
   "ui.appearance.status.saving": "Salvando aparência...",

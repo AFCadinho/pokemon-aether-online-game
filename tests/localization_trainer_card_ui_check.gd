@@ -155,6 +155,33 @@ func _check_trainer_card_runtime_translation() -> void:
 		and wardrobe_capacity.tooltip_text == wardrobe_capacity.text,
 		"Appearance keeps the complete wardrobe capacity available"
 	)
+	var player_save := root.get_node_or_null("PlayerSave")
+	var original_hair_id := str(player_save.get("appearance_hair_id")) if player_save != null else ""
+	var hair_category_button := category_rail.get_child(2) as Button if category_rail != null else null
+	if hair_category_button != null and content_stack != null:
+		overlay.call(
+			"_on_trainer_card_appearance_category_selected",
+			hair_category_button,
+			content_stack,
+			"hair"
+		)
+	unequip_button = overlay.get("trainer_card_appearance_unequip_button") as Button
+	_check(
+		unequip_button != null
+		and unequip_button.text == "Kaal / Geen haar"
+		and unequip_button.visible
+		and unequip_button.toggle_mode,
+		"Hair uses an explicit Dutch no-hair choice"
+	)
+	if player_save != null:
+		player_save.set("appearance_hair_id", "")
+	overlay.call("_refresh_trainer_card_appearance_actions")
+	_check(
+		unequip_button != null and unequip_button.button_pressed,
+		"The no-hair choice shows its selected state"
+	)
+	if player_save != null:
+		player_save.set("appearance_hair_id", original_hair_id)
 	var body_category_button := category_rail.get_child(1) as Button if category_rail != null else null
 	if body_category_button != null and content_stack != null:
 		overlay.call(
@@ -191,6 +218,18 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(status_label != null and status_label.text.begins_with("Alterações"), "Appearance status updates to Portuguese")
 	_check(overlay.call("_format_appearance_swatch_name", "Dark Brown") == "Marrom-escuro", "Appearance swatch updates to Portuguese")
 	_check(overlay.call("_format_appearance_option_name", "top", "IronFanton_Shirt") == "Camisa IronFanton", "IronFanton shirt updates to Portuguese")
+	if hair_category_button != null and content_stack != null:
+		overlay.call(
+			"_on_trainer_card_appearance_category_selected",
+			hair_category_button,
+			content_stack,
+			"hair"
+		)
+	unequip_button = overlay.get("trainer_card_appearance_unequip_button") as Button
+	_check(
+		unequip_button != null and unequip_button.text == "Careca / Sem cabelo",
+		"No-hair choice updates to Portuguese"
+	)
 	if top_category_button != null and content_stack != null:
 		overlay.call(
 			"_on_trainer_card_appearance_category_selected",

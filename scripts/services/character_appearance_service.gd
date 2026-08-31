@@ -21,7 +21,6 @@ const PRESENCE_BODY_APPEARANCE_SEPARATOR := "#appearance="
 const DEFAULT_BODY_ID := "Gen4_Base_v1"
 const DEFAULT_MALE_BODY_ID := "Gen4_Base_v1"
 const DEFAULT_FEMALE_BODY_ID := "Gen4_Base_F_v1"
-const BASE_HAIR_ID := "Bald_Hair"
 const DEFAULT_MALE_HAIR_ID := "Hair"
 const DEFAULT_MALE_HEADGEAR_ID := "Cap"
 const DEFAULT_MALE_FACIAL_HAIR_ID := ""
@@ -672,11 +671,6 @@ static func deserialize_part_id(part_id: String) -> String:
 	return normalized_part_id
 
 
-static func resolve_hair_render_id(hair_id: String) -> String:
-	var normalized_hair_id := deserialize_part_id(hair_id)
-	return BASE_HAIR_ID if normalized_hair_id == "" else normalized_hair_id
-
-
 static func _is_empty_presence_part_id(part_id: String) -> bool:
 	var normalized_part_id: String = part_id.strip_edges().to_lower()
 	return normalized_part_id == "" or normalized_part_id == UNEQUIPPED_PART_ID
@@ -829,7 +823,7 @@ static func get_tinted_part_frames(
 	var tinted_frames: SpriteFrames = _build_tinted_sprite_frames(
 		base_frames,
 		tint_color,
-		preserve_luminance and normalized_part_id != BASE_HAIR_ID
+		preserve_luminance
 	)
 	_tinted_part_frames_cache[cache_key] = tinted_frames
 	return tinted_frames

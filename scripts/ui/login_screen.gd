@@ -848,7 +848,7 @@ func _get_player_preview_category_for_sprite(sprite_name: String) -> String:
 func _get_player_preview_part_id(category_id: String) -> String:
 	match CharacterAppearanceService.normalize_part_category(category_id):
 		"hair":
-			return CharacterAppearanceService.resolve_hair_render_id(
+			return CharacterAppearanceService.deserialize_part_id(
 				PlayerSave.appearance_hair_id
 			)
 		"headgear":
