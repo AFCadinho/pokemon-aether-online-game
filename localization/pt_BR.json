@@ -4514,6 +4514,7 @@
   "ui.trainer_card.field.id": "ID",
   "ui.trainer_card.field.joined": "Ingressou",
   "ui.trainer_card.field.badge": "Distintivo",
+  "ui.trainer_card.field.title": "Título de Treinador",
   "ui.trainer_card.field.playtime": "Tempo de jogo",
   "ui.trainer_card.field.gym_badges": "Insígnias de Ginásio",
   "ui.trainer_card.field.status": "Status",

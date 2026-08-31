@@ -24,8 +24,9 @@ func _run() -> void:
 		quit(1)
 		return
 	overlay.set("root_control", overlay.get_node_or_null("Control"))
+	root.add_child(overlay)
 	overlay.call("_show_public_trainer_card", {
-		"userId": 42,
+		"userId": 42.0,
 		"username": "misty",
 		"displayName": "Misty",
 		"createdAt": "2026-05-04T12:00:00Z",
@@ -54,6 +55,10 @@ func _run() -> void:
 	var tabs := popup.find_child("PublicTrainerCardTabs", true, false) as TabContainer if popup != null else null
 	var overview_tab := tabs.get_node_or_null("Overview") as Control if tabs != null else null
 	var badges_tab := tabs.get_node_or_null("Badges") as Control if tabs != null else null
+	var avatar_panel := popup.find_child("PublicTrainerAvatarPanel", true, false) as PanelContainer if popup != null else null
+	var avatar_preview := popup.find_child("PublicTrainerAvatarPreview", true, false) as Node2D if popup != null else null
+	var profile_panel := popup.find_child("PublicTrainerInfo_ProfileSection", true, false) as PanelContainer if popup != null else null
+	var adventure_panel := popup.find_child("PublicTrainerInfo_Adventure", true, false) as PanelContainer if popup != null else null
 	_check(popup != null, "public Trainer Card opens as a dedicated view")
 	_check(
 		popup != null
@@ -73,8 +78,37 @@ func _run() -> void:
 		tabs != null and tabs.get_tab_bar().focus_mode == Control.FOCUS_ALL,
 		"public Trainer Card tabs support keyboard and controller focus"
 	)
-	_check(_find_label(popup, "Misty") != null, "public Trainer Card leads with trainer identity")
-	_check(_find_label(popup, "Cerulean Waves") != null, "public Trainer Card shows Guild identity")
+	_check(
+		_find_label(popup, "TRAINER PASSPORT · ID 42") != null
+		and _find_label(popup, "TRAINER PASSPORT · ID 42.0") == null,
+		"public Trainer Card formats Trainer IDs as whole numbers"
+	)
+	_check(
+		_find_label(popup, "Misty") != null and _find_visible_label(avatar_panel, "Misty") == null,
+		"public Trainer Card shows the trainer name only in its header"
+	)
+	_check(
+		avatar_panel != null
+		and avatar_panel.size.y <= 210.0
+		and avatar_preview != null
+		and avatar_preview.position == Vector2(80, 112)
+		and avatar_preview.scale == Vector2(2.7, 2.7),
+		"public Trainer Card matches the own-card avatar framing"
+	)
+	var joined_value := _find_label(overview_tab, "04-05-2026")
+	var guild_value := _find_label(overview_tab, "Cerulean Waves")
+	var playtime_value := _find_label(overview_tab, "2 H.")
+	_check(
+		joined_value != null and joined_value.is_visible_in_tree() and joined_value.size.x > 0.0
+		and guild_value != null and guild_value.is_visible_in_tree() and guild_value.size.x > 0.0
+		and playtime_value != null and playtime_value.is_visible_in_tree() and playtime_value.size.x > 0.0,
+		"public Trainer Card renders Joined, Guild and Playtime values visibly"
+	)
+	_check(
+		profile_panel != null and profile_panel.size.y <= 120.0
+		and adventure_panel != null and adventure_panel.size.y <= 90.0,
+		"public Trainer Card keeps profile panels compact"
+	)
 	_check(
 		_find_label(overview_tab, "Gym Badges") == null and _find_label(overview_tab, "2 / 8") == null,
 		"public Trainer Card keeps Gym Badges out of Overview"
@@ -94,12 +128,15 @@ func _run() -> void:
 		"public Trainer Card provides a focused primary social action"
 	)
 
+	await process_frame
+	await process_frame
 	localization_manager.call("set_locale", original_locale)
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
 		var loader := overlay.get(loader_property) as Node
 		if loader != null:
 			loader.free()
 	overlay.free()
+	await process_frame
 	quit(1 if failed else 0)
 
 
@@ -125,6 +162,11 @@ func _find_button(node: Node, text: String) -> Button:
 		if result != null:
 			return result
 	return null
+
+
+func _find_visible_label(node: Node, text: String) -> Label:
+	var label := _find_label(node, text)
+	return label if label != null and label.is_visible_in_tree() else null
 
 
 func _check(condition: bool, label: String) -> void:

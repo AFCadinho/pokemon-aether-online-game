@@ -4522,6 +4522,7 @@
   "ui.trainer_card.field.id": "ID",
   "ui.trainer_card.field.joined": "Lid sinds",
   "ui.trainer_card.field.badge": "Badge",
+  "ui.trainer_card.field.title": "Trainerstitel",
   "ui.trainer_card.field.playtime": "Speeltijd",
   "ui.trainer_card.field.gym_badges": "Gym Badges",
   "ui.trainer_card.field.status": "Status",

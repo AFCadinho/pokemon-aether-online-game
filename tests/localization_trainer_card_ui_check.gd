@@ -62,6 +62,7 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(_find_label(popup, "VOORTGANGSLIMIETEN") != null, "Trainer Card progression limits render in Dutch")
 	_check(_find_label(popup, "Levellimiet") != null, "Trainer Card level cap renders in Dutch")
 	_check(_find_label(popup, "Trade-limiet") != null, "Trainer Card trade cap renders in Dutch")
+	_check(_find_label(popup, "Trainerstitel") != null, "Trainer Card names the role selector clearly in Dutch")
 	_check(_find_label(popup, "Natuurlijke kleuren") != null, "Appearance colors render in Dutch")
 	_check(
 		preview_viewport != null

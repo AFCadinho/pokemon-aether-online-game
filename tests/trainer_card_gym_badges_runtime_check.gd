@@ -26,6 +26,9 @@ func _run() -> void:
 		quit(1)
 		return
 	var overlay := overlay_script.new() as CanvasLayer
+	var original_player_id := str(player_save.get("player_id"))
+	player_save.set("player_id", "2.0")
+	_check(overlay.call("_get_trainer_id_text") == "2", "local Trainer Card formats Trainer IDs as whole numbers")
 	var overview := overlay.call("_create_trainer_card_stats_tab") as Control
 	overlay.call("_apply_own_trainer_card_pvp", {
 		"gamesPlayed": 12,
@@ -80,6 +83,7 @@ func _run() -> void:
 		public_badges_tab.free()
 	overlay.free()
 	player_save.call("apply_gym_badge_state", {"badges": []})
+	player_save.set("player_id", original_player_id)
 	localization_manager.call("set_locale", original_locale)
 	quit(1 if failed else 0)
 

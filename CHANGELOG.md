@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Other Trainers' cards now use the same compact profile layout and correctly sized avatar preview as your own card, with visible values, whole-number Trainer IDs, and clearer Trainer Title wording.
+
 - Added Aether UU to Ranked matchmaking, team validation, Casual rooms, banlist browsing, leaderboards, match history, live battles, and Aether Clash challenges.
 
 - Public Trainer Cards now load follower previews without a setup error.
