@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Public Trainer Cards now load follower previews without a setup error.
+
 - Trainer Cards now keep regional Gym Badge progress exclusively in the Badges tab, both for your own card and cards viewed from other Trainers.
 
 - Aether Clash battles now leave the waiting screen when the 7.5-minute limit decides the result, and blocked forced-switch selections no longer trigger a script error.
