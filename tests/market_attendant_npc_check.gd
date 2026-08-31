@@ -25,6 +25,7 @@ func _check_market_attendant_script() -> void:
 	_check_true(text.contains("@export var market_id := \"standard\""), "MarketAttendantNPC exports market_id")
 	_check_true(text.contains('@export_enum("player_buys", "player_sells")'), "MarketAttendantNPC exports an explicit market mode")
 	_check_true(text.contains("get_node_or_null(\"/root/MarketService\")"), "MarketAttendantNPC uses MarketService autoload")
+	_check_true(text.contains('world.call("save_current_player_state_now")'), "MarketAttendantNPC saves authoritative proximity before opening")
 	_check_true(text.contains("await _load_npc_metadata()"), "MarketAttendantNPC loads shared NPC metadata")
 	_check_true(text.contains('market_service.call("load_market", market_id)'), "MarketAttendantNPC loads its configured market")
 	_check_true(text.contains("openingDialogueId"), "MarketAttendantNPC supports opening dialogue metadata")
@@ -57,7 +58,7 @@ func _check_market_attendant_scene() -> void:
 	_check_true(
 		battle_point_vendor_source.contains('npc_definition_id = "battle_point_vendor"')
 		and battle_point_vendor_source.contains('market_id = "battle_point_exchange"'),
-		"One Battle Point vendor scene is ready for later placement"
+		"One reusable Battle Point vendor scene backs the lobby placement"
 	)
 
 	var pallet_source := _read_text(PALLET_TOWN_SCENE)
