@@ -4,6 +4,8 @@ class_name BillsHouseMachine
 
 const BILL_MUGSHOT: Texture2D = preload("res://assets/sprites/trainer_cards/showdown/bill.png")
 const BILL_QUEST_ID := "help_bill"
+const BILL_REWARD_STEP_ID := "receive_bill_reward"
+const BILL_REWARD_ID := "kanto_bills_house_completion_reward"
 const BILL_COMPUTER_IDLE_DIALOGUE_ID := "kanto_bills_house_computer_idle"
 const BILL_COMPUTER_COMPLETE_DIALOGUE_ID := "kanto_bills_house_computer_complete"
 
@@ -17,15 +19,27 @@ var _story_dialogue_stage := 0
 func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictionary:
 	_story_dialogue_stage = 0
 	var result := await super._run_story_or_legacy_interaction(body, trigger)
-	if bool(result.get("success", false)) and bool(result.get("handled", false)):
+	var reward_step_active := StoryService.is_requirement_met(
+		BILL_QUEST_ID,
+		BILL_REWARD_STEP_ID,
+		"active"
+	)
+	if bool(result.get("success", false)) and (
+		bool(result.get("handled", false)) or reward_step_active
+	):
 		_apply_restored_visual_state()
-		_present_ticket_reward(result.get("effects", []))
+		var reward_result: Dictionary = await InventoryService.claim_npc_item_reward(BILL_REWARD_ID)
+		if not bool(reward_result.get("success", false)):
+			await GameErrorDialogService.show_response(reward_result, "backend.error.reward_claim")
+			return reward_result
+		_present_ticket_reward(reward_result)
 	return result
 
 
 func interact_with_player(_player: Node2D) -> void:
 	var dialogue_reference := BILL_COMPUTER_COMPLETE_DIALOGUE_ID if (
 		StoryService.is_requirement_met(BILL_QUEST_ID, "", "completed")
+		or StoryService.is_requirement_met(BILL_QUEST_ID, BILL_REWARD_STEP_ID, "active")
 	) else BILL_COMPUTER_IDLE_DIALOGUE_ID
 	await _show_dialogue_reference(dialogue_reference)
 
@@ -70,24 +84,12 @@ func _apply_restored_visual_state() -> void:
 		restored_bill.visible = true
 
 
-func _present_ticket_reward(effects_value: Variant) -> bool:
-	var quantity := 0
-	if effects_value is Array:
-		for effect_value: Variant in effects_value as Array:
-			if effect_value is not Dictionary:
-				continue
-			var effect := effect_value as Dictionary
-			if bool(effect.get("alreadyGranted", false)):
-				continue
-			var grants_value: Variant = effect.get("grants", [])
-			if grants_value is not Array:
-				continue
-			for grant_value: Variant in grants_value as Array:
-				if grant_value is not Dictionary:
-					continue
-				var grant := grant_value as Dictionary
-				if str(grant.get("itemId", "")).strip_edges().to_lower() == "ss-ticket":
-					quantity += maxi(int(grant.get("quantity", 0)), 0)
+func _present_ticket_reward(reward_result: Dictionary) -> bool:
+	if not bool(reward_result.get("claimed", false)):
+		return false
+	if str(reward_result.get("itemId", "")).strip_edges().to_lower() != "ss-ticket":
+		return false
+	var quantity := maxi(int(reward_result.get("quantity", 0)), 0)
 	if quantity <= 0:
 		return false
 	get_tree().call_group(
@@ -98,7 +100,6 @@ func _present_ticket_reward(effects_value: Variant) -> bool:
 			"quantity": quantity,
 		})
 	)
-	get_tree().call_group("ui_overlay", "add_item_reward_notification", "ss-ticket", quantity)
 	SfxManager.play("item_received")
 	return true
 

@@ -110,6 +110,7 @@ func _run() -> void:
 		_check(computer.get_node_or_null("MachineFlash") is Polygon2D, "the separation machine has a visible activation flash")
 		var machine_source := FileAccess.get_file_as_string("res://scripts/world/kanto/routes/bills_house_machine.gd")
 		_check(machine_source.contains("current_stage >= 2"), "Bill's human portrait only appears after cell separation")
+		_check(machine_source.contains("or reward_step_active"), "Bill's reward can be retried after cell separation")
 		var interactable_source := FileAccess.get_file_as_string("res://scripts/world/interactables/world_interactable.gd")
 		_check(interactable_source.contains("mugshot_override != null"), "the computer hides the default portrait when no mugshot is supplied")
 		await computer.call("_play_cell_separation")
@@ -117,11 +118,13 @@ func _run() -> void:
 			trapped_bill != null and restored_bill != null and not trapped_bill.visible and restored_bill.visible,
 			"the machine replaces Clefairy-form Bill with human Bill"
 		)
-		var ticket_effects := [{
-			"alreadyGranted": false,
-			"grants": [{"itemId": "ss-ticket", "quantity": 1}],
-		}]
-		_check(bool(computer.call("_present_ticket_reward", ticket_effects)), "a new S.S. Ticket grant is presented")
+		_check(machine_source.contains("kanto_bills_house_completion_reward"), "the restored Bill reward uses its trusted server claim")
+		var ticket_reward := {
+			"claimed": true,
+			"itemId": "ss-ticket",
+			"quantity": 1,
+		}
+		_check(bool(computer.call("_present_ticket_reward", ticket_reward)), "a new S.S. Ticket grant is presented")
 		_check(system_overlay.messages.size() == 1 and system_overlay.messages[0].contains("S.S. Ticket"), "the S.S. Ticket produces a localized System message")
 		var ticket_icon := load("res://assets/items/icons/SSTICKET.png") as Texture2D
 		_check(ticket_icon != null and ticket_icon.get_size() == Vector2(48, 48), "the S.S. Ticket has a dedicated 48px pixel-art Bag icon")
