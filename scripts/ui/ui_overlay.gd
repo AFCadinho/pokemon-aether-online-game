@@ -1085,6 +1085,8 @@ var trainer_card_battle_points_label: Label
 var trainer_card_playtime_label: Label
 var trainer_card_gym_badge_count_label: Label
 var trainer_card_guild_label: Label
+var trainer_card_pvp_value_labels: Dictionary = {}
+var trainer_card_pvp_request_generation := 0
 var trainer_card_level_cap_label: Label
 var trainer_card_trade_level_cap_label: Label
 var trainer_card_name_label: Label
@@ -14905,12 +14907,25 @@ func _create_trainer_card_stats_tab() -> Control:
 			"value": "%d / %d" % [_get_local_trainer_gym_badge_count(), KANTO_BADGES.size()],
 		},
 	]
+	var stats_row := HBoxContainer.new()
+	stats_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stats_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	stats_row.add_theme_constant_override("separation", 12)
+	layout.add_child(stats_row)
+
 	var adventure_panel := _create_trainer_card_stat_panel(
 		"ui.trainer_card.stats.adventure",
 		adventure_rows
 	)
-	adventure_panel.custom_minimum_size = Vector2(0, 112)
-	layout.add_child(adventure_panel)
+	stats_row.add_child(adventure_panel)
+
+	var pvp_rows: Array[Dictionary] = [
+		{"id": "pvp_games", "label_key": "ui.trainer_card.pvp.games", "value": "0"},
+		{"id": "pvp_wins", "label_key": "ui.trainer_card.pvp.wins", "value": "0"},
+		{"id": "pvp_losses", "label_key": "ui.trainer_card.pvp.losses", "value": "0"},
+		{"id": "pvp_win_rate", "label_key": "ui.trainer_card.pvp.win_rate", "value": "0%"},
+	]
+	stats_row.add_child(_create_trainer_card_stat_panel("ui.trainer_card.pvp.title", pvp_rows))
 
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -15665,6 +15680,8 @@ func _create_trainer_card_stat_row(
 	row.add_child(label)
 
 	var value := Label.new()
+	if field_id != "":
+		value.name = "TrainerCardValue_%s" % field_id
 	value.text = value_text
 	value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -15680,6 +15697,8 @@ func _create_trainer_card_stat_row(
 		trainer_card_gym_badge_count_label = value
 	elif field_id == "guild":
 		trainer_card_guild_label = value
+	elif field_id.begins_with("pvp_"):
+		trainer_card_pvp_value_labels[field_id] = value
 
 	return row
 
@@ -17088,6 +17107,43 @@ func _show_trainer_card() -> void:
 	_update_trainer_card_appearance_save_state()
 	trainer_card_popup.visible = true
 	_activate_ui_panel(trainer_card_popup)
+	_refresh_own_trainer_card_pvp()
+
+
+func _refresh_own_trainer_card_pvp() -> void:
+	trainer_card_pvp_request_generation += 1
+	var request_generation := trainer_card_pvp_request_generation
+	_apply_own_trainer_card_pvp({})
+	var user_id := int(str(PlayerSave.player_id).strip_edges())
+	if user_id <= 0:
+		return
+	var result: Dictionary = await PlayerGameStateService.load_public_trainer_card(user_id)
+	if request_generation != trainer_card_pvp_request_generation:
+		return
+	if not bool(result.get("success", false)):
+		push_warning(
+			"Trainer Card PvP stats failed to load: %s"
+			% str(result.get("error", "Unknown error"))
+		)
+		return
+	var card := _dictionary_from_value(result.get("card", {}))
+	_apply_own_trainer_card_pvp(_dictionary_from_value(card.get("pvp", {})))
+
+
+func _apply_own_trainer_card_pvp(pvp: Dictionary) -> void:
+	var values := {
+		"pvp_games": str(pvp.get("gamesPlayed", 0)),
+		"pvp_wins": str(pvp.get("wins", 0)),
+		"pvp_losses": str(pvp.get("losses", 0)),
+		"pvp_win_rate": "%s%%" % (
+			("%.1f" % float(pvp.get("winRate", 0.0))).trim_suffix(".0")
+		),
+	}
+	for field_id_value: Variant in values.keys():
+		var field_id := str(field_id_value)
+		var label := trainer_card_pvp_value_labels.get(field_id) as Label
+		if is_instance_valid(label):
+			label.text = str(values.get(field_id, "0"))
 
 func _load_owned_appearance_parts() -> void:
 	if appearance_inventory_loading:
