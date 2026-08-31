@@ -698,6 +698,8 @@
   "ui.aether_clash.arena.context.spectator_hint": "Use an Aether View orb to explore. Click a Master Ball to watch its battle.",
   "ui.aether_clash.arena.context.battles.one": "1 battle in progress",
   "ui.aether_clash.arena.context.battles.many": "{count} battles in progress",
+  "ui.aether_clash.arena.context.show_players": "Players ({count})  ▾",
+  "ui.aether_clash.arena.context.hide_players": "Hide players  ▴",
   "ui.aether_clash.arena.context.you": " (YOU)",
   "ui.aether_clash.arena.context.status.active": "ACTIVE",
   "ui.aether_clash.arena.context.status.in_battle": "IN BATTLE",

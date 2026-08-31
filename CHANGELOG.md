@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The in-arena Clash status now stays compact by default and opens the Guild player roster only when requested.
+
 - The Clash Coordinator now uses its local guide content without making a failing server NPC metadata request when approached.
 
 - Ranked Rewards now separates its overview, per-battle rewards, placements, objectives, and season rewards into scalable subtabs.
