@@ -737,8 +737,8 @@ func _init() -> void:
 	)
 	_check_equal(
 		PvpBattleRealtimeServiceNode.should_defer_authoritative_terminal_until_render(false, false, "", true, false),
-		true,
-		"animation-free durable terminal still waits for queued work"
+		false,
+		"animation-free durable terminal supersedes unstarted queued transport work"
 	)
 	_check_equal(
 		PvpBattleRealtimeServiceNode.is_animation_free_authoritative_terminal_reason(" timeout "),

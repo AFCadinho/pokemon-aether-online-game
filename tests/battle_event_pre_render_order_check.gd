@@ -921,6 +921,7 @@ func _check_authoritative_terminal_waits_for_render() -> void:
 	_check_equal(finish_source.contains("should_defer_authoritative_terminal_until_render"), true, "normal terminal waits while canonical render work is unfinished")
 	_check_equal(finish_source.contains("is_animation_free_authoritative_terminal_reason(end_reason)"), true, "durable timeout, disconnect, forfeit, and battle-limit outcomes are recognized as animation-free terminal work")
 	_check_equal(finish_source.contains("not is_animation_free_terminal"), true, "animation-free terminal work does not wait forever for a separate ended projection")
+	_check_equal(finish_source.contains("_discard_pvp_updates_superseded_by_terminal()"), true, "animation-free terminal retires submitted-choice updates that can no longer resolve")
 	_check_equal(finish_source.contains("pvp_pending_authoritative_terminal = message.duplicate(true)"), true, "early terminal is retained for post-render completion")
 	_check_equal(callback_source.contains("_retry_pending_pvp_authoritative_terminal.call_deferred()"), true, "render completion retries the retained terminal")
 	_check_equal(drain_source.contains("_retry_pending_pvp_authoritative_terminal.call_deferred()"), true, "render queue exhaustion retries the retained terminal")
