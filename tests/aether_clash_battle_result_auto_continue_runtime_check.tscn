@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/aether_clash_battle_result_auto_continue_runtime_check.gd" id="1_test"]
+
+[node name="AetherClashBattleResultAutoContinueRuntimeCheck" type="Node"]
+script = ExtResource("1_test")
