@@ -822,6 +822,7 @@ var pvp_bans_list: VBoxContainer
 var pvp_bans_refresh_button: Button
 var pvp_live_status_label: Label
 var pvp_live_list: VBoxContainer
+var pvp_live_refresh_button: Button
 var pvp_leaderboard_status_label: Label
 var pvp_leaderboard_list: VBoxContainer
 var pvp_leaderboard_refresh_button: Button
@@ -919,6 +920,10 @@ var pvp_history_loaded := false
 var pvp_history_matches: Array = []
 var pvp_history_user_id := 0
 var pvp_live_entries: Array = []
+var pvp_live_in_flight := false
+var pvp_live_loaded := false
+var pvp_live_error := ""
+var pvp_live_watch_in_flight := false
 var pvp_ranked_team_validation_in_flight := false
 var pvp_ranked_queue_join_preparing := false
 var pvp_ranked_team_validation_request_seq := 0
@@ -6494,6 +6499,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_ranked_battles_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_ranked_battles_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pvp_ranked_battles_tabs.add_theme_font_size_override("font_size", 12)
+	pvp_ranked_battles_tabs.tab_changed.connect(_on_pvp_ranked_battles_tab_changed)
 	_apply_pvp_ranked_subtabs_style(pvp_ranked_battles_tabs)
 	battles_tab_page.add_child(pvp_ranked_battles_tabs)
 
@@ -6515,6 +6521,13 @@ func _setup_pvp_room_popup() -> void:
 	pvp_live_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_live_status_label.add_theme_color_override("font_color", UI_TEXT)
 	live_header.add_child(pvp_live_status_label)
+
+	pvp_live_refresh_button = Button.new()
+	_set_localized_control_property(pvp_live_refresh_button, "text", "ui.pvp.live.refresh")
+	pvp_live_refresh_button.custom_minimum_size = Vector2(92, 32)
+	pvp_live_refresh_button.focus_mode = Control.FOCUS_NONE
+	pvp_live_refresh_button.pressed.connect(_on_pvp_live_refresh_pressed)
+	live_header.add_child(pvp_live_refresh_button)
 
 	var live_columns := HBoxContainer.new()
 	live_columns.add_theme_constant_override("separation", 10)
@@ -6720,6 +6733,7 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_leave_queue_button)
 	_apply_button_style(pvp_reconnect_battle_button)
 	_apply_button_style(pvp_bans_refresh_button)
+	_apply_button_style(pvp_live_refresh_button)
 	_apply_button_style(pvp_leaderboard_refresh_button)
 	_apply_button_style(pvp_history_refresh_button)
 	for tab_container: TabContainer in [pvp_ranked_tabs, pvp_ranked_rules_tabs, pvp_ranked_battles_tabs]:
@@ -39634,6 +39648,8 @@ func _open_pvp_popup_section(section_name: String) -> void:
 		_select_first_pvp_queue_for_mode("ranked")
 		await _poll_pvp_queue_status()
 		await _refresh_pvp_ranked_team_validation(true)
+		pvp_live_loaded = false
+		_refresh_pvp_live_if_selected()
 
 func _pvp_popup_title_for_section(section_name: String) -> String:
 	match section_name:
@@ -40914,6 +40930,9 @@ func _invalidate_pvp_ranked_lazy_data() -> void:
 	pvp_history_loaded = false
 	pvp_history_matches.clear()
 	pvp_history_user_id = 0
+	pvp_live_loaded = false
+	pvp_live_entries.clear()
+	pvp_live_error = ""
 
 func _on_pvp_ranked_tab_changed(tab_index: int) -> void:
 	if pvp_ranked_tabs == null:
@@ -40926,11 +40945,24 @@ func _on_pvp_ranked_tab_changed(tab_index: int) -> void:
 			_refresh_pvp_banlists_if_selected()
 		"Leaderboard":
 			_refresh_pvp_leaderboard.call_deferred(false)
+		"Battles":
+			_refresh_pvp_live_if_selected()
 		"My History":
 			_refresh_pvp_match_history.call_deferred(false)
 
 func _on_pvp_ranked_rules_tab_changed(_tab_index: int) -> void:
 	_refresh_pvp_banlists_if_selected()
+
+func _on_pvp_ranked_battles_tab_changed(_tab_index: int) -> void:
+	_refresh_pvp_live_if_selected()
+
+func _refresh_pvp_live_if_selected() -> void:
+	if pvp_ranked_battles_tabs == null:
+		return
+	var selected_tab := pvp_ranked_battles_tabs.get_child(pvp_ranked_battles_tabs.current_tab)
+	if selected_tab == null or selected_tab.name != "Live":
+		return
+	_refresh_pvp_live_battles.call_deferred(false)
 
 func _refresh_pvp_banlists_if_selected() -> void:
 	if pvp_ranked_rules_tabs == null:
@@ -41182,6 +41214,9 @@ func _pvp_banlist_updated_label(value: String) -> String:
 func _on_pvp_history_refresh_pressed() -> void:
 	await _refresh_pvp_match_history(true)
 
+func _on_pvp_live_refresh_pressed() -> void:
+	await _refresh_pvp_live_battles(true)
+
 func _on_pvp_leaderboard_refresh_pressed() -> void:
 	await _refresh_pvp_leaderboard(true)
 
@@ -41192,13 +41227,178 @@ func _render_pvp_live_battles(entries: Array) -> void:
 	for child in pvp_live_list.get_children():
 		child.queue_free()
 	if pvp_live_status_label != null:
-		pvp_live_status_label.text = LocalizationManager.text("ui.pvp.live.title")
+		if pvp_live_in_flight:
+			pvp_live_status_label.text = LocalizationManager.text("ui.pvp.live.loading")
+		elif pvp_live_error != "":
+			pvp_live_status_label.text = LocalizationManager.text("ui.pvp.live.unavailable")
+		elif entries.is_empty():
+			pvp_live_status_label.text = LocalizationManager.text("ui.pvp.live.title")
+		else:
+			pvp_live_status_label.text = LocalizationManager.text(
+				"ui.pvp.live.count",
+				{"count": entries.size()}
+			)
+	if pvp_live_refresh_button != null:
+		pvp_live_refresh_button.disabled = pvp_live_in_flight or pvp_live_watch_in_flight
+	if pvp_live_in_flight:
+		var loading_label := Label.new()
+		loading_label.text = LocalizationManager.text("ui.pvp.live.loading")
+		loading_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		pvp_live_list.add_child(loading_label)
+		return
+	if pvp_live_error != "":
+		var error_label := Label.new()
+		error_label.text = LocalizationManager.text("ui.pvp.live.unavailable_detail")
+		error_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		error_label.add_theme_color_override("font_color", Color("#ff7979"))
+		pvp_live_list.add_child(error_label)
+		return
 	if entries.is_empty():
 		var empty_label := Label.new()
 		empty_label.text = LocalizationManager.text("ui.pvp.live.empty")
 		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 		pvp_live_list.add_child(empty_label)
 		return
+	for entry_value: Variant in entries:
+		if entry_value is Dictionary:
+			pvp_live_list.add_child(_create_pvp_live_battle_row(entry_value as Dictionary))
+
+func _refresh_pvp_live_battles(force: bool = false) -> void:
+	if pvp_live_in_flight:
+		return
+	if pvp_live_loaded and not force:
+		_render_pvp_live_battles(pvp_live_entries)
+		return
+	pvp_live_in_flight = true
+	pvp_live_error = ""
+	_render_pvp_live_battles([])
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.get_live_ranked_pvp_matches(
+		request,
+		50,
+		pvp_active_format_key
+	)
+	request.queue_free()
+	pvp_live_in_flight = false
+	if not bool(response.get("success", false)):
+		pvp_live_loaded = false
+		pvp_live_entries.clear()
+		pvp_live_error = str(response.get("error", "Live ranked battles are unavailable."))
+		_render_pvp_live_battles([])
+		return
+	var battles_value: Variant = response.get("battles", [])
+	pvp_live_entries = (battles_value as Array).duplicate(true) if battles_value is Array else []
+	pvp_live_loaded = true
+	pvp_live_error = ""
+	_render_pvp_live_battles(pvp_live_entries)
+
+func _create_pvp_live_battle_row(entry: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#080d15e8"), Color("#38516baa"), 5, 1)
+	)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 5)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 5)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	margin.add_child(row)
+
+	var match_id := str(entry.get("matchId", "")).strip_edges()
+	var battle_id := str(entry.get("battleId", "")).strip_edges()
+	var watch_button := Button.new()
+	watch_button.text = LocalizationManager.text(
+		"ui.pvp.live.watch_battle",
+		{"battle": _pvp_live_battle_label(entry, battle_id)}
+	)
+	watch_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	watch_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	watch_button.focus_mode = Control.FOCUS_NONE
+	watch_button.disabled = match_id == "" or _pvp_live_watch_blocked()
+	watch_button.pressed.connect(_on_pvp_live_watch_pressed.bind(match_id))
+	_apply_button_style(watch_button)
+	row.add_child(watch_button)
+	row.add_child(_create_pvp_leaderboard_value_label(
+		_pvp_live_players_label(entry), 180, HORIZONTAL_ALIGNMENT_LEFT
+	))
+	row.add_child(_create_pvp_leaderboard_value_label(
+		LocalizationManager.text("ui.pvp.live.status.live"),
+		100,
+		HORIZONTAL_ALIGNMENT_RIGHT,
+		Color("#78e6a1")
+	))
+	row.add_child(_create_pvp_leaderboard_value_label(
+		_pvp_live_started_label(str(entry.get("startedAt", ""))),
+		110,
+		HORIZONTAL_ALIGNMENT_RIGHT,
+		UI_MUTED_TEXT
+	))
+	return panel
+
+func _pvp_live_battle_label(entry: Dictionary, battle_id: String) -> String:
+	var format_name := str(entry.get("formatName", pvp_active_format_name)).strip_edges()
+	var short_id := battle_id.left(8) if battle_id.length() > 8 else battle_id
+	if short_id == "":
+		return format_name
+	return "%s · %s" % [format_name, short_id]
+
+func _pvp_live_players_label(entry: Dictionary) -> String:
+	var participants_value: Variant = entry.get("participants", [])
+	if not (participants_value is Array):
+		return LocalizationManager.text("ui.pvp.live.players_unknown")
+	var names: Array[String] = []
+	for participant_value: Variant in participants_value as Array:
+		if participant_value is Dictionary:
+			var display_name := str((participant_value as Dictionary).get("displayName", "")).strip_edges()
+			if display_name != "":
+				names.append(display_name)
+	return " vs ".join(names) if not names.is_empty() else LocalizationManager.text("ui.pvp.live.players_unknown")
+
+func _pvp_live_started_label(value: String) -> String:
+	var cleaned := value.strip_edges().trim_suffix("Z")
+	var parts := cleaned.split("T")
+	if parts.size() != 2:
+		return "-"
+	var time_parts := String(parts[1]).split(":")
+	if time_parts.size() < 2:
+		return "-"
+	return "%s:%s UTC" % [time_parts[0], time_parts[1]]
+
+func _on_pvp_live_watch_pressed(match_id: String) -> void:
+	var normalized_match_id := match_id.strip_edges()
+	if normalized_match_id == "" or _pvp_live_watch_blocked():
+		return
+	pvp_live_watch_in_flight = true
+	_render_pvp_live_battles(pvp_live_entries)
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.spectate_ranked_pvp_match(
+		request,
+		normalized_match_id
+	)
+	request.queue_free()
+	pvp_live_watch_in_flight = false
+	if not bool(response.get("success", false)) or not _spectator_response_has_public_teams(response):
+		pvp_live_error = str(response.get("error", "This ranked battle is no longer available."))
+		pvp_live_loaded = false
+		pvp_live_entries.clear()
+		_render_pvp_live_battles([])
+		return
+	pvp_active_room_code = str(response.get("roomCode", normalized_match_id.to_upper())).strip_edges().to_upper()
+	await _start_pvp_battle_from_response(response)
+
+func _pvp_live_watch_blocked() -> bool:
+	return (
+		pvp_live_watch_in_flight
+		or pvp_battle_starting
+		or pvp_active_queue_entry_id != ""
+		or pvp_active_queue_match_id != ""
+		or pvp_active_room_code != ""
+	)
 
 func _on_pvp_leaderboard_scope_selected(index: int) -> void:
 	if pvp_leaderboard_scope_select == null:

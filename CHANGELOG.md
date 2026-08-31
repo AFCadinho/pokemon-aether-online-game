@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Ongoing Ranked battles now appear in the Ranked Battles Live tab and can be watched in the existing read-only spectator view.
+
 - Nearby Trainers, social actions, Friends and Guild Members now show compact previews of each Trainer's equipped player sprite, with initials as a fallback.
 
 - Trainer right-click actions now use compact quick and secondary pages, clearer icons, and a calmer safety section.
