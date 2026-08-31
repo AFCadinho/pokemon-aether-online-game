@@ -21062,7 +21062,7 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
 		return false
-	if use_action in ["activate_shiny_charm", "open_shiny_tracker", "unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
+	if use_action in ["activate_shiny_charm", "open_shiny_tracker", "open_mount_license", "unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -21101,6 +21101,8 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 		return LocalizationManager.text("ui.bag.action.activate")
 	if use_action == "open_shiny_tracker":
 		return LocalizationManager.text("ui.bag.action.open_tracker")
+	if use_action == "open_mount_license":
+		return LocalizationManager.text("ui.bag.action.view_license")
 	if use_action == "apply_guild_emblem_template":
 		return LocalizationManager.text("ui.bag.action.unlock_for_guild")
 	if _bag_machine_move_id(item_id) != "":
@@ -21280,6 +21282,9 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 	if use_action == "open_shiny_tracker":
 		_show_shiny_tracker()
 		return
+	if use_action == "open_mount_license":
+		_show_mount_license()
+		return
 	if use_action == "apply_guild_emblem_template":
 		var emblem_result: Dictionary = await InventoryService.use_inventory_item(item_id)
 		if not bool(emblem_result.get("success", false)):
@@ -21323,6 +21328,39 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 	_add_chat_message(LocalizationManager.text("ui.bag.message.informational", {
 		"item": str(item.get("name", _item_name_from_id(item_id))),
 	}))
+
+
+func _show_mount_license() -> void:
+	var regions: Array[String] = InventoryService.get_mount_license_regions()
+	var registration_lines: Array[String] = []
+	for region_id: String in regions:
+		var region_key := "ui.mount_license.region.%s" % region_id
+		var region_name := LocalizationManager.text(region_key)
+		if region_name == region_key:
+			region_name = region_id.replace("_", " ").capitalize()
+		registration_lines.append(LocalizationManager.text(
+			"ui.mount_license.registration",
+			{"region": region_name}
+		))
+	var message := (
+		"\n".join(registration_lines)
+		if not registration_lines.is_empty()
+		else LocalizationManager.text("ui.mount_license.none")
+	)
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	dialog.name = "MountLicenseDialog"
+	var host: Node = root_control if root_control != null else self
+	host.add_child(dialog)
+	dialog.configure(
+		LocalizationManager.text("ui.mount_license.title"),
+		message,
+		LocalizationManager.text("common.close"),
+		LocalizationManager.text("common.close")
+	)
+	dialog.cancel_button.visible = false
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(500, 230))
 
 
 func _show_trainer_name_change_popup() -> void:

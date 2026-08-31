@@ -1681,6 +1681,8 @@ func _try_toggle_land_mount_input() -> bool:
 	if not toggle_land_mount():
 		var message_key := "ui.mounts.interior_blocked" \
 			if _get_current_map_world_access_area_type() == "interior" \
+			else "ui.mounts.license_required" \
+			if not _has_mount_license_for_current_region() \
 			else "ui.mounts.unavailable"
 		get_tree().call_group(
 			"ui_overlay",
@@ -1770,6 +1772,8 @@ func _start_surf_activity(clear_input := true) -> void:
 func _start_land_mount_activity() -> bool:
 	if _get_current_map_world_access_area_type() == "interior":
 		return false
+	if not _has_mount_license_for_current_region():
+		return false
 	var mount_id := MountService.resolve_mount_id_for_mode(
 		SettingsManager.get_selected_mount_id(SettingsManager.MOUNT_MODE_LAND),
 		SettingsManager.MOUNT_MODE_LAND
@@ -1805,6 +1809,37 @@ func _is_mount_owned(mount_id: String) -> bool:
 		and inventory_service.has_method("has_item")
 		and bool(inventory_service.call("has_item", unlock_item_id))
 	)
+
+
+func _has_mount_license_for_current_region() -> bool:
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	return (
+		inventory_service != null
+		and inventory_service.has_method("has_mount_license_for_region")
+		and bool(inventory_service.call(
+			"has_mount_license_for_region",
+			_get_current_map_region_id()
+		))
+	)
+
+
+func _get_current_map_region_id() -> String:
+	var current_map := _resolve_current_map()
+	if current_map == null:
+		return ""
+	if current_map.has_method("get_location_metadata"):
+		var metadata_value: Variant = current_map.call("get_location_metadata")
+		if metadata_value is Dictionary:
+			var region_id := str((metadata_value as Dictionary).get("regionId", "")).strip_edges()
+			if not region_id.is_empty():
+				return region_id.to_lower()
+	if current_map.has_method("get_map_region_name"):
+		var region_name := str(current_map.call("get_map_region_name")).strip_edges()
+		if not region_name.is_empty():
+			return region_name.to_lower().replace(" ", "_")
+	if current_map.has_method("get_map_id"):
+		return str(current_map.call("get_map_id")).strip_edges().to_lower().get_slice("_", 0)
+	return ""
 
 func _finish_surf_activity(reason := "left_water") -> void:
 	if not surf_activity_active:

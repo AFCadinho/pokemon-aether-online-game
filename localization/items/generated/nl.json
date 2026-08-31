@@ -815,6 +815,10 @@
     "name": "Cyclizar-mount",
     "shortDesc": "Ontgrendelt Cyclizar als landmount."
   },
+  "mount-license": {
+    "name": "Mount License",
+    "shortDesc": "Toont de regio's waar je landmounts mag activeren."
+  },
   "damp-mulch": {
     "name": "Vochtige mulch",
     "shortDesc": "De groeitijd van bessen wordt verlengd, maar de grond droogt langzamer uit."

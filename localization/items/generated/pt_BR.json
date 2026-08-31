@@ -815,6 +815,10 @@
     "name": "Montaria Cyclizar",
     "shortDesc": "Desbloqueia Cyclizar como montaria terrestre."
   },
+  "mount-license": {
+    "name": "Licença de Montaria",
+    "shortDesc": "Lista as regiões onde você pode ativar montarias terrestres."
+  },
   "damp-mulch": {
     "name": "Palha úmida",
     "shortDesc": "O tempo de crescimento das bagas aumenta, mas o solo seca mais lentamente."
