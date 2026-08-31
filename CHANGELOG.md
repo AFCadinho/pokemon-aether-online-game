@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer Cards now use a cleaner Overview-first layout, while other Trainers' cards offer simple Overview, Badges, and PvP tabs with a direct message action.
+
 - Choosing no hair now shows a consistent natural bald head in previews and the overworld, without the old stray scalp pixel.
 
 - Aether Clash battle results now count down on the Continue button and automatically return Trainers to the arena after five seconds.

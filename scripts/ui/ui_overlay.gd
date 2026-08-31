@@ -1083,6 +1083,8 @@ var trainer_card_aether_gems_label: Label
 var trainer_card_aetherite_label: Label
 var trainer_card_battle_points_label: Label
 var trainer_card_playtime_label: Label
+var trainer_card_gym_badge_count_label: Label
+var trainer_card_guild_label: Label
 var trainer_card_level_cap_label: Label
 var trainer_card_trade_level_cap_label: Label
 var trainer_card_name_label: Label
@@ -14119,6 +14121,7 @@ func _refresh_player_status_card() -> void:
 		trainer_card_battle_points_label.text = _format_money(PlayerSave.battle_points)
 	if trainer_card_playtime_label != null:
 		trainer_card_playtime_label.text = _format_playtime(PlayerSave.playtime_seconds)
+	_refresh_trainer_card_identity_values()
 	_refresh_trainer_card_caps()
 	_refresh_aether_blessing_membership_status()
 
@@ -14156,6 +14159,7 @@ func _make_trainer_card_tab_style(background: Color, border: Color, selected: bo
 
 func _apply_trainer_card_tabs_style(tabs: TabContainer) -> void:
 	var tab_bar := tabs.get_tab_bar()
+	tab_bar.focus_mode = Control.FOCUS_ALL
 	tab_bar.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	tabs.add_theme_constant_override("side_margin", 8)
 	tabs.add_theme_constant_override("tab_separation", 4)
@@ -14283,13 +14287,11 @@ func _setup_trainer_card_popup() -> void:
 	trainer_card_subtitle_label = subtitle
 	title_stack.add_child(subtitle)
 
-	header.add_child(_create_trainer_card_redeem_button())
-
 	var close_button := Button.new()
 	close_button.text = "×"
 	close_button.custom_minimum_size = Vector2(32, 30)
 	close_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.focus_mode = Control.FOCUS_ALL
 	close_button.pressed.connect(_hide_trainer_card)
 	_apply_button_style(close_button)
 	header.add_child(close_button)
@@ -14299,9 +14301,9 @@ func _setup_trainer_card_popup() -> void:
 	trainer_card_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	trainer_card_tabs.add_theme_font_size_override("font_size", 13)
 	trainer_card_tabs.add_child(_create_trainer_card_stats_tab())
-	trainer_card_tabs.add_child(_create_trainer_card_wallet_tab())
-	trainer_card_tabs.add_child(_create_trainer_card_appearance_tab())
 	trainer_card_tabs.add_child(_create_trainer_card_badges_tab())
+	trainer_card_tabs.add_child(_create_trainer_card_appearance_tab())
+	trainer_card_tabs.add_child(_create_trainer_card_wallet_tab())
 	_apply_trainer_card_tabs_style(trainer_card_tabs)
 	_refresh_trainer_card_tab_titles()
 	layout.add_child(trainer_card_tabs)
@@ -14334,69 +14336,285 @@ func _show_public_trainer_card(card: Dictionary) -> void:
 	public_trainer_card_popup.add_child(margin)
 
 	var root := VBoxContainer.new()
-	root.add_theme_constant_override("separation", 12)
+	root.add_theme_constant_override("separation", 8)
 	margin.add_child(root)
 
 	var header := HBoxContainer.new()
+	header.custom_minimum_size = Vector2(0, 46)
+	header.add_theme_constant_override("separation", 10)
 	root.add_child(header)
-	var header_spacer := Control.new()
-	header_spacer.custom_minimum_size = Vector2(34, 0)
-	header.add_child(header_spacer)
+	var title_stack := VBoxContainer.new()
+	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	title_stack.add_theme_constant_override("separation", 0)
+	header.add_child(title_stack)
 	var title := Label.new()
-	_set_localized_control_property(title, "text", "ui.trainer_card.title")
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.text = str(card.get("displayName", card.get("username", LocalizationManager.text("ui.trainer_card.trainer"))))
 	title.add_theme_font_size_override("font_size", 22)
 	title.add_theme_color_override("font_color", UI_TEXT)
-	header.add_child(title)
+	title_stack.add_child(title)
+	var subtitle := Label.new()
+	subtitle.text = LocalizationManager.text(
+		"ui.trainer_card.passport",
+		{"id": str(card.get("userId", "-"))}
+	)
+	subtitle.add_theme_font_size_override("font_size", 10)
+	subtitle.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	title_stack.add_child(subtitle)
+
+	var role_badge_text := _get_public_trainer_badge_text(card)
+	if role_badge_text != "-":
+		header.add_child(_create_public_trainer_role_chip(role_badge_text))
 	var close_button := Button.new()
-	close_button.text = "X"
+	close_button.text = "×"
 	close_button.custom_minimum_size = Vector2(34, 30)
-	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	close_button.focus_mode = Control.FOCUS_ALL
 	close_button.pressed.connect(_hide_public_trainer_card)
-	_apply_button_style(close_button, "danger")
+	_apply_button_style(close_button)
 	header.add_child(close_button)
 
+	var tabs := TabContainer.new()
+	tabs.name = "PublicTrainerCardTabs"
+	tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	tabs.add_theme_font_size_override("font_size", 13)
+	tabs.add_child(_create_public_trainer_overview_tab(card))
+	tabs.add_child(_create_public_trainer_badges_tab(card))
+	tabs.add_child(_create_public_trainer_pvp_tab(card))
+	_apply_trainer_card_tabs_style(tabs)
+	tabs.set_tab_title(0, LocalizationManager.text("ui.trainer_card.tab.overview"))
+	tabs.set_tab_title(1, LocalizationManager.text("ui.trainer_card.tab.badges"))
+	tabs.set_tab_title(2, LocalizationManager.text("ui.trainer_card.tab.pvp"))
+	tabs.get_tab_bar().focus_mode = Control.FOCUS_ALL
+	root.add_child(tabs)
+
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 8)
+	root.add_child(actions)
+	var message_button := Button.new()
+	_set_localized_control_property(message_button, "text", "ui.trainer_card.action.message")
+	message_button.focus_mode = Control.FOCUS_ALL
+	message_button.pressed.connect(_on_public_trainer_message_pressed.bind(card))
+	_apply_button_style(message_button, "primary")
+	actions.add_child(message_button)
+
+	_activate_ui_panel(public_trainer_card_popup)
+	if tabs.is_inside_tree():
+		tabs.get_tab_bar().call_deferred("grab_focus")
+
+
+func _create_public_trainer_role_chip(role_badge_text: String) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_INTERACTIVE, TRAINER_CARD_ACCENT_SOFT, 8, 1)
+	)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 4)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 4)
+	panel.add_child(margin)
+	var label := Label.new()
+	label.text = role_badge_text
+	label.add_theme_font_size_override("font_size", 11)
+	label.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	margin.add_child(label)
+	return panel
+
+
+func _create_public_trainer_overview_tab(card: Dictionary) -> Control:
+	var tab := MarginContainer.new()
+	tab.name = "Overview"
+	tab.add_theme_constant_override("margin_left", 8)
+	tab.add_theme_constant_override("margin_top", 8)
+	tab.add_theme_constant_override("margin_right", 8)
+	tab.add_theme_constant_override("margin_bottom", 8)
 	var body := HBoxContainer.new()
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body.add_theme_constant_override("separation", 12)
-	root.add_child(body)
+	tab.add_child(body)
 	body.add_child(_create_public_trainer_avatar_panel(card))
-
 	var details := VBoxContainer.new()
 	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	details.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	details.add_theme_constant_override("separation", 10)
 	body.add_child(details)
-
+	var guild_name := str(card.get("guildName", "")).strip_edges()
+	if guild_name == "":
+		guild_name = LocalizationManager.text("ui.trainer_card.value.no_guild")
 	var identity_rows: Array[Dictionary] = [
-		{"label_key": "ui.trainer_card.field.name", "value": str(card.get("displayName", card.get("username", LocalizationManager.text("ui.trainer_card.trainer"))))},
-		{"label_key": "ui.trainer_card.field.id", "value": str(card.get("userId", "-"))},
 		{"label_key": "ui.trainer_card.field.joined", "value": _format_join_date_text(str(card.get("createdAt", "")), "-")},
-		{"label_key": "ui.trainer_card.field.badge", "value": _get_public_trainer_badge_text(card)},
+		{"label_key": "ui.trainer_card.field.guild", "value": guild_name},
 	]
 	details.add_child(_create_public_trainer_info_panel("ui.trainer_card.profile_section", identity_rows))
-	details.add_child(_create_public_trainer_gym_badges_panel(card))
-
-	var summary_row := HBoxContainer.new()
-	summary_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	summary_row.add_theme_constant_override("separation", 10)
-	details.add_child(summary_row)
+	var badge_count := _get_public_trainer_gym_badge_count(card)
 	var adventure_rows: Array[Dictionary] = [
 		{"label_key": "ui.trainer_card.field.playtime", "value": _format_playtime(int(card.get("playtimeSeconds", 0)))},
-		{"label_key": "ui.trainer_card.field.status", "value": LocalizationManager.text("ui.trainer_card.status.online")},
+		{"label_key": "ui.trainer_card.field.gym_badges", "value": "%d / %d" % [badge_count, KANTO_BADGES.size()]},
 	]
-	var location_text := str(card.get("mapId", LocalizationManager.text("ui.trainer_card.status.nearby"))).strip_edges()
-	if location_text == "":
-		location_text = LocalizationManager.text("ui.trainer_card.status.nearby")
-	var presence_rows: Array[Dictionary] = [
-		{"label_key": "ui.trainer_card.field.location", "value": location_text},
-		{"label_key": "ui.trainer_card.field.profile", "value": LocalizationManager.text("ui.trainer_card.status.public")},
-	]
-	summary_row.add_child(_create_public_trainer_info_panel("ui.trainer_card.adventure", adventure_rows))
-	summary_row.add_child(_create_public_trainer_info_panel("ui.trainer_card.presence", presence_rows))
+	details.add_child(_create_public_trainer_info_panel("ui.trainer_card.adventure", adventure_rows))
+	details.add_child(_create_public_trainer_gym_badges_panel(card))
+	return tab
 
-	_activate_ui_panel(public_trainer_card_popup)
+
+func _create_public_trainer_badges_tab(card: Dictionary) -> Control:
+	var tab := MarginContainer.new()
+	tab.name = "Badges"
+	tab.add_theme_constant_override("margin_left", 10)
+	tab.add_theme_constant_override("margin_top", 10)
+	tab.add_theme_constant_override("margin_right", 10)
+	tab.add_theme_constant_override("margin_bottom", 10)
+	tab.add_child(_create_public_trainer_badge_collection(card))
+	return tab
+
+
+func _create_public_trainer_badge_collection(card: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 18)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 18)
+	margin.add_theme_constant_override("margin_bottom", 14)
+	panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 12)
+	margin.add_child(stack)
+	var heading := Label.new()
+	heading.text = LocalizationManager.text(
+		"ui.trainer_card.gym_badges",
+		{"earned": _get_public_trainer_gym_badge_count(card), "total": KANTO_BADGES.size()}
+	)
+	heading.add_theme_font_size_override("font_size", 12)
+	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	stack.add_child(heading)
+	var grid := GridContainer.new()
+	grid.columns = 4
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 12)
+	grid.add_theme_constant_override("v_separation", 10)
+	stack.add_child(grid)
+	var badge_state := _dictionary_from_value(card.get("badges", {}))
+	for badge_value: Variant in KANTO_BADGES:
+		if badge_value is not Dictionary:
+			continue
+		var badge := badge_value as Dictionary
+		var earned := _gym_badge_state_has(
+			badge_state,
+			str(badge.get("region", "kanto")),
+			str(badge.get("id", ""))
+		)
+		grid.add_child(_create_public_trainer_badge_card(badge, earned))
+	return panel
+
+
+func _create_public_trainer_badge_card(badge: Dictionary, earned: bool) -> Control:
+	var card := PanelContainer.new()
+	card.custom_minimum_size = Vector2(118, 104)
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+	var stack := VBoxContainer.new()
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 3)
+	card.add_child(stack)
+	stack.add_child(_create_public_trainer_gym_badge_icon(badge, earned))
+	var name_label := Label.new()
+	name_label.text = str(badge.get("name", LocalizationManager.text("ui.trainer_card.field.badge")))
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.add_theme_font_size_override("font_size", 11)
+	name_label.add_theme_color_override("font_color", UI_TEXT if earned else UI_MUTED_TEXT)
+	stack.add_child(name_label)
+	var state_label := Label.new()
+	_set_localized_control_property(
+		state_label,
+		"text",
+		"ui.trainer_card.badge.earned" if earned else "ui.trainer_card.badge.locked"
+	)
+	state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	state_label.add_theme_font_size_override("font_size", 9)
+	state_label.add_theme_color_override("font_color", TRAINER_CARD_GREEN if earned else UI_MUTED_TEXT)
+	stack.add_child(state_label)
+	return card
+
+
+func _create_public_trainer_pvp_tab(card: Dictionary) -> Control:
+	var tab := MarginContainer.new()
+	tab.name = "Pvp"
+	tab.add_theme_constant_override("margin_left", 10)
+	tab.add_theme_constant_override("margin_top", 10)
+	tab.add_theme_constant_override("margin_right", 10)
+	tab.add_theme_constant_override("margin_bottom", 10)
+	var pvp := _dictionary_from_value(card.get("pvp", {}))
+	if pvp.is_empty():
+		tab.add_child(_create_public_trainer_empty_pvp_panel())
+		return tab
+	var rows: Array[Dictionary] = [
+		{"label_key": "ui.trainer_card.pvp.format", "value": str(pvp.get("formatKey", "-")).to_upper()},
+		{"label_key": "ui.trainer_card.pvp.points", "value": str(pvp.get("points", 0))},
+		{"label_key": "ui.trainer_card.pvp.games", "value": str(pvp.get("gamesPlayed", 0))},
+		{"label_key": "ui.trainer_card.pvp.wins", "value": str(pvp.get("wins", 0))},
+		{"label_key": "ui.trainer_card.pvp.losses", "value": str(pvp.get("losses", 0))},
+		{
+			"label_key": "ui.trainer_card.pvp.win_rate",
+			"value": "%s%%" % (("%.1f" % float(pvp.get("winRate", 0.0))).trim_suffix(".0")),
+		},
+	]
+	tab.add_child(_create_public_trainer_info_panel("ui.trainer_card.pvp.title", rows))
+	return tab
+
+
+func _create_public_trainer_empty_pvp_panel() -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
+	var center := CenterContainer.new()
+	panel.add_child(center)
+	var stack := VBoxContainer.new()
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 6)
+	center.add_child(stack)
+	var title := Label.new()
+	_set_localized_control_property(title, "text", "ui.trainer_card.pvp.empty_title")
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	stack.add_child(title)
+	var description := Label.new()
+	_set_localized_control_property(description, "text", "ui.trainer_card.pvp.empty_description")
+	description.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	stack.add_child(description)
+	return panel
+
+
+func _get_public_trainer_gym_badge_count(card: Dictionary) -> int:
+	var badge_state := _dictionary_from_value(card.get("badges", {}))
+	var earned_count := 0
+	for badge_value: Variant in KANTO_BADGES:
+		if badge_value is not Dictionary:
+			continue
+		var badge := badge_value as Dictionary
+		if _gym_badge_state_has(
+			badge_state,
+			str(badge.get("region", "kanto")),
+			str(badge.get("id", ""))
+		):
+			earned_count += 1
+	return earned_count
+
+
+func _on_public_trainer_message_pressed(card: Dictionary) -> void:
+	_hide_public_trainer_card()
+	open_private_message_conversation(card)
 
 func _create_public_trainer_gym_badges_panel(card: Dictionary) -> Control:
 	var panel := PanelContainer.new()
@@ -14651,7 +14869,7 @@ func _create_trainer_card_avatar_panel(
 
 func _create_trainer_card_stats_tab() -> Control:
 	var tab := MarginContainer.new()
-	tab.name = "Trainer"
+	tab.name = "Overview"
 	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.trainer")
 	tab.add_theme_constant_override("margin_left", 8)
 	tab.add_theme_constant_override("margin_top", 8)
@@ -14678,30 +14896,41 @@ func _create_trainer_card_stats_tab() -> Control:
 	profile_stack.add_child(_create_trainer_card_caps_panel())
 	top_row.add_child(profile_stack)
 
-	var stats_row := HBoxContainer.new()
-	stats_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	stats_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	stats_row.add_theme_constant_override("separation", 12)
-	layout.add_child(stats_row)
-
 	var adventure_rows: Array[Dictionary] = [
 		{"id": "join_date", "label_key": "ui.trainer_card.field.join_date", "value": _get_formatted_trainer_stat_text("join_date", "-")},
 		{"id": "playtime", "label_key": "ui.trainer_card.field.playtime", "value": _format_playtime(PlayerSave.playtime_seconds)},
-		{"id": "pokemon_caught", "label_key": "ui.trainer_card.field.pokemon_caught", "value": _get_trainer_stat_text("pokemon_caught", "0")},
-		{"id": "pokemon_seen", "label_key": "ui.trainer_card.field.pokemon_seen", "value": _get_trainer_stat_text("pokemon_seen", "0")},
+		{
+			"id": "gym_badges",
+			"label_key": "ui.trainer_card.field.gym_badges",
+			"value": "%d / %d" % [_get_local_trainer_gym_badge_count(), KANTO_BADGES.size()],
+		},
 	]
-	var battle_rows: Array[Dictionary] = [
-		{"id": "victories", "label_key": "ui.trainer_card.field.victories", "value": _get_trainer_stat_text("victories", "0")},
-		{"id": "defeats", "label_key": "ui.trainer_card.field.defeats", "value": _get_trainer_stat_text("defeats", "0")},
-	]
-	stats_row.add_child(_create_trainer_card_stat_panel("ui.trainer_card.stats.adventure", adventure_rows))
-	stats_row.add_child(_create_trainer_card_stat_panel("ui.trainer_card.stats.battle", battle_rows))
+	var adventure_panel := _create_trainer_card_stat_panel(
+		"ui.trainer_card.stats.adventure",
+		adventure_rows
+	)
+	adventure_panel.custom_minimum_size = Vector2(0, 112)
+	layout.add_child(adventure_panel)
 
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_child(spacer)
 
 	return tab
+
+
+func _get_local_trainer_gym_badge_count() -> int:
+	var earned_count := 0
+	for badge_value: Variant in KANTO_BADGES:
+		if badge_value is not Dictionary:
+			continue
+		var badge := badge_value as Dictionary
+		if PlayerSave.has_gym_badge(
+			str(badge.get("region", "kanto")),
+			str(badge.get("id", ""))
+		):
+			earned_count += 1
+	return earned_count
 
 
 func _create_trainer_card_wallet_tab() -> Control:
@@ -14719,11 +14948,18 @@ func _create_trainer_card_wallet_tab() -> Control:
 	layout.add_theme_constant_override("separation", 12)
 	tab.add_child(layout)
 
+	var heading_row := HBoxContainer.new()
+	heading_row.add_theme_constant_override("separation", 10)
+	layout.add_child(heading_row)
+
 	var heading := Label.new()
 	_set_localized_control_property(heading, "text", "ui.trainer_card.wallet.title")
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	heading.add_theme_font_size_override("font_size", 12)
 	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
-	layout.add_child(heading)
+	heading_row.add_child(heading)
+	heading_row.add_child(_create_trainer_card_redeem_button())
 
 	var introduction := Label.new()
 	_set_localized_control_property(introduction, "text", "ui.trainer_card.wallet.intro")
@@ -14877,7 +15113,7 @@ func _create_trainer_card_redeem_button() -> Button:
 	redeem_button.expand_icon = true
 	redeem_button.custom_minimum_size = Vector2(142, 30)
 	redeem_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	redeem_button.focus_mode = Control.FOCUS_NONE
+	redeem_button.focus_mode = Control.FOCUS_ALL
 	redeem_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	_set_localized_control_property(redeem_button, "tooltip_text", "ui.trainer_card.redeem_tooltip")
 	redeem_button.pressed.connect(_open_trainer_card_redeem_popup)
@@ -15090,7 +15326,10 @@ func _create_trainer_card_identity_panel() -> Control:
 	rows.add_child(heading)
 
 	rows.add_child(_create_trainer_card_stat_row("ui.trainer_card.field.trainer_id", _get_trainer_id_text(), 104, 15, TRAINER_CARD_CYAN))
-	rows.add_child(_create_trainer_card_stat_row("ui.trainer_card.field.guild", _get_trainer_stat_text("guild", "-"), 104, 15, UI_TEXT))
+	var guild_name := str(GuildService.current_guild.get("name", "-")).strip_edges()
+	if guild_name == "":
+		guild_name = "-"
+	rows.add_child(_create_trainer_card_stat_row("ui.trainer_card.field.guild", guild_name, 104, 15, UI_TEXT, "guild"))
 	rows.add_child(_create_trainer_card_badge_row())
 	return panel
 
@@ -15193,7 +15432,7 @@ func _create_trainer_card_badge_row() -> Control:
 
 	trainer_card_badge_option = OptionButton.new()
 	trainer_card_badge_option.custom_minimum_size = Vector2(116, 24)
-	trainer_card_badge_option.focus_mode = Control.FOCUS_NONE
+	trainer_card_badge_option.focus_mode = Control.FOCUS_ALL
 	trainer_card_badge_option.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_apply_trainer_card_badge_option_style(trainer_card_badge_option)
 	option_wrap.add_child(trainer_card_badge_option)
@@ -15437,6 +15676,10 @@ func _create_trainer_card_stat_row(
 		trainer_card_money_label = value
 	elif field_id == "playtime":
 		trainer_card_playtime_label = value
+	elif field_id == "gym_badges":
+		trainer_card_gym_badge_count_label = value
+	elif field_id == "guild":
+		trainer_card_guild_label = value
 
 	return row
 
@@ -15548,7 +15791,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 		var category_key: String = str(category.get("label_key", "ui.appearance.category.%s" % category_id))
 		var side_button := Button.new()
 		_set_localized_control_property(side_button, "text", category_key)
-		side_button.focus_mode = Control.FOCUS_NONE
+		side_button.focus_mode = Control.FOCUS_ALL
 		side_button.custom_minimum_size = Vector2(0, 30)
 		side_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		side_button.toggle_mode = true
@@ -15591,7 +15834,7 @@ func _create_trainer_card_appearance_save_row() -> Control:
 	trainer_card_appearance_save_button = Button.new()
 	_set_localized_control_property(trainer_card_appearance_save_button, "text", "common.save")
 	trainer_card_appearance_save_button.custom_minimum_size = Vector2(84, 30)
-	trainer_card_appearance_save_button.focus_mode = Control.FOCUS_NONE
+	trainer_card_appearance_save_button.focus_mode = Control.FOCUS_ALL
 	trainer_card_appearance_save_button.pressed.connect(_on_trainer_card_appearance_save_pressed)
 	_apply_button_style(trainer_card_appearance_save_button, "primary")
 	row.add_child(trainer_card_appearance_save_button)
@@ -15639,7 +15882,7 @@ func _create_trainer_card_badges_tab() -> Control:
 
 	var region_select := OptionButton.new()
 	region_select.custom_minimum_size = Vector2(132, 32)
-	region_select.focus_mode = Control.FOCUS_NONE
+	region_select.focus_mode = Control.FOCUS_ALL
 	region_select.add_item("Kanto")
 	region_select.selected = 0
 	_apply_button_style(region_select, "default")
@@ -15737,6 +15980,18 @@ func _refresh_trainer_card_gym_badges() -> void:
 			str(slot_data.get("name", badge.get("name", "Badge"))),
 			PlayerSave.has_gym_badge(region, badge_id)
 		)
+	if trainer_card_gym_badge_count_label != null:
+		trainer_card_gym_badge_count_label.text = "%d / %d" % [
+			_get_local_trainer_gym_badge_count(),
+			KANTO_BADGES.size(),
+		]
+
+
+func _refresh_trainer_card_identity_values() -> void:
+	if trainer_card_guild_label == null:
+		return
+	var guild_name := str(GuildService.current_guild.get("name", "-")).strip_edges()
+	trainer_card_guild_label.text = guild_name if guild_name != "" else "-"
 
 func _apply_trainer_card_gym_badge_slot_state(
 	slot: PanelContainer,
@@ -15992,7 +16247,7 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 	for body_id: String in body_ids:
 		var body_button := Button.new()
 		body_button.text = _format_appearance_option_name("body", body_id)
-		body_button.focus_mode = Control.FOCUS_NONE
+		body_button.focus_mode = Control.FOCUS_ALL
 		body_button.custom_minimum_size = Vector2(0, 36)
 		body_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		body_button.toggle_mode = true
@@ -16040,7 +16295,7 @@ func _create_trainer_card_natural_colors_summary(content_stack: VBoxContainer) -
 	_set_localized_control_property(edit_button, "text", "common.edit")
 	_set_localized_control_property(edit_button, "tooltip_text", "ui.appearance.natural.edit_tooltip")
 	edit_button.custom_minimum_size = Vector2(62, 30)
-	edit_button.focus_mode = Control.FOCUS_NONE
+	edit_button.focus_mode = Control.FOCUS_ALL
 	edit_button.pressed.connect(_open_trainer_card_natural_colors_popup)
 	_apply_button_style(edit_button, "primary")
 	header.add_child(edit_button)
@@ -16082,7 +16337,7 @@ func _create_trainer_card_natural_colors_summary(content_stack: VBoxContainer) -
 		)
 		swatch.custom_minimum_size = Vector2(0, 26)
 		swatch.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		swatch.focus_mode = Control.FOCUS_NONE
+		swatch.focus_mode = Control.FOCUS_ALL
 		swatch.pressed.connect(_open_trainer_card_natural_colors_popup)
 		swatch_group.add_child(swatch)
 		trainer_card_natural_color_summary_buttons[color_key] = swatch
@@ -16135,7 +16390,7 @@ func _open_trainer_card_natural_colors_popup() -> void:
 	var close_button := Button.new()
 	close_button.text = "×"
 	close_button.custom_minimum_size = Vector2(32, 30)
-	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.focus_mode = Control.FOCUS_ALL
 	close_button.pressed.connect(popup.hide)
 	_apply_button_style(close_button)
 	header.add_child(close_button)
@@ -16221,7 +16476,7 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 		28
 	)
 	trainer_card_appearance_unequip_button.toggle_mode = is_hair_category
-	trainer_card_appearance_unequip_button.focus_mode = Control.FOCUS_NONE
+	trainer_card_appearance_unequip_button.focus_mode = Control.FOCUS_ALL
 	trainer_card_appearance_unequip_button.pressed.connect(
 		_on_trainer_card_part_selected.bind(normalized_category, "")
 	)
@@ -16236,7 +16491,7 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 		"ui.appearance.return_to_bag"
 	)
 	trainer_card_appearance_return_button.custom_minimum_size = Vector2(92, 28)
-	trainer_card_appearance_return_button.focus_mode = Control.FOCUS_NONE
+	trainer_card_appearance_return_button.focus_mode = Control.FOCUS_ALL
 	trainer_card_appearance_return_button.pressed.connect(
 		_on_trainer_card_return_selected_pressed.bind(normalized_category)
 	)
@@ -16265,7 +16520,7 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 		var part_button := Button.new()
 		part_button.text = _format_appearance_option_name(normalized_category, part_id)
 		part_button.tooltip_text = part_button.text
-		part_button.focus_mode = Control.FOCUS_NONE
+		part_button.focus_mode = Control.FOCUS_ALL
 		part_button.custom_minimum_size = Vector2(0, 58)
 		part_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		part_button.toggle_mode = true
@@ -16340,7 +16595,7 @@ func _create_trainer_card_color_palette(
 		button.text = ""
 		button.tooltip_text = _format_appearance_swatch_name(str(swatch.get("label", color_id)))
 		button.custom_minimum_size = Vector2(30, 24)
-		button.focus_mode = Control.FOCUS_NONE
+		button.focus_mode = Control.FOCUS_ALL
 		button.pressed.connect(_on_trainer_card_color_selected.bind(color_key, color_id))
 		grid.add_child(button)
 		trainer_card_color_buttons["%s:%s" % [color_key, color_id]] = {
@@ -16364,7 +16619,7 @@ func _create_trainer_card_color_palette(
 		var custom_picker := ColorPickerButton.new()
 		_set_localized_control_property(custom_picker, "tooltip_text", "ui.appearance.color.custom_tooltip")
 		custom_picker.custom_minimum_size = Vector2(54, 26)
-		custom_picker.focus_mode = Control.FOCUS_NONE
+		custom_picker.focus_mode = Control.FOCUS_ALL
 		custom_picker.color = Color.from_string(
 			_get_player_save_color_value(color_key),
 			Color.WHITE
