@@ -154,6 +154,11 @@ func _run() -> void:
 		"battle money uses reward cards"
 	)
 	_check(
+		world_source.contains('_notify_wild_currency_drop_awards(reward.get("currencies", []))')
+		and world_source.contains('"add_currency_reward_notification", currency_id, amount'),
+		"wild Aetherite uses currency reward cards"
+	)
+	_check(
 		world_source.contains("_story_reward_item_grants")
 		and world_source.contains('"add_item_reward_notification"'),
 		"story and fishing items use reward cards"

@@ -98,6 +98,15 @@ func _check_mega_stone_drops(overlay: Node, detail_stack: VBoxContainer) -> void
 	overlay.set("pokedex_active_tab", "drops")
 	overlay.set("pokedex_selected_species", {
 		"id": "charizard",
+		"wildCurrencyDropCatalogId": "wild-currency-drops-v1",
+		"wildCurrencyDrops": [
+			{
+				"currency": "aetherite",
+				"amount": 10,
+				"chance": 0.5,
+				"encounterOutcomes": ["defeated", "caught"],
+			},
+		],
 		"wildDrops": [
 			{
 				"itemId": "charizardite-x",
@@ -111,11 +120,18 @@ func _check_mega_stone_drops(overlay: Node, detail_stack: VBoxContainer) -> void
 	})
 	overlay.call("_refresh_pokedex_detail")
 	var item_link := overlay.find_child("PokedexDropItem_charizardite-x", true, false) as LinkButton
+	var currency_label := overlay.find_child("PokedexDropCurrency_aetherite", true, false) as Label
 	_check(
 		detail_stack != null
 		and _tree_contains_text(detail_stack, "2% per voltooide encounter")
 		and _tree_contains_text(detail_stack, "Verhandelbaar · Versla of vang deze Pokémon"),
 		"Pokédex renders the shared effective item-drop chance without a redundant category heading"
+	)
+	_check(
+		currency_label != null
+		and currency_label.text == "Aetherite"
+		and _tree_contains_text(detail_stack, "50% per voltooide encounter · 10 Aetherite"),
+		"Pokédex renders the rarity-based Aetherite amount and chance"
 	)
 	_check(
 		item_link != null and not item_link.pressed.get_connections().is_empty(),
@@ -124,13 +140,15 @@ func _check_mega_stone_drops(overlay: Node, detail_stack: VBoxContainer) -> void
 	overlay.set("pokedex_selected_species", {
 		"id": "rattata",
 		"wildDrops": [],
+		"wildCurrencyDrops": [],
 		"wildDropCatalogId": "mega-stone-wild-drops-v1",
+		"wildCurrencyDropCatalogId": "wild-currency-drops-v1",
 	})
 	overlay.call("_refresh_pokedex_detail")
 	_check(
 		detail_stack != null
-		and _tree_contains_text(detail_stack, "Deze Pokémon heeft geen bekende itemdrops."),
-		"Pokédex uses a generic empty item-drop message"
+		and _tree_contains_text(detail_stack, "Deze Pokémon heeft geen bekende drops."),
+		"Pokédex uses a generic empty drop message"
 	)
 	overlay.set("pokedex_selected_species", {})
 	overlay.set("pokedex_active_tab", "general")

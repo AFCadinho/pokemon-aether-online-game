@@ -89,6 +89,12 @@ func _init() -> void:
 		and world_source.contains('"add_item_reward_notification", item_id, quantity'),
 		"wild Mega Stone drops show a localized item notification"
 	)
+	_check(
+		world_source.contains("func _notify_wild_currency_drop_awards")
+		and world_source.contains('LocalizationManager.text("ui.world.reward.wild_aetherite_drop"')
+		and world_source.contains('"add_currency_reward_notification", currency_id, amount'),
+		"wild Aetherite drops show a localized currency notification"
+	)
 
 	quit(1 if failed else 0)
 

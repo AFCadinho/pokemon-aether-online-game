@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Wild Pokémon now show their rarity-based Aetherite rewards in the Pokédex, and successful drops update the wallet with a localized currency notification.
+
 - Aether Clash challenge loading now shows a clear recoverable error with a retry button instead of remaining stuck on a loading message.
 
 - New Aether Clash production safety limits provide localized feedback when intake, stakes, roster size, spectator capacity, or challenge frequency is restricted.
