@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Aether Exchange now includes item wishlists: escrow a fixed-price offer, browse items other Trainers want, fulfill complete requests, or cancel your own order for a full refund.
+
 - Obsolete bicycle and Rotom Bike items, consumable Repels, Roto Powers, unused imports, and duplicate Bag-side Z-Crystals have been removed from item search and localization, while Escape Rope remains a reusable Key Item and Mega/Z activation items remain available.
 
 - Completed Ranked battles can now award 1,000 Battle Points for a win and 500 for a loss, with the active server policy shown in Rewards and the payout shown after battle.
