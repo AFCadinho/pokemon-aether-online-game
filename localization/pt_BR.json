@@ -3471,6 +3471,8 @@
   "battle.timer.reconnect": "Reconectar {time}",
   "battle.timer.starts": "Começa em {time}",
   "battle.timer.time": "Tempo {time}",
+  "battle.timer.clash_limit": "CLASH {time}",
+  "battle.timer.clash_tiebreak": "DESEMPATE…",
   "battle.timer.choosing": "Escolhendo",
   "battle.timer.scheduled": "Agendado",
   "battle.timer.paused": "Pausado",

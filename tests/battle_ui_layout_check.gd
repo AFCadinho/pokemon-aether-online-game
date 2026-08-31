@@ -176,6 +176,7 @@ func _check_scene_structure() -> void:
 	_check_contains(scene_source, "[node name=\"CalcPanel\" type=\"MarginContainer\" parent=\"BattleDrawerLayer/CalcDrawer/CalcDrawerContent\"", "Calc uses separate drawer content")
 	_check_contains(scene_source, "[node name=\"CalcTimerDock\" parent=\"BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow\" instance=ExtResource(\"9_pyfix\")]", "Calc keeps its dedicated timer dock in the workspace header")
 	_check_contains(scene_source, "[node name=\"CalcTurnLabel\" type=\"Label\" parent=\"BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow\"]", "Calc keeps the current turn visible in its header")
+	_check_contains(scene_source, "[node name=\"CalcBattleLimitLabel\" type=\"Label\" parent=\"BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow\"]", "Calc keeps the Clash hard limit visible in its header")
 	_check_contains(scene_source, "vertical_scroll_mode = 0", "Calc removes the old full-workspace scrollbar")
 	var calc_drawer_start := scene_source.find("[node name=\"CalcDrawer\"")
 	var calc_drawer_end := scene_source.find("\n\n", calc_drawer_start)

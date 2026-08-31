@@ -3471,6 +3471,8 @@
   "battle.timer.reconnect": "Opnieuw verbinden {time}",
   "battle.timer.starts": "Start over {time}",
   "battle.timer.time": "Tijd {time}",
+  "battle.timer.clash_limit": "CLASH {time}",
+  "battle.timer.clash_tiebreak": "TIEBREAK…",
   "battle.timer.choosing": "Kiezen",
   "battle.timer.scheduled": "Ingepland",
   "battle.timer.paused": "Gepauzeerd",

@@ -304,6 +304,7 @@ var wild_owned_request_id := 0
 @onready var calc_drawer: Control = %CalcDrawer
 @onready var calc_timer_dock: BattleVsPanelContainer = %CalcTimerDock
 @onready var calc_turn_label: Label = %CalcTurnLabel
+@onready var calc_battle_limit_label: Label = %CalcBattleLimitLabel
 @onready var bag_drawer_close_button: Button = %BagDrawerCloseButton
 @onready var calc_drawer_close_button: Button = %CalcDrawerCloseButton
 @onready var context_hint: Label = %ContextHint
@@ -758,6 +759,7 @@ func _process(delta: float) -> void:
 	weather_presentation.animate(delta)
 	if _should_show_bank_timer_projection():
 		_show_pvp_decision_timers()
+	_update_battle_limit_ui()
 	_request_pvp_team_preview_recovery_if_server_advanced()
 	_report_stalled_pvp_waiting_if_needed()
 
@@ -6253,6 +6255,7 @@ func _update_battle_status_panels() -> void:
 	_timer_panels_call("hide_decision_timers")
 	if _should_show_bank_timer_projection():
 		_show_pvp_decision_timers()
+	_update_battle_limit_ui()
 	_sync_calc_timer_dock_visibility()
 	var field_effects := _get_display_field_effects()
 	_prune_inactive_field_condition_ability_modifiers(field_effects)
@@ -6276,6 +6279,40 @@ func _show_pvp_decision_timers() -> void:
 		opponent_timer,
 		"TEAM_PREVIEW" if team_preview_lead_selection_active else "",
 	])
+
+
+func _update_battle_limit_ui() -> void:
+	var display := PvpBattleRealtimeService.timer_projection.battle_limit_display()
+	if display.is_empty():
+		_vs_panel_call("hide_battle_limit")
+		if is_instance_valid(calc_battle_limit_label):
+			calc_battle_limit_label.visible = false
+		return
+	var state := str(display.get("state", "ACTIVE"))
+	var remaining_ms := maxi(int(display.get("remainingMs", 0)), 0)
+	var timer_text := _t("battle.timer.clash_tiebreak") if state == "TIEBREAK" else _t(
+		"battle.timer.clash_limit",
+		{"time": _format_battle_limit_ms(remaining_ms)}
+	)
+	var color := Color(0.38431373, 0.84313726, 1.0)
+	var pulse := false
+	if state == "TIEBREAK" or remaining_ms <= 15_000:
+		color = Color(1.0, 0.35, 0.25)
+		pulse = true
+	elif remaining_ms <= 60_000:
+		color = Color(1.0, 0.72, 0.24)
+	_vs_panel_call("show_battle_limit", [timer_text, color, pulse])
+	if is_instance_valid(calc_battle_limit_label):
+		calc_battle_limit_label.visible = current_action_panel_mode == BattleActionsPanelMode.CALC
+		calc_battle_limit_label.text = timer_text
+		calc_battle_limit_label.modulate = color
+		if pulse:
+			calc_battle_limit_label.modulate.a = 0.65 + 0.35 * abs(sin(float(Time.get_ticks_msec()) / 180.0))
+
+
+func _format_battle_limit_ms(value: int) -> String:
+	var seconds := int(ceil(float(maxi(value, 0)) / 1000.0))
+	return "%02d:%02d" % [seconds / 60, seconds % 60]
 
 func _get_display_field_effects() -> Array:
 	if presentation_state.has_field_snapshot:
