@@ -4,6 +4,12 @@
 
 - Aether Clash battles now show one synchronized 7.5-minute Clash timer in both the regular battle header and the Damage Calculator, with clear final-minute and tiebreak warnings.
 
+- Aethernet travel now separates available and locked destinations, uses full-row selection, and keeps one clear travel action with each fare shown beside its destination.
+
+- Obsolete bicycle and Rotom Bike items, consumable Repels, Roto Powers, unused imports, and duplicate Bag-side Z-Crystals have been removed from item search and localization, while Escape Rope remains a reusable Key Item and Mega/Z activation items remain available.
+
+- Completed Ranked battles can now award 1,000 Battle Points for a win and 500 for a loss, with the active server policy shown in Rewards and the payout shown after battle.
+
 - The Quest Log now shows item, currency, and skill-XP rewards in each quest's full detail view while keeping the overworld tracker compact.
 
 - The in-arena Clash status now stays compact by default and opens the Guild player roster only when requested.

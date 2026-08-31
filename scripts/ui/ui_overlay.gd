@@ -480,7 +480,7 @@ const BAG_CATEGORIES := [
 	{"id": "all", "labelKey": "ui.bag.category.all", "iconItemId": ""},
 	{"id": "medicine", "labelKey": "ui.bag.category.medicine", "iconItemId": "potion"},
 	{"id": "pokeball", "labelKey": "ui.bag.category.pokeballs", "iconItemId": "poke-ball"},
-	{"id": "key_items", "labelKey": "ui.bag.category.key_items", "iconItemId": "bicycle"},
+	{"id": "key_items", "labelKey": "ui.bag.category.key_items", "iconItemId": "mount-license"},
 	{"id": "machines", "labelKey": "ui.bag.category.machines", "iconItemId": "tm-material"},
 	{"id": "charms", "labelKey": "ui.bag.category.charms", "iconItemId": "surf-charm"},
 	{"id": "held_items", "labelKey": "ui.bag.category.held_items", "iconItemId": "leftovers"},
@@ -803,6 +803,13 @@ var pvp_ranked_battles_tabs: TabContainer
 var pvp_ranked_rules_tabs: TabContainer
 var pvp_ranked_rewards_tabs: TabContainer
 var pvp_ranked_objectives_filter: OptionButton
+var pvp_ranked_rewards_intro_label: Label
+var pvp_ranked_rewards_status_label: Label
+var pvp_ranked_rewards_activation_notes: Array[Label] = []
+var pvp_ranked_battle_reward_status_labels: Array[Label] = []
+var pvp_ranked_battle_reward_detail_labels: Array[Label] = []
+var pvp_ranked_battle_reward_win_value_labels: Array[Label] = []
+var pvp_ranked_battle_reward_loss_value_labels: Array[Label] = []
 var pvp_queue_compact_panel: PanelContainer
 var pvp_queue_compact_status_label: Label
 var pvp_queue_compact_time_label: Label
@@ -1903,6 +1910,7 @@ func _refresh_pvp_localized_ui() -> void:
 		_refresh_pvp_tab_titles(tab_container)
 	_refresh_pvp_leaderboard_scope_options()
 	_refresh_pvp_ranked_objectives_filter_options()
+	_refresh_pvp_ranked_rewards_state()
 	_render_pvp_team_preview()
 	_render_pvp_training_team_preview()
 	_refresh_pvp_team_validator()
@@ -7140,6 +7148,11 @@ func _configure_tool_tile_button(
 	labels.add_child(subtitle)
 
 func _create_pvp_ranked_rewards_content() -> TabContainer:
+	pvp_ranked_rewards_activation_notes.clear()
+	pvp_ranked_battle_reward_status_labels.clear()
+	pvp_ranked_battle_reward_detail_labels.clear()
+	pvp_ranked_battle_reward_win_value_labels.clear()
+	pvp_ranked_battle_reward_loss_value_labels.clear()
 	pvp_ranked_rewards_tabs = TabContainer.new()
 	pvp_ranked_rewards_tabs.name = "RankedRewardsTabs"
 	pvp_ranked_rewards_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -7287,12 +7300,12 @@ func _create_pvp_ranked_rewards_overview_content() -> ScrollContainer:
 	title.add_theme_color_override("font_color", Color("#f3e1a5"))
 	overview_copy.add_child(title)
 
-	var intro := Label.new()
-	_set_localized_control_property(intro, "text", "ui.pvp.rewards.intro")
-	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	intro.add_theme_font_size_override("font_size", 12)
-	intro.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	overview_copy.add_child(intro)
+	pvp_ranked_rewards_intro_label = Label.new()
+	_set_localized_control_property(pvp_ranked_rewards_intro_label, "text", "ui.pvp.rewards.intro")
+	pvp_ranked_rewards_intro_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_ranked_rewards_intro_label.add_theme_font_size_override("font_size", 12)
+	pvp_ranked_rewards_intro_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	overview_copy.add_child(pvp_ranked_rewards_intro_label)
 
 	var status_panel := PanelContainer.new()
 	status_panel.add_theme_stylebox_override(
@@ -7308,12 +7321,12 @@ func _create_pvp_ranked_rewards_overview_content() -> ScrollContainer:
 	status_margin.add_theme_constant_override("margin_bottom", 6)
 	status_panel.add_child(status_margin)
 
-	var status := Label.new()
-	status.name = "RankedRewardsStatus"
-	_set_localized_control_property(status, "text", "ui.pvp.rewards.status_inactive")
-	status.add_theme_font_size_override("font_size", 10)
-	status.add_theme_color_override("font_color", Color("#f4d47b"))
-	status_margin.add_child(status)
+	pvp_ranked_rewards_status_label = Label.new()
+	pvp_ranked_rewards_status_label.name = "RankedRewardsStatus"
+	_set_localized_control_property(pvp_ranked_rewards_status_label, "text", "ui.pvp.rewards.status_inactive")
+	pvp_ranked_rewards_status_label.add_theme_font_size_override("font_size", 10)
+	pvp_ranked_rewards_status_label.add_theme_color_override("font_color", Color("#f4d47b"))
+	status_margin.add_child(pvp_ranked_rewards_status_label)
 
 	var cards := GridContainer.new()
 	cards.name = "RankedRewardsCards"
@@ -7371,6 +7384,7 @@ func _create_pvp_ranked_rewards_overview_content() -> ScrollContainer:
 	activation_note.add_theme_font_size_override("font_size", 11)
 	activation_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(activation_note)
+	pvp_ranked_rewards_activation_notes.append(activation_note)
 	return scroll
 
 
@@ -7405,6 +7419,7 @@ func _create_pvp_ranked_reward_detail_content(
 	activation_note.add_theme_font_size_override("font_size", 11)
 	activation_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(activation_note)
+	pvp_ranked_rewards_activation_notes.append(activation_note)
 	return scroll
 
 
@@ -7452,6 +7467,9 @@ func _create_pvp_reward_preview_card(
 	status.add_theme_font_size_override("font_size", 9)
 	status.add_theme_color_override("font_color", accent)
 	heading.add_child(status)
+	var is_battle_reward_card := card_name.begins_with("RankedBattleReward")
+	if is_battle_reward_card:
+		pvp_ranked_battle_reward_status_labels.append(status)
 
 	if not metrics.is_empty():
 		var metrics_row := HBoxContainer.new()
@@ -7492,6 +7510,12 @@ func _create_pvp_reward_preview_card(
 			metric_value_label.add_theme_font_size_override("font_size", 15)
 			metric_value_label.add_theme_color_override("font_color", accent)
 			metric_layout.add_child(metric_value_label)
+			if is_battle_reward_card:
+				var metric_label_key := str(metric.get("label_key", ""))
+				if metric_label_key == "ui.pvp.rewards.battle.win":
+					pvp_ranked_battle_reward_win_value_labels.append(metric_value_label)
+				elif metric_label_key == "ui.pvp.rewards.battle.loss":
+					pvp_ranked_battle_reward_loss_value_labels.append(metric_value_label)
 
 	var detail := Label.new()
 	_set_localized_control_property(detail, "text", detail_key)
@@ -7500,6 +7524,8 @@ func _create_pvp_reward_preview_card(
 	detail.add_theme_font_size_override("font_size", 11)
 	detail.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(detail)
+	if is_battle_reward_card:
+		pvp_ranked_battle_reward_detail_labels.append(detail)
 	return card
 
 
@@ -41606,6 +41632,7 @@ func _populate_pvp_queue_select(queues: Array[Dictionary]) -> void:
 	_select_pvp_mode_by_queue_id(pvp_active_queue_id)
 	if pvp_popup_subtitle_label != null:
 		pvp_popup_subtitle_label.text = _pvp_popup_subtitle_for_section("Ranked")
+	_refresh_pvp_ranked_rewards_state()
 	_refresh_pvp_team_validator()
 
 func _select_pvp_queue_by_id(queue_id: String) -> bool:
@@ -41641,8 +41668,85 @@ func _on_pvp_queue_selected(index: int) -> void:
 	_select_pvp_mode_by_queue_id(pvp_active_queue_id)
 	_set_pvp_queue_status_key("ui.pvp.queue.ready")
 	_refresh_pvp_queue_buttons("idle")
+	_refresh_pvp_ranked_rewards_state()
 	_refresh_pvp_team_validator()
 	_refresh_pvp_ranked_team_validation.call_deferred(true)
+
+func _selected_pvp_ranked_battle_point_rewards() -> Dictionary:
+	var queue := _pvp_queue_by_id(pvp_active_queue_id)
+	var rewards_value: Variant = queue.get("battlePointRewards", {})
+	return (rewards_value as Dictionary).duplicate(true) if rewards_value is Dictionary else {}
+
+func _refresh_pvp_ranked_rewards_state() -> void:
+	var rewards := _selected_pvp_ranked_battle_point_rewards()
+	var win_amount: int = max(int(rewards.get("winAmount", 0)), 0)
+	var loss_amount: int = max(int(rewards.get("lossAmount", 0)), 0)
+	var is_active: bool = (
+		bool(rewards.get("enabled", false))
+		and str(rewards.get("currency", "")).strip_edges() == "battle_points"
+		and win_amount > 0
+		and loss_amount > 0
+	)
+	if pvp_ranked_rewards_intro_label != null:
+		_set_localized_control_property(
+			pvp_ranked_rewards_intro_label,
+			"text",
+			"ui.pvp.rewards.intro_active" if is_active else "ui.pvp.rewards.intro"
+		)
+		if is_active:
+			pvp_ranked_rewards_intro_label.text = LocalizationManager.text(
+				"ui.pvp.rewards.intro_active",
+				{
+					"win": _format_pvp_reward_amount(win_amount),
+					"loss": _format_pvp_reward_amount(loss_amount),
+				}
+			)
+	if pvp_ranked_rewards_status_label != null:
+		_set_localized_control_property(
+			pvp_ranked_rewards_status_label,
+			"text",
+			"ui.pvp.rewards.status_active" if is_active else "ui.pvp.rewards.status_inactive"
+		)
+		pvp_ranked_rewards_status_label.add_theme_color_override(
+			"font_color",
+			Color("#74e5a2") if is_active else Color("#f4d47b")
+		)
+	for label: Label in pvp_ranked_rewards_activation_notes:
+		if is_instance_valid(label):
+			_set_localized_control_property(
+				label,
+				"text",
+				"ui.pvp.rewards.activation_note_active" if is_active else "ui.pvp.rewards.activation_note"
+			)
+	for label: Label in pvp_ranked_battle_reward_status_labels:
+		if is_instance_valid(label):
+			_set_localized_control_property(
+				label,
+				"text",
+				"ui.pvp.rewards.status_active_short" if is_active else "ui.pvp.rewards.status_planned"
+			)
+	for label: Label in pvp_ranked_battle_reward_detail_labels:
+		if is_instance_valid(label):
+			_set_localized_control_property(
+				label,
+				"text",
+				"ui.pvp.rewards.battle.detail_active" if is_active else "ui.pvp.rewards.battle.detail"
+			)
+	if is_active:
+		var win_text := _format_pvp_reward_amount(win_amount)
+		var loss_text := _format_pvp_reward_amount(loss_amount)
+		for label: Label in pvp_ranked_battle_reward_win_value_labels:
+			if is_instance_valid(label):
+				label.text = win_text
+		for label: Label in pvp_ranked_battle_reward_loss_value_labels:
+			if is_instance_valid(label):
+				label.text = loss_text
+
+func _format_pvp_reward_amount(amount: int) -> String:
+	var formatted := _format_money(amount)
+	if str(LocalizationManager.current_locale) in ["nl", "pt_BR"]:
+		formatted = formatted.replace(",", ".")
+	return "%s BP" % formatted
 
 func _pvp_queue_by_id(queue_id: String) -> Dictionary:
 	var normalized_queue_id := queue_id.strip_edges()

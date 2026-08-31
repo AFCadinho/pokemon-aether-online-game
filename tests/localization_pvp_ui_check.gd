@@ -85,6 +85,27 @@ func _check_pvp_runtime_translation() -> void:
 	_check(rewards_tabs != null and rewards_tabs.get_tab_title(1) == "Per gevecht", "Battle reward subtab renders in Dutch")
 	_check(rewards_tabs != null and rewards_tabs.get_tab_title(4) == "Seizoen", "Season reward subtab renders in Dutch")
 	_check(rewards_status != null and rewards_status.text == "BELONINGEN NIET ACTIEF", "Ranked reward availability renders in Dutch")
+	var active_ranked_queues: Array[Dictionary] = [
+		{
+			"id": "ranked_queue_v1",
+			"name": "Ranked Queue",
+			"mode": "ranked",
+			"status": "active",
+			"battlePointRewards": {
+				"enabled": true,
+				"currency": "battle_points",
+				"policyVersion": "ranked_bp_v1",
+				"winAmount": 1000,
+				"lossAmount": 500,
+			},
+		},
+	]
+	overlay.call("_populate_pvp_queue_select", active_ranked_queues)
+	var rewards_intro := overlay.get("pvp_ranked_rewards_intro_label") as Label
+	var reward_win_labels: Array = overlay.get("pvp_ranked_battle_reward_win_value_labels") as Array
+	_check(rewards_status != null and rewards_status.text == "BATTLE REWARDS ACTIEF", "Ranked reward availability follows the authoritative queue state")
+	_check(rewards_intro != null and rewards_intro.text.contains("1.000"), "Active Ranked reward copy explains the Dutch payout")
+	_check(not reward_win_labels.is_empty() and (reward_win_labels[0] as Label).text == "1.000 BP", "Active payout values come from the queue policy")
 	_check(objectives_filter != null and objectives_filter.item_count == 3, "Objectives exposes daily, weekly and seasonal filters")
 	_check(objectives_filter != null and objectives_filter.get_item_text(0) == "Dagelijks", "Objective filter renders in Dutch")
 	_check_ranked_dropdown_style(objectives_filter, "Objective period")
@@ -231,7 +252,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(rewards_tabs != null and rewards_tabs.get_tab_title(0) == "Visão geral", "Reward overview subtab updates to Portuguese")
 	_check(rewards_tabs != null and rewards_tabs.get_tab_title(1) == "Por batalha", "Battle reward subtab updates to Portuguese")
 	_check(rewards_tabs != null and rewards_tabs.get_tab_title(4) == "Temporada", "Season reward subtab updates to Portuguese")
-	_check(rewards_status != null and rewards_status.text == "RECOMPENSAS INATIVAS", "Ranked reward availability updates to Portuguese")
+	_check(rewards_status != null and rewards_status.text == "RECOMPENSAS DE BATALHA ATIVAS", "Active Ranked reward availability updates to Portuguese")
 	_check(objectives_filter != null and objectives_filter.get_item_text(0) == "Diário", "Objective filter updates to Portuguese")
 	_check(room_join_button != null and room_join_button.text == "Entrar no treinamento", "Training room action updates to Portuguese")
 	_check(training_button != null and training_button.text == "✓ Sala de treinamento", "Selected training room updates to Portuguese")
