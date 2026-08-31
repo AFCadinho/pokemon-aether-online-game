@@ -1876,7 +1876,7 @@ func _character_preview_category_for_sprite(sprite_name: String) -> String:
 func _character_preview_part_id(category: String, appearance: Dictionary) -> String:
 	match CharacterAppearanceService.normalize_part_category(category):
 		"hair":
-			return CharacterAppearanceService.resolve_hair_render_id(
+			return CharacterAppearanceService.deserialize_part_id(
 				str(appearance.get("hair", ""))
 			)
 		"eyes":

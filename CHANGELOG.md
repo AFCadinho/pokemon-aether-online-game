@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Choosing no hair now shows a consistent natural bald head in previews and the overworld, without the old stray scalp pixel.
+
 - Aether Clash battle results now count down on the Continue button and automatically return Trainers to the arena after five seconds.
 
 - Aether Clash now waits until Trainers close their previous battle result screen before allowing another collision or automatic match.
