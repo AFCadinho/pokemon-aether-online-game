@@ -88,6 +88,8 @@ func style_option_button(select: OptionButton) -> void:
 func style_spin_box(input: SpinBox) -> void:
 	if input == null:
 		return
+	input.editable = true
+	input.select_all_on_focus = true
 	var line_edit := input.get_line_edit()
 	if line_edit == null:
 		return
@@ -102,6 +104,16 @@ func style_spin_box(input: SpinBox) -> void:
 		"focus",
 		_select_style(COLOR_SURFACE_HOVER, COLOR_ACCENT)
 	)
+
+
+func focus_spin_box(input: SpinBox) -> void:
+	if input == null:
+		return
+	var line_edit := input.get_line_edit()
+	if line_edit == null:
+		return
+	line_edit.grab_focus.call_deferred()
+	line_edit.select_all.call_deferred()
 
 
 func popup_centered(requested_size: Vector2i = Vector2i.ZERO) -> void:
