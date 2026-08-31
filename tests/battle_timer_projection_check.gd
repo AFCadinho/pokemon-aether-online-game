@@ -14,6 +14,12 @@ func _init() -> void:
 		"participants": {
 			"p1": {"status":"RUNNING","decisionId":"d1","decisionGeneration":1,"mainBankRemainingMs":90000,"mainBankMaximumMs":90000,"actionableAtMs":2000,"bankChargeStartsAtMs":2000,"decisionCapAtMs":22000,"bankExhaustionAtMs":92000,"hypotheticalDeadlineAtMs":22000},
 			"p2": {"status":"CHOICE_ACCEPTED","decisionId":"d2","decisionGeneration":1,"mainBankRemainingMs":80000,"mainBankMaximumMs":90000,"actionableAtMs":1000,"bankChargeStartsAtMs":1000,"decisionCapAtMs":21000,"hypotheticalDeadlineAtMs":21000},
+		},
+		"battleLimit": {
+			"durationMs": 450000,
+			"startedAtMs": 1000,
+			"deadlineAtMs": 451000,
+			"status": "ACTIVE",
 		}
 	}, 5000), "accepts v1 snapshot")
 	_check(projection.should_present(true), "valid shadow projection presents by default")
@@ -21,6 +27,7 @@ func _init() -> void:
 	_check(not projection.should_present(false), "non-PvP battle does not present bank timer")
 	_check(not projection.should_present(true, false), "debug visibility override can hide bank timer")
 	_check_equal(projection.estimated_server_now_ms(5500), 1500, "monotonic server interpolation")
+	_check_equal(projection.battle_limit_display(5500).get("remainingMs"), 449500, "Clash limit uses the authoritative wall-clock deadline")
 	_check_equal(projection.participant_display("p1", 5500).get("state"), "SCHEDULED", "scheduled before actionable")
 	_check_equal(projection.participant_display("p1", 5500).get("bankRemainingMs"), 90000, "no charge before actionable")
 	_check_equal(projection.participant_display("p1", 6000).get("state"), "DECIDING", "active exactly actionable")
@@ -53,8 +60,12 @@ func _init() -> void:
 	_check_equal(projection.estimated_server_now_ms(9000), 10000, "foreground/reconnect snap")
 	projection.pause_for_reconnect(9000)
 	_check_equal(projection.estimated_server_now_ms(19000), 10000, "disconnect freezes projected server time")
+	_check_equal(projection.battle_limit_display(19000).get("remainingMs"), 431000, "Clash limit continues while decision clocks are reconnect-paused")
 	projection.resume_after_reconnect(19000)
 	_check_equal(projection.estimated_server_now_ms(19500), 10500, "reconnect resumes without charging disconnected time")
+	_check_equal(projection.battle_limit_display(19500).get("remainingMs"), 430500, "Clash limit never rewinds when decision clocks resume")
+	projection.resync(10500, 20000)
+	_check_equal(projection.battle_limit_display(20000).get("remainingMs"), 430000, "an older server sample cannot make the Clash countdown grow")
 	projection.reset()
 	_check(not projection.contract_enabled, "reset removes stale projection eligibility")
 	_check(not projection.should_present(true), "battle without a valid projection remains hidden")

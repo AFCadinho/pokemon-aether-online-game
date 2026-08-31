@@ -52,6 +52,9 @@ func _init() -> void:
 	panel.set_names("Extremely Long Player Display Name", "Extremely Long Opponent Display Name")
 	await process_frame
 	_check_true(panel.names_panel.size.x <= 340.0, "long names remain capped")
+	panel.show_battle_limit("CLASH 07:30", Color.CYAN)
+	_check_true(panel.battle_limit_label.visible, "Clash limit is visible beneath the player names")
+	_check_true(panel.battle_limit_label.text == "CLASH 07:30", "Clash limit preserves the synchronized countdown text")
 
 	panel.queue_free()
 	host.queue_free()
