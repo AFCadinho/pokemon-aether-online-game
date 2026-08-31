@@ -4509,6 +4509,7 @@
   "ui.trainer_card.field.id": "ID",
   "ui.trainer_card.field.joined": "已加入",
   "ui.trainer_card.field.badge": "徽章",
+  "ui.trainer_card.field.title": "训练家称号",
   "ui.trainer_card.field.playtime": "游戏时间",
   "ui.trainer_card.field.gym_badges": "道馆徽章",
   "ui.trainer_card.field.status": "状态",

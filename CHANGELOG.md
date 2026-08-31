@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Other Trainers' cards now use the same compact profile layout and correctly sized avatar preview as your own card, with visible values, whole-number Trainer IDs, and clearer Trainer Title wording.
+
 - Public Trainer Cards now load follower previews without a setup error.
 
 - Trainer Cards now keep regional Gym Badge progress exclusively in the Badges tab, both for your own card and cards viewed from other Trainers.
