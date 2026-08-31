@@ -465,6 +465,7 @@ func _trace_aether_clash(event: String, fields: Dictionary = {}) -> void:
 func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	var current_map_id := _get_map_id(GameState.current_map)
 	var target_map_id := str(state.get("mapId", "")).strip_edges()
+	var reuses_presence_roster := current_map_id != "" and current_map_id == target_map_id
 	var trace_aether_clash := (
 		_is_aether_clash_map_id(current_map_id)
 		or _is_aether_clash_map_id(target_map_id)
@@ -582,6 +583,8 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	authorized_teleport_in_progress = false
 	is_loading_map = false
 	_publish_world_presence(true)
+	if reuses_presence_roster:
+		_restore_remote_players_from_cached_presence()
 	if authorized_teleport_locked_overworld:
 		GameState.unlock_overworld_input()
 	authorized_teleport_locked_overworld = false
@@ -600,6 +603,16 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 			aether_clash_result.duplicate(true)
 		)
 	return {"success": true}
+
+
+func _restore_remote_players_from_cached_presence() -> void:
+	var cached_players := WorldPresenceService.get_current_map_players()
+	_apply_remote_player_states(cached_players, true)
+	if _is_aether_clash_map_id(_get_map_id(GameState.current_map)):
+		_trace_aether_clash("same_map_presence_restored", {
+			"cachedPlayerCount": cached_players.size(),
+			"remoteAvatarCount": remote_player_avatars.size(),
+		})
 
 
 func _configure_authorized_map_instance(map: Node, state: Dictionary) -> void:
