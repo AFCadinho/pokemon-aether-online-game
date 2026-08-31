@@ -40,8 +40,8 @@ func _init() -> void:
 	_check(battle_point_vendor != null, "Lobby places the Battle Point vendor")
 	_check(
 		battle_point_vendor != null
-		and battle_point_vendor.position == Vector2(912, 1424),
-		"Battle Point vendor uses the protected lobby market location"
+		and battle_point_vendor.position == Vector2(1584, 944),
+		"Battle Point vendor uses the updated lobby market location"
 	)
 	var lobby_scene_source := FileAccess.get_file_as_string(LOBBY_SCENE)
 	_check(
@@ -89,7 +89,7 @@ func _init() -> void:
 		"Guild arrival tile is walkable"
 	)
 	_check(
-		collision != null and collision.get_cell_source_id(Vector2i(28, 44)) == -1,
+		collision != null and collision.get_cell_source_id(Vector2i(49, 29)) == -1,
 		"Battle Point vendor placement tile is available"
 	)
 	lobby.queue_free()

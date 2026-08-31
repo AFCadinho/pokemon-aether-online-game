@@ -212,7 +212,7 @@ local_destination_id = ""
 npc_id = "aether_clash_lobby_transit_keeper"
 
 [node name="BattlePointVendor" parent="Entities/NPCs" instance=ExtResource("8_bp_vendor")]
-position = Vector2(912, 1424)
+position = Vector2(1584, 944)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1814140839]
 
