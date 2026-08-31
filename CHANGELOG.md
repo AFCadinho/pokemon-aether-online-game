@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Mega Stone Seller is now available in the Aether Clash Lobby, and the Bag distinguishes grouped account-bound and tradeable copies without showing a misleading combined stack count.
+
 - Already-owned permanent shop items now appear disabled in catalog lists instead of looking like active purchase options.
 
 - Live Ranked battles now use compact battle cards with clearer matchups, status details, and a dedicated spectate button.

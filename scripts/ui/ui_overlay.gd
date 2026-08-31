@@ -19849,9 +19849,12 @@ func _normalize_market_items(items_value: Variant) -> Array[Dictionary]:
 		var item_id := str(item.get("itemId", "")).strip_edges()
 		if item_id == "":
 			continue
+		var canonical_item_id := str(item.get("canonicalItemId", _canonical_display_item_id(item_id))).strip_edges()
 		var purchase_cost := _market_item_purchase_cost(item)
 		normalized_items.append(ItemLocalization.localize_item({
 			"id": item_id,
+			"canonicalItemId": canonical_item_id,
+			"ownershipVariant": str(item.get("ownershipVariant", "")).strip_edges().to_lower(),
 			"name": str(item.get("name", _format_item_name_from_id(item_id))),
 			"category": str(item.get("category", "")),
 			"shortDesc": str(item.get("shortDesc", "")),
@@ -20817,6 +20820,8 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 		else "ui.bag.item_tooltip",
 		{"item": item_name},
 	)
+	if _is_mega_stone_bag_item(item):
+		slot.tooltip_text += "\n%s" % _mega_stone_provenance_label(item)
 	slot.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	slot.gui_input.connect(_on_bag_item_slot_gui_input.bind(item.duplicate(true), slot))
 	slot.mouse_entered.connect(_on_bag_item_slot_hover_changed.bind(slot, true))
@@ -20988,6 +20993,8 @@ func _refresh_bag_detail() -> void:
 		if bool(bag_selected_item.get("borrowed", false))
 		else LocalizationManager.text("ui.bag.assignment_unlimited")
 		if _is_account_entitlement_bag_item(bag_selected_item)
+		else _mega_stone_provenance_label(bag_selected_item)
+		if _is_mega_stone_bag_item(bag_selected_item)
 		else LocalizationManager.text("ui.bag.key_item")
 		if bool(bag_selected_item.get("permanent", false))
 		else LocalizationManager.text("ui.bag.quantity_owned", {"quantity": quantity}),
@@ -22217,6 +22224,7 @@ func _bag_gameplay_definition_for_item_id(item_id: String) -> Dictionary:
 func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_type: String = "") -> Texture2D:
 	if item_id == "escape-rope-action":
 		item_id = "escape-rope"
+	item_id = _canonical_display_item_id(item_id)
 	var cosmetic_icon := CharacterAppearanceService.get_cosmetic_item_icon(
 		item_id,
 		_bag_item_icon_gender(item_id)
@@ -22333,11 +22341,14 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 		var item_id := str(item.get("itemId", item.get("id", ""))).strip_edges()
 		if item_id == "":
 			continue
+		var canonical_item_id := str(item.get("canonicalItemId", _canonical_display_item_id(item_id))).strip_edges()
 		var backend_category := str(item.get("category", "")).strip_edges()
 		var gameplay: Dictionary = _staff_dictionary_from_variant(item.get("gameplay", {})).duplicate(true)
 		var use_notice: Dictionary = _staff_dictionary_from_variant(item.get("useNotice", {})).duplicate(true)
 		normalized_items.append(ItemLocalization.localize_item({
 			"id": item_id,
+			"canonicalItemId": canonical_item_id,
+			"ownershipVariant": str(item.get("ownershipVariant", "")).strip_edges().to_lower(),
 			"name": str(item.get("name", _format_item_name_from_id(item_id))),
 			"category": _normalize_backend_bag_category(backend_category, item_id),
 			"shortDesc": str(item.get("shortDesc", item.get("description", ""))).strip_edges(),
@@ -22357,6 +22368,7 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"assignmentMode": str(item.get("assignmentMode", item.get("assignment_mode", ""))).strip_edges().to_lower(),
 			"tradable": bool(item.get("tradable", false)),
 		}))
+	normalized_items = _group_mega_stone_bag_items(normalized_items)
 	for borrowed_value: Variant in InventoryService.cached_borrowed_inventory_items:
 		if borrowed_value is not Dictionary:
 			continue
@@ -22398,14 +22410,65 @@ func _is_account_entitlement_bag_item(item: Dictionary) -> bool:
 	return str(item.get("assignmentMode", item.get("assignment_mode", ""))).strip_edges().to_lower() == "account_entitlement"
 
 
+func _is_mega_stone_bag_item(item: Dictionary) -> bool:
+	return str(item.get("ownershipVariant", "")) in ["account_bound", "tradeable", "grouped"]
+
+
+func _group_mega_stone_bag_items(items: Array[Dictionary]) -> Array[Dictionary]:
+	var grouped: Array[Dictionary] = []
+	var group_indexes: Dictionary = {}
+	for item: Dictionary in items:
+		if not _is_mega_stone_bag_item(item):
+			grouped.append(item)
+			continue
+		var canonical_item_id := str(item.get("canonicalItemId", _canonical_display_item_id(str(item.get("id", "")))))
+		if not group_indexes.has(canonical_item_id):
+			var initial := item.duplicate(true)
+			initial["boundQuantity"] = 0
+			initial["tradeableQuantity"] = 0
+			group_indexes[canonical_item_id] = grouped.size()
+			grouped.append(initial)
+		var group_index := int(group_indexes[canonical_item_id])
+		var current := grouped[group_index]
+		var quantity: int = max(int(item.get("quantity", 1)), 1)
+		if str(item.get("ownershipVariant", "")) == "account_bound":
+			current["boundQuantity"] = int(current.get("boundQuantity", 0)) + quantity
+			current["id"] = str(item.get("id", ""))
+			current["tradable"] = false
+		else:
+			current["tradeableQuantity"] = int(current.get("tradeableQuantity", 0)) + quantity
+		current["quantity"] = int(current.get("boundQuantity", 0)) + int(current.get("tradeableQuantity", 0))
+		current["ownershipVariant"] = "grouped"
+		grouped[group_index] = current
+	return grouped
+
+
 func _bag_item_quantity_marker(item: Dictionary) -> String:
 	if bool(item.get("borrowed", false)):
 		return LocalizationManager.text("ui.bag.loan_marker")
 	if _is_account_entitlement_bag_item(item):
 		return "∞"
+	if _is_mega_stone_bag_item(item):
+		var bound_quantity := int(item.get("boundQuantity", 0))
+		var tradeable_quantity := int(item.get("tradeableQuantity", 0))
+		if bound_quantity > 0 and tradeable_quantity > 0:
+			return LocalizationManager.text("ui.bag.mega_marker.both", {"quantity": tradeable_quantity})
+		if bound_quantity > 0:
+			return LocalizationManager.text("ui.bag.mega_marker.bound")
+		return LocalizationManager.text("ui.bag.mega_marker.tradeable", {"quantity": tradeable_quantity})
 	if bool(item.get("permanent", false)):
 		return LocalizationManager.text("ui.bag.key_marker")
 	return "x%s" % max(int(item.get("quantity", 1)), 1)
+
+
+func _mega_stone_provenance_label(item: Dictionary) -> String:
+	var bound_quantity := int(item.get("boundQuantity", 0))
+	var tradeable_quantity := int(item.get("tradeableQuantity", 0))
+	if bound_quantity > 0 and tradeable_quantity > 0:
+		return LocalizationManager.text("ui.bag.mega_provenance.both", {"quantity": tradeable_quantity})
+	if bound_quantity > 0:
+		return LocalizationManager.text("ui.bag.mega_provenance.bound")
+	return LocalizationManager.text("ui.bag.mega_provenance.tradeable", {"quantity": tradeable_quantity})
 
 func _normalize_backend_bag_category(category: String, item_id: String) -> String:
 	if _is_fossil_item_id(item_id):
@@ -22430,7 +22493,7 @@ func _is_fossil_item_id(item_id: String) -> bool:
 		or normalized.begins_with("fossilized-")
 
 func _item_name_from_id(item_id: String) -> String:
-	var normalized_item_id := _normalize_item_id(item_id)
+	var normalized_item_id := _canonical_display_item_id(item_id)
 	return ItemLocalization.display_name(
 		normalized_item_id,
 		_format_item_name_from_id(normalized_item_id)
@@ -22438,7 +22501,7 @@ func _item_name_from_id(item_id: String) -> String:
 
 
 func _format_item_name_from_id(item_id: String) -> String:
-	var words := item_id.replace("_", "-").split("-")
+	var words := _canonical_display_item_id(item_id).replace("_", "-").split("-")
 	var formatted_words: Array[String] = []
 	for word: String in words:
 		if word == "":
@@ -22448,6 +22511,11 @@ func _format_item_name_from_id(item_id: String) -> String:
 
 func _normalize_item_id(item_id: String) -> String:
 	return item_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+
+
+func _canonical_display_item_id(item_id: String) -> String:
+	var normalized := _normalize_item_id(item_id)
+	return normalized.trim_suffix("-bound")
 
 func _guess_bag_category(item_id: String) -> String:
 	var normalized := item_id.strip_edges().to_lower()
@@ -22473,7 +22541,7 @@ func _guess_bag_category(item_id: String) -> String:
 ## (the bag and battle-held forms are intentionally separate IDs).  Their item
 ## ID is the stable signal for the player-facing Mega & Z Bag category.
 func _is_power_stone_item_id(item_id: String) -> bool:
-	var normalized := _normalize_item_id(item_id)
+	var normalized := _canonical_display_item_id(item_id)
 	var base_item_id := normalized.trim_suffix("--bag").trim_suffix("--held")
 	return base_item_id.ends_with("-z") \
 		or base_item_id.ends_with("ite") \
@@ -25668,6 +25736,11 @@ func _create_summary_item_choice(item: Dictionary) -> Control:
 	button.tooltip_text = str(item.get("name", _item_name_from_id(item_id)))
 	if _is_account_entitlement_bag_item(item):
 		button.tooltip_text += "\n%s" % LocalizationManager.text("ui.pokemon_summary.held_item.assign_entitlement_tooltip")
+	elif _is_mega_stone_bag_item(item):
+		button.tooltip_text += "\n%s\n%s" % [
+			_mega_stone_provenance_label(item),
+			LocalizationManager.text("ui.pokemon_summary.held_item.mega_provenance_tooltip"),
+		]
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.custom_minimum_size = Vector2(0, 30)
 	button.focus_mode = Control.FOCUS_NONE
