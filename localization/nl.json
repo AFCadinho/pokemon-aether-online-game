@@ -4605,6 +4605,8 @@
   "ui.appearance.return_item_tooltip": "Breng {item} terug naar de Bag; aangebrachte Chroma-verf wordt verwijderd",
   "ui.appearance.unequip": "Uittrekken",
   "ui.appearance.unequip_tooltip": "Draag niets in deze categorie",
+  "ui.appearance.no_hair": "Kaal / Geen haar",
+  "ui.appearance.no_hair_tooltip": "Gebruik het natuurlijke kale hoofd zonder haarlaag",
   "ui.appearance.return_to_bag": "Naar Bag",
   "ui.appearance.wardrobe_capacity": "{category}-garderobe · {count}/{limit} ontgrendeld",
   "ui.appearance.status.saving": "Uiterlijk opslaan...",

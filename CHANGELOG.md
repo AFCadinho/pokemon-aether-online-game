@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Choosing no hair now shows a consistent natural bald head in previews and the overworld, without the old stray scalp pixel.
+
 - Aether Clash now waits until Trainers close their previous battle result screen before allowing another collision or automatic match.
 
 - Character Customization now shows wardrobe cosmetics with their real sprite thumbnails, while unequipping and returning an item to the Bag use clear contextual actions outside the item grid.

@@ -4605,6 +4605,8 @@
   "ui.appearance.return_item_tooltip": "Return {item} to the Bag; applied Chroma dye is removed",
   "ui.appearance.unequip": "Unequip",
   "ui.appearance.unequip_tooltip": "Wear nothing in this category",
+  "ui.appearance.no_hair": "Bald / No Hair",
+  "ui.appearance.no_hair_tooltip": "Use the natural bald head without a hair layer",
   "ui.appearance.return_to_bag": "To Bag",
   "ui.appearance.wardrobe_capacity": "{category} wardrobe · {count}/{limit} unlocked",
   "ui.appearance.status.saving": "Saving appearance...",

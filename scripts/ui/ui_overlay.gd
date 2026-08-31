@@ -13957,7 +13957,7 @@ func _get_appearance_category_for_sprite(sprite_name: String) -> String:
 func _get_preview_part_id(category_id: String) -> String:
 	match CharacterAppearanceService.normalize_part_category(category_id):
 		"hair":
-			return CharacterAppearanceService.resolve_hair_render_id(
+			return CharacterAppearanceService.deserialize_part_id(
 				PlayerSave.appearance_hair_id
 			)
 		"headgear":
@@ -16205,17 +16205,22 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 
 	trainer_card_appearance_unequip_button = Button.new()
 	trainer_card_appearance_unequip_button.name = "AppearanceUnequipButton"
+	var is_hair_category := normalized_category == "hair"
 	_set_localized_control_property(
 		trainer_card_appearance_unequip_button,
 		"text",
-		"ui.appearance.unequip"
+		"ui.appearance.no_hair" if is_hair_category else "ui.appearance.unequip"
 	)
 	_set_localized_control_property(
 		trainer_card_appearance_unequip_button,
 		"tooltip_text",
-		"ui.appearance.unequip_tooltip"
+		"ui.appearance.no_hair_tooltip" if is_hair_category else "ui.appearance.unequip_tooltip"
 	)
-	trainer_card_appearance_unequip_button.custom_minimum_size = Vector2(74, 28)
+	trainer_card_appearance_unequip_button.custom_minimum_size = Vector2(
+		112 if is_hair_category else 74,
+		28
+	)
+	trainer_card_appearance_unequip_button.toggle_mode = is_hair_category
 	trainer_card_appearance_unequip_button.focus_mode = Control.FOCUS_NONE
 	trainer_card_appearance_unequip_button.pressed.connect(
 		_on_trainer_card_part_selected.bind(normalized_category, "")
@@ -16652,8 +16657,15 @@ func _refresh_trainer_card_appearance_actions() -> void:
 	)
 	var selected_part_id := _get_preview_part_id(category)
 	if trainer_card_appearance_unequip_button != null:
-		trainer_card_appearance_unequip_button.visible = selected_part_id != ""
+		var is_hair_category := category == "hair"
+		var is_no_hair_selected := is_hair_category and selected_part_id == ""
+		trainer_card_appearance_unequip_button.visible = is_hair_category or selected_part_id != ""
 		trainer_card_appearance_unequip_button.disabled = appearance_inventory_returning
+		trainer_card_appearance_unequip_button.button_pressed = is_no_hair_selected
+		_apply_button_style(
+			trainer_card_appearance_unequip_button,
+			"primary" if is_no_hair_selected else "default"
+		)
 	if trainer_card_appearance_return_button == null:
 		return
 	var source_item_id := _appearance_source_item_for_part(category, selected_part_id)
