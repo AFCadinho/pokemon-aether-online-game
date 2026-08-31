@@ -57,11 +57,35 @@ func _run() -> void:
 		"Initial matchmaking state shows the synchronized 60-second search window"
 	)
 	_check(hud.clash_panel.visible, "Arena state opens the contextual Clash panel")
+	_check(
+		hud.clash_panel.size.y <= 140.0,
+		"Clash context stays compact until the player requests more detail"
+	)
 	_check(hud.roster_guild_name_label.text == "North Stars", "Clash panel names only the viewer's Guild")
 	_check(hud.roster_list.get_child_count() == 2, "Clash panel lists the viewer's Guild roster")
+	_check(not hud.roster_scroll.visible, "Guild roster is hidden by default")
+	_check(
+		hud.roster_toggle_button.visible
+		and hud.roster_toggle_button.text.contains("2"),
+		"Compact panel exposes a player-list button with the roster size"
+	)
 	_check(
 		hud.battle_summary_label.text == "1 battle in progress",
 		"Clash panel summarizes live arena battles"
+	)
+	hud.roster_toggle_button.emit_signal("pressed")
+	await process_frame
+	_check(hud.roster_scroll.visible, "Player-list button opens the private Guild roster")
+	_check(hud.context_hint_label.visible, "Expanded roster includes the contextual gameplay hint")
+	_check(
+		hud.clash_panel.size.y > 300.0,
+		"Only the requested roster expands the context panel"
+	)
+	hud.roster_toggle_button.emit_signal("pressed")
+	await process_frame
+	_check(
+		not hud.roster_scroll.visible and hud.clash_panel.size.y <= 140.0,
+		"Player-list button restores the compact arena view"
 	)
 
 	var elimination_payload := _arena_payload("active", 3, 1)
@@ -161,6 +185,7 @@ func _run() -> void:
 		"Spectators do not receive a participant matchmaking countdown"
 	)
 	_check(not hud.roster_scroll.visible, "Public spectators receive no private Guild roster")
+	_check(not hud.roster_toggle_button.visible, "Public spectators are not shown an empty roster button")
 	_check(
 		hud.context_hint_label.text.contains("Aether View")
 		and hud.context_hint_label.text.contains("Master Ball"),
@@ -252,6 +277,16 @@ func _run() -> void:
 		player_source.contains("_is_world_barrier_step_blocked(global_position"),
 		"Grid movement consults the map-owned Aether barrier"
 	)
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+		var parsed: Variant = JSON.parse_string(
+			FileAccess.get_file_as_string("res://localization/%s.json" % locale)
+		)
+		var catalog := parsed as Dictionary if parsed is Dictionary else {}
+		_check(
+			catalog.has("ui.aether_clash.arena.context.show_players")
+			and catalog.has("ui.aether_clash.arena.context.hide_players"),
+			"%s localizes the compact roster controls" % locale
+		)
 
 	localization_manager.call("set_locale", original_locale)
 	duel.queue_free()
