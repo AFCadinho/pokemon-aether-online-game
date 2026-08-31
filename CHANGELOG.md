@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The whole server now receives a localized System chat message when an Aether Clash starts and finishes, including roster sizes and any Guild stake or prize pot.
+
 - System and error dialogue now uses a dedicated neutral Aether Core portrait instead of Professor Oak.
 
 - Aether Clash stake fields now accept a full amount immediately, while their arrow buttons continue to adjust the stake in ₽1,000 steps.
