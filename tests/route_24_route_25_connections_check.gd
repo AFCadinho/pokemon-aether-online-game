@@ -66,12 +66,12 @@ func _run() -> void:
 	_check(not _is_open(route_24_collision, Vector2i(59, 20)), "Route 24 closes the east boundary below all passages")
 
 	var route_25_collision := route_25.find_map_tilemap_layer("Collision") as TileMapLayer
-	_check(_is_open(route_25_collision, Vector2i(0, 4)), "Route 25 opens its upper Route 24 passage")
-	_check(_is_open(route_25_collision, Vector2i(0, 10)), "Route 25 opens its lower Route 24 passage")
-	_check(_is_open(route_25_collision, Vector2i(0, 15)), "Route 25 opens its south Route 24 passage")
-	_check(not _is_open(route_25_collision, Vector2i(0, 7)), "Route 25 separates both Route 24 passages")
-	_check(not _is_open(route_25_collision, Vector2i(0, 14)), "Route 25 separates its lower and south passages")
-	_check(not _is_open(route_25_collision, Vector2i(0, 17)), "Route 25 closes the west boundary below all passages")
+	_check(_is_vertical_range_open(route_25_collision, 0, 14, 17), "Route 25 opens its upper Route 24 passage")
+	_check(_is_vertical_range_open(route_25_collision, 0, 20, 25), "Route 25 opens its lower Route 24 passage")
+	_check(_is_vertical_range_open(route_25_collision, 0, 28, 30), "Route 25 opens its south Route 24 passage")
+	_check(not _is_open(route_25_collision, Vector2i(0, 19)), "Route 25 separates its upper and lower passages")
+	_check(not _is_open(route_25_collision, Vector2i(0, 27)), "Route 25 separates its lower and south passages")
+	_check(not _is_open(route_25_collision, Vector2i(0, 31)), "Route 25 closes the west boundary below all passages")
 
 	route_24.queue_free()
 	route_25.queue_free()
@@ -108,6 +108,13 @@ func _instantiate_map(scene_path: String) -> Node:
 
 func _is_open(layer: TileMapLayer, cell: Vector2i) -> bool:
 	return layer != null and layer.get_cell_source_id(cell) == -1
+
+
+func _is_vertical_range_open(layer: TileMapLayer, x: int, start_y: int, end_y: int) -> bool:
+	for y in range(start_y, end_y + 1):
+		if not _is_open(layer, Vector2i(x, y)):
+			return false
+	return true
 
 
 func _check(condition: bool, message: String) -> void:
