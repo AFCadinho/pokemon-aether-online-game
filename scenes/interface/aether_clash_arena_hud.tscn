@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/aether_clash_arena_hud.gd" id="1_hud"]
 
@@ -29,6 +29,42 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 shadow_color = Color(0, 0, 0, 0.4)
 shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_context_button"]
+bg_color = Color(0.0431373, 0.109804, 0.176471, 0.98)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.231373, 0.788235, 0.882353, 0.55)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_context_button_hover"]
+bg_color = Color(0.0784314, 0.192157, 0.298039, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.411765, 0.847059, 0.905882, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_context_button_pressed"]
+bg_color = Color(0.0313726, 0.0823529, 0.137255, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.890196, 0.741176, 0.407843, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
 
 [node name="AetherClashArenaHud" type="CanvasLayer"]
 layer = 9
@@ -161,45 +197,44 @@ text_overrun_behavior = 3
 visible = false
 layout_mode = 0
 anchor_left = 1.0
-anchor_bottom = 1.0
 anchor_right = 1.0
 offset_left = -292.0
 offset_top = 166.0
 offset_right = -16.0
-offset_bottom = -16.0
+offset_bottom = 294.0
 grow_horizontal = 0
-grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_context")
 
 [node name="Margin" type="MarginContainer" parent="Root/ClashPanel"]
 layout_mode = 2
-theme_override_constants/margin_left = 14
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 14
-theme_override_constants/margin_bottom = 12
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 9
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 9
 
 [node name="Layout" type="VBoxContainer" parent="Root/ClashPanel/Margin"]
 layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Header" type="HBoxContainer" parent="Root/ClashPanel/Margin/Layout"]
+layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Title" type="Label" parent="Root/ClashPanel/Margin/Layout"]
+[node name="Title" type="Label" parent="Root/ClashPanel/Margin/Layout/Header"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.494118, 0.87451, 0.956863, 1)
 theme_override_font_sizes/font_size = 11
 text = "CLASH STATUS"
 
-[node name="ViewerStatus" type="Label" parent="Root/ClashPanel/Margin/Layout"]
+[node name="ViewerStatus" type="Label" parent="Root/ClashPanel/Margin/Layout/Header"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.956863, 0.941176, 0.870588, 1)
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 12
 text = "PARTICIPANT"
-
-[node name="Divider" type="ColorRect" parent="Root/ClashPanel/Margin/Layout"]
-custom_minimum_size = Vector2(0, 1)
-layout_mode = 2
-mouse_filter = 2
-color = Color(0.231373, 0.788235, 0.882353, 0.3)
+horizontal_alignment = 2
+text_overrun_behavior = 3
 
 [node name="RosterHeader" type="HBoxContainer" parent="Root/ClashPanel/Margin/Layout"]
 layout_mode = 2
@@ -220,8 +255,28 @@ theme_override_font_sizes/font_size = 12
 text = "0 ACTIVE"
 horizontal_alignment = 2
 
+[node name="BattleSummary" type="Label" parent="Root/ClashPanel/Margin/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.627451, 0.717647, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+text = "0 battles in progress"
+
+[node name="RosterToggle" type="Button" parent="Root/ClashPanel/Margin/Layout"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.831373, 0.937255, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_context_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_context_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_context_button_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_context_button_hover")
+text = "Players (0)  ▾"
+
 [node name="RosterScroll" type="ScrollContainer" parent="Root/ClashPanel/Margin/Layout"]
-custom_minimum_size = Vector2(0, 290)
+visible = false
+custom_minimum_size = Vector2(0, 180)
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
@@ -231,13 +286,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 5
 
-[node name="BattleSummary" type="Label" parent="Root/ClashPanel/Margin/Layout"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.627451, 0.717647, 0.8, 1)
-theme_override_font_sizes/font_size = 11
-text = "0 battles in progress"
-
 [node name="ContextHint" type="Label" parent="Root/ClashPanel/Margin/Layout"]
+visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.627451, 0.717647, 0.8, 1)
 theme_override_font_sizes/font_size = 11

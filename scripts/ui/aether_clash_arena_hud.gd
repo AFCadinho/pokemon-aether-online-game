@@ -13,6 +13,10 @@ const BLUE_SIDE_COLOR := Color("#58b8ff")
 const RED_SIDE_COLOR := Color("#ff6678")
 const ELIMINATION_TOAST_SECONDS := 5.0
 const INITIAL_ELIMINATION_FRESHNESS_SECONDS := 10.0
+const CONTEXT_PANEL_TOP := 166.0
+const CONTEXT_PANEL_BOTTOM_MARGIN := 16.0
+const CONTEXT_PANEL_COLLAPSED_HEIGHT := 128.0
+const CONTEXT_PANEL_EXPANDED_HEIGHT := 480.0
 
 @onready var challenger_name_label: Label = $Root/Panel/Margin/Main/Matchup/Challenger/Name
 @onready var challenger_side_label: Label = $Root/Panel/Margin/Main/Matchup/Challenger/Side
@@ -25,11 +29,12 @@ const INITIAL_ELIMINATION_FRESHNESS_SECONDS := 10.0
 @onready var barrier_hint_label: Label = $Root/Panel/Margin/Main/BarrierHint
 @onready var matchmaking_hint_label: Label = $Root/Panel/Margin/Main/MatchmakingHint
 @onready var clash_panel: PanelContainer = $Root/ClashPanel
-@onready var context_title_label: Label = $Root/ClashPanel/Margin/Layout/Title
-@onready var viewer_status_label: Label = $Root/ClashPanel/Margin/Layout/ViewerStatus
+@onready var context_title_label: Label = $Root/ClashPanel/Margin/Layout/Header/Title
+@onready var viewer_status_label: Label = $Root/ClashPanel/Margin/Layout/Header/ViewerStatus
 @onready var roster_header: HBoxContainer = $Root/ClashPanel/Margin/Layout/RosterHeader
 @onready var roster_guild_name_label: Label = $Root/ClashPanel/Margin/Layout/RosterHeader/GuildName
 @onready var roster_remaining_label: Label = $Root/ClashPanel/Margin/Layout/RosterHeader/Remaining
+@onready var roster_toggle_button: Button = $Root/ClashPanel/Margin/Layout/RosterToggle
 @onready var roster_scroll: ScrollContainer = $Root/ClashPanel/Margin/Layout/RosterScroll
 @onready var roster_list: VBoxContainer = $Root/ClashPanel/Margin/Layout/RosterScroll/RosterList
 @onready var battle_summary_label: Label = $Root/ClashPanel/Margin/Layout/BattleSummary
@@ -43,10 +48,16 @@ var arena_display_requested := false
 var elimination_snapshot_received := false
 var seen_elimination_ids: Dictionary = {}
 var queued_elimination_events: Array[Dictionary] = []
+var roster_expanded := false
+var roster_player_count := 0
 
 
 func _ready() -> void:
 	visible = false
+	roster_toggle_button.pressed.connect(_toggle_roster)
+	var viewport := get_viewport()
+	if viewport != null:
+		viewport.size_changed.connect(_apply_context_panel_size)
 	show_syncing()
 
 
@@ -64,6 +75,8 @@ func show_syncing() -> void:
 	arena_display_requested = true
 	visible = not battle_overlay_active
 	clash_panel.visible = false
+	roster_player_count = 0
+	_set_roster_expanded(false)
 	_clear_roster()
 	elimination_snapshot_received = false
 	seen_elimination_ids.clear()
@@ -126,7 +139,7 @@ func _render_context_panel() -> void:
 	var roster := _array(arena_payload.get("viewerRoster", []))
 	var has_guild_roster := viewer_side in ["blue", "red"] and not roster.is_empty()
 	roster_header.visible = has_guild_roster
-	roster_scroll.visible = has_guild_roster
+	roster_player_count = roster.size() if has_guild_roster else 0
 	if has_guild_roster:
 		var own_guild := (
 			_dictionary(session.get("challengerGuild", {}))
@@ -184,6 +197,52 @@ func _render_context_panel() -> void:
 		if live_battle_count == 1
 		else "{count} battles in progress"
 	).replace("{count}", str(live_battle_count))
+	_set_roster_expanded(roster_expanded if has_guild_roster else false)
+
+
+func _toggle_roster() -> void:
+	_set_roster_expanded(not roster_expanded)
+
+
+func _set_roster_expanded(expanded: bool) -> void:
+	var has_roster := roster_player_count > 0
+	roster_expanded = expanded and has_roster
+	roster_scroll.visible = roster_expanded
+	context_hint_label.visible = roster_expanded
+	roster_toggle_button.visible = has_roster
+	roster_toggle_button.text = (
+		_text("ui.aether_clash.arena.context.hide_players", "Hide players  ▴")
+		if roster_expanded
+		else _text(
+			"ui.aether_clash.arena.context.show_players",
+			"Players ({count})  ▾"
+		).replace("{count}", str(roster_player_count))
+	)
+	roster_toggle_button.tooltip_text = context_hint_label.text
+	_apply_context_panel_size()
+
+
+func _apply_context_panel_size() -> void:
+	if clash_panel == null:
+		return
+	var viewport := get_viewport()
+	var viewport_height := (
+		viewport.get_visible_rect().size.y
+		if viewport != null
+		else CONTEXT_PANEL_TOP + CONTEXT_PANEL_EXPANDED_HEIGHT + CONTEXT_PANEL_BOTTOM_MARGIN
+	)
+	var available_height := maxf(
+		CONTEXT_PANEL_COLLAPSED_HEIGHT,
+		viewport_height - CONTEXT_PANEL_TOP - CONTEXT_PANEL_BOTTOM_MARGIN
+	)
+	var requested_height := (
+		CONTEXT_PANEL_EXPANDED_HEIGHT
+		if roster_expanded
+		else CONTEXT_PANEL_COLLAPSED_HEIGHT
+	)
+	var panel_height := minf(requested_height, available_height)
+	clash_panel.offset_top = CONTEXT_PANEL_TOP
+	clash_panel.offset_bottom = CONTEXT_PANEL_TOP + panel_height
 
 
 func _render_roster(roster: Array) -> void:
