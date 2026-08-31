@@ -9643,9 +9643,10 @@ func _setup_item_dex_popup() -> void:
 	icon_panel.add_child(icon_center)
 
 	item_dex_icon = TextureRect.new()
-	item_dex_icon.custom_minimum_size = Vector2(96, 96)
+	item_dex_icon.custom_minimum_size = Vector2(48, 48)
 	item_dex_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	item_dex_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	item_dex_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	icon_center.add_child(item_dex_icon)
 
 	var hero_stack := VBoxContainer.new()

@@ -85,6 +85,20 @@ func _check_runtime_copy() -> void:
 		aethernet_requirements == ["Activeer minstens één Aethernet Beacon"],
 		"Item Dex explains access to the Battle Point vendor"
 	)
+	_check(
+		overlay.call(
+			"_format_item_dex_source_costs",
+			[{"currency": "battle_points", "amount": 25}]
+		) == "25 BP",
+		"Item Dex renders Battle Point prices without exposing a localization key"
+	)
+	_check(
+		overlay.call(
+			"_format_item_dex_source_costs",
+			[{"currency": "aetherite", "amount": 100}]
+		) == "100 Aetherite",
+		"Item Dex renders Aetherite prices for special-item vendors"
+	)
 
 	localization_manager.call("set_locale", "pt_BR")
 	var portuguese_meta := str(overlay.call("_format_item_dex_meta", medicine))

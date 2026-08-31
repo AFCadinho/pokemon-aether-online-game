@@ -3013,6 +3013,8 @@
   "ui.item_dex.requirement.exclusive_choice": "选择一个奖励",
   "ui.item_dex.currency.money": "${amount}",
   "ui.item_dex.currency.gems": "{amount}宝石",
+  "ui.item_dex.currency.aetherite": "{amount}以太石",
+  "ui.item_dex.currency.battle_points": "{amount}战斗点数",
   "ui.item_dex.source.battle": "战斗",
   "ui.item_dex.source.other": "其他",
   "ui.wild.title": "野生宝可梦",

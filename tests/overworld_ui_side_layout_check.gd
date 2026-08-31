@@ -211,6 +211,11 @@ func _init() -> void:
 	_check(scene_source.contains('path="res://assets/ui/town_map_navigation.svg" id="3_riyyd"'), "Town Map uses a navigation-focused map icon")
 	_check(scene_source.contains('path="res://assets/ui/item_dex.svg" id="12_item_dex"') and script_source.contains('const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")'), "Item Dex uses its dedicated item catalogue icon")
 	_check(script_source.contains("item_dex_popup.theme = _make_item_dex_tooltip_theme()"), "Every Item Dex hover card inherits the Item Dex tooltip theme")
+	_check(
+		script_source.contains("item_dex_icon.custom_minimum_size = Vector2(48, 48)")
+		and script_source.contains("item_dex_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST"),
+		"Item Dex keeps native-size pixel item art crisp instead of enlarging it"
+	)
 	_check(item_dex_tooltip_theme_block.contains('tooltip_theme.set_stylebox("panel", "TooltipPanel"'), "Item Dex hover cards use a styled panel instead of the Godot default")
 	_check(
 		script_source.contains("func _create_item_dex_source_card")

@@ -3016,6 +3016,8 @@
   "ui.item_dex.requirement.exclusive_choice": "Kies één beloning",
   "ui.item_dex.currency.money": "${amount}",
   "ui.item_dex.currency.gems": "{amount} Gems",
+  "ui.item_dex.currency.aetherite": "{amount} Aetherite",
+  "ui.item_dex.currency.battle_points": "{amount} BP",
   "ui.item_dex.source.battle": "Gevecht",
   "ui.item_dex.source.other": "Overig",
   "ui.wild.title": "Wilde Pokémon",
