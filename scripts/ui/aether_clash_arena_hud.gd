@@ -2,6 +2,10 @@ extends CanvasLayer
 
 class_name AetherClashArenaHud
 
+const MATCHMAKING_COLOR := Color("#7edff4")
+const MATCHMAKING_WARNING_COLOR := Color("#ffb35c")
+const MATCHMAKING_WAITING_COLOR := Color("#9fb7cc")
+
 @onready var challenger_name_label: Label = $Root/Panel/Margin/Main/Matchup/Challenger/Name
 @onready var challenger_side_label: Label = $Root/Panel/Margin/Main/Matchup/Challenger/Side
 @onready var challenger_count_label: Label = $Root/Panel/Margin/Main/Matchup/Challenger/Count
@@ -11,6 +15,7 @@ class_name AetherClashArenaHud
 @onready var phase_label: Label = $Root/Panel/Margin/Main/Matchup/Center/Phase
 @onready var countdown_label: Label = $Root/Panel/Margin/Main/Matchup/Center/Countdown
 @onready var barrier_hint_label: Label = $Root/Panel/Margin/Main/BarrierHint
+@onready var matchmaking_hint_label: Label = $Root/Panel/Margin/Main/MatchmakingHint
 
 var arena_payload: Dictionary = {}
 var server_clock_offset_seconds := 0.0
@@ -48,6 +53,7 @@ func show_syncing() -> void:
 		"ui.aether_clash.arena.barrier_raised",
 		"The Aether barrier separates both Guilds"
 	)
+	matchmaking_hint_label.visible = false
 
 
 func apply_arena_state(payload: Dictionary) -> void:
@@ -80,6 +86,7 @@ func _render_phase() -> void:
 	var status := str(session.get("status", ""))
 	match status:
 		"entry_open":
+			matchmaking_hint_label.visible = false
 			var remaining := _entry_seconds_remaining(session)
 			phase_label.text = _text(
 				"ui.aether_clash.arena.entry_open"
@@ -99,13 +106,64 @@ func _render_phase() -> void:
 				"ui.aether_clash.arena.duel_time",
 				"Duel time: {time}"
 			).replace("{time}", _format_duration(_duel_seconds_elapsed(session)))
+			_render_matchmaking()
 		"completed", "no_show", "cancelled":
+			matchmaking_hint_label.visible = false
 			phase_label.text = _text("ui.aether_clash.arena.finished", "CLASH FINISHED")
 			countdown_label.text = "—"
 			barrier_hint_label.text = ""
 		_:
+			matchmaking_hint_label.visible = false
 			phase_label.text = _text("ui.aether_clash.arena.syncing", "Synchronizing arena")
 			countdown_label.text = "--:--"
+
+
+func _render_matchmaking() -> void:
+	var matchmaking := _dictionary(arena_payload.get("matchmaking", {}))
+	var status := str(matchmaking.get("status", "disabled"))
+	matchmaking_hint_label.visible = status != "disabled"
+	match status:
+		"searching":
+			var remaining := _matchmaking_seconds_remaining(matchmaking)
+			var warning_seconds := maxi(1, int(matchmaking.get("warningSeconds", 15)))
+			matchmaking_hint_label.text = _text(
+				"ui.aether_clash.arena.matchmaking_available",
+				"OPPONENT AVAILABLE — Find a battle within {time} or be matched automatically"
+			).replace("{time}", _format_countdown(remaining))
+			matchmaking_hint_label.add_theme_color_override(
+				"font_color",
+				MATCHMAKING_WARNING_COLOR if remaining <= warning_seconds else MATCHMAKING_COLOR
+			)
+		"waiting_for_opponent":
+			matchmaking_hint_label.text = _text(
+				"ui.aether_clash.arena.matchmaking_waiting",
+				"WAITING FOR AN OPPONENT…"
+			)
+			matchmaking_hint_label.add_theme_color_override(
+				"font_color",
+				MATCHMAKING_WAITING_COLOR
+			)
+		"starting":
+			matchmaking_hint_label.text = _text(
+				"ui.aether_clash.arena.matchmaking_starting",
+				"STARTING FORCED BATTLE…"
+			)
+			matchmaking_hint_label.add_theme_color_override(
+				"font_color",
+				MATCHMAKING_WARNING_COLOR
+			)
+		_:
+			matchmaking_hint_label.visible = false
+
+
+func _matchmaking_seconds_remaining(matchmaking: Dictionary) -> int:
+	var deadline := _timestamp_to_unix(str(matchmaking.get("deadlineAt", "")))
+	if deadline > 0.0:
+		return maxi(
+			0,
+			int(ceil(deadline - (Time.get_unix_time_from_system() + server_clock_offset_seconds)))
+		)
+	return maxi(0, int(matchmaking.get("secondsRemaining", 0)))
 
 
 func _display_counts(session: Dictionary) -> Dictionary:
