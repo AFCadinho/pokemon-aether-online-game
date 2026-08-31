@@ -35,11 +35,62 @@ func _init() -> void:
 
 
 func _run() -> void:
+	_check_pokemon_assignment_before_ready()
+	_check_remote_player_accepts_follower_before_ready()
 	_check_reset_spacing_in_every_direction()
 	_check_visual_offset_in_every_direction()
 	_check_trail_keeps_one_open_tile()
 	_check_remote_player_exposes_active_step_target()
 	quit(1 if failed else 0)
+
+
+func _check_pokemon_assignment_before_ready() -> void:
+	var follower_script := load(FOLLOWER_SCRIPT_PATH) as Script
+	_check(follower_script != null, "follower script loads for pre-ready assignment")
+	if follower_script == null:
+		return
+
+	var follower := follower_script.new() as Node2D
+	var pokemon := Pokemon.new("Pikachu", 5)
+	follower.call("set_pokemon", pokemon)
+	var sprite_before_ready := follower.get("sprite") as AnimatedSprite2D
+	_check(sprite_before_ready != null, "pre-ready assignment creates the follower sprite")
+	_check(
+		sprite_before_ready != null and sprite_before_ready.sprite_frames != null,
+		"pre-ready assignment applies the requested Pokemon frames"
+	)
+
+	get_root().add_child(follower)
+	var sprite_after_ready := follower.get("sprite") as AnimatedSprite2D
+	_check(sprite_after_ready == sprite_before_ready, "ready reuses the pre-created follower sprite")
+	_check(follower.visible, "ready preserves the assigned follower visibility")
+	follower.free()
+
+
+func _check_remote_player_accepts_follower_before_ready() -> void:
+	var remote_player_script := load(REMOTE_PLAYER_SCRIPT_PATH) as Script
+	_check(remote_player_script != null, "remote player script loads for pre-ready follower state")
+	if remote_player_script == null:
+		return
+
+	var remote_player := remote_player_script.new() as Node2D
+	remote_player.call("apply_state", {
+		"position": {"x": 0.0, "y": 0.0},
+		"facingDirection": "down",
+		"follower": {
+			"visible": true,
+			"species": "Pikachu",
+			"shiny": false,
+		},
+	})
+	var follower := remote_player.get("pokemon_follower") as Node2D
+	var follower_sprite := follower.get("sprite") as AnimatedSprite2D if follower != null else null
+	_check(follower != null, "off-tree remote state creates its Pokemon follower")
+	_check(
+		follower_sprite != null and follower_sprite.sprite_frames != null,
+		"off-tree remote state applies follower frames without waiting for ready"
+	)
+	remote_player.free()
 
 
 func _check_reset_spacing_in_every_direction() -> void:

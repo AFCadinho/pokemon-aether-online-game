@@ -28,12 +28,23 @@ var shiny_sparkle_time := 0.0
 func _ready() -> void:
 	top_level = true
 	z_as_relative = false
+	_ensure_sprite()
+	if current_species != "" and sprite.sprite_frames != null:
+		visible = true
+		_play_idle_animation()
+		return
+
+	visible = false
+
+func _ensure_sprite() -> void:
+	if sprite != null and is_instance_valid(sprite):
+		return
+
 	sprite = AnimatedSprite2D.new()
 	sprite.name = "FollowerSprite"
 	sprite.centered = true
 	sprite.texture_filter = SPRITE_TEXTURE_FILTER
 	add_child(sprite)
-	visible = false
 
 func setup(target_player: Node2D) -> void:
 	player = target_player
@@ -59,6 +70,7 @@ func set_pokemon(pokemon: Pokemon) -> void:
 		queue_redraw()
 		return
 
+	_ensure_sprite()
 	sprite.sprite_frames = sprite_frames
 	visible = true
 	_play_idle_animation()
