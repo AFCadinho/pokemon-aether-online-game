@@ -20808,7 +20808,11 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	slot.mouse_filter = Control.MOUSE_FILTER_STOP
 	var item_name := str(item.get("name", LocalizationManager.text("ui.bag.item_fallback")))
 	slot.tooltip_text = LocalizationManager.text(
-		"ui.bag.borrowed_tooltip" if bool(item.get("borrowed", false)) else "ui.bag.item_tooltip",
+		"ui.bag.borrowed_tooltip"
+		if bool(item.get("borrowed", false))
+		else "ui.bag.assignment_tooltip"
+		if _is_account_entitlement_bag_item(item)
+		else "ui.bag.item_tooltip",
 		{"item": item_name},
 	)
 	slot.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -20877,13 +20881,7 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 
 	var quantity_label := Label.new()
 	quantity_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	quantity_label.text = (
-		LocalizationManager.text("ui.bag.loan_marker")
-		if bool(item.get("borrowed", false))
-		else LocalizationManager.text("ui.bag.key_marker")
-		if bool(item.get("permanent", false))
-		else "x%s" % max(int(item.get("quantity", 1)), 1)
-	)
+	quantity_label.text = _bag_item_quantity_marker(item)
 	quantity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	quantity_label.add_theme_font_size_override("font_size", 9)
@@ -20986,6 +20984,8 @@ func _refresh_bag_detail() -> void:
 		_bag_category_label(category),
 		LocalizationManager.text("ui.bag.quantity_borrowed", {"quantity": quantity})
 		if bool(bag_selected_item.get("borrowed", false))
+		else LocalizationManager.text("ui.bag.assignment_unlimited")
+		if _is_account_entitlement_bag_item(bag_selected_item)
 		else LocalizationManager.text("ui.bag.key_item")
 		if bool(bag_selected_item.get("permanent", false))
 		else LocalizationManager.text("ui.bag.quantity_owned", {"quantity": quantity}),
@@ -22352,6 +22352,7 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"useNotice": use_notice,
 			"useAction": str(item.get("useAction", "")).strip_edges(),
 			"appearanceUnlocks": item.get("appearanceUnlocks", []),
+			"assignmentMode": str(item.get("assignmentMode", item.get("assignment_mode", ""))).strip_edges().to_lower(),
 			"tradable": bool(item.get("tradable", false)),
 		}))
 	for borrowed_value: Variant in InventoryService.cached_borrowed_inventory_items:
@@ -22389,6 +22390,20 @@ func _bag_item_key(item: Dictionary) -> String:
 	var item_id := _normalize_item_id(str(item.get("id", item.get("itemId", ""))))
 	var loan_asset_id := str(item.get("loanAssetId", "")).strip_edges()
 	return "loan:%s" % loan_asset_id if bool(item.get("borrowed", false)) and loan_asset_id != "" else "owned:%s" % item_id
+
+
+func _is_account_entitlement_bag_item(item: Dictionary) -> bool:
+	return str(item.get("assignmentMode", item.get("assignment_mode", ""))).strip_edges().to_lower() == "account_entitlement"
+
+
+func _bag_item_quantity_marker(item: Dictionary) -> String:
+	if bool(item.get("borrowed", false)):
+		return LocalizationManager.text("ui.bag.loan_marker")
+	if _is_account_entitlement_bag_item(item):
+		return "∞"
+	if bool(item.get("permanent", false)):
+		return LocalizationManager.text("ui.bag.key_marker")
+	return "x%s" % max(int(item.get("quantity", 1)), 1)
 
 func _normalize_backend_bag_category(category: String, item_id: String) -> String:
 	if _is_fossil_item_id(item_id):
@@ -25647,8 +25662,10 @@ func _on_pokemon_summary_item_search_changed(_text: String) -> void:
 func _create_summary_item_choice(item: Dictionary) -> Control:
 	var button := Button.new()
 	var item_id: String = str(item.get("id", ""))
-	button.text = "%s  x%s" % [_ellipsize_text(str(item.get("name", item_id)), 18), max(int(item.get("quantity", 1)), 1)]
+	button.text = "%s  %s" % [_ellipsize_text(str(item.get("name", item_id)), 18), _bag_item_quantity_marker(item)]
 	button.tooltip_text = str(item.get("name", _item_name_from_id(item_id)))
+	if _is_account_entitlement_bag_item(item):
+		button.tooltip_text += "\n%s" % LocalizationManager.text("ui.pokemon_summary.held_item.assign_entitlement_tooltip")
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.custom_minimum_size = Vector2(0, 30)
 	button.focus_mode = Control.FOCUS_NONE

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Z-Crystals now display an ∞ marker in the Bag and held-item picker to show that they can be assigned without being consumed.
+
 - Finished maps now keep their boundary and water collision in the scene instead of rebuilding it from placeholder settings at runtime.
 
 - Route 25's lower and south passages to Route 24 are no longer blocked by stray collision tiles.
