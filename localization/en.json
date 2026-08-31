@@ -609,6 +609,7 @@
   "ui.aether_clash.arena.barrier_lowered": "The Aether barrier is down",
   "ui.aether_clash.arena.duel_time": "Duel time: {time}",
   "ui.aether_clash.arena.matchmaking_available": "OPPONENT AVAILABLE — Find a battle within {time} or be matched automatically",
+  "ui.aether_clash.arena.matchmaking_opponent_searching": "POTENTIAL OPPONENT FOUND — Automatic matchmaking in {time}",
   "ui.aether_clash.arena.matchmaking_waiting": "WAITING FOR AN OPPONENT…",
   "ui.aether_clash.arena.matchmaking_starting": "STARTING FORCED BATTLE…",
   "ui.aether_clash.arena.blue_side": "BLUE SIDE",

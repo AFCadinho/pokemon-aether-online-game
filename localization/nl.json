@@ -609,6 +609,7 @@
   "ui.aether_clash.arena.barrier_lowered": "De Aether-muur is neergelaten",
   "ui.aether_clash.arena.duel_time": "Duelduur: {time}",
   "ui.aether_clash.arena.matchmaking_available": "TEGENSTANDER BESCHIKBAAR — Vind binnen {time} een gevecht of word automatisch gekoppeld",
+  "ui.aether_clash.arena.matchmaking_opponent_searching": "MOGELIJKE TEGENSTANDER GEVONDEN — Automatische koppeling over {time}",
   "ui.aether_clash.arena.matchmaking_waiting": "WACHTEN OP EEN TEGENSTANDER…",
   "ui.aether_clash.arena.matchmaking_starting": "GEFORCEERD GEVECHT START…",
   "ui.aether_clash.arena.blue_side": "BLAUWE KANT",

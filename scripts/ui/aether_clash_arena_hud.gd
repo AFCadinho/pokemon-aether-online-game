@@ -134,6 +134,17 @@ func _render_matchmaking() -> void:
 				"font_color",
 				MATCHMAKING_WARNING_COLOR if remaining <= warning_seconds else MATCHMAKING_COLOR
 			)
+		"opponent_searching":
+			var remaining := _matchmaking_seconds_remaining(matchmaking)
+			var warning_seconds := maxi(1, int(matchmaking.get("warningSeconds", 15)))
+			matchmaking_hint_label.text = _text(
+				"ui.aether_clash.arena.matchmaking_opponent_searching",
+				"POTENTIAL OPPONENT FOUND — Automatic matchmaking in {time}"
+			).replace("{time}", _format_countdown(remaining))
+			matchmaking_hint_label.add_theme_color_override(
+				"font_color",
+				MATCHMAKING_WARNING_COLOR if remaining <= warning_seconds else MATCHMAKING_COLOR
+			)
 		"waiting_for_opponent":
 			matchmaking_hint_label.text = _text(
 				"ui.aether_clash.arena.matchmaking_waiting",
