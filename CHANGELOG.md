@@ -4,6 +4,8 @@
 
 - The Pokédex now shows Mega Stone drop chances for each eligible evolution line, the Item Dex lists defeat-or-catch sources, and successful wild drops receive an item notification.
 
+- The whole server now receives a localized System chat message when an Aether Clash starts and finishes, including roster sizes and any Guild stake or prize pot.
+
 - System and error dialogue now uses a dedicated neutral Aether Core portrait instead of Professor Oak.
 
 - Aether Clash stake fields now accept a full amount immediately, while their arrow buttons continue to adjust the stake in ₽1,000 steps.

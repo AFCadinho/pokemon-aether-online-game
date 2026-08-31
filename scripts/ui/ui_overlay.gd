@@ -44333,6 +44333,14 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		if system_notice_banner != null and bool(system_notice_banner.call("enqueue_notice", message)):
 			add_system_message(str(message.get("message", "")).strip_edges())
 		return
+	if message_type == "system.aether_clash_announcement":
+		var clash_message := AetherClashAnnouncementFormatter.format_event(
+			message,
+			Callable(LocalizationManager, "text")
+		)
+		if clash_message != "":
+			add_system_message(clash_message)
+		return
 	if message_type == "system.thieving_arrest":
 		add_system_message(LocalizationManager.text(
 			"ui.thieving.global_arrest",
