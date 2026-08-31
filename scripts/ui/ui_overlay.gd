@@ -19622,7 +19622,11 @@ func open_market(market: Dictionary, requested_mode: String = "player_buys", inv
 		else _market_available_buy_items(catalog_items)
 	)
 	market_selected_item = market_items[0].duplicate(true) if not market_items.is_empty() else {}
-	market_quantity_spinbox.max_value = max(int(market_selected_item.get("quantity", 1)), 1) if player_is_selling else 99
+	market_quantity_spinbox.max_value = (
+		max(int(market_selected_item.get("quantity", 1)), 1)
+		if player_is_selling
+		else _market_item_max_purchase_quantity(market_selected_item)
+	)
 	market_quantity_spinbox.value = 1
 	market_search_input.text = ""
 	if market_sort_select != null:
@@ -19852,6 +19856,10 @@ func _normalize_market_items(items_value: Variant) -> Array[Dictionary]:
 			"sellPrice": max(int(item.get("sellPrice", 0)), 0),
 			"requiredBadges": max(int(item.get("requiredBadges", 0)), 0),
 			"available": bool(item.get("available", true)),
+			"accountUnique": bool(item.get("accountUnique", false)),
+			"accountBound": bool(item.get("accountBound", false)),
+			"owned": bool(item.get("owned", false)),
+			"maxPurchaseQuantity": clampi(int(item.get("maxPurchaseQuantity", 99)), 1, 99),
 		}))
 	return normalized_items
 
@@ -20190,16 +20198,20 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	price_stack.add_child(price_label)
 
 	var each_label := Label.new()
-	each_label.text = LocalizationManager.text(
-		"ui.market.member_discount" if discount_percent > 0 else "ui.market.each",
-		{"percent": discount_percent}
+	each_label.text = (
+		LocalizationManager.text("ui.market.owned")
+		if bool(item.get("owned", false))
+		else LocalizationManager.text(
+			"ui.market.member_discount" if discount_percent > 0 else "ui.market.each",
+			{"percent": discount_percent}
+		)
 	)
 	each_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	each_label.add_theme_font_size_override("font_size", 9)
 	each_label.add_theme_color_override(
 		"font_color",
 		TRAINER_CARD_GREEN
-		if discount_percent > 0
+		if discount_percent > 0 or bool(item.get("owned", false))
 		else Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.68)
 	)
 	price_stack.add_child(each_label)
@@ -20284,7 +20296,11 @@ func _on_market_item_selected(item: Dictionary) -> void:
 		return
 	market_selected_item = item
 	market_quantity_spinbox.value = 1
-	market_quantity_spinbox.max_value = max(int(item.get("quantity", 1)), 1) if market_mode == "player_sells" else 99
+	market_quantity_spinbox.max_value = (
+		max(int(item.get("quantity", 1)), 1)
+		if market_mode == "player_sells"
+		else _market_item_max_purchase_quantity(item)
+	)
 	_refresh_market_items()
 
 func _on_market_quantity_changed(_value: float) -> void:
@@ -20305,12 +20321,18 @@ func _refresh_market_purchase_state() -> void:
 	var currency := str(market_selected_item.get("currency", "money"))
 	var total: int = price * quantity
 	var player_is_selling := market_mode == "player_sells"
+	var already_owned := not player_is_selling and bool(market_selected_item.get("owned", false))
 	var allowed := (
 		quantity <= int(market_selected_item.get("quantity", 0))
 		if player_is_selling
 		else total <= _market_currency_balance(currency)
 	)
 	market_buy_button.disabled = market_purchase_in_progress or not allowed
+	if already_owned:
+		market_buy_button.disabled = true
+		market_buy_button.text = LocalizationManager.text("ui.market.owned")
+		_set_market_status(LocalizationManager.text("ui.market.status.already_owned"), false)
+		return
 	if market_purchase_in_progress:
 		market_buy_button.text = LocalizationManager.text(
 			"ui.market.action.selling" if player_is_selling else "ui.market.action.purchasing"
@@ -20367,7 +20389,10 @@ func _refresh_market_detail() -> void:
 	market_detail_icon.texture = _load_item_icon(item_id)
 	market_detail_icon.modulate = Color.WHITE
 	market_detail_name_label.text = item_name
-	market_detail_category_label.text = _market_category_label(category).to_upper()
+	var category_text := _market_category_label(category).to_upper()
+	if bool(market_selected_item.get("accountBound", false)):
+		category_text += " · %s" % LocalizationManager.text("ui.market.account_bound").to_upper()
+	market_detail_category_label.text = category_text
 	market_detail_description_label.text = description if description != "" else (
 		LocalizationManager.text("ui.market.detail.sell_fallback")
 		if market_mode == "player_sells"
@@ -20375,8 +20400,15 @@ func _refresh_market_detail() -> void:
 	)
 	market_unit_price_label.text = _format_market_currency_amount(unit_price, currency)
 	market_total_price_label.text = _format_market_currency_amount(unit_price * quantity, currency)
-	market_quantity_spinbox.max_value = max(int(market_selected_item.get("quantity", 1)), 1) if market_mode == "player_sells" else 99
-	market_quantity_spinbox.editable = not market_purchase_in_progress
+	market_quantity_spinbox.max_value = (
+		max(int(market_selected_item.get("quantity", 1)), 1)
+		if market_mode == "player_sells"
+		else _market_item_max_purchase_quantity(market_selected_item)
+	)
+	market_quantity_spinbox.editable = (
+		not market_purchase_in_progress
+		and not bool(market_selected_item.get("accountUnique", false))
+	)
 
 func _refresh_market_money() -> void:
 	if market_money_label != null:
@@ -20482,7 +20514,23 @@ func _on_market_buy_pressed() -> void:
 		_update_market_sell_items_from_inventory(inventory_value)
 	else:
 		add_item_reward_notification(item_id, transacted_quantity)
+		if bool(market_selected_item.get("accountUnique", false)):
+			_mark_market_item_owned(item_id)
 	_refresh_market_purchase_state()
+
+
+func _market_item_max_purchase_quantity(item: Dictionary) -> int:
+	return clampi(int(item.get("maxPurchaseQuantity", 99)), 1, 99)
+
+
+func _mark_market_item_owned(item_id: String) -> void:
+	for item_index in range(market_items.size()):
+		if str(market_items[item_index].get("id", "")) != item_id:
+			continue
+		market_items[item_index]["owned"] = true
+		market_selected_item = market_items[item_index].duplicate(true)
+		break
+	_refresh_market_items()
 
 
 func _update_market_sell_items_from_inventory(inventory_value: Variant) -> void:

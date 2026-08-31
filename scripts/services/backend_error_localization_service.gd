@@ -37,6 +37,8 @@ const CODE_TO_KEY: Dictionary = {
 	"global_heal_expired": "backend.error.global_heal_expired",
 	"global_heal_player_busy": "backend.error.global_heal_busy",
 	"market_badges_required": "backend.error.market_badges_required",
+	"market_item_already_owned": "backend.error.item_already_owned",
+	"market_purchase_request_conflict": "backend.error.request_conflict",
 	"not_enough_gems": "backend.error.not_enough_gems",
 	"transit_attunement_location_invalid": "backend.error.transit_wrong_location",
 	"transit_attunement_distance_invalid": "backend.error.transit_too_far",
