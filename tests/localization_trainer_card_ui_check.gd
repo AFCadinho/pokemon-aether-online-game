@@ -40,6 +40,12 @@ func _check_trainer_card_runtime_translation() -> void:
 	var subtitle := overlay.get("trainer_card_subtitle_label") as Label
 	var save_button := overlay.get("trainer_card_appearance_save_button") as Button
 	var status_label := overlay.get("trainer_card_appearance_status_label") as Label
+	var save_bar := popup.find_child("AppearanceSaveBar", true, false) as Control if popup != null else null
+	var preview_panel := popup.find_child("AppearancePreviewPanel", true, false) as Control if popup != null else null
+	var preview_viewport := _find_subviewport(preview_panel)
+	var category_rail := popup.find_child("AppearanceCategoryRail", true, false) as VBoxContainer if popup != null else null
+	var content_stack := popup.find_child("AppearanceContentStack", true, false) as VBoxContainer if popup != null else null
+	var swatch_row := popup.find_child("NaturalColorSwatches", true, false) as HBoxContainer if popup != null else null
 	var badge_option := overlay.get("trainer_card_badge_option") as OptionButton
 	var redeem_button := popup.find_child("RedeemCodeButton", true, false) as Button if popup != null else null
 
@@ -51,6 +57,27 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(_find_label(popup, "Levellimiet") != null, "Trainer Card level cap renders in Dutch")
 	_check(_find_label(popup, "Trade-limiet") != null, "Trainer Card trade cap renders in Dutch")
 	_check(_find_label(popup, "Natuurlijke kleuren") != null, "Appearance colors render in Dutch")
+	_check(
+		preview_viewport != null
+		and preview_viewport.size == Vector2i(194, 248)
+		and preview_viewport.get_meta("preview_scale", Vector2.ZERO) == Vector2(3.0, 3.0),
+		"Appearance uses a large full-body preview"
+	)
+	_check(
+		category_rail != null
+		and category_rail.get_child_count() == 9
+		and _all_category_buttons_toggle(category_rail),
+		"Appearance category rail stays compact and clearly selectable"
+	)
+	_check(
+		content_stack != null and _find_line_edit(content_stack) == null,
+		"Appearance omits search when the body catalog is short"
+	)
+	_check(
+		swatch_row != null and _swatches_have_labels(swatch_row),
+		"Appearance natural-color swatches have explicit labels"
+	)
+	_check(save_bar != null and not save_bar.visible, "Appearance save feedback stays hidden when clean")
 	_check(badge_option != null and badge_option.get_item_text(0) == "Geen", "Trainer Card badge fallback renders in Dutch")
 	var badge_popup := badge_option.get_popup() if badge_option != null else null
 	_check(
@@ -79,6 +106,7 @@ func _check_trainer_card_runtime_translation() -> void:
 
 	overlay.set("trainer_card_has_unsaved_appearance_changes", true)
 	overlay.call("_update_trainer_card_appearance_save_state")
+	_check(save_bar != null and save_bar.visible, "Appearance save feedback appears for unsaved changes")
 	_check(save_button != null and save_button.text == "Opslaan", "Appearance save action renders in Dutch")
 	_check(status_label != null and status_label.text.begins_with("Niet-opgeslagen"), "Appearance status renders in Dutch")
 
@@ -119,6 +147,48 @@ func _find_label(node: Node, text: String) -> Label:
 		if result != null:
 			return result
 	return null
+
+
+func _find_subviewport(node: Node) -> SubViewport:
+	if node == null:
+		return null
+	if node is SubViewport:
+		return node as SubViewport
+	for child: Node in node.get_children():
+		var result := _find_subviewport(child)
+		if result != null:
+			return result
+	return null
+
+
+func _find_line_edit(node: Node) -> LineEdit:
+	if node == null:
+		return null
+	if node is LineEdit:
+		return node as LineEdit
+	for child: Node in node.get_children():
+		var result := _find_line_edit(child)
+		if result != null:
+			return result
+	return null
+
+
+func _all_category_buttons_toggle(category_rail: VBoxContainer) -> bool:
+	for child: Node in category_rail.get_children():
+		if child is Button and not (child as Button).toggle_mode:
+			return false
+	return true
+
+
+func _swatches_have_labels(swatch_row: HBoxContainer) -> bool:
+	if swatch_row.get_child_count() != 3:
+		return false
+	for child: Node in swatch_row.get_children():
+		if not child is VBoxContainer or child.get_child_count() < 2:
+			return false
+		if not child.get_child(0) is Label or not child.get_child(1) is Button:
+			return false
+	return true
 
 
 func _check(condition: bool, label: String) -> void:
