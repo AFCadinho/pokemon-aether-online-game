@@ -4,6 +4,8 @@
 
 - Ranked Rewards now separates its overview, per-battle rewards, placements, objectives, and season rewards into scalable subtabs.
 
+- When several Guild Duels are available, the lobby portal now shows each Clash's phase, player counts, live timer, tier, and the Trainer's entry role before joining.
+
 - The Clash Coordinator's question menus now use a compact two-column layout so they cover less of the arena view.
 
 - Ranked now has a Rewards tab that previews planned Battle Point payouts and future placement, objective, and season rewards while clearly showing that grants are not active yet.
