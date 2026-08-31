@@ -1078,8 +1078,9 @@ func _on_aether_clash_challenge_pressed() -> void:
 	var tier_selector := OptionButton.new()
 	tier_selector.name = "AetherClashPlayerTier"
 	tier_selector.custom_minimum_size = Vector2(0, 42)
-	tier_selector.add_item(_t("ui.guild.aether_clash.tier.aether_ou"))
-	tier_selector.set_item_metadata(0, "aether-ou")
+	for tier: Dictionary in GuildPopup.AETHER_CLASH_TIERS:
+		tier_selector.add_item(_t(str(tier.get("label", ""))))
+		tier_selector.set_item_metadata(tier_selector.item_count - 1, str(tier.get("id", "")))
 	dialog.style_option_button(tier_selector)
 	dialog.add_custom_control(_aether_clash_dialog_field(
 		_t("ui.guild.aether_clash.tier_label"),

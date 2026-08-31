@@ -319,6 +319,21 @@ func _check_aether_clash_context_action() -> void:
 		true,
 		"right-click challenge styles the spectator selector"
 	)
+	var tier_selector := (
+		dialog.find_child("AetherClashPlayerTier", true, false) as OptionButton
+		if dialog != null
+		else null
+	)
+	_check_equal(
+		tier_selector != null
+		and tier_selector.item_count == 2
+		and tier_selector.get_item_text(0) == "Aether OU"
+		and tier_selector.get_item_metadata(0) == "aether-ou"
+		and tier_selector.get_item_text(1) == "Aether UU"
+		and tier_selector.get_item_metadata(1) == "aether-uu",
+		true,
+		"right-click challenge offers both Aether OU and Aether UU"
+	)
 	if dialog != null:
 		dialog.cancel_button.pressed.emit()
 	await process_frame
