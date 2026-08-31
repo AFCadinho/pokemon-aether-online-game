@@ -609,6 +609,7 @@
   "ui.aether_clash.arena.barrier_lowered": "以太屏障已降下",
   "ui.aether_clash.arena.duel_time": "对决时间：{time}",
   "ui.aether_clash.arena.matchmaking_available": "发现可用对手 — 在 {time} 内开始对战，否则将自动匹配",
+  "ui.aether_clash.arena.matchmaking_opponent_searching": "发现潜在对手 — 将在 {time} 后自动匹配",
   "ui.aether_clash.arena.matchmaking_waiting": "正在等待对手…",
   "ui.aether_clash.arena.matchmaking_starting": "正在开始强制对战…",
   "ui.aether_clash.arena.blue_side": "蓝方",

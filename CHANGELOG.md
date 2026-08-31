@@ -4,9 +4,11 @@
 
 - The Mega Stone Seller is now available in the Aether Clash Lobby, and the Bag distinguishes grouped account-bound and tradeable copies without showing a misleading combined stack count.
 
+- Ready Guild Duel players now see an available opponent's remaining search timer instead of an incorrect waiting message.
+
 - Already-owned permanent shop items now appear disabled in catalog lists instead of looking like active purchase options.
 
-- Live Ranked battles now use compact battle cards with clearer matchups, status details, and a dedicated spectate button.
+- Live Ranked battles now use compact battle cards with clearer matchups, status details, a prominent Spectate action, and a quieter Refresh control.
 
 - Z-Crystals now display an ∞ marker in the Bag and held-item picker to show that they can be assigned without being consumed.
 
