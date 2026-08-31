@@ -1468,6 +1468,8 @@ var displayed_money: int = -1
 var player_status_panel_hovered := false
 var displayed_location_map: Node
 var displayed_location_name := ""
+var aether_clash_arena_ui_mode := false
+var aether_clash_arena_ui_initialized := false
 var utc_time_refresh_elapsed := UTC_TIME_REFRESH_INTERVAL_SECONDS
 var displayed_world_weekday_id := ""
 var ui_input_mouse_blocker: Control
@@ -10411,6 +10413,7 @@ func _position_pokedex_popup() -> void:
 	pokedex_popup.offset_bottom = popup_size.y * 0.5
 
 func _process(delta: float) -> void:
+	_refresh_aether_clash_arena_ui_mode_if_needed()
 	_refresh_ui_input_mouse_blocker()
 	_position_collapsible_buttons()
 	_refresh_pvp_queue_compact_panel(delta)
@@ -10518,6 +10521,18 @@ func _is_in_aether_clash_duel() -> bool:
 		and current_map.has_method("get_map_id")
 		and str(current_map.call("get_map_id")).begins_with(AETHER_CLASH_DUEL_MAP_PREFIX)
 	)
+
+
+func _refresh_aether_clash_arena_ui_mode_if_needed() -> void:
+	var next_mode := _is_in_aether_clash_duel()
+	if aether_clash_arena_ui_initialized and next_mode == aether_clash_arena_ui_mode:
+		return
+	aether_clash_arena_ui_initialized = true
+	aether_clash_arena_ui_mode = next_mode
+	_set_collapsible_panel_available("hotkey_sidebar", not next_mode)
+	if quest_journal_view != null and quest_journal_view.has_method("set_tracker_available"):
+		quest_journal_view.call("set_tracker_available", not next_mode)
+	_refresh_quest_tracker_layout()
 
 func _on_location_weather_changed(weather_state: Dictionary) -> void:
 	_refresh_location_weather(weather_state)

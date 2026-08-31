@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/aether_clash_arena_hud.gd" id="1_hud"]
 
@@ -15,6 +15,20 @@ corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 shadow_color = Color(0, 0, 0, 0.45)
 shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_context"]
+bg_color = Color(0.0196078, 0.0509804, 0.0862745, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.231373, 0.788235, 0.882353, 0.78)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 6
 
 [node name="AetherClashArenaHud" type="CanvasLayer"]
 layer = 9
@@ -142,3 +156,102 @@ theme_override_font_sizes/font_size = 11
 text = "OPPONENT AVAILABLE — Find a battle within 01:00 or be matched automatically"
 horizontal_alignment = 1
 text_overrun_behavior = 3
+
+[node name="ClashPanel" type="PanelContainer" parent="Root"]
+visible = false
+layout_mode = 0
+anchor_left = 1.0
+anchor_bottom = 1.0
+anchor_right = 1.0
+offset_left = -292.0
+offset_top = 166.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_context")
+
+[node name="Margin" type="MarginContainer" parent="Root/ClashPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="Layout" type="VBoxContainer" parent="Root/ClashPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Root/ClashPanel/Margin/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.494118, 0.87451, 0.956863, 1)
+theme_override_font_sizes/font_size = 11
+text = "CLASH STATUS"
+
+[node name="ViewerStatus" type="Label" parent="Root/ClashPanel/Margin/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.956863, 0.941176, 0.870588, 1)
+theme_override_font_sizes/font_size = 17
+text = "PARTICIPANT"
+
+[node name="Divider" type="ColorRect" parent="Root/ClashPanel/Margin/Layout"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.231373, 0.788235, 0.882353, 0.3)
+
+[node name="RosterHeader" type="HBoxContainer" parent="Root/ClashPanel/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="GuildName" type="Label" parent="Root/ClashPanel/Margin/Layout/RosterHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.956863, 0.941176, 0.870588, 1)
+theme_override_font_sizes/font_size = 13
+text = "YOUR GUILD"
+text_overrun_behavior = 3
+
+[node name="Remaining" type="Label" parent="Root/ClashPanel/Margin/Layout/RosterHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.494118, 0.87451, 0.956863, 1)
+theme_override_font_sizes/font_size = 12
+text = "0 ACTIVE"
+horizontal_alignment = 2
+
+[node name="RosterScroll" type="ScrollContainer" parent="Root/ClashPanel/Margin/Layout"]
+custom_minimum_size = Vector2(0, 290)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="RosterList" type="VBoxContainer" parent="Root/ClashPanel/Margin/Layout/RosterScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="BattleSummary" type="Label" parent="Root/ClashPanel/Margin/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.627451, 0.717647, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+text = "0 battles in progress"
+
+[node name="ContextHint" type="Label" parent="Root/ClashPanel/Margin/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.627451, 0.717647, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+text = "Contact an opponent to start a battle."
+autowrap_mode = 2
+
+[node name="EliminationFeed" type="VBoxContainer" parent="Root"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -280.0
+offset_top = 160.0
+offset_right = 280.0
+offset_bottom = 360.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 8

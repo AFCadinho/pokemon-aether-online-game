@@ -5,6 +5,14 @@ class_name AetherClashArenaHud
 const MATCHMAKING_COLOR := Color("#7edff4")
 const MATCHMAKING_WARNING_COLOR := Color("#ffb35c")
 const MATCHMAKING_WAITING_COLOR := Color("#9fb7cc")
+const ROSTER_ACTIVE_COLOR := Color("#73d98b")
+const ROSTER_BATTLE_COLOR := Color("#bd8cff")
+const ROSTER_ELIMINATED_COLOR := Color("#ff6b74")
+const ROSTER_LEFT_COLOR := Color("#78889a")
+const BLUE_SIDE_COLOR := Color("#58b8ff")
+const RED_SIDE_COLOR := Color("#ff6678")
+const ELIMINATION_TOAST_SECONDS := 5.0
+const INITIAL_ELIMINATION_FRESHNESS_SECONDS := 10.0
 
 @onready var challenger_name_label: Label = $Root/Panel/Margin/Main/Matchup/Challenger/Name
 @onready var challenger_side_label: Label = $Root/Panel/Margin/Main/Matchup/Challenger/Side
@@ -16,11 +24,25 @@ const MATCHMAKING_WAITING_COLOR := Color("#9fb7cc")
 @onready var countdown_label: Label = $Root/Panel/Margin/Main/Matchup/Center/Countdown
 @onready var barrier_hint_label: Label = $Root/Panel/Margin/Main/BarrierHint
 @onready var matchmaking_hint_label: Label = $Root/Panel/Margin/Main/MatchmakingHint
+@onready var clash_panel: PanelContainer = $Root/ClashPanel
+@onready var context_title_label: Label = $Root/ClashPanel/Margin/Layout/Title
+@onready var viewer_status_label: Label = $Root/ClashPanel/Margin/Layout/ViewerStatus
+@onready var roster_header: HBoxContainer = $Root/ClashPanel/Margin/Layout/RosterHeader
+@onready var roster_guild_name_label: Label = $Root/ClashPanel/Margin/Layout/RosterHeader/GuildName
+@onready var roster_remaining_label: Label = $Root/ClashPanel/Margin/Layout/RosterHeader/Remaining
+@onready var roster_scroll: ScrollContainer = $Root/ClashPanel/Margin/Layout/RosterScroll
+@onready var roster_list: VBoxContainer = $Root/ClashPanel/Margin/Layout/RosterScroll/RosterList
+@onready var battle_summary_label: Label = $Root/ClashPanel/Margin/Layout/BattleSummary
+@onready var context_hint_label: Label = $Root/ClashPanel/Margin/Layout/ContextHint
+@onready var elimination_feed: VBoxContainer = $Root/EliminationFeed
 
 var arena_payload: Dictionary = {}
 var server_clock_offset_seconds := 0.0
 var battle_overlay_active := false
 var arena_display_requested := false
+var elimination_snapshot_received := false
+var seen_elimination_ids: Dictionary = {}
+var queued_elimination_events: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -41,6 +63,12 @@ func _process(_delta: float) -> void:
 func show_syncing() -> void:
 	arena_display_requested = true
 	visible = not battle_overlay_active
+	clash_panel.visible = false
+	_clear_roster()
+	elimination_snapshot_received = false
+	seen_elimination_ids.clear()
+	queued_elimination_events.clear()
+	_clear_elimination_feed()
 	challenger_side_label.text = _text("ui.aether_clash.arena.blue_side", "BLUE SIDE")
 	challenged_side_label.text = _text("ui.aether_clash.arena.red_side", "RED SIDE")
 	challenger_name_label.text = _text("ui.aether_clash.arena.guild_one", "Guild 1")
@@ -62,11 +90,16 @@ func apply_arena_state(payload: Dictionary) -> void:
 	server_clock_offset_seconds = _server_clock_offset(str(payload.get("serverNow", "")))
 	visible = not battle_overlay_active
 	_render()
+	_render_context_panel()
+	_consume_eliminations()
 
 
 func set_battle_overlay_active(is_active: bool) -> void:
+	var was_active := battle_overlay_active
 	battle_overlay_active = is_active
 	visible = not battle_overlay_active and arena_display_requested
+	if was_active and not battle_overlay_active:
+		_flush_queued_eliminations()
 
 
 func _render() -> void:
@@ -79,6 +112,317 @@ func _render() -> void:
 	challenger_count_label.text = str(int(counts.get("challenger", 0)))
 	challenged_count_label.text = str(int(counts.get("challenged", 0)))
 	_render_phase()
+
+
+func _render_context_panel() -> void:
+	var session := _session()
+	var status := str(session.get("status", ""))
+	clash_panel.visible = status in ["entry_open", "roster_locked", "active", "finishing"]
+	if not clash_panel.visible:
+		return
+	context_title_label.text = _text("ui.aether_clash.arena.context.title", "CLASH STATUS")
+	var viewer_role := str(arena_payload.get("viewerRole", "spectator"))
+	var viewer_side := str(arena_payload.get("viewerSide", ""))
+	var roster := _array(arena_payload.get("viewerRoster", []))
+	var has_guild_roster := viewer_side in ["blue", "red"] and not roster.is_empty()
+	roster_header.visible = has_guild_roster
+	roster_scroll.visible = has_guild_roster
+	if has_guild_roster:
+		var own_guild := (
+			_dictionary(session.get("challengerGuild", {}))
+			if viewer_side == "blue"
+			else _dictionary(session.get("challengedGuild", {}))
+		)
+		roster_guild_name_label.text = str(own_guild.get("name", "Your Guild"))
+		var active_count := 0
+		for player_value: Variant in roster:
+			if player_value is Dictionary and str((player_value as Dictionary).get("status", "")) in ["active", "in_battle"]:
+				active_count += 1
+		roster_remaining_label.text = _text(
+			"ui.aether_clash.arena.context.active_count",
+			"{count} ACTIVE"
+		).replace("{count}", str(active_count))
+	_render_roster(roster if has_guild_roster else [])
+
+	if viewer_role == "participant":
+		viewer_status_label.text = (
+			_text("ui.aether_clash.arena.context.staging", "STAGING PLAYER")
+			if status == "entry_open"
+			else _local_player_status(roster)
+		)
+		context_hint_label.text = (
+			_text(
+				"ui.aether_clash.arena.context.staging_hint",
+				"Prepare your team. The barrier drops when the portal closes."
+			)
+			if status == "entry_open"
+			else _text(
+				"ui.aether_clash.arena.context.participant_hint",
+				"Contact an opponent to start a battle."
+			)
+		)
+	else:
+		viewer_status_label.text = _text("ui.aether_clash.arena.context.spectator", "SPECTATOR")
+		context_hint_label.text = _text(
+			"ui.aether_clash.arena.context.spectator_hint",
+			"Use an Aether View orb to explore. Click a Master Ball to watch its battle."
+		)
+
+	var live_engagements: Dictionary = {}
+	for player_value: Variant in _array(arena_payload.get("arenaPlayers", [])):
+		if not player_value is Dictionary:
+			continue
+		var engagement_id := str((player_value as Dictionary).get("engagementId", "")).strip_edges()
+		if not engagement_id.is_empty():
+			live_engagements[engagement_id] = true
+	var live_battle_count := live_engagements.size()
+	battle_summary_label.text = _text(
+		"ui.aether_clash.arena.context.battles.one"
+		if live_battle_count == 1
+		else "ui.aether_clash.arena.context.battles.many",
+		"1 battle in progress"
+		if live_battle_count == 1
+		else "{count} battles in progress"
+	).replace("{count}", str(live_battle_count))
+
+
+func _render_roster(roster: Array) -> void:
+	_clear_roster()
+	var local_user_id := int(AuthService.current_user.get("id", 0))
+	for player_value: Variant in roster:
+		if not player_value is Dictionary:
+			continue
+		var player := player_value as Dictionary
+		var row := PanelContainer.new()
+		row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		row.add_theme_stylebox_override("panel", _roster_row_style(str(player.get("status", "left"))))
+		roster_list.add_child(row)
+		var margin := MarginContainer.new()
+		margin.add_theme_constant_override("margin_left", 8)
+		margin.add_theme_constant_override("margin_top", 5)
+		margin.add_theme_constant_override("margin_right", 8)
+		margin.add_theme_constant_override("margin_bottom", 5)
+		row.add_child(margin)
+		var content := HBoxContainer.new()
+		content.add_theme_constant_override("separation", 7)
+		margin.add_child(content)
+		var status := str(player.get("status", "left"))
+		var dot := Label.new()
+		dot.text = "●"
+		dot.add_theme_color_override("font_color", _roster_status_color(status))
+		dot.add_theme_font_size_override("font_size", 10)
+		content.add_child(dot)
+		var name_label := Label.new()
+		name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		name_label.clip_text = true
+		name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		name_label.add_theme_color_override("font_color", Color("#f4f0de"))
+		name_label.add_theme_font_size_override("font_size", 12)
+		name_label.text = str(player.get("displayName", "Guildmate"))
+		if int(player.get("userId", 0)) == local_user_id:
+			name_label.text += _text("ui.aether_clash.arena.context.you", " (YOU)")
+		content.add_child(name_label)
+		var status_label := Label.new()
+		status_label.add_theme_color_override("font_color", _roster_status_color(status))
+		status_label.add_theme_font_size_override("font_size", 9)
+		status_label.text = _roster_status_text(status)
+		content.add_child(status_label)
+
+
+func _clear_roster() -> void:
+	if roster_list == null:
+		return
+	for child: Node in roster_list.get_children():
+		roster_list.remove_child(child)
+		child.queue_free()
+
+
+func _local_player_status(roster: Array) -> String:
+	var local_user_id := int(AuthService.current_user.get("id", 0))
+	for player_value: Variant in roster:
+		if not player_value is Dictionary:
+			continue
+		var player := player_value as Dictionary
+		if int(player.get("userId", 0)) == local_user_id:
+			return _roster_status_text(str(player.get("status", "active")))
+	return _text("ui.aether_clash.arena.context.participant", "ACTIVE PLAYER")
+
+
+func _roster_status_text(status: String) -> String:
+	match status:
+		"in_battle":
+			return _text("ui.aether_clash.arena.context.status.in_battle", "IN BATTLE")
+		"eliminated":
+			return _text("ui.aether_clash.arena.context.status.eliminated", "ELIMINATED")
+		"left":
+			return _text("ui.aether_clash.arena.context.status.left", "LEFT")
+		_:
+			return _text("ui.aether_clash.arena.context.status.active", "ACTIVE")
+
+
+func _roster_status_color(status: String) -> Color:
+	match status:
+		"in_battle":
+			return ROSTER_BATTLE_COLOR
+		"eliminated":
+			return ROSTER_ELIMINATED_COLOR
+		"left":
+			return ROSTER_LEFT_COLOR
+		_:
+			return ROSTER_ACTIVE_COLOR
+
+
+func _roster_row_style(status: String) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("#081522e8")
+	style.border_width_left = 2
+	style.border_color = _roster_status_color(status)
+	style.corner_radius_top_left = 5
+	style.corner_radius_top_right = 5
+	style.corner_radius_bottom_right = 5
+	style.corner_radius_bottom_left = 5
+	return style
+
+
+func _consume_eliminations() -> void:
+	var eliminations := _array(arena_payload.get("recentEliminations", []))
+	if not elimination_snapshot_received:
+		elimination_snapshot_received = true
+		for event_value: Variant in eliminations:
+			if event_value is Dictionary:
+				var event := event_value as Dictionary
+				var event_id := str(event.get("engagementId", "")).strip_edges()
+				if not event_id.is_empty():
+					seen_elimination_ids[event_id] = true
+		if not eliminations.is_empty():
+			var latest_value: Variant = eliminations.back()
+			if latest_value is Dictionary and _is_recent_elimination(latest_value as Dictionary):
+				_present_elimination(latest_value as Dictionary)
+		return
+	for event_value: Variant in eliminations:
+		if not event_value is Dictionary:
+			continue
+		var event := event_value as Dictionary
+		var event_id := str(event.get("engagementId", "")).strip_edges()
+		if event_id.is_empty() or seen_elimination_ids.has(event_id):
+			continue
+		seen_elimination_ids[event_id] = true
+		_present_elimination(event)
+
+
+func _is_recent_elimination(event: Dictionary) -> bool:
+	var completed_at := _timestamp_to_unix(str(event.get("completedAt", "")))
+	var server_now := _timestamp_to_unix(str(arena_payload.get("serverNow", "")))
+	if completed_at <= 0.0 or server_now <= 0.0:
+		return false
+	var age := server_now - completed_at
+	return age >= -1.0 and age <= INITIAL_ELIMINATION_FRESHNESS_SECONDS
+
+
+func _present_elimination(event: Dictionary) -> void:
+	if battle_overlay_active:
+		queued_elimination_events.append(event.duplicate(true))
+		return
+	_show_elimination_toast(event)
+
+
+func _flush_queued_eliminations() -> void:
+	var queued := queued_elimination_events.duplicate(true)
+	queued_elimination_events.clear()
+	for event_value: Variant in queued:
+		if event_value is Dictionary:
+			_show_elimination_toast(event_value as Dictionary)
+
+
+func _show_elimination_toast(event: Dictionary) -> void:
+	var winner_side := str(event.get("winnerSide", ""))
+	var loser_side := str(event.get("loserSide", ""))
+	var viewer_side := str(arena_payload.get("viewerSide", ""))
+	var message := ""
+	if viewer_side == winner_side:
+		var winner_name := str(event.get("winnerDisplayName", "")).strip_edges()
+		message = _text(
+			"ui.aether_clash.arena.elimination.own_winner",
+			"{player} eliminated an enemy player."
+		).replace(
+			"{player}",
+			winner_name if not winner_name.is_empty() else _text(
+				"ui.aether_clash.arena.elimination.guildmate",
+				"A guildmate"
+			)
+		)
+	elif viewer_side == loser_side:
+		var loser_name := str(event.get("loserDisplayName", "")).strip_edges()
+		message = _text(
+			"ui.aether_clash.arena.elimination.own_loser",
+			"{player} was eliminated by an enemy player."
+		).replace(
+			"{player}",
+			loser_name if not loser_name.is_empty() else _text(
+				"ui.aether_clash.arena.elimination.guildmate",
+				"A guildmate"
+			)
+		)
+	else:
+		message = _text(
+			"ui.aether_clash.arena.elimination.spectator",
+			"{winner} eliminated a {loser} player."
+		).replace("{winner}", _side_text(winner_side)).replace("{loser}", _side_text(loser_side))
+
+	var toast := PanelContainer.new()
+	toast.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	toast.modulate = Color(1.0, 1.0, 1.0, 0.0)
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("#050b14f2")
+	style.border_width_left = 3
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.border_color = BLUE_SIDE_COLOR if winner_side == "blue" else RED_SIDE_COLOR
+	style.corner_radius_top_left = 8
+	style.corner_radius_top_right = 8
+	style.corner_radius_bottom_right = 8
+	style.corner_radius_bottom_left = 8
+	toast.add_theme_stylebox_override("panel", style)
+	elimination_feed.add_child(toast)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 9)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 9)
+	toast.add_child(margin)
+	var label := Label.new()
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.add_theme_color_override("font_color", Color("#f4f0de"))
+	label.add_theme_font_size_override("font_size", 13)
+	label.text = message
+	margin.add_child(label)
+	while elimination_feed.get_child_count() > 4:
+		var oldest := elimination_feed.get_child(0)
+		elimination_feed.remove_child(oldest)
+		oldest.queue_free()
+	var tween := toast.create_tween()
+	tween.tween_property(toast, "modulate:a", 1.0, 0.16)
+	tween.tween_interval(ELIMINATION_TOAST_SECONDS)
+	tween.tween_property(toast, "modulate:a", 0.0, 0.32)
+	tween.tween_callback(toast.queue_free)
+
+
+func _clear_elimination_feed() -> void:
+	if elimination_feed == null:
+		return
+	for child: Node in elimination_feed.get_children():
+		elimination_feed.remove_child(child)
+		child.queue_free()
+
+
+func _side_text(side: String) -> String:
+	return (
+		_text("ui.aether_clash.arena.blue_side", "Blue Side")
+		if side == "blue"
+		else _text("ui.aether_clash.arena.red_side", "Red Side")
+	)
 
 
 func _render_phase() -> void:
@@ -239,6 +583,10 @@ func _session() -> Dictionary:
 
 func _dictionary(value: Variant) -> Dictionary:
 	return value as Dictionary if value is Dictionary else {}
+
+
+func _array(value: Variant) -> Array:
+	return value as Array if value is Array else []
 
 
 func _text(key: String, fallback: String) -> String:

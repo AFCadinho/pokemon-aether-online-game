@@ -311,6 +311,22 @@ func _run() -> void:
 		and view.get_visible_tracker_count() == 2,
 		"quest tracker group expands with its data-driven contents intact"
 	)
+	view.set_tracker_available(false)
+	_expect(
+		not view.tracker_panel.visible
+		and not view.side_tracker_panel.visible
+		and not view.tracker_collapse_button.visible
+		and view.get_visible_tracker_count() == 0,
+		"arena UI can temporarily remove every quest tracker surface"
+	)
+	view.set_tracker_available(true)
+	_expect(
+		view.tracker_panel.visible
+		and view.side_tracker_panel.visible
+		and view.tracker_collapse_button.visible
+		and view.get_visible_tracker_count() == 2,
+		"leaving the arena restores the previous quest tracker state"
+	)
 	var tracker_click := InputEventMouseButton.new()
 	tracker_click.button_index = MOUSE_BUTTON_LEFT
 	tracker_click.pressed = true
