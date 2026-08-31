@@ -57,7 +57,9 @@ func _check_market_attendant_scene() -> void:
 	var battle_point_vendor_source := _read_text(BATTLE_POINT_VENDOR_SCENE)
 	_check_true(
 		battle_point_vendor_source.contains('npc_definition_id = "battle_point_vendor"')
-		and battle_point_vendor_source.contains('market_id = "battle_point_exchange"'),
+		and battle_point_vendor_source.contains('market_id = "battle_point_exchange"')
+		and battle_point_vendor_source.contains("res://assets/npcs/classes/poke_fan_m_frames.tres")
+		and battle_point_vendor_source.contains('portrait_id = "showdown_pokefan_gen6"'),
 		"One reusable Battle Point vendor scene backs the lobby placement"
 	)
 
