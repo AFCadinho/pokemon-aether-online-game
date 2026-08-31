@@ -71,11 +71,14 @@ func _check_pvp_runtime_translation() -> void:
 	var room_status := overlay.get("pvp_room_status_label") as Label
 	var format_select := overlay.get("pvp_queue_select") as OptionButton
 	var leaderboard_scope := overlay.get("pvp_leaderboard_scope_select") as OptionButton
+	var rewards_status := overlay.find_child("RankedRewardsStatus", true, false) as Label
 	var compact_status := overlay.get("pvp_queue_compact_status_label") as Label
 
 	_check(title != null and title.text == "Ranked", "PvP ranked title renders in Dutch")
 	_check(subtitle != null and subtitle.text.begins_with("Competitieve"), "PvP subtitle renders in Dutch")
 	_check(ranked_tabs != null and ranked_tabs.get_tab_title(0) == "Spelen", "PvP tab title renders in Dutch")
+	_check(ranked_tabs != null and ranked_tabs.get_tab_title(4) == "Beloningen", "Ranked Rewards tab renders in Dutch")
+	_check(rewards_status != null and rewards_status.text == "BELONINGEN NIET ACTIEF", "Ranked reward availability renders in Dutch")
 	_check(room_join_button != null and room_join_button.text == "Deelnemen", "Private room action renders in Dutch")
 	_check(training_button != null and training_button.text == "Training Room", "Training room selector renders in Dutch")
 	_check(casual_button != null and casual_button.text.begins_with("✓ "), "Default room type is visibly selected")
@@ -215,6 +218,8 @@ func _check_pvp_runtime_translation() -> void:
 	_check(title != null and title.text == "Ranqueada", "PvP ranked title updates to Portuguese")
 	_check(subtitle != null and subtitle.text.begins_with("Pareamento"), "PvP subtitle updates to Portuguese")
 	_check(ranked_tabs != null and ranked_tabs.get_tab_title(0) == "Jogar", "PvP tab title updates to Portuguese")
+	_check(ranked_tabs != null and ranked_tabs.get_tab_title(4) == "Recompensas", "Ranked Rewards tab updates to Portuguese")
+	_check(rewards_status != null and rewards_status.text == "RECOMPENSAS INATIVAS", "Ranked reward availability updates to Portuguese")
 	_check(room_join_button != null and room_join_button.text == "Entrar no treinamento", "Training room action updates to Portuguese")
 	_check(training_button != null and training_button.text == "✓ Sala de treinamento", "Selected training room updates to Portuguese")
 	_check(room_timer_check != null and room_timer_check.text.begins_with("Cronômetro"), "Private room timer updates to Portuguese")

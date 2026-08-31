@@ -3090,6 +3090,7 @@ func _setup_pc_ui() -> void:
 	release_stack.add_child(release_warning_label)
 
 	var status_panel := PanelContainer.new()
+	status_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	status_panel.name = "StorageStatusBar"
 	status_panel.custom_minimum_size = Vector2(0, 34)
 	status_panel.add_theme_stylebox_override("panel", _make_pc_status_style())
@@ -6667,6 +6668,10 @@ func _setup_pvp_room_popup() -> void:
 		LocalizationManager.text("ui.pvp.leaderboard.not_loaded_detail")
 	)
 
+	var rewards_tab_page := _create_pvp_ranked_tab_page("Rewards")
+	ranked_tabs.add_child(rewards_tab_page)
+	rewards_tab_page.add_child(_create_pvp_ranked_rewards_content())
+
 	var history_tab_page := _create_pvp_ranked_tab_page("My History", 8)
 	pvp_ranked_battles_tabs.add_child(history_tab_page)
 
@@ -7131,6 +7136,237 @@ func _configure_tool_tile_button(
 	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	labels.add_child(subtitle)
 
+func _create_pvp_ranked_rewards_content() -> ScrollContainer:
+	var scroll := ScrollContainer.new()
+	scroll.name = "RankedRewardsScroll"
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+
+	var margin := MarginContainer.new()
+	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	margin.add_theme_constant_override("margin_left", 4)
+	margin.add_theme_constant_override("margin_right", 4)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	scroll.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	layout.add_theme_constant_override("separation", 12)
+	margin.add_child(layout)
+
+	var overview := PanelContainer.new()
+	overview.name = "RankedRewardsOverview"
+	overview.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#0a1b2bea"), Color("#d3a84fcc"), 12, 1)
+	)
+	layout.add_child(overview)
+
+	var overview_margin := MarginContainer.new()
+	overview_margin.add_theme_constant_override("margin_left", 16)
+	overview_margin.add_theme_constant_override("margin_top", 14)
+	overview_margin.add_theme_constant_override("margin_right", 16)
+	overview_margin.add_theme_constant_override("margin_bottom", 14)
+	overview.add_child(overview_margin)
+
+	var overview_row := HBoxContainer.new()
+	overview_row.add_theme_constant_override("separation", 14)
+	overview_margin.add_child(overview_row)
+
+	var overview_copy := VBoxContainer.new()
+	overview_copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	overview_copy.add_theme_constant_override("separation", 4)
+	overview_row.add_child(overview_copy)
+
+	var title := Label.new()
+	_set_localized_control_property(title, "text", "ui.pvp.rewards.title")
+	title.add_theme_font_size_override("font_size", 21)
+	title.add_theme_color_override("font_color", Color("#f3e1a5"))
+	overview_copy.add_child(title)
+
+	var intro := Label.new()
+	_set_localized_control_property(intro, "text", "ui.pvp.rewards.intro")
+	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	intro.add_theme_font_size_override("font_size", 12)
+	intro.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	overview_copy.add_child(intro)
+
+	var status_panel := PanelContainer.new()
+	status_panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#3a2b12dd"), Color("#d3a84f"), 8, 1)
+	)
+	overview_row.add_child(status_panel)
+
+	var status_margin := MarginContainer.new()
+	status_margin.add_theme_constant_override("margin_left", 10)
+	status_margin.add_theme_constant_override("margin_top", 6)
+	status_margin.add_theme_constant_override("margin_right", 10)
+	status_margin.add_theme_constant_override("margin_bottom", 6)
+	status_panel.add_child(status_margin)
+
+	var status := Label.new()
+	status.name = "RankedRewardsStatus"
+	_set_localized_control_property(status, "text", "ui.pvp.rewards.status_inactive")
+	status.add_theme_font_size_override("font_size", 10)
+	status.add_theme_color_override("font_color", Color("#f4d47b"))
+	status_margin.add_child(status)
+
+	var cards := GridContainer.new()
+	cards.name = "RankedRewardsCards"
+	cards.columns = 2
+	cards.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	cards.add_theme_constant_override("h_separation", 12)
+	cards.add_theme_constant_override("v_separation", 12)
+	layout.add_child(cards)
+
+	cards.add_child(
+		_create_pvp_reward_preview_card(
+			"RankedBattleRewardCard",
+			"ui.pvp.rewards.battle.title",
+			"ui.pvp.rewards.status_planned",
+			"ui.pvp.rewards.battle.detail",
+			Color("#58c8ef"),
+			[
+				{"label_key": "ui.pvp.rewards.battle.win", "value_key": "ui.pvp.rewards.battle.win_value"},
+				{"label_key": "ui.pvp.rewards.battle.loss", "value_key": "ui.pvp.rewards.battle.loss_value"},
+			]
+		)
+	)
+	cards.add_child(
+		_create_pvp_reward_preview_card(
+			"RankedPlacementRewardCard",
+			"ui.pvp.rewards.placements.title",
+			"ui.pvp.rewards.status_inactive_short",
+			"ui.pvp.rewards.placements.detail",
+			Color("#bd8eff")
+		)
+	)
+	cards.add_child(
+		_create_pvp_reward_preview_card(
+			"RankedObjectivesRewardCard",
+			"ui.pvp.rewards.objectives.title",
+			"ui.pvp.rewards.objectives.empty",
+			"ui.pvp.rewards.objectives.detail",
+			Color("#6fd39a")
+		)
+	)
+	cards.add_child(
+		_create_pvp_reward_preview_card(
+			"RankedSeasonRewardCard",
+			"ui.pvp.rewards.season.title",
+			"ui.pvp.rewards.season.unconfigured",
+			"ui.pvp.rewards.season.detail",
+			Color("#efbd58")
+		)
+	)
+
+	var activation_note := Label.new()
+	_set_localized_control_property(activation_note, "text", "ui.pvp.rewards.activation_note")
+	activation_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	activation_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	activation_note.add_theme_font_size_override("font_size", 11)
+	activation_note.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(activation_note)
+	return scroll
+
+
+func _create_pvp_reward_preview_card(
+	card_name: String,
+	title_key: String,
+	status_key: String,
+	detail_key: String,
+	accent: Color,
+	metrics: Array = []
+) -> PanelContainer:
+	var card := PanelContainer.new()
+	card.name = card_name
+	card.custom_minimum_size = Vector2(0, 164)
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(UI_SURFACE_RAISED, Color(accent, 0.72), 11, 1)
+	)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	card.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 9)
+	margin.add_child(layout)
+
+	var heading := HBoxContainer.new()
+	heading.add_theme_constant_override("separation", 8)
+	layout.add_child(heading)
+
+	var title := Label.new()
+	_set_localized_control_property(title, "text", title_key)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.add_theme_font_size_override("font_size", 16)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	heading.add_child(title)
+
+	var status := Label.new()
+	_set_localized_control_property(status, "text", status_key)
+	status.add_theme_font_size_override("font_size", 9)
+	status.add_theme_color_override("font_color", accent)
+	heading.add_child(status)
+
+	if not metrics.is_empty():
+		var metrics_row := HBoxContainer.new()
+		metrics_row.add_theme_constant_override("separation", 8)
+		layout.add_child(metrics_row)
+		for metric_value: Variant in metrics:
+			var metric := metric_value as Dictionary
+			var metric_panel := PanelContainer.new()
+			metric_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			metric_panel.add_theme_stylebox_override(
+				"panel",
+				_make_panel_style(UI_SURFACE_INSET, Color(accent, 0.34), 8, 1)
+			)
+			metrics_row.add_child(metric_panel)
+
+			var metric_margin := MarginContainer.new()
+			metric_margin.add_theme_constant_override("margin_left", 6)
+			metric_margin.add_theme_constant_override("margin_top", 5)
+			metric_margin.add_theme_constant_override("margin_right", 6)
+			metric_margin.add_theme_constant_override("margin_bottom", 5)
+			metric_panel.add_child(metric_margin)
+
+			var metric_layout := VBoxContainer.new()
+			metric_layout.alignment = BoxContainer.ALIGNMENT_CENTER
+			metric_layout.add_theme_constant_override("separation", 1)
+			metric_margin.add_child(metric_layout)
+
+			var metric_label := Label.new()
+			_set_localized_control_property(metric_label, "text", str(metric.get("label_key", "")))
+			metric_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			metric_label.add_theme_font_size_override("font_size", 9)
+			metric_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+			metric_layout.add_child(metric_label)
+
+			var metric_value_label := Label.new()
+			_set_localized_control_property(metric_value_label, "text", str(metric.get("value_key", "")))
+			metric_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			metric_value_label.add_theme_font_size_override("font_size", 15)
+			metric_value_label.add_theme_color_override("font_color", accent)
+			metric_layout.add_child(metric_value_label)
+
+	var detail := Label.new()
+	_set_localized_control_property(detail, "text", detail_key)
+	detail.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	detail.add_theme_font_size_override("font_size", 11)
+	detail.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(detail)
+	return card
+
+
 func _create_pvp_ranked_tab_page(tab_name: String, top_margin: int = 12) -> MarginContainer:
 	var page := MarginContainer.new()
 	page.name = tab_name
@@ -7153,6 +7389,8 @@ func _pvp_tab_key(tab_name: String) -> String:
 			return "ui.pvp.tab.battles"
 		"Leaderboard":
 			return "ui.pvp.tab.leaderboard"
+		"Rewards":
+			return "ui.pvp.tab.rewards"
 		"Format":
 			return "ui.pvp.tab.format"
 		"Banlist":
