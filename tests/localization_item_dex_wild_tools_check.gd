@@ -77,6 +77,15 @@ func _check_runtime_copy() -> void:
 		) == "Kans: 2% per verslagen of gevangen Pokémon",
 		"Item Dex explains that Mega Stone chances apply to defeat and capture"
 	)
+	_check(
+		overlay.call("_item_dex_source_title", {
+			"type": "wild_drop",
+			"family_id": "bulbasaur",
+			"family_name": "Bulbasaur",
+			"species_ids": ["bulbasaur", "ivysaur", "venusaur"],
+		}) == "Bulbasaur-evolutielijn",
+		"Item Dex groups Mega Stone drops under one localized evolution-line title"
+	)
 	var dutch_requirements: Array[String] = overlay.call(
 		"_item_dex_source_requirements",
 		[{"type": "rock_smash_level", "minimum": 25, "maximum": 49}]
@@ -121,6 +130,14 @@ func _check_runtime_copy() -> void:
 		overlay.call("_format_item_dex_source_chance", {"minimum": 0.1, "maximum": 0.1})
 		== "Chance: 10%",
 		"Item Dex acquisition chances update to Portuguese"
+	)
+	_check(
+		overlay.call("_item_dex_source_title", {
+			"type": "wild_drop",
+			"family_id": "bulbasaur",
+			"family_name": "Bulbasaur",
+		}) == "Linha evolutiva de Bulbasaur",
+		"Item Dex evolution-line titles update to Portuguese"
 	)
 	overlay.free()
 
