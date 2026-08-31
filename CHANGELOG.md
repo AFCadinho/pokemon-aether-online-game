@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Aether Gift Store now uses a cleaner three-column catalog with curated Featured items and one unified product preview, detail, price, and checkout panel.
+
 - The Aether Exchange now includes item wishlists: escrow a fixed-price offer, browse items other Trainers want, fulfill complete requests, or cancel your own order for a full refund.
 
 - The Kanto Mount License now also works in the Aether Clash Lobby and its minigame maps.

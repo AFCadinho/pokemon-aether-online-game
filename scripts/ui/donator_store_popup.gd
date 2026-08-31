@@ -47,9 +47,9 @@ const UI_PURPLE_DARK := Color("#6840b1")
 const UI_GOLD := Color("#f0cc70")
 const UI_CYAN := Color("#60d3ff")
 const UI_DANGER := Color("#ef7085")
-const PREVIEW_VIEWPORT_SIZE := Vector2i(236, 260)
-const PREVIEW_AVATAR_POSITION := Vector2(118, 158)
-const PREVIEW_AVATAR_SCALE := Vector2(3.0, 3.0)
+const PREVIEW_VIEWPORT_SIZE := Vector2i(258, 174)
+const PREVIEW_AVATAR_POSITION := Vector2(129, 119)
+const PREVIEW_AVATAR_SCALE := Vector2(2.5, 2.5)
 const PREVIEW_DIRECTIONS: Array[Dictionary] = [
 	{"id": "down", "label": "Front"},
 	{"id": "left", "label": "Left"},
@@ -65,6 +65,14 @@ const CATEGORY_ORDER: Array[String] = [
 	"mounts",
 	"charms",
 	"services",
+]
+const FEATURED_ITEM_ORDER: Array[String] = [
+	"aether-blessing-voucher-30-days",
+	"mysterious-outfit",
+	"aether-blossom-outfit",
+	"surf-charm",
+	"squirtle-guild-emblem-template",
+	"name-change-ticket",
 ]
 const CATEGORY_LABELS := {
 	"featured": "Featured",
@@ -618,9 +626,9 @@ var catalog_search_text := ""
 var balance_label: Label
 var hero_title_label: Label
 var hero_description_label: Label
-var hero_promise_label: Label
 var cosmetic_subcategory_bar: PanelContainer
 var product_grid: GridContainer
+var catalog_results_label: Label
 var selection_title_label: Label
 var selection_description_label: Label
 var selection_price_label: Label
@@ -706,11 +714,15 @@ func apply_store_state(wallet: Dictionary, store: Dictionary) -> void:
 					break
 	store_catalog_loaded = true
 	store_catalog_loading = false
+	_refresh_category_visibility()
 	if selected_item_id != "" and not _item_matches_trainer_gender(_catalog_item(selected_item_id)):
 		selected_item_id = ""
 		_reset_selection_footer()
 	_render_products()
-	_refresh_purchase_state()
+	if selected_item_id == "":
+		_reset_selection_footer()
+	else:
+		_refresh_purchase_state()
 
 
 func show_store_error(message: String) -> void:
@@ -781,25 +793,23 @@ func _build_interface() -> void:
 	add_child(outer_margin)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 12)
+	layout.add_theme_constant_override("separation", 10)
 	outer_margin.add_child(layout)
 	layout.add_child(_create_header())
 
 	var body := HBoxContainer.new()
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	body.add_theme_constant_override("separation", 14)
+	body.add_theme_constant_override("separation", 12)
 	layout.add_child(body)
 	body.add_child(_create_category_rail())
 	body.add_child(_create_catalog_area())
 	body.add_child(_create_character_preview_panel())
 
-	layout.add_child(_create_selection_footer())
-
 
 func _create_header() -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 64)
-	panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE_RAISED, Color("#8065b0aa"), 11, 1))
+	panel.custom_minimum_size = Vector2(0, 58)
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE_RAISED, UI_BORDER_SOFT, 10, 1))
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 10)
@@ -855,6 +865,7 @@ func _create_header() -> Control:
 	add_gems_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	add_gems_button.pressed.connect(_on_add_gems_pressed)
 	_apply_text_button_style(add_gems_button, UI_GOLD)
+	add_gems_button.visible = false
 	row.add_child(add_gems_button)
 
 	var close_button := Button.new()
@@ -910,7 +921,7 @@ func _create_balance_pill() -> Control:
 
 func _create_category_rail() -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(176, 0)
+	panel.custom_minimum_size = Vector2(154, 0)
 	panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE_RAISED, UI_BORDER_SOFT, 11, 1))
 
 	var margin := MarginContainer.new()
@@ -921,7 +932,7 @@ func _create_category_rail() -> Control:
 	panel.add_child(margin)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 7)
+	layout.add_theme_constant_override("separation", 6)
 	margin.add_child(layout)
 
 	var browse_label := Label.new()
@@ -934,23 +945,13 @@ func _create_category_rail() -> Control:
 		var button := Button.new()
 		button.text = _category_text(category_id, "label")
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.custom_minimum_size = Vector2(0, 38)
+		button.custom_minimum_size = Vector2(0, 34)
 		button.focus_mode = Control.FOCUS_NONE
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		button.pressed.connect(_select_category.bind(category_id))
 		layout.add_child(button)
 		category_buttons[category_id] = button
 
-	var spacer := Control.new()
-	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	layout.add_child(spacer)
-
-	var note := Label.new()
-	_set_localized_property(note, "text", "ui.store.catalog_note")
-	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	note.add_theme_font_size_override("font_size", 10)
-	note.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	layout.add_child(note)
 	return panel
 
 
@@ -966,19 +967,19 @@ func _create_catalog_area() -> Control:
 	catalog_header.add_theme_constant_override("separation", 8)
 	layout.add_child(catalog_header)
 
-	var products_label := Label.new()
-	_set_localized_property(products_label, "text", "ui.store.catalog")
-	products_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	products_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	products_label.add_theme_font_size_override("font_size", 10)
-	products_label.add_theme_color_override("font_color", UI_CYAN)
-	catalog_header.add_child(products_label)
+	catalog_results_label = Label.new()
+	_set_localized_property(catalog_results_label, "text", "ui.store.catalog")
+	catalog_results_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	catalog_results_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	catalog_results_label.add_theme_font_size_override("font_size", 11)
+	catalog_results_label.add_theme_color_override("font_color", UI_CYAN)
+	catalog_header.add_child(catalog_results_label)
 
 	catalog_search_input = LineEdit.new()
 	catalog_search_input.name = "CatalogSearchInput"
 	_set_localized_property(catalog_search_input, "placeholder_text", "ui.store.search")
 	catalog_search_input.clear_button_enabled = true
-	catalog_search_input.custom_minimum_size = Vector2(210, 34)
+	catalog_search_input.custom_minimum_size = Vector2(190, 32)
 	_set_localized_property(catalog_search_input, "tooltip_text", "ui.store.search_tooltip")
 	catalog_search_input.text_changed.connect(_on_catalog_search_changed)
 	_apply_line_edit_style(catalog_search_input)
@@ -990,7 +991,7 @@ func _create_catalog_area() -> Control:
 	layout.add_child(scroll)
 
 	product_grid = GridContainer.new()
-	product_grid.columns = 2
+	product_grid.columns = 3
 	product_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	product_grid.add_theme_constant_override("h_separation", 9)
 	product_grid.add_theme_constant_override("v_separation", 9)
@@ -1068,57 +1069,44 @@ func _create_cosmetic_subcategory_bar() -> PanelContainer:
 
 func _create_hero_panel() -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 94)
-	var style := _panel_style(Color("#17102be8"), Color("#8964bfb0"), 12, 1)
-	style.shadow_color = Color("#8a5fc344")
-	style.shadow_size = 10
-	style.shadow_offset = Vector2.ZERO
+	panel.custom_minimum_size = Vector2(0, 66)
+	var style := _panel_style(UI_SURFACE_RAISED, UI_BORDER_SOFT, 10, 1)
 	panel.add_theme_stylebox_override("panel", style)
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 16)
-	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_top", 8)
 	margin.add_theme_constant_override("margin_right", 16)
-	margin.add_theme_constant_override("margin_bottom", 12)
+	margin.add_theme_constant_override("margin_bottom", 8)
 	panel.add_child(margin)
-
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 12)
-	margin.add_child(row)
 
 	var heading := VBoxContainer.new()
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.alignment = BoxContainer.ALIGNMENT_CENTER
-	heading.add_theme_constant_override("separation", 3)
-	row.add_child(heading)
+	heading.add_theme_constant_override("separation", 2)
+	margin.add_child(heading)
 
 	hero_title_label = Label.new()
-	hero_title_label.add_theme_font_size_override("font_size", 19)
+	hero_title_label.add_theme_font_size_override("font_size", 17)
 	hero_title_label.add_theme_color_override("font_color", UI_TEXT)
 	heading.add_child(hero_title_label)
 
 	hero_description_label = Label.new()
-	hero_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	hero_description_label.add_theme_font_size_override("font_size", 12)
+	hero_description_label.custom_minimum_size = Vector2(0, 16)
+	hero_description_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	hero_description_label.clip_text = true
+	hero_description_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	hero_description_label.add_theme_font_size_override("font_size", 11)
 	hero_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	heading.add_child(hero_description_label)
-
-	hero_promise_label = Label.new()
-	hero_promise_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	hero_promise_label.add_theme_font_size_override("font_size", 10)
-	hero_promise_label.add_theme_color_override("font_color", UI_GOLD)
-	row.add_child(hero_promise_label)
 	return panel
 
 
 func _create_character_preview_panel() -> Control:
 	var panel := PanelContainer.new()
 	panel.name = "CharacterPreviewPanel"
-	panel.custom_minimum_size = Vector2(260, 0)
-	var style := _panel_style(Color("#0b1524f2"), Color("#694f8eb8"), 11, 1)
-	style.shadow_color = Color("#00000055")
-	style.shadow_size = 8
-	style.shadow_offset = Vector2(0, 3)
+	panel.custom_minimum_size = Vector2(282, 0)
+	var style := _panel_style(Color("#0b1524f2"), UI_BORDER_SOFT, 10, 1)
 	panel.add_theme_stylebox_override("panel", style)
 
 	var margin := MarginContainer.new()
@@ -1129,7 +1117,7 @@ func _create_character_preview_panel() -> Control:
 	panel.add_child(margin)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 7)
+	layout.add_theme_constant_override("separation", 6)
 	margin.add_child(layout)
 
 	character_preview_eyebrow_label = Label.new()
@@ -1146,6 +1134,7 @@ func _create_character_preview_panel() -> Control:
 	character_preview_title_label.add_theme_font_size_override("font_size", 14)
 	character_preview_title_label.add_theme_color_override("font_color", UI_TEXT)
 	layout.add_child(character_preview_title_label)
+	selection_title_label = character_preview_title_label
 
 	var viewport_frame := PanelContainer.new()
 	viewport_frame.custom_minimum_size = Vector2(PREVIEW_VIEWPORT_SIZE)
@@ -1252,80 +1241,66 @@ func _create_character_preview_panel() -> Control:
 	character_preview_note_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(character_preview_note_label)
 
-	_refresh_character_preview_direction_buttons()
-	_refresh_character_preview()
-	return panel
-
-
-func _create_selection_footer() -> Control:
-	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 62)
-	panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE_RAISED, UI_BORDER_SOFT, 10, 1))
-
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_top", 8)
-	margin.add_theme_constant_override("margin_right", 8)
-	margin.add_theme_constant_override("margin_bottom", 8)
-	panel.add_child(margin)
-
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 10)
-	margin.add_child(row)
-
-	var selection := VBoxContainer.new()
-	selection.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	selection.alignment = BoxContainer.ALIGNMENT_CENTER
-	selection.add_theme_constant_override("separation", 1)
-	row.add_child(selection)
-
-	selection_title_label = Label.new()
-	selection_title_label.text = _t("ui.store.selection.title")
-	selection_title_label.add_theme_font_size_override("font_size", 13)
-	selection_title_label.add_theme_color_override("font_color", UI_TEXT)
-	selection.add_child(selection_title_label)
-
 	selection_description_label = Label.new()
 	selection_description_label.text = _t("ui.store.selection.description")
-	selection_description_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	selection_description_label.add_theme_font_size_override("font_size", 10)
+	selection_description_label.custom_minimum_size = Vector2(0, 46)
+	selection_description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	selection_description_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	selection_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	selection_description_label.add_theme_font_size_override("font_size", 11)
 	selection_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	selection.add_child(selection_description_label)
+	layout.add_child(selection_description_label)
+
+	var checkout_row := HBoxContainer.new()
+	checkout_row.add_theme_constant_override("separation", 8)
+	layout.add_child(checkout_row)
 
 	selection_price_label = Label.new()
 	selection_price_label.text = "—"
-	selection_price_label.custom_minimum_size = Vector2(80, 0)
-	selection_price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	selection_price_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	selection_price_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	selection_price_label.add_theme_font_size_override("font_size", 14)
+	selection_price_label.add_theme_font_size_override("font_size", 15)
 	selection_price_label.add_theme_color_override("font_color", UI_GOLD)
-	row.add_child(selection_price_label)
+	checkout_row.add_child(selection_price_label)
 
 	purchase_button = Button.new()
 	_set_localized_property(purchase_button, "text", "ui.store.purchase")
 	_set_localized_property(purchase_button, "tooltip_text", "ui.store.purchase_select")
-	purchase_button.custom_minimum_size = Vector2(112, 36)
+	purchase_button.custom_minimum_size = Vector2(132, 36)
 	purchase_button.focus_mode = Control.FOCUS_NONE
 	purchase_button.disabled = true
 	purchase_button.pressed.connect(_on_purchase_pressed)
 	_apply_text_button_style(purchase_button, UI_PURPLE)
-	row.add_child(purchase_button)
+	checkout_row.add_child(purchase_button)
 
 	status_label = Label.new()
 	status_label.text = _t("ui.store.status.loading")
-	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	status_label.custom_minimum_size = Vector2(0, 28)
+	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status_label.add_theme_font_size_override("font_size", 10)
 	status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	_set_localized_property(status_label, "tooltip_text", "ui.store.safety")
-	row.add_child(status_label)
+	layout.add_child(status_label)
+
+	_refresh_character_preview_direction_buttons()
+	_refresh_character_preview()
 	return panel
 
 
 func _select_category(category_id: String) -> void:
 	if not CATEGORY_ORDER.has(category_id):
 		return
+	var category_changed := active_category != category_id
 	active_category = category_id
 	selected_item_id = ""
+	if category_changed and catalog_search_text != "":
+		catalog_search_text = ""
+		if catalog_search_input != null:
+			catalog_search_input.set_block_signals(true)
+			catalog_search_input.text = ""
+			catalog_search_input.set_block_signals(false)
 	for category_key: String in CATEGORY_ORDER:
 		var button := category_buttons.get(category_key) as Button
 		if button != null:
@@ -1334,8 +1309,6 @@ func _select_category(category_id: String) -> void:
 		hero_title_label.text = _category_text(active_category, "label")
 	if hero_description_label != null:
 		hero_description_label.text = _category_text(active_category, "description")
-	if hero_promise_label != null:
-		hero_promise_label.text = _category_text(active_category, "promise")
 	_refresh_cosmetic_subcategory_bar()
 	_reset_selection_footer()
 	_render_products()
@@ -1415,7 +1388,16 @@ func _render_products() -> void:
 		child.queue_free()
 	product_buttons.clear()
 
-	for item: Dictionary in CATALOG:
+	var catalog_items: Array[Dictionary] = []
+	if active_category == "featured":
+		for item_id: String in FEATURED_ITEM_ORDER:
+			var featured_item := _catalog_item(item_id)
+			if not featured_item.is_empty():
+				catalog_items.append(featured_item)
+	else:
+		catalog_items.assign(CATALOG)
+
+	for item: Dictionary in catalog_items:
 		var categories: Array = item.get("categories", [])
 		if not categories.has(active_category):
 			continue
@@ -1428,6 +1410,39 @@ func _render_products() -> void:
 		var card := _create_product_card(item)
 		product_grid.add_child(card)
 		product_buttons[str(item.get("id", ""))] = card
+	if catalog_results_label != null:
+		catalog_results_label.text = (
+			_t("ui.store.no_results")
+			if product_buttons.is_empty()
+			else _t("ui.store.results", {"count": product_buttons.size()})
+		)
+
+
+func _refresh_category_visibility() -> void:
+	if not store_catalog_loaded:
+		return
+	for category_id: String in CATEGORY_ORDER:
+		var button := category_buttons.get(category_id) as Button
+		if button != null:
+			button.visible = _category_has_available_items(category_id)
+	var active_button := category_buttons.get(active_category) as Button
+	if active_button != null and not active_button.visible:
+		_select_category("featured")
+
+
+func _category_has_available_items(category_id: String) -> bool:
+	var item_ids: Array[String] = []
+	if category_id == "featured":
+		item_ids.assign(FEATURED_ITEM_ORDER)
+	else:
+		for item: Dictionary in CATALOG:
+			var categories: Array = item.get("categories", [])
+			if categories.has(category_id):
+				item_ids.append(str(item.get("id", "")))
+	for item_id: String in item_ids:
+		if _gem_price(item_id) >= 0:
+			return true
+	return false
 
 
 func _on_catalog_search_changed(search_text: String) -> void:
@@ -1478,7 +1493,7 @@ func _create_product_card(item: Dictionary) -> Button:
 	var item_id := str(item.get("id", ""))
 	var button := Button.new()
 	button.text = ""
-	button.custom_minimum_size = Vector2(0, 188)
+	button.custom_minimum_size = Vector2(0, 140)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -1490,13 +1505,13 @@ func _create_product_card(item: Dictionary) -> Button:
 	button.add_child(margin)
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	margin.add_theme_constant_override("margin_left", 10)
-	margin.add_theme_constant_override("margin_top", 9)
+	margin.add_theme_constant_override("margin_top", 8)
 	margin.add_theme_constant_override("margin_right", 10)
-	margin.add_theme_constant_override("margin_bottom", 9)
+	margin.add_theme_constant_override("margin_bottom", 8)
 
 	var layout := VBoxContainer.new()
 	layout.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layout.add_theme_constant_override("separation", 4)
+	layout.add_theme_constant_override("separation", 3)
 	margin.add_child(layout)
 
 	var badge := Label.new()
@@ -1509,19 +1524,19 @@ func _create_product_card(item: Dictionary) -> Button:
 		else badge_text
 	)
 	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	badge.add_theme_font_size_override("font_size", 9)
+	badge.add_theme_font_size_override("font_size", 10)
 	badge.add_theme_color_override("font_color", UI_PURPLE)
 	layout.add_child(badge)
 
 	var icon_center := CenterContainer.new()
 	icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_center.custom_minimum_size = Vector2(0, 58)
+	icon_center.custom_minimum_size = Vector2(0, 50)
 	layout.add_child(icon_center)
 
 	var icon_frame := PanelContainer.new()
 	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_frame.custom_minimum_size = Vector2(58, 58)
-	icon_frame.add_theme_stylebox_override("panel", _panel_style(Color("#1d1332d9"), Color("#7655a6aa"), 12, 1))
+	icon_frame.custom_minimum_size = Vector2(50, 50)
+	icon_frame.add_theme_stylebox_override("panel", _panel_style(Color("#171126cc"), Color("#503b7080"), 10, 1))
 	icon_center.add_child(icon_frame)
 
 	var center := CenterContainer.new()
@@ -1530,7 +1545,7 @@ func _create_product_card(item: Dictionary) -> Button:
 
 	var icon := TextureRect.new()
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon.custom_minimum_size = Vector2(44, 44)
+	icon.custom_minimum_size = Vector2(40, 40)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	var cosmetic_icon := CharacterAppearanceService.get_cosmetic_item_icon(item_id, trainer_gender)
@@ -1546,16 +1561,6 @@ func _create_product_card(item: Dictionary) -> Button:
 	title.add_theme_font_size_override("font_size", 13)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	layout.add_child(title)
-
-	var description := Label.new()
-	description.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	description.text = _item_description(item)
-	description.custom_minimum_size = Vector2(0, 34)
-	description.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description.add_theme_font_size_override("font_size", 10)
-	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	layout.add_child(description)
 
 	var price := Label.new()
 	price.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1679,17 +1684,53 @@ func _refresh_character_preview() -> void:
 		child.queue_free()
 
 	var item := _catalog_item(selected_item_id)
+	if item.is_empty():
+		var base_preview := _create_character_preview_visual(_current_character_preview_appearance())
+		if base_preview != null:
+			character_preview_viewport.add_child(base_preview)
+			base_preview.position = PREVIEW_AVATAR_POSITION
+			base_preview.scale = PREVIEW_AVATAR_SCALE
+			_disable_character_preview_processing(base_preview)
+			_set_character_preview_direction(base_preview)
+		character_preview_eyebrow_label.text = _t("ui.store.preview.details")
+		character_preview_title_label.text = _t("ui.store.selection.title")
+		character_preview_note_label.text = _t("ui.store.preview.choose_item")
+		character_preview_direction_row.visible = false
+		character_preview_palette.visible = false
+		return
 	if bool(item.get("guild_emblem_template", false)):
 		var emblem_sprite := Sprite2D.new()
 		emblem_sprite.name = "GuildEmblemStorePreview"
 		emblem_sprite.texture = item.get("icon") as Texture2D
 		emblem_sprite.position = Vector2(PREVIEW_VIEWPORT_SIZE) * 0.5
-		emblem_sprite.scale = Vector2(6.0, 6.0)
+		emblem_sprite.scale = Vector2(4.0, 4.0)
 		emblem_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		character_preview_viewport.add_child(emblem_sprite)
 		character_preview_eyebrow_label.text = _t("ui.store.preview.for_guild")
 		character_preview_title_label.text = _item_name(item)
 		character_preview_note_label.text = _t("ui.store.preview.guild_template")
+		character_preview_direction_row.visible = false
+		character_preview_palette.visible = false
+		return
+
+	var preview_parts := _preview_parts_for_item(item)
+	if preview_parts.is_empty():
+		var item_sprite := Sprite2D.new()
+		item_sprite.name = "StoreItemDetailPreview"
+		item_sprite.texture = item.get("icon") as Texture2D
+		item_sprite.position = Vector2(PREVIEW_VIEWPORT_SIZE) * 0.5
+		var item_scale := 1.0
+		if item_sprite.texture != null:
+			var texture_size := item_sprite.texture.get_size()
+			var largest_dimension := maxf(texture_size.x, texture_size.y)
+			if largest_dimension > 0.0:
+				item_scale = minf(3.0, 112.0 / largest_dimension)
+		item_sprite.scale = Vector2.ONE * item_scale
+		item_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		character_preview_viewport.add_child(item_sprite)
+		character_preview_eyebrow_label.text = _t("ui.store.preview.details")
+		character_preview_title_label.text = _item_name(item)
+		character_preview_note_label.text = _badge_text(str(item.get("badge", "")))
 		character_preview_direction_row.visible = false
 		character_preview_palette.visible = false
 		return
@@ -1705,7 +1746,6 @@ func _refresh_character_preview() -> void:
 		_disable_character_preview_processing(preview_visual)
 		_set_character_preview_direction(preview_visual)
 
-	var preview_parts := _preview_parts_for_item(item)
 	var tint_key := ""
 	for preview_part: Dictionary in preview_parts:
 		tint_key = str(preview_part.get("tint", "")).strip_edges()
@@ -2180,6 +2220,10 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 			status_label.text = _t("ui.store.status.loading")
 		return
 	var price := _gem_price(selected_item_id)
+	if price >= 0:
+		purchase_button.text = _t("ui.store.purchase_with_price", {
+			"amount": _format_number(price),
+		})
 	if price < 0:
 		purchase_button.disabled = true
 		purchase_button.tooltip_text = _t("ui.store.error.preview_unavailable")
@@ -2201,7 +2245,9 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 		"amount": _format_number(price),
 	})
 	if update_status:
-		status_label.text = _t("ui.store.status.ready")
+		status_label.text = _t("ui.store.status.ready_balance", {
+			"amount": _format_number(gem_balance - price),
+		})
 
 
 func _on_purchase_pressed() -> void:
@@ -2328,10 +2374,10 @@ func _cosmetic_item_category_popup_style() -> StyleBoxFlat:
 
 
 func _apply_product_card_style(button: Button, selected: bool) -> void:
-	var accent := UI_PURPLE if selected else UI_BORDER_SOFT
-	var background := Color("#17102be8") if selected else UI_SURFACE_RAISED
+	var accent := UI_PURPLE if selected else Color("#2b455a70")
+	var background := Color("#17102be8") if selected else Color("#081522dc")
 	button.add_theme_stylebox_override("normal", _button_style(background, accent, 11, 1))
-	button.add_theme_stylebox_override("hover", _button_style(UI_SURFACE_HOVER, UI_PURPLE, 11, 1))
+	button.add_theme_stylebox_override("hover", _button_style(UI_SURFACE_HOVER, Color("#8e6cc1"), 11, 1))
 	button.add_theme_stylebox_override("pressed", _button_style(UI_SURFACE_BASE, UI_PURPLE, 11, 1))
 	button.add_theme_stylebox_override("focus", _button_style(background, accent, 11, 1))
 
