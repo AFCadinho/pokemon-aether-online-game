@@ -64,6 +64,7 @@ var spectator_camera_dragging := false
 var participant_zoom_applied := false
 var participant_zoom_camera: Camera2D
 var spectator_battle_request_active := false
+var spectator_battle_request_observed_world_battle := false
 
 
 func _ready() -> void:
@@ -92,6 +93,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	_sync_spectator_battle_request_lifecycle()
 	_sync_arena_hud_battle_visibility()
 	_sync_local_camera_mode()
 	_process_spectator_camera(delta)
@@ -146,6 +148,7 @@ func configure_aether_clash_instance(instance_map_id: String) -> void:
 	last_trace_arena_state_fingerprint = ""
 	last_trace_arena_error_fingerprint = ""
 	spectator_battle_request_active = false
+	spectator_battle_request_observed_world_battle = false
 	_deactivate_spectator_camera()
 	_trace_aether_clash("duel_configured", {
 		"sessionId": instance_session_id,
@@ -611,12 +614,7 @@ func _activate_spectator_camera(fallback_position: Vector2) -> void:
 	# Reopening Aether View while World is idle is the authoritative signal that
 	# the old request is stale and a new Master Ball click may be accepted.
 	if spectator_battle_request_active and not _world_battle_active():
-		spectator_battle_request_active = false
-		_trace_aether_clash("spectator_battle_request_stale_cleared", {
-			"sessionId": instance_session_id,
-			"localUserId": _local_user_id(),
-			"source": "spectator_camera_reactivated",
-		})
+		_clear_spectator_battle_request("spectator_camera_reactivated")
 	var player := _actor_for_user_id(_local_user_id())
 	var player_camera := player.get_node_or_null("Camera2D") as Camera2D if player != null else null
 	if player_camera == null:
@@ -898,7 +896,32 @@ func _world_battle_active() -> bool:
 	return world != null and bool(world.get("is_in_battle"))
 
 
+func _sync_spectator_battle_request_lifecycle() -> void:
+	if not spectator_battle_request_active:
+		spectator_battle_request_observed_world_battle = false
+		return
+	if _world_battle_active():
+		spectator_battle_request_observed_world_battle = true
+		return
+	if spectator_battle_request_observed_world_battle:
+		_clear_spectator_battle_request("world_battle_closed")
+
+
+func _clear_spectator_battle_request(source: String) -> void:
+	if not spectator_battle_request_active:
+		spectator_battle_request_observed_world_battle = false
+		return
+	spectator_battle_request_active = false
+	spectator_battle_request_observed_world_battle = false
+	_trace_aether_clash("spectator_battle_request_stale_cleared", {
+		"sessionId": instance_session_id,
+		"localUserId": _local_user_id(),
+		"source": source,
+	})
+
+
 func _on_battle_indicator_spectate_requested(user_id: int, room_code: String) -> void:
+	_sync_spectator_battle_request_lifecycle()
 	var normalized_room_code := room_code.strip_edges().to_upper()
 	var rejection_reason := ""
 	if spectator_battle_request_active:
@@ -924,6 +947,7 @@ func _on_battle_indicator_spectate_requested(user_id: int, room_code: String) ->
 	if not rejection_reason.is_empty():
 		return
 	spectator_battle_request_active = true
+	spectator_battle_request_observed_world_battle = false
 	_trace_aether_clash("spectator_battle_requested", {
 		"sessionId": instance_session_id,
 		"localUserId": _local_user_id(),
@@ -939,6 +963,7 @@ func _on_battle_indicator_spectate_requested(user_id: int, room_code: String) ->
 			started = bool(await overlay.call("start_aether_clash_pvp_spectate", normalized_room_code))
 			break
 	spectator_battle_request_active = false
+	spectator_battle_request_observed_world_battle = false
 	_trace_aether_clash("spectator_battle_request_completed", {
 		"sessionId": instance_session_id,
 		"localUserId": _local_user_id(),

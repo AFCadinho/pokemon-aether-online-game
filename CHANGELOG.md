@@ -77,6 +77,7 @@
 
 **Fixed**
 
+- Aether View spectators can now reopen an ongoing battle immediately after leaving it, and Master Balls glow clearly when hovered.
 - Eliminated Guild Duel players now immediately see stationary arena participants after arriving in jail.
 - Leaving a Guild Duel no longer tries to read a detached game window while restoring the normal world zoom.
 - Rotating Guild Duel Master Balls now use a camera-aware click fallback and trace every spectate step when native world-object input is intercepted.
