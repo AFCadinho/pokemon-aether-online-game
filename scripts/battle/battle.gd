@@ -3996,17 +3996,31 @@ func _refresh_pvp_battle_result_copy(result: Dictionary) -> void:
 func _refresh_pvp_battle_rating_copy(result: Dictionary) -> void:
 	var value: Variant = result.get("ratingChange", {})
 	var change: Dictionary = value as Dictionary if value is Dictionary else {}
-	if change.is_empty():
+	var reward_value: Variant = result.get("battlePointReward", {})
+	var reward: Dictionary = reward_value as Dictionary if reward_value is Dictionary else {}
+	if change.is_empty() and reward.is_empty():
 		battle_result_rating.visible = false
 		battle_result_rating.text = ""
 		return
-	var rating_after := int(change.get("ratingAfter", 0))
-	var rating_delta := int(change.get("ratingDelta", 0))
-	battle_result_rating.text = _t("battle.result.rating_change", {
-		"rating": rating_after,
-		"delta": "+%d" % rating_delta if rating_delta > 0 else "%d" % rating_delta,
-	})
-	battle_result_rating.modulate = Color("65e38b") if rating_delta >= 0 else Color("ff7b83")
+	var lines: PackedStringArray = []
+	var rating_delta := 0
+	if not change.is_empty():
+		var rating_after := int(change.get("ratingAfter", 0))
+		rating_delta = int(change.get("ratingDelta", 0))
+		lines.append(_t("battle.result.rating_change", {
+			"rating": rating_after,
+			"delta": "+%d" % rating_delta if rating_delta > 0 else "%d" % rating_delta,
+		}))
+	if not reward.is_empty():
+		lines.append(_t("battle.result.battle_points_reward", {
+			"amount": _format_battle_point_reward_amount(int(reward.get("amount", 0))),
+		}))
+	battle_result_rating.text = "\n".join(lines)
+	battle_result_rating.modulate = (
+		Color("65e38b")
+		if change.is_empty() or rating_delta >= 0
+		else Color("ff7b83")
+	)
 	battle_result_rating.visible = true
 
 
@@ -4016,23 +4030,56 @@ func _refresh_pvp_battle_rating(match_id: String) -> void:
 		return
 	var request := HTTPRequest.new()
 	add_child(request)
-	for attempt in range(5):
+	for attempt in range(15):
 		var response: Dictionary = await BattleApiClient.get_pvp_match_summary(request, normalized_match_id)
 		if bool(response.get("success", false)):
 			var match_value: Variant = response.get("match", {})
 			var match: Dictionary = match_value as Dictionary if match_value is Dictionary else {}
+			var current_user_id := int(AuthService.current_user.get("id", 0))
+			var rating_found := false
 			var changes_value: Variant = match.get("ratingChanges", [])
 			var changes: Array = changes_value as Array if changes_value is Array else []
-			var current_user_id := int(AuthService.current_user.get("id", 0))
 			for change_value: Variant in changes:
 				if change_value is Dictionary and int((change_value as Dictionary).get("userId", 0)) == current_user_id:
 					pending_battle_end_result["ratingChange"] = (change_value as Dictionary).duplicate(true)
-					_refresh_pvp_battle_rating_copy(pending_battle_end_result)
-					request.queue_free()
-					return
-		if attempt < 4:
-			await get_tree().create_timer(0.4).timeout
+					rating_found = true
+					break
+			var reward_found := false
+			var rewards_value: Variant = match.get("battlePointRewards", [])
+			var rewards: Array = rewards_value as Array if rewards_value is Array else []
+			for reward_value: Variant in rewards:
+				if reward_value is Dictionary and int((reward_value as Dictionary).get("userId", 0)) == current_user_id:
+					var is_new_reward := not pending_battle_end_result.has("battlePointReward")
+					pending_battle_end_result["battlePointReward"] = (reward_value as Dictionary).duplicate(true)
+					reward_found = true
+					if is_new_reward:
+						var wallet_result: Dictionary = await PlayerWalletService.load_wallet()
+						PlayerWalletService.apply_wallet_result(wallet_result)
+					break
+			if rating_found or reward_found:
+				_refresh_pvp_battle_rating_copy(pending_battle_end_result)
+			var result_value: Variant = match.get("result", {})
+			var result_summary: Dictionary = result_value as Dictionary if result_value is Dictionary else {}
+			var reward_expected := bool(result_summary.get("rewardsReady", false))
+			if rating_found and (not reward_expected or reward_found):
+				request.queue_free()
+				return
+		if attempt < 14:
+			await get_tree().create_timer(0.5).timeout
 	request.queue_free()
+
+
+func _format_battle_point_reward_amount(amount: int) -> String:
+	var value_text := str(max(amount, 0))
+	var formatted := ""
+	var counter := 0
+	var separator := "." if str(LocalizationManager.current_locale) in ["nl", "pt_BR"] else ","
+	for index in range(value_text.length() - 1, -1, -1):
+		if counter > 0 and counter % 3 == 0:
+			formatted = separator + formatted
+		formatted = value_text.substr(index, 1) + formatted
+		counter += 1
+	return formatted
 
 
 func _format_battle_result_reason(reason: String) -> String:
