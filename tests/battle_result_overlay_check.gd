@@ -15,6 +15,7 @@ func _init() -> void:
 
 	_check(scene_source.contains('[node name="BattleResultOverlay" type="Control"'), "battle scene has a terminal result overlay")
 	_check(scene_source.contains('[node name="BattleResultContinueButton" type="Button"'), "result overlay has an explicit Continue action")
+	_check(scene_source.contains('[node name="BattleResultRating" type="Label"'), "result overlay has a dedicated rating change line")
 	_check(finish_source.contains("_show_pvp_battle_result(result)"), "PvP completion presents the result before exiting")
 	_check(finish_source.contains("_close_battle_drawers_for_terminal_result()"), "terminal completion closes battle drawers before presenting the result")
 	_check(not finish_source.contains("battle_ended.emit(result)"), "PvP completion no longer destroys the battle scene immediately")
@@ -25,6 +26,8 @@ func _init() -> void:
 	_check(source.contains('_t("battle.result.defeat")'), "result screen supports a localized defeat")
 	_check(source.contains('_t("battle.result.winner_title"'), "spectator result title names the public winner through a localized template")
 	_check(source.contains("PvpBattleRealtimeService.is_local_terminal_winner("), "result screen resolves both winner sides and Showdown display names")
+	_check(source.contains("func _refresh_pvp_battle_rating(match_id: String) -> void:"), "rated PvP completion fetches the committed rating change")
+	_check(source.contains('BattleApiClient.get_pvp_match_summary(request, normalized_match_id)'), "rating presentation reads the participant-authorized match summary")
 	quit(1 if failed else 0)
 
 

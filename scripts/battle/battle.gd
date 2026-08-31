@@ -384,6 +384,7 @@ var wild_owned_request_id := 0
 @onready var battle_result_title: Label = %BattleResultTitle
 @onready var battle_result_summary: Label = %BattleResultSummary
 @onready var battle_result_reason: Label = %BattleResultReason
+@onready var battle_result_rating: Label = %BattleResultRating
 @onready var battle_result_continue_button: Button = %BattleResultContinueButton
 
 # HTTP Request
@@ -3882,6 +3883,8 @@ func _finish_battle(result: Dictionary) -> void:
 	pending_mega_species_by_ident.clear()
 	_reset_damage_calc_assumptions()
 	if _is_pvp_battle():
+		if not result.has("matchId") and pvp_match_id != "":
+			result["matchId"] = pvp_match_id
 		PvpBattleRealtimeService.disconnect_room()
 		pvp_match_id = ""
 		_clear_pvp_party_hud_display_override()
@@ -3941,6 +3944,7 @@ func _show_pvp_battle_result(result: Dictionary) -> void:
 	battle_result_overlay.visible = true
 	battle_result_overlay.move_to_front()
 	battle_result_continue_button.grab_focus.call_deferred()
+	_refresh_pvp_battle_rating.call_deferred(str(result.get("matchId", "")))
 
 
 func _refresh_pvp_battle_result_copy(result: Dictionary) -> void:
@@ -3986,6 +3990,49 @@ func _refresh_pvp_battle_result_copy(result: Dictionary) -> void:
 	var reason := str(result.get("reason", "")).strip_edges().to_lower()
 	battle_result_reason.text = _format_battle_result_reason(reason)
 	battle_result_reason.visible = battle_result_reason.text != ""
+	_refresh_pvp_battle_rating_copy(result)
+
+
+func _refresh_pvp_battle_rating_copy(result: Dictionary) -> void:
+	var value: Variant = result.get("ratingChange", {})
+	var change: Dictionary = value as Dictionary if value is Dictionary else {}
+	if change.is_empty():
+		battle_result_rating.visible = false
+		battle_result_rating.text = ""
+		return
+	var rating_after := int(change.get("ratingAfter", 0))
+	var rating_delta := int(change.get("ratingDelta", 0))
+	battle_result_rating.text = _t("battle.result.rating_change", {
+		"rating": rating_after,
+		"delta": "+%d" % rating_delta if rating_delta > 0 else "%d" % rating_delta,
+	})
+	battle_result_rating.modulate = Color("65e38b") if rating_delta >= 0 else Color("ff7b83")
+	battle_result_rating.visible = true
+
+
+func _refresh_pvp_battle_rating(match_id: String) -> void:
+	var normalized_match_id := match_id.strip_edges()
+	if normalized_match_id == "" or _is_spectator_battle() or bool(pending_battle_end_result.get("noContest", false)):
+		return
+	var request := HTTPRequest.new()
+	add_child(request)
+	for attempt in range(5):
+		var response: Dictionary = await BattleApiClient.get_pvp_match_summary(request, normalized_match_id)
+		if bool(response.get("success", false)):
+			var match_value: Variant = response.get("match", {})
+			var match: Dictionary = match_value as Dictionary if match_value is Dictionary else {}
+			var changes_value: Variant = match.get("ratingChanges", [])
+			var changes: Array = changes_value as Array if changes_value is Array else []
+			var current_user_id := int(AuthService.current_user.get("id", 0))
+			for change_value: Variant in changes:
+				if change_value is Dictionary and int((change_value as Dictionary).get("userId", 0)) == current_user_id:
+					pending_battle_end_result["ratingChange"] = (change_value as Dictionary).duplicate(true)
+					_refresh_pvp_battle_rating_copy(pending_battle_end_result)
+					request.queue_free()
+					return
+		if attempt < 4:
+			await get_tree().create_timer(0.4).timeout
+	request.queue_free()
 
 
 func _format_battle_result_reason(reason: String) -> String:
