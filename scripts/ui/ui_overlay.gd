@@ -5,6 +5,9 @@ const LOAN_RETURNS_DIALOG_SCRIPT := preload("res://scripts/ui/loan_returns_dialo
 const BORROWED_POKEMON_DIALOG_SCRIPT := preload("res://scripts/ui/borrowed_pokemon_dialog.gd")
 const LOAN_SUMMARY_TIME_SCRIPT := preload("res://scripts/ui/loan_summary_time.gd")
 const SYSTEM_NOTICE_BANNER_SCRIPT := preload("res://scripts/ui/system_notice_banner.gd")
+const AETHER_CLASH_ANNOUNCEMENT_FORMATTER := preload(
+	"res://scripts/ui/aether_clash_announcement_formatter.gd"
+)
 const MAX_PARTY_SIZE := 6
 const PARTY_SLOT_HEIGHT := 68.0
 const PARTY_SLOT_GAP := 5.0
@@ -44334,7 +44337,7 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 			add_system_message(str(message.get("message", "")).strip_edges())
 		return
 	if message_type == "system.aether_clash_announcement":
-		var clash_message := AetherClashAnnouncementFormatter.format_event(
+		var clash_message: String = AETHER_CLASH_ANNOUNCEMENT_FORMATTER.format_event(
 			message,
 			Callable(LocalizationManager, "text")
 		)
