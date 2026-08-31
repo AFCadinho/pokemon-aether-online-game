@@ -33,6 +33,7 @@ func _run() -> void:
 		"guildName": "Cerulean Waves",
 		"mapId": "private_internal_map_id",
 		"appearance": {},
+		"follower": {"visible": true, "species": "rattata", "shiny": false},
 		"badges": {
 			"badges": [
 				{"region": "kanto", "badgeId": "boulder", "earned": true},
@@ -57,8 +58,9 @@ func _run() -> void:
 	var badges_tab := tabs.get_node_or_null("Badges") as Control if tabs != null else null
 	var avatar_panel := popup.find_child("PublicTrainerAvatarPanel", true, false) as PanelContainer if popup != null else null
 	var avatar_preview := popup.find_child("PublicTrainerAvatarPreview", true, false) as Node2D if popup != null else null
-	var profile_panel := popup.find_child("PublicTrainerInfo_ProfileSection", true, false) as PanelContainer if popup != null else null
-	var adventure_panel := popup.find_child("PublicTrainerInfo_Adventure", true, false) as PanelContainer if popup != null else null
+	var profile_panel := popup.find_child("PublicTrainerProfilePanel", true, false) as PanelContainer if popup != null else null
+	var profile_grid := popup.find_child("PublicTrainerProfileGrid", true, false) as GridContainer if popup != null else null
+	var follower_preview := avatar_preview.find_child("RemotePokemonFollower", true, false) as Node2D if avatar_preview != null else null
 	_check(popup != null, "public Trainer Card opens as a dedicated view")
 	_check(
 		popup != null
@@ -89,11 +91,12 @@ func _run() -> void:
 	)
 	_check(
 		avatar_panel != null
-		and avatar_panel.size.y <= 210.0
+		and avatar_panel.size.y >= 280.0
 		and avatar_preview != null
 		and avatar_preview.position == Vector2(80, 112)
-		and avatar_preview.scale == Vector2(2.7, 2.7),
-		"public Trainer Card matches the own-card avatar framing"
+		and avatar_preview.scale == Vector2(2.7, 2.7)
+		and (follower_preview == null or not follower_preview.visible),
+		"public Trainer Card fills its avatar column without showing the overworld follower"
 	)
 	var joined_value := _find_label(overview_tab, "04-05-2026")
 	var guild_value := _find_label(overview_tab, "Cerulean Waves")
@@ -105,9 +108,14 @@ func _run() -> void:
 		"public Trainer Card renders Joined, Guild and Playtime values visibly"
 	)
 	_check(
-		profile_panel != null and profile_panel.size.y <= 120.0
-		and adventure_panel != null and adventure_panel.size.y <= 90.0,
-		"public Trainer Card keeps profile panels compact"
+		avatar_panel != null
+		and profile_panel != null
+		and profile_grid != null
+		and profile_grid.get_child_count() == 4
+		and absf(profile_panel.size.y - avatar_panel.size.y) <= 2.0
+		and _find_label(profile_panel, "TRAINER PROFILE") != null
+		and _find_label(profile_panel, "ADVENTURE") == null,
+		"public Trainer Card fills Overview with one balanced four-value profile grid"
 	)
 	_check(
 		_find_label(overview_tab, "Gym Badges") == null and _find_label(overview_tab, "2 / 8") == null,

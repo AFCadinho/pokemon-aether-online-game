@@ -14440,27 +14440,11 @@ func _create_public_trainer_overview_tab(card: Dictionary) -> Control:
 	tab.add_theme_constant_override("margin_bottom", 8)
 	var body := HBoxContainer.new()
 	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	body.alignment = BoxContainer.ALIGNMENT_BEGIN
+	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body.add_theme_constant_override("separation", 12)
 	tab.add_child(body)
 	body.add_child(_create_public_trainer_avatar_panel(card))
-	var details := VBoxContainer.new()
-	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	details.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	details.add_theme_constant_override("separation", 10)
-	body.add_child(details)
-	var guild_name := str(card.get("guildName", "")).strip_edges()
-	if guild_name == "":
-		guild_name = LocalizationManager.text("ui.trainer_card.value.no_guild")
-	var identity_rows: Array[Dictionary] = [
-		{"label_key": "ui.trainer_card.field.joined", "value": _format_join_date_text(str(card.get("createdAt", "")), "—")},
-		{"label_key": "ui.trainer_card.field.guild", "value": guild_name},
-	]
-	details.add_child(_create_public_trainer_info_panel("ui.trainer_card.profile_section", identity_rows))
-	var adventure_rows: Array[Dictionary] = [
-		{"label_key": "ui.trainer_card.field.playtime", "value": _format_playtime(int(card.get("playtimeSeconds", 0)))},
-	]
-	details.add_child(_create_public_trainer_info_panel("ui.trainer_card.adventure", adventure_rows))
+	body.add_child(_create_public_trainer_profile_panel(card))
 	return tab
 
 
@@ -14647,8 +14631,8 @@ func _create_public_trainer_gym_badge_icon(badge: Dictionary, earned: bool) -> C
 func _create_public_trainer_avatar_panel(card: Dictionary) -> Control:
 	var panel := PanelContainer.new()
 	panel.name = "PublicTrainerAvatarPanel"
-	panel.custom_minimum_size = Vector2(210, 198)
-	panel.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	panel.custom_minimum_size = Vector2(210, 0)
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 12)
@@ -14684,6 +14668,9 @@ func _create_public_trainer_avatar_panel(card: Dictionary) -> Control:
 		var state := card.duplicate(true)
 		state["position"] = {"x": 0.0, "y": 0.0}
 		state["facingDirection"] = "down"
+		state["follower"] = {}
+		state["movement"] = {}
+		state["mountId"] = ""
 		avatar.apply_state(state)
 		_finalize_public_trainer_avatar_preview(avatar)
 		call_deferred("_finalize_public_trainer_avatar_preview", avatar)
@@ -14701,8 +14688,113 @@ func _finalize_public_trainer_avatar_preview(avatar: RemotePlayerAvatar) -> void
 	var nameplate := avatar.get_node_or_null("Nameplate") as Control
 	if nameplate != null:
 		nameplate.visible = false
+	var follower := avatar.get_node_or_null("RemotePokemonFollower") as Node2D
+	if follower != null:
+		follower.visible = false
 	_disable_avatar_preview_processing(avatar)
 	_set_avatar_preview_idle_frame(avatar)
+
+
+func _create_public_trainer_profile_panel(card: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "PublicTrainerProfilePanel"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style(true))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	panel.add_child(margin)
+
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin.add_child(layout)
+
+	var heading := Label.new()
+	_set_localized_control_property(heading, "text", "ui.trainer_card.profile_section")
+	heading.add_theme_font_size_override("font_size", 11)
+	heading.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	layout.add_child(heading)
+
+	var guild_name := str(card.get("guildName", "")).strip_edges()
+	if guild_name == "":
+		guild_name = LocalizationManager.text("ui.trainer_card.value.no_guild")
+	var profile_values: Array[Dictionary] = [
+		{
+			"id": "trainer_id",
+			"label_key": "ui.trainer_card.field.trainer_id",
+			"value": _format_trainer_id_text(card.get("userId", "-")),
+		},
+		{
+			"id": "joined",
+			"label_key": "ui.trainer_card.field.joined",
+			"value": _format_join_date_text(str(card.get("createdAt", "")), "—"),
+		},
+		{
+			"id": "guild",
+			"label_key": "ui.trainer_card.field.guild",
+			"value": guild_name,
+		},
+		{
+			"id": "playtime",
+			"label_key": "ui.trainer_card.field.playtime",
+			"value": _format_playtime(int(card.get("playtimeSeconds", 0))),
+		},
+	]
+	var grid := GridContainer.new()
+	grid.name = "PublicTrainerProfileGrid"
+	grid.columns = 2
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 10)
+	grid.add_theme_constant_override("v_separation", 10)
+	layout.add_child(grid)
+	for profile_value: Dictionary in profile_values:
+		grid.add_child(_create_public_trainer_profile_tile(profile_value))
+	return panel
+
+
+func _create_public_trainer_profile_tile(profile_value: Dictionary) -> Control:
+	var tile := PanelContainer.new()
+	tile.name = "PublicTrainerProfileTile_%s" % str(profile_value.get("id", "value")).to_pascal_case()
+	tile.custom_minimum_size = Vector2(0, 96)
+	tile.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tile.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	tile.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	tile.add_child(margin)
+
+	var stack := VBoxContainer.new()
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 5)
+	margin.add_child(stack)
+
+	var label := Label.new()
+	_set_localized_control_property(label, "text", str(profile_value.get("label_key", "")))
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	stack.add_child(label)
+
+	var value_text := str(profile_value.get("value", "—")).strip_edges()
+	if value_text == "" or value_text == "<null>":
+		value_text = "—"
+	var value := Label.new()
+	value.text = value_text
+	value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	value.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	value.add_theme_font_size_override("font_size", 18)
+	value.add_theme_color_override("font_color", TRAINER_CARD_CYAN)
+	stack.add_child(value)
+	return tile
 
 
 func _create_public_trainer_info_panel(title_key: String, rows: Array[Dictionary]) -> Control:
