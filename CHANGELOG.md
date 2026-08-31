@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer Card Appearance now uses a larger full-body preview, calmer category navigation, clearer natural-color controls, and save feedback that only appears when needed.
+
 - Aether Gift Store outfit previews now keep the Trainer's complete body and shoes visible.
 
 - The Aether Gift Store now uses a cleaner three-column catalog with curated Featured items and one unified product preview, detail, price, and checkout panel.

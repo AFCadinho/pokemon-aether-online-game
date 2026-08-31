@@ -275,8 +275,9 @@ const TRAINER_CARD_SIZE := Vector2(720, 500)
 const TRAINER_CARD_AVATAR_VIEWPORT_SIZE := Vector2i(160, 160)
 const TRAINER_CARD_AVATAR_POSITION := Vector2(80, 112)
 const TRAINER_CARD_AVATAR_SCALE := Vector2(2.7, 2.7)
-const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(80, 100)
-const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(2.05, 2.05)
+const TRAINER_CARD_APPEARANCE_VIEWPORT_SIZE := Vector2i(194, 248)
+const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(97, 142)
+const TRAINER_CARD_APPEARANCE_AVATAR_SCALE := Vector2(3.0, 3.0)
 const BAG_SIZE := Vector2(1120, 660)
 const BAG_ITEM_GRID_ICON_SIZE := Vector2(48, 48)
 const BAG_ITEM_DETAIL_ICON_SIZE := Vector2(72, 72)
@@ -1107,6 +1108,7 @@ var appearance_inventory_loading := false
 var appearance_inventory_returning := false
 var trainer_card_appearance_save_button: Button
 var trainer_card_appearance_status_label: Label
+var trainer_card_appearance_save_bar: Control
 var trainer_card_badge_option: OptionButton
 var trainer_card_badge_status_label: Label
 var trainer_card_badge_options: Array[Dictionary] = []
@@ -14596,10 +14598,12 @@ func _hide_public_trainer_card() -> void:
 func _create_trainer_card_avatar_panel(
 	preview_position: Vector2 = TRAINER_CARD_AVATAR_POSITION,
 	preview_scale: Vector2 = TRAINER_CARD_AVATAR_SCALE,
-	show_name: bool = true
+	show_name: bool = true,
+	viewport_size: Vector2i = TRAINER_CARD_AVATAR_VIEWPORT_SIZE,
+	panel_minimum_size: Vector2 = Vector2(210, 198)
 ) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(210, 198)
+	panel.custom_minimum_size = panel_minimum_size
 	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
 
 	var margin_container := MarginContainer.new()
@@ -14623,18 +14627,18 @@ func _create_trainer_card_avatar_panel(
 		layout.add_child(preview_label)
 
 	var viewport_frame := MarginContainer.new()
-	viewport_frame.custom_minimum_size = Vector2(160, 160)
+	viewport_frame.custom_minimum_size = Vector2(viewport_size)
 	layout.add_child(viewport_frame)
 
 	var viewport_container := SubViewportContainer.new()
-	viewport_container.custom_minimum_size = Vector2(160, 160)
+	viewport_container.custom_minimum_size = Vector2(viewport_size)
 	viewport_container.stretch = false
 	viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	viewport_frame.add_child(viewport_container)
 
 	var trainer_card_avatar_viewport := SubViewport.new()
 	trainer_card_avatar_viewport.transparent_bg = true
-	trainer_card_avatar_viewport.size = TRAINER_CARD_AVATAR_VIEWPORT_SIZE
+	trainer_card_avatar_viewport.size = viewport_size
 	trainer_card_avatar_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	trainer_card_avatar_viewport.set_meta("preview_position", preview_position)
 	trainer_card_avatar_viewport.set_meta("preview_scale", preview_scale)
@@ -15441,19 +15445,19 @@ func _create_trainer_card_appearance_tab() -> Control:
 	var tab := MarginContainer.new()
 	tab.name = "Appearance"
 	tab.set_meta("i18n_tab_key", "ui.trainer_card.tab.appearance")
-	tab.add_theme_constant_override("margin_left", 10)
-	tab.add_theme_constant_override("margin_top", 10)
-	tab.add_theme_constant_override("margin_right", 10)
-	tab.add_theme_constant_override("margin_bottom", 10)
+	tab.add_theme_constant_override("margin_left", 8)
+	tab.add_theme_constant_override("margin_top", 8)
+	tab.add_theme_constant_override("margin_right", 8)
+	tab.add_theme_constant_override("margin_bottom", 8)
 
 	var layout := HBoxContainer.new()
 	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	layout.add_theme_constant_override("separation", 12)
+	layout.add_theme_constant_override("separation", 10)
 	tab.add_child(layout)
 
 	var preview_column := VBoxContainer.new()
-	preview_column.custom_minimum_size = Vector2(200, 0)
+	preview_column.custom_minimum_size = Vector2(214, 0)
 	preview_column.add_theme_constant_override("separation", 6)
 	layout.add_child(preview_column)
 
@@ -15467,25 +15471,29 @@ func _create_trainer_card_appearance_tab() -> Control:
 	var preview_panel := _create_trainer_card_avatar_panel(
 		TRAINER_CARD_APPEARANCE_AVATAR_POSITION,
 		TRAINER_CARD_APPEARANCE_AVATAR_SCALE,
-		false
+		false,
+		TRAINER_CARD_APPEARANCE_VIEWPORT_SIZE,
+		Vector2(214, 0)
 	)
+	preview_panel.name = "AppearancePreviewPanel"
 	preview_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	preview_column.add_child(preview_panel)
 
 	var sidebar_panel := PanelContainer.new()
-	sidebar_panel.custom_minimum_size = Vector2(108, 0)
+	sidebar_panel.custom_minimum_size = Vector2(96, 0)
 	sidebar_panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style())
 	layout.add_child(sidebar_panel)
 
 	var sidebar_margin := MarginContainer.new()
-	sidebar_margin.add_theme_constant_override("margin_left", 8)
-	sidebar_margin.add_theme_constant_override("margin_top", 10)
-	sidebar_margin.add_theme_constant_override("margin_right", 8)
-	sidebar_margin.add_theme_constant_override("margin_bottom", 10)
+	sidebar_margin.add_theme_constant_override("margin_left", 6)
+	sidebar_margin.add_theme_constant_override("margin_top", 8)
+	sidebar_margin.add_theme_constant_override("margin_right", 6)
+	sidebar_margin.add_theme_constant_override("margin_bottom", 8)
 	sidebar_panel.add_child(sidebar_margin)
 
 	var sidebar := VBoxContainer.new()
-	sidebar.add_theme_constant_override("separation", 5)
+	sidebar.name = "AppearanceCategoryRail"
+	sidebar.add_theme_constant_override("separation", 4)
 	sidebar_margin.add_child(sidebar)
 
 	var sidebar_label := Label.new()
@@ -15503,16 +15511,16 @@ func _create_trainer_card_appearance_tab() -> Control:
 	layout.add_child(editor_panel)
 
 	var editor_margin := MarginContainer.new()
-	editor_margin.add_theme_constant_override("margin_left", 12)
-	editor_margin.add_theme_constant_override("margin_top", 10)
-	editor_margin.add_theme_constant_override("margin_right", 12)
-	editor_margin.add_theme_constant_override("margin_bottom", 10)
+	editor_margin.add_theme_constant_override("margin_left", 10)
+	editor_margin.add_theme_constant_override("margin_top", 8)
+	editor_margin.add_theme_constant_override("margin_right", 10)
+	editor_margin.add_theme_constant_override("margin_bottom", 8)
 	editor_panel.add_child(editor_margin)
 
 	var editor_stack := VBoxContainer.new()
 	editor_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	editor_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	editor_stack.add_theme_constant_override("separation", 10)
+	editor_stack.add_theme_constant_override("separation", 8)
 	editor_margin.add_child(editor_stack)
 
 	var content_scroll := ScrollContainer.new()
@@ -15523,6 +15531,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 	editor_stack.add_child(content_scroll)
 
 	var content_stack := VBoxContainer.new()
+	content_stack.name = "AppearanceContentStack"
 	content_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content_stack.add_theme_constant_override("separation", 8)
 	content_scroll.add_child(content_stack)
@@ -15537,7 +15546,7 @@ func _create_trainer_card_appearance_tab() -> Control:
 		var side_button := Button.new()
 		_set_localized_control_property(side_button, "text", category_key)
 		side_button.focus_mode = Control.FOCUS_NONE
-		side_button.custom_minimum_size = Vector2(0, 34)
+		side_button.custom_minimum_size = Vector2(0, 30)
 		side_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		side_button.toggle_mode = true
 		side_button.button_pressed = category_id == "body"
@@ -15552,14 +15561,16 @@ func _create_trainer_card_appearance_tab() -> Control:
 
 func _create_trainer_card_appearance_save_row() -> Control:
 	var bar := PanelContainer.new()
+	bar.name = "AppearanceSaveBar"
 	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bar.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+	trainer_card_appearance_save_bar = bar
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 10)
-	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_top", 4)
 	margin.add_theme_constant_override("margin_right", 6)
-	margin.add_theme_constant_override("margin_bottom", 6)
+	margin.add_theme_constant_override("margin_bottom", 4)
 	bar.add_child(margin)
 
 	var row := HBoxContainer.new()
@@ -15570,13 +15581,13 @@ func _create_trainer_card_appearance_save_row() -> Control:
 	trainer_card_appearance_status_label = Label.new()
 	trainer_card_appearance_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	trainer_card_appearance_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	trainer_card_appearance_status_label.add_theme_font_size_override("font_size", 13)
+	trainer_card_appearance_status_label.add_theme_font_size_override("font_size", 11)
 	trainer_card_appearance_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	row.add_child(trainer_card_appearance_status_label)
 
 	trainer_card_appearance_save_button = Button.new()
 	_set_localized_control_property(trainer_card_appearance_save_button, "text", "common.save")
-	trainer_card_appearance_save_button.custom_minimum_size = Vector2(96, 32)
+	trainer_card_appearance_save_button.custom_minimum_size = Vector2(84, 30)
 	trainer_card_appearance_save_button.focus_mode = Control.FOCUS_NONE
 	trainer_card_appearance_save_button.pressed.connect(_on_trainer_card_appearance_save_pressed)
 	_apply_button_style(trainer_card_appearance_save_button, "primary")
@@ -15960,9 +15971,11 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 		"ui.appearance.body_description"
 	)
 
-	var search_input := _create_trainer_card_appearance_search_input("ui.appearance.search_bodies")
-	search_input.text_changed.connect(_filter_trainer_card_body_buttons)
-	content_stack.add_child(search_input)
+	var body_ids := _get_body_appearance_ids()
+	if body_ids.size() > 6:
+		var search_input := _create_trainer_card_appearance_search_input("ui.appearance.search_bodies")
+		search_input.text_changed.connect(_filter_trainer_card_body_buttons)
+		content_stack.add_child(search_input)
 
 	var grid := GridContainer.new()
 	grid.columns = 2
@@ -15972,11 +15985,13 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 	content_stack.add_child(grid)
 
 	trainer_card_body_buttons.clear()
-	for body_id: String in _get_body_appearance_ids():
+	for body_id: String in body_ids:
 		var body_button := Button.new()
 		body_button.text = _format_appearance_option_name("body", body_id)
 		body_button.focus_mode = Control.FOCUS_NONE
+		body_button.custom_minimum_size = Vector2(0, 36)
 		body_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		body_button.toggle_mode = true
 		body_button.pressed.connect(_on_trainer_card_body_selected.bind(body_id))
 		grid.add_child(body_button)
 		trainer_card_body_buttons[body_id] = body_button
@@ -15998,14 +16013,18 @@ func _create_trainer_card_natural_colors_summary(content_stack: VBoxContainer) -
 	margin.add_theme_constant_override("margin_bottom", 8)
 	panel.add_child(margin)
 
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 7)
-	margin.add_child(row)
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 8)
+	margin.add_child(layout)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	layout.add_child(header)
 
 	var copy := VBoxContainer.new()
 	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	copy.add_theme_constant_override("separation", 0)
-	row.add_child(copy)
+	header.add_child(copy)
 
 	var title := Label.new()
 	_set_localized_control_property(title, "text", "ui.appearance.natural.title")
@@ -16013,11 +16032,19 @@ func _create_trainer_card_natural_colors_summary(content_stack: VBoxContainer) -
 	title.add_theme_color_override("font_color", UI_TEXT)
 	copy.add_child(title)
 
-	var hint := Label.new()
-	_set_localized_control_property(hint, "text", "ui.appearance.natural.hint")
-	hint.add_theme_font_size_override("font_size", 10)
-	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	copy.add_child(hint)
+	var edit_button := Button.new()
+	_set_localized_control_property(edit_button, "text", "common.edit")
+	_set_localized_control_property(edit_button, "tooltip_text", "ui.appearance.natural.edit_tooltip")
+	edit_button.custom_minimum_size = Vector2(62, 30)
+	edit_button.focus_mode = Control.FOCUS_NONE
+	edit_button.pressed.connect(_open_trainer_card_natural_colors_popup)
+	_apply_button_style(edit_button, "primary")
+	header.add_child(edit_button)
+
+	var swatch_row := HBoxContainer.new()
+	swatch_row.name = "NaturalColorSwatches"
+	swatch_row.add_theme_constant_override("separation", 8)
+	layout.add_child(swatch_row)
 
 	for color_entry: Dictionary in [
 		{"key": "skin_tone", "label_key": "ui.appearance.color.skin"},
@@ -16025,6 +16052,23 @@ func _create_trainer_card_natural_colors_summary(content_stack: VBoxContainer) -
 		{"key": "hair_color", "label_key": "ui.appearance.color.starter_hair"},
 	]:
 		var color_key := str(color_entry.get("key", ""))
+		var swatch_group := VBoxContainer.new()
+		swatch_group.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		swatch_group.add_theme_constant_override("separation", 3)
+		swatch_row.add_child(swatch_group)
+
+		var swatch_label := Label.new()
+		_set_localized_control_property(
+			swatch_label,
+			"text",
+			str(color_entry.get("label_key", "ui.appearance.color.generic"))
+		)
+		swatch_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		swatch_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		swatch_label.add_theme_font_size_override("font_size", 9)
+		swatch_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		swatch_group.add_child(swatch_label)
+
 		var swatch := Button.new()
 		swatch.text = ""
 		_set_localized_control_property(
@@ -16032,20 +16076,12 @@ func _create_trainer_card_natural_colors_summary(content_stack: VBoxContainer) -
 			"tooltip_text",
 			str(color_entry.get("label_key", "ui.appearance.color.generic"))
 		)
-		swatch.custom_minimum_size = Vector2(27, 27)
+		swatch.custom_minimum_size = Vector2(0, 26)
+		swatch.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		swatch.focus_mode = Control.FOCUS_NONE
 		swatch.pressed.connect(_open_trainer_card_natural_colors_popup)
-		row.add_child(swatch)
+		swatch_group.add_child(swatch)
 		trainer_card_natural_color_summary_buttons[color_key] = swatch
-
-	var edit_button := Button.new()
-	_set_localized_control_property(edit_button, "text", "common.edit")
-	_set_localized_control_property(edit_button, "tooltip_text", "ui.appearance.natural.edit_tooltip")
-	edit_button.custom_minimum_size = Vector2(58, 30)
-	edit_button.focus_mode = Control.FOCUS_NONE
-	edit_button.pressed.connect(_open_trainer_card_natural_colors_popup)
-	_apply_button_style(edit_button, "primary")
-	row.add_child(edit_button)
 	_refresh_trainer_card_natural_color_summary()
 
 func _open_trainer_card_natural_colors_popup() -> void:
@@ -16149,9 +16185,14 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 	content_stack.add_child(trainer_card_appearance_capacity_label)
 	_refresh_trainer_card_appearance_capacity_label()
 
-	var search_input := _create_trainer_card_appearance_search_input("ui.appearance.search_cosmetics")
-	search_input.text_changed.connect(_filter_trainer_card_part_buttons)
-	content_stack.add_child(search_input)
+	var available_part_ids := CharacterAppearanceService.get_available_part_ids(
+		normalized_category,
+		PlayerSave.gender
+	)
+	if available_part_ids.size() > 6:
+		var search_input := _create_trainer_card_appearance_search_input("ui.appearance.search_cosmetics")
+		search_input.text_changed.connect(_filter_trainer_card_part_buttons)
+		content_stack.add_child(search_input)
 
 	var grid := GridContainer.new()
 	grid.columns = 2
@@ -16166,13 +16207,15 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 	var none_button := Button.new()
 	_set_localized_control_property(none_button, "text", "common.none")
 	none_button.focus_mode = Control.FOCUS_NONE
+	none_button.custom_minimum_size = Vector2(0, 34)
 	none_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	none_button.toggle_mode = true
 	none_button.pressed.connect(_on_trainer_card_part_selected.bind(normalized_category, ""))
 	none_row.add_child(none_button)
 	trainer_card_part_buttons["%s:" % normalized_category] = none_button
 	trainer_card_part_rows["%s:" % normalized_category] = none_row
 
-	for part_id: String in CharacterAppearanceService.get_available_part_ids(normalized_category, PlayerSave.gender):
+	for part_id: String in available_part_ids:
 		var option_key := "%s:%s" % [normalized_category, part_id]
 		var option_row := HBoxContainer.new()
 		option_row.add_theme_constant_override("separation", 6)
@@ -16181,7 +16224,9 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 		var part_button := Button.new()
 		part_button.text = _format_appearance_option_name(normalized_category, part_id)
 		part_button.focus_mode = Control.FOCUS_NONE
+		part_button.custom_minimum_size = Vector2(0, 34)
 		part_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		part_button.toggle_mode = true
 		part_button.pressed.connect(_on_trainer_card_part_selected.bind(normalized_category, part_id))
 		option_row.add_child(part_button)
 		trainer_card_part_buttons[option_key] = part_button
@@ -16217,12 +16262,13 @@ func _create_trainer_card_appearance_section_header(
 
 	var title := Label.new()
 	_set_localized_control_property(title, "text", title_key)
-	title.add_theme_font_size_override("font_size", 20)
+	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	header.add_child(title)
 
 	var description := Label.new()
 	_set_localized_control_property(description, "text", description_key)
+	description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	description.add_theme_font_size_override("font_size", 11)
 	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	header.add_child(description)
@@ -16314,6 +16360,7 @@ func _create_trainer_card_appearance_search_input(placeholder_key: String) -> Li
 	var search_input := LineEdit.new()
 	_set_localized_control_property(search_input, "placeholder_text", placeholder_key)
 	search_input.clear_button_enabled = true
+	search_input.custom_minimum_size = Vector2(0, 32)
 	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_apply_line_edit_style(search_input)
 	return search_input
@@ -16525,6 +16572,7 @@ func _refresh_trainer_card_body_buttons() -> void:
 
 		var display_name: String = _format_appearance_option_name("body", body_id)
 		var is_selected: bool = body_id == String(PlayerSave.appearance_body_id)
+		button.button_pressed = is_selected
 		if is_selected:
 			button.text = "%s  *" % display_name
 			_apply_button_style(button, "primary")
@@ -16550,6 +16598,7 @@ func _refresh_trainer_card_part_buttons() -> void:
 		var part_id: String = key.substr(separator_index + 1)
 		var selected_part_id: String = _get_preview_part_id(category_id)
 		var display_name: String = LocalizationManager.text("common.none") if part_id == "" else _format_appearance_option_name(category_id, part_id)
+		button.button_pressed = part_id == selected_part_id
 		var is_owned := _is_appearance_part_owned(category_id, part_id)
 		var row := trainer_card_part_rows.get(key) as Control
 		if row != null:
@@ -16870,6 +16919,12 @@ func _update_trainer_card_appearance_save_state(
 ) -> void:
 	trainer_card_appearance_message_key = message_key
 	trainer_card_appearance_message_values = message_values.duplicate()
+	if trainer_card_appearance_save_bar != null:
+		trainer_card_appearance_save_bar.visible = (
+			trainer_card_is_saving_appearance
+			or trainer_card_has_unsaved_appearance_changes
+			or (message_key != "" and message_key != "ui.appearance.status.saved")
+		)
 	if trainer_card_appearance_save_button != null:
 		trainer_card_appearance_save_button.disabled = trainer_card_is_saving_appearance or not trainer_card_has_unsaved_appearance_changes
 		if trainer_card_is_saving_appearance:
@@ -32686,6 +32741,7 @@ func _rebuild_trainer_card_popup(keep_visible: bool) -> void:
 	trainer_card_gym_badge_slots.clear()
 	trainer_card_appearance_save_button = null
 	trainer_card_appearance_status_label = null
+	trainer_card_appearance_save_bar = null
 	trainer_card_money_label = null
 	trainer_card_aether_gems_label = null
 	trainer_card_aetherite_label = null
