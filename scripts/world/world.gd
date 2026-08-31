@@ -3605,6 +3605,44 @@ func _notify_story_reward_items(value: Variant) -> void:
 			str(grant.get("itemId", "")),
 			int(grant.get("quantity", 0))
 		)
+	var aetherite_awarded := _story_reward_aetherite_amount(value)
+	if aetherite_awarded > 0:
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text(
+				"ui.world.reward.quest_aetherite",
+				{"amount": aetherite_awarded}
+			)
+		)
+		get_tree().call_group(
+			"ui_overlay",
+			"add_currency_reward_notification",
+			"aetherite",
+			aetherite_awarded
+		)
+
+
+func _story_reward_aetherite_amount(value: Variant) -> int:
+	var amount := 0
+	if value is not Array:
+		return amount
+	for effect_value: Variant in value as Array:
+		if effect_value is not Dictionary:
+			continue
+		var effect := effect_value as Dictionary
+		if bool(effect.get("alreadyGranted", false)):
+			continue
+		var grants_value: Variant = effect.get("grants", [])
+		if grants_value is not Array:
+			continue
+		for grant_value: Variant in grants_value as Array:
+			if grant_value is not Dictionary:
+				continue
+			var grant := grant_value as Dictionary
+			if str(grant.get("currency", "")).strip_edges().to_lower() == "aetherite":
+				amount += maxi(int(grant.get("amount", 0)), 0)
+	return amount
 
 
 func _story_reward_item_grants(value: Variant) -> Array[Dictionary]:
