@@ -48,6 +48,8 @@ func _init() -> void:
 	_check(source.contains("EvolutionSpeciesLink_") and source.contains("_on_pokedex_species_selected.bind(species_id)"), "Evolution species names link to their Pokédex records")
 	_check(source.contains("EvolutionSpeciesIcon_") and source.contains('species_icon.texture = _load_pokedex_species_texture'), "Evolution relationships show Pokémon HOME artwork")
 	_check(source.contains("EvolutionItemLink_") and source.contains("_open_item_dex_item_from_pokedex"), "Evolution items link to their Item Dex records")
+	_check(source.contains("func _build_pokedex_drops_tab") and source.contains('get("wildDrops", [])'), "Pokédex drops tab renders server-owned wild-drop projections")
+	_check(source.contains("PokedexDropItem_") and source.contains("_format_item_dex_percent(drop_chance * 100.0)"), "Pokédex Mega Stone rows link to Item Dex and show effective percentages")
 	_check(source.contains('button.set_meta("item_data", localized_item)'), "Item Dex search rows retain exact item data for cross-Dex navigation")
 	_check(source.contains("_warm_up_pokedex.call_deferred()"), "Owning the Pokédex warms its default catalog in the background")
 	_check(source.contains("await PokedexService.warm_up_default_catalog()") and source.contains("index % 8 == 0"), "Pokédex icons warm incrementally without blocking one frame")

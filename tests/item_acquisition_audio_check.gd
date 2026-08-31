@@ -83,6 +83,12 @@ func _init() -> void:
 		and overlay_source.contains('SfxManager.play("item_found")'),
 		"discovering items in a bundle plays the item-found jingle"
 	)
+	_check(
+		world_source.contains("func _notify_wild_item_drop_awards")
+		and world_source.contains('LocalizationManager.text("ui.world.reward.wild_item_drop"')
+		and world_source.contains('"add_item_reward_notification", item_id, quantity'),
+		"wild Mega Stone drops show a localized item notification"
+	)
 
 	quit(1 if failed else 0)
 

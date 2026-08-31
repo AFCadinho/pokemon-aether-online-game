@@ -67,6 +67,7 @@ func _check_pokedex_runtime_translation() -> void:
 		"Pokédex empty detail renders in Dutch"
 	)
 	_check_evolution_navigation(overlay, detail_stack)
+	_check_mega_stone_drops(overlay, detail_stack)
 	_check_location_availability(overlay)
 	_check_wild_rotation_availability(overlay)
 	_check_eelevate_hover(overlay)
@@ -90,6 +91,40 @@ func _check_pokedex_runtime_translation() -> void:
 		if loader != null:
 			loader.free()
 	overlay.free()
+
+
+func _check_mega_stone_drops(overlay: Node, detail_stack: VBoxContainer) -> void:
+	localization_manager.call("set_locale", "nl")
+	overlay.set("pokedex_active_tab", "drops")
+	overlay.set("pokedex_selected_species", {
+		"id": "charizard",
+		"wildDrops": [
+			{
+				"itemId": "charizardite-x",
+				"chance": 0.02,
+				"familyDropChance": 0.04,
+				"selectionChance": 0.5,
+				"tradeable": true,
+				"encounterOutcomes": ["defeated", "caught"],
+			},
+		],
+	})
+	overlay.call("_refresh_pokedex_detail")
+	var item_link := overlay.find_child("PokedexDropItem_charizardite-x", true, false) as LinkButton
+	_check(
+		detail_stack != null
+		and _tree_contains_text(detail_stack, "MEGA STONE-DROPS")
+		and _tree_contains_text(detail_stack, "2% per voltooide encounter")
+		and _tree_contains_text(detail_stack, "Verhandelbaar · Versla of vang deze Pokémon"),
+		"Pokédex renders the shared effective Mega Stone chance for defeat or capture"
+	)
+	_check(
+		item_link != null and not item_link.pressed.get_connections().is_empty(),
+		"Pokédex Mega Stone drops link to the Item Dex"
+	)
+	overlay.set("pokedex_selected_species", {})
+	overlay.set("pokedex_active_tab", "general")
+	overlay.call("_refresh_pokedex_detail")
 
 
 func _check_location_availability(overlay: Node) -> void:

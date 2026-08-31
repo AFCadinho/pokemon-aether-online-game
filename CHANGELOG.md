@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Pokédex now shows Mega Stone drop chances for each eligible evolution line, the Item Dex lists defeat-or-catch sources, and successful wild drops receive an item notification.
+
 - System and error dialogue now uses a dedicated neutral Aether Core portrait instead of Professor Oak.
 
 - Aether Clash stake fields now accept a full amount immediately, while their arrow buttons continue to adjust the stake in ₽1,000 steps.
