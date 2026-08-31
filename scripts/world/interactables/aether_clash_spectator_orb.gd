@@ -8,6 +8,7 @@ class_name AetherClashSpectatorOrb
 
 @onready var orb_sprite: Sprite2D = $OrbSprite
 @onready var orb_light: PointLight2D = $OrbLight
+@onready var nameplate_label: Label = $Nameplate/Label
 
 var animation_time := 0.0
 var sprite_origin := Vector2.ZERO
@@ -23,6 +24,10 @@ func _ready() -> void:
 	display_name = _text(
 		"world.aether_clash.spectator_orb.name",
 		"Aether Spectator Orb"
+	)
+	nameplate_label.text = _text(
+		"world.aether_clash.spectator_orb.nameplate",
+		"AETHER VIEW"
 	)
 	super._ready()
 	sprite_origin = orb_sprite.position
