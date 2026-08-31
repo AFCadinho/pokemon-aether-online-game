@@ -16184,17 +16184,24 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 		"ui.appearance.part_description"
 	)
 
-	var wardrobe_toolbar := HBoxContainer.new()
+	var wardrobe_toolbar := VBoxContainer.new()
 	wardrobe_toolbar.name = "AppearanceWardrobeToolbar"
 	wardrobe_toolbar.add_theme_constant_override("separation", 6)
 	content_stack.add_child(wardrobe_toolbar)
 
 	trainer_card_appearance_capacity_label = Label.new()
+	trainer_card_appearance_capacity_label.name = "AppearanceWardrobeCapacity"
 	trainer_card_appearance_capacity_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	trainer_card_appearance_capacity_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	trainer_card_appearance_capacity_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	trainer_card_appearance_capacity_label.add_theme_font_size_override("font_size", 12)
 	wardrobe_toolbar.add_child(trainer_card_appearance_capacity_label)
+
+	var wardrobe_actions := HBoxContainer.new()
+	wardrobe_actions.name = "AppearanceWardrobeActions"
+	wardrobe_actions.alignment = BoxContainer.ALIGNMENT_END
+	wardrobe_actions.add_theme_constant_override("separation", 6)
+	wardrobe_toolbar.add_child(wardrobe_actions)
 
 	trainer_card_appearance_unequip_button = Button.new()
 	trainer_card_appearance_unequip_button.name = "AppearanceUnequipButton"
@@ -16214,7 +16221,7 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 		_on_trainer_card_part_selected.bind(normalized_category, "")
 	)
 	_apply_button_style(trainer_card_appearance_unequip_button)
-	wardrobe_toolbar.add_child(trainer_card_appearance_unequip_button)
+	wardrobe_actions.add_child(trainer_card_appearance_unequip_button)
 
 	trainer_card_appearance_return_button = Button.new()
 	trainer_card_appearance_return_button.name = "AppearanceReturnToBagButton"
@@ -16229,7 +16236,7 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 		_on_trainer_card_return_selected_pressed.bind(normalized_category)
 	)
 	_apply_button_style(trainer_card_appearance_return_button, "warning")
-	wardrobe_toolbar.add_child(trainer_card_appearance_return_button)
+	wardrobe_actions.add_child(trainer_card_appearance_return_button)
 	_refresh_trainer_card_appearance_capacity_label()
 
 	var available_part_ids := CharacterAppearanceService.get_available_part_ids(
@@ -16890,6 +16897,7 @@ func _refresh_trainer_card_appearance_capacity_label() -> void:
 			"limit": appearance_inventory_slot_limit,
 		}
 	)
+	trainer_card_appearance_capacity_label.tooltip_text = trainer_card_appearance_capacity_label.text
 	trainer_card_appearance_capacity_label.add_theme_color_override(
 		"font_color",
 		UI_DANGER if count >= appearance_inventory_slot_limit else TRAINER_CARD_ACCENT
