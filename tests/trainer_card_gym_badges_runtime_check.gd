@@ -27,6 +27,19 @@ func _run() -> void:
 		return
 	var overlay := overlay_script.new() as CanvasLayer
 	var overview := overlay.call("_create_trainer_card_stats_tab") as Control
+	overlay.call("_apply_own_trainer_card_pvp", {
+		"gamesPlayed": 12,
+		"wins": 8,
+		"losses": 4,
+		"winRate": 66.7,
+	})
+	_check(
+		_trainer_card_value(overview, "pvp_games") == "12"
+		and _trainer_card_value(overview, "pvp_wins") == "8"
+		and _trainer_card_value(overview, "pvp_losses") == "4"
+		and _trainer_card_value(overview, "pvp_win_rate") == "66.7%",
+		"local Trainer Card overview preserves real PvP games, wins and losses"
+	)
 	var boulder := {
 		"id": "boulder",
 		"name": "Boulder Badge",
@@ -86,6 +99,17 @@ func _find_tooltip(node: Node, text: String) -> Control:
 		if result != null:
 			return result
 	return null
+
+
+func _trainer_card_value(overview: Control, field_id: String) -> String:
+	if overview == null:
+		return ""
+	var label := overview.find_child(
+		"TrainerCardValue_%s" % field_id,
+		true,
+		false
+	) as Label
+	return label.text if label != null else ""
 
 
 func _check(condition: bool, label: String) -> void:
