@@ -5358,18 +5358,6 @@ func _build_guild_member_card(
 	avatar_preview.set_trainer_state(member, fallback_source.left(1))
 	avatar_overlay.add_child(avatar_preview)
 
-	var presence_dot := _label("●", 11, UI_SUCCESS if online else UI_MUTED)
-	presence_dot.name = "GuildMemberPresenceDot_%d" % user_id
-	presence_dot.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	presence_dot.position = Vector2(29, 25)
-	presence_dot.size = Vector2(12, 14)
-	presence_dot.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	presence_dot.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	presence_dot.add_theme_color_override("font_shadow_color", Color("#04101b"))
-	presence_dot.add_theme_constant_override("shadow_offset_x", 1)
-	presence_dot.add_theme_constant_override("shadow_offset_y", 1)
-	avatar_overlay.add_child(presence_dot)
-
 	var identity := VBoxContainer.new()
 	identity.name = "GuildMemberIdentityColumn_%d" % user_id
 	identity.custom_minimum_size = Vector2(150, 0)

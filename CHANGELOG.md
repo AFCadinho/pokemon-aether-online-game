@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Guild member cards no longer show a redundant status dot alongside their status text.
+
 - The Mega Stone Seller is now available in the Aether Clash Lobby, and the Bag distinguishes grouped account-bound and tradeable copies without showing a misleading combined stack count.
 
 - Ready Guild Duel players now see an available opponent's remaining search timer instead of an incorrect waiting message.
