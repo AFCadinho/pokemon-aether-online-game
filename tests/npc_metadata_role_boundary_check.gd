@@ -3,6 +3,7 @@ extends SceneTree
 const BASE_NPC_SCRIPT := "res://scripts/world/npcs/base_npc.gd"
 const TRAINER_NPC_SCRIPT := "res://scripts/world/npcs/trainer_npc.gd"
 const TRANSIT_KEEPER_SCRIPT := "res://scripts/world/npcs/transit_keeper_npc.gd"
+const AETHER_CLASH_GUIDE_SCRIPT := "res://scripts/world/npcs/aether_clash_guide_npc.gd"
 
 var failed := false
 
@@ -11,6 +12,7 @@ func _init() -> void:
 	var base_npc := FileAccess.get_file_as_string(BASE_NPC_SCRIPT)
 	var trainer_npc := FileAccess.get_file_as_string(TRAINER_NPC_SCRIPT)
 	var transit_keeper := FileAccess.get_file_as_string(TRANSIT_KEEPER_SCRIPT)
+	var aether_clash_guide := FileAccess.get_file_as_string(AETHER_CLASH_GUIDE_SCRIPT)
 
 	_check(
 		base_npc.contains("func _loads_pickpocket_profile_from_npc_metadata() -> bool:")
@@ -24,6 +26,10 @@ func _init() -> void:
 	_check(
 		_has_pickpocket_metadata_opt_out(transit_keeper),
 		"Transit Keepers do not request unused generic NPC metadata"
+	)
+	_check(
+		_has_pickpocket_metadata_opt_out(aether_clash_guide),
+		"Aether Clash guide does not request nonexistent generic NPC metadata"
 	)
 
 	quit(1 if failed else 0)

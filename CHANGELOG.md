@@ -4,6 +4,8 @@
 
 - Current Kanto quests now award a balanced 1,325 Aetherite across main and side progression, with localized wallet notifications and safe one-time rewards for existing completions.
 
+- The Clash Coordinator now uses its local guide content without making a failing server NPC metadata request when approached.
+
 - Ranked Rewards now separates its overview, per-battle rewards, placements, objectives, and season rewards into scalable subtabs.
 
 - When several Guild Duels are available, the lobby portal now shows each Clash's phase, player counts, live timer, tier, and the Trainer's entry role before joining.

@@ -130,6 +130,11 @@ func _prefetches_dialogue_metadata_on_approach() -> bool:
 	return false
 
 
+func _loads_pickpocket_profile_from_npc_metadata() -> bool:
+	# The guide is entirely client-authored and is not a thieving target.
+	return false
+
+
 func interact_with_player(_player: Node2D) -> void:
 	await show_dialogue(
 		[LocalizationManager.text("npc.aether_clash_guide.intro")],
