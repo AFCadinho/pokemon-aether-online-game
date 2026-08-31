@@ -3,6 +3,7 @@ extends "res://scripts/world/map_metadata.gd"
 
 const PORTAL_REFRESH_SECONDS := 5.0
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
+const AETHER_CLASH_PORTAL_SESSION_PICKER := preload("res://scripts/ui/aether_clash_portal_session_picker.gd")
 
 var portal_refresh_in_flight := false
 
@@ -118,34 +119,23 @@ func _select_session(sessions: Array[Dictionary]) -> Dictionary:
 		_text("world.aether_clash.portal.enter"),
 		_text("common.cancel")
 	)
-	var choices := OptionButton.new()
-	choices.name = "AetherClashPortalSessionSelect"
-	choices.custom_minimum_size = Vector2(0, 42)
-	for item: Dictionary in sessions:
-		var challenge := item.get("session", {}) as Dictionary
-		var challenger := challenge.get("challengerGuild", {}) as Dictionary
-		var challenged := challenge.get("challengedGuild", {}) as Dictionary
-		var role := str(item.get("role", "spectator"))
-		choices.add_item("%s vs %s · %s" % [
-			str(challenger.get("name", "Guild")),
-			str(challenged.get("name", "Guild")),
-			_text("world.aether_clash.portal.role.%s" % role),
-		])
-	dialog.style_option_button(choices)
-	dialog.add_custom_control(choices)
+	var picker := AETHER_CLASH_PORTAL_SESSION_PICKER.new()
+	dialog.add_custom_control(picker)
+	picker.configure(sessions)
+	dialog.style_option_button(picker.option_button())
 	var resolution := {"finished": false, "confirmed": false}
 	dialog.confirmed.connect(func() -> void:
 		resolution["confirmed"] = true
 		resolution["finished"] = true
 	)
 	dialog.canceled.connect(func() -> void: resolution["finished"] = true)
-	dialog.popup_centered(Vector2i(580, 320))
+	dialog.popup_centered(Vector2i(680, 420))
 	await dialog.visibility_changed
 	while not bool(resolution["finished"]):
 		await get_tree().process_frame
 	var selected: Dictionary = {}
-	if bool(resolution["confirmed"]) and choices.selected >= 0:
-		selected = sessions[choices.selected].duplicate(true)
+	if bool(resolution["confirmed"]):
+		selected = picker.selected_session()
 	dialog.queue_free()
 	return selected
 

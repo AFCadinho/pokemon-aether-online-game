@@ -4,6 +4,16 @@
 
 - Current Kanto quests now award a balanced 1,325 Aetherite across main and side progression, with localized wallet notifications and safe one-time rewards for existing completions.
 
+- Ranked Rewards now separates its overview, per-battle rewards, placements, objectives, and season rewards into scalable subtabs.
+
+- When several Guild Duels are available, the lobby portal now shows each Clash's phase, player counts, live timer, tier, and the Trainer's entry role before joining.
+
+- The Clash Coordinator's question menus now use a compact two-column layout so they cover less of the arena view.
+
+- Ranked now has a Rewards tab that previews planned Battle Point payouts and future placement, objective, and season rewards while clearly showing that grants are not active yet.
+
+- The Aether Clash Lobby now has a Clash Coordinator with categorized help for Guild Duels, battles, rules, entry, spectating, and the future Battle Royale format.
+
 - Aether Clash arenas now replace the quest tracker and hotkey bar with a private Guild status panel, spectator guidance, live battle counts, and anonymous elimination notifications.
 
 - Wild Pokémon now show their rarity-based Aetherite rewards in the Pokédex, and successful drops update the wallet with a localized currency notification.

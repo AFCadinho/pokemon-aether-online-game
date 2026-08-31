@@ -48,6 +48,8 @@ func _check_pvp_runtime_translation() -> void:
 	var title := overlay.get("pvp_popup_title_label") as Label
 	var subtitle := overlay.get("pvp_popup_subtitle_label") as Label
 	var ranked_tabs := overlay.get("pvp_ranked_tabs") as TabContainer
+	var rewards_tabs := overlay.get("pvp_ranked_rewards_tabs") as TabContainer
+	var objectives_filter := overlay.get("pvp_ranked_objectives_filter") as OptionButton
 	var room_workspace := overlay.find_child("RoomWorkspace", true, false) as HBoxContainer
 	var room_type_card := overlay.find_child("BattleTypeCard", true, false) as PanelContainer
 	var room_flow_card := overlay.find_child("RoomFlowCard", true, false) as PanelContainer
@@ -71,11 +73,21 @@ func _check_pvp_runtime_translation() -> void:
 	var room_status := overlay.get("pvp_room_status_label") as Label
 	var format_select := overlay.get("pvp_queue_select") as OptionButton
 	var leaderboard_scope := overlay.get("pvp_leaderboard_scope_select") as OptionButton
+	var rewards_status := overlay.find_child("RankedRewardsStatus", true, false) as Label
 	var compact_status := overlay.get("pvp_queue_compact_status_label") as Label
 
 	_check(title != null and title.text == "Ranked", "PvP ranked title renders in Dutch")
 	_check(subtitle != null and subtitle.text.begins_with("Competitieve"), "PvP subtitle renders in Dutch")
 	_check(ranked_tabs != null and ranked_tabs.get_tab_title(0) == "Spelen", "PvP tab title renders in Dutch")
+	_check(ranked_tabs != null and ranked_tabs.get_tab_title(4) == "Beloningen", "Ranked Rewards tab renders in Dutch")
+	_check(rewards_tabs != null and rewards_tabs.get_tab_count() == 5, "Ranked Rewards exposes five scalable destinations")
+	_check(rewards_tabs != null and rewards_tabs.get_tab_title(0) == "Overzicht", "Reward overview subtab renders in Dutch")
+	_check(rewards_tabs != null and rewards_tabs.get_tab_title(1) == "Per gevecht", "Battle reward subtab renders in Dutch")
+	_check(rewards_tabs != null and rewards_tabs.get_tab_title(4) == "Seizoen", "Season reward subtab renders in Dutch")
+	_check(rewards_status != null and rewards_status.text == "BELONINGEN NIET ACTIEF", "Ranked reward availability renders in Dutch")
+	_check(objectives_filter != null and objectives_filter.item_count == 3, "Objectives exposes daily, weekly and seasonal filters")
+	_check(objectives_filter != null and objectives_filter.get_item_text(0) == "Dagelijks", "Objective filter renders in Dutch")
+	_check_ranked_dropdown_style(objectives_filter, "Objective period")
 	_check(room_join_button != null and room_join_button.text == "Deelnemen", "Private room action renders in Dutch")
 	_check(training_button != null and training_button.text == "Training Room", "Training room selector renders in Dutch")
 	_check(casual_button != null and casual_button.text.begins_with("✓ "), "Default room type is visibly selected")
@@ -215,6 +227,12 @@ func _check_pvp_runtime_translation() -> void:
 	_check(title != null and title.text == "Ranqueada", "PvP ranked title updates to Portuguese")
 	_check(subtitle != null and subtitle.text.begins_with("Pareamento"), "PvP subtitle updates to Portuguese")
 	_check(ranked_tabs != null and ranked_tabs.get_tab_title(0) == "Jogar", "PvP tab title updates to Portuguese")
+	_check(ranked_tabs != null and ranked_tabs.get_tab_title(4) == "Recompensas", "Ranked Rewards tab updates to Portuguese")
+	_check(rewards_tabs != null and rewards_tabs.get_tab_title(0) == "Visão geral", "Reward overview subtab updates to Portuguese")
+	_check(rewards_tabs != null and rewards_tabs.get_tab_title(1) == "Por batalha", "Battle reward subtab updates to Portuguese")
+	_check(rewards_tabs != null and rewards_tabs.get_tab_title(4) == "Temporada", "Season reward subtab updates to Portuguese")
+	_check(rewards_status != null and rewards_status.text == "RECOMPENSAS INATIVAS", "Ranked reward availability updates to Portuguese")
+	_check(objectives_filter != null and objectives_filter.get_item_text(0) == "Diário", "Objective filter updates to Portuguese")
 	_check(room_join_button != null and room_join_button.text == "Entrar no treinamento", "Training room action updates to Portuguese")
 	_check(training_button != null and training_button.text == "✓ Sala de treinamento", "Selected training room updates to Portuguese")
 	_check(room_timer_check != null and room_timer_check.text.begins_with("Cronômetro"), "Private room timer updates to Portuguese")
