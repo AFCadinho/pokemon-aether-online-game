@@ -77,8 +77,7 @@ const PARTY_CONTEXT_SUMMARY := 0
 const PARTY_CONTEXT_GIVE_ITEM := 1
 const PARTY_CONTEXT_TAKE_ITEM := 2
 const PARTY_CONTEXT_SET_LEAD := 3
-const PC_CONTEXT_SUMMARY := 0
-const PC_CONTEXT_TAKE_ITEM := 1
+const PC_CONTEXT_TAKE_ITEM := 0
 const CHAT_CONTEXT_COPY_TEXT := 100
 const CHAT_CONTEXT_COPY_FULL := 101
 const CHAT_CONTEXT_OPEN_PM := 200
@@ -2638,11 +2637,8 @@ func _setup_pc_ui() -> void:
 
 	pc_slot_context_menu = PopupMenu.new()
 	pc_slot_context_menu.name = "PcSlotContextMenu"
-	pc_slot_context_menu.min_size = Vector2i(220, 0)
-	pc_slot_context_menu.add_theme_stylebox_override(
-		"panel",
-		_make_panel_style(UI_SURFACE_RAISED, UI_BORDER_FOCUS, 8, 1)
-	)
+	pc_slot_context_menu.min_size = Vector2i(232, 0)
+	_apply_pc_slot_context_menu_style()
 	pc_slot_context_menu.id_pressed.connect(_on_pc_slot_context_action)
 	pc_slot_context_menu.popup_hide.connect(_clear_pc_slot_context)
 	root_control.add_child(pc_slot_context_menu)
@@ -3129,6 +3125,35 @@ func _create_pc_section_caption(key: String) -> Label:
 	label.add_theme_font_size_override("font_size", 9)
 	label.add_theme_color_override("font_color", PC_ACCENT)
 	return label
+
+
+func _apply_pc_slot_context_menu_style() -> void:
+	if pc_slot_context_menu == null:
+		return
+	var panel_style := _make_panel_style(Color("#06131ff7"), PC_ACCENT_SOFT, 9, 1)
+	panel_style.content_margin_left = 5
+	panel_style.content_margin_top = 5
+	panel_style.content_margin_right = 5
+	panel_style.content_margin_bottom = 5
+	panel_style.shadow_color = Color("#00000099")
+	panel_style.shadow_size = 9
+	panel_style.shadow_offset = Vector2(0, 4)
+	var hover_style := _make_panel_style(Color("#16445df2"), PC_ACCENT, 6, 1)
+	hover_style.content_margin_left = 0
+	hover_style.content_margin_top = 0
+	hover_style.content_margin_right = 0
+	hover_style.content_margin_bottom = 0
+	pc_slot_context_menu.add_theme_stylebox_override("panel", panel_style)
+	pc_slot_context_menu.add_theme_stylebox_override("hover", hover_style)
+	pc_slot_context_menu.add_theme_font_size_override("font_size", 13)
+	pc_slot_context_menu.add_theme_color_override("font_color", Color("#dfeaf5"))
+	pc_slot_context_menu.add_theme_color_override("font_hover_color", Color.WHITE)
+	pc_slot_context_menu.add_theme_color_override("font_disabled_color", UI_MUTED_TEXT)
+	pc_slot_context_menu.add_theme_constant_override("item_start_padding", 11)
+	pc_slot_context_menu.add_theme_constant_override("item_end_padding", 11)
+	pc_slot_context_menu.add_theme_constant_override("icon_separation", 9)
+	pc_slot_context_menu.add_theme_constant_override("v_separation", 7)
+	pc_slot_context_menu.add_theme_constant_override("icon_max_width", 22)
 
 
 func _make_pc_outer_style() -> StyleBoxFlat:
@@ -37361,7 +37386,12 @@ func _on_pc_slot_button_gui_input(event: InputEvent, button: PcPokemonSlotButton
 
 
 func _open_pc_slot_context_menu(source: Dictionary, payload: Dictionary, global_position: Vector2) -> void:
-	if pc_slot_context_menu == null or source.is_empty() or int(source.get("pokemonId", 0)) <= 0:
+	if (
+		pc_slot_context_menu == null
+		or source.is_empty()
+		or int(source.get("pokemonId", 0)) <= 0
+		or _pc_payload_held_item_id(payload) == ""
+	):
 		return
 	_hide_pc_pokemon_hover()
 	pc_slot_context_source = source.duplicate(true)
@@ -37369,8 +37399,8 @@ func _open_pc_slot_context_menu(source: Dictionary, payload: Dictionary, global_
 	_populate_pc_slot_context_menu(payload)
 	var viewport_size := get_viewport().get_visible_rect().size
 	var menu_position := global_position
-	menu_position.x = minf(menu_position.x, viewport_size.x - 240.0)
-	menu_position.y = minf(menu_position.y, viewport_size.y - 120.0)
+	menu_position.x = minf(menu_position.x, viewport_size.x - 248.0)
+	menu_position.y = minf(menu_position.y, viewport_size.y - 82.0)
 	pc_slot_context_menu.position = Vector2i(menu_position.max(Vector2.ZERO))
 	pc_slot_context_menu.popup()
 
@@ -37379,15 +37409,16 @@ func _populate_pc_slot_context_menu(payload: Dictionary) -> void:
 	if pc_slot_context_menu == null:
 		return
 	pc_slot_context_menu.clear()
-	pc_slot_context_menu.add_item(LocalizationManager.text("ui.storage.context.summary"), PC_CONTEXT_SUMMARY)
 	var held_item_id := _pc_payload_held_item_id(payload)
 	if held_item_id != "":
-		pc_slot_context_menu.add_item(
-			LocalizationManager.text("ui.storage.context.take_item", {
-				"item": _item_name_from_id(held_item_id),
-			}),
-			PC_CONTEXT_TAKE_ITEM
-		)
+		var action_text := LocalizationManager.text("ui.storage.context.take_item", {
+			"item": _item_name_from_id(held_item_id),
+		})
+		var item_icon := _load_item_icon(held_item_id)
+		if item_icon != null:
+			pc_slot_context_menu.add_icon_item(item_icon, action_text, PC_CONTEXT_TAKE_ITEM)
+		else:
+			pc_slot_context_menu.add_item(action_text, PC_CONTEXT_TAKE_ITEM)
 
 
 func _on_pc_slot_context_action(action_id: int) -> void:
@@ -37395,8 +37426,6 @@ func _on_pc_slot_context_action(action_id: int) -> void:
 	var payload := pc_slot_context_payload.duplicate(true)
 	_clear_pc_slot_context()
 	match action_id:
-		PC_CONTEXT_SUMMARY:
-			_open_pc_drag_source_summary(source)
 		PC_CONTEXT_TAKE_ITEM:
 			await _take_pc_box_pokemon_held_item(source, payload)
 
