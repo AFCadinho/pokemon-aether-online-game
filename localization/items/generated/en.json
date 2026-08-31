@@ -815,6 +815,10 @@
     "name": "Cyclizar Mount",
     "shortDesc": "Unlocks Cyclizar as a land mount."
   },
+  "mount-license": {
+    "name": "Mount License",
+    "shortDesc": "Lists the regions where you are licensed to activate land mounts."
+  },
   "damp-mulch": {
     "name": "Damp Mulch",
     "shortDesc": "Growing time of berries is increased, but the soil dries out slower."

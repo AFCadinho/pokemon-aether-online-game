@@ -73,6 +73,11 @@ func _check_catalog_and_frames() -> void:
 		voucher_icon != null and Vector2i(voucher_icon.get_size()) == Vector2i(48, 48),
 		"the Bike Voucher has a dedicated 48px pixel-art Bag icon"
 	)
+	var license_icon := load("res://assets/items/icons/MOUNTLICENSE.png") as Texture2D
+	_check(
+		license_icon != null and Vector2i(license_icon.get_size()) == Vector2i(48, 48),
+		"the Mount License has a dedicated 48px pixel-art Key Item icon"
+	)
 
 
 func _check_land_mount_runtime_contract() -> void:
@@ -93,6 +98,8 @@ func _check_land_mount_runtime_contract() -> void:
 	_check(
 		player_source.contains("func toggle_land_mount()")
 		and player_source.contains("func restore_land_mount(mount_id: String)")
+		and player_source.contains("func _has_mount_license_for_current_region()")
+		and player_source.contains('"ui.mounts.license_required"')
 		and player_source.contains("LAND_MOUNT_TILE_MOVE_DURATION := 0.065")
 		and player_source.contains("LAND_MOUNT_WALK_ANIMATION_SPEED := 18.0")
 		and player_source.contains("InventoryService"),
@@ -169,8 +176,10 @@ func _check_bike_shop_owner_contract() -> void:
 	_check(
 		owner_source.contains('voucher_item_id := "bike-voucher"')
 		and owner_source.contains('mount_item_id := "cyclizar-mount"')
+		and owner_source.contains('license_item_id := "mount-license"')
+		and owner_source.contains('license_region_id := "kanto"')
 		and owner_source.contains("turn_in_npc_quest_item"),
-		"the owner exchanges the Bike Voucher for the Cyclizar entitlement"
+		"the owner exchanges the Bike Voucher for Cyclizar and a Kanto Mount License"
 	)
 	_check(
 		owner_source.contains("MENTOR_TOPIC_MENU")
@@ -178,8 +187,20 @@ func _check_bike_shop_owner_contract() -> void:
 		and owner_source.contains("func _show_mount_guide()")
 		and owner_source.contains('"id": "selecting"')
 		and owner_source.contains('"id": "riding"')
-		and owner_source.contains('"id": "purpose"'),
-		"the owner becomes a reusable mount guide after Cyclizar is owned"
+		and owner_source.contains('"id": "purpose"')
+		and owner_source.contains('"id": "license"'),
+		"the owner becomes a reusable mount and license guide after Cyclizar is owned"
+	)
+	var inventory_source := FileAccess.get_file_as_string(
+		"res://scripts/services/inventory_service.gd"
+	)
+	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	_check(
+		inventory_source.contains("cached_mount_license_regions")
+		and inventory_source.contains("func has_mount_license_for_region")
+		and overlay_source.contains('use_action == "open_mount_license"')
+		and overlay_source.contains("func _show_mount_license()"),
+		"the inventory caches regional registrations and the Key Item opens their overview"
 	)
 	for locale_path: String in [
 		"res://localization/en.json",
@@ -191,8 +212,11 @@ func _check_bike_shop_owner_contract() -> void:
 		_check(
 			locale_source.contains('"mentor.bike_seller.help.topic.selecting"')
 			and locale_source.contains('"mentor.bike_seller.help.topic.riding"')
-			and locale_source.contains('"mentor.bike_seller.help.topic.purpose"'),
-			"%s contains the Bike Seller mount guide" % locale_path
+			and locale_source.contains('"mentor.bike_seller.help.topic.purpose"')
+			and locale_source.contains('"mentor.bike_seller.help.topic.license"')
+			and locale_source.contains('"ui.mounts.license_required"')
+			and locale_source.contains('"ui.mount_license.registration"'),
+			"%s contains the Bike Seller license guide and rider feedback" % locale_path
 		)
 
 

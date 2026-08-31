@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Land mounts now require a regional Mount License; Cerulean's Bike Seller registers Kanto, explains the license in his guide, and gives it a dedicated Key Item with a viewable registration list.
+
 - Guild member cards no longer show a redundant status dot alongside their status text.
 
 - The Mega Stone Seller is now available in the Aether Clash Lobby, and the Bag distinguishes grouped account-bound and tradeable copies without showing a misleading combined stack count.

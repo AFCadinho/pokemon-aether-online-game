@@ -28,6 +28,7 @@ const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var cached_inventory_items: Array = []
 var cached_borrowed_inventory_items: Array = []
+var cached_mount_license_regions: Array[String] = []
 var cached_inventory_user_id := 0
 var inventory_loaded := false
 var collected_world_pickup_ids: Dictionary = {}
@@ -60,6 +61,7 @@ func load_inventory() -> Dictionary:
 		"success": true,
 		"items": cached_inventory_items.duplicate(true),
 		"borrowedItems": cached_borrowed_inventory_items.duplicate(true),
+		"mountLicenseRegions": cached_mount_license_regions.duplicate(),
 	}
 
 
@@ -83,6 +85,19 @@ func has_item(item_id: String) -> bool:
 	return false
 
 
+func has_mount_license_for_region(region_id: String) -> bool:
+	var normalized_region_id := region_id.strip_edges().to_lower()
+	return (
+		not normalized_region_id.is_empty()
+		and has_item("mount-license")
+		and normalized_region_id in cached_mount_license_regions
+	)
+
+
+func get_mount_license_regions() -> Array[String]:
+	return cached_mount_license_regions.duplicate()
+
+
 func apply_inventory_state(value: Variant) -> bool:
 	if value is not Dictionary:
 		return false
@@ -94,6 +109,12 @@ func apply_inventory_state(value: Variant) -> bool:
 		cached_borrowed_inventory_items.clear()
 	var items := _array_from_value(inventory.get("items", []))
 	cached_inventory_items = items.duplicate(true)
+	cached_mount_license_regions.clear()
+	for region_value: Variant in _array_from_value(inventory.get("mountLicenseRegions", [])):
+		var region_id := str(region_value).strip_edges().to_lower()
+		if not region_id.is_empty() and region_id not in cached_mount_license_regions:
+			cached_mount_license_regions.append(region_id)
+	cached_mount_license_regions.sort()
 	if inventory.get("borrowedItems", null) is Array:
 		cached_borrowed_inventory_items = _array_from_value(inventory.get("borrowedItems", [])).duplicate(true)
 	cached_inventory_user_id = current_user_id
@@ -105,6 +126,7 @@ func apply_inventory_state(value: Variant) -> bool:
 func _clear_inventory_cache() -> void:
 	cached_inventory_items.clear()
 	cached_borrowed_inventory_items.clear()
+	cached_mount_license_regions.clear()
 	cached_inventory_user_id = 0
 	inventory_loaded = false
 	collected_world_pickup_ids.clear()
@@ -355,6 +377,7 @@ func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:
 		"alreadyTurnedIn": bool(body.get("alreadyTurnedIn", false)),
 		"rewardItemId": str(body.get("rewardItemId", "")),
 		"rewardQuantity": maxi(int(body.get("rewardQuantity", 0)), 0),
+		"mountLicenseRegions": _array_from_value(body.get("mountLicenseRegions", [])),
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
 		"storyRefreshSuccess": bool(story_result.get("success", false)),
 	}
