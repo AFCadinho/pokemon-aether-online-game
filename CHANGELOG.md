@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Pokémon in PC boxes can now have their held item moved directly to the Bag from a right-click menu.
+- Pokémon in PC boxes can now move their held item directly to the Bag through one clean, item-focused right-click action.
 
 - Pokémon Storage actions now use clearer visual hierarchy, with one primary box control, quieter icon actions and danger colors only when needed.
 

@@ -64,17 +64,21 @@ func _check_storage_runtime_translation() -> void:
 	_check(previous_style != null and previous_style.bg_color.a == 0.0 and previous_style.border_width_left == 0, "Storage arrow navigation uses a quiet icon style")
 	_check(status != null and status.text.begins_with("Slepen"), "Storage status renders in Dutch")
 	_check(status != null and status.text.contains("Rechtsklik"), "Storage status teaches the box context action")
-	_check(slot_context_menu != null and slot_context_menu.min_size.x >= 220, "Storage creates a readable slot context menu")
+	_check(slot_context_menu != null and slot_context_menu.min_size.x >= 232, "Storage creates a readable slot context menu")
+	var context_panel_style := slot_context_menu.get_theme_stylebox("panel") as StyleBoxFlat
+	var context_hover_style := slot_context_menu.get_theme_stylebox("hover") as StyleBoxFlat
+	_check(context_panel_style != null and context_panel_style.bg_color == Color("#06131ff7"), "Storage context menu uses the dark PC surface")
+	_check(context_hover_style != null and context_hover_style.bg_color == Color("#16445df2"), "Storage context action uses a restrained cyan hover")
 	_check(
 		localization_manager.call("text", "ui.storage.context.take_item", {"item": "Restjes"}) == "Restjes afnemen",
 		"Storage take-item action renders in Dutch"
 	)
 	overlay.call("_populate_pc_slot_context_menu", {"heldItemId": "leftovers"})
-	_check(slot_context_menu.item_count == 2, "Held items add one focused action to the Storage context menu")
-	_check(slot_context_menu.get_item_text(0) == "Pokémon bekijken", "Storage context summary renders in Dutch")
-	_check(slot_context_menu.get_item_text(1) == "Leftovers afnemen", "Storage context take-item action includes the localized item name")
+	_check(slot_context_menu.item_count == 1, "Held items expose one focused Storage context action")
+	_check(slot_context_menu.get_item_text(0) == "Leftovers afnemen", "Storage context action includes the localized item name")
+	_check(slot_context_menu.get_item_icon(0) != null, "Storage context action includes the held-item icon")
 	overlay.call("_populate_pc_slot_context_menu", {})
-	_check(slot_context_menu.item_count == 1, "Storage omits the take action when a Pokémon holds no item")
+	_check(slot_context_menu.item_count == 0, "Storage has no redundant context action when a Pokémon holds no item")
 	species_filter.text = "Pikachu"
 	overlay.call("_on_pc_filter_text_changed", species_filter.text)
 	_check(filter_button.text == "Filters (1)", "Storage toolbar reports active filters")
