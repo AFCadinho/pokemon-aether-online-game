@@ -25,7 +25,7 @@ func _init() -> void:
 	_check_not_contains(login_scene, '[node name="CreditsButton"', "login screen avoids a redundant credits action")
 	_check_not_contains(login_script, "func _on_credits_button_pressed", "login credits wiring is removed")
 	_check_contains(login_scene, 'text = "ui.login.legal_notice"', "login keeps a concise non-interactive legal notice")
-	_check_contains(settings_script, '_create_tab_content("About", "ui.settings.tab.about")', "settings expose an About tab")
+	_check_contains(settings_script, '"About", "ui.settings.tab.about", "ui.settings.about.description"', "settings expose an About tab")
 	_check_contains(settings_script, "ExternalLinks.CREDITS_URL", "settings use the shared credits URL")
 	_check_contains(settings_script, '_set_localized_text(credits_button, "ui.settings.about.credits")', "About tab exposes localized credits")
 	_check_contains(settings_script, '_set_localized_text(legal_note, "ui.settings.about.legal")', "About tab retains the legal notice")

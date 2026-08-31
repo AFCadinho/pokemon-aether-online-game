@@ -65,7 +65,7 @@ func _init() -> void:
 		"Fishing cast and reel use one persisted configurable Input Map action"
 	)
 	_check(
-		settings_menu_source.contains('_create_tab_content("Controls", "ui.settings.tab.controls")')
+		settings_menu_source.contains('"Controls", "ui.settings.tab.controls", "ui.settings.section.controls_subtitle"')
 		and settings_menu_source.contains('binding_button.name = "%sBindingButton" % control_name')
 		and settings_menu_source.contains("SettingsManager.set_input_binding"),
 		"Settings expose a Fishing hotkey capture control"
