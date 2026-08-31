@@ -158,6 +158,7 @@ var is_loading_guilds := false
 var is_creating_guild := false
 var is_application_action_in_flight := false
 var is_aether_clash_action_in_flight := false
+var is_aether_clash_history_detail_loading := false
 var is_leaving_guild := false
 var directory_request_generation := 0
 var has_resolved_initial_membership := false
@@ -1843,13 +1844,27 @@ func _build_aether_clash_duel_history() -> Control:
 
 
 func _build_aether_clash_history_entry(entry: Dictionary) -> Control:
-	var panel := PanelContainer.new()
+	var session_id := str(entry.get("sessionId", "")).strip_edges()
+	var panel := Button.new()
 	panel.name = "GuildAetherClashHistoryEntry"
-	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 8, 1))
+	panel.text = ""
+	panel.custom_minimum_size.y = 116
+	panel.focus_mode = Control.FOCUS_NONE
+	panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	panel.tooltip_text = _t("ui.guild.aether_clash.history.view_details")
+	panel.add_theme_stylebox_override("normal", _button_style(UI_RAISED, UI_BORDER_INNER))
+	panel.add_theme_stylebox_override("hover", _button_style(UI_HOVER, UI_ACCENT_SOFT))
+	panel.add_theme_stylebox_override("pressed", _button_style(Color("#071624f2"), UI_ACCENT))
+	panel.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	if session_id != "":
+		panel.pressed.connect(_open_aether_clash_history_detail.bind(session_id))
 	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_set_margins(margin, 12, 9, 12, 9)
 	panel.add_child(margin)
 	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_theme_constant_override("separation", 10)
 	margin.add_child(row)
 	var result := str(entry.get("result", "no_contest")).strip_edges().to_lower()
@@ -1866,6 +1881,7 @@ func _build_aether_clash_history_entry(entry: Dictionary) -> Control:
 	result_label.custom_minimum_size.x = 86
 	row.add_child(result_label)
 	var copy := VBoxContainer.new()
+	copy.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	copy.add_theme_constant_override("separation", 2)
 	row.add_child(copy)
@@ -1916,7 +1932,358 @@ func _build_aether_clash_history_entry(entry: Dictionary) -> Control:
 	)
 	opponent_roster.name = "GuildAetherClashHistoryOpponentRoster"
 	copy.add_child(opponent_roster)
+	var arrow := _label("›", 24, UI_ACCENT)
+	arrow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	arrow.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(arrow)
 	return panel
+
+
+func _open_aether_clash_history_detail(session_id: String) -> void:
+	var normalized_id := session_id.strip_edges()
+	if normalized_id == "" or is_aether_clash_history_detail_loading:
+		return
+	var existing := find_child("GuildAetherClashHistoryDetailWindow", true, false) as Window
+	if existing != null:
+		existing.grab_focus()
+		return
+	var window := Window.new()
+	window.name = "GuildAetherClashHistoryDetailWindow"
+	window.title = _t("ui.guild.aether_clash.history.detail.title")
+	window.size = Vector2i(880, 650)
+	window.min_size = Vector2i(680, 500)
+	window.transient = true
+	window.exclusive = true
+	window.borderless = true
+	_apply_guild_window_style(window)
+	window.close_requested.connect(window.queue_free)
+	add_child(window)
+	var panel := PanelContainer.new()
+	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER, 10, 1))
+	window.add_child(panel)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 18, 16, 18, 16)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.name = "GuildAetherClashHistoryDetailContent"
+	content.add_theme_constant_override("separation", 10)
+	margin.add_child(content)
+	var loading := _localized_label("ui.guild.aether_clash.history.detail.loading", 13, UI_ACCENT)
+	loading.custom_minimum_size.y = 460
+	loading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	loading.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	content.add_child(loading)
+	window.popup_centered()
+
+	is_aether_clash_history_detail_loading = true
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		is_aether_clash_history_detail_loading = false
+		_show_aether_clash_history_detail_error(
+			content,
+			window,
+			_t("ui.guild.error.service_unavailable")
+		)
+		return
+	var result := _dictionary(await guild_service.call(
+		"load_aether_clash_history_detail",
+		normalized_id
+	))
+	is_aether_clash_history_detail_loading = false
+	if not is_instance_valid(window) or not is_instance_valid(content):
+		return
+	if not bool(result.get("success", false)):
+		_show_aether_clash_history_detail_error(
+			content,
+			window,
+			str(result.get("error", _t("ui.guild.aether_clash.history.detail.error")))
+		)
+		return
+	var detail := _dictionary(result.get("detail", {}))
+	if detail.is_empty():
+		_show_aether_clash_history_detail_error(
+			content,
+			window,
+			_t("ui.guild.aether_clash.history.detail.error")
+		)
+		return
+	_render_aether_clash_history_detail(content, window, detail)
+
+
+func _show_aether_clash_history_detail_error(
+	content: VBoxContainer,
+	window: Window,
+	message: String
+) -> void:
+	_clear_children(content)
+	var error := _label(message, 12, UI_ERROR)
+	error.custom_minimum_size.y = 430
+	error.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	error.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	error.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	content.add_child(error)
+	content.add_child(_aether_clash_history_close_row(window))
+
+
+func _render_aether_clash_history_detail(
+	content: VBoxContainer,
+	window: Window,
+	detail: Dictionary
+) -> void:
+	_clear_children(content)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 12)
+	content.add_child(header)
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_theme_constant_override("separation", 3)
+	header.add_child(heading)
+	var challenger := _dictionary(detail.get("challengerGuild", {}))
+	var challenged := _dictionary(detail.get("challengedGuild", {}))
+	heading.add_child(_label(
+		_t("ui.guild.aether_clash.history.detail.matchup", {
+			"challenger": str(challenger.get("name", _t("ui.guild.fallback.guild"))),
+			"challenged": str(challenged.get("name", _t("ui.guild.fallback.guild"))),
+		}),
+		18,
+		UI_TEXT
+	))
+	var winner := _dictionary(detail.get("winnerGuild", {}))
+	var result_text := _t("ui.guild.aether_clash.history.detail.no_contest")
+	var result_color := UI_MUTED
+	if not winner.is_empty():
+		result_text = _t("ui.guild.aether_clash.history.detail.winner", {
+			"guild": str(winner.get("name", _t("ui.guild.fallback.guild"))),
+		})
+		result_color = UI_GOLD
+	heading.add_child(_label(result_text, 11, result_color))
+
+	var summary := HBoxContainer.new()
+	summary.add_theme_constant_override("separation", 8)
+	content.add_child(summary)
+	for definition: Dictionary in [
+		{
+			"label": "ui.guild.aether_clash.history.detail.completed",
+			"value": _relative_last_seen_text(str(detail.get("completedAt", ""))),
+			"color": UI_ACCENT,
+		},
+		{
+			"label": "ui.guild.aether_clash.history.detail.duration",
+			"value": _format_duration_short(int(detail.get("durationSeconds", 0))),
+			"color": UI_TEXT,
+		},
+		{
+			"label": "ui.guild.aether_clash.history.detail.tier",
+			"value": str(detail.get("tierName", "Aether OU")),
+			"color": UI_ACCENT,
+		},
+		{
+			"label": "ui.guild.aether_clash.history.detail.pot",
+			"value": "₽%s" % _format_number(int(detail.get("stakePotAmount", 0))),
+			"color": UI_GOLD,
+		},
+	]:
+		summary.add_child(_aether_clash_history_summary_card(definition))
+
+	var scroll := ScrollContainer.new()
+	scroll.name = "GuildAetherClashHistoryDetailScroll"
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	content.add_child(scroll)
+	var body := VBoxContainer.new()
+	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body.add_theme_constant_override("separation", 12)
+	scroll.add_child(body)
+	body.add_child(_localized_label("ui.guild.aether_clash.history.detail.participants", 12, UI_ACCENT))
+	var rosters := HBoxContainer.new()
+	rosters.add_theme_constant_override("separation", 10)
+	body.add_child(rosters)
+	rosters.add_child(_build_aether_clash_history_roster(detail, challenger, "challenger", UI_ACCENT))
+	rosters.add_child(_build_aether_clash_history_roster(detail, challenged, "challenged", UI_ERROR))
+	body.add_child(_localized_label("ui.guild.aether_clash.history.detail.battles", 12, UI_ACCENT))
+	var battles := _array_from_value(detail.get("battles", []))
+	if battles.is_empty():
+		body.add_child(_build_aether_clash_message_panel(
+			_t("ui.guild.aether_clash.history.detail.no_battles"),
+			UI_MUTED
+		))
+	else:
+		for battle_value: Variant in battles:
+			if battle_value is Dictionary:
+				body.add_child(_build_aether_clash_history_battle_row(battle_value as Dictionary))
+	content.add_child(_aether_clash_history_close_row(window))
+
+
+func _aether_clash_history_summary_card(definition: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_BORDER_INNER, 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 10, 8, 10, 8)
+	panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 2)
+	margin.add_child(stack)
+	stack.add_child(_localized_label(str(definition.get("label", "")), 9, UI_MUTED))
+	var value_color: Color = definition.get("color", UI_TEXT)
+	stack.add_child(_label(
+		str(definition.get("value", "")),
+		12,
+		value_color
+	))
+	return panel
+
+
+func _build_aether_clash_history_roster(
+	detail: Dictionary,
+	guild: Dictionary,
+	side: String,
+	accent: Color
+) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildAetherClashHistoryRoster_%s" % side.capitalize()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, accent.darkened(0.35), 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 11, 9, 11, 10)
+	panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 6)
+	margin.add_child(stack)
+	var counts := _dictionary(detail.get("participantCounts", {}))
+	var remaining := _dictionary(detail.get("remainingCounts", {}))
+	stack.add_child(_label(
+		_t("ui.guild.aether_clash.history.detail.roster_heading", {
+			"guild": str(guild.get("name", _t("ui.guild.fallback.guild"))),
+			"started": int(counts.get(side, 0)),
+			"remaining": int(remaining.get(side, 0)),
+		}),
+		12,
+		accent
+	))
+	var side_participants: Array[Dictionary] = []
+	for participant_value: Variant in _array_from_value(detail.get("participants", [])):
+		if participant_value is Dictionary:
+			var participant := participant_value as Dictionary
+			if str(participant.get("side", "")) == side:
+				side_participants.append(participant)
+	if side_participants.is_empty():
+		stack.add_child(_localized_label(
+			"ui.guild.aether_clash.history.detail.no_participants",
+			10,
+			UI_MUTED
+		))
+		return panel
+	for participant: Dictionary in side_participants:
+		stack.add_child(_build_aether_clash_history_participant_row(participant))
+	return panel
+
+
+func _build_aether_clash_history_participant_row(participant: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildAetherClashHistoryParticipant_%d" % int(participant.get("userId", 0))
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131fe8"), UI_BORDER_INNER, 7, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 9, 6, 9, 6)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.add_theme_constant_override("separation", 2)
+	row.add_child(copy)
+	copy.add_child(_label(
+		str(participant.get("displayName", participant.get("username", _t("common.unknown")))),
+		11,
+		UI_TEXT
+	))
+	copy.add_child(_label(
+		_t("ui.guild.aether_clash.history.detail.player_record", {
+			"battles": int(participant.get("battles", 0)),
+			"wins": int(participant.get("wins", 0)),
+			"losses": int(participant.get("losses", 0)),
+		}),
+		9,
+		UI_MUTED
+	))
+	var status := str(participant.get("finalStatus", "left")).strip_edges().to_lower()
+	var status_color := UI_WARNING
+	if status == "survived":
+		status_color = UI_SUCCESS
+	elif status == "eliminated":
+		status_color = UI_ERROR
+	var status_copy := _t("ui.guild.aether_clash.history.detail.status.%s" % status)
+	var eliminated_by := _dictionary(participant.get("eliminatedBy", {}))
+	if status == "eliminated" and not eliminated_by.is_empty():
+		status_copy = _t("ui.guild.aether_clash.history.detail.eliminated_by", {
+			"trainer": str(eliminated_by.get("displayName", _t("common.unknown"))),
+		})
+	var status_label := _label(status_copy, 9, status_color)
+	status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(status_label)
+	return panel
+
+
+func _build_aether_clash_history_battle_row(battle: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildAetherClashHistoryBattle_%d" % int(battle.get("sequence", 0))
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_BORDER_INNER, 7, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 11, 8, 11, 8)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	margin.add_child(row)
+	var sequence := _label("#%d" % int(battle.get("sequence", 0)), 11, UI_ACCENT)
+	sequence.custom_minimum_size.x = 34
+	row.add_child(sequence)
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.add_theme_constant_override("separation", 2)
+	row.add_child(copy)
+	var result := str(battle.get("result", "no_contest"))
+	var winner := _dictionary(battle.get("winner", {}))
+	var loser := _dictionary(battle.get("loser", {}))
+	var source := _dictionary(battle.get("source", {}))
+	var target := _dictionary(battle.get("target", {}))
+	var result_copy := _t("ui.guild.aether_clash.history.detail.battle_no_contest", {
+		"source": str(source.get("displayName", _t("common.unknown"))),
+		"target": str(target.get("displayName", _t("common.unknown"))),
+	})
+	var result_color := UI_MUTED
+	if result == "completed" and not winner.is_empty() and not loser.is_empty():
+		result_copy = _t("ui.guild.aether_clash.history.detail.battle_result", {
+			"winner": str(winner.get("displayName", _t("common.unknown"))),
+			"loser": str(loser.get("displayName", _t("common.unknown"))),
+		})
+		result_color = UI_TEXT
+	copy.add_child(_label(result_copy, 11, result_color))
+	copy.add_child(_label(
+		_t("ui.guild.aether_clash.history.detail.battle_meta", {
+			"method": _t("ui.guild.aether_clash.history.detail.method.%s" % str(
+				battle.get("method", "automatic")
+			)),
+			"time": _relative_last_seen_text(str(battle.get("completedAt", ""))),
+		}),
+		9,
+		UI_MUTED
+	))
+	return panel
+
+
+func _aether_clash_history_close_row(window: Window) -> Control:
+	var footer := HBoxContainer.new()
+	footer.alignment = BoxContainer.ALIGNMENT_END
+	var close_button := Button.new()
+	close_button.name = "CloseAetherClashHistoryDetailButton"
+	close_button.text = _t("common.close")
+	close_button.custom_minimum_size = Vector2(120, 34)
+	close_button.pressed.connect(window.queue_free)
+	_apply_button_style(close_button, "primary")
+	footer.add_child(close_button)
+	return footer
 
 
 func _build_current_aether_clash_card(challenge: Dictionary) -> Control:

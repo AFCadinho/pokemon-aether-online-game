@@ -14,6 +14,7 @@ const GUILD_NOTIFICATIONS_ENDPOINT := "/game/guild-notifications"
 const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
 const AETHER_CLASH_CHAMPION_ENDPOINT := "/game/aether-clash/champion"
 const AETHER_CLASH_CHALLENGES_ENDPOINT := "/game/aether-clash/challenges"
+const AETHER_CLASH_HISTORY_ENDPOINT := "/game/aether-clash/history"
 const AETHER_CLASH_PLAYER_CHALLENGES_ENDPOINT := "/game/aether-clash/player-challenges"
 const AETHER_CLASH_PORTAL_SESSIONS_ENDPOINT := "/game/aether-clash/portal-sessions"
 const AETHER_CLASH_SESSIONS_ENDPOINT := "/game/aether-clash/sessions"
@@ -317,6 +318,23 @@ func load_aether_clash_challenges() -> Dictionary:
 		if not bool(response.get("success", false))
 		else _aether_clash_challenges_result(response.get("body", {}))
 	)
+
+
+func load_aether_clash_history_detail(challenge_id: String) -> Dictionary:
+	var normalized_id := challenge_id.strip_edges()
+	if normalized_id == "":
+		return {"success": false, "error": "Aether Clash history id was missing."}
+	var response := await _authenticated_request(
+		AETHER_CLASH_HISTORY_ENDPOINT + "/" + normalized_id.uri_encode(),
+		HTTPClient.METHOD_GET,
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	return {
+		"success": true,
+		"detail": _normalize_aether_clash_history_detail(response.get("body", {})),
+	}
 
 
 func create_aether_clash_challenge(
@@ -700,6 +718,43 @@ func _aether_clash_challenges_result(value: Variant) -> Dictionary:
 		"duelStats": stats,
 		"duelHistory": history,
 	}
+
+
+func _normalize_aether_clash_history_detail(value: Variant) -> Dictionary:
+	var detail := _dictionary(value).duplicate(true)
+	if detail.is_empty():
+		return {}
+	detail["challengerGuild"] = _dictionary(detail.get("challengerGuild", {})).duplicate(true)
+	detail["challengedGuild"] = _dictionary(detail.get("challengedGuild", {})).duplicate(true)
+	detail["winnerGuild"] = _dictionary(detail.get("winnerGuild", {})).duplicate(true)
+	detail["participantCounts"] = _dictionary(detail.get("participantCounts", {})).duplicate(true)
+	detail["remainingCounts"] = _dictionary(detail.get("remainingCounts", {})).duplicate(true)
+	detail["durationSeconds"] = maxi(int(detail.get("durationSeconds", 0)), 0)
+	detail["stakeAmount"] = maxi(int(detail.get("stakeAmount", 0)), 0)
+	detail["stakePotAmount"] = maxi(int(detail.get("stakePotAmount", 0)), 0)
+	var participants: Array[Dictionary] = []
+	for participant_value: Variant in _array(detail.get("participants", [])):
+		if not participant_value is Dictionary:
+			continue
+		var participant := (participant_value as Dictionary).duplicate(true)
+		participant["battles"] = maxi(int(participant.get("battles", 0)), 0)
+		participant["wins"] = maxi(int(participant.get("wins", 0)), 0)
+		participant["losses"] = maxi(int(participant.get("losses", 0)), 0)
+		participant["eliminatedBy"] = _dictionary(
+			participant.get("eliminatedBy", {})
+		).duplicate(true)
+		participants.append(participant)
+	detail["participants"] = participants
+	var battles: Array[Dictionary] = []
+	for battle_value: Variant in _array(detail.get("battles", [])):
+		if not battle_value is Dictionary:
+			continue
+		var battle := (battle_value as Dictionary).duplicate(true)
+		for player_key: String in ["source", "target", "winner", "loser"]:
+			battle[player_key] = _dictionary(battle.get(player_key, {})).duplicate(true)
+		battles.append(battle)
+	detail["battles"] = battles
+	return detail
 
 
 func _aether_clash_action(challenge_id: String, action: String) -> Dictionary:
