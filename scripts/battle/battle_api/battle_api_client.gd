@@ -139,6 +139,12 @@ func spectate_pvp_room(request_node: HTTPRequest, room_code: String) -> Dictiona
 		"/battle/pvp/rooms/%s/spectate" % room_code.strip_edges().uri_encode()
 	)
 
+func spectate_ranked_pvp_match(request_node: HTTPRequest, match_id: String) -> Dictionary:
+	return await send_get_request(
+		request_node,
+		"/battle/pvp/matches/%s/spectate" % match_id.strip_edges().uri_encode()
+	)
+
 func get_pvp_queues(request_node: HTTPRequest) -> Dictionary:
 	return await send_get_request(request_node, "/account/pvp/queues")
 
@@ -200,6 +206,17 @@ func get_pvp_leaderboard(
 		request_node,
 		query
 	)
+
+func get_live_ranked_pvp_matches(
+	request_node: HTTPRequest,
+	limit: int = 50,
+	format_key: String = ""
+) -> Dictionary:
+	var query := "/account/pvp/ranked/live?limit=%d" % clampi(limit, 1, 100)
+	var normalized_format_key := format_key.strip_edges()
+	if normalized_format_key != "":
+		query += "&formatKey=%s" % normalized_format_key.uri_encode()
+	return await send_get_request(request_node, query)
 
 func get_pvp_match_history(request_node: HTTPRequest, limit: int = 20, offset: int = 0, format_key: String = "") -> Dictionary:
 	var query := "/account/pvp/matches/history/me?limit=%d&offset=%d" % [

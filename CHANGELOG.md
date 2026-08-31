@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Ongoing Ranked battles now appear in the Ranked Battles Live tab and can be watched in the existing read-only spectator view.
+
 - Trainer right-click actions now use compact quick and secondary pages, clearer icons, and a calmer safety section.
 
 - Pokémon in PC boxes can now move their held item directly to the Bag through one clean, item-focused right-click action.
