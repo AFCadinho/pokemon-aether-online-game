@@ -27,10 +27,6 @@
     "name": "Absorver Bulbo",
     "shortDesc": "Realizado: Aumenta o Ataque Especial do titular em um estágio quando sofre dano do tipo Água."
   },
-  "acro-bike": {
-    "name": "Bicicleta acrobática",
-    "shortDesc": "Mais manobrável que a Mach Bike e permite pular sobre trilhos."
-  },
   "adamant-crystal": {
     "name": "Cristal Adamante",
     "shortDesc": "Se segurado por um Dialga, seus ataques do tipo Steel e Dragon têm 1,2x de poder."
@@ -182,10 +178,6 @@
   "alakazite": {
     "name": "Alakazita",
     "shortDesc": "Realizado: Permite que Alakazam Megaevolua para Mega Alakazam."
-  },
-  "aloraichium-z--bag": {
-    "name": "Aloraichium Z",
-    "shortDesc": "XXX novo efeito para aloraichium-z--bag"
   },
   "aloraichium-z--held": {
     "name": "Aloraichium Z",
@@ -339,10 +331,6 @@
     "name": "Doce de frutas vermelhas",
     "shortDesc": "Um doce em formato de baga. Quando um Milcery segura isso, ele gira alegremente."
   },
-  "bicycle": {
-    "name": "Bicicleta",
-    "shortDesc": "Use para trânsito rápido."
-  },
   "big-malasada": {
     "name": "Grande Malasada",
     "shortDesc": "Cura grandes problemas de status e confusão."
@@ -362,18 +350,6 @@
   "big-root": {
     "name": "Raiz Grande",
     "shortDesc": "Realizado: Aumenta o HP recuperado de movimentos de drenagem, Ingrain e Aqua Ring em 3/10 (30%)."
-  },
-  "bike": {
-    "name": "Bicicleta",
-    "shortDesc": "Permite ao jogador viajar mais rápido."
-  },
-  "bike--green": {
-    "name": "Bicicleta",
-    "shortDesc": "XXX novo efeito para bicicleta - verde"
-  },
-  "bike--yellow": {
-    "name": "Bicicleta",
-    "shortDesc": "XXX novo efeito para bicicleta - amarelo"
   },
   "bike-voucher": {
     "name": "Voucher de bicicleta",
@@ -522,10 +498,6 @@
   "bug-memory": {
     "name": "Memória de Bug",
     "shortDesc": "Realizado: Muda Silvally para sua forma Bug. Altera o tipo de ataques múltiplos para Bug."
-  },
-  "buginium-z--bag": {
-    "name": "Bugínio Z",
-    "shortDesc": "XXX novo efeito para buginium-z--bag"
   },
   "buginium-z--held": {
     "name": "Bugínio Z",
@@ -839,10 +811,6 @@
     "name": "Pedra Negra",
     "shortDesc": "Invoca Zekrom para a batalha final contra N."
   },
-  "darkinium-z--bag": {
-    "name": "Darkínio Z",
-    "shortDesc": "XXX novo efeito para darkinium-z--bag"
-  },
   "darkinium-z--held": {
     "name": "Darkínio Z",
     "shortDesc": "Held: Permite que um Pokémon use os movimentos Z equivalentes aos seus movimentos Dark."
@@ -854,10 +822,6 @@
   "dawn-stone": {
     "name": "Pedra do Amanhecer",
     "shortDesc": "Evolui um Kirlia macho para Gallade ou uma Snorunt fêmea para Froslass."
-  },
-  "decidium-z--bag": {
-    "name": "Decisão Z",
-    "shortDesc": "XXX novo efeito para decidim-z--bag"
   },
   "decidium-z--held": {
     "name": "Decisão Z",
@@ -975,10 +939,6 @@
     "name": "Dragoninita",
     "shortDesc": "Se Dragonite estiver segurando este item, poderá megaevoluir durante a batalha."
   },
-  "dragonium-z--bag": {
-    "name": "Dragão Z",
-    "shortDesc": "XXX novo efeito para dragonium-z--bag"
-  },
   "dragonium-z--held": {
     "name": "Dragão Z",
     "shortDesc": "Held: Permite que um Pokémon use os movimentos Z equivalentes aos seus movimentos de Dragão."
@@ -1043,10 +1003,6 @@
     "name": "Eelektrossita",
     "shortDesc": "Se Eelektross estiver segurando este item, poderá megaevoluir durante a batalha."
   },
-  "eevium-z--bag": {
-    "name": "Eevium Z",
-    "shortDesc": "XXX novo efeito para eevium-z--bag"
-  },
   "eevium-z--held": {
     "name": "Eevium Z",
     "shortDesc": "Realizado: Permite que Eevee atualize Last Resort para Extreme Evoboost."
@@ -1074,10 +1030,6 @@
   "electric-seed": {
     "name": "Semente Elétrica",
     "shortDesc": "Realizado: Consumido em terreno elétrico e aumenta a defesa do titular em um estágio."
-  },
-  "electrium-z--bag": {
-    "name": "Eletrio Z",
-    "shortDesc": "XXX novo efeito para electrium-z--bag"
   },
   "electrium-z--held": {
     "name": "Eletrio Z",
@@ -1183,10 +1135,6 @@
     "name": "Kit Explorador",
     "shortDesc": "Permite visitar o Metrô."
   },
-  "fairium-z--bag": {
-    "name": "Fário Z",
-    "shortDesc": "XXX novo efeito para fairium-z--bag"
-  },
   "fairium-z--held": {
     "name": "Fário Z",
     "shortDesc": "Held: Permite que um Pokémon use os movimentos Z equivalentes aos seus movimentos Fairy."
@@ -1239,10 +1187,6 @@
     "name": "Memória de luta",
     "shortDesc": "Realizado: Muda Silvally para sua forma de Luta. Muda o tipo de ataques múltiplos para Luta."
   },
-  "fightinium-z--bag": {
-    "name": "Fightinium Z",
-    "shortDesc": "XXX novo efeito para fightinium-z--bag"
-  },
   "fightinium-z--held": {
     "name": "Fightinium Z",
     "shortDesc": "Held: Permite que um Pokémon use os movimentos Z equivalentes aos seus movimentos de luta."
@@ -1262,10 +1206,6 @@
   "fire-stone": {
     "name": "Pedra de Fogo",
     "shortDesc": "Evolui certos Pokémon."
-  },
-  "firium-z--bag": {
-    "name": "Fírio Z",
-    "shortDesc": "XXX novo efeito para firium-z--bag"
   },
   "firium-z--held": {
     "name": "Fírio Z",
@@ -1318,10 +1258,6 @@
   "flying-memory": {
     "name": "Memória Voadora",
     "shortDesc": "Realizado: Muda Silvally para sua forma voadora. Muda o tipo de ataques múltiplos para voador."
-  },
-  "flyinium-z--bag": {
-    "name": "Flyínio Z",
-    "shortDesc": "XXX novo efeito para flyinium-z--bag"
   },
   "flyinium-z--held": {
     "name": "Flyínio Z",
@@ -1455,10 +1391,6 @@
     "name": "Memória Fantasma",
     "shortDesc": "Realizado: Muda Silvally para sua forma Fantasma. Muda o tipo de ataques múltiplos para Fantasma."
   },
-  "ghostium-z--bag": {
-    "name": "Fantasma Z",
-    "shortDesc": "XXX novo efeito para ghostium-z--bag"
-  },
   "ghostium-z--held": {
     "name": "Fantasma Z",
     "shortDesc": "Held: Permite que um Pokémon use os movimentos Z equivalentes aos seus movimentos Ghost."
@@ -1478,10 +1410,6 @@
   "go-goggles": {
     "name": "Óculos de proteção",
     "shortDesc": "Permite passagem por desertos ventosos."
-  },
-  "god-stone": {
-    "name": "pedra divina",
-    "shortDesc": "Desconhecido. Atualmente não utilizado."
   },
   "gold-bottle-cap": {
     "name": "Tampa de garrafa dourada",
@@ -1534,10 +1462,6 @@
   "grass-memory": {
     "name": "Memória de grama",
     "shortDesc": "Realizado: Muda Silvally para sua forma Grass. Muda o tipo de ataques múltiplos para Grama."
-  },
-  "grassium-z--bag": {
-    "name": "Grassium Z",
-    "shortDesc": "XXX novo efeito para grassium-z-bag"
   },
   "grassium-z--held": {
     "name": "Grassium Z",
@@ -1594,10 +1518,6 @@
   "ground-memory": {
     "name": "Memória Terrestre",
     "shortDesc": "Realizado: Muda Silvally para sua forma Ground. Muda o tipo de ataques múltiplos para terrestre."
-  },
-  "groundium-z--bag": {
-    "name": "Terrêmio Z",
-    "shortDesc": "XXX novo efeito para groundium-z-bag"
   },
   "groundium-z--held": {
     "name": "Terrêmio Z",
@@ -1803,10 +1723,6 @@
     "name": "Prato de Sincelo",
     "shortDesc": "Realizado: Movimentos do tipo Ice do titular causam 20% a mais de dano. Muda o tipo de Arceuss e Julgamentos para Gelo."
   },
-  "icium-z--bag": {
-    "name": "Gelo Z",
-    "shortDesc": "XXX novo efeito para icium-z--bag"
-  },
   "icium-z--held": {
     "name": "Gelo Z",
     "shortDesc": "Held: Permite que um Pokémon use os movimentos Z equivalentes aos seus movimentos Ice."
@@ -1822,10 +1738,6 @@
   "impish-mint": {
     "name": "Menta travessa",
     "shortDesc": "Quando um Pokémon cheira esta menta, sua Defesa crescerá mais facilmente, mas seu Sp. Atk crescerá mais lentamente."
-  },
-  "incinium-z--bag": {
-    "name": "Incínio Z",
-    "shortDesc": "XXX novo efeito para incinium-z--bag"
   },
   "incinium-z--held": {
     "name": "Incínio Z",
@@ -1919,10 +1831,6 @@
     "name": "Reis Rock",
     "shortDesc": "Realizado: Golpes de dano ganham 10% de chance de fazer seu alvo recuar. Negociado em um Poliwhirl: Holder evolui para Politoed. Negociado em um Slowpoke: Holder evolui para Slowking."
   },
-  "kommonium-z--bag": {
-    "name": "Commônio Z",
-    "shortDesc": "XXX novo efeito para kommonium-z--bag"
-  },
   "kommonium-z--held": {
     "name": "Commônio Z",
     "shortDesc": "Realizado: Permite que Kommo-o use Clangorous Soulblaze."
@@ -1970,10 +1878,6 @@
   "leaf-stone": {
     "name": "Pedra Folha",
     "shortDesc": "Evolui um Exeggcute para Exeggutor, um Gloom para Vileplume, um Nuzleaf para Shiftry, um Pansage para Simisage ou um Weepinbell para Victreebel."
-  },
-  "left-poke-ball": {
-    "name": "Pokébola Esquerda",
-    "shortDesc": "XXX novo efeito para pokébola esquerda"
   },
   "leftovers": {
     "name": "Sobras",
@@ -2067,10 +1971,6 @@
     "name": "Ingresso do Looker",
     "shortDesc": "Avança o enredo pós-jogo do Looker."
   },
-  "loot-sack": {
-    "name": "Saco de saque",
-    "shortDesc": "Carrega saques de minas de carvão."
-  },
   "lopunnite": {
     "name": "Lopunnite",
     "shortDesc": "Realizado: Permite que Lopunny Megaevolua para Mega Lopunny."
@@ -2119,10 +2019,6 @@
     "name": "Galette Lumiose",
     "shortDesc": "Cura todas as principais doenças e confusões de status."
   },
-  "lunalium-z--bag": {
-    "name": "Lunálio Z",
-    "shortDesc": "XXX novo efeito para lunalium-z--bag"
-  },
   "lunalium-z--held": {
     "name": "Lunálio Z",
     "shortDesc": "Realizado: Permite que Lunala use Menacing Moonraze Maelstrom."
@@ -2151,17 +2047,9 @@
     "name": "Baile de Luxo",
     "shortDesc": "Tenta capturar um Pokémon selvagem. Pokémon capturados começam com 200 de felicidade."
   },
-  "lycanium-z--bag": {
-    "name": "Licânio Z",
-    "shortDesc": "XXX novo efeito para lycanium-z-bag"
-  },
   "lycanium-z--held": {
     "name": "Licânio Z",
     "shortDesc": "Realizado: Permite que Lycanroc use Splintered Stormshards."
-  },
-  "mach-bike": {
-    "name": "Bicicleta Mach",
-    "shortDesc": "Mais rápido que a Acro Bike e pode subir encostas arenosas e pisos rachados."
   },
   "machine-part": {
     "name": "Peça da máquina",
@@ -2231,10 +2119,6 @@
     "name": "Marcar Feitiço",
     "shortDesc": "Um amuleto misterioso e único que aumenta a chance de encontrar um Pokémon com marca."
   },
-  "marshadium-z--bag": {
-    "name": "Marsádio Z",
-    "shortDesc": "XXX novo efeito para marshadium-z--bag"
-  },
   "marshadium-z--held": {
     "name": "Marsádio Z",
     "shortDesc": "Realizado: Permite que Marshadow atualize Spectral Thief para Soul-Stealing 7 Star Strike."
@@ -2274,10 +2158,6 @@
   "max-potion": {
     "name": "Poção Máxima",
     "shortDesc": "Restaura completamente os PS de um Pokémon."
-  },
-  "max-repel": {
-    "name": "Repulsão máxima",
-    "shortDesc": "Por 250 passos, evita encontros selvagens de nível inferior ao do Pokémon líder do seu grupo."
   },
   "max-revive": {
     "name": "Reanimar Máximo",
@@ -2399,10 +2279,6 @@
     "name": "Metrônomo",
     "shortDesc": "Realizado: Usos consecutivos do mesmo ataque têm um aumento de dano cumulativo de 10%. Aumento máximo de 100%."
   },
-  "mewnium-z--bag": {
-    "name": "Mewnium Z",
-    "shortDesc": "XXX novo efeito para mewnium-z--bag"
-  },
   "mewnium-z--held": {
     "name": "Mewnium Z",
     "shortDesc": "Realizado: Permite que Mew atualize Psychic para Genesis Supernova."
@@ -2434,10 +2310,6 @@
   "mild-mint": {
     "name": "Menta suave",
     "shortDesc": "Quando um Pokémon cheira esta menta, seu Sp. Atk crescerá mais facilmente, mas sua Defesa crescerá mais lentamente."
-  },
-  "mimikium-z--bag": {
-    "name": "Mimício Z",
-    "shortDesc": "XXX novo efeito para mimikium-z--bag"
   },
   "mimikium-z--held": {
     "name": "Mimício Z",
@@ -2578,10 +2450,6 @@
   "normal-gem": {
     "name": "Gema Normal",
     "shortDesc": "Realizado: Quando o titular usa um movimento prejudicial do tipo Normal, o movimento tem 1,5 de poder e este item é consumido."
-  },
-  "normalium-z--bag": {
-    "name": "Normalium Z",
-    "shortDesc": "XXX novo efeito para normalium-z--bag"
   },
   "normalium-z--held": {
     "name": "Normalium Z",
@@ -2743,17 +2611,9 @@
     "name": "Pidgeotite",
     "shortDesc": "Realizado: Permite que Pidgeot megaevolua para Mega Pidgeot."
   },
-  "pikanium-z--bag": {
-    "name": "Picânio Z",
-    "shortDesc": "XXX novo efeito para pikanium-z--bag"
-  },
   "pikanium-z--held": {
     "name": "Picânio Z",
     "shortDesc": "Realizado: Permite que Pikachu atualize Volt Tackle para Catastropika."
-  },
-  "pikashunium-z--bag": {
-    "name": "Pikashunium Z",
-    "shortDesc": "XXX novo efeito para pikashunium-z--bag"
   },
   "pikashunium-z--held": {
     "name": "Pikashunium Z",
@@ -2814,10 +2674,6 @@
   "poison-memory": {
     "name": "Memória Venenosa",
     "shortDesc": "Realizado: Muda Silvally para sua forma Veneno. Muda o tipo de ataques múltiplos para Veneno."
-  },
-  "poisonium-z--bag": {
-    "name": "Veneno Z",
-    "shortDesc": "XXX novo efeito para Poisonium-z-bag"
   },
   "poisonium-z--held": {
     "name": "Veneno Z",
@@ -2935,10 +2791,6 @@
     "name": "Pena Bonita",
     "shortDesc": "Venda por 100 Pokedollars."
   },
-  "primarium-z--bag": {
-    "name": "Primário Z",
-    "shortDesc": "XXX novo efeito para primarium-z--bag"
-  },
   "primarium-z--held": {
     "name": "Primário Z",
     "shortDesc": "Realizado: Permite que Primarina atualize Sparkling Aria para Oceanic Operetta."
@@ -2986,10 +2838,6 @@
   "psychic-seed": {
     "name": "Semente Psíquica",
     "shortDesc": "Realizado: Consumido em Psychic Terrain e aumenta a Defesa Especial do detentor em um estágio."
-  },
-  "psychium-z--bag": {
-    "name": "Psíquio Z",
-    "shortDesc": "XXX novo efeito para psychium-z-bag"
   },
   "psychium-z--held": {
     "name": "Psíquio Z",
@@ -3207,10 +3055,6 @@
     "name": "Repetir bola",
     "shortDesc": "Tenta capturar um Pokémon selvagem. A taxa de sucesso é de 3 para Pokémon capturados anteriormente."
   },
-  "repel": {
-    "name": "Repelir",
-    "shortDesc": "Impede que Pokémon selvagens fracos apareçam por um curto período de tempo."
-  },
   "resist-wing": {
     "name": "Resistir Pena",
     "shortDesc": "Aumenta o esforço de Defesa em 1."
@@ -3287,10 +3131,6 @@
     "name": "Amuleto de Rock Smash",
     "shortDesc": "Permite usar Rock Smash sem que um Pokémon conheça o movimento."
   },
-  "rockium-z--bag": {
-    "name": "Rockium Z",
-    "shortDesc": "XXX novo efeito para rockium-z--bag"
-  },
   "rockium-z--held": {
     "name": "Rockium Z",
     "shortDesc": "Held: Permite que um Pokémon use os movimentos Z equivalentes aos seus movimentos Rock."
@@ -3298,10 +3138,6 @@
   "rocky-helmet": {
     "name": "Capacete Rochoso",
     "shortDesc": "Realizado: Quando o detentor é atingido por um movimento de contato, o Pokémon atacante sofre 1/6 de seu HP máximo em dano."
-  },
-  "roller-skates": {
-    "name": "Patins",
-    "shortDesc": "Permite ao jogador se mover rapidamente e fora da grade."
   },
   "room-service": {
     "name": "Serviço de quarto",
@@ -3319,66 +3155,6 @@
     "name": "Roseli Berry",
     "shortDesc": "Realizado: Consumido quando atingido por um ataque supereficaz do tipo Fada para reduzir o dano pela metade."
   },
-  "roto-bargain": {
-    "name": "Pechincha Roto",
-    "shortDesc": "XXX novo efeito para roto-bargain"
-  },
-  "roto-boost": {
-    "name": "Impulso Roto",
-    "shortDesc": "XXX novo efeito para roto-boost"
-  },
-  "roto-catch": {
-    "name": "Captura Roto",
-    "shortDesc": "XXX novo efeito para roto-catch"
-  },
-  "roto-encounter": {
-    "name": "Encontro Roto",
-    "shortDesc": "XXX novo efeito para roto-encounter"
-  },
-  "roto-exp-points": {
-    "name": "Roto Exp. Pontos",
-    "shortDesc": "XXX novo efeito para pontos roto-exp"
-  },
-  "roto-friendship": {
-    "name": "Amizade Roto",
-    "shortDesc": "XXX novo efeito para roto-amizade"
-  },
-  "roto-hatch": {
-    "name": "Escotilha Roto",
-    "shortDesc": "XXX novo efeito para roto-hachura"
-  },
-  "roto-hp-restore": {
-    "name": "Restauração Roto HP",
-    "shortDesc": "XXX novo efeito para roto-hp-restore"
-  },
-  "roto-pp-restore": {
-    "name": "Restauração Roto PP",
-    "shortDesc": "XXX novo efeito para roto-pp-restore"
-  },
-  "roto-prize-money": {
-    "name": "Prêmio Roto em dinheiro",
-    "shortDesc": "XXX novo efeito para roto-prêmio-dinheiro"
-  },
-  "roto-stealth": {
-    "name": "Roto Furtividade",
-    "shortDesc": "XXX novo efeito para roto-stealth"
-  },
-  "rotom-bike": {
-    "name": "Bicicleta Rotom",
-    "shortDesc": "Esta bicicleta pode ser combinada com o Pokémon Rotom para usar um turbo boost."
-  },
-  "rotom-bike--glistening-black": {
-    "name": "Bicicleta Rotom",
-    "shortDesc": "Esta bicicleta pode fazer um turbo boost e correr na água usando a força do Rotom. É um preto brilhante que brilha em preto avermelhado."
-  },
-  "rotom-bike--sparkling-white": {
-    "name": "Bicicleta Rotom",
-    "shortDesc": "Esta bicicleta pode fazer um turbo boost e correr na água usando a força do Rotom. É um branco cintilante que brilha intensamente."
-  },
-  "rotom-bike--water-mode": {
-    "name": "Bicicleta Rotom",
-    "shortDesc": "Esta bicicleta pode ser combinada com o Pokémon Rotom para não apenas dar um turbo boost, mas também correr na água."
-  },
   "rotom-catalog": {
     "name": "Catálogo Rotom",
     "shortDesc": "Um catálogo de dispositivos que o Rotom gosta. Use o catálogo para que o Rotom entre e saia dos vários dispositivos listados."
@@ -3390,10 +3166,6 @@
   "ruby": {
     "name": "Rubi",
     "shortDesc": "Dê ao Celio com Sapphire para ativar Network Machine e obter Rainbow Pass."
-  },
-  "rule-book": {
-    "name": "Livro de regras",
-    "shortDesc": "Lista de tipos de batalha e suas regras."
   },
   "rusted-shield": {
     "name": "Escudo Enferrujado",
@@ -3482,10 +3254,6 @@
   "sea-incense": {
     "name": "Incenso Marinho",
     "shortDesc": "Realizado: Movimentos do tipo Água do suporte causam 20% a mais de dano. Reprodução: Marill ou Azumarill geram um Ovo de Azurill."
-  },
-  "seal-bag": {
-    "name": "Saco Selado",
-    "shortDesc": "Possui dez selos para Poke Balls."
   },
   "seal-case": {
     "name": "Caixa de vedação",
@@ -3631,10 +3399,6 @@
     "name": "Rocha Suave",
     "shortDesc": "Realizada: Tempestade de areia do titular dura 8 rodadas em vez de 5."
   },
-  "snorlium-z--bag": {
-    "name": "Snrólio Z",
-    "shortDesc": "XXX novo efeito para snorlium-z-bag"
-  },
   "snorlium-z--held": {
     "name": "Snrólio Z",
     "shortDesc": "Realizado: Permite que Snorlax atualize Giga Impact para Pulverizing Pancake."
@@ -3654,10 +3418,6 @@
   "soft-sand": {
     "name": "Areia fofa",
     "shortDesc": "Realizado: Golpes Ground-Type do titular causam 20% a mais de dano."
-  },
-  "solganium-z--bag": {
-    "name": "Solgânio Z",
-    "shortDesc": "XXX novo efeito para solganium-z-bag"
   },
   "solganium-z--held": {
     "name": "Solgânio Z",
@@ -3771,10 +3531,6 @@
     "name": "Memória de Aço",
     "shortDesc": "Realizado: Muda Silvally para sua forma de Aço. Muda o tipo de ataques múltiplos para Aço."
   },
-  "steelium-z--bag": {
-    "name": "Aço Z",
-    "shortDesc": "XXX novo efeito para steelium-z-bag"
-  },
   "steelium-z--held": {
     "name": "Aço Z",
     "shortDesc": "Held: Permite que um Pokémon use os movimentos Z equivalentes aos seus movimentos Steel."
@@ -3855,10 +3611,6 @@
     "name": "Superpoção",
     "shortDesc": "Restaura 50 PS."
   },
-  "super-repel": {
-    "name": "Super Repelir",
-    "shortDesc": "Por 200 passos, evita encontros selvagens de nível inferior ao Pokémon líder do seu grupo."
-  },
   "super-rod": {
     "name": "Supervara",
     "shortDesc": "Use-a para capturar Pokémon poderosos em corpos d'água."
@@ -3902,10 +3654,6 @@
   "tanga-berry": {
     "name": "Baga Tanga",
     "shortDesc": "Realizado: Consumido quando atingido por um ataque supereficaz do tipo Bug para reduzir o dano pela metade."
-  },
-  "tapunium-z--bag": {
-    "name": "Tapúnio Z",
-    "shortDesc": "XXX novo efeito para tapunium-z--bag"
   },
   "tapunium-z--held": {
     "name": "Tapúnio Z",
@@ -5547,10 +5295,6 @@
     "name": "Ultra Bola",
     "shortDesc": "Uma bola de alto desempenho, com uma chance de captura maior que a de uma Grande Bola."
   },
-  "ultranecrozium-z--bag": {
-    "name": "Ultranecrózio Z",
-    "shortDesc": "XXX novo efeito para ultranecrozium-z-bag"
-  },
   "ultranecrozium-z--held": {
     "name": "Ultranecrózio Z",
     "shortDesc": "Realizado: Permite que Necrozma use Luz que Queima o Céu."
@@ -5614,10 +5358,6 @@
   "waterfall-charm": {
     "name": "Amuleto de Waterfall",
     "shortDesc": "Permite usar Waterfall sem que um Pokémon conheça o movimento."
-  },
-  "waterium-z--bag": {
-    "name": "Aquário Z",
-    "shortDesc": "XXX novo efeito para waterium-z-bag"
   },
   "waterium-z--held": {
     "name": "Aquário Z",

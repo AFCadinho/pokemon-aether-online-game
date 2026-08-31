@@ -480,7 +480,7 @@ const BAG_CATEGORIES := [
 	{"id": "all", "labelKey": "ui.bag.category.all", "iconItemId": ""},
 	{"id": "medicine", "labelKey": "ui.bag.category.medicine", "iconItemId": "potion"},
 	{"id": "pokeball", "labelKey": "ui.bag.category.pokeballs", "iconItemId": "poke-ball"},
-	{"id": "key_items", "labelKey": "ui.bag.category.key_items", "iconItemId": "bicycle"},
+	{"id": "key_items", "labelKey": "ui.bag.category.key_items", "iconItemId": "mount-license"},
 	{"id": "machines", "labelKey": "ui.bag.category.machines", "iconItemId": "tm-material"},
 	{"id": "charms", "labelKey": "ui.bag.category.charms", "iconItemId": "surf-charm"},
 	{"id": "held_items", "labelKey": "ui.bag.category.held_items", "iconItemId": "leftovers"},
