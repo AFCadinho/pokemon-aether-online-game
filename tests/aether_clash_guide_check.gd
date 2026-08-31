@@ -37,6 +37,23 @@ func _run() -> void:
 	_check(mode_guides.has("guild_duel"), "Guide owns a Guild Duel section")
 	_check(mode_guides.has("battle_royale"), "Guide is already structured for Battle Royale")
 	_check(root_topics.size() >= 6, "Guide exposes concise categorized questions")
+	_check(
+		not bool(guide.call("_prefetches_dialogue_metadata_on_approach"))
+		and not bool(guide.call("_loads_pickpocket_profile_from_npc_metadata")),
+		"Local guide dialogue and thieving behavior never request server NPC metadata"
+	)
+	var nearby_player := Node2D.new()
+	nearby_player.name = "Player"
+	add_child(nearby_player)
+	guide.set("player_nearby", true)
+	guide.set("nearby_player", nearby_player)
+	await guide.call("_prefetch_nearby_npc_content")
+	_check(
+		not bool(guide.get("npc_metadata_loaded"))
+		and not bool(guide.get("npc_metadata_load_failed")),
+		"Approaching the guide skips the NPC metadata request entirely"
+	)
+	nearby_player.queue_free()
 	var localized_topics: Array = guide.call("_localized_topics", root_topics)
 	_check(
 		localized_topics.size() == root_topics.size()
