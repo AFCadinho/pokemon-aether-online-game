@@ -1,6 +1,7 @@
 extends SceneTree
 
 const MountServiceScript := preload("res://scripts/services/mount_service.gd")
+const MapMetadataScript := preload("res://scripts/world/map_metadata.gd")
 
 var failed := false
 
@@ -84,6 +85,7 @@ func _check_land_mount_runtime_contract() -> void:
 	var project_source := FileAccess.get_file_as_string("res://project.godot")
 	var settings_source := FileAccess.get_file_as_string("res://scripts/services/settings_manager.gd")
 	var player_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
+	var map_metadata_source := FileAccess.get_file_as_string("res://scripts/world/map_metadata.gd")
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	var loading_source := FileAccess.get_file_as_string("res://scripts/ui/loading_screen.gd")
 	var settings_menu_source := FileAccess.get_file_as_string("res://scripts/ui/settings_menu.gd")
@@ -99,12 +101,44 @@ func _check_land_mount_runtime_contract() -> void:
 		player_source.contains("func toggle_land_mount()")
 		and player_source.contains("func restore_land_mount(mount_id: String)")
 		and player_source.contains("func _has_mount_license_for_current_region()")
+		and player_source.contains("func _get_current_mount_license_region_id()")
+		and player_source.contains('["mountLicenseRegionId", "regionId"]')
 		and player_source.contains('"ui.mounts.license_required"')
 		and player_source.contains("LAND_MOUNT_TILE_MOVE_DURATION := 0.065")
 		and player_source.contains("LAND_MOUNT_WALK_ANIMATION_SPEED := 18.0")
 		and player_source.contains("InventoryService"),
 		"the player can toggle an owned, faster land mount"
 	)
+	_check(
+		map_metadata_source.contains("@export var mount_license_region_id")
+		and map_metadata_source.contains('"mountLicenseRegionId"'),
+		"maps can define a mount-license region independently from their world region"
+	)
+	var metadata_node := MapMetadataScript.new()
+	metadata_node.map_region_name = "Aether Clash"
+	metadata_node.region_id = "aether_clash"
+	metadata_node.mount_license_region_id = "kanto"
+	var location_metadata: Dictionary = metadata_node.get_location_metadata()
+	_check(
+		str(location_metadata.get("regionId", "")) == "aether_clash"
+		and str(location_metadata.get("mountLicenseRegionId", "")) == "kanto",
+		"Aether Clash metadata resolves world and mount-license regions separately"
+	)
+	metadata_node.free()
+	for aether_clash_scene_path: String in [
+		"res://scenes/overworld/aether_clash/aether_clash_lobby.tscn",
+		"res://scenes/overworld/aether_clash/aether_clash_duel.tscn",
+		"res://scenes/overworld/aether_clash/aether_clash_duel_preview.tscn",
+		"res://scenes/overworld/aether_clash/aether_clash_battle_royale_preview.tscn",
+		"res://scenes/overworld/aether_clash/waiting_area_preview.tscn",
+	]:
+		var aether_clash_scene_source := FileAccess.get_file_as_string(aether_clash_scene_path)
+		_check(
+			aether_clash_scene_source.contains('region_id = "aether_clash"')
+			and aether_clash_scene_source.contains('mount_license_region_id = "kanto"'),
+			"%s keeps its Aether Clash identity while accepting the Kanto Mount License"
+			% aether_clash_scene_path
+		)
 	_check(
 		world_source.contains('"mountId": active_land_mount_id')
 		and world_source.contains('state.get("mountId", "")')

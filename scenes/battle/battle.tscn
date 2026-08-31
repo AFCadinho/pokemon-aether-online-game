@@ -644,6 +644,17 @@ theme_override_font_sizes/font_size = 18
 text = "battle.ui.damage_calculator"
 vertical_alignment = 1
 
+[node name="CalcBattleLimitLabel" type="Label" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(118, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.38431373, 0.84313726, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="CalcTurnLabel" type="Label" parent="BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(88, 30)

@@ -11,6 +11,7 @@ const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.
 @export var location_id := ""
 @export var location_name := ""
 @export var region_id := ""
+@export var mount_license_region_id := ""
 @export var encounter_area_id := ""
 @export_group("Battle")
 @export_enum("grass", "water", "cave") var battle_environment_id := "grass"
@@ -58,12 +59,22 @@ func get_world_access_area_type() -> String:
 
 
 func get_location_metadata() -> Dictionary:
+	var resolved_region_id := (
+		region_id
+		if region_id.strip_edges() != ""
+		else map_region_name.to_lower().replace(" ", "_")
+	)
 	return {
 		"locationId": location_id if location_id.strip_edges() != "" else map_id,
 		"locationName": location_name if location_name.strip_edges() != "" else get_map_display_name(),
-		"regionId": region_id if region_id.strip_edges() != "" else map_region_name.to_lower().replace(" ", "_"),
+		"regionId": resolved_region_id,
 		"regionName": map_region_name,
 		"mapId": map_id,
+		"mountLicenseRegionId": (
+			mount_license_region_id
+			if mount_license_region_id.strip_edges() != ""
+			else resolved_region_id
+		),
 		"battleEnvironmentId": battle_environment_id,
 	}
 
