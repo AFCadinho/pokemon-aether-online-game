@@ -8,6 +8,9 @@ De guide is een startpunt. Niet iedere tester hoeft alles te doen. Verdeel de
 testkaarten vooraf en sla een kaart alleen over als de benodigde functie of
 testdata niet beschikbaar is.
 
+Zie ook de [kant-en-klare Engelstalige Discord-posts](tester-discord-posts.md)
+voor aankondigingen, dagelijkse opdrachten en bugrapporten.
+
 ## Wat is end-to-end testen?
 
 Bij een end-to-end test doorloop je een complete spelersreis. Je controleert dus
