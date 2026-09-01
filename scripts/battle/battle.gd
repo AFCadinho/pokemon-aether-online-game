@@ -121,6 +121,7 @@ var pvp_room_code := ""
 var pvp_match_id := ""
 var pvp_viewer_role := "participant"
 var pvp_battle_purpose := ""
+var training_ai_battle := false
 var pvp_local_canonical_roster: Array = []
 var pvp_realtime_updates: Array[Dictionary] = []
 var pvp_realtime_deferred_updates: Array[Dictionary] = []
@@ -3906,7 +3907,11 @@ func _finish_battle(result: Dictionary) -> void:
 			_heal_party_after_pvp_battle.call_deferred()
 	if not result.has("localPartyDefeated"):
 		result["localPartyDefeated"] = _is_local_battle_party_defeated()
-	var skip_party_battle_sync := bool(result.get("skipPartyBattleSync", false)) or _should_skip_party_battle_sync_for_blackout(result)
+	var skip_party_battle_sync := (
+		_is_training_room_battle()
+		or bool(result.get("skipPartyBattleSync", false))
+		or _should_skip_party_battle_sync_for_blackout(result)
+	)
 	if not skip_party_battle_sync:
 		_sync_player_save_from_battle_state()
 		PlayerPartyStateService.save_current_battle_party_state_deferred(_battle_happiness_context())
@@ -5107,6 +5112,8 @@ func _remember_active_player_party_moves() -> void:
 		player_party_moves_by_key[key] = moves
 
 func _sync_player_save_from_battle_state() -> void:
+	if _is_training_room_battle():
+		return
 	var player_team := battle_state.get_player_team("p1")
 	if player_team.is_empty():
 		return
@@ -6614,9 +6621,13 @@ func setup_trainer_battle_from_response(
 	trainer_data: Dictionary,
 	api_response: Dictionary,
 	entry_ready_callback: Callable = Callable(),
-	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
+	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID,
+	is_training_ai: bool = false
 ) -> void:
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
+	training_ai_battle = is_training_ai
+	if training_ai_battle:
+		pvp_battle_purpose = "training"
 	npc_trainer_display_name = setup_flow.get_trainer_name(trainer_data, "")
 	var team_preview_enabled := _trainer_team_preview_enabled(api_response)
 	opponent_party_reveal_policy.reset(team_preview_enabled)
@@ -7045,6 +7056,7 @@ func _prepare_battle_setup(
 	pvp_presentation_acknowledgements_authoritative = false
 	pvp_response_order.reset()
 	pvp_battle_purpose = ""
+	training_ai_battle = false
 	pvp_local_canonical_roster.clear()
 	spectator_sides_swapped = false
 	spectator_latest_raw_response.clear()
@@ -11288,7 +11300,7 @@ func _is_aether_clash_battle() -> bool:
 	return _is_pvp_battle() and pvp_battle_purpose == "aether_clash"
 
 func _is_training_room_battle() -> bool:
-	return _is_pvp_battle() and pvp_battle_purpose == "training"
+	return training_ai_battle or (_is_pvp_battle() and pvp_battle_purpose == "training")
 
 func _is_spectator_battle() -> bool:
 	return _is_pvp_battle() and pvp_viewer_role == "spectator"

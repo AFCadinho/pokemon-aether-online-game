@@ -55,12 +55,15 @@ func _check_pvp_runtime_translation() -> void:
 	var room_flow_card := overlay.find_child("RoomFlowCard", true, false) as PanelContainer
 	var room_join_button := overlay.get("pvp_room_join_mode_button") as Button
 	var room_create_button := overlay.get("pvp_room_create_mode_button") as Button
+	var room_ai_button := overlay.get("pvp_room_ai_mode_button") as Button
 	var room_spectate_button := overlay.get("pvp_room_spectate_mode_button") as Button
 	var casual_button := overlay.get("pvp_room_casual_type_button") as Button
 	var training_button := overlay.get("pvp_room_training_type_button") as Button
 	var room_type_note := overlay.get("pvp_room_type_note") as Label
 	var room_flow_hint := overlay.get("pvp_room_flow_hint") as Label
 	var training_input := overlay.get("pvp_training_team_input") as TextEdit
+	var training_ai_team_row := overlay.get("pvp_training_ai_team_row") as HBoxContainer
+	var training_ai_team_select := overlay.get("pvp_training_ai_team_select") as OptionButton
 	var training_preview := overlay.get("pvp_training_team_preview_section") as VBoxContainer
 	var training_preview_title := overlay.get("pvp_training_team_preview_title") as Label
 	var training_preview_grid := overlay.get("pvp_training_team_preview_grid") as HBoxContainer
@@ -127,6 +130,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(objectives_filter != null and objectives_filter.get_item_text(0) == "Dagelijks", "Objective filter renders in Dutch")
 	_check_ranked_dropdown_style(objectives_filter, "Objective period")
 	_check(room_join_button != null and room_join_button.text == "Deelnemen", "Private room action renders in Dutch")
+	_check(room_ai_button != null and room_ai_button.text == "Tegen AI5", "AI5 training action renders in Dutch")
 	_check(training_button != null and training_button.text == "Training Room", "Training room selector renders in Dutch")
 	_check(casual_button != null and casual_button.text.begins_with("✓ "), "Default room type is visibly selected")
 	_check(room_workspace != null and room_workspace.get_child_count() == 2, "Room setup uses a clear two-column workflow")
@@ -193,13 +197,42 @@ func _check_pvp_runtime_translation() -> void:
 	_check_ranked_dropdown_style(format_select, "Matchmaking format")
 	_check_ranked_dropdown_style(leaderboard_scope, "Leaderboard period")
 
+	# This focused localization test does not mount the overlay in the tree, so
+	# treat the remote catalog as already checked and keep the signal path local.
+	overlay.set("pvp_training_ai_catalog_loaded", true)
 	training_button.emit_signal("pressed")
 	await process_frame
 	_check(overlay.get("pvp_room_battle_purpose") == "training", "Training button signal selects training mode")
 	_check(training_button.text.begins_with("✓ "), "Training selection is immediately visible on its button")
+	_check(room_ai_button != null and room_ai_button.visible, "Training selection exposes the AI5 opponent option")
 	_check(room_type_note != null and room_type_note.text.contains("beide spelers"), "Training selection immediately changes its explanation")
 	_check(room_status != null and room_status.text.begins_with("Training Room geselecteerd"), "Training selection immediately changes room status")
 	_check(room_create_button != null and room_create_button.text == "Training maken", "Training selection changes the create action")
+	var training_ai_catalog_entries: Array = overlay.get("pvp_training_ai_catalog_entries") as Array
+	training_ai_catalog_entries.clear()
+	training_ai_catalog_entries.append({
+		"teamId": "smogon-ndou-screens-lameflame",
+		"displayName": "Screens",
+		"authors": ["Lameflame"],
+	})
+	overlay.set("pvp_training_ai_enabled", true)
+	overlay.call("_refresh_pvp_training_ai_team_options")
+	overlay.call("_refresh_pvp_room_battle_purpose_ui")
+	room_ai_button.emit_signal("pressed")
+	await process_frame
+	_check(overlay.get("pvp_room_selected_mode") == "ai", "AI5 button selects the server-owned opponent flow")
+	_check(training_input != null and training_input.visible, "AI5 flow accepts an imported Gen 9 National Dex team")
+	_check(training_ai_team_row != null and training_ai_team_row.visible, "AI5 flow exposes the sample-team selector")
+	_check(training_ai_team_select != null and training_ai_team_select.item_count == 2, "AI5 selector includes random and catalog choices")
+	_check(
+		training_ai_team_select != null
+		and training_ai_team_select.item_count > 1
+		and str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-screens-lameflame",
+		"AI5 selector preserves the stable team ID"
+	)
+	_check(room_form_title != null and room_form_title.text.begins_with("PLAK JE TEAM"), "AI5 form guidance renders in Dutch")
+	_check(not room_tier_row.visible and not room_code_input.visible, "AI5 flow does not expose two-player room settings")
+	_check(popup.get_combined_minimum_size().y <= 620.0, "AI5 team selector fits inside the room popup")
 	room_create_button.emit_signal("pressed")
 	await process_frame
 	_check(room_tier_row != null and room_tier_row.visible, "Room creation exposes the optional battle tier")
