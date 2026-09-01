@@ -9,7 +9,9 @@ testkaarten vooraf en sla een kaart alleen over als de benodigde functie of
 testdata niet beschikbaar is.
 
 Zie ook de [kant-en-klare Engelstalige Discord-posts](tester-discord-posts.md)
-voor aankondigingen, dagelijkse opdrachten en bugrapporten.
+voor concrete opdrachten per feature en bugrapporten. De Discord-posts splitsen
+de tests verder op en gebruiken daarom hun eigen nummers `TEST 01` t/m
+`TEST 28`.
 
 ## Wat is end-to-end testen?
 
