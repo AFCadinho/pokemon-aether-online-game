@@ -6838,6 +6838,7 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_copy_code_button)
 	_apply_button_style(pvp_room_create_mode_button, "primary")
 	_apply_button_style(pvp_room_join_mode_button)
+	_apply_button_style(pvp_room_ai_mode_button)
 	_apply_button_style(pvp_room_spectate_mode_button)
 	_apply_pvp_room_type_button_style(pvp_room_casual_type_button)
 	_apply_pvp_room_type_button_style(pvp_room_training_type_button)
