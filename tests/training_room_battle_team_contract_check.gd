@@ -104,6 +104,25 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 		"AI5 battles inherit every Training Room party-persistence safeguard"
 	)
 	_check(
+		battle_source.contains("if training_ai_battle:\n\t\tpvp_battle_purpose = \"training\"\n\t\t_capture_pvp_local_canonical_roster(api_response)"),
+		"AI training captures the imported private team before rendering its party rails"
+	)
+	_check(
+		battle_source.contains("if _is_training_room_battle():\n\t\treturn _get_lead_selection_team_data(\"p1\")")
+		and battle_source.contains("var selected_player_pokemon := _get_selected_trainer_player_pokemon()"),
+		"AI training selects and renders its lead from the imported team instead of PlayerSave"
+	)
+	var roster_capture_start := battle_source.find("func _capture_pvp_local_canonical_roster")
+	var roster_capture_end := battle_source.find("func _get_selected_trainer_player_pokemon", roster_capture_start)
+	var roster_capture_source := battle_source.substr(
+		roster_capture_start,
+		roster_capture_end - roster_capture_start
+	)
+	_check(
+		roster_capture_source.contains("\t\treturn\n\n\tfor index in range(PlayerSave.party.size())"),
+		"Training rosters cannot append account-party Pokemon after the imported team"
+	)
+	_check(
 		api_source.contains("/battle/pvp/training/ai/battles")
 		and api_source.contains("\"teamId\": ai_team_id")
 		and api_source.contains("\"aiMode\": ai_mode")

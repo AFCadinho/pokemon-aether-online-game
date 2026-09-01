@@ -6628,6 +6628,7 @@ func setup_trainer_battle_from_response(
 	training_ai_battle = is_training_ai
 	if training_ai_battle:
 		pvp_battle_purpose = "training"
+		_capture_pvp_local_canonical_roster(api_response)
 	npc_trainer_display_name = setup_flow.get_trainer_name(trainer_data, "")
 	var team_preview_enabled := _trainer_team_preview_enabled(api_response)
 	opponent_party_reveal_policy.reset(team_preview_enabled)
@@ -6658,9 +6659,7 @@ func setup_trainer_battle_from_response(
 	if lead_response.is_empty():
 		return
 
-	var selected_player_pokemon := _get_player_save_pokemon_for_battle_display_data(
-		battle_state.get_active_player_pokemon("p1")
-	)
+	var selected_player_pokemon := _get_selected_trainer_player_pokemon()
 	if selected_player_pokemon != null:
 		player_pokemon = selected_player_pokemon
 		active_player_pokemon = selected_player_pokemon
@@ -7794,6 +7793,9 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 	return {}
 
 func _get_trainer_lead_selection_party_data() -> Array:
+	if _is_training_room_battle():
+		return _get_lead_selection_team_data("p1")
+
 	var party: Array = []
 	for pokemon_value: Variant in PlayerSave.party:
 		var pokemon: Pokemon = pokemon_value as Pokemon
@@ -7824,6 +7826,16 @@ func _get_trainer_lead_selection_party_data() -> Array:
 	return party
 
 func _can_choose_trainer_lead_slot(slot: int) -> bool:
+	if _is_training_room_battle():
+		var training_team := _get_trainer_lead_selection_party_data()
+		if slot < 1 or slot > training_team.size():
+			return false
+		var training_pokemon_value: Variant = training_team[slot - 1]
+		return (
+			training_pokemon_value is Dictionary
+			and _is_pokemon_data_usable_for_lead(training_pokemon_value as Dictionary)
+		)
+
 	if slot < 1 or slot > PlayerSave.party.size():
 		return false
 
@@ -15626,6 +15638,27 @@ func _capture_pvp_local_canonical_roster(display_response: Dictionary = {}) -> v
 		pokemon_data["metadataSlot"] = canonical_slot
 		pokemon_data["pokemonKey"] = "%s:slot:%d" % [_get_local_state_player_id(), canonical_slot]
 		pvp_local_canonical_roster.append(pokemon_data)
+
+func _get_selected_trainer_player_pokemon() -> Pokemon:
+	var active_pokemon_data := battle_state.get_active_player_pokemon("p1")
+	if not training_ai_battle:
+		return _get_player_save_pokemon_for_battle_display_data(active_pokemon_data)
+
+	var active_slot := _get_pokemon_data_canonical_party_slot(active_pokemon_data)
+	for pokemon_value: Variant in _get_display_team_data("p1"):
+		if not (pokemon_value is Dictionary):
+			continue
+		var pokemon_data: Dictionary = pokemon_value as Dictionary
+		if (
+			bool(pokemon_data.get("active", false))
+			or (
+				active_slot > 0
+				and _get_pokemon_data_canonical_party_slot(pokemon_data) == active_slot
+			)
+		):
+			return PokemonFactory.create_pokemon_from_backend_payload(pokemon_data)
+
+	return PokemonFactory.create_pokemon_from_backend_payload(active_pokemon_data)
 
 func _is_pokemon_data_usable_for_lead(pokemon_data: Dictionary) -> bool:
 	if bool(pokemon_data.get("fainted", false)):
