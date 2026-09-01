@@ -42,12 +42,12 @@ func _run() -> void:
 		},
 		"playtimeSeconds": 7200,
 		"pvp": {
-			"formatKey": "singles",
-			"points": 30,
 			"gamesPlayed": 5,
 			"wins": 4,
 			"losses": 1,
 			"winRate": 80.0,
+			"ranked": {"gamesPlayed": 3, "wins": 2, "losses": 1, "winRate": 66.7},
+			"aetherClash": {"gamesPlayed": 2, "wins": 2, "losses": 0, "winRate": 100.0},
 		},
 	})
 	await process_frame
@@ -56,6 +56,7 @@ func _run() -> void:
 	var tabs := popup.find_child("PublicTrainerCardTabs", true, false) as TabContainer if popup != null else null
 	var overview_tab := tabs.get_node_or_null("Overview") as Control if tabs != null else null
 	var badges_tab := tabs.get_node_or_null("Badges") as Control if tabs != null else null
+	var pvp_tab := tabs.get_node_or_null("Pvp") as Control if tabs != null else null
 	var avatar_panel := popup.find_child("PublicTrainerAvatarPanel", true, false) as PanelContainer if popup != null else null
 	var avatar_preview := popup.find_child("PublicTrainerAvatarPreview", true, false) as Node2D if popup != null else null
 	var profile_panel := popup.find_child("PublicTrainerProfilePanel", true, false) as PanelContainer if popup != null else null
@@ -125,7 +126,13 @@ func _run() -> void:
 		_find_label(badges_tab, "GYM BADGES · 2/8") != null,
 		"public Trainer Card keeps Gym Badge progress in the Badges tab"
 	)
-	_check(_find_label(popup, "80%") != null, "public Trainer Card presents the PvP win rate")
+	_check(
+		_find_label(pvp_tab, "PVP RECORD") != null
+		and _find_label(pvp_tab, "80%") != null
+		and _find_label(pvp_tab, "Ranked") != null
+		and _find_label(pvp_tab, "Aether Clash") != null,
+		"public Trainer Card presents the official PvP total and its two sources"
+	)
 	_check(
 		_find_label(popup, "private_internal_map_id") == null,
 		"public Trainer Card never exposes a raw internal map identifier"

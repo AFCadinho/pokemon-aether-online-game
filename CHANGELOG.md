@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer Cards now show one official PvP record with separate Ranked and Aether Clash results; Casual rooms are excluded.
+
 - Other Trainers' Overview now fills its space with a centered avatar and a compact profile grid for Trainer ID, join date, Guild, and playtime, without showing their overworld follower.
 
 - Direct player Aether Clash challenges now offer Aether UU alongside Aether OU.
