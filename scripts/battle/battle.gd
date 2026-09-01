@@ -6370,7 +6370,9 @@ func _update_battle_limit_ui() -> void:
 	)
 	var color := Color(0.38431373, 0.84313726, 1.0)
 	var pulse := false
-	if state == "TIEBREAK" or remaining_ms <= 15_000:
+	if state == "TIEBREAK":
+		color = Color(1.0, 0.35, 0.25)
+	elif remaining_ms <= 15_000:
 		color = Color(1.0, 0.35, 0.25)
 		pulse = true
 	elif remaining_ms <= 60_000:
