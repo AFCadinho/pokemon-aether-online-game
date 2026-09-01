@@ -62,6 +62,10 @@ func _check_pvp_runtime_translation() -> void:
 	var room_type_note := overlay.get("pvp_room_type_note") as Label
 	var room_flow_hint := overlay.get("pvp_room_flow_hint") as Label
 	var training_input := overlay.get("pvp_training_team_input") as TextEdit
+	var training_ai_mode_row := overlay.get("pvp_training_ai_mode_row") as HBoxContainer
+	var training_ai_mode_select := overlay.get("pvp_training_ai_mode_select") as OptionButton
+	var training_ai_archetype_row := overlay.get("pvp_training_ai_archetype_row") as HBoxContainer
+	var training_ai_archetype_select := overlay.get("pvp_training_ai_archetype_select") as OptionButton
 	var training_ai_team_row := overlay.get("pvp_training_ai_team_row") as HBoxContainer
 	var training_ai_team_select := overlay.get("pvp_training_ai_team_select") as OptionButton
 	var training_preview := overlay.get("pvp_training_team_preview_section") as VBoxContainer
@@ -130,7 +134,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(objectives_filter != null and objectives_filter.get_item_text(0) == "Dagelijks", "Objective filter renders in Dutch")
 	_check_ranked_dropdown_style(objectives_filter, "Objective period")
 	_check(room_join_button != null and room_join_button.text == "Deelnemen", "Private room action renders in Dutch")
-	_check(room_ai_button != null and room_ai_button.text == "Tegen AI5", "AI5 training action renders in Dutch")
+	_check(room_ai_button != null and room_ai_button.text == "Tegen AI", "AI training action renders in Dutch")
 	_check(training_button != null and training_button.text == "Training Room", "Training room selector renders in Dutch")
 	_check(casual_button != null and casual_button.text.begins_with("✓ "), "Default room type is visibly selected")
 	_check(room_workspace != null and room_workspace.get_child_count() == 2, "Room setup uses a clear two-column workflow")
@@ -214,25 +218,47 @@ func _check_pvp_runtime_translation() -> void:
 		"teamId": "smogon-ndou-screens-lameflame",
 		"displayName": "Screens",
 		"authors": ["Lameflame"],
+		"archetype": "hyper_offense",
 	})
+	training_ai_catalog_entries.append({
+		"teamId": "smogon-ndou-stall-example",
+		"displayName": "Stall",
+		"authors": ["Example"],
+		"archetype": "stall",
+	})
+	var training_ai_available_modes: Array = overlay.get("pvp_training_ai_available_modes") as Array
+	training_ai_available_modes.assign(["shadow", "active"])
+	var training_ai_archetypes: Array = overlay.get("pvp_training_ai_catalog_archetypes") as Array
+	training_ai_archetypes.assign(["hyper_offense", "stall"])
 	overlay.set("pvp_training_ai_enabled", true)
+	overlay.call("_refresh_pvp_training_ai_mode_options")
+	overlay.call("_refresh_pvp_training_ai_archetype_options")
 	overlay.call("_refresh_pvp_training_ai_team_options")
 	overlay.call("_refresh_pvp_room_battle_purpose_ui")
 	room_ai_button.emit_signal("pressed")
 	await process_frame
-	_check(overlay.get("pvp_room_selected_mode") == "ai", "AI5 button selects the server-owned opponent flow")
-	_check(training_input != null and training_input.visible, "AI5 flow accepts an imported Gen 9 National Dex team")
-	_check(training_ai_team_row != null and training_ai_team_row.visible, "AI5 flow exposes the sample-team selector")
-	_check(training_ai_team_select != null and training_ai_team_select.item_count == 2, "AI5 selector includes random and catalog choices")
+	_check(overlay.get("pvp_room_selected_mode") == "ai", "AI button selects the server-owned opponent flow")
+	_check(training_input != null and training_input.visible, "AI flow accepts an imported Gen 9 National Dex team")
+	_check(training_ai_mode_row != null and training_ai_mode_row.visible, "AI flow exposes shadow and active execution modes")
+	_check(training_ai_mode_select != null and training_ai_mode_select.item_count == 2, "Both permitted AI modes are selectable")
+	_check(str(training_ai_mode_select.get_selected_metadata()) == "shadow", "AI4 with AI5 shadow observation is the safe default")
+	_check(training_ai_archetype_row != null and training_ai_archetype_row.visible, "AI flow exposes an archetype selector")
+	_check(training_ai_archetype_select != null and training_ai_archetype_select.item_count == 3, "Archetype selector includes random and catalog archetypes")
+	_check(training_ai_team_row != null and training_ai_team_row.visible, "AI flow exposes the sample-team selector")
+	_check(training_ai_team_select != null and training_ai_team_select.item_count == 3, "AI selector includes random and catalog choices")
 	_check(
 		training_ai_team_select != null
 		and training_ai_team_select.item_count > 1
 		and str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-screens-lameflame",
-		"AI5 selector preserves the stable team ID"
+		"AI selector preserves the stable team ID"
 	)
-	_check(room_form_title != null and room_form_title.text.begins_with("PLAK JE TEAM"), "AI5 form guidance renders in Dutch")
-	_check(not room_tier_row.visible and not room_code_input.visible, "AI5 flow does not expose two-player room settings")
-	_check(popup.get_combined_minimum_size().y <= 620.0, "AI5 team selector fits inside the room popup")
+	training_ai_archetype_select.select(2)
+	overlay.call("_on_pvp_training_ai_archetype_selected", 2)
+	_check(training_ai_team_select.item_count == 2, "Choosing an archetype filters the specific team list")
+	_check(str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-stall-example", "Filtered team keeps its stable catalog identity")
+	_check(room_form_title != null and room_form_title.text.begins_with("PLAK JE TEAM"), "AI form guidance renders in Dutch")
+	_check(not room_tier_row.visible and not room_code_input.visible, "AI flow does not expose two-player room settings")
+	_check(popup.get_combined_minimum_size().y <= 620.0, "AI mode and team selectors fit inside the room popup")
 	room_create_button.emit_signal("pressed")
 	await process_frame
 	_check(room_tier_row != null and room_tier_row.visible, "Room creation exposes the optional battle tier")

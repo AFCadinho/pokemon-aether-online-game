@@ -2958,9 +2958,12 @@ func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 
 	var ai_team_value: Variant = response.get("trainingAiTeam", {})
 	var ai_team: Dictionary = ai_team_value as Dictionary if ai_team_value is Dictionary else {}
+	var trainer_name := str(response.get("trainerName", "AI Level 5")).strip_edges()
+	if trainer_name == "":
+		trainer_name = "AI Level 5"
 	var trainer_data := {
 		"id": "training-ai-level5",
-		"name": "AI Level 5",
+		"name": trainer_name,
 		"teamDisplayName": str(ai_team.get("displayName", "")),
 		"battleTransitionStyle": "trainer",
 	}
@@ -2970,7 +2973,7 @@ func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 	active_wild_pokemon_species = ""
 	active_wild_encounter_type = ""
 	active_trainer_id = ""
-	active_trainer_name = "AI Level 5"
+	active_trainer_name = trainer_name
 	active_trainer_outro_dialogue_id = ""
 	active_trainer_mugshot = null
 	active_trainer_is_rematch = false

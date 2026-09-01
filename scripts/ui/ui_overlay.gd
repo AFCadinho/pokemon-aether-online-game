@@ -863,6 +863,13 @@ var pvp_room_selected_mode := ""
 var pvp_room_code_input: LineEdit
 var pvp_training_team_input: TextEdit
 var pvp_training_team_note: Label
+var pvp_training_ai_mode_row: HBoxContainer
+var pvp_training_ai_mode_select: OptionButton
+var pvp_training_ai_available_modes: Array[String] = []
+var pvp_training_ai_default_mode := "shadow"
+var pvp_training_ai_archetype_row: HBoxContainer
+var pvp_training_ai_archetype_select: OptionButton
+var pvp_training_ai_catalog_archetypes: Array[String] = []
 var pvp_training_ai_team_row: HBoxContainer
 var pvp_training_ai_team_select: OptionButton
 var pvp_training_ai_catalog_entries: Array[Dictionary] = []
@@ -1940,6 +1947,9 @@ func _refresh_pvp_localized_ui() -> void:
 	if not pvp_leaderboard_entries.is_empty():
 		_render_pvp_leaderboard(pvp_leaderboard_entries)
 	_render_pvp_history_matches(pvp_history_matches, pvp_history_user_id)
+	_refresh_pvp_training_ai_mode_options()
+	_refresh_pvp_training_ai_archetype_options()
+	_refresh_pvp_training_ai_team_options()
 	_refresh_pvp_room_battle_purpose_ui()
 	_refresh_pvp_room_form_title()
 	if pvp_room_code_label != null:
@@ -6365,6 +6375,47 @@ func _setup_pvp_room_popup() -> void:
 	pvp_training_team_note.add_theme_color_override("font_color", Color("#9be7b1"))
 	pvp_training_team_note.visible = false
 	pvp_room_form.add_child(pvp_training_team_note)
+
+	pvp_training_ai_mode_row = HBoxContainer.new()
+	pvp_training_ai_mode_row.add_theme_constant_override("separation", 8)
+	pvp_training_ai_mode_row.visible = false
+	pvp_room_form.add_child(pvp_training_ai_mode_row)
+
+	var training_ai_mode_label := Label.new()
+	_set_localized_control_property(training_ai_mode_label, "text", "ui.pvp.training.ai.mode_label")
+	training_ai_mode_label.custom_minimum_size = Vector2(82, 36)
+	training_ai_mode_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	training_ai_mode_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pvp_training_ai_mode_row.add_child(training_ai_mode_label)
+
+	pvp_training_ai_mode_select = OptionButton.new()
+	pvp_training_ai_mode_select.custom_minimum_size = Vector2(0, 36)
+	pvp_training_ai_mode_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_mode_select.focus_mode = Control.FOCUS_NONE
+	_apply_pvp_ranked_dropdown_style(pvp_training_ai_mode_select, true)
+	pvp_training_ai_mode_row.add_child(pvp_training_ai_mode_select)
+	_refresh_pvp_training_ai_mode_options()
+
+	pvp_training_ai_archetype_row = HBoxContainer.new()
+	pvp_training_ai_archetype_row.add_theme_constant_override("separation", 8)
+	pvp_training_ai_archetype_row.visible = false
+	pvp_room_form.add_child(pvp_training_ai_archetype_row)
+
+	var training_ai_archetype_label := Label.new()
+	_set_localized_control_property(training_ai_archetype_label, "text", "ui.pvp.training.ai.archetype_label")
+	training_ai_archetype_label.custom_minimum_size = Vector2(82, 36)
+	training_ai_archetype_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	training_ai_archetype_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pvp_training_ai_archetype_row.add_child(training_ai_archetype_label)
+
+	pvp_training_ai_archetype_select = OptionButton.new()
+	pvp_training_ai_archetype_select.custom_minimum_size = Vector2(0, 36)
+	pvp_training_ai_archetype_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_archetype_select.focus_mode = Control.FOCUS_NONE
+	_apply_pvp_ranked_dropdown_style(pvp_training_ai_archetype_select, true)
+	pvp_training_ai_archetype_select.item_selected.connect(_on_pvp_training_ai_archetype_selected)
+	pvp_training_ai_archetype_row.add_child(pvp_training_ai_archetype_select)
+	_refresh_pvp_training_ai_archetype_options()
 
 	pvp_training_ai_team_row = HBoxContainer.new()
 	pvp_training_ai_team_row.add_theme_constant_override("separation", 8)
@@ -41699,6 +41750,10 @@ func _refresh_pvp_room_team_fields() -> void:
 			pvp_room_form.move_child(pvp_training_team_input, 1)
 	if pvp_training_team_note != null:
 		pvp_training_team_note.visible = needs_team and is_training
+	if pvp_training_ai_mode_row != null:
+		pvp_training_ai_mode_row.visible = is_training and pvp_room_selected_mode == "ai"
+	if pvp_training_ai_archetype_row != null:
+		pvp_training_ai_archetype_row.visible = is_training and pvp_room_selected_mode == "ai"
 	if pvp_training_ai_team_row != null:
 		pvp_training_ai_team_row.visible = is_training and pvp_room_selected_mode == "ai"
 
@@ -41726,13 +41781,68 @@ func _refresh_pvp_room_form_title() -> void:
 			pvp_room_form_title.text = ""
 
 
+func _refresh_pvp_training_ai_mode_options() -> void:
+	if pvp_training_ai_mode_select == null:
+		return
+	var previous_mode := _selected_pvp_training_ai_mode()
+	pvp_training_ai_mode_select.clear()
+	for mode: String in pvp_training_ai_available_modes:
+		if mode not in ["shadow", "active"]:
+			continue
+		pvp_training_ai_mode_select.add_item(
+			LocalizationManager.text("ui.pvp.training.ai.mode_%s" % mode)
+		)
+		pvp_training_ai_mode_select.set_item_metadata(
+			pvp_training_ai_mode_select.item_count - 1,
+			mode
+		)
+	var preferred_mode := previous_mode
+	if preferred_mode not in pvp_training_ai_available_modes:
+		preferred_mode = pvp_training_ai_default_mode
+	for index in range(pvp_training_ai_mode_select.item_count):
+		if str(pvp_training_ai_mode_select.get_item_metadata(index)) == preferred_mode:
+			pvp_training_ai_mode_select.select(index)
+			break
+
+
+func _refresh_pvp_training_ai_archetype_options() -> void:
+	if pvp_training_ai_archetype_select == null:
+		return
+	var previous_archetype := _selected_pvp_training_ai_archetype()
+	pvp_training_ai_archetype_select.clear()
+	pvp_training_ai_archetype_select.add_item(
+		LocalizationManager.text("ui.pvp.training.ai.archetype_random")
+	)
+	pvp_training_ai_archetype_select.set_item_metadata(0, "random")
+	for archetype: String in pvp_training_ai_catalog_archetypes:
+		pvp_training_ai_archetype_select.add_item(
+			LocalizationManager.text("ui.pvp.training.ai.archetype.%s" % archetype)
+		)
+		pvp_training_ai_archetype_select.set_item_metadata(
+			pvp_training_ai_archetype_select.item_count - 1,
+			archetype
+		)
+	for index in range(pvp_training_ai_archetype_select.item_count):
+		if str(pvp_training_ai_archetype_select.get_item_metadata(index)) == previous_archetype:
+			pvp_training_ai_archetype_select.select(index)
+			break
+
+
 func _refresh_pvp_training_ai_team_options() -> void:
 	if pvp_training_ai_team_select == null:
 		return
+	var requested_archetype := _selected_pvp_training_ai_archetype()
+	var previous_team_id := _selected_pvp_training_ai_team_id()
 	pvp_training_ai_team_select.clear()
-	pvp_training_ai_team_select.add_item(LocalizationManager.text("ui.pvp.training.ai.team_random"))
+	pvp_training_ai_team_select.add_item(LocalizationManager.text(
+		"ui.pvp.training.ai.team_random"
+		if requested_archetype == "random"
+		else "ui.pvp.training.ai.team_random_archetype"
+	))
 	pvp_training_ai_team_select.set_item_metadata(0, "random")
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
+		if requested_archetype != "random" and str(entry.get("archetype", "")) != requested_archetype:
+			continue
 		var display_name := str(entry.get("displayName", entry.get("teamId", ""))).strip_edges()
 		var authors_value: Variant = entry.get("authors", [])
 		var authors: Array[String] = []
@@ -41749,6 +41859,14 @@ func _refresh_pvp_training_ai_team_options() -> void:
 			pvp_training_ai_team_select.item_count - 1,
 			str(entry.get("teamId", "random"))
 		)
+	for index in range(pvp_training_ai_team_select.item_count):
+		if str(pvp_training_ai_team_select.get_item_metadata(index)) == previous_team_id:
+			pvp_training_ai_team_select.select(index)
+			break
+
+
+func _on_pvp_training_ai_archetype_selected(_index: int) -> void:
+	_refresh_pvp_training_ai_team_options()
 
 
 func _load_pvp_training_ai_catalog() -> void:
@@ -41763,13 +41881,40 @@ func _load_pvp_training_ai_catalog() -> void:
 	pvp_training_ai_catalog_loading = false
 	pvp_training_ai_catalog_loaded = bool(response.get("success", false))
 	pvp_training_ai_catalog_entries.clear()
+	pvp_training_ai_available_modes.clear()
+	pvp_training_ai_catalog_archetypes.clear()
 	if pvp_training_ai_catalog_loaded:
+		var modes_value: Variant = response.get("availableModes", [])
+		if modes_value is Array:
+			for mode_value: Variant in modes_value:
+				var mode := str(mode_value).strip_edges().to_lower()
+				if mode in ["shadow", "active"] and mode not in pvp_training_ai_available_modes:
+					pvp_training_ai_available_modes.append(mode)
+		pvp_training_ai_default_mode = str(response.get("defaultMode", "shadow")).strip_edges().to_lower()
+		if pvp_training_ai_default_mode not in pvp_training_ai_available_modes:
+			pvp_training_ai_default_mode = (
+				pvp_training_ai_available_modes[0]
+				if not pvp_training_ai_available_modes.is_empty()
+				else "shadow"
+			)
+		var archetypes_value: Variant = response.get("archetypes", [])
+		if archetypes_value is Array:
+			for archetype_value: Variant in archetypes_value:
+				var archetype := str(archetype_value).strip_edges().to_lower()
+				if archetype != "" and archetype not in pvp_training_ai_catalog_archetypes:
+					pvp_training_ai_catalog_archetypes.append(archetype)
 		var teams_value: Variant = response.get("teams", [])
 		if teams_value is Array:
 			for entry_value: Variant in teams_value:
 				if entry_value is Dictionary:
 					pvp_training_ai_catalog_entries.append((entry_value as Dictionary).duplicate(true))
-		pvp_training_ai_enabled = bool(response.get("enabled", false)) and not pvp_training_ai_catalog_entries.is_empty()
+		pvp_training_ai_enabled = (
+			bool(response.get("enabled", false))
+			and not pvp_training_ai_available_modes.is_empty()
+			and not pvp_training_ai_catalog_entries.is_empty()
+		)
+	_refresh_pvp_training_ai_mode_options()
+	_refresh_pvp_training_ai_archetype_options()
 	_refresh_pvp_training_ai_team_options()
 	_refresh_pvp_room_battle_purpose_ui()
 	if not pvp_training_ai_enabled and pvp_room_selected_mode == "ai":
@@ -41781,6 +41926,20 @@ func _selected_pvp_training_ai_team_id() -> String:
 		return "random"
 	var selected_id := str(pvp_training_ai_team_select.get_selected_metadata()).strip_edges()
 	return selected_id if selected_id != "" else "random"
+
+
+func _selected_pvp_training_ai_mode() -> String:
+	if pvp_training_ai_mode_select == null or pvp_training_ai_mode_select.item_count == 0:
+		return pvp_training_ai_default_mode
+	var selected_mode := str(pvp_training_ai_mode_select.get_selected_metadata()).strip_edges().to_lower()
+	return selected_mode if selected_mode in ["shadow", "active"] else pvp_training_ai_default_mode
+
+
+func _selected_pvp_training_ai_archetype() -> String:
+	if pvp_training_ai_archetype_select == null or pvp_training_ai_archetype_select.item_count == 0:
+		return "random"
+	var selected_archetype := str(pvp_training_ai_archetype_select.get_selected_metadata()).strip_edges().to_lower()
+	return selected_archetype if selected_archetype != "" else "random"
 
 
 func _on_pvp_training_ai_start_pressed() -> void:
@@ -41798,7 +41957,9 @@ func _on_pvp_training_ai_start_pressed() -> void:
 		request,
 		_pvp_room_player_payload(),
 		team_text,
-		_selected_pvp_training_ai_team_id()
+		_selected_pvp_training_ai_team_id(),
+		_selected_pvp_training_ai_mode(),
+		_selected_pvp_training_ai_archetype()
 	)
 	request.queue_free()
 	_set_pvp_room_busy(false)
@@ -44906,6 +45067,12 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 		pvp_timer_enabled_check.disabled = is_busy
 	if pvp_timer_tier_select != null:
 		pvp_timer_tier_select.disabled = is_busy
+	if pvp_training_ai_mode_select != null:
+		pvp_training_ai_mode_select.disabled = is_busy
+	if pvp_training_ai_archetype_select != null:
+		pvp_training_ai_archetype_select.disabled = is_busy
+	if pvp_training_ai_team_select != null:
+		pvp_training_ai_team_select.disabled = is_busy
 	if pvp_join_queue_button != null:
 		var ranked_blocked := _is_selected_pvp_queue_ranked() and not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)
 		pvp_join_queue_button.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "" or ranked_blocked
