@@ -15,6 +15,10 @@ func _init() -> void:
 		battle_source.contains('"TEAM_PREVIEW" if team_preview_lead_selection_active else ""'),
 		"visible Team Preview overrides stale per-player decision labels"
 	)
+	_check(
+		battle_source.contains('if state == "TIEBREAK":\n\t\tcolor = Color(1.0, 0.35, 0.25)\n\telif remaining_ms <= 15_000:'),
+		"resolved Clash tiebreak status is steady while only the final countdown pulses"
+	)
 	await _check_supported_resolutions()
 	print("PASS battle_timer_ui_visibility_check")
 	quit(0)

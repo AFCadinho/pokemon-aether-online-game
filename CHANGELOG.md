@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aether Clash now shows a steady tiebreak status while the server resolves the 7.5-minute battle limit, without a prolonged flashing indicator.
+
 - Trainer Cards now show one official PvP record with separate Ranked and Aether Clash results; Casual rooms are excluded.
 
 - Character Customization now keeps skin, starter hair, and eye colors in their matching categories, with clearer selected swatches and custom hex colors tucked under an Advanced option.
