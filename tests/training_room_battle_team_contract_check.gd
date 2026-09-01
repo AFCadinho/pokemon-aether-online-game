@@ -105,18 +105,23 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 	)
 	_check(
 		api_source.contains("/battle/pvp/training/ai/battles")
-		and api_source.contains("\"teamId\": ai_team_id"),
-		"AI5 creation sends the selected stable catalog team identity"
+		and api_source.contains("\"teamId\": ai_team_id")
+		and api_source.contains("\"aiMode\": ai_mode")
+		and api_source.contains("\"archetype\": ai_archetype"),
+		"AI creation sends the mode, archetype and selected stable team identity"
 	)
 	_check(
 		overlay_source.contains("_selected_pvp_training_ai_team_id()")
+		and overlay_source.contains("_selected_pvp_training_ai_mode()")
+		and overlay_source.contains("_selected_pvp_training_ai_archetype()")
 		and overlay_source.contains("ui.pvp.training.ai.team_random"),
-		"Training Room exposes a server-backed AI team selector with a random option"
+		"Training Room exposes server-backed AI mode, archetype and team selectors"
 	)
 	_check(
 		world_source.contains("active_battle_kind = \"training_ai\"")
+		and world_source.contains("response.get(\"trainerName\", \"AI Level 5\")")
 		and world_source.contains("battle_environment_id,\n\t\ttrue"),
-		"World starts AI5 as a non-rewarding training battle"
+		"World starts the selected AI mode as a non-rewarding training battle"
 	)
 
 

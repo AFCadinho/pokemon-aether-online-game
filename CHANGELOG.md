@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- The Training Room can now start experimental level 5 AI battles using imported Gen 9 National Dex teams and a selectable catalog of current competitive sample teams.
+- The Training Room now lets players choose AI4 with AI5 watching or active AI5, plus a team archetype, a random matching sample team, or a specific competitive team.
 
 ## 0.3.70 - 2026-09-01
 
