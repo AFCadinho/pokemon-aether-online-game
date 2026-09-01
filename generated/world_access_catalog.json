@@ -50,8 +50,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "Guild1ArenaSpawn",
 					"tile": {
-						"x": 10,
-						"y": 15
+						"x": 45,
+						"y": 5
 					}
 				},
 				"guild_1_jail_spawn": {
@@ -70,8 +70,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "Guild2ArenaSpawn",
 					"tile": {
-						"x": 71,
-						"y": 15
+						"x": 33,
+						"y": 150
 					}
 				},
 				"guild_2_jail_spawn": {
@@ -106,6 +106,16 @@
 			"sceneAliases": [],
 			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_duel_preview.tscn",
 			"spawnPoints": {
+				"guild_1_arena_spawn": {
+					"facingDirection": "down",
+					"label": "Guild 1 Arena Spawn",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Guild1ArenaSpawn",
+					"tile": {
+						"x": 45,
+						"y": 5
+					}
+				},
 				"guild_1_jail": {
 					"facingDirection": "down",
 					"label": "Guild 1 Jail",
@@ -114,6 +124,16 @@
 					"tile": {
 						"x": 69,
 						"y": 75
+					}
+				},
+				"guild_2_arena_spawn": {
+					"facingDirection": "down",
+					"label": "Guild 2 Arena Spawn",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Guild2ArenaSpawn",
+					"tile": {
+						"x": 33,
+						"y": 150
 					}
 				},
 				"guild_2_jail": {
