@@ -14544,19 +14544,76 @@ func _create_public_trainer_pvp_tab(card: Dictionary) -> Control:
 	if pvp.is_empty():
 		tab.add_child(_create_public_trainer_empty_pvp_panel())
 		return tab
-	var rows: Array[Dictionary] = [
-		{"label_key": "ui.trainer_card.pvp.format", "value": str(pvp.get("formatKey", "-")).to_upper()},
-		{"label_key": "ui.trainer_card.pvp.points", "value": str(pvp.get("points", 0))},
-		{"label_key": "ui.trainer_card.pvp.games", "value": str(pvp.get("gamesPlayed", 0))},
-		{"label_key": "ui.trainer_card.pvp.wins", "value": str(pvp.get("wins", 0))},
-		{"label_key": "ui.trainer_card.pvp.losses", "value": str(pvp.get("losses", 0))},
+	var layout := VBoxContainer.new()
+	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_theme_constant_override("separation", 10)
+	tab.add_child(layout)
+	layout.add_child(_create_public_trainer_pvp_summary(pvp))
+
+	var source_row := HBoxContainer.new()
+	source_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	source_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	source_row.add_theme_constant_override("separation", 10)
+	layout.add_child(source_row)
+	var sources: Array[Dictionary] = [
 		{
+			"title_key": "ui.pvp.mode.ranked",
+			"record": _dictionary_from_value(pvp.get("ranked", {})),
+		},
+		{
+			"title_key": "ui.guild.aether_clash.title",
+			"record": _dictionary_from_value(pvp.get("aetherClash", {})),
+		},
+	]
+	for source: Dictionary in sources:
+		var record := _dictionary_from_value(source.get("record", {}))
+		var rows: Array[Dictionary] = [
+			{"label_key": "ui.trainer_card.pvp.games", "value": str(record.get("gamesPlayed", 0))},
+			{"label_key": "ui.trainer_card.pvp.wins", "value": str(record.get("wins", 0))},
+			{"label_key": "ui.trainer_card.pvp.losses", "value": str(record.get("losses", 0))},
+		]
+		source_row.add_child(_create_public_trainer_info_panel(str(source.get("title_key", "")), rows))
+	return tab
+
+
+func _create_public_trainer_pvp_summary(pvp: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "PublicTrainerPvpSummary"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_section_style(true))
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 8)
+	margin.add_child(stack)
+	var title := Label.new()
+	_set_localized_control_property(title, "text", "ui.trainer_card.pvp.title")
+	title.add_theme_font_size_override("font_size", 11)
+	title.add_theme_color_override("font_color", TRAINER_CARD_ACCENT)
+	stack.add_child(title)
+	var stats := GridContainer.new()
+	stats.columns = 4
+	stats.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stats.add_theme_constant_override("h_separation", 8)
+	stack.add_child(stats)
+	var values: Array[Dictionary] = [
+		{"id": "pvp_games", "label_key": "ui.trainer_card.pvp.games", "value": str(pvp.get("gamesPlayed", 0))},
+		{"id": "pvp_wins", "label_key": "ui.trainer_card.pvp.wins", "value": str(pvp.get("wins", 0))},
+		{"id": "pvp_losses", "label_key": "ui.trainer_card.pvp.losses", "value": str(pvp.get("losses", 0))},
+		{
+			"id": "pvp_win_rate",
 			"label_key": "ui.trainer_card.pvp.win_rate",
 			"value": "%s%%" % (("%.1f" % float(pvp.get("winRate", 0.0))).trim_suffix(".0")),
 		},
 	]
-	tab.add_child(_create_public_trainer_info_panel("ui.trainer_card.pvp.title", rows))
-	return tab
+	for value: Dictionary in values:
+		stats.add_child(_create_public_trainer_profile_tile(value))
+	return panel
 
 
 func _create_public_trainer_empty_pvp_panel() -> Control:
@@ -14576,11 +14633,6 @@ func _create_public_trainer_empty_pvp_panel() -> Control:
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	stack.add_child(title)
-	var description := Label.new()
-	_set_localized_control_property(description, "text", "ui.trainer_card.pvp.empty_description")
-	description.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	stack.add_child(description)
 	return panel
 
 
