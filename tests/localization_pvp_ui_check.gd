@@ -135,6 +135,14 @@ func _check_pvp_runtime_translation() -> void:
 	_check_ranked_dropdown_style(objectives_filter, "Objective period")
 	_check(room_join_button != null and room_join_button.text == "Deelnemen", "Private room action renders in Dutch")
 	_check(room_ai_button != null and room_ai_button.text == "Tegen AI", "AI training action renders in Dutch")
+	_check(
+		room_ai_button != null
+		and room_ai_button.has_theme_stylebox_override("normal")
+		and room_ai_button.has_theme_stylebox_override("hover")
+		and room_ai_button.has_theme_stylebox_override("pressed")
+		and room_ai_button.has_theme_stylebox_override("focus"),
+		"AI training action uses the interactive room-button styling"
+	)
 	_check(training_button != null and training_button.text == "Training Room", "Training room selector renders in Dutch")
 	_check(casual_button != null and casual_button.text.begins_with("✓ "), "Default room type is visibly selected")
 	_check(room_workspace != null and room_workspace.get_child_count() == 2, "Room setup uses a clear two-column workflow")
