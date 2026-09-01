@@ -49,6 +49,8 @@ const PVP_FORCE_SWITCH_RECONCILE_MAX_MSEC := 5000
 const PVP_OPPONENT_RENDER_RECONCILE_INITIAL_MSEC := 2500
 const PVP_OPPONENT_RENDER_RECONCILE_MAX_MSEC := 5000
 const PVP_IDLE_WAIT_RECONCILE_MSEC := 3000
+const PVP_PRESENTATION_RELEASE_REPORT_MSEC := 8000
+const PVP_PRESENTATION_RELEASE_RESYNC_MSEC := 30000
 const PVP_RENDER_PROGRESS_HEARTBEAT_SECONDS := 1.0
 const AETHER_CLASH_RESULT_AUTO_CONTINUE_SECONDS := 5
 const Z_MOVE_FALLBACK_ICON: Texture2D = preload("res://assets/battles/mechanics/z-move.png")
@@ -13678,12 +13680,16 @@ func _describe_pvp_realtime_message(message: Dictionary) -> String:
 	]
 
 func _report_stalled_pvp_waiting_if_needed() -> void:
+	var waiting_on_presentation_release := _is_waiting_on_rendered_pvp_presentation_release()
 	var should_observe := (
 		_is_pvp_battle()
 		and not battle_finished
 		and not _is_spectator_battle()
-		and battle_input_locked
-		and pvp_last_phase == "waiting_for_opponent"
+		and not pvp_local_connection_recovering
+		and (
+			(battle_input_locked and pvp_last_phase == "waiting_for_opponent")
+			or waiting_on_presentation_release
+		)
 	)
 	if not should_observe:
 		pvp_waiting_observability_started_msec = 0
@@ -13695,27 +13701,65 @@ func _report_stalled_pvp_waiting_if_needed() -> void:
 		pvp_waiting_observability_reported = false
 		return
 	var observed_duration_msec := Time.get_ticks_msec() - pvp_waiting_observability_started_msec
-	if observed_duration_msec < PVP_IDLE_WAIT_RECONCILE_MSEC:
+	var diagnostic_threshold_msec := (
+		PVP_PRESENTATION_RELEASE_REPORT_MSEC
+		if waiting_on_presentation_release
+		else PVP_IDLE_WAIT_RECONCILE_MSEC
+	)
+	var recovery_threshold_msec := (
+		PVP_PRESENTATION_RELEASE_RESYNC_MSEC
+		if waiting_on_presentation_release
+		else PVP_IDLE_WAIT_RECONCILE_MSEC
+	)
+	if observed_duration_msec < diagnostic_threshold_msec:
 		return
 	if not pvp_waiting_observability_reported:
 		pvp_waiting_observability_reported = true
 		PvpBattleRealtimeService.report_diagnostic("pvp.client_waiting_state", {
-			"eventBatchId": pvp_last_phase_update_batch_id,
-			"displayedPhase": "waiting_for_opponent",
+			"eventBatchId": (
+				str(pvp_pending_presentation_fence.get("eventBatchId", ""))
+				if waiting_on_presentation_release
+				else pvp_last_phase_update_batch_id
+			),
+			"displayedPhase": pvp_last_phase if pvp_last_phase != "" else "unknown",
 			"reasonCode": "waiting_state_observed",
 			"serverSeq": max(pvp_last_applied_server_seq, 0),
 			"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
 			"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
 			"observedDurationMs": observed_duration_msec,
-			"inputLocked": true,
-			"pendingAction": true,
+			"inputLocked": battle_input_locked,
+			"pendingAction": pvp_prechoice_buffer.has_choice() or battle_input_locked,
 		})
+	if observed_duration_msec < recovery_threshold_msec:
+		return
 	if not pvp_waiting_recovery_in_flight:
 		pvp_waiting_recovery_in_flight = true
 		_recover_stalled_pvp_idle_wait.call_deferred()
 
 
+func _is_waiting_on_rendered_pvp_presentation_release() -> bool:
+	if pvp_pending_presentation_fence.is_empty() or pvp_event_queue.is_rendering:
+		return false
+	var event_seq_end := _get_int_from_variant(
+		pvp_pending_presentation_fence.get("eventSeqEnd", -1),
+		-1
+	)
+	return event_seq_end >= 0 and pvp_event_queue.last_rendered_seq >= event_seq_end
+
+
 func _recover_stalled_pvp_idle_wait() -> void:
+	if _is_waiting_on_rendered_pvp_presentation_release():
+		# The completed batch is already on screen, but its exact phase-release
+		# packet may have been lost after both render ACKs reached the gateway.
+		# HTTP room snapshots do not own gateway presentation fences, so reconnect
+		# through the realtime transport and accept only its validated snapshot.
+		_retry_pending_pvp_render_ack()
+		pvp_waiting_recovery_in_flight = false
+		pvp_waiting_observability_started_msec = Time.get_ticks_msec()
+		PvpBattleRealtimeService.request_resync(
+			"A completed PvP presentation boundary did not release."
+		)
+		return
 	var reconciled := await _reconcile_pvp_battle_from_room("pvp_idle_wait_watchdog")
 	pvp_waiting_recovery_in_flight = false
 	# Bound both unchanged and successfully applied snapshots. The latter can
