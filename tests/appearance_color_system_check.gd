@@ -221,10 +221,17 @@ func _run() -> void:
 	_check(ui_source.contains('"skin_tone":'), "customization can read and update skin tone")
 	_check(ui_source.contains("ColorPickerButton.new()"), "customization includes custom natural trainer colours")
 	_check(
-		ui_source.contains('panel.name = "NaturalColorsSummary"')
-			and ui_source.contains('popup.name = "NaturalColorsPopup"')
-			and ui_source.contains("func _open_trainer_card_natural_colors_popup"),
-		"Body keeps natural colours behind a compact styled editor"
+		ui_source.contains('{"id": "eyes", "label_key": "ui.appearance.category.eyes"}')
+			and ui_source.contains("func _create_trainer_card_eye_appearance_content")
+			and ui_source.contains('panel.name = "AppearanceColorPalette_%s" % color_key')
+			and not ui_source.contains("NaturalColorsPopup"),
+		"Natural colours live in focused Body, Hair, and Eyes views"
+	)
+	_check(
+		ui_source.contains('custom_row.visible = false')
+			and ui_source.contains("_on_trainer_card_color_advanced_toggled")
+			and ui_source.contains('button.text = "✓" if is_selected else ""'),
+		"Color palettes emphasize selection and collapse advanced input"
 	)
 	_check(
 		ui_source.contains('hex_input.placeholder_text = "#RRGGBB"')
