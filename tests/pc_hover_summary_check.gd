@@ -6,9 +6,17 @@ var failures := 0
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
+	var host := Control.new()
+	host.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	host.size = Vector2(1280, 720)
+	root.add_child(host)
 	var card := PARTY_HOVER_SCENE.instantiate() as PartyHoverCard
 	card.set_show_storage_details(true)
-	root.add_child(card)
+	host.add_child(card)
 	await process_frame
 
 	var iv_details := card.get_node_or_null(
@@ -60,7 +68,10 @@ func _init() -> void:
 			and positioned_rect.position.y >= safe_bounds.position.y
 			and positioned_rect.end.x <= safe_bounds.end.x
 			and positioned_rect.end.y <= safe_bounds.end.y,
-		"Storage hover cards stay inside their navigation-safe bounds"
+		"Storage hover cards stay inside their navigation-safe bounds (card=%s, bounds=%s)" % [
+			positioned_rect,
+			safe_bounds,
+		]
 	)
 
 	card.show_for_pokemon({
@@ -78,7 +89,7 @@ func _init() -> void:
 		"Storage hover height stays fixed across different Pokémon details"
 	)
 
-	card.free()
+	host.free()
 	quit(1 if failures > 0 else 0)
 
 

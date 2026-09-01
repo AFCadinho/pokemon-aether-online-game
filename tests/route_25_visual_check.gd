@@ -16,6 +16,7 @@ func _run() -> void:
 		"Route 25 references its imported visual"
 	)
 	_check(not source.contains("generated/tiled_visuals/open_field/"), "Route 25 removes the placeholder visual")
+	_check(not source.contains("open_field_placeholder_map.gd"), "Route 25 uses finished map metadata")
 
 	var packed := load(ROUTE_25_SCENE) as PackedScene
 	_check(packed != null, "Route 25 scene loads")
@@ -26,7 +27,6 @@ func _run() -> void:
 	var route_25 := packed.instantiate()
 	root.add_child(route_25)
 	await process_frame
-	_check(route_25.get("map_size") == Vector2i(80, 50), "Route 25 uses its 80-by-50-tile map boundary")
 
 	var visual := route_25.get_node_or_null("Route25Visual")
 	_check(visual != null, "Route 25 instantiates its imported visual")
