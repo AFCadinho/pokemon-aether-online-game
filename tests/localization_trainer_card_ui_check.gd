@@ -45,7 +45,10 @@ func _check_trainer_card_runtime_translation() -> void:
 	var preview_viewport := _find_subviewport(preview_panel)
 	var category_rail := popup.find_child("AppearanceCategoryRail", true, false) as VBoxContainer if popup != null else null
 	var content_stack := popup.find_child("AppearanceContentStack", true, false) as VBoxContainer if popup != null else null
-	var swatch_row := popup.find_child("NaturalColorSwatches", true, false) as HBoxContainer if popup != null else null
+	var skin_palette := popup.find_child("AppearanceColorPalette_skin_tone", true, false) as PanelContainer if popup != null else null
+	var skin_swatch_grid := popup.find_child("AppearanceColorSwatches_skin_tone", true, false) as GridContainer if popup != null else null
+	var skin_advanced := popup.find_child("AppearanceColorAdvanced_skin_tone", true, false) as Button if popup != null else null
+	var skin_custom := popup.find_child("AppearanceColorCustom_skin_tone", true, false) as HBoxContainer if popup != null else null
 	var badge_option := overlay.get("trainer_card_badge_option") as OptionButton
 	var redeem_button := popup.find_child("RedeemCodeButton", true, false) as Button if popup != null else null
 
@@ -63,7 +66,7 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(_find_label(popup, "Levellimiet") != null, "Trainer Card level cap renders in Dutch")
 	_check(_find_label(popup, "Trade-limiet") != null, "Trainer Card trade cap renders in Dutch")
 	_check(_find_label(popup, "Trainerstitel") != null, "Trainer Card names the role selector clearly in Dutch")
-	_check(_find_label(popup, "Natuurlijke kleuren") != null, "Appearance colors render in Dutch")
+	_check(_find_label(popup, "Huidskleur") != null, "Body color renders in Dutch")
 	_check(
 		preview_viewport != null
 		and preview_viewport.size == Vector2i(194, 248)
@@ -72,7 +75,7 @@ func _check_trainer_card_runtime_translation() -> void:
 	)
 	_check(
 		category_rail != null
-		and category_rail.get_child_count() == 9
+		and category_rail.get_child_count() == 10
 		and _all_category_buttons_toggle(category_rail),
 		"Appearance category rail stays compact and clearly selectable"
 	)
@@ -84,12 +87,22 @@ func _check_trainer_card_runtime_translation() -> void:
 		"Trainer Card tabs and Appearance categories support keyboard focus"
 	)
 	_check(
-		content_stack != null and _find_line_edit(content_stack) == null,
-		"Appearance omits search when the body catalog is short"
+		content_stack != null and _find_visible_line_edit(content_stack) == null,
+		"Appearance omits visible search and hex inputs in the default Body view"
 	)
 	_check(
-		swatch_row != null and _swatches_have_labels(swatch_row),
-		"Appearance natural-color swatches have explicit labels"
+		skin_palette != null
+		and skin_swatch_grid != null
+		and _swatches_have_clear_selection(skin_swatch_grid)
+		and skin_advanced != null
+		and skin_advanced.text == "Geavanceerde kleur"
+		and skin_custom != null
+		and not skin_custom.visible,
+		"Body shows one readable palette with advanced input collapsed"
+	)
+	_check(
+		popup.find_child("NaturalColorsPopup", true, false) == null,
+		"Appearance no longer creates an overlapping natural-colors window"
 	)
 	_check(save_bar != null and not save_bar.visible, "Appearance save feedback stays hidden when clean")
 	_check(badge_option != null and badge_option.get_item_text(0) == "Geen", "Trainer Card badge fallback renders in Dutch")
@@ -118,7 +131,7 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(overlay.call("_format_appearance_option_name", "hair", "IronFanton_Hair") == "IronFanton-haar", "IronFanton hair renders in Dutch")
 	_check(overlay.call("_format_appearance_swatch_name", "Dark Brown") == "Donkerbruin", "Appearance swatch renders in Dutch")
 	overlay.set("appearance_inventory_slot_counts", {"top": 1})
-	var top_category_button := category_rail.get_child(6) as Button if category_rail != null else null
+	var top_category_button := category_rail.get_child(7) as Button if category_rail != null else null
 	if top_category_button != null and content_stack != null:
 		overlay.call(
 			"_on_trainer_card_appearance_category_selected",
@@ -167,12 +180,29 @@ func _check_trainer_card_runtime_translation() -> void:
 			"hair"
 		)
 	unequip_button = overlay.get("trainer_card_appearance_unequip_button") as Button
+	var hair_color_section := popup.find_child("AppearanceStarterHairColorSection", true, false) as Control if popup != null else null
+	var hair_atelier_hint := popup.find_child("AppearanceHairColorAtelierHint", true, false) as Control if popup != null else null
 	_check(
 		unequip_button != null
 		and unequip_button.text == "Kaal / Geen haar"
 		and unequip_button.visible
 		and unequip_button.toggle_mode,
 		"Hair uses an explicit Dutch no-hair choice"
+	)
+	_check(
+		hair_color_section != null
+		and hair_color_section.find_child("AppearanceColorPalette_hair_color", true, false) != null,
+		"Hair keeps the starter hair-color palette in its own view"
+	)
+	if player_save != null:
+		player_save.set("appearance_hair_id", "IronFanton_Hair")
+	overlay.call("_refresh_trainer_card_hair_color_section")
+	_check(
+		hair_color_section != null
+		and not hair_color_section.visible
+		and hair_atelier_hint != null
+		and hair_atelier_hint.visible,
+		"Chroma hair replaces the starter palette with the Atelier explanation"
 	)
 	if player_save != null:
 		player_save.set("appearance_hair_id", "")
@@ -183,6 +213,27 @@ func _check_trainer_card_runtime_translation() -> void:
 	)
 	if player_save != null:
 		player_save.set("appearance_hair_id", original_hair_id)
+	var eyes_category_button := category_rail.get_child(3) as Button if category_rail != null else null
+	if eyes_category_button != null and content_stack != null:
+		overlay.call(
+			"_on_trainer_card_appearance_category_selected",
+			eyes_category_button,
+			content_stack,
+			"eyes"
+		)
+	var eye_palette := popup.find_child("AppearanceColorPalette_eye_color", true, false) as PanelContainer if popup != null else null
+	var eye_custom := popup.find_child("AppearanceColorCustom_eye_color", true, false) as HBoxContainer if popup != null else null
+	var eye_advanced := popup.find_child("AppearanceColorAdvanced_eye_color", true, false) as Button if popup != null else null
+	_check(
+		eye_palette != null
+		and _find_label(content_stack, "Oogkleur") != null
+		and eye_custom != null
+		and not eye_custom.visible,
+		"Eyes has its own focused color view"
+	)
+	if eye_advanced != null:
+		eye_advanced.emit_signal("toggled", true)
+	_check(eye_custom != null and eye_custom.visible, "Advanced eye-color input expands on demand")
 	var body_category_button := category_rail.get_child(1) as Button if category_rail != null else null
 	if body_category_button != null and content_stack != null:
 		overlay.call(
@@ -213,7 +264,7 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(_find_label(popup, "LIMITES DE PROGRESSÃO") != null, "Trainer Card progression limits update to Portuguese")
 	_check(_find_label(popup, "Limite de nível") != null, "Trainer Card level cap updates to Portuguese")
 	_check(_find_label(popup, "Limite de troca") != null, "Trainer Card trade cap updates to Portuguese")
-	_check(_find_label(popup, "Cores naturais") != null, "Appearance colors update to Portuguese")
+	_check(_find_label(popup, "Tom de pele") != null, "Body color updates to Portuguese")
 	_check(badge_option != null and badge_option.get_item_text(0) == "Nenhum", "Trainer Card badge fallback updates to Portuguese")
 	_check(save_button != null and save_button.text == "Salvar", "Appearance save action updates to Portuguese")
 	_check(status_label != null and status_label.text.begins_with("Alterações"), "Appearance status updates to Portuguese")
@@ -278,13 +329,15 @@ func _find_subviewport(node: Node) -> SubViewport:
 	return null
 
 
-func _find_line_edit(node: Node) -> LineEdit:
+func _find_visible_line_edit(node: Node) -> LineEdit:
 	if node == null:
+		return null
+	if node is Control and not (node as Control).visible:
 		return null
 	if node is LineEdit:
 		return node as LineEdit
 	for child: Node in node.get_children():
-		var result := _find_line_edit(child)
+		var result := _find_visible_line_edit(child)
 		if result != null:
 			return result
 	return null
@@ -304,15 +357,17 @@ func _all_category_buttons_focusable(category_rail: VBoxContainer) -> bool:
 	return true
 
 
-func _swatches_have_labels(swatch_row: HBoxContainer) -> bool:
-	if swatch_row.get_child_count() != 3:
-		return false
-	for child: Node in swatch_row.get_children():
-		if not child is VBoxContainer or child.get_child_count() < 2:
+func _swatches_have_clear_selection(swatch_grid: GridContainer) -> bool:
+	var selected_count := 0
+	for child: Node in swatch_grid.get_children():
+		if not child is Button:
 			return false
-		if not child.get_child(0) is Label or not child.get_child(1) is Button:
+		var button := child as Button
+		if button.custom_minimum_size.x < 36.0 or button.tooltip_text.strip_edges() == "":
 			return false
-	return true
+		if button.text == "✓":
+			selected_count += 1
+	return selected_count == 1
 
 
 func _check(condition: bool, label: String) -> void:

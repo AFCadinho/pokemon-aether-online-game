@@ -241,6 +241,7 @@ const DEFAULT_APPEARANCE_SLOT_LIMIT := 8
 const APPEARANCE_CATEGORIES := [
 	{"id": "body", "label_key": "ui.appearance.category.body"},
 	{"id": "hair", "label_key": "ui.appearance.category.hair"},
+	{"id": "eyes", "label_key": "ui.appearance.category.eyes"},
 	{"id": "headgear", "label_key": "ui.appearance.category.headgear"},
 	{"id": "facial_hair", "label_key": "ui.appearance.category.facial_hair"},
 	{"id": "facegear", "label_key": "ui.appearance.category.facegear"},
@@ -1098,8 +1099,10 @@ var trainer_card_appearance_unequip_button: Button
 var trainer_card_appearance_return_button: Button
 var trainer_card_color_buttons: Dictionary = {}
 var trainer_card_hex_inputs: Dictionary = {}
-var trainer_card_natural_color_summary_buttons: Dictionary = {}
-var trainer_card_natural_colors_popup: PopupPanel
+var trainer_card_color_pickers: Dictionary = {}
+var trainer_card_color_selection_labels: Dictionary = {}
+var trainer_card_hair_color_section: Control
+var trainer_card_hair_color_atelier_hint: Control
 var trainer_card_redeem_popup: PanelContainer
 var trainer_card_redeem_input: LineEdit
 var trainer_card_redeem_status: Label
@@ -14204,8 +14207,6 @@ func _refresh_trainer_card_tab_titles() -> void:
 func _refresh_trainer_card_localized_ui() -> void:
 	if trainer_card_popup != null:
 		LocalizationManager.localize_tree(trainer_card_popup)
-	if trainer_card_natural_colors_popup != null:
-		LocalizationManager.localize_tree(trainer_card_natural_colors_popup)
 	if trainer_card_subtitle_label != null:
 		trainer_card_subtitle_label.text = LocalizationManager.text(
 			"ui.trainer_card.passport",
@@ -16253,10 +16254,14 @@ func _on_trainer_card_appearance_category_selected(button: Button, content_stack
 	trainer_card_appearance_return_button = null
 	trainer_card_color_buttons.clear()
 	trainer_card_hex_inputs.clear()
-	trainer_card_natural_color_summary_buttons.clear()
-	_hide_trainer_card_natural_colors_popup()
+	trainer_card_color_pickers.clear()
+	trainer_card_color_selection_labels.clear()
+	trainer_card_hair_color_section = null
+	trainer_card_hair_color_atelier_hint = null
 	if category_id == "body":
 		_create_trainer_card_body_appearance_content(content_stack)
+	elif category_id == "eyes":
+		_create_trainer_card_eye_appearance_content(content_stack)
 	else:
 		_create_trainer_card_part_appearance_content(content_stack, category_id)
 
@@ -16294,180 +16299,26 @@ func _create_trainer_card_body_appearance_content(content_stack: VBoxContainer) 
 		trainer_card_body_buttons[body_id] = body_button
 
 	_refresh_trainer_card_body_buttons()
-	_create_trainer_card_natural_colors_summary(content_stack)
-
-func _create_trainer_card_natural_colors_summary(content_stack: VBoxContainer) -> void:
-	var panel := PanelContainer.new()
-	panel.name = "NaturalColorsSummary"
-	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
-	content_stack.add_child(panel)
-
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 10)
-	margin.add_theme_constant_override("margin_top", 8)
-	margin.add_theme_constant_override("margin_right", 8)
-	margin.add_theme_constant_override("margin_bottom", 8)
-	panel.add_child(margin)
-
-	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 8)
-	margin.add_child(layout)
-
-	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 8)
-	layout.add_child(header)
-
-	var copy := VBoxContainer.new()
-	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	copy.add_theme_constant_override("separation", 0)
-	header.add_child(copy)
-
-	var title := Label.new()
-	_set_localized_control_property(title, "text", "ui.appearance.natural.title")
-	title.add_theme_font_size_override("font_size", 13)
-	title.add_theme_color_override("font_color", UI_TEXT)
-	copy.add_child(title)
-
-	var edit_button := Button.new()
-	_set_localized_control_property(edit_button, "text", "common.edit")
-	_set_localized_control_property(edit_button, "tooltip_text", "ui.appearance.natural.edit_tooltip")
-	edit_button.custom_minimum_size = Vector2(62, 30)
-	edit_button.focus_mode = Control.FOCUS_ALL
-	edit_button.pressed.connect(_open_trainer_card_natural_colors_popup)
-	_apply_button_style(edit_button, "primary")
-	header.add_child(edit_button)
-
-	var swatch_row := HBoxContainer.new()
-	swatch_row.name = "NaturalColorSwatches"
-	swatch_row.add_theme_constant_override("separation", 8)
-	layout.add_child(swatch_row)
-
-	for color_entry: Dictionary in [
-		{"key": "skin_tone", "label_key": "ui.appearance.color.skin"},
-		{"key": "eye_color", "label_key": "ui.appearance.color.eye"},
-		{"key": "hair_color", "label_key": "ui.appearance.color.starter_hair"},
-	]:
-		var color_key := str(color_entry.get("key", ""))
-		var swatch_group := VBoxContainer.new()
-		swatch_group.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		swatch_group.add_theme_constant_override("separation", 3)
-		swatch_row.add_child(swatch_group)
-
-		var swatch_label := Label.new()
-		_set_localized_control_property(
-			swatch_label,
-			"text",
-			str(color_entry.get("label_key", "ui.appearance.color.generic"))
-		)
-		swatch_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		swatch_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		swatch_label.add_theme_font_size_override("font_size", 9)
-		swatch_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-		swatch_group.add_child(swatch_label)
-
-		var swatch := Button.new()
-		swatch.text = ""
-		_set_localized_control_property(
-			swatch,
-			"tooltip_text",
-			str(color_entry.get("label_key", "ui.appearance.color.generic"))
-		)
-		swatch.custom_minimum_size = Vector2(0, 26)
-		swatch.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		swatch.focus_mode = Control.FOCUS_ALL
-		swatch.pressed.connect(_open_trainer_card_natural_colors_popup)
-		swatch_group.add_child(swatch)
-		trainer_card_natural_color_summary_buttons[color_key] = swatch
-	_refresh_trainer_card_natural_color_summary()
-
-func _open_trainer_card_natural_colors_popup() -> void:
-	if is_instance_valid(trainer_card_natural_colors_popup):
-		trainer_card_natural_colors_popup.queue_free()
-
-	var popup := PopupPanel.new()
-	popup.name = "NaturalColorsPopup"
-	popup.exclusive = true
-	popup.add_theme_stylebox_override("panel", _make_gold_panel_style(10, 1))
-	root_control.add_child(popup)
-	trainer_card_natural_colors_popup = popup
-
-	var margin := MarginContainer.new()
-	margin.custom_minimum_size = Vector2(430, 500)
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 14)
-	popup.add_child(margin)
-
-	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 8)
-	margin.add_child(layout)
-
-	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 8)
-	layout.add_child(header)
-
-	var heading := VBoxContainer.new()
-	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	heading.add_theme_constant_override("separation", 0)
-	header.add_child(heading)
-
-	var title := Label.new()
-	_set_localized_control_property(title, "text", "ui.appearance.natural.title")
-	title.add_theme_font_size_override("font_size", 18)
-	title.add_theme_color_override("font_color", UI_TEXT)
-	heading.add_child(title)
-
-	var description := Label.new()
-	_set_localized_control_property(description, "text", "ui.appearance.natural.description")
-	description.add_theme_font_size_override("font_size", 10)
-	description.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	heading.add_child(description)
-
-	var close_button := Button.new()
-	close_button.text = "×"
-	close_button.custom_minimum_size = Vector2(32, 30)
-	close_button.focus_mode = Control.FOCUS_ALL
-	close_button.pressed.connect(popup.hide)
-	_apply_button_style(close_button)
-	header.add_child(close_button)
-
-	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(0, 430)
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	layout.add_child(scroll)
-
-	var palettes := VBoxContainer.new()
-	palettes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	palettes.add_theme_constant_override("separation", 8)
-	scroll.add_child(palettes)
-	_create_trainer_card_color_palette(palettes, "ui.appearance.color.skin", "skin_tone", SKIN_TONE_SWATCHES)
-	_create_trainer_card_color_palette(palettes, "ui.appearance.color.eye", "eye_color", EYE_COLOR_SWATCHES)
 	_create_trainer_card_color_palette(
-		palettes,
-		"ui.appearance.color.starter_hair_free",
-		"hair_color",
-		HAIR_COLOR_SWATCHES
+		content_stack,
+		"ui.appearance.color.skin",
+		"skin_tone",
+		SKIN_TONE_SWATCHES
 	)
 
-	popup.popup_centered(Vector2i(430, 500))
-
-func _hide_trainer_card_natural_colors_popup() -> void:
-	if is_instance_valid(trainer_card_natural_colors_popup):
-		trainer_card_natural_colors_popup.hide()
-
-func _refresh_trainer_card_natural_color_summary() -> void:
-	for color_key_value: Variant in trainer_card_natural_color_summary_buttons.keys():
-		var color_key := str(color_key_value)
-		var button := trainer_card_natural_color_summary_buttons.get(color_key) as Button
-		if not is_instance_valid(button):
-			trainer_card_natural_color_summary_buttons.erase(color_key)
-			continue
-		var color := Color.from_string(_get_player_save_color_value(color_key), Color.WHITE)
-		_apply_color_swatch_button_style(button, color, false)
+func _create_trainer_card_eye_appearance_content(content_stack: VBoxContainer) -> void:
+	trainer_card_appearance_capacity_label = null
+	_create_trainer_card_appearance_section_header(
+		content_stack,
+		"ui.appearance.category.eyes",
+		"ui.appearance.eye_description"
+	)
+	_create_trainer_card_color_palette(
+		content_stack,
+		"ui.appearance.color.eye",
+		"eye_color",
+		EYE_COLOR_SWATCHES
+	)
 
 func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, category_id: String) -> void:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
@@ -16476,6 +16327,8 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 		"ui.appearance.category.%s" % normalized_category,
 		"ui.appearance.part_description"
 	)
+	if normalized_category == "hair":
+		_create_trainer_card_hair_color_content(content_stack)
 
 	var wardrobe_toolbar := VBoxContainer.new()
 	wardrobe_toolbar.name = "AppearanceWardrobeToolbar"
@@ -16581,6 +16434,33 @@ func _create_trainer_card_part_appearance_content(content_stack: VBoxContainer, 
 
 	_refresh_trainer_card_part_buttons()
 
+func _create_trainer_card_hair_color_content(content_stack: VBoxContainer) -> void:
+	var section := VBoxContainer.new()
+	section.name = "AppearanceStarterHairColorSection"
+	section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_stack.add_child(section)
+	trainer_card_hair_color_section = section
+	_create_trainer_card_color_palette(
+		section,
+		"ui.appearance.color.starter_hair_free",
+		"hair_color",
+		HAIR_COLOR_SWATCHES
+	)
+
+	var atelier_hint := Label.new()
+	atelier_hint.name = "AppearanceHairColorAtelierHint"
+	atelier_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	atelier_hint.add_theme_font_size_override("font_size", 11)
+	atelier_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	_set_localized_control_property(
+		atelier_hint,
+		"text",
+		"ui.appearance.color.hair_atelier_hint"
+	)
+	content_stack.add_child(atelier_hint)
+	trainer_card_hair_color_atelier_hint = atelier_hint
+	_refresh_trainer_card_hair_color_section()
+
 func _create_trainer_card_appearance_section_header(
 	content_stack: VBoxContainer,
 	title_key: String,
@@ -16610,18 +16490,52 @@ func _create_trainer_card_color_palette(
 	swatches: Array,
 	allow_custom: bool = true
 ) -> void:
+	var panel := PanelContainer.new()
+	panel.name = "AppearanceColorPalette_%s" % color_key
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_trainer_card_inset_style())
+	content_stack.add_child(panel)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	panel.add_child(margin)
+
+	var palette_stack := VBoxContainer.new()
+	palette_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	palette_stack.add_theme_constant_override("separation", 7)
+	margin.add_child(palette_stack)
+
+	var header := HBoxContainer.new()
+	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_theme_constant_override("separation", 8)
+	palette_stack.add_child(header)
+
 	var title := Label.new()
 	_set_localized_control_property(title, "text", title_key)
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_TEXT)
-	content_stack.add_child(title)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(title)
+
+	var selection_label := Label.new()
+	selection_label.name = "AppearanceColorSelection_%s" % color_key
+	selection_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	selection_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	selection_label.add_theme_font_size_override("font_size", 10)
+	selection_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	header.add_child(selection_label)
+	trainer_card_color_selection_labels[color_key] = selection_label
 
 	var grid := GridContainer.new()
-	grid.columns = 8
+	grid.name = "AppearanceColorSwatches_%s" % color_key
+	grid.columns = 7
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	grid.add_theme_constant_override("h_separation", 6)
 	grid.add_theme_constant_override("v_separation", 6)
-	content_stack.add_child(grid)
+	palette_stack.add_child(grid)
 
 	for swatch_value: Variant in swatches:
 		if not swatch_value is Dictionary:
@@ -16630,9 +16544,9 @@ func _create_trainer_card_color_palette(
 		var color_id: String = str(swatch.get("id", ""))
 		var swatch_color: Color = swatch.get("color", Color.WHITE) as Color
 		var button := Button.new()
-		button.text = ""
+		button.text = "✓" if _get_player_save_color_value(color_key) == color_id else ""
 		button.tooltip_text = _format_appearance_swatch_name(str(swatch.get("label", color_id)))
-		button.custom_minimum_size = Vector2(30, 24)
+		button.custom_minimum_size = Vector2(36, 30)
 		button.focus_mode = Control.FOCUS_ALL
 		button.pressed.connect(_on_trainer_card_color_selected.bind(color_key, color_id))
 		grid.add_child(button)
@@ -16644,9 +16558,28 @@ func _create_trainer_card_color_palette(
 		_apply_color_swatch_button_style(button, swatch_color, _get_player_save_color_value(color_key) == color_id)
 
 	if allow_custom:
+		var advanced_button := Button.new()
+		advanced_button.name = "AppearanceColorAdvanced_%s" % color_key
+		_set_localized_control_property(
+			advanced_button,
+			"text",
+			"ui.appearance.color.advanced"
+		)
+		advanced_button.toggle_mode = true
+		advanced_button.focus_mode = Control.FOCUS_ALL
+		advanced_button.custom_minimum_size = Vector2(0, 28)
+		advanced_button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		_apply_button_style(advanced_button)
+		palette_stack.add_child(advanced_button)
+
 		var custom_row := HBoxContainer.new()
+		custom_row.name = "AppearanceColorCustom_%s" % color_key
+		custom_row.visible = false
 		custom_row.add_theme_constant_override("separation", 8)
-		content_stack.add_child(custom_row)
+		palette_stack.add_child(custom_row)
+		advanced_button.toggled.connect(
+			_on_trainer_card_color_advanced_toggled.bind(custom_row)
+		)
 
 		var custom_label := Label.new()
 		_set_localized_control_property(custom_label, "text", "ui.appearance.color.custom")
@@ -16664,6 +16597,7 @@ func _create_trainer_card_color_palette(
 		)
 		custom_picker.color_changed.connect(_on_trainer_card_custom_color_changed.bind(color_key))
 		custom_row.add_child(custom_picker)
+		trainer_card_color_pickers[color_key] = custom_picker
 
 		var hex_input := LineEdit.new()
 		hex_input.name = "AppearanceHexInput_%s" % color_key
@@ -16685,6 +16619,12 @@ func _create_trainer_card_color_palette(
 		_apply_line_edit_style(hex_input)
 		custom_row.add_child(hex_input)
 		trainer_card_hex_inputs[color_key] = hex_input
+
+	_refresh_trainer_card_color_buttons()
+
+func _on_trainer_card_color_advanced_toggled(expanded: bool, custom_row: Control) -> void:
+	if custom_row != null:
+		custom_row.visible = expanded
 
 func _create_trainer_card_appearance_search_input(placeholder_key: String) -> LineEdit:
 	var search_input := LineEdit.new()
@@ -16953,6 +16893,19 @@ func _refresh_trainer_card_part_buttons() -> void:
 			button.text = display_name
 			_apply_button_style(button)
 	_refresh_trainer_card_appearance_actions()
+	_refresh_trainer_card_hair_color_section()
+
+func _refresh_trainer_card_hair_color_section() -> void:
+	if trainer_card_hair_color_section == null and trainer_card_hair_color_atelier_hint == null:
+		return
+	var uses_starter_color := CharacterAppearanceService.is_free_part_id(
+		"hair",
+		PlayerSave.appearance_hair_id
+	)
+	if trainer_card_hair_color_section != null:
+		trainer_card_hair_color_section.visible = uses_starter_color
+	if trainer_card_hair_color_atelier_hint != null:
+		trainer_card_hair_color_atelier_hint.visible = not uses_starter_color
 
 func _refresh_trainer_card_appearance_actions() -> void:
 	var category := CharacterAppearanceService.normalize_part_category(
@@ -16983,6 +16936,16 @@ func _refresh_trainer_card_appearance_actions() -> void:
 func _apply_color_swatch_button_style(button: Button, color: Color, selected: bool) -> void:
 	var border_color := Color("#f4d78a") if selected else Color("#4b5872")
 	var border_width := 3 if selected else 1
+	var check_color := Color("#111722") if color.get_luminance() > 0.58 else Color("#ffffff")
+	button.add_theme_color_override("font_color", check_color)
+	button.add_theme_color_override("font_hover_color", check_color)
+	button.add_theme_color_override("font_pressed_color", check_color)
+	button.add_theme_color_override("font_focus_color", check_color)
+	button.add_theme_constant_override("outline_size", 2 if selected else 0)
+	button.add_theme_color_override(
+		"font_outline_color",
+		Color("#ffffff99") if check_color == Color("#111722") else Color("#00000099")
+	)
 	button.add_theme_stylebox_override("normal", _make_panel_style(color, border_color, 5, border_width))
 	button.add_theme_stylebox_override("hover", _make_panel_style(color.lightened(0.12), Color("#62d7ff"), 5, 2))
 	button.add_theme_stylebox_override("pressed", _make_panel_style(color.darkened(0.12), Color("#f4d78a"), 5, 2))
@@ -17031,8 +16994,10 @@ func _refresh_trainer_card_color_buttons() -> void:
 		var color_key: String = key.substr(0, separator_index)
 		var color_value: String = key.substr(separator_index + 1)
 		var swatch_color: Color = entry.get("color", Color.WHITE) as Color
+		var is_selected := _get_player_save_color_value(color_key).to_lower() == color_value.to_lower()
+		button.text = "✓" if is_selected else ""
 		button.tooltip_text = _format_appearance_swatch_name(str(entry.get("label", color_value)))
-		_apply_color_swatch_button_style(button, swatch_color, _get_player_save_color_value(color_key) == color_value)
+		_apply_color_swatch_button_style(button, swatch_color, is_selected)
 	for color_key_value: Variant in trainer_card_hex_inputs.keys():
 		var color_key := str(color_key_value)
 		var input := trainer_card_hex_inputs.get(color_key) as LineEdit
@@ -17043,7 +17008,46 @@ func _refresh_trainer_card_color_buttons() -> void:
 		input.text = _get_player_save_color_value(color_key)
 		input.set_block_signals(false)
 		input.add_theme_color_override("font_color", UI_TEXT)
-	_refresh_trainer_card_natural_color_summary()
+	for color_key_value: Variant in trainer_card_color_pickers.keys():
+		var color_key := str(color_key_value)
+		var picker := trainer_card_color_pickers.get(color_key) as ColorPickerButton
+		if not is_instance_valid(picker):
+			trainer_card_color_pickers.erase(color_key)
+			continue
+		picker.set_block_signals(true)
+		picker.color = Color.from_string(_get_player_save_color_value(color_key), Color.WHITE)
+		picker.set_block_signals(false)
+	for color_key_value: Variant in trainer_card_color_selection_labels.keys():
+		var color_key := str(color_key_value)
+		var label := trainer_card_color_selection_labels.get(color_key) as Label
+		if not is_instance_valid(label):
+			trainer_card_color_selection_labels.erase(color_key)
+			continue
+		label.text = _get_trainer_card_color_selection_text(color_key)
+
+func _get_trainer_card_color_selection_text(color_key: String) -> String:
+	var selected_value := _get_player_save_color_value(color_key)
+	for entry_key_value: Variant in trainer_card_color_buttons.keys():
+		var entry_key := str(entry_key_value)
+		if not entry_key.begins_with("%s:" % color_key):
+			continue
+		var entry_value: Variant = trainer_card_color_buttons.get(entry_key)
+		if not entry_value is Dictionary:
+			continue
+		var entry := entry_value as Dictionary
+		var button := entry.get("button") as Button
+		if button == null:
+			continue
+		var stored_color := entry.get("color", Color.WHITE) as Color
+		if ("#%s" % stored_color.to_html(false)).to_lower() == selected_value.to_lower():
+			return "%s · %s" % [
+				_format_appearance_swatch_name(str(entry.get("label", selected_value))),
+				selected_value.to_upper(),
+			]
+	return "%s · %s" % [
+		LocalizationManager.text("ui.appearance.color.custom"),
+		selected_value.to_upper(),
+	]
 
 func _on_player_status_panel_gui_input(event: InputEvent) -> void:
 	if not (event is InputEventMouseButton):
@@ -17421,7 +17425,6 @@ func _save_response_matches_current_appearance(result: Dictionary) -> bool:
 	return int(appearance.get("hair_style_index", 0)) == int(current_appearance.get("hair_style_index", 0))
 
 func _hide_trainer_card() -> void:
-	_hide_trainer_card_natural_colors_popup()
 	if trainer_card_popup != null:
 		trainer_card_popup.visible = false
 
@@ -17589,7 +17592,6 @@ func _on_trainer_card_color_selected(color_key: String, color_value: String) -> 
 		player.call("refresh_appearance")
 
 	_refresh_trainer_card_color_buttons()
-	_refresh_trainer_card_natural_color_summary()
 	_refresh_avatar_previews()
 	_mark_trainer_card_appearance_dirty()
 
@@ -33143,6 +33145,11 @@ func _rebuild_trainer_card_popup(keep_visible: bool) -> void:
 	trainer_card_appearance_unequip_button = null
 	trainer_card_appearance_return_button = null
 	trainer_card_color_buttons.clear()
+	trainer_card_hex_inputs.clear()
+	trainer_card_color_pickers.clear()
+	trainer_card_color_selection_labels.clear()
+	trainer_card_hair_color_section = null
+	trainer_card_hair_color_atelier_hint = null
 	trainer_card_gym_badge_slots.clear()
 	trainer_card_appearance_save_button = null
 	trainer_card_appearance_status_label = null
