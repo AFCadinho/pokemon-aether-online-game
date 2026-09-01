@@ -597,7 +597,7 @@ func _init() -> void:
 		"Quest Log navigation opens the implemented journal"
 	)
 	_check(script_source.contains('const REDEEM_CODE_ICON: Texture2D = preload("res://assets/ui/redeem_code.svg")'), "Trainer Card redeem action uses its own gift-code icon")
-	_check(script_source.contains("func _create_trainer_card_redeem_button()") and script_source.contains('header.add_child(_create_trainer_card_redeem_button())'), "Trainer Card places the future Redeem Code action beside Close")
+	_check(script_source.contains("func _create_trainer_card_redeem_button()") and script_source.contains('heading_row.add_child(_create_trainer_card_redeem_button())'), "Trainer Card places Redeem Code in the Wallet tab heading")
 	_check(not script_source.contains('hint_label.text = "Have a gift code?"') and not script_source.contains("RedeemCodePanel"), "Trainer Card omits the redundant redeem footer copy")
 	_check(script_source.contains('redeem_button.add_theme_constant_override("icon_max_width", 18)') and not script_source.contains("redeem_button.icon_max_width"), "runtime Redeem Code button sizes its icon through a valid theme override")
 	_check(script_source.contains("redeem_button.pressed.connect(_open_trainer_card_redeem_popup)"), "Redeem Code opens the live gift-code flow")

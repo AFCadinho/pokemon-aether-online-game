@@ -4,6 +4,7 @@ const OVERLAY_SCENE_PATH := "res://scenes/interface/ui_overlay.tscn"
 
 var failed := false
 var localization_manager: Node
+var settings_manager: Node
 
 
 func _init() -> void:
@@ -12,13 +13,18 @@ func _init() -> void:
 
 func _run() -> void:
 	localization_manager = root.get_node_or_null("LocalizationManager")
+	settings_manager = root.get_node_or_null("SettingsManager")
 	_check(localization_manager != null, "Storage localization check can access LocalizationManager")
-	if localization_manager == null:
+	_check(settings_manager != null, "Storage localization check can access SettingsManager")
+	if localization_manager == null or settings_manager == null:
 		quit(1)
 		return
 
 	var original_locale := str(localization_manager.get("current_locale"))
+	var original_content_name_language := str(settings_manager.get("content_name_language"))
+	settings_manager.set("content_name_language", "english")
 	_check_storage_runtime_translation()
+	settings_manager.set("content_name_language", original_content_name_language)
 	localization_manager.call("set_locale", original_locale)
 	await process_frame
 	quit(1 if failed else 0)

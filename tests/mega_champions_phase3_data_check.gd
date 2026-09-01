@@ -141,7 +141,7 @@ func _check_localizations_and_item_icons(catalog: Dictionary) -> void:
 	for locale: String in ITEM_LOCALE_PATHS:
 		var locale_catalog := _read_dictionary(str(ITEM_LOCALE_PATHS[locale]))
 		locale_catalogs[locale] = locale_catalog
-		_check(locale_catalog.size() == 1449, "%s generated item catalog contains all 1449 items" % locale)
+		_check(locale_catalog.size() == 1384, "%s generated item catalog covers the cleaned item index" % locale)
 
 	var unique_items: Dictionary = {}
 	for form_value: Variant in catalog.get("forms", []):
