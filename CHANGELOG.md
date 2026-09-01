@@ -44,6 +44,7 @@
 
 **Fixed**
 
+- PvP battles now recover when a saved next-turn choice remains stuck behind a lost render-release update.
 - Aether Clash battles now finish correctly when the time limit decides the winner, even if a move was already selected.
 - Aether Clash no longer starts another battle before the previous result has been closed.
 - Aether Clash challenge and entry errors now explain what went wrong and offer a retry when possible.

@@ -30,6 +30,7 @@ func _run_checks() -> void:
 	_check_prejoin_battle_event_paging()
 	_check_private_action_resync_resolves_only_the_correlated_waiter()
 	_check_idle_wait_watchdog_recovers_canonical_snapshot()
+	_check_buffered_choice_recovers_lost_presentation_release()
 	_check_canonical_ended_snapshot_recovers_lost_terminal_event()
 
 	if failures > 0:
@@ -664,6 +665,48 @@ func _check_idle_wait_watchdog_recovers_canonical_snapshot() -> void:
 		recovery.contains('"pvp_idle_wait_watchdog"')
 			and recovery.contains("_recover_pvp_idle_wait_ui_after_update"),
 		"idle recovery applies the canonical snapshot and reopens only authoritative controls"
+	)
+
+
+func _check_buffered_choice_recovers_lost_presentation_release() -> void:
+	var battle_script: Script = load(BATTLE_SCRIPT_PATH)
+	_check(battle_script != null, "battle controller loads for presentation-release recovery")
+	if battle_script == null:
+		return
+	var controller: Variant = battle_script.new()
+	controller.pvp_pending_presentation_fence = {
+		"releasePending": true,
+		"eventBatchId": "rendered-batch",
+		"batchSeq": 12,
+		"eventSeqEnd": 64,
+		"turn": 8,
+	}
+	controller.pvp_event_queue.last_rendered_seq = 64
+	controller.pvp_event_queue.is_rendering = false
+	_check(
+		controller._is_waiting_on_rendered_pvp_presentation_release(),
+		"a completed batch with an unreleased presentation fence is recoverable"
+	)
+	controller.pvp_event_queue.is_rendering = true
+	_check(
+		not controller._is_waiting_on_rendered_pvp_presentation_release(),
+		"an actively rendering batch is not mistaken for a lost phase release"
+	)
+	controller.free()
+
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var observer := _function_source(battle_source, "_report_stalled_pvp_waiting_if_needed")
+	var recovery := _function_source(battle_source, "_recover_stalled_pvp_idle_wait")
+	_check(
+		observer.contains("PVP_PRESENTATION_RELEASE_REPORT_MSEC")
+			and observer.contains("PVP_PRESENTATION_RELEASE_RESYNC_MSEC")
+			and observer.contains("waiting_on_presentation_release"),
+		"the presentation-release watchdog reports both waiting clients before its local reconnect fallback"
+	)
+	_check(
+		recovery.contains("_retry_pending_pvp_render_ack()")
+			and recovery.contains("PvpBattleRealtimeService.request_resync("),
+		"a lost release retries its proof and obtains a gateway-owned snapshot"
 	)
 
 
