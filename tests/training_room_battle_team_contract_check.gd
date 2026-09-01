@@ -3,6 +3,8 @@ extends SceneTree
 const TRAINING_TEAM_CONTEXT := preload("res://scripts/battle/battle_training_team_context.gd")
 const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
 const BATTLE_API_PATH := "res://scripts/battle/battle_api/battle_api_client.gd"
+const UI_OVERLAY_PATH := "res://scripts/ui/ui_overlay.gd"
+const WORLD_SCRIPT_PATH := "res://scripts/world/world.gd"
 
 var failed := false
 
@@ -12,6 +14,7 @@ func _init() -> void:
 	_check_private_details_survive_battle_state_updates()
 	_check_duplicate_species_keep_their_declared_slots()
 	_check_battle_controller_isolates_training_from_player_save()
+	_check_level_five_training_ai_uses_the_same_isolation_boundary()
 	_check_room_requests_advertise_durable_timer_contracts()
 	quit(1 if failed else 0)
 
@@ -87,6 +90,34 @@ func _check_battle_controller_isolates_training_from_player_save() -> void:
 	_check(source.contains("if _is_training_room_battle():\n\t\treturn null"), "Training Room display cannot fall back to PlayerSave Pokemon")
 	_check(source.contains("and not _is_training_room_battle():\n\t\t\t_heal_local_party_after_pvp_battle()"), "Training Room completion does not heal or persist the account party")
 	_check(source.contains("func _sync_player_save_party_status_from_battle_state() -> void:\n\tif _is_training_room_battle():\n\t\treturn"), "Training Room responses cannot write HP or status into PlayerSave")
+	_check(source.contains("func _sync_player_save_from_battle_state() -> void:\n\tif _is_training_room_battle():\n\t\treturn"), "Training battle render events cannot replace the saved party with an imported team")
+	_check(source.contains("var skip_party_battle_sync := (\n\t\t_is_training_room_battle()"), "Training battle completion cannot save imported party or happiness state")
+
+
+func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var api_source := FileAccess.get_file_as_string(BATTLE_API_PATH)
+	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
+	var world_source := FileAccess.get_file_as_string(WORLD_SCRIPT_PATH)
+	_check(
+		battle_source.contains("return training_ai_battle or (_is_pvp_battle() and pvp_battle_purpose == \"training\")"),
+		"AI5 battles inherit every Training Room party-persistence safeguard"
+	)
+	_check(
+		api_source.contains("/battle/pvp/training/ai/battles")
+		and api_source.contains("\"teamId\": ai_team_id"),
+		"AI5 creation sends the selected stable catalog team identity"
+	)
+	_check(
+		overlay_source.contains("_selected_pvp_training_ai_team_id()")
+		and overlay_source.contains("ui.pvp.training.ai.team_random"),
+		"Training Room exposes a server-backed AI team selector with a random option"
+	)
+	_check(
+		world_source.contains("active_battle_kind = \"training_ai\"")
+		and world_source.contains("battle_environment_id,\n\t\ttrue"),
+		"World starts AI5 as a non-rewarding training battle"
+	)
 
 
 func _check_room_requests_advertise_durable_timer_contracts() -> void:
