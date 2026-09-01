@@ -1,400 +1,428 @@
-# English Discord posts for testers
+# Simple English Discord posts for testers
 
-These messages can be copied directly into Discord. Replace anything between
-`[SQUARE BRACKETS]` before posting. Delete a line if it does not apply.
+These messages use short and simple English. They are made for people who do
+not speak English as their first language.
 
-The messages intentionally split the testing week into smaller posts. This
-makes assignments and results easier to follow than one very long announcement.
+You can copy each message into Discord. Before you post it, replace all text
+between `[SQUARE BRACKETS]`. You can remove a line when you do not need it.
 
-## Post 1 — Announce the testing week
+## Post 1 — Tell everyone about the test week
 
 ```text
 🧪 POKEAETHER TESTING WEEK
 
-From [START DATE] until [END DATE], we are pausing new feature work and focusing entirely on testing the game we already have.
+From [START DATE] to [END DATE], we will not add new features. We will test the game we have now.
 
-Our goal is to find progression blockers, lost or duplicated data, battle problems, unclear instructions, multiplayer issues, and anything else that makes the current game difficult to play.
+We want to answer these questions:
+• Can a new player start and follow the story?
+• Does the game save the correct progress?
+• Do battles and online features work well?
+• Are any instructions hard to understand?
 
-You do not need technical knowledge to help. Please play like a normal player, follow your assigned test journey, and report anything that behaves differently from what you expected.
+You do not need to know how the game is made. Play like a normal player. Follow your test steps. Tell us when something does not work as you expected.
 
-Build: [BUILD/VERSION]
-Environment: [TEST SERVER/ENVIRONMENT]
+Game version: [GAME VERSION]
+Server: [TEST SERVER]
 Download: [DOWNLOAD LINK]
-Testing guide: [TEST GUIDE LINK]
-Bug reports: [BUG REPORT CHANNEL/LINK]
+Test guide: [TEST GUIDE LINK]
+Report problems here: [BUG REPORT CHANNEL/LINK]
 
-Please react with ✅ if you can participate this week. Thank you for helping us make the current PokeAether experience more reliable!
+Please react with ✅ if you can help this week. Thank you!
 ```
 
-## Post 2 — What every tester needs to know
+## Post 2 — Simple rules for all testers
 
 ```text
-📋 BEFORE YOU START TESTING
+📋 PLEASE READ BEFORE YOU START
 
-Please follow these rules during the test week:
-
-1. Use only the test account assigned to you.
-2. Write down the game build, your operating system, and your screen resolution.
-3. Follow the steps of your assigned test in order.
+1. Use only the test account given to you.
+2. Write down the game version. Ask the test leader if you cannot find it. Also tell us if you use Windows, Linux, or macOS.
+3. Follow your test steps in the given order.
 4. Give every test one result: PASS, FAIL, BLOCKED, or SKIPPED.
-5. Create a separate bug report for each problem you find.
-6. Add a screenshot or short video whenever it helps explain the problem.
-7. Never post your password, email address, session details, private messages, or another player's private information.
-8. Do not intentionally crash, spam, or overload the server.
-9. Do not test real-money purchases or risk valuable items unless the test lead explicitly asks you to.
+5. Make a new bug report for each different problem.
+6. Add a picture or short video when it can help us.
+7. Never share your password, email address, private messages, or private information from another player.
+8. Do not try to break the server. Do not send many messages or actions very quickly.
+9. Do not test real-money payments. Do not risk important Pokémon or items unless the test leader asks you to.
 
-Result meanings:
-✅ PASS — Every step worked and the final result was correct.
-❌ FAIL — At least one step failed or produced the wrong result.
-⛔ BLOCKED — Another problem prevented you from finishing the test.
-⏭️ SKIPPED — The test was not assigned or the feature was unavailable.
+What do the results mean?
+✅ PASS — Everything worked.
+❌ FAIL — Something did not work or gave the wrong result.
+⛔ BLOCKED — A problem stopped you, so you could not finish.
+⏭️ SKIPPED — You did not do this test.
 
-If you are unsure whether something is a bug, report it anyway and describe what confused you.
+Not sure if something is a bug? Please report it and tell us what was confusing.
+
+The E2E number is only the name of your test task. You do not need to understand this number.
 ```
 
-## Post 3 — Individual assignment
+## Post 3 — Give one tester a task
 
-Send this as a direct message or tag the tester in the testing channel.
+You can send this as a direct message or tag the tester.
 
 ```text
-Hi [TESTER NAME]! Your PokeAether test assignment is ready.
+Hi [TESTER NAME]! Here is your PokeAether test task.
 
-Test card(s): [E2E NUMBER AND NAME]
-Account/character: [ASSIGNED TEST ACCOUNT OR CHARACTER]
-Build: [BUILD/VERSION]
-Deadline: [DATE AND TIME]
-Instructions: [TEST GUIDE LINK]
-Report bugs here: [BUG REPORT CHANNEL/LINK]
+Test task(s): [E2E NUMBER AND NAME]
+Test account or character: [ACCOUNT OR CHARACTER]
+Game version: [GAME VERSION]
+Finish before: [DATE AND TIME]
+Test guide: [TEST GUIDE LINK]
+Report problems here: [BUG REPORT CHANNEL/LINK]
 
-When you finish, please reply with:
+When you are done, please send:
 
 Result: [PASS / FAIL / BLOCKED / SKIPPED]
-Bug report links:
-Time spent:
-Anything confusing, even if it technically worked:
+Links to bug reports:
+Time used:
+Was anything hard to understand?
 
-Please contact [TEST LEAD] if your account, build, or starting situation is not correct. Have fun testing!
+Please contact [TEST LEADER] if your account or starting place is wrong. Have fun!
 ```
 
-## Post 4 — Day 1: launcher and new-player journey
+## Post 4 — Day 1: start as a new player
 
 ```text
-🌱 TESTING DAY 1 — NEW-PLAYER JOURNEY
+🌱 TESTING DAY 1 — NEW PLAYER
 
-Today's focus is the experience from opening the launcher to catching and healing your first Pokémon.
+Today we test everything from opening the launcher to catching and healing your first Pokémon.
 
 Please test:
-• Launcher update, news/server status, and starting the game
-• Account creation and login, including one incorrect-password attempt
-• New Game warnings and character creation
-• Movement, collision, NPC interaction, and opening/closing menus
-• Following the Quest Log to Professor Oak
-• Choosing a starter and completing the first required battle
-• Travelling from Pallet Town through Route 1 to Viridian City
-• One wild battle, catching a Pokémon, checking the Pokédex, and healing at a Pokémon Center
-• Closing the game, logging in again, and checking that progress remains correct
+• Update and start the game with the launcher
+• Look at the news and server status
+• Create an account and log in
+• Try one wrong password, then use the correct password
+• Start a New Game and create your character
+• Walk in all directions and try to walk through walls or objects
+• Talk to characters and open and close the main menus
+• Follow the Quest Log to Professor Oak
+• Choose a starter and finish the first battle
+• Travel from Pallet Town through Route 1 to Viridian City
+• Fight one wild Pokémon and catch one Pokémon
+• Check the Pokédex and heal at a Pokémon Center
+• Close the game, log in again, and check your progress
 
-Pay special attention to anything that leaves a new player confused or unsure where to go. If you are stuck for more than five minutes, report where and why.
+If you do not know where to go for more than five minutes, please report it. Tell us where you were and what was not clear.
 
-Assigned cards: E2E-01 to E2E-04
-Build: [BUILD/VERSION]
-Instructions: [TEST GUIDE LINK]
-Results: [RESULTS CHANNEL/LINK]
+Test tasks: E2E-01 to E2E-04
+Game version: [GAME VERSION]
+Test guide: [TEST GUIDE LINK]
+Post results here: [RESULTS CHANNEL/LINK]
 ```
 
-## Post 5 — Day 2: current story and saved progress
+## Post 5 — Day 2: story and saved progress
 
 ```text
-🗺️ TESTING DAY 2 — STORY AND SAVED PROGRESS
+🗺️ TESTING DAY 2 — STORY AND SAVING
 
-Today's goal is to play through the current Kanto story using only the Quest Log, NPC dialogue, and signs for directions.
+Today we test the current Kanto story. Use only the Quest Log, signs, and what game characters tell you.
 
-Please continue through the available journey:
+Please continue through:
 • Viridian Forest and Pewter City
 • Brock and the first Gym reward
 • Route 3 and Mt. Moon
 • Cerulean City
 • Route 24 and Nugget Bridge
 • Route 25 and Bill's quest
-• The available Cerulean Gym story and Misty battle
+• The Cerulean Gym story and Misty battle
 
-After every major step, check the Quest Log, Bag, Trainer Card, badges, rewards, and access to the next area. Rewards and story events must happen exactly once.
+After each big story step:
+• Check the Quest Log, Bag, Trainer Card, badges, and rewards
+• Check that the next place is open
+• Check that you get each reward only one time
 
-Before logging out, write down your map, Party, money, important items, quests, and badges. Log back in and compare everything.
+Before you log out, write down your map, Party, money, important items, quests, and badges. Log in again and check if everything is still correct.
 
-If your build ends before one of these sections, report the last quest objective you successfully completed and mark only the unavailable steps as SKIPPED.
+Can you not reach a place because it is not in this game version? Tell us the last quest you finished. Use SKIPPED for the parts that are not in the game yet.
 
-Assigned cards: E2E-05 and E2E-06
-Build: [BUILD/VERSION]
-Instructions: [TEST GUIDE LINK]
-Results: [RESULTS CHANNEL/LINK]
+Test tasks: E2E-05 and E2E-06
+Game version: [GAME VERSION]
+Test guide: [TEST GUIDE LINK]
+Post results here: [RESULTS CHANNEL/LINK]
 ```
 
-## Post 6 — Day 3: battles, inventory, world, and skills
+## Post 6 — Day 3: battles, items, world, and skills
 
 ```text
-⚔️ TESTING DAY 3 — CORE GAME SYSTEMS
+⚔️ TESTING DAY 3 — MAIN GAME PARTS
 
-Today's tests are being divided between testers. Please complete only the cards assigned to you.
+Different testers will test different parts today. Only do the tasks given to you.
 
-Battle testing:
-• Win a wild battle and a Trainer battle
-• Switch Pokémon and use a battle item
-• Continue after a Pokémon faints
-• Check XP, level-ups, new moves, rewards, and the return to the overworld
+BATTLES
+• Win one wild battle and one Trainer battle
+• Change Pokémon during a battle
+• Use one item during a battle
+• Let one Pokémon faint and continue with the next Pokémon
+• Check XP, new levels, new moves, and rewards
+• Check that you return to the world after the battle
 
-Inventory and Storage testing:
-• Bag categories and using an item
-• Held items
-• Moving Pokémon between Party and Storage boxes
-• Search, filters, Pokémon Summary, Pokédex, and Item Dex
-• Logging in again to check that everything was saved
+BAG AND POKÉMON STORAGE
+• Open every Bag section and use one item
+• Give a Pokémon an item, change it, and take it back
+• Move Pokémon between your Party and different boxes
+• Try search and filter buttons
+• Check Pokémon Summary, Pokédex, and Item Dex
+• Log in again and check that everything was saved
 
-World testing:
-• Doors and map transitions in both directions
-• Collision around water, trees, stairs, bridges, edges, and narrow paths
-• NPCs, signs, followers, mounts, music, weather, and day/night
-• Available field moves and the message shown when requirements are missing
+WORLD
+• Use doors and paths between maps in both directions
+• Walk near water, trees, stairs, bridges, map edges, and small paths
+• Check characters, signs, followers, mounts, music, weather, and day/night
+• Try special moves outside battle, such as Cut or Surf
+• If you need an HM or badge, check that the game tells you what is missing
 
-Quest and skill testing:
-• Accepting, progressing, and completing a sidequest
-• Checking every listed reward
-• Available Fishing, Thieving, and Rock Smash actions
-• XP, cooldowns, success, failure, and progress after logging in again
+QUESTS AND SKILLS
+• Start, continue, and finish one extra quest
+• Check every reward shown in the Quest Log
+• Try Fishing, Thieving, and Rock Smash if you can use them
+• Check XP and wait times after success and failure
+• Log in again and check your progress
 
-Assigned cards: [E2E-07 / E2E-08 / E2E-09 / E2E-10]
-Build: [BUILD/VERSION]
-Instructions: [TEST GUIDE LINK]
-Results: [RESULTS CHANNEL/LINK]
+Your test task: [E2E-07 / E2E-08 / E2E-09 / E2E-10]
+Game version: [GAME VERSION]
+Test guide: [TEST GUIDE LINK]
+Post results here: [RESULTS CHANNEL/LINK]
 ```
 
-## Post 7 — Day 4: settings, recovery, and social features
+## Post 7 — Day 4: settings and other players
 
 ```text
-💬 TESTING DAY 4 — SETTINGS, RECOVERY, AND SOCIAL FEATURES
+💬 TESTING DAY 4 — SETTINGS AND OTHER PLAYERS
 
-Settings testers:
-• Open and close every available main menu
-• Change audio, graphics, zoom, controls, and at least one hotkey
-• Test windowed mode and at least two resolutions
-• Change language and perform normal gameplay actions
-• Restart and check that the settings were saved
-• Report clipped text, overlapping controls, missing icons, or unreadable colors
+SETTINGS
+• Open and close every main menu you can find
+• Change sound, music, graphics, zoom, controls, and one key
+• Change the game window to two different sizes
+• Change the language and play for a short time
+• Restart the game and check that your settings were saved
+• Report text that is cut off or hard to read
+• Report buttons or pictures that are missing or in the wrong place
 
-Social testers working in pairs:
-• Meet on the same map and compare appearance, follower, and movement
-• Test available chat channels and one private message
+TWO-PLAYER TEST
+• Meet another tester on the same map
+• Check their name, look, follower, and movement
+• Send chat messages and one private message
 • Send, accept, and remove a friend request
 • Open each other's public Trainer Card
-• Let one player log out and return, then check online status and presence
+• Let one player log out and return
+• Check if the game shows the correct online status
 
-Only perform the connection-recovery test if the test lead assigned it to you. Never stop a server or alter server data.
+Only test losing your internet connection if the test leader asks you to. Never turn off a server or change server data.
 
-Assigned cards: E2E-11 to E2E-14
-Partner: [PARTNER NAME]
-Session time: [DATE/TIME/TIME ZONE]
-Build: [BUILD/VERSION]
-Instructions: [TEST GUIDE LINK]
-Results: [RESULTS CHANNEL/LINK]
+Test tasks: E2E-11 to E2E-14
+Test partner: [PARTNER NAME]
+Time: [DATE/TIME/TIME ZONE]
+Game version: [GAME VERSION]
+Test guide: [TEST GUIDE LINK]
+Post results here: [RESULTS CHANNEL/LINK]
 ```
 
-## Post 8 — Multiplayer session invitation
+## Post 8 — Invite testers to the multiplayer test
 
 ```text
-👥 SCHEDULED MULTIPLAYER TEST SESSION
+👥 MULTIPLAYER TEST TIME
 
-We need multiple testers online at the same time to test trading, Casual battles, Ranked, spectating, Guilds, and Aether Clash.
+We need several testers online at the same time. We will test trading, Casual battles, Ranked battles, watching battles, Guilds, and Aether Clash.
 
 Date: [DATE]
 Time: [TIME AND TIME ZONE]
-Expected duration: [DURATION]
-Build: [BUILD/VERSION]
-Meet in: [VOICE/TEXT CHANNEL]
-Test lead: [NAME]
+How long: [DURATION]
+Game version: [GAME VERSION]
+Meet here: [VOICE/TEXT CHANNEL]
+Test leader: [NAME]
 
-Please arrive with:
-• The assigned test account
-• A legal battle team, if assigned to PvP
-• Only test Pokémon/items that may safely be traded
-• Discord open so both sides can compare their results
+Please have these ready:
+• Your test account
+• A battle team that the game accepts, if you test PvP
+• Only Pokémon and items that are safe to trade
+• Discord, so you can compare what both players see
 
-React with ✅ if you will attend or ❌ if you need a different time. Please do not start the assigned trade or match before the test lead records who is participating.
+React with ✅ if you can join. React with ❌ if you need another time.
+
+Please wait for the test leader before you start a trade or battle.
 ```
 
-## Post 9 — Day 5: trade, PvP, Guild, and Aether Clash
+## Post 9 — Day 5: trading and battles with players
 
 ```text
-🏆 TESTING DAY 5 — MULTIPLAYER AND PVP
+🏆 TESTING DAY 5 — PLAYING WITH OTHER PLAYERS
 
-Please join the scheduled session before starting these tests.
+Please join the group test before you start.
 
-Trade pair:
-• Refuse one invitation, then accept a new one
-• Change both offers and confirm that previous approval is cleared
-• Complete one trade and cancel one trade
-• Check ownership on both accounts and again after logging in
+TRADING — TWO PLAYERS
+• Player B says no to the first trade invite
+• Send a new invite and accept it
+• Both players add or change an offer
+• Check that both players must press confirm again after a change
+• Finish one trade
+• Cancel one different trade before it is finished
+• Check both accounts after logging in again
 
-PvP group:
-• Complete one Casual room battle
-• Complete one Ranked battle
-• Test one forfeit
-• Let a third tester spectate a live battle
-• Compare turns, HP, timer, result, match history, rating, leaderboard, and Battle Points
-• Confirm that Casual does not change Ranked rating
+CASUAL AND RANKED BATTLES
+• Finish one Casual room battle
+• Finish one Ranked battle
+• Give up in one different battle
+• Let a third tester watch a live battle
+• Compare HP, turns, timer, winner, match history, rating, leaderboard, and Battle Points
+• Check that a Casual battle does not change the Ranked rating
 
-Guild/Aether Clash group, if access is available:
-• Test invitations/applications and member permissions
-• Perform only the assigned test deposit and withdrawal, then check logs
+GUILD AND AETHER CLASH — ONLY IF YOU HAVE ACCESS
+• Test Guild invites and requests to join
+• Check what each Guild role can and cannot do
+• Put one test item in Guild Storage and take it out again
+• Check the Guild history after this
 • Test Guild chat and public Guild information
 • Enter the Aether Clash Lobby
-• Complete the assigned Guild Duel flow, including invitation, entry, battle, spectating, result, and exit
+• Test a Guild Duel from invite to result and exit
+• Let another tester watch the Guild Duel
 
-Use only disposable test items and Pokémon. Report mismatched results from both player perspectives.
+Use only Pokémon and items that are safe to lose or trade. Tell us if the two players see different information.
 
-Assigned cards: E2E-14 to E2E-16
-Session time: [DATE/TIME/TIME ZONE]
-Build: [BUILD/VERSION]
-Instructions: [TEST GUIDE LINK]
-Results: [RESULTS CHANNEL/LINK]
+Test tasks: E2E-14 to E2E-16
+Time: [DATE/TIME/TIME ZONE]
+Game version: [GAME VERSION]
+Test guide: [TEST GUIDE LINK]
+Post results here: [RESULTS CHANNEL/LINK]
 ```
 
-## Post 10 — Bug report template
+## Post 10 — Easy bug report
 
-The outer four backticks are only there to display this post in this document.
-Copy the content starting at `🐛` through the final backticks into Discord.
+Copy the message from `🐛 BUG REPORT` through the final three backticks into
+Discord. If you do not know an answer, write `I do not know`.
 
 ````text
 🐛 BUG REPORT
 
-**Title:** [Short description of what failed and where]
-**Test card:** [For example: E2E-07]
-**Severity:** [Blocker / High / Medium / Low]
-**Build:** [BUILD/VERSION]
-**Test character:** [CHARACTER NAME — no email or password]
-**Operating system:** [WINDOWS/LINUX/MACOS]
-**Screen resolution:** [RESOLUTION]
-**Map/screen:** [LOCATION]
+**Short name for the problem:** [WHAT WENT WRONG AND WHERE?]
+**Test task:** [FOR EXAMPLE: E2E-07]
+**How big is the problem?**
+[BLOCKER: I CANNOT CONTINUE / HIGH: A MAIN PART DOES NOT WORK / MEDIUM: I CAN CONTINUE IN ANOTHER WAY / LOW: SMALL TEXT OR PICTURE PROBLEM]
 
-**Starting situation:**
-[What was true immediately before the problem?]
+**Game version:** [GAME VERSION]
+**Character name:** [NO EMAIL OR PASSWORD]
+**Computer:** [WINDOWS / LINUX / MACOS]
+**Place in the game:** [MAP OR MENU]
 
-**Steps to reproduce:**
+**What was happening before the problem?**
+[SHORT ANSWER]
+
+**What did you do?**
 1. [FIRST STEP]
 2. [SECOND STEP]
 3. [THIRD STEP]
 
-**Expected result:**
-[What should have happened?]
+**What did you expect?**
+[WHAT SHOULD THE GAME DO?]
 
-**Actual result:**
-[What happened instead?]
+**What happened?**
+[WHAT DID THE GAME DO?]
 
-**Frequency:** [For example: 1/1, 2/3, or sometimes]
-**Still present after restart:** [Yes / No / Not tested]
-**Attachment:** [Screenshot/video/log if requested]
+**How often did it happen?** [EVERY TIME / SOMETIMES / ONE TIME]
+**Does it still happen after restarting the game?** [YES / NO / NOT TESTED]
+**Picture or video:** [ADD IT HERE IF YOU HAVE ONE]
 ```
 ````
 
-## Post 11 — Urgent Blocker/High bug alert
+## Post 11 — Tell testers about a big problem
 
 ```text
-🚨 IMPORTANT TESTING ISSUE
+🚨 IMPORTANT TESTING PROBLEM
 
-We found a possible [BLOCKER/HIGH] severity issue:
-[ONE-SENTENCE DESCRIPTION]
+We found this big problem:
+[ONE SHORT SENTENCE]
 
-Affected build: [BUILD/VERSION]
+Game version: [GAME VERSION]
 Bug report: [LINK]
 
-Until the test lead confirms otherwise:
-• [STOP THIS SPECIFIC TEST / AVOID THIS SPECIFIC ACTION]
-• Do not create duplicate reports unless your result is meaningfully different.
-• Continue with unrelated assigned tests if it is safe to do so.
+For now:
+• [DO NOT DO THIS TEST / DO NOT USE THIS ACTION]
+• You do not need to report the same problem again.
+• You can continue with other safe tests.
 
-Reply in [CHANNEL] if this issue blocks your assignment.
+Please reply in [CHANNEL] if this problem stops your test.
 ```
 
-## Post 12 — Retest request after a fix
+## Post 12 — Ask someone to test a fix
 
 ```text
-🔁 FIX READY FOR RETEST
+🔁 PLEASE TEST THIS FIX
 
-The following issue should now be fixed:
-[BUG TITLE]
+We made a fix for this problem:
+[BUG NAME]
 
 Bug report: [LINK]
-New build: [BUILD/VERSION]
-Retest owner: [TESTER NAME]
-Related test card: [E2E NUMBER]
+New game version: [GAME VERSION]
+Tester: [TESTER NAME]
+Test task: [E2E NUMBER]
 
 Please:
-1. Repeat the original reproduction steps exactly.
-2. Confirm whether the original problem is gone.
-3. Complete the rest of the related test card.
-4. Check one nearby flow that could have been affected.
-5. Reply with PASS or FAIL and include the new result.
+1. Do the same steps that caused the problem before.
+2. Check if the old problem is gone.
+3. Finish the rest of the test task.
+4. Test one normal action close to the fixed part.
+5. Reply with PASS or FAIL and tell us what happened.
 
-Do not mark the bug as fixed based only on the patch notes; it needs a result from the new build.
+Please test the new game version. Do not use the old version.
 ```
 
-## Post 13 — Daily check-in
+## Post 13 — Ask for the daily results
 
 ```text
-📊 DAILY TESTING CHECK-IN — [DATE]
+📊 TODAY'S TEST RESULTS — [DATE]
 
-Please post your summary before [TIME AND TIME ZONE]:
+Please send this before [TIME AND TIME ZONE]:
 
-Tester:
-Build:
+Tester name:
+Game version:
 PASS:
 FAIL:
 BLOCKED:
 SKIPPED:
-New Blocker/High bug links:
-Fixes retested successfully:
-Most important open question:
+Links to big problems:
+Fixes that now work:
+Do you have a question?
 
-Short answers are fine. Every assigned test must have a result, even when it was blocked or skipped.
+Short answers are okay. Please give a result for every test task you received.
 ```
 
-## Post 14 — End-of-week message
+## Post 14 — End the test week
 
 ```text
 ✅ POKEAETHER TESTING WEEK — FINAL CHECK
 
-Thank you to everyone who tested this week. Before we close the test round, please check that:
+Thank you for testing this week. Before we finish, please check these points:
 
-• Every assigned test has a PASS, FAIL, BLOCKED, or SKIPPED result.
-• Every FAIL or BLOCKED result links to a bug report.
-• Your bug reports include the build and clear reproduction steps.
-• Any fix you were asked to retest has a result from the new build.
-• You have reported anything that was confusing, even if you eventually found a workaround.
+• Every test task has a PASS, FAIL, BLOCKED, or SKIPPED result.
+• Every FAIL or BLOCKED result has a bug report.
+• Every bug report has the game version and clear steps.
+• You tested each fix that was given to you.
+• You reported anything that was hard to understand.
 
-Please submit missing results before [DEADLINE].
+Please send missing results before [DEADLINE].
 
-Results overview: [LINK]
-Open issues: [LINK]
-Next update from the team: [DATE/CHANNEL]
+All results: [LINK]
+Open problems: [LINK]
+Next news from the team: [DATE/CHANNEL]
 
-Your reports directly help us decide what must be fixed before feature development resumes.
+Your reports help us choose what we must fix first. Thank you for your help!
 ```
 
 ## Optional short reminders
 
-### Start-of-session reminder
+### The test starts soon
 
 ```text
-Testing starts in 30 minutes. Please update to build [BUILD/VERSION], open [VOICE/TEXT CHANNEL], and have your assigned account ready. Do not begin multiplayer actions until the test lead gives the signal.
+Testing starts in 30 minutes. Please update to game version [GAME VERSION]. Open [VOICE/TEXT CHANNEL] and have your test account ready. Please wait for the test leader before you start.
 ```
 
-### Missing-result reminder
+### A result is missing
 
 ```text
-Hi [TESTER NAME], we are still missing a result for [TEST CARD]. Please reply with PASS, FAIL, BLOCKED, or SKIPPED before [DEADLINE]. If you were blocked, tell us which issue stopped you.
+Hi [TESTER NAME]. We still need your result for [TEST TASK]. Please reply with PASS, FAIL, BLOCKED, or SKIPPED before [DEADLINE]. If you could not finish, please tell us what stopped you.
 ```
 
-### Build-changed reminder
+### There is a new game version
 
 ```text
-⚠️ The test build has changed from [OLD BUILD] to [NEW BUILD]. Please finish or stop your current test safely, update the game, and include the new build number in every new result. Wait for a retest assignment before repeating completed cards.
+⚠️ We now use game version [NEW VERSION]. Please stop your current test in a safe place and update the game. Add the new version number to every new report. Please wait before you test an old problem again.
 ```
