@@ -62,6 +62,16 @@ func _init() -> void:
 		"Named NPC resolves its exact portrait"
 	)
 	_check_equal(
+		catalog.resolve_portrait_id("", "", "pokemon_center_move_mentor"),
+		"showdown_pokemaniac_gen6",
+		"Move Maniac resolves its matching Showdown portrait"
+	)
+	_check_equal(
+		catalog.resolve_portrait_id("", "", "pokemon_center_move_deleter"),
+		"showdown_gentleman_gen6",
+		"Move Deleter resolves its matching Showdown portrait"
+	)
+	_check_equal(
 		catalog.resolve_portrait_id("", "kanto_alpha_gym_lt_surge", ""),
 		"showdown_ltsurge",
 		"Lt. Surge resolves his exact Showdown portrait"

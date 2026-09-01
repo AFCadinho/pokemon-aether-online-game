@@ -41,28 +41,28 @@ func _check_scene_staging() -> void:
 
 func _check_battle_setup_contract() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
-	_check(source.contains("_show_local_player_trainer()"), "battle setup renders the local overworld appearance")
+	var wild_prepare_start := source.find("func prepare_wild_battle_from_response(")
+	var wild_prepare_end := source.find("\nfunc ", wild_prepare_start + 1)
+	var wild_prepare_source := source.substr(wild_prepare_start, wild_prepare_end - wild_prepare_start)
 	var wild_intro_start := source.find("func play_wild_battle_intro(")
-	var wild_summon_index := source.find("await _play_lead_summon(", wild_intro_start)
-	var wild_hide_index := source.find("_hide_wild_battle_player_trainer()", wild_summon_index)
-	var wild_event_index := source.find("await _render_initial_battle_events(api_response)", wild_hide_index)
+	var wild_intro_end := source.find("\nfunc ", wild_intro_start + 1)
+	var wild_intro_source := source.substr(wild_intro_start, wild_intro_end - wild_intro_start)
+	var wild_event_index := wild_intro_source.find("await _render_initial_battle_events(api_response)")
+	var wild_controls_index := wild_intro_source.find("_show_battle_controls_after_initial_events()")
+	var wild_ready_index := wild_intro_source.find("_set_battle_actions_ready(true)")
+	_check(
+		wild_prepare_start >= 0
+		and not wild_prepare_source.contains("_show_local_player_trainer()")
+		and wild_prepare_source.contains("player_sprite_box.visible = true"),
+		"wild battles stage the lead directly without showing the player trainer"
+	)
 	_check(
 		wild_intro_start >= 0
-		and wild_summon_index > wild_intro_start
-		and wild_hide_index > wild_summon_index
-		and wild_event_index > wild_hide_index,
-		"wild battles hide the player trainer after the opening summon"
-	)
-	var wild_hide_function := source.find("func _hide_wild_battle_player_trainer()")
-	var local_trainer_function := source.find("func _show_local_player_trainer()", wild_hide_function)
-	var wild_hide_block := source.substr(
-		wild_hide_function,
-		local_trainer_function - wild_hide_function
-	)
-	_check(
-		wild_hide_block.contains("battle_type != BattleType.WILD")
-		and wild_hide_block.contains("player_trainer_sprite.clear()"),
-		"wild-only cleanup removes the staged player trainer"
+		and not wild_intro_source.contains("_play_lead_summon(")
+		and wild_event_index >= 0
+		and wild_controls_index > wild_event_index
+		and wild_ready_index > wild_controls_index,
+		"wild battles unlock controls immediately after required start events without an opening summon"
 	)
 	var trainer_setup_start := source.find("func setup_trainer_battle_from_response(")
 	var pvp_setup_start := source.find("func setup_pvp_battle_from_response(")

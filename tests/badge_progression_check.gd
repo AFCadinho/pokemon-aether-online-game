@@ -55,7 +55,7 @@ func _init() -> void:
 	_check_contains(loading, "PlayerSave.apply_gym_badge_state", "login applies server badge progress")
 	_check_contains(overlay, "PlayerSave.has_gym_badge(region, badge_id)", "Trainer Card renders actual badge ownership")
 	_check_contains(overlay, "PlayerSave.gym_badges_changed.connect(_refresh_trainer_card_gym_badges)", "Trainer Card reacts immediately when badge progress changes")
-	_check_contains(overlay, "_create_public_trainer_gym_badges_panel(card)", "public Trainer Cards render server-provided Gym Badges")
+	_check_contains(overlay, "_create_public_trainer_badge_collection(card)", "public Trainer Cards render server-provided Gym Badges")
 	_check_contains(overlay, "_gym_badge_state_has(", "public Trainer Cards distinguish earned and locked badges")
 	_check_contains(overlay, '"ui.staff.dev.trainer_progress"', "Developer Tools exposes trainer progress")
 	_check_contains(guild, "func _player_badge_count", "guild requirements read canonical badge progress")

@@ -16,6 +16,78 @@ func _run() -> void:
 		quit(1)
 		return
 
+	var first_open_popup := packed.instantiate() as GuildPopup
+	root.add_child(first_open_popup)
+	await process_frame
+	first_open_popup.open()
+	var initial_loading_page := first_open_popup.find_child(
+		"GuildInitialLoadingPage",
+		true,
+		false
+	) as Control
+	_check(
+		initial_loading_page != null
+		and initial_loading_page.visible
+		and not first_open_popup.browse_page.visible,
+		"first Guild open shows a neutral loading state instead of flashing Browse"
+	)
+	_check(
+		first_open_popup.primary_navigation != null
+		and not first_open_popup.primary_navigation.visible,
+		"membership-dependent Guild navigation stays hidden during the first load"
+	)
+	await process_frame
+	var initial_retry := first_open_popup.find_child(
+		"GuildInitialLoadingRetryButton",
+		true,
+		false
+	) as Button
+	_check(
+		initial_loading_page != null
+		and initial_loading_page.visible
+		and initial_retry != null
+		and initial_retry.visible
+		and not first_open_popup.browse_page.visible,
+		"an initial load failure remains neutral and offers retry without showing Browse"
+	)
+	first_open_popup.membership = {
+		"userId": 1,
+		"guildId": 1,
+		"role": "member",
+		"permissions": [],
+	}
+	first_open_popup.guild_home = {
+		"guild": {
+			"id": 1,
+			"name": "First Open Guild",
+			"level": 1,
+			"capacity": 20,
+			"language": "English",
+			"focus": "Social",
+		},
+		"membership": first_open_popup.membership.duplicate(true),
+		"members": [],
+	}
+	first_open_popup.has_resolved_initial_membership = true
+	first_open_popup._set_initial_guild_loading(false)
+	first_open_popup._show_page("member")
+	_check(
+		first_open_popup.member_page.visible
+		and not first_open_popup.browse_page.visible
+		and not first_open_popup.initial_loading_page.visible,
+		"a resolved Guild member transitions directly from loading to the Guild dashboard"
+	)
+	first_open_popup.close()
+	first_open_popup.open()
+	_check(
+		first_open_popup.member_page.visible
+		and not first_open_popup.initial_loading_page.visible,
+		"later Guild opens immediately reuse the resolved membership"
+	)
+	first_open_popup.close()
+	first_open_popup.queue_free()
+	await process_frame
+
 	var popup := packed.instantiate() as GuildPopup
 	root.add_child(popup)
 	await process_frame
@@ -208,8 +280,14 @@ func _run() -> void:
 	_check(popup.find_child("GuildMemberDashboard", true, false) != null, "member dashboard renders")
 	_check(popup.find_child("GuildOverviewTab", true, false) != null, "guild overview tab renders")
 	_check(popup.find_child("GuildBankTab", true, false) != null, "guild bank tab renders")
+	_check(popup.find_child("GuildAetherClashTab", true, false) != null, "Aether Clash tab renders for Guild members")
 	_check(popup.find_child("GuildMembersTab", true, false) != null, "guild members tab renders")
 	_check(popup.find_child("GuildManagementTab", true, false) != null, "guild management tab renders for leaders")
+	var active_overview_tab := popup.find_child("GuildOverviewTab", true, false) as Button
+	_check(
+		_button_background_is(active_overview_tab, Color("#123650f2")),
+		"active Guild tab uses a clearly filled accent surface"
+	)
 	var section_navigation := popup.find_child("GuildSectionNavigation", true, false) as HBoxContainer
 	var member_browse_button := popup.find_child("BrowseGuildsButton", true, false) as Button
 	_check(
@@ -223,19 +301,225 @@ func _run() -> void:
 		member_browse_button != null and member_browse_button.custom_minimum_size.x <= 150.0,
 		"Guild discovery becomes a compact secondary action for members"
 	)
+	_check(
+		_button_background_is(member_browse_button, GuildPopup.UI_SECONDARY_BACKGROUND),
+		"Guild discovery uses the softer cyan secondary action style"
+	)
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "guild dashboard opens on its overview")
+	_check(
+		popup.find_child("GuildOverviewWorkspaceHeader", true, false) != null,
+		"Guild Overview uses the shared workspace heading"
+	)
+	var overview_level := popup.find_child("GuildOverviewLevelValue", true, false) as Label
+	_check(overview_level != null and overview_level.text == "12", "guild overview omits decimal zeroes from levels")
+	popup._show_guild_section("aether_clash")
+	await process_frame
+	_check(popup.find_child("GuildAetherClashWorkspace", true, false) != null, "Aether Clash workspace opens")
+	_check(
+		GuildPopup.AETHER_CLASH_TIERS.size() == 2
+		and str(GuildPopup.AETHER_CLASH_TIERS[0].get("id", "")) == "aether-ou"
+		and str(GuildPopup.AETHER_CLASH_TIERS[1].get("id", "")) == "aether-uu",
+		"Aether Clash challenges offer both Aether OU and Aether UU"
+	)
+	_check(popup.find_child("GuildAetherClashDuelModeTab", true, false) != null, "Guild Duel has a dedicated mode tab")
+	_check(popup.find_child("GuildAetherClashBattleRoyaleModeTab", true, false) != null, "Battle Royale has a dedicated mode tab")
+	_check(popup.find_child("GuildAetherClashDuelNavigation", true, false) != null, "Guild Duel exposes compact workspace navigation")
+	_check(popup.find_child("GuildAetherClashOverviewTab", true, false) != null, "Guild Duel has an Overview workspace")
+	_check(popup.find_child("GuildAetherClashChallengesTab", true, false) != null, "Guild Duel has a Challenges workspace")
+	_check(popup.find_child("GuildAetherClashHistoryTab", true, false) != null, "Guild Duel has a History workspace")
+	_check(popup.find_child("GuildAetherClashDuelStats", true, false) != null, "Guild Duel record renders")
+	var duel_wins := popup.find_child("GuildAetherClashWins", true, false) as PanelContainer
+	_check(duel_wins != null, "Guild Duel win statistic renders")
+	_check(popup.find_child("GuildAetherClashDuelHistory", true, false) == null, "Overview stays focused on current status")
+	popup._set_aether_clash_duel_section("challenges")
+	await process_frame
+	_check(popup.find_child("GuildAetherClashIncomingGroup", true, false) != null, "Challenges separates the incoming queue")
+	_check(popup.find_child("GuildAetherClashOutgoingGroup", true, false) != null, "Challenges separates the outgoing queue")
+	_check(popup.find_child("GuildAetherClashDuelStats", true, false) == null, "Challenges stays free of unrelated statistics")
+	popup.aether_clash_state["pendingIncoming"] = [{
+		"id": "leader-incoming",
+		"challengerGuild": {"id": 2, "name": "Midnight League"},
+		"challengedGuild": {"id": 1, "name": "Aether Vanguard"},
+		"createdBy": "Umbra",
+		"expiresAt": Time.get_datetime_string_from_unix_time(int(Time.get_unix_time_from_system()) + 60),
+	}]
+	popup.aether_clash_state["pendingOutgoing"] = [{
+		"id": "leader-outgoing",
+		"challengerGuild": {"id": 1, "name": "Aether Vanguard"},
+		"challengedGuild": {"id": 3, "name": "Silver Guard"},
+		"createdBy": "Nova",
+		"expiresAt": Time.get_datetime_string_from_unix_time(int(Time.get_unix_time_from_system()) + 60),
+	}]
+	popup._render_guild_home()
+	await process_frame
+	var challenge_section_tab := popup.find_child("GuildAetherClashChallengesTab", true, false) as Button
+	_check(challenge_section_tab != null and challenge_section_tab.text.contains("2"), "Challenges navigation shows the pending total")
+	_check(popup.find_child("AcceptGuildAetherClashButton", true, false) != null, "authorized staff can accept from the Challenges workspace")
+	_check(popup.find_child("DeclineGuildAetherClashButton", true, false) != null, "authorized staff can decline from the Challenges workspace")
+	_check(popup.find_child("CancelGuildAetherClashChallengeButton", true, false) != null, "authorized staff can cancel an outgoing challenge from its workspace")
+	popup.aether_clash_state["pendingIncoming"] = []
+	popup.aether_clash_state["pendingOutgoing"] = []
+	popup._render_guild_home()
+	await process_frame
+	popup._set_aether_clash_duel_section("history")
+	await process_frame
+	_check(popup.find_child("GuildAetherClashDuelStats", true, false) == null, "History does not repeat the statistic dashboard")
+	_check(popup.find_child("GuildCurrentAetherClash", true, false) != null, "the active Clash stays visible while browsing history")
+	var history_entry := popup.find_child("GuildAetherClashHistoryEntry", true, false) as Button
+	_check(history_entry != null, "recent Guild Duel history renders as a clickable entry")
+	_check(
+		history_entry != null and history_entry.mouse_default_cursor_shape == Control.CURSOR_POINTING_HAND,
+		"Guild Duel history advertises its detailed view on hover"
+	)
+	var own_roster := popup.find_child("GuildAetherClashHistoryOwnRoster", true, false) as Label
+	var opponent_roster := popup.find_child("GuildAetherClashHistoryOpponentRoster", true, false) as Label
+	_check(
+		own_roster != null
+		and own_roster.text.contains("Aether Vanguard")
+		and own_roster.text.contains("3")
+		and own_roster.text.contains("2"),
+		"Guild Duel history shows the own Guild's locked roster and survivors"
+	)
+	_check(
+		opponent_roster != null
+		and opponent_roster.text.contains("Midnight League")
+		and opponent_roster.text.contains("2")
+		and opponent_roster.text.contains("0"),
+		"Guild Duel history shows the opponent's locked roster and survivors"
+	)
+	var detail_window := Window.new()
+	var detail_content := VBoxContainer.new()
+	detail_window.add_child(detail_content)
+	popup.add_child(detail_window)
+	popup._render_aether_clash_history_detail(detail_content, detail_window, {
+		"sessionId": "runtime-history",
+		"status": "completed",
+		"challengerGuild": {"id": 1, "name": "Aether Vanguard"},
+		"challengedGuild": {"id": 3, "name": "Midnight League"},
+		"winnerGuild": {"id": 1, "name": "Aether Vanguard"},
+		"completedAt": Time.get_datetime_string_from_system(true) + "Z",
+		"durationSeconds": 428,
+		"tierName": "Aether OU",
+		"stakeAmount": 100000,
+		"stakePotAmount": 200000,
+		"participantCounts": {"challenger": 1, "challenged": 1},
+		"remainingCounts": {"challenger": 1, "challenged": 0},
+		"participants": [
+			{
+				"userId": 1, "username": "nova", "displayName": "Nova",
+				"guildId": 1, "side": "challenger", "battles": 1,
+				"wins": 1, "losses": 0, "finalStatus": "survived",
+				"eliminatedBy": {},
+			},
+			{
+				"userId": 2, "username": "umbra", "displayName": "Umbra",
+				"guildId": 3, "side": "challenged", "battles": 1,
+				"wins": 0, "losses": 1, "finalStatus": "eliminated",
+				"eliminatedBy": {
+					"userId": 1, "username": "nova", "displayName": "Nova",
+					"guildId": 1, "side": "challenger",
+				},
+			},
+		],
+		"battles": [{
+			"sequence": 1, "method": "automatic", "result": "completed",
+			"completedAt": Time.get_datetime_string_from_system(true) + "Z",
+			"source": {"displayName": "Nova"},
+			"target": {"displayName": "Umbra"},
+			"winner": {"displayName": "Nova"},
+			"loser": {"displayName": "Umbra"},
+		}],
+	})
+	await process_frame
+	_check(
+		detail_window.find_child("GuildAetherClashHistoryParticipant_1", true, false) != null
+		and detail_window.find_child("GuildAetherClashHistoryParticipant_2", true, false) != null,
+		"Guild Duel details render both completed rosters"
+	)
+	_check(
+		detail_window.find_child("GuildAetherClashHistoryBattle_1", true, false) != null,
+		"Guild Duel details render the chronological battle timeline"
+	)
+	_check(
+		_find_label_with_text(detail_window, "₽100,000") != null
+		and _find_label_with_text(detail_window, "₽200,000") != null,
+		"Guild Duel details distinguish the per-Guild stake from the total prize pot"
+	)
+	detail_window.queue_free()
+	popup._set_aether_clash_duel_section("overview")
+	await process_frame
+	_check(popup.find_child("GuildAetherClashHeader", true, false) != null, "Aether Clash uses the shared workspace heading")
+	var clash_refresh := popup.find_child("RefreshGuildAetherClashButton", true, false) as Button
+	_check(
+		_button_background_is(clash_refresh, GuildPopup.UI_SECONDARY_BACKGROUND),
+		"Aether Clash refresh is visually secondary to challenge actions"
+	)
+	_check(popup.find_child("GuildCurrentAetherClash", true, false) != null, "accepted Guild clash is visible")
+	var clash_status_label := popup.find_child("GuildAetherClashStatusLabel", true, false) as Label
+	_check(clash_status_label != null and clash_status_label.text == "Accepted", "active Clash uses a compact status badge")
+	var clash_countdown := popup.find_child("GuildAetherClashEntryCountdown", true, false) as Label
+	_check(clash_countdown != null and clash_countdown.text.contains(":"), "accepted Guild clash shows a running portal countdown")
+	_check(popup.find_child("CancelCurrentGuildAetherClashButton", true, false) != null, "authorized staff can cancel an accepted clash")
+	popup._set_aether_clash_mode_tab("battle_royale")
+	await process_frame
+	_check(popup.find_child("GuildAetherClashBattleRoyaleComingSoon", true, false) != null, "Battle Royale tab explains the later phase")
+	popup._set_aether_clash_mode_tab("duel")
+	await process_frame
+	popup._show_guild_section("overview")
+	await process_frame
 	var announcement_text := popup.find_child("GuildAnnouncementText", true, false) as Label
 	_check(announcement_text != null and announcement_text.text.contains("Aether Clash practice"), "guild overview displays the current announcement")
+	var role_badge := popup.find_child("GuildRoleBadgeLabel", true, false) as Label
+	_check(role_badge != null and role_badge.text == "Leader", "guild header shows the member rank as a compact badge")
+	var header_description := popup.find_child("GuildHeaderDescription", true, false) as Label
+	_check(
+		header_description != null
+		and header_description.max_lines_visible == 2
+		and header_description.text_overrun_behavior == TextServer.OVERRUN_TRIM_ELLIPSIS,
+		"guild header constrains long descriptions to two readable lines"
+	)
+	var presence_summary := popup.find_child("GuildPresenceSummary", true, false) as Label
+	_check(
+		presence_summary != null and presence_summary.text.contains("2 / 3"),
+		"guild overview uses available member data for a live presence summary"
+	)
+	var original_announcement: String = str(popup.guild_home.get("announcement", ""))
+	popup.guild_home["announcement"] = ""
+	var empty_announcement := popup._build_guild_announcement_panel()
+	popup.add_child(empty_announcement)
+	await process_frame
+	_check(
+		empty_announcement.custom_minimum_size.y <= 80.0,
+		"empty Guild announcements collapse to a compact state"
+	)
+	empty_announcement.queue_free()
+	popup.guild_home["announcement"] = original_announcement
 	var leader_options := popup.find_child("GuildOptionsMenuButton", true, false) as MenuButton
 	_check(leader_options != null and leader_options.get_popup().is_item_disabled(0), "Guild leaders cannot leave through Guild options")
 	var header_travel := popup.find_child("GuildHeaderTravelActions", true, false) as VBoxContainer
 	_check(header_travel != null, "guild travel occupies the member header")
+	var guild_lobby_action := popup.find_child("GuildLobbyTeleportButton", true, false) as Button
+	_check(
+		_button_background_is(guild_lobby_action, GuildPopup.UI_PRIMARY_BACKGROUND),
+		"Guild lobby travel uses the prominent primary action colour"
+	)
 	var guild_progress := popup.find_child("GuildExperienceProgress", true, false) as ProgressBar
 	_check(guild_progress != null and is_equal_approx(guild_progress.value, 47.5), "guild overview shows authoritative level progress")
+	_check(guild_progress != null and guild_progress.custom_minimum_size.y >= 24.0, "guild EXP bar is prominent enough to scan")
 	var guild_progress_label := popup.find_child("GuildExperienceProgressLabel", true, false) as Label
 	_check(guild_progress_label != null and guild_progress_label.text.contains("500,000"), "guild overview shows total Guild EXP")
+	_check(
+		popup.find_child("GuildMemberCapacity", true, false) != null
+		and popup.find_child("GuildItemCapacity", true, false) != null
+		and popup.find_child("GuildPokemonCapacity", true, false) != null,
+		"guild capacities use three separate visual indicators"
+	)
 	var rewards_button := popup.find_child("GuildLevelRewardsButton", true, false) as Button
 	_check(rewards_button != null and not rewards_button.disabled, "guild overview exposes the level unlock roadmap")
+	_check(
+		_button_background_is(rewards_button, GuildPopup.UI_GOLD_BACKGROUND),
+		"Guild level roadmap uses its distinct gold action accent"
+	)
 	if rewards_button != null:
 		rewards_button.pressed.emit()
 		await process_frame
@@ -278,6 +562,7 @@ func _run() -> void:
 		bank_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildBankSection", true, false) != null, "Guild Bank opens in its own workspace")
+	_check(popup.find_child("GuildBankHeader", true, false) != null, "Guild Bank uses the shared workspace heading")
 	_check(popup.find_child("GuildBankFundsCard", true, false) != null, "Guild Bank shows shared funds")
 	_check(popup.find_child("GuildBankPokemonCard", true, false) != null, "Guild Bank shows Pokémon storage")
 	_check(popup.find_child("GuildBankItemsCard", true, false) != null, "Guild Bank shows item storage")
@@ -300,10 +585,18 @@ func _run() -> void:
 		"every Guild member can open each bank category"
 	)
 	_check(pokemon_action != null and pokemon_action.text == "Enter Vault", "Pokémon category uses a distinct entry label")
+	_check(
+		_button_background_is(pokemon_action, GuildPopup.UI_SECONDARY_BACKGROUND),
+		"Guild Bank category entry actions use the secondary accent"
+	)
 	var permission_summary := popup.find_child("GuildBankPermissionSummary", true, false) as Label
 	_check(permission_summary != null and permission_summary.text.contains("allowed"), "Guild Bank shows the leader's transaction rights")
 	var rank_rights_action := popup.find_child("GuildBankRankRightsButton", true, false) as Button
 	_check(rank_rights_action != null, "every Guild member can open the rank-rights page")
+	_check(
+		_button_background_is(rank_rights_action, GuildPopup.UI_SECONDARY_BACKGROUND),
+		"Guild Bank rank rights reads as a supporting action"
+	)
 	if rank_rights_action != null:
 		rank_rights_action.pressed.emit()
 		await process_frame
@@ -328,6 +621,20 @@ func _run() -> void:
 	_check(popup.find_child("GuildBankPokemonListScroll", true, false) != null, "Pokémon Vault overview remains scrollable at scale")
 	_check(popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) == null, "Pokémon Vault overview keeps Guild withdrawals out of the preview")
 	_check(popup.find_child("GuildBankPokemonDepositButton_22", true, false) != null, "Pokémon Vault overview keeps direct personal donations available")
+	var ineligible_pokemon := popup.find_child("GuildBankPokemonEligibility_23", true, false) as Label
+	var ineligible_deposit := popup.find_child("GuildBankPokemonDepositButton_23", true, false) as Button
+	_check(
+		ineligible_pokemon != null
+		and ineligible_pokemon.text.contains("held item")
+		and ineligible_pokemon.get_theme_color("font_color") == GuildPopup.UI_ERROR,
+		"Pokémon Vault shows an ineligible Pokémon in red with its reason"
+	)
+	_check(
+		ineligible_deposit != null
+		and ineligible_deposit.disabled
+		and ineligible_deposit.tooltip_text.contains("held item"),
+		"ineligible Pokémon remain impossible to donate from the client"
+	)
 	var stored_pokemon_preview := popup.find_child("GuildBankPokemonIcon_21", true, false) as Button
 	_check(
 		stored_pokemon_preview != null and stored_pokemon_preview.tooltip_text == "Open Summary",
@@ -694,6 +1001,8 @@ func _run() -> void:
 		members_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildMembersSection", true, false) != null, "members tab opens the roster")
+	_check(popup.find_child("GuildMembersWorkspaceHeader", true, false) != null, "Members uses the shared workspace heading")
+	_check(popup.find_child("GuildMemberRosterSummary", true, false) != null, "Members keeps the online summary in its heading")
 	var members_section := popup.find_child("GuildMembersSection", true, false) as Control
 	var widest_member_card := popup.find_child("GuildMemberCard_2", true, false) as Control
 	_check(
@@ -704,6 +1013,10 @@ func _run() -> void:
 	)
 	var leader_contribution := popup.find_child("GuildMemberContributionLabel_1", true, false) as Label
 	_check(leader_contribution != null and leader_contribution.text == "124,350", "member roster shows contributed Guild EXP")
+	_check(
+		popup.find_child("GuildMemberPresenceDot_1", true, false) == null,
+		"member avatars avoid a redundant presence dot"
+	)
 	var leader_status_column := popup.find_child("GuildMemberStatusColumn_1", true, false) as Control
 	var member_status_column := popup.find_child("GuildMemberStatusColumn_2", true, false) as Control
 	var leader_rank_column := popup.find_child("GuildMemberRankColumn_1", true, false) as Control
@@ -742,7 +1055,13 @@ func _run() -> void:
 		var maple_card := popup.find_child("GuildMemberCard_2", true, false) as Control
 		var pecha_card := popup.find_child("GuildMemberCard_3", true, false) as Control
 		_check(maple_card != null and not maple_card.visible and pecha_card != null and pecha_card.visible, "member search filters current Guild members")
+		member_search.text = "no-trainer-has-this-name"
+		popup._filter_guild_member_cards(member_search.text)
+		await process_frame
+		var member_filter_empty := popup.find_child("GuildMemberFilterEmptyState", true, false) as Control
+		_check(member_filter_empty != null and member_filter_empty.visible, "member search explains when no Trainers match")
 		member_search.text = ""
+		popup._filter_guild_member_cards(member_search.text)
 	var invite_action := popup.find_child("OpenGuildInviteDialogButton", true, false) as Button
 	_check(
 		invite_action != null
@@ -966,6 +1285,7 @@ func _run() -> void:
 		management_tab.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildManagementNavigation", true, false) != null, "Management opens an organized secondary navigation")
+	_check(popup.find_child("GuildManagementWorkspaceHeader", true, false) != null, "Management uses the shared workspace heading")
 	_check(popup.find_child("GuildManagementProfileTab", true, false) != null, "leaders receive a Guild Profile management page")
 	_check(popup.find_child("GuildManagementRecruitmentTab", true, false) != null, "leaders receive a Recruitment management page")
 	var applications_tab := popup.find_child("GuildManagementApplicationsTab", true, false) as Button
@@ -1010,6 +1330,10 @@ func _run() -> void:
 	_check(popup.find_child("GuildSettingsRequirement_0", true, false) != null, "saved requirements remain editable")
 	var add_requirement := popup.find_child("GuildAddRequirementButton", true, false) as Button
 	_check(add_requirement != null, "leaders can add individual requirements")
+	_check(
+		_button_background_is(add_requirement, GuildPopup.UI_SECONDARY_BACKGROUND),
+		"adding a recruitment requirement reads as a supporting action"
+	)
 	if add_requirement != null:
 		add_requirement.pressed.emit()
 		await process_frame
@@ -1160,10 +1484,48 @@ func _run() -> void:
 		"bankPermissionOverrides": {"bank_borrow": "deny"},
 	}
 	popup.membership = popup.guild_home["membership"]
+	popup.aether_clash_state["canManage"] = false
+	popup.aether_clash_state["pendingIncoming"] = [{
+		"id": "member-visible-incoming",
+		"status": "pending",
+		"challengerGuild": {"id": 2, "name": "Midnight League"},
+		"challengedGuild": {"id": 1, "name": "Aether Vanguard"},
+		"createdBy": "Umbra",
+		"expiresAt": Time.get_datetime_string_from_unix_time(
+			int(Time.get_unix_time_from_system()) + 60
+		),
+	}]
+	popup.aether_clash_state["pendingOutgoing"] = [{
+		"id": "member-visible-outgoing",
+		"status": "pending",
+		"challengerGuild": {"id": 1, "name": "Aether Vanguard"},
+		"challengedGuild": {"id": 3, "name": "Silver Guard"},
+		"createdBy": "Nova",
+		"expiresAt": Time.get_datetime_string_from_unix_time(
+			int(Time.get_unix_time_from_system()) + 45
+		),
+	}]
 	popup._render_guild_home()
 	await process_frame
 	_check(popup.find_child("GuildManagementTab", true, false) == null, "regular members do not see management")
 	_check(popup.find_child("GuildManagementApplicationsTab", true, false) == null, "regular members do not see the staff applications inbox")
+	popup._show_guild_section("aether_clash")
+	await process_frame
+	_check(popup.find_child("GuildCurrentAetherClash", true, false) != null, "regular members can see the accepted Aether Clash")
+	_check(popup.find_child("GuildAetherClashDuelStats", true, false) != null, "regular members can see the Guild Duel record")
+	_check(popup.find_child("CancelCurrentGuildAetherClashButton", true, false) == null, "regular members cannot manage the accepted Aether Clash")
+	popup._set_aether_clash_duel_section("challenges")
+	await process_frame
+	_check(popup.find_child("GuildAetherClashChallengesWorkspace", true, false) != null, "regular members can open pending challenges")
+	_check(popup.find_child("GuildCurrentAetherClash", true, false) != null, "the active Clash stays visible while reviewing challenges")
+	_check(popup.find_child("IncomingGuildAetherClashChallenge", true, false) != null, "incoming challenges remain easy to find after their popup closes")
+	_check(popup.find_child("OutgoingGuildAetherClashChallenge", true, false) != null, "outgoing challenges remain easy to review")
+	_check(popup.find_child("AcceptGuildAetherClashButton", true, false) == null, "regular members cannot accept pending Aether Clash challenges")
+	_check(popup.find_child("DeclineGuildAetherClashButton", true, false) == null, "regular members cannot decline pending Aether Clash challenges")
+	_check(popup.find_child("CancelGuildAetherClashChallengeButton", true, false) == null, "regular members cannot cancel pending Aether Clash challenges")
+	popup._set_aether_clash_duel_section("history")
+	await process_frame
+	_check(popup.find_child("GuildAetherClashDuelHistory", true, false) != null, "regular members can navigate to Guild Duel history")
 	popup._show_guild_section("members")
 	await process_frame
 	var regular_member_actions := popup.find_child("GuildMemberActionsButton_2", true, false) as MenuButton
@@ -1299,6 +1661,21 @@ func _check_dialog_styled(dialog: ConfirmationDialog, label: String) -> void:
 		and dialog.get_cancel_button().has_theme_stylebox_override("normal"),
 		"%s uses styled action buttons" % label
 	)
+
+
+func _button_background_is(button: Button, expected: Color) -> bool:
+	if button == null:
+		return false
+	var style := button.get_theme_stylebox("normal") as StyleBoxFlat
+	return style != null and style.bg_color.is_equal_approx(expected)
+
+
+func _find_label_with_text(root_node: Node, expected: String) -> Label:
+	for child: Node in root_node.find_children("*", "Label", true, false):
+		var label := child as Label
+		if label != null and label.text == expected:
+			return label
+	return null
 
 
 func _check(condition: bool, label: String) -> void:

@@ -65,6 +65,57 @@ func add_custom_control(control: Control) -> void:
 	custom_content.add_child(control)
 
 
+func style_option_button(select: OptionButton) -> void:
+	if select == null:
+		return
+	select.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	select.add_theme_color_override("font_color", COLOR_TEXT)
+	select.add_theme_color_override("font_hover_color", COLOR_TEXT)
+	select.add_theme_color_override("font_pressed_color", COLOR_TEXT)
+	select.add_theme_font_size_override("font_size", 14)
+	select.add_theme_stylebox_override("normal", _select_style(COLOR_SURFACE, COLOR_BORDER))
+	select.add_theme_stylebox_override("hover", _select_style(COLOR_SURFACE_HOVER, COLOR_ACCENT))
+	select.add_theme_stylebox_override("pressed", _select_style(COLOR_ACCENT_DARK, COLOR_ACCENT))
+	select.add_theme_stylebox_override("focus", _select_style(COLOR_SURFACE, COLOR_ACCENT))
+	var popup := select.get_popup()
+	popup.add_theme_color_override("font_color", COLOR_TEXT)
+	popup.add_theme_color_override("font_hover_color", COLOR_TEXT)
+	popup.add_theme_font_size_override("font_size", 14)
+	popup.add_theme_stylebox_override("panel", _make_style(COLOR_BACKGROUND, COLOR_BORDER, 8, 1, true))
+	popup.add_theme_stylebox_override("hover", _make_style(COLOR_SURFACE_HOVER, COLOR_ACCENT, 6, 1))
+
+
+func style_spin_box(input: SpinBox) -> void:
+	if input == null:
+		return
+	input.editable = true
+	input.select_all_on_focus = true
+	var line_edit := input.get_line_edit()
+	if line_edit == null:
+		return
+	line_edit.add_theme_color_override("font_color", COLOR_TEXT)
+	line_edit.add_theme_color_override("caret_color", COLOR_ACCENT)
+	line_edit.add_theme_font_size_override("font_size", 14)
+	line_edit.add_theme_stylebox_override(
+		"normal",
+		_select_style(COLOR_SURFACE, COLOR_BORDER)
+	)
+	line_edit.add_theme_stylebox_override(
+		"focus",
+		_select_style(COLOR_SURFACE_HOVER, COLOR_ACCENT)
+	)
+
+
+func focus_spin_box(input: SpinBox) -> void:
+	if input == null:
+		return
+	var line_edit := input.get_line_edit()
+	if line_edit == null:
+		return
+	line_edit.grab_focus.call_deferred()
+	line_edit.select_all.call_deferred()
+
+
 func popup_centered(requested_size: Vector2i = Vector2i.ZERO) -> void:
 	_fit_to_viewport()
 	var target_size := Vector2(requested_size)
@@ -195,6 +246,15 @@ func _button_style(background: Color, border: Color) -> StyleBoxFlat:
 	style.content_margin_right = 18
 	style.content_margin_top = 9
 	style.content_margin_bottom = 9
+	return style
+
+
+func _select_style(background: Color, border: Color) -> StyleBoxFlat:
+	var style := _make_style(background, border, 8, 1)
+	style.content_margin_left = 14
+	style.content_margin_right = 38
+	style.content_margin_top = 10
+	style.content_margin_bottom = 10
 	return style
 
 

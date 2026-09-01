@@ -791,7 +791,7 @@ func _request_sample_sets_if_needed() -> void:
 func _get_sample_set_format_id() -> String:
 	var format := _as_dictionary(knowledge_snapshot.get("format", {}))
 	var format_key := str(format.get("formatKey", "")).strip_edges().to_lower()
-	if format_key in ["aether-ou", "ranked-aether-ou"]:
+	if format_key in ["aether-ou", "aether-uu", "ranked-aether-ou", "ranked-aether-uu"]:
 		return "aether-ou"
 	return "gen9nationaldex"
 

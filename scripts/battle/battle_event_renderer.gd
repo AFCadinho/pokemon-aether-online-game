@@ -54,7 +54,11 @@ func add_turn_header(turn: int) -> void:
 	reset_battle_log_player_gap()
 
 
-func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
+func render_event(
+	event_data: Dictionary,
+	presentation: Dictionary,
+	suppress_presentation_waits := false
+) -> void:
 	var pre_log_message := str(presentation.get("pre_log_message", ""))
 	var pre_log_kind := str(presentation.get("pre_log_kind", ""))
 	var log_message := str(presentation.get("log_message", ""))
@@ -125,7 +129,8 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 			attack_actor_ident,
 			move_animation_name,
 			move_animation_target_ident,
-			move_animation_result
+			move_animation_result,
+			suppress_presentation_waits
 		)
 	var defer_stat_change_effect := (
 		stat_change_target_ident != ""
@@ -147,7 +152,7 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 			await animation_router.restore_substitute_after_move(attack_actor_ident)
 		var move_hold_seconds := message_timing.get_move_animation_hold_seconds()
 		artificial_hold_seconds += move_hold_seconds
-		await _wait(move_hold_seconds)
+		await _wait(move_hold_seconds, suppress_presentation_waits)
 	if damage_target_ident != "":
 		_set_active_hud_hp_from_event(damage_target_ident, event_data, true)
 		if animations_allowed:
@@ -158,7 +163,7 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 		_set_active_hud_hp_from_event(damage_target_ident, event_data, false)
 		var damage_hold_seconds := message_timing.get_damage_animation_hold_seconds()
 		artificial_hold_seconds += damage_hold_seconds
-		await _wait(damage_hold_seconds)
+		await _wait(damage_hold_seconds, suppress_presentation_waits)
 	if heal_target_ident != "":
 		var heal_target_visible := true
 		if animation_router != null:
@@ -189,19 +194,22 @@ func render_event(event_data: Dictionary, presentation: Dictionary) -> void:
 		)
 		var stat_change_hold_seconds := message_timing.get_stat_change_animation_hold_seconds()
 		artificial_hold_seconds += stat_change_hold_seconds
-		await _wait(stat_change_hold_seconds)
+		await _wait(stat_change_hold_seconds, suppress_presentation_waits)
 	if animations_allowed and ability_boost_target_ident != "":
 		await animation_router.play_stat_change_presentation_for_target(ability_boost_target_ident, 1, "stat_up")
 		var ability_boost_hold_seconds := message_timing.get_stat_change_animation_hold_seconds()
 		artificial_hold_seconds += ability_boost_hold_seconds
-		await _wait(ability_boost_hold_seconds)
+		await _wait(ability_boost_hold_seconds, suppress_presentation_waits)
 	if faint_target_ident != "":
 		_set_active_hud_hp_from_event(faint_target_ident, event_data, false)
 		if animations_allowed:
 			await animation_router.play_faint_tween_for_target(faint_target_ident)
 	if battle_message != "":
 		var message_hold_seconds := message_timing.get_battle_message_hold_seconds(event_data, battle_message)
-		await _wait(max(message_hold_seconds - artificial_hold_seconds, 0.0))
+		await _wait(
+			max(message_hold_seconds - artificial_hold_seconds, 0.0),
+			suppress_presentation_waits
+		)
 
 
 func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_previous_hp: bool) -> void:
@@ -215,8 +223,8 @@ func _add_log_message(message: String, kind := "") -> void:
 		mini_battle_feed.add_message(message, kind)
 
 
-func _wait(seconds: float) -> void:
-	if seconds <= 0.0 or host_node == null:
+func _wait(seconds: float, suppressed := false) -> void:
+	if suppressed or seconds <= 0.0 or host_node == null:
 		return
 
 	await host_node.get_tree().create_timer(seconds).timeout
@@ -234,7 +242,8 @@ func _show_trainer_move_commands(
 	actor_ident: String,
 	move_name: String,
 	target_ident: String,
-	animation_result: String
+	animation_result: String,
+	suppress_presentation_waits := false
 ) -> void:
 	if not show_trainer_command.is_valid():
 		return
@@ -247,14 +256,17 @@ func _show_trainer_move_commands(
 	})
 	var attack_command_shown := _command_was_shown(attack_command_result)
 	if attack_command_shown:
-		await _wait(_get_command_minimum_read_seconds(
-			attack_command_result,
-			FALLBACK_MOVE_ACTION_LEAD_SECONDS
-		))
+		await _wait(
+			_get_command_minimum_read_seconds(
+				attack_command_result,
+				FALLBACK_MOVE_ACTION_LEAD_SECONDS
+			),
+			suppress_presentation_waits
+		)
 	if not attack_command_shown or animation_result != "miss" or target_ident == "":
 		return
 
-	await _wait(DODGE_RESPONSE_DELAY_SECONDS)
+	await _wait(DODGE_RESPONSE_DELAY_SECONDS, suppress_presentation_waits)
 	var dodge_command_result: Variant = show_trainer_command.call({
 		"kind": "dodge",
 		"player_id": _get_player_id_from_ident(target_ident),
@@ -262,10 +274,13 @@ func _show_trainer_move_commands(
 		"event": event_data,
 	})
 	if _command_was_shown(dodge_command_result):
-		await _wait(_get_command_minimum_read_seconds(
-			dodge_command_result,
-			FALLBACK_DODGE_ACTION_LEAD_SECONDS
-		))
+		await _wait(
+			_get_command_minimum_read_seconds(
+				dodge_command_result,
+				FALLBACK_DODGE_ACTION_LEAD_SECONDS
+			),
+			suppress_presentation_waits
+		)
 
 
 func _command_was_shown(result: Variant) -> bool:

@@ -39,11 +39,19 @@ func _check_renderer_waits_at_presentation_boundary() -> void:
 	var function_end := source.find("\nfunc ", function_start + 1)
 	var function_source := source.substr(function_start, function_end - function_start)
 	var move_call_index := function_source.find('"kind": "move"')
-	var move_wait_index := function_source.find("await _wait(_get_command_minimum_read_seconds", move_call_index)
-	var dodge_call_index := function_source.find('"kind": "dodge"', move_wait_index)
-	var dodge_wait_index := function_source.find("await _wait(_get_command_minimum_read_seconds", dodge_call_index)
-	_check(move_wait_index > move_call_index, "move callout lead is awaited before attack presentation")
-	_check(dodge_wait_index > dodge_call_index, "dodge callout lead is awaited before miss presentation")
+	var move_wait_index := function_source.find("await _wait(", move_call_index)
+	var move_read_index := function_source.find("_get_command_minimum_read_seconds(", move_wait_index)
+	var dodge_call_index := function_source.find('"kind": "dodge"', move_read_index)
+	var dodge_wait_index := function_source.find("await _wait(", dodge_call_index)
+	var dodge_read_index := function_source.find("_get_command_minimum_read_seconds(", dodge_wait_index)
+	_check(
+		move_wait_index > move_call_index and move_read_index > move_wait_index and move_read_index < dodge_call_index,
+		"move callout lead is awaited before attack presentation"
+	)
+	_check(
+		dodge_wait_index > dodge_call_index and dodge_read_index > dodge_wait_index,
+		"dodge callout lead is awaited before miss presentation"
+	)
 	_check(source.contains("func _command_was_shown(result: Variant) -> bool:"), "renderer accepts legacy boolean and timed command callbacks")
 
 

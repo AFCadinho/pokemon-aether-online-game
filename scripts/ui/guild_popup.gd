@@ -14,6 +14,8 @@ const GUILD_MEMBER_MESSAGE_ICON: Texture2D = preload("res://assets/ui/icons/guil
 const GUILD_MEMBER_RANK_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_rank.svg")
 const GUILD_MEMBER_BANK_RIGHTS_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_bank_rights.svg")
 const GUILD_MEMBER_REMOVE_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_remove.svg")
+const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
+const TrainerAvatarPreviewScript := preload("res://scripts/ui/trainer_avatar_preview.gd")
 const CREATION_COST := 100000
 const REQUIRED_BADGES := 3
 const GUILD_EMBLEM_SIZE := 32
@@ -40,6 +42,10 @@ const GUILD_LANGUAGE_OPTIONS: Array[String] = [
 	"Other",
 ]
 const GUILD_ASSIGNABLE_ROLES: Array[String] = ["recruit", "member", "captain"]
+const AETHER_CLASH_TIERS: Array[Dictionary] = [
+	{"id": "aether-ou", "label": "ui.guild.aether_clash.tier.aether_ou"},
+	{"id": "aether-uu", "label": "ui.guild.aether_clash.tier.aether_uu"},
+]
 const GUILD_MEMBER_ACTION_PM := 1
 const GUILD_MEMBER_ACTION_CHANGE_RANK := 2
 const GUILD_MEMBER_ACTION_BANK_RIGHTS := 3
@@ -63,10 +69,18 @@ const UI_BORDER_INNER := Color("#29445f")
 const UI_ACCENT := Color("#60d3ff")
 const UI_ACCENT_SOFT := Color("#3d7596")
 const UI_GOLD := Color("#e3bd68")
+const UI_PRIMARY_BACKGROUND := Color("#126589f5")
+const UI_PRIMARY_HOVER := Color("#1685b0fa")
+const UI_PRIMARY_PRESSED := Color("#0d4b68f5")
+const UI_SECONDARY_BACKGROUND := Color("#0d2b40f2")
+const UI_SECONDARY_HOVER := Color("#143b55f5")
+const UI_GOLD_BACKGROUND := Color("#332812f2")
+const UI_GOLD_HOVER := Color("#49391af5")
 const UI_TEXT := Color("#f4f0de")
 const UI_MUTED := Color("#aeb8c5")
 const UI_SUCCESS := Color("#79e49b")
 const UI_WARNING := Color("#f0c875")
+const UI_ERROR := Color("#ff8f9b")
 
 # Preview-only data used by the isolated interface checks. Normal gameplay always
 # loads the authoritative directory from the guild service.
@@ -137,6 +151,11 @@ var guild_home: Dictionary = {}
 var incoming_invitations: Array = []
 var pending_applications: Array = []
 var application_cooldowns: Array = []
+var aether_clash_state: Dictionary = {}
+var aether_clash_load_error := ""
+var is_aether_clash_loading := false
+var active_aether_clash_mode_tab := "duel"
+var active_aether_clash_duel_section := "overview"
 var selected_guild_id := 0
 var active_page := "browse"
 var is_dragging_popup := false
@@ -144,8 +163,11 @@ var is_debug_preview := false
 var is_loading_guilds := false
 var is_creating_guild := false
 var is_application_action_in_flight := false
+var is_aether_clash_action_in_flight := false
+var is_aether_clash_history_detail_loading := false
 var is_leaving_guild := false
 var directory_request_generation := 0
+var has_resolved_initial_membership := false
 var has_explicit_page_selection := false
 var active_guild_section := "overview"
 var active_management_section := "profile"
@@ -173,6 +195,9 @@ var primary_navigation_spacer: Control
 var browse_page: Control
 var member_page: Control
 var create_page: Control
+var initial_loading_page: Control
+var initial_loading_status_label: Label
+var initial_loading_retry_button: Button
 var search_input: LineEdit
 var guild_list: VBoxContainer
 var guild_count_label: Label
@@ -203,6 +228,7 @@ var settings_focus_select: OptionButton
 var settings_recruitment_select: OptionButton
 var settings_loan_duration_select: OptionButton
 var settings_requirements_container: VBoxContainer
+var aether_clash_countdown_label: Label
 var settings_requirements: Array[Dictionary] = []
 var guild_bank_asset_search_input: LineEdit
 var guild_bank_asset_filter_select: OptionButton
@@ -210,6 +236,7 @@ var guild_bank_filter_empty_state: Label
 var invite_username_input: LineEdit
 var member_search_input: LineEdit
 var member_cards_container: VBoxContainer
+var member_filter_empty_state: Control
 var emblem_editor_popup: PopupPanel
 var emblem_grid: GridContainer
 var emblem_pixel_buttons: Array[Button] = []
@@ -232,6 +259,12 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	add_theme_stylebox_override("panel", _outer_style())
 	_build_ui()
+	var aether_clash_timer := Timer.new()
+	aether_clash_timer.name = "AetherClashCountdownTimer"
+	aether_clash_timer.wait_time = 1.0
+	aether_clash_timer.autostart = true
+	aether_clash_timer.timeout.connect(_refresh_aether_clash_countdown)
+	add_child(aether_clash_timer)
 	var localization_manager := get_node_or_null("/root/LocalizationManager")
 	if localization_manager != null:
 		var locale_callable := Callable(self, "_on_locale_changed")
@@ -245,13 +278,22 @@ func _ready() -> void:
 
 
 func open() -> void:
-	visible = true
 	has_explicit_page_selection = false
 	_center_in_viewport()
 	_clamp_to_viewport()
 	_refresh_creation_requirements()
 	_render_guild_list()
-	_show_page("member" if not membership.is_empty() else "browse")
+	var needs_initial_membership := (
+		not is_debug_preview
+		and not has_resolved_initial_membership
+		and membership.is_empty()
+	)
+	if needs_initial_membership:
+		_prepare_initial_guild_loading()
+	else:
+		_set_initial_guild_loading(false)
+		_show_page("member" if not membership.is_empty() else "browse")
+	visible = true
 	if not is_debug_preview:
 		call_deferred("_refresh_from_server")
 
@@ -295,6 +337,7 @@ func show_debug_member_preview() -> void:
 	is_debug_preview = true
 	active_guild_section = "overview"
 	var guild := DEBUG_GUILDS[0].duplicate(true)
+	guild["level"] = 12.0
 	guild["requirements"] = [
 		{"type": "minimum_badges", "value": "5"},
 		{"type": "activity", "value": "Play together at least twice per week"},
@@ -335,6 +378,7 @@ func show_debug_member_preview() -> void:
 			"bank_deposit", "bank_withdraw", "bank_borrow", "bank_force_return",
 			"resource_deposit", "resource_withdraw",
 			"manage_members", "manage_guild", "manage_permissions",
+			"challenge_aether_clash",
 		],
 		"bankPermissionOverrides": {},
 	}
@@ -391,6 +435,43 @@ func show_debug_member_preview() -> void:
 			"recruit": [],
 		},
 	}
+	aether_clash_state = {
+		"success": true,
+		"canManage": true,
+		"pendingIncoming": [],
+		"pendingOutgoing": [],
+		"duelStats": {
+			"wins": 12,
+			"losses": 5,
+			"noContests": 1,
+			"totalMatches": 18,
+			"decidedMatches": 17,
+			"winRate": 70.6,
+		},
+		"duelHistory": [{
+			"sessionId": "debug-history-1",
+			"opponentGuild": {"id": 3, "name": "Midnight League"},
+			"ownSide": "challenger",
+			"result": "win",
+			"completedAt": Time.get_datetime_string_from_unix_time(
+				int(Time.get_unix_time_from_system()) - 3600,
+				true
+			) + "Z",
+			"durationSeconds": 428,
+			"participantCounts": {"challenger": 3, "challenged": 2},
+			"remainingCounts": {"challenger": 2, "challenged": 0},
+		}],
+		"currentSession": {
+			"id": "debug-aether-clash",
+			"status": "entry_open",
+			"challengerGuild": {"id": 1, "name": "Aether Vanguard"},
+			"challengedGuild": {"id": 3, "name": "Midnight League"},
+			"acceptedBy": "Umbra",
+			"entryClosesAt": Time.get_datetime_string_from_unix_time(
+				int(Time.get_unix_time_from_system()) + 300
+			),
+		},
+	}
 	guild_bank_state = {
 		"itemCapacity": 55,
 		"pokemonCapacity": 32,
@@ -421,7 +502,11 @@ func show_debug_member_preview() -> void:
 			},
 		],
 		"depositablePokemon": [
-			{"pokemonId": 22, "pokemon": {"name": "Venusaur", "level": 48}},
+			{"pokemonId": 22, "pokemon": {"name": "Venusaur", "level": 48}, "canDeposit": true, "eligibility": "eligible"},
+		],
+		"pokemonCandidates": [
+			{"pokemonId": 22, "pokemon": {"name": "Venusaur", "level": 48}, "canDeposit": true, "eligibility": "eligible"},
+			{"pokemonId": 23, "pokemon": {"name": "Charizard", "level": 50}, "canDeposit": false, "eligibility": "holding_item"},
 		],
 		"party": [],
 	}
@@ -509,7 +594,95 @@ func _build_ui() -> void:
 	create_page = _build_create_page()
 	create_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	pages.add_child(create_page)
+	initial_loading_page = _build_initial_guild_loading_page()
+	initial_loading_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	pages.add_child(initial_loading_page)
 	_show_page("browse")
+	initial_loading_page.visible = false
+
+
+func _build_initial_guild_loading_page() -> Control:
+	var center := CenterContainer.new()
+	center.name = "GuildInitialLoadingPage"
+	center.mouse_filter = Control.MOUSE_FILTER_STOP
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(440, 176)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#091927f2"), Color(UI_ACCENT.r, UI_ACCENT.g, UI_ACCENT.b, 0.48), 10, 1)
+	)
+	center.add_child(panel)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 24, 20, 24, 20)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.alignment = BoxContainer.ALIGNMENT_CENTER
+	content.add_theme_constant_override("separation", 9)
+	margin.add_child(content)
+	var icon_center := CenterContainer.new()
+	icon_center.add_child(_icon_rect(36, UI_ACCENT))
+	content.add_child(icon_center)
+	var title := _localized_label("ui.guild.initial_load.title", 18, UI_TEXT)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	content.add_child(title)
+	initial_loading_status_label = _localized_label("ui.guild.status.loading_home", 11, UI_MUTED)
+	initial_loading_status_label.name = "GuildInitialLoadingStatus"
+	initial_loading_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	initial_loading_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(initial_loading_status_label)
+	var retry_center := CenterContainer.new()
+	content.add_child(retry_center)
+	initial_loading_retry_button = Button.new()
+	initial_loading_retry_button.name = "GuildInitialLoadingRetryButton"
+	_set_localized_property(initial_loading_retry_button, "text", "ui.guild.initial_load.retry")
+	initial_loading_retry_button.custom_minimum_size = Vector2(130, 34)
+	initial_loading_retry_button.visible = false
+	initial_loading_retry_button.pressed.connect(_retry_initial_guild_load)
+	_apply_button_style(initial_loading_retry_button, "primary")
+	retry_center.add_child(initial_loading_retry_button)
+	return center
+
+
+func _prepare_initial_guild_loading() -> void:
+	if initial_loading_status_label != null:
+		initial_loading_status_label.set_meta("i18n_source_text", "ui.guild.status.loading_home")
+		initial_loading_status_label.text = _t("ui.guild.status.loading_home")
+		initial_loading_status_label.add_theme_color_override("font_color", UI_MUTED)
+	if initial_loading_retry_button != null:
+		initial_loading_retry_button.visible = false
+	_set_initial_guild_loading(true)
+
+
+func _set_initial_guild_loading(active: bool) -> void:
+	if initial_loading_page != null:
+		initial_loading_page.visible = active
+	if primary_navigation != null:
+		primary_navigation.visible = not active
+	if not active:
+		return
+	if browse_page != null:
+		browse_page.visible = false
+	if member_page != null:
+		member_page.visible = false
+	if create_page != null:
+		create_page.visible = false
+
+
+func _show_initial_guild_load_error(message: String) -> void:
+	_set_initial_guild_loading(true)
+	if initial_loading_status_label != null:
+		initial_loading_status_label.remove_meta("i18n_source_text")
+		initial_loading_status_label.text = message
+		initial_loading_status_label.add_theme_color_override("font_color", UI_ERROR)
+	if initial_loading_retry_button != null:
+		initial_loading_retry_button.visible = true
+
+
+func _retry_initial_guild_load() -> void:
+	if is_loading_guilds:
+		return
+	_prepare_initial_guild_loading()
+	call_deferred("_refresh_from_server")
 
 
 func _build_header() -> Control:
@@ -1043,20 +1216,22 @@ func _render_guild_home() -> void:
 	header.add_child(_build_guild_header_emblem(guild, is_leader))
 	var heading := VBoxContainer.new()
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_theme_constant_override("separation", 5)
 	header.add_child(heading)
-	heading.add_child(_label(str(guild.get("name", "Your Guild")), 25, UI_TEXT))
-	var role_row := HBoxContainer.new()
-	role_row.add_theme_constant_override("separation", 9)
-	heading.add_child(role_row)
-	var role_label := _label(
-		_t("ui.guild.membership.role", {"role": _membership_role_label(role)}),
-		12,
-		UI_ACCENT
-	)
-	role_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	role_row.add_child(role_label)
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 10)
+	heading.add_child(title_row)
+	var guild_name := _label(str(guild.get("name", "Your Guild")), 25, UI_TEXT)
+	guild_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	guild_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title_row.add_child(guild_name)
+	title_row.add_child(_build_guild_role_badge(role))
 	var description := _label(str(guild.get("description", "")), 12, UI_MUTED)
+	description.name = "GuildHeaderDescription"
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.max_lines_visible = 2
+	description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	description.custom_minimum_size.y = 34.0
 	heading.add_child(description)
 	header.add_child(_build_guild_header_travel_actions(guild, is_leader))
 
@@ -1068,6 +1243,8 @@ func _render_guild_home() -> void:
 	match active_guild_section:
 		"bank":
 			member_content.add_child(_build_guild_bank())
+		"aether_clash":
+			member_content.add_child(_build_aether_clash_workspace())
 		"members":
 			member_content.add_child(_build_member_roster(can_invite))
 		"management":
@@ -1077,6 +1254,27 @@ func _render_guild_home() -> void:
 	_refresh_guild_pokemon_vault_window()
 	_refresh_guild_item_storage_window("items")
 	_refresh_guild_item_storage_window("resources")
+
+
+func _build_guild_role_badge(role: String) -> Control:
+	var badge := PanelContainer.new()
+	badge.name = "GuildRoleBadge"
+	badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	badge.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#0b3045e8"), Color(UI_ACCENT.r, UI_ACCENT.g, UI_ACCENT.b, 0.72), 8, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 9, 3, 9, 3)
+	badge.add_child(margin)
+	var normalized_role := role.to_lower()
+	var role_key := "ui.guild.role.member"
+	if normalized_role in GUILD_ASSIGNABLE_ROLES or normalized_role == "leader":
+		role_key = "ui.guild.role.%s" % normalized_role
+	var role_label := _localized_label(role_key, 10, UI_ACCENT)
+	role_label.name = "GuildRoleBadgeLabel"
+	margin.add_child(role_label)
+	return badge
 
 func _build_guild_header_emblem(guild: Dictionary, is_editable: bool) -> Control:
 	if not is_editable:
@@ -1109,6 +1307,11 @@ func _build_guild_section_navigation(can_open_management: bool) -> Control:
 	var sections: Array[Dictionary] = [
 		{"id": "overview", "label_key": "ui.guild.section.overview", "name": "GuildOverviewTab"},
 		{"id": "bank", "label_key": "ui.guild.section.bank", "name": "GuildBankTab"},
+		{
+			"id": "aether_clash",
+			"label_key": "ui.guild.section.aether_clash",
+			"name": "GuildAetherClashTab",
+		},
 		{"id": "members", "label_key": "ui.guild.section.members", "name": "GuildMembersTab"},
 	]
 	if can_open_management:
@@ -1132,12 +1335,18 @@ func _build_guild_section_navigation(can_open_management: bool) -> Control:
 		navigation.add_child(button)
 		if section_id == "management" and _pending_application_count() > 0:
 			_add_application_notification_badge(button, _pending_application_count(), "GuildManagementNotificationBadge")
+		if section_id == "aether_clash" and _pending_aether_clash_count() > 0:
+			_add_application_notification_badge(
+				button,
+				_pending_aether_clash_count(),
+				"GuildAetherClashNotificationBadge"
+			)
 		guild_section_buttons[section_id] = button
 	return navigation
 
 
 func _show_guild_section(section: String) -> void:
-	if section not in ["overview", "bank", "members", "management"]:
+	if section not in ["overview", "bank", "aether_clash", "members", "management"]:
 		return
 	active_guild_section = section
 	if section != "bank":
@@ -1153,6 +1362,12 @@ func _show_guild_section(section: String) -> void:
 
 func _pending_application_count() -> int:
 	return _array_from_value(guild_home.get("pendingApplications", [])).size()
+
+
+func _pending_aether_clash_count() -> int:
+	if not _can_manage_aether_clash():
+		return 0
+	return _array_from_value(aether_clash_state.get("pendingIncoming", [])).size()
 
 
 func _add_application_notification_badge(button: Button, count: int, badge_name: String = "GuildApplicationsNotificationBadge") -> void:
@@ -1227,11 +1442,24 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	var overview := VBoxContainer.new()
 	overview.name = "GuildOverviewSection"
 	overview.add_theme_constant_override("separation", 10)
+	var overview_header := _build_guild_workspace_header(
+		"ui.guild.overview",
+		"ui.guild.overview.hint"
+	)
+	overview_header.name = "GuildOverviewWorkspaceHeader"
+	overview.add_child(overview_header)
 	var metadata := GridContainer.new()
 	metadata.columns = 4
 	metadata.add_theme_constant_override("h_separation", 8)
 	overview.add_child(metadata)
-	metadata.add_child(_metadata_card(_t("ui.guild.field.level"), str(guild.get("level", 1)), UI_ACCENT))
+	var level_card := _metadata_card(
+		_t("ui.guild.field.level"),
+		str(int(guild.get("level", 1))),
+		UI_ACCENT,
+		"GuildOverviewLevelValue"
+	)
+	level_card.name = "GuildOverviewLevelCard"
+	metadata.add_child(level_card)
 	metadata.add_child(_metadata_card(
 		_t("ui.guild.field.members"),
 		"%d / %d" % [_array_from_value(guild_home.get("members", [])).size(), int(guild.get("capacity", 50))],
@@ -1240,10 +1468,19 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	metadata.add_child(_metadata_card(_t("ui.guild.field.language"), _option_display(str(guild.get("language", ""))), UI_GOLD))
 	metadata.add_child(_metadata_card(_t("ui.guild.field.focus"), _option_display(str(guild.get("focus", ""))), UI_ACCENT))
 	overview.add_child(_build_guild_progression(guild))
+	var overview_details := HBoxContainer.new()
+	overview_details.name = "GuildOverviewDetails"
+	overview_details.add_theme_constant_override("separation", 10)
+	overview.add_child(overview_details)
+	overview_details.add_child(_build_guild_announcement_panel())
+	overview_details.add_child(_build_guild_presence_panel())
+	return overview
+
+
+func _build_guild_announcement_panel() -> Control:
 	var announcement_panel := PanelContainer.new()
 	announcement_panel.name = "GuildAnnouncementPanel"
-	announcement_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	announcement_panel.custom_minimum_size = Vector2(0, 150)
+	announcement_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	announcement_panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
 	var margin := MarginContainer.new()
 	_set_margins(margin, 16, 14, 16, 14)
@@ -1253,6 +1490,7 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	margin.add_child(copy)
 	copy.add_child(_localized_label("ui.guild.announcement.title", 10, UI_ACCENT))
 	var announcement := str(guild_home.get("announcement", "")).strip_edges()
+	announcement_panel.custom_minimum_size = Vector2(0, 104 if announcement != "" else 78)
 	var announcement_label := _label(
 		announcement if announcement != "" else _t("ui.guild.announcement.empty"),
 		14 if announcement != "" else 12,
@@ -1260,10 +1498,1132 @@ func _build_guild_overview(guild: Dictionary) -> Control:
 	)
 	announcement_label.name = "GuildAnnouncementText"
 	announcement_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	announcement_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	announcement_label.max_lines_visible = 3
+	announcement_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	copy.add_child(announcement_label)
-	overview.add_child(announcement_panel)
-	return overview
+	return announcement_panel
+
+
+func _build_guild_presence_panel() -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildPresencePanel"
+	panel.custom_minimum_size = Vector2(250, 0)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#091a25f2"), Color(UI_SUCCESS.r, UI_SUCCESS.g, UI_SUCCESS.b, 0.45), 9, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 14, 12, 14, 12)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 7)
+	margin.add_child(content)
+	content.add_child(_localized_label("ui.guild.overview.presence.title", 10, UI_SUCCESS))
+	var members := _array_from_value(guild_home.get("members", []))
+	var online_names: Array[String] = []
+	for member_value: Variant in members:
+		if not member_value is Dictionary or not bool((member_value as Dictionary).get("online", false)):
+			continue
+		online_names.append(str((member_value as Dictionary).get(
+			"displayName",
+			(member_value as Dictionary).get("username", _t("common.unknown"))
+		)))
+	var summary := _label(_t("ui.guild.overview.presence.summary", {
+		"online": online_names.size(),
+		"total": members.size(),
+	}), 13, UI_TEXT)
+	summary.name = "GuildPresenceSummary"
+	content.add_child(summary)
+	var names_text := _t("ui.guild.overview.presence.none")
+	if not online_names.is_empty():
+		names_text = _t("ui.guild.overview.presence.online_names", {
+			"names": ", ".join(online_names.slice(0, 3)),
+		})
+	var names := _label(names_text, 10, UI_MUTED)
+	names.name = "GuildPresenceNames"
+	names.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	names.max_lines_visible = 2
+	names.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	content.add_child(names)
+	return panel
+
+
+func _build_aether_clash_workspace() -> Control:
+	var workspace := VBoxContainer.new()
+	workspace.name = "GuildAetherClashWorkspace"
+	workspace.add_theme_constant_override("separation", 10)
+
+	var refresh_button := Button.new()
+	refresh_button.name = "RefreshGuildAetherClashButton"
+	_set_localized_property(refresh_button, "text", "ui.guild.aether_clash.refresh")
+	refresh_button.disabled = is_aether_clash_action_in_flight or is_aether_clash_loading
+	refresh_button.pressed.connect(_refresh_aether_clash_from_server)
+	_apply_button_style(refresh_button, "secondary")
+	var heading := _build_guild_workspace_header(
+		"ui.guild.aether_clash.title",
+		"ui.guild.aether_clash.intro",
+		[refresh_button]
+	)
+	heading.name = "GuildAetherClashHeader"
+	workspace.add_child(heading)
+
+	var mode_tabs := HBoxContainer.new()
+	mode_tabs.name = "GuildAetherClashModeTabs"
+	mode_tabs.add_theme_constant_override("separation", 6)
+	mode_tabs.alignment = BoxContainer.ALIGNMENT_CENTER
+	workspace.add_child(mode_tabs)
+	for tab_definition: Dictionary in [
+		{
+			"id": "duel",
+			"name": "GuildAetherClashDuelModeTab",
+			"key": "ui.guild.aether_clash.tab.duel",
+		},
+		{
+			"id": "battle_royale",
+			"name": "GuildAetherClashBattleRoyaleModeTab",
+			"key": "ui.guild.aether_clash.tab.battle_royale",
+		},
+	]:
+		var mode_button := Button.new()
+		mode_button.name = str(tab_definition.get("name", "AetherClashModeTab"))
+		mode_button.text = _t(str(tab_definition.get("key", "")))
+		mode_button.toggle_mode = true
+		mode_button.button_pressed = active_aether_clash_mode_tab == str(tab_definition.get("id", "duel"))
+		mode_button.custom_minimum_size = Vector2(190, 34)
+		mode_button.pressed.connect(
+			_set_aether_clash_mode_tab.bind(str(tab_definition.get("id", "duel")))
+		)
+		_apply_tab_style(mode_button, mode_button.button_pressed)
+		mode_tabs.add_child(mode_button)
+
+	if active_aether_clash_mode_tab == "battle_royale":
+		var royale_panel := _build_aether_clash_message_panel(
+			_t("ui.guild.aether_clash.battle_royale.coming_soon"),
+			UI_MUTED
+		)
+		royale_panel.name = "GuildAetherClashBattleRoyaleComingSoon"
+		workspace.add_child(royale_panel)
+		return workspace
+
+	if aether_clash_state.is_empty():
+		if not aether_clash_load_error.is_empty():
+			var error_stack := VBoxContainer.new()
+			error_stack.name = "GuildAetherClashLoadError"
+			error_stack.add_theme_constant_override("separation", 8)
+			error_stack.add_child(_build_aether_clash_message_panel(aether_clash_load_error, UI_ERROR))
+			var retry_button := Button.new()
+			retry_button.name = "RetryGuildAetherClashButton"
+			retry_button.text = _t("ui.guild.aether_clash.retry")
+			retry_button.disabled = is_aether_clash_loading
+			retry_button.pressed.connect(_refresh_aether_clash_from_server)
+			_apply_button_style(retry_button, "primary")
+			error_stack.add_child(retry_button)
+			workspace.add_child(error_stack)
+		else:
+			workspace.add_child(_build_aether_clash_message_panel(
+				_t("ui.guild.aether_clash.loading"),
+				UI_MUTED
+			))
+		return workspace
+
+	var incoming := _array_from_value(aether_clash_state.get("pendingIncoming", []))
+	var outgoing := _array_from_value(aether_clash_state.get("pendingOutgoing", []))
+	var current_session := _dictionary(aether_clash_state.get("currentSession", {}))
+	if not current_session.is_empty():
+		workspace.add_child(_build_current_aether_clash_card(current_session))
+	workspace.add_child(_build_aether_clash_duel_navigation(incoming.size() + outgoing.size()))
+	match active_aether_clash_duel_section:
+		"challenges":
+			workspace.add_child(_build_aether_clash_challenges_workspace(incoming, outgoing))
+		"history":
+			workspace.add_child(_build_aether_clash_duel_history())
+		_:
+			workspace.add_child(_build_aether_clash_duel_overview())
+	return workspace
+
+
+func _set_aether_clash_mode_tab(mode: String) -> void:
+	var normalized_mode := mode.strip_edges().to_lower()
+	if normalized_mode not in ["duel", "battle_royale"]:
+		return
+	if active_aether_clash_mode_tab == normalized_mode:
+		return
+	active_aether_clash_mode_tab = normalized_mode
+	if active_guild_section == "aether_clash":
+		_render_guild_home()
+
+
+func _build_aether_clash_duel_navigation(pending_count: int) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildAetherClashDuelNavigationPanel"
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 6, 6, 6, 6)
+	panel.add_child(margin)
+	var navigation := HBoxContainer.new()
+	navigation.name = "GuildAetherClashDuelNavigation"
+	navigation.add_theme_constant_override("separation", 6)
+	margin.add_child(navigation)
+	for definition: Dictionary in [
+		{
+			"id": "overview",
+			"name": "GuildAetherClashOverviewTab",
+			"text": _t("ui.guild.aether_clash.section.overview"),
+		},
+		{
+			"id": "challenges",
+			"name": "GuildAetherClashChallengesTab",
+			"text": _t("ui.guild.aether_clash.section.challenges", {"count": pending_count}),
+		},
+		{
+			"id": "history",
+			"name": "GuildAetherClashHistoryTab",
+			"text": _t("ui.guild.aether_clash.section.history"),
+		},
+	]:
+		var button := Button.new()
+		button.name = str(definition.get("name", "GuildAetherClashSectionTab"))
+		button.text = str(definition.get("text", ""))
+		button.custom_minimum_size = Vector2(155, 34)
+		var section_id := str(definition.get("id", "overview"))
+		button.pressed.connect(_set_aether_clash_duel_section.bind(section_id))
+		_apply_tab_style(button, active_aether_clash_duel_section == section_id)
+		navigation.add_child(button)
+	return panel
+
+
+func _set_aether_clash_duel_section(section: String) -> void:
+	var normalized_section := section.strip_edges().to_lower()
+	if normalized_section not in ["overview", "challenges", "history"]:
+		return
+	if active_aether_clash_duel_section == normalized_section:
+		return
+	active_aether_clash_duel_section = normalized_section
+	active_aether_clash_mode_tab = "duel"
+	if active_guild_section == "aether_clash":
+		_render_guild_home()
+
+
+func _build_aether_clash_duel_overview() -> Control:
+	var content := VBoxContainer.new()
+	content.name = "GuildAetherClashDuelOverview"
+	content.add_theme_constant_override("separation", 10)
+	content.add_child(_build_aether_clash_duel_stats())
+	var current_session := _dictionary(aether_clash_state.get("currentSession", {}))
+	if current_session.is_empty():
+		content.add_child(_build_aether_clash_message_panel(
+			_t("ui.guild.aether_clash.no_current"),
+			UI_MUTED
+		))
+	return content
+
+
+func _build_aether_clash_challenges_workspace(incoming: Array, outgoing: Array) -> Control:
+	var content := VBoxContainer.new()
+	content.name = "GuildAetherClashChallengesWorkspace"
+	content.add_theme_constant_override("separation", 9)
+	if not _can_manage_aether_clash():
+		content.add_child(_build_aether_clash_message_panel(
+			_t("ui.guild.aether_clash.member_hint"),
+			UI_MUTED
+		))
+	var columns := HBoxContainer.new()
+	columns.name = "GuildAetherClashChallengeColumns"
+	columns.add_theme_constant_override("separation", 10)
+	content.add_child(columns)
+	columns.add_child(_build_aether_clash_challenge_group(
+		"ui.guild.aether_clash.incoming",
+		"ui.guild.aether_clash.incoming_empty",
+		incoming,
+		true,
+		UI_WARNING
+	))
+	columns.add_child(_build_aether_clash_challenge_group(
+		"ui.guild.aether_clash.outgoing",
+		"ui.guild.aether_clash.outgoing_empty",
+		outgoing,
+		false,
+		UI_ACCENT
+	))
+	return content
+
+
+func _build_aether_clash_challenge_group(
+	title_key: String,
+	empty_key: String,
+	challenges: Array,
+	incoming: bool,
+	accent: Color
+) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = (
+		"GuildAetherClashIncomingGroup"
+		if incoming
+		else "GuildAetherClashOutgoingGroup"
+	)
+	panel.custom_minimum_size.y = 138
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(UI_RAISED, Color(accent.r, accent.g, accent.b, 0.48), 9, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 10, 12, 12)
+	panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 8)
+	margin.add_child(stack)
+	stack.add_child(_label(_t(title_key, {"count": challenges.size()}), 11, accent))
+	if challenges.is_empty():
+		var empty := _localized_label(empty_key, 10, UI_MUTED)
+		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		stack.add_child(empty)
+		return panel
+	for challenge_value: Variant in challenges:
+		if challenge_value is Dictionary:
+			stack.add_child(_build_aether_clash_challenge_card(
+				challenge_value as Dictionary,
+				incoming
+			))
+	return panel
+
+
+func _build_aether_clash_duel_stats() -> Control:
+	var stats := _dictionary(aether_clash_state.get("duelStats", {}))
+	var row := HBoxContainer.new()
+	row.name = "GuildAetherClashDuelStats"
+	row.add_theme_constant_override("separation", 8)
+	var definitions: Array[Dictionary] = [
+		{
+			"name": "GuildAetherClashWins",
+			"key": "ui.guild.aether_clash.stats.wins",
+			"value": str(int(stats.get("wins", 0))),
+			"color": UI_SUCCESS,
+		},
+		{
+			"name": "GuildAetherClashLosses",
+			"key": "ui.guild.aether_clash.stats.losses",
+			"value": str(int(stats.get("losses", 0))),
+			"color": UI_ERROR,
+		},
+		{
+			"name": "GuildAetherClashWinRate",
+			"key": "ui.guild.aether_clash.stats.win_rate",
+			"value": "%.1f%%" % float(stats.get("winRate", 0.0)),
+			"color": UI_GOLD,
+		},
+		{
+			"name": "GuildAetherClashMatches",
+			"key": "ui.guild.aether_clash.stats.matches",
+			"value": str(int(stats.get("totalMatches", 0))),
+			"color": UI_ACCENT,
+		},
+	]
+	for definition: Dictionary in definitions:
+		var panel := PanelContainer.new()
+		panel.name = str(definition.get("name", "GuildAetherClashStat"))
+		panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
+		var margin := MarginContainer.new()
+		_set_margins(margin, 10, 9, 10, 9)
+		panel.add_child(margin)
+		var stack := VBoxContainer.new()
+		stack.add_theme_constant_override("separation", 2)
+		margin.add_child(stack)
+		stack.add_child(_localized_label(str(definition.get("key", "")), 9, UI_MUTED))
+		var stat_color: Color = definition.get("color", UI_TEXT)
+		stack.add_child(_label(
+			str(definition.get("value", "0")),
+			20,
+			stat_color
+		))
+		row.add_child(panel)
+	return row
+
+
+func _build_aether_clash_duel_history() -> Control:
+	var content := VBoxContainer.new()
+	content.name = "GuildAetherClashDuelHistory"
+	content.add_theme_constant_override("separation", 7)
+	content.add_child(_localized_label("ui.guild.aether_clash.history.title", 11, UI_ACCENT))
+	var history := _array_from_value(aether_clash_state.get("duelHistory", []))
+	if history.is_empty():
+		content.add_child(_build_aether_clash_message_panel(
+			_t("ui.guild.aether_clash.history.empty"),
+			UI_MUTED
+		))
+		return content
+	for history_value: Variant in history:
+		if not history_value is Dictionary:
+			continue
+		content.add_child(_build_aether_clash_history_entry(history_value as Dictionary))
+	return content
+
+
+func _build_aether_clash_history_entry(entry: Dictionary) -> Control:
+	var session_id := str(entry.get("sessionId", "")).strip_edges()
+	var panel := Button.new()
+	panel.name = "GuildAetherClashHistoryEntry"
+	panel.text = ""
+	panel.custom_minimum_size.y = 116
+	panel.focus_mode = Control.FOCUS_NONE
+	panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	panel.tooltip_text = _t("ui.guild.aether_clash.history.view_details")
+	panel.add_theme_stylebox_override("normal", _button_style(UI_RAISED, UI_BORDER_INNER))
+	panel.add_theme_stylebox_override("hover", _button_style(UI_HOVER, UI_ACCENT_SOFT))
+	panel.add_theme_stylebox_override("pressed", _button_style(Color("#071624f2"), UI_ACCENT))
+	panel.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	if session_id != "":
+		panel.pressed.connect(_open_aether_clash_history_detail.bind(session_id))
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_set_margins(margin, 12, 9, 12, 9)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 10)
+	margin.add_child(row)
+	var result := str(entry.get("result", "no_contest")).strip_edges().to_lower()
+	var result_color := UI_MUTED
+	if result == "win":
+		result_color = UI_SUCCESS
+	elif result == "loss":
+		result_color = UI_ERROR
+	var result_label := _label(
+		_t("ui.guild.aether_clash.history.result.%s" % result),
+		12,
+		result_color
+	)
+	result_label.custom_minimum_size.x = 86
+	row.add_child(result_label)
+	var copy := VBoxContainer.new()
+	copy.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.add_theme_constant_override("separation", 2)
+	row.add_child(copy)
+	var opponent := _dictionary(entry.get("opponentGuild", {}))
+	copy.add_child(_label(
+		_t("ui.guild.aether_clash.history.vs", {
+			"guild": str(opponent.get("name", _t("ui.guild.fallback.guild"))),
+		}),
+		13,
+		UI_TEXT
+	))
+	var completed_at := str(entry.get("completedAt", ""))
+	copy.add_child(_label(
+		_t("ui.guild.aether_clash.history.details", {
+			"time": _relative_last_seen_text(completed_at),
+			"duration": _format_duration_short(int(entry.get("durationSeconds", 0))),
+		}),
+		9,
+		UI_MUTED
+	))
+	copy.add_child(_label(_aether_clash_contract_text(entry), 9, UI_GOLD))
+	var participants := _dictionary(entry.get("participantCounts", {}))
+	var remaining := _dictionary(entry.get("remainingCounts", {}))
+	var own_side := str(entry.get("ownSide", "challenger")).strip_edges().to_lower()
+	if own_side not in ["challenger", "challenged"]:
+		own_side = "challenger"
+	var opponent_side := "challenged" if own_side == "challenger" else "challenger"
+	var own_guild := _dictionary(guild_home.get("guild", {}))
+	var own_roster := _label(
+		_t("ui.guild.aether_clash.history.roster", {
+			"guild": str(own_guild.get("name", _t("ui.guild.fallback.guild"))),
+			"started": int(participants.get(own_side, 0)),
+			"remaining": int(remaining.get(own_side, 0)),
+		}),
+		9,
+		UI_ACCENT
+	)
+	own_roster.name = "GuildAetherClashHistoryOwnRoster"
+	copy.add_child(own_roster)
+	var opponent_roster := _label(
+		_t("ui.guild.aether_clash.history.roster", {
+			"guild": str(opponent.get("name", _t("ui.guild.fallback.guild"))),
+			"started": int(participants.get(opponent_side, 0)),
+			"remaining": int(remaining.get(opponent_side, 0)),
+		}),
+		9,
+		UI_MUTED
+	)
+	opponent_roster.name = "GuildAetherClashHistoryOpponentRoster"
+	copy.add_child(opponent_roster)
+	var arrow := _label("›", 24, UI_ACCENT)
+	arrow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	arrow.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(arrow)
+	return panel
+
+
+func _open_aether_clash_history_detail(session_id: String) -> void:
+	var normalized_id := session_id.strip_edges()
+	if normalized_id == "" or is_aether_clash_history_detail_loading:
+		return
+	var existing := find_child("GuildAetherClashHistoryDetailWindow", true, false) as Window
+	if existing != null:
+		existing.grab_focus()
+		return
+	var window := Window.new()
+	window.name = "GuildAetherClashHistoryDetailWindow"
+	window.title = _t("ui.guild.aether_clash.history.detail.title")
+	window.size = Vector2i(880, 650)
+	window.min_size = Vector2i(680, 500)
+	window.transient = true
+	window.exclusive = true
+	window.borderless = true
+	_apply_guild_window_style(window)
+	window.close_requested.connect(window.queue_free)
+	add_child(window)
+	var panel := PanelContainer.new()
+	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER, 10, 1))
+	window.add_child(panel)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 18, 16, 18, 16)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.name = "GuildAetherClashHistoryDetailContent"
+	content.add_theme_constant_override("separation", 10)
+	margin.add_child(content)
+	var loading := _localized_label("ui.guild.aether_clash.history.detail.loading", 13, UI_ACCENT)
+	loading.custom_minimum_size.y = 460
+	loading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	loading.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	content.add_child(loading)
+	window.popup_centered()
+
+	is_aether_clash_history_detail_loading = true
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		is_aether_clash_history_detail_loading = false
+		_show_aether_clash_history_detail_error(
+			content,
+			window,
+			_t("ui.guild.error.service_unavailable")
+		)
+		return
+	var result := _dictionary(await guild_service.call(
+		"load_aether_clash_history_detail",
+		normalized_id
+	))
+	is_aether_clash_history_detail_loading = false
+	if not is_instance_valid(window) or not is_instance_valid(content):
+		return
+	if not bool(result.get("success", false)):
+		_show_aether_clash_history_detail_error(
+			content,
+			window,
+			str(result.get("error", _t("ui.guild.aether_clash.history.detail.error")))
+		)
+		return
+	var detail := _dictionary(result.get("detail", {}))
+	if detail.is_empty():
+		_show_aether_clash_history_detail_error(
+			content,
+			window,
+			_t("ui.guild.aether_clash.history.detail.error")
+		)
+		return
+	_render_aether_clash_history_detail(content, window, detail)
+
+
+func _show_aether_clash_history_detail_error(
+	content: VBoxContainer,
+	window: Window,
+	message: String
+) -> void:
+	_clear_children(content)
+	var error := _label(message, 12, UI_ERROR)
+	error.custom_minimum_size.y = 430
+	error.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	error.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	error.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	content.add_child(error)
+	content.add_child(_aether_clash_history_close_row(window))
+
+
+func _render_aether_clash_history_detail(
+	content: VBoxContainer,
+	window: Window,
+	detail: Dictionary
+) -> void:
+	_clear_children(content)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 12)
+	content.add_child(header)
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_theme_constant_override("separation", 3)
+	header.add_child(heading)
+	var challenger := _dictionary(detail.get("challengerGuild", {}))
+	var challenged := _dictionary(detail.get("challengedGuild", {}))
+	heading.add_child(_label(
+		_t("ui.guild.aether_clash.history.detail.matchup", {
+			"challenger": str(challenger.get("name", _t("ui.guild.fallback.guild"))),
+			"challenged": str(challenged.get("name", _t("ui.guild.fallback.guild"))),
+		}),
+		18,
+		UI_TEXT
+	))
+	var winner := _dictionary(detail.get("winnerGuild", {}))
+	var result_text := _t("ui.guild.aether_clash.history.detail.no_contest")
+	var result_color := UI_MUTED
+	if not winner.is_empty():
+		result_text = _t("ui.guild.aether_clash.history.detail.winner", {
+			"guild": str(winner.get("name", _t("ui.guild.fallback.guild"))),
+		})
+		result_color = UI_GOLD
+	heading.add_child(_label(result_text, 11, result_color))
+
+	var summary := HBoxContainer.new()
+	summary.add_theme_constant_override("separation", 8)
+	content.add_child(summary)
+	for definition: Dictionary in [
+		{
+			"label": "ui.guild.aether_clash.history.detail.completed",
+			"value": _format_aether_clash_history_datetime(str(detail.get("completedAt", ""))),
+			"color": UI_ACCENT,
+		},
+		{
+			"label": "ui.guild.aether_clash.history.detail.duration",
+			"value": _format_duration_short(int(detail.get("durationSeconds", 0))),
+			"color": UI_TEXT,
+		},
+		{
+			"label": "ui.guild.aether_clash.history.detail.tier",
+			"value": str(detail.get("tierName", "Aether OU")),
+			"color": UI_ACCENT,
+		},
+		{
+			"label": "ui.guild.aether_clash.history.detail.stake",
+			"value": "₽%s" % _format_number(int(detail.get("stakeAmount", 0))),
+			"color": UI_GOLD,
+		},
+		{
+			"label": "ui.guild.aether_clash.history.detail.pot",
+			"value": "₽%s" % _format_number(int(detail.get("stakePotAmount", 0))),
+			"color": UI_GOLD,
+		},
+	]:
+		summary.add_child(_aether_clash_history_summary_card(definition))
+
+	var scroll := ScrollContainer.new()
+	scroll.name = "GuildAetherClashHistoryDetailScroll"
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	content.add_child(scroll)
+	var body := VBoxContainer.new()
+	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body.add_theme_constant_override("separation", 12)
+	scroll.add_child(body)
+	body.add_child(_localized_label("ui.guild.aether_clash.history.detail.participants", 12, UI_ACCENT))
+	var rosters := HBoxContainer.new()
+	rosters.add_theme_constant_override("separation", 10)
+	body.add_child(rosters)
+	rosters.add_child(_build_aether_clash_history_roster(detail, challenger, "challenger", UI_ACCENT))
+	rosters.add_child(_build_aether_clash_history_roster(detail, challenged, "challenged", UI_ERROR))
+	body.add_child(_localized_label("ui.guild.aether_clash.history.detail.battles", 12, UI_ACCENT))
+	var battles := _array_from_value(detail.get("battles", []))
+	if battles.is_empty():
+		body.add_child(_build_aether_clash_message_panel(
+			_t("ui.guild.aether_clash.history.detail.no_battles"),
+			UI_MUTED
+		))
+	else:
+		for battle_value: Variant in battles:
+			if battle_value is Dictionary:
+				body.add_child(_build_aether_clash_history_battle_row(battle_value as Dictionary))
+	content.add_child(_aether_clash_history_close_row(window))
+
+
+func _aether_clash_history_summary_card(definition: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_BORDER_INNER, 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 10, 8, 10, 8)
+	panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 2)
+	margin.add_child(stack)
+	stack.add_child(_localized_label(str(definition.get("label", "")), 9, UI_MUTED))
+	var value_color: Color = definition.get("color", UI_TEXT)
+	stack.add_child(_label(
+		str(definition.get("value", "")),
+		12,
+		value_color
+	))
+	return panel
+
+
+func _format_aether_clash_history_datetime(value: String) -> String:
+	var timestamp := int(_unix_from_iso_datetime(value))
+	if timestamp <= 0:
+		return _t("common.unknown")
+	var datetime := Time.get_datetime_dict_from_unix_time(timestamp)
+	return _t("ui.guild.aether_clash.history.detail.datetime", {
+		"year": int(datetime.get("year", 0)),
+		"month": "%02d" % int(datetime.get("month", 0)),
+		"day": "%02d" % int(datetime.get("day", 0)),
+		"hour": "%02d" % int(datetime.get("hour", 0)),
+		"minute": "%02d" % int(datetime.get("minute", 0)),
+	})
+
+
+func _build_aether_clash_history_roster(
+	detail: Dictionary,
+	guild: Dictionary,
+	side: String,
+	accent: Color
+) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildAetherClashHistoryRoster_%s" % side.capitalize()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, accent.darkened(0.35), 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 11, 9, 11, 10)
+	panel.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 6)
+	margin.add_child(stack)
+	var counts := _dictionary(detail.get("participantCounts", {}))
+	var remaining := _dictionary(detail.get("remainingCounts", {}))
+	stack.add_child(_label(
+		_t("ui.guild.aether_clash.history.detail.roster_heading", {
+			"guild": str(guild.get("name", _t("ui.guild.fallback.guild"))),
+			"started": int(counts.get(side, 0)),
+			"remaining": int(remaining.get(side, 0)),
+		}),
+		12,
+		accent
+	))
+	var side_participants: Array[Dictionary] = []
+	for participant_value: Variant in _array_from_value(detail.get("participants", [])):
+		if participant_value is Dictionary:
+			var participant := participant_value as Dictionary
+			if str(participant.get("side", "")) == side:
+				side_participants.append(participant)
+	if side_participants.is_empty():
+		stack.add_child(_localized_label(
+			"ui.guild.aether_clash.history.detail.no_participants",
+			10,
+			UI_MUTED
+		))
+		return panel
+	for participant: Dictionary in side_participants:
+		stack.add_child(_build_aether_clash_history_participant_row(participant))
+	return panel
+
+
+func _build_aether_clash_history_participant_row(participant: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildAetherClashHistoryParticipant_%d" % int(participant.get("userId", 0))
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131fe8"), UI_BORDER_INNER, 7, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 9, 6, 9, 6)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.add_theme_constant_override("separation", 2)
+	row.add_child(copy)
+	copy.add_child(_label(
+		str(participant.get("displayName", participant.get("username", _t("common.unknown")))),
+		11,
+		UI_TEXT
+	))
+	copy.add_child(_label(
+		_t("ui.guild.aether_clash.history.detail.player_record", {
+			"battles": int(participant.get("battles", 0)),
+			"wins": int(participant.get("wins", 0)),
+			"losses": int(participant.get("losses", 0)),
+		}),
+		9,
+		UI_MUTED
+	))
+	var status := str(participant.get("finalStatus", "left")).strip_edges().to_lower()
+	var status_color := UI_WARNING
+	if status == "survived":
+		status_color = UI_SUCCESS
+	elif status == "eliminated":
+		status_color = UI_ERROR
+	var status_copy := _t("ui.guild.aether_clash.history.detail.status.%s" % status)
+	var eliminated_by := _dictionary(participant.get("eliminatedBy", {}))
+	if status == "eliminated" and not eliminated_by.is_empty():
+		status_copy = _t("ui.guild.aether_clash.history.detail.eliminated_by", {
+			"trainer": str(eliminated_by.get("displayName", _t("common.unknown"))),
+		})
+	var status_label := _label(status_copy, 9, status_color)
+	status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(status_label)
+	return panel
+
+
+func _build_aether_clash_history_battle_row(battle: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildAetherClashHistoryBattle_%d" % int(battle.get("sequence", 0))
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_BORDER_INNER, 7, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 11, 8, 11, 8)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	margin.add_child(row)
+	var sequence := _label("#%d" % int(battle.get("sequence", 0)), 11, UI_ACCENT)
+	sequence.custom_minimum_size.x = 34
+	row.add_child(sequence)
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.add_theme_constant_override("separation", 2)
+	row.add_child(copy)
+	var result := str(battle.get("result", "no_contest"))
+	var winner := _dictionary(battle.get("winner", {}))
+	var loser := _dictionary(battle.get("loser", {}))
+	var source := _dictionary(battle.get("source", {}))
+	var target := _dictionary(battle.get("target", {}))
+	var result_copy := _t("ui.guild.aether_clash.history.detail.battle_no_contest", {
+		"source": str(source.get("displayName", _t("common.unknown"))),
+		"target": str(target.get("displayName", _t("common.unknown"))),
+	})
+	var result_color := UI_MUTED
+	if result == "completed" and not winner.is_empty() and not loser.is_empty():
+		result_copy = _t("ui.guild.aether_clash.history.detail.battle_result", {
+			"winner": str(winner.get("displayName", _t("common.unknown"))),
+			"loser": str(loser.get("displayName", _t("common.unknown"))),
+		})
+		result_color = UI_TEXT
+	copy.add_child(_label(result_copy, 11, result_color))
+	copy.add_child(_label(
+		_t("ui.guild.aether_clash.history.detail.battle_meta", {
+			"method": _t("ui.guild.aether_clash.history.detail.method.%s" % str(
+				battle.get("method", "automatic")
+			)),
+			"time": _relative_last_seen_text(str(battle.get("completedAt", ""))),
+		}),
+		9,
+		UI_MUTED
+	))
+	return panel
+
+
+func _aether_clash_history_close_row(window: Window) -> Control:
+	var footer := HBoxContainer.new()
+	footer.alignment = BoxContainer.ALIGNMENT_END
+	var close_button := Button.new()
+	close_button.name = "CloseAetherClashHistoryDetailButton"
+	close_button.text = _t("common.close")
+	close_button.custom_minimum_size = Vector2(120, 34)
+	close_button.pressed.connect(window.queue_free)
+	_apply_button_style(close_button, "primary")
+	footer.add_child(close_button)
+	return footer
+
+
+func _build_current_aether_clash_card(challenge: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = "GuildCurrentAetherClash"
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#10233af5"), UI_ACCENT_SOFT, 10, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 14, 12, 14, 12)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 7)
+	margin.add_child(content)
+	var status := str(challenge.get("status", "entry_open"))
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	content.add_child(header)
+	var eyebrow := _localized_label("ui.guild.aether_clash.current", 10, UI_GOLD)
+	eyebrow.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	eyebrow.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	header.add_child(eyebrow)
+	header.add_child(_build_aether_clash_status_pill(status))
+	var guild_names := _aether_clash_guild_names(challenge)
+	var matchup := _label(
+		_t("ui.guild.aether_clash.matchup", {
+			"challenger": guild_names.get("challenger", "Guild"),
+			"challenged": guild_names.get("challenged", "Guild"),
+		}),
+		18,
+		UI_TEXT
+	)
+	matchup.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	matchup.max_lines_visible = 2
+	matchup.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	content.add_child(matchup)
+	var details := HBoxContainer.new()
+	details.add_theme_constant_override("separation", 14)
+	content.add_child(details)
+	var contract := _label(_aether_clash_contract_text(challenge), 10, UI_GOLD)
+	contract.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details.add_child(contract)
+	var spectator_access := _label(
+		_aether_clash_spectator_access_text(str(challenge.get("spectatorAccess", "public"))),
+		10,
+		UI_MUTED
+	)
+	details.add_child(spectator_access)
+	if status == "entry_open":
+		aether_clash_countdown_label = _label("", 14, UI_GOLD)
+		aether_clash_countdown_label.name = "GuildAetherClashEntryCountdown"
+		details.add_child(aether_clash_countdown_label)
+		_refresh_aether_clash_countdown()
+	var accepted_by := str(challenge.get("acceptedBy", "")).strip_edges()
+	if accepted_by != "":
+		details.add_child(_label(
+			_t("ui.guild.aether_clash.accepted_by", {"trainer": accepted_by}),
+			10,
+			UI_MUTED
+		))
+	if _can_manage_aether_clash() and status == "entry_open":
+		var actions := HBoxContainer.new()
+		actions.alignment = BoxContainer.ALIGNMENT_END
+		content.add_child(actions)
+		var cancel_button := Button.new()
+		cancel_button.name = "CancelCurrentGuildAetherClashButton"
+		_set_localized_property(cancel_button, "text", "ui.guild.aether_clash.cancel_clash")
+		cancel_button.disabled = is_aether_clash_action_in_flight
+		cancel_button.pressed.connect(_confirm_aether_clash_cancel.bind(challenge.duplicate(true)))
+		_apply_button_style(cancel_button, "danger")
+		actions.add_child(cancel_button)
+	return panel
+
+
+func _build_aether_clash_status_pill(status: String) -> Control:
+	var color := UI_SUCCESS
+	if status == "active":
+		color = UI_WARNING
+	elif status == "roster_locked":
+		color = UI_ACCENT
+	elif status == "finishing":
+		color = UI_MUTED
+	var panel := PanelContainer.new()
+	panel.name = "GuildAetherClashStatusPill"
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(
+			Color(color.r, color.g, color.b, 0.10),
+			Color(color.r, color.g, color.b, 0.58),
+			9,
+			1
+		)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 9, 4, 9, 4)
+	panel.add_child(margin)
+	var short_status_key := "ui.guild.aether_clash.status_short.%s" % status
+	var short_status := _t(short_status_key)
+	var status_label := _label(
+		_aether_clash_status_text(status) if short_status == short_status_key else short_status,
+		10,
+		color
+	)
+	status_label.name = "GuildAetherClashStatusLabel"
+	margin.add_child(status_label)
+	return panel
+
+
+func _build_aether_clash_challenge_card(challenge: Dictionary, incoming: bool) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = (
+		"IncomingGuildAetherClashChallenge"
+		if incoming
+		else "OutgoingGuildAetherClashChallenge"
+	)
+	var accent := UI_WARNING if incoming else UI_ACCENT
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#07131ff2"), Color(accent.r, accent.g, accent.b, 0.42), 8, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 10, 12, 10)
+	panel.add_child(margin)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 5)
+	margin.add_child(content)
+	var top_row := HBoxContainer.new()
+	top_row.add_theme_constant_override("separation", 8)
+	content.add_child(top_row)
+	var opponent := _aether_clash_opponent(challenge)
+	var opponent_name := _label(str(opponent.get("name", _t("ui.guild.fallback.guild"))), 14, UI_TEXT)
+	opponent_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	opponent_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	top_row.add_child(opponent_name)
+	top_row.add_child(_label(
+		_t("ui.guild.aether_clash.expires", {
+			"time": _format_aether_clash_remaining(str(challenge.get("expiresAt", ""))),
+		}),
+		10,
+		UI_WARNING
+	))
+	content.add_child(_label(
+		_t(
+			"ui.guild.aether_clash.received_from"
+			if incoming
+			else "ui.guild.aether_clash.sent_to",
+			{"trainer": str(challenge.get("createdBy", _t("common.unknown"))) }
+		),
+		10,
+		UI_MUTED
+	))
+	content.add_child(_label(
+		_aether_clash_contract_text(challenge),
+		10,
+		UI_GOLD
+	))
+	content.add_child(_label(
+		_aether_clash_spectator_access_text(str(challenge.get("spectatorAccess", "public"))),
+		10,
+		UI_MUTED
+	))
+	if not _can_manage_aether_clash():
+		return panel
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 6)
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	content.add_child(actions)
+	var challenge_id := str(challenge.get("id", ""))
+	if incoming:
+		var accept_button := Button.new()
+		accept_button.name = "AcceptGuildAetherClashButton"
+		_set_localized_property(accept_button, "text", "common.accept")
+		accept_button.disabled = is_aether_clash_action_in_flight
+		accept_button.pressed.connect(
+			_run_aether_clash_action.bind("accept_aether_clash_challenge", challenge_id)
+		)
+		_apply_button_style(accept_button, "primary")
+		actions.add_child(accept_button)
+		var decline_button := Button.new()
+		decline_button.name = "DeclineGuildAetherClashButton"
+		_set_localized_property(decline_button, "text", "common.decline")
+		decline_button.disabled = is_aether_clash_action_in_flight
+		decline_button.pressed.connect(
+			_run_aether_clash_action.bind("decline_aether_clash_challenge", challenge_id)
+		)
+		_apply_button_style(decline_button, "danger")
+		actions.add_child(decline_button)
+	else:
+		var cancel_button := Button.new()
+		cancel_button.name = "CancelGuildAetherClashChallengeButton"
+		_set_localized_property(cancel_button, "text", "common.cancel")
+		cancel_button.disabled = is_aether_clash_action_in_flight
+		cancel_button.pressed.connect(
+			_run_aether_clash_action.bind("cancel_aether_clash_challenge", challenge_id)
+		)
+		_apply_button_style(cancel_button, "secondary")
+		actions.add_child(cancel_button)
+	return panel
+
+
+func _build_aether_clash_message_panel(message: String, color: Color) -> Control:
+	return _build_guild_message_panel(message, color)
+
+
+func _aether_clash_opponent(challenge: Dictionary) -> Dictionary:
+	var own_guild_id := int(membership.get("guildId", 0))
+	var challenger := _dictionary(challenge.get("challengerGuild", {}))
+	var challenged := _dictionary(challenge.get("challengedGuild", {}))
+	return challenged if int(challenger.get("id", 0)) == own_guild_id else challenger
+
+
+func _aether_clash_guild_names(challenge: Dictionary) -> Dictionary:
+	return {
+		"challenger": str(_dictionary(challenge.get("challengerGuild", {})).get(
+			"name", _t("ui.guild.fallback.guild")
+		)),
+		"challenged": str(_dictionary(challenge.get("challengedGuild", {})).get(
+			"name", _t("ui.guild.fallback.guild")
+		)),
+	}
+
+
+func _aether_clash_status_text(status: String) -> String:
+	match status:
+		"entry_open":
+			return _t("ui.guild.aether_clash.status.entry_open")
+		"roster_locked":
+			return _t("ui.guild.aether_clash.status.roster_locked")
+		"active":
+			return _t("ui.guild.aether_clash.status.active")
+		"finishing":
+			return _t("ui.guild.aether_clash.status.finishing")
+		_:
+			return status.replace("_", " ").capitalize()
+
+
+func _aether_clash_spectator_access_text(access: String) -> String:
+	return _t(
+		"ui.guild.aether_clash.spectators.guilds_only"
+		if access == "guilds_only"
+		else "ui.guild.aether_clash.spectators.public"
+	)
+
+
+func _aether_clash_contract_text(challenge: Dictionary) -> String:
+	return _t("ui.guild.aether_clash.contract", {
+		"tier": str(challenge.get("tierName", "Aether OU")),
+		"stake": _format_number(maxi(int(challenge.get("stakeAmount", 0)), 0)),
+		"pot": _format_number(maxi(int(challenge.get("stakePotAmount", 0)), 0)),
+	})
+
+
+func _aether_clash_dialog_field(
+	caption: String,
+	control: Control,
+	hint := ""
+) -> Control:
+	var field := VBoxContainer.new()
+	field.add_theme_constant_override("separation", 4)
+	field.add_child(_label(caption, 11, UI_ACCENT))
+	field.add_child(control)
+	if not hint.is_empty():
+		var hint_label := _label(hint, 9, UI_MUTED)
+		hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		field.add_child(hint_label)
+	return field
+
+
+func _refresh_aether_clash_countdown() -> void:
+	if not is_instance_valid(aether_clash_countdown_label):
+		return
+	var current_session := _dictionary(aether_clash_state.get("currentSession", {}))
+	var closes_at := str(current_session.get("entryClosesAt", ""))
+	var remaining := maxi(
+		0,
+		int(_unix_from_iso_datetime(closes_at) - Time.get_unix_time_from_system())
+	)
+	if remaining <= 0:
+		aether_clash_countdown_label.text = _t("ui.guild.aether_clash.entry_closed")
+		return
+	aether_clash_countdown_label.text = _t("ui.guild.aether_clash.entry_countdown", {
+		"time": _format_duration_short(remaining),
+	})
+
+
+func _format_aether_clash_remaining(value: String) -> String:
+	var remaining := maxi(
+		0,
+		int(_unix_from_iso_datetime(value) - Time.get_unix_time_from_system())
+	)
+	return _format_duration_short(remaining)
+
+
+func _format_duration_short(total_seconds: int) -> String:
+	var hours := int(total_seconds / 3600)
+	var minutes := int(total_seconds % 3600 / 60)
+	var seconds := total_seconds % 60
+	if hours > 0:
+		return "%d:%02d:%02d" % [hours, minutes, seconds]
+	return "%02d:%02d" % [minutes, seconds]
 
 
 func _build_guild_progression(guild: Dictionary) -> Control:
@@ -1288,7 +2648,7 @@ func _build_guild_progression(guild: Dictionary) -> Control:
 	rewards_button.custom_minimum_size = Vector2(112, 30)
 	rewards_button.disabled = _array_from_value(guild.get("levelRewards", [])).is_empty()
 	rewards_button.pressed.connect(_show_guild_level_rewards_window.bind(guild))
-	_apply_button_style(rewards_button)
+	_apply_button_style(rewards_button, "gold")
 	heading.add_child(rewards_button)
 	heading.add_child(_label(
 		_t("ui.guild.progression.level", {
@@ -1300,33 +2660,92 @@ func _build_guild_progression(guild: Dictionary) -> Control:
 	))
 	var progress := ProgressBar.new()
 	progress.name = "GuildExperienceProgress"
-	progress.custom_minimum_size.y = 18.0
+	progress.custom_minimum_size.y = 26.0
 	progress.show_percentage = false
 	progress.min_value = 0.0
 	progress.max_value = 100.0
 	progress.value = clampf(float(guild.get("progressPercent", 0.0)), 0.0, 100.0)
 	progress.add_theme_stylebox_override("background", _panel_style(Color("#030810"), Color("#263b50"), 5, 1))
 	progress.add_theme_stylebox_override("fill", _panel_style(Color("#237ca8"), UI_ACCENT, 5, 1))
-	content.add_child(progress)
 	var at_maximum := bool(guild.get("atMaxLevel", false))
+	var total_experience := int(guild.get("totalExperience", 0))
 	var progress_text := _t("ui.guild.progression.max", {
-		"total": _format_number(int(guild.get("totalExperience", 0))),
-	}) if at_maximum else _t("ui.guild.progression.progress", {
-		"current": _format_number(int(guild.get("experienceIntoLevel", 0))),
-		"required": _format_number(int(guild.get("experienceForNextLevel", 0))),
-		"total": _format_number(int(guild.get("totalExperience", 0))),
-	})
-	var progress_label := _label(progress_text, 10, UI_MUTED)
+		"total": _format_number(total_experience),
+	}) if at_maximum else _t(
+		"ui.guild.progression.progress_with_total"
+		if total_experience > 0
+		else "ui.guild.progression.progress_compact",
+		{
+			"current": _format_number(int(guild.get("experienceIntoLevel", 0))),
+			"required": _format_number(int(guild.get("experienceForNextLevel", 0))),
+			"total": _format_number(total_experience),
+		}
+	)
+	var progress_label := _label(progress_text, 11, UI_TEXT)
 	progress_label.name = "GuildExperienceProgressLabel"
-	progress_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	content.add_child(progress_label)
-	var capacities := _label(_t("ui.guild.progression.capacities", {
-		"members": int(guild.get("capacity", 20)),
-		"items": int(guild.get("bankItemCapacity", 50)),
-		"pokemon": int(guild.get("bankPokemonCapacity", 30)),
-	}), 10, UI_MUTED)
-	capacities.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	content.add_child(capacities)
+	content.add_child(progress)
+	content.add_child(_build_guild_capacity_indicators(guild))
+	return panel
+
+
+func _build_guild_capacity_indicators(guild: Dictionary) -> Control:
+	var indicators := HBoxContainer.new()
+	indicators.name = "GuildCapacityIndicators"
+	indicators.add_theme_constant_override("separation", 8)
+	indicators.add_child(_guild_capacity_indicator(
+		"GuildMemberCapacity",
+		"ui.guild.progression.capacity.members",
+		int(guild.get("capacity", 20)),
+		UI_SUCCESS
+	))
+	indicators.add_child(_guild_capacity_indicator(
+		"GuildItemCapacity",
+		"ui.guild.progression.capacity.items",
+		int(guild.get("bankItemCapacity", 50)),
+		UI_GOLD
+	))
+	indicators.add_child(_guild_capacity_indicator(
+		"GuildPokemonCapacity",
+		"ui.guild.progression.capacity.pokemon",
+		int(guild.get("bankPokemonCapacity", 30)),
+		UI_ACCENT
+	))
+	return indicators
+
+
+func _guild_capacity_indicator(
+	control_name: String,
+	label_key: String,
+	value: int,
+	accent: Color
+) -> Control:
+	var panel := PanelContainer.new()
+	panel.name = control_name
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color(accent.r, accent.g, accent.b, 0.07), Color(accent.r, accent.g, accent.b, 0.46), 7, 1)
+	)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 10, 6, 10, 6)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	margin.add_child(row)
+	var marker := ColorRect.new()
+	marker.custom_minimum_size = Vector2(4, 24)
+	marker.color = accent
+	marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(marker)
+	var label := _localized_label(label_key, 9, UI_MUTED)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(label)
+	var value_label := _label(str(value), 13, accent)
+	value_label.name = "%sValue" % control_name
+	value_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(value_label)
 	return panel
 
 
@@ -1514,27 +2933,24 @@ func _build_guild_bank() -> Control:
 	var content := VBoxContainer.new()
 	content.add_theme_constant_override("separation", 9)
 	margin.add_child(content)
-	var header := HBoxContainer.new()
-	content.add_child(header)
-	var title_stack := VBoxContainer.new()
-	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_stack.add_theme_constant_override("separation", 2)
-	header.add_child(title_stack)
-	title_stack.add_child(_localized_label("ui.guild.bank.title", 16, UI_TEXT))
-	var description := _localized_label("ui.guild.bank.description", 11, UI_MUTED)
-	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title_stack.add_child(description)
-	header.add_child(_status_pill(
+	var bank_status := _status_pill(
 		_t("ui.guild.bank.status.loading")
 		if is_loading_guild_bank
 		else _t("ui.guild.bank.status.ready")
-	))
+	)
+	bank_status.name = "GuildBankStatusPill"
 	var rank_rights_button := Button.new()
 	rank_rights_button.name = "GuildBankRankRightsButton"
 	_set_localized_property(rank_rights_button, "text", "ui.guild.bank.rank_rights.action")
 	rank_rights_button.pressed.connect(_on_guild_bank_category_opened.bind("rights"))
-	_apply_button_style(rank_rights_button)
-	header.add_child(rank_rights_button)
+	_apply_button_style(rank_rights_button, "secondary")
+	var header := _build_guild_workspace_header(
+		"ui.guild.bank.title",
+		"ui.guild.bank.description",
+		[bank_status, rank_rights_button]
+	)
+	header.name = "GuildBankHeader"
+	content.add_child(header)
 	var access_summary := _label(_guild_bank_access_summary(), 10, UI_ACCENT)
 	access_summary.name = "GuildBankPermissionSummary"
 	access_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1608,6 +3024,8 @@ func _build_guild_bank_card(
 		content.add_child(loan_usage)
 	var description := _label(description_text, 10, UI_MUTED)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.max_lines_visible = 3
+	description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	content.add_child(description)
 	var action := Button.new()
@@ -1615,7 +3033,7 @@ func _build_guild_bank_card(
 	_set_localized_property(action, "text", action_key)
 	action.disabled = is_loading_guild_bank
 	action.pressed.connect(_on_guild_bank_category_opened.bind(category))
-	_apply_button_style(action)
+	_apply_button_style(action, "secondary")
 	content.add_child(action)
 	return panel
 
@@ -2020,6 +3438,10 @@ func _build_guild_bank_category_preview(category: String) -> Control:
 	workspace.add_child(columns)
 	match category:
 		"pokemon":
+			var player_pokemon := _array_from_value(guild_bank_state.get(
+				"pokemonCandidates",
+				guild_bank_state.get("depositablePokemon", [])
+			))
 			columns.add_child(_build_guild_pokemon_list(
 				"ui.guild.bank.pokemon.stored",
 				_array_from_value(guild_bank_state.get("pokemon", [])),
@@ -2028,7 +3450,7 @@ func _build_guild_bank_category_preview(category: String) -> Control:
 			))
 			columns.add_child(_build_guild_pokemon_list(
 				"ui.guild.bank.pokemon.yours",
-				_array_from_value(guild_bank_state.get("depositablePokemon", [])),
+				player_pokemon,
 				false
 			))
 		"items":
@@ -3180,7 +4602,7 @@ func _build_guild_pokemon_list(
 		if not is_bank:
 			var can_deposit := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
 			if can_deposit:
-				empty_key = "ui.guild.bank.empty.pokemon_eligible"
+				empty_key = "ui.guild.bank.empty.pokemon_owned"
 			elif _guild_bank_permission_is_personally_denied("bank_deposit"):
 				empty_key = "ui.guild.bank.empty.deposit_personal_deny"
 			else:
@@ -3263,14 +4685,31 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool, readonly: bool =
 		))
 		return row
 	if not is_bank:
-		identity.add_child(_localized_label("ui.guild.bank.pokemon.ready_to_deposit", 9, UI_MUTED))
-		var can_deposit := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
+		var eligibility := str(entry.get("eligibility", "eligible"))
+		var candidate_can_deposit := bool(entry.get("canDeposit", eligibility == "eligible"))
+		var status_key := _guild_bank_pokemon_eligibility_key(eligibility)
+		var eligibility_label := _localized_label(
+			status_key,
+			9,
+			UI_MUTED if candidate_can_deposit else UI_ERROR
+		)
+		eligibility_label.name = "GuildBankPokemonEligibility_%d" % pokemon_id
+		identity.add_child(eligibility_label)
+		if not candidate_can_deposit:
+			row.modulate = Color("#ffb2ba")
+		var has_permission := bool(_dictionary(guild_bank_state.get("access", {})).get("canDeposit", false))
+		var can_deposit := has_permission and candidate_can_deposit
+		var unavailable_tooltip := ""
+		if not candidate_can_deposit:
+			unavailable_tooltip = _t(status_key)
+		elif not has_permission:
+			unavailable_tooltip = _guild_bank_permission_restriction("bank_deposit", "ui.guild.bank.tooltip.deposit_rank")
 		row.add_child(_guild_bank_action_button(
 			"GuildBankPokemonDepositButton_%d" % pokemon_id,
 			"ui.guild.bank.donate",
 			can_deposit,
 			_on_guild_bank_pokemon_action.bind("deposit", pokemon_id, pokemon),
-			"" if can_deposit else _guild_bank_permission_restriction("bank_deposit", "ui.guild.bank.tooltip.deposit_rank")
+			unavailable_tooltip
 		))
 		return row
 	if is_borrowed:
@@ -3348,6 +4787,20 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool, readonly: bool =
 		)
 	))
 	return row
+
+
+func _guild_bank_pokemon_eligibility_key(eligibility: String) -> String:
+	match eligibility:
+		"not_owned":
+			return "ui.guild.bank.pokemon.ineligible.not_owned"
+		"not_shareable":
+			return "ui.guild.bank.pokemon.ineligible.not_shareable"
+		"holding_item":
+			return "ui.guild.bank.pokemon.ineligible.holding_item"
+		"last_party_pokemon":
+			return "ui.guild.bank.pokemon.ineligible.last_party_pokemon"
+		_:
+			return "ui.guild.bank.pokemon.ready_to_deposit"
 
 
 func _open_guild_bank_pokemon_summary(pokemon: Dictionary) -> void:
@@ -3511,7 +4964,9 @@ func _guild_log_action_filter(category: String) -> OptionButton:
 	var actions: Array[String] = []
 	if category == "guild":
 		actions.assign(["joined", "left", "kicked", "rank_changed", "bank_permission_changed"])
-	elif category in ["funds", "resources"]:
+	elif category == "funds":
+		actions.assign(["deposit", "withdraw", "clash_stake_hold", "clash_stake_refund", "clash_stake_payout"])
+	elif category == "resources":
 		actions.assign(["deposit", "withdraw"])
 	else:
 		actions.assign(["deposit", "withdraw", "borrow", "return", "force_return"])
@@ -3799,6 +5254,10 @@ func _guild_log_entry_text(category: String, entry: Dictionary) -> String:
 			})
 		return _t("ui.guild.log.guild.generic", {"trainer": str(entry.get("target", _t("common.unknown")))})
 	var actor := str(entry.get("actor", _t("common.unknown")))
+	if category == "funds" and action in ["clash_stake_hold", "clash_stake_refund", "clash_stake_payout"]:
+		return _t("ui.guild.log.aether_clash.%s" % action, {
+			"amount": _format_number(int(entry.get("amount", 0))),
+		})
 	var action_group := "funds" if category == "funds" else "asset"
 	var action_text := _t("ui.guild.log.action.%s.%s" % [action_group, action])
 	if category == "funds":
@@ -4095,20 +5554,19 @@ func _build_member_roster(can_invite: bool = false) -> Control:
 			online_count += 1
 	var heading_row := HBoxContainer.new()
 	heading_row.add_theme_constant_override("separation", 10)
-	content.add_child(heading_row)
-	var roster_heading := _localized_label("ui.guild.roster", 10, UI_ACCENT)
-	roster_heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	heading_row.add_child(roster_heading)
 	var history_button := Button.new()
 	history_button.name = "GuildHistoryLogButton"
 	_set_localized_property(history_button, "text", "ui.guild.log.history.view")
 	history_button.pressed.connect(_open_guild_log.bind("guild"))
-	_apply_button_style(history_button)
-	heading_row.add_child(_label(
+	_apply_button_style(history_button, "secondary")
+	var roster_summary := _label(
 		_t("ui.guild.roster.summary", {"online": online_count, "total": members.size()}),
 		10,
 		UI_MUTED
-	))
+	)
+	roster_summary.name = "GuildMemberRosterSummary"
+	roster_summary.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	heading_row.add_child(roster_summary)
 	if can_invite:
 		var invite_button := Button.new()
 		invite_button.name = "OpenGuildInviteDialogButton"
@@ -4117,6 +5575,13 @@ func _build_member_roster(can_invite: bool = false) -> Control:
 		_apply_button_style(invite_button, "primary")
 		heading_row.add_child(invite_button)
 	heading_row.add_child(history_button)
+	var roster_header := _build_guild_workspace_header(
+		"ui.guild.roster",
+		"ui.guild.roster.hint",
+		[heading_row]
+	)
+	roster_header.name = "GuildMembersWorkspaceHeader"
+	content.add_child(roster_header)
 	content.add_child(_build_guild_roster_toolbar())
 	if can_invite:
 		_render_pending_invitations(content)
@@ -4133,6 +5598,13 @@ func _build_member_roster(can_invite: bool = false) -> Control:
 			continue
 		var member := member_value as Dictionary
 		member_cards_container.add_child(_build_guild_member_card(member, own_role, own_user_id, can_manage_permissions))
+	member_filter_empty_state = _build_guild_message_panel(
+		_t("ui.guild.roster.empty_search"),
+		UI_MUTED,
+		"GuildMemberFilterEmptyState"
+	)
+	member_filter_empty_state.visible = false
+	content.add_child(member_filter_empty_state)
 	return panel
 
 
@@ -4158,10 +5630,16 @@ func _filter_guild_member_cards(query: String) -> void:
 	if member_cards_container == null:
 		return
 	var normalized := query.strip_edges().to_lower()
+	var visible_count := 0
 	for child: Node in member_cards_container.get_children():
 		if child is Control:
 			var haystack := str(child.get_meta("member_search_text", ""))
-			(child as Control).visible = normalized == "" or haystack.contains(normalized)
+			var is_visible := normalized == "" or haystack.contains(normalized)
+			(child as Control).visible = is_visible
+			if is_visible:
+				visible_count += 1
+	if member_filter_empty_state != null:
+		member_filter_empty_state.visible = normalized != "" and visible_count == 0
 
 
 func _open_guild_invite_dialog() -> void:
@@ -4267,11 +5745,24 @@ func _build_guild_member_card(
 	row.add_theme_constant_override("separation", 9)
 	margin.add_child(row)
 
-	var presence_dot := _label("●", 15, UI_SUCCESS if online else UI_MUTED)
-	presence_dot.name = "GuildMemberPresenceDot_%d" % user_id
-	presence_dot.custom_minimum_size = Vector2(14, 0)
-	presence_dot.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	row.add_child(presence_dot)
+	var avatar_frame := PanelContainer.new()
+	avatar_frame.name = "GuildMemberAvatar_%d" % user_id
+	avatar_frame.custom_minimum_size = Vector2(44, 44)
+	avatar_frame.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color("#071c29e8"), UI_SUCCESS if online else UI_BORDER_INNER, 9, 1)
+	)
+	row.add_child(avatar_frame)
+	var avatar_overlay := Control.new()
+	avatar_overlay.custom_minimum_size = Vector2(42, 42)
+	avatar_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	avatar_frame.add_child(avatar_overlay)
+	var avatar_preview = TrainerAvatarPreviewScript.new()
+	avatar_preview.name = "TrainerAvatarPreview"
+	avatar_preview.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var fallback_source := str(member.get("displayName", member.get("username", "?"))).strip_edges()
+	avatar_preview.set_trainer_state(member, fallback_source.left(1))
+	avatar_overlay.add_child(avatar_preview)
 
 	var identity := VBoxContainer.new()
 	identity.name = "GuildMemberIdentityColumn_%d" % user_id
@@ -4284,7 +5775,9 @@ func _build_guild_member_card(
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	identity.add_child(name_label)
 	var username := str(member.get("username", "")).strip_edges()
-	identity.add_child(_label("@%s" % username if username != "" else "", 10, UI_ACCENT))
+	var username_label := _label("@%s" % username if username != "" else "", 10, UI_ACCENT)
+	username_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	identity.add_child(username_label)
 
 	var presence := VBoxContainer.new()
 	presence.name = "GuildMemberStatusColumn_%d" % user_id
@@ -4705,6 +6198,12 @@ func _build_member_management(guild: Dictionary, can_manage_settings: bool, can_
 	var content := VBoxContainer.new()
 	content.add_theme_constant_override("separation", 10)
 	margin.add_child(content)
+	var management_header := _build_guild_workspace_header(
+		"ui.guild.management.title",
+		"ui.guild.management.hint"
+	)
+	management_header.name = "GuildManagementWorkspaceHeader"
+	content.add_child(management_header)
 	var available_sections: Array[String] = []
 	if can_manage_settings:
 		available_sections.assign(["profile", "recruitment", "bank"])
@@ -4820,7 +6319,7 @@ func _build_management_recruitment_page(guild: Dictionary) -> Control:
 	add_requirement.name = "GuildAddRequirementButton"
 	_set_localized_property(add_requirement, "text", "ui.guild.requirements.add")
 	add_requirement.pressed.connect(_on_add_guild_requirement)
-	_apply_button_style(add_requirement)
+	_apply_button_style(add_requirement, "secondary")
 	content.add_child(add_requirement)
 	content.add_child(_management_save_button("GuildSaveRecruitmentButton", _on_save_recruitment_settings))
 	return content
@@ -5515,12 +7014,11 @@ func _render_selected_guild() -> void:
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 8)
 	detail_content.add_child(actions)
-	var apply_button := Button.new()
-	apply_button.name = "GuildApplyButton"
 	var recruitment := str(guild.get("recruitment", "Closed"))
-	var is_own_guild := int(membership.get("guildId", 0)) == int(guild.get("id", 0))
-	var pending_application := _pending_application_for_guild(int(guild.get("id", 0)))
-	var application_cooldown := _application_cooldown_for_guild(int(guild.get("id", 0)))
+	var guild_id := int(guild.get("id", 0))
+	var is_own_guild := int(membership.get("guildId", 0)) == guild_id
+	var pending_application := _pending_application_for_guild(guild_id)
+	var application_cooldown := _application_cooldown_for_guild(guild_id)
 	var cooldown_time := (
 		_application_cooldown_time(application_cooldown)
 		if not application_cooldown.is_empty()
@@ -5541,6 +7039,24 @@ func _render_selected_guild() -> void:
 		cooldown_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		cooldown_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		actions.add_child(cooldown_label)
+	if _can_manage_aether_clash() and not is_own_guild:
+		var clash_button := Button.new()
+		clash_button.name = "GuildAetherClashChallengeButton"
+		var outgoing_challenge := _pending_outgoing_aether_clash_for_guild(guild_id)
+		var incoming_challenge := _pending_incoming_aether_clash_for_guild(guild_id)
+		if not outgoing_challenge.is_empty():
+			clash_button.text = _t("ui.guild.aether_clash.cancel_challenge")
+		elif not incoming_challenge.is_empty():
+			clash_button.text = _t("ui.guild.aether_clash.review_challenge")
+		else:
+			clash_button.text = _t("ui.guild.aether_clash.challenge")
+		clash_button.disabled = is_aether_clash_action_in_flight
+		clash_button.custom_minimum_size = Vector2(150, 40)
+		clash_button.pressed.connect(_on_aether_clash_directory_pressed.bind(guild.duplicate(true)))
+		_apply_button_style(clash_button, "secondary")
+		actions.add_child(clash_button)
+	var apply_button := Button.new()
+	apply_button.name = "GuildApplyButton"
 	if is_own_guild:
 		apply_button.text = _t("ui.guild.yours")
 	elif not membership.is_empty():
@@ -5562,6 +7078,30 @@ func _render_selected_guild() -> void:
 	apply_button.pressed.connect(_on_application_pressed.bind(guild))
 	_apply_button_style(apply_button, "" if not pending_application.is_empty() else "primary")
 	actions.add_child(apply_button)
+
+
+func _can_manage_aether_clash() -> bool:
+	return str(membership.get("role", "")).strip_edges().to_lower() in ["leader", "captain"]
+
+
+func _pending_outgoing_aether_clash_for_guild(guild_id: int) -> Dictionary:
+	for value: Variant in _array_from_value(aether_clash_state.get("pendingOutgoing", [])):
+		if not value is Dictionary:
+			continue
+		var challenge := value as Dictionary
+		if int(_dictionary(challenge.get("challengedGuild", {})).get("id", 0)) == guild_id:
+			return challenge
+	return {}
+
+
+func _pending_incoming_aether_clash_for_guild(guild_id: int) -> Dictionary:
+	for value: Variant in _array_from_value(aether_clash_state.get("pendingIncoming", [])):
+		if not value is Dictionary:
+			continue
+		var challenge := value as Dictionary
+		if int(_dictionary(challenge.get("challengerGuild", {})).get("id", 0)) == guild_id:
+			return challenge
+	return {}
 
 
 func _guild_requirements(guild: Dictionary) -> Array[Dictionary]:
@@ -5742,7 +7282,12 @@ func _status_pill(status: String) -> Control:
 	return panel
 
 
-func _metadata_card(caption: String, value: String, accent: Color) -> Control:
+func _metadata_card(
+	caption: String,
+	value: String,
+	accent: Color,
+	value_name: String = ""
+) -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 60)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -5755,6 +7300,8 @@ func _metadata_card(caption: String, value: String, accent: Color) -> Control:
 	margin.add_child(stack)
 	stack.add_child(_label(caption, 9, UI_MUTED))
 	var value_label := _label(value, 14, accent)
+	if not value_name.is_empty():
+		value_label.name = value_name
 	value_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	stack.add_child(value_label)
 	return panel
@@ -5860,6 +7407,197 @@ func _on_application_pressed(guild: Dictionary) -> void:
 			_confirm_open_guild_join(guild)
 		"applications open":
 			_confirm_guild_application(guild)
+
+
+func _on_aether_clash_directory_pressed(guild: Dictionary) -> void:
+	if is_aether_clash_action_in_flight or not _can_manage_aether_clash():
+		return
+	var guild_id := int(guild.get("id", 0))
+	var outgoing := _pending_outgoing_aether_clash_for_guild(guild_id)
+	if not outgoing.is_empty():
+		await _run_aether_clash_action(
+			"cancel_aether_clash_challenge",
+			str(outgoing.get("id", ""))
+		)
+		return
+	if not _pending_incoming_aether_clash_for_guild(guild_id).is_empty():
+		_show_guild_section("aether_clash")
+		return
+	_confirm_aether_clash_challenge(guild)
+
+
+func _confirm_aether_clash_challenge(guild: Dictionary) -> void:
+	var guild_id := int(guild.get("id", 0))
+	if guild_id <= 0:
+		return
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	dialog.name = "GuildAetherClashChallengeDialog"
+	add_child(dialog)
+	dialog.configure(
+		_t("ui.guild.aether_clash.challenge_title"),
+		_t("ui.guild.aether_clash.challenge_confirm", {
+			"guild": str(guild.get("name", _t("ui.guild.fallback.guild"))),
+		}),
+		_t("ui.guild.aether_clash.challenge"),
+		_t("common.cancel")
+	)
+	var spectator_access := OptionButton.new()
+	spectator_access.name = "GuildAetherClashSpectatorAccess"
+	spectator_access.custom_minimum_size = Vector2(0, 42)
+	spectator_access.add_item(_t("ui.guild.aether_clash.spectators.public"))
+	spectator_access.set_item_metadata(0, "public")
+	spectator_access.add_item(_t("ui.guild.aether_clash.spectators.guilds_only"))
+	spectator_access.set_item_metadata(1, "guilds_only")
+	dialog.style_option_button(spectator_access)
+	var tier_selector := OptionButton.new()
+	tier_selector.name = "GuildAetherClashTier"
+	tier_selector.custom_minimum_size = Vector2(0, 42)
+	for tier: Dictionary in AETHER_CLASH_TIERS:
+		tier_selector.add_item(_t(str(tier.get("label", ""))))
+		tier_selector.set_item_metadata(tier_selector.item_count - 1, str(tier.get("id", "")))
+	dialog.style_option_button(tier_selector)
+	dialog.add_custom_control(_aether_clash_dialog_field(
+		_t("ui.guild.aether_clash.tier_label"),
+		tier_selector
+	))
+	var stake_amount := SpinBox.new()
+	stake_amount.name = "GuildAetherClashStakeAmount"
+	stake_amount.min_value = 0
+	stake_amount.max_value = 2147483647
+	stake_amount.step = 1
+	stake_amount.custom_arrow_step = 1000
+	stake_amount.value = 0
+	stake_amount.update_on_text_changed = true
+	stake_amount.prefix = "₽"
+	stake_amount.custom_minimum_size = Vector2(0, 42)
+	dialog.style_spin_box(stake_amount)
+	dialog.add_custom_control(_aether_clash_dialog_field(
+		_t("ui.guild.aether_clash.stake_label"),
+		stake_amount,
+		_t("ui.guild.aether_clash.stake_hint")
+	))
+	dialog.add_custom_control(spectator_access)
+	dialog.confirmed.connect(
+		_create_aether_clash_challenge.bind(
+			guild_id,
+			spectator_access,
+			tier_selector,
+			stake_amount
+		),
+		CONNECT_ONE_SHOT
+	)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(560, 490))
+	dialog.focus_spin_box(stake_amount)
+
+
+func _create_aether_clash_challenge(
+	guild_id: int,
+	spectator_access_selector: OptionButton = null,
+	tier_selector: OptionButton = null,
+	stake_selector: SpinBox = null
+) -> void:
+	if is_aether_clash_action_in_flight:
+		return
+	is_aether_clash_action_in_flight = true
+	_render_guild_list()
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		is_aether_clash_action_in_flight = false
+		_set_aether_clash_feedback(_t("ui.guild.error.service_unavailable"), true)
+		_render_guild_list()
+		return
+	var spectator_access := "public"
+	if spectator_access_selector != null and spectator_access_selector.selected >= 0:
+		spectator_access = str(spectator_access_selector.get_item_metadata(
+			spectator_access_selector.selected
+		))
+	var tier_id := "aether-ou"
+	if tier_selector != null and tier_selector.selected >= 0:
+		tier_id = str(tier_selector.get_item_metadata(tier_selector.selected))
+	var stake_amount := maxi(int(stake_selector.value), 0) if stake_selector != null else 0
+	var result := _dictionary(await guild_service.call(
+		"create_aether_clash_challenge",
+		guild_id,
+		spectator_access,
+		tier_id,
+		stake_amount
+	))
+	is_aether_clash_action_in_flight = false
+	if not bool(result.get("success", false)):
+		_set_aether_clash_feedback(str(result.get(
+			"error", _t("ui.guild.aether_clash.action_error")
+		)), true)
+		_render_guild_list()
+		return
+	await _refresh_aether_clash_from_server()
+	_set_aether_clash_feedback(_t("ui.guild.aether_clash.challenge_sent"), false)
+
+
+func _confirm_aether_clash_cancel(challenge: Dictionary) -> void:
+	var opponent := _aether_clash_opponent(challenge)
+	var dialog := ConfirmationDialog.new()
+	dialog.name = "CancelCurrentGuildAetherClashDialog"
+	dialog.title = _t("ui.guild.aether_clash.cancel_clash_title")
+	dialog.dialog_text = _t("ui.guild.aether_clash.cancel_clash_confirm", {
+		"guild": str(opponent.get("name", _t("ui.guild.fallback.guild"))),
+	})
+	dialog.ok_button_text = _t("ui.guild.aether_clash.cancel_clash")
+	dialog.cancel_button_text = _t("common.cancel")
+	_apply_guild_confirmation_style(dialog, "danger")
+	add_child(dialog)
+	dialog.confirmed.connect(
+		_run_aether_clash_action.bind(
+			"cancel_aether_clash_challenge",
+			str(challenge.get("id", ""))
+		),
+		CONNECT_ONE_SHOT
+	)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(520, 230))
+
+
+func _run_aether_clash_action(method_name: String, challenge_id: String) -> void:
+	if is_aether_clash_action_in_flight or challenge_id.strip_edges() == "":
+		return
+	is_aether_clash_action_in_flight = true
+	_render_guild_home()
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		is_aether_clash_action_in_flight = false
+		_set_aether_clash_feedback(_t("ui.guild.error.service_unavailable"), true)
+		_render_guild_home()
+		return
+	var result := _dictionary(await guild_service.call(method_name, challenge_id))
+	is_aether_clash_action_in_flight = false
+	if not bool(result.get("success", false)):
+		_set_aether_clash_feedback(str(result.get(
+			"error", _t("ui.guild.aether_clash.action_error")
+		)), true)
+		_render_guild_home()
+		_render_guild_list()
+		return
+	await _refresh_aether_clash_from_server()
+	var success_key := "ui.guild.aether_clash.challenge_cancelled"
+	if method_name == "accept_aether_clash_challenge":
+		success_key = "ui.guild.aether_clash.challenge_accepted"
+		_show_guild_section("aether_clash")
+	elif method_name == "decline_aether_clash_challenge":
+		success_key = "ui.guild.aether_clash.challenge_declined"
+	_set_aether_clash_feedback(_t(success_key), false)
+
+
+func _set_aether_clash_feedback(message: String, is_error: bool) -> void:
+	_set_member_status(message, is_error)
+	if active_page == "browse" and browse_status_label != null:
+		browse_status_label.text = message
+		browse_status_label.add_theme_color_override(
+			"font_color",
+			Color("#ff8e94") if is_error else UI_SUCCESS
+		)
+		browse_status_label.visible = true
 
 
 func _confirm_guild_application(guild: Dictionary) -> void:
@@ -6070,7 +7808,10 @@ func _refresh_from_server() -> void:
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
 		is_loading_guilds = false
-		browse_status_label.text = _t("ui.guild.error.service_unavailable")
+		var service_error := _t("ui.guild.error.service_unavailable")
+		browse_status_label.text = service_error
+		if initial_loading_page != null and initial_loading_page.visible:
+			_show_initial_guild_load_error(service_error)
 		return
 	var response: Variant = await guild_service.call("load_directory")
 	var result := _dictionary(response)
@@ -6078,9 +7819,13 @@ func _refresh_from_server() -> void:
 		return
 	is_loading_guilds = false
 	if not bool(result.get("success", false)):
-		browse_status_label.text = str(result.get("error", _t("ui.guild.error.load_directory")))
+		var load_error := str(result.get("error", _t("ui.guild.error.load_directory")))
+		browse_status_label.text = load_error
 		browse_status_label.visible = true
+		if initial_loading_page != null and initial_loading_page.visible:
+			_show_initial_guild_load_error(load_error)
 		return
+	has_resolved_initial_membership = true
 	membership = _dictionary(result.get("membership", {})).duplicate(true)
 	incoming_invitations = _array_from_value(result.get("incomingInvitations", [])).duplicate(true)
 	pending_applications = _array_from_value(result.get("pendingApplications", [])).duplicate(true)
@@ -6089,11 +7834,17 @@ func _refresh_from_server() -> void:
 	browse_status_label.visible = false
 	if not membership.is_empty():
 		await _refresh_home_from_server()
+		_set_initial_guild_loading(false)
 		if visible and not has_explicit_page_selection:
 			_show_page("member")
+		await _refresh_aether_clash_from_server()
 	else:
 		guild_home.clear()
+		aether_clash_state.clear()
 		_render_guild_home()
+		_set_initial_guild_loading(false)
+		if visible and not has_explicit_page_selection:
+			_show_page("browse")
 
 
 func _refresh_home_from_server() -> void:
@@ -6112,6 +7863,42 @@ func _refresh_home_from_server() -> void:
 		_set_member_status(str(result.get("error", _t("ui.guild.error.load_home"))), true)
 		return
 	_apply_home_result(result)
+
+
+func _refresh_aether_clash_from_server() -> void:
+	if membership.is_empty():
+		aether_clash_state.clear()
+		aether_clash_load_error = ""
+		is_aether_clash_loading = false
+		return
+	if is_aether_clash_loading:
+		return
+	is_aether_clash_loading = true
+	aether_clash_load_error = ""
+	if active_guild_section == "aether_clash":
+		_render_guild_home()
+	var guild_service := get_node_or_null("/root/GuildService")
+	if guild_service == null:
+		is_aether_clash_loading = false
+		aether_clash_load_error = _t("ui.guild.error.service_unavailable")
+		if active_guild_section == "aether_clash":
+			_render_guild_home()
+		return
+	var result := _dictionary(await guild_service.call("load_aether_clash_challenges"))
+	is_aether_clash_loading = false
+	if not bool(result.get("success", false)):
+		aether_clash_state.clear()
+		aether_clash_load_error = str(result.get(
+			"error", _t("ui.guild.aether_clash.load_error")
+		))
+		if active_guild_section == "aether_clash":
+			_set_member_status(aether_clash_load_error, true)
+			_render_guild_home()
+		return
+	aether_clash_load_error = ""
+	aether_clash_state = result.duplicate(true)
+	_render_guild_home()
+	_render_guild_list()
 
 
 func _apply_home_result(result: Dictionary) -> void:
@@ -6876,6 +8663,47 @@ func _localized_label(key: String, font_size: int, color: Color) -> Label:
 	return label
 
 
+func _build_guild_workspace_header(
+	title_key: String,
+	intro_key: String,
+	actions: Array = []
+) -> Control:
+	var heading := HBoxContainer.new()
+	heading.add_theme_constant_override("separation", 12)
+	var title_stack := VBoxContainer.new()
+	title_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_stack.add_theme_constant_override("separation", 3)
+	heading.add_child(title_stack)
+	var title := _localized_label(title_key, 18, UI_TEXT)
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title_stack.add_child(title)
+	var intro := _localized_label(intro_key, 10, UI_MUTED)
+	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	intro.max_lines_visible = 2
+	intro.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title_stack.add_child(intro)
+	for action_value: Variant in actions:
+		if action_value is Control:
+			var action := action_value as Control
+			action.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			heading.add_child(action)
+	return heading
+
+
+func _build_guild_message_panel(message: String, color: Color, panel_name: String = "") -> Control:
+	var panel := PanelContainer.new()
+	if not panel_name.is_empty():
+		panel.name = panel_name
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_INPUT, UI_BORDER_INNER, 8, 1))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 12, 9, 12, 9)
+	panel.add_child(margin)
+	var label := _label(message, 11, color)
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	margin.add_child(label)
+	return panel
+
+
 func _set_localized_property(control: Control, property_name: String, key: String) -> void:
 	control.set_meta("i18n_source_%s" % property_name, key)
 	control.set(property_name, _t(key))
@@ -6994,7 +8822,7 @@ func _icon_rect(icon_size: int, color: Color) -> TextureRect:
 func _apply_tab_style(button: Button, selected: bool) -> void:
 	if button == null:
 		return
-	var background := UI_RAISED if selected else Color("#07111edc")
+	var background := Color("#123650f2") if selected else Color("#07111edc")
 	var border := UI_ACCENT if selected else UI_BORDER
 	button.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
@@ -7014,11 +8842,23 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	var border := UI_BORDER
 	var hover_border := Color("#7aa7f4")
 	if variant == "primary":
-		normal_bg = Color("#0b2235f2")
-		hover_bg = Color("#12334df2")
-		pressed_bg = Color("#071624f2")
-		border = Color("#4b9dc4cc")
-		hover_border = Color("#79d9ff")
+		normal_bg = UI_PRIMARY_BACKGROUND
+		hover_bg = UI_PRIMARY_HOVER
+		pressed_bg = UI_PRIMARY_PRESSED
+		border = UI_ACCENT
+		hover_border = Color("#a1eaff")
+	elif variant == "secondary":
+		normal_bg = UI_SECONDARY_BACKGROUND
+		hover_bg = UI_SECONDARY_HOVER
+		pressed_bg = Color("#091d2bf2")
+		border = UI_ACCENT_SOFT
+		hover_border = UI_ACCENT
+	elif variant == "gold":
+		normal_bg = UI_GOLD_BACKGROUND
+		hover_bg = UI_GOLD_HOVER
+		pressed_bg = Color("#251d0df2")
+		border = Color(UI_GOLD.r, UI_GOLD.g, UI_GOLD.b, 0.78)
+		hover_border = UI_GOLD.lightened(0.12)
 	elif variant == "danger":
 		normal_bg = Color("#35151bf2")
 		hover_bg = Color("#512029f2")

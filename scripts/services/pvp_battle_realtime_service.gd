@@ -708,6 +708,9 @@ func _apply_timer_projection_from_battle_response(message: Dictionary) -> bool:
 
 
 func apply_initial_timer_response(response: Dictionary) -> void:
+	var timer_value: Variant = response.get("timerState", {})
+	if timer_value is Dictionary and timer_projection.apply_snapshot(timer_value as Dictionary):
+		timer_state_changed.emit(timer_projection)
 	var timers_value: Variant = response.get("pvpTimers", [])
 	var enabled := bool(response.get("timerEnabled", false))
 	if timer_projection.apply_legacy_snapshot(timers_value, enabled):
@@ -752,7 +755,7 @@ static func should_apply_terminal_action_immediately(message: Dictionary, _local
 
 	var message_action := str(message.get("action", "")).strip_edges().to_lower()
 	var message_player_id := str(message.get("playerId", "")).strip_edges()
-	if not (message_action in ["forfeit", "disconnect", "abandon"]) or message_player_id == "":
+	if not (message_action in ["forfeit", "disconnect", "abandon", "timeout"]) or message_player_id == "":
 		return false
 
 	# The action response and battle-update broadcast can race each other. Treat a
@@ -775,16 +778,26 @@ static func should_defer_authoritative_terminal_until_render(
 	has_pending_updates: bool,
 	require_mechanical_state_ended := true
 ) -> bool:
-	return (
-		(require_mechanical_state_ended and not mechanical_state_ended)
-		or queue_is_rendering
-		or current_batch_id.strip_edges() != ""
-		or has_pending_updates
-	)
+	if queue_is_rendering or current_batch_id.strip_edges() != "":
+		return true
+	if not require_mechanical_state_ended:
+		# An animation-free durable terminal (timeout, disconnect, forfeit, or
+		# Clash battle limit) supersedes submitted-choice acknowledgements and
+		# other transport updates that have not started rendering. Those updates
+		# can never advance after the server has closed the battle, so waiting for
+		# the queue to empty would strand both clients on their Waiting screen.
+		return false
+	return not mechanical_state_ended or has_pending_updates
 
 
 static func is_animation_free_authoritative_terminal_reason(end_reason: String) -> bool:
-	return end_reason.strip_edges().to_lower() in ["timeout", "disconnect", "forfeit"]
+	return end_reason.strip_edges().to_lower() in [
+		"timeout",
+		"disconnect",
+		"forfeit",
+		"battle_time_limit",
+		"battle_time_limit_draw",
+	]
 
 
 static func classify_action_timeout_recovery(

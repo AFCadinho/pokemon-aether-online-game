@@ -90,7 +90,7 @@ func _check_catalogs() -> void:
 		_check(parsed is Dictionary, "generated %s item catalog is valid JSON" % locale)
 		var catalog: Dictionary = parsed as Dictionary if parsed is Dictionary else {}
 		generated_catalogs[locale] = catalog
-		_check(catalog.size() == 1448, "generated %s item catalog covers the complete source index" % locale)
+		_check(catalog.size() == 1384, "generated %s item catalog covers the cleaned source index" % locale)
 		for item_id_value: Variant in catalog.keys():
 			var item_id := str(item_id_value)
 			var entry: Dictionary = catalog.get(item_id, {})
@@ -107,6 +107,20 @@ func _check_catalogs() -> void:
 
 	var generated_english: Dictionary = generated_catalogs.get("en", {})
 	var generated_chinese: Dictionary = generated_catalogs.get("zh_CN", {})
+	var retired_item_ids: Array[String] = [
+		"acro-bike", "bicycle", "bike", "mach-bike", "roller-skates", "rotom-bike",
+		"bike--green", "bike--yellow", "rotom-bike--glistening-black",
+		"rotom-bike--sparkling-white", "rotom-bike--water-mode",
+		"roto-bargain", "roto-boost", "roto-catch", "roto-encounter",
+		"roto-exp-points", "roto-friendship", "roto-hatch", "roto-hp-restore",
+		"roto-pp-restore", "roto-prize-money", "roto-stealth",
+		"god-stone", "loot-sack", "rule-book", "seal-bag", "left-poke-ball",
+		"repel", "super-repel", "max-repel",
+	]
+	for retired_item_id: String in retired_item_ids:
+		_check(not generated_english.has(retired_item_id), "%s is absent from generated item localization" % retired_item_id)
+	for item_id_value: Variant in generated_english.keys():
+		_check(not str(item_id_value).ends_with("-z--bag"), "duplicate Bag-side Z-Crystals are absent from generated item localization")
 	_check(
 		str((generated_chinese.get("ability-capsule", {}) as Dictionary).get("name", "")) == "特性胶囊",
 		"generated Simplified Chinese uses the official Ability Capsule name"
@@ -139,7 +153,7 @@ func _check_catalogs() -> void:
 		localized_ids.sort()
 		_check(localized_ids == expected_generated_ids, "generated %s item IDs match English" % locale)
 		_check(
-			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1449,
+			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1385,
 			"%s complete item catalog plus virtual Escape Rope action loads into the runtime resolver" % locale
 		)
 
@@ -160,13 +174,13 @@ func _check_resolver_fallback_and_mechanics() -> void:
 	_check(dutch.get("quantity") == 4, "item localization preserves quantity")
 	_check(dutch.get("gameplay") == {"target": "pokemon"}, "item localization preserves mechanics")
 	var generated_dutch: Dictionary = item_localization.call("localize_item", {
-		"itemId": "armorite-ore",
-		"name": "Armorite Ore",
+		"itemId": "resonite-ore",
+		"name": "Resonite Ore",
 		"shortDesc": "Server-provided English description.",
 		"quantity": 7,
 		"sellPrice": 5,
 	})
-	_check(generated_dutch.get("name") == "Armorieterts", "Dutch generated catalog covers an item outside the reviewed pilot")
+	_check(generated_dutch.get("name") == "Resonieterts", "Dutch generated catalog covers an item outside the reviewed pilot")
 	_check(generated_dutch.get("quantity") == 7, "generated item localization preserves quantity")
 	_check(generated_dutch.get("sellPrice") == 5, "generated item localization preserves price mechanics")
 	var mega_stone_dutch: Dictionary = item_localization.call("localize_item", {
@@ -216,12 +230,12 @@ func _check_independent_name_language() -> void:
 	settings_manager.set("locale", "nl")
 	settings_manager.set("content_name_language", "english")
 	var english_names: Dictionary = item_localization.call("localize_item", {
-		"itemId": "armorite-ore",
-		"name": "Armorite Ore",
+		"itemId": "resonite-ore",
+		"name": "Resonite Ore",
 		"shortDesc": "Server-provided English description.",
 	})
 	_check(
-		english_names.get("name") == "Armorite Ore",
+		english_names.get("name") == "Resonite Ore",
 		"Dutch interface can keep English item names"
 	)
 	_check(
@@ -245,11 +259,57 @@ func _check_overlay_integration() -> void:
 		"category": "medicine",
 		"shortDesc": "Restores 20 HP.",
 		"quantity": 2,
+	}, {
+		"itemId": "normalium-z--held",
+		"name": "Normalium Z",
+		"category": "held-items",
+		"shortDesc": "Enables Normal-type Z-Moves.",
+		"isHoldable": true,
+		"quantity": 1,
+		"assignmentMode": "account_entitlement",
+	}, {
+		"itemId": "abomasite-bound",
+		"canonicalItemId": "abomasite",
+		"ownershipVariant": "account_bound",
+		"name": "Abomasite",
+		"category": "held-items",
+		"isHoldable": true,
+		"quantity": 1,
+		"tradable": false,
+	}, {
+		"itemId": "abomasite",
+		"canonicalItemId": "abomasite",
+		"ownershipVariant": "tradeable",
+		"name": "Abomasite",
+		"category": "held-items",
+		"isHoldable": true,
+		"quantity": 1,
+		"tradable": true,
 	}])
-	_check(normalized.size() == 2, "Bag normalization retains inventory plus virtual Escape Rope")
+	_check(normalized.size() == 4, "Bag normalization groups Mega provenance plus virtual Escape Rope")
 	var potion: Dictionary = normalized[0]
-	var escape_rope: Dictionary = normalized[1]
+	var normalium: Dictionary = normalized[1]
+	var abomasite: Dictionary = normalized[2]
+	var escape_rope: Dictionary = normalized[3]
 	_check(potion.get("shortDesc") == "Herstelt 20 HP.", "Bag normalization applies Dutch item data")
+	_check(
+		normalium.get("assignmentMode") == "account_entitlement",
+		"Bag normalization preserves account-entitlement assignment mechanics"
+	)
+	_check(
+		overlay.call("_bag_item_quantity_marker", normalium) == "∞",
+		"account entitlements use the infinite assignment marker"
+	)
+	_check(
+		abomasite.get("id") == "abomasite-bound"
+		and int(abomasite.get("boundQuantity", 0)) == 1
+		and int(abomasite.get("tradeableQuantity", 0)) == 1,
+		"Bag groups bound and tradeable Mega Stones while preferring the bound copy for assignment"
+	)
+	_check(
+		overlay.call("_bag_item_quantity_marker", abomasite) == "G+R1",
+		"grouped Mega Stones show provenance instead of a misleading x2"
+	)
 	_check(
 		escape_rope.get("name") == "Escape Rope · Belangrijk item",
 		"virtual Escape Rope name renders in Dutch"
@@ -266,6 +326,10 @@ func _check_overlay_integration() -> void:
 		"shortDesc": "Restores 20 HP.",
 		"costs": [{"currency": "money", "amount": 300}],
 		"available": true,
+		"accountUnique": true,
+		"accountBound": true,
+		"owned": true,
+		"maxPurchaseQuantity": 1,
 	}, {
 		"itemId": "ultra-ball",
 		"name": "Ultra Ball",
@@ -277,6 +341,13 @@ func _check_overlay_integration() -> void:
 	_check(
 		market_items.size() == 2 and (market_items[0] as Dictionary).get("shortDesc") == "Herstelt 20 HP.",
 		"Market normalization reuses the item resolver"
+	)
+	_check(
+		bool((market_items[0] as Dictionary).get("accountUnique", false))
+		and bool((market_items[0] as Dictionary).get("accountBound", false))
+		and bool((market_items[0] as Dictionary).get("owned", false))
+		and int((market_items[0] as Dictionary).get("maxPurchaseQuantity", 0)) == 1,
+		"Market normalization preserves account-bound ownership"
 	)
 	var available_market_items: Array = overlay.call("_market_available_buy_items", market_items)
 	_check(

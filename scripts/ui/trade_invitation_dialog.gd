@@ -25,6 +25,7 @@ var notified_incoming_trade_ids: Dictionary = {}
 
 func setup() -> void:
 	hide()
+	add_to_group("aether_clash_exchange_surface")
 	trade.clear()
 	title = _t("ui.trade.invitation.window_title")
 	min_size = DIALOG_SIZE
@@ -184,6 +185,11 @@ func setup() -> void:
 
 
 func send_invitation(username: String) -> Dictionary:
+	if _aether_clash_exchange_blocked():
+		return {
+			"success": false,
+			"error": _t("backend.error.aether_clash_exchange_blocked"),
+		}
 	var service := get_node_or_null("/root/TradeService")
 	if service == null:
 		return {"success": false, "error": _t("ui.trade.error.service_unavailable")}
@@ -203,6 +209,9 @@ func send_invitation(username: String) -> Dictionary:
 
 func show_trade(value: Dictionary) -> void:
 	trade = value.duplicate(true)
+	if _aether_clash_exchange_blocked():
+		hide()
+		return
 	if str(trade.get("status", "")) != "invited":
 		hide()
 		return
@@ -221,6 +230,14 @@ func show_trade(value: Dictionary) -> void:
 		_notify_incoming_invitation_once()
 	size = DIALOG_SIZE
 	popup_centered(DIALOG_SIZE)
+
+
+func suppress_for_aether_clash() -> void:
+	hide()
+
+
+func _aether_clash_exchange_blocked() -> bool:
+	return not get_tree().get_nodes_in_group("aether_clash_duel_controller").is_empty()
 
 
 func show_error(message: String) -> void:

@@ -1,6 +1,7 @@
 extends Node2D
 
 const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
+const AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE := "POKEAETHER_AETHER_CLASH_TRACE"
 const BATTLE_SCENE: PackedScene = preload(BATTLE_SCENE_PATH)
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const AETHERNET_TELEPORT_EFFECT_SCRIPT: Script = preload("res://scripts/world/aethernet_teleport_effect.gd")
@@ -452,7 +453,34 @@ func _set_aethernet_effect_presence(phase: String) -> void:
 	_publish_world_presence(true)
 
 
+func _is_aether_clash_map_id(value: String) -> bool:
+	return value.strip_edges().begins_with("aether_clash_duel:")
+
+
+func _trace_aether_clash(event: String, fields: Dictionary = {}) -> void:
+	if OS.get_environment(AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE) != "1":
+		return
+	var payload := fields.duplicate(true)
+	payload["event"] = event
+	print("[AetherClashTrace] %s" % JSON.stringify(payload))
+
+
 func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
+	var current_map_id := _get_map_id(GameState.current_map)
+	var target_map_id := str(state.get("mapId", "")).strip_edges()
+	var reuses_presence_roster := current_map_id != "" and current_map_id == target_map_id
+	var trace_aether_clash := (
+		_is_aether_clash_map_id(current_map_id)
+		or _is_aether_clash_map_id(target_map_id)
+	)
+	if trace_aether_clash:
+		_trace_aether_clash("teleport_apply_started", {
+			"currentMapId": current_map_id,
+			"targetMapId": target_map_id,
+			"targetScenePath": str(state.get("mapScenePath", "")),
+			"teleportRevision": int(state.get("teleportRevision", 0)),
+			"teleportCommandId": str(state.get("teleportCommandId", "")),
+		})
 	authorized_teleport_in_progress = true
 	if player == null:
 		_mark_authorized_teleport_apply_failed()
@@ -516,6 +544,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 		_apply_weather_for_map(target_map)
 		MusicManager.play_map_music(target_map)
 
+	_configure_authorized_map_instance(target_map, state)
 	move_player_to_map(target_map)
 	if player.has_method("reset_movement_state"):
 		player.call("reset_movement_state")
@@ -557,15 +586,66 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	authorized_teleport_in_progress = false
 	is_loading_map = false
 	_publish_world_presence(true)
+	if reuses_presence_roster:
+		_restore_remote_players_from_cached_presence()
 	if authorized_teleport_locked_overworld:
 		GameState.unlock_overworld_input()
 	authorized_teleport_locked_overworld = false
+	if trace_aether_clash:
+		_trace_aether_clash("teleport_apply_finished", {
+			"currentMapId": _get_map_id(GameState.current_map),
+			"targetMapId": target_map_id,
+			"teleportRevision": current_teleport_revision,
+			"teleportCommandId": str(state.get("teleportCommandId", "")),
+		})
+	var aether_clash_result := _dictionary_from_value(state.get("aetherClashResult", {}))
+	if not aether_clash_result.is_empty():
+		get_tree().call_group(
+			"ui_overlay",
+			"show_aether_clash_result",
+			aether_clash_result.duplicate(true)
+		)
 	return {"success": true}
+
+
+func _restore_remote_players_from_cached_presence() -> void:
+	var cached_players := WorldPresenceService.get_current_map_players()
+	_apply_remote_player_states(cached_players, true)
+	if _is_aether_clash_map_id(_get_map_id(GameState.current_map)):
+		_trace_aether_clash("same_map_presence_restored", {
+			"cachedPlayerCount": cached_players.size(),
+			"remoteAvatarCount": remote_player_avatars.size(),
+		})
+
+
+func _configure_authorized_map_instance(map: Node, state: Dictionary) -> void:
+	if map == null or not map.has_method("configure_aether_clash_instance"):
+		return
+	map.call("configure_aether_clash_instance", str(state.get("mapId", "")))
 
 
 func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	var command_id := _optional_string(state.get("teleportCommandId"))
+	var current_map_id := _get_map_id(GameState.current_map)
+	var target_map_id := str(state.get("mapId", "")).strip_edges()
+	var trace_aether_clash := (
+		_is_aether_clash_map_id(current_map_id)
+		or _is_aether_clash_map_id(target_map_id)
+	)
+	if trace_aether_clash:
+		_trace_aether_clash("remote_teleport_received", {
+			"currentMapId": current_map_id,
+			"targetMapId": target_map_id,
+			"teleportRevision": int(state.get("teleportRevision", 0)),
+			"teleportCommandId": command_id,
+		})
 	if command_id != "" and completed_remote_authorized_teleport_commands.has(command_id):
+		if trace_aether_clash:
+			_trace_aether_clash("remote_teleport_skipped", {
+				"reason": "completed_duplicate",
+				"targetMapId": target_map_id,
+				"teleportCommandId": command_id,
+			})
 		return {"success": true, "applied": true, "duplicate": true}
 	if (
 		command_id != ""
@@ -576,11 +656,23 @@ func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
 			).strip_edges()
 		)
 	):
+		if trace_aether_clash:
+			_trace_aether_clash("remote_teleport_skipped", {
+				"reason": "active_duplicate",
+				"targetMapId": target_map_id,
+				"teleportCommandId": command_id,
+			})
 		return {"success": true, "queued": true, "duplicate": true}
 	var block_reason := _get_authorized_teleport_block_reason(false, true)
 	if block_reason != "":
 		pending_remote_authorized_teleport_state = state.duplicate(true)
 		remote_authorized_teleport_retry_elapsed = 0.0
+		if trace_aether_clash:
+			_trace_aether_clash("remote_teleport_queued", {
+				"targetMapId": target_map_id,
+				"teleportCommandId": command_id,
+				"blockReason": block_reason,
+			})
 		return {
 			"success": true,
 			"queued": true,
@@ -596,6 +688,13 @@ func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	await play_authorized_teleport_departure_effect()
 	var result: Dictionary = await apply_authorized_teleport_state(state)
 	active_remote_authorized_teleport_command_id = ""
+	if trace_aether_clash:
+		_trace_aether_clash("remote_teleport_completed", {
+			"targetMapId": target_map_id,
+			"teleportCommandId": command_id,
+			"success": bool(result.get("success", false)),
+			"error": str(result.get("error", "")),
+		})
 	if bool(result.get("success", false)) and command_id != "":
 		_remember_completed_remote_authorized_teleport(command_id)
 	return result
@@ -1219,6 +1318,7 @@ func _setup_initial_world_state() -> void:
 		else:
 			push_warning("World: saved map '%s' could not be loaded. Falling back to initial map." % saved_scene_path)
 
+	_configure_authorized_map_instance(initial_map, saved_state)
 	GameState.current_map = initial_map
 	_normalize_map_tree_layer_z_indices(initial_map)
 	_apply_day_night_for_map(initial_map)
@@ -2164,6 +2264,30 @@ func _save_current_player_position(
 	else:
 		if str(result.get("error", "")) == "FORCED_TELEPORT_PENDING":
 			_mark_authorized_teleport_apply_failed()
+		var attempted_map_id := str(state.get("mapId", "")).strip_edges()
+		var current_map_id := _get_map_id(GameState.current_map)
+		var pending_target_map_id := str(
+			pending_remote_authorized_teleport_state.get("mapId", "")
+		).strip_edges()
+		var error_code := BackendErrorLocalizationService.error_code(result)
+		if (
+			_is_aether_clash_map_id(attempted_map_id)
+			or _is_aether_clash_map_id(current_map_id)
+			or _is_aether_clash_map_id(pending_target_map_id)
+			or error_code == "forced_teleport_pending"
+			or str(result.get("error", "")) == "FORCED_TELEPORT_PENDING"
+		):
+			_trace_aether_clash("position_save_failed", {
+				"attemptedMapId": attempted_map_id,
+				"currentMapId": current_map_id,
+				"httpStatus": int(result.get("status", 0)),
+				"errorCode": error_code,
+				"error": str(result.get("diagnosticError", result.get("error", ""))),
+				"teleportRevision": current_teleport_revision,
+				"authorizedTeleportInProgress": authorized_teleport_in_progress,
+				"activeTeleportCommandId": active_remote_authorized_teleport_command_id,
+				"pendingTargetMapId": pending_target_map_id,
+			})
 		if not ThievingService.is_arrest_transfer_pending():
 			push_warning("World: player position save failed: %s" % str(result.get("error", "Unknown error")))
 	is_saving_player_position = false
@@ -2710,10 +2834,7 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 	MusicManager.play_wild_battle_music()
 	await _reveal_prepared_wild_battle()
 
-	await battle_instance.play_wild_battle_intro(
-		PlayerSave.party[0],
-		response
-	)
+	await battle_instance.play_wild_battle_intro(response)
 
 
 func _show_wild_encounter_start_error(response: Dictionary) -> void:
@@ -3195,7 +3316,7 @@ func _should_claim_wild_battle_reward(result: Dictionary) -> bool:
 		return false
 	var reason := str(result.get("reason", "")).strip_edges().to_lower()
 	if reason == "caught":
-		return active_wild_encounter_type in ["old_rod", "good_rod", "super_rod"]
+		return true
 	if reason != "win":
 		return false
 	if not _is_player_battle_winner(str(result.get("winner", ""))):
@@ -3224,6 +3345,8 @@ func _award_wild_battle_money(battle_id: String, pokemon_species: String) -> voi
 		_notify_reward_experience_gains(reward)
 		_notify_reward_level_ups(reward)
 		_notify_fishing_treasure_award(reward.get("items", []))
+		_notify_wild_item_drop_awards(reward.get("items", []))
+		_notify_wild_currency_drop_awards(reward.get("currencies", []))
 		await _notify_fishing_experience_award(reward.get("fishingProgression", {}))
 		var tutorial := _dictionary_from_value(reward.get("evTrainingTutorial", {}))
 		if not tutorial.is_empty():
@@ -3396,6 +3519,50 @@ func _notify_fishing_treasure_award(value: Variant) -> void:
 		SfxManager.play("item_found")
 		return
 
+func _notify_wild_item_drop_awards(value: Variant) -> void:
+	if value is not Array:
+		return
+	for item_value: Variant in value as Array:
+		if item_value is not Dictionary:
+			continue
+		var item := item_value as Dictionary
+		if str(item.get("source", "")).strip_edges().to_lower() != "wild_pokemon_drop":
+			continue
+		var item_id := str(item.get("itemId", item.get("id", ""))).strip_edges().to_lower()
+		if item_id.is_empty():
+			continue
+		var quantity := maxi(int(item.get("quantity", 1)), 1)
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.world.reward.wild_item_drop", {
+				"item": ItemLocalization.display_name(item_id),
+			})
+		)
+		get_tree().call_group("ui_overlay", "add_item_reward_notification", item_id, quantity)
+		SfxManager.play("item_found")
+
+func _notify_wild_currency_drop_awards(value: Variant) -> void:
+	if value is not Array:
+		return
+	for currency_value: Variant in value as Array:
+		if currency_value is not Dictionary:
+			continue
+		var currency := currency_value as Dictionary
+		if str(currency.get("source", "")).strip_edges().to_lower() != "wild_pokemon_drop":
+			continue
+		var currency_id := str(currency.get("currency", "")).strip_edges().to_lower()
+		var amount := maxi(int(currency.get("amount", 0)), 0)
+		if currency_id != "aetherite" or amount <= 0:
+			continue
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.world.reward.wild_aetherite_drop", {"amount": amount})
+		)
+		get_tree().call_group("ui_overlay", "add_currency_reward_notification", currency_id, amount)
+		SfxManager.play("item_found")
+
 func _notify_wild_battle_money_awarded(pokemon_species: String, money_awarded: int) -> void:
 	if money_awarded <= 0:
 		return
@@ -3441,6 +3608,44 @@ func _notify_story_reward_items(value: Variant) -> void:
 			str(grant.get("itemId", "")),
 			int(grant.get("quantity", 0))
 		)
+	var aetherite_awarded := _story_reward_aetherite_amount(value)
+	if aetherite_awarded > 0:
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text(
+				"ui.world.reward.quest_aetherite",
+				{"amount": aetherite_awarded}
+			)
+		)
+		get_tree().call_group(
+			"ui_overlay",
+			"add_currency_reward_notification",
+			"aetherite",
+			aetherite_awarded
+		)
+
+
+func _story_reward_aetherite_amount(value: Variant) -> int:
+	var amount := 0
+	if value is not Array:
+		return amount
+	for effect_value: Variant in value as Array:
+		if effect_value is not Dictionary:
+			continue
+		var effect := effect_value as Dictionary
+		if bool(effect.get("alreadyGranted", false)):
+			continue
+		var grants_value: Variant = effect.get("grants", [])
+		if grants_value is not Array:
+			continue
+		for grant_value: Variant in grants_value as Array:
+			if grant_value is not Dictionary:
+				continue
+			var grant := grant_value as Dictionary
+			if str(grant.get("currency", "")).strip_edges().to_lower() == "aetherite":
+				amount += maxi(int(grant.get("amount", 0)), 0)
+	return amount
 
 
 func _story_reward_item_grants(value: Variant) -> Array[Dictionary]:

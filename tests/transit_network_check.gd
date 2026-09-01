@@ -157,13 +157,17 @@ func _init() -> void:
 	_check(english_localization.contains('"ui.transit.hubs": "Aethernet hubs"'), "Transit UI labels its worldwide hub section")
 	_check(menu_source.contains("ScrollContainer.new()"), "Transit UI remains scrollable as towns are added")
 	_check(menu_source.contains('destination.get("isAnchor"'), "Transit UI identifies the Aether Anchor")
-	_check(menu_source.contains('ui.transit.travel_free'), "Transit UI labels Anchor travel as free without a price")
+	_check(menu_source.contains("_available_destination_card"), "Transit UI makes available destination rows selectable")
+	_check(menu_source.contains("_locked_destination_card"), "Transit UI separates locked destinations into quiet rows")
+	_check(menu_source.contains('ui.transit.travel_to_free'), "Transit UI labels Anchor travel as free without a price")
 	_check(
 		menu_source.contains('membershipDiscountActive')
-		and menu_source.contains('"membershipFare" if discounted else "standardFare"')
+		and menu_source.contains('ui.transit.tier.blessing')
 		and english_localization.contains('"ui.transit.tier.blessing": "Aether Blessing · 50% off"'),
-		"Transit UI clearly presents the active Aether Blessing fare"
+		"Transit UI presents the active Aether Blessing without a redundant standard-fare banner"
 	)
+	_check(menu_source.contains("_request_selected_confirmation"), "Transit UI uses one fixed travel action for the selected row")
+	_check(menu_source.contains('name = "HeaderCloseButton"'), "Transit UI has a conventional header close action")
 	_check(
 		menu_source.contains("AetherConfirmationDialogScene.instantiate()"),
 		"Transit travel uses the shared styled confirmation dialog"

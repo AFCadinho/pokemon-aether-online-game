@@ -806,6 +806,8 @@ func _is_story_grid_step_blocked(
 ) -> bool:
 	if not _has_story_movement_context():
 		return true
+	if _is_world_barrier_step_blocked(current_position, next_position):
+		return true
 	if direction == Vector2.DOWN and _tilemap_has_tile_at(block_down_tilemap, current_position):
 		return true
 	if direction == Vector2.UP and _tilemap_has_tile_at(block_up_tilemap, current_position):
@@ -929,13 +931,21 @@ func _on_render_viewport_size_changed() -> void:
 	_apply_world_pixel_scale()
 
 func _apply_world_pixel_scale() -> void:
-	if world_camera == null:
+	if world_camera == null or not is_instance_valid(world_camera):
 		return
+	var window := get_window()
+	var viewport := world_camera.get_viewport()
+	# Map teardown removes the player and its camera from the active Window
+	# before Aether Clash restores its temporary zoom. The next map reapplies
+	# the correct baseline, so a detached player must simply skip this update.
+	if window == null or viewport == null:
+		return
+	var window_size := window.size
 	var effective_scale := PixelPerfectRenderingScript.resolve_world_scale_for_area(
-		SettingsManager.world_pixel_scale,
+		SettingsManager.get_effective_world_pixel_scale(window_size),
 		_get_current_map_world_access_area_type()
 	)
-	var canvas_scale := world_camera.get_viewport().get_screen_transform().get_scale()
+	var canvas_scale := viewport.get_screen_transform().get_scale()
 	var baseline_zoom := PixelPerfectRenderingScript.camera_zoom_for_output_scale(
 		effective_scale,
 		canvas_scale
@@ -950,7 +960,7 @@ func _apply_world_pixel_scale() -> void:
 	PixelPerfectRenderingScript.apply_to_camera(
 		world_camera,
 		effective_scale,
-		get_window().size
+		window_size
 	)
 
 
@@ -1671,6 +1681,8 @@ func _try_toggle_land_mount_input() -> bool:
 	if not toggle_land_mount():
 		var message_key := "ui.mounts.interior_blocked" \
 			if _get_current_map_world_access_area_type() == "interior" \
+			else "ui.mounts.license_required" \
+			if not _has_mount_license_for_current_region() \
 			else "ui.mounts.unavailable"
 		get_tree().call_group(
 			"ui_overlay",
@@ -1760,6 +1772,8 @@ func _start_surf_activity(clear_input := true) -> void:
 func _start_land_mount_activity() -> bool:
 	if _get_current_map_world_access_area_type() == "interior":
 		return false
+	if not _has_mount_license_for_current_region():
+		return false
 	var mount_id := MountService.resolve_mount_id_for_mode(
 		SettingsManager.get_selected_mount_id(SettingsManager.MOUNT_MODE_LAND),
 		SettingsManager.MOUNT_MODE_LAND
@@ -1795,6 +1809,39 @@ func _is_mount_owned(mount_id: String) -> bool:
 		and inventory_service.has_method("has_item")
 		and bool(inventory_service.call("has_item", unlock_item_id))
 	)
+
+
+func _has_mount_license_for_current_region() -> bool:
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	return (
+		inventory_service != null
+		and inventory_service.has_method("has_mount_license_for_region")
+		and bool(inventory_service.call(
+			"has_mount_license_for_region",
+			_get_current_mount_license_region_id()
+		))
+	)
+
+
+func _get_current_mount_license_region_id() -> String:
+	var current_map := _resolve_current_map()
+	if current_map == null:
+		return ""
+	if current_map.has_method("get_location_metadata"):
+		var metadata_value: Variant = current_map.call("get_location_metadata")
+		if metadata_value is Dictionary:
+			var metadata := metadata_value as Dictionary
+			for key: String in ["mountLicenseRegionId", "regionId"]:
+				var resolved_region_id := str(metadata.get(key, "")).strip_edges()
+				if not resolved_region_id.is_empty():
+					return resolved_region_id.to_lower()
+	if current_map.has_method("get_map_region_name"):
+		var region_name := str(current_map.call("get_map_region_name")).strip_edges()
+		if not region_name.is_empty():
+			return region_name.to_lower().replace(" ", "_")
+	if current_map.has_method("get_map_id"):
+		return str(current_map.call("get_map_id")).strip_edges().to_lower().get_slice("_", 0)
+	return ""
 
 func _finish_surf_activity(reason := "left_water") -> void:
 	if not surf_activity_active:
@@ -2090,7 +2137,11 @@ func _try_start_move(direction: Vector2) -> bool:
 
 	# Check eerst of de target tile vrij is.
 	# Alleen als can_move_to true teruggeeft, starten we de beweging.
+	if _is_world_barrier_step_blocked(global_position, movement_target_position):
+		return false
 	if not can_move_to(movement_target_position):
+		return false
+	if _is_world_actor_step_blocked(global_position, movement_target_position):
 		return false
 
 	target_position = _snap_world_position(movement_target_position)
@@ -2180,6 +2231,36 @@ func can_move_to(check_position: Vector2) -> bool:
 	var tile_data := collision_tilemap.get_cell_tile_data(tile_position)
 
 	return tile_data == null
+
+
+func _is_world_barrier_step_blocked(from_position: Vector2, to_position: Vector2) -> bool:
+	var current_map := _resolve_current_map()
+	return (
+		current_map != null
+		and current_map.has_method("is_world_barrier_step_blocked")
+		and bool(
+			current_map.call(
+				"is_world_barrier_step_blocked",
+				from_position,
+				to_position
+			)
+		)
+	)
+
+
+func _is_world_actor_step_blocked(from_position: Vector2, to_position: Vector2) -> bool:
+	var current_map := _resolve_current_map()
+	return (
+		current_map != null
+		and current_map.has_method("is_world_actor_step_blocked")
+		and bool(
+			current_map.call(
+				"is_world_actor_step_blocked",
+				from_position,
+				to_position
+			)
+		)
+	)
 
 func _is_direction_blocked_by_current_tile(direction: Vector2) -> bool:
 	if direction == Vector2.DOWN:
@@ -2713,7 +2794,7 @@ func _apply_directional_appearance_layer_order(direction: Vector2) -> void:
 func _get_player_appearance_part_id(category: String) -> String:
 	match CharacterAppearanceService.normalize_part_category(category):
 		"hair":
-			return CharacterAppearanceService.resolve_hair_render_id(
+			return CharacterAppearanceService.deserialize_part_id(
 				PlayerSave.appearance_hair_id
 			)
 		"headgear":

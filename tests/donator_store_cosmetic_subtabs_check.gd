@@ -71,13 +71,25 @@ func _run() -> void:
 		"cosmetic filters no longer require horizontal scrolling"
 	)
 	var add_gems_button := store.find_child("AddGemsButton", true, false) as Button
-	_check(add_gems_button != null, "Store exposes an Add Gems action beside the balance")
+	_check(add_gems_button != null, "Store retains the future Add Gems action")
 	if add_gems_button != null:
-		add_gems_button.pressed.emit()
 		_check(
-			store.status_label.text == "Adding Aether Gems is not implemented yet.",
-			"Add Gems clearly reports that top-ups are not implemented yet"
+			not add_gems_button.visible,
+			"unfinished Gem top-ups stay out of the active Store navigation"
 		)
+	_check(source.contains("product_grid.columns = 3"), "Store catalog uses three compact product columns")
+	_check(
+		source.contains("button.custom_minimum_size = Vector2(0, 140)"),
+		"product cards use a compact browsing height"
+	)
+	_check(
+		not source.contains("func _create_selection_footer()"),
+		"product details and checkout no longer repeat in a separate footer"
+	)
+	_check(
+		store.selection_title_label == store.character_preview_title_label,
+		"selection details, preview and checkout share one contextual panel"
+	)
 
 	store.call("_select_category", "cosmetics")
 	_check(store.cosmetic_subcategory_bar.visible, "cosmetic filters appear inside Cosmetics")
@@ -122,7 +134,12 @@ func _run() -> void:
 		store.product_buttons.size() == 1 and store.product_buttons.has("adinho-chroma-beard"),
 		"catalog search filters products in the active category"
 	)
-	store.call("_on_catalog_search_changed", "")
+	store.call("_select_category", "charms")
+	_check(
+		store.catalog_search_text == "" and store.catalog_search_input.text == "",
+		"changing category clears the previous category's search"
+	)
+	store.call("_select_category", "cosmetics")
 
 	store.call("_select_cosmetic_subcategory", "face")
 	_check(store.active_cosmetic_subcategory == "face", "Face can become the active cosmetic subtab")
@@ -169,7 +186,10 @@ func _run() -> void:
 	_check(store.character_preview_palette.visible, "Classic preview exposes its grayscale hair colour")
 	_check(store.character_preview_viewport.get_child_count() == 1, "character preview renders the current trainer")
 	var preview_visual := store.character_preview_viewport.get_child(0) as Node2D
-	_check(preview_visual.position.y <= 160.0 and preview_visual.scale.y <= 3.0, "preview camera leaves room for the trainer's legs and feet")
+	_check(
+		preview_visual.position.y <= 96.0 and preview_visual.scale.y <= 2.25,
+		"preview camera keeps the trainer visible from head to feet"
+	)
 
 	store.set_trainer_gender("female")
 	_check(store.product_buttons.has("mysterious-outfit"), "unisex Mysterious Outfit stays available for female models")
@@ -423,6 +443,10 @@ func _run() -> void:
 			],
 		}
 	)
+	var mounts_button := store.category_buttons.get("mounts") as Button
+	_check(mounts_button != null and not mounts_button.visible, "categories without purchasable items stay hidden")
+	store.call("_select_category", "featured")
+	_check(store.product_buttons.size() <= 6, "Featured stays curated to at most six varied products")
 	store.call("_select_category", "guilds")
 	_check(store.product_buttons.has("squirtle-guild-emblem-template"), "Guilds lists the Squirtle emblem template")
 	store.call("_select_product", "squirtle-guild-emblem-template")
@@ -517,7 +541,8 @@ func _run() -> void:
 	)
 	_check(not store.purchase_button.disabled, "server-listed Blessing Vouchers can be purchased with Aether Gems")
 	_check(store.selection_price_label.text.contains("75"), "Blessing Vouchers use their authoritative Aether Gem price")
-	_check(store.status_label.text.contains("item goes to your Bag"), "Blessing checkout sends the voucher to the Bag")
+	_check(store.purchase_button.text.contains("75"), "checkout button includes the authoritative Gem price")
+	_check(store.status_label.text.contains("25 remaining"), "checkout previews the remaining Gem balance")
 	var blessing_icon_paths := {
 		"aether-blessing-voucher-3-days": "res://assets/items/icons/AETHERBLESSINGVOUCHER3DAYS.png",
 		"aether-blessing-voucher-7-days": "res://assets/items/icons/AETHERBLESSINGVOUCHER7DAYS.png",

@@ -27,10 +27,6 @@
     "name": "球根",
     "shortDesc": "一次性使用的球根。携带它的宝可梦如果受到水属性招式的攻击，特攻就会提高。"
   },
-  "acro-bike": {
-    "name": "越野自行车",
-    "shortDesc": "能做出跳跃或抬前轮动作的折叠式自行车。"
-  },
   "adamant-crystal": {
     "name": "大金刚宝玉",
     "shortDesc": "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power."
@@ -183,10 +179,6 @@
     "name": "胡地进化石",
     "shortDesc": "让胡地携带后，在战斗时就能进行超级进化的一种神奇超级石。"
   },
-  "aloraichium-z--bag": {
-    "name": "阿罗雷Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将阿罗拉地区雷丘的十万伏特升级成特殊Ｚ招式的Ｚ力量结晶。"
-  },
   "aloraichium-z--held": {
     "name": "阿罗雷Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将阿罗拉地区雷丘的十万伏特升级成Ｚ招式。"
@@ -230,10 +222,6 @@
   "armor-pass": {
     "name": "铠甲车票",
     "shortDesc": "前往铠岛的车票。在木杆镇的车站，把它出示给站务员看吧。"
-  },
-  "armorite-ore": {
-    "name": "铠甲矿石",
-    "shortDesc": "能够在铠岛找出的珍稀石头。把它送给铠岛的收藏家，就会有好事发生。"
   },
   "aspear-berry": {
     "name": "利木果",
@@ -343,10 +331,6 @@
     "name": "野莓糖饰",
     "shortDesc": "浆果形状的工艺糖果。让小仙奶携带的话，会高兴地转圈圈。"
   },
-  "bicycle": {
-    "name": "Bicycle",
-    "shortDesc": "Use for fast transit."
-  },
   "big-malasada": {
     "name": "大马拉萨达",
     "shortDesc": "阿罗拉特产的油炸面包。能治愈１只宝可梦的所有异常状态。"
@@ -366,18 +350,6 @@
   "big-root": {
     "name": "大根茎",
     "shortDesc": "携带后，吸取ＨＰ的招式可以比平时更多地回复自己的ＨＰ。"
-  },
-  "bike": {
-    "name": "Bike",
-    "shortDesc": "Lets the player travel faster."
-  },
-  "bike--green": {
-    "name": "自行车",
-    "shortDesc": "能比跑步鞋跑得还快的折叠式自行车。"
-  },
-  "bike--yellow": {
-    "name": "自行车",
-    "shortDesc": "能比跑步鞋跑得还快的折叠式自行车。"
   },
   "bike-voucher": {
     "name": "自行车兑换券",
@@ -526,10 +498,6 @@
   "bug-memory": {
     "name": "虫子存储碟",
     "shortDesc": "装有虫属性数据的存储碟。特定宝可梦携带后，属性就会发生变化。"
-  },
-  "buginium-z--bag": {
-    "name": "虫Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将虫属性招式升级成Ｚ招式的Ｚ力量结晶。"
   },
   "buginium-z--held": {
     "name": "虫Ｚ",
@@ -819,6 +787,10 @@
     "name": "摩托蜥坐骑",
     "shortDesc": "解锁摩托蜥作为陆地坐骑。"
   },
+  "mount-license": {
+    "name": "坐骑许可证",
+    "shortDesc": "列出允许你召唤陆地坐骑的地区。"
+  },
   "damp-mulch": {
     "name": "湿湿肥",
     "shortDesc": "培育树果时的肥料。但完全不适合丰缘地区的土壤，所以没什么效果。"
@@ -839,10 +811,6 @@
     "name": "黑暗石",
     "shortDesc": "捷克罗姆的肉体毁灭后变成的样子。据说它在等待着英雄的到来。"
   },
-  "darkinium-z--bag": {
-    "name": "恶Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将恶属性招式升级成Ｚ招式的Ｚ力量结晶。"
-  },
   "darkinium-z--held": {
     "name": "恶Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将恶属性的招式升级成Ｚ招式。"
@@ -854,10 +822,6 @@
   "dawn-stone": {
     "name": "觉醒之石",
     "shortDesc": "能让某些特定宝可梦进化的神奇石头。像眼眸一般光彩动人。"
-  },
-  "decidium-z--bag": {
-    "name": "狙射树枭Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将狙射树枭的缝影升级成特殊Ｚ招式的Ｚ力量结晶。"
   },
   "decidium-z--held": {
     "name": "狙射树枭Ｚ",
@@ -975,10 +939,6 @@
     "name": "Dragoninite",
     "shortDesc": "If held by a Dragonite, this item allows it to Mega Evolve in battle."
   },
-  "dragonium-z--bag": {
-    "name": "龙Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将龙属性招式升级成Ｚ招式的Ｚ力量结晶。"
-  },
   "dragonium-z--held": {
     "name": "龙Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将龙属性的招式升级成Ｚ招式。"
@@ -1043,10 +1003,6 @@
     "name": "Eelektrossite",
     "shortDesc": "If held by an Eelektross, this item allows it to Mega Evolve in battle."
   },
-  "eevium-z--bag": {
-    "name": "伊布Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将伊布的珍藏升级成特殊Ｚ招式的Ｚ力量结晶。"
-  },
   "eevium-z--held": {
     "name": "伊布Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将伊布的珍藏升级成Ｚ招式。"
@@ -1074,10 +1030,6 @@
   "electric-seed": {
     "name": "电气种子",
     "shortDesc": "让宝可梦携带后，在电气场地上使用，防御就会提高。"
-  },
-  "electrium-z--bag": {
-    "name": "电Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将电属性招式升级成Ｚ招式的Ｚ力量结晶。"
   },
   "electrium-z--held": {
     "name": "电Ｚ",
@@ -1183,10 +1135,6 @@
     "name": "探险套装",
     "shortDesc": "装着有助于探险且方便使用的道具的袋子。有了它就可以进入地下通道。"
   },
-  "fairium-z--bag": {
-    "name": "妖精Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将妖精属性招式升级成Ｚ招式的Ｚ力量结晶。"
-  },
   "fairium-z--held": {
     "name": "妖精Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将妖精属性的招式升级成Ｚ招式。"
@@ -1239,10 +1187,6 @@
     "name": "战斗存储碟",
     "shortDesc": "装有格斗属性数据的存储碟。特定宝可梦携带后，属性就会发生变化。"
   },
-  "fightinium-z--bag": {
-    "name": "格斗Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将格斗属性招式升级成Ｚ招式的Ｚ力量结晶。"
-  },
   "fightinium-z--held": {
     "name": "格斗Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将格斗属性的招式升级成Ｚ招式。"
@@ -1262,10 +1206,6 @@
   "fire-stone": {
     "name": "火之石",
     "shortDesc": "能让某些特定宝可梦进化的神奇石头。看上去是橙黄色的。"
-  },
-  "firium-z--bag": {
-    "name": "火Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将火属性招式升级成Ｚ招式的Ｚ力量结晶。"
   },
   "firium-z--held": {
     "name": "火Ｚ",
@@ -1318,10 +1258,6 @@
   "flying-memory": {
     "name": "飞翔存储碟",
     "shortDesc": "装有飞行属性数据的存储碟。特定宝可梦携带后，属性就会发生变化。"
-  },
-  "flyinium-z--bag": {
-    "name": "飞行Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将飞行属性招式升级成Ｚ招式的Ｚ力量结晶。"
   },
   "flyinium-z--held": {
     "name": "飞行Ｚ",
@@ -1455,10 +1391,6 @@
     "name": "幽灵存储碟",
     "shortDesc": "装有幽灵属性数据的存储碟。特定宝可梦携带后，属性就会发生变化。"
   },
-  "ghostium-z--bag": {
-    "name": "幽灵Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将幽灵属性招式升级成Ｚ招式的Ｚ力量结晶。"
-  },
   "ghostium-z--held": {
     "name": "幽灵Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将幽灵属性的招式升级成Ｚ招式。"
@@ -1478,10 +1410,6 @@
   "go-goggles": {
     "name": "ＧＯＧＯ护目镜",
     "shortDesc": "能在沙漠的沙暴中保护眼睛的出色护目镜。"
-  },
-  "god-stone": {
-    "name": "god stone",
-    "shortDesc": "Unknown. Currently unused."
   },
   "gold-bottle-cap": {
     "name": "金色王冠",
@@ -1534,10 +1462,6 @@
   "grass-memory": {
     "name": "青草存储碟",
     "shortDesc": "装有草属性数据的存储碟。特定宝可梦携带后，属性就会发生变化。"
-  },
-  "grassium-z--bag": {
-    "name": "草Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将草属性招式升级成Ｚ招式的Ｚ力量结晶。"
   },
   "grassium-z--held": {
     "name": "草Ｚ",
@@ -1594,10 +1518,6 @@
   "ground-memory": {
     "name": "大地存储碟",
     "shortDesc": "装有地面属性数据的存储碟。特定宝可梦携带后，属性就会发生变化。"
-  },
-  "groundium-z--bag": {
-    "name": "地面Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将地面属性招式升级成Ｚ招式的Ｚ力量结晶。"
   },
   "groundium-z--held": {
     "name": "地面Ｚ",
@@ -1803,10 +1723,6 @@
     "name": "冰柱石板",
     "shortDesc": "冰属性的石板。携带后，冰属性的招式威力就会增强。"
   },
-  "icium-z--bag": {
-    "name": "冰Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将冰属性招式升级成Ｚ招式的Ｚ力量结晶。"
-  },
   "icium-z--held": {
     "name": "冰Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将冰属性的招式升级成Ｚ招式。"
@@ -1822,10 +1738,6 @@
   "impish-mint": {
     "name": "淘气薄荷",
     "shortDesc": "宝可梦闻了这种薄荷之后，会令防御容易提高，而特攻则难以提高。"
-  },
-  "incinium-z--bag": {
-    "name": "炽焰咆哮虎Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将炽焰咆哮虎的ＤＤ金勾臂升级成特殊Ｚ招式的Ｚ力量结晶。"
   },
   "incinium-z--held": {
     "name": "炽焰咆哮虎Ｚ",
@@ -1919,10 +1831,6 @@
     "name": "王者之证",
     "shortDesc": "携带后进行攻击，在造成伤害时，有时会让对手畏缩。"
   },
-  "kommonium-z--bag": {
-    "name": "杖尾鳞甲龙Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将杖尾鳞甲龙的鳞片噪音升级成Ｚ招式的Ｚ力量结晶。"
-  },
   "kommonium-z--held": {
     "name": "杖尾鳞甲龙Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将杖尾鳞甲龙的鳞片噪音升级成Ｚ招式。"
@@ -1970,10 +1878,6 @@
   "leaf-stone": {
     "name": "叶之石",
     "shortDesc": "能让某些特定宝可梦进化的神奇石头。有着叶子般的花纹。"
-  },
-  "left-poke-ball": {
-    "name": "留下的精灵球",
-    "shortDesc": "该精灵球里面装的是没有了训练家的宝可梦。那位训练家好像是出生自乌拉乌拉岛。"
   },
   "leftovers": {
     "name": "吃剩的东西",
@@ -2067,10 +1971,6 @@
     "name": "帅哥券",
     "shortDesc": "喷有闪闪发光的涂料，帅哥亲手制作的券。"
   },
-  "loot-sack": {
-    "name": "宝物袋",
-    "shortDesc": "结实的大袋子。可以将在煤矿里获得的宝物放进去。"
-  },
   "lopunnite": {
     "name": "长耳兔进化石",
     "shortDesc": "长耳兔携带后，在战斗时就能进行超级进化的一种神奇超级石。"
@@ -2119,10 +2019,6 @@
     "name": "密阿雷格雷派饼",
     "shortDesc": "在密阿雷市很受欢迎的点心。能治愈１只宝可梦的所有异常状态。"
   },
-  "lunalium-z--bag": {
-    "name": "露奈雅拉Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将露奈雅拉的暗影之光升级成Ｚ招式的Ｚ力量结晶。"
-  },
   "lunalium-z--held": {
     "name": "露奈雅拉Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将露奈雅拉的暗影之光升级成Ｚ招式。"
@@ -2151,17 +2047,9 @@
     "name": "豪华球",
     "shortDesc": "舒适宜居的球。捉到的野生宝可梦会变得非常容易和训练家亲密。"
   },
-  "lycanium-z--bag": {
-    "name": "鬃岩狼人Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将鬃岩狼人的尖石攻击升级成Ｚ招式的Ｚ力量结晶。"
-  },
   "lycanium-z--held": {
     "name": "鬃岩狼人Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将鬃岩狼人的尖石攻击升级成Ｚ招式。"
-  },
-  "mach-bike": {
-    "name": "音速自行车",
-    "shortDesc": "能以２倍以上的速度移动的折叠式自行车。"
   },
   "machine-part": {
     "name": "机械零件",
@@ -2231,10 +2119,6 @@
     "name": "证章护符",
     "shortDesc": "神奇而富有个性的护符。拥有该护符后，会更容易遇到带有证章的宝可梦。"
   },
-  "marshadium-z--bag": {
-    "name": "玛夏多Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将玛夏多的暗影偷盗升级成特殊Ｚ招式的Ｚ力量结晶。"
-  },
   "marshadium-z--held": {
     "name": "玛夏多Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将玛夏多的暗影偷盗升级成Ｚ招式。"
@@ -2274,10 +2158,6 @@
   "max-potion": {
     "name": "全满药",
     "shortDesc": "喷雾式伤药。能让１只宝可梦回复所有ＨＰ。"
-  },
-  "max-repel": {
-    "name": "黄金喷雾",
-    "shortDesc": "弱小的野生宝可梦将完全不会出现。效果比白银喷雾更持久。"
   },
   "max-revive": {
     "name": "活力块",
@@ -2399,10 +2279,6 @@
     "name": "节拍器",
     "shortDesc": "携带后，连续使出相同招式时，威力就会提高。不再使出相同招式时，威力就会复原。"
   },
-  "mewnium-z--bag": {
-    "name": "梦幻Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将梦幻的精神强念升级成特殊Ｚ招式的Ｚ力量结晶。"
-  },
   "mewnium-z--held": {
     "name": "梦幻Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将梦幻的精神强念升级成Ｚ招式。"
@@ -2434,10 +2310,6 @@
   "mild-mint": {
     "name": "慢吞吞薄荷",
     "shortDesc": "宝可梦闻了这种薄荷之后，会令特攻容易提高，而防御则难以提高。"
-  },
-  "mimikium-z--bag": {
-    "name": "谜拟ＱＺ",
-    "shortDesc": "可用它来制造用于对战并能将谜拟Ｑ的嬉闹升级成Ｚ招式的Ｚ力量结晶。"
   },
   "mimikium-z--held": {
     "name": "谜拟ＱＺ",
@@ -2578,10 +2450,6 @@
   "normal-gem": {
     "name": "一般宝石",
     "shortDesc": "一般属性的宝石。携带后，一般属性的招式威力仅会增强１次。"
-  },
-  "normalium-z--bag": {
-    "name": "一般Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将一般属性招式升级成Ｚ招式的Ｚ力量结晶。"
   },
   "normalium-z--held": {
     "name": "一般Ｚ",
@@ -2743,17 +2611,9 @@
     "name": "大比鸟进化石",
     "shortDesc": "让大比鸟携带后，在战斗时就能进行超级进化的一种神奇超级石。"
   },
-  "pikanium-z--bag": {
-    "name": "皮卡丘Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将皮卡丘的伏特攻击升级成特殊Ｚ招式的Ｚ力量结晶。"
-  },
   "pikanium-z--held": {
     "name": "皮卡丘Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将皮卡丘的伏特攻击升级成Ｚ招式。"
-  },
-  "pikashunium-z--bag": {
-    "name": "智皮卡Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将戴着帽子的皮卡丘的十万伏特升级成特殊Ｚ招式的Ｚ力量结晶。"
   },
   "pikashunium-z--held": {
     "name": "智皮卡Ｚ",
@@ -2814,10 +2674,6 @@
   "poison-memory": {
     "name": "毒存储碟",
     "shortDesc": "装有毒属性数据的存储碟。特定宝可梦携带后，属性就会发生变化。"
-  },
-  "poisonium-z--bag": {
-    "name": "毒Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将毒属性招式升级成Ｚ招式的Ｚ力量结晶。"
   },
   "poisonium-z--held": {
     "name": "毒Ｚ",
@@ -2935,10 +2791,6 @@
     "name": "美丽之羽",
     "shortDesc": "仅仅只是漂亮，没有任何效果，极其普通的羽毛。"
   },
-  "primarium-z--bag": {
-    "name": "西狮海壬Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将西狮海壬的泡影的咏叹调升级成特殊Ｚ招式的Ｚ力量结晶。"
-  },
   "primarium-z--held": {
     "name": "西狮海壬Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将西狮海壬的泡影的咏叹调升级成Ｚ招式。"
@@ -2986,10 +2838,6 @@
   "psychic-seed": {
     "name": "精神种子",
     "shortDesc": "让宝可梦携带后，在精神场地上使用，特防就会提高。"
-  },
-  "psychium-z--bag": {
-    "name": "超能力Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将超能力属性招式升级成Ｚ招式的Ｚ力量结晶。"
   },
   "psychium-z--held": {
     "name": "超能力Ｚ",
@@ -3207,13 +3055,13 @@
     "name": "重复球",
     "shortDesc": "有点与众不同的球。能很容易地捕捉以前曾捉到过的宝可梦。"
   },
-  "repel": {
-    "name": "除虫喷雾",
-    "shortDesc": "使用后，在较短的一段时间内，弱小的野生宝可梦将完全不会出现。"
-  },
   "resist-wing": {
     "name": "抵抗之羽",
     "shortDesc": "用于宝可梦的道具。能稍微提高１只宝可梦的防御的基础点数。"
+  },
+  "resonite-ore": {
+    "name": "共鸣矿石",
+    "shortDesc": "一种带有结晶核心的深色矿物，会与宝可梦的战斗本能产生共鸣。"
   },
   "reveal-glass": {
     "name": "现形镜",
@@ -3283,10 +3131,6 @@
     "name": "Rock Smash Charm",
     "shortDesc": "Lets you use Rock Smash without a Pokemon knowing it."
   },
-  "rockium-z--bag": {
-    "name": "岩石Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将岩石属性招式升级成Ｚ招式的Ｚ力量结晶。"
-  },
   "rockium-z--held": {
     "name": "岩石Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将岩石属性的招式升级成Ｚ招式。"
@@ -3294,10 +3138,6 @@
   "rocky-helmet": {
     "name": "凸凸头盔",
     "shortDesc": "让宝可梦携带后，在受到打击招式攻击时，能给予对手伤害。"
-  },
-  "roller-skates": {
-    "name": "轮滑鞋",
-    "shortDesc": "鞋底下装着滑轮。能在地面上滑行，或漂亮地表演特技。"
   },
   "room-service": {
     "name": "客房服务",
@@ -3315,66 +3155,6 @@
     "name": "洛玫果",
     "shortDesc": "让宝可梦携带后，在受到效果绝佳的妖精属性招式攻击时，能令其威力减弱。"
   },
-  "roto-bargain": {
-    "name": "优惠碰碰",
-    "shortDesc": "洛托姆之力的一种。使用后，友好商店的商品就会变成半价。"
-  },
-  "roto-boost": {
-    "name": "加油碰碰",
-    "shortDesc": "洛托姆之力的一种。正在战斗的我方宝可梦的所有能力都会提高。"
-  },
-  "roto-catch": {
-    "name": "捕捉碰碰",
-    "shortDesc": "洛托姆之力的一种。使用后，眼前的野生宝可梦会变得非常容易捕捉。"
-  },
-  "roto-encounter": {
-    "name": "相遇碰碰",
-    "shortDesc": "洛托姆之力的一种。一定时间内，会变得容易遇到高等级的野生宝可梦。"
-  },
-  "roto-exp-points": {
-    "name": "经验碰碰",
-    "shortDesc": "洛托姆之力的一种。对战后能得到的经验值会稍微增加。"
-  },
-  "roto-friendship": {
-    "name": "亲密碰碰",
-    "shortDesc": "洛托姆之力的一种。带在身边的宝可梦会变得非常容易亲近。"
-  },
-  "roto-hatch": {
-    "name": "孵蛋碰碰",
-    "shortDesc": "洛托姆之力的一种。使用后，蛋就会变得非常容易孵化。"
-  },
-  "roto-hp-restore": {
-    "name": "ＨＰ回复碰碰",
-    "shortDesc": "洛托姆之力的一种。正在战斗的我方宝可梦的ＨＰ会全部回复。"
-  },
-  "roto-pp-restore": {
-    "name": "ＰＰ回复碰碰",
-    "shortDesc": "洛托姆之力的一种。正在战斗的我方宝可梦的ＰＰ会全部回复。"
-  },
-  "roto-prize-money": {
-    "name": "零花钱碰碰",
-    "shortDesc": "洛托姆之力的一种。对战后能得到的零花钱会变成３倍。"
-  },
-  "roto-stealth": {
-    "name": "隐身碰碰",
-    "shortDesc": "洛托姆之力的一种。一定时间内，会变得完全不会遇到野生宝可梦。"
-  },
-  "rotom-bike": {
-    "name": "洛托姆自行车",
-    "shortDesc": "宝可梦洛托姆潜入马达后，这辆自行车变得可以通过涡轮发动机加速了。"
-  },
-  "rotom-bike--glistening-black": {
-    "name": "洛托姆自行车",
-    "shortDesc": "能借助洛托姆的力量进行涡轮加速，且可在水面上骑行的自行车。闪烁着红黑色光泽的炫耀黑。"
-  },
-  "rotom-bike--sparkling-white": {
-    "name": "洛托姆自行车",
-    "shortDesc": "能借助洛托姆的力量进行涡轮加速，且可在水面上骑行的自行车。洁白耀眼的闪亮白。"
-  },
-  "rotom-bike--water-mode": {
-    "name": "洛托姆自行车",
-    "shortDesc": "自行车和宝可梦洛托姆组合后，不仅可以通过涡轮发动机加速，而且可以在水面上骑行。"
-  },
   "rotom-catalog": {
     "name": "洛托姆型录",
     "shortDesc": "上面记载着洛托姆喜欢的家电。通过使用这本指南，可以让洛托姆潜入或脱离家电。"
@@ -3386,10 +3166,6 @@
   "ruby": {
     "name": "Ruby",
     "shortDesc": "Give to Celio with Sapphire to activate Network Machine and get Rainbow Pass."
-  },
-  "rule-book": {
-    "name": "规则书",
-    "shortDesc": "写着对战规则。在进行连接对战时，可以选择规则。"
   },
   "rusted-shield": {
     "name": "腐朽的盾",
@@ -3478,10 +3254,6 @@
   "sea-incense": {
     "name": "海潮薰香",
     "shortDesc": "有着神奇香气的薰香。携带后，水属性的招式威力就会提高。"
-  },
-  "seal-bag": {
-    "name": "贴纸袋",
-    "shortDesc": "可以放入１０张贴纸的小袋子。"
   },
   "seal-case": {
     "name": "贴纸盒",
@@ -3627,10 +3399,6 @@
     "name": "沙沙岩石",
     "shortDesc": "携带它的宝可梦使出沙暴的话，沙暴的时间就会比平时更长。"
   },
-  "snorlium-z--bag": {
-    "name": "卡比兽Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将卡比兽的终极冲击升级成特殊Ｚ招式的Ｚ力量结晶。"
-  },
   "snorlium-z--held": {
     "name": "卡比兽Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将卡比兽的终极冲击升级成Ｚ招式。"
@@ -3650,10 +3418,6 @@
   "soft-sand": {
     "name": "柔软沙子",
     "shortDesc": "手感细腻的沙子。携带后，地面属性的招式威力就会提高。"
-  },
-  "solganium-z--bag": {
-    "name": "索尔迦雷欧Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将索尔迦雷欧的流星闪冲升级成Ｚ招式的Ｚ力量结晶。"
   },
   "solganium-z--held": {
     "name": "索尔迦雷欧Ｚ",
@@ -3767,10 +3531,6 @@
     "name": "钢铁存储碟",
     "shortDesc": "装有钢属性数据的存储碟。特定宝可梦携带后，属性就会发生变化。"
   },
-  "steelium-z--bag": {
-    "name": "钢Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将钢属性招式升级成Ｚ招式的Ｚ力量结晶。"
-  },
   "steelium-z--held": {
     "name": "钢Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将钢属性的招式升级成Ｚ招式。"
@@ -3851,10 +3611,6 @@
     "name": "好伤药",
     "shortDesc": "喷雾式伤药。能让１只宝可梦回复６０ＨＰ。"
   },
-  "super-repel": {
-    "name": "白银喷雾",
-    "shortDesc": "弱小的野生宝可梦将完全不会出现。效果比除虫喷雾更持久。"
-  },
   "super-rod": {
     "name": "厉害钓竿",
     "shortDesc": "最新的厉害钓竿。在有水的地方使用的话，可以钓到宝可梦。"
@@ -3898,10 +3654,6 @@
   "tanga-berry": {
     "name": "扁樱果",
     "shortDesc": "让宝可梦携带后，在受到效果绝佳的虫属性招式攻击时，能令其威力减弱。"
-  },
-  "tapunium-z--bag": {
-    "name": "卡璞Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将卡璞们的自然之怒升级成特殊Ｚ招式的Ｚ力量结晶。"
   },
   "tapunium-z--held": {
     "name": "卡璞Ｚ",
@@ -5543,10 +5295,6 @@
     "name": "高级球",
     "shortDesc": "比起超级球来更容易捉到宝可梦的，性能非常不错的球。"
   },
-  "ultranecrozium-z--bag": {
-    "name": "究极奈克洛Ｚ",
-    "shortDesc": "能让和索尔迦雷欧或露奈雅拉合体的奈克洛兹玛变成崭新样子的结晶。"
-  },
   "ultranecrozium-z--held": {
     "name": "究极奈克洛Ｚ",
     "shortDesc": "Ｚ力量的结晶。会将奈克洛兹玛的光子喷涌升级成Ｚ招式。"
@@ -5610,10 +5358,6 @@
   "waterfall-charm": {
     "name": "Waterfall Charm",
     "shortDesc": "Lets you use Waterfall without a Pokemon knowing it."
-  },
-  "waterium-z--bag": {
-    "name": "水Ｚ",
-    "shortDesc": "可用它来制造用于对战并能将水属性招式升级成Ｚ招式的Ｚ力量结晶。"
   },
   "waterium-z--held": {
     "name": "水Ｚ",

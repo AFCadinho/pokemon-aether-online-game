@@ -6,6 +6,12 @@ const WorldPresenceServiceScript := preload("res://scripts/services/world_presen
 class FakeAuthService extends Node:
 	var current_user: Dictionary = {}
 
+class FakeAetherClashDuelController extends Node:
+	var visible_user_ids: Dictionary = {}
+
+	func can_view_overworld_identity(user_id: int) -> bool:
+		return visible_user_ids.has(user_id)
+
 var failed := false
 var coordinator: Node
 var auth_service: Node
@@ -42,12 +48,29 @@ func _check_trade_context_action() -> void:
 	coordinator.trade_capabilities = {"enabled": true}
 	coordinator.trade_capabilities_loaded = true
 	coordinator.open_context_for_player(
-		{"userId": 7, "username": "misty", "displayName": "Misty"},
+		{
+			"userId": 7,
+			"username": "misty",
+			"displayName": "Misty",
+			"gender": "female",
+			"appearance": {
+				"body": "Gen4_Base_F_v1",
+				"hair": "Aether_Blossom_Hair",
+				"top": "Aether_Blossom_Dress",
+			},
+		},
 		Vector2(400, 200)
 	)
 	await process_frame
 	await process_frame
 	await process_frame
+	_check_equal(
+		coordinator.context_avatar_preview != null
+		and coordinator.context_avatar_preview.portrait != null
+		and coordinator.context_avatar_preview.portrait.visible,
+		true,
+		"trainer context card renders the selected player's sprite portrait"
+	)
 	_check_equal(
 		is_equal_approx(
 			coordinator.context_menu.size.y,
@@ -62,6 +85,7 @@ func _check_trade_context_action() -> void:
 	if trade_button != null:
 		var viewport_rect := get_root().get_visible_rect()
 		_check_equal(viewport_rect.encloses(trade_button.get_global_rect()), true, "Trade action remains inside the viewport")
+	await _check_context_page_navigation()
 
 	coordinator.trade_capabilities.clear()
 	coordinator.trade_capabilities_loaded = false
@@ -88,10 +112,71 @@ func _check_trade_context_action() -> void:
 	_check_equal(trade_button != null and trade_button.disabled, true, "authoritatively disabled trading remains visible but cannot start")
 
 	await _check_guild_invite_context_action()
-	_check_chat_moderation_context_action()
+	await _check_aether_clash_context_action()
+	await _check_chat_moderation_context_action()
 	await _check_live_localization()
-	coordinator.close_context_menu()
+	await _check_context_outside_click()
+	await _check_aether_clash_identity_filtering()
 	host.queue_free()
+
+
+func _check_context_page_navigation() -> void:
+	_check_equal(coordinator.context_status_dot != null and coordinator.context_status_dot.text == "●", true, "trainer status uses a compact identity-row indicator")
+	_check_equal(_find_player_action("Message") != null, true, "quick actions page starts with Message")
+	_check_equal(_find_player_action("View Trainer Card") == null, true, "secondary actions stay off the quick page")
+	var message_button := _find_player_action("Message")
+	_check_equal(
+		message_button != null and message_button.find_child("ActionIcon", true, false) != null,
+		true,
+		"quick actions include a consistent scan icon"
+	)
+	var more_button := _find_player_action("More actions")
+	_check_equal(more_button != null, true, "quick actions expose More actions navigation")
+	if more_button != null:
+		more_button.pressed.emit()
+	await process_frame
+	await process_frame
+	var back_button := _find_player_action("Back to quick actions")
+	_check_equal(_find_player_action("Message") == null, true, "secondary page replaces rather than extends quick actions")
+	_check_equal(_find_player_action("View Trainer Card") != null, true, "secondary page exposes Trainer Card")
+	_check_equal(back_button != null, true, "secondary page has an explicit back action")
+	_check_equal(
+		coordinator.context_menu.get_combined_minimum_size().y < 500.0,
+		true,
+		"secondary page stays compact on a standard-height viewport"
+	)
+	_check_equal(
+		back_button != null
+		and back_button.focus_mode == Control.FOCUS_ALL
+		and back_button.get_theme_stylebox("focus") is StyleBoxFlat,
+		true,
+		"back action keeps visible keyboard focus navigation"
+	)
+	if back_button != null:
+		back_button.pressed.emit()
+	await process_frame
+	_check_equal(_find_player_action("Message") != null, true, "back returns to quick actions")
+	_check_equal(_find_player_action("View Trainer Card") == null, true, "back removes secondary actions")
+
+
+func _check_context_outside_click() -> void:
+	coordinator.open_context_for_player(
+		{"userId": 7, "username": "misty", "displayName": "Misty"},
+		Vector2(400, 200)
+	)
+	await process_frame
+	var inside_event := InputEventMouseButton.new()
+	inside_event.button_index = MOUSE_BUTTON_LEFT
+	inside_event.pressed = true
+	inside_event.global_position = coordinator.context_menu.get_global_rect().get_center()
+	coordinator._input(inside_event)
+	_check_equal(coordinator.context_menu.visible, true, "clicking inside keeps the trainer actions open")
+	var outside_event := InputEventMouseButton.new()
+	outside_event.button_index = MOUSE_BUTTON_LEFT
+	outside_event.pressed = true
+	outside_event.global_position = Vector2(2, 2)
+	coordinator._input(outside_event)
+	_check_equal(coordinator.context_menu.visible, false, "clicking outside closes the trainer actions")
 
 func _check_live_localization() -> void:
 	var manager := root.get_node_or_null("LocalizationManager")
@@ -113,6 +198,12 @@ func _check_live_localization() -> void:
 		true,
 		"Nearby actions display Dutch without changing their canonical action id"
 	)
+	coordinator._toggle_context_more_actions()
+	await process_frame
+	var back_button := _find_player_action("Back to quick actions")
+	_check_equal(back_button != null and back_button.text.contains("Terug naar snelle acties"), true, "secondary-page back navigation renders in Dutch")
+	_check_equal(_find_label_with_text(coordinator.context_actions, "VEILIGHEID") != null, true, "Safety section renders in Dutch")
+	coordinator._toggle_context_more_actions()
 	manager.set_locale("en")
 	await process_frame
 
@@ -174,6 +265,100 @@ func _check_guild_invite_context_action() -> void:
 	)
 
 
+func _check_aether_clash_context_action() -> void:
+	coordinator.guild_membership = {
+		"guildId": 4,
+		"role": "captain",
+		"permissions": ["challenge_aether_clash"],
+	}
+	coordinator.guild_membership_loaded = true
+	coordinator.current_target = {
+		"userId": 7,
+		"username": "misty",
+		"displayName": "Misty",
+	}
+	coordinator.social_state_loading = true
+	coordinator.context_more_actions_expanded = false
+	coordinator._render_context_menu()
+	await process_frame
+	var challenge_button := _find_player_action("Challenge to Aether Clash")
+	_check_equal(
+		challenge_button != null and not challenge_button.disabled,
+		true,
+		"Guild Captains receive an independent right-click Aether Clash action"
+	)
+	if challenge_button != null:
+		challenge_button.pressed.emit()
+	await process_frame
+	var dialog := coordinator.host.find_child(
+		"AetherClashPlayerChallengeDialog",
+		true,
+		false
+	) as AetherConfirmationDialog
+	_check_equal(dialog != null, true, "right-click challenge uses the shared Aether confirmation")
+	_check_equal(
+		dialog != null and dialog.get_node("Shade").visible,
+		true,
+		"right-click challenge dims the world behind its custom modal"
+	)
+	var spectator_access := (
+		dialog.find_child("AetherClashPlayerSpectatorAccess", true, false) as OptionButton
+		if dialog != null
+		else null
+	)
+	_check_equal(
+		spectator_access != null
+		and spectator_access.get_item_metadata(0) == "public"
+		and spectator_access.get_item_metadata(1) == "guilds_only",
+		true,
+		"right-click challenge configures public or Guild-only spectators"
+	)
+	_check_equal(
+		spectator_access != null
+		and spectator_access.get_theme_stylebox("normal") is StyleBoxFlat,
+		true,
+		"right-click challenge styles the spectator selector"
+	)
+	var tier_selector := (
+		dialog.find_child("AetherClashPlayerTier", true, false) as OptionButton
+		if dialog != null
+		else null
+	)
+	_check_equal(
+		tier_selector != null
+		and tier_selector.item_count == 2
+		and tier_selector.get_item_text(0) == "Aether OU"
+		and tier_selector.get_item_metadata(0) == "aether-ou"
+		and tier_selector.get_item_text(1) == "Aether UU"
+		and tier_selector.get_item_metadata(1) == "aether-uu",
+		true,
+		"right-click challenge offers both Aether OU and Aether UU"
+	)
+	if dialog != null:
+		dialog.cancel_button.pressed.emit()
+	await process_frame
+	coordinator._render_context_menu()
+	await process_frame
+	_check_equal(
+		_find_player_action("Challenge to Aether Clash") != null,
+		true,
+		"target rank does not hide the challenge action before server validation"
+	)
+	coordinator.guild_membership = {
+		"guildId": 4,
+		"role": "member",
+		"permissions": [],
+	}
+	coordinator.social_state_loading = false
+	coordinator._render_context_menu()
+	await process_frame
+	_check_equal(
+		_find_player_action("Challenge to Aether Clash") == null,
+		true,
+		"regular Guild members cannot send right-click Aether Clash challenges"
+	)
+
+
 func _check_chat_moderation_context_action() -> void:
 	auth_service.current_user = {
 		"id": 1,
@@ -182,11 +367,17 @@ func _check_chat_moderation_context_action() -> void:
 		"permissions": [],
 	}
 	coordinator.current_target = {"userId": 7, "username": "misty", "displayName": "Misty"}
+	coordinator.guild_membership = {"guildId": 4, "role": "officer"}
+	coordinator.guild_membership_loaded = true
+	coordinator.guild_members.clear()
+	coordinator.guild_members.append({"userId": 9, "username": "brock"})
+	coordinator.guild_members_loaded = true
 	coordinator.context_more_actions_expanded = true
 	coordinator.social_state_loading = true
 	coordinator.chat_moderation_state_loading = true
 	coordinator.chat_target_is_muted = false
 	coordinator._render_context_menu()
+	await process_frame
 	var requested_actions: Array[String] = []
 	var requested_players: Array[Dictionary] = []
 	coordinator.chat_moderation_requested.connect(
@@ -195,11 +386,16 @@ func _check_chat_moderation_context_action() -> void:
 			requested_players.append(player)
 	)
 	var mute_button := _find_player_action("Mute Player")
+	var block_button := _find_player_action("Block")
 	_check_equal(
 		mute_button != null and not mute_button.disabled,
 		true,
 		"Owner can use direct-player mute while unrelated social state is loading"
 	)
+	_check_equal(_find_player_action("Invite to Guild") != null, true, "staff-sized secondary page retains eligible Guild actions")
+	_check_equal(coordinator.context_menu.get_combined_minimum_size().y < 560.0, true, "largest secondary action set stays within a standard viewport")
+	var block_style: StyleBoxFlat = block_button.get_theme_stylebox("normal") as StyleBoxFlat if block_button != null else null
+	_check_equal(block_style != null and block_style.bg_color == Color("#0b1a2bea"), true, "sensitive actions stay visually calm until hover")
 	if mute_button != null:
 		mute_button.pressed.emit()
 	_check_equal(requested_actions, ["mute"], "direct-player mute emits the moderation request")
@@ -238,7 +434,7 @@ func _check_deterministic_player_ordering() -> void:
 
 func _check_self_exclusion_and_roster_ordering() -> void:
 	presence_service._apply_snapshot_message({
-		"rosterRevision": 1,
+		"rosterRevision": 2,
 		"players": [
 			{"userId": 1, "username": "ash"},
 			{"userId": 9, "username": "brock", "displayName": "Brock"},
@@ -249,6 +445,42 @@ func _check_self_exclusion_and_roster_ordering() -> void:
 	_check_equal(players.size(), 2, "self excluded from roster")
 	_check_equal(players[0].get("userId", 0), 9, "roster alphabetical first")
 	_check_equal(players[1].get("userId", 0), 2, "roster alphabetical second")
+
+func _check_aether_clash_identity_filtering() -> void:
+	presence_service._apply_snapshot_message({
+		"rosterRevision": 1,
+		"players": [
+			{"userId": 1, "username": "ash"},
+			{"userId": 9, "username": "brock", "displayName": "Brock"},
+			{"userId": 2, "username": "misty", "displayName": "Misty"},
+		],
+	})
+	var duel_controller := FakeAetherClashDuelController.new()
+	duel_controller.visible_user_ids = {9: true}
+	duel_controller.add_to_group("aether_clash_duel_controller")
+	root.add_child(duel_controller)
+	var visible_players: Array[Dictionary] = coordinator._current_map_players()
+	_check_equal(visible_players.size(), 1, "Guild Duel roster omits hidden enemy identities")
+	_check_equal(visible_players[0].get("userId", 0), 9, "Guild Duel roster retains allowed identities")
+	coordinator.close_context_menu()
+	coordinator.open_context_for_player(
+		{"userId": 2, "username": "misty", "displayName": "Misty"},
+		Vector2(400, 200)
+	)
+	_check_equal(coordinator.current_target.is_empty(), true, "hidden Duel enemies cannot leak through right-click actions")
+	coordinator.open_context_for_player(
+		{"userId": 9, "username": "brock", "displayName": "Brock"},
+		Vector2(400, 200)
+	)
+	_check_equal(coordinator.current_target.get("userId", 0), 9, "allowed Duel identities retain trainer actions")
+	coordinator._render_context_menu()
+	await process_frame
+	_check_equal(_find_player_action("Trade") == null, true, "Guild Duel context menus hide Trade")
+	_check_equal(_find_player_action("Lend") == null, true, "Guild Duel context menus hide Lend")
+	_check_equal(_find_player_action("Message") != null, true, "Guild Duel context menus retain safe social actions")
+	coordinator.close_context_menu()
+	root.remove_child(duel_controller)
+	duel_controller.free()
 
 func _check_social_state_matching() -> void:
 	coordinator.social_overview = {
@@ -268,6 +500,11 @@ func _check_phase_scope_contract() -> void:
 	_check_equal(source.contains("WorldPresenceService"), true, "canonical roster dependency")
 	_check_equal(source.contains("_social_action(\"load_socials\")"), true, "authoritative social refresh")
 	_check_equal(source.contains("service.invite_member(username)"), true, "guild action uses the authoritative invitation endpoint")
+	_check_equal(source.contains("create_aether_clash_player_challenge"), true, "right-click Clash action uses the authoritative player endpoint")
+	_check_equal(source.contains("AetherClashPlayerTier"), true, "right-click Clash challenges choose a battle tier")
+	_check_equal(source.contains("AetherClashPlayerStakeAmount"), true, "right-click Clash challenges configure a Guild Bank stake")
+	_check_equal(source.contains("_can_view_overworld_identity"), true, "Duel identity intel gates roster and right-click name exposure")
+	_check_equal(source.contains("_exchange_actions_allowed"), true, "Duel instances gate Trade and Lend actions")
 	_check_equal(source.contains("load_map_players"), false, "no secondary map-player projection")
 
 func _check_remote_avatar_interaction_contract() -> void:

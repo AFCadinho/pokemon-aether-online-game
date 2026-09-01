@@ -35,6 +35,7 @@ func _check_market_runtime_translation() -> void:
 	localization_manager.call("set_locale", "nl")
 	overlay.call("_setup_market_popup")
 	overlay.call("open_market", {
+		"id": "battle_point_exchange",
 		"name": "Pallet Town Poké Mart",
 		"locationName": "Pallet Town",
 		"items": [{
@@ -48,6 +49,18 @@ func _check_market_runtime_translation() -> void:
 				"baseAmount": 300,
 				"membershipDiscountPercent": 5,
 			}],
+		}, {
+			"itemId": "focus-sash",
+			"name": "Focus Sash",
+			"category": "held-items",
+			"shortDesc": "Lets its holder survive one hit.",
+			"costs": [{"currency": "battle_points", "amount": 15}],
+		}, {
+			"itemId": "leftovers",
+			"name": "Leftovers",
+			"category": "held-items",
+			"shortDesc": "Restores HP every turn.",
+			"costs": [{"currency": "battle_points", "amount": 20}],
 		}],
 	})
 	var game_state := root.get_node_or_null("GameState")
@@ -59,6 +72,7 @@ func _check_market_runtime_translation() -> void:
 	var title := overlay.get("market_title_label") as Label
 	var subtitle := overlay.get("market_subtitle_label") as Label
 	var search := overlay.get("market_search_input") as LineEdit
+	var sort_select := overlay.get("market_sort_select") as OptionButton
 	var caption := overlay.get("market_catalog_caption_label") as Label
 	var detail_description := overlay.get("market_detail_description_label") as Label
 	var buy_button := overlay.get("market_buy_button") as Button
@@ -68,6 +82,34 @@ func _check_market_runtime_translation() -> void:
 		"Market activity renders in Dutch"
 	)
 	_check(search != null and search.placeholder_text == "Doorzoek het aanbod...", "Market search renders in Dutch")
+	_check(sort_select != null and sort_select.get_item_text(0) == "Naam A–Z", "Market name sort renders in Dutch")
+	_check(
+		str((overlay.get("market_context") as Dictionary).get("id", "")) == "battle_point_exchange",
+		"Market retains the named catalog id"
+	)
+	var name_sorted: Array = overlay.call("_filtered_market_items")
+	_check(
+		name_sorted.size() == 3 and str(name_sorted[0].get("id", "")) == "focus-sash",
+		"Market defaults to neutral alphabetical sorting"
+	)
+	if sort_select != null:
+		sort_select.select(1)
+	var price_ascending: Array = overlay.call("_filtered_market_items")
+	_check(
+		price_ascending.size() == 3
+		and int(price_ascending[0].get("price", 0)) == 15
+		and int(price_ascending[2].get("price", 0)) == 285,
+		"Market can sort prices from low to high"
+	)
+	if sort_select != null:
+		sort_select.select(2)
+	var price_descending: Array = overlay.call("_filtered_market_items")
+	_check(
+		price_descending.size() == 3
+		and int(price_descending[0].get("price", 0)) == 285
+		and int(price_descending[2].get("price", 0)) == 15,
+		"Market can sort prices from high to low"
+	)
 	_check(caption != null and caption.text == "WINKELAANBOD", "Market catalog caption renders in Dutch")
 	_check(
 		detail_description != null and detail_description.text == "Herstelt 20 HP.",
@@ -93,6 +135,7 @@ func _check_market_runtime_translation() -> void:
 	overlay.call("_on_locale_changed", "pt_BR")
 	_check(subtitle != null and subtitle.text.contains("Suprimentos"), "Market activity updates to Portuguese")
 	_check(search != null and search.placeholder_text == "Buscar no catálogo...", "Market search updates to Portuguese")
+	_check(sort_select != null and sort_select.get_item_text(0) == "Nome A–Z", "Market sort updates to Portuguese")
 	_check(caption != null and caption.text == "CATÁLOGO DA LOJA", "Market caption updates to Portuguese")
 	_check(
 		detail_description != null and detail_description.text == "Restaura 20 PS.",

@@ -9,6 +9,8 @@ const MENTOR_TOPIC_MENU := preload("res://scripts/ui/mentor_topic_menu.gd")
 @export var voucher_turn_in_id := "kanto_cerulean_city_bike_voucher"
 @export var mount_item_id := "cyclizar-mount"
 @export var mount_id := "cyclizar"
+@export var license_item_id := "mount-license"
+@export var license_region_id := "kanto"
 @export var voucher_dialogue_id := ""
 @export var mount_received_dialogue_id := ""
 @export var mount_owned_dialogue_id := ""
@@ -21,10 +23,11 @@ const VOUCHER_FALLBACK_LINES: Array[String] = [
 ]
 const RECEIVED_FALLBACK_LINES: Array[String] = [
 	"This is Cyclizar. He has been looking for a Trainer to travel with.",
-	"You can now select Cyclizar as your land mount.",
+	"I am also issuing your Mount License and registering it for Kanto.",
+	"You can now select Cyclizar and activate him outdoors in Kanto.",
 ]
 const OWNED_FALLBACK_LINES: Array[String] = [
-	"Take good care of Cyclizar. He will take good care of you on the road.",
+	"Your Mount License is registered for Kanto. Take good care of Cyclizar on the road.",
 ]
 const FAILURE_FALLBACK_LINES: Array[String] = [
 	"I cannot complete the exchange right now. Please come back in a moment.",
@@ -72,7 +75,11 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 
 	var received_mount_id := str(turn_in_result.get("rewardItemId", "")).strip_edges().to_lower()
-	if received_mount_id != mount_item_id:
+	if (
+		received_mount_id != mount_item_id
+		or not bool(inventory_service.call("has_item", license_item_id))
+		or not bool(inventory_service.call("has_mount_license_for_region", license_region_id))
+	):
 		await _show_exchange_failure()
 		return
 	SettingsManager.set_selected_mount_id(SettingsManager.MOUNT_MODE_LAND, mount_id)
@@ -84,7 +91,7 @@ func interact_with_player(_player: Node2D) -> void:
 		get_tree().call_group(
 			"ui_overlay",
 			"add_system_message",
-			LocalizationManager.text("ui.mounts.cyclizar_received")
+			LocalizationManager.text("ui.mounts.cyclizar_license_received")
 		)
 		SfxManager.play("item_received")
 		return
@@ -119,6 +126,10 @@ func _choose_mount_help_topic() -> String:
 				"id": "purpose",
 				"label": LocalizationManager.text("mentor.bike_seller.help.topic.purpose"),
 			},
+			{
+				"id": "license",
+				"label": LocalizationManager.text("mentor.bike_seller.help.topic.license"),
+			},
 		],
 		LocalizationManager.text("ui.mentor_help.eyebrow"),
 		LocalizationManager.text("common.close")
@@ -145,6 +156,11 @@ func _mount_help_lines(topic_id: String) -> Array[String]:
 				"mentor.bike_seller.help.purpose.1",
 				"mentor.bike_seller.help.purpose.2",
 			]
+		"license":
+			keys = [
+				"mentor.bike_seller.help.license.1",
+				"mentor.bike_seller.help.license.2",
+			]
 	var lines: Array[String] = []
 	for key: String in keys:
 		lines.append(LocalizationManager.text(key))
@@ -157,6 +173,8 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	voucher_turn_in_id = _metadata_value(metadata, "voucherTurnInId", voucher_turn_in_id)
 	mount_item_id = _metadata_value(metadata, "mountItemId", mount_item_id)
 	mount_id = _metadata_value(metadata, "mountId", mount_id)
+	license_item_id = _metadata_value(metadata, "licenseItemId", license_item_id)
+	license_region_id = _metadata_value(metadata, "licenseRegionId", license_region_id)
 	voucher_dialogue_id = _metadata_value(metadata, "voucherDialogueId", voucher_dialogue_id)
 	mount_received_dialogue_id = _metadata_value(
 		metadata,

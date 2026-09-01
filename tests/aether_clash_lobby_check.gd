@@ -14,6 +14,7 @@ func _init() -> void:
 
 	var lobby := packed.instantiate()
 	root.add_child(lobby)
+	await process_frame
 	_check(lobby.has_method("get_map_id"), "Lobby exposes overworld map metadata")
 	_check(lobby.call("get_map_id") == "aether_clash_lobby", "Lobby has its canonical map id")
 	_check(
@@ -35,26 +36,93 @@ func _init() -> void:
 		and posmod(int(arrival.position.y), 32) == 16,
 		"Guild arrival marker is centered on a map tile"
 	)
+	var battle_point_vendor := lobby.get_node_or_null("Entities/NPCs/BattlePointVendor")
+	_check(battle_point_vendor != null, "Lobby places the Battle Point vendor")
+	_check(
+		battle_point_vendor != null
+		and battle_point_vendor.position == Vector2(1584, 944),
+		"Battle Point vendor uses the updated lobby market location"
+	)
+	var z_crystal_vendor := lobby.get_node_or_null("Entities/NPCs/ZCrystalVendor")
+	_check(z_crystal_vendor != null, "Lobby places the Z-Crystal Seller")
+	_check(
+		z_crystal_vendor != null
+		and z_crystal_vendor.position == Vector2(1328, 944),
+		"Z-Crystal Seller uses the temporary lobby market location"
+	)
+	var mega_stone_vendor := lobby.get_node_or_null("Entities/NPCs/MegaStoneVendor")
+	_check(mega_stone_vendor != null, "Lobby places the Mega Stone Seller")
+	_check(
+		mega_stone_vendor != null
+		and mega_stone_vendor.position == Vector2(1456, 944),
+		"Mega Stone Seller uses the temporary lobby market location"
+	)
+	var lobby_scene_source := FileAccess.get_file_as_string(LOBBY_SCENE)
+	_check(
+		lobby_scene_source.contains("res://scenes/npcs/battle_point_vendor_npc.tscn")
+		and lobby_scene_source.contains('[node name="BattlePointVendor"'),
+		"Lobby placement instantiates the reusable Battle Point vendor scene"
+	)
+	_check(
+		lobby_scene_source.contains("res://scenes/npcs/z_crystal_vendor_npc.tscn")
+		and lobby_scene_source.contains('[node name="ZCrystalVendor"'),
+		"Lobby placement instantiates the reusable Z-Crystal Seller scene"
+	)
+	_check(
+		lobby_scene_source.contains("res://scenes/npcs/mega_stone_vendor_npc.tscn")
+		and lobby_scene_source.contains('[node name="MegaStoneVendor"'),
+		"Lobby placement instantiates the reusable Mega Stone Seller scene"
+	)
 	var night_lights := lobby.get_node_or_null("NightLights")
 	_check(night_lights != null, "Lobby owns a hand-maintained night-light layer")
 	_check(night_lights != null and night_lights.get_child_count() == 22, "Lobby lanterns and portals have night lights")
-	var purple_portal := lobby.get_node_or_null("Entities/Interactables/PurpleClashPortal")
-	var red_portal := lobby.get_node_or_null("Entities/Interactables/RedClashPortal")
-	_check(purple_portal != null and purple_portal.position == Vector2(864, 624), "Purple portal fills the west portal bay")
-	_check(red_portal != null and red_portal.position == Vector2(1088, 624), "Red portal fills the east portal bay")
-	_check(purple_portal != null and purple_portal.get("team_id") == "purple", "West portal represents purple")
-	_check(red_portal != null and red_portal.get("team_id") == "red", "East portal represents red")
-	var red_portal_sprite := red_portal.get_node_or_null("PortalSprite") as Sprite2D if red_portal != null else null
+	var guild_portal := lobby.get_node_or_null("Entities/Interactables/GuildDuelPortal")
+	var royale_portal := lobby.get_node_or_null("Entities/Interactables/BattleRoyalePortal")
+	_check(guild_portal != null and guild_portal.position == Vector2(864, 624), "Guild duel portal fills the west portal bay")
+	_check(royale_portal != null and royale_portal.position == Vector2(1088, 624), "Battle Royale portal fills the east portal bay")
+	_check(guild_portal != null and guild_portal.get("mode_id") == "guild_duel", "West portal represents Guild vs Guild")
+	_check(royale_portal != null and royale_portal.get("mode_id") == "battle_royale", "East portal represents Battle Royale")
+	var red_portal_sprite := guild_portal.get_node_or_null("PortalSprite") as Sprite2D if guild_portal != null else null
 	_check(
 		red_portal_sprite != null
 		and red_portal_sprite.texture.resource_path.ends_with("clash_portal_red.png"),
-		"East portal uses the red portal art"
+		"Guild vs Guild uses the red portal art"
+	)
+	var purple_portal_sprite := royale_portal.get_node_or_null("PortalSprite") as Sprite2D if royale_portal != null else null
+	_check(
+		purple_portal_sprite != null
+		and purple_portal_sprite.texture.resource_path.ends_with("clash_portal_purple.png"),
+		"Battle Royale keeps the purple portal art"
+	)
+	var lobby_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_lobby.gd")
+	var save_index := lobby_source.find('world.call("save_current_player_state_now")')
+	var enter_index := lobby_source.find('guild_service.call("enter_aether_clash_portal", challenge_id)')
+	var effect_index := lobby_source.find('world.call("play_authorized_teleport_departure_effect")')
+	_check(
+		save_index >= 0 and enter_index > save_index and effect_index > enter_index,
+		"portal entry saves position and waits for server authorization before its teleport effect"
+	)
+	_check(
+		lobby_source.contains("AETHER_CONFIRMATION_DIALOG_SCENE.instantiate()"),
+		"multi-session portal selection uses the themed Aether modal"
 	)
 	var collision := lobby.get_node_or_null("Collision") as TileMapLayer
 	_check(collision != null and not collision.get_used_cells().is_empty(), "Lobby includes gameplay collision")
 	_check(
 		collision != null and collision.get_cell_source_id(Vector2i(29, 50)) == -1,
 		"Guild arrival tile is walkable"
+	)
+	_check(
+		collision != null and collision.get_cell_source_id(Vector2i(49, 29)) == -1,
+		"Battle Point vendor placement tile is available"
+	)
+	_check(
+		collision != null and collision.get_cell_source_id(Vector2i(41, 29)) == -1,
+		"Z-Crystal Seller placement tile is available"
+	)
+	_check(
+		collision != null and collision.get_cell_source_id(Vector2i(45, 29)) == -1,
+		"Mega Stone Seller placement tile is available"
 	)
 	lobby.queue_free()
 	quit(1 if failed else 0)

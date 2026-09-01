@@ -26,14 +26,36 @@ func _run() -> void:
 		quit(1)
 		return
 	var overlay := overlay_script.new() as CanvasLayer
+	var original_player_id := str(player_save.get("player_id"))
+	player_save.set("player_id", "2.0")
+	_check(overlay.call("_get_trainer_id_text") == "2", "local Trainer Card formats Trainer IDs as whole numbers")
+	var overview := overlay.call("_create_trainer_card_stats_tab") as Control
+	overlay.call("_apply_own_trainer_card_pvp", {
+		"gamesPlayed": 12,
+		"wins": 8,
+		"losses": 4,
+		"winRate": 66.7,
+	})
+	_check(
+		_trainer_card_value(overview, "pvp_games") == "12"
+		and _trainer_card_value(overview, "pvp_wins") == "8"
+		and _trainer_card_value(overview, "pvp_losses") == "4"
+		and _trainer_card_value(overview, "pvp_win_rate") == "66.7%",
+		"local Trainer Card overview preserves real PvP games, wins and losses"
+	)
 	var boulder := {
 		"id": "boulder",
 		"name": "Boulder Badge",
 		"texture": "res://assets/gym_badges/kanto_badges/Boulder_Badge.png",
 	}
 	player_save.call("apply_gym_badge_state", {"badges": []})
-	var local_slot := overlay.call("_create_trainer_card_badge_slot", boulder) as PanelContainer
+	var local_badges_tab := overlay.call("_create_trainer_card_badges_tab") as Control
+	var local_slot := _find_tooltip(local_badges_tab, "Boulder Badge · Locked") as PanelContainer
 	_check(local_slot != null and local_slot.tooltip_text.contains("Locked"), "local Trainer Card starts an unearned badge locked")
+	_check(
+		_find_label(overview, "Gym Badges") == null and _find_label(overview, "0 / 8") == null,
+		"local Trainer Card keeps Gym Badges out of Overview"
+	)
 
 	player_save.call("apply_gym_badge_state", {
 		"badges": [{"region": "kanto", "badgeId": "boulder", "earned": true}],
@@ -41,7 +63,7 @@ func _run() -> void:
 	overlay.call("_refresh_trainer_card_gym_badges")
 	_check(local_slot != null and local_slot.tooltip_text.contains("Earned"), "local Trainer Card refreshes an earned badge")
 
-	var public_panel := overlay.call("_create_public_trainer_gym_badges_panel", {
+	var public_badges_tab := overlay.call("_create_public_trainer_badges_tab", {
 		"badges": {
 			"badges": [
 				{"region": "kanto", "badgeId": "boulder", "earned": true},
@@ -49,16 +71,19 @@ func _run() -> void:
 			],
 		},
 	}) as Control
-	_check(_find_label(public_panel, "GYM BADGES · 1/8") != null, "public Trainer Card reports the correct earned badge count")
-	_check(_find_tooltip(public_panel, "Boulder Badge · Earned") != null, "public Trainer Card shows another trainer's earned badge")
-	_check(_find_tooltip(public_panel, "Cascade Badge · Locked") != null, "public Trainer Card keeps another trainer's unearned badge locked")
+	_check(_find_label(public_badges_tab, "GYM BADGES · 1/8") != null, "public Badges tab reports the correct earned badge count")
+	_check(_find_tooltip(public_badges_tab, "Boulder Badge · Earned") != null, "public Badges tab shows another trainer's earned badge")
+	_check(_find_tooltip(public_badges_tab, "Cascade Badge · Locked") != null, "public Badges tab keeps another trainer's unearned badge locked")
 
-	if local_slot != null:
-		local_slot.free()
-	if public_panel != null:
-		public_panel.free()
+	if local_badges_tab != null:
+		local_badges_tab.free()
+	if overview != null:
+		overview.free()
+	if public_badges_tab != null:
+		public_badges_tab.free()
 	overlay.free()
 	player_save.call("apply_gym_badge_state", {"badges": []})
+	player_save.set("player_id", original_player_id)
 	localization_manager.call("set_locale", original_locale)
 	quit(1 if failed else 0)
 
@@ -81,6 +106,17 @@ func _find_tooltip(node: Node, text: String) -> Control:
 		if result != null:
 			return result
 	return null
+
+
+func _trainer_card_value(overview: Control, field_id: String) -> String:
+	if overview == null:
+		return ""
+	var label := overview.find_child(
+		"TrainerCardValue_%s" % field_id,
+		true,
+		false
+	) as Label
+	return label.text if label != null else ""
 
 
 func _check(condition: bool, label: String) -> void:

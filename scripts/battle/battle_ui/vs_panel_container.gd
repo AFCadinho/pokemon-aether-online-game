@@ -15,8 +15,9 @@ const TIMER_WARNING_COLOR := Color(1.0, 0.72, 0.24)
 const TIMER_URGENT_COLOR := Color(1.0, 0.35, 0.25)
 
 @onready var names_panel: PanelContainer = $NamesPanel
-@onready var player_1_label: Label = $NamesPanel/MarginContainer/HBoxContainer/Player1
-@onready var player_2_label: Label = $NamesPanel/MarginContainer/HBoxContainer/Player2
+@onready var player_1_label: Label = $NamesPanel/MarginContainer/VBoxContainer/HBoxContainer/Player1
+@onready var player_2_label: Label = $NamesPanel/MarginContainer/VBoxContainer/HBoxContainer/Player2
+@onready var battle_limit_label: Label = $NamesPanel/MarginContainer/VBoxContainer/BattleLimitLabel
 @onready var player_1_timer_panel: PanelContainer = $Player1TimerPanel
 @onready var player_2_timer_panel: PanelContainer = $Player2TimerPanel
 @onready var player_1_timer_state_label: Label = $Player1TimerPanel/MarginContainer/VBoxContainer/Player1TimerStateLabel
@@ -67,6 +68,19 @@ func set_player_appearances(player_1_state: Dictionary, player_2_state: Dictiona
 			player_2_portrait.set_appearance_state(player_2_state)
 
 
+func show_battle_limit(text: String, color: Color, pulse: bool = false) -> void:
+	battle_limit_label.visible = not _compact_mode and not text.is_empty()
+	battle_limit_label.text = text
+	battle_limit_label.modulate = color
+	if pulse:
+		battle_limit_label.modulate.a = 0.65 + 0.35 * abs(sin(float(Time.get_ticks_msec()) / 180.0))
+
+
+func hide_battle_limit() -> void:
+	battle_limit_label.visible = false
+	battle_limit_label.text = ""
+
+
 func _create_player_portraits() -> void:
 	var name_row := player_1_label.get_parent() as HBoxContainer
 	if name_row == null:
@@ -108,6 +122,8 @@ func configure_compact_timer_mode(enabled: bool, show_opponent: bool = true) -> 
 	_compact_mode = enabled
 	_compact_show_opponent = show_opponent
 	names_panel.visible = not enabled
+	if enabled:
+		battle_limit_label.visible = false
 	player_1_timer_panel.custom_minimum_size = Vector2(170, 50) if enabled else Vector2(220, 50)
 	player_2_timer_panel.custom_minimum_size = Vector2(170, 50) if enabled else Vector2(220, 50)
 	player_1_timer_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL if enabled else Control.SIZE_FILL

@@ -6,9 +6,17 @@ var failures := 0
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
+	var host := Control.new()
+	host.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	host.size = Vector2(1280, 720)
+	root.add_child(host)
 	var card := PARTY_HOVER_SCENE.instantiate() as PartyHoverCard
 	card.set_show_storage_details(true)
-	root.add_child(card)
+	host.add_child(card)
 	await process_frame
 
 	var iv_details := card.get_node_or_null(
@@ -19,6 +27,13 @@ func _init() -> void:
 	) as Control
 	_check(iv_details != null and not iv_details.visible, "Storage hover cards hide IV details")
 	_check(ev_details != null and not ev_details.visible, "Storage hover cards hide EV details")
+	var stats := card.get_node("MarginContainer/VBoxContainer/StatsBoxContainer")
+	for stat_row_name: String in ["AttackContainer", "DefContainer", "SpAContainer", "SpDContainer", "SpeContainer"]:
+		var stat_row := stats.get_node(stat_row_name) as HBoxContainer
+		_check(
+			stat_row.get_theme_constant("separation") == PartyHoverCard.STORAGE_STAT_VALUE_SEPARATION,
+			"Storage hover %s separates its stat label and value" % stat_row_name
+		)
 
 	card.show_for_pokemon({
 		"species": "Blastoise",
@@ -45,6 +60,19 @@ func _init() -> void:
 		is_equal_approx(populated_height, PartyHoverCard.STORAGE_CARD_HEIGHT),
 		"A fully populated Storage hover card stays at the fixed height"
 	)
+	var safe_bounds := Rect2(100, 100, 640, 320)
+	card.position_beside_rect_within(Rect2(210, 210, 118, 80), safe_bounds)
+	var positioned_rect := card.get_global_rect()
+	_check(
+		positioned_rect.position.x >= safe_bounds.position.x
+			and positioned_rect.position.y >= safe_bounds.position.y
+			and positioned_rect.end.x <= safe_bounds.end.x
+			and positioned_rect.end.y <= safe_bounds.end.y,
+		"Storage hover cards stay inside their navigation-safe bounds (card=%s, bounds=%s)" % [
+			positioned_rect,
+			safe_bounds,
+		]
+	)
 
 	card.show_for_pokemon({
 		"species": "Blastoise",
@@ -61,7 +89,7 @@ func _init() -> void:
 		"Storage hover height stays fixed across different Pokémon details"
 	)
 
-	card.free()
+	host.free()
 	quit(1 if failures > 0 else 0)
 
 

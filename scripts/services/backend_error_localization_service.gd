@@ -28,17 +28,23 @@ const CODE_TO_KEY: Dictionary = {
 	"not_enough_money": "backend.error.not_enough_money",
 	"not_enough_aetherite": "backend.error.not_enough_aetherite",
 	"not_enough_battle_points": "backend.error.not_enough_battle_points",
+	"market_not_active": "backend.error.market_not_active",
+	"market_interaction_required": "backend.error.market_interaction_required",
+	"market_interaction_misconfigured": "backend.error.market_unavailable",
 	"global_heal_cooldown_active": "backend.error.global_heal_cooldown",
 	"global_heal_broadcast_failed": "backend.error.global_heal_broadcast",
 	"global_heal_not_found": "backend.error.global_heal_unavailable",
 	"global_heal_expired": "backend.error.global_heal_expired",
 	"global_heal_player_busy": "backend.error.global_heal_busy",
 	"market_badges_required": "backend.error.market_badges_required",
+	"market_item_already_owned": "backend.error.item_already_owned",
+	"market_purchase_request_conflict": "backend.error.request_conflict",
 	"not_enough_gems": "backend.error.not_enough_gems",
 	"transit_attunement_location_invalid": "backend.error.transit_wrong_location",
 	"transit_attunement_distance_invalid": "backend.error.transit_too_far",
 	"item_not_found": "backend.error.item_not_found",
 	"item_not_owned": "backend.error.item_not_owned",
+	"move_mentor_resource_required": "backend.error.move_mentor_resource_required",
 	"item_not_usable": "backend.error.item_not_usable",
 	"item_no_effect": "backend.error.item_no_effect",
 	"item_unsupported": "backend.error.item_unsupported",
@@ -99,6 +105,42 @@ const CODE_TO_KEY: Dictionary = {
 	"guild_request_id_conflict": "backend.error.request_conflict",
 	"guild_creation_conflict": "backend.error.request_conflict",
 	"guild_creation_incomplete": "ui.guild.error.create",
+	"aether_clash_membership_required": "backend.error.guild_membership_not_found",
+	"aether_clash_permission_required": "backend.error.aether_clash_permission",
+	"aether_clash_action_forbidden": "backend.error.aether_clash_permission",
+	"aether_clash_guild_not_found": "backend.error.aether_clash_unavailable",
+	"aether_clash_guild_unavailable": "backend.error.aether_clash_unavailable",
+	"aether_clash_target_guild_required": "backend.error.aether_clash_target_guild",
+	"aether_clash_target_rank_required": "backend.error.aether_clash_target_rank",
+	"aether_clash_challenge_not_found": "backend.error.aether_clash_unavailable",
+	"aether_clash_self_challenge": "backend.error.aether_clash_self",
+	"aether_clash_challenge_pending": "backend.error.aether_clash_pending",
+	"aether_clash_guild_busy": "backend.error.aether_clash_busy",
+	"aether_clash_challenge_unavailable": "backend.error.aether_clash_challenge_unavailable",
+	"aether_clash_challenge_expired": "backend.error.aether_clash_challenge_unavailable",
+	"aether_clash_tier_unsupported": "backend.error.aether_clash_tier_unsupported",
+	"aether_clash_stake_funds_required": "backend.error.aether_clash_stake_funds_required",
+	"aether_clash_intake_paused": "backend.error.aether_clash_intake_paused",
+	"aether_clash_stake_limit": "backend.error.aether_clash_stake_limit",
+	"aether_clash_pending_limit": "backend.error.aether_clash_pending_limit",
+	"aether_clash_challenge_rate_limited": "backend.error.aether_clash_challenge_rate_limited",
+	"aether_clash_participant_limit": "backend.error.aether_clash_participant_limit",
+	"aether_clash_spectator_limit": "backend.error.aether_clash_spectator_limit",
+	"aether_clash_team_invalid": "backend.error.aether_clash_team_invalid",
+	"aether_clash_team_lock_invalid": "backend.error.aether_clash_team_lock_invalid",
+	"aether_clash_team_lock_changed": "backend.error.aether_clash_team_lock_invalid",
+	"aether_clash_entry_closed": "backend.error.aether_clash_entry_closed",
+	"aether_clash_spectating_forbidden": "backend.error.aether_clash_spectating_forbidden",
+	"aether_clash_portal_required": "backend.error.aether_clash_portal_required",
+	"aether_clash_teleport_pending": "backend.error.aether_clash_teleport_pending",
+	"aether_clash_activity_blocked": "backend.error.aether_clash_activity_blocked",
+	"aether_clash_exchange_blocked": "backend.error.aether_clash_exchange_blocked",
+	"loan_aether_clash_unavailable": "backend.error.aether_clash_exchange_blocked",
+	"aether_clash_presence_required": "backend.error.aether_clash_presence_required",
+	"aether_clash_player_in_battle": "backend.error.aether_clash_player_in_battle",
+	"aether_clash_contact_sync_pending": "backend.error.aether_clash_contact_sync_pending",
+	"aether_clash_contact_sync_unavailable": "backend.error.aether_clash_contact_sync_pending",
+	"aether_clash_contact_out_of_range": "backend.error.aether_clash_contact_out_of_range",
 	"pokemon_reserved_for_trade": "ui.trade.error.pokemon_reserved",
 	"pokemon_holding_item": "ui.trade.error.pokemon_holding_item",
 	"pokemon_not_tradable": "ui.trade.error.pokemon_not_tradable",
@@ -120,9 +162,15 @@ const CODE_TO_KEY: Dictionary = {
 	"exchange_asset_type_invalid": "backend.error.exchange_asset_type_invalid",
 	"exchange_request_conflict": "backend.error.exchange_request_conflict",
 	"exchange_listing_limit": "backend.error.exchange_listing_limit",
+	"exchange_wishlist_limit": "backend.error.exchange_wishlist_limit",
 	"exchange_price_too_high": "backend.error.exchange_price_too_high",
 	"exchange_listing_not_found": "backend.error.exchange_listing_not_found",
 	"exchange_listing_unavailable": "backend.error.exchange_listing_unavailable",
+	"exchange_wishlist_not_found": "backend.error.exchange_wishlist_not_found",
+	"exchange_wishlist_unavailable": "backend.error.exchange_wishlist_unavailable",
+	"exchange_own_wishlist": "backend.error.exchange_own_wishlist",
+	"exchange_wishlist_requester_unavailable": "backend.error.exchange_wishlist_requester_unavailable",
+	"exchange_wishlist_refund_wallet_full": "backend.error.exchange_wishlist_refund_wallet_full",
 	"exchange_own_listing": "backend.error.exchange_own_listing",
 	"exchange_seller_unavailable": "backend.error.exchange_seller_unavailable",
 	"exchange_seller_wallet_full": "backend.error.exchange_seller_wallet_full",
@@ -220,6 +268,7 @@ const CODE_TO_KEY: Dictionary = {
 	"gift_code_rate_limited": "backend.error.rate_limited",
 	"request_timeout": "backend.error.timeout",
 	"service_unavailable": "backend.error.unavailable",
+	"circuit_breaker_open": "backend.error.unavailable",
 	"test_form_not_allowed": "backend.error.mega_test_form_not_allowed",
 	"mega_direct_form_not_allowed": "backend.error.mega_direct_form_not_allowed",
 	"mega_catalog_disabled": "backend.error.mega_catalog_disabled",
@@ -263,6 +312,13 @@ static func message(
 ) -> String:
 	var code := error_code(response)
 	var key := str(CODE_TO_KEY.get(code, "")).strip_edges()
+	if code == "aether_clash_team_invalid":
+		var rule_code := _aether_clash_team_rule_code(response)
+		var rule_key := "backend.error.aether_clash_team_invalid.%s" % rule_code
+		if not rule_code.is_empty() and _has_key(rule_key):
+			key = rule_key
+		elif CODE_TO_KEY.has(rule_code):
+			key = str(CODE_TO_KEY.get(rule_code, "")).strip_edges()
 	var format_values := _format_values(response)
 	format_values.merge(values, true)
 	if not key.is_empty() and _has_key(key):
@@ -326,6 +382,15 @@ static func _response_dictionaries(response: Dictionary) -> Array[Dictionary]:
 		if not source.is_empty():
 			sources.append(source)
 	return sources
+
+
+static func _aether_clash_team_rule_code(response: Dictionary) -> String:
+	for source: Dictionary in _response_dictionaries(response):
+		for field: String in ["ruleCode", "rule_code"]:
+			var value := str(source.get(field, "")).strip_edges()
+			if not value.is_empty():
+				return _normalize_code(value)
+	return ""
 
 
 static func _valid_support_id(value: String) -> bool:

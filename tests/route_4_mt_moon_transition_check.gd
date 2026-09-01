@@ -13,9 +13,6 @@ func _init() -> void:
 	var cerulean_source := FileAccess.get_file_as_string(
 		"res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 	)
-	var route_script := FileAccess.get_file_as_string(
-		"res://scripts/world/kanto/routes/kanto_route_4.gd"
-	)
 	var route_visual := FileAccess.get_file_as_string(
 		"res://generated/tiled_visuals/route_4/route_4.visual.tscn"
 	)
@@ -48,8 +45,8 @@ func _init() -> void:
 	_check(route_source.contains('position = Vector2(3136, 1008)'), "Cerulean water arrival is on the imported east water")
 	_check(route_source.contains('transition_id = "kanto_route_4__to_cerulean_city_water"'), "Route 4 water exits to Cerulean City")
 	_check(route_source.contains('target_spawn_name = "FromRoute4Water"'), "Route 4 water targets the Cerulean water arrival")
-	_check(route_script.contains('const MAP_SIZE := Vector2i(100, 50)'), "Route 4 bounds match its imported visual")
-	_check(route_script.contains('not _is_cerulean_connection_y(y)'), "Route 4 keeps the Cerulean road and water open")
+	_check(route_source.contains('res://scripts/world/map_metadata.gd'), "Route 4 uses non-mutating map metadata")
+	_check(route_source.contains('[node name="Collision" type="TileMapLayer" parent="Tiles"'), "Route 4 stores authored Collision")
 	_check(cave_source.contains('[node name="FromRoute4" type="Marker2D" parent="Spawns"'), "Mt. Moon has a Route 4 return spawn")
 	_check(cave_source.contains('transition_id = "kanto_mt_moon__to_route_4"'), "Mt. Moon exits to Route 4")
 	_check(cave_source.contains('target_spawn_name = "FromMtMoon"'), "Mt. Moon targets the Route 4 arrival")
@@ -69,9 +66,9 @@ func _init() -> void:
 	_check(cerulean_source.contains('[node name="FromRoute4Water" type="Marker2D" parent="Spawns"'), "Cerulean City has a Route 4 water arrival")
 	_check(cerulean_source.contains('transition_id = "kanto_cerulean_city__to_route_4_water"'), "Cerulean City returns to Route 4 water")
 	_check(cerulean_source.contains('target_spawn_name = "FromCeruleanWater"'), "Cerulean City targets the Route 4 water arrival")
-	_check(cerulean_script.contains('const MAP_SIZE := Vector2i(75, 70)'), "Cerulean City bounds match its imported visual")
 	_check(map_metadata_script.contains('find_map_tilemap_layer("Collision")'), "Cerulean City inherits the shared Collision layer resolver")
-	_check(cerulean_script.contains('"route_4"'), "Cerulean City keeps the Route 4 road open")
+	_check(not cerulean_script.contains('_open_exterior_connections'), "Cerulean City does not generate exit Collision")
+	_check(not cerulean_script.contains('_build_water_connections'), "Cerulean City does not generate Water markings")
 	quit(1 if failed else 0)
 
 

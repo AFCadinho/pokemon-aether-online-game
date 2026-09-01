@@ -76,6 +76,7 @@ var history_search_timer: Timer
 
 func _ready() -> void:
 	hide()
+	add_to_group("aether_clash_exchange_surface")
 	title = _t("ui.lending.title")
 	min_size = WINDOW_SIZE
 	max_size = WINDOW_SIZE
@@ -121,6 +122,8 @@ func clear_account_state() -> void:
 
 
 func open_for_trainer(username: String) -> void:
+	if _aether_clash_exchange_blocked():
+		return
 	target_username = username.strip_edges()
 	_set_workspace_mode(true)
 	if target_display_label != null:
@@ -1535,6 +1538,11 @@ func _refresh_loan_deadline_labels() -> void:
 func _poll_incoming_offers() -> void:
 	if incoming_poll_in_flight:
 		return
+	if _aether_clash_exchange_blocked():
+		if incoming_dialog != null and incoming_dialog.has_method("clear_offers"):
+			incoming_dialog.call("clear_offers")
+		last_incoming_signature = ""
+		return
 	var auth := get_node_or_null("/root/AuthService")
 	if auth == null or not auth.has_method("is_authenticated") or not bool(auth.is_authenticated()):
 		return
@@ -1582,6 +1590,17 @@ func _poll_incoming_offers() -> void:
 	if signature != last_incoming_signature and incoming_dialog != null and incoming_dialog.has_method("show_offers"):
 		incoming_dialog.call("show_offers", pending, true)
 	last_incoming_signature = signature
+
+
+func suppress_for_aether_clash() -> void:
+	hide()
+	if incoming_dialog != null and incoming_dialog.has_method("clear_offers"):
+		incoming_dialog.call("clear_offers")
+	last_incoming_signature = ""
+
+
+func _aether_clash_exchange_blocked() -> bool:
+	return not get_tree().get_nodes_in_group("aether_clash_duel_controller").is_empty()
 
 
 func _update_return_request_attention(requests: Array[Dictionary]) -> void:

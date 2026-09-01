@@ -17,10 +17,12 @@ const OPTION_ID_BY_SPRITE_STYLE: Dictionary = {
 const GEN5_SPRITE_MISSING_KEY := "ui.settings.sprite.not_installed"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const LOADING_SCENE_PATH := "res://scenes/interface/loading_screen.tscn"
-const MINIMUM_MENU_SIZE := Vector2(700, 540)
-const NAVIGATION_WIDTH := 168.0
+const MINIMUM_MENU_SIZE := Vector2(900, 680)
+const NAVIGATION_WIDTH := 208.0
+const NAVIGATION_BUTTON_HEIGHT := 46.0
 const UI_BG := Color("#07111ff7")
 const UI_SLOT_BG := Color("#0d1c30eb")
+const UI_ROW_BG := Color("#0a1829c7")
 const UI_INPUT_BG := Color("#050d1aed")
 const UI_BORDER := Color("#7aa7f4")
 const UI_BORDER_SOFT := Color("#315070")
@@ -82,6 +84,8 @@ var settings_workspace: HBoxContainer
 var settings_navigation: VBoxContainer
 var settings_navigation_panel: PanelContainer
 var settings_navigation_buttons: Array[Button] = []
+var settings_footer: HBoxContainer
+var autosave_label: Label
 var account_tab_root: Control
 var account_user_label: Label
 var account_status_label: Label
@@ -299,7 +303,7 @@ func _setup_tabs() -> void:
 	settings_workspace.name = "SettingsWorkspace"
 	settings_workspace.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	settings_workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	settings_workspace.add_theme_constant_override("separation", 14)
+	settings_workspace.add_theme_constant_override("separation", 16)
 	settings_layout.add_child(settings_workspace)
 	settings_layout.move_child(settings_workspace, 1)
 
@@ -318,7 +322,7 @@ func _setup_tabs() -> void:
 
 	settings_navigation = VBoxContainer.new()
 	settings_navigation.name = "SettingsNavigation"
-	settings_navigation.add_theme_constant_override("separation", 7)
+	settings_navigation.add_theme_constant_override("separation", 6)
 	navigation_margin.add_child(settings_navigation)
 
 	var content_panel := PanelContainer.new()
@@ -332,15 +336,31 @@ func _setup_tabs() -> void:
 	settings_workspace.add_child(content_panel)
 	content_panel.add_child(tab_container)
 
-	var general_tab: VBoxContainer = _create_tab_content("General", "ui.settings.tab.general")
-	var language_tab: VBoxContainer = _create_tab_content("Language", "ui.settings.tab.language")
-	var graphics_tab: VBoxContainer = _create_tab_content("Graphics", "ui.settings.tab.graphics")
-	var sound_tab: VBoxContainer = _create_tab_content("Sound", "ui.settings.tab.sound")
-	var controls_tab: VBoxContainer = _create_tab_content("Controls", "ui.settings.tab.controls")
-	var account_tab: VBoxContainer = _create_tab_content("Account", "ui.settings.tab.account")
-	var support_tab: VBoxContainer = _create_tab_content("Support", "ui.settings.tab.support")
-	var about_tab: VBoxContainer = _create_tab_content("About", "ui.settings.tab.about")
-	account_tab_root = account_tab.get_parent().get_parent() as Control
+	var general_tab := _create_tab_content(
+		"General", "ui.settings.tab.general", "ui.settings.section.gameplay_subtitle"
+	)
+	var language_tab := _create_tab_content(
+		"Language", "ui.settings.tab.language", "ui.settings.section.language_subtitle"
+	)
+	var graphics_tab := _create_tab_content(
+		"Graphics", "ui.settings.tab.graphics", "ui.settings.section.display_subtitle"
+	)
+	var sound_tab := _create_tab_content(
+		"Sound", "ui.settings.tab.sound", "ui.settings.section.audio_mix_subtitle"
+	)
+	var controls_tab := _create_tab_content(
+		"Controls", "ui.settings.tab.controls", "ui.settings.section.controls_subtitle"
+	)
+	var account_tab := _create_tab_content(
+		"Account", "ui.settings.tab.account", "ui.settings.account.page_subtitle"
+	)
+	var support_tab := _create_tab_content(
+		"Support", "ui.settings.tab.support", "ui.settings.support.description"
+	)
+	var about_tab := _create_tab_content(
+		"About", "ui.settings.tab.about", "ui.settings.about.description"
+	)
+	account_tab_root = account_tab.get_parent().get_parent().get_parent() as Control
 	_build_navigation()
 	_create_world_pixel_scale_control()
 	_create_cursor_scale_control()
@@ -349,78 +369,101 @@ func _setup_tabs() -> void:
 	_set_localized_text(language_label, "ui.settings.language")
 	language_options_button = OptionButton.new()
 	language_options_button.name = "LanguageOptionsButton"
-	language_options_button.focus_mode = Control.FOCUS_NONE
+	language_options_button.focus_mode = Control.FOCUS_ALL
 	terminology_label = Label.new()
 	_set_localized_text(terminology_label, "ui.settings.terminology")
 	terminology_options_button = OptionButton.new()
 	terminology_options_button.name = "TerminologyOptionsButton"
-	terminology_options_button.focus_mode = Control.FOCUS_NONE
+	terminology_options_button.focus_mode = Control.FOCUS_ALL
 	terminology_hint_label = Label.new()
 	terminology_hint_label.name = "TerminologyHintLabel"
 	terminology_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_set_localized_text(terminology_hint_label, "ui.settings.terminology_hint")
-	_move_nodes_to_container(general_tab, [
-		battle_animations_check_box,
-		weather_effects_check_box,
-		terrain_effects_check_box,
-		_create_display_own_name_check_box(),
-		_create_hide_other_players_check_box(),
-	])
+	_create_display_own_name_check_box()
+	_create_hide_other_players_check_box()
+	var gameplay_rows: Array = [
+		_create_toggle_setting(battle_animations_check_box, "ui.settings.enable_move_animations"),
+		_create_toggle_setting(weather_effects_check_box, "ui.settings.enable_weather_effects"),
+		_create_toggle_setting(terrain_effects_check_box, "ui.settings.enable_terrain_effects"),
+		_create_toggle_setting(display_own_name_check_box, "ui.settings.display_own_name"),
+		_create_toggle_setting(hide_other_players_check_box, "ui.settings.hide_other_players"),
+	]
+	_move_nodes_to_container(general_tab, gameplay_rows)
 	_wrap_settings_section(
 		general_tab,
-		"ui.settings.section.gameplay",
-		"ui.settings.section.gameplay_subtitle",
+		"",
+		"",
 		general_tab.get_children()
 	)
-	_move_nodes_to_container(language_tab, [
-		language_label,
-		language_options_button,
-		terminology_label,
-		terminology_options_button,
-		terminology_hint_label,
-	])
+	var language_row := _create_labeled_control_row(language_label, language_options_button)
+	var terminology_row := _create_labeled_control_row(
+		terminology_label, terminology_options_button, terminology_hint_label
+	)
+	_move_nodes_to_container(language_tab, [language_row, terminology_row])
 	_wrap_settings_section(
 		language_tab,
-		"ui.settings.section.language",
-		"ui.settings.section.language_subtitle",
+		"",
+		"",
 		language_tab.get_children()
 	)
+	var sprite_style_label := sprite_style_options_button.get_node("../SpriteStyleLabel") as Label
+	var display_label := fullscreen_check_box.get_node("../DisplayLabel") as Label
+	var resolution_label := resolution_options_button.get_node("../ResolutionLabel") as Label
+	var sprite_style_row := _create_labeled_control_row(
+		sprite_style_label, sprite_style_options_button
+	)
+	var fullscreen_row := _create_toggle_setting(fullscreen_check_box, "ui.settings.fullscreen")
+	var resolution_row := _create_labeled_control_row(
+		resolution_label, resolution_options_button
+	)
+	var world_scale_row := _create_labeled_control_row(
+		world_pixel_scale_label, world_pixel_scale_options_button, world_pixel_scale_hint_label
+	)
+	var cursor_scale_row := _create_labeled_control_row(
+		cursor_scale_label, cursor_scale_slider.get_parent() as Control
+	)
+	if display_label != null:
+		display_label.get_parent().remove_child(display_label)
+		display_label.queue_free()
 	_move_nodes_to_container(graphics_tab, [
-		sprite_style_options_button.get_node("../SpriteStyleLabel"),
-		sprite_style_options_button,
+		sprite_style_row,
 		sprite_style_status_label,
-		fullscreen_check_box.get_node("../DisplayLabel"),
-		fullscreen_check_box,
-		resolution_options_button.get_node("../ResolutionLabel"),
-		resolution_options_button,
-		world_pixel_scale_label,
-		world_pixel_scale_options_button,
-		world_pixel_scale_hint_label,
-		cursor_scale_label,
-		cursor_scale_slider.get_parent(),
+		fullscreen_row,
+		resolution_row,
+		world_scale_row,
+		cursor_scale_row,
 	])
 	_wrap_settings_section(graphics_tab, "ui.settings.section.sprites", "ui.settings.section.sprites_subtitle", [
-		sprite_style_options_button.get_node("../SpriteStyleLabel"),
-		sprite_style_options_button,
+		sprite_style_row,
 		sprite_style_status_label,
 	])
-	_wrap_settings_section(graphics_tab, "ui.settings.section.display", "ui.settings.section.display_subtitle", [
-		fullscreen_check_box.get_node("../DisplayLabel"),
-		fullscreen_check_box,
-		resolution_options_button.get_node("../ResolutionLabel"),
-		resolution_options_button,
-		world_pixel_scale_label,
-		world_pixel_scale_options_button,
-		world_pixel_scale_hint_label,
-		cursor_scale_label,
-		cursor_scale_slider.get_parent(),
+	_wrap_settings_section(graphics_tab, "ui.settings.section.display", "", [
+		fullscreen_row,
+		resolution_row,
+		world_scale_row,
+		cursor_scale_row,
 	])
+	var audio_label := master_volume_slider.get_node("../../AudioLabel") as Label
+	var battle_music_label := battle_music_options_button.get_node("../BattleMusicLabel") as Label
+	var battle_music_row := _create_labeled_control_row(
+		battle_music_label, battle_music_options_button
+	)
+	if audio_label != null:
+		audio_label.get_parent().remove_child(audio_label)
+		audio_label.queue_free()
+	for volume_row: Control in [
+		master_volume_slider.get_parent(),
+		music_volume_slider.get_parent(),
+		sfx_volume_slider.get_parent(),
+		pokemon_cry_volume_slider.get_parent(),
+		ui_volume_slider.get_parent(),
+		notification_volume_slider.get_parent(),
+	]:
+		volume_row.custom_minimum_size.y = 38.0
 	_move_nodes_to_container(sound_tab, [
-		master_volume_slider.get_node("../../AudioLabel"),
 		master_volume_slider.get_node(".."),
 		music_volume_slider.get_node(".."),
-		battle_music_options_button.get_node("../BattleMusicLabel"),
-		battle_music_options_button,
+		battle_music_row,
 		sfx_volume_slider.get_node(".."),
 		pokemon_cry_volume_slider.get_node(".."),
 		ui_volume_slider.get_node(".."),
@@ -429,17 +472,20 @@ func _setup_tabs() -> void:
 	_wrap_settings_section(
 		sound_tab,
 		"ui.settings.section.audio_mix",
-		"ui.settings.section.audio_mix_subtitle",
+		"",
 		sound_tab.get_children()
 	)
 	_build_controls_tab(controls_tab)
 	_build_account_tab(account_tab)
 	_build_support_tab(support_tab)
 	_build_about_tab(about_tab)
+	_create_settings_footer()
 
 
 func _apply_context(context: String) -> void:
 	var show_account_tab := context != "login"
+	if exit_game_button != null:
+		exit_game_button.visible = show_account_tab
 	if account_tab_root != null:
 		account_tab_root.visible = show_account_tab
 		var account_tab_index: int = account_tab_root.get_index()
@@ -463,10 +509,16 @@ func _build_navigation() -> void:
 		return
 
 	for index: int in range(tab_container.get_tab_count()):
+		if index == 6:
+			var navigation_spacer := Control.new()
+			navigation_spacer.name = "NavigationSpacer"
+			navigation_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			navigation_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			settings_navigation.add_child(navigation_spacer)
 		var tab_root := tab_container.get_child(index)
 		var button := Button.new()
 		button.name = "%sNavigationButton" % str(tab_root.name)
-		button.custom_minimum_size = Vector2(NAVIGATION_WIDTH - 20.0, 42.0)
+		button.custom_minimum_size = Vector2(NAVIGATION_WIDTH - 20.0, NAVIGATION_BUTTON_HEIGHT)
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.focus_mode = Control.FOCUS_ALL
 		button.set_meta("settings_tab_index", index)
@@ -495,6 +547,7 @@ func _refresh_navigation_state() -> void:
 	for index: int in range(settings_navigation_buttons.size()):
 		var button := settings_navigation_buttons[index]
 		_apply_navigation_button_style(button, index == tab_container.current_tab)
+	_update_focus_links()
 
 
 func _focus_active_navigation_button() -> void:
@@ -510,7 +563,47 @@ func _focus_active_navigation_button() -> void:
 	close_button.grab_focus()
 
 
-func _create_tab_content(tab_name: String, translation_key: String) -> VBoxContainer:
+func _update_focus_links() -> void:
+	if tab_container == null or settings_navigation_buttons.is_empty():
+		return
+	var visible_buttons: Array[Button] = []
+	for button: Button in settings_navigation_buttons:
+		if button.visible:
+			visible_buttons.append(button)
+	for index: int in range(visible_buttons.size()):
+		var button := visible_buttons[index]
+		button.focus_neighbor_top = visible_buttons[maxi(index - 1, 0)].get_path()
+		button.focus_neighbor_bottom = visible_buttons[mini(index + 1, visible_buttons.size() - 1)].get_path()
+
+	var active_index := tab_container.current_tab
+	if active_index < 0 or active_index >= settings_navigation_buttons.size():
+		return
+	var active_button := settings_navigation_buttons[active_index]
+	var active_tab := tab_container.get_child(active_index)
+	var first_control := _find_first_focusable_control(active_tab)
+	if first_control != null:
+		active_button.focus_neighbor_right = first_control.get_path()
+		first_control.focus_neighbor_left = active_button.get_path()
+
+
+func _find_first_focusable_control(node: Node) -> Control:
+	if node is Control:
+		var control := node as Control
+		if control.visible and control.focus_mode == Control.FOCUS_ALL:
+			if not control is BaseButton or not (control as BaseButton).disabled:
+				return control
+	for child: Node in node.get_children():
+		var candidate := _find_first_focusable_control(child)
+		if candidate != null:
+			return candidate
+	return null
+
+
+func _create_tab_content(
+	tab_name: String,
+	translation_key: String,
+	description_key: String
+) -> VBoxContainer:
 	var scroll := ScrollContainer.new()
 	scroll.name = tab_name
 	scroll.set_meta("i18n_tab_key", translation_key)
@@ -527,19 +620,175 @@ func _create_tab_content(tab_name: String, translation_key: String) -> VBoxConta
 	margin.name = "%sMargin" % tab_name
 	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	margin.add_theme_constant_override("margin_left", 4)
-	margin.add_theme_constant_override("margin_top", 14)
-	margin.add_theme_constant_override("margin_right", 4)
-	margin.add_theme_constant_override("margin_bottom", 8)
+	margin.add_theme_constant_override("margin_left", 18)
+	margin.add_theme_constant_override("margin_top", 18)
+	margin.add_theme_constant_override("margin_right", 18)
+	margin.add_theme_constant_override("margin_bottom", 16)
 	scroll.add_child(margin)
+
+	var page := VBoxContainer.new()
+	page.name = "%sPage" % tab_name
+	page.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	page.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	page.add_theme_constant_override("separation", 14)
+	margin.add_child(page)
+
+	var page_header := VBoxContainer.new()
+	page_header.name = "%sPageHeader" % tab_name
+	page_header.add_theme_constant_override("separation", 4)
+	page.add_child(page_header)
+
+	var page_title := Label.new()
+	page_title.name = "%sPageTitle" % tab_name
+	page_title.set_meta("settings_page_title", true)
+	_set_localized_text(page_title, translation_key)
+	page_title.add_theme_font_size_override("font_size", 24)
+	page_title.add_theme_color_override("font_color", UI_TEXT)
+	page_header.add_child(page_title)
+
+	var page_subtitle := Label.new()
+	page_subtitle.name = "%sPageSubtitle" % tab_name
+	page_subtitle.set_meta("settings_page_subtitle", true)
+	_set_localized_text(page_subtitle, description_key)
+	page_subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	page_subtitle.add_theme_font_size_override("font_size", 13)
+	page_subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	page_header.add_child(page_subtitle)
 
 	var content := VBoxContainer.new()
 	content.name = "%sContent" % tab_name
 	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	content.add_theme_constant_override("separation", 12)
-	margin.add_child(content)
+	content.add_theme_constant_override("separation", 14)
+	page.add_child(content)
 	return content
+
+
+func _create_labeled_control_row(
+	label: Label,
+	control: Control,
+	hint: Label = null
+) -> PanelContainer:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size.y = 58.0 if hint == null else 68.0
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_ROW_BG, Color(0, 0, 0, 0), 8, 0))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 9)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 9)
+	panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 18)
+	margin.add_child(row)
+
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.add_theme_constant_override("separation", 3)
+	row.add_child(copy)
+	_move_node(label, copy)
+	label.set_meta("settings_row_label", true)
+	label.add_theme_color_override("font_color", UI_TEXT)
+	label.add_theme_font_size_override("font_size", 14)
+	if hint != null:
+		_move_node(hint, copy)
+		hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		hint.add_theme_font_size_override("font_size", 11)
+
+	_move_node(control, row)
+	control.custom_minimum_size.x = maxf(control.custom_minimum_size.x, 268.0)
+	control.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	return panel
+
+
+func _create_toggle_setting(check_box: CheckBox, label_key: String) -> PanelContainer:
+	var label := Label.new()
+	_set_localized_text(label, label_key)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_font_size_override("font_size", 14)
+	label.add_theme_color_override("font_color", UI_TEXT)
+	label.set_meta("settings_row_label", true)
+
+	var panel := PanelContainer.new()
+	panel.name = "%sSettingRow" % check_box.name.trim_suffix("CheckBox")
+	panel.custom_minimum_size.y = 50.0
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	panel.add_theme_stylebox_override("panel", _make_panel_style(UI_ROW_BG, Color(0, 0, 0, 0), 8, 0))
+	panel.gui_input.connect(_on_toggle_row_gui_input.bind(check_box))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 7)
+	panel.add_child(margin)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 16)
+	margin.add_child(row)
+	row.add_child(label)
+	_move_node(check_box, row)
+	check_box.text = ""
+	check_box.remove_meta("i18n_text_key")
+	check_box.remove_meta("i18n_text_uppercase")
+	check_box.focus_mode = Control.FOCUS_ALL
+	check_box.custom_minimum_size = Vector2(48, 30)
+	check_box.tooltip_text = LocalizationManager.text(label_key)
+	check_box.set_meta("i18n_tooltip_key", label_key)
+	return panel
+
+
+func _on_toggle_row_gui_input(event: InputEvent, check_box: CheckBox) -> void:
+	if event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
+			check_box.button_pressed = not check_box.button_pressed
+
+
+func _move_node(node: Node, new_parent: Node) -> void:
+	if node == null or new_parent == null:
+		return
+	var current_parent := node.get_parent()
+	if current_parent != null:
+		current_parent.remove_child(node)
+	new_parent.add_child(node)
+
+
+func _create_settings_footer() -> void:
+	settings_footer = HBoxContainer.new()
+	settings_footer.name = "SettingsFooter"
+	settings_footer.custom_minimum_size.y = 36.0
+	settings_footer.alignment = BoxContainer.ALIGNMENT_BEGIN
+	settings_footer.add_theme_constant_override("separation", 7)
+	settings_layout.add_child(settings_footer)
+
+	var saved_dot := Label.new()
+	saved_dot.text = "●"
+	saved_dot.set_meta("settings_saved_dot", true)
+	saved_dot.add_theme_color_override("font_color", Color("#54d99b"))
+	saved_dot.add_theme_font_size_override("font_size", 10)
+	settings_footer.add_child(saved_dot)
+
+	autosave_label = Label.new()
+	autosave_label.name = "AutosaveLabel"
+	_set_localized_text(autosave_label, "ui.settings.autosave")
+	autosave_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	autosave_label.add_theme_font_size_override("font_size", 12)
+	settings_footer.add_child(autosave_label)
+
+	var footer_spacer := Control.new()
+	footer_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	footer_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	settings_footer.add_child(footer_spacer)
+
+	if exit_game_button != null:
+		exit_game_button.custom_minimum_size = Vector2(126, 32)
+		settings_footer.add_child(exit_game_button)
 
 
 func _create_world_pixel_scale_control() -> void:
@@ -549,7 +798,7 @@ func _create_world_pixel_scale_control() -> void:
 
 	world_pixel_scale_options_button = OptionButton.new()
 	world_pixel_scale_options_button.name = "WorldPixelScaleOptionsButton"
-	world_pixel_scale_options_button.focus_mode = Control.FOCUS_NONE
+	world_pixel_scale_options_button.focus_mode = Control.FOCUS_ALL
 
 	world_pixel_scale_hint_label = Label.new()
 	world_pixel_scale_hint_label.name = "WorldPixelScaleHintLabel"
@@ -615,7 +864,7 @@ func _build_controls_tab(controls_tab: VBoxContainer) -> void:
 	_wrap_settings_section(
 		controls_tab,
 		"ui.settings.section.controls",
-		"ui.settings.section.controls_subtitle",
+		"",
 		controls_tab.get_children()
 	)
 
@@ -658,12 +907,15 @@ func _add_input_binding_control(
 
 	var reset_button := Button.new()
 	reset_button.name = "Reset%sBindingButton" % control_name
-	_set_localized_text(reset_button, "ui.settings.controls.reset")
+	reset_button.text = "↺"
+	reset_button.tooltip_text = LocalizationManager.text("ui.settings.controls.reset")
+	reset_button.set_meta("i18n_tooltip_key", "ui.settings.controls.reset")
+	reset_button.custom_minimum_size = Vector2(42, 38)
 	reset_button.focus_mode = Control.FOCUS_ALL
 	reset_button.pressed.connect(_reset_input_binding.bind(action))
+	row.add_child(reset_button)
 
 	controls_tab.add_child(row)
-	controls_tab.add_child(reset_button)
 
 
 func _start_input_binding_capture(action: String) -> void:
@@ -713,28 +965,31 @@ func _wrap_settings_section(container: VBoxContainer, title_key: String, subtitl
 	container.add_child(card)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_right", 12)
-	margin.add_theme_constant_override("margin_bottom", 10)
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 13)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 14)
 	card.add_child(margin)
 
 	var stack := VBoxContainer.new()
-	stack.add_theme_constant_override("separation", 9)
+	stack.add_theme_constant_override("separation", 8)
 	margin.add_child(stack)
 
-	var title := Label.new()
-	_set_localized_text(title, title_key, true)
-	title.add_theme_font_size_override("font_size", 10)
-	title.add_theme_color_override("font_color", UI_SECTION_TEXT)
-	stack.add_child(title)
+	if not title_key.is_empty():
+		var title := Label.new()
+		title.set_meta("settings_section_title", true)
+		_set_localized_text(title, title_key, true)
+		title.add_theme_font_size_override("font_size", 10)
+		title.add_theme_color_override("font_color", UI_SECTION_TEXT)
+		stack.add_child(title)
 
-	var subtitle := Label.new()
-	_set_localized_text(subtitle, subtitle_key)
-	subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	subtitle.add_theme_font_size_override("font_size", 11)
-	subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	stack.add_child(subtitle)
+	if not subtitle_key.is_empty():
+		var subtitle := Label.new()
+		_set_localized_text(subtitle, subtitle_key)
+		subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		subtitle.add_theme_font_size_override("font_size", 11)
+		subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		stack.add_child(subtitle)
 
 	for node_value: Variant in nodes.duplicate():
 		var node := node_value as Node
@@ -747,12 +1002,10 @@ func _wrap_settings_section(container: VBoxContainer, title_key: String, subtitl
 
 
 func _build_account_tab(account_tab: VBoxContainer) -> void:
-	var account_label := Label.new()
-	_set_localized_text(account_label, "ui.settings.tab.account")
-	account_tab.add_child(account_label)
-
 	account_user_label = Label.new()
 	account_user_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	account_user_label.add_theme_color_override("font_color", UI_TEXT)
+	account_user_label.add_theme_font_size_override("font_size", 15)
 	account_tab.add_child(account_user_label)
 
 	account_portal_note_label = Label.new()
@@ -764,7 +1017,7 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 
 	account_portal_button = Button.new()
 	_set_localized_text(account_portal_button, "ui.settings.account.portal")
-	account_portal_button.focus_mode = Control.FOCUS_NONE
+	account_portal_button.focus_mode = Control.FOCUS_ALL
 	account_tab.add_child(account_portal_button)
 
 	account_status_label = Label.new()
@@ -781,13 +1034,25 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 
 	logout_button = Button.new()
 	_set_localized_text(logout_button, "ui.settings.account.return_login")
-	logout_button.focus_mode = Control.FOCUS_NONE
+	logout_button.focus_mode = Control.FOCUS_ALL
 	account_tab.add_child(logout_button)
 
 	exit_game_button = Button.new()
 	_set_localized_text(exit_game_button, "ui.settings.account.exit_game")
-	exit_game_button.focus_mode = Control.FOCUS_NONE
-	account_tab.add_child(exit_game_button)
+	exit_game_button.focus_mode = Control.FOCUS_ALL
+
+	_wrap_settings_section(
+		account_tab,
+		"ui.settings.account.section.manage",
+		"",
+		[account_user_label, account_portal_note_label, account_portal_button, account_status_label]
+	)
+	_wrap_settings_section(
+		account_tab,
+		"ui.settings.account.section.session",
+		"",
+		[account_return_note_label, logout_button]
+	)
 
 
 func _build_about_tab(about_tab: VBoxContainer) -> void:
@@ -801,12 +1066,6 @@ func _build_about_tab(about_tab: VBoxContainer) -> void:
 	about_version_label.set_meta("version", version)
 	_update_about_version_label()
 	about_tab.add_child(about_version_label)
-
-	var description_label := Label.new()
-	_set_localized_text(description_label, "ui.settings.about.description")
-	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description_label.add_theme_font_size_override("font_size", 13)
-	about_tab.add_child(description_label)
 
 	var spacer := Control.new()
 	spacer.custom_minimum_size = Vector2(0, 8)
@@ -831,18 +1090,6 @@ func _build_about_tab(about_tab: VBoxContainer) -> void:
 
 
 func _build_support_tab(support_tab: VBoxContainer) -> void:
-	var title := Label.new()
-	_set_localized_text(title, "ui.settings.support.title")
-	title.add_theme_font_size_override("font_size", 18)
-	title.add_theme_color_override("font_color", UI_TEXT)
-	support_tab.add_child(title)
-
-	var explanation := Label.new()
-	_set_localized_text(explanation, "ui.settings.support.description")
-	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	explanation.add_theme_font_size_override("font_size", 13)
-	support_tab.add_child(explanation)
-
 	var privacy_note := Label.new()
 	_set_localized_text(privacy_note, "ui.settings.support.privacy")
 	privacy_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -877,14 +1124,14 @@ func _build_support_tab(support_tab: VBoxContainer) -> void:
 func _create_display_own_name_check_box() -> CheckBox:
 	display_own_name_check_box = CheckBox.new()
 	_set_localized_text(display_own_name_check_box, "ui.settings.display_own_name")
-	display_own_name_check_box.focus_mode = Control.FOCUS_NONE
+	display_own_name_check_box.focus_mode = Control.FOCUS_ALL
 	return display_own_name_check_box
 
 
 func _create_hide_other_players_check_box() -> CheckBox:
 	hide_other_players_check_box = CheckBox.new()
 	_set_localized_text(hide_other_players_check_box, "ui.settings.hide_other_players")
-	hide_other_players_check_box.focus_mode = Control.FOCUS_NONE
+	hide_other_players_check_box.focus_mode = Control.FOCUS_ALL
 	return hide_other_players_check_box
 
 
@@ -1165,6 +1412,10 @@ func _refresh_localized_controls(node: Node) -> void:
 		(node as LineEdit).placeholder_text = LocalizationManager.text(
 			str(node.get_meta("i18n_placeholder_key"))
 		)
+	if node is Control and node.has_meta("i18n_tooltip_key"):
+		(node as Control).tooltip_text = LocalizationManager.text(
+			str(node.get_meta("i18n_tooltip_key"))
+		)
 	for child: Node in node.get_children():
 		_refresh_localized_controls(child)
 
@@ -1284,7 +1535,27 @@ func _apply_label_style(label: Label) -> void:
 	label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	if label.name == "TitleLabel":
 		label.add_theme_color_override("font_color", UI_TEXT)
-		label.add_theme_font_size_override("font_size", 21)
+		label.add_theme_font_size_override("font_size", 24)
+		return
+	if bool(label.get_meta("settings_page_title", false)):
+		label.add_theme_color_override("font_color", UI_TEXT)
+		label.add_theme_font_size_override("font_size", 24)
+		return
+	if bool(label.get_meta("settings_page_subtitle", false)):
+		label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		label.add_theme_font_size_override("font_size", 13)
+		return
+	if bool(label.get_meta("settings_section_title", false)):
+		label.add_theme_color_override("font_color", UI_SECTION_TEXT)
+		label.add_theme_font_size_override("font_size", 11)
+		return
+	if bool(label.get_meta("settings_row_label", false)):
+		label.add_theme_color_override("font_color", UI_TEXT)
+		label.add_theme_font_size_override("font_size", 14)
+		return
+	if bool(label.get_meta("settings_saved_dot", false)):
+		label.add_theme_color_override("font_color", Color("#54d99b"))
+		label.add_theme_font_size_override("font_size", 10)
 		return
 	var localization_key := str(label.get_meta("i18n_text_key", ""))
 	if label.name in [
@@ -1316,35 +1587,43 @@ func _apply_checkbox_style(check_box: CheckBox) -> void:
 	check_box.add_theme_icon_override("checked", _settings_checkbox_icon(true, false))
 	check_box.add_theme_icon_override("checked_hover", _settings_checkbox_icon(true, true))
 	check_box.add_theme_icon_override("checked_pressed", _settings_checkbox_icon(true, true))
+	check_box.add_theme_icon_override("unchecked_disabled", _settings_checkbox_icon(false, false))
+	check_box.add_theme_icon_override("checked_disabled", _settings_checkbox_icon(true, false))
 
 
 static func _settings_checkbox_icon(checked: bool, highlighted: bool) -> ImageTexture:
-	var image := Image.create(20, 20, false, Image.FORMAT_RGBA8)
+	var image := Image.create(44, 24, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0, 0, 0, 0))
 	var border := UI_BORDER_FOCUS if highlighted else (UI_SECTION_TEXT if checked else Color("#5d7692"))
-	var fill := Color("#274b79") if checked else Color("#0a1423")
-	for y: int in range(20):
-		for x: int in range(20):
-			var is_border := x < 2 or x > 17 or y < 2 or y > 17
-			image.set_pixel(x, y, border if is_border else fill)
-	if checked:
-		var check_pixels := [
-			Vector2i(5, 10), Vector2i(6, 11), Vector2i(7, 12), Vector2i(8, 13),
-			Vector2i(9, 12), Vector2i(10, 11), Vector2i(11, 10), Vector2i(12, 9),
-			Vector2i(13, 8), Vector2i(14, 7),
-		]
-		for point: Vector2i in check_pixels:
-			image.set_pixelv(point, Color.WHITE)
-			if point.y + 1 < 18:
-				image.set_pixel(point.x, point.y + 1, Color.WHITE)
+	var fill := Color("#7650d6") if checked else Color("#091522")
+	for y: int in range(24):
+		for x: int in range(44):
+			var point := Vector2(float(x) + 0.5, float(y) + 0.5)
+			var nearest_x := clampf(point.x, 12.0, 32.0)
+			var distance := point.distance_to(Vector2(nearest_x, 12.0))
+			if distance <= 11.0:
+				image.set_pixel(x, y, border if distance > 9.0 else fill)
+	var knob_center := Vector2(32.0 if checked else 12.0, 12.0)
+	for y: int in range(24):
+		for x: int in range(44):
+			var point := Vector2(float(x) + 0.5, float(y) + 0.5)
+			if point.distance_to(knob_center) <= 7.0:
+				image.set_pixel(x, y, Color("#f4f7fb"))
 	return ImageTexture.create_from_image(image)
 
 
 func _apply_slider_style(slider: HSlider) -> void:
 	if slider == null:
 		return
-	slider.custom_minimum_size.y = max(slider.custom_minimum_size.y, 22.0)
-	slider.add_theme_stylebox_override("slider", _make_panel_style(UI_BORDER_SOFT, UI_BORDER_SOFT, 4, 0))
-	slider.add_theme_stylebox_override("grabber_area", _make_panel_style(UI_BORDER, UI_BORDER, 4, 0))
+	slider.custom_minimum_size.y = max(slider.custom_minimum_size.y, 26.0)
+	var track := _make_panel_style(Color("#263d56"), Color("#263d56"), 4, 0)
+	track.content_margin_top = 3
+	track.content_margin_bottom = 3
+	var filled_track := _make_panel_style(UI_BORDER, UI_BORDER, 4, 0)
+	filled_track.content_margin_top = 3
+	filled_track.content_margin_bottom = 3
+	slider.add_theme_stylebox_override("slider", track)
+	slider.add_theme_stylebox_override("grabber_area", filled_track)
 
 
 func _apply_button_style(button: Button, variant: String = "default") -> void:
@@ -1378,16 +1657,23 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 func _apply_navigation_button_style(button: Button, selected: bool) -> void:
 	if button == null:
 		return
-	var normal_bg := Color("#201b3fed") if selected else Color(0, 0, 0, 0)
-	var normal_border := UI_PURPLE_HOVER if selected else Color(0, 0, 0, 0)
+	var normal_bg := Color("#1a2442ed") if selected else Color(0, 0, 0, 0)
 	button.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED_TEXT)
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
 	button.add_theme_color_override("font_pressed_color", UI_TEXT)
 	button.add_theme_font_size_override("font_size", 14)
-	button.add_theme_stylebox_override("normal", _make_button_style(normal_bg, normal_border, 8, 1 if selected else 0))
-	button.add_theme_stylebox_override("hover", _make_button_style(Color("#171b35e8"), UI_PURPLE_HOVER, 8, 1))
-	button.add_theme_stylebox_override("pressed", _make_button_style(Color("#12152bf2"), UI_PURPLE_HOVER, 8, 1))
-	button.add_theme_stylebox_override("focus", _make_button_style(normal_bg, UI_PURPLE_HOVER, 8, 1))
+	button.add_theme_stylebox_override(
+		"normal", _make_navigation_style(normal_bg, UI_PURPLE_HOVER if selected else Color(0, 0, 0, 0), selected)
+	)
+	button.add_theme_stylebox_override(
+		"hover", _make_navigation_style(Color("#13243ae8"), UI_BORDER, true)
+	)
+	button.add_theme_stylebox_override(
+		"pressed", _make_navigation_style(Color("#101a30f2"), UI_PURPLE_HOVER, true)
+	)
+	button.add_theme_stylebox_override(
+		"focus", _make_button_style(Color(0, 0, 0, 0), UI_BORDER_FOCUS, 8, 1)
+	)
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
@@ -1485,6 +1771,16 @@ func _make_button_style(background_color: Color, border_color: Color, corner_rad
 	style.content_margin_right = 12
 	style.content_margin_top = 7
 	style.content_margin_bottom = 7
+	return style
+
+
+func _make_navigation_style(background_color: Color, accent_color: Color, accented: bool) -> StyleBoxFlat:
+	var style := _make_panel_style(background_color, accent_color, 8, 0)
+	style.border_width_left = 3 if accented else 0
+	style.content_margin_left = 15
+	style.content_margin_right = 12
+	style.content_margin_top = 8
+	style.content_margin_bottom = 8
 	return style
 
 
@@ -1598,6 +1894,9 @@ func _on_world_pixel_scale_selected(index: int) -> void:
 		return
 
 	var scale_metadata: Variant = world_pixel_scale_options_button.get_item_metadata(index)
+	if scale_metadata is String and scale_metadata == SettingsManager.WORLD_PIXEL_SCALE_MODE_AUTO:
+		SettingsManager.set_world_pixel_scale_auto()
+		return
 	if not scale_metadata is float and not scale_metadata is int:
 		return
 
@@ -2486,13 +2785,25 @@ func _apply_world_pixel_scale_options_to_control() -> void:
 	world_pixel_scale_options_button.clear()
 
 	var selected_index := 0
+	world_pixel_scale_options_button.add_item(
+		LocalizationManager.text("ui.settings.world_pixel_scale_auto"),
+		0
+	)
+	world_pixel_scale_options_button.set_item_metadata(
+		0,
+		SettingsManager.WORLD_PIXEL_SCALE_MODE_AUTO
+	)
 	for index: int in range(SettingsManager.AVAILABLE_WORLD_PIXEL_SCALES.size()):
 		var scale: float = SettingsManager.AVAILABLE_WORLD_PIXEL_SCALES[index]
 		var option_text := _world_pixel_scale_option_text(scale)
-		world_pixel_scale_options_button.add_item(option_text, index)
-		world_pixel_scale_options_button.set_item_metadata(index, scale)
-		if is_equal_approx(scale, SettingsManager.world_pixel_scale):
-			selected_index = index
+		var item_index := index + 1
+		world_pixel_scale_options_button.add_item(option_text, item_index)
+		world_pixel_scale_options_button.set_item_metadata(item_index, scale)
+		if (
+			not SettingsManager.is_world_pixel_scale_auto()
+			and is_equal_approx(scale, SettingsManager.world_pixel_scale)
+		):
+			selected_index = item_index
 
 	if world_pixel_scale_options_button.item_count > 0:
 		world_pixel_scale_options_button.select(selected_index)

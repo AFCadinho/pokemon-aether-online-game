@@ -21,7 +21,6 @@ const PRESENCE_BODY_APPEARANCE_SEPARATOR := "#appearance="
 const DEFAULT_BODY_ID := "Gen4_Base_v1"
 const DEFAULT_MALE_BODY_ID := "Gen4_Base_v1"
 const DEFAULT_FEMALE_BODY_ID := "Gen4_Base_F_v1"
-const BASE_HAIR_ID := "Bald_Hair"
 const DEFAULT_MALE_HAIR_ID := "Hair"
 const DEFAULT_MALE_HEADGEAR_ID := "Cap"
 const DEFAULT_MALE_FACIAL_HAIR_ID := ""
@@ -162,6 +161,7 @@ static var _skin_tinted_body_frames_cache: Dictionary = {}
 static var _part_frames_cache: Dictionary = {}
 static var _tinted_part_frames_cache: Dictionary = {}
 static var _cosmetic_item_icon_cache: Dictionary = {}
+static var _appearance_part_icon_cache: Dictionary = {}
 
 
 static func resolve_cosmetic_icon_gender(gender: String, allowed_genders_value: Variant = []) -> String:
@@ -405,9 +405,50 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 				frames = get_part_frames(category, appearance_id, normalized_gender)
 		_blend_idle_front_frame(icon_image, frames)
 
+	var icon_texture := _create_cropped_appearance_icon(icon_image)
+	if icon_texture == null:
+		_cosmetic_item_icon_cache[cache_key] = null
+		return null
+	_cosmetic_item_icon_cache[cache_key] = icon_texture
+	return icon_texture
+
+
+static func get_appearance_part_icon(
+	category: String,
+	part_id: String,
+	gender: String = "male"
+) -> Texture2D:
+	var normalized_category := normalize_part_category(category)
+	var normalized_part_id := part_id.strip_edges()
+	var normalized_gender := normalize_gender(gender)
+	if normalized_gender == "":
+		normalized_gender = "male"
+	if normalized_category == "" or normalized_part_id == "":
+		return null
+	var cache_key := "%s:%s:%s" % [
+		normalized_gender,
+		normalized_category,
+		normalized_part_id,
+	]
+	if _appearance_part_icon_cache.has(cache_key):
+		return _appearance_part_icon_cache.get(cache_key) as Texture2D
+
+	var icon_image := Image.create(64, 64, false, Image.FORMAT_RGBA8)
+	icon_image.fill(Color.TRANSPARENT)
+	_blend_idle_front_frame(
+		icon_image,
+		get_part_frames(normalized_category, normalized_part_id, normalized_gender)
+	)
+	var icon_texture := _create_cropped_appearance_icon(icon_image)
+	_appearance_part_icon_cache[cache_key] = icon_texture
+	return icon_texture
+
+
+static func _create_cropped_appearance_icon(icon_image: Image) -> Texture2D:
+	if icon_image == null:
+		return null
 	var used_rect := icon_image.get_used_rect()
 	if used_rect.size.x <= 0 or used_rect.size.y <= 0:
-		_cosmetic_item_icon_cache[cache_key] = null
 		return null
 	var padded_position := Vector2i(
 		maxi(used_rect.position.x - 2, 0),
@@ -418,9 +459,7 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 		mini(used_rect.end.y + 2, icon_image.get_height())
 	)
 	var cropped_image := icon_image.get_region(Rect2i(padded_position, padded_end - padded_position))
-	var icon_texture := ImageTexture.create_from_image(cropped_image)
-	_cosmetic_item_icon_cache[cache_key] = icon_texture
-	return icon_texture
+	return ImageTexture.create_from_image(cropped_image)
 
 
 static func _blend_idle_front_frame(target: Image, frames: SpriteFrames) -> void:
@@ -632,11 +671,6 @@ static func deserialize_part_id(part_id: String) -> String:
 	return normalized_part_id
 
 
-static func resolve_hair_render_id(hair_id: String) -> String:
-	var normalized_hair_id := deserialize_part_id(hair_id)
-	return BASE_HAIR_ID if normalized_hair_id == "" else normalized_hair_id
-
-
 static func _is_empty_presence_part_id(part_id: String) -> bool:
 	var normalized_part_id: String = part_id.strip_edges().to_lower()
 	return normalized_part_id == "" or normalized_part_id == UNEQUIPPED_PART_ID
@@ -789,7 +823,7 @@ static func get_tinted_part_frames(
 	var tinted_frames: SpriteFrames = _build_tinted_sprite_frames(
 		base_frames,
 		tint_color,
-		preserve_luminance and normalized_part_id != BASE_HAIR_ID
+		preserve_luminance
 	)
 	_tinted_part_frames_cache[cache_key] = tinted_frames
 	return tinted_frames

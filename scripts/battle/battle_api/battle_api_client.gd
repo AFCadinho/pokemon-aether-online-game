@@ -139,6 +139,12 @@ func spectate_pvp_room(request_node: HTTPRequest, room_code: String) -> Dictiona
 		"/battle/pvp/rooms/%s/spectate" % room_code.strip_edges().uri_encode()
 	)
 
+func spectate_ranked_pvp_match(request_node: HTTPRequest, match_id: String) -> Dictionary:
+	return await send_get_request(
+		request_node,
+		"/battle/pvp/matches/%s/spectate" % match_id.strip_edges().uri_encode()
+	)
+
 func get_pvp_queues(request_node: HTTPRequest) -> Dictionary:
 	return await send_get_request(request_node, "/account/pvp/queues")
 
@@ -184,7 +190,7 @@ func get_pvp_leaderboard(
 	limit: int = 50,
 	offset: int = 0,
 	format_key: String = "",
-	scope: String = "all_time"
+	scope: String = "season"
 ) -> Dictionary:
 	var query := "/account/pvp/leaderboard?limit=%d&offset=%d" % [
 		max(1, limit),
@@ -201,6 +207,17 @@ func get_pvp_leaderboard(
 		query
 	)
 
+func get_live_ranked_pvp_matches(
+	request_node: HTTPRequest,
+	limit: int = 50,
+	format_key: String = ""
+) -> Dictionary:
+	var query := "/account/pvp/ranked/live?limit=%d" % clampi(limit, 1, 100)
+	var normalized_format_key := format_key.strip_edges()
+	if normalized_format_key != "":
+		query += "&formatKey=%s" % normalized_format_key.uri_encode()
+	return await send_get_request(request_node, query)
+
 func get_pvp_match_history(request_node: HTTPRequest, limit: int = 20, offset: int = 0, format_key: String = "") -> Dictionary:
 	var query := "/account/pvp/matches/history/me?limit=%d&offset=%d" % [
 		max(1, limit),
@@ -212,6 +229,15 @@ func get_pvp_match_history(request_node: HTTPRequest, limit: int = 20, offset: i
 	return await send_get_request(
 		request_node,
 		query
+	)
+
+func get_pvp_match_summary(request_node: HTTPRequest, match_id: String) -> Dictionary:
+	var normalized_match_id := match_id.strip_edges()
+	if normalized_match_id == "":
+		return {"success": false, "error": "Missing PvP match id."}
+	return await send_get_request(
+		request_node,
+		"/account/pvp/matches/%s/summary" % normalized_match_id.uri_encode()
 	)
 
 func get_pvp_ranked_banlists(request_node: HTTPRequest, format_key: String = "") -> Dictionary:

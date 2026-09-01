@@ -35,22 +35,31 @@ func _check_endpoints() -> void:
 	_check_true(text.contains("STANDARD_MARKET_ENDPOINT := \"/game/markets/standard\""), "catalog endpoint")
 	_check_true(text.contains("STANDARD_MARKET_PURCHASE_ENDPOINT := \"/game/markets/standard/purchase\""), "purchase endpoint")
 	_check_true(text.contains("STANDARD_MARKET_SALE_ENDPOINT := \"/game/markets/standard/sell\""), "sale endpoint")
+	_check_true(text.contains("MARKET_ENDPOINT_TEMPLATE := \"/game/markets/%s\""), "named catalog endpoint")
+	_check_true(text.contains("MARKET_PURCHASE_ENDPOINT_TEMPLATE := \"/game/markets/%s/purchase\""), "named purchase endpoint")
 
 
 func _check_market_selection() -> void:
 	var text := _read_text(MARKET_SERVICE_SCRIPT)
 	_check_true(text.contains("func load_market(market_id: String) -> Dictionary:"), "market selection entrypoint")
 	_check_true(text.contains('"standard", "standard_pokemart":'), "standard market aliases")
-	_check_true(text.contains("Unsupported market id:"), "unsupported markets fail explicitly")
+	_check_true(text.contains("return await _load_named_market(normalized_market_id)"), "named NPC markets load through the generic endpoint")
+	_check_true(
+		text.contains("func purchase_item(") and text.contains("\tmarket_id: String,"),
+		"named NPC markets use a generic purchase entrypoint"
+	)
 
 
 func _check_purchase_payload() -> void:
-	var payload: Dictionary = service.build_purchase_payload("Poke Ball", 3)
+	var request_id := "11111111-1111-4111-8111-111111111111"
+	var payload: Dictionary = service.build_purchase_payload("Poke Ball", 3, request_id)
 	_check_equal(payload.get("itemId", ""), "poke-ball", "purchase payload item id")
 	_check_equal(payload.get("quantity", 0), 3, "purchase payload quantity")
+	_check_equal(payload.get("requestId", ""), request_id, "purchase payload request id")
 
 	var minimum_payload: Dictionary = service.build_purchase_payload("potion", 0)
 	_check_equal(minimum_payload.get("quantity", 0), 1, "purchase payload minimum quantity")
+	_check_true(str(minimum_payload.get("requestId", "")).length() == 36, "purchase payload generates a request id")
 
 
 func _check_sale_payload() -> void:
@@ -80,6 +89,10 @@ func _check_catalog_response_parsing() -> void:
 						"sellPrice": 100,
 						"requiredBadges": 0,
 						"available": true,
+						"accountUnique": true,
+						"accountBound": true,
+						"owned": true,
+						"maxPurchaseQuantity": 1,
 						"costs": [{
 							"currency": "money",
 							"amount": 190,
@@ -104,6 +117,10 @@ func _check_catalog_response_parsing() -> void:
 	_check_equal(first_item.get("sellPrice", 0), 100, "catalog item sale price")
 	_check_equal(first_item.get("requiredBadges", -1), 0, "catalog item badge requirement")
 	_check_equal(first_item.get("available", false), true, "catalog item availability")
+	_check_equal(first_item.get("accountUnique", false), true, "catalog account-unique flag")
+	_check_equal(first_item.get("accountBound", false), true, "catalog account-bound flag")
+	_check_equal(first_item.get("owned", false), true, "catalog ownership flag")
+	_check_equal(first_item.get("maxPurchaseQuantity", 0), 1, "catalog purchase quantity cap")
 	var first_cost := (first_item.get("costs", []) as Array)[0] as Dictionary
 	_check_equal(first_cost.get("amount", 0), 190, "catalog item discounted price")
 	_check_equal(first_cost.get("baseAmount", 0), 200, "catalog item base price")

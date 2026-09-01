@@ -1,6 +1,60 @@
 # Changelog
 
-## Unreleased
+## 0.3.70 - 2026-09-01
+
+**Added**
+
+- Aether UU is now available in Ranked, Casual rooms, leaderboards, match history, live battles, and direct Aether Clash challenges.
+- Ranked battles now award 1,000 Battle Points for a win and 500 for a loss. Your reward and rating change are shown after the battle.
+- The Aether Exchange now has item wishlists. You can offer money for an item, fill another Trainer's request, or cancel your own request for a full refund.
+- Trainers can now work together to fund one hour of double Fishing, Thieving, and Rock Smash experience.
+- Every Pokémon Center now has a Move Maniac and Move Deleter. They can teach old moves or remove moves in exchange for the listed materials.
+- The Aether Clash Lobby now has a Battle Point vendor, a Mega Stone Seller, and a temporary account-bound Z-Crystal Seller.
+- Guild Leaders and Captains can now challenge another Guild to an Aether Clash. Guild members receive a timer and directions when a challenge is accepted.
+- Guild Duel spectators can explore the arena, watch active battles, and return to the spectator area at any time.
+- The Clash Coordinator now explains Guild Duels, battle rules, timers, entry, and spectating.
+- Live Events now appear in System chat and in an on-screen card with their remaining time.
+
+**Changed**
+
+- Trainer Cards now have a cleaner Overview, Badges, and PvP layout. Ranked and Aether Clash records are shown separately, while Casual battles are not counted.
+- Character Customization now has clearer color choices, better item previews, and simpler options for equipping or returning wardrobe items.
+- Settings now has clearer pages, controls, hotkeys, and links to Support and About.
+- The Aether Gift Store now has a cleaner catalog and larger outfit previews that show the full outfit.
+- The Aether Exchange is easier to browse and separates market browsing, wishlists, and your own orders.
+- Aethernet travel now clearly separates available and locked destinations and shows each travel price.
+- The Quest Log now shows all item, currency, and skill experience rewards in the quest details.
+- Kanto quests now award a total of 1,325 Aetherite. Rewards from quests you already finished are granted once.
+- The Pokédex and Item Dex now show Aetherite rewards, Mega Stone drop chances, and clearer information about where items come from.
+- Ranked now has clearer reward pages, a Preseason rating leaderboard, and an improved list of live battles to spectate.
+- Pokémon Storage now has simpler box controls, clearer filters, improved stat cards, and an option to move a held item straight to the Bag.
+- Trainer menus and social lists now show clearer actions and small previews of each Trainer's appearance.
+- Guild pages now have clearer navigation, member information, announcements, search results, and donation messages.
+- Outdoor zoom now defaults to Auto and changes between 1× and 2× based on the window size. Fixed zoom options are still available.
+- Land mounts now require a license for the current region. The Cerulean Bike Seller gives the Kanto license, which also works in the Aether Clash Lobby.
+- Wild battles now start and finish faster. Turning off Move Animations removes the remaining end-of-battle delays.
+- Move lessons now show their cost, move details, and how many materials you own. Teaching a fifth move lets you choose which move to forget.
+- Aether Clash battles now show one clear 7.5-minute timer with warnings near the end. Results close automatically after five seconds.
+- Aether Clash menus now make challenges, history, active Clashes, stakes, entry rules, and available Guild Duels easier to understand.
+- Guild Duel arenas now have clear team areas, exits, player counts, timers, and battle zones. Opponent names stay hidden until battle.
+- Finished Guild Duels now show the winner, survivors, player results, and a full battle timeline.
+- Aether Clash start and finish messages now appear in System chat with the Guild sizes and any prize pot.
+- Z-Crystals now show an ∞ symbol to make it clear that they are not consumed when assigned.
+- Permanent shop items you already own are now shown as unavailable instead of appearing purchasable.
+
+**Fixed**
+
+- Aether Clash battles now finish correctly when the time limit decides the winner, even if a move was already selected.
+- Aether Clash no longer starts another battle before the previous result has been closed.
+- Aether Clash challenge and entry errors now explain what went wrong and offer a retry when possible.
+- Guild Duel matchmaking now shows the correct wait time and starts battles more reliably.
+- Guild Duel portals, spectator controls, battle controls, team areas, and exit messages now stay visible and work correctly.
+- Public Trainer Cards now load appearance previews correctly, and choosing no hair no longer leaves a stray pixel.
+- Aether Gift Store outfit previews no longer cut off the Trainer's body or shoes.
+- Failing to catch a wild Pokémon no longer freezes the party choice if the active Pokémon faints.
+- The Rare Encounter boost now shows its funding progress in the boost list.
+- Route 25's lower paths to Route 24 are no longer blocked.
+- Item Dex pictures now stay sharp, and special prices no longer show broken text.
 
 ## 0.3.69 - 2026-08-30
 

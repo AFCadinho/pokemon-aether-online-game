@@ -29,6 +29,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/global_ev_boost.svg" id="24_global_ev"]
 [ext_resource type="Texture2D" path="res://assets/ui/global_shiny_boost.svg" id="25_global_shiny"]
 [ext_resource type="Texture2D" path="res://assets/ui/global_rare_encounter_boost.svg" id="26_global_rare"]
+[ext_resource type="Texture2D" path="res://assets/ui/global_skill_exp_boost.svg" id="27_global_skill_exp"]
 [ext_resource type="Texture2D" path="res://assets/ui/quest_log.svg" id="27_quest_log"]
 [ext_resource type="Texture2D" path="res://assets/ui/pvp_queue_ball_red.svg" id="28_pvp_red_ball"]
 [ext_resource type="Texture2D" path="res://assets/ui/pvp_queue_ball_blue.svg" id="29_pvp_blue_ball"]
@@ -902,14 +903,6 @@ texture_normal = ExtResource("21_wild_radar")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="AetherClashChampionLabel" type="Label" parent="Control/LocationPanel/MarginContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_colors/font_color = Color(0.84705883, 0.7176471, 0.40392157, 1)
-theme_override_font_sizes/font_size = 11
-text = "ui.aether_clash.reigning_guild"
-text_overrun_behavior = 3
-
 [node name="StatusRow" type="HBoxContainer" parent="Control/LocationPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 6
@@ -956,14 +949,14 @@ theme_override_font_sizes/font_size = 13
 text = "ui.world.weather.clear"
 
 [node name="GlobalBuffsPanel" type="PanelContainer" parent="Control"]
-custom_minimum_size = Vector2(242, 50)
+custom_minimum_size = Vector2(289, 50)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = 214.0
 offset_top = 6.0
-offset_right = 456.0
+offset_right = 503.0
 offset_bottom = 56.0
 grow_horizontal = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_global_buff_tray")
@@ -1104,6 +1097,35 @@ custom_minimum_size = Vector2(42, 40)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 icon = ExtResource("23_global_exp")
+icon_max_width = 30
+expand_icon = true
+theme_override_styles/normal = SubResource("StyleBoxFlat_global_buff_slot")
+theme_override_styles/hover = SubResource("StyleBoxFlat_global_buff_slot_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_global_buff_slot_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_global_buff_slot_hover")
+
+[node name="ProgressBar" type="ProgressBar" parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots/BuffSlot5"]
+layout_mode = 1
+anchors_preset = 12
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -6.0
+offset_right = -4.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+value = 0.0
+show_percentage = false
+theme_override_styles/background = SubResource("StyleBoxFlat_global_buff_progress_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_global_buff_progress_fill")
+
+[node name="BuffSlot6" type="Button" parent="Control/GlobalBuffsPanel/MarginContainer/Row/BuffSlots"]
+custom_minimum_size = Vector2(42, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+icon = ExtResource("27_global_skill_exp")
 icon_max_width = 30
 expand_icon = true
 theme_override_styles/normal = SubResource("StyleBoxFlat_global_buff_slot")

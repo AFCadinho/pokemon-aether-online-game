@@ -15,6 +15,7 @@ func _init() -> void:
 	_check_snapshot_and_update_roster_state()
 	_check_stale_and_duplicate_revisions_are_ignored()
 	_check_roster_resets_for_reconnect_or_map_change()
+	_check_same_map_teleport_can_restore_cached_roster()
 	_check_presence_payload_includes_activity_state()
 	_check_connection_attempt_guard()
 	_check_authoritative_weather_messages()
@@ -78,6 +79,54 @@ func _check_roster_resets_for_reconnect_or_map_change() -> void:
 	_check_equal(service.get_current_map_players().size(), 0, "reset clears roster")
 	_check_equal(service.roster_revision, 0, "reset clears revision")
 	_check_equal(service.has_authoritative_roster_revision, false, "reset clears authority state")
+
+
+func _check_same_map_teleport_can_restore_cached_roster() -> void:
+	var same_map_service := WorldPresenceServiceScript.new()
+	var duel_map_id := "aether_clash_duel:test-session"
+	same_map_service.last_sent_map_id = duel_map_id
+	same_map_service._apply_snapshot_message({
+		"rosterRevision": 1,
+		"players": [{
+			"userId": 22,
+			"username": "stationary-player",
+			"mapId": duel_map_id,
+		}],
+	})
+	same_map_service.update_position({"mapId": duel_map_id})
+	_check_equal(
+		same_map_service.get_current_map_players().size(),
+		1,
+		"same-map position publish preserves cached roster"
+	)
+	same_map_service.free()
+
+	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	_check_equal(
+		world_source.contains(
+			'var reuses_presence_roster := current_map_id != "" and current_map_id == target_map_id'
+		),
+		true,
+		"authorized teleport distinguishes the same presence map"
+	)
+	_check_equal(
+		world_source.contains(
+			"_publish_world_presence(true)\n"
+			+ "\tif reuses_presence_roster:\n"
+			+ "\t\t_restore_remote_players_from_cached_presence()"
+		),
+		true,
+		"same-map teleport restores avatars after publishing the jail position"
+	)
+	_check_equal(
+		world_source.contains(
+			"func _restore_remote_players_from_cached_presence() -> void:\n"
+			+ "\tvar cached_players := WorldPresenceService.get_current_map_players()\n"
+			+ "\t_apply_remote_player_states(cached_players, true)"
+		),
+		true,
+		"cached presence players are reapplied without waiting for movement"
+	)
 
 
 func _check_presence_payload_includes_activity_state() -> void:

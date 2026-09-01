@@ -14,7 +14,12 @@ const PREVIEWS := {
 		"map_id": "aether_clash_duel_preview",
 		"source_suffix": "/Clan Wars Map.tmx",
 		"requires_collision": true,
-		"match_spawn_names": ["Guild1JailSpawn", "Guild2JailSpawn"],
+		"match_spawn_names": [
+			"Guild1ArenaSpawn",
+			"Guild2ArenaSpawn",
+			"Guild1JailSpawn",
+			"Guild2JailSpawn",
+		],
 		"runtime_visual_layers": ["JailTop"],
 	},
 	"res://scenes/overworld/aether_clash/waiting_area_preview.tscn": {

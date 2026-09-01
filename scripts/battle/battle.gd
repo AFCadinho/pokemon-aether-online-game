@@ -29,6 +29,7 @@ const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_sup
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
 const BATTLE_OWNED_FORM_PROJECTION := preload("res://scripts/battle/battle_owned_form_projection.gd")
 const OPPONENT_PARTY_REVEAL_POLICY := preload("res://scripts/battle/opponent_party_reveal_policy.gd")
+const WILD_BATTLE_PRESENTATION_POLICY := preload("res://scripts/battle/wild_battle_presentation_policy.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
 const OGERPON_BATTLE_FORM := preload("res://scripts/battle/ogerpon_battle_form.gd")
@@ -49,6 +50,7 @@ const PVP_OPPONENT_RENDER_RECONCILE_INITIAL_MSEC := 2500
 const PVP_OPPONENT_RENDER_RECONCILE_MAX_MSEC := 5000
 const PVP_IDLE_WAIT_RECONCILE_MSEC := 3000
 const PVP_RENDER_PROGRESS_HEARTBEAT_SECONDS := 1.0
+const AETHER_CLASH_RESULT_AUTO_CONTINUE_SECONDS := 5
 const Z_MOVE_FALLBACK_ICON: Texture2D = preload("res://assets/battles/mechanics/z-move.png")
 const Z_MOVE_TYPE_ICON_PATH := "res://assets/battles/types/%s.svg"
 const Z_CRYSTAL_NAMES := {
@@ -167,6 +169,8 @@ var spectator_sides_swapped := false
 var spectator_latest_raw_response: Dictionary = {}
 var pending_battle_end_result: Dictionary = {}
 var battle_end_signal_emitted := false
+var battle_result_auto_continue_timer: Timer
+var battle_result_auto_continue_seconds_remaining := 0
 var last_rendered_event_seq := -1
 var ordered_response_display_species_hold: Dictionary = {}
 var publicly_revealed_ogerpon_species_by_player: Dictionary = {}
@@ -303,6 +307,7 @@ var wild_owned_request_id := 0
 @onready var calc_drawer: Control = %CalcDrawer
 @onready var calc_timer_dock: BattleVsPanelContainer = %CalcTimerDock
 @onready var calc_turn_label: Label = %CalcTurnLabel
+@onready var calc_battle_limit_label: Label = %CalcBattleLimitLabel
 @onready var bag_drawer_close_button: Button = %BagDrawerCloseButton
 @onready var calc_drawer_close_button: Button = %CalcDrawerCloseButton
 @onready var context_hint: Label = %ContextHint
@@ -383,6 +388,7 @@ var wild_owned_request_id := 0
 @onready var battle_result_title: Label = %BattleResultTitle
 @onready var battle_result_summary: Label = %BattleResultSummary
 @onready var battle_result_reason: Label = %BattleResultReason
+@onready var battle_result_rating: Label = %BattleResultRating
 @onready var battle_result_continue_button: Button = %BattleResultContinueButton
 
 # HTTP Request
@@ -441,6 +447,11 @@ func _ready() -> void:
 	_connect_forfeit_confirm_dialog_signals()
 	if not battle_result_continue_button.pressed.is_connected(_on_battle_result_continue_pressed):
 		battle_result_continue_button.pressed.connect(_on_battle_result_continue_pressed)
+	battle_result_auto_continue_timer = Timer.new()
+	battle_result_auto_continue_timer.name = "BattleResultAutoContinueTimer"
+	battle_result_auto_continue_timer.wait_time = 1.0
+	battle_result_auto_continue_timer.timeout.connect(_on_battle_result_auto_continue_tick)
+	add_child(battle_result_auto_continue_timer)
 	if not battle_background_video.finished.is_connected(_on_battle_background_video_finished):
 		battle_background_video.finished.connect(_on_battle_background_video_finished)
 	if not calc_panel.defender_assumptions_changed.is_connected(_on_calc_panel_defender_assumptions_changed):
@@ -559,6 +570,7 @@ func _on_locale_changed(_locale: String) -> void:
 		_update_spectator_perspective_label()
 	if battle_result_overlay.visible and not pending_battle_end_result.is_empty():
 		_refresh_pvp_battle_result_copy(pending_battle_end_result)
+	_refresh_battle_result_continue_button()
 
 
 func _setup_battle_ui_position() -> void:
@@ -756,6 +768,7 @@ func _process(delta: float) -> void:
 	weather_presentation.animate(delta)
 	if _should_show_bank_timer_projection():
 		_show_pvp_decision_timers()
+	_update_battle_limit_ui()
 	_request_pvp_team_preview_recovery_if_server_advanced()
 	_report_stalled_pvp_waiting_if_needed()
 
@@ -3589,6 +3602,7 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 		if await _finish_if_battle_ended():
 			return
 		if _show_force_switch_if_needed():
+			_set_battle_input_locked(false)
 			return
 
 	_set_battle_input_locked(false)
@@ -3880,6 +3894,8 @@ func _finish_battle(result: Dictionary) -> void:
 	pending_mega_species_by_ident.clear()
 	_reset_damage_calc_assumptions()
 	if _is_pvp_battle():
+		if not result.has("matchId") and pvp_match_id != "":
+			result["matchId"] = pvp_match_id
 		PvpBattleRealtimeService.disconnect_room()
 		pvp_match_id = ""
 		_clear_pvp_party_hud_display_override()
@@ -3925,7 +3941,16 @@ func _should_present_pvp_battle_result(result: Dictionary) -> bool:
 	return (
 		bool(result.get("noContest", false))
 		or str(result.get("winner", "")).strip_edges() != ""
-		or reason in ["win", "ended", "battle_end", "forfeit", "timeout", "disconnect"]
+		or reason in [
+			"win",
+			"ended",
+			"battle_end",
+			"forfeit",
+			"timeout",
+			"disconnect",
+			"battle_time_limit",
+			"battle_time_limit_draw",
+		]
 	)
 
 
@@ -3938,7 +3963,9 @@ func _show_pvp_battle_result(result: Dictionary) -> void:
 	_refresh_pvp_battle_result_copy(result)
 	battle_result_overlay.visible = true
 	battle_result_overlay.move_to_front()
+	_start_battle_result_auto_continue()
 	battle_result_continue_button.grab_focus.call_deferred()
+	_refresh_pvp_battle_rating.call_deferred(str(result.get("matchId", "")))
 
 
 func _refresh_pvp_battle_result_copy(result: Dictionary) -> void:
@@ -3962,6 +3989,9 @@ func _refresh_pvp_battle_result_copy(result: Dictionary) -> void:
 			else _t("battle.result.over")
 		)
 		battle_result_title.modulate = Color("f5df9a")
+	elif winner_name == "":
+		battle_result_title.text = _t("battle.result.over")
+		battle_result_title.modulate = Color("f5df9a")
 	elif local_won:
 		battle_result_title.text = _t("battle.result.victory")
 		battle_result_title.modulate = Color("65e38b")
@@ -3984,13 +4014,103 @@ func _refresh_pvp_battle_result_copy(result: Dictionary) -> void:
 	var reason := str(result.get("reason", "")).strip_edges().to_lower()
 	battle_result_reason.text = _format_battle_result_reason(reason)
 	battle_result_reason.visible = battle_result_reason.text != ""
+	_refresh_pvp_battle_rating_copy(result)
+
+
+func _refresh_pvp_battle_rating_copy(result: Dictionary) -> void:
+	var value: Variant = result.get("ratingChange", {})
+	var change: Dictionary = value as Dictionary if value is Dictionary else {}
+	var reward_value: Variant = result.get("battlePointReward", {})
+	var reward: Dictionary = reward_value as Dictionary if reward_value is Dictionary else {}
+	if change.is_empty() and reward.is_empty():
+		battle_result_rating.visible = false
+		battle_result_rating.text = ""
+		return
+	var lines: PackedStringArray = []
+	var rating_delta := 0
+	if not change.is_empty():
+		var rating_after := int(change.get("ratingAfter", 0))
+		rating_delta = int(change.get("ratingDelta", 0))
+		lines.append(_t("battle.result.rating_change", {
+			"rating": rating_after,
+			"delta": "+%d" % rating_delta if rating_delta > 0 else "%d" % rating_delta,
+		}))
+	if not reward.is_empty():
+		lines.append(_t("battle.result.battle_points_reward", {
+			"amount": _format_battle_point_reward_amount(int(reward.get("amount", 0))),
+		}))
+	battle_result_rating.text = "\n".join(lines)
+	battle_result_rating.modulate = (
+		Color("65e38b")
+		if change.is_empty() or rating_delta >= 0
+		else Color("ff7b83")
+	)
+	battle_result_rating.visible = true
+
+
+func _refresh_pvp_battle_rating(match_id: String) -> void:
+	var normalized_match_id := match_id.strip_edges()
+	if normalized_match_id == "" or _is_spectator_battle() or bool(pending_battle_end_result.get("noContest", false)):
+		return
+	var request := HTTPRequest.new()
+	add_child(request)
+	for attempt in range(15):
+		var response: Dictionary = await BattleApiClient.get_pvp_match_summary(request, normalized_match_id)
+		if bool(response.get("success", false)):
+			var match_value: Variant = response.get("match", {})
+			var match: Dictionary = match_value as Dictionary if match_value is Dictionary else {}
+			var current_user_id := int(AuthService.current_user.get("id", 0))
+			var rating_found := false
+			var changes_value: Variant = match.get("ratingChanges", [])
+			var changes: Array = changes_value as Array if changes_value is Array else []
+			for change_value: Variant in changes:
+				if change_value is Dictionary and int((change_value as Dictionary).get("userId", 0)) == current_user_id:
+					pending_battle_end_result["ratingChange"] = (change_value as Dictionary).duplicate(true)
+					rating_found = true
+					break
+			var reward_found := false
+			var rewards_value: Variant = match.get("battlePointRewards", [])
+			var rewards: Array = rewards_value as Array if rewards_value is Array else []
+			for reward_value: Variant in rewards:
+				if reward_value is Dictionary and int((reward_value as Dictionary).get("userId", 0)) == current_user_id:
+					var is_new_reward := not pending_battle_end_result.has("battlePointReward")
+					pending_battle_end_result["battlePointReward"] = (reward_value as Dictionary).duplicate(true)
+					reward_found = true
+					if is_new_reward:
+						var wallet_result: Dictionary = await PlayerWalletService.load_wallet()
+						PlayerWalletService.apply_wallet_result(wallet_result)
+					break
+			if rating_found or reward_found:
+				_refresh_pvp_battle_rating_copy(pending_battle_end_result)
+			var result_value: Variant = match.get("result", {})
+			var result_summary: Dictionary = result_value as Dictionary if result_value is Dictionary else {}
+			var reward_expected := bool(result_summary.get("rewardsReady", false))
+			if rating_found and (not reward_expected or reward_found):
+				request.queue_free()
+				return
+		if attempt < 14:
+			await get_tree().create_timer(0.5).timeout
+	request.queue_free()
+
+
+func _format_battle_point_reward_amount(amount: int) -> String:
+	var value_text := str(max(amount, 0))
+	var formatted := ""
+	var counter := 0
+	var separator := "." if str(LocalizationManager.current_locale) in ["nl", "pt_BR"] else ","
+	for index in range(value_text.length() - 1, -1, -1):
+		if counter > 0 and counter % 3 == 0:
+			formatted = separator + formatted
+		formatted = value_text.substr(index, 1) + formatted
+		counter += 1
+	return formatted
 
 
 func _format_battle_result_reason(reason: String) -> String:
 	match reason:
 		"forfeit":
 			return _t("battle.result.reason.forfeit")
-		"timeout":
+		"timeout", "battle_time_limit", "battle_time_limit_draw":
 			return _t("battle.result.reason.timeout")
 		"disconnect":
 			return _t("battle.result.reason.disconnect")
@@ -4001,13 +4121,65 @@ func _format_battle_result_reason(reason: String) -> String:
 
 
 func _on_battle_result_continue_pressed() -> void:
+	_complete_pvp_battle_result()
+
+
+func _start_battle_result_auto_continue() -> void:
+	_stop_battle_result_auto_continue()
+	if not _is_aether_clash_battle():
+		return
+	battle_result_auto_continue_seconds_remaining = AETHER_CLASH_RESULT_AUTO_CONTINUE_SECONDS
+	_refresh_battle_result_continue_button()
+	battle_result_auto_continue_timer.start()
+
+
+func _stop_battle_result_auto_continue() -> void:
+	if battle_result_auto_continue_timer != null:
+		battle_result_auto_continue_timer.stop()
+	battle_result_auto_continue_seconds_remaining = 0
+	_refresh_battle_result_continue_button()
+
+
+func _refresh_battle_result_continue_button() -> void:
+	if battle_result_continue_button == null:
+		return
+	var continue_text := _t("common.continue")
+	if battle_result_auto_continue_seconds_remaining > 0:
+		continue_text = "%s (%d)" % [
+			continue_text,
+			battle_result_auto_continue_seconds_remaining,
+		]
+	battle_result_continue_button.text = continue_text
+
+
+func _on_battle_result_auto_continue_tick() -> void:
+	if (
+		not battle_result_overlay.visible
+		or pending_battle_end_result.is_empty()
+		or battle_end_signal_emitted
+	):
+		_stop_battle_result_auto_continue()
+		return
+	battle_result_auto_continue_seconds_remaining -= 1
+	if battle_result_auto_continue_seconds_remaining <= 0:
+		_complete_pvp_battle_result()
+		return
+	_refresh_battle_result_continue_button()
+
+
+func _complete_pvp_battle_result() -> void:
+	if pending_battle_end_result.is_empty() or battle_end_signal_emitted:
+		return
+	var completed_result := pending_battle_end_result.duplicate(true)
+	_stop_battle_result_auto_continue()
 	battle_result_overlay.visible = false
-	_emit_battle_ended(pending_battle_end_result)
+	_emit_battle_ended(completed_result)
 
 
 func _emit_battle_ended(result: Dictionary) -> void:
 	if battle_end_signal_emitted:
 		return
+	_stop_battle_result_auto_continue()
 	battle_end_signal_emitted = true
 	pending_battle_end_result.clear()
 	battle_ended.emit(result)
@@ -4152,7 +4324,12 @@ func _get_pvp_state_player_id_for_raw_player_id(player_id: String) -> String:
 		return player_id
 	return "p1" if player_id == "p2" else "p2"
 
-func _finish_confirmed_pvp_forfeit(response: Dictionary, forfeiting_player_id: String, source: String) -> void:
+func _finish_confirmed_pvp_forfeit(
+	response: Dictionary,
+	forfeiting_player_id: String,
+	source: String,
+	reason := "forfeit"
+) -> void:
 	if battle_finished:
 		return
 
@@ -4175,7 +4352,7 @@ func _finish_confirmed_pvp_forfeit(response: Dictionary, forfeiting_player_id: S
 		winner_side = "p2" if forfeiting_player_id == "p1" else "p1"
 
 	_finish_battle({
-		"reason": "forfeit",
+		"reason": reason,
 		"winner": winner_side,
 		"forfeitingPlayerId": forfeiting_player_id,
 	})
@@ -6157,6 +6334,7 @@ func _update_battle_status_panels() -> void:
 	_timer_panels_call("hide_decision_timers")
 	if _should_show_bank_timer_projection():
 		_show_pvp_decision_timers()
+	_update_battle_limit_ui()
 	_sync_calc_timer_dock_visibility()
 	var field_effects := _get_display_field_effects()
 	_prune_inactive_field_condition_ability_modifiers(field_effects)
@@ -6180,6 +6358,42 @@ func _show_pvp_decision_timers() -> void:
 		opponent_timer,
 		"TEAM_PREVIEW" if team_preview_lead_selection_active else "",
 	])
+
+
+func _update_battle_limit_ui() -> void:
+	var display := PvpBattleRealtimeService.timer_projection.battle_limit_display()
+	if display.is_empty():
+		_vs_panel_call("hide_battle_limit")
+		if is_instance_valid(calc_battle_limit_label):
+			calc_battle_limit_label.visible = false
+		return
+	var state := str(display.get("state", "ACTIVE"))
+	var remaining_ms := maxi(int(display.get("remainingMs", 0)), 0)
+	var timer_text := _t("battle.timer.clash_tiebreak") if state == "TIEBREAK" else _t(
+		"battle.timer.clash_limit",
+		{"time": _format_battle_limit_ms(remaining_ms)}
+	)
+	var color := Color(0.38431373, 0.84313726, 1.0)
+	var pulse := false
+	if state == "TIEBREAK":
+		color = Color(1.0, 0.35, 0.25)
+	elif remaining_ms <= 15_000:
+		color = Color(1.0, 0.35, 0.25)
+		pulse = true
+	elif remaining_ms <= 60_000:
+		color = Color(1.0, 0.72, 0.24)
+	_vs_panel_call("show_battle_limit", [timer_text, color, pulse])
+	if is_instance_valid(calc_battle_limit_label):
+		calc_battle_limit_label.visible = current_action_panel_mode == BattleActionsPanelMode.CALC
+		calc_battle_limit_label.text = timer_text
+		calc_battle_limit_label.modulate = color
+		if pulse:
+			calc_battle_limit_label.modulate.a = 0.65 + 0.35 * abs(sin(float(Time.get_ticks_msec()) / 180.0))
+
+
+func _format_battle_limit_ms(value: int) -> String:
+	var seconds := int(ceil(float(maxi(value, 0)) / 1000.0))
+	return "%02d:%02d" % [seconds / 60, seconds % 60]
 
 func _get_display_field_effects() -> Array:
 	if presentation_state.has_field_snapshot:
@@ -6327,7 +6541,7 @@ func setup_wild_battle_from_response(
 ) -> void:
 	if not prepare_wild_battle_from_response(player_pokemon, enemy_pokemon, api_response, environment_id):
 		return
-	await play_wild_battle_intro(player_pokemon, api_response)
+	await play_wild_battle_intro(api_response)
 
 func prepare_wild_battle_from_response(
 	player_pokemon: Pokemon,
@@ -6337,7 +6551,6 @@ func prepare_wild_battle_from_response(
 ) -> bool:
 	wild_capture_allowed = bool(api_response.get("captureAllowed", true))
 	_prepare_battle_setup(BattleType.WILD, player_pokemon, enemy_pokemon, environment_id)
-	_show_local_player_trainer()
 
 	var initial_player_species := _get_saved_pokemon_battle_boundary_species(
 		player_pokemon,
@@ -6372,9 +6585,9 @@ func prepare_wild_battle_from_response(
 
 	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(_get_active_battle_log_identity("p1"), _get_active_battle_log_identity("p2")))
 	_show_original_player_lead_before_initial_events(player_species, player_lead_pokemon)
-	# The lead data must be ready for the summon target, but the player sprite
-	# itself must not flash before the Poké Ball release animation begins.
-	player_sprite_box.visible = false
+	# Wild encounters are frequent grind loops, so stage the resolved lead behind
+	# the encounter cover instead of blocking first-turn input on a summon.
+	player_sprite_box.visible = true
 	_refresh_wild_opponent_owned_icon.call_deferred(
 		enemy_pokemon.species,
 		enemy_pokemon.shiny,
@@ -6389,22 +6602,7 @@ func _refresh_wild_opponent_owned_icon(species: String, is_shiny: bool, request_
 	if enemy_hud_panel != null and enemy_hud_panel.has_method("set_owned_icon_visible"):
 		enemy_hud_panel.set_owned_icon_visible(PokedexService.is_species_owned(species, is_shiny))
 
-func play_wild_battle_intro(player_pokemon: Pokemon, api_response: Dictionary) -> void:
-	var player_lead_pokemon := active_player_pokemon if active_player_pokemon != null else player_pokemon
-	var player_species := _get_saved_pokemon_battle_boundary_species(
-		player_lead_pokemon,
-		_get_original_active_player_species(player_lead_pokemon.species)
-	)
-	var opponent_species := _get_active_display_species("p2")
-	await get_tree().process_frame
-	_debug_battle_start("wild.setup.before_player_lead_summon playerSpecies=%s opponentSpecies=%s lastRenderedSeq=%d" % [
-		player_species,
-		opponent_species,
-		last_rendered_event_seq,
-	])
-	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_lead_pokemon.ball_item_id), player_species, player_sprite_box, "back")
-	_hide_wild_battle_player_trainer()
-	_debug_battle_start("wild.setup.after_player_lead_summon lastRenderedSeq=%d" % last_rendered_event_seq)
+func play_wild_battle_intro(api_response: Dictionary) -> void:
 	await _render_initial_battle_events(api_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
@@ -6852,6 +7050,7 @@ func _prepare_battle_setup(
 	pending_battle_end_result.clear()
 	battle_end_signal_emitted = false
 	battle_result_overlay.visible = false
+	_stop_battle_result_auto_continue()
 	last_rendered_event_seq = -1
 	rendered_non_pvp_event_keys.clear()
 	active_player_pokemon = player_pokemon
@@ -6871,12 +7070,6 @@ func _clear_battle_trainer_sprites() -> void:
 		player_trainer_sprite.clear()
 	if enemy_trainer_sprite != null:
 		enemy_trainer_sprite.clear()
-
-
-func _hide_wild_battle_player_trainer() -> void:
-	if battle_type != BattleType.WILD or player_trainer_sprite == null:
-		return
-	player_trainer_sprite.clear()
 
 
 func _show_local_player_trainer() -> void:
@@ -8257,13 +8450,20 @@ func _on_moves_grid_move_selected(slot: int) -> void:
 	if _is_pvp_battle():
 		return
 
-	if not await _render_resolved_player_choice_response(player_response, pending_player_choice_events):
+	var skip_wild_win_result := _should_skip_wild_win_result()
+	var fast_finish_wild_win := _should_fast_finish_wild_win()
+	if not await _render_resolved_player_choice_response(
+		player_response,
+		pending_player_choice_events,
+		fast_finish_wild_win,
+		skip_wild_win_result
+	):
 		_clear_pending_mega_species_for_events(pending_player_choice_events)
 		_show_moves()
 		_set_battle_input_locked(false)
 		return
 
-	if await _finish_if_battle_ended():
+	if await _finish_if_battle_ended({}, skip_wild_win_result):
 		return
 
 	if await _auto_force_switch_opponent_if_needed():
@@ -8621,7 +8821,13 @@ func _warn_if_pvp_species_change_outside_batch(sprite_box: Node, species: String
 	push_warning("PvP sprite species changed outside active render batch. %s" % details)
 	_log_pvp_realtime("PvP sprite species changed outside active render batch", details)
 
-func _render_battle_events(events: Array, render_turn_headers := true, source := "") -> void:
+func _render_battle_events(
+	events: Array,
+	render_turn_headers := true,
+	source := "",
+	suppress_presentation_waits := false,
+	suppress_terminal_win_presentation := false
+) -> void:
 	if not _guard_pvp_render_runner(source):
 		return
 	var ordered_events: Array = _order_switch_out_heals_before_switches(
@@ -8734,7 +8940,8 @@ func _render_battle_events(events: Array, render_turn_headers := true, source :=
 				event_type,
 				_summarize_hp_event_for_order_debug(event_data),
 			])
-		await event_renderer.render_event(event_data, presentation)
+		if not (suppress_terminal_win_presentation and event_type == "win"):
+			await event_renderer.render_event(event_data, presentation, suppress_presentation_waits)
 		if defer_field_effect_end:
 			# Keep weather and terrain visible while their public end message is
 			# being presented. The visual state changes only at that event's
@@ -10595,7 +10802,7 @@ func _report_pvp_forced_switch_selection_blocked(selection_gate: String) -> void
 		"phaseSeq": max(pvp_last_phase_update_server_seq, 0),
 		"lastRenderedSeq": max(pvp_event_queue.last_rendered_seq, 0),
 		"inputLocked": battle_input_locked,
-		"pendingAction": pvp_prechoice_buffer.has_pending(),
+		"pendingAction": pvp_prechoice_buffer.has_choice(),
 		"forceSwitchRequired": true,
 	})
 
@@ -10901,7 +11108,10 @@ func _player_active_fainted_with_available_switch(player_id: String) -> bool:
 
 	return false
 
-func _finish_if_battle_ended(result_overrides: Dictionary = {}) -> bool:
+func _finish_if_battle_ended(
+	result_overrides: Dictionary = {},
+	skip_result_hold := false
+) -> bool:
 	if not battle_state.is_battle_ended():
 		return false
 
@@ -10911,9 +11121,31 @@ func _finish_if_battle_ended(result_overrides: Dictionary = {}) -> bool:
 	}
 	finish_result.merge(result_overrides, true)
 	_add_pvp_victory_message_if_needed(finish_result)
-	await get_tree().create_timer(BATTLE_END_RESULT_HOLD_SECONDS).timeout
+	if not skip_result_hold:
+		await get_tree().create_timer(BATTLE_END_RESULT_HOLD_SECONDS).timeout
 	_finish_battle(finish_result)
 	return true
+
+func _should_fast_finish_wild_win() -> bool:
+	return WILD_BATTLE_PRESENTATION_POLICY.should_fast_finish_win(
+		battle_type == BattleType.WILD,
+		_is_pvp_battle(),
+		SettingsManager.battle_animations,
+		battle_state.is_battle_ended(),
+		battle_state.get_winner(),
+		_get_local_state_player_id(),
+		_get_player_display_name("p1")
+	)
+
+func _should_skip_wild_win_result() -> bool:
+	return WILD_BATTLE_PRESENTATION_POLICY.is_confirmed_local_win(
+		battle_type == BattleType.WILD,
+		_is_pvp_battle(),
+		battle_state.is_battle_ended(),
+		battle_state.get_winner(),
+		_get_local_state_player_id(),
+		_get_player_display_name("p1")
+	)
 
 func _submit_player_choice(
 	choice_type: String,
@@ -11049,6 +11281,9 @@ func _pvp_response_has_render_batch_metadata(response: Dictionary) -> bool:
 
 func _is_pvp_battle() -> bool:
 	return pvp_room_code.strip_edges() != ""
+
+func _is_aether_clash_battle() -> bool:
+	return _is_pvp_battle() and pvp_battle_purpose == "aether_clash"
 
 func _is_training_room_battle() -> bool:
 	return _is_pvp_battle() and pvp_battle_purpose == "training"
@@ -13688,6 +13923,8 @@ func _finish_pvp_authoritative_terminal(message: Dictionary) -> void:
 		pvp_pending_authoritative_terminal = message.duplicate(true)
 		return
 	pvp_pending_authoritative_terminal.clear()
+	if is_animation_free_terminal:
+		_discard_pvp_updates_superseded_by_terminal()
 	var winner_side := _get_pvp_state_player_id_for_raw_player_id(str(message.get("winnerSide", "")))
 	var loser_side := _get_pvp_state_player_id_for_raw_player_id(str(message.get("loserSide", "")))
 	_finish_battle({
@@ -13697,6 +13934,15 @@ func _finish_pvp_authoritative_terminal(message: Dictionary) -> void:
 		"battleEventSeq": message.get("battleEventSeq", -1),
 		"terminalSource": str(message.get("source", "DURABLE_BATTLE_EVENT")),
 	})
+
+
+func _discard_pvp_updates_superseded_by_terminal() -> void:
+	# The durable terminal is ordered after the accepted battle commands. Once no
+	# render batch is active, queued acknowledgements/snapshots cannot add valid
+	# presentation work and must not reopen or retain the action wait.
+	pvp_realtime_updates.clear()
+	pvp_realtime_deferred_updates.clear()
+	pvp_event_queue.pending_updates.clear()
 
 
 func _retry_pending_pvp_authoritative_terminal() -> void:
@@ -13712,10 +13958,13 @@ func _finish_pvp_realtime_battle_from_message(message: Dictionary) -> void:
 	if response.is_empty():
 		return
 
+	var terminal_action := str(message.get("action", "")).strip_edges().to_lower()
+	var terminal_reason := "battle_time_limit" if terminal_action == "timeout" else "forfeit"
 	_finish_confirmed_pvp_forfeit(
 		response,
 		_get_pvp_state_player_id_for_raw_player_id(str(message.get("playerId", ""))),
-		"pvp_forfeit_end"
+		"pvp_battle_limit_end" if terminal_action == "timeout" else "pvp_forfeit_end",
+		terminal_reason
 	)
 
 func _finish_pvp_realtime_battle_from_snapshot(message: Dictionary) -> void:
@@ -14480,13 +14729,21 @@ func _submit_npc_choice_and_render(
 
 func _render_resolved_player_choice_response(
 	resolved_response: Dictionary,
-	pending_player_choice_events: Array = []
+	pending_player_choice_events: Array = [],
+	suppress_presentation_waits := false,
+	suppress_terminal_win_presentation := false
 ) -> bool:
 	if not bool(resolved_response.get("success", false)):
 		_clear_ordered_response_display_species()
 		return false
 
-	await _render_opponent_response(resolved_response, {}, pending_player_choice_events)
+	await _render_opponent_response(
+		resolved_response,
+		{},
+		pending_player_choice_events,
+		suppress_presentation_waits,
+		suppress_terminal_win_presentation
+	)
 	await _hold_opponent_response_message()
 	return true
 
@@ -14588,7 +14845,9 @@ func _preserve_terminal_presentation_requests(response: Dictionary) -> void:
 func _render_opponent_response(
 	opponent_response: Dictionary,
 	rendered_event_keys: Dictionary = {},
-	pending_player_choice_events: Array = []
+	pending_player_choice_events: Array = [],
+	suppress_presentation_waits := false,
+	suppress_terminal_win_presentation := false
 ) -> void:
 	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
 	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys, opponent_response)
@@ -14599,7 +14858,13 @@ func _render_opponent_response(
 	_update_battle_presentation_before_event_render(opponent_events)
 	_rewind_active_hud_hp_for_events(opponent_events)
 	_rewind_party_slots_for_events(opponent_events)
-	await _render_battle_events(opponent_events, true, "opponent_response_non_pvp")
+	await _render_battle_events(
+		opponent_events,
+		true,
+		"opponent_response_non_pvp",
+		suppress_presentation_waits,
+		suppress_terminal_win_presentation
+	)
 	_mark_non_pvp_response_events_rendered(opponent_response, filtered_events)
 	defer_force_switch_active_hide = false
 	_clear_ordered_response_display_species()

@@ -32,6 +32,18 @@ func _run() -> void:
 	_check(str(listing.get("id", "")) == "listing-1", "Exchange service retains listing ids")
 	_check(int(listing.get("totalPrice", 0)) == 5000, "Exchange service retains authoritative totals")
 	_check(_dictionary(listing.get("asset", {})).get("speciesName") == "Bulbasaur", "Exchange service retains public Pokémon snapshots")
+	var wish := service.normalize_wish({
+		"id": "wish-1",
+		"item": {"itemId": "poke-ball", "name": "Poké Ball"},
+		"quantity": 3,
+		"unitPrice": 250,
+		"totalPrice": 750,
+		"status": "active",
+		"isMine": false,
+	})
+	_check(str(wish.get("id", "")) == "wish-1", "Exchange service retains wishlist order ids")
+	_check(int(wish.get("totalPrice", 0)) == 750, "Exchange service retains wishlist escrow totals")
+	_check(_dictionary(wish.get("item", {})).get("itemId") == "poke-ball", "Exchange service retains wishlist item snapshots")
 	service.free()
 
 	var popup_host := Control.new()
@@ -46,14 +58,20 @@ func _run() -> void:
 	_check(popup.custom_minimum_size == Vector2(1040, 660), "Exchange popup uses the production workspace size")
 	_check(popup.size == Vector2(1040, 660), "Exchange popup starts at its fixed workspace size")
 	_check(popup.call("_get_minimum_size") == Vector2(1040, 660), "Exchange content cannot increase the popup minimum size")
-	_check((popup.get("tab_buttons") as Dictionary).size() == 3, "Exchange popup exposes Browse, Sell, and My Listings")
-	_check((popup.get("filter_buttons") as Dictionary).size() == 2, "Exchange popup exposes only Items and Pokémon filters")
-	_check(not (popup.get("filter_buttons") as Dictionary).has(""), "Browse does not expose a combined All filter")
+	_check((popup.get("tab_buttons") as Dictionary).size() == 3, "Exchange groups navigation into Market, New order, and My orders")
+	var mode_selector := popup.get("mode_selector") as OptionButton
+	var asset_filter_selector := popup.get("asset_filter_selector") as OptionButton
+	_check(mode_selector != null and mode_selector.item_count == 2, "Market choices live in one contextual selector")
+	_check(str(mode_selector.get_item_metadata(0)) == "browse" and str(mode_selector.get_item_metadata(1)) == "wanted", "Market selector separates listings from wanted items")
+	_check(asset_filter_selector != null and asset_filter_selector.item_count == 2, "Asset type uses one compact Items or Pokémon selector")
+	_check(mode_selector.get_theme_icon("arrow").resource_path.ends_with("photo_mode_dropdown_arrow.svg"), "Context selector follows the clean Aether dropdown styling")
+	_check(asset_filter_selector.get_popup().get_theme_stylebox("panel") is StyleBoxFlat, "Asset selector menu uses the shared Aether surface")
 	_check(str(popup.get("asset_filter")) == "item", "Browse defaults to the Items category")
 	var search_input := popup.get("search_input") as LineEdit
 	var refresh_button := popup.get("refresh_button") as Button
 	_check(search_input.get_theme_stylebox("normal") is StyleBoxFlat, "Exchange search field uses the styled input surface")
 	_check(search_input.get_theme_stylebox("focus") is StyleBoxFlat, "Exchange search field has a styled focus state")
+	_check(refresh_button.text == "↻" and refresh_button.custom_minimum_size.x == 38.0, "Refresh stays available as a quiet compact action")
 	_check(refresh_button.get_theme_stylebox("normal") is StyleBoxFlat, "Exchange Refresh action uses the styled button surface")
 	_check(refresh_button.get_theme_stylebox("hover") is StyleBoxFlat, "Exchange Refresh action has a styled hover state")
 	var advanced_filter_button := popup.get("advanced_filter_button") as Button
@@ -155,9 +173,11 @@ func _run() -> void:
 	popup.set("asset_filter", "item")
 	popup.call("_hide_advanced_filter_panel")
 	var fixed_popup_rect := Rect2(popup.position, popup.size)
-	((popup.get("tab_buttons") as Dictionary).get("sell") as Button).pressed.emit()
+	((popup.get("tab_buttons") as Dictionary).get("create") as Button).pressed.emit()
 	await process_frame
 	await process_frame
+	_check(str(popup.get("active_tab")) == "sell", "New order opens directly on the familiar selling flow")
+	_check(mode_selector.item_count == 2 and str(mode_selector.get_item_metadata(1)) == "wishlist", "New order groups selling and item requests contextually")
 	_check(Rect2(popup.position, popup.size) == fixed_popup_rect, "Clicking Sell preserves the complete Exchange window geometry")
 	var list_container := popup.get("list_container") as GridContainer
 	var empty_state := list_container.get_child(0) as Label
@@ -177,9 +197,9 @@ func _run() -> void:
 	popup.set("active_tab", "sell")
 	popup.set("asset_filter", "")
 	popup.call("_refresh_controls")
-	var filter_buttons := popup.get("filter_buttons") as Dictionary
-	_check((filter_buttons.get("item") as Button).visible, "Sell keeps the Items category visible")
-	_check((filter_buttons.get("pokemon") as Button).visible, "Sell keeps the Pokémon category visible")
+	_check(asset_filter_selector.visible, "Sell keeps the compact asset type selector visible")
+	_check(str(asset_filter_selector.get_item_metadata(0)) == "item", "Sell keeps the Items category available")
+	_check(str(asset_filter_selector.get_item_metadata(1)) == "pokemon", "Sell keeps the Pokémon category available")
 	_check(str(popup.get("asset_filter")) == "item", "Sell defaults to the Items category")
 	popup.set("sellable_items", [{
 		"itemId": "poke-ball",
@@ -207,6 +227,52 @@ func _run() -> void:
 	_check(item_detail_icon.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "Item details render pixel art without smoothing")
 	_check(popup.get("quantity_spin") is SpinBox, "Item listings expose quantity input")
 	_check(popup.get("price_spin") is SpinBox, "Listings expose fixed-price input")
+	var wishlist_item := {
+		"itemId": "poke-ball",
+		"name": "Poké Ball",
+		"category": "items",
+		"shortDesc": "A useful item.",
+	}
+	popup.set("active_tab", "wishlist")
+	popup.set("asset_filter", "item")
+	popup.set("wishlist_catalog", [wishlist_item])
+	popup.call("_render_current_list")
+	popup.call("_select_entry", wishlist_item, "wish_catalog")
+	_check(popup.find_child("ExchangeCreateWishButton", true, false) is Button, "Wishlist catalog selections expose buy-order creation")
+	_check((popup.get("quantity_spin") as SpinBox).max_value == 999, "Wishlist orders support complete item stacks")
+	await process_frame
+	var wanted_order := {
+		"id": "wish-poke-balls",
+		"item": wishlist_item,
+		"quantity": 3,
+		"unitPrice": 250,
+		"totalPrice": 750,
+		"status": "active",
+		"isMine": false,
+	}
+	popup.set("active_tab", "wanted")
+	popup.set("browse_wishes", [wanted_order])
+	popup.call("_render_current_list")
+	popup.call("_select_entry", wanted_order, "wish")
+	await process_frame
+	var fulfill_button := popup.find_child("ExchangeWishActionButton", true, false) as Button
+	_check(fulfill_button != null and not fulfill_button.disabled, "Players with the full requested stack can fulfill a wishlist order")
+	popup.set("sellable_items", [{"itemId": "poke-ball", "quantity": 2, "name": "Poké Ball"}])
+	popup.call("_select_entry", wanted_order, "wish")
+	await process_frame
+	fulfill_button = popup.find_child("ExchangeWishActionButton", true, false) as Button
+	_check(fulfill_button != null and fulfill_button.disabled, "Partial item stacks cannot partially fulfill a wishlist order")
+	var own_wish := wanted_order.duplicate(true)
+	own_wish["isMine"] = true
+	popup.set("active_tab", "mine")
+	popup.set("asset_filter", "item")
+	popup.set("my_listings", [])
+	popup.set("my_wishes", [own_wish])
+	popup.call("_render_current_list")
+	popup.call("_select_entry", own_wish, "wish")
+	await process_frame
+	var cancel_wish_button := popup.find_child("ExchangeWishActionButton", true, false) as Button
+	_check(cancel_wish_button != null and not cancel_wish_button.disabled, "Owners can cancel an active wishlist order for a refund")
 	var sellable_garchomp := {
 		"pokemonId": 25,
 		"species": "garchomp",
@@ -236,6 +302,7 @@ func _run() -> void:
 			"currentTrainerUserId": 987,
 		},
 	}
+	popup.set("active_tab", "sell")
 	popup.set("asset_filter", "pokemon")
 	popup.set("sellable_pokemon", [sellable_garchomp])
 	popup.call("_render_current_list")

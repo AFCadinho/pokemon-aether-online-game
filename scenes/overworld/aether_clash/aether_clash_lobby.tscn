@@ -3,10 +3,14 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/lobby/lobby.visual.tscn" id="1_stnl8"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="2_tauxp"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="3_7psnb"]
-[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="4_map_meta"]
+[ext_resource type="Script" uid="uid://tdsytwlj3n04" path="res://scripts/world/aether_clash_lobby.gd" id="4_map_meta"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="5_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="6_o8e3w"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_clash_portal.tscn" id="7_clash_portal"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/battle_point_vendor_npc.tscn" id="8_bp_vendor"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/z_crystal_vendor_npc.tscn" id="9_z_crystal_vendor"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/mega_stone_vendor_npc.tscn" id="10_mega_stone_vendor"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/aether_clash_guide_npc.tscn" id="11_clash_guide"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t1icv"]
 texture = ExtResource("2_tauxp")
@@ -190,6 +194,7 @@ world_access_group_label = "Aether Clash"
 location_id = "aether_clash.lobby"
 location_name = "Aether Clash Lobby"
 region_id = "aether_clash"
+mount_license_region_id = "kanto"
 weather_profile = "disabled"
 music_track_id = "login.lugia_theme_lofi"
 
@@ -210,16 +215,33 @@ position = Vector2(1040, 1424)
 local_destination_id = ""
 npc_id = "aether_clash_lobby_transit_keeper"
 
+[node name="BattlePointVendor" parent="Entities/NPCs" unique_id=706577053 instance=ExtResource("8_bp_vendor")]
+position = Vector2(1584, 944)
+
+[node name="ZCrystalVendor" parent="Entities/NPCs" unique_id=630248255 instance=ExtResource("9_z_crystal_vendor")]
+position = Vector2(1328, 944)
+
+[node name="MegaStoneVendor" parent="Entities/NPCs" instance=ExtResource("10_mega_stone_vendor")]
+position = Vector2(1456, 944)
+
+[node name="ClashCoordinator" parent="Entities/NPCs" instance=ExtResource("11_clash_guide")]
+position = Vector2(784, 1360)
+npc_id = "aether_clash_lobby_clash_coordinator"
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1814140839]
 
-[node name="PurpleClashPortal" parent="Entities/Interactables" unique_id=445435609 instance=ExtResource("7_clash_portal")]
+[node name="GuildDuelPortal" parent="Entities/Interactables" unique_id=445435609 instance=ExtResource("7_clash_portal")]
+z_index = 624
+z_as_relative = false
 position = Vector2(864, 624)
-display_name = "Purple Clash Portal"
+display_name = "Guild Duel Portal"
 
-[node name="RedClashPortal" parent="Entities/Interactables" unique_id=2137196691 instance=ExtResource("7_clash_portal")]
+[node name="BattleRoyalePortal" parent="Entities/Interactables" unique_id=2137196691 instance=ExtResource("7_clash_portal")]
+z_index = 624
+z_as_relative = false
 position = Vector2(1088, 624)
-team_id = "red"
-display_name = "Red Clash Portal"
+mode_id = "battle_royale"
+display_name = "Battle Royale Portal"
 
 [node name="Collision" type="TileMapLayer" parent="." unique_id=1428557043]
 visible = false

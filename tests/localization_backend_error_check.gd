@@ -87,6 +87,61 @@ func _run() -> void:
 		"Guild Lobby attunement requirement displays in Dutch"
 	)
 	_check(
+		errors.call("message", {
+			"detail": {"code": "aether_clash_target_guild_required"}
+		}) == "Die Trainer zit niet in een Guild die je kunt uitdagen.",
+		"right-click Clash target errors display in Dutch"
+	)
+	_check(
+		errors.call("message", {
+			"detail": {"code": "aether_clash_target_rank_required"}
+		}) == "Je kunt alleen een Guildleider of Captain van de andere Guild uitdagen.",
+		"right-click Clash target rank errors provide clear Dutch feedback"
+	)
+	_check(
+		errors.call("message", {
+			"detail": {"code": "aether_clash_portal_required"}
+		}) == "Ga dichter bij de rode Guild vs Guild-portal in de Aether Clash Lobby staan.",
+		"Aether Clash portal distance errors explain the required portal"
+	)
+	_check(
+		errors.call("message", {
+			"detail": {
+				"code": "aether_clash_stake_funds_required",
+				"requiredAmount": 100000,
+				"availableAmount": 25000,
+			}
+		}) == "De Guild Bank heeft ₽100000 nodig voor deze inzet, maar bevat momenteel ₽25000.",
+		"Aether Clash stake errors show the required and available Guild Bank funds"
+	)
+	_check(
+		errors.call("message", {
+			"body": {
+				"detail": {
+					"code": "aether_clash_team_invalid",
+					"ruleCode": "banned_pokemon",
+					"pokemon": "Mewtwo",
+					"tierName": "Aether OU",
+				}
+			}
+		}) == "Mewtwo is verbannen in deze Aether OU Clash. Pas je team aan via Ranked Team Validation en probeer opnieuw.",
+		"Aether Clash portal errors identify the frozen tier rule and affected Pokemon"
+	)
+	_check(
+		errors.call("message", {
+			"detail": {
+				"code": "aether_clash_team_lock_changed",
+			}
+		}) == "Het vastgezette Aether Clash-team kon niet worden gecontroleerd. Meld dit bij staff.",
+		"Aether Clash team lock integrity failures provide safe feedback"
+	)
+	_check(
+		errors.call("message", {
+			"detail": {"code": "CIRCUIT_BREAKER_OPEN"}
+		}) == "Deze dienst is tijdelijk niet beschikbaar.",
+		"temporarily fenced PvP authority displays a clear service message"
+	)
+	_check(
 		errors.call("message", {"detail": {"code": "current_password_incorrect"}})
 		== "Het huidige wachtwoord is onjuist.",
 		"privacy password errors explain how identity verification failed"
@@ -191,6 +246,17 @@ func _run() -> void:
 		var catalog: Dictionary = localization.call("get_catalog", locale)
 		for key_value: Variant in errors.call("mapped_translation_keys"):
 			_check(catalog.has(str(key_value)), "%s contains mapped backend key %s" % [locale, key_value])
+		for rule_code: String in [
+			"team_too_small",
+			"team_too_large",
+			"species_clause_duplicate",
+			"banned_pokemon",
+			"banned_item",
+			"banned_move",
+			"banned_ability",
+		]:
+			var rule_key := "backend.error.aether_clash_team_invalid.%s" % rule_code
+			_check(catalog.has(rule_key), "%s contains Aether Clash rule key %s" % [locale, rule_key])
 	for path: String in HTTP_SERVICE_PATHS:
 		_check(
 			FileAccess.get_file_as_string(path).contains("BackendErrorLocalizationService"),

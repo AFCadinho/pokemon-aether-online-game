@@ -523,7 +523,14 @@ func allocate_pokemon_evs(pokemon_id: int, stat_id: String, value: int) -> Dicti
 	return result
 
 
-func learn_pokemon_move(pokemon_id: int, move_id: String, replace_slot: int = -1, skip: bool = false, source_item_id: String = "") -> Dictionary:
+func learn_pokemon_move(
+	pokemon_id: int,
+	move_id: String,
+	replace_slot: int = -1,
+	skip: bool = false,
+	source_item_id: String = "",
+	learn_source: String = ""
+) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -543,6 +550,8 @@ func learn_pokemon_move(pokemon_id: int, move_id: String, replace_slot: int = -1
 		payload["replaceSlot"] = replace_slot
 	if source_item_id.strip_edges() != "":
 		payload["sourceItemId"] = source_item_id
+	if learn_source.strip_edges() != "":
+		payload["learnSource"] = learn_source
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
@@ -552,6 +561,59 @@ func learn_pokemon_move(pokemon_id: int, move_id: String, replace_slot: int = -1
 		JSON.stringify(payload)
 	)
 	var result: Dictionary = _pokemon_move_learn_result_from_response(response)
+	_apply_party_response(result)
+	return result
+
+
+func get_move_mentor_catalog(pokemon_id: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if pokemon_id <= 0:
+		return {
+			"success": false,
+			"error": "Missing Pokemon.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/pokemon/%s/moves/mentor" % pokemon_id,
+		HTTPClient.METHOD_GET,
+		GatewayApiConfig.get_accept_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	return {
+		"success": true,
+		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
+		"moves": _array_from_value(body.get("moves", [])),
+	}
+
+
+func delete_pokemon_move(pokemon_id: int, move_slot: int, move_id: String) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if pokemon_id <= 0 or move_slot < 0 or move_slot > 3 or move_id.strip_edges().is_empty():
+		return {
+			"success": false,
+			"error": "Missing Pokemon or move slot.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/pokemon/%s/moves/delete" % pokemon_id,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"moveSlot": move_slot, "moveId": move_id})
+	)
+	var result := _pokemon_move_delete_result_from_response(response)
 	_apply_party_response(result)
 	return result
 
@@ -777,6 +839,22 @@ func _pokemon_move_learn_result_from_response(response: Dictionary) -> Dictionar
 		"learnedMove": _dictionary_from_value(body.get("learnedMove", {})),
 		"replacedMove": _dictionary_from_value(body.get("replacedMove", {})),
 		"skipped": bool(body.get("skipped", false)),
+	}
+
+
+func _pokemon_move_delete_result_from_response(response: Dictionary) -> Dictionary:
+	if not bool(response.get("success", false)):
+		return response
+
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var party: Dictionary = _dictionary_from_value(body.get("party", {}))
+	return {
+		"success": true,
+		"pokemon": _dictionary_from_value(body.get("pokemon", {})),
+		"party": _array_from_value(party.get("party", [])),
+		"hasParty": bool(party.get("hasParty", false)),
+		"pokemonLevelCap": _dictionary_from_value(party.get("pokemonLevelCap", {})),
+		"deletedMove": _dictionary_from_value(body.get("deletedMove", {})),
 	}
 
 

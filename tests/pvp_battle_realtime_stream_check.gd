@@ -380,6 +380,25 @@ func _init() -> void:
 	service._apply_timer_projection_from_battle_response({"response":{"timerState":{"timerContractVersion":1,"authority":"BATTLE_BANK_V1_SHADOW","timerRevision":1,"battleEventSeq":41,"serverNowMs":1,"participants":{}}}})
 	_check_equal(service.last_battle_event_seq, 3, "newer timer snapshot cannot skip unapplied durable terminal events")
 
+	var initial_timer_service := PvpBattleRealtimeServiceNode.new()
+	initial_timer_service.apply_initial_timer_response({
+		"timerState": {
+			"timerContractVersion": 1,
+			"authority": "BATTLE_BANK_V1_SHADOW",
+			"timerRevision": 1,
+			"serverNowMs": 1000,
+			"participants": {},
+			"battleLimit": {
+				"durationMs": 450000,
+				"startedAtMs": 1000,
+				"deadlineAtMs": 451000,
+				"status": "ACTIVE",
+			},
+		},
+	})
+	_check_equal(initial_timer_service.timer_projection.contract_enabled, true, "initial battle response enables the timer contract before realtime join")
+	_check_equal(initial_timer_service.timer_projection.battle_limit.get("durationMs"), 450000, "initial battle response preserves the Clash battle limit")
+
 	var legacy_service := PvpBattleRealtimeServiceNode.new()
 	legacy_service.timer_projection.apply_legacy_snapshot([{
 		"activeSide": "p1", "phase": "team_preview", "status": "active",
@@ -687,6 +706,22 @@ func _init() -> void:
 		"failed local forfeit cannot end the client battle"
 	)
 	_check_equal(
+		PvpBattleRealtimeServiceNode.should_apply_terminal_action_immediately(
+			{"action": "timeout", "playerId": "p2", "response": {"success": true, "state": {"ended": true}}},
+			"p1"
+		),
+		true,
+		"battle-limit terminal snapshot finishes even when settlement metadata arrives later"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_apply_terminal_action_immediately(
+			{"action": "timeout", "playerId": "p2", "response": {"success": true, "state": {"ended": false}}},
+			"p1"
+		),
+		false,
+		"nonterminal timeout update cannot finish the client battle"
+	)
+	_check_equal(
 		PvpBattleRealtimeServiceNode.should_defer_authoritative_terminal_until_render(false, false, "", false),
 		true,
 		"normal authoritative terminal waits for the ended mechanical projection"
@@ -718,8 +753,8 @@ func _init() -> void:
 	)
 	_check_equal(
 		PvpBattleRealtimeServiceNode.should_defer_authoritative_terminal_until_render(false, false, "", true, false),
-		true,
-		"animation-free durable terminal still waits for queued work"
+		false,
+		"animation-free durable terminal supersedes unstarted queued transport work"
 	)
 	_check_equal(
 		PvpBattleRealtimeServiceNode.is_animation_free_authoritative_terminal_reason(" timeout "),
@@ -735,6 +770,16 @@ func _init() -> void:
 		PvpBattleRealtimeServiceNode.is_animation_free_authoritative_terminal_reason("forfeit"),
 		true,
 		"forfeit is recognized as animation-free terminal work"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_animation_free_authoritative_terminal_reason("battle_time_limit"),
+		true,
+		"Aether Clash battle limit is recognized as animation-free terminal work"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.is_animation_free_authoritative_terminal_reason("battle_time_limit_draw"),
+		true,
+		"Aether Clash battle limit draw is recognized as animation-free terminal work"
 	)
 	_check_equal(
 		PvpBattleRealtimeServiceNode.is_animation_free_authoritative_terminal_reason("battle_end"),

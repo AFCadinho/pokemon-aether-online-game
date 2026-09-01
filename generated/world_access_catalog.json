@@ -32,6 +32,70 @@
 				}
 			}
 		},
+		"aether_clash_duel": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Aether Clash Guild Duel",
+			"locationGroupId": "aether_clash",
+			"locationGroupLabel": "Aether Clash",
+			"regionName": "Aether Clash",
+			"sceneAliases": [
+				"uid://d2kpdo8520sie"
+			],
+			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_duel.tscn",
+			"spawnPoints": {
+				"guild_1_arena_spawn": {
+					"facingDirection": "down",
+					"label": "Guild 1 Arena Spawn",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Guild1ArenaSpawn",
+					"tile": {
+						"x": 45,
+						"y": 5
+					}
+				},
+				"guild_1_jail_spawn": {
+					"facingDirection": "down",
+					"label": "Guild 1 Jail Spawn",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Guild1JailSpawn",
+					"tile": {
+						"x": 69,
+						"y": 75
+					}
+				},
+				"guild_2_arena_spawn": {
+					"facingDirection": "down",
+					"label": "Guild 2 Arena Spawn",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Guild2ArenaSpawn",
+					"tile": {
+						"x": 33,
+						"y": 150
+					}
+				},
+				"guild_2_jail_spawn": {
+					"facingDirection": "down",
+					"label": "Guild 2 Jail Spawn",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Guild2JailSpawn",
+					"tile": {
+						"x": 69,
+						"y": 83
+					}
+				},
+				"spectator_jail_spawn": {
+					"facingDirection": "down",
+					"label": "Spectator Jail Spawn",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "SpectatorJailSpawn",
+					"tile": {
+						"x": 69,
+						"y": 75
+					}
+				}
+			}
+		},
 		"aether_clash_duel_preview": {
 			"areaType": "exterior",
 			"defaultMode": "open",
@@ -42,6 +106,16 @@
 			"sceneAliases": [],
 			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_duel_preview.tscn",
 			"spawnPoints": {
+				"guild_1_arena_spawn": {
+					"facingDirection": "down",
+					"label": "Guild 1 Arena Spawn",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Guild1ArenaSpawn",
+					"tile": {
+						"x": 45,
+						"y": 5
+					}
+				},
 				"guild_1_jail": {
 					"facingDirection": "down",
 					"label": "Guild 1 Jail",
@@ -50,6 +124,16 @@
 					"tile": {
 						"x": 69,
 						"y": 75
+					}
+				},
+				"guild_2_arena_spawn": {
+					"facingDirection": "down",
+					"label": "Guild 2 Arena Spawn",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Guild2ArenaSpawn",
+					"tile": {
+						"x": 33,
+						"y": 150
 					}
 				},
 				"guild_2_jail": {

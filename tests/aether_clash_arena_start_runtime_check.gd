@@ -1,0 +1,348 @@
+extends SceneTree
+
+
+const DUEL_SCENE := "res://scenes/overworld/aether_clash/aether_clash_duel.tscn"
+const OVERLAY_SCRIPT := "res://scripts/ui/ui_overlay.gd"
+
+var failed := false
+
+
+func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
+	var localization_manager := root.get_node_or_null("LocalizationManager")
+	var original_locale := str(localization_manager.get("current_locale"))
+	localization_manager.call("set_locale", "en")
+	var packed := load(DUEL_SCENE) as PackedScene
+	_check(packed != null, "Aether Clash duel start scene loads")
+	if packed == null:
+		quit(1)
+		return
+	var duel := packed.instantiate()
+	root.add_child(duel)
+	await process_frame
+
+	var barrier = duel.get_node("StartBarrier")
+	var collision := duel.get_node(
+		"StartBarrier/BarrierBody/CollisionShape2D"
+	) as CollisionShape2D
+	var visual := duel.get_node("StartBarrier/BarrierVisual") as Node2D
+	var hud = duel.get_node("ArenaHud")
+	_check(not hud.visible, "Canonical staff preview keeps the match HUD hidden")
+	_check(not barrier.is_barrier_raised(), "Canonical staff preview keeps the barrier lowered")
+
+	duel.call("_apply_arena_state", _arena_payload("active", 4, 2))
+	await physics_frame
+	_check(hud.visible, "Receiving arena state opens the dedicated HUD")
+	_check(not barrier.is_barrier_raised(), "Reconnect into an active Clash keeps the barrier down")
+	_check(collision.disabled, "Reconnect into an active Clash keeps barrier collision disabled")
+	_check(not visual.visible, "Reconnect skips an obsolete lowering animation")
+	_check(hud.challenger_name_label.text == "North Stars", "HUD names the north Guild")
+	_check(hud.challenged_name_label.text == "South Guard", "HUD names the south Guild")
+	_check(hud.challenger_side_label.text == "BLUE SIDE", "HUD identifies the north Guild as Blue Side")
+	_check(hud.challenged_side_label.text == "RED SIDE", "HUD identifies the south Guild as Red Side")
+	_check(hud.challenger_count_label.text == "4", "HUD shows north active players")
+	_check(hud.challenged_count_label.text == "2", "HUD shows south active players")
+	_check(hud.countdown_label.text == "FIGHT!", "Active arena HUD shows the fight phase")
+	_check(
+		hud.barrier_hint_label.text == "Duel time: 02:05",
+		"Active arena HUD shows synchronized elapsed duel time"
+	)
+	_check(hud.matchmaking_hint_label.visible, "Active participants see automatic matchmaking status")
+	_check(
+		hud.matchmaking_hint_label.text.contains("OPPONENT AVAILABLE")
+		and hud.matchmaking_hint_label.text.contains("01:00"),
+		"Initial matchmaking state shows the synchronized 60-second search window"
+	)
+	_check(hud.clash_panel.visible, "Arena state opens the contextual Clash panel")
+	_check(
+		hud.clash_panel.size.y <= 140.0,
+		"Clash context stays compact until the player requests more detail"
+	)
+	_check(hud.roster_guild_name_label.text == "North Stars", "Clash panel names only the viewer's Guild")
+	_check(hud.roster_list.get_child_count() == 2, "Clash panel lists the viewer's Guild roster")
+	_check(not hud.roster_scroll.visible, "Guild roster is hidden by default")
+	_check(
+		hud.roster_toggle_button.visible
+		and hud.roster_toggle_button.text.contains("2"),
+		"Compact panel exposes a player-list button with the roster size"
+	)
+	_check(
+		hud.battle_summary_label.text == "1 battle in progress",
+		"Clash panel summarizes live arena battles"
+	)
+	hud.roster_toggle_button.emit_signal("pressed")
+	await process_frame
+	_check(hud.roster_scroll.visible, "Player-list button opens the private Guild roster")
+	_check(hud.context_hint_label.visible, "Expanded roster includes the contextual gameplay hint")
+	_check(
+		hud.clash_panel.size.y > 300.0,
+		"Only the requested roster expands the context panel"
+	)
+	hud.roster_toggle_button.emit_signal("pressed")
+	await process_frame
+	_check(
+		not hud.roster_scroll.visible and hud.clash_panel.size.y <= 140.0,
+		"Player-list button restores the compact arena view"
+	)
+
+	var elimination_payload := _arena_payload("active", 3, 1)
+	elimination_payload["viewerRoster"] = [
+		{"userId": 1, "displayName": "Admin", "side": "blue", "status": "active"},
+		{"userId": 4, "displayName": "Blue Captain", "side": "blue", "status": "eliminated"},
+	]
+	elimination_payload["recentEliminations"] = [{
+		"engagementId": "elimination-1",
+		"completedAt": elimination_payload["serverNow"],
+		"winnerUserId": 1,
+		"loserUserId": 7,
+		"winnerSide": "blue",
+		"loserSide": "red",
+		"winnerDisplayName": "Admin",
+		"loserDisplayName": null,
+	}]
+	duel.call("_apply_arena_state", elimination_payload)
+	await process_frame
+	_check(
+		hud.elimination_feed.get_child_count() == 1,
+		"A fresh elimination creates one non-blocking arena notification"
+	)
+	if hud.elimination_feed.get_child_count() > 0:
+		var toast_label := hud.elimination_feed.get_child(0).get_child(0).get_child(0) as Label
+		_check(
+			toast_label != null and toast_label.text == "Admin eliminated an enemy player.",
+			"The winning Guild sees its own player but not the opponent's identity"
+		)
+
+	var warning_payload := _arena_payload("active", 4, 2)
+	var warning_now := int(Time.get_unix_time_from_system())
+	warning_payload["serverNow"] = Time.get_datetime_string_from_unix_time(warning_now, true) + "Z"
+	warning_payload["matchmaking"]["deadlineAt"] = Time.get_datetime_string_from_unix_time(
+		warning_now + 10,
+		true
+	) + "Z"
+	duel.call("_apply_arena_state", warning_payload)
+	await physics_frame
+	_check(
+		hud.matchmaking_hint_label.get_theme_color("font_color")
+		== Color("#ffb35c"),
+		"The final 15 matchmaking seconds use the warning color"
+	)
+
+	var waiting_payload := _arena_payload("active", 4, 2)
+	waiting_payload["matchmaking"] = {
+		"status": "waiting_for_opponent",
+		"secondsRemaining": 37,
+		"searchSeconds": 60,
+		"warningSeconds": 15,
+	}
+	duel.call("_apply_arena_state", waiting_payload)
+	await physics_frame
+	_check(
+		hud.matchmaking_hint_label.text == "WAITING FOR AN OPPONENT…",
+		"Paused matchmaking clearly waits for another free opponent"
+	)
+
+	var opponent_searching_payload := _arena_payload("active", 4, 2)
+	opponent_searching_payload["matchmaking"] = {
+		"status": "opponent_searching",
+		"secondsRemaining": 37,
+		"searchSeconds": 60,
+		"warningSeconds": 15,
+	}
+	duel.call("_apply_arena_state", opponent_searching_payload)
+	await physics_frame
+	_check(
+		hud.matchmaking_hint_label.text
+		== "POTENTIAL OPPONENT FOUND — Automatic matchmaking in 00:37",
+		"A ready player sees the available opponent's remaining search time"
+	)
+
+	var starting_payload := _arena_payload("active", 4, 2)
+	starting_payload["matchmaking"] = {
+		"status": "starting",
+		"secondsRemaining": 0,
+		"searchSeconds": 60,
+		"warningSeconds": 15,
+	}
+	duel.call("_apply_arena_state", starting_payload)
+	await physics_frame
+	_check(
+		hud.matchmaking_hint_label.text == "STARTING FORCED BATTLE…",
+		"An automatic reservation announces the forced battle transition"
+	)
+	var disabled_payload := _arena_payload("active", 4, 2)
+	disabled_payload["viewerRole"] = "spectator"
+	disabled_payload["viewerSide"] = ""
+	disabled_payload["viewerRoster"] = []
+	disabled_payload["matchmaking"] = {"status": "disabled"}
+	duel.call("_apply_arena_state", disabled_payload)
+	await physics_frame
+	_check(
+		not hud.matchmaking_hint_label.visible,
+		"Spectators do not receive a participant matchmaking countdown"
+	)
+	_check(not hud.roster_scroll.visible, "Public spectators receive no private Guild roster")
+	_check(not hud.roster_toggle_button.visible, "Public spectators are not shown an empty roster button")
+	_check(
+		hud.context_hint_label.text.contains("Aether View")
+		and hud.context_hint_label.text.contains("Master Ball"),
+		"Spectator Clash panel explains arena and battle spectating"
+	)
+
+	duel.call("_apply_arena_state", _arena_payload("entry_open", 3, 5))
+	await physics_frame
+	_check(barrier.is_barrier_raised(), "Open entry window raises the center barrier")
+	_check(not collision.disabled, "Open entry window blocks players at the center")
+	_check(visual.visible, "Open entry window renders the Aether wall")
+	_check(hud.challenger_count_label.text == "3", "Countdown HUD shows north arrivals")
+	_check(hud.challenged_count_label.text == "5", "Countdown HUD shows south arrivals")
+	_check(hud.countdown_label.text.contains(":"), "Countdown HUD shows synchronized time")
+	_check(
+		bool(duel.call(
+			"is_world_barrier_step_blocked",
+			Vector2(100, 2544),
+			Vector2(100, 2576)
+		)),
+		"Raised barrier blocks a grid step between Guild halves"
+	)
+	_check(
+		not bool(duel.call(
+			"is_world_barrier_step_blocked",
+			Vector2(100, 2544),
+			Vector2(132, 2544)
+		)),
+		"Raised barrier still allows movement along a Guild half"
+	)
+	_check(
+		not bool(duel.call(
+			"is_world_barrier_step_blocked",
+			Vector2(100, 2544),
+			Vector2(100, 2512)
+		)),
+		"Player touching the barrier can move back toward their Guild side"
+	)
+	var game_state := root.get_node("GameState")
+	var original_current_map: Variant = game_state.get("current_map")
+	game_state.set("current_map", duel)
+	var player_script := load("res://scripts/world/player.gd") as Script
+	var player = player_script.new()
+	_check(
+		bool(player.call(
+			"_is_world_barrier_step_blocked",
+			Vector2(100, 2544),
+			Vector2(100, 2576)
+		)),
+		"Player grid movement receives the raised map barrier"
+	)
+	player.free()
+	game_state.set("current_map", original_current_map)
+
+	duel.call("_apply_arena_state", _arena_payload("active", 3, 5))
+	await physics_frame
+	_check(collision.disabled, "Roster lock removes collision immediately")
+	_check(not barrier.is_barrier_raised(), "Roster lock marks the barrier as lowered")
+	await create_timer(0.8).timeout
+	_check(not visual.visible, "Roster lock finishes the visual lowering animation")
+	_check(bool(duel.call("is_clash_active")), "Controller exposes the active Clash phase")
+	_check(bool(duel.call("can_launch_projectile")), "Active phase is ready for later projectiles")
+	_check(
+		not bool(duel.call(
+			"is_world_barrier_step_blocked",
+			Vector2(100, 2544),
+			Vector2(100, 2576)
+		)),
+		"Lowered barrier allows movement between Guild halves"
+	)
+
+	var overlay_source := FileAccess.get_file_as_string(OVERLAY_SCRIPT)
+	_check(
+		overlay_source.contains('"location", not _is_in_aether_clash_duel()')
+		and overlay_source.contains('_set_collapsible_panel_available("hotkey_sidebar", not next_mode)')
+		and overlay_source.contains('set_tracker_available", not next_mode'),
+		"Dedicated match UI replaces location, hotkey and quest tracker surfaces in a duel"
+	)
+	var duel_source := FileAccess.get_file_as_string(
+		"res://scripts/world/aether_clash_duel.gd"
+	)
+	_check(
+		not duel_source.contains(": AetherClashStartBarrier")
+		and not duel_source.contains(": AetherClashArenaHud"),
+		"Duel controller does not depend on a pre-warmed global class cache"
+	)
+	var player_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
+	_check(
+		player_source.contains("_is_world_barrier_step_blocked(global_position"),
+		"Grid movement consults the map-owned Aether barrier"
+	)
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+		var parsed: Variant = JSON.parse_string(
+			FileAccess.get_file_as_string("res://localization/%s.json" % locale)
+		)
+		var catalog := parsed as Dictionary if parsed is Dictionary else {}
+		_check(
+			catalog.has("ui.aether_clash.arena.context.show_players")
+			and catalog.has("ui.aether_clash.arena.context.hide_players"),
+			"%s localizes the compact roster controls" % locale
+		)
+
+	localization_manager.call("set_locale", original_locale)
+	duel.queue_free()
+	await process_frame
+	quit(1 if failed else 0)
+
+
+func _arena_payload(status: String, challenger_count: int, challenged_count: int) -> Dictionary:
+	var now := int(Time.get_unix_time_from_system())
+	return {
+		"success": true,
+		"serverNow": Time.get_datetime_string_from_unix_time(now, true) + "Z",
+		"viewerRole": "participant",
+		"viewerSide": "blue",
+		"arenaPlayers": [
+			{"userId": 1, "side": "blue", "engagementId": "battle-1"},
+			{"userId": 7, "side": "red", "engagementId": "battle-1"},
+		],
+		"viewerRoster": [
+			{"userId": 1, "displayName": "Admin", "side": "blue", "status": "in_battle"},
+			{"userId": 4, "displayName": "Blue Captain", "side": "blue", "status": "active"},
+		],
+		"recentEliminations": [],
+		"matchmaking": {
+			"status": "searching",
+			"deadlineAt": Time.get_datetime_string_from_unix_time(now + 60, true) + "Z",
+			"secondsRemaining": 60,
+			"searchSeconds": 60,
+			"warningSeconds": 15,
+		},
+		"session": {
+			"id": "runtime-test",
+			"status": status,
+			"entryClosesAt": Time.get_datetime_string_from_unix_time(now + 90, true) + "Z",
+			"startedAt": Time.get_datetime_string_from_unix_time(now - 125, true) + "Z",
+			"challengerGuild": {"id": 1, "name": "North Stars"},
+			"challengedGuild": {"id": 2, "name": "South Guard"},
+			"entryCounts": {
+				"challenger": challenger_count,
+				"challenged": challenged_count,
+			},
+			"participantCounts": {
+				"challenger": challenger_count,
+				"challenged": challenged_count,
+			},
+			"activeCounts": {
+				"challenger": challenger_count,
+				"challenged": challenged_count,
+			},
+		},
+	}
+
+
+func _check(condition: bool, label: String) -> void:
+	if condition:
+		print("PASS %s" % label)
+		return
+	failed = true
+	push_error("FAIL %s" % label)

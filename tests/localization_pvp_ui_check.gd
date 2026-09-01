@@ -48,6 +48,8 @@ func _check_pvp_runtime_translation() -> void:
 	var title := overlay.get("pvp_popup_title_label") as Label
 	var subtitle := overlay.get("pvp_popup_subtitle_label") as Label
 	var ranked_tabs := overlay.get("pvp_ranked_tabs") as TabContainer
+	var rewards_tabs := overlay.get("pvp_ranked_rewards_tabs") as TabContainer
+	var objectives_filter := overlay.get("pvp_ranked_objectives_filter") as OptionButton
 	var room_workspace := overlay.find_child("RoomWorkspace", true, false) as HBoxContainer
 	var room_type_card := overlay.find_child("BattleTypeCard", true, false) as PanelContainer
 	var room_flow_card := overlay.find_child("RoomFlowCard", true, false) as PanelContainer
@@ -71,11 +73,59 @@ func _check_pvp_runtime_translation() -> void:
 	var room_status := overlay.get("pvp_room_status_label") as Label
 	var format_select := overlay.get("pvp_queue_select") as OptionButton
 	var leaderboard_scope := overlay.get("pvp_leaderboard_scope_select") as OptionButton
+	var rewards_status := overlay.find_child("RankedRewardsStatus", true, false) as Label
 	var compact_status := overlay.get("pvp_queue_compact_status_label") as Label
 
 	_check(title != null and title.text == "Ranked", "PvP ranked title renders in Dutch")
 	_check(subtitle != null and subtitle.text.begins_with("Competitieve"), "PvP subtitle renders in Dutch")
 	_check(ranked_tabs != null and ranked_tabs.get_tab_title(0) == "Spelen", "PvP tab title renders in Dutch")
+	_check(ranked_tabs != null and ranked_tabs.get_tab_title(4) == "Beloningen", "Ranked Rewards tab renders in Dutch")
+	_check(rewards_tabs != null and rewards_tabs.get_tab_count() == 5, "Ranked Rewards exposes five scalable destinations")
+	_check(rewards_tabs != null and rewards_tabs.get_tab_title(0) == "Overzicht", "Reward overview subtab renders in Dutch")
+	_check(rewards_tabs != null and rewards_tabs.get_tab_title(1) == "Per gevecht", "Battle reward subtab renders in Dutch")
+	_check(rewards_tabs != null and rewards_tabs.get_tab_title(4) == "Seizoen", "Season reward subtab renders in Dutch")
+	_check(rewards_status != null and rewards_status.text == "BELONINGEN NIET ACTIEF", "Ranked reward availability renders in Dutch")
+	var active_ranked_queues: Array[Dictionary] = [
+		{
+			"id": "ranked_queue_v1",
+			"name": "Ranked Queue",
+			"mode": "ranked",
+			"status": "active",
+			"formatKey": "aether-ou",
+			"formatName": "Aether OU",
+			"battlePointRewards": {
+				"enabled": true,
+				"currency": "battle_points",
+				"policyVersion": "ranked_bp_v1",
+				"winAmount": 1000,
+				"lossAmount": 500,
+			},
+		},
+		{
+			"id": "ranked_aether_uu_queue_v1",
+			"name": "Aether UU Ranked Queue",
+			"mode": "ranked",
+			"status": "active",
+			"formatKey": "aether-uu",
+			"formatName": "Aether UU",
+			"battlePointRewards": {"enabled": false},
+		},
+	]
+	overlay.call("_populate_pvp_queue_select", active_ranked_queues)
+	_check(format_select.item_count == 2, "Ranked matchmaking exposes both Aether OU and Aether UU")
+	_check(format_select.get_item_text(0) == "Aether OU" and format_select.get_item_text(1) == "Aether UU", "Ranked tier labels come from the server queue catalog")
+	overlay.call("_update_pvp_active_format_from_queue_id", "ranked_aether_uu_queue_v1")
+	var leaderboard_title := overlay.get("pvp_leaderboard_title_label") as Label
+	_check(leaderboard_title != null and leaderboard_title.text == "Aether UU-ranglijst", "Ranked data headings follow the selected tier")
+	overlay.call("_update_pvp_active_format_from_queue_id", "ranked_queue_v1")
+	var rewards_intro := overlay.get("pvp_ranked_rewards_intro_label") as Label
+	var reward_win_labels: Array = overlay.get("pvp_ranked_battle_reward_win_value_labels") as Array
+	_check(rewards_status != null and rewards_status.text == "BATTLE REWARDS ACTIEF", "Ranked reward availability follows the authoritative queue state")
+	_check(rewards_intro != null and rewards_intro.text.contains("1.000"), "Active Ranked reward copy explains the Dutch payout")
+	_check(not reward_win_labels.is_empty() and (reward_win_labels[0] as Label).text == "1.000 BP", "Active payout values come from the queue policy")
+	_check(objectives_filter != null and objectives_filter.item_count == 3, "Objectives exposes daily, weekly and seasonal filters")
+	_check(objectives_filter != null and objectives_filter.get_item_text(0) == "Dagelijks", "Objective filter renders in Dutch")
+	_check_ranked_dropdown_style(objectives_filter, "Objective period")
 	_check(room_join_button != null and room_join_button.text == "Deelnemen", "Private room action renders in Dutch")
 	_check(training_button != null and training_button.text == "Training Room", "Training room selector renders in Dutch")
 	_check(casual_button != null and casual_button.text.begins_with("✓ "), "Default room type is visibly selected")
@@ -139,7 +189,7 @@ func _check_pvp_runtime_translation() -> void:
 		) == "backend.error.mega_readiness_pending",
 		"Mega readiness failures keep their specific localized explanation"
 	)
-	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Dagelijks", "Leaderboard period renders in Dutch")
+	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Preseason", "Leaderboard season renders in Dutch")
 	_check_ranked_dropdown_style(format_select, "Matchmaking format")
 	_check_ranked_dropdown_style(leaderboard_scope, "Leaderboard period")
 
@@ -153,14 +203,18 @@ func _check_pvp_runtime_translation() -> void:
 	room_create_button.emit_signal("pressed")
 	await process_frame
 	_check(room_tier_row != null and room_tier_row.visible, "Room creation exposes the optional battle tier")
-	_check(room_tier_select != null and room_tier_select.item_count == 3, "Players can choose no tier, Aether OU, or Champions ZA")
+	_check(room_tier_select != null and room_tier_select.item_count == 4, "Players can choose no tier, Aether OU, Aether UU, or Champions ZA")
 	_check(str(room_tier_select.get_selected_metadata()) == "none", "No tier is selected by default")
 	_check(room_tier_select.get_item_text(0) == "Geen tier", "The default tier is localized in Dutch")
 	_check(room_tier_select.get_item_text(1) == "Aether OU", "Aether OU is available for unrated rooms")
 	room_tier_select.select(1)
 	_check(overlay.call("_selected_pvp_room_format_id") == "gen9nationaldex", "Aether OU resolves to the reviewed National Dex engine")
 	room_tier_select.select(2)
-	_check(room_tier_select.get_item_text(2) == "Champions ZA", "Champions ZA is available without a developer label")
+	_check(room_tier_select.get_item_text(2) == "Aether UU", "Aether UU is available for unrated rooms")
+	_check(str(room_tier_select.get_selected_metadata()) == "aether-uu", "Aether UU keeps its public tier identity")
+	_check(overlay.call("_selected_pvp_room_format_id") == "gen9nationaldex", "Aether UU resolves to the reviewed National Dex engine")
+	room_tier_select.select(3)
+	_check(room_tier_select.get_item_text(3) == "Champions ZA", "Champions ZA is available without a developer label")
 	_check(str(room_tier_select.get_selected_metadata()) == "pokeaether-mega-z-test", "Champions ZA keeps its bounded room identity")
 	_check(overlay.call("_selected_pvp_room_format_id") == "pokeaether-mega-z-test-v1", "Champions ZA maps to the versioned engine format")
 	_check(room_timer_check != null and room_timer_check.visible, "Training room creation exposes the shared decision timer option")
@@ -215,13 +269,19 @@ func _check_pvp_runtime_translation() -> void:
 	_check(title != null and title.text == "Ranqueada", "PvP ranked title updates to Portuguese")
 	_check(subtitle != null and subtitle.text.begins_with("Pareamento"), "PvP subtitle updates to Portuguese")
 	_check(ranked_tabs != null and ranked_tabs.get_tab_title(0) == "Jogar", "PvP tab title updates to Portuguese")
+	_check(ranked_tabs != null and ranked_tabs.get_tab_title(4) == "Recompensas", "Ranked Rewards tab updates to Portuguese")
+	_check(rewards_tabs != null and rewards_tabs.get_tab_title(0) == "Visão geral", "Reward overview subtab updates to Portuguese")
+	_check(rewards_tabs != null and rewards_tabs.get_tab_title(1) == "Por batalha", "Battle reward subtab updates to Portuguese")
+	_check(rewards_tabs != null and rewards_tabs.get_tab_title(4) == "Temporada", "Season reward subtab updates to Portuguese")
+	_check(rewards_status != null and rewards_status.text == "RECOMPENSAS DE BATALHA ATIVAS", "Active Ranked reward availability updates to Portuguese")
+	_check(objectives_filter != null and objectives_filter.get_item_text(0) == "Diário", "Objective filter updates to Portuguese")
 	_check(room_join_button != null and room_join_button.text == "Entrar no treinamento", "Training room action updates to Portuguese")
 	_check(training_button != null and training_button.text == "✓ Sala de treinamento", "Selected training room updates to Portuguese")
 	_check(room_timer_check != null and room_timer_check.text.begins_with("Cronômetro"), "Private room timer updates to Portuguese")
 	_check(room_timer_tier != null and room_timer_tier.get_item_text(0).begins_with("Casual"), "Timer tier labels update to Portuguese")
 	_check(room_tier_select != null and room_tier_select.get_item_text(0) == "Sem tier", "Room tier labels update to Portuguese")
 	_check(room_status != null and room_status.text == "Aguardando outro jogador...", "Dynamic room status updates to Portuguese")
-	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Diária", "Leaderboard period updates to Portuguese")
+	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Pré-temporada", "Leaderboard season updates to Portuguese")
 	_check(compact_status != null and compact_status.text == "Fila ranqueada", "Compact queue status updates to Portuguese")
 
 	if popup != null:

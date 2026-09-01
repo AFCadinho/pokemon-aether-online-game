@@ -61,6 +61,61 @@ func _check_runtime_copy() -> void:
 		str(overlay.call("_format_item_dex_capture_info", {"id": "master-ball", "category": "balls"})).begins_with("Gegarandeerde vangst"),
 		"Item Dex capture rules render in Dutch"
 	)
+	_check(
+		overlay.call(
+			"_format_item_dex_source_chance",
+			{"minimum": 0.0075, "maximum": 0.012},
+			"won_fishing_battle"
+		) == "Kans: 0.75%–1.2%, afhankelijk van level per gewonnen fishing-gevecht",
+		"Item Dex renders effective chance ranges in Dutch"
+	)
+	_check(
+		overlay.call(
+			"_format_item_dex_source_chance",
+			{"minimum": 0.02, "maximum": 0.02},
+			"completed_wild_encounter"
+		) == "Kans: 2% per verslagen of gevangen Pokémon",
+		"Item Dex explains that Mega Stone chances apply to defeat and capture"
+	)
+	_check(
+		overlay.call("_item_dex_source_title", {
+			"type": "wild_drop",
+			"family_id": "bulbasaur",
+			"family_name": "Bulbasaur",
+			"species_ids": ["bulbasaur", "ivysaur", "venusaur"],
+		}) == "Bulbasaur-evolutielijn",
+		"Item Dex groups Mega Stone drops under one localized evolution-line title"
+	)
+	var dutch_requirements: Array[String] = overlay.call(
+		"_item_dex_source_requirements",
+		[{"type": "rock_smash_level", "minimum": 25, "maximum": 49}]
+	)
+	_check(
+		dutch_requirements == ["Rock Smash lv. 25–49"],
+		"Item Dex renders acquisition requirements in Dutch"
+	)
+	var aethernet_requirements: Array[String] = overlay.call(
+		"_item_dex_source_requirements",
+		[{"type": "aethernet_beacon", "amount": 1}]
+	)
+	_check(
+		aethernet_requirements == ["Activeer minstens één Aethernet Beacon"],
+		"Item Dex explains access to the Battle Point vendor"
+	)
+	_check(
+		overlay.call(
+			"_format_item_dex_source_costs",
+			[{"currency": "battle_points", "amount": 25}]
+		) == "25 BP",
+		"Item Dex renders Battle Point prices without exposing a localization key"
+	)
+	_check(
+		overlay.call(
+			"_format_item_dex_source_costs",
+			[{"currency": "aetherite", "amount": 100}]
+		) == "100 Aetherite",
+		"Item Dex renders Aetherite prices for special-item vendors"
+	)
 
 	localization_manager.call("set_locale", "pt_BR")
 	var portuguese_meta := str(overlay.call("_format_item_dex_meta", medicine))
@@ -71,6 +126,19 @@ func _check_runtime_copy() -> void:
 	_check(portuguese_effect.contains("Restaura os PS"), "Item Dex effect description updates to Portuguese")
 	_check(overlay.call("_wild_encounter_method_label", "grass") == "Grama alta", "Wild encounter method updates to Portuguese")
 	_check(overlay.call("_wild_pokemon_rarity_label", "very_rare") == "Muito raro", "Wild rarity updates to Portuguese")
+	_check(
+		overlay.call("_format_item_dex_source_chance", {"minimum": 0.1, "maximum": 0.1})
+		== "Chance: 10%",
+		"Item Dex acquisition chances update to Portuguese"
+	)
+	_check(
+		overlay.call("_item_dex_source_title", {
+			"type": "wild_drop",
+			"family_id": "bulbasaur",
+			"family_name": "Bulbasaur",
+		}) == "Linha evolutiva de Bulbasaur",
+		"Item Dex evolution-line titles update to Portuguese"
+	)
 	overlay.free()
 
 

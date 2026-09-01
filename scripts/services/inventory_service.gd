@@ -28,6 +28,7 @@ const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var cached_inventory_items: Array = []
 var cached_borrowed_inventory_items: Array = []
+var cached_mount_license_regions: Array[String] = []
 var cached_inventory_user_id := 0
 var inventory_loaded := false
 var collected_world_pickup_ids: Dictionary = {}
@@ -60,6 +61,7 @@ func load_inventory() -> Dictionary:
 		"success": true,
 		"items": cached_inventory_items.duplicate(true),
 		"borrowedItems": cached_borrowed_inventory_items.duplicate(true),
+		"mountLicenseRegions": cached_mount_license_regions.duplicate(),
 	}
 
 
@@ -83,6 +85,19 @@ func has_item(item_id: String) -> bool:
 	return false
 
 
+func has_mount_license_for_region(region_id: String) -> bool:
+	var normalized_region_id := region_id.strip_edges().to_lower()
+	return (
+		not normalized_region_id.is_empty()
+		and has_item("mount-license")
+		and normalized_region_id in cached_mount_license_regions
+	)
+
+
+func get_mount_license_regions() -> Array[String]:
+	return cached_mount_license_regions.duplicate()
+
+
 func apply_inventory_state(value: Variant) -> bool:
 	if value is not Dictionary:
 		return false
@@ -94,6 +109,12 @@ func apply_inventory_state(value: Variant) -> bool:
 		cached_borrowed_inventory_items.clear()
 	var items := _array_from_value(inventory.get("items", []))
 	cached_inventory_items = items.duplicate(true)
+	cached_mount_license_regions.clear()
+	for region_value: Variant in _array_from_value(inventory.get("mountLicenseRegions", [])):
+		var region_id := str(region_value).strip_edges().to_lower()
+		if not region_id.is_empty() and region_id not in cached_mount_license_regions:
+			cached_mount_license_regions.append(region_id)
+	cached_mount_license_regions.sort()
 	if inventory.get("borrowedItems", null) is Array:
 		cached_borrowed_inventory_items = _array_from_value(inventory.get("borrowedItems", [])).duplicate(true)
 	cached_inventory_user_id = current_user_id
@@ -105,6 +126,7 @@ func apply_inventory_state(value: Variant) -> bool:
 func _clear_inventory_cache() -> void:
 	cached_inventory_items.clear()
 	cached_borrowed_inventory_items.clear()
+	cached_mount_license_regions.clear()
 	cached_inventory_user_id = 0
 	inventory_loaded = false
 	collected_world_pickup_ids.clear()
@@ -199,6 +221,8 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 	var progression_result: Dictionary = await load_fishing_progression("")
 	var wallet_result: Dictionary = await PlayerWalletService.load_wallet()
 	PlayerWalletService.apply_wallet_result(wallet_result)
+	var story_effects := _array_from_value(body.get("storyEffects", []))
+	_notify_story_currency_rewards(story_effects)
 	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
 	var item_id := str(body.get("itemId", "")).strip_edges().to_lower()
 	var quantity := maxi(int(body.get("quantity", 1)), 1)
@@ -211,6 +235,7 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 		"quantity": quantity,
 		"claimed": bool(body.get("claimed", false)),
 		"alreadyOwned": bool(body.get("alreadyOwned", false)),
+		"storyEffects": story_effects,
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
 		"fishingProgressionRefreshSuccess": bool(progression_result.get("success", false)),
 		"walletRefreshSuccess": bool(wallet_result.get("success", false)),
@@ -309,6 +334,10 @@ func claim_world_pickup(pickup_id: String) -> Dictionary:
 	collected_world_pickups_loaded = true
 	world_pickup_state_changed.emit()
 	var inventory_result := await load_inventory()
+	var wallet_result: Dictionary = await PlayerWalletService.load_wallet()
+	PlayerWalletService.apply_wallet_result(wallet_result)
+	var story_effects := _array_from_value(body.get("storyEffects", []))
+	_notify_story_currency_rewards(story_effects)
 	if story_value is Dictionary:
 		StoryService.apply_story_if_not_stale(story_value)
 	var item_id := str(body.get("itemId", "")).strip_edges().to_lower()
@@ -322,7 +351,9 @@ func claim_world_pickup(pickup_id: String) -> Dictionary:
 		"quantity": quantity,
 		"claimed": bool(body.get("claimed", false)),
 		"alreadyCollected": bool(body.get("alreadyCollected", false)),
+		"storyEffects": story_effects,
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
+		"walletRefreshSuccess": bool(wallet_result.get("success", false)),
 	}
 
 
@@ -345,6 +376,10 @@ func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var inventory_result: Dictionary = await load_inventory()
+	var wallet_result: Dictionary = await PlayerWalletService.load_wallet()
+	PlayerWalletService.apply_wallet_result(wallet_result)
+	var story_effects := _array_from_value(body.get("storyEffects", []))
+	_notify_story_currency_rewards(story_effects)
 	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
 	return {
 		"success": true,
@@ -355,9 +390,46 @@ func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:
 		"alreadyTurnedIn": bool(body.get("alreadyTurnedIn", false)),
 		"rewardItemId": str(body.get("rewardItemId", "")),
 		"rewardQuantity": maxi(int(body.get("rewardQuantity", 0)), 0),
+		"mountLicenseRegions": _array_from_value(body.get("mountLicenseRegions", [])),
+		"storyEffects": story_effects,
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
+		"walletRefreshSuccess": bool(wallet_result.get("success", false)),
 		"storyRefreshSuccess": bool(story_result.get("success", false)),
 	}
+
+
+func _notify_story_currency_rewards(effects_value: Variant) -> void:
+	if effects_value is not Array:
+		return
+	var aetherite_awarded := 0
+	for effect_value: Variant in effects_value as Array:
+		if effect_value is not Dictionary:
+			continue
+		var effect := effect_value as Dictionary
+		if bool(effect.get("alreadyGranted", false)):
+			continue
+		var grants_value: Variant = effect.get("grants", [])
+		if grants_value is not Array:
+			continue
+		for grant_value: Variant in grants_value as Array:
+			if grant_value is not Dictionary:
+				continue
+			var grant := grant_value as Dictionary
+			if str(grant.get("currency", "")).strip_edges().to_lower() == "aetherite":
+				aetherite_awarded += maxi(int(grant.get("amount", 0)), 0)
+	if aetherite_awarded <= 0:
+		return
+	get_tree().call_group(
+		"ui_overlay",
+		"add_system_message",
+		LocalizationManager.text("ui.world.reward.quest_aetherite", {"amount": aetherite_awarded})
+	)
+	get_tree().call_group(
+		"ui_overlay",
+		"add_currency_reward_notification",
+		"aetherite",
+		aetherite_awarded
+	)
 
 
 func load_appearance_inventory() -> Dictionary:

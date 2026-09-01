@@ -1,0 +1,82 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/interactables/aether_clash_spectator_orb.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/items/icons/BLUEORB.png" id="2_orb"]
+
+[sub_resource type="Gradient" id="Gradient_orb"]
+offsets = PackedFloat32Array(0, 0.45, 1)
+colors = PackedColorArray(0.35, 0.9, 1, 0.62, 0.14, 0.48, 1, 0.22, 0.06, 0.18, 0.8, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_orb"]
+gradient = SubResource("Gradient_orb")
+width = 96
+height = 96
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_orb"]
+size = Vector2(96, 112)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nameplate"]
+content_margin_left = 8.0
+content_margin_top = 3.0
+content_margin_right = 8.0
+content_margin_bottom = 3.0
+bg_color = Color(0.0196078, 0.0431373, 0.0745098, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.376471, 0.827451, 1, 0.85)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[node name="AetherClashSpectatorOrb" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_script")
+interactable_kind = "aether_clash_spectator_orb"
+blocks_movement = true
+requires_facing = false
+interaction_shape_size = Vector2(96, 112)
+
+[node name="OrbSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -28)
+texture_filter = 1
+texture = ExtResource("2_orb")
+scale = Vector2(1.12, 1.12)
+
+[node name="OrbLight" type="PointLight2D" parent="."]
+position = Vector2(0, -28)
+color = Color(0.29, 0.78, 1, 1)
+energy = 0.9
+texture = SubResource("GradientTexture2D_orb")
+texture_scale = 1.5
+
+[node name="Nameplate" type="PanelContainer" parent="."]
+z_index = 2
+offset_left = -58.0
+offset_top = -94.0
+offset_right = 58.0
+offset_bottom = -68.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nameplate")
+
+[node name="Label" type="Label" parent="Nameplate"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.686275, 0.921569, 1, 1)
+theme_override_colors/font_outline_color = Color(0.00392157, 0.0117647, 0.0235294, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 10
+text = "AETHER VIEW"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -12)
+shape = SubResource("RectangleShape_orb")

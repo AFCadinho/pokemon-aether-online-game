@@ -56,6 +56,17 @@ func _init() -> void:
 			),
 		"Pokémon Center template provides the reusable Aether Atelier tailor"
 	)
+	_check(
+		template_source.contains('path="res://scenes/npcs/move_mentor_npc.tscn"')
+			and template_source.contains('[node name="MoveManiac" parent="Entities/NPCs"'),
+		"Pokémon Center template provides the reusable Move Maniac"
+	)
+	_check(
+		template_source.contains('path="res://scenes/npcs/move_deleter_npc.tscn"')
+			and template_source.contains('[node name="MoveDeleter" parent="Entities/NPCs"')
+			and template_source.contains("position = Vector2(656, 464)"),
+		"Pokémon Center template provides a separate directly approachable Move Deleter"
+	)
 	var first_clerk_start := template_source.find('[node name="Clerk" parent="Entities/NPCs"')
 	var second_clerk_start := template_source.find('[node name="Clerk2" parent="Entities/NPCs"')
 	var atelier_start := template_source.find('[node name="AetherAtelier" parent="Entities/NPCs"', second_clerk_start)

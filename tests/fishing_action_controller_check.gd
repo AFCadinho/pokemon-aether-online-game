@@ -65,7 +65,7 @@ func _init() -> void:
 		"Fishing cast and reel use one persisted configurable Input Map action"
 	)
 	_check(
-		settings_menu_source.contains('_create_tab_content("Controls", "ui.settings.tab.controls")')
+		settings_menu_source.contains('"Controls", "ui.settings.tab.controls", "ui.settings.section.controls_subtitle"')
 		and settings_menu_source.contains('binding_button.name = "%sBindingButton" % control_name')
 		and settings_menu_source.contains("SettingsManager.set_input_binding"),
 		"Settings expose a Fishing hotkey capture control"
@@ -260,9 +260,9 @@ func _init() -> void:
 		"world refreshes regional progression and reports localized Fishing XP levels"
 	)
 	_check(
-		world_source.contains('reason == "caught"')
-		and world_source.contains('active_wild_encounter_type in ["old_rod", "good_rod", "super_rod"]')
+		world_source.contains('if reason == "caught":')
 		and world_source.contains('_notify_fishing_treasure_award(reward.get("items", []))')
+		and world_source.contains('!= "fishing_treasure"')
 		and world_source.contains('SfxManager.play("item_found")'),
 		"completed Fishing wins and catches report authoritative treasure rewards"
 	)

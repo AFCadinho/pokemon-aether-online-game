@@ -176,6 +176,7 @@ func _check_scene_structure() -> void:
 	_check_contains(scene_source, "[node name=\"CalcPanel\" type=\"MarginContainer\" parent=\"BattleDrawerLayer/CalcDrawer/CalcDrawerContent\"", "Calc uses separate drawer content")
 	_check_contains(scene_source, "[node name=\"CalcTimerDock\" parent=\"BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow\" instance=ExtResource(\"9_pyfix\")]", "Calc keeps its dedicated timer dock in the workspace header")
 	_check_contains(scene_source, "[node name=\"CalcTurnLabel\" type=\"Label\" parent=\"BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow\"]", "Calc keeps the current turn visible in its header")
+	_check_contains(scene_source, "[node name=\"CalcBattleLimitLabel\" type=\"Label\" parent=\"BattleDrawerLayer/CalcDrawer/CalcDrawerContent/CalcDrawerHeader/HeaderRow\"]", "Calc keeps the Clash hard limit visible in its header")
 	_check_contains(scene_source, "vertical_scroll_mode = 0", "Calc removes the old full-workspace scrollbar")
 	var calc_drawer_start := scene_source.find("[node name=\"CalcDrawer\"")
 	var calc_drawer_end := scene_source.find("\n\n", calc_drawer_start)
@@ -227,6 +228,11 @@ func _check_scene_structure() -> void:
 		"Bag closes before the capture request can delay the throw presentation"
 	)
 	_check_contains(capture_block, "_restore_bag_after_capture_error()", "Rejected capture attempts restore the Bag for another choice")
+	_check_contains(
+		capture_block,
+		"if _show_force_switch_if_needed():\n\t\t\t_set_battle_input_locked(false)\n\t\t\treturn",
+		"A failed capture that faints the active Pokemon unlocks forced-switch selection"
+	)
 	_check_contains(scene_source, "[node name=\"MechanicsPanel\" type=\"PanelContainer\" parent=\"HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage\"", "mechanics live beside the battlefield moves")
 	_check_contains(scene_source, "[node name=\"CalcLogButton\" type=\"Button\" parent=\"HBoxContainer/BattleLogRail/ActionChoices", "Damage Calc lives below the battle log")
 	_check_contains(scene_source, "[node name=\"UtilityActions\" type=\"PanelContainer\" parent=\"HBoxContainer/CenterColumn/BattleFrame/MarginContainer/BattleStageViewport/BattleStage\"", "battlefield has a shared segmented utility bar")
