@@ -755,7 +755,7 @@ static func should_apply_terminal_action_immediately(message: Dictionary, _local
 
 	var message_action := str(message.get("action", "")).strip_edges().to_lower()
 	var message_player_id := str(message.get("playerId", "")).strip_edges()
-	if not (message_action in ["forfeit", "disconnect", "abandon"]) or message_player_id == "":
+	if not (message_action in ["forfeit", "disconnect", "abandon", "timeout"]) or message_player_id == "":
 		return false
 
 	# The action response and battle-update broadcast can race each other. Treat a

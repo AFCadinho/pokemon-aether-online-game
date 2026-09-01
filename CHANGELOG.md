@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aether Clash battles now close smoothly for both players when the battle time limit decides the winner.
+
 - Aether Clash now shows a steady tiebreak status while the server resolves the 7.5-minute battle limit, without a prolonged flashing indicator.
 
 - Trainer Cards now show one official PvP record with separate Ranked and Aether Clash results; Casual rooms are excluded.
