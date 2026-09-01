@@ -4324,7 +4324,12 @@ func _get_pvp_state_player_id_for_raw_player_id(player_id: String) -> String:
 		return player_id
 	return "p1" if player_id == "p2" else "p2"
 
-func _finish_confirmed_pvp_forfeit(response: Dictionary, forfeiting_player_id: String, source: String) -> void:
+func _finish_confirmed_pvp_forfeit(
+	response: Dictionary,
+	forfeiting_player_id: String,
+	source: String,
+	reason := "forfeit"
+) -> void:
 	if battle_finished:
 		return
 
@@ -4347,7 +4352,7 @@ func _finish_confirmed_pvp_forfeit(response: Dictionary, forfeiting_player_id: S
 		winner_side = "p2" if forfeiting_player_id == "p1" else "p1"
 
 	_finish_battle({
-		"reason": "forfeit",
+		"reason": reason,
 		"winner": winner_side,
 		"forfeitingPlayerId": forfeiting_player_id,
 	})
@@ -13953,10 +13958,13 @@ func _finish_pvp_realtime_battle_from_message(message: Dictionary) -> void:
 	if response.is_empty():
 		return
 
+	var terminal_action := str(message.get("action", "")).strip_edges().to_lower()
+	var terminal_reason := "battle_time_limit" if terminal_action == "timeout" else "forfeit"
 	_finish_confirmed_pvp_forfeit(
 		response,
 		_get_pvp_state_player_id_for_raw_player_id(str(message.get("playerId", ""))),
-		"pvp_forfeit_end"
+		"pvp_battle_limit_end" if terminal_action == "timeout" else "pvp_forfeit_end",
+		terminal_reason
 	)
 
 func _finish_pvp_realtime_battle_from_snapshot(message: Dictionary) -> void:

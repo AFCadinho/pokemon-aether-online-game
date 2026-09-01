@@ -706,6 +706,22 @@ func _init() -> void:
 		"failed local forfeit cannot end the client battle"
 	)
 	_check_equal(
+		PvpBattleRealtimeServiceNode.should_apply_terminal_action_immediately(
+			{"action": "timeout", "playerId": "p2", "response": {"success": true, "state": {"ended": true}}},
+			"p1"
+		),
+		true,
+		"battle-limit terminal snapshot finishes even when settlement metadata arrives later"
+	)
+	_check_equal(
+		PvpBattleRealtimeServiceNode.should_apply_terminal_action_immediately(
+			{"action": "timeout", "playerId": "p2", "response": {"success": true, "state": {"ended": false}}},
+			"p1"
+		),
+		false,
+		"nonterminal timeout update cannot finish the client battle"
+	)
+	_check_equal(
 		PvpBattleRealtimeServiceNode.should_defer_authoritative_terminal_until_render(false, false, "", false),
 		true,
 		"normal authoritative terminal waits for the ended mechanical projection"
