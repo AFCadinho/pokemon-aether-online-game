@@ -2939,6 +2939,70 @@ func _is_expected_trainer_battle_rejection(response: Dictionary) -> bool:
 		in EXPECTED_TRAINER_BATTLE_REJECTION_CODES
 	)
 
+
+func start_training_ai_battle_from_response(response: Dictionary) -> bool:
+	if is_in_battle or not bool(response.get("success", false)):
+		return false
+	var own_team_value: Variant = response.get("ownTeam", [])
+	if not (own_team_value is Array) or (own_team_value as Array).is_empty():
+		push_warning("World.start_training_ai_battle_from_response requires an imported player team.")
+		return false
+	var first_pokemon_value: Variant = (own_team_value as Array)[0]
+	if not (first_pokemon_value is Dictionary):
+		return false
+	var player_lead_pokemon := PokemonFactory.create_pokemon_from_backend_payload(
+		first_pokemon_value as Dictionary
+	)
+	if player_lead_pokemon == null:
+		return false
+
+	var ai_team_value: Variant = response.get("trainingAiTeam", {})
+	var ai_team: Dictionary = ai_team_value as Dictionary if ai_team_value is Dictionary else {}
+	var trainer_name := str(response.get("trainerName", "AI Level 5")).strip_edges()
+	if trainer_name == "":
+		trainer_name = "AI Level 5"
+	var trainer_data := {
+		"id": "training-ai-level5",
+		"name": trainer_name,
+		"teamDisplayName": str(ai_team.get("displayName", "")),
+		"battleTransitionStyle": "trainer",
+	}
+	is_in_battle = true
+	active_battle_kind = "training_ai"
+	active_battle_id = str(response.get("battleId", ""))
+	active_wild_pokemon_species = ""
+	active_wild_encounter_type = ""
+	active_trainer_id = ""
+	active_trainer_name = trainer_name
+	active_trainer_outro_dialogue_id = ""
+	active_trainer_mugshot = null
+	active_trainer_is_rematch = false
+	_lock_overworld_for_battle()
+	var transition_started_at_msec := _begin_trainer_battle_transition(trainer_data)
+	_save_player_activity_state_deferred("battle", _get_current_activity_context())
+	await _wait_for_wild_encounter_cover(transition_started_at_msec)
+
+	if not _mount_battle_ui():
+		push_error("World.start_training_ai_battle_from_response could not load the battle scene.")
+		await _cancel_wild_encounter_transition()
+		_abort_battle_start()
+		return false
+
+	_prepare_battle_instance_reveal()
+	MusicManager.play_trainer_battle_music()
+	var battle_environment_id := _resolve_battle_environment_id("pvp", response)
+	await battle_instance.setup_trainer_battle_from_response(
+		player_lead_pokemon,
+		trainer_data,
+		response,
+		Callable(self, "_reveal_prepared_wild_battle"),
+		battle_environment_id,
+		true
+	)
+	if wild_encounter_transition.visible:
+		await _reveal_prepared_wild_battle()
+	return true
+
 func start_pvp_battle_from_response(response: Dictionary) -> bool:
 	if is_in_battle:
 		if not await _interrupt_current_battle_for_pvp_match():

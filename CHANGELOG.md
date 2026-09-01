@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- The Training Room now lets players choose AI4 with AI5 watching or active AI5, plus a team archetype, a random matching sample team, or a specific competitive team.
+
 ## 0.3.70 - 2026-09-01
 
 **Added**

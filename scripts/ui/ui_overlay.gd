@@ -857,11 +857,25 @@ var pvp_room_tier_row: HBoxContainer
 var pvp_room_tier_select: OptionButton
 var pvp_room_create_mode_button: Button
 var pvp_room_join_mode_button: Button
+var pvp_room_ai_mode_button: Button
 var pvp_room_spectate_mode_button: Button
 var pvp_room_selected_mode := ""
 var pvp_room_code_input: LineEdit
 var pvp_training_team_input: TextEdit
 var pvp_training_team_note: Label
+var pvp_training_ai_mode_row: HBoxContainer
+var pvp_training_ai_mode_select: OptionButton
+var pvp_training_ai_available_modes: Array[String] = []
+var pvp_training_ai_default_mode := "shadow"
+var pvp_training_ai_archetype_row: HBoxContainer
+var pvp_training_ai_archetype_select: OptionButton
+var pvp_training_ai_catalog_archetypes: Array[String] = []
+var pvp_training_ai_team_row: HBoxContainer
+var pvp_training_ai_team_select: OptionButton
+var pvp_training_ai_catalog_entries: Array[Dictionary] = []
+var pvp_training_ai_catalog_loaded := false
+var pvp_training_ai_catalog_loading := false
+var pvp_training_ai_enabled := false
 var pvp_training_team_preview_section: VBoxContainer
 var pvp_training_team_preview_title: Label
 var pvp_training_team_preview_grid: HBoxContainer
@@ -1933,6 +1947,9 @@ func _refresh_pvp_localized_ui() -> void:
 	if not pvp_leaderboard_entries.is_empty():
 		_render_pvp_leaderboard(pvp_leaderboard_entries)
 	_render_pvp_history_matches(pvp_history_matches, pvp_history_user_id)
+	_refresh_pvp_training_ai_mode_options()
+	_refresh_pvp_training_ai_archetype_options()
+	_refresh_pvp_training_ai_team_options()
 	_refresh_pvp_room_battle_purpose_ui()
 	_refresh_pvp_room_form_title()
 	if pvp_room_code_label != null:
@@ -6286,6 +6303,16 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_join_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("join"))
 	pvp_room_mode_selector.add_child(pvp_room_join_mode_button)
 
+	pvp_room_ai_mode_button = Button.new()
+	_set_localized_control_property(pvp_room_ai_mode_button, "text", "ui.pvp.training.ai.mode")
+	pvp_room_ai_mode_button.custom_minimum_size = Vector2(0, 42)
+	pvp_room_ai_mode_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_room_ai_mode_button.focus_mode = Control.FOCUS_NONE
+	pvp_room_ai_mode_button.visible = false
+	pvp_room_ai_mode_button.disabled = true
+	pvp_room_ai_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("ai"))
+	pvp_room_mode_selector.add_child(pvp_room_ai_mode_button)
+
 	pvp_room_spectate_mode_button = Button.new()
 	_set_localized_control_property(pvp_room_spectate_mode_button, "text", "ui.pvp.room.spectate")
 	pvp_room_spectate_mode_button.custom_minimum_size = Vector2(106, 42)
@@ -6348,6 +6375,67 @@ func _setup_pvp_room_popup() -> void:
 	pvp_training_team_note.add_theme_color_override("font_color", Color("#9be7b1"))
 	pvp_training_team_note.visible = false
 	pvp_room_form.add_child(pvp_training_team_note)
+
+	pvp_training_ai_mode_row = HBoxContainer.new()
+	pvp_training_ai_mode_row.add_theme_constant_override("separation", 8)
+	pvp_training_ai_mode_row.visible = false
+	pvp_room_form.add_child(pvp_training_ai_mode_row)
+
+	var training_ai_mode_label := Label.new()
+	_set_localized_control_property(training_ai_mode_label, "text", "ui.pvp.training.ai.mode_label")
+	training_ai_mode_label.custom_minimum_size = Vector2(82, 36)
+	training_ai_mode_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	training_ai_mode_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pvp_training_ai_mode_row.add_child(training_ai_mode_label)
+
+	pvp_training_ai_mode_select = OptionButton.new()
+	pvp_training_ai_mode_select.custom_minimum_size = Vector2(0, 36)
+	pvp_training_ai_mode_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_mode_select.focus_mode = Control.FOCUS_NONE
+	_apply_pvp_ranked_dropdown_style(pvp_training_ai_mode_select, true)
+	pvp_training_ai_mode_row.add_child(pvp_training_ai_mode_select)
+	_refresh_pvp_training_ai_mode_options()
+
+	pvp_training_ai_archetype_row = HBoxContainer.new()
+	pvp_training_ai_archetype_row.add_theme_constant_override("separation", 8)
+	pvp_training_ai_archetype_row.visible = false
+	pvp_room_form.add_child(pvp_training_ai_archetype_row)
+
+	var training_ai_archetype_label := Label.new()
+	_set_localized_control_property(training_ai_archetype_label, "text", "ui.pvp.training.ai.archetype_label")
+	training_ai_archetype_label.custom_minimum_size = Vector2(82, 36)
+	training_ai_archetype_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	training_ai_archetype_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pvp_training_ai_archetype_row.add_child(training_ai_archetype_label)
+
+	pvp_training_ai_archetype_select = OptionButton.new()
+	pvp_training_ai_archetype_select.custom_minimum_size = Vector2(0, 36)
+	pvp_training_ai_archetype_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_archetype_select.focus_mode = Control.FOCUS_NONE
+	_apply_pvp_ranked_dropdown_style(pvp_training_ai_archetype_select, true)
+	pvp_training_ai_archetype_select.item_selected.connect(_on_pvp_training_ai_archetype_selected)
+	pvp_training_ai_archetype_row.add_child(pvp_training_ai_archetype_select)
+	_refresh_pvp_training_ai_archetype_options()
+
+	pvp_training_ai_team_row = HBoxContainer.new()
+	pvp_training_ai_team_row.add_theme_constant_override("separation", 8)
+	pvp_training_ai_team_row.visible = false
+	pvp_room_form.add_child(pvp_training_ai_team_row)
+
+	var training_ai_team_label := Label.new()
+	_set_localized_control_property(training_ai_team_label, "text", "ui.pvp.training.ai.team_label")
+	training_ai_team_label.custom_minimum_size = Vector2(82, 36)
+	training_ai_team_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	training_ai_team_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pvp_training_ai_team_row.add_child(training_ai_team_label)
+
+	pvp_training_ai_team_select = OptionButton.new()
+	pvp_training_ai_team_select.custom_minimum_size = Vector2(0, 36)
+	pvp_training_ai_team_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_team_select.focus_mode = Control.FOCUS_NONE
+	_apply_pvp_ranked_dropdown_style(pvp_training_ai_team_select, true)
+	pvp_training_ai_team_row.add_child(pvp_training_ai_team_select)
+	_refresh_pvp_training_ai_team_options()
 
 	pvp_room_code_input = LineEdit.new()
 	_set_localized_control_property(pvp_room_code_input, "placeholder_text", "ui.pvp.room.enter_code")
@@ -41549,6 +41637,9 @@ func _heal_party_before_pvp(action_label: String = "PvP") -> bool:
 	return false
 
 func _on_pvp_room_mode_selected(mode: String) -> void:
+	if mode == "ai" and not pvp_training_ai_enabled:
+		_set_pvp_status_key("ui.pvp.training.ai.unavailable")
+		return
 	if pvp_active_room_code == "":
 		_clear_pvp_training_team_preview()
 	pvp_room_selected_mode = mode
@@ -41568,12 +41659,14 @@ func _on_pvp_room_mode_selected(mode: String) -> void:
 			and pvp_timer_enabled_check != null
 			and pvp_timer_enabled_check.button_pressed
 		)
-	pvp_create_room_button.visible = mode == "create"
+	pvp_create_room_button.visible = mode in ["create", "ai"]
 	pvp_join_room_button.visible = mode == "join"
 	pvp_spectate_room_button.visible = mode == "spectate"
 	pvp_cancel_room_button.visible = false
 	pvp_copy_code_button.visible = false
 	_refresh_pvp_room_form_title()
+	if mode == "ai":
+		pvp_create_room_button.text = LocalizationManager.text("ui.pvp.training.ai.start")
 	_set_pvp_status_key(
 		"ui.pvp.room.ready" if mode == "spectate" else _pvp_room_ready_status_key()
 	)
@@ -41583,6 +41676,9 @@ func _on_pvp_room_battle_purpose_selected(purpose: String) -> void:
 	if pvp_active_room_code != "" or pvp_battle_starting:
 		return
 	pvp_room_battle_purpose = "training" if purpose == "training" else "casual"
+	if pvp_room_battle_purpose != "training" and pvp_room_selected_mode == "ai":
+		pvp_room_selected_mode = ""
+		pvp_room_form.visible = false
 	_clear_pvp_training_team_preview()
 	if pvp_room_casual_type_button != null:
 		pvp_room_casual_type_button.button_pressed = pvp_room_battle_purpose == "casual"
@@ -41592,6 +41688,8 @@ func _on_pvp_room_battle_purpose_selected(purpose: String) -> void:
 	_refresh_pvp_room_battle_purpose_ui()
 	_refresh_pvp_room_form_title()
 	_set_pvp_status_key(_pvp_room_ready_status_key())
+	if pvp_room_battle_purpose == "training" and not pvp_training_ai_catalog_loaded:
+		await _load_pvp_training_ai_catalog()
 
 
 func _pvp_room_ready_status_key() -> String:
@@ -41624,6 +41722,9 @@ func _refresh_pvp_room_battle_purpose_ui() -> void:
 			"text",
 			"ui.pvp.room.flow_hint.training" if is_training else "ui.pvp.room.flow_hint.casual"
 		)
+	if pvp_room_ai_mode_button != null:
+		pvp_room_ai_mode_button.visible = is_training
+		pvp_room_ai_mode_button.disabled = not pvp_training_ai_enabled or pvp_training_ai_catalog_loading
 	var create_key := "ui.pvp.training.create" if is_training else "ui.pvp.room.create"
 	var join_key := "ui.pvp.training.join" if is_training else "ui.pvp.room.join"
 	for create_button: Button in [pvp_room_create_mode_button, pvp_create_room_button]:
@@ -41632,13 +41733,15 @@ func _refresh_pvp_room_battle_purpose_ui() -> void:
 	for join_button: Button in [pvp_room_join_mode_button, pvp_join_room_button]:
 		if join_button != null:
 			join_button.text = LocalizationManager.text(join_key)
+	if pvp_create_room_button != null and pvp_room_selected_mode == "ai":
+		pvp_create_room_button.text = LocalizationManager.text("ui.pvp.training.ai.start")
 
 
 func _refresh_pvp_room_team_fields() -> void:
-	var needs_team := pvp_room_selected_mode in ["create", "join"]
+	var needs_team := pvp_room_selected_mode in ["create", "join", "ai"]
 	var is_training := pvp_room_battle_purpose == "training"
 	if pvp_room_code_input != null:
-		pvp_room_code_input.visible = pvp_room_selected_mode != "create"
+		pvp_room_code_input.visible = pvp_room_selected_mode in ["join", "spectate"]
 		if pvp_room_form != null and pvp_room_selected_mode in ["join", "spectate"]:
 			pvp_room_form.move_child(pvp_room_code_input, 1)
 	if pvp_training_team_input != null:
@@ -41647,6 +41750,12 @@ func _refresh_pvp_room_team_fields() -> void:
 			pvp_room_form.move_child(pvp_training_team_input, 1)
 	if pvp_training_team_note != null:
 		pvp_training_team_note.visible = needs_team and is_training
+	if pvp_training_ai_mode_row != null:
+		pvp_training_ai_mode_row.visible = is_training and pvp_room_selected_mode == "ai"
+	if pvp_training_ai_archetype_row != null:
+		pvp_training_ai_archetype_row.visible = is_training and pvp_room_selected_mode == "ai"
+	if pvp_training_ai_team_row != null:
+		pvp_training_ai_team_row.visible = is_training and pvp_room_selected_mode == "ai"
 
 
 func _refresh_pvp_room_form_title() -> void:
@@ -41666,11 +41775,212 @@ func _refresh_pvp_room_form_title() -> void:
 			)
 		"spectate":
 			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_spectate")
+		"ai":
+			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.training.ai.form")
 		_:
 			pvp_room_form_title.text = ""
 
+
+func _refresh_pvp_training_ai_mode_options() -> void:
+	if pvp_training_ai_mode_select == null:
+		return
+	var previous_mode := _selected_pvp_training_ai_mode()
+	pvp_training_ai_mode_select.clear()
+	for mode: String in pvp_training_ai_available_modes:
+		if mode not in ["shadow", "active"]:
+			continue
+		pvp_training_ai_mode_select.add_item(
+			LocalizationManager.text("ui.pvp.training.ai.mode_%s" % mode)
+		)
+		pvp_training_ai_mode_select.set_item_metadata(
+			pvp_training_ai_mode_select.item_count - 1,
+			mode
+		)
+	var preferred_mode := previous_mode
+	if preferred_mode not in pvp_training_ai_available_modes:
+		preferred_mode = pvp_training_ai_default_mode
+	for index in range(pvp_training_ai_mode_select.item_count):
+		if str(pvp_training_ai_mode_select.get_item_metadata(index)) == preferred_mode:
+			pvp_training_ai_mode_select.select(index)
+			break
+
+
+func _refresh_pvp_training_ai_archetype_options() -> void:
+	if pvp_training_ai_archetype_select == null:
+		return
+	var previous_archetype := _selected_pvp_training_ai_archetype()
+	pvp_training_ai_archetype_select.clear()
+	pvp_training_ai_archetype_select.add_item(
+		LocalizationManager.text("ui.pvp.training.ai.archetype_random")
+	)
+	pvp_training_ai_archetype_select.set_item_metadata(0, "random")
+	for archetype: String in pvp_training_ai_catalog_archetypes:
+		pvp_training_ai_archetype_select.add_item(
+			LocalizationManager.text("ui.pvp.training.ai.archetype.%s" % archetype)
+		)
+		pvp_training_ai_archetype_select.set_item_metadata(
+			pvp_training_ai_archetype_select.item_count - 1,
+			archetype
+		)
+	for index in range(pvp_training_ai_archetype_select.item_count):
+		if str(pvp_training_ai_archetype_select.get_item_metadata(index)) == previous_archetype:
+			pvp_training_ai_archetype_select.select(index)
+			break
+
+
+func _refresh_pvp_training_ai_team_options() -> void:
+	if pvp_training_ai_team_select == null:
+		return
+	var requested_archetype := _selected_pvp_training_ai_archetype()
+	var previous_team_id := _selected_pvp_training_ai_team_id()
+	pvp_training_ai_team_select.clear()
+	pvp_training_ai_team_select.add_item(LocalizationManager.text(
+		"ui.pvp.training.ai.team_random"
+		if requested_archetype == "random"
+		else "ui.pvp.training.ai.team_random_archetype"
+	))
+	pvp_training_ai_team_select.set_item_metadata(0, "random")
+	for entry: Dictionary in pvp_training_ai_catalog_entries:
+		if requested_archetype != "random" and str(entry.get("archetype", "")) != requested_archetype:
+			continue
+		var display_name := str(entry.get("displayName", entry.get("teamId", ""))).strip_edges()
+		var authors_value: Variant = entry.get("authors", [])
+		var authors: Array[String] = []
+		if authors_value is Array:
+			for author_value: Variant in authors_value:
+				var author := str(author_value).strip_edges()
+				if author != "":
+					authors.append(author)
+		var label := display_name
+		if not authors.is_empty():
+			label = "%s — %s" % [display_name, ", ".join(authors)]
+		pvp_training_ai_team_select.add_item(label)
+		pvp_training_ai_team_select.set_item_metadata(
+			pvp_training_ai_team_select.item_count - 1,
+			str(entry.get("teamId", "random"))
+		)
+	for index in range(pvp_training_ai_team_select.item_count):
+		if str(pvp_training_ai_team_select.get_item_metadata(index)) == previous_team_id:
+			pvp_training_ai_team_select.select(index)
+			break
+
+
+func _on_pvp_training_ai_archetype_selected(_index: int) -> void:
+	_refresh_pvp_training_ai_team_options()
+
+
+func _load_pvp_training_ai_catalog() -> void:
+	if pvp_training_ai_catalog_loading:
+		return
+	pvp_training_ai_catalog_loading = true
+	pvp_training_ai_enabled = false
+	_refresh_pvp_room_battle_purpose_ui()
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.get_training_ai_teams(request)
+	request.queue_free()
+	pvp_training_ai_catalog_loading = false
+	pvp_training_ai_catalog_loaded = bool(response.get("success", false))
+	pvp_training_ai_catalog_entries.clear()
+	pvp_training_ai_available_modes.clear()
+	pvp_training_ai_catalog_archetypes.clear()
+	if pvp_training_ai_catalog_loaded:
+		var modes_value: Variant = response.get("availableModes", [])
+		if modes_value is Array:
+			for mode_value: Variant in modes_value:
+				var mode := str(mode_value).strip_edges().to_lower()
+				if mode in ["shadow", "active"] and mode not in pvp_training_ai_available_modes:
+					pvp_training_ai_available_modes.append(mode)
+		pvp_training_ai_default_mode = str(response.get("defaultMode", "shadow")).strip_edges().to_lower()
+		if pvp_training_ai_default_mode not in pvp_training_ai_available_modes:
+			pvp_training_ai_default_mode = (
+				pvp_training_ai_available_modes[0]
+				if not pvp_training_ai_available_modes.is_empty()
+				else "shadow"
+			)
+		var archetypes_value: Variant = response.get("archetypes", [])
+		if archetypes_value is Array:
+			for archetype_value: Variant in archetypes_value:
+				var archetype := str(archetype_value).strip_edges().to_lower()
+				if archetype != "" and archetype not in pvp_training_ai_catalog_archetypes:
+					pvp_training_ai_catalog_archetypes.append(archetype)
+		var teams_value: Variant = response.get("teams", [])
+		if teams_value is Array:
+			for entry_value: Variant in teams_value:
+				if entry_value is Dictionary:
+					pvp_training_ai_catalog_entries.append((entry_value as Dictionary).duplicate(true))
+		pvp_training_ai_enabled = (
+			bool(response.get("enabled", false))
+			and not pvp_training_ai_available_modes.is_empty()
+			and not pvp_training_ai_catalog_entries.is_empty()
+		)
+	_refresh_pvp_training_ai_mode_options()
+	_refresh_pvp_training_ai_archetype_options()
+	_refresh_pvp_training_ai_team_options()
+	_refresh_pvp_room_battle_purpose_ui()
+	if not pvp_training_ai_enabled and pvp_room_selected_mode == "ai":
+		_set_pvp_status_key("ui.pvp.training.ai.unavailable")
+
+
+func _selected_pvp_training_ai_team_id() -> String:
+	if pvp_training_ai_team_select == null or pvp_training_ai_team_select.item_count == 0:
+		return "random"
+	var selected_id := str(pvp_training_ai_team_select.get_selected_metadata()).strip_edges()
+	return selected_id if selected_id != "" else "random"
+
+
+func _selected_pvp_training_ai_mode() -> String:
+	if pvp_training_ai_mode_select == null or pvp_training_ai_mode_select.item_count == 0:
+		return pvp_training_ai_default_mode
+	var selected_mode := str(pvp_training_ai_mode_select.get_selected_metadata()).strip_edges().to_lower()
+	return selected_mode if selected_mode in ["shadow", "active"] else pvp_training_ai_default_mode
+
+
+func _selected_pvp_training_ai_archetype() -> String:
+	if pvp_training_ai_archetype_select == null or pvp_training_ai_archetype_select.item_count == 0:
+		return "random"
+	var selected_archetype := str(pvp_training_ai_archetype_select.get_selected_metadata()).strip_edges().to_lower()
+	return selected_archetype if selected_archetype != "" else "random"
+
+
+func _on_pvp_training_ai_start_pressed() -> void:
+	if not pvp_training_ai_enabled:
+		_set_pvp_status_key("ui.pvp.training.ai.unavailable")
+		return
+	var team_text := pvp_training_team_input.text.strip_edges() if pvp_training_team_input != null else ""
+	if team_text == "":
+		_set_pvp_status_key("ui.pvp.training.paste_required")
+		return
+	_set_pvp_room_busy(true)
+	_set_pvp_status_key("ui.pvp.training.ai.creating")
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.create_training_ai_battle(
+		request,
+		_pvp_room_player_payload(),
+		team_text,
+		_selected_pvp_training_ai_team_id(),
+		_selected_pvp_training_ai_mode(),
+		_selected_pvp_training_ai_archetype()
+	)
+	request.queue_free()
+	_set_pvp_room_busy(false)
+	if not bool(response.get("success", false)):
+		var error_code := BackendErrorLocalizationService.error_code(response)
+		_set_pvp_status_key(
+			"ui.pvp.training.paste_invalid"
+			if error_code in ["training_team_invalid", "training_team_illegal"]
+			else "ui.pvp.training.ai.start_failed"
+		)
+		push_warning("UIOverlay: training AI battle start failed: %s" % str(response.get("error", response.get("detail", "Unknown error"))))
+		return
+	_set_pvp_training_team_preview(response.get("ownTeam", []))
+	await _start_training_ai_battle_from_response(response)
+
+
 func _on_pvp_create_room_pressed() -> void:
 	if pvp_battle_starting:
+		return
+	if pvp_room_selected_mode == "ai":
+		await _on_pvp_training_ai_start_pressed()
 		return
 	var is_training := pvp_room_battle_purpose == "training"
 	var team_text := pvp_training_team_input.text.strip_edges() if pvp_training_team_input != null else ""
@@ -44697,6 +45007,39 @@ func _start_pvp_battle_from_response(response: Dictionary) -> void:
 	_refresh_pvp_queue_compact_panel(0.0)
 	pvp_battle_starting = false
 
+
+func _start_training_ai_battle_from_response(response: Dictionary) -> void:
+	if pvp_battle_starting:
+		return
+	pvp_battle_starting = true
+	_set_pvp_status_key("ui.pvp.training.ai.starting")
+	var world := get_tree().get_first_node_in_group("world")
+	if world == null or not world.has_method("start_training_ai_battle_from_response"):
+		_set_pvp_status_key("ui.pvp.battle.scene_unavailable")
+		pvp_battle_starting = false
+		return
+	var popup_was_visible := pvp_room_popup != null and pvp_room_popup.visible
+	if popup_was_visible:
+		_hide_pvp_room_popup()
+	var started: bool = await world.start_training_ai_battle_from_response(response)
+	if not started:
+		if popup_was_visible and pvp_room_popup != null:
+			pvp_room_popup.visible = true
+			_activate_ui_panel(pvp_room_popup)
+		_set_pvp_status_key("ui.pvp.training.ai.start_failed")
+		pvp_battle_starting = false
+		return
+	_clear_pvp_training_team_preview()
+	pvp_room_selected_mode = ""
+	if pvp_room_mode_selector != null:
+		pvp_room_mode_selector.visible = true
+	if pvp_room_form != null:
+		pvp_room_form.visible = false
+	if pvp_room_flow_hint != null:
+		pvp_room_flow_hint.visible = true
+	_set_pvp_status_key("ui.pvp.training.ready")
+	pvp_battle_starting = false
+
 func _create_pvp_request_node() -> HTTPRequest:
 	var request := HTTPRequest.new()
 	add_child(request)
@@ -44709,6 +45052,8 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 		pvp_room_create_mode_button.disabled = is_busy
 	if pvp_room_join_mode_button != null:
 		pvp_room_join_mode_button.disabled = is_busy
+	if pvp_room_ai_mode_button != null:
+		pvp_room_ai_mode_button.disabled = is_busy or not pvp_training_ai_enabled
 	if pvp_room_spectate_mode_button != null:
 		pvp_room_spectate_mode_button.disabled = is_busy
 	if pvp_cancel_room_button != null:
@@ -44722,6 +45067,12 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 		pvp_timer_enabled_check.disabled = is_busy
 	if pvp_timer_tier_select != null:
 		pvp_timer_tier_select.disabled = is_busy
+	if pvp_training_ai_mode_select != null:
+		pvp_training_ai_mode_select.disabled = is_busy
+	if pvp_training_ai_archetype_select != null:
+		pvp_training_ai_archetype_select.disabled = is_busy
+	if pvp_training_ai_team_select != null:
+		pvp_training_ai_team_select.disabled = is_busy
 	if pvp_join_queue_button != null:
 		var ranked_blocked := _is_selected_pvp_queue_ranked() and not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)
 		pvp_join_queue_button.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "" or ranked_blocked
