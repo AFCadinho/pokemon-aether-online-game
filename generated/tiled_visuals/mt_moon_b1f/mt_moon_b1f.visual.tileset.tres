@@ -1,14 +1,15 @@
-[gd_resource type="TileSet" format=3 uid="uid://62saf0l76bmt"]
+[gd_resource type="TileSet" format=3]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/mt_moon_b1f/assets/5GEN_CAVE_TILESET_2392707819_000.texture.res" id="1_p6ma8"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/mt_moon_b1f/assets/5GEN_TILESET_2109830053_005.texture.res" id="2_i85b5"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/mt_moon_b1f/assets/5GEN_TILESET_2109830053_006.texture.res" id="3_i85b5"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/mt_moon_b1f/assets/5GEN_TILESET_2109830053_001.texture.res" id="3_il1fu"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/mt_moon_b1f/assets/5GEN_TILESET_2109830053_002.texture.res" id="4_p0ml8"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/mt_moon_b1f/assets/5GEN_TILESET_2109830053_003.texture.res" id="5_uhtw2"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/mt_moon_b1f/assets/5GEN_TILESET_2109830053_000.texture.res" id="6_2suan"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/mt_moon_b1f/assets/5GEN_TILESET_2109830053_004.texture.res" id="7_syh8y"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2oqpe"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_il1fu"]
 texture = ExtResource("1_p6ma8")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -716,7 +717,7 @@ texture_region_size = Vector2i(32, 32)
 6:87/0 = 0
 7:87/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4iu7b"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p0ml8"]
 texture = ExtResource("2_i85b5")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -2559,8 +2560,332 @@ texture_region_size = Vector2i(32, 32)
 5:229/0 = 0
 6:229/0 = 0
 7:229/0 = 0
+0:230/0 = 0
+1:230/0 = 0
+2:230/0 = 0
+3:230/0 = 0
+4:230/0 = 0
+5:230/0 = 0
+6:230/0 = 0
+7:230/0 = 0
+0:231/0 = 0
+1:231/0 = 0
+2:231/0 = 0
+3:231/0 = 0
+4:231/0 = 0
+5:231/0 = 0
+6:231/0 = 0
+7:231/0 = 0
+0:232/0 = 0
+1:232/0 = 0
+2:232/0 = 0
+3:232/0 = 0
+4:232/0 = 0
+5:232/0 = 0
+6:232/0 = 0
+7:232/0 = 0
+0:233/0 = 0
+1:233/0 = 0
+2:233/0 = 0
+3:233/0 = 0
+4:233/0 = 0
+5:233/0 = 0
+6:233/0 = 0
+7:233/0 = 0
+0:234/0 = 0
+1:234/0 = 0
+2:234/0 = 0
+3:234/0 = 0
+4:234/0 = 0
+5:234/0 = 0
+6:234/0 = 0
+7:234/0 = 0
+0:235/0 = 0
+1:235/0 = 0
+2:235/0 = 0
+3:235/0 = 0
+4:235/0 = 0
+5:235/0 = 0
+6:235/0 = 0
+7:235/0 = 0
+0:236/0 = 0
+1:236/0 = 0
+2:236/0 = 0
+3:236/0 = 0
+4:236/0 = 0
+5:236/0 = 0
+6:236/0 = 0
+7:236/0 = 0
+0:237/0 = 0
+1:237/0 = 0
+2:237/0 = 0
+3:237/0 = 0
+4:237/0 = 0
+5:237/0 = 0
+6:237/0 = 0
+7:237/0 = 0
+0:238/0 = 0
+1:238/0 = 0
+2:238/0 = 0
+3:238/0 = 0
+4:238/0 = 0
+5:238/0 = 0
+6:238/0 = 0
+7:238/0 = 0
+0:239/0 = 0
+1:239/0 = 0
+2:239/0 = 0
+3:239/0 = 0
+4:239/0 = 0
+5:239/0 = 0
+6:239/0 = 0
+7:239/0 = 0
+0:240/0 = 0
+1:240/0 = 0
+2:240/0 = 0
+3:240/0 = 0
+4:240/0 = 0
+5:240/0 = 0
+6:240/0 = 0
+7:240/0 = 0
+0:241/0 = 0
+1:241/0 = 0
+2:241/0 = 0
+3:241/0 = 0
+4:241/0 = 0
+5:241/0 = 0
+6:241/0 = 0
+7:241/0 = 0
+0:242/0 = 0
+1:242/0 = 0
+2:242/0 = 0
+3:242/0 = 0
+4:242/0 = 0
+5:242/0 = 0
+6:242/0 = 0
+7:242/0 = 0
+0:243/0 = 0
+1:243/0 = 0
+2:243/0 = 0
+3:243/0 = 0
+4:243/0 = 0
+5:243/0 = 0
+6:243/0 = 0
+7:243/0 = 0
+0:244/0 = 0
+1:244/0 = 0
+2:244/0 = 0
+3:244/0 = 0
+4:244/0 = 0
+5:244/0 = 0
+6:244/0 = 0
+7:244/0 = 0
+0:245/0 = 0
+1:245/0 = 0
+2:245/0 = 0
+3:245/0 = 0
+4:245/0 = 0
+5:245/0 = 0
+6:245/0 = 0
+7:245/0 = 0
+0:246/0 = 0
+1:246/0 = 0
+2:246/0 = 0
+3:246/0 = 0
+4:246/0 = 0
+5:246/0 = 0
+6:246/0 = 0
+7:246/0 = 0
+0:247/0 = 0
+1:247/0 = 0
+2:247/0 = 0
+3:247/0 = 0
+4:247/0 = 0
+5:247/0 = 0
+6:247/0 = 0
+7:247/0 = 0
+0:248/0 = 0
+1:248/0 = 0
+2:248/0 = 0
+3:248/0 = 0
+4:248/0 = 0
+5:248/0 = 0
+6:248/0 = 0
+7:248/0 = 0
+0:249/0 = 0
+1:249/0 = 0
+2:249/0 = 0
+3:249/0 = 0
+4:249/0 = 0
+5:249/0 = 0
+6:249/0 = 0
+7:249/0 = 0
+0:250/0 = 0
+1:250/0 = 0
+2:250/0 = 0
+3:250/0 = 0
+4:250/0 = 0
+5:250/0 = 0
+6:250/0 = 0
+7:250/0 = 0
+0:251/0 = 0
+1:251/0 = 0
+2:251/0 = 0
+3:251/0 = 0
+4:251/0 = 0
+5:251/0 = 0
+6:251/0 = 0
+7:251/0 = 0
+0:252/0 = 0
+1:252/0 = 0
+2:252/0 = 0
+3:252/0 = 0
+4:252/0 = 0
+5:252/0 = 0
+6:252/0 = 0
+7:252/0 = 0
+0:253/0 = 0
+1:253/0 = 0
+2:253/0 = 0
+3:253/0 = 0
+4:253/0 = 0
+5:253/0 = 0
+6:253/0 = 0
+7:253/0 = 0
+0:254/0 = 0
+1:254/0 = 0
+2:254/0 = 0
+3:254/0 = 0
+4:254/0 = 0
+5:254/0 = 0
+6:254/0 = 0
+7:254/0 = 0
+0:255/0 = 0
+1:255/0 = 0
+2:255/0 = 0
+3:255/0 = 0
+4:255/0 = 0
+5:255/0 = 0
+6:255/0 = 0
+7:255/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y4kgv"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uhtw2"]
+texture = ExtResource("3_i85b5")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+7:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+6:6/0 = 0
+7:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+6:7/0 = 0
+7:7/0 = 0
+0:8/0 = 0
+1:8/0 = 0
+2:8/0 = 0
+3:8/0 = 0
+4:8/0 = 0
+5:8/0 = 0
+6:8/0 = 0
+7:8/0 = 0
+0:9/0 = 0
+1:9/0 = 0
+2:9/0 = 0
+3:9/0 = 0
+4:9/0 = 0
+5:9/0 = 0
+6:9/0 = 0
+7:9/0 = 0
+0:10/0 = 0
+1:10/0 = 0
+2:10/0 = 0
+3:10/0 = 0
+4:10/0 = 0
+5:10/0 = 0
+6:10/0 = 0
+7:10/0 = 0
+0:11/0 = 0
+1:11/0 = 0
+2:11/0 = 0
+3:11/0 = 0
+4:11/0 = 0
+5:11/0 = 0
+6:11/0 = 0
+7:11/0 = 0
+0:12/0 = 0
+1:12/0 = 0
+2:12/0 = 0
+3:12/0 = 0
+4:12/0 = 0
+5:12/0 = 0
+6:12/0 = 0
+7:12/0 = 0
+0:13/0 = 0
+1:13/0 = 0
+2:13/0 = 0
+3:13/0 = 0
+4:13/0 = 0
+5:13/0 = 0
+6:13/0 = 0
+7:13/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2suan"]
 texture = ExtResource("3_il1fu")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -4612,7 +4937,7 @@ texture_region_size = Vector2i(32, 32)
 6:255/0 = 0
 7:255/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bh57f"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_syh8y"]
 texture = ExtResource("4_p0ml8")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -6664,7 +6989,7 @@ texture_region_size = Vector2i(32, 32)
 6:255/0 = 0
 7:255/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lvhyx"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2oqpe"]
 texture = ExtResource("5_uhtw2")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -8716,7 +9041,7 @@ texture_region_size = Vector2i(32, 32)
 6:255/0 = 0
 7:255/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jrsad"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4iu7b"]
 texture = ExtResource("6_2suan")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -10768,7 +11093,7 @@ texture_region_size = Vector2i(32, 32)
 6:255/0 = 0
 7:255/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lm7rx"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y4kgv"]
 texture = ExtResource("7_syh8y")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -12822,13 +13147,14 @@ texture_region_size = Vector2i(32, 32)
 
 [resource]
 tile_size = Vector2i(32, 32)
-sources/1 = SubResource("TileSetAtlasSource_2oqpe")
-sources/705 = SubResource("TileSetAtlasSource_jrsad")
-sources/2753 = SubResource("TileSetAtlasSource_y4kgv")
-sources/4801 = SubResource("TileSetAtlasSource_bh57f")
-sources/6849 = SubResource("TileSetAtlasSource_lvhyx")
-sources/8897 = SubResource("TileSetAtlasSource_lm7rx")
-sources/10945 = SubResource("TileSetAtlasSource_4iu7b")
+sources/1 = SubResource("TileSetAtlasSource_il1fu")
+sources/705 = SubResource("TileSetAtlasSource_4iu7b")
+sources/2753 = SubResource("TileSetAtlasSource_2suan")
+sources/4801 = SubResource("TileSetAtlasSource_syh8y")
+sources/6849 = SubResource("TileSetAtlasSource_2oqpe")
+sources/8897 = SubResource("TileSetAtlasSource_y4kgv")
+sources/10945 = SubResource("TileSetAtlasSource_p0ml8")
+sources/12993 = SubResource("TileSetAtlasSource_uhtw2")
 metadata/tiled_source_signature = "32
 32
 |
@@ -12905,7 +13231,18 @@ Outside Tileset_5
 32
 0
 0
-1840
+2048
 8
-res://generated/tiled_visuals/mt_moon_b1f/assets/5GEN_TILESET_2109830053_005.texture.res"
+res://generated/tiled_visuals/mt_moon_b1f/assets/5GEN_TILESET_2109830053_005.texture.res
+|
+12993
+/home/adinho/Documents/tiled_pokeaether/kanto/artist/exterior/Outside Tileset.tsx
+Outside Tileset_6
+32
+32
+0
+0
+112
+8
+res://generated/tiled_visuals/mt_moon_b1f/assets/5GEN_TILESET_2109830053_006.texture.res"
 metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/exterior/mt_moon/Mt. Moon Part 3.tmx"
