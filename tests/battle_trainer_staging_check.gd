@@ -36,6 +36,7 @@ func _check_scene_staging() -> void:
 	_check(player_start < platform_start and enemy_start < platform_start, "trainers render behind both platforms")
 	_check(source.contains("position = Vector2(124, 474)"), "player trainer stands slightly above the player platform baseline")
 	_check(source.contains("position = Vector2(1028, 316)"), "opponent trainer mirrors the raised staging")
+	_check(source.contains('[node name="EnemySpriteBox"') and source.contains("z_index = 2"), "active Pokemon render above trainer art")
 	_check(source.contains("position = Vector2(300, 412)"), "player team preview remains in its original position")
 	_check(source.contains("position = Vector2(850, 268)"), "opponent team preview remains in its original position")
 
@@ -134,8 +135,9 @@ func _check_runtime_renderer() -> void:
 	var renderer := BattleTrainerScene.instantiate() as BattleTrainerSprite
 	root.add_child(renderer)
 	_check(
-		renderer.z_index < BattleRenderLayers.FIELD,
-		"trainer figures render behind active Pokemon"
+		renderer.z_index > BattleRenderLayers.FIELD
+			and renderer.z_index < BattleRenderLayers.POKEMON,
+		"trainer figures render above arena platforms but behind active Pokemon"
 	)
 	_check(
 		renderer.command_callout.z_index > BattleRenderLayers.MOVE_FOREGROUND,
