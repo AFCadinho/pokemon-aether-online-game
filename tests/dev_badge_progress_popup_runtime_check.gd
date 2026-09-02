@@ -72,6 +72,11 @@ func _run() -> void:
 	_check(side_quest_select != null and side_quest_select.item_count == 6, "trainer progress exposes all side-quest controls")
 	_check(popup.find_child("ResetSideQuestButton", true, false) != null, "side quests can be restarted")
 	_check(popup.find_child("CompleteSideQuestButton", true, false) != null, "side quests can be completed with rewards")
+	var game_state_service_source := FileAccess.get_file_as_string("res://scripts/services/player_game_state_service.gd")
+	_check(
+		game_state_service_source.contains("reload_current_map_preserving_player_position"),
+		"resetting Rock Smash refreshes removed training-rock nodes in the open map"
+	)
 	if story_chapter_select != null and story_checkpoint_select != null:
 		_check(story_chapter_select.item_count == 5, "story checkpoints are divided into compact chapters")
 		var largest_chapter_size := 0

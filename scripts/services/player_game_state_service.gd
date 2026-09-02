@@ -194,11 +194,21 @@ func dev_set_side_quest_progress(quest_id: String, action: String) -> Dictionary
 	var wallet_result: Dictionary = await PlayerWalletService.load_wallet()
 	if bool(wallet_result.get("success", false)):
 		PlayerWalletService.apply_wallet_result(wallet_result)
+	var rock_smash_refresh_success := true
+	if normalized_quest_id == "learn_rock_smash" and normalized_action == "reset":
+		var rock_smash_result: Dictionary = await RockSmashService.load_state()
+		rock_smash_refresh_success = bool(rock_smash_result.get("success", false))
+		var world := get_tree().get_first_node_in_group("world")
+		if world != null and world.has_method("reload_current_map_preserving_player_position"):
+			rock_smash_refresh_success = bool(
+				await world.call("reload_current_map_preserving_player_position")
+			) and rock_smash_refresh_success
 	return {
 		"success": true,
 		"story": StoryService.get_story(),
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
 		"walletRefreshSuccess": bool(wallet_result.get("success", false)),
+		"rockSmashRefreshSuccess": rock_smash_refresh_success,
 	}
 
 
