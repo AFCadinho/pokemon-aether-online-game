@@ -391,8 +391,11 @@ func _attack_and_faint_follower() -> bool:
 		return false
 	_fainted_follower = _resolve_player_follower(player)
 	if not is_instance_valid(_fainted_follower):
-		push_warning("MtMoonAmbushController: player follower is unavailable for ambush attack.")
-		return false
+		# A map/battle transition can briefly leave the cosmetic overworld follower
+		# unattached. The rescue is still valid without this visual beat, so never
+		# block the server-backed story interaction on its availability.
+		push_warning("MtMoonAmbushController: player follower is unavailable; skipping cosmetic ambush attack.")
+		return true
 	_fainted_follower.visible = true
 	_fainted_follower.set_process(false)
 	var attacker_species := ROCKET_SPECIES[0]
