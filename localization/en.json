@@ -148,6 +148,7 @@
   "backend.error.fishing_level_required": "Fishing Level {requiredFishingLevel} is required for this rod. Your Fishing Level is {currentFishingLevel}.",
   "backend.error.fishing_badges_required": "You need {requiredBadges} {region} badges for this rod. You currently have {currentBadges}.",
   "backend.error.fishing_nothing_biting": "Nothing seems to be biting with this rod here.",
+  "backend.error.wild_encounter_not_found": "No wild Pokémon are available for this encounter method here.",
   "backend.error.no_usable_pokemon": "None of your Pokémon can battle. Heal your party at a Pokémon Center first.",
   "backend.error.pokemon_level_cap_reached": "This Pokémon has reached your current level cap of {levelCap}.",
   "backend.error.pokemon_level_cap_party_ineligible": "Your party contains a Pokémon above the current level cap of {levelCap}.",

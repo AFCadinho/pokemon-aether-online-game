@@ -36,6 +36,11 @@ func _init() -> void:
 		"no-usable-Pokemon guidance"
 	)
 	_check_equal(
+		ErrorRules.message_lines({"errorCode": "wild_encounter_not_found"}),
+		["No wild Pokémon are available for this encounter method here."],
+		"ordinary wild encounters do not use fishing guidance"
+	)
+	_check_equal(
 		ErrorRules.message_lines({"error": "Unexpected backend failure"}),
 		[],
 		"unknown errors remain eligible for staff reporting"

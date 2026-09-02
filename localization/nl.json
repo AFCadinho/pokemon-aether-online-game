@@ -148,6 +148,7 @@
   "backend.error.fishing_level_required": "Fishing Level {requiredFishingLevel} is vereist voor deze hengel. Je Fishing Level is {currentFishingLevel}.",
   "backend.error.fishing_badges_required": "Je hebt {requiredBadges} {region}-badges nodig voor deze hengel. Je hebt er nu {currentBadges}.",
   "backend.error.fishing_nothing_biting": "Er lijkt hier niets te bijten met deze hengel.",
+  "backend.error.wild_encounter_not_found": "Er zijn hier geen wilde Pokémon beschikbaar voor deze ontmoetingsmethode.",
   "backend.error.no_usable_pokemon": "Geen van je Pokémon kan vechten. Heel eerst je team in een Pokémon Center.",
   "backend.error.pokemon_level_cap_reached": "Deze Pokémon heeft je huidige levellimiet van {levelCap} bereikt.",
   "backend.error.pokemon_level_cap_party_ineligible": "Je team bevat een Pokémon boven de huidige levellimiet van {levelCap}.",

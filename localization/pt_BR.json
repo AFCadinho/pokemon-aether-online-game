@@ -148,6 +148,7 @@
   "backend.error.fishing_level_required": "É necessário ter Nível de Pesca {requiredFishingLevel} para esta vara. Seu Nível de Pesca é {currentFishingLevel}.",
   "backend.error.fishing_badges_required": "Você precisa de {requiredBadges} insígnias de {region} para esta vara. Você tem {currentBadges}.",
   "backend.error.fishing_nothing_biting": "Nada parece estar mordendo a isca com esta vara aqui.",
+  "backend.error.wild_encounter_not_found": "Não há Pokémon selvagens disponíveis aqui para este método de encontro.",
   "backend.error.no_usable_pokemon": "Nenhum dos seus Pokémon pode batalhar. Cure sua equipe em um Centro Pokémon primeiro.",
   "backend.error.pokemon_level_cap_reached": "Este Pokémon atingiu seu limite de nível atual de {levelCap}.",
   "backend.error.pokemon_level_cap_party_ineligible": "Sua equipe contém um Pokémon acima do limite de nível atual de {levelCap}.",
