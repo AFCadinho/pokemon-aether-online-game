@@ -39,6 +39,22 @@ func _init() -> void:
 		and panel.player_2_portrait.avatar.find_child("BodySprite", true, false) != null,
 		"opponent trainer portrait renders an avatar body"
 	)
+	panel.set_names("afc_adinho", "Team Rocket Grunt")
+	panel.set_trainer_portraits_visible(false)
+	await process_frame
+	_check_true(not panel.player_1_portrait.visible, "NPC and AI title hides the local portrait")
+	_check_true(not panel.player_2_portrait.visible, "NPC and AI title hides the opponent portrait")
+	_check_true(
+		panel.player_1_label.custom_minimum_size.x > 40.0
+		and panel.player_2_label.custom_minimum_size.x > 40.0,
+		"portrait-free trainer titles allocate room to both names"
+	)
+	panel.set_trainer_portraits_visible(true)
+	await process_frame
+	_check_true(panel.player_1_portrait.visible, "PvP title restores the local portrait")
+	_check_true(panel.player_2_portrait.visible, "PvP title restores the opponent portrait")
+	panel.set_names("A", "B")
+	await process_frame
 	var short_width: float = panel.names_panel.size.x
 	_check_true(short_width >= 150.0, "short names respect the compact minimum")
 	_check_true(short_width < 240.0, "short names do not keep the old fixed width")

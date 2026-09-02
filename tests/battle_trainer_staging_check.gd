@@ -83,6 +83,14 @@ func _check_battle_setup_contract() -> void:
 	_check(source.contains('player_id == "p2" and battle_type == BattleType.TRAINER and npc_trainer_display_name != ""'), "NPC switch events prefer the retained trainer name over the generic opponent fallback")
 	_check(source.contains("npc_trainer_display_name = \"\""), "every battle setup clears the prior NPC trainer name")
 	_check(source.contains("_show_pvp_trainers(display_response)"), "PvP consumes appearances only from its projected response")
+	_check(
+		source.contains('_vs_panel_call("set_trainer_portraits_visible", [_vs_panel_uses_player_portraits()])'),
+		"VS panel hides player heads when full trainer art is staged"
+	)
+	_check(
+		source.contains("return _is_pvp_battle() and not _is_training_room_battle()"),
+		"VS portraits remain exclusive to real PvP rather than NPC or AI battles"
+	)
 	_check(source.contains("_show_pvp_trainers(mapped_snapshot)"), "spectator side swaps rebuild side-owned trainer visuals")
 	_check(source.contains("# their attached command callouts cannot remain tied to the old side."), "spectator side swaps document callout reset ownership")
 	_check(source.contains("if appearance_state.is_empty():\n\t\treturn"), "missing opponent appearances stay hidden instead of using a false identity")
