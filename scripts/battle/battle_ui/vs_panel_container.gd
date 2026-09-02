@@ -6,8 +6,9 @@ const TRAINER_HEAD_PORTRAIT_SCRIPT := preload("res://scripts/ui/trainer_head_por
 
 const MIN_NAMES_PANEL_WIDTH := 150.0
 const MAX_NAMES_PANEL_WIDTH := 340.0
-# Margins, four HBox gaps, two portraits, the VS label, and the panel borders.
-const NAMES_PANEL_CHROME_WIDTH := 131.0
+# Margins, HBox gaps, portraits when present, the VS label, and panel borders.
+const NAMES_PANEL_CHROME_WITH_PORTRAITS := 131.0
+const NAMES_PANEL_CHROME_WITHOUT_PORTRAITS := 63.0
 const MIN_PLAYER_NAME_WIDTH := 40.0
 const TIMER_WARNING_THRESHOLD_MS := 15_000
 const TIMER_URGENT_THRESHOLD_MS := 5_000
@@ -36,6 +37,7 @@ var _compact_mode := false
 var _compact_show_opponent := true
 var _timers_presented := false
 var _localization_manager: Node
+var _show_player_portraits := true
 var player_1_portrait: TrainerHeadPortrait
 var player_2_portrait: TrainerHeadPortrait
 
@@ -59,13 +61,25 @@ func set_names(player_1_name: String, player_2_name: String) -> void:
 
 func set_player_appearances(player_1_state: Dictionary, player_2_state: Dictionary) -> void:
 	if player_1_portrait != null:
-		player_1_portrait.visible = not player_1_state.is_empty()
-		if player_1_portrait.visible:
+		player_1_portrait.visible = _show_player_portraits and not player_1_state.is_empty()
+		if not player_1_state.is_empty():
 			player_1_portrait.set_appearance_state(player_1_state)
 	if player_2_portrait != null:
-		player_2_portrait.visible = not player_2_state.is_empty()
-		if player_2_portrait.visible:
+		player_2_portrait.visible = _show_player_portraits and not player_2_state.is_empty()
+		if not player_2_state.is_empty():
 			player_2_portrait.set_appearance_state(player_2_state)
+	_refresh_names_panel_width()
+
+
+## NPC and AI battles already show full trainer art on the stage. Hiding both
+## small heads keeps the title symmetric and gives their names room to render.
+func set_trainer_portraits_visible(visible: bool) -> void:
+	_show_player_portraits = visible
+	if player_1_portrait != null:
+		player_1_portrait.visible = visible and not player_1_portrait.appearance_state.is_empty()
+	if player_2_portrait != null:
+		player_2_portrait.visible = visible and not player_2_portrait.appearance_state.is_empty()
+	_refresh_names_panel_width()
 
 
 func show_battle_limit(text: String, color: Color, pulse: bool = false) -> void:
@@ -101,7 +115,12 @@ func _create_player_portraits() -> void:
 func _refresh_names_panel_width() -> void:
 	var player_1_width: float = _measure_name_width(player_1_label)
 	var player_2_width: float = _measure_name_width(player_2_label)
-	var maximum_names_width := MAX_NAMES_PANEL_WIDTH - NAMES_PANEL_CHROME_WIDTH
+	var names_panel_chrome_width := (
+		NAMES_PANEL_CHROME_WITH_PORTRAITS
+		if _show_player_portraits
+		else NAMES_PANEL_CHROME_WITHOUT_PORTRAITS
+	)
+	var maximum_names_width := MAX_NAMES_PANEL_WIDTH - names_panel_chrome_width
 	var desired_names_width := player_1_width + player_2_width
 	if desired_names_width > maximum_names_width:
 		var flexible_width := maximum_names_width - (MIN_PLAYER_NAME_WIDTH * 2.0)
@@ -114,7 +133,7 @@ func _refresh_names_panel_width() -> void:
 
 	player_1_label.custom_minimum_size.x = ceilf(player_1_width)
 	player_2_label.custom_minimum_size.x = ceilf(player_2_width)
-	var content_width := player_1_label.custom_minimum_size.x + player_2_label.custom_minimum_size.x + NAMES_PANEL_CHROME_WIDTH
+	var content_width := player_1_label.custom_minimum_size.x + player_2_label.custom_minimum_size.x + names_panel_chrome_width
 	names_panel.custom_minimum_size.x = clampf(content_width, MIN_NAMES_PANEL_WIDTH, MAX_NAMES_PANEL_WIDTH)
 
 

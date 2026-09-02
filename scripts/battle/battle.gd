@@ -15759,6 +15759,14 @@ func _update_vs_panel_names() -> void:
 			_get_vs_player_appearance("p1"),
 			_get_vs_player_appearance("p2")
 		])
+		_vs_panel_call("set_trainer_portraits_visible", [_vs_panel_uses_player_portraits()])
+
+
+func _vs_panel_uses_player_portraits() -> bool:
+	# Full trainer art is visible during NPC and AI battles. Retain the compact
+	# player heads exclusively for real PvP, where both player identities need
+	# to remain recognizable beside their decision timers.
+	return _is_pvp_battle() and not _is_training_room_battle()
 
 
 func _vs_panel_has_method(method_name: String) -> bool:
