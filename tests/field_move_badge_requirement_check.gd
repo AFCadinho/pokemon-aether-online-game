@@ -8,6 +8,12 @@ func _init() -> void:
 
 
 func _run() -> void:
+	var player_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
+	_check(
+		player_source.contains('FieldMoveService.can_use_field_move("surf")')
+		and player_source.contains("_show_surf_unavailable_feedback"),
+		"Surf checks the shared field-move gate and exposes blocked-use feedback"
+	)
 	var player_save := root.get_node_or_null("PlayerSave")
 	var field_move_service := root.get_node_or_null("FieldMoveService")
 	_check(player_save != null, "PlayerSave autoload is available")

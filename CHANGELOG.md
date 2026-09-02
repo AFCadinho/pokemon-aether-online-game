@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Surf now explains which badge is missing when its HM and Charm are owned but the field move is still badge-locked.
 - Rock Smash level requirement messages now use whole-number levels.
 - Rock Smash progression unlocks now show the same coloured rocks used in the overworld.
 - Trainer battles now show their matching Pokémon Showdown trainer art behind NPC Pokémon, while unassigned NPCs retain their existing overworld appearance.
