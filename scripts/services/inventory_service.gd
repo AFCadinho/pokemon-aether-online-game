@@ -226,8 +226,6 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
 	var item_id := str(body.get("itemId", "")).strip_edges().to_lower()
 	var quantity := maxi(int(body.get("quantity", 1)), 1)
-	if bool(body.get("claimed", false)) and item_id != "":
-		item_received.emit(item_id, quantity)
 	return {
 		"success": true,
 		"rewardId": str(body.get("rewardId", normalized_reward_id)),
@@ -241,6 +239,52 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 		"walletRefreshSuccess": bool(wallet_result.get("success", false)),
 		"storyRefreshSuccess": bool(story_result.get("success", false)),
 	}
+
+
+## Displays a completed story reward after its dialogue has finished.
+## Keeping this here makes the inventory event the single source for the item
+## reward card while the caller controls the dialogue boundary.
+func notify_story_reward_effects(effects_value: Variant) -> bool:
+	if not effects_value is Array:
+		return false
+	var displayed_reward := false
+	for effect_value: Variant in effects_value as Array:
+		if not effect_value is Dictionary:
+			continue
+		var effect := effect_value as Dictionary
+		if bool(effect.get("alreadyGranted", false)):
+			continue
+		var grants_value: Variant = effect.get("grants", [])
+		if not grants_value is Array:
+			continue
+		for grant_value: Variant in grants_value as Array:
+			if not grant_value is Dictionary:
+				continue
+			var grant := grant_value as Dictionary
+			var item_id := str(grant.get("itemId", "")).strip_edges().to_lower()
+			var quantity := maxi(int(grant.get("quantity", 0)), 0)
+			if item_id != "" and quantity > 0:
+				item_received.emit(item_id, quantity)
+				get_tree().call_group(
+					"ui_overlay",
+					"add_system_message",
+					LocalizationManager.text("ui.world.reward.story_item", {
+						"item": ItemLocalization.display_name(item_id),
+						"quantity": quantity,
+					})
+				)
+				displayed_reward = true
+			var currency_id := str(grant.get("currency", "")).strip_edges().to_lower()
+			var amount := maxi(int(grant.get("amount", 0)), 0)
+			if currency_id != "" and amount > 0:
+				get_tree().call_group(
+					"ui_overlay",
+					"add_system_message",
+					LocalizationManager.text("ui.world.reward.quest_%s" % currency_id, {"amount": amount})
+				)
+				get_tree().call_group("ui_overlay", "add_currency_reward_notification", currency_id, amount)
+				displayed_reward = true
+	return displayed_reward
 
 
 func load_collected_world_pickups(force_refresh := false) -> Dictionary:
@@ -379,7 +423,6 @@ func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:
 	var wallet_result: Dictionary = await PlayerWalletService.load_wallet()
 	PlayerWalletService.apply_wallet_result(wallet_result)
 	var story_effects := _array_from_value(body.get("storyEffects", []))
-	_notify_story_currency_rewards(story_effects)
 	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
 	return {
 		"success": true,

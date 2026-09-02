@@ -64,6 +64,18 @@ func interact_with_player(_player: Node2D) -> void:
 		reward_resolved = true
 		_refresh_quest_marker()
 		await show_dialogue(await _resolve_dialogue_lines(success_dialogue_id, success_dialogue_lines))
+		var inventory_item_id := str(result.get("itemId", "")).strip_edges().to_lower()
+		var inventory_quantity := maxi(int(result.get("quantity", 1)), 1)
+		if inventory_item_id != "" and inventory_item_id not in ["town-map", "old-rod"]:
+			inventory_service.item_received.emit(inventory_item_id, inventory_quantity)
+			get_tree().call_group(
+				"ui_overlay",
+				"add_system_message",
+				LocalizationManager.text("ui.world.reward.story_item", {
+					"item": ItemLocalization.display_name(inventory_item_id),
+					"quantity": inventory_quantity,
+				})
+			)
 		if str(result.get("itemId", "")).strip_edges().to_lower() == "town-map":
 			get_tree().call_group(
 				"ui_overlay",
