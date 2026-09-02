@@ -201,14 +201,22 @@ static func get_mount_foreground_frames(mount_id: String) -> SpriteFrames:
 	return foreground_frames
 
 
-static func get_mounted_rider_frames(base_frames: SpriteFrames, mount_id: String) -> SpriteFrames:
+static func get_mounted_rider_frames(
+	base_frames: SpriteFrames,
+	mount_id: String,
+	rider_offset_adjustments: Dictionary = {}
+) -> SpriteFrames:
 	if base_frames == null:
 		return null
 	var normalized_id := normalize_mount_id(mount_id)
 	if normalized_id == "":
 		return base_frames
 
-	var cache_key := "%s:%d" % [normalized_id, base_frames.get_instance_id()]
+	var cache_key := "%s:%d:%s" % [
+		normalized_id,
+		base_frames.get_instance_id(),
+		JSON.stringify(rider_offset_adjustments),
+	]
 	if _rider_frames_cache.has(cache_key):
 		return _rider_frames_cache[cache_key] as SpriteFrames
 
@@ -236,6 +244,7 @@ static func get_mounted_rider_frames(base_frames: SpriteFrames, mount_id: String
 			var source_texture := base_frames.get_frame_texture(animation_name, frame_index)
 			var source_image := _get_texture_image(source_texture)
 			var offset := _get_rider_offset(rider_offsets_value as Dictionary, direction, frame_index)
+			offset += _get_rider_offset_adjustment(rider_offset_adjustments, direction)
 			var mounted_image := _transform_rider_frame(
 				source_image,
 				mask_image,
@@ -382,6 +391,15 @@ static func _get_rider_offset(
 	if not offset_value is Array or (offset_value as Array).size() < 2:
 		return Vector2i.ZERO
 	return Vector2i(int((offset_value as Array)[0]), int((offset_value as Array)[1]))
+
+
+static func _get_rider_offset_adjustment(adjustments: Dictionary, direction: String) -> Vector2i:
+	var adjustment_value: Variant = adjustments.get(direction, Vector2i.ZERO)
+	if adjustment_value is Vector2i:
+		return adjustment_value as Vector2i
+	if adjustment_value is Vector2:
+		return Vector2i(adjustment_value as Vector2)
+	return Vector2i.ZERO
 
 
 static func _direction_from_animation(animation_name: String) -> String:

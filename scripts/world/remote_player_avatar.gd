@@ -134,10 +134,10 @@ const ACTIVITY_VISUAL_OFFSETS := {
 # Keep remote Surf-fishing riders aligned with the same existing-pose saddle
 # offsets used locally. Normal land fishing continues to use the fish offsets.
 const SURF_FISH_RIDER_OFFSETS := {
-	"down": Vector2(0.0, 18.0),
-	"left": Vector2(0.0, 4.0),
-	"right": Vector2(0.0, 4.0),
-	"up": Vector2(0.0, 10.0),
+	"down": Vector2i(0, 18),
+	"left": Vector2i(0, 4),
+	"right": Vector2i(0, 4),
+	"up": Vector2i(0, 10),
 }
 const APPEARANCE_PART_SPRITES := {
 	"hair": "HairSprite",
@@ -815,7 +815,14 @@ func _get_surf_fish_rider_offset(direction: String) -> Vector2:
 	if CharacterAppearanceService.normalize_movement_style(current_body_movement_style) \
 		!= CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
 		return Vector2.ZERO
-	return SURF_FISH_RIDER_OFFSETS.get(direction, Vector2.ZERO)
+	return Vector2(SURF_FISH_RIDER_OFFSETS.get(direction, Vector2i.ZERO))
+
+
+func _get_surf_fish_rider_offset_adjustments() -> Dictionary:
+	if CharacterAppearanceService.normalize_movement_style(current_body_movement_style) \
+		!= CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
+		return {}
+	return SURF_FISH_RIDER_OFFSETS
 
 func _create_interaction_hit_area() -> void:
 	var hit_area := Area2D.new()
@@ -1297,7 +1304,11 @@ func _apply_body_frames(body_id: String, gender: String, movement_style: String)
 	)
 	if body_frames == null:
 		return
-	body_frames = MountService.get_mounted_rider_frames(body_frames, current_mount_id)
+	body_frames = MountService.get_mounted_rider_frames(
+		body_frames,
+		current_mount_id,
+		_get_surf_fish_rider_offset_adjustments()
+	)
 
 	for sprite in appearance_sprites:
 		if sprite.name != "BodySprite":
@@ -1412,7 +1423,11 @@ func _apply_appearance_part(category: String, part_id: String, movement_style: S
 	if part_frames == null:
 		_clear_appearance_part_sprite(normalized_category)
 		return
-	part_frames = MountService.get_mounted_rider_frames(part_frames, current_mount_id)
+	part_frames = MountService.get_mounted_rider_frames(
+		part_frames,
+		current_mount_id,
+		_get_surf_fish_rider_offset_adjustments()
+	)
 
 	sprite.sprite_frames = part_frames
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST

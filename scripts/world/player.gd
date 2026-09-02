@@ -166,10 +166,10 @@ const ACTIVITY_VISUAL_OFFSETS := {
 # seated rider. These values align the existing fishing art with the saddle
 # without changing the normal land-fishing pose.
 const SURF_FISH_RIDER_OFFSETS := {
-	"down": Vector2(0.0, 18.0),
-	"left": Vector2(0.0, 4.0),
-	"right": Vector2(0.0, 4.0),
-	"up": Vector2(0.0, 10.0),
+	"down": Vector2i(0, 18),
+	"left": Vector2i(0, 4),
+	"right": Vector2i(0, 4),
+	"up": Vector2i(0, 10),
 }
 const WATER_TILEMAP_NAMES: Array[String] = ["Water"]
 const TALL_GRASS_VISUAL_TILEMAP_NAMES: Array[String] = ["TallGrassVisual", "Grass"]
@@ -416,7 +416,14 @@ func _get_surf_fish_rider_offset(direction: String) -> Vector2:
 	if CharacterAppearanceService.normalize_movement_style(activity_style) \
 		!= CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
 		return Vector2.ZERO
-	return SURF_FISH_RIDER_OFFSETS.get(direction, Vector2.ZERO)
+	return Vector2(SURF_FISH_RIDER_OFFSETS.get(direction, Vector2i.ZERO))
+
+
+func _get_surf_fish_rider_offset_adjustments() -> Dictionary:
+	if CharacterAppearanceService.normalize_movement_style(activity_style) \
+		!= CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
+		return {}
+	return SURF_FISH_RIDER_OFFSETS
 
 func is_fishing_activity_active() -> bool:
 	return fishing_activity_active
@@ -2737,7 +2744,11 @@ func _apply_body_appearance(body_id: String) -> void:
 	if body_frames == null:
 		push_warning("Player: body appearance '%s' could not be loaded." % normalized_body_id)
 		return
-	body_frames = MountService.get_mounted_rider_frames(body_frames, active_mount_id)
+	body_frames = MountService.get_mounted_rider_frames(
+		body_frames,
+		active_mount_id,
+		_get_surf_fish_rider_offset_adjustments()
+	)
 
 	body_sprite.sprite_frames = body_frames
 	body_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
@@ -2766,7 +2777,11 @@ func _sync_body_sprite_frames_for_movement() -> void:
 	)
 	if body_frames == null:
 		return
-	body_frames = MountService.get_mounted_rider_frames(body_frames, active_mount_id)
+	body_frames = MountService.get_mounted_rider_frames(
+		body_frames,
+		active_mount_id,
+		_get_surf_fish_rider_offset_adjustments()
+	)
 
 	body_sprite.sprite_frames = body_frames
 	body_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
@@ -2862,7 +2877,11 @@ func _apply_appearance_part(category: String, part_id: String, movement_style: S
 	if part_frames == null:
 		_clear_appearance_part_sprite(normalized_category)
 		return
-	part_frames = MountService.get_mounted_rider_frames(part_frames, active_mount_id)
+	part_frames = MountService.get_mounted_rider_frames(
+		part_frames,
+		active_mount_id,
+		_get_surf_fish_rider_offset_adjustments()
+	)
 
 	sprite.sprite_frames = part_frames
 	sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER

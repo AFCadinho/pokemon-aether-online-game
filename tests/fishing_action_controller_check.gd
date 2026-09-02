@@ -8,9 +8,11 @@ const APPEARANCE_SERVICE_PATH := "res://scripts/services/character_appearance_se
 const REMOTE_PLAYER_PATH := "res://scripts/world/remote_player_avatar.gd"
 const SETTINGS_MANAGER_PATH := "res://scripts/services/settings_manager.gd"
 const SETTINGS_MENU_PATH := "res://scripts/ui/settings_menu.gd"
+const MOUNT_SERVICE_PATH := "res://scripts/services/mount_service.gd"
 const CharacterAppearanceServiceScript := preload(
 	"res://scripts/services/character_appearance_service.gd"
 )
+const MountServiceScript := preload("res://scripts/services/mount_service.gd")
 
 var failed := false
 
@@ -24,6 +26,7 @@ func _init() -> void:
 	var remote_player_source := FileAccess.get_file_as_string(REMOTE_PLAYER_PATH)
 	var settings_manager_source := FileAccess.get_file_as_string(SETTINGS_MANAGER_PATH)
 	var settings_menu_source := FileAccess.get_file_as_string(SETTINGS_MENU_PATH)
+	var mount_service_source := FileAccess.get_file_as_string(MOUNT_SERVICE_PATH)
 
 	for activity_asset_path: String in [
 		"res://assets/player/male/top/fish/Adinho_Shirt_fish.png",
@@ -237,16 +240,19 @@ func _init() -> void:
 		_function_source(player_source, "_get_surf_fish_rider_offset").contains(
 			"BODY_MOVEMENT_SURF_FISH"
 		)
-		and player_source.contains('"down": Vector2(0.0, 18.0)')
-		and player_source.contains('"left": Vector2(0.0, 4.0)')
-		and player_source.contains('"right": Vector2(0.0, 4.0)')
-		and player_source.contains('"up": Vector2(0.0, 10.0)')
+		and player_source.contains('"down": Vector2i(0, 18)')
+		and player_source.contains('"left": Vector2i(0, 4)')
+		and player_source.contains('"right": Vector2i(0, 4)')
+		and player_source.contains('"up": Vector2i(0, 10)')
 		and _function_source(player_source, "_get_activity_visual_offset").contains(
 			"return Vector2.ZERO"
 		)
+		and player_source.contains("_get_surf_fish_rider_offset_adjustments()")
 		and remote_player_source.contains("func _get_surf_fish_rider_offset")
-		and remote_player_source.contains('"down": Vector2(0.0, 18.0)'),
-		"Surf fishing aligns existing fishing frames to the saddle locally and remotely"
+		and remote_player_source.contains("_get_surf_fish_rider_offset_adjustments()")
+		and mount_service_source.contains("rider_offset_adjustments: Dictionary = {}")
+		and mount_service_source.contains("_get_rider_offset_adjustment"),
+		"Surf fishing aligns and masks existing fishing frames to the saddle locally and remotely"
 	)
 	_check(
 		player_source.contains('"left": Vector2(-6.0, 0.0)')
@@ -254,6 +260,23 @@ func _init() -> void:
 		and remote_player_source.contains('"left": Vector2(-6.0, 0.0)')
 		and remote_player_source.contains('"right": Vector2(6.0, 0.0)'),
 		"normal land fishing retains its existing visual offsets"
+	)
+	var surf_fish_offsets := {
+		"down": Vector2i(0, 18),
+		"left": Vector2i(0, 4),
+		"right": Vector2i(0, 4),
+		"up": Vector2i(0, 10),
+	}
+	var masked_surf_fish_frames := MountServiceScript.get_mounted_rider_frames(
+		combined_body_frames,
+		"lapras",
+		surf_fish_offsets
+	)
+	var unmasked_surf_fish_image := combined_body_frames.get_frame_texture("idle_left", 0).get_image()
+	var masked_surf_fish_image := masked_surf_fish_frames.get_frame_texture("idle_left", 0).get_image()
+	_check(
+		_opaque_pixel_count(masked_surf_fish_image) < _opaque_pixel_count(unmasked_surf_fish_image),
+		"Lapras's existing rider mask hides the lower side-facing Surf-fishing body pixels"
 	)
 	_check(
 		controller_source.contains('button.add_theme_constant_override("icon_max_width", 32)')
@@ -313,3 +336,14 @@ func _frame_atlas_path(frames: SpriteFrames) -> String:
 	if texture == null or texture.atlas == null:
 		return ""
 	return texture.atlas.resource_path
+
+
+func _opaque_pixel_count(image: Image) -> int:
+	if image == null:
+		return 0
+	var count := 0
+	for y: int in range(image.get_height()):
+		for x: int in range(image.get_width()):
+			if image.get_pixel(x, y).a > 0.001:
+				count += 1
+	return count
