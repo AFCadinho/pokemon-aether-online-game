@@ -82,11 +82,14 @@ var key_item_content: VBoxContainer
 var badge_tab_button: Button
 var key_item_tab_button: Button
 var story_tab_button: Button
+var side_quests_tab_button: Button
 var story_content: VBoxContainer
+var side_quests_content: VBoxContainer
 var story_chapter_select: OptionButton
 var story_checkpoint_select: OptionButton
 var story_status_label: Label
 var side_quest_select: OptionButton
+var side_quest_status_label: Label
 var badge_buttons: Dictionary = {}
 var badge_icon_rects: Dictionary = {}
 var badge_status_labels: Dictionary = {}
@@ -221,6 +224,15 @@ func _build_ui() -> void:
 	_set_localized_property(story_tab_button, "text", "ui.staff.trainer_progress.story")
 	story_tab_button.pressed.connect(_show_tab.bind("story"))
 	tabs.add_child(story_tab_button)
+
+	side_quests_tab_button = Button.new()
+	side_quests_tab_button.name = "SideQuestsTabButton"
+	side_quests_tab_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	side_quests_tab_button.custom_minimum_size = Vector2(0, 38)
+	side_quests_tab_button.focus_mode = Control.FOCUS_NONE
+	_set_localized_property(side_quests_tab_button, "text", "ui.staff.trainer_progress.side_quests")
+	side_quests_tab_button.pressed.connect(_show_tab.bind("side_quests"))
+	tabs.add_child(side_quests_tab_button)
 
 	badge_content = VBoxContainer.new()
 	badge_content.name = "BadgesContent"
@@ -462,36 +474,6 @@ func _build_story_ui(layout: VBoxContainer) -> void:
 	_refresh_story_chapter_options()
 	_refresh_story_checkpoint_options()
 
-	var side_divider := HSeparator.new()
-	story_content.add_child(side_divider)
-	story_content.add_child(_localized_label("ui.staff.side_quest.controls", 13, UI_TEXT))
-	side_quest_select = OptionButton.new()
-	side_quest_select.name = "SideQuestSelect"
-	side_quest_select.custom_minimum_size = Vector2(0, 40)
-	side_quest_select.focus_mode = Control.FOCUS_NONE
-	_apply_story_checkpoint_dropdown_style(side_quest_select)
-	for side_quest: Dictionary in SIDE_QUESTS:
-		side_quest_select.add_item(_t(str(side_quest.get("label_key", ""))))
-		side_quest_select.set_item_metadata(side_quest_select.item_count - 1, str(side_quest.get("id", "")))
-	story_content.add_child(side_quest_select)
-	var side_actions := HBoxContainer.new()
-	side_actions.add_theme_constant_override("separation", 10)
-	story_content.add_child(side_actions)
-	var reset_side_button := Button.new()
-	reset_side_button.name = "ResetSideQuestButton"
-	reset_side_button.custom_minimum_size = Vector2(180, 36)
-	_set_localized_property(reset_side_button, "text", "ui.staff.side_quest.reset")
-	reset_side_button.pressed.connect(_apply_side_quest_action.bind("reset"))
-	_apply_button_style(reset_side_button, false)
-	side_actions.add_child(reset_side_button)
-	var complete_side_button := Button.new()
-	complete_side_button.name = "CompleteSideQuestButton"
-	complete_side_button.custom_minimum_size = Vector2(210, 36)
-	_set_localized_property(complete_side_button, "text", "ui.staff.side_quest.complete")
-	complete_side_button.pressed.connect(_apply_side_quest_action.bind("complete"))
-	_apply_button_style(complete_side_button, true)
-	side_actions.add_child(complete_side_button)
-
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	story_content.add_child(spacer)
@@ -511,6 +493,57 @@ func _build_story_ui(layout: VBoxContainer) -> void:
 	story_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	story_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	footer.add_child(story_status_label)
+
+	_build_side_quests_ui(layout)
+
+
+func _build_side_quests_ui(layout: VBoxContainer) -> void:
+	side_quests_content = VBoxContainer.new()
+	side_quests_content.name = "SideQuestsContent"
+	side_quests_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	side_quests_content.add_theme_constant_override("separation", 16)
+	layout.add_child(side_quests_content)
+
+	side_quests_content.add_child(_localized_label("ui.staff.side_quest.controls", 14, UI_TEXT))
+	side_quest_select = OptionButton.new()
+	side_quest_select.name = "SideQuestSelect"
+	side_quest_select.custom_minimum_size = Vector2(0, 40)
+	side_quest_select.focus_mode = Control.FOCUS_NONE
+	_apply_story_checkpoint_dropdown_style(side_quest_select)
+	for side_quest: Dictionary in SIDE_QUESTS:
+		side_quest_select.add_item(_t(str(side_quest.get("label_key", ""))))
+		side_quest_select.set_item_metadata(side_quest_select.item_count - 1, str(side_quest.get("id", "")))
+	side_quests_content.add_child(side_quest_select)
+	var side_actions := HBoxContainer.new()
+	side_actions.add_theme_constant_override("separation", 10)
+	side_quests_content.add_child(side_actions)
+	var reset_side_button := Button.new()
+	reset_side_button.name = "ResetSideQuestButton"
+	reset_side_button.custom_minimum_size = Vector2(180, 36)
+	_set_localized_property(reset_side_button, "text", "ui.staff.side_quest.reset")
+	reset_side_button.pressed.connect(_apply_side_quest_action.bind("reset"))
+	_apply_button_style(reset_side_button, false)
+	side_actions.add_child(reset_side_button)
+	var complete_side_button := Button.new()
+	complete_side_button.name = "CompleteSideQuestButton"
+	complete_side_button.custom_minimum_size = Vector2(210, 36)
+	_set_localized_property(complete_side_button, "text", "ui.staff.side_quest.complete")
+	complete_side_button.pressed.connect(_apply_side_quest_action.bind("complete"))
+	_apply_button_style(complete_side_button, true)
+	side_actions.add_child(complete_side_button)
+
+	var spacer := Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	side_quests_content.add_child(spacer)
+
+	var footer := HBoxContainer.new()
+	footer.add_theme_constant_override("separation", 10)
+	side_quests_content.add_child(footer)
+	side_quest_status_label = _label("", 11, UI_MUTED)
+	side_quest_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	side_quest_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	side_quest_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	footer.add_child(side_quest_status_label)
 
 
 func _toggle_badge(badge_id: String) -> void:
@@ -552,19 +585,23 @@ func _submit_badges(badge_ids: Array[String], earned: bool) -> void:
 
 
 func _show_tab(tab_id: String) -> void:
-	active_tab = tab_id if tab_id in ["badges", "key_items", "story"] else "badges"
+	active_tab = tab_id if tab_id in ["badges", "key_items", "story", "side_quests"] else "badges"
 	if badge_content != null:
 		badge_content.visible = active_tab == "badges"
 	if key_item_content != null:
 		key_item_content.visible = active_tab == "key_items"
 	if story_content != null:
 		story_content.visible = active_tab == "story"
+	if side_quests_content != null:
+		side_quests_content.visible = active_tab == "side_quests"
 	if badge_tab_button != null:
 		_apply_button_style(badge_tab_button, active_tab == "badges")
 	if key_item_tab_button != null:
 		_apply_button_style(key_item_tab_button, active_tab == "key_items")
 	if story_tab_button != null:
 		_apply_button_style(story_tab_button, active_tab == "story")
+	if side_quests_tab_button != null:
+		_apply_button_style(side_quests_tab_button, active_tab == "side_quests")
 
 
 func _refresh_story_chapter_options() -> void:
@@ -645,16 +682,16 @@ func _apply_side_quest_action(action: String) -> void:
 	var quest_id := str(side_quest_select.get_item_metadata(side_quest_select.selected))
 	var service := get_node_or_null("/root/PlayerGameStateService")
 	if service == null or not service.has_method("dev_set_side_quest_progress"):
-		_set_story_status(_t("ui.staff.side_quest.unavailable"), true)
+		_set_side_quest_status(_t("ui.staff.side_quest.unavailable"), true)
 		return
 	_set_busy(true)
-	_set_story_status(_t("ui.staff.side_quest.updating"), false)
+	_set_side_quest_status(_t("ui.staff.side_quest.updating"), false)
 	var result: Dictionary = await service.call("dev_set_side_quest_progress", quest_id, action)
 	_set_busy(false)
 	if not bool(result.get("success", false)):
-		_set_story_status(str(result.get("error", _t("ui.staff.side_quest.failed"))), true)
+		_set_side_quest_status(str(result.get("error", _t("ui.staff.side_quest.failed"))), true)
 		return
-	_set_story_status(_t("ui.staff.side_quest.updated"), false)
+	_set_side_quest_status(_t("ui.staff.side_quest.updated"), false)
 	_load_key_items.call_deferred()
 
 
@@ -841,6 +878,13 @@ func _set_story_status(message: String, is_error: bool) -> void:
 		return
 	story_status_label.text = message
 	story_status_label.add_theme_color_override("font_color", UI_ERROR if is_error else UI_MUTED)
+
+
+func _set_side_quest_status(message: String, is_error: bool) -> void:
+	if side_quest_status_label == null:
+		return
+	side_quest_status_label.text = message
+	side_quest_status_label.add_theme_color_override("font_color", UI_ERROR if is_error else UI_MUTED)
 
 
 func _t(key: String, replacements: Dictionary = {}) -> String:

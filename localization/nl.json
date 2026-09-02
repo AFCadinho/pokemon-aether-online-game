@@ -3049,6 +3049,7 @@
   "ui.staff.trainer_progress.badges": "Badges",
   "ui.staff.trainer_progress.key_items": "Key items",
   "ui.staff.trainer_progress.story": "Verhaal",
+  "ui.staff.trainer_progress.side_quests": "Side quests",
   "ui.staff.story_checkpoint.notice": "Verplaats dit testaccount naar een consistent verhaalcheckpoint. Eerdere hoofdquests en benodigde key items worden gesynchroniseerd. Checkpoints vóór Oak zijn starterkeuze zetten die starter ook terug, zodat je de flow opnieuw kunt testen; andere Pokémon blijven ongewijzigd.",
   "ui.staff.story_checkpoint.select": "Verhaalcheckpoint",
   "ui.staff.story_chapter.select": "Verhaalhoofdstuk",
