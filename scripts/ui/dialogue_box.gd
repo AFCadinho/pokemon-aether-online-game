@@ -5,6 +5,10 @@ const TRAINER_CARD_TEXTURE_ROOT := "res://assets/sprites/trainer_cards/"
 const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
 const SYSTEM_SPEAKER_NAME := "system"
 const SYSTEM_MUGSHOT := preload("res://assets/sprites/mugshots/aether_system_core.png")
+const MONEY_REWARD_ICON: Texture2D = preload("res://assets/items/icons/COINCASE.png")
+const GEMS_REWARD_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
+const AETHERITE_REWARD_ICON: Texture2D = preload("res://assets/ui/aetherite.svg")
+const BATTLE_POINTS_REWARD_ICON: Texture2D = preload("res://assets/ui/battle_points.svg")
 
 static var reward_move_type_index: Dictionary = {}
 static var reward_move_type_index_loaded := false
@@ -323,17 +327,27 @@ func _create_quest_reward_entry(reward: Dictionary, reward_text: String) -> HBox
 	if str(reward.get("type", "")) == "item":
 		var item_id := str(reward.get("itemId", "")).strip_edges()
 		var icon_texture := _quest_reward_item_icon(item_id)
-		if icon_texture != null:
-			var icon := TextureRect.new()
-			icon.custom_minimum_size = Vector2(28, 28)
-			icon.texture = icon_texture
-			icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-			icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			entry.add_child(icon)
+		_add_quest_reward_icon(entry, icon_texture)
+	elif str(reward.get("type", "")) == "currency":
+		_add_quest_reward_icon(
+			entry,
+			_quest_reward_currency_icon(str(reward.get("currency", "")).strip_edges().to_lower())
+		)
 	entry.add_child(_create_quest_reward_label(reward_text))
 	return entry
+
+
+func _add_quest_reward_icon(entry: HBoxContainer, icon_texture: Texture2D) -> void:
+	if icon_texture == null:
+		return
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(28, 28)
+	icon.texture = icon_texture
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	entry.add_child(icon)
 
 
 func _create_quest_reward_label(reward_text: String) -> Label:
@@ -396,6 +410,19 @@ func _quest_reward_item_icon(item_id: String) -> Texture2D:
 			return load(icon_path) as Texture2D
 	var fallback_path := ITEM_ICON_ROOT + "000.png"
 	return load(fallback_path) as Texture2D if ResourceLoader.exists(fallback_path) else null
+
+
+func _quest_reward_currency_icon(currency_id: String) -> Texture2D:
+	match currency_id:
+		"money":
+			return MONEY_REWARD_ICON
+		"gems":
+			return GEMS_REWARD_ICON
+		"aetherite":
+			return AETHERITE_REWARD_ICON
+		"battle_points":
+			return BATTLE_POINTS_REWARD_ICON
+	return null
 
 
 func _quest_reward_machine_icon_path(item_id: String) -> String:
