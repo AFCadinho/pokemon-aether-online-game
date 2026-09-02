@@ -3,12 +3,12 @@ extends RefCounted
 class_name RockSmashLevelPalette
 
 const LEVEL_COLORS := {
-	1: Color("#ffffff"),
-	5: Color("#b9d59f"),
-	10: Color("#9fcadf"),
-	20: Color("#c5a7dd"),
-	50: Color("#e79a73"),
-	75: Color("#f1d36f"),
+	1: Color("#78c96b"),
+	5: Color("#39d6a0"),
+	10: Color("#4aa8ff"),
+	20: Color("#ae70ff"),
+	50: Color("#ff8954"),
+	75: Color("#ffd34d"),
 }
 
 
