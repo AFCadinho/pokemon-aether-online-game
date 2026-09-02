@@ -168,8 +168,8 @@ func _check_runtime_renderer() -> void:
 	_check(not renderer.npc_sprite.visible, "catalog trainer art replaces the overworld-frame renderer")
 	_check(renderer.catalog_sprite.texture == catalog_texture, "catalog trainer art keeps the assigned Showdown texture")
 	_check(
-		renderer.catalog_sprite.position == Vector2(0.0, -32.0),
-		"catalog trainer art aligns its feet with legacy overworld trainer staging"
+		renderer.catalog_sprite.position == Vector2(-24.0, -32.0),
+		"catalog trainer art aligns its feet and clears the opponent party rail"
 	)
 
 	renderer.show_player({

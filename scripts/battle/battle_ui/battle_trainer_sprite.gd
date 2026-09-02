@@ -6,8 +6,9 @@ const BattleRenderLayers := preload("res://scripts/battle/battle_render_layers.g
 const REMOTE_PLAYER_AVATAR_SCRIPT_PATH := "res://scripts/world/remote_player_avatar.gd"
 const DEFAULT_DISPLAY_SCALE := 2.0
 ## Catalog sprites are 80px-square poses, while the legacy overworld frames
-## are 64px-square. Preserve their shared foot baseline at the stage marker.
-const CATALOG_SPRITE_OFFSET := Vector2(0.0, -16.0)
+## are 64px-square. Preserve their shared foot baseline and leave clearance
+## between the opponent pose and the right-side party rail.
+const CATALOG_SPRITE_OFFSET := Vector2(-24.0, -16.0)
 
 @export_range(0.5, 4.0, 0.05) var display_scale := DEFAULT_DISPLAY_SCALE
 
