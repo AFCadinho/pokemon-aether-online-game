@@ -88,6 +88,19 @@ func interact_with_player(_player: Node2D) -> void:
 			mount_received_dialogue_id,
 			RECEIVED_FALLBACK_LINES
 		))
+		var reward_quantity := maxi(int(turn_in_result.get("rewardQuantity", 1)), 1)
+		get_tree().call_group(
+			"ui_overlay",
+			"add_item_reward_notification",
+			mount_item_id,
+			reward_quantity
+		)
+		get_tree().call_group(
+			"ui_overlay",
+			"add_item_reward_notification",
+			license_item_id,
+			1
+		)
 		get_tree().call_group(
 			"ui_overlay",
 			"add_system_message",
