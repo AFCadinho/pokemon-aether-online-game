@@ -243,6 +243,8 @@ func set_story_sprite_offset(value: Vector2) -> void:
 	sprite_offset = value
 	if sprite != null:
 		sprite.position = value
+	if nameplate != null:
+		nameplate.position.x = value.x
 
 
 func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
@@ -487,6 +489,7 @@ func _setup_nameplate() -> void:
 	nameplate.z_as_relative = false
 	nameplate.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
 	nameplate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	nameplate.position.x = sprite_offset.x
 	nameplate.offset_left = -82.0
 	nameplate.offset_top = NAMEPLATE_OFFSET_TOP
 	nameplate.offset_right = 82.0
@@ -620,6 +623,7 @@ func _quest_marker_style(border_color: Color) -> StyleBoxFlat:
 func _sync_nameplate() -> void:
 	if nameplate == null or nameplate_label == null:
 		return
+	nameplate.position.x = sprite_offset.x
 
 	var name_text := display_name.strip_edges()
 	nameplate_label.text = name_text
