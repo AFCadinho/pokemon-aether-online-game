@@ -477,10 +477,13 @@ func _show_post_battle_dialogue() -> void:
 	var fallback_lines := _string_array(metadata.get("dialogue_after_battle", []))
 	var lines: Array[String] = []
 	var speaker_name := str(metadata.get("name", display_name))
-	var outro_dialogue_id := str(metadata.get("outroDialogueId", "")).strip_edges()
-	if not outro_dialogue_id.is_empty():
+	var completed_dialogue_id := str(metadata.get("completedDialogueId", "")).strip_edges()
+	var dialogue_id := completed_dialogue_id
+	if dialogue_id.is_empty():
+		dialogue_id = str(metadata.get("outroDialogueId", "")).strip_edges()
+	if not dialogue_id.is_empty():
 		var dialogue := await NpcDialogueService.resolve_dialogue(
-			outro_dialogue_id,
+			dialogue_id,
 			fallback_lines,
 			"TrainerNPC"
 		)
