@@ -21,6 +21,12 @@ func _init() -> void:
 	_check_true(script_source.contains("extends DialogueNPC"), "item gift NPC extends DialogueNPC")
 	_check_true(script_source.contains("claim_npc_item_reward"), "item gift NPC claims a server reward")
 	_check_true(script_source.contains("already_received_dialogue_id"), "item gift NPC supports repeat dialogue")
+	_check_true(
+		script_source.contains(
+			'if inventory_item_id != "":\n\t\t\tinventory_service.item_received.emit(inventory_item_id, inventory_quantity)'
+		),
+		"item gift NPC shows a reward card for every received item"
+	)
 	_check_true(scene_source.contains("res://scripts/world/npcs/item_gift_npc.gd"), "item gift scene uses its script")
 	_check_true(inventory_source.contains('NPC_ITEM_REWARD_ENDPOINT := "/game/npc-rewards/%s/claim"'), "inventory service uses NPC reward endpoint")
 	_check_true(pallet_source.contains('npc_id = "kanto_pallet_town_fishing_guru"'), "Pallet Town places the Fishing Guru")
