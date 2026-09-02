@@ -17,6 +17,7 @@
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="15_picnicker"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="16_trainer"]
 [ext_resource type="SpriteFrames" uid="uid://brop6u80ud8n0" path="res://assets/npcs/classes/swimmer_f_frames.tres" id="17_swimmer_f"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="18_floor_mask"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(96, 32)
@@ -136,6 +137,22 @@ weather_profile = "disabled"
 music_profile_id = "gym.interior"
 
 [node name="CeruleanGymVisual" parent="." unique_id=971541075 instance=ExtResource("1_visual")]
+
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=904116440]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("18_floor_mask")
+floor_regions = {
+&"ground_floor": Rect2(0, 0, 960, 1440)
+}
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=904116441]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=904116442]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=904116443]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=904116444]
 
 [node name="Entities" type="Node2D" parent="." unique_id=94429353]
 z_index = 5

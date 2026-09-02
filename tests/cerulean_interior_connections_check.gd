@@ -170,6 +170,14 @@ func _check_interior(city: Node, data: Dictionary) -> void:
 		_check(interior.get_node_or_null("PewterGymTemplate/Entities") == null, "Cerulean Gym does not inherit Pewter NPC content")
 		_check(interior.get_node_or_null("PewterGymTemplate/Visuals") == null, "Cerulean Gym hides the obsolete Pewter visual")
 		_check(interior.get_node_or_null("PewterGymTemplate/FloorVisibilityMask") == null, "Cerulean Gym removes the Pewter floor mask")
+		var gym_floor_mask := interior.get_node_or_null("FloorVisibilityMask")
+		_check(gym_floor_mask != null, "Cerulean Gym has its own visibility mask")
+		if gym_floor_mask != null:
+			var gym_floor_regions := gym_floor_mask.get("floor_regions") as Dictionary
+			_check(
+				gym_floor_regions.get(&"ground_floor", Rect2()) == Rect2(0, 0, 960, 1440),
+				"Cerulean Gym visibility mask covers its full imported canvas"
+			)
 		_check(interior.get_node_or_null("Tiles/Collision") != null, "Cerulean Gym retains its gameplay collision layer")
 		var gym_visual := interior.get_node_or_null("CeruleanGymVisual")
 		var gym_visual_map: Dictionary = {}
