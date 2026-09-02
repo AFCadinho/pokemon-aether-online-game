@@ -4993,6 +4993,7 @@
   "ui.skill.thieving.unlocked": "Thieving unlocked · Complete Rook's first pickpocket lesson",
   "ui.skill.rock_smash.unlocked": "Rock Smash unlocked · Received HM Rock Smash",
   "ui.rock_smash.experience_gained": "Rock Smash +{experience} XP",
+  "ui.rock_smash.money_found": "Found ₽{amount}!",
   "ui.rock_smash.item_found": "Found {quantity}× {item}!",
   "ui.thieving.arrested": "You were arrested and fined ₽{amount}.",
   "ui.thieving.arrest.civilian_confrontation": "Stop right there! You've been caught pickpocketing. You're coming with me.",

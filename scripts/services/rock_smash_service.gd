@@ -62,15 +62,20 @@ func smash_rock(rock_id: String, field_move_result: Dictionary) -> Dictionary:
 	var body := _dictionary_from_value(response.get("body", {}))
 	_apply_state(_dictionary_from_value(body.get("state", {})))
 	var inventory_result: Dictionary = await InventoryService.load_inventory()
+	var wallet_result: Dictionary = await PlayerWalletService.load_wallet()
+	if bool(wallet_result.get("success", false)):
+		PlayerWalletService.apply_wallet_result(wallet_result)
 	var story_result: Dictionary = await PlayerGameStateService.refresh_story()
 	return {
 		"success": true,
 		"rockId": str(body.get("rockId", normalized_rock_id)),
 		"rockType": str(body.get("rockType", "training")),
 		"rewardItems": _array_from_value(body.get("rewardItems", [])).duplicate(true),
+		"moneyAwarded": maxi(int(body.get("moneyAwarded", 0)), 0),
 		"experienceAwarded": maxi(int(body.get("experienceAwarded", 0)), 0),
 		"state": state.duplicate(true),
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
+		"walletRefreshSuccess": bool(wallet_result.get("success", false)),
 		"storyRefreshSuccess": bool(story_result.get("success", false)),
 	}
 
