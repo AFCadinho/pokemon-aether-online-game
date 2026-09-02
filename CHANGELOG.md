@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- The temporary side-quest accepting status now uses a neutral color instead of the error red.
 - Cuttable Tree dialogs now show a dedicated Tree mugshot.
 - Route-gate attendants can now be spoken to from two tiles away across all shared gate interiors.
 - Active land mounts now stay active when using authorized route transitions.
