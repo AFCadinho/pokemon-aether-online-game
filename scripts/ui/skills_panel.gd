@@ -18,6 +18,8 @@ const COMPLETE_COLOR := Color("#84a0b8")
 const FISHING_ICON: Texture2D = preload("res://assets/ui/fishing_rod.svg")
 const THIEVING_ICON: Texture2D = preload("res://assets/ui/thieving.svg")
 const ROCK_SMASH_ICON: Texture2D = preload("res://assets/ui/rock_smash_skill_icon.tres")
+const ROCK_SMASH_ROCK_SHEET: Texture2D = preload("res://assets/world/field_move_obstacles/object_rock.png")
+const RockSmashLevelPalette := preload("res://scripts/world/interactables/rock_smash_level_palette.gd")
 const WINDOW_PREFERRED_SIZE := Vector2(760, 780)
 const WINDOW_MINIMUM_SIZE := Vector2(480, 420)
 const WINDOW_EDGE_MARGIN := 12.0
@@ -776,7 +778,7 @@ func _render_detail(skill: Dictionary) -> void:
 	wanted_section.visible = skill_id == "thieving"
 	if wanted_section.visible:
 		_render_wanted_meter(stats)
-	_render_unlocks(skill.get("unlocks", []) as Array)
+	_render_unlocks(skill.get("unlocks", []) as Array, skill_id)
 	if skill_id == "thieving":
 		_render_targets(skill.get("targets", []) as Array)
 	elif skill_id == "rock_smash":
@@ -1122,7 +1124,7 @@ func _catalog_locations_tooltip(entry: Dictionary) -> String:
 	return ", ".join(names)
 
 
-func _render_unlocks(unlocks: Array) -> void:
+func _render_unlocks(unlocks: Array, skill_id: String) -> void:
 	for child: Node in unlocks_container.get_children():
 		unlocks_container.remove_child(child)
 		child.queue_free()
@@ -1134,12 +1136,12 @@ func _render_unlocks(unlocks: Array) -> void:
 		var is_next := not unlocked and not next_unlock_found
 		if is_next:
 			next_unlock_found = true
-		unlocks_container.add_child(_create_unlock_card(unlock, unlocked, is_next))
+		unlocks_container.add_child(_create_unlock_card(unlock, unlocked, is_next, skill_id == "rock_smash"))
 	_update_unlock_grid_columns()
 	unlocks_scroll.scroll_vertical = 0
 
 
-func _create_unlock_card(unlock: Dictionary, unlocked: bool, is_next: bool) -> Control:
+func _create_unlock_card(unlock: Dictionary, unlocked: bool, is_next: bool, show_rock_tier := false) -> Control:
 	var accent := SUCCESS_COLOR if unlocked else (GOLD_COLOR if is_next else LOCKED_COLOR)
 	var background := Color("#0a1d17") if unlocked else (Color("#211c0d") if is_next else Color("#080f18"))
 	var border := Color("#397858") if unlocked else (Color("#8c7436") if is_next else Color("#263746"))
@@ -1160,6 +1162,8 @@ func _create_unlock_card(unlock: Dictionary, unlocked: bool, is_next: bool) -> C
 	marker.add_theme_font_size_override("font_size", 15)
 	marker.text = "✓" if unlocked else ("→" if is_next else "🔒")
 	content.add_child(marker)
+	if show_rock_tier:
+		content.add_child(_create_rock_smash_tier_icon(int(unlock.get("requiredLevel", 1)), unlocked or is_next))
 
 	var identity := VBoxContainer.new()
 	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1187,6 +1191,36 @@ func _create_unlock_card(unlock: Dictionary, unlocked: bool, is_next: bool) -> C
 	name_label.text = _text(str(unlock.get("labelKey", "")))
 	identity.add_child(name_label)
 	return card
+
+
+func _create_rock_smash_tier_icon(required_level: int, available: bool) -> Control:
+	var tier_color := RockSmashLevelPalette.color_for_required_level(required_level)
+	var icon_frame := PanelContainer.new()
+	icon_frame.name = "RockTierIcon"
+	icon_frame.custom_minimum_size = Vector2(34, 34)
+	icon_frame.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(_with_alpha(tier_color, 0.16), _with_alpha(tier_color, 0.9), 6, 1)
+	)
+
+	var icon := TextureRect.new()
+	icon.name = "RockSprite"
+	icon.custom_minimum_size = Vector2(30, 30)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.texture = _rock_smash_tier_texture(required_level)
+	icon.modulate = tier_color if available else tier_color.lerp(LOCKED_COLOR, 0.42)
+	icon_frame.add_child(icon)
+	return icon_frame
+
+
+func _rock_smash_tier_texture(required_level: int) -> AtlasTexture:
+	var tier_variants := {1: 0, 5: 1, 10: 2, 20: 3, 50: 0, 75: 1}
+	var texture := AtlasTexture.new()
+	texture.atlas = ROCK_SMASH_ROCK_SHEET
+	texture.region = Rect2(int(tier_variants.get(required_level, 0)) * 32, 0, 32, 32)
+	return texture
 
 
 func _render_targets(targets: Array) -> void:

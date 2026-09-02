@@ -329,6 +329,10 @@ func _run() -> void:
 	_check((panel.get("stats_label") as Label).text.contains("0.25") and (panel.get("stats_label") as Label).text.contains("4"), "Rock Smash shows fossil chance and today's availability")
 	_check(not (panel.get("wanted_section") as VBoxContainer).visible, "Rock Smash hides the Thieving Wanted meter")
 	_check((panel.get("unlocks_container") as GridContainer).get_child_count() == 2 and (panel.get("unlocks_container") as GridContainer).get_child(0) is PanelContainer, "Rock Smash uses the shared progression roadmap")
+	var first_rock_unlock := (panel.get("unlocks_container") as GridContainer).get_child(0) as PanelContainer
+	var first_rock_unlock_content := first_rock_unlock.get_child(0) as HBoxContainer
+	var first_rock_tier_icon := first_rock_unlock_content.get_child(1) as PanelContainer
+	_check(first_rock_tier_icon.name == "RockTierIcon" and first_rock_tier_icon.find_child("RockSprite", true, false) is TextureRect, "Rock Smash progression shows its coloured overworld rock tier")
 	panel.call("_select_detail_tab", "catalog")
 	_check((panel.get("targets_section") as VBoxContainer).visible, "Rock Smash has a dedicated daily Rocks tab")
 	_check((panel.get("catalog_tab_button") as Button).text == "Rocks", "Rock Smash labels its secondary tab for rocks")

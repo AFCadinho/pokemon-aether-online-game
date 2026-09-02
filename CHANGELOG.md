@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Rock Smash progression unlocks now show the same coloured rocks used in the overworld.
 - Trainer battles now show their matching Pokémon Showdown trainer art behind NPC Pokémon, while unassigned NPCs retain their existing overworld appearance.
 - NPC and AI battle headers now show both trainer names without redundant portrait thumbnails; PvP keeps player portraits.
 
