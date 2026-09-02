@@ -540,6 +540,7 @@
 - Other players now see the correct beard color instead of a white beard.
 - Talking to Palet Kid Leo no longer traps you in an endless conversation.
 - Public held-item effects and effectiveness feedback in PvP are now shown consistently to both players and spectators.
+- PC release mode now stays active after a successful release for faster mass releasing.
 
 ## 0.3.47 - 2026-08-06
 

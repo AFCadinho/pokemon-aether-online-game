@@ -123,6 +123,12 @@ func _check_ui_overlay_wrapper_exists() -> void:
 	_check_equal(source.contains("pc_release_drop_panel"), true, "UIOverlay has PC release drop zone")
 	_check_equal(source.contains("func _confirm_pc_release_from_source"), true, "UIOverlay confirms releases from dropped Pokemon")
 	_check_equal(source.contains("func _release_selected_pc_pokemon"), true, "UIOverlay releases selected PC Pokemon")
+	_check_equal(
+		source.contains("_clear_pc_release_selection()")
+		and not source.contains("_set_pc_release_mode_active(false)\n\t_add_chat_message(LocalizationManager.text(\"ui.storage.release.success\"))"),
+		true,
+		"successful releases keep PC release mode active"
+	)
 	_check_equal(source.contains("func _add_pc_held_item_marker"), true, "UIOverlay marks PC Pokemon with held items")
 	_check_equal(source.contains("HeldItemMarker"), true, "UIOverlay creates held item marker control")
 	_check_equal(source.contains("pc_box_selector"), true, "UIOverlay provides a scrollable box selector")
