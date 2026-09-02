@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Surfing now travels at running speed, whether or not Running Shoes are toggled on.
 - Mt. Moon Part 3 has been re-imported from its latest Tiled visual.
 - Team Rocket's recruitment refusal now uses the intended question mark punctuation.
 - The Mt. Moon Future Self rescue now continues safely if your overworld follower is temporarily unavailable after a battle.
