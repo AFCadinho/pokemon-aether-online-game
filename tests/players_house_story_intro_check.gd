@@ -42,8 +42,11 @@ func _run() -> void:
 			"Player's House Dadinho aligns his sprite with the downstairs collision tile"
 		)
 		var father_nameplate := father.get("nameplate") as Control
+		var father_sprite := father.get_node_or_null("Look/AnimatedSprite2D") as AnimatedSprite2D
 		_expect(
-			father_nameplate != null and father_nameplate.position.x == 16.0,
+			father_nameplate != null
+			and father_sprite != null
+			and is_equal_approx(father_nameplate.global_position.x, father_sprite.global_position.x),
 			"Dadinho's nameplate follows his opening sprite offset"
 		)
 		_expect(
