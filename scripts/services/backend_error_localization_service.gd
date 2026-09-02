@@ -421,10 +421,24 @@ static func _format_values(response: Dictionary) -> Dictionary:
 			"requiredFishingLevel",
 			values.get("required_level", 1)
 		))
-	for integer_level_key: String in ["levelCap", "pokemonLevel", "tradeLevelCap"]:
+	for integer_level_key: String in [
+		"level",
+		"requiredLevel",
+		"requiredFishingLevel",
+		"levelCap",
+		"pokemonLevel",
+		"tradeLevelCap",
+	]:
 		if values.has(integer_level_key):
-			values[integer_level_key] = int(values.get(integer_level_key, 0))
+			values[integer_level_key] = _whole_number(values.get(integer_level_key, 0))
 	return values
+
+
+static func _whole_number(value: Variant) -> int:
+	if value is int or value is float:
+		return roundi(float(value))
+	var text := str(value).strip_edges()
+	return roundi(text.to_float()) if text.is_valid_float() else 0
 
 
 static func _normalize_code(value: String) -> String:
