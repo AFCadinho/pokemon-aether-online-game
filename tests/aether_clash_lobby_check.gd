@@ -106,7 +106,7 @@ func _init() -> void:
 		lobby_source.contains("AETHER_CONFIRMATION_DIALOG_SCENE.instantiate()"),
 		"multi-session portal selection uses the themed Aether modal"
 	)
-	var collision := lobby.get_node_or_null("Collision") as TileMapLayer
+	var collision := lobby.get_node_or_null("Tiles/Collision") as TileMapLayer
 	_check(collision != null and not collision.get_used_cells().is_empty(), "Lobby includes gameplay collision")
 	_check(
 		collision != null and collision.get_cell_source_id(Vector2i(29, 50)) == -1,
