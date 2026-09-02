@@ -201,6 +201,7 @@ func _on_quest_offer_accepted() -> void:
 		"ui.quest.offer_accepting",
 		"Accepting side quest..."
 	)
+	quest_offer_status_label.add_theme_color_override("font_color", Color("#aeb8c5"))
 	quest_offer_status_label.visible = true
 	var result: Dictionary = await PlayerGameStateService.accept_side_quest(
 		str(offered_quest.get("questId", "")),
