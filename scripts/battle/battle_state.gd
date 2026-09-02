@@ -1117,8 +1117,13 @@ func _get_mega_species_for_base_and_item(base_species: String, item: String) -> 
 		return "Mewtwo-Mega-X"
 	if item_key == "mewtwonitey":
 		return "Mewtwo-Mega-Y"
-	if item_key.ends_with("ite"):
-		return "%s-Mega" % cleaned_base_species
+
+	var catalog_entry := MegaChampionsCatalog.get_entry_for_base_and_item(
+		cleaned_base_species,
+		item
+	)
+	if not catalog_entry.is_empty():
+		return str(catalog_entry.get("showdownSpeciesName", "")).strip_edges()
 
 	return ""
 
@@ -1138,7 +1143,11 @@ func _get_active_mega_species_from_request_slot(player_id: String, active_index 
 	if not (active_data is Dictionary):
 		return ""
 
-	var can_mega_value: Variant = (active_data as Dictionary).get("canMegaEvo", "")
+	var active_request := active_data as Dictionary
+	var can_mega_value: Variant = active_request.get("canMegaEvo", "")
+	var requested_mega_species := str(active_request.get("canMegaEvoSpecies", "")).strip_edges()
+	if requested_mega_species != "":
+		return requested_mega_species
 	var active_pokemon := get_active_player_pokemon(player_id)
 	var active_species := _strip_mega_suffix(get_species_from_pokemon_data(active_pokemon)).to_lower().strip_edges()
 	var mega_species := _get_mega_species_for_pokemon_data(active_pokemon)
