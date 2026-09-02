@@ -27,6 +27,8 @@ func _check_custom_move(moves: Dictionary, move_id: String, config_id: String, l
 	_check(str(move.get("sheet_path", "")) == "", "%s is procedural-only" % label)
 	var custom_config := move.get(config_id, {}) as Dictionary
 	_check(bool(custom_config.get("enabled", false)), "%s enables its custom renderer" % label)
+	_check(bool(custom_config.get("straight_line", false)), "%s travels in a straight line" % label)
+	_check(str(custom_config.get("projectile_actor_anchor_point", "")) == "mouth", "%s starts at the attacker's mouth" % label)
 	var path := custom_config.get("path", []) as Array
 	_check(path.size() >= 4, "%s defines a complete source-to-target path" % label)
 

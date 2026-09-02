@@ -940,6 +940,16 @@ func get_single_animation_anchor_in_node(target_node: CanvasItem) -> Vector2:
 
 	return target_node.get_global_transform().affine_inverse() * global_anchor
 
+func get_single_animation_visual_rect_in_node(target_node: CanvasItem) -> Rect2:
+	if target_node == null or single_sprite == null or not single_sprite.visible:
+		return Rect2()
+
+	var visual_rect := _get_sprite_visual_rect_global(single_sprite)
+	var transform := target_node.get_global_transform().affine_inverse()
+	var top_left := transform * visual_rect.position
+	var bottom_right := transform * visual_rect.end
+	return Rect2(top_left, bottom_right - top_left)
+
 func _get_sprite_frames_key(sprite_frames: SpriteFrames) -> String:
 	if sprite_frames == null:
 		return ""
