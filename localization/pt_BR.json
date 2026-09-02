@@ -3049,6 +3049,7 @@
   "ui.staff.trainer_progress.badges": "Insígnias",
   "ui.staff.trainer_progress.key_items": "Itens-chave",
   "ui.staff.trainer_progress.story": "História",
+  "ui.staff.trainer_progress.side_quests": "Missões secundárias",
   "ui.staff.story_checkpoint.notice": "Mova esta conta de teste para um ponto consistente da história. Missões principais anteriores e itens-chave necessários são sincronizados. Pontos anteriores à escolha do inicial com o Professor Oak também redefinem esse inicial para que o fluxo possa ser testado novamente; os outros Pokémon permanecem inalterados.",
   "ui.staff.story_checkpoint.select": "Ponto da história",
   "ui.staff.story_chapter.select": "Capítulo da história",

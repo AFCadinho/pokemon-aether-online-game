@@ -64,6 +64,8 @@ func _run() -> void:
 	_check(popup.find_child("ClearAllButton", true, false) != null, "clear-all developer action exists")
 	_check(popup.find_child("BadgesTabButton", true, false) != null, "trainer progress exposes a badges tab")
 	_check(popup.find_child("KeyItemsTabButton", true, false) != null, "trainer progress exposes a key-items tab")
+	_check(popup.find_child("StoryTabButton", true, false) != null, "trainer progress exposes a dedicated story tab")
+	_check(popup.find_child("SideQuestsTabButton", true, false) != null, "trainer progress separates side quests into their own tab")
 	var story_chapter_select := popup.find_child("StoryChapterSelect", true, false) as OptionButton
 	var story_checkpoint_select := popup.find_child("StoryCheckpointSelect", true, false) as OptionButton
 	var side_quest_select := popup.find_child("SideQuestSelect", true, false) as OptionButton
@@ -72,6 +74,11 @@ func _run() -> void:
 	_check(side_quest_select != null and side_quest_select.item_count == 6, "trainer progress exposes all side-quest controls")
 	_check(popup.find_child("ResetSideQuestButton", true, false) != null, "side quests can be restarted")
 	_check(popup.find_child("CompleteSideQuestButton", true, false) != null, "side quests can be completed with rewards")
+	_check(
+		popup.find_child("ApplyStoryCheckpointButton", true, false).get_parent().get_parent().name == "StoryContent"
+		and side_quest_select.get_parent().name == "SideQuestsContent",
+		"story checkpoint and side-quest actions are placed in distinct workflows"
+	)
 	var game_state_service_source := FileAccess.get_file_as_string("res://scripts/services/player_game_state_service.gd")
 	_check(
 		game_state_service_source.contains("reload_current_map_preserving_player_position"),

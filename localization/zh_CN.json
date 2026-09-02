@@ -3046,6 +3046,7 @@
   "ui.staff.trainer_progress.badges": "徽章",
   "ui.staff.trainer_progress.key_items": "关键项目",
   "ui.staff.trainer_progress.story": "故事",
+  "ui.staff.trainer_progress.side_quests": "支线任务",
   "ui.staff.story_checkpoint.notice": "将此测试帐户移动到一致的故事检查点。早期的主线任务和所需的关键物品是同步的。 Oak 选择启动器之前的检查点也会重置该启动器，以便可以再次测试流程；其他宝可梦保持不变。",
   "ui.staff.story_checkpoint.select": "故事检查点",
   "ui.staff.story_chapter.select": "故事篇",

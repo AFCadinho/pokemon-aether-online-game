@@ -3049,6 +3049,7 @@
   "ui.staff.trainer_progress.badges": "Badges",
   "ui.staff.trainer_progress.key_items": "Key Items",
   "ui.staff.trainer_progress.story": "Story",
+  "ui.staff.trainer_progress.side_quests": "Side Quests",
   "ui.staff.story_checkpoint.notice": "Move this test account to a consistent story checkpoint. Earlier main quests and required key items are synchronized. Checkpoints before Oak's starter choice also reset that starter so the flow can be tested again; other Pokémon remain unchanged.",
   "ui.staff.story_checkpoint.select": "Story checkpoint",
   "ui.staff.story_chapter.select": "Story chapter",
