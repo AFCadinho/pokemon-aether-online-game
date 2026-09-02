@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Developer story checkpoints now refresh rewards from completed main quests without adding side-quest rewards.
+- The Quest Log now separates quest titles, types, and statuses for faster scanning, with green completion checkmarks and improved keyboard focus and tooltips.
 - Water Gun and Dragon Breath now travel in a straight line from the attacking Pokémon's mouth to the target.
 - Water Gun and Dragon Breath now use custom procedural battle animations with stronger projectile and impact visuals.
 - Fall back to the regular trainer battle music when an optional rival track is unavailable.
