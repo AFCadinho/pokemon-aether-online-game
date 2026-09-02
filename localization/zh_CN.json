@@ -148,6 +148,7 @@
   "backend.error.fishing_level_required": "此钓竿需要钓鱼等级 {requiredFishingLevel}。您的钓鱼等级是{currentFishingLevel}。",
   "backend.error.fishing_badges_required": "此杆需要 {requiredBadges} {region} 徽章。您当前拥有 {currentBadges}。",
   "backend.error.fishing_nothing_biting": "这根棍子似乎没有咬到这里。",
+  "backend.error.wild_encounter_not_found": "这里没有可用的野生宝可梦遭遇方式。",
   "backend.error.no_usable_pokemon": "你的宝可梦都不能战斗。首先在宝可梦中心治愈你的队伍。",
   "backend.error.pokemon_level_cap_reached": "该宝可梦已达到你当前的等级上限 {levelCap}。",
   "backend.error.pokemon_level_cap_party_ineligible": "你的队伍中包含一只高于当前等级上限 {levelCap} 的宝可梦。",

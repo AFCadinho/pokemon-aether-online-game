@@ -221,6 +221,7 @@ const CODE_TO_KEY: Dictionary = {
 	"invalid_fishing_rod": "backend.error.fishing_rod_invalid",
 	"invalid_fishing_encounter_type": "backend.error.fishing_unavailable",
 	"encounter_type_not_found": "backend.error.fishing_nothing_biting",
+	"wild_encounter_not_found": "backend.error.wild_encounter_not_found",
 	"fishing_authentication_required": "backend.error.auth_required",
 	"fishing_rod_validation_unavailable": "backend.error.fishing_unavailable",
 	"fishing_level_required": "backend.error.fishing_level_required",

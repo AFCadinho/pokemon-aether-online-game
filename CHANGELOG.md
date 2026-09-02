@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed unavailable ordinary map encounters showing the fishing “nothing biting” message.
+
 - The Pokédex now shows every species' official base catch rate with a plain-language scale and explanation; battle catches use that value together with HP, status, and the chosen Poké Ball.
 
 - Surfing now travels at running speed, whether or not Running Shoes are toggled on.
