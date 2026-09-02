@@ -32783,6 +32783,8 @@ func _on_staff_teleport_confirm_pressed() -> void:
 		_add_chat_message("Teleport failed: %s" % str(result.get("error", "Unknown error")))
 		return
 
+	_hide_staff_teleport_popup()
+	_hide_staff_tools_popup()
 	var state: Dictionary = _staff_dictionary_from_variant(result.get("state", {}))
 	var apply_result: Dictionary = await world.call("apply_authorized_teleport_state", state)
 	staff_teleport_in_flight = false
@@ -32793,8 +32795,6 @@ func _on_staff_teleport_confirm_pressed() -> void:
 		_add_chat_message("Teleport was saved, but applying it failed: %s" % str(apply_result.get("error", "Unknown error")))
 		return
 
-	_hide_staff_teleport_popup()
-	_hide_staff_tools_popup()
 	_add_chat_message("Teleported to %s: %s." % [
 		str(selected_map.get("label", map_id)),
 		str(selected_point.get("label", point_id)),
@@ -32873,6 +32873,8 @@ func _on_staff_teleport_to_player_pressed() -> void:
 		await _load_staff_teleport_online_players_if_needed(true)
 		return
 
+	_hide_staff_teleport_popup()
+	_hide_staff_tools_popup()
 	var state: Dictionary = _staff_dictionary_from_variant(result.get("state", {}))
 	var apply_result: Dictionary = await world.call("apply_authorized_teleport_state", state)
 	staff_teleport_in_flight = false
@@ -32885,8 +32887,6 @@ func _on_staff_teleport_to_player_pressed() -> void:
 		_add_chat_message("Teleport was saved, but applying it failed: %s" % str(apply_result.get("error", "Unknown error")))
 		return
 
-	_hide_staff_teleport_popup()
-	_hide_staff_tools_popup()
 	_add_chat_message("Teleported to %s." % str(selected_player.get("displayName", selected_player.get("username", "player"))))
 
 

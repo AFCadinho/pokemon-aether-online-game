@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Staff teleport windows now close as soon as the server confirms a successful teleport.
 - Quest offer dialogs now show dedicated icons for currency rewards such as Aetherite and Pokédollars.
 - Successful Thieving attempts now show earned Pokédollars in the reward popup.
 - Existing saved Running Shoes bindings on `X` now migrate to `N` automatically.
