@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Aethernet now shows the current location separately instead of listing it as a travel destination.
 - Rock Smash money rewards now start at ₽100 and scale with both the rock and your Rock Smash level; regular item drops remain chance-based.
 - Karate Master Kenji now explains Rock Smash Pokédollar scaling and the 30% regular item-drop chance correctly.
 - The staff Trainer Progress window can now restart individual side quests or safely mark them complete and grant any unclaimed rewards.

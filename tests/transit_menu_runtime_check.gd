@@ -40,7 +40,8 @@ func _run() -> void:
 	var travel := menu.find_child("TravelButton", true, false) as Button
 	_check(pallet != null and pewter != null, "unlocked destinations render as full-row buttons")
 	_check(cerulean != null, "locked destinations render as quiet non-interactive rows")
-	_check(hub != null and hub.disabled, "the current worldwide hub is compact and non-interactive")
+	_check(menu.find_child("CurrentLocation", true, false) != null, "the current location is shown in a separate status card")
+	_check(hub == null, "the current worldwide hub is omitted from travel destinations")
 	_check(travel != null and not travel.disabled and travel.text.contains("Pallet Town"), "the first usable destination selects a clear footer action")
 	if pallet != null:
 		var selected_style := pallet.get_theme_stylebox("normal") as StyleBoxFlat
@@ -93,6 +94,17 @@ func _run() -> void:
 	var poor_travel := poor_menu.find_child("TravelButton", true, false) as Button
 	_check(poor_travel != null and poor_travel.disabled and poor_travel.text == "Not enough funds", "an unaffordable selection explains why travel is unavailable")
 	poor_menu.queue_free()
+
+	var current_menu := TransitMenuScript.new() as TransitMenu
+	root.add_child(current_menu)
+	var current_network := _network_fixture()
+	current_network["sourceMapId"] = "kanto_viridian_city"
+	current_menu.open(current_network)
+	await process_frame
+	var current_button := current_menu.find_child("Destination_kanto_viridian_city", true, false)
+	_check(current_button == null, "the current regional location is omitted from travel destinations")
+	_check(current_menu.find_child("CurrentLocation", true, false) != null, "the current regional location gets its own status card")
+	current_menu.queue_free()
 
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))
