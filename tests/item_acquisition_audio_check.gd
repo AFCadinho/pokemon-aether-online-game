@@ -6,9 +6,14 @@ const SFX_MANAGER := "res://scripts/services/sfx_manager.gd"
 const INVENTORY_SERVICE := "res://scripts/services/inventory_service.gd"
 const ITEM_GIFT_NPC := "res://scripts/world/npcs/item_gift_npc.gd"
 const MARKET_ATTENDANT_NPC := "res://scripts/world/npcs/market_attendant_npc.gd"
+const ROOK_NPC := "res://scripts/world/kanto/towns/thieving_mentor_rook.gd"
+const KENJI_NPC := "res://scripts/world/kanto/towns/pewter_city/karate_master_kenji.gd"
+const FISHING_GURU_NPC := "res://scripts/world/kanto/towns/pallet_town/fishing_guru.gd"
 const MATEO_NPC := "res://scripts/world/kanto/towns/ev_training_expert_mateo.gd"
 const GIDEON_NPC := "res://scripts/world/kanto/towns/catching_mentor_gideon.gd"
 const DADINHO_NPC := "res://scripts/world/kanto/routes/dadinho_training_npc.gd"
+const NUGGET_BRIDGE_NPC := "res://scripts/world/kanto/routes/nugget_bridge_recruiter.gd"
+const BILLS_MACHINE_NPC := "res://scripts/world/kanto/routes/bills_house_machine.gd"
 const ROUTE_25_DATE_NPC := "res://scripts/world/kanto/routes/route_25_misty_date_npc.gd"
 const UI_OVERLAY := "res://scripts/ui/ui_overlay.gd"
 const OAK_SCRIPT := "res://scripts/world/kanto/towns/pallet_town/oak.gd"
@@ -24,9 +29,14 @@ func _init() -> void:
 	var inventory_source := FileAccess.get_file_as_string(INVENTORY_SERVICE)
 	var item_gift_source := FileAccess.get_file_as_string(ITEM_GIFT_NPC)
 	var market_attendant_source := FileAccess.get_file_as_string(MARKET_ATTENDANT_NPC)
+	var rook_source := FileAccess.get_file_as_string(ROOK_NPC)
+	var kenji_source := FileAccess.get_file_as_string(KENJI_NPC)
+	var fishing_guru_source := FileAccess.get_file_as_string(FISHING_GURU_NPC)
 	var mateo_source := FileAccess.get_file_as_string(MATEO_NPC)
 	var gideon_source := FileAccess.get_file_as_string(GIDEON_NPC)
 	var dadinho_source := FileAccess.get_file_as_string(DADINHO_NPC)
+	var nugget_bridge_source := FileAccess.get_file_as_string(NUGGET_BRIDGE_NPC)
+	var bills_machine_source := FileAccess.get_file_as_string(BILLS_MACHINE_NPC)
 	var route_25_date_source := FileAccess.get_file_as_string(ROUTE_25_DATE_NPC)
 	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY)
 	var oak_source := FileAccess.get_file_as_string(OAK_SCRIPT)
@@ -50,9 +60,18 @@ func _init() -> void:
 	)
 	_check_received_sound_after(item_gift_source, "success_dialogue_id", "generic item gifts")
 	_check_received_sound_after(market_attendant_source, "quest_reward_received_dialogue_id", "Market quest rewards")
+	_check_received_item_popup_after(market_attendant_source, "quest_reward_received_dialogue_id", "Market quest rewards")
+	_check_received_item_popup_after(rook_source, "quest_reward_received_dialogue_id", "Rook's quest reward")
+	_check_received_item_popup_after(kenji_source, "quest_reward_received_dialogue_id", "Rock Smash quest reward")
+	_check_received_item_popup_after(fishing_guru_source, "quest_reward_received_dialogue_id", "Fishing quest reward")
 	_check_received_sound_after(mateo_source, "quest_reward_received_dialogue_id", "Mateo's quest reward")
+	_check_received_item_popup_after(mateo_source, "quest_reward_received_dialogue_id", "Mateo's quest reward")
 	_check_received_sound_after(gideon_source, "quest_reward_received_dialogue_id", "Gideon's quest reward")
+	_check_received_item_popup_after(gideon_source, "quest_reward_received_dialogue_id", "Gideon's quest reward")
 	_check_received_sound_after(dadinho_source, "quest_reward_received_dialogue_id", "Dadinho's quest reward")
+	_check_received_item_popup_after(dadinho_source, "quest_reward_received_dialogue_id", "Dadinho's quest reward")
+	_check_received_item_popup_after(nugget_bridge_source, "PRIZE_DIALOGUE_ID", "Nugget Bridge reward")
+	_check_received_item_popup_after(bills_machine_source, "_present_ticket_reward", "Bill's reward")
 	var milk_message_index := route_25_date_source.find('LocalizationManager.text("ui.world.reward.story_item"')
 	var milk_sound_index := route_25_date_source.find('SfxManager.play("item_received")', milk_message_index)
 	_check(
@@ -106,6 +125,19 @@ func _check_received_sound_after(source: String, dialogue_marker: String, label:
 	_check(
 		dialogue_call_index >= 0 and dialogue_index > dialogue_call_index and sound_index > dialogue_index,
 		"%s plays the received-item jingle after its reward dialogue" % label
+	)
+
+
+func _check_received_item_popup_after(source: String, dialogue_marker: String, label: String) -> void:
+	var popup_index := source.find("InventoryService.notify_claimed_item_reward")
+	var dialogue_index := source.rfind("await show_dialogue", popup_index)
+	if dialogue_index < 0:
+		dialogue_index = source.rfind("await _show_catalogue_dialogue", popup_index)
+	if dialogue_marker.begins_with("_"):
+		dialogue_index = popup_index - 1
+	_check(
+		popup_index >= 0 and dialogue_index >= 0 and popup_index > dialogue_index,
+		"%s shows an item reward popup after its reward dialogue" % label
 	)
 
 

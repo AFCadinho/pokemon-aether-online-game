@@ -71,6 +71,7 @@ func _run_recruitment_sequence() -> void:
 				"quantity": 1,
 			})
 		)
+		InventoryService.notify_claimed_item_reward(reward_result)
 		SfxManager.play("item_received")
 
 		await _show_catalogue_dialogue(

@@ -163,6 +163,15 @@ func _claim_quest_reward() -> void:
 		["Please deliver it to Professor Oak."]
 	))
 	if bool(result.get("claimed", false)):
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.world.reward.story_item", {
+				"item": ItemLocalization.display_name(str(result.get("itemId", "oaks-parcel"))),
+				"quantity": maxi(int(result.get("quantity", 1)), 1),
+			})
+		)
+		InventoryService.notify_claimed_item_reward(result)
 		SfxManager.play("item_received")
 
 

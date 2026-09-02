@@ -79,6 +79,7 @@ func _claim_catching_reward() -> void:
 		})
 	)
 	if bool(result.get("claimed", false)):
+		InventoryService.notify_claimed_item_reward(result)
 		SfxManager.play("item_received")
 
 

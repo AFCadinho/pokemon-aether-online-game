@@ -79,6 +79,7 @@ func _claim_training_reward() -> void:
 	))
 	_notify_training_completed(str(result.get("itemId", "exp-share")))
 	if bool(result.get("claimed", false)):
+		InventoryService.notify_claimed_item_reward(result)
 		SfxManager.play("item_received")
 
 
