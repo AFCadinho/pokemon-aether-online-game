@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- After defeating Misty, she now follows up on Dadinho, Bill's S.S. Anne ticket, Vermilion City, and its Gym.
+- After defeating Misty, the new S.S. Anne mission directs you south through Route 5 to Vermilion City.
 
 - Mount selection now includes search, keyboard navigation, and a scrollable result list for an easier experience as more mounts are added.
 
