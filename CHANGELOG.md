@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Forest Gate attendants can now be reached and spoken to from in front of the counter.
 - Staff can now start a normal map encounter with a selected eligible Pokémon and encounter method.
 
 - Currency-only rewards now stay silent while item rewards retain the received-item sound.

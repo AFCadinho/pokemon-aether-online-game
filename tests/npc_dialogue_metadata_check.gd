@@ -16,6 +16,8 @@ const DEFINITION_FALLBACK_SCENES: Dictionary = {
 }
 const ROUTE_1_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
 const PALLET_TOWN_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
+const FOREST_GATE_NORTH_SCENE := "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_north_gate.tscn"
+const FOREST_GATE_SOUTH_SCENE := "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_south_gate.tscn"
 
 var failed := false
 
@@ -34,6 +36,7 @@ func _init() -> void:
 	_check_base_npc_movement_behavior()
 	_check_existing_npc_behavior_entrypoints()
 	_check_pallet_guard_story_requirement()
+	_check_forest_gate_attendant_reach()
 
 	quit(1 if failed else 0)
 
@@ -102,6 +105,16 @@ func _check_scene_defined_dialogue_id_is_allowed() -> void:
 		not text.contains("dialogue_id = \"kanto_route_1_camper_quinn_default\""),
 		"Route 1 residents resolve normal dialogue from NPC metadata"
 	)
+
+
+func _check_forest_gate_attendant_reach() -> void:
+	for scene_path: String in [FOREST_GATE_NORTH_SCENE, FOREST_GATE_SOUTH_SCENE]:
+		var text := _read_text(scene_path)
+		_check_true(
+			text.contains('npc_id = "kanto_viridian_forest_')
+			and text.contains("manual_interaction_reach_tiles = 2"),
+			"Forest Gate attendant remains reachable from in front of the counter"
+		)
 
 
 func _check_metadata_populates_dialogue_id() -> void:

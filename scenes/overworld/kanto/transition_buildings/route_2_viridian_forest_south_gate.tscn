@@ -16,6 +16,7 @@ music_track_id = "overworld.kanto.route.1"
 npc_id = "kanto_viridian_forest_south_gate_attendant"
 display_name = "Forest Gate Attendant"
 requires_party_pokemon = false
+manual_interaction_reach_tiles = 2
 
 [node name="ToNorth" parent="Exits" index="0"]
 target_scene_path = "res://scenes/overworld/kanto/routes/viridian_forest.tscn"
