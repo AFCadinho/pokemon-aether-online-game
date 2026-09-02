@@ -162,6 +162,15 @@ const ACTIVITY_VISUAL_OFFSETS := {
 		"down": Vector2(0.0, 2.0),
 	},
 }
+# Fishing sheets are full-height standing poses, whereas Surf uses a compact
+# seated rider. These values align the existing fishing art with the saddle
+# without changing the normal land-fishing pose.
+const SURF_FISH_RIDER_OFFSETS := {
+	"down": Vector2(0.0, 18.0),
+	"left": Vector2(0.0, 4.0),
+	"right": Vector2(0.0, 4.0),
+	"up": Vector2(0.0, 10.0),
+}
 const WATER_TILEMAP_NAMES: Array[String] = ["Water"]
 const TALL_GRASS_VISUAL_TILEMAP_NAMES: Array[String] = ["TallGrassVisual", "Grass"]
 const TALL_GRASS_DEPTH_SORTING_SCRIPT := preload("res://scripts/world/tall_grass_depth_sorting.gd")
@@ -399,7 +408,15 @@ func _sync_mount_rider_delta() -> void:
 		direction,
 		mount_sprite.frame
 	)
-	rider_node.position = base_rider_position + Vector2(rider_offset)
+	rider_node.position = base_rider_position + Vector2(rider_offset) \
+		+ _get_surf_fish_rider_offset(direction)
+
+
+func _get_surf_fish_rider_offset(direction: String) -> Vector2:
+	if CharacterAppearanceService.normalize_movement_style(activity_style) \
+		!= CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
+		return Vector2.ZERO
+	return SURF_FISH_RIDER_OFFSETS.get(direction, Vector2.ZERO)
 
 func is_fishing_activity_active() -> bool:
 	return fishing_activity_active
@@ -2955,7 +2972,8 @@ func _clear_stair_visual_offset() -> void:
 func _get_activity_visual_offset() -> Vector2:
 	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(activity_style)
 	if normalized_style == CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
-		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_FISH
+		# Keep the mount anchored; only the fishing rider needs correction.
+		return Vector2.ZERO
 	elif normalized_style == CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET:
 		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_FISH
 	var style_offsets: Variant = ACTIVITY_VISUAL_OFFSETS.get(normalized_style, {})
