@@ -204,7 +204,8 @@ static func get_mount_foreground_frames(mount_id: String) -> SpriteFrames:
 static func get_mounted_rider_frames(
 	base_frames: SpriteFrames,
 	mount_id: String,
-	rider_offset_adjustments: Dictionary = {}
+	rider_offset_adjustments: Dictionary = {},
+	hidden_regions: Dictionary = {}
 ) -> SpriteFrames:
 	if base_frames == null:
 		return null
@@ -212,10 +213,11 @@ static func get_mounted_rider_frames(
 	if normalized_id == "":
 		return base_frames
 
-	var cache_key := "%s:%d:%s" % [
+	var cache_key := "%s:%d:%s:%s" % [
 		normalized_id,
 		base_frames.get_instance_id(),
 		JSON.stringify(rider_offset_adjustments),
+		JSON.stringify(hidden_regions),
 	]
 	if _rider_frames_cache.has(cache_key):
 		return _rider_frames_cache[cache_key] as SpriteFrames
@@ -252,6 +254,7 @@ static func get_mounted_rider_frames(
 				mini(frame_index, FRAME_COLUMNS - 1),
 				offset
 			)
+			_clear_hidden_region(mounted_image, hidden_regions, direction)
 			var mounted_texture := ImageTexture.create_from_image(mounted_image) \
 				if mounted_image != null \
 				else source_texture
@@ -400,6 +403,18 @@ static func _get_rider_offset_adjustment(adjustments: Dictionary, direction: Str
 	if adjustment_value is Vector2:
 		return Vector2i(adjustment_value as Vector2)
 	return Vector2i.ZERO
+
+
+static func _clear_hidden_region(image: Image, regions: Dictionary, direction: String) -> void:
+	if image == null:
+		return
+	var region_value: Variant = regions.get(direction, Rect2i())
+	if not region_value is Rect2i:
+		return
+	var region := (region_value as Rect2i).intersection(Rect2i(Vector2i.ZERO, image.get_size()))
+	if region.size.x <= 0 or region.size.y <= 0:
+		return
+	image.fill_rect(region, Color.TRANSPARENT)
 
 
 static func _direction_from_animation(animation_name: String) -> String:

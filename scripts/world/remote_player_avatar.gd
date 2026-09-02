@@ -134,10 +134,13 @@ const ACTIVITY_VISUAL_OFFSETS := {
 # Keep remote Surf-fishing riders aligned with the same existing-pose saddle
 # offsets used locally. Normal land fishing continues to use the fish offsets.
 const SURF_FISH_RIDER_OFFSETS := {
-	"down": Vector2i(0, 18),
-	"left": Vector2i(0, 4),
-	"right": Vector2i(0, 4),
-	"up": Vector2i(0, 10),
+	"down": Vector2i(-2, 18),
+	"left": Vector2i(-20, 4),
+	"right": Vector2i(20, 4),
+	"up": Vector2i(-2, 10),
+}
+const SURF_FISH_BODY_HIDDEN_REGIONS := {
+	"down": Rect2i(30, 48, 4, 16),
 }
 const APPEARANCE_PART_SPRITES := {
 	"hair": "HairSprite",
@@ -754,7 +757,10 @@ func _sync_mount_visual() -> void:
 	mount_sprite.sprite_frames = mount_frames
 	mount_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	mount_sprite.visible = true
-	var foreground_frames := MountService.get_mount_foreground_frames(current_mount_id)
+	var foreground_frames := mount_frames \
+		if CharacterAppearanceService.normalize_movement_style(current_body_movement_style) \
+		== CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH \
+		else MountService.get_mount_foreground_frames(current_mount_id)
 	mount_foreground_sprite.sprite_frames = foreground_frames
 	mount_foreground_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	mount_foreground_sprite.visible = foreground_frames != null
@@ -823,6 +829,13 @@ func _get_surf_fish_rider_offset_adjustments() -> Dictionary:
 		!= CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
 		return {}
 	return SURF_FISH_RIDER_OFFSETS
+
+
+func _get_surf_fish_body_hidden_regions() -> Dictionary:
+	if CharacterAppearanceService.normalize_movement_style(current_body_movement_style) \
+		!= CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
+		return {}
+	return SURF_FISH_BODY_HIDDEN_REGIONS
 
 func _create_interaction_hit_area() -> void:
 	var hit_area := Area2D.new()
@@ -1307,7 +1320,8 @@ func _apply_body_frames(body_id: String, gender: String, movement_style: String)
 	body_frames = MountService.get_mounted_rider_frames(
 		body_frames,
 		current_mount_id,
-		_get_surf_fish_rider_offset_adjustments()
+		_get_surf_fish_rider_offset_adjustments(),
+		_get_surf_fish_body_hidden_regions()
 	)
 
 	for sprite in appearance_sprites:
