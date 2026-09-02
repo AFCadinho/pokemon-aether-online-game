@@ -37241,14 +37241,17 @@ func _apply_staff_encounter_tab_style(button: Button, selected: bool) -> void:
 		return
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	button.add_theme_font_size_override("font_size", 13)
-	button.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED_TEXT)
+	button.add_theme_font_size_override("font_size", 14)
+	var is_map_tab := button == dev_encounter_map_mode_button
+	var accent := UI_SUCCESS if is_map_tab else Color("#67d7ff")
+	var selected_background := Color("#174d31f2") if is_map_tab else Color("#16465df2")
+	button.add_theme_color_override("font_color", Color("#effff4") if selected and is_map_tab else (Color("#edfbff") if selected else UI_MUTED_TEXT))
 	button.add_theme_color_override("font_hover_color", UI_TEXT)
-	var background := Color("#17354bf2") if selected else UI_SURFACE_INTERACTIVE
-	var border := Color("#70d9efff") if selected else UI_BORDER_SOFT
+	var background := selected_background if selected else Color("#0b1420f2")
+	var border := accent if selected else UI_BORDER_SOFT
 	button.add_theme_stylebox_override("normal", _make_button_style(background, border, 7, 1))
-	button.add_theme_stylebox_override("hover", _make_button_style(UI_SURFACE_HOVER, Color("#75d9ed"), 7, 1))
-	button.add_theme_stylebox_override("pressed", _make_button_style(UI_SURFACE_PRESSED, Color("#8edfff"), 7, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(selected_background if selected else UI_SURFACE_HOVER, accent, 7, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(UI_SURFACE_PRESSED, accent, 7, 1))
 	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 
 func _on_dev_pokemon_add_button_pressed() -> void:
