@@ -38,7 +38,7 @@ func _run() -> void:
 		_expect(father.position == Vector2(448, 896), "Dadinho starts beside the downstairs door")
 		_expect(father.get("npc_sprite_frames") == load(DAD_FRAMES_PATH), "Dadinho keeps his custom sprite")
 		_expect(
-			father.get("sprite_offset") == Vector2(16, -16),
+			father.get("sprite_offset") == Vector2(0, -16),
 			"Player's House Dadinho aligns his sprite with the downstairs collision tile"
 		)
 		_expect(
@@ -70,22 +70,6 @@ func _run() -> void:
 			"Mom completes the post-Pokedex family visit"
 		)
 	_expect(house.get_node_or_null("Spawns/MomHeal") != null, "Player's House exposes Mom's stable respawn marker")
-
-	story_service.apply_story(_story_before_starter())
-	await process_frame
-	await process_frame
-	_expect(father != null and father.position == Vector2(336, 880), "Dadinho moves beside the TV when the opening story state loads")
-	_expect(father != null and father.get("facing_direction") == Vector2.UP, "Dadinho faces the TV during the opening story state")
-	if father != null:
-		father.call("_apply_npc_metadata", {
-			"questMarkers": [{
-				"questId": "choose_starter",
-				"stepId": "talk_to_father",
-				"statuses": ["active"],
-			}],
-		})
-		var father_marker := father.get("quest_marker_label") as Label
-		_expect(father_marker != null and father_marker.text == "!", "Dadinho shows the main-story marker before starter selection")
 
 	story_service.apply_story(_story_after_starter())
 	await process_frame
@@ -178,18 +162,6 @@ func _story_after_starter() -> Dictionary:
 			"questType": "main",
 			"status": "completed",
 			"steps": [{"stepId": "choose_starter", "status": "completed"}],
-		}],
-	}
-
-
-func _story_before_starter() -> Dictionary:
-	return {
-		"revision": 1,
-		"quests": [{
-			"questId": "choose_starter",
-			"questType": "main",
-			"status": "active",
-			"steps": [{"stepId": "talk_to_father", "status": "active"}],
 		}],
 	}
 

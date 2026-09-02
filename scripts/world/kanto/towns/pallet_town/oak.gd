@@ -59,6 +59,10 @@ func interact_with_player(player: Node2D) -> void:
 		await _turn_in_quest_item(player)
 		is_creating_starter = false
 		return
+	if not StoryService.is_requirement_met("choose_starter", "talk_to_father", "completed"):
+		is_creating_starter = false
+		await show_dialogue([LocalizationManager.text("story.kanto.choose_starter.talk_to_father")])
+		return
 
 	var options_result: Dictionary = await PlayerPartyStateService.get_starter_options()
 	if not bool(options_result.get("success", false)):
