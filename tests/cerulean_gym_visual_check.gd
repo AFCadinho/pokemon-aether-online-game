@@ -26,6 +26,14 @@ func _run() -> void:
 	_check(visual_map.get("height") == 45, "Cerulean Gym preserves the 45-tile visual height")
 	_check(gym.get_node_or_null("PewterGymTemplate/Visuals") == null, "Cerulean Gym removes the Pewter visual")
 	_check(gym.get_node_or_null("PewterGymTemplate/FloorVisibilityMask") == null, "Cerulean Gym removes the Pewter floor mask")
+	var floor_mask := gym.get_node_or_null("FloorVisibilityMask")
+	_check(floor_mask != null, "Cerulean Gym has a floor visibility mask")
+	if floor_mask != null:
+		var floor_regions := floor_mask.get("floor_regions") as Dictionary
+		_check(
+			floor_regions.get(&"ground_floor", Rect2()) == Rect2(0, 0, 960, 1440),
+			"Cerulean Gym mask covers the full imported 30x45-tile canvas"
+		)
 	var collision := gym.find_map_tilemap_layer("Collision") as TileMapLayer
 	_check(collision != null, "Cerulean Gym retains gameplay collision")
 	var spawn := gym.get_node_or_null("Spawns/FromCeruleanCity") as Marker2D
