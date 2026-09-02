@@ -526,8 +526,10 @@ func get_surf_check_result() -> Dictionary:
 	if not bool(GameState.surf_unlocked):
 		result["reason"] = "surf_locked"
 		return result
-	if not _has_party_field_move("surf"):
-		result["reason"] = "no_party_surf"
+	var field_move_result: Dictionary = FieldMoveService.can_use_field_move("surf")
+	if not bool(field_move_result.get("success", false)):
+		result["reason"] = str(field_move_result.get("errorCode", "surf_unavailable"))
+		result["error"] = str(field_move_result.get("error", ""))
 		return result
 
 	result["allowed"] = true
@@ -1667,6 +1669,8 @@ func _try_check_surf_interaction_input() -> bool:
 	_debug_surf_check("interact", surf_check)
 	if bool(surf_check.get("allowed", false)):
 		start_surf()
+	else:
+		_show_surf_unavailable_feedback(surf_check)
 	return true
 
 
@@ -1692,8 +1696,11 @@ func _try_toggle_land_mount_input() -> bool:
 	return true
 
 
-func _has_party_field_move(move_id: String) -> bool:
-	return bool(FieldMoveService.can_use_field_move(move_id).get("success", false))
+func _show_surf_unavailable_feedback(surf_check: Dictionary) -> void:
+	var message := str(surf_check.get("error", "")).strip_edges()
+	if message.is_empty():
+		return
+	GameErrorDialogService.show_message.call_deferred([message])
 
 
 func _show_field_move_system_message(move_id: String) -> void:
