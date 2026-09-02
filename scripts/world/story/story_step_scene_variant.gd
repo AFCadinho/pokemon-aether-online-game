@@ -2,7 +2,7 @@ extends Node
 
 class_name StoryStepSceneVariant
 
-const MATCHING_STEP_STATUSES: Array[String] = ["completed", "skipped"]
+const MATCHING_STEP_STATUSES: Array[String] = ["active", "completed", "skipped"]
 
 @export var quest_id := ""
 @export var step_id := ""
@@ -15,6 +15,9 @@ const MATCHING_STEP_STATUSES: Array[String] = ["completed", "skipped"]
 
 
 func _ready() -> void:
+	var story_service := get_node_or_null("/root/StoryService")
+	if story_service != null and not story_service.story_changed.is_connected(_on_story_changed):
+		story_service.story_changed.connect(_on_story_changed)
 	_apply_story_state.call_deferred()
 
 
@@ -65,3 +68,7 @@ func _matches_story_state() -> bool:
 		):
 			return true
 	return false
+
+
+func _on_story_changed(_revision: int) -> void:
+	_apply_story_state.call_deferred()
