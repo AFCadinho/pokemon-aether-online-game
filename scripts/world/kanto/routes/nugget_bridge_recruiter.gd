@@ -79,7 +79,7 @@ func _run_recruitment_sequence() -> void:
 			["You have real potential. I recruit for Team Rocket. Will you join us?"],
 			"Bridge Attendant"
 		)
-		await _show_catalogue_dialogue(REFUSAL_DIALOGUE_ID, ["No."], "You")
+		await _show_catalogue_dialogue(REFUSAL_DIALOGUE_ID, ["No?"], "You")
 		_reveal_team_rocket()
 	elif not revealed:
 		_reveal_team_rocket()
