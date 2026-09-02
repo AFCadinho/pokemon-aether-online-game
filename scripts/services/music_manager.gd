@@ -56,7 +56,12 @@ func play_trainer_battle_music(track_id: String = "") -> void:
 	var resolved_track_id := track_id.strip_edges()
 	if resolved_track_id == "":
 		resolved_track_id = DEFAULT_TRAINER_BATTLE_MUSIC_ID
-	play_music(get_music_track_path(resolved_track_id))
+	var track_path := get_music_track_path(resolved_track_id)
+	# Optional music packs may not be installed yet. Keep the battle transition
+	# audible by falling back before play_music leaves the overworld track alone.
+	if _load_music_stream(track_path) == null:
+		track_path = get_music_track_path(DEFAULT_TRAINER_BATTLE_MUSIC_ID)
+	play_music(track_path)
 
 
 func play_pvp_battle_music() -> void:
