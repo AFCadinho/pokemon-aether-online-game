@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Team Rocket's recruitment refusal now uses the intended question mark punctuation.
 - The Mt. Moon Future Self rescue now continues safely if your overworld follower is temporarily unavailable after a battle.
 - Surf now explains which badge is missing when its HM and Charm are owned but the field move is still badge-locked.
 - Rock Smash level requirement messages now use whole-number levels.

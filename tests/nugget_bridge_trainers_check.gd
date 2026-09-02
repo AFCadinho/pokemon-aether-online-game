@@ -92,7 +92,7 @@ func _run() -> void:
 		recruiter_source.contains("kanto_route_24_nugget_bridge_big_nugget"),
 		"Recruiter claims the one-time Big Nugget prize"
 	)
-	var refusal_position := recruiter_source.find('REFUSAL_DIALOGUE_ID, ["No."]')
+	var refusal_position := recruiter_source.find('REFUSAL_DIALOGUE_ID, ["No?"]')
 	var reveal_position := recruiter_source.find("_reveal_team_rocket()", refusal_position)
 	var challenge_position := recruiter_source.find("CHALLENGE_DIALOGUE_ID,", reveal_position)
 	var battle_position := recruiter_source.find(
