@@ -2554,7 +2554,7 @@ func _draw_water_splash_visual() -> void:
 		var droplet_state: Dictionary = _get_projectile_state_from_config(droplet_t, water_splash_config)
 		var base: Vector2 = _projectile_battlefield_position(droplet_state.get("position", Vector2.ZERO) as Vector2, water_splash_config)
 		var wave: float = sin(float(frame_index) * 0.42 + float(droplet_index) * 1.7)
-		var offset := Vector2(wave * 8.0, -absf(wave) * 9.0 + float(droplet_index % 3) * 3.0)
+		var offset := Vector2.ZERO if bool(water_splash_config.get("straight_line", false)) else Vector2(wave * 8.0, -absf(wave) * 9.0 + float(droplet_index % 3) * 3.0)
 		var droplet_alpha: float = alpha * (0.72 - float(droplet_index) / float(droplet_count + 2))
 		draw_circle(base + offset, 2.5 + float(droplet_index % 2), _color_with_alpha(foam_color, droplet_alpha))
 
@@ -2643,7 +2643,7 @@ func _draw_dragon_breath_visual() -> void:
 			var ribbon_t := lerpf(trail_start, travel, float(segment_index) / float(segments))
 			var point_state := _get_projectile_state_from_config(ribbon_t, dragon_breath_config)
 			var point := _projectile_battlefield_position(point_state.get("position", source) as Vector2, dragon_breath_config)
-			var offset := normal * sin(phase + ribbon_t * 22.0 + float(ribbon_index) * 2.1) * wave * (0.35 + ribbon_t * 0.65)
+			var offset := Vector2.ZERO if bool(dragon_breath_config.get("straight_line", false)) else normal * sin(phase + ribbon_t * 22.0 + float(ribbon_index) * 2.1) * wave * (0.35 + ribbon_t * 0.65)
 			ribbon_points.append(point + offset)
 		if ribbon_points.size() > 1:
 			draw_polyline(ribbon_points, _color_with_alpha(core_color if ribbon_index == 1 else breath_color, alpha * (0.72 if ribbon_index == 1 else 0.46)), 2.0, true)
@@ -2653,7 +2653,7 @@ func _draw_dragon_breath_visual() -> void:
 		var particle_t := fmod(travel * 0.9 + float(particle_index) / float(particle_count), 1.0)
 		var particle_state := _get_projectile_state_from_config(particle_t, dragon_breath_config)
 		var particle_position := _projectile_battlefield_position(particle_state.get("position", source) as Vector2, dragon_breath_config)
-		var particle_offset := normal * sin(phase * 1.4 + float(particle_index) * 2.7) * (wave * (0.7 + particle_t))
+		var particle_offset := Vector2.ZERO if bool(dragon_breath_config.get("straight_line", false)) else normal * sin(phase * 1.4 + float(particle_index) * 2.7) * (wave * (0.7 + particle_t))
 		draw_circle(particle_position + particle_offset, 1.5 + float(particle_index % 3), _color_with_alpha(core_color, alpha * (0.35 + 0.45 * particle_t)))
 
 	var impact_progress := clampf((progress - travel_end) / maxf(visible_end - travel_end, 0.001), 0.0, 1.0)
@@ -3306,6 +3306,18 @@ func _get_projectile_state_from_config(progress: float, config: Dictionary) -> D
 		return {"position": Vector2.ZERO, "scale": 1.0}
 
 	var first_point: Dictionary = _get_projectile_path_point(path[0])
+	if bool(config.get("straight_line", false)) and path.size() > 1:
+		var last_point := _get_projectile_path_point(path[path.size() - 1])
+		var first_at := float(first_point.get("at", 0.0))
+		var last_at := float(last_point.get("at", 1.0))
+		var line_progress := clampf(progress, first_at, last_at)
+		line_progress = inverse_lerp(first_at, last_at, line_progress)
+		var eased_progress := _ease_projectile_progress(line_progress, str(last_point.get("ease", "linear")))
+		return {
+			"position": (first_point.get("position", Vector2.ZERO) as Vector2).lerp(last_point.get("position", Vector2.ZERO) as Vector2, eased_progress),
+			"scale": lerpf(float(first_point.get("scale", 1.0)), float(last_point.get("scale", 1.0)), line_progress),
+		}
+
 	if path.size() == 1 or progress <= float(first_point.get("at", 0.0)):
 		return {
 			"position": first_point.get("position", Vector2.ZERO),

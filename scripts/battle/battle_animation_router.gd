@@ -1415,6 +1415,17 @@ func _get_effect_target_anchor_in_parent(player_id: String, parent_node: Node, a
 		return Vector2.ZERO
 
 	var target_box: Node = player_sprite_box if player_id == "p1" else enemy_sprite_box
+	if anchor_point == "mouth" and target_box != null and parent_node is CanvasItem and target_box.has_method("get_single_animation_visual_rect_in_node"):
+		var visual_rect_value: Variant = target_box.call("get_single_animation_visual_rect_in_node", parent_node as CanvasItem)
+		if visual_rect_value is Rect2:
+			var visual_rect := visual_rect_value as Rect2
+			# Battle sprites face inward: the player's mouth is on the right and
+			# the opponent's mouth is on the left.
+			var facing_sign := 1.0 if player_id == "p1" else -1.0
+			return Vector2(
+				visual_rect.position.x + visual_rect.size.x * (0.5 + facing_sign * 0.38),
+				visual_rect.position.y + visual_rect.size.y * 0.38
+			)
 	var use_battle_anchor := anchor_point == "feet" or anchor_point == "battle"
 	if use_battle_anchor and target_box != null and parent_node is CanvasItem and target_box.has_method("get_single_battle_anchor_in_node"):
 		var battle_anchor: Variant = target_box.call("get_single_battle_anchor_in_node", parent_node as CanvasItem)
