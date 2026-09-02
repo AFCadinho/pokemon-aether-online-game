@@ -212,7 +212,10 @@ func _check_bike_shop_owner_contract() -> void:
 		and owner_source.contains('mount_item_id := "cyclizar-mount"')
 		and owner_source.contains('license_item_id := "mount-license"')
 		and owner_source.contains('license_region_id := "kanto"')
-		and owner_source.contains("turn_in_npc_quest_item"),
+		and owner_source.contains("turn_in_npc_quest_item")
+		and owner_source.contains('"add_item_reward_notification"')
+		and owner_source.contains("reward_quantity")
+		and owner_source.contains("license_item_id,\n\t\t\t1"),
 		"the owner exchanges the Bike Voucher for Cyclizar and a Kanto Mount License"
 	)
 	_check(

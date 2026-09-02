@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Bike Voucher turn-ins now show reward popups for both the Cyclizar mount and Mount License.
 - Forest Gate attendants can now be reached and spoken to from in front of the counter.
 - Staff can now start a normal map encounter with a selected eligible Pokémon and encounter method.
 
