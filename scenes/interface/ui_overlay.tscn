@@ -825,12 +825,6 @@ theme_override_colors/font_color = Color(0.55, 0.61, 0.69, 1)
 theme_override_font_sizes/font_size = 11
 text = "ui.staff.dev.pokemon.add_subtitle"
 
-[node name="PokemonText" type="TextEdit" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=488137648]
-custom_minimum_size = Vector2(0, 300)
-layout_mode = 2
-size_flags_vertical = 3
-placeholder_text = "ui.staff.dev.pokemon.add_placeholder"
-
 [node name="EncounterModeTabs" type="HBoxContainer" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
@@ -838,11 +832,13 @@ theme_override_constants/separation = 8
 
 [node name="FreeModeButton" type="Button" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer/EncounterModeTabs"]
 layout_mode = 2
+custom_minimum_size = Vector2(0, 40)
 size_flags_horizontal = 3
 text = "Free Pokémon"
 
 [node name="MapModeButton" type="Button" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer/EncounterModeTabs"]
 layout_mode = 2
+custom_minimum_size = Vector2(0, 40)
 size_flags_horizontal = 3
 text = "Map encounter"
 
@@ -863,6 +859,12 @@ text = "Pokémon"
 [node name="EncounterSpecies" type="OptionButton" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
+
+[node name="PokemonText" type="TextEdit" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer" unique_id=488137648]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "ui.staff.dev.pokemon.add_placeholder"
 
 [node name="PreserveDirectBattleForm" type="CheckButton" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
 visible = false
