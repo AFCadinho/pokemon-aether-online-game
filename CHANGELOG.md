@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- PC release mode now stays active after a successful release for faster mass releasing.
+
 ## 0.3.47 - 2026-08-06
 
 **Added**

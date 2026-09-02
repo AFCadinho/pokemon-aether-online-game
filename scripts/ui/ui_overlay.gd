@@ -31068,7 +31068,7 @@ func _release_selected_pc_pokemon() -> void:
 		_refresh_pc_release_controls()
 		return
 
-	_set_pc_release_mode_active(false)
+	_clear_pc_release_selection()
 	_add_chat_message(LocalizationManager.text("ui.storage.release.success"))
 	_refresh_party()
 	await _refresh_pc_state(_pc_search_query() != "")
