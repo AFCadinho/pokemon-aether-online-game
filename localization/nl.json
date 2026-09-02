@@ -2903,7 +2903,7 @@
   "ui.staff.dev.overworld_resets_success": "Alle Rock Smash-stenen zijn opnieuw verschenen.",
   "ui.staff.dev.overworld_resets_failed": "Rock Smash-stenen konden niet opnieuw verschijnen: {error}",
   "ui.staff.dev.clear_data": "Gegevens wissen",
-  "ui.staff.dev.clear_data_description": "Party of inventaris",
+  "ui.staff.dev.clear_data_description": "Party, tas en wereld",
   "ui.staff.dev.world_preview": "WERELDVOORBEELD",
   "ui.staff.dev.time": "Tijd",
   "ui.staff.dev.weather": "Weer",

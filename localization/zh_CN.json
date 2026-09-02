@@ -2900,7 +2900,7 @@
   "ui.staff.dev.overworld_resets_success": "所有岩石粉碎岩石已重新出现。",
   "ui.staff.dev.overworld_resets_failed": "无法重新出现岩石粉碎岩石：{error}",
   "ui.staff.dev.clear_data": "清除数据",
-  "ui.staff.dev.clear_data_description": "聚会或库存",
+  "ui.staff.dev.clear_data_description": "队伍、背包和世界",
   "ui.staff.dev.world_preview": "世界预览",
   "ui.staff.dev.time": "时间",
   "ui.staff.dev.weather": "天气",
