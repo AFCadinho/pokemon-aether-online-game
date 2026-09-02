@@ -38,7 +38,7 @@ func _run() -> void:
 		_expect(father.position == Vector2(448, 896), "Dadinho starts beside the downstairs door")
 		_expect(father.get("npc_sprite_frames") == load(DAD_FRAMES_PATH), "Dadinho keeps his custom sprite")
 		_expect(
-			father.get("sprite_offset") == Vector2(-16, 0),
+			father.get("sprite_offset") == Vector2(16, 0),
 			"Player's House Dadinho aligns his sprite with the downstairs collision tile"
 		)
 		_expect(
