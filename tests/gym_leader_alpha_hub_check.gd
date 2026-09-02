@@ -35,6 +35,7 @@ func _run() -> void:
 	_check(leader_source.contains("_battle_music_track_id"), "Gym Leaders provide dedicated battle music metadata")
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	_check(world_source.contains("MusicManager.play_trainer_battle_music(battle_music_track_id)"), "trainer battles forward their client-selected music track")
+	_check(world_source.contains("TrainerBattleMusicResolverScript.resolve_track_id(battle_trainer_data)"), "trainer battles resolve a fallback music track from trainer metadata")
 	var catalog := JSON.parse_string(FileAccess.get_file_as_string(MUSIC_CATALOG_PATH)) as Dictionary
 	var tracks: Dictionary = catalog.get("tracks", {}) as Dictionary
 	_check(
