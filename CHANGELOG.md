@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer item reward popups now appear after the outro dialogue alongside the received-item sound.
+- Rock Smash rewards now show item popups and play the received-item sound.
 - The temporary side-quest accepting status now uses a neutral color instead of the error red.
 - Cuttable Tree dialogs now show a dedicated Tree mugshot.
 - Route-gate attendants can now be spoken to from two tiles away across all shared gate interiors.

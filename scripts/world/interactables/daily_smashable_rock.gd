@@ -172,6 +172,7 @@ func _show_rewards(result: Dictionary) -> void:
 	var rewards_value: Variant = result.get("rewardItems", [])
 	if rewards_value is not Array:
 		return
+	var item_reward_awarded := false
 	for reward_value: Variant in rewards_value as Array:
 		if reward_value is not Dictionary:
 			continue
@@ -186,3 +187,12 @@ func _show_rewards(result: Dictionary) -> void:
 				"quantity": quantity,
 			})
 		)
+		get_tree().call_group(
+			"ui_overlay",
+			"add_item_reward_notification",
+			item_id,
+			quantity
+		)
+		item_reward_awarded = true
+	if item_reward_awarded:
+		SfxManager.play("item_received")

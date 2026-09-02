@@ -15,6 +15,7 @@ const DADINHO_NPC := "res://scripts/world/kanto/routes/dadinho_training_npc.gd"
 const NUGGET_BRIDGE_NPC := "res://scripts/world/kanto/routes/nugget_bridge_recruiter.gd"
 const BILLS_MACHINE_NPC := "res://scripts/world/kanto/routes/bills_house_machine.gd"
 const ROUTE_25_DATE_NPC := "res://scripts/world/kanto/routes/route_25_misty_date_npc.gd"
+const DAILY_SMASHABLE_ROCK := "res://scripts/world/interactables/daily_smashable_rock.gd"
 const UI_OVERLAY := "res://scripts/ui/ui_overlay.gd"
 const OAK_SCRIPT := "res://scripts/world/kanto/towns/pallet_town/oak.gd"
 const WORLD_SCRIPT := "res://scripts/world/world.gd"
@@ -38,6 +39,7 @@ func _init() -> void:
 	var nugget_bridge_source := FileAccess.get_file_as_string(NUGGET_BRIDGE_NPC)
 	var bills_machine_source := FileAccess.get_file_as_string(BILLS_MACHINE_NPC)
 	var route_25_date_source := FileAccess.get_file_as_string(ROUTE_25_DATE_NPC)
+	var daily_smashable_rock_source := FileAccess.get_file_as_string(DAILY_SMASHABLE_ROCK)
 	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY)
 	var oak_source := FileAccess.get_file_as_string(OAK_SCRIPT)
 	var world_source := FileAccess.get_file_as_string(WORLD_SCRIPT)
@@ -79,6 +81,22 @@ func _init() -> void:
 		"Moomoo Milk shows its System message before the received-item jingle"
 	)
 	_check_received_sound_after(oak_source, "quest_turn_in_completed_dialogue_id", "Oak's Pokedex reward")
+	var trainer_outro_index := world_source.find("await _show_trainer_outro_dialogue")
+	var trainer_popup_index := world_source.find("_notify_story_reward_items(", trainer_outro_index)
+	var trainer_sound_index := world_source.find('SfxManager.play("item_received")', trainer_popup_index)
+	_check(
+		trainer_outro_index >= 0
+		and trainer_popup_index > trainer_outro_index
+		and trainer_sound_index > trainer_popup_index,
+		"trainer item reward popup and sound follow the outro dialogue together"
+	)
+	var rock_popup_index := daily_smashable_rock_source.find('"add_item_reward_notification"')
+	var rock_sound_index := daily_smashable_rock_source.find('SfxManager.play("item_received")')
+	_check(
+		rock_popup_index >= 0
+		and rock_sound_index > rock_popup_index,
+		"Rock Smash rewards show an item popup before the received-item sound"
+	)
 	_check(
 		world_source.contains('InventoryService.apply_inventory_state(reward_result.get("inventory", {}))'),
 		"trainer battle item rewards immediately refresh the local Bag"
@@ -107,8 +125,9 @@ func _init() -> void:
 		"wild Aetherite drops show a localized currency notification"
 	)
 	_check(
-		world_source.contains('"playItemReceivedSfx": item_reward_awarded')
-		and not world_source.contains('"playItemReceivedSfx": bool(gym_badge_award.get("awarded", false))'),
+		world_source.contains('var item_reward_awarded := false')
+		and world_source.contains('item_reward_awarded = _notify_story_reward_items(')
+		and not world_source.contains('"playItemReceivedSfx"'),
 		"trainer reward sound is limited to item rewards"
 	)
 
