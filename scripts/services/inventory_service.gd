@@ -241,6 +241,19 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 	}
 
 
+## Displays the item reward card after the owning NPC has finished its dialogue.
+## The caller remains responsible for the System message and received-item SFX.
+func notify_claimed_item_reward(result: Dictionary) -> bool:
+	if not bool(result.get("success", false)) or not bool(result.get("claimed", false)):
+		return false
+	var item_id := str(result.get("itemId", "")).strip_edges().to_lower()
+	var quantity := maxi(int(result.get("quantity", 1)), 1)
+	if item_id.is_empty():
+		return false
+	item_received.emit(item_id, quantity)
+	return true
+
+
 ## Displays a completed story reward after its dialogue has finished.
 ## Keeping this here makes the inventory event the single source for the item
 ## reward card while the caller controls the dialogue boundary.

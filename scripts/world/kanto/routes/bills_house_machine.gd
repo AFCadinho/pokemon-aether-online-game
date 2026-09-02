@@ -100,6 +100,7 @@ func _present_ticket_reward(reward_result: Dictionary) -> bool:
 			"quantity": quantity,
 		})
 	)
+	InventoryService.notify_claimed_item_reward(reward_result)
 	SfxManager.play("item_received")
 	return true
 

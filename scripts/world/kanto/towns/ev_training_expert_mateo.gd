@@ -137,6 +137,7 @@ func _claim_reward() -> void:
 		LocalizationManager.text("ui.ev_training.mateo.unlocked")
 	)
 	if bool(result.get("claimed", false)):
+		InventoryService.notify_claimed_item_reward(result)
 		SfxManager.play("item_received")
 
 

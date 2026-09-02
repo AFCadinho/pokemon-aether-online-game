@@ -65,8 +65,7 @@ func interact_with_player(_player: Node2D) -> void:
 		await show_dialogue(await _resolve_dialogue_lines(success_dialogue_id, success_dialogue_lines))
 		var inventory_item_id := str(result.get("itemId", "")).strip_edges().to_lower()
 		var inventory_quantity := maxi(int(result.get("quantity", 1)), 1)
-		if inventory_item_id != "":
-			inventory_service.item_received.emit(inventory_item_id, inventory_quantity)
+		InventoryService.notify_claimed_item_reward(result)
 		if inventory_item_id != "" and inventory_item_id not in ["town-map", "old-rod"]:
 			get_tree().call_group(
 				"ui_overlay",
