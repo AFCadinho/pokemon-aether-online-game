@@ -160,7 +160,7 @@ func _claim_quest_reward() -> void:
 		push_warning("MarketAttendantNPC: Oak's Parcel story refresh did not complete locally.")
 	await show_dialogue(await _resolve_dialogue_lines(
 		quest_reward_received_dialogue_id,
-		["You received Oak's Parcel!", "Please deliver it to Professor Oak."]
+		["Please deliver it to Professor Oak."]
 	))
 	if bool(result.get("claimed", false)):
 		SfxManager.play("item_received")

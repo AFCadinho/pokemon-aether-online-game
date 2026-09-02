@@ -11,7 +11,6 @@ extends DialogueNPC
 @export var starter_confirmed_dialogue_lines: Array[String] = [
 	"{pokemon}... So this is the partner Dadinho prepared for you.",
 	"He knew exactly which Pokemon would suit you.",
-	"You received {pokemon}!",
 ]
 @export var starter_received_dialogue_lines: Array[String] = [
 	"Take good care of {pokemon}. Dadinho entrusted that partner to you.",

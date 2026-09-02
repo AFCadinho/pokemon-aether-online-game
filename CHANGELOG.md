@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- NPC item rewards now show their reward popup consistently, including the Town Map, without repeating the receipt in the NPC dialogue.
 - Dadinho’s opening position and overhead quest indicators are aligned correctly, and Professor Oak now waits for the family introduction before offering a starter.
 - Item rewards from Mom, Oak, and Daisy now show their popup, System message, and sound together after the reward dialogue.
 - Re-imported the Aether Clash Lobby visual from the latest Tiled map.
