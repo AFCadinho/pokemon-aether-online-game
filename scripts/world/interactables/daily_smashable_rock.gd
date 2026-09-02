@@ -170,6 +170,7 @@ func _show_rewards(result: Dictionary) -> void:
 			"add_system_message",
 			LocalizationManager.text("ui.rock_smash.money_found", {"amount": money_awarded})
 		)
+		get_tree().call_group("ui_overlay", "add_money_reward_notification", money_awarded)
 	var experience := maxi(int(result.get("experienceAwarded", 0)), 0)
 	get_tree().call_group(
 		"ui_overlay",

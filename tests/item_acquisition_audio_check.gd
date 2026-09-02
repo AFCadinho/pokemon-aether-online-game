@@ -98,6 +98,12 @@ func _init() -> void:
 		"Rock Smash rewards show an item popup before the received-item sound"
 	)
 	_check(
+		daily_smashable_rock_source.contains('"add_money_reward_notification", money_awarded')
+		and daily_smashable_rock_source.contains('var item_reward_awarded := false')
+		and daily_smashable_rock_source.contains('if item_reward_awarded:'),
+		"Rock Smash money rewards show a popup while money-only rewards stay silent"
+	)
+	_check(
 		world_source.contains('InventoryService.apply_inventory_state(reward_result.get("inventory", {}))'),
 		"trainer battle item rewards immediately refresh the local Bag"
 	)
