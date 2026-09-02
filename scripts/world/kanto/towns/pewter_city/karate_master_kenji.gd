@@ -29,7 +29,8 @@ func interact_with_player(player: Node2D) -> void:
 	var quest_status := str(quest.get("status", "")).strip_edges().to_lower()
 	if quest_status == "available":
 		if _is_lesson_offer_unlocked():
-			await _show_available_quest_offer(display_name)
+			if await _show_available_quest_offer(display_name):
+				await interact_with_player(player)
 		else:
 			await show_dialogue()
 		return
