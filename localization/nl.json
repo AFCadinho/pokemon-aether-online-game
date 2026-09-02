@@ -5043,6 +5043,7 @@
   "ui.skill.fishing.unlocked": "Fishing ontgrendeld · Oude Hengel ontvangen",
   "ui.skill.rock_smash.unlocked": "Rock Smash ontgrendeld · HM Rock Smash ontvangen",
   "ui.rock_smash.experience_gained": "Rock Smash +{experience} XP",
+  "ui.rock_smash.money_found": "Je vond ₽{amount}!",
   "ui.rock_smash.item_found": "{quantity}× {item} gevonden!",
   "ui.skills.thieving.name": "Thieving",
   "ui.skills.thieving.description": "Beroof NPC's voor geld en handige items terwijl je je wanted level beheerst.",

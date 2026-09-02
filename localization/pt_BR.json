@@ -5043,6 +5043,7 @@
   "ui.skill.fishing.unlocked": "Pesca desbloqueada · Vara Velha recebida",
   "ui.skill.rock_smash.unlocked": "Rock Smash desbloqueado · HM Rock Smash recebido",
   "ui.rock_smash.experience_gained": "Rock Smash +{experience} XP",
+  "ui.rock_smash.money_found": "Você encontrou ₽{amount}!",
   "ui.rock_smash.item_found": "Encontrou {quantity}× {item}!",
   "ui.skills.thieving.name": "Furto",
   "ui.skills.thieving.description": "Furte dinheiro e itens úteis enquanto controla seu nível de procurado.",

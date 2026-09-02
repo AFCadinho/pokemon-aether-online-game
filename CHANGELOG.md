@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Rock Smash now always grants ₽25 per rock, with regular item drops appearing only as a chance.
 - The staff Trainer Progress window can now restart individual side quests or safely mark them complete and grant any unclaimed rewards.
 - Trainer item reward popups now appear after the outro dialogue alongside the received-item sound.
 - Rock Smash rewards now show item popups and play the received-item sound.

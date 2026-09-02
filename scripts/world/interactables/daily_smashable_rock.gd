@@ -163,6 +163,13 @@ func _sync_player_position() -> Dictionary:
 
 
 func _show_rewards(result: Dictionary) -> void:
+	var money_awarded := maxi(int(result.get("moneyAwarded", 0)), 0)
+	if money_awarded > 0:
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.rock_smash.money_found", {"amount": money_awarded})
+		)
 	var experience := maxi(int(result.get("experienceAwarded", 0)), 0)
 	get_tree().call_group(
 		"ui_overlay",
