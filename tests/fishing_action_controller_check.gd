@@ -240,10 +240,10 @@ func _init() -> void:
 		_function_source(player_source, "_get_surf_fish_rider_offset").contains(
 			"BODY_MOVEMENT_SURF_FISH"
 		)
-		and player_source.contains('"down": Vector2i(0, 18)')
-		and player_source.contains('"left": Vector2i(0, 4)')
-		and player_source.contains('"right": Vector2i(0, 4)')
-		and player_source.contains('"up": Vector2i(0, 10)')
+		and player_source.contains('"down": Vector2i(-2, 18)')
+		and player_source.contains('"left": Vector2i(-20, 4)')
+		and player_source.contains('"right": Vector2i(20, 4)')
+		and player_source.contains('"up": Vector2i(-2, 10)')
 		and _function_source(player_source, "_get_activity_visual_offset").contains(
 			"return Vector2.ZERO"
 		)
@@ -251,7 +251,9 @@ func _init() -> void:
 		and remote_player_source.contains("func _get_surf_fish_rider_offset")
 		and remote_player_source.contains("_get_surf_fish_rider_offset_adjustments()")
 		and mount_service_source.contains("rider_offset_adjustments: Dictionary = {}")
-		and mount_service_source.contains("_get_rider_offset_adjustment"),
+		and mount_service_source.contains("hidden_regions: Dictionary = {}")
+		and mount_service_source.contains("_get_rider_offset_adjustment")
+		and mount_service_source.contains("_clear_hidden_region"),
 		"Surf fishing aligns and masks existing fishing frames to the saddle locally and remotely"
 	)
 	_check(
@@ -262,21 +264,39 @@ func _init() -> void:
 		"normal land fishing retains its existing visual offsets"
 	)
 	var surf_fish_offsets := {
-		"down": Vector2i(0, 18),
-		"left": Vector2i(0, 4),
-		"right": Vector2i(0, 4),
-		"up": Vector2i(0, 10),
+		"down": Vector2i(-2, 18),
+		"left": Vector2i(-20, 4),
+		"right": Vector2i(20, 4),
+		"up": Vector2i(-2, 10),
+	}
+	var surf_fish_hidden_regions := {
+		"down": Rect2i(30, 48, 4, 16),
 	}
 	var masked_surf_fish_frames := MountServiceScript.get_mounted_rider_frames(
 		combined_body_frames,
 		"lapras",
-		surf_fish_offsets
+		surf_fish_offsets,
+		surf_fish_hidden_regions
 	)
-	var unmasked_surf_fish_image := combined_body_frames.get_frame_texture("idle_left", 0).get_image()
-	var masked_surf_fish_image := masked_surf_fish_frames.get_frame_texture("idle_left", 0).get_image()
+	var masked_surf_fish_image := masked_surf_fish_frames.get_frame_texture("idle_down", 0).get_image()
 	_check(
-		_opaque_pixel_count(masked_surf_fish_image) < _opaque_pixel_count(unmasked_surf_fish_image),
-		"Lapras's existing rider mask hides the lower side-facing Surf-fishing body pixels"
+		_opaque_pixel_count_in_region(masked_surf_fish_image, Rect2i(30, 48, 4, 16)) == 0,
+		"the down-facing Surf-fishing rod does not reappear beneath Lapras"
+	)
+	_check(
+		_function_source(player_source, "_sync_mount_visual").contains(
+			"BODY_MOVEMENT_SURF_FISH"
+		)
+		and _function_source(player_source, "_sync_mount_visual").contains(
+			"var foreground_frames := mount_frames"
+		)
+		and _function_source(player_source, "set_activity_style").contains(
+			"_sync_mount_visual()"
+		)
+		and _function_source(remote_player_source, "_sync_mount_visual").contains(
+			"var foreground_frames := mount_frames"
+		),
+		"Surf fishing sandwiches the complete rider behind the mount locally and remotely"
 	)
 	_check(
 		controller_source.contains('button.add_theme_constant_override("icon_max_width", 32)')
@@ -338,12 +358,13 @@ func _frame_atlas_path(frames: SpriteFrames) -> String:
 	return texture.atlas.resource_path
 
 
-func _opaque_pixel_count(image: Image) -> int:
+func _opaque_pixel_count_in_region(image: Image, region: Rect2i) -> int:
 	if image == null:
 		return 0
+	var clipped_region := region.intersection(Rect2i(Vector2i.ZERO, image.get_size()))
 	var count := 0
-	for y: int in range(image.get_height()):
-		for x: int in range(image.get_width()):
+	for y: int in range(clipped_region.position.y, clipped_region.end.y):
+		for x: int in range(clipped_region.position.x, clipped_region.end.x):
 			if image.get_pixel(x, y).a > 0.001:
 				count += 1
 	return count

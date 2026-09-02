@@ -166,10 +166,13 @@ const ACTIVITY_VISUAL_OFFSETS := {
 # seated rider. These values align the existing fishing art with the saddle
 # without changing the normal land-fishing pose.
 const SURF_FISH_RIDER_OFFSETS := {
-	"down": Vector2i(0, 18),
-	"left": Vector2i(0, 4),
-	"right": Vector2i(0, 4),
-	"up": Vector2i(0, 10),
+	"down": Vector2i(-2, 18),
+	"left": Vector2i(-20, 4),
+	"right": Vector2i(20, 4),
+	"up": Vector2i(-2, 10),
+}
+const SURF_FISH_BODY_HIDDEN_REGIONS := {
+	"down": Rect2i(30, 48, 4, 16),
 }
 const WATER_TILEMAP_NAMES: Array[String] = ["Water"]
 const TALL_GRASS_VISUAL_TILEMAP_NAMES: Array[String] = ["TallGrassVisual", "Grass"]
@@ -316,6 +319,7 @@ func set_activity_style(style: String) -> void:
 		return
 
 	activity_style = normalized_style
+	_sync_mount_visual()
 	body_sprite_frames_movement_style = ""
 	_sync_body_sprite_frames_for_movement()
 	_sync_appearance_animation_speeds()
@@ -358,7 +362,10 @@ func _sync_mount_visual() -> void:
 	mount_sprite.sprite_frames = mount_frames
 	mount_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
 	mount_sprite.visible = true
-	var foreground_frames := MountService.get_mount_foreground_frames(normalized_mount_id)
+	var foreground_frames := mount_frames \
+		if CharacterAppearanceService.normalize_movement_style(activity_style) \
+		== CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH \
+		else MountService.get_mount_foreground_frames(normalized_mount_id)
 	mount_foreground_sprite.sprite_frames = foreground_frames
 	mount_foreground_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
 	mount_foreground_sprite.visible = foreground_frames != null
@@ -424,6 +431,13 @@ func _get_surf_fish_rider_offset_adjustments() -> Dictionary:
 		!= CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
 		return {}
 	return SURF_FISH_RIDER_OFFSETS
+
+
+func _get_surf_fish_body_hidden_regions() -> Dictionary:
+	if CharacterAppearanceService.normalize_movement_style(activity_style) \
+		!= CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
+		return {}
+	return SURF_FISH_BODY_HIDDEN_REGIONS
 
 func is_fishing_activity_active() -> bool:
 	return fishing_activity_active
@@ -2747,7 +2761,8 @@ func _apply_body_appearance(body_id: String) -> void:
 	body_frames = MountService.get_mounted_rider_frames(
 		body_frames,
 		active_mount_id,
-		_get_surf_fish_rider_offset_adjustments()
+		_get_surf_fish_rider_offset_adjustments(),
+		_get_surf_fish_body_hidden_regions()
 	)
 
 	body_sprite.sprite_frames = body_frames
@@ -2780,7 +2795,8 @@ func _sync_body_sprite_frames_for_movement() -> void:
 	body_frames = MountService.get_mounted_rider_frames(
 		body_frames,
 		active_mount_id,
-		_get_surf_fish_rider_offset_adjustments()
+		_get_surf_fish_rider_offset_adjustments(),
+		_get_surf_fish_body_hidden_regions()
 	)
 
 	body_sprite.sprite_frames = body_frames
