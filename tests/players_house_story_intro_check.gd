@@ -17,6 +17,7 @@ func _init() -> void:
 func _run() -> void:
 	var story_service := get_root().get_node("StoryService")
 	story_service.reset_story()
+	story_service.apply_story(_story_opening())
 	var house_scene := load(HOUSE_PATH) as PackedScene
 	var route_scene := load(ROUTE_1_PATH) as PackedScene
 	_expect(house_scene != null, "Player's House scene loads")
@@ -46,13 +47,35 @@ func _run() -> void:
 		_expect(
 			father_nameplate != null
 			and father_sprite != null
-			and is_equal_approx(father_nameplate.global_position.x, father_sprite.global_position.x),
+			and is_equal_approx(
+				father_nameplate.global_position.x + father_nameplate.size.x * 0.5,
+				father_sprite.global_position.x
+			),
 			"Dadinho's nameplate follows his opening sprite offset"
 		)
 		_expect(
 			str(father.get("visibility_hidden_quest_id")) == "choose_starter"
 			and str(father.get("visibility_hidden_quest_step_id")) == "choose_starter",
 			"Dadinho leaves when the player receives a starter"
+		)
+		father.call("_apply_npc_metadata", {
+			"questMarkers": [{
+				"questId": "choose_starter",
+				"stepId": "talk_to_father",
+				"statuses": ["active"],
+			}],
+		})
+		father.call("_refresh_quest_marker")
+		await process_frame
+		var father_quest_marker := father.get("quest_marker") as Control
+		_expect(
+			father_quest_marker != null
+			and father_quest_marker.visible
+			and is_equal_approx(
+				father_quest_marker.global_position.x + father_quest_marker.size.x * 0.5,
+				father_sprite.global_position.x
+			),
+			"Dadinho's opening quest marker is centered over his sprite"
 		)
 	if mom != null:
 		_expect(
@@ -78,6 +101,31 @@ func _run() -> void:
 			"Mom completes the post-Pokedex family visit"
 		)
 	_expect(house.get_node_or_null("Spawns/MomHeal") != null, "Player's House exposes Mom's stable respawn marker")
+
+	story_service.apply_story(_story_after_father_intro())
+	var tv_house := house_scene.instantiate()
+	get_root().add_child(tv_house)
+	await process_frame
+	await process_frame
+	var tv_father := tv_house.get_node_or_null("Entities/NPCs/Father") as Node2D
+	if tv_father != null:
+		var tv_nameplate := tv_father.get("nameplate") as Control
+		var tv_sprite := tv_father.get_node_or_null("Look/AnimatedSprite2D") as AnimatedSprite2D
+		_expect(tv_father.position == Vector2(336, 880), "Dadinho moves in front of the TV after the opening talk")
+		_expect(tv_father.get("sprite_offset") == Vector2(0, -16), "Dadinho uses his TV sprite offset")
+		_expect(
+			tv_nameplate != null
+			and tv_sprite != null
+			and is_equal_approx(
+				tv_nameplate.global_position.x + tv_nameplate.size.x * 0.5,
+				tv_sprite.global_position.x
+			),
+			"Dadinho's nameplate remains centered over his TV sprite"
+		)
+	else:
+		_expect(false, "Dadinho is present in the TV story variant")
+	tv_house.queue_free()
+	await process_frame
 
 	story_service.apply_story(_story_after_starter())
 	await process_frame
@@ -170,6 +218,33 @@ func _story_after_starter() -> Dictionary:
 			"questType": "main",
 			"status": "completed",
 			"steps": [{"stepId": "choose_starter", "status": "completed"}],
+		}],
+	}
+
+
+func _story_opening() -> Dictionary:
+	return {
+		"revision": 1,
+		"quests": [{
+			"questId": "choose_starter",
+			"questType": "main",
+			"status": "active",
+			"steps": [{"stepId": "talk_to_father", "status": "active"}],
+		}],
+	}
+
+
+func _story_after_father_intro() -> Dictionary:
+	return {
+		"revision": 2,
+		"quests": [{
+			"questId": "choose_starter",
+			"questType": "main",
+			"status": "active",
+			"steps": [
+				{"stepId": "talk_to_father", "status": "completed"},
+				{"stepId": "choose_starter", "status": "active"},
+			],
 		}],
 	}
 

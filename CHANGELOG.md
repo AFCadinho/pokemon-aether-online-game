@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Dadinho’s opening position is aligned to the 32-pixel grid, and Professor Oak now waits for the family introduction before offering a starter.
+- Dadinho’s opening position and overhead quest indicators are aligned correctly, and Professor Oak now waits for the family introduction before offering a starter.
 - Item rewards from Mom, Oak, and Daisy now show their popup, System message, and sound together after the reward dialogue.
 - Re-imported the Aether Clash Lobby visual from the latest Tiled map.
 - The Training Room now lets players choose AI4 with AI5 watching or active AI5, plus a team archetype, a random matching sample team, or a specific competitive team.

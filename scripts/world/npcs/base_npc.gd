@@ -243,8 +243,7 @@ func set_story_sprite_offset(value: Vector2) -> void:
 	sprite_offset = value
 	if sprite != null:
 		sprite.position = value
-	if nameplate != null:
-		nameplate.position.x = value.x
+	_sync_overhead_ui_positions()
 
 
 func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
@@ -489,12 +488,8 @@ func _setup_nameplate() -> void:
 	nameplate.z_as_relative = false
 	nameplate.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
 	nameplate.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	nameplate.position.x = sprite_offset.x
-	nameplate.offset_left = -82.0
-	nameplate.offset_top = NAMEPLATE_OFFSET_TOP
-	nameplate.offset_right = 82.0
-	nameplate.offset_bottom = -56.0
 	add_child(nameplate)
+	_sync_overhead_ui_positions()
 
 	nameplate_background = Panel.new()
 	nameplate_background.name = "NameplateBackground"
@@ -528,9 +523,9 @@ func _setup_quest_marker() -> void:
 	quest_marker.visible = false
 	quest_marker.z_index = 513
 	quest_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	quest_marker.position = Vector2(-15.0, -116.0)
 	quest_marker.custom_minimum_size = Vector2(30.0, 30.0)
 	add_child(quest_marker)
+	_sync_overhead_ui_positions()
 
 	quest_marker_label = Label.new()
 	quest_marker_label.name = "Icon"
@@ -623,7 +618,7 @@ func _quest_marker_style(border_color: Color) -> StyleBoxFlat:
 func _sync_nameplate() -> void:
 	if nameplate == null or nameplate_label == null:
 		return
-	nameplate.position.x = sprite_offset.x
+	_sync_overhead_ui_positions()
 
 	var name_text := display_name.strip_edges()
 	nameplate_label.text = name_text
@@ -645,6 +640,20 @@ func _sync_nameplate() -> void:
 		nameplate_background.offset_right = nameplate_label.offset_right + NAMEPLATE_HORIZONTAL_PADDING
 		nameplate_background.offset_top = card_top
 		nameplate_background.offset_bottom = NAMEPLATE_CARD_BOTTOM
+
+
+func _sync_overhead_ui_positions() -> void:
+	var horizontal_offset := sprite_offset.x
+	if nameplate != null:
+		nameplate.offset_left = -82.0 + horizontal_offset
+		nameplate.offset_top = NAMEPLATE_OFFSET_TOP
+		nameplate.offset_right = 82.0 + horizontal_offset
+		nameplate.offset_bottom = -56.0
+	if quest_marker != null:
+		quest_marker.position = Vector2(
+			horizontal_offset - 15.0,
+			-116.0
+		)
 
 
 func _make_nameplate_background_style() -> StyleBoxFlat:
