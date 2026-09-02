@@ -938,6 +938,24 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	await _save_current_player_position_if_changed(true, target_spawn_name)
 	_publish_world_presence(true)
 	await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+
+
+func reload_current_map_preserving_player_position() -> bool:
+	"""Recreate map-owned daily interactables after a developer state reset."""
+	if is_loading_map or player == null or GameState.current_map == null:
+		return false
+	var scene_path := _get_map_scene_path(GameState.current_map)
+	if scene_path.is_empty() or not ResourceLoader.exists(scene_path):
+		return false
+	var player_position := player.global_position
+	var facing_value: Variant = player.get("last_direction")
+	var facing := facing_value as Vector2 if facing_value is Vector2 else Vector2.DOWN
+	await load_map(scene_path, "")
+	if player == null or not is_instance_valid(player):
+		return false
+	player.teleport_within_current_map(player_position, facing)
+	await _save_current_player_position_if_changed(true, "")
+	return true
 	is_loading_map = false
 	GameState.unlock_overworld_input()
 
