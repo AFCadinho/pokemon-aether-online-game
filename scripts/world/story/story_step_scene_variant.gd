@@ -32,6 +32,8 @@ func _apply_story_state() -> void:
 	target.global_position = position_marker.global_position
 	if override_sprite_offset and target.has_method("set_story_sprite_offset"):
 		target.call("set_story_sprite_offset", sprite_offset_override)
+	if target.has_method("_sync_nameplate"):
+		target.call("_sync_nameplate")
 	if target.has_method("face_world_position"):
 		target.call("face_world_position", facing_marker.global_position)
 	if target.has_method("_update_sort_z"):
