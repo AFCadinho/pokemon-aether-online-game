@@ -61,6 +61,9 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var sprite_offset := Vector2(0, -16)
 ## Optional catalog id. Empty values use the central NPC assignment table.
 @export var portrait_id := ""
+## Optional static battle-art catalog id. Empty values reuse the resolved
+## Showdown portrait assignment; unavailable entries retain overworld fallback.
+@export var battle_sprite_id := ""
 @export var mugshot: Texture2D
 @export var dialogue_portrait_visible := true
 @export_group("Battle")
@@ -183,6 +186,8 @@ func _apply_npc_profile() -> void:
 		npc_sprite_frames = npc_profile.sprite_frames
 	if not npc_profile.portrait_id.strip_edges().is_empty():
 		portrait_id = npc_profile.portrait_id
+	if not npc_profile.battle_sprite_id.strip_edges().is_empty():
+		battle_sprite_id = npc_profile.battle_sprite_id
 	if npc_profile.mugshot != null:
 		mugshot = npc_profile.mugshot
 
@@ -258,12 +263,30 @@ func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
 		# staging can select the inward-facing idle pose from atlas-only NPCs.
 		battle_metadata["_battle_sprite_frames"] = _get_directional_sprite_frames(npc_sprite_frames)
 		battle_metadata["_battle_sprite_offset"] = sprite_offset
+	var resolved_battle_sprite_id := _resolve_battle_sprite_id()
+	if not resolved_battle_sprite_id.is_empty():
+		battle_metadata["_battle_sprite_id"] = resolved_battle_sprite_id
 	if mugshot != null:
 		battle_metadata["_battle_mugshot"] = mugshot
 	var normalized_environment_id := battle_environment_id.strip_edges()
 	if normalized_environment_id != "" and normalized_environment_id != "inherit":
 		battle_metadata["battleEnvironmentId"] = normalized_environment_id
 	return battle_metadata
+
+
+func _resolve_battle_sprite_id() -> String:
+	if not is_inside_tree():
+		return ""
+	var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
+	if catalog == null or not catalog.has_method("resolve_battle_sprite_id"):
+		return ""
+	return str(catalog.call(
+		"resolve_battle_sprite_id",
+		battle_sprite_id,
+		portrait_id,
+		npc_id,
+		npc_definition_id
+	))
 
 
 func is_story_requirement_met() -> bool:

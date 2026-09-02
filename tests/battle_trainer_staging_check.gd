@@ -9,6 +9,7 @@ const BATTLE_ANIMATION_ROUTER_PATH := "res://scripts/battle/battle_animation_rou
 const BattleTrainerScene := preload("res://scenes/battle/battle_trainer_sprite.tscn")
 const BattleRenderLayers := preload("res://scripts/battle/battle_render_layers.gd")
 const NPC_FRAMES := preload("res://assets/npcs/generic_npc_fallback_frames.tres")
+const PortraitCatalogScript := preload("res://scripts/services/trainer_portrait_catalog.gd")
 
 var failed := false
 
@@ -21,7 +22,7 @@ func _run_checks() -> void:
 	_check_scene_staging()
 	_check_battle_setup_contract()
 	_check_npc_metadata_contract()
-	_check_runtime_renderer()
+	await _check_runtime_renderer()
 	quit(1 if failed else 0)
 
 
@@ -106,22 +107,39 @@ func _check_npc_metadata_contract() -> void:
 	var boss_source := FileAccess.get_file_as_string(BOSS_NPC_SCRIPT_PATH)
 	_check(base_source.contains("func build_battle_trainer_metadata"), "BaseNPC owns visual-only battle metadata")
 	_check(base_source.contains('battle_metadata["_battle_sprite_frames"] = _get_directional_sprite_frames(npc_sprite_frames)'), "NPC battle metadata reuses directional overworld frames")
+	_check(base_source.contains('battle_metadata["_battle_sprite_id"] = resolved_battle_sprite_id'), "NPC metadata includes a resolved catalog battle sprite")
+	_check(base_source.contains("func _resolve_battle_sprite_id()"), "NPCs resolve battle art independently from overworld frames")
 	_check(base_source.contains('battle_metadata["_battle_mugshot"] = mugshot'), "NPC battle metadata preserves its local portrait for battle outros")
 	_check(trainer_source.contains("build_battle_trainer_metadata(trainer_metadata)"), "regular trainers pass their placed overworld sprite")
 	_check(boss_source.contains("build_battle_trainer_metadata(trainer_metadata)"), "boss trainers pass their placed overworld sprite")
 
 
 func _check_runtime_renderer() -> void:
-	var npc: Object = (load(BASE_NPC_SCRIPT_PATH) as Script).new()
+	var catalog := PortraitCatalogScript.new()
+	root.add_child(catalog)
+	var npc := _create_base_npc_harness()
 	npc.set("npc_sprite_frames", NPC_FRAMES)
+	npc.set("npc_id", "kanto_alpha_gym_brock")
+	root.add_child(npc)
+	await process_frame
 	var battle_metadata: Dictionary = npc.call("build_battle_trainer_metadata", {})
 	var battle_frames := battle_metadata.get("_battle_sprite_frames") as SpriteFrames
+	var battle_sprite_id := catalog.resolve_battle_sprite_id(
+		"",
+		"",
+		"kanto_alpha_gym_brock",
+		""
+	)
 
 	var renderer := BattleTrainerScene.instantiate() as BattleTrainerSprite
 	root.add_child(renderer)
 	_check(
-		renderer.z_index > BattleRenderLayers.MOVE_FOREGROUND,
-		"trainer identities render above foreground move overlays"
+		renderer.z_index < BattleRenderLayers.FIELD,
+		"trainer figures render behind active Pokemon"
+	)
+	_check(
+		renderer.command_callout.z_index > BattleRenderLayers.MOVE_FOREGROUND,
+		"trainer command callouts remain above foreground move overlays"
 	)
 	renderer.show_npc(battle_frames, Vector2.LEFT)
 	_check(renderer.visible, "NPC renderer becomes visible with valid frames")
@@ -136,6 +154,21 @@ func _check_runtime_renderer() -> void:
 	_check(command_callout.size.x <= 214.0, "trainer command callout stays compact")
 	_check(command_callout.position.y <= -150.0, "trainer command callout stays above the trainer sprite")
 	_check(renderer.npc_sprite.z_as_relative, "NPC trainer art inherits the protected trainer render band")
+	_check(battle_sprite_id == "showdown_brock_lgpe", "NPC uses its existing Showdown assignment for battle art")
+	_check(
+		str(battle_metadata.get("_battle_sprite_id", "")) == battle_sprite_id,
+		"NPC battle metadata resolves the assigned Showdown art locally"
+	)
+	var catalog_texture := catalog.get_texture(battle_sprite_id)
+	renderer.show_catalog_sprite(catalog_texture, Vector2.LEFT)
+	_check(renderer.visible, "catalog trainer renderer becomes visible with a valid texture")
+	_check(renderer.catalog_sprite.visible, "catalog trainer art is visible")
+	_check(not renderer.npc_sprite.visible, "catalog trainer art replaces the overworld-frame renderer")
+	_check(renderer.catalog_sprite.texture == catalog_texture, "catalog trainer art keeps the assigned Showdown texture")
+	_check(
+		renderer.catalog_sprite.position == Vector2(0.0, -32.0),
+		"catalog trainer art aligns its feet with legacy overworld trainer staging"
+	)
 
 	renderer.show_player({
 		"gender": "male",
@@ -154,6 +187,7 @@ func _check_runtime_renderer() -> void:
 	_check(not command_callout.visible, "clearing a trainer also clears its command callout")
 	renderer.free()
 	npc.free()
+	catalog.free()
 
 	var default_image := _render_player_trainer_skin("#f8d0b8")
 	var deep_image := _render_player_trainer_skin("#3f271f")
@@ -162,6 +196,23 @@ func _check_runtime_renderer() -> void:
 		changed_skin_pixels > 12,
 		"inward-facing battle trainers render their selected skin tone"
 	)
+
+
+func _create_base_npc_harness() -> Node2D:
+	var npc := (load(BASE_NPC_SCRIPT_PATH) as Script).new() as Node2D
+	var look := Node2D.new()
+	look.name = "Look"
+	var sprite := AnimatedSprite2D.new()
+	sprite.name = "AnimatedSprite2D"
+	look.add_child(sprite)
+	npc.add_child(look)
+	var feet_marker := Marker2D.new()
+	feet_marker.name = "FeetMarker"
+	npc.add_child(feet_marker)
+	var interaction_area := Area2D.new()
+	interaction_area.name = "InteractionArea"
+	npc.add_child(interaction_area)
+	return npc
 
 
 func _render_player_trainer_skin(skin_tone: String) -> Image:

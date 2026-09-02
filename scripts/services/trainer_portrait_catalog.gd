@@ -29,6 +29,28 @@ func resolve_portrait_id(
 	return str(_definition_id_assignments.get(normalized_definition_id, ""))
 
 
+## Battle art shares the local Showdown files with dialogue portraits, but its
+## identity remains separately configurable. An explicit battle choice wins;
+## otherwise the established NPC/profile portrait assignment is reused.
+func resolve_battle_sprite_id(
+		explicit_battle_sprite_id: String,
+		portrait_id: String,
+		npc_id: String,
+		npc_definition_id: String
+) -> String:
+	_ensure_loaded()
+	var explicit_id := explicit_battle_sprite_id.strip_edges()
+	if not explicit_id.is_empty():
+		return explicit_id if _entries_by_id.has(explicit_id) else ""
+
+	var portrait_candidate := portrait_id.strip_edges()
+	if _entries_by_id.has(portrait_candidate):
+		return portrait_candidate
+
+	var assigned_id := resolve_portrait_id("", npc_id, npc_definition_id)
+	return assigned_id if _entries_by_id.has(assigned_id) else ""
+
+
 func get_texture(portrait_id: String) -> Texture2D:
 	_ensure_loaded()
 	var normalized_id := portrait_id.strip_edges()

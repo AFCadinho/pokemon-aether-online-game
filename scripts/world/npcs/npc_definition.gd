@@ -14,4 +14,6 @@ class_name NpcDefinition
 @export var sprite_frames: SpriteFrames
 ## Optional catalog id. Empty values use the central NPC assignment table.
 @export var portrait_id := ""
+## Optional battle-art catalog id. Empty values reuse the portrait assignment.
+@export var battle_sprite_id := ""
 @export var mugshot: Texture2D

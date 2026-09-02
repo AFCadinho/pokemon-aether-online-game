@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer battles now show their matching Pokémon Showdown trainer art behind NPC Pokémon, while unassigned NPCs retain their existing overworld appearance.
+
 - Developers can now use the Overworld Resets tool to respawn every Rock Smash rock without restarting their game.
 
 - Rock Smash rocks now use vivid, level-specific colours and a matching outline so their required tiers are clear in the overworld.
