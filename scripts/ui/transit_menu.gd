@@ -194,6 +194,9 @@ func _show_region(index: int) -> void:
 	var safe_index := clampi(index, 0, _region_ids.size() - 1)
 	var region_id := _region_ids[safe_index]
 	_build_region_heading(_destination_stack, region_id)
+	var current_destination := _find_current_destination()
+	if not current_destination.is_empty():
+		_destination_stack.add_child(_current_location_card(current_destination))
 	var destinations := _destinations_by_region.get(region_id, []) as Array
 	var available: Array[Dictionary] = []
 	var locked: Array[Dictionary] = []
@@ -201,6 +204,8 @@ func _show_region(index: int) -> void:
 		if not value is Dictionary:
 			continue
 		var destination := value as Dictionary
+		if _is_current_destination(destination):
+			continue
 		if bool(destination.get("attuned", false)) or bool(destination.get("isAnchor", false)):
 			available.append(destination)
 		else:
@@ -232,6 +237,40 @@ func _show_region(index: int) -> void:
 	_select_default_destination()
 
 
+func _current_location_card(destination: Dictionary) -> PanelContainer:
+	var card := PanelContainer.new()
+	card.name = "CurrentLocation"
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.custom_minimum_size.y = 54
+	card.add_theme_stylebox_override("panel", _style(Color("14291f"), Color("39704f"), 1, 10))
+	var margin := MarginContainer.new()
+	_set_margins(margin, 14, 14, 8, 8)
+	card.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	margin.add_child(row)
+	var marker := Label.new()
+	marker.text = "◆"
+	marker.add_theme_font_size_override("font_size", 20)
+	marker.add_theme_color_override("font_color", COLOR_SUCCESS)
+	row.add_child(marker)
+	var details := VBoxContainer.new()
+	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_child(details)
+	var status := Label.new()
+	status.text = _t("ui.transit.status.current")
+	status.add_theme_font_size_override("font_size", 10)
+	status.add_theme_color_override("font_color", COLOR_SUCCESS)
+	details.add_child(status)
+	var name_label := Label.new()
+	name_label.text = str(destination.get("name", destination.get("destinationId", "")))
+	name_label.add_theme_font_size_override("font_size", 16)
+	name_label.add_theme_color_override("font_color", COLOR_TEXT)
+	details.add_child(name_label)
+	return card
+
+
 func _build_region_heading(parent: VBoxContainer, region_id: String) -> void:
 	var row := HBoxContainer.new()
 	row.name = "RegionHeading"
@@ -253,7 +292,11 @@ func _build_region_heading(parent: VBoxContainer, region_id: String) -> void:
 
 
 func _build_global_hub_section(parent: VBoxContainer) -> void:
-	if _global_hubs.is_empty():
+	var available_hubs: Array[Dictionary] = []
+	for destination: Dictionary in _global_hubs:
+		if not _is_current_destination(destination):
+			available_hubs.append(destination)
+	if available_hubs.is_empty():
 		return
 	var separator := HSeparator.new()
 	separator.add_theme_constant_override("separation", 4)
@@ -273,8 +316,23 @@ func _build_global_hub_section(parent: VBoxContainer) -> void:
 	global_badge.add_theme_color_override("font_color", COLOR_HUB_ACCENT)
 	global_badge.add_theme_stylebox_override("normal", _style(Color("152d45"), Color("4aa6bd"), 1, 7))
 	heading_row.add_child(global_badge)
-	for destination: Dictionary in _global_hubs:
+	for destination: Dictionary in available_hubs:
 		parent.add_child(_global_hub_card(destination))
+
+
+func _find_current_destination() -> Dictionary:
+	for region_id: String in _region_ids:
+		for destination: Dictionary in _destinations_by_region.get(region_id, []):
+			if _is_current_destination(destination):
+				return destination
+	for destination: Dictionary in _global_hubs:
+		if _is_current_destination(destination):
+			return destination
+	return {}
+
+
+func _is_current_destination(destination: Dictionary) -> bool:
+	return str(destination.get("destinationId", "")) == str(_network.get("sourceMapId", ""))
 
 
 func _available_destination_card(destination: Dictionary) -> Button:
