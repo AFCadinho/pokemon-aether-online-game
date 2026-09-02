@@ -599,8 +599,12 @@ var donator_store_popup: DonatorStorePopup
 @onready var dev_pokemon_title: Label = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/Title
 @onready var dev_pokemon_subtitle: Label = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/Subtitle
 @onready var dev_pokemon_text: TextEdit = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/PokemonText
-@onready var dev_encounter_mode: OptionButton = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/EncounterMode
+@onready var dev_encounter_mode_tabs: HBoxContainer = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/EncounterModeTabs
+@onready var dev_encounter_free_mode_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/EncounterModeTabs/FreeModeButton
+@onready var dev_encounter_map_mode_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/EncounterModeTabs/MapModeButton
+@onready var dev_encounter_method_label: Label = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/EncounterMethodLabel
 @onready var dev_encounter_method: OptionButton = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/EncounterMethod
+@onready var dev_encounter_species_label: Label = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/EncounterSpeciesLabel
 @onready var dev_encounter_species: OptionButton = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/EncounterSpecies
 @onready var dev_preserve_direct_form: CheckButton = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/PreserveDirectBattleForm
 @onready var dev_test_purpose: LineEdit = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/TestPurpose
@@ -723,6 +727,7 @@ var hotbar_next_page_button: Button
 var hotbar_page_label: Label
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var dev_encounter_metadata: Dictionary = {}
+var dev_map_encounter_mode := false
 var collapsible_panels: Dictionary = {}
 var chat_resize_button: Button
 var chat_input_dock: PanelContainer
@@ -1699,7 +1704,8 @@ func _ready() -> void:
 	dev_pokemon_button.disabled = true
 	dev_pokemon_add_button.pressed.connect(_on_dev_pokemon_add_button_pressed)
 	dev_pokemon_close_button.pressed.connect(_on_dev_pokemon_close_button_pressed)
-	dev_encounter_mode.item_selected.connect(_on_dev_encounter_mode_selected)
+	dev_encounter_free_mode_button.pressed.connect(_on_dev_encounter_free_mode_pressed)
+	dev_encounter_map_mode_button.pressed.connect(_on_dev_encounter_map_mode_pressed)
 	dev_encounter_method.item_selected.connect(_on_dev_encounter_method_selected)
 	dev_preserve_direct_form.toggled.connect(_on_dev_preserve_direct_form_toggled)
 	_setup_icon_slot_hover(aether_exchange_slot, aether_exchange_button)
@@ -28261,6 +28267,12 @@ func _apply_premium_overlay_styles() -> void:
 	_apply_line_edit_style(chat_input)
 	_apply_line_edit_style(dev_test_purpose)
 	_apply_text_edit_style(dev_pokemon_text)
+	_apply_developer_dropdown_style(dev_encounter_method)
+	_apply_developer_dropdown_style(dev_encounter_species)
+	dev_encounter_method_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	dev_encounter_species_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	dev_encounter_method_label.add_theme_font_size_override("font_size", 11)
+	dev_encounter_species_label.add_theme_font_size_override("font_size", 11)
 	dev_pokemon_title.add_theme_color_override("font_color", UI_TEXT)
 	if dev_pokemon_subtitle != null:
 		dev_pokemon_subtitle.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -37110,10 +37122,15 @@ func _refresh_dev_pokemon_popup_copy() -> void:
 	dev_preserve_direct_form.visible = can_preserve_direct
 	dev_test_purpose.visible = can_preserve_direct and dev_preserve_direct_form.button_pressed
 	var is_spawn := dev_pokemon_popup_mode == DevPokemonPopupMode.SPAWN
-	dev_encounter_mode.visible = is_spawn
-	dev_encounter_method.visible = is_spawn and dev_encounter_mode.selected == 1
-	dev_encounter_species.visible = is_spawn and dev_encounter_mode.selected == 1
-	dev_pokemon_text.visible = not is_spawn or dev_encounter_mode.selected == 0
+	dev_encounter_mode_tabs.visible = is_spawn
+	dev_encounter_method_label.visible = is_spawn and dev_map_encounter_mode
+	dev_encounter_method.visible = is_spawn and dev_map_encounter_mode
+	dev_encounter_species_label.visible = is_spawn and dev_map_encounter_mode
+	dev_encounter_species.visible = is_spawn and dev_map_encounter_mode
+	dev_pokemon_text.visible = not is_spawn or not dev_map_encounter_mode
+	if is_spawn:
+		_apply_staff_encounter_tab_style(dev_encounter_free_mode_button, not dev_map_encounter_mode)
+		_apply_staff_encounter_tab_style(dev_encounter_map_mode_button, dev_map_encounter_mode)
 	match dev_pokemon_popup_mode:
 		DevPokemonPopupMode.CONTENT_CREATOR:
 			dev_pokemon_title.text = LocalizationManager.text("ui.staff.dev.pokemon.alpha_title")
@@ -37137,10 +37154,7 @@ func _refresh_dev_pokemon_popup_copy() -> void:
 			dev_pokemon_text.placeholder_text = LocalizationManager.text("ui.staff.dev.pokemon.add_placeholder")
 
 func _setup_dev_encounter_mode_selector() -> void:
-	dev_encounter_mode.clear()
-	dev_encounter_mode.add_item("Free Pokemon", 0)
-	dev_encounter_mode.add_item("Map encounter", 1)
-	dev_encounter_mode.select(0)
+	dev_map_encounter_mode = false
 	dev_encounter_method.clear()
 	dev_encounter_method.add_item("Loading map encounter methods…")
 	dev_encounter_method.disabled = true
@@ -37210,13 +37224,32 @@ func _selected_dev_encounter_value(selector: OptionButton) -> String:
 		return ""
 	return str(selector.get_item_metadata(selector.selected)).strip_edges()
 
-func _on_dev_encounter_mode_selected(_selected: int) -> void:
+func _on_dev_encounter_free_mode_pressed() -> void:
+	dev_map_encounter_mode = false
 	_refresh_dev_pokemon_popup_copy()
-	if dev_encounter_mode.selected == 0:
-		dev_pokemon_text.grab_focus()
+	dev_pokemon_text.grab_focus()
+
+func _on_dev_encounter_map_mode_pressed() -> void:
+	dev_map_encounter_mode = true
+	_refresh_dev_pokemon_popup_copy()
 
 func _on_dev_encounter_method_selected(_selected: int) -> void:
 	_populate_dev_encounter_species()
+
+func _apply_staff_encounter_tab_style(button: Button, selected: bool) -> void:
+	if button == null:
+		return
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_size_override("font_size", 13)
+	button.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED_TEXT)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	var background := Color("#17354bf2") if selected else UI_SURFACE_INTERACTIVE
+	var border := Color("#70d9efff") if selected else UI_BORDER_SOFT
+	button.add_theme_stylebox_override("normal", _make_button_style(background, border, 7, 1))
+	button.add_theme_stylebox_override("hover", _make_button_style(UI_SURFACE_HOVER, Color("#75d9ed"), 7, 1))
+	button.add_theme_stylebox_override("pressed", _make_button_style(UI_SURFACE_PRESSED, Color("#8edfff"), 7, 1))
+	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 
 func _on_dev_pokemon_add_button_pressed() -> void:
 	if dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
@@ -37242,7 +37275,7 @@ func _on_dev_pokemon_add_button_pressed() -> void:
 		DevPokemonPopupMode.SPAWN:
 			added = (
 				await _handle_start_map_encounter_command()
-				if dev_encounter_mode.selected == 1
+				if dev_map_encounter_mode
 				else await _handle_start_encounter_command(dev_pokemon_text.text)
 			)
 		_:
@@ -37255,6 +37288,7 @@ func _on_dev_pokemon_add_button_pressed() -> void:
 func _on_dev_pokemon_close_button_pressed() -> void:
 	dev_pokemon_popup.visible = false
 	dev_encounter_metadata.clear()
+	dev_map_encounter_mode = false
 	dev_preserve_direct_form.set_pressed_no_signal(false)
 	dev_test_purpose.clear()
 	dev_pokemon_popup_mode = DevPokemonPopupMode.POKEMON
