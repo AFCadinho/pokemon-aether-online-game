@@ -14,6 +14,7 @@ const TEXT_COLOR := Color("#f4f0de")
 const MUTED_TEXT_COLOR := Color("#aeb8c5")
 const CARD_WIDTH := 116.0
 const CARD_HEIGHT := 72.0
+const SELECTOR_LIST_HEIGHT := 132.0
 
 var slots_panel: PanelContainer
 var title_label: Label
@@ -21,6 +22,8 @@ var manager_close_button: Button
 var slot_buttons: Dictionary = {}
 var selector_panel: PanelContainer
 var selector_title_label: Label
+var selector_search_input: LineEdit
+var selector_scroll: ScrollContainer
 var selector_options: VBoxContainer
 var selector_empty_label: Label
 var selector_close_button: Button
@@ -68,6 +71,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			_close_selector()
 		else:
 			close_manager()
+		get_viewport().set_input_as_handled()
+	if selector_panel != null and selector_panel.visible and event.is_action_pressed("ui_down"):
+		_focus_first_filtered_option()
 		get_viewport().set_input_as_handled()
 
 
@@ -247,10 +253,39 @@ func _build_interface() -> void:
 	selector_close_button.pressed.connect(_close_selector)
 	selector_header.add_child(selector_close_button)
 
+	selector_search_input = LineEdit.new()
+	selector_search_input.name = "SearchInput"
+	selector_search_input.custom_minimum_size.y = 32.0
+	selector_search_input.clear_button_enabled = true
+	selector_search_input.focus_mode = Control.FOCUS_ALL
+	selector_search_input.add_theme_color_override("font_color", TEXT_COLOR)
+	selector_search_input.add_theme_color_override("font_placeholder_color", MUTED_TEXT_COLOR)
+	selector_search_input.add_theme_font_size_override("font_size", 12)
+	selector_search_input.add_theme_stylebox_override(
+		"normal",
+		_make_panel_style(SLOT_BACKGROUND, PANEL_BORDER, 7, 1)
+	)
+	selector_search_input.add_theme_stylebox_override(
+		"focus",
+		_make_panel_style(SLOT_BACKGROUND, SLOT_SELECTED_BORDER, 7, 1)
+	)
+	selector_search_input.text_changed.connect(_on_search_text_changed)
+	selector_search_input.gui_input.connect(_on_search_input_gui)
+	selector_content.add_child(selector_search_input)
+
+	selector_scroll = ScrollContainer.new()
+	selector_scroll.name = "OptionsScroll"
+	selector_scroll.custom_minimum_size.y = SELECTOR_LIST_HEIGHT
+	selector_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	selector_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	selector_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	selector_content.add_child(selector_scroll)
+
 	selector_options = VBoxContainer.new()
 	selector_options.name = "Options"
+	selector_options.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	selector_options.add_theme_constant_override("separation", 5)
-	selector_content.add_child(selector_options)
+	selector_scroll.add_child(selector_options)
 
 	selector_empty_label = Label.new()
 	selector_empty_label.name = "EmptyLabel"
@@ -269,6 +304,7 @@ func _refresh_localized_content() -> void:
 	title_label.text = _text("ui.mounts.title").to_upper()
 	manager_close_button.tooltip_text = _text("common.close")
 	selector_empty_label.text = _text("ui.mounts.none_available")
+	selector_search_input.placeholder_text = _text("ui.mounts.search")
 	selector_close_button.tooltip_text = _text("common.close")
 	_refresh_slots()
 	if selector_panel.visible and active_mode != "":
@@ -301,8 +337,10 @@ func _refresh_slots() -> void:
 
 func _open_selector(movement_mode: String) -> void:
 	active_mode = movement_mode
+	selector_search_input.clear()
 	_populate_selector(active_mode)
 	selector_panel.visible = true
+	selector_search_input.grab_focus.call_deferred()
 
 
 func _populate_selector(movement_mode: String) -> void:
@@ -318,13 +356,23 @@ func _populate_selector(movement_mode: String) -> void:
 		movement_mode,
 		owned_item_ids
 	)
-	selector_empty_label.visible = mount_ids.is_empty()
-	var selected_mount_id := _get_selected_mount_id(movement_mode)
+	var search_query := selector_search_input.text.strip_edges().to_lower()
+	var matching_mount_ids: Array[String] = []
 	for mount_id: String in mount_ids:
+		var mount_name := MountServiceScript.get_mount_display_name(mount_id)
+		if search_query.is_empty() or mount_name.to_lower().contains(search_query):
+			matching_mount_ids.append(mount_id)
+	selector_empty_label.text = _text(
+		"ui.mounts.none_available" if mount_ids.is_empty() else "ui.mounts.no_search_results"
+	)
+	selector_empty_label.visible = matching_mount_ids.is_empty()
+	selector_scroll.visible = not matching_mount_ids.is_empty()
+	var selected_mount_id := _get_selected_mount_id(movement_mode)
+	for mount_id: String in matching_mount_ids:
 		var option := Button.new()
 		option.name = "%sOption" % mount_id.to_pascal_case()
 		option.custom_minimum_size = Vector2(0, 50)
-		option.focus_mode = Control.FOCUS_NONE
+		option.focus_mode = Control.FOCUS_ALL
 		option.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		option.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		option.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -351,9 +399,33 @@ func _populate_selector(movement_mode: String) -> void:
 			"hover",
 			_make_panel_style(SLOT_HOVER_BACKGROUND, SLOT_SELECTED_BORDER, 8, 1)
 		)
-		option.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+		option.add_theme_stylebox_override(
+			"focus",
+			_make_panel_style(SLOT_HOVER_BACKGROUND, SLOT_SELECTED_BORDER, 8, 1)
+		)
 		option.pressed.connect(_select_mount.bind(movement_mode, mount_id))
 		selector_options.add_child(option)
+	if selector_scroll.visible:
+		selector_scroll.scroll_vertical = 0
+
+
+func _on_search_text_changed(_search_text: String) -> void:
+	if selector_panel != null and selector_panel.visible and not active_mode.is_empty():
+		_populate_selector(active_mode)
+
+
+func _on_search_input_gui(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_down"):
+		_focus_first_filtered_option()
+		selector_search_input.accept_event()
+
+
+func _focus_first_filtered_option() -> void:
+	if selector_options == null or selector_options.get_child_count() == 0:
+		return
+	var first_option := selector_options.get_child(0) as Button
+	if first_option != null:
+		first_option.grab_focus()
 
 
 func _select_mount(movement_mode: String, mount_id: String) -> void:

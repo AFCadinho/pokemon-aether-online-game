@@ -121,14 +121,33 @@ func _run() -> void:
 
 	panel.call("_open_selector", "surf")
 	var selector_panel := panel.get("selector_panel") as PanelContainer
+	var selector_search_input := panel.get("selector_search_input") as LineEdit
+	var selector_scroll := panel.get("selector_scroll") as ScrollContainer
 	var selector_options := panel.get("selector_options") as VBoxContainer
 	var selector_empty_label := panel.get("selector_empty_label") as Label
 	_check(selector_panel.visible, "clicking a slot opens its mount selector")
+	_check(
+		selector_search_input != null
+		and selector_search_input.placeholder_text == str(localization_manager.call("text", "ui.mounts.search"))
+		and selector_search_input.clear_button_enabled
+		and selector_scroll != null,
+		"mount selector provides a clear search field and a scrollable results list"
+	)
 	_check(
 		selector_options.get_child_count() == 1
 		and (selector_options.get_child(0) as Button).text.contains("Lapras"),
 		"Surf selector lists Lapras"
 	)
+	selector_search_input.text = "no-match"
+	panel.call("_on_search_text_changed", selector_search_input.text)
+	_check(
+		selector_options.get_child_count() == 0
+		and selector_empty_label.visible
+		and selector_empty_label.text == str(localization_manager.call("text", "ui.mounts.no_search_results")),
+		"mount selector filters its list and explains an empty search"
+	)
+	selector_search_input.clear()
+	panel.call("_on_search_text_changed", selector_search_input.text)
 	panel.call("_open_selector", "land")
 	_check(
 		selector_options.get_child_count() == 0 and selector_empty_label.visible,
@@ -151,7 +170,9 @@ func _run() -> void:
 		var locale_source := FileAccess.get_file_as_string(locale_path)
 		_check(
 			locale_source.contains('"ui.mounts.title"')
-			and locale_source.contains('"ui.mounts.none_available"'),
+			and locale_source.contains('"ui.mounts.none_available"')
+			and locale_source.contains('"ui.mounts.search"')
+			and locale_source.contains('"ui.mounts.no_search_results"'),
 			"%s contains mount management translations" % locale_path
 		)
 

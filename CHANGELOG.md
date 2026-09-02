@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Mount selection now includes search, keyboard navigation, and a scrollable result list for an easier experience as more mounts are added.
+
 - Fixed invalid Mega Stone combinations incorrectly producing nonexistent Mega forms in battle previews.
 - Fixed unavailable ordinary map encounters showing the fishing “nothing biting” message.
 
