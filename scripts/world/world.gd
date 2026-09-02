@@ -515,6 +515,11 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	var current_scene_path := _get_map_scene_path(GameState.current_map)
 	var target_map: Node = GameState.current_map
 	var changes_map := current_scene_path != target_scene_path
+	# Authorized route transitions reset transient player activities as part of
+	# positioning. Keep an active land mount across an allowed map change too.
+	var land_mount_id_to_restore := str(player.call("get_active_land_mount_id")) \
+		if player.has_method("get_active_land_mount_id") \
+		else ""
 	if changes_map:
 		if not ResourceLoader.exists(target_scene_path):
 			_mark_authorized_teleport_apply_failed()
@@ -566,6 +571,11 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 		_mark_authorized_teleport_apply_failed()
 		return position_result
 	_apply_camera_limits_for_map(target_map)
+	if (
+		not land_mount_id_to_restore.is_empty()
+		and player.has_method("restore_land_mount")
+	):
+		player.call("restore_land_mount", land_mount_id_to_restore)
 	await _refresh_fishing_progression()
 	if changes_map:
 		await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
