@@ -52,6 +52,14 @@ func _init() -> void:
 		rival_track_id == RIVAL_BATTLE_MUSIC_ID,
 		"Rival-class Trainers select the dedicated Rival battle track"
 	)
+	var blue_track_id: String = TrainerBattleMusicResolverScript.resolve_track_id({
+		"id": "test-gary",
+		"trainer_class": "blue",
+	})
+	_check(
+		blue_track_id == RIVAL_BATTLE_MUSIC_ID,
+		"Blue/Gary Trainers select the dedicated Rival battle track"
+	)
 	var regular_track_id: String = TrainerBattleMusicResolverScript.resolve_track_id({
 		"id": "test-youngster",
 		"trainer_class": "youngster",
