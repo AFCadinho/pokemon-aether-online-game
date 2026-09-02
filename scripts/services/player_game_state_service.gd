@@ -155,11 +155,15 @@ func dev_set_story_checkpoint(checkpoint_id: String) -> Dictionary:
 	# visible world pickups and Miguel's fossil logic update in the open map.
 	var pickup_result: Dictionary = await InventoryService.load_collected_world_pickups(true)
 	var inventory_result: Dictionary = await InventoryService.load_inventory()
+	var wallet_result: Dictionary = await PlayerWalletService.load_wallet()
+	if bool(wallet_result.get("success", false)):
+		PlayerWalletService.apply_wallet_result(wallet_result)
 	return {
 		"success": true,
 		"story": StoryService.get_story(),
 		"worldPickupRefreshSuccess": bool(pickup_result.get("success", false)),
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
+		"walletRefreshSuccess": bool(wallet_result.get("success", false)),
 	}
 
 
