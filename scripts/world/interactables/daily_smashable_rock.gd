@@ -133,11 +133,29 @@ func _apply_daily_state() -> void:
 func _configure_variant_frames() -> void:
 	if obstacle_sprite == null:
 		return
-	obstacle_sprite.self_modulate = LevelPalette.color_for_required_level(required_rock_smash_level)
+	var tier_color := LevelPalette.color_for_required_level(required_rock_smash_level)
+	obstacle_sprite.self_modulate = tier_color
+	_configure_tier_outline(tier_color)
 	obstacle_sprite.texture = _frame_texture(0)
 	clear_frames = []
 	for row in range(1, 4):
 		clear_frames.append(_frame_texture(row))
+
+
+func _configure_tier_outline(tier_color: Color) -> void:
+	var outline := get_node_or_null("TierOutline") as Line2D
+	if outline == null:
+		outline = Line2D.new()
+		outline.name = "TierOutline"
+		outline.points = PackedVector2Array([
+			Vector2(-15, -15), Vector2(15, -15), Vector2(15, 15),
+			Vector2(-15, 15), Vector2(-15, -15),
+		])
+		outline.width = 2.0
+		outline.antialiased = false
+		outline.z_index = -1
+		add_child(outline)
+	outline.default_color = tier_color.lightened(0.22)
 
 
 func _frame_texture(row: int) -> AtlasTexture:

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rock Smash rocks now use vivid, level-specific colours and a matching outline so their required tiers are clear in the overworld.
+
 - Rock Smash Pokédollar rewards now appear in the reward popup without playing the item-received sound.
 - Aethernet now shows the current location separately instead of listing it as a travel destination.
 - Rock Smash money rewards now start at ₽100 and scale with both the rock and your Rock Smash level; regular item drops remain chance-based.
