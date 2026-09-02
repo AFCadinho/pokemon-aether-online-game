@@ -9,10 +9,17 @@ func _init() -> void:
 
 func _run() -> void:
 	var player_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
+	var error_dialog_source := FileAccess.get_file_as_string("res://scripts/services/game_error_dialog_service.gd")
 	_check(
 		player_source.contains('FieldMoveService.can_use_field_move("surf")')
-		and player_source.contains("_show_surf_unavailable_feedback"),
+		and player_source.contains("_show_surf_unavailable_feedback")
+		and player_source.contains('call_deferred("show_single_message_deferred", message)'),
 		"Surf checks the shared field-move gate and exposes blocked-use feedback"
+	)
+	_check(
+		error_dialog_source.contains("func show_single_message_deferred(message: String")
+		and error_dialog_source.contains("var lines: Array[String] = [message]"),
+		"deferred field-move feedback preserves the dialogue line type"
 	)
 	var player_save := root.get_node_or_null("PlayerSave")
 	var field_move_service := root.get_node_or_null("FieldMoveService")

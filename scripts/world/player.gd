@@ -1700,7 +1700,7 @@ func _show_surf_unavailable_feedback(surf_check: Dictionary) -> void:
 	var message := str(surf_check.get("error", "")).strip_edges()
 	if message.is_empty():
 		return
-	GameErrorDialogService.show_message.call_deferred([message])
+	GameErrorDialogService.call_deferred("show_single_message_deferred", message)
 
 
 func _show_field_move_system_message(move_id: String) -> void:

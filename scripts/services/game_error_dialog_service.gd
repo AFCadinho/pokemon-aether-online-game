@@ -48,6 +48,11 @@ func show_message(lines: Array[String], speaker: String = DEFAULT_SPEAKER, dialo
 	target_dialogue_box.start_dialogue(lines, speaker)
 	await target_dialogue_box.dialogue_finished
 
+
+func show_single_message_deferred(message: String, speaker: String = DEFAULT_SPEAKER) -> void:
+	var lines: Array[String] = [message]
+	await show_message(lines, speaker)
+
 func _get_dialogue_box() -> Node:
 	if get_tree().current_scene == null:
 		return null
