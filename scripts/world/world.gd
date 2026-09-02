@@ -3175,7 +3175,12 @@ func _on_battle_ended(result: Dictionary) -> void:
 		var reward_claimed := bool(trainer_reward_result.get("success", false))
 		if reward_claimed and keep_locked_for_outro:
 			await _show_trainer_outro_dialogue(trainer_outro_dialogue_id, trainer_mugshot)
-		if reward_claimed and bool(trainer_reward_result.get("playItemReceivedSfx", false)):
+		var item_reward_awarded := false
+		if reward_claimed:
+			item_reward_awarded = _notify_story_reward_items(
+				trainer_reward_result.get("storyEffects", [])
+			)
+		if reward_claimed and item_reward_awarded:
 			SfxManager.play("item_received")
 	if keep_locked_for_outro:
 		_unlock_overworld_after_battle()
@@ -3470,7 +3475,6 @@ func _award_trainer_battle_rewards(
 		_notify_reward_experience_gains(reward)
 		_notify_reward_level_ups(reward)
 		_notify_gym_badge_award(reward_result.get("gymBadgeAward", {}))
-		var item_reward_awarded := _notify_story_reward_items(reward_result.get("storyEffects", []))
 		var trainer_progress := _dictionary_from_value(reward_result.get("trainerProgress", {}))
 		if not trainer_id.is_empty() and not trainer_progress.is_empty():
 			get_tree().call_group(
@@ -3487,7 +3491,7 @@ func _award_trainer_battle_rewards(
 			push_warning("World: trainer reward story refresh failed: %s" % str(story_result.get("error", "Unknown error")))
 		return {
 			"success": true,
-			"playItemReceivedSfx": item_reward_awarded,
+			"storyEffects": reward_result.get("storyEffects", []),
 		}
 	else:
 		push_warning("World: trainer battle reward failed: %s" % str(reward_result.get("error", "Unknown error")))
