@@ -6,6 +6,7 @@
 - Water Gun and Dragon Breath now use custom procedural battle animations with stronger projectile and impact visuals.
 - Fall back to the regular trainer battle music when an optional rival track is unavailable.
 - Gary/Blue trainer battles now select the dedicated rival battle soundtrack.
+- Gary battles also resolve the rival soundtrack directly from their battle metadata as a local fallback.
 
 - NPC item rewards now show their reward popup consistently, including the Town Map, without repeating the receipt in the NPC dialogue.
 - Dadinho’s opening position and overhead quest indicators are aligned correctly, and Professor Oak now waits for the family introduction before offering a starter.
