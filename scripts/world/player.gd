@@ -2062,7 +2062,7 @@ func _get_current_tile_move_duration() -> float:
 	if land_mount_activity_active:
 		return LAND_MOUNT_TILE_MOVE_DURATION
 	if surf_activity_active:
-		return RUN_TILE_MOVE_DURATION if GameState.running_shoes_enabled else TILE_MOVE_DURATION
+		return RUN_TILE_MOVE_DURATION
 	if _is_activity_pose_active():
 		return TILE_MOVE_DURATION
 	return RUN_TILE_MOVE_DURATION if GameState.running_shoes_enabled else TILE_MOVE_DURATION
@@ -2071,7 +2071,7 @@ func _get_current_walk_animation_speed() -> float:
 	if land_mount_activity_active:
 		return LAND_MOUNT_WALK_ANIMATION_SPEED
 	if surf_activity_active:
-		return RUN_WALK_ANIMATION_SPEED if GameState.running_shoes_enabled else WALK_ANIMATION_SPEED
+		return RUN_WALK_ANIMATION_SPEED
 	if _is_activity_pose_active():
 		return WALK_ANIMATION_SPEED
 	return RUN_WALK_ANIMATION_SPEED if GameState.running_shoes_enabled else WALK_ANIMATION_SPEED

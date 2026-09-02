@@ -6,6 +6,7 @@ var failed := false
 
 
 func _init() -> void:
+	_check_surf_moves_at_running_speed()
 	_check_water_position_restores_surf_without_rechecking_entitlement()
 	_check_surf_can_cross_authorized_transitions()
 	_check_presence_payload_and_signature_include_activity_style()
@@ -13,6 +14,20 @@ func _init() -> void:
 	_check_remote_surf_render_matches_local_pose_rules()
 	_check_mount_animation_continues_across_tiles()
 	quit(1 if failed else 0)
+
+
+func _check_surf_moves_at_running_speed() -> void:
+	var source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
+	var movement_source := _function_source(source, "_get_current_tile_move_duration")
+	var animation_source := _function_source(source, "_get_current_walk_animation_speed")
+	_expect(
+		movement_source.contains("if surf_activity_active:\n\t\treturn RUN_TILE_MOVE_DURATION"),
+		"Surf completes tiles at the same speed as running"
+	)
+	_expect(
+		animation_source.contains("if surf_activity_active:\n\t\treturn RUN_WALK_ANIMATION_SPEED"),
+		"Surf animation cadence matches running speed"
+	)
 
 
 func _check_water_position_restores_surf_without_rechecking_entitlement() -> void:
