@@ -6,6 +6,10 @@ var failed := false
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
 	var packed := load(LOBBY_SCENE) as PackedScene
 	_check(packed != null, "Aether Clash Lobby scene loads")
 	if packed == null:
