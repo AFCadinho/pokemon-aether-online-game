@@ -3427,6 +3427,7 @@
   "ui.world.reward.wild_item_drop": "野外掉落：你发现了{item}！",
   "ui.world.reward.wild_aetherite_drop": "野外掉落：你发现了{amount}个 Aetherite！",
   "ui.world.reward.quest_aetherite": "任务奖励：你获得了{amount}个 Aetherite！",
+  "ui.world.reward.quest_money": "任务奖励：你获得了 ₽{amount}！",
   "ui.world.reward.wild_money": "您晕倒了 {pokemon} 并赚取了 ${money}。",
   "ui.world.reward.trainer_money": "您击败了 {trainer} 并赢得了 ${money}。",
   "ui.world.reward.story_item": "您收到 {quantity} × {item}！",

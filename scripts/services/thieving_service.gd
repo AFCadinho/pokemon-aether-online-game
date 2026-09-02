@@ -70,7 +70,10 @@ func attempt_pickpocket(npc_id: String, defer_arrest_transfer := false) -> Dicti
 		arrest_transfer_pending = true
 	_apply_state(_dictionary_from_value(body.get("state", {})))
 	var reward_item := _dictionary_from_value(body.get("rewardItem", {}))
+	var reward_money := maxi(int(body.get("rewardMoney", 0)), 0)
 	await _refresh_wallet()
+	if reward_money > 0:
+		get_tree().call_group("ui_overlay", "add_money_reward_notification", reward_money)
 	if not reward_item.is_empty():
 		await InventoryService.load_inventory()
 	if not arrest.is_empty():
@@ -80,7 +83,7 @@ func attempt_pickpocket(npc_id: String, defer_arrest_transfer := false) -> Dicti
 		"outcome": str(body.get("outcome", "")),
 		"npcId": str(body.get("npcId", normalized_npc_id)),
 		"npcType": str(body.get("npcType", "civilian")),
-		"rewardMoney": max(int(body.get("rewardMoney", 0)), 0),
+		"rewardMoney": reward_money,
 		"rewardItem": reward_item,
 		"experienceAwarded": max(int(body.get("experienceAwarded", 0)), 0),
 		"catchChance": clampf(float(body.get("catchChance", 0.0)), 0.0, 1.0),

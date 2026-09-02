@@ -3430,6 +3430,7 @@
   "ui.world.reward.wild_item_drop": "Drop selvagem: você encontrou {item}!",
   "ui.world.reward.wild_aetherite_drop": "Drop selvagem: você encontrou {amount} Aetherite!",
   "ui.world.reward.quest_aetherite": "Recompensa de missão: você recebeu {amount} Aetherite!",
+  "ui.world.reward.quest_money": "Recompensa de missão: você recebeu ₽{amount}!",
   "ui.world.reward.wild_money": "Você derrotou {pokemon} e ganhou ${money}.",
   "ui.world.reward.trainer_money": "Você derrotou {trainer} e ganhou ${money}.",
   "ui.world.reward.story_item": "Você recebeu {quantity} × {item}!",

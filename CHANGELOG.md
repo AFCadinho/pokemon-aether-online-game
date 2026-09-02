@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Successful Thieving attempts now show earned Pokédollars in the reward popup.
 - Existing saved Running Shoes bindings on `X` now migrate to `N` automatically.
 - Developer story checkpoints now refresh rewards from completed main quests without adding side-quest rewards.
 - The Quest Log now separates quest titles, types, and statuses for faster scanning, with green completion checkmarks and improved keyboard focus and tooltips.
