@@ -56,6 +56,14 @@ const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "mt_moon", "label_key": "ui.staff.story_chapter.mt_moon"},
 	{"id": "cerulean", "label_key": "ui.staff.story_chapter.cerulean"},
 ]
+const SIDE_QUESTS: Array[Dictionary] = [
+	{"id": "train_starter_to_level_10", "label_key": "ui.staff.side_quest.starter_training"},
+	{"id": "learn_to_fish", "label_key": "ui.staff.side_quest.fishing"},
+	{"id": "learn_to_pickpocket", "label_key": "ui.staff.side_quest.pickpocket"},
+	{"id": "catch_route_22_mankey", "label_key": "ui.staff.side_quest.catching"},
+	{"id": "viridian_ev_training", "label_key": "ui.staff.side_quest.ev_training"},
+	{"id": "learn_rock_smash", "label_key": "ui.staff.side_quest.rock_smash"},
+]
 
 const UI_BG := Color("#050b14fa")
 const UI_SURFACE := Color("#0a1726f5")
@@ -78,6 +86,7 @@ var story_content: VBoxContainer
 var story_chapter_select: OptionButton
 var story_checkpoint_select: OptionButton
 var story_status_label: Label
+var side_quest_select: OptionButton
 var badge_buttons: Dictionary = {}
 var badge_icon_rects: Dictionary = {}
 var badge_status_labels: Dictionary = {}
@@ -453,6 +462,36 @@ func _build_story_ui(layout: VBoxContainer) -> void:
 	_refresh_story_chapter_options()
 	_refresh_story_checkpoint_options()
 
+	var side_divider := HSeparator.new()
+	story_content.add_child(side_divider)
+	story_content.add_child(_localized_label("ui.staff.side_quest.controls", 13, UI_TEXT))
+	side_quest_select = OptionButton.new()
+	side_quest_select.name = "SideQuestSelect"
+	side_quest_select.custom_minimum_size = Vector2(0, 40)
+	side_quest_select.focus_mode = Control.FOCUS_NONE
+	_apply_story_checkpoint_dropdown_style(side_quest_select)
+	for side_quest: Dictionary in SIDE_QUESTS:
+		side_quest_select.add_item(_t(str(side_quest.get("label_key", ""))))
+		side_quest_select.set_item_metadata(side_quest_select.item_count - 1, str(side_quest.get("id", "")))
+	story_content.add_child(side_quest_select)
+	var side_actions := HBoxContainer.new()
+	side_actions.add_theme_constant_override("separation", 10)
+	story_content.add_child(side_actions)
+	var reset_side_button := Button.new()
+	reset_side_button.name = "ResetSideQuestButton"
+	reset_side_button.custom_minimum_size = Vector2(180, 36)
+	_set_localized_property(reset_side_button, "text", "ui.staff.side_quest.reset")
+	reset_side_button.pressed.connect(_apply_side_quest_action.bind("reset"))
+	_apply_button_style(reset_side_button, false)
+	side_actions.add_child(reset_side_button)
+	var complete_side_button := Button.new()
+	complete_side_button.name = "CompleteSideQuestButton"
+	complete_side_button.custom_minimum_size = Vector2(210, 36)
+	_set_localized_property(complete_side_button, "text", "ui.staff.side_quest.complete")
+	complete_side_button.pressed.connect(_apply_side_quest_action.bind("complete"))
+	_apply_button_style(complete_side_button, true)
+	side_actions.add_child(complete_side_button)
+
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	story_content.add_child(spacer)
@@ -597,6 +636,25 @@ func _apply_story_checkpoint() -> void:
 		var badge_result: Dictionary = await badge_service.call("load_gym_badges")
 		if bool(badge_result.get("success", false)):
 			set_badge_state(badge_result)
+	_load_key_items.call_deferred()
+
+
+func _apply_side_quest_action(action: String) -> void:
+	if busy or side_quest_select == null or side_quest_select.selected < 0:
+		return
+	var quest_id := str(side_quest_select.get_item_metadata(side_quest_select.selected))
+	var service := get_node_or_null("/root/PlayerGameStateService")
+	if service == null or not service.has_method("dev_set_side_quest_progress"):
+		_set_story_status(_t("ui.staff.side_quest.unavailable"), true)
+		return
+	_set_busy(true)
+	_set_story_status(_t("ui.staff.side_quest.updating"), false)
+	var result: Dictionary = await service.call("dev_set_side_quest_progress", quest_id, action)
+	_set_busy(false)
+	if not bool(result.get("success", false)):
+		_set_story_status(str(result.get("error", _t("ui.staff.side_quest.failed"))), true)
+		return
+	_set_story_status(_t("ui.staff.side_quest.updated"), false)
 	_load_key_items.call_deferred()
 
 

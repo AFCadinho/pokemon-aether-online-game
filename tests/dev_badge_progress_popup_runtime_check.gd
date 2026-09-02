@@ -66,8 +66,12 @@ func _run() -> void:
 	_check(popup.find_child("KeyItemsTabButton", true, false) != null, "trainer progress exposes a key-items tab")
 	var story_chapter_select := popup.find_child("StoryChapterSelect", true, false) as OptionButton
 	var story_checkpoint_select := popup.find_child("StoryCheckpointSelect", true, false) as OptionButton
+	var side_quest_select := popup.find_child("SideQuestSelect", true, false) as OptionButton
 	_check(story_chapter_select != null, "trainer progress exposes a story chapter selector")
 	_check(story_checkpoint_select != null, "trainer progress exposes a story checkpoint selector")
+	_check(side_quest_select != null and side_quest_select.item_count == 6, "trainer progress exposes all side-quest controls")
+	_check(popup.find_child("ResetSideQuestButton", true, false) != null, "side quests can be restarted")
+	_check(popup.find_child("CompleteSideQuestButton", true, false) != null, "side quests can be completed with rewards")
 	if story_chapter_select != null and story_checkpoint_select != null:
 		_check(story_chapter_select.item_count == 5, "story checkpoints are divided into compact chapters")
 		var largest_chapter_size := 0
