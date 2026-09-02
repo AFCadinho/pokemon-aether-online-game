@@ -34501,6 +34501,10 @@ func _build_pokedex_general_tab() -> void:
 		LocalizationManager.text("ui.pokedex.profile.base_exp"),
 		str(int(pokedex_selected_species.get("baseExperience", 0)))
 	))
+	profile_facts.add_child(_create_pokedex_profile_fact(
+		LocalizationManager.text("ui.pokedex.profile.catch_rate"),
+		"%d / 255" % clampi(int(pokedex_selected_species.get("catchRate", 0)), 0, 255)
+	))
 
 	var abilities_card := _create_pokedex_dossier_card(
 		LocalizationManager.text("ui.pokedex.abilities.title"),

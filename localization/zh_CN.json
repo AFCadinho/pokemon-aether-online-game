@@ -1511,6 +1511,7 @@
   "ui.pokedex.profile.egg_groups": "蛋组",
   "ui.pokedex.profile.growth_rate": "增长率",
   "ui.pokedex.profile.base_exp": "基础经验",
+  "ui.pokedex.profile.catch_rate": "基础捕获率",
   "ui.pokedex.abilities.title": "特性",
   "ui.pokedex.abilities.subtitle": "将鼠标悬停在某个技能上即可获得其效果",
   "ui.pokedex.abilities.empty": "没有可用的能力。",
