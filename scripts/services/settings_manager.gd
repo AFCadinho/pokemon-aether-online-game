@@ -51,6 +51,7 @@ const DEFAULT_INPUT_BINDINGS: Dictionary = {
 	"mount": KEY_M,
 	"pickpocket": KEY_T,
 }
+const LEGACY_RUNNING_SHOES_DEFAULT := KEY_X
 const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 	Vector2i(1280, 720),
 	Vector2i(1600, 900),
@@ -573,6 +574,8 @@ func _validated_input_bindings(value: Variant) -> Dictionary:
 	var bindings := DEFAULT_INPUT_BINDINGS.duplicate()
 	for action: String in CONFIGURABLE_INPUT_ACTIONS:
 		var keycode := int(source.get(action, bindings.get(action, KEY_NONE)))
+		if action == "toggle_running_shoes" and keycode == int(LEGACY_RUNNING_SHOES_DEFAULT):
+			keycode = int(DEFAULT_INPUT_BINDINGS[action])
 		if keycode != int(KEY_NONE):
 			bindings[action] = keycode
 	return bindings
