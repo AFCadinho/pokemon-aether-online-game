@@ -48,12 +48,14 @@ func show_dialogue(lines: Array[String] = [], speaker_name_override := "") -> bo
 			resolved_speaker_name = resolved_dialogue_speaker_name
 		var shown := await super.show_dialogue(dialogue_metadata_lines, resolved_speaker_name)
 		if shown:
-			await _show_available_quest_offer(resolved_speaker_name)
+			if await _show_available_quest_offer(resolved_speaker_name):
+				await interact_with_player(null)
 		return shown
 
 	var shown := await super.show_dialogue(lines, resolved_speaker_name)
 	if shown:
-		await _show_available_quest_offer(resolved_speaker_name)
+		if await _show_available_quest_offer(resolved_speaker_name):
+			await interact_with_player(null)
 	return shown
 
 
@@ -101,9 +103,9 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 			story_dialogue_variants.append((variant_value as Dictionary).duplicate(true))
 
 
-func _show_available_quest_offer(speaker_name: String) -> void:
+func _show_available_quest_offer(speaker_name: String) -> bool:
 	if offered_quest_id.is_empty():
-		return
+		return false
 	if (
 		not offered_quest_required_quest_id.is_empty()
 		and not StoryService.is_requirement_met(
@@ -112,21 +114,21 @@ func _show_available_quest_offer(speaker_name: String) -> void:
 			offered_quest_required_quest_status
 		)
 	):
-		return
+		return false
 	var quest := StoryService.get_quest(offered_quest_id)
 	if (
 		str(quest.get("questType", "")) != "side"
 		or str(quest.get("status", "")) != "available"
 	):
-		return
+		return false
 	var dialogue_box := _get_dialogue_box()
 	if dialogue_box == null or not dialogue_box.has_method("start_quest_offer"):
-		return
+		return false
 	var offer_speaker_name := speaker_name.strip_edges()
 	if offer_speaker_name.is_empty():
 		offer_speaker_name = display_name if not display_name.is_empty() else name
 	dialogue_box.start_quest_offer(quest, offer_speaker_name, mugshot)
-	await dialogue_box.quest_offer_resolved
+	return bool(await dialogue_box.quest_offer_resolved)
 
 
 func _resolve_story_dialogue_id() -> String:
