@@ -179,6 +179,11 @@ func _run() -> void:
 		"NPC story currency rewards use localized currency reward cards"
 	)
 	_check(
+		inventory_source.contains("var item_reward_displayed := false")
+		and inventory_source.contains("return item_reward_displayed"),
+		"Story reward sound gating only reports item rewards"
+	)
+	_check(
 		overlay_source.contains("purchased_item_id,")
 		and overlay_source.contains("add_item_reward_notification(box_item_id, 1)")
 		and overlay_source.contains("add_item_reward_notification(item_id, transacted_quantity)"),

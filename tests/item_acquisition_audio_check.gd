@@ -79,14 +79,6 @@ func _init() -> void:
 		"Moomoo Milk shows its System message before the received-item jingle"
 	)
 	_check_received_sound_after(oak_source, "quest_turn_in_completed_dialogue_id", "Oak's Pokedex reward")
-	var brock_outro_index := world_source.find("await _show_trainer_outro_dialogue")
-	var brock_sound_index := world_source.find('SfxManager.play("item_received")', brock_outro_index)
-	_check(
-		brock_outro_index >= 0
-		and brock_sound_index > brock_outro_index
-		and world_source.contains('trainer_reward_result.get("playItemReceivedSfx", false)'),
-		"a newly earned Gym Badge plays the received-item jingle after the Leader's reward dialogue"
-	)
 	_check(
 		world_source.contains('InventoryService.apply_inventory_state(reward_result.get("inventory", {}))'),
 		"trainer battle item rewards immediately refresh the local Bag"
@@ -113,6 +105,11 @@ func _init() -> void:
 		and world_source.contains('LocalizationManager.text("ui.world.reward.wild_aetherite_drop"')
 		and world_source.contains('"add_currency_reward_notification", currency_id, amount'),
 		"wild Aetherite drops show a localized currency notification"
+	)
+	_check(
+		world_source.contains('"playItemReceivedSfx": item_reward_awarded')
+		and not world_source.contains('"playItemReceivedSfx": bool(gym_badge_award.get("awarded", false))'),
+		"trainer reward sound is limited to item rewards"
 	)
 
 	quit(1 if failed else 0)
