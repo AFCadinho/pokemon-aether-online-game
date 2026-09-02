@@ -34,6 +34,8 @@ func _init() -> void:
 	_check_contains(player_data, "func has_gym_badge", "PlayerSave exposes badge ownership")
 	_check_contains(profile_service, '"badges": badges', "profile service preserves badge progress")
 	_check_contains(profile_service, 'DEV_STORY_CHECKPOINT_ENDPOINT := "/game/dev/progression/story-checkpoint"', "trainer progress can update the authoritative story checkpoint")
+	_check_contains(profile_service, 'DEV_ROCK_SMASH_RESPAWN_ENDPOINT := "/game/dev/overworld/rock-smash-respawn"', "overworld reset uses the protected Rock Smash respawn endpoint")
+	_check_contains(overlay, "dev_overworld_resets_button", "developer tools expose the Overworld Resets action")
 	_check_contains(profile_service, "StoryService.apply_story(story)", "story checkpoints immediately refresh local story state")
 	_check_contains(profile_service, "TrainerProgressService.invalidate_all()", "story checkpoints immediately refresh visible trainer progress")
 	_check_contains(FileAccess.get_file_as_string("res://scripts/services/trainer_progress_service.gd"), "signal progress_invalidated", "trainer progress exposes a safe invalidation signal")

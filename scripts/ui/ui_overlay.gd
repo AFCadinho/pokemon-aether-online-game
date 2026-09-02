@@ -203,6 +203,7 @@ const TRAINER_WALLET_AETHERITE_ICON: Texture2D = preload("res://assets/ui/aether
 const TRAINER_WALLET_BATTLE_POINTS_ICON: Texture2D = preload("res://assets/ui/battle_points.svg")
 const DEV_HEAL_PARTY_ICON: Texture2D = preload("res://assets/ui/tool_heal_party.svg")
 const DEV_TRAINER_PROGRESS_ICON: Texture2D = preload("res://assets/gym_badges/kanto_badges/Boulder_Badge.png")
+const DEV_OVERWORLD_RESETS_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")
 const TOOL_CLEAR_DATA_ICON: Texture2D = preload("res://assets/ui/tool_clear_data.svg")
 const TOOL_DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
 const TOOL_DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
@@ -1432,6 +1433,7 @@ var dev_aetherite_confirm_button: Button
 var dev_battle_points_confirm_button: Button
 var dev_heal_party_button: Button
 var dev_badge_progress_button: Button
+var dev_overworld_resets_button: Button
 var dev_badge_progress_popup: DevBadgeProgressPopup
 var dev_item_catalog: Array[Dictionary] = []
 var dev_selected_item: Dictionary = {}
@@ -1792,6 +1794,7 @@ func _ready() -> void:
 	dev_add_button.pressed.connect(_on_dev_add_button_pressed)
 	dev_heal_party_button.pressed.connect(_on_dev_heal_party_button_pressed)
 	dev_badge_progress_button.pressed.connect(_on_dev_badge_progress_button_pressed)
+	dev_overworld_resets_button.pressed.connect(_on_dev_overworld_resets_button_pressed)
 	dev_add_item_button.pressed.connect(_on_dev_add_item_button_pressed)
 	dev_add_money_button.pressed.connect(_on_dev_add_money_button_pressed)
 	dev_clear_party_button.pressed.connect(_on_dev_clear_party_button_pressed)
@@ -2204,6 +2207,9 @@ func _refresh_dev_tools_visibility() -> void:
 	if dev_badge_progress_button != null:
 		dev_badge_progress_button.visible = can_use_dev_tools
 		dev_badge_progress_button.disabled = not can_use_dev_tools
+	if dev_overworld_resets_button != null:
+		dev_overworld_resets_button.visible = can_use_dev_tools
+		dev_overworld_resets_button.disabled = not can_use_dev_tools
 	dev_clear_party_button.visible = can_use_dev_tools
 	dev_clear_party_button.disabled = not can_use_dev_tools
 	dev_cleanup_test_pokemon_button.visible = can_use_dev_tools
@@ -8144,6 +8150,14 @@ func _setup_dev_add_item_tools() -> void:
 		dev_actions_container.add_child(dev_badge_progress_button)
 		dev_actions_container.move_child(dev_badge_progress_button, dev_clear_party_button.get_index())
 
+	dev_overworld_resets_button = Button.new()
+	_set_localized_control_property(dev_overworld_resets_button, "text", "ui.staff.dev.overworld_resets")
+	dev_overworld_resets_button.custom_minimum_size = Vector2(190, 34)
+	dev_overworld_resets_button.focus_mode = Control.FOCUS_NONE
+	if dev_actions_container != null:
+		dev_actions_container.add_child(dev_overworld_resets_button)
+		dev_actions_container.move_child(dev_overworld_resets_button, dev_clear_party_button.get_index())
+
 	dev_add_menu_popup = PanelContainer.new()
 	dev_add_menu_popup.name = "DevAddMenuPopup"
 	dev_add_menu_popup.visible = false
@@ -8534,6 +8548,7 @@ func _setup_dev_tools_menu_surface() -> void:
 		dev_add_button,
 		dev_heal_party_button,
 		dev_badge_progress_button,
+		dev_overworld_resets_button,
 		dev_clear_party_button,
 	]:
 		_move_tool_menu_control(action_button, dev_quick_actions_grid)
@@ -8572,6 +8587,13 @@ func _setup_dev_tools_menu_surface() -> void:
 		"ui.staff.dev.trainer_progress_description",
 		DEV_TRAINER_PROGRESS_ICON,
 		Color("#e3bd68")
+	)
+	_configure_tool_tile_button(
+		dev_overworld_resets_button,
+		"ui.staff.dev.overworld_resets",
+		"ui.staff.dev.overworld_resets_description",
+		DEV_OVERWORLD_RESETS_ICON,
+		Color("#70d7f0")
 	)
 	_configure_tool_tile_button(
 		dev_clear_party_button,
@@ -32008,6 +32030,20 @@ func _on_dev_badge_progress_button_pressed() -> void:
 func _on_dev_badge_progress_popup_closed() -> void:
 	if dev_badge_progress_popup != null:
 		_deactivate_ui_panel(dev_badge_progress_popup)
+
+
+func _on_dev_overworld_resets_button_pressed() -> void:
+	if not _can_use_dev_tools():
+		return
+	dev_overworld_resets_button.disabled = true
+	var result: Dictionary = await PlayerGameStateService.dev_respawn_rock_smash_rocks()
+	dev_overworld_resets_button.disabled = false
+	if bool(result.get("success", false)):
+		_add_chat_message(_t("ui.staff.dev.overworld_resets_success"))
+		return
+	_add_chat_message(_t("ui.staff.dev.overworld_resets_failed", {
+		"error": str(result.get("error", _t("common.unknown_error"))),
+	}))
 
 func _on_staff_tools_button_pressed() -> void:
 	if not (
