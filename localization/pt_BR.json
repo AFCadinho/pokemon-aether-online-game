@@ -2903,7 +2903,7 @@
   "ui.staff.dev.overworld_resets_success": "Todas as rochas de Rock Smash reapareceram.",
   "ui.staff.dev.overworld_resets_failed": "Não foi possível restaurar as rochas de Rock Smash: {error}",
   "ui.staff.dev.clear_data": "Limpar Dados",
-  "ui.staff.dev.clear_data_description": "Equipe ou inventário",
+  "ui.staff.dev.clear_data_description": "Equipe, bolsa e mundo",
   "ui.staff.dev.world_preview": "PRÉVIA DO MUNDO",
   "ui.staff.dev.time": "Horário",
   "ui.staff.dev.weather": "Clima",

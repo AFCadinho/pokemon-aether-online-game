@@ -2903,7 +2903,7 @@
   "ui.staff.dev.overworld_resets_success": "All Rock Smash rocks have respawned.",
   "ui.staff.dev.overworld_resets_failed": "Could not respawn Rock Smash rocks: {error}",
   "ui.staff.dev.clear_data": "Clear Data",
-  "ui.staff.dev.clear_data_description": "Party or inventory",
+  "ui.staff.dev.clear_data_description": "Party, bag & world",
   "ui.staff.dev.world_preview": "WORLD PREVIEW",
   "ui.staff.dev.time": "Time",
   "ui.staff.dev.weather": "Weather",
