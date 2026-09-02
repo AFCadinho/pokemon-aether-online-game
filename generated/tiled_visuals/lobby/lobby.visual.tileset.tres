@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://bg2c4o55b2pki"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/5GEN_TILESET_1699757399_000.texture.res" id="1_w4e2b"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/lobby/assets/5GEN_TILESET_1699757399_005.texture.res" id="2_fcf67"]
