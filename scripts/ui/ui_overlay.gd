@@ -1794,7 +1794,6 @@ func _ready() -> void:
 	dev_add_button.pressed.connect(_on_dev_add_button_pressed)
 	dev_heal_party_button.pressed.connect(_on_dev_heal_party_button_pressed)
 	dev_badge_progress_button.pressed.connect(_on_dev_badge_progress_button_pressed)
-	dev_overworld_resets_button.pressed.connect(_on_dev_overworld_resets_button_pressed)
 	dev_add_item_button.pressed.connect(_on_dev_add_item_button_pressed)
 	dev_add_money_button.pressed.connect(_on_dev_add_money_button_pressed)
 	dev_clear_party_button.pressed.connect(_on_dev_clear_party_button_pressed)
@@ -5670,6 +5669,17 @@ func _setup_dev_clear_menu_popup() -> void:
 		Color("#ef7085")
 	)
 
+	dev_overworld_resets_button = Button.new()
+	dev_overworld_resets_button.pressed.connect(_on_dev_overworld_resets_button_pressed)
+	layout.add_child(dev_overworld_resets_button)
+	_configure_tool_tile_button(
+		dev_overworld_resets_button,
+		"ui.staff.dev.overworld_resets",
+		"ui.staff.dev.overworld_resets_description",
+		DEV_OVERWORLD_RESETS_ICON,
+		Color("#70d7f0")
+	)
+
 	dev_reset_game_button = _add_gameplay_reset_button(
 		layout,
 		Callable(self, "_hide_dev_clear_menu_popup"),
@@ -8150,14 +8160,6 @@ func _setup_dev_add_item_tools() -> void:
 		dev_actions_container.add_child(dev_badge_progress_button)
 		dev_actions_container.move_child(dev_badge_progress_button, dev_clear_party_button.get_index())
 
-	dev_overworld_resets_button = Button.new()
-	_set_localized_control_property(dev_overworld_resets_button, "text", "ui.staff.dev.overworld_resets")
-	dev_overworld_resets_button.custom_minimum_size = Vector2(190, 34)
-	dev_overworld_resets_button.focus_mode = Control.FOCUS_NONE
-	if dev_actions_container != null:
-		dev_actions_container.add_child(dev_overworld_resets_button)
-		dev_actions_container.move_child(dev_overworld_resets_button, dev_clear_party_button.get_index())
-
 	dev_add_menu_popup = PanelContainer.new()
 	dev_add_menu_popup.name = "DevAddMenuPopup"
 	dev_add_menu_popup.visible = false
@@ -8548,7 +8550,6 @@ func _setup_dev_tools_menu_surface() -> void:
 		dev_add_button,
 		dev_heal_party_button,
 		dev_badge_progress_button,
-		dev_overworld_resets_button,
 		dev_clear_party_button,
 	]:
 		_move_tool_menu_control(action_button, dev_quick_actions_grid)
@@ -8587,13 +8588,6 @@ func _setup_dev_tools_menu_surface() -> void:
 		"ui.staff.dev.trainer_progress_description",
 		DEV_TRAINER_PROGRESS_ICON,
 		Color("#e3bd68")
-	)
-	_configure_tool_tile_button(
-		dev_overworld_resets_button,
-		"ui.staff.dev.overworld_resets",
-		"ui.staff.dev.overworld_resets_description",
-		DEV_OVERWORLD_RESETS_ICON,
-		Color("#70d7f0")
 	)
 	_configure_tool_tile_button(
 		dev_clear_party_button,
