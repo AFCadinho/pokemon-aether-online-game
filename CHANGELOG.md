@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fixed invalid Mega Stone combinations incorrectly producing nonexistent Mega forms in battle previews.
 - Fixed unavailable ordinary map encounters showing the fishing “nothing biting” message.
 
 - The Pokédex now shows every species' official base catch rate with a plain-language scale and explanation; battle catches use that value together with HP, status, and the chosen Poké Ball.

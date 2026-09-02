@@ -8,6 +8,10 @@ var failed := false
 func _init() -> void:
 	_check_primal_form("Groudon", "Red Orb", "Groudon-Primal")
 	_check_primal_form("Kyogre", "Blue Orb", "Kyogre-Primal")
+	_check_catalog_mega_form("Starmie", "Starminite", "Starmie-Mega")
+	_check_invalid_mega_stone_does_not_invent_form("Staryu", "Starminite")
+	_check_invalid_mega_stone_does_not_invent_form("Marshtomp", "Swampertite")
+	_check_request_mega_species_is_authoritative()
 	_check_event_species_is_preserved("Groudon-Primal")
 	_check_event_species_is_preserved("Kyogre-Primal")
 	_check_tera_shift_ability_updates_display_form()
@@ -15,6 +19,57 @@ func _init() -> void:
 	_check_late_join_snapshot_preserves_public_mega_form()
 
 	quit(1 if failed else 0)
+
+
+func _check_catalog_mega_form(base_species: String, item: String, expected_species: String) -> void:
+	var state = _state_with_active_pokemon(base_species, item, {"canMegaEvo": true})
+	_check_equal(
+		state.resolve_active_mega_species("p1"),
+		expected_species,
+		"%s resolves from %s" % [expected_species, item]
+	)
+
+
+func _check_invalid_mega_stone_does_not_invent_form(base_species: String, item: String) -> void:
+	var state = _state_with_active_pokemon(base_species, item, {"canMegaEvo": true})
+	_check_equal(
+		state.resolve_active_mega_species("p1"),
+		"",
+		"%s cannot invent a Mega form from %s" % [base_species, item]
+	)
+
+
+func _check_request_mega_species_is_authoritative() -> void:
+	var state = _state_with_active_pokemon("Starmie", "Unknown Item", {
+		"canMegaEvo": true,
+		"canMegaEvoSpecies": "Starmie-Mega",
+	})
+	_check_equal(
+		state.resolve_active_mega_species("p1"),
+		"Starmie-Mega",
+		"battle request supplies the canonical Mega form"
+	)
+
+
+func _state_with_active_pokemon(species: String, item: String, active_data: Dictionary):
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"battleId": "mega-form-resolution-test",
+		"requests": {
+			"p1": {
+				"active": [active_data],
+				"side": {
+					"pokemon": [{
+						"ident": "p1a: %s" % species,
+						"species": species,
+						"item": item,
+						"active": true,
+					}],
+				},
+			},
+		},
+	}, false)
+	return state
 
 
 func _check_primal_form(base_species: String, item: String, expected_species: String) -> void:
