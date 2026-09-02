@@ -46,7 +46,7 @@ const CONFIGURABLE_INPUT_ACTIONS: Array[String] = [
 	"pickpocket",
 ]
 const DEFAULT_INPUT_BINDINGS: Dictionary = {
-	"toggle_running_shoes": KEY_X,
+	"toggle_running_shoes": KEY_N,
 	"fish": KEY_F,
 	"mount": KEY_M,
 	"pickpocket": KEY_T,
