@@ -15,6 +15,7 @@ const STORY_BOOTSTRAP_ENDPOINT := "/game/story/bootstrap"
 const STORY_INTERACTION_ENDPOINT := "/game/story/interactions/%s"
 const STORY_QUEST_ACCEPT_ENDPOINT := "/game/story/quests/%s/accept"
 const DEV_STORY_CHECKPOINT_ENDPOINT := "/game/dev/progression/story-checkpoint"
+const DEV_SIDE_QUEST_PROGRESS_ENDPOINT := "/game/dev/progression/side-quest"
 const PUBLIC_TRAINER_CARD_ENDPOINT := "/game/trainers/%s/card"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
@@ -162,6 +163,40 @@ func dev_set_story_checkpoint(checkpoint_id: String) -> Dictionary:
 		"success": true,
 		"story": StoryService.get_story(),
 		"worldPickupRefreshSuccess": bool(pickup_result.get("success", false)),
+		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
+		"walletRefreshSuccess": bool(wallet_result.get("success", false)),
+	}
+
+
+func dev_set_side_quest_progress(quest_id: String, action: String) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "status": 401, "error": "Not authenticated."}
+	var normalized_quest_id := quest_id.strip_edges().to_lower()
+	var normalized_action := action.strip_edges().to_lower()
+	if normalized_quest_id.is_empty() or not normalized_action in ["reset", "complete"]:
+		return {"success": false, "status": 0, "error": "Invalid side quest action."}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + DEV_SIDE_QUEST_PROGRESS_ENDPOINT,
+		HTTPClient.METHOD_PUT,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"questId": normalized_quest_id, "action": normalized_action})
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var story: Dictionary = _dictionary_from_value(response.get("body", {}))
+	if not _is_valid_story_projection_body(story):
+		return {"success": false, "status": int(response.get("status", 0)), "error": "Side quest response was invalid."}
+	StoryService.apply_story(story)
+	TrainerProgressService.invalidate_all()
+	var inventory_result: Dictionary = await InventoryService.load_inventory()
+	var wallet_result: Dictionary = await PlayerWalletService.load_wallet()
+	if bool(wallet_result.get("success", false)):
+		PlayerWalletService.apply_wallet_result(wallet_result)
+	return {
+		"success": true,
+		"story": StoryService.get_story(),
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
 		"walletRefreshSuccess": bool(wallet_result.get("success", false)),
 	}
