@@ -27,8 +27,8 @@ func _run() -> void:
 	var default_bindings: Dictionary = settings_constants.get("DEFAULT_INPUT_BINDINGS", {})
 	var running_shoes_events := InputMap.action_get_events("toggle_running_shoes")
 	_expect(
-		int(default_bindings.get("toggle_running_shoes", KEY_NONE)) == int(KEY_X),
-		"Running Shoes defaults to X"
+		int(default_bindings.get("toggle_running_shoes", KEY_NONE)) == int(KEY_N),
+		"Running Shoes defaults to N"
 	)
 	_expect(
 		not running_shoes_events.is_empty()

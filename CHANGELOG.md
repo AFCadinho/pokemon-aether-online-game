@@ -108,7 +108,7 @@
 **Added**
 
 - Rival battles now feature a special Blue and Green remix by Zame.
-- Running Shoes can now be turned on or off with X. This key can be changed in the Controls settings.
+- Running Shoes can now be turned on or off with N by default. This key can be changed in the Controls settings.
 - The Cerulean City Pokémon Center now has two visiting Trainers with their partner Pokémon.
 - Signs can now show illustrated previews of routes, towns, caves, Gyms, and landmarks.
 - Staff announcements now appear in System chat and briefly on screen.
