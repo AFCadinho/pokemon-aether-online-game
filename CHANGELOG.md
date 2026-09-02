@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Route-gate attendants can now be spoken to from two tiles away across all shared gate interiors.
 - Active land mounts now stay active when using authorized route transitions.
 - Bike Voucher turn-ins now show reward popups for both the Cyclizar mount and Mount License.
 - Forest Gate attendants can now be reached and spoken to from in front of the counter.

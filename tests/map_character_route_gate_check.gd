@@ -153,6 +153,10 @@ func _check_transition_attendant() -> void:
 	_check(attendant != null, "transition building places its attendant")
 	if attendant != null:
 		_check(str(attendant.get("guard_role")) == "attendant", "counter guard keeps the attendant role")
+		_check(
+			int(attendant.get("manual_interaction_reach_tiles")) == 2,
+			"counter attendant can be reached from two tiles away"
+		)
 		_check(not bool(attendant.call("guards_world_position", attendant.global_position)), "counter attendant creates no route blocking zone")
 	map.free()
 
