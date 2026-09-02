@@ -131,6 +131,14 @@ const ACTIVITY_VISUAL_OFFSETS := {
 		"down": Vector2(0.0, 2.0),
 	},
 }
+# Keep remote Surf-fishing riders aligned with the same existing-pose saddle
+# offsets used locally. Normal land fishing continues to use the fish offsets.
+const SURF_FISH_RIDER_OFFSETS := {
+	"down": Vector2(0.0, 18.0),
+	"left": Vector2(0.0, 4.0),
+	"right": Vector2(0.0, 4.0),
+	"up": Vector2(0.0, 10.0),
+}
 const APPEARANCE_PART_SPRITES := {
 	"hair": "HairSprite",
 	"headgear": "HeadgearSprite",
@@ -793,12 +801,21 @@ func _sync_mount_rider_delta() -> void:
 	if mount_sprite == null or not mount_sprite.visible or current_mount_id == "":
 		rider_node.position = base_rider_position
 		return
+	var direction := _get_activity_offset_direction()
 	var rider_offset := MountService.get_rider_frame_offset(
 		current_mount_id,
-		_get_activity_offset_direction(),
+		direction,
 		mount_sprite.frame
 	)
-	rider_node.position = base_rider_position + Vector2(rider_offset)
+	rider_node.position = base_rider_position + Vector2(rider_offset) \
+		+ _get_surf_fish_rider_offset(direction)
+
+
+func _get_surf_fish_rider_offset(direction: String) -> Vector2:
+	if CharacterAppearanceService.normalize_movement_style(current_body_movement_style) \
+		!= CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
+		return Vector2.ZERO
+	return SURF_FISH_RIDER_OFFSETS.get(direction, Vector2.ZERO)
 
 func _create_interaction_hit_area() -> void:
 	var hit_area := Area2D.new()
@@ -1506,7 +1523,7 @@ func _apply_activity_visual_offset() -> void:
 func _get_activity_visual_offset() -> Vector2:
 	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(current_body_movement_style)
 	if normalized_style == CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
-		normalized_style = CharacterAppearanceService.BODY_MOVEMENT_FISH
+		return Vector2.ZERO
 	var style_offsets: Variant = ACTIVITY_VISUAL_OFFSETS.get(normalized_style, {})
 	if not style_offsets is Dictionary:
 		return Vector2.ZERO

@@ -234,6 +234,28 @@ func _init() -> void:
 		"down-facing fishing aligns static head layers with the raised fishing body"
 	)
 	_check(
+		_function_source(player_source, "_get_surf_fish_rider_offset").contains(
+			"BODY_MOVEMENT_SURF_FISH"
+		)
+		and player_source.contains('"down": Vector2(0.0, 18.0)')
+		and player_source.contains('"left": Vector2(0.0, 4.0)')
+		and player_source.contains('"right": Vector2(0.0, 4.0)')
+		and player_source.contains('"up": Vector2(0.0, 10.0)')
+		and _function_source(player_source, "_get_activity_visual_offset").contains(
+			"return Vector2.ZERO"
+		)
+		and remote_player_source.contains("func _get_surf_fish_rider_offset")
+		and remote_player_source.contains('"down": Vector2(0.0, 18.0)'),
+		"Surf fishing aligns existing fishing frames to the saddle locally and remotely"
+	)
+	_check(
+		player_source.contains('"left": Vector2(-6.0, 0.0)')
+		and player_source.contains('"right": Vector2(6.0, 0.0)')
+		and remote_player_source.contains('"left": Vector2(-6.0, 0.0)')
+		and remote_player_source.contains('"right": Vector2(6.0, 0.0)'),
+		"normal land fishing retains its existing visual offsets"
+	)
+	_check(
 		controller_source.contains('button.add_theme_constant_override("icon_max_width", 32)')
 		and not controller_source.contains("button.icon_max_width ="),
 		"rod buttons size icons through the supported Button theme constant"
