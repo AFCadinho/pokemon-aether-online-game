@@ -30,6 +30,7 @@ var auto_trigger_failed := false
 var trainer_progress_state := STATE_FIRST_ENCOUNTER
 var trainer_progress_loaded := false
 var trainer_progress_request_active := false
+var developer_rematch_mode := false
 var battle_in_progress := false
 var next_progress_refresh_at_msec := 0
 var rematch_marker: PanelContainer
@@ -378,10 +379,7 @@ func apply_battle_victory_progress(progress_trainer_id: String, progress: Dictio
 	if progress_trainer_id.strip_edges() != trainer_id.strip_edges():
 		return
 	battle_in_progress = false
-	trainer_progress_loaded = true
-	trainer_progress_state = str(progress.get("state", STATE_DEFEATED)).strip_edges().to_lower()
-	if not supports_trainer_rematches():
-		trainer_progress_state = STATE_COMPLETED
+	_apply_trainer_progress(progress, STATE_DEFEATED)
 	if trainer_progress_state == STATE_SLEEPING:
 		next_progress_refresh_at_msec = Time.get_ticks_msec() + SLEEPING_REFRESH_INTERVAL_MSEC
 	_refresh_rematch_marker()
@@ -410,16 +408,26 @@ func _load_trainer_progress() -> void:
 		return
 
 	var progress: Dictionary = result.get("progress", {}) as Dictionary
-	trainer_progress_state = str(progress.get("state", STATE_FIRST_ENCOUNTER)).strip_edges().to_lower()
-	if has_existing_trainer_completion():
-		trainer_progress_state = STATE_COMPLETED
-	elif not supports_trainer_rematches() and trainer_progress_state != STATE_FIRST_ENCOUNTER:
-		trainer_progress_state = STATE_COMPLETED
-	trainer_progress_loaded = true
+	_apply_trainer_progress(progress, STATE_FIRST_ENCOUNTER)
 	if trainer_progress_state == STATE_SLEEPING:
 		next_progress_refresh_at_msec = Time.get_ticks_msec() + SLEEPING_REFRESH_INTERVAL_MSEC
 	_refresh_rematch_marker()
 	_configure_vision_area()
+
+
+func _apply_trainer_progress(progress: Dictionary, fallback_state: String) -> void:
+	developer_rematch_mode = bool(progress.get("developerRematchMode", false))
+	trainer_progress_state = str(progress.get("state", fallback_state)).strip_edges().to_lower()
+	if has_existing_trainer_completion():
+		trainer_progress_state = STATE_COMPLETED
+	elif not supports_trainer_rematches():
+		if trainer_progress_state != STATE_FIRST_ENCOUNTER:
+			trainer_progress_state = STATE_COMPLETED
+	elif developer_rematch_mode and trainer_progress_state == STATE_FIRST_ENCOUNTER:
+		# The protected server setting projects ordinary trainers as rematches.
+		# Story and gym trainer subclasses opt out through supports_trainer_rematches.
+		trainer_progress_state = STATE_READY
+	trainer_progress_loaded = true
 
 
 func _reload_trainer_progress() -> void:
@@ -433,6 +441,7 @@ func _reload_trainer_progress() -> void:
 	auto_trigger_failed = false
 	vision_candidate = null
 	trainer_progress_loaded = false
+	developer_rematch_mode = false
 	next_progress_refresh_at_msec = 0
 	await _load_trainer_progress()
 
