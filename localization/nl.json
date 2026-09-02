@@ -3430,6 +3430,7 @@
   "ui.world.reward.wild_item_drop": "Wilde drop: je hebt een {item} gevonden!",
   "ui.world.reward.wild_aetherite_drop": "Wilde drop: je hebt {amount} Aetherite gevonden!",
   "ui.world.reward.quest_aetherite": "Questbeloning: je hebt {amount} Aetherite ontvangen!",
+  "ui.world.reward.quest_money": "Questbeloning: je hebt ₽{amount} ontvangen!",
   "ui.world.reward.wild_money": "Je versloeg {pokemon} en verdiende ${money}.",
   "ui.world.reward.trainer_money": "Je versloeg {trainer} en verdiende ${money}.",
   "ui.world.reward.story_item": "Je hebt {quantity} × {item} ontvangen!",

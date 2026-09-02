@@ -3430,6 +3430,7 @@
   "ui.world.reward.wild_item_drop": "Wild drop: You found a {item}!",
   "ui.world.reward.wild_aetherite_drop": "Wild drop: You found {amount} Aetherite!",
   "ui.world.reward.quest_aetherite": "Quest reward: You received {amount} Aetherite!",
+  "ui.world.reward.quest_money": "Quest reward: You received ₽{amount}!",
   "ui.world.reward.wild_money": "You fainted {pokemon} and earned ${money}.",
   "ui.world.reward.trainer_money": "You defeated {trainer} and earned ${money}.",
   "ui.world.reward.story_item": "You received {quantity} × {item}!",

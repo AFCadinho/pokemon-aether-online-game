@@ -174,6 +174,11 @@ func _run() -> void:
 		"trainer quest Aetherite uses localized currency reward cards"
 	)
 	_check(
+		inventory_source.contains('add_currency_reward_notification", currency_id, amount')
+		and inventory_source.contains('"ui.world.reward.quest_%s" % currency_id'),
+		"NPC story currency rewards use localized currency reward cards"
+	)
+	_check(
 		overlay_source.contains("purchased_item_id,")
 		and overlay_source.contains("add_item_reward_notification(box_item_id, 1)")
 		and overlay_source.contains("add_item_reward_notification(item_id, transacted_quantity)"),

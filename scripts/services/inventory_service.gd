@@ -457,7 +457,7 @@ func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:
 func _notify_story_currency_rewards(effects_value: Variant) -> void:
 	if effects_value is not Array:
 		return
-	var aetherite_awarded := 0
+	var currency_awards: Dictionary = {}
 	for effect_value: Variant in effects_value as Array:
 		if effect_value is not Dictionary:
 			continue
@@ -471,21 +471,20 @@ func _notify_story_currency_rewards(effects_value: Variant) -> void:
 			if grant_value is not Dictionary:
 				continue
 			var grant := grant_value as Dictionary
-			if str(grant.get("currency", "")).strip_edges().to_lower() == "aetherite":
-				aetherite_awarded += maxi(int(grant.get("amount", 0)), 0)
-	if aetherite_awarded <= 0:
-		return
-	get_tree().call_group(
-		"ui_overlay",
-		"add_system_message",
-		LocalizationManager.text("ui.world.reward.quest_aetherite", {"amount": aetherite_awarded})
-	)
-	get_tree().call_group(
-		"ui_overlay",
-		"add_currency_reward_notification",
-		"aetherite",
-		aetherite_awarded
-	)
+			var currency_id := str(grant.get("currency", "")).strip_edges().to_lower()
+			var amount := maxi(int(grant.get("amount", 0)), 0)
+			if currency_id != "" and amount > 0:
+				currency_awards[currency_id] = int(currency_awards.get(currency_id, 0)) + amount
+	for currency_id: String in currency_awards:
+		var amount: int = int(currency_awards[currency_id])
+		var message_key := "ui.world.reward.quest_%s" % currency_id
+		if LocalizationManager.has_key(message_key):
+			get_tree().call_group(
+				"ui_overlay",
+				"add_system_message",
+				LocalizationManager.text(message_key, {"amount": amount})
+			)
+		get_tree().call_group("ui_overlay", "add_currency_reward_notification", currency_id, amount)
 
 
 func load_appearance_inventory() -> Dictionary:

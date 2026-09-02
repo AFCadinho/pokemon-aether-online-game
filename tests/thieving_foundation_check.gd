@@ -53,6 +53,10 @@ func _init() -> void:
 	_check("BODY_MOVEMENT_PICKPOCKET" in npc and "create_timer(0.55)" in npc, "NPC interaction plays the one-shot pose")
 	_check("ui.thieving.experience" in npc and "experienceAwarded" in npc, "Pickpocket attempts report awarded Thieving XP")
 	_check("rewardMoney" in service and "lostMoney" in service, "Thieving rewards and fines use the shared wallet")
+	_check(
+		'"add_money_reward_notification", reward_money' in service,
+		"Successful Thieving rewards use the money reward popup"
+	)
 	_check("rewardItem" in service and "load_inventory" in service, "Item loot refreshes the player inventory")
 	_check("system.thieving_arrest" in FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd"), "Arrests can appear as global system messages")
 	_check("_try_start_pickpocket" in npc and "pickpocketProfile" in npc, "Pickpocket targets load their class from NPC metadata on demand")
