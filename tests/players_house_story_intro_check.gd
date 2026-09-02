@@ -41,6 +41,11 @@ func _run() -> void:
 			father.get("sprite_offset") == Vector2(16, 0),
 			"Player's House Dadinho aligns his sprite with the downstairs collision tile"
 		)
+		var father_nameplate := father.get("nameplate") as Control
+		_expect(
+			father_nameplate != null and father_nameplate.position.x == 16.0,
+			"Dadinho's nameplate follows his opening sprite offset"
+		)
 		_expect(
 			str(father.get("visibility_hidden_quest_id")) == "choose_starter"
 			and str(father.get("visibility_hidden_quest_step_id")) == "choose_starter",
