@@ -25,10 +25,22 @@ func _run() -> void:
 	))
 	var settings_constants: Dictionary = settings_manager.get_script().get_script_constant_map()
 	var default_bindings: Dictionary = settings_constants.get("DEFAULT_INPUT_BINDINGS", {})
+	var legacy_running_shoes_default: Key = settings_constants.get(
+		"LEGACY_RUNNING_SHOES_DEFAULT",
+		KEY_X
+	)
 	var running_shoes_events := InputMap.action_get_events("toggle_running_shoes")
 	_expect(
 		int(default_bindings.get("toggle_running_shoes", KEY_NONE)) == int(KEY_N),
 		"Running Shoes defaults to N"
+	)
+	var migrated_bindings: Dictionary = settings_manager.call(
+		"_validated_input_bindings",
+		{"toggle_running_shoes": int(legacy_running_shoes_default)}
+	)
+	_expect(
+		int(migrated_bindings.get("toggle_running_shoes", KEY_NONE)) == int(KEY_N),
+		"Existing Running Shoes X binding migrates to N"
 	)
 	_expect(
 		not running_shoes_events.is_empty()
