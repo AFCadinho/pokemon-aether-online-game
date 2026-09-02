@@ -479,6 +479,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 	animation_node.explosion_burst_config = (config.get("explosion_burst", {}) as Dictionary).duplicate(true)
 	animation_node.energy_blast_config = (config.get("energy_blast", {}) as Dictionary).duplicate(true)
 	animation_node.water_splash_config = (config.get("water_splash", {}) as Dictionary).duplicate(true)
+	animation_node.dragon_breath_config = (config.get("dragon_breath", {}) as Dictionary).duplicate(true)
 	animation_node.electric_switch_config = (config.get("electric_switch", {}) as Dictionary).duplicate(true)
 	animation_node.fire_stream_config = (config.get("fire_stream", {}) as Dictionary).duplicate(true)
 	animation_node.heat_wave_config = (config.get("heat_wave", {}) as Dictionary).duplicate(true)
@@ -1081,6 +1082,12 @@ func _apply_move_projectile_endpoint_anchors(
 	)
 	animation_node.water_splash_config = _with_projectile_endpoint_anchors(
 		animation_node.water_splash_config,
+		actor_anchor,
+		target_anchor,
+		animation_node.reverse_battlefield
+	)
+	animation_node.dragon_breath_config = _with_projectile_endpoint_anchors(
+		animation_node.dragon_breath_config,
 		actor_anchor,
 		target_anchor,
 		animation_node.reverse_battlefield

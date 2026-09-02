@@ -7673,7 +7673,7 @@
       ],
       "sparkle_count": 0,
       "template": "imported_sheet",
-      "show_sheet_sprites": true,
+      "show_sheet_sprites": false,
       "speed_scale": 1.0,
       "overlay_peak_alpha": 0.0,
       "pattern_offset": 0,
@@ -7682,11 +7682,36 @@
       "category": "projectile",
       "sprite_zoom_multiplier": 0.6,
       "data_path": "res://assets/battles/animations/watergun/watergun.json",
-      "sheet_path": "res://assets/battles/animations/watergun/PRAS- Water.png",
+      "sheet_path": "",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Water Gun.wav": "res://assets/battles/animations/watergun/PRSFX- Water Gun.wav"
+      },
+      "water_splash": {
+        "enabled": true,
+        "visible_start": 0.0,
+        "visible_end": 0.96,
+        "fade_in": 0.04,
+        "fade_out": 0.12,
+        "trail_length": 0.3,
+        "trail_width": 10.0,
+        "segments": 22,
+        "droplet_count": 14,
+        "impact_start": 0.62,
+        "impact_radius": 52.0,
+        "impact_alpha": 0.94,
+        "impact_splash_count": 16,
+        "actor_offset": [0, 66],
+        "target_offset": [0, -4],
+        "water_color": [0.04, 0.46, 1.0, 1.0],
+        "foam_color": [0.84, 0.98, 1.0, 1.0],
+        "path": [
+          {"at": 0.0, "position": [128, 224], "scale": 0.46},
+          {"at": 0.24, "position": [218, 156], "scale": 0.72, "ease": "ease_out_quad"},
+          {"at": 0.58, "position": [330, 112], "scale": 0.94, "ease": "smoothstep"},
+          {"at": 1.0, "position": [384, 96], "scale": 1.08, "ease": "ease_out_quad"}
+        ]
       }
     },
     "tackle": {
@@ -8134,15 +8159,42 @@
       "show_timing_backgrounds": false,
       "show_timing_foregrounds": false,
       "show_pink_visual": false,
+      "show_sheet_sprites": false,
       "overlay_fill_enabled": false,
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/dragonbreath/dragonbreath.json",
-      "sheet_path": "res://assets/battles/animations/dragonbreath/PRAS- Dragonbreath.png",
+      "sheet_path": "",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Dragon Breath.wav": "res://assets/battles/animations/dragonbreath/PRSFX- Dragon Breath.wav"
+      },
+      "dragon_breath": {
+        "enabled": true,
+        "visible_start": 0.0,
+        "visible_end": 0.96,
+        "fade_in": 0.08,
+        "fade_out": 0.14,
+        "travel_end": 0.7,
+        "trail_length": 0.46,
+        "width": 22.0,
+        "wave": 13.0,
+        "wave_speed": 0.42,
+        "segments": 24,
+        "particle_count": 18,
+        "impact_radius": 54.0,
+        "actor_offset": [0, 48],
+        "target_offset": [0, -8],
+        "outer_color": [0.18, 0.02, 0.55, 1.0],
+        "breath_color": [0.76, 0.04, 1.0, 1.0],
+        "core_color": [1.0, 0.84, 1.0, 1.0],
+        "path": [
+          {"at": 0.0, "position": [128, 224], "scale": 0.42},
+          {"at": 0.22, "position": [218, 158], "scale": 0.68, "ease": "ease_out_quad"},
+          {"at": 0.58, "position": [334, 112], "scale": 0.94, "ease": "smoothstep"},
+          {"at": 1.0, "position": [384, 96], "scale": 1.08, "ease": "ease_out_quad"}
+        ]
       }
     },
     "disarmingvoice": {
