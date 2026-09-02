@@ -623,7 +623,7 @@ func _quest_marker_style(border_color: Color) -> StyleBoxFlat:
 func _sync_nameplate() -> void:
 	if nameplate == null or nameplate_label == null:
 		return
-	nameplate.global_position.x = sprite.global_position.x
+	nameplate.position.x = sprite_offset.x
 
 	var name_text := display_name.strip_edges()
 	nameplate_label.text = name_text
