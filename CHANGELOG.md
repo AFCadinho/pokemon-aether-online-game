@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Developers can now use the Overworld Resets tool to respawn every Rock Smash rock without restarting their game.
+
 - Rock Smash rocks now use vivid, level-specific colours and a matching outline so their required tiers are clear in the overworld.
 
 - Rock Smash Pokédollar rewards now appear in the reward popup without playing the item-received sound.

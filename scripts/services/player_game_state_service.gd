@@ -16,6 +16,7 @@ const STORY_INTERACTION_ENDPOINT := "/game/story/interactions/%s"
 const STORY_QUEST_ACCEPT_ENDPOINT := "/game/story/quests/%s/accept"
 const DEV_STORY_CHECKPOINT_ENDPOINT := "/game/dev/progression/story-checkpoint"
 const DEV_SIDE_QUEST_PROGRESS_ENDPOINT := "/game/dev/progression/side-quest"
+const DEV_ROCK_SMASH_RESPAWN_ENDPOINT := "/game/dev/overworld/rock-smash-respawn"
 const PUBLIC_TRAINER_CARD_ENDPOINT := "/game/trainers/%s/card"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
@@ -209,6 +210,31 @@ func dev_set_side_quest_progress(quest_id: String, action: String) -> Dictionary
 		"inventoryRefreshSuccess": bool(inventory_result.get("success", false)),
 		"walletRefreshSuccess": bool(wallet_result.get("success", false)),
 		"rockSmashRefreshSuccess": rock_smash_refresh_success,
+	}
+
+
+func dev_respawn_rock_smash_rocks() -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "status": 401, "error": "Not authenticated."}
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + DEV_ROCK_SMASH_RESPAWN_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		""
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var rock_smash_result: Dictionary = await RockSmashService.load_state()
+	var world := get_tree().get_first_node_in_group("world")
+	var map_reload_success := true
+	if world != null and world.has_method("reload_current_map_preserving_player_position"):
+		map_reload_success = bool(await world.call("reload_current_map_preserving_player_position"))
+	return {
+		"success": bool(rock_smash_result.get("success", false)) and map_reload_success,
+		"rockSmashRefreshSuccess": bool(rock_smash_result.get("success", false)),
+		"mapReloadSuccess": map_reload_success,
+		"error": str(rock_smash_result.get("error", "")),
 	}
 
 
