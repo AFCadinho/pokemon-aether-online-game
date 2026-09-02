@@ -38,27 +38,6 @@ func _run() -> void:
 	await process_frame
 
 	var date := route.get_node_or_null("Entities/NPCs/MistyDate") as Node2D
-	var misty_after_bill := route.get_node_or_null("Entities/NPCs/MistyAfterBill") as Node2D
-	_check(misty_after_bill != null, "Route 25 brings Misty back after Bill's rescue")
-	if misty_after_bill != null:
-		_check(
-			str(misty_after_bill.get("visibility_required_quest_id")) == "help_bill"
-			and str(misty_after_bill.get("visibility_required_quest_status")) == "completed",
-			"Misty's follow-up only appears after the S.S. Anne ticket is earned"
-		)
-		_check(
-			str(misty_after_bill.get("display_name")) == "Misty"
-			and misty_after_bill.get("mugshot") != null,
-			"Misty's follow-up uses her own name and portrait"
-		)
-		var misty_lines: Array = misty_after_bill.get("dialogue_lines")
-		_check(
-			misty_lines.size() == 3
-			and str(misty_lines[0]).contains("Dadinho")
-			and str(misty_lines[1]).contains("S.S. Anne")
-			and str(misty_lines[2]).contains("Vermilion City"),
-			"Misty connects Dadinho, Bill's ticket, Vermilion City, and its Gym"
-		)
 	_check(date != null, "Route 25 places Dadinho and Misty by the water")
 	if date != null:
 		_check(date.position == Vector2(1840, 1040), "the date uses its designed waterside position")

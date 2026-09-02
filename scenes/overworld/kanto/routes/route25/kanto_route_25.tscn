@@ -20,8 +20,6 @@
 [ext_resource type="Script" uid="uid://diueg43o4xvic" path="res://scripts/world/kanto/routes/route_25_misty_date_npc.gd" id="18_misty_date"]
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="19_gxnmn"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="20_story_hook"]
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/misty-lgpe.png" id="21_misty_mugshot"]
-[ext_resource type="Script" path="res://scripts/world/kanto/routes/route_25_misty_after_bill_npc.gd" id="22_misty_after_bill"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_upper_exit"]
 size = Vector2(32, 128)
@@ -320,17 +318,6 @@ vertical_alignment = 1
 script = ExtResource("20_story_hook")
 interaction_id = "kanto_route_25_misty_found"
 entity_id = "kanto_route_25_dadinho_date"
-
-[node name="MistyAfterBill" parent="Entities/NPCs" instance=ExtResource("14_dialogue_npc")]
-position = Vector2(1872, 1024)
-script = ExtResource("22_misty_after_bill")
-npc_id = "kanto_route_25_misty_after_bill"
-visibility_required_quest_id = "help_bill"
-visibility_required_quest_status = "completed"
-display_name = "Misty"
-facing_direction = Vector2(-1, 0)
-npc_sprite_frames = ExtResource("16_misty_frames")
-mugshot = ExtResource("21_misty_mugshot")
 
 [node name="HikerFranklin" parent="Entities/NPCs" unique_id=98883287 instance=ExtResource("7_trainer")]
 position = Vector2(272, 464)
