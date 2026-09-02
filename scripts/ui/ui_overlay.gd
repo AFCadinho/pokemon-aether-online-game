@@ -32039,10 +32039,10 @@ func _on_dev_overworld_resets_button_pressed() -> void:
 	var result: Dictionary = await PlayerGameStateService.dev_respawn_rock_smash_rocks()
 	dev_overworld_resets_button.disabled = false
 	if bool(result.get("success", false)):
-		_add_chat_message(_t("ui.staff.dev.overworld_resets_success"))
+		_add_chat_message(LocalizationManager.text("ui.staff.dev.overworld_resets_success"))
 		return
-	_add_chat_message(_t("ui.staff.dev.overworld_resets_failed", {
-		"error": str(result.get("error", _t("common.unknown_error"))),
+	_add_chat_message(LocalizationManager.text("ui.staff.dev.overworld_resets_failed", {
+		"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
 	}))
 
 func _on_staff_tools_button_pressed() -> void:
