@@ -37213,7 +37213,10 @@ func _populate_dev_encounter_species() -> void:
 		if species == "" or seen.has(species):
 			continue
 		seen[species] = true
-		dev_encounter_species.add_item(_format_identifier_display_name(species))
+		var icon := PokemonAssets.load_party_icon(species, false)
+		if icon == null:
+			icon = PokemonAssets.load_unknown_icon()
+		dev_encounter_species.add_icon_item(icon, _format_identifier_display_name(species))
 		dev_encounter_species.set_item_metadata(dev_encounter_species.item_count - 1, species)
 	dev_encounter_species.disabled = dev_encounter_species.item_count == 0
 	if dev_encounter_species.item_count > 0:

@@ -17,6 +17,7 @@ func _init() -> void:
 	_check(overlay.contains("EncounterMetadataService.get_encounter_area_metadata"), "staff UI reads current-map encounter metadata")
 	_check(overlay.contains("func _apply_staff_encounter_tab_style"), "staff encounter tabs use the custom UI style")
 	_check(overlay.contains("_apply_developer_dropdown_style(dev_encounter_method)"), "method selector uses the custom dropdown style")
+	_check(overlay.contains("PokemonAssets.load_party_icon(species, false)"), "species selector uses Pokémon HOME icons")
 	_check(world.contains("forced_species_id: String = \"\""), "world forwards an optional staff-selected species")
 	_check(api.contains('payload["forcedSpeciesId"]'), "battle API sends a selected species only when requested")
 	quit(1 if failed else 0)
