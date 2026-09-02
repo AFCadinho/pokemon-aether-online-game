@@ -171,6 +171,16 @@ func _run() -> void:
 		"trade level cap errors include the relevant levels"
 	)
 	_check(
+		errors.call("message", {
+			"detail": {
+				"code": "rock_smash_level_required",
+				"requiredLevel": 10.0,
+				"level": 5.0,
+			}
+		}) == "Rock Smash-level 10 is vereist. Jouw level is 5.",
+		"Rock Smash level requirements display whole numbers"
+	)
+	_check(
 		errors.call("message", {"detail": {"code": "MEGA_CALCULATOR_PENDING"}})
 		== "De damage calculator is nog niet klaar voor die Mega Evolution.",
 		"Mega calculator readiness errors display in Dutch"
