@@ -364,7 +364,6 @@ func _build_journal() -> void:
 		var filter_button := Button.new()
 		filter_button.custom_minimum_size = Vector2(108, 32)
 		filter_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		filter_button.focus_mode = Control.FOCUS_NONE
 		filter_button.pressed.connect(set_filter.bind(filter_id))
 		filter_row.add_child(filter_button)
 		filter_buttons[filter_id] = filter_button
@@ -685,29 +684,87 @@ func _refresh_journal() -> void:
 		)
 		if section != current_section:
 			current_section = section
-			var section_label := _label(10, MUTED_TEXT)
+			var section_label := _label(10, _section_color(section))
 			section_label.text = localization_manager.text("ui.quest.section.%s" % section).to_upper()
 			section_label.add_theme_constant_override("outline_size", 1)
 			quest_list.add_child(section_label)
 		var button := Button.new()
 		button.custom_minimum_size = Vector2(0, 70)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.text = "%s  •  %s\n%s" % [
-			_quest_type_text(str(quest.get("questType", "main"))).to_upper(),
-			_status_text(status).to_upper(),
-			_localized_definition(str(quest.get("titleKey", "")), quest_id),
-		]
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		button.tooltip_text = _localized_definition(
+			str(quest.get("summaryKey", "")),
+			quest_id
+		)
 		_style_quest_button(
 			button,
 			quest_id == selected_quest_id,
-			str(quest.get("questType", "main"))
+			str(quest.get("questType", "main")),
+			status
 		)
+		_add_quest_button_content(button, quest, status)
 		button.pressed.connect(_on_quest_selected.bind(quest_id))
 		quest_list.add_child(button)
 
 	_show_quest_detail(_find_entry(entries, selected_quest_id))
+
+
+func _add_quest_button_content(button: Button, quest: Dictionary, status: String) -> void:
+	var margin := MarginContainer.new()
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_set_margins(margin, 11, 8, 11, 8)
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 3)
+	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_child(stack)
+
+	var meta_row := HBoxContainer.new()
+	meta_row.add_theme_constant_override("separation", 5)
+	meta_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_child(meta_row)
+	var status_label := _label(10, _status_color(status))
+	status_label.text = "%s  %s" % [_status_marker(status), _status_text(status).to_upper()]
+	status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	meta_row.add_child(status_label)
+	var type_label := _label(10, _quest_type_color(str(quest.get("questType", "main"))))
+	type_label.text = _quest_type_text(str(quest.get("questType", "main"))).to_upper()
+	type_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	type_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	meta_row.add_child(type_label)
+
+	var title_label := _label(13, TEXT)
+	title_label.text = _localized_definition(
+		str(quest.get("titleKey", "")),
+		str(quest.get("questId", ""))
+	)
+	title_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_child(title_label)
+
+
+func _status_marker(status: String) -> String:
+	match status:
+		"completed":
+			return "✓"
+		"active":
+			return "●"
+		"failed":
+			return "!"
+		_:
+			return "○"
+
+
+func _section_color(section: String) -> Color:
+	match section:
+		"active":
+			return ACCENT
+		"available":
+			return SIDE_QUEST_ACCENT
+		_:
+			return MUTED_TEXT
 
 
 func _show_quest_detail(quest: Dictionary) -> void:
@@ -1217,7 +1274,9 @@ func _color_with_alpha(color: Color, alpha: float) -> Color:
 
 
 func _style_filter_button(button: Button, selected: bool, filter_id: String) -> void:
-	var accent := SIDE_QUEST_ACCENT if filter_id == "side" else ACCENT
+	var accent := SIDE_QUEST_ACCENT if filter_id == "side" else (
+		SUCCESS if filter_id == "completed" else ACCENT
+	)
 	var background := _color_with_alpha(accent, 0.12) if selected else SURFACE_INSET
 	var border := _color_with_alpha(accent, 0.85) if selected else BORDER_SOFT
 	button.add_theme_color_override("font_color", TEXT if selected else MUTED_TEXT)
@@ -1229,8 +1288,13 @@ func _style_filter_button(button: Button, selected: bool, filter_id: String) -> 
 	button.add_theme_stylebox_override("focus", _style(background, accent, 7, 1))
 
 
-func _style_quest_button(button: Button, selected: bool, quest_type: String) -> void:
-	var accent := _quest_type_color(quest_type)
+func _style_quest_button(
+	button: Button,
+	selected: bool,
+	quest_type: String,
+	status: String = ""
+) -> void:
+	var accent := SUCCESS if status == "completed" else _quest_type_color(quest_type)
 	var background := _color_with_alpha(accent, 0.12) if selected else Color("#0b1a2bea")
 	var border := accent if selected else BORDER_SOFT
 	button.add_theme_color_override("font_color", TEXT)
