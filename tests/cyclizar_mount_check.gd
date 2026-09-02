@@ -166,6 +166,16 @@ func _check_land_mount_runtime_contract() -> void:
 		< load_map_source.find('player.call("restore_land_mount", land_mount_id_to_restore)'),
 		"ordinary map changes preserve land mounts when the destination permits them"
 	)
+	var authorized_teleport_source := _function_source(world_source, "apply_authorized_teleport_state")
+	_check(
+		authorized_teleport_source.contains('player.call("get_active_land_mount_id")')
+		and authorized_teleport_source.contains('player.call("restore_land_mount", land_mount_id_to_restore)')
+		and authorized_teleport_source.find('player.call("get_active_land_mount_id")')
+		< authorized_teleport_source.find("player.call(\"reset_movement_state\")")
+		and authorized_teleport_source.find("player.call(\"reset_movement_state\")")
+		< authorized_teleport_source.find('player.call("restore_land_mount", land_mount_id_to_restore)'),
+		"authorized route transitions preserve an active land mount"
+	)
 	var battle_lock_source := _function_source(world_source, "_lock_overworld_for_battle")
 	var battle_unlock_source := _function_source(world_source, "_unlock_overworld_after_battle")
 	_check(
