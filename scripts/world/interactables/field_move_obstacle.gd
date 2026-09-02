@@ -4,6 +4,7 @@ class_name FieldMoveObstacle
 
 @export_enum("cut", "rock-smash") var required_field_move := "cut"
 @export_multiline var unavailable_message := "This obstacle can be cleared with Cut."
+@export var mugshot: Texture2D
 @export var clear_frames: Array[Texture2D] = []
 @export var clear_frame_duration := 0.11
 @export var clear_duration := 0.32
@@ -29,7 +30,11 @@ func interact_with_player(_player: Node2D) -> void:
 		return
 	var field_move_result: Dictionary = FieldMoveService.can_use_field_move(required_field_move)
 	if not bool(field_move_result.get("success", false)):
-		await show_dialogue([str(field_move_result.get("error", unavailable_message))])
+		await show_dialogue(
+			[str(field_move_result.get("error", unavailable_message))],
+			display_name,
+			mugshot
+		)
 		return
 
 	var pokemon: Pokemon = field_move_result.get("pokemon") as Pokemon
