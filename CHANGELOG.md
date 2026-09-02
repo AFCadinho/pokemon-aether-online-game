@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Item rewards from Mom, Oak, and Daisy now show their popup, System message, and sound together after the reward dialogue.
 - Re-imported the Aether Clash Lobby visual from the latest Tiled map.
 - The Training Room now lets players choose AI4 with AI5 watching or active AI5, plus a team archetype, a random matching sample team, or a specific competitive team.
 - The Training Room's Vs AI action now clearly looks interactive when it is available.

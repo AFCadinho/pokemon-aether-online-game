@@ -127,8 +127,11 @@ func try_handle_interaction(host: Node, player: Node2D, trigger: String) -> Dict
 	# another trusted event has already advanced the local projection, keep that
 	# newer state while still treating this completion receipt as successful.
 	StoryService.apply_story_if_not_stale(completion_result.get("story", {}))
-	if not (completion_result.get("effects", []) as Array).is_empty():
+	var effects := completion_result.get("effects", []) as Array
+	if not effects.is_empty():
 		await InventoryService.load_inventory()
+		if InventoryService.notify_story_reward_effects(effects):
+			SfxManager.play("item_received")
 	return _finish({
 		"success": true,
 		"handled": true,
