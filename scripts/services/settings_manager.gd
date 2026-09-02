@@ -154,11 +154,24 @@ func load_settings() -> void:
 	enabled_language_chats = _validated_language_chats(
 		data.get("enabled_language_chats", enabled_language_chats)
 	)
-	input_bindings = _validated_input_bindings(data.get("input_bindings", input_bindings))
+	var stored_input_bindings: Variant = data.get("input_bindings", input_bindings)
+	var input_bindings_migrated := (
+		stored_input_bindings is Dictionary
+		and int((stored_input_bindings as Dictionary).get(
+			"toggle_running_shoes",
+			DEFAULT_INPUT_BINDINGS["toggle_running_shoes"]
+		)) == int(LEGACY_RUNNING_SHOES_DEFAULT)
+	)
+	input_bindings = _validated_input_bindings(stored_input_bindings)
 	var launcher_changed := _apply_launcher_locale_argument()
 	if not has_content_name_language:
 		content_name_language = _default_content_name_language(locale)
-	if launcher_changed or not has_content_name_language or not has_world_pixel_scale_mode:
+	if (
+		launcher_changed
+		or input_bindings_migrated
+		or not has_content_name_language
+		or not has_world_pixel_scale_mode
+	):
 		save_settings()
 	_apply_runtime_settings()
 
