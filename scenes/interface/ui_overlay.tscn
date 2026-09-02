@@ -831,6 +831,18 @@ layout_mode = 2
 size_flags_vertical = 3
 placeholder_text = "ui.staff.dev.pokemon.add_placeholder"
 
+[node name="EncounterMode" type="OptionButton" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="EncounterMethod" type="OptionButton" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="EncounterSpecies" type="OptionButton" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
 [node name="PreserveDirectBattleForm" type="CheckButton" parent="Control/DevPokemonPopup/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2

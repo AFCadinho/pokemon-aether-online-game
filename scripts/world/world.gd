@@ -2617,7 +2617,11 @@ func create_dev_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
 	battle_request.queue_free()
 	return response
 
-func create_triggered_wild_battle_response(area_id: String, encounter_type: String = "grass") -> Dictionary:
+func create_triggered_wild_battle_response(
+	area_id: String,
+	encounter_type: String = "grass",
+	forced_species_id: String = ""
+) -> Dictionary:
 	var battle_request := HTTPRequest.new()
 	add_child(battle_request)
 	var player_payload: Dictionary = BattleApiPayloads.from_player_save(PlayerSave)
@@ -2631,7 +2635,8 @@ func create_triggered_wild_battle_response(area_id: String, encounter_type: Stri
 		area_id,
 		encounter_type,
 		_get_current_wild_battle_origin(),
-		debug_time_of_day
+		debug_time_of_day,
+		forced_species_id
 	)
 
 	battle_request.queue_free()
@@ -2776,7 +2781,11 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 		response
 	)
 
-func start_triggered_wild_battle_for_area(area_id: String, encounter_type: String = "grass") -> void:
+func start_triggered_wild_battle_for_area(
+	area_id: String,
+	encounter_type: String = "grass",
+	forced_species_id: String = ""
+) -> void:
 	if is_in_battle:
 		return
 
@@ -2788,7 +2797,7 @@ func start_triggered_wild_battle_for_area(area_id: String, encounter_type: Strin
 	_lock_overworld_for_battle()
 	var transition_started_at_msec := _begin_wild_encounter_transition()
 
-	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type)
+	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id)
 	if not response.get("success", false):
 		push_warning("World.start_triggered_wild_battle_for_area failed: %s" % str(response.get("error", "Unknown error")))
 		await _cancel_wild_encounter_transition()

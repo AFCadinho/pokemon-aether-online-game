@@ -599,6 +599,9 @@ var donator_store_popup: DonatorStorePopup
 @onready var dev_pokemon_title: Label = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/Title
 @onready var dev_pokemon_subtitle: Label = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/Subtitle
 @onready var dev_pokemon_text: TextEdit = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/PokemonText
+@onready var dev_encounter_mode: OptionButton = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/EncounterMode
+@onready var dev_encounter_method: OptionButton = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/EncounterMethod
+@onready var dev_encounter_species: OptionButton = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/EncounterSpecies
 @onready var dev_preserve_direct_form: CheckButton = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/PreserveDirectBattleForm
 @onready var dev_test_purpose: LineEdit = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/TestPurpose
 @onready var dev_pokemon_add_button: Button = $Control/DevPokemonPopup/MarginContainer/VBoxContainer/ButtonRow/AddButton
@@ -719,6 +722,7 @@ var hotbar_previous_page_button: Button
 var hotbar_next_page_button: Button
 var hotbar_page_label: Label
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
+var dev_encounter_metadata: Dictionary = {}
 var collapsible_panels: Dictionary = {}
 var chat_resize_button: Button
 var chat_input_dock: PanelContainer
@@ -1695,6 +1699,8 @@ func _ready() -> void:
 	dev_pokemon_button.disabled = true
 	dev_pokemon_add_button.pressed.connect(_on_dev_pokemon_add_button_pressed)
 	dev_pokemon_close_button.pressed.connect(_on_dev_pokemon_close_button_pressed)
+	dev_encounter_mode.item_selected.connect(_on_dev_encounter_mode_selected)
+	dev_encounter_method.item_selected.connect(_on_dev_encounter_method_selected)
 	dev_preserve_direct_form.toggled.connect(_on_dev_preserve_direct_form_toggled)
 	_setup_icon_slot_hover(aether_exchange_slot, aether_exchange_button)
 	_setup_icon_slot_hover(map_slot, map_button)
@@ -11420,6 +11426,12 @@ func _wild_encounter_method_label(encounter_type: String) -> String:
 			return LocalizationManager.text("ui.wild.method.surf")
 		"fish", "fishing":
 			return LocalizationManager.text("ui.wild.method.fishing")
+		"old_rod":
+			return "Old Rod"
+		"good_rod":
+			return "Good Rod"
+		"super_rod":
+			return "Super Rod"
 		_:
 			return _format_identifier_display_name(encounter_type)
 
@@ -31078,6 +31090,27 @@ func _handle_start_encounter_command(pokemon_text: String) -> bool:
 	await world.start_dev_wild_battle(pokemon)
 	return true
 
+func _handle_start_map_encounter_command() -> bool:
+	if PlayerSave.party.is_empty():
+		_add_chat_message("You need a Pokemon in your party first.")
+		return false
+	var area_id := _get_current_encounter_area_id()
+	var encounter_type := _selected_dev_encounter_value(dev_encounter_method)
+	var species_id := _selected_dev_encounter_value(dev_encounter_species)
+	if area_id == "" or encounter_type == "" or species_id == "":
+		_add_chat_message("Choose an encounter method and Pokemon from this map first.")
+		return false
+	var world := GameState.get_world()
+	if world == null or not world.has_method("start_triggered_wild_battle_for_area"):
+		_add_chat_message("Cannot start a wild battle from here.")
+		return false
+	_add_chat_message("Starting %s encounter: %s." % [
+		_wild_encounter_method_label(encounter_type),
+		_format_identifier_display_name(species_id),
+	])
+	await world.start_triggered_wild_battle_for_area(area_id, encounter_type, species_id)
+	return true
+
 func _handle_add_pokemon_command(
 	pokemon_text: String,
 	preserve_direct_battle_form: bool = false,
@@ -37062,7 +37095,11 @@ func _show_dev_pokemon_popup(mode: int) -> void:
 	dev_pokemon_add_button.disabled = dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR and not _can_use_content_creator_generation()
 	dev_pokemon_popup.visible = true
 	_activate_ui_panel(dev_pokemon_popup)
-	dev_pokemon_text.grab_focus()
+	if mode == DevPokemonPopupMode.SPAWN:
+		_setup_dev_encounter_mode_selector()
+		await _load_dev_encounter_metadata()
+	else:
+		dev_pokemon_text.grab_focus()
 
 
 func _refresh_dev_pokemon_popup_copy() -> void:
@@ -37072,6 +37109,11 @@ func _refresh_dev_pokemon_popup_copy() -> void:
 	)
 	dev_preserve_direct_form.visible = can_preserve_direct
 	dev_test_purpose.visible = can_preserve_direct and dev_preserve_direct_form.button_pressed
+	var is_spawn := dev_pokemon_popup_mode == DevPokemonPopupMode.SPAWN
+	dev_encounter_mode.visible = is_spawn
+	dev_encounter_method.visible = is_spawn and dev_encounter_mode.selected == 1
+	dev_encounter_species.visible = is_spawn and dev_encounter_mode.selected == 1
+	dev_pokemon_text.visible = not is_spawn or dev_encounter_mode.selected == 0
 	match dev_pokemon_popup_mode:
 		DevPokemonPopupMode.CONTENT_CREATOR:
 			dev_pokemon_title.text = LocalizationManager.text("ui.staff.dev.pokemon.alpha_title")
@@ -37085,7 +37127,7 @@ func _refresh_dev_pokemon_popup_copy() -> void:
 			dev_pokemon_text.placeholder_text = LocalizationManager.text("ui.staff.dev.pokemon.create_placeholder")
 		DevPokemonPopupMode.SPAWN:
 			dev_pokemon_title.text = LocalizationManager.text("ui.staff.dev.pokemon.spawn_title")
-			dev_pokemon_subtitle.text = LocalizationManager.text("ui.staff.dev.pokemon.spawn_subtitle")
+			dev_pokemon_subtitle.text = "Choose a free Pokemon set, or test a normal encounter from this map."
 			dev_pokemon_add_button.text = LocalizationManager.text("ui.staff.dev.pokemon.spawn")
 			dev_pokemon_text.placeholder_text = LocalizationManager.text("ui.staff.dev.pokemon.spawn_placeholder")
 		_:
@@ -37093,6 +37135,88 @@ func _refresh_dev_pokemon_popup_copy() -> void:
 			dev_pokemon_subtitle.text = LocalizationManager.text("ui.staff.dev.pokemon.add_subtitle")
 			dev_pokemon_add_button.text = LocalizationManager.text("ui.staff.dev.add")
 			dev_pokemon_text.placeholder_text = LocalizationManager.text("ui.staff.dev.pokemon.add_placeholder")
+
+func _setup_dev_encounter_mode_selector() -> void:
+	dev_encounter_mode.clear()
+	dev_encounter_mode.add_item("Free Pokemon", 0)
+	dev_encounter_mode.add_item("Map encounter", 1)
+	dev_encounter_mode.select(0)
+	dev_encounter_method.clear()
+	dev_encounter_method.add_item("Loading map encounter methods…")
+	dev_encounter_method.disabled = true
+	dev_encounter_species.clear()
+	dev_encounter_species.add_item("Choose an encounter method first")
+	dev_encounter_species.disabled = true
+	_refresh_dev_pokemon_popup_copy()
+
+func _load_dev_encounter_metadata() -> void:
+	var area_id := _get_current_encounter_area_id()
+	dev_encounter_metadata.clear()
+	if area_id == "":
+		dev_encounter_method.clear()
+		dev_encounter_method.add_item("This map has no wild encounters")
+		dev_encounter_species.clear()
+		dev_encounter_species.add_item("No Pokemon available")
+		return
+	var response: Dictionary = await EncounterMetadataService.get_encounter_area_metadata(area_id)
+	if (
+		not dev_pokemon_popup.visible
+		or dev_pokemon_popup_mode != DevPokemonPopupMode.SPAWN
+		or area_id != _get_current_encounter_area_id()
+	):
+		return
+	if not bool(response.get("success", false)):
+		dev_encounter_method.clear()
+		dev_encounter_method.add_item("Could not load map encounters")
+		return
+	dev_encounter_metadata = (response.get("metadata", {}) as Dictionary).duplicate(true)
+	_populate_dev_encounter_methods()
+
+func _populate_dev_encounter_methods() -> void:
+	dev_encounter_method.clear()
+	var encounter_types: Dictionary = dev_encounter_metadata.get("encounterTypes", {}) as Dictionary
+	var ids: Array = encounter_types.keys()
+	ids.sort()
+	for value: Variant in ids:
+		var encounter_type := str(value)
+		dev_encounter_method.add_item(_wild_encounter_method_label(encounter_type))
+		dev_encounter_method.set_item_metadata(dev_encounter_method.item_count - 1, encounter_type)
+	dev_encounter_method.disabled = dev_encounter_method.item_count == 0
+	if dev_encounter_method.item_count > 0:
+		dev_encounter_method.select(0)
+	_populate_dev_encounter_species()
+
+func _populate_dev_encounter_species() -> void:
+	dev_encounter_species.clear()
+	var encounter_type := _selected_dev_encounter_value(dev_encounter_method)
+	var encounter_types: Dictionary = dev_encounter_metadata.get("encounterTypes", {}) as Dictionary
+	var encounter_data: Dictionary = encounter_types.get(encounter_type, {}) as Dictionary
+	var seen: Dictionary = {}
+	for entry_value: Variant in _array_from_variant(encounter_data.get("pokemon", [])):
+		if not entry_value is Dictionary:
+			continue
+		var species := str((entry_value as Dictionary).get("species", "")).strip_edges()
+		if species == "" or seen.has(species):
+			continue
+		seen[species] = true
+		dev_encounter_species.add_item(_format_identifier_display_name(species))
+		dev_encounter_species.set_item_metadata(dev_encounter_species.item_count - 1, species)
+	dev_encounter_species.disabled = dev_encounter_species.item_count == 0
+	if dev_encounter_species.item_count > 0:
+		dev_encounter_species.select(0)
+
+func _selected_dev_encounter_value(selector: OptionButton) -> String:
+	if selector == null or selector.selected < 0:
+		return ""
+	return str(selector.get_item_metadata(selector.selected)).strip_edges()
+
+func _on_dev_encounter_mode_selected(_selected: int) -> void:
+	_refresh_dev_pokemon_popup_copy()
+	if dev_encounter_mode.selected == 0:
+		dev_pokemon_text.grab_focus()
+
+func _on_dev_encounter_method_selected(_selected: int) -> void:
+	_populate_dev_encounter_species()
 
 func _on_dev_pokemon_add_button_pressed() -> void:
 	if dev_pokemon_popup_mode == DevPokemonPopupMode.CONTENT_CREATOR:
@@ -37116,7 +37240,11 @@ func _on_dev_pokemon_add_button_pressed() -> void:
 		DevPokemonPopupMode.TEAM:
 			added = await _handle_add_team_command(dev_pokemon_text.text, preserve_direct, test_purpose)
 		DevPokemonPopupMode.SPAWN:
-			added = await _handle_start_encounter_command(dev_pokemon_text.text)
+			added = (
+				await _handle_start_map_encounter_command()
+				if dev_encounter_mode.selected == 1
+				else await _handle_start_encounter_command(dev_pokemon_text.text)
+			)
 		_:
 			added = await _handle_add_pokemon_command(dev_pokemon_text.text, preserve_direct, test_purpose)
 
@@ -37126,6 +37254,7 @@ func _on_dev_pokemon_add_button_pressed() -> void:
 
 func _on_dev_pokemon_close_button_pressed() -> void:
 	dev_pokemon_popup.visible = false
+	dev_encounter_metadata.clear()
 	dev_preserve_direct_form.set_pressed_no_signal(false)
 	dev_test_purpose.clear()
 	dev_pokemon_popup_mode = DevPokemonPopupMode.POKEMON
