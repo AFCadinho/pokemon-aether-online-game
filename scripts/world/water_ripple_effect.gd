@@ -7,6 +7,7 @@ const KIND_FISH_BITE := "fish_bite"
 const KIND_FISH_REEL := "fish_reel"
 
 const Z_OFFSET := 1
+const SURF_Z_OFFSET := -2
 
 var duration := 0.34
 var elapsed := 0.0
@@ -20,7 +21,9 @@ var ripple_color := Color(0.78, 0.93, 1.0, 0.72)
 func play(world_position: Vector2, kind := KIND_SURF_STEP) -> void:
 	global_position = world_position
 	z_as_relative = false
-	z_index = floori(world_position.y) + Z_OFFSET
+	# Surf rings originate underneath the rider. Keep them below the complete
+	# mount layer (which renders one level below the player), rather than over it.
+	z_index = floori(world_position.y) + (SURF_Z_OFFSET if kind.begins_with("surf_") else Z_OFFSET)
 	_configure_kind(kind)
 	queue_redraw()
 

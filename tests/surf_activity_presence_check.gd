@@ -1,12 +1,14 @@
 extends SceneTree
 
 const WorldPresenceServiceScript := preload("res://scripts/services/world_presence_service.gd")
+const WaterRippleEffectScript := preload("res://scripts/world/water_ripple_effect.gd")
 
 var failed := false
 
 
 func _init() -> void:
 	_check_surf_moves_at_running_speed()
+	_check_surf_ripples_render_below_mount()
 	_check_water_position_restores_surf_without_rechecking_entitlement()
 	_check_surf_can_cross_authorized_transitions()
 	_check_presence_payload_and_signature_include_activity_style()
@@ -28,6 +30,17 @@ func _check_surf_moves_at_running_speed() -> void:
 		animation_source.contains("if surf_activity_active:\n\t\treturn RUN_WALK_ANIMATION_SPEED"),
 		"Surf animation cadence matches running speed"
 	)
+
+
+func _check_surf_ripples_render_below_mount() -> void:
+	var ripple := WaterRippleEffectScript.new()
+	var ripple_position := Vector2(64.0, 96.0)
+	ripple.play(ripple_position, "surf_step")
+	_expect(
+		ripple.z_index < floori(ripple_position.y) - 1,
+		"Surf ripples render below the player and its behind-rider mount layer"
+	)
+	ripple.free()
 
 
 func _check_water_position_restores_surf_without_rechecking_entitlement() -> void:
