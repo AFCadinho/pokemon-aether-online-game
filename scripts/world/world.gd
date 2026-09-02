@@ -3451,7 +3451,7 @@ func _award_trainer_battle_rewards(
 		_notify_reward_experience_gains(reward)
 		_notify_reward_level_ups(reward)
 		_notify_gym_badge_award(reward_result.get("gymBadgeAward", {}))
-		_notify_story_reward_items(reward_result.get("storyEffects", []))
+		var item_reward_awarded := _notify_story_reward_items(reward_result.get("storyEffects", []))
 		var trainer_progress := _dictionary_from_value(reward_result.get("trainerProgress", {}))
 		if not trainer_id.is_empty() and not trainer_progress.is_empty():
 			get_tree().call_group(
@@ -3468,7 +3468,7 @@ func _award_trainer_battle_rewards(
 			push_warning("World: trainer reward story refresh failed: %s" % str(story_result.get("error", "Unknown error")))
 		return {
 			"success": true,
-			"playItemReceivedSfx": bool(gym_badge_award.get("awarded", false)),
+			"playItemReceivedSfx": item_reward_awarded,
 		}
 	else:
 		push_warning("World: trainer battle reward failed: %s" % str(reward_result.get("error", "Unknown error")))
@@ -3665,7 +3665,8 @@ func _notify_trainer_battle_rewards_awarded(trainer_name: String, money_awarded:
 	get_tree().call_group("ui_overlay", "add_money_reward_notification", money_awarded)
 
 
-func _notify_story_reward_items(value: Variant) -> void:
+func _notify_story_reward_items(value: Variant) -> bool:
+	var item_reward_awarded := false
 	for message: String in _story_reward_item_messages(value):
 		get_tree().call_group("ui_overlay", "add_system_message", message)
 	for grant: Dictionary in _story_reward_item_grants(value):
@@ -3675,6 +3676,7 @@ func _notify_story_reward_items(value: Variant) -> void:
 			str(grant.get("itemId", "")),
 			int(grant.get("quantity", 0))
 		)
+		item_reward_awarded = true
 	var aetherite_awarded := _story_reward_aetherite_amount(value)
 	if aetherite_awarded > 0:
 		get_tree().call_group(
@@ -3691,6 +3693,7 @@ func _notify_story_reward_items(value: Variant) -> void:
 			"aetherite",
 			aetherite_awarded
 		)
+	return item_reward_awarded
 
 
 func _story_reward_aetherite_amount(value: Variant) -> int:

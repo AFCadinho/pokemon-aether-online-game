@@ -260,7 +260,7 @@ func notify_claimed_item_reward(result: Dictionary) -> bool:
 func notify_story_reward_effects(effects_value: Variant) -> bool:
 	if not effects_value is Array:
 		return false
-	var displayed_reward := false
+	var item_reward_displayed := false
 	for effect_value: Variant in effects_value as Array:
 		if not effect_value is Dictionary:
 			continue
@@ -286,7 +286,7 @@ func notify_story_reward_effects(effects_value: Variant) -> bool:
 						"quantity": quantity,
 					})
 				)
-				displayed_reward = true
+				item_reward_displayed = true
 			var currency_id := str(grant.get("currency", "")).strip_edges().to_lower()
 			var amount := maxi(int(grant.get("amount", 0)), 0)
 			if currency_id != "" and amount > 0:
@@ -296,8 +296,7 @@ func notify_story_reward_effects(effects_value: Variant) -> bool:
 					LocalizationManager.text("ui.world.reward.quest_%s" % currency_id, {"amount": amount})
 				)
 				get_tree().call_group("ui_overlay", "add_currency_reward_notification", currency_id, amount)
-				displayed_reward = true
-	return displayed_reward
+	return item_reward_displayed
 
 
 func load_collected_world_pickups(force_refresh := false) -> Dictionary:
