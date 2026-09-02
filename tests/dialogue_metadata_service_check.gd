@@ -123,6 +123,12 @@ func _check_dialogue_box_side_quest_offer() -> void:
 	_check_true(text.contains('quest.get("rewardPreviews"'), "quest choice shows its server-projected rewards")
 	_check_true(text.contains("ItemLocalization.display_name("), "item rewards use localized item names")
 	_check_true(text.contains('"skill_experience"'), "quest choice renders skill experience rewards")
+	_check_true(
+		text.contains("func _quest_reward_currency_icon(")
+		and text.contains("AETHERITE_REWARD_ICON")
+		and text.contains('str(reward.get("currency", ""))'),
+		"currency rewards resolve their dedicated icons"
+	)
 	_check_true(text.contains("func _quest_reward_item_icon("), "item rewards resolve their catalog icon")
 	_check_true(
 		text.contains("func _quest_reward_machine_icon_path(")

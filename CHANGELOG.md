@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Quest offer dialogs now show dedicated icons for currency rewards such as Aetherite and Pokédollars.
 - Successful Thieving attempts now show earned Pokédollars in the reward popup.
 - Existing saved Running Shoes bindings on `X` now migrate to `N` automatically.
 - Developer story checkpoints now refresh rewards from completed main quests without adding side-quest rewards.
