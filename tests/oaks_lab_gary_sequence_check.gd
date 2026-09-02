@@ -80,6 +80,10 @@ func _run() -> void:
 	)
 	var oak_text := _read_text(OAK_SCRIPT)
 	_check_true(
+		oak_text.contains('StoryService.is_requirement_met("choose_starter", "talk_to_father", "completed")'),
+		"Oak requires the player to complete Dadinho's introduction before offering a starter"
+	)
+	_check_true(
 		gary_text.contains("starter_sequence_pending")
 		and gary_text.contains("func prepare_starter_sequence()")
 		and oak_text.contains("_prepare_gary_starter_sequence()"),
