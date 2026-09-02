@@ -34,6 +34,7 @@ signal animation_finished
 @export var explosion_burst_config: Dictionary = {}
 @export var energy_blast_config: Dictionary = {}
 @export var water_splash_config: Dictionary = {}
+@export var dragon_breath_config: Dictionary = {}
 @export var electric_switch_config: Dictionary = {}
 @export var fire_stream_config: Dictionary = {}
 @export var heat_wave_config: Dictionary = {}
@@ -384,6 +385,7 @@ func _draw() -> void:
 	_draw_explosion_burst_visual()
 	_draw_energy_blast_visual()
 	_draw_water_splash_visual()
+	_draw_dragon_breath_visual()
 	_draw_electric_switch_visual()
 	_draw_fire_stream_visual()
 	_draw_heat_wave_visual()
@@ -2585,6 +2587,87 @@ func _draw_water_splash_impact(progress: float, visible_end: float, target: Vect
 		var color := foam_color if splash_index % 2 == 0 else water_color
 		draw_line(start, end, _color_with_alpha(color, impact_alpha * 0.62), 1.7)
 		draw_circle(end, 2.0, _color_with_alpha(foam_color, impact_alpha * 0.46))
+
+
+func _draw_dragon_breath_visual() -> void:
+	if not bool(dragon_breath_config.get("enabled", false)):
+		return
+
+	var frames: Array = data.get("frames", []) as Array
+	var progress := clampf(float(frame_index) / float(maxi(frames.size() - 1, 1)), 0.0, 1.0)
+	var visible_start := clampf(float(dragon_breath_config.get("visible_start", 0.02)), 0.0, 1.0)
+	var visible_end := clampf(float(dragon_breath_config.get("visible_end", 0.94)), visible_start, 1.0)
+	if progress < visible_start or progress > visible_end:
+		return
+
+	var alpha := _get_timed_alpha(progress, visible_start, visible_end, dragon_breath_config)
+	if alpha <= 0.02:
+		return
+
+	var source_state := _get_projectile_state_from_config(0.0, dragon_breath_config)
+	var target_state := _get_projectile_state_from_config(1.0, dragon_breath_config)
+	var source := _projectile_battlefield_position(source_state.get("position", Vector2(128.0, 204.0)) as Vector2, dragon_breath_config)
+	var target := _projectile_battlefield_position(target_state.get("position", Vector2(384.0, 92.0)) as Vector2, dragon_breath_config)
+	var direction := (target - source).normalized()
+	if direction == Vector2.ZERO:
+		return
+	var normal := direction.orthogonal()
+	var travel_end := clampf(float(dragon_breath_config.get("travel_end", 0.72)), 0.2, visible_end)
+	var travel := clampf((progress - visible_start) / maxf(travel_end - visible_start, 0.001), 0.0, 1.0)
+	var head := source.lerp(target, 1.0 - pow(1.0 - travel, 2.0))
+	var trail_length := clampf(float(dragon_breath_config.get("trail_length", 0.38)), 0.08, 0.8)
+	var trail_start := clampf(travel - trail_length, 0.0, 1.0)
+	var outer_color := _color_from_value(dragon_breath_config.get("outer_color", [0.28, 0.04, 0.72, 1.0]), Color(0.28, 0.04, 0.72, 1.0))
+	var breath_color := _color_from_value(dragon_breath_config.get("breath_color", [0.78, 0.08, 1.0, 1.0]), Color(0.78, 0.08, 1.0, 1.0))
+	var core_color := _color_from_value(dragon_breath_config.get("core_color", [1.0, 0.82, 1.0, 1.0]), Color(1.0, 0.82, 1.0, 1.0))
+	var segments := maxi(10, int(dragon_breath_config.get("segments", 20)))
+	var width := float(dragon_breath_config.get("width", 18.0))
+	var wave := float(dragon_breath_config.get("wave", 10.0))
+	var phase := float(frame_index) * float(dragon_breath_config.get("wave_speed", 0.34))
+	var previous := source
+	for segment_index: int in range(1, segments + 1):
+		var segment_t := lerpf(trail_start, travel, float(segment_index) / float(segments))
+		var point_state := _get_projectile_state_from_config(segment_t, dragon_breath_config)
+		var point := _projectile_battlefield_position(point_state.get("position", source) as Vector2, dragon_breath_config)
+		var pulse := 0.72 + 0.28 * sin(phase + segment_t * 18.0)
+		var segment_width := width * (0.28 + segment_t * 0.82) * pulse
+		var segment_alpha := alpha * (0.18 + 0.72 * float(segment_index) / float(segments))
+		draw_line(previous, point, _color_with_alpha(outer_color, segment_alpha * 0.72), segment_width * 1.55, true)
+		draw_line(previous, point, _color_with_alpha(breath_color, segment_alpha * 0.76), segment_width, true)
+		draw_line(previous + normal * 2.0, point + normal * 2.0, _color_with_alpha(core_color, segment_alpha * 0.62), maxf(2.0, segment_width * 0.22), true)
+		previous = point
+
+	for ribbon_index: int in range(3):
+		var ribbon_points := PackedVector2Array()
+		for segment_index: int in range(segments + 1):
+			var ribbon_t := lerpf(trail_start, travel, float(segment_index) / float(segments))
+			var point_state := _get_projectile_state_from_config(ribbon_t, dragon_breath_config)
+			var point := _projectile_battlefield_position(point_state.get("position", source) as Vector2, dragon_breath_config)
+			var offset := normal * sin(phase + ribbon_t * 22.0 + float(ribbon_index) * 2.1) * wave * (0.35 + ribbon_t * 0.65)
+			ribbon_points.append(point + offset)
+		if ribbon_points.size() > 1:
+			draw_polyline(ribbon_points, _color_with_alpha(core_color if ribbon_index == 1 else breath_color, alpha * (0.72 if ribbon_index == 1 else 0.46)), 2.0, true)
+
+	var particle_count := maxi(6, int(dragon_breath_config.get("particle_count", 14)))
+	for particle_index: int in range(particle_count):
+		var particle_t := fmod(travel * 0.9 + float(particle_index) / float(particle_count), 1.0)
+		var particle_state := _get_projectile_state_from_config(particle_t, dragon_breath_config)
+		var particle_position := _projectile_battlefield_position(particle_state.get("position", source) as Vector2, dragon_breath_config)
+		var particle_offset := normal * sin(phase * 1.4 + float(particle_index) * 2.7) * (wave * (0.7 + particle_t))
+		draw_circle(particle_position + particle_offset, 1.5 + float(particle_index % 3), _color_with_alpha(core_color, alpha * (0.35 + 0.45 * particle_t)))
+
+	var impact_progress := clampf((progress - travel_end) / maxf(visible_end - travel_end, 0.001), 0.0, 1.0)
+	if impact_progress > 0.0:
+		var impact_alpha := alpha * (1.0 - impact_progress)
+		var impact_radius := float(dragon_breath_config.get("impact_radius", 48.0)) * (0.32 + impact_progress * 0.9)
+		draw_circle(target, impact_radius * 0.58, _color_with_alpha(outer_color, impact_alpha * 0.22))
+		draw_arc(target, impact_radius, -phase, TAU - phase, 64, _color_with_alpha(breath_color, impact_alpha * 0.86), 2.5, true)
+		draw_arc(target, impact_radius * 0.62, phase * 1.3, TAU + phase * 1.3, 48, _color_with_alpha(core_color, impact_alpha * 0.78), 1.8, true)
+		for ray_index: int in range(10):
+			var angle := float(ray_index) * TAU / 10.0 + phase * 0.3
+			var ray_start := target + Vector2.from_angle(angle) * impact_radius * 0.28
+			var ray_end := target + Vector2.from_angle(angle) * impact_radius * (0.82 + float(ray_index % 3) * 0.1)
+			draw_line(ray_start, ray_end, _color_with_alpha(core_color, impact_alpha * 0.64), 1.6, true)
 
 
 func _draw_electric_switch_visual() -> void:

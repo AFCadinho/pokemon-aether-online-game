@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Water Gun and Dragon Breath now use custom procedural battle animations with stronger projectile and impact visuals.
 - Fall back to the regular trainer battle music when an optional rival track is unavailable.
 
 - NPC item rewards now show their reward popup consistently, including the Town Map, without repeating the receipt in the NPC dialogue.
