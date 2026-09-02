@@ -11,4 +11,8 @@ script = ExtResource("1_trainer")
 visible = false
 texture_filter = 1
 
+[node name="CatalogSprite" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+
 [node name="TrainerCommandCallout" parent="." instance=ExtResource("2_callout")]

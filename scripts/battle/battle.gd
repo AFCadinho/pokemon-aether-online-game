@@ -7094,13 +7094,23 @@ func _show_local_player_trainer() -> void:
 func _show_npc_opponent_trainer(trainer_data: Dictionary) -> void:
 	if enemy_trainer_sprite == null:
 		return
-	var sprite_frames_value: Variant = trainer_data.get("_battle_sprite_frames", null)
-	if not (sprite_frames_value is SpriteFrames):
-		return
 	var sprite_offset := Vector2(0.0, -16.0)
 	var sprite_offset_value: Variant = trainer_data.get("_battle_sprite_offset", sprite_offset)
 	if sprite_offset_value is Vector2:
 		sprite_offset = sprite_offset_value as Vector2
+	var battle_sprite_id := str(trainer_data.get("_battle_sprite_id", "")).strip_edges()
+	if not battle_sprite_id.is_empty():
+		var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
+		var catalog_texture: Texture2D
+		if catalog != null and catalog.has_method("get_texture"):
+			catalog_texture = catalog.call("get_texture", battle_sprite_id) as Texture2D
+		if catalog_texture != null:
+			enemy_trainer_sprite.show_catalog_sprite(catalog_texture, Vector2.LEFT, sprite_offset)
+			return
+
+	var sprite_frames_value: Variant = trainer_data.get("_battle_sprite_frames", null)
+	if not (sprite_frames_value is SpriteFrames):
+		return
 	enemy_trainer_sprite.show_npc(
 		sprite_frames_value as SpriteFrames,
 		Vector2.LEFT,

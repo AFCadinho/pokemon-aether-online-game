@@ -5,10 +5,14 @@ class_name BattleTrainerSprite
 const BattleRenderLayers := preload("res://scripts/battle/battle_render_layers.gd")
 const REMOTE_PLAYER_AVATAR_SCRIPT_PATH := "res://scripts/world/remote_player_avatar.gd"
 const DEFAULT_DISPLAY_SCALE := 2.0
+## Catalog sprites are 80px-square poses, while the legacy overworld frames
+## are 64px-square. Preserve their shared foot baseline at the stage marker.
+const CATALOG_SPRITE_OFFSET := Vector2(0.0, -16.0)
 
 @export_range(0.5, 4.0, 0.05) var display_scale := DEFAULT_DISPLAY_SCALE
 
 @onready var npc_sprite: AnimatedSprite2D = $NpcSprite
+@onready var catalog_sprite: Sprite2D = $CatalogSprite
 @onready var command_callout: Control = $TrainerCommandCallout
 
 var player_avatar: Node2D
@@ -16,10 +20,13 @@ var facing_direction := Vector2.RIGHT
 
 
 func _ready() -> void:
-	# Move animations intentionally cover Pokemon at MOVE_FOREGROUND. Trainer
-	# identities and their callouts must remain color-stable above that band.
+	# Trainer figures are staged behind their Pokemon. Their command callouts
+	# are a separate overlay so they remain legible above foreground move art.
 	z_as_relative = true
-	z_index = BattleRenderLayers.TRAINERS
+	z_index = BattleRenderLayers.TRAINER_ART
+	if command_callout != null:
+		command_callout.z_as_relative = false
+		command_callout.z_index = BattleRenderLayers.TRAINER_CALLOUTS
 
 
 func clear() -> void:
@@ -32,6 +39,9 @@ func clear() -> void:
 	if npc_sprite != null:
 		npc_sprite.visible = false
 		npc_sprite.sprite_frames = null
+	if catalog_sprite != null:
+		catalog_sprite.visible = false
+		catalog_sprite.texture = null
 
 
 func show_player(appearance_state: Dictionary, facing_direction: Vector2) -> void:
@@ -83,6 +93,28 @@ func show_npc(
 	npc_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	npc_sprite.stop()
 	npc_sprite.visible = true
+	visible = true
+
+
+## Shows an unmodified static trainer pose from the local trainer catalog.
+## This path intentionally accepts a Texture2D instead of manufacturing a
+## four-direction SpriteFrames resource: Showdown poses are battle art, not
+## overworld animation sheets. Future player battle art can use this same path.
+func show_catalog_sprite(
+	texture: Texture2D,
+	facing_direction: Vector2,
+	sprite_offset := Vector2(0.0, -16.0)
+) -> void:
+	clear()
+	self.facing_direction = facing_direction
+	if texture == null or catalog_sprite == null:
+		return
+
+	catalog_sprite.texture = texture
+	catalog_sprite.position = sprite_offset + CATALOG_SPRITE_OFFSET
+	catalog_sprite.scale = Vector2.ONE * display_scale
+	catalog_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	catalog_sprite.visible = true
 	visible = true
 
 
