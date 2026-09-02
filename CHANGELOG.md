@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- After helping Bill, Misty now follows up on Route 25 with guidance to the S.S. Anne in Vermilion City and its Gym.
+
 - Mount selection now includes search, keyboard navigation, and a scrollable result list for an easier experience as more mounts are added.
 
 - Fixed invalid Mega Stone combinations incorrectly producing nonexistent Mega forms in battle previews.
