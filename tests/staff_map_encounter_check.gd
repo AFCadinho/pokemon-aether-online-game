@@ -18,6 +18,8 @@ func _init() -> void:
 	_check(overlay.contains("func _apply_staff_encounter_tab_style"), "staff encounter tabs use the custom UI style")
 	_check(overlay.contains("_apply_developer_dropdown_style(dev_encounter_method)"), "method selector uses the custom dropdown style")
 	_check(overlay.contains("PokemonAssets.load_party_icon(species, false)"), "species selector uses Pokémon HOME icons")
+	_check(overlay.contains("func _make_staff_encounter_species_icon"), "species selector constrains HOME icon size")
+	_check(overlay.contains("image.resize(32, 32"), "species selector uses compact 32px icons")
 	_check(world.contains("forced_species_id: String = \"\""), "world forwards an optional staff-selected species")
 	_check(api.contains('payload["forcedSpeciesId"]'), "battle API sends a selected species only when requested")
 	quit(1 if failed else 0)

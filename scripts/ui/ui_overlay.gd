@@ -37216,11 +37216,21 @@ func _populate_dev_encounter_species() -> void:
 		var icon := PokemonAssets.load_party_icon(species, false)
 		if icon == null:
 			icon = PokemonAssets.load_unknown_icon()
+		icon = _make_staff_encounter_species_icon(icon)
 		dev_encounter_species.add_icon_item(icon, _format_identifier_display_name(species))
 		dev_encounter_species.set_item_metadata(dev_encounter_species.item_count - 1, species)
 	dev_encounter_species.disabled = dev_encounter_species.item_count == 0
 	if dev_encounter_species.item_count > 0:
 		dev_encounter_species.select(0)
+
+func _make_staff_encounter_species_icon(icon: Texture2D) -> Texture2D:
+	if icon == null:
+		return null
+	var image := icon.get_image()
+	if image == null:
+		return icon
+	image.resize(32, 32, Image.INTERPOLATE_LANCZOS)
+	return ImageTexture.create_from_image(image)
 
 func _selected_dev_encounter_value(selector: OptionButton) -> String:
 	if selector == null or selector.selected < 0:
