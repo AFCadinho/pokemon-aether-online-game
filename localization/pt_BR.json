@@ -357,6 +357,8 @@
   "ui.mounts.surf": "Surfe",
   "ui.mounts.none_selected": "Não selecionada",
   "ui.mounts.choose": "Escolher montaria de {type}",
+  "ui.mounts.search": "Buscar montarias",
+  "ui.mounts.no_search_results": "Nenhuma montaria corresponde à busca.",
   "ui.mounts.none_available": "Ainda não há montarias deste tipo disponíveis.",
   "ui.mounts.unavailable": "Você não selecionou uma montaria terrestre disponível.",
   "ui.mounts.interior_blocked": "Montarias terrestres não podem ser usadas em ambientes internos.",

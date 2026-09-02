@@ -357,6 +357,8 @@
   "ui.mounts.surf": "Surf",
   "ui.mounts.none_selected": "Niet geselecteerd",
   "ui.mounts.choose": "Kies een {type}-mount",
+  "ui.mounts.search": "Zoek mounts",
+  "ui.mounts.no_search_results": "Geen mounts gevonden voor je zoekopdracht.",
   "ui.mounts.none_available": "Er zijn nog geen mounts van dit type beschikbaar.",
   "ui.mounts.unavailable": "Je hebt geen beschikbare landmount geselecteerd.",
   "ui.mounts.interior_blocked": "Landmounts kunnen niet binnen worden gebruikt.",

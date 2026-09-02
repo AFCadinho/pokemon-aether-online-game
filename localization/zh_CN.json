@@ -357,6 +357,8 @@
   "ui.mounts.surf": "冲浪",
   "ui.mounts.none_selected": "未选择",
   "ui.mounts.choose": "选择 {type} 安装座",
+  "ui.mounts.search": "搜索坐骑",
+  "ui.mounts.no_search_results": "没有符合搜索条件的坐骑。",
   "ui.mounts.none_available": "尚无此类安装座可用。",
   "ui.mounts.unavailable": "你尚未选择可用的陆地坐骑。",
   "ui.mounts.interior_blocked": "室内不能使用陆地坐骑。",

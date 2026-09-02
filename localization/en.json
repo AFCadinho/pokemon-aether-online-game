@@ -357,6 +357,8 @@
   "ui.mounts.surf": "Surf",
   "ui.mounts.none_selected": "Not selected",
   "ui.mounts.choose": "Choose {type} mount",
+  "ui.mounts.search": "Search mounts",
+  "ui.mounts.no_search_results": "No mounts match your search.",
   "ui.mounts.none_available": "No mounts of this type are available yet.",
   "ui.mounts.unavailable": "You do not have an available land mount selected.",
   "ui.mounts.interior_blocked": "Land mounts cannot be used indoors.",
