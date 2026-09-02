@@ -34501,9 +34501,11 @@ func _build_pokedex_general_tab() -> void:
 		LocalizationManager.text("ui.pokedex.profile.base_exp"),
 		str(int(pokedex_selected_species.get("baseExperience", 0)))
 	))
+	var catch_rate := clampi(int(pokedex_selected_species.get("catchRate", 0)), 0, 255)
 	profile_facts.add_child(_create_pokedex_profile_fact(
 		LocalizationManager.text("ui.pokedex.profile.catch_rate"),
-		"%d / 255" % clampi(int(pokedex_selected_species.get("catchRate", 0)), 0, 255)
+		_format_pokedex_catch_rate(catch_rate),
+		LocalizationManager.text("ui.pokedex.profile.catch_rate.tooltip")
 	))
 
 	var abilities_card := _create_pokedex_dossier_card(
@@ -35493,12 +35495,30 @@ func _create_pokedex_dossier_card(title_text: String, subtitle_text: String = ""
 		"content": content,
 	}
 
-func _create_pokedex_profile_fact(label_text: String, value_text: String) -> Control:
+func _format_pokedex_catch_rate(catch_rate: int) -> String:
+	var rating_key := "ui.pokedex.profile.catch_rate.very_low"
+	if catch_rate >= 255:
+		rating_key = "ui.pokedex.profile.catch_rate.maximum"
+	elif catch_rate >= 200:
+		rating_key = "ui.pokedex.profile.catch_rate.very_high"
+	elif catch_rate >= 100:
+		rating_key = "ui.pokedex.profile.catch_rate.medium"
+	elif catch_rate >= 50:
+		rating_key = "ui.pokedex.profile.catch_rate.low"
+	return "%d / 255 — %s" % [catch_rate, LocalizationManager.text(rating_key)]
+
+
+func _create_pokedex_profile_fact(
+	label_text: String,
+	value_text: String,
+	tooltip_text: String = ""
+) -> Control:
 	var stack := VBoxContainer.new()
 	stack.custom_minimum_size = Vector2(160, 44)
 	stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	stack.add_theme_constant_override("separation", 3)
+	stack.tooltip_text = tooltip_text
 
 	var label := Label.new()
 	label.text = label_text

@@ -43,7 +43,7 @@ func _init() -> void:
 	_check(source.contains("pokedex_popup.theme = _make_pokedex_tooltip_theme()"), "Every Pokédex hover card inherits the Pokédex tooltip theme")
 	_check(source.contains('tooltip_theme.set_stylebox("panel", "TooltipPanel"'), "Pokédex hover cards use a styled panel instead of the Godot default")
 	_check(source.contains('"ui.pokedex.profile.title"'), "Localized profile facts no longer render as disconnected boxes")
-	_check(source.contains('"ui.pokedex.profile.catch_rate"') and source.contains('"%d / 255"'), "Species profiles show the official base catch rate")
+	_check(source.contains('"ui.pokedex.profile.catch_rate"') and source.contains('func _format_pokedex_catch_rate') and source.contains('"ui.pokedex.profile.catch_rate.tooltip"'), "Species profiles explain the official base catch rate")
 	_check(source.contains("PokedexService.search_species") and source.contains("PokedexService.get_species_detail"), "Existing Pokédex data loading remains connected")
 	_check(source.contains('get("preEvolutions", [])'), "Evolution tab renders server-owned pre-evolution relationships")
 	_check(source.contains("EvolutionSpeciesLink_") and source.contains("_on_pokedex_species_selected.bind(species_id)"), "Evolution species names link to their Pokédex records")
