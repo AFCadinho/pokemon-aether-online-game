@@ -2827,7 +2827,8 @@ func start_triggered_wild_battle_for_area(
 
 	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id)
 	if not response.get("success", false):
-		push_warning("World.start_triggered_wild_battle_for_area failed: %s" % str(response.get("error", "Unknown error")))
+		if WildEncounterErrorRules.message_lines(response).is_empty():
+			push_warning("World.start_triggered_wild_battle_for_area failed: %s" % str(response.get("error", "Unknown error")))
 		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		await _show_wild_encounter_start_error(response)
