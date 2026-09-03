@@ -6453,6 +6453,9 @@ func _setup_pvp_room_popup() -> void:
 	pvp_training_ai_mode_select = OptionButton.new()
 	pvp_training_ai_mode_select.custom_minimum_size = Vector2(0, 36)
 	pvp_training_ai_mode_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_mode_select.fit_to_longest_item = false
+	pvp_training_ai_mode_select.clip_text = true
+	pvp_training_ai_mode_select.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pvp_training_ai_mode_select.focus_mode = Control.FOCUS_NONE
 	_apply_pvp_ranked_dropdown_style(pvp_training_ai_mode_select, true)
 	pvp_training_ai_mode_row.add_child(pvp_training_ai_mode_select)
@@ -6473,6 +6476,9 @@ func _setup_pvp_room_popup() -> void:
 	pvp_training_ai_archetype_select = OptionButton.new()
 	pvp_training_ai_archetype_select.custom_minimum_size = Vector2(0, 36)
 	pvp_training_ai_archetype_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_archetype_select.fit_to_longest_item = false
+	pvp_training_ai_archetype_select.clip_text = true
+	pvp_training_ai_archetype_select.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pvp_training_ai_archetype_select.focus_mode = Control.FOCUS_NONE
 	_apply_pvp_ranked_dropdown_style(pvp_training_ai_archetype_select, true)
 	pvp_training_ai_archetype_select.item_selected.connect(_on_pvp_training_ai_archetype_selected)
@@ -6494,6 +6500,9 @@ func _setup_pvp_room_popup() -> void:
 	pvp_training_ai_team_select = OptionButton.new()
 	pvp_training_ai_team_select.custom_minimum_size = Vector2(0, 36)
 	pvp_training_ai_team_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_team_select.fit_to_longest_item = false
+	pvp_training_ai_team_select.clip_text = true
+	pvp_training_ai_team_select.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pvp_training_ai_team_select.focus_mode = Control.FOCUS_NONE
 	_apply_pvp_ranked_dropdown_style(pvp_training_ai_team_select, true)
 	_apply_ai_sparring_team_selector_style(pvp_training_ai_team_select)
@@ -7104,6 +7113,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	var team_card := PanelContainer.new()
 	team_card.name = "AiSparringTeamStep"
 	team_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	team_card.size_flags_stretch_ratio = 1.0
 	team_card.add_theme_stylebox_override(
 		"panel",
 		_make_panel_style(Color("#101829d9"), Color("#35597a99"), 10, 1)
@@ -7141,6 +7151,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	var opponent_card := PanelContainer.new()
 	opponent_card.name = "AiSparringOpponentStep"
 	opponent_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	opponent_card.size_flags_stretch_ratio = 1.0
 	opponent_card.add_theme_stylebox_override(
 		"panel",
 		_make_panel_style(Color("#101829d9"), Color("#35597a99"), 10, 1)
