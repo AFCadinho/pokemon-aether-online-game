@@ -5302,10 +5302,18 @@ func _update_hud_panels(include_team_data := true) -> void:
 	opponent_party_grid.set_selection_enabled(false)
 	_sync_status_condition_overlays()
 
-func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
+func _update_active_hud_panel(player_id: String, hud_panel: Node, public_species_override := "") -> void:
+	var display_species := str(public_species_override).strip_edges()
+	var display_name := _get_active_display_name(player_id)
+	if display_species == "":
+		display_species = _get_active_display_species(player_id)
+	elif player_id == "p2":
+		# Imported AI catalog entries cannot have nicknames, so the public form
+		# species is also the correct HUD name at this presentation boundary.
+		display_name = display_species
 	if _should_hide_active_pokemon_for_force_switch(player_id):
 		hud_panel.set_pokemon_data(
-			_get_active_display_species(player_id),
+			display_species,
 			battle_state.get_active_pokemon_level(player_id),
 			0,
 			max(battle_state.get_active_pokemon_max_hp(player_id), 1),
@@ -5313,12 +5321,12 @@ func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
 			battle_state.get_active_pokemon_gender(player_id),
 			_get_active_pokemon_is_shiny(player_id),
 			_get_active_player_experience_data(player_id),
-			_get_active_display_name(player_id),
+			display_name,
 		)
 		return
 
 	hud_panel.set_pokemon_data(
-		_get_active_display_species(player_id),
+		display_species,
 		battle_state.get_active_pokemon_level(player_id),
 		battle_state.get_active_pokemon_current_hp(player_id),
 		battle_state.get_active_pokemon_max_hp(player_id),
@@ -5326,7 +5334,7 @@ func _update_active_hud_panel(player_id: String, hud_panel: Node) -> void:
 		battle_state.get_active_pokemon_gender(player_id),
 		_get_active_pokemon_is_shiny(player_id),
 		_get_active_player_experience_data(player_id),
-		_get_active_display_name(player_id),
+		display_name,
 	)
 
 func _setup_status_condition_overlays() -> void:
@@ -6646,7 +6654,10 @@ func setup_trainer_battle_from_response(
 	battle_voice_director.configure(str(api_response.get("battleId", "")), "trainer", trainer_data)
 	_show_local_player_trainer()
 	_show_npc_opponent_trainer(trainer_data)
-	display_data_presenter.set_trainer_team(api_response.get("trainerTeam", []))
+	display_data_presenter.set_trainer_team(
+		api_response.get("trainerTeam", []),
+		training_ai_battle
+	)
 
 	if not _apply_team_preview_battle_response(api_response):
 		await _notify_trainer_entry_ready(entry_ready_callback)
@@ -9763,10 +9774,10 @@ func _update_active_pokemon_presentation_for_ident(ident: String, public_species
 	var player_id := _get_player_id_from_ident(ident)
 	match player_id:
 		"p1":
-			_update_active_hud_panel("p1", player_hud_panel)
+			_update_active_hud_panel("p1", player_hud_panel, public_species_override)
 			_update_active_sprite_box("p1", player_sprite_box, "back", "sprite_refresh", public_species_override)
 		"p2":
-			_update_active_hud_panel("p2", enemy_hud_panel)
+			_update_active_hud_panel("p2", enemy_hud_panel, public_species_override)
 			_update_active_sprite_box("p2", enemy_sprite_box, "front", "sprite_refresh", public_species_override)
 
 	_update_party_slots()

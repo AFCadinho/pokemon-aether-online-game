@@ -10,6 +10,10 @@ const TRAINER_TEAM_DEBUG_PREFIX := "[PAO Trainer Team Display Debug]"
 
 var battle_state: BattleState
 var display_metadata := preload("res://scripts/battle/battle_display_metadata.gd").new()
+# AI Sparring assigns immutable catalog slots at its import boundary. Ordinary
+# NPC snapshots retain species validation because older NPC data can expose
+# request positions that are not canonical trainer-team slots.
+var trust_trainer_team_canonical_slots := false
 
 
 func setup(state: BattleState) -> void:
@@ -21,8 +25,9 @@ func set_battle_context(type_value: int, enemy_pokemon: Pokemon) -> void:
 	display_metadata.set_battle_context(type_value, enemy_pokemon)
 
 
-func set_trainer_team(team: Array) -> void:
+func set_trainer_team(team: Array, trust_canonical_slots := false) -> void:
 	display_metadata.set_trainer_team(team)
+	trust_trainer_team_canonical_slots = trust_canonical_slots
 
 
 func get_active_display_species(player_id: String) -> String:
@@ -329,7 +334,13 @@ func _find_request_data_for_trainer_slot(
 		if slot <= 0:
 			slot = index + 1
 
-		if slot == canonical_slot and _pokemon_data_species_matches(trainer_species, pokemon_data):
+		if (
+			slot == canonical_slot
+			and (
+				trust_trainer_team_canonical_slots
+				or _pokemon_data_species_matches(trainer_species, pokemon_data)
+			)
+		):
 			same_slot_candidate = pokemon_data
 
 		if _pokemon_data_species_matches(trainer_species, pokemon_data):
