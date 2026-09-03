@@ -8979,6 +8979,11 @@ func _render_battle_events(
 			])
 		if not (suppress_terminal_win_presentation and event_type == "win"):
 			await event_renderer.render_event(event_data, presentation, suppress_presentation_waits)
+		if event_type == "mega" or event_type == "primal":
+			# Reconcile once more after the transformation animation. The pre-render
+			# update gives the effect its transformed target; this final boundary
+			# prevents an earlier base-form refresh from surviving on the field.
+			_update_active_pokemon_presentation_for_ident(str(event_data.get("target", "")))
 		if defer_field_effect_end:
 			# Keep weather and terrain visible while their public end message is
 			# being presented. The visual state changes only at that event's
@@ -9718,6 +9723,7 @@ func _update_active_pokemon_presentation_for_ident(ident: String) -> void:
 			_update_active_hud_panel("p2", enemy_hud_panel)
 			_update_active_sprite_box("p2", enemy_sprite_box, "front")
 
+	_update_party_slots()
 	_update_stat_stage_panels()
 
 func _order_form_change_events_before_moves(events: Array) -> Array:
