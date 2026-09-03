@@ -6511,18 +6511,38 @@ func _setup_pvp_room_popup() -> void:
 
 	var assignment_tab := VBoxContainer.new()
 	assignment_tab.name = LocalizationManager.text("ui.pvp.training.ai5_playtest.tab_assignment")
-	assignment_tab.add_theme_constant_override("separation", 8)
 	pvp_ai5_playtest_tabs.add_child(assignment_tab)
+	var assignment_card := PanelContainer.new()
+	assignment_card.name = "AiResearchAssignmentCard"
+	assignment_card.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#101829d9"), Color("#496b93aa"), 10, 1)
+	)
+	assignment_tab.add_child(assignment_card)
+	var assignment_margin := MarginContainer.new()
+	assignment_margin.add_theme_constant_override("margin_left", 14)
+	assignment_margin.add_theme_constant_override("margin_top", 12)
+	assignment_margin.add_theme_constant_override("margin_right", 14)
+	assignment_margin.add_theme_constant_override("margin_bottom", 12)
+	assignment_card.add_child(assignment_margin)
+	var assignment_layout := VBoxContainer.new()
+	assignment_layout.add_theme_constant_override("separation", 8)
+	assignment_margin.add_child(assignment_layout)
+	var assignment_heading := Label.new()
+	_set_localized_control_property(assignment_heading, "text", "ui.pvp.training.ai5_playtest.assignment_heading")
+	assignment_heading.add_theme_font_size_override("font_size", 11)
+	assignment_heading.add_theme_color_override("font_color", Color("#b9aaff"))
+	assignment_layout.add_child(assignment_heading)
 	pvp_ai5_playtest_progress_label = Label.new()
 	pvp_ai5_playtest_progress_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_ai5_playtest_progress_label.add_theme_font_size_override("font_size", 16)
 	pvp_ai5_playtest_progress_label.add_theme_color_override("font_color", Color("#9be7b1"))
-	assignment_tab.add_child(pvp_ai5_playtest_progress_label)
+	assignment_layout.add_child(pvp_ai5_playtest_progress_label)
 	pvp_ai5_playtest_assignment_label = Label.new()
 	pvp_ai5_playtest_assignment_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_ai5_playtest_assignment_label.add_theme_font_size_override("font_size", 14)
-	pvp_ai5_playtest_assignment_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	assignment_tab.add_child(pvp_ai5_playtest_assignment_label)
+	pvp_ai5_playtest_assignment_label.add_theme_color_override("font_color", UI_TEXT)
+	assignment_layout.add_child(pvp_ai5_playtest_assignment_label)
 	pvp_ai5_playtest_consent_check = CheckBox.new()
 	pvp_ai5_playtest_consent_check.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.consent")
 	pvp_ai5_playtest_consent_check.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -6532,20 +6552,45 @@ func _setup_pvp_room_popup() -> void:
 	pvp_ai5_playtest_consent_check.add_theme_icon_override("unchecked_hover", _pvp_spectators_checkbox_icon(false, true))
 	pvp_ai5_playtest_consent_check.add_theme_icon_override("checked", _pvp_spectators_checkbox_icon(true, false))
 	pvp_ai5_playtest_consent_check.add_theme_icon_override("checked_hover", _pvp_spectators_checkbox_icon(true, true))
-	assignment_tab.add_child(pvp_ai5_playtest_consent_check)
+	assignment_layout.add_child(pvp_ai5_playtest_consent_check)
 
 	var statistics_tab := VBoxContainer.new()
 	statistics_tab.name = LocalizationManager.text("ui.pvp.training.ai5_playtest.tab_statistics")
-	statistics_tab.add_theme_constant_override("separation", 7)
 	pvp_ai5_playtest_tabs.add_child(statistics_tab)
+	var statistics_card := PanelContainer.new()
+	statistics_card.name = "AiResearchStatisticsCard"
+	statistics_card.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#101829d9"), Color("#35597a99"), 10, 1)
+	)
+	statistics_tab.add_child(statistics_card)
+	var statistics_margin := MarginContainer.new()
+	statistics_margin.add_theme_constant_override("margin_left", 14)
+	statistics_margin.add_theme_constant_override("margin_top", 12)
+	statistics_margin.add_theme_constant_override("margin_right", 14)
+	statistics_margin.add_theme_constant_override("margin_bottom", 12)
+	statistics_card.add_child(statistics_margin)
+	var statistics_layout := VBoxContainer.new()
+	statistics_layout.add_theme_constant_override("separation", 8)
+	statistics_margin.add_child(statistics_layout)
+	var statistics_heading := Label.new()
+	_set_localized_control_property(statistics_heading, "text", "ui.pvp.training.ai5_playtest.statistics_heading")
+	statistics_heading.add_theme_font_size_override("font_size", 11)
+	statistics_heading.add_theme_color_override("font_color", Color("#b9aaff"))
+	statistics_layout.add_child(statistics_heading)
 	pvp_ai5_playtest_stats_label = Label.new()
 	pvp_ai5_playtest_stats_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_ai5_playtest_stats_label.add_theme_font_size_override("font_size", 13)
-	pvp_ai5_playtest_stats_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	statistics_tab.add_child(pvp_ai5_playtest_stats_label)
+	pvp_ai5_playtest_stats_label.add_theme_color_override("font_color", UI_TEXT)
+	statistics_layout.add_child(pvp_ai5_playtest_stats_label)
+	var flag_heading := Label.new()
+	_set_localized_control_property(flag_heading, "text", "ui.pvp.training.ai5_playtest.flag_heading")
+	flag_heading.add_theme_font_size_override("font_size", 11)
+	flag_heading.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	statistics_layout.add_child(flag_heading)
 	var flag_row := HBoxContainer.new()
 	flag_row.add_theme_constant_override("separation", 6)
-	statistics_tab.add_child(flag_row)
+	statistics_layout.add_child(flag_row)
 	pvp_ai5_playtest_flag_turn = SpinBox.new()
 	pvp_ai5_playtest_flag_turn.min_value = 0
 	pvp_ai5_playtest_flag_turn.max_value = 1000
@@ -7181,19 +7226,41 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	research_intro.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	research_layout.add_child(research_intro)
 
-	pvp_ai5_playtest_tabs.reparent(research_layout)
+	var research_card := PanelContainer.new()
+	research_card.name = "AiResearchCampaignCard"
+	research_card.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#0d1726eb"), Color("#6f5fbaaa"), 11, 1)
+	)
+	research_layout.add_child(research_card)
+	var research_margin := MarginContainer.new()
+	research_margin.add_theme_constant_override("margin_left", 12)
+	research_margin.add_theme_constant_override("margin_top", 10)
+	research_margin.add_theme_constant_override("margin_right", 12)
+	research_margin.add_theme_constant_override("margin_bottom", 12)
+	research_card.add_child(research_margin)
+	var research_card_layout := VBoxContainer.new()
+	research_card_layout.add_theme_constant_override("separation", 8)
+	research_margin.add_child(research_card_layout)
+
+	pvp_ai5_playtest_tabs.reparent(research_card_layout)
 	pvp_ai5_playtest_tabs.visible = true
-	pvp_ai5_playtest_tabs.custom_minimum_size = Vector2(0, 290)
-	pvp_ai5_playtest_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	pvp_ai5_playtest_tabs.custom_minimum_size = Vector2.ZERO
 	_apply_pvp_ranked_subtabs_style(pvp_ai5_playtest_tabs)
 
+	var research_start_step := Label.new()
+	research_start_step.name = "AiResearchStartStep"
+	_set_localized_control_property(research_start_step, "text", "ui.pvp.training.ai5_playtest.start_step")
+	research_start_step.add_theme_font_size_override("font_size", 11)
+	research_start_step.add_theme_color_override("font_color", Color("#b9aaff"))
+	research_card_layout.add_child(research_start_step)
 	pvp_ai5_playtest_start_button = Button.new()
 	_set_localized_control_property(pvp_ai5_playtest_start_button, "text", "ui.pvp.training.ai5_playtest.start")
 	pvp_ai5_playtest_start_button.custom_minimum_size = Vector2(0, 42)
 	pvp_ai5_playtest_start_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_ai5_playtest_start_button.focus_mode = Control.FOCUS_NONE
 	pvp_ai5_playtest_start_button.pressed.connect(_on_pvp_ai5_playtest_start_pressed)
-	research_layout.add_child(pvp_ai5_playtest_start_button)
+	research_card_layout.add_child(pvp_ai5_playtest_start_button)
 
 	var status_panel := PanelContainer.new()
 	status_panel.add_theme_stylebox_override(
@@ -42670,7 +42737,7 @@ func _refresh_ai5_playtest_panel() -> void:
 				pvp_ai5_playtest_battle_id = str(battle.get("battleId", ""))
 	pvp_ai5_playtest_stats_label.text = LocalizationManager.text(
 		"ui.pvp.training.ai5_playtest.statistics"
-	) % [int(statistics.get("wins", 0)), int(statistics.get("losses", 0)), int(statistics.get("draws", 0)), int(statistics.get("excludedAttempts", 0)), int(statistics.get("aiSwitchCount", 0)), int(statistics.get("decisionCount", 0)), float(statistics.get("aiSwitchRate", 0.0)) * 100.0, int(statistics.get("fallbackCount", 0)), int(pvp_ai5_playtest_status.get("flagCount", 0)), str(campaign.get("policyRevision", "-"))]
+	) % [int(statistics.get("wins", 0)), int(statistics.get("losses", 0)), int(statistics.get("draws", 0)), int(statistics.get("aiSwitchCount", 0)), int(statistics.get("decisionCount", 0)), float(statistics.get("aiSwitchRate", 0.0)) * 100.0, int(pvp_ai5_playtest_status.get("flagCount", 0))]
 	if pvp_ai5_playtest_flag_button != null:
 		pvp_ai5_playtest_flag_button.disabled = pvp_ai5_playtest_battle_id == ""
 	if pvp_ai5_playtest_start_button != null:
