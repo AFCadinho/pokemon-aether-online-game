@@ -898,6 +898,7 @@ var pvp_ai5_playtest_progress_label: Label
 var pvp_ai5_playtest_stats_label: Label
 var pvp_ai5_playtest_consent_check: CheckBox
 var pvp_ai5_playtest_start_button: Button
+var pvp_ai5_playtest_start_step_label: Label
 var pvp_ai_sparring_start_button: Button
 var pvp_ai_sparring_tabs: TabContainer
 var pvp_ai_sparring_status_label: Label
@@ -6513,6 +6514,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_ai5_playtest_tabs.visible = false
 	pvp_ai5_playtest_tabs.custom_minimum_size = Vector2(0, 230)
 	pvp_ai5_playtest_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai5_playtest_tabs.tab_changed.connect(_on_ai5_playtest_detail_tab_changed)
 	pvp_room_form.add_child(pvp_ai5_playtest_tabs)
 
 	var assignment_tab := VBoxContainer.new()
@@ -6522,7 +6524,7 @@ func _setup_pvp_room_popup() -> void:
 	assignment_card.name = "AiResearchAssignmentCard"
 	assignment_card.add_theme_stylebox_override(
 		"panel",
-		_make_panel_style(Color("#101829d9"), Color("#496b93aa"), 10, 1)
+		_make_panel_style(Color("#09132188"), Color("#31506f88"), 9, 1)
 	)
 	assignment_tab.add_child(assignment_card)
 	var assignment_margin := MarginContainer.new()
@@ -6567,7 +6569,7 @@ func _setup_pvp_room_popup() -> void:
 	statistics_card.name = "AiResearchStatisticsCard"
 	statistics_card.add_theme_stylebox_override(
 		"panel",
-		_make_panel_style(Color("#101829d9"), Color("#35597a99"), 10, 1)
+		_make_panel_style(Color("#09132188"), Color("#31506f88"), 9, 1)
 	)
 	statistics_tab.add_child(statistics_card)
 	var statistics_margin := MarginContainer.new()
@@ -6995,7 +6997,7 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_room_join_mode_button)
 	_apply_button_style(pvp_room_ai_mode_button)
 	_apply_ai_sparring_start_style(pvp_ai_sparring_start_button)
-	_apply_ai_sparring_start_style(pvp_ai5_playtest_start_button)
+	_apply_ai_research_start_style(pvp_ai5_playtest_start_button)
 	_apply_button_style(pvp_room_spectate_mode_button)
 	_apply_pvp_room_type_button_style(pvp_room_casual_type_button)
 	_apply_pvp_room_type_button_style(pvp_room_training_type_button)
@@ -7225,12 +7227,12 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai5_playtest_tabs.custom_minimum_size = Vector2.ZERO
 	_apply_pvp_ranked_subtabs_style(pvp_ai5_playtest_tabs)
 
-	var research_start_step := Label.new()
-	research_start_step.name = "AiResearchStartStep"
-	_set_localized_control_property(research_start_step, "text", "ui.pvp.training.ai5_playtest.start_step")
-	research_start_step.add_theme_font_size_override("font_size", 11)
-	research_start_step.add_theme_color_override("font_color", Color("#b9aaff"))
-	research_card_layout.add_child(research_start_step)
+	pvp_ai5_playtest_start_step_label = Label.new()
+	pvp_ai5_playtest_start_step_label.name = "AiResearchStartStep"
+	_set_localized_control_property(pvp_ai5_playtest_start_step_label, "text", "ui.pvp.training.ai5_playtest.start_step")
+	pvp_ai5_playtest_start_step_label.add_theme_font_size_override("font_size", 11)
+	pvp_ai5_playtest_start_step_label.add_theme_color_override("font_color", Color("#60d3ff"))
+	research_card_layout.add_child(pvp_ai5_playtest_start_step_label)
 	pvp_ai5_playtest_start_button = Button.new()
 	_set_localized_control_property(pvp_ai5_playtest_start_button, "text", "ui.pvp.training.ai5_playtest.start")
 	pvp_ai5_playtest_start_button.custom_minimum_size = Vector2(0, 42)
@@ -28480,6 +28482,25 @@ func _apply_ai_sparring_start_style(button: Button) -> void:
 	button.add_theme_stylebox_override("focus", hover)
 
 
+func _apply_ai_research_start_style(button: Button) -> void:
+	if button == null:
+		return
+	var normal := _make_button_style(Color("#126b91"), Color("#7de0ff"), 9, 1)
+	var hover := _make_button_style(Color("#1785ae"), Color("#c1f2ff"), 9, 1)
+	var pressed := _make_button_style(Color("#0d526f"), Color("#7de0ff"), 9, 1)
+	for style: StyleBoxFlat in [normal, hover]:
+		style.shadow_color = Color("#07101a99")
+		style.shadow_size = 5
+		style.shadow_offset = Vector2(0, 2)
+	button.add_theme_color_override("font_color", Color.WHITE)
+	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	button.add_theme_color_override("font_pressed_color", Color.WHITE)
+	button.add_theme_stylebox_override("normal", normal)
+	button.add_theme_stylebox_override("hover", hover)
+	button.add_theme_stylebox_override("pressed", pressed)
+	button.add_theme_stylebox_override("focus", hover)
+
+
 func _apply_ai_sparring_team_selector_style(option: OptionButton) -> void:
 	if option == null:
 		return
@@ -42417,6 +42438,14 @@ func _on_pvp_ai_sparring_tab_changed(tab_index: int) -> void:
 		_refresh_ai5_playtest_panel()
 
 
+func _on_ai5_playtest_detail_tab_changed(tab_index: int) -> void:
+	var assignment_visible := tab_index == 0
+	if pvp_ai5_playtest_start_step_label != null:
+		pvp_ai5_playtest_start_step_label.visible = assignment_visible
+	if pvp_ai5_playtest_start_button != null:
+		pvp_ai5_playtest_start_button.visible = assignment_visible
+
+
 func _on_pvp_room_battle_purpose_selected(purpose: String) -> void:
 	if pvp_active_room_code != "" or pvp_battle_starting:
 		return
@@ -42749,16 +42778,18 @@ func _refresh_ai5_playtest_panel() -> void:
 	var campaign_value: Variant = pvp_ai5_playtest_status.get("campaign", {})
 	var campaign: Dictionary = campaign_value as Dictionary if campaign_value is Dictionary else {}
 	var phase := str(campaign.get("phase", "pilot"))
+	var campaign_id := str(campaign.get("campaignId", ""))
+	var campaign_version := "V2" if "-v2-" in campaign_id else "V1" if "-v1-" in campaign_id else ""
 	pvp_ai5_playtest_progress_label.text = LocalizationManager.text(
 		"ui.pvp.training.ai5_playtest.progress"
-	) % [phase.capitalize(), completed, target]
+	) % [campaign_version, phase.capitalize(), completed, target, min(target, completed + 1)]
 	var next_value: Variant = pvp_ai5_playtest_status.get("nextAssignment", {})
 	var next_assignment: Dictionary = next_value as Dictionary if next_value is Dictionary else {}
 	var own_value: Variant = next_assignment.get("playerTeam", {})
 	var own_team: Dictionary = own_value as Dictionary if own_value is Dictionary else {}
 	pvp_ai5_playtest_assignment_label.text = (
 		LocalizationManager.text("ui.pvp.training.ai5_playtest.next_assignment")
-		% [int(next_assignment.get("assignmentIndex", 0)) + 1,
+		% [int(next_assignment.get("assignmentIndex", 0)) + 1, target,
 			str(own_team.get("displayName", "-")), str(own_team.get("archetype", "-")),
 			str(next_assignment.get("aiArchetype", "-"))]
 		if not next_assignment.is_empty()
