@@ -175,6 +175,12 @@ func _check_form_change_refreshes_party_rails() -> void:
 		true,
 		"AI sparring pins the resolved public Mega species before and after its animation"
 	)
+	_check_equal(
+		function_source.contains('_update_active_hud_panel("p2", enemy_hud_panel, public_species_override)')
+		and function_source.contains('_update_active_sprite_box("p2", enemy_sprite_box, "front", "sprite_refresh", public_species_override)'),
+		true,
+		"AI sparring applies the same public Mega species to the opponent HUD and field sprite"
+	)
 
 
 func _check_pre_event_render_skips_final_team_hud_refresh() -> void:

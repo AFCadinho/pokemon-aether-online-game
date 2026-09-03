@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- AI Sparring now keeps live HP and status attached to the imported team slot when an opponent changes battle form.
 - AI Sparring now changes an opponent's field sprite immediately when its Mega Evolution is shown, without waiting for a later attack.
 - Training AI battles now keep each imported Pokémon's fixed party position when submitting switches, including after Showdown reorders its internal request list.
 - Training battles no longer request another AI replacement after its final Pokémon faints to entry hazards.

@@ -21,6 +21,7 @@ func _run_checks() -> void:
 	_check_opponent_default_name_follows_snapshot_mega_form()
 	_check_opponent_custom_nickname_survives_public_mega_form()
 	_check_known_trainer_team_keeps_public_mega_form()
+	_check_training_ai_canonical_slot_keeps_live_state_across_form_identity_change()
 	_check_trainer_active_species_uses_metadata_form()
 	_check_trainer_team_display_keeps_roster_species_during_ambiguous_switch_state()
 	_check_trainer_team_display_ignores_request_slot_identity_for_species_match()
@@ -225,6 +226,51 @@ func _check_known_trainer_team_keeps_public_mega_form() -> void:
 	_check_equal(display_sableye.get("megaSpecies", ""), "Sableye-Mega", "known AI hover data retains the public Mega species")
 	_check_equal(display_sableye.get("condition", ""), "93/100", "known AI Mega slot retains its live condition")
 	_check_equal((display_sableye.get("moves", []) as Array).size(), 4, "known AI Mega hover retains its known moveset")
+
+
+func _check_training_ai_canonical_slot_keeps_live_state_across_form_identity_change() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"battleId": "training-ai-canonical-form-state-test",
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [{
+						"ident": "p2a: Ditto",
+						"species": "Ditto",
+						"displaySpecies": "Dragonite",
+						"transformedSpecies": "Dragonite",
+						"condition": "71/100 brn",
+						"hp": 71,
+						"maxHp": 100,
+						"status": "brn",
+						"active": true,
+						"partySlot": 1,
+					}],
+				},
+			},
+		},
+	}, false)
+	var presenter = BattleDisplayDataPresenterScript.new()
+	presenter.setup(state)
+	presenter.set_battle_context(1, null)
+	# AI Sparring owns an immutable imported slot identity. Even if an imported
+	# form label and Showdown's live form label diverge, the slot's live HP and
+	# status must remain authoritative.
+	presenter.set_trainer_team([{
+		"species": "Ditto",
+		"condition": "100/100",
+		"hp": 100,
+		"maxHp": 100,
+		"metadataSlot": 1,
+	}], true)
+
+	var display_team: Array = presenter.get_display_team_data("p2")
+	var display_ditto: Dictionary = display_team[0] as Dictionary
+	_check_equal(display_ditto.get("displaySpecies", ""), "Dragonite", "AI canonical slot keeps the live transformed species")
+	_check_equal(display_ditto.get("condition", ""), "71/100 brn", "AI canonical slot cannot restore imported full HP")
+	_check_equal(int(display_ditto.get("hp", 0)), 71, "AI canonical slot keeps live damaged HP")
+	_check_equal(display_ditto.get("status", ""), "brn", "AI canonical slot keeps live status")
 
 
 func _check_opponent_default_name_follows_snapshot_mega_form() -> void:
