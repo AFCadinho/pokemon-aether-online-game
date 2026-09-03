@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring now opens on Free Sparring and guides you through choosing your team, AI opponent, and battle with a clearer three-step layout.
+
 - Fixed Mega-Evolved AI Pokémon retaining their base-form field sprite, party icon, and hover information.
 
 - AI Sparring now has its own polished PvP destination for free AI5 practice and assigned research battles, while AI5 appears as a Veteran trainer in battle.

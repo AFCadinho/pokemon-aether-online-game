@@ -7083,20 +7083,41 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	practice_page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.practice")
 	pvp_ai_sparring_tabs.add_child(practice_page)
 	var practice_layout := VBoxContainer.new()
-	practice_layout.add_theme_constant_override("separation", 10)
+	practice_layout.add_theme_constant_override("separation", 12)
 	practice_page.add_child(practice_layout)
 
-	var practice_intro := Label.new()
-	_set_localized_control_property(practice_intro, "text", "ui.pvp.ai_sparring.practice_intro")
-	practice_intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	practice_intro.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	practice_layout.add_child(practice_intro)
+	var practice_steps := HBoxContainer.new()
+	practice_steps.add_theme_constant_override("separation", 12)
+	practice_layout.add_child(practice_steps)
+
+	var team_card := PanelContainer.new()
+	team_card.name = "AiSparringTeamStep"
+	team_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	team_card.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#101829d9"), Color("#35597a99"), 10, 1)
+	)
+	practice_steps.add_child(team_card)
+	var team_margin := MarginContainer.new()
+	team_margin.add_theme_constant_override("margin_left", 14)
+	team_margin.add_theme_constant_override("margin_top", 12)
+	team_margin.add_theme_constant_override("margin_right", 14)
+	team_margin.add_theme_constant_override("margin_bottom", 12)
+	team_card.add_child(team_margin)
+	var team_layout := VBoxContainer.new()
+	team_layout.add_theme_constant_override("separation", 8)
+	team_margin.add_child(team_layout)
+	var team_step := Label.new()
+	_set_localized_control_property(team_step, "text", "ui.pvp.ai_sparring.step.team")
+	team_step.add_theme_font_size_override("font_size", 11)
+	team_step.add_theme_color_override("font_color", Color("#b9aaff"))
+	team_layout.add_child(team_step)
 
 	pvp_training_team_input = TextEdit.new()
 	_set_localized_control_property(pvp_training_team_input, "placeholder_text", "ui.pvp.training.paste_placeholder")
 	pvp_training_team_input.custom_minimum_size = Vector2(0, 110)
 	pvp_training_team_input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
-	practice_layout.add_child(pvp_training_team_input)
+	team_layout.add_child(pvp_training_team_input)
 	_apply_text_edit_style(pvp_training_team_input)
 
 	pvp_training_team_note = Label.new()
@@ -7104,14 +7125,43 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_training_team_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_training_team_note.add_theme_font_size_override("font_size", 11)
 	pvp_training_team_note.add_theme_color_override("font_color", Color("#9be7b1"))
-	practice_layout.add_child(pvp_training_team_note)
+	team_layout.add_child(pvp_training_team_note)
+
+	var opponent_card := PanelContainer.new()
+	opponent_card.name = "AiSparringOpponentStep"
+	opponent_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	opponent_card.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#101829d9"), Color("#35597a99"), 10, 1)
+	)
+	practice_steps.add_child(opponent_card)
+	var opponent_margin := MarginContainer.new()
+	opponent_margin.add_theme_constant_override("margin_left", 14)
+	opponent_margin.add_theme_constant_override("margin_top", 12)
+	opponent_margin.add_theme_constant_override("margin_right", 14)
+	opponent_margin.add_theme_constant_override("margin_bottom", 12)
+	opponent_card.add_child(opponent_margin)
+	var opponent_layout := VBoxContainer.new()
+	opponent_layout.add_theme_constant_override("separation", 8)
+	opponent_margin.add_child(opponent_layout)
+	var opponent_step := Label.new()
+	_set_localized_control_property(opponent_step, "text", "ui.pvp.ai_sparring.step.opponent")
+	opponent_step.add_theme_font_size_override("font_size", 11)
+	opponent_step.add_theme_color_override("font_color", Color("#b9aaff"))
+	opponent_layout.add_child(opponent_step)
 
 	for row: Control in [pvp_training_ai_mode_row, pvp_training_ai_archetype_row, pvp_training_ai_team_row]:
-		row.reparent(practice_layout)
+		row.reparent(opponent_layout)
 		row.visible = true
 
+	var action_step := Label.new()
+	action_step.name = "AiSparringReadyStep"
+	_set_localized_control_property(action_step, "text", "ui.pvp.ai_sparring.step.ready")
+	action_step.add_theme_font_size_override("font_size", 11)
+	action_step.add_theme_color_override("font_color", Color("#b9aaff"))
+	practice_layout.add_child(action_step)
 	pvp_ai_sparring_start_button = Button.new()
-	_set_localized_control_property(pvp_ai_sparring_start_button, "text", "ui.pvp.training.ai.start")
+	_set_localized_control_property(pvp_ai_sparring_start_button, "text", "ui.pvp.ai_sparring.start")
 	pvp_ai_sparring_start_button.custom_minimum_size = Vector2(0, 42)
 	pvp_ai_sparring_start_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_ai_sparring_start_button.focus_mode = Control.FOCUS_NONE
@@ -7162,7 +7212,8 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai_sparring_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	status_margin.add_child(pvp_ai_sparring_status_label)
 
-	pvp_ai_sparring_tabs.current_tab = 1
+	# Free sparring is the player-facing default; research remains an explicit advanced route.
+	pvp_ai_sparring_tabs.current_tab = 0
 	return page
 
 
