@@ -11,6 +11,7 @@ func _init() -> void:
 	_check_damage_response_is_display_deferred()
 	_check_forme_change_response_is_display_deferred()
 	_check_deferred_damage_load_rewinds_to_previous_hp()
+	_check_keyed_ai_damage_updates_keyless_imported_slot()
 	_check_deferred_mimikyu_forme_change_keeps_disguise_until_event()
 	_check_newer_damage_and_faint_override_hp_memory()
 	_check_stale_switch_event_does_not_revive_canonical_faint()
@@ -95,6 +96,53 @@ func _check_deferred_damage_load_rewinds_to_previous_hp() -> void:
 	state.apply_event_conditions([damage_event])
 	_check_equal(state.get_active_pokemon_current_hp("p2"), 0, "damage event applies final HP")
 	_check_equal(state.is_active_pokemon_fainted("p2"), true, "damage event applies fainted state")
+
+
+func _check_keyed_ai_damage_updates_keyless_imported_slot() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"success": true,
+		"battleId": "ai-keyless-imported-slot-damage-test",
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [{
+						"ident": "p2a: Sableye",
+						"species": "Sableye-Mega",
+						"active": true,
+						"condition": "80/100",
+						"hp": 80,
+						"maxHp": 100,
+						"metadataSlot": 1,
+					}],
+				},
+			},
+		},
+		"events": [],
+	}, true)
+
+	state.apply_event_conditions([{
+		"type": "damage",
+		"target": "p2a: Sableye",
+		"pokemonKey": "p2:slot:1",
+		"metadataSlot": 1,
+		"previousCondition": "80/100",
+		"condition": "20/100",
+		"previousHp": 80,
+		"hp": 20,
+		"maxHp": 100,
+	}])
+
+	_check_equal(
+		state.get_active_pokemon_current_hp("p2"),
+		20,
+		"keyed AI damage commits 80-to-20 HP to a keyless imported request slot"
+	)
+	_check_equal(
+		str(state.get_active_player_pokemon("p2").get("condition", "")),
+		"20/100",
+		"post-animation refresh cannot restore the AI slot's previous 80 percent HP"
+	)
 
 
 func _check_deferred_mimikyu_forme_change_keeps_disguise_until_event() -> void:
