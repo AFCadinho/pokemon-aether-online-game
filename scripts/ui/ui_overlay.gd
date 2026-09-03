@@ -6492,7 +6492,7 @@ func _setup_pvp_room_popup() -> void:
 	_set_localized_control_property(training_ai_team_label, "text", "ui.pvp.training.ai.team_label")
 	training_ai_team_label.custom_minimum_size = Vector2(82, 36)
 	training_ai_team_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	training_ai_team_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	training_ai_team_label.add_theme_color_override("font_color", Color("#c9beff"))
 	pvp_training_ai_team_row.add_child(training_ai_team_label)
 
 	pvp_training_ai_team_select = OptionButton.new()
@@ -6500,6 +6500,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_training_ai_team_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_training_ai_team_select.focus_mode = Control.FOCUS_NONE
 	_apply_pvp_ranked_dropdown_style(pvp_training_ai_team_select, true)
+	_apply_ai_sparring_team_selector_style(pvp_training_ai_team_select)
 	pvp_training_ai_team_row.add_child(pvp_training_ai_team_select)
 	_refresh_pvp_training_ai_team_options()
 
@@ -7019,8 +7020,8 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_room_create_mode_button, "primary")
 	_apply_button_style(pvp_room_join_mode_button)
 	_apply_button_style(pvp_room_ai_mode_button)
-	_apply_button_style(pvp_ai_sparring_start_button, "primary")
-	_apply_button_style(pvp_ai5_playtest_start_button, "primary")
+	_apply_ai_sparring_start_style(pvp_ai_sparring_start_button)
+	_apply_ai_sparring_start_style(pvp_ai5_playtest_start_button)
 	_apply_button_style(pvp_room_spectate_mode_button)
 	_apply_pvp_room_type_button_style(pvp_room_casual_type_button)
 	_apply_pvp_room_type_button_style(pvp_room_training_type_button)
@@ -28480,6 +28481,45 @@ func _apply_button_style(button: Button, variant: String = "default") -> void:
 	button.add_theme_stylebox_override("pressed", _make_button_style(pressed_bg, hover_border))
 	button.add_theme_stylebox_override("focus", _make_button_style(hover_bg, hover_border, 8, 1))
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+
+func _apply_ai_sparring_start_style(button: Button) -> void:
+	if button == null:
+		return
+	var normal := _make_button_style(Color("#5d4aa4"), Color("#d4c9ff"), 9, 2)
+	normal.shadow_color = Color("#04061199")
+	normal.shadow_size = 6
+	normal.shadow_offset = Vector2(0, 3)
+	var hover := _make_button_style(Color("#725dbe"), Color("#f0ebff"), 9, 2)
+	hover.shadow_color = Color("#5d4aa488")
+	hover.shadow_size = 8
+	hover.shadow_offset = Vector2(0, 3)
+	var pressed := _make_button_style(Color("#493984"), Color("#c7b8ff"), 9, 2)
+	button.add_theme_color_override("font_color", Color("#ffffff"))
+	button.add_theme_color_override("font_hover_color", Color("#ffffff"))
+	button.add_theme_color_override("font_pressed_color", Color("#ffffff"))
+	button.add_theme_stylebox_override("normal", normal)
+	button.add_theme_stylebox_override("hover", hover)
+	button.add_theme_stylebox_override("pressed", pressed)
+	button.add_theme_stylebox_override("focus", hover)
+
+
+func _apply_ai_sparring_team_selector_style(option: OptionButton) -> void:
+	if option == null:
+		return
+	option.add_theme_color_override("font_color", Color("#f4f0ff"))
+	option.add_theme_stylebox_override(
+		"normal",
+		_make_pvp_ranked_dropdown_button_style(Color("#171630"), Color("#8977dc"), true)
+	)
+	option.add_theme_stylebox_override(
+		"hover",
+		_make_pvp_ranked_dropdown_button_style(Color("#211d42"), Color("#c9beff"), true)
+	)
+	option.add_theme_stylebox_override(
+		"pressed",
+		_make_pvp_ranked_dropdown_button_style(Color("#110f26"), Color("#c9beff"), true)
+	)
 
 
 func _apply_pvp_room_type_button_style(button: Button) -> void:

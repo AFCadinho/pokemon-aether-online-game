@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring now visually distinguishes supporting AI settings, the final opponent choice, and the primary battle action.
+
 - AI5 Research Campaign now keeps the next battle, consent, and start action together in a compact campaign card, with statistics and decision markers clearly separated.
 
 - AI Sparring now opens on Free Sparring and guides you through choosing your team, AI opponent, and battle with a clearer three-step layout.
