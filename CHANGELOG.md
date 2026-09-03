@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI5 Research now clearly requires administrator-granted AI Trainer access; players without it can view why the campaign is locked but cannot start data-collecting battles.
+
 - AI5 Research battles now let players mark the current turn during battle, choose a diagnostic category, and add an optional note without remembering battle or turn numbers.
 
 - AI Sparring now visually distinguishes supporting AI settings, the final opponent choice, and the primary battle action.

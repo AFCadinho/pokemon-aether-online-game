@@ -4357,6 +4357,7 @@
   "ui.pvp.training.ai5_playtest.creating": "正在创建指定的 AI5 对战……",
   "ui.pvp.training.ai5_playtest.start_failed": "无法开始指定的 AI5 对战。",
   "ui.pvp.training.ai5_playtest.unavailable": "活动暂不可用。",
+  "ui.pvp.training.ai5_playtest.access_required": "需要 AI Trainer 权限。请联系管理员为你的账号启用。",
   "ui.pvp.training.ai5_playtest.complete": "试点/活动已完成。",
   "ui.pvp.training.ai5_playtest.mark": "标记",
   "ui.pvp.training.ai5_playtest.mark_failed": "无法保存此标记。",

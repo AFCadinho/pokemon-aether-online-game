@@ -4360,6 +4360,7 @@
   "ui.pvp.training.ai5_playtest.creating": "Criando batalha AI5 atribuída...",
   "ui.pvp.training.ai5_playtest.start_failed": "Não foi possível iniciar a batalha AI5 atribuída.",
   "ui.pvp.training.ai5_playtest.unavailable": "Campanha indisponível.",
+  "ui.pvp.training.ai5_playtest.access_required": "O acesso AI Trainer é obrigatório. Peça a um administrador para ativá-lo em sua conta.",
   "ui.pvp.training.ai5_playtest.complete": "Piloto/campanha concluído.",
   "ui.pvp.training.ai5_playtest.mark": "Marcar",
   "ui.pvp.training.ai5_playtest.mark_failed": "Não foi possível salvar esta marcação.",

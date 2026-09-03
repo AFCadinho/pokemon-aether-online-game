@@ -4360,6 +4360,7 @@
   "ui.pvp.training.ai5_playtest.creating": "Toegewezen AI5-battle wordt gemaakt...",
   "ui.pvp.training.ai5_playtest.start_failed": "De toegewezen AI5-battle kon niet worden gestart.",
   "ui.pvp.training.ai5_playtest.unavailable": "Campagne niet beschikbaar.",
+  "ui.pvp.training.ai5_playtest.access_required": "AI Trainer-toegang is vereist. Vraag een beheerder om dit voor je account aan te zetten.",
   "ui.pvp.training.ai5_playtest.complete": "Pilot/campagne voltooid.",
   "ui.pvp.training.ai5_playtest.mark": "Markeer",
   "ui.pvp.training.ai5_playtest.mark_failed": "Deze markering kon niet worden opgeslagen.",

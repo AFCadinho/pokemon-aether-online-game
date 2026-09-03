@@ -173,9 +173,11 @@ func _check_ai5_playtest_uses_server_assignments_and_separate_consent() -> void:
 		and overlay_source.contains("pvp_ai5_playtest_start_button")
 		and overlay_source.contains("nextAssignment")
 		and overlay_source.contains("completedBattles")
+		and overlay_source.contains("accessDenied")
+		and overlay_source.contains("ui.pvp.training.ai5_playtest.access_required")
 		and battle_source.contains("flag_ai5_playtest_turn")
 		and marker_source.contains("note_input"),
-		"AI5 research shows assignments and statistics, with live categorized turn notes in battle"
+		"AI5 research is access-locked and shows assignments, statistics, and live categorized turn notes"
 	)
 
 

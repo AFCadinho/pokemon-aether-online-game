@@ -308,6 +308,18 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_refresh_ai5_playtest_panel")
 	_check(ai_research_statistics_text != null and ai_research_statistics_text.text.begins_with("Battle record:"), "Research statistics use player-facing battle language")
 	_check(ai_research_statistics_text != null and not ai_research_statistics_text.text.contains("Policy"), "Research statistics keep internal policy details out of the main UI")
+	overlay.set("pvp_ai5_playtest_status", {"success": true, "enabled": false, "accessDenied": true})
+	overlay.call("_refresh_ai5_playtest_panel")
+	var research_progress := overlay.get("pvp_ai5_playtest_progress_label") as Label
+	_check(research_progress != null and research_progress.text.contains("AI Trainer-toegang"), "Research explains the AI Trainer access lock")
+	_check(ai_research_start != null and ai_research_start.disabled, "Research cannot start without AI Trainer access")
+	overlay.set("pvp_ai5_playtest_status", {
+		"enabled": true, "completedBattles": 1, "targetBattles": 10,
+		"campaign": {"phase": "pilot"},
+		"nextAssignment": {"assignmentIndex": 1, "playerTeam": {"displayName": "Screens", "archetype": "hyper_offense"}, "aiArchetype": "balance"},
+		"statistics": {}, "flagCount": 0,
+	})
+	overlay.call("_refresh_ai5_playtest_panel")
 	overlay.call("_on_pvp_ai_sparring_tab_changed", 1)
 	_check(popup.get_combined_minimum_size().y <= 620.0, "Research campaign fits inside the room popup without empty forced height")
 	overlay.call("_on_pvp_ai_sparring_tab_changed", 0)
