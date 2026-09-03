@@ -21,6 +21,7 @@ var mark_button: Button
 var feedback_label: Label
 var modal: Control
 var turn_label: Label
+var turn_select: OptionButton
 var category_select: OptionButton
 var note_input: TextEdit
 var save_button: Button
@@ -105,7 +106,7 @@ func _build_interface() -> void:
 	modal.add_child(center)
 
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(520.0, 350.0)
+	panel.custom_minimum_size = Vector2(520.0, 410.0)
 	var panel_style := StyleBoxFlat.new()
 	panel_style.bg_color = Color("#071426")
 	panel_style.border_color = Color("#3296e8")
@@ -132,8 +133,15 @@ func _build_interface() -> void:
 	title.add_theme_color_override("font_color", Color("#6fdcff"))
 	layout.add_child(title)
 	turn_label = Label.new()
+	turn_label.text = _t("battle.ai5_research.turn_prompt")
 	turn_label.add_theme_font_size_override("font_size", 14)
 	layout.add_child(turn_label)
+	turn_select = OptionButton.new()
+	turn_select.custom_minimum_size = Vector2(0.0, 40.0)
+	turn_select.tooltip_text = _t("battle.ai5_research.turn_tooltip")
+	_apply_input_style(turn_select)
+	turn_select.item_selected.connect(_select_marked_turn)
+	layout.add_child(turn_select)
 
 	category_select = OptionButton.new()
 	category_select.custom_minimum_size = Vector2(0.0, 40.0)
@@ -177,14 +185,27 @@ func _build_interface() -> void:
 func _open_marker() -> void:
 	if submitting or not turn_provider.is_valid():
 		return
-	marked_turn = maxi(0, int(turn_provider.call()))
-	if marked_turn < 1:
+	var current_turn := maxi(0, int(turn_provider.call()))
+	var latest_completed_turn := current_turn - 1
+	if latest_completed_turn < 1:
 		feedback_label.text = _t("battle.ai5_research.turn_unavailable")
 		return
-	turn_label.text = _t("battle.ai5_research.turn", {"turn": marked_turn})
+	turn_select.clear()
+	for completed_turn: int in range(latest_completed_turn, 0, -1):
+		turn_select.add_item(_t("battle.ai5_research.turn_option", {"turn": completed_turn}))
+		turn_select.set_item_metadata(turn_select.item_count - 1, completed_turn)
+	turn_select.select(0)
+	_select_marked_turn(0)
 	modal_status.text = ""
 	modal.visible = true
 	note_input.grab_focus()
+
+
+func _select_marked_turn(index: int) -> void:
+	if turn_select == null or index < 0 or index >= turn_select.item_count:
+		marked_turn = 0
+		return
+	marked_turn = int(turn_select.get_item_metadata(index))
 
 
 func _close_marker() -> void:
