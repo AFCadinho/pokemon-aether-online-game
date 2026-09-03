@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Training AI battles now switch to the intended Pokémon after Showdown reorders the team internally.
 - Training battles no longer request another AI replacement after its final Pokémon faints to entry hazards.
 - AI5 Research markers now default to the previous completed turn and let trainers select any earlier turn.
 

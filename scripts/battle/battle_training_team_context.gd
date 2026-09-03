@@ -123,6 +123,30 @@ static func sort_by_canonical_slot(team: Array) -> Array:
 	return sorted_team
 
 
+static func resolve_mechanical_switch_slot(request_team_value: Variant, selected_pokemon: Dictionary) -> int:
+	if not (request_team_value is Array) or selected_pokemon.is_empty():
+		return -1
+	var canonical_slot := get_canonical_slot(selected_pokemon)
+	if canonical_slot <= 0:
+		return -1
+
+	var resolved_slot := -1
+	var request_team: Array = request_team_value as Array
+	for index in range(request_team.size()):
+		var request_value: Variant = request_team[index]
+		if not (request_value is Dictionary):
+			continue
+		if get_canonical_slot(request_value as Dictionary) != canonical_slot:
+			continue
+		if resolved_slot > 0:
+			return -1
+		# Showdown switch commands address the Pokémon's current position in its
+		# mechanically reordered side, not our stable imported-team slot.
+		resolved_slot = index + 1
+
+	return resolved_slot
+
+
 static func _find_request_pokemon(
 	request_team: Array,
 	roster_pokemon: Dictionary,
