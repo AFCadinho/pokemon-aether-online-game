@@ -265,7 +265,7 @@ func _check_pvp_runtime_translation() -> void:
 		"archetype": "stall",
 	})
 	var training_ai_available_modes: Array = overlay.get("pvp_training_ai_available_modes") as Array
-	training_ai_available_modes.assign(["shadow", "active"])
+	training_ai_available_modes.assign(["ai4", "active"])
 	var training_ai_archetypes: Array = overlay.get("pvp_training_ai_catalog_archetypes") as Array
 	training_ai_archetypes.assign(["hyper_offense", "stall"])
 	overlay.set("pvp_training_ai_enabled", true)
@@ -276,9 +276,9 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_on_pvp_ai_sparring_tab_changed", 0)
 	_check(overlay.get("pvp_room_selected_mode") == "ai", "Free sparring selects the server-owned opponent flow")
 	_check(ai_training_input != null and ai_training_input.visible, "AI flow accepts an imported Gen 9 National Dex team")
-	_check(training_ai_mode_row != null and training_ai_mode_row.visible, "AI flow exposes shadow and active execution modes")
+	_check(training_ai_mode_row != null and training_ai_mode_row.visible, "AI flow exposes AI4 and active AI5 execution modes")
 	_check(training_ai_mode_select != null and training_ai_mode_select.item_count == 2, "Both permitted AI modes are selectable")
-	_check(str(training_ai_mode_select.get_selected_metadata()) == "shadow", "AI4 with AI5 shadow observation is the safe default")
+	_check(str(training_ai_mode_select.get_selected_metadata()) == "ai4", "plain AI4 without shadow observation is the safe default")
 	_check(training_ai_archetype_row != null and training_ai_archetype_row.visible, "AI flow exposes an archetype selector")
 	_check(training_ai_archetype_select != null and training_ai_archetype_select.item_count == 3, "Archetype selector includes random and catalog archetypes")
 	_check(training_ai_team_row != null and training_ai_team_row.visible, "AI flow exposes the sample-team selector")
