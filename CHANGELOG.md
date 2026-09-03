@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed Training Room AI battles getting stuck when entry hazards immediately fainted an AI replacement during a forced switch.
+
 - Training Room now includes a disabled-by-default AI5 Research campaign view with server-assigned teams, pilot/core progress, battle statistics, explicit diagnostic consent, and turn markers for suspicious AI decisions.
 
 - Cerulean City Gym now correctly masks the space outside its interior map.

@@ -25,6 +25,7 @@ func _init() -> void:
 	_check_local_force_switch_render_restores_canonical_party_state()
 	_check_api_response_uses_rendered_event_cursor()
 	_check_chained_force_switch_request_survives_entry_hazard_faint()
+	_check_npc_entry_hazard_faint_requests_another_replacement()
 	_check_pivot_ko_wait_state_blocks_fainted_fallback()
 	_check_pvp_state_and_field_wait_for_render_cursor()
 	_check_pvp_restore_keeps_rendered_hp_and_field_events()
@@ -41,6 +42,22 @@ func _init() -> void:
 	_check_resolved_response_holds_species_until_ordered_form_event()
 	_check_animated_forme_change_is_prepared_before_render()
 	quit(1 if failed else 0)
+
+
+func _check_npc_entry_hazard_faint_requests_another_replacement() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var start := source.find("func _submit_npc_choice_and_render(")
+	var finish := source.find("\nfunc _render_resolved_player_choice_response(", start)
+	var function_source := source.substr(start, finish - start)
+	_check_equal(
+		start >= 0
+		and finish > start
+		and function_source.contains("range(MAX_NPC_FORCE_SWITCH_CHAIN)")
+		and function_source.contains("_response_has_opponent_force_switch(opponent_response)")
+		and function_source.count("action_flow.submit_npc_choice") == 1,
+		true,
+		"an NPC replacement fainted by entry hazards requests another bounded forced switch"
+	)
 
 
 func _check_disguise_form_change_follows_recoil_damage() -> void:

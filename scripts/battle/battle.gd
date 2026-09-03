@@ -53,6 +53,7 @@ const PVP_PRESENTATION_RELEASE_REPORT_MSEC := 8000
 const PVP_PRESENTATION_RELEASE_RESYNC_MSEC := 30000
 const PVP_RENDER_PROGRESS_HEARTBEAT_SECONDS := 1.0
 const AETHER_CLASH_RESULT_AUTO_CONTINUE_SECONDS := 5
+const MAX_NPC_FORCE_SWITCH_CHAIN := 6
 const Z_MOVE_FALLBACK_ICON: Texture2D = preload("res://assets/battles/mechanics/z-move.png")
 const Z_MOVE_TYPE_ICON_PATH := "res://assets/battles/types/%s.svg"
 const Z_CRYSTAL_NAMES := {
@@ -14794,16 +14795,34 @@ func _submit_npc_choice_and_render(
 	rendered_event_keys: Dictionary = {},
 	pending_player_choice_events: Array = []
 ) -> bool:
-	_capture_ordered_response_display_species()
-	var opponent_response: Dictionary = await action_flow.submit_npc_choice("p2", last_rendered_event_seq)
+	var next_rendered_event_keys := rendered_event_keys
+	var next_pending_player_choice_events := pending_player_choice_events
+	for _attempt in range(MAX_NPC_FORCE_SWITCH_CHAIN):
+		_capture_ordered_response_display_species()
+		var opponent_response: Dictionary = await action_flow.submit_npc_choice(
+			"p2", last_rendered_event_seq
+		)
+		if not bool(opponent_response.get("success", false)):
+			_clear_ordered_response_display_species()
+			return false
 
-	if not bool(opponent_response.get("success", false)):
-		_clear_ordered_response_display_species()
-		return false
+		await _render_opponent_response(
+			opponent_response,
+			next_rendered_event_keys,
+			next_pending_player_choice_events
+		)
+		await _hold_opponent_response_message()
+		if not _response_has_opponent_force_switch(opponent_response):
+			return true
 
-	await _render_opponent_response(opponent_response, rendered_event_keys, pending_player_choice_events)
-	await _hold_opponent_response_message()
-	return true
+		# Entry hazards can immediately faint the selected replacement. The
+		# Showdown request then remains an opponent forced switch, so ask the
+		# server-owned NPC for the next replacement instead of unlocking moves.
+		next_rendered_event_keys = {}
+		next_pending_player_choice_events = []
+
+	push_warning("NPC forced-switch chain exceeded the six-member team bound")
+	return false
 
 func _render_resolved_player_choice_response(
 	resolved_response: Dictionary,
