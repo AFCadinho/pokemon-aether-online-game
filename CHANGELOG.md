@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed AI battles asking the player for an unusable move after consecutive entry-hazard KOs; AI forced replacements now finish before player input reopens.
+
 - Fixed Mega-Evolved AI Pokémon retaining their base-form field sprite, party icon, and hover information.
 
 - AI Sparring now has its own polished PvP destination for free AI5 practice and assigned research battles, while AI5 appears as a Veteran trainer in battle.
