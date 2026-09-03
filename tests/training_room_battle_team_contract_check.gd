@@ -4,6 +4,7 @@ const TRAINING_TEAM_CONTEXT := preload("res://scripts/battle/battle_training_tea
 const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
 const BATTLE_API_PATH := "res://scripts/battle/battle_api/battle_api_client.gd"
 const UI_OVERLAY_PATH := "res://scripts/ui/ui_overlay.gd"
+const AI5_RESEARCH_MARKER_PATH := "res://scripts/battle/battle_ui/ai5_research_marker.gd"
 const WORLD_SCRIPT_PATH := "res://scripts/world/world.gd"
 const TRAINER_CATALOG_PATH := "res://data/npc_portraits/showdown_trainer_catalog.json"
 const AI_VETERAN_TEXTURE_PATH := "res://assets/sprites/trainer_cards/showdown/veteran-gen7.png"
@@ -158,6 +159,8 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 func _check_ai5_playtest_uses_server_assignments_and_separate_consent() -> void:
 	var api_source := FileAccess.get_file_as_string(BATTLE_API_PATH)
 	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
+	var marker_source := FileAccess.get_file_as_string(AI5_RESEARCH_MARKER_PATH)
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	_check(
 		api_source.contains("/battle/pvp/training/ai/playtest/battles")
 		and api_source.contains("\"consentAcknowledged\": consent_acknowledged")
@@ -170,8 +173,9 @@ func _check_ai5_playtest_uses_server_assignments_and_separate_consent() -> void:
 		and overlay_source.contains("pvp_ai5_playtest_start_button")
 		and overlay_source.contains("nextAssignment")
 		and overlay_source.contains("completedBattles")
-		and overlay_source.contains("flag_ai5_playtest_turn"),
-		"AI5 research shows assignments, progress, statistics and turn markers"
+		and battle_source.contains("flag_ai5_playtest_turn")
+		and marker_source.contains("note_input"),
+		"AI5 research shows assignments and statistics, with live categorized turn notes in battle"
 	)
 
 

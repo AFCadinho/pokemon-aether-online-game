@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI5 Research battles now let players mark the current turn during battle, choose a diagnostic category, and add an optional note without remembering battle or turn numbers.
+
 - AI Sparring now visually distinguishes supporting AI settings, the final opponent choice, and the primary battle action.
 
 - AI5 Research Campaign now keeps the next battle, consent, and start action together in a compact campaign card, with statistics and decision markers clearly separated.

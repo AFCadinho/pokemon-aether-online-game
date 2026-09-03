@@ -126,12 +126,13 @@ func flag_ai5_playtest_turn(
 	request_node: HTTPRequest,
 	battle_id: String,
 	turn: int,
-	category: String
+	category: String,
+	note: String = ""
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,
 		"/battle/pvp/training/ai/playtest/battles/%s/flags" % battle_id.uri_encode(),
-		{"turn": maxi(0, turn), "category": category}
+		{"turn": maxi(1, turn), "category": category, "note": note.strip_edges().left(2000)}
 	)
 
 func create_training_ai_battle(
