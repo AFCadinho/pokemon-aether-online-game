@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI5 Research now clearly requires administrator-granted AI Trainer access; players without it can view why the campaign is locked but cannot start data-collecting battles.
+
 - Free Sparring now keeps its team and opponent panels evenly proportioned when AI selections change.
 
 - Free Sparring now offers AI4 without an AI5 shadow search alongside a clearly named AI5 option.

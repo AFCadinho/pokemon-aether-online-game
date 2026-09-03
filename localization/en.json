@@ -4361,6 +4361,7 @@
   "ui.pvp.training.ai5_playtest.creating": "Creating assigned AI5 battle...",
   "ui.pvp.training.ai5_playtest.start_failed": "Could not start the assigned AI5 battle.",
   "ui.pvp.training.ai5_playtest.unavailable": "Campaign unavailable.",
+  "ui.pvp.training.ai5_playtest.access_required": "AI Trainer access is required. Ask an administrator to enable it for your account.",
   "ui.pvp.training.ai5_playtest.complete": "Pilot/campaign complete.",
   "ui.pvp.training.ai5_playtest.mark": "Mark",
   "ui.pvp.training.ai5_playtest.mark_failed": "Could not save this marker.",

@@ -42407,7 +42407,9 @@ func _on_pvp_ai_sparring_tab_changed(tab_index: int) -> void:
 	var research_selected := tab_index == 1
 	pvp_room_selected_mode = "ai5_playtest" if research_selected else "ai"
 	_set_pvp_status_key(
-		"ui.pvp.ai_sparring.research_ready"
+		("ui.pvp.training.ai5_playtest.access_required"
+		if bool(pvp_ai5_playtest_status.get("accessDenied", false))
+		else "ui.pvp.ai_sparring.research_ready")
 		if research_selected
 		else "ui.pvp.ai_sparring.practice_ready"
 	)
@@ -42730,6 +42732,18 @@ func _refresh_ai5_playtest_panel() -> void:
 		if pvp_ai5_playtest_start_button != null:
 			pvp_ai5_playtest_start_button.disabled = true
 		return
+	if bool(pvp_ai5_playtest_status.get("accessDenied", false)):
+		pvp_ai5_playtest_progress_label.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.access_required")
+		pvp_ai5_playtest_assignment_label.text = ""
+		pvp_ai5_playtest_stats_label.text = ""
+		if pvp_ai5_playtest_consent_check != null:
+			pvp_ai5_playtest_consent_check.disabled = true
+			pvp_ai5_playtest_consent_check.button_pressed = false
+		if pvp_ai5_playtest_start_button != null:
+			pvp_ai5_playtest_start_button.disabled = true
+		return
+	if pvp_ai5_playtest_consent_check != null:
+		pvp_ai5_playtest_consent_check.disabled = false
 	var completed := int(pvp_ai5_playtest_status.get("completedBattles", 0))
 	var target := int(pvp_ai5_playtest_status.get("targetBattles", 0))
 	var campaign_value: Variant = pvp_ai5_playtest_status.get("campaign", {})
@@ -42761,7 +42775,11 @@ func _refresh_ai5_playtest_panel() -> void:
 
 func _on_pvp_ai5_playtest_start_pressed() -> void:
 	if not bool(pvp_ai5_playtest_status.get("enabled", false)):
-		_set_pvp_status_key("ui.pvp.training.ai.unavailable")
+		_set_pvp_status_key(
+			"ui.pvp.training.ai5_playtest.access_required"
+			if bool(pvp_ai5_playtest_status.get("accessDenied", false))
+			else "ui.pvp.training.ai.unavailable"
+		)
 		return
 	if pvp_ai5_playtest_consent_check == null or not pvp_ai5_playtest_consent_check.button_pressed:
 		_set_pvp_status_key("ui.pvp.training.ai5_playtest.consent_required")
