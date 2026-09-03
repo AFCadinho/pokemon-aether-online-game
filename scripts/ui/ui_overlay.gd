@@ -882,7 +882,7 @@ var pvp_training_team_note: Label
 var pvp_training_ai_mode_row: HBoxContainer
 var pvp_training_ai_mode_select: OptionButton
 var pvp_training_ai_available_modes: Array[String] = []
-var pvp_training_ai_default_mode := "shadow"
+var pvp_training_ai_default_mode := "ai4"
 var pvp_training_ai_archetype_row: HBoxContainer
 var pvp_training_ai_archetype_select: OptionButton
 var pvp_training_ai_catalog_archetypes: Array[String] = []
@@ -6453,6 +6453,9 @@ func _setup_pvp_room_popup() -> void:
 	pvp_training_ai_mode_select = OptionButton.new()
 	pvp_training_ai_mode_select.custom_minimum_size = Vector2(0, 36)
 	pvp_training_ai_mode_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_mode_select.fit_to_longest_item = false
+	pvp_training_ai_mode_select.clip_text = true
+	pvp_training_ai_mode_select.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pvp_training_ai_mode_select.focus_mode = Control.FOCUS_NONE
 	_apply_pvp_ranked_dropdown_style(pvp_training_ai_mode_select, true)
 	pvp_training_ai_mode_row.add_child(pvp_training_ai_mode_select)
@@ -6473,6 +6476,9 @@ func _setup_pvp_room_popup() -> void:
 	pvp_training_ai_archetype_select = OptionButton.new()
 	pvp_training_ai_archetype_select.custom_minimum_size = Vector2(0, 36)
 	pvp_training_ai_archetype_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_archetype_select.fit_to_longest_item = false
+	pvp_training_ai_archetype_select.clip_text = true
+	pvp_training_ai_archetype_select.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pvp_training_ai_archetype_select.focus_mode = Control.FOCUS_NONE
 	_apply_pvp_ranked_dropdown_style(pvp_training_ai_archetype_select, true)
 	pvp_training_ai_archetype_select.item_selected.connect(_on_pvp_training_ai_archetype_selected)
@@ -6494,6 +6500,9 @@ func _setup_pvp_room_popup() -> void:
 	pvp_training_ai_team_select = OptionButton.new()
 	pvp_training_ai_team_select.custom_minimum_size = Vector2(0, 36)
 	pvp_training_ai_team_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_team_select.fit_to_longest_item = false
+	pvp_training_ai_team_select.clip_text = true
+	pvp_training_ai_team_select.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pvp_training_ai_team_select.focus_mode = Control.FOCUS_NONE
 	_apply_pvp_ranked_dropdown_style(pvp_training_ai_team_select, true)
 	_apply_ai_sparring_team_selector_style(pvp_training_ai_team_select)
@@ -7104,6 +7113,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	var team_card := PanelContainer.new()
 	team_card.name = "AiSparringTeamStep"
 	team_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	team_card.size_flags_stretch_ratio = 1.0
 	team_card.add_theme_stylebox_override(
 		"panel",
 		_make_panel_style(Color("#101829d9"), Color("#35597a99"), 10, 1)
@@ -7141,6 +7151,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	var opponent_card := PanelContainer.new()
 	opponent_card.name = "AiSparringOpponentStep"
 	opponent_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	opponent_card.size_flags_stretch_ratio = 1.0
 	opponent_card.add_theme_stylebox_override(
 		"panel",
 		_make_panel_style(Color("#101829d9"), Color("#35597a99"), 10, 1)
@@ -42531,7 +42542,7 @@ func _refresh_pvp_training_ai_mode_options() -> void:
 	var previous_mode := _selected_pvp_training_ai_mode()
 	pvp_training_ai_mode_select.clear()
 	for mode: String in pvp_training_ai_available_modes:
-		if mode not in ["shadow", "active"]:
+		if mode not in ["ai4", "shadow", "active"]:
 			continue
 		pvp_training_ai_mode_select.add_item(
 			LocalizationManager.text("ui.pvp.training.ai.mode_%s" % mode)
@@ -42630,16 +42641,25 @@ func _load_pvp_training_ai_catalog() -> void:
 	if pvp_training_ai_catalog_loaded:
 		var modes_value: Variant = response.get("availableModes", [])
 		if modes_value is Array:
+			var raw_modes: Array[String] = []
 			for mode_value: Variant in modes_value:
 				var mode := str(mode_value).strip_edges().to_lower()
-				if mode in ["shadow", "active"] and mode not in pvp_training_ai_available_modes:
-					pvp_training_ai_available_modes.append(mode)
-		pvp_training_ai_default_mode = str(response.get("defaultMode", "shadow")).strip_edges().to_lower()
+				if mode in ["ai4", "shadow", "active"] and mode not in raw_modes:
+					raw_modes.append(mode)
+			if "ai4" in raw_modes:
+				pvp_training_ai_available_modes.append("ai4")
+			elif "shadow" in raw_modes:
+				# Compatibility with a backend deployed before plain AI4. The
+				# legacy mode still acts through AI4 and is shown simply as AI4.
+				pvp_training_ai_available_modes.append("shadow")
+			if "active" in raw_modes:
+				pvp_training_ai_available_modes.append("active")
+		pvp_training_ai_default_mode = str(response.get("defaultMode", "ai4")).strip_edges().to_lower()
 		if pvp_training_ai_default_mode not in pvp_training_ai_available_modes:
 			pvp_training_ai_default_mode = (
 				pvp_training_ai_available_modes[0]
 				if not pvp_training_ai_available_modes.is_empty()
-				else "shadow"
+				else "ai4"
 			)
 		var archetypes_value: Variant = response.get("archetypes", [])
 		if archetypes_value is Array:
@@ -42676,7 +42696,7 @@ func _selected_pvp_training_ai_mode() -> String:
 	if pvp_training_ai_mode_select == null or pvp_training_ai_mode_select.item_count == 0:
 		return pvp_training_ai_default_mode
 	var selected_mode := str(pvp_training_ai_mode_select.get_selected_metadata()).strip_edges().to_lower()
-	return selected_mode if selected_mode in ["shadow", "active"] else pvp_training_ai_default_mode
+	return selected_mode if selected_mode in ["ai4", "shadow", "active"] else pvp_training_ai_default_mode
 
 
 func _selected_pvp_training_ai_archetype() -> String:
