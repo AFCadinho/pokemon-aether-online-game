@@ -108,6 +108,32 @@ func get_training_ai_teams(request_node: HTTPRequest) -> Dictionary:
 		"/battle/pvp/training/ai/teams"
 	)
 
+func get_ai5_playtest_status(request_node: HTTPRequest) -> Dictionary:
+	return await send_get_request(request_node, "/battle/pvp/training/ai/playtest")
+
+func create_ai5_playtest_battle(
+	request_node: HTTPRequest,
+	player: Dictionary,
+	consent_acknowledged: bool
+) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/battle/pvp/training/ai/playtest/battles",
+		{"player": player, "consentAcknowledged": consent_acknowledged}
+	)
+
+func flag_ai5_playtest_turn(
+	request_node: HTTPRequest,
+	battle_id: String,
+	turn: int,
+	category: String
+) -> Dictionary:
+	return await send_post_request(
+		request_node,
+		"/battle/pvp/training/ai/playtest/battles/%s/flags" % battle_id.uri_encode(),
+		{"turn": maxi(0, turn), "category": category}
+	)
+
 func create_training_ai_battle(
 	request_node: HTTPRequest,
 	player: Dictionary,
