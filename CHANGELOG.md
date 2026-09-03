@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI5 Research now names the exact active campaign, clearly separates assignment progress from AI statistics, and only shows the start action beside the assignment and consent.
+
 - AI5 Research now clearly requires administrator-granted AI Trainer access; players without it can view why the campaign is locked but cannot start data-collecting battles.
 
 - Free Sparring now keeps its team and opponent panels evenly proportioned when AI selections change.

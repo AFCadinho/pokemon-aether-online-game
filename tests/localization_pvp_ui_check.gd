@@ -324,13 +324,15 @@ func _check_pvp_runtime_translation() -> void:
 		"enabled": true,
 		"completedBattles": 1,
 		"targetBattles": 10,
-		"campaign": {"phase": "pilot", "policyRevision": "internal-policy"},
+		"campaign": {"campaignId": "ai5-playtest-v2-pilot-10", "phase": "pilot", "policyRevision": "internal-policy"},
 		"nextAssignment": {"assignmentIndex": 1, "playerTeam": {"displayName": "Screens", "archetype": "hyper_offense"}, "aiArchetype": "balance"},
 		"statistics": {"wins": 1, "losses": 0, "draws": 0, "aiSwitchCount": 3, "decisionCount": 8, "aiSwitchRate": 0.375, "fallbackCount": 2},
 		"flagCount": 1,
 	})
 	overlay.call("_refresh_ai5_playtest_panel")
-	_check(ai_research_statistics_text != null and ai_research_statistics_text.text.begins_with("Battle record:"), "Research statistics use player-facing battle language")
+	var active_campaign_text := (overlay.get("pvp_ai5_playtest_progress_label") as Label).text
+	_check(active_campaign_text.begins_with("AI5 V2 Pilot · ACTIEF"), "Research identifies the exact active campaign version and phase")
+	_check(ai_research_statistics_text != null and ai_research_statistics_text.text.begins_with("RESULTATEN"), "Research statistics clearly separate results from AI behaviour")
 	_check(ai_research_statistics_text != null and not ai_research_statistics_text.text.contains("Policy"), "Research statistics keep internal policy details out of the main UI")
 	overlay.set("pvp_ai5_playtest_status", {"success": true, "enabled": false, "accessDenied": true})
 	overlay.call("_refresh_ai5_playtest_panel")
@@ -339,11 +341,17 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_research_start != null and ai_research_start.disabled, "Research cannot start without AI Trainer access")
 	overlay.set("pvp_ai5_playtest_status", {
 		"enabled": true, "completedBattles": 1, "targetBattles": 10,
-		"campaign": {"phase": "pilot"},
+		"campaign": {"campaignId": "ai5-playtest-v2-pilot-10", "phase": "pilot"},
 		"nextAssignment": {"assignmentIndex": 1, "playerTeam": {"displayName": "Screens", "archetype": "hyper_offense"}, "aiArchetype": "balance"},
 		"statistics": {}, "flagCount": 0,
 	})
 	overlay.call("_refresh_ai5_playtest_panel")
+	ai_research_tabs.current_tab = 1
+	overlay.call("_on_ai5_playtest_detail_tab_changed", 1)
+	_check(ai_research_start != null and not ai_research_start.visible, "Statistics hides the assignment start action")
+	ai_research_tabs.current_tab = 0
+	overlay.call("_on_ai5_playtest_detail_tab_changed", 0)
+	_check(ai_research_start != null and ai_research_start.visible, "Assignment keeps the start action visible")
 	overlay.call("_on_pvp_ai_sparring_tab_changed", 1)
 	_check(popup.get_combined_minimum_size().y <= 620.0, "Research campaign fits inside the room popup without empty forced height")
 	overlay.call("_on_pvp_ai_sparring_tab_changed", 0)
