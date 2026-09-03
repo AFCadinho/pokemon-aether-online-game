@@ -154,7 +154,7 @@ func _check_animated_forme_change_is_prepared_before_render() -> void:
 
 func _check_form_change_refreshes_party_rails() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
-	var function_index := source.find("func _update_active_pokemon_presentation_for_ident(ident: String) -> void:")
+	var function_index := source.find("func _update_active_pokemon_presentation_for_ident(")
 	var next_function_index := source.find("\nfunc ", function_index + 1)
 	var function_source := source.substr(function_index, next_function_index - function_index)
 	var render_index := source.find("func _render_battle_events(")
@@ -169,6 +169,11 @@ func _check_form_change_refreshes_party_rails() -> void:
 		render_source.contains("if event_type == \"mega\" or event_type == \"primal\":\n\t\t\t# Reconcile once more after the transformation animation."),
 		true,
 		"Mega presentation reconciles the transformed field sprite after its animation"
+	)
+	_check_equal(
+		render_source.count('str(event_data.get("species", "")) if training_ai_battle else ""') == 2,
+		true,
+		"AI sparring pins the resolved public Mega species before and after its animation"
 	)
 
 
