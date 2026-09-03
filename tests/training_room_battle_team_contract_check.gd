@@ -5,6 +5,8 @@ const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
 const BATTLE_API_PATH := "res://scripts/battle/battle_api/battle_api_client.gd"
 const UI_OVERLAY_PATH := "res://scripts/ui/ui_overlay.gd"
 const WORLD_SCRIPT_PATH := "res://scripts/world/world.gd"
+const TRAINER_CATALOG_PATH := "res://data/npc_portraits/showdown_trainer_catalog.json"
+const AI_VETERAN_TEXTURE_PATH := "res://assets/sprites/trainer_cards/showdown/veteran-gen7.png"
 
 var failed := false
 
@@ -100,6 +102,7 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 	var api_source := FileAccess.get_file_as_string(BATTLE_API_PATH)
 	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
 	var world_source := FileAccess.get_file_as_string(WORLD_SCRIPT_PATH)
+	var trainer_catalog_source := FileAccess.get_file_as_string(TRAINER_CATALOG_PATH)
 	_check(
 		battle_source.contains("return training_ai_battle or (_is_pvp_battle() and pvp_battle_purpose == \"training\")"),
 		"AI5 battles inherit every Training Room party-persistence safeguard"
@@ -140,8 +143,15 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 	_check(
 		world_source.contains("active_battle_kind = \"training_ai\"")
 		and world_source.contains("response.get(\"trainerName\", \"AI Level 5\")")
+		and world_source.contains("\"_battle_sprite_id\": \"showdown_veteran_gen7\"")
 		and world_source.contains("battle_environment_id,\n\t\ttrue"),
-		"World starts the selected AI mode as a non-rewarding training battle"
+		"World starts the selected AI mode as a non-rewarding Veteran training battle"
+	)
+	_check(
+		FileAccess.file_exists(AI_VETERAN_TEXTURE_PATH)
+		and trainer_catalog_source.contains("\"id\": \"showdown_veteran_gen7\"")
+		and trainer_catalog_source.contains(AI_VETERAN_TEXTURE_PATH),
+		"AI5 Veteran identity resolves to an existing Showdown catalog texture"
 	)
 
 
@@ -155,7 +165,9 @@ func _check_ai5_playtest_uses_server_assignments_and_separate_consent() -> void:
 		"AI5 research sends explicit consent and cannot submit a player-authored team"
 	)
 	_check(
-		overlay_source.contains("pvp_ai5_playtest_tabs")
+		overlay_source.contains("_create_pvp_ai_sparring_tab")
+		and overlay_source.contains("pvp_ai5_playtest_tabs")
+		and overlay_source.contains("pvp_ai5_playtest_start_button")
 		and overlay_source.contains("nextAssignment")
 		and overlay_source.contains("completedBattles")
 		and overlay_source.contains("flag_ai5_playtest_turn"),
