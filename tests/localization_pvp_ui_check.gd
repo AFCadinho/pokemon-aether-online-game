@@ -74,6 +74,8 @@ func _check_pvp_runtime_translation() -> void:
 	var room_flow_hint := overlay.get("pvp_room_flow_hint") as Label
 	var training_input := overlay.get("pvp_training_room_team_input") as TextEdit
 	var ai_training_input := overlay.get("pvp_training_team_input") as TextEdit
+	var ai_team_step := overlay.find_child("AiSparringTeamStep", true, false) as PanelContainer
+	var ai_opponent_step := overlay.find_child("AiSparringOpponentStep", true, false) as PanelContainer
 	var training_ai_mode_row := overlay.get("pvp_training_ai_mode_row") as HBoxContainer
 	var training_ai_mode_select := overlay.get("pvp_training_ai_mode_select") as OptionButton
 	var training_ai_archetype_row := overlay.get("pvp_training_ai_archetype_row") as HBoxContainer
@@ -161,8 +163,14 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(1) == "Onderzoekscampagne", "Research tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.current_tab == 0, "Free sparring is the default AI destination")
 	_check(overlay.find_child("AiVeteranPortrait", true, false) != null, "AI Sparring presents the Veteran trainer identity")
-	_check(overlay.find_child("AiSparringTeamStep", true, false) != null, "Free sparring groups the player's team as its first step")
-	_check(overlay.find_child("AiSparringOpponentStep", true, false) != null, "Free sparring groups AI selection as its second step")
+	_check(ai_team_step != null, "Free sparring groups the player's team as its first step")
+	_check(ai_opponent_step != null, "Free sparring groups AI selection as its second step")
+	_check(
+		ai_team_step != null
+		and ai_opponent_step != null
+		and is_equal_approx(ai_team_step.size_flags_stretch_ratio, ai_opponent_step.size_flags_stretch_ratio),
+		"Free sparring keeps equal team and opponent column proportions"
+	)
 	_check(overlay.find_child("AiSparringReadyStep", true, false) != null, "Free sparring marks the final battle action as its third step")
 	_check(ai_sparring_start != null and ai_sparring_start.text == "Start sparring", "Free sparring uses a direct start action")
 	_check(ai_sparring_start != null and ai_sparring_start.custom_minimum_size.y >= 42.0, "Free sparring has a prominent start action")
@@ -279,6 +287,14 @@ func _check_pvp_runtime_translation() -> void:
 	_check(training_ai_mode_row != null and training_ai_mode_row.visible, "AI flow exposes AI4 and active AI5 execution modes")
 	_check(training_ai_mode_select != null and training_ai_mode_select.item_count == 2, "Both permitted AI modes are selectable")
 	_check(str(training_ai_mode_select.get_selected_metadata()) == "ai4", "plain AI4 without shadow observation is the safe default")
+	for select: OptionButton in [training_ai_mode_select, training_ai_archetype_select, training_ai_team_select]:
+		_check(
+			select != null
+			and not select.fit_to_longest_item
+			and select.clip_text
+			and select.text_overrun_behavior == TextServer.OVERRUN_TRIM_ELLIPSIS,
+			"AI opponent dropdown content cannot resize the sparring columns"
+		)
 	_check(training_ai_archetype_row != null and training_ai_archetype_row.visible, "AI flow exposes an archetype selector")
 	_check(training_ai_archetype_select != null and training_ai_archetype_select.item_count == 3, "Archetype selector includes random and catalog archetypes")
 	_check(training_ai_team_row != null and training_ai_team_row.visible, "AI flow exposes the sample-team selector")
@@ -291,10 +307,18 @@ func _check_pvp_runtime_translation() -> void:
 		and str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-screens-lameflame",
 		"AI selector preserves the stable team ID"
 	)
+	var opponent_minimum_width_before_filter := ai_opponent_step.get_combined_minimum_size().x
 	training_ai_archetype_select.select(2)
 	overlay.call("_on_pvp_training_ai_archetype_selected", 2)
 	_check(training_ai_team_select.item_count == 2, "Choosing an archetype filters the specific team list")
 	_check(str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-stall-example", "Filtered team keeps its stable catalog identity")
+	_check(
+		is_equal_approx(
+			opponent_minimum_width_before_filter,
+			ai_opponent_step.get_combined_minimum_size().x
+		),
+		"Changing the archetype cannot change the opponent column minimum width"
+	)
 	_check(ai_sparring_status != null and ai_sparring_status.text.begins_with("Vrij oefenen"), "Dedicated AI status explains the selected flow")
 	overlay.set("pvp_ai5_playtest_status", {
 		"enabled": true,
