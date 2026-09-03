@@ -4336,7 +4336,7 @@
   "ui.pvp.training.ai.mode_label": "AI MODE",
   "ui.pvp.training.ai.mode_ai4": "AI4",
   "ui.pvp.training.ai.mode_shadow": "AI4",
-  "ui.pvp.training.ai.mode_active": "AI5 active",
+  "ui.pvp.training.ai.mode_active": "AI5",
   "ui.pvp.training.ai.archetype_label": "ARCHETYPE",
   "ui.pvp.training.ai.archetype_random": "Random archetype",
   "ui.pvp.training.ai.archetype.hyper_offense": "Hyper offense",

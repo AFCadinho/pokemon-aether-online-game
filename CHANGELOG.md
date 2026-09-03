@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Free Sparring now offers plain AI4 without an AI5 shadow search, while active AI5 remains separately selectable.
+- Free Sparring now offers AI4 without an AI5 shadow search alongside a clearly named AI5 option.
 
 - AI5 Research battles now let players mark the current turn during battle, choose a diagnostic category, and add an optional note without remembering battle or turn numbers.
 

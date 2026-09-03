@@ -4333,7 +4333,7 @@
   "ui.pvp.training.ai.mode_label": "AI 模式",
   "ui.pvp.training.ai.mode_ai4": "AI4",
   "ui.pvp.training.ai.mode_shadow": "AI4",
-  "ui.pvp.training.ai.mode_active": "AI5 主动",
+  "ui.pvp.training.ai.mode_active": "AI5",
   "ui.pvp.training.ai.archetype_label": "队伍类型",
   "ui.pvp.training.ai.archetype_random": "随机类型",
   "ui.pvp.training.ai.archetype.hyper_offense": "超级进攻",
