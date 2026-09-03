@@ -50,6 +50,8 @@ func _check_npc_entry_hazard_faint_requests_another_replacement() -> void:
 	var start := source.find("func _submit_npc_choice_and_render(")
 	var finish := source.find("\nfunc _render_resolved_player_choice_response(", start)
 	var function_source := source.substr(start, finish - start)
+	var terminal_guard := function_source.find("if battle_finished or battle_state.is_battle_ended():", function_source.find("await _hold_opponent_response_message()"))
+	var force_switch_check := function_source.find("var response_requires_switch :=")
 	var show_moves_start := source.find("func _show_moves() -> void:")
 	var show_moves_end := source.find("\nfunc ", show_moves_start + 1)
 	var show_moves_source := source.substr(show_moves_start, show_moves_end - show_moves_start)
@@ -60,9 +62,11 @@ func _check_npc_entry_hazard_faint_requests_another_replacement() -> void:
 		and function_source.contains("_response_has_opponent_force_switch(opponent_response)")
 		and function_source.contains("rendered_state_requires_switch := _opponent_player_needs_force_switch_ui()")
 		and function_source.contains("BattleForceSwitchFlow.opponent_replacement_still_required(")
+		and terminal_guard >= 0
+		and terminal_guard < force_switch_check
 		and function_source.count("action_flow.submit_npc_choice") == 1,
 		true,
-		"an NPC replacement fainted by entry hazards requests another bounded forced switch"
+		"an NPC replacement continues only while the entry-hazard result remains nonterminal"
 	)
 	_check_equal(
 		show_moves_source.contains("not _is_pvp_battle() and _opponent_player_needs_force_switch_ui()")

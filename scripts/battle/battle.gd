@@ -14869,9 +14869,13 @@ func _submit_npc_choice_and_render(
 	rendered_event_keys: Dictionary = {},
 	pending_player_choice_events: Array = []
 ) -> bool:
+	if battle_finished or battle_state.is_battle_ended():
+		return true
 	var next_rendered_event_keys := rendered_event_keys
 	var next_pending_player_choice_events := pending_player_choice_events
 	for _attempt in range(MAX_NPC_FORCE_SWITCH_CHAIN):
+		if battle_finished or battle_state.is_battle_ended():
+			return true
 		_capture_ordered_response_display_species()
 		var opponent_response: Dictionary = await action_flow.submit_npc_choice(
 			"p2", last_rendered_event_seq
@@ -14886,6 +14890,11 @@ func _submit_npc_choice_and_render(
 			next_pending_player_choice_events
 		)
 		await _hold_opponent_response_message()
+		# The selected replacement can be the opponent's final Pokemon and faint
+		# immediately to entry hazards. Its response already contains the terminal
+		# state, so never ask the now-inactive training session for another choice.
+		if battle_finished or battle_state.is_battle_ended():
+			return true
 		var response_requires_switch := _response_has_opponent_force_switch(opponent_response)
 		var rendered_state_requires_switch := _opponent_player_needs_force_switch_ui()
 		if not BattleForceSwitchFlow.opponent_replacement_still_required(
