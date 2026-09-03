@@ -1412,7 +1412,12 @@ func _find_party_target_index(team: Array, target_ident: String, source_event: D
 		var pokemon_key_index := _find_unique_team_index_by_pokemon_key(team, event_pokemon_key)
 		if pokemon_key_index >= 0:
 			return pokemon_key_index
-		return -1
+		# Imported AI request parties can temporarily predate the server's
+		# canonical pokemonKey enrichment while their events already carry both
+		# that key and a stable metadata slot. Only fall through when the entire
+		# party is still keyless; a conflicting populated key set must fail closed.
+		if _team_has_any_pokemon_key(team):
+			return -1
 
 	var event_slot := _get_event_metadata_slot(source_event)
 	if event_slot > 0:
@@ -1540,6 +1545,16 @@ func _find_unique_team_index_by_pokemon_key(team: Array, pokemon_key: String) ->
 		found_index = index
 
 	return found_index
+
+
+func _team_has_any_pokemon_key(team: Array) -> bool:
+	for pokemon_value: Variant in team:
+		if not (pokemon_value is Dictionary):
+			continue
+		var pokemon: Dictionary = pokemon_value as Dictionary
+		if str(pokemon.get("pokemonKey", pokemon.get("pokemon_key", ""))).strip_edges() != "":
+			return true
+	return false
 
 
 func _find_unique_team_index_by_metadata_slot(team: Array, metadata_slot: int) -> int:
