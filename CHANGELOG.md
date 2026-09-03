@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring now has its own polished PvP destination for free AI5 practice and assigned research battles, while AI5 appears as a Veteran trainer in battle.
+
 - Training Room sample Pokémon now use their species names consistently, including before and after Mega Evolution.
 
 - Fixed Training Room AI battles getting stuck when entry hazards immediately fainted an AI replacement during a forced switch.

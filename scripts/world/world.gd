@@ -3007,6 +3007,8 @@ func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 		"name": trainer_name,
 		"teamDisplayName": str(ai_team.get("displayName", "")),
 		"battleTransitionStyle": "trainer",
+		"_battle_sprite_id": "showdown_veteran_gen7",
+		"_battle_sprite_offset": Vector2(0.0, -16.0),
 	}
 	is_in_battle = true
 	active_battle_kind = "training_ai"

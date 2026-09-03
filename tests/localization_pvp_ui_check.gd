@@ -56,12 +56,18 @@ func _check_pvp_runtime_translation() -> void:
 	var room_join_button := overlay.get("pvp_room_join_mode_button") as Button
 	var room_create_button := overlay.get("pvp_room_create_mode_button") as Button
 	var room_ai_button := overlay.get("pvp_room_ai_mode_button") as Button
+	var ai_sparring_menu_button := overlay.get("pvp_mode_ai_sparring_button") as Button
+	var ai_sparring_tabs := overlay.get("pvp_ai_sparring_tabs") as TabContainer
+	var ai_sparring_status := overlay.get("pvp_ai_sparring_status_label") as Label
+	var ai_sparring_start := overlay.get("pvp_ai_sparring_start_button") as Button
+	var ai_research_start := overlay.get("pvp_ai5_playtest_start_button") as Button
 	var room_spectate_button := overlay.get("pvp_room_spectate_mode_button") as Button
 	var casual_button := overlay.get("pvp_room_casual_type_button") as Button
 	var training_button := overlay.get("pvp_room_training_type_button") as Button
 	var room_type_note := overlay.get("pvp_room_type_note") as Label
 	var room_flow_hint := overlay.get("pvp_room_flow_hint") as Label
-	var training_input := overlay.get("pvp_training_team_input") as TextEdit
+	var training_input := overlay.get("pvp_training_room_team_input") as TextEdit
+	var ai_training_input := overlay.get("pvp_training_team_input") as TextEdit
 	var training_ai_mode_row := overlay.get("pvp_training_ai_mode_row") as HBoxContainer
 	var training_ai_mode_select := overlay.get("pvp_training_ai_mode_select") as OptionButton
 	var training_ai_archetype_row := overlay.get("pvp_training_ai_archetype_row") as HBoxContainer
@@ -143,6 +149,13 @@ func _check_pvp_runtime_translation() -> void:
 		and room_ai_button.has_theme_stylebox_override("focus"),
 		"AI training action uses the interactive room-button styling"
 	)
+	_check(ai_sparring_menu_button != null, "AI Sparring has its own PvP destination")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 2, "AI Sparring separates free practice from research")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(0) == "Vrij oefenen", "Free sparring tab renders in Dutch")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(1) == "Onderzoekscampagne", "Research tab renders in Dutch")
+	_check(overlay.find_child("AiVeteranPortrait", true, false) != null, "AI Sparring presents the Veteran trainer identity")
+	_check(ai_sparring_start != null and ai_sparring_start.custom_minimum_size.y >= 42.0, "Free sparring has a prominent start action")
+	_check(ai_research_start != null and ai_research_start.custom_minimum_size.y >= 42.0, "Research has a separate prominent start action")
 	_check(training_button != null and training_button.text == "Training Room", "Training room selector renders in Dutch")
 	_check(casual_button != null and casual_button.text.begins_with("✓ "), "Default room type is visibly selected")
 	_check(room_workspace != null and room_workspace.get_child_count() == 2, "Room setup uses a clear two-column workflow")
@@ -216,7 +229,7 @@ func _check_pvp_runtime_translation() -> void:
 	await process_frame
 	_check(overlay.get("pvp_room_battle_purpose") == "training", "Training button signal selects training mode")
 	_check(training_button.text.begins_with("✓ "), "Training selection is immediately visible on its button")
-	_check(room_ai_button != null and room_ai_button.visible, "Training selection exposes the AI5 opponent option")
+	_check(room_ai_button != null and not room_ai_button.visible, "Training Rooms keep AI battles out of the room action row")
 	_check(room_type_note != null and room_type_note.text.contains("beide spelers"), "Training selection immediately changes its explanation")
 	_check(room_status != null and room_status.text.begins_with("Training Room geselecteerd"), "Training selection immediately changes room status")
 	_check(room_create_button != null and room_create_button.text == "Training maken", "Training selection changes the create action")
@@ -243,10 +256,9 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_refresh_pvp_training_ai_archetype_options")
 	overlay.call("_refresh_pvp_training_ai_team_options")
 	overlay.call("_refresh_pvp_room_battle_purpose_ui")
-	room_ai_button.emit_signal("pressed")
-	await process_frame
-	_check(overlay.get("pvp_room_selected_mode") == "ai", "AI button selects the server-owned opponent flow")
-	_check(training_input != null and training_input.visible, "AI flow accepts an imported Gen 9 National Dex team")
+	overlay.call("_on_pvp_ai_sparring_tab_changed", 0)
+	_check(overlay.get("pvp_room_selected_mode") == "ai", "Free sparring selects the server-owned opponent flow")
+	_check(ai_training_input != null and ai_training_input.visible, "AI flow accepts an imported Gen 9 National Dex team")
 	_check(training_ai_mode_row != null and training_ai_mode_row.visible, "AI flow exposes shadow and active execution modes")
 	_check(training_ai_mode_select != null and training_ai_mode_select.item_count == 2, "Both permitted AI modes are selectable")
 	_check(str(training_ai_mode_select.get_selected_metadata()) == "shadow", "AI4 with AI5 shadow observation is the safe default")
@@ -264,8 +276,7 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_on_pvp_training_ai_archetype_selected", 2)
 	_check(training_ai_team_select.item_count == 2, "Choosing an archetype filters the specific team list")
 	_check(str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-stall-example", "Filtered team keeps its stable catalog identity")
-	_check(room_form_title != null and room_form_title.text.begins_with("PLAK JE TEAM"), "AI form guidance renders in Dutch")
-	_check(not room_tier_row.visible and not room_code_input.visible, "AI flow does not expose two-player room settings")
+	_check(ai_sparring_status != null and ai_sparring_status.text.begins_with("Vrij oefenen"), "Dedicated AI status explains the selected flow")
 	_check(popup.get_combined_minimum_size().y <= 620.0, "AI mode and team selectors fit inside the room popup")
 	room_create_button.emit_signal("pressed")
 	await process_frame
