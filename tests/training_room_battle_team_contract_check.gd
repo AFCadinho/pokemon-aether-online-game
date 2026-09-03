@@ -16,7 +16,7 @@ func _init() -> void:
 	_check_private_team_is_the_only_canonical_roster()
 	_check_private_details_survive_battle_state_updates()
 	_check_duplicate_species_keep_their_declared_slots()
-	_check_training_switches_resolve_reordered_showdown_slots()
+	_check_training_switches_preserve_canonical_slots()
 	_check_battle_controller_isolates_training_from_player_save()
 	_check_level_five_training_ai_uses_the_same_isolation_boundary()
 	_check_ai5_playtest_uses_server_assignments_and_separate_consent()
@@ -88,27 +88,21 @@ func _check_duplicate_species_keep_their_declared_slots() -> void:
 	_check(str(display_team[1].get("condition")) == "18/20", "duplicate live state resolves by canonical slot")
 
 
-func _check_training_switches_resolve_reordered_showdown_slots() -> void:
-	var selected_toxapex := {"species": "Toxapex", "canonicalPartySlot": 1, "pokemonKey": "p1:slot:1"}
-	var mechanically_reordered_team := [
-		{"species": "Moltres", "active": true, "metadataSlot": 2},
-		{"species": "Lopunny-Mega", "active": false, "metadataSlot": 5},
-		{"species": "Toxapex", "active": false, "metadataSlot": 1},
-		{"species": "Ting-Lu", "active": false, "metadataSlot": 3},
-	]
+func _check_training_switches_preserve_canonical_slots() -> void:
+	var selected_raging_bolt := {
+		"species": "Raging Bolt",
+		"canonicalPartySlot": 1,
+		"partySlot": 1,
+		"pokemonKey": "p1:slot:1",
+	}
+	var battle_source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	_check(
-		TRAINING_TEAM_CONTEXT.resolve_mechanical_switch_slot(
-			mechanically_reordered_team,
-			selected_toxapex
-		) == 3,
-		"Training AI switches translate stable imported-team identity to Showdown's current mechanical position"
+		TRAINING_TEAM_CONTEXT.get_canonical_slot(selected_raging_bolt) == 1,
+		"Training AI switch submission preserves the imported-team slot identity"
 	)
 	_check(
-		TRAINING_TEAM_CONTEXT.resolve_mechanical_switch_slot(
-			mechanically_reordered_team,
-			{"species": "Unknown", "canonicalPartySlot": 6}
-		) == -1,
-		"Training AI switch translation fails closed when the selected identity is absent"
+		not battle_source.contains("resolve_mechanical_switch_slot"),
+		"Training AI switch submission leaves canonical-to-request translation to the backend"
 	)
 
 
