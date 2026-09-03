@@ -196,6 +196,7 @@ var hp_event_helper := preload("res://scripts/battle/battle_hp_event_helper.gd")
 var rewind_helper := preload("res://scripts/battle/battle_rewind_helper.gd").new()
 var action_flow := preload("res://scripts/battle/battle_action_flow.gd").new()
 var force_switch_flow := preload("res://scripts/battle/battle_force_switch_flow.gd").new()
+var non_pvp_opponent_force_switch_recovery_active := false
 var display_data_presenter := preload("res://scripts/battle/battle_display_data_presenter.gd").new()
 var message_timing := preload("res://scripts/battle/battle_message_timing.gd").new()
 var event_presentation := preload("res://scripts/battle/battle_event_presentation.gd").new()
@@ -3243,6 +3244,9 @@ func _show_moves() -> void:
 
 	if not _is_pvp_battle() and _local_player_needs_force_switch_ui():
 		_show_force_switch_if_needed()
+		return
+	if not _is_pvp_battle() and _opponent_player_needs_force_switch_ui():
+		_show_non_pvp_opponent_force_switch_wait()
 		return
 
 	if _is_pvp_battle():
@@ -11316,6 +11320,34 @@ func _auto_force_switch_opponent_if_needed() -> bool:
 
 	return await _submit_npc_choice_and_render()
 
+
+func _show_non_pvp_opponent_force_switch_wait() -> void:
+	_set_battle_input_locked(true)
+	current_action_view = ActionView.NONE
+	moves_grid.visible = false
+	mechanics_panel.visible = false
+	current_action_panel.set_message(_t("battle.prompt.waiting_switch"))
+	_sync_action_panel_mode_visibility()
+	if not non_pvp_opponent_force_switch_recovery_active:
+		_resolve_non_pvp_opponent_force_switch_wait.call_deferred()
+
+
+func _resolve_non_pvp_opponent_force_switch_wait() -> void:
+	if non_pvp_opponent_force_switch_recovery_active or battle_finished:
+		return
+	non_pvp_opponent_force_switch_recovery_active = true
+	var resolved := await _auto_force_switch_opponent_if_needed()
+	non_pvp_opponent_force_switch_recovery_active = false
+	if battle_finished or await _finish_if_battle_ended():
+		return
+	if not resolved and _opponent_player_needs_force_switch_ui():
+		push_warning("Could not resolve the pending NPC forced switch; player input remains locked")
+		return
+	_set_battle_input_locked(false)
+	if _show_force_switch_if_needed():
+		return
+	_show_moves()
+
 func _pvp_response_has_render_batch_metadata(response: Dictionary) -> bool:
 	return (
 		pvp_event_queue.get_response_event_batch_id(response) != ""
@@ -14818,7 +14850,12 @@ func _submit_npc_choice_and_render(
 			next_pending_player_choice_events
 		)
 		await _hold_opponent_response_message()
-		if not _response_has_opponent_force_switch(opponent_response):
+		var response_requires_switch := _response_has_opponent_force_switch(opponent_response)
+		var rendered_state_requires_switch := _opponent_player_needs_force_switch_ui()
+		if not BattleForceSwitchFlow.opponent_replacement_still_required(
+			response_requires_switch,
+			rendered_state_requires_switch
+		):
 			return true
 
 		# Entry hazards can immediately faint the selected replacement. The

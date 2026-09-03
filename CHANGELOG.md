@@ -3,6 +3,7 @@
 ## Unreleased
 
 - AI Sparring now opens on Free Sparring and guides you through choosing your team, AI opponent, and battle with a clearer three-step layout.
+- Fixed AI battles asking the player for an unusable move after consecutive entry-hazard KOs; AI forced replacements now finish before player input reopens.
 
 - Fixed Mega-Evolved AI Pokémon retaining their base-form field sprite, party icon, and hover information.
 
