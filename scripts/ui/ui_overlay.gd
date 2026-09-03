@@ -897,16 +897,12 @@ var pvp_ai5_playtest_assignment_label: Label
 var pvp_ai5_playtest_progress_label: Label
 var pvp_ai5_playtest_stats_label: Label
 var pvp_ai5_playtest_consent_check: CheckBox
-var pvp_ai5_playtest_flag_turn: SpinBox
-var pvp_ai5_playtest_flag_category: OptionButton
-var pvp_ai5_playtest_flag_button: Button
 var pvp_ai5_playtest_start_button: Button
 var pvp_ai_sparring_start_button: Button
 var pvp_ai_sparring_tabs: TabContainer
 var pvp_ai_sparring_status_label: Label
 var pvp_ai5_playtest_status: Dictionary = {}
 var pvp_ai5_playtest_loading := false
-var pvp_ai5_playtest_battle_id := ""
 var pvp_training_team_preview_section: VBoxContainer
 var pvp_training_team_preview_title: Label
 var pvp_training_team_preview_grid: HBoxContainer
@@ -6583,37 +6579,6 @@ func _setup_pvp_room_popup() -> void:
 	pvp_ai5_playtest_stats_label.add_theme_font_size_override("font_size", 13)
 	pvp_ai5_playtest_stats_label.add_theme_color_override("font_color", UI_TEXT)
 	statistics_layout.add_child(pvp_ai5_playtest_stats_label)
-	var flag_heading := Label.new()
-	_set_localized_control_property(flag_heading, "text", "ui.pvp.training.ai5_playtest.flag_heading")
-	flag_heading.add_theme_font_size_override("font_size", 11)
-	flag_heading.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	statistics_layout.add_child(flag_heading)
-	var flag_row := HBoxContainer.new()
-	flag_row.add_theme_constant_override("separation", 6)
-	statistics_layout.add_child(flag_row)
-	pvp_ai5_playtest_flag_turn = SpinBox.new()
-	pvp_ai5_playtest_flag_turn.min_value = 0
-	pvp_ai5_playtest_flag_turn.max_value = 1000
-	pvp_ai5_playtest_flag_turn.custom_minimum_size = Vector2(76, 34)
-	flag_row.add_child(pvp_ai5_playtest_flag_turn)
-	pvp_ai5_playtest_flag_category = OptionButton.new()
-	pvp_ai5_playtest_flag_category.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_ai5_playtest_flag_category.custom_minimum_size = Vector2(0, 36)
-	_apply_pvp_ranked_dropdown_style(pvp_ai5_playtest_flag_category, true)
-	for category: String in ["UNNECESSARY_SWITCH", "INEFFECTIVE_MOVE", "SETUP_IGNORED", "HAZARDS_OR_SUSTAIN", "THREW_WIN_CONDITION", "UNCLEAR_OTHER"]:
-		pvp_ai5_playtest_flag_category.add_item(LocalizationManager.text(
-			"ui.pvp.training.ai5_playtest.flag.%s" % category.to_lower()
-		))
-		pvp_ai5_playtest_flag_category.set_item_metadata(pvp_ai5_playtest_flag_category.item_count - 1, category)
-	flag_row.add_child(pvp_ai5_playtest_flag_category)
-	pvp_ai5_playtest_flag_button = Button.new()
-	pvp_ai5_playtest_flag_button.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.mark")
-	pvp_ai5_playtest_flag_button.custom_minimum_size = Vector2(118, 36)
-	pvp_ai5_playtest_flag_button.focus_mode = Control.FOCUS_NONE
-	_apply_button_style(pvp_ai5_playtest_flag_button, "secondary")
-	pvp_ai5_playtest_flag_button.pressed.connect(_on_ai5_playtest_flag_pressed)
-	flag_row.add_child(pvp_ai5_playtest_flag_button)
-
 	pvp_room_code_input = LineEdit.new()
 	_set_localized_control_property(pvp_room_code_input, "placeholder_text", "ui.pvp.room.enter_code")
 	pvp_room_code_input.max_length = 12
@@ -42727,19 +42692,9 @@ func _refresh_ai5_playtest_panel() -> void:
 	)
 	var statistics_value: Variant = pvp_ai5_playtest_status.get("statistics", {})
 	var statistics: Dictionary = statistics_value as Dictionary if statistics_value is Dictionary else {}
-	var recent_value: Variant = pvp_ai5_playtest_status.get("recentBattles", [])
-	if recent_value is Array:
-		for battle_value: Variant in recent_value:
-			if not (battle_value is Dictionary):
-				continue
-			var battle: Dictionary = battle_value as Dictionary
-			if pvp_ai5_playtest_battle_id == "" and str(battle.get("battleId", "")) != "":
-				pvp_ai5_playtest_battle_id = str(battle.get("battleId", ""))
 	pvp_ai5_playtest_stats_label.text = LocalizationManager.text(
 		"ui.pvp.training.ai5_playtest.statistics"
 	) % [int(statistics.get("wins", 0)), int(statistics.get("losses", 0)), int(statistics.get("draws", 0)), int(statistics.get("aiSwitchCount", 0)), int(statistics.get("decisionCount", 0)), float(statistics.get("aiSwitchRate", 0.0)) * 100.0, int(pvp_ai5_playtest_status.get("flagCount", 0))]
-	if pvp_ai5_playtest_flag_button != null:
-		pvp_ai5_playtest_flag_button.disabled = pvp_ai5_playtest_battle_id == ""
 	if pvp_ai5_playtest_start_button != null:
 		pvp_ai5_playtest_start_button.disabled = pvp_ai5_playtest_loading or next_assignment.is_empty()
 
@@ -42760,25 +42715,8 @@ func _on_pvp_ai5_playtest_start_pressed() -> void:
 	if not bool(response.get("success", false)):
 		_set_pvp_status_key("ui.pvp.training.ai5_playtest.start_failed")
 		return
-	pvp_ai5_playtest_battle_id = str(response.get("battleId", ""))
 	_set_pvp_training_team_preview(response.get("ownTeam", []))
 	await _start_training_ai_battle_from_response(response)
-
-
-func _on_ai5_playtest_flag_pressed() -> void:
-	if pvp_ai5_playtest_battle_id == "" or pvp_ai5_playtest_flag_category == null:
-		return
-	var request := _create_pvp_request_node()
-	var response: Dictionary = await BattleApiClient.flag_ai5_playtest_turn(
-		request, pvp_ai5_playtest_battle_id,
-		int(pvp_ai5_playtest_flag_turn.value),
-		str(pvp_ai5_playtest_flag_category.get_selected_metadata())
-	)
-	request.queue_free()
-	if bool(response.get("success", false)):
-		await _load_ai5_playtest_status()
-	else:
-		_set_pvp_status_key("ui.pvp.training.ai5_playtest.mark_failed")
 
 
 func _on_pvp_training_ai_start_pressed() -> void:
