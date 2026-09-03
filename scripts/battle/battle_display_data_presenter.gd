@@ -351,10 +351,30 @@ func _pokemon_data_species_matches(expected_species: String, pokemon_data: Dicti
 	if actual_species == "":
 		actual_species = str(pokemon_data.get("species", pokemon_data.get("displaySpecies", "")))
 
+	var expected_key := display_metadata.normalize_species_for_compare(expected_species)
+	var actual_key := display_metadata.normalize_species_for_compare(actual_species)
+	if expected_key == actual_key:
+		return true
+
+	# A public Mega/Primal form is still the same canonical team slot as the
+	# base species imported for an NPC or AI trainer. Without this comparison,
+	# live Mega fields are discarded while merging request state into the known
+	# trainer team, leaving party icons and hover data on the base form.
+	var expected_base_key := _strip_public_battle_transformation_suffix(expected_key)
+	var actual_base_key := _strip_public_battle_transformation_suffix(actual_key)
+	var expected_is_transformed := expected_base_key != expected_key
+	var actual_is_transformed := actual_base_key != actual_key
 	return (
-		display_metadata.normalize_species_for_compare(expected_species)
-		== display_metadata.normalize_species_for_compare(actual_species)
+		expected_base_key == actual_base_key
+		and expected_is_transformed != actual_is_transformed
 	)
+
+
+func _strip_public_battle_transformation_suffix(species_key: String) -> String:
+	for suffix: String in ["-mega-x", "-mega-y", "-mega-z", "-mega", "-primal"]:
+		if species_key.ends_with(suffix):
+			return species_key.trim_suffix(suffix)
+	return species_key
 
 
 func _apply_request_battle_state_to_trainer_display(display_data: Dictionary, request_data: Dictionary) -> void:

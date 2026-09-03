@@ -41,6 +41,7 @@ func _init() -> void:
 	_check_disguise_form_change_follows_recoil_damage()
 	_check_resolved_response_holds_species_until_ordered_form_event()
 	_check_animated_forme_change_is_prepared_before_render()
+	_check_form_change_refreshes_party_rails()
 	quit(1 if failed else 0)
 
 
@@ -133,6 +134,26 @@ func _check_animated_forme_change_is_prepared_before_render() -> void:
 		deferred_form_index > render_event_index,
 		true,
 		"ordinary form changes keep their existing post-render update order"
+	)
+
+
+func _check_form_change_refreshes_party_rails() -> void:
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	var function_index := source.find("func _update_active_pokemon_presentation_for_ident(ident: String) -> void:")
+	var next_function_index := source.find("\nfunc ", function_index + 1)
+	var function_source := source.substr(function_index, next_function_index - function_index)
+	var render_index := source.find("func _render_battle_events(")
+	var render_end := source.find("\nfunc ", render_index + 1)
+	var render_source := source.substr(render_index, render_end - render_index)
+	_check_equal(
+		function_index >= 0 and function_source.contains("_update_party_slots()"),
+		true,
+		"Mega and forme changes refresh the field, HUD and party rails from one presentation boundary"
+	)
+	_check_equal(
+		render_source.contains("if event_type == \"mega\" or event_type == \"primal\":\n\t\t\t# Reconcile once more after the transformation animation."),
+		true,
+		"Mega presentation reconciles the transformed field sprite after its animation"
 	)
 
 

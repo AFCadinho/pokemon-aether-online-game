@@ -20,6 +20,7 @@ func _run_checks() -> void:
 	_check_opponent_default_name_follows_public_mega_form()
 	_check_opponent_default_name_follows_snapshot_mega_form()
 	_check_opponent_custom_nickname_survives_public_mega_form()
+	_check_known_trainer_team_keeps_public_mega_form()
 	_check_trainer_active_species_uses_metadata_form()
 	_check_trainer_team_display_keeps_roster_species_during_ambiguous_switch_state()
 	_check_trainer_team_display_ignores_request_slot_identity_for_species_match()
@@ -179,6 +180,51 @@ func _check_opponent_custom_nickname_survives_public_mega_form() -> void:
 		"Puff",
 		"a custom opponent nickname remains visible after Mega Evolution"
 	)
+
+
+func _check_known_trainer_team_keeps_public_mega_form() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"battleId": "trainer-sableye-mega-display-test",
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [{
+						"ident": "p2a: Sableye",
+						"species": "Sableye",
+						"item": "Sablenite",
+						"condition": "93/100",
+						"active": true,
+						"partySlot": 1,
+					}],
+				},
+			},
+		},
+	}, false)
+	state.apply_event_conditions([{
+		"type": "mega",
+		"target": "p2a: Sableye",
+		"species": "Sableye-Mega",
+	}])
+	var presenter = BattleDisplayDataPresenterScript.new()
+	presenter.setup(state)
+	presenter.set_battle_context(1, null)
+	presenter.set_trainer_team([{
+		"ident": "p2: Sableye",
+		"species": "Sableye",
+		"item": "Sablenite",
+		"moves": ["Knock Off", "Will-O-Wisp", "Recover", "Protect"],
+		"partySlot": 1,
+	}])
+
+	_check_equal(presenter.get_active_display_species("p2"), "Sableye-Mega", "active AI field presentation uses Mega Sableye")
+	var display_team: Array = presenter.get_display_team_data("p2")
+	_check_equal(display_team.size(), 1, "known AI team keeps one canonical Sableye slot after Mega Evolution")
+	var display_sableye: Dictionary = display_team[0] as Dictionary
+	_check_equal(display_sableye.get("displaySpecies", ""), "Sableye-Mega", "known AI party slot adopts the public Mega forme")
+	_check_equal(display_sableye.get("megaSpecies", ""), "Sableye-Mega", "known AI hover data retains the public Mega species")
+	_check_equal(display_sableye.get("condition", ""), "93/100", "known AI Mega slot retains its live condition")
+	_check_equal((display_sableye.get("moves", []) as Array).size(), 4, "known AI Mega hover retains its known moveset")
 
 
 func _check_opponent_default_name_follows_snapshot_mega_form() -> void:
