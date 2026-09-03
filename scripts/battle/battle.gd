@@ -8955,7 +8955,10 @@ func _render_battle_events(
 			_release_ordered_response_display_species_for_ident(str(event_data.get("target", "")))
 			_fill_mega_event_species(event_data)
 			battle_state.apply_event_conditions([event_data])
-			_update_active_pokemon_presentation_for_ident(str(event_data.get("target", "")))
+			_update_active_pokemon_presentation_for_ident(
+				str(event_data.get("target", "")),
+				str(event_data.get("species", "")) if training_ai_battle else ""
+			)
 			_clear_pending_mega_species_for_event(event_data)
 		if event_type == "ability" or event_type == "pokemonEffect":
 			var ability_target := str(event_data.get("target", ""))
@@ -9023,7 +9026,10 @@ func _render_battle_events(
 			# Reconcile once more after the transformation animation. The pre-render
 			# update gives the effect its transformed target; this final boundary
 			# prevents an earlier base-form refresh from surviving on the field.
-			_update_active_pokemon_presentation_for_ident(str(event_data.get("target", "")))
+			_update_active_pokemon_presentation_for_ident(
+				str(event_data.get("target", "")),
+				str(event_data.get("species", "")) if training_ai_battle else ""
+			)
 		if defer_field_effect_end:
 			# Keep weather and terrain visible while their public end message is
 			# being presented. The visual state changes only at that event's
@@ -9753,15 +9759,15 @@ func _get_pokemon_name_from_ident_for_key(ident: String) -> String:
 	pokemon_name = pokemon_name.replace("-mega", "")
 	return pokemon_name
 
-func _update_active_pokemon_presentation_for_ident(ident: String) -> void:
+func _update_active_pokemon_presentation_for_ident(ident: String, public_species_override := "") -> void:
 	var player_id := _get_player_id_from_ident(ident)
 	match player_id:
 		"p1":
 			_update_active_hud_panel("p1", player_hud_panel)
-			_update_active_sprite_box("p1", player_sprite_box, "back")
+			_update_active_sprite_box("p1", player_sprite_box, "back", "sprite_refresh", public_species_override)
 		"p2":
 			_update_active_hud_panel("p2", enemy_hud_panel)
-			_update_active_sprite_box("p2", enemy_sprite_box, "front")
+			_update_active_sprite_box("p2", enemy_sprite_box, "front", "sprite_refresh", public_species_override)
 
 	_update_party_slots()
 	_update_stat_stage_panels()
@@ -15796,10 +15802,18 @@ func _update_active_sprites(context := "sprite_refresh") -> void:
 	_update_active_sprite_box("p2", enemy_sprite_box, "front", context)
 	_update_stat_stage_panels()
 
-func _update_active_sprite_box(player_id: String, sprite_box: Node, side: String, context := "sprite_refresh") -> void:
+func _update_active_sprite_box(
+	player_id: String,
+	sprite_box: Node,
+	side: String,
+	context := "sprite_refresh",
+	public_species_override := ""
+) -> void:
 	var field_slot_empty := _active_field_slot_is_empty(player_id, context)
 	var force_switch_hidden := _should_hide_active_pokemon_for_force_switch(player_id)
-	var active_species := _get_active_display_species(player_id).strip_edges()
+	var active_species := str(public_species_override).strip_edges()
+	if active_species == "":
+		active_species = _get_active_display_species(player_id).strip_edges()
 	if field_slot_empty or force_switch_hidden:
 		if sprite_box.has_method("clear_pokemon"):
 			sprite_box.call("clear_pokemon")
