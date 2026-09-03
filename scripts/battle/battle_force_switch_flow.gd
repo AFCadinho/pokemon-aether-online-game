@@ -37,6 +37,16 @@ static func should_preserve_chained_request(next_phase: String, local_player_nee
 	return next_phase.strip_edges() == "awaiting_force_switch" and local_player_needs_force_switch
 
 
+static func opponent_replacement_still_required(
+	response_requires_switch: bool,
+	rendered_state_requires_switch: bool
+) -> bool:
+	# A hazard faint is first authoritative in the ordered events. Some response
+	# projections do not carry the next forceSwitch request until the following
+	# NPC submission, so either source must keep the bounded replacement chain.
+	return response_requires_switch or rendered_state_requires_switch
+
+
 static func should_infer_pvp_force_switch_from_fainted_active(
 	phase: String,
 	request_is_waiting: bool,

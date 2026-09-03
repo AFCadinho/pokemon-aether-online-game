@@ -574,6 +574,16 @@ func _check_entry_hazard_faint_preserves_chained_force_switch() -> void:
 		false,
 		"an opponent-only forced switch does not retain a local request"
 	)
+	_check_equal(
+		BattleForceSwitchFlowScript.opponent_replacement_still_required(false, true),
+		true,
+		"a rendered hazard faint continues the NPC replacement chain before its next request projection"
+	)
+	_check_equal(
+		BattleForceSwitchFlowScript.opponent_replacement_still_required(false, false),
+		false,
+		"the NPC replacement chain ends only when response and rendered state agree"
+	)
 
 
 func _check_pivot_ko_waiting_player_does_not_infer_force_switch() -> void:
