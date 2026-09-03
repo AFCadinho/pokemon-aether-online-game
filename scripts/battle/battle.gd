@@ -15466,11 +15466,6 @@ func _get_party_grid_selected_pokemon_data(visual_slot: int) -> Dictionary:
 	return {}
 
 func _get_canonical_switch_submit_slot(visual_slot: int, pokemon_data: Dictionary) -> int:
-	if training_ai_battle and not pokemon_data.is_empty():
-		return BATTLE_TRAINING_TEAM_CONTEXT.resolve_mechanical_switch_slot(
-			battle_state.get_player_team(_get_local_state_player_id()),
-			pokemon_data
-		)
 	if _is_pvp_battle() and pokemon_data.is_empty():
 		return -1
 	if _is_pvp_battle() and not pokemon_data.is_empty():
