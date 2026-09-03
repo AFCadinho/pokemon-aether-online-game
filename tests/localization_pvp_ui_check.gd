@@ -166,6 +166,8 @@ func _check_pvp_runtime_translation() -> void:
 	_check(overlay.find_child("AiSparringReadyStep", true, false) != null, "Free sparring marks the final battle action as its third step")
 	_check(ai_sparring_start != null and ai_sparring_start.text == "Start sparring", "Free sparring uses a direct start action")
 	_check(ai_sparring_start != null and ai_sparring_start.custom_minimum_size.y >= 42.0, "Free sparring has a prominent start action")
+	var ai_sparring_start_style := ai_sparring_start.get_theme_stylebox("normal") as StyleBoxFlat if ai_sparring_start != null else null
+	_check(ai_sparring_start_style != null and ai_sparring_start_style.bg_color == Color("#5d4aa4"), "Free sparring start action uses a distinct primary treatment")
 	_check(ai_research_start != null and ai_research_start.custom_minimum_size.y >= 42.0, "Research has a separate prominent start action")
 	_check(ai_research_card != null, "Research campaign groups its work into a dedicated card")
 	_check(ai_research_assignment != null and ai_research_statistics != null, "Research separates the assignment from campaign statistics")
@@ -281,6 +283,8 @@ func _check_pvp_runtime_translation() -> void:
 	_check(training_ai_archetype_select != null and training_ai_archetype_select.item_count == 3, "Archetype selector includes random and catalog archetypes")
 	_check(training_ai_team_row != null and training_ai_team_row.visible, "AI flow exposes the sample-team selector")
 	_check(training_ai_team_select != null and training_ai_team_select.item_count == 3, "AI selector includes random and catalog choices")
+	var training_ai_team_style := training_ai_team_select.get_theme_stylebox("normal") as StyleBoxFlat if training_ai_team_select != null else null
+	_check(training_ai_team_style != null and training_ai_team_style.bg_color == Color("#171630"), "The final AI team choice is visually distinct from supporting settings")
 	_check(
 		training_ai_team_select != null
 		and training_ai_team_select.item_count > 1
