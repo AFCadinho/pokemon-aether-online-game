@@ -15,6 +15,7 @@ func _init() -> void:
 	_check_duplicate_species_keep_their_declared_slots()
 	_check_battle_controller_isolates_training_from_player_save()
 	_check_level_five_training_ai_uses_the_same_isolation_boundary()
+	_check_ai5_playtest_uses_server_assignments_and_separate_consent()
 	_check_room_requests_advertise_durable_timer_contracts()
 	quit(1 if failed else 0)
 
@@ -141,6 +142,24 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 		and world_source.contains("response.get(\"trainerName\", \"AI Level 5\")")
 		and world_source.contains("battle_environment_id,\n\t\ttrue"),
 		"World starts the selected AI mode as a non-rewarding training battle"
+	)
+
+
+func _check_ai5_playtest_uses_server_assignments_and_separate_consent() -> void:
+	var api_source := FileAccess.get_file_as_string(BATTLE_API_PATH)
+	var overlay_source := FileAccess.get_file_as_string(UI_OVERLAY_PATH)
+	_check(
+		api_source.contains("/battle/pvp/training/ai/playtest/battles")
+		and api_source.contains("\"consentAcknowledged\": consent_acknowledged")
+		and not api_source.contains("create_ai5_playtest_battle(\n\trequest_node: HTTPRequest,\n\tplayer: Dictionary,\n\tteam_text"),
+		"AI5 research sends explicit consent and cannot submit a player-authored team"
+	)
+	_check(
+		overlay_source.contains("pvp_ai5_playtest_tabs")
+		and overlay_source.contains("nextAssignment")
+		and overlay_source.contains("completedBattles")
+		and overlay_source.contains("flag_ai5_playtest_turn"),
+		"AI5 research shows assignments, progress, statistics and turn markers"
 	)
 
 

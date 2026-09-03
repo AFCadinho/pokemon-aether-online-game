@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Training Room now includes a disabled-by-default AI5 Research campaign view with server-assigned teams, pilot/core progress, battle statistics, explicit diagnostic consent, and turn markers for suspicious AI decisions.
+
 - Cerulean City Gym now correctly masks the space outside its interior map.
 
 - After defeating Misty, the new S.S. Anne mission directs you south through Route 5 to Vermilion City.

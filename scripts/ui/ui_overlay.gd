@@ -869,6 +869,7 @@ var pvp_room_tier_select: OptionButton
 var pvp_room_create_mode_button: Button
 var pvp_room_join_mode_button: Button
 var pvp_room_ai_mode_button: Button
+var pvp_room_ai5_playtest_button: Button
 var pvp_room_spectate_mode_button: Button
 var pvp_room_selected_mode := ""
 var pvp_room_code_input: LineEdit
@@ -887,6 +888,17 @@ var pvp_training_ai_catalog_entries: Array[Dictionary] = []
 var pvp_training_ai_catalog_loaded := false
 var pvp_training_ai_catalog_loading := false
 var pvp_training_ai_enabled := false
+var pvp_ai5_playtest_tabs: TabContainer
+var pvp_ai5_playtest_assignment_label: Label
+var pvp_ai5_playtest_progress_label: Label
+var pvp_ai5_playtest_stats_label: Label
+var pvp_ai5_playtest_consent_check: CheckBox
+var pvp_ai5_playtest_flag_turn: SpinBox
+var pvp_ai5_playtest_flag_category: OptionButton
+var pvp_ai5_playtest_flag_button: Button
+var pvp_ai5_playtest_status: Dictionary = {}
+var pvp_ai5_playtest_loading := false
+var pvp_ai5_playtest_battle_id := ""
 var pvp_training_team_preview_section: VBoxContainer
 var pvp_training_team_preview_title: Label
 var pvp_training_team_preview_grid: HBoxContainer
@@ -6349,6 +6361,16 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_ai_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("ai"))
 	pvp_room_mode_selector.add_child(pvp_room_ai_mode_button)
 
+	pvp_room_ai5_playtest_button = Button.new()
+	pvp_room_ai5_playtest_button.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.mode")
+	pvp_room_ai5_playtest_button.custom_minimum_size = Vector2(0, 42)
+	pvp_room_ai5_playtest_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_room_ai5_playtest_button.focus_mode = Control.FOCUS_NONE
+	pvp_room_ai5_playtest_button.visible = false
+	pvp_room_ai5_playtest_button.disabled = true
+	pvp_room_ai5_playtest_button.pressed.connect(_on_pvp_room_mode_selected.bind("ai5_playtest"))
+	pvp_room_mode_selector.add_child(pvp_room_ai5_playtest_button)
+
 	pvp_room_spectate_mode_button = Button.new()
 	_set_localized_control_property(pvp_room_spectate_mode_button, "text", "ui.pvp.room.spectate")
 	pvp_room_spectate_mode_button.custom_minimum_size = Vector2(106, 42)
@@ -6472,6 +6494,58 @@ func _setup_pvp_room_popup() -> void:
 	_apply_pvp_ranked_dropdown_style(pvp_training_ai_team_select, true)
 	pvp_training_ai_team_row.add_child(pvp_training_ai_team_select)
 	_refresh_pvp_training_ai_team_options()
+
+	pvp_ai5_playtest_tabs = TabContainer.new()
+	pvp_ai5_playtest_tabs.visible = false
+	pvp_ai5_playtest_tabs.custom_minimum_size = Vector2(0, 230)
+	pvp_ai5_playtest_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_room_form.add_child(pvp_ai5_playtest_tabs)
+
+	var assignment_tab := VBoxContainer.new()
+	assignment_tab.name = LocalizationManager.text("ui.pvp.training.ai5_playtest.tab_assignment")
+	assignment_tab.add_theme_constant_override("separation", 8)
+	pvp_ai5_playtest_tabs.add_child(assignment_tab)
+	pvp_ai5_playtest_progress_label = Label.new()
+	pvp_ai5_playtest_progress_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_ai5_playtest_progress_label.add_theme_color_override("font_color", Color("#9be7b1"))
+	assignment_tab.add_child(pvp_ai5_playtest_progress_label)
+	pvp_ai5_playtest_assignment_label = Label.new()
+	pvp_ai5_playtest_assignment_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_ai5_playtest_assignment_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	assignment_tab.add_child(pvp_ai5_playtest_assignment_label)
+	pvp_ai5_playtest_consent_check = CheckBox.new()
+	pvp_ai5_playtest_consent_check.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.consent")
+	pvp_ai5_playtest_consent_check.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	assignment_tab.add_child(pvp_ai5_playtest_consent_check)
+
+	var statistics_tab := VBoxContainer.new()
+	statistics_tab.name = LocalizationManager.text("ui.pvp.training.ai5_playtest.tab_statistics")
+	statistics_tab.add_theme_constant_override("separation", 7)
+	pvp_ai5_playtest_tabs.add_child(statistics_tab)
+	pvp_ai5_playtest_stats_label = Label.new()
+	pvp_ai5_playtest_stats_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_ai5_playtest_stats_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	statistics_tab.add_child(pvp_ai5_playtest_stats_label)
+	var flag_row := HBoxContainer.new()
+	flag_row.add_theme_constant_override("separation", 6)
+	statistics_tab.add_child(flag_row)
+	pvp_ai5_playtest_flag_turn = SpinBox.new()
+	pvp_ai5_playtest_flag_turn.min_value = 0
+	pvp_ai5_playtest_flag_turn.max_value = 1000
+	pvp_ai5_playtest_flag_turn.custom_minimum_size = Vector2(76, 34)
+	flag_row.add_child(pvp_ai5_playtest_flag_turn)
+	pvp_ai5_playtest_flag_category = OptionButton.new()
+	pvp_ai5_playtest_flag_category.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	for category: String in ["UNNECESSARY_SWITCH", "INEFFECTIVE_MOVE", "SETUP_IGNORED", "HAZARDS_OR_SUSTAIN", "THREW_WIN_CONDITION", "UNCLEAR_OTHER"]:
+		pvp_ai5_playtest_flag_category.add_item(LocalizationManager.text(
+			"ui.pvp.training.ai5_playtest.flag.%s" % category.to_lower()
+		))
+		pvp_ai5_playtest_flag_category.set_item_metadata(pvp_ai5_playtest_flag_category.item_count - 1, category)
+	flag_row.add_child(pvp_ai5_playtest_flag_category)
+	pvp_ai5_playtest_flag_button = Button.new()
+	pvp_ai5_playtest_flag_button.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.mark")
+	pvp_ai5_playtest_flag_button.pressed.connect(_on_ai5_playtest_flag_pressed)
+	flag_row.add_child(pvp_ai5_playtest_flag_button)
 
 	pvp_room_code_input = LineEdit.new()
 	_set_localized_control_property(pvp_room_code_input, "placeholder_text", "ui.pvp.room.enter_code")
@@ -41329,6 +41403,8 @@ func _open_pvp_popup_section(section_name: String) -> void:
 		pvp_popup_subtitle_label.text = _pvp_popup_subtitle_for_section(section_name)
 	if pvp_popup_icon != null:
 		pvp_popup_icon.texture = _pvp_popup_icon_for_section(section_name)
+	if section_name == "Custom / Casual" and pvp_room_battle_purpose == "training":
+		await _load_ai5_playtest_status()
 	if section_name != "Ranked":
 		return
 	if section_name == "Ranked":
@@ -41937,7 +42013,12 @@ func _heal_party_before_pvp(action_label: String = "PvP") -> bool:
 	return false
 
 func _on_pvp_room_mode_selected(mode: String) -> void:
+	if mode == "ai5_playtest" and pvp_ai5_playtest_status.is_empty():
+		await _load_ai5_playtest_status()
 	if mode == "ai" and not pvp_training_ai_enabled:
+		_set_pvp_status_key("ui.pvp.training.ai.unavailable")
+		return
+	if mode == "ai5_playtest" and not bool(pvp_ai5_playtest_status.get("enabled", false)):
 		_set_pvp_status_key("ui.pvp.training.ai.unavailable")
 		return
 	if pvp_active_room_code == "":
@@ -41959,14 +42040,18 @@ func _on_pvp_room_mode_selected(mode: String) -> void:
 			and pvp_timer_enabled_check != null
 			and pvp_timer_enabled_check.button_pressed
 		)
-	pvp_create_room_button.visible = mode in ["create", "ai"]
+	pvp_create_room_button.visible = mode in ["create", "ai", "ai5_playtest"]
 	pvp_join_room_button.visible = mode == "join"
 	pvp_spectate_room_button.visible = mode == "spectate"
 	pvp_cancel_room_button.visible = false
 	pvp_copy_code_button.visible = false
 	_refresh_pvp_room_form_title()
+	if mode == "ai5_playtest":
+		_refresh_ai5_playtest_panel()
 	if mode == "ai":
 		pvp_create_room_button.text = LocalizationManager.text("ui.pvp.training.ai.start")
+	elif mode == "ai5_playtest":
+		pvp_create_room_button.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.start")
 	_set_pvp_status_key(
 		"ui.pvp.room.ready" if mode == "spectate" else _pvp_room_ready_status_key()
 	)
@@ -41976,7 +42061,7 @@ func _on_pvp_room_battle_purpose_selected(purpose: String) -> void:
 	if pvp_active_room_code != "" or pvp_battle_starting:
 		return
 	pvp_room_battle_purpose = "training" if purpose == "training" else "casual"
-	if pvp_room_battle_purpose != "training" and pvp_room_selected_mode == "ai":
+	if pvp_room_battle_purpose != "training" and pvp_room_selected_mode in ["ai", "ai5_playtest"]:
 		pvp_room_selected_mode = ""
 		pvp_room_form.visible = false
 	_clear_pvp_training_team_preview()
@@ -41990,6 +42075,8 @@ func _on_pvp_room_battle_purpose_selected(purpose: String) -> void:
 	_set_pvp_status_key(_pvp_room_ready_status_key())
 	if pvp_room_battle_purpose == "training" and not pvp_training_ai_catalog_loaded:
 		await _load_pvp_training_ai_catalog()
+	if pvp_room_battle_purpose == "training":
+		await _load_ai5_playtest_status()
 
 
 func _pvp_room_ready_status_key() -> String:
@@ -42025,6 +42112,9 @@ func _refresh_pvp_room_battle_purpose_ui() -> void:
 	if pvp_room_ai_mode_button != null:
 		pvp_room_ai_mode_button.visible = is_training
 		pvp_room_ai_mode_button.disabled = not pvp_training_ai_enabled or pvp_training_ai_catalog_loading
+	if pvp_room_ai5_playtest_button != null:
+		pvp_room_ai5_playtest_button.visible = is_training and bool(pvp_ai5_playtest_status.get("enabled", false))
+		pvp_room_ai5_playtest_button.disabled = pvp_ai5_playtest_loading or not bool(pvp_ai5_playtest_status.get("enabled", false))
 	var create_key := "ui.pvp.training.create" if is_training else "ui.pvp.room.create"
 	var join_key := "ui.pvp.training.join" if is_training else "ui.pvp.room.join"
 	for create_button: Button in [pvp_room_create_mode_button, pvp_create_room_button]:
@@ -42035,6 +42125,8 @@ func _refresh_pvp_room_battle_purpose_ui() -> void:
 			join_button.text = LocalizationManager.text(join_key)
 	if pvp_create_room_button != null and pvp_room_selected_mode == "ai":
 		pvp_create_room_button.text = LocalizationManager.text("ui.pvp.training.ai.start")
+	elif pvp_create_room_button != null and pvp_room_selected_mode == "ai5_playtest":
+		pvp_create_room_button.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.start")
 
 
 func _refresh_pvp_room_team_fields() -> void:
@@ -42056,6 +42148,8 @@ func _refresh_pvp_room_team_fields() -> void:
 		pvp_training_ai_archetype_row.visible = is_training and pvp_room_selected_mode == "ai"
 	if pvp_training_ai_team_row != null:
 		pvp_training_ai_team_row.visible = is_training and pvp_room_selected_mode == "ai"
+	if pvp_ai5_playtest_tabs != null:
+		pvp_ai5_playtest_tabs.visible = is_training and pvp_room_selected_mode == "ai5_playtest"
 
 
 func _refresh_pvp_room_form_title() -> void:
@@ -42077,6 +42171,8 @@ func _refresh_pvp_room_form_title() -> void:
 			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_spectate")
 		"ai":
 			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.training.ai.form")
+		"ai5_playtest":
+			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.form")
 		_:
 			pvp_room_form_title.text = ""
 
@@ -42242,6 +42338,104 @@ func _selected_pvp_training_ai_archetype() -> String:
 	return selected_archetype if selected_archetype != "" else "random"
 
 
+func _load_ai5_playtest_status() -> void:
+	if pvp_ai5_playtest_loading:
+		return
+	pvp_ai5_playtest_loading = true
+	_refresh_pvp_room_battle_purpose_ui()
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.get_ai5_playtest_status(request)
+	request.queue_free()
+	pvp_ai5_playtest_loading = false
+	pvp_ai5_playtest_status = response.duplicate(true) if bool(response.get("success", false)) else {}
+	_refresh_ai5_playtest_panel()
+	_refresh_pvp_room_battle_purpose_ui()
+
+
+func _refresh_ai5_playtest_panel() -> void:
+	if pvp_ai5_playtest_progress_label == null:
+		return
+	if pvp_ai5_playtest_status.is_empty():
+		pvp_ai5_playtest_progress_label.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.unavailable")
+		pvp_ai5_playtest_assignment_label.text = ""
+		pvp_ai5_playtest_stats_label.text = ""
+		return
+	var completed := int(pvp_ai5_playtest_status.get("completedBattles", 0))
+	var target := int(pvp_ai5_playtest_status.get("targetBattles", 0))
+	var campaign_value: Variant = pvp_ai5_playtest_status.get("campaign", {})
+	var campaign: Dictionary = campaign_value as Dictionary if campaign_value is Dictionary else {}
+	var phase := str(campaign.get("phase", "pilot"))
+	pvp_ai5_playtest_progress_label.text = LocalizationManager.text(
+		"ui.pvp.training.ai5_playtest.progress"
+	) % [phase.capitalize(), completed, target]
+	var next_value: Variant = pvp_ai5_playtest_status.get("nextAssignment", {})
+	var next_assignment: Dictionary = next_value as Dictionary if next_value is Dictionary else {}
+	var own_value: Variant = next_assignment.get("playerTeam", {})
+	var own_team: Dictionary = own_value as Dictionary if own_value is Dictionary else {}
+	pvp_ai5_playtest_assignment_label.text = (
+		LocalizationManager.text("ui.pvp.training.ai5_playtest.next_assignment")
+		% [int(next_assignment.get("assignmentIndex", 0)) + 1,
+			str(own_team.get("displayName", "-")), str(own_team.get("archetype", "-")),
+			str(next_assignment.get("aiArchetype", "-"))]
+		if not next_assignment.is_empty()
+		else LocalizationManager.text("ui.pvp.training.ai5_playtest.complete")
+	)
+	var statistics_value: Variant = pvp_ai5_playtest_status.get("statistics", {})
+	var statistics: Dictionary = statistics_value as Dictionary if statistics_value is Dictionary else {}
+	var recent_value: Variant = pvp_ai5_playtest_status.get("recentBattles", [])
+	if recent_value is Array:
+		for battle_value: Variant in recent_value:
+			if not (battle_value is Dictionary):
+				continue
+			var battle: Dictionary = battle_value as Dictionary
+			if pvp_ai5_playtest_battle_id == "" and str(battle.get("battleId", "")) != "":
+				pvp_ai5_playtest_battle_id = str(battle.get("battleId", ""))
+	pvp_ai5_playtest_stats_label.text = LocalizationManager.text(
+		"ui.pvp.training.ai5_playtest.statistics"
+	) % [int(statistics.get("wins", 0)), int(statistics.get("losses", 0)), int(statistics.get("draws", 0)), int(statistics.get("excludedAttempts", 0)), int(statistics.get("aiSwitchCount", 0)), int(statistics.get("decisionCount", 0)), float(statistics.get("aiSwitchRate", 0.0)) * 100.0, int(statistics.get("fallbackCount", 0)), int(pvp_ai5_playtest_status.get("flagCount", 0)), str(campaign.get("policyRevision", "-"))]
+	if pvp_ai5_playtest_flag_button != null:
+		pvp_ai5_playtest_flag_button.disabled = pvp_ai5_playtest_battle_id == ""
+	if pvp_create_room_button != null and pvp_room_selected_mode == "ai5_playtest":
+		pvp_create_room_button.disabled = next_assignment.is_empty()
+
+
+func _on_pvp_ai5_playtest_start_pressed() -> void:
+	if not bool(pvp_ai5_playtest_status.get("enabled", false)):
+		_set_pvp_status_key("ui.pvp.training.ai.unavailable")
+		return
+	if pvp_ai5_playtest_consent_check == null or not pvp_ai5_playtest_consent_check.button_pressed:
+		pvp_room_status_label.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.consent_required")
+		return
+	_set_pvp_room_busy(true)
+	pvp_room_status_label.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.creating")
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.create_ai5_playtest_battle(request, _pvp_room_player_payload(), true)
+	request.queue_free()
+	_set_pvp_room_busy(false)
+	if not bool(response.get("success", false)):
+		pvp_room_status_label.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.start_failed")
+		return
+	pvp_ai5_playtest_battle_id = str(response.get("battleId", ""))
+	_set_pvp_training_team_preview(response.get("ownTeam", []))
+	await _start_training_ai_battle_from_response(response)
+
+
+func _on_ai5_playtest_flag_pressed() -> void:
+	if pvp_ai5_playtest_battle_id == "" or pvp_ai5_playtest_flag_category == null:
+		return
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.flag_ai5_playtest_turn(
+		request, pvp_ai5_playtest_battle_id,
+		int(pvp_ai5_playtest_flag_turn.value),
+		str(pvp_ai5_playtest_flag_category.get_selected_metadata())
+	)
+	request.queue_free()
+	if bool(response.get("success", false)):
+		await _load_ai5_playtest_status()
+	else:
+		pvp_room_status_label.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.mark_failed")
+
+
 func _on_pvp_training_ai_start_pressed() -> void:
 	if not pvp_training_ai_enabled:
 		_set_pvp_status_key("ui.pvp.training.ai.unavailable")
@@ -42281,6 +42475,9 @@ func _on_pvp_create_room_pressed() -> void:
 		return
 	if pvp_room_selected_mode == "ai":
 		await _on_pvp_training_ai_start_pressed()
+		return
+	if pvp_room_selected_mode == "ai5_playtest":
+		await _on_pvp_ai5_playtest_start_pressed()
 		return
 	var is_training := pvp_room_battle_purpose == "training"
 	var team_text := pvp_training_team_input.text.strip_edges() if pvp_training_team_input != null else ""
@@ -45354,6 +45551,8 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 		pvp_room_join_mode_button.disabled = is_busy
 	if pvp_room_ai_mode_button != null:
 		pvp_room_ai_mode_button.disabled = is_busy or not pvp_training_ai_enabled
+	if pvp_room_ai5_playtest_button != null:
+		pvp_room_ai5_playtest_button.disabled = is_busy or not bool(pvp_ai5_playtest_status.get("enabled", false))
 	if pvp_room_spectate_mode_button != null:
 		pvp_room_spectate_mode_button.disabled = is_busy
 	if pvp_cancel_room_button != null:
@@ -45373,6 +45572,8 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 		pvp_training_ai_archetype_select.disabled = is_busy
 	if pvp_training_ai_team_select != null:
 		pvp_training_ai_team_select.disabled = is_busy
+	if pvp_ai5_playtest_consent_check != null:
+		pvp_ai5_playtest_consent_check.disabled = is_busy
 	if pvp_join_queue_button != null:
 		var ranked_blocked := _is_selected_pvp_queue_ranked() and not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)
 		pvp_join_queue_button.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "" or ranked_blocked
