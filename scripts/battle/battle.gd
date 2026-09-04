@@ -15767,6 +15767,9 @@ func _capture_pvp_local_canonical_roster(display_response: Dictionary = {}) -> v
 		)
 		if pvp_local_canonical_roster.is_empty():
 			push_error("Training Room battle response is missing the private Pokepaste team.")
+			return
+		# The temporary practice roster is already complete and canonical. Never
+		# append the account party as a second set of the same six slots.
 		return
 
 	for index in range(PlayerSave.party.size()):

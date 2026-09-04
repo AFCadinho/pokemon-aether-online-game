@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring now switches to the selected Pokémon even when Team Preview has reordered the active lead.
+
 - AI Sparring now resolves base-species Mega events such as Latios with Latiosite before refreshing the opponent sprite, name and party icon.
 
 - AI Sparring keeps the opponent setup panel at a stable height when switching between a catalog team and PokéPaste.
