@@ -172,9 +172,9 @@ func _check_popup_scene() -> void:
 	)
 	_check(
 		catalog_cost != null
-			and catalog_cost.custom_minimum_size.x >= 72.0
+			and catalog_cost.custom_minimum_size.x <= 48.0
 			and catalog_price != null
-			and catalog_price.text == "1×/1×"
+			and catalog_price.text == "×1"
 			and catalog_cost.tooltip_text.contains("Resonite Ore"),
 		"Move Mentor catalog shows a compact price beside every move"
 	)
