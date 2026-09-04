@@ -43493,7 +43493,7 @@ func _refresh_ai_sparring_catalog_view() -> void:
 	var tier_id := str(pvp_ai_sparring_catalog_tier.get_selected_metadata()) if pvp_ai_sparring_catalog_tier != null and pvp_ai_sparring_catalog_tier.item_count > 0 else "all"
 	var matches: Array[Dictionary] = []
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
-		if tier_id != "all" and _ai_sparring_team_catalog_tier(entry) != tier_id:
+		if tier_id != "all" and not _ai_sparring_team_matches_tier(entry, tier_id):
 			continue
 		if archetype != "all" and str(entry.get("archetype", "")) != archetype:
 			continue
@@ -43944,6 +43944,15 @@ func _ai_sparring_team_is_eligible(entry: Dictionary, tier_id: String) -> bool:
 		if str(value) == tier_id:
 			return true
 	return false
+
+
+func _ai_sparring_team_matches_tier(entry: Dictionary, tier_id: String) -> bool:
+	var home_tier := _ai_sparring_team_catalog_tier(entry)
+	# A team explicitly curated for another named metagame must not leak into
+	# this tier, even when the rules validator reports it as legal there.
+	if home_tier in ["aether-ou", "aether-uu"] and home_tier != tier_id:
+		return false
+	return _ai_sparring_team_is_eligible(entry, tier_id)
 
 
 func _ai_sparring_team_catalog_tier(entry: Dictionary) -> String:
