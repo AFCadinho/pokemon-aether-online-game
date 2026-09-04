@@ -3427,6 +3427,7 @@
   "ui.move_deleter.confirm.delete": "Esquecer golpe",
   "ui.move_deleter.npc.records_unavailable": "Meus registros de golpes não estão disponíveis agora.",
   "ui.move_deleter.npc.service_unavailable": "Meu serviço de exclusão não está disponível agora.",
+  "ui.move_deleter.npc.free_service": "Posso remover golpes gratuitamente.",
   "ui.move_learning.title": "Aprender Golpe",
   "ui.move_learning.learn": "Aprender",
   "ui.move_learning.do_not_learn": "Não aprender",

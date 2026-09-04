@@ -3427,6 +3427,7 @@
   "ui.move_deleter.confirm.delete": "Move vergeten",
   "ui.move_deleter.npc.records_unavailable": "Mijn movegegevens zijn nu niet beschikbaar.",
   "ui.move_deleter.npc.service_unavailable": "Mijn verwijderdienst is nu niet beschikbaar.",
+  "ui.move_deleter.npc.free_service": "Ik kan moves gratis verwijderen.",
   "ui.move_learning.title": "Move leren",
   "ui.move_learning.learn": "Leren",
   "ui.move_learning.do_not_learn": "Niet leren",

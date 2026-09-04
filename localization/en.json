@@ -3427,6 +3427,7 @@
   "ui.move_deleter.confirm.delete": "Forget move",
   "ui.move_deleter.npc.records_unavailable": "My move records are unavailable right now.",
   "ui.move_deleter.npc.service_unavailable": "My deletion service is unavailable right now.",
+  "ui.move_deleter.npc.free_service": "I can remove moves for free.",
   "ui.move_learning.title": "Learn Move",
   "ui.move_learning.learn": "Learn",
   "ui.move_learning.do_not_learn": "Do not learn",

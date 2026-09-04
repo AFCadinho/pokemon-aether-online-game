@@ -3424,6 +3424,7 @@
   "ui.move_deleter.confirm.delete": "遗忘招式",
   "ui.move_deleter.npc.records_unavailable": "我的招式记录目前无法使用。",
   "ui.move_deleter.npc.service_unavailable": "我的遗忘服务目前无法使用。",
+  "ui.move_deleter.npc.free_service": "我可以免费遗忘招式。",
   "ui.move_learning.title": "学习移动",
   "ui.move_learning.learn": "学习",
   "ui.move_learning.do_not_learn": "不学",
