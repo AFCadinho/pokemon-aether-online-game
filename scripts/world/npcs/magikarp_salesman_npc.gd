@@ -47,7 +47,8 @@ func interact_with_player(_player: Node2D) -> void:
 
 	var result: Dictionary = await NpcPokemonSaleService.purchase(sale_id)
 	if not bool(result.get("success", false)):
-		if _error_code(result) == "npc_pokemon_purchase_insufficient_funds":
+		var error_code := _error_code(result)
+		if error_code in ["npc_pokemon_purchase_insufficient_funds", "not_enough_money"]:
 			await show_dialogue(await _resolve_lines(
 				insufficient_funds_dialogue_id,
 				["Future Champions know when to invest. Come back with ₽5,000 and secure your destiny!"]
@@ -135,12 +136,7 @@ func _resolve_lines(dialogue_id: String, fallback: Array) -> Array[String]:
 
 
 func _error_code(result: Dictionary) -> String:
-	var body: Variant = result.get("body", {})
-	if body is Dictionary:
-		var detail: Variant = (body as Dictionary).get("detail", {})
-		if detail is Dictionary:
-			return str((detail as Dictionary).get("code", ""))
-	return ""
+	return BackendErrorLocalizationService.error_code(result)
 
 
 func _format_money(amount: int) -> String:
