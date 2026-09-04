@@ -153,6 +153,8 @@ func _build_interface() -> void:
 	learn_button = Button.new()
 	_set_localized_property(learn_button, "text", "ui.move_mentor.learn")
 	learn_button.custom_minimum_size = Vector2(170, 42)
+	learn_button.icon_max_width = 18
+	learn_button.expand_icon = true
 	learn_button.focus_mode = Control.FOCUS_NONE
 	learn_button.disabled = true
 	learn_button.pressed.connect(_on_learn_pressed)
