@@ -21,6 +21,7 @@ func _run_checks() -> void:
 	_check_opponent_default_name_follows_snapshot_mega_form()
 	_check_opponent_custom_nickname_survives_public_mega_form()
 	_check_known_trainer_team_keeps_public_mega_form()
+	_check_training_ai_mega_event_uses_canonical_slot_after_form_ident_changes()
 	_check_training_ai_canonical_slot_keeps_live_state_across_form_identity_change()
 	_check_trainer_active_species_uses_metadata_form()
 	_check_trainer_team_display_keeps_roster_species_during_ambiguous_switch_state()
@@ -226,6 +227,54 @@ func _check_known_trainer_team_keeps_public_mega_form() -> void:
 	_check_equal(display_sableye.get("megaSpecies", ""), "Sableye-Mega", "known AI hover data retains the public Mega species")
 	_check_equal(display_sableye.get("condition", ""), "93/100", "known AI Mega slot retains its live condition")
 	_check_equal((display_sableye.get("moves", []) as Array).size(), 4, "known AI Mega hover retains its known moveset")
+
+
+func _check_training_ai_mega_event_uses_canonical_slot_after_form_ident_changes() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"battleId": "training-ai-mega-canonical-slot-test",
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [{
+						"ident": "p2a: Sableye",
+						"species": "Sableye",
+						"name": "Sableye",
+						"item": "Sablenite",
+						"active": true,
+						"metadataSlot": 1,
+					}],
+				},
+			},
+		},
+	}, false)
+	# The public event can already use the transformed ident, but its targetRef
+	# points at the immutable imported team slot. Persisting the Mega form there
+	# keeps the opponent HUD name and field sprite on the same form after the
+	# Mega animation's final refresh.
+	state.apply_event_conditions([{
+		"type": "mega",
+		"target": "p2a: Sableye-Mega",
+		"species": "Sableye-Mega",
+		"metadataSlot": 1,
+		"pokemonKey": "p2:slot:1",
+		"targetRef": {
+			"metadataSlot": 1,
+			"pokemonKey": "p2:slot:1",
+		},
+	}])
+	var presenter = BattleDisplayDataPresenterScript.new()
+	presenter.setup(state)
+	_check_equal(
+		presenter.get_active_display_species("p2"),
+		"Sableye-Mega",
+		"AI Mega event persists its public form through the canonical imported slot"
+	)
+	_check_equal(
+		presenter.get_active_display_name("p2"),
+		"Sableye-Mega",
+		"AI Mega event keeps the opponent HUD name on the public Mega form"
+	)
 
 
 func _check_training_ai_canonical_slot_keeps_live_state_across_form_identity_change() -> void:

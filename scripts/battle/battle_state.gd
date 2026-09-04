@@ -544,7 +544,7 @@ func resolve_mega_species_for_event(event: Dictionary) -> String:
 	if target_ident == "":
 		return ""
 
-	var pokemon_data: Dictionary = _get_side_pokemon_by_ident(target_ident)
+	var pokemon_data: Dictionary = _get_side_pokemon_by_ident(target_ident, event)
 	if pokemon_data.is_empty():
 		pokemon_data = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
 	if pokemon_data.is_empty():
@@ -1072,7 +1072,7 @@ func _apply_mega_event_to_requests(event: Dictionary) -> void:
 	if target_ident == "":
 		return
 
-	var pokemon_data: Dictionary = _get_side_pokemon_by_ident(target_ident)
+	var pokemon_data: Dictionary = _get_side_pokemon_by_ident(target_ident, event)
 	if pokemon_data.is_empty():
 		pokemon_data = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
 	if pokemon_data.is_empty():
@@ -1309,7 +1309,7 @@ func _remove_deferred_forme_change_fields_from_requests(
 func _remove_deferred_mega_fields_from_requests(event: Dictionary) -> void:
 	var target_ident := str(event.get("target", ""))
 	var original_species := _get_original_species_from_ident(target_ident)
-	var pokemon_data := _get_side_pokemon_by_ident(target_ident)
+	var pokemon_data := _get_side_pokemon_by_ident(target_ident, event)
 	if pokemon_data.is_empty():
 		pokemon_data = _get_active_side_pokemon(_get_player_id_from_ident(target_ident))
 	if pokemon_data.is_empty():
@@ -1389,13 +1389,18 @@ func _clear_battle_bond_cosmetic_for_ident(ident: String) -> void:
 		pokemon_data.erase("battleBondCosmeticActive")
 	battle_bond_cosmetic_species_by_ident.erase(cosmetic_key)
 
-func _get_side_pokemon_by_ident(target_ident: String) -> Dictionary:
+func _get_side_pokemon_by_ident(target_ident: String, source_event: Dictionary = {}) -> Dictionary:
 	var player_id := _get_player_id_from_ident(target_ident)
 	if player_id == "":
 		return {}
 
 	var team := get_player_team(player_id)
-	var target_index := _find_party_target_index(team, target_ident, {}, true)
+	# Battle events carry a stable Pokémon key and metadata slot. Prefer those
+	# over the public ident: after a form change, the ident can name the new
+	# form while the request entry still retains the base-form ident. This is
+	# especially important for imported AI practice teams, whose catalog slot is
+	# the durable battle identity.
+	var target_index := _find_party_target_index(team, target_ident, source_event, true)
 	if target_index < 0 or target_index >= team.size():
 		return {}
 
