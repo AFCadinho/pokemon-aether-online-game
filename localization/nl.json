@@ -4464,6 +4464,8 @@
   "ui.pvp.ai_sparring.catalog.choose_hint": "Kies een team om Pokémon, items, spreads en moves te bekijken.",
   "ui.pvp.ai_sparring.catalog.use_player": "Gebruik als jouw team",
   "ui.pvp.ai_sparring.catalog.use_opponent": "Train tegen dit team",
+  "ui.pvp.ai_sparring.catalog.export": "Kopieer PokéPaste",
+  "ui.pvp.ai_sparring.catalog.export_copied": "Gekopieerd!",
   "ui.pvp.ai_sparring.catalog.item": "Item",
   "ui.pvp.ai_sparring.catalog.ability": "Ability",
   "ui.pvp.ai_sparring.catalog.nature": "Nature",

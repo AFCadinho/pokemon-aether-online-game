@@ -4461,6 +4461,8 @@
   "ui.pvp.ai_sparring.catalog.choose_hint": "选择队伍以查看宝可梦、道具、努力值和招式。",
   "ui.pvp.ai_sparring.catalog.use_player": "设为我的队伍",
   "ui.pvp.ai_sparring.catalog.use_opponent": "与此队伍训练",
+  "ui.pvp.ai_sparring.catalog.export": "复制 PokéPaste",
+  "ui.pvp.ai_sparring.catalog.export_copied": "已复制！",
   "ui.pvp.ai_sparring.catalog.item": "道具",
   "ui.pvp.ai_sparring.catalog.ability": "特性",
   "ui.pvp.ai_sparring.catalog.nature": "性格",
