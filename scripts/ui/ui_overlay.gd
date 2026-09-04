@@ -891,7 +891,7 @@ var pvp_training_ai_team_select: OptionButton
 var pvp_training_ai_catalog_entries: Array[Dictionary] = []
 var pvp_training_ai_opponent_preview: VBoxContainer
 var pvp_training_ai_opponent_preview_title: Label
-var pvp_training_ai_opponent_preview_grid: GridContainer
+var pvp_training_ai_opponent_preview_grid: HBoxContainer
 var pvp_training_ai_resolved_team_id := ""
 var pvp_training_ai_catalog_loaded := false
 var pvp_training_ai_catalog_loading := false
@@ -7206,16 +7206,14 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	opponent_layout.add_child(pvp_training_ai_opponent_preview)
 
 	pvp_training_ai_opponent_preview_title = Label.new()
-	pvp_training_ai_opponent_preview_title.add_theme_font_size_override("font_size", 10)
-	pvp_training_ai_opponent_preview_title.add_theme_color_override("font_color", Color("#9be7b1"))
+	pvp_training_ai_opponent_preview_title.add_theme_font_size_override("font_size", 12)
+	pvp_training_ai_opponent_preview_title.add_theme_color_override("font_color", Color("#f5df9a"))
 	pvp_training_ai_opponent_preview_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pvp_training_ai_opponent_preview.add_child(pvp_training_ai_opponent_preview_title)
 
-	pvp_training_ai_opponent_preview_grid = GridContainer.new()
-	pvp_training_ai_opponent_preview_grid.columns = 2
+	pvp_training_ai_opponent_preview_grid = HBoxContainer.new()
 	pvp_training_ai_opponent_preview_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_training_ai_opponent_preview_grid.add_theme_constant_override("h_separation", 6)
-	pvp_training_ai_opponent_preview_grid.add_theme_constant_override("v_separation", 6)
+	pvp_training_ai_opponent_preview_grid.add_theme_constant_override("separation", 6)
 	pvp_training_ai_opponent_preview.add_child(pvp_training_ai_opponent_preview_grid)
 	_refresh_pvp_training_ai_opponent_preview()
 
@@ -42739,10 +42737,8 @@ func _refresh_pvp_training_ai_opponent_preview() -> void:
 	pvp_training_ai_opponent_preview.visible = not selected_entry.is_empty() and not pokemon.is_empty()
 	if not pvp_training_ai_opponent_preview.visible:
 		return
-	var display_name := str(selected_entry.get("displayName", selected_entry.get("teamId", ""))).strip_edges()
 	pvp_training_ai_opponent_preview_title.text = LocalizationManager.text(
-		"ui.pvp.training.ai.opponent_preview",
-		{"team": display_name}
+		"ui.pvp.training.ai.opponent_preview"
 	)
 	for slot_index in range(min(MAX_PARTY_SIZE, pokemon.size())):
 		var entry_value: Variant = pokemon[slot_index]
@@ -42756,39 +42752,23 @@ func _create_pvp_training_ai_opponent_preview_slot(entry: Dictionary) -> Control
 	var species := str(entry.get("species", "")).strip_edges()
 	var display_name := _localized_species_name(species, species)
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 40)
+	panel.custom_minimum_size = Vector2(50, 50)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.tooltip_text = display_name
 	panel.add_theme_stylebox_override(
 		"panel",
-		_make_panel_style(Color("#091725d9"), Color("#31506f99"), 7, 1)
+		_make_panel_style(UI_SURFACE_INSET, Color("#315070cc"), 8, 1)
 	)
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 5)
-	margin.add_theme_constant_override("margin_top", 3)
-	margin.add_theme_constant_override("margin_right", 6)
-	margin.add_theme_constant_override("margin_bottom", 3)
-	panel.add_child(margin)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 5)
-	margin.add_child(row)
+	var center := CenterContainer.new()
+	panel.add_child(center)
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(32, 32)
+	icon.custom_minimum_size = Vector2(44, 44)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture = PokemonAssets.load_party_icon(species, false)
 	icon.modulate = Color.WHITE if icon.texture != null else Color(1, 1, 1, 0.2)
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	row.add_child(icon)
-	var name_label := Label.new()
-	name_label.text = display_name
-	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	name_label.add_theme_font_size_override("font_size", 10)
-	name_label.add_theme_color_override("font_color", UI_TEXT)
-	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	row.add_child(name_label)
+	center.add_child(icon)
 	return panel
 
 
