@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon Center healing indicators keep the final Poké Ball centered in the two-column party grid.
+
 - Added confirmation before choosing the Helix or Dome Fossil in Mt. Moon.
 
 - Move Deleter now explicitly says moves are removed for free.

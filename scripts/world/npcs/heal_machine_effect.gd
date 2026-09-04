@@ -64,20 +64,22 @@ func _draw() -> void:
 	var row_count := ceili(float(_visible_indicator_count) / float(column_count))
 	var first_y := -float(row_count - 1) * indicator_row_spacing * 0.5
 	for index: int in range(_visible_indicator_count):
-		var column := index % column_count
-		var row := floori(float(index) / float(column_count))
-		var indicators_before_row := row * column_count
-		var indicators_in_row := mini(
-			column_count,
-			_visible_indicator_count - indicators_before_row
-		)
-		var row_first_x := -float(indicators_in_row - 1) * indicator_column_spacing * 0.5
-		var center := Vector2(
-			row_first_x + float(column) * indicator_column_spacing,
-			first_y + float(row) * indicator_row_spacing
-		)
+		var center := get_indicator_center(index, _visible_indicator_count, column_count, first_y)
 		var is_active := index < active_indicators
 		_draw_indicator(center, is_active, final_pulse, fade_alpha)
+
+
+func get_indicator_center(index: int, visible_count: int, column_count: int = 2, first_y: float = 0.0) -> Vector2:
+	var safe_column_count := maxi(column_count, 1)
+	var row := floori(float(index) / float(safe_column_count))
+	var column := index % safe_column_count
+	var indicators_before_row := row * safe_column_count
+	var indicators_in_row := mini(safe_column_count, visible_count - indicators_before_row)
+	var row_first_x := -float(indicators_in_row - 1) * indicator_column_spacing * 0.5
+	return Vector2(
+		row_first_x + float(column) * indicator_column_spacing,
+		first_y + float(row) * indicator_row_spacing
+	)
 
 
 func _draw_indicator(center: Vector2, is_active: bool, pulse: float, fade_alpha: float) -> void:
