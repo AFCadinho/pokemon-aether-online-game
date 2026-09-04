@@ -576,6 +576,29 @@ func _check_pvp_runtime_translation() -> void:
 		),
 		"Changing the archetype cannot change the opponent column minimum width"
 	)
+	var cross_tier_ou_entry := training_ai_catalog_entries[0].duplicate(true) as Dictionary
+	cross_tier_ou_entry["homeTierId"] = "aether-ou"
+	cross_tier_ou_entry["eligibleTierIds"] = ["none", "aether-ou", "aether-uu"]
+	var uu_entry := cross_tier_ou_entry.duplicate(true)
+	uu_entry["teamId"] = "smogon-nduu-hyper-offense"
+	uu_entry["displayName"] = "UU Hyper Offense"
+	uu_entry["homeTierId"] = "aether-uu"
+	training_ai_catalog_entries.assign([cross_tier_ou_entry, uu_entry])
+	ai_sparring_tier_select.select(2)
+	training_ai_archetype_select.select(1)
+	overlay.call("_on_ai_sparring_tier_selected", 2)
+	overlay.call("_on_pvp_training_ai_archetype_selected", 1)
+	_check(
+		training_ai_team_select.item_count == 2
+		and str(training_ai_team_select.get_item_metadata(1)) == "smogon-nduu-hyper-offense"
+		and str(overlay.call("_resolved_pvp_training_ai_team_id")) == "smogon-nduu-hyper-offense",
+		"Aether UU random opponents resolve only from the UU home-tier catalog"
+	)
+	_check(
+		ai_sparring_catalog_player_select.item_count == 1
+		and str(ai_sparring_catalog_player_select.get_item_metadata(0)) == "smogon-nduu-hyper-offense",
+		"Aether UU player catalog choices exclude cross-eligible OU teams"
+	)
 	training_ai_team_source_select.select(1)
 	overlay.call("_on_pvp_training_ai_team_source_selected", 1)
 	_check(training_ai_custom_team_input != null and training_ai_custom_team_input.visible, "PokéPaste source reveals an opponent-team paste field")

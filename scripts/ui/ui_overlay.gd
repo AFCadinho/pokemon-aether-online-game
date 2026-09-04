@@ -43212,7 +43212,7 @@ func _refresh_pvp_training_ai_team_options() -> void:
 	))
 	pvp_training_ai_team_select.set_item_metadata(0, "random")
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
-		if not _ai_sparring_team_is_eligible(entry, _selected_ai_sparring_tier_id()):
+		if not _ai_sparring_team_matches_tier(entry, _selected_ai_sparring_tier_id()):
 			continue
 		if requested_archetype != "random" and str(entry.get("archetype", "")) != requested_archetype:
 			continue
@@ -43266,6 +43266,8 @@ func _resolve_pvp_training_ai_opponent_team() -> void:
 	var candidates: Array[Dictionary] = []
 	var requested_archetype := _selected_pvp_training_ai_archetype()
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
+		if not _ai_sparring_team_matches_tier(entry, _selected_ai_sparring_tier_id()):
+			continue
 		if requested_archetype != "random" and str(entry.get("archetype", "")) != requested_archetype:
 			continue
 		if requested_team_id != "random" and str(entry.get("teamId", "")) != requested_team_id:
@@ -43430,7 +43432,7 @@ func _refresh_ai_sparring_player_catalog_options() -> void:
 	var previous_id := _selected_ai_sparring_player_catalog_team_id()
 	pvp_ai_sparring_catalog_team_select.clear()
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
-		if not _ai_sparring_team_is_eligible(entry, _selected_ai_sparring_tier_id()):
+		if not _ai_sparring_team_matches_tier(entry, _selected_ai_sparring_tier_id()):
 			continue
 		var team_id := str(entry.get("teamId", ""))
 		pvp_ai_sparring_catalog_team_select.add_item(str(entry.get("displayName", team_id)))
@@ -43953,10 +43955,12 @@ func _ai_sparring_team_is_eligible(entry: Dictionary, tier_id: String) -> bool:
 
 
 func _ai_sparring_team_matches_tier(entry: Dictionary, tier_id: String) -> bool:
+	if tier_id == "none":
+		return _ai_sparring_team_is_eligible(entry, tier_id)
 	var home_tier := _ai_sparring_team_catalog_tier(entry)
-	# A team explicitly curated for another named metagame must not leak into
-	# this tier, even when the rules validator reports it as legal there.
-	if home_tier in ["aether-ou", "aether-uu"] and home_tier != tier_id:
+	# Named tiers are curated catalogs, not merely legality filters. Unknown or
+	# cross-tier catalog entries must not leak in even when validation accepts them.
+	if home_tier != tier_id:
 		return false
 	return _ai_sparring_team_is_eligible(entry, tier_id)
 
@@ -44170,11 +44174,13 @@ func _training_ai_failure_feedback(
 	var player_error := error_code in [
 		"training_team_invalid",
 		"training_team_illegal",
+		"training_player_team_tier_mismatch",
 		"training_player_team_tier_invalid",
 	]
 	var opponent_error := error_code in [
 		"training_ai_team_illegal",
 		"training_ai_team_import_failed",
+		"training_ai_team_tier_mismatch",
 		"training_ai_team_tier_invalid",
 	]
 	if player_error:
