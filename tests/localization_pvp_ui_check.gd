@@ -400,6 +400,57 @@ func _check_pvp_runtime_translation() -> void:
 		) == "backend.error.mega_readiness_pending",
 		"Mega readiness failures keep their specific localized explanation"
 	)
+	var party_validation_feedback: Dictionary = overlay.call(
+		"_training_ai_failure_feedback",
+		{
+			"detail": {
+				"code": "TRAINING_PLAYER_TEAM_TIER_INVALID",
+				"validation": {
+					"errors": [{
+						"slot": 6,
+						"message": "battle-bond is not legal for this Pokemon",
+					}],
+				},
+			},
+		},
+		"party",
+		"catalog"
+	)
+	var party_validation_values := party_validation_feedback.get("values", {}) as Dictionary
+	_check(
+		party_validation_feedback.get("key", "") == "ui.pvp.training.ai.player_team_invalid_detail"
+		and party_validation_values.get("reason", "")
+			== "Vak 6 · battle-bond is not legal for this Pokemon",
+		"AI Sparring reports the exact player-party slot validation issue"
+	)
+	var opponent_validation_feedback: Dictionary = overlay.call(
+		"_training_ai_failure_feedback",
+		{
+			"detail": {
+				"code": "TRAINING_AI_TEAM_ILLEGAL",
+				"problems": ["Greninja's ability Battle Bond is not legal."],
+			},
+		},
+		"party",
+		"paste"
+	)
+	var opponent_validation_values := opponent_validation_feedback.get("values", {}) as Dictionary
+	_check(
+		opponent_validation_feedback.get("key", "") == "ui.pvp.training.ai.opponent_team_invalid_detail"
+		and opponent_validation_values.get("reason", "")
+			== "Greninja's ability Battle Bond is not legal.",
+		"AI Sparring identifies detailed opponent-team legality failures"
+	)
+	var paste_import_feedback: Dictionary = overlay.call(
+		"_training_ai_failure_feedback",
+		{"detail": {"code": "TRAINING_AI_TEAM_IMPORT_FAILED"}},
+		"party",
+		"paste"
+	)
+	_check(
+		paste_import_feedback.get("key", "") == "ui.pvp.training.paste_invalid",
+		"AI Sparring keeps Pokepaste guidance for an actual paste import failure"
+	)
 	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Preseason", "Leaderboard season renders in Dutch")
 	_check_ranked_dropdown_style(format_select, "Matchmaking format")
 	_check_ranked_dropdown_style(leaderboard_scope, "Leaderboard period")
