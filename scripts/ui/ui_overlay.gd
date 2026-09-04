@@ -43947,7 +43947,7 @@ func _ai_sparring_team_is_eligible(entry: Dictionary, tier_id: String) -> bool:
 
 
 func _ai_sparring_team_catalog_tier(entry: Dictionary) -> String:
-	for key in ["tierId", "catalogTier", "tier"]:
+	for key in ["homeTierId", "tierId", "catalogTier", "tier"]:
 		var value := str(entry.get(key, "")).strip_edges().to_lower()
 		if value in ["none", "aether-ou", "aether-uu"]:
 			return value
