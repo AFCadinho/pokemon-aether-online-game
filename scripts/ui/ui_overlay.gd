@@ -929,8 +929,8 @@ var pvp_ai_sparring_catalog_results: VBoxContainer
 var pvp_ai_sparring_catalog_status: Label
 var pvp_ai_sparring_catalog_detail_title: Label
 var pvp_ai_sparring_catalog_detail_meta: Label
-var pvp_ai_sparring_catalog_pokemon_select: OptionButton
-var pvp_ai_sparring_catalog_pokemon_detail: RichTextLabel
+var pvp_ai_sparring_catalog_team_hint: Label
+var pvp_ai_sparring_catalog_team_grid: GridContainer
 var pvp_ai_sparring_catalog_use_player_button: Button
 var pvp_ai_sparring_catalog_use_opponent_button: Button
 var pvp_ai_sparring_catalog_selected_team_id := ""
@@ -7406,10 +7406,10 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	var catalog_split := HSplitContainer.new()
 	catalog_split.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	catalog_split.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	catalog_split.split_offset = 390
+	catalog_split.split_offset = 285
 	catalog_layout.add_child(catalog_split)
 	var catalog_scroll := ScrollContainer.new()
-	catalog_scroll.custom_minimum_size = Vector2(350, 0)
+	catalog_scroll.custom_minimum_size = Vector2(270, 0)
 	catalog_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	catalog_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	catalog_split.add_child(catalog_scroll)
@@ -7418,7 +7418,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai_sparring_catalog_results.add_theme_constant_override("separation", 7)
 	catalog_scroll.add_child(pvp_ai_sparring_catalog_results)
 	var detail_panel := PanelContainer.new()
-	detail_panel.custom_minimum_size = Vector2(390, 0)
+	detail_panel.custom_minimum_size = Vector2(510, 0)
 	detail_panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#0d1726eb"), Color("#6f5fbaaa"), 10, 1))
 	catalog_split.add_child(detail_panel)
 	var detail_margin := MarginContainer.new()
@@ -7437,18 +7437,22 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai_sparring_catalog_detail_meta.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_ai_sparring_catalog_detail_meta.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	detail_layout.add_child(pvp_ai_sparring_catalog_detail_meta)
-	pvp_ai_sparring_catalog_pokemon_select = OptionButton.new()
-	pvp_ai_sparring_catalog_pokemon_select.custom_minimum_size = Vector2(0, 36)
-	pvp_ai_sparring_catalog_pokemon_select.visible = false
-	pvp_ai_sparring_catalog_pokemon_select.item_selected.connect(_on_ai_sparring_catalog_pokemon_selected)
-	_apply_pvp_ranked_dropdown_style(pvp_ai_sparring_catalog_pokemon_select, true)
-	detail_layout.add_child(pvp_ai_sparring_catalog_pokemon_select)
-	pvp_ai_sparring_catalog_pokemon_detail = RichTextLabel.new()
-	pvp_ai_sparring_catalog_pokemon_detail.bbcode_enabled = true
-	pvp_ai_sparring_catalog_pokemon_detail.fit_content = false
-	pvp_ai_sparring_catalog_pokemon_detail.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	pvp_ai_sparring_catalog_pokemon_detail.custom_minimum_size = Vector2(0, 180)
-	detail_layout.add_child(pvp_ai_sparring_catalog_pokemon_detail)
+	pvp_ai_sparring_catalog_team_hint = Label.new()
+	_set_localized_control_property(pvp_ai_sparring_catalog_team_hint, "text", "ui.pvp.ai_sparring.catalog.choose_hint")
+	pvp_ai_sparring_catalog_team_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_ai_sparring_catalog_team_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	detail_layout.add_child(pvp_ai_sparring_catalog_team_hint)
+	var team_sets_scroll := ScrollContainer.new()
+	team_sets_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	team_sets_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	team_sets_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	detail_layout.add_child(team_sets_scroll)
+	pvp_ai_sparring_catalog_team_grid = GridContainer.new()
+	pvp_ai_sparring_catalog_team_grid.columns = 3
+	pvp_ai_sparring_catalog_team_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_catalog_team_grid.add_theme_constant_override("h_separation", 7)
+	pvp_ai_sparring_catalog_team_grid.add_theme_constant_override("v_separation", 7)
+	team_sets_scroll.add_child(pvp_ai_sparring_catalog_team_grid)
 	var catalog_actions := HBoxContainer.new()
 	catalog_actions.add_theme_constant_override("separation", 8)
 	detail_layout.add_child(catalog_actions)
@@ -43243,11 +43247,15 @@ func _refresh_pvp_training_ai_opponent_preview() -> void:
 		)
 
 
-func _create_pvp_training_ai_opponent_preview_slot(entry: Dictionary) -> Control:
+func _create_pvp_training_ai_opponent_preview_slot(
+	entry: Dictionary,
+	panel_size: float = 50.0,
+	icon_size: float = 44.0
+) -> Control:
 	var species := str(entry.get("species", "")).strip_edges()
 	var display_name := _localized_species_name(species, species)
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(50, 50)
+	panel.custom_minimum_size = Vector2(panel_size, panel_size)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.tooltip_text = display_name
 	panel.add_theme_stylebox_override(
@@ -43257,7 +43265,7 @@ func _create_pvp_training_ai_opponent_preview_slot(entry: Dictionary) -> Control
 	var center := CenterContainer.new()
 	panel.add_child(center)
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(44, 44)
+	icon.custom_minimum_size = Vector2(icon_size, icon_size)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture = PokemonAssets.load_party_icon(species, false)
@@ -43438,6 +43446,9 @@ func _create_ai_sparring_catalog_team_card(entry: Dictionary) -> Control:
 	]
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.custom_minimum_size = Vector2(0, 48)
+	button.clip_text = true
+	button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	button.tooltip_text = str(entry.get("displayName", team_id))
 	button.pressed.connect(_on_ai_sparring_catalog_team_pressed.bind(team_id))
 	_apply_button_style(button)
 	layout.add_child(button)
@@ -43446,7 +43457,7 @@ func _create_ai_sparring_catalog_team_card(entry: Dictionary) -> Control:
 	layout.add_child(icons)
 	for pokemon_value: Variant in _array_from_variant(entry.get("pokemon", [])):
 		if pokemon_value is Dictionary:
-			icons.add_child(_create_pvp_training_ai_opponent_preview_slot(pokemon_value as Dictionary))
+			icons.add_child(_create_pvp_training_ai_opponent_preview_slot(pokemon_value as Dictionary, 34.0, 30.0))
 	return panel
 
 
@@ -43483,64 +43494,109 @@ func _render_ai_sparring_catalog_detail() -> void:
 		pvp_ai_sparring_catalog_use_player_button.disabled = not has_selection
 	if pvp_ai_sparring_catalog_use_opponent_button != null:
 		pvp_ai_sparring_catalog_use_opponent_button.disabled = not has_selection
-	if pvp_ai_sparring_catalog_pokemon_select == null:
+	if pvp_ai_sparring_catalog_team_grid == null:
 		return
-	pvp_ai_sparring_catalog_pokemon_select.clear()
+	for child: Node in pvp_ai_sparring_catalog_team_grid.get_children():
+		pvp_ai_sparring_catalog_team_grid.remove_child(child)
+		child.queue_free()
 	var pokemon := _array_from_variant(pvp_ai_sparring_catalog_detail.get("pokemon", []))
+	if pvp_ai_sparring_catalog_team_hint != null:
+		pvp_ai_sparring_catalog_team_hint.text = LocalizationManager.text(
+			"ui.pvp.ai_sparring.catalog.loading"
+			if pvp_ai_sparring_catalog_detail_loading
+			else "ui.pvp.ai_sparring.catalog.choose_hint"
+		)
+		pvp_ai_sparring_catalog_team_hint.visible = pokemon.is_empty()
 	for pokemon_value: Variant in pokemon:
 		if pokemon_value is Dictionary:
-			var species := str((pokemon_value as Dictionary).get("species", ""))
-			var icon := PokemonAssets.load_party_icon(species, bool((pokemon_value as Dictionary).get("shiny", false)))
-			if icon != null:
-				pvp_ai_sparring_catalog_pokemon_select.add_icon_item(icon, _localized_species_name(species, species))
-			else:
-				pvp_ai_sparring_catalog_pokemon_select.add_item(_localized_species_name(species, species))
-	pvp_ai_sparring_catalog_pokemon_select.visible = not pokemon.is_empty()
-	_render_ai_sparring_catalog_pokemon(0)
+			pvp_ai_sparring_catalog_team_grid.add_child(
+				_create_ai_sparring_catalog_set_card(pokemon_value as Dictionary)
+			)
 
 
-func _on_ai_sparring_catalog_pokemon_selected(index: int) -> void:
-	_render_ai_sparring_catalog_pokemon(index)
-
-
-func _render_ai_sparring_catalog_pokemon(index: int) -> void:
-	if pvp_ai_sparring_catalog_pokemon_detail == null:
-		return
-	var pokemon := _array_from_variant(pvp_ai_sparring_catalog_detail.get("pokemon", []))
-	if index < 0 or index >= pokemon.size() or not (pokemon[index] is Dictionary):
-		pvp_ai_sparring_catalog_pokemon_detail.text = LocalizationManager.text(
-			"ui.pvp.ai_sparring.catalog.loading" if pvp_ai_sparring_catalog_detail_loading else "ui.pvp.ai_sparring.catalog.choose_hint"
-		)
-		return
-	var set_data: Dictionary = pokemon[index]
+func _create_ai_sparring_catalog_set_card(set_data: Dictionary) -> Control:
 	var species := str(set_data.get("species", ""))
-	var lines: Array[String] = [
-		"[font_size=18][color=#60d3ff]%s[/color][/font_size]" % _localized_species_name(species, species),
-		"%s: %s" % [LocalizationManager.text("ui.pvp.ai_sparring.catalog.item"), str(set_data.get("item", "—"))],
-		"%s: %s" % [LocalizationManager.text("ui.pvp.ai_sparring.catalog.ability"), str(set_data.get("ability", "—"))],
-		"%s: %s" % [LocalizationManager.text("ui.pvp.ai_sparring.catalog.nature"), str(set_data.get("nature", "—"))],
-		"%s: %s" % [LocalizationManager.text("ui.pvp.ai_sparring.catalog.tera_type"), str(set_data.get("teraType", "—")) if str(set_data.get("teraType", "")) != "" else "—"],
-		"%s: %d · %s: %s" % [
-			LocalizationManager.text("ui.pvp.ai_sparring.catalog.level"), int(set_data.get("level", 100)),
-			LocalizationManager.text("ui.pvp.ai_sparring.catalog.shiny"),
-			LocalizationManager.text("ui.pvp.ai_sparring.catalog.yes" if bool(set_data.get("shiny", false)) else "ui.pvp.ai_sparring.catalog.no"),
-		],
-		"EVs: %s" % _ai_sparring_stat_spread(set_data.get("evs", {})),
-		"IVs: %s" % _ai_sparring_stat_spread(set_data.get("ivs", {})),
-		"\n[color=#f5df9a]%s[/color]" % LocalizationManager.text("ui.pvp.ai_sparring.catalog.moves"),
+	var card := PanelContainer.new()
+	card.custom_minimum_size = Vector2(0, 180)
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#0a1321e8"), Color("#315070cc"), 8, 1)
+	)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 7)
+	card.add_child(margin)
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 4)
+	margin.add_child(layout)
+	var heading := HBoxContainer.new()
+	heading.add_theme_constant_override("separation", 5)
+	layout.add_child(heading)
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(36, 36)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = PokemonAssets.load_party_icon(species, bool(set_data.get("shiny", false)))
+	heading.add_child(icon)
+	var title := Label.new()
+	var gender := str(set_data.get("gender", "")).strip_edges()
+	title.text = "%s%s" % [
+		_localized_species_name(species, species),
+		" (%s)" % gender if gender in ["M", "F"] else "",
 	]
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	title.add_theme_font_size_override("font_size", 12)
+	title.add_theme_color_override("font_color", Color("#60d3ff"))
+	heading.add_child(title)
+	var item := str(set_data.get("item", "")).strip_edges()
+	var ability := str(set_data.get("ability", "")).strip_edges()
+	var tera_type := str(set_data.get("teraType", "")).strip_edges()
+	var evs := _ai_sparring_stat_spread(set_data.get("evs", {}), 0)
+	var ivs := _ai_sparring_stat_spread(set_data.get("ivs", {}), 31)
+	var lines: Array[String] = []
+	if item != "":
+		lines.append("[color=#f5df9a]@ %s[/color]" % item)
+	if ability != "":
+		lines.append("%s: %s" % [LocalizationManager.text("ui.pvp.ai_sparring.catalog.ability"), ability])
+	if tera_type != "":
+		lines.append("%s: %s" % [LocalizationManager.text("ui.pvp.ai_sparring.catalog.tera_type"), tera_type])
+	if int(set_data.get("level", 100)) != 100:
+		lines.append("%s: %d" % [LocalizationManager.text("ui.pvp.ai_sparring.catalog.level"), int(set_data.get("level", 100))])
+	if bool(set_data.get("shiny", false)):
+		lines.append("%s: %s" % [LocalizationManager.text("ui.pvp.ai_sparring.catalog.shiny"), LocalizationManager.text("ui.pvp.ai_sparring.catalog.yes")])
+	if evs != "":
+		lines.append("EVs: %s" % evs)
+	var nature := str(set_data.get("nature", "")).strip_edges()
+	if nature != "":
+		lines.append("%s %s" % [nature, LocalizationManager.text("ui.pvp.ai_sparring.catalog.nature")])
+	if ivs != "":
+		lines.append("IVs: %s" % ivs)
 	for move: Variant in _array_from_variant(set_data.get("moves", [])):
-		lines.append("• %s" % str(move))
-	pvp_ai_sparring_catalog_pokemon_detail.text = "\n".join(lines)
+		lines.append("[color=#c9beff]– %s[/color]" % str(move))
+	var details := RichTextLabel.new()
+	details.bbcode_enabled = true
+	details.fit_content = true
+	details.scroll_active = false
+	details.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	details.add_theme_font_size_override("normal_font_size", 10)
+	details.text = "\n".join(lines)
+	layout.add_child(details)
+	return card
 
 
-func _ai_sparring_stat_spread(value: Variant) -> String:
+func _ai_sparring_stat_spread(value: Variant, omitted_default: int = -1) -> String:
 	if not (value is Dictionary) or (value as Dictionary).is_empty():
-		return "—"
+		return ""
 	var parts: Array[String] = []
 	for stat: String in ["HP", "Atk", "Def", "SpA", "SpD", "Spe"]:
 		if (value as Dictionary).has(stat):
-			parts.append("%d %s" % [int((value as Dictionary).get(stat)), stat])
+			var amount := int((value as Dictionary).get(stat))
+			if amount != omitted_default:
+				parts.append("%d %s" % [amount, stat])
 	return " / ".join(parts)
 
 
