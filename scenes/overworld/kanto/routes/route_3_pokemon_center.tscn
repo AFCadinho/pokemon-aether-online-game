@@ -49,7 +49,7 @@ npc_id = "kanto_route_3_pokemon_center_clerk_2"
 npc_sprite_frames = SubResource("SpriteFrames_4gbm4")
 
 [node name="CamperIris" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="5" unique_id=816145770 instance=ExtResource("2_dialogue_npc")]
-position = Vector2(656, 464)
+position = Vector2(752, 560)
 npc_id = "kanto_route_3_pokemon_center_camper_iris"
 npc_definition_id = "trainer_class_camper"
 display_name = "Camper Iris"
@@ -75,7 +75,7 @@ npc_id = "kanto_route_3_pokemon_center_magikarp_salesman"
 [node name="Pokemon" type="Node2D" parent="Entities" parent_id_path=PackedInt32Array(1761485951) index="3" unique_id=1500487584]
 
 [node name="Paras" parent="Entities/Pokemon" index="0" unique_id=930451594 instance=ExtResource("3_overworld_pokemon")]
-position = Vector2(656, 496)
+position = Vector2(784, 560)
 overworld_pokemon_id = "kanto_route_3_pokemon_center_paras_1"
 species_id = "paras"
 level = 8
