@@ -1015,7 +1015,7 @@ func _cost_badge(candidate: Dictionary) -> Control:
 	var affordable := owned >= required
 	var panel := PanelContainer.new()
 	panel.name = "MoveCost_%s" % str(candidate.get("moveId", "unknown"))
-	panel.custom_minimum_size = Vector2(68, 28)
+	panel.custom_minimum_size = Vector2(72, 28)
 	panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	panel.tooltip_text = _t("ui.move_mentor.cost.tooltip", {
 		"item": _item_name(item_id),
@@ -1046,6 +1046,8 @@ func _cost_badge(candidate: Dictionary) -> Control:
 	row.add_child(icon)
 	var price := _text_label("%d×/%d×" % [owned, required], 10, UI_GREEN if affordable else UI_DANGER)
 	price.name = "MoveCostPrice"
+	price.custom_minimum_size = Vector2(34, 0)
+	price.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	row.add_child(price)
 	return panel
 
