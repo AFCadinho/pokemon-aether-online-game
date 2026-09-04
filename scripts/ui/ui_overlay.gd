@@ -7121,12 +7121,12 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	page.add_theme_constant_override("separation", 12)
 
 	var hero := PanelContainer.new()
+	hero.name = "AiSparringPracticeHero"
 	hero.custom_minimum_size = Vector2(0, 104)
 	hero.add_theme_stylebox_override(
 		"panel",
 		_make_panel_style(Color("#101829f2"), Color("#7968c7cc"), 11, 1)
 	)
-	page.add_child(hero)
 
 	var hero_margin := MarginContainer.new()
 	hero_margin.add_theme_constant_override("margin_left", 16)
@@ -7197,6 +7197,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	var practice_layout := VBoxContainer.new()
 	practice_layout.add_theme_constant_override("separation", 12)
 	practice_page.add_child(practice_layout)
+	practice_layout.add_child(hero)
 
 	var practice_steps := HBoxContainer.new()
 	practice_steps.custom_minimum_size = Vector2(0, AI_SPARRING_OPPONENT_STEP_MIN_HEIGHT)

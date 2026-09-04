@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring now keeps its tabs above the content and shows the trainer introduction only in Free Sparring, leaving the catalog and history more room.
+
 - AI Sparring now includes a searchable Team Catalog with compact PokéPaste-style full-team views and one-click choices to use a published team or train against it.
 
 - AI Sparring now shows the complete form name, such as Samurott Hisui, when an unnicknamed Pokémon's battle ident contains only its base name.

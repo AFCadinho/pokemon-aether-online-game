@@ -61,6 +61,7 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_sparring_history_list := overlay.get("pvp_ai_sparring_history_list") as VBoxContainer
 	var ai_sparring_history_clear := overlay.get("pvp_ai_sparring_history_clear_button") as Button
 	var ai_sparring_intro := overlay.find_child("AiSparringIntro", true, false) as Label
+	var ai_sparring_practice_hero := overlay.find_child("AiSparringPracticeHero", true, false) as PanelContainer
 	var ai_sparring_start := overlay.get("pvp_ai_sparring_start_button") as Button
 	var ai_sparring_team_source := overlay.get("pvp_ai_sparring_team_source_select") as OptionButton
 	var ai_sparring_party_preview := overlay.get("pvp_ai_sparring_party_preview") as VBoxContainer
@@ -183,6 +184,11 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Matchhistorie", "Match history tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(3) == "Onderzoekscampagne", "Research tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.current_tab == 0, "Free sparring is the default AI destination")
+	_check(
+		ai_sparring_practice_hero != null
+		and ai_sparring_practice_hero.get_parent().get_parent() == ai_sparring_tabs.get_tab_control(0),
+		"AI trainer introduction belongs only to the Free Sparring tab content"
+	)
 	overlay.call("_render_pvp_ai_sparring_match_history", [{
 		"battleId": "battle-history-test",
 		"result": "win",
