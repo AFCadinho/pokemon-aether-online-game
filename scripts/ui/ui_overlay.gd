@@ -43493,7 +43493,7 @@ func _refresh_ai_sparring_catalog_view() -> void:
 	var tier_id := str(pvp_ai_sparring_catalog_tier.get_selected_metadata()) if pvp_ai_sparring_catalog_tier != null and pvp_ai_sparring_catalog_tier.item_count > 0 else "all"
 	var matches: Array[Dictionary] = []
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
-		if tier_id != "all" and not _ai_sparring_team_is_eligible(entry, tier_id):
+		if tier_id != "all" and _ai_sparring_team_catalog_tier(entry) != tier_id:
 			continue
 		if archetype != "all" and str(entry.get("archetype", "")) != archetype:
 			continue
@@ -43576,6 +43576,19 @@ func _create_ai_sparring_catalog_team_card(entry: Dictionary) -> Control:
 		"normal", _make_panel_style(Color("#172c45"), Color("#4c789f"), 6, 1)
 	)
 	header.add_child(archetype_badge)
+	var catalog_tier := _ai_sparring_team_catalog_tier(entry)
+	if catalog_tier != "":
+		var tier_badge := Label.new()
+		tier_badge.text = _ai_sparring_tier_label(catalog_tier)
+		tier_badge.custom_minimum_size = Vector2(76.0, 22.0)
+		tier_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		tier_badge.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		tier_badge.add_theme_font_size_override("font_size", 10)
+		tier_badge.add_theme_color_override("font_color", Color("#f5df9a"))
+		tier_badge.add_theme_stylebox_override(
+			"normal", _make_panel_style(Color("#332d1b"), Color("#9f8750"), 6, 1)
+		)
+		header.add_child(tier_badge)
 	var icons := HBoxContainer.new()
 	icons.add_theme_constant_override("separation", 5)
 	layout.add_child(icons)
@@ -43931,6 +43944,19 @@ func _ai_sparring_team_is_eligible(entry: Dictionary, tier_id: String) -> bool:
 		if str(value) == tier_id:
 			return true
 	return false
+
+
+func _ai_sparring_team_catalog_tier(entry: Dictionary) -> String:
+	for key in ["tierId", "catalogTier", "tier"]:
+		var value := str(entry.get(key, "")).strip_edges().to_lower()
+		if value in ["none", "aether-ou", "aether-uu"]:
+			return value
+	var eligible_value: Variant = entry.get("eligibleTierIds", [])
+	if eligible_value is Array and (eligible_value as Array).size() == 1:
+		var only_tier := str((eligible_value as Array)[0]).strip_edges().to_lower()
+		if only_tier in ["none", "aether-ou", "aether-uu"]:
+			return only_tier
+	return ""
 
 
 func _selected_pvp_training_ai_team_source() -> String:
