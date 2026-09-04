@@ -98,19 +98,41 @@ static func party_signature(party: Array) -> String:
 	for entry: Variant in party:
 		if entry is Dictionary:
 			var pokemon: Dictionary = entry as Dictionary
-			parts.append("%s:%s:%s" % [
+			parts.append("%s:%s" % [
 				str(pokemon.get("instanceId", pokemon.get("instance_id", ""))).strip_edges(),
-				str(pokemon.get("species", pokemon.get("speciesId", ""))).strip_edges(),
-				str(pokemon.get("level", "")).strip_edges(),
+				JSON.stringify(_legality_signature_fields(pokemon)),
 			])
 		elif entry is Object:
 			var object := entry as Object
-			parts.append("%s:%s:%s" % [
+			parts.append("%s:%s" % [
 				str(object.get("instance_id")).strip_edges(),
-				str(object.get("species")).strip_edges(),
-				str(object.get("level")).strip_edges(),
+				JSON.stringify({
+					"species": object.get("species"),
+					"level": object.get("level"),
+					"item": object.get("item"),
+					"ability": object.get("ability"),
+					"nature": object.get("nature"),
+					"moves": object.get("moves"),
+					"evs": object.get("evs"),
+					"ivs": object.get("ivs"),
+				}),
 			])
 	return "|".join(parts)
+
+
+static func _legality_signature_fields(pokemon: Dictionary) -> Dictionary:
+	return {
+		"species": pokemon.get("species", pokemon.get("speciesId", "")),
+		"level": pokemon.get("level", 1),
+		"item": pokemon.get("heldItemId", pokemon.get("item", "")),
+		"ability": pokemon.get("ability", pokemon.get("abilityId", "")),
+		"nature": pokemon.get("nature", pokemon.get("natureId", "")),
+		"moves": pokemon.get("moves", []),
+		"evs": pokemon.get("evs", {}),
+		"ivs": pokemon.get("ivs", {}),
+		"happiness": pokemon.get("happiness", pokemon.get("friendship", null)),
+		"teraType": pokemon.get("teraType", pokemon.get("tera_type", "")),
+	}
 
 
 static func display_errors(result: Dictionary) -> Array[String]:
