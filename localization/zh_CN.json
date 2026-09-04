@@ -9,6 +9,8 @@
   "common.cancel": "取消",
   "common.confirm": "确认",
   "common.return": "返回",
+  "ui.fossil_choice.title": "选择化石",
+  "ui.fossil_choice.confirm": "这是{item}。确定选择它吗？",
   "story.mt_moon.cutscene.go": "去{pokemon}！",
   "story.mt_moon.cutscene.use_move": "{pokemon}，使用{move}！",
   "story.mt_moon.cutscene.player_speaker": "你",

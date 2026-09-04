@@ -9,6 +9,8 @@
   "common.cancel": "Cancelar",
   "common.confirm": "Confirmar",
   "common.return": "Voltar",
+  "ui.fossil_choice.title": "Escolha um fóssil",
+  "ui.fossil_choice.confirm": "Este é o {item}. Esta é a sua escolha?",
   "story.mt_moon.cutscene.go": "Vai, {pokemon}!",
   "story.mt_moon.cutscene.use_move": "{pokemon}, use {move}!",
   "story.mt_moon.cutscene.player_speaker": "Você",
