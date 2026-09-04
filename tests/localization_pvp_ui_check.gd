@@ -60,6 +60,7 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_sparring_tabs := overlay.get("pvp_ai_sparring_tabs") as TabContainer
 	var ai_sparring_status := overlay.get("pvp_ai_sparring_status_label") as Label
 	var ai_sparring_start := overlay.get("pvp_ai_sparring_start_button") as Button
+	var ai_sparring_team_source := overlay.get("pvp_ai_sparring_team_source_select") as OptionButton
 	var ai_research_start := overlay.get("pvp_ai5_playtest_start_button") as Button
 	var ai_research_tabs := overlay.get("pvp_ai5_playtest_tabs") as TabContainer
 	var ai_research_card := overlay.find_child("AiResearchCampaignCard", true, false) as PanelContainer
@@ -164,6 +165,21 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.current_tab == 0, "Free sparring is the default AI destination")
 	_check(overlay.find_child("AiVeteranPortrait", true, false) != null, "AI Sparring presents the Veteran trainer identity")
 	_check(ai_team_step != null, "Free sparring groups the player's team as its first step")
+	_check(
+		ai_sparring_team_source != null
+		and ai_sparring_team_source.item_count == 2
+		and str(ai_sparring_team_source.get_item_metadata(1)) == "party",
+		"Free sparring offers the current party as a team source"
+	)
+	_check(ai_training_input != null and ai_training_input.visible, "Free sparring starts with Showdown team input visible")
+	if ai_sparring_team_source != null:
+		ai_sparring_team_source.select(1)
+		overlay.call("_on_ai_sparring_team_source_selected", 1)
+	_check(ai_training_input != null and not ai_training_input.visible, "Choosing the current party hides the paste field")
+	if ai_sparring_team_source != null:
+		ai_sparring_team_source.select(0)
+		overlay.call("_on_ai_sparring_team_source_selected", 0)
+	_check(ai_training_input != null and ai_training_input.visible, "Switching back restores the paste field")
 	_check(ai_opponent_step != null, "Free sparring groups AI selection as its second step")
 	_check(
 		ai_team_step != null

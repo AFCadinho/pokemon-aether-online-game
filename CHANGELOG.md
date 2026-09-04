@@ -4,6 +4,8 @@
 
 - Battle side-condition indicators now sit below each active Pokémon's HP HUD beside its party preview, and trainer command callouts render above battle UI overlays.
 
+- AI Sparring Free Sparring can now use your current party directly, alongside Showdown team paste.
+
 - Move Maniac resource badges now show owned and required quantities at a glance.
 
 - Pokémon Center healing indicators keep the final Poké Ball centered in the two-column party grid.
