@@ -911,6 +911,12 @@ var pvp_ai_sparring_team_source_select: OptionButton
 var pvp_ai_sparring_party_preview: VBoxContainer
 var pvp_ai_sparring_party_preview_title: Label
 var pvp_ai_sparring_party_preview_grid: HBoxContainer
+var pvp_ai_sparring_history_status: Label
+var pvp_ai_sparring_history_list: VBoxContainer
+var pvp_ai_sparring_history_refresh_button: Button
+var pvp_ai_sparring_history_loaded := false
+var pvp_ai_sparring_history_in_flight := false
+var pvp_ai_sparring_history_matches: Array = []
 var pvp_ai5_playtest_status: Dictionary = {}
 var pvp_ai5_playtest_loading := false
 var pvp_training_team_preview_section: VBoxContainer
@@ -7257,6 +7263,50 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai_sparring_start_button.focus_mode = Control.FOCUS_NONE
 	pvp_ai_sparring_start_button.pressed.connect(_on_pvp_training_ai_start_pressed)
 	practice_layout.add_child(pvp_ai_sparring_start_button)
+
+	var history_page := _create_pvp_ranked_tab_page("Match History", 14)
+	history_page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.history")
+	pvp_ai_sparring_tabs.add_child(history_page)
+	var history_layout := VBoxContainer.new()
+	history_layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	history_layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	history_layout.add_theme_constant_override("separation", 10)
+	history_page.add_child(history_layout)
+
+	var history_header := HBoxContainer.new()
+	history_header.add_theme_constant_override("separation", 8)
+	history_layout.add_child(history_header)
+	pvp_ai_sparring_history_status = Label.new()
+	_set_localized_control_property(
+		pvp_ai_sparring_history_status,
+		"text",
+		"ui.pvp.ai_sparring.history.recent"
+	)
+	pvp_ai_sparring_history_status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_history_status.add_theme_color_override("font_color", UI_TEXT)
+	history_header.add_child(pvp_ai_sparring_history_status)
+	pvp_ai_sparring_history_refresh_button = Button.new()
+	_set_localized_control_property(
+		pvp_ai_sparring_history_refresh_button,
+		"text",
+		"ui.pvp.bans.refresh"
+	)
+	pvp_ai_sparring_history_refresh_button.custom_minimum_size = Vector2(92, 32)
+	pvp_ai_sparring_history_refresh_button.focus_mode = Control.FOCUS_NONE
+	pvp_ai_sparring_history_refresh_button.pressed.connect(
+		_on_pvp_ai_sparring_history_refresh_pressed
+	)
+	_apply_button_style(pvp_ai_sparring_history_refresh_button)
+	history_header.add_child(pvp_ai_sparring_history_refresh_button)
+
+	var history_scroll := ScrollContainer.new()
+	history_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	history_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	history_layout.add_child(history_scroll)
+	pvp_ai_sparring_history_list = VBoxContainer.new()
+	pvp_ai_sparring_history_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_history_list.add_theme_constant_override("separation", 8)
+	history_scroll.add_child(pvp_ai_sparring_history_list)
 
 	var research_page := _create_pvp_ranked_tab_page("Research", 14)
 	research_page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.research")
@@ -41815,7 +41865,7 @@ func _open_pvp_popup_section(section_name: String) -> void:
 		if not pvp_training_ai_catalog_loaded:
 			await _load_pvp_training_ai_catalog()
 		await _load_ai5_playtest_status()
-		_on_pvp_ai_sparring_tab_changed(pvp_ai_sparring_tabs.current_tab if pvp_ai_sparring_tabs != null else 1)
+		_on_pvp_ai_sparring_tab_changed(pvp_ai_sparring_tabs.current_tab if pvp_ai_sparring_tabs != null else 0)
 	if section_name != "Ranked":
 		return
 	if section_name == "Ranked":
@@ -42475,12 +42525,141 @@ func _on_pvp_room_mode_selected(mode: String) -> void:
 
 
 func _on_pvp_ai_sparring_tab_changed(tab_index: int) -> void:
-	var research_selected := tab_index == 1
-	pvp_room_selected_mode = "ai5_playtest" if research_selected else "ai"
+	var history_selected := tab_index == 1
+	var research_selected := tab_index == 2
+	pvp_room_selected_mode = "ai5_playtest" if research_selected else ("" if history_selected else "ai")
 	if pvp_popup_subtitle_label != null:
 		pvp_popup_subtitle_label.text = _pvp_popup_subtitle_for_section("AI Sparring")
+	if history_selected:
+		_refresh_pvp_ai_sparring_match_history()
 	if research_selected:
 		_refresh_ai5_playtest_panel()
+
+
+func _on_pvp_ai_sparring_history_refresh_pressed() -> void:
+	await _refresh_pvp_ai_sparring_match_history(true)
+
+
+func _refresh_pvp_ai_sparring_match_history(force: bool = false) -> void:
+	if pvp_ai_sparring_history_in_flight:
+		return
+	if pvp_ai_sparring_history_loaded and not force:
+		_render_pvp_ai_sparring_match_history(pvp_ai_sparring_history_matches)
+		return
+	pvp_ai_sparring_history_in_flight = true
+	if pvp_ai_sparring_history_refresh_button != null:
+		pvp_ai_sparring_history_refresh_button.disabled = true
+	if pvp_ai_sparring_history_status != null:
+		pvp_ai_sparring_history_status.text = LocalizationManager.text("ui.pvp.ai_sparring.history.loading")
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.get_training_ai_match_history(request, 20, 0)
+	request.queue_free()
+	pvp_ai_sparring_history_in_flight = false
+	if pvp_ai_sparring_history_refresh_button != null:
+		pvp_ai_sparring_history_refresh_button.disabled = false
+	if not bool(response.get("success", false)):
+		if pvp_ai_sparring_history_status != null:
+			pvp_ai_sparring_history_status.text = LocalizationManager.text("ui.pvp.ai_sparring.history.failed")
+		_render_pvp_ai_sparring_match_history([])
+		return
+	var matches_value: Variant = response.get("matches", [])
+	var matches: Array = matches_value as Array if matches_value is Array else []
+	pvp_ai_sparring_history_loaded = true
+	if pvp_ai_sparring_history_status != null:
+		pvp_ai_sparring_history_status.text = LocalizationManager.text("ui.pvp.ai_sparring.history.recent")
+	_render_pvp_ai_sparring_match_history(matches)
+
+
+func _render_pvp_ai_sparring_match_history(matches: Array) -> void:
+	pvp_ai_sparring_history_matches = matches.duplicate(true)
+	if pvp_ai_sparring_history_list == null:
+		return
+	for child in pvp_ai_sparring_history_list.get_children():
+		child.queue_free()
+	if matches.is_empty():
+		var empty_label := Label.new()
+		empty_label.text = LocalizationManager.text("ui.pvp.ai_sparring.history.empty")
+		empty_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+		pvp_ai_sparring_history_list.add_child(empty_label)
+		return
+	for value: Variant in matches:
+		if value is Dictionary:
+			pvp_ai_sparring_history_list.add_child(
+				_create_pvp_ai_sparring_history_card(value as Dictionary)
+			)
+
+
+func _create_pvp_ai_sparring_history_card(match: Dictionary) -> Control:
+	var card := PanelContainer.new()
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#0b1321e8"), Color("#5f79a499"), 8, 1)
+	)
+	var margin := MarginContainer.new()
+	for side in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_%s" % side, 10)
+	card.add_child(margin)
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 7)
+	margin.add_child(layout)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 10)
+	layout.add_child(header)
+	var result := str(match.get("result", "unknown")).to_lower()
+	var result_label := Label.new()
+	result_label.text = LocalizationManager.text(
+		"ui.pvp.ai_sparring.history.%s" % result if result in ["win", "loss", "draw"] else "ui.pvp.ai_sparring.history.unknown"
+	)
+	result_label.add_theme_font_size_override("font_size", 15)
+	result_label.add_theme_color_override(
+		"font_color",
+		Color("#75d59a") if result == "win" else (Color("#ef7b7b") if result == "loss" else UI_MUTED_TEXT)
+	)
+	header.add_child(result_label)
+	var ai_level := int(match.get("aiLevel", 4))
+	var opponent := Label.new()
+	opponent.text = LocalizationManager.text(
+		"ui.pvp.ai_sparring.history.opponent",
+		{"level": ai_level}
+	)
+	opponent.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	opponent.add_theme_color_override("font_color", UI_TEXT)
+	header.add_child(opponent)
+	var ended_at := str(match.get("endedAt", "")).strip_edges()
+	var date := Label.new()
+	date.text = "%s · %s" % [_pvp_history_date_label(ended_at), _pvp_history_clock_label(ended_at)]
+	date.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	header.add_child(date)
+
+	var teams := HBoxContainer.new()
+	teams.alignment = BoxContainer.ALIGNMENT_CENTER
+	teams.add_theme_constant_override("separation", 8)
+	layout.add_child(teams)
+	teams.add_child(_create_pvp_history_team_strip(_array_from_variant(match.get("playerRoster", []))))
+	var versus := Label.new()
+	versus.text = "VS"
+	versus.add_theme_color_override("font_color", Color("#f5df9a"))
+	teams.add_child(versus)
+	teams.add_child(_create_pvp_history_team_strip(_array_from_variant(match.get("opponentRoster", []))))
+
+	var details := Label.new()
+	var detail_parts: Array[String] = []
+	var team_name := str(match.get("teamDisplayName", "")).strip_edges()
+	if team_name != "":
+		detail_parts.append(team_name)
+	var turns := int(match.get("turns", 0))
+	if turns > 0:
+		detail_parts.append(LocalizationManager.text("ui.pvp.ai_sparring.history.turns", {"count": turns}))
+	var duration := _pvp_history_duration_label(match.get("durationSeconds", null))
+	if duration != "":
+		detail_parts.append(duration)
+	details.text = " · ".join(detail_parts)
+	details.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	details.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(details)
+	return card
 
 
 func _on_ai5_playtest_detail_tab_changed(tab_index: int) -> void:
@@ -46110,6 +46289,7 @@ func _start_training_ai_battle_from_response(response: Dictionary) -> void:
 		_set_pvp_status_key("ui.pvp.training.ai.start_failed")
 		pvp_battle_starting = false
 		return
+	pvp_ai_sparring_history_loaded = false
 	_clear_pvp_training_team_preview()
 	pvp_room_selected_mode = ""
 	if pvp_room_mode_selector != null:

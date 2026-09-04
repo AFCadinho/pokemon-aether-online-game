@@ -58,6 +58,7 @@ func _check_pvp_runtime_translation() -> void:
 	var room_ai_button := overlay.get("pvp_room_ai_mode_button") as Button
 	var ai_sparring_menu_button := overlay.get("pvp_mode_ai_sparring_button") as Button
 	var ai_sparring_tabs := overlay.get("pvp_ai_sparring_tabs") as TabContainer
+	var ai_sparring_history_list := overlay.get("pvp_ai_sparring_history_list") as VBoxContainer
 	var ai_sparring_intro := overlay.find_child("AiSparringIntro", true, false) as Label
 	var ai_sparring_start := overlay.get("pvp_ai_sparring_start_button") as Button
 	var ai_sparring_team_source := overlay.get("pvp_ai_sparring_team_source_select") as OptionButton
@@ -165,10 +166,29 @@ func _check_pvp_runtime_translation() -> void:
 		"AI training action uses the interactive room-button styling"
 	)
 	_check(ai_sparring_menu_button != null, "AI Sparring has its own PvP destination")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 2, "AI Sparring separates free practice from research")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 3, "AI Sparring separates practice, history and research")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(0) == "Vrij oefenen", "Free sparring tab renders in Dutch")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(1) == "Onderzoekscampagne", "Research tab renders in Dutch")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(1) == "Matchhistorie", "Match history tab renders in Dutch")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Onderzoekscampagne", "Research tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.current_tab == 0, "Free sparring is the default AI destination")
+	overlay.call("_render_pvp_ai_sparring_match_history", [{
+		"battleId": "battle-history-test",
+		"result": "win",
+		"aiLevel": 5,
+		"endedAt": "2026-09-04T12:00:00+00:00",
+		"durationSeconds": 125,
+		"turns": 14,
+		"teamDisplayName": "Balance Sample",
+		"playerRoster": [{"species": "Gholdengo"}],
+		"opponentRoster": [{"species": "Iron Treads"}],
+	}])
+	_check(ai_sparring_history_list != null and ai_sparring_history_list.get_child_count() == 1, "AI Sparring renders completed match-history cards")
+	var history_labels := ai_sparring_history_list.get_child(0).find_children("*", "Label", true, false) if ai_sparring_history_list != null and ai_sparring_history_list.get_child_count() == 1 else []
+	var history_text := ""
+	for history_label: Label in history_labels:
+		history_text += history_label.text + " "
+	_check(history_text.contains("Tegenstander: AI5"), "Match history identifies AI5 as the opponent")
+	_check(history_text.contains("Gewonnen"), "Match history shows the localized player result")
 	_check(overlay.find_child("AiVeteranPortrait", true, false) != null, "AI Sparring presents the Veteran trainer identity")
 	_check(ai_team_step != null, "Free sparring groups the player's team as its first step")
 	_check(
@@ -406,7 +426,7 @@ func _check_pvp_runtime_translation() -> void:
 	ai_research_tabs.current_tab = 0
 	overlay.call("_on_ai5_playtest_detail_tab_changed", 0)
 	_check(ai_research_start != null and ai_research_start.visible, "Assignment keeps the start action visible")
-	overlay.call("_on_pvp_ai_sparring_tab_changed", 1)
+	overlay.call("_on_pvp_ai_sparring_tab_changed", 2)
 	_check(popup.get_combined_minimum_size().y <= 620.0, "Research campaign fits inside the room popup without empty forced height")
 	overlay.call("_on_pvp_ai_sparring_tab_changed", 0)
 	_check(popup.get_combined_minimum_size().y <= 620.0, "AI mode and team selectors fit inside the room popup")
