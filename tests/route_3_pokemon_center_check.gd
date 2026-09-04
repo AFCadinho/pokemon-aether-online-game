@@ -15,6 +15,7 @@ func _run() -> void:
 	var route_source := FileAccess.get_file_as_string(ROUTE_3_PATH)
 	var center_source := FileAccess.get_file_as_string(CENTER_PATH)
 	var mt_moon_source := FileAccess.get_file_as_string(MT_MOON_1F_PATH)
+	_check_route_3_center_npc_spacing()
 	_check(center_source.contains('map_id = "kanto_route_3_pokemon_center"'), "center has a unique map id")
 	_check(center_source.contains('npc_id = "kanto_route_3_pokemon_center_nurse_joy"'), "center places Nurse Joy")
 	_check(center_source.contains('npc_id = "kanto_route_3_pokemon_center_magikarp_salesman"'), "center places the Magikarp salesman")
@@ -48,6 +49,23 @@ func _run() -> void:
 	_check(route_3_exit.contains('transition_facing_direction = "down"'), "Mt. Moon exit faces the player away from the cave")
 	_check(mt_moon_source.contains('[connection signal="body_entered" from="Exits/ToRoute3"'), "Mt. Moon listens for Route 3 return")
 	quit(1 if failed else 0)
+
+
+func _check_route_3_center_npc_spacing() -> void:
+	var packed := load(CENTER_PATH) as PackedScene
+	_check(packed != null, "Route 3 Pokemon Center loads for NPC spacing")
+	if packed == null:
+		return
+	var center := packed.instantiate()
+	var deleter := center.get_node_or_null("Entities/NPCs/MoveDeleter") as Node2D
+	var iris := center.get_node_or_null("Entities/NPCs/CamperIris") as Node2D
+	var paras := center.get_node_or_null("Entities/Pokemon/Paras") as Node2D
+	_check(deleter != null and iris != null and paras != null, "Route 3 Pokemon Center exposes specialist NPCs and Paras")
+	if deleter != null and iris != null and paras != null:
+		_check(iris.position != deleter.position, "Camper Iris no longer overlaps the Move Deleter")
+		_check(paras.position != deleter.position, "Paras no longer overlaps the Move Deleter")
+		_check(iris.position != paras.position, "Camper Iris and Paras have separate positions")
+	center.free()
 
 
 func _node_block(source: String, node_name: String, parent := "") -> String:
