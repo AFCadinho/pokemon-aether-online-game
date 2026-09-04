@@ -85,7 +85,7 @@ func _check_pvp_runtime_translation() -> void:
 	var training_ai_team_select := overlay.get("pvp_training_ai_team_select") as OptionButton
 	var ai_opponent_preview := overlay.get("pvp_training_ai_opponent_preview") as VBoxContainer
 	var ai_opponent_preview_title := overlay.get("pvp_training_ai_opponent_preview_title") as Label
-	var ai_opponent_preview_grid := overlay.get("pvp_training_ai_opponent_preview_grid") as GridContainer
+	var ai_opponent_preview_grid := overlay.get("pvp_training_ai_opponent_preview_grid") as HBoxContainer
 	var training_preview := overlay.get("pvp_training_team_preview_section") as VBoxContainer
 	var training_preview_title := overlay.get("pvp_training_team_preview_title") as Label
 	var training_preview_grid := overlay.get("pvp_training_team_preview_grid") as HBoxContainer
@@ -349,9 +349,9 @@ func _check_pvp_runtime_translation() -> void:
 	_check(training_ai_team_select.item_count == 2, "Choosing an archetype filters the specific team list")
 	_check(str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-stall-example", "Filtered team keeps its stable catalog identity")
 	_check(str(overlay.call("_resolved_pvp_training_ai_team_id")) == "smogon-ndou-stall-example", "Random archetype choice resolves to the exact team that will battle")
-	_check(ai_opponent_preview_grid.get_child(0).tooltip_text == "Alomomola", "AI opponent preview shows each Pokemon name")
+	_check(ai_opponent_preview_grid.get_child(0).tooltip_text == "Alomomola", "AI opponent preview exposes each Pokemon name on hover")
 	var first_opponent_name_labels := ai_opponent_preview_grid.get_child(0).find_children("*", "Label", true, false)
-	_check(not first_opponent_name_labels.is_empty() and (first_opponent_name_labels[0] as Label).text == "Alomomola", "AI opponent names remain visible beside their icons")
+	_check(first_opponent_name_labels.is_empty(), "AI opponent names stay out of the compact icon row")
 	_check(
 		is_equal_approx(
 			opponent_minimum_width_before_filter,

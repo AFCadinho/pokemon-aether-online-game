@@ -4348,7 +4348,7 @@
   "ui.pvp.training.ai.archetype.balance": "Balance",
   "ui.pvp.training.ai.archetype.stall": "Stall",
   "ui.pvp.training.ai.team_label": "EQUIPE IA",
-  "ui.pvp.training.ai.opponent_preview": "EQUIPE ADVERSÁRIA · {team}",
+  "ui.pvp.training.ai.opponent_preview": "EQUIPE ADVERSÁRIA",
   "ui.pvp.training.ai.team_random": "Equipe de amostra atual aleatória",
   "ui.pvp.training.ai.team_random_archetype": "Equipe aleatória do arquétipo",
   "ui.pvp.training.ai.form": "COLE SUA EQUIPE E ESCOLHA UM OPONENTE IA",

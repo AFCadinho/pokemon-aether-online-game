@@ -4348,7 +4348,7 @@
   "ui.pvp.training.ai.archetype.balance": "Balance",
   "ui.pvp.training.ai.archetype.stall": "Stall",
   "ui.pvp.training.ai.team_label": "AI-TEAM",
-  "ui.pvp.training.ai.opponent_preview": "TEAM TEGENSTANDER · {team}",
+  "ui.pvp.training.ai.opponent_preview": "TEAM TEGENSTANDER",
   "ui.pvp.training.ai.team_random": "Willekeurig huidig sampleteam",
   "ui.pvp.training.ai.team_random_archetype": "Willekeurig team binnen archetype",
   "ui.pvp.training.ai.form": "PLAK JE TEAM EN KIES EEN AI-TEGENSTANDER",
