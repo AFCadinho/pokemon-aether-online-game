@@ -458,7 +458,12 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_opponent_preview_grid != null and ai_opponent_preview_grid.get_child_count() == 6, "AI opponent preview renders all six Pokemon")
 	_check(ai_opponent_preview_title != null and ai_opponent_preview_title.text.begins_with("TEAM TEGENSTANDER"), "AI opponent preview identifies the resolved team")
 	var ai_sparring_hover_card := overlay.get("pvp_ai_sparring_hover_card") as PartyHoverCard
-	_check(ai_sparring_hover_card != null and ai_sparring_hover_card.storage_visuals, "Free Sparring reuses the PC Pokemon hover card")
+	_check(
+		ai_sparring_hover_card != null
+		and ai_sparring_hover_card.storage_visuals
+		and ai_sparring_hover_card.z_index == 1099,
+		"Free Sparring reuses the PC Pokemon hover card above the PvP popup"
+	)
 	_check(
 		ai_opponent_preview_grid != null
 		and not ai_opponent_preview_grid.get_child(0).get_signal_connection_list("mouse_entered").is_empty(),
