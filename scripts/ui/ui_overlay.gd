@@ -902,6 +902,7 @@ var pvp_ai5_playtest_start_step_label: Label
 var pvp_ai_sparring_start_button: Button
 var pvp_ai_sparring_tabs: TabContainer
 var pvp_ai_sparring_status_label: Label
+var pvp_ai_sparring_team_source_select: OptionButton
 var pvp_ai5_playtest_status: Dictionary = {}
 var pvp_ai5_playtest_loading := false
 var pvp_training_team_preview_section: VBoxContainer
@@ -7135,6 +7136,21 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	team_step.add_theme_font_size_override("font_size", 11)
 	team_step.add_theme_color_override("font_color", Color("#b9aaff"))
 	team_layout.add_child(team_step)
+
+	pvp_ai_sparring_team_source_select = OptionButton.new()
+	pvp_ai_sparring_team_source_select.custom_minimum_size = Vector2(0, 34)
+	pvp_ai_sparring_team_source_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_team_source_select.fit_to_longest_item = false
+	pvp_ai_sparring_team_source_select.clip_text = true
+	pvp_ai_sparring_team_source_select.focus_mode = Control.FOCUS_NONE
+	pvp_ai_sparring_team_source_select.add_item(LocalizationManager.text("ui.pvp.ai_sparring.team_source.paste"))
+	pvp_ai_sparring_team_source_select.set_item_metadata(0, "paste")
+	pvp_ai_sparring_team_source_select.add_item(LocalizationManager.text("ui.pvp.team.current_option"))
+	pvp_ai_sparring_team_source_select.set_item_metadata(1, "party")
+	pvp_ai_sparring_team_source_select.select(0)
+	pvp_ai_sparring_team_source_select.item_selected.connect(_on_ai_sparring_team_source_selected)
+	_apply_pvp_ranked_dropdown_style(pvp_ai_sparring_team_source_select, true)
+	team_layout.add_child(pvp_ai_sparring_team_source_select)
 
 	pvp_training_team_input = TextEdit.new()
 	_set_localized_control_property(pvp_training_team_input, "placeholder_text", "ui.pvp.training.paste_placeholder")
@@ -42832,12 +42848,19 @@ func _on_pvp_training_ai_start_pressed() -> void:
 	if not pvp_training_ai_enabled:
 		_set_pvp_status_key("ui.pvp.training.ai.unavailable")
 		return
+	var team_source := _selected_ai_sparring_team_source()
 	var team_text := pvp_training_team_input.text.strip_edges() if pvp_training_team_input != null else ""
-	if team_text == "":
+	if team_source == "paste" and team_text == "":
 		_set_pvp_status_key("ui.pvp.training.paste_required")
 		return
 	_set_pvp_room_busy(true)
 	_set_pvp_status_key("ui.pvp.training.ai.creating")
+	if team_source == "party":
+		team_text = await _export_ai_sparring_party_team()
+		if team_text == "":
+			_set_pvp_room_busy(false)
+			_set_pvp_status_key("ui.pvp.ai_sparring.party_export_failed")
+			return
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.create_training_ai_battle(
 		request,
@@ -42860,6 +42883,41 @@ func _on_pvp_training_ai_start_pressed() -> void:
 		return
 	_set_pvp_training_team_preview(response.get("ownTeam", []))
 	await _start_training_ai_battle_from_response(response)
+
+
+func _on_ai_sparring_team_source_selected(_index: int) -> void:
+	var use_party := _selected_ai_sparring_team_source() == "party"
+	if pvp_training_team_input != null:
+		pvp_training_team_input.visible = not use_party
+	if pvp_training_team_note != null:
+		_set_localized_control_property(
+			pvp_training_team_note,
+			"text",
+			"ui.pvp.ai_sparring.party_note" if use_party else "ui.pvp.training.ephemeral_note"
+		)
+
+
+func _selected_ai_sparring_team_source() -> String:
+	if pvp_ai_sparring_team_source_select == null:
+		return "paste"
+	var source := str(pvp_ai_sparring_team_source_select.get_selected_metadata()).strip_edges().to_lower()
+	return source if source in ["paste", "party"] else "paste"
+
+
+func _export_ai_sparring_party_team() -> String:
+	var party_value: Variant = PlayerSave.get("party")
+	if not (party_value is Array):
+		return ""
+	var team: Array = []
+	for pokemon_value: Variant in party_value:
+		if pokemon_value is Pokemon and str((pokemon_value as Pokemon).species).strip_edges() != "":
+			team.append((pokemon_value as Pokemon).to_battle_dict())
+	if team.is_empty():
+		return ""
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await PokemonDataApiClient.export_team(request, team)
+	request.queue_free()
+	return str(response.get("text", "")).strip_edges() if bool(response.get("success", false)) else ""
 
 
 func _on_pvp_create_room_pressed() -> void:
