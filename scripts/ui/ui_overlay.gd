@@ -936,6 +936,9 @@ var pvp_ai_sparring_catalog_use_opponent_button: Button
 var pvp_ai_sparring_catalog_selected_team_id := ""
 var pvp_ai_sparring_catalog_detail: Dictionary = {}
 var pvp_ai_sparring_catalog_detail_loading := false
+var pvp_ai_sparring_hover_card: PartyHoverCard
+var pvp_ai_sparring_hover_generation := 0
+var pvp_ai_sparring_hover_team_cache: Dictionary = {}
 var pvp_ai_sparring_history_status: Label
 var pvp_ai_sparring_history_list: VBoxContainer
 var pvp_ai_sparring_history_refresh_button: Button
@@ -5809,6 +5812,11 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_popup.add_theme_stylebox_override("panel", ranked_shell_style)
 	pvp_room_popup.gui_input.connect(_on_pvp_room_panel_gui_input)
 	root_control.add_child(pvp_room_popup)
+	pvp_ai_sparring_hover_card = PC_PARTY_HOVER_CARD_SCENE.instantiate() as PartyHoverCard
+	pvp_ai_sparring_hover_card.name = "AiSparringPokemonHoverCard"
+	pvp_ai_sparring_hover_card.z_index = UI_BASE_Z_INDEX + 4
+	pvp_ai_sparring_hover_card.set_show_storage_details(true)
+	root_control.add_child(pvp_ai_sparring_hover_card)
 
 	var margin_container := MarginContainer.new()
 	margin_container.add_theme_constant_override("margin_left", 16)
@@ -8576,7 +8584,7 @@ func _render_pvp_team_preview() -> void:
 		var pokemon: Pokemon = PlayerSave.party[slot_index] if slot_index < PlayerSave.party.size() else null
 		pvp_team_preview_grid.add_child(_create_pvp_team_preview_slot(pokemon, slot_index))
 
-func _create_pvp_team_preview_slot(pokemon: Pokemon, slot_index: int) -> Control:
+func _create_pvp_team_preview_slot(pokemon: Pokemon, slot_index: int, enable_ai_sparring_hover: bool = false) -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(62, 62)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -8601,7 +8609,10 @@ func _create_pvp_team_preview_slot(pokemon: Pokemon, slot_index: int) -> Control
 
 	icon.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
 	icon.modulate = Color(1, 1, 1, 1) if icon.texture != null else Color(1, 1, 1, 0.18)
-	panel.tooltip_text = _pokemon_display_name(pokemon)
+	if enable_ai_sparring_hover:
+		_connect_ai_sparring_hover(panel, _pc_pokemon_hover_data(pokemon.to_persistence_dict()))
+	else:
+		panel.tooltip_text = _pokemon_display_name(pokemon)
 	return panel
 
 func _set_pvp_training_team_preview(preview_value: Variant) -> void:
@@ -42653,6 +42664,7 @@ func _hide_pvp_room_popup_now(stop_queue_polling: bool = true) -> void:
 	pvp_history_in_flight = false
 	pvp_room_dragging = false
 	pvp_poll_elapsed = 0.0
+	_hide_ai_sparring_hover()
 	pvp_room_popup.visible = false
 	_deactivate_ui_panel(pvp_room_popup)
 
@@ -43234,14 +43246,18 @@ func _refresh_pvp_training_ai_opponent_preview() -> void:
 		var entry_value: Variant = pokemon[slot_index]
 		var pokemon_entry: Dictionary = entry_value as Dictionary if entry_value is Dictionary else {}
 		pvp_training_ai_opponent_preview_grid.add_child(
-			_create_pvp_training_ai_opponent_preview_slot(pokemon_entry)
+			_create_pvp_training_ai_opponent_preview_slot(
+				pokemon_entry, 50.0, 44.0, pvp_training_ai_resolved_team_id, slot_index
+			)
 		)
 
 
 func _create_pvp_training_ai_opponent_preview_slot(
 	entry: Dictionary,
 	panel_size: float = 50.0,
-	icon_size: float = 44.0
+	icon_size: float = 44.0,
+	hover_team_id: String = "",
+	hover_pokemon_index: int = -1
 ) -> Control:
 	var species := str(entry.get("species", "")).strip_edges()
 	var display_name := _localized_species_name(species, species)
@@ -43263,6 +43279,8 @@ func _create_pvp_training_ai_opponent_preview_slot(
 	icon.modulate = Color.WHITE if icon.texture != null else Color(1, 1, 1, 0.2)
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	center.add_child(icon)
+	if hover_team_id != "" and hover_pokemon_index >= 0:
+		_connect_ai_sparring_catalog_hover(panel, hover_team_id, hover_pokemon_index)
 	return panel
 
 
@@ -43699,9 +43717,16 @@ func _refresh_ai_sparring_catalog_preview() -> void:
 	if not pvp_ai_sparring_catalog_preview.visible:
 		return
 	pvp_ai_sparring_catalog_preview_title.text = str(entry.get("displayName", ""))
-	for pokemon_value: Variant in _array_from_variant(entry.get("pokemon", [])):
+	var team_id := _selected_ai_sparring_player_catalog_team_id()
+	var pokemon := _array_from_variant(entry.get("pokemon", []))
+	for pokemon_index in range(pokemon.size()):
+		var pokemon_value: Variant = pokemon[pokemon_index]
 		if pokemon_value is Dictionary:
-			pvp_ai_sparring_catalog_preview_grid.add_child(_create_pvp_training_ai_opponent_preview_slot(pokemon_value as Dictionary))
+			pvp_ai_sparring_catalog_preview_grid.add_child(
+				_create_pvp_training_ai_opponent_preview_slot(
+					pokemon_value as Dictionary, 50.0, 44.0, team_id, pokemon_index
+				)
+			)
 
 
 func _selected_pvp_training_ai_team_id() -> String:
@@ -43920,7 +43945,7 @@ func _refresh_ai_sparring_party_preview() -> void:
 			else null
 		)
 		pvp_ai_sparring_party_preview_grid.add_child(
-			_create_pvp_team_preview_slot(pokemon, slot_index)
+			_create_pvp_team_preview_slot(pokemon, slot_index, true)
 		)
 
 
@@ -43929,6 +43954,65 @@ func _selected_ai_sparring_team_source() -> String:
 		return "paste"
 	var source := str(pvp_ai_sparring_team_source_select.get_selected_metadata()).strip_edges().to_lower()
 	return source if source in ["paste", "party", "catalog"] else "paste"
+
+
+func _connect_ai_sparring_hover(slot: Control, pokemon_data: Dictionary) -> void:
+	slot.mouse_entered.connect(_show_ai_sparring_hover.bind(slot, pokemon_data))
+	slot.mouse_exited.connect(_hide_ai_sparring_hover)
+
+
+func _connect_ai_sparring_catalog_hover(slot: Control, team_id: String, pokemon_index: int) -> void:
+	slot.mouse_entered.connect(_show_ai_sparring_catalog_hover.bind(slot, team_id, pokemon_index))
+	slot.mouse_exited.connect(_hide_ai_sparring_hover)
+
+
+func _show_ai_sparring_hover(slot: Control, pokemon_data: Dictionary) -> void:
+	if pvp_ai_sparring_hover_card == null or pokemon_data.is_empty():
+		return
+	pvp_ai_sparring_hover_generation += 1
+	pvp_ai_sparring_hover_card.show_for_pokemon(pokemon_data)
+	_position_ai_sparring_hover_card(slot)
+
+
+func _show_ai_sparring_catalog_hover(slot: Control, team_id: String, pokemon_index: int) -> void:
+	pvp_ai_sparring_hover_generation += 1
+	var hover_generation := pvp_ai_sparring_hover_generation
+	var team := await _get_ai_sparring_hover_team(team_id)
+	if hover_generation != pvp_ai_sparring_hover_generation or not is_instance_valid(slot):
+		return
+	var pokemon := _array_from_variant(team.get("pokemon", []))
+	if pokemon_index < 0 or pokemon_index >= pokemon.size() or not (pokemon[pokemon_index] is Dictionary):
+		return
+	_show_ai_sparring_hover(slot, _pc_pokemon_hover_data(pokemon[pokemon_index] as Dictionary))
+
+
+func _get_ai_sparring_hover_team(team_id: String) -> Dictionary:
+	if team_id == "":
+		return {}
+	if pvp_ai_sparring_hover_team_cache.has(team_id):
+		return pvp_ai_sparring_hover_team_cache[team_id] as Dictionary
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.get_training_ai_team(request, team_id)
+	request.queue_free()
+	if bool(response.get("success", false)) and response.get("team") is Dictionary:
+		var team: Dictionary = (response.get("team") as Dictionary).duplicate(true)
+		pvp_ai_sparring_hover_team_cache[team_id] = team
+		return team
+	return {}
+
+
+func _position_ai_sparring_hover_card(slot: Control) -> void:
+	if pvp_ai_sparring_hover_card == null or slot == null:
+		return
+	pvp_ai_sparring_hover_card.position_near_rect(
+		slot.get_global_rect(), get_viewport().get_visible_rect().size
+	)
+
+
+func _hide_ai_sparring_hover() -> void:
+	pvp_ai_sparring_hover_generation += 1
+	if pvp_ai_sparring_hover_card != null:
+		pvp_ai_sparring_hover_card.hide_card()
 
 
 func _export_ai_sparring_party_team() -> String:
