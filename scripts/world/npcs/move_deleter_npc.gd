@@ -13,6 +13,7 @@ func interact_with_player(_player: Node2D) -> void:
 		])
 		return
 	await show_dialogue()
+	await show_dialogue([_text("ui.move_deleter.npc.free_service")])
 	var ui_overlay := (
 		get_tree().current_scene.get_node_or_null("UIOverlay")
 		if get_tree().current_scene != null
