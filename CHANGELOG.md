@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Move Maniac resource badges now show owned and required quantities at a glance.
+
 - Pokémon Center healing indicators keep the final Poké Ball centered in the two-column party grid.
 
 - Added confirmation before choosing the Helix or Dome Fossil in Mt. Moon.
