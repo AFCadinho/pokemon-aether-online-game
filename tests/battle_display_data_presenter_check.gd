@@ -256,15 +256,21 @@ func _check_training_ai_public_mega_event_updates_all_opponent_display_data() ->
 		"name": "Latios",
 		"metadataSlot": 1,
 	}], true)
-	# The current response still reports the base form. The public Mega event
-	# must nevertheless update the field HUD and trainer roster immediately.
-	presenter.remember_public_trainer_mega_species({
+	# Showdown's public protocol reports the base species plus its Mega Stone.
+	# Resolve that wire shape before it reaches the display presenter, exactly as
+	# battle.gd does while rendering the event.
+	var mega_event := {
 		"type": "mega",
 		"target": "p2a: Latios",
-		"species": "Latios-Mega",
+		"species": "Latios",
+		"item": "Latiosite",
 		"metadataSlot": 1,
 		"targetRef": {"metadataSlot": 1, "pokemonKey": "p2:slot:1"},
-	})
+	}
+	mega_event["species"] = state.resolve_mega_species_for_event(mega_event)
+	_check_equal(mega_event.get("species", ""), "Latios-Mega", "base-species Mega protocol resolves Latiosite to Mega Latios")
+	presenter.remember_public_trainer_mega_species(mega_event)
+	state.apply_event_conditions([mega_event])
 	_check_equal(presenter.get_active_display_species("p2"), "Latios-Mega", "AI Mega event updates the opponent field species before the next request")
 	_check_equal(presenter.get_active_display_name("p2"), "Latios-Mega", "AI Mega event updates the opponent HUD name before the next request")
 	var display_team: Array = presenter.get_display_team_data("p2")
