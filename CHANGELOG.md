@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring now includes a searchable Team Catalog with complete sets and one-click choices to use a published team or train against it.
+
 - AI Sparring now shows the complete form name, such as Samurott Hisui, when an unnicknamed Pokémon's battle ident contains only its base name.
 
 - AI Sparring now switches to the selected Pokémon even when Team Preview has reordered the active lead.

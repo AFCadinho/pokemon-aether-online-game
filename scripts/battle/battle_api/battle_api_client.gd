@@ -108,6 +108,12 @@ func get_training_ai_teams(request_node: HTTPRequest) -> Dictionary:
 		"/battle/pvp/training/ai/teams"
 	)
 
+func get_training_ai_team(request_node: HTTPRequest, team_id: String) -> Dictionary:
+	return await send_get_request(
+		request_node,
+		"/battle/pvp/training/ai/teams/%s" % team_id.strip_edges().uri_encode()
+	)
+
 func get_training_ai_match_history(request_node: HTTPRequest, limit: int = 20, offset: int = 0) -> Dictionary:
 	return await send_get_request(
 		request_node,
@@ -155,7 +161,8 @@ func create_training_ai_battle(
 	ai_team_id: String = "random",
 	ai_mode: String = "ai4",
 	ai_archetype: String = "random",
-	ai_team_text: String = ""
+	ai_team_text: String = "",
+	player_team_id: String = ""
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,
@@ -163,6 +170,7 @@ func create_training_ai_battle(
 		{
 			"player": player,
 			"teamText": team_text,
+			"playerTeamId": player_team_id.strip_edges(),
 			"teamId": ai_team_id if ai_team_id.strip_edges() != "" else "random",
 			"aiMode": ai_mode if ai_mode in ["ai4", "shadow", "active"] else "ai4",
 			"archetype": ai_archetype if ai_archetype.strip_edges() != "" else "random",

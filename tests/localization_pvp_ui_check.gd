@@ -66,6 +66,11 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_sparring_party_preview := overlay.get("pvp_ai_sparring_party_preview") as VBoxContainer
 	var ai_sparring_party_preview_title := overlay.get("pvp_ai_sparring_party_preview_title") as Label
 	var ai_sparring_party_preview_grid := overlay.get("pvp_ai_sparring_party_preview_grid") as HBoxContainer
+	var ai_sparring_catalog_search := overlay.get("pvp_ai_sparring_catalog_search") as LineEdit
+	var ai_sparring_catalog_results := overlay.get("pvp_ai_sparring_catalog_results") as VBoxContainer
+	var ai_sparring_catalog_player_select := overlay.get("pvp_ai_sparring_catalog_team_select") as OptionButton
+	var ai_sparring_catalog_use_player := overlay.get("pvp_ai_sparring_catalog_use_player_button") as Button
+	var ai_sparring_catalog_use_opponent := overlay.get("pvp_ai_sparring_catalog_use_opponent_button") as Button
 	var ai_research_start := overlay.get("pvp_ai5_playtest_start_button") as Button
 	var ai_research_tabs := overlay.get("pvp_ai5_playtest_tabs") as TabContainer
 	var ai_research_card := overlay.find_child("AiResearchCampaignCard", true, false) as PanelContainer
@@ -171,10 +176,11 @@ func _check_pvp_runtime_translation() -> void:
 		"AI training action uses the interactive room-button styling"
 	)
 	_check(ai_sparring_menu_button != null, "AI Sparring has its own PvP destination")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 3, "AI Sparring separates practice, history and research")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 4, "AI Sparring separates practice, team catalog, history and research")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(0) == "Vrij oefenen", "Free sparring tab renders in Dutch")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(1) == "Matchhistorie", "Match history tab renders in Dutch")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Onderzoekscampagne", "Research tab renders in Dutch")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(1) == "Teamcatalogus", "Team catalog tab renders in Dutch")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Matchhistorie", "Match history tab renders in Dutch")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(3) == "Onderzoekscampagne", "Research tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.current_tab == 0, "Free sparring is the default AI destination")
 	overlay.call("_render_pvp_ai_sparring_match_history", [{
 		"battleId": "battle-history-test",
@@ -206,10 +212,44 @@ func _check_pvp_runtime_translation() -> void:
 	)
 	_check(
 		ai_sparring_team_source != null
-		and ai_sparring_team_source.item_count == 2
+		and ai_sparring_team_source.item_count == 3
 		and str(ai_sparring_team_source.get_item_metadata(1)) == "party",
 		"Free sparring offers the current party as a team source"
 	)
+	_check(str(ai_sparring_team_source.get_item_metadata(2)) == "catalog", "Free sparring offers catalog teams as a player source")
+	var catalog_archetypes: Array[String] = ["balance"]
+	var catalog_entries: Array[Dictionary] = [{
+		"teamId": "catalog-balance",
+		"displayName": "Zapdos Balance",
+		"authors": ["Aether"],
+		"archetype": "balance",
+		"pokemon": [{"species": "Zapdos"}, {"species": "Gholdengo"}],
+	}]
+	overlay.set("pvp_training_ai_catalog_archetypes", catalog_archetypes)
+	overlay.set("pvp_training_ai_catalog_entries", catalog_entries)
+	overlay.call("_refresh_ai_sparring_player_catalog_options")
+	overlay.call("_refresh_ai_sparring_catalog_filters")
+	overlay.call("_refresh_ai_sparring_catalog_view")
+	_check(ai_sparring_catalog_search != null and ai_sparring_catalog_search.placeholder_text.begins_with("Zoek Pokémon"), "Catalog search renders in Dutch")
+	_check(ai_sparring_catalog_results != null and ai_sparring_catalog_results.get_child_count() == 1, "Catalog renders matching team cards")
+	ai_sparring_catalog_search.text = "Gholdengo"
+	overlay.call("_refresh_ai_sparring_catalog_view")
+	_check(ai_sparring_catalog_results.get_child_count() == 1, "Catalog search matches a Pokémon inside a team")
+	ai_sparring_catalog_search.text = "Pikachu"
+	overlay.call("_refresh_ai_sparring_catalog_view")
+	_check(ai_sparring_catalog_results.get_child_count() == 0, "Catalog search hides teams without the requested Pokémon")
+	ai_sparring_catalog_search.text = ""
+	_check(ai_sparring_catalog_player_select != null and ai_sparring_catalog_player_select.item_count == 1, "Catalog teams populate the player selector")
+	ai_sparring_team_source.select(2)
+	overlay.call("_on_ai_sparring_team_source_selected", 2)
+	_check(ai_sparring_catalog_player_select.visible, "Choosing a catalog player team reveals its selector")
+	_check(not ai_training_input.visible, "Choosing a catalog player team hides the PokéPaste field")
+	ai_sparring_team_source.select(0)
+	overlay.call("_on_ai_sparring_team_source_selected", 0)
+	overlay.set("pvp_ai_sparring_catalog_selected_team_id", "catalog-balance")
+	overlay.call("_render_ai_sparring_catalog_detail")
+	_check(ai_sparring_catalog_use_player != null and not ai_sparring_catalog_use_player.disabled, "Catalog selection enables use as player team")
+	_check(ai_sparring_catalog_use_opponent != null and not ai_sparring_catalog_use_opponent.disabled, "Catalog selection enables train-against action")
 	_check(ai_training_input != null and ai_training_input.visible, "Free sparring starts with Showdown team input visible")
 	if ai_sparring_team_source != null:
 		ai_sparring_team_source.select(1)
@@ -455,7 +495,9 @@ func _check_pvp_runtime_translation() -> void:
 	ai_research_tabs.current_tab = 0
 	overlay.call("_on_ai5_playtest_detail_tab_changed", 0)
 	_check(ai_research_start != null and ai_research_start.visible, "Assignment keeps the start action visible")
-	overlay.call("_on_pvp_ai_sparring_tab_changed", 2)
+	overlay.call("_on_pvp_ai_sparring_tab_changed", 1)
+	_check(popup.get_combined_minimum_size().y <= 620.0, "Team catalog fits inside the AI Sparring popup")
+	overlay.call("_on_pvp_ai_sparring_tab_changed", 3)
 	_check(popup.get_combined_minimum_size().y <= 620.0, "Research campaign fits inside the room popup without empty forced height")
 	overlay.call("_on_pvp_ai_sparring_tab_changed", 0)
 	_check(popup.get_combined_minimum_size().y <= 620.0, "AI mode and team selectors fit inside the room popup")
