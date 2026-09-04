@@ -83,6 +83,9 @@ func _check_pvp_runtime_translation() -> void:
 	var training_ai_archetype_select := overlay.get("pvp_training_ai_archetype_select") as OptionButton
 	var training_ai_team_row := overlay.get("pvp_training_ai_team_row") as HBoxContainer
 	var training_ai_team_select := overlay.get("pvp_training_ai_team_select") as OptionButton
+	var ai_opponent_preview := overlay.get("pvp_training_ai_opponent_preview") as VBoxContainer
+	var ai_opponent_preview_title := overlay.get("pvp_training_ai_opponent_preview_title") as Label
+	var ai_opponent_preview_grid := overlay.get("pvp_training_ai_opponent_preview_grid") as GridContainer
 	var training_preview := overlay.get("pvp_training_team_preview_section") as VBoxContainer
 	var training_preview_title := overlay.get("pvp_training_team_preview_title") as Label
 	var training_preview_grid := overlay.get("pvp_training_team_preview_grid") as HBoxContainer
@@ -281,12 +284,22 @@ func _check_pvp_runtime_translation() -> void:
 		"displayName": "Screens",
 		"authors": ["Lameflame"],
 		"archetype": "hyper_offense",
+		"pokemon": [
+			{"species": "Mawile-Mega"}, {"species": "Ceruledge"},
+			{"species": "Zamazenta"}, {"species": "Ogerpon-Wellspring"},
+			{"species": "Moltres-Galar"}, {"species": "Iron Treads"},
+		],
 	})
 	training_ai_catalog_entries.append({
 		"teamId": "smogon-ndou-stall-example",
 		"displayName": "Stall",
 		"authors": ["Example"],
 		"archetype": "stall",
+		"pokemon": [
+			{"species": "Alomomola"}, {"species": "Gliscor"},
+			{"species": "Blissey"}, {"species": "Corviknight"},
+			{"species": "Clodsire"}, {"species": "Sableye-Mega"},
+		],
 	})
 	var training_ai_available_modes: Array = overlay.get("pvp_training_ai_available_modes") as Array
 	training_ai_available_modes.assign(["ai4", "active"])
@@ -315,6 +328,9 @@ func _check_pvp_runtime_translation() -> void:
 	_check(training_ai_archetype_select != null and training_ai_archetype_select.item_count == 3, "Archetype selector includes random and catalog archetypes")
 	_check(training_ai_team_row != null and training_ai_team_row.visible, "AI flow exposes the sample-team selector")
 	_check(training_ai_team_select != null and training_ai_team_select.item_count == 3, "AI selector includes random and catalog choices")
+	_check(ai_opponent_preview != null and ai_opponent_preview.visible, "A random AI team is resolved before the battle starts")
+	_check(ai_opponent_preview_grid != null and ai_opponent_preview_grid.get_child_count() == 6, "AI opponent preview renders all six Pokemon")
+	_check(ai_opponent_preview_title != null and ai_opponent_preview_title.text.begins_with("TEAM TEGENSTANDER"), "AI opponent preview identifies the resolved team")
 	var training_ai_team_style := training_ai_team_select.get_theme_stylebox("normal") as StyleBoxFlat if training_ai_team_select != null else null
 	_check(training_ai_team_style != null and training_ai_team_style.bg_color == Color("#171630"), "The final AI team choice is visually distinct from supporting settings")
 	_check(
@@ -323,11 +339,19 @@ func _check_pvp_runtime_translation() -> void:
 		and str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-screens-lameflame",
 		"AI selector preserves the stable team ID"
 	)
+	training_ai_team_select.select(1)
+	overlay.call("_on_pvp_training_ai_team_selected", 1)
+	_check(str(overlay.call("_resolved_pvp_training_ai_team_id")) == "smogon-ndou-screens-lameflame", "Selecting a named AI team binds its exact preview and battle identity")
+	_check(ai_opponent_preview_grid.get_child(0).tooltip_text.contains("Mawile"), "Named AI team preview uses that team's roster")
 	var opponent_minimum_width_before_filter := ai_opponent_step.get_combined_minimum_size().x
 	training_ai_archetype_select.select(2)
 	overlay.call("_on_pvp_training_ai_archetype_selected", 2)
 	_check(training_ai_team_select.item_count == 2, "Choosing an archetype filters the specific team list")
 	_check(str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-stall-example", "Filtered team keeps its stable catalog identity")
+	_check(str(overlay.call("_resolved_pvp_training_ai_team_id")) == "smogon-ndou-stall-example", "Random archetype choice resolves to the exact team that will battle")
+	_check(ai_opponent_preview_grid.get_child(0).tooltip_text == "Alomomola", "AI opponent preview shows each Pokemon name")
+	var first_opponent_name_labels := ai_opponent_preview_grid.get_child(0).find_children("*", "Label", true, false)
+	_check(not first_opponent_name_labels.is_empty() and (first_opponent_name_labels[0] as Label).text == "Alomomola", "AI opponent names remain visible beside their icons")
 	_check(
 		is_equal_approx(
 			opponent_minimum_width_before_filter,

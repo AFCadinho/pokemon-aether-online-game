@@ -155,7 +155,7 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 		"AI creation sends the mode, archetype and selected stable team identity"
 	)
 	_check(
-		overlay_source.contains("_selected_pvp_training_ai_team_id()")
+		overlay_source.contains("_resolved_pvp_training_ai_team_id()")
 		and overlay_source.contains("_selected_pvp_training_ai_mode()")
 		and overlay_source.contains("_selected_pvp_training_ai_archetype()")
 		and overlay_source.contains("if \"ai4\" in raw_modes:")

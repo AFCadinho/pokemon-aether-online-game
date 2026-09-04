@@ -889,6 +889,10 @@ var pvp_training_ai_catalog_archetypes: Array[String] = []
 var pvp_training_ai_team_row: HBoxContainer
 var pvp_training_ai_team_select: OptionButton
 var pvp_training_ai_catalog_entries: Array[Dictionary] = []
+var pvp_training_ai_opponent_preview: VBoxContainer
+var pvp_training_ai_opponent_preview_title: Label
+var pvp_training_ai_opponent_preview_grid: GridContainer
+var pvp_training_ai_resolved_team_id := ""
 var pvp_training_ai_catalog_loaded := false
 var pvp_training_ai_catalog_loading := false
 var pvp_training_ai_enabled := false
@@ -6508,6 +6512,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_training_ai_team_select.focus_mode = Control.FOCUS_NONE
 	_apply_pvp_ranked_dropdown_style(pvp_training_ai_team_select, true)
 	_apply_ai_sparring_team_selector_style(pvp_training_ai_team_select)
+	pvp_training_ai_team_select.item_selected.connect(_on_pvp_training_ai_team_selected)
 	pvp_training_ai_team_row.add_child(pvp_training_ai_team_select)
 	_refresh_pvp_training_ai_team_options()
 
@@ -7193,6 +7198,26 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	for row: Control in [pvp_training_ai_mode_row, pvp_training_ai_archetype_row, pvp_training_ai_team_row]:
 		row.reparent(opponent_layout)
 		row.visible = true
+
+	pvp_training_ai_opponent_preview = VBoxContainer.new()
+	pvp_training_ai_opponent_preview.name = "AiSparringOpponentTeamPreview"
+	pvp_training_ai_opponent_preview.visible = false
+	pvp_training_ai_opponent_preview.add_theme_constant_override("separation", 6)
+	opponent_layout.add_child(pvp_training_ai_opponent_preview)
+
+	pvp_training_ai_opponent_preview_title = Label.new()
+	pvp_training_ai_opponent_preview_title.add_theme_font_size_override("font_size", 10)
+	pvp_training_ai_opponent_preview_title.add_theme_color_override("font_color", Color("#9be7b1"))
+	pvp_training_ai_opponent_preview_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	pvp_training_ai_opponent_preview.add_child(pvp_training_ai_opponent_preview_title)
+
+	pvp_training_ai_opponent_preview_grid = GridContainer.new()
+	pvp_training_ai_opponent_preview_grid.columns = 2
+	pvp_training_ai_opponent_preview_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_opponent_preview_grid.add_theme_constant_override("h_separation", 6)
+	pvp_training_ai_opponent_preview_grid.add_theme_constant_override("v_separation", 6)
+	pvp_training_ai_opponent_preview.add_child(pvp_training_ai_opponent_preview_grid)
+	_refresh_pvp_training_ai_opponent_preview()
 
 	var action_step := Label.new()
 	action_step.name = "AiSparringReadyStep"
@@ -42663,10 +42688,108 @@ func _refresh_pvp_training_ai_team_options() -> void:
 		if str(pvp_training_ai_team_select.get_item_metadata(index)) == previous_team_id:
 			pvp_training_ai_team_select.select(index)
 			break
+	_resolve_pvp_training_ai_opponent_team()
 
 
 func _on_pvp_training_ai_archetype_selected(_index: int) -> void:
 	_refresh_pvp_training_ai_team_options()
+
+
+func _on_pvp_training_ai_team_selected(_index: int) -> void:
+	_resolve_pvp_training_ai_opponent_team()
+
+
+func _resolve_pvp_training_ai_opponent_team() -> void:
+	var requested_team_id := _selected_pvp_training_ai_team_id()
+	var candidates: Array[Dictionary] = []
+	var requested_archetype := _selected_pvp_training_ai_archetype()
+	for entry: Dictionary in pvp_training_ai_catalog_entries:
+		if requested_archetype != "random" and str(entry.get("archetype", "")) != requested_archetype:
+			continue
+		if requested_team_id != "random" and str(entry.get("teamId", "")) != requested_team_id:
+			continue
+		candidates.append(entry)
+	if candidates.is_empty():
+		pvp_training_ai_resolved_team_id = ""
+	else:
+		var resolved: Dictionary = candidates[randi() % candidates.size()]
+		pvp_training_ai_resolved_team_id = str(resolved.get("teamId", "")).strip_edges()
+	_refresh_pvp_training_ai_opponent_preview()
+
+
+func _resolved_pvp_training_ai_team_id() -> String:
+	if pvp_training_ai_resolved_team_id != "":
+		return pvp_training_ai_resolved_team_id
+	return _selected_pvp_training_ai_team_id()
+
+
+func _refresh_pvp_training_ai_opponent_preview() -> void:
+	if pvp_training_ai_opponent_preview == null or pvp_training_ai_opponent_preview_grid == null:
+		return
+	var selected_entry: Dictionary = {}
+	for entry: Dictionary in pvp_training_ai_catalog_entries:
+		if str(entry.get("teamId", "")) == pvp_training_ai_resolved_team_id:
+			selected_entry = entry
+			break
+	for child: Node in pvp_training_ai_opponent_preview_grid.get_children():
+		pvp_training_ai_opponent_preview_grid.remove_child(child)
+		child.queue_free()
+	var pokemon_value: Variant = selected_entry.get("pokemon", [])
+	var pokemon: Array = pokemon_value if pokemon_value is Array else []
+	pvp_training_ai_opponent_preview.visible = not selected_entry.is_empty() and not pokemon.is_empty()
+	if not pvp_training_ai_opponent_preview.visible:
+		return
+	var display_name := str(selected_entry.get("displayName", selected_entry.get("teamId", ""))).strip_edges()
+	pvp_training_ai_opponent_preview_title.text = LocalizationManager.text(
+		"ui.pvp.training.ai.opponent_preview",
+		{"team": display_name}
+	)
+	for slot_index in range(min(MAX_PARTY_SIZE, pokemon.size())):
+		var entry_value: Variant = pokemon[slot_index]
+		var pokemon_entry: Dictionary = entry_value as Dictionary if entry_value is Dictionary else {}
+		pvp_training_ai_opponent_preview_grid.add_child(
+			_create_pvp_training_ai_opponent_preview_slot(pokemon_entry)
+		)
+
+
+func _create_pvp_training_ai_opponent_preview_slot(entry: Dictionary) -> Control:
+	var species := str(entry.get("species", "")).strip_edges()
+	var display_name := _localized_species_name(species, species)
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(0, 40)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.tooltip_text = display_name
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(Color("#091725d9"), Color("#31506f99"), 7, 1)
+	)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 5)
+	margin.add_theme_constant_override("margin_top", 3)
+	margin.add_theme_constant_override("margin_right", 6)
+	margin.add_theme_constant_override("margin_bottom", 3)
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 5)
+	margin.add_child(row)
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(32, 32)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = PokemonAssets.load_party_icon(species, false)
+	icon.modulate = Color.WHITE if icon.texture != null else Color(1, 1, 1, 0.2)
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(icon)
+	var name_label := Label.new()
+	name_label.text = display_name
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.add_theme_font_size_override("font_size", 10)
+	name_label.add_theme_color_override("font_color", UI_TEXT)
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(name_label)
+	return panel
 
 
 func _load_pvp_training_ai_catalog() -> void:
@@ -42861,12 +42984,13 @@ func _on_pvp_training_ai_start_pressed() -> void:
 			_set_pvp_room_busy(false)
 			_set_pvp_status_key("ui.pvp.ai_sparring.party_export_failed")
 			return
+	var resolved_ai_team_id := _resolved_pvp_training_ai_team_id()
 	var request := _create_pvp_request_node()
 	var response: Dictionary = await BattleApiClient.create_training_ai_battle(
 		request,
 		_pvp_room_player_payload(),
 		team_text,
-		_selected_pvp_training_ai_team_id(),
+		resolved_ai_team_id,
 		_selected_pvp_training_ai_mode(),
 		_selected_pvp_training_ai_archetype()
 	)
@@ -42881,6 +43005,8 @@ func _on_pvp_training_ai_start_pressed() -> void:
 		)
 		push_warning("UIOverlay: training AI battle start failed: %s" % str(response.get("error", response.get("detail", "Unknown error"))))
 		return
+	if _selected_pvp_training_ai_team_id() == "random":
+		_resolve_pvp_training_ai_opponent_team()
 	_set_pvp_training_team_preview(response.get("ownTeam", []))
 	await _start_training_ai_battle_from_response(response)
 

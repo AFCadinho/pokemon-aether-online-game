@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- AI Sparring now previews all six Pokémon and their names before starting a Free Sparring battle, including the team resolved from a random selection.
 - Battle side-condition indicators now sit below each active Pokémon's HP HUD beside its party preview, and trainer command callouts render above battle UI overlays.
 
 - Battle side-condition indicators now stay toward the outer party rails so active Pokémon boost badges remain unobstructed.
