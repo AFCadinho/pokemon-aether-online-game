@@ -199,7 +199,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_team_step != null, "Free sparring groups the player's team as its first step")
 	_check(
 		ai_sparring_setup_steps != null
-		and is_equal_approx(ai_sparring_setup_steps.custom_minimum_size.y, 282.0)
+		and is_equal_approx(ai_sparring_setup_steps.custom_minimum_size.y, 310.0)
 		and ai_team_step.size_flags_vertical == Control.SIZE_EXPAND_FILL
 		and ai_opponent_step.size_flags_vertical == Control.SIZE_EXPAND_FILL,
 		"AI setup cards fill one stable shared-height row"
