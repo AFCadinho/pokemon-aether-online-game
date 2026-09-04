@@ -117,6 +117,10 @@ func get_training_ai_match_history(request_node: HTTPRequest, limit: int = 20, o
 		]
 	)
 
+
+func clear_training_ai_match_history(request_node: HTTPRequest) -> Dictionary:
+	return await send_delete_request(request_node, "/account/pvp/training-ai/history/me")
+
 func get_ai5_playtest_status(request_node: HTTPRequest) -> Dictionary:
 	return await send_get_request(request_node, "/battle/pvp/training/ai/playtest")
 
@@ -672,6 +676,25 @@ func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary
 		JSON.stringify(body)
 	)
 	
+	if error != OK:
+		return {
+			"success": false,
+			"error": "Request failed to start",
+			"code": error,
+		}
+
+	return await _read_json_response(request_node)
+
+
+func send_delete_request(request_node: HTTPRequest, path: String) -> Dictionary:
+	var api_base_url: String = await GatewayApiConfig.get_base_url()
+
+	var error: int = request_node.request(
+		api_base_url + path,
+		GatewayApiConfig.get_accept_headers(),
+		HTTPClient.METHOD_DELETE
+	)
+
 	if error != OK:
 		return {
 			"success": false,
