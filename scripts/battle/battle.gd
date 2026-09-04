@@ -11131,12 +11131,13 @@ func _local_player_needs_force_switch_ui() -> bool:
 		return pvp_own_force_switch_required and pvp_own_action_required
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_local_state_player_id(), "p1")
 	for player_id in candidate_player_ids:
-		var request_is_waiting := false
+		var request_is_waiting := _player_request_is_waiting(player_id)
 		var decision_allows_choice := true
+		if request_is_waiting:
+			return false
 		if _is_pvp_battle():
-			request_is_waiting = _player_request_is_waiting(player_id)
 			decision_allows_choice = _pvp_local_decision_allows_choice(player_id)
-			if request_is_waiting or not decision_allows_choice:
+			if not decision_allows_choice:
 				return false
 
 		if force_switch_flow.player_needs_force_switch(player_id):
@@ -11162,12 +11163,13 @@ func _opponent_player_needs_force_switch_ui() -> bool:
 		return pvp_opponent_force_switch_required and pvp_opponent_action_required
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_opponent_state_player_id(), "p2")
 	for player_id in candidate_player_ids:
-		var request_is_waiting := false
+		var request_is_waiting := _player_request_is_waiting(player_id)
 		var decision_allows_choice := true
+		if request_is_waiting:
+			return false
 		if _is_pvp_battle():
-			request_is_waiting = _player_request_is_waiting(player_id)
 			decision_allows_choice = _pvp_local_decision_allows_choice(player_id)
-			if request_is_waiting or not decision_allows_choice:
+			if not decision_allows_choice:
 				return false
 
 		if force_switch_flow.player_needs_force_switch(player_id):
@@ -14780,6 +14782,8 @@ func _response_has_opponent_force_switch(response: Dictionary) -> bool:
 			continue
 
 		var opponent_request: Dictionary = opponent_request_value as Dictionary
+		if bool(opponent_request.get("wait", false)):
+			continue
 		var force_switch_value: Variant = opponent_request.get("forceSwitch", [])
 		if force_switch_value is Array:
 			var force_switches: Array = force_switch_value as Array
