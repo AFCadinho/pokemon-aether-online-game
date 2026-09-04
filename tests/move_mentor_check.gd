@@ -190,9 +190,8 @@ func _check_popup_scene() -> void:
 	_check(not learn_button.disabled, "Move Mentor enables Teach move before choosing a replacement")
 	_check(
 		learn_button.text.contains("1")
-			and learn_button.icon != null
-			and learn_button.icon.resource_path.ends_with("RESONITEORE.png")
-			and learn_button.icon.get_size() == Vector2(32, 32),
+			and learn_button.icon == null
+			and learn_button.text.contains("1"),
 		"Move Mentor Teach button shows the selected resource cost"
 	)
 	var first_current_move := current_moves_list.get_child(0) as Button

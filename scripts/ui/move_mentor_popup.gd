@@ -153,8 +153,6 @@ func _build_interface() -> void:
 	learn_button = Button.new()
 	_set_localized_property(learn_button, "text", "ui.move_mentor.learn")
 	learn_button.custom_minimum_size = Vector2(170, 42)
-	learn_button.icon_max_width = 18
-	learn_button.expand_icon = true
 	learn_button.focus_mode = Control.FOCUS_NONE
 	learn_button.disabled = true
 	learn_button.pressed.connect(_on_learn_pressed)
@@ -791,7 +789,10 @@ func _refresh_action_state() -> void:
 		var owned := maxi(int(cost.get("ownedQuantity", 0)), 0)
 		var item_name := _item_name(item_id)
 		learn_button.text = _t("ui.move_mentor.learn_cost", {"quantity": quantity})
-		learn_button.icon = _item_icon_texture(item_id)
+		# The required amount is already part of the button text. Keeping the
+		# button icon empty prevents item sprites with different sizes from
+		# changing the action button layout.
+		learn_button.icon = null
 		learn_button.tooltip_text = _t("ui.move_mentor.cost.tooltip", {
 			"item": item_name,
 			"required": quantity,
