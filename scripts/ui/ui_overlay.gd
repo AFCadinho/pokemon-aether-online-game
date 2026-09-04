@@ -43951,6 +43951,13 @@ func _ai_sparring_team_catalog_tier(entry: Dictionary) -> String:
 		var value := str(entry.get(key, "")).strip_edges().to_lower()
 		if value in ["none", "aether-ou", "aether-uu"]:
 			return value
+	var source_file := str(entry.get("sourceFile", "")).to_lower()
+	if source_file.begins_with("open/"):
+		return "none"
+	if source_file.begins_with("aether-ou/"):
+		return "aether-ou"
+	if source_file.begins_with("aether-uu/"):
+		return "aether-uu"
 	var eligible_value: Variant = entry.get("eligibleTierIds", [])
 	if eligible_value is Array and (eligible_value as Array).size() == 1:
 		var only_tier := str((eligible_value as Array)[0]).strip_edges().to_lower()
