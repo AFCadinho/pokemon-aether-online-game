@@ -162,7 +162,8 @@ func create_training_ai_battle(
 	ai_mode: String = "ai4",
 	ai_archetype: String = "random",
 	ai_team_text: String = "",
-	player_team_id: String = ""
+	player_team_id: String = "",
+	tier_id: String = "none"
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,
@@ -176,6 +177,7 @@ func create_training_ai_battle(
 			"archetype": ai_archetype if ai_archetype.strip_edges() != "" else "random",
 			"aiTeamText": ai_team_text.strip_edges(),
 			"formatId": FORMAT_ID,
+			"tierId": tier_id if tier_id in ["none", "aether-ou", "aether-uu"] else "none",
 		}
 	)
 

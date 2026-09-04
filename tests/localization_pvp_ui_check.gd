@@ -63,11 +63,13 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_sparring_intro := overlay.find_child("AiSparringIntro", true, false) as Label
 	var ai_sparring_practice_hero := overlay.find_child("AiSparringPracticeHero", true, false) as PanelContainer
 	var ai_sparring_start := overlay.get("pvp_ai_sparring_start_button") as Button
+	var ai_sparring_tier_select := overlay.get("pvp_ai_sparring_tier_select") as OptionButton
 	var ai_sparring_team_source := overlay.get("pvp_ai_sparring_team_source_select") as OptionButton
 	var ai_sparring_party_preview := overlay.get("pvp_ai_sparring_party_preview") as VBoxContainer
 	var ai_sparring_party_preview_title := overlay.get("pvp_ai_sparring_party_preview_title") as Label
 	var ai_sparring_party_preview_grid := overlay.get("pvp_ai_sparring_party_preview_grid") as HBoxContainer
 	var ai_sparring_catalog_search := overlay.get("pvp_ai_sparring_catalog_search") as LineEdit
+	var ai_sparring_catalog_tier := overlay.get("pvp_ai_sparring_catalog_tier") as OptionButton
 	var ai_sparring_catalog_results := overlay.get("pvp_ai_sparring_catalog_results") as VBoxContainer
 	var ai_sparring_catalog_player_select := overlay.get("pvp_ai_sparring_catalog_team_select") as OptionButton
 	var ai_sparring_catalog_use_player := overlay.get("pvp_ai_sparring_catalog_use_player_button") as Button
@@ -186,6 +188,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(3) == "Onderzoekscampagne", "Research tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.custom_minimum_size.y == 520.0, "AI Sparring keeps a stable workspace height across tabs")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.current_tab == 0, "Free sparring is the default AI destination")
+	_check(ai_sparring_tier_select != null and ai_sparring_tier_select.item_count == 1 and ai_sparring_tier_select.get_item_text(0) == "Open" and str(ai_sparring_tier_select.get_selected_metadata()) == "none", "Free sparring safely defaults to the open tier")
 	_check(
 		ai_sparring_practice_hero != null
 		and ai_sparring_practice_hero.get_parent().get_parent() == ai_sparring_tabs.get_tab_control(0),
@@ -232,14 +235,24 @@ func _check_pvp_runtime_translation() -> void:
 		"displayName": "Zapdos Balance",
 		"authors": ["Aether"],
 		"archetype": "balance",
+		"eligibleTierIds": ["none", "aether-ou", "aether-uu"],
 		"pokemon": [{"species": "Zapdos"}, {"species": "Gholdengo"}],
 	}]
 	overlay.set("pvp_training_ai_catalog_archetypes", catalog_archetypes)
 	overlay.set("pvp_training_ai_catalog_entries", catalog_entries)
+	var catalog_tiers: Array[Dictionary] = [
+		{"tierId": "none", "tierName": "Open"},
+		{"tierId": "aether-ou", "tierName": "Aether OU"},
+		{"tierId": "aether-uu", "tierName": "Aether UU"},
+	]
+	overlay.set("pvp_training_ai_tiers", catalog_tiers)
+	overlay.call("_refresh_ai_sparring_tier_options")
 	overlay.call("_refresh_ai_sparring_player_catalog_options")
 	overlay.call("_refresh_ai_sparring_catalog_filters")
 	overlay.call("_refresh_ai_sparring_catalog_view")
 	_check(ai_sparring_catalog_search != null and ai_sparring_catalog_search.placeholder_text.begins_with("Zoek Pokémon"), "Catalog search renders in Dutch")
+	_check(ai_sparring_tier_select.item_count == 3 and ai_sparring_tier_select.get_item_text(2) == "Aether UU", "Free sparring offers Open, Aether OU and Aether UU")
+	_check(ai_sparring_catalog_tier != null and ai_sparring_catalog_tier.item_count == 4, "Team catalog adds a tier eligibility filter")
 	_check(ai_sparring_catalog_results != null and ai_sparring_catalog_results.get_child_count() == 1, "Catalog renders matching team cards")
 	var catalog_card := ai_sparring_catalog_results.get_child(0) as PanelContainer if ai_sparring_catalog_results != null and ai_sparring_catalog_results.get_child_count() == 1 else null
 	_check(catalog_card != null and catalog_card.mouse_default_cursor_shape == Control.CURSOR_POINTING_HAND, "The complete catalog team card is selectable")

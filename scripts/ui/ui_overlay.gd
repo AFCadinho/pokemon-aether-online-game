@@ -901,6 +901,7 @@ var pvp_training_ai_catalog_archetypes: Array[String] = []
 var pvp_training_ai_team_row: HBoxContainer
 var pvp_training_ai_team_select: OptionButton
 var pvp_training_ai_catalog_entries: Array[Dictionary] = []
+var pvp_training_ai_tiers: Array[Dictionary] = []
 var pvp_training_ai_opponent_preview: VBoxContainer
 var pvp_training_ai_opponent_preview_title: Label
 var pvp_training_ai_opponent_preview_grid: HBoxContainer
@@ -917,6 +918,7 @@ var pvp_ai5_playtest_start_button: Button
 var pvp_ai5_playtest_start_step_label: Label
 var pvp_ai_sparring_start_button: Button
 var pvp_ai_sparring_tabs: TabContainer
+var pvp_ai_sparring_tier_select: OptionButton
 var pvp_ai_sparring_status_label: Label
 var pvp_ai_sparring_team_source_select: OptionButton
 var pvp_ai_sparring_party_preview: VBoxContainer
@@ -928,6 +930,7 @@ var pvp_ai_sparring_catalog_preview_title: Label
 var pvp_ai_sparring_catalog_preview_grid: HBoxContainer
 var pvp_ai_sparring_catalog_search: LineEdit
 var pvp_ai_sparring_catalog_archetype: OptionButton
+var pvp_ai_sparring_catalog_tier: OptionButton
 var pvp_ai_sparring_catalog_results: VBoxContainer
 var pvp_ai_sparring_catalog_status: Label
 var pvp_ai_sparring_catalog_detail_title: Label
@@ -7215,6 +7218,29 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	practice_page.add_child(practice_layout)
 	practice_layout.add_child(hero)
 
+	var tier_row := VBoxContainer.new()
+	tier_row.name = "AiSparringTierRow"
+	tier_row.custom_minimum_size = Vector2(190, 0)
+	tier_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	tier_row.add_theme_constant_override("separation", 4)
+	hero_row.add_child(tier_row)
+	var tier_label := Label.new()
+	_set_localized_control_property(tier_label, "text", "ui.pvp.room.tier.label")
+	tier_label.custom_minimum_size = Vector2(0, 20)
+	tier_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	tier_label.add_theme_color_override("font_color", Color("#b9aaff"))
+	tier_row.add_child(tier_label)
+	pvp_ai_sparring_tier_select = OptionButton.new()
+	pvp_ai_sparring_tier_select.name = "AiSparringTierSelect"
+	pvp_ai_sparring_tier_select.custom_minimum_size = Vector2(190, 34)
+	pvp_ai_sparring_tier_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_tier_select.fit_to_longest_item = false
+	pvp_ai_sparring_tier_select.clip_text = true
+	pvp_ai_sparring_tier_select.item_selected.connect(_on_ai_sparring_tier_selected)
+	_apply_pvp_ranked_dropdown_style(pvp_ai_sparring_tier_select, true)
+	tier_row.add_child(pvp_ai_sparring_tier_select)
+	_refresh_ai_sparring_tier_options()
+
 	var practice_steps := HBoxContainer.new()
 	practice_steps.custom_minimum_size = Vector2(0, AI_SPARRING_OPPONENT_STEP_MIN_HEIGHT)
 	practice_steps.add_theme_constant_override("separation", 12)
@@ -7416,6 +7442,12 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai_sparring_catalog_archetype.item_selected.connect(_on_ai_sparring_catalog_archetype_selected)
 	_apply_pvp_ranked_dropdown_style(pvp_ai_sparring_catalog_archetype, true)
 	catalog_filter_row.add_child(pvp_ai_sparring_catalog_archetype)
+	pvp_ai_sparring_catalog_tier = OptionButton.new()
+	pvp_ai_sparring_catalog_tier.custom_minimum_size = Vector2(155, 34)
+	pvp_ai_sparring_catalog_tier.fit_to_longest_item = false
+	pvp_ai_sparring_catalog_tier.item_selected.connect(_on_ai_sparring_catalog_tier_selected)
+	_apply_pvp_ranked_dropdown_style(pvp_ai_sparring_catalog_tier, true)
+	catalog_filter_row.add_child(pvp_ai_sparring_catalog_tier)
 	pvp_ai_sparring_catalog_status = Label.new()
 	pvp_ai_sparring_catalog_status.add_theme_font_size_override("font_size", 11)
 	pvp_ai_sparring_catalog_status.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -42956,6 +42988,9 @@ func _create_pvp_ai_sparring_history_card(match: Dictionary) -> Control:
 	var team_name := str(match.get("teamDisplayName", "")).strip_edges()
 	if team_name != "":
 		detail_parts.append(team_name)
+	var tier_id := str(match.get("tierId", "none")).strip_edges()
+	if tier_id in ["none", "aether-ou", "aether-uu"]:
+		detail_parts.append(_ai_sparring_tier_label(tier_id))
 	var turns := int(match.get("turns", 0))
 	if turns > 0:
 		detail_parts.append(LocalizationManager.text("ui.pvp.ai_sparring.history.turns", {"count": turns}))
@@ -43171,6 +43206,8 @@ func _refresh_pvp_training_ai_team_options() -> void:
 	))
 	pvp_training_ai_team_select.set_item_metadata(0, "random")
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
+		if not _ai_sparring_team_is_eligible(entry, _selected_ai_sparring_tier_id()):
+			continue
 		if requested_archetype != "random" and str(entry.get("archetype", "")) != requested_archetype:
 			continue
 		var display_name := str(entry.get("displayName", entry.get("teamId", ""))).strip_edges()
@@ -43188,6 +43225,13 @@ func _refresh_pvp_training_ai_team_options() -> void:
 
 func _on_pvp_training_ai_archetype_selected(_index: int) -> void:
 	_refresh_pvp_training_ai_team_options()
+
+
+func _on_ai_sparring_tier_selected(_index: int) -> void:
+	_refresh_pvp_training_ai_team_options()
+	_refresh_ai_sparring_player_catalog_options()
+	_refresh_ai_sparring_catalog_preview()
+	_refresh_pvp_training_ai_opponent_preview()
 
 
 func _on_pvp_training_ai_team_selected(_index: int) -> void:
@@ -43311,9 +43355,18 @@ func _load_pvp_training_ai_catalog() -> void:
 	pvp_training_ai_catalog_loading = false
 	pvp_training_ai_catalog_loaded = bool(response.get("success", false))
 	pvp_training_ai_catalog_entries.clear()
+	pvp_training_ai_tiers.clear()
 	pvp_training_ai_available_modes.clear()
 	pvp_training_ai_catalog_archetypes.clear()
 	if pvp_training_ai_catalog_loaded:
+		var tiers_value: Variant = response.get("tiers", [])
+		if tiers_value is Array:
+			for tier_value: Variant in tiers_value:
+				if tier_value is Dictionary:
+					var tier := (tier_value as Dictionary).duplicate(true)
+					var tier_id := str(tier.get("tierId", "")).strip_edges().to_lower()
+					if tier_id in ["none", "aether-ou", "aether-uu"]:
+						pvp_training_ai_tiers.append(tier)
 		var modes_value: Variant = response.get("availableModes", [])
 		if modes_value is Array:
 			var raw_modes: Array[String] = []
@@ -43353,6 +43406,7 @@ func _load_pvp_training_ai_catalog() -> void:
 			and not pvp_training_ai_catalog_entries.is_empty()
 		)
 	_refresh_pvp_training_ai_mode_options()
+	_refresh_ai_sparring_tier_options()
 	_refresh_pvp_training_ai_team_source_options()
 	_refresh_pvp_training_ai_archetype_options()
 	_refresh_pvp_training_ai_team_options()
@@ -43370,6 +43424,8 @@ func _refresh_ai_sparring_player_catalog_options() -> void:
 	var previous_id := _selected_ai_sparring_player_catalog_team_id()
 	pvp_ai_sparring_catalog_team_select.clear()
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
+		if not _ai_sparring_team_is_eligible(entry, _selected_ai_sparring_tier_id()):
+			continue
 		var team_id := str(entry.get("teamId", ""))
 		pvp_ai_sparring_catalog_team_select.add_item(str(entry.get("displayName", team_id)))
 		pvp_ai_sparring_catalog_team_select.set_item_metadata(
@@ -43402,6 +43458,16 @@ func _refresh_ai_sparring_catalog_filters() -> void:
 			archetype
 		)
 	_select_option_by_metadata(pvp_ai_sparring_catalog_archetype, previous)
+	if pvp_ai_sparring_catalog_tier != null:
+		var previous_tier := str(pvp_ai_sparring_catalog_tier.get_selected_metadata())
+		pvp_ai_sparring_catalog_tier.clear()
+		pvp_ai_sparring_catalog_tier.add_item(LocalizationManager.text("ui.pvp.ai_sparring.catalog.all_tiers"))
+		pvp_ai_sparring_catalog_tier.set_item_metadata(0, "all")
+		for tier: Dictionary in pvp_training_ai_tiers:
+			var tier_id := str(tier.get("tierId", "none"))
+			pvp_ai_sparring_catalog_tier.add_item(_ai_sparring_tier_label(tier_id))
+			pvp_ai_sparring_catalog_tier.set_item_metadata(pvp_ai_sparring_catalog_tier.item_count - 1, tier_id)
+		_select_option_by_metadata(pvp_ai_sparring_catalog_tier, previous_tier)
 
 
 func _on_ai_sparring_catalog_filter_changed(_text: String) -> void:
@@ -43409,6 +43475,10 @@ func _on_ai_sparring_catalog_filter_changed(_text: String) -> void:
 
 
 func _on_ai_sparring_catalog_archetype_selected(_index: int) -> void:
+	_refresh_ai_sparring_catalog_view()
+
+
+func _on_ai_sparring_catalog_tier_selected(_index: int) -> void:
 	_refresh_ai_sparring_catalog_view()
 
 
@@ -43420,8 +43490,11 @@ func _refresh_ai_sparring_catalog_view() -> void:
 		child.queue_free()
 	var query := pvp_ai_sparring_catalog_search.text.strip_edges().to_lower() if pvp_ai_sparring_catalog_search != null else ""
 	var archetype := str(pvp_ai_sparring_catalog_archetype.get_selected_metadata()) if pvp_ai_sparring_catalog_archetype != null and pvp_ai_sparring_catalog_archetype.item_count > 0 else "all"
+	var tier_id := str(pvp_ai_sparring_catalog_tier.get_selected_metadata()) if pvp_ai_sparring_catalog_tier != null and pvp_ai_sparring_catalog_tier.item_count > 0 else "all"
 	var matches: Array[Dictionary] = []
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
+		if tier_id != "all" and not _ai_sparring_team_is_eligible(entry, tier_id):
+			continue
 		if archetype != "all" and str(entry.get("archetype", "")) != archetype:
 			continue
 		if query != "" and query not in _ai_sparring_catalog_search_text(entry):
@@ -43563,9 +43636,16 @@ func _render_ai_sparring_catalog_detail() -> void:
 	if pvp_ai_sparring_catalog_detail_title != null:
 		pvp_ai_sparring_catalog_detail_title.text = str(entry.get("displayName", LocalizationManager.text("ui.pvp.ai_sparring.catalog.select_team")))
 	if pvp_ai_sparring_catalog_detail_meta != null:
-		pvp_ai_sparring_catalog_detail_meta.text = LocalizationManager.text(
-			"ui.pvp.training.ai.archetype.%s" % str(entry.get("archetype", "balance"))
-		) if has_selection else ""
+		var meta_parts: Array[String] = []
+		if has_selection:
+			meta_parts.append(LocalizationManager.text(
+				"ui.pvp.training.ai.archetype.%s" % str(entry.get("archetype", "balance"))
+			))
+		for tier_value: Variant in _array_from_variant(entry.get("eligibleTierIds", [])):
+			var tier_id := str(tier_value)
+			if tier_id in ["none", "aether-ou", "aether-uu"]:
+				meta_parts.append(_ai_sparring_tier_label(tier_id))
+		pvp_ai_sparring_catalog_detail_meta.text = " · ".join(meta_parts)
 	if pvp_ai_sparring_catalog_use_player_button != null:
 		pvp_ai_sparring_catalog_use_player_button.disabled = not has_selection
 	if pvp_ai_sparring_catalog_use_opponent_button != null:
@@ -43813,6 +43893,46 @@ func _selected_pvp_training_ai_team_id() -> String:
 	return selected_id if selected_id != "" else "random"
 
 
+func _refresh_ai_sparring_tier_options() -> void:
+	if pvp_ai_sparring_tier_select == null:
+		return
+	var previous := _selected_ai_sparring_tier_id()
+	pvp_ai_sparring_tier_select.clear()
+	var tiers := pvp_training_ai_tiers
+	if tiers.is_empty():
+		tiers = [{"tierId": "none", "tierName": "Open"}]
+	for tier: Dictionary in tiers:
+		var tier_id := str(tier.get("tierId", "none"))
+		pvp_ai_sparring_tier_select.add_item(_ai_sparring_tier_label(tier_id))
+		pvp_ai_sparring_tier_select.set_item_metadata(pvp_ai_sparring_tier_select.item_count - 1, tier_id)
+	_select_option_by_metadata(pvp_ai_sparring_tier_select, previous)
+
+
+func _selected_ai_sparring_tier_id() -> String:
+	if pvp_ai_sparring_tier_select == null or pvp_ai_sparring_tier_select.item_count == 0:
+		return "none"
+	var tier_id := str(pvp_ai_sparring_tier_select.get_selected_metadata()).strip_edges().to_lower()
+	return tier_id if tier_id in ["none", "aether-ou", "aether-uu"] else "none"
+
+
+func _ai_sparring_tier_label(tier_id: String) -> String:
+	if tier_id == "none":
+		return LocalizationManager.text("ui.pvp.ai_sparring.tier.open")
+	return LocalizationManager.text("ui.pvp.room.tier.%s" % tier_id.replace("-", "_"))
+
+
+func _ai_sparring_team_is_eligible(entry: Dictionary, tier_id: String) -> bool:
+	if not entry.has("eligibleTierIds"):
+		return tier_id == "none"
+	var eligible_value: Variant = entry.get("eligibleTierIds", [])
+	if not (eligible_value is Array):
+		return tier_id == "none"
+	for value: Variant in eligible_value:
+		if str(value) == tier_id:
+			return true
+	return false
+
+
 func _selected_pvp_training_ai_team_source() -> String:
 	if pvp_training_ai_team_source_select == null or pvp_training_ai_team_source_select.item_count == 0:
 		return "catalog"
@@ -43966,7 +44086,8 @@ func _on_pvp_training_ai_start_pressed() -> void:
 		_selected_pvp_training_ai_mode(),
 		_selected_pvp_training_ai_archetype() if ai_team_source == "catalog" else "random",
 		ai_team_text if ai_team_source == "paste" else "",
-		player_catalog_team_id
+		player_catalog_team_id,
+		_selected_ai_sparring_tier_id()
 	)
 	request.queue_free()
 	_set_pvp_room_busy(false)
@@ -43975,7 +44096,15 @@ func _on_pvp_training_ai_start_pressed() -> void:
 		_set_pvp_status_key(
 			"ui.pvp.training.paste_invalid"
 			if error_code in ["training_team_invalid", "training_team_illegal", "training_ai_team_illegal", "training_ai_team_import_failed"]
-			else "ui.pvp.training.ai.start_failed"
+			else (
+				"ui.pvp.room.tier_team_invalid"
+				if error_code in ["training_player_team_tier_invalid", "training_ai_team_tier_invalid"]
+				else (
+					"ui.pvp.room.tier_unavailable"
+					if error_code in ["training_ai_tier_rules_unavailable", "training_ai_catalog_team_tier_invalid"]
+					else "ui.pvp.training.ai.start_failed"
+				)
+			)
 		)
 		push_warning("UIOverlay: training AI battle start failed: %s" % str(response.get("error", response.get("detail", "Unknown error"))))
 		return
@@ -47215,6 +47344,10 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 		pvp_training_ai_archetype_select.disabled = is_busy
 	if pvp_training_ai_team_select != null:
 		pvp_training_ai_team_select.disabled = is_busy
+	if pvp_ai_sparring_tier_select != null:
+		pvp_ai_sparring_tier_select.disabled = is_busy
+	if pvp_ai_sparring_catalog_tier != null:
+		pvp_ai_sparring_catalog_tier.disabled = is_busy
 	if pvp_ai5_playtest_consent_check != null:
 		pvp_ai5_playtest_consent_check.disabled = is_busy
 	if pvp_ai_sparring_start_button != null:
