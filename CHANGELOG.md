@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring now supports Open, Aether OU, and Aether UU practice, with tier-aware catalog filters and match history.
+
 - AI Sparring now keeps a stable panel height when switching between Free Sparring, Team Catalog, Match History, and Research.
 
 - AI Sparring's Team Catalog can now copy any selected team as a PokéPaste export.
