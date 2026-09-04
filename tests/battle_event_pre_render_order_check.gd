@@ -730,7 +730,7 @@ func _check_pivot_ko_wait_state_blocks_fainted_fallback() -> void:
 		var next_function_index := source.find("\nfunc ", function_index + 1)
 		var function_source := source.substr(function_index, next_function_index - function_index)
 		var waiting_guard_index := function_source.find(
-			"if request_is_waiting or not decision_allows_choice:"
+			"if request_is_waiting:"
 		)
 		var fainted_fallback_index := function_source.find(
 			"should_infer_pvp_force_switch_from_fainted_active"
@@ -742,6 +742,18 @@ func _check_pivot_ko_wait_state_blocks_fainted_fallback() -> void:
 			true,
 			"%s honors wait/LOCKED before the fainted-active fallback" % function_name
 		)
+
+	var response_function_index := source.find("func _response_has_opponent_force_switch(")
+	var response_function_end := source.find("\nfunc ", response_function_index + 1)
+	var response_function_source := source.substr(
+		response_function_index,
+		response_function_end - response_function_index
+	)
+	_check_equal(
+		response_function_source.contains('if bool(opponent_request.get("wait", false)):\n\t\t\tcontinue'),
+		true,
+		"a waiting NPC response cannot infer a replacement solely from its fainted active Pokemon"
+	)
 
 
 func _check_pvp_state_and_field_wait_for_render_cursor() -> void:
