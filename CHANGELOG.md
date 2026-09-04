@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring catalog cards now show their tier, and tier filters return only teams assigned to that exact tier.
+
 - AI Sparring now supports Open, Aether OU, and Aether UU practice, with tier-aware catalog filters and match history.
 
 - AI Sparring now keeps a stable panel height when switching between Free Sparring, Team Catalog, Match History, and Research.
