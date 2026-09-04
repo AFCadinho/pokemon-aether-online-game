@@ -419,9 +419,10 @@ func _check_pvp_runtime_translation() -> void:
 	var party_validation_values := party_validation_feedback.get("values", {}) as Dictionary
 	_check(
 		party_validation_feedback.get("key", "") == "ui.pvp.training.ai.player_team_invalid_detail"
+		and not bool(party_validation_feedback.get("log_warning", true))
 		and party_validation_values.get("reason", "")
 			== "Vak 6 · battle-bond is not legal for this Pokemon",
-		"AI Sparring reports the exact player-party slot validation issue"
+		"AI Sparring reports player-party validation issues without console warnings"
 	)
 	var opponent_validation_feedback: Dictionary = overlay.call(
 		"_training_ai_failure_feedback",
@@ -437,9 +438,10 @@ func _check_pvp_runtime_translation() -> void:
 	var opponent_validation_values := opponent_validation_feedback.get("values", {}) as Dictionary
 	_check(
 		opponent_validation_feedback.get("key", "") == "ui.pvp.training.ai.opponent_team_invalid_detail"
+		and not bool(opponent_validation_feedback.get("log_warning", true))
 		and opponent_validation_values.get("reason", "")
 			== "Greninja's ability Battle Bond is not legal.",
-		"AI Sparring identifies detailed opponent-team legality failures"
+		"AI Sparring identifies opponent-team legality failures without console warnings"
 	)
 	var paste_import_feedback: Dictionary = overlay.call(
 		"_training_ai_failure_feedback",
@@ -448,8 +450,19 @@ func _check_pvp_runtime_translation() -> void:
 		"paste"
 	)
 	_check(
-		paste_import_feedback.get("key", "") == "ui.pvp.training.paste_invalid",
-		"AI Sparring keeps Pokepaste guidance for an actual paste import failure"
+		paste_import_feedback.get("key", "") == "ui.pvp.training.paste_invalid"
+		and not bool(paste_import_feedback.get("log_warning", true)),
+		"AI Sparring keeps paste import failures actionable without console warnings"
+	)
+	var technical_failure_feedback: Dictionary = overlay.call(
+		"_training_ai_failure_feedback",
+		{"detail": {"code": "TRAINING_AI_TIER_RULES_UNAVAILABLE"}},
+		"party",
+		"catalog"
+	)
+	_check(
+		bool(technical_failure_feedback.get("log_warning", true)),
+		"AI Sparring keeps console warnings enabled for technical failures"
 	)
 	_check(leaderboard_scope != null and leaderboard_scope.get_item_text(0) == "Preseason", "Leaderboard season renders in Dutch")
 	_check_ranked_dropdown_style(format_select, "Matchmaking format")

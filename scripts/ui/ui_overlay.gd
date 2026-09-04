@@ -44149,9 +44149,10 @@ func _on_pvp_training_ai_start_pressed() -> void:
 			feedback_values,
 			true
 		)
-		push_warning("UIOverlay: training AI battle start failed: %s" % str(
-			feedback.get("diagnostic", response.get("error", response.get("detail", "Unknown error")))
-		))
+		if bool(feedback.get("log_warning", true)):
+			push_warning("UIOverlay: training AI battle start failed: %s" % str(
+				feedback.get("diagnostic", response.get("error", response.get("detail", "Unknown error")))
+			))
 		return
 	if ai_team_source == "catalog" and _selected_pvp_training_ai_team_id() == "random":
 		_resolve_pvp_training_ai_opponent_team()
@@ -44182,11 +44183,13 @@ func _training_ai_failure_feedback(
 				"key": "ui.pvp.training.ai.player_team_invalid_detail",
 				"values": {"reason": reason},
 				"diagnostic": reason,
+				"log_warning": false,
 			}
 		return {
 			"key": "ui.pvp.training.paste_invalid"
 				if player_team_source == "paste"
 				else "ui.pvp.training.ai.player_team_invalid",
+			"log_warning": false,
 		}
 	if opponent_error:
 		if not reason.is_empty():
@@ -44194,11 +44197,13 @@ func _training_ai_failure_feedback(
 				"key": "ui.pvp.training.ai.opponent_team_invalid_detail",
 				"values": {"reason": reason},
 				"diagnostic": reason,
+				"log_warning": false,
 			}
 		return {
 			"key": "ui.pvp.training.paste_invalid"
 				if ai_team_source == "paste"
 				else "ui.pvp.training.ai.opponent_team_invalid",
+			"log_warning": false,
 		}
 	if error_code in [
 		"training_ai_tier_rules_unavailable",
