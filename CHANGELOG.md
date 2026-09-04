@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring now waits for the player's ordered pivot replacement without repeatedly requesting an unavailable opponent switch.
+
 - AI battle HUDs now show an opponent's complete battle form name, such as Urshifu Rapid-Strike, while preserving real nicknames.
 
 - AI Sparring's Team Catalog now treats each team card as one selectable unit and removes non-gameplay author labels from the player view.
