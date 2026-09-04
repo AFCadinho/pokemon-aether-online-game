@@ -2074,8 +2074,7 @@ func _refresh_pvp_localized_ui() -> void:
 		_set_pvp_queue_status_key(pvp_queue_status_translation_key, pvp_queue_status_translation_values)
 	if pvp_popup_title_label != null:
 		pvp_popup_title_label.text = _pvp_popup_title_for_section(_current_pvp_section_name())
-	if pvp_popup_subtitle_label != null:
-		pvp_popup_subtitle_label.text = _pvp_popup_subtitle_for_section(_current_pvp_section_name())
+	_set_pvp_popup_subtitle(_pvp_popup_subtitle_for_section(_current_pvp_section_name()))
 
 
 func _play_mail_notification_sound() -> void:
@@ -42136,8 +42135,7 @@ func _open_pvp_popup_section(section_name: String) -> void:
 	_select_pvp_root_tab(section_name)
 	if pvp_popup_title_label != null:
 		pvp_popup_title_label.text = _pvp_popup_title_for_section(section_name)
-	if pvp_popup_subtitle_label != null:
-		pvp_popup_subtitle_label.text = _pvp_popup_subtitle_for_section(section_name)
+	_set_pvp_popup_subtitle(_pvp_popup_subtitle_for_section(section_name))
 	if pvp_popup_icon != null:
 		pvp_popup_icon.texture = _pvp_popup_icon_for_section(section_name)
 	if section_name == "AI Sparring":
@@ -42185,6 +42183,15 @@ func _pvp_popup_subtitle_for_section(section_name: String) -> String:
 			return LocalizationManager.text("ui.pvp.mode.ai_sparring_subtitle")
 		_:
 			return LocalizationManager.text("ui.pvp.choose_mode")
+
+func _set_pvp_popup_subtitle(text: String, is_error: bool = false) -> void:
+	if pvp_popup_subtitle_label == null:
+		return
+	pvp_popup_subtitle_label.text = text
+	pvp_popup_subtitle_label.add_theme_color_override(
+		"font_color",
+		UI_DANGER if is_error else UI_MUTED_TEXT
+	)
 
 func _pvp_popup_icon_for_section(section_name: String) -> Texture2D:
 	match section_name:
@@ -42764,10 +42771,10 @@ func _on_pvp_room_mode_selected(mode: String) -> void:
 	if mode == "ai5_playtest" and pvp_ai5_playtest_status.is_empty():
 		await _load_ai5_playtest_status()
 	if mode == "ai" and not pvp_training_ai_enabled:
-		_set_pvp_status_key("ui.pvp.training.ai.unavailable")
+		_set_pvp_status_key("ui.pvp.training.ai.unavailable", {}, true)
 		return
 	if mode == "ai5_playtest" and not bool(pvp_ai5_playtest_status.get("enabled", false)):
-		_set_pvp_status_key("ui.pvp.training.ai.unavailable")
+		_set_pvp_status_key("ui.pvp.training.ai.unavailable", {}, true)
 		return
 	if pvp_active_room_code == "":
 		_clear_pvp_training_team_preview()
@@ -42812,8 +42819,7 @@ func _on_pvp_ai_sparring_tab_changed(tab_index: int) -> void:
 	var history_selected := tab_key == "ui.pvp.ai_sparring.tab.history"
 	var research_selected := tab_key == "ui.pvp.ai_sparring.tab.research"
 	pvp_room_selected_mode = "ai5_playtest" if research_selected else ("" if history_selected or catalog_selected else "ai")
-	if pvp_popup_subtitle_label != null:
-		pvp_popup_subtitle_label.text = _pvp_popup_subtitle_for_section("AI Sparring")
+	_set_pvp_popup_subtitle(_pvp_popup_subtitle_for_section("AI Sparring"))
 	if history_selected:
 		_refresh_pvp_ai_sparring_match_history()
 	if catalog_selected:
@@ -43415,7 +43421,7 @@ func _load_pvp_training_ai_catalog() -> void:
 	_refresh_ai_sparring_catalog_view()
 	_refresh_pvp_room_battle_purpose_ui()
 	if not pvp_training_ai_enabled and pvp_room_selected_mode == "ai":
-		_set_pvp_status_key("ui.pvp.training.ai.unavailable")
+		_set_pvp_status_key("ui.pvp.training.ai.unavailable", {}, true)
 
 
 func _refresh_ai_sparring_player_catalog_options() -> void:
@@ -44070,11 +44076,13 @@ func _on_pvp_ai5_playtest_start_pressed() -> void:
 		_set_pvp_status_key(
 			"ui.pvp.training.ai5_playtest.access_required"
 			if bool(pvp_ai5_playtest_status.get("accessDenied", false))
-			else "ui.pvp.training.ai.unavailable"
+			else "ui.pvp.training.ai.unavailable",
+			{},
+			true
 		)
 		return
 	if pvp_ai5_playtest_consent_check == null or not pvp_ai5_playtest_consent_check.button_pressed:
-		_set_pvp_status_key("ui.pvp.training.ai5_playtest.consent_required")
+		_set_pvp_status_key("ui.pvp.training.ai5_playtest.consent_required", {}, true)
 		return
 	_set_pvp_room_busy(true)
 	_set_pvp_status_key("ui.pvp.training.ai5_playtest.creating")
@@ -44083,7 +44091,7 @@ func _on_pvp_ai5_playtest_start_pressed() -> void:
 	request.queue_free()
 	_set_pvp_room_busy(false)
 	if not bool(response.get("success", false)):
-		_set_pvp_status_key("ui.pvp.training.ai5_playtest.start_failed")
+		_set_pvp_status_key("ui.pvp.training.ai5_playtest.start_failed", {}, true)
 		return
 	_set_pvp_training_team_preview(response.get("ownTeam", []))
 	await _start_training_ai_battle_from_response(response)
@@ -44091,12 +44099,12 @@ func _on_pvp_ai5_playtest_start_pressed() -> void:
 
 func _on_pvp_training_ai_start_pressed() -> void:
 	if not pvp_training_ai_enabled:
-		_set_pvp_status_key("ui.pvp.training.ai.unavailable")
+		_set_pvp_status_key("ui.pvp.training.ai.unavailable", {}, true)
 		return
 	var team_source := _selected_ai_sparring_team_source()
 	var team_text := pvp_training_team_input.text.strip_edges() if pvp_training_team_input != null else ""
 	if team_source == "paste" and team_text == "":
-		_set_pvp_status_key("ui.pvp.training.paste_required")
+		_set_pvp_status_key("ui.pvp.training.paste_required", {}, true)
 		return
 	_set_pvp_room_busy(true)
 	_set_pvp_status_key("ui.pvp.training.ai.creating")
@@ -44104,19 +44112,19 @@ func _on_pvp_training_ai_start_pressed() -> void:
 		team_text = await _export_ai_sparring_party_team()
 		if team_text == "":
 			_set_pvp_room_busy(false)
-			_set_pvp_status_key("ui.pvp.ai_sparring.party_export_failed")
+			_set_pvp_status_key("ui.pvp.ai_sparring.party_export_failed", {}, true)
 			return
 	var player_catalog_team_id := _selected_ai_sparring_player_catalog_team_id() if team_source == "catalog" else ""
 	if team_source == "catalog" and player_catalog_team_id == "":
 		_set_pvp_room_busy(false)
-		_set_pvp_status_key("ui.pvp.ai_sparring.catalog.team_required")
+		_set_pvp_status_key("ui.pvp.ai_sparring.catalog.team_required", {}, true)
 		return
 	if team_source == "catalog":
 		team_text = ""
 	var ai_team_source := _selected_pvp_training_ai_team_source()
 	var ai_team_text := pvp_training_ai_custom_team_input.text.strip_edges() if pvp_training_ai_custom_team_input != null else ""
 	if ai_team_source == "paste" and ai_team_text == "":
-		_set_pvp_status_key("ui.pvp.training.ai.custom_paste_required")
+		_set_pvp_status_key("ui.pvp.training.ai.custom_paste_required", {}, true)
 		return
 	var resolved_ai_team_id := _resolved_pvp_training_ai_team_id() if ai_team_source == "catalog" else "random"
 	var request := _create_pvp_request_node()
@@ -44136,7 +44144,11 @@ func _on_pvp_training_ai_start_pressed() -> void:
 	if not bool(response.get("success", false)):
 		var feedback := _training_ai_failure_feedback(response, team_source, ai_team_source)
 		var feedback_values := _dictionary_from_value(feedback.get("values", {}))
-		_set_pvp_status_key(str(feedback.get("key", "ui.pvp.training.ai.start_failed")), feedback_values)
+		_set_pvp_status_key(
+			str(feedback.get("key", "ui.pvp.training.ai.start_failed")),
+			feedback_values,
+			true
+		)
 		push_warning("UIOverlay: training AI battle start failed: %s" % str(
 			feedback.get("diagnostic", response.get("error", response.get("detail", "Unknown error")))
 		))
@@ -44854,8 +44866,7 @@ func _populate_pvp_queue_select(queues: Array[Dictionary]) -> void:
 		pvp_queue_select.select(0)
 	_update_pvp_active_format_from_queue_id(pvp_active_queue_id)
 	_select_pvp_mode_by_queue_id(pvp_active_queue_id)
-	if pvp_popup_subtitle_label != null:
-		pvp_popup_subtitle_label.text = _pvp_popup_subtitle_for_section("Ranked")
+	_set_pvp_popup_subtitle(_pvp_popup_subtitle_for_section("Ranked"))
 	_refresh_pvp_ranked_rewards_state()
 	_refresh_pvp_team_validator()
 
@@ -44884,8 +44895,7 @@ func _on_pvp_queue_selected(index: int) -> void:
 	var previous_format_key := pvp_active_format_key
 	pvp_active_queue_id = queue_id
 	_update_pvp_active_format_from_queue_id(pvp_active_queue_id)
-	if pvp_popup_subtitle_label != null:
-		pvp_popup_subtitle_label.text = _pvp_popup_subtitle_for_section("Ranked")
+	_set_pvp_popup_subtitle(_pvp_popup_subtitle_for_section("Ranked"))
 	if pvp_active_format_key != previous_format_key:
 		pvp_banlists_loaded = false
 		pvp_banlists_result = PvpRankedBanlists.not_loaded()
@@ -47408,7 +47418,7 @@ func _start_training_ai_battle_from_response(response: Dictionary) -> void:
 	_set_pvp_status_key("ui.pvp.training.ai.starting")
 	var world := get_tree().get_first_node_in_group("world")
 	if world == null or not world.has_method("start_training_ai_battle_from_response"):
-		_set_pvp_status_key("ui.pvp.battle.scene_unavailable")
+		_set_pvp_status_key("ui.pvp.battle.scene_unavailable", {}, true)
 		pvp_battle_starting = false
 		return
 	var popup_was_visible := pvp_room_popup != null and pvp_room_popup.visible
@@ -47419,7 +47429,7 @@ func _start_training_ai_battle_from_response(response: Dictionary) -> void:
 		if popup_was_visible and pvp_room_popup != null:
 			pvp_room_popup.visible = true
 			_activate_ui_panel(pvp_room_popup)
-		_set_pvp_status_key("ui.pvp.training.ai.start_failed")
+		_set_pvp_status_key("ui.pvp.training.ai.start_failed", {}, true)
 		pvp_battle_starting = false
 		return
 	pvp_ai_sparring_history_loaded = false
@@ -47498,17 +47508,21 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 		pvp_reconnect_battle_button.disabled = is_busy
 
 
-func _set_pvp_status_key(key: String, values: Dictionary = {}) -> void:
+func _set_pvp_status_key(key: String, values: Dictionary = {}, is_error: bool = false) -> void:
 	pvp_room_status_translation_key = key
 	pvp_room_status_translation_values = values.duplicate(true)
 	if pvp_room_status_label != null:
 		pvp_room_status_label.text = LocalizationManager.text(key, values)
 	if pvp_ai_sparring_status_label != null:
 		pvp_ai_sparring_status_label.text = LocalizationManager.text(key, values)
+		pvp_ai_sparring_status_label.add_theme_color_override(
+			"font_color",
+			UI_DANGER if is_error else UI_MUTED_TEXT
+		)
 	elif pvp_popup_active_section == "AI Sparring" and pvp_popup_subtitle_label != null:
 		# AI Sparring has no persistent footer; surface actionable and progress
 		# feedback in the popup header instead.
-		pvp_popup_subtitle_label.text = LocalizationManager.text(key, values)
+		_set_pvp_popup_subtitle(LocalizationManager.text(key, values), is_error)
 
 func _set_pvp_queue_status_key(key: String, values: Dictionary = {}) -> void:
 	pvp_queue_status_translation_key = key
