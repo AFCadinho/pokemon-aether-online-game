@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI battle HUDs now show an opponent's complete battle form name, such as Urshifu Rapid-Strike, while preserving real nicknames.
+
 - AI Sparring's Team Catalog now treats each team card as one selectable unit and removes non-gameplay author labels from the player view.
 
 - AI Sparring now keeps its tabs above the content and shows the trainer introduction only in Free Sparring, leaving the catalog and history more room.
