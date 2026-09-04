@@ -5,6 +5,7 @@
 - Added a dedicated pixel-art icon for Oak's Parcel instead of the missing-item placeholder.
 
 - Moved Camper Iris and Paras in the Route 3 Pokémon Center so the Move Deleter can be interacted with directly.
+- Renamed the item label from "Oaks Parcel" to "Oak's Parcel".
 
 - AI Sparring now keeps live HP and status attached to imported team slots after damage and battle-form changes.
 - AI Sparring now changes an opponent's field sprite immediately when its Mega Evolution is shown, without waiting for a later attack.
