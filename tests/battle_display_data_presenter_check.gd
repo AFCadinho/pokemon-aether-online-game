@@ -17,6 +17,8 @@ func _init() -> void:
 func _run_checks() -> void:
 	_check_local_ogerpon_uses_mask_battle_form()
 	_check_opponent_ogerpon_default_ident_uses_mask_form_name()
+	_check_opponent_urshifu_default_ident_uses_full_form_name()
+	_check_opponent_urshifu_custom_nickname_survives_form_name()
 	_check_opponent_default_name_follows_public_mega_form()
 	_check_opponent_default_name_follows_snapshot_mega_form()
 	_check_opponent_custom_nickname_survives_public_mega_form()
@@ -131,6 +133,62 @@ func _check_opponent_ogerpon_default_ident_uses_mask_form_name() -> void:
 		presenter.get_active_display_name("p2"),
 		"Ogerpon Wellspring",
 		"the default Showdown Ogerpon ident does not hide the opponent mask forme"
+	)
+
+
+func _check_opponent_urshifu_default_ident_uses_full_form_name() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"battleId": "opponent-urshifu-form-display-test",
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [{
+						"ident": "p2a: Urshifu",
+						"species": "Urshifu-Rapid-Strike",
+						"displaySpecies": "Urshifu-Rapid-Strike",
+						"details": "Urshifu-Rapid-Strike, M",
+						"active": true,
+					}],
+				},
+			},
+		},
+	}, false)
+
+	var presenter = BattleDisplayDataPresenterScript.new()
+	presenter.setup(state)
+	_check_equal(
+		presenter.get_active_display_name("p2"),
+		"Urshifu Rapid-Strike",
+		"an unnicknamed opponent Urshifu uses its complete battle forme on the HUD"
+	)
+
+
+func _check_opponent_urshifu_custom_nickname_survives_form_name() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"battleId": "opponent-urshifu-nickname-display-test",
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [{
+						"ident": "p2a: Torrent",
+						"species": "Urshifu-Rapid-Strike",
+						"displaySpecies": "Urshifu-Rapid-Strike",
+						"details": "Urshifu-Rapid-Strike, M",
+						"active": true,
+					}],
+				},
+			},
+		},
+	}, false)
+
+	var presenter = BattleDisplayDataPresenterScript.new()
+	presenter.setup(state)
+	_check_equal(
+		presenter.get_active_display_name("p2"),
+		"Torrent",
+		"a real opponent Urshifu nickname remains visible on the HUD"
 	)
 
 

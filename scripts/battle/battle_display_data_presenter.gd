@@ -10,6 +10,7 @@ const TRAINER_TEAM_DEBUG_PREFIX := "[PAO Trainer Team Display Debug]"
 
 var battle_state: BattleState
 var display_metadata := preload("res://scripts/battle/battle_display_metadata.gd").new()
+var event_text_formatter := preload("res://scripts/battle/battle_event_text_formatter.gd").new()
 # AI Sparring assigns immutable catalog slots at its import boundary. Ordinary
 # NPC snapshots retain species validation because older NPC data can expose
 # request positions that are not canonical trainer-team slots.
@@ -169,7 +170,10 @@ func get_active_display_name(player_id: String) -> String:
 				and display_metadata.normalize_species_for_compare(display_species).begins_with("ogerpon-")
 			):
 				return display_species
-			return explicit_name
+			return event_text_formatter.resolve_pokemon_display_name(
+				explicit_name,
+				display_species
+			)
 
 	var ident := str(active_pokemon.get("ident", ""))
 	if ident.contains(": "):
@@ -184,7 +188,10 @@ func get_active_display_name(player_id: String) -> String:
 				display_species
 			):
 				return display_species
-			return ident_name
+			return event_text_formatter.resolve_pokemon_display_name(
+				ident_name,
+				display_species
+			)
 
 	return get_active_display_species(player_id)
 
