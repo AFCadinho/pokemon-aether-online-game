@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring now resolves base-species Mega events such as Latios with Latiosite before refreshing the opponent sprite, name and party icon.
+
 - AI Sparring keeps the opponent setup panel at a stable height when switching between a catalog team and PokéPaste.
 
 - AI Sparring Match History can now be cleared from the player-facing tab after confirmation.

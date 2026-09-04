@@ -563,6 +563,14 @@ func resolve_mega_species_for_event(event: Dictionary) -> String:
 	if species_from_pokemon_data != "":
 		return species_from_pokemon_data
 
+	# Showdown's public `-mega` protocol can report the base species alongside
+	# the Mega Stone (for example Latios + Latiosite). X/Y forms and catalogued
+	# forms were resolved above; every remaining Mega event has the ordinary
+	# single `-Mega` suffix. Convert it before the battle renderer refreshes the
+	# field sprite, HUD name and party rail.
+	if str(event.get("type", "")) == "mega" and base_species != "":
+		return "%s-Mega" % base_species
+
 	return _get_active_mega_species_from_request_slot(_get_player_id_from_ident(target_ident))
 
 ## Geeft de laatste request-state voor een speler terug.
