@@ -43577,7 +43577,7 @@ func _create_ai_sparring_catalog_team_card(entry: Dictionary) -> Control:
 	)
 	header.add_child(archetype_badge)
 	var catalog_tier := _ai_sparring_team_catalog_tier(entry)
-	if catalog_tier != "":
+	if catalog_tier in ["aether-ou", "aether-uu"]:
 		var tier_badge := Label.new()
 		tier_badge.text = _ai_sparring_tier_label(catalog_tier)
 		tier_badge.custom_minimum_size = Vector2(76.0, 22.0)

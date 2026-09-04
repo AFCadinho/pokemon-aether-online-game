@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Tierless Open teams no longer show “Open” as a tier badge on AI Sparring cards.
 - AI Sparring catalog cards now show their tier, and tier filters return only teams assigned to that exact tier.
 
 - AI Sparring now supports Open, Aether OU, and Aether UU practice, with tier-aware catalog filters and match history.
