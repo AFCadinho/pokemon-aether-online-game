@@ -150,7 +150,8 @@ func create_training_ai_battle(
 	team_text: String,
 	ai_team_id: String = "random",
 	ai_mode: String = "ai4",
-	ai_archetype: String = "random"
+	ai_archetype: String = "random",
+	ai_team_text: String = ""
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,
@@ -161,6 +162,7 @@ func create_training_ai_battle(
 			"teamId": ai_team_id if ai_team_id.strip_edges() != "" else "random",
 			"aiMode": ai_mode if ai_mode in ["ai4", "shadow", "active"] else "ai4",
 			"archetype": ai_archetype if ai_archetype.strip_edges() != "" else "random",
+			"aiTeamText": ai_team_text.strip_edges(),
 			"formatId": FORMAT_ID,
 		}
 	)
