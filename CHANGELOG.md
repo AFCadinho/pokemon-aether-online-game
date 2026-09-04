@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- AI Sparring now shows the exact player or opponent team-validation issue instead of misreporting every failure as an invalid PokéPaste.
 - Ranked Team Validation now refreshes when moves, EVs, IVs, abilities, natures, or held items change.
 
 - Tierless Open teams no longer show “Open” as a tier badge on AI Sparring cards.

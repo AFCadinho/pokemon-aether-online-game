@@ -44134,26 +44134,113 @@ func _on_pvp_training_ai_start_pressed() -> void:
 	request.queue_free()
 	_set_pvp_room_busy(false)
 	if not bool(response.get("success", false)):
-		var error_code := BackendErrorLocalizationService.error_code(response)
-		_set_pvp_status_key(
-			"ui.pvp.training.paste_invalid"
-			if error_code in ["training_team_invalid", "training_team_illegal", "training_ai_team_illegal", "training_ai_team_import_failed"]
-			else (
-				"ui.pvp.room.tier_team_invalid"
-				if error_code in ["training_player_team_tier_invalid", "training_ai_team_tier_invalid"]
-				else (
-					"ui.pvp.room.tier_unavailable"
-					if error_code in ["training_ai_tier_rules_unavailable", "training_ai_catalog_team_tier_invalid"]
-					else "ui.pvp.training.ai.start_failed"
-				)
-			)
-		)
-		push_warning("UIOverlay: training AI battle start failed: %s" % str(response.get("error", response.get("detail", "Unknown error"))))
+		var feedback := _training_ai_failure_feedback(response, team_source, ai_team_source)
+		var feedback_values := _dictionary_from_value(feedback.get("values", {}))
+		_set_pvp_status_key(str(feedback.get("key", "ui.pvp.training.ai.start_failed")), feedback_values)
+		push_warning("UIOverlay: training AI battle start failed: %s" % str(
+			feedback.get("diagnostic", response.get("error", response.get("detail", "Unknown error")))
+		))
 		return
 	if ai_team_source == "catalog" and _selected_pvp_training_ai_team_id() == "random":
 		_resolve_pvp_training_ai_opponent_team()
 	_set_pvp_training_team_preview(response.get("ownTeam", []))
 	await _start_training_ai_battle_from_response(response)
+
+
+func _training_ai_failure_feedback(
+	response: Dictionary,
+	player_team_source: String,
+	ai_team_source: String
+) -> Dictionary:
+	var error_code := BackendErrorLocalizationService.error_code(response)
+	var reason := _training_ai_validation_reason(response)
+	var player_error := error_code in [
+		"training_team_invalid",
+		"training_team_illegal",
+		"training_player_team_tier_invalid",
+	]
+	var opponent_error := error_code in [
+		"training_ai_team_illegal",
+		"training_ai_team_import_failed",
+		"training_ai_team_tier_invalid",
+	]
+	if player_error:
+		if not reason.is_empty():
+			return {
+				"key": "ui.pvp.training.ai.player_team_invalid_detail",
+				"values": {"reason": reason},
+				"diagnostic": reason,
+			}
+		return {
+			"key": "ui.pvp.training.paste_invalid"
+				if player_team_source == "paste"
+				else "ui.pvp.training.ai.player_team_invalid",
+		}
+	if opponent_error:
+		if not reason.is_empty():
+			return {
+				"key": "ui.pvp.training.ai.opponent_team_invalid_detail",
+				"values": {"reason": reason},
+				"diagnostic": reason,
+			}
+		return {
+			"key": "ui.pvp.training.paste_invalid"
+				if ai_team_source == "paste"
+				else "ui.pvp.training.ai.opponent_team_invalid",
+		}
+	if error_code in [
+		"training_ai_tier_rules_unavailable",
+		"training_ai_catalog_team_illegal",
+		"training_ai_catalog_import_failed",
+		"training_ai_catalog_team_tier_invalid",
+		"training_ai_catalog_content_hash_mismatch",
+		"training_player_catalog_content_hash_mismatch",
+	]:
+		return {"key": "ui.pvp.room.tier_unavailable"}
+	return {"key": "ui.pvp.training.ai.start_failed"}
+
+
+func _training_ai_validation_reason(response: Dictionary) -> String:
+	var body := _dictionary_from_value(response.get("body", {}))
+	var sources: Array[Dictionary] = []
+	for value: Variant in [
+		body.get("detail", {}),
+		response.get("detail", {}),
+		body,
+		response,
+	]:
+		var source := _dictionary_from_value(value)
+		if not source.is_empty():
+			sources.append(source)
+
+	for source: Dictionary in sources:
+		var validation := _dictionary_from_value(source.get("validation", {}))
+		for issue_list: Variant in [validation.get("errors", []), source.get("errors", [])]:
+			if not (issue_list is Array):
+				continue
+			for issue_value: Variant in issue_list:
+				var issue := _dictionary_from_value(issue_value)
+				var issue_message := str(issue.get("message", "")).strip_edges().replace("\n", " ")
+				if issue_message.is_empty():
+					continue
+				var slot := int(issue.get("slot", 0))
+				return (
+					"%s · %s" % [LocalizationManager.text("ui.pvp.validation.slot", {"number": slot}), issue_message]
+					if slot > 0
+					else issue_message
+				).left(240)
+
+		var problems: Variant = source.get("problems", [])
+		if problems is Array:
+			for problem: Variant in problems:
+				var problem_text := str(problem).strip_edges().replace("\n", " ")
+				if not problem_text.is_empty():
+					return problem_text.left(240)
+
+		var source_message := str(source.get("message", "")).strip_edges().replace("\n", " ")
+		if not source_message.is_empty():
+			return source_message.left(240)
+	return ""
 
 
 func _on_ai_sparring_team_source_selected(_index: int) -> void:
