@@ -239,6 +239,13 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_refresh_ai_sparring_catalog_view")
 	_check(ai_sparring_catalog_search != null and ai_sparring_catalog_search.placeholder_text.begins_with("Zoek Pokémon"), "Catalog search renders in Dutch")
 	_check(ai_sparring_catalog_results != null and ai_sparring_catalog_results.get_child_count() == 1, "Catalog renders matching team cards")
+	var catalog_card := ai_sparring_catalog_results.get_child(0) as PanelContainer if ai_sparring_catalog_results != null and ai_sparring_catalog_results.get_child_count() == 1 else null
+	_check(catalog_card != null and catalog_card.mouse_default_cursor_shape == Control.CURSOR_POINTING_HAND, "The complete catalog team card is selectable")
+	_check(catalog_card != null and catalog_card.find_children("*", "Button", true, false).is_empty(), "Catalog roster icons are not separate button targets")
+	var catalog_card_text := ""
+	for catalog_label: Label in catalog_card.find_children("*", "Label", true, false) if catalog_card != null else []:
+		catalog_card_text += catalog_label.text
+	_check(not catalog_card_text.contains("Aether"), "Catalog cards omit author labels from the player view")
 	ai_sparring_catalog_search.text = "Gholdengo"
 	overlay.call("_refresh_ai_sparring_catalog_view")
 	_check(ai_sparring_catalog_results.get_child_count() == 1, "Catalog search matches a Pokémon inside a team")

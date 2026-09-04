@@ -43147,17 +43147,7 @@ func _refresh_pvp_training_ai_team_options() -> void:
 		if requested_archetype != "random" and str(entry.get("archetype", "")) != requested_archetype:
 			continue
 		var display_name := str(entry.get("displayName", entry.get("teamId", ""))).strip_edges()
-		var authors_value: Variant = entry.get("authors", [])
-		var authors: Array[String] = []
-		if authors_value is Array:
-			for author_value: Variant in authors_value:
-				var author := str(author_value).strip_edges()
-				if author != "":
-					authors.append(author)
-		var label := display_name
-		if not authors.is_empty():
-			label = "%s — %s" % [display_name, ", ".join(authors)]
-		pvp_training_ai_team_select.add_item(label)
+		pvp_training_ai_team_select.add_item(display_name)
 		pvp_training_ai_team_select.set_item_metadata(
 			pvp_training_ai_team_select.item_count - 1,
 			str(entry.get("teamId", "random"))
@@ -43419,8 +43409,6 @@ func _ai_sparring_catalog_search_text(entry: Dictionary) -> String:
 		str(entry.get("displayName", "")),
 		str(entry.get("archetype", "")),
 	]
-	for author: Variant in _array_from_variant(entry.get("authors", [])):
-		parts.append(str(author))
 	for pokemon_value: Variant in _array_from_variant(entry.get("pokemon", [])):
 		if pokemon_value is Dictionary:
 			var species := str((pokemon_value as Dictionary).get("species", ""))
@@ -43431,40 +43419,67 @@ func _ai_sparring_catalog_search_text(entry: Dictionary) -> String:
 
 func _create_ai_sparring_catalog_team_card(entry: Dictionary) -> Control:
 	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#101829d9"), Color("#35597a99"), 9, 1))
+	var team_id := str(entry.get("teamId", ""))
+	var selected := team_id == pvp_ai_sparring_catalog_selected_team_id
+	panel.tooltip_text = str(entry.get("displayName", team_id))
+	panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	panel.add_theme_stylebox_override(
+		"panel",
+		_make_panel_style(
+			Color("#172541ee") if selected else Color("#101829d9"),
+			Color("#f5df9acc") if selected else Color("#35597a99"),
+			9,
+			2 if selected else 1
+		)
+	)
+	panel.gui_input.connect(_on_ai_sparring_catalog_team_card_gui_input.bind(team_id))
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 5)
 	panel.add_child(layout)
-	var team_id := str(entry.get("teamId", ""))
-	var authors: Array[String] = []
-	for author: Variant in _array_from_variant(entry.get("authors", [])):
-		authors.append(str(author))
-	var button := Button.new()
-	button.text = "%s\n%s · %s" % [
-		str(entry.get("displayName", team_id)),
-		", ".join(authors),
-		LocalizationManager.text("ui.pvp.training.ai.archetype.%s" % str(entry.get("archetype", "balance"))),
-	]
-	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	button.custom_minimum_size = Vector2(0, 48)
-	button.clip_text = true
-	button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	button.tooltip_text = str(entry.get("displayName", team_id))
-	button.pressed.connect(_on_ai_sparring_catalog_team_pressed.bind(team_id))
-	_apply_button_style(button)
-	layout.add_child(button)
+	var title := Label.new()
+	title.text = str(entry.get("displayName", team_id))
+	title.clip_text = true
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title.add_theme_font_size_override("font_size", 13)
+	title.add_theme_color_override("font_color", UI_TEXT)
+	layout.add_child(title)
+	var archetype := Label.new()
+	archetype.text = LocalizationManager.text(
+		"ui.pvp.training.ai.archetype.%s" % str(entry.get("archetype", "balance"))
+	)
+	archetype.add_theme_font_size_override("font_size", 11)
+	archetype.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	layout.add_child(archetype)
 	var icons := HBoxContainer.new()
 	icons.add_theme_constant_override("separation", 4)
 	layout.add_child(icons)
 	for pokemon_value: Variant in _array_from_variant(entry.get("pokemon", [])):
 		if pokemon_value is Dictionary:
-			icons.add_child(_create_pvp_training_ai_opponent_preview_slot(pokemon_value as Dictionary, 34.0, 30.0))
+			var slot := _create_pvp_training_ai_opponent_preview_slot(pokemon_value as Dictionary, 34.0, 30.0)
+			icons.add_child(slot)
+	_set_mouse_ignore_recursive(layout)
 	return panel
+
+
+func _on_ai_sparring_catalog_team_card_gui_input(event: InputEvent, team_id: String) -> void:
+	if not (event is InputEventMouseButton):
+		return
+	var mouse_event := event as InputEventMouseButton
+	if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
+		_on_ai_sparring_catalog_team_pressed(team_id)
+
+
+func _set_mouse_ignore_recursive(node: Node) -> void:
+	if node is Control:
+		(node as Control).mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for child: Node in node.get_children():
+		_set_mouse_ignore_recursive(child)
 
 
 func _on_ai_sparring_catalog_team_pressed(team_id: String) -> void:
 	pvp_ai_sparring_catalog_selected_team_id = team_id
 	pvp_ai_sparring_catalog_detail.clear()
+	_refresh_ai_sparring_catalog_view()
 	_render_ai_sparring_catalog_detail()
 	pvp_ai_sparring_catalog_detail_loading = true
 	var request := _create_pvp_request_node()
@@ -43484,13 +43499,9 @@ func _render_ai_sparring_catalog_detail() -> void:
 	if pvp_ai_sparring_catalog_detail_title != null:
 		pvp_ai_sparring_catalog_detail_title.text = str(entry.get("displayName", LocalizationManager.text("ui.pvp.ai_sparring.catalog.select_team")))
 	if pvp_ai_sparring_catalog_detail_meta != null:
-		var authors: Array[String] = []
-		for author: Variant in _array_from_variant(entry.get("authors", [])):
-			authors.append(str(author))
-		pvp_ai_sparring_catalog_detail_meta.text = "%s · %s" % [
-			", ".join(authors),
-			LocalizationManager.text("ui.pvp.training.ai.archetype.%s" % str(entry.get("archetype", "balance"))),
-		] if has_selection else ""
+		pvp_ai_sparring_catalog_detail_meta.text = LocalizationManager.text(
+			"ui.pvp.training.ai.archetype.%s" % str(entry.get("archetype", "balance"))
+		) if has_selection else ""
 	if pvp_ai_sparring_catalog_use_player_button != null:
 		pvp_ai_sparring_catalog_use_player_button.disabled = not has_selection
 	if pvp_ai_sparring_catalog_use_opponent_button != null:
