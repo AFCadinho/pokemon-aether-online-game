@@ -8966,10 +8966,17 @@ func _render_battle_events(
 			_release_ordered_response_display_species_for_ident(str(event_data.get("target", "")))
 			_fill_mega_event_species(event_data)
 			battle_state.apply_event_conditions([event_data])
+			var public_mega_species := str(event_data.get("species", "")) if training_ai_battle else ""
 			_update_active_pokemon_presentation_for_ident(
 				str(event_data.get("target", "")),
-				str(event_data.get("species", "")) if training_ai_battle else ""
+				public_mega_species
 			)
+			# AI Practice receives the complete resolution before its events are
+			# rendered. Commit the newly selected front sprite and HUD label to a
+			# frame before the fullscreen Mega overlay starts, so the animation
+			# visibly transforms the opponent instead of covering its base form.
+			if public_mega_species != "":
+				await get_tree().process_frame
 			_clear_pending_mega_species_for_event(event_data)
 		if event_type == "ability" or event_type == "pokemonEffect":
 			var ability_target := str(event_data.get("target", ""))
