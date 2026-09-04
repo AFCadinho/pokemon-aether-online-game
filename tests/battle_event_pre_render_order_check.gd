@@ -181,6 +181,18 @@ func _check_form_change_refreshes_party_rails() -> void:
 		true,
 		"AI sparring applies the same public Mega species to the opponent HUD and field sprite"
 	)
+	var mega_apply_index := render_source.find("battle_state.apply_event_conditions([event_data])")
+	var mega_presentation_index := render_source.find("_update_active_pokemon_presentation_for_ident(", mega_apply_index)
+	var mega_frame_index := render_source.find("await get_tree().process_frame", mega_presentation_index)
+	var mega_animation_index := render_source.find("var presentation: Dictionary = event_presentation.build(event_data)")
+	_check_equal(
+		mega_apply_index >= 0
+		and mega_presentation_index > mega_apply_index
+		and mega_frame_index > mega_presentation_index
+		and mega_frame_index < mega_animation_index,
+		true,
+		"AI sparring commits the Mega opponent HUD and sprite before its animation overlay begins"
+	)
 
 
 func _check_pre_event_render_skips_final_team_hud_refresh() -> void:
