@@ -59,6 +59,7 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_sparring_menu_button := overlay.get("pvp_mode_ai_sparring_button") as Button
 	var ai_sparring_tabs := overlay.get("pvp_ai_sparring_tabs") as TabContainer
 	var ai_sparring_history_list := overlay.get("pvp_ai_sparring_history_list") as VBoxContainer
+	var ai_sparring_history_clear := overlay.get("pvp_ai_sparring_history_clear_button") as Button
 	var ai_sparring_intro := overlay.find_child("AiSparringIntro", true, false) as Label
 	var ai_sparring_start := overlay.get("pvp_ai_sparring_start_button") as Button
 	var ai_sparring_team_source := overlay.get("pvp_ai_sparring_team_source_select") as OptionButton
@@ -186,6 +187,7 @@ func _check_pvp_runtime_translation() -> void:
 		"opponentRoster": [{"species": "Iron Treads"}],
 	}])
 	_check(ai_sparring_history_list != null and ai_sparring_history_list.get_child_count() == 1, "AI Sparring renders completed match-history cards")
+	_check(ai_sparring_history_clear != null and not ai_sparring_history_clear.disabled, "AI Sparring enables clearing only after history has entries")
 	var history_labels := ai_sparring_history_list.get_child(0).find_children("*", "Label", true, false) if ai_sparring_history_list != null and ai_sparring_history_list.get_child_count() == 1 else []
 	var history_text := ""
 	for history_label: Label in history_labels:

@@ -918,6 +918,7 @@ var pvp_ai_sparring_party_preview_grid: HBoxContainer
 var pvp_ai_sparring_history_status: Label
 var pvp_ai_sparring_history_list: VBoxContainer
 var pvp_ai_sparring_history_refresh_button: Button
+var pvp_ai_sparring_history_clear_button: Button
 var pvp_ai_sparring_history_loaded := false
 var pvp_ai_sparring_history_in_flight := false
 var pvp_ai_sparring_history_matches: Array = []
@@ -7344,6 +7345,20 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	)
 	_apply_button_style(pvp_ai_sparring_history_refresh_button)
 	history_header.add_child(pvp_ai_sparring_history_refresh_button)
+	pvp_ai_sparring_history_clear_button = Button.new()
+	_set_localized_control_property(
+		pvp_ai_sparring_history_clear_button,
+		"text",
+		"ui.pvp.ai_sparring.history.clear"
+	)
+	pvp_ai_sparring_history_clear_button.custom_minimum_size = Vector2(118, 32)
+	pvp_ai_sparring_history_clear_button.focus_mode = Control.FOCUS_NONE
+	pvp_ai_sparring_history_clear_button.disabled = true
+	pvp_ai_sparring_history_clear_button.pressed.connect(
+		_on_pvp_ai_sparring_history_clear_pressed
+	)
+	_apply_button_style(pvp_ai_sparring_history_clear_button, "danger")
+	history_header.add_child(pvp_ai_sparring_history_clear_button)
 
 	var history_scroll := ScrollContainer.new()
 	history_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -42586,6 +42601,50 @@ func _on_pvp_ai_sparring_history_refresh_pressed() -> void:
 	await _refresh_pvp_ai_sparring_match_history(true)
 
 
+func _on_pvp_ai_sparring_history_clear_pressed() -> void:
+	if pvp_ai_sparring_history_matches.is_empty() or pvp_ai_sparring_history_in_flight:
+		return
+	_show_ui_confirm_popup(
+		LocalizationManager.text("ui.pvp.ai_sparring.history.clear_title"),
+		LocalizationManager.text("ui.pvp.ai_sparring.history.clear_message"),
+		LocalizationManager.text("ui.pvp.ai_sparring.history.clear_confirm"),
+		_clear_pvp_ai_sparring_match_history,
+		Vector2i(470, 190),
+		true
+	)
+
+
+func _clear_pvp_ai_sparring_match_history() -> void:
+	if pvp_ai_sparring_history_in_flight:
+		return
+	pvp_ai_sparring_history_in_flight = true
+	if pvp_ai_sparring_history_refresh_button != null:
+		pvp_ai_sparring_history_refresh_button.disabled = true
+	if pvp_ai_sparring_history_clear_button != null:
+		pvp_ai_sparring_history_clear_button.disabled = true
+	if pvp_ai_sparring_history_status != null:
+		pvp_ai_sparring_history_status.text = LocalizationManager.text("ui.pvp.ai_sparring.history.clearing")
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.clear_training_ai_match_history(request)
+	request.queue_free()
+	pvp_ai_sparring_history_in_flight = false
+	if pvp_ai_sparring_history_refresh_button != null:
+		pvp_ai_sparring_history_refresh_button.disabled = false
+	if not bool(response.get("success", false)):
+		if pvp_ai_sparring_history_status != null:
+			pvp_ai_sparring_history_status.text = LocalizationManager.text("ui.pvp.ai_sparring.history.clear_failed")
+		if pvp_ai_sparring_history_clear_button != null:
+			pvp_ai_sparring_history_clear_button.disabled = pvp_ai_sparring_history_matches.is_empty()
+		return
+	pvp_ai_sparring_history_loaded = true
+	pvp_ai_sparring_history_matches.clear()
+	if pvp_ai_sparring_history_status != null:
+		pvp_ai_sparring_history_status.text = LocalizationManager.text("ui.pvp.ai_sparring.history.cleared")
+	if pvp_ai_sparring_history_clear_button != null:
+		pvp_ai_sparring_history_clear_button.disabled = true
+	_render_pvp_ai_sparring_match_history([])
+
+
 func _refresh_pvp_ai_sparring_match_history(force: bool = false) -> void:
 	if pvp_ai_sparring_history_in_flight:
 		return
@@ -42595,6 +42654,8 @@ func _refresh_pvp_ai_sparring_match_history(force: bool = false) -> void:
 	pvp_ai_sparring_history_in_flight = true
 	if pvp_ai_sparring_history_refresh_button != null:
 		pvp_ai_sparring_history_refresh_button.disabled = true
+	if pvp_ai_sparring_history_clear_button != null:
+		pvp_ai_sparring_history_clear_button.disabled = true
 	if pvp_ai_sparring_history_status != null:
 		pvp_ai_sparring_history_status.text = LocalizationManager.text("ui.pvp.ai_sparring.history.loading")
 	var request := _create_pvp_request_node()
@@ -42606,18 +42667,25 @@ func _refresh_pvp_ai_sparring_match_history(force: bool = false) -> void:
 	if not bool(response.get("success", false)):
 		if pvp_ai_sparring_history_status != null:
 			pvp_ai_sparring_history_status.text = LocalizationManager.text("ui.pvp.ai_sparring.history.failed")
+		if pvp_ai_sparring_history_clear_button != null:
+			pvp_ai_sparring_history_clear_button.disabled = true
 		_render_pvp_ai_sparring_match_history([])
 		return
 	var matches_value: Variant = response.get("matches", [])
 	var matches: Array = matches_value as Array if matches_value is Array else []
 	pvp_ai_sparring_history_loaded = true
+	pvp_ai_sparring_history_matches = matches.duplicate(true)
 	if pvp_ai_sparring_history_status != null:
 		pvp_ai_sparring_history_status.text = LocalizationManager.text("ui.pvp.ai_sparring.history.recent")
+	if pvp_ai_sparring_history_clear_button != null:
+		pvp_ai_sparring_history_clear_button.disabled = matches.is_empty()
 	_render_pvp_ai_sparring_match_history(matches)
 
 
 func _render_pvp_ai_sparring_match_history(matches: Array) -> void:
 	pvp_ai_sparring_history_matches = matches.duplicate(true)
+	if pvp_ai_sparring_history_clear_button != null and not pvp_ai_sparring_history_in_flight:
+		pvp_ai_sparring_history_clear_button.disabled = matches.is_empty()
 	if pvp_ai_sparring_history_list == null:
 		return
 	for child in pvp_ai_sparring_history_list.get_children():

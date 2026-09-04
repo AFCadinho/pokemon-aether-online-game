@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring Match History can now be cleared from the player-facing tab after confirmation.
+
 - AI Sparring can now use a temporary PokéPaste as the AI opponent's team, alongside the curated catalog teams.
 
 - AI Sparring now includes a Match History tab showing recent results, AI4 or AI5 as the opponent, and both teams.
