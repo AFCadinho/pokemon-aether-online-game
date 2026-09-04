@@ -70,7 +70,7 @@ var selected_pokemon_label: Label
 var selected_pokemon_sprite: TextureRect
 var selected_pokemon_types: HBoxContainer
 var status_label: Label
-var resource_summary_label: Label
+var resource_summary_row: HBoxContainer
 var learn_button: Button
 
 
@@ -137,11 +137,9 @@ func _build_interface() -> void:
 	workspace.add_child(_build_party_panel())
 	workspace.add_child(_build_catalog_panel())
 	workspace.add_child(_build_current_moves_panel())
-	resource_summary_label = Label.new()
-	resource_summary_label.add_theme_font_size_override("font_size", 10)
-	resource_summary_label.add_theme_color_override("font_color", UI_MUTED)
-	resource_summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	layout.add_child(resource_summary_label)
+	resource_summary_row = HBoxContainer.new()
+	resource_summary_row.add_theme_constant_override("separation", 10)
+	layout.add_child(resource_summary_row)
 
 	var footer := HBoxContainer.new()
 	footer.add_theme_constant_override("separation", 10)
@@ -1022,7 +1020,7 @@ func _cost_badge(candidate: Dictionary) -> Control:
 	var affordable := owned >= required
 	var panel := PanelContainer.new()
 	panel.name = "MoveCost_%s" % str(candidate.get("moveId", "unknown"))
-	panel.custom_minimum_size = Vector2(48, 28)
+	panel.custom_minimum_size = Vector2(58, 28)
 	panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	panel.tooltip_text = _t("ui.move_mentor.cost.tooltip", {
 		"item": _item_name(item_id),
@@ -1053,13 +1051,16 @@ func _cost_badge(candidate: Dictionary) -> Control:
 	row.add_child(icon)
 	var price := _text_label("×%d" % required, 10, UI_GREEN if affordable else UI_DANGER)
 	price.name = "MoveCostPrice"
+	price.custom_minimum_size = Vector2(18, 0)
+	price.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	row.add_child(price)
 	return panel
 
 
 func _refresh_resource_summary() -> void:
-	if resource_summary_label == null:
+	if resource_summary_row == null:
 		return
+	_clear_children(resource_summary_row)
 	var resources := {}
 	for candidate: Dictionary in candidates:
 		var cost_value: Variant = candidate.get("cost", {})
@@ -1072,8 +1073,18 @@ func _refresh_resource_summary() -> void:
 		resources[item_id] = maxi(int(cost.get("ownedQuantity", 0)), 0)
 	var parts: Array[String] = []
 	for item_id: String in resources:
-		parts.append("%s ×%d" % [_item_name(item_id), int(resources[item_id])])
-	resource_summary_label.text = "Resources: " + "  •  ".join(parts) if not parts.is_empty() else ""
+		var item_panel := HBoxContainer.new()
+		item_panel.add_theme_constant_override("separation", 3)
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(18, 18)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		icon.texture = _item_icon_texture(item_id)
+		icon.tooltip_text = _item_name(item_id)
+		item_panel.add_child(icon)
+		item_panel.add_child(_text_label("×%d" % int(resources[item_id]), 10, UI_MUTED))
+		resource_summary_row.add_child(item_panel)
 
 
 func _item_icon_texture(item_id: String) -> Texture2D:
