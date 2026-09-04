@@ -104,6 +104,13 @@ func _check_training_switches_preserve_canonical_slots() -> void:
 		not battle_source.contains("resolve_mechanical_switch_slot"),
 		"Training AI switch submission leaves canonical-to-request translation to the backend"
 	)
+	var capture_start := battle_source.find("func _capture_pvp_local_canonical_roster(")
+	var capture_end := battle_source.find("\nfunc ", capture_start + 1)
+	var capture_source := battle_source.substr(capture_start, capture_end - capture_start)
+	_check(
+		capture_source.contains("\t\treturn\n\n\tfor index in range(PlayerSave.party.size()):"),
+		"Training AI canonical roster stops before account-party slots are appended"
+	)
 
 
 func _check_battle_controller_isolates_training_from_player_save() -> void:
