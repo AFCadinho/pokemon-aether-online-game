@@ -10,6 +10,7 @@ func _init() -> void:
 	_check_multiple_validation_errors()
 	_check_server_failure()
 	_check_party_change_signature()
+	_check_legality_change_signature()
 	_check_invalid_join_gate()
 	_check_valid_join_gate()
 	quit(1 if failed else 0)
@@ -68,6 +69,32 @@ func _check_party_change_signature() -> void:
 		{"instanceId": "one", "species": "Raichu", "level": 12},
 	])
 	_check_equal(first != second, true, "party change updates validation signature")
+
+
+func _check_legality_change_signature() -> void:
+	var first := Validation.party_signature([{
+		"instanceId": "one",
+		"species": "Pikachu",
+		"level": 12,
+		"moves": ["thunder-shock"],
+		"evs": {"spe": 4},
+	}])
+	var changed_moves := Validation.party_signature([{
+		"instanceId": "one",
+		"species": "Pikachu",
+		"level": 12,
+		"moves": ["thunderbolt"],
+		"evs": {"spe": 4},
+	}])
+	var changed_evs := Validation.party_signature([{
+		"instanceId": "one",
+		"species": "Pikachu",
+		"level": 12,
+		"moves": ["thunder-shock"],
+		"evs": {"spe": 8},
+	}])
+	_check_equal(first != changed_moves, true, "move change updates validation signature")
+	_check_equal(first != changed_evs, true, "EV change updates validation signature")
 
 
 func _check_invalid_join_gate() -> void:

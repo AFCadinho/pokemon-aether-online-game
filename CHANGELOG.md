@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Ranked Team Validation now refreshes when moves, EVs, IVs, abilities, natures, or held items change.
+
 - Tierless Open teams no longer show “Open” as a tier badge on AI Sparring cards.
 - AI Sparring catalog cards now show their tier, and tier filters return only teams assigned to that exact tier.
 
