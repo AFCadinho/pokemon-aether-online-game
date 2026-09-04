@@ -581,9 +581,17 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_intro != null and not ai_sparring_intro.text.to_lower().contains("onderzoek"), "Free Sparring copy does not mention the research campaign")
 	overlay.set("pvp_popup_active_section", "AI Sparring")
 	overlay.call("_on_pvp_ai_sparring_tab_changed", 0)
-	overlay.call("_set_pvp_status_key", "ui.pvp.training.paste_required")
+	overlay.call("_set_pvp_status_key", "ui.pvp.training.paste_required", {}, true)
 	_check(subtitle != null and subtitle.text.begins_with("Plak eerst"), "AI Sparring keeps actionable feedback visible without a footer")
+	_check(
+		subtitle != null and subtitle.get_theme_color("font_color") == Color("#ff6b74"),
+		"AI Sparring renders error feedback in red"
+	)
 	overlay.call("_on_pvp_ai_sparring_tab_changed", 0)
+	_check(
+		subtitle != null and subtitle.get_theme_color("font_color") == Color("#aeb8c5"),
+		"AI Sparring restores the normal subtitle color after leaving an error state"
+	)
 	overlay.set("pvp_ai5_playtest_status", {
 		"enabled": true,
 		"completedBattles": 1,
