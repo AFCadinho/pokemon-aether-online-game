@@ -5815,7 +5815,10 @@ func _setup_pvp_room_popup() -> void:
 	root_control.add_child(pvp_room_popup)
 	pvp_ai_sparring_hover_card = PC_PARTY_HOVER_CARD_SCENE.instantiate() as PartyHoverCard
 	pvp_ai_sparring_hover_card.name = "AiSparringPokemonHoverCard"
-	pvp_ai_sparring_hover_card.z_index = UI_BASE_Z_INDEX + 4
+	# Keep this root-level card above the entire PvP popup, just like the PC
+	# hover card. A small offset above the popup can still be covered by other
+	# modal UI layers.
+	pvp_ai_sparring_hover_card.z_index = UI_DRAG_Z_INDEX - 1
 	pvp_ai_sparring_hover_card.set_show_storage_details(true)
 	root_control.add_child(pvp_ai_sparring_hover_card)
 
