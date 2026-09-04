@@ -72,6 +72,7 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_sparring_catalog_player_select := overlay.get("pvp_ai_sparring_catalog_team_select") as OptionButton
 	var ai_sparring_catalog_use_player := overlay.get("pvp_ai_sparring_catalog_use_player_button") as Button
 	var ai_sparring_catalog_use_opponent := overlay.get("pvp_ai_sparring_catalog_use_opponent_button") as Button
+	var ai_sparring_catalog_export := overlay.get("pvp_ai_sparring_catalog_export_button") as Button
 	var ai_sparring_catalog_team_grid := overlay.get("pvp_ai_sparring_catalog_team_grid") as GridContainer
 	var ai_research_start := overlay.get("pvp_ai5_playtest_start_button") as Button
 	var ai_research_tabs := overlay.get("pvp_ai5_playtest_tabs") as TabContainer
@@ -285,6 +286,10 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_render_ai_sparring_catalog_detail")
 	_check(ai_sparring_catalog_use_player != null and not ai_sparring_catalog_use_player.disabled, "Catalog selection enables use as player team")
 	_check(ai_sparring_catalog_use_opponent != null and not ai_sparring_catalog_use_opponent.disabled, "Catalog selection enables train-against action")
+	_check(ai_sparring_catalog_export != null and not ai_sparring_catalog_export.disabled, "Catalog selection enables PokéPaste export")
+	var catalog_export := str(overlay.call("_ai_sparring_catalog_pokepaste"))
+	_check(catalog_export.contains("Zapdos @ Leftovers") and catalog_export.contains("Tera Type: Steel"), "Catalog export preserves Showdown set details")
+	_check(catalog_export.contains("EVs: 4 Def / 252 SpA / 252 Spe") and catalog_export.contains("- Thunderbolt"), "Catalog export uses PokéPaste EV and move syntax")
 	_check(ai_sparring_catalog_team_grid != null and ai_sparring_catalog_team_grid.columns == 3, "Catalog presents sets in a compact three-column grid")
 	_check(ai_sparring_catalog_team_grid != null and ai_sparring_catalog_team_grid.get_child_count() == 6, "Catalog shows the complete six-Pokémon team at once")
 	_check(overlay.call("_ai_sparring_stat_spread", catalog_sets[0]["evs"], 0) == "4 Def / 252 SpA / 252 Spe", "Catalog PokéPaste view omits zero EV values")

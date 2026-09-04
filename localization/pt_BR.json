@@ -4464,6 +4464,8 @@
   "ui.pvp.ai_sparring.catalog.choose_hint": "Escolha uma equipe para ver Pokémon, itens, spreads e golpes.",
   "ui.pvp.ai_sparring.catalog.use_player": "Usar como sua equipe",
   "ui.pvp.ai_sparring.catalog.use_opponent": "Treinar contra equipe",
+  "ui.pvp.ai_sparring.catalog.export": "Copiar PokéPaste",
+  "ui.pvp.ai_sparring.catalog.export_copied": "Copiado!",
   "ui.pvp.ai_sparring.catalog.item": "Item",
   "ui.pvp.ai_sparring.catalog.ability": "Habilidade",
   "ui.pvp.ai_sparring.catalog.nature": "Natureza",

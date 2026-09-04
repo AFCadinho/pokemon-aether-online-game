@@ -933,6 +933,7 @@ var pvp_ai_sparring_catalog_team_hint: Label
 var pvp_ai_sparring_catalog_team_grid: GridContainer
 var pvp_ai_sparring_catalog_use_player_button: Button
 var pvp_ai_sparring_catalog_use_opponent_button: Button
+var pvp_ai_sparring_catalog_export_button: Button
 var pvp_ai_sparring_catalog_selected_team_id := ""
 var pvp_ai_sparring_catalog_detail: Dictionary = {}
 var pvp_ai_sparring_catalog_detail_loading := false
@@ -7479,6 +7480,13 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai_sparring_catalog_use_opponent_button.pressed.connect(_on_ai_sparring_catalog_use_opponent_pressed)
 	_apply_button_style(pvp_ai_sparring_catalog_use_opponent_button)
 	catalog_actions.add_child(pvp_ai_sparring_catalog_use_opponent_button)
+	pvp_ai_sparring_catalog_export_button = Button.new()
+	_set_localized_control_property(pvp_ai_sparring_catalog_export_button, "text", "ui.pvp.ai_sparring.catalog.export")
+	pvp_ai_sparring_catalog_export_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_catalog_export_button.disabled = true
+	pvp_ai_sparring_catalog_export_button.pressed.connect(_on_ai_sparring_catalog_export_pressed)
+	_apply_button_style(pvp_ai_sparring_catalog_export_button)
+	catalog_actions.add_child(pvp_ai_sparring_catalog_export_button)
 
 	var history_page := _create_pvp_ranked_tab_page("Match History", 14)
 	history_page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.history")
@@ -43555,6 +43563,8 @@ func _render_ai_sparring_catalog_detail() -> void:
 		pvp_ai_sparring_catalog_use_player_button.disabled = not has_selection
 	if pvp_ai_sparring_catalog_use_opponent_button != null:
 		pvp_ai_sparring_catalog_use_opponent_button.disabled = not has_selection
+	if pvp_ai_sparring_catalog_export_button != null:
+		pvp_ai_sparring_catalog_export_button.disabled = _ai_sparring_catalog_pokepaste().is_empty()
 	if pvp_ai_sparring_catalog_team_grid == null:
 		return
 	for child: Node in pvp_ai_sparring_catalog_team_grid.get_children():
@@ -43693,6 +43703,66 @@ func _on_ai_sparring_catalog_use_opponent_pressed() -> void:
 	_resolve_pvp_training_ai_opponent_team()
 	_refresh_pvp_training_ai_team_source_ui()
 	pvp_ai_sparring_tabs.current_tab = 0
+
+
+func _on_ai_sparring_catalog_export_pressed() -> void:
+	var export_text := _ai_sparring_catalog_pokepaste()
+	if export_text.is_empty() or pvp_ai_sparring_catalog_export_button == null:
+		return
+	var export_button := pvp_ai_sparring_catalog_export_button
+	DisplayServer.clipboard_set(export_text)
+	export_button.disabled = true
+	export_button.text = LocalizationManager.text("ui.pvp.ai_sparring.catalog.export_copied")
+	await get_tree().create_timer(1.25).timeout
+	if not is_instance_valid(export_button):
+		return
+	export_button.text = LocalizationManager.text("ui.pvp.ai_sparring.catalog.export")
+	export_button.disabled = _ai_sparring_catalog_pokepaste().is_empty()
+
+
+func _ai_sparring_catalog_pokepaste() -> String:
+	var pokemon := _array_from_variant(pvp_ai_sparring_catalog_detail.get("pokemon", []))
+	var sets: Array[String] = []
+	for pokemon_value: Variant in pokemon:
+		if not (pokemon_value is Dictionary):
+			continue
+		var set_data := pokemon_value as Dictionary
+		var species := str(set_data.get("species", "")).strip_edges()
+		if species == "":
+			continue
+		var header := species
+		var gender := str(set_data.get("gender", "")).strip_edges()
+		if gender in ["M", "F"]:
+			header += " (%s)" % gender
+		var item := str(set_data.get("item", "")).strip_edges()
+		if item != "":
+			header += " @ %s" % item
+		var lines: Array[String] = [header]
+		var ability := str(set_data.get("ability", "")).strip_edges()
+		if ability != "":
+			lines.append("Ability: %s" % ability)
+		if int(set_data.get("level", 100)) != 100:
+			lines.append("Level: %d" % int(set_data.get("level", 100)))
+		if bool(set_data.get("shiny", false)):
+			lines.append("Shiny: Yes")
+		var tera_type := str(set_data.get("teraType", "")).strip_edges()
+		if tera_type != "":
+			lines.append("Tera Type: %s" % tera_type)
+		var evs := _ai_sparring_stat_spread(set_data.get("evs", {}), 0)
+		if evs != "":
+			lines.append("EVs: %s" % evs)
+		var nature := str(set_data.get("nature", "")).strip_edges()
+		if nature != "":
+			lines.append("%s Nature" % nature)
+		var ivs := _ai_sparring_stat_spread(set_data.get("ivs", {}), 31)
+		if ivs != "":
+			lines.append("IVs: %s" % ivs)
+		for move: Variant in _array_from_variant(set_data.get("moves", [])):
+			var move_name := str(move).strip_edges()
+			if move_name != "":
+				lines.append("- %s" % move_name)
+		sets.append("\n".join(lines))
+	return "\n\n".join(sets)
 
 
 func _on_ai_sparring_player_catalog_team_selected(_index: int) -> void:

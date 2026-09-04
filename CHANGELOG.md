@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring's Team Catalog can now copy any selected team as a PokéPaste export.
+
 - AI Sparring now shows the full PC-style Pokémon info card when hovering a team slot in Free Sparring.
 
 - AI Sparring now waits for the player's ordered pivot replacement without repeatedly requesting an unavailable opponent switch.
