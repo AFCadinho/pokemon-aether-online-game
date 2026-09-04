@@ -43421,43 +43421,66 @@ func _create_ai_sparring_catalog_team_card(entry: Dictionary) -> Control:
 	var panel := PanelContainer.new()
 	var team_id := str(entry.get("teamId", ""))
 	var selected := team_id == pvp_ai_sparring_catalog_selected_team_id
+	var normal_style := _make_panel_style(Color("#101829e8"), Color("#35597a99"), 10, 1)
+	var hover_style := _make_panel_style(Color("#172b49f2"), Color("#62d5ffcc"), 10, 2)
+	var selected_style := _make_panel_style(Color("#182741f2"), Color("#f5df9acc"), 10, 2)
+	var selected_hover_style := _make_panel_style(Color("#24385ae8"), Color("#ffe699"), 10, 2)
 	panel.tooltip_text = str(entry.get("displayName", team_id))
 	panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	panel.add_theme_stylebox_override(
-		"panel",
-		_make_panel_style(
-			Color("#172541ee") if selected else Color("#101829d9"),
-			Color("#f5df9acc") if selected else Color("#35597a99"),
-			9,
-			2 if selected else 1
-		)
-	)
+	panel.custom_minimum_size = Vector2(0.0, 84.0)
+	panel.set_meta("normal_style", normal_style)
+	panel.set_meta("hover_style", hover_style)
+	panel.set_meta("selected_style", selected_style)
+	panel.set_meta("selected_hover_style", selected_hover_style)
+	panel.set_meta("selected", selected)
+	panel.add_theme_stylebox_override("panel", selected_style if selected else normal_style)
 	panel.gui_input.connect(_on_ai_sparring_catalog_team_card_gui_input.bind(team_id))
+	panel.mouse_entered.connect(_on_ai_sparring_catalog_team_card_hover_changed.bind(panel, true))
+	panel.mouse_exited.connect(_on_ai_sparring_catalog_team_card_hover_changed.bind(panel, false))
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 9)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_right", 9)
+	margin.add_theme_constant_override("margin_bottom", 7)
+	panel.add_child(margin)
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 5)
-	panel.add_child(layout)
+	margin.add_child(layout)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 7)
+	layout.add_child(header)
 	var title := Label.new()
 	title.text = str(entry.get("displayName", team_id))
 	title.clip_text = true
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	title.add_theme_font_size_override("font_size", 13)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_TEXT)
-	layout.add_child(title)
-	var archetype := Label.new()
-	archetype.text = LocalizationManager.text(
+	header.add_child(title)
+	var archetype_badge := Label.new()
+	archetype_badge.text = LocalizationManager.text(
 		"ui.pvp.training.ai.archetype.%s" % str(entry.get("archetype", "balance"))
 	)
-	archetype.add_theme_font_size_override("font_size", 11)
-	archetype.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	layout.add_child(archetype)
+	archetype_badge.custom_minimum_size = Vector2(76.0, 22.0)
+	archetype_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	archetype_badge.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	archetype_badge.add_theme_font_size_override("font_size", 10)
+	archetype_badge.add_theme_color_override("font_color", Color("#b8dbf4"))
+	archetype_badge.add_theme_stylebox_override(
+		"normal", _make_panel_style(Color("#172c45"), Color("#4c789f"), 6, 1)
+	)
+	header.add_child(archetype_badge)
 	var icons := HBoxContainer.new()
-	icons.add_theme_constant_override("separation", 4)
+	icons.add_theme_constant_override("separation", 5)
 	layout.add_child(icons)
 	for pokemon_value: Variant in _array_from_variant(entry.get("pokemon", [])):
 		if pokemon_value is Dictionary:
 			var slot := _create_pvp_training_ai_opponent_preview_slot(pokemon_value as Dictionary, 34.0, 30.0)
+			slot.add_theme_stylebox_override(
+				"panel", _make_panel_style(Color("#081321ee"), Color("#41698d"), 7, 1)
+			)
 			icons.add_child(slot)
-	_set_mouse_ignore_recursive(layout)
+	_set_mouse_ignore_recursive(margin)
 	return panel
 
 
@@ -43467,6 +43490,14 @@ func _on_ai_sparring_catalog_team_card_gui_input(event: InputEvent, team_id: Str
 	var mouse_event := event as InputEventMouseButton
 	if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
 		_on_ai_sparring_catalog_team_pressed(team_id)
+
+
+func _on_ai_sparring_catalog_team_card_hover_changed(panel: PanelContainer, hovered: bool) -> void:
+	var selected := bool(panel.get_meta("selected", false))
+	var style_key := "selected_hover_style" if selected and hovered else "selected_style" if selected else "hover_style" if hovered else "normal_style"
+	var style := panel.get_meta(style_key, null) as StyleBox
+	if style != null:
+		panel.add_theme_stylebox_override("panel", style)
 
 
 func _set_mouse_ignore_recursive(node: Node) -> void:
