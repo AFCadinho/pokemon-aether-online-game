@@ -148,8 +148,9 @@ func _check_runtime_renderer() -> void:
 		"trainer figures render above arena platforms but behind active Pokemon"
 	)
 	_check(
-		renderer.command_callout.z_index > BattleRenderLayers.MOVE_FOREGROUND,
-		"trainer command callouts remain above foreground move overlays"
+		renderer.command_callout.z_index == BattleRenderLayers.TRAINER_CALLOUTS
+			and renderer.command_callout.z_index > BattleRenderLayers.SIDE_CONDITION_INDICATORS,
+		"trainer command callouts remain above all battle-stage overlays"
 	)
 	renderer.show_npc(battle_frames, Vector2.LEFT)
 	_check(renderer.visible, "NPC renderer becomes visible with valid frames")
