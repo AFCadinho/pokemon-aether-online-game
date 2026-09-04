@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring keeps the opponent setup panel at a stable height when switching between a catalog team and PokéPaste.
+
 - AI Sparring Match History can now be cleared from the player-facing tab after confirmation.
 
 - AI Sparring can now use a temporary PokéPaste as the AI opponent's team, alongside the curated catalog teams.

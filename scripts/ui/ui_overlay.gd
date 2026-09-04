@@ -148,6 +148,7 @@ const ALPHA_TOOLS_ERROR_FEEDBACK := preload("res://scripts/services/alpha_tools_
 const GAMEPLAY_RESET_TITLE := "Reset / New Game"
 const GAMEPLAY_RESET_DESCRIPTION := "Return this trainer to first-login gameplay state"
 const GAMEPLAY_RESET_CONFIRM_TEXT := "This permanently resets your location, party, boxes, regular inventory, money, playtime and gameplay unlocks. Unclaimed mail attachments are permanently removed, and your other active sessions are signed out.\n\nYour account, roles, friends, mail history, PvP history, Aether Gems and paid items remain."
+const AI_SPARRING_OPPONENT_STEP_MIN_HEIGHT := 282.0
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
 const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")
@@ -7253,6 +7254,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 
 	var opponent_card := PanelContainer.new()
 	opponent_card.name = "AiSparringOpponentStep"
+	opponent_card.custom_minimum_size = Vector2(0, AI_SPARRING_OPPONENT_STEP_MIN_HEIGHT)
 	opponent_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	opponent_card.size_flags_stretch_ratio = 1.0
 	opponent_card.add_theme_stylebox_override(
