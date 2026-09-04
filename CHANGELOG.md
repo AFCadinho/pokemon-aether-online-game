@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a dedicated pixel-art icon for Oak's Parcel instead of the missing-item placeholder.
+
 - AI Sparring now keeps live HP and status attached to imported team slots after damage and battle-form changes.
 - AI Sparring now changes an opponent's field sprite immediately when its Mega Evolution is shown, without waiting for a later attack.
 - Training AI battles now keep each imported Pokémon's fixed party position when submitting switches, including after Showdown reorders its internal request list.
