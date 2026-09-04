@@ -452,6 +452,13 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_opponent_preview != null and ai_opponent_preview.visible, "A random AI team is resolved before the battle starts")
 	_check(ai_opponent_preview_grid != null and ai_opponent_preview_grid.get_child_count() == 6, "AI opponent preview renders all six Pokemon")
 	_check(ai_opponent_preview_title != null and ai_opponent_preview_title.text.begins_with("TEAM TEGENSTANDER"), "AI opponent preview identifies the resolved team")
+	var ai_sparring_hover_card := overlay.get("pvp_ai_sparring_hover_card") as PartyHoverCard
+	_check(ai_sparring_hover_card != null and ai_sparring_hover_card.storage_visuals, "Free Sparring reuses the PC Pokemon hover card")
+	_check(
+		ai_opponent_preview_grid != null
+		and not ai_opponent_preview_grid.get_child(0).get_signal_connection_list("mouse_entered").is_empty(),
+		"AI opponent preview slots open a full Pokemon hover card"
+	)
 	var training_ai_team_style := training_ai_team_select.get_theme_stylebox("normal") as StyleBoxFlat if training_ai_team_select != null else null
 	_check(training_ai_team_style != null and training_ai_team_style.bg_color == Color("#171630"), "The final AI team choice is visually distinct from supporting settings")
 	_check(
