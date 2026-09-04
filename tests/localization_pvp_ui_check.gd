@@ -82,6 +82,9 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_opponent_step := overlay.find_child("AiSparringOpponentStep", true, false) as PanelContainer
 	var training_ai_mode_row := overlay.get("pvp_training_ai_mode_row") as HBoxContainer
 	var training_ai_mode_select := overlay.get("pvp_training_ai_mode_select") as OptionButton
+	var training_ai_team_source_row := overlay.get("pvp_training_ai_team_source_row") as HBoxContainer
+	var training_ai_team_source_select := overlay.get("pvp_training_ai_team_source_select") as OptionButton
+	var training_ai_custom_team_input := overlay.get("pvp_training_ai_custom_team_input") as TextEdit
 	var training_ai_archetype_row := overlay.get("pvp_training_ai_archetype_row") as HBoxContainer
 	var training_ai_archetype_select := overlay.get("pvp_training_ai_archetype_select") as OptionButton
 	var training_ai_team_row := overlay.get("pvp_training_ai_team_row") as HBoxContainer
@@ -323,7 +326,9 @@ func _check_pvp_runtime_translation() -> void:
 	_check(training_ai_mode_row != null and training_ai_mode_row.visible, "AI flow exposes AI4 and active AI5 execution modes")
 	_check(training_ai_mode_select != null and training_ai_mode_select.item_count == 2, "Both permitted AI modes are selectable")
 	_check(str(training_ai_mode_select.get_selected_metadata()) == "ai4", "plain AI4 without shadow observation is the safe default")
-	for select: OptionButton in [training_ai_mode_select, training_ai_archetype_select, training_ai_team_select]:
+	_check(training_ai_team_source_row != null and training_ai_team_source_row.visible, "AI flow lets players choose a catalog or PokéPaste opponent")
+	_check(training_ai_team_source_select != null and training_ai_team_source_select.item_count == 2, "AI team source offers catalog and PokéPaste choices")
+	for select: OptionButton in [training_ai_mode_select, training_ai_team_source_select, training_ai_archetype_select, training_ai_team_select]:
 		_check(
 			select != null
 			and not select.fit_to_longest_item
@@ -366,6 +371,12 @@ func _check_pvp_runtime_translation() -> void:
 		),
 		"Changing the archetype cannot change the opponent column minimum width"
 	)
+	training_ai_team_source_select.select(1)
+	overlay.call("_on_pvp_training_ai_team_source_selected", 1)
+	_check(training_ai_custom_team_input != null and training_ai_custom_team_input.visible, "PokéPaste source reveals an opponent-team paste field")
+	_check(training_ai_archetype_row != null and not training_ai_archetype_row.visible, "Custom opponent paste hides irrelevant catalog archetypes")
+	_check(training_ai_team_row != null and not training_ai_team_row.visible, "Custom opponent paste hides irrelevant catalog teams")
+	_check(ai_opponent_preview != null and not ai_opponent_preview.visible, "Custom opponent paste does not claim a catalog roster preview")
 	_check(overlay.get("pvp_ai_sparring_status_label") == null, "AI Sparring omits the redundant footer status bar")
 	_check(subtitle != null and subtitle.text == "Oefen PvP-gevechten tegen AI-tegenstanders", "AI Sparring presents itself as general AI PvP practice")
 	_check(ai_sparring_intro != null and not ai_sparring_intro.text.to_lower().contains("onderzoek"), "Free Sparring copy does not mention the research campaign")

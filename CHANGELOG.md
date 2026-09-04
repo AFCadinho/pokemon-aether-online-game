@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring can now use a temporary PokéPaste as the AI opponent's team, alongside the curated catalog teams.
+
 - AI Sparring now presents itself as general AI PvP practice and removes the redundant setup footer below the battle button.
 
 - AI Sparring now shows the current party in the same compact six-slot preview used for battle teams, with Pokémon names available on hover.

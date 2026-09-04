@@ -149,6 +149,7 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 	_check(
 		api_source.contains("/battle/pvp/training/ai/battles")
 		and api_source.contains("\"teamId\": ai_team_id")
+		and api_source.contains("\"aiTeamText\": ai_team_text.strip_edges()")
 		and api_source.contains("\"aiMode\": ai_mode")
 		and api_source.contains("ai_mode in [\"ai4\", \"shadow\", \"active\"]")
 		and api_source.contains("\"archetype\": ai_archetype"),
@@ -156,6 +157,8 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 	)
 	_check(
 		overlay_source.contains("_resolved_pvp_training_ai_team_id()")
+		and overlay_source.contains("_selected_pvp_training_ai_team_source()")
+		and overlay_source.contains("ui.pvp.training.ai.team_source_paste")
 		and overlay_source.contains("_selected_pvp_training_ai_mode()")
 		and overlay_source.contains("_selected_pvp_training_ai_archetype()")
 		and overlay_source.contains("if \"ai4\" in raw_modes:")
