@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed Dreepy's follower sprite to face the same direction as the Trainer while walking.
+
 - Added a dedicated pixel-art icon for Oak's Parcel instead of the missing-item placeholder.
 
 - Moved Camper Iris and Paras in the Route 3 Pokémon Center so the Move Deleter can be interacted with directly.
