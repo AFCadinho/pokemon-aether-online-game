@@ -100,8 +100,8 @@ func _init() -> void:
 	for odd_count: int in [1, 3, 5]:
 		var last_center: Vector2 = heal_machine_effect.call("get_indicator_center", odd_count - 1, odd_count, 2, 0.0)
 		_check(
-			is_zero_approx(last_center.x),
-			"Healing machine centers the last indicator for %d Pokémon" % odd_count
+			is_equal_approx(last_center.x, -6.5),
+			"Healing machine left-aligns the last indicator for %d Pokémon" % odd_count
 		)
 	heal_machine_effect.call("play_heal_sequence", 0.8, 3)
 	_check(
