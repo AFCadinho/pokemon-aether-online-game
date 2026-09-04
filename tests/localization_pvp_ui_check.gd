@@ -378,6 +378,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(str(overlay.call("_resolved_pvp_training_ai_team_id")) == "smogon-ndou-screens-lameflame", "Selecting a named AI team binds its exact preview and battle identity")
 	_check(ai_opponent_preview_grid.get_child(0).tooltip_text.contains("Mawile"), "Named AI team preview uses that team's roster")
 	var opponent_minimum_width_before_filter := ai_opponent_step.get_combined_minimum_size().x
+	var opponent_minimum_height_before_filter := ai_opponent_step.get_combined_minimum_size().y
 	training_ai_archetype_select.select(2)
 	overlay.call("_on_pvp_training_ai_archetype_selected", 2)
 	_check(training_ai_team_select.item_count == 2, "Choosing an archetype filters the specific team list")
@@ -399,6 +400,13 @@ func _check_pvp_runtime_translation() -> void:
 	_check(training_ai_archetype_row != null and not training_ai_archetype_row.visible, "Custom opponent paste hides irrelevant catalog archetypes")
 	_check(training_ai_team_row != null and not training_ai_team_row.visible, "Custom opponent paste hides irrelevant catalog teams")
 	_check(ai_opponent_preview != null and not ai_opponent_preview.visible, "Custom opponent paste does not claim a catalog roster preview")
+	_check(
+		is_equal_approx(
+			opponent_minimum_height_before_filter,
+			ai_opponent_step.get_combined_minimum_size().y
+		),
+		"Switching between a catalog team and PokéPaste keeps the opponent panel height stable"
+	)
 	_check(overlay.get("pvp_ai_sparring_status_label") == null, "AI Sparring omits the redundant footer status bar")
 	_check(subtitle != null and subtitle.text == "Oefen PvP-gevechten tegen AI-tegenstanders", "AI Sparring presents itself as general AI PvP practice")
 	_check(ai_sparring_intro != null and not ai_sparring_intro.text.to_lower().contains("onderzoek"), "Free Sparring copy does not mention the research campaign")
