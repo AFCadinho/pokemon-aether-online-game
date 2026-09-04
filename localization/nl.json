@@ -9,6 +9,8 @@
   "common.cancel": "Annuleren",
   "common.confirm": "Bevestigen",
   "common.return": "Terug",
+  "ui.fossil_choice.title": "Kies een fossiel",
+  "ui.fossil_choice.confirm": "Dit is het {item}. Is dit je keuze?",
   "story.mt_moon.cutscene.go": "Vooruit, {pokemon}!",
   "story.mt_moon.cutscene.use_move": "{pokemon}, gebruik {move}!",
   "story.mt_moon.cutscene.player_speaker": "Jij",

@@ -2,6 +2,10 @@ extends WorldInteractable
 
 class_name OverworldItem
 
+signal fossil_confirmation_finished(accepted: bool)
+
+const ConfirmationScene := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
+
 const MACHINE_BALL_TEXTURE := preload(
 	"res://assets/npcs/gen4-ow-sprites/Object ball gold.png"
 )
@@ -48,6 +52,8 @@ func interact_with_player(_player: Node2D) -> void:
 	if pickup_id.strip_edges() == "":
 		_notify_pickup_warning(LocalizationManager.text("ui.overworld_item.unavailable"))
 		return
+	if _is_fossil_choice() and not await _confirm_fossil_choice():
+		return
 
 	claim_in_flight = true
 	var result: Dictionary = await InventoryService.claim_world_pickup(pickup_id)
@@ -65,6 +71,36 @@ func interact_with_player(_player: Node2D) -> void:
 	var granted_item_id := str(result.get("itemId", item_id)).strip_edges().to_lower()
 	var granted_quantity := maxi(int(result.get("quantity", quantity)), 1)
 	_notify_item_found(granted_item_id, granted_quantity)
+
+
+func _is_fossil_choice() -> bool:
+	var normalized_item_id := item_id.strip_edges().to_lower()
+	return normalized_item_id in ["helix-fossil", "dome-fossil"]
+
+
+func _confirm_fossil_choice() -> bool:
+	var item_name := ItemLocalization.display_name(item_id, item_id.capitalize())
+	var layer := CanvasLayer.new()
+	layer.layer = 120
+	get_tree().current_scene.add_child(layer)
+	var confirmation := ConfirmationScene.instantiate() as AetherConfirmationDialog
+	layer.add_child(confirmation)
+	confirmation.configure(
+		LocalizationManager.text("ui.fossil_choice.title"),
+		LocalizationManager.text("ui.fossil_choice.confirm", {"item": item_name}),
+		LocalizationManager.text("common.confirm"),
+		LocalizationManager.text("common.cancel")
+	)
+	confirmation.confirmed.connect(_resolve_fossil_confirmation.bind(true), CONNECT_ONE_SHOT)
+	confirmation.canceled.connect(_resolve_fossil_confirmation.bind(false), CONNECT_ONE_SHOT)
+	confirmation.popup_centered(Vector2i(540, 230))
+	var accepted: bool = await fossil_confirmation_finished
+	layer.queue_free()
+	return accepted
+
+
+func _resolve_fossil_confirmation(accepted: bool) -> void:
+	fossil_confirmation_finished.emit(accepted)
 
 
 func _notify_item_found(granted_item_id: String, granted_quantity: int) -> void:

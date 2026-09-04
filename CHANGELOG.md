@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added confirmation before choosing the Helix or Dome Fossil in Mt. Moon.
+
 - Fixed Dreepy's follower sprite to face the same direction as the Trainer while walking.
 
 - Added a dedicated pixel-art icon for Oak's Parcel instead of the missing-item placeholder.
