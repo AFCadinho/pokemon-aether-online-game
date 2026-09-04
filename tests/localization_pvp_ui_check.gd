@@ -242,6 +242,12 @@ func _check_pvp_runtime_translation() -> void:
 	var catalog_card := ai_sparring_catalog_results.get_child(0) as PanelContainer if ai_sparring_catalog_results != null and ai_sparring_catalog_results.get_child_count() == 1 else null
 	_check(catalog_card != null and catalog_card.mouse_default_cursor_shape == Control.CURSOR_POINTING_HAND, "The complete catalog team card is selectable")
 	_check(catalog_card != null and catalog_card.find_children("*", "Button", true, false).is_empty(), "Catalog roster icons are not separate button targets")
+	_check(catalog_card != null and catalog_card.has_meta("hover_style"), "Catalog cards provide a dedicated hover style")
+	if catalog_card != null:
+		overlay.call("_on_ai_sparring_catalog_team_card_hover_changed", catalog_card, true)
+		_check(catalog_card.get_theme_stylebox("panel") == catalog_card.get_meta("hover_style"), "Catalog cards use the hover style on pointer entry")
+		overlay.call("_on_ai_sparring_catalog_team_card_hover_changed", catalog_card, false)
+		_check(catalog_card.get_theme_stylebox("panel") == catalog_card.get_meta("normal_style"), "Catalog cards restore their resting style on pointer exit")
 	var catalog_card_text := ""
 	for catalog_label: Label in catalog_card.find_children("*", "Label", true, false) if catalog_card != null else []:
 		catalog_card_text += catalog_label.text
