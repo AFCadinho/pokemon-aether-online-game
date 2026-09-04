@@ -4428,6 +4428,7 @@
   "ui.pvp.ai_sparring.step.team": "1 · JOUW TEAM",
   "ui.pvp.ai_sparring.team_source.paste": "Plak een Showdown-team",
   "ui.pvp.ai_sparring.party_note": "Je huidige party wordt gebruikt als tijdelijk oefenteam. Je party wordt niet gewijzigd.",
+  "ui.pvp.ai_sparring.party_preview": "JOUW TEAM",
   "ui.pvp.ai_sparring.party_export_failed": "Je huidige party kon niet klaargemaakt worden voor sparring.",
   "ui.pvp.ai_sparring.step.opponent": "2 · AI-TEGENSTANDER",
   "ui.pvp.ai_sparring.step.ready": "3 · KLAAR OM TE VECHTEN",

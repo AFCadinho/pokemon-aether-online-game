@@ -4428,6 +4428,7 @@
   "ui.pvp.ai_sparring.step.team": "1 · SUA EQUIPE",
   "ui.pvp.ai_sparring.team_source.paste": "Cole uma equipe do Showdown",
   "ui.pvp.ai_sparring.party_note": "Sua equipe atual será usada como equipe temporária de treino. Sua equipe não será alterada.",
+  "ui.pvp.ai_sparring.party_preview": "SUA EQUIPE",
   "ui.pvp.ai_sparring.party_export_failed": "Não foi possível preparar sua equipe atual para o treino.",
   "ui.pvp.ai_sparring.step.opponent": "2 · OPONENTE IA",
   "ui.pvp.ai_sparring.step.ready": "3 · PRONTO PARA BATALHAR",

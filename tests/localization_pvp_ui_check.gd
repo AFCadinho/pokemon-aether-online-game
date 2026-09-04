@@ -61,6 +61,9 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_sparring_status := overlay.get("pvp_ai_sparring_status_label") as Label
 	var ai_sparring_start := overlay.get("pvp_ai_sparring_start_button") as Button
 	var ai_sparring_team_source := overlay.get("pvp_ai_sparring_team_source_select") as OptionButton
+	var ai_sparring_party_preview := overlay.get("pvp_ai_sparring_party_preview") as VBoxContainer
+	var ai_sparring_party_preview_title := overlay.get("pvp_ai_sparring_party_preview_title") as Label
+	var ai_sparring_party_preview_grid := overlay.get("pvp_ai_sparring_party_preview_grid") as HBoxContainer
 	var ai_research_start := overlay.get("pvp_ai5_playtest_start_button") as Button
 	var ai_research_tabs := overlay.get("pvp_ai5_playtest_tabs") as TabContainer
 	var ai_research_card := overlay.find_child("AiResearchCampaignCard", true, false) as PanelContainer
@@ -179,10 +182,14 @@ func _check_pvp_runtime_translation() -> void:
 		ai_sparring_team_source.select(1)
 		overlay.call("_on_ai_sparring_team_source_selected", 1)
 	_check(ai_training_input != null and not ai_training_input.visible, "Choosing the current party hides the paste field")
+	_check(ai_sparring_party_preview != null and ai_sparring_party_preview.visible, "Choosing the current party reveals its compact team preview")
+	_check(ai_sparring_party_preview_title != null and ai_sparring_party_preview_title.text == "JOUW TEAM", "Current-party preview heading renders in Dutch")
+	_check(ai_sparring_party_preview_grid != null and ai_sparring_party_preview_grid.get_child_count() == 6, "Current-party preview always renders six ranked-style slots")
 	if ai_sparring_team_source != null:
 		ai_sparring_team_source.select(0)
 		overlay.call("_on_ai_sparring_team_source_selected", 0)
 	_check(ai_training_input != null and ai_training_input.visible, "Switching back restores the paste field")
+	_check(ai_sparring_party_preview != null and not ai_sparring_party_preview.visible, "Paste mode hides the current-party preview")
 	_check(ai_opponent_step != null, "Free sparring groups AI selection as its second step")
 	_check(
 		ai_team_step != null

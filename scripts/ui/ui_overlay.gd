@@ -907,6 +907,9 @@ var pvp_ai_sparring_start_button: Button
 var pvp_ai_sparring_tabs: TabContainer
 var pvp_ai_sparring_status_label: Label
 var pvp_ai_sparring_team_source_select: OptionButton
+var pvp_ai_sparring_party_preview: VBoxContainer
+var pvp_ai_sparring_party_preview_title: Label
+var pvp_ai_sparring_party_preview_grid: HBoxContainer
 var pvp_ai5_playtest_status: Dictionary = {}
 var pvp_ai5_playtest_loading := false
 var pvp_training_team_preview_section: VBoxContainer
@@ -7170,6 +7173,28 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_training_team_note.add_theme_font_size_override("font_size", 11)
 	pvp_training_team_note.add_theme_color_override("font_color", Color("#9be7b1"))
 	team_layout.add_child(pvp_training_team_note)
+
+	pvp_ai_sparring_party_preview = VBoxContainer.new()
+	pvp_ai_sparring_party_preview.name = "AiSparringCurrentPartyPreview"
+	pvp_ai_sparring_party_preview.visible = false
+	pvp_ai_sparring_party_preview.add_theme_constant_override("separation", 6)
+	team_layout.add_child(pvp_ai_sparring_party_preview)
+
+	pvp_ai_sparring_party_preview_title = Label.new()
+	_set_localized_control_property(
+		pvp_ai_sparring_party_preview_title,
+		"text",
+		"ui.pvp.ai_sparring.party_preview"
+	)
+	pvp_ai_sparring_party_preview_title.add_theme_font_size_override("font_size", 12)
+	pvp_ai_sparring_party_preview_title.add_theme_color_override("font_color", Color("#f5df9a"))
+	pvp_ai_sparring_party_preview.add_child(pvp_ai_sparring_party_preview_title)
+
+	pvp_ai_sparring_party_preview_grid = HBoxContainer.new()
+	pvp_ai_sparring_party_preview_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_party_preview_grid.add_theme_constant_override("separation", 6)
+	pvp_ai_sparring_party_preview.add_child(pvp_ai_sparring_party_preview_grid)
+	_refresh_ai_sparring_party_preview()
 
 	var opponent_card := PanelContainer.new()
 	opponent_card.name = "AiSparringOpponentStep"
@@ -43000,6 +43025,28 @@ func _on_ai_sparring_team_source_selected(_index: int) -> void:
 			pvp_training_team_note,
 			"text",
 			"ui.pvp.ai_sparring.party_note" if use_party else "ui.pvp.training.ephemeral_note"
+		)
+	_refresh_ai_sparring_party_preview()
+
+
+func _refresh_ai_sparring_party_preview() -> void:
+	if pvp_ai_sparring_party_preview == null or pvp_ai_sparring_party_preview_grid == null:
+		return
+	var use_party := _selected_ai_sparring_team_source() == "party"
+	pvp_ai_sparring_party_preview.visible = use_party
+	for child: Node in pvp_ai_sparring_party_preview_grid.get_children():
+		pvp_ai_sparring_party_preview_grid.remove_child(child)
+		child.queue_free()
+	if not use_party:
+		return
+	for slot_index in range(MAX_PARTY_SIZE):
+		var pokemon: Pokemon = (
+			PlayerSave.party[slot_index]
+			if slot_index < PlayerSave.party.size() and PlayerSave.party[slot_index] is Pokemon
+			else null
+		)
+		pvp_ai_sparring_party_preview_grid.add_child(
+			_create_pvp_team_preview_slot(pokemon, slot_index)
 		)
 
 
