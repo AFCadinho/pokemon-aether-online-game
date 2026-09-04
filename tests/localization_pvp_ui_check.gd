@@ -58,7 +58,7 @@ func _check_pvp_runtime_translation() -> void:
 	var room_ai_button := overlay.get("pvp_room_ai_mode_button") as Button
 	var ai_sparring_menu_button := overlay.get("pvp_mode_ai_sparring_button") as Button
 	var ai_sparring_tabs := overlay.get("pvp_ai_sparring_tabs") as TabContainer
-	var ai_sparring_status := overlay.get("pvp_ai_sparring_status_label") as Label
+	var ai_sparring_intro := overlay.find_child("AiSparringIntro", true, false) as Label
 	var ai_sparring_start := overlay.get("pvp_ai_sparring_start_button") as Button
 	var ai_sparring_team_source := overlay.get("pvp_ai_sparring_team_source_select") as OptionButton
 	var ai_sparring_party_preview := overlay.get("pvp_ai_sparring_party_preview") as VBoxContainer
@@ -366,7 +366,14 @@ func _check_pvp_runtime_translation() -> void:
 		),
 		"Changing the archetype cannot change the opponent column minimum width"
 	)
-	_check(ai_sparring_status != null and ai_sparring_status.text.begins_with("Vrij oefenen"), "Dedicated AI status explains the selected flow")
+	_check(overlay.get("pvp_ai_sparring_status_label") == null, "AI Sparring omits the redundant footer status bar")
+	_check(subtitle != null and subtitle.text == "Oefen PvP-gevechten tegen AI-tegenstanders", "AI Sparring presents itself as general AI PvP practice")
+	_check(ai_sparring_intro != null and not ai_sparring_intro.text.to_lower().contains("onderzoek"), "Free Sparring copy does not mention the research campaign")
+	overlay.set("pvp_popup_active_section", "AI Sparring")
+	overlay.call("_on_pvp_ai_sparring_tab_changed", 0)
+	overlay.call("_set_pvp_status_key", "ui.pvp.training.paste_required")
+	_check(subtitle != null and subtitle.text.begins_with("Plak eerst"), "AI Sparring keeps actionable feedback visible without a footer")
+	overlay.call("_on_pvp_ai_sparring_tab_changed", 0)
 	overlay.set("pvp_ai5_playtest_status", {
 		"enabled": true,
 		"completedBattles": 1,
