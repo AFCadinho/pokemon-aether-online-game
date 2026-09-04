@@ -8965,6 +8965,8 @@ func _render_battle_events(
 		if event_type == "mega" or event_type == "primal":
 			_release_ordered_response_display_species_for_ident(str(event_data.get("target", "")))
 			_fill_mega_event_species(event_data)
+			if training_ai_battle and _get_player_id_from_ident(str(event_data.get("target", ""))) == "p2":
+				display_data_presenter.remember_public_trainer_mega_species(event_data)
 			battle_state.apply_event_conditions([event_data])
 			var public_mega_species := str(event_data.get("species", "")) if training_ai_battle else ""
 			_update_active_pokemon_presentation_for_ident(

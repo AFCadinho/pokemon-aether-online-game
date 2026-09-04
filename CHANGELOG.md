@@ -28,7 +28,7 @@
 - Renamed the item label from "Oaks Parcel" to "Oak's Parcel".
 
 - AI Sparring now keeps live HP and status attached to imported team slots after damage and battle-form changes.
-- AI Sparring now updates an opponent's name and field sprite before its Mega Evolution animation begins, without waiting for a later attack.
+- AI Sparring now updates an opponent's name, field sprite and team icon during its Mega Evolution, without waiting for the next turn.
 - Training AI battles now keep each imported Pokémon's fixed party position when submitting switches, including after Showdown reorders its internal request list.
 - Training battles no longer request another AI replacement after its final Pokémon faints to entry hazards.
 - AI5 Research markers now default to the previous completed turn and let trainers select any earlier turn.
