@@ -30,6 +30,12 @@ const FORM_FOLLOWER_SPRITE_ALIASES := {
 	"URSHIFU_RAPID_STRIKE": ["URSHIFU_1"],
 }
 
+# Dreepy's artwork was authored with the directional rows in a different
+# order from the shared follower spritesheet convention.
+const SPECIES_DIRECTION_ROWS := {
+	"DREEPY": {"down": 0, "left": 2, "right": 3, "up": 1},
+}
+
 static var _sprite_frames_cache: Dictionary = {}
 static var _follower_sprite_map: Dictionary = {}
 static var _follower_sprite_map_loaded := false
@@ -47,7 +53,7 @@ static func get_sprite_frames(species: String, shiny: bool) -> SpriteFrames:
 		_sprite_frames_cache[cache_key] = null
 		return null
 
-	var sprite_frames: SpriteFrames = _build_sprite_frames(texture)
+	var sprite_frames: SpriteFrames = _build_sprite_frames(texture, species)
 	_sprite_frames_cache[cache_key] = sprite_frames
 	return sprite_frames
 
@@ -68,22 +74,23 @@ static func _load_texture_for_species(species: String, shiny: bool) -> Texture2D
 
 	return null
 
-static func _build_sprite_frames(texture: Texture2D) -> SpriteFrames:
+static func _build_sprite_frames(texture: Texture2D, species: String) -> SpriteFrames:
 	var sprite_frames := SpriteFrames.new()
 	if sprite_frames.has_animation(&"default"):
 		sprite_frames.remove_animation(&"default")
 
 	var frame_size := _get_frame_size(texture)
 
-	_add_idle_animation(sprite_frames, texture, frame_size, "idle_down", 0)
-	_add_idle_animation(sprite_frames, texture, frame_size, "idle_left", 1)
-	_add_idle_animation(sprite_frames, texture, frame_size, "idle_right", 2)
-	_add_idle_animation(sprite_frames, texture, frame_size, "idle_up", 3)
+	var direction_rows := _get_direction_rows(species)
+	_add_idle_animation(sprite_frames, texture, frame_size, "idle_down", direction_rows.down)
+	_add_idle_animation(sprite_frames, texture, frame_size, "idle_left", direction_rows.left)
+	_add_idle_animation(sprite_frames, texture, frame_size, "idle_right", direction_rows.right)
+	_add_idle_animation(sprite_frames, texture, frame_size, "idle_up", direction_rows.up)
 
-	_add_walk_animation(sprite_frames, texture, frame_size, "walk_down", 0)
-	_add_walk_animation(sprite_frames, texture, frame_size, "walk_left", 1)
-	_add_walk_animation(sprite_frames, texture, frame_size, "walk_right", 2)
-	_add_walk_animation(sprite_frames, texture, frame_size, "walk_up", 3)
+	_add_walk_animation(sprite_frames, texture, frame_size, "walk_down", direction_rows.down)
+	_add_walk_animation(sprite_frames, texture, frame_size, "walk_left", direction_rows.left)
+	_add_walk_animation(sprite_frames, texture, frame_size, "walk_right", direction_rows.right)
+	_add_walk_animation(sprite_frames, texture, frame_size, "walk_up", direction_rows.up)
 
 	return sprite_frames
 
@@ -92,6 +99,9 @@ static func _get_frame_size(texture: Texture2D) -> Vector2i:
 		maxi(texture.get_width() / FRAME_COLUMNS, 1),
 		maxi(texture.get_height() / FRAME_ROWS, 1)
 	)
+
+static func _get_direction_rows(species: String) -> Dictionary:
+	return SPECIES_DIRECTION_ROWS.get(_normalize_species_key(species), {"down": 0, "left": 1, "right": 2, "up": 3})
 
 static func _add_idle_animation(sprite_frames: SpriteFrames, texture: Texture2D, frame_size: Vector2i, animation_name: String, row: int) -> void:
 	sprite_frames.add_animation(animation_name)
