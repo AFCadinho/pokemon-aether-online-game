@@ -15975,6 +15975,7 @@ func _remember_publicly_revealed_ogerpon_species(player_id: String, species: Str
 
 func _get_active_display_name(player_id: String) -> String:
 	var display_name := ""
+	var display_name_uses_default_ident := false
 	if _is_training_room_battle() and player_id == _get_local_state_player_id():
 		var active_pokemon := battle_state.get_active_player_pokemon(player_id)
 		for key: String in ["nickname", "name", "displayName"]:
@@ -15985,15 +15986,22 @@ func _get_active_display_name(player_id: String) -> String:
 		if display_name == "":
 			var ident_name := _get_species_from_battle_ident(str(active_pokemon.get("ident", "")))
 			display_name = ident_name if ident_name != "" else _get_active_display_species(player_id)
+			display_name_uses_default_ident = ident_name != ""
 	else:
 		display_name = display_data_presenter.get_active_display_name(player_id).strip_edges()
 		if display_name == "":
 			display_name = _get_active_display_species(player_id)
 
-	return OGERPON_BATTLE_FORM.resolve_hud_display_name(
+	var resolved_display_name := OGERPON_BATTLE_FORM.resolve_hud_display_name(
 		_get_active_display_species(player_id),
 		display_name
 	)
+	if display_name_uses_default_ident:
+		return event_text_formatter.resolve_pokemon_display_name(
+			resolved_display_name,
+			_get_active_display_species(player_id)
+		)
+	return resolved_display_name
 
 func _get_active_battle_log_identity(player_id: String) -> String:
 	return event_text_formatter.format_pokemon_identity(

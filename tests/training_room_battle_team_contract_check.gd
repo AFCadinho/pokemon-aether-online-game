@@ -117,6 +117,11 @@ func _check_battle_controller_isolates_training_from_player_save() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
 	_check(source.contains("pvp_battle_purpose == \"training\""), "battle controller recognizes Training Room purpose")
 	_check(source.contains("display_response.get(\"ownTeam\", [])"), "battle controller captures the private imported team")
+	_check(
+		source.contains("if display_name_uses_default_ident:")
+		and source.contains("event_text_formatter.resolve_pokemon_display_name("),
+		"Training Room HUD resolves an unnicknamed base ident to the complete battle form name"
+	)
 	_check(source.contains("if _is_training_room_battle():\n\t\treturn null"), "Training Room display cannot fall back to PlayerSave Pokemon")
 	_check(source.contains("and not _is_training_room_battle():\n\t\t\t_heal_local_party_after_pvp_battle()"), "Training Room completion does not heal or persist the account party")
 	_check(source.contains("func _sync_player_save_party_status_from_battle_state() -> void:\n\tif _is_training_room_battle():\n\t\treturn"), "Training Room responses cannot write HP or status into PlayerSave")

@@ -44,7 +44,7 @@ func format_move_event(actor: String, move_name: String) -> String:
 	})
 
 func format_pokemon_identity(display_name: String, species: String) -> String:
-	var safe_name := display_name.strip_edges()
+	var safe_name := resolve_pokemon_display_name(display_name, species)
 	var safe_species := species.strip_edges()
 	if safe_species != "":
 		safe_species = _localized_content_name("species", safe_species, safe_species)
@@ -52,29 +52,38 @@ func format_pokemon_identity(display_name: String, species: String) -> String:
 		return safe_species if safe_species != "" else _t("battle.fallback.pokemon")
 	if safe_species == "" or _normalize_pokemon_identity(safe_name) == _normalize_pokemon_identity(safe_species):
 		return safe_name
-	# After a public Mega Evolution, Showdown keeps the base species in an
-	# unnicknamed battle ident. Treat that default ident as the species name so
-	# logs show the revealed Mega forme instead of a fake nickname in brackets.
-	if _is_base_name_for_mega_species(safe_name, safe_species):
-		return safe_species
-	# Showdown keeps the base species in an unnicknamed Ogerpon ident while its
-	# details expose the mask-selected battle forme. That base name is not a
-	# nickname, so present the effective forme instead of adding parentheses.
-	if (
-		_normalize_pokemon_identity(safe_name) == "ogerpon"
-		and _normalize_pokemon_identity(safe_species).begins_with("ogerpon")
-	):
-		return safe_species
 	return _t("battle.event.pokemon_identity", {
 		"nickname": safe_name,
 		"species": safe_species,
 	})
 
 
-func _is_base_name_for_mega_species(display_name: String, species: String) -> bool:
+func resolve_pokemon_display_name(display_name: String, species: String) -> String:
+	var safe_name := display_name.strip_edges()
+	var safe_species := species.strip_edges()
+	if safe_species != "":
+		safe_species = _localized_content_name("species", safe_species, safe_species)
+	if safe_name == "":
+		return safe_species
+	if safe_species == "" or _normalize_pokemon_identity(safe_name) == _normalize_pokemon_identity(safe_species):
+		return safe_name
+	if _is_base_name_for_form_species(safe_name, safe_species):
+		return safe_species
+	return safe_name
+
+
+func _is_base_name_for_form_species(display_name: String, species: String) -> bool:
 	var normalized_name := _normalize_pokemon_identity(display_name)
 	var normalized_species := _normalize_pokemon_identity(species)
-	for suffix in ["megax", "megay", "megaz", "mega", "primal"]:
+	for suffix in [
+		"megax", "megay", "megaz", "mega", "primal",
+		"alola", "galar", "hisui", "paldea",
+		"therian", "incarnate", "origin", "altered", "terastal",
+		"wellspring", "hearthflame", "cornerstone", "teal",
+		"wash", "heat", "frost", "fan", "mow",
+		"sky", "land", "blade", "shield", "disguised", "busted",
+		"rapidstrike", "singlestrike",
+	]:
 		if normalized_species.ends_with(suffix):
 			return normalized_name == normalized_species.trim_suffix(suffix)
 	return false

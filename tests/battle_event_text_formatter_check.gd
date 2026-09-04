@@ -60,6 +60,21 @@ func _run() -> void:
 		"a custom nickname remains linked to its revealed Mega species"
 	)
 	_check_equal(
+		formatter.resolve_pokemon_display_name("Samurott", "Samurott-Hisui"),
+		"Samurott Hisui",
+		"an unnicknamed regional-form ident resolves to the localized species name"
+	)
+	_check_equal(
+		formatter.format_pokemon_identity("Samurott", "Samurott-Hisui"),
+		"Samurott Hisui",
+		"an unnicknamed regional form does not render as a fake nickname in the battle log"
+	)
+	_check_equal(
+		formatter.resolve_pokemon_display_name("Mizu", "Samurott-Hisui"),
+		"Mizu",
+		"a real regional-form nickname remains unchanged"
+	)
+	_check_equal(
 		formatter.format_trainer_battle_start_messages("Pikachu", "Eevee", "Gary Oak"),
 		["Gary Oak wants to battle!", "Gary Oak sent out Eevee!", "Go! Pikachu!"],
 		"trainer battle start messages"
