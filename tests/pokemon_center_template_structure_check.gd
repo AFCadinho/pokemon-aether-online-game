@@ -97,6 +97,12 @@ func _init() -> void:
 		int(heal_machine_effect.get("indicator_columns")) == 2,
 		"Healing machine arranges party indicators in two columns"
 	)
+	for odd_count: int in [1, 3, 5]:
+		var last_center: Vector2 = heal_machine_effect.call("get_indicator_center", odd_count - 1, odd_count, 2, 0.0)
+		_check(
+			is_zero_approx(last_center.x),
+			"Healing machine centers the last indicator for %d Pokémon" % odd_count
+		)
 	heal_machine_effect.call("play_heal_sequence", 0.8, 3)
 	_check(
 		int(heal_machine_effect.get("_visible_indicator_count")) == 3,
