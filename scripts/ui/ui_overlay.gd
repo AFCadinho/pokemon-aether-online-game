@@ -152,6 +152,9 @@ const GAMEPLAY_RESET_CONFIRM_TEXT := "This permanently resets your location, par
 # opponent preview. Keep it as the baseline when the custom PokéPaste fields
 # replace those catalog controls, so the following controls never shift.
 const AI_SPARRING_OPPONENT_STEP_MIN_HEIGHT := 310.0
+# The catalog, history, and research tabs should retain the Free Sparring
+# workspace height instead of making the complete PvP panel jump on tab change.
+const AI_SPARRING_TAB_MIN_HEIGHT := 520.0
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
 const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")
@@ -7196,6 +7199,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	hero_copy.add_child(intro)
 
 	pvp_ai_sparring_tabs = TabContainer.new()
+	pvp_ai_sparring_tabs.custom_minimum_size = Vector2(0.0, AI_SPARRING_TAB_MIN_HEIGHT)
 	pvp_ai_sparring_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pvp_ai_sparring_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pvp_ai_sparring_tabs.add_theme_font_size_override("font_size", 13)

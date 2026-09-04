@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring now keeps a stable panel height when switching between Free Sparring, Team Catalog, Match History, and Research.
+
 - AI Sparring's Team Catalog can now copy any selected team as a PokéPaste export.
 
 - AI Sparring now shows the full PC-style Pokémon info card when hovering a team slot in Free Sparring.

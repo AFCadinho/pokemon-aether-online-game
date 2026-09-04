@@ -184,6 +184,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(1) == "Teamcatalogus", "Team catalog tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Matchhistorie", "Match history tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(3) == "Onderzoekscampagne", "Research tab renders in Dutch")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.custom_minimum_size.y == 520.0, "AI Sparring keeps a stable workspace height across tabs")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.current_tab == 0, "Free sparring is the default AI destination")
 	_check(
 		ai_sparring_practice_hero != null
