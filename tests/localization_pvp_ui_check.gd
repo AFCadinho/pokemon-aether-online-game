@@ -82,6 +82,7 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_training_input := overlay.get("pvp_training_team_input") as TextEdit
 	var ai_team_step := overlay.find_child("AiSparringTeamStep", true, false) as PanelContainer
 	var ai_opponent_step := overlay.find_child("AiSparringOpponentStep", true, false) as PanelContainer
+	var ai_sparring_setup_steps := ai_team_step.get_parent() as HBoxContainer if ai_team_step != null else null
 	var training_ai_mode_row := overlay.get("pvp_training_ai_mode_row") as HBoxContainer
 	var training_ai_mode_select := overlay.get("pvp_training_ai_mode_select") as OptionButton
 	var training_ai_team_source_row := overlay.get("pvp_training_ai_team_source_row") as HBoxContainer
@@ -196,6 +197,13 @@ func _check_pvp_runtime_translation() -> void:
 	_check(history_text.contains("Gewonnen"), "Match history shows the localized player result")
 	_check(overlay.find_child("AiVeteranPortrait", true, false) != null, "AI Sparring presents the Veteran trainer identity")
 	_check(ai_team_step != null, "Free sparring groups the player's team as its first step")
+	_check(
+		ai_sparring_setup_steps != null
+		and is_equal_approx(ai_sparring_setup_steps.custom_minimum_size.y, 282.0)
+		and ai_team_step.size_flags_vertical == Control.SIZE_EXPAND_FILL
+		and ai_opponent_step.size_flags_vertical == Control.SIZE_EXPAND_FILL,
+		"AI setup cards fill one stable shared-height row"
+	)
 	_check(
 		ai_sparring_team_source != null
 		and ai_sparring_team_source.item_count == 2

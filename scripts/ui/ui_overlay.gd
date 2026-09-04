@@ -7174,12 +7174,14 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	practice_page.add_child(practice_layout)
 
 	var practice_steps := HBoxContainer.new()
+	practice_steps.custom_minimum_size = Vector2(0, AI_SPARRING_OPPONENT_STEP_MIN_HEIGHT)
 	practice_steps.add_theme_constant_override("separation", 12)
 	practice_layout.add_child(practice_steps)
 
 	var team_card := PanelContainer.new()
 	team_card.name = "AiSparringTeamStep"
 	team_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	team_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	team_card.size_flags_stretch_ratio = 1.0
 	team_card.add_theme_stylebox_override(
 		"panel",
@@ -7256,6 +7258,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	opponent_card.name = "AiSparringOpponentStep"
 	opponent_card.custom_minimum_size = Vector2(0, AI_SPARRING_OPPONENT_STEP_MIN_HEIGHT)
 	opponent_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	opponent_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	opponent_card.size_flags_stretch_ratio = 1.0
 	opponent_card.add_theme_stylebox_override(
 		"panel",
