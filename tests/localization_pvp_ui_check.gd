@@ -71,6 +71,7 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_sparring_catalog_player_select := overlay.get("pvp_ai_sparring_catalog_team_select") as OptionButton
 	var ai_sparring_catalog_use_player := overlay.get("pvp_ai_sparring_catalog_use_player_button") as Button
 	var ai_sparring_catalog_use_opponent := overlay.get("pvp_ai_sparring_catalog_use_opponent_button") as Button
+	var ai_sparring_catalog_team_grid := overlay.get("pvp_ai_sparring_catalog_team_grid") as GridContainer
 	var ai_research_start := overlay.get("pvp_ai5_playtest_start_button") as Button
 	var ai_research_tabs := overlay.get("pvp_ai5_playtest_tabs") as TabContainer
 	var ai_research_card := overlay.find_child("AiResearchCampaignCard", true, false) as PanelContainer
@@ -247,9 +248,28 @@ func _check_pvp_runtime_translation() -> void:
 	ai_sparring_team_source.select(0)
 	overlay.call("_on_ai_sparring_team_source_selected", 0)
 	overlay.set("pvp_ai_sparring_catalog_selected_team_id", "catalog-balance")
+	var catalog_sets: Array = []
+	for species: String in ["Zapdos", "Gholdengo", "Landorus-Therian", "Heatran", "Ogerpon-Wellspring", "Zamazenta"]:
+		catalog_sets.append({
+			"species": species,
+			"item": "Leftovers",
+			"ability": "Pressure",
+			"nature": "Timid",
+			"teraType": "Steel",
+			"level": 100,
+			"shiny": false,
+			"evs": {"HP": 0, "Atk": 0, "Def": 4, "SpA": 252, "SpD": 0, "Spe": 252},
+			"ivs": {"HP": 31, "Atk": 0, "Def": 31, "SpA": 31, "SpD": 31, "Spe": 31},
+			"moves": ["Thunderbolt", "Volt Switch", "Roost", "Heat Wave"],
+		})
+	overlay.set("pvp_ai_sparring_catalog_detail", {"pokemon": catalog_sets})
 	overlay.call("_render_ai_sparring_catalog_detail")
 	_check(ai_sparring_catalog_use_player != null and not ai_sparring_catalog_use_player.disabled, "Catalog selection enables use as player team")
 	_check(ai_sparring_catalog_use_opponent != null and not ai_sparring_catalog_use_opponent.disabled, "Catalog selection enables train-against action")
+	_check(ai_sparring_catalog_team_grid != null and ai_sparring_catalog_team_grid.columns == 3, "Catalog presents sets in a compact three-column grid")
+	_check(ai_sparring_catalog_team_grid != null and ai_sparring_catalog_team_grid.get_child_count() == 6, "Catalog shows the complete six-Pokémon team at once")
+	_check(overlay.call("_ai_sparring_stat_spread", catalog_sets[0]["evs"], 0) == "4 Def / 252 SpA / 252 Spe", "Catalog PokéPaste view omits zero EV values")
+	_check(overlay.call("_ai_sparring_stat_spread", catalog_sets[0]["ivs"], 31) == "0 Atk", "Catalog PokéPaste view only shows non-default IV values")
 	_check(ai_training_input != null and ai_training_input.visible, "Free sparring starts with Showdown team input visible")
 	if ai_sparring_team_source != null:
 		ai_sparring_team_source.select(1)
