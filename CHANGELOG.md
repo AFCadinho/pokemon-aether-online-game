@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring now presents itself as general AI PvP practice and removes the redundant setup footer below the battle button.
+
 - AI Sparring now shows the current party in the same compact six-slot preview used for battle teams, with Pokémon names available on hover.
 - AI Sparring now previews all six opponent Pokémon as compact icons before a Free Sparring battle, with names available on hover and the random team resolved in advance.
 - Battle side-condition indicators now sit below each active Pokémon's HP HUD beside its party preview, and trainer command callouts render above battle UI overlays.

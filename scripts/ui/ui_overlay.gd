@@ -814,6 +814,7 @@ var pvp_room_popup: PanelContainer
 var pvp_popup_title_label: Label
 var pvp_popup_subtitle_label: Label
 var pvp_popup_icon: TextureRect
+var pvp_popup_active_section := "Ranked"
 var pvp_root_tabs: TabContainer
 var pvp_ranked_tabs: TabContainer
 var pvp_ranked_battles_tabs: TabContainer
@@ -7096,6 +7097,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	hero_copy.add_child(heading)
 
 	var intro := Label.new()
+	intro.name = "AiSparringIntro"
 	_set_localized_control_property(intro, "text", "ui.pvp.ai_sparring.intro")
 	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	intro.add_theme_font_size_override("font_size", 12)
@@ -7304,23 +7306,6 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai5_playtest_start_button.focus_mode = Control.FOCUS_NONE
 	pvp_ai5_playtest_start_button.pressed.connect(_on_pvp_ai5_playtest_start_pressed)
 	research_card_layout.add_child(pvp_ai5_playtest_start_button)
-
-	var status_panel := PanelContainer.new()
-	status_panel.add_theme_stylebox_override(
-		"panel",
-		_make_panel_style(Color("#0b1c2de8"), Color("#35597a"), 8, 1)
-	)
-	page.add_child(status_panel)
-	var status_margin := MarginContainer.new()
-	status_margin.add_theme_constant_override("margin_left", 12)
-	status_margin.add_theme_constant_override("margin_top", 7)
-	status_margin.add_theme_constant_override("margin_right", 12)
-	status_margin.add_theme_constant_override("margin_bottom", 7)
-	status_panel.add_child(status_margin)
-	pvp_ai_sparring_status_label = Label.new()
-	pvp_ai_sparring_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	pvp_ai_sparring_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	status_margin.add_child(pvp_ai_sparring_status_label)
 
 	# Free sparring is the player-facing default; research remains an explicit advanced route.
 	pvp_ai_sparring_tabs.current_tab = 0
@@ -41812,6 +41797,7 @@ func _on_pvp_mode_ai_sparring_pressed() -> void:
 func _open_pvp_popup_section(section_name: String) -> void:
 	if pvp_room_popup == null:
 		return
+	pvp_popup_active_section = section_name
 	_hide_pvp_mode_menu()
 	pvp_queue_compact_minimized = false
 	_refresh_pvp_queue_compact_panel(0.0)
@@ -42491,13 +42477,8 @@ func _on_pvp_room_mode_selected(mode: String) -> void:
 func _on_pvp_ai_sparring_tab_changed(tab_index: int) -> void:
 	var research_selected := tab_index == 1
 	pvp_room_selected_mode = "ai5_playtest" if research_selected else "ai"
-	_set_pvp_status_key(
-		("ui.pvp.training.ai5_playtest.access_required"
-		if bool(pvp_ai5_playtest_status.get("accessDenied", false))
-		else "ui.pvp.ai_sparring.research_ready")
-		if research_selected
-		else "ui.pvp.ai_sparring.practice_ready"
-	)
+	if pvp_popup_subtitle_label != null:
+		pvp_popup_subtitle_label.text = _pvp_popup_subtitle_for_section("AI Sparring")
 	if research_selected:
 		_refresh_ai5_playtest_panel()
 
@@ -46203,6 +46184,10 @@ func _set_pvp_status_key(key: String, values: Dictionary = {}) -> void:
 		pvp_room_status_label.text = LocalizationManager.text(key, values)
 	if pvp_ai_sparring_status_label != null:
 		pvp_ai_sparring_status_label.text = LocalizationManager.text(key, values)
+	elif pvp_popup_active_section == "AI Sparring" and pvp_popup_subtitle_label != null:
+		# AI Sparring has no persistent footer; surface actionable and progress
+		# feedback in the popup header instead.
+		pvp_popup_subtitle_label.text = LocalizationManager.text(key, values)
 
 func _set_pvp_queue_status_key(key: String, values: Dictionary = {}) -> void:
 	pvp_queue_status_translation_key = key
