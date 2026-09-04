@@ -73,9 +73,9 @@ func get_indicator_center(index: int, visible_count: int, column_count: int = 2,
 	var safe_column_count := maxi(column_count, 1)
 	var row := floori(float(index) / float(safe_column_count))
 	var column := index % safe_column_count
-	var indicators_before_row := row * safe_column_count
-	var indicators_in_row := mini(safe_column_count, visible_count - indicators_before_row)
-	var row_first_x := -float(indicators_in_row - 1) * indicator_column_spacing * 0.5
+	# Keep every row aligned to the same two-column grid. An incomplete row
+	# starts on the left, leaving the right slot empty.
+	var row_first_x := -float(safe_column_count - 1) * indicator_column_spacing * 0.5
 	return Vector2(
 		row_first_x + float(column) * indicator_column_spacing,
 		first_y + float(row) * indicator_row_spacing
