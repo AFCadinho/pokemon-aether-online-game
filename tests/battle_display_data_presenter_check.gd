@@ -21,6 +21,7 @@ func _run_checks() -> void:
 	_check_opponent_default_name_follows_snapshot_mega_form()
 	_check_opponent_custom_nickname_survives_public_mega_form()
 	_check_known_trainer_team_keeps_public_mega_form()
+	_check_training_ai_public_mega_event_updates_all_opponent_display_data()
 	_check_training_ai_mega_event_uses_canonical_slot_after_form_ident_changes()
 	_check_training_ai_canonical_slot_keeps_live_state_across_form_identity_change()
 	_check_trainer_active_species_uses_metadata_form()
@@ -227,6 +228,48 @@ func _check_known_trainer_team_keeps_public_mega_form() -> void:
 	_check_equal(display_sableye.get("megaSpecies", ""), "Sableye-Mega", "known AI hover data retains the public Mega species")
 	_check_equal(display_sableye.get("condition", ""), "93/100", "known AI Mega slot retains its live condition")
 	_check_equal((display_sableye.get("moves", []) as Array).size(), 4, "known AI Mega hover retains its known moveset")
+
+
+func _check_training_ai_public_mega_event_updates_all_opponent_display_data() -> void:
+	var state = BattleStateScript.new()
+	state.load_from_api_response({
+		"battleId": "training-ai-public-mega-display-test",
+		"requests": {
+			"p2": {
+				"side": {
+					"pokemon": [{
+						"ident": "p2a: Latios",
+						"species": "Latios",
+						"name": "Latios",
+						"active": true,
+						"metadataSlot": 1,
+					}],
+				},
+			},
+		},
+	}, false)
+	var presenter = BattleDisplayDataPresenterScript.new()
+	presenter.setup(state)
+	presenter.set_battle_context(1, null)
+	presenter.set_trainer_team([{
+		"species": "Latios",
+		"name": "Latios",
+		"metadataSlot": 1,
+	}], true)
+	# The current response still reports the base form. The public Mega event
+	# must nevertheless update the field HUD and trainer roster immediately.
+	presenter.remember_public_trainer_mega_species({
+		"type": "mega",
+		"target": "p2a: Latios",
+		"species": "Latios-Mega",
+		"metadataSlot": 1,
+		"targetRef": {"metadataSlot": 1, "pokemonKey": "p2:slot:1"},
+	})
+	_check_equal(presenter.get_active_display_species("p2"), "Latios-Mega", "AI Mega event updates the opponent field species before the next request")
+	_check_equal(presenter.get_active_display_name("p2"), "Latios-Mega", "AI Mega event updates the opponent HUD name before the next request")
+	var display_team: Array = presenter.get_display_team_data("p2")
+	var display_latios: Dictionary = display_team[0] as Dictionary
+	_check_equal(display_latios.get("displaySpecies", ""), "Latios-Mega", "AI Mega event updates the opponent party-rail icon before the next request")
 
 
 func _check_training_ai_mega_event_uses_canonical_slot_after_form_ident_changes() -> void:

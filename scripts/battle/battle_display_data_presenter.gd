@@ -14,6 +14,10 @@ var display_metadata := preload("res://scripts/battle/battle_display_metadata.gd
 # NPC snapshots retain species validation because older NPC data can expose
 # request positions that are not canonical trainer-team slots.
 var trust_trainer_team_canonical_slots := false
+# A training-AI resolution can reveal Mega Evolution one response before the
+# next request itself carries the transformed form. Keep that public result by
+# immutable imported slot so every visual consumer uses the revealed form.
+var public_mega_species_by_canonical_slot: Dictionary = {}
 
 
 func setup(state: BattleState) -> void:
@@ -28,6 +32,25 @@ func set_battle_context(type_value: int, enemy_pokemon: Pokemon) -> void:
 func set_trainer_team(team: Array, trust_canonical_slots := false) -> void:
 	display_metadata.set_trainer_team(team)
 	trust_trainer_team_canonical_slots = trust_canonical_slots
+	public_mega_species_by_canonical_slot.clear()
+
+
+func remember_public_trainer_mega_species(event_data: Dictionary) -> void:
+	if battle_state == null:
+		return
+	var mega_species := str(event_data.get("species", "")).strip_edges()
+	if mega_species == "":
+		return
+
+	var canonical_slot := _get_canonical_party_slot(event_data)
+	if canonical_slot <= 0:
+		var target_ref_value: Variant = event_data.get("targetRef", event_data.get("target_ref", {}))
+		if target_ref_value is Dictionary:
+			canonical_slot = _get_canonical_party_slot(target_ref_value as Dictionary)
+	if canonical_slot <= 0:
+		canonical_slot = _get_canonical_party_slot(battle_state.get_active_player_pokemon("p2"))
+	if canonical_slot > 0:
+		public_mega_species_by_canonical_slot[canonical_slot] = mega_species
 
 
 func get_active_display_species(player_id: String) -> String:
@@ -35,6 +58,11 @@ func get_active_display_species(player_id: String) -> String:
 		return ""
 
 	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
+	if player_id == "p2":
+		var active_slot := _get_canonical_party_slot(active_pokemon)
+		var public_mega_species := str(public_mega_species_by_canonical_slot.get(active_slot, "")).strip_edges()
+		if public_mega_species != "":
+			return public_mega_species
 	var cosmetic_species := str(active_pokemon.get("cosmeticDisplaySpecies", "")).strip_edges()
 	if cosmetic_species != "":
 		return cosmetic_species
@@ -305,6 +333,7 @@ func _get_trainer_display_team_data(request_team: Array) -> Array:
 		})
 		var display_data := trainer_data.duplicate(true)
 		_apply_request_battle_state_to_trainer_display(display_data, request_data)
+		_apply_public_mega_species_to_trainer_display(display_data, canonical_slot)
 		display_metadata.enrich_display_data("p2", display_data)
 		display_team.append(display_data)
 
@@ -403,6 +432,14 @@ func _apply_request_battle_state_to_trainer_display(display_data: Dictionary, re
 			display_data[key] = request_data.get(key)
 
 	_apply_condition_fields_from_display_data(display_data)
+
+
+func _apply_public_mega_species_to_trainer_display(display_data: Dictionary, canonical_slot: int) -> void:
+	var mega_species := str(public_mega_species_by_canonical_slot.get(canonical_slot, "")).strip_edges()
+	if mega_species == "":
+		return
+	display_data["displaySpecies"] = mega_species
+	display_data["megaSpecies"] = mega_species
 
 
 func _apply_condition_fields_from_display_data(display_data: Dictionary) -> void:
