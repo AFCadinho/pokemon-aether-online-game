@@ -3284,6 +3284,12 @@ func _respawn_after_battle_loss() -> void:
 		return
 
 	_apply_respawn_party_response(_dictionary_from_value(result.get("party", {})))
+	var wallet_result: Dictionary = await PlayerWalletService.load_wallet()
+	if bool(wallet_result.get("success", false)):
+		PlayerWalletService.apply_wallet_result(wallet_result)
+		get_tree().call_group("ui_overlay", "refresh_money_display")
+	else:
+		push_warning("World: wallet refresh after blackout failed.")
 	SfxManager.play("pokemon_recovery")
 	var position_state := _dictionary_from_value(result.get("position", {}))
 	if position_state.is_empty():
