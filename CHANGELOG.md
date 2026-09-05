@@ -4,6 +4,7 @@
 
 **Changed**
 
+- Reopening the game during a wild battle now restores that battle at its current turn instead of returning the player to the overworld.
 - Pokémon Storage now removes the misleading `ALL BOXES` badge and gives primary, secondary, and navigation actions clearer visual hierarchy.
 
 ## 0.3.71 - 2026-09-05
