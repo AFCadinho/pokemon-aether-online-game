@@ -3450,6 +3450,7 @@
   "ui.move.category.special": "Speciaal",
   "ui.move.category.status": "Status",
   "ui.world.blackout.respawned": "Je viel flauw, keerde terug naar je laatste herstelpunt en je party is genezen.",
+  "ui.world.blackout.money_lost": "Je viel flauw en verloor ₽{amount}.",
   "ui.world.blackout.default_failed": "Je viel flauw, maar het standaardherstelpunt kon niet worden geladen.",
   "ui.world.blackout.nurse_joy": "Je viel flauw en keerde terug naar je laatste healpunt.",
   "npc.trainer.rematch.ready": "Ik heb getraind sinds ons laatste gevecht. Laten we nog eens vechten!",
