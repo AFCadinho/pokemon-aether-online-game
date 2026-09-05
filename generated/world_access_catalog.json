@@ -680,8 +680,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "From1F1",
 					"tile": {
-						"x": 47,
-						"y": 61
+						"x": 75,
+						"y": 41
 					}
 				},
 				"from_1f_3": {
@@ -690,8 +690,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "From1F3",
 					"tile": {
-						"x": 66,
-						"y": 9
+						"x": 75,
+						"y": 5
 					}
 				},
 				"from_1f_5": {
@@ -700,8 +700,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "From1F5",
 					"tile": {
-						"x": 29,
-						"y": 32
+						"x": 4,
+						"y": 7
 					}
 				},
 				"from_b_2f_2": {
@@ -710,8 +710,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromB2F2",
 					"tile": {
-						"x": 75,
-						"y": 41
+						"x": 49,
+						"y": 61
 					}
 				},
 				"from_b_2f_4": {
@@ -720,8 +720,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromB2F4",
 					"tile": {
-						"x": 75,
-						"y": 5
+						"x": 66,
+						"y": 9
 					}
 				},
 				"from_b_2f_6": {
@@ -730,8 +730,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromB2F6",
 					"tile": {
-						"x": 4,
-						"y": 7
+						"x": 29,
+						"y": 32
 					}
 				},
 				"from_b_2f_7": {
@@ -2519,15 +2519,15 @@
 		},
 		"kanto_mt_moon_1f__to_b1f_1": {
 			"destination": {
-				"facingDirection": "right",
+				"facingDirection": "left",
 				"mapId": "kanto_mt_moon_b1f",
 				"mapSceneAliases": [
 					"uid://dmu7iwolokkl7"
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
 				"position": {
-					"x": 1520.0,
-					"y": 1968.0
+					"x": 2416.0,
+					"y": 1328.0
 				},
 				"spawnMarker": "From1F1"
 			},
@@ -2536,15 +2536,15 @@
 		},
 		"kanto_mt_moon_1f__to_b1f_3": {
 			"destination": {
-				"facingDirection": "right",
+				"facingDirection": "left",
 				"mapId": "kanto_mt_moon_b1f",
 				"mapSceneAliases": [
 					"uid://dmu7iwolokkl7"
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
 				"position": {
-					"x": 2128.0,
-					"y": 304.0
+					"x": 2416.0,
+					"y": 176.0
 				},
 				"spawnMarker": "From1F3"
 			},
@@ -2553,15 +2553,15 @@
 		},
 		"kanto_mt_moon_1f__to_b1f_5": {
 			"destination": {
-				"facingDirection": "left",
+				"facingDirection": "right",
 				"mapId": "kanto_mt_moon_b1f",
 				"mapSceneAliases": [
 					"uid://dmu7iwolokkl7"
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
 				"position": {
-					"x": 944.0,
-					"y": 1040.0
+					"x": 144.0,
+					"y": 240.0
 				},
 				"spawnMarker": "From1F5"
 			},
@@ -2723,15 +2723,15 @@
 		},
 		"kanto_mt_moon_b2f__to_b1f_2": {
 			"destination": {
-				"facingDirection": "left",
+				"facingDirection": "right",
 				"mapId": "kanto_mt_moon_b1f",
 				"mapSceneAliases": [
 					"uid://dmu7iwolokkl7"
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
 				"position": {
-					"x": 2416.0,
-					"y": 1328.0
+					"x": 1584.0,
+					"y": 1968.0
 				},
 				"spawnMarker": "FromB2F2"
 			},
@@ -2740,15 +2740,15 @@
 		},
 		"kanto_mt_moon_b2f__to_b1f_4": {
 			"destination": {
-				"facingDirection": "left",
+				"facingDirection": "right",
 				"mapId": "kanto_mt_moon_b1f",
 				"mapSceneAliases": [
 					"uid://dmu7iwolokkl7"
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
 				"position": {
-					"x": 2416.0,
-					"y": 176.0
+					"x": 2128.0,
+					"y": 304.0
 				},
 				"spawnMarker": "FromB2F4"
 			},
@@ -2757,15 +2757,15 @@
 		},
 		"kanto_mt_moon_b2f__to_b1f_6": {
 			"destination": {
-				"facingDirection": "right",
+				"facingDirection": "left",
 				"mapId": "kanto_mt_moon_b1f",
 				"mapSceneAliases": [
 					"uid://dmu7iwolokkl7"
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
 				"position": {
-					"x": 144.0,
-					"y": 240.0
+					"x": 944.0,
+					"y": 1040.0
 				},
 				"spawnMarker": "FromB2F6"
 			},

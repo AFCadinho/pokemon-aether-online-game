@@ -2,9 +2,9 @@ extends SceneTree
 
 const CATALOG_PATH := "res://generated/world_access_catalog.json"
 const EXPECTED_FACING := {
-	"kanto_mt_moon_1f__to_b1f_1": "right",
-	"kanto_mt_moon_1f__to_b1f_3": "right",
-	"kanto_mt_moon_1f__to_b1f_5": "left",
+	"kanto_mt_moon_1f__to_b1f_1": "left",
+	"kanto_mt_moon_1f__to_b1f_3": "left",
+	"kanto_mt_moon_1f__to_b1f_5": "right",
 	"kanto_mt_moon_1f__to_route_3": "down",
 	"kanto_mt_moon_b1f__to_1f_1": "left",
 	"kanto_mt_moon_b1f__to_1f_3": "left",
@@ -16,9 +16,9 @@ const EXPECTED_FACING := {
 	"kanto_mt_moon__to_route_4": "down",
 	"kanto_route_4__to_cerulean_city": "right",
 	"kanto_cerulean_city__to_route_4": "left",
-	"kanto_mt_moon_b2f__to_b1f_2": "left",
-	"kanto_mt_moon_b2f__to_b1f_4": "left",
-	"kanto_mt_moon_b2f__to_b1f_6": "right",
+	"kanto_mt_moon_b2f__to_b1f_2": "right",
+	"kanto_mt_moon_b2f__to_b1f_4": "right",
+	"kanto_mt_moon_b2f__to_b1f_6": "left",
 	"kanto_mt_moon_b2f__to_b1f_7": "right",
 	"kanto_route_3__to_mt_moon": "up",
 	"kanto_route_4__to_mt_moon": "down",

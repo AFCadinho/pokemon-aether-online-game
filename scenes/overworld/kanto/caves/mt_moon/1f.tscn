@@ -315,7 +315,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"
 target_spawn_name = "From1F1"
 transition_id = "kanto_mt_moon_1f__to_b1f_1"
-transition_facing_direction = "right"
+transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F1" unique_id=597208270]
 position = Vector2(16, 0)
@@ -331,7 +331,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"
 target_spawn_name = "From1F3"
 transition_id = "kanto_mt_moon_1f__to_b1f_3"
-transition_facing_direction = "right"
+transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F3" unique_id=1334140973]
 position = Vector2(16, 0)
@@ -347,7 +347,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"
 target_spawn_name = "From1F5"
 transition_id = "kanto_mt_moon_1f__to_b1f_5"
-transition_facing_direction = "left"
+transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F5" unique_id=146741441]
 position = Vector2(16, 0)
@@ -470,22 +470,22 @@ item_id = "moon-stone"
 [node name="RockSmash01" parent="Entities/Interactables" unique_id=1155397083 instance=ExtResource("15_rock")]
 position = Vector2(400, 720)
 rock_id = "kanto_mt_moon_1f_rock_west"
-required_rock_smash_level = 5
 rock_visual_style = 1
+required_rock_smash_level = 5
 
 [node name="RockSmash02" parent="Entities/Interactables" unique_id=1318206778 instance=ExtResource("15_rock")]
 position = Vector2(720, 688)
 rock_id = "kanto_mt_moon_1f_rock_central"
-required_rock_smash_level = 5
 rock_variant = 1
 rock_visual_style = 1
+required_rock_smash_level = 5
 
 [node name="RockSmash03" parent="Entities/Interactables" unique_id=938321987 instance=ExtResource("15_rock")]
 position = Vector2(2416, 1104)
 rock_id = "kanto_mt_moon_1f_rock_east"
-required_rock_smash_level = 5
 rock_variant = 2
 rock_visual_style = 1
+required_rock_smash_level = 5
 
 [node name="StoryTriggers" type="Node2D" parent="." unique_id=1676346445]
 
