@@ -3,7 +3,7 @@ extends SceneTree
 const CATALOG_PATH := "res://generated/world_access_catalog.json"
 const EXPECTED_FACING := {
 	"kanto_mt_moon_1f__to_b1f_1": "left",
-	"kanto_mt_moon_1f__to_b1f_3": "right",
+	"kanto_mt_moon_1f__to_b1f_3": "left",
 	"kanto_mt_moon_1f__to_b1f_5": "right",
 	"kanto_mt_moon_1f__to_route_3": "down",
 	"kanto_mt_moon_b1f__to_1f_1": "left",
