@@ -3091,26 +3091,14 @@ func _setup_pc_ui() -> void:
 	_apply_pc_action_button_style(pc_filter_button, "secondary")
 	search_row.add_child(pc_filter_button)
 
-	var search_scope_panel := PanelContainer.new()
-	search_scope_panel.name = "SearchScopeBadge"
-	search_scope_panel.custom_minimum_size = Vector2(88, 38)
-	search_scope_panel.add_theme_stylebox_override(
-		"panel",
-		_make_panel_style(Color("#091a29d9"), Color("#2949638c"), 7, 1)
-	)
-	search_row.add_child(search_scope_panel)
-	var search_scope_margin := MarginContainer.new()
-	search_scope_margin.add_theme_constant_override("margin_left", 8)
-	search_scope_margin.add_theme_constant_override("margin_right", 8)
-	search_scope_panel.add_child(search_scope_margin)
-
 	pc_search_results_label = Label.new()
-	_set_localized_control_property(pc_search_results_label, "text", "ui.storage.all_boxes")
+	pc_search_results_label.visible = false
+	pc_search_results_label.custom_minimum_size = Vector2(110, 38)
 	pc_search_results_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pc_search_results_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pc_search_results_label.add_theme_font_size_override("font_size", 10)
 	pc_search_results_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	search_scope_margin.add_child(pc_search_results_label)
+	search_row.add_child(pc_search_results_label)
 
 	pc_filter_panel = PanelContainer.new()
 	pc_filter_panel.name = "StorageFilterPanel"
@@ -3372,6 +3360,13 @@ func _apply_pc_action_button_style(button: Button, role: String) -> void:
 			normal_border = PC_ACCENT
 			hover_border = Color("#a6eeff")
 			font_color = Color.WHITE
+		"secondary":
+			normal_bg = Color("#071521e6")
+			hover_bg = Color("#102a3cf2")
+			pressed_bg = Color("#0b2030f2")
+			normal_border = Color("#3c5b71c9")
+			hover_border = PC_ACCENT_SOFT
+			font_color = Color("#dfeaf5")
 		"icon":
 			normal_bg = Color.TRANSPARENT
 			hover_bg = Color("#123149c4")
@@ -38944,6 +38939,7 @@ func _render_pc_box_search_results(search_query: String) -> void:
 			pc_box_count
 		)
 	if pc_search_results_label != null:
+		pc_search_results_label.visible = true
 		pc_search_results_label.text = LocalizationManager.plural(
 			"ui.storage.search_found.one",
 			"ui.storage.search_found.many",
@@ -38961,7 +38957,8 @@ func _refresh_pc_box_overview(occupied_count: int) -> void:
 			"capacity": pc_slots_per_box,
 		})
 	if pc_search_results_label != null:
-		pc_search_results_label.text = LocalizationManager.text("ui.storage.all_boxes")
+		pc_search_results_label.visible = false
+		pc_search_results_label.text = ""
 		pc_search_results_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 
 

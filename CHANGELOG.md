@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+**Changed**
+
+- Pokémon Storage now removes the misleading `ALL BOXES` badge and gives primary, secondary, and navigation actions clearer visual hierarchy.
+
 ## 0.3.71 - 2026-09-05
 
 **Added**
