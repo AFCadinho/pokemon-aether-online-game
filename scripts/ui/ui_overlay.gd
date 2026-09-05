@@ -11566,7 +11566,7 @@ func _create_pokedex_variant_button(variant_id: String, label_key: String) -> Bu
 	var button := Button.new()
 	button.name = "PokedexVariant_%s" % variant_id
 	_set_localized_control_property(button, "text", label_key)
-	button.custom_minimum_size = Vector2(0, 32)
+		button.custom_minimum_size = Vector2(0, 32)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
