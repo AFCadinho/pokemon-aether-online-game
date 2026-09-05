@@ -1326,7 +1326,6 @@ func _setup_initial_world_state() -> void:
 	if GameState.has_prepared_world_state():
 		var prepared_state: Dictionary = GameState.consume_prepared_world_state()
 		recovered_blackout_loss = int(prepared_state.get("blackoutLoss", 0))
-		print("Blackout diagnostics: world recovered blackoutLoss=", recovered_blackout_loss)
 		if bool(prepared_state.get("hasSavedState", false)):
 			saved_state = _dictionary_from_value(prepared_state.get("savedState", {}))
 	else:
