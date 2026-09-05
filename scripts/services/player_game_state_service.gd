@@ -48,6 +48,7 @@ func load_player_profile() -> Dictionary:
 	var stats: Dictionary = _dictionary_from_value(body.get("stats", {}))
 	var badges: Dictionary = _dictionary_from_value(body.get("badges", {}))
 	var story: Dictionary = _dictionary_from_value(body.get("story", {}))
+	print("Blackout diagnostics: profile position blackoutLoss=", int(position.get("blackoutLoss", 0)))
 	return {
 		"success": true,
 		"user": _dictionary_from_value(body.get("user", {})),
@@ -88,6 +89,7 @@ func refresh_story() -> Dictionary:
 		return response
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	print("Blackout diagnostics: position blackoutLoss=", int(body.get("blackoutLoss", 0)))
 	var story: Dictionary = _dictionary_from_value(body.get("story", body))
 	StoryService.apply_story(story)
 	return {
