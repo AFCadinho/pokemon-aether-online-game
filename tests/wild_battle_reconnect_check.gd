@@ -20,6 +20,9 @@ func _init() -> void:
 		"Login attempts wild battle recovery before clearing activity")
 	_expect(world.contains('get("retryable", false)'),
 		"Transient resume failures preserve the server activity binding")
+	_expect(world.contains("for attempt in range(3):")
+		and world.contains("create_timer(0.35).timeout"),
+		"Login retries a temporarily unavailable battle snapshot")
 	_expect(world.contains("wild_battle_resume_pending = true")
 		and world.contains("if is_in_battle or wild_battle_resume_pending:"),
 		"A temporarily unreachable battle cannot be replaced by another battle")

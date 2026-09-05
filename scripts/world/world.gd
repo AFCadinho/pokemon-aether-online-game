@@ -1412,7 +1412,13 @@ func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
 
 	var request := HTTPRequest.new()
 	add_child(request)
-	var response: Dictionary = await BattleApiClient.resume_wild_battle(request)
+	var response: Dictionary = {}
+	for attempt in range(3):
+		response = await BattleApiClient.resume_wild_battle(request)
+		if bool(response.get("success", false)) or int(response.get("status", 0)) in range(400, 500):
+			break
+		if attempt < 2:
+			await get_tree().create_timer(0.35).timeout
 	request.queue_free()
 	if not bool(response.get("success", false)):
 		push_warning(
