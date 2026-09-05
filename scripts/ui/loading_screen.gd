@@ -179,7 +179,6 @@ func _prepare_world() -> void:
 		"hasSavedState": not saved_state.is_empty(),
 		"blackoutLoss": int(_dictionary_from_value(profile_response.get("position", {})).get("blackoutLoss", 0)),
 	})
-	print("Blackout diagnostics: prepared blackoutLoss=", int(_dictionary_from_value(profile_response.get("position", {})).get("blackoutLoss", 0)))
 
 	_set_loading_status("ui.loading.opening_path", 2)
 	var world_scene: PackedScene = await _load_world_scene_threaded()
