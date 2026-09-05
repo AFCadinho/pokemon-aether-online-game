@@ -254,6 +254,20 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_tier_select.item_count == 3 and ai_sparring_tier_select.get_item_text(2) == "Aether UU", "Free sparring offers Open, Aether OU and Aether UU")
 	_check(ai_sparring_catalog_tier != null and ai_sparring_catalog_tier.item_count == 4, "Team catalog adds a tier eligibility filter")
 	_check(ai_sparring_catalog_results != null and ai_sparring_catalog_results.get_child_count() == 1, "Catalog renders matching team cards")
+	_check(
+		overlay.call("_ai_sparring_team_display_tier", {
+			"homeTierId": "aether-uu",
+			"eligibleTierIds": ["none"],
+		}) == "",
+		"Catalog cards do not label a currently ineligible team as Aether UU"
+	)
+	_check(
+		overlay.call("_ai_sparring_team_display_tier", {
+			"homeTierId": "aether-uu",
+			"eligibleTierIds": ["none", "aether-uu"],
+		}) == "aether-uu",
+		"Catalog cards keep the home-tier badge for a currently eligible team"
+	)
 	var catalog_card := ai_sparring_catalog_results.get_child(0) as PanelContainer if ai_sparring_catalog_results != null and ai_sparring_catalog_results.get_child_count() == 1 else null
 	_check(catalog_card != null and catalog_card.mouse_default_cursor_shape == Control.CURSOR_POINTING_HAND, "The complete catalog team card is selectable")
 	_check(catalog_card != null and catalog_card.find_children("*", "Button", true, false).is_empty(), "Catalog roster icons are not separate button targets")

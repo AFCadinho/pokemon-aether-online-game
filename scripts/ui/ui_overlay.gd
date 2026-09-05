@@ -43641,7 +43641,7 @@ func _create_ai_sparring_catalog_team_card(entry: Dictionary) -> Control:
 		"normal", _make_panel_style(Color("#172c45"), Color("#4c789f"), 6, 1)
 	)
 	header.add_child(archetype_badge)
-	var catalog_tier := _ai_sparring_team_catalog_tier(entry)
+	var catalog_tier := _ai_sparring_team_display_tier(entry)
 	if catalog_tier in ["aether-ou", "aether-uu"]:
 		var tier_badge := Label.new()
 		tier_badge.text = _ai_sparring_tier_label(catalog_tier)
@@ -44020,6 +44020,11 @@ func _ai_sparring_team_matches_tier(entry: Dictionary, tier_id: String) -> bool:
 	if home_tier != tier_id:
 		return false
 	return _ai_sparring_team_is_eligible(entry, tier_id)
+
+
+func _ai_sparring_team_display_tier(entry: Dictionary) -> String:
+	var home_tier := _ai_sparring_team_catalog_tier(entry)
+	return home_tier if _ai_sparring_team_is_eligible(entry, home_tier) else ""
 
 
 func _ai_sparring_team_catalog_tier(entry: Dictionary) -> String:
