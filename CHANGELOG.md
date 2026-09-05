@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring and NPC battles recover interrupted turns and forced switches more reliably, and keep HP updates in step with battle events.
+
 **Changed**
 
 - Spectating PvP battles now leaves your own party's HP, status, and moves unchanged.

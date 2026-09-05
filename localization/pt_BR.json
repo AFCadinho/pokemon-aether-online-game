@@ -1,4 +1,5 @@
 {
+  "battle.error.recovery_retry": "Não foi possível reconectar à batalha. Selecione Batalha para tentar novamente.",
   "story.mt_moon.cutscene.follower_fainted": "Ah, não, {pokemon}... por favor, levante!",
   "story.mt_moon.cutscene.follower_attack": "{pokemon}, ataque!",
   "story.mt_moon.cutscene.capture_threat": "Certo, ele está fora de combate. Vamos pegar os Pokémon dele!",

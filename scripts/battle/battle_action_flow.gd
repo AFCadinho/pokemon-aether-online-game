@@ -2,10 +2,14 @@ extends RefCounted
 
 class_name BattleActionFlow
 
+const HTTP_RESPONSE_TIMEOUT_SECONDS := 15.0
+
 var battle_state: BattleState
 var request_node: HTTPRequest
 var ability_response_handler: Callable
 var local_player_id := "p1"
+var http_flow := preload("res://scripts/battle/battle_http_flow.gd").new()
+var http_recovery_required := false
 
 
 func setup(
@@ -48,52 +52,80 @@ func map_response_for_local_player(response: Dictionary) -> Dictionary:
 func submit_player_choice(choice_type: String, slot: int, mega := false, since_event_seq := -1, z_move := false) -> Dictionary:
 	var response: Dictionary = await send_player_choice(choice_type, slot, mega, since_event_seq, z_move)
 	if not _is_successful_response(response):
-		print("Player choice failed: ", response)
+		http_recovery_required = true
 		return response
 
-	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq), true, since_event_seq):
-		return response
-
-	return map_response_for_local_player(response)
+	return await accept_http_response(response, since_event_seq)
 
 
 func submit_player_choice_and_resolve(choice_type: String, slot: int, mega := false, since_event_seq := -1, z_move := false) -> Dictionary:
 	var response: Dictionary = await send_player_choice_and_resolve(choice_type, slot, mega, since_event_seq, z_move)
 	if not _is_successful_response(response):
-		print("Player choice resolution failed: ", response)
+		http_recovery_required = true
 		return response
 
-	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq), true, since_event_seq):
-		return response
-
-	return map_response_for_local_player(response)
+	return await accept_http_response(response, since_event_seq)
 
 
 func submit_npc_choice(player_id: String = "p2", since_event_seq := -1) -> Dictionary:
 	var response: Dictionary = await send_npc_choice(player_id, since_event_seq)
 	if not _is_successful_response(response):
-		print("NPC choice failed: ", response)
+		http_recovery_required = true
 		return response
 
-	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq), true, since_event_seq):
-		return response
-
-	return map_response_for_local_player(response)
+	return await accept_http_response(response, since_event_seq)
 
 
 func submit_pass_turn(pass_player_id: String = "p1", player_id: String = "p2", since_event_seq := -1) -> Dictionary:
 	var response: Dictionary = await send_pass_turn(pass_player_id, player_id, since_event_seq)
 	if not _is_successful_response(response):
-		print("Pass turn failed: ", response)
+		http_recovery_required = true
 		return response
 
-	if not apply_response(response, not _response_has_deferred_display_event(response, since_event_seq), true, since_event_seq):
-		return response
+	return await accept_http_response(response, since_event_seq)
 
+
+func accept_http_response(response: Dictionary, since_event_seq: int, recover_gap := true) -> Dictionary:
+	if not _is_successful_response(response):
+		http_recovery_required = true
+		return response
+	if str(response.get("battleId", "")) != battle_state.battle_id:
+		return {"success": false, "code": "BATTLE_RESPONSE_ID_MISMATCH"}
+	if http_flow.has_gap(response, since_event_seq):
+		if recover_gap:
+			return await recover_http_response(since_event_seq)
+		http_recovery_required = true
+		return {"success": false, "code": "BATTLE_EVENT_DELIVERY_GAP"}
+	if http_flow.is_stale(response):
+		var latest: Dictionary = http_flow.order.latest_response.duplicate(true)
+		if int(latest.get("eventSeq", -1)) <= since_event_seq:
+			latest["events"] = []
+			latest["eventBatches"] = []
+		return latest
+	# Preserve the immutable post-event snapshot before BattleState rewinds HP.
+	http_flow.remember(response)
+	http_recovery_required = false
+	apply_response(response, not _response_has_deferred_display_event(response, since_event_seq), true, since_event_seq)
 	return map_response_for_local_player(response)
 
 
+func recover_http_response(since_event_seq: int) -> Dictionary:
+	_set_http_timeout()
+	var response: Dictionary = await BattleApiClient.get_npc_battle_state(request_node, battle_state.battle_id, since_event_seq)
+	return await accept_http_response(response, since_event_seq, false)
+
+
+func restore_http_response(response: Dictionary, rendered_seq: int) -> void:
+	if http_flow.is_stale(response):
+		return
+	var snapshot: Dictionary = http_flow.order.canonical_snapshot_for_render_cursor(response, rendered_seq)
+	if bool(snapshot.get("state", {}).get("ended", false)):
+		snapshot["requests"] = battle_state.requests.duplicate(true)
+	battle_state.load_from_api_response(snapshot, false, rendered_seq, true)
+
+
 func send_player_choice(choice_type: String, slot: int, mega := false, since_event_seq := -1, z_move := false) -> Dictionary:
+	_set_http_timeout()
 	return await BattleApiClient.send_choice(
 		request_node,
 		battle_state.battle_id,
@@ -107,6 +139,7 @@ func send_player_choice(choice_type: String, slot: int, mega := false, since_eve
 
 
 func send_player_choice_and_resolve(choice_type: String, slot: int, mega := false, since_event_seq := -1, z_move := false) -> Dictionary:
+	_set_http_timeout()
 	return await BattleApiClient.send_choice_and_resolve(
 		request_node,
 		battle_state.battle_id,
@@ -122,6 +155,7 @@ func send_player_choice_and_resolve(choice_type: String, slot: int, mega := fals
 
 
 func send_npc_choice(player_id: String = "p2", since_event_seq := -1) -> Dictionary:
+	_set_http_timeout()
 	return await BattleApiClient.send_npc_choice(
 		request_node,
 		battle_state.battle_id,
@@ -131,6 +165,7 @@ func send_npc_choice(player_id: String = "p2", since_event_seq := -1) -> Diction
 	)
 
 func send_pass_turn(pass_player_id: String = "p1", player_id: String = "p2", since_event_seq := -1) -> Dictionary:
+	_set_http_timeout()
 	return await BattleApiClient.send_pass_turn(
 		request_node,
 		battle_state.battle_id,
@@ -139,6 +174,11 @@ func send_pass_turn(pass_player_id: String = "p1", player_id: String = "p2", sin
 		"basic",
 		since_event_seq
 	)
+
+func _set_http_timeout() -> void:
+	if request_node != null:
+		request_node.timeout = HTTP_RESPONSE_TIMEOUT_SECONDS
+
 
 func _swap_pokemon_sides(value: Variant) -> Variant:
 	match typeof(value):
