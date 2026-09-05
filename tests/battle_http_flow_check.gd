@@ -72,6 +72,7 @@ func _ready() -> void:
 
 
 func _run() -> void:
+	_check_decision_contract_forwarding()
 	_check_public_force_switch_contract()
 	await _check_damage_heal_and_delayed_response()
 	await _check_missing_events_are_recovered_without_resubmitting()
@@ -83,6 +84,19 @@ func _run() -> void:
 	if not failed:
 		print("PASS: HTTP battle ordering, HP, forced-switch chains and bounded recovery")
 	get_tree().quit(1 if failed else 0)
+
+
+func _check_decision_contract_forwarding() -> void:
+	var action_source := FileAccess.get_file_as_string("res://scripts/battle/battle_action_flow.gd")
+	var api_source := FileAccess.get_file_as_string("res://scripts/battle/battle_api/battle_api_client.gd")
+	_check(
+		action_source.count("battle_state.get_active_decision(local_player_id)") >= 2,
+		"standalone and compound player choices read the active decision contract"
+	)
+	_check(
+		api_source.contains('["decisionId", "decisionGeneration", "decisionKind"]'),
+		"HTTP choices forward the server decision identity and kind"
+	)
 
 
 func _check_public_force_switch_contract() -> void:
