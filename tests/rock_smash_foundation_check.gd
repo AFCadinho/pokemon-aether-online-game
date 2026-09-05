@@ -106,12 +106,17 @@ func _run() -> void:
 		"kanto_mt_moon_b2f_rock_south",
 	]
 	var combined_mt_moon := "\n".join(mt_moon_scenes)
+	var master_rock_block := _property_block(
+		combined_mt_moon,
+		'rock_id = "kanto_mt_moon_b2f_rock_south"'
+	)
 	for rock_id: String in mt_moon_rock_ids:
 		_check(combined_mt_moon.count(rock_id) == 1, "Mt. Moon places daily rock %s once" % rock_id)
 	_check(
 		combined_mt_moon.count("daily_smashable_rock.tscn") == 3
 		and combined_mt_moon.count("rock_visual_style = 1") == 9
-		and 'rock_id = "kanto_mt_moon_b2f_rock_south"\nrequired_rock_smash_level = 75\nrock_variant = 3' in combined_mt_moon
+		and "required_rock_smash_level = 75" in master_rock_block
+		and "rock_variant = 3" in master_rock_block
 		and "smashable_rock.tscn" not in combined_mt_moon.replace("daily_smashable_rock.tscn", ""),
 		"Mt. Moon uses nine daily cave rocks with a distinct master rock variant"
 	)
@@ -206,3 +211,13 @@ func _check(condition: bool, label: String) -> void:
 		return
 	failed = true
 	push_error("FAIL %s" % label)
+
+
+func _property_block(source: String, marker: String) -> String:
+	var start := source.find(marker)
+	if start < 0:
+		return ""
+	var finish := source.find("\n\n", start)
+	if finish < 0:
+		finish = source.length()
+	return source.substr(start, finish - start)
