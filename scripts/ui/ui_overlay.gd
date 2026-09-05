@@ -2800,12 +2800,13 @@ func _setup_pc_ui() -> void:
 	pc_box_selector_panel = PanelContainer.new()
 	pc_box_selector_panel.name = "BoxSelectorPanel"
 	pc_box_selector_panel.visible = false
-	pc_box_selector_panel.z_index = UI_DRAG_Z_INDEX + 2
+	# The selector is reparented into StorageWorkspace below. Keep it in the
+	# normal layout so opening it reserves space instead of covering box slots.
+	pc_box_selector_panel.z_index = 0
 	pc_box_selector_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	pc_box_selector_panel.custom_minimum_size = Vector2(300, 0)
-	pc_box_selector_panel.size = Vector2(300, 560)
+	pc_box_selector_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pc_box_selector_panel.add_theme_stylebox_override("panel", _make_pc_box_selector_style())
-	add_child(pc_box_selector_panel)
 	_build_pc_box_selector_panel()
 
 	var margin := MarginContainer.new()
@@ -2992,6 +2993,11 @@ func _setup_pc_ui() -> void:
 	box_margin.add_theme_constant_override("margin_right", 10)
 	box_margin.add_theme_constant_override("margin_bottom", 10)
 	box_panel.add_child(box_margin)
+
+	# Keep the selector beside the box workspace rather than floating above it.
+	# This makes the box grid reflow to the remaining width, so every slot stays
+	# clickable while the selector is open.
+	body.add_child(pc_box_selector_panel)
 
 	var box_stack := VBoxContainer.new()
 	box_stack.add_theme_constant_override("separation", 7)
@@ -38700,6 +38706,7 @@ func _toggle_pc_box_selector() -> void:
 	if pc_box_selector_panel == null:
 		return
 	pc_box_selector_panel.visible = not pc_box_selector_panel.visible
+	_set_pc_box_grid_layout()
 	if pc_box_selector_panel.visible:
 		_position_pc_box_selector()
 		_refresh_pc_box_selector()
@@ -38708,16 +38715,21 @@ func _toggle_pc_box_selector() -> void:
 func _close_pc_box_selector() -> void:
 	if pc_box_selector_panel != null:
 		pc_box_selector_panel.visible = false
+	_set_pc_box_grid_layout()
+
+
+func _set_pc_box_grid_layout() -> void:
+	if pc_box_grid == null:
+		return
+	# Four columns leave enough room for the 300px selector sibling at the
+	# supported popup width. Restore the denser six-column layout when closed.
+	pc_box_grid.columns = 4 if pc_box_selector_panel != null and pc_box_selector_panel.visible else PC_BOX_SLOTS_PER_ROW
 
 
 func _position_pc_box_selector() -> void:
-	if pc_box_selector_panel == null or pc_popup == null:
-		return
-	var popup_rect := pc_popup.get_global_rect()
-	var panel_width := pc_box_selector_panel.size.x
-	var panel_height := minf(popup_rect.size.y - 80.0, 560.0)
-	pc_box_selector_panel.size = Vector2(panel_width, maxf(panel_height, 260.0))
-	pc_box_selector_panel.global_position = Vector2(popup_rect.end.x - panel_width - 8.0, popup_rect.position.y + 58.0)
+	# The selector is a sibling in StorageWorkspace. Its container layout now
+	# reserves its width and keeps it out of the box grid hit area.
+	return
 
 
 func _refresh_pc_box_selector() -> void:
@@ -38890,7 +38902,7 @@ func _render_pc_party() -> void:
 
 func _render_pc_box() -> void:
 	_clear_children(pc_box_grid)
-	pc_box_grid.columns = PC_BOX_SLOTS_PER_ROW
+	_set_pc_box_grid_layout()
 	var search_query := _pc_search_query()
 	if search_query != "" or _pc_has_active_filter():
 		_render_pc_box_search_results(search_query)
