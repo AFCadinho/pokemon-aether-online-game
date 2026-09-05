@@ -1,169 +1,36 @@
 # Changelog
 
-## Unreleased
+## 0.3.71 - 2026-09-05
 
-- Aether OU and Aether UU AI Sparring now select opponent and player catalog teams from the chosen tier instead of mixing tier catalogs.
-- AI Sparring error messages are now shown in red and return to the normal subtitle color when the error is cleared.
-- AI Sparring now shows the exact player or opponent team-validation issue instead of misreporting every failure as an invalid PokéPaste.
-- Ranked Team Validation now refreshes when moves, EVs, IVs, abilities, natures, or held items change.
+**Added**
 
-- Tierless Open teams no longer show “Open” as a tier badge on AI Sparring cards.
-- AI Sparring catalog cards now show their tier, and tier filters return only teams assigned to that exact tier.
+- Practice battles against AI opponents in Open, Aether OU, and Aether UU. Choose a team from the catalog, use your current party, or paste a PokéPaste.
+- View your recent practice battles and clear your practice history when you want.
+- See a preview of your team and your opponent's team before practice battles.
+- AI battles now clearly show Pokémon forms such as Urshifu Rapid-Strike and Samurott Hisui.
+- The Pokédex now explains how difficult each Pokémon is to catch in plain language.
+- Mt. Moon now asks you to confirm before you choose a fossil.
+- The Move Deleter now clearly says that removing a move is free.
+- The Move Maniac now shows move costs and how many materials you have.
+- Oak's Parcel now has its own icon and a consistent name.
+- Surf now moves at running speed and looks more natural.
+- Rock Smash rocks now use colors that show their required level.
 
-- AI Sparring now supports Open, Aether OU, and Aether UU practice, with tier-aware catalog filters and match history.
+**Changed**
 
-- AI Sparring now keeps a stable panel height when switching between Free Sparring, Team Catalog, Match History, and Research.
+- AI practice battles have clearer tabs, team cards, filters, messages, and buttons.
+- Battle information is easier to follow, with clearer Pokémon forms, team members, field effects, and trainer names.
+- Pokémon Centers, Route 3, Mt. Moon, Cerulean City, and the Aether Clash Lobby have received further visual improvements.
+- The Quest Log, rewards, Aethernet, and Trainer information are easier to understand.
+- Mounts, Running Shoes, and route transitions work more smoothly.
 
-- AI Sparring's Team Catalog can now copy any selected team as a PokéPaste export.
+**Fixed**
 
-- AI Sparring now shows the full PC-style Pokémon info card when hovering a team slot in Free Sparring.
-
-- AI Sparring now waits for the player's ordered pivot replacement without repeatedly requesting an unavailable opponent switch.
-
-- AI Sparring's Team Catalog cards now have clearer roster styling plus visual hover and selected-state feedback.
-
-- AI battle HUDs now show an opponent's complete battle form name, such as Urshifu Rapid-Strike, while preserving real nicknames.
-
-- AI Sparring's Team Catalog now treats each team card as one selectable unit and removes non-gameplay author labels from the player view.
-
-- AI Sparring now keeps its tabs above the content and shows the trainer introduction only in Free Sparring, leaving the catalog and history more room.
-
-- AI Sparring now includes a searchable Team Catalog with compact PokéPaste-style full-team views and one-click choices to use a published team or train against it.
-
-- AI Sparring now shows the complete form name, such as Samurott Hisui, when an unnicknamed Pokémon's battle ident contains only its base name.
-
-- AI Sparring now switches to the selected Pokémon even when Team Preview has reordered the active lead.
-
-- AI Sparring now resolves base-species Mega events such as Latios with Latiosite before refreshing the opponent sprite, name and party icon.
-
-- AI Sparring keeps the opponent setup panel at a stable height when switching between a catalog team and PokéPaste.
-
-- AI Sparring Match History can now be cleared from the player-facing tab after confirmation.
-
-- AI Sparring can now use a temporary PokéPaste as the AI opponent's team, alongside the curated catalog teams.
-
-- AI Sparring now includes a Match History tab showing recent results, AI4 or AI5 as the opponent, and both teams.
-- AI Sparring now presents itself as general AI PvP practice and removes the redundant setup footer below the battle button.
-
-- AI Sparring now shows the current party in the same compact six-slot preview used for battle teams, with Pokémon names available on hover.
-- AI Sparring now previews all six opponent Pokémon as compact icons before a Free Sparring battle, with names available on hover and the random team resolved in advance.
-- Battle side-condition indicators now sit below each active Pokémon's HP HUD beside its party preview, and trainer command callouts render above battle UI overlays.
-
-- Battle side-condition indicators now stay toward the outer party rails so active Pokémon boost badges remain unobstructed.
-
-- AI Sparring Free Sparring can now use your current party directly, alongside Showdown team paste.
-
-- Move Maniac resource badges now show owned and required quantities at a glance.
-
-- Pokémon Center healing indicators keep the final Poké Ball centered in the two-column party grid.
-
-- Added confirmation before choosing the Helix or Dome Fossil in Mt. Moon.
-
-- Move Deleter now explicitly says moves are removed for free.
-
-- Fixed Dreepy's follower sprite to face the same direction as the Trainer while walking.
-
-- Added a dedicated pixel-art icon for Oak's Parcel instead of the missing-item placeholder.
-
-- Moved Camper Iris and Paras in the Route 3 Pokémon Center so the Move Deleter can be interacted with directly.
-- Renamed the item label from "Oaks Parcel" to "Oak's Parcel".
-
-- AI Sparring now keeps live HP and status attached to imported team slots after damage and battle-form changes.
-- AI Sparring now updates an opponent's name, field sprite and team icon during its Mega Evolution, without waiting for the next turn.
-- Training AI battles now keep each imported Pokémon's fixed party position when submitting switches, including after Showdown reorders its internal request list.
-- Training battles no longer request another AI replacement after its final Pokémon faints to entry hazards.
-- AI5 Research markers now default to the previous completed turn and let trainers select any earlier turn.
-
-- AI5 Research now names the exact active campaign, clearly separates assignment progress from AI statistics, and only shows the start action beside the assignment and consent.
-
-- AI5 Research now clearly requires administrator-granted AI Trainer access; players without it can view why the campaign is locked but cannot start data-collecting battles.
-
-- Free Sparring now keeps its team and opponent panels evenly proportioned when AI selections change.
-
-- Free Sparring now offers AI4 without an AI5 shadow search alongside a clearly named AI5 option.
-
-- AI5 Research battles now let players mark the current turn during battle, choose a diagnostic category, and add an optional note without remembering battle or turn numbers.
-
-- AI Sparring now visually distinguishes supporting AI settings, the final opponent choice, and the primary battle action.
-
-- AI5 Research Campaign now keeps the next battle, consent, and start action together in a compact campaign card, with statistics and decision markers clearly separated.
-
-- AI Sparring now opens on Free Sparring and guides you through choosing your team, AI opponent, and battle with a clearer three-step layout.
-- Fixed AI battles asking the player for an unusable move after consecutive entry-hazard KOs; AI forced replacements now finish before player input reopens.
-
-- Fixed Mega-Evolved AI Pokémon retaining their base-form field sprite, party icon, and hover information.
-
-- AI Sparring now has its own polished PvP destination for free AI5 practice and assigned research battles, while AI5 appears as a Veteran trainer in battle.
-
-- Training Room sample Pokémon now use their species names consistently, including before and after Mega Evolution.
-
-- Fixed Training Room AI battles getting stuck when entry hazards immediately fainted an AI replacement during a forced switch.
-
-- Training Room now includes a disabled-by-default AI5 Research campaign view with server-assigned teams, pilot/core progress, battle statistics, explicit diagnostic consent, and turn markers for suspicious AI decisions.
-
-- Cerulean City Gym now correctly masks the space outside its interior map.
-
-- After defeating Misty, the new S.S. Anne mission directs you south through Route 5 to Vermilion City.
-
-- Mount selection now includes search, keyboard navigation, and a scrollable result list for an easier experience as more mounts are added.
-
-- Fixed invalid Mega Stone combinations incorrectly producing nonexistent Mega forms in battle previews.
-- Fixed unavailable ordinary map encounters showing the fishing “nothing biting” message.
-
-- The Pokédex now shows every species' official base catch rate with a plain-language scale and explanation; battle catches use that value together with HP, status, and the chosen Poké Ball.
-
-- Surfing now travels at running speed, whether or not Running Shoes are toggled on.
-- Surf ripples now render beneath your rider and mount.
-- Fishing while Surfing now keeps your existing fishing pose aligned behind the mount.
-- Mt. Moon Part 3 has been re-imported from its latest Tiled visual.
-- Team Rocket's recruitment refusal now uses the intended question mark punctuation.
-- The Mt. Moon Future Self rescue now continues safely if your overworld follower is temporarily unavailable after a battle.
-- Surf now explains which badge is missing when its HM and Charm are owned but the field move is still badge-locked.
-- Rock Smash level requirement messages now use whole-number levels.
-- Rock Smash progression unlocks now show the same coloured rocks used in the overworld.
-- Trainer battles now show their matching Pokémon Showdown trainer art behind NPC Pokémon, while unassigned NPCs retain their existing overworld appearance.
-- NPC and AI battle headers now show both trainer names without redundant portrait thumbnails; PvP keeps player portraits.
-
-- Developers can now use the Overworld Resets tool to respawn every Rock Smash rock without restarting their game.
-
-- Rock Smash rocks now use vivid, level-specific colours and a matching outline so their required tiers are clear in the overworld.
-
-- Rock Smash Pokédollar rewards now appear in the reward popup without playing the item-received sound.
-- Aethernet now shows the current location separately instead of listing it as a travel destination.
-- Rock Smash money rewards now start at ₽100 and scale with both the rock and your Rock Smash level; regular item drops remain chance-based.
-- Karate Master Kenji now explains Rock Smash Pokédollar scaling and the 30% regular item-drop chance correctly.
-- The staff Trainer Progress window can now restart individual side quests or safely mark them complete and grant any unclaimed rewards.
-- Trainer item reward popups now appear after the outro dialogue alongside the received-item sound.
-- Rock Smash rewards now show item popups and play the received-item sound.
-- The temporary side-quest accepting status now uses a neutral color instead of the error red.
-- Cuttable Tree dialogs now show a dedicated Tree mugshot.
-- Route-gate attendants can now be spoken to from two tiles away across all shared gate interiors.
-- Active land mounts now stay active when using authorized route transitions.
-- Bike Voucher turn-ins now show reward popups for both the Cyclizar mount and Mount License.
-- Forest Gate attendants can now be reached and spoken to from in front of the counter.
-- Staff can now start a normal map encounter with a selected eligible Pokémon and encounter method.
-
-- Currency-only rewards now stay silent while item rewards retain the received-item sound.
-- Staff teleport windows now close as soon as the server confirms a successful teleport.
-- Quest offer dialogs now show dedicated icons for currency rewards such as Aetherite and Pokédollars.
-- Successful Thieving attempts now show earned Pokédollars in the reward popup.
-- Existing saved Running Shoes bindings on `X` now migrate to `N` automatically.
-- Developer story checkpoints now refresh rewards from completed main quests without adding side-quest rewards.
-- The Quest Log now separates quest titles, types, and statuses for faster scanning, with green completion checkmarks and improved keyboard focus and tooltips.
-- Water Gun and Dragon Breath now travel in a straight line from the attacking Pokémon's mouth to the target.
-- Water Gun and Dragon Breath now use custom procedural battle animations with stronger projectile and impact visuals.
-- Fall back to the regular trainer battle music when an optional rival track is unavailable.
-- Gary/Blue trainer battles now select the dedicated rival battle soundtrack.
-- Gary battles also resolve the rival soundtrack directly from their battle metadata as a local fallback.
-- Side-quest NPCs now continue their interaction immediately after a player accepts a quest, including the Fishing Guru and Karate Master Kenji item handoffs.
-
-- NPC item rewards now show their reward popup consistently, including the Town Map, without repeating the receipt in the NPC dialogue.
-- Dadinho’s opening position and overhead quest indicators are aligned correctly, and Professor Oak now waits for the family introduction before offering a starter.
-- Item rewards from Mom, Oak, and Daisy now show their popup, System message, and sound together after the reward dialogue.
-- Re-imported the Aether Clash Lobby visual from the latest Tiled map.
-- The Training Room now lets players choose AI4 with AI5 watching or active AI5, plus a team archetype, a random matching sample team, or a specific competitive team.
-- The Training Room's Vs AI action now clearly looks interactive when it is available.
-- AI Training battles now keep the full imported player team and the lead selected during Team Preview.
+- AI battles could get stuck during forced switches or when field effects knocked out a Pokémon.
+- Mega Evolutions could show the wrong sprite, name, or information.
+- Switching Pokémon could fail after Team Preview changed the order.
+- Catching, fishing, Surf, and some route transitions could show incorrect messages or animations.
+- Several NPCs, rewards, items, sounds, and story moments did not always appear at the right time.
 
 ## 0.3.70 - 2026-09-01
 
