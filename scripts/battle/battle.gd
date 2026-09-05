@@ -34,6 +34,7 @@ const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.g
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
 const OGERPON_BATTLE_FORM := preload("res://scripts/battle/ogerpon_battle_form.gd")
 const AI5_RESEARCH_MARKER := preload("res://scripts/battle/battle_ui/ai5_research_marker.gd")
+const NPC_FORCE_SWITCH_DIAGNOSTICS := preload("res://scripts/battle/battle_npc_force_switch_diagnostics.gd")
 const TYPE_CHANGE_BADGE_COLORS := {
 	"bug": Color("#85a114"), "dark": Color("#403847"), "dragon": Color("#4d52c4"),
 	"electric": Color("#e0ad14"), "fairy": Color("#d163a3"), "fighting": Color("#b83338"),
@@ -11386,6 +11387,7 @@ func _auto_force_switch_opponent_if_needed() -> bool:
 
 
 func _show_non_pvp_opponent_force_switch_wait() -> void:
+	_trace_npc_force_switch("wait_shown", -1)
 	_set_battle_input_locked(true)
 	current_action_view = ActionView.NONE
 	moves_grid.visible = false
@@ -11399,12 +11401,15 @@ func _show_non_pvp_opponent_force_switch_wait() -> void:
 func _resolve_non_pvp_opponent_force_switch_wait() -> void:
 	if non_pvp_opponent_force_switch_recovery_active or battle_finished:
 		return
+	_trace_npc_force_switch("recovery_started", -1)
 	non_pvp_opponent_force_switch_recovery_active = true
 	var resolved := await _auto_force_switch_opponent_if_needed()
 	non_pvp_opponent_force_switch_recovery_active = false
+	_trace_npc_force_switch("recovery_finished", -1, {}, {"resolved": resolved})
 	if battle_finished or await _finish_if_battle_ended():
 		return
 	if not resolved and _opponent_player_needs_force_switch_ui():
+		_trace_npc_force_switch("recovery_stalled", -1)
 		push_warning("Could not resolve the pending NPC forced switch; player input remains locked")
 		return
 	_set_battle_input_locked(false)
@@ -14906,10 +14911,12 @@ func _submit_npc_choice_and_render(
 	for _attempt in range(MAX_NPC_FORCE_SWITCH_CHAIN):
 		if battle_finished or battle_state.is_battle_ended():
 			return true
+		_trace_npc_force_switch("before_submit", _attempt + 1)
 		_capture_ordered_response_display_species()
 		var opponent_response: Dictionary = await action_flow.submit_npc_choice(
 			"p2", last_rendered_event_seq
 		)
+		_trace_npc_force_switch("after_submit", _attempt + 1, opponent_response)
 		if not bool(opponent_response.get("success", false)):
 			_clear_ordered_response_display_species()
 			return false
@@ -14920,6 +14927,7 @@ func _submit_npc_choice_and_render(
 			next_pending_player_choice_events
 		)
 		await _hold_opponent_response_message()
+		_trace_npc_force_switch("after_render", _attempt + 1, opponent_response)
 		# The selected replacement can be the opponent's final Pokemon and faint
 		# immediately to entry hazards. Its response already contains the terminal
 		# state, so never ask the now-inactive training session for another choice.
@@ -14939,8 +14947,37 @@ func _submit_npc_choice_and_render(
 		next_rendered_event_keys = {}
 		next_pending_player_choice_events = []
 
+	_trace_npc_force_switch("chain_exhausted", MAX_NPC_FORCE_SWITCH_CHAIN)
 	push_warning("NPC forced-switch chain exceeded the six-member team bound")
 	return false
+
+
+func _trace_npc_force_switch(
+	stage: String,
+	attempt: int,
+	response: Dictionary = {},
+	extra: Dictionary = {}
+) -> void:
+	if not OS.is_debug_build() or battle_type != BattleType.TRAINER or _is_pvp_battle():
+		return
+	var opponent_player_id := _get_opponent_state_player_id()
+	if opponent_player_id == "":
+		opponent_player_id = "p2"
+	var snapshot: Dictionary = NPC_FORCE_SWITCH_DIAGNOSTICS.build_snapshot(
+		stage,
+		npc_trainer_display_name,
+		attempt,
+		opponent_player_id,
+		battle_state.requests,
+		battle_state.decisions,
+		response
+	)
+	snapshot["uiRequiresSwitch"] = _opponent_player_needs_force_switch_ui()
+	snapshot["battleEnded"] = battle_finished or battle_state.is_battle_ended()
+	if not response.is_empty():
+		snapshot["responseRequiresSwitch"] = _response_has_opponent_force_switch(response)
+	snapshot.merge(extra, true)
+	print(NPC_FORCE_SWITCH_DIAGNOSTICS.PREFIX, " ", JSON.stringify(snapshot))
 
 func _render_resolved_player_choice_response(
 	resolved_response: Dictionary,
