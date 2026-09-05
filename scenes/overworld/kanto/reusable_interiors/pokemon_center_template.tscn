@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bb62an6t47c7m" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_044_Beauty.png" id="10_k6grd"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/move_mentor_npc.tscn" id="11_move_mentor"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/move_deleter_npc.tscn" id="12_move_deleter"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/banker_npc.tscn" id="13_banker"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="20_transition_hint"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y5qkb"]
@@ -125,6 +126,9 @@ manual_interaction_reach_tiles = 2
 [node name="HealMachineEffect" type="Node2D" parent="Entities/NPCs" unique_id=1029628802]
 position = Vector2(464, 600)
 script = ExtResource("9_heal_effect")
+
+[node name="Banker" parent="Entities/NPCs" instance=ExtResource("13_banker")]
+position = Vector2(560, 688)
 
 [node name="Clerk" parent="Entities/NPCs" unique_id=554856490 instance=ExtResource("7_seller")]
 position = Vector2(592, 912)

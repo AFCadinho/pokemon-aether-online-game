@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Every Pokémon Center now has a Banker who can safely store money so it is protected from blackout losses.
 - Your benched Pokémon now display their saved PP correctly instead of appearing to have PP Max applied.
 - AI Sparring and NPC battles recover interrupted turns and forced switches more reliably, and keep HP updates in step with battle events.
 

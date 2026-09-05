@@ -13,6 +13,7 @@ var gender := "male"
 var is_staff := false
 var party: Array[Pokemon] = []
 var money := 0
+var bank_money := 0
 var gems := 0
 var aetherite := 0
 var battle_points := 0
@@ -63,6 +64,7 @@ func reset_account_state() -> void:
 	is_staff = false
 	party = []
 	money = 0
+	bank_money = 0
 	gems = 0
 	aetherite = 0
 	battle_points = 0
@@ -117,6 +119,7 @@ func reset_gameplay_progress() -> void:
 	var join_date: Variant = flags.get("join_date", null)
 	party = []
 	money = 0
+	bank_money = 0
 	aetherite = 0
 	battle_points = 0
 	playtime_seconds = 0
