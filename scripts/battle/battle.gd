@@ -2328,6 +2328,14 @@ func _set_action_panel_mode(mode: BattleActionsPanelMode) -> void:
 func _sync_action_panel_mode_visibility() -> void:
 	var is_calc_mode := current_action_panel_mode == BattleActionsPanelMode.CALC
 	var is_bag_view := current_action_view == ActionView.BAG
+	# Side-condition labels belong to the battlefield presentation. Hide them
+	# while the full-workspace calculator drawer is open, and repopulate their
+	# normal visibility when returning to the battle view.
+	if is_calc_mode:
+		player_side_effects_panel.visible = false
+		enemy_side_effects_panel.visible = false
+	else:
+		_update_side_condition_ui(_get_display_field_effects())
 	if is_calc_mode:
 		_update_calc_drawer_layout()
 	if is_calc_mode or is_bag_view:
@@ -6201,6 +6209,9 @@ func _update_side_condition_ui(field_effects: Array, current_turn := -1) -> void
 	var player_side_effects: Array = _get_side_condition_effects("p1", field_effects)
 	var enemy_side_effects: Array = _get_side_condition_effects("p2", field_effects)
 	side_condition_presentation.update(player_side_effects, enemy_side_effects, current_turn)
+	if current_action_panel_mode == BattleActionsPanelMode.CALC:
+		player_side_effects_panel.visible = false
+		enemy_side_effects_panel.visible = false
 
 func _get_side_condition_effects(side_id: String, field_effects: Array) -> Array:
 	var side_effects: Array = []
