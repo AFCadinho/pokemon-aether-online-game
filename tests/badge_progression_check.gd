@@ -68,7 +68,7 @@ func _init() -> void:
 	_check_contains(world, "func _notify_gym_badge_award", "Gym victory announces the awarded badge")
 	_check_contains(world, "func _notify_story_reward_items", "Gym victory announces story item rewards")
 	_check_contains(world, '"ui.world.reward.story_item"', "story item reward messages are localized")
-	_check_contains(world, '"playItemReceivedSfx": bool(gym_badge_award.get("awarded", false))', "new Gym Badges schedule the received-item jingle")
+	_check_contains(world, '"storyEffects": reward_result.get("storyEffects", [])', "trainer rewards carry story item effects to battle-end audio handling")
 
 	quit(1 if failed else 0)
 

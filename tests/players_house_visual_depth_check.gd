@@ -19,7 +19,7 @@ func _init() -> void:
 	_check_visual(PokemonLaboratoryVisualScene, "Oak's Lab", &"StructuresTop")
 	_check_visual(PokemonCenterVisualScene, "Pokémon Center template", &"StructuresTop")
 	_check_visual(VerticalTransitionBuildingVisualScene, "vertical transition building", &"StructuresTop")
-	_check_visual(AetherClashLobbyVisualScene, "Aether Clash Lobby", &"ObjectTop")
+	_check_visual(AetherClashLobbyVisualScene, "Aether Clash Lobby", &"ObjectsTop")
 	_check_visual(MtMoonB1FVisualScene, "Mt. Moon B1F", &"ObjectsTop")
 	_check_visual(MtMoonB2FVisualScene, "Mt. Moon B2F", &"ObjectsTop")
 

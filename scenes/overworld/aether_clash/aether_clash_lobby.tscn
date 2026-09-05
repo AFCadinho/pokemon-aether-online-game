@@ -346,6 +346,7 @@ tile_set = SubResource("TileSet_4afb1")
 tile_set = SubResource("TileSet_4afb1")
 
 [node name="Stairs" type="Node2D" parent="Tiles" unique_id=1190078652]
+visible = false
 
 [node name="StairUpLeft" type="TileMapLayer" parent="Tiles/Stairs" unique_id=749827893]
 z_index = 100
