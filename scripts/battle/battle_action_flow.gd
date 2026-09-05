@@ -126,6 +126,7 @@ func restore_http_response(response: Dictionary, rendered_seq: int) -> void:
 
 func send_player_choice(choice_type: String, slot: int, mega := false, since_event_seq := -1, z_move := false) -> Dictionary:
 	_set_http_timeout()
+	var decision := battle_state.get_active_decision(local_player_id)
 	return await BattleApiClient.send_choice(
 		request_node,
 		battle_state.battle_id,
@@ -134,12 +135,14 @@ func send_player_choice(choice_type: String, slot: int, mega := false, since_eve
 		slot,
 		mega,
 		since_event_seq,
-		z_move
+		z_move,
+		decision
 		)
 
 
 func send_player_choice_and_resolve(choice_type: String, slot: int, mega := false, since_event_seq := -1, z_move := false) -> Dictionary:
 	_set_http_timeout()
+	var decision := battle_state.get_active_decision(local_player_id)
 	return await BattleApiClient.send_choice_and_resolve(
 		request_node,
 		battle_state.battle_id,
@@ -150,7 +153,8 @@ func send_player_choice_and_resolve(choice_type: String, slot: int, mega := fals
 		"basic",
 		"p2",
 		since_event_seq,
-		z_move
+		z_move,
+		decision
 	)
 
 

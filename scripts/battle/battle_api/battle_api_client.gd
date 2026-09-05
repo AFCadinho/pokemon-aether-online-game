@@ -384,7 +384,8 @@ func send_choice(
 	slot: int,
 	mega := false,
 	since_event_seq := -1,
-	z_move := false
+	z_move := false,
+	decision_contract: Dictionary = {}
 ) -> Dictionary:
 	var body := {
 		"playerId": player_id,
@@ -395,6 +396,7 @@ func send_choice(
 		body["mega"] = true
 	if z_move:
 		body["zMove"] = true
+	_apply_decision_contract(body, decision_contract)
 	
 	return await send_post_request(
 		request_node,
@@ -412,7 +414,8 @@ func send_choice_and_resolve(
 	strategy := "basic",
 	npc_player_id := "p2",
 	since_event_seq := -1,
-	z_move := false
+	z_move := false,
+	decision_contract: Dictionary = {}
 ) -> Dictionary:
 	var body := {
 		"playerId": player_id,
@@ -425,12 +428,18 @@ func send_choice_and_resolve(
 		body["mega"] = true
 	if z_move:
 		body["zMove"] = true
+	_apply_decision_contract(body, decision_contract)
 
 	return await send_post_request(
 		request_node,
 		_append_since_event_seq_query("/battle/%s/choice-and-resolve" % battle_id, since_event_seq),
 		body
 	)
+
+func _apply_decision_contract(body: Dictionary, decision_contract: Dictionary) -> void:
+	for key in ["decisionId", "decisionGeneration", "decisionKind"]:
+		if decision_contract.has(key):
+			body[key] = decision_contract[key]
 
 func send_npc_choice(
 	request_node: HTTPRequest,
