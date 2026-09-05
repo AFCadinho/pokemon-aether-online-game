@@ -177,6 +177,7 @@ func _prepare_world() -> void:
 	GameState.set_prepared_world_state({
 		"savedState": saved_state,
 		"hasSavedState": not saved_state.is_empty(),
+		"blackoutLoss": int(_dictionary_from_value(profile_response.get("position", {})).get("blackoutLoss", 0)),
 	})
 
 	_set_loading_status("ui.loading.opening_path", 2)

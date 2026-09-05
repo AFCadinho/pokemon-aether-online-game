@@ -54,6 +54,7 @@ func load_player_profile() -> Dictionary:
 		"position": {
 			"hasState": bool(position.get("hasState", false)),
 			"state": _dictionary_from_value(position.get("state", {})),
+			"blackoutLoss": int(position.get("blackoutLoss", 0)),
 		},
 		"party": {
 			"hasParty": bool(party.get("hasParty", false)),
