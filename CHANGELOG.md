@@ -4,6 +4,7 @@
 
 **Changed**
 
+- Spectating PvP battles now leaves your own party's HP, status, and moves unchanged.
 - Reopening the game during a wild battle now restores that battle at its current turn instead of returning the player to the overworld.
 - Pokémon Storage now removes the misleading `ALL BOXES` badge and gives primary, secondary, and navigation actions clearer visual hierarchy.
 

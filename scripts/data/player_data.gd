@@ -419,8 +419,17 @@ func apply_battle_team_state(team: Array) -> void:
 
 		var pokemon: Pokemon = null
 		var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", "")))
-		if instance_id != "" and party_by_instance_id.has(instance_id):
-			pokemon = party_by_instance_id[instance_id] as Pokemon
+		var owned_pokemon_id := int(pokemon_data.get("ownedPokemonId", pokemon_data.get("owned_pokemon_id", 0)))
+		if owned_pokemon_id > 0:
+			for saved_pokemon: Pokemon in party:
+				if saved_pokemon.owned_pokemon_id == owned_pokemon_id:
+					pokemon = saved_pokemon
+					break
+			if pokemon == null or (instance_id != "" and pokemon.instance_id != instance_id):
+				continue
+		elif instance_id != "":
+			# An explicit foreign identity must never fall back to slot/species.
+			pokemon = party_by_instance_id.get(instance_id) as Pokemon
 		else:
 			pokemon = _find_party_pokemon_for_team_entry(pokemon_data, used_fallback_instances)
 		if pokemon == null:
