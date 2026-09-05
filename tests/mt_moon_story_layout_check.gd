@@ -45,7 +45,7 @@ func _init() -> void:
 	_check(basement.contains('position = Vector2(752, 688)'), "Miguel's recovery marker stays on the open approach tile")
 	_check(basement.contains('interaction_id = "kanto_mt_moon_ambush_rescue"'), "B2F binds the resumable ambush")
 	_check(not basement.contains('adinho_dad_frames.tres'), "ambush no longer gives the future self Dadinho's outfit")
-	_check(basement.contains('[node name="FaceGearSprite" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush/FutureSelf"]'), "ambush layers the future-self outfit")
+	_check(basement.contains('[node name="FaceGearSprite" type="AnimatedSprite2D" parent="Entities/MtMoonAmbush/FutureSelf"'), "ambush layers the future-self outfit")
 	_check(ambush_script.contains('"id": "Mysterious_Mask"') and ambush_script.contains('"id": "Mysterious_Shirt"') and ambush_script.contains('"id": "Mysterious_Trousers"') and ambush_script.contains('"id": "Mysterious_Shoes"'), "future self wears every Mysterious Outfit component")
 	_check(ambush_script.contains('PlayerPartyStateService.get_starter_options()'), "ambush resolves the chosen starter's final evolution")
 	_check(ambush_script.contains('InventoryService.has_item("helix-fossil")'), "Miguel takes the unchosen fossil")
