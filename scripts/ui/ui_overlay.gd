@@ -301,6 +301,7 @@ const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 680)
 const PC_POPUP_SIZE := Vector2(1160, 720)
 const PC_BOX_SLOTS_PER_ROW := 6
 const PC_BOX_SLOT_SIZE := Vector2(118, 80)
+const PC_BOX_COMPACT_SLOT_SIZE := Vector2(104, 72)
 const PC_PARTY_SLOT_SIZE := Vector2(232, 68)
 const PC_ACCENT := Color("#60d3ff")
 const PC_ACCENT_SOFT := Color("#60d3ff88")
@@ -2804,7 +2805,7 @@ func _setup_pc_ui() -> void:
 	# normal layout so opening it reserves space instead of covering box slots.
 	pc_box_selector_panel.z_index = 0
 	pc_box_selector_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	pc_box_selector_panel.custom_minimum_size = Vector2(300, 0)
+	pc_box_selector_panel.custom_minimum_size = Vector2(230, 0)
 	pc_box_selector_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pc_box_selector_panel.add_theme_stylebox_override("panel", _make_pc_box_selector_style())
 	_build_pc_box_selector_panel()
@@ -38721,9 +38722,9 @@ func _close_pc_box_selector() -> void:
 func _set_pc_box_grid_layout() -> void:
 	if pc_box_grid == null:
 		return
-	# Four columns leave enough room for the 300px selector sibling at the
-	# supported popup width. Restore the denser six-column layout when closed.
-	pc_box_grid.columns = 4 if pc_box_selector_panel != null and pc_box_selector_panel.visible else PC_BOX_SLOTS_PER_ROW
+	# Five compact columns leave enough room for the narrower selector sibling
+	# while keeping slots 5 and 6 visible in the second row.
+	pc_box_grid.columns = 5 if pc_box_selector_panel != null and pc_box_selector_panel.visible else PC_BOX_SLOTS_PER_ROW
 
 
 func _position_pc_box_selector() -> void:
@@ -38745,7 +38746,7 @@ func _refresh_pc_box_selector() -> void:
 	for index in range(max(pc_box_count, 1)):
 		var button := Button.new()
 		button.text = "%02d    %s" % [index + 1, _pc_box_display_name(index)]
-		button.custom_minimum_size = Vector2(0, 38)
+	button.custom_minimum_size = Vector2(0, 32)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.focus_mode = Control.FOCUS_NONE
 		button.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -39085,7 +39086,7 @@ func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, po
 		occupied,
 		selected,
 		slot_badge,
-		PC_BOX_SLOT_SIZE
+		PC_BOX_COMPACT_SLOT_SIZE if pc_box_selector_panel != null and pc_box_selector_panel.visible else PC_BOX_SLOT_SIZE
 	)
 	if occupied:
 		var loan_value: Variant = payload.get("loan", {})

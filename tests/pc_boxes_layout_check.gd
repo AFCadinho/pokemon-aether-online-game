@@ -14,6 +14,7 @@ func _init() -> void:
 
 	_check(source.contains("const PC_POPUP_SIZE := Vector2(1160, 720)"), "Pokémon Storage uses a spacious workspace")
 	_check(source.contains("const PC_BOX_SLOT_SIZE := Vector2(118, 80)"), "A complete 6 by 5 box uses roomier collection cards")
+	_check(source.contains("const PC_BOX_COMPACT_SLOT_SIZE := Vector2(104, 72)"), "Open selector uses compact collection cards")
 	_check(source.contains('const POKEMON_STORAGE_ICON: Texture2D = preload("res://assets/ui/pokemon_storage.svg")'), "Storage has a dedicated interface icon")
 	_check(FileAccess.file_exists(STORAGE_ICON_PATH), "Dedicated storage icon exists")
 	_check(source.contains('_set_localized_control_property(title, "text", "ui.storage.title")'), "Storage uses a clear localized title")
@@ -22,7 +23,7 @@ func _init() -> void:
 	_check(source.contains('box_panel.name = "BoxWorkspacePanel"'), "Boxes have a dedicated workspace panel")
 	_check(source.contains("body.add_child(pc_box_selector_panel)"), "Box selector participates in the storage workspace layout")
 	_check(source.contains("pc_box_selector_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL"), "Box selector fills its reserved workspace height")
-	_check(source.contains("pc_box_grid.columns = 4 if pc_box_selector_panel != null and pc_box_selector_panel.visible else PC_BOX_SLOTS_PER_ROW"), "Box grid makes room for the open selector")
+	_check(source.contains("pc_box_grid.columns = 5 if pc_box_selector_panel != null and pc_box_selector_panel.visible else PC_BOX_SLOTS_PER_ROW"), "Box grid makes room for the open selector")
 	_check(not source.contains("pc_box_selector_panel.global_position ="), "Box selector cannot overlay storage slots")
 	_check(not source.contains('party_help.text ='), "Party rail avoids repeating the global interaction hint")
 	_check(source.contains("pc_party_count_label.text ="), "Party rail reports occupied slots")
