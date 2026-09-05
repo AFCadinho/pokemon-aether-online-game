@@ -66,7 +66,7 @@ func _init() -> void:
 		_check(color not in colors, "Rock Smash level %d has a unique color" % required_level)
 		colors.append(color)
 	var rock_source := FileAccess.get_file_as_string("res://scripts/world/interactables/daily_smashable_rock.gd")
-	_check("_configure_tier_outline(tier_color)" in rock_source, "Rock Smash rocks show a visible outline for their level tier")
+	_check("TierOutline" not in rock_source, "Rock Smash rocks do not draw colored square outlines")
 	_check(
 		RockSmashLevelPaletteScript.color_for_required_level(25) == Color.WHITE,
 		"unknown Rock Smash levels do not receive a misleading known-tier color"
