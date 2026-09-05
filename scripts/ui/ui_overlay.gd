@@ -488,6 +488,7 @@ const REWARD_NOTIFICATION_STACK_SCRIPT := preload("res://scripts/ui/reward_notif
 const BAG_INTERFACE_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
 const MARKET_INTERFACE_ICON: Texture2D = preload("res://assets/ui/market_shop.svg")
 const AETHER_ATELIER_POPUP_SCENE := preload("res://scenes/interface/aether_atelier_popup.tscn")
+const BANK_POPUP_SCENE := preload("res://scenes/interface/bank_popup.tscn")
 const MOVE_MENTOR_POPUP_SCENE := preload("res://scenes/interface/move_mentor_popup.tscn")
 const MOVE_DELETER_POPUP_SCENE := preload("res://scenes/interface/move_deleter_popup.tscn")
 const SHINY_TRACKER_POPUP_SCENE := preload("res://scenes/interface/shiny_tracker_popup.tscn")
@@ -1261,6 +1262,7 @@ var trainer_name_change_status_label: Label
 var trainer_name_change_confirm_button: Button
 var trainer_name_change_in_progress := false
 var aether_atelier_popup: AetherAtelierPopup
+var bank_popup: BankPopup
 var move_mentor_popup
 var move_deleter_popup
 var shiny_tracker_popup: ShinyTrackerPopup
@@ -1653,6 +1655,7 @@ func _ready() -> void:
 	_setup_market_popup()
 	_setup_aether_exchange_popup()
 	_setup_aether_atelier_popup()
+	_setup_bank_popup()
 	_setup_move_mentor_popup()
 	_setup_move_deleter_popup()
 	_setup_shiny_tracker_popup()
@@ -3642,6 +3645,7 @@ func _apply_ui_z_index_policy() -> void:
 		wild_pokemon_popup,
 		settings_menu,
 		guild_popup,
+		bank_popup,
 		move_mentor_popup,
 		move_deleter_popup,
 	]
@@ -3720,6 +3724,7 @@ func _priority_overlay_panels() -> Array[Control]:
 		mail_compose_popup,
 		pc_popup,
 		guild_popup,
+		bank_popup,
 		move_mentor_popup,
 		move_deleter_popup,
 	]
@@ -21507,6 +21512,14 @@ func _setup_aether_atelier_popup() -> void:
 	aether_atelier_popup.bundle_created.connect(_on_aether_atelier_bundle_created)
 	aether_atelier_popup.chroma_dyed.connect(_on_aether_atelier_chroma_dyed)
 
+func _setup_bank_popup() -> void:
+	bank_popup = BANK_POPUP_SCENE.instantiate() as BankPopup
+	if bank_popup == null:
+		return
+	root_control.add_child(bank_popup)
+	bank_popup.closed.connect(_hide_bank)
+	bank_popup.wallet_changed.connect(refresh_money_display)
+
 func _setup_move_mentor_popup() -> void:
 	move_mentor_popup = MOVE_MENTOR_POPUP_SCENE.instantiate()
 	if move_mentor_popup == null:
@@ -21583,6 +21596,19 @@ func open_aether_atelier() -> void:
 	aether_atelier_popup.visible = true
 	_activate_ui_panel(aether_atelier_popup)
 	aether_atelier_popup.open_atelier()
+
+func open_bank() -> void:
+	if bank_popup == null:
+		return
+	bank_popup.visible = true
+	_activate_ui_panel(bank_popup)
+	bank_popup.open_bank()
+
+func _hide_bank() -> void:
+	if bank_popup == null:
+		return
+	bank_popup.visible = false
+	_deactivate_ui_panel(bank_popup)
 
 func open_move_mentor() -> void:
 	if move_mentor_popup == null:
@@ -29639,6 +29665,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": dev_badge_progress_popup, "close": Callable(self, "_hide_dev_badge_progress_popup_for_escape")},
 		{"panel": dev_actions_popup, "close": Callable(self, "_hide_dev_actions_popup_for_escape")},
 		{"panel": aether_atelier_popup, "close": Callable(self, "_hide_aether_atelier")},
+		{"panel": bank_popup, "close": Callable(self, "_hide_bank")},
 		{"panel": move_mentor_popup, "close": Callable(self, "_hide_move_mentor")},
 		{"panel": move_deleter_popup, "close": Callable(self, "_hide_move_deleter")},
 		{"panel": bag_popup, "close": Callable(self, "_hide_bag_popup_for_escape")},
