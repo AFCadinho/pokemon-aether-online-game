@@ -4416,6 +4416,7 @@
   "ui.pvp.room.tier.aether_ou": "Aether OU",
   "ui.pvp.room.tier.aether_uu": "Aether UU",
   "ui.pvp.room.tier.mega_z_test": "Champions ZA",
+  "ui.pvp.room.tier.pokemmo_ou": "PokeMMO OU",
   "ui.pvp.room.tier_team_invalid": "Your team does not follow the selected tier's rules.",
   "ui.pvp.room.tier_unavailable": "This room tier is temporarily unavailable.",
   "ui.pvp.room.timer_tooltip": "Use the shared authoritative battle timer. Select a speed tier below.",

@@ -694,7 +694,7 @@ func _check_pvp_runtime_translation() -> void:
 	room_create_button.emit_signal("pressed")
 	await process_frame
 	_check(room_tier_row != null and room_tier_row.visible, "Room creation exposes the optional battle tier")
-	_check(room_tier_select != null and room_tier_select.item_count == 4, "Players can choose no tier, Aether OU, Aether UU, or Champions ZA")
+	_check(room_tier_select != null and room_tier_select.item_count == 5, "Custom rooms include the separate PokeMMO OU tier")
 	_check(str(room_tier_select.get_selected_metadata()) == "none", "No tier is selected by default")
 	_check(room_tier_select.get_item_text(0) == "Geen tier", "The default tier is localized in Dutch")
 	_check(room_tier_select.get_item_text(1) == "Aether OU", "Aether OU is available for unrated rooms")
@@ -708,6 +708,11 @@ func _check_pvp_runtime_translation() -> void:
 	_check(room_tier_select.get_item_text(3) == "Champions ZA", "Champions ZA is available without a developer label")
 	_check(str(room_tier_select.get_selected_metadata()) == "pokeaether-mega-z-test", "Champions ZA keeps its bounded room identity")
 	_check(overlay.call("_selected_pvp_room_format_id") == "pokeaether-mega-z-test-v1", "Champions ZA maps to the versioned engine format")
+	room_tier_select.select(4)
+	_check(room_tier_select.get_item_text(4) == "PokeMMO OU", "PokeMMO OU is available for custom rooms")
+	_check(str(room_tier_select.get_selected_metadata()) == "pokemmo-ou", "PokeMMO OU has its own room identity")
+	_check(overlay.call("_selected_pvp_room_format_id") == "pokemmo-ou-v1", "PokeMMO OU maps to its isolated engine")
+	room_tier_select.select(3)
 	_check(room_timer_check != null and room_timer_check.visible, "Training room creation exposes the shared decision timer option")
 	room_timer_check.button_pressed = true
 	room_timer_check.emit_signal("toggled", true)

@@ -193,6 +193,7 @@ const PVP_ROOM_TIERS: Array[Dictionary] = [
 	{"id": "aether-ou", "format_id": "gen9nationaldex", "label": "ui.pvp.room.tier.aether_ou"},
 	{"id": "aether-uu", "format_id": "gen9nationaldex", "label": "ui.pvp.room.tier.aether_uu"},
 	{"id": PVP_ROOM_TIER_MEGA_Z_TEST, "format_id": "pokeaether-mega-z-test-v1", "label": "ui.pvp.room.tier.mega_z_test"},
+	{"id": "pokemmo-ou", "format_id": "pokemmo-ou-v1", "label": "ui.pvp.room.tier.pokemmo_ou"},
 ]
 const SOCIALS_FRIENDS_ICON: Texture2D = preload("res://assets/ui/friendlist.svg")
 const SOCIALS_NEARBY_ICON: Texture2D = preload("res://assets/ui/socials_nearby.svg")
