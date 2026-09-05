@@ -38779,7 +38779,8 @@ func _make_pc_box_selector_style() -> StyleBoxFlat:
 
 
 func _on_pc_selector_box_selected(index: int) -> void:
-	_close_pc_box_selector()
+	# Keep the selector open while browsing boxes. It is also the panel that
+	# makes the currently visible box slots available for drag-and-drop.
 	await _on_pc_box_selected(index)
 
 
