@@ -2789,7 +2789,6 @@ func _setup_pc_ui() -> void:
 	pc_slot_context_menu.min_size = Vector2i(232, 0)
 	_apply_pc_slot_context_menu_style()
 	pc_slot_context_menu.id_pressed.connect(_on_pc_slot_context_action)
-	pc_slot_context_menu.popup_hide.connect(_clear_pc_slot_context)
 	root_control.add_child(pc_slot_context_menu)
 
 	pc_pokemon_hover_card = PC_PARTY_HOVER_CARD_SCENE.instantiate() as PartyHoverCard
