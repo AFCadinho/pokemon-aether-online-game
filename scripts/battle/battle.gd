@@ -1351,12 +1351,13 @@ func _get_player_save_pokemon_for_hover(pokemon_data: Dictionary) -> Pokemon:
 func _get_player_save_pokemon_for_battle_display_data(pokemon_data: Dictionary, fallback_index := -1) -> Pokemon:
 	if _is_training_room_battle():
 		return null
+	if _is_spectator_battle():
+		return null
 
 	var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", ""))).strip_edges()
-	if instance_id != "":
-		for pokemon in PlayerSave.party:
-			if pokemon.instance_id == instance_id:
-				return pokemon
+	var owned_pokemon_id := int(pokemon_data.get("ownedPokemonId", pokemon_data.get("owned_pokemon_id", 0)))
+	if instance_id != "" or owned_pokemon_id > 0:
+		return _find_saved_party_pokemon_for_battle_data(pokemon_data, fallback_index)
 
 	var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
 	if canonical_slot > 0:
@@ -3898,6 +3899,11 @@ func _get_active_canonical_party_slot(player_id: String) -> int:
 func _finish_battle(result: Dictionary) -> void:
 	if battle_finished:
 		return
+	# Viewing a battle never grants ownership of either displayed team. Keep
+	# this invariant here so every terminal route, including plain wins, obeys it.
+	if _is_spectator_battle():
+		result["skipPartyBattleSync"] = true
+		result["localPartyDefeated"] = false
 
 	pvp_pending_authoritative_terminal.clear()
 	pvp_prechoice_buffer.reset()
@@ -4241,6 +4247,8 @@ func _is_local_battle_party_defeated() -> bool:
 	return has_pokemon
 
 func _heal_local_party_after_pvp_battle() -> void:
+	if _is_spectator_battle() or _is_training_room_battle():
+		return
 	var player_save := get_node_or_null("/root/PlayerSave")
 	if player_save == null:
 		return
@@ -4252,6 +4260,8 @@ func _heal_local_party_after_pvp_battle() -> void:
 	PartyHealService.heal_party_locally(party_value as Array)
 
 func _heal_party_after_pvp_battle() -> void:
+	if _is_spectator_battle() or _is_training_room_battle():
+		return
 	var result: Dictionary = await PartyHealService.heal_current_party_and_save()
 	if not bool(result.get("success", false)):
 		push_warning("Battle: could not heal party after PvP battle: %s" % str(result.get("error", "Unknown error")))
@@ -4888,6 +4898,8 @@ func _pvp_should_wait_for_force_switch_phase_release(display_response: Dictionar
 	return _pvp_is_waiting_for_force_switch_phase_release()
 
 func _apply_party_state_from_api_response(response: Dictionary) -> void:
+	if _is_spectator_battle() or _is_training_room_battle():
+		return
 	if not response.has("party"):
 		return
 
@@ -4899,6 +4911,8 @@ func _apply_party_state_from_api_response(response: Dictionary) -> void:
 
 func _sync_player_save_party_status_from_battle_state() -> void:
 	if _is_training_room_battle():
+		return
+	if _is_spectator_battle():
 		return
 
 	var team: Array = battle_state.get_player_team(_get_local_state_player_id())
@@ -4935,17 +4949,23 @@ func _sync_player_save_party_status_from_battle_state() -> void:
 		PlayerSave.party_changed.emit()
 
 func _find_saved_party_pokemon_for_battle_data(pokemon_data: Dictionary, fallback_index: int) -> Pokemon:
+	if _is_spectator_battle():
+		return null
 	var owned_pokemon_id := int(pokemon_data.get("ownedPokemonId", pokemon_data.get("owned_pokemon_id", 0)))
+	var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", ""))).strip_edges()
 	if owned_pokemon_id > 0:
 		for saved_pokemon: Pokemon in PlayerSave.party:
 			if saved_pokemon != null and saved_pokemon.owned_pokemon_id == owned_pokemon_id:
+				if instance_id != "" and saved_pokemon.instance_id != instance_id:
+					return null
 				return saved_pokemon
+		return null
 
-	var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", ""))).strip_edges()
 	if instance_id != "":
 		for saved_pokemon: Pokemon in PlayerSave.party:
 			if saved_pokemon != null and saved_pokemon.instance_id == instance_id:
 				return saved_pokemon
+		return null
 
 	var metadata_slot := int(pokemon_data.get("metadataSlot", pokemon_data.get("metadata_slot", fallback_index + 1)))
 	if metadata_slot > 0:
@@ -5130,6 +5150,8 @@ func _remember_active_player_party_moves() -> void:
 
 func _sync_player_save_from_battle_state() -> void:
 	if _is_training_room_battle():
+		return
+	if _is_spectator_battle():
 		return
 	var player_team := battle_state.get_player_team("p1")
 	if player_team.is_empty():
