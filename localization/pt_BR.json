@@ -3450,6 +3450,7 @@
   "ui.move.category.special": "Especial",
   "ui.move.category.status": "Status",
   "ui.world.blackout.respawned": "Você desmaiou, voltou ao último ponto de cura e sua equipe foi restaurada.",
+  "ui.world.blackout.money_lost": "Você desmaiou e perdeu ₽{amount}.",
   "ui.world.blackout.default_failed": "Você desmaiou, mas o ponto de cura padrão não pôde ser carregado.",
   "ui.world.blackout.nurse_joy": "Você desmaiou e voltou ao seu último ponto de cura.",
   "npc.trainer.rematch.ready": "Treinei desde nossa última batalha. Vamos de novo!",

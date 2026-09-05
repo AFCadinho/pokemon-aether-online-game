@@ -3450,6 +3450,7 @@
   "ui.move.category.special": "Special",
   "ui.move.category.status": "Status",
   "ui.world.blackout.respawned": "You blacked out, returned to your last healing point, and your party was healed.",
+  "ui.world.blackout.money_lost": "You blacked out and lost ₽{amount}.",
   "ui.world.blackout.default_failed": "You blacked out, but the default healing point could not be loaded.",
   "ui.world.blackout.nurse_joy": "You blacked out and returned to your last healing point.",
   "npc.trainer.rematch.ready": "I've trained since our last battle. Let's go again!",

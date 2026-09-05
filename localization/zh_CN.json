@@ -3447,6 +3447,7 @@
   "ui.move.category.special": "特殊",
   "ui.move.category.status": "变化",
   "ui.world.blackout.respawned": "你昏了过去，回到了最后的治疗点，你的队伍也被治愈了。",
+  "ui.world.blackout.money_lost": "你昏了过去，损失了 ₽{amount}。",
   "ui.world.blackout.default_failed": "你黑了，但无法加载默认治疗点。",
   "ui.world.blackout.nurse_joy": "你眼前一黑，回到了最后的治疗点。",
   "npc.trainer.rematch.ready": "自从我们上次战斗以来我就一直在训练。我们再去吧！",

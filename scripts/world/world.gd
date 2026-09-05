@@ -3287,11 +3287,11 @@ func _respawn_after_battle_loss() -> void:
 	if not bool(apply_result.get("success", false)):
 		push_warning("World: respawn position apply failed: %s" % str(apply_result.get("error", "Unknown error")))
 		return
-	get_tree().call_group(
-		"ui_overlay",
-		"add_system_message",
-		LocalizationManager.text("ui.world.blackout.respawned")
-	)
+	var blackout_loss := int(result.get("blackoutLoss", 0))
+	var blackout_message := LocalizationManager.text("ui.world.blackout.respawned")
+	if blackout_loss > 0:
+		blackout_message = LocalizationManager.text("ui.world.blackout.money_lost", {"amount": blackout_loss})
+	get_tree().call_group("ui_overlay", "add_system_message", blackout_message)
 
 
 func _fallback_respawn_after_battle_loss() -> void:
