@@ -2,11 +2,11 @@ extends SceneTree
 
 const RockSmashLevelPaletteScript := preload("res://scripts/world/interactables/rock_smash_level_palette.gd")
 const EXPECTED_COLORS := {
-	1: Color("#d84b78"),
+	1: Color("#ff8954"),
 	5: Color("#18c8b0"),
 	10: Color("#4aa8ff"),
 	20: Color("#ae70ff"),
-	50: Color("#ff8954"),
+	50: Color("#d84b78"),
 	75: Color("#ffd34d"),
 }
 const EXPECTED_LEVELS := {
