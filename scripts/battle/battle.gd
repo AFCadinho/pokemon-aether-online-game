@@ -1289,12 +1289,10 @@ func _with_default_pp_for_moves(moves: Array) -> Array:
 
 		var move_data: Dictionary = (move_value as Dictionary).duplicate(true)
 		if not move_data.has("maxpp") and move_data.has("maxPp"):
-			var base_max_pp: int = int(move_data.get("maxPp", 0))
-			var current_pp: int = int(move_data.get("pp", base_max_pp))
-			var used_pp: int = max(0, base_max_pp - current_pp)
-			var max_pp: int = _calculate_max_pp(base_max_pp)
+			# Saved move capacity already includes any PP upgrades.
+			var max_pp: int = int(move_data.get("maxPp", 0))
 			move_data["maxpp"] = max_pp
-			move_data["pp"] = max(0, max_pp - used_pp)
+			move_data["pp"] = clampi(int(move_data.get("pp", max_pp)), 0, max_pp)
 		elif not move_data.has("maxpp") and move_data.has("pp"):
 			var max_pp: int = _calculate_max_pp(int(move_data.get("pp", 0)))
 			move_data["maxpp"] = max_pp
