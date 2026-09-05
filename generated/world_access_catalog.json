@@ -680,7 +680,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "From1F1",
 					"tile": {
-						"x": 49,
+						"x": 47,
 						"y": 61
 					}
 				},
@@ -2526,7 +2526,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn",
 				"position": {
-					"x": 1584.0,
+					"x": 1520.0,
 					"y": 1968.0
 				},
 				"spawnMarker": "From1F1"
