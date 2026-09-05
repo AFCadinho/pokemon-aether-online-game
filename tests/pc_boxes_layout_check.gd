@@ -15,6 +15,7 @@ func _init() -> void:
 	_check(source.contains("const PC_POPUP_SIZE := Vector2(1160, 720)"), "Pokémon Storage uses a spacious workspace")
 	_check(source.contains("const PC_BOX_SLOT_SIZE := Vector2(118, 80)"), "A complete 6 by 5 box uses roomier collection cards")
 	_check(source.contains("const PC_BOX_COMPACT_SLOT_SIZE := Vector2(104, 72)"), "Open selector uses compact collection cards")
+	_check(source.contains("var compact := slot_size == PC_BOX_COMPACT_SLOT_SIZE"), "Compact collection cards use an internal responsive layout")
 	_check(source.contains('const POKEMON_STORAGE_ICON: Texture2D = preload("res://assets/ui/pokemon_storage.svg")'), "Storage has a dedicated interface icon")
 	_check(FileAccess.file_exists(STORAGE_ICON_PATH), "Dedicated storage icon exists")
 	_check(source.contains('_set_localized_control_property(title, "text", "ui.storage.title")'), "Storage uses a clear localized title")

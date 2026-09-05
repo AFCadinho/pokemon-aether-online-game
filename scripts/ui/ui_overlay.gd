@@ -39160,6 +39160,7 @@ func _on_pc_loan_marker_gui_input(event: InputEvent) -> void:
 
 func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: bool, held_item_id: String, types: Array, texture: Texture2D, occupied: bool, selected: bool, slot_badge: String, slot_size: Vector2) -> PcPokemonSlotButton:
 	var button: PcPokemonSlotButton = PC_POKEMON_SLOT_BUTTON_SCRIPT.new()
+	var compact := slot_size == PC_BOX_COMPACT_SLOT_SIZE
 	button.use_native_drag = false
 	button.text = ""
 	button.custom_minimum_size = slot_size
@@ -39181,17 +39182,17 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stack.anchor_right = 1.0
 	stack.anchor_bottom = 1.0
-	stack.offset_left = 6
-	stack.offset_top = 4
-	stack.offset_right = -6
-	stack.offset_bottom = -4
+	stack.offset_left = 5 if compact else 6
+	stack.offset_top = 2 if compact else 4
+	stack.offset_right = -5 if compact else -6
+	stack.offset_bottom = -2 if compact else -4
 	stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	stack.add_theme_constant_override("separation", 1)
 	button.add_child(stack)
 
 	var meta_row := HBoxContainer.new()
 	meta_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	meta_row.custom_minimum_size = Vector2(0, 13)
+	meta_row.custom_minimum_size = Vector2(0, 11 if compact else 13)
 	meta_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	meta_row.add_theme_constant_override("separation", 3)
 	stack.add_child(meta_row)
@@ -39201,7 +39202,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	badge.text = slot_badge
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	badge.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	badge.add_theme_font_size_override("font_size", 9)
+	badge.add_theme_font_size_override("font_size", 8 if compact else 9)
 	badge.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.82 if occupied else 0.32))
 	meta_row.add_child(badge)
 
@@ -39220,7 +39221,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 
 	var icon := TextureRect.new()
 	icon.name = "PokemonIcon"
-	icon.custom_minimum_size = Vector2(48, 42)
+	icon.custom_minimum_size = Vector2(40, 34) if compact else Vector2(48, 42)
 	icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -39239,7 +39240,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	title.text = _pc_compact_text(title_text, 12) if occupied else ""
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_font_size_override("font_size", 11)
+	title.add_theme_font_size_override("font_size", 9 if compact else 11)
 	title.add_theme_color_override("font_color", UI_TEXT if occupied else Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.56))
 	title.clip_text = true
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -39250,7 +39251,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	level_label.text = LocalizationManager.text("ui.storage.level", {"level": level}) if occupied else ""
 	level_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	level_label.add_theme_font_size_override("font_size", 9)
+	level_label.add_theme_font_size_override("font_size", 8 if compact else 9)
 	level_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	footer.add_child(level_label)
 	if occupied and held_item_id != "":
