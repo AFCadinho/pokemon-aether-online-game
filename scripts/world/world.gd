@@ -1321,8 +1321,10 @@ func _sync_player_activity_state_for_current_tile() -> void:
 func _setup_initial_world_state() -> void:
 	var first_map: Node = $CurrentMap.get_child(0)
 	var saved_state: Dictionary = {}
+	var recovered_blackout_loss := 0
 	if GameState.has_prepared_world_state():
 		var prepared_state: Dictionary = GameState.consume_prepared_world_state()
+		recovered_blackout_loss = int(prepared_state.get("blackoutLoss", 0))
 		if bool(prepared_state.get("hasSavedState", false)):
 			saved_state = _dictionary_from_value(prepared_state.get("savedState", {}))
 	else:
@@ -1377,6 +1379,12 @@ func _setup_initial_world_state() -> void:
 
 	_apply_camera_limits_for_map(initial_map)
 	player.refresh_map_layers()
+	if recovered_blackout_loss > 0:
+		get_tree().call_group(
+			"ui_overlay",
+			"add_system_message",
+			LocalizationManager.text("ui.world.blackout.money_lost", {"amount": recovered_blackout_loss})
+		)
 	# A battle can be interrupted by a crash or process restart before its
 	# deferred idle update reaches the backend. Entering a fresh overworld is
 	# the authoritative client boundary that clears that stale activity lock.
