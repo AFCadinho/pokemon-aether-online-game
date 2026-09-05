@@ -2872,6 +2872,11 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 	active_wild_encounter_type = ""
 	_lock_overworld_for_battle()
 	
+	var position_result := await sync_player_position_for_world_action()
+	if not bool(position_result.get("success", false)):
+		_abort_battle_start()
+		await GameErrorDialogService.show_response(position_result)
+		return
 	var response: Dictionary = await create_dev_wild_battle_response(wild_pokemon)
 	if not response.get("success", false):
 		push_warning("World.start_dev_wild_battle failed: %s" % str(response.get("error", "Unknown error")))
@@ -2911,6 +2916,14 @@ func start_triggered_wild_battle_for_area(
 	_lock_overworld_for_battle()
 	var transition_started_at_msec := _begin_wild_encounter_transition()
 
+	# Persist the encounter tile before the server creates the resumable battle.
+	# Closing the client cannot reliably finish an asynchronous position save.
+	var position_result := await sync_player_position_for_world_action()
+	if not bool(position_result.get("success", false)):
+		await _cancel_wild_encounter_transition()
+		_abort_battle_start()
+		await GameErrorDialogService.show_response(position_result)
+		return
 	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id)
 	if not response.get("success", false):
 		if WildEncounterErrorRules.message_lines(response).is_empty():
@@ -3014,6 +3027,11 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	_lock_overworld_for_battle()
 	var transition_started_at_msec := _begin_trainer_battle_transition(battle_trainer_data)
 
+	var position_result := await sync_player_position_for_world_action()
+	if not bool(position_result.get("success", false)):
+		await _cancel_wild_encounter_transition()
+		_abort_battle_start()
+		return position_result
 	var response: Dictionary = await create_trainer_battle_response(
 		trainer_id,
 		active_trainer_is_rematch
