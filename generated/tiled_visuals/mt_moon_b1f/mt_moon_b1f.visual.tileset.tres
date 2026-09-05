@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://tu55ckrpr4hg"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/mt_moon_b1f/assets/5GEN_CAVE_TILESET_2392707819_000.texture.res" id="1_p6ma8"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/mt_moon_b1f/assets/5GEN_TILESET_419699423_005.texture.res" id="2_i85b5"]

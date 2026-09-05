@@ -175,10 +175,10 @@ tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_80emr")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ladder_exit"]
-size = Vector2(32, 64)
+size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tunnel_exit"]
-size = Vector2(112, 48)
+size = Vector2(32, 32)
 
 [node name="B1f" type="Node2D" unique_id=555040763]
 script = ExtResource("2_metadata")
@@ -223,22 +223,22 @@ tile_set = SubResource("TileSet_f70rk")
 [node name="Spawns" type="Node2D" parent="." unique_id=388732249]
 
 [node name="From1F1" type="Marker2D" parent="Spawns" unique_id=1207700887]
-position = Vector2(1520, 1968)
-
-[node name="FromB2F2" type="Marker2D" parent="Spawns" unique_id=1556089352]
 position = Vector2(2416, 1328)
 
-[node name="From1F3" type="Marker2D" parent="Spawns" unique_id=1660675346]
-position = Vector2(2128, 304)
+[node name="FromB2F2" type="Marker2D" parent="Spawns" unique_id=1556089352]
+position = Vector2(1584, 1968)
 
-[node name="FromB2F4" type="Marker2D" parent="Spawns" unique_id=478096262]
+[node name="From1F3" type="Marker2D" parent="Spawns" unique_id=1660675346]
 position = Vector2(2416, 176)
 
+[node name="FromB2F4" type="Marker2D" parent="Spawns" unique_id=478096262]
+position = Vector2(2128, 304)
+
 [node name="From1F5" type="Marker2D" parent="Spawns" unique_id=968540160]
-position = Vector2(944, 1040)
+position = Vector2(144, 240)
 
 [node name="FromB2F6" type="Marker2D" parent="Spawns" unique_id=952748171]
-position = Vector2(144, 240)
+position = Vector2(944, 1040)
 
 [node name="FromB2F7" type="Marker2D" parent="Spawns" unique_id=1015409257]
 position = Vector2(336, 2192)
@@ -249,7 +249,7 @@ position = Vector2(512, 1984)
 [node name="Exits" type="Node2D" parent="." unique_id=1706055105]
 
 [node name="To1F1" type="Area2D" parent="Exits" unique_id=618428542]
-position = Vector2(1488, 1968)
+position = Vector2(2448, 1328)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn"
 target_spawn_name = "FromB1F1"
@@ -257,15 +257,15 @@ transition_id = "kanto_mt_moon_b1f__to_1f_1"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/To1F1" unique_id=61230680]
-position = Vector2(-16, 0)
+position = Vector2(32, 0)
 shape = SubResource("RectangleShape2D_ladder_exit")
 
 [node name="DoorTransitionHint" parent="Exits/To1F1" unique_id=104769243 instance=ExtResource("4_hint")]
 z_as_relative = false
-flow_direction = "left"
+flow_direction = "right"
 
 [node name="ToB2F2" type="Area2D" parent="Exits" unique_id=789586147]
-position = Vector2(2480, 1328)
+position = Vector2(1552, 1968)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn"
 target_spawn_name = "FromB1F2"
@@ -273,15 +273,16 @@ transition_id = "kanto_mt_moon_b1f__to_b2f_2"
 transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB2F2" unique_id=2057365573]
+position = Vector2(-28, 0)
 shape = SubResource("RectangleShape2D_tunnel_exit")
 
 [node name="DoorTransitionHint" parent="Exits/ToB2F2" unique_id=521382438 instance=ExtResource("4_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(2, 2)
-flow_direction = "right"
+flow_direction = "left"
 
 [node name="To1F3" type="Area2D" parent="Exits" unique_id=628727475]
-position = Vector2(2096, 304)
+position = Vector2(2448, 176)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn"
 target_spawn_name = "FromB1F3"
@@ -289,15 +290,15 @@ transition_id = "kanto_mt_moon_b1f__to_1f_3"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/To1F3" unique_id=377764353]
-position = Vector2(-16, 0)
+position = Vector2(16, 0)
 shape = SubResource("RectangleShape2D_ladder_exit")
 
 [node name="DoorTransitionHint" parent="Exits/To1F3" unique_id=870058532 instance=ExtResource("4_hint")]
 z_as_relative = false
-flow_direction = "left"
+flow_direction = "right"
 
 [node name="ToB2F4" type="Area2D" parent="Exits" unique_id=185824859]
-position = Vector2(2480, 176)
+position = Vector2(2096, 304)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn"
 target_spawn_name = "FromB1F4"
@@ -305,15 +306,16 @@ transition_id = "kanto_mt_moon_b1f__to_b2f_4"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB2F4" unique_id=786258898]
+position = Vector2(-16, 0)
 shape = SubResource("RectangleShape2D_tunnel_exit")
 
 [node name="DoorTransitionHint" parent="Exits/ToB2F4" unique_id=724579729 instance=ExtResource("4_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(2, 2)
-flow_direction = "right"
+flow_direction = "left"
 
 [node name="To1F5" type="Area2D" parent="Exits" unique_id=1090026773]
-position = Vector2(976, 1040)
+position = Vector2(112, 240)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn"
 target_spawn_name = "FromB1F5"
@@ -321,15 +323,15 @@ transition_id = "kanto_mt_moon_b1f__to_1f_5"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/To1F5" unique_id=1408437795]
-position = Vector2(16, 0)
+position = Vector2(-24, 0)
 shape = SubResource("RectangleShape2D_ladder_exit")
 
 [node name="DoorTransitionHint" parent="Exits/To1F5" unique_id=653213978 instance=ExtResource("4_hint")]
 z_as_relative = false
-flow_direction = "right"
+flow_direction = "left"
 
 [node name="ToB2F6" type="Area2D" parent="Exits" unique_id=1327648080]
-position = Vector2(80, 240)
+position = Vector2(976, 1040)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn"
 target_spawn_name = "FromB1F6"
@@ -337,12 +339,13 @@ transition_id = "kanto_mt_moon_b1f__to_b2f_6"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB2F6" unique_id=1028113827]
+position = Vector2(16, 0)
 shape = SubResource("RectangleShape2D_tunnel_exit")
 
 [node name="DoorTransitionHint" parent="Exits/ToB2F6" unique_id=1465215178 instance=ExtResource("4_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(2, 2)
-flow_direction = "left"
+flow_direction = "right"
 
 [node name="ToB2F7" type="Area2D" parent="Exits" unique_id=970143976]
 position = Vector2(272, 2192)
