@@ -39977,6 +39977,7 @@ func _take_pc_box_pokemon_held_item(source: Dictionary, payload: Dictionary) -> 
 	await _refresh_pc_state(true)
 	pc_move_in_progress = false
 	_set_pc_status("ui.storage.item.taken", {"item": item_name})
+	add_system_message(LocalizationManager.text("ui.storage.item.taken", {"item": item_name}))
 
 
 func _close_pc_slot_context_menu() -> void:
