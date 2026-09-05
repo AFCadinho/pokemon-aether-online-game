@@ -38748,6 +38748,7 @@ func _refresh_pc_box_selector() -> void:
 			"ui.storage.selector.open",
 			{"box": _pc_box_display_name(index)}
 		)
+		button.set_meta("pc_box_selector_index", index)
 		button.pressed.connect(_on_pc_selector_box_selected.bind(index))
 		_apply_pc_box_selector_item_style(button, index == pc_selected_box_index)
 		pc_box_selector_list.add_child(button)
@@ -40088,6 +40089,17 @@ func _set_pc_storage_drag_cursor_state(active: bool) -> void:
 			else:
 				button.mouse_default_cursor_shape = Control.CURSOR_CAN_DROP
 				button.self_modulate = Color("#c9f4ff")
+	if pc_box_selector_list != null:
+		for child: Node in pc_box_selector_list.get_children():
+			var selector_button := child as Button
+			if selector_button == null:
+				continue
+			var selector_box_index := int(selector_button.get_meta("pc_box_selector_index", -1))
+			var selector_target := _pc_first_empty_box_location(selector_box_index) if active else {}
+			selector_button.mouse_default_cursor_shape = (
+				Control.CURSOR_CAN_DROP if not selector_target.is_empty() else Control.CURSOR_ARROW
+			)
+			selector_button.self_modulate = Color("#c9f4ff") if not selector_target.is_empty() else Color.WHITE
 	if pc_release_drop_panel != null:
 		var release_cursor := Control.CURSOR_CAN_DROP if active and pc_release_mode_active else Control.CURSOR_ARROW
 		_set_pc_control_tree_cursor(pc_release_drop_panel, release_cursor)
@@ -40112,6 +40124,25 @@ func _pc_drop_target_at_global_position(global_position: Vector2) -> Dictionary:
 				continue
 			if button.get_global_rect().has_point(global_position):
 				return button.drop_target.duplicate(true)
+	if pc_box_selector_list != null and pc_box_selector_panel != null and pc_box_selector_panel.visible:
+		for child: Node in pc_box_selector_list.get_children():
+			var selector_button := child as Button
+			if selector_button == null or not selector_button.get_global_rect().has_point(global_position):
+				continue
+			var selector_box_index := int(selector_button.get_meta("pc_box_selector_index", -1))
+			return _pc_first_empty_box_location(selector_box_index)
+	return {}
+
+
+func _pc_first_empty_box_location(box_index: int) -> Dictionary:
+	if box_index < 0:
+		return {}
+	for slot_index in range(max(pc_slots_per_box, 1)):
+		var pokemon_response := _dictionary_from_value(
+			_pc_box_pokemon_response_at_location(box_index, slot_index)
+		)
+		if pokemon_response.is_empty():
+			return PokemonStorageService.box_location(box_index, slot_index)
 	return {}
 
 
