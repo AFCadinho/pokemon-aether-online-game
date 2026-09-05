@@ -101,6 +101,13 @@ func _init() -> void:
 		"Map exits silently yield before and during deferred entry when a route guard owns the interaction"
 	)
 	_expect(
+		map_exit_source.contains("func _is_battle_active")
+		and map_exit_source.contains('world.get("is_in_battle")')
+		and map_exit_source.contains('world.get("wild_battle_resume_pending")')
+		and map_exit_source.count("_is_battle_active(world)") == 2,
+		"Map exits silently yield while a battle or wild-battle resume is active"
+	)
+	_expect(
 		world_source.contains("ignore_player_movement := false,")
 		and world_source.contains("not ignore_player_movement"),
 		"Boundary transitions can authorize while a tile movement is finishing"
