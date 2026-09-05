@@ -361,7 +361,7 @@ shape = SubResource("RectangleShape2D_ladder_exit")
 
 [node name="DoorTransitionHint" parent="Exits/ToB2F7" unique_id=2136897327 instance=ExtResource("4_hint")]
 z_as_relative = false
-flow_direction = "left"
+flow_direction = "right"
 
 [node name="ToRoute4" type="Area2D" parent="Exits" unique_id=208040013]
 position = Vector2(496, 1936)

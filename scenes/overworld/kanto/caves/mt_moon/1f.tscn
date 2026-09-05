@@ -315,7 +315,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn"
 target_spawn_name = "From1F1"
 transition_id = "kanto_mt_moon_1f__to_b1f_1"
-transition_facing_direction = "right"
+transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F1" unique_id=597208270]
 position = Vector2(16, 0)
