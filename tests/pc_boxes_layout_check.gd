@@ -58,6 +58,7 @@ func _init() -> void:
 	_check(source.contains('button.set_meta("pc_box_selector_index", index)'), "Box selector rows retain their destination box")
 	_check(source.contains("func _pc_first_empty_box_location(box_index: int)"), "Box selector drops resolve to the first open destination slot")
 	_check(source.contains("return _pc_first_empty_box_location(selector_box_index)"), "Open box selector rows are valid drag destinations")
+	_check(source.find("# The selector is drawn above the current box grid.") < source.find("for container in [pc_party_list, pc_box_grid]:"), "Box selector hit-testing takes priority over the grid underneath")
 	_check(not source.contains("pc_box_tab_bar"), "Storage avoids a duplicate row of box tabs")
 	_check(source.contains("button.focus_mode = Control.FOCUS_NONE"), "Storage controls cannot become stale Spacebar targets")
 	_check(source.contains("PokemonStorageService.move_pokemon("), "Storage revamp preserves moving Pokémon")

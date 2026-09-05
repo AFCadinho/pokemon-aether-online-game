@@ -40115,6 +40115,15 @@ func _set_pc_control_tree_cursor(control: Control, cursor_shape: Control.CursorS
 func _pc_drop_target_at_global_position(global_position: Vector2) -> Dictionary:
 	if pc_release_mode_active and pc_release_drop_panel != null and pc_release_drop_panel.visible and pc_release_drop_panel.get_global_rect().has_point(global_position):
 		return {"type": "release"}
+	# The selector is drawn above the current box grid. Check it first so its
+	# rows win the hit-test over the slots visually underneath it.
+	if pc_box_selector_list != null and pc_box_selector_panel != null and pc_box_selector_panel.visible:
+		for child: Node in pc_box_selector_list.get_children():
+			var selector_button := child as Button
+			if selector_button == null or not selector_button.get_global_rect().has_point(global_position):
+				continue
+			var selector_box_index := int(selector_button.get_meta("pc_box_selector_index", -1))
+			return _pc_first_empty_box_location(selector_box_index)
 	for container in [pc_party_list, pc_box_grid]:
 		if container == null:
 			continue
@@ -40124,13 +40133,6 @@ func _pc_drop_target_at_global_position(global_position: Vector2) -> Dictionary:
 				continue
 			if button.get_global_rect().has_point(global_position):
 				return button.drop_target.duplicate(true)
-	if pc_box_selector_list != null and pc_box_selector_panel != null and pc_box_selector_panel.visible:
-		for child: Node in pc_box_selector_list.get_children():
-			var selector_button := child as Button
-			if selector_button == null or not selector_button.get_global_rect().has_point(global_position):
-				continue
-			var selector_box_index := int(selector_button.get_meta("pc_box_selector_index", -1))
-			return _pc_first_empty_box_location(selector_box_index)
 	return {}
 
 
