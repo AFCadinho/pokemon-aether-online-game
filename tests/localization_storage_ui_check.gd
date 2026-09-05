@@ -81,6 +81,7 @@ func _check_storage_runtime_translation() -> void:
 	)
 	overlay.call("_populate_pc_slot_context_menu", {"heldItemId": "leftovers"})
 	_check(slot_context_menu.item_count == 1, "Held items expose one focused Storage context action")
+	_check(slot_context_menu.get_item_id(0) == 1, "Storage context action keeps its callable menu id")
 	_check(slot_context_menu.get_item_text(0) == "Leftovers afnemen", "Storage context action includes the localized item name")
 	_check(slot_context_menu.get_item_icon(0) != null, "Storage context action includes the held-item icon")
 	overlay.call("_populate_pc_slot_context_menu", {})

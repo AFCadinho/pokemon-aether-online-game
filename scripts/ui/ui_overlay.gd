@@ -81,7 +81,7 @@ const PARTY_CONTEXT_SUMMARY := 0
 const PARTY_CONTEXT_GIVE_ITEM := 1
 const PARTY_CONTEXT_TAKE_ITEM := 2
 const PARTY_CONTEXT_SET_LEAD := 3
-const PC_CONTEXT_TAKE_ITEM := 0
+const PC_CONTEXT_TAKE_ITEM := 1
 const CHAT_CONTEXT_COPY_TEXT := 100
 const CHAT_CONTEXT_COPY_FULL := 101
 const CHAT_CONTEXT_OPEN_PM := 200
@@ -301,6 +301,7 @@ const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 680)
 const PC_POPUP_SIZE := Vector2(1160, 720)
 const PC_BOX_SLOTS_PER_ROW := 6
 const PC_BOX_SLOT_SIZE := Vector2(118, 80)
+const PC_BOX_COMPACT_SLOT_SIZE := Vector2(104, 72)
 const PC_PARTY_SLOT_SIZE := Vector2(232, 68)
 const PC_ACCENT := Color("#60d3ff")
 const PC_ACCENT_SOFT := Color("#60d3ff88")
@@ -2788,7 +2789,6 @@ func _setup_pc_ui() -> void:
 	pc_slot_context_menu.min_size = Vector2i(232, 0)
 	_apply_pc_slot_context_menu_style()
 	pc_slot_context_menu.id_pressed.connect(_on_pc_slot_context_action)
-	pc_slot_context_menu.popup_hide.connect(_clear_pc_slot_context)
 	root_control.add_child(pc_slot_context_menu)
 
 	pc_pokemon_hover_card = PC_PARTY_HOVER_CARD_SCENE.instantiate() as PartyHoverCard
@@ -2800,12 +2800,13 @@ func _setup_pc_ui() -> void:
 	pc_box_selector_panel = PanelContainer.new()
 	pc_box_selector_panel.name = "BoxSelectorPanel"
 	pc_box_selector_panel.visible = false
-	pc_box_selector_panel.z_index = UI_DRAG_Z_INDEX + 2
+	# The selector is reparented into StorageWorkspace below. Keep it in the
+	# normal layout so opening it reserves space instead of covering box slots.
+	pc_box_selector_panel.z_index = 0
 	pc_box_selector_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	pc_box_selector_panel.custom_minimum_size = Vector2(300, 0)
-	pc_box_selector_panel.size = Vector2(300, 560)
+	pc_box_selector_panel.custom_minimum_size = Vector2(230, 0)
+	pc_box_selector_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pc_box_selector_panel.add_theme_stylebox_override("panel", _make_pc_box_selector_style())
-	add_child(pc_box_selector_panel)
 	_build_pc_box_selector_panel()
 
 	var margin := MarginContainer.new()
@@ -2993,6 +2994,11 @@ func _setup_pc_ui() -> void:
 	box_margin.add_theme_constant_override("margin_bottom", 10)
 	box_panel.add_child(box_margin)
 
+	# Keep the selector beside the box workspace rather than floating above it.
+	# This makes the box grid reflow to the remaining width, so every slot stays
+	# clickable while the selector is open.
+	body.add_child(pc_box_selector_panel)
+
 	var box_stack := VBoxContainer.new()
 	box_stack.add_theme_constant_override("separation", 7)
 	box_margin.add_child(box_stack)
@@ -3091,26 +3097,14 @@ func _setup_pc_ui() -> void:
 	_apply_pc_action_button_style(pc_filter_button, "secondary")
 	search_row.add_child(pc_filter_button)
 
-	var search_scope_panel := PanelContainer.new()
-	search_scope_panel.name = "SearchScopeBadge"
-	search_scope_panel.custom_minimum_size = Vector2(88, 38)
-	search_scope_panel.add_theme_stylebox_override(
-		"panel",
-		_make_panel_style(Color("#091a29d9"), Color("#2949638c"), 7, 1)
-	)
-	search_row.add_child(search_scope_panel)
-	var search_scope_margin := MarginContainer.new()
-	search_scope_margin.add_theme_constant_override("margin_left", 8)
-	search_scope_margin.add_theme_constant_override("margin_right", 8)
-	search_scope_panel.add_child(search_scope_margin)
-
 	pc_search_results_label = Label.new()
-	_set_localized_control_property(pc_search_results_label, "text", "ui.storage.all_boxes")
+	pc_search_results_label.visible = false
+	pc_search_results_label.custom_minimum_size = Vector2(110, 38)
 	pc_search_results_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pc_search_results_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pc_search_results_label.add_theme_font_size_override("font_size", 10)
 	pc_search_results_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	search_scope_margin.add_child(pc_search_results_label)
+	search_row.add_child(pc_search_results_label)
 
 	pc_filter_panel = PanelContainer.new()
 	pc_filter_panel.name = "StorageFilterPanel"
@@ -3372,6 +3366,13 @@ func _apply_pc_action_button_style(button: Button, role: String) -> void:
 			normal_border = PC_ACCENT
 			hover_border = Color("#a6eeff")
 			font_color = Color.WHITE
+		"secondary":
+			normal_bg = Color("#071521e6")
+			hover_bg = Color("#102a3cf2")
+			pressed_bg = Color("#0b2030f2")
+			normal_border = Color("#3c5b71c9")
+			hover_border = PC_ACCENT_SOFT
+			font_color = Color("#dfeaf5")
 		"icon":
 			normal_bg = Color.TRANSPARENT
 			hover_bg = Color("#123149c4")
@@ -38705,6 +38706,7 @@ func _toggle_pc_box_selector() -> void:
 	if pc_box_selector_panel == null:
 		return
 	pc_box_selector_panel.visible = not pc_box_selector_panel.visible
+	_set_pc_box_grid_layout()
 	if pc_box_selector_panel.visible:
 		_position_pc_box_selector()
 		_refresh_pc_box_selector()
@@ -38713,16 +38715,21 @@ func _toggle_pc_box_selector() -> void:
 func _close_pc_box_selector() -> void:
 	if pc_box_selector_panel != null:
 		pc_box_selector_panel.visible = false
+	_set_pc_box_grid_layout()
+
+
+func _set_pc_box_grid_layout() -> void:
+	if pc_box_grid == null:
+		return
+	# Five compact columns leave enough room for the narrower selector sibling
+	# while keeping slots 5 and 6 visible in the second row.
+	pc_box_grid.columns = 5 if pc_box_selector_panel != null and pc_box_selector_panel.visible else PC_BOX_SLOTS_PER_ROW
 
 
 func _position_pc_box_selector() -> void:
-	if pc_box_selector_panel == null or pc_popup == null:
-		return
-	var popup_rect := pc_popup.get_global_rect()
-	var panel_width := pc_box_selector_panel.size.x
-	var panel_height := minf(popup_rect.size.y - 80.0, 560.0)
-	pc_box_selector_panel.size = Vector2(panel_width, maxf(panel_height, 260.0))
-	pc_box_selector_panel.global_position = Vector2(popup_rect.end.x - panel_width - 8.0, popup_rect.position.y + 58.0)
+	# The selector is a sibling in StorageWorkspace. Its container layout now
+	# reserves its width and keeps it out of the box grid hit area.
+	return
 
 
 func _refresh_pc_box_selector() -> void:
@@ -38738,7 +38745,7 @@ func _refresh_pc_box_selector() -> void:
 	for index in range(max(pc_box_count, 1)):
 		var button := Button.new()
 		button.text = "%02d    %s" % [index + 1, _pc_box_display_name(index)]
-		button.custom_minimum_size = Vector2(0, 38)
+		button.custom_minimum_size = Vector2(0, 32)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.focus_mode = Control.FOCUS_NONE
 		button.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -38748,6 +38755,7 @@ func _refresh_pc_box_selector() -> void:
 			"ui.storage.selector.open",
 			{"box": _pc_box_display_name(index)}
 		)
+		button.set_meta("pc_box_selector_index", index)
 		button.pressed.connect(_on_pc_selector_box_selected.bind(index))
 		_apply_pc_box_selector_item_style(button, index == pc_selected_box_index)
 		pc_box_selector_list.add_child(button)
@@ -38771,7 +38779,8 @@ func _make_pc_box_selector_style() -> StyleBoxFlat:
 
 
 func _on_pc_selector_box_selected(index: int) -> void:
-	_close_pc_box_selector()
+	# Keep the selector open while browsing boxes. It is also the panel that
+	# makes the currently visible box slots available for drag-and-drop.
 	await _on_pc_box_selected(index)
 
 
@@ -38894,7 +38903,7 @@ func _render_pc_party() -> void:
 
 func _render_pc_box() -> void:
 	_clear_children(pc_box_grid)
-	pc_box_grid.columns = PC_BOX_SLOTS_PER_ROW
+	_set_pc_box_grid_layout()
 	var search_query := _pc_search_query()
 	if search_query != "" or _pc_has_active_filter():
 		_render_pc_box_search_results(search_query)
@@ -38943,6 +38952,7 @@ func _render_pc_box_search_results(search_query: String) -> void:
 			pc_box_count
 		)
 	if pc_search_results_label != null:
+		pc_search_results_label.visible = true
 		pc_search_results_label.text = LocalizationManager.plural(
 			"ui.storage.search_found.one",
 			"ui.storage.search_found.many",
@@ -38960,7 +38970,8 @@ func _refresh_pc_box_overview(occupied_count: int) -> void:
 			"capacity": pc_slots_per_box,
 		})
 	if pc_search_results_label != null:
-		pc_search_results_label.text = LocalizationManager.text("ui.storage.all_boxes")
+		pc_search_results_label.visible = false
+		pc_search_results_label.text = ""
 		pc_search_results_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 
 
@@ -39074,7 +39085,7 @@ func _create_pc_box_slot_button_for_location(box_index: int, slot_index: int, po
 		occupied,
 		selected,
 		slot_badge,
-		PC_BOX_SLOT_SIZE
+		PC_BOX_COMPACT_SLOT_SIZE if pc_box_selector_panel != null and pc_box_selector_panel.visible else PC_BOX_SLOT_SIZE
 	)
 	if occupied:
 		var loan_value: Variant = payload.get("loan", {})
@@ -39148,6 +39159,7 @@ func _on_pc_loan_marker_gui_input(event: InputEvent) -> void:
 
 func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: bool, held_item_id: String, types: Array, texture: Texture2D, occupied: bool, selected: bool, slot_badge: String, slot_size: Vector2) -> PcPokemonSlotButton:
 	var button: PcPokemonSlotButton = PC_POKEMON_SLOT_BUTTON_SCRIPT.new()
+	var compact := slot_size == PC_BOX_COMPACT_SLOT_SIZE
 	button.use_native_drag = false
 	button.text = ""
 	button.custom_minimum_size = slot_size
@@ -39169,17 +39181,17 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stack.anchor_right = 1.0
 	stack.anchor_bottom = 1.0
-	stack.offset_left = 6
-	stack.offset_top = 4
-	stack.offset_right = -6
-	stack.offset_bottom = -4
+	stack.offset_left = 5 if compact else 6
+	stack.offset_top = 2 if compact else 4
+	stack.offset_right = -5 if compact else -6
+	stack.offset_bottom = -2 if compact else -4
 	stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	stack.add_theme_constant_override("separation", 1)
 	button.add_child(stack)
 
 	var meta_row := HBoxContainer.new()
 	meta_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	meta_row.custom_minimum_size = Vector2(0, 13)
+	meta_row.custom_minimum_size = Vector2(0, 11 if compact else 13)
 	meta_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	meta_row.add_theme_constant_override("separation", 3)
 	stack.add_child(meta_row)
@@ -39189,7 +39201,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	badge.text = slot_badge
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	badge.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	badge.add_theme_font_size_override("font_size", 9)
+	badge.add_theme_font_size_override("font_size", 8 if compact else 9)
 	badge.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.82 if occupied else 0.32))
 	meta_row.add_child(badge)
 
@@ -39208,7 +39220,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 
 	var icon := TextureRect.new()
 	icon.name = "PokemonIcon"
-	icon.custom_minimum_size = Vector2(48, 42)
+	icon.custom_minimum_size = Vector2(40, 34) if compact else Vector2(48, 42)
 	icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -39227,7 +39239,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	title.text = _pc_compact_text(title_text, 12) if occupied else ""
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_font_size_override("font_size", 11)
+	title.add_theme_font_size_override("font_size", 9 if compact else 11)
 	title.add_theme_color_override("font_color", UI_TEXT if occupied else Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.56))
 	title.clip_text = true
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -39238,7 +39250,7 @@ func _create_pc_box_pokemon_slot_button(title_text: String, level: int, shiny: b
 	level_label.text = LocalizationManager.text("ui.storage.level", {"level": level}) if occupied else ""
 	level_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	level_label.add_theme_font_size_override("font_size", 9)
+	level_label.add_theme_font_size_override("font_size", 8 if compact else 9)
 	level_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	footer.add_child(level_label)
 	if occupied and held_item_id != "":
@@ -39965,6 +39977,7 @@ func _take_pc_box_pokemon_held_item(source: Dictionary, payload: Dictionary) -> 
 	await _refresh_pc_state(true)
 	pc_move_in_progress = false
 	_set_pc_status("ui.storage.item.taken", {"item": item_name})
+	add_system_message(LocalizationManager.text("ui.storage.item.taken", {"item": item_name}))
 
 
 func _close_pc_slot_context_menu() -> void:
@@ -40088,6 +40101,17 @@ func _set_pc_storage_drag_cursor_state(active: bool) -> void:
 			else:
 				button.mouse_default_cursor_shape = Control.CURSOR_CAN_DROP
 				button.self_modulate = Color("#c9f4ff")
+	if pc_box_selector_list != null:
+		for child: Node in pc_box_selector_list.get_children():
+			var selector_button := child as Button
+			if selector_button == null:
+				continue
+			var selector_box_index := int(selector_button.get_meta("pc_box_selector_index", -1))
+			var selector_target := _pc_first_empty_box_location(selector_box_index) if active else {}
+			selector_button.mouse_default_cursor_shape = (
+				Control.CURSOR_CAN_DROP if not selector_target.is_empty() else Control.CURSOR_ARROW
+			)
+			selector_button.self_modulate = Color("#c9f4ff") if not selector_target.is_empty() else Color.WHITE
 	if pc_release_drop_panel != null:
 		var release_cursor := Control.CURSOR_CAN_DROP if active and pc_release_mode_active else Control.CURSOR_ARROW
 		_set_pc_control_tree_cursor(pc_release_drop_panel, release_cursor)
@@ -40103,6 +40127,15 @@ func _set_pc_control_tree_cursor(control: Control, cursor_shape: Control.CursorS
 func _pc_drop_target_at_global_position(global_position: Vector2) -> Dictionary:
 	if pc_release_mode_active and pc_release_drop_panel != null and pc_release_drop_panel.visible and pc_release_drop_panel.get_global_rect().has_point(global_position):
 		return {"type": "release"}
+	# The selector is drawn above the current box grid. Check it first so its
+	# rows win the hit-test over the slots visually underneath it.
+	if pc_box_selector_list != null and pc_box_selector_panel != null and pc_box_selector_panel.visible:
+		for child: Node in pc_box_selector_list.get_children():
+			var selector_button := child as Button
+			if selector_button == null or not selector_button.get_global_rect().has_point(global_position):
+				continue
+			var selector_box_index := int(selector_button.get_meta("pc_box_selector_index", -1))
+			return _pc_first_empty_box_location(selector_box_index)
 	for container in [pc_party_list, pc_box_grid]:
 		if container == null:
 			continue
@@ -40112,6 +40145,18 @@ func _pc_drop_target_at_global_position(global_position: Vector2) -> Dictionary:
 				continue
 			if button.get_global_rect().has_point(global_position):
 				return button.drop_target.duplicate(true)
+	return {}
+
+
+func _pc_first_empty_box_location(box_index: int) -> Dictionary:
+	if box_index < 0:
+		return {}
+	for slot_index in range(max(pc_slots_per_box, 1)):
+		var pokemon_response := _dictionary_from_value(
+			_pc_box_pokemon_response_at_location(box_index, slot_index)
+		)
+		if pokemon_response.is_empty():
+			return PokemonStorageService.box_location(box_index, slot_index)
 	return {}
 
 

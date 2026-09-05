@@ -729,6 +729,7 @@ func respawn_player() -> Dictionary:
 			"hasParty": bool(party_response.get("hasParty", false)),
 			"party": _array_from_value(party_response.get("party", [])),
 		},
+		"blackoutLoss": int(body.get("blackoutLoss", 0)),
 	}
 
 
