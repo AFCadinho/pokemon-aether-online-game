@@ -82,6 +82,7 @@ func _init() -> void:
 	_check(not source.contains("PC_CONTEXT_SUMMARY"), "Storage leaves inspection to the existing normal click action")
 	_check(source.contains("func _apply_pc_slot_context_menu_style("), "Storage context menu follows the PC visual language")
 	_check(source.contains("pc_slot_context_menu.add_icon_item("), "Storage context action shows the held-item icon")
+	_check(source.contains("const PC_CONTEXT_TAKE_ITEM := 1"), "Storage context action uses a dedicated non-zero menu id")
 	_check(source.contains("PlayerPartyStateService.take_pokemon_held_item(pokemon_id)"), "Storage reuses the atomic held-item service action")
 	_check(source.contains('button.set_meta("pc_pokemon_payload"'), "Box actions retain the exact Pokémon held-item payload")
 	_check(source.contains("bag_inventory_items = _normalize_bag_inventory_items(result.get(\"inventory\", []))"), "Taking an item refreshes the local Bag state")
