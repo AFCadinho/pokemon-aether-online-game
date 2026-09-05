@@ -111,6 +111,7 @@ var pvp_battle_transition_started_at_msec := -1
 var active_battle_id := ""
 var active_wild_pokemon_species := ""
 var active_wild_encounter_type := ""
+var wild_battle_resume_pending := false
 var active_trainer_id := ""
 var active_trainer_name := ""
 var active_trainer_outro_dialogue_id := ""
@@ -1386,12 +1387,83 @@ func _setup_initial_world_state() -> void:
 			"add_system_message",
 			LocalizationManager.text("ui.world.blackout.money_lost", {"amount": recovered_blackout_loss})
 		)
-	# A battle can be interrupted by a crash or process restart before its
-	# deferred idle update reaches the backend. Entering a fresh overworld is
-	# the authoritative client boundary that clears that stale activity lock.
-	await _save_player_activity_state("idle")
+	var wild_resume := await _resume_saved_wild_battle(saved_state)
+	# Preserve a live or temporarily unreachable wild battle binding. Only a
+	# confirmed absent/expired battle may cross into the fresh overworld boundary.
+	if not bool(wild_resume.get("resumed", false)) and not bool(wild_resume.get("retryable", false)):
+		await _save_player_activity_state("idle")
 	WorldPresenceService.connect_presence.call_deferred()
 	_publish_world_presence.call_deferred(true)
+
+
+func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
+	wild_battle_resume_pending = false
+	var activity_context := _dictionary_from_value(saved_state.get("activityContext", {}))
+	if (
+		str(saved_state.get("activityState", "")).strip_edges().to_lower() != "battle"
+		or str(activity_context.get("kind", "")).strip_edges().to_lower() != "wild"
+		or str(activity_context.get("battleId", "")).strip_edges().is_empty()
+	):
+		return {"resumed": false, "retryable": false}
+	is_in_battle = true
+	active_battle_kind = "wild"
+	active_battle_id = str(activity_context.get("battleId", ""))
+	_lock_overworld_for_battle()
+
+	var request := HTTPRequest.new()
+	add_child(request)
+	var response: Dictionary = await BattleApiClient.resume_wild_battle(request)
+	request.queue_free()
+	if not bool(response.get("success", false)):
+		push_warning(
+			"World: active wild battle resume temporarily failed: %s"
+			% str(response.get("error", "Unknown error"))
+		)
+		_abort_battle_start(true)
+		wild_battle_resume_pending = true
+		return {"resumed": false, "retryable": true}
+	if not bool(response.get("resumable", false)):
+		_abort_battle_start(true)
+		return {"resumed": false, "retryable": false}
+
+	var wild_pokemon_data := _dictionary_from_value(response.get("wildPokemon", {}))
+	var wild_pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(wild_pokemon_data)
+	if wild_pokemon == null or PlayerSave.party.is_empty():
+		push_warning("World: active wild battle resume returned invalid Pokemon data.")
+		_abort_battle_start(true)
+		wild_battle_resume_pending = true
+		return {"resumed": false, "retryable": true}
+	var lead_slot := PlayerSave.get_first_usable_party_slot()
+	var player_pokemon: Pokemon = PlayerSave.party[maxi(lead_slot - 1, 0)] as Pokemon
+	if player_pokemon == null:
+		_abort_battle_start(true)
+		wild_battle_resume_pending = true
+		return {"resumed": false, "retryable": true}
+
+	active_battle_id = str(response.get("battleId", activity_context.get("battleId", "")))
+	active_wild_pokemon_species = wild_pokemon.species
+	active_wild_encounter_type = str(response.get("encounterType", "")).strip_edges().to_lower()
+	if not _mount_battle_ui():
+		_abort_battle_start(true)
+		wild_battle_resume_pending = true
+		return {"resumed": false, "retryable": true}
+
+	var battle_environment_id := _resolve_battle_environment_id(
+		"wild",
+		response,
+		active_wild_encounter_type
+	)
+	MusicManager.play_wild_battle_music()
+	if not await battle_instance.resume_wild_battle_from_response(
+		player_pokemon,
+		wild_pokemon,
+		response,
+		battle_environment_id
+	):
+		_abort_battle_start(true)
+		wild_battle_resume_pending = true
+		return {"resumed": false, "retryable": true}
+	return {"resumed": true, "retryable": false}
 
 
 func _resolve_saved_map_scene_path(scene_path: String) -> String:
@@ -2785,7 +2857,7 @@ func _clear_battle_ui_instance() -> void:
 		battle_ui_host.visible = false
 
 func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
-	if is_in_battle:
+	if is_in_battle or wild_battle_resume_pending:
 		return
 		
 	is_in_battle = true
@@ -2823,7 +2895,7 @@ func start_triggered_wild_battle_for_area(
 	encounter_type: String = "grass",
 	forced_species_id: String = ""
 ) -> void:
-	if is_in_battle:
+	if is_in_battle or wild_battle_resume_pending:
 		return
 
 	is_in_battle = true
@@ -2899,7 +2971,7 @@ func _show_wild_encounter_start_error(response: Dictionary) -> void:
 				await GameErrorDialogService.show_response(response)
 
 func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
-	if is_in_battle:
+	if is_in_battle or wild_battle_resume_pending:
 		return {
 			"success": false,
 			"code": "battle_already_active",
@@ -2991,7 +3063,7 @@ func _is_expected_trainer_battle_rejection(response: Dictionary) -> bool:
 
 
 func start_training_ai_battle_from_response(response: Dictionary) -> bool:
-	if is_in_battle or not bool(response.get("success", false)):
+	if is_in_battle or wild_battle_resume_pending or not bool(response.get("success", false)):
 		return false
 	var own_team_value: Variant = response.get("ownTeam", [])
 	if not (own_team_value is Array) or (own_team_value as Array).is_empty():
@@ -3056,7 +3128,7 @@ func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 	return true
 
 func start_pvp_battle_from_response(response: Dictionary) -> bool:
-	if is_in_battle:
+	if is_in_battle or wild_battle_resume_pending:
 		if not await _interrupt_current_battle_for_pvp_match():
 			await cancel_pvp_battle_transition()
 			return false
@@ -4126,7 +4198,7 @@ func _unlock_overworld_after_battle() -> void:
 	player.set_physics_process(true)
 	GameState.unlock_overworld_input()
 
-func _abort_battle_start() -> void:
+func _abort_battle_start(preserve_activity := false) -> void:
 	_clear_battle_ui_instance()
 	is_in_battle = false
 	active_battle_kind = ""
@@ -4138,6 +4210,7 @@ func _abort_battle_start() -> void:
 	active_trainer_outro_dialogue_id = ""
 	active_trainer_mugshot = null
 	active_trainer_is_rematch = false
-	_save_player_activity_state_deferred("idle")
+	if not preserve_activity:
+		_save_player_activity_state_deferred("idle")
 	_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()

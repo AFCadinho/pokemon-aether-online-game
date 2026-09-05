@@ -6580,6 +6580,29 @@ func setup_wild_battle_from_response(
 		return
 	await play_wild_battle_intro(api_response)
 
+
+func resume_wild_battle_from_response(
+	player_pokemon: Pokemon,
+	enemy_pokemon: Pokemon,
+	api_response: Dictionary,
+	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
+) -> bool:
+	if not prepare_wild_battle_from_response(
+		player_pokemon,
+		enemy_pokemon,
+		api_response,
+		environment_id
+	):
+		return false
+	# The snapshot already contains the authoritative HP, status, PP, field and
+	# decision boundary. Restore that boundary without replaying encounter or
+	# move animations from before the disconnect.
+	_show_battle_controls_after_initial_events()
+	_set_battle_actions_ready(true)
+	if battle_state.is_battle_ended():
+		await _finish_if_battle_ended({}, true)
+	return true
+
 func prepare_wild_battle_from_response(
 	player_pokemon: Pokemon,
 	enemy_pokemon: Pokemon,

@@ -114,6 +114,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/blackout_respawn_contract_check.gd",
 	"res://tests/world_area_access_contract_check.gd",
 	"res://tests/world_activity_recovery_check.gd",
+	"res://tests/wild_battle_reconnect_check.gd",
 	"res://tests/map_character_route_gate_check.gd",
 	"res://tests/world_access_catalog_generation_check.gd",
 	"res://tests/aether_clash_staff_preview_check.gd",

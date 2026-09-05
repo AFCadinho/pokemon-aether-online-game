@@ -52,6 +52,10 @@ func create_dev_wild_battle(
 		payload
 	)
 
+
+func resume_wild_battle(request_node: HTTPRequest) -> Dictionary:
+	return await send_get_request(request_node, "/battle/wild/resume")
+
 func create_trainer_battle(
 	request_node: HTTPRequest,
 	player: Dictionary,
