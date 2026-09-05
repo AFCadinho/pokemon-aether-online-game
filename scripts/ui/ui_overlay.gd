@@ -6523,6 +6523,7 @@ func _setup_pvp_room_popup() -> void:
 	pvp_training_ai_mode_select.clip_text = true
 	pvp_training_ai_mode_select.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	pvp_training_ai_mode_select.focus_mode = Control.FOCUS_NONE
+	pvp_training_ai_mode_select.item_selected.connect(_on_pvp_training_ai_mode_selected)
 	_apply_pvp_ranked_dropdown_style(pvp_training_ai_mode_select, true)
 	pvp_training_ai_mode_row.add_child(pvp_training_ai_mode_select)
 	_refresh_pvp_training_ai_mode_options()
@@ -43215,6 +43216,8 @@ func _refresh_pvp_training_ai_archetype_options() -> void:
 	)
 	pvp_training_ai_archetype_select.set_item_metadata(0, "random")
 	for archetype: String in pvp_training_ai_catalog_archetypes:
+		if not _pvp_training_ai_archetype_allowed(archetype):
+			continue
 		pvp_training_ai_archetype_select.add_item(
 			LocalizationManager.text("ui.pvp.training.ai.archetype.%s" % archetype)
 		)
@@ -43259,6 +43262,8 @@ func _refresh_pvp_training_ai_team_options() -> void:
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
 		if not _ai_sparring_team_matches_tier(entry, _selected_ai_sparring_tier_id()):
 			continue
+		if not _pvp_training_ai_archetype_allowed(str(entry.get("archetype", ""))):
+			continue
 		if requested_archetype != "random" and str(entry.get("archetype", "")) != requested_archetype:
 			continue
 		var display_name := str(entry.get("displayName", entry.get("teamId", ""))).strip_edges()
@@ -43275,6 +43280,11 @@ func _refresh_pvp_training_ai_team_options() -> void:
 
 
 func _on_pvp_training_ai_archetype_selected(_index: int) -> void:
+	_refresh_pvp_training_ai_team_options()
+
+
+func _on_pvp_training_ai_mode_selected(_index: int) -> void:
+	_refresh_pvp_training_ai_archetype_options()
 	_refresh_pvp_training_ai_team_options()
 
 
@@ -43312,6 +43322,8 @@ func _resolve_pvp_training_ai_opponent_team() -> void:
 	var requested_archetype := _selected_pvp_training_ai_archetype()
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
 		if not _ai_sparring_team_matches_tier(entry, _selected_ai_sparring_tier_id()):
+			continue
+		if not _pvp_training_ai_archetype_allowed(str(entry.get("archetype", ""))):
 			continue
 		if requested_archetype != "random" and str(entry.get("archetype", "")) != requested_archetype:
 			continue
@@ -44049,6 +44061,12 @@ func _selected_pvp_training_ai_archetype() -> String:
 		return "random"
 	var selected_archetype := str(pvp_training_ai_archetype_select.get_selected_metadata()).strip_edges().to_lower()
 	return selected_archetype if selected_archetype != "" else "random"
+
+
+func _pvp_training_ai_archetype_allowed(archetype: String) -> bool:
+	var normalized_archetype := archetype.strip_edges().to_lower()
+	var ai_mode := _selected_pvp_training_ai_mode()
+	return normalized_archetype != "stall" or ai_mode == "active"
 
 
 func _load_ai5_playtest_status() -> void:
