@@ -199,6 +199,8 @@ var rewind_helper := preload("res://scripts/battle/battle_rewind_helper.gd").new
 var action_flow := preload("res://scripts/battle/battle_action_flow.gd").new()
 var force_switch_flow := preload("res://scripts/battle/battle_force_switch_flow.gd").new()
 var non_pvp_opponent_force_switch_recovery_active := false
+var non_pvp_recovery_failed := false
+var non_pvp_render_active := false
 var display_data_presenter := preload("res://scripts/battle/battle_display_data_presenter.gd").new()
 var message_timing := preload("res://scripts/battle/battle_message_timing.gd").new()
 var event_presentation := preload("res://scripts/battle/battle_event_presentation.gd").new()
@@ -2289,6 +2291,9 @@ func _is_point_over_visible_overlay_ui(global_position: Vector2) -> bool:
 func _on_battle_mode_button_pressed() -> void:
 	_focus_battle_ui_layer()
 	_set_action_panel_mode(BattleActionsPanelMode.BATTLE)
+	if not _is_pvp_battle() and non_pvp_recovery_failed:
+		non_pvp_recovery_failed = false
+		_show_non_pvp_opponent_force_switch_wait()
 
 func _on_calc_mode_button_pressed() -> void:
 	_focus_battle_ui_layer()
@@ -3253,6 +3258,13 @@ func _show_moves() -> void:
 		_restore_team_preview_lead_selection_ui()
 		return
 
+	if not _is_pvp_battle() and (
+		action_flow.http_recovery_required
+		or action_flow.http_flow.needs_resolution(action_flow.http_flow.order.latest_response)
+	):
+		_show_non_pvp_opponent_force_switch_wait()
+		return
+
 	if not _is_pvp_battle() and _local_player_needs_force_switch_ui():
 		_show_force_switch_if_needed()
 		return
@@ -3344,6 +3356,10 @@ func _show_current_action_prompt() -> void:
 	current_action_panel.set_message(event_text_formatter.format_action_prompt(_get_active_display_name("p1")))
 
 func _set_battle_input_locked(is_locked: bool) -> void:
+	if not is_locked and not _is_pvp_battle() and action_flow.http_recovery_required and not non_pvp_opponent_force_switch_recovery_active and not non_pvp_recovery_failed:
+		_show_non_pvp_opponent_force_switch_wait.call_deferred()
+	if not _is_pvp_battle() and (action_flow.http_recovery_required or non_pvp_opponent_force_switch_recovery_active or non_pvp_recovery_failed):
+		is_locked = true
 	if _is_spectator_battle():
 		is_locked = true
 	if not is_locked and _is_pvp_battle() and pvp_local_connection_recovering:
@@ -4438,6 +4454,8 @@ func _apply_api_response(
 		apply_outcome["status"] = "applied"
 		if _is_pvp_battle():
 			pvp_response_order.remember(display_response)
+		else:
+			action_flow.http_flow.remember(display_response)
 		_update_pvp_presentation_schedule(response)
 		if not defer_state_load:
 			_apply_party_state_from_api_response(response)
@@ -7162,6 +7180,9 @@ func _prepare_battle_setup(
 	pvp_presentation_schedule_token = ""
 	pvp_presentation_acknowledgements_authoritative = false
 	pvp_response_order.reset()
+	action_flow.http_flow.order.reset()
+	action_flow.http_recovery_required = false
+	non_pvp_recovery_failed = false
 	pvp_battle_purpose = ""
 	training_ai_battle = false
 	pvp_local_canonical_roster.clear()
@@ -10047,6 +10068,8 @@ func _find_next_form_change_event_index(
 
 		var event_data: Dictionary = event_value as Dictionary
 		var event_type: String = str(event_data.get("type", ""))
+		if event_type in ["turn", "move", "switch", "drag", "faint"]:
+			return -1
 		if event_type != "mega" and event_type != "primal":
 			continue
 
@@ -10872,6 +10895,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 			_rewind_party_slots_for_events(player_events)
 			await _render_battle_events(player_events, true, "force_switch_player_non_pvp")
 			_mark_non_pvp_response_events_rendered(player_response, player_events)
+			_restore_non_pvp_presentation(player_response, player_events)
 
 			if await _finish_if_battle_ended():
 				return
@@ -11183,6 +11207,8 @@ func _remember_pvp_local_prechoice(choice: Dictionary) -> bool:
 	return true
 
 func _local_player_needs_force_switch_ui() -> bool:
+	if not _is_pvp_battle() and battle_state.viewer_control.has("ownForceSwitchRequired"):
+		return action_flow.http_flow.public_force_switch(battle_state.viewer_control, true)
 	if _is_pvp_battle() and pvp_public_control_contract_version >= 3:
 		return pvp_own_force_switch_required and pvp_own_action_required
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_local_state_player_id(), "p1")
@@ -11215,6 +11241,8 @@ func _local_player_needs_force_switch_ui() -> bool:
 	return false
 
 func _opponent_player_needs_force_switch_ui() -> bool:
+	if not _is_pvp_battle() and battle_state.viewer_control.has("opponentForceSwitchRequired"):
+		return action_flow.http_flow.public_force_switch(battle_state.viewer_control, false)
 	if _is_pvp_battle() and pvp_public_control_contract_version >= 3:
 		return pvp_opponent_force_switch_required and pvp_opponent_action_required
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_opponent_state_player_id(), "p2")
@@ -11447,8 +11475,10 @@ func _show_non_pvp_opponent_force_switch_wait() -> void:
 	moves_grid.visible = false
 	mechanics_panel.visible = false
 	current_action_panel.set_message(_t("battle.prompt.waiting_switch"))
+	if non_pvp_recovery_failed:
+		current_action_panel.set_message(_t("battle.error.recovery_retry"))
 	_sync_action_panel_mode_visibility()
-	if not non_pvp_opponent_force_switch_recovery_active:
+	if not non_pvp_opponent_force_switch_recovery_active and not non_pvp_recovery_failed:
 		_resolve_non_pvp_opponent_force_switch_wait.call_deferred()
 
 
@@ -11456,17 +11486,45 @@ func _resolve_non_pvp_opponent_force_switch_wait() -> void:
 	if non_pvp_opponent_force_switch_recovery_active or battle_finished:
 		return
 	non_pvp_opponent_force_switch_recovery_active = true
-	var resolved := await _auto_force_switch_opponent_if_needed()
+	while non_pvp_render_active:
+		await get_tree().process_frame
+	var recovery_battle_id := battle_state.battle_id
+	var resolved := false
+	for attempt in range(3):
+		if attempt > 0:
+			await _wait_non_pvp_recovery_retry(attempt)
+		if battle_finished or battle_state.battle_id != recovery_battle_id:
+			break
+		var response: Dictionary = await action_flow.recover_http_response(last_rendered_event_seq)
+		if not bool(response.get("success", false)):
+			continue
+		await _render_opponent_response(response)
+		if battle_state.is_battle_ended():
+			resolved = true
+			break
+		if not action_flow.http_flow.needs_resolution(response):
+			resolved = true
+			break
+		if bool(battle_state.viewer_control.get("opponentActionRequired", false)):
+			if await _submit_npc_choice_and_render():
+				resolved = not action_flow.http_flow.needs_resolution(action_flow.http_flow.order.latest_response)
+				if resolved:
+					break
 	non_pvp_opponent_force_switch_recovery_active = false
 	if battle_finished or await _finish_if_battle_ended():
 		return
-	if not resolved and _opponent_player_needs_force_switch_ui():
-		push_warning("Could not resolve the pending NPC forced switch; player input remains locked")
+	if not resolved:
+		non_pvp_recovery_failed = true
+		_show_non_pvp_opponent_force_switch_wait()
 		return
 	_set_battle_input_locked(false)
 	if _show_force_switch_if_needed():
 		return
 	_show_moves()
+
+func _wait_non_pvp_recovery_retry(attempt: int) -> void:
+	await get_tree().create_timer(0.3 * attempt).timeout
+
 
 func _pvp_response_has_render_batch_metadata(response: Dictionary) -> bool:
 	return (
@@ -14981,6 +15039,8 @@ func _submit_npc_choice_and_render(
 		# state, so never ask the now-inactive training session for another choice.
 		if battle_finished or battle_state.is_battle_ended():
 			return true
+		if bool(opponent_response.get("npcChoiceSkipped", false)):
+			return true
 		var response_requires_switch := _response_has_opponent_force_switch(opponent_response)
 		var rendered_state_requires_switch := _opponent_player_needs_force_switch_ui()
 		if not BattleForceSwitchFlow.opponent_replacement_still_required(
@@ -15120,6 +15180,11 @@ func _render_opponent_response(
 	suppress_presentation_waits := false,
 	suppress_terminal_win_presentation := false
 ) -> void:
+	while non_pvp_render_active:
+		await get_tree().process_frame
+	if action_flow.http_flow.is_stale(opponent_response):
+		return
+	non_pvp_render_active = true
 	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
 	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys, opponent_response)
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
@@ -15137,10 +15202,19 @@ func _render_opponent_response(
 		suppress_terminal_win_presentation
 	)
 	_mark_non_pvp_response_events_rendered(opponent_response, filtered_events)
+	_restore_non_pvp_presentation(opponent_response, opponent_events)
 	defer_force_switch_active_hide = false
 	_clear_ordered_response_display_species()
 	_update_hud_panels()
 	_update_active_sprites()
+	non_pvp_render_active = false
+
+func _restore_non_pvp_presentation(response: Dictionary, rendered_events: Array) -> void:
+	# Reconcile only after the events finish; never replay historical switches.
+	action_flow.restore_http_response(response, last_rendered_event_seq)
+	_reapply_rendered_condition_events(rendered_events)
+	_update_hud_panels()
+	_update_party_slots()
 
 func _prepare_switch_in_presentation_for_events(events: Array) -> void:
 	for event_value: Variant in events:
