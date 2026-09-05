@@ -2723,7 +2723,7 @@
 		},
 		"kanto_mt_moon_b2f__to_b1f_2": {
 			"destination": {
-				"facingDirection": "left",
+				"facingDirection": "right",
 				"mapId": "kanto_mt_moon_b1f",
 				"mapSceneAliases": [
 					"uid://dmu7iwolokkl7"
