@@ -3489,6 +3489,7 @@
   "npc.trainer.rematch.defeated": "Deze keer heb je me verslagen. Ik blijf trainen.",
   "ui.world.capture.caught": "Je hebt {pokemon} gevangen!",
   "ui.world.capture.caught_party": "Je hebt {pokemon} gevangen! Toegevoegd aan je party.",
+  "ui.world.capture.caught_storage": "Je hebt {pokemon} gevangen! Naar {location} gestuurd.",
   "ui.reward_card.level_up": "Level omhoog",
   "ui.reward_card.caught": "Gevangen",
   "ui.reward_card.global_buff_activated": "Geactiveerd",
