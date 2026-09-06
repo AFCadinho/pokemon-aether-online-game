@@ -90,6 +90,22 @@ func _ready() -> void:
 	battle.hover_state.set_sprite_hover_player("p1")
 	await battle._show_pokemon_hover(own, own, "p1")
 	_check(battle.pokemon_hover_card.current_confirmed_moves[0].pp == 2 and battle.pokemon_hover_card.current_confirmed_moves[0].maxpp == 15, "participant sprite still uses exact owned PP")
+	var saved_scale_source := Pokemon.new(
+		"Samurott-Hisui",
+		100,
+		"",
+		"",
+		"Jolly",
+		{},
+		{},
+		{},
+		[{"name": "Flip Turn", "pp": 20, "maxPp": 20}],
+	)
+	var scaled_hover_moves: Array = battle._convert_battle_moves_to_owned_hover_scale(
+		[{"move": "Flip Turn", "pp": 31, "maxpp": 32}],
+		saved_scale_source,
+	)
+	_check(scaled_hover_moves[0].pp == 19 and scaled_hover_moves[0].maxpp == 20, "owned hover translates live battle PP to saved base PP")
 	battle.party_hover_card.hide_card()
 	battle.pokemon_hover_card.hide_card()
 	battle.party_hover_card.queue_free()

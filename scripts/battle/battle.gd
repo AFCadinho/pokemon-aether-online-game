@@ -1285,11 +1285,13 @@ func _get_party_hover_moves(display_data: Dictionary, fallback_data: Dictionary)
 	if _is_hover_pokemon_active("p1", display_data):
 		var available_moves: Array = battle_state.get_available_moves("p1")
 		if not available_moves.is_empty():
+			var saved_pokemon := _get_player_save_pokemon_for_hover(display_data)
+			var hover_moves := _convert_battle_moves_to_owned_hover_scale(available_moves, saved_pokemon)
 			_debug_pvp_hover_pp("owned party move source=request active=%s moves=%s" % [
 				str(_is_hover_pokemon_active("p1", display_data)),
-				_summarize_hover_pp_moves(available_moves),
+				_summarize_hover_pp_moves(hover_moves),
 			])
-			return available_moves
+			return hover_moves
 
 	var cached_moves: Array = _get_cached_party_moves(display_data)
 	if not cached_moves.is_empty():
@@ -1798,13 +1800,15 @@ func _get_own_pokemon_hover_moves(player_id: String, pokemon_data: Dictionary) -
 	if _is_hover_pokemon_active(player_id, pokemon_data):
 		var available_moves: Array = battle_state.get_available_moves(player_id)
 		if not available_moves.is_empty():
+			var saved_pokemon := _get_player_save_pokemon_for_hover(pokemon_data)
+			var hover_moves := _convert_battle_moves_to_owned_hover_scale(available_moves, saved_pokemon)
 			_debug_pvp_hover_pp("owned sprite move source=request player=%s active=%s ident=%s moves=%s" % [
 				player_id,
 				str(_is_hover_pokemon_active(player_id, pokemon_data)),
 				str(pokemon_data.get("ident", "")),
-				_summarize_hover_pp_moves(available_moves),
+				_summarize_hover_pp_moves(hover_moves),
 			])
-			return available_moves
+			return hover_moves
 
 	var cached_moves: Array = _get_cached_party_moves(pokemon_data)
 	if not cached_moves.is_empty():
@@ -1828,6 +1832,48 @@ func _get_own_pokemon_hover_moves(player_id: String, pokemon_data: Dictionary) -
 			return normalized_moves
 
 	return []
+
+func _convert_battle_moves_to_owned_hover_scale(moves: Array, saved_pokemon: Pokemon) -> Array:
+	if saved_pokemon == null or saved_pokemon.moves.is_empty():
+		return moves
+
+	var converted_moves: Array = []
+	for move_value: Variant in moves:
+		if not move_value is Dictionary:
+			converted_moves.append(move_value)
+			continue
+
+		var battle_move: Dictionary = (move_value as Dictionary).duplicate(true)
+		var battle_current := _get_hover_move_pp_value(battle_move, ["pp", "currentPp", "currentPP", "current_pp"])
+		var battle_max := _get_hover_move_pp_value(battle_move, ["maxpp", "maxPp", "maxPP", "max_pp"])
+		var saved_move := _find_saved_move_for_hover(battle_move, saved_pokemon.moves)
+		var saved_max := _get_hover_move_pp_value(saved_move, ["maxPp", "maxpp", "maxPP", "max_pp"])
+		if battle_current >= 0 and battle_max > 0 and saved_max > 0 and battle_max > saved_max:
+			var spent_pp := maxi(battle_max - battle_current, 0)
+			var owned_current := clampi(saved_max - spent_pp, 0, saved_max)
+			battle_move["pp"] = owned_current
+			battle_move["maxpp"] = saved_max
+			battle_move["maxPp"] = saved_max
+
+		converted_moves.append(battle_move)
+
+	return converted_moves
+
+func _find_saved_move_for_hover(battle_move: Dictionary, saved_moves: Array) -> Dictionary:
+	var battle_key := _hover_move_identity(battle_move)
+	if battle_key == "":
+		return {}
+
+	for saved_value: Variant in saved_moves:
+		if not saved_value is Dictionary:
+			continue
+		if _hover_move_identity(saved_value as Dictionary) == battle_key:
+			return saved_value as Dictionary
+
+	return {}
+
+func _hover_move_identity(move_data: Dictionary) -> String:
+	return str(move_data.get("id", move_data.get("move", move_data.get("name", "")))).strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "")
 
 func _is_hover_pokemon_active(player_id: String, pokemon_data: Dictionary) -> bool:
 	if bool(pokemon_data.get("active", false)):
