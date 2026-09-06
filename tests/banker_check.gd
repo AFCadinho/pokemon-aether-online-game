@@ -25,10 +25,10 @@ func _run() -> void:
 	_check(banker_scene_source.contains('display_name = "Banker"'), "Banker uses the clear English name")
 	_check(banker_scene_source.contains("manual_interaction_reach_tiles = 3"), "Banker can be reached across the upper counter")
 	var banker_script_source := FileAccess.get_file_as_string("res://scripts/world/npcs/banker_npc.gd")
-	_check(banker_script_source.contains('bank_marker.name = "BankMarker"'), "Banker displays a money icon above the nameplate")
-	_check(FileAccess.get_file_as_string("res://scenes/npcs/move_mentor_npc.tscn").contains('text = "TM"'), "Move Maniac scene includes a TM marker")
-	_check(FileAccess.get_file_as_string("res://scenes/npcs/move_deleter_npc.tscn").contains('text = "−"'), "Move Deleter scene includes a deletion marker")
-	_check(FileAccess.get_file_as_string("res://scenes/npcs/aether_atelier_npc.tscn").contains('text = "◇"'), "Aether Atelier scene includes an atelier marker")
+	_check(banker_script_source.contains('BANK_MARKER_TEXTURE := preload("res://assets/ui/icons/npc_services/banker_wallet.png")'), "Banker displays a pixel-art wallet marker")
+	_check(FileAccess.get_file_as_string("res://scenes/npcs/move_mentor_npc.tscn").contains('move_maniac_tm.png'), "Move Maniac scene includes a TM sprite marker")
+	_check(FileAccess.get_file_as_string("res://scenes/npcs/move_deleter_npc.tscn").contains('move_deleter.png'), "Move Deleter scene includes a deletion sprite marker")
+	_check(FileAccess.get_file_as_string("res://scenes/npcs/aether_atelier_npc.tscn").contains('aether_atelier.png'), "Aether Atelier scene includes an atelier sprite marker")
 
 	for center_path: String in CENTER_PATHS:
 		var center_source := FileAccess.get_file_as_string(center_path)
