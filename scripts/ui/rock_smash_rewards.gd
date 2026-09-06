@@ -162,7 +162,10 @@ func _render() -> void:
 			var title := _text("rock_level", {"level": required})
 			if required > player_level:
 				title += " · " + _text("locked")
-			_row(title, _text("payout", {"money": rock.get("money", 0), "xp": rock.get("experience", 0)}))
+			_row(title, _text("payout", {
+				"money": int(rock.get("money", 0)),
+				"xp": int(rock.get("experience", 0)),
+			}))
 		_row(_text("boost"), "×%d" % int(catalog.get("experienceMultiplier", 1)))
 		_row(_text("guild"), _text("guild_detail"))
 		return
