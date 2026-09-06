@@ -1255,7 +1255,11 @@ func _fetch_owned_party_hover_moves(pokemon_data: Dictionary) -> Array:
 	return info.get("confirmedMoves", [])
 
 func _get_party_hover_moves(display_data: Dictionary, fallback_data: Dictionary) -> Array:
-	if bool(display_data.get("active", false)):
+	# PvP party projections can briefly omit the derived `active` flag while
+	# the canonical request has already advanced. Resolve active by identity as
+	# well, otherwise we fall through to saved moves and reinterpret base PP as
+	# the upgraded maximum-PP scale.
+	if _is_hover_pokemon_active("p1", display_data):
 		var available_moves: Array = battle_state.get_available_moves("p1")
 		if not available_moves.is_empty():
 			return available_moves
@@ -1752,8 +1756,25 @@ func _is_hover_pokemon_active(player_id: String, pokemon_data: Dictionary) -> bo
 	if bool(pokemon_data.get("active", false)):
 		return true
 
+	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
+	if not active_pokemon.is_empty() and _pokemon_data_matches_identity(pokemon_data, active_pokemon):
+		return true
+
 	var active_slot := _get_active_canonical_party_slot(player_id)
 	return active_slot > 0 and _get_pokemon_data_canonical_party_slot(pokemon_data) == active_slot
+
+func _pokemon_data_matches_identity(first: Dictionary, second: Dictionary) -> bool:
+	var first_ident := str(first.get("ident", "")).strip_edges()
+	var second_ident := str(second.get("ident", "")).strip_edges()
+	if first_ident != "" and second_ident != "" and first_ident == second_ident:
+		return true
+
+	var first_instance := str(first.get("instanceId", first.get("instance_id", ""))).strip_edges()
+	var second_instance := str(second.get("instanceId", second.get("instance_id", ""))).strip_edges()
+	if first_instance != "" and second_instance != "" and first_instance == second_instance:
+		return true
+
+	return false
 
 func _hover_response_ident_matches_pokemon_request(response_ident: String, hover_data: Dictionary, pokemon_data: Dictionary) -> bool:
 	var normalized_response := _normalize_battle_ident(response_ident)

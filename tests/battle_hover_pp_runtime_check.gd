@@ -50,6 +50,11 @@ func _ready() -> void:
 	battle.party_hover_card.show_for_pokemon(hover)
 	var row: Node = battle.party_hover_card.move_rows[0]
 	_check(row.get_node("Label").text == "7/24", "party card actually renders live PP")
+	# PvP display projections may lose `active` while keeping the same battle
+	# identity. The live request must still win over saved/base-PP fallback.
+	var projected_active := {"ident": "p1: Pikachu", "species": "Pikachu", "metadataSlot": 1, "moves": [{"name": "Thunderbolt", "pp": 7, "maxPp": 15}]}
+	var projected_hover: Dictionary = await battle._get_owned_party_hover_data(projected_active)
+	_check(projected_hover.moves[0].pp == 7 and projected_hover.moves[0].maxpp == 24, "identity-matched active hover uses live PP without active flag")
 	battle._remember_active_player_party_moves()
 	pokemon.active = false
 	request.erase("active")
