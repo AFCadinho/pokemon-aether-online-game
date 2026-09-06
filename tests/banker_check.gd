@@ -23,6 +23,7 @@ func _run() -> void:
 	_check(template_source.contains("position = Vector2(560, 400)"), "Banker occupies the right upper counter")
 	var banker_scene_source := FileAccess.get_file_as_string("res://scenes/npcs/banker_npc.tscn")
 	_check(banker_scene_source.contains('display_name = "Banker"'), "Banker uses the clear English name")
+	_check(banker_scene_source.contains("manual_interaction_reach_tiles = 3"), "Banker can be reached across the upper counter")
 	var banker_script_source := FileAccess.get_file_as_string("res://scripts/world/npcs/banker_npc.gd")
 	_check(banker_script_source.contains('bank_marker.name = "BankMarker"'), "Banker displays a money icon above the nameplate")
 
