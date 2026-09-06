@@ -63,6 +63,10 @@ const SIDE_QUESTS: Array[Dictionary] = [
 	{"id": "catch_route_22_mankey", "label_key": "ui.staff.side_quest.catching"},
 	{"id": "viridian_ev_training", "label_key": "ui.staff.side_quest.ev_training"},
 	{"id": "learn_rock_smash", "label_key": "ui.staff.side_quest.rock_smash"},
+	{
+		"id": "pokemon_fan_club_chairman",
+		"label_key": "ui.staff.side_quest.pokemon_fan_club_chairman",
+	},
 ]
 
 const UI_BG := Color("#050b14fa")
