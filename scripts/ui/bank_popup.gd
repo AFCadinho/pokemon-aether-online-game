@@ -116,7 +116,7 @@ func _build_interface() -> void:
 	quick_caption.custom_minimum_size = Vector2(72, 0)
 	quick_caption.add_theme_color_override("font_color", UI_MUTED)
 	quick_amounts.add_child(quick_caption)
-	for quick_amount: int in [100, 1_000, 10_000]:
+	for quick_amount: int in [10_000, 100_000, 1_000_000]:
 		var quick_button := Button.new()
 		quick_button.name = "QuickAmount%s" % quick_amount
 		quick_button.text = _format_compact_amount(quick_amount)
@@ -355,6 +355,8 @@ func _format_amount(amount: int) -> String:
 
 
 func _format_compact_amount(amount: int) -> String:
+	if amount >= 1_000_000:
+		return "%sM" % (amount / 1_000_000)
 	if amount >= 1_000:
 		return "%sK" % (amount / 1_000)
 	return str(amount)
