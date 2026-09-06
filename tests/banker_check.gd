@@ -47,6 +47,7 @@ func _run() -> void:
 	_check(popup_script_source.contains('deposit_all_button.name = "DepositAllButton"'), "Bank provides a deposit all action")
 	_check(popup_script_source.contains('withdraw_all_button.name = "WithdrawAllButton"'), "Bank provides a withdraw all action")
 	_check(popup_script_source.contains("for quick_amount: int in [10_000, 100_000, 1_000_000]"), "Bank provides high-value quick amounts")
+	_check(popup_script_source.contains("layout.add_child(amount_caption)") and popup_script_source.contains("layout.add_child(quick_caption)"), "Bank keeps labels above their full-width controls")
 
 	var wallet_source := FileAccess.get_file_as_string("res://scripts/services/player_wallet_service.gd")
 	_check(wallet_source.contains('const PLAYER_BANK_TRANSFER_ENDPOINT := "/game/bank/transfer"'), "Wallet service uses the bank endpoint")

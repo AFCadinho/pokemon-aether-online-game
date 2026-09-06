@@ -75,12 +75,12 @@ func close_bank() -> void:
 func _build_interface() -> void:
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 18)
-	margin.add_theme_constant_override("margin_top", 16)
+	margin.add_theme_constant_override("margin_top", 12)
 	margin.add_theme_constant_override("margin_right", 18)
-	margin.add_theme_constant_override("margin_bottom", 16)
+	margin.add_theme_constant_override("margin_bottom", 12)
 	add_child(margin)
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 14)
+	layout.add_theme_constant_override("separation", 8)
 	margin.add_child(layout)
 	layout.add_child(_build_header())
 
@@ -90,32 +90,28 @@ func _build_interface() -> void:
 	balances.add_child(_build_balance_card("ui.bank.stored", true))
 	layout.add_child(balances)
 
-	var amount_row := HBoxContainer.new()
-	amount_row.add_theme_constant_override("separation", 8)
-	layout.add_child(amount_row)
 	var amount_caption := Label.new()
 	_set_localized_property(amount_caption, "text", "ui.bank.amount")
-	amount_caption.custom_minimum_size = Vector2(72, 0)
 	amount_caption.add_theme_color_override("font_color", UI_MUTED)
-	amount_row.add_child(amount_caption)
+	layout.add_child(amount_caption)
 	amount_input = LineEdit.new()
 	amount_input.name = "BankAmountInput"
 	amount_input.text = "1"
 	amount_input.placeholder_text = "0"
 	amount_input.max_length = 10
 	amount_input.virtual_keyboard_type = LineEdit.KEYBOARD_TYPE_NUMBER
+	amount_input.custom_minimum_size = Vector2(0, 36)
 	amount_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	amount_input.text_changed.connect(_on_amount_changed)
 	_apply_amount_input_style()
-	amount_row.add_child(amount_input)
+	layout.add_child(amount_input)
+	var quick_caption := Label.new()
+	_set_localized_property(quick_caption, "text", "ui.bank.quick_amount")
+	quick_caption.add_theme_color_override("font_color", UI_MUTED)
+	layout.add_child(quick_caption)
 	var quick_amounts := HBoxContainer.new()
 	quick_amounts.add_theme_constant_override("separation", 8)
 	layout.add_child(quick_amounts)
-	var quick_caption := Label.new()
-	_set_localized_property(quick_caption, "text", "ui.bank.quick_amount")
-	quick_caption.custom_minimum_size = Vector2(72, 0)
-	quick_caption.add_theme_color_override("font_color", UI_MUTED)
-	quick_amounts.add_child(quick_caption)
 	for quick_amount: int in [10_000, 100_000, 1_000_000]:
 		var quick_button := Button.new()
 		quick_button.name = "QuickAmount%s" % quick_amount
