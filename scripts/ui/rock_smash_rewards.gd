@@ -11,6 +11,13 @@ var player_level := 1
 var catalog: Dictionary = {}
 var request_revision := 0
 
+const CONTROL_BACKGROUND := Color("#071522")
+const CONTROL_HOVER := Color("#102a40")
+const CONTROL_PRESSED := Color("#0d3048")
+const CONTROL_BORDER := Color("#31546e")
+const CONTROL_ACCENT := Color("#58c8eb")
+const CONTROL_TEXT := Color("#e8edf2")
+
 
 func _ready() -> void:
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -19,6 +26,7 @@ func _ready() -> void:
 	category.name = "RewardCategory"
 	for key in ["items", "fossils", "money_xp"]:
 		category.add_item(_text(key))
+	_style_option(category)
 	category.item_selected.connect(func(_index: int): _render())
 	add_child(category)
 	var controls := HBoxContainer.new()
@@ -26,12 +34,16 @@ func _ready() -> void:
 	preview = CheckButton.new()
 	preview.text = _text("preview")
 	preview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	preview.add_theme_color_override("font_color", CONTROL_TEXT)
+	preview.add_theme_color_override("font_hover_color", CONTROL_TEXT)
+	preview.add_theme_font_size_override("font_size", 12)
 	controls.add_child(preview)
 	preview_level = SpinBox.new()
 	preview_level.min_value = 1
 	preview_level.max_value = 100
 	preview_level.step = 1
 	preview_level.visible = false
+	_style_spinbox(preview_level)
 	controls.add_child(preview_level)
 	preview.toggled.connect(func(enabled: bool):
 		preview_level.visible = enabled
@@ -59,6 +71,47 @@ func _ready() -> void:
 	rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	rows.add_theme_constant_override("separation", 5)
 	scroll.add_child(rows)
+
+
+func _style_option(button: OptionButton) -> void:
+	button.custom_minimum_size.y = 34.0
+	button.add_theme_color_override("font_color", CONTROL_TEXT)
+	button.add_theme_color_override("font_hover_color", CONTROL_TEXT)
+	button.add_theme_color_override("font_pressed_color", CONTROL_TEXT)
+	button.add_theme_font_size_override("font_size", 12)
+	button.add_theme_stylebox_override("normal", _control_style(CONTROL_BACKGROUND, CONTROL_BORDER))
+	button.add_theme_stylebox_override("hover", _control_style(CONTROL_HOVER, CONTROL_ACCENT))
+	button.add_theme_stylebox_override("pressed", _control_style(CONTROL_PRESSED, CONTROL_ACCENT))
+	button.add_theme_stylebox_override("focus", _control_style(CONTROL_PRESSED, CONTROL_ACCENT))
+	var popup := button.get_popup()
+	popup.add_theme_color_override("font_color", CONTROL_TEXT)
+	popup.add_theme_color_override("font_hover_color", CONTROL_TEXT)
+	popup.add_theme_font_size_override("font_size", 12)
+	popup.add_theme_stylebox_override("panel", _control_style(CONTROL_BACKGROUND, CONTROL_BORDER))
+	popup.add_theme_stylebox_override("hover", _control_style(CONTROL_HOVER, CONTROL_ACCENT))
+
+
+func _style_spinbox(spinbox: SpinBox) -> void:
+	spinbox.custom_minimum_size = Vector2(92, 34)
+	var line_edit := spinbox.get_line_edit()
+	line_edit.add_theme_color_override("font_color", CONTROL_TEXT)
+	line_edit.add_theme_color_override("caret_color", CONTROL_ACCENT)
+	line_edit.add_theme_font_size_override("font_size", 12)
+	line_edit.add_theme_stylebox_override("normal", _control_style(CONTROL_BACKGROUND, CONTROL_BORDER))
+	line_edit.add_theme_stylebox_override("focus", _control_style(CONTROL_PRESSED, CONTROL_ACCENT))
+
+
+func _control_style(background: Color, border: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(6)
+	style.content_margin_left = 10.0
+	style.content_margin_right = 10.0
+	style.content_margin_top = 6.0
+	style.content_margin_bottom = 6.0
+	return style
 
 
 func show_for_level(level: int) -> void:
