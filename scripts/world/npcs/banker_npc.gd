@@ -3,33 +3,22 @@ extends DialogueNPC
 
 class_name BankerNPC
 
-var bank_marker: PanelContainer
+const BANK_MARKER_TEXTURE := preload("res://assets/ui/icons/npc_services/banker_wallet.png")
+
+var bank_marker: Sprite2D
 
 
 func _ready() -> void:
 	super._ready()
 	if Engine.is_editor_hint():
 		return
-	bank_marker = PanelContainer.new()
+	bank_marker = Sprite2D.new()
 	bank_marker.name = "BankMarker"
-	bank_marker.position = Vector2(-17, -120)
-	bank_marker.custom_minimum_size = Vector2(34, 24)
+	bank_marker.position = Vector2(0, -108)
+	bank_marker.scale = Vector2(0.66, 0.66)
 	bank_marker.z_index = 513
-	bank_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color("#54c98b")
-	style.border_color = Color("#d9ffe9")
-	style.set_border_width_all(2)
-	style.set_corner_radius_all(6)
-	bank_marker.add_theme_stylebox_override("panel", style)
-	var label := Label.new()
-	label.text = "₽"
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 16)
-	label.add_theme_color_override("font_color", Color("#0a2824"))
-	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	bank_marker.add_child(label)
+	bank_marker.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	bank_marker.texture = BANK_MARKER_TEXTURE
 	add_child(bank_marker)
 
 
