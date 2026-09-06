@@ -76,13 +76,6 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_sparring_catalog_use_opponent := overlay.get("pvp_ai_sparring_catalog_use_opponent_button") as Button
 	var ai_sparring_catalog_export := overlay.get("pvp_ai_sparring_catalog_export_button") as Button
 	var ai_sparring_catalog_team_grid := overlay.get("pvp_ai_sparring_catalog_team_grid") as GridContainer
-	var ai_research_start := overlay.get("pvp_ai5_playtest_start_button") as Button
-	var ai_research_tabs := overlay.get("pvp_ai5_playtest_tabs") as TabContainer
-	var ai_research_card := overlay.find_child("AiResearchCampaignCard", true, false) as PanelContainer
-	var ai_research_assignment := overlay.find_child("AiResearchAssignmentCard", true, false) as PanelContainer
-	var ai_research_statistics := overlay.find_child("AiResearchStatisticsCard", true, false) as PanelContainer
-	var ai_research_start_step := overlay.find_child("AiResearchStartStep", true, false) as Label
-	var ai_research_statistics_text := overlay.get("pvp_ai5_playtest_stats_label") as Label
 	var room_spectate_button := overlay.get("pvp_room_spectate_mode_button") as Button
 	var casual_button := overlay.get("pvp_room_casual_type_button") as Button
 	var training_button := overlay.get("pvp_room_training_type_button") as Button
@@ -181,11 +174,10 @@ func _check_pvp_runtime_translation() -> void:
 		"AI training action uses the interactive room-button styling"
 	)
 	_check(ai_sparring_menu_button != null, "AI Sparring has its own PvP destination")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 4, "AI Sparring separates practice, team catalog, history and research")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 3, "AI Sparring separates practice, team catalog and history")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(0) == "Vrij oefenen", "Free sparring tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(1) == "Teamcatalogus", "Team catalog tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Matchhistorie", "Match history tab renders in Dutch")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(3) == "Onderzoekscampagne", "Research tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.custom_minimum_size.y == 520.0, "AI Sparring keeps a stable workspace height across tabs")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.current_tab == 0, "Free sparring is the default AI destination")
 	_check(ai_sparring_tier_select != null and ai_sparring_tier_select.item_count == 1 and ai_sparring_tier_select.get_item_text(0) == "Open" and str(ai_sparring_tier_select.get_selected_metadata()) == "none", "Free sparring safely defaults to the open tier")
@@ -347,11 +339,6 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_start != null and ai_sparring_start.custom_minimum_size.y >= 42.0, "Free sparring has a prominent start action")
 	var ai_sparring_start_style := ai_sparring_start.get_theme_stylebox("normal") as StyleBoxFlat if ai_sparring_start != null else null
 	_check(ai_sparring_start_style != null and ai_sparring_start_style.bg_color == Color("#5d4aa4"), "Free sparring start action uses a distinct primary treatment")
-	_check(ai_research_start != null and ai_research_start.custom_minimum_size.y >= 42.0, "Research has a separate prominent start action")
-	_check(ai_research_card != null, "Research campaign groups its work into a dedicated card")
-	_check(ai_research_assignment != null and ai_research_statistics != null, "Research separates the assignment from campaign statistics")
-	_check(ai_research_start_step != null and ai_research_card != null and ai_research_card.is_ancestor_of(ai_research_start), "Research keeps the start action with its campaign context")
-	_check(ai_research_tabs != null and ai_research_tabs.custom_minimum_size == Vector2.ZERO, "Research content uses its natural height instead of an empty fixed panel")
 	_check(training_button != null and training_button.text == "Training Room", "Training room selector renders in Dutch")
 	_check(casual_button != null and casual_button.text.begins_with("✓ "), "Default room type is visibly selected")
 	_check(room_workspace != null and room_workspace.get_child_count() == 2, "Room setup uses a clear two-column workflow")
@@ -653,42 +640,8 @@ func _check_pvp_runtime_translation() -> void:
 		subtitle != null and subtitle.get_theme_color("font_color") == Color("#aeb8c5"),
 		"AI Sparring restores the normal subtitle color after leaving an error state"
 	)
-	overlay.set("pvp_ai5_playtest_status", {
-		"enabled": true,
-		"completedBattles": 1,
-		"targetBattles": 10,
-		"campaign": {"campaignId": "ai5-playtest-v2-pilot-10", "phase": "pilot", "policyRevision": "internal-policy"},
-		"nextAssignment": {"assignmentIndex": 1, "playerTeam": {"displayName": "Screens", "archetype": "hyper_offense"}, "aiArchetype": "balance"},
-		"statistics": {"wins": 1, "losses": 0, "draws": 0, "aiSwitchCount": 3, "decisionCount": 8, "aiSwitchRate": 0.375, "fallbackCount": 2},
-		"flagCount": 1,
-	})
-	overlay.call("_refresh_ai5_playtest_panel")
-	var active_campaign_text := (overlay.get("pvp_ai5_playtest_progress_label") as Label).text
-	_check(active_campaign_text.begins_with("AI5 V2 Pilot · ACTIEF"), "Research identifies the exact active campaign version and phase")
-	_check(ai_research_statistics_text != null and ai_research_statistics_text.text.begins_with("RESULTATEN"), "Research statistics clearly separate results from AI behaviour")
-	_check(ai_research_statistics_text != null and not ai_research_statistics_text.text.contains("Policy"), "Research statistics keep internal policy details out of the main UI")
-	overlay.set("pvp_ai5_playtest_status", {"success": true, "enabled": false, "accessDenied": true})
-	overlay.call("_refresh_ai5_playtest_panel")
-	var research_progress := overlay.get("pvp_ai5_playtest_progress_label") as Label
-	_check(research_progress != null and research_progress.text.contains("AI Trainer-toegang"), "Research explains the AI Trainer access lock")
-	_check(ai_research_start != null and ai_research_start.disabled, "Research cannot start without AI Trainer access")
-	overlay.set("pvp_ai5_playtest_status", {
-		"enabled": true, "completedBattles": 1, "targetBattles": 10,
-		"campaign": {"campaignId": "ai5-playtest-v2-pilot-10", "phase": "pilot"},
-		"nextAssignment": {"assignmentIndex": 1, "playerTeam": {"displayName": "Screens", "archetype": "hyper_offense"}, "aiArchetype": "balance"},
-		"statistics": {}, "flagCount": 0,
-	})
-	overlay.call("_refresh_ai5_playtest_panel")
-	ai_research_tabs.current_tab = 1
-	overlay.call("_on_ai5_playtest_detail_tab_changed", 1)
-	_check(ai_research_start != null and not ai_research_start.visible, "Statistics hides the assignment start action")
-	ai_research_tabs.current_tab = 0
-	overlay.call("_on_ai5_playtest_detail_tab_changed", 0)
-	_check(ai_research_start != null and ai_research_start.visible, "Assignment keeps the start action visible")
 	overlay.call("_on_pvp_ai_sparring_tab_changed", 1)
 	_check(popup.get_combined_minimum_size().y <= 620.0, "Team catalog fits inside the AI Sparring popup")
-	overlay.call("_on_pvp_ai_sparring_tab_changed", 3)
-	_check(popup.get_combined_minimum_size().y <= 620.0, "Research campaign fits inside the room popup without empty forced height")
 	overlay.call("_on_pvp_ai_sparring_tab_changed", 0)
 	_check(popup.get_combined_minimum_size().y <= 620.0, "AI mode and team selectors fit inside the room popup")
 	room_create_button.emit_signal("pressed")

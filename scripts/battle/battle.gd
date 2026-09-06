@@ -33,7 +33,6 @@ const WILD_BATTLE_PRESENTATION_POLICY := preload("res://scripts/battle/wild_batt
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
 const OGERPON_BATTLE_FORM := preload("res://scripts/battle/ogerpon_battle_form.gd")
-const AI5_RESEARCH_MARKER := preload("res://scripts/battle/battle_ui/ai5_research_marker.gd")
 const TYPE_CHANGE_BADGE_COLORS := {
 	"bug": Color("#85a114"), "dark": Color("#403847"), "dragon": Color("#4d52c4"),
 	"electric": Color("#e0ad14"), "fairy": Color("#d163a3"), "fighting": Color("#b83338"),
@@ -124,7 +123,6 @@ var pvp_match_id := ""
 var pvp_viewer_role := "participant"
 var pvp_battle_purpose := ""
 var training_ai_battle := false
-var ai5_research_marker: Ai5ResearchMarker
 var pvp_local_canonical_roster: Array = []
 var pvp_realtime_updates: Array[Dictionary] = []
 var pvp_realtime_deferred_updates: Array[Dictionary] = []
@@ -3951,8 +3949,6 @@ func _finish_battle(result: Dictionary) -> void:
 	if allows_gameplay_persistence or _is_spectator_battle():
 		_add_pvp_victory_message_if_needed(result)
 	battle_finished = true
-	if ai5_research_marker != null:
-		ai5_research_marker.close_for_battle_end()
 	_close_battle_drawers_for_terminal_result()
 	_sync_party_rail_interaction()
 	pending_mega_species_by_ident.clear()
@@ -6742,7 +6738,6 @@ func setup_trainer_battle_from_response(
 	if training_ai_battle:
 		pvp_battle_purpose = "training"
 		_capture_pvp_local_canonical_roster(api_response)
-		# AI5 research campaigns are closed; normal sparring uses server telemetry.
 	npc_trainer_display_name = setup_flow.get_trainer_name(trainer_data, "")
 	var team_preview_enabled := _trainer_team_preview_enabled(api_response)
 	opponent_party_reveal_policy.reset(team_preview_enabled)
@@ -6819,36 +6814,6 @@ func _notify_trainer_entry_ready(entry_ready_callback: Callable) -> void:
 	if entry_ready_callback.is_valid():
 		await entry_ready_callback.call()
 
-
-func _configure_ai5_research_marker(api_response: Dictionary) -> void:
-	if not AI5_RESEARCH_MARKER.has_research_context(api_response):
-		return
-	ai5_research_marker = AI5_RESEARCH_MARKER.new()
-	battle_stage.add_child(ai5_research_marker)
-	if not ai5_research_marker.configure(
-		api_response,
-		Callable(self, "_get_battle_presentation_turn"),
-		Callable(self, "_submit_ai5_research_marker"),
-		Callable(self, "_t")
-	):
-		ai5_research_marker.queue_free()
-		ai5_research_marker = null
-
-
-func _submit_ai5_research_marker(turn: int, category: String, note: String) -> Dictionary:
-	if ai5_research_marker == null or battle_finished:
-		return {"success": false}
-	var request := HTTPRequest.new()
-	add_child(request)
-	var response: Dictionary = await BattleApiClient.flag_ai5_playtest_turn(
-		request,
-		ai5_research_marker.battle_id,
-		turn,
-		category,
-		note
-	)
-	request.queue_free()
-	return response
 
 func setup_pvp_battle_from_response(
 	player_pokemon: Pokemon,
