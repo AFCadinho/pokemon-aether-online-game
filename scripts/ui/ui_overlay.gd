@@ -44240,11 +44240,7 @@ func _on_pvp_create_room_pressed() -> void:
 	_set_pvp_room_busy(false)
 
 	if not bool(response.get("success", false)):
-		_set_pvp_status_key(_pvp_room_failure_status_key(
-			response,
-			is_training,
-			"ui.pvp.room.create_failed"
-		))
+		_set_pvp_room_failure_status(response, is_training, "ui.pvp.room.create_failed")
 		push_warning("UIOverlay: PVP room creation failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
@@ -44449,11 +44445,7 @@ func _on_pvp_join_room_pressed() -> void:
 			_set_pvp_status_key("ui.pvp.room.reconnecting")
 			await _start_pvp_battle_from_response(_normalize_started_pvp_reconnect_response(response))
 			return
-		_set_pvp_status_key(_pvp_room_failure_status_key(
-			response,
-			is_training,
-			"ui.pvp.room.join_failed"
-		))
+		_set_pvp_room_failure_status(response, is_training, "ui.pvp.room.join_failed")
 		push_warning("UIOverlay: PVP room join failed: %s" % str(response.get("error", "Unknown error")))
 		return
 
@@ -44508,6 +44500,35 @@ func _pvp_room_failure_status_key(
 	if is_training and error_code in ["training_team_required", "training_team_invalid"]:
 		return "ui.pvp.training.paste_invalid"
 	return fallback_key
+
+
+func _set_pvp_room_failure_status(response: Dictionary, is_training: bool, fallback_key: String) -> void:
+	if BackendErrorLocalizationService.error_code(response) == "pvp_room_team_invalid":
+		var issue := _pvp_room_first_validation_issue(response)
+		if not issue.is_empty():
+			_set_pvp_status_key(
+				"ui.pvp.room.team_invalid_detail",
+				{"reason": _pvp_ranked_validation_issue_message(issue)},
+				true
+			)
+			return
+	_set_pvp_status_key(_pvp_room_failure_status_key(response, is_training, fallback_key), {}, true)
+
+
+func _pvp_room_first_validation_issue(response: Dictionary) -> Dictionary:
+	var sources: Array[Dictionary] = [response]
+	for key: String in ["body", "detail"]:
+		var nested := _dictionary_from_value(response.get(key, {}))
+		if not nested.is_empty():
+			sources.append(nested)
+	for source: Dictionary in sources:
+		var validation := _dictionary_from_value(source.get("validation", {}))
+		var errors: Variant = validation.get("errors", [])
+		if errors is Array:
+			for value: Variant in errors:
+				if value is Dictionary:
+					return (value as Dictionary).duplicate(true)
+	return {}
 
 
 func _pvp_room_player_payload() -> Dictionary:
@@ -44585,8 +44606,8 @@ func _on_pvp_join_queue_pressed() -> void:
 			pvp_ranked_queue_join_preparing = false
 			pvp_queue_join_in_flight = false
 			_set_pvp_room_busy(false)
-			_set_pvp_queue_status_key("ui.pvp.queue.validation_failed")
 			_refresh_pvp_team_validator()
+			_set_pvp_queue_validation_failure_status()
 			return
 	pvp_ranked_queue_join_preparing = false
 	_set_pvp_queue_status_key("ui.pvp.queue.joining")
@@ -44601,12 +44622,14 @@ func _on_pvp_join_queue_pressed() -> void:
 	_set_pvp_room_busy(false)
 
 	if not bool(response.get("success", false)):
-		_set_pvp_queue_status_key("ui.pvp.queue.join_failed")
 		push_warning("UIOverlay: PVP queue join failed: %s" % str(response.get("error", "Unknown error")))
 		var validation_value: Variant = response.get("validation", {})
 		if validation_value is Dictionary:
 			pvp_ranked_team_validation_result = PvpRankedTeamValidation.normalize_response(validation_value as Dictionary)
 			_refresh_pvp_team_validator()
+			_set_pvp_queue_validation_failure_status()
+		else:
+			_set_pvp_queue_status_key("ui.pvp.queue.join_failed")
 		return
 
 	var active_match := _pvp_active_queue_match_from_response(response)
@@ -44625,6 +44648,17 @@ func _on_pvp_join_queue_pressed() -> void:
 		_begin_pvp_match_countdown(pvp_active_queue_match_id, pvp_active_queue_starts_at)
 	else:
 		_start_pvp_queue_polling()
+
+
+func _set_pvp_queue_validation_failure_status() -> void:
+	var issues := PvpRankedTeamValidation.display_issues(pvp_ranked_team_validation_result)
+	if not issues.is_empty():
+		_set_pvp_queue_status_key(
+			"ui.pvp.queue.validation_failed_detail",
+			{"reason": _pvp_ranked_validation_issue_message(issues[0])}
+		)
+		return
+	_set_pvp_queue_status_key("ui.pvp.queue.validation_failed")
 
 func _refresh_pvp_queue_list() -> void:
 	if pvp_queue_list_in_flight or pvp_battle_starting:
