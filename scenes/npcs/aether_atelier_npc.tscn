@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/npcs/aether_atelier_npc.gd" id="1_atelier"]
 [ext_resource type="SpriteFrames" uid="uid://phqssxcvumu3" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_fallback"]
@@ -23,6 +23,18 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_atelier"]
 size = Vector2(96, 32)
 
+[sub_resource type="StyleBoxFlat" id="StyleBox_atelier_marker"]
+bg_color = Color(0.153, 0.44, 0.65, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.62, 0.9, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
 [node name="AetherAtelierNPC" type="Node2D"]
 script = ExtResource("1_atelier")
 npc_definition_id = "aether_atelier_tailor"
@@ -35,6 +47,23 @@ npc_sprite_frames = SubResource("SpriteFrames_tailor")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look"]
 position = Vector2(0, -16)
 sprite_frames = ExtResource("2_fallback")
+
+[node name="AtelierMarker" type="PanelContainer" parent="."]
+offset_left = -17.0
+offset_top = -120.0
+offset_right = 17.0
+offset_bottom = -96.0
+mouse_filter = 2
+z_index = 513
+theme_override_styles/panel = SubResource("StyleBox_atelier_marker")
+
+[node name="Icon" type="Label" parent="AtelierMarker"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.02, 0.16, 0.25, 1)
+theme_override_font_sizes/font_size = 20
+text = "◇"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="InteractionArea" type="Area2D" parent="."]
 
