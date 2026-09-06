@@ -882,7 +882,6 @@ var pvp_room_tier_select: OptionButton
 var pvp_room_create_mode_button: Button
 var pvp_room_join_mode_button: Button
 var pvp_room_ai_mode_button: Button
-var pvp_room_ai5_playtest_button: Button
 var pvp_room_spectate_mode_button: Button
 var pvp_room_selected_mode := ""
 var pvp_room_code_input: LineEdit
@@ -912,13 +911,6 @@ var pvp_training_ai_resolved_team_id := ""
 var pvp_training_ai_catalog_loaded := false
 var pvp_training_ai_catalog_loading := false
 var pvp_training_ai_enabled := false
-var pvp_ai5_playtest_tabs: TabContainer
-var pvp_ai5_playtest_assignment_label: Label
-var pvp_ai5_playtest_progress_label: Label
-var pvp_ai5_playtest_stats_label: Label
-var pvp_ai5_playtest_consent_check: CheckBox
-var pvp_ai5_playtest_start_button: Button
-var pvp_ai5_playtest_start_step_label: Label
 var pvp_ai_sparring_start_button: Button
 var pvp_ai_sparring_tabs: TabContainer
 var pvp_ai_sparring_tier_select: OptionButton
@@ -956,8 +948,6 @@ var pvp_ai_sparring_history_clear_button: Button
 var pvp_ai_sparring_history_loaded := false
 var pvp_ai_sparring_history_in_flight := false
 var pvp_ai_sparring_history_matches: Array = []
-var pvp_ai5_playtest_status: Dictionary = {}
-var pvp_ai5_playtest_loading := false
 var pvp_training_team_preview_section: VBoxContainer
 var pvp_training_team_preview_title: Label
 var pvp_training_team_preview_grid: HBoxContainer
@@ -6437,16 +6427,6 @@ func _setup_pvp_room_popup() -> void:
 	pvp_room_ai_mode_button.pressed.connect(_on_pvp_room_mode_selected.bind("ai"))
 	pvp_room_mode_selector.add_child(pvp_room_ai_mode_button)
 
-	pvp_room_ai5_playtest_button = Button.new()
-	pvp_room_ai5_playtest_button.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.mode")
-	pvp_room_ai5_playtest_button.custom_minimum_size = Vector2(0, 42)
-	pvp_room_ai5_playtest_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_room_ai5_playtest_button.focus_mode = Control.FOCUS_NONE
-	pvp_room_ai5_playtest_button.visible = false
-	pvp_room_ai5_playtest_button.disabled = true
-	pvp_room_ai5_playtest_button.pressed.connect(_on_pvp_room_mode_selected.bind("ai5_playtest"))
-	pvp_room_mode_selector.add_child(pvp_room_ai5_playtest_button)
-
 	pvp_room_spectate_mode_button = Button.new()
 	_set_localized_control_property(pvp_room_spectate_mode_button, "text", "ui.pvp.room.spectate")
 	pvp_room_spectate_mode_button.custom_minimum_size = Vector2(106, 42)
@@ -6624,87 +6604,6 @@ func _setup_pvp_room_popup() -> void:
 	pvp_training_ai_team_row.add_child(pvp_training_ai_team_select)
 	_refresh_pvp_training_ai_team_options()
 
-	pvp_ai5_playtest_tabs = TabContainer.new()
-	pvp_ai5_playtest_tabs.visible = false
-	pvp_ai5_playtest_tabs.custom_minimum_size = Vector2(0, 230)
-	pvp_ai5_playtest_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_ai5_playtest_tabs.tab_changed.connect(_on_ai5_playtest_detail_tab_changed)
-	pvp_room_form.add_child(pvp_ai5_playtest_tabs)
-
-	var assignment_tab := VBoxContainer.new()
-	assignment_tab.name = LocalizationManager.text("ui.pvp.training.ai5_playtest.tab_assignment")
-	pvp_ai5_playtest_tabs.add_child(assignment_tab)
-	var assignment_card := PanelContainer.new()
-	assignment_card.name = "AiResearchAssignmentCard"
-	assignment_card.add_theme_stylebox_override(
-		"panel",
-		_make_panel_style(Color("#09132188"), Color("#31506f88"), 9, 1)
-	)
-	assignment_tab.add_child(assignment_card)
-	var assignment_margin := MarginContainer.new()
-	assignment_margin.add_theme_constant_override("margin_left", 14)
-	assignment_margin.add_theme_constant_override("margin_top", 12)
-	assignment_margin.add_theme_constant_override("margin_right", 14)
-	assignment_margin.add_theme_constant_override("margin_bottom", 12)
-	assignment_card.add_child(assignment_margin)
-	var assignment_layout := VBoxContainer.new()
-	assignment_layout.add_theme_constant_override("separation", 8)
-	assignment_margin.add_child(assignment_layout)
-	var assignment_heading := Label.new()
-	_set_localized_control_property(assignment_heading, "text", "ui.pvp.training.ai5_playtest.assignment_heading")
-	assignment_heading.add_theme_font_size_override("font_size", 11)
-	assignment_heading.add_theme_color_override("font_color", Color("#b9aaff"))
-	assignment_layout.add_child(assignment_heading)
-	pvp_ai5_playtest_progress_label = Label.new()
-	pvp_ai5_playtest_progress_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	pvp_ai5_playtest_progress_label.add_theme_font_size_override("font_size", 16)
-	pvp_ai5_playtest_progress_label.add_theme_color_override("font_color", Color("#9be7b1"))
-	assignment_layout.add_child(pvp_ai5_playtest_progress_label)
-	pvp_ai5_playtest_assignment_label = Label.new()
-	pvp_ai5_playtest_assignment_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	pvp_ai5_playtest_assignment_label.add_theme_font_size_override("font_size", 14)
-	pvp_ai5_playtest_assignment_label.add_theme_color_override("font_color", UI_TEXT)
-	assignment_layout.add_child(pvp_ai5_playtest_assignment_label)
-	pvp_ai5_playtest_consent_check = CheckBox.new()
-	pvp_ai5_playtest_consent_check.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.consent")
-	pvp_ai5_playtest_consent_check.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	pvp_ai5_playtest_consent_check.custom_minimum_size = Vector2(0, 48)
-	pvp_ai5_playtest_consent_check.add_theme_constant_override("h_separation", 8)
-	pvp_ai5_playtest_consent_check.add_theme_icon_override("unchecked", _pvp_spectators_checkbox_icon(false, false))
-	pvp_ai5_playtest_consent_check.add_theme_icon_override("unchecked_hover", _pvp_spectators_checkbox_icon(false, true))
-	pvp_ai5_playtest_consent_check.add_theme_icon_override("checked", _pvp_spectators_checkbox_icon(true, false))
-	pvp_ai5_playtest_consent_check.add_theme_icon_override("checked_hover", _pvp_spectators_checkbox_icon(true, true))
-	assignment_layout.add_child(pvp_ai5_playtest_consent_check)
-
-	var statistics_tab := VBoxContainer.new()
-	statistics_tab.name = LocalizationManager.text("ui.pvp.training.ai5_playtest.tab_statistics")
-	pvp_ai5_playtest_tabs.add_child(statistics_tab)
-	var statistics_card := PanelContainer.new()
-	statistics_card.name = "AiResearchStatisticsCard"
-	statistics_card.add_theme_stylebox_override(
-		"panel",
-		_make_panel_style(Color("#09132188"), Color("#31506f88"), 9, 1)
-	)
-	statistics_tab.add_child(statistics_card)
-	var statistics_margin := MarginContainer.new()
-	statistics_margin.add_theme_constant_override("margin_left", 14)
-	statistics_margin.add_theme_constant_override("margin_top", 12)
-	statistics_margin.add_theme_constant_override("margin_right", 14)
-	statistics_margin.add_theme_constant_override("margin_bottom", 12)
-	statistics_card.add_child(statistics_margin)
-	var statistics_layout := VBoxContainer.new()
-	statistics_layout.add_theme_constant_override("separation", 8)
-	statistics_margin.add_child(statistics_layout)
-	var statistics_heading := Label.new()
-	_set_localized_control_property(statistics_heading, "text", "ui.pvp.training.ai5_playtest.statistics_heading")
-	statistics_heading.add_theme_font_size_override("font_size", 11)
-	statistics_heading.add_theme_color_override("font_color", Color("#b9aaff"))
-	statistics_layout.add_child(statistics_heading)
-	pvp_ai5_playtest_stats_label = Label.new()
-	pvp_ai5_playtest_stats_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	pvp_ai5_playtest_stats_label.add_theme_font_size_override("font_size", 13)
-	pvp_ai5_playtest_stats_label.add_theme_color_override("font_color", UI_TEXT)
-	statistics_layout.add_child(pvp_ai5_playtest_stats_label)
 	pvp_room_code_input = LineEdit.new()
 	_set_localized_control_property(pvp_room_code_input, "placeholder_text", "ui.pvp.room.enter_code")
 	pvp_room_code_input.max_length = 12
@@ -7111,7 +7010,6 @@ func _setup_pvp_room_popup() -> void:
 	_apply_button_style(pvp_room_join_mode_button)
 	_apply_button_style(pvp_room_ai_mode_button)
 	_apply_ai_sparring_start_style(pvp_ai_sparring_start_button)
-	_apply_ai_research_start_style(pvp_ai5_playtest_start_button)
 	_apply_button_style(pvp_room_spectate_mode_button)
 	_apply_pvp_room_type_button_style(pvp_room_casual_type_button)
 	_apply_pvp_room_type_button_style(pvp_room_training_type_button)
@@ -7592,58 +7490,6 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai_sparring_history_list.add_theme_constant_override("separation", 8)
 	history_scroll.add_child(pvp_ai_sparring_history_list)
 
-	var research_page := _create_pvp_ranked_tab_page("Research", 14)
-	research_page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.research")
-	pvp_ai_sparring_tabs.add_child(research_page)
-	# Retained only for old UI references; the closed campaign is not a game mode.
-	pvp_ai_sparring_tabs.set_tab_hidden(pvp_ai_sparring_tabs.get_tab_count() - 1, true)
-	var research_layout := VBoxContainer.new()
-	research_layout.add_theme_constant_override("separation", 10)
-	research_page.add_child(research_layout)
-
-	var research_intro := Label.new()
-	_set_localized_control_property(research_intro, "text", "ui.pvp.ai_sparring.research_intro")
-	research_intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	research_intro.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	research_layout.add_child(research_intro)
-
-	var research_card := PanelContainer.new()
-	research_card.name = "AiResearchCampaignCard"
-	research_card.add_theme_stylebox_override(
-		"panel",
-		_make_panel_style(Color("#0d1726eb"), Color("#6f5fbaaa"), 11, 1)
-	)
-	research_layout.add_child(research_card)
-	var research_margin := MarginContainer.new()
-	research_margin.add_theme_constant_override("margin_left", 12)
-	research_margin.add_theme_constant_override("margin_top", 10)
-	research_margin.add_theme_constant_override("margin_right", 12)
-	research_margin.add_theme_constant_override("margin_bottom", 12)
-	research_card.add_child(research_margin)
-	var research_card_layout := VBoxContainer.new()
-	research_card_layout.add_theme_constant_override("separation", 8)
-	research_margin.add_child(research_card_layout)
-
-	pvp_ai5_playtest_tabs.reparent(research_card_layout)
-	pvp_ai5_playtest_tabs.visible = true
-	pvp_ai5_playtest_tabs.custom_minimum_size = Vector2.ZERO
-	_apply_pvp_ranked_subtabs_style(pvp_ai5_playtest_tabs)
-
-	pvp_ai5_playtest_start_step_label = Label.new()
-	pvp_ai5_playtest_start_step_label.name = "AiResearchStartStep"
-	_set_localized_control_property(pvp_ai5_playtest_start_step_label, "text", "ui.pvp.training.ai5_playtest.start_step")
-	pvp_ai5_playtest_start_step_label.add_theme_font_size_override("font_size", 11)
-	pvp_ai5_playtest_start_step_label.add_theme_color_override("font_color", Color("#60d3ff"))
-	research_card_layout.add_child(pvp_ai5_playtest_start_step_label)
-	pvp_ai5_playtest_start_button = Button.new()
-	_set_localized_control_property(pvp_ai5_playtest_start_button, "text", "ui.pvp.training.ai5_playtest.start")
-	pvp_ai5_playtest_start_button.custom_minimum_size = Vector2(0, 42)
-	pvp_ai5_playtest_start_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_ai5_playtest_start_button.focus_mode = Control.FOCUS_NONE
-	pvp_ai5_playtest_start_button.pressed.connect(_on_pvp_ai5_playtest_start_pressed)
-	research_card_layout.add_child(pvp_ai5_playtest_start_button)
-
-	# Free sparring is the default; historical research widgets stay hidden.
 	pvp_ai_sparring_tabs.current_tab = 0
 	return page
 
@@ -42218,7 +42064,6 @@ func _open_pvp_popup_section(section_name: String) -> void:
 		pvp_room_battle_purpose = "training"
 		if not pvp_training_ai_catalog_loaded:
 			await _load_pvp_training_ai_catalog()
-		await _load_ai5_playtest_status()
 		_on_pvp_ai_sparring_tab_changed(pvp_ai_sparring_tabs.current_tab if pvp_ai_sparring_tabs != null else 0)
 	if section_name != "Ranked":
 		return
@@ -42844,12 +42689,7 @@ func _heal_party_before_pvp(action_label: String = "PvP") -> bool:
 	return false
 
 func _on_pvp_room_mode_selected(mode: String) -> void:
-	if mode == "ai5_playtest" and pvp_ai5_playtest_status.is_empty():
-		await _load_ai5_playtest_status()
 	if mode == "ai" and not pvp_training_ai_enabled:
-		_set_pvp_status_key("ui.pvp.training.ai.unavailable", {}, true)
-		return
-	if mode == "ai5_playtest" and not bool(pvp_ai5_playtest_status.get("enabled", false)):
 		_set_pvp_status_key("ui.pvp.training.ai.unavailable", {}, true)
 		return
 	if pvp_active_room_code == "":
@@ -42871,18 +42711,14 @@ func _on_pvp_room_mode_selected(mode: String) -> void:
 			and pvp_timer_enabled_check != null
 			and pvp_timer_enabled_check.button_pressed
 		)
-	pvp_create_room_button.visible = mode in ["create", "ai", "ai5_playtest"]
+	pvp_create_room_button.visible = mode in ["create", "ai"]
 	pvp_join_room_button.visible = mode == "join"
 	pvp_spectate_room_button.visible = mode == "spectate"
 	pvp_cancel_room_button.visible = false
 	pvp_copy_code_button.visible = false
 	_refresh_pvp_room_form_title()
-	if mode == "ai5_playtest":
-		_refresh_ai5_playtest_panel()
 	if mode == "ai":
 		pvp_create_room_button.text = LocalizationManager.text("ui.pvp.training.ai.start")
-	elif mode == "ai5_playtest":
-		pvp_create_room_button.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.start")
 	_set_pvp_status_key(
 		"ui.pvp.room.ready" if mode == "spectate" else _pvp_room_ready_status_key()
 	)
@@ -42893,18 +42729,12 @@ func _on_pvp_ai_sparring_tab_changed(tab_index: int) -> void:
 	var tab_key := str(selected_page.get_meta("i18n_tab_key", "")) if selected_page != null else ""
 	var catalog_selected := tab_key == "ui.pvp.ai_sparring.tab.catalog"
 	var history_selected := tab_key == "ui.pvp.ai_sparring.tab.history"
-	var research_selected := tab_key == "ui.pvp.ai_sparring.tab.research"
-	if research_selected:
-		pvp_ai_sparring_tabs.current_tab = 0
-		return
-	pvp_room_selected_mode = "ai5_playtest" if research_selected else ("" if history_selected or catalog_selected else "ai")
+	pvp_room_selected_mode = "" if history_selected or catalog_selected else "ai"
 	_set_pvp_popup_subtitle(_pvp_popup_subtitle_for_section("AI Sparring"))
 	if history_selected:
 		_refresh_pvp_ai_sparring_match_history()
 	if catalog_selected:
 		_refresh_ai_sparring_catalog_view()
-	if research_selected:
-		_refresh_ai5_playtest_panel()
 
 
 func _on_pvp_ai_sparring_history_refresh_pressed() -> void:
@@ -43089,19 +42919,11 @@ func _create_pvp_ai_sparring_history_card(match: Dictionary) -> Control:
 	return card
 
 
-func _on_ai5_playtest_detail_tab_changed(tab_index: int) -> void:
-	var assignment_visible := tab_index == 0
-	if pvp_ai5_playtest_start_step_label != null:
-		pvp_ai5_playtest_start_step_label.visible = assignment_visible
-	if pvp_ai5_playtest_start_button != null:
-		pvp_ai5_playtest_start_button.visible = assignment_visible
-
-
 func _on_pvp_room_battle_purpose_selected(purpose: String) -> void:
 	if pvp_active_room_code != "" or pvp_battle_starting:
 		return
 	pvp_room_battle_purpose = "training" if purpose == "training" else "casual"
-	if pvp_room_battle_purpose != "training" and pvp_room_selected_mode in ["ai", "ai5_playtest"]:
+	if pvp_room_battle_purpose != "training" and pvp_room_selected_mode == "ai":
 		pvp_room_selected_mode = ""
 		pvp_room_form.visible = false
 	_clear_pvp_training_team_preview()
@@ -43151,9 +42973,6 @@ func _refresh_pvp_room_battle_purpose_ui() -> void:
 	if pvp_room_ai_mode_button != null:
 		pvp_room_ai_mode_button.visible = false
 		pvp_room_ai_mode_button.disabled = not pvp_training_ai_enabled or pvp_training_ai_catalog_loading
-	if pvp_room_ai5_playtest_button != null:
-		pvp_room_ai5_playtest_button.visible = false
-		pvp_room_ai5_playtest_button.disabled = pvp_ai5_playtest_loading or not bool(pvp_ai5_playtest_status.get("enabled", false))
 	var create_key := "ui.pvp.training.create" if is_training else "ui.pvp.room.create"
 	var join_key := "ui.pvp.training.join" if is_training else "ui.pvp.room.join"
 	for create_button: Button in [pvp_room_create_mode_button, pvp_create_room_button]:
@@ -43164,8 +42983,6 @@ func _refresh_pvp_room_battle_purpose_ui() -> void:
 			join_button.text = LocalizationManager.text(join_key)
 	if pvp_create_room_button != null and pvp_room_selected_mode == "ai":
 		pvp_create_room_button.text = LocalizationManager.text("ui.pvp.training.ai.start")
-	elif pvp_create_room_button != null and pvp_room_selected_mode == "ai5_playtest":
-		pvp_create_room_button.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.start")
 
 
 func _refresh_pvp_room_team_fields() -> void:
@@ -43186,8 +43003,6 @@ func _refresh_pvp_room_team_fields() -> void:
 	if pvp_training_ai_team_source_row != null:
 		pvp_training_ai_team_source_row.visible = true
 	_refresh_pvp_training_ai_team_source_ui()
-	if pvp_ai5_playtest_tabs != null:
-		pvp_ai5_playtest_tabs.visible = true
 
 
 func _refresh_pvp_room_form_title() -> void:
@@ -43209,8 +43024,6 @@ func _refresh_pvp_room_form_title() -> void:
 			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.room.form_spectate")
 		"ai":
 			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.training.ai.form")
-		"ai5_playtest":
-			pvp_room_form_title.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.form")
 		_:
 			pvp_room_form_title.text = ""
 
@@ -44107,108 +43920,6 @@ func _pvp_training_ai_archetype_allowed(archetype: String) -> bool:
 	return normalized_archetype != "stall" or ai_mode == "active"
 
 
-func _load_ai5_playtest_status() -> void:
-	# The campaign is archived. Do not poll or collect new research data.
-	pvp_ai5_playtest_status = {"success": true, "enabled": false, "retired": true}
-	_refresh_ai5_playtest_panel()
-	return
-
-
-func _load_legacy_ai5_playtest_status() -> void:
-	if pvp_ai5_playtest_loading:
-		return
-	pvp_ai5_playtest_loading = true
-	if pvp_ai5_playtest_start_button != null:
-		pvp_ai5_playtest_start_button.disabled = true
-	_refresh_pvp_room_battle_purpose_ui()
-	var request := _create_pvp_request_node()
-	var response: Dictionary = await BattleApiClient.get_ai5_playtest_status(request)
-	request.queue_free()
-	pvp_ai5_playtest_loading = false
-	pvp_ai5_playtest_status = response.duplicate(true) if bool(response.get("success", false)) else {}
-	_refresh_ai5_playtest_panel()
-	_refresh_pvp_room_battle_purpose_ui()
-
-
-func _refresh_ai5_playtest_panel() -> void:
-	if pvp_ai5_playtest_progress_label == null:
-		return
-	if pvp_ai5_playtest_status.is_empty():
-		pvp_ai5_playtest_progress_label.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.unavailable")
-		pvp_ai5_playtest_assignment_label.text = ""
-		pvp_ai5_playtest_stats_label.text = ""
-		if pvp_ai5_playtest_start_button != null:
-			pvp_ai5_playtest_start_button.disabled = true
-		return
-	if bool(pvp_ai5_playtest_status.get("accessDenied", false)):
-		pvp_ai5_playtest_progress_label.text = LocalizationManager.text("ui.pvp.training.ai5_playtest.access_required")
-		pvp_ai5_playtest_assignment_label.text = ""
-		pvp_ai5_playtest_stats_label.text = ""
-		if pvp_ai5_playtest_consent_check != null:
-			pvp_ai5_playtest_consent_check.disabled = true
-			pvp_ai5_playtest_consent_check.button_pressed = false
-		if pvp_ai5_playtest_start_button != null:
-			pvp_ai5_playtest_start_button.disabled = true
-		return
-	if pvp_ai5_playtest_consent_check != null:
-		pvp_ai5_playtest_consent_check.disabled = false
-	var completed := int(pvp_ai5_playtest_status.get("completedBattles", 0))
-	var target := int(pvp_ai5_playtest_status.get("targetBattles", 0))
-	var campaign_value: Variant = pvp_ai5_playtest_status.get("campaign", {})
-	var campaign: Dictionary = campaign_value as Dictionary if campaign_value is Dictionary else {}
-	var phase := str(campaign.get("phase", "pilot"))
-	var campaign_id := str(campaign.get("campaignId", ""))
-	var campaign_version := "V2" if "-v2-" in campaign_id else "V1" if "-v1-" in campaign_id else ""
-	pvp_ai5_playtest_progress_label.text = LocalizationManager.text(
-		"ui.pvp.training.ai5_playtest.progress"
-	) % [campaign_version, phase.capitalize(), completed, target, min(target, completed + 1)]
-	var next_value: Variant = pvp_ai5_playtest_status.get("nextAssignment", {})
-	var next_assignment: Dictionary = next_value as Dictionary if next_value is Dictionary else {}
-	var own_value: Variant = next_assignment.get("playerTeam", {})
-	var own_team: Dictionary = own_value as Dictionary if own_value is Dictionary else {}
-	pvp_ai5_playtest_assignment_label.text = (
-		LocalizationManager.text("ui.pvp.training.ai5_playtest.next_assignment")
-		% [int(next_assignment.get("assignmentIndex", 0)) + 1, target,
-			str(own_team.get("displayName", "-")), str(own_team.get("archetype", "-")),
-			str(next_assignment.get("aiArchetype", "-"))]
-		if not next_assignment.is_empty()
-		else LocalizationManager.text("ui.pvp.training.ai5_playtest.complete")
-	)
-	var statistics_value: Variant = pvp_ai5_playtest_status.get("statistics", {})
-	var statistics: Dictionary = statistics_value as Dictionary if statistics_value is Dictionary else {}
-	pvp_ai5_playtest_stats_label.text = LocalizationManager.text(
-		"ui.pvp.training.ai5_playtest.statistics"
-	) % [int(statistics.get("wins", 0)), int(statistics.get("losses", 0)), int(statistics.get("draws", 0)), int(statistics.get("aiSwitchCount", 0)), int(statistics.get("decisionCount", 0)), float(statistics.get("aiSwitchRate", 0.0)) * 100.0, int(pvp_ai5_playtest_status.get("flagCount", 0))]
-	if pvp_ai5_playtest_start_button != null:
-		pvp_ai5_playtest_start_button.disabled = pvp_ai5_playtest_loading or next_assignment.is_empty()
-
-
-func _on_pvp_ai5_playtest_start_pressed() -> void:
-	if not bool(pvp_ai5_playtest_status.get("enabled", false)):
-		_set_pvp_status_key(
-			"ui.pvp.training.ai5_playtest.access_required"
-			if bool(pvp_ai5_playtest_status.get("accessDenied", false))
-			else "ui.pvp.training.ai.unavailable",
-			{},
-			true
-		)
-		return
-	if pvp_ai5_playtest_consent_check == null or not pvp_ai5_playtest_consent_check.button_pressed:
-		_set_pvp_status_key("ui.pvp.training.ai5_playtest.consent_required", {}, true)
-		return
-	_set_pvp_room_busy(true)
-	_set_pvp_status_key("ui.pvp.training.ai5_playtest.creating")
-	var request := _create_pvp_request_node()
-	var response: Dictionary = await BattleApiClient.create_ai5_playtest_battle(request, _pvp_room_player_payload(), true)
-	request.queue_free()
-	_set_pvp_room_busy(false)
-	if not bool(response.get("success", false)):
-		_set_pvp_status_key("ui.pvp.training.ai5_playtest.start_failed", {}, true)
-		return
-	_set_pvp_training_team_preview(response.get("ownTeam", []))
-	await _start_training_ai_battle_from_response(response)
-
-
 func _on_pvp_training_ai_start_pressed() -> void:
 	if not pvp_training_ai_enabled:
 		_set_pvp_status_key("ui.pvp.training.ai.unavailable", {}, true)
@@ -44502,9 +44213,6 @@ func _on_pvp_create_room_pressed() -> void:
 		return
 	if pvp_room_selected_mode == "ai":
 		await _on_pvp_training_ai_start_pressed()
-		return
-	if pvp_room_selected_mode == "ai5_playtest":
-		await _on_pvp_ai5_playtest_start_pressed()
 		return
 	var is_training := pvp_room_battle_purpose == "training"
 	var team_text := pvp_training_room_team_input.text.strip_edges() if pvp_training_room_team_input != null else ""
@@ -47577,8 +47285,6 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 		pvp_room_join_mode_button.disabled = is_busy
 	if pvp_room_ai_mode_button != null:
 		pvp_room_ai_mode_button.disabled = is_busy or not pvp_training_ai_enabled
-	if pvp_room_ai5_playtest_button != null:
-		pvp_room_ai5_playtest_button.disabled = is_busy or not bool(pvp_ai5_playtest_status.get("enabled", false))
 	if pvp_room_spectate_mode_button != null:
 		pvp_room_spectate_mode_button.disabled = is_busy
 	if pvp_cancel_room_button != null:
@@ -47606,12 +47312,8 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 		pvp_ai_sparring_tier_select.disabled = is_busy
 	if pvp_ai_sparring_catalog_tier != null:
 		pvp_ai_sparring_catalog_tier.disabled = is_busy
-	if pvp_ai5_playtest_consent_check != null:
-		pvp_ai5_playtest_consent_check.disabled = is_busy
 	if pvp_ai_sparring_start_button != null:
 		pvp_ai_sparring_start_button.disabled = is_busy or not pvp_training_ai_enabled
-	if pvp_ai5_playtest_start_button != null:
-		pvp_ai5_playtest_start_button.disabled = is_busy or pvp_ai5_playtest_status.is_empty()
 	if pvp_join_queue_button != null:
 		var ranked_blocked := _is_selected_pvp_queue_ranked() and not PvpRankedTeamValidation.allows_ranked_join(pvp_ranked_team_validation_result)
 		pvp_join_queue_button.disabled = is_busy or pvp_active_queue_entry_id != "" or pvp_active_queue_match_id != "" or ranked_blocked
