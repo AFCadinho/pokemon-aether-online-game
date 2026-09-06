@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="6_dialogue"]
 [ext_resource type="SpriteFrames" uid="uid://cdhq6bete0vs8" path="res://assets/npcs/classes/mart_m_frames.tres" id="7_mart_m"]
 [ext_resource type="Script" path="res://scripts/world/kanto/towns/cerulean_bike_shop_owner.gd" id="8_owner"]
+[ext_resource type="Script" path="res://scripts/world/kanto/towns/pokemon_fan_club_chairman.gd" id="9_chairman"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="10_poke_fan"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7h5j0"]
 texture = ExtResource("3_7h5j0")
@@ -144,6 +146,15 @@ position = Vector2(-32, 0)
 [node name="CollisionShape2D" parent="Entities/NPCs/BikeShopOwner/InteractionArea" index="0"]
 shape = SubResource("RectangleShape2D_owner_interaction")
 
+[node name="PokemonFanClubChairman" parent="Entities/NPCs" instance=ExtResource("6_dialogue")]
+position = Vector2(336, 400)
+script = ExtResource("9_chairman")
+npc_id = "kanto_pokemon_fan_club_chairman"
+npc_definition_id = "trainer_class_poke_fan_m"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("10_poke_fan")
+preload_quest_markers = true
+
 [node name="Players" type="Node2D" parent="Entities" unique_id=5355531]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1619540355]
@@ -175,3 +186,4 @@ flow_direction = "down"
 [connection signal="body_entered" from="Exits/ToCeruleanCity" to="Exits/ToCeruleanCity" method="_on_body_entered"]
 
 [editable path="Entities/NPCs/BikeShopOwner"]
+[editable path="Entities/NPCs/PokemonFanClubChairman"]

@@ -3,6 +3,7 @@
 ## Unreleased
 
 - AI Sparring now focuses on practice, the team catalog and match history; the completed Research Campaign and its in-battle markers are retired.
+- The Pokemon Fan Club Chairman now tells Trainers about his beloved Rapidash and offers an interactive Bike Voucher side quest.
 
 - Added a Rock Smash reward catalog with item and fossil chances, money and XP, and previews for other skill levels.
 

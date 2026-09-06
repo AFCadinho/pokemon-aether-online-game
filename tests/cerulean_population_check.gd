@@ -36,6 +36,7 @@ const POPULATION := {
 	},
 	"res://scenes/overworld/kanto/towns/cerulean_city/bike_store.tscn": {
 		"Entities/NPCs/BikeShopOwner": "kanto_cerulean_city_bike_store_owner",
+		"Entities/NPCs/PokemonFanClubChairman": "kanto_pokemon_fan_club_chairman",
 	},
 	"res://scenes/overworld/kanto/towns/cerulean_city/pokemon_center.tscn": {
 		"Entities/NPCs/TrainerMarina": "kanto_cerulean_city_pokemon_center_trainer_marina",
