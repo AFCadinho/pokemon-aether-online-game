@@ -133,6 +133,14 @@ func _check_runtime_copy() -> void:
 		"Capture feedback updates to Portuguese"
 	)
 	_check(
+		localization_manager.call(
+			"text",
+			"ui.world.capture.caught_storage",
+			{"pokemon": "Pikachu", "location": "Box 2 slot 5"}
+		) == "Você capturou Pikachu! Enviado para Box 2 slot 5.",
+		"Box capture feedback includes the exact storage location"
+	)
+	_check(
 		localization_manager.call("text", "ui.reward_card.level_up") == "Subiu de nível"
 		and localization_manager.call("text", "ui.reward_card.caught") == "Capturado",
 		"Pokemon reward-card events update to Portuguese"
@@ -153,6 +161,7 @@ func _check_source_contracts() -> void:
 	_check(overlay_source.contains('"ui.move_learning.result.replaced"'), "Move-learning result uses semantic keys")
 	_check(world_source.contains('"ui.world.blackout.respawned"'), "Blackout feedback uses semantic keys")
 	_check(world_source.contains('"ui.world.reward.level_up"'), "Progression rewards use semantic keys")
+	_check(world_source.contains('"ui.world.capture.caught_storage"'), "Boxed captures use a localized storage system message")
 
 
 func _check(condition: bool, label: String) -> void:

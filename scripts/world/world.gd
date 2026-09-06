@@ -3506,6 +3506,16 @@ func _notify_caught_pokemon_if_needed(result: Dictionary) -> void:
 			"ui.world.capture.caught_party",
 			{"pokemon": species}
 		)
+	else:
+		var storage_location := PokemonStorageService.normalize_storage_location(result.get("storageLocation", {}))
+		if str(storage_location.get("type", "")) == "box":
+			message = LocalizationManager.text(
+				"ui.world.capture.caught_storage",
+				{
+					"pokemon": species,
+					"location": PokemonStorageService.storage_location_label(storage_location),
+				}
+			)
 
 	get_tree().call_group("ui_overlay", "add_system_pokemon_message", message, [pokemon_payload])
 	get_tree().call_group(

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.73 - 2026-09-06
+
+- Caught Pokémon now show the destination box and slot in the system message.
+
 ## 0.3.72 - 2026-09-06
 
 ### Battles and training
