@@ -1,24 +1,25 @@
 # Changelog
 
-## Unreleased
+## 0.3.72 - 2026-09-06
 
-- Ranked and custom PvP now report the concrete team rule that prevents joining instead of falling back to a generic match or room error.
-- Removed the completed AI5 Research Campaign, its feedback markers and archived interface; AI Sparring now focuses on practice, the team catalog and match history.
-- The Pokemon Fan Club Chairman now tells Trainers about his beloved Rapidash and offers an interactive Bike Voucher side quest.
+### Gevechten en trainen
 
-- Added a Rock Smash reward catalog with item and fossil chances, money and XP, and previews for other skill levels.
+- Ranked- en eigen gevechten vertellen duidelijk welke teamregel deelname tegenhoudt.
+- AI-trainingsgevechten herstellen beter na een onderbreking of een verplichte wissel.
+- Bij geïmporteerde teams en tijdens het kijken naar een gevecht zie je de beschikbare PP duidelijker.
+- Kijken naar een PvP-gevecht verandert je eigen team niet.
 
-- Imported battle teams now show PP in party-slot hovers. Spectators see the same public PP estimates on both sides.
+### Avontuur en gemak
 
-- Every Pokémon Center now has a Banker who can safely store money so it is protected from blackout losses.
-- Your benched Pokémon now display their saved PP correctly instead of appearing to have PP Max applied.
-- AI Sparring and NPC battles recover interrupted turns and forced switches more reliably, and keep HP updates in step with battle events.
+- De Fan Club-voorzitter heeft een interactieve zijmissie met de Bike Voucher als beloning.
+- Rock Smash laat duidelijker zien welke beloningen je kunt vinden.
+- Je kunt geld veilig bewaren bij de bank in elk Pokémon Center.
+- Open je het spel opnieuw tijdens een wild gevecht, dan ga je verder waar je gebleven was.
 
-**Changed**
+### Duidelijker scherm
 
-- Spectating PvP battles now leaves your own party's HP, status, and moves unchanged.
-- Reopening the game during a wild battle now restores that battle at its current turn instead of returning the player to the overworld.
-- Pokémon Storage now removes the misleading `ALL BOXES` badge and gives primary, secondary, and navigation actions clearer visual hierarchy.
+- Pokémon-opslag heeft rustigere knoppen en een duidelijkere indeling.
+- De AI Research Campaign is afgerond en verwijderd. AI Sparring richt zich nu volledig op oefenen, teams en je gevechtsgeschiedenis.
 
 ## 0.3.71 - 2026-09-05
 
