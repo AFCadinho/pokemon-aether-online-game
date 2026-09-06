@@ -54,6 +54,8 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	if world.has_method("is_map_transition_in_progress") and bool(world.call("is_map_transition_in_progress")):
 		return
+	if _is_battle_active(world):
+		return
 
 	is_transitioning = true
 	if normalized_transition_id.is_empty():
@@ -79,6 +81,9 @@ func _enter_authorized_transition(
 	arrival_facing_direction: String
 ) -> void:
 	if _is_route_gate_interaction_active(player):
+		is_transitioning = false
+		return
+	if _is_battle_active(world):
 		is_transitioning = false
 		return
 
@@ -132,6 +137,10 @@ func _enter_authorized_transition(
 
 func _is_route_gate_interaction_active(player: Node2D) -> bool:
 	return bool(player.get("route_gate_interaction_in_progress"))
+
+
+func _is_battle_active(world: Node) -> bool:
+	return bool(world.get("is_in_battle")) or bool(world.get("wild_battle_resume_pending"))
 
 
 func _present_denied_transition(

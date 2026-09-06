@@ -33,7 +33,6 @@ const WILD_BATTLE_PRESENTATION_POLICY := preload("res://scripts/battle/wild_batt
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
 const OGERPON_BATTLE_FORM := preload("res://scripts/battle/ogerpon_battle_form.gd")
-const AI5_RESEARCH_MARKER := preload("res://scripts/battle/battle_ui/ai5_research_marker.gd")
 const TYPE_CHANGE_BADGE_COLORS := {
 	"bug": Color("#85a114"), "dark": Color("#403847"), "dragon": Color("#4d52c4"),
 	"electric": Color("#e0ad14"), "fairy": Color("#d163a3"), "fighting": Color("#b83338"),
@@ -124,7 +123,6 @@ var pvp_match_id := ""
 var pvp_viewer_role := "participant"
 var pvp_battle_purpose := ""
 var training_ai_battle := false
-var ai5_research_marker: Ai5ResearchMarker
 var pvp_local_canonical_roster: Array = []
 var pvp_realtime_updates: Array[Dictionary] = []
 var pvp_realtime_deferred_updates: Array[Dictionary] = []
@@ -199,6 +197,8 @@ var rewind_helper := preload("res://scripts/battle/battle_rewind_helper.gd").new
 var action_flow := preload("res://scripts/battle/battle_action_flow.gd").new()
 var force_switch_flow := preload("res://scripts/battle/battle_force_switch_flow.gd").new()
 var non_pvp_opponent_force_switch_recovery_active := false
+var non_pvp_recovery_failed := false
+var non_pvp_render_active := false
 var display_data_presenter := preload("res://scripts/battle/battle_display_data_presenter.gd").new()
 var message_timing := preload("res://scripts/battle/battle_message_timing.gd").new()
 var event_presentation := preload("res://scripts/battle/battle_event_presentation.gd").new()
@@ -923,6 +923,12 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 	BATTLE_OWNED_FORM_PROJECTION.apply_live_request_to_display(display_data, live_data)
 	var saved_pokemon := _get_player_save_pokemon_for_hover(display_data)
 	if saved_pokemon == null:
+		if not _is_spectator_battle():
+			var battle_moves := _get_party_hover_moves(display_data, display_data)
+			if not _hover_moves_have_pp(battle_moves):
+				battle_moves = await _fetch_owned_party_hover_moves(display_data)
+			if not battle_moves.is_empty():
+				display_data["moves"] = battle_moves
 		_apply_held_item_stat_hover_data(display_data)
 		return display_data
 
@@ -1230,11 +1236,35 @@ func _get_nature_stat_modifier(nature: String, stat_key: String) -> float:
 		return 0.9
 	return 1.0
 
+func _hover_moves_have_pp(moves: Array) -> bool:
+	return not moves.is_empty() and moves.all(func(move: Variant) -> bool:
+		return move is Dictionary and move.has("pp") and (move.has("maxpp") or move.has("maxPp"))
+	)
+
+func _fetch_owned_party_hover_moves(pokemon_data: Dictionary) -> Array:
+	var ident := _get_hover_info_lookup_ident(pokemon_data, _get_local_state_player_id())
+	var raw_ident := _get_raw_pvp_hover_ident(ident)
+	if raw_ident != "":
+		ident = raw_ident
+	var request := HTTPRequest.new()
+	add_child(request)
+	var info: Dictionary = await pokemon_hover_service._fetch_hover_pokemon_info(
+		battle_state, request, pokemon_data, _get_raw_pvp_hover_viewer_id(), ident
+	)
+	request.queue_free()
+	return info.get("confirmedMoves", [])
+
 func _get_party_hover_moves(display_data: Dictionary, fallback_data: Dictionary) -> Array:
-	if bool(display_data.get("active", false)):
+	# PvP party projections can briefly omit the derived `active` flag while
+	# the canonical request has already advanced. Resolve active by identity as
+	# well, otherwise we fall through to saved moves and reinterpret base PP as
+	# the upgraded maximum-PP scale.
+	if _is_hover_pokemon_active("p1", display_data):
 		var available_moves: Array = battle_state.get_available_moves("p1")
 		if not available_moves.is_empty():
-			return available_moves
+			var saved_pokemon := _get_player_save_pokemon_for_hover(display_data)
+			var hover_moves := _convert_battle_moves_to_owned_hover_scale(available_moves, saved_pokemon)
+			return hover_moves
 
 	var cached_moves: Array = _get_cached_party_moves(display_data)
 	if not cached_moves.is_empty():
@@ -1287,12 +1317,10 @@ func _with_default_pp_for_moves(moves: Array) -> Array:
 
 		var move_data: Dictionary = (move_value as Dictionary).duplicate(true)
 		if not move_data.has("maxpp") and move_data.has("maxPp"):
-			var base_max_pp: int = int(move_data.get("maxPp", 0))
-			var current_pp: int = int(move_data.get("pp", base_max_pp))
-			var used_pp: int = max(0, base_max_pp - current_pp)
-			var max_pp: int = _calculate_max_pp(base_max_pp)
+			# Saved move capacity already includes any PP upgrades.
+			var max_pp: int = int(move_data.get("maxPp", 0))
 			move_data["maxpp"] = max_pp
-			move_data["pp"] = max(0, max_pp - used_pp)
+			move_data["pp"] = clampi(int(move_data.get("pp", max_pp)), 0, max_pp)
 		elif not move_data.has("maxpp") and move_data.has("pp"):
 			var max_pp: int = _calculate_max_pp(int(move_data.get("pp", 0)))
 			move_data["maxpp"] = max_pp
@@ -1304,7 +1332,10 @@ func _with_default_pp_for_moves(moves: Array) -> Array:
 
 func _filter_public_opponent_hover_moves(moves: Array) -> Array:
 	var public_moves: Array = []
-	var normalized_moves := _with_max_pp_assumption_for_opponent_moves(moves)
+	# The server already supplies public estimates on the maximum-PP scale.
+	var normalized_moves: Array = BATTLE_PUBLIC_POKEMON_KNOWLEDGE.from_pokemon_data(
+		{"knowledge": {"confirmedMoves": moves}}
+	).get("confirmedMoves", [])
 	for move_value in normalized_moves:
 		if not (move_value is Dictionary):
 			continue
@@ -1314,9 +1345,6 @@ func _filter_public_opponent_hover_moves(moves: Array) -> Array:
 			public_moves.append(move_data)
 
 	return public_moves
-
-func _with_max_pp_assumption_for_opponent_moves(moves: Array) -> Array:
-	return BATTLE_PUBLIC_POKEMON_KNOWLEDGE.with_max_pp_assumption(moves)
 
 func _hover_move_has_visible_pp_use(move_data: Dictionary) -> bool:
 	var current_pp := _get_hover_move_pp_value(move_data, ["pp", "currentPp", "currentPP", "current_pp"])
@@ -1351,12 +1379,13 @@ func _get_player_save_pokemon_for_hover(pokemon_data: Dictionary) -> Pokemon:
 func _get_player_save_pokemon_for_battle_display_data(pokemon_data: Dictionary, fallback_index := -1) -> Pokemon:
 	if _is_training_room_battle():
 		return null
+	if _is_spectator_battle():
+		return null
 
 	var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", ""))).strip_edges()
-	if instance_id != "":
-		for pokemon in PlayerSave.party:
-			if pokemon.instance_id == instance_id:
-				return pokemon
+	var owned_pokemon_id := int(pokemon_data.get("ownedPokemonId", pokemon_data.get("owned_pokemon_id", 0)))
+	if instance_id != "" or owned_pokemon_id > 0:
+		return _find_saved_party_pokemon_for_battle_data(pokemon_data, fallback_index)
 
 	var canonical_slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
 	if canonical_slot > 0:
@@ -1569,7 +1598,7 @@ func _show_pokemon_hover(
 		display_data["displaySpecies"] = display_species
 
 	var local_hover_owner := _get_local_state_player_id()
-	var is_local_hover_owner := hover_owner_player_id == local_hover_owner
+	var is_local_hover_owner := not _is_spectator_battle() and hover_owner_player_id == local_hover_owner
 	if is_local_hover_owner and not public_confirmed_only:
 		var own_hover_moves := _get_own_pokemon_hover_moves(hover_owner_player_id, display_data)
 		if not own_hover_moves.is_empty():
@@ -1711,7 +1740,9 @@ func _get_own_pokemon_hover_moves(player_id: String, pokemon_data: Dictionary) -
 	if _is_hover_pokemon_active(player_id, pokemon_data):
 		var available_moves: Array = battle_state.get_available_moves(player_id)
 		if not available_moves.is_empty():
-			return available_moves
+			var saved_pokemon := _get_player_save_pokemon_for_hover(pokemon_data)
+			var hover_moves := _convert_battle_moves_to_owned_hover_scale(available_moves, saved_pokemon)
+			return hover_moves
 
 	var cached_moves: Array = _get_cached_party_moves(pokemon_data)
 	if not cached_moves.is_empty():
@@ -1725,12 +1756,71 @@ func _get_own_pokemon_hover_moves(player_id: String, pokemon_data: Dictionary) -
 
 	return []
 
+func _convert_battle_moves_to_owned_hover_scale(moves: Array, saved_pokemon: Pokemon) -> Array:
+	if saved_pokemon == null or saved_pokemon.moves.is_empty():
+		return moves
+
+	var converted_moves: Array = []
+	for move_value: Variant in moves:
+		if not move_value is Dictionary:
+			converted_moves.append(move_value)
+			continue
+
+		var battle_move: Dictionary = (move_value as Dictionary).duplicate(true)
+		var battle_current := _get_hover_move_pp_value(battle_move, ["pp", "currentPp", "currentPP", "current_pp"])
+		var battle_max := _get_hover_move_pp_value(battle_move, ["maxpp", "maxPp", "maxPP", "max_pp"])
+		var saved_move := _find_saved_move_for_hover(battle_move, saved_pokemon.moves)
+		var saved_max := _get_hover_move_pp_value(saved_move, ["maxPp", "maxpp", "maxPP", "max_pp"])
+		if battle_current >= 0 and battle_max > 0 and saved_max > 0 and battle_max > saved_max:
+			var spent_pp := maxi(battle_max - battle_current, 0)
+			var owned_current := clampi(saved_max - spent_pp, 0, saved_max)
+			battle_move["pp"] = owned_current
+			battle_move["maxpp"] = saved_max
+			battle_move["maxPp"] = saved_max
+
+		converted_moves.append(battle_move)
+
+	return converted_moves
+
+func _find_saved_move_for_hover(battle_move: Dictionary, saved_moves: Array) -> Dictionary:
+	var battle_key := _hover_move_identity(battle_move)
+	if battle_key == "":
+		return {}
+
+	for saved_value: Variant in saved_moves:
+		if not saved_value is Dictionary:
+			continue
+		if _hover_move_identity(saved_value as Dictionary) == battle_key:
+			return saved_value as Dictionary
+
+	return {}
+
+func _hover_move_identity(move_data: Dictionary) -> String:
+	return str(move_data.get("id", move_data.get("move", move_data.get("name", "")))).strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "")
+
 func _is_hover_pokemon_active(player_id: String, pokemon_data: Dictionary) -> bool:
 	if bool(pokemon_data.get("active", false)):
 		return true
 
+	var active_pokemon := battle_state.get_active_player_pokemon(player_id)
+	if not active_pokemon.is_empty() and _pokemon_data_matches_identity(pokemon_data, active_pokemon):
+		return true
+
 	var active_slot := _get_active_canonical_party_slot(player_id)
 	return active_slot > 0 and _get_pokemon_data_canonical_party_slot(pokemon_data) == active_slot
+
+func _pokemon_data_matches_identity(first: Dictionary, second: Dictionary) -> bool:
+	var first_ident := str(first.get("ident", "")).strip_edges()
+	var second_ident := str(second.get("ident", "")).strip_edges()
+	if first_ident != "" and second_ident != "" and first_ident == second_ident:
+		return true
+
+	var first_instance := str(first.get("instanceId", first.get("instance_id", ""))).strip_edges()
+	var second_instance := str(second.get("instanceId", second.get("instance_id", ""))).strip_edges()
+	if first_instance != "" and second_instance != "" and first_instance == second_instance:
+		return true
+
+	return false
 
 func _hover_response_ident_matches_pokemon_request(response_ident: String, hover_data: Dictionary, pokemon_data: Dictionary) -> bool:
 	var normalized_response := _normalize_battle_ident(response_ident)
@@ -2288,6 +2378,9 @@ func _is_point_over_visible_overlay_ui(global_position: Vector2) -> bool:
 func _on_battle_mode_button_pressed() -> void:
 	_focus_battle_ui_layer()
 	_set_action_panel_mode(BattleActionsPanelMode.BATTLE)
+	if not _is_pvp_battle() and non_pvp_recovery_failed:
+		non_pvp_recovery_failed = false
+		_show_non_pvp_opponent_force_switch_wait()
 
 func _on_calc_mode_button_pressed() -> void:
 	_focus_battle_ui_layer()
@@ -2348,6 +2441,14 @@ func _set_action_panel_mode(mode: BattleActionsPanelMode) -> void:
 func _sync_action_panel_mode_visibility() -> void:
 	var is_calc_mode := current_action_panel_mode == BattleActionsPanelMode.CALC
 	var is_bag_view := current_action_view == ActionView.BAG
+	# Side-condition labels belong to the battlefield presentation. Hide them
+	# while the full-workspace calculator drawer is open, and repopulate their
+	# normal visibility when returning to the battle view.
+	if is_calc_mode:
+		player_side_effects_panel.visible = false
+		enemy_side_effects_panel.visible = false
+	else:
+		_update_side_condition_ui(_get_display_field_effects())
 	if is_calc_mode:
 		_update_calc_drawer_layout()
 	if is_calc_mode or is_bag_view:
@@ -3244,6 +3345,13 @@ func _show_moves() -> void:
 		_restore_team_preview_lead_selection_ui()
 		return
 
+	if not _is_pvp_battle() and (
+		action_flow.http_recovery_required
+		or action_flow.http_flow.needs_resolution(action_flow.http_flow.order.latest_response)
+	):
+		_show_non_pvp_opponent_force_switch_wait()
+		return
+
 	if not _is_pvp_battle() and _local_player_needs_force_switch_ui():
 		_show_force_switch_if_needed()
 		return
@@ -3335,6 +3443,10 @@ func _show_current_action_prompt() -> void:
 	current_action_panel.set_message(event_text_formatter.format_action_prompt(_get_active_display_name("p1")))
 
 func _set_battle_input_locked(is_locked: bool) -> void:
+	if not is_locked and not _is_pvp_battle() and action_flow.http_recovery_required and not non_pvp_opponent_force_switch_recovery_active and not non_pvp_recovery_failed:
+		_show_non_pvp_opponent_force_switch_wait.call_deferred()
+	if not _is_pvp_battle() and (action_flow.http_recovery_required or non_pvp_opponent_force_switch_recovery_active or non_pvp_recovery_failed):
+		is_locked = true
 	if _is_spectator_battle():
 		is_locked = true
 	if not is_locked and _is_pvp_battle() and pvp_local_connection_recovering:
@@ -3890,6 +4002,11 @@ func _get_active_canonical_party_slot(player_id: String) -> int:
 func _finish_battle(result: Dictionary) -> void:
 	if battle_finished:
 		return
+	# Viewing a battle never grants ownership of either displayed team. Keep
+	# this invariant here so every terminal route, including plain wins, obeys it.
+	if _is_spectator_battle():
+		result["skipPartyBattleSync"] = true
+		result["localPartyDefeated"] = false
 
 	pvp_pending_authoritative_terminal.clear()
 	pvp_prechoice_buffer.reset()
@@ -3899,8 +4016,6 @@ func _finish_battle(result: Dictionary) -> void:
 	if allows_gameplay_persistence or _is_spectator_battle():
 		_add_pvp_victory_message_if_needed(result)
 	battle_finished = true
-	if ai5_research_marker != null:
-		ai5_research_marker.close_for_battle_end()
 	_close_battle_drawers_for_terminal_result()
 	_sync_party_rail_interaction()
 	pending_mega_species_by_ident.clear()
@@ -4233,6 +4348,8 @@ func _is_local_battle_party_defeated() -> bool:
 	return has_pokemon
 
 func _heal_local_party_after_pvp_battle() -> void:
+	if _is_spectator_battle() or _is_training_room_battle():
+		return
 	var player_save := get_node_or_null("/root/PlayerSave")
 	if player_save == null:
 		return
@@ -4244,6 +4361,8 @@ func _heal_local_party_after_pvp_battle() -> void:
 	PartyHealService.heal_party_locally(party_value as Array)
 
 func _heal_party_after_pvp_battle() -> void:
+	if _is_spectator_battle() or _is_training_room_battle():
+		return
 	var result: Dictionary = await PartyHealService.heal_current_party_and_save()
 	if not bool(result.get("success", false)):
 		push_warning("Battle: could not heal party after PvP battle: %s" % str(result.get("error", "Unknown error")))
@@ -4420,6 +4539,8 @@ func _apply_api_response(
 		apply_outcome["status"] = "applied"
 		if _is_pvp_battle():
 			pvp_response_order.remember(display_response)
+		else:
+			action_flow.http_flow.remember(display_response)
 		_update_pvp_presentation_schedule(response)
 		if not defer_state_load:
 			_apply_party_state_from_api_response(response)
@@ -4880,6 +5001,8 @@ func _pvp_should_wait_for_force_switch_phase_release(display_response: Dictionar
 	return _pvp_is_waiting_for_force_switch_phase_release()
 
 func _apply_party_state_from_api_response(response: Dictionary) -> void:
+	if _is_spectator_battle() or _is_training_room_battle():
+		return
 	if not response.has("party"):
 		return
 
@@ -4891,6 +5014,8 @@ func _apply_party_state_from_api_response(response: Dictionary) -> void:
 
 func _sync_player_save_party_status_from_battle_state() -> void:
 	if _is_training_room_battle():
+		return
+	if _is_spectator_battle():
 		return
 
 	var team: Array = battle_state.get_player_team(_get_local_state_player_id())
@@ -4927,17 +5052,23 @@ func _sync_player_save_party_status_from_battle_state() -> void:
 		PlayerSave.party_changed.emit()
 
 func _find_saved_party_pokemon_for_battle_data(pokemon_data: Dictionary, fallback_index: int) -> Pokemon:
+	if _is_spectator_battle():
+		return null
 	var owned_pokemon_id := int(pokemon_data.get("ownedPokemonId", pokemon_data.get("owned_pokemon_id", 0)))
+	var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", ""))).strip_edges()
 	if owned_pokemon_id > 0:
 		for saved_pokemon: Pokemon in PlayerSave.party:
 			if saved_pokemon != null and saved_pokemon.owned_pokemon_id == owned_pokemon_id:
+				if instance_id != "" and saved_pokemon.instance_id != instance_id:
+					return null
 				return saved_pokemon
+		return null
 
-	var instance_id := str(pokemon_data.get("instanceId", pokemon_data.get("instance_id", ""))).strip_edges()
 	if instance_id != "":
 		for saved_pokemon: Pokemon in PlayerSave.party:
 			if saved_pokemon != null and saved_pokemon.instance_id == instance_id:
 				return saved_pokemon
+		return null
 
 	var metadata_slot := int(pokemon_data.get("metadataSlot", pokemon_data.get("metadata_slot", fallback_index + 1)))
 	if metadata_slot > 0:
@@ -5122,6 +5253,8 @@ func _remember_active_player_party_moves() -> void:
 
 func _sync_player_save_from_battle_state() -> void:
 	if _is_training_room_battle():
+		return
+	if _is_spectator_battle():
 		return
 	var player_team := battle_state.get_player_team("p1")
 	if player_team.is_empty():
@@ -6441,6 +6574,9 @@ func _update_side_condition_ui(field_effects: Array, current_turn := -1) -> void
 	var player_side_effects: Array = _get_side_condition_effects("p1", field_effects)
 	var enemy_side_effects: Array = _get_side_condition_effects("p2", field_effects)
 	side_condition_presentation.update(player_side_effects, enemy_side_effects, current_turn)
+	if current_action_panel_mode == BattleActionsPanelMode.CALC:
+		player_side_effects_panel.visible = false
+		enemy_side_effects_panel.visible = false
 
 func _get_side_condition_effects(side_id: String, field_effects: Array) -> Array:
 	var side_effects: Array = []
@@ -6569,6 +6705,29 @@ func setup_wild_battle_from_response(
 		return
 	await play_wild_battle_intro(api_response)
 
+
+func resume_wild_battle_from_response(
+	player_pokemon: Pokemon,
+	enemy_pokemon: Pokemon,
+	api_response: Dictionary,
+	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
+) -> bool:
+	if not prepare_wild_battle_from_response(
+		player_pokemon,
+		enemy_pokemon,
+		api_response,
+		environment_id
+	):
+		return false
+	# The snapshot already contains the authoritative HP, status, PP, field and
+	# decision boundary. Restore that boundary without replaying encounter or
+	# move animations from before the disconnect.
+	_show_battle_controls_after_initial_events()
+	_set_battle_actions_ready(true)
+	if battle_state.is_battle_ended():
+		await _finish_if_battle_ended({}, true)
+	return true
+
 func prepare_wild_battle_from_response(
 	player_pokemon: Pokemon,
 	enemy_pokemon: Pokemon,
@@ -6646,7 +6805,6 @@ func setup_trainer_battle_from_response(
 	if training_ai_battle:
 		pvp_battle_purpose = "training"
 		_capture_pvp_local_canonical_roster(api_response)
-		_configure_ai5_research_marker(api_response)
 	npc_trainer_display_name = setup_flow.get_trainer_name(trainer_data, "")
 	var team_preview_enabled := _trainer_team_preview_enabled(api_response)
 	opponent_party_reveal_policy.reset(team_preview_enabled)
@@ -6723,36 +6881,6 @@ func _notify_trainer_entry_ready(entry_ready_callback: Callable) -> void:
 	if entry_ready_callback.is_valid():
 		await entry_ready_callback.call()
 
-
-func _configure_ai5_research_marker(api_response: Dictionary) -> void:
-	if not AI5_RESEARCH_MARKER.has_research_context(api_response):
-		return
-	ai5_research_marker = AI5_RESEARCH_MARKER.new()
-	battle_stage.add_child(ai5_research_marker)
-	if not ai5_research_marker.configure(
-		api_response,
-		Callable(self, "_get_battle_presentation_turn"),
-		Callable(self, "_submit_ai5_research_marker"),
-		Callable(self, "_t")
-	):
-		ai5_research_marker.queue_free()
-		ai5_research_marker = null
-
-
-func _submit_ai5_research_marker(turn: int, category: String, note: String) -> Dictionary:
-	if ai5_research_marker == null or battle_finished:
-		return {"success": false}
-	var request := HTTPRequest.new()
-	add_child(request)
-	var response: Dictionary = await BattleApiClient.flag_ai5_playtest_turn(
-		request,
-		ai5_research_marker.battle_id,
-		turn,
-		category,
-		note
-	)
-	request.queue_free()
-	return response
 
 func setup_pvp_battle_from_response(
 	player_pokemon: Pokemon,
@@ -7106,6 +7234,9 @@ func _prepare_battle_setup(
 	pvp_presentation_schedule_token = ""
 	pvp_presentation_acknowledgements_authoritative = false
 	pvp_response_order.reset()
+	action_flow.http_flow.order.reset()
+	action_flow.http_recovery_required = false
+	non_pvp_recovery_failed = false
 	pvp_battle_purpose = ""
 	training_ai_battle = false
 	pvp_local_canonical_roster.clear()
@@ -9991,6 +10122,8 @@ func _find_next_form_change_event_index(
 
 		var event_data: Dictionary = event_value as Dictionary
 		var event_type: String = str(event_data.get("type", ""))
+		if event_type in ["turn", "move", "switch", "drag", "faint"]:
+			return -1
 		if event_type != "mega" and event_type != "primal":
 			continue
 
@@ -10816,6 +10949,7 @@ func _on_party_grid_party_selected(slot: int) -> void:
 			_rewind_party_slots_for_events(player_events)
 			await _render_battle_events(player_events, true, "force_switch_player_non_pvp")
 			_mark_non_pvp_response_events_rendered(player_response, player_events)
+			_restore_non_pvp_presentation(player_response, player_events)
 
 			if await _finish_if_battle_ended():
 				return
@@ -11127,6 +11261,8 @@ func _remember_pvp_local_prechoice(choice: Dictionary) -> bool:
 	return true
 
 func _local_player_needs_force_switch_ui() -> bool:
+	if not _is_pvp_battle() and battle_state.viewer_control.has("ownForceSwitchRequired"):
+		return action_flow.http_flow.public_force_switch(battle_state.viewer_control, true)
 	if _is_pvp_battle() and pvp_public_control_contract_version >= 3:
 		return pvp_own_force_switch_required and pvp_own_action_required
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_local_state_player_id(), "p1")
@@ -11159,6 +11295,8 @@ func _local_player_needs_force_switch_ui() -> bool:
 	return false
 
 func _opponent_player_needs_force_switch_ui() -> bool:
+	if not _is_pvp_battle() and battle_state.viewer_control.has("opponentForceSwitchRequired"):
+		return action_flow.http_flow.public_force_switch(battle_state.viewer_control, false)
 	if _is_pvp_battle() and pvp_public_control_contract_version >= 3:
 		return pvp_opponent_force_switch_required and pvp_opponent_action_required
 	var candidate_player_ids := _get_force_switch_candidate_player_ids(_get_opponent_state_player_id(), "p2")
@@ -11391,8 +11529,10 @@ func _show_non_pvp_opponent_force_switch_wait() -> void:
 	moves_grid.visible = false
 	mechanics_panel.visible = false
 	current_action_panel.set_message(_t("battle.prompt.waiting_switch"))
+	if non_pvp_recovery_failed:
+		current_action_panel.set_message(_t("battle.error.recovery_retry"))
 	_sync_action_panel_mode_visibility()
-	if not non_pvp_opponent_force_switch_recovery_active:
+	if not non_pvp_opponent_force_switch_recovery_active and not non_pvp_recovery_failed:
 		_resolve_non_pvp_opponent_force_switch_wait.call_deferred()
 
 
@@ -11400,17 +11540,45 @@ func _resolve_non_pvp_opponent_force_switch_wait() -> void:
 	if non_pvp_opponent_force_switch_recovery_active or battle_finished:
 		return
 	non_pvp_opponent_force_switch_recovery_active = true
-	var resolved := await _auto_force_switch_opponent_if_needed()
+	while non_pvp_render_active:
+		await get_tree().process_frame
+	var recovery_battle_id := battle_state.battle_id
+	var resolved := false
+	for attempt in range(3):
+		if attempt > 0:
+			await _wait_non_pvp_recovery_retry(attempt)
+		if battle_finished or battle_state.battle_id != recovery_battle_id:
+			break
+		var response: Dictionary = await action_flow.recover_http_response(last_rendered_event_seq)
+		if not bool(response.get("success", false)):
+			continue
+		await _render_opponent_response(response)
+		if battle_state.is_battle_ended():
+			resolved = true
+			break
+		if not action_flow.http_flow.needs_resolution(response):
+			resolved = true
+			break
+		if bool(battle_state.viewer_control.get("opponentActionRequired", false)):
+			if await _submit_npc_choice_and_render():
+				resolved = not action_flow.http_flow.needs_resolution(action_flow.http_flow.order.latest_response)
+				if resolved:
+					break
 	non_pvp_opponent_force_switch_recovery_active = false
 	if battle_finished or await _finish_if_battle_ended():
 		return
-	if not resolved and _opponent_player_needs_force_switch_ui():
-		push_warning("Could not resolve the pending NPC forced switch; player input remains locked")
+	if not resolved:
+		non_pvp_recovery_failed = true
+		_show_non_pvp_opponent_force_switch_wait()
 		return
 	_set_battle_input_locked(false)
 	if _show_force_switch_if_needed():
 		return
 	_show_moves()
+
+func _wait_non_pvp_recovery_retry(attempt: int) -> void:
+	await get_tree().create_timer(0.3 * attempt).timeout
+
 
 func _pvp_response_has_render_batch_metadata(response: Dictionary) -> bool:
 	return (
@@ -14925,6 +15093,8 @@ func _submit_npc_choice_and_render(
 		# state, so never ask the now-inactive training session for another choice.
 		if battle_finished or battle_state.is_battle_ended():
 			return true
+		if bool(opponent_response.get("npcChoiceSkipped", false)):
+			return true
 		var response_requires_switch := _response_has_opponent_force_switch(opponent_response)
 		var rendered_state_requires_switch := _opponent_player_needs_force_switch_ui()
 		if not BattleForceSwitchFlow.opponent_replacement_still_required(
@@ -15064,6 +15234,11 @@ func _render_opponent_response(
 	suppress_presentation_waits := false,
 	suppress_terminal_win_presentation := false
 ) -> void:
+	while non_pvp_render_active:
+		await get_tree().process_frame
+	if action_flow.http_flow.is_stale(opponent_response):
+		return
+	non_pvp_render_active = true
 	var response_events: Array = _filter_incremental_non_pvp_response_events(opponent_response)
 	var filtered_events: Array = _filter_already_rendered_events(response_events, rendered_event_keys, opponent_response)
 	var opponent_events: Array = _merge_pending_player_choice_events(pending_player_choice_events, filtered_events)
@@ -15081,10 +15256,19 @@ func _render_opponent_response(
 		suppress_terminal_win_presentation
 	)
 	_mark_non_pvp_response_events_rendered(opponent_response, filtered_events)
+	_restore_non_pvp_presentation(opponent_response, opponent_events)
 	defer_force_switch_active_hide = false
 	_clear_ordered_response_display_species()
 	_update_hud_panels()
 	_update_active_sprites()
+	non_pvp_render_active = false
+
+func _restore_non_pvp_presentation(response: Dictionary, rendered_events: Array) -> void:
+	# Reconcile only after the events finish; never replay historical switches.
+	action_flow.restore_http_response(response, last_rendered_event_seq)
+	_reapply_rendered_condition_events(rendered_events)
+	_update_hud_panels()
+	_update_party_slots()
 
 func _prepare_switch_in_presentation_for_events(events: Array) -> void:
 	for event_value: Variant in events:

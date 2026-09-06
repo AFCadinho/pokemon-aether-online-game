@@ -45,6 +45,10 @@
       "label": "Cerulean City Remastered (Zame)",
       "path": "res://assets/music/overworld/kanto/towns/cerulean_city.ogg"
     },
+    "overworld.aether_clash.duel": {
+      "label": "Lugia's Song Remix (Aether Clash Duel)",
+      "path": "res://assets/music/overworld/aether_clash/aether_clash_duel.ogg"
+    },
     "battle.wild.kanto": {
       "label": "Kanto Wild Battle",
       "path": "res://assets/music/battle/wild/Kanto Wild Battle.ogg"
@@ -71,6 +75,7 @@
     "kanto.pallet_town": "overworld.kanto.pallet_town",
     "kanto.viridian_city": "overworld.kanto.viridian_city",
     "kanto.pewter_city": "overworld.kanto.viridian_city",
-    "kanto.routes_3_10_16_22": "overworld.kanto.routes_3_10_16_22"
+    "kanto.routes_3_10_16_22": "overworld.kanto.routes_3_10_16_22",
+    "aether_clash.duel": "overworld.aether_clash.duel"
   }
 }

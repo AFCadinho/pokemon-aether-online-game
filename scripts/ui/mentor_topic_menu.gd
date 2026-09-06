@@ -16,10 +16,20 @@ func choose_topic(
 	eyebrow_text: String = "MENTOR NOTES",
 	close_text: String = "Close",
 	column_count: int = 1,
-	compact: bool = false
+	compact: bool = false,
+	show_close_button: bool = true
 ) -> String:
 	layer = 105
-	_build_menu(title_text, prompt_text, topics, eyebrow_text, close_text, column_count, compact)
+	_build_menu(
+		title_text,
+		prompt_text,
+		topics,
+		eyebrow_text,
+		close_text,
+		column_count,
+		compact,
+		show_close_button
+	)
 	return await topic_selected
 
 
@@ -30,7 +40,8 @@ func _build_menu(
 	eyebrow_text: String,
 	close_text: String,
 	column_count: int = 1,
-	compact: bool = false
+	compact: bool = false,
+	show_close_button: bool = true
 ) -> void:
 	var root := Control.new()
 	root.name = "MentorTopicMenu"
@@ -98,6 +109,7 @@ func _build_menu(
 		layout.add_child(topic_grid)
 		topic_container = topic_grid
 
+	var first_topic_button: Button
 	for topic: Dictionary in topics:
 		var topic_id := str(topic.get("id", "")).strip_edges()
 		if topic_id.is_empty():
@@ -117,18 +129,23 @@ func _build_menu(
 		button.add_theme_stylebox_override("pressed", _button_style(Color("#091521"), Color("#e3bd68"), compact))
 		button.pressed.connect(_finish.bind(topic_id))
 		topic_container.add_child(button)
+		if first_topic_button == null:
+			first_topic_button = button
 
-	var close_button := Button.new()
-	close_button.text = close_text
-	close_button.custom_minimum_size = Vector2(0, 36 if compact else 42)
-	close_button.focus_mode = Control.FOCUS_ALL
-	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	close_button.add_theme_font_size_override("font_size", 13 if compact else 14)
-	close_button.add_theme_color_override("font_color", Color("#c4cfda"))
-	close_button.add_theme_stylebox_override("normal", _button_style(Color("#111c29f5"), Color("#40556a"), compact))
-	close_button.add_theme_stylebox_override("hover", _button_style(Color("#26384af5"), Color("#8fa8bb"), compact))
-	close_button.pressed.connect(_finish.bind(""))
-	layout.add_child(close_button)
+	if show_close_button:
+		var close_button := Button.new()
+		close_button.text = close_text
+		close_button.custom_minimum_size = Vector2(0, 36 if compact else 42)
+		close_button.focus_mode = Control.FOCUS_ALL
+		close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		close_button.add_theme_font_size_override("font_size", 13 if compact else 14)
+		close_button.add_theme_color_override("font_color", Color("#c4cfda"))
+		close_button.add_theme_stylebox_override("normal", _button_style(Color("#111c29f5"), Color("#40556a"), compact))
+		close_button.add_theme_stylebox_override("hover", _button_style(Color("#26384af5"), Color("#8fa8bb"), compact))
+		close_button.pressed.connect(_finish.bind(""))
+		layout.add_child(close_button)
+	if first_topic_button != null:
+		first_topic_button.grab_focus.call_deferred()
 
 
 func _unhandled_input(event: InputEvent) -> void:

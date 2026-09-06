@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/world/npcs/move_deleter_npc.gd" id="1_deleter"]
 [ext_resource type="SpriteFrames" uid="uid://phqssxcvumu3" path="res://assets/npcs/generic_npc_fallback_frames.tres" id="2_fallback"]
 [ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_036_Gentleman.png" id="3_gentleman"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/npc_services/move_deleter.png" id="4_marker"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_down"]
 atlas = ExtResource("3_gentleman")
@@ -58,6 +59,13 @@ npc_sprite_frames = SubResource("SpriteFrames_gentleman")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look"]
 position = Vector2(0, -16)
 sprite_frames = ExtResource("2_fallback")
+
+[node name="DeleteMarker" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -108)
+scale = Vector2(0.66, 0.66)
+z_index = 513
+texture = ExtResource("4_marker")
 
 [node name="InteractionArea" type="Area2D" parent="."]
 

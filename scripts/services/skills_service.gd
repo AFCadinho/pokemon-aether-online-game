@@ -233,3 +233,7 @@ func _extract_error(body: Dictionary, status: int) -> String:
 
 func _dictionary_from_value(value: Variant) -> Dictionary:
 	return value as Dictionary if value is Dictionary else {}
+
+
+func load_rock_smash_rewards(level: int) -> Dictionary:
+	return await _request_json("/game/rock-smash/rewards?level=%d" % level)

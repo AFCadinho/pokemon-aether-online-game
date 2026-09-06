@@ -54,6 +54,7 @@ func load_player_profile() -> Dictionary:
 		"position": {
 			"hasState": bool(position.get("hasState", false)),
 			"state": _dictionary_from_value(position.get("state", {})),
+			"blackoutLoss": int(position.get("blackoutLoss", 0)),
 		},
 		"party": {
 			"hasParty": bool(party.get("hasParty", false)),
@@ -592,6 +593,7 @@ func load_player_position() -> Dictionary:
 		"success": true,
 		"hasState": bool(body.get("hasState", false)),
 		"state": _dictionary_from_value(body.get("state", {})),
+		"blackoutLoss": int(body.get("blackoutLoss", 0)),
 		"happinessUpdated": bool(body.get("happinessUpdated", false)),
 		"party": _array_from_value(body.get("party", [])),
 	}

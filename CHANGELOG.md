@@ -1,10 +1,25 @@
 # Changelog
 
-## Unreleased
+## 0.3.72 - 2026-09-06
 
-**Changed**
+### Battles and training
 
-- Pokémon Storage now removes the misleading `ALL BOXES` badge and gives primary, secondary, and navigation actions clearer visual hierarchy.
+- Ranked and custom battles now clearly explain which team rule prevents you from joining.
+- AI training battles recover better after an interruption or a forced switch.
+- Imported teams and spectators now show available PP more clearly.
+- Watching a PvP battle no longer changes your own team.
+
+### Adventure and convenience
+
+- The Fan Club Chairman now offers an interactive side quest with the Bike Voucher as a reward.
+- Rock Smash now explains its possible rewards more clearly.
+- You can safely store money at the Banker in every Pokémon Center.
+- Reopening the game during a wild battle now lets you continue where you left off.
+
+### Clearer screens
+
+- Pokémon Storage now has calmer controls and a clearer layout.
+- The AI Research Campaign is complete and has been removed. AI Sparring now focuses on practice, teams, and your battle history.
 
 ## 0.3.71 - 2026-09-05
 

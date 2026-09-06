@@ -19,6 +19,7 @@ var mega_species_by_ident: Dictionary = {}
 var battle_bond_cosmetic_species_by_ident: Dictionary = {}
 var hp_snapshot_by_ident: Dictionary = {}
 var skip_previous_hp_memory_once := false
+var viewer_control: Dictionary = {}
 var timer_state: Dictionary = {}
 var operational_state: Dictionary = {}
 var decisions: Dictionary = {}
@@ -49,7 +50,8 @@ static func get_mimikyu_disguise_state_for_species(species: String) -> String:
 func load_from_api_response(
 	response: Dictionary,
 	apply_event_conditions: bool = true,
-	since_event_seq := -1
+	since_event_seq := -1,
+	trust_hp_snapshot := false
 ) -> void:
 	var next_battle_id := str(response.get("battleId", ""))
 	var battle_changed := battle_id != "" and next_battle_id != battle_id
@@ -91,7 +93,8 @@ func load_from_api_response(
 		# Presentation rewinds temporarily mutate request HP. Keep that state local to
 		# BattleState so the canonical response can still restore the server truth.
 		var next_requests_dictionary: Dictionary = (next_requests_value as Dictionary).duplicate(true)
-		_preserve_missing_hp_fields_in_requests(next_requests_dictionary)
+		if not trust_hp_snapshot:
+			_preserve_missing_hp_fields_in_requests(next_requests_dictionary)
 		requests = next_requests_dictionary
 	elif next_requests_value != null:
 		requests = next_requests_value
@@ -113,6 +116,7 @@ func load_from_api_response(
 		if incoming_operational_revision >= int(operational_state.get("revision", 0)):
 			operational_state = (next_operational_state as Dictionary).duplicate(true)
 	decisions = (response.get("decisions", {}) as Dictionary).duplicate(true) if response.get("decisions", {}) is Dictionary else {}
+	viewer_control = (response.get("viewerControl", {}) as Dictionary).duplicate(true) if response.get("viewerControl", {}) is Dictionary else {}
 	battle_event_seq = max(battle_event_seq, int(response.get("battleEventSeq", 0)))
 	_update_calcdex_projection_revision(response)
 	if apply_event_conditions:

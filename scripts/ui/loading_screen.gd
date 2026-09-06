@@ -177,6 +177,7 @@ func _prepare_world() -> void:
 	GameState.set_prepared_world_state({
 		"savedState": saved_state,
 		"hasSavedState": not saved_state.is_empty(),
+		"blackoutLoss": int(_dictionary_from_value(profile_response.get("position", {})).get("blackoutLoss", 0)),
 	})
 
 	_set_loading_status("ui.loading.opening_path", 2)
@@ -264,6 +265,7 @@ func _apply_profile_response(profile_response: Dictionary) -> bool:
 
 	var wallet: Dictionary = _dictionary_from_value(profile_response.get("wallet", {}))
 	PlayerSave.money = max(int(wallet.get("money", PlayerSave.money)), 0)
+	PlayerSave.bank_money = max(int(wallet.get("bank_money", PlayerSave.bank_money)), 0)
 	PlayerSave.gems = max(int(wallet.get("gems", PlayerSave.gems)), 0)
 	PlayerSave.aetherite = max(int(wallet.get("aetherite", PlayerSave.aetherite)), 0)
 	PlayerSave.battle_points = max(int(wallet.get("battle_points", PlayerSave.battle_points)), 0)

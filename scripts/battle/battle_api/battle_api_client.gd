@@ -52,6 +52,13 @@ func create_dev_wild_battle(
 		payload
 	)
 
+
+func resume_wild_battle(request_node: HTTPRequest) -> Dictionary:
+	return await send_get_request(request_node, "/battle/wild/resume")
+
+func get_npc_battle_state(request_node: HTTPRequest, battle_id: String, since_event_seq: int) -> Dictionary:
+	return await send_get_request(request_node, _append_since_event_seq_query("/battle/%s/state" % battle_id.uri_encode(), since_event_seq))
+
 func create_trainer_battle(
 	request_node: HTTPRequest,
 	player: Dictionary,
@@ -126,33 +133,6 @@ func get_training_ai_match_history(request_node: HTTPRequest, limit: int = 20, o
 
 func clear_training_ai_match_history(request_node: HTTPRequest) -> Dictionary:
 	return await send_delete_request(request_node, "/account/pvp/training-ai/history/me")
-
-func get_ai5_playtest_status(request_node: HTTPRequest) -> Dictionary:
-	return await send_get_request(request_node, "/battle/pvp/training/ai/playtest")
-
-func create_ai5_playtest_battle(
-	request_node: HTTPRequest,
-	player: Dictionary,
-	consent_acknowledged: bool
-) -> Dictionary:
-	return await send_post_request(
-		request_node,
-		"/battle/pvp/training/ai/playtest/battles",
-		{"player": player, "consentAcknowledged": consent_acknowledged}
-	)
-
-func flag_ai5_playtest_turn(
-	request_node: HTTPRequest,
-	battle_id: String,
-	turn: int,
-	category: String,
-	note: String = ""
-) -> Dictionary:
-	return await send_post_request(
-		request_node,
-		"/battle/pvp/training/ai/playtest/battles/%s/flags" % battle_id.uri_encode(),
-		{"turn": maxi(1, turn), "category": category, "note": note.strip_edges().left(2000)}
-	)
 
 func create_training_ai_battle(
 	request_node: HTTPRequest,
@@ -377,7 +357,8 @@ func send_choice(
 	slot: int,
 	mega := false,
 	since_event_seq := -1,
-	z_move := false
+	z_move := false,
+	decision_contract: Dictionary = {}
 ) -> Dictionary:
 	var body := {
 		"playerId": player_id,
@@ -388,6 +369,7 @@ func send_choice(
 		body["mega"] = true
 	if z_move:
 		body["zMove"] = true
+	_apply_decision_contract(body, decision_contract)
 	
 	return await send_post_request(
 		request_node,
@@ -405,7 +387,8 @@ func send_choice_and_resolve(
 	strategy := "basic",
 	npc_player_id := "p2",
 	since_event_seq := -1,
-	z_move := false
+	z_move := false,
+	decision_contract: Dictionary = {}
 ) -> Dictionary:
 	var body := {
 		"playerId": player_id,
@@ -418,12 +401,18 @@ func send_choice_and_resolve(
 		body["mega"] = true
 	if z_move:
 		body["zMove"] = true
+	_apply_decision_contract(body, decision_contract)
 
 	return await send_post_request(
 		request_node,
 		_append_since_event_seq_query("/battle/%s/choice-and-resolve" % battle_id, since_event_seq),
 		body
 	)
+
+func _apply_decision_contract(body: Dictionary, decision_contract: Dictionary) -> void:
+	for key in ["decisionId", "decisionGeneration", "decisionKind"]:
+		if decision_contract.has(key):
+			body[key] = decision_contract[key]
 
 func send_npc_choice(
 	request_node: HTTPRequest,

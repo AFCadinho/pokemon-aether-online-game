@@ -76,13 +76,6 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_sparring_catalog_use_opponent := overlay.get("pvp_ai_sparring_catalog_use_opponent_button") as Button
 	var ai_sparring_catalog_export := overlay.get("pvp_ai_sparring_catalog_export_button") as Button
 	var ai_sparring_catalog_team_grid := overlay.get("pvp_ai_sparring_catalog_team_grid") as GridContainer
-	var ai_research_start := overlay.get("pvp_ai5_playtest_start_button") as Button
-	var ai_research_tabs := overlay.get("pvp_ai5_playtest_tabs") as TabContainer
-	var ai_research_card := overlay.find_child("AiResearchCampaignCard", true, false) as PanelContainer
-	var ai_research_assignment := overlay.find_child("AiResearchAssignmentCard", true, false) as PanelContainer
-	var ai_research_statistics := overlay.find_child("AiResearchStatisticsCard", true, false) as PanelContainer
-	var ai_research_start_step := overlay.find_child("AiResearchStartStep", true, false) as Label
-	var ai_research_statistics_text := overlay.get("pvp_ai5_playtest_stats_label") as Label
 	var room_spectate_button := overlay.get("pvp_room_spectate_mode_button") as Button
 	var casual_button := overlay.get("pvp_room_casual_type_button") as Button
 	var training_button := overlay.get("pvp_room_training_type_button") as Button
@@ -115,6 +108,7 @@ func _check_pvp_runtime_translation() -> void:
 	var room_tier_row := overlay.get("pvp_room_tier_row") as HBoxContainer
 	var room_tier_select := overlay.get("pvp_room_tier_select") as OptionButton
 	var room_status := overlay.get("pvp_room_status_label") as Label
+	var queue_status := overlay.get("pvp_queue_status_label") as Label
 	var format_select := overlay.get("pvp_queue_select") as OptionButton
 	var leaderboard_scope := overlay.get("pvp_leaderboard_scope_select") as OptionButton
 	var rewards_status := overlay.find_child("RankedRewardsStatus", true, false) as Label
@@ -181,11 +175,10 @@ func _check_pvp_runtime_translation() -> void:
 		"AI training action uses the interactive room-button styling"
 	)
 	_check(ai_sparring_menu_button != null, "AI Sparring has its own PvP destination")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 4, "AI Sparring separates practice, team catalog, history and research")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 3, "AI Sparring separates practice, team catalog and history")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(0) == "Vrij oefenen", "Free sparring tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(1) == "Teamcatalogus", "Team catalog tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Matchhistorie", "Match history tab renders in Dutch")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(3) == "Onderzoekscampagne", "Research tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.custom_minimum_size.y == 520.0, "AI Sparring keeps a stable workspace height across tabs")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.current_tab == 0, "Free sparring is the default AI destination")
 	_check(ai_sparring_tier_select != null and ai_sparring_tier_select.item_count == 1 and ai_sparring_tier_select.get_item_text(0) == "Open" and str(ai_sparring_tier_select.get_selected_metadata()) == "none", "Free sparring safely defaults to the open tier")
@@ -254,6 +247,20 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_tier_select.item_count == 3 and ai_sparring_tier_select.get_item_text(2) == "Aether UU", "Free sparring offers Open, Aether OU and Aether UU")
 	_check(ai_sparring_catalog_tier != null and ai_sparring_catalog_tier.item_count == 4, "Team catalog adds a tier eligibility filter")
 	_check(ai_sparring_catalog_results != null and ai_sparring_catalog_results.get_child_count() == 1, "Catalog renders matching team cards")
+	_check(
+		overlay.call("_ai_sparring_team_display_tier", {
+			"homeTierId": "aether-uu",
+			"eligibleTierIds": ["none"],
+		}) == "",
+		"Catalog cards do not label a currently ineligible team as Aether UU"
+	)
+	_check(
+		overlay.call("_ai_sparring_team_display_tier", {
+			"homeTierId": "aether-uu",
+			"eligibleTierIds": ["none", "aether-uu"],
+		}) == "aether-uu",
+		"Catalog cards keep the home-tier badge for a currently eligible team"
+	)
 	var catalog_card := ai_sparring_catalog_results.get_child(0) as PanelContainer if ai_sparring_catalog_results != null and ai_sparring_catalog_results.get_child_count() == 1 else null
 	_check(catalog_card != null and catalog_card.mouse_default_cursor_shape == Control.CURSOR_POINTING_HAND, "The complete catalog team card is selectable")
 	_check(catalog_card != null and catalog_card.find_children("*", "Button", true, false).is_empty(), "Catalog roster icons are not separate button targets")
@@ -333,11 +340,6 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_start != null and ai_sparring_start.custom_minimum_size.y >= 42.0, "Free sparring has a prominent start action")
 	var ai_sparring_start_style := ai_sparring_start.get_theme_stylebox("normal") as StyleBoxFlat if ai_sparring_start != null else null
 	_check(ai_sparring_start_style != null and ai_sparring_start_style.bg_color == Color("#5d4aa4"), "Free sparring start action uses a distinct primary treatment")
-	_check(ai_research_start != null and ai_research_start.custom_minimum_size.y >= 42.0, "Research has a separate prominent start action")
-	_check(ai_research_card != null, "Research campaign groups its work into a dedicated card")
-	_check(ai_research_assignment != null and ai_research_statistics != null, "Research separates the assignment from campaign statistics")
-	_check(ai_research_start_step != null and ai_research_card != null and ai_research_card.is_ancestor_of(ai_research_start), "Research keeps the start action with its campaign context")
-	_check(ai_research_tabs != null and ai_research_tabs.custom_minimum_size == Vector2.ZERO, "Research content uses its natural height instead of an empty fixed panel")
 	_check(training_button != null and training_button.text == "Training Room", "Training room selector renders in Dutch")
 	_check(casual_button != null and casual_button.text.begins_with("✓ "), "Default room type is visibly selected")
 	_check(room_workspace != null and room_workspace.get_child_count() == 2, "Room setup uses a clear two-column workflow")
@@ -390,6 +392,33 @@ func _check_pvp_runtime_translation() -> void:
 			"ui.pvp.room.create_failed"
 		) == "ui.pvp.room.tier_team_invalid",
 		"Tier validation failures explain that the selected rules were not met"
+	)
+	var room_validation_response := {
+		"code": "PVP_ROOM_TEAM_INVALID",
+		"validation": {"errors": [{
+			"code": "banned_move",
+			"slot": 1,
+			"value": "fissure",
+			"message": "Move is banned.",
+		}]},
+	}
+	var room_validation_issue: Dictionary = overlay.call(
+		"_pvp_room_first_validation_issue",
+		room_validation_response
+	)
+	_check(room_validation_issue.get("code") == "banned_move", "Room failures preserve their first actionable validation issue")
+	overlay.call("_set_pvp_room_failure_status", room_validation_response, false, "ui.pvp.room.join_failed")
+	_check(
+		room_status != null and room_status.text.contains("Fissure") and room_status.text.contains("niet toegestaan"),
+		"Room validation shows the localized concrete reason instead of a generic join failure"
+	)
+	overlay.set("pvp_ranked_team_validation_result", {
+		"state": "invalid", "valid": false, "issues": [room_validation_issue],
+	})
+	overlay.call("_set_pvp_queue_validation_failure_status")
+	_check(
+		queue_status != null and queue_status.text.contains("Fissure") and queue_status.text.contains("Ranked"),
+		"Ranked join feedback includes the concrete localized validation reason"
 	)
 	_check(
 		overlay.call(
@@ -529,9 +558,9 @@ func _check_pvp_runtime_translation() -> void:
 			"AI opponent dropdown content cannot resize the sparring columns"
 		)
 	_check(training_ai_archetype_row != null and training_ai_archetype_row.visible, "AI flow exposes an archetype selector")
-	_check(training_ai_archetype_select != null and training_ai_archetype_select.item_count == 3, "Archetype selector includes random and catalog archetypes")
+	_check(training_ai_archetype_select != null and training_ai_archetype_select.item_count == 2, "AI4 archetype selector excludes stall")
 	_check(training_ai_team_row != null and training_ai_team_row.visible, "AI flow exposes the sample-team selector")
-	_check(training_ai_team_select != null and training_ai_team_select.item_count == 3, "AI selector includes random and catalog choices")
+	_check(training_ai_team_select != null and training_ai_team_select.item_count == 2, "AI4 team selector excludes stall teams")
 	_check(ai_opponent_preview != null and ai_opponent_preview.visible, "A random AI team is resolved before the battle starts")
 	_check(ai_opponent_preview_grid != null and ai_opponent_preview_grid.get_child_count() == 6, "AI opponent preview renders all six Pokemon")
 	_check(ai_opponent_preview_title != null and ai_opponent_preview_title.text.begins_with("TEAM TEGENSTANDER"), "AI opponent preview identifies the resolved team")
@@ -561,12 +590,23 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_opponent_preview_grid.get_child(0).tooltip_text.contains("Mawile"), "Named AI team preview uses that team's roster")
 	var opponent_minimum_width_before_filter := ai_opponent_step.get_combined_minimum_size().x
 	var opponent_minimum_height_before_filter := ai_opponent_step.get_combined_minimum_size().y
+	training_ai_mode_select.select(1)
+	overlay.call("_on_pvp_training_ai_mode_selected", 1)
+	_check(str(training_ai_mode_select.get_selected_metadata()) == "active", "AI5 mode can expose its complete catalog")
+	_check(training_ai_archetype_select.item_count == 3, "AI5 archetype selector keeps stall available")
+	_check(training_ai_team_select.item_count == 3, "AI5 team selector keeps stall teams available")
 	training_ai_archetype_select.select(2)
 	overlay.call("_on_pvp_training_ai_archetype_selected", 2)
 	_check(training_ai_team_select.item_count == 2, "Choosing an archetype filters the specific team list")
 	_check(str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-stall-example", "Filtered team keeps its stable catalog identity")
 	_check(str(overlay.call("_resolved_pvp_training_ai_team_id")) == "smogon-ndou-stall-example", "Random archetype choice resolves to the exact team that will battle")
 	_check(ai_opponent_preview_grid.get_child(0).tooltip_text == "Alomomola", "AI opponent preview exposes each Pokemon name on hover")
+	training_ai_mode_select.select(0)
+	overlay.call("_on_pvp_training_ai_mode_selected", 0)
+	_check(str(training_ai_mode_select.get_selected_metadata()) == "ai4", "AI4 can be reselected after browsing AI5")
+	_check(str(training_ai_archetype_select.get_selected_metadata()) == "random", "Switching to AI4 clears a selected stall archetype")
+	_check(training_ai_archetype_select.item_count == 2, "Switching to AI4 removes stall from the archetype selector")
+	_check(training_ai_team_select.item_count == 2, "Switching to AI4 removes stall from the team selector")
 	var first_opponent_name_labels := ai_opponent_preview_grid.get_child(0).find_children("*", "Label", true, false)
 	_check(first_opponent_name_labels.is_empty(), "AI opponent names stay out of the compact icon row")
 	_check(
@@ -628,48 +668,14 @@ func _check_pvp_runtime_translation() -> void:
 		subtitle != null and subtitle.get_theme_color("font_color") == Color("#aeb8c5"),
 		"AI Sparring restores the normal subtitle color after leaving an error state"
 	)
-	overlay.set("pvp_ai5_playtest_status", {
-		"enabled": true,
-		"completedBattles": 1,
-		"targetBattles": 10,
-		"campaign": {"campaignId": "ai5-playtest-v2-pilot-10", "phase": "pilot", "policyRevision": "internal-policy"},
-		"nextAssignment": {"assignmentIndex": 1, "playerTeam": {"displayName": "Screens", "archetype": "hyper_offense"}, "aiArchetype": "balance"},
-		"statistics": {"wins": 1, "losses": 0, "draws": 0, "aiSwitchCount": 3, "decisionCount": 8, "aiSwitchRate": 0.375, "fallbackCount": 2},
-		"flagCount": 1,
-	})
-	overlay.call("_refresh_ai5_playtest_panel")
-	var active_campaign_text := (overlay.get("pvp_ai5_playtest_progress_label") as Label).text
-	_check(active_campaign_text.begins_with("AI5 V2 Pilot · ACTIEF"), "Research identifies the exact active campaign version and phase")
-	_check(ai_research_statistics_text != null and ai_research_statistics_text.text.begins_with("RESULTATEN"), "Research statistics clearly separate results from AI behaviour")
-	_check(ai_research_statistics_text != null and not ai_research_statistics_text.text.contains("Policy"), "Research statistics keep internal policy details out of the main UI")
-	overlay.set("pvp_ai5_playtest_status", {"success": true, "enabled": false, "accessDenied": true})
-	overlay.call("_refresh_ai5_playtest_panel")
-	var research_progress := overlay.get("pvp_ai5_playtest_progress_label") as Label
-	_check(research_progress != null and research_progress.text.contains("AI Trainer-toegang"), "Research explains the AI Trainer access lock")
-	_check(ai_research_start != null and ai_research_start.disabled, "Research cannot start without AI Trainer access")
-	overlay.set("pvp_ai5_playtest_status", {
-		"enabled": true, "completedBattles": 1, "targetBattles": 10,
-		"campaign": {"campaignId": "ai5-playtest-v2-pilot-10", "phase": "pilot"},
-		"nextAssignment": {"assignmentIndex": 1, "playerTeam": {"displayName": "Screens", "archetype": "hyper_offense"}, "aiArchetype": "balance"},
-		"statistics": {}, "flagCount": 0,
-	})
-	overlay.call("_refresh_ai5_playtest_panel")
-	ai_research_tabs.current_tab = 1
-	overlay.call("_on_ai5_playtest_detail_tab_changed", 1)
-	_check(ai_research_start != null and not ai_research_start.visible, "Statistics hides the assignment start action")
-	ai_research_tabs.current_tab = 0
-	overlay.call("_on_ai5_playtest_detail_tab_changed", 0)
-	_check(ai_research_start != null and ai_research_start.visible, "Assignment keeps the start action visible")
 	overlay.call("_on_pvp_ai_sparring_tab_changed", 1)
 	_check(popup.get_combined_minimum_size().y <= 620.0, "Team catalog fits inside the AI Sparring popup")
-	overlay.call("_on_pvp_ai_sparring_tab_changed", 3)
-	_check(popup.get_combined_minimum_size().y <= 620.0, "Research campaign fits inside the room popup without empty forced height")
 	overlay.call("_on_pvp_ai_sparring_tab_changed", 0)
 	_check(popup.get_combined_minimum_size().y <= 620.0, "AI mode and team selectors fit inside the room popup")
 	room_create_button.emit_signal("pressed")
 	await process_frame
 	_check(room_tier_row != null and room_tier_row.visible, "Room creation exposes the optional battle tier")
-	_check(room_tier_select != null and room_tier_select.item_count == 4, "Players can choose no tier, Aether OU, Aether UU, or Champions ZA")
+	_check(room_tier_select != null and room_tier_select.item_count == 5, "Custom rooms include the separate PokeMMO OU tier")
 	_check(str(room_tier_select.get_selected_metadata()) == "none", "No tier is selected by default")
 	_check(room_tier_select.get_item_text(0) == "Geen tier", "The default tier is localized in Dutch")
 	_check(room_tier_select.get_item_text(1) == "Aether OU", "Aether OU is available for unrated rooms")
@@ -683,6 +689,11 @@ func _check_pvp_runtime_translation() -> void:
 	_check(room_tier_select.get_item_text(3) == "Champions ZA", "Champions ZA is available without a developer label")
 	_check(str(room_tier_select.get_selected_metadata()) == "pokeaether-mega-z-test", "Champions ZA keeps its bounded room identity")
 	_check(overlay.call("_selected_pvp_room_format_id") == "pokeaether-mega-z-test-v1", "Champions ZA maps to the versioned engine format")
+	room_tier_select.select(4)
+	_check(room_tier_select.get_item_text(4) == "PokeMMO OU", "PokeMMO OU is available for custom rooms")
+	_check(str(room_tier_select.get_selected_metadata()) == "pokemmo-ou", "PokeMMO OU has its own room identity")
+	_check(overlay.call("_selected_pvp_room_format_id") == "pokemmo-ou-v1", "PokeMMO OU maps to its isolated engine")
+	room_tier_select.select(3)
 	_check(room_timer_check != null and room_timer_check.visible, "Training room creation exposes the shared decision timer option")
 	room_timer_check.button_pressed = true
 	room_timer_check.emit_signal("toggled", true)

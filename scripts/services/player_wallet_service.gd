@@ -3,6 +3,7 @@ extends Node
 class_name PlayerWalletServiceNode
 
 const PLAYER_WALLET_ENDPOINT := "/game/wallet"
+const PLAYER_BANK_TRANSFER_ENDPOINT := "/game/bank/transfer"
 const DEV_ADD_MONEY_ENDPOINT := "/game/dev/wallet/money"
 const DEV_ADD_GEMS_ENDPOINT := "/game/dev/wallet/gems"
 const DEV_ADD_AETHERITE_ENDPOINT := "/game/dev/wallet/aetherite"
@@ -31,6 +32,32 @@ func load_wallet() -> Dictionary:
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
+	)
+	return _wallet_result_from_response(response)
+
+
+func transfer_bank_money(direction: String, amount: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	var normalized_direction := direction.strip_edges().to_lower()
+	if normalized_direction not in ["deposit", "withdraw"] or amount <= 0:
+		return {
+			"success": false,
+			"error": "Choose a valid amount.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + PLAYER_BANK_TRANSFER_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"direction": normalized_direction,
+			"amount": amount,
+		})
 	)
 	return _wallet_result_from_response(response)
 
@@ -293,6 +320,7 @@ func apply_wallet_result(result: Dictionary) -> void:
 
 	var wallet: Dictionary = _dictionary_from_value(result.get("wallet", {}))
 	PlayerSave.money = max(int(wallet.get("money", PlayerSave.money)), 0)
+	PlayerSave.bank_money = max(int(wallet.get("bank_money", PlayerSave.bank_money)), 0)
 	PlayerSave.gems = max(int(wallet.get("gems", PlayerSave.gems)), 0)
 	PlayerSave.aetherite = max(int(wallet.get("aetherite", PlayerSave.aetherite)), 0)
 	PlayerSave.battle_points = max(int(wallet.get("battle_points", PlayerSave.battle_points)), 0)

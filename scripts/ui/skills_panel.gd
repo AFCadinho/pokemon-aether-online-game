@@ -51,6 +51,8 @@ var wanted_value_label: Label
 var wanted_bar: ProgressBar
 var detail_tabs: HBoxContainer
 var progression_tab_button: Button
+var rewards_tab_button: Button
+var rewards_section: VBoxContainer
 var catalog_tab_button: Button
 var progression_section: VBoxContainer
 var unlocks_scroll: ScrollContainer
@@ -363,6 +365,13 @@ func _build_interface() -> void:
 	catalog_tab_button = _create_detail_tab_button("catalog")
 	catalog_tab_button.pressed.connect(_select_detail_tab.bind("catalog"))
 	detail_tabs.add_child(catalog_tab_button)
+	rewards_tab_button = _create_detail_tab_button("rewards")
+	rewards_tab_button.text = _text("ui.skills.rock_smash.rewards.tab")
+	rewards_tab_button.pressed.connect(_select_detail_tab.bind("rewards"))
+	detail_tabs.add_child(rewards_tab_button)
+	rewards_section = preload("res://scripts/ui/rock_smash_rewards.gd").new()
+	rewards_section.name = "RockSmashRewards"
+	detail_content.add_child(rewards_section)
 
 	progression_section = VBoxContainer.new()
 	progression_section.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -818,10 +827,17 @@ func _render_detail_tab(skill: Dictionary) -> void:
 	var skill_id := str(skill.get("id", ""))
 	var show_catalog := skill_id == "fishing" and selected_detail_tab == "catalog"
 	var show_targets := skill_id in ["thieving", "rock_smash"] and selected_detail_tab == "catalog"
-	progression_section.visible = not show_catalog and not show_targets
+	var show_rewards := skill_id == "rock_smash" and selected_detail_tab == "rewards"
+	rewards_tab_button.visible = skill_id == "rock_smash"
+	rewards_tab_button.text = _text("ui.skills.rock_smash.rewards.tab")
+	rewards_section.visible = show_rewards
+	_style_detail_tab(rewards_tab_button, show_rewards)
+	if show_rewards:
+		rewards_section.show_for_level(int(skill.get("level", 1)))
+	progression_section.visible = not show_catalog and not show_targets and not show_rewards
 	fishing_catalog_section.visible = show_catalog
 	targets_section.visible = show_targets
-	_style_detail_tab(progression_tab_button, not show_catalog and not show_targets)
+	_style_detail_tab(progression_tab_button, not show_catalog and not show_targets and not show_rewards)
 	_style_detail_tab(catalog_tab_button, show_catalog or show_targets)
 	if show_catalog:
 		_render_fishing_catalog(skill)
