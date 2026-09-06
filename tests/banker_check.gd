@@ -20,7 +20,7 @@ func _run() -> void:
 	var template_source := FileAccess.get_file_as_string(TEMPLATE_PATH)
 	_check(not template_source.is_empty(), "Pokémon Center template is readable")
 	_check(template_source.contains('[node name="Banker" parent="Entities/NPCs"'), "Pokémon Center template includes the Banker")
-	_check(template_source.contains("position = Vector2(560, 688)"), "Banker occupies the right upper counter")
+	_check(template_source.contains("position = Vector2(560, 400)"), "Banker occupies the right upper counter")
 	var banker_scene_source := FileAccess.get_file_as_string("res://scenes/npcs/banker_npc.tscn")
 	_check(banker_scene_source.contains('display_name = "Banker"'), "Banker uses the clear English name")
 	var banker_script_source := FileAccess.get_file_as_string("res://scripts/world/npcs/banker_npc.gd")

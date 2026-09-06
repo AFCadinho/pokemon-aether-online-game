@@ -63,7 +63,7 @@ sources/1 = SubResource("TileSetAtlasSource_y5qkb")
 atlas = ExtResource("10_k6grd")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_j7rhc"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_ko5hf"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -127,8 +127,8 @@ manual_interaction_reach_tiles = 2
 position = Vector2(464, 600)
 script = ExtResource("9_heal_effect")
 
-[node name="Banker" parent="Entities/NPCs" instance=ExtResource("13_banker")]
-position = Vector2(560, 688)
+[node name="Banker" parent="Entities/NPCs" unique_id=1765711553 instance=ExtResource("13_banker")]
+position = Vector2(560, 400)
 
 [node name="Clerk" parent="Entities/NPCs" unique_id=554856490 instance=ExtResource("7_seller")]
 position = Vector2(592, 912)
@@ -140,7 +140,7 @@ position = Vector2(592, 976)
 [node name="AetherAtelier" parent="Entities/NPCs" unique_id=1024286238 instance=ExtResource("7_atelier")]
 position = Vector2(304, 880)
 facing_direction = Vector2(1, 0)
-npc_sprite_frames = SubResource("SpriteFrames_j7rhc")
+npc_sprite_frames = SubResource("SpriteFrames_ko5hf")
 
 [node name="MoveManiac" parent="Entities/NPCs" unique_id=1484831813 instance=ExtResource("11_move_mentor")]
 position = Vector2(368, 400)
