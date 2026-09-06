@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Ranked and custom PvP now report the concrete team rule that prevents joining instead of falling back to a generic match or room error.
 - Removed the completed AI5 Research Campaign, its feedback markers and archived interface; AI Sparring now focuses on practice, the team catalog and match history.
 - The Pokemon Fan Club Chairman now tells Trainers about his beloved Rapidash and offers an interactive Bike Voucher side quest.
 

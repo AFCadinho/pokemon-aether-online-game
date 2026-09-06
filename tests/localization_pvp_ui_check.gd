@@ -108,6 +108,7 @@ func _check_pvp_runtime_translation() -> void:
 	var room_tier_row := overlay.get("pvp_room_tier_row") as HBoxContainer
 	var room_tier_select := overlay.get("pvp_room_tier_select") as OptionButton
 	var room_status := overlay.get("pvp_room_status_label") as Label
+	var queue_status := overlay.get("pvp_queue_status_label") as Label
 	var format_select := overlay.get("pvp_queue_select") as OptionButton
 	var leaderboard_scope := overlay.get("pvp_leaderboard_scope_select") as OptionButton
 	var rewards_status := overlay.find_child("RankedRewardsStatus", true, false) as Label
@@ -391,6 +392,33 @@ func _check_pvp_runtime_translation() -> void:
 			"ui.pvp.room.create_failed"
 		) == "ui.pvp.room.tier_team_invalid",
 		"Tier validation failures explain that the selected rules were not met"
+	)
+	var room_validation_response := {
+		"code": "PVP_ROOM_TEAM_INVALID",
+		"validation": {"errors": [{
+			"code": "banned_move",
+			"slot": 1,
+			"value": "fissure",
+			"message": "Move is banned.",
+		}]},
+	}
+	var room_validation_issue: Dictionary = overlay.call(
+		"_pvp_room_first_validation_issue",
+		room_validation_response
+	)
+	_check(room_validation_issue.get("code") == "banned_move", "Room failures preserve their first actionable validation issue")
+	overlay.call("_set_pvp_room_failure_status", room_validation_response, false, "ui.pvp.room.join_failed")
+	_check(
+		room_status != null and room_status.text.contains("Fissure") and room_status.text.contains("niet toegestaan"),
+		"Room validation shows the localized concrete reason instead of a generic join failure"
+	)
+	overlay.set("pvp_ranked_team_validation_result", {
+		"state": "invalid", "valid": false, "issues": [room_validation_issue],
+	})
+	overlay.call("_set_pvp_queue_validation_failure_status")
+	_check(
+		queue_status != null and queue_status.text.contains("Fissure") and queue_status.text.contains("Ranked"),
+		"Ranked join feedback includes the concrete localized validation reason"
 	)
 	_check(
 		overlay.call(
