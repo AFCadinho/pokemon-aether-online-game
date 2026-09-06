@@ -2,24 +2,24 @@
 
 ## 0.3.72 - 2026-09-06
 
-### Gevechten en trainen
+### Battles and training
 
-- Ranked- en eigen gevechten vertellen duidelijk welke teamregel deelname tegenhoudt.
-- AI-trainingsgevechten herstellen beter na een onderbreking of een verplichte wissel.
-- Bij geïmporteerde teams en tijdens het kijken naar een gevecht zie je de beschikbare PP duidelijker.
-- Kijken naar een PvP-gevecht verandert je eigen team niet.
+- Ranked and custom battles now clearly explain which team rule prevents you from joining.
+- AI training battles recover better after an interruption or a forced switch.
+- Imported teams and spectators now show available PP more clearly.
+- Watching a PvP battle no longer changes your own team.
 
-### Avontuur en gemak
+### Adventure and convenience
 
-- De Fan Club-voorzitter heeft een interactieve zijmissie met de Bike Voucher als beloning.
-- Rock Smash laat duidelijker zien welke beloningen je kunt vinden.
-- Je kunt geld veilig bewaren bij de bank in elk Pokémon Center.
-- Open je het spel opnieuw tijdens een wild gevecht, dan ga je verder waar je gebleven was.
+- The Fan Club Chairman now offers an interactive side quest with the Bike Voucher as a reward.
+- Rock Smash now explains its possible rewards more clearly.
+- You can safely store money at the Banker in every Pokémon Center.
+- Reopening the game during a wild battle now lets you continue where you left off.
 
-### Duidelijker scherm
+### Clearer screens
 
-- Pokémon-opslag heeft rustigere knoppen en een duidelijkere indeling.
-- De AI Research Campaign is afgerond en verwijderd. AI Sparring richt zich nu volledig op oefenen, teams en je gevechtsgeschiedenis.
+- Pokémon Storage now has calmer controls and a clearer layout.
+- The AI Research Campaign is complete and has been removed. AI Sparring now focuses on practice, teams, and your battle history.
 
 ## 0.3.71 - 2026-09-05
 
