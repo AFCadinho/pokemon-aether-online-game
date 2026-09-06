@@ -7595,6 +7595,8 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	var research_page := _create_pvp_ranked_tab_page("Research", 14)
 	research_page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.research")
 	pvp_ai_sparring_tabs.add_child(research_page)
+	# Retained only for old UI references; the closed campaign is not a game mode.
+	pvp_ai_sparring_tabs.set_tab_hidden(pvp_ai_sparring_tabs.get_tab_count() - 1, true)
 	var research_layout := VBoxContainer.new()
 	research_layout.add_theme_constant_override("separation", 10)
 	research_page.add_child(research_layout)
@@ -7641,7 +7643,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai5_playtest_start_button.pressed.connect(_on_pvp_ai5_playtest_start_pressed)
 	research_card_layout.add_child(pvp_ai5_playtest_start_button)
 
-	# Free sparring is the player-facing default; research remains an explicit advanced route.
+	# Free sparring is the default; historical research widgets stay hidden.
 	pvp_ai_sparring_tabs.current_tab = 0
 	return page
 
@@ -42892,6 +42894,9 @@ func _on_pvp_ai_sparring_tab_changed(tab_index: int) -> void:
 	var catalog_selected := tab_key == "ui.pvp.ai_sparring.tab.catalog"
 	var history_selected := tab_key == "ui.pvp.ai_sparring.tab.history"
 	var research_selected := tab_key == "ui.pvp.ai_sparring.tab.research"
+	if research_selected:
+		pvp_ai_sparring_tabs.current_tab = 0
+		return
 	pvp_room_selected_mode = "ai5_playtest" if research_selected else ("" if history_selected or catalog_selected else "ai")
 	_set_pvp_popup_subtitle(_pvp_popup_subtitle_for_section("AI Sparring"))
 	if history_selected:
@@ -44103,6 +44108,13 @@ func _pvp_training_ai_archetype_allowed(archetype: String) -> bool:
 
 
 func _load_ai5_playtest_status() -> void:
+	# The campaign is archived. Do not poll or collect new research data.
+	pvp_ai5_playtest_status = {"success": true, "enabled": false, "retired": true}
+	_refresh_ai5_playtest_panel()
+	return
+
+
+func _load_legacy_ai5_playtest_status() -> void:
 	if pvp_ai5_playtest_loading:
 		return
 	pvp_ai5_playtest_loading = true
