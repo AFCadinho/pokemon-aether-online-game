@@ -409,7 +409,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(room_validation_issue.get("code") == "banned_move", "Room failures preserve their first actionable validation issue")
 	overlay.call("_set_pvp_room_failure_status", room_validation_response, false, "ui.pvp.room.join_failed")
 	_check(
-		room_status != null and room_status.text.contains("Fissure") and room_status.text.contains("niet toegestaan"),
+		room_status != null and room_status.text.contains("Spleet") and room_status.text.contains("niet toegestaan"),
 		"Room validation shows the localized concrete reason instead of a generic join failure"
 	)
 	overlay.set("pvp_ranked_team_validation_result", {
@@ -417,7 +417,7 @@ func _check_pvp_runtime_translation() -> void:
 	})
 	overlay.call("_set_pvp_queue_validation_failure_status")
 	_check(
-		queue_status != null and queue_status.text.contains("Fissure") and queue_status.text.contains("Ranked"),
+		queue_status != null and queue_status.text.contains("Spleet") and queue_status.text.contains("Ranked"),
 		"Ranked join feedback includes the concrete localized validation reason"
 	)
 	_check(
