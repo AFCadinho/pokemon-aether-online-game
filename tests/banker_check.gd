@@ -26,6 +26,9 @@ func _run() -> void:
 	_check(banker_scene_source.contains("manual_interaction_reach_tiles = 3"), "Banker can be reached across the upper counter")
 	var banker_script_source := FileAccess.get_file_as_string("res://scripts/world/npcs/banker_npc.gd")
 	_check(banker_script_source.contains('bank_marker.name = "BankMarker"'), "Banker displays a money icon above the nameplate")
+	_check(FileAccess.get_file_as_string("res://scenes/npcs/move_mentor_npc.tscn").contains('text = "TM"'), "Move Maniac scene includes a TM marker")
+	_check(FileAccess.get_file_as_string("res://scenes/npcs/move_deleter_npc.tscn").contains('text = "−"'), "Move Deleter scene includes a deletion marker")
+	_check(FileAccess.get_file_as_string("res://scenes/npcs/aether_atelier_npc.tscn").contains('text = "◇"'), "Aether Atelier scene includes an atelier marker")
 
 	for center_path: String in CENTER_PATHS:
 		var center_source := FileAccess.get_file_as_string(center_path)
