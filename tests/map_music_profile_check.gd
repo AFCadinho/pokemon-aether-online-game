@@ -31,6 +31,8 @@ const KANTO_ROUTE_GROUP_TRACK := "res://assets/music/overworld/kanto/routes/kant
 const MT_MOON_TRACK := "res://assets/music/overworld/kanto/caves/mt_moon.ogg"
 const CERULEAN_CITY_TRACK := "res://assets/music/overworld/kanto/towns/cerulean_city.ogg"
 const GYM_TRACK := "res://assets/music/overworld/gyms/black_white_gym_theme_remastered_zame.ogg"
+const AETHER_CLASH_DUEL_TRACK_ID := "overworld.aether_clash.duel"
+const AETHER_CLASH_DUEL_TRACK := "res://assets/music/overworld/aether_clash/aether_clash_duel.ogg"
 
 var failed := false
 
@@ -63,6 +65,8 @@ func _init() -> void:
 	_check_scene_track(CERULEAN_CITY_SCENE_PATH, 'music_track_id = "%s"' % CERULEAN_CITY_TRACK_ID, "Cerulean City uses its dedicated catalog track")
 	_check_equal(str(profiles.get(GYM_PROFILE_ID, "")), GYM_TRACK_ID, "Gym interior profile resolves to its catalog track")
 	_check_equal(str((tracks.get(GYM_TRACK_ID, {}) as Dictionary).get("path", "")), GYM_TRACK, "Gym catalog track has the expected path")
+	_check_equal(str(profiles.get("aether_clash.duel", "")), AETHER_CLASH_DUEL_TRACK_ID, "Aether Clash Duel profile resolves to its dedicated track")
+	_check_equal(str((tracks.get(AETHER_CLASH_DUEL_TRACK_ID, {}) as Dictionary).get("path", "")), AETHER_CLASH_DUEL_TRACK, "Aether Clash Duel catalog track has the expected path")
 	_check_scene_track(PEWTER_GYM_SCENE_PATH, 'music_profile_id = "%s"' % GYM_PROFILE_ID, "Pewter Gym uses the shared gym interior profile")
 	_check_scene_track(CERULEAN_GYM_SCENE_PATH, 'music_profile_id = "%s"' % GYM_PROFILE_ID, "Cerulean Gym uses the shared gym interior profile")
 	_check(FileAccess.file_exists(OAKS_LAB_TRACK), "Oak's Lab OGG is included in the project")
@@ -70,6 +74,7 @@ func _init() -> void:
 	_check(FileAccess.file_exists(MT_MOON_TRACK), "Mt. Moon OGG is included in the project")
 	_check(FileAccess.file_exists(CERULEAN_CITY_TRACK), "Cerulean City OGG is included in the project")
 	_check(FileAccess.file_exists(GYM_TRACK), "Gym OGG is included in the project")
+	_check(FileAccess.file_exists(AETHER_CLASH_DUEL_TRACK), "Aether Clash Duel OGG is included in the project")
 	_check(ResourceLoader.exists(CERULEAN_CITY_TRACK), "Godot recognizes the Cerulean City OGG resource")
 	var cerulean_stream := load(CERULEAN_CITY_TRACK) as AudioStream
 	_check(cerulean_stream != null and cerulean_stream.get_length() > 130.0, "Cerulean City OGG decodes as a complete audio stream")
