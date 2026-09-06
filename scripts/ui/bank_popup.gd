@@ -19,6 +19,9 @@ var stored_amount_label: Label
 var amount_input: LineEdit
 var deposit_button: Button
 var withdraw_button: Button
+var deposit_all_button: Button
+var withdraw_all_button: Button
+var quick_amount_buttons: Array[Button] = []
 var status_label: Label
 var request_in_progress := false
 var balances_loaded := false
@@ -40,7 +43,6 @@ func open_bank() -> void:
 	visible = true
 	request_in_progress = true
 	balances_loaded = false
-	amount_input.text = "1"
 	_set_status(_t("ui.bank.status.loading"), false)
 	_refresh_balances()
 	_refresh_actions()
@@ -106,6 +108,24 @@ func _build_interface() -> void:
 	amount_input.text_changed.connect(_on_amount_changed)
 	_apply_amount_input_style()
 	amount_row.add_child(amount_input)
+	var quick_amounts := HBoxContainer.new()
+	quick_amounts.add_theme_constant_override("separation", 8)
+	layout.add_child(quick_amounts)
+	var quick_caption := Label.new()
+	_set_localized_property(quick_caption, "text", "ui.bank.quick_amount")
+	quick_caption.custom_minimum_size = Vector2(72, 0)
+	quick_caption.add_theme_color_override("font_color", UI_MUTED)
+	quick_amounts.add_child(quick_caption)
+	for quick_amount: int in [100, 1_000, 10_000]:
+		var quick_button := Button.new()
+		quick_button.name = "QuickAmount%s" % quick_amount
+		quick_button.text = _format_compact_amount(quick_amount)
+		quick_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		quick_button.focus_mode = Control.FOCUS_NONE
+		quick_button.pressed.connect(_set_amount.bind(quick_amount))
+		_apply_button_style(quick_button, false)
+		quick_amounts.add_child(quick_button)
+		quick_amount_buttons.append(quick_button)
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 10)
 	layout.add_child(actions)
@@ -127,6 +147,27 @@ func _build_interface() -> void:
 	withdraw_button.pressed.connect(_transfer.bind("withdraw"))
 	_apply_button_style(withdraw_button, true)
 	actions.add_child(withdraw_button)
+	var full_actions := HBoxContainer.new()
+	full_actions.add_theme_constant_override("separation", 10)
+	layout.add_child(full_actions)
+	deposit_all_button = Button.new()
+	deposit_all_button.name = "DepositAllButton"
+	_set_localized_property(deposit_all_button, "text", "ui.bank.deposit_all")
+	deposit_all_button.custom_minimum_size = Vector2(0, 34)
+	deposit_all_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	deposit_all_button.focus_mode = Control.FOCUS_NONE
+	deposit_all_button.pressed.connect(_transfer_all.bind("deposit"))
+	_apply_button_style(deposit_all_button, false)
+	full_actions.add_child(deposit_all_button)
+	withdraw_all_button = Button.new()
+	withdraw_all_button.name = "WithdrawAllButton"
+	_set_localized_property(withdraw_all_button, "text", "ui.bank.withdraw_all")
+	withdraw_all_button.custom_minimum_size = Vector2(0, 34)
+	withdraw_all_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	withdraw_all_button.focus_mode = Control.FOCUS_NONE
+	withdraw_all_button.pressed.connect(_transfer_all.bind("withdraw"))
+	_apply_button_style(withdraw_all_button, false)
+	full_actions.add_child(withdraw_all_button)
 
 	status_label = Label.new()
 	status_label.name = "BankStatusLabel"
@@ -206,10 +247,10 @@ func _build_balance_card(label_key: String, stored: bool) -> Control:
 	return panel
 
 
-func _transfer(direction: String) -> void:
+func _transfer(direction: String, amount_override := -1) -> void:
 	if request_in_progress:
 		return
-	var amount := _requested_amount()
+	var amount := amount_override if amount_override > 0 else _requested_amount()
 	if amount <= 0:
 		return
 	request_in_progress = true
@@ -228,7 +269,6 @@ func _transfer(direction: String) -> void:
 		_refresh_actions()
 		return
 	wallet_service.call("apply_wallet_result", result)
-	amount_input.text = "1"
 	_refresh_balances()
 	_refresh_actions()
 	_set_status(
@@ -240,6 +280,17 @@ func _transfer(direction: String) -> void:
 
 func _on_amount_changed(_value: String) -> void:
 	_refresh_actions()
+
+
+func _set_amount(amount: int) -> void:
+	if not request_in_progress:
+		amount_input.text = str(amount)
+
+
+func _transfer_all(direction: String) -> void:
+	var amount := _carried_money() if direction == "deposit" else _stored_money()
+	if amount > 0:
+		_transfer(direction, amount)
 
 
 func _refresh_balances() -> void:
@@ -257,6 +308,10 @@ func _refresh_actions() -> void:
 	amount_input.editable = not actions_blocked
 	deposit_button.disabled = actions_blocked or amount <= 0 or amount > _carried_money()
 	withdraw_button.disabled = actions_blocked or amount <= 0 or amount > _stored_money()
+	deposit_all_button.disabled = actions_blocked or _carried_money() <= 0
+	withdraw_all_button.disabled = actions_blocked or _stored_money() <= 0
+	for quick_button: Button in quick_amount_buttons:
+		quick_button.disabled = actions_blocked
 
 
 func _carried_money() -> int:
@@ -297,6 +352,12 @@ func _format_amount(amount: int) -> String:
 		formatted = ",%s%s" % [digits.substr(digits.length() - 3), formatted]
 		digits = digits.left(digits.length() - 3)
 	return digits + formatted
+
+
+func _format_compact_amount(amount: int) -> String:
+	if amount >= 1_000:
+		return "%sK" % (amount / 1_000)
+	return str(amount)
 
 
 func _set_localized_property(control: Control, property_name: String, key: String) -> void:

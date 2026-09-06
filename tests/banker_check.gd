@@ -33,13 +33,16 @@ func _run() -> void:
 
 	var popup_scene_source := FileAccess.get_file_as_string(BANK_POPUP_PATH)
 	var popup_script_source := FileAccess.get_file_as_string("res://scripts/ui/bank_popup.gd")
-	_check(popup_scene_source.contains("custom_minimum_size = Vector2(470, 330)"), "Bank uses a compact interface")
+	_check(popup_scene_source.contains("custom_minimum_size = Vector2(470, 420)"), "Bank uses an expanded compact interface")
 	_check(popup_script_source.contains('amount_input.name = "BankAmountInput"'), "Bank provides an amount input")
 	_check(popup_script_source.contains("amount_input = LineEdit.new()"), "Bank amount input uses the custom interface styling")
 	_check(popup_script_source.contains("var amount := _requested_amount()"), "Bank actions use the typed amount immediately")
 	_check(popup_script_source.contains("header.gui_input.connect(_on_header_gui_input)"), "Bank window can be dragged by its header")
 	_check(popup_script_source.contains('deposit_button.name = "DepositButton"'), "Bank provides a deposit action")
 	_check(popup_script_source.contains('withdraw_button.name = "WithdrawButton"'), "Bank provides a withdraw action")
+	_check(popup_script_source.contains('deposit_all_button.name = "DepositAllButton"'), "Bank provides a deposit all action")
+	_check(popup_script_source.contains('withdraw_all_button.name = "WithdrawAllButton"'), "Bank provides a withdraw all action")
+	_check(popup_script_source.contains("for quick_amount: int in [100, 1_000, 10_000]"), "Bank provides standard quick amounts")
 
 	var wallet_source := FileAccess.get_file_as_string("res://scripts/services/player_wallet_service.gd")
 	_check(wallet_source.contains('const PLAYER_BANK_TRANSFER_ENDPOINT := "/game/bank/transfer"'), "Wallet service uses the bank endpoint")
