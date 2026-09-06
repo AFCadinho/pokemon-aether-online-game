@@ -5698,7 +5698,7 @@
   "ui.skills.rock_smash.rewards.locked": "Nog niet vrijgespeeld",
   "ui.skills.rock_smash.rewards.guaranteed": "Gegarandeerd per smash. Bedragen gelden voor het gekozen skill-level.",
   "ui.skills.rock_smash.rewards.rock_level": "Level {level}-rotsen",
-  "ui.skills.rock_smash.rewards.payout": "{money} geld · {xp} XP",
+  "ui.skills.rock_smash.rewards.payout": "${money} · {xp} XP",
   "ui.skills.rock_smash.rewards.boost": "Huidige skill-XP-boost",
   "ui.skills.rock_smash.rewards.guild": "Guildbijdrage",
   "ui.skills.rock_smash.rewards.guild_detail": "Geeft ook guild-XP als je in een guild zit",

@@ -5698,7 +5698,7 @@
   "ui.skills.rock_smash.rewards.locked": "Ainda não desbloqueado",
   "ui.skills.rock_smash.rewards.guaranteed": "Garantido por rocha. Valores para o nível de habilidade selecionado.",
   "ui.skills.rock_smash.rewards.rock_level": "Rochas de nível {level}",
-  "ui.skills.rock_smash.rewards.payout": "{money} dinheiro · {xp} XP",
+  "ui.skills.rock_smash.rewards.payout": "${money} · {xp} XP",
   "ui.skills.rock_smash.rewards.boost": "Bônus atual de XP de habilidade",
   "ui.skills.rock_smash.rewards.guild": "Contribuição da guilda",
   "ui.skills.rock_smash.rewards.guild_detail": "Também concede XP de guilda para membros",

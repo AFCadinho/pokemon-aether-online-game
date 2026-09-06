@@ -5698,7 +5698,7 @@
   "ui.skills.rock_smash.rewards.locked": "Not yet unlocked",
   "ui.skills.rock_smash.rewards.guaranteed": "Guaranteed per smash. Amounts use the selected skill level.",
   "ui.skills.rock_smash.rewards.rock_level": "Level {level} rocks",
-  "ui.skills.rock_smash.rewards.payout": "{money} money · {xp} XP",
+  "ui.skills.rock_smash.rewards.payout": "${money} · {xp} XP",
   "ui.skills.rock_smash.rewards.boost": "Current skill XP boost",
   "ui.skills.rock_smash.rewards.guild": "Guild contribution",
   "ui.skills.rock_smash.rewards.guild_detail": "Also earns guild XP when in a guild",
