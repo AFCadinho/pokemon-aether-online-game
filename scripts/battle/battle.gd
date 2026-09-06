@@ -925,6 +925,12 @@ func _get_owned_party_hover_data(pokemon_data: Dictionary) -> Dictionary:
 	BATTLE_OWNED_FORM_PROJECTION.apply_live_request_to_display(display_data, live_data)
 	var saved_pokemon := _get_player_save_pokemon_for_hover(display_data)
 	if saved_pokemon == null:
+		if not _is_spectator_battle():
+			var battle_moves := _get_party_hover_moves(display_data, display_data)
+			if not _hover_moves_have_pp(battle_moves):
+				battle_moves = await _fetch_owned_party_hover_moves(display_data)
+			if not battle_moves.is_empty():
+				display_data["moves"] = battle_moves
 		_apply_held_item_stat_hover_data(display_data)
 		return display_data
 
@@ -1232,6 +1238,24 @@ func _get_nature_stat_modifier(nature: String, stat_key: String) -> float:
 		return 0.9
 	return 1.0
 
+func _hover_moves_have_pp(moves: Array) -> bool:
+	return not moves.is_empty() and moves.all(func(move: Variant) -> bool:
+		return move is Dictionary and move.has("pp") and (move.has("maxpp") or move.has("maxPp"))
+	)
+
+func _fetch_owned_party_hover_moves(pokemon_data: Dictionary) -> Array:
+	var ident := _get_hover_info_lookup_ident(pokemon_data, _get_local_state_player_id())
+	var raw_ident := _get_raw_pvp_hover_ident(ident)
+	if raw_ident != "":
+		ident = raw_ident
+	var request := HTTPRequest.new()
+	add_child(request)
+	var info: Dictionary = await pokemon_hover_service._fetch_hover_pokemon_info(
+		battle_state, request, pokemon_data, _get_raw_pvp_hover_viewer_id(), ident
+	)
+	request.queue_free()
+	return info.get("confirmedMoves", [])
+
 func _get_party_hover_moves(display_data: Dictionary, fallback_data: Dictionary) -> Array:
 	if bool(display_data.get("active", false)):
 		var available_moves: Array = battle_state.get_available_moves("p1")
@@ -1304,7 +1328,10 @@ func _with_default_pp_for_moves(moves: Array) -> Array:
 
 func _filter_public_opponent_hover_moves(moves: Array) -> Array:
 	var public_moves: Array = []
-	var normalized_moves := _with_max_pp_assumption_for_opponent_moves(moves)
+	# The server already supplies public estimates on the maximum-PP scale.
+	var normalized_moves: Array = BATTLE_PUBLIC_POKEMON_KNOWLEDGE.from_pokemon_data(
+		{"knowledge": {"confirmedMoves": moves}}
+	).get("confirmedMoves", [])
 	for move_value in normalized_moves:
 		if not (move_value is Dictionary):
 			continue
@@ -1314,9 +1341,6 @@ func _filter_public_opponent_hover_moves(moves: Array) -> Array:
 			public_moves.append(move_data)
 
 	return public_moves
-
-func _with_max_pp_assumption_for_opponent_moves(moves: Array) -> Array:
-	return BATTLE_PUBLIC_POKEMON_KNOWLEDGE.with_max_pp_assumption(moves)
 
 func _hover_move_has_visible_pp_use(move_data: Dictionary) -> bool:
 	var current_pp := _get_hover_move_pp_value(move_data, ["pp", "currentPp", "currentPP", "current_pp"])
@@ -1570,7 +1594,7 @@ func _show_pokemon_hover(
 		display_data["displaySpecies"] = display_species
 
 	var local_hover_owner := _get_local_state_player_id()
-	var is_local_hover_owner := hover_owner_player_id == local_hover_owner
+	var is_local_hover_owner := not _is_spectator_battle() and hover_owner_player_id == local_hover_owner
 	if is_local_hover_owner and not public_confirmed_only:
 		var own_hover_moves := _get_own_pokemon_hover_moves(hover_owner_player_id, display_data)
 		if not own_hover_moves.is_empty():
