@@ -19,8 +19,8 @@ var stored_amount_label: Label
 var amount_input: LineEdit
 var deposit_button: Button
 var withdraw_button: Button
-var deposit_all_button: Button
-var withdraw_all_button: Button
+var carried_set_amount_button: Button
+var stored_set_amount_button: Button
 var quick_amount_buttons: Array[Button] = []
 var status_label: Label
 var request_in_progress := false
@@ -143,28 +143,6 @@ func _build_interface() -> void:
 	withdraw_button.pressed.connect(_transfer.bind("withdraw"))
 	_apply_button_style(withdraw_button, true)
 	actions.add_child(withdraw_button)
-	var full_actions := HBoxContainer.new()
-	full_actions.add_theme_constant_override("separation", 10)
-	layout.add_child(full_actions)
-	deposit_all_button = Button.new()
-	deposit_all_button.name = "DepositAllButton"
-	_set_localized_property(deposit_all_button, "text", "ui.bank.deposit_all")
-	deposit_all_button.custom_minimum_size = Vector2(0, 34)
-	deposit_all_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	deposit_all_button.focus_mode = Control.FOCUS_NONE
-	deposit_all_button.pressed.connect(_transfer_all.bind("deposit"))
-	_apply_button_style(deposit_all_button, false)
-	full_actions.add_child(deposit_all_button)
-	withdraw_all_button = Button.new()
-	withdraw_all_button.name = "WithdrawAllButton"
-	_set_localized_property(withdraw_all_button, "text", "ui.bank.withdraw_all")
-	withdraw_all_button.custom_minimum_size = Vector2(0, 34)
-	withdraw_all_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	withdraw_all_button.focus_mode = Control.FOCUS_NONE
-	withdraw_all_button.pressed.connect(_transfer_all.bind("withdraw"))
-	_apply_button_style(withdraw_all_button, false)
-	full_actions.add_child(withdraw_all_button)
-
 	status_label = Label.new()
 	status_label.name = "BankStatusLabel"
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -220,7 +198,7 @@ func _build_header() -> Control:
 
 func _build_balance_card(label_key: String, stored: bool) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 72)
+	panel.custom_minimum_size = Vector2(0, 96)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER, 9, 1))
 	var stack := VBoxContainer.new()
@@ -236,10 +214,21 @@ func _build_balance_card(label_key: String, stored: bool) -> Control:
 	amount.add_theme_font_size_override("font_size", 20)
 	amount.add_theme_color_override("font_color", UI_CYAN if stored else UI_GREEN)
 	stack.add_child(amount)
+	var set_amount_button := Button.new()
+	set_amount_button.name = "StoredSetAmountButton" if stored else "CarriedSetAmountButton"
+	_set_localized_property(set_amount_button, "text", "ui.bank.set_amount")
+	set_amount_button.custom_minimum_size = Vector2(0, 28)
+	set_amount_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	set_amount_button.focus_mode = Control.FOCUS_NONE
+	set_amount_button.pressed.connect(_set_balance_amount.bind(stored))
+	_apply_button_style(set_amount_button, false)
+	stack.add_child(set_amount_button)
 	if stored:
 		stored_amount_label = amount
+		stored_set_amount_button = set_amount_button
 	else:
 		carried_amount_label = amount
+		carried_set_amount_button = set_amount_button
 	return panel
 
 
@@ -283,10 +272,8 @@ func _set_amount(amount: int) -> void:
 		amount_input.text = str(amount)
 
 
-func _transfer_all(direction: String) -> void:
-	var amount := _carried_money() if direction == "deposit" else _stored_money()
-	if amount > 0:
-		_transfer(direction, amount)
+func _set_balance_amount(stored: bool) -> void:
+	_set_amount(_stored_money() if stored else _carried_money())
 
 
 func _refresh_balances() -> void:
@@ -304,8 +291,8 @@ func _refresh_actions() -> void:
 	amount_input.editable = not actions_blocked
 	deposit_button.disabled = actions_blocked or amount <= 0 or amount > _carried_money()
 	withdraw_button.disabled = actions_blocked or amount <= 0 or amount > _stored_money()
-	deposit_all_button.disabled = actions_blocked or _carried_money() <= 0
-	withdraw_all_button.disabled = actions_blocked or _stored_money() <= 0
+	carried_set_amount_button.disabled = actions_blocked or _carried_money() <= 0
+	stored_set_amount_button.disabled = actions_blocked or _stored_money() <= 0
 	for quick_button: Button in quick_amount_buttons:
 		quick_button.disabled = actions_blocked
 
