@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Pokemon Fan Club Chairman now tells Trainers about his beloved Rapidash and offers an interactive Bike Voucher side quest.
+
 - Added a Rock Smash reward catalog with item and fossil chances, money and XP, and previews for other skill levels.
 
 - Imported battle teams now show PP in party-slot hovers. Spectators see the same public PP estimates on both sides.
