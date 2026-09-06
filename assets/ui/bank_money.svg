@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="48" viewBox="0 0 64 48">
-  <rect x="2" y="5" width="60" height="38" rx="7" fill="#54c98b" stroke="#d9ffe9" stroke-width="3"/>
-  <rect x="8" y="11" width="48" height="26" rx="4" fill="#173f38" stroke="#8aefb4" stroke-width="2"/>
-  <circle cx="32" cy="24" r="10" fill="#70dda0"/>
-  <text x="32" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#0a2824">₽</text>
-  <circle cx="13" cy="17" r="2" fill="#70dda0"/>
-  <circle cx="51" cy="31" r="2" fill="#70dda0"/>
-</svg>
