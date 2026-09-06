@@ -139,11 +139,16 @@ func _build_interface() -> void:
 func _build_header() -> Control:
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 10)
-	var icon := TextureRect.new()
-	icon.texture = preload("res://assets/ui/bank_money.svg")
+	var icon := PanelContainer.new()
 	icon.custom_minimum_size = Vector2(44, 34)
-	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.add_theme_stylebox_override("panel", _panel_style(Color("#54c98b"), Color("#d9ffe9"), 8, 2))
+	var icon_label := Label.new()
+	icon_label.text = "₽"
+	icon_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	icon_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	icon_label.add_theme_font_size_override("font_size", 19)
+	icon_label.add_theme_color_override("font_color", Color("#0a2824"))
+	icon.add_child(icon_label)
 	header.add_child(icon)
 	var heading := VBoxContainer.new()
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
