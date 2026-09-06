@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a Rock Smash reward catalog with item and fossil chances, money and XP, and previews for other skill levels.
+
 - Imported battle teams now show PP in party-slot hovers. Spectators see the same public PP estimates on both sides.
 
 - Every Pokémon Center now has a Banker who can safely store money so it is protected from blackout losses.
