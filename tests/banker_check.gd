@@ -35,6 +35,9 @@ func _run() -> void:
 	var popup_script_source := FileAccess.get_file_as_string("res://scripts/ui/bank_popup.gd")
 	_check(popup_scene_source.contains("custom_minimum_size = Vector2(470, 330)"), "Bank uses a compact interface")
 	_check(popup_script_source.contains('amount_input.name = "BankAmountInput"'), "Bank provides an amount input")
+	_check(popup_script_source.contains("amount_input = LineEdit.new()"), "Bank amount input uses the custom interface styling")
+	_check(popup_script_source.contains("var amount := _requested_amount()"), "Bank actions use the typed amount immediately")
+	_check(popup_script_source.contains("header.gui_input.connect(_on_header_gui_input)"), "Bank window can be dragged by its header")
 	_check(popup_script_source.contains('deposit_button.name = "DepositButton"'), "Bank provides a deposit action")
 	_check(popup_script_source.contains('withdraw_button.name = "WithdrawButton"'), "Bank provides a withdraw action")
 

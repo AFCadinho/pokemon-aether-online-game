@@ -16,12 +16,14 @@ const UI_CYAN := Color("#74d7ef")
 
 var carried_amount_label: Label
 var stored_amount_label: Label
-var amount_input: SpinBox
+var amount_input: LineEdit
 var deposit_button: Button
 var withdraw_button: Button
 var status_label: Label
 var request_in_progress := false
 var balances_loaded := false
+var dragging := false
+var drag_pointer_offset := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -38,7 +40,7 @@ func open_bank() -> void:
 	visible = true
 	request_in_progress = true
 	balances_loaded = false
-	amount_input.value = 1
+	amount_input.text = "1"
 	_set_status(_t("ui.bank.status.loading"), false)
 	_refresh_balances()
 	_refresh_actions()
@@ -94,16 +96,15 @@ func _build_interface() -> void:
 	amount_caption.custom_minimum_size = Vector2(72, 0)
 	amount_caption.add_theme_color_override("font_color", UI_MUTED)
 	amount_row.add_child(amount_caption)
-	amount_input = SpinBox.new()
+	amount_input = LineEdit.new()
 	amount_input.name = "BankAmountInput"
-	amount_input.min_value = 1
-	amount_input.max_value = 2_147_483_647
-	amount_input.value = 1
-	amount_input.step = 1
-	amount_input.allow_greater = false
-	amount_input.allow_lesser = false
+	amount_input.text = "1"
+	amount_input.placeholder_text = "0"
+	amount_input.max_length = 10
+	amount_input.virtual_keyboard_type = LineEdit.KEYBOARD_TYPE_NUMBER
 	amount_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	amount_input.value_changed.connect(_on_amount_changed)
+	amount_input.text_changed.connect(_on_amount_changed)
+	_apply_amount_input_style()
 	amount_row.add_child(amount_input)
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 10)
@@ -139,8 +140,11 @@ func _build_interface() -> void:
 func _build_header() -> Control:
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 10)
+	header.mouse_filter = Control.MOUSE_FILTER_STOP
+	header.gui_input.connect(_on_header_gui_input)
 	var icon := PanelContainer.new()
 	icon.custom_minimum_size = Vector2(44, 34)
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	icon.add_theme_stylebox_override("panel", _panel_style(Color("#54c98b"), Color("#d9ffe9"), 8, 2))
 	var icon_label := Label.new()
 	icon_label.text = "₽"
@@ -152,13 +156,16 @@ func _build_header() -> Control:
 	header.add_child(icon)
 	var heading := VBoxContainer.new()
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header.add_child(heading)
 	var title := Label.new()
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_set_localized_property(title, "text", "ui.bank.title")
 	title.add_theme_font_size_override("font_size", 21)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	heading.add_child(title)
 	var subtitle := Label.new()
+	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_set_localized_property(subtitle, "text", "ui.bank.subtitle")
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", UI_MUTED)
@@ -202,7 +209,7 @@ func _build_balance_card(label_key: String, stored: bool) -> Control:
 func _transfer(direction: String) -> void:
 	if request_in_progress:
 		return
-	var amount := int(amount_input.value)
+	var amount := _requested_amount()
 	if amount <= 0:
 		return
 	request_in_progress = true
@@ -221,7 +228,7 @@ func _transfer(direction: String) -> void:
 		_refresh_actions()
 		return
 	wallet_service.call("apply_wallet_result", result)
-	amount_input.value = 1
+	amount_input.text = "1"
 	_refresh_balances()
 	_refresh_actions()
 	_set_status(
@@ -231,7 +238,7 @@ func _transfer(direction: String) -> void:
 	wallet_changed.emit()
 
 
-func _on_amount_changed(_value: float) -> void:
+func _on_amount_changed(_value: String) -> void:
 	_refresh_actions()
 
 
@@ -245,7 +252,7 @@ func _refresh_balances() -> void:
 func _refresh_actions() -> void:
 	if amount_input == null:
 		return
-	var amount := int(amount_input.value)
+	var amount := _requested_amount()
 	var actions_blocked := request_in_progress or not balances_loaded
 	amount_input.editable = not actions_blocked
 	deposit_button.disabled = actions_blocked or amount <= 0 or amount > _carried_money()
@@ -260,6 +267,15 @@ func _carried_money() -> int:
 func _stored_money() -> int:
 	var player_save := get_node_or_null("/root/PlayerSave")
 	return maxi(int(player_save.get("bank_money")), 0) if player_save != null else 0
+
+
+func _requested_amount() -> int:
+	if amount_input == null:
+		return 0
+	var amount_text := amount_input.text.strip_edges()
+	if amount_text.is_empty() or not amount_text.is_valid_int():
+		return 0
+	return clampi(amount_text.to_int(), 0, 2_147_483_647)
 
 
 func _set_status(text: String, is_error: bool) -> void:
@@ -301,6 +317,27 @@ func _apply_button_style(button: Button, primary: bool) -> void:
 	button.add_theme_stylebox_override("pressed", _panel_style(Color("#0c342aff"), UI_GREEN, 8, 1))
 	button.add_theme_color_override("font_color", UI_TEXT)
 	button.add_theme_color_override("font_disabled_color", Color("#657484"))
+
+
+func _apply_amount_input_style() -> void:
+	amount_input.add_theme_stylebox_override("normal", _panel_style(UI_INTERACTIVE, UI_BORDER, 8, 1))
+	amount_input.add_theme_stylebox_override("focus", _panel_style(UI_HOVER, UI_CYAN, 8, 1))
+	amount_input.add_theme_stylebox_override("read_only", _panel_style(UI_RAISED, UI_BORDER, 8, 1))
+	amount_input.add_theme_color_override("font_color", UI_TEXT)
+	amount_input.add_theme_color_override("font_placeholder_color", UI_MUTED)
+	amount_input.add_theme_font_size_override("font_size", 16)
+
+
+func _on_header_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		dragging = event.pressed
+		if dragging:
+			drag_pointer_offset = get_global_mouse_position() - global_position
+		accept_event()
+		return
+	if event is InputEventMouseMotion and dragging:
+		global_position = get_global_mouse_position() - drag_pointer_offset
+		accept_event()
 
 
 func _panel_style(fill: Color, border: Color, radius: int, width: int) -> StyleBoxFlat:
