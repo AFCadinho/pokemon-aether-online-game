@@ -96,55 +96,6 @@ static func confirmed_item_reveal_from_event(event: Dictionary) -> Dictionary:
 	}
 
 
-static func with_max_pp_assumption(moves: Array) -> Array:
-	var normalized_moves: Array = []
-	for move_value in moves:
-		if not (move_value is Dictionary):
-			continue
-
-		var move_data: Dictionary = (move_value as Dictionary).duplicate(true)
-		var current_pp := _get_move_pp_value(
-			move_data,
-			["pp", "currentPp", "currentPP", "current_pp"]
-		)
-		var base_max_pp := _get_move_pp_value(
-			move_data,
-			["maxpp", "maxPp", "maxPP", "max_pp"]
-		)
-		if current_pp < 0 or base_max_pp <= 0:
-			normalized_moves.append(move_data)
-			continue
-
-		var used_pp: int = max(0, base_max_pp - current_pp)
-		var assumed_max_pp := _calculate_max_pp(base_max_pp)
-		move_data["maxpp"] = assumed_max_pp
-		move_data["pp"] = max(0, assumed_max_pp - used_pp)
-		normalized_moves.append(move_data)
-
-	return normalized_moves
-
-
-static func _get_move_pp_value(move_data: Dictionary, keys: Array[String]) -> int:
-	for key in keys:
-		if not move_data.has(key):
-			continue
-
-		var value: Variant = move_data.get(key)
-		if value == null or str(value).strip_edges() == "":
-			continue
-
-		return int(value)
-
-	return -1
-
-
-static func _calculate_max_pp(base_pp: int) -> int:
-	if base_pp <= 1:
-		return max(base_pp, 0)
-
-	return int(floor(float(base_pp) * 1.6))
-
-
 static func _item_name_from_source(source: String) -> String:
 	var cleaned := source.strip_edges()
 	if not cleaned.to_lower().begins_with("item:"):

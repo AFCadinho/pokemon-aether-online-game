@@ -85,14 +85,14 @@ func _init() -> void:
 		embedded_knowledge.get("statChanges", {}) == {"spe": 1},
 		"side-preview hover accepts integral JSON numbers and rejects fractions"
 	)
-	var pressure_pp_hover := PublicPokemonKnowledge.with_max_pp_assumption([
-		{"name": "Thunderbolt", "pp": 13, "maxpp": 15},
-	])
+	var pressure_pp_hover: Array = PublicPokemonKnowledge.from_pokemon_data({
+		"knowledge": {"confirmedMoves": [{"name": "Thunderbolt", "pp": 22, "maxpp": 24}]},
+	}).get("confirmedMoves", [])
 	_check(
 		pressure_pp_hover == [
 			{"name": "Thunderbolt", "pp": 22, "maxpp": 24},
 		],
-		"side-preview hover preserves Pressure's two-PP use with the max-PP display assumption"
+		"side-preview hover preserves the server's maximum-PP estimate without boosting it again"
 	)
 	_check(
 		not embedded_knowledge.has("privateSet") \
