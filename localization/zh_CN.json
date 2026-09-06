@@ -5695,7 +5695,7 @@
   "ui.skills.rock_smash.rewards.locked": "尚未解锁",
   "ui.skills.rock_smash.rewards.guaranteed": "每次碎岩必得。数值按所选技能等级计算。",
   "ui.skills.rock_smash.rewards.rock_level": "等级 {level} 岩石",
-  "ui.skills.rock_smash.rewards.payout": "{money} 金钱 · {xp} 经验",
+  "ui.skills.rock_smash.rewards.payout": "${money} · {xp} 经验",
   "ui.skills.rock_smash.rewards.boost": "当前技能经验加成",
   "ui.skills.rock_smash.rewards.guild": "公会贡献",
   "ui.skills.rock_smash.rewards.guild_detail": "公会成员还可获得公会经验",
