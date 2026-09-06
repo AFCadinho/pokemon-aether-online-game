@@ -5,6 +5,7 @@ const LOGIN_MUSIC_PATH := "res://assets/music/login/lugia_theme_lofi.ogg"
 const DEFAULT_WILD_BATTLE_MUSIC_PATH := "res://assets/music/battle/wild/Kanto Wild Battle.ogg"
 const DEFAULT_TRAINER_BATTLE_MUSIC_PATH := "res://assets/music/battle/trainer/Kalos Trainer Battle.ogg"
 const DEFAULT_PVP_BATTLE_MUSIC_PATH := "res://assets/music/battle/pvp/lysandre_remix_pokemon_legends_z_a_zame.ogg"
+const AETHER_CLASH_DUEL_MUSIC_PATH := "res://assets/music/overworld/aether_clash/aether_clash_duel.ogg"
 const PVP_BATTLE_MUSIC_RES_DIR := "res://assets/music/battle/pvp"
 const PVP_BATTLE_MUSIC_RELATIVE_DIR := "battle/pvp"
 const MUSIC_RES_ROOT := "res://assets/music"
@@ -61,6 +62,9 @@ func play_pvp_battle_music() -> void:
 
 
 func get_map_music_path(map_node: Node) -> String:
+	if _is_aether_clash_duel_map(map_node):
+		return AETHER_CLASH_DUEL_MUSIC_PATH
+
 	if map_node != null and map_node.has_method("get_music_track_path"):
 		var map_track_path: String = str(map_node.call("get_music_track_path")).strip_edges()
 		if map_track_path != "":
@@ -81,6 +85,24 @@ func get_map_music_path(map_node: Node) -> String:
 				return component_profile_track_path
 
 	return DEFAULT_OVERWORLD_MUSIC_PATH
+
+
+func _is_aether_clash_duel_map(map_node: Node) -> bool:
+	if map_node == null:
+		return false
+
+	if map_node.has_method("get_map_id"):
+		var map_id := str(map_node.call("get_map_id")).strip_edges()
+		if map_id == "aether_clash_duel" or map_id.begins_with("aether_clash_duel:"):
+			return true
+
+	if map_node.has_method("get_location_metadata"):
+		var location_metadata: Dictionary = map_node.call("get_location_metadata") as Dictionary
+		var location_id := str(location_metadata.get("locationId", "")).strip_edges()
+		if location_id == "aether_clash.duel" or location_id.begins_with("aether_clash_duel:"):
+			return true
+
+	return false
 
 
 func get_music_profile_track_path(profile_id: String) -> String:
