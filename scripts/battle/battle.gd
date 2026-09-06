@@ -6742,7 +6742,7 @@ func setup_trainer_battle_from_response(
 	if training_ai_battle:
 		pvp_battle_purpose = "training"
 		_capture_pvp_local_canonical_roster(api_response)
-		_configure_ai5_research_marker(api_response)
+		# AI5 research campaigns are closed; normal sparring uses server telemetry.
 	npc_trainer_display_name = setup_flow.get_trainer_name(trainer_data, "")
 	var team_preview_enabled := _trainer_team_preview_enabled(api_response)
 	opponent_party_reveal_policy.reset(team_preview_enabled)

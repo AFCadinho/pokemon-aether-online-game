@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring now focuses on practice, the team catalog and match history; the completed Research Campaign and its in-battle markers are retired.
+
 - Added a Rock Smash reward catalog with item and fossil chances, money and XP, and previews for other skill levels.
 
 - Imported battle teams now show PP in party-slot hovers. Spectators see the same public PP estimates on both sides.
