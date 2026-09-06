@@ -334,10 +334,16 @@ func _on_header_gui_input(event: InputEvent) -> void:
 		if dragging:
 			drag_pointer_offset = get_global_mouse_position() - global_position
 		accept_event()
+
+
+func _input(event: InputEvent) -> void:
+	if not dragging:
 		return
-	if event is InputEventMouseMotion and dragging:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		dragging = false
+		return
+	if event is InputEventMouseMotion:
 		global_position = get_global_mouse_position() - drag_pointer_offset
-		accept_event()
 
 
 func _panel_style(fill: Color, border: Color, radius: int, width: int) -> StyleBoxFlat:
