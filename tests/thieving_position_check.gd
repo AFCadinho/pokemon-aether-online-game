@@ -101,6 +101,17 @@ func _run() -> void:
 	player.last_direction = Vector2.UP
 	npc.call("_sync_thieving_prompt")
 	_check(prompt != null and not prompt.visible, "The Thieving icon hides when the player moves in front")
+	_check(
+		bool(npc.call("_can_show_pickpocket_position_hint")),
+		"Available Thieving targets explain that the player must stand behind them"
+	)
+
+	player.global_position = Vector2(16.0, -16.0)
+	player.last_direction = Vector2.DOWN
+	_check(
+		not bool(npc.call("_can_show_pickpocket_position_hint")),
+		"The position hint stays hidden when the player can pickpocket"
+	)
 
 	quit(1 if failed else 0)
 

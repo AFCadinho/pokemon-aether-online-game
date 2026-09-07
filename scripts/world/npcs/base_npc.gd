@@ -916,6 +916,8 @@ func _process_base_npc() -> void:
 	_update_sort_z()
 	await _process_npc_movement()
 	_sync_thieving_prompt()
+	if Input.is_action_just_pressed("pickpocket") and _can_show_pickpocket_position_hint():
+		_add_system_message(LocalizationManager.text("ui.thieving.position_required"))
 	if _can_request_pickpocket():
 		await _try_start_pickpocket(nearby_player)
 		_after_base_npc_process()
@@ -1096,6 +1098,24 @@ func _can_request_pickpocket() -> bool:
 
 func _is_player_in_pickpocket_position(body: Node2D) -> bool:
 	return _is_player_behind_npc(body) and _is_player_facing_npc(body)
+
+
+func _can_show_pickpocket_position_hint() -> bool:
+	return (
+		story_visibility_active
+		and not is_interacting
+		and player_nearby
+		and nearby_player != null
+		and not GameState.is_overworld_input_locked()
+		and not _is_ui_typing()
+		and npc_metadata_loaded
+		and pickpocket_enabled
+		and ThievingService.state_loaded
+		and ThievingService.is_unlocked()
+		and ThievingService.get_level() >= pickpocket_required_level
+		and not ThievingService.is_npc_attempted_today(_get_npc_metadata_id())
+		and not _is_player_in_pickpocket_position(nearby_player)
+	)
 
 
 func _is_player_behind_npc(body: Node2D) -> bool:

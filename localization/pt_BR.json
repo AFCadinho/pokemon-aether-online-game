@@ -5132,6 +5132,7 @@
   "ui.thieving.unavailable": "Furto indisponível no momento.",
   "ui.thieving.invalid_target": "Este NPC não pode ser furtado.",
   "ui.thieving.locked": "Aprenda Thieving com Mestre Ladrão Rook em Viridian City primeiro.",
+  "ui.thieving.position_required": "Fique atrás do alvo e olhe para ele para bater carteira.",
   "ui.thieving.prompt.pickpocket": "Bater carteira ({hotkey})",
   "ui.skill.thieving.unlocked": "Thieving desbloqueado · Conclua a primeira lição de pickpocket de Rook",
   "ui.thieving.arrested": "Você foi preso e multado em ₽{amount}.",

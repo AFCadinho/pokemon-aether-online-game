@@ -5129,6 +5129,7 @@
   "ui.thieving.unavailable": "目前无法进行扒窃。",
   "ui.thieving.invalid_target": "该 NPC 无法被扒窃。",
   "ui.thieving.locked": "首先向常磐市的盗贼大师Rook学习偷窃。",
+  "ui.thieving.position_required": "请站在目标身后并面向目标进行扒窃。",
   "ui.thieving.prompt.pickpocket": "扒手 ({hotkey})",
   "ui.skill.thieving.unlocked": "盗窃已解锁 · 完成Rook的第一堂扒窃课程",
   "ui.skill.rock_smash.unlocked": "摇滚粉碎已解锁 · 收到 HM 粉碎粉碎",

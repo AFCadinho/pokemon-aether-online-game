@@ -15,6 +15,8 @@
     Godot-styling.
 - Een overworld-reset voor developers maakt alle Thieving-NPC's opnieuw pickpocketbaar, naast de
     Rock Smash-rotsen. De System-melding noemt beide resets.
+- Als je Thieving probeert bij een beschikbaar doelwit vanaf de voorkant of zijkant, legt een
+    System-melding nu uit dat je erachter moet staan en ernaartoe moet kijken.
 - Discard tradable Bag items from the right-click menu, with a quantity choice, confirmation and safe retry after an interrupted connection. Key Items, HMs, account-bound items and the Bike Shop Cyclizar remain protected.
 
 - Medicine-system message toont nu Pokémonnaam en exact herstelde HP.
