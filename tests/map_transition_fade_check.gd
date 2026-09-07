@@ -28,6 +28,19 @@ func _init() -> void:
 		and world_source.contains("ImageTexture.create_from_image(image)"),
 		"map transitions freeze the rendered source map before replacing it"
 	)
+	var load_map_start := world_source.find("func load_map(")
+	var reload_map_start := world_source.find("func reload_current_map_preserving_player_position()")
+	var load_map_body := world_source.substr(load_map_start, reload_map_start - load_map_start)
+	_check(
+		load_map_start >= 0
+		and reload_map_start > load_map_start
+		and load_map_body.contains(
+			"await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)\n"
+			+ "\tis_loading_map = false\n"
+			+ "\tGameState.unlock_overworld_input()"
+		),
+		"completed map transitions release their movement lock after fading in"
+	)
 
 	var reveal_branch := world_source.find("if is_zero_approx(target_alpha):")
 	var content_fade := world_source.find("await content_tween.finished", reveal_branch)

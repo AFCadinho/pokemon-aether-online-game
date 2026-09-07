@@ -2935,7 +2935,7 @@
   "ui.staff.dev.heal_party_description": "Restore the active team",
   "ui.staff.dev.trainer_progress_description": "Manage badges, key items and story checkpoints",
   "ui.staff.dev.overworld_resets_description": "Respawn daily world content",
-  "ui.staff.dev.overworld_resets_success": "All Rock Smash rocks have respawned.",
+  "ui.staff.dev.overworld_resets_success": "All Rock Smash rocks have respawned and daily Thieving NPCs are available again.",
   "ui.staff.dev.overworld_resets_failed": "Could not respawn Rock Smash rocks: {error}",
   "ui.staff.dev.clear_data": "Clear Data",
   "ui.staff.dev.clear_data_description": "Party, bag & world",

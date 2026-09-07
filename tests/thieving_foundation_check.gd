@@ -11,6 +11,14 @@ func _init() -> void:
 	var market := FileAccess.get_file_as_string("res://scripts/world/npcs/market_attendant_npc.gd")
 	var party_heal := FileAccess.get_file_as_string("res://scripts/services/party_heal_service.gd")
 	var status_hud := FileAccess.get_file_as_string("res://scripts/ui/thieving_status_hud.gd")
+	var auth_service := FileAccess.get_file_as_string("res://scripts/services/auth_service.gd")
+	var loading_screen := FileAccess.get_file_as_string("res://scripts/ui/loading_screen.gd")
+	var settings_menu := FileAccess.get_file_as_string("res://scripts/ui/settings_menu.gd")
+	var player_game_state := FileAccess.get_file_as_string("res://scripts/services/player_game_state_service.gd")
+	var state_changed_handler := status_hud.substr(
+		status_hud.find("func _on_state_changed"),
+		status_hud.find("func _on_locale_changed") - status_hud.find("func _on_state_changed")
+	)
 	var mentor := FileAccess.get_file_as_string("res://scripts/world/kanto/towns/thieving_mentor_rook.gd")
 	var rook_help_locales: Array[String] = ["en", "nl", "pt_BR", "zh_CN"]
 	var viridian := FileAccess.get_file_as_string(
@@ -80,8 +88,26 @@ func _init() -> void:
 	_check("BODY_MOVEMENT_FISH" not in npc, "Pickpocket does not alter fishing behavior")
 	_check(
 		"panel.visible = jailed" in status_hud
+		and "\n\t_refresh()\n" in state_changed_handler
 		and "jailed or currency > 0 or wanted > 0" not in status_hud,
-		"Contraband and Wanted stay in the Skills interface instead of the overworld HUD"
+		"The jail HUD refreshes for every account state and hides outside jail"
+	)
+	_check(
+		"func clear_state()" in service
+		and "state_generation += 1" in service
+		and "state_changed.emit({})" in service
+		and "ThievingService.clear_state()" in auth_service
+		and "ThievingService.clear_state()" in settings_menu,
+		"Thieving state and pending jail release are cleared at every account and login boundary"
+	)
+	_check(
+		"await ThievingService.load_state()" in loading_screen,
+		"The loading flow hydrates jail state for the newly authenticated account"
+	)
+	_check(
+		"func dev_respawn_rock_smash_rocks()" in player_game_state
+		and "await ThievingService.load_state()" in player_game_state,
+		"Developer overworld resets refresh daily Thieving target availability"
 	)
 	quit(1 if failed else 0)
 

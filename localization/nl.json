@@ -2935,7 +2935,7 @@
   "ui.staff.dev.heal_party_description": "Herstel het actieve team",
   "ui.staff.dev.trainer_progress_description": "Beheer badges, key items en verhaalcheckpoints",
   "ui.staff.dev.overworld_resets_description": "Laat dagelijkse wereldcontent opnieuw verschijnen",
-  "ui.staff.dev.overworld_resets_success": "Alle Rock Smash-stenen zijn opnieuw verschenen.",
+  "ui.staff.dev.overworld_resets_success": "Alle Rock Smash-stenen zijn opnieuw verschenen en dagelijkse Thieving-NPC's zijn weer beschikbaar.",
   "ui.staff.dev.overworld_resets_failed": "Rock Smash-stenen konden niet opnieuw verschijnen: {error}",
   "ui.staff.dev.clear_data": "Gegevens wissen",
   "ui.staff.dev.clear_data_description": "Party, tas en wereld",
