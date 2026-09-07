@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Medicine-system message toont nu Pokémonnaam en exact herstelde HP.
+- Max Revive is toegevoegd aan de daadwerkelijke field-use configuratie: fainted Pokémon terug naar volle
+    HP.
+- Revive en Max Revive herstellen geen PP
+
 ## 0.3.73 - 2026-09-06
 
 - Caught Pokémon now show the destination box and slot in the system message.
