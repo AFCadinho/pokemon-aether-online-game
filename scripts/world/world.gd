@@ -150,11 +150,6 @@ func _ready() -> void:
 	_connect_world_presence_signals()
 	await _setup_initial_world_state()
 	await _refresh_fishing_progression()
-	_normalize_map_depth_layer_z_indices(GameState.current_map)
-	# Saved jail positions are restored before the runtime JailTop layer is
-	# split into depth groups. Ensure the player's z-index is based on that
-	# restored position before the first frame can draw the new foreground bars.
-	player.refresh_visual_depth()
 	if GameState.gameplay_reset_in_progress:
 		GameState.finish_gameplay_reset()
 
@@ -1264,6 +1259,7 @@ func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position:
 	player.move_start_position = spawn_position
 	player.is_moving = false
 	player.set_idle_frame()
+	_refresh_map_visual_depth_for_player(map)
 	player.refresh_map_layers()
 	_sync_player_activity_state_for_current_tile()
 	if player.has_method("reset_pokemon_follower_position"):
@@ -1289,6 +1285,7 @@ func _position_player_at_authorized_teleport_state(map: Node, state: Dictionary)
 		player.is_moving = false
 		player.last_direction = _direction_from_name(str(state.get("facingDirection", "down")))
 		player.set_idle_frame()
+		_refresh_map_visual_depth_for_player(map)
 		player.refresh_map_layers()
 		_sync_player_activity_state_for_current_tile()
 		if player.has_method("reset_pokemon_follower_position"):
@@ -1315,6 +1312,7 @@ func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 	player.is_moving = false
 	player.last_direction = _direction_from_name(str(state.get("facingDirection", "down")))
 	player.set_idle_frame()
+	_refresh_map_visual_depth_for_player(map)
 	player.refresh_map_layers()
 	_sync_player_activity_state_for_current_tile()
 	var saved_mount_id := str(state.get("mountId", "")).strip_edges().to_lower()
@@ -1334,6 +1332,14 @@ func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 func _sync_player_activity_state_for_current_tile() -> void:
 	if player != null and player.has_method("sync_activity_state_for_current_tile"):
 		player.call("sync_activity_state_for_current_tile")
+
+
+func _refresh_map_visual_depth_for_player(map: Node) -> void:
+	# Do this as part of positioning, rather than after the asynchronous login
+	# recovery finishes. A saved jail position must be correctly layered before
+	# any acknowledgement or activity-recovery request can delay the first frame.
+	_normalize_map_depth_layer_z_indices(map)
+	player.refresh_visual_depth()
 
 
 func _setup_initial_world_state() -> void:
