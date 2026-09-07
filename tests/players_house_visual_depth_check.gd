@@ -69,7 +69,7 @@ func _check_nameplate_depth() -> void:
 	var player_scene_source := FileAccess.get_file_as_string(PLAYER_SCENE_PATH)
 	_check(
 		player_scene_source.contains(
-			'[node name="Nameplate" type="Control" parent="." unique_id=1400626741]\nvisible = false\nz_index = 4096\nz_as_relative = false'
+			'[node name="Nameplate" type="Control" parent="." unique_id=1400626741]\nvisible = false\nz_index = 4095\nz_as_relative = false'
 		),
 		"player nameplate renders in the absolute foreground band"
 	)
@@ -77,7 +77,7 @@ func _check_nameplate_depth() -> void:
 	var npc_source := FileAccess.get_file_as_string(NPC_SCRIPT_PATH)
 	_check(
 		npc_source.contains(
-			"nameplate.z_as_relative = false\n\tnameplate.z_index = RenderingServer.CANVAS_ITEM_Z_MAX"
+			"nameplate.z_as_relative = false\n\tnameplate.z_index = OVERHEAD_NAMEPLATE_Z"
 		),
 		"NPC nameplates render in the same absolute foreground band"
 	)
