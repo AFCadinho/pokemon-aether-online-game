@@ -14,7 +14,9 @@ const ACCENT_COLOR := Color("#70d8f6")
 const GOLD_COLOR := Color("#f3cf70")
 const SUCCESS_COLOR := Color("#79d99b")
 const LOCKED_COLOR := Color("#738092")
-const COMPLETE_COLOR := Color("#84a0b8")
+const COMPLETE_COLOR := Color("#ffd36a")
+const COMPLETE_BACKGROUND_COLOR := Color("#2a210d")
+const COMPLETE_BORDER_COLOR := Color("#8f6d29")
 const FISHING_ICON: Texture2D = preload("res://assets/ui/fishing_rod.svg")
 const THIEVING_ICON: Texture2D = preload("res://assets/ui/thieving.svg")
 const ROCK_SMASH_ICON: Texture2D = preload("res://assets/ui/rock_smash_skill_icon.tres")
@@ -1436,7 +1438,7 @@ func _create_target_row(target: Dictionary) -> Control:
 			else "ui.skills.thieving.target.completed"
 		)
 		status.add_theme_color_override("font_color", COMPLETE_COLOR)
-		status.add_theme_stylebox_override("normal", _make_panel_style(Color("#111d28"), Color("#38536a"), 7, 1))
+		status.add_theme_stylebox_override("normal", _make_panel_style(COMPLETE_BACKGROUND_COLOR, COMPLETE_BORDER_COLOR, 7, 1))
 	elif not unlocked:
 		status.text = _text(
 			"ui.skills.rock_smash.rock.level_required"
