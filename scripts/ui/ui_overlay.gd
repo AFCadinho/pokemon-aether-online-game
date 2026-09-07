@@ -916,6 +916,7 @@ var pvp_ai_sparring_start_button: Button
 var pvp_ai_sparring_tabs: TabContainer
 var pvp_ai_sparring_bot_versions: Dictionary = {}
 var pvp_ai_sparring_about_versions: Dictionary = {}
+var pvp_ai_sparring_about_loading := false
 var pvp_ai_sparring_tier_select: OptionButton
 var pvp_ai_sparring_status_label: Label
 var pvp_ai_sparring_team_source_select: OptionButton
@@ -42891,7 +42892,31 @@ func _on_pvp_ai_sparring_tab_changed(tab_index: int) -> void:
 	if catalog_selected:
 		_refresh_ai_sparring_catalog_view()
 	if about_selected:
-		_load_pvp_training_ai_catalog()
+		_load_ai_sparring_about()
+
+
+func _load_ai_sparring_about() -> void:
+	if pvp_ai_sparring_about_loading:
+		return
+	pvp_ai_sparring_about_loading = true
+	pvp_ai_sparring_bot_versions.clear()
+	_refresh_ai_sparring_about()
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.get_training_ai_teams(request)
+	request.queue_free()
+	pvp_ai_sparring_about_loading = false
+	# Refresh information only; opening About must not reroll a random opponent.
+	_apply_ai_sparring_bot_versions(response)
+
+
+func _apply_ai_sparring_bot_versions(response: Dictionary) -> void:
+	pvp_ai_sparring_bot_versions.clear()
+	var bots_value: Variant = response.get("bots", []) if bool(response.get("success", false)) else []
+	if bots_value is Array:
+		for bot: Variant in bots_value:
+			if bot is Dictionary and str(bot.get("id", "")) in ["ai4", "ai5"]:
+				pvp_ai_sparring_bot_versions[str(bot["id"])] = bot
+	_refresh_ai_sparring_about()
 
 
 func _refresh_ai_sparring_about() -> void:
@@ -43439,11 +43464,7 @@ func _load_pvp_training_ai_catalog() -> void:
 	pvp_training_ai_available_modes.clear()
 	pvp_training_ai_catalog_archetypes.clear()
 	if pvp_training_ai_catalog_loaded:
-		var bots_value: Variant = response.get("bots", [])
-		if bots_value is Array:
-			for bot: Variant in bots_value:
-				if bot is Dictionary and str(bot.get("id", "")) in ["ai4", "ai5"]:
-					pvp_ai_sparring_bot_versions[str(bot["id"])] = bot
+		_apply_ai_sparring_bot_versions(response)
 		var tiers_value: Variant = response.get("tiers", [])
 		if tiers_value is Array:
 			for tier_value: Variant in tiers_value:
