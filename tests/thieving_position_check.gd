@@ -96,6 +96,18 @@ func _run() -> void:
 		and prompt.position.y + prompt.size.y <= nameplate.position.y - 4.0,
 		"The Thieving icon has clear vertical spacing above the nameplate"
 	)
+	_check(
+		prompt != null
+		and nameplate != null
+		and not prompt.z_as_relative
+		and prompt.z_index > nameplate.z_index,
+		"The Thieving icon renders above NPC nameplates"
+	)
+	var player_scene_source := FileAccess.get_file_as_string("res://scenes/player.tscn")
+	_check(
+		player_scene_source.contains("visible = false\nz_index = 4095\nz_as_relative = false"),
+		"Player nameplates remain below the Thieving icon overlay"
+	)
 
 	player.global_position = Vector2(16.0, 48.0)
 	player.last_direction = Vector2.UP

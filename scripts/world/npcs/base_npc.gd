@@ -103,6 +103,7 @@ const NAMEPLATE_CARD_BOTTOM := 20.0
 const NAMEPLATE_OFFSET_TOP := -80.0
 const THIEVING_PROMPT_SIZE := Vector2(30.0, 30.0)
 const THIEVING_PROMPT_NAMEPLATE_GAP := 6.0
+const OVERHEAD_NAMEPLATE_Z := RenderingServer.CANVAS_ITEM_Z_MAX - 1
 const THIEVING_PROMPT_POSITION := Vector2(
 	-THIEVING_PROMPT_SIZE.x * 0.5,
 	NAMEPLATE_OFFSET_TOP - THIEVING_PROMPT_SIZE.y - THIEVING_PROMPT_NAMEPLATE_GAP
@@ -509,7 +510,7 @@ func _setup_nameplate() -> void:
 	nameplate.name = "Nameplate"
 	nameplate.visible = false
 	nameplate.z_as_relative = false
-	nameplate.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
+	nameplate.z_index = OVERHEAD_NAMEPLATE_Z
 	nameplate.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(nameplate)
 	_sync_overhead_ui_positions()
