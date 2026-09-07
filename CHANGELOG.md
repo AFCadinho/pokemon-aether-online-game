@@ -2,31 +2,25 @@
 
 ## Unreleased
 
-- Jail- en Thieving-herstel is betrouwbaarder: de `JAILED`-timer blijft niet langer zichtbaar na
-    uitloggen, opnieuw inloggen of wisselen van account.
-- Een arrestatie verplaatst je direct naar de jail en laat je daar meteen bewegen; je hoeft niet
-    meer eerst opnieuw in te loggen.
-- Een actieve jailstraf wordt server-side afgehandeld. Na afloop word je ook na uitloggen correct
-    vrijgelaten, zodat je niet vast kunt blijven staan in de jail.
-- Vanuit de jail kun je weer veilig terug naar het inlogscherm, ook vlak nadat je gearresteerd bent.
-- De tralies in de jail tekenen bij het inloggen direct op de juiste diepte, zonder kort over je
-    Trainer heen te verschijnen.
-- Het jail-bailvenster heeft nu passende knoppen voor sluiten en betalen in plaats van de standaard
-    Godot-styling.
-- Een overworld-reset voor developers maakt alle Thieving-NPC's opnieuw pickpocketbaar, naast de
-    Rock Smash-rotsen. De System-melding noemt beide resets.
-- Als je Thieving probeert bij een beschikbaar doelwit vanaf de voorkant of zijkant, legt een
-    System-melding nu uit dat je erachter moet staan en ernaartoe moet kijken.
-- Thieving-iconen verschijnen altijd boven naamplaatjes, zodat de actie goed zichtbaar blijft.
+- Jail and Thieving recovery is more reliable when you log out, log back in, or change accounts.
+- An arrest now takes you straight to jail and lets you move there immediately.
+- Jail sentences now finish correctly even if you log out, so you cannot get stuck in jail.
+- You can safely return to the login screen from jail, even right after an arrest.
+- Jail bars now appear at the correct depth as soon as you log in.
+- The jail bail window now has clear close and pay buttons.
+- Thieving now explains that you must stand behind a target and face it before you pickpocket.
+- Thieving icons now always appear above nameplates, so targets are easier to spot.
 - Discard tradable Bag items from the right-click menu, with a quantity choice, confirmation and safe retry after an interrupted connection. Key Items, HMs, account-bound items and the Bike Shop Cyclizar remain protected.
+- Completed daily Rock Smash targets now stand out with a clear gold badge.
+- The Aether Clash Lobby now has two healing NPCs, so you can quickly heal your team there.
+- Map transitions now unlock movement correctly after the new area has finished loading.
+- Worker Cole now faces the correct direction when you meet him.
 
-- Medicine-system message toont nu Pokémonnaam en exact herstelde HP.
-- Max Revive is toegevoegd aan de daadwerkelijke field-use configuratie: fainted Pokémon terug naar volle
-    HP.
-- Revive en Max Revive herstellen geen PP
-- Scoped teleport-lock voorkomt dat het sluiten van de staff-popup beweging vroegtijdig vrijgeeft.
-- Geldt voor self-teleports, remote/staff-teleports en herstel van een teleport.
-- Je positie en actieve mount worden direct opgeslagen wanneer je op- of afstapt.
+- Medicine messages now show the Pokémon's name and the exact HP restored.
+- Max Revive now works correctly in the field and restores a fainted Pokémon to full HP.
+- Revive and Max Revive no longer restore PP.
+- Teleports now keep movement locked until the teleport window and map transition are finished.
+- Your position and active mount are now saved immediately when you mount or dismount.
 
 
 ## 0.3.73 - 2026-09-06
