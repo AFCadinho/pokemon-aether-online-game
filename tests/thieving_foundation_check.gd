@@ -14,6 +14,7 @@ func _init() -> void:
 	var auth_service := FileAccess.get_file_as_string("res://scripts/services/auth_service.gd")
 	var loading_screen := FileAccess.get_file_as_string("res://scripts/ui/loading_screen.gd")
 	var settings_menu := FileAccess.get_file_as_string("res://scripts/ui/settings_menu.gd")
+	var player_game_state := FileAccess.get_file_as_string("res://scripts/services/player_game_state_service.gd")
 	var state_changed_handler := status_hud.substr(
 		status_hud.find("func _on_state_changed"),
 		status_hud.find("func _on_locale_changed") - status_hud.find("func _on_state_changed")
@@ -102,6 +103,11 @@ func _init() -> void:
 	_check(
 		"await ThievingService.load_state()" in loading_screen,
 		"The loading flow hydrates jail state for the newly authenticated account"
+	)
+	_check(
+		"func dev_respawn_rock_smash_rocks()" in player_game_state
+		and "await ThievingService.load_state()" in player_game_state,
+		"Developer overworld resets refresh daily Thieving target availability"
 	)
 	quit(1 if failed else 0)
 
