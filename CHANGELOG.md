@@ -8,6 +8,7 @@
 - Revive en Max Revive herstellen geen PP
 - Scoped teleport-lock voorkomt dat het sluiten van de staff-popup beweging vroegtijdig vrijgeeft.
 - Geldt voor self-teleports, remote/staff-teleports en herstel van een teleport.
+- Je positie en actieve mount worden direct opgeslagen wanneer je op- of afstapt.
 
 
 ## 0.3.73 - 2026-09-06

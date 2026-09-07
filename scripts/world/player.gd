@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 signal overworld_steps_completed(step_count: int)
+signal land_mount_toggled
 
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
@@ -489,8 +490,12 @@ func start_fishing(fishing_tier: int = -1) -> bool:
 func toggle_land_mount() -> bool:
 	if land_mount_activity_active:
 		_finish_land_mount_activity()
+		land_mount_toggled.emit()
 		return true
-	return _start_land_mount_activity()
+	var started := _start_land_mount_activity()
+	if started:
+		land_mount_toggled.emit()
+	return started
 
 
 func restore_land_mount(mount_id: String) -> bool:

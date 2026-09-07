@@ -145,6 +145,16 @@ func _check_land_mount_runtime_contract() -> void:
 		and world_source.contains('player.call("restore_land_mount", saved_mount_id)'),
 		"the active owned land mount is saved with player position and restored on login"
 	)
+	var land_mount_toggle_source := _function_source(player_source, "toggle_land_mount")
+	var immediate_mount_save_source := _function_source(world_source, "_on_player_land_mount_toggled")
+	_check(
+		player_source.contains("signal land_mount_toggled")
+		and land_mount_toggle_source.count("land_mount_toggled.emit()") == 2
+		and world_source.contains('player.connect("land_mount_toggled", mount_toggle_callback)')
+		and immediate_mount_save_source.contains("_save_current_player_position_if_changed.call_deferred(true)")
+		and immediate_mount_save_source.contains("_publish_world_presence.call_deferred(true)"),
+		"mount toggles immediately save the current position and update world presence"
+	)
 	var loading_prepare_source := _function_source(loading_source, "_prepare_world")
 	var logout_source := _function_source(settings_menu_source, "_logout_confirmed")
 	_check(

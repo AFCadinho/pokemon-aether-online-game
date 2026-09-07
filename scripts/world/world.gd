@@ -135,6 +135,9 @@ func _ready() -> void:
 	var step_callback := Callable(self, "_on_player_overworld_steps_completed")
 	if player.has_signal("overworld_steps_completed") and not player.is_connected("overworld_steps_completed", step_callback):
 		player.connect("overworld_steps_completed", step_callback)
+	var mount_toggle_callback := Callable(self, "_on_player_land_mount_toggled")
+	if player.has_signal("land_mount_toggled") and not player.is_connected("land_mount_toggled", mount_toggle_callback):
+		player.connect("land_mount_toggled", mount_toggle_callback)
 	if not PlayerSave.party_changed.is_connected(_validate_active_flash_source):
 		PlayerSave.party_changed.connect(_validate_active_flash_source)
 	if not FieldMoveService.owned_charms_changed.is_connected(_validate_active_flash_source):
@@ -154,6 +157,11 @@ func _ready() -> void:
 
 func _on_player_overworld_steps_completed(step_count: int) -> void:
 	pending_happiness_walk_steps += maxi(step_count, 0)
+
+
+func _on_player_land_mount_toggled() -> void:
+	_save_current_player_position_if_changed.call_deferred(true)
+	_publish_world_presence.call_deferred(true)
 
 
 func _refresh_fishing_progression() -> void:
