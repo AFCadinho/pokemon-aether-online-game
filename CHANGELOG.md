@@ -6,6 +6,9 @@
 - Max Revive is toegevoegd aan de daadwerkelijke field-use configuratie: fainted Pokémon terug naar volle
     HP.
 - Revive en Max Revive herstellen geen PP
+- Scoped teleport-lock voorkomt dat het sluiten van de staff-popup beweging vroegtijdig vrijgeeft.
+- Geldt voor self-teleports, remote/staff-teleports en herstel van een teleport.
+
 
 ## 0.3.73 - 2026-09-06
 
