@@ -104,11 +104,8 @@ func apply_inventory_state(value: Variant) -> bool:
 	var inventory := value as Dictionary
 	if inventory.get("items", null) is not Array:
 		return false
-	var current_user_id := int(AuthService.current_user.get("id", 0))
-	if cached_inventory_user_id != current_user_id:
-		cached_borrowed_inventory_items.clear()
 	var items := _array_from_value(inventory.get("items", []))
-	cached_inventory_items = items.duplicate(true)
+	_apply_inventory_items(items)
 	cached_mount_license_regions.clear()
 	for region_value: Variant in _array_from_value(inventory.get("mountLicenseRegions", [])):
 		var region_id := str(region_value).strip_edges().to_lower()
@@ -117,10 +114,27 @@ func apply_inventory_state(value: Variant) -> bool:
 	cached_mount_license_regions.sort()
 	if inventory.get("borrowedItems", null) is Array:
 		cached_borrowed_inventory_items = _array_from_value(inventory.get("borrowedItems", [])).duplicate(true)
-	cached_inventory_user_id = current_user_id
-	inventory_loaded = true
 	inventory_changed.emit(cached_inventory_items.duplicate(true))
 	return true
+
+
+## Applies an item-list response without discarding inventory state that was not
+## included by the endpoint, such as mount-license regions or borrowed items.
+func apply_inventory_items(items_value: Variant) -> bool:
+	if items_value is not Array:
+		return false
+	_apply_inventory_items(_array_from_value(items_value))
+	inventory_changed.emit(cached_inventory_items.duplicate(true))
+	return true
+
+
+func _apply_inventory_items(items: Array) -> void:
+	var current_user_id := int(AuthService.current_user.get("id", 0))
+	if cached_inventory_user_id != current_user_id:
+		cached_borrowed_inventory_items.clear()
+	cached_inventory_items = items.duplicate(true)
+	cached_inventory_user_id = current_user_id
+	inventory_loaded = true
 
 
 func _clear_inventory_cache() -> void:
@@ -768,7 +782,14 @@ func dev_add_item(item_id: String, quantity: int) -> Dictionary:
 		return response
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
-	var items := _array_from_value(body.get("items", []))
+	var items_value: Variant = body.get("items", null)
+	if not (items_value is Array):
+		return {
+			"success": false,
+			"error": "The item-add response did not contain a valid inventory.",
+		}
+	var items := _array_from_value(items_value)
+	apply_inventory_items(items)
 	return {
 		"success": true,
 		"items": items,
