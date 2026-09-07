@@ -914,6 +914,9 @@ var pvp_training_ai_catalog_loading := false
 var pvp_training_ai_enabled := false
 var pvp_ai_sparring_start_button: Button
 var pvp_ai_sparring_tabs: TabContainer
+var pvp_ai_sparring_bot_versions: Dictionary = {}
+var pvp_ai_sparring_about_versions: Dictionary = {}
+var pvp_ai_sparring_about_loading := false
 var pvp_ai_sparring_tier_select: OptionButton
 var pvp_ai_sparring_status_label: Label
 var pvp_ai_sparring_team_source_select: OptionButton
@@ -2031,6 +2034,7 @@ func _refresh_pvp_localized_ui() -> void:
 	if not pvp_leaderboard_entries.is_empty():
 		_render_pvp_leaderboard(pvp_leaderboard_entries)
 	_render_pvp_history_matches(pvp_history_matches, pvp_history_user_id)
+	_refresh_ai_sparring_about()
 	_refresh_pvp_training_ai_mode_options()
 	_refresh_pvp_training_ai_team_source_options()
 	_refresh_pvp_training_ai_archetype_options()
@@ -7492,6 +7496,42 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai_sparring_history_list.add_theme_constant_override("separation", 8)
 	history_scroll.add_child(pvp_ai_sparring_history_list)
 
+	var about_page := _create_pvp_ranked_tab_page("About the bots", 14)
+	about_page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.about")
+	pvp_ai_sparring_tabs.add_child(about_page)
+	var about_scroll := ScrollContainer.new()
+	about_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	about_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	about_page.add_child(about_scroll)
+	var about_layout := VBoxContainer.new()
+	about_layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	about_layout.add_theme_constant_override("separation", 18)
+	about_scroll.add_child(about_layout)
+	for bot_id: String in ["ai4", "ai5"]:
+		var card := PanelContainer.new()
+		card.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_INSET, Color("#8474c4"), 10, 1))
+		about_layout.add_child(card)
+		var content := VBoxContainer.new()
+		content.add_theme_constant_override("separation", 10)
+		card.add_child(content)
+		var bot_title := Label.new()
+		bot_title.add_theme_font_size_override("font_size", 22)
+		_set_localized_control_property(bot_title, "text", "ui.pvp.training.ai.mode_ai4" if bot_id == "ai4" else "ui.pvp.training.ai.mode_active")
+		content.add_child(bot_title)
+		var bot_version := Label.new()
+		bot_version.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		bot_version.name = "AiSparringVersion_" + bot_id
+		content.add_child(bot_version)
+		pvp_ai_sparring_about_versions[bot_id] = bot_version
+		var description := Label.new()
+		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_set_localized_control_property(description, "text", "ui.pvp.ai_sparring.about.scholar" if bot_id == "ai4" else "ui.pvp.ai_sparring.about.grandmaster")
+		content.add_child(description)
+	var about_note := Label.new()
+	about_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_set_localized_control_property(about_note, "text", "ui.pvp.ai_sparring.about.note")
+	about_layout.add_child(about_note)
+	_refresh_ai_sparring_about()
 	pvp_ai_sparring_tabs.current_tab = 0
 	return page
 
@@ -42844,12 +42884,51 @@ func _on_pvp_ai_sparring_tab_changed(tab_index: int) -> void:
 	var tab_key := str(selected_page.get_meta("i18n_tab_key", "")) if selected_page != null else ""
 	var catalog_selected := tab_key == "ui.pvp.ai_sparring.tab.catalog"
 	var history_selected := tab_key == "ui.pvp.ai_sparring.tab.history"
-	pvp_room_selected_mode = "" if history_selected or catalog_selected else "ai"
+	var about_selected := tab_key == "ui.pvp.ai_sparring.tab.about"
+	pvp_room_selected_mode = "" if history_selected or catalog_selected or about_selected else "ai"
 	_set_pvp_popup_subtitle(_pvp_popup_subtitle_for_section("AI Sparring"))
 	if history_selected:
 		_refresh_pvp_ai_sparring_match_history()
 	if catalog_selected:
 		_refresh_ai_sparring_catalog_view()
+	if about_selected:
+		_load_ai_sparring_about()
+
+
+func _load_ai_sparring_about() -> void:
+	if pvp_ai_sparring_about_loading:
+		return
+	pvp_ai_sparring_about_loading = true
+	pvp_ai_sparring_bot_versions.clear()
+	_refresh_ai_sparring_about()
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.get_training_ai_teams(request)
+	request.queue_free()
+	pvp_ai_sparring_about_loading = false
+	# Refresh information only; opening About must not reroll a random opponent.
+	_apply_ai_sparring_bot_versions(response)
+
+
+func _apply_ai_sparring_bot_versions(response: Dictionary) -> void:
+	pvp_ai_sparring_bot_versions.clear()
+	var bots_value: Variant = response.get("bots", []) if bool(response.get("success", false)) else []
+	if bots_value is Array:
+		for bot: Variant in bots_value:
+			if bot is Dictionary and str(bot.get("id", "")) in ["ai4", "ai5"]:
+				pvp_ai_sparring_bot_versions[str(bot["id"])] = bot
+	_refresh_ai_sparring_about()
+
+
+func _refresh_ai_sparring_about() -> void:
+	for bot_id: String in pvp_ai_sparring_about_versions:
+		var label: Label = pvp_ai_sparring_about_versions[bot_id]
+		var info: Dictionary = pvp_ai_sparring_bot_versions.get(bot_id, {})
+		var version := str(info.get("version", "")) if info.get("version") != null else ""
+		var version_text := LocalizationManager.text("ui.pvp.ai_sparring.about.unknown")
+		if not version.is_empty():
+			version_text = LocalizationManager.text("ui.pvp.ai_sparring.about.version", {"version": version})
+		var status_key := "ui.pvp.ai_sparring.about.available" if bool(info.get("available", false)) else "ui.pvp.ai_sparring.about.unavailable"
+		label.text = version_text + " · " + LocalizationManager.text(status_key)
 
 
 func _on_pvp_ai_sparring_history_refresh_pressed() -> void:
@@ -43371,6 +43450,8 @@ func _load_pvp_training_ai_catalog() -> void:
 	if pvp_training_ai_catalog_loading:
 		return
 	pvp_training_ai_catalog_loading = true
+	pvp_ai_sparring_bot_versions.clear()
+	_refresh_ai_sparring_about()
 	pvp_training_ai_enabled = false
 	_refresh_pvp_room_battle_purpose_ui()
 	var request := _create_pvp_request_node()
@@ -43383,6 +43464,7 @@ func _load_pvp_training_ai_catalog() -> void:
 	pvp_training_ai_available_modes.clear()
 	pvp_training_ai_catalog_archetypes.clear()
 	if pvp_training_ai_catalog_loaded:
+		_apply_ai_sparring_bot_versions(response)
 		var tiers_value: Variant = response.get("tiers", [])
 		if tiers_value is Array:
 			for tier_value: Variant in tiers_value:
@@ -43429,6 +43511,7 @@ func _load_pvp_training_ai_catalog() -> void:
 			and not pvp_training_ai_available_modes.is_empty()
 			and not pvp_training_ai_catalog_entries.is_empty()
 		)
+	_refresh_ai_sparring_about()
 	_refresh_pvp_training_ai_mode_options()
 	_refresh_ai_sparring_tier_options()
 	_refresh_pvp_training_ai_team_source_options()

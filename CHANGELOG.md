@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- AI Sparring now shows the full names AI4 Scholar and AI5 Grandmaster.
+- Added an About the bots tab with their play styles, availability and server versions.
+
 ## 0.3.74 - 2026-09-07
 
 - AI Sparring now calls AI4 **Scholar** and AI5 **Grandmaster**.

@@ -18,7 +18,11 @@ func _run() -> void:
 		return
 
 	var original_locale := str(localization_manager.get("current_locale"))
+	var settings_manager := root.get_node("SettingsManager")
+	var original_name_language := str(settings_manager.get("content_name_language"))
+	settings_manager.set("content_name_language", "localized")
 	await _check_pvp_runtime_translation()
+	settings_manager.set("content_name_language", original_name_language)
 	localization_manager.call("set_locale", original_locale)
 	await process_frame
 	quit(1 if failed else 0)
@@ -175,7 +179,19 @@ func _check_pvp_runtime_translation() -> void:
 		"AI training action uses the interactive room-button styling"
 	)
 	_check(ai_sparring_menu_button != null, "AI Sparring has its own PvP destination")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 3, "AI Sparring separates practice, team catalog and history")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 4, "AI Sparring separates practice, team catalog, history and bot information")
+	_check(ai_sparring_tabs.get_tab_title(3) == "Over de bots", "Bot information tab is localized")
+	var bot_versions: Dictionary = overlay.get("pvp_ai_sparring_about_versions")
+	_check(bot_versions["ai5"].text.contains("Serverversie niet bevestigd"), "Missing server data does not claim a bot version")
+	overlay.set("pvp_ai_sparring_bot_versions", {"ai5": {"version": "Native Z v4", "available": true}})
+	overlay.call("_refresh_ai_sparring_about")
+	_check(bot_versions["ai5"].text.contains("Native Z v4"), "About displays the confirmed server version")
+	overlay.set("pvp_training_ai_resolved_team_id", "keep-selected-opponent")
+	overlay.call("_apply_ai_sparring_bot_versions", {"success": true, "bots": [{"id": "ai5", "version": "Native Z v4", "available": true}]})
+	_check(overlay.get("pvp_training_ai_resolved_team_id") == "keep-selected-opponent", "Refreshing bot information does not reroll the opponent")
+	overlay.call("_apply_ai_sparring_bot_versions", {"success": false})
+	_check(bot_versions["ai5"].text.contains("Serverversie niet bevestigd"), "A failed refresh clears an old confirmed version")
+	overlay.set("pvp_training_ai_resolved_team_id", "")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(0) == "Vrij oefenen", "Free sparring tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(1) == "Teamcatalogus", "Team catalog tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Matchhistorie", "Match history tab renders in Dutch")
@@ -204,7 +220,7 @@ func _check_pvp_runtime_translation() -> void:
 	var history_text := ""
 	for history_label: Label in history_labels:
 		history_text += history_label.text + " "
-	_check(history_text.contains("Tegenstander: Grandmaster"), "Match history identifies Grandmaster as the opponent")
+	_check(history_text.contains("Tegenstander: AI5 Grandmaster"), "Match history identifies AI5 Grandmaster as the opponent")
 	_check(history_text.contains("Gewonnen"), "Match history shows the localized player result")
 	_check(overlay.find_child("AiVeteranPortrait", true, false) != null, "AI Sparring presents the Veteran trainer identity")
 	_check(ai_team_step != null, "Free sparring groups the player's team as its first step")
