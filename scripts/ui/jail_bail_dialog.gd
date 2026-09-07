@@ -67,6 +67,7 @@ func _build_ui() -> void:
 	close_button = Button.new()
 	close_button.text = "×"
 	close_button.custom_minimum_size = Vector2(38, 38)
+	_apply_close_button_style(close_button)
 	close_button.pressed.connect(_close)
 	header.add_child(close_button)
 
@@ -142,9 +143,48 @@ func _create_detainee_row(detainee: Dictionary) -> Control:
 	var pay_button := Button.new()
 	pay_button.text = "Pay ₽%s" % _format_money(bail_cost)
 	pay_button.custom_minimum_size = Vector2(120, 42)
+	_apply_pay_button_style(pay_button)
 	pay_button.pressed.connect(_pay_bail.bind(int(detainee.get("targetPlayerId", 0))))
 	content.add_child(pay_button)
 	return row
+
+
+func _apply_close_button_style(button: Button) -> void:
+	button.focus_mode = Control.FOCUS_NONE
+	button.tooltip_text = "Close"
+	button.add_theme_font_size_override("font_size", 22)
+	button.add_theme_color_override("font_color", Color("#c6d9e8"))
+	button.add_theme_color_override("font_hover_color", Color("#fff4f6"))
+	button.add_theme_color_override("font_pressed_color", Color("#ffffff"))
+	button.add_theme_color_override("font_disabled_color", Color("#587084"))
+	button.add_theme_stylebox_override("normal", _button_style(Color("#102638"), Color("#315874"), 7))
+	button.add_theme_stylebox_override("hover", _button_style(Color("#3a1b2a"), Color("#ef7188"), 7, 2))
+	button.add_theme_stylebox_override("pressed", _button_style(Color("#1c0d16"), Color("#ff9aac"), 7, 2))
+	button.add_theme_stylebox_override("disabled", _button_style(Color("#0a141f"), Color("#263d50"), 7))
+
+
+func _apply_pay_button_style(button: Button) -> void:
+	button.focus_mode = Control.FOCUS_ALL
+	button.add_theme_font_size_override("font_size", 14)
+	button.add_theme_color_override("font_color", Color("#eaf8ff"))
+	button.add_theme_color_override("font_hover_color", Color("#ffffff"))
+	button.add_theme_color_override("font_pressed_color", Color("#d8f4ff"))
+	button.add_theme_color_override("font_disabled_color", Color("#6f8798"))
+	button.add_theme_stylebox_override("normal", _button_style(Color("#0d5f92"), Color("#4bc5ff"), 7, 1))
+	button.add_theme_stylebox_override("hover", _button_style(Color("#167bb6"), Color("#91ddff"), 7, 2))
+	button.add_theme_stylebox_override("pressed", _button_style(Color("#08456d"), Color("#d0f3ff"), 7, 2))
+	button.add_theme_stylebox_override("disabled", _button_style(Color("#0a1722"), Color("#294457"), 7, 1))
+
+
+func _button_style(background: Color, border: Color, corner_radius: int, border_width: int = 1) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(border_width)
+	style.set_corner_radius_all(corner_radius)
+	style.content_margin_left = 10
+	style.content_margin_right = 10
+	return style
 
 
 func _pay_bail(target_player_id: int) -> void:
