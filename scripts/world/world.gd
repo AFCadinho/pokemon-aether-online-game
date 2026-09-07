@@ -151,6 +151,10 @@ func _ready() -> void:
 	await _setup_initial_world_state()
 	await _refresh_fishing_progression()
 	_normalize_map_depth_layer_z_indices(GameState.current_map)
+	# Saved jail positions are restored before the runtime JailTop layer is
+	# split into depth groups. Ensure the player's z-index is based on that
+	# restored position before the first frame can draw the new foreground bars.
+	player.refresh_visual_depth()
 	if GameState.gameplay_reset_in_progress:
 		GameState.finish_gameplay_reset()
 
