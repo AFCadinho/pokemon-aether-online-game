@@ -22924,11 +22924,22 @@ func _show_bag_discard_dialog(item: Dictionary) -> void:
 	dialog.popup_centered(Vector2i(500, 260))
 	dialog.cancel_button.grab_focus.call_deferred()
 
-func _discard_bag_item(item: Dictionary, quantity: int) -> void:
+func _discard_bag_item(item: Dictionary, quantity: int, request_id: String = "") -> void:
 	var item_id := str(item.get("discardItemId", item.get("id", "")))
-	var result: Dictionary = await InventoryService.discard_item(item_id, quantity)
+	var result: Dictionary = await InventoryService.discard_item(item_id, quantity, request_id)
 	bag_discard_busy = false
 	if not bool(result.get("success", false)):
+		var retry_request_id := str(result.get("requestId", ""))
+		if _bag_discard_failure_may_be_ambiguous(result) and retry_request_id != "":
+			_show_ui_confirm_popup(
+				LocalizationManager.text("ui.bag.discard.retry.title"),
+				LocalizationManager.text("ui.bag.discard.retry.message"),
+				LocalizationManager.text("ui.bag.discard.retry.action"),
+				Callable(self, "_discard_bag_item").bind(item, quantity, retry_request_id),
+				Vector2i(500, 190),
+				false
+			)
+			return
 		_add_chat_message(str(result.get("error", LocalizationManager.text("ui.bag.discard.failed"))))
 		await _load_bag_inventory()
 		return
@@ -22937,6 +22948,10 @@ func _discard_bag_item(item: Dictionary, quantity: int) -> void:
 	_refresh_bag_items()
 	_refresh_bag_detail()
 	_add_chat_message(LocalizationManager.text("ui.bag.discard.done", {"quantity": quantity, "item": str(item.get("name", ""))}))
+
+func _bag_discard_failure_may_be_ambiguous(result: Dictionary) -> bool:
+	var status := int(result.get("status", 0))
+	return status <= 0 or status >= 500
 
 func _set_bag_summary(text: String) -> void:
 	if bag_summary_label != null:

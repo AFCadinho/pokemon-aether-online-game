@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bag discard retries after an interrupted connection now safely check the original request instead of discarding a second time.
+
 - Discard tradable items from the Bag with right-click, a quantity choice and confirmation. Key items, HMs, account-bound items and the Bike Shop Cyclizar remain protected.
 
 - Medicine-system message toont nu Pokémonnaam en exact herstelde HP.

@@ -1,6 +1,7 @@
 extends SceneTree
 
 var failures := 0
+const INVENTORY_SERVICE_PATH := "res://scripts/services/inventory_service.gd"
 
 func _init() -> void:
 	_run.call_deferred()
@@ -12,6 +13,7 @@ func _run() -> void:
 		quit(1)
 		return
 	var overlay = overlay_script.new()
+	var inventory_service_source := FileAccess.get_file_as_string(INVENTORY_SERVICE_PATH)
 	var host := Control.new()
 	root.add_child(host)
 	overlay.root_control = host
@@ -23,6 +25,12 @@ func _run() -> void:
 	])
 	_check(overlay._bag_discard_quantity(ordinary[0]) == 5, "Owned quantity is available for discard")
 	_check(overlay._bag_discard_quantity(ordinary[1]) == 0, "Protected item stays protected")
+	_check(inventory_service_source.contains("func discard_item(item_id: String, quantity: int, request_id: String = \"\")"), "Discard accepts an existing request ID for retries")
+	_check(inventory_service_source.contains("JSON.stringify({\"quantity\": quantity, \"requestId\": resolved_request_id})"), "Retries submit their original request ID")
+	_check(inventory_service_source.contains('response[\"requestId\"] = resolved_request_id'), "Ambiguous responses retain their request ID")
+	_check(overlay._bag_discard_failure_may_be_ambiguous({"status": 0}), "Timeouts retain their original discard request")
+	_check(overlay._bag_discard_failure_may_be_ambiguous({"status": 502}), "Server failures retain their original discard request")
+	_check(not overlay._bag_discard_failure_may_be_ambiguous({"status": 400}), "Rejected requests do not offer an unnecessary retry")
 	for reverse in [false, true]:
 		var stones: Array[Dictionary] = [
 			{"id": "venusaurite", "canonicalItemId": "venusaurite", "ownershipVariant": "tradeable", "quantity": 3, "discardQuantity": 3},
@@ -49,7 +57,6 @@ func _run() -> void:
 	overlay.pokedex_sprite_loader.free()
 	overlay.free()
 	host.queue_free()
-	await process_frame
 	quit(1 if failures else 0)
 
 func _check(condition: bool, message: String) -> void:

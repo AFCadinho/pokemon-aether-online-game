@@ -542,23 +542,48 @@ func use_inventory_item(item_id: String) -> Dictionary:
 	}
 
 
-func discard_item(item_id: String, quantity: int) -> Dictionary:
+func discard_item(item_id: String, quantity: int, request_id: String = "") -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
-	var random_id := Crypto.new().generate_random_bytes(16).hex_encode()
-	var request_id := "%s-%s-%s-%s-%s" % [random_id.substr(0, 8), random_id.substr(8, 4), random_id.substr(12, 4), random_id.substr(16, 4), random_id.substr(20, 12)]
+	var resolved_request_id := request_id if _is_request_id(request_id) else _new_request_id()
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
 		base_url + "/game/inventory/items/%s/discard" % item_id.uri_encode(),
 		HTTPClient.METHOD_POST, GatewayApiConfig.get_json_headers(),
-		JSON.stringify({"quantity": quantity, "requestId": request_id})
+		JSON.stringify({"quantity": quantity, "requestId": resolved_request_id})
 	)
 	if not bool(response.get("success", false)):
+		response["requestId"] = resolved_request_id
 		return response
 	var body := _dictionary_from_value(response.get("body", {}))
 	var inventory := _dictionary_from_value(body.get("inventory", {}))
 	apply_inventory_state(inventory)
-	return {"success": true, "inventory": inventory.get("items", [])}
+	return {
+		"success": true,
+		"inventory": inventory.get("items", []),
+		"requestId": resolved_request_id,
+	}
+
+
+func _new_request_id() -> String:
+	var random_id := Crypto.new().generate_random_bytes(16).hex_encode()
+	return "%s-%s-%s-%s-%s" % [
+		random_id.substr(0, 8), random_id.substr(8, 4), random_id.substr(12, 4),
+		random_id.substr(16, 4), random_id.substr(20, 12),
+	]
+
+
+func _is_request_id(value: String) -> bool:
+	if value.length() != 36:
+		return false
+	for index in value.length():
+		var character := value.substr(index, 1).to_lower()
+		if index in [8, 13, 18, 23]:
+			if character != "-":
+				return false
+		elif not character in "0123456789abcdef":
+			return false
+	return true
 
 
 func return_appearance_item(item_id: String) -> Dictionary:
