@@ -2,9 +2,7 @@
 
 ## Unreleased
 
-- Bag discard retries after an interrupted connection now safely check the original request instead of discarding a second time.
-
-- Discard tradable items from the Bag with right-click, a quantity choice and confirmation. Key items, HMs, account-bound items and the Bike Shop Cyclizar remain protected.
+- Discard tradable Bag items from the right-click menu, with a quantity choice, confirmation and safe retry after an interrupted connection. Key Items, HMs, account-bound items and the Bike Shop Cyclizar remain protected.
 
 - Medicine-system message toont nu Pokémonnaam en exact herstelde HP.
 - Max Revive is toegevoegd aan de daadwerkelijke field-use configuratie: fainted Pokémon terug naar volle
