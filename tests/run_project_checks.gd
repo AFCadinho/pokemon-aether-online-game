@@ -122,6 +122,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/evolution_prompt_queue_check.gd",
 	"res://tests/gameplay_reset_contract_check.gd",
 	"res://tests/game_state_scoped_input_lock_check.gd",
+	"res://tests/authorized_teleport_input_lock_check.gd",
 	"res://tests/story_service_contract_check.gd",
 	"res://tests/dev_story_checkpoint_world_state_check.gd",
 	"res://tests/starter_choice_dialog_check.gd",

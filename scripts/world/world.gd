@@ -81,6 +81,7 @@ var has_pending_player_position_save := false
 var activity_state_save_in_progress := false
 var pending_activity_state_save: Dictionary = {}
 var pending_happiness_walk_steps := 0
+const AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER := &"authorized_teleport"
 var authorized_teleport_in_progress := false
 var authorized_teleport_locked_overworld := false
 var authorized_teleport_apply_failed_autosave_blocked := false
@@ -374,7 +375,7 @@ func begin_authorized_teleport(
 		}
 	authorized_teleport_in_progress = true
 	has_pending_player_position_save = false
-	GameState.lock_overworld_input()
+	GameState.acquire_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
 	authorized_teleport_locked_overworld = true
 	while is_saving_player_position:
 		await get_tree().process_frame
@@ -396,7 +397,7 @@ func begin_authorized_teleport(
 func cancel_authorized_teleport() -> void:
 	authorized_teleport_in_progress = false
 	if authorized_teleport_locked_overworld:
-		GameState.unlock_overworld_input()
+		GameState.release_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
 	authorized_teleport_locked_overworld = false
 
 
@@ -508,7 +509,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 		}
 
 	if not authorized_teleport_locked_overworld:
-		GameState.lock_overworld_input()
+		GameState.acquire_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
 		authorized_teleport_locked_overworld = true
 	is_loading_map = true
 	_clear_remote_players()
@@ -601,7 +602,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	if reuses_presence_roster:
 		_restore_remote_players_from_cached_presence()
 	if authorized_teleport_locked_overworld:
-		GameState.unlock_overworld_input()
+		GameState.release_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
 	authorized_teleport_locked_overworld = false
 	if trace_aether_clash:
 		_trace_aether_clash("teleport_apply_finished", {
@@ -693,7 +694,7 @@ func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	active_remote_authorized_teleport_command_id = command_id
 	authorized_teleport_in_progress = true
 	has_pending_player_position_save = false
-	GameState.lock_overworld_input()
+	GameState.acquire_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
 	authorized_teleport_locked_overworld = true
 	while is_saving_player_position:
 		await get_tree().process_frame
@@ -808,7 +809,7 @@ func _mark_authorized_teleport_apply_failed() -> void:
 		_clear_local_aethernet_effect(true)
 		_set_aethernet_effect_presence("")
 	if authorized_teleport_locked_overworld:
-		GameState.unlock_overworld_input()
+		GameState.release_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
 	authorized_teleport_locked_overworld = false
 
 
