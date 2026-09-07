@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Jail- en Thieving-herstel is betrouwbaarder: de `JAILED`-timer blijft niet langer zichtbaar na
+    uitloggen, opnieuw inloggen of wisselen van account.
+- Een arrestatie verplaatst je direct naar de jail en laat je daar meteen bewegen; je hoeft niet
+    meer eerst opnieuw in te loggen.
+- Een actieve jailstraf wordt server-side afgehandeld. Na afloop word je ook na uitloggen correct
+    vrijgelaten, zodat je niet vast kunt blijven staan in de jail.
+- Vanuit de jail kun je weer veilig terug naar het inlogscherm, ook vlak nadat je gearresteerd bent.
+- De tralies in de jail tekenen bij het inloggen direct op de juiste diepte, zonder kort over je
+    Trainer heen te verschijnen.
+- Het jail-bailvenster heeft nu passende knoppen voor sluiten en betalen in plaats van de standaard
+    Godot-styling.
+- Een overworld-reset voor developers maakt alle Thieving-NPC's opnieuw pickpocketbaar, naast de
+    Rock Smash-rotsen. De System-melding noemt beide resets.
 - Discard tradable Bag items from the right-click menu, with a quantity choice, confirmation and safe retry after an interrupted connection. Key Items, HMs, account-bound items and the Bike Shop Cyclizar remain protected.
 
 - Medicine-system message toont nu Pokémonnaam en exact herstelde HP.
