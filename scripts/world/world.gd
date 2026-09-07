@@ -948,6 +948,8 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	await _save_current_player_position_if_changed(true, target_spawn_name)
 	_publish_world_presence(true)
 	await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+	is_loading_map = false
+	GameState.unlock_overworld_input()
 
 
 func reload_current_map_preserving_player_position() -> bool:
@@ -966,8 +968,6 @@ func reload_current_map_preserving_player_position() -> bool:
 	player.teleport_within_current_map(player_position, facing)
 	await _save_current_player_position_if_changed(true, "")
 	return true
-	is_loading_map = false
-	GameState.unlock_overworld_input()
 
 
 func is_map_transition_in_progress() -> bool:
