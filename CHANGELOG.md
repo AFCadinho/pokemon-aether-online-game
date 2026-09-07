@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.3.74 - 2026-09-07
 
+- AI Sparring now calls AI4 **Scholar** and AI5 **Grandmaster**.
 - AI Sparring now uses an improved AI5 opponent with smarter battle choices and better predictions.
 - Jail and Thieving recovery is more reliable when you log out, log back in, or change accounts.
 - An arrest now takes you straight to jail and lets you move there immediately.

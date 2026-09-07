@@ -204,7 +204,7 @@ func _check_pvp_runtime_translation() -> void:
 	var history_text := ""
 	for history_label: Label in history_labels:
 		history_text += history_label.text + " "
-	_check(history_text.contains("Tegenstander: AI5"), "Match history identifies AI5 as the opponent")
+	_check(history_text.contains("Tegenstander: Grandmaster"), "Match history identifies Grandmaster as the opponent")
 	_check(history_text.contains("Gewonnen"), "Match history shows the localized player result")
 	_check(overlay.find_child("AiVeteranPortrait", true, false) != null, "AI Sparring presents the Veteran trainer identity")
 	_check(ai_team_step != null, "Free sparring groups the player's team as its first step")

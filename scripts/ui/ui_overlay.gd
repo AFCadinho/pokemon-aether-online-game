@@ -42989,10 +42989,8 @@ func _create_pvp_ai_sparring_history_card(match: Dictionary) -> Control:
 	header.add_child(result_label)
 	var ai_level := int(match.get("aiLevel", 4))
 	var opponent := Label.new()
-	opponent.text = LocalizationManager.text(
-		"ui.pvp.ai_sparring.history.opponent",
-		{"level": ai_level}
-	)
+	var opponent_key := "ui.pvp.ai_sparring.history.opponent_grandmaster" if ai_level >= 5 else "ui.pvp.ai_sparring.history.opponent_scholar"
+	opponent.text = LocalizationManager.text(opponent_key)
 	opponent.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	opponent.add_theme_color_override("font_color", UI_TEXT)
 	header.add_child(opponent)
