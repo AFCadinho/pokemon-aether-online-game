@@ -94,6 +94,7 @@ func _init() -> void:
 	)
 	_check(
 		"func clear_state()" in service
+		and "func is_jailed()" in service
 		and "state_generation += 1" in service
 		and "state_changed.emit({})" in service
 		and "ThievingService.clear_state()" in auth_service
@@ -108,6 +109,12 @@ func _init() -> void:
 		"func dev_respawn_rock_smash_rocks()" in player_game_state
 		and "await ThievingService.load_state()" in player_game_state,
 		"Developer overworld resets refresh daily Thieving target availability"
+	)
+	var world := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	_check(
+		"if not ThievingService.is_jailed():" in world
+		and "var save_result := await save_current_player_state_now()" in world,
+		"Jailed players can return to login without repeating the authoritative jail save"
 	)
 	quit(1 if failed else 0)
 

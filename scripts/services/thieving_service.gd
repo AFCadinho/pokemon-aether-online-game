@@ -149,6 +149,10 @@ func is_most_wanted() -> bool:
 	return int(state.get("wanted", 0)) >= 100
 
 
+func is_jailed() -> bool:
+	return bool(state.get("jailed", false))
+
+
 func load_bailable_detainees() -> Dictionary:
 	var response := await _request_json(JAIL_DETAINEES_ENDPOINT, HTTPClient.METHOD_GET, "")
 	if not bool(response.get("success", false)):

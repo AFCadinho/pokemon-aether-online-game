@@ -270,15 +270,19 @@ func prepare_for_account_switch() -> Dictionary:
 			var overlay_reason := str(overlay.call("get_account_switch_block_reason")).strip_edges()
 			if overlay_reason != "":
 				return {"success": false, "error": overlay_reason}
-	var save_result := await save_current_player_state_now()
-	if not bool(save_result.get("success", false)):
-		return {
-			"success": false,
-			"error": str(save_result.get(
-				"error",
-				"Could not save the current account before switching."
-			)),
-		}
+	# An arrest has already persisted the authoritative jail destination. Do not
+	# submit a second position save while detained: its cage-boundary validation
+	# can reject an otherwise safe return to the login screen.
+	if not ThievingService.is_jailed():
+		var save_result := await save_current_player_state_now()
+		if not bool(save_result.get("success", false)):
+			return {
+				"success": false,
+				"error": str(save_result.get(
+					"error",
+					"Could not save the current account before switching."
+				)),
+			}
 	await _flush_playtime_if_needed(true)
 	if unflushed_playtime_seconds > 0:
 		return {
