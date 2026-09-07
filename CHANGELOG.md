@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- AI Sparring now uses an improved AI5 opponent with smarter battle choices and better predictions.
 - Jail and Thieving recovery is more reliable when you log out, log back in, or change accounts.
 - An arrest now takes you straight to jail and lets you move there immediately.
 - Jail sentences now finish correctly even if you log out, so you cannot get stuck in jail.
