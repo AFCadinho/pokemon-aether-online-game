@@ -5132,6 +5132,7 @@
   "ui.thieving.unavailable": "Pickpocketing is unavailable right now.",
   "ui.thieving.invalid_target": "This NPC cannot be pickpocketed.",
   "ui.thieving.locked": "Learn Thieving from Master Thief Rook in Viridian City first.",
+  "ui.thieving.position_required": "Stand behind the target and face them to pickpocket.",
   "ui.thieving.prompt.pickpocket": "Pickpocket ({hotkey})",
   "ui.skill.thieving.unlocked": "Thieving unlocked · Complete Rook's first pickpocket lesson",
   "ui.skill.rock_smash.unlocked": "Rock Smash unlocked · Received HM Rock Smash",

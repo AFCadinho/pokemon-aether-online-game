@@ -108,7 +108,7 @@ z_index = 9
 
 [node name="Nameplate" type="Control" parent="." unique_id=1400626741]
 visible = false
-z_index = 4096
+z_index = 4095
 z_as_relative = false
 layout_mode = 3
 anchors_preset = 0

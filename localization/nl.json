@@ -5132,6 +5132,7 @@
   "ui.thieving.unavailable": "Pickpocket is nu niet beschikbaar.",
   "ui.thieving.invalid_target": "Deze NPC kun je niet beroven.",
   "ui.thieving.locked": "Leer eerst Thieving van Meesterdief Rook in Viridian City.",
+  "ui.thieving.position_required": "Ga achter het doelwit staan en kijk ernaartoe om te zakkenrollen.",
   "ui.thieving.prompt.pickpocket": "Zakkenrollen ({hotkey})",
   "ui.skill.thieving.unlocked": "Thieving ontgrendeld · Voltooi Rooks eerste pickpocketles",
   "ui.thieving.arrested": "Je bent gearresteerd en kreeg een boete van ₽{amount}.",
