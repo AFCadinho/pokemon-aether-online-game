@@ -173,6 +173,11 @@ func _prepare_world() -> void:
 		push_warning("LoadingScreen: inventory load failed: %s" % str(
 			inventory_response.get("error", "Unknown error")
 		))
+	var thieving_response: Dictionary = await ThievingService.load_state()
+	if not bool(thieving_response.get("success", false)):
+		push_warning("LoadingScreen: thieving state load failed: %s" % str(
+			thieving_response.get("error", "Unknown error")
+		))
 
 	GameState.set_prepared_world_state({
 		"savedState": saved_state,
