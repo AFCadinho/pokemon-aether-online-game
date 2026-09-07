@@ -34,6 +34,8 @@ def main() -> None:
 
     changelog_path = Path(args.changelog)
     sections = _parse_changelog_section(changelog_path, version)
+    if not any(sections.values()):
+        raise SystemExit(f"No release notes found for version {version} in {changelog_path}.")
     fields = _build_fields(sections)
     description = args.release_notes.strip() or "Open the launcher to download the latest build."
 
@@ -81,15 +83,18 @@ def _parse_changelog_section(changelog_path: Path, version: str) -> dict[str, li
             sections.setdefault(current_section, [])
             continue
 
-        if stripped.startswith("- ") and current_section:
-            sections[current_section].append(stripped)
+        if stripped.startswith("- "):
+            # Release notes may be grouped under Added/Fixed/Changed, but
+            # direct bullets under the version heading are valid too.
+            section = current_section or "Release notes"
+            sections.setdefault(section, []).append(stripped)
 
     return sections
 
 
 def _build_fields(sections: dict[str, list[str]]) -> list[dict[str, object]]:
     fields: list[dict[str, object]] = []
-    for section_name in ("Added", "Fixed", "Changed"):
+    for section_name in ("Added", "Fixed", "Changed", "Release notes"):
         entries = sections.get(section_name, [])
         if not entries:
             continue
@@ -99,12 +104,6 @@ def _build_fields(sections: dict[str, list[str]]) -> list[dict[str, object]]:
             name = section_name if index == 0 else f"{section_name} continued"
             fields.append({"name": name, "value": "\n".join(chunk), "inline": False})
 
-    if not fields:
-        fields.append({
-            "name": "Release notes",
-            "value": "Open the launcher to download the latest build.",
-            "inline": False,
-        })
     return fields
 
 

@@ -41,7 +41,18 @@ jobs:
             --release-notes "${RELEASE_NOTES}" \
             > discord_payload.json
 
-          curl -sS \
+          python3 - <<'PY'
+          import json
+
+          with open("discord_payload.json", encoding="utf-8") as handle:
+              payload = json.load(handle)
+          embeds = payload.get("embeds") or []
+          fields = embeds[0].get("fields") if embeds else None
+          if not fields:
+              raise SystemExit("Discord release payload contains no release-note fields.")
+          PY
+
+          curl --fail-with-body --retry 2 --retry-delay 2 -sS \
             -H "Content-Type: application/json" \
             -d @discord_payload.json \
             "${DISCORD_WEBHOOK_URL}"
