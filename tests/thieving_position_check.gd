@@ -96,11 +96,34 @@ func _run() -> void:
 		and prompt.position.y + prompt.size.y <= nameplate.position.y - 4.0,
 		"The Thieving icon has clear vertical spacing above the nameplate"
 	)
+	_check(
+		prompt != null
+		and nameplate != null
+		and not prompt.z_as_relative
+		and prompt.z_index > nameplate.z_index,
+		"The Thieving icon renders above NPC nameplates"
+	)
+	var player_scene_source := FileAccess.get_file_as_string("res://scenes/player.tscn")
+	_check(
+		player_scene_source.contains("visible = false\nz_index = 4095\nz_as_relative = false"),
+		"Player nameplates remain below the Thieving icon overlay"
+	)
 
 	player.global_position = Vector2(16.0, 48.0)
 	player.last_direction = Vector2.UP
 	npc.call("_sync_thieving_prompt")
 	_check(prompt != null and not prompt.visible, "The Thieving icon hides when the player moves in front")
+	_check(
+		bool(npc.call("_can_show_pickpocket_position_hint")),
+		"Available Thieving targets explain that the player must stand behind them"
+	)
+
+	player.global_position = Vector2(16.0, -16.0)
+	player.last_direction = Vector2.DOWN
+	_check(
+		not bool(npc.call("_can_show_pickpocket_position_hint")),
+		"The position hint stays hidden when the player can pickpocket"
+	)
 
 	quit(1 if failed else 0)
 

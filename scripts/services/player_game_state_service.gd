@@ -227,15 +227,21 @@ func dev_respawn_rock_smash_rocks() -> Dictionary:
 	if not bool(response.get("success", false)):
 		return response
 	var rock_smash_result: Dictionary = await RockSmashService.load_state()
+	var thieving_result: Dictionary = await ThievingService.load_state()
 	var world := get_tree().get_first_node_in_group("world")
 	var map_reload_success := true
 	if world != null and world.has_method("reload_current_map_preserving_player_position"):
 		map_reload_success = bool(await world.call("reload_current_map_preserving_player_position"))
 	return {
-		"success": bool(rock_smash_result.get("success", false)) and map_reload_success,
+		"success": (
+			bool(rock_smash_result.get("success", false))
+			and bool(thieving_result.get("success", false))
+			and map_reload_success
+		),
 		"rockSmashRefreshSuccess": bool(rock_smash_result.get("success", false)),
+		"thievingRefreshSuccess": bool(thieving_result.get("success", false)),
 		"mapReloadSuccess": map_reload_success,
-		"error": str(rock_smash_result.get("error", "")),
+		"error": str(rock_smash_result.get("error", thieving_result.get("error", ""))),
 	}
 
 

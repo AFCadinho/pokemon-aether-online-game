@@ -17,6 +17,7 @@ const ThievingArrestPresenterScript := preload("res://scripts/world/thieving_arr
 var state: Dictionary = {}
 var state_loaded := false
 var jail_release_generation := 0
+var state_generation := 0
 var was_authenticated := false
 var arrest_transfer_pending := false
 
@@ -32,22 +33,33 @@ func _process(_delta: float) -> void:
 	if authenticated and not was_authenticated:
 		load_state.call_deferred()
 	elif not authenticated and was_authenticated:
-		state.clear()
-		state_loaded = false
-		arrest_transfer_pending = false
-		jail_release_generation += 1
-		state_changed.emit({})
+		clear_state()
 	was_authenticated = authenticated
 
 
 func load_state() -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
+	var request_generation := state_generation
 	var response := await _request_json(THIEVING_ENDPOINT, HTTPClient.METHOD_GET, "")
+	if request_generation != state_generation:
+		return {"success": false, "error": "Thieving state request was superseded."}
 	if not bool(response.get("success", false)):
 		return response
 	_apply_state(_dictionary_from_value(response.get("body", {})))
 	return {"success": true, "state": state.duplicate(true)}
+
+
+func clear_state() -> void:
+	# Thieving state belongs to the authenticated account. Clear it immediately
+	# when that account changes so no jail HUD or pending release can bleed into
+	# the login scene or another account.
+	state_generation += 1
+	state.clear()
+	state_loaded = false
+	arrest_transfer_pending = false
+	jail_release_generation += 1
+	state_changed.emit({})
 
 
 func attempt_pickpocket(npc_id: String, defer_arrest_transfer := false) -> Dictionary:
@@ -135,6 +147,10 @@ func is_unlocked() -> bool:
 
 func is_most_wanted() -> bool:
 	return int(state.get("wanted", 0)) >= 100
+
+
+func is_jailed() -> bool:
+	return bool(state.get("jailed", false))
 
 
 func load_bailable_detainees() -> Dictionary:

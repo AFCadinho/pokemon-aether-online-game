@@ -208,13 +208,20 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 			world_source.contains(
 				"AetherClashJailDepthScript.split_jail_bars_for_depth_sorting(map)"
 			)
+			and world_source.contains("func _refresh_map_visual_depth_for_player(map: Node) -> void:")
+			and world_source.contains("_normalize_map_depth_layer_z_indices(map)\n\tplayer.refresh_visual_depth()")
+			and world_source.contains("player.set_idle_frame()\n\t_refresh_map_visual_depth_for_player(map)")
+			and FileAccess.get_file_as_string("res://scripts/world/player.gd").contains(
+				"func refresh_visual_depth() -> void:"
+			)
 			and world_source.contains(
 				"AetherClashJailDepthScript.get_depth_boundary_offset(tiled_name)"
 			)
 			and world_source.contains(
 				"AetherClashJailDepthScript.get_objects_top_overlay_z_floor("
 			),
-			"%s registers its isolated jail bars for world depth sorting" % scene_path.get_file()
+			"%s registers its isolated jail bars and refreshes player depth before the first frame"
+				% scene_path.get_file()
 		)
 	preview.queue_free()
 

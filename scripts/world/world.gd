@@ -81,6 +81,7 @@ var has_pending_player_position_save := false
 var activity_state_save_in_progress := false
 var pending_activity_state_save: Dictionary = {}
 var pending_happiness_walk_steps := 0
+const AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER := &"authorized_teleport"
 var authorized_teleport_in_progress := false
 var authorized_teleport_locked_overworld := false
 var authorized_teleport_apply_failed_autosave_blocked := false
@@ -134,6 +135,9 @@ func _ready() -> void:
 	var step_callback := Callable(self, "_on_player_overworld_steps_completed")
 	if player.has_signal("overworld_steps_completed") and not player.is_connected("overworld_steps_completed", step_callback):
 		player.connect("overworld_steps_completed", step_callback)
+	var mount_toggle_callback := Callable(self, "_on_player_land_mount_toggled")
+	if player.has_signal("land_mount_toggled") and not player.is_connected("land_mount_toggled", mount_toggle_callback):
+		player.connect("land_mount_toggled", mount_toggle_callback)
 	if not PlayerSave.party_changed.is_connected(_validate_active_flash_source):
 		PlayerSave.party_changed.connect(_validate_active_flash_source)
 	if not FieldMoveService.owned_charms_changed.is_connected(_validate_active_flash_source):
@@ -146,13 +150,17 @@ func _ready() -> void:
 	_connect_world_presence_signals()
 	await _setup_initial_world_state()
 	await _refresh_fishing_progression()
-	_normalize_map_depth_layer_z_indices(GameState.current_map)
 	if GameState.gameplay_reset_in_progress:
 		GameState.finish_gameplay_reset()
 
 
 func _on_player_overworld_steps_completed(step_count: int) -> void:
 	pending_happiness_walk_steps += maxi(step_count, 0)
+
+
+func _on_player_land_mount_toggled() -> void:
+	_save_current_player_position_if_changed.call_deferred(true)
+	_publish_world_presence.call_deferred(true)
 
 
 func _refresh_fishing_progression() -> void:
@@ -261,15 +269,19 @@ func prepare_for_account_switch() -> Dictionary:
 			var overlay_reason := str(overlay.call("get_account_switch_block_reason")).strip_edges()
 			if overlay_reason != "":
 				return {"success": false, "error": overlay_reason}
-	var save_result := await save_current_player_state_now()
-	if not bool(save_result.get("success", false)):
-		return {
-			"success": false,
-			"error": str(save_result.get(
-				"error",
-				"Could not save the current account before switching."
-			)),
-		}
+	# An arrest has already persisted the authoritative jail destination. Do not
+	# submit a second position save while detained: its cage-boundary validation
+	# can reject an otherwise safe return to the login screen.
+	if not ThievingService.is_jailed():
+		var save_result := await save_current_player_state_now()
+		if not bool(save_result.get("success", false)):
+			return {
+				"success": false,
+				"error": str(save_result.get(
+					"error",
+					"Could not save the current account before switching."
+				)),
+			}
 	await _flush_playtime_if_needed(true)
 	if unflushed_playtime_seconds > 0:
 		return {
@@ -374,7 +386,7 @@ func begin_authorized_teleport(
 		}
 	authorized_teleport_in_progress = true
 	has_pending_player_position_save = false
-	GameState.lock_overworld_input()
+	GameState.acquire_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
 	authorized_teleport_locked_overworld = true
 	while is_saving_player_position:
 		await get_tree().process_frame
@@ -396,7 +408,7 @@ func begin_authorized_teleport(
 func cancel_authorized_teleport() -> void:
 	authorized_teleport_in_progress = false
 	if authorized_teleport_locked_overworld:
-		GameState.unlock_overworld_input()
+		GameState.release_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
 	authorized_teleport_locked_overworld = false
 
 
@@ -508,7 +520,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 		}
 
 	if not authorized_teleport_locked_overworld:
-		GameState.lock_overworld_input()
+		GameState.acquire_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
 		authorized_teleport_locked_overworld = true
 	is_loading_map = true
 	_clear_remote_players()
@@ -601,7 +613,7 @@ func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	if reuses_presence_roster:
 		_restore_remote_players_from_cached_presence()
 	if authorized_teleport_locked_overworld:
-		GameState.unlock_overworld_input()
+		GameState.release_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
 	authorized_teleport_locked_overworld = false
 	if trace_aether_clash:
 		_trace_aether_clash("teleport_apply_finished", {
@@ -693,7 +705,7 @@ func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
 	active_remote_authorized_teleport_command_id = command_id
 	authorized_teleport_in_progress = true
 	has_pending_player_position_save = false
-	GameState.lock_overworld_input()
+	GameState.acquire_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
 	authorized_teleport_locked_overworld = true
 	while is_saving_player_position:
 		await get_tree().process_frame
@@ -808,7 +820,7 @@ func _mark_authorized_teleport_apply_failed() -> void:
 		_clear_local_aethernet_effect(true)
 		_set_aethernet_effect_presence("")
 	if authorized_teleport_locked_overworld:
-		GameState.unlock_overworld_input()
+		GameState.release_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
 	authorized_teleport_locked_overworld = false
 
 
@@ -939,6 +951,8 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	await _save_current_player_position_if_changed(true, target_spawn_name)
 	_publish_world_presence(true)
 	await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+	is_loading_map = false
+	GameState.unlock_overworld_input()
 
 
 func reload_current_map_preserving_player_position() -> bool:
@@ -957,8 +971,6 @@ func reload_current_map_preserving_player_position() -> bool:
 	player.teleport_within_current_map(player_position, facing)
 	await _save_current_player_position_if_changed(true, "")
 	return true
-	is_loading_map = false
-	GameState.unlock_overworld_input()
 
 
 func is_map_transition_in_progress() -> bool:
@@ -1247,6 +1259,7 @@ func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position:
 	player.move_start_position = spawn_position
 	player.is_moving = false
 	player.set_idle_frame()
+	_refresh_map_visual_depth_for_player(map)
 	player.refresh_map_layers()
 	_sync_player_activity_state_for_current_tile()
 	if player.has_method("reset_pokemon_follower_position"):
@@ -1272,6 +1285,7 @@ func _position_player_at_authorized_teleport_state(map: Node, state: Dictionary)
 		player.is_moving = false
 		player.last_direction = _direction_from_name(str(state.get("facingDirection", "down")))
 		player.set_idle_frame()
+		_refresh_map_visual_depth_for_player(map)
 		player.refresh_map_layers()
 		_sync_player_activity_state_for_current_tile()
 		if player.has_method("reset_pokemon_follower_position"):
@@ -1298,6 +1312,7 @@ func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 	player.is_moving = false
 	player.last_direction = _direction_from_name(str(state.get("facingDirection", "down")))
 	player.set_idle_frame()
+	_refresh_map_visual_depth_for_player(map)
 	player.refresh_map_layers()
 	_sync_player_activity_state_for_current_tile()
 	var saved_mount_id := str(state.get("mountId", "")).strip_edges().to_lower()
@@ -1317,6 +1332,14 @@ func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 func _sync_player_activity_state_for_current_tile() -> void:
 	if player != null and player.has_method("sync_activity_state_for_current_tile"):
 		player.call("sync_activity_state_for_current_tile")
+
+
+func _refresh_map_visual_depth_for_player(map: Node) -> void:
+	# Do this as part of positioning, rather than after the asynchronous login
+	# recovery finishes. A saved jail position must be correctly layered before
+	# any acknowledgement or activity-recovery request can delay the first frame.
+	_normalize_map_depth_layer_z_indices(map)
+	player.refresh_visual_depth()
 
 
 func _setup_initial_world_state() -> void:

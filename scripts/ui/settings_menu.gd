@@ -2540,6 +2540,9 @@ func _logout_confirmed() -> void:
 	# This action only returns to the login scene. Keep AuthService and its
 	# remember-me session intact; the explicit Logout action on the login screen
 	# is responsible for ending the session and clearing the saved token.
+	# The jail state is account-specific gameplay UI. It must not remain visible
+	# over the login screen while that remembered session waits to continue.
+	ThievingService.clear_state()
 	var error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
 	if error != OK:
 		if world.has_method("cancel_account_switch"):

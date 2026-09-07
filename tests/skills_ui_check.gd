@@ -384,6 +384,14 @@ func _run() -> void:
 	var first_rock := (panel.get("targets_container") as GridContainer).get_child(0) as PanelContainer
 	var first_rock_status := ((first_rock.get_child(0) as HBoxContainer).get_child(1) as Label)
 	_check(first_rock_status.text == "Smashed today", "a completed rock has a clear daily status")
+	var completed_rock_badge := first_rock_status.get_theme_stylebox("normal") as StyleBoxFlat
+	_check(
+		first_rock_status.get_theme_color("font_color") == Color("#ffd36a")
+		and completed_rock_badge != null
+		and completed_rock_badge.bg_color == Color("#2a210d")
+		and completed_rock_badge.border_color == Color("#8f6d29"),
+		"a completed rock uses the distinct gold daily-complete badge"
+	)
 	skills_service.call("_on_rock_smash_state_changed", {
 		"unlocked": true,
 		"level": 20,

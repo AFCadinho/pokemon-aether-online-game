@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 signal overworld_steps_completed(step_count: int)
+signal land_mount_toggled
 
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
@@ -489,8 +490,12 @@ func start_fishing(fishing_tier: int = -1) -> bool:
 func toggle_land_mount() -> bool:
 	if land_mount_activity_active:
 		_finish_land_mount_activity()
+		land_mount_toggled.emit()
 		return true
-	return _start_land_mount_activity()
+	var started := _start_land_mount_activity()
+	if started:
+		land_mount_toggled.emit()
+	return started
 
 
 func restore_land_mount(mount_id: String) -> bool:
@@ -2413,6 +2418,13 @@ func refresh_map_layers() -> void:
 	if collision_tilemap == null:
 		push_warning("Player.refresh_map_layers: Collision layer missing on %s." % current_map.name)
 	_apply_world_pixel_scale()
+
+
+func refresh_visual_depth() -> void:
+	# Map visual depth layers can be constructed after a saved position is
+	# restored. Recalculate immediately so the first rendered frame uses the
+	# restored position rather than the Player scene's default position.
+	_update_sort_z()
 
 func _find_tilemap_layer(parent: Node, layer_names: Array[String]) -> TileMapLayer:
 	return MapLayerResolverScript.find_tilemap_layer(parent, layer_names)

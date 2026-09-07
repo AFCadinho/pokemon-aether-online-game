@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.3.74 - 2026-09-07
+
+- AI Sparring now calls AI4 **Scholar** and AI5 **Grandmaster**.
+- AI Sparring now uses an improved AI5 opponent with smarter battle choices and better predictions.
+- Jail and Thieving recovery is more reliable when you log out, log back in, or change accounts.
+- An arrest now takes you straight to jail and lets you move there immediately.
+- Jail sentences now finish correctly even if you log out, so you cannot get stuck in jail.
+- You can safely return to the login screen from jail, even right after an arrest.
+- Jail bars now appear at the correct depth as soon as you log in.
+- The jail bail window now has clear close and pay buttons.
+- Thieving now explains that you must stand behind a target and face it before you pickpocket.
+- Thieving icons now always appear above nameplates, so targets are easier to spot.
+- Discard tradable Bag items from the right-click menu, with a quantity choice, confirmation and safe retry after an interrupted connection. Key Items, HMs, account-bound items and the Bike Shop Cyclizar remain protected.
+- Completed daily Rock Smash targets now stand out with a clear gold badge.
+- The Aether Clash Lobby now has two healing NPCs, so you can quickly heal your team there.
+- Map transitions now unlock movement correctly after the new area has finished loading.
+- Worker Cole now faces the correct direction when you meet him.
+
+- Medicine messages now show the Pokémon's name and the exact HP restored.
+- Max Revive now works correctly in the field and restores a fainted Pokémon to full HP.
+- Revive and Max Revive no longer restore PP.
+- Teleports now keep movement locked until the teleport window and map transition are finished.
+- Your position and active mount are now saved immediately when you mount or dismount.
+
+
 ## 0.3.73 - 2026-09-06
 
 - Caught Pokémon now show the destination box and slot in the system message.

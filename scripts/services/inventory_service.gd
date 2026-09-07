@@ -104,11 +104,8 @@ func apply_inventory_state(value: Variant) -> bool:
 	var inventory := value as Dictionary
 	if inventory.get("items", null) is not Array:
 		return false
-	var current_user_id := int(AuthService.current_user.get("id", 0))
-	if cached_inventory_user_id != current_user_id:
-		cached_borrowed_inventory_items.clear()
 	var items := _array_from_value(inventory.get("items", []))
-	cached_inventory_items = items.duplicate(true)
+	_apply_inventory_items(items)
 	cached_mount_license_regions.clear()
 	for region_value: Variant in _array_from_value(inventory.get("mountLicenseRegions", [])):
 		var region_id := str(region_value).strip_edges().to_lower()
@@ -117,10 +114,27 @@ func apply_inventory_state(value: Variant) -> bool:
 	cached_mount_license_regions.sort()
 	if inventory.get("borrowedItems", null) is Array:
 		cached_borrowed_inventory_items = _array_from_value(inventory.get("borrowedItems", [])).duplicate(true)
-	cached_inventory_user_id = current_user_id
-	inventory_loaded = true
 	inventory_changed.emit(cached_inventory_items.duplicate(true))
 	return true
+
+
+## Applies an item-list response without discarding inventory state that was not
+## included by the endpoint, such as mount-license regions or borrowed items.
+func apply_inventory_items(items_value: Variant) -> bool:
+	if items_value is not Array:
+		return false
+	_apply_inventory_items(_array_from_value(items_value))
+	inventory_changed.emit(cached_inventory_items.duplicate(true))
+	return true
+
+
+func _apply_inventory_items(items: Array) -> void:
+	var current_user_id := int(AuthService.current_user.get("id", 0))
+	if cached_inventory_user_id != current_user_id:
+		cached_borrowed_inventory_items.clear()
+	cached_inventory_items = items.duplicate(true)
+	cached_inventory_user_id = current_user_id
+	inventory_loaded = true
 
 
 func _clear_inventory_cache() -> void:
@@ -542,6 +556,50 @@ func use_inventory_item(item_id: String) -> Dictionary:
 	}
 
 
+func discard_item(item_id: String, quantity: int, request_id: String = "") -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	var resolved_request_id := request_id if _is_request_id(request_id) else _new_request_id()
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/inventory/items/%s/discard" % item_id.uri_encode(),
+		HTTPClient.METHOD_POST, GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"quantity": quantity, "requestId": resolved_request_id})
+	)
+	if not bool(response.get("success", false)):
+		response["requestId"] = resolved_request_id
+		return response
+	var body := _dictionary_from_value(response.get("body", {}))
+	var inventory := _dictionary_from_value(body.get("inventory", {}))
+	apply_inventory_state(inventory)
+	return {
+		"success": true,
+		"inventory": inventory.get("items", []),
+		"requestId": resolved_request_id,
+	}
+
+
+func _new_request_id() -> String:
+	var random_id := Crypto.new().generate_random_bytes(16).hex_encode()
+	return "%s-%s-%s-%s-%s" % [
+		random_id.substr(0, 8), random_id.substr(8, 4), random_id.substr(12, 4),
+		random_id.substr(16, 4), random_id.substr(20, 12),
+	]
+
+
+func _is_request_id(value: String) -> bool:
+	if value.length() != 36:
+		return false
+	for index in value.length():
+		var character := value.substr(index, 1).to_lower()
+		if index in [8, 13, 18, 23]:
+			if character != "-":
+				return false
+		elif not character in "0123456789abcdef":
+			return false
+	return true
+
+
 func return_appearance_item(item_id: String) -> Dictionary:
 	var normalized_item_id := item_id.strip_edges()
 	if not AuthService.is_authenticated():
@@ -724,7 +782,14 @@ func dev_add_item(item_id: String, quantity: int) -> Dictionary:
 		return response
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
-	var items := _array_from_value(body.get("items", []))
+	var items_value: Variant = body.get("items", null)
+	if not (items_value is Array):
+		return {
+			"success": false,
+			"error": "The item-add response did not contain a valid inventory.",
+		}
+	var items := _array_from_value(items_value)
+	apply_inventory_items(items)
 	return {
 		"success": true,
 		"items": items,

@@ -103,6 +103,7 @@ const NAMEPLATE_CARD_BOTTOM := 20.0
 const NAMEPLATE_OFFSET_TOP := -80.0
 const THIEVING_PROMPT_SIZE := Vector2(30.0, 30.0)
 const THIEVING_PROMPT_NAMEPLATE_GAP := 6.0
+const OVERHEAD_NAMEPLATE_Z := RenderingServer.CANVAS_ITEM_Z_MAX - 1
 const THIEVING_PROMPT_POSITION := Vector2(
 	-THIEVING_PROMPT_SIZE.x * 0.5,
 	NAMEPLATE_OFFSET_TOP - THIEVING_PROMPT_SIZE.y - THIEVING_PROMPT_NAMEPLATE_GAP
@@ -509,7 +510,7 @@ func _setup_nameplate() -> void:
 	nameplate.name = "Nameplate"
 	nameplate.visible = false
 	nameplate.z_as_relative = false
-	nameplate.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
+	nameplate.z_index = OVERHEAD_NAMEPLATE_Z
 	nameplate.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(nameplate)
 	_sync_overhead_ui_positions()
@@ -916,6 +917,8 @@ func _process_base_npc() -> void:
 	_update_sort_z()
 	await _process_npc_movement()
 	_sync_thieving_prompt()
+	if Input.is_action_just_pressed("pickpocket") and _can_show_pickpocket_position_hint():
+		_add_system_message(LocalizationManager.text("ui.thieving.position_required"))
 	if _can_request_pickpocket():
 		await _try_start_pickpocket(nearby_player)
 		_after_base_npc_process()
@@ -1096,6 +1099,24 @@ func _can_request_pickpocket() -> bool:
 
 func _is_player_in_pickpocket_position(body: Node2D) -> bool:
 	return _is_player_behind_npc(body) and _is_player_facing_npc(body)
+
+
+func _can_show_pickpocket_position_hint() -> bool:
+	return (
+		story_visibility_active
+		and not is_interacting
+		and player_nearby
+		and nearby_player != null
+		and not GameState.is_overworld_input_locked()
+		and not _is_ui_typing()
+		and npc_metadata_loaded
+		and pickpocket_enabled
+		and ThievingService.state_loaded
+		and ThievingService.is_unlocked()
+		and ThievingService.get_level() >= pickpocket_required_level
+		and not ThievingService.is_npc_attempted_today(_get_npc_metadata_id())
+		and not _is_player_in_pickpocket_position(nearby_player)
+	)
 
 
 func _is_player_behind_npc(body: Node2D) -> bool:

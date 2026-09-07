@@ -85,8 +85,10 @@ func _init() -> void:
 				rock_start,
 				next_node - rock_start if next_node >= 0 else source.length() - rock_start
 			)
+			var has_explicit_level := 'required_rock_smash_level = %d' % required_level in rock_block
+			var uses_default_level_one := required_level == 1 and 'required_rock_smash_level =' not in rock_block
 			_check(
-				rock_start >= 0 and 'required_rock_smash_level = %d' % required_level in rock_block,
+				rock_start >= 0 and (has_explicit_level or uses_default_level_one),
 				"%s uses the level %d color contract" % [rock_id, required_level]
 			)
 
