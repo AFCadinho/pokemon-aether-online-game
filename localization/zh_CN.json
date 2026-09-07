@@ -1311,6 +1311,7 @@
   "ui.bag.use.using": "使用项目...",
   "ui.bag.use.failed": "无法使用项目：{error}",
   "ui.bag.use.success": "使用了 {quantity}x {item}。",
+  "ui.bag.use.success_heal": "使用了 {quantity}x {item}。{pokemon}恢复了 {amount} 点HP。",
   "ui.bag.use.success_exp": "使用 {quantity}x {item}。获得 {exp} EXP。",
   "ui.bag.use.success_evs": "使用了 {quantity}x {item}。 {pokemon} 存储 +{amount} {stat} EV。",
   "ui.bag.preview.fainted_to": "晕倒 -> {current}/{max}",

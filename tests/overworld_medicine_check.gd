@@ -111,6 +111,8 @@ func _check_overlay_contract() -> void:
 	var source := _read_text(OVERLAY_SCRIPT)
 	_check(source.contains("BAG_ITEM_EFFECT_PREVIEW.supports"), "Bag recognizes gameplay effects generically")
 	_check(source.contains("BAG_ITEM_EFFECT_PREVIEW.preview"), "Bag delegates medicine previews")
+	_check(source.contains("func _item_effect_restored_hp"), "Bag derives restored HP from authoritative item-effect results")
+	_check(source.contains('"ui.bag.use.success_heal"'), "Bag reports restored HP in its success system message")
 	_check(source.contains("PlayerSave.replace_party_from_state(party_value as Array)"), "successful use applies authoritative server party")
 	_check(source.contains('"gameplay": gameplay'), "inventory normalization preserves gameplay metadata")
 	_check(source.contains('func _is_evolution_item_id'), "Bag recognizes evolution items as Pokemon items")

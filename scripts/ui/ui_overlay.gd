@@ -23743,6 +23743,15 @@ func _add_bag_item_use_success_message(item_id: String, reward: Dictionary) -> v
 		var item_effects: Array = item_effects_value as Array
 		if not item_effects.is_empty() and item_effects[0] is Dictionary:
 			quantity = max(int((item_effects[0] as Dictionary).get("consumedQuantity", quantity)), 1)
+	var restored_hp := _item_effect_restored_hp(reward)
+	if restored_hp > 0:
+		_add_chat_message(LocalizationManager.text("ui.bag.use.success_heal", {
+			"quantity": quantity,
+			"item": item_name,
+			"pokemon": _pokemon_display_name(PlayerSave.party[bag_item_use_selected_slot]) if bag_item_use_selected_slot >= 0 and bag_item_use_selected_slot < PlayerSave.party.size() else LocalizationManager.text("ui.bag.pokemon_fallback"),
+			"amount": restored_hp,
+		}))
+		return
 	var effort_value: Variant = reward.get("effort", [])
 	if effort_value is Array:
 		var effort_array: Array = effort_value as Array
@@ -23786,6 +23795,30 @@ func _add_bag_item_use_success_message(item_id: String, reward: Dictionary) -> v
 		}))
 	else:
 		_add_chat_message(LocalizationManager.text("ui.bag.use.success", {"quantity": quantity, "item": item_name}))
+
+func _item_effect_restored_hp(reward: Dictionary) -> int:
+	var item_effects_value: Variant = reward.get("itemEffects", [])
+	if not (item_effects_value is Array):
+		return 0
+	for item_effect_value: Variant in item_effects_value as Array:
+		if not (item_effect_value is Dictionary):
+			continue
+		var executions_value: Variant = (item_effect_value as Dictionary).get("effects", [])
+		if not (executions_value is Array):
+			continue
+		for execution_value: Variant in executions_value as Array:
+			if not (execution_value is Dictionary):
+				continue
+			var execution: Dictionary = execution_value as Dictionary
+			if not bool(execution.get("applied", false)) or str(execution.get("type", "")) not in ["heal_hp", "revive"]:
+				continue
+			var details := _staff_dictionary_from_variant(execution.get("details", {}))
+			var restored_hp := int(details.get("restoredHp", 0))
+			if restored_hp <= 0:
+				restored_hp = int(details.get("currentHp", 0)) - int(details.get("previousHp", 0))
+			if restored_hp > 0:
+				return restored_hp
+	return 0
 
 func _present_item_trade_evolution(reward: Dictionary) -> void:
 	var item_effects_value: Variant = reward.get("itemEffects", [])

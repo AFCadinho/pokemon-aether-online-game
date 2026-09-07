@@ -1314,6 +1314,7 @@
   "ui.bag.use.using": "Usando item...",
   "ui.bag.use.failed": "Não foi possível usar o item: {error}",
   "ui.bag.use.success": "{quantity}x {item} usado.",
+  "ui.bag.use.success_heal": "{quantity}x {item} usado. {pokemon} recuperou {amount} de HP.",
   "ui.bag.use.success_exp": "{quantity}x {item} usado. {exp} EXP obtida.",
   "ui.bag.use.success_evs": "{quantity}x {item} usado. {pokemon} armazenou +{amount} EVs em {stat}.",
   "ui.bag.preview.fainted_to": "Desmaiado → {current}/{max}",
