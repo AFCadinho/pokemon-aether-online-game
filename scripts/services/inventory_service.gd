@@ -542,6 +542,25 @@ func use_inventory_item(item_id: String) -> Dictionary:
 	}
 
 
+func discard_item(item_id: String, quantity: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	var random_id := Crypto.new().generate_random_bytes(16).hex_encode()
+	var request_id := "%s-%s-%s-%s-%s" % [random_id.substr(0, 8), random_id.substr(8, 4), random_id.substr(12, 4), random_id.substr(16, 4), random_id.substr(20, 12)]
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/inventory/items/%s/discard" % item_id.uri_encode(),
+		HTTPClient.METHOD_POST, GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"quantity": quantity, "requestId": request_id})
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary_from_value(response.get("body", {}))
+	var inventory := _dictionary_from_value(body.get("inventory", {}))
+	apply_inventory_state(inventory)
+	return {"success": true, "inventory": inventory.get("items", [])}
+
+
 func return_appearance_item(item_id: String) -> Dictionary:
 	var normalized_item_id := item_id.strip_edges()
 	if not AuthService.is_authenticated():

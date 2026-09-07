@@ -296,6 +296,7 @@ const BAG_ITEM_GRID_ICON_SIZE := Vector2(48, 48)
 const BAG_ITEM_DETAIL_ICON_SIZE := Vector2(72, 72)
 const BAG_CONTEXT_ACTION_USE := 0
 const BAG_CONTEXT_ACTION_HOTBAR := 1
+const BAG_CONTEXT_ACTION_DISCARD := 2
 const MARKET_SIZE := Vector2(930, 610)
 const MAIL_POPUP_SIZE := Vector2(920, 600)
 const MAIL_COMPOSE_POPUP_SIZE := Vector2(720, 680)
@@ -1244,6 +1245,7 @@ var bag_item_use_pending_item: Dictionary = {}
 var bag_item_use_selected_slot := -1
 var bag_item_use_in_progress := false
 var bag_item_context_menu: PopupMenu
+var bag_discard_busy := false
 var bag_item_context_item: Dictionary = {}
 var trainer_name_change_popup: PanelContainer
 var trainer_name_change_username_input: LineEdit
@@ -22859,6 +22861,8 @@ func _show_bag_item_context_menu(item: Dictionary) -> void:
 		bag_item_context_menu.add_item(_bag_item_use_action_label(item), BAG_CONTEXT_ACTION_USE)
 	if _bag_item_can_assign_to_hotbar(item):
 		bag_item_context_menu.add_item(LocalizationManager.text("ui.bag.assign_hotbar"), BAG_CONTEXT_ACTION_HOTBAR)
+	if _bag_discard_quantity(item) > 0 and not bag_discard_busy:
+		bag_item_context_menu.add_item(LocalizationManager.text("ui.bag.discard.action"), BAG_CONTEXT_ACTION_DISCARD)
 	var viewport_size := get_viewport().get_visible_rect().size
 	var menu_position := get_viewport().get_mouse_position()
 	menu_position.x = minf(menu_position.x, viewport_size.x - 200.0)
@@ -22876,6 +22880,63 @@ func _on_bag_item_context_menu_id_pressed(action_id: int) -> void:
 			await _on_bag_item_selected(item)
 		BAG_CONTEXT_ACTION_HOTBAR:
 			await _assign_bag_item_to_hotbar(item)
+		BAG_CONTEXT_ACTION_DISCARD:
+			_show_bag_discard_dialog(item)
+
+func _bag_discard_quantity(item: Dictionary) -> int:
+	if bool(item.get("borrowed", false)):
+		return 0
+	return maxi(int(item.get("discardQuantity", 0)), 0)
+
+func _show_bag_discard_dialog(item: Dictionary) -> void:
+	var maximum := _bag_discard_quantity(item)
+	if maximum <= 0 or bag_discard_busy:
+		return
+	bag_discard_busy = true
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	root_control.add_child(dialog)
+	dialog.configure(
+		LocalizationManager.text("ui.bag.discard.action"),
+		LocalizationManager.text("ui.bag.discard.confirm", {"quantity": 1, "item": str(item.get("name", ""))}),
+		LocalizationManager.text("ui.bag.discard.action"), LocalizationManager.text("common.cancel")
+	)
+	var quantity := SpinBox.new()
+	quantity.min_value = 1
+	quantity.max_value = maximum
+	quantity.step = 1
+	quantity.value = 1
+	dialog.add_custom_control(quantity)
+	dialog.style_spin_box(quantity)
+	quantity.visible = maximum > 1
+	quantity.value_changed.connect(func(value: float) -> void:
+		dialog.message_label.text = LocalizationManager.text("ui.bag.discard.confirm", {"quantity": int(value), "item": str(item.get("name", ""))})
+	)
+	dialog.canceled.connect(func() -> void:
+		bag_discard_busy = false
+		dialog.queue_free()
+	, CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(func() -> void:
+		quantity.apply()
+		var count := int(quantity.value)
+		dialog.queue_free()
+		await _discard_bag_item(item, count)
+	, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(500, 260))
+	dialog.cancel_button.grab_focus.call_deferred()
+
+func _discard_bag_item(item: Dictionary, quantity: int) -> void:
+	var item_id := str(item.get("discardItemId", item.get("id", "")))
+	var result: Dictionary = await InventoryService.discard_item(item_id, quantity)
+	bag_discard_busy = false
+	if not bool(result.get("success", false)):
+		_add_chat_message(str(result.get("error", LocalizationManager.text("ui.bag.discard.failed"))))
+		await _load_bag_inventory()
+		return
+	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
+	bag_selected_item = {}
+	_refresh_bag_items()
+	_refresh_bag_detail()
+	_add_chat_message(LocalizationManager.text("ui.bag.discard.done", {"quantity": quantity, "item": str(item.get("name", ""))}))
 
 func _set_bag_summary(text: String) -> void:
 	if bag_summary_label != null:
@@ -24150,6 +24211,8 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"appearanceUnlocks": item.get("appearanceUnlocks", []),
 			"assignmentMode": str(item.get("assignmentMode", item.get("assignment_mode", ""))).strip_edges().to_lower(),
 			"tradable": bool(item.get("tradable", false)),
+			"discardItemId": item_id,
+			"discardQuantity": int(item.get("quantity", 0)) if bool(item.get("discardable", false)) else 0,
 		}))
 	normalized_items = _group_mega_stone_bag_items(normalized_items)
 	for borrowed_value: Variant in InventoryService.cached_borrowed_inventory_items:
@@ -24209,10 +24272,14 @@ func _group_mega_stone_bag_items(items: Array[Dictionary]) -> Array[Dictionary]:
 			var initial := item.duplicate(true)
 			initial["boundQuantity"] = 0
 			initial["tradeableQuantity"] = 0
+			initial["discardQuantity"] = 0
 			group_indexes[canonical_item_id] = grouped.size()
 			grouped.append(initial)
 		var group_index := int(group_indexes[canonical_item_id])
 		var current := grouped[group_index]
+		if _bag_discard_quantity(item) > 0:
+			current["discardQuantity"] = int(current.get("discardQuantity", 0)) + _bag_discard_quantity(item)
+			current["discardItemId"] = str(item.get("discardItemId", item.get("id", "")))
 		var quantity: int = max(int(item.get("quantity", 1)), 1)
 		if str(item.get("ownershipVariant", "")) == "account_bound":
 			current["boundQuantity"] = int(current.get("boundQuantity", 0)) + quantity
