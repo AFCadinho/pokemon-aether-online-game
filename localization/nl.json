@@ -1,4 +1,8 @@
 {
+  "ui.bag.discard.action": "Weggooien",
+  "ui.bag.discard.confirm": "{quantity} × {item} weggooien? Deze items gaan definitief verloren; je ontvangt geen geld.",
+  "ui.bag.discard.failed": "Dit item kon niet worden weggegooid.",
+  "ui.bag.discard.done": "{quantity} × {item} weggegooid.",
   "battle.error.recovery_retry": "De verbinding met het gevecht kon niet worden hersteld. Kies Gevecht om opnieuw te proberen.",
   "story.mt_moon.cutscene.follower_fainted": "O nee, {pokemon}... sta alsjeblieft op!",
   "story.mt_moon.cutscene.follower_attack": "{pokemon}, val aan!",

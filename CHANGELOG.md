@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Discard tradable items from the Bag with right-click, a quantity choice and confirmation. Key items, HMs, account-bound items and the Bike Shop Cyclizar remain protected.
+
 - Medicine-system message toont nu Pokémonnaam en exact herstelde HP.
 - Max Revive is toegevoegd aan de daadwerkelijke field-use configuratie: fainted Pokémon terug naar volle
     HP.

@@ -1,4 +1,8 @@
 {
+  "ui.bag.discard.action": "Discard",
+  "ui.bag.discard.confirm": "Discard {quantity} × {item}? These items will be permanently lost; you receive no money.",
+  "ui.bag.discard.failed": "Could not discard this item.",
+  "ui.bag.discard.done": "Discarded {quantity} × {item}.",
   "battle.error.recovery_retry": "The battle could not reconnect. Select Battle to retry.",
   "story.mt_moon.cutscene.follower_fainted": "Oh no, {pokemon}... please get up!",
   "story.mt_moon.cutscene.follower_attack": "{pokemon}, attack!",
