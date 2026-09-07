@@ -2932,7 +2932,7 @@
   "ui.staff.dev.heal_party_description": "恢复活跃队伍",
   "ui.staff.dev.trainer_progress_description": "管理徽章、关键物品和故事检查点",
   "ui.staff.dev.overworld_resets_description": "重置每日野外内容",
-  "ui.staff.dev.overworld_resets_success": "所有岩石粉碎岩石已重新出现。",
+  "ui.staff.dev.overworld_resets_success": "所有岩石粉碎岩石已重新出现，每日扒窃 NPC 现已重新可用。",
   "ui.staff.dev.overworld_resets_failed": "无法重新出现岩石粉碎岩石：{error}",
   "ui.staff.dev.clear_data": "清除数据",
   "ui.staff.dev.clear_data_description": "队伍、背包和世界",

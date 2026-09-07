@@ -2935,7 +2935,7 @@
   "ui.staff.dev.heal_party_description": "Restaure a equipe ativa",
   "ui.staff.dev.trainer_progress_description": "Gerencie insígnias, itens-chave e pontos da história",
   "ui.staff.dev.overworld_resets_description": "Restaura conteúdo diário do mundo",
-  "ui.staff.dev.overworld_resets_success": "Todas as rochas de Rock Smash reapareceram.",
+  "ui.staff.dev.overworld_resets_success": "Todas as rochas de Rock Smash reapareceram e os NPCs diários de Thieving estão disponíveis novamente.",
   "ui.staff.dev.overworld_resets_failed": "Não foi possível restaurar as rochas de Rock Smash: {error}",
   "ui.staff.dev.clear_data": "Limpar Dados",
   "ui.staff.dev.clear_data_description": "Equipe, bolsa e mundo",
