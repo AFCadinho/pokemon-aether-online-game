@@ -32,7 +32,7 @@ func _init() -> void:
 	_check(source.contains("var hero_panel := PanelContainer.new()"), "Species identity and stats share a focused hero card")
 	_check(source.contains("var sprite_stage_style :=") and source.contains("TEXTURE_FILTER_NEAREST"), "Species sprites use a crisp softly elevated display stage")
 	_check(not source.contains("pokedex_sprite_view_label") and source.contains('"ui.pokedex.sprite.show_view"'), "Localized view controls never cover the Pokémon preview")
-	_check(source.contains("round(scale_value * 4.0) / 4.0"), "Animated sprites use pixel-friendly scale steps")
+	# Preview scale and fit are verified with real frames in pokedex_sprite_scale_check.
 	_check(source.contains("var stats_panel := PanelContainer.new()"), "Base stats use their own balanced dossier surface")
 	_check(source.contains("var tab_panel := PanelContainer.new()"), "Pokédex tabs use an integrated navigation surface")
 	_check(source.contains("func _style_pokedex_species_button") and source.contains("func _refresh_pokedex_species_selection_state"), "Selected species stays visually marked")

@@ -28,15 +28,19 @@ var active_weather := WEATHER_CLEAR
 var current_weather_profile := WEATHER_PROFILE_OUTDOOR
 var _transition_tween: Tween
 var _creator_weather_visibility_override := -1
+var _layout_signature: Array = []
+var _settings: Node
 
 
 func _ready() -> void:
+	_settings = get_node_or_null("/root/SettingsManager")
+	if _settings != null:
+		_settings.settings_changed.connect(_on_settings_changed)
 	_move_ground_effects_to_world_canvas.call_deferred()
 	if get_viewport() != null:
 		get_viewport().size_changed.connect(_update_viewport_layout)
 	_update_viewport_layout()
 	_apply_weather_immediately(get_effective_weather())
-	set_process(true)
 
 
 func _exit_tree() -> void:
@@ -47,6 +51,10 @@ func _exit_tree() -> void:
 
 func _process(_delta: float) -> void:
 	_update_viewport_layout()
+
+
+func _on_settings_changed() -> void:
+	_transition_to_weather(get_effective_weather())
 
 
 func set_server_weather(weather: String) -> void:
@@ -92,6 +100,8 @@ func get_effective_weather() -> String:
 		return WEATHER_CLEAR
 	if _creator_weather_visibility_override == 0:
 		return WEATHER_CLEAR
+	if _creator_weather_visibility_override < 0 and _settings != null and not bool(_settings.get("weather_effects")):
+		return WEATHER_CLEAR
 	return debug_weather_override if is_debug_weather_active() else server_weather
 
 
@@ -135,6 +145,8 @@ func _transition_to_weather(weather: String) -> void:
 	var previous_ground_effects := _ground_effects_for_weather(active_weather)
 	var next_ground_effects := _ground_effects_for_weather(normalized_weather)
 	active_weather = normalized_weather
+	set_process(true)
+	_update_viewport_layout()
 	if transition_duration <= 0.0:
 		_apply_weather_immediately(normalized_weather)
 		weather_changed.emit(active_weather, is_debug_weather_active())
@@ -189,10 +201,12 @@ func _finish_weather_transition(
 		next_ground_effects.set_emitting(true)
 		next_ground_effects.modulate.a = 1.0
 	_transition_tween = null
+	set_process(active_weather != WEATHER_CLEAR)
 
 
 func _apply_weather_immediately(weather: String) -> void:
 	active_weather = _normalize_weather(weather)
+	set_process(active_weather != WEATHER_CLEAR)
 	for particles: GPUParticles2D in [rain_particles, snow_particles]:
 		var enabled := particles == _particles_for_weather(active_weather)
 		particles.emitting = enabled
@@ -238,7 +252,12 @@ func _update_viewport_layout() -> void:
 	):
 		return
 	var viewport_size := get_viewport().get_visible_rect().size
-	var inverse_canvas_transform := get_viewport().get_canvas_transform().affine_inverse()
+	var canvas_transform := get_viewport().get_canvas_transform()
+	var signature: Array = [viewport_size, canvas_transform]
+	if signature == _layout_signature:
+		return
+	_layout_signature = signature
+	var inverse_canvas_transform := canvas_transform.affine_inverse()
 	var visible_top_left := inverse_canvas_transform * Vector2.ZERO
 	var visible_bottom_right := inverse_canvas_transform * viewport_size
 	var visible_world_size := (visible_bottom_right - visible_top_left).abs()

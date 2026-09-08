@@ -743,6 +743,7 @@ var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var dev_encounter_metadata: Dictionary = {}
 var dev_map_encounter_mode := false
 var collapsible_panels: Dictionary = {}
+var _collapsible_layout_dirty := true
 var chat_resize_button: Button
 var chat_input_dock: PanelContainer
 var chat_tabs_background: Panel
@@ -1671,6 +1672,8 @@ func _ready() -> void:
 	_setup_pokemon_summary_ev_allocate_popup()
 	_build_party_slots()
 	_setup_collapsible_panels()
+	root_control.resized.connect(_invalidate_collapsible_layout)
+	chat_tabs_panel.minimum_size_changed.connect(_invalidate_collapsible_layout)
 	if not root_control.resized.is_connected(_refresh_quest_tracker_layout):
 		root_control.resized.connect(_refresh_quest_tracker_layout)
 	_setup_chat_resize_button()
@@ -1697,12 +1700,10 @@ func _ready() -> void:
 	_setup_dev_tools_menu_surface()
 	_setup_staff_impersonation_tools()
 	_setup_item_dex_button()
-	_setup_item_dex_popup()
 	_setup_pokedex_button()
 	_setup_town_map_popup()
 	_setup_mount_loadout_panel()
 	_setup_skills_panel()
-	_setup_pokedex_popup()
 	_setup_wild_pokemon_popup()
 	_setup_pc_ui()
 	_apply_ui_z_index_policy()
@@ -10906,6 +10907,8 @@ func _warm_up_pokedex() -> void:
 	pokedex_warmup_in_progress = false
 
 func _setup_item_dex_popup() -> void:
+	if item_dex_popup != null:
+		return
 	item_dex_popup = PanelContainer.new()
 	item_dex_popup.name = "ItemDexPopup"
 	item_dex_popup.visible = false
@@ -11186,6 +11189,8 @@ func _setup_item_dex_popup() -> void:
 func _position_item_dex_popup() -> void:
 	if item_dex_popup == null:
 		return
+	if get_viewport() == null:
+		return
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
 	var popup_size := Vector2(
 		min(ITEM_DEX_SIZE.x, max(viewport_size.x - 32.0, 360.0)),
@@ -11216,6 +11221,8 @@ func _make_item_dex_tooltip_theme() -> Theme:
 	return tooltip_theme
 
 func _setup_pokedex_popup() -> void:
+	if pokedex_popup != null:
+		return
 	pokedex_popup = PanelContainer.new()
 	pokedex_popup.name = "PokedexPopup"
 	pokedex_popup.visible = false
@@ -11874,7 +11881,8 @@ func _position_pokedex_popup() -> void:
 func _process(delta: float) -> void:
 	_refresh_aether_clash_arena_ui_mode_if_needed()
 	_refresh_ui_input_mouse_blocker()
-	_position_collapsible_buttons()
+	if _collapsible_layout_dirty:
+		_position_collapsible_buttons()
 	_refresh_pvp_queue_compact_panel(delta)
 	_refresh_pvp_queue_button_animation(delta)
 	_refresh_pvp_ranked_queue_availability(delta)
@@ -29591,6 +29599,8 @@ func _register_collapsible_panel(
 	existing_button: Button = null,
 	companions: Array[Control] = []
 ) -> void:
+	panel.item_rect_changed.connect(_invalidate_collapsible_layout)
+	_invalidate_collapsible_layout()
 	var button := existing_button
 	if button == null:
 		button = Button.new()
@@ -29638,6 +29648,7 @@ func _set_collapsible_panel_available(panel_id: String, available: bool) -> void
 	_apply_collapsible_panel_state(panel_id)
 
 func _apply_collapsible_panel_state(panel_id: String) -> void:
+	_invalidate_collapsible_layout()
 	var state: Dictionary = collapsible_panels.get(panel_id, {})
 	if state.is_empty():
 		return
@@ -29706,7 +29717,11 @@ func _apply_collapsible_button_style(button: Button, _side: String, collapsed: b
 	button.add_theme_stylebox_override("pressed", _make_panel_style(UI_SURFACE_PRESSED, UI_BORDER_FOCUS, 8, 1))
 	button.add_theme_stylebox_override("focus", _make_panel_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8, 1))
 
+func _invalidate_collapsible_layout() -> void:
+	_collapsible_layout_dirty = true
+
 func _position_collapsible_buttons() -> void:
+	_collapsible_layout_dirty = false
 	for panel_id_value: Variant in collapsible_panels.keys():
 		var panel_id := str(panel_id_value)
 		_position_collapsible_button(panel_id)
@@ -34642,6 +34657,7 @@ func _hide_content_creator_tools_popup() -> void:
 	_deactivate_ui_panel(content_creator_tools_popup)
 
 func _show_item_dex_popup() -> void:
+	_setup_item_dex_popup()
 	_position_item_dex_popup()
 	item_dex_popup.visible = true
 	_activate_ui_panel(item_dex_popup)
@@ -34649,12 +34665,13 @@ func _show_item_dex_popup() -> void:
 	await _refresh_item_dex_results()
 
 func _hide_item_dex_popup() -> void:
+	if item_dex_popup == null:
+		return
 	item_dex_popup.visible = false
 	_deactivate_ui_panel(item_dex_popup)
 
 func _show_pokedex_popup() -> void:
-	if pokedex_popup == null:
-		return
+	_setup_pokedex_popup()
 	_position_pokedex_popup()
 	pokedex_popup.visible = true
 	_activate_ui_panel(pokedex_popup)
@@ -36284,8 +36301,9 @@ func _get_pokedex_evolution_item_ids(evolution: Dictionary) -> Array[String]:
 
 func _open_item_dex_item_from_pokedex(item_id: String) -> void:
 	var normalized_item_id := item_id.strip_edges().to_lower()
-	if normalized_item_id == "" or item_dex_popup == null or item_dex_search_input == null:
+	if normalized_item_id == "":
 		return
+	_setup_item_dex_popup()
 
 	item_dex_search_input.set_block_signals(true)
 	item_dex_search_input.text = normalized_item_id
