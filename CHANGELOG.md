@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The performance meter now explains FPS and ping, colours ping using recent measurements, and offers saved optional frame-time and recent FPS-dip details.
+
 - Show FPS and server ping while playing with an optional, saved toggle in Graphics settings.
 
 - Bot statistics now use easy-to-read whole numbers.

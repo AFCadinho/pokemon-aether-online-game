@@ -1,4 +1,8 @@
 {
+  "ui.settings.performance_hint": "FPS 表示游戏画面的流畅程度，延迟表示服务器的响应时间。颜色基于最近多次测量：绿色为低，橙色为中等，红色为高。",
+  "ui.settings.performance_details": "显示详细性能数据",
+  "ui.settings.performance_details_hint": "开启性能显示时，还会显示最近 5 秒的平均帧耗时，以及最慢一帧对应的 FPS。帧耗时较高或最低 FPS 较低可能说明出现了卡顿。",
+  "ui.performance.details": "帧耗时：{time} ms · 最低（5秒）：{fps} FPS",
   "ui.settings.show_performance": "显示 FPS 和延迟",
   "ui.performance.measuring": "正在测量延迟…",
   "ui.performance.reconnecting": "正在重新连接…",
