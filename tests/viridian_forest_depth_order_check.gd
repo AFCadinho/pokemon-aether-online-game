@@ -91,7 +91,7 @@ func _check_objects_top_grass_priority(
 			continue
 
 		var structure_floor := MapDepthSortingScript.get_tall_grass_overlap_z_floor(
-			map,
+			TallGrassDepthSortingScript.collect_depth_rows(map),
 			objects_top,
 			[overlap_cell],
 			SORT_Z_MIN,

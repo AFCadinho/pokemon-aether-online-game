@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reduced map setup pauses when entering Cerulean City and other areas with depth-sorted scenery.
+
 - The ping number now uses the same recent average as its colour indicator.
 
 - The performance meter now explains FPS and ping, colours ping using recent measurements, and offers saved optional frame-time and recent FPS-dip details.
