@@ -24015,10 +24015,13 @@ func _on_bag_item_use_confirm_pressed() -> void:
 	_refresh_open_pokemon_summary_cards()
 	_refresh_player_status_card()
 	var reward: Dictionary = _staff_dictionary_from_variant(result.get("reward", {}))
+	var restored_hp := _item_effect_restored_hp(reward)
 	await _present_item_trade_evolution(reward)
 	_add_bag_item_use_success_message(item_id, reward)
 	_notify_progression_reward(reward)
 	_hide_bag_item_use_popup()
+	if restored_hp > 0:
+		SfxManager.play("pokemon_item_heal")
 
 func _set_bag_item_use_status(message: String, is_error: bool) -> void:
 	if bag_item_use_status_label == null:

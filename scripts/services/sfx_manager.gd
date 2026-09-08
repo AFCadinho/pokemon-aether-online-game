@@ -59,6 +59,10 @@ const SOUND_DATA := {
 		"path": "res://assets/audio/sfx/overworld/pokemon_recovery.ogg",
 		"volume_db": 0.0,
 	},
+	"pokemon_item_heal": {
+		"path": "res://assets/audio/sfx/overworld/pokemon_item_heal.ogg",
+		"volume_db": 0.0,
+	},
 	"pokemon_level_up": {
 		"path": "res://assets/audio/sfx/overworld/pokemon_level_up.ogg",
 		"volume_db": 0.0,
