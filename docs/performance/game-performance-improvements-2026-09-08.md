@@ -1,10 +1,12 @@
 # Performanceverbeteringen — 8 september 2026
 
-**Aanvullende belastingtest:** de lokale WebSocket-proef heeft bij 60 continu
-bewegende spelers een regressie in het nieuwe verzendpad bevestigd. Dit onderdeel
-moet vóór release worden herwerkt. De vier implementatiefases hieronder zijn dus
-geen releasegoedkeuring. Resultaten en herhaalbare runner staan in de backend:
-`docs/performance/presence-load-2026-09-08.md` en `ops/performance/presence_load.py`.
+**Aanvullende belastingtest en correctie:** de lokale WebSocket-proef bevestigde
+bij 60 continu bewegende spelers een regressie. Het verzendpad is vervolgens
+herwerkt met blijvende workers en begrensde queues. De definitieve kernproeven
+verwerken alle updates zonder afgesloten gezonde verbindingen; de langere proef
+telt ruim 1,17 miljoen bezorgingen. Zie in de backend
+`docs/performance/presence-sender-fix-2026-09-08.md` voor cijfers en beperkingen.
+De implementatiefases zijn geen releasegoedkeuring; praktijkprofiling blijft open.
 
 Vervolg op [de gamebrede audit](game-performance-audit-2026-09-08.md).
 Uitgevoerd in gepaard slot C, taak `game-performance-improvements`.
