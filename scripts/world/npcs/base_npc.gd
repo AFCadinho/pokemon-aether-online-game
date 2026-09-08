@@ -139,6 +139,7 @@ var is_npc_moving := false
 var _base_npc_process_active := false
 var _movement_collision_map: Node
 var _movement_collision_tilemap: TileMapLayer
+var _sorting_player: Node2D
 
 
 func _ready_base_npc() -> void:
@@ -1696,6 +1697,14 @@ func _update_sort_z() -> void:
 func _get_player_for_sorting() -> Node2D:
 	if nearby_player != null and is_instance_valid(nearby_player):
 		return nearby_player
+	if (
+		_sorting_player != null
+		and is_instance_valid(_sorting_player)
+		and _sorting_player.is_inside_tree()
+		and _sorting_player.is_in_group("player")
+	):
+		return _sorting_player
+	_sorting_player = null
 
 	var tree := get_tree()
 	if tree == null:
@@ -1704,7 +1713,8 @@ func _get_player_for_sorting() -> Node2D:
 	for candidate: Node in tree.get_nodes_in_group("player"):
 		var player_node := candidate as Node2D
 		if player_node != null and is_instance_valid(player_node):
-			return player_node
+			_sorting_player = player_node
+			return _sorting_player
 
 	return null
 

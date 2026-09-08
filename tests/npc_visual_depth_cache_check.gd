@@ -9,12 +9,18 @@ func _init() -> void:
 
 
 func _run() -> void:
-	var BaseNPCScript := load(BASE_NPC_SCRIPT_PATH) as Script
-	var first_npc: Node = BaseNPCScript.new()
-	var second_npc: Node = BaseNPCScript.new()
+	var first_npc: Node = load("res://scenes/npcs/dialogue_npc.tscn").instantiate()
+	var second_npc: Node = load("res://scenes/npcs/dialogue_npc.tscn").instantiate()
+	root.add_child(first_npc)
+	root.add_child(second_npc)
 	var player := load("res://scenes/player.tscn").instantiate() as Node2D
 	root.add_child(player)
 	await process_frame
+	_check(first_npc._get_player_for_sorting() == player, "NPC finds the local player for depth sorting")
+	player.remove_from_group("player")
+	_check(first_npc._get_player_for_sorting() == null, "cached player is discarded after leaving its group")
+	player.add_to_group("player")
+	_check(first_npc._get_player_for_sorting() == player, "NPC can refresh its local-player reference")
 	var front_part := player.get_node("Look/Rider/HeadgearSprite") as CanvasItem
 	front_part.z_index = 15
 	player.call("_cache_appearance_sprites")
@@ -40,6 +46,8 @@ func _run() -> void:
 		"a different player never receives the previous player's cached depth"
 	)
 
+	root.remove_child(first_npc)
+	root.remove_child(second_npc)
 	first_npc.free()
 	second_npc.free()
 	root.remove_child(player)
