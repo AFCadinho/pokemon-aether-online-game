@@ -170,6 +170,8 @@ func _ready_base_npc() -> void:
 		story_service.story_changed.connect(_on_story_changed)
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
+	if not SettingsManager.input_binding_changed.is_connected(_on_input_binding_changed):
+		SettingsManager.input_binding_changed.connect(_on_input_binding_changed)
 	if preload_quest_markers:
 		_initialize_quest_markers.call_deferred()
 	_apply_story_visibility()
@@ -711,7 +713,7 @@ func _setup_thieving_prompt() -> void:
 	thieving_prompt_button.position = THIEVING_PROMPT_POSITION
 	thieving_prompt_button.z_as_relative = false
 	thieving_prompt_button.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
-	thieving_prompt_button.tooltip_text = _get_thieving_prompt_tooltip()
+	_refresh_thieving_prompt_tooltip()
 	_apply_thieving_prompt_style(thieving_prompt_button)
 	thieving_prompt_button.pressed.connect(Callable(self, "_on_thieving_prompt_pressed"))
 	add_child(thieving_prompt_button)
@@ -1156,7 +1158,9 @@ func _is_player_behind_npc(body: Node2D) -> bool:
 func _sync_thieving_prompt() -> void:
 	if thieving_prompt_button == null:
 		return
-	thieving_prompt_button.tooltip_text = _get_thieving_prompt_tooltip()
+	if not pickpocket_enabled or not player_nearby or nearby_player == null:
+		thieving_prompt_button.visible = false
+		return
 	thieving_prompt_button.visible = (
 		story_visibility_active
 		and not is_interacting
@@ -1178,6 +1182,16 @@ func _get_thieving_prompt_tooltip() -> String:
 		"ui.thieving.prompt.pickpocket",
 		{"hotkey": SettingsManager.get_input_binding_label("pickpocket")}
 	)
+
+
+func _refresh_thieving_prompt_tooltip() -> void:
+	if thieving_prompt_button != null:
+		thieving_prompt_button.tooltip_text = _get_thieving_prompt_tooltip()
+
+
+func _on_input_binding_changed(action: String, _keycode: Key) -> void:
+	if action == "pickpocket":
+		_refresh_thieving_prompt_tooltip()
 
 
 func _on_thieving_prompt_pressed() -> void:
@@ -1486,6 +1500,7 @@ func _on_locale_changed(_locale: String) -> void:
 	metadata_dialogue_id = ""
 	quest_marker_bindings.clear()
 	_refresh_quest_marker()
+	_refresh_thieving_prompt_tooltip()
 	_sync_thieving_prompt()
 	if preload_quest_markers:
 		_initialize_quest_markers.call_deferred()
