@@ -197,6 +197,7 @@ var sample_set_format_id := ""
 var sample_set_loading := false
 var sample_set_error := ""
 var selected_sample_set_id := ""
+var selected_sample_variant_id := ""
 var current_default_ability := ""
 var current_default_ability_species := ""
 var current_default_ability_loading := false
@@ -760,6 +761,7 @@ func _get_condition_target_relation() -> String:
 
 
 func _clear_sample_sets() -> void:
+	selected_sample_variant_id = ""
 	sample_set_options.clear()
 	sample_set_species = ""
 	sample_set_format_id = ""
@@ -806,10 +808,10 @@ func show_sample_set_catalog_response(species: String, response: Dictionary) -> 
 		and str(response.get("formatId", "")) == sample_set_format_id
 		and str(response.get("engineFormatId", "")) == "gen9nationaldex"
 		and str(response.get("dataFormatId", "")) == "gen9nationaldex"
-		and str(response.get("source", "")) == "pokeaether_curated"
+		and str(response.get("source", "")) in ["pokeaether_curated", "pokeaether_library"]
 		and str(response.get("species", "")).to_lower() == species.to_lower()
 		and response.get("sets") is Array
-		and (response.get("sets") as Array).size() <= 64
+		and (response.get("sets") as Array).size() <= 288
 	)
 	if not valid_envelope:
 		sample_set_options.clear()
@@ -818,7 +820,7 @@ func show_sample_set_catalog_response(species: String, response: Dictionary) -> 
 		var options: Array[Dictionary] = []
 		for value: Variant in response.get("sets", []):
 			var entry := _as_dictionary(value)
-			if _is_valid_sample_set(entry):
+			if _is_valid_sample_group(entry):
 				options.append(entry.duplicate(true))
 		sample_set_options = options
 	if is_inside_tree():
@@ -833,6 +835,28 @@ func show_sample_set_catalog_error(species: String, _error: String) -> void:
 	sample_set_error = _t("battle.calc.sample_sets_unavailable")
 	if is_inside_tree():
 		_render_current_state()
+
+
+func _is_valid_sample_group(entry: Dictionary) -> bool:
+	if not _is_valid_sample_set(entry):
+		return false
+	if not entry.has("variants"):
+		return true
+	var provenance := _as_dictionary(entry.get("provenance", {}))
+	if provenance.get("kind") != "smogon" or provenance.get("formatId") not in ["gen9nationaldex", "gen9nationaldexuu"]:
+		return false
+	var variants: Variant = entry.get("variants")
+	if not (variants is Array) or variants.is_empty() or variants.size() > 4096:
+		return false
+	var ids: Dictionary = {}
+	for variant: Variant in variants:
+		if not (variant is Dictionary) or variant.has("variants") or not _is_valid_sample_set(variant):
+			return false
+		var variant_id := str(variant.get("id", ""))
+		if ids.has(variant_id) or variant.get("provenance") != entry.get("provenance"):
+			return false
+		ids[variant_id] = true
+	return true
 
 
 func _is_valid_sample_set(entry: Dictionary) -> bool:
@@ -978,7 +1002,8 @@ func _add_sample_set_selector(parent: Container) -> void:
 		selector.select(selector.item_count - 1)
 	for option: Dictionary in sample_set_options:
 		var option_id := str(option.get("id", ""))
-		selector.add_item(str(option.get("name", option_id)))
+		var source_label := _get_sample_set_source_label(option)
+		selector.add_item(str(option.get("name", option_id)) + (" · " + source_label if source_label != "" else ""))
 		selector.set_item_metadata(selector.item_count - 1, option_id)
 		selector.set_item_tooltip(selector.item_count - 1, _get_sample_set_tooltip(option))
 		if option_id == selected_sample_set_id:
@@ -995,6 +1020,67 @@ func _add_sample_set_selector(parent: Container) -> void:
 	if selected_sample_set_id != "" or not edited_assumption_fields.is_empty() or not field_scenario.is_empty():
 		selector.add_theme_color_override("font_color", TEXT_ACCENT)
 	parent.add_child(selector)
+	_add_sample_variant_selector(parent)
+
+
+func _get_sample_set_source_label(option: Dictionary) -> String:
+	var provenance := _as_dictionary(option.get("provenance", {}))
+	if str(provenance.get("kind", "")) != "smogon":
+		return ""
+	return "Smogon · National Dex UU" if provenance.get("formatId") == "gen9nationaldexuu" else "Smogon · National Dex"
+
+
+func _add_sample_variant_selector(parent: Container) -> void:
+	for group: Dictionary in sample_set_options:
+		if str(group.get("id", "")) != selected_sample_set_id:
+			continue
+		var variants := _as_array(group.get("variants", []))
+		if variants.size() <= 1:
+			return
+		var selector := OptionButton.new()
+		selector.name = "SampleSetVariantSelector"
+		selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		selector.fit_to_longest_item = false
+		selector.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		for index: int in range(variants.size()):
+			var variant := _as_dictionary(variants[index])
+			var label := _t("battle.calc.set_variant") + " " + str(index + 1) + ": " + _get_sample_variant_summary(variant, _as_dictionary(variants[0]))
+			selector.add_item(label.left(100) + ("…" if label.length() > 100 else ""))
+			selector.set_item_tooltip(index, _get_sample_set_tooltip(variant))
+			if str(variant.get("id", "")) == selected_sample_variant_id:
+				selector.select(index)
+		selector.item_selected.connect(_on_sample_variant_selected.bind(selected_sample_set_id))
+		_apply_calcdex_dropdown_style(selector, 36.0, 12)
+		parent.add_child(selector)
+		return
+
+
+func _get_sample_variant_summary(variant: Dictionary, reference: Dictionary) -> String:
+	var differences: Array[String] = []
+	for key: String in ["item", "ability", "nature"]:
+		if variant.get(key) != reference.get(key):
+			differences.append(str(variant.get(key, "")))
+	for key: String in ["evs", "ivs"]:
+		if variant.get(key) != reference.get(key):
+			var stat_values := _as_dictionary(variant.get(key, {}))
+			for stat: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+				if stat_values.get(stat) != _as_dictionary(reference.get(key, {})).get(stat):
+					differences.append(key.to_upper() + " " + str(stat_values.get(stat, 0)) + " " + stat.to_upper())
+	var previous_moves := _as_array(reference.get("moves", []))
+	for move: Variant in _as_array(variant.get("moves", [])):
+		if move not in previous_moves:
+			differences.append(str(move))
+	return _join_string_array(differences, " · ") if not differences.is_empty() else _get_sample_set_tooltip(variant)
+
+
+func _on_sample_variant_selected(index: int, group_id: String) -> void:
+	for group: Dictionary in sample_set_options:
+		if str(group.get("id", "")) != group_id:
+			continue
+		var variants := _as_array(group.get("variants", []))
+		if index >= 0 and index < variants.size():
+			_apply_sample_set(_as_dictionary(variants[index]), group_id)
+		return
 
 
 func _on_sample_set_selected(index: int, selector: OptionButton) -> void:
@@ -1011,6 +1097,7 @@ func _on_sample_set_selected(index: int, selector: OptionButton) -> void:
 
 
 func _reset_to_current() -> void:
+	selected_sample_variant_id = ""
 	edited_assumption_fields.clear()
 	field_scenario.clear()
 	selected_sample_set_id = ""
@@ -1023,7 +1110,7 @@ func _reset_to_current() -> void:
 	_render_current_state()
 
 
-func _apply_sample_set(option: Dictionary) -> void:
+func _apply_sample_set(option: Dictionary, group_id: String = "") -> void:
 	defender_assumptions.clear()
 	edited_assumption_fields.clear()
 	for key: String in ["item", "ability", "nature"]:
@@ -1047,7 +1134,9 @@ func _apply_sample_set(option: Dictionary) -> void:
 		defender_assumptions["replaceMoves"] = true
 		edited_assumption_fields["assumedMoves"] = true
 		edited_assumption_fields["replaceMoves"] = true
-	selected_sample_set_id = str(option.get("id", ""))
+	selected_sample_set_id = group_id if group_id != "" else str(option.get("id", ""))
+	var variants := _as_array(option.get("variants", []))
+	selected_sample_variant_id = str(_as_dictionary(variants[0]).get("id", "")) if not variants.is_empty() else str(option.get("id", ""))
 	active_selector = SELECTOR_NONE
 	active_move_slot = -1
 	_clear_move_scenarios()
@@ -1057,6 +1146,7 @@ func _apply_sample_set(option: Dictionary) -> void:
 
 
 func _mark_sample_set_custom() -> void:
+	selected_sample_variant_id = ""
 	selected_sample_set_id = ""
 	edited_assumption_fields["exactStats"] = true
 
@@ -1079,6 +1169,20 @@ func _get_sample_set_tooltip(option: Dictionary) -> String:
 		var value := str(option.get(key, "")).strip_edges()
 		if value != "" and value != "<null>":
 			details.append(value)
+	for stat_key: String in ["evs", "ivs"]:
+		var stat_values := _as_dictionary(option.get(stat_key, {}))
+		var stat_parts: Array[String] = []
+		for stat: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+			var value := int(stat_values.get(stat, 31 if stat_key == "ivs" else 0))
+			if (stat_key == "evs" and value != 0) or (stat_key == "ivs" and value != 31):
+				stat_parts.append(str(value) + " " + stat.to_upper())
+		if not stat_parts.is_empty():
+			details.append(stat_key.to_upper() + ": " + _join_string_array(stat_parts, "/"))
+	var moves: Array[String] = []
+	for move: Variant in _as_array(option.get("moves", [])):
+		moves.append(str(move))
+	if not moves.is_empty():
+		details.append(_join_string_array(moves, "/"))
 	return _join_string_array(details, " · ")
 
 

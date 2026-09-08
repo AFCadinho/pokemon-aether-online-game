@@ -139,7 +139,7 @@ func get_calcdex_sample_sets(request_node: HTTPRequest, format_id: String, speci
 		return {"success": false, "error": "A format and species are required."}
 	return await send_get_request(
 		request_node,
-		"/calcdex/v1/sample-sets/%s/%s" % [normalized_format.uri_encode(), normalized_species.uri_encode()]
+		"/calcdex/v1/sample-sets/%s/%s?includeExternal=true" % [normalized_format.uri_encode(), normalized_species.uri_encode()]
 	)
 
 func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
