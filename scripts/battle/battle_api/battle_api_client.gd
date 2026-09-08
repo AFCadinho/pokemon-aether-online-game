@@ -157,7 +157,7 @@ func create_training_ai_battle(
 			"teamText": team_text,
 			"playerTeamId": player_team_id.strip_edges(),
 			"teamId": ai_team_id if ai_team_id.strip_edges() != "" else "random",
-			"aiMode": ai_mode if ai_mode in ["ai4", "shadow", "intermediate", "active", "extreme"] else "ai4",
+			"aiMode": ai_mode if ai_mode in ["ai4", "shadow", "intermediate", "active", "nightmare"] else "ai4",
 			"archetype": ai_archetype if ai_archetype.strip_edges() != "" else "random",
 			"aiTeamText": ai_team_text.strip_edges(),
 			"formatId": FORMAT_ID,
