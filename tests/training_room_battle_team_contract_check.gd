@@ -162,7 +162,7 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 		and api_source.contains("\"aiTeamText\": ai_team_text.strip_edges()")
 		and api_source.contains("func clear_training_ai_match_history")
 		and api_source.contains("\"aiMode\": ai_mode")
-		and api_source.contains("ai_mode in [\"ai4\", \"shadow\", \"active\", \"extreme\"]")
+		and api_source.contains("ai_mode in [\"ai4\", \"shadow\", \"intermediate\", \"active\", \"extreme\"]")
 		and api_source.contains("\"archetype\": ai_archetype")
 		and api_source.contains("\"tierId\": tier_id")
 		and overlay_source.contains("_selected_ai_sparring_tier_id()"),
