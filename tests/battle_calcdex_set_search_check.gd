@@ -22,6 +22,18 @@ func _run() -> void:
 	})
 	panel.sample_set_loading = false
 	panel.sample_set_options = [_fixture_set("dragon-z", "Dragonium Z"), _fixture_set("dice", "Loaded Dice"), _fixture_set("tank", "TankChomp")]
+	var selector_host := VBoxContainer.new()
+	content.add_child(selector_host)
+	panel._add_sample_set_selector(selector_host)
+	var toggle := selector_host.find_child("SampleSetSelector", true, false) as Button
+	toggle.pressed.emit()
+	_expect(is_instance_valid(panel.sample_set_search_popup), "Set button must open the search")
+	toggle.pressed.emit()
+	_expect(panel.sample_set_search_popup == null, "Pressing the open set button again must close it")
+	toggle.pressed.emit()
+	_expect(is_instance_valid(panel.sample_set_search_popup), "Set button must reopen after toggling closed")
+	panel._close_sample_set_search()
+	await process_frame
 	var before := panel.defender_assumptions.duplicate(true)
 	var anchor := Button.new()
 	content.add_child(anchor)
