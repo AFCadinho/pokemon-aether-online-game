@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Sparring bots now show a simple version number, with a separate label for test versions.
+
 - Bot statistics now use easy-to-read whole numbers.
 
 - Older AI5 statistics are now tucked away under View older versions.

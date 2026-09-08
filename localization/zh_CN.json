@@ -4468,6 +4468,7 @@
   "ui.pvp.ai_sparring.about.grandmaster": "Grandmaster 会探索可能的回合，并考虑你可能采取的行动。它会比较攻击、换人和强化等选择，因此不一定会使用威力最大的招式。\n\n想挑战更强的对手、检验自己的预判与队伍计划时，可以试试 Grandmaster。它也会犯错：寻找机会，尝试不同的战术。",
   "ui.pvp.ai_sparring.about.grandmaster_tagline": "提前思考，检验你的预判。",
   "ui.pvp.ai_sparring.about.version": "服务器版本：{version}",
+  "ui.pvp.ai_sparring.about.test_version": "测试版本",
   "ui.pvp.ai_sparring.about.unknown": "服务器版本尚未确认",
   "ui.pvp.ai_sparring.about.available": "可进行对战",
   "ui.pvp.ai_sparring.about.unavailable": "暂不可用",

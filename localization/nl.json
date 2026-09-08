@@ -4471,6 +4471,7 @@
   "ui.pvp.ai_sparring.about.grandmaster": "Grandmaster bekijkt mogelijke beurten en houdt rekening met hoe jij zou kunnen reageren. Hij kan een aanval afwegen tegen een wissel of een voorbereidende zet. De sterkste aanval is dus niet altijd zijn keuze.\n\nProbeer Grandmaster als je jouw voorspellingen en teamplan wilt testen tegen een uitdagendere tegenstander. Ook hij kan fouten maken: zoek naar kansen en probeer verschillende aanpakken.",
   "ui.pvp.ai_sparring.about.grandmaster_tagline": "Denk vooruit. Test je voorspellingen.",
   "ui.pvp.ai_sparring.about.version": "Serverversie: {version}",
+  "ui.pvp.ai_sparring.about.test_version": "Testversie",
   "ui.pvp.ai_sparring.about.unknown": "Serverversie niet bevestigd",
   "ui.pvp.ai_sparring.about.available": "Beschikbaar om tegen te spelen",
   "ui.pvp.ai_sparring.about.unavailable": "Momenteel niet beschikbaar",

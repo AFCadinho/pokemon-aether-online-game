@@ -43107,6 +43107,8 @@ func _refresh_ai_sparring_about() -> void:
 			version_text = LocalizationManager.text("ui.pvp.ai_sparring.about.version", {"version": version})
 		var status_key := "ui.pvp.ai_sparring.about.available" if bool(info.get("available", false)) else "ui.pvp.ai_sparring.about.unavailable"
 		label.text = LocalizationManager.text(status_key) + "\n" + version_text
+		if not version.is_empty() and str(info.get("releaseStatus", "")) == "test":
+			label.text += "\n" + LocalizationManager.text("ui.pvp.ai_sparring.about.test_version")
 		label.add_theme_color_override("font_color", Color("#91dbb1") if bool(info.get("available", false)) else Color("#e6bf86"))
 
 

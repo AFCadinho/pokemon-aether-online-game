@@ -4471,6 +4471,7 @@
   "ui.pvp.ai_sparring.about.grandmaster": "Grandmaster explora possíveis turnos e considera como você pode responder. Ele pode comparar um ataque com uma troca ou um golpe de preparação. O ataque mais forte nem sempre será sua escolha.\n\nExperimente Grandmaster para testar suas previsões e seu plano de equipe contra um oponente mais exigente. Ele também pode errar: procure oportunidades e tente abordagens diferentes.",
   "ui.pvp.ai_sparring.about.grandmaster_tagline": "Pense à frente. Teste suas previsões.",
   "ui.pvp.ai_sparring.about.version": "Versão do servidor: {version}",
+  "ui.pvp.ai_sparring.about.test_version": "Versão de teste",
   "ui.pvp.ai_sparring.about.unknown": "Versão do servidor não confirmada",
   "ui.pvp.ai_sparring.about.available": "Disponível para jogar",
   "ui.pvp.ai_sparring.about.unavailable": "Indisponível no momento",
