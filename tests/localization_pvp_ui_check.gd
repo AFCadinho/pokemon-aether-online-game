@@ -183,7 +183,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_tabs.get_tab_title(4) == "Statistieken", "Statistics tab is localized")
 	overlay.set("pvp_ai_sparring_stats_data", {"success": true, "bots": [
 		{"bot": "ai4", "version": "Classic v1", "completed": 2, "unconfirmed": 1, "sufficient": false},
-		{"bot": "ai5", "version": "Native Z v4", "completed": 10, "unconfirmed": 0, "sufficient": true, "winRate": 0.6, "nativeRate": 0.9, "fallbackRate": 0.1, "averageTurns": 25}
+		{"bot": "ai5", "version": "Native Z v4", "completed": 10.0, "unconfirmed": 0, "sufficient": true, "winRate": 0.6, "nativeRate": 0.9, "fallbackRate": 0.1, "averageTurns": 25.6}
 	]})
 	overlay.call("_render_ai_sparring_stats")
 	var stats_list := overlay.get("pvp_ai_sparring_stats_list") as VBoxContainer
@@ -191,7 +191,7 @@ func _check_pvp_runtime_translation() -> void:
 	for stats_label: Node in stats_list.find_children("*", "Label", true, false):
 		stats_text += (stats_label as Label).text + "\n"
 	_check(stats_text.contains("AI4 Scholar") and stats_text.contains("AI5 Grandmaster"), "Statistics show both bot versions")
-	_check(stats_text.contains("Nog onvoldoende gegevens") and stats_text.contains("60.0%") and stats_text.contains("90.0%"), "Statistics distinguish small samples from measured rates")
+	_check(stats_text.contains("Nog onvoldoende gegevens") and stats_text.contains("60%") and stats_text.contains("90%") and stats_text.contains("26") and not stats_text.contains("10.0") and not stats_text.contains("25.6"), "Statistics show whole numbers and distinguish small samples from measured rates")
 	_check(stats_list.get_node_or_null("AiSparringOlderStatisticsToggle") == null, "No archive toggle without older statistics")
 	var archived_stats: Dictionary = overlay.get("pvp_ai_sparring_stats_data")
 	archived_stats["bots"].append({"bot": "ai5", "version": "Hybrid v1", "completed": 12, "sufficient": true})
