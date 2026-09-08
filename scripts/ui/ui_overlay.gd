@@ -7623,12 +7623,24 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 		var divider := HSeparator.new()
 		divider.modulate = Color(1, 1, 1, 0.3)
 		content.add_child(divider)
-		var bot_version := Label.new()
-		bot_version.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		bot_version.name = "AiSparringVersion_" + bot_id
-		bot_version.add_theme_font_size_override("font_size", 13)
-		content.add_child(bot_version)
-		pvp_ai_sparring_about_versions[bot_id] = bot_version
+		for mode_id: String in (["ai4"] if bot_id == "ai4" else ["intermediate", "ai5", "extreme"]):
+			var difficulty_mode: String = "active" if mode_id == "ai5" else mode_id
+			var difficulty_title := Label.new()
+			difficulty_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			difficulty_title.add_theme_font_size_override("font_size", 17)
+			_set_localized_control_property(difficulty_title, "text", "ui.pvp.training.ai.difficulty_" + difficulty_mode)
+			content.add_child(difficulty_title)
+			if bot_id == "ai5":
+				var difficulty_description := Label.new()
+				difficulty_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				_set_localized_control_property(difficulty_description, "text", "ui.pvp.ai_sparring.about.difficulty_" + mode_id)
+				content.add_child(difficulty_description)
+			var bot_version := Label.new()
+			bot_version.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			bot_version.name = "AiSparringVersion_" + mode_id
+			bot_version.add_theme_font_size_override("font_size", 13)
+			content.add_child(bot_version)
+			pvp_ai_sparring_about_versions[mode_id] = bot_version
 		var description := Label.new()
 		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		description.add_theme_constant_override("line_spacing", 4)
@@ -43259,7 +43271,7 @@ func _apply_ai_sparring_bot_versions(response: Dictionary) -> void:
 	var bots_value: Variant = response.get("bots", []) if bool(response.get("success", false)) else []
 	if bots_value is Array:
 		for bot: Variant in bots_value:
-			if bot is Dictionary and str(bot.get("id", "")) in ["ai4", "ai5"]:
+			if bot is Dictionary and str(bot.get("id", "")) in ["ai4", "ai5", "intermediate", "extreme"]:
 				pvp_ai_sparring_bot_versions[str(bot["id"])] = bot
 	_refresh_ai_sparring_about()
 
@@ -43287,7 +43299,7 @@ func _refresh_ai_sparring_about() -> void:
 		var version_text := LocalizationManager.text("ui.pvp.ai_sparring.about.unknown")
 		if not version.is_empty():
 			version_text = LocalizationManager.text("ui.pvp.ai_sparring.about.version", {"version": version})
-		var status_key := "ui.pvp.ai_sparring.about.available" if bool(info.get("available", false)) else "ui.pvp.ai_sparring.about.unavailable"
+		var status_key := "ui.pvp.ai_sparring.about.status_unknown" if info.is_empty() else "ui.pvp.ai_sparring.about.available" if bool(info.get("available", false)) else "ui.pvp.ai_sparring.about.unavailable"
 		label.text = LocalizationManager.text(status_key) + "\n" + version_text
 		if not version.is_empty() and str(info.get("releaseStatus", "")) == "test" and _ai_sparring_uses_local_server():
 			label.text += "\n" + LocalizationManager.text("ui.pvp.ai_sparring.about.test_version")

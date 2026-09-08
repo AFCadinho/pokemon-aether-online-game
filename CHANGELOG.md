@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- About the bots now explains each Grandmaster difficulty and shows its own availability and version.
+
 - AI Sparring statistics now separate Beginner, Intermediate, Hard and Extreme, each with its own results.
 
 - AI Sparring offers Grandmaster Intermediate when the server enables the fair bot, with separate match history.
