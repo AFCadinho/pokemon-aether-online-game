@@ -184,10 +184,23 @@ func _check_npc_collision_layer_cache() -> void:
 		npc.call("_get_movement_collision_tilemap", second_map) == second_collision,
 		"NPC refreshes its collision layer when the active map changes"
 	)
+	var late_map := Node2D.new()
+	_check(
+		npc.call("_get_movement_collision_tilemap", late_map) == null,
+		"NPC accepts a map whose collision layer is not available yet"
+	)
+	var late_collision := TileMapLayer.new()
+	late_collision.name = "Collision"
+	late_map.add_child(late_collision)
+	_check(
+		npc.call("_get_movement_collision_tilemap", late_map) == late_collision,
+		"NPC retries a missing collision layer on the same map"
+	)
 
 	npc.free()
 	first_map.free()
 	second_map.free()
+	late_map.free()
 
 
 func _check_multidirectional_ledge_cell() -> void:

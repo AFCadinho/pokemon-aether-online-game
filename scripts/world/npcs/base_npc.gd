@@ -1058,10 +1058,8 @@ func _can_npc_move_to(world_position: Vector2) -> bool:
 func _get_movement_collision_tilemap(current_map: Node) -> TileMapLayer:
 	if (
 		current_map == _movement_collision_map
-		and (
-			_movement_collision_tilemap == null
-			or is_instance_valid(_movement_collision_tilemap)
-		)
+		and _movement_collision_tilemap != null
+		and is_instance_valid(_movement_collision_tilemap)
 	):
 		return _movement_collision_tilemap
 	_movement_collision_map = current_map
