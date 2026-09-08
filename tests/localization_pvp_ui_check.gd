@@ -622,6 +622,14 @@ func _check_pvp_runtime_translation() -> void:
 	for entry: Dictionary in training_ai_catalog_entries:
 		entry["homeTierId"] = "aether-ou"
 		entry["eligibleTierIds"] = ["none", "aether-ou"]
+	training_ai_available_modes.assign(["ai4", "active", "extreme", "intermediate"])
+	overlay.call("_refresh_pvp_training_ai_mode_options")
+	_check(training_ai_mode_select.item_count == 3, "Intermediate stays hidden until implemented")
+	_check(training_ai_mode_select.get_item_text(0) == "Beginner", "AI4 is Beginner")
+	_check(training_ai_mode_select.get_item_text(1) == "Grandmaster — Hard", "Current AI5 is Hard")
+	_check(training_ai_mode_select.get_item_text(2) == "Grandmaster — Extreme", "Extreme uses the public sparring label")
+	training_ai_mode_select.select(2)
+	_check(overlay.call("_selected_pvp_training_ai_mode") == "extreme", "Extreme selection preserves its server mode")
 	training_ai_available_modes.assign(["ai4", "active"])
 	var training_ai_archetypes: Array = overlay.get("pvp_training_ai_catalog_archetypes") as Array
 	training_ai_archetypes.assign(["hyper_offense", "stall"])
