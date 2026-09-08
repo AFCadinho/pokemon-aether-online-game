@@ -3,6 +3,7 @@
 ## Unreleased
 
 - AI Sparring offers Grandmaster Intermediate when the server enables the fair bot, with separate match history.
+- AI Sparring lets you search catalog opponents by team name before choosing one.
 
 - Switching between a catalog team and PokéPaste keeps the AI Sparring window the same size.
 

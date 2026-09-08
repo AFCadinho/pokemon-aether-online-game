@@ -4402,6 +4402,7 @@
   "ui.pvp.training.ai.archetype.balance": "平衡",
   "ui.pvp.training.ai.archetype.stall": "耗回合",
   "ui.pvp.training.ai.team_label": "AI 队伍",
+  "ui.pvp.training.ai.team_search": "搜索队伍名称...",
   "ui.pvp.training.ai.opponent_preview": "对手队伍",
   "ui.pvp.training.ai.team_random": "随机当前示例队伍",
   "ui.pvp.training.ai.team_random_archetype": "该类型中的随机队伍",

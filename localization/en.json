@@ -4413,6 +4413,7 @@
   "ui.pvp.training.ai.archetype.balance": "Balance",
   "ui.pvp.training.ai.archetype.stall": "Stall",
   "ui.pvp.training.ai.team_label": "AI TEAM",
+  "ui.pvp.training.ai.team_search": "Search team name...",
   "ui.pvp.training.ai.opponent_preview": "OPPONENT TEAM",
   "ui.pvp.training.ai.team_random": "Random current sample team",
   "ui.pvp.training.ai.team_random_archetype": "Random team in archetype",
