@@ -242,6 +242,12 @@ music_track_id = "login.lugia_theme_lofi"
 [node name="GuildArrival" type="Marker2D" parent="Spawns" unique_id=29553750]
 position = Vector2(976, 1456)
 
+[node name="HealNPC" type="Marker2D" parent="Spawns" unique_id=785620350]
+position = Vector2(880, 1008)
+
+[node name="HealNPC2" type="Marker2D" parent="Spawns" unique_id=1869746028]
+position = Vector2(1072, 1008)
+
 [node name="Entities" type="Node2D" parent="." unique_id=717145666]
 z_index = 5
 
