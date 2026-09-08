@@ -674,6 +674,21 @@ func _check_pvp_runtime_translation() -> void:
 		and ai_sparring_hover_card.z_index == 1099,
 		"Free Sparring reuses the PC Pokemon hover card above the PvP popup"
 	)
+	var catalog_hover_data: Dictionary = overlay.call("_pc_pokemon_hover_data", {
+		"species": "Zamazenta",
+		"types": ["Fighting"],
+		"currentHp": 325,
+		"maxHp": 325,
+		"stats": {"hp": 325, "atk": 339, "def": 266, "spa": 176, "spd": 266, "spe": 390},
+		"moves": ["Close Combat"],
+		"moveData": [{"name": "Close Combat", "pp": 5, "maxPp": 5}],
+	})
+	_check(
+		int((catalog_hover_data.get("stats") as Dictionary).get("spe", 0)) == 390
+		and catalog_hover_data.get("moves") is Array
+		and int(((catalog_hover_data.get("moves") as Array)[0] as Dictionary).get("maxPp", 0)) == 5,
+		"Free Sparring catalog hovers keep calculated stats and complete move PP"
+	)
 	_check(
 		ai_opponent_preview_grid != null
 		and not ai_opponent_preview_grid.get_child(0).get_signal_connection_list("mouse_entered").is_empty(),

@@ -39758,13 +39758,23 @@ func _pc_pokemon_hover_data(pokemon_payload: Dictionary) -> Dictionary:
 	if str(hover_data.get("item", "")).strip_edges() == "":
 		hover_data["item"] = _pc_payload_held_item_id(hover_data)
 
+	var moves := _array_from_variant(hover_data.get("moves", []))
+	var move_details := _array_from_variant(hover_data.get(
+		"moveData", hover_data.get("move_data", [])
+	))
 	var display_moves: Array = []
-	for move_value: Variant in _array_from_variant(hover_data.get("moves", [])):
+	for move_index in range(moves.size()):
+		var move_value: Variant = moves[move_index]
 		if move_value is Dictionary:
 			var move_data: Dictionary = (move_value as Dictionary).duplicate(true)
 			if str(move_data.get("name", "")).strip_edges() == "":
 				var move_id := str(move_data.get("id", move_data.get("move", ""))).strip_edges()
 				move_data["name"] = _format_move_name(move_id)
+			display_moves.append(move_data)
+		elif move_index < move_details.size() and move_details[move_index] is Dictionary:
+			var move_data: Dictionary = (move_details[move_index] as Dictionary).duplicate(true)
+			if str(move_data.get("name", "")).strip_edges() == "":
+				move_data["name"] = str(move_value)
 			display_moves.append(move_data)
 		else:
 			display_moves.append(move_value)

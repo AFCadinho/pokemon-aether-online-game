@@ -4,6 +4,8 @@
 
 - AI Sparring now separates the Scholar/Grandmaster opponent choice from its difficulty.
 
+- AI Sparring team hovers now show complete stats, HP, types, and move PP for both bots and selected catalog teams.
+
 - Choose Beginner, Grandmaster Hard or Grandmaster Extreme in AI Sparring when available on your server.
 
 - Clicking the calculator set button again now closes its open search menu.
