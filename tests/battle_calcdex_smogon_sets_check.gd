@@ -52,8 +52,8 @@ func _run() -> void:
 	var host := VBoxContainer.new()
 	content.add_child(host)
 	panel._add_sample_set_selector(host)
-	var selector := host.find_child("SampleSetSelector", true, false) as OptionButton
-	_expect(selector != null and "Smogon · National Dex UU" in selector.get_item_text(1), "Set menu must show source and format")
+	var selector := host.find_child("SampleSetSelector", true, false) as Button
+	_expect(selector != null and "Smogon · National Dex UU" in selector.text, "Set menu must show source and format")
 	var variants := host.find_child("SampleSetVariantSelector", true, false) as OptionButton
 	_expect(variants != null and variants.item_count == 2 and variants.selected == 1, "Variants must have a separate selector")
 	if variants != null:

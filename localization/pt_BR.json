@@ -3944,6 +3944,8 @@
   "battle.calc.assumed_ability_warning": "{ability} é usada porque a habilidade do oponente ainda não é conhecida.",
   "battle.calc.loading_default_ability": "Carregando a habilidade padrão da espécie...",
   "battle.calc.custom_scenario": "Cenário personalizado",
+  "battle.calc.search_sets": "Buscar conjuntos pelo nome…",
+  "battle.calc.no_matching_sets": "Nenhum conjunto encontrado",
   "battle.calc.set_variant": "Variante do conjunto",
   "battle.calc.sample_set_disclaimer": "Usa informações confirmadas da batalha por padrão. Escolha um conjunto Aether ou Smogon, ou edite os valores para calcular um cenário.",
   "battle.calc.sample_sets_loading": "Carregando sets de exemplo...",
