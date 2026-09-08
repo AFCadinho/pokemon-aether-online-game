@@ -16,6 +16,8 @@ func _run() -> void:
 	var player := load("res://scenes/player.tscn").instantiate() as Node2D
 	root.add_child(player)
 	await process_frame
+	first_npc.nearby_player = null
+	first_npc.player_nearby = false
 	_check(first_npc._get_player_for_sorting() == player, "NPC finds the local player for depth sorting")
 	player.remove_from_group("player")
 	_check(first_npc._get_player_for_sorting() == null, "cached player is discarded after leaving its group")
