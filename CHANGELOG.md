@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Clicking the calculator set button again now closes its open search menu.
+
 - Calculator sets with the same name appear once; choose their different builds through the variant selector.
 
 - Opponent sets in the damage calculator can now be searched by name and selected with the mouse or keyboard.

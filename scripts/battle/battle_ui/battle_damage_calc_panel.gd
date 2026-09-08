@@ -1011,7 +1011,8 @@ func _add_sample_set_selector(parent: Container) -> void:
 			selector.text = _get_sample_set_display_name(option)
 	selector.icon = DROPDOWN_ARROW
 	selector.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	selector.pressed.connect(_open_sample_set_search.bind(selector))
+	selector.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
+	selector.pressed.connect(_toggle_sample_set_search.bind(selector))
 	_apply_calcdex_dropdown_style(selector, 36.0, 12)
 	if selected_sample_set_id != "" or not edited_assumption_fields.is_empty() or not field_scenario.is_empty():
 		selector.add_theme_color_override("font_color", TEXT_ACCENT)
@@ -1041,6 +1042,15 @@ func _refresh_sample_set_search() -> void:
 		_filter_sample_set_search(input.text, results)
 
 
+func _toggle_sample_set_search(anchor: Control) -> void:
+	if bool(anchor.get_meta("sample_set_dismiss_click", false)):
+		return
+	if is_instance_valid(sample_set_search_popup):
+		_close_sample_set_search()
+	else:
+		_open_sample_set_search(anchor)
+
+
 func _open_sample_set_search(anchor: Control) -> void:
 	_close_sample_set_search()
 	var popup := PopupPanel.new()
@@ -1049,6 +1059,11 @@ func _open_sample_set_search(anchor: Control) -> void:
 	add_child(popup)
 	sample_set_search_popup = popup
 	popup.popup_hide.connect(func() -> void:
+		# Outside-click dismissal can happen before the anchor receives that same
+		# mouse press. Consume it so the button does not immediately reopen us.
+		if is_instance_valid(anchor) and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and anchor.get_global_rect().has_point(anchor.get_global_mouse_position()):
+			anchor.set_meta("sample_set_dismiss_click", true)
+			anchor.set_meta.call_deferred("sample_set_dismiss_click", false)
 		if sample_set_search_popup == popup:
 			sample_set_search_popup = null
 		popup.queue_free()
