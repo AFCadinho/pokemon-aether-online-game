@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refreshed sparring statistics with trainer portraits, clearer number cards, and a layout that adapts to smaller windows.
+
 - Sparring bots now show a simple version number, with a separate label for test versions.
 
 - Added a dedicated healing sound when medicine restores a Pokémon's HP.
