@@ -100,7 +100,7 @@ func _check_pvp_runtime_translation() -> void:
 	var training_ai_archetype_select := overlay.get("pvp_training_ai_archetype_select") as OptionButton
 	var training_ai_team_row := overlay.get("pvp_training_ai_team_row") as HBoxContainer
 	var training_ai_team_search := overlay.get("pvp_training_ai_team_search") as LineEdit
-	var training_ai_team_select := overlay.get("pvp_training_ai_team_select") as OptionButton
+	var training_ai_team_suggestions := overlay.get("pvp_training_ai_team_suggestions") as PopupMenu
 	var ai_opponent_preview := overlay.get("pvp_training_ai_opponent_preview") as VBoxContainer
 	var ai_opponent_preview_title := overlay.get("pvp_training_ai_opponent_preview_title") as Label
 	var ai_opponent_preview_grid := overlay.get("pvp_training_ai_opponent_preview_grid") as HBoxContainer
@@ -653,7 +653,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(str(training_ai_mode_select.get_selected_metadata()) == "ai4", "plain AI4 without shadow observation is the safe default")
 	_check(training_ai_team_source_row != null and training_ai_team_source_row.visible, "AI flow lets players choose a catalog or PokéPaste opponent")
 	_check(training_ai_team_source_select != null and training_ai_team_source_select.item_count == 2, "AI team source offers catalog and PokéPaste choices")
-	for select: OptionButton in [training_ai_mode_select, training_ai_team_source_select, training_ai_archetype_select, training_ai_team_select]:
+	for select: OptionButton in [training_ai_mode_select, training_ai_team_source_select, training_ai_archetype_select]:
 		_check(
 			select != null
 			and not select.fit_to_longest_item
@@ -664,13 +664,13 @@ func _check_pvp_runtime_translation() -> void:
 	_check(training_ai_archetype_row != null and training_ai_archetype_row.visible, "AI flow exposes an archetype selector")
 	_check(training_ai_archetype_select != null and training_ai_archetype_select.item_count == 2, "AI4 archetype selector excludes stall")
 	_check(training_ai_team_row != null and training_ai_team_row.visible, "AI flow exposes the sample-team selector")
-	_check(training_ai_team_search != null and training_ai_team_search.visible and training_ai_team_search.clear_button_enabled, "AI team selector provides a clearable name search")
-	_check(training_ai_team_select != null and training_ai_team_select.item_count == 2, "AI4 team selector excludes stall teams")
+	_check(training_ai_team_search != null and training_ai_team_search.visible and training_ai_team_search.clear_button_enabled, "AI team selector is one clearable name input")
+	_check(training_ai_team_suggestions != null and training_ai_team_suggestions.item_count == 2, "AI4 team suggestions exclude stall teams")
 	training_ai_team_search.text = "geen-resultaat"
 	overlay.call("_on_pvp_training_ai_team_search_changed", training_ai_team_search.text)
 	_check(
-		training_ai_team_select.item_count == 1
-		and str(training_ai_team_select.get_selected_metadata()) == "random",
+		training_ai_team_suggestions.item_count == 1
+		and str(training_ai_team_suggestions.get_item_metadata(0)) == "random",
 		"A non-matching AI team search leaves only the random choice"
 	)
 	training_ai_team_search.text = ""
@@ -705,38 +705,37 @@ func _check_pvp_runtime_translation() -> void:
 		and not ai_opponent_preview_grid.get_child(0).get_signal_connection_list("mouse_entered").is_empty(),
 		"AI opponent preview slots open a full Pokemon hover card"
 	)
-	var training_ai_team_style := training_ai_team_select.get_theme_stylebox("normal") as StyleBoxFlat if training_ai_team_select != null else null
-	_check(training_ai_team_style != null and training_ai_team_style.bg_color == Color("#171630"), "The final AI team choice is visually distinct from supporting settings")
 	_check(
-		training_ai_team_select != null
-		and training_ai_team_select.item_count > 1
-		and str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-screens-lameflame",
-		"AI selector preserves the stable team ID"
+		training_ai_team_suggestions != null
+		and training_ai_team_suggestions.item_count > 1
+		and str(training_ai_team_suggestions.get_item_metadata(1)) == "smogon-ndou-screens-lameflame",
+		"AI searchable selector preserves the stable team ID"
 	)
-	training_ai_team_select.select(1)
-	overlay.call("_on_pvp_training_ai_team_selected", 1)
+	overlay.call("_on_pvp_training_ai_team_suggestion_selected", 1)
 	_check(str(overlay.call("_resolved_pvp_training_ai_team_id")) == "smogon-ndou-screens-lameflame", "Selecting a named AI team binds its exact preview and battle identity")
 	_check(ai_opponent_preview_grid.get_child(0).tooltip_text.contains("Mawile"), "Named AI team preview uses that team's roster")
+	training_ai_team_search.text = ""
+	overlay.call("_on_pvp_training_ai_team_search_changed", training_ai_team_search.text)
 	var opponent_minimum_width_before_filter := ai_opponent_step.get_combined_minimum_size().x
 	var opponent_minimum_height_before_filter := ai_opponent_step.get_combined_minimum_size().y
 	training_ai_bot_select.select(1)
 	overlay.call("_on_pvp_training_ai_bot_selected", 1)
 	_check(str(training_ai_mode_select.get_selected_metadata()) == "active", "AI5 mode can expose its complete catalog")
 	_check(training_ai_archetype_select.item_count == 3, "AI5 archetype selector keeps stall available")
-	_check(training_ai_team_select.item_count == 3, "AI5 team selector keeps stall teams available")
+	_check(training_ai_team_suggestions.item_count == 3, "AI5 team suggestions keep stall teams available")
 	training_ai_team_search.text = "stall"
 	overlay.call("_on_pvp_training_ai_team_search_changed", training_ai_team_search.text)
 	_check(
-		training_ai_team_select.item_count == 2
-		and str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-stall-example",
-		"Searching an AI team name narrows the catalog dropdown without changing its stable ID"
+		training_ai_team_suggestions.item_count == 2
+		and str(training_ai_team_suggestions.get_item_metadata(1)) == "smogon-ndou-stall-example",
+		"Searching an AI team name narrows its choices without changing its stable ID"
 	)
 	training_ai_team_search.text = ""
 	overlay.call("_on_pvp_training_ai_team_search_changed", training_ai_team_search.text)
 	training_ai_archetype_select.select(2)
 	overlay.call("_on_pvp_training_ai_archetype_selected", 2)
-	_check(training_ai_team_select.item_count == 2, "Choosing an archetype filters the specific team list")
-	_check(str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-stall-example", "Filtered team keeps its stable catalog identity")
+	_check(training_ai_team_suggestions.item_count == 2, "Choosing an archetype filters the specific team list")
+	_check(str(training_ai_team_suggestions.get_item_metadata(1)) == "smogon-ndou-stall-example", "Filtered team keeps its stable catalog identity")
 	_check(str(overlay.call("_resolved_pvp_training_ai_team_id")) == "smogon-ndou-stall-example", "Random archetype choice resolves to the exact team that will battle")
 	_check(ai_opponent_preview_grid.get_child(0).tooltip_text == "Alomomola", "AI opponent preview exposes each Pokemon name on hover")
 	training_ai_bot_select.select(0)
@@ -744,7 +743,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(str(training_ai_mode_select.get_selected_metadata()) == "ai4", "AI4 can be reselected after browsing AI5")
 	_check(str(training_ai_archetype_select.get_selected_metadata()) == "random", "Switching to AI4 clears a selected stall archetype")
 	_check(training_ai_archetype_select.item_count == 2, "Switching to AI4 removes stall from the archetype selector")
-	_check(training_ai_team_select.item_count == 2, "Switching to AI4 removes stall from the team selector")
+	_check(training_ai_team_suggestions.item_count == 2, "Switching to AI4 removes stall from the team suggestions")
 	var first_opponent_name_labels := ai_opponent_preview_grid.get_child(0).find_children("*", "Label", true, false)
 	_check(first_opponent_name_labels.is_empty(), "AI opponent names stay out of the compact icon row")
 	_check(
@@ -767,8 +766,8 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_on_ai_sparring_tier_selected", 1)
 	overlay.call("_on_pvp_training_ai_archetype_selected", 1)
 	_check(
-		training_ai_team_select.item_count == 2
-		and str(training_ai_team_select.get_item_metadata(1)) == "smogon-nduu-hyper-offense"
+		training_ai_team_suggestions.item_count == 2
+		and str(training_ai_team_suggestions.get_item_metadata(1)) == "smogon-nduu-hyper-offense"
 		and str(overlay.call("_resolved_pvp_training_ai_team_id")) == "smogon-nduu-hyper-offense",
 		"Aether UU random opponents resolve only from the UU home-tier catalog"
 	)
