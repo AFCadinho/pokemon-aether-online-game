@@ -22,6 +22,7 @@ const DEBUG_PLAYER_UPDATE_PAYLOADS := false
 const PLAYER_UPDATE_LOG_PATH := "user://world_presence_player_update.log"
 
 var websocket: WebSocketPeer = WebSocketPeer.new()
+var latency := preload("res://scripts/services/connection_latency.gd").new()
 var connected := false
 var connecting := false
 var should_reconnect := false
@@ -48,7 +49,10 @@ func _process(delta: float) -> void:
 
 	var is_connected := ready_state == WebSocketPeer.STATE_OPEN
 	if connected != is_connected:
+		latency.reset()
 		connected = is_connected
+		if connected:
+			session_check_timer = 0.0
 		connection_changed.emit(connected)
 		if connected and not last_position_payload.is_empty():
 			_reset_roster()
@@ -60,7 +64,8 @@ func _process(delta: float) -> void:
 		session_check_timer -= delta
 		if session_check_timer <= 0.0:
 			session_check_timer = SESSION_CHECK_INTERVAL_SECONDS
-			_send_payload({"type": "ping"})
+			if _send_payload({"type": "ping"}):
+				latency.sent(Time.get_ticks_msec())
 		return
 
 	if ready_state == WebSocketPeer.STATE_CONNECTING:
@@ -116,6 +121,7 @@ func _connect_presence_async(attempt_id: int) -> void:
 
 
 func disconnect_presence() -> void:
+	latency.reset()
 	should_reconnect = false
 	connecting = false
 	connection_attempt_id += 1
@@ -306,6 +312,8 @@ func _process_packets() -> void:
 
 		var message: Dictionary = parsed_body
 		match str(message.get("type", "")):
+			"pong":
+				latency.received(Time.get_ticks_msec())
 			"snapshot":
 				_apply_snapshot_message(message)
 			"weather_update":

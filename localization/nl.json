@@ -1,4 +1,7 @@
 {
+  "ui.settings.show_performance": "FPS en ping tonen",
+  "ui.performance.measuring": "Ping meten…",
+  "ui.performance.reconnecting": "Verbinding herstellen…",
   "ui.bag.discard.action": "Weggooien",
   "ui.bag.discard.confirm": "{quantity} × {item} weggooien? Deze items gaan definitief verloren; je ontvangt geen geld.",
   "ui.bag.discard.failed": "Dit item kon niet worden weggegooid.",

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show FPS and server ping while playing with an optional, saved toggle in Graphics settings.
+
 - Bot statistics now use easy-to-read whole numbers.
 
 - Older AI5 statistics are now tucked away under View older versions.

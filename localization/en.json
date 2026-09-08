@@ -1,4 +1,7 @@
 {
+  "ui.settings.show_performance": "Show FPS and ping",
+  "ui.performance.measuring": "Measuring ping…",
+  "ui.performance.reconnecting": "Reconnecting…",
   "ui.bag.discard.action": "Discard",
   "ui.bag.discard.confirm": "Discard {quantity} × {item}? These items will be permanently lost; you receive no money.",
   "ui.bag.discard.failed": "Could not discard this item.",
