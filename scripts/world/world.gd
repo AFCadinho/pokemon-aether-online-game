@@ -1838,6 +1838,9 @@ func _get_decorative_row_z_index(decorative_layer: TileMapLayer, row: int) -> in
 func _build_structure_top_visual_depth_groups(map: Node) -> void:
 	var structure_layers: Array[TileMapLayer] = []
 	_collect_structure_top_visual_layers_recursive(map, structure_layers)
+	# Grass rows are already built and remain fixed throughout this pass.
+	# Keep the lookup local so map reloads/rebuilds cannot retain stale layers.
+	var grass_rows := TallGrassDepthSortingScript.collect_depth_rows(map)
 
 	for structure_layer: TileMapLayer in structure_layers:
 		if bool(structure_layer.get_meta(STRUCTURE_TOP_DEPTH_GROUPS_BUILT_META, false)):
@@ -1892,7 +1895,7 @@ func _build_structure_top_visual_depth_groups(map: Node) -> void:
 			group_z_index = maxi(
 				group_z_index,
 				MapDepthSortingScript.get_tall_grass_overlap_z_floor(
-					map,
+					grass_rows,
 					structure_layer,
 					group,
 					TREE_LAYER_Z_MIN,
