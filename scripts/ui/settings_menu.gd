@@ -42,6 +42,7 @@ const LOGOUT_CONFIRM_Z_INDEX := 2200
 @onready var battle_animations_check_box: CheckBox = $MarginContainer/VBoxContainer/BattleAnimationsCheckBox
 @onready var weather_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/WeatherEffectsCheckBox
 @onready var terrain_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/TerrainEffectsCheckBox
+var performance_check_box: CheckBox
 var display_own_name_check_box: CheckBox
 var hide_other_players_check_box: CheckBox
 var language_label: Label
@@ -153,6 +154,7 @@ func _ready() -> void:
 	display_own_name_check_box.toggled.connect(_on_display_own_name_toggled)
 	hide_other_players_check_box.toggled.connect(_on_hide_other_players_toggled)
 	sprite_style_options_button.item_selected.connect(_on_sprite_style_selected)
+	performance_check_box.toggled.connect(_on_performance_toggled)
 	fullscreen_check_box.toggled.connect(_on_fullscreen_toggled)
 	resolution_options_button.item_selected.connect(_on_resolution_selected)
 	world_pixel_scale_options_button.item_selected.connect(_on_world_pixel_scale_selected)
@@ -270,6 +272,7 @@ func _apply_settings_to_controls() -> void:
 		sprite_style_options_button.select(option_index)
 	_update_sprite_style_status_label("")
 
+	performance_check_box.button_pressed = SettingsManager.show_performance
 	fullscreen_check_box.button_pressed = SettingsManager.fullscreen
 	_apply_resolution_options_to_control()
 	_apply_world_pixel_scale_options_to_control()
@@ -412,6 +415,10 @@ func _setup_tabs() -> void:
 	var sprite_style_row := _create_labeled_control_row(
 		sprite_style_label, sprite_style_options_button
 	)
+	performance_check_box = CheckBox.new()
+	performance_check_box.name = "PerformanceCheckBox"
+	performance_check_box.focus_mode = Control.FOCUS_ALL
+	var performance_row := _create_toggle_setting(performance_check_box, "ui.settings.show_performance")
 	var fullscreen_row := _create_toggle_setting(fullscreen_check_box, "ui.settings.fullscreen")
 	var resolution_row := _create_labeled_control_row(
 		resolution_label, resolution_options_button
@@ -432,6 +439,7 @@ func _setup_tabs() -> void:
 		resolution_row,
 		world_scale_row,
 		cursor_scale_row,
+		performance_row,
 	])
 	_wrap_settings_section(graphics_tab, "ui.settings.section.sprites", "ui.settings.section.sprites_subtitle", [
 		sprite_style_row,
@@ -442,6 +450,7 @@ func _setup_tabs() -> void:
 		resolution_row,
 		world_scale_row,
 		cursor_scale_row,
+		performance_row,
 	])
 	var audio_label := master_volume_slider.get_node("../../AudioLabel") as Label
 	var battle_music_label := battle_music_options_button.get_node("../BattleMusicLabel") as Label
@@ -1868,6 +1877,11 @@ func _on_sprite_style_selected(index: int) -> void:
 		return
 
 	_update_sprite_style_status_label("")
+
+
+func _on_performance_toggled(enabled: bool) -> void:
+	if not loading_controls:
+		SettingsManager.set_show_performance(enabled)
 
 
 func _on_fullscreen_toggled(enabled: bool) -> void:

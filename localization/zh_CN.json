@@ -1,4 +1,7 @@
 {
+  "ui.settings.show_performance": "显示 FPS 和延迟",
+  "ui.performance.measuring": "正在测量延迟…",
+  "ui.performance.reconnecting": "正在重新连接…",
   "ui.bag.discard.action": "丢弃",
   "ui.bag.discard.confirm": "丢弃{quantity}个{item}？这些道具将永久消失，你不会获得金钱。",
   "ui.bag.discard.failed": "无法丢弃此道具。",

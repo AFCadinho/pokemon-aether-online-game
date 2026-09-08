@@ -30,6 +30,7 @@ const ACTION_TIMEOUT_RECOVERY_ADVANCED := "advanced"
 const ACTION_TIMEOUT_RECOVERY_RETRY := "retry"
 
 var websocket: WebSocketPeer = WebSocketPeer.new()
+var latency := preload("res://scripts/services/connection_latency.gd").new()
 var connected := false
 var connecting := false
 var should_reconnect := false
@@ -81,6 +82,8 @@ func _process(delta: float) -> void:
 
 	var is_connected := ready_state == WebSocketPeer.STATE_OPEN
 	if connected != is_connected:
+		if not is_connected:
+			latency.reset()
 		connected = is_connected
 		if not connected and should_reconnect and reconnect_retry_count == 0:
 			_schedule_reconnect_retry()
@@ -109,6 +112,7 @@ func _process(delta: float) -> void:
 				return
 			awaiting_pong = true
 			ping_sent_at_msec = Time.get_ticks_msec()
+			latency.sent(ping_sent_at_msec)
 			connection_heartbeat_timer = CONNECTION_HEARTBEAT_SECONDS
 		return
 
@@ -157,6 +161,7 @@ func connect_room(
 	connection_heartbeat_timer = 0.0
 	awaiting_pong = false
 	ping_sent_at_msec = 0
+	latency.reset()
 	room_is_ready = false
 	if active_room_code == "" or not _is_authenticated():
 		if DEBUG_PVP_REALTIME:
@@ -266,6 +271,7 @@ func disconnect_room() -> void:
 	connection_heartbeat_timer = 0.0
 	awaiting_pong = false
 	ping_sent_at_msec = 0
+	latency.reset()
 	room_is_ready = false
 	active_room_code = ""
 	active_player_id = "p1"
@@ -524,6 +530,7 @@ func _process_packets() -> void:
 			_handle_joined_message(message)
 			continue
 		if message_type == "pong":
+			latency.received(Time.get_ticks_msec())
 			awaiting_pong = false
 			ping_sent_at_msec = 0
 			continue
@@ -657,6 +664,7 @@ func _handle_joined_message(message: Dictionary) -> bool:
 	connection_heartbeat_timer = 0.0
 	awaiting_pong = false
 	ping_sent_at_msec = 0
+	latency.reset()
 	room_is_ready = false
 	room_joined.emit(active_room_code, active_player_id, active_battle_id)
 	_send_pending_render_ack_after_join()
@@ -1303,6 +1311,7 @@ func _restart_stalled_connection(reason: String) -> void:
 	room_is_ready = false
 	awaiting_pong = false
 	ping_sent_at_msec = 0
+	latency.reset()
 	connection_heartbeat_timer = 0.0
 	connecting = false
 	_schedule_reconnect_retry()
