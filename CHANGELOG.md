@@ -4,6 +4,19 @@
 
 - Sparring bots now show a simple version number, with a separate label for test versions.
 
+- Added a dedicated healing sound when medicine restores a Pokémon's HP.
+
+- Fixed moving multiple Pokémon in sequence through the PC box selector sending a later Pokémon into the first destination slot and swapping the earlier one back.
+
+- Reduced map setup pauses when entering Cerulean City and other areas with depth-sorted scenery.
+
+- The ping number now uses the same recent average as its colour indicator.
+
+- The performance meter now explains FPS and ping, colours ping using recent measurements, and offers saved optional frame-time and recent FPS-dip details.
+
+- AI Sparring and the team catalog now start on Aether OU, offer only OU and UU, and share your tier selection.
+- Show FPS and server ping while playing with an optional, saved toggle in Graphics settings.
+
 - Bot statistics now use easy-to-read whole numbers.
 
 - Older AI5 statistics are now tucked away under View older versions.

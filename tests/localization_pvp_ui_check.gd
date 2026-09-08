@@ -239,7 +239,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Matchhistorie", "Match history tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.custom_minimum_size.y == 520.0, "AI Sparring keeps a stable workspace height across tabs")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.current_tab == 0, "Free sparring is the default AI destination")
-	_check(ai_sparring_tier_select != null and ai_sparring_tier_select.item_count == 1 and ai_sparring_tier_select.get_item_text(0) == "Open" and str(ai_sparring_tier_select.get_selected_metadata()) == "none", "Free sparring safely defaults to the open tier")
+	_check(ai_sparring_tier_select != null and ai_sparring_tier_select.item_count == 1 and ai_sparring_tier_select.get_item_text(0) == "Aether OU" and str(ai_sparring_tier_select.get_selected_metadata()) == "aether-ou", "Free sparring defaults to Aether OU before the catalog loads")
 	_check(
 		ai_sparring_practice_hero != null
 		and ai_sparring_practice_hero.get_parent().get_parent() == ai_sparring_tabs.get_tab_control(0),
@@ -283,8 +283,9 @@ func _check_pvp_runtime_translation() -> void:
 	var catalog_archetypes: Array[String] = ["balance"]
 	var catalog_entries: Array[Dictionary] = [{
 		"teamId": "catalog-balance",
+		"homeTierId": "aether-ou",
 		"displayName": "Zapdos Balance",
-		"authors": ["Aether"],
+		"authors": ["Catalog Author"],
 		"archetype": "balance",
 		"eligibleTierIds": ["none", "aether-ou", "aether-uu"],
 		"pokemon": [{"species": "Zapdos"}, {"species": "Gholdengo"}],
@@ -302,8 +303,8 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_refresh_ai_sparring_catalog_filters")
 	overlay.call("_refresh_ai_sparring_catalog_view")
 	_check(ai_sparring_catalog_search != null and ai_sparring_catalog_search.placeholder_text.begins_with("Zoek Pokémon"), "Catalog search renders in Dutch")
-	_check(ai_sparring_tier_select.item_count == 3 and ai_sparring_tier_select.get_item_text(2) == "Aether UU", "Free sparring offers Open, Aether OU and Aether UU")
-	_check(ai_sparring_catalog_tier != null and ai_sparring_catalog_tier.item_count == 4, "Team catalog adds a tier eligibility filter")
+	_check(ai_sparring_tier_select.item_count == 2 and ai_sparring_tier_select.get_item_text(0) == "Aether OU" and ai_sparring_tier_select.get_item_text(1) == "Aether UU", "Free sparring offers only Aether OU and Aether UU")
+	_check(ai_sparring_catalog_tier != null and ai_sparring_catalog_tier.item_count == 2 and str(ai_sparring_catalog_tier.get_selected_metadata()) == "aether-ou", "Team catalog defaults to OU without Open or All tiers")
 	_check(ai_sparring_catalog_results != null and ai_sparring_catalog_results.get_child_count() == 1, "Catalog renders matching team cards")
 	_check(
 		overlay.call("_ai_sparring_team_display_tier", {
@@ -331,7 +332,7 @@ func _check_pvp_runtime_translation() -> void:
 	var catalog_card_text := ""
 	for catalog_label: Label in catalog_card.find_children("*", "Label", true, false) if catalog_card != null else []:
 		catalog_card_text += catalog_label.text
-	_check(not catalog_card_text.contains("Aether"), "Catalog cards omit author labels from the player view")
+	_check(not catalog_card_text.contains("Catalog Author"), "Catalog cards omit author labels from the player view")
 	ai_sparring_catalog_search.text = "Gholdengo"
 	overlay.call("_refresh_ai_sparring_catalog_view")
 	_check(ai_sparring_catalog_results.get_child_count() == 1, "Catalog search matches a Pokémon inside a team")
@@ -591,6 +592,9 @@ func _check_pvp_runtime_translation() -> void:
 		],
 	})
 	var training_ai_available_modes: Array = overlay.get("pvp_training_ai_available_modes") as Array
+	for entry: Dictionary in training_ai_catalog_entries:
+		entry["homeTierId"] = "aether-ou"
+		entry["eligibleTierIds"] = ["none", "aether-ou"]
 	training_ai_available_modes.assign(["ai4", "active"])
 	var training_ai_archetypes: Array = overlay.get("pvp_training_ai_catalog_archetypes") as Array
 	training_ai_archetypes.assign(["hyper_offense", "stall"])
@@ -682,9 +686,9 @@ func _check_pvp_runtime_translation() -> void:
 	uu_entry["displayName"] = "UU Hyper Offense"
 	uu_entry["homeTierId"] = "aether-uu"
 	training_ai_catalog_entries.assign([cross_tier_ou_entry, uu_entry])
-	ai_sparring_tier_select.select(2)
+	ai_sparring_tier_select.select(1)
 	training_ai_archetype_select.select(1)
-	overlay.call("_on_ai_sparring_tier_selected", 2)
+	overlay.call("_on_ai_sparring_tier_selected", 1)
 	overlay.call("_on_pvp_training_ai_archetype_selected", 1)
 	_check(
 		training_ai_team_select.item_count == 2
@@ -697,6 +701,17 @@ func _check_pvp_runtime_translation() -> void:
 		and str(ai_sparring_catalog_player_select.get_item_metadata(0)) == "smogon-nduu-hyper-offense",
 		"Aether UU player catalog choices exclude cross-eligible OU teams"
 	)
+	_check(str(ai_sparring_catalog_tier.get_selected_metadata()) == "aether-uu" and ai_sparring_catalog_results.get_child_count() == 1, "Practice tier changes synchronize and filter the catalog")
+	overlay.call("_on_pvp_ai_sparring_tab_changed", 1)
+	overlay.call("_on_pvp_ai_sparring_tab_changed", 0)
+	_check(str(overlay.call("_selected_ai_sparring_tier_id")) == "aether-uu", "Switching tabs preserves the selected tier")
+	overlay.call("_refresh_ai_sparring_tier_options")
+	overlay.call("_refresh_ai_sparring_catalog_filters")
+	_check(str(ai_sparring_catalog_tier.get_selected_metadata()) == "aether-uu", "Refreshing tier options preserves UU in both tabs")
+	ai_sparring_catalog_tier.select(0)
+	overlay.call("_on_ai_sparring_catalog_tier_selected", 0)
+	_check(str(overlay.call("_selected_ai_sparring_tier_id")) == "aether-ou", "Catalog tier changes synchronize back to practice")
+	_check(str(overlay.call("_resolved_pvp_training_ai_team_id")) == str(cross_tier_ou_entry["teamId"]) and str(ai_sparring_catalog_player_select.get_item_metadata(0)) == str(cross_tier_ou_entry["teamId"]), "Catalog tier changes replace incompatible player and opponent selections")
 	training_ai_team_source_select.select(1)
 	overlay.call("_on_pvp_training_ai_team_source_selected", 1)
 	_check(training_ai_custom_team_input != null and training_ai_custom_team_input.visible, "PokéPaste source reveals an opponent-team paste field")

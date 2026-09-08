@@ -24015,10 +24015,13 @@ func _on_bag_item_use_confirm_pressed() -> void:
 	_refresh_open_pokemon_summary_cards()
 	_refresh_player_status_card()
 	var reward: Dictionary = _staff_dictionary_from_variant(result.get("reward", {}))
+	var restored_hp := _item_effect_restored_hp(reward)
 	await _present_item_trade_evolution(reward)
 	_add_bag_item_use_success_message(item_id, reward)
 	_notify_progression_reward(reward)
 	_hide_bag_item_use_popup()
+	if restored_hp > 0:
+		SfxManager.play("pokemon_item_heal")
 
 func _set_bag_item_use_status(message: String, is_error: bool) -> void:
 	if bag_item_use_status_label == null:
@@ -40602,7 +40605,11 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 		{"location": _pc_storage_location_label(location)}
 	))
 	_refresh_party()
-	await _refresh_pc_state(_pc_search_query() != "")
+	# A move through the box selector can target a box other than the visible
+	# one. Refresh every cached box so the next selector drop resolves its first
+	# open slot from the server's authoritative state, rather than stale data.
+	var refresh_all_boxes := str(source.get("type", "")) == "box" or str(target.get("type", "")) == "box"
+	await _refresh_pc_state(refresh_all_boxes)
 
 
 func _pc_storage_location_label(value: Variant) -> String:
@@ -43508,10 +43515,12 @@ func _on_pvp_training_ai_mode_selected(_index: int) -> void:
 
 
 func _on_ai_sparring_tier_selected(_index: int) -> void:
+	_select_option_by_metadata(pvp_ai_sparring_catalog_tier, _selected_ai_sparring_tier_id())
 	_refresh_pvp_training_ai_team_options()
 	_refresh_ai_sparring_player_catalog_options()
 	_refresh_ai_sparring_catalog_preview()
 	_refresh_pvp_training_ai_opponent_preview()
+	_refresh_ai_sparring_catalog_view()
 
 
 func _on_pvp_training_ai_team_selected(_index: int) -> void:
@@ -43749,15 +43758,11 @@ func _refresh_ai_sparring_catalog_filters() -> void:
 		)
 	_select_option_by_metadata(pvp_ai_sparring_catalog_archetype, previous)
 	if pvp_ai_sparring_catalog_tier != null:
-		var previous_tier := str(pvp_ai_sparring_catalog_tier.get_selected_metadata())
 		pvp_ai_sparring_catalog_tier.clear()
-		pvp_ai_sparring_catalog_tier.add_item(LocalizationManager.text("ui.pvp.ai_sparring.catalog.all_tiers"))
-		pvp_ai_sparring_catalog_tier.set_item_metadata(0, "all")
-		for tier: Dictionary in pvp_training_ai_tiers:
-			var tier_id := str(tier.get("tierId", "none"))
+		for tier_id: String in _ai_sparring_available_tier_ids():
 			pvp_ai_sparring_catalog_tier.add_item(_ai_sparring_tier_label(tier_id))
 			pvp_ai_sparring_catalog_tier.set_item_metadata(pvp_ai_sparring_catalog_tier.item_count - 1, tier_id)
-		_select_option_by_metadata(pvp_ai_sparring_catalog_tier, previous_tier)
+		_select_option_by_metadata(pvp_ai_sparring_catalog_tier, _selected_ai_sparring_tier_id())
 
 
 func _on_ai_sparring_catalog_filter_changed(_text: String) -> void:
@@ -43769,7 +43774,8 @@ func _on_ai_sparring_catalog_archetype_selected(_index: int) -> void:
 
 
 func _on_ai_sparring_catalog_tier_selected(_index: int) -> void:
-	_refresh_ai_sparring_catalog_view()
+	_select_option_by_metadata(pvp_ai_sparring_tier_select, str(pvp_ai_sparring_catalog_tier.get_selected_metadata()))
+	_on_ai_sparring_tier_selected(pvp_ai_sparring_tier_select.selected)
 
 
 func _refresh_ai_sparring_catalog_view() -> void:
@@ -43780,10 +43786,10 @@ func _refresh_ai_sparring_catalog_view() -> void:
 		child.queue_free()
 	var query := pvp_ai_sparring_catalog_search.text.strip_edges().to_lower() if pvp_ai_sparring_catalog_search != null else ""
 	var archetype := str(pvp_ai_sparring_catalog_archetype.get_selected_metadata()) if pvp_ai_sparring_catalog_archetype != null and pvp_ai_sparring_catalog_archetype.item_count > 0 else "all"
-	var tier_id := str(pvp_ai_sparring_catalog_tier.get_selected_metadata()) if pvp_ai_sparring_catalog_tier != null and pvp_ai_sparring_catalog_tier.item_count > 0 else "all"
+	var tier_id := _selected_ai_sparring_tier_id()
 	var matches: Array[Dictionary] = []
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
-		if tier_id != "all" and not _ai_sparring_team_matches_tier(entry, tier_id):
+		if not _ai_sparring_team_matches_tier(entry, tier_id):
 			continue
 		if archetype != "all" and str(entry.get("archetype", "")) != archetype:
 			continue
@@ -44196,16 +44202,24 @@ func _selected_pvp_training_ai_team_id() -> String:
 	return selected_id if selected_id != "" else "random"
 
 
+func _ai_sparring_available_tier_ids() -> Array[String]:
+	var result: Array[String] = []
+	for tier_id: String in ["aether-ou", "aether-uu"]:
+		for tier: Dictionary in pvp_training_ai_tiers:
+			if str(tier.get("tierId", "")) == tier_id:
+				result.append(tier_id)
+				break
+	if result.is_empty():
+		result.append("aether-ou")
+	return result
+
+
 func _refresh_ai_sparring_tier_options() -> void:
 	if pvp_ai_sparring_tier_select == null:
 		return
 	var previous := _selected_ai_sparring_tier_id()
 	pvp_ai_sparring_tier_select.clear()
-	var tiers := pvp_training_ai_tiers
-	if tiers.is_empty():
-		tiers = [{"tierId": "none", "tierName": "Open"}]
-	for tier: Dictionary in tiers:
-		var tier_id := str(tier.get("tierId", "none"))
+	for tier_id: String in _ai_sparring_available_tier_ids():
 		pvp_ai_sparring_tier_select.add_item(_ai_sparring_tier_label(tier_id))
 		pvp_ai_sparring_tier_select.set_item_metadata(pvp_ai_sparring_tier_select.item_count - 1, tier_id)
 	_select_option_by_metadata(pvp_ai_sparring_tier_select, previous)
@@ -44213,9 +44227,9 @@ func _refresh_ai_sparring_tier_options() -> void:
 
 func _selected_ai_sparring_tier_id() -> String:
 	if pvp_ai_sparring_tier_select == null or pvp_ai_sparring_tier_select.item_count == 0:
-		return "none"
+		return "aether-ou"
 	var tier_id := str(pvp_ai_sparring_tier_select.get_selected_metadata()).strip_edges().to_lower()
-	return tier_id if tier_id in ["none", "aether-ou", "aether-uu"] else "none"
+	return tier_id if tier_id in ["aether-ou", "aether-uu"] else "aether-ou"
 
 
 func _ai_sparring_tier_label(tier_id: String) -> String:

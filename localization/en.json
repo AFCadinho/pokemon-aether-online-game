@@ -1,4 +1,11 @@
 {
+  "ui.settings.performance_hint": "FPS shows how smoothly your game runs. Ping shows the delay to the server. The ping value and colour use the average of up to five recent measurements: green is low, orange is moderate, red is high.",
+  "ui.settings.performance_details": "Show performance details",
+  "ui.settings.performance_details_hint": "When the meter is enabled, also show average frame time and the FPS equivalent of the slowest frame in the last 5 seconds. A higher frame time or lower minimum FPS can reveal stutters.",
+  "ui.performance.details": "Frame: {time} ms · Low (5s): {fps} FPS",
+  "ui.settings.show_performance": "Show FPS and ping",
+  "ui.performance.measuring": "Measuring ping…",
+  "ui.performance.reconnecting": "Reconnecting…",
   "ui.bag.discard.action": "Discard",
   "ui.bag.discard.confirm": "Discard {quantity} × {item}? These items will be permanently lost; you receive no money.",
   "ui.bag.discard.failed": "Could not discard this item.",

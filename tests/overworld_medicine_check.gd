@@ -2,6 +2,8 @@ extends SceneTree
 
 const Preview := preload("res://scripts/ui/bag_item_effect_preview.gd")
 const OVERLAY_SCRIPT := "res://scripts/ui/ui_overlay.gd"
+const SFX_MANAGER_SCRIPT := "res://scripts/services/sfx_manager.gd"
+const ITEM_HEAL_SOUND := "res://assets/audio/sfx/overworld/pokemon_item_heal.ogg"
 
 var failed := false
 
@@ -109,10 +111,17 @@ func _check_ability_item_previews() -> void:
 
 func _check_overlay_contract() -> void:
 	var source := _read_text(OVERLAY_SCRIPT)
+	var sfx_source := _read_text(SFX_MANAGER_SCRIPT)
 	_check(source.contains("BAG_ITEM_EFFECT_PREVIEW.supports"), "Bag recognizes gameplay effects generically")
 	_check(source.contains("BAG_ITEM_EFFECT_PREVIEW.preview"), "Bag delegates medicine previews")
 	_check(source.contains("func _item_effect_restored_hp"), "Bag derives restored HP from authoritative item-effect results")
 	_check(source.contains('"ui.bag.use.success_heal"'), "Bag reports restored HP in its success system message")
+	_check(source.contains('SfxManager.play("pokemon_item_heal")'), "Bag plays the item healing sound after restored HP")
+	_check(
+		sfx_source.contains('"pokemon_item_heal"') and sfx_source.contains('pokemon_item_heal.ogg'),
+		"SFX manager registers the item healing sound"
+	)
+	_check(load(ITEM_HEAL_SOUND) is AudioStream, "item healing sound is a loadable Ogg audio stream")
 	_check(source.contains("PlayerSave.replace_party_from_state(party_value as Array)"), "successful use applies authoritative server party")
 	_check(source.contains('"gameplay": gameplay'), "inventory normalization preserves gameplay metadata")
 	_check(source.contains('func _is_evolution_item_id'), "Bag recognizes evolution items as Pokemon items")
