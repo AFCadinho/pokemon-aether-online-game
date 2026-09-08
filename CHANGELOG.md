@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refreshed sparring statistics with trainer portraits, clearer number cards, and a layout that adapts to smaller windows.
+
 - Busy maps now avoid repeated NPC and online-player calculations, improving smoothness in areas such as Cerulean City.
 - Sparring bots now show a simple version number, with a separate label for test versions.
 

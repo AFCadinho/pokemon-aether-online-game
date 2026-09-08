@@ -7589,26 +7589,32 @@ func _create_ai_sparring_stats_page() -> MarginContainer:
 	var page := _create_pvp_ranked_tab_page("Statistics", 14)
 	page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.statistics")
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 12)
+	layout.add_theme_constant_override("separation", 18)
 	page.add_child(layout)
 	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 16)
 	layout.add_child(header)
 	pvp_ai_sparring_stats_status = Label.new()
+	pvp_ai_sparring_stats_status.add_theme_font_size_override("font_size", 16)
+	pvp_ai_sparring_stats_status.add_theme_color_override("font_color", Color("#c4cfdf"))
 	pvp_ai_sparring_stats_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pvp_ai_sparring_stats_status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(pvp_ai_sparring_stats_status)
 	var refresh := Button.new()
+	refresh.custom_minimum_size = Vector2(110, 38)
+	refresh.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_set_localized_control_property(refresh, "text", "ui.pvp.bans.refresh")
 	_apply_button_style(refresh)
 	refresh.pressed.connect(_load_ai_sparring_stats)
 	header.add_child(refresh)
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	layout.add_child(scroll)
 	pvp_ai_sparring_stats_list = VBoxContainer.new()
 	pvp_ai_sparring_stats_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_ai_sparring_stats_list.add_theme_constant_override("separation", 14)
+	pvp_ai_sparring_stats_list.add_theme_constant_override("separation", 18)
 	scroll.add_child(pvp_ai_sparring_stats_list)
 	_render_ai_sparring_stats()
 	return page
@@ -7650,36 +7656,87 @@ func _render_ai_sparring_stats() -> void:
 		if not entry is Dictionary or str(entry.get("bot", "")) not in ["ai4", "ai5"]:
 			continue
 		var is_ai5 := str(entry["bot"]) == "ai5"
+		var accent := Color("#efd080") if is_ai5 else Color("#87d5ec")
 		var panel := PanelContainer.new()
-		panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#111c2e"), Color("#75619a") if is_ai5 else Color("#386b83"), 12, 1))
-		if is_ai5 and str(entry.get("version", "")) == "Hybrid v1":
+		panel.name = "AiSparringStatsCard_" + str(entry["bot"])
+		panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#111c2e"), accent.darkened(0.4), 12, 1))
+		if is_ai5 and str(entry.get("version", "")) in ["v1", "Hybrid v1"]:
 			older_versions.add_child(panel)
 		else:
 			pvp_ai_sparring_stats_list.add_child(panel)
 		var margin := MarginContainer.new()
+		margin.name = "CardPadding"
 		for edge: String in ["left", "right", "top", "bottom"]:
-			margin.add_theme_constant_override("margin_" + edge, 16)
+			margin.add_theme_constant_override("margin_" + edge, 18)
 		panel.add_child(margin)
 		var content := VBoxContainer.new()
-		content.add_theme_constant_override("separation", 8)
+		content.add_theme_constant_override("separation", 14)
 		margin.add_child(content)
+		var heading := HBoxContainer.new()
+		heading.add_theme_constant_override("separation", 16)
+		content.add_child(heading)
+		var portrait_frame := PanelContainer.new()
+		portrait_frame.custom_minimum_size = Vector2(64, 76)
+		portrait_frame.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		portrait_frame.add_theme_stylebox_override("panel", _make_panel_style(Color("#091321"), accent.darkened(0.55), 10, 1))
+		heading.add_child(portrait_frame)
+		var portrait := TextureRect.new()
+		portrait.name = "BotPortrait"
+		portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		portrait.texture = load("res://assets/sprites/trainer_cards/showdown/veteran-gen7.png" if is_ai5 else "res://assets/sprites/trainer_cards/showdown/scientist-gen7.png") as Texture2D
+		portrait_frame.add_child(portrait)
+		var titles := VBoxContainer.new()
+		titles.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		titles.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		titles.add_theme_constant_override("separation", 6)
+		heading.add_child(titles)
 		var title := Label.new()
 		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		title.add_theme_font_size_override("font_size", 20)
-		title.text = LocalizationManager.text("ui.pvp.training.ai.mode_active" if is_ai5 else "ui.pvp.training.ai.mode_ai4") + " · " + str(entry.get("version", ""))
-		content.add_child(title)
+		title.add_theme_font_size_override("font_size", 22)
+		title.add_theme_color_override("font_color", accent)
+		title.text = LocalizationManager.text("ui.pvp.training.ai.mode_active" if is_ai5 else "ui.pvp.training.ai.mode_ai4")
+		titles.add_child(title)
+		var version := Label.new()
+		version.text = str(entry.get("version", ""))
+		version.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		version.add_theme_font_size_override("font_size", 13)
+		version.add_theme_color_override("font_color", Color("#a8b8cc"))
+		titles.add_child(version)
+		var metrics := GridContainer.new()
+		metrics.name = "Metrics"
+		metrics.columns = 2
+		metrics.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		metrics.add_theme_constant_override("h_separation", 10)
+		metrics.add_theme_constant_override("v_separation", 10)
+		content.add_child(metrics)
+		metrics.resized.connect(func() -> void: _resize_ai_sparring_stats_grid(metrics))
 		for metric: String in ["completed", "unconfirmed", "winRate", "averageTurns", "nativeRate", "fallbackRate"]:
 			if not is_ai5 and metric in ["nativeRate", "fallbackRate"]:
 				continue
-			var line := HBoxContainer.new()
-			line.add_theme_constant_override("separation", 16)
-			content.add_child(line)
+			var tile := PanelContainer.new()
+			tile.name = "Metric_" + metric
+			tile.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			tile.add_theme_stylebox_override("panel", _make_panel_style(Color("#091321"), Color("#263950"), 8, 1))
+			metrics.add_child(tile)
+			var tile_margin := MarginContainer.new()
+			for edge: String in ["left", "right", "top", "bottom"]:
+				tile_margin.add_theme_constant_override("margin_" + edge, 12)
+			tile.add_child(tile_margin)
+			var line := VBoxContainer.new()
+			line.add_theme_constant_override("separation", 6)
+			tile_margin.add_child(line)
 			var name_label := Label.new()
 			name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			name_label.text = LocalizationManager.text("ui.pvp.ai_sparring.stats." + metric)
+			name_label.add_theme_font_size_override("font_size", 13)
+			name_label.add_theme_color_override("font_color", Color("#a8b8cc"))
 			line.add_child(name_label)
 			var value_label := Label.new()
+			value_label.add_theme_font_size_override("font_size", 24)
+			value_label.add_theme_color_override("font_color", accent)
 			var value: Variant = entry.get(metric)
 			value_label.text = "—" if value == null else ("%.0f%%" % (float(value) * 100.0) if metric.ends_with("Rate") else "%.0f" % float(value))
 			line.add_child(value_label)
@@ -7688,6 +7745,7 @@ func _render_ai_sparring_stats() -> void:
 			insufficient.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			insufficient.text = LocalizationManager.text("ui.pvp.ai_sparring.stats.insufficient")
 			insufficient.add_theme_color_override("font_color", Color("#e6bf86"))
+			insufficient.add_theme_font_size_override("font_size", 13)
 			content.add_child(insufficient)
 	if older_versions.get_child_count() > 0:
 		var toggle := Button.new()
@@ -7705,10 +7763,16 @@ func _render_ai_sparring_stats() -> void:
 	else:
 		older_versions.free()
 	var note := Label.new()
+	note.add_theme_font_size_override("font_size", 13)
+	note.add_theme_constant_override("line_spacing", 4)
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note.text = LocalizationManager.text("ui.pvp.ai_sparring.stats.note")
 	note.add_theme_color_override("font_color", Color("#a8b8cc"))
 	pvp_ai_sparring_stats_list.add_child(note)
+
+
+func _resize_ai_sparring_stats_grid(grid: GridContainer) -> void:
+	grid.columns = 3 if grid.size.x >= 660 and grid.get_child_count() != 4 else (2 if grid.size.x >= 380 else 1)
 
 
 func _setup_pvp_mode_menu() -> void:

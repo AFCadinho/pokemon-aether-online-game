@@ -182,11 +182,24 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 5, "AI Sparring separates practice, catalog, history, bot information and statistics")
 	_check(ai_sparring_tabs.get_tab_title(4) == "Statistieken", "Statistics tab is localized")
 	overlay.set("pvp_ai_sparring_stats_data", {"success": true, "bots": [
-		{"bot": "ai4", "version": "Classic v1", "completed": 2, "unconfirmed": 1, "sufficient": false},
-		{"bot": "ai5", "version": "Native Z v4", "completed": 10.0, "unconfirmed": 0, "sufficient": true, "winRate": 0.6, "nativeRate": 0.9, "fallbackRate": 0.1, "averageTurns": 25.6}
+		{"bot": "ai4", "version": "v1", "completed": 2, "unconfirmed": 1, "sufficient": false},
+		{"bot": "ai5", "version": "v4", "completed": 10.0, "unconfirmed": 0, "sufficient": true, "winRate": 0.6, "nativeRate": 0.9, "fallbackRate": 0.1, "averageTurns": 25.6}
 	]})
 	overlay.call("_render_ai_sparring_stats")
 	var stats_list := overlay.get("pvp_ai_sparring_stats_list") as VBoxContainer
+	for bot_id: String in ["ai4", "ai5"]:
+		var stats_card := stats_list.get_node("AiSparringStatsCard_" + bot_id) as PanelContainer
+		_check(stats_card.get_node("CardPadding").get_theme_constant("margin_left") == 18, "Statistics match bot profile card padding")
+		var stats_portrait := stats_card.find_child("BotPortrait", true, false) as TextureRect
+		_check(stats_portrait.texture != null and stats_portrait.texture.resource_path.ends_with("veteran-gen7.png" if bot_id == "ai5" else "scientist-gen7.png"), "Statistics use the correct trainer portrait")
+		var metrics := stats_card.find_child("Metrics", true, false) as GridContainer
+		_check(metrics.get_child_count() == (6 if bot_id == "ai5" else 4), "Metric tiles retain all applicable statistics")
+	var responsive_grid := GridContainer.new()
+	for width: int in [320, 500, 800]:
+		responsive_grid.size.x = width
+		overlay.call("_resize_ai_sparring_stats_grid", responsive_grid)
+		_check(responsive_grid.columns == (1 if width == 320 else 2 if width == 500 else 3), "Metric grid adapts to narrow and wide panels")
+	responsive_grid.free()
 	var stats_text := ""
 	for stats_label: Node in stats_list.find_children("*", "Label", true, false):
 		stats_text += (stats_label as Label).text + "\n"
@@ -194,7 +207,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(stats_text.contains("Nog onvoldoende gegevens") and stats_text.contains("60%") and stats_text.contains("90%") and stats_text.contains("26") and not stats_text.contains("10.0") and not stats_text.contains("25.6"), "Statistics show whole numbers and distinguish small samples from measured rates")
 	_check(stats_list.get_node_or_null("AiSparringOlderStatisticsToggle") == null, "No archive toggle without older statistics")
 	var archived_stats: Dictionary = overlay.get("pvp_ai_sparring_stats_data")
-	archived_stats["bots"].append({"bot": "ai5", "version": "Hybrid v1", "completed": 12, "sufficient": true})
+	archived_stats["bots"].append({"bot": "ai5", "version": "v1", "completed": 12, "sufficient": true})
 	overlay.call("_render_ai_sparring_stats")
 	var older_stats := stats_list.get_node("AiSparringOlderStatistics") as VBoxContainer
 	var older_toggle := stats_list.get_node("AiSparringOlderStatisticsToggle") as Button
