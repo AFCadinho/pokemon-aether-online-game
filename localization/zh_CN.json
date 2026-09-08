@@ -4450,6 +4450,8 @@
   "ui.pvp.ai_sparring.history.opponent_grandmaster": "对手：AI5 Grandmaster",
   "ui.pvp.ai_sparring.tab.about": "关于机器人",
   "ui.pvp.ai_sparring.tab.statistics": "统计",
+  "ui.pvp.ai_sparring.stats.show_older": "查看旧版本",
+  "ui.pvp.ai_sparring.stats.hide_older": "隐藏旧版本",
   "ui.pvp.ai_sparring.stats.period": "已记录的对战 · 最近7天 · 每分钟更新",
   "ui.pvp.ai_sparring.stats.loading": "正在加载统计…",
   "ui.pvp.ai_sparring.stats.unavailable": "无法加载统计，请尝试刷新。",

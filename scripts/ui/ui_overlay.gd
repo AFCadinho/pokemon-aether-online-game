@@ -7642,13 +7642,20 @@ func _render_ai_sparring_stats() -> void:
 	var bots: Variant = pvp_ai_sparring_stats_data.get("bots", [])
 	if not bots is Array:
 		return
+	var older_versions := VBoxContainer.new()
+	older_versions.name = "AiSparringOlderStatistics"
+	older_versions.add_theme_constant_override("separation", 14)
+	older_versions.visible = false
 	for entry: Variant in bots:
 		if not entry is Dictionary or str(entry.get("bot", "")) not in ["ai4", "ai5"]:
 			continue
 		var is_ai5 := str(entry["bot"]) == "ai5"
 		var panel := PanelContainer.new()
 		panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#111c2e"), Color("#75619a") if is_ai5 else Color("#386b83"), 12, 1))
-		pvp_ai_sparring_stats_list.add_child(panel)
+		if is_ai5 and str(entry.get("version", "")) == "Hybrid v1":
+			older_versions.add_child(panel)
+		else:
+			pvp_ai_sparring_stats_list.add_child(panel)
 		var margin := MarginContainer.new()
 		for edge: String in ["left", "right", "top", "bottom"]:
 			margin.add_theme_constant_override("margin_" + edge, 16)
@@ -7682,6 +7689,21 @@ func _render_ai_sparring_stats() -> void:
 			insufficient.text = LocalizationManager.text("ui.pvp.ai_sparring.stats.insufficient")
 			insufficient.add_theme_color_override("font_color", Color("#e6bf86"))
 			content.add_child(insufficient)
+	if older_versions.get_child_count() > 0:
+		var toggle := Button.new()
+		toggle.name = "AiSparringOlderStatisticsToggle"
+		toggle.toggle_mode = true
+		toggle.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		toggle.text = LocalizationManager.text("ui.pvp.ai_sparring.stats.show_older")
+		_apply_button_style(toggle)
+		toggle.toggled.connect(func(expanded: bool) -> void:
+			older_versions.visible = expanded
+			toggle.text = LocalizationManager.text("ui.pvp.ai_sparring.stats.hide_older" if expanded else "ui.pvp.ai_sparring.stats.show_older")
+		)
+		pvp_ai_sparring_stats_list.add_child(toggle)
+		pvp_ai_sparring_stats_list.add_child(older_versions)
+	else:
+		older_versions.free()
 	var note := Label.new()
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note.text = LocalizationManager.text("ui.pvp.ai_sparring.stats.note")

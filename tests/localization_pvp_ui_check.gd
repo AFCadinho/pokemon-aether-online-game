@@ -192,6 +192,18 @@ func _check_pvp_runtime_translation() -> void:
 		stats_text += (stats_label as Label).text + "\n"
 	_check(stats_text.contains("AI4 Scholar") and stats_text.contains("AI5 Grandmaster"), "Statistics show both bot versions")
 	_check(stats_text.contains("Nog onvoldoende gegevens") and stats_text.contains("60.0%") and stats_text.contains("90.0%"), "Statistics distinguish small samples from measured rates")
+	_check(stats_list.get_node_or_null("AiSparringOlderStatisticsToggle") == null, "No archive toggle without older statistics")
+	var archived_stats: Dictionary = overlay.get("pvp_ai_sparring_stats_data")
+	archived_stats["bots"].append({"bot": "ai5", "version": "Hybrid v1", "completed": 12, "sufficient": true})
+	overlay.call("_render_ai_sparring_stats")
+	var older_stats := stats_list.get_node("AiSparringOlderStatistics") as VBoxContainer
+	var older_toggle := stats_list.get_node("AiSparringOlderStatisticsToggle") as Button
+	_check(not older_stats.visible and older_stats.get_child_count() == 1, "Historical AI5 card is collapsed by default")
+	_check(older_toggle.text == "Bekijk oudere versies", "Archive toggle is localized")
+	older_toggle.button_pressed = true
+	_check(older_stats.visible and older_toggle.text == "Verberg oudere versies", "Older statistics can be expanded")
+	older_toggle.button_pressed = false
+	_check(not older_stats.visible, "Older statistics can be collapsed again")
 	overlay.set("pvp_ai_sparring_stats_data", {"success": false})
 	overlay.call("_render_ai_sparring_stats")
 	_check(stats_list.get_child_count() == 0, "Failed statistics refresh does not leave stale rates visible")
