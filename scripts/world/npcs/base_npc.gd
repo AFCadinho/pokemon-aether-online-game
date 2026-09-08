@@ -137,6 +137,8 @@ var movement_reserved_tile := Vector2i.ZERO
 var story_visibility_active := true
 var is_npc_moving := false
 var _base_npc_process_active := false
+var _movement_collision_map: Node
+var _movement_collision_tilemap: TileMapLayer
 
 
 func _ready_base_npc() -> void:
@@ -1033,8 +1035,10 @@ func _can_npc_move_to(world_position: Vector2) -> bool:
 		if player_node != null and _to_tile(_get_body_target_feet_position(player_node)) == _to_tile(world_position):
 			return false
 
-	var collision_tilemap := MapLayerResolverScript.find_tilemap_layer(current_map, ["Collision"])
-	if collision_tilemap != null and not ambient_movement_ignores_map_collision:
+	var collision_tilemap: TileMapLayer
+	if not ambient_movement_ignores_map_collision:
+		collision_tilemap = _get_movement_collision_tilemap(current_map)
+	if collision_tilemap != null:
 		var local_position := collision_tilemap.to_local(world_position)
 		var tile_position := collision_tilemap.local_to_map(local_position)
 		if collision_tilemap.get_cell_source_id(tile_position) != -1:
@@ -1046,6 +1050,23 @@ func _can_npc_move_to(world_position: Vector2) -> bool:
 		return not bool(current_map.call("is_position_blocked_by_character", world_position))
 
 	return not MapCharacterBlocking.is_position_blocked_by_character(current_map, world_position)
+
+
+func _get_movement_collision_tilemap(current_map: Node) -> TileMapLayer:
+	if (
+		current_map == _movement_collision_map
+		and (
+			_movement_collision_tilemap == null
+			or is_instance_valid(_movement_collision_tilemap)
+		)
+	):
+		return _movement_collision_tilemap
+	_movement_collision_map = current_map
+	_movement_collision_tilemap = MapLayerResolverScript.find_tilemap_layer(
+		current_map,
+		["Collision"]
+	)
+	return _movement_collision_tilemap
 
 
 func _update_directional_sensors() -> void:

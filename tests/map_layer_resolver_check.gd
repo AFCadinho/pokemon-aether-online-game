@@ -136,10 +136,11 @@ func _check_collision_consumers_use_recursive_lookup() -> void:
 	var npc_source := FileAccess.get_file_as_string(NPC_SCRIPT_PATH)
 	_check(
 		npc_source.contains(
-			'MapLayerResolverScript.find_tilemap_layer(current_map, ["Collision"])'
+			'MapLayerResolverScript.find_tilemap_layer('
 		),
 		"NPC movement resolves nested collision"
 	)
+	_check_npc_collision_layer_cache()
 	var world_source := FileAccess.get_file_as_string(WORLD_SCRIPT_PATH)
 	_check(
 		world_source.contains("return MapLayerResolverScript.find_tilemap_layer("),
@@ -154,6 +155,39 @@ func _check_collision_consumers_use_recursive_lookup() -> void:
 		),
 		"Every standard map inherits the shared collision resolver"
 	)
+
+
+func _check_npc_collision_layer_cache() -> void:
+	var npc_script := load(NPC_SCRIPT_PATH) as Script
+	var npc := npc_script.new() as Node2D
+	var first_map := Node2D.new()
+	var first_tiles := Node2D.new()
+	first_map.add_child(first_tiles)
+	var first_collision := TileMapLayer.new()
+	first_collision.name = "Collision"
+	first_tiles.add_child(first_collision)
+	var second_map := Node2D.new()
+	var second_collision := TileMapLayer.new()
+	second_collision.name = "Collision"
+	second_map.add_child(second_collision)
+
+	_check(
+		npc.call("_get_movement_collision_tilemap", first_map) == first_collision,
+		"NPC resolves a nested collision layer once for its current map"
+	)
+	first_collision.name = "RenamedAfterResolution"
+	_check(
+		npc.call("_get_movement_collision_tilemap", first_map) == first_collision,
+		"NPC reuses its valid collision layer without another tree search"
+	)
+	_check(
+		npc.call("_get_movement_collision_tilemap", second_map) == second_collision,
+		"NPC refreshes its collision layer when the active map changes"
+	)
+
+	npc.free()
+	first_map.free()
+	second_map.free()
 
 
 func _check_multidirectional_ledge_cell() -> void:
