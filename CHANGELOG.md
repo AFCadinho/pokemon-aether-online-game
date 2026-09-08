@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring lets you search your own catalog team by name before choosing it.
+
 - AI Sparring statistics now show their catalog-team and 10-turn inclusion rule directly on the statistics page.
 
 - AI Sparring statistics now count only catalog-versus-catalog matches that last at least 10 turns; other team choices remain pure practice.
