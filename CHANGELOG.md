@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calculator sets with the same name appear once; choose their different builds through the variant selector.
+
 - Opponent sets in the damage calculator can now be searched by name and selected with the mouse or keyboard.
 
 - The battle calculator now shows Smogon set sources and lets you choose between build variants.

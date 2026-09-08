@@ -848,7 +848,7 @@ func _is_valid_sample_group(entry: Dictionary) -> bool:
 	if not entry.has("variants"):
 		return true
 	var provenance := _as_dictionary(entry.get("provenance", {}))
-	if provenance.get("kind") != "smogon" or provenance.get("formatId") not in ["gen9nationaldex", "gen9nationaldexuu"]:
+	if not _is_known_sample_source(provenance):
 		return false
 	var variants: Variant = entry.get("variants")
 	if not (variants is Array) or variants.is_empty() or variants.size() > 4096:
@@ -858,10 +858,14 @@ func _is_valid_sample_group(entry: Dictionary) -> bool:
 		if not (variant is Dictionary) or variant.has("variants") or not _is_valid_sample_set(variant):
 			return false
 		var variant_id := str(variant.get("id", ""))
-		if ids.has(variant_id) or variant.get("provenance") != entry.get("provenance"):
+		if ids.has(variant_id) or not _is_known_sample_source(_as_dictionary(variant.get("provenance", {}))):
 			return false
 		ids[variant_id] = true
 	return true
+
+
+func _is_known_sample_source(provenance: Dictionary) -> bool:
+	return provenance == {"kind": "pokeaether_curated"} or (provenance.get("kind") == "smogon" and provenance.get("formatId") in ["gen9nationaldex", "gen9nationaldexuu"])
 
 
 func _is_valid_sample_set(entry: Dictionary) -> bool:
@@ -1155,6 +1159,15 @@ func _choose_sample_set_search_result(index: int, results: ItemList) -> void:
 
 
 func _get_sample_set_source_label(option: Dictionary) -> String:
+	var sources: Array[String] = []
+	for variant: Variant in _as_array(option.get("variants", [])):
+		var label := _get_sample_set_source_label(_as_dictionary(variant))
+		if label == "":
+			label = "Aether"
+		if not sources.has(label):
+			sources.append(label)
+	if not sources.is_empty():
+		return "" if sources == ["Aether"] else _join_string_array(sources, " / ")
 	var provenance := _as_dictionary(option.get("provenance", {}))
 	if str(provenance.get("kind", "")) != "smogon":
 		return ""
@@ -1283,6 +1296,9 @@ func _sanitize_sample_set_stats(stats: Dictionary, maximum: int, omit_default: b
 
 func _get_sample_set_tooltip(option: Dictionary) -> String:
 	var details: Array[String] = []
+	var source := _get_sample_set_source_label(option)
+	if source != "":
+		details.append(source)
 	for key: String in ["item", "ability", "nature"]:
 		var value := str(option.get(key, "")).strip_edges()
 		if value != "" and value != "<null>":
