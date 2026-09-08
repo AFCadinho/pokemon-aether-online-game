@@ -203,7 +203,7 @@ func _check_pvp_runtime_translation() -> void:
 	var stats_text := ""
 	for stats_label: Node in stats_list.find_children("*", "Label", true, false):
 		stats_text += (stats_label as Label).text + "\n"
-	_check(stats_text.contains("AI4 Scholar") and stats_text.contains("AI5 Grandmaster"), "Statistics show both bot versions")
+	_check(stats_text.contains("Beginner") and stats_text.contains("Grandmaster — Hard"), "Statistics show both bot versions")
 	_check(stats_text.contains("Nog onvoldoende gegevens") and stats_text.contains("60%") and stats_text.contains("90%") and stats_text.contains("26") and not stats_text.contains("10.0") and not stats_text.contains("25.6"), "Statistics show whole numbers and distinguish small samples from measured rates")
 	_check(stats_list.get_node_or_null("AiSparringOlderStatisticsToggle") == null, "No archive toggle without older statistics")
 	var archived_stats: Dictionary = overlay.get("pvp_ai_sparring_stats_data")
@@ -289,7 +289,7 @@ func _check_pvp_runtime_translation() -> void:
 	var history_text := ""
 	for history_label: Label in history_labels:
 		history_text += history_label.text + " "
-	_check(history_text.contains("Tegenstander: AI5 Grandmaster"), "Match history identifies AI5 Grandmaster as the opponent")
+	_check(history_text.contains("Tegenstander: Grandmaster — Hard"), "Match history identifies Grandmaster Hard as the opponent")
 	_check(history_text.contains("Gewonnen"), "Match history shows the localized player result")
 	_check(overlay.find_child("AiVeteranPortrait", true, false) != null, "AI Sparring presents the Veteran trainer identity")
 	_check(ai_team_step != null, "Free sparring groups the player's team as its first step")
@@ -622,6 +622,14 @@ func _check_pvp_runtime_translation() -> void:
 	for entry: Dictionary in training_ai_catalog_entries:
 		entry["homeTierId"] = "aether-ou"
 		entry["eligibleTierIds"] = ["none", "aether-ou"]
+	training_ai_available_modes.assign(["ai4", "active", "extreme", "intermediate"])
+	overlay.call("_refresh_pvp_training_ai_mode_options")
+	_check(training_ai_mode_select.item_count == 3, "Intermediate stays hidden until implemented")
+	_check(training_ai_mode_select.get_item_text(0) == "Beginner", "AI4 is Beginner")
+	_check(training_ai_mode_select.get_item_text(1) == "Grandmaster — Hard", "Current AI5 is Hard")
+	_check(training_ai_mode_select.get_item_text(2) == "Grandmaster — Extreme", "Extreme uses the public sparring label")
+	training_ai_mode_select.select(2)
+	_check(overlay.call("_selected_pvp_training_ai_mode") == "extreme", "Extreme selection preserves its server mode")
 	training_ai_available_modes.assign(["ai4", "active"])
 	var training_ai_archetypes: Array = overlay.get("pvp_training_ai_catalog_archetypes") as Array
 	training_ai_archetypes.assign(["hyper_offense", "stall"])
