@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Busy maps now avoid repeated NPC and online-player calculations, improving smoothness in areas such as Cerulean City.
+
 - Added a dedicated healing sound when medicine restores a Pokémon's HP.
 
 - Fixed moving multiple Pokémon in sequence through the PC box selector sending a later Pokémon into the first destination slot and swapping the earlier one back.

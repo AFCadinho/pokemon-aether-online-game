@@ -100,6 +100,7 @@ var last_presence_position_signature := ""
 var confirmed_appearance_state: Dictionary = {}
 var remote_players_container: Node2D
 var remote_player_avatars: Dictionary = {}
+var remote_player_order_dirty := false
 var creator_remote_players_visibility_override_active := false
 var creator_remote_players_visible := true
 var creator_nameplate_visibility_override_active := false
@@ -2194,6 +2195,7 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 			avatar = new_avatar as Node2D
 			remote_player_avatars[user_key] = avatar
 			remote_players_container.add_child(avatar)
+			remote_player_order_dirty = true
 			if creator_nameplate_visibility_override_active and avatar.has_method("set_creator_nameplate_visible"):
 				avatar.call("set_creator_nameplate_visible", creator_nameplates_visible)
 			if avatar.has_method("set_interaction_enabled"):
@@ -2228,8 +2230,11 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 
 
 func _sort_remote_player_avatar_nodes() -> void:
+	if not remote_player_order_dirty:
+		return
 	if remote_players_container == null or not is_instance_valid(remote_players_container):
 		return
+	remote_player_order_dirty = false
 
 	var avatars: Array[Node] = []
 	for child: Node in remote_players_container.get_children():
@@ -2285,6 +2290,7 @@ func _clear_remote_players() -> void:
 		if avatar != null and is_instance_valid(avatar):
 			avatar.queue_free()
 	remote_player_avatars.clear()
+	remote_player_order_dirty = false
 	# Keep the reusable container alive while its old map is removed. It will be
 	# attached to the next map's Entities/Players branch by move_player_to_map().
 	if remote_players_container != null \
