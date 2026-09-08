@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added Grandmaster Master: Hard with selective Nightmare turns, for practicing positioning and moves that hold up against different responses.
+
 - Added experimental Grandmaster Expert to AI Sparring, with its own difficulty description, match history and statistics.
 
 - AI Sparring calls its highest Grandmaster difficulty Nightmare; existing results and match history remain available.
