@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Older AI5 statistics are now tucked away under View older versions.
+
 - Added bot statistics for recent sparring matches, with win rates, average turns and AI5 fallback use, grouped by version.
 
 - Meet AI4 Scholar and AI5 Grandmaster in clearer bot profiles with trainer portraits and more practice tips.

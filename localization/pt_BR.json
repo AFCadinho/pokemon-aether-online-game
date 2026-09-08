@@ -4453,6 +4453,8 @@
   "ui.pvp.ai_sparring.history.opponent_grandmaster": "Oponente: AI5 Grandmaster",
   "ui.pvp.ai_sparring.tab.about": "Sobre os bots",
   "ui.pvp.ai_sparring.tab.statistics": "Estatísticas",
+  "ui.pvp.ai_sparring.stats.show_older": "Ver versões anteriores",
+  "ui.pvp.ai_sparring.stats.hide_older": "Ocultar versões anteriores",
   "ui.pvp.ai_sparring.stats.period": "Partidas registradas · Últimos 7 dias · Atualização a cada minuto",
   "ui.pvp.ai_sparring.stats.loading": "Carregando estatísticas…",
   "ui.pvp.ai_sparring.stats.unavailable": "Não foi possível carregar as estatísticas. Tente atualizar.",
