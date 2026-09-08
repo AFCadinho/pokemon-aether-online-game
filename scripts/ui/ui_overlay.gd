@@ -149,12 +149,13 @@ const GAMEPLAY_RESET_TITLE := "Reset / New Game"
 const GAMEPLAY_RESET_DESCRIPTION := "Return this trainer to first-login gameplay state"
 const GAMEPLAY_RESET_CONFIRM_TEXT := "This permanently resets your location, party, boxes, regular inventory, money, playtime and gameplay unlocks. Unclaimed mail attachments are permanently removed, and your other active sessions are signed out.\n\nYour account, roles, friends, mail history, PvP history, Aether Gems and paid items remain."
 # This matches the catalog team's natural setup height, including its six-slot
-# opponent preview. Keep it as the baseline when the custom PokéPaste fields
+# opponent preview and the separate 36px difficulty row plus its 8px gap.
+# Keep it as the baseline when the custom PokéPaste fields
 # replace those catalog controls, so the following controls never shift.
-const AI_SPARRING_OPPONENT_STEP_MIN_HEIGHT := 310.0
+const AI_SPARRING_OPPONENT_STEP_MIN_HEIGHT := 354.0
 # The catalog, history, and research tabs should retain the Free Sparring
 # workspace height instead of making the complete PvP panel jump on tab change.
-const AI_SPARRING_TAB_MIN_HEIGHT := 520.0
+const AI_SPARRING_TAB_MIN_HEIGHT := 564.0
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
 const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")

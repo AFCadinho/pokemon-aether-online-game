@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Switching between a catalog team and PokéPaste keeps the AI Sparring window the same size.
+
 - AI Sparring now separates the Scholar/Grandmaster opponent choice from its difficulty.
 
 - AI Sparring team hovers now show complete stats, HP, types, and move PP for both bots and selected catalog teams.
