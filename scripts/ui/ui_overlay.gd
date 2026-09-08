@@ -7717,11 +7717,17 @@ func _render_ai_sparring_stats() -> void:
 		if not entry is Dictionary or str(entry.get("bot", "")) not in ["ai4", "ai5"]:
 			continue
 		var is_ai5 := str(entry["bot"]) == "ai5"
+		var difficulty := str(entry.get("difficulty", "hard" if is_ai5 else "beginner"))
+		if difficulty not in (["intermediate", "hard", "extreme"] if is_ai5 else ["beginner"]):
+			continue
+		if difficulty == "intermediate" and "intermediate" not in pvp_training_ai_available_modes and int(entry.get("completed", 0)) + int(entry.get("unconfirmed", 0)) == 0:
+			continue
+		var has_choice_rates := is_ai5 and difficulty == "hard"
 		var accent := Color("#efd080") if is_ai5 else Color("#87d5ec")
 		var panel := PanelContainer.new()
-		panel.name = "AiSparringStatsCard_" + str(entry["bot"])
+		panel.name = "AiSparringStatsCard_" + str(entry["bot"]) + "_" + difficulty + "_" + str(entry.get("version", ""))
 		panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#111c2e"), accent.darkened(0.4), 12, 1))
-		if is_ai5 and str(entry.get("version", "")) in ["v1", "Hybrid v1"]:
+		if has_choice_rates and str(entry.get("version", "")) in ["v1", "Hybrid v1"]:
 			older_versions.add_child(panel)
 		else:
 			pvp_ai_sparring_stats_list.add_child(panel)
@@ -7758,6 +7764,8 @@ func _render_ai_sparring_stats() -> void:
 		title.add_theme_font_size_override("font_size", 22)
 		title.add_theme_color_override("font_color", accent)
 		title.text = LocalizationManager.text("ui.pvp.training.ai.mode_active" if is_ai5 else "ui.pvp.training.ai.mode_ai4")
+		var difficulty_mode: String = str({"beginner": "ai4", "hard": "active"}.get(difficulty, difficulty))
+		title.text += " — " + LocalizationManager.text("ui.pvp.training.ai.difficulty_" + str(difficulty_mode))
 		titles.add_child(title)
 		var version := Label.new()
 		version.text = str(entry.get("version", ""))
@@ -7774,7 +7782,7 @@ func _render_ai_sparring_stats() -> void:
 		content.add_child(metrics)
 		metrics.resized.connect(func() -> void: _resize_ai_sparring_stats_grid(metrics))
 		for metric: String in ["completed", "unconfirmed", "winRate", "averageTurns", "nativeRate", "fallbackRate"]:
-			if not is_ai5 and metric in ["nativeRate", "fallbackRate"]:
+			if not has_choice_rates and metric in ["nativeRate", "fallbackRate"]:
 				continue
 			var tile := PanelContainer.new()
 			tile.name = "Metric_" + metric
