@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The ping number now uses the same recent average as its colour indicator.
+
 - The performance meter now explains FPS and ping, colours ping using recent measurements, and offers saved optional frame-time and recent FPS-dip details.
 
 - AI Sparring and the team catalog now start on Aether OU, offer only OU and UU, and share your tier selection.
