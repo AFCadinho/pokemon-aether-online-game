@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring statistics now count only catalog-versus-catalog matches that last at least 10 turns; other team choices remain pure practice.
+
 - Battle trainers now show the player facing right toward the opponent and the correct Scholar or Grandmaster sprite for AI Sparring.
 
 - About the bots now explains each Grandmaster difficulty and shows its own availability and version.
