@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Choose Beginner, Grandmaster Hard or Grandmaster Extreme in AI Sparring when available on your server.
+
 - Clicking the calculator set button again now closes its open search menu.
 
 - Calculator sets with the same name appear once; choose their different builds through the variant selector.
