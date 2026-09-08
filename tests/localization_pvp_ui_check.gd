@@ -99,6 +99,7 @@ func _check_pvp_runtime_translation() -> void:
 	var training_ai_archetype_row := overlay.get("pvp_training_ai_archetype_row") as HBoxContainer
 	var training_ai_archetype_select := overlay.get("pvp_training_ai_archetype_select") as OptionButton
 	var training_ai_team_row := overlay.get("pvp_training_ai_team_row") as HBoxContainer
+	var training_ai_team_search := overlay.get("pvp_training_ai_team_search") as LineEdit
 	var training_ai_team_select := overlay.get("pvp_training_ai_team_select") as OptionButton
 	var ai_opponent_preview := overlay.get("pvp_training_ai_opponent_preview") as VBoxContainer
 	var ai_opponent_preview_title := overlay.get("pvp_training_ai_opponent_preview_title") as Label
@@ -265,7 +266,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(0) == "Vrij oefenen", "Free sparring tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(1) == "Teamcatalogus", "Team catalog tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Matchhistorie", "Match history tab renders in Dutch")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.custom_minimum_size.y == 564.0, "AI Sparring keeps a stable workspace height across tabs")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.custom_minimum_size.y == 595.0, "AI Sparring keeps a stable workspace height across tabs")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.current_tab == 0, "Free sparring is the default AI destination")
 	_check(ai_sparring_tier_select != null and ai_sparring_tier_select.item_count == 1 and ai_sparring_tier_select.get_item_text(0) == "Aether OU" and str(ai_sparring_tier_select.get_selected_metadata()) == "aether-ou", "Free sparring defaults to Aether OU before the catalog loads")
 	_check(
@@ -296,7 +297,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_team_step != null, "Free sparring groups the player's team as its first step")
 	_check(
 		ai_sparring_setup_steps != null
-		and is_equal_approx(ai_sparring_setup_steps.custom_minimum_size.y, 354.0)
+		and is_equal_approx(ai_sparring_setup_steps.custom_minimum_size.y, 385.0)
 		and ai_team_step.size_flags_vertical == Control.SIZE_EXPAND_FILL
 		and ai_opponent_step.size_flags_vertical == Control.SIZE_EXPAND_FILL,
 		"AI setup cards fill one stable shared-height row"
@@ -663,7 +664,17 @@ func _check_pvp_runtime_translation() -> void:
 	_check(training_ai_archetype_row != null and training_ai_archetype_row.visible, "AI flow exposes an archetype selector")
 	_check(training_ai_archetype_select != null and training_ai_archetype_select.item_count == 2, "AI4 archetype selector excludes stall")
 	_check(training_ai_team_row != null and training_ai_team_row.visible, "AI flow exposes the sample-team selector")
+	_check(training_ai_team_search != null and training_ai_team_search.visible and training_ai_team_search.clear_button_enabled, "AI team selector provides a clearable name search")
 	_check(training_ai_team_select != null and training_ai_team_select.item_count == 2, "AI4 team selector excludes stall teams")
+	training_ai_team_search.text = "geen-resultaat"
+	overlay.call("_on_pvp_training_ai_team_search_changed", training_ai_team_search.text)
+	_check(
+		training_ai_team_select.item_count == 1
+		and str(training_ai_team_select.get_selected_metadata()) == "random",
+		"A non-matching AI team search leaves only the random choice"
+	)
+	training_ai_team_search.text = ""
+	overlay.call("_on_pvp_training_ai_team_search_changed", training_ai_team_search.text)
 	_check(ai_opponent_preview != null and ai_opponent_preview.visible, "A random AI team is resolved before the battle starts")
 	_check(ai_opponent_preview_grid != null and ai_opponent_preview_grid.get_child_count() == 6, "AI opponent preview renders all six Pokemon")
 	_check(ai_opponent_preview_title != null and ai_opponent_preview_title.text.begins_with("TEAM TEGENSTANDER"), "AI opponent preview identifies the resolved team")
@@ -713,6 +724,15 @@ func _check_pvp_runtime_translation() -> void:
 	_check(str(training_ai_mode_select.get_selected_metadata()) == "active", "AI5 mode can expose its complete catalog")
 	_check(training_ai_archetype_select.item_count == 3, "AI5 archetype selector keeps stall available")
 	_check(training_ai_team_select.item_count == 3, "AI5 team selector keeps stall teams available")
+	training_ai_team_search.text = "stall"
+	overlay.call("_on_pvp_training_ai_team_search_changed", training_ai_team_search.text)
+	_check(
+		training_ai_team_select.item_count == 2
+		and str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-stall-example",
+		"Searching an AI team name narrows the catalog dropdown without changing its stable ID"
+	)
+	training_ai_team_search.text = ""
+	overlay.call("_on_pvp_training_ai_team_search_changed", training_ai_team_search.text)
 	training_ai_archetype_select.select(2)
 	overlay.call("_on_pvp_training_ai_archetype_selected", 2)
 	_check(training_ai_team_select.item_count == 2, "Choosing an archetype filters the specific team list")

@@ -149,13 +149,14 @@ const GAMEPLAY_RESET_TITLE := "Reset / New Game"
 const GAMEPLAY_RESET_DESCRIPTION := "Return this trainer to first-login gameplay state"
 const GAMEPLAY_RESET_CONFIRM_TEXT := "This permanently resets your location, party, boxes, regular inventory, money, playtime and gameplay unlocks. Unclaimed mail attachments are permanently removed, and your other active sessions are signed out.\n\nYour account, roles, friends, mail history, PvP history, Aether Gems and paid items remain."
 # This matches the catalog team's natural setup height, including its six-slot
-# opponent preview and the separate 36px difficulty row plus its 8px gap.
+# opponent preview, the separate 36px difficulty row plus its 8px gap, and
+# the catalog name search.
 # Keep it as the baseline when the custom PokéPaste fields
 # replace those catalog controls, so the following controls never shift.
-const AI_SPARRING_OPPONENT_STEP_MIN_HEIGHT := 354.0
+const AI_SPARRING_OPPONENT_STEP_MIN_HEIGHT := 385.0
 # The catalog, history, and research tabs should retain the Free Sparring
 # workspace height instead of making the complete PvP panel jump on tab change.
-const AI_SPARRING_TAB_MIN_HEIGHT := 564.0
+const AI_SPARRING_TAB_MIN_HEIGHT := 595.0
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
 const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")
@@ -906,6 +907,7 @@ var pvp_training_ai_archetype_row: HBoxContainer
 var pvp_training_ai_archetype_select: OptionButton
 var pvp_training_ai_catalog_archetypes: Array[String] = []
 var pvp_training_ai_team_row: HBoxContainer
+var pvp_training_ai_team_search: LineEdit
 var pvp_training_ai_team_select: OptionButton
 var pvp_training_ai_catalog_entries: Array[Dictionary] = []
 var pvp_training_ai_tiers: Array[Dictionary] = []
@@ -6635,6 +6637,24 @@ func _setup_pvp_room_popup() -> void:
 	training_ai_team_label.add_theme_color_override("font_color", Color("#c9beff"))
 	pvp_training_ai_team_row.add_child(training_ai_team_label)
 
+	var training_ai_team_controls := VBoxContainer.new()
+	training_ai_team_controls.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	training_ai_team_controls.add_theme_constant_override("separation", 5)
+	pvp_training_ai_team_row.add_child(training_ai_team_controls)
+
+	pvp_training_ai_team_search = LineEdit.new()
+	pvp_training_ai_team_search.name = "AiSparringOpponentTeamSearch"
+	_set_localized_control_property(
+		pvp_training_ai_team_search,
+		"placeholder_text",
+		"ui.pvp.training.ai.team_search"
+	)
+	pvp_training_ai_team_search.custom_minimum_size = Vector2(0, 30)
+	pvp_training_ai_team_search.clear_button_enabled = true
+	pvp_training_ai_team_search.text_changed.connect(_on_pvp_training_ai_team_search_changed)
+	_apply_line_edit_style(pvp_training_ai_team_search)
+	training_ai_team_controls.add_child(pvp_training_ai_team_search)
+
 	pvp_training_ai_team_select = OptionButton.new()
 	pvp_training_ai_team_select.custom_minimum_size = Vector2(0, 36)
 	pvp_training_ai_team_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -6645,7 +6665,7 @@ func _setup_pvp_room_popup() -> void:
 	_apply_pvp_ranked_dropdown_style(pvp_training_ai_team_select, true)
 	_apply_ai_sparring_team_selector_style(pvp_training_ai_team_select)
 	pvp_training_ai_team_select.item_selected.connect(_on_pvp_training_ai_team_selected)
-	pvp_training_ai_team_row.add_child(pvp_training_ai_team_select)
+	training_ai_team_controls.add_child(pvp_training_ai_team_select)
 	_refresh_pvp_training_ai_team_options()
 
 	pvp_room_code_input = LineEdit.new()
@@ -43638,6 +43658,7 @@ func _refresh_pvp_training_ai_team_options() -> void:
 		return
 	var requested_archetype := _selected_pvp_training_ai_archetype()
 	var previous_team_id := _selected_pvp_training_ai_team_id()
+	var search_query := pvp_training_ai_team_search.text.strip_edges().to_lower() if pvp_training_ai_team_search != null else ""
 	pvp_training_ai_team_select.clear()
 	pvp_training_ai_team_select.add_item(LocalizationManager.text(
 		"ui.pvp.training.ai.team_random"
@@ -43653,6 +43674,8 @@ func _refresh_pvp_training_ai_team_options() -> void:
 		if requested_archetype != "random" and str(entry.get("archetype", "")) != requested_archetype:
 			continue
 		var display_name := str(entry.get("displayName", entry.get("teamId", ""))).strip_edges()
+		if search_query != "" and not display_name.to_lower().contains(search_query):
+			continue
 		pvp_training_ai_team_select.add_item(display_name)
 		pvp_training_ai_team_select.set_item_metadata(
 			pvp_training_ai_team_select.item_count - 1,
@@ -43687,6 +43710,10 @@ func _on_pvp_training_ai_team_selected(_index: int) -> void:
 	_resolve_pvp_training_ai_opponent_team()
 
 
+func _on_pvp_training_ai_team_search_changed(_text: String) -> void:
+	_refresh_pvp_training_ai_team_options()
+
+
 func _on_pvp_training_ai_team_source_selected(_index: int) -> void:
 	_refresh_pvp_training_ai_team_source_ui()
 
@@ -43697,6 +43724,8 @@ func _refresh_pvp_training_ai_team_source_ui() -> void:
 		pvp_training_ai_archetype_row.visible = not use_custom_paste
 	if pvp_training_ai_team_row != null:
 		pvp_training_ai_team_row.visible = not use_custom_paste
+	if pvp_training_ai_team_search != null:
+		pvp_training_ai_team_search.visible = not use_custom_paste
 	if pvp_training_ai_custom_team_input != null:
 		pvp_training_ai_custom_team_input.visible = use_custom_paste
 	if pvp_training_ai_custom_team_note != null:
@@ -43708,12 +43737,15 @@ func _resolve_pvp_training_ai_opponent_team() -> void:
 	var requested_team_id := _selected_pvp_training_ai_team_id()
 	var candidates: Array[Dictionary] = []
 	var requested_archetype := _selected_pvp_training_ai_archetype()
+	var search_query := pvp_training_ai_team_search.text.strip_edges().to_lower() if pvp_training_ai_team_search != null else ""
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
 		if not _ai_sparring_team_matches_tier(entry, _selected_ai_sparring_tier_id()):
 			continue
 		if not _pvp_training_ai_archetype_allowed(str(entry.get("archetype", ""))):
 			continue
 		if requested_archetype != "random" and str(entry.get("archetype", "")) != requested_archetype:
+			continue
+		if search_query != "" and not str(entry.get("displayName", entry.get("teamId", ""))).to_lower().contains(search_query):
 			continue
 		if requested_team_id != "random" and str(entry.get("teamId", "")) != requested_team_id:
 			continue
@@ -44256,6 +44288,8 @@ func _on_ai_sparring_catalog_use_player_pressed() -> void:
 func _on_ai_sparring_catalog_use_opponent_pressed() -> void:
 	_select_option_by_metadata(pvp_training_ai_team_source_select, "catalog")
 	_select_option_by_metadata(pvp_training_ai_archetype_select, "random")
+	if pvp_training_ai_team_search != null:
+		pvp_training_ai_team_search.text = ""
 	_refresh_pvp_training_ai_team_options()
 	_select_option_by_metadata(pvp_training_ai_team_select, pvp_ai_sparring_catalog_selected_team_id)
 	_resolve_pvp_training_ai_opponent_team()
@@ -47899,6 +47933,8 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 		pvp_training_ai_archetype_select.disabled = is_busy
 	if pvp_training_ai_team_select != null:
 		pvp_training_ai_team_select.disabled = is_busy
+	if pvp_training_ai_team_search != null:
+		pvp_training_ai_team_search.editable = not is_busy
 	if pvp_ai_sparring_tier_select != null:
 		pvp_ai_sparring_tier_select.disabled = is_busy
 	if pvp_ai_sparring_catalog_tier != null:
