@@ -7272,7 +7272,7 @@ func _clear_battle_trainer_sprites() -> void:
 func _show_local_player_trainer() -> void:
 	if player_trainer_sprite == null:
 		return
-	player_trainer_sprite.show_player(PlayerSave.to_appearance_state(), Vector2.UP)
+	player_trainer_sprite.show_player(PlayerSave.to_appearance_state(), Vector2.RIGHT)
 
 
 func _show_npc_opponent_trainer(trainer_data: Dictionary) -> void:
@@ -7306,7 +7306,7 @@ func _show_pvp_trainers(display_response: Dictionary) -> void:
 	var players_value: Variant = display_response.get("players", {})
 	var players: Dictionary = players_value as Dictionary if players_value is Dictionary else {}
 	if _is_spectator_battle():
-		_show_response_player_trainer(player_trainer_sprite, players.get("p1", {}), Vector2.UP)
+		_show_response_player_trainer(player_trainer_sprite, players.get("p1", {}), Vector2.RIGHT)
 		_show_response_player_trainer(enemy_trainer_sprite, players.get("p2", {}), Vector2.LEFT)
 		return
 
