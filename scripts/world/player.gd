@@ -277,6 +277,7 @@ var held_direction_time := 0.0
 var route_gate_interaction_in_progress := false
 var appearance_sprites: Array[AnimatedSprite2D] = []
 var master_appearance_sprite: AnimatedSprite2D
+var visual_sort_depth_cache := -1
 var pokemon_follower: PokemonFollower
 var body_sprite_frames_movement_style := ""
 var activity_style := CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
@@ -2713,10 +2714,28 @@ func _update_sort_z() -> void:
 	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
 
 func _cache_appearance_sprites() -> void:
+	visual_sort_depth_cache = -1
 	appearance_sprites.clear()
 	_collect_appearance_sprites(look_node)
 	master_appearance_sprite = _get_master_appearance_sprite()
 	_sync_appearance_animation_speeds()
+
+
+func get_visual_sort_depth() -> int:
+	if visual_sort_depth_cache >= 0:
+		return visual_sort_depth_cache
+	visual_sort_depth_cache = _get_visual_sort_depth(look_node)
+	return visual_sort_depth_cache
+
+
+func _get_visual_sort_depth(node: Node) -> int:
+	var maximum := 0
+	var canvas_item := node as CanvasItem
+	if canvas_item != null and canvas_item.z_as_relative:
+		maximum = maxi(maximum, canvas_item.z_index)
+	for child: Node in node.get_children():
+		maximum = maxi(maximum, _get_visual_sort_depth(child))
+	return maximum
 
 func _collect_appearance_sprites(parent: Node) -> void:
 	for child: Node in parent.get_children():
@@ -2857,6 +2876,7 @@ func _apply_directional_appearance_layer_order(direction: Vector2) -> void:
 		direction_id,
 		8
 	)
+	visual_sort_depth_cache = -1
 
 func _get_player_appearance_part_id(category: String) -> String:
 	match CharacterAppearanceService.normalize_part_category(category):

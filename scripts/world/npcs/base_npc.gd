@@ -1695,11 +1695,16 @@ func _get_player_for_sorting() -> Node2D:
 
 
 func _get_player_visual_sort_depth(player_node: Node2D) -> int:
+	if player_node.has_method("get_visual_sort_depth"):
+		return maxi(
+			int(player_node.call("get_visual_sort_depth")),
+			DEFAULT_PLAYER_VISUAL_SORT_DEPTH
+		)
 	var look_node := player_node.get_node_or_null("Look")
-	if look_node == null:
-		return DEFAULT_PLAYER_VISUAL_SORT_DEPTH
-
-	return maxi(_get_max_relative_z_index(look_node), DEFAULT_PLAYER_VISUAL_SORT_DEPTH)
+	var depth := DEFAULT_PLAYER_VISUAL_SORT_DEPTH
+	if look_node != null:
+		depth = maxi(_get_max_relative_z_index(look_node), depth)
+	return depth
 
 
 func _get_max_relative_z_index(node: Node) -> int:
