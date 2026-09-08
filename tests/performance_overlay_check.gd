@@ -24,6 +24,7 @@ func _run() -> void:
 	metrics.record_ping(40, 3)
 	_check(metrics.ping_band == 0, "three low pings yield green")
 	metrics.record_ping(150, 4)
+	_check(is_equal_approx(metrics.average_ping(), 67.5), "display average uses the same samples as the colour")
 	_check(metrics.ping_band == 0, "one moderate spike does not flicker the colour")
 	for stamp: int in range(5, 11):
 		metrics.record_ping(250, stamp)
@@ -36,6 +37,7 @@ func _run() -> void:
 	_check(metrics.ping_band == 1, "sustained recovery yields orange")
 	metrics.record_ping(-1, 24)
 	_check(metrics.ping_band == -1, "connection loss clears the colour history")
+	_check(metrics.average_ping() == -1.0, "connection loss clears the display average")
 	var latency := Latency.new()
 	_check(latency.sample(0) == -1, "no fabricated initial ping")
 	latency.received(10)
@@ -92,6 +94,12 @@ func _run() -> void:
 	presence.latency.received(now)
 	overlay._refresh()
 	_check(overlay.ping_readout.text.ends_with("42 ms"), "world connection supplies the displayed ping")
+	presence.latency.round_trip_msec = 90
+	presence.latency.received_at = now + 1
+	overlay._refresh()
+	_check(overlay.ping_readout.text == "66 ms", "display shows average rather than latest ping")
+	overlay._refresh()
+	_check(overlay.ping_readout.text == "66 ms", "refresh does not duplicate the latest sample")
 	pvp.active_room_code = "LOCAL_TEST"
 	pvp.connected = true
 	now = Time.get_ticks_msec()

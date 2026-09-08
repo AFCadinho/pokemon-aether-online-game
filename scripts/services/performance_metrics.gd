@@ -53,10 +53,7 @@ func record_ping(milliseconds: int, stamp: int) -> void:
 		pings.pop_front()
 	if pings.size() < 3:
 		return
-	var average := 0.0
-	for ping: int in pings:
-		average += ping
-	average /= pings.size()
+	var average := average_ping()
 	# 100/200 ms bands with 10 ms hysteresis after the initial classification.
 	if ping_band < 0:
 		ping_band = 0 if average < 100 else (1 if average < 200 else 2)
@@ -69,3 +66,12 @@ func record_ping(milliseconds: int, stamp: int) -> void:
 			ping_band = 2
 	elif ping_band == 2 and average < 190:
 		ping_band = 0 if average < 90 else 1
+
+
+func average_ping() -> float:
+	if pings.is_empty():
+		return -1.0
+	var total := 0.0
+	for ping: int in pings:
+		total += ping
+	return total / pings.size()

@@ -100,10 +100,11 @@ func _refresh() -> void:
 		service.latency.received_at >= 0
 		or (service.latency.sent_at >= 0 and now - service.latency.sent_at >= 12000)
 	)
-	var network_text := "%d ms" % ping if ping >= 0 else LocalizationManager.text(
+	metrics.record_ping(ping, service.latency.received_at)
+	var average_ping := metrics.average_ping()
+	var network_text := "%d ms" % int(roundf(average_ping)) if average_ping >= 0 else LocalizationManager.text(
 		"ui.performance.measuring" if service.connected and not stalled else "ui.performance.reconnecting"
 	)
-	metrics.record_ping(ping, service.latency.received_at)
 	readout.text = "%d FPS ·" % int(Engine.get_frames_per_second())
 	ping_readout.text = network_text
 	ping_readout.add_theme_color_override("font_color",

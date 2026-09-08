@@ -1,5 +1,5 @@
 {
-  "ui.settings.performance_hint": "FPS mostra a fluidez do jogo. Ping mostra o atraso até o servidor. A cor considera várias medições recentes: verde é baixo, laranja é moderado e vermelho é alto.",
+  "ui.settings.performance_hint": "FPS mostra a fluidez do jogo. Ping mostra o atraso até o servidor. O valor do ping e a cor usam a média de até cinco medições recentes: verde é baixo, laranja é moderado e vermelho é alto.",
   "ui.settings.performance_details": "Mostrar detalhes de desempenho",
   "ui.settings.performance_details_hint": "Com o indicador ativado, mostra também o tempo médio por quadro e o FPS equivalente ao quadro mais lento dos últimos 5 segundos. Um tempo maior ou FPS mínimo menor pode indicar travamentos.",
   "ui.performance.details": "Quadro: {time} ms · Mín. (5s): {fps} FPS",

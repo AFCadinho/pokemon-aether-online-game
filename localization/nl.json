@@ -1,5 +1,5 @@
 {
-  "ui.settings.performance_hint": "FPS laat zien hoe soepel je game draait. Ping toont de vertraging naar de server. De kleur is gebaseerd op meerdere recente metingen: groen is laag, oranje is gemiddeld, rood is hoog.",
+  "ui.settings.performance_hint": "FPS laat zien hoe soepel je game draait. Ping toont de vertraging naar de server. De pingwaarde en kleur gebruiken het gemiddelde van maximaal vijf recente metingen: groen is laag, oranje is gemiddeld, rood is hoog.",
   "ui.settings.performance_details": "Uitgebreide prestatiemeter tonen",
   "ui.settings.performance_details_hint": "Toon bij de ingeschakelde meter ook de gemiddelde frametijd en de FPS-waarde van het traagste frame in de laatste 5 seconden. Een hogere frametijd of lagere minimum-FPS kan haperingen zichtbaar maken.",
   "ui.performance.details": "Frame: {time} ms · Laagste (5s): {fps} FPS",
