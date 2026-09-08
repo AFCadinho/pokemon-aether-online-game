@@ -266,7 +266,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(0) == "Vrij oefenen", "Free sparring tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(1) == "Teamcatalogus", "Team catalog tab renders in Dutch")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Matchhistorie", "Match history tab renders in Dutch")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.custom_minimum_size.y == 520.0, "AI Sparring keeps a stable workspace height across tabs")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.custom_minimum_size.y == 595.0, "AI Sparring keeps a stable workspace height across tabs")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.current_tab == 0, "Free sparring is the default AI destination")
 	_check(ai_sparring_tier_select != null and ai_sparring_tier_select.item_count == 1 and ai_sparring_tier_select.get_item_text(0) == "Aether OU" and str(ai_sparring_tier_select.get_selected_metadata()) == "aether-ou", "Free sparring defaults to Aether OU before the catalog loads")
 	_check(
@@ -297,7 +297,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_team_step != null, "Free sparring groups the player's team as its first step")
 	_check(
 		ai_sparring_setup_steps != null
-		and is_equal_approx(ai_sparring_setup_steps.custom_minimum_size.y, 310.0)
+		and is_equal_approx(ai_sparring_setup_steps.custom_minimum_size.y, 385.0)
 		and ai_team_step.size_flags_vertical == Control.SIZE_EXPAND_FILL
 		and ai_opponent_step.size_flags_vertical == Control.SIZE_EXPAND_FILL,
 		"AI setup cards fill one stable shared-height row"
@@ -920,6 +920,7 @@ func _check_pvp_runtime_translation() -> void:
 		var loader := overlay.get(loader_property) as Node
 		if loader != null:
 			loader.free()
+	await _check_sparring_source_size(overlay)
 	overlay.free()
 
 
@@ -945,6 +946,44 @@ func _check_ranked_dropdown_style(option: OptionButton, label: String) -> void:
 		and popup.has_theme_icon_override("radio_unchecked"),
 		"%s uses custom selection indicators" % label
 	)
+
+
+func _check_sparring_source_size(overlay: Node) -> void:
+	# Mount the two setup cards: unlike the production section switcher, this
+	# broad localization fixture leaves unrelated popup pages visible.
+	var workspace := overlay.find_child("AiSparringOpponentStep", true, false).get_parent() as Control
+	var parent := workspace.get_parent()
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1280, 960)
+	root.add_child(viewport)
+	workspace.reparent(viewport)
+	var opponent := overlay.get("pvp_training_ai_team_source_select") as OptionButton
+	var player := overlay.get("pvp_ai_sparring_team_source_select") as OptionButton
+	var previous_opponent := opponent.selected
+	var previous_player := player.selected
+	var catalog_size := Vector2.ZERO
+	for sources: Vector2i in [Vector2i(0, 2), Vector2i(1, 0), Vector2i(0, 0), Vector2i(1, 2), Vector2i(0, 2)]:
+		opponent.select(sources.x)
+		overlay.call("_on_pvp_training_ai_team_source_selected", sources.x)
+		player.select(sources.y)
+		overlay.call("_on_ai_sparring_team_source_selected", sources.y)
+		workspace.size = Vector2(880, 0)
+		for frame in range(8):
+			await process_frame
+		# Wrapped labels need the final column width before their minimum height
+		# settles; then measure the smallest allowed workspace, not a stale size.
+		workspace.size = Vector2(880, 0)
+		for frame in range(8):
+			await process_frame
+		if catalog_size == Vector2.ZERO:
+			catalog_size = workspace.size
+		_check(workspace.size.is_equal_approx(catalog_size), "Sparring workspace keeps catalog dimensions across both source selectors: %s vs %s" % [workspace.size, catalog_size])
+	workspace.reparent(parent)
+	viewport.queue_free()
+	opponent.select(previous_opponent)
+	overlay.call("_on_pvp_training_ai_team_source_selected", previous_opponent)
+	player.select(previous_player)
+	overlay.call("_on_ai_sparring_team_source_selected", previous_player)
 
 
 func _check(condition: bool, label: String) -> void:
