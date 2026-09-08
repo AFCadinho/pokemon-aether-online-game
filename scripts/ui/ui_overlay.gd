@@ -43812,7 +43812,7 @@ func _resolved_pvp_training_ai_team_id() -> String:
 
 func _refresh_pvp_training_ai_opponent_preview() -> void:
 	if pvp_ai_sparring_trainer_portrait != null:
-		pvp_ai_sparring_trainer_portrait.texture = load("res://assets/sprites/trainer_cards/showdown/veteran-gen7.png" if _selected_pvp_training_ai_mode() == "active" else "res://assets/sprites/trainer_cards/showdown/scientist-gen7.png") as Texture2D
+		pvp_ai_sparring_trainer_portrait.texture = load("res://assets/sprites/trainer_cards/showdown/veteran-gen7.png" if _selected_pvp_training_ai_mode() in ["active", "intermediate", "extreme"] else "res://assets/sprites/trainer_cards/showdown/scientist-gen7.png") as Texture2D
 	if pvp_training_ai_opponent_preview == null or pvp_training_ai_opponent_preview_grid == null:
 		return
 	if _selected_pvp_training_ai_team_source() == "paste":

@@ -190,10 +190,21 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 	_check(
 		world_source.contains("active_battle_kind = \"training_ai\"")
 		and world_source.contains("response.get(\"trainerName\", \"AI Level 5\")")
-		and world_source.contains("\"_battle_sprite_id\": \"showdown_veteran_gen7\"")
+		and world_source.contains("\"_battle_sprite_id\": _training_ai_battle_sprite_id(response)")
 		and world_source.contains("battle_environment_id,\n\t\ttrue"),
-		"World starts the selected AI mode as a non-rewarding Veteran training battle"
+		"World starts the selected AI mode as a non-rewarding training battle with mode-specific art"
 	)
+	var helper_start := world_source.find("func _training_ai_battle_sprite_id(")
+	var helper_end := world_source.find("\nfunc ", helper_start + 1)
+	var helper := GDScript.new()
+	helper.source_code = "extends RefCounted\n" + world_source.substr(helper_start, helper_end - helper_start)
+	_check(helper.reload() == OK, "Sparring sprite selector compiles")
+	var selector: RefCounted = helper.new()
+	for mode: String in ["ai4", "shadow", "active", "intermediate", "extreme"]:
+		var expected := "showdown_scientist_gen7" if mode in ["ai4", "shadow"] else "showdown_veteran_gen7"
+		_check(selector.call("_training_ai_battle_sprite_id", {"trainingAiMode": mode, "aiLevel": 5}) == expected, "Server mode selects the correct trainer: " + mode)
+	_check(selector.call("_training_ai_battle_sprite_id", {"aiLevel": 4}) == "showdown_scientist_gen7", "Legacy AI4 response keeps Scholar art")
+	_check(trainer_catalog_source.contains('"id": "showdown_scientist_gen7"'), "Scholar battle art exists in the catalog")
 	_check(
 		FileAccess.file_exists(AI_VETERAN_TEXTURE_PATH)
 		and trainer_catalog_source.contains("\"id\": \"showdown_veteran_gen7\"")
