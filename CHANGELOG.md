@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Sparring bots now show a simple version number, with a separate label for test versions.
+
 - Added a dedicated healing sound when medicine restores a Pokémon's HP.
 
 - Fixed moving multiple Pokémon in sequence through the PC box selector sending a later Pokémon into the first destination slot and swapping the earlier one back.
