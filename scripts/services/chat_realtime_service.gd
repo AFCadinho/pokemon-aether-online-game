@@ -286,7 +286,12 @@ func _handle_closed_socket() -> void:
 
 
 func _process_packets() -> void:
+	var deadline := Time.get_ticks_usec() + 2000
+	var processed := 0
 	while websocket.get_available_packet_count() > 0:
+		if processed >= 64 or (processed > 0 and Time.get_ticks_usec() >= deadline):
+			break
+		processed += 1
 		var packet: PackedByteArray = websocket.get_packet()
 		var parsed_body: Variant = JSON.parse_string(packet.get_string_from_utf8())
 		if typeof(parsed_body) != TYPE_DICTIONARY:
