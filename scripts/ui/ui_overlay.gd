@@ -43738,6 +43738,9 @@ func _show_pvp_training_ai_team_suggestions() -> void:
 	pvp_training_ai_team_suggestions.position = Vector2i(search_rect.position + Vector2(0, search_rect.size.y))
 	pvp_training_ai_team_suggestions.size = Vector2i(maxf(search_rect.size.x, 280.0), 0)
 	pvp_training_ai_team_suggestions.popup()
+	# PopupMenu takes keyboard focus when it opens. Restore it on the input so
+	# opening suggestions never interrupts typing.
+	pvp_training_ai_team_search.call_deferred("grab_focus")
 
 
 func _on_pvp_training_ai_team_source_selected(_index: int) -> void:
