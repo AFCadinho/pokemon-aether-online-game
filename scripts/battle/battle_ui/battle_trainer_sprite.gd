@@ -56,6 +56,9 @@ func show_player(appearance_state: Dictionary, facing_direction: Vector2) -> voi
 		return
 
 	add_child(player_avatar)
+	# Avatar animation updates are skipped while hidden. Show this staging
+	# marker before applying the pose, since processing is disabled below.
+	visible = true
 	player_avatar.call("apply_state", {
 		"appearance": appearance_state.duplicate(true),
 		"facingDirection": _direction_name(facing_direction),

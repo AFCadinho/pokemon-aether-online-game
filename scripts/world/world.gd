@@ -3117,6 +3117,12 @@ func _is_expected_trainer_battle_rejection(response: Dictionary) -> bool:
 	)
 
 
+func _training_ai_battle_sprite_id(response: Dictionary) -> String:
+	var mode := str(response.get("trainingAiMode", ""))
+	var scholar := mode in ["ai4", "shadow"] if not mode.is_empty() else int(response.get("aiLevel", 5)) == 4
+	return "showdown_scientist_gen7" if scholar else "showdown_veteran_gen7"
+
+
 func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 	if is_in_battle or wild_battle_resume_pending or not bool(response.get("success", false)):
 		return false
@@ -3143,7 +3149,7 @@ func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 		"name": trainer_name,
 		"teamDisplayName": str(ai_team.get("displayName", "")),
 		"battleTransitionStyle": "trainer",
-		"_battle_sprite_id": "showdown_veteran_gen7",
+		"_battle_sprite_id": _training_ai_battle_sprite_id(response),
 		"_battle_sprite_offset": Vector2(0.0, -16.0),
 	}
 	is_in_battle = true

@@ -247,6 +247,16 @@ func _check_pvp_runtime_translation() -> void:
 		var expected_sprite := "scientist-gen7.png" if bot_id == "ai4" else "veteran-gen7.png"
 		_check(portrait.texture.resource_path.ends_with(expected_sprite), "Each bot uses its assigned trainer")
 	var bot_versions: Dictionary = overlay.get("pvp_ai_sparring_about_versions")
+	_check(bot_versions.size() == 4, "About has independent status for all four difficulties")
+	overlay.call("_apply_ai_sparring_bot_versions", {"success": true, "bots": [
+		{"id": "ai5", "version": "v4", "available": false},
+		{"id": "intermediate", "version": "v1", "available": false},
+		{"id": "extreme", "version": "v1", "available": true}
+	]})
+	_check(bot_versions["extreme"].text.contains("Beschikbaar om tegen te spelen") and bot_versions["extreme"].text.contains("Serverversie: v1"), "Extreme keeps its own version and availability when Hard is disabled")
+	_check(bot_versions["intermediate"].text.contains("Momenteel niet beschikbaar"), "Intermediate reports its own availability")
+	overlay.call("_apply_ai_sparring_bot_versions", {"success": false})
+	_check(bot_versions["extreme"].text.contains("Beschikbaarheid niet bevestigd"), "Failed refresh clears all difficulty availability")
 	_check(bot_versions["ai5"].text.contains("Serverversie niet bevestigd"), "Missing server data does not claim a bot version")
 	overlay.set("pvp_ai_sparring_bot_versions", {"ai5": {"version": "Native Z v4", "available": true}})
 	overlay.call("_refresh_ai_sparring_about")

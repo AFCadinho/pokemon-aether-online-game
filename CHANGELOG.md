@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Battle trainers now show the player's back-facing pose and the correct Scholar or Grandmaster sprite for AI Sparring.
+
+- About the bots now explains each Grandmaster difficulty and shows its own availability and version.
 - Riding mounts and walking keep a more consistent speed across frame rates, and mounted appearances use less repeated work and bounded cache memory.
 
 - AI Sparring statistics now separate Beginner, Intermediate, Hard and Extreme, each with its own results.
