@@ -162,7 +162,7 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 		and api_source.contains("\"aiTeamText\": ai_team_text.strip_edges()")
 		and api_source.contains("func clear_training_ai_match_history")
 		and api_source.contains("\"aiMode\": ai_mode")
-		and api_source.contains("ai_mode in [\"ai4\", \"shadow\", \"intermediate\", \"active\", \"nightmare\"]")
+		and api_source.contains("ai_mode in [\"ai4\", \"shadow\", \"intermediate\", \"active\", \"expert\", \"nightmare\"]")
 		and api_source.contains("\"archetype\": ai_archetype")
 		and api_source.contains("\"tierId\": tier_id")
 		and overlay_source.contains("_selected_ai_sparring_tier_id()"),
@@ -200,7 +200,7 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 	helper.source_code = "extends RefCounted\n" + world_source.substr(helper_start, helper_end - helper_start)
 	_check(helper.reload() == OK, "Sparring sprite selector compiles")
 	var selector: RefCounted = helper.new()
-	for mode: String in ["ai4", "shadow", "active", "intermediate", "nightmare"]:
+	for mode: String in ["ai4", "shadow", "active", "intermediate", "expert", "nightmare"]:
 		var expected := "showdown_scientist_gen7" if mode in ["ai4", "shadow"] else "showdown_veteran_gen7"
 		_check(selector.call("_training_ai_battle_sprite_id", {"trainingAiMode": mode, "aiLevel": 5}) == expected, "Server mode selects the correct trainer: " + mode)
 	_check(selector.call("_training_ai_battle_sprite_id", {"aiLevel": 4}) == "showdown_scientist_gen7", "Legacy AI4 response keeps Scholar art")

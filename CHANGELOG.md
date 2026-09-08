@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added experimental Grandmaster Expert to AI Sparring, with its own difficulty description, match history and statistics.
+
 - AI Sparring calls its highest Grandmaster difficulty Nightmare; existing results and match history remain available.
 
 - AI Sparring lets you search your own catalog team by name before choosing it.

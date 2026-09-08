@@ -248,14 +248,16 @@ func _check_pvp_runtime_translation() -> void:
 		var expected_sprite := "scientist-gen7.png" if bot_id == "ai4" else "veteran-gen7.png"
 		_check(portrait.texture.resource_path.ends_with(expected_sprite), "Each bot uses its assigned trainer")
 	var bot_versions: Dictionary = overlay.get("pvp_ai_sparring_about_versions")
-	_check(bot_versions.size() == 4, "About has independent status for all four difficulties")
+	_check(bot_versions.size() == 5, "About has independent status for all five difficulties")
 	overlay.call("_apply_ai_sparring_bot_versions", {"success": true, "bots": [
 		{"id": "ai5", "version": "v4", "available": false},
 		{"id": "intermediate", "version": "v1", "available": false},
+		{"id": "expert", "version": "v1", "available": true},
 		{"id": "nightmare", "version": "v1", "available": true}
 	]})
 	_check(bot_versions["nightmare"].text.contains("Beschikbaar om tegen te spelen") and bot_versions["nightmare"].text.contains("Serverversie: v1"), "Nightmare keeps its own version and availability when Hard is disabled")
 	_check(bot_versions["intermediate"].text.contains("Momenteel niet beschikbaar"), "Intermediate reports its own availability")
+	_check(bot_versions["expert"].text.contains("Beschikbaar om tegen te spelen") and bot_versions["expert"].text.contains("Serverversie: v1"), "Expert reports its own version and availability")
 	overlay.call("_apply_ai_sparring_bot_versions", {"success": false})
 	_check(bot_versions["nightmare"].text.contains("Beschikbaarheid niet bevestigd"), "Failed refresh clears all difficulty availability")
 	_check(bot_versions["ai5"].text.contains("Serverversie niet bevestigd"), "Missing server data does not claim a bot version")
@@ -653,18 +655,20 @@ func _check_pvp_runtime_translation() -> void:
 	for entry: Dictionary in training_ai_catalog_entries:
 		entry["homeTierId"] = "aether-ou"
 		entry["eligibleTierIds"] = ["none", "aether-ou"]
-	training_ai_available_modes.assign(["ai4", "active", "nightmare", "intermediate"])
+	training_ai_available_modes.assign(["ai4", "active", "expert", "nightmare", "intermediate"])
 	overlay.call("_refresh_pvp_training_ai_mode_options")
 	_check(training_ai_bot_select.item_count == 2, "Bot selector separates Scholar and Grandmaster")
 	_check(training_ai_bot_select.get_item_text(0) == "AI4 Scholar" and training_ai_bot_select.get_item_text(1) == "AI5 Grandmaster", "Bot names remain familiar")
 	_check(training_ai_mode_select.item_count == 1 and training_ai_mode_select.get_item_text(0) == "Beginner", "Scholar exposes only Beginner")
 	training_ai_bot_select.select(1)
 	overlay.call("_on_pvp_training_ai_bot_selected", 1)
-	_check(training_ai_mode_select.item_count == 3, "Grandmaster exposes all three server-enabled difficulties")
-	_check(training_ai_mode_select.get_item_text(0) == "Intermediate" and training_ai_mode_select.get_item_text(1) == "Hard" and training_ai_mode_select.get_item_text(2) == "Nightmare", "Grandmaster has a separate difficulty selector topped by Nightmare")
+	_check(training_ai_mode_select.item_count == 4, "Grandmaster exposes all four server-enabled difficulties")
+	_check(training_ai_mode_select.get_item_text(0) == "Intermediate" and training_ai_mode_select.get_item_text(1) == "Hard" and training_ai_mode_select.get_item_text(2) == "Expert" and training_ai_mode_select.get_item_text(3) == "Nightmare", "Expert sits between Hard and Nightmare")
 	training_ai_mode_select.select(0)
 	_check(overlay.call("_selected_pvp_training_ai_mode") == "intermediate", "Intermediate selection preserves its server mode")
 	training_ai_mode_select.select(2)
+	_check(overlay.call("_selected_pvp_training_ai_mode") == "expert", "Expert selection preserves its server mode")
+	training_ai_mode_select.select(3)
 	_check(overlay.call("_selected_pvp_training_ai_mode") == "nightmare", "Nightmare selection preserves its server mode")
 	training_ai_available_modes.assign(["ai4", "active"])
 	training_ai_bot_select.select(0)
