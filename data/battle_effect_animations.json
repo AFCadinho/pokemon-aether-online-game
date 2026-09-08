@@ -291,7 +291,7 @@
       "source": "Move:ELECTROSHOT",
       "category": "charge_up",
       "data_path": "res://assets/battles/animations/electroshot/electroshot.json",
-      "sheet_path": "res://assets/battles/animations/electroshot/PRAS- Catastropika.png",
+      "sheet_path": "res://assets/battles/animations/catastropika/PRAS- Catastropika.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -362,7 +362,7 @@
       "source": "Common:StatUp",
       "category": "stat_change",
       "data_path": "res://assets/battles/animations/common/statup/statup.json",
-      "sheet_path": "res://assets/battles/animations/common/statup/PRAS- Stats.png",
+      "sheet_path": "res://assets/battles/animations/common/statdown/PRAS- Stats.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -638,7 +638,7 @@
       "data_path": "res://assets/battles/animations/common/megaevolution/megaevolution.json",
       "sheet_path": "res://assets/battles/animations/common/megaevolution/GEN8- MegaEvolution.png",
       "background_path": "",
-      "foreground_path": "res://assets/battles/animations/common/megaevolution/PRAS- Flash FG.png",
+      "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
         "PRSFX- Mega Evolution2.wav": "res://assets/battles/animations/common/megaevolution/PRSFX- Mega Evolution2.wav"
       },
@@ -718,7 +718,7 @@
       "source": "Common:Paralysis",
       "category": "status_condition",
       "data_path": "res://assets/battles/animations/paralysis/paralysis.json",
-      "sheet_path": "res://assets/battles/animations/paralysis/PRAS- Status.png",
+      "sheet_path": "res://assets/battles/animations/burn/PRAS- Status.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -807,7 +807,7 @@
       "source": "Common:Poison",
       "category": "status_condition",
       "data_path": "res://assets/battles/animations/poison/poison.json",
-      "sheet_path": "res://assets/battles/animations/poison/PRAS- Status.png",
+      "sheet_path": "res://assets/battles/animations/burn/PRAS- Status.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -895,7 +895,7 @@
       "source": "Common:Frozen",
       "category": "status_condition",
       "data_path": "res://assets/battles/animations/frozen/frozen.json",
-      "sheet_path": "res://assets/battles/animations/frozen/PRAS- Status.png",
+      "sheet_path": "res://assets/battles/animations/burn/PRAS- Status.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -939,7 +939,7 @@
       "source": "Common:Sleep",
       "category": "status_condition",
       "data_path": "res://assets/battles/animations/sleep/sleep.json",
-      "sheet_path": "res://assets/battles/animations/sleep/PRAS- Status.png",
+      "sheet_path": "res://assets/battles/animations/burn/PRAS- Status.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {

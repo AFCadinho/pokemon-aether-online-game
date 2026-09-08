@@ -469,7 +469,7 @@
         ]
       },
       "data_path": "res://assets/battles/animations/icebeam/icebeam.json",
-      "sheet_path": "res://assets/battles/animations/icebeam/PRAS- Ice.png",
+      "sheet_path": "res://assets/battles/animations/blizzard/PRAS- Ice.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -507,7 +507,7 @@
       "show_sheet_sprites": false,
       "overlay_fill_enabled": false,
       "data_path": "res://assets/battles/animations/flamethrower/flamethrower.json",
-      "sheet_path": "res://assets/battles/animations/flamethrower/PRAS- Fire.png",
+      "sheet_path": "res://assets/battles/animations/ember/PRAS- Fire.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -729,9 +729,9 @@
         ]
       },
       "data_path": "res://assets/battles/animations/thunderbolt/thunderbolt.json",
-      "sheet_path": "res://assets/battles/animations/thunderbolt/PRAS- Electric.png",
-      "background_path": "res://assets/battles/animations/thunderbolt/PRAS- Black BG.png",
-      "foreground_path": "res://assets/battles/animations/thunderbolt/PRAS- Flash FG.png",
+      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
+      "background_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Black BG.png",
+      "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
         "PRSFX- Thunderbolt1.wav": "res://assets/battles/animations/thunderbolt/PRSFX- Thunderbolt1.wav",
         "PRSFX- Thunderbolt2.wav": "res://assets/battles/animations/thunderbolt/PRSFX- Thunderbolt2.wav"
@@ -766,7 +766,7 @@
       ],
       "category": "physical_contact",
       "data_path": "res://assets/battles/animations/quickattack/quickattack.json",
-      "sheet_path": "res://assets/battles/animations/quickattack/PRAS- Strike.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -814,7 +814,7 @@
       "show_pink_visual": true,
       "overlay_peak_alpha": 0.12,
       "data_path": "res://assets/battles/animations/swordsdance/swordsdance.json",
-      "sheet_path": "res://assets/battles/animations/swordsdance/PRAS- Swords Dance + Signal Beam.png",
+      "sheet_path": "res://assets/battles/animations/psyshock/PRAS- Swords Dance + Signal Beam.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -1005,8 +1005,8 @@
         "decay": true
       },
       "data_path": "res://assets/battles/animations/earthquake/earthquake.json",
-      "sheet_path": "res://assets/battles/animations/earthquake/PRAS- Rock.png",
-      "background_path": "res://assets/battles/animations/earthquake/PRAS- Earthquake BG.png",
+      "sheet_path": "res://assets/battles/animations/continentalcrush/PRAS- Rock.png",
+      "background_path": "res://assets/battles/animations/breakneckblitz/PRAS- Earthquake BG.png",
       "foreground_path": "res://assets/battles/animations/earthquake/PRAS- Sandstorm.png",
       "sound_paths": {
         "PRSFX- Earthquake1.wav": "res://assets/battles/animations/earthquake/PRSFX- Earthquake1.wav",
@@ -1043,7 +1043,7 @@
       "template": "imported_sheet",
       "category": "physical_contact",
       "data_path": "res://assets/battles/animations/knockoff/knockoff.json",
-      "sheet_path": "res://assets/battles/animations/knockoff/PRAS- Strike.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -1323,7 +1323,7 @@
       "template": "imported_sheet",
       "category": "physical_contact",
       "data_path": "res://assets/battles/animations/flipturn/flipturn.json",
-      "sheet_path": "res://assets/battles/animations/flipturn/PRAS- Water.png",
+      "sheet_path": "res://assets/battles/animations/bubble/PRAS- Water.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -1575,7 +1575,7 @@
       "template": "imported_sheet",
       "category": "projectile",
       "data_path": "res://assets/battles/animations/voltswitch/voltswitch.json",
-      "sheet_path": "res://assets/battles/animations/voltswitch/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -1751,7 +1751,7 @@
       "template": "imported_sheet",
       "category": "physical_contact",
       "data_path": "res://assets/battles/animations/rapidspin/rapidspin.json",
-      "sheet_path": "res://assets/battles/animations/rapidspin/PRAS- Dragon Dance.png",
+      "sheet_path": "res://assets/battles/animations/dragondance/PRAS- Dragon Dance.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -1929,7 +1929,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/toxicspikes/toxicspikes.json",
-      "sheet_path": "res://assets/battles/animations/toxicspikes/PRAS- Spikes.png",
+      "sheet_path": "res://assets/battles/animations/spikes/PRAS- Spikes.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -2080,7 +2080,7 @@
       "template": "imported_sheet",
       "category": "status_projectile",
       "data_path": "res://assets/battles/animations/thunderwave/thunderwave.json",
-      "sheet_path": "res://assets/battles/animations/thunderwave/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -2130,7 +2130,7 @@
       "template": "imported_sheet",
       "category": "status_projectile",
       "data_path": "res://assets/battles/animations/toxic/toxic.json",
-      "sheet_path": "res://assets/battles/animations/toxic/PRAS- Poison.png",
+      "sheet_path": "res://assets/battles/animations/badlypoisoned/PRAS- Poison.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -2226,7 +2226,7 @@
       "category": "field_impact",
       "data_path": "res://assets/battles/animations/blizzard/blizzard.json",
       "sheet_path": "res://assets/battles/animations/blizzard/PRAS- Ice.png",
-      "background_path": "res://assets/battles/animations/blizzard/PRAS- Blizzard BG.png",
+      "background_path": "res://assets/battles/animations/bleakwindstorm/PRAS- Blizzard BG.png",
       "foreground_path": "res://assets/battles/animations/blizzard/PRAS- Blizzard FG.png",
       "sound_paths": {
         "PRSFX- Blizzard.wav": "res://assets/battles/animations/blizzard/PRSFX- Blizzard.wav"
@@ -2311,7 +2311,7 @@
       "template": "imported_sheet",
       "category": "field_impact",
       "data_path": "res://assets/battles/animations/hurricane/hurricane.json",
-      "sheet_path": "res://assets/battles/animations/hurricane/PRAS- Gust.png",
+      "sheet_path": "res://assets/battles/animations/gust/PRAS- Gust.png",
       "background_path": "",
       "foreground_path": "res://assets/battles/animations/hurricane/PRAS- Hurricane FG.png",
       "sound_paths": {
@@ -2554,8 +2554,8 @@
         "suppress_shake": true
       },
       "data_path": "res://assets/battles/animations/dracometeor/dracometeor.json",
-      "sheet_path": "res://assets/battles/animations/dracometeor/PRAS- Rock.png",
-      "background_path": "res://assets/battles/animations/dracometeor/PRAS- Space BG.png",
+      "sheet_path": "res://assets/battles/animations/continentalcrush/PRAS- Rock.png",
+      "background_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Space BG.png",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Draco Meteor1.wav": "res://assets/battles/animations/dracometeor/PRSFX- Draco Meteor1.wav",
@@ -2847,7 +2847,7 @@
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/wish/wish.json",
       "sheet_path": "res://assets/battles/animations/wish/PRAS- Wish.png",
-      "background_path": "res://assets/battles/animations/wish/PRAS- Starry BG.png",
+      "background_path": "res://assets/battles/animations/moonblast/PRAS- Starry BG.png",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Wish.wav": "res://assets/battles/animations/wish/PRSFX- Wish.wav"
@@ -3149,7 +3149,7 @@
         "decay": true
       },
       "data_path": "res://assets/battles/animations/pursuit/pursuit.json",
-      "sheet_path": "res://assets/battles/animations/pursuit/PRAS- Shadow Sneak.png",
+      "sheet_path": "res://assets/battles/animations/astonish/PRAS- Shadow Sneak.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -3298,7 +3298,7 @@
         "decay": true
       },
       "data_path": "res://assets/battles/animations/suckerpunch/suckerpunch.json",
-      "sheet_path": "res://assets/battles/animations/suckerpunch/PRAS- Strike.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -3529,7 +3529,7 @@
         "suppress_target_feedback": true
       },
       "data_path": "res://assets/battles/animations/closecombat/closecombat.json",
-      "sheet_path": "res://assets/battles/animations/closecombat/PRAS- Strike.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
       "background_path": "res://assets/battles/animations/closecombat/PRAS- Spotlight BG.png",
       "foreground_path": "",
       "sound_paths": {
@@ -3574,8 +3574,8 @@
         "suppress_target_feedback": true
       },
       "data_path": "res://assets/battles/animations/headlongrush/headlongrush.json",
-      "sheet_path": "res://assets/battles/animations/headlongrush/PRAS- Strike.png",
-      "background_path": "res://assets/battles/animations/headlongrush/PRAS- Earthquake BG.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
+      "background_path": "res://assets/battles/animations/breakneckblitz/PRAS- Earthquake BG.png",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Bulldoze": "res://assets/battles/animations/headlongrush/PRSFX- Bulldoze.wav"
@@ -3631,7 +3631,7 @@
         "suppress_target_feedback": true
       },
       "data_path": "res://assets/battles/animations/headsmash/headsmash.json",
-      "sheet_path": "res://assets/battles/animations/headsmash/PRAS- Rock.png",
+      "sheet_path": "res://assets/battles/animations/continentalcrush/PRAS- Rock.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -3802,9 +3802,9 @@
         "suppress_target_feedback": true
       },
       "data_path": "res://assets/battles/animations/solarbeam/solarbeam.json",
-      "sheet_path": "res://assets/battles/animations/solarbeam/PRAS- Orbs.png",
+      "sheet_path": "res://assets/battles/animations/mistyterrain/PRAS- Orbs.png",
       "background_path": "",
-      "foreground_path": "res://assets/battles/animations/solarbeam/PRAS- Flash FG.png",
+      "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
         "PRSFX- Solar Beam2.wav": "res://assets/battles/animations/solarbeam/PRSFX- Solar Beam2.wav"
       }
@@ -3944,7 +3944,7 @@
         "suppress_target_feedback": true
       },
       "data_path": "res://assets/battles/animations/electroshot/electroshot.json",
-      "sheet_path": "res://assets/battles/animations/electroshot/PRAS- Catastropika.png",
+      "sheet_path": "res://assets/battles/animations/catastropika/PRAS- Catastropika.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -4465,7 +4465,7 @@
       "overlay_fill_enabled": false,
       "sprite_zoom_multiplier": 0.82,
       "data_path": "res://assets/battles/animations/icepunch/icepunch.json",
-      "sheet_path": "res://assets/battles/animations/icepunch/PRAS- Elemental Punch.png",
+      "sheet_path": "res://assets/battles/animations/firepunch/PRAS- Elemental Punch.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -4514,8 +4514,8 @@
         ]
       },
       "data_path": "res://assets/battles/animations/thunderpunch/thunderpunch.json",
-      "sheet_path": "res://assets/battles/animations/thunderpunch/PRAS- Elemental Punch.png",
-      "background_path": "res://assets/battles/animations/thunderpunch/PRAS- Black BG.png",
+      "sheet_path": "res://assets/battles/animations/firepunch/PRAS- Elemental Punch.png",
+      "background_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Black BG.png",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Thunder Punch1.wav": "res://assets/battles/animations/thunderpunch/PRSFX- Thunder Punch1.wav",
@@ -4651,8 +4651,8 @@
         ]
       },
       "data_path": "res://assets/battles/animations/extremespeed/extremespeed.json",
-      "sheet_path": "res://assets/battles/animations/extremespeed/PRAS- Strike.png",
-      "background_path": "res://assets/battles/animations/extremespeed/PRAS- Speed BG.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
+      "background_path": "res://assets/battles/animations/agility/PRAS- Speed BG.png",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Extremespeed1.wav": "res://assets/battles/animations/extremespeed/PRSFX- Extremespeed1.wav",
@@ -4805,7 +4805,7 @@
       },
       "data_path": "res://assets/battles/animations/darkpulse/darkpulse.json",
       "sheet_path": "res://assets/battles/animations/darkpulse/PRAS- Dark Pulse.png",
-      "background_path": "res://assets/battles/animations/darkpulse/PRAS- Ominous Wind BG.png",
+      "background_path": "res://assets/battles/animations/ceaselessedge/PRAS- Ominous Wind BG.png",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Dark Pulse1.wav": "res://assets/battles/animations/darkpulse/PRSFX- Dark Pulse1.wav",
@@ -5379,7 +5379,7 @@
         ]
       },
       "data_path": "res://assets/battles/animations/highjumpkick/highjumpkick.json",
-      "sheet_path": "res://assets/battles/animations/highjumpkick/PRAS- Strike.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -5519,7 +5519,7 @@
         ]
       },
       "data_path": "res://assets/battles/animations/psychicnoise/psychicnoise.json",
-      "sheet_path": "res://assets/battles/animations/psychicnoise/PRAS- Screech.png",
+      "sheet_path": "res://assets/battles/animations/calmmind/PRAS- Screech.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -5664,7 +5664,7 @@
         }
       ],
       "data_path": "res://assets/battles/animations/superpower/superpower.json",
-      "sheet_path": "res://assets/battles/animations/superpower/PRAS- Strike.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -5707,8 +5707,8 @@
       "overlay_fill_enabled": false,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/grassyterrain/grassyterrain.json",
-      "sheet_path": "res://assets/battles/animations/grassyterrain/PRAS- Grass.png",
-      "background_path": "res://assets/battles/animations/grassyterrain/PRAS- Giga Drain BG.png",
+      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
+      "background_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Giga Drain BG.png",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Grassy Terrain.wav": "res://assets/battles/animations/grassyterrain/PRSFX- Grassy Terrain.wav"
@@ -5727,7 +5727,7 @@
       "overlay_fill_enabled": false,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/electricterrain/electricterrain.json",
-      "sheet_path": "res://assets/battles/animations/electricterrain/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
       "background_path": "res://assets/battles/animations/electricterrain/PRAS- Electric Terrain BG.png",
       "foreground_path": "",
       "sound_paths": {
@@ -5783,7 +5783,7 @@
       "data_path": "res://assets/battles/animations/devastatingdrake/devastatingdrake.json",
       "sheet_path": "res://assets/battles/animations/devastatingdrake/PRAS- Devastating Drake.png",
       "background_path": "res://assets/battles/animations/devastatingdrake/PRAS- Dragon Fire BG.png",
-      "foreground_path": "res://assets/battles/animations/devastatingdrake/PRAS- Flash FG.png",
+      "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
         "PRSFX- Devastating Drake1": "res://assets/battles/animations/devastatingdrake/PRSFX- Devastating Drake1.wav",
         "PRSFX- Devastating Drake2.wav": "res://assets/battles/animations/devastatingdrake/PRSFX- Devastating Drake2.wav",
@@ -5856,7 +5856,7 @@
       "data_path": "res://assets/battles/animations/breakneckblitz/breakneckblitz.json",
       "sheet_path": "res://assets/battles/animations/breakneckblitz/PRAS- Breakneck Blitz.png",
       "background_path": "res://assets/battles/animations/breakneckblitz/PRAS- Earthquake BG.png",
-      "foreground_path": "res://assets/battles/animations/breakneckblitz/PRAS- Flash FG.png",
+      "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {},
       "target_shake": {
         "enabled": true,
@@ -6024,7 +6024,7 @@
       "data_path": "res://assets/battles/animations/supersonicskystrike/supersonicskystrike.json",
       "sheet_path": "res://assets/battles/animations/supersonicskystrike/PRAS- Brave Bird.png",
       "background_path": "",
-      "foreground_path": "res://assets/battles/animations/supersonicskystrike/PRAS- Flash FG.png",
+      "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
         "PRSFX- Brave Bird1.wav": "res://assets/battles/animations/supersonicskystrike/PRSFX- Brave Bird1.wav",
         "PRSFX- Brave Bird2.wav": "res://assets/battles/animations/supersonicskystrike/PRSFX- Brave Bird2.wav",
@@ -6117,7 +6117,7 @@
       "data_path": "res://assets/battles/animations/tectonicrage/tectonicrage.json",
       "sheet_path": "res://assets/battles/animations/tectonicrage/PRAS- Tectonic Rage.png",
       "background_path": "res://assets/battles/animations/tectonicrage/PRAS- Tectonic Rage BG.png",
-      "foreground_path": "res://assets/battles/animations/tectonicrage/PRAS- Guillotine BG.png",
+      "foreground_path": "res://assets/battles/animations/savagespinout/PRAS- Guillotine BG.png",
       "sound_paths": {
         "PRSFX- Tectonic Rage1.ogg": "res://assets/battles/animations/tectonicrage/PRSFX- Tectonic Rage1.ogg",
         "PRSFX- Tectonic Rage2.ogg": "res://assets/battles/animations/tectonicrage/PRSFX- Tectonic Rage2.ogg",
@@ -6166,7 +6166,7 @@
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/continentalcrush/continentalcrush.json",
       "sheet_path": "res://assets/battles/animations/continentalcrush/PRAS- Rock.png",
-      "background_path": "res://assets/battles/animations/continentalcrush/PRAS- Earthquake BG.png",
+      "background_path": "res://assets/battles/animations/breakneckblitz/PRAS- Earthquake BG.png",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Continental Crush1.ogg": "res://assets/battles/animations/continentalcrush/PRSFX- Continental Crush1.ogg",
@@ -6274,7 +6274,7 @@
       "data_path": "res://assets/battles/animations/savagespinout/savagespinout.json",
       "sheet_path": "res://assets/battles/animations/savagespinout/PRAS- Savage Spin Out.png",
       "background_path": "res://assets/battles/animations/savagespinout/PRAS- Guillotine BG.png",
-      "foreground_path": "res://assets/battles/animations/savagespinout/PRAS- Black BG.png",
+      "foreground_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Black BG.png",
       "sound_paths": {
         "PRSFX- SSO1.ogg": "res://assets/battles/animations/savagespinout/PRSFX- SSO1.ogg",
         "PRSFX- SSO10.ogg": "res://assets/battles/animations/savagespinout/PRSFX- SSO10.ogg",
@@ -6371,7 +6371,7 @@
       "data_path": "res://assets/battles/animations/neverendingnightmare/neverendingnightmare.json",
       "sheet_path": "res://assets/battles/animations/neverendingnightmare/PRAS- NeverEndingNightmare.png",
       "background_path": "res://assets/battles/animations/neverendingnightmare/PRAS- NeverEndingNightmare BG.png",
-      "foreground_path": "res://assets/battles/animations/neverendingnightmare/PRAS- Black BG.png",
+      "foreground_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Black BG.png",
       "sound_paths": {
         "PRSFX- NeverEndingNightmare1.wav": "res://assets/battles/animations/neverendingnightmare/PRSFX- NeverEndingNightmare1.wav",
         "PRSFX- NeverEndingNightmare2.wav": "res://assets/battles/animations/neverendingnightmare/PRSFX- NeverEndingNightmare2.wav",
@@ -6459,9 +6459,9 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/infernooverdrive/infernooverdrive.json",
-      "sheet_path": "res://assets/battles/animations/infernooverdrive/PRAS- Fire.png",
-      "background_path": "res://assets/battles/animations/infernooverdrive/PRAS- Burning BG.png",
-      "foreground_path": "res://assets/battles/animations/infernooverdrive/PRAS- Fire BG.png",
+      "sheet_path": "res://assets/battles/animations/ember/PRAS- Fire.png",
+      "background_path": "res://assets/battles/animations/earthpower/PRAS- Burning BG.png",
+      "foreground_path": "res://assets/battles/animations/explosion/PRAS- Fire BG.png",
       "sound_paths": {
         "PRSFX- Inferno Overdrive1.wav": "res://assets/battles/animations/infernooverdrive/PRSFX- Inferno Overdrive1.wav",
         "PRSFX- Inferno Overdrive2.wav": "res://assets/battles/animations/infernooverdrive/PRSFX- Inferno Overdrive2.wav",
@@ -6501,7 +6501,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/hydrovortex/hydrovortex.json",
-      "sheet_path": "res://assets/battles/animations/hydrovortex/PRAS- Water.png",
+      "sheet_path": "res://assets/battles/animations/bubble/PRAS- Water.png",
       "background_path": "res://assets/battles/animations/hydrovortex/PRAS- Underwater BG.png",
       "foreground_path": "res://assets/battles/animations/hydrovortex/PRAS- Surf FG.png",
       "sound_paths": {
@@ -6707,9 +6707,9 @@
         ]
       },
       "data_path": "res://assets/battles/animations/gigavolthavoc/gigavolthavoc.json",
-      "sheet_path": "res://assets/battles/animations/gigavolthavoc/PRAS- Electric.png",
-      "background_path": "res://assets/battles/animations/gigavolthavoc/PRAS- Thunder BG.png",
-      "foreground_path": "res://assets/battles/animations/gigavolthavoc/PRAS- Flash FG.png",
+      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
+      "background_path": "res://assets/battles/animations/catastropika/PRAS- Thunder BG.png",
+      "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
         "PRSFX- Gigavolt Havoc1.wav": "res://assets/battles/animations/gigavolthavoc/PRSFX- Gigavolt Havoc1.wav",
         "PRSFX- Gigavolt Havoc2.wav": "res://assets/battles/animations/gigavolthavoc/PRSFX- Gigavolt Havoc2.wav",
@@ -6740,7 +6740,7 @@
       "data_path": "res://assets/battles/animations/shatteredpsyche/shatteredpsyche.json",
       "sheet_path": "res://assets/battles/animations/shatteredpsyche/PRAS- Shattered Psyche.png",
       "background_path": "",
-      "foreground_path": "res://assets/battles/animations/shatteredpsyche/PRAS- Black BG.png",
+      "foreground_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Black BG.png",
       "sound_paths": {
         "PRSFX- Shattered Psyche1.wav": "res://assets/battles/animations/shatteredpsyche/PRSFX- Shattered Psyche1.wav",
         "PRSFX- Shattered Psyche2.wav": "res://assets/battles/animations/shatteredpsyche/PRSFX- Shattered Psyche2.wav",
@@ -6762,9 +6762,9 @@
       "show_sheet_sprites": true,
       "overlay_fill_enabled": false,
       "data_path": "res://assets/battles/animations/subzeroslammer/subzeroslammer.json",
-      "sheet_path": "res://assets/battles/animations/subzeroslammer/PRAS- Ice.png",
+      "sheet_path": "res://assets/battles/animations/blizzard/PRAS- Ice.png",
       "background_path": "res://assets/battles/animations/subzeroslammer/PRAS- Icy Wind BG.png",
-      "foreground_path": "res://assets/battles/animations/subzeroslammer/PRAS- Blizzard FG.png",
+      "foreground_path": "res://assets/battles/animations/blizzard/PRAS- Blizzard FG.png",
       "sound_paths": {
         "PRSFX- Subzero Slammer1.wav": "res://assets/battles/animations/subzeroslammer/PRSFX- Subzero Slammer1.wav",
         "PRSFX- Subzero Slammer2.wav": "res://assets/battles/animations/subzeroslammer/PRSFX- Subzero Slammer2.wav",
@@ -6840,7 +6840,7 @@
       "data_path": "res://assets/battles/animations/catastropika/catastropika.json",
       "sheet_path": "res://assets/battles/animations/catastropika/PRAS- Catastropika.png",
       "background_path": "res://assets/battles/animations/catastropika/PRAS- Thunder BG.png",
-      "foreground_path": "res://assets/battles/animations/catastropika/PRAS- Flash FG.png",
+      "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
         "PRSFX- Catastropika1.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika1.wav",
         "PRSFX- Catastropika2.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika2.wav",
@@ -6866,7 +6866,7 @@
       "data_path": "res://assets/battles/animations/sinisterarrowraid/sinisterarrowraid.json",
       "sheet_path": "res://assets/battles/animations/sinisterarrowraid/PRAS- Sinister Arrow Raid.png",
       "background_path": "res://assets/battles/animations/sinisterarrowraid/PRAS- Curse BG.png",
-      "foreground_path": "res://assets/battles/animations/sinisterarrowraid/PRAS- Flash FG.png",
+      "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
         "PRSFX- SinisterArrowRaid1.wav": "res://assets/battles/animations/sinisterarrowraid/PRSFX- SinisterArrowRaid1.wav",
         "PRSFX- SinisterArrowRaid2.wav": "res://assets/battles/animations/sinisterarrowraid/PRSFX- SinisterArrowRaid2.wav",
@@ -6966,7 +6966,7 @@
         ]
       },
       "data_path": "res://assets/battles/animations/maliciousmoonsault/maliciousmoonsault.json",
-      "sheet_path": "res://assets/battles/animations/maliciousmoonsault/PRAS- Fire.png",
+      "sheet_path": "res://assets/battles/animations/ember/PRAS- Fire.png",
       "background_path": "res://assets/battles/animations/maliciousmoonsault/PRAS- Malicious Moonsault BG.png",
       "foreground_path": "res://assets/battles/animations/maliciousmoonsault/PRAS- Speed Up BG.png",
       "sound_paths": {
@@ -7051,8 +7051,8 @@
       "show_sheet_sprites": true,
       "overlay_fill_enabled": false,
       "data_path": "res://assets/battles/animations/stokedsparksurfer/stokedsparksurfer.json",
-      "sheet_path": "res://assets/battles/animations/stokedsparksurfer/PRAS- Electric.png",
-      "background_path": "res://assets/battles/animations/stokedsparksurfer/PRAS- Electric Terrain BG.png",
+      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
+      "background_path": "res://assets/battles/animations/electricterrain/PRAS- Electric Terrain BG.png",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Stoked Sparksurfer1.ogg": "res://assets/battles/animations/stokedsparksurfer/PRSFX- Stoked Sparksurfer1.ogg",
@@ -7080,7 +7080,7 @@
       "data_path": "res://assets/battles/animations/pulverizingpancake/pulverizingpancake.json",
       "sheet_path": "res://assets/battles/animations/pulverizingpancake/PRAS- Pulverizing Pancake.png",
       "background_path": "res://assets/battles/animations/pulverizingpancake/PRAS- Pulverizing Pancake BG.png",
-      "foreground_path": "res://assets/battles/animations/pulverizingpancake/PRAS- Flash FG.png",
+      "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
         "PRSFX- Pulverizing Pancake1.wav": "res://assets/battles/animations/pulverizingpancake/PRSFX- Pulverizing Pancake1.wav",
         "PRSFX- Pulverizing Pancake2.wav": "res://assets/battles/animations/pulverizingpancake/PRSFX- Pulverizing Pancake2.wav",
@@ -7124,7 +7124,7 @@
       "overlay_fill_enabled": false,
       "data_path": "res://assets/battles/animations/genesissupernova/genesissupernova.json",
       "sheet_path": "res://assets/battles/animations/genesissupernova/PRAS- Genesis Supernova.png",
-      "background_path": "res://assets/battles/animations/genesissupernova/PRAS- Space BG.png",
+      "background_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Space BG.png",
       "foreground_path": "res://assets/battles/animations/genesissupernova/PRAS- Genesis Supernova BG.png",
       "sound_paths": {
         "PRSFX- Genesis Supernova1.ogg": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova1.ogg",
@@ -7157,7 +7157,7 @@
       "data_path": "res://assets/battles/animations/lightthatburnsthesky/lightthatburnsthesky.json",
       "sheet_path": "res://assets/battles/animations/lightthatburnsthesky/PRAS- Light that Burns the Sky.png",
       "background_path": "res://assets/battles/animations/lightthatburnsthesky/PRAS- LTBTS BG1.png",
-      "foreground_path": "res://assets/battles/animations/lightthatburnsthesky/PRAS- Black BG.png",
+      "foreground_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Black BG.png",
       "sound_paths": {
         "PRSFX- LTBTS1.wav": "res://assets/battles/animations/lightthatburnsthesky/PRSFX- LTBTS1.wav",
         "PRSFX- LTBTS2.wav": "res://assets/battles/animations/lightthatburnsthesky/PRSFX- LTBTS2.wav",
@@ -7179,9 +7179,9 @@
       "show_sheet_sprites": true,
       "overlay_fill_enabled": false,
       "data_path": "res://assets/battles/animations/searingsunrazesmash/searingsunrazesmash.json",
-      "sheet_path": "res://assets/battles/animations/searingsunrazesmash/PRAS- SunMoonZ.png",
-      "background_path": "res://assets/battles/animations/searingsunrazesmash/PRAS- Space BG.png",
-      "foreground_path": "res://assets/battles/animations/searingsunrazesmash/PRAS- Fire BG.png",
+      "sheet_path": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRAS- SunMoonZ.png",
+      "background_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Space BG.png",
+      "foreground_path": "res://assets/battles/animations/explosion/PRAS- Fire BG.png",
       "sound_paths": {
         "PRSFX- SSS1.ogg": "res://assets/battles/animations/searingsunrazesmash/PRSFX- SSS1.ogg",
         "PRSFX- Searing Sunraze Smash1.ogg": "res://assets/battles/animations/searingsunrazesmash/PRSFX- Searing Sunraze Smash1.ogg",
@@ -7205,7 +7205,7 @@
       "data_path": "res://assets/battles/animations/catastropika/catastropika.json",
       "sheet_path": "res://assets/battles/animations/catastropika/PRAS- Catastropika.png",
       "background_path": "res://assets/battles/animations/catastropika/PRAS- Thunder BG.png",
-      "foreground_path": "res://assets/battles/animations/catastropika/PRAS- Flash FG.png",
+      "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
         "PRSFX- Catastropika1.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika1.wav",
         "PRSFX- Catastropika2.wav": "res://assets/battles/animations/catastropika/PRSFX- Catastropika2.wav",
@@ -7230,8 +7230,8 @@
       "overlay_fill_enabled": false,
       "data_path": "res://assets/battles/animations/menacingmoonrazemaelstrom/menacingmoonrazemaelstrom.json",
       "sheet_path": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRAS- SunMoonZ.png",
-      "background_path": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRAS- Space BG.png",
-      "foreground_path": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRAS- Flash FG.png",
+      "background_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Space BG.png",
+      "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
         "PRSFX- MMM1.ogg": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRSFX- MMM1.ogg",
         "PRSFX- MMM3.ogg": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRSFX- MMM3.ogg",
@@ -7285,7 +7285,7 @@
       "data_path": "res://assets/battles/animations/splinteredstormshards/splinteredstormshards.json",
       "sheet_path": "res://assets/battles/animations/splinteredstormshards/PRAS- Splintered Stormshards.png",
       "background_path": "res://assets/battles/animations/splinteredstormshards/PRAS- Magnitude BG.png",
-      "foreground_path": "res://assets/battles/animations/splinteredstormshards/PRAS- Flash FG.png",
+      "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
         "PRSFX- Splintered Stormshards1.ogg": "res://assets/battles/animations/splinteredstormshards/PRSFX- Splintered Stormshards1.ogg",
         "PRSFX- Splintered Stormshards2.ogg": "res://assets/battles/animations/splinteredstormshards/PRSFX- Splintered Stormshards2.ogg",
@@ -7469,7 +7469,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/recover/recover.json",
-      "sheet_path": "res://assets/battles/animations/recover/PRAS- Recovery.png",
+      "sheet_path": "res://assets/battles/animations/common/healthup/PRAS- Recovery.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -7507,7 +7507,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/outrage/outrage.json",
-      "sheet_path": "res://assets/battles/animations/outrage/PRAS- Fire.png",
+      "sheet_path": "res://assets/battles/animations/ember/PRAS- Fire.png",
       "background_path": "res://assets/battles/animations/outrage/PRAS- Outrage BG.png",
       "foreground_path": "",
       "sound_paths": {
@@ -7519,7 +7519,7 @@
       "template": "imported_sheet",
       "category": "uncategorized",
       "data_path": "res://assets/battles/animations/fakeout/fakeout.json",
-      "sheet_path": "res://assets/battles/animations/fakeout/PRAS- Strike.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -7555,7 +7555,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/return/return.json",
-      "sheet_path": "res://assets/battles/animations/return/PRAS- Love.png",
+      "sheet_path": "res://assets/battles/animations/charm/PRAS- Love.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -7580,7 +7580,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/frustration/frustration.json",
-      "sheet_path": "res://assets/battles/animations/frustration/PRAS- Strike.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -7727,7 +7727,7 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "data_path": "res://assets/battles/animations/tackle/tackle.json",
-      "sheet_path": "res://assets/battles/animations/tackle/PRAS- Strike.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -7745,7 +7745,7 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "data_path": "res://assets/battles/animations/scratch/scratch.json",
-      "sheet_path": "res://assets/battles/animations/scratch/PRAS- Slash.png",
+      "sheet_path": "res://assets/battles/animations/ceaselessedge/PRAS- Slash.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -7763,7 +7763,7 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "data_path": "res://assets/battles/animations/pound/pound.json",
-      "sheet_path": "res://assets/battles/animations/pound/PRAS- Strike.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -7785,7 +7785,7 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "data_path": "res://assets/battles/animations/growl/growl.json",
-      "sheet_path": "res://assets/battles/animations/growl/PRAS- Sound.png",
+      "sheet_path": "res://assets/battles/animations/disarmingvoice/PRAS- Sound.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {}
@@ -7889,7 +7889,7 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "data_path": "res://assets/battles/animations/vinewhip/vinewhip.json",
-      "sheet_path": "res://assets/battles/animations/vinewhip/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -7907,7 +7907,7 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "data_path": "res://assets/battles/animations/leafage/leafage.json",
-      "sheet_path": "res://assets/battles/animations/leafage/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -7982,7 +7982,7 @@
       "show_pink_visual": false,
       "show_sheet_sprites": true,
       "data_path": "res://assets/battles/animations/thundershock/thundershock.json",
-      "sheet_path": "res://assets/battles/animations/thundershock/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8019,7 +8019,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/razorleaf/razorleaf.json",
-      "sheet_path": "res://assets/battles/animations/razorleaf/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8058,7 +8058,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/growth/growth.json",
-      "sheet_path": "res://assets/battles/animations/growth/PRAS- Grass.png",
+      "sheet_path": "res://assets/battles/animations/common/grassyterrain/PRAS- Grass.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8252,7 +8252,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/smokescreen/smokescreen.json",
-      "sheet_path": "res://assets/battles/animations/smokescreen/PRAS- Smokescreen.png",
+      "sheet_path": "res://assets/battles/animations/haze/PRAS- Smokescreen.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8456,7 +8456,7 @@
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/waterpulse/waterpulse.json",
       "sheet_path": "res://assets/battles/animations/waterpulse/PRAS- Water Pulse.png",
-      "background_path": "res://assets/battles/animations/waterpulse/PRAS- Underwater BG.png",
+      "background_path": "res://assets/battles/animations/hydrovortex/PRAS- Underwater BG.png",
       "foreground_path": "",
       "sound_paths": {
         "PRSFX- Water Pulse.wav": "res://assets/battles/animations/waterpulse/PRSFX- Water Pulse.wav",
@@ -8475,7 +8475,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/sleeppowder/sleeppowder.json",
-      "sheet_path": "res://assets/battles/animations/sleeppowder/PRAS- Powders.png",
+      "sheet_path": "res://assets/battles/animations/poisonpowder/PRAS- Powders.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8513,7 +8513,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/peck/peck.json",
-      "sheet_path": "res://assets/battles/animations/peck/PRAS- Strike.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8646,7 +8646,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/doublekick/doublekick.json",
-      "sheet_path": "res://assets/battles/animations/doublekick/PRAS- Strike.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8665,7 +8665,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/furyattack/furyattack.json",
-      "sheet_path": "res://assets/battles/animations/furyattack/PRAS- Slash.png",
+      "sheet_path": "res://assets/battles/animations/ceaselessedge/PRAS- Slash.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8707,7 +8707,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/rockthrow/rockthrow.json",
-      "sheet_path": "res://assets/battles/animations/rockthrow/PRAS- Rock.png",
+      "sheet_path": "res://assets/battles/animations/continentalcrush/PRAS- Rock.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8727,7 +8727,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/wingattack/wingattack.json",
-      "sheet_path": "res://assets/battles/animations/wingattack/PRAS- Slash.png",
+      "sheet_path": "res://assets/battles/animations/ceaselessedge/PRAS- Slash.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -8835,7 +8835,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/screech/screech.json",
-      "sheet_path": "res://assets/battles/animations/screech/PRAS- Screech.png",
+      "sheet_path": "res://assets/battles/animations/calmmind/PRAS- Screech.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -9039,7 +9039,7 @@
         }
       },
       "data_path": "res://assets/battles/animations/iceshard/iceshard.json",
-      "sheet_path": "res://assets/battles/animations/iceshard/PRAS- Ice.png",
+      "sheet_path": "res://assets/battles/animations/blizzard/PRAS- Ice.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -9198,7 +9198,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/lowkick/lowkick.json",
-      "sheet_path": "res://assets/battles/animations/lowkick/PRAS- Strike.png",
+      "sheet_path": "res://assets/battles/animations/bulletpunch/PRAS- Strike.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -9221,7 +9221,7 @@
       "overlay_peak_alpha": 0.0,
       "sparkle_count": 0,
       "data_path": "res://assets/battles/animations/spark/spark.json",
-      "sheet_path": "res://assets/battles/animations/spark/PRAS- Electric.png",
+      "sheet_path": "res://assets/battles/animations/charge/PRAS- Electric.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -9360,7 +9360,7 @@
         ]
       },
       "data_path": "res://assets/battles/animations/doubleteam/doubleteam.json",
-      "sheet_path": "res://assets/battles/animations/doubleteam/PRAS- Stats.png",
+      "sheet_path": "res://assets/battles/animations/common/statdown/PRAS- Stats.png",
       "background_path": "",
       "foreground_path": "",
       "sound_paths": {
@@ -10020,7 +10020,7 @@
       "data_path": "res://assets/battles/animations/explosion/explosion.json",
       "sheet_path": "res://assets/battles/animations/explosion/PRAS- Explosions.png",
       "background_path": "res://assets/battles/animations/explosion/PRAS- Fire BG.png",
-      "foreground_path": "res://assets/battles/animations/explosion/PRAS- Flash FG.png",
+      "foreground_path": "res://assets/battles/animations/bloomdoom/PRAS- Flash FG.png",
       "sound_paths": {
         "PRSFX- Explosion.wav": "res://assets/battles/animations/explosion/PRSFX- Explosion.wav",
         "PRSFX- Selfdestruct1.wav": "res://assets/battles/animations/explosion/PRSFX- Selfdestruct1.wav"
