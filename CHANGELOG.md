@@ -5,10 +5,12 @@
 - Battle trainers now show the player's back-facing pose and the correct Scholar or Grandmaster sprite for AI Sparring.
 
 - About the bots now explains each Grandmaster difficulty and shows its own availability and version.
+- Riding mounts and walking keep a more consistent speed across frame rates, and mounted appearances use less repeated work and bounded cache memory.
 
 - AI Sparring statistics now separate Beginner, Intermediate, Hard and Extreme, each with its own results.
 
 - AI Sparring offers Grandmaster Intermediate when the server enables the fair bot, with separate match history.
+
 - AI Sparring lets you search catalog opponents by team name before choosing one.
 
 - Switching between a catalog team and PokéPaste keeps the AI Sparring window the same size.
