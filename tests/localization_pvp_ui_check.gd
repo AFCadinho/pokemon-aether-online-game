@@ -75,7 +75,8 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_sparring_catalog_search := overlay.get("pvp_ai_sparring_catalog_search") as LineEdit
 	var ai_sparring_catalog_tier := overlay.get("pvp_ai_sparring_catalog_tier") as OptionButton
 	var ai_sparring_catalog_results := overlay.get("pvp_ai_sparring_catalog_results") as VBoxContainer
-	var ai_sparring_catalog_player_select := overlay.get("pvp_ai_sparring_catalog_team_select") as OptionButton
+	var ai_sparring_catalog_player_search := overlay.get("pvp_ai_sparring_player_catalog_search") as LineEdit
+	var ai_sparring_catalog_player_suggestion_list := overlay.get("pvp_ai_sparring_player_catalog_suggestion_list") as VBoxContainer
 	var ai_sparring_catalog_use_player := overlay.get("pvp_ai_sparring_catalog_use_player_button") as Button
 	var ai_sparring_catalog_use_opponent := overlay.get("pvp_ai_sparring_catalog_use_opponent_button") as Button
 	var ai_sparring_catalog_export := overlay.get("pvp_ai_sparring_catalog_export_button") as Button
@@ -393,10 +394,14 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_refresh_ai_sparring_catalog_view")
 	_check(ai_sparring_catalog_results.get_child_count() == 0, "Catalog search hides teams without the requested Pokémon")
 	ai_sparring_catalog_search.text = ""
-	_check(ai_sparring_catalog_player_select != null and ai_sparring_catalog_player_select.item_count == 1, "Catalog teams populate the player selector")
+	_check(ai_sparring_catalog_player_search != null and ai_sparring_catalog_player_search.text == "Zapdos Balance", "Catalog teams populate the player search field")
 	ai_sparring_team_source.select(2)
 	overlay.call("_on_ai_sparring_team_source_selected", 2)
-	_check(ai_sparring_catalog_player_select.visible, "Choosing a catalog player team reveals its selector")
+	_check(ai_sparring_catalog_player_search.visible, "Choosing a catalog player team reveals its search field")
+	ai_sparring_catalog_player_search.text = "Balance"
+	_check(ai_sparring_catalog_player_suggestion_list.get_child_count() == 1, "Typing in the player catalog field filters its matching teams")
+	overlay.call("_on_ai_sparring_player_catalog_suggestion_selected", "catalog-balance")
+	_check(str(overlay.call("_selected_ai_sparring_player_catalog_team_id")) == "catalog-balance", "Selecting a player catalog search result chooses that exact team")
 	_check(not ai_training_input.visible, "Choosing a catalog player team hides the PokéPaste field")
 	ai_sparring_team_source.select(0)
 	overlay.call("_on_ai_sparring_team_source_selected", 0)
@@ -798,8 +803,7 @@ func _check_pvp_runtime_translation() -> void:
 		"Aether UU random opponents resolve only from the UU home-tier catalog"
 	)
 	_check(
-		ai_sparring_catalog_player_select.item_count == 1
-		and str(ai_sparring_catalog_player_select.get_item_metadata(0)) == "smogon-nduu-hyper-offense",
+		str(overlay.call("_selected_ai_sparring_player_catalog_team_id")) == "smogon-nduu-hyper-offense",
 		"Aether UU player catalog choices exclude cross-eligible OU teams"
 	)
 	_check(str(ai_sparring_catalog_tier.get_selected_metadata()) == "aether-uu" and ai_sparring_catalog_results.get_child_count() == 1, "Practice tier changes synchronize and filter the catalog")
@@ -812,7 +816,7 @@ func _check_pvp_runtime_translation() -> void:
 	ai_sparring_catalog_tier.select(0)
 	overlay.call("_on_ai_sparring_catalog_tier_selected", 0)
 	_check(str(overlay.call("_selected_ai_sparring_tier_id")) == "aether-ou", "Catalog tier changes synchronize back to practice")
-	_check(str(overlay.call("_resolved_pvp_training_ai_team_id")) == str(cross_tier_ou_entry["teamId"]) and str(ai_sparring_catalog_player_select.get_item_metadata(0)) == str(cross_tier_ou_entry["teamId"]), "Catalog tier changes replace incompatible player and opponent selections")
+	_check(str(overlay.call("_resolved_pvp_training_ai_team_id")) == str(cross_tier_ou_entry["teamId"]) and str(overlay.call("_selected_ai_sparring_player_catalog_team_id")) == str(cross_tier_ou_entry["teamId"]), "Catalog tier changes replace incompatible player and opponent selections")
 	training_ai_team_source_select.select(1)
 	overlay.call("_on_pvp_training_ai_team_source_selected", 1)
 	_check(training_ai_custom_team_input != null and training_ai_custom_team_input.visible, "PokéPaste source reveals an opponent-team paste field")

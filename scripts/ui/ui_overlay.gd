@@ -937,7 +937,10 @@ var pvp_ai_sparring_team_source_select: OptionButton
 var pvp_ai_sparring_party_preview: VBoxContainer
 var pvp_ai_sparring_party_preview_title: Label
 var pvp_ai_sparring_party_preview_grid: HBoxContainer
-var pvp_ai_sparring_catalog_team_select: OptionButton
+var pvp_ai_sparring_player_catalog_search: LineEdit
+var pvp_ai_sparring_player_catalog_suggestions: PanelContainer
+var pvp_ai_sparring_player_catalog_suggestion_list: VBoxContainer
+var pvp_ai_sparring_player_catalog_team_id := ""
 var pvp_ai_sparring_catalog_preview: VBoxContainer
 var pvp_ai_sparring_catalog_preview_title: Label
 var pvp_ai_sparring_catalog_preview_grid: HBoxContainer
@@ -7303,16 +7306,38 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai_sparring_party_preview.add_child(pvp_ai_sparring_party_preview_grid)
 	_refresh_ai_sparring_party_preview()
 
-	pvp_ai_sparring_catalog_team_select = OptionButton.new()
-	pvp_ai_sparring_catalog_team_select.name = "AiSparringPlayerCatalogTeamSelect"
-	pvp_ai_sparring_catalog_team_select.custom_minimum_size = Vector2(0, 34)
-	pvp_ai_sparring_catalog_team_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_ai_sparring_catalog_team_select.fit_to_longest_item = false
-	pvp_ai_sparring_catalog_team_select.clip_text = true
-	pvp_ai_sparring_catalog_team_select.visible = false
-	pvp_ai_sparring_catalog_team_select.item_selected.connect(_on_ai_sparring_player_catalog_team_selected)
-	_apply_pvp_ranked_dropdown_style(pvp_ai_sparring_catalog_team_select, true)
-	team_layout.add_child(pvp_ai_sparring_catalog_team_select)
+	pvp_ai_sparring_player_catalog_search = LineEdit.new()
+	pvp_ai_sparring_player_catalog_search.name = "AiSparringPlayerCatalogTeamSearch"
+	_set_localized_control_property(
+		pvp_ai_sparring_player_catalog_search,
+		"placeholder_text",
+		"ui.pvp.training.ai.team_search"
+	)
+	pvp_ai_sparring_player_catalog_search.custom_minimum_size = Vector2(0, 34)
+	pvp_ai_sparring_player_catalog_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_player_catalog_search.clear_button_enabled = true
+	pvp_ai_sparring_player_catalog_search.visible = false
+	pvp_ai_sparring_player_catalog_search.text_changed.connect(_on_ai_sparring_player_catalog_search_changed)
+	pvp_ai_sparring_player_catalog_search.focus_entered.connect(_show_ai_sparring_player_catalog_suggestions)
+	_apply_line_edit_style(pvp_ai_sparring_player_catalog_search)
+	team_layout.add_child(pvp_ai_sparring_player_catalog_search)
+
+	pvp_ai_sparring_player_catalog_suggestions = PanelContainer.new()
+	pvp_ai_sparring_player_catalog_suggestions.name = "AiSparringPlayerCatalogTeamSuggestions"
+	pvp_ai_sparring_player_catalog_suggestions.top_level = true
+	pvp_ai_sparring_player_catalog_suggestions.z_index = UI_MODAL_Z_INDEX + 1
+	pvp_ai_sparring_player_catalog_suggestions.visible = false
+	pvp_ai_sparring_player_catalog_suggestions.add_theme_stylebox_override("panel", _make_pvp_ranked_dropdown_popup_style())
+	add_child(pvp_ai_sparring_player_catalog_suggestions)
+	var player_catalog_suggestion_scroll := ScrollContainer.new()
+	player_catalog_suggestion_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	player_catalog_suggestion_scroll.custom_minimum_size = Vector2(0, 196)
+	pvp_ai_sparring_player_catalog_suggestions.add_child(player_catalog_suggestion_scroll)
+	pvp_ai_sparring_player_catalog_suggestion_list = VBoxContainer.new()
+	pvp_ai_sparring_player_catalog_suggestion_list.name = "AiSparringPlayerCatalogTeamSuggestionList"
+	pvp_ai_sparring_player_catalog_suggestion_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_player_catalog_suggestion_list.add_theme_constant_override("separation", 4)
+	player_catalog_suggestion_scroll.add_child(pvp_ai_sparring_player_catalog_suggestion_list)
 
 	pvp_ai_sparring_catalog_preview = VBoxContainer.new()
 	pvp_ai_sparring_catalog_preview.name = "AiSparringPlayerCatalogPreview"
@@ -43734,6 +43759,9 @@ func _on_pvp_training_ai_mode_selected(_index: int) -> void:
 func _on_ai_sparring_tier_selected(_index: int) -> void:
 	_select_option_by_metadata(pvp_ai_sparring_catalog_tier, _selected_ai_sparring_tier_id())
 	_refresh_pvp_training_ai_team_options()
+	if pvp_ai_sparring_player_catalog_search != null:
+		pvp_ai_sparring_player_catalog_team_id = ""
+		pvp_ai_sparring_player_catalog_search.text = ""
 	_refresh_ai_sparring_player_catalog_options()
 	_refresh_ai_sparring_catalog_preview()
 	_refresh_pvp_training_ai_opponent_preview()
@@ -43966,21 +43994,36 @@ func _load_pvp_training_ai_catalog() -> void:
 		_set_pvp_status_key("ui.pvp.training.ai.unavailable", {}, true)
 
 
-func _refresh_ai_sparring_player_catalog_options() -> void:
-	if pvp_ai_sparring_catalog_team_select == null:
+func _refresh_ai_sparring_player_catalog_options(keep_selection: bool = true) -> void:
+	if pvp_ai_sparring_player_catalog_suggestion_list == null:
 		return
-	var previous_id := _selected_ai_sparring_player_catalog_team_id()
-	pvp_ai_sparring_catalog_team_select.clear()
+	var search_query := pvp_ai_sparring_player_catalog_search.text.strip_edges().to_lower() if pvp_ai_sparring_player_catalog_search != null else ""
+	var matching_entries: Array[Dictionary] = []
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
 		if not _ai_sparring_team_matches_tier(entry, _selected_ai_sparring_tier_id()):
 			continue
-		var team_id := str(entry.get("teamId", ""))
-		pvp_ai_sparring_catalog_team_select.add_item(str(entry.get("displayName", team_id)))
-		pvp_ai_sparring_catalog_team_select.set_item_metadata(
-			pvp_ai_sparring_catalog_team_select.item_count - 1,
-			team_id
+		var display_name := str(entry.get("displayName", entry.get("teamId", ""))).strip_edges()
+		if search_query != "" and not display_name.to_lower().contains(search_query):
+			continue
+		matching_entries.append(entry)
+	for child: Node in pvp_ai_sparring_player_catalog_suggestion_list.get_children():
+		pvp_ai_sparring_player_catalog_suggestion_list.remove_child(child)
+		child.queue_free()
+	for entry: Dictionary in matching_entries:
+		_add_ai_sparring_player_catalog_suggestion(
+			str(entry.get("displayName", entry.get("teamId", ""))),
+			str(entry.get("teamId", ""))
 		)
-	_select_option_by_metadata(pvp_ai_sparring_catalog_team_select, previous_id)
+	if keep_selection:
+		var selected_entry := _ai_sparring_catalog_entry(pvp_ai_sparring_player_catalog_team_id)
+		var selected_is_available := false
+		for entry: Dictionary in matching_entries:
+			if str(entry.get("teamId", "")) == pvp_ai_sparring_player_catalog_team_id:
+				selected_is_available = true
+				break
+		if selected_entry.is_empty() or not selected_is_available:
+			selected_entry = matching_entries[0] if not matching_entries.is_empty() else {}
+		_select_ai_sparring_player_catalog_team(str(selected_entry.get("teamId", "")))
 	_refresh_ai_sparring_catalog_preview()
 
 
@@ -44335,7 +44378,7 @@ func _select_option_by_metadata(selector: OptionButton, requested: String) -> vo
 
 func _on_ai_sparring_catalog_use_player_pressed() -> void:
 	_select_option_by_metadata(pvp_ai_sparring_team_source_select, "catalog")
-	_select_option_by_metadata(pvp_ai_sparring_catalog_team_select, pvp_ai_sparring_catalog_selected_team_id)
+	_select_ai_sparring_player_catalog_team(pvp_ai_sparring_catalog_selected_team_id)
 	_on_ai_sparring_team_source_selected(pvp_ai_sparring_team_source_select.selected)
 	pvp_ai_sparring_tabs.current_tab = 0
 
@@ -44416,14 +44459,58 @@ func _ai_sparring_catalog_pokepaste() -> String:
 	return "\n\n".join(sets)
 
 
-func _on_ai_sparring_player_catalog_team_selected(_index: int) -> void:
+func _on_ai_sparring_player_catalog_search_changed(_text: String) -> void:
+	pvp_ai_sparring_player_catalog_team_id = ""
+	_refresh_ai_sparring_player_catalog_options(false)
+	_show_ai_sparring_player_catalog_suggestions()
+
+
+func _on_ai_sparring_player_catalog_suggestion_selected(team_id: String) -> void:
+	_select_ai_sparring_player_catalog_team(team_id)
+	if pvp_ai_sparring_player_catalog_suggestions != null:
+		pvp_ai_sparring_player_catalog_suggestions.hide()
+
+
+func _select_ai_sparring_player_catalog_team(team_id: String) -> void:
+	pvp_ai_sparring_player_catalog_team_id = team_id.strip_edges()
+	var entry := _ai_sparring_catalog_entry(pvp_ai_sparring_player_catalog_team_id)
+	if pvp_ai_sparring_player_catalog_search != null:
+		pvp_ai_sparring_player_catalog_search.text = str(entry.get("displayName", "")) if not entry.is_empty() else ""
+		pvp_ai_sparring_player_catalog_team_id = team_id.strip_edges()
 	_refresh_ai_sparring_catalog_preview()
 
 
+func _show_ai_sparring_player_catalog_suggestions() -> void:
+	if pvp_ai_sparring_player_catalog_suggestions == null or pvp_ai_sparring_player_catalog_search == null or not pvp_ai_sparring_player_catalog_search.visible:
+		return
+	if not is_inside_tree() or not pvp_ai_sparring_player_catalog_suggestions.is_inside_tree():
+		return
+	var search_rect := pvp_ai_sparring_player_catalog_search.get_global_rect()
+	pvp_ai_sparring_player_catalog_suggestions.global_position = search_rect.position + Vector2(0, search_rect.size.y + 2)
+	pvp_ai_sparring_player_catalog_suggestions.size = Vector2(maxf(search_rect.size.x, 280.0), 208.0)
+	pvp_ai_sparring_player_catalog_suggestions.visible = true
+
+
+func _add_ai_sparring_player_catalog_suggestion(display_name: String, team_id: String) -> void:
+	var suggestion := Button.new()
+	suggestion.text = display_name
+	suggestion.tooltip_text = display_name
+	suggestion.custom_minimum_size = Vector2(0, 32)
+	suggestion.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	suggestion.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	suggestion.focus_mode = Control.FOCUS_NONE
+	suggestion.clip_text = true
+	suggestion.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	suggestion.pressed.connect(_on_ai_sparring_player_catalog_suggestion_selected.bind(team_id))
+	suggestion.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	suggestion.add_theme_color_override("font_hover_color", UI_TEXT)
+	suggestion.add_theme_stylebox_override("normal", _make_pvp_ranked_dropdown_item_style(Color("#00000000"), Color("#00000000")))
+	suggestion.add_theme_stylebox_override("hover", _make_pvp_ranked_dropdown_item_style(Color("#17304afa"), UI_MONEY))
+	pvp_ai_sparring_player_catalog_suggestion_list.add_child(suggestion)
+
+
 func _selected_ai_sparring_player_catalog_team_id() -> String:
-	if pvp_ai_sparring_catalog_team_select == null or pvp_ai_sparring_catalog_team_select.item_count == 0:
-		return ""
-	return str(pvp_ai_sparring_catalog_team_select.get_selected_metadata()).strip_edges()
+	return pvp_ai_sparring_player_catalog_team_id
 
 
 func _refresh_ai_sparring_catalog_preview() -> void:
@@ -44745,8 +44832,10 @@ func _on_ai_sparring_team_source_selected(_index: int) -> void:
 				"ui.pvp.ai_sparring.catalog.player_note" if use_catalog else "ui.pvp.training.ephemeral_note"
 			)
 		)
-	if pvp_ai_sparring_catalog_team_select != null:
-		pvp_ai_sparring_catalog_team_select.visible = use_catalog
+	if pvp_ai_sparring_player_catalog_search != null:
+		pvp_ai_sparring_player_catalog_search.visible = use_catalog
+	if pvp_ai_sparring_player_catalog_suggestions != null and not use_catalog:
+		pvp_ai_sparring_player_catalog_suggestions.hide()
 	_refresh_ai_sparring_party_preview()
 	_refresh_ai_sparring_catalog_preview()
 
@@ -47990,6 +48079,8 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 		pvp_training_ai_archetype_select.disabled = is_busy
 	if pvp_training_ai_team_search != null:
 		pvp_training_ai_team_search.editable = not is_busy
+	if pvp_ai_sparring_player_catalog_search != null:
+		pvp_ai_sparring_player_catalog_search.editable = not is_busy
 	if pvp_ai_sparring_tier_select != null:
 		pvp_ai_sparring_tier_select.disabled = is_busy
 	if pvp_ai_sparring_catalog_tier != null:
