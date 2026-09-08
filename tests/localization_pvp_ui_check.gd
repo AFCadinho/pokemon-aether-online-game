@@ -191,7 +191,7 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_render_ai_sparring_stats")
 	var stats_list := overlay.get("pvp_ai_sparring_stats_list") as VBoxContainer
 	for bot_id: String in ["ai4", "ai5"]:
-		var stats_card := stats_list.get_node("AiSparringStatsCard_" + bot_id) as PanelContainer
+		var stats_card := stats_list.get_node("AiSparringStatsCard_" + bot_id + ("_hard_v4" if bot_id == "ai5" else "_beginner_v1")) as PanelContainer
 		_check(stats_card.get_node("CardPadding").get_theme_constant("margin_left") == 18, "Statistics match bot profile card padding")
 		var stats_portrait := stats_card.find_child("BotPortrait", true, false) as TextureRect
 		_check(stats_portrait.texture != null and stats_portrait.texture.resource_path.ends_with("veteran-gen7.png" if bot_id == "ai5" else "scientist-gen7.png"), "Statistics use the correct trainer portrait")
@@ -220,6 +220,19 @@ func _check_pvp_runtime_translation() -> void:
 	_check(older_stats.visible and older_toggle.text == "Verberg oudere versies", "Older statistics can be expanded")
 	older_toggle.button_pressed = false
 	_check(not older_stats.visible, "Older statistics can be collapsed again")
+	# New v1 difficulties are current cards, not archived Hard versions.
+	archived_stats["bots"].append({"bot": "ai5", "difficulty": "extreme", "version": "v1", "completed": 0})
+	archived_stats["bots"].append({"bot": "ai5", "difficulty": "intermediate", "version": "v1", "completed": 0})
+	var saved_modes: Variant = overlay.get("pvp_training_ai_available_modes").duplicate()
+	var test_modes: Array[String] = ["ai4", "active", "extreme"]
+	overlay.set("pvp_training_ai_available_modes", test_modes)
+	overlay.call("_render_ai_sparring_stats")
+	_check(stats_list.get_node_or_null("AiSparringStatsCard_ai5_extreme_v1") != null, "Extreme has a separate current card")
+	_check(stats_list.get_node_or_null("AiSparringStatsCard_ai5_intermediate_v1") == null, "Unavailable Intermediate without results stays hidden")
+	test_modes.append("intermediate")
+	overlay.call("_render_ai_sparring_stats")
+	_check(stats_list.get_node_or_null("AiSparringStatsCard_ai5_intermediate_v1") != null, "Available Intermediate has a separate current card")
+	overlay.set("pvp_training_ai_available_modes", saved_modes)
 	overlay.set("pvp_ai_sparring_stats_data", {"success": false})
 	overlay.call("_render_ai_sparring_stats")
 	_check(stats_list.get_child_count() == 0, "Failed statistics refresh does not leave stale rates visible")

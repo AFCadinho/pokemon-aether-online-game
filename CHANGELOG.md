@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring statistics now separate Beginner, Intermediate, Hard and Extreme, each with its own results.
+
 - AI Sparring offers Grandmaster Intermediate when the server enables the fair bot, with separate match history.
 - AI Sparring lets you search catalog opponents by team name before choosing one.
 

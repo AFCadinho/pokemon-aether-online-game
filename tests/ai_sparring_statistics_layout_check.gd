@@ -25,17 +25,20 @@ func _run() -> void:
 			viewport.size = Vector2i(width, 800)
 			overlay.set("pvp_ai_sparring_stats_data", {"success": true, "bots": [
 				{"bot": "ai4", "version": "v1", "completed": 2, "unconfirmed": 1, "sufficient": false},
-				{"bot": "ai5", "version": "v5", "completed": 124, "unconfirmed": 0, "winRate": 0.62, "averageTurns": 32, "nativeRate": 0.99, "fallbackRate": 0.01, "sufficient": true}
+				{"bot": "ai5", "version": "v5", "completed": 124, "unconfirmed": 0, "winRate": 0.62, "averageTurns": 32, "nativeRate": 0.99, "fallbackRate": 0.01, "sufficient": true},
+				{"bot": "ai5", "difficulty": "intermediate", "version": "v1", "completed": 10, "winRate": 0.4, "averageTurns": 40, "sufficient": true},
+				{"bot": "ai5", "difficulty": "extreme", "version": "v1", "completed": 10, "winRate": 1.0, "averageTurns": 20, "sufficient": true}
 			]})
 			overlay.call("_render_ai_sparring_stats")
 			for frame: int in range(8):
 				await process_frame
 			var list := overlay.get("pvp_ai_sparring_stats_list") as VBoxContainer
-			for bot: String in ["ai4", "ai5"]:
+			for bot: String in ["ai4_beginner_v1", "ai5_hard_v5", "ai5_intermediate_v1", "ai5_extreme_v1"]:
 				var card := list.get_node("AiSparringStatsCard_" + bot) as PanelContainer
 				_check(card.get_global_rect().end.x <= width + 1, "Card fits viewport: " + locale + str(width))
 				var grid := card.find_child("Metrics", true, false) as GridContainer
-				_check(grid.columns == (1 if width == 360 else 3 if width == 900 and bot == "ai5" else 2), "Responsive columns: " + locale + str(width) + bot)
+				_check(grid.get_child_count() == (6 if bot == "ai5_hard_v5" else 4), "Only Hard shows choice rates")
+				_check(grid.columns == (1 if width == 360 else 3 if width == 900 and bot == "ai5_hard_v5" else 2), "Responsive columns: " + locale + str(width) + bot)
 				for tile: Control in grid.get_children():
 					_check(tile.get_global_rect().end.x <= card.get_global_rect().end.x, "Tile stays within card")
 			var capture_dir := OS.get_environment("AI5_STATS_CAPTURE_DIR")
