@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring lets you search catalog opponents by team name before choosing one.
+
 - AI Sparring now separates the Scholar/Grandmaster opponent choice from its difficulty.
 
 - AI Sparring team hovers now show complete stats, HP, types, and move PP for both bots and selected catalog teams.
