@@ -90,10 +90,7 @@ func _check_surf_can_cross_authorized_transitions() -> void:
 func _check_presence_payload_and_signature_include_activity_style() -> void:
 	var service := WorldPresenceServiceScript.new()
 	var movement := service._build_movement_payload(
-		{"isMoving": false, "activityStyle": "ride", "mountId": "lapras"},
-		{},
-		"",
-		{}
+		{"isMoving": false, "activityStyle": "ride", "mountId": "lapras"}
 	)
 	_expect(
 		str(movement.get("activityStyle", "")) == "ride",

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bursts of online player, chat and battle updates are spread across frames to reduce short freezes without dropping updates.
+
 - Pokémon previews reuse processed sprites, new appearance colours avoid duplicate work, and visual caches have limits to reduce memory use.
 
 - Busy maps use less work for guild emblems and idle or hidden players, and closing the interface releases its Pokémon preview resources.
