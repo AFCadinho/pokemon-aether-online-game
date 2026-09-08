@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon previews reuse processed sprites, new appearance colours avoid duplicate work, and visual caches have limits to reduce memory use.
+
 - Busy maps use less work for guild emblems and idle or hidden players, and closing the interface releases its Pokémon preview resources.
 
 - Sparring bot profiles now hide test labels when connected to the live server, while still showing the current bot version.

@@ -162,6 +162,13 @@ static var _part_frames_cache: Dictionary = {}
 static var _tinted_part_frames_cache: Dictionary = {}
 static var _cosmetic_item_icon_cache: Dictionary = {}
 static var _appearance_part_icon_cache: Dictionary = {}
+const APPEARANCE_CACHE_LIMIT := 128
+
+
+static func _remember_appearance_resource(cache: Dictionary, key: String, resource: Variant) -> void:
+	if not cache.has(key) and cache.size() >= APPEARANCE_CACHE_LIMIT:
+		cache.erase(cache.keys()[0])
+	cache[key] = resource
 
 
 static func resolve_cosmetic_icon_gender(gender: String, allowed_genders_value: Variant = []) -> String:
@@ -407,9 +414,9 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 
 	var icon_texture := _create_cropped_appearance_icon(icon_image)
 	if icon_texture == null:
-		_cosmetic_item_icon_cache[cache_key] = null
+		_remember_appearance_resource(_cosmetic_item_icon_cache, cache_key, null)
 		return null
-	_cosmetic_item_icon_cache[cache_key] = icon_texture
+	_remember_appearance_resource(_cosmetic_item_icon_cache, cache_key, icon_texture)
 	return icon_texture
 
 
@@ -440,7 +447,7 @@ static func get_appearance_part_icon(
 		get_part_frames(normalized_category, normalized_part_id, normalized_gender)
 	)
 	var icon_texture := _create_cropped_appearance_icon(icon_image)
-	_appearance_part_icon_cache[cache_key] = icon_texture
+	_remember_appearance_resource(_appearance_part_icon_cache, cache_key, icon_texture)
 	return icon_texture
 
 
@@ -770,11 +777,11 @@ static func get_part_frames(category: String, part_id: String, gender: String = 
 		normalized_movement_style
 	)
 	if texture == null:
-		_part_frames_cache[cache_key] = null
+		_remember_appearance_resource(_part_frames_cache, cache_key, null)
 		return null
 
 	var sprite_frames: SpriteFrames = _build_sprite_frames(texture)
-	_part_frames_cache[cache_key] = sprite_frames
+	_remember_appearance_resource(_part_frames_cache, cache_key, sprite_frames)
 	return sprite_frames
 
 
@@ -817,7 +824,7 @@ static func get_tinted_part_frames(
 		normalized_movement_style
 	)
 	if base_frames == null:
-		_tinted_part_frames_cache[cache_key] = null
+		_remember_appearance_resource(_tinted_part_frames_cache, cache_key, null)
 		return null
 
 	var tinted_frames: SpriteFrames = _build_tinted_sprite_frames(
@@ -825,7 +832,7 @@ static func get_tinted_part_frames(
 		tint_color,
 		preserve_luminance
 	)
-	_tinted_part_frames_cache[cache_key] = tinted_frames
+	_remember_appearance_resource(_tinted_part_frames_cache, cache_key, tinted_frames)
 	return tinted_frames
 
 
@@ -934,11 +941,11 @@ static func get_body_frames(body_id: String, gender: String = "", movement_style
 	if texture == null and normalized_body_id != fallback_body_id:
 		texture = _load_body_texture_for_movement(fallback_body_id, normalized_gender, normalized_movement_style)
 	if texture == null:
-		_body_frames_cache[cache_key] = null
+		_remember_appearance_resource(_body_frames_cache, cache_key, null)
 		return null
 
 	var sprite_frames: SpriteFrames = _build_sprite_frames(texture)
-	_body_frames_cache[cache_key] = sprite_frames
+	_remember_appearance_resource(_body_frames_cache, cache_key, sprite_frames)
 	return sprite_frames
 
 
@@ -976,7 +983,7 @@ static func get_skin_tinted_body_frames(
 		return null
 
 	var tinted_frames := _build_skin_tinted_sprite_frames(base_frames, tint_color)
-	_skin_tinted_body_frames_cache[cache_key] = tinted_frames
+	_remember_appearance_resource(_skin_tinted_body_frames_cache, cache_key, tinted_frames)
 	return tinted_frames
 
 
@@ -1256,6 +1263,7 @@ static func _build_sprite_frames(texture: Texture2D) -> SpriteFrames:
 
 static func _build_tinted_sprite_frames(base_frames: SpriteFrames, tint_color: Color, preserve_luminance: bool) -> SpriteFrames:
 	var sprite_frames := SpriteFrames.new()
+	var textures := {}
 	if sprite_frames.has_animation(&"default"):
 		sprite_frames.remove_animation(&"default")
 
@@ -1270,7 +1278,10 @@ static func _build_tinted_sprite_frames(base_frames: SpriteFrames, tint_color: C
 		for frame_index: int in range(frame_count):
 			var frame_texture: Texture2D = base_frames.get_frame_texture(animation_name, frame_index)
 			var frame_duration: float = base_frames.get_frame_duration(animation_name, frame_index)
-			var tinted_texture: Texture2D = _make_tinted_texture(frame_texture, tint_color, preserve_luminance)
+			var key := _tint_frame_key(frame_texture)
+			if not textures.has(key):
+				textures[key] = _make_tinted_texture(frame_texture, tint_color, preserve_luminance)
+			var tinted_texture: Texture2D = textures[key]
 			sprite_frames.add_frame(animation_name, tinted_texture, frame_duration)
 
 	return sprite_frames
@@ -1278,6 +1289,7 @@ static func _build_tinted_sprite_frames(base_frames: SpriteFrames, tint_color: C
 
 static func _build_skin_tinted_sprite_frames(base_frames: SpriteFrames, skin_tone: Color) -> SpriteFrames:
 	var sprite_frames := SpriteFrames.new()
+	var textures := {}
 	if sprite_frames.has_animation(&"default"):
 		sprite_frames.remove_animation(&"default")
 
@@ -1292,13 +1304,22 @@ static func _build_skin_tinted_sprite_frames(base_frames: SpriteFrames, skin_ton
 		for frame_index: int in range(frame_count):
 			var frame_texture := base_frames.get_frame_texture(animation_name, frame_index)
 			var frame_duration := base_frames.get_frame_duration(animation_name, frame_index)
+			var key := _tint_frame_key(frame_texture)
+			if not textures.has(key):
+				textures[key] = _make_skin_tinted_texture(frame_texture, skin_tone)
 			sprite_frames.add_frame(
 				animation_name,
-				_make_skin_tinted_texture(frame_texture, skin_tone),
+				textures[key],
 				frame_duration
 			)
 
 	return sprite_frames
+
+
+static func _tint_frame_key(texture: Texture2D) -> String:
+	if texture is AtlasTexture and texture.atlas != null:
+		return "%s:%s:%s:%s" % [texture.atlas.get_instance_id(), texture.region, texture.margin, texture.filter_clip]
+	return str(texture.get_instance_id()) if texture != null else "null"
 
 
 static func _make_tinted_texture(texture: Texture2D, tint_color: Color, preserve_luminance: bool) -> Texture2D:
@@ -1311,12 +1332,13 @@ static func _make_tinted_texture(texture: Texture2D, tint_color: Color, preserve
 
 	var width: int = source_image.get_width()
 	var height: int = source_image.get_height()
+	var used := source_image.get_used_rect()
 	var tinted_image := Image.create(width, height, false, Image.FORMAT_RGBA8)
 	var minimum_luminance := 1.0
 	var maximum_luminance := 0.0
 	if preserve_luminance:
-		for y: int in range(height):
-			for x: int in range(width):
+		for y: int in range(used.position.y, used.end.y):
+			for x: int in range(used.position.x, used.end.x):
 				var range_pixel := source_image.get_pixel(x, y)
 				if range_pixel.a <= 0.001:
 					continue
@@ -1326,8 +1348,8 @@ static func _make_tinted_texture(texture: Texture2D, tint_color: Color, preserve
 				minimum_luminance = minf(minimum_luminance, range_luminance)
 				maximum_luminance = maxf(maximum_luminance, range_luminance)
 
-	for y: int in range(height):
-		for x: int in range(width):
+	for y: int in range(used.position.y, used.end.y):
+		for x: int in range(used.position.x, used.end.x):
 			var source_pixel: Color = source_image.get_pixel(x, y)
 			var alpha: float = source_pixel.a * tint_color.a
 			if source_pixel.a <= 0.001:
@@ -1368,10 +1390,11 @@ static func _make_skin_tinted_texture(texture: Texture2D, skin_tone: Color) -> T
 
 	var width := source_image.get_width()
 	var height := source_image.get_height()
+	var used := source_image.get_used_rect()
 	var minimum_luminance := 1.0
 	var maximum_luminance := 0.0
-	for y: int in range(height):
-		for x: int in range(width):
+	for y: int in range(used.position.y, used.end.y):
+		for x: int in range(used.position.x, used.end.x):
 			var range_pixel := source_image.get_pixel(x, y)
 			if not _is_skin_palette_pixel(range_pixel):
 				continue
@@ -1384,8 +1407,8 @@ static func _make_skin_tinted_texture(texture: Texture2D, skin_tone: Color) -> T
 
 	var tinted_image := Image.create(width, height, false, Image.FORMAT_RGBA8)
 	var luminance_span := maxf(maximum_luminance - minimum_luminance, 0.001)
-	for y: int in range(height):
-		for x: int in range(width):
+	for y: int in range(used.position.y, used.end.y):
+		for x: int in range(used.position.x, used.end.x):
 			var source_pixel := source_image.get_pixel(x, y)
 			if source_pixel.a <= 0.001:
 				tinted_image.set_pixel(x, y, Color(0.0, 0.0, 0.0, 0.0))

@@ -54,6 +54,10 @@ const STAT_STAGE_PANEL_GAP := 8.0
 const FAINT_TWEEN_OFFSET := Vector2(0, 34)
 const SPRITE_HOVER_PADDING := Vector2(8, 8)
 const SPRITE_ALPHA_BOUNDS_THRESHOLD := 0.02
+const SPRITE_CACHE_LIMIT := 32
+const FRAME_METADATA_FIELDS := ["sprite_frames_render_scales", "sprite_frames_display_scale_multipliers",
+	"sprite_frames_position_offsets", "sprite_frames_anchors", "sprite_frames_frame_sizes", "sprite_frames_visual_bounds"]
+static var _shared_sprite_frames_cache: Dictionary = {}
 const SUBSTITUTE_SHEET: Texture2D = preload("res://assets/battles/animations/substitute/PRAS- Substitute.png")
 const SUBSTITUTE_CELL_SIZE := Vector2(192.0, 192.0)
 const SUBSTITUTE_DISPLAY_SCALE := Vector2(2.0, 2.0)
@@ -800,9 +804,14 @@ func _calculate_texture_alpha_bounds(texture: Texture2D) -> Rect2:
 	var min_y: int = image.get_height()
 	var max_x: int = -1
 	var max_y: int = -1
-	for y: int in range(image.get_height()):
-		for x: int in range(image.get_width()):
-			if image.get_pixel(x, y).a <= SPRITE_ALPHA_BOUNDS_THRESHOLD:
+	var used := image.get_used_rect()
+	if image.get_format() == Image.FORMAT_RGBA8:
+		return _rgba8_alpha_bounds(image.get_data(), image.get_width(), used)
+	# Preserve float alpha precision for non-PNG/custom image formats.
+	for y: int in range(used.position.y, used.end.y):
+		for x: int in range(used.position.x, used.end.x):
+			var alpha := image.get_pixel(x, y).a
+			if alpha <= SPRITE_ALPHA_BOUNDS_THRESHOLD:
 				continue
 
 			min_x = mini(min_x, x)
@@ -814,6 +823,31 @@ func _calculate_texture_alpha_bounds(texture: Texture2D) -> Rect2:
 		return Rect2()
 
 	return Rect2(Vector2(min_x, min_y), Vector2(max_x - min_x + 1, max_y - min_y + 1))
+
+func _rgba8_alpha_bounds(bytes: PackedByteArray, width: int, used: Rect2i) -> Rect2:
+	if not used.has_area():
+		return Rect2()
+	var top := used.position.y
+	var bottom := used.end.y - 1
+	var left := used.position.x
+	var right := used.end.x - 1
+	while top <= bottom and not _alpha_span_has_pixel(bytes, (top * width + left) * 4 + 3, right - left + 1, 4):
+		top += 1
+	if top > bottom:
+		return Rect2()
+	while not _alpha_span_has_pixel(bytes, (bottom * width + left) * 4 + 3, right - left + 1, 4):
+		bottom -= 1
+	while not _alpha_span_has_pixel(bytes, (top * width + left) * 4 + 3, bottom - top + 1, width * 4):
+		left += 1
+	while not _alpha_span_has_pixel(bytes, (top * width + right) * 4 + 3, bottom - top + 1, width * 4):
+		right -= 1
+	return Rect2(left, top, right - left + 1, bottom - top + 1)
+
+func _alpha_span_has_pixel(bytes: PackedByteArray, start: int, count: int, stride: int) -> bool:
+	for i in count:
+		if bytes[start + i * stride] > int(floor(SPRITE_ALPHA_BOUNDS_THRESHOLD * 255.0)):
+			return true
+	return false
 
 func _get_visual_bounds_horizontal_anchor(visual_bounds: Rect2, frame_size: Vector2) -> Vector2:
 	if visual_bounds.size.x <= 0.0 or visual_bounds.size.y <= 0.0:
@@ -975,12 +1009,36 @@ func _load_sprite_frames(
 	]
 	if sprite_frames_cache.has(cache_key):
 		return sprite_frames_cache[cache_key] as SpriteFrames
+	if _shared_sprite_frames_cache.has(cache_key):
+		var entry: Dictionary = _shared_sprite_frames_cache[cache_key]
+		var shared: SpriteFrames = entry.frames
+		var frame_key := _get_sprite_frames_key(shared)
+		for field: String in FRAME_METADATA_FIELDS:
+			if entry.metadata.has(field):
+				var table: Dictionary = get(field)
+				table[frame_key] = entry.metadata[field]
+		_remember_sprite_frames(cache_key, shared)
+		return shared
 
 	var frames := _load_sprite_frames_uncached(species, side, is_shiny, report_missing)
 	if frames != null:
 		_apply_species_render_scale_override(frames, species, side)
-		sprite_frames_cache[cache_key] = frames
+		_remember_sprite_frames(cache_key, frames)
+		var metadata := {}
+		for field: String in FRAME_METADATA_FIELDS:
+			var table: Dictionary = get(field)
+			var frame_key := _get_sprite_frames_key(frames)
+			if table.has(frame_key):
+				metadata[field] = table[frame_key]
+		if _shared_sprite_frames_cache.size() >= SPRITE_CACHE_LIMIT:
+			_shared_sprite_frames_cache.erase(_shared_sprite_frames_cache.keys()[0])
+		_shared_sprite_frames_cache[cache_key] = {"frames": frames, "metadata": metadata}
 	return frames
+
+func _remember_sprite_frames(key: String, frames: SpriteFrames) -> void:
+	if sprite_frames_cache.size() >= SPRITE_CACHE_LIMIT:
+		sprite_frames_cache.erase(sprite_frames_cache.keys()[0])
+	sprite_frames_cache[key] = frames
 
 func _apply_species_render_scale_override(sprite_frames: SpriteFrames, species: String, side: String) -> void:
 	# The Gen 9 Ogerpon front sheets use a 192 px canvas for artwork authored at
@@ -1272,7 +1330,8 @@ func _load_sprite_frames_from_sheet_metadata(metadata_path: String, side: String
 	if _metadata_has_anchor(metadata):
 		_set_sprite_frames_anchor(sprite_frames, _get_metadata_anchor(metadata, metadata_frame_size), metadata_frame_size)
 	else:
-		_set_sprite_frames_auto_anchor(sprite_frames, metadata_frame_size)
+		_set_sprite_frames_anchor(sprite_frames, _get_visual_bounds_horizontal_anchor(
+			_get_sprite_frames_visual_bounds(sprite_frames), metadata_frame_size), metadata_frame_size)
 	return sprite_frames
 
 func _metadata_has_anchor(metadata: Dictionary) -> bool:

@@ -33,4 +33,6 @@ Thumbs.db
 
 .import/
 *.import
+!assets/ui/pokeaether_combo_logo.png.import
+!assets/ui/pokeaether_text_logo.png.import
 __pycache__/
