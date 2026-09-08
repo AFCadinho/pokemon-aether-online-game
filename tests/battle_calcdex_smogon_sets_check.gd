@@ -62,6 +62,19 @@ func _run() -> void:
 	_expect(panel.selected_sample_set_id == "", "Manual edits must switch to a custom scenario")
 	panel._reset_to_current()
 	_expect(not panel.defender_assumptions.has("assumedMoves"), "Reset must clear imported moves")
+	var mixed := group.duplicate(true)
+	mixed["provenance"] = {"kind": "pokeaether_curated"}
+	mixed["variants"][0]["provenance"] = {"kind": "pokeaether_curated"}
+	response["sets"] = [mixed]
+	panel.show_sample_set_catalog_response("Mew", response)
+	_expect(panel.sample_set_options.size() == 1, "Curated and Smogon builds must share one named group")
+	_expect(panel._get_sample_set_source_label(mixed) == "Aether / Smogon · National Dex UU", "Mixed group must retain both sources")
+	panel._apply_sample_set(mixed)
+	panel._on_sample_variant_selected(1, "smogon-test")
+	_expect(panel.defender_assumptions["nature"] == "Timid", "Mixed-source alternative must remain selectable")
+	var unknown := mixed.duplicate(true)
+	unknown["variants"][1]["provenance"] = {"kind": "unknown"}
+	_expect(not panel._is_valid_sample_group(unknown), "Unknown variant sources must be rejected")
 	var broken := response.duplicate(true)
 	broken["sets"][0]["variants"][1]["id"] = "smogon-test-a"
 	panel.show_sample_set_catalog_response("Mew", broken)
