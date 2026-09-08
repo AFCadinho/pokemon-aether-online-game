@@ -914,6 +914,7 @@ var pvp_training_ai_catalog_loading := false
 var pvp_training_ai_enabled := false
 var pvp_ai_sparring_start_button: Button
 var pvp_ai_sparring_tabs: TabContainer
+var pvp_ai_sparring_trainer_portrait: TextureRect
 var pvp_ai_sparring_bot_versions: Dictionary = {}
 var pvp_ai_sparring_about_versions: Dictionary = {}
 var pvp_ai_sparring_about_loading := false
@@ -7080,6 +7081,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	portrait_frame.add_child(portrait_center)
 	var portrait := TextureRect.new()
 	portrait.name = "AiVeteranPortrait"
+	pvp_ai_sparring_trainer_portrait = portrait
 	portrait.custom_minimum_size = Vector2(72, 72)
 	portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -7500,6 +7502,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	about_page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.about")
 	pvp_ai_sparring_tabs.add_child(about_page)
 	var about_scroll := ScrollContainer.new()
+	about_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	about_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	about_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	about_page.add_child(about_scroll)
@@ -7508,26 +7511,66 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	about_layout.add_theme_constant_override("separation", 18)
 	about_scroll.add_child(about_layout)
 	for bot_id: String in ["ai4", "ai5"]:
+		var accent := Color("#87d5ec") if bot_id == "ai4" else Color("#efd080")
 		var card := PanelContainer.new()
-		card.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_INSET, Color("#8474c4"), 10, 1))
+		card.name = "AiSparringAboutCard_" + bot_id
+		card.add_theme_stylebox_override("panel", _make_panel_style(Color("#111c2e"), accent.darkened(0.4), 12, 1))
 		about_layout.add_child(card)
+		var margin := MarginContainer.new()
+		margin.name = "CardPadding"
+		for edge: String in ["left", "right", "top", "bottom"]:
+			margin.add_theme_constant_override("margin_" + edge, 18)
+		card.add_child(margin)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 20)
+		margin.add_child(row)
+		var bot_portrait_frame := PanelContainer.new()
+		bot_portrait_frame.custom_minimum_size = Vector2(96, 116)
+		bot_portrait_frame.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+		bot_portrait_frame.add_theme_stylebox_override("panel", _make_panel_style(Color("#091321"), accent.darkened(0.55), 10, 1))
+		row.add_child(bot_portrait_frame)
+		var bot_portrait_center := CenterContainer.new()
+		bot_portrait_frame.add_child(bot_portrait_center)
+		var bot_portrait := TextureRect.new()
+		bot_portrait.name = "AiSparringAboutPortrait_" + bot_id
+		bot_portrait.custom_minimum_size = Vector2(88, 104)
+		bot_portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		bot_portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		bot_portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		bot_portrait.texture = load("res://assets/sprites/trainer_cards/showdown/scientist-gen7.png" if bot_id == "ai4" else "res://assets/sprites/trainer_cards/showdown/veteran-gen7.png") as Texture2D
+		bot_portrait_center.add_child(bot_portrait)
 		var content := VBoxContainer.new()
+		content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		content.add_theme_constant_override("separation", 10)
-		card.add_child(content)
+		row.add_child(content)
 		var bot_title := Label.new()
+		bot_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		bot_title.add_theme_font_size_override("font_size", 22)
+		bot_title.add_theme_color_override("font_color", accent)
 		_set_localized_control_property(bot_title, "text", "ui.pvp.training.ai.mode_ai4" if bot_id == "ai4" else "ui.pvp.training.ai.mode_active")
 		content.add_child(bot_title)
+		var tagline := Label.new()
+		tagline.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		tagline.add_theme_color_override("font_color", Color("#c4cfdf"))
+		_set_localized_control_property(tagline, "text", "ui.pvp.ai_sparring.about.scholar_tagline" if bot_id == "ai4" else "ui.pvp.ai_sparring.about.grandmaster_tagline")
+		content.add_child(tagline)
+		var divider := HSeparator.new()
+		divider.modulate = Color(1, 1, 1, 0.3)
+		content.add_child(divider)
 		var bot_version := Label.new()
 		bot_version.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		bot_version.name = "AiSparringVersion_" + bot_id
+		bot_version.add_theme_font_size_override("font_size", 13)
 		content.add_child(bot_version)
 		pvp_ai_sparring_about_versions[bot_id] = bot_version
 		var description := Label.new()
 		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		description.add_theme_constant_override("line_spacing", 4)
 		_set_localized_control_property(description, "text", "ui.pvp.ai_sparring.about.scholar" if bot_id == "ai4" else "ui.pvp.ai_sparring.about.grandmaster")
 		content.add_child(description)
 	var about_note := Label.new()
+	about_note.add_theme_color_override("font_color", Color("#a8b8cc"))
+	about_note.add_theme_font_size_override("font_size", 13)
 	about_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_set_localized_control_property(about_note, "text", "ui.pvp.ai_sparring.about.note")
 	about_layout.add_child(about_note)
@@ -42928,7 +42971,8 @@ func _refresh_ai_sparring_about() -> void:
 		if not version.is_empty():
 			version_text = LocalizationManager.text("ui.pvp.ai_sparring.about.version", {"version": version})
 		var status_key := "ui.pvp.ai_sparring.about.available" if bool(info.get("available", false)) else "ui.pvp.ai_sparring.about.unavailable"
-		label.text = version_text + " · " + LocalizationManager.text(status_key)
+		label.text = LocalizationManager.text(status_key) + "\n" + version_text
+		label.add_theme_color_override("font_color", Color("#91dbb1") if bool(info.get("available", false)) else Color("#e6bf86"))
 
 
 func _on_pvp_ai_sparring_history_refresh_pressed() -> void:
@@ -43383,6 +43427,8 @@ func _resolved_pvp_training_ai_team_id() -> String:
 
 
 func _refresh_pvp_training_ai_opponent_preview() -> void:
+	if pvp_ai_sparring_trainer_portrait != null:
+		pvp_ai_sparring_trainer_portrait.texture = load("res://assets/sprites/trainer_cards/showdown/veteran-gen7.png" if _selected_pvp_training_ai_mode() == "active" else "res://assets/sprites/trainer_cards/showdown/scientist-gen7.png") as Texture2D
 	if pvp_training_ai_opponent_preview == null or pvp_training_ai_opponent_preview_grid == null:
 		return
 	if _selected_pvp_training_ai_team_source() == "paste":

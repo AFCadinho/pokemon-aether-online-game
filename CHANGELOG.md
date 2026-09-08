@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Meet AI4 Scholar and AI5 Grandmaster in clearer bot profiles with trainer portraits and more practice tips.
+
 - AI Sparring now shows the full names AI4 Scholar and AI5 Grandmaster.
 - Added an About the bots tab with their play styles, availability and server versions.
 

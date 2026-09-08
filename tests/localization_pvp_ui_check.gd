@@ -181,6 +181,15 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_sparring_menu_button != null, "AI Sparring has its own PvP destination")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 4, "AI Sparring separates practice, team catalog, history and bot information")
 	_check(ai_sparring_tabs.get_tab_title(3) == "Over de bots", "Bot information tab is localized")
+	for bot_id: String in ["ai4", "ai5"]:
+		var card := overlay.find_child("AiSparringAboutCard_" + bot_id, true, false)
+		_check(card != null, "Each bot has its own profile card")
+		var padding := card.get_node("CardPadding") as MarginContainer
+		_check(padding.get_theme_constant("margin_left") >= 18, "Bot copy has comfortable padding")
+		var portrait := card.find_child("AiSparringAboutPortrait_" + bot_id, true, false) as TextureRect
+		_check(portrait != null and portrait.texture != null, "Bot trainer portrait loads")
+		var expected_sprite := "scientist-gen7.png" if bot_id == "ai4" else "veteran-gen7.png"
+		_check(portrait.texture.resource_path.ends_with(expected_sprite), "Each bot uses its assigned trainer")
 	var bot_versions: Dictionary = overlay.get("pvp_ai_sparring_about_versions")
 	_check(bot_versions["ai5"].text.contains("Serverversie niet bevestigd"), "Missing server data does not claim a bot version")
 	overlay.set("pvp_ai_sparring_bot_versions", {"ai5": {"version": "Native Z v4", "available": true}})
