@@ -43168,6 +43168,21 @@ func _apply_ai_sparring_bot_versions(response: Dictionary) -> void:
 	_refresh_ai_sparring_about()
 
 
+func _ai_sparring_uses_local_server() -> bool:
+	# Use the connected server, not the build type: the editor can also connect
+	# to production, and an exported client can connect to a local test server.
+	var url := GatewayApiConfig.get_base_url().strip_edges().to_lower()
+	if not (url.begins_with("http://") or url.begins_with("https://")):
+		return false
+	var authority := url.get_slice("://", 1).get_slice("/", 0)
+	if authority.contains("@"):
+		return false
+	if authority == "[::1]" or authority.begins_with("[::1]:"):
+		return true
+	var host := authority.get_slice(":", 0)
+	return host in ["localhost", "127.0.0.1"] or host.ends_with(".localhost")
+
+
 func _refresh_ai_sparring_about() -> void:
 	for bot_id: String in pvp_ai_sparring_about_versions:
 		var label: Label = pvp_ai_sparring_about_versions[bot_id]
@@ -43178,7 +43193,7 @@ func _refresh_ai_sparring_about() -> void:
 			version_text = LocalizationManager.text("ui.pvp.ai_sparring.about.version", {"version": version})
 		var status_key := "ui.pvp.ai_sparring.about.available" if bool(info.get("available", false)) else "ui.pvp.ai_sparring.about.unavailable"
 		label.text = LocalizationManager.text(status_key) + "\n" + version_text
-		if not version.is_empty() and str(info.get("releaseStatus", "")) == "test":
+		if not version.is_empty() and str(info.get("releaseStatus", "")) == "test" and _ai_sparring_uses_local_server():
 			label.text += "\n" + LocalizationManager.text("ui.pvp.ai_sparring.about.test_version")
 		label.add_theme_color_override("font_color", Color("#91dbb1") if bool(info.get("available", false)) else Color("#e6bf86"))
 
