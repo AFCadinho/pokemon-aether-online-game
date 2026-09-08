@@ -7,6 +7,8 @@ const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
 const RUN_TILE_MOVE_DURATION := 0.14
 const LAND_MOUNT_TILE_MOVE_DURATION := 0.065
+const MAX_MOVEMENT_FRAME_DELTA := 0.1
+const MAX_MOVEMENT_STEPS_PER_FRAME := 4
 const MOVE_EASE_AMOUNT := 0.0
 const INPUT_BUFFER_DURATION := 0.14
 const CONTINUOUS_MOVE_HOLD_DELAY := 0.0
@@ -1545,9 +1547,31 @@ func _process(delta: float) -> void:
 		_clear_held_direction()
 
 	if is_moving:
+		_advance_tile_movement(delta)
+		return
+
+	if not _can_accept_movement_input():
+		set_idle_frame()
+		return
+
+	var direction := _get_next_movement_direction()
+
+	if direction != Vector2.ZERO:
+		if not _try_start_move(direction):
+			set_idle_frame()
+
+
+func _advance_tile_movement(delta: float) -> void:
+	# Keep fractional frame time across tile boundaries. Bound hitch recovery so
+	# collisions, exits and encounter callbacks cannot run without limit.
+	var remaining_delta := clampf(delta, 0.0, MAX_MOVEMENT_FRAME_DELTA)
+	var completed_steps := 0
+	while is_moving and completed_steps < MAX_MOVEMENT_STEPS_PER_FRAME:
 		# Beweeg per render-frame naar de volgende tile.
 		# De tile-logica blijft deterministisch; alleen de visual interpolation is soepeler.
-		move_elapsed = minf(move_elapsed + delta, move_duration)
+		var consumed_delta := minf(remaining_delta, maxf(move_duration - move_elapsed, 0.0))
+		remaining_delta -= consumed_delta
+		move_elapsed = minf(move_elapsed + consumed_delta, move_duration)
 		var move_progress := move_elapsed / move_duration
 		var interpolated_position: Vector2 = move_start_position.lerp(target_position, _get_move_interpolation(move_progress))
 		global_position = _snap_world_position(interpolated_position)
@@ -1556,6 +1580,7 @@ func _process(delta: float) -> void:
 
 		# Als de bestemming is bereikt.
 		if _has_reached_target():
+			completed_steps += 1
 			global_position = _snap_world_position(target_position)
 			is_moving = false
 			_clear_stair_visual_offset()
@@ -1583,20 +1608,12 @@ func _process(delta: float) -> void:
 			if _can_accept_movement_input():
 				var next_direction := _get_next_movement_direction()
 				if next_direction != Vector2.ZERO and _try_start_move(next_direction):
+					if remaining_delta > 0.0:
+						continue
 					return
 
 			set_idle_frame()
 		return
-
-	if not _can_accept_movement_input():
-		set_idle_frame()
-		return
-
-	var direction := _get_next_movement_direction()
-
-	if direction != Vector2.ZERO:
-		if not _try_start_move(direction):
-			set_idle_frame()
 
 func refresh_pokemon_follower() -> void:
 	_ensure_pokemon_follower_parent()
