@@ -254,7 +254,7 @@ func _check_pvp_runtime_translation() -> void:
 		{"id": "intermediate", "version": "v1", "available": false},
 		{"id": "extreme", "version": "v1", "available": true}
 	]})
-	_check(bot_versions["extreme"].text.contains("Beschikbaar om tegen te spelen") and bot_versions["extreme"].text.contains("Serverversie: v1"), "Extreme keeps its own version and availability when Hard is disabled")
+	_check(bot_versions["extreme"].text.contains("Beschikbaar om tegen te spelen") and bot_versions["extreme"].text.contains("Serverversie: v1"), "Nightmare keeps its own version and availability when Hard is disabled")
 	_check(bot_versions["intermediate"].text.contains("Momenteel niet beschikbaar"), "Intermediate reports its own availability")
 	overlay.call("_apply_ai_sparring_bot_versions", {"success": false})
 	_check(bot_versions["extreme"].text.contains("Beschikbaarheid niet bevestigd"), "Failed refresh clears all difficulty availability")
@@ -661,11 +661,11 @@ func _check_pvp_runtime_translation() -> void:
 	training_ai_bot_select.select(1)
 	overlay.call("_on_pvp_training_ai_bot_selected", 1)
 	_check(training_ai_mode_select.item_count == 3, "Grandmaster exposes all three server-enabled difficulties")
-	_check(training_ai_mode_select.get_item_text(0) == "Intermediate" and training_ai_mode_select.get_item_text(1) == "Hard" and training_ai_mode_select.get_item_text(2) == "Extreme", "Grandmaster has a separate difficulty selector")
+	_check(training_ai_mode_select.get_item_text(0) == "Intermediate" and training_ai_mode_select.get_item_text(1) == "Hard" and training_ai_mode_select.get_item_text(2) == "Nightmare", "Grandmaster has a separate difficulty selector topped by Nightmare")
 	training_ai_mode_select.select(0)
 	_check(overlay.call("_selected_pvp_training_ai_mode") == "intermediate", "Intermediate selection preserves its server mode")
 	training_ai_mode_select.select(2)
-	_check(overlay.call("_selected_pvp_training_ai_mode") == "extreme", "Extreme selection preserves its server mode")
+	_check(overlay.call("_selected_pvp_training_ai_mode") == "extreme", "Nightmare selection preserves its compatible server mode")
 	training_ai_available_modes.assign(["ai4", "active"])
 	training_ai_bot_select.select(0)
 	overlay.call("_on_pvp_training_ai_bot_selected", 0)
