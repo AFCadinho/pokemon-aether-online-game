@@ -7681,7 +7681,7 @@ func _render_ai_sparring_stats() -> void:
 			line.add_child(name_label)
 			var value_label := Label.new()
 			var value: Variant = entry.get(metric)
-			value_label.text = "—" if value == null else ("%.1f%%" % (float(value) * 100.0) if metric.ends_with("Rate") else str(value))
+			value_label.text = "—" if value == null else ("%.0f%%" % (float(value) * 100.0) if metric.ends_with("Rate") else "%.0f" % float(value))
 			line.add_child(value_label)
 		if not bool(entry.get("sufficient", false)):
 			var insufficient := Label.new()
