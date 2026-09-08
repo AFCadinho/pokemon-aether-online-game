@@ -137,6 +137,9 @@ var movement_reserved_tile := Vector2i.ZERO
 var story_visibility_active := true
 var is_npc_moving := false
 var _base_npc_process_active := false
+var _movement_collision_map: Node
+var _movement_collision_tilemap: TileMapLayer
+var _sorting_player: Node2D
 
 
 func _ready_base_npc() -> void:
@@ -168,6 +171,8 @@ func _ready_base_npc() -> void:
 		story_service.story_changed.connect(_on_story_changed)
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
+	if not SettingsManager.input_binding_changed.is_connected(_on_input_binding_changed):
+		SettingsManager.input_binding_changed.connect(_on_input_binding_changed)
 	if preload_quest_markers:
 		_initialize_quest_markers.call_deferred()
 	_apply_story_visibility()
@@ -709,7 +714,7 @@ func _setup_thieving_prompt() -> void:
 	thieving_prompt_button.position = THIEVING_PROMPT_POSITION
 	thieving_prompt_button.z_as_relative = false
 	thieving_prompt_button.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
-	thieving_prompt_button.tooltip_text = _get_thieving_prompt_tooltip()
+	_refresh_thieving_prompt_tooltip()
 	_apply_thieving_prompt_style(thieving_prompt_button)
 	thieving_prompt_button.pressed.connect(Callable(self, "_on_thieving_prompt_pressed"))
 	add_child(thieving_prompt_button)
@@ -1033,8 +1038,10 @@ func _can_npc_move_to(world_position: Vector2) -> bool:
 		if player_node != null and _to_tile(_get_body_target_feet_position(player_node)) == _to_tile(world_position):
 			return false
 
-	var collision_tilemap := MapLayerResolverScript.find_tilemap_layer(current_map, ["Collision"])
-	if collision_tilemap != null and not ambient_movement_ignores_map_collision:
+	var collision_tilemap: TileMapLayer
+	if not ambient_movement_ignores_map_collision:
+		collision_tilemap = _get_movement_collision_tilemap(current_map)
+	if collision_tilemap != null:
 		var local_position := collision_tilemap.to_local(world_position)
 		var tile_position := collision_tilemap.local_to_map(local_position)
 		if collision_tilemap.get_cell_source_id(tile_position) != -1:
@@ -1046,6 +1053,21 @@ func _can_npc_move_to(world_position: Vector2) -> bool:
 		return not bool(current_map.call("is_position_blocked_by_character", world_position))
 
 	return not MapCharacterBlocking.is_position_blocked_by_character(current_map, world_position)
+
+
+func _get_movement_collision_tilemap(current_map: Node) -> TileMapLayer:
+	if (
+		current_map == _movement_collision_map
+		and _movement_collision_tilemap != null
+		and is_instance_valid(_movement_collision_tilemap)
+	):
+		return _movement_collision_tilemap
+	_movement_collision_map = current_map
+	_movement_collision_tilemap = MapLayerResolverScript.find_tilemap_layer(
+		current_map,
+		["Collision"]
+	)
+	return _movement_collision_tilemap
 
 
 func _update_directional_sensors() -> void:
@@ -1135,7 +1157,9 @@ func _is_player_behind_npc(body: Node2D) -> bool:
 func _sync_thieving_prompt() -> void:
 	if thieving_prompt_button == null:
 		return
-	thieving_prompt_button.tooltip_text = _get_thieving_prompt_tooltip()
+	if not pickpocket_enabled or not player_nearby or nearby_player == null:
+		thieving_prompt_button.visible = false
+		return
 	thieving_prompt_button.visible = (
 		story_visibility_active
 		and not is_interacting
@@ -1157,6 +1181,16 @@ func _get_thieving_prompt_tooltip() -> String:
 		"ui.thieving.prompt.pickpocket",
 		{"hotkey": SettingsManager.get_input_binding_label("pickpocket")}
 	)
+
+
+func _refresh_thieving_prompt_tooltip() -> void:
+	if thieving_prompt_button != null:
+		thieving_prompt_button.tooltip_text = _get_thieving_prompt_tooltip()
+
+
+func _on_input_binding_changed(action: String, _keycode: Key) -> void:
+	if action == "pickpocket":
+		_refresh_thieving_prompt_tooltip()
 
 
 func _on_thieving_prompt_pressed() -> void:
@@ -1465,6 +1499,7 @@ func _on_locale_changed(_locale: String) -> void:
 	metadata_dialogue_id = ""
 	quest_marker_bindings.clear()
 	_refresh_quest_marker()
+	_refresh_thieving_prompt_tooltip()
 	_sync_thieving_prompt()
 	if preload_quest_markers:
 		_initialize_quest_markers.call_deferred()
@@ -1660,6 +1695,14 @@ func _update_sort_z() -> void:
 func _get_player_for_sorting() -> Node2D:
 	if nearby_player != null and is_instance_valid(nearby_player):
 		return nearby_player
+	if (
+		_sorting_player != null
+		and is_instance_valid(_sorting_player)
+		and _sorting_player.is_inside_tree()
+		and _sorting_player.is_in_group("player")
+	):
+		return _sorting_player
+	_sorting_player = null
 
 	var tree := get_tree()
 	if tree == null:
@@ -1668,17 +1711,23 @@ func _get_player_for_sorting() -> Node2D:
 	for candidate: Node in tree.get_nodes_in_group("player"):
 		var player_node := candidate as Node2D
 		if player_node != null and is_instance_valid(player_node):
-			return player_node
+			_sorting_player = player_node
+			return _sorting_player
 
 	return null
 
 
 func _get_player_visual_sort_depth(player_node: Node2D) -> int:
+	if player_node.has_method("get_visual_sort_depth"):
+		return maxi(
+			int(player_node.call("get_visual_sort_depth")),
+			DEFAULT_PLAYER_VISUAL_SORT_DEPTH
+		)
 	var look_node := player_node.get_node_or_null("Look")
-	if look_node == null:
-		return DEFAULT_PLAYER_VISUAL_SORT_DEPTH
-
-	return maxi(_get_max_relative_z_index(look_node), DEFAULT_PLAYER_VISUAL_SORT_DEPTH)
+	var depth := DEFAULT_PLAYER_VISUAL_SORT_DEPTH
+	if look_node != null:
+		depth = maxi(_get_max_relative_z_index(look_node), depth)
+	return depth
 
 
 func _get_max_relative_z_index(node: Node) -> int:
