@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring team hovers now show complete stats, HP, types, and move PP for both bots and selected catalog teams.
+
 - Clicking the calculator set button again now closes its open search menu.
 
 - Calculator sets with the same name appear once; choose their different builds through the variant selector.
