@@ -115,6 +115,10 @@ func get_training_ai_teams(request_node: HTTPRequest) -> Dictionary:
 		"/battle/pvp/training/ai/teams"
 	)
 
+
+func get_training_ai_statistics(request_node: HTTPRequest) -> Dictionary:
+	return await send_get_request(request_node, "/account/pvp/training-ai/statistics")
+
 func get_training_ai_team(request_node: HTTPRequest, team_id: String) -> Dictionary:
 	return await send_get_request(
 		request_node,

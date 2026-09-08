@@ -179,7 +179,22 @@ func _check_pvp_runtime_translation() -> void:
 		"AI training action uses the interactive room-button styling"
 	)
 	_check(ai_sparring_menu_button != null, "AI Sparring has its own PvP destination")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 4, "AI Sparring separates practice, team catalog, history and bot information")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 5, "AI Sparring separates practice, catalog, history, bot information and statistics")
+	_check(ai_sparring_tabs.get_tab_title(4) == "Statistieken", "Statistics tab is localized")
+	overlay.set("pvp_ai_sparring_stats_data", {"success": true, "bots": [
+		{"bot": "ai4", "version": "Classic v1", "completed": 2, "unconfirmed": 1, "sufficient": false},
+		{"bot": "ai5", "version": "Native Z v4", "completed": 10, "unconfirmed": 0, "sufficient": true, "winRate": 0.6, "nativeRate": 0.9, "fallbackRate": 0.1, "averageTurns": 25}
+	]})
+	overlay.call("_render_ai_sparring_stats")
+	var stats_list := overlay.get("pvp_ai_sparring_stats_list") as VBoxContainer
+	var stats_text := ""
+	for stats_label: Node in stats_list.find_children("*", "Label", true, false):
+		stats_text += (stats_label as Label).text + "\n"
+	_check(stats_text.contains("AI4 Scholar") and stats_text.contains("AI5 Grandmaster"), "Statistics show both bot versions")
+	_check(stats_text.contains("Nog onvoldoende gegevens") and stats_text.contains("60.0%") and stats_text.contains("90.0%"), "Statistics distinguish small samples from measured rates")
+	overlay.set("pvp_ai_sparring_stats_data", {"success": false})
+	overlay.call("_render_ai_sparring_stats")
+	_check(stats_list.get_child_count() == 0, "Failed statistics refresh does not leave stale rates visible")
 	_check(ai_sparring_tabs.get_tab_title(3) == "Over de bots", "Bot information tab is localized")
 	for bot_id: String in ["ai4", "ai5"]:
 		var card := overlay.find_child("AiSparringAboutCard_" + bot_id, true, false)

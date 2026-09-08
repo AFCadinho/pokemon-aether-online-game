@@ -914,6 +914,10 @@ var pvp_training_ai_catalog_loading := false
 var pvp_training_ai_enabled := false
 var pvp_ai_sparring_start_button: Button
 var pvp_ai_sparring_tabs: TabContainer
+var pvp_ai_sparring_stats_list: VBoxContainer
+var pvp_ai_sparring_stats_status: Label
+var pvp_ai_sparring_stats_data: Dictionary = {}
+var pvp_ai_sparring_stats_loading := false
 var pvp_ai_sparring_trainer_portrait: TextureRect
 var pvp_ai_sparring_bot_versions: Dictionary = {}
 var pvp_ai_sparring_about_versions: Dictionary = {}
@@ -2035,6 +2039,7 @@ func _refresh_pvp_localized_ui() -> void:
 	if not pvp_leaderboard_entries.is_empty():
 		_render_pvp_leaderboard(pvp_leaderboard_entries)
 	_render_pvp_history_matches(pvp_history_matches, pvp_history_user_id)
+	_render_ai_sparring_stats()
 	_refresh_ai_sparring_about()
 	_refresh_pvp_training_ai_mode_options()
 	_refresh_pvp_training_ai_team_source_options()
@@ -7576,7 +7581,112 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	about_layout.add_child(about_note)
 	_refresh_ai_sparring_about()
 	pvp_ai_sparring_tabs.current_tab = 0
+	pvp_ai_sparring_tabs.add_child(_create_ai_sparring_stats_page())
 	return page
+
+
+func _create_ai_sparring_stats_page() -> MarginContainer:
+	var page := _create_pvp_ranked_tab_page("Statistics", 14)
+	page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.statistics")
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 12)
+	page.add_child(layout)
+	var header := HBoxContainer.new()
+	layout.add_child(header)
+	pvp_ai_sparring_stats_status = Label.new()
+	pvp_ai_sparring_stats_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_ai_sparring_stats_status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(pvp_ai_sparring_stats_status)
+	var refresh := Button.new()
+	_set_localized_control_property(refresh, "text", "ui.pvp.bans.refresh")
+	_apply_button_style(refresh)
+	refresh.pressed.connect(_load_ai_sparring_stats)
+	header.add_child(refresh)
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_child(scroll)
+	pvp_ai_sparring_stats_list = VBoxContainer.new()
+	pvp_ai_sparring_stats_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_stats_list.add_theme_constant_override("separation", 14)
+	scroll.add_child(pvp_ai_sparring_stats_list)
+	_render_ai_sparring_stats()
+	return page
+
+
+func _load_ai_sparring_stats() -> void:
+	if pvp_ai_sparring_stats_loading:
+		return
+	pvp_ai_sparring_stats_loading = true
+	pvp_ai_sparring_stats_data = {}
+	_render_ai_sparring_stats()
+	var request := _create_pvp_request_node()
+	pvp_ai_sparring_stats_data = await BattleApiClient.get_training_ai_statistics(request)
+	request.queue_free()
+	pvp_ai_sparring_stats_loading = false
+	_render_ai_sparring_stats()
+
+
+func _render_ai_sparring_stats() -> void:
+	if pvp_ai_sparring_stats_list == null:
+		return
+	for child: Node in pvp_ai_sparring_stats_list.get_children():
+		pvp_ai_sparring_stats_list.remove_child(child)
+		child.queue_free()
+	var status_key := "period" if bool(pvp_ai_sparring_stats_data.get("success", false)) else "unavailable"
+	if pvp_ai_sparring_stats_loading:
+		status_key = "loading"
+	pvp_ai_sparring_stats_status.text = LocalizationManager.text("ui.pvp.ai_sparring.stats." + status_key)
+	if status_key != "period":
+		return
+	var bots: Variant = pvp_ai_sparring_stats_data.get("bots", [])
+	if not bots is Array:
+		return
+	for entry: Variant in bots:
+		if not entry is Dictionary or str(entry.get("bot", "")) not in ["ai4", "ai5"]:
+			continue
+		var is_ai5 := str(entry["bot"]) == "ai5"
+		var panel := PanelContainer.new()
+		panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#111c2e"), Color("#75619a") if is_ai5 else Color("#386b83"), 12, 1))
+		pvp_ai_sparring_stats_list.add_child(panel)
+		var margin := MarginContainer.new()
+		for edge: String in ["left", "right", "top", "bottom"]:
+			margin.add_theme_constant_override("margin_" + edge, 16)
+		panel.add_child(margin)
+		var content := VBoxContainer.new()
+		content.add_theme_constant_override("separation", 8)
+		margin.add_child(content)
+		var title := Label.new()
+		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		title.add_theme_font_size_override("font_size", 20)
+		title.text = LocalizationManager.text("ui.pvp.training.ai.mode_active" if is_ai5 else "ui.pvp.training.ai.mode_ai4") + " · " + str(entry.get("version", ""))
+		content.add_child(title)
+		for metric: String in ["completed", "unconfirmed", "winRate", "averageTurns", "nativeRate", "fallbackRate"]:
+			if not is_ai5 and metric in ["nativeRate", "fallbackRate"]:
+				continue
+			var line := HBoxContainer.new()
+			line.add_theme_constant_override("separation", 16)
+			content.add_child(line)
+			var name_label := Label.new()
+			name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			name_label.text = LocalizationManager.text("ui.pvp.ai_sparring.stats." + metric)
+			line.add_child(name_label)
+			var value_label := Label.new()
+			var value: Variant = entry.get(metric)
+			value_label.text = "—" if value == null else ("%.1f%%" % (float(value) * 100.0) if metric.ends_with("Rate") else str(value))
+			line.add_child(value_label)
+		if not bool(entry.get("sufficient", false)):
+			var insufficient := Label.new()
+			insufficient.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			insufficient.text = LocalizationManager.text("ui.pvp.ai_sparring.stats.insufficient")
+			insufficient.add_theme_color_override("font_color", Color("#e6bf86"))
+			content.add_child(insufficient)
+	var note := Label.new()
+	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	note.text = LocalizationManager.text("ui.pvp.ai_sparring.stats.note")
+	note.add_theme_color_override("font_color", Color("#a8b8cc"))
+	pvp_ai_sparring_stats_list.add_child(note)
 
 
 func _setup_pvp_mode_menu() -> void:
@@ -42928,7 +43038,8 @@ func _on_pvp_ai_sparring_tab_changed(tab_index: int) -> void:
 	var catalog_selected := tab_key == "ui.pvp.ai_sparring.tab.catalog"
 	var history_selected := tab_key == "ui.pvp.ai_sparring.tab.history"
 	var about_selected := tab_key == "ui.pvp.ai_sparring.tab.about"
-	pvp_room_selected_mode = "" if history_selected or catalog_selected or about_selected else "ai"
+	var stats_selected := tab_key == "ui.pvp.ai_sparring.tab.statistics"
+	pvp_room_selected_mode = "" if history_selected or catalog_selected or about_selected or stats_selected else "ai"
 	_set_pvp_popup_subtitle(_pvp_popup_subtitle_for_section("AI Sparring"))
 	if history_selected:
 		_refresh_pvp_ai_sparring_match_history()
@@ -42936,6 +43047,8 @@ func _on_pvp_ai_sparring_tab_changed(tab_index: int) -> void:
 		_refresh_ai_sparring_catalog_view()
 	if about_selected:
 		_load_ai_sparring_about()
+	if stats_selected:
+		_load_ai_sparring_stats()
 
 
 func _load_ai_sparring_about() -> void:
