@@ -92,6 +92,7 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_sparring_setup_steps := ai_team_step.get_parent() as HBoxContainer if ai_team_step != null else null
 	var training_ai_mode_row := overlay.get("pvp_training_ai_mode_row") as HBoxContainer
 	var training_ai_mode_select := overlay.get("pvp_training_ai_mode_select") as OptionButton
+	var training_ai_bot_select := overlay.get("pvp_training_ai_bot_select") as OptionButton
 	var training_ai_team_source_row := overlay.get("pvp_training_ai_team_source_row") as HBoxContainer
 	var training_ai_team_source_select := overlay.get("pvp_training_ai_team_source_select") as OptionButton
 	var training_ai_custom_team_input := overlay.get("pvp_training_ai_custom_team_input") as TextEdit
@@ -203,7 +204,7 @@ func _check_pvp_runtime_translation() -> void:
 	var stats_text := ""
 	for stats_label: Node in stats_list.find_children("*", "Label", true, false):
 		stats_text += (stats_label as Label).text + "\n"
-	_check(stats_text.contains("Beginner") and stats_text.contains("Grandmaster — Hard"), "Statistics show both bot versions")
+	_check(stats_text.contains("AI4 Scholar") and stats_text.contains("AI5 Grandmaster"), "Statistics show both bot versions")
 	_check(stats_text.contains("Nog onvoldoende gegevens") and stats_text.contains("60%") and stats_text.contains("90%") and stats_text.contains("26") and not stats_text.contains("10.0") and not stats_text.contains("25.6"), "Statistics show whole numbers and distinguish small samples from measured rates")
 	_check(stats_list.get_node_or_null("AiSparringOlderStatisticsToggle") == null, "No archive toggle without older statistics")
 	var archived_stats: Dictionary = overlay.get("pvp_ai_sparring_stats_data")
@@ -624,13 +625,18 @@ func _check_pvp_runtime_translation() -> void:
 		entry["eligibleTierIds"] = ["none", "aether-ou"]
 	training_ai_available_modes.assign(["ai4", "active", "extreme", "intermediate"])
 	overlay.call("_refresh_pvp_training_ai_mode_options")
-	_check(training_ai_mode_select.item_count == 3, "Intermediate stays hidden until implemented")
-	_check(training_ai_mode_select.get_item_text(0) == "Beginner", "AI4 is Beginner")
-	_check(training_ai_mode_select.get_item_text(1) == "Grandmaster — Hard", "Current AI5 is Hard")
-	_check(training_ai_mode_select.get_item_text(2) == "Grandmaster — Extreme", "Extreme uses the public sparring label")
-	training_ai_mode_select.select(2)
+	_check(training_ai_bot_select.item_count == 2, "Bot selector separates Scholar and Grandmaster")
+	_check(training_ai_bot_select.get_item_text(0) == "AI4 Scholar" and training_ai_bot_select.get_item_text(1) == "AI5 Grandmaster", "Bot names remain familiar")
+	_check(training_ai_mode_select.item_count == 1 and training_ai_mode_select.get_item_text(0) == "Beginner", "Scholar exposes only Beginner")
+	training_ai_bot_select.select(1)
+	overlay.call("_on_pvp_training_ai_bot_selected", 1)
+	_check(training_ai_mode_select.item_count == 2, "Intermediate stays hidden until implemented")
+	_check(training_ai_mode_select.get_item_text(0) == "Hard" and training_ai_mode_select.get_item_text(1) == "Extreme", "Grandmaster has a separate difficulty selector")
+	training_ai_mode_select.select(1)
 	_check(overlay.call("_selected_pvp_training_ai_mode") == "extreme", "Extreme selection preserves its server mode")
 	training_ai_available_modes.assign(["ai4", "active"])
+	training_ai_bot_select.select(0)
+	overlay.call("_on_pvp_training_ai_bot_selected", 0)
 	var training_ai_archetypes: Array = overlay.get("pvp_training_ai_catalog_archetypes") as Array
 	training_ai_archetypes.assign(["hyper_offense", "stall"])
 	overlay.set("pvp_training_ai_enabled", true)
@@ -642,7 +648,7 @@ func _check_pvp_runtime_translation() -> void:
 	_check(overlay.get("pvp_room_selected_mode") == "ai", "Free sparring selects the server-owned opponent flow")
 	_check(ai_training_input != null and ai_training_input.visible, "AI flow accepts an imported Gen 9 National Dex team")
 	_check(training_ai_mode_row != null and training_ai_mode_row.visible, "AI flow exposes AI4 and active AI5 execution modes")
-	_check(training_ai_mode_select != null and training_ai_mode_select.item_count == 2, "Both permitted AI modes are selectable")
+	_check(training_ai_bot_select.item_count == 2 and training_ai_mode_select.item_count == 1, "Both bots are selectable with filtered difficulties")
 	_check(str(training_ai_mode_select.get_selected_metadata()) == "ai4", "plain AI4 without shadow observation is the safe default")
 	_check(training_ai_team_source_row != null and training_ai_team_source_row.visible, "AI flow lets players choose a catalog or PokéPaste opponent")
 	_check(training_ai_team_source_select != null and training_ai_team_source_select.item_count == 2, "AI team source offers catalog and PokéPaste choices")
@@ -687,8 +693,8 @@ func _check_pvp_runtime_translation() -> void:
 	_check(ai_opponent_preview_grid.get_child(0).tooltip_text.contains("Mawile"), "Named AI team preview uses that team's roster")
 	var opponent_minimum_width_before_filter := ai_opponent_step.get_combined_minimum_size().x
 	var opponent_minimum_height_before_filter := ai_opponent_step.get_combined_minimum_size().y
-	training_ai_mode_select.select(1)
-	overlay.call("_on_pvp_training_ai_mode_selected", 1)
+	training_ai_bot_select.select(1)
+	overlay.call("_on_pvp_training_ai_bot_selected", 1)
 	_check(str(training_ai_mode_select.get_selected_metadata()) == "active", "AI5 mode can expose its complete catalog")
 	_check(training_ai_archetype_select.item_count == 3, "AI5 archetype selector keeps stall available")
 	_check(training_ai_team_select.item_count == 3, "AI5 team selector keeps stall teams available")
@@ -698,8 +704,8 @@ func _check_pvp_runtime_translation() -> void:
 	_check(str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-stall-example", "Filtered team keeps its stable catalog identity")
 	_check(str(overlay.call("_resolved_pvp_training_ai_team_id")) == "smogon-ndou-stall-example", "Random archetype choice resolves to the exact team that will battle")
 	_check(ai_opponent_preview_grid.get_child(0).tooltip_text == "Alomomola", "AI opponent preview exposes each Pokemon name on hover")
-	training_ai_mode_select.select(0)
-	overlay.call("_on_pvp_training_ai_mode_selected", 0)
+	training_ai_bot_select.select(0)
+	overlay.call("_on_pvp_training_ai_bot_selected", 0)
 	_check(str(training_ai_mode_select.get_selected_metadata()) == "ai4", "AI4 can be reselected after browsing AI5")
 	_check(str(training_ai_archetype_select.get_selected_metadata()) == "random", "Switching to AI4 clears a selected stall archetype")
 	_check(training_ai_archetype_select.item_count == 2, "Switching to AI4 removes stall from the archetype selector")

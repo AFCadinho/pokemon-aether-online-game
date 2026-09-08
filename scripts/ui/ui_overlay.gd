@@ -891,6 +891,8 @@ var pvp_training_room_team_input: TextEdit
 var pvp_training_room_team_note: Label
 var pvp_training_team_input: TextEdit
 var pvp_training_team_note: Label
+var pvp_training_ai_bot_row: HBoxContainer
+var pvp_training_ai_bot_select: OptionButton
 var pvp_training_ai_mode_row: HBoxContainer
 var pvp_training_ai_mode_select: OptionButton
 var pvp_training_ai_available_modes: Array[String] = []
@@ -6511,13 +6513,33 @@ func _setup_pvp_room_popup() -> void:
 	pvp_training_room_team_note.visible = false
 	pvp_room_form.add_child(pvp_training_room_team_note)
 
+	pvp_training_ai_bot_row = HBoxContainer.new()
+	pvp_training_ai_bot_row.add_theme_constant_override("separation", 8)
+	pvp_training_ai_bot_row.visible = false
+	pvp_room_form.add_child(pvp_training_ai_bot_row)
+	var bot_label := Label.new()
+	_set_localized_control_property(bot_label, "text", "ui.pvp.training.ai.mode_label")
+	bot_label.custom_minimum_size = Vector2(82, 36)
+	bot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	bot_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pvp_training_ai_bot_row.add_child(bot_label)
+	pvp_training_ai_bot_select = OptionButton.new()
+	pvp_training_ai_bot_select.custom_minimum_size = Vector2(0, 36)
+	pvp_training_ai_bot_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_bot_select.fit_to_longest_item = false
+	pvp_training_ai_bot_select.clip_text = true
+	pvp_training_ai_bot_select.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	pvp_training_ai_bot_select.focus_mode = Control.FOCUS_NONE
+	pvp_training_ai_bot_select.item_selected.connect(_on_pvp_training_ai_bot_selected)
+	_apply_pvp_ranked_dropdown_style(pvp_training_ai_bot_select, true)
+	pvp_training_ai_bot_row.add_child(pvp_training_ai_bot_select)
 	pvp_training_ai_mode_row = HBoxContainer.new()
 	pvp_training_ai_mode_row.add_theme_constant_override("separation", 8)
 	pvp_training_ai_mode_row.visible = false
 	pvp_room_form.add_child(pvp_training_ai_mode_row)
 
 	var training_ai_mode_label := Label.new()
-	_set_localized_control_property(training_ai_mode_label, "text", "ui.pvp.training.ai.mode_label")
+	_set_localized_control_property(training_ai_mode_label, "text", "ui.pvp.training.ai.difficulty_label")
 	training_ai_mode_label.custom_minimum_size = Vector2(82, 36)
 	training_ai_mode_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	training_ai_mode_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -7303,7 +7325,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	opponent_step.add_theme_color_override("font_color", Color("#b9aaff"))
 	opponent_layout.add_child(opponent_step)
 
-	for row: Control in [pvp_training_ai_mode_row, pvp_training_ai_team_source_row, pvp_training_ai_archetype_row, pvp_training_ai_team_row, pvp_training_ai_custom_team_input, pvp_training_ai_custom_team_note]:
+	for row: Control in [pvp_training_ai_bot_row, pvp_training_ai_mode_row, pvp_training_ai_team_source_row, pvp_training_ai_archetype_row, pvp_training_ai_team_row, pvp_training_ai_custom_team_input, pvp_training_ai_custom_team_note]:
 		row.reparent(opponent_layout)
 		row.visible = row != pvp_training_ai_custom_team_input and row != pvp_training_ai_custom_team_note
 
@@ -43487,6 +43509,8 @@ func _refresh_pvp_room_team_fields() -> void:
 		pvp_training_room_team_note.visible = needs_team and is_training
 	if pvp_training_ai_mode_row != null:
 		pvp_training_ai_mode_row.visible = true
+	if pvp_training_ai_bot_row != null:
+		pvp_training_ai_bot_row.visible = true
 	if pvp_training_ai_team_source_row != null:
 		pvp_training_ai_team_source_row.visible = true
 	_refresh_pvp_training_ai_team_source_ui()
@@ -43516,27 +43540,45 @@ func _refresh_pvp_room_form_title() -> void:
 
 
 func _refresh_pvp_training_ai_mode_options() -> void:
-	if pvp_training_ai_mode_select == null:
+	if pvp_training_ai_mode_select == null or pvp_training_ai_bot_select == null:
 		return
 	var previous_mode := _selected_pvp_training_ai_mode()
+	pvp_training_ai_bot_select.clear()
+	for bot: String in ["ai4", "ai5"]:
+		var supported := ("ai4" in pvp_training_ai_available_modes or "shadow" in pvp_training_ai_available_modes) if bot == "ai4" else ("active" in pvp_training_ai_available_modes or "extreme" in pvp_training_ai_available_modes)
+		if supported:
+			pvp_training_ai_bot_select.add_item("AI4 Scholar" if bot == "ai4" else "AI5 Grandmaster")
+			pvp_training_ai_bot_select.set_item_metadata(pvp_training_ai_bot_select.item_count - 1, bot)
+	if previous_mode not in pvp_training_ai_available_modes:
+		previous_mode = pvp_training_ai_default_mode
+	_select_option_by_metadata(pvp_training_ai_bot_select, "ai5" if previous_mode in ["active", "extreme"] else "ai4")
+	_refresh_pvp_training_ai_difficulty_options(previous_mode)
+
+
+func _refresh_pvp_training_ai_difficulty_options(preferred_mode: String = "") -> void:
 	pvp_training_ai_mode_select.clear()
-	for mode: String in pvp_training_ai_available_modes:
-		if mode not in ["ai4", "shadow", "active", "extreme"]:
+	var grandmaster := str(pvp_training_ai_bot_select.get_selected_metadata()) == "ai5"
+	var modes: Array = ["active", "extreme"] if grandmaster else (["ai4"] if "ai4" in pvp_training_ai_available_modes else ["shadow"])
+	for mode: String in modes:
+		if mode not in pvp_training_ai_available_modes:
 			continue
 		pvp_training_ai_mode_select.add_item(
-			LocalizationManager.text("ui.pvp.training.ai.mode_%s" % mode)
+			LocalizationManager.text("ui.pvp.training.ai.difficulty_%s" % mode)
 		)
 		pvp_training_ai_mode_select.set_item_metadata(
 			pvp_training_ai_mode_select.item_count - 1,
 			mode
 		)
-	var preferred_mode := previous_mode
-	if preferred_mode not in pvp_training_ai_available_modes:
-		preferred_mode = pvp_training_ai_default_mode
 	for index in range(pvp_training_ai_mode_select.item_count):
 		if str(pvp_training_ai_mode_select.get_item_metadata(index)) == preferred_mode:
 			pvp_training_ai_mode_select.select(index)
 			break
+	pvp_training_ai_mode_select.disabled = pvp_training_ai_mode_select.item_count <= 1
+
+
+func _on_pvp_training_ai_bot_selected(_index: int) -> void:
+	_refresh_pvp_training_ai_difficulty_options()
+	_on_pvp_training_ai_mode_selected(0)
 
 
 func _refresh_pvp_training_ai_archetype_options() -> void:
@@ -47835,7 +47877,9 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 	if pvp_timer_tier_select != null:
 		pvp_timer_tier_select.disabled = is_busy
 	if pvp_training_ai_mode_select != null:
-		pvp_training_ai_mode_select.disabled = is_busy
+		pvp_training_ai_mode_select.disabled = is_busy or pvp_training_ai_mode_select.item_count <= 1
+	if pvp_training_ai_bot_select != null:
+		pvp_training_ai_bot_select.disabled = is_busy
 	if pvp_training_ai_team_source_select != null:
 		pvp_training_ai_team_source_select.disabled = is_busy
 	if pvp_training_ai_custom_team_input != null:
