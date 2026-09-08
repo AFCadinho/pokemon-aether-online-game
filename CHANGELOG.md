@@ -3,6 +3,7 @@
 ## Unreleased
 
 - AI Sparring and the team catalog now start on Aether OU, offer only OU and UU, and share your tier selection.
+- Show FPS and server ping while playing with an optional, saved toggle in Graphics settings.
 
 - Bot statistics now use easy-to-read whole numbers.
 

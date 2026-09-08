@@ -1,4 +1,7 @@
 {
+  "ui.settings.show_performance": "Mostrar FPS e ping",
+  "ui.performance.measuring": "Medindo ping…",
+  "ui.performance.reconnecting": "Reconectando…",
   "ui.bag.discard.action": "Descartar",
   "ui.bag.discard.confirm": "Descartar {quantity} × {item}? Os itens serão perdidos permanentemente; você não receberá dinheiro.",
   "ui.bag.discard.failed": "Não foi possível descartar este item.",
