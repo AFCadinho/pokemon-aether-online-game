@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring and the team catalog now start on Aether OU, offer only OU and UU, and share your tier selection.
+
 - Bot statistics now use easy-to-read whole numbers.
 
 - Older AI5 statistics are now tucked away under View older versions.
