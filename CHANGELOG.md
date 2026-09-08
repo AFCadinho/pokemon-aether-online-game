@@ -15,7 +15,7 @@
 - About the bots now explains each Grandmaster difficulty and shows its own availability and version.
 - Riding mounts and walking keep a more consistent speed across frame rates, and mounted appearances use less repeated work and bounded cache memory.
 
-- AI Sparring statistics now separate Beginner, Intermediate, Hard and Extreme, each with its own results.
+- AI Sparring statistics now separate Beginner, Intermediate, Hard and Nightmare, each with its own results.
 
 - AI Sparring offers Grandmaster Intermediate when the server enables the fair bot, with separate match history.
 

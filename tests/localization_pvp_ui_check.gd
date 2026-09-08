@@ -222,13 +222,13 @@ func _check_pvp_runtime_translation() -> void:
 	older_toggle.button_pressed = false
 	_check(not older_stats.visible, "Older statistics can be collapsed again")
 	# New v1 difficulties are current cards, not archived Hard versions.
-	archived_stats["bots"].append({"bot": "ai5", "difficulty": "extreme", "version": "v1", "completed": 0})
+	archived_stats["bots"].append({"bot": "ai5", "difficulty": "nightmare", "version": "v1", "completed": 0})
 	archived_stats["bots"].append({"bot": "ai5", "difficulty": "intermediate", "version": "v1", "completed": 0})
 	var saved_modes: Variant = overlay.get("pvp_training_ai_available_modes").duplicate()
-	var test_modes: Array[String] = ["ai4", "active", "extreme"]
+	var test_modes: Array[String] = ["ai4", "active", "nightmare"]
 	overlay.set("pvp_training_ai_available_modes", test_modes)
 	overlay.call("_render_ai_sparring_stats")
-	_check(stats_list.get_node_or_null("AiSparringStatsCard_ai5_extreme_v1") != null, "Extreme has a separate current card")
+	_check(stats_list.get_node_or_null("AiSparringStatsCard_ai5_nightmare_v1") != null, "Nightmare has a separate current card")
 	_check(stats_list.get_node_or_null("AiSparringStatsCard_ai5_intermediate_v1") == null, "Unavailable Intermediate without results stays hidden")
 	test_modes.append("intermediate")
 	overlay.call("_render_ai_sparring_stats")
@@ -252,12 +252,12 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_apply_ai_sparring_bot_versions", {"success": true, "bots": [
 		{"id": "ai5", "version": "v4", "available": false},
 		{"id": "intermediate", "version": "v1", "available": false},
-		{"id": "extreme", "version": "v1", "available": true}
+		{"id": "nightmare", "version": "v1", "available": true}
 	]})
-	_check(bot_versions["extreme"].text.contains("Beschikbaar om tegen te spelen") and bot_versions["extreme"].text.contains("Serverversie: v1"), "Nightmare keeps its own version and availability when Hard is disabled")
+	_check(bot_versions["nightmare"].text.contains("Beschikbaar om tegen te spelen") and bot_versions["nightmare"].text.contains("Serverversie: v1"), "Nightmare keeps its own version and availability when Hard is disabled")
 	_check(bot_versions["intermediate"].text.contains("Momenteel niet beschikbaar"), "Intermediate reports its own availability")
 	overlay.call("_apply_ai_sparring_bot_versions", {"success": false})
-	_check(bot_versions["extreme"].text.contains("Beschikbaarheid niet bevestigd"), "Failed refresh clears all difficulty availability")
+	_check(bot_versions["nightmare"].text.contains("Beschikbaarheid niet bevestigd"), "Failed refresh clears all difficulty availability")
 	_check(bot_versions["ai5"].text.contains("Serverversie niet bevestigd"), "Missing server data does not claim a bot version")
 	overlay.set("pvp_ai_sparring_bot_versions", {"ai5": {"version": "Native Z v4", "available": true}})
 	overlay.call("_refresh_ai_sparring_about")
@@ -653,7 +653,7 @@ func _check_pvp_runtime_translation() -> void:
 	for entry: Dictionary in training_ai_catalog_entries:
 		entry["homeTierId"] = "aether-ou"
 		entry["eligibleTierIds"] = ["none", "aether-ou"]
-	training_ai_available_modes.assign(["ai4", "active", "extreme", "intermediate"])
+	training_ai_available_modes.assign(["ai4", "active", "nightmare", "intermediate"])
 	overlay.call("_refresh_pvp_training_ai_mode_options")
 	_check(training_ai_bot_select.item_count == 2, "Bot selector separates Scholar and Grandmaster")
 	_check(training_ai_bot_select.get_item_text(0) == "AI4 Scholar" and training_ai_bot_select.get_item_text(1) == "AI5 Grandmaster", "Bot names remain familiar")
@@ -665,7 +665,7 @@ func _check_pvp_runtime_translation() -> void:
 	training_ai_mode_select.select(0)
 	_check(overlay.call("_selected_pvp_training_ai_mode") == "intermediate", "Intermediate selection preserves its server mode")
 	training_ai_mode_select.select(2)
-	_check(overlay.call("_selected_pvp_training_ai_mode") == "extreme", "Nightmare selection preserves its compatible server mode")
+	_check(overlay.call("_selected_pvp_training_ai_mode") == "nightmare", "Nightmare selection preserves its server mode")
 	training_ai_available_modes.assign(["ai4", "active"])
 	training_ai_bot_select.select(0)
 	overlay.call("_on_pvp_training_ai_bot_selected", 0)
