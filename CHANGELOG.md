@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Busy maps now avoid repeated NPC and online-player calculations, improving smoothness in areas such as Cerulean City.
+- Sparring bots now show a simple version number, with a separate label for test versions.
 
 - Added a dedicated healing sound when medicine restores a Pokémon's HP.
 
