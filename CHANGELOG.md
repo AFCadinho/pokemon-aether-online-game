@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed moving multiple Pokémon in sequence through the PC box selector sending a later Pokémon into the first destination slot and swapping the earlier one back.
+
 - Reduced map setup pauses when entering Cerulean City and other areas with depth-sorted scenery.
 
 - The ping number now uses the same recent average as its colour indicator.
