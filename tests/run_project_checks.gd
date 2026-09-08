@@ -145,6 +145,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/tall_grass_rustle_effect_check.gd",
 	"res://tests/remote_player_render_layer_check.gd",
 	"res://tests/remote_player_ordering_performance_check.gd",
+	"res://tests/avatar_resource_lifecycle_check.gd",
 	"res://tests/tall_grass_scene_convention_check.gd",
 	"res://tests/players_house_visual_depth_check.gd",
 	"res://tests/players_house_location_label_check.gd",
