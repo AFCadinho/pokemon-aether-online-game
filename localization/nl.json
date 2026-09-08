@@ -3944,6 +3944,8 @@
   "battle.calc.assumed_ability_warning": "{ability} wordt gebruikt omdat de ability van de tegenstander nog niet bekend is.",
   "battle.calc.loading_default_ability": "Standaardability van deze Pokémon laden...",
   "battle.calc.custom_scenario": "Eigen scenario",
+  "battle.calc.search_sets": "Zoek sets op naam…",
+  "battle.calc.no_matching_sets": "Geen passende sets",
   "battle.calc.set_variant": "Setvariant",
   "battle.calc.sample_set_disclaimer": "Gebruikt standaard bevestigde battle-informatie. Kies een Aether- of Smogon-set, of pas waarden aan om een scenario door te rekenen.",
   "battle.calc.sample_sets_loading": "Samplesets laden...",

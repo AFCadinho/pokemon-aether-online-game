@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Opponent sets in the damage calculator can now be searched by name and selected with the mouse or keyboard.
+
 - The battle calculator now shows Smogon set sources and lets you choose between build variants.
 
 - The Item Dex and Pokédex build their windows when opened, fixed interface positions update only when needed, and busy maps check NPC obstacles more efficiently.

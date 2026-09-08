@@ -198,6 +198,7 @@ var sample_set_loading := false
 var sample_set_error := ""
 var selected_sample_set_id := ""
 var selected_sample_variant_id := ""
+var sample_set_search_popup: PopupPanel
 var current_default_ability := ""
 var current_default_ability_species := ""
 var current_default_ability_loading := false
@@ -761,6 +762,7 @@ func _get_condition_target_relation() -> String:
 
 
 func _clear_sample_sets() -> void:
+	_close_sample_set_search()
 	selected_sample_variant_id = ""
 	sample_set_options.clear()
 	sample_set_species = ""
@@ -781,6 +783,7 @@ func _request_sample_sets_if_needed() -> void:
 		)
 	):
 		return
+	_close_sample_set_search()
 	sample_set_options.clear()
 	sample_set_species = species
 	sample_set_format_id = format_id
@@ -823,6 +826,7 @@ func show_sample_set_catalog_response(species: String, response: Dictionary) -> 
 			if _is_valid_sample_group(entry):
 				options.append(entry.duplicate(true))
 		sample_set_options = options
+	_refresh_sample_set_search()
 	if is_inside_tree():
 		_render_current_state()
 
@@ -833,6 +837,7 @@ func show_sample_set_catalog_error(species: String, _error: String) -> void:
 	sample_set_loading = false
 	sample_set_options.clear()
 	sample_set_error = _t("battle.calc.sample_sets_unavailable")
+	_refresh_sample_set_search()
 	if is_inside_tree():
 		_render_current_state()
 
@@ -990,37 +995,163 @@ func _is_current_ability_assumed() -> bool:
 
 
 func _add_sample_set_selector(parent: Container) -> void:
-	var selector := OptionButton.new()
+	var selector := Button.new()
 	selector.name = "SampleSetSelector"
 	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	selector.tooltip_text = _t("battle.calc.set_selector_tooltip")
-	selector.add_item(_t("battle.calc.current"))
-	selector.set_item_metadata(0, "")
+	selector.tooltip_text = _t("battle.calc.search_sets")
+	selector.text = _t("battle.calc.current")
 	if selected_sample_set_id == "" and (not edited_assumption_fields.is_empty() or not field_scenario.is_empty()):
-		selector.add_item(_t("battle.calc.custom_scenario"))
-		selector.set_item_metadata(selector.item_count - 1, SAMPLE_SET_CUSTOM)
-		selector.select(selector.item_count - 1)
+		selector.text = _t("battle.calc.custom_scenario")
 	for option: Dictionary in sample_set_options:
-		var option_id := str(option.get("id", ""))
-		var source_label := _get_sample_set_source_label(option)
-		selector.add_item(str(option.get("name", option_id)) + (" · " + source_label if source_label != "" else ""))
-		selector.set_item_metadata(selector.item_count - 1, option_id)
-		selector.set_item_tooltip(selector.item_count - 1, _get_sample_set_tooltip(option))
-		if option_id == selected_sample_set_id:
-			selector.select(selector.item_count - 1)
-	if sample_set_loading:
-		selector.add_item(_t("battle.calc.sample_sets_loading"))
-		selector.set_item_disabled(selector.item_count - 1, true)
-	elif sample_set_error != "":
-		selector.add_item(sample_set_error)
-		selector.set_item_disabled(selector.item_count - 1, true)
-	selector.item_selected.connect(_on_sample_set_selected.bind(selector))
+		if str(option.get("id", "")) == selected_sample_set_id:
+			selector.text = _get_sample_set_display_name(option)
+	selector.icon = DROPDOWN_ARROW
+	selector.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	selector.pressed.connect(_open_sample_set_search.bind(selector))
 	_apply_calcdex_dropdown_style(selector, 36.0, 12)
-	selector.add_theme_constant_override("arrow_margin", 12)
 	if selected_sample_set_id != "" or not edited_assumption_fields.is_empty() or not field_scenario.is_empty():
 		selector.add_theme_color_override("font_color", TEXT_ACCENT)
 	parent.add_child(selector)
 	_add_sample_variant_selector(parent)
+
+
+func _get_sample_set_display_name(option: Dictionary) -> String:
+	var source := _get_sample_set_source_label(option)
+	return str(option.get("name", option.get("id", ""))) + (" · " + source if source != "" else "")
+
+
+func _close_sample_set_search() -> void:
+	var popup := sample_set_search_popup
+	sample_set_search_popup = null
+	if is_instance_valid(popup):
+		popup.hide()
+		popup.queue_free()
+
+
+func _refresh_sample_set_search() -> void:
+	if not is_instance_valid(sample_set_search_popup) or sample_set_search_popup.is_queued_for_deletion():
+		return
+	var input := sample_set_search_popup.find_child("SampleSetSearchInput", true, false) as LineEdit
+	var results := sample_set_search_popup.find_child("SampleSetSearchResults", true, false) as ItemList
+	if input != null and results != null:
+		_filter_sample_set_search(input.text, results)
+
+
+func _open_sample_set_search(anchor: Control) -> void:
+	_close_sample_set_search()
+	var popup := PopupPanel.new()
+	popup.name = "SampleSetSearchPopup"
+	popup.add_theme_stylebox_override("panel", _make_dropdown_popup_style())
+	add_child(popup)
+	sample_set_search_popup = popup
+	popup.popup_hide.connect(func() -> void:
+		if sample_set_search_popup == popup:
+			sample_set_search_popup = null
+		popup.queue_free()
+	)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 6)
+	popup.add_child(column)
+	var input := LineEdit.new()
+	input.name = "SampleSetSearchInput"
+	input.placeholder_text = _t("battle.calc.search_sets")
+	input.clear_button_enabled = true
+	input.max_length = 100
+	input.custom_minimum_size.y = 34
+	input.add_theme_font_size_override("font_size", 13)
+	input.add_theme_color_override("font_color", TEXT_PRIMARY)
+	input.add_theme_color_override("font_placeholder_color", TEXT_MUTED)
+	input.add_theme_stylebox_override("normal", _make_stylebox(SURFACE_CANVAS, DROPDOWN_BORDER, 4, 8.0, 4.0))
+	input.add_theme_stylebox_override("focus", _make_stylebox(SURFACE_CANVAS, DROPDOWN_FOCUS_BORDER, 4, 8.0, 4.0))
+	column.add_child(input)
+	var results := ItemList.new()
+	results.name = "SampleSetSearchResults"
+	results.custom_minimum_size = Vector2(260, 230)
+	results.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	results.allow_reselect = true
+	results.add_theme_font_size_override("font_size", 13)
+	results.add_theme_color_override("font_color", TEXT_PRIMARY)
+	results.add_theme_color_override("font_selected_color", Color.WHITE)
+	results.add_theme_constant_override("v_separation", 8)
+	results.add_theme_stylebox_override("panel", _make_stylebox(DROPDOWN_BG, Color.TRANSPARENT, 0, 2.0, 2.0))
+	results.add_theme_stylebox_override("selected", _make_dropdown_popup_item_style(DROPDOWN_HOVER_BG, DROPDOWN_HOVER_BORDER))
+	results.add_theme_stylebox_override("selected_focus", _make_dropdown_popup_item_style(DROPDOWN_HOVER_BG, DROPDOWN_FOCUS_BORDER))
+	column.add_child(results)
+	input.text_changed.connect(_filter_sample_set_search.bind(results))
+	input.text_submitted.connect(func(_query: String) -> void: _activate_sample_set_search_selection(results))
+	input.gui_input.connect(_on_sample_set_search_key.bind(results, input))
+	results.item_clicked.connect(func(index: int, _position: Vector2, button: int) -> void:
+		if button == MOUSE_BUTTON_LEFT:
+			_choose_sample_set_search_result(index, results)
+	)
+	results.item_activated.connect(_choose_sample_set_search_result.bind(results))
+	_filter_sample_set_search("", results)
+	var popup_size := Vector2i(380, 290)
+	var position := Vector2i(anchor.get_screen_position() + Vector2(0, anchor.size.y))
+	popup.popup(Rect2i(position, popup_size))
+	input.grab_focus.call_deferred()
+
+
+func _filter_sample_set_search(query: String, results: ItemList) -> void:
+	results.clear()
+	var normalized := query.strip_edges().to_lower()
+	var entries: Array[Dictionary] = [{"id": "", "name": _t("battle.calc.current")}]
+	if selected_sample_set_id == "" and (not edited_assumption_fields.is_empty() or not field_scenario.is_empty()):
+		entries.append({"id": SAMPLE_SET_CUSTOM, "name": _t("battle.calc.custom_scenario")})
+	entries.append_array(sample_set_options)
+	for entry: Dictionary in entries:
+		var label := _get_sample_set_display_name(entry)
+		if normalized != "" and not label.to_lower().contains(normalized):
+			continue
+		var index := results.add_item(label)
+		results.set_item_metadata(index, str(entry.get("id", "")))
+		results.set_item_tooltip(index, _get_sample_set_tooltip(entry))
+		if str(entry.get("id", "")) == selected_sample_set_id:
+			results.select(index)
+	if results.item_count == 0 or sample_set_loading or sample_set_error != "":
+		var message := _t("battle.calc.no_matching_sets")
+		if sample_set_loading:
+			message = _t("battle.calc.sample_sets_loading")
+		elif sample_set_error != "":
+			message = sample_set_error
+		results.add_item(message)
+		results.set_item_disabled(results.item_count - 1, true)
+	if results.get_selected_items().is_empty() and not results.is_item_disabled(0):
+		results.select(0)
+
+
+func _on_sample_set_search_key(event: InputEvent, results: ItemList, input: LineEdit) -> void:
+	if not (event is InputEventKey) or not event.pressed or event.keycode not in [KEY_UP, KEY_DOWN]:
+		return
+	var selected := results.get_selected_items()
+	var index := selected[0] if not selected.is_empty() else -1
+	index = clampi(index + (1 if event.keycode == KEY_DOWN else -1), 0, results.item_count - 1)
+	if index >= 0 and not results.is_item_disabled(index):
+		results.select(index)
+		results.ensure_current_is_visible()
+	input.accept_event()
+
+
+func _activate_sample_set_search_selection(results: ItemList) -> void:
+	var selected := results.get_selected_items()
+	if not selected.is_empty():
+		_choose_sample_set_search_result(selected[0], results)
+
+
+func _choose_sample_set_search_result(index: int, results: ItemList) -> void:
+	if index < 0 or index >= results.item_count or results.is_item_disabled(index):
+		return
+	var set_id := str(results.get_item_metadata(index))
+	_close_sample_set_search()
+	if set_id == SAMPLE_SET_CUSTOM:
+		return
+	if set_id == "":
+		_reset_to_current()
+		return
+	for option: Dictionary in sample_set_options:
+		if str(option.get("id", "")) == set_id:
+			_apply_sample_set(option)
+			return
 
 
 func _get_sample_set_source_label(option: Dictionary) -> String:
@@ -1081,19 +1212,6 @@ func _on_sample_variant_selected(index: int, group_id: String) -> void:
 		if index >= 0 and index < variants.size():
 			_apply_sample_set(_as_dictionary(variants[index]), group_id)
 		return
-
-
-func _on_sample_set_selected(index: int, selector: OptionButton) -> void:
-	var option_id := str(selector.get_item_metadata(index))
-	if option_id == SAMPLE_SET_CUSTOM:
-		return
-	if option_id == "":
-		_reset_to_current()
-		return
-	for option: Dictionary in sample_set_options:
-		if str(option.get("id", "")) == option_id:
-			_apply_sample_set(option)
-			return
 
 
 func _reset_to_current() -> void:
@@ -5060,7 +5178,7 @@ func _get_ev_full_display_name(stat_key: String) -> String:
 	return _t("battle.calc.ev_stat.%s" % stat_key)
 
 
-func _apply_calcdex_dropdown_style(selector: OptionButton, minimum_height: float, font_size: int) -> void:
+func _apply_calcdex_dropdown_style(selector: Button, minimum_height: float, font_size: int) -> void:
 	if selector == null:
 		return
 	selector.custom_minimum_size.y = maxf(selector.custom_minimum_size.y, minimum_height)
@@ -5097,7 +5215,9 @@ func _apply_calcdex_dropdown_style(selector: OptionButton, minimum_height: float
 		_make_dropdown_button_style(Color(SURFACE_PANEL, 0.76), Color(BORDER_NEUTRAL, 0.60))
 	)
 
-	var popup := selector.get_popup()
+	if not (selector is OptionButton):
+		return
+	var popup := (selector as OptionButton).get_popup()
 	if popup == null:
 		return
 	_apply_calcdex_popup_style(popup, font_size)
