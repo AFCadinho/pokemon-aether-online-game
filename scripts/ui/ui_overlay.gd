@@ -40602,7 +40602,11 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 		{"location": _pc_storage_location_label(location)}
 	))
 	_refresh_party()
-	await _refresh_pc_state(_pc_search_query() != "")
+	# A move through the box selector can target a box other than the visible
+	# one. Refresh every cached box so the next selector drop resolves its first
+	# open slot from the server's authoritative state, rather than stale data.
+	var refresh_all_boxes := str(source.get("type", "")) == "box" or str(target.get("type", "")) == "box"
+	await _refresh_pc_state(refresh_all_boxes)
 
 
 func _pc_storage_location_label(value: Variant) -> String:

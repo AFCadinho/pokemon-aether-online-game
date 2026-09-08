@@ -109,6 +109,8 @@ func _check_ui_overlay_wrapper_exists() -> void:
 	_check_equal(source.contains('_preview_pc_slot_move(source, target)'), true, "UIOverlay applies the immediate PC slot preview")
 	_check_equal(source.contains('"ui.storage.move.saving"'), true, "UIOverlay distinguishes an immediate preview from persisted storage")
 	_check_equal(source.contains("_render_pc_party()") and source.contains("_render_pc_box()"), true, "UIOverlay can restore authoritative PC slots after a failed move")
+	_check_equal(source.contains("var refresh_all_boxes := str(source.get(\"type\", \"\")) == \"box\" or str(target.get(\"type\", \"\")) == \"box\""), true, "PC moves refresh all cached boxes when either endpoint is a box")
+	_check_equal(source.contains("await _refresh_pc_state(refresh_all_boxes)"), true, "PC box moves reload the selector destination cache after saving")
 	_check_equal(source.contains("pc_party_slot_by_owned_id"), true, "UIOverlay tracks PC party storage slots")
 	_check_equal(source.contains("func _pc_party_pokemon_at_storage_slot"), true, "UIOverlay can inspect party storage slots")
 	_check_equal(source.contains("func _pc_storage_slot_for_party_pokemon"), true, "UIOverlay translates compact party rows to storage slots")
