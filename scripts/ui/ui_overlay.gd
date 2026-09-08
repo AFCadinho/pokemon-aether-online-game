@@ -7680,6 +7680,13 @@ func _create_ai_sparring_stats_page() -> MarginContainer:
 	_apply_button_style(refresh)
 	refresh.pressed.connect(_load_ai_sparring_stats)
 	header.add_child(refresh)
+	var scope_note := Label.new()
+	scope_note.name = "AiSparringStatisticsScope"
+	scope_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	scope_note.add_theme_font_size_override("font_size", 14)
+	scope_note.add_theme_color_override("font_color", Color("#efd080"))
+	_set_localized_control_property(scope_note, "text", "ui.pvp.ai_sparring.stats.scope")
+	layout.add_child(scope_note)
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
