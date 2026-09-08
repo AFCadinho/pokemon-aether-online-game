@@ -4,6 +4,8 @@ class_name GuildEmblemTexture
 
 const EMBLEM_SIZE := 32
 const EMBLEM_PIXEL_COUNT := EMBLEM_SIZE * EMBLEM_SIZE
+const NAMEPLATE_CACHE_LIMIT := 64
+static var _nameplate_cache: Dictionary = {}
 
 
 static func create_texture(emblem: Dictionary) -> Texture2D:
@@ -12,6 +14,9 @@ static func create_texture(emblem: Dictionary) -> Texture2D:
 
 
 static func create_nameplate_texture(emblem: Dictionary) -> Texture2D:
+	var key := JSON.stringify([emblem.get("palette", []), emblem.get("pixels", [])])
+	if _nameplate_cache.has(key):
+		return _nameplate_cache[key] as Texture2D
 	var image := _image_from_emblem(emblem)
 	if image == null:
 		return null
@@ -28,7 +33,11 @@ static func create_nameplate_texture(emblem: Dictionary) -> Texture2D:
 			(crop_size - used_rect.size.y) / 2
 		)
 	)
-	return ImageTexture.create_from_image(thumbnail)
+	var texture := ImageTexture.create_from_image(thumbnail)
+	if _nameplate_cache.size() >= NAMEPLATE_CACHE_LIMIT:
+		_nameplate_cache.erase(_nameplate_cache.keys()[0])
+	_nameplate_cache[key] = texture
+	return texture
 
 
 static func _image_from_emblem(emblem: Dictionary) -> Image:

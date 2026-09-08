@@ -1632,6 +1632,13 @@ var global_buff_notification_tokens: Dictionary = {}
 var global_buff_activation_sound_pending := false
 
 # Called when the node enters the scene tree for the first time.
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		for loader: Node in [pokemon_summary_sprite_loader, pokedex_sprite_loader]:
+			if is_instance_valid(loader):
+				loader.free()
+
+
 func _ready() -> void:
 	add_to_group("ui_overlay")
 	layer = UI_OVERLAY_BASE_LAYER

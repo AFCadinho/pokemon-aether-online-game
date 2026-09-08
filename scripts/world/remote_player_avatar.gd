@@ -211,6 +211,9 @@ var gameplay_identity_masked := false
 var gameplay_identity_placeholder := "???"
 var last_aethernet_effect_sequence := -1
 var active_aethernet_effect: Node
+var _rendered_emblem: Dictionary = {}
+var _emblem_initialized := false
+var _rendered_animation_state: Array = []
 
 
 func _ready() -> void:
@@ -218,6 +221,8 @@ func _ready() -> void:
 	z_as_relative = false
 	y_sort_enabled = true
 	_create_visual()
+	visibility_changed.connect(_on_visual_visibility_changed)
+	_on_visual_visibility_changed()
 	_update_animation(false)
 	_update_sort_z()
 
@@ -517,6 +522,7 @@ func _apply_appearance_state(appearance_state: Dictionary) -> void:
 		)
 	)
 	current_appearance_state = next_appearance_state
+	_rendered_animation_state.clear()
 	current_appearance_signature = signature
 	if body_id != current_body_id \
 		or current_gender != current_body_gender \
@@ -979,6 +985,10 @@ func clear_gameplay_identity_mask_override() -> void:
 func _apply_guild_emblem(emblem: Dictionary) -> void:
 	if guild_emblem == null:
 		return
+	if _emblem_initialized and emblem == _rendered_emblem:
+		return
+	_emblem_initialized = true
+	_rendered_emblem = emblem.duplicate(true)
 	guild_emblem.texture = GuildEmblemTexture.create_nameplate_texture(emblem)
 	guild_emblem.visible = guild_emblem.texture != null
 	if guild_emblem_background != null:
@@ -1734,6 +1744,18 @@ func _get_appearance_signature(appearance_state: Dictionary) -> String:
 
 
 func _update_animation(is_moving: bool) -> void:
+	if is_inside_tree() and not is_visible_in_tree():
+		_rendered_animation_state.clear()
+		return
+	var next_state: Array = [is_moving, last_direction, current_activity_style,
+		current_mount_id, current_appearance_signature, current_body_movement_style]
+	if next_state == _rendered_animation_state:
+		if is_moving:
+			_sync_all_part_sprites_to_body()
+			_sync_mount_rider_delta()
+			_sync_mount_foreground_frame()
+		return
+	_rendered_animation_state = next_state
 	_apply_directional_appearance_layer_order()
 	_sync_activity_layer_offsets()
 	var uses_static_pose := _uses_static_activity_movement_pose()
@@ -1763,6 +1785,12 @@ func _update_animation(is_moving: bool) -> void:
 	_sync_mount_rider_delta()
 	_sync_mount_foreground_frame()
 	_apply_activity_visual_offset()
+
+
+func _on_visual_visibility_changed() -> void:
+	_rendered_animation_state.clear()
+	if look_node != null:
+		look_node.process_mode = Node.PROCESS_MODE_INHERIT if is_visible_in_tree() else Node.PROCESS_MODE_DISABLED
 
 
 func _uses_static_activity_movement_pose() -> bool:
