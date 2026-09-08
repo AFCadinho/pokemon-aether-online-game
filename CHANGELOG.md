@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- The Item Dex and Pokédex build their windows when opened, fixed interface positions update only when needed, and busy maps check NPC obstacles more efficiently.
+- The weather effects setting now also controls overworld rain and snow.
+
 - Bursts of online player, chat and battle updates are spread across frames to reduce short freezes without dropping updates.
 
 - Pokémon previews reuse processed sprites, new appearance colours avoid duplicate work, and visual caches have limits to reduce memory use.

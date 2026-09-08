@@ -73,7 +73,9 @@ func _check_pokedex_runtime_translation() -> void:
 	_check_eelevate_hover(overlay)
 
 	localization_manager.call("set_locale", "pt_BR")
-	overlay.call("_on_locale_changed", "pt_BR")
+	# This fixture builds only dex windows, not the chat and buff HUD.
+	overlay.call("_refresh_pokedex_localized_ui")
+	overlay.call("_refresh_wild_pokemon_localized_ui")
 	_check(search != null and search.placeholder_text == "Buscar por nome ou número...", "Pokédex search updates to Portuguese")
 	_check(
 		dex_selector != null and dex_selector.get_item_text(0) == "Dex Nacional",

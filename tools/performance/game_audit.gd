@@ -34,8 +34,16 @@ func _run() -> void:
 		for _i in 300:
 			Blocking.is_position_blocked_by_character(topology, Vector2(-100000, -100000))
 		var collision_ms := (Time.get_ticks_usec() - started) / 300000.0
+		# Synthetic topology only: entering it runs no real map/NPC startup hooks.
+		root.add_child(topology)
+		Blocking.is_position_blocked_by_character(topology, Vector2(-100000, -100000))
+		started = Time.get_ticks_usec()
+		for _i in 300:
+			Blocking.is_position_blocked_by_character(topology, Vector2(-100000, -100000))
+		var indexed_collision_ms := (Time.get_ticks_usec() - started) / 300000.0
 		print(JSON.stringify({"scene": path, "load_ms": load_ms, "instantiate_ms": instantiate_ms,
-			"nodes_before_ready": nodes, "synthetic_topology_scan_ms": collision_ms}))
+			"nodes_before_ready": nodes, "synthetic_topology_scan_ms": collision_ms,
+			"synthetic_indexed_scan_ms": indexed_collision_ms}))
 		topology.free()
 		var detached_loaders: Array[Node] = []
 		for property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
