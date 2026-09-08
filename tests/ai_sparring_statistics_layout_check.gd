@@ -28,13 +28,14 @@ func _run() -> void:
 				{"bot": "ai5", "version": "v5", "completed": 124, "unconfirmed": 0, "winRate": 0.62, "averageTurns": 32, "nativeRate": 0.99, "fallbackRate": 0.01, "sufficient": true},
 				{"bot": "ai5", "difficulty": "intermediate", "version": "v1", "completed": 10, "winRate": 0.4, "averageTurns": 40, "sufficient": true},
 				{"bot": "ai5", "difficulty": "expert", "version": "v1", "completed": 10, "winRate": 0.6, "averageTurns": 30, "sufficient": true},
+				{"bot": "ai5", "difficulty": "master", "version": "v1", "completed": 10, "winRate": 0.7, "averageTurns": 28, "sufficient": true},
 				{"bot": "ai5", "difficulty": "nightmare", "version": "v1", "completed": 10, "winRate": 1.0, "averageTurns": 20, "sufficient": true}
 			]})
 			overlay.call("_render_ai_sparring_stats")
 			for frame: int in range(8):
 				await process_frame
 			var list := overlay.get("pvp_ai_sparring_stats_list") as VBoxContainer
-			for bot: String in ["ai4_beginner_v1", "ai5_hard_v5", "ai5_intermediate_v1", "ai5_expert_v1", "ai5_nightmare_v1"]:
+			for bot: String in ["ai4_beginner_v1", "ai5_hard_v5", "ai5_intermediate_v1", "ai5_expert_v1", "ai5_master_v1", "ai5_nightmare_v1"]:
 				var card := list.get_node("AiSparringStatsCard_" + bot) as PanelContainer
 				_check(card.get_global_rect().end.x <= width + 1, "Card fits viewport: " + locale + str(width))
 				var grid := card.find_child("Metrics", true, false) as GridContainer

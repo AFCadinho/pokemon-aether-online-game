@@ -1,4 +1,8 @@
 {
+  "ui.pvp.training.ai.difficulty_master": "Master",
+  "ui.pvp.training.ai.mode_master": "Grandmaster — Master",
+  "ui.pvp.ai_sparring.history.opponent_master": "对手：Grandmaster — Master",
+  "ui.pvp.ai_sparring.about.difficulty_master": "以 Hard 难度作战。当知道你选择的行动能带来明显优势时，会在该回合启用 Nightmare。练习局势布局，以及能够应对多种回应的行动。",
   "ui.settings.performance_hint": "FPS 表示游戏画面的流畅程度，延迟表示服务器的响应时间。延迟数值和颜色均基于最近最多五次测量的平均值：绿色为低，橙色为中等，红色为高。",
   "ui.settings.performance_details": "显示详细性能数据",
   "ui.settings.performance_details_hint": "开启性能显示时，还会显示最近 5 秒的平均帧耗时，以及最慢一帧对应的 FPS。帧耗时较高或最低 FPS 较低可能说明出现了卡顿。",
