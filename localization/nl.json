@@ -4021,6 +4021,7 @@
   "battle.calc.error.assumptions": "Aannames konden niet worden geladen.",
   "battle.calc.error.direction_mismatch": "De calculator heeft een verouderd resultaat voor de andere schaderichting geweigerd.",
   "battle.calc.error.failed": "Schadeberekening mislukt.",
+  "battle.calc.error.invalid_snapshot_data": "De calculator kon niet laden omdat een of meer Pokémon ongeldige of onvolledige battledata hebben. Controleer hun aanvallen, Ability, IV's en EV's (maximaal 510 in totaal).",
   "battle.calc.error.reverse_requires_safe_snapshot": "Ontvangen schade wacht op een privacyveilige battle-snapshot. Probeer het opnieuw nadat de battle-status is vernieuwd.",
   "battle.calc.error.safe_snapshot_required": "De calculator wacht op een privacyveilige battle-snapshot. Probeer het opnieuw nadat de battle-status is vernieuwd.",
   "battle.calc.error.selection": "Selecteer een beschikbare aanvaller en verdediger.",

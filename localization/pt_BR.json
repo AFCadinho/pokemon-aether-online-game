@@ -4025,6 +4025,7 @@
   "battle.calc.error.assumptions": "Não foi possível carregar as suposições.",
   "battle.calc.error.direction_mismatch": "A calculadora rejeitou um resultado desatualizado da outra direção de dano.",
   "battle.calc.error.failed": "O cálculo de dano falhou.",
+  "battle.calc.error.invalid_snapshot_data": "A calculadora não pôde carregar porque um ou mais Pokémon têm dados de batalha inválidos ou incompletos. Verifique os golpes, a Habilidade, os IVs e os EVs (máximo de 510 no total).",
   "battle.calc.error.reverse_requires_safe_snapshot": "O dano recebido aguarda um snapshot de batalha seguro para privacidade. Tente novamente após a atualização do estado da batalha.",
   "battle.calc.error.safe_snapshot_required": "A calculadora aguarda um snapshot de batalha seguro para privacidade. Tente novamente após a atualização do estado da batalha.",
   "battle.calc.error.selection": "Selecione um atacante e defensor disponíveis.",
