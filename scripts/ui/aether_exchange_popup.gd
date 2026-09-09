@@ -89,6 +89,10 @@ var subtitle_label: Label
 var money_label: Label
 var tab_buttons: Dictionary = {}
 var context_row: HBoxContainer
+var context_panel: PanelContainer
+var context_title_label: Label
+var context_description_label: Label
+var context_segment_panel: PanelContainer
 var context_buttons: Dictionary = {}
 var asset_buttons: Dictionary = {}
 var request_item_button: Button
@@ -406,21 +410,51 @@ func _build_tabs() -> Control:
 		var button := Button.new()
 		button.custom_minimum_size = Vector2(160, 42)
 		button.pressed.connect(_on_section_pressed.bind(section))
+		_apply_primary_navigation_style(button)
 		row.add_child(button)
 		tab_buttons[section] = button
 	return row
 
 
 func _build_context_navigation() -> Control:
+	context_panel = PanelContainer.new()
+	context_panel.name = "ExchangeContextPanel"
+	context_panel.custom_minimum_size = Vector2(0, 52)
+	context_panel.add_theme_stylebox_override(
+		"panel", _compact_panel_style(Color("#071522cc"), Color("#29465b99"), 10, 1, 14, 5)
+	)
 	context_row = HBoxContainer.new()
-	context_row.add_theme_constant_override("separation", 8)
+	context_row.add_theme_constant_override("separation", 14)
+	context_panel.add_child(context_row)
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.alignment = BoxContainer.ALIGNMENT_CENTER
+	copy.add_theme_constant_override("separation", 2)
+	context_row.add_child(copy)
+	context_title_label = Label.new()
+	context_title_label.add_theme_font_size_override("font_size", 16)
+	context_title_label.add_theme_color_override("font_color", UI_TEXT)
+	copy.add_child(context_title_label)
+	context_description_label = Label.new()
+	context_description_label.add_theme_font_size_override("font_size", 10)
+	context_description_label.add_theme_color_override("font_color", UI_MUTED)
+	copy.add_child(context_description_label)
+	context_segment_panel = PanelContainer.new()
+	context_segment_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	context_segment_panel.add_theme_stylebox_override(
+		"panel", _compact_panel_style(Color("#040b13e8"), Color("#29465b88"), 8, 1, 4, 4)
+	)
+	context_row.add_child(context_segment_panel)
+	var segments := HBoxContainer.new()
+	segments.add_theme_constant_override("separation", 3)
+	context_segment_panel.add_child(segments)
 	for mode: String in ["sell", "wanted", "active", "history", "browse"]:
 		var button := Button.new()
-		button.custom_minimum_size = Vector2(140, 34)
+		button.custom_minimum_size = Vector2(128, 32)
 		button.pressed.connect(_on_context_pressed.bind(mode))
-		context_row.add_child(button)
+		segments.add_child(button)
 		context_buttons[mode] = button
-	return context_row
+	return context_panel
 
 
 func _on_context_pressed(mode: String) -> void:
@@ -454,7 +488,7 @@ func _build_filters() -> Control:
 		var button := Button.new()
 		button.custom_minimum_size = Vector2(100, 36)
 		button.pressed.connect(_on_filter_pressed.bind(filter_id))
-		_apply_button_style(button)
+		_apply_category_button_style(button)
 		row.add_child(button)
 		asset_buttons[filter_id] = button
 	search_input = LineEdit.new()
@@ -468,7 +502,7 @@ func _build_filters() -> Control:
 	advanced_filter_button.name = "AdvancedFilterButton"
 	advanced_filter_button.custom_minimum_size = Vector2(112, 36)
 	advanced_filter_button.pressed.connect(_toggle_advanced_filter_panel)
-	_apply_button_style(advanced_filter_button)
+	_apply_utility_button_style(advanced_filter_button)
 	row.add_child(advanced_filter_button)
 	browse_sort_button = OptionButton.new()
 	browse_sort_button.name = "BrowseSortButton"
@@ -486,7 +520,7 @@ func _build_filters() -> Control:
 	refresh_button.pressed.connect(_refresh_current_tab)
 	refresh_button.name = "RefreshButton"
 	refresh_button.text = "↻"
-	_apply_button_style(refresh_button)
+	_apply_utility_button_style(refresh_button)
 	row.add_child(refresh_button)
 	return row
 
@@ -670,7 +704,7 @@ func _new_tristate_filter_option() -> OptionButton:
 
 
 func _apply_filter_option_style(option: OptionButton) -> void:
-	_apply_button_style(option)
+	_apply_utility_button_style(option)
 	option.add_theme_icon_override("arrow", DROPDOWN_ARROW)
 	option.add_theme_constant_override("arrow_margin", 10)
 	var popup := option.get_popup()
@@ -1435,7 +1469,7 @@ func _entry_button(entry: Dictionary, kind: String) -> Button:
 	button.set_meta("exchange_selection_key", _entry_selection_key(entry, kind))
 	button.set_meta("exchange_kind", kind)
 	button.pressed.connect(_select_entry.bind(entry, kind))
-	_apply_button_style(button, _entry_matches_selection(entry, kind))
+	_apply_listing_button_style(button, _entry_matches_selection(entry, kind))
 	return button
 
 
@@ -1529,7 +1563,7 @@ func _select_entry(entry: Dictionary, kind: String) -> void:
 	# Keep the grid and scroll position intact while inspecting another offer.
 	for child: Node in list_container.get_children():
 		if child is Button:
-			_apply_button_style(child, str(child.get_meta("exchange_kind", "")) == kind and str(child.get_meta("exchange_selection_key", "")) == _entry_selection_key(entry, kind))
+			_apply_listing_button_style(child, str(child.get_meta("exchange_kind", "")) == kind and str(child.get_meta("exchange_selection_key", "")) == _entry_selection_key(entry, kind))
 	_render_detail()
 
 
@@ -1661,16 +1695,21 @@ func _build_pokemon_detail_header(asset: Dictionary) -> Control:
 	var hero := PanelContainer.new()
 	hero.name = "PokemonPurchaseHeader"
 	hero.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, Color.TRANSPARENT, 10, 0))
-	var information := VBoxContainer.new()
-	information.add_theme_constant_override("separation", 12)
-	hero.add_child(information)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	hero.add_child(row)
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(80, 80)
+	icon.custom_minimum_size = Vector2(72, 72)
 	icon.texture = _entry_texture(selected_entry, selected_kind)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	information.add_child(icon)
+	row.add_child(icon)
+	var information := VBoxContainer.new()
+	information.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	information.alignment = BoxContainer.ALIGNMENT_CENTER
+	information.add_theme_constant_override("separation", 4)
+	row.add_child(information)
 	var name := Label.new()
 	name.text = _entry_name(selected_entry, selected_kind)
 	name.tooltip_text = name.text
@@ -1685,7 +1724,10 @@ func _build_pokemon_detail_header(asset: Dictionary) -> Control:
 		traits.text += " · HA"
 	traits.add_theme_color_override("font_color", UI_MUTED)
 	information.add_child(traits)
-	information.add_child(_build_summary_button(asset))
+	var summary_button := _build_summary_button(asset)
+	summary_button.custom_minimum_size = Vector2(150, 36)
+	summary_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	row.add_child(summary_button)
 	return hero
 
 
@@ -2153,7 +2195,7 @@ func _refresh_controls() -> void:
 		var button := tab_buttons[key] as Button
 		button.text = _t("ui.exchange.nav.%s" % str(key))
 		button.disabled = request_busy
-		_apply_button_style(button, str(key) == active_section)
+		_apply_primary_navigation_style(button, str(key) == active_section)
 	_refresh_context_navigation()
 	_refresh_asset_filter_buttons()
 	search_input.editable = not request_busy
@@ -2169,7 +2211,7 @@ func _refresh_controls() -> void:
 		)
 		advanced_filter_button.visible = active_tab == "browse"
 		advanced_filter_button.disabled = request_busy
-		_apply_button_style(advanced_filter_button, filter_count > 0 or (advanced_filter_panel != null and advanced_filter_panel.visible))
+		_apply_utility_button_style(advanced_filter_button, filter_count > 0 or (advanced_filter_panel != null and advanced_filter_panel.visible))
 	if browse_sort_button != null:
 		browse_sort_button.visible = active_tab == "browse"
 		browse_sort_button.disabled = request_busy
@@ -2215,14 +2257,18 @@ func _section_for_tab(tab: String) -> String:
 
 
 func _refresh_context_navigation() -> void:
-	context_row.visible = active_tab in ["sell", "wanted", "wishlist", "mine"]
+	context_panel.visible = active_tab in ["sell", "wanted", "wishlist", "mine"]
+	context_row.visible = context_panel.visible
+	if context_panel.visible:
+		context_title_label.text = _t("ui.exchange.context_title.%s" % active_tab)
+		context_description_label.text = _t("ui.exchange.context_description.%s" % active_tab)
 	for mode: String in context_buttons:
 		var button := context_buttons[mode] as Button
 		button.visible = (active_section == "create" and mode in ["sell", "wanted"]) or (active_tab == "mine" and mode in ["active", "history"]) or (active_tab == "wishlist" and mode == "browse")
 		button.text = _t("ui.exchange.context.%s" % mode)
 		button.disabled = request_busy
 		var selected := mode == active_tab or (active_tab == "mine" and mode == ("history" if portfolio_history else "active"))
-		_apply_button_style(button, selected)
+		_apply_segment_button_style(button, selected)
 
 
 func _refresh_asset_filter_buttons() -> void:
@@ -2231,7 +2277,7 @@ func _refresh_asset_filter_buttons() -> void:
 		button.text = _t("ui.exchange.filter.%s" % filter_id)
 		button.visible = active_tab in ["browse", "sell", "mine"]
 		button.disabled = request_busy
-		_apply_button_style(button, filter_id == asset_filter)
+		_apply_category_button_style(button, filter_id == asset_filter)
 
 
 func _center_in_parent() -> void:
@@ -2487,6 +2533,69 @@ func _apply_button_style(button: Button, selected := false) -> void:
 	button.add_theme_stylebox_override("pressed", _panel_style(Color("#173e5af5"), UI_CYAN, 8, 1))
 	button.add_theme_stylebox_override("disabled", _panel_style(Color("#07111dcc"), Color("#263b4d99"), 8, 1))
 	button.add_theme_stylebox_override("focus", _panel_style(Color("#12324af5"), UI_CYAN, 8, 2))
+	button.add_theme_color_override("font_color", UI_TEXT)
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.55))
+
+
+func _apply_primary_navigation_style(button: Button, selected := false) -> void:
+	var background := Color("#15566df5") if selected else Color("#071522b8")
+	var border := UI_CYAN if selected else Color("#29465b88")
+	button.add_theme_stylebox_override("normal", _panel_style(background, border, 9, 1))
+	button.add_theme_stylebox_override("hover", _panel_style(Color("#103047e8"), Color("#5fa9c2cc"), 9, 1))
+	button.add_theme_stylebox_override("pressed", _panel_style(Color("#0f465bf5"), UI_CYAN, 9, 1))
+	button.add_theme_stylebox_override("disabled", _panel_style(Color("#07111dcc"), Color("#263b4d66"), 9, 1))
+	button.add_theme_stylebox_override("focus", _panel_style(background, UI_CYAN, 9, 2))
+	button.add_theme_color_override("font_color", Color.WHITE if selected else UI_TEXT)
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.55))
+	button.add_theme_font_size_override("font_size", 15)
+
+
+func _apply_segment_button_style(button: Button, selected := false) -> void:
+	var background := Color("#17384df2") if selected else Color.TRANSPARENT
+	var border := Color("#47758f88") if selected else Color.TRANSPARENT
+	button.add_theme_stylebox_override("normal", _panel_style(background, border, 6, 1 if selected else 0))
+	button.add_theme_stylebox_override("hover", _panel_style(Color("#0e2638dd"), Color("#355f7899"), 6, 1))
+	button.add_theme_stylebox_override("pressed", _panel_style(Color("#17384df2"), UI_CYAN, 6, 1))
+	button.add_theme_stylebox_override("disabled", _panel_style(Color.TRANSPARENT, Color.TRANSPARENT, 6, 0))
+	button.add_theme_stylebox_override("focus", _panel_style(background, UI_CYAN, 6, 1))
+	button.add_theme_color_override("font_color", UI_CYAN if selected else UI_MUTED)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.5))
+
+
+func _apply_category_button_style(button: Button, selected := false) -> void:
+	var background := Color("#102b3ef0") if selected else Color("#07111d99")
+	var border := Color("#5eb8cedd") if selected else Color("#29465b77")
+	button.add_theme_stylebox_override("normal", _panel_style(background, border, 7, 1))
+	button.add_theme_stylebox_override("hover", _panel_style(Color("#102b3ef0"), Color("#5eb8cedd"), 7, 1))
+	button.add_theme_stylebox_override("pressed", _panel_style(Color("#14374df5"), UI_CYAN, 7, 1))
+	button.add_theme_stylebox_override("disabled", _panel_style(Color("#07111dcc"), Color("#263b4d66"), 7, 1))
+	button.add_theme_stylebox_override("focus", _panel_style(background, UI_CYAN, 7, 2))
+	button.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED)
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.5))
+
+
+func _apply_utility_button_style(button: Button, selected := false) -> void:
+	var background := Color("#0d2232dd") if selected else Color("#07111daa")
+	var border := Color("#4c7a92bb") if selected else Color("#29465b66")
+	button.add_theme_stylebox_override("normal", _panel_style(background, border, 7, 1))
+	button.add_theme_stylebox_override("hover", _panel_style(Color("#0d2232dd"), Color("#4c7a92bb"), 7, 1))
+	button.add_theme_stylebox_override("pressed", _panel_style(Color("#102b3ef0"), UI_CYAN, 7, 1))
+	button.add_theme_stylebox_override("disabled", _panel_style(Color("#07111dcc"), Color("#263b4d55"), 7, 1))
+	button.add_theme_stylebox_override("focus", _panel_style(background, UI_CYAN, 7, 1))
+	button.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED)
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.5))
+
+
+func _apply_listing_button_style(button: Button, selected := false) -> void:
+	var background := Color("#10293bed") if selected else Color("#081725cc")
+	var border := Color("#65bfd5e6") if selected else Color("#29465b88")
+	var width := 2 if selected else 1
+	button.add_theme_stylebox_override("normal", _panel_style(background, border, 8, width))
+	button.add_theme_stylebox_override("hover", _panel_style(Color("#0e2638ed"), Color("#4f8da8cc"), 8, 1))
+	button.add_theme_stylebox_override("pressed", _panel_style(Color("#12324af5"), UI_CYAN, 8, 2))
+	button.add_theme_stylebox_override("disabled", _panel_style(Color("#07111dcc"), Color("#263b4d66"), 8, 1))
+	button.add_theme_stylebox_override("focus", _panel_style(background, UI_CYAN, 8, 2))
 	button.add_theme_color_override("font_color", UI_TEXT)
 	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.55))
 
