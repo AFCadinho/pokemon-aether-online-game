@@ -8,6 +8,8 @@
 
 - My Exchange now clearly separates the Pokémon and items you are selling from requested items, with compact side-by-side sections and Pokémon listing cards. Pokémon offers use the familiar Storage hover card with IVs, while full details remain available through Summary.
 
+- Fixed Exchange Pokémon hover cards showing a literal “<null>” before an unnamed Pokémon.
+
 - NPC shop purchases now report the exact Pokédollars, Aetherite, or Battle Points deducted from your wallet in System chat.
 
 - Every Global Boost activation now sends a localized System message to all online Trainers.

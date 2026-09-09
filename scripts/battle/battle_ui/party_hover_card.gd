@@ -361,21 +361,21 @@ func _get_name_and_level(pokemon_data: Dictionary) -> String:
 
 
 func _get_display_species(pokemon_data: Dictionary) -> String:
-	var nickname := str(pokemon_data.get(
+	var nickname := _optional_display_text(pokemon_data.get(
 		"nickname",
 		pokemon_data.get("nickName", pokemon_data.get("displayName", pokemon_data.get("display_name", "")))
-	)).strip_edges()
-	var cosmetic_species := str(pokemon_data.get("cosmeticDisplaySpecies", "")).strip_edges()
+	))
+	var cosmetic_species := _optional_display_text(pokemon_data.get("cosmeticDisplaySpecies", ""))
 	var species := (
 		cosmetic_species
-		if cosmetic_species != ""
-		else str(pokemon_data.get("displaySpecies", pokemon_data.get("species", "")))
+		if not cosmetic_species.is_empty()
+		else _optional_display_text(pokemon_data.get("displaySpecies", pokemon_data.get("species", "")))
 	)
-	if species != "":
+	if not species.is_empty():
 		var species_id := (
 			cosmetic_species
-			if cosmetic_species != ""
-			else str(pokemon_data.get(
+			if not cosmetic_species.is_empty()
+			else _optional_display_text(pokemon_data.get(
 				"speciesId",
 				pokemon_data.get("species_id", pokemon_data.get("species", species))
 			))
@@ -389,6 +389,13 @@ func _get_display_species(pokemon_data: Dictionary) -> String:
 		return _localized_content_name("species", ident_species, ident_species)
 
 	return _t("common.unknown")
+
+
+func _optional_display_text(value: Variant) -> String:
+	if value == null:
+		return ""
+	var text := str(value).strip_edges()
+	return "" if text.to_lower() in ["<null>", "null", "<nil>"] else text
 
 
 func _localized_nature_name(nature: String) -> String:
