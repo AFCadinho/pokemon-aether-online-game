@@ -75,25 +75,27 @@ func _run() -> void:
 	await process_frame
 	_check(is_instance_valid(panel.set_suggestions_popup), "Suggestion opener creates its own popup layer")
 	_check(panel.set_suggestions_popup.exclusive, "Suggestion popup blocks input behind its modal layer")
-	_check(panel.set_suggestions_popup.find_child("SetSuggestionsScroll", true, false) != null, "Suggestion popup scrolls independently")
+	_check(panel.set_suggestions_popup.find_child("SetSuggestionDetailsScroll", true, false) != null, "Suggestion details scroll independently from the fixed set list")
 	_check(panel.set_suggestions_popup.find_child("ApplySetSuggestion", true, false) != null, "Suggestion popup has an explicit apply button")
 	var suggestion_list := panel.set_suggestions_popup.find_child("SetSuggestionsList", true, false) as VBoxContainer
-	_check(suggestion_list != null and suggestion_list.get_child_count() == 4, "All three suggested sets are shown as distinct cards")
-	_check(panel.set_suggestions_popup.size.x <= 540 and panel.set_suggestions_popup.size.y <= 520, "Suggestion popup stays compact (%s)" % panel.set_suggestions_popup.size)
+	var suggestion_choices := panel.set_suggestions_popup.find_child("SetSuggestionChoices", true, false) as VBoxContainer
+	_check(suggestion_choices != null and suggestion_choices.get_child_count() == 3, "All three suggestions remain visible as fixed compact choices")
+	_check(suggestion_list != null and suggestion_list.get_child_count() <= 5, "Suggestion popup keeps a compact master-detail structure")
+	_check(panel.set_suggestions_popup.size.x <= 520 and panel.set_suggestions_popup.size.y <= 460, "Suggestion popup stays compact (%s)" % panel.set_suggestions_popup.size)
 	var suggestion_name := panel.set_suggestions_popup.find_child("SetSuggestionName", true, false) as Label
 	var suggestion_build := panel.set_suggestions_popup.find_child("SetSuggestionBuild", true, false) as Label
 	_check(suggestion_name != null and suggestion_name.text == "TankChomp" and suggestion_name.custom_minimum_size.y > 0, "Suggested set name remains visibly allocated")
 	_check(suggestion_build != null and suggestion_build.text.contains("Rocky Helmet") and suggestion_build.text.contains("Earthquake") and suggestion_build.custom_minimum_size.y > 0, "Suggested build details remain visibly allocated")
 	var evidence_summary := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceSummary", true, false) as HBoxContainer
-	_check(evidence_summary != null and evidence_summary.get_child_count() == 4, "Evidence stays summarized by four stable states")
-	_check(panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) == null, "Evidence details are collapsed by default")
-	var details_toggle := panel.set_suggestions_popup.find_child("SetSuggestionDetailsToggle", true, false) as Button
-	_check(details_toggle != null, "Each suggestion offers progressive evidence disclosure")
-	if details_toggle != null:
-		details_toggle.pressed.emit()
+	_check(evidence_summary != null and evidence_summary.get_child_count() == 4, "Every choice keeps four comparable evidence counters")
+	_check(panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) != null, "The selected suggestion shows evidence without expanding its list row")
+	var choices := panel.set_suggestions_popup.find_children("SetSuggestionChoice", "Button", true, false)
+	if choices.size() > 1:
+		(choices[1] as Button).pressed.emit()
 		await process_frame
-	_check(panel.expanded_set_suggestion_key == "tank:tank-1", "Only the selected suggestion is expanded")
-	_check(panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) != null, "Expanded suggestion shows individual evidence")
+	_check(panel.selected_set_suggestion_key == "tank-0:tank-extra-0", "Selecting a compact row changes only the detail target")
+	var selected_name := panel.set_suggestions_popup.find_child("SetSuggestionName", true, false) as Label
+	_check(selected_name != null and selected_name.text == "TankChomp Alternative 1", "The stable detail pane follows the selected suggestion")
 	panel._apply_set_suggestion(build)
 	_check(not is_instance_valid(panel.set_suggestions_popup), "Applying a suggestion closes the popup")
 	_check(panel.defender_assumptions["assumedMoves"][0] == "Fire Blast", "Revealed Fire Blast survives reference Toxic")
