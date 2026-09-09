@@ -477,6 +477,10 @@ func _init() -> void:
 	_check(script_source.contains('"goal": 100000') and script_source.contains('"active_duration": "1h"'), "Skill EXP boost shows its one-hour 100,000 Pokédollar goal")
 	_check(script_source.contains('"goal": 1000000') and script_source.contains('"active_duration": "7d"'), "Shiny boost starts at one million for seven days")
 	_check(script_source.contains('message_type == "system.global_exp_boost_contribution"'), "global EXP contributions appear as realtime system messages")
+	_check(
+		script_source.contains("add_system_message(_global_boost_activation_message(buff))"),
+		"all global boost activations appear as deduplicated system messages"
+	)
 	_check(script_source.contains('message_type == "system.global_skill_exp_boost_contribution"'), "global Skill EXP contributions appear as realtime system messages")
 	_check(script_source.contains('message_type == "system.global_ev_boost_contribution"'), "global EV contributions appear as realtime system messages")
 	_check(script_source.contains('message_type == "system.global_rare_encounter_boost_contribution"'), "rare encounter contributions appear as realtime system messages")

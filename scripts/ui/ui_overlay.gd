@@ -14475,6 +14475,7 @@ func _show_global_boost_activation_notification(buff: Dictionary, remaining_seco
 	var active_until := str(buff.get("activeUntil", "")).strip_edges()
 	if boost_id == "" or active_until == "":
 		return
+	add_system_message(_global_boost_activation_message(buff))
 	_show_event_notification(
 		"global-buff:%s:%s" % [boost_id, active_until],
 		str(buff.get("eventName", "")).strip_edges() if str(buff.get("eventName", "")).strip_edges() != "" else _localized_buff_name(buff),
@@ -14489,6 +14490,13 @@ func _show_global_boost_activation_notification(buff: Dictionary, remaining_seco
 		GLOBAL_BUFF_NOTIFICATION_DISPLAY_SECONDS
 	)
 	_queue_global_buff_activation_sound()
+
+
+func _global_boost_activation_message(buff: Dictionary) -> String:
+	return LocalizationManager.text(
+		"ui.buff.global_activated",
+		{"boost": _localized_buff_name(buff)}
+	)
 
 
 func _show_global_heal_activation_notification(message: Dictionary) -> void:
@@ -22707,10 +22715,23 @@ func _on_market_buy_pressed() -> void:
 		)
 		_update_market_sell_items_from_inventory(inventory_value)
 	else:
+		var paid_amount := maxi(int(transaction.get("totalPrice", 0)), 0)
+		if paid_amount > 0:
+			add_system_message(_market_currency_spent_message(
+				paid_amount,
+				str(transaction.get("currency", "money"))
+			))
 		add_item_reward_notification(item_id, transacted_quantity)
 		if bool(market_selected_item.get("accountUnique", false)):
 			_mark_market_item_owned(item_id)
 	_refresh_market_purchase_state()
+
+
+func _market_currency_spent_message(amount: int, currency: String) -> String:
+	return LocalizationManager.text(
+		"ui.market.message.wallet_debited",
+		{"amount": _format_market_currency_amount(maxi(amount, 0), currency)}
+	)
 
 
 func _market_item_max_purchase_quantity(item: Dictionary) -> int:

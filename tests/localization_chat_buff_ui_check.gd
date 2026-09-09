@@ -116,6 +116,12 @@ func _check_localized_helpers() -> void:
 		"Global EXP contributions render as localized Dutch system messages"
 	)
 	_check(
+		overlay.call("_global_boost_activation_message", {
+			"name_key": "ui.buff.global_exp.name",
+		}) == "Wereldwijde EXP-boost is geactiveerd!",
+		"Global boost activations render as localized Dutch system messages"
+	)
+	_check(
 		overlay.call("_global_skill_exp_boost_contribution_message", {
 			"displayName": "Misty",
 			"amount": 10_000,
