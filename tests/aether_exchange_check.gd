@@ -316,10 +316,16 @@ func _run() -> void:
 	popup.call("_render_current_list")
 	var listings_section := list_container.find_child("ExchangePortfolioListingsSection", true, false) as Control
 	var requests_section := list_container.find_child("ExchangePortfolioRequestsSection", true, false) as Control
+	_check(list_container.columns == 2, "Item listings and requests use two portfolio columns")
 	_check(listings_section != null and listings_section.find_children("*", "Button", true, false).is_empty(), "Active listings section excludes completed sales")
 	_check(requests_section != null and requests_section.find_children("*", "Button", true, false).size() == 1, "Active requests stay in their own section")
 	_check((listings_section.find_child("PortfolioSectionTitle", true, false) as Label).text.contains("ITEMS FOR SALE"), "My Exchange names the player's sale listings explicitly")
 	_check((requests_section.find_child("PortfolioSectionTitle", true, false) as Label).text.contains("ITEM REQUESTS"), "My Exchange names the player's requests explicitly")
+	popup.set("asset_filter", "pokemon")
+	popup.call("_render_current_list")
+	_check(list_container.columns == 1, "Pokémon listings use one column because Pokémon requests do not exist")
+	popup.set("asset_filter", "item")
+	popup.call("_render_current_list")
 	(context_buttons.get("history") as Button).pressed.emit()
 	await process_frame
 	listings_section = list_container.find_child("ExchangePortfolioListingsSection", true, false) as Control
