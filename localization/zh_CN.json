@@ -4999,6 +4999,7 @@
   "ui.buff.fill_remaining": "使用剩余的 ₽{amount}",
   "ui.buff.fill_remaining_tooltip": "填写剩余的 ₽{amount}。",
   "ui.buff.aetherite_reward": "您因支持 {boost} 而收到 {amount} 以太石。",
+  "ui.buff.global_activated": "{boost} 已激活！",
   "ui.buff.contribute": "贡献",
   "ui.buff.contribution_unavailable": "社区贡献尚未连接。选定的贡献：${amount}。",
   "ui.buff.global_exp.name": "全球经验提升",

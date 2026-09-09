@@ -14475,6 +14475,7 @@ func _show_global_boost_activation_notification(buff: Dictionary, remaining_seco
 	var active_until := str(buff.get("activeUntil", "")).strip_edges()
 	if boost_id == "" or active_until == "":
 		return
+	add_system_message(_global_boost_activation_message(buff))
 	_show_event_notification(
 		"global-buff:%s:%s" % [boost_id, active_until],
 		str(buff.get("eventName", "")).strip_edges() if str(buff.get("eventName", "")).strip_edges() != "" else _localized_buff_name(buff),
@@ -14489,6 +14490,13 @@ func _show_global_boost_activation_notification(buff: Dictionary, remaining_seco
 		GLOBAL_BUFF_NOTIFICATION_DISPLAY_SECONDS
 	)
 	_queue_global_buff_activation_sound()
+
+
+func _global_boost_activation_message(buff: Dictionary) -> String:
+	return LocalizationManager.text(
+		"ui.buff.global_activated",
+		{"boost": _localized_buff_name(buff)}
+	)
 
 
 func _show_global_heal_activation_notification(message: Dictionary) -> void:
