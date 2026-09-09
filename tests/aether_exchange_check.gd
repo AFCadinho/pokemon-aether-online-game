@@ -248,6 +248,16 @@ func _run() -> void:
 			charm_icon != null and charm_icon.resource_path.contains("/field_move_charms/") and not charm_icon.resource_path.ends_with("/000.png"),
 			"Exchange resolves the dedicated %s icon" % charm_id
 		)
+	var tm_icon := popup.call("_load_item_icon", "tm-thunderbolt") as Texture2D
+	_check(tm_icon != null and tm_icon.resource_path.ends_with("/machine_ELECTRIC.png"), "Exchange infers the Item Dex icon for a TM")
+	var catalog_tm_icon := popup.call("_load_item_icon", "tm-catalog-entry", "tm", "water") as Texture2D
+	_check(catalog_tm_icon != null and catalog_tm_icon.resource_path.ends_with("/machine_WATER.png"), "Exchange uses Item Dex machine metadata when provided")
+	var outfit_icon := popup.call("_load_item_icon", "mysterious-outfit") as Texture2D
+	_check(outfit_icon != null and not outfit_icon.resource_path.ends_with("/000.png"), "Exchange resolves Item Dex cosmetic previews")
+	var mount_icon := popup.call("_load_item_icon", "cyclizar-mount") as Texture2D
+	_check(mount_icon != null and not mount_icon.resource_path.ends_with("/000.png"), "Exchange resolves Item Dex mount previews")
+	var item_dex_overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	_check(item_dex_overlay_source.contains("ITEM_ICON_RESOLVER.load_icon("), "Item Dex and Exchange use the same item icon resolver")
 	_check(popup.get("quantity_spin") is SpinBox, "Item listings expose quantity input")
 	_check(popup.get("price_spin") is SpinBox, "Listings expose fixed-price input")
 	var wishlist_item := {

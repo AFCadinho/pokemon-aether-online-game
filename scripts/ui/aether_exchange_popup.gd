@@ -20,6 +20,7 @@ const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_a
 const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
 const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
 const POKEMON_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/party_hover_card.tscn")
+const ITEM_ICON_RESOLVER := preload("res://scripts/services/item_icon_resolver.gd")
 const EXCHANGE_SIZE := Vector2(1040, 660)
 const MAX_PRICE := 2_147_483_647
 const BROWSE_CARD_MIN_WIDTH := 172.0
@@ -2477,20 +2478,17 @@ func _entry_texture(entry: Dictionary, kind: String) -> Texture2D:
 		if species.is_empty():
 			species = _optional_text(asset.get("speciesName"), _optional_text(asset.get("speciesId")))
 		return PokemonAssets.load_party_icon(species, bool(asset.get("shiny", false)))
-	return _load_item_icon(str(asset.get("itemId", "")))
+	return _load_item_icon(
+		str(asset.get("itemId", asset.get("id", ""))),
+		str(asset.get("machineKind", "")),
+		str(asset.get("machineMoveType", "")),
+	)
 
 
-func _load_item_icon(item_id: String) -> Texture2D:
-	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
-	for path: String in [
-		"res://assets/items/icons/field_move_charms/%s.png" % normalized,
-		"res://assets/items/icons/%s.png" % normalized,
-		"res://assets/items/icons/%s.png" % item_id.strip_edges(),
-		"res://assets/items/icons/000.png",
-	]:
-		if ResourceLoader.exists(path):
-			return load(path) as Texture2D
-	return null
+func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_type: String = "") -> Texture2D:
+	var player_save := get_node_or_null("/root/PlayerSave")
+	var cosmetic_gender := str(player_save.get("gender")) if player_save != null else "male"
+	return ITEM_ICON_RESOLVER.load_icon(item_id, machine_kind, machine_move_type, cosmetic_gender)
 
 
 func _list_caption(count: int) -> String:

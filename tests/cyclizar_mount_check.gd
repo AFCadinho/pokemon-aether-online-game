@@ -63,10 +63,12 @@ func _check_catalog_and_frames() -> void:
 			"Cyclizar foreground frames match its mount frame size"
 		)
 	var bag_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	var icon_resolver_source := FileAccess.get_file_as_string("res://scripts/services/item_icon_resolver.gd")
 	_check(
 		bag_source.contains('{"id": "mounts", "labelKey": "ui.bag.category.mounts", "iconItemId": "cyclizar-mount"}')
 		and bag_source.contains('"power_stones", "mounts", "cosmetics"')
-		and bag_source.contains("MountService.get_mount_id_for_unlock_item(item_id)"),
+		and bag_source.contains("ITEM_ICON_RESOLVER.load_icon(")
+		and icon_resolver_source.contains("MountServiceScript.get_mount_id_for_unlock_item(canonical_id)"),
 		"mount entitlements have their own visible Bag category and reuse the mount sprite as icon"
 	)
 	var voucher_icon := load("res://assets/items/icons/BIKEVOUCHER.png") as Texture2D

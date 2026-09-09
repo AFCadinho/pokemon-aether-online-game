@@ -33,6 +33,9 @@ func _run() -> void:
 	}
 	var item := {"itemId": "poke-ball", "name": "Poké Ball", "shortDesc": "A ball used to catch wild Pokémon.", "quantity": 20}
 	var cut_charm := {"itemId": "cut-charm", "name": "Cut Charm", "shortDesc": "Lets you use Cut without a Pokémon knowing it.", "quantity": 1}
+	var tm := {"itemId": "tm-thunderbolt", "name": "TM: Thunderbolt", "machineKind": "tm", "machineMoveType": "electric", "quantity": 1}
+	var outfit := {"itemId": "mysterious-outfit", "name": "Mysterious Outfit", "quantity": 1}
+	var mount := {"itemId": "cyclizar-mount", "name": "Cyclizar Mount", "quantity": 1}
 	var listing := {"id": "preview-1", "assetType": "pokemon", "asset": pokemon, "quantity": 1, "unitPrice": 100, "totalPrice": 100, "status": "active"}
 	var wish := {"id": "preview-wish", "item": item, "quantity": 10, "unitPrice": 100, "totalPrice": 1000, "status": "active", "isMine": false}
 	var listings: Array = []
@@ -52,7 +55,7 @@ func _run() -> void:
 	var previous_locale: String = localization.current_locale
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		localization.set_locale(locale)
-		for screen: String in ["buy", "hover", "items", "sell", "request", "wanted", "mine", "history"]:
+		for screen: String in ["buy", "hover", "items", "tm", "outfit", "mount", "sell", "request", "wanted", "mine", "history"]:
 			popup.search_input.text = ""
 			popup.wallet_money = 24826
 			popup.sellable_items = [item]
@@ -63,10 +66,11 @@ func _run() -> void:
 			popup.my_wishes = [wish.merged({"isMine": true}, true)]
 			popup.my_listings = [listing.merged({"status": "sold"}, true)]
 			popup.portfolio_history = screen == "history"
-			popup.active_tab = {"buy": "browse", "hover": "browse", "items": "browse", "request": "wishlist", "history": "mine"}.get(screen, screen)
+			popup.active_tab = {"buy": "browse", "hover": "browse", "items": "browse", "tm": "browse", "outfit": "browse", "mount": "browse", "request": "wishlist", "history": "mine"}.get(screen, screen)
 			popup.asset_filter = "pokemon" if screen in ["buy", "hover", "sell"] else "item"
-			if screen == "items":
-				popup.browse_listings = [{"id": "item-offer", "assetType": "item", "asset": cut_charm, "quantity": 1, "unitPrice": 100000, "totalPrice": 100000, "status": "active"}]
+			if screen in ["items", "tm", "outfit", "mount"]:
+				var preview_item: Dictionary = {"items": cut_charm, "tm": tm, "outfit": outfit, "mount": mount}[screen]
+				popup.browse_listings = [{"id": "item-offer", "assetType": "item", "asset": preview_item, "quantity": 1, "unitPrice": 100000, "totalPrice": 100000, "status": "active"}]
 			if screen == "history":
 				popup.asset_filter = "pokemon"
 			popup.selected_entry = {}
@@ -78,7 +82,7 @@ func _run() -> void:
 				"hover":
 					var hover_source := popup.list_container.get_child(0) as Button
 					popup._show_pokemon_hover(hover_source, pokemon)
-				"items": popup._select_entry(popup.browse_listings[0], "listing")
+				"items", "tm", "outfit", "mount": popup._select_entry(popup.browse_listings[0], "listing")
 				"sell": popup._select_entry(pokemon, "sell")
 				"request": popup._select_entry(item, "wish_catalog")
 				"wanted": popup._select_entry(wish, "wish")
@@ -102,11 +106,15 @@ func _run() -> void:
 			if screen == "hover":
 				_check(popup.pokemon_hover_card.visible, description + ": Pokémon hover card is visible")
 				_check_bounds(popup.pokemon_hover_card, popup, description)
-			if screen == "items":
+			if screen in ["items", "tm", "outfit", "mount"]:
 				var item_icon := popup.list_container.get_child(0).find_child("BrowseCardIcon", true, false) as TextureRect
 				_check(item_icon != null, description + ": item offer has an icon")
 				if item_icon != null:
-					_check(item_icon.texture.resource_path.ends_with("/field_move_charms/CUTCHARM.png"), description + ": Cut Charm uses its own icon")
+					_check(item_icon.texture != null and not item_icon.texture.resource_path.ends_with("/000.png"), description + ": item uses its Item Dex icon")
+					if screen == "items":
+						_check(item_icon.texture.resource_path.ends_with("/field_move_charms/CUTCHARM.png"), description + ": Cut Charm uses its own icon")
+					elif screen == "tm":
+						_check(item_icon.texture.resource_path.ends_with("/machine_ELECTRIC.png"), description + ": TM uses its type icon")
 			var active_content: Control = popup.detail_stack if popup.detail_panel.visible else popup.action_content
 			for button: Button in active_content.find_children("*", "Button", true, false):
 				if button.is_visible_in_tree():
@@ -130,7 +138,7 @@ func _run() -> void:
 	await process_frame
 	PokemonAssets.party_icon_cache.clear()
 	await process_frame
-	print("Exchange layout (4 locales, 8 screens): ", "FAIL" if failed else "PASS")
+	print("Exchange layout (4 locales, 11 screens): ", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
 
 

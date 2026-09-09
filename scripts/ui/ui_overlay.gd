@@ -6,6 +6,7 @@ const LOAN_RETURNS_DIALOG_SCRIPT := preload("res://scripts/ui/loan_returns_dialo
 const BORROWED_POKEMON_DIALOG_SCRIPT := preload("res://scripts/ui/borrowed_pokemon_dialog.gd")
 const LOAN_SUMMARY_TIME_SCRIPT := preload("res://scripts/ui/loan_summary_time.gd")
 const SYSTEM_NOTICE_BANNER_SCRIPT := preload("res://scripts/ui/system_notice_banner.gd")
+const ITEM_ICON_RESOLVER := preload("res://scripts/services/item_icon_resolver.gd")
 const AETHER_CLASH_ANNOUNCEMENT_FORMATTER := preload(
 	"res://scripts/ui/aether_clash_announcement_formatter.gd"
 )
@@ -24483,67 +24484,12 @@ func _bag_gameplay_definition_for_item_id(item_id: String) -> Dictionary:
 	return {}
 
 func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_type: String = "") -> Texture2D:
-	if item_id == "escape-rope-action":
-		item_id = "escape-rope"
-	item_id = _canonical_display_item_id(item_id)
-	var cosmetic_icon := CharacterAppearanceService.get_cosmetic_item_icon(
+	return ITEM_ICON_RESOLVER.load_icon(
 		item_id,
-		_bag_item_icon_gender(item_id)
+		machine_kind,
+		machine_move_type,
+		_bag_item_icon_gender(item_id),
 	)
-	if cosmetic_icon != null:
-		return cosmetic_icon
-	var mount_id := MountService.get_mount_id_for_unlock_item(item_id)
-	if mount_id != "":
-		var mount_icon := MountService.get_mount_icon_texture(mount_id)
-		if mount_icon != null:
-			return mount_icon
-	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
-	var candidates: Array[String] = [
-		BAG_ICON_ROOT + "field_move_charms/" + normalized + ".png",
-	]
-	if normalized == "POKEDEX":
-		candidates.append("res://assets/ui/pokedex.svg")
-	var machine_icon_path := _machine_item_icon_path(item_id, machine_kind, machine_move_type)
-	if machine_icon_path != "":
-		candidates.append(machine_icon_path)
-	candidates.append_array([
-		BAG_ICON_ROOT + normalized + ".png",
-		BAG_ICON_ROOT + item_id.strip_edges() + ".png",
-		BAG_ICON_ROOT + "000.png",
-	])
-	for path: String in candidates:
-		if ResourceLoader.exists(path):
-			return load(path) as Texture2D
-	return null
-
-func _machine_item_icon_path(item_id: String, machine_kind: String, machine_move_type: String) -> String:
-	var resolved_kind := machine_kind.strip_edges().to_lower()
-	var resolved_move_type := machine_move_type.strip_edges().to_upper()
-	var normalized_item_id := _normalize_item_id(item_id)
-	if resolved_kind == "" or resolved_move_type == "":
-		for inventory_item: Dictionary in bag_inventory_items:
-			if _normalize_item_id(str(inventory_item.get("id", ""))) != normalized_item_id:
-				continue
-			resolved_kind = str(inventory_item.get("machineKind", "")).strip_edges().to_lower()
-			resolved_move_type = str(inventory_item.get("machineMoveType", "")).strip_edges().to_upper()
-			break
-	if resolved_kind == "" or resolved_move_type == "":
-		var inferred_kind := ""
-		if normalized_item_id.begins_with("tm-"):
-			inferred_kind = "tm"
-		elif normalized_item_id.begins_with("hm-"):
-			inferred_kind = "hm"
-		if inferred_kind != "":
-			if resolved_kind == "":
-				resolved_kind = inferred_kind
-			if resolved_move_type == "":
-				resolved_move_type = _get_summary_move_type(
-					normalized_item_id.trim_prefix("%s-" % inferred_kind)
-				).strip_edges().to_upper()
-	if resolved_kind not in ["tm", "hm"] or resolved_move_type == "":
-		return ""
-	var icon_prefix := "machine_tr_" if resolved_kind == "hm" else "machine_"
-	return BAG_ICON_ROOT + icon_prefix + resolved_move_type + ".png"
 
 func _ellipsize_text(value: String, max_length: int) -> String:
 	if value.length() <= max_length:
