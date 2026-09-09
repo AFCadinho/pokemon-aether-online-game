@@ -4543,6 +4543,8 @@
   "ui.pvp.ai_sparring.about.rank_ai5": "Above-average Showdown player",
   "ui.pvp.ai_sparring.about.rank_elite": "High-ladder Showdown player",
   "ui.pvp.ai_sparring.about.rank_nightmare": "Punishment mode",
+  "ui.pvp.ai_sparring.about.recommendation_intermediate": "Best for players who are new to PvP but already have strong Pokémon knowledge.",
+  "ui.pvp.ai_sparring.about.recommendation_ai5": "The best all-round sparring partner.",
   "ui.pvp.ai_sparring.about.difficulty_intermediate": "Plays safely and uses the course of the battle to learn more about its opponent, gradually adjusting its plan along the way.",
   "ui.pvp.ai_sparring.about.difficulty_ai5": "Lives for midground plays. It considers every response and chooses the path that can win consistently without depending on a hard prediction.",
   "ui.pvp.ai_sparring.about.difficulty_elite": "Uses the same strong midground foundation as Hard, but punishes mistakes ruthlessly when your position forces risky guesses.",

@@ -241,7 +241,11 @@ func _check_pvp_runtime_translation() -> void:
 	var intermediate_about := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.difficulty_intermediate"))
 	var nightmare_about := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.difficulty_nightmare"))
 	var grandmaster_about := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.grandmaster"))
+	var intermediate_recommendation := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.recommendation_intermediate"))
+	var hard_recommendation := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.recommendation_ai5"))
 	_check(intermediate_about.contains("Speelt veilig") and not intermediate_about.contains("informatie die een echte speler"), "Intermediate describes its safe learning style without disclosing its information boundary")
+	_check(intermediate_recommendation.contains("nieuw bent in PvP") and intermediate_recommendation.contains("Pokémonkennis"), "Intermediate is recommended to knowledgeable PvP beginners")
+	_check(hard_recommendation.contains("beste algemene sparringpartner"), "Hard is presented as the best all-round sparring partner")
 	_check(nightmare_about.contains("genadeloze tegenstander") and not nightmare_about.contains("weet jouw actie"), "Nightmare describes its challenge without disclosing hidden action knowledge")
 	_check(not grandmaster_about.contains("informatieregels"), "The About introduction does not advertise internal information rules")
 	for bot_id: String in ["ai4", "ai5"]:
@@ -257,6 +261,8 @@ func _check_pvp_runtime_translation() -> void:
 	_check(difficulty_cards != null and difficulty_cards.get_child_count() == 4, "Grandmaster difficulties have four separate hierarchy cards")
 	for mode_id: String in ["intermediate", "ai5", "elite", "nightmare"]:
 		_check(difficulty_cards.get_node_or_null("AiSparringDifficultyCard_" + mode_id) != null, "About has a distinct card for " + mode_id)
+	_check(overlay.find_child("AiSparringRecommendation_intermediate", true, false) != null, "Intermediate displays its recommendation")
+	_check(overlay.find_child("AiSparringRecommendation_ai5", true, false) != null, "Hard displays its recommendation")
 	var bot_versions: Dictionary = overlay.get("pvp_ai_sparring_about_versions")
 	_check(bot_versions.size() == 5, "About has independent status for all five difficulties")
 	overlay.call("_apply_ai_sparring_bot_versions", {"success": true, "bots": [
