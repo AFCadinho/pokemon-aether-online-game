@@ -238,6 +238,12 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_render_ai_sparring_stats")
 	_check(stats_list.get_child_count() == 0, "Failed statistics refresh does not leave stale rates visible")
 	_check(ai_sparring_tabs.get_tab_title(3) == "About", "Bot information tab uses the concise title")
+	var intermediate_about := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.difficulty_intermediate"))
+	var nightmare_about := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.difficulty_nightmare"))
+	var grandmaster_about := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.grandmaster"))
+	_check(intermediate_about.contains("Speelt veilig") and not intermediate_about.contains("informatie die een echte speler"), "Intermediate describes its safe learning style without disclosing its information boundary")
+	_check(nightmare_about.contains("genadeloze tegenstander") and not nightmare_about.contains("weet jouw actie"), "Nightmare describes its challenge without disclosing hidden action knowledge")
+	_check(not grandmaster_about.contains("informatieregels"), "The About introduction does not advertise internal information rules")
 	for bot_id: String in ["ai4", "ai5"]:
 		var card := overlay.find_child("AiSparringAboutCard_" + bot_id, true, false)
 		_check(card != null, "Each bot has its own profile card")

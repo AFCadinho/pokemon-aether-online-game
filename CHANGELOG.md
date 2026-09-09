@@ -51,6 +51,8 @@
 - Battle trainers now show the player facing right toward the opponent and the correct Scholar or Grandmaster sprite for AI Sparring.
 
 - The clearer About tab now explains each Grandmaster difficulty, skill level, play style, availability and version.
+
+- AI Sparring's About tab now focuses on each bot's play style and challenge without revealing how the bots receive battle information.
 - Riding mounts and walking keep a more consistent speed across frame rates, and mounted appearances use less repeated work and bounded cache memory.
 
 - AI Sparring statistics now separate Beginner, Intermediate, Hard and Nightmare, each with its own results.
