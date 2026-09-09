@@ -891,8 +891,8 @@ func _open_set_suggestions_popup() -> void:
 	set_suggestions_expanded = true
 	popup.popup_hide.connect(_on_set_suggestions_popup_hidden.bind(popup))
 	var viewport_size := get_viewport_rect().size
-	var popup_width := mini(520, maxi(380, int(viewport_size.x - 48.0)))
-	var popup_height := maxi(340, mini(460, int(viewport_size.y - 80.0)))
+	var popup_width := mini(760, maxi(380, int(viewport_size.x - 32.0)))
+	var popup_height := maxi(360, mini(520, int(viewport_size.y - 48.0)))
 	_populate_set_suggestions_popup(popup, popup_width - 28)
 	popup.popup_centered(Vector2i(popup_width, popup_height))
 
@@ -938,10 +938,10 @@ func _populate_set_suggestions_popup(popup: PopupPanel, content_width := 500) ->
 	suggestions_column.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	suggestions_column.add_theme_constant_override("separation", 7)
 	column.add_child(suggestions_column)
-	_add_set_suggestion_rows(suggestions_column)
+	_add_set_suggestion_rows(suggestions_column, content_width >= 620)
 
 
-func _add_set_suggestion_rows(parent: VBoxContainer) -> void:
+func _add_set_suggestion_rows(parent: VBoxContainer, wide_layout := false) -> void:
 	var rows := _as_array(set_suggestions.get("suggestions", []))
 	var signature := SET_SUGGESTIONS.signature(set_suggestions)
 	if set_suggestions_loading:
@@ -961,11 +961,24 @@ func _add_set_suggestion_rows(parent: VBoxContainer) -> void:
 	if not rows.any(func(row: Dictionary) -> bool: return _get_set_suggestion_key(row) == selected_set_suggestion_key):
 		selected_set_suggestion_key = _get_set_suggestion_key(rows[0])
 
+	var workspace: BoxContainer = HBoxContainer.new() if wide_layout else VBoxContainer.new()
+	workspace.name = "SetSuggestionsWorkspace"
+	workspace.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	workspace.add_theme_constant_override("separation", 9)
+	parent.add_child(workspace)
+	var list_panel := PanelContainer.new()
+	list_panel.name = "SetSuggestionChoicesPanel"
+	list_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	if wide_layout:
+		list_panel.custom_minimum_size.x = 270
+	list_panel.add_theme_stylebox_override("panel", _make_stylebox(Color(SURFACE_CANVAS, 0.72), BORDER_NEUTRAL, 8, 6.0, 6.0))
+	workspace.add_child(list_panel)
 	var list := VBoxContainer.new()
 	list.name = "SetSuggestionChoices"
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	list.add_theme_constant_override("separation", 5)
-	parent.add_child(list)
+	list_panel.add_child(list)
 	for row: Dictionary in rows:
 		var suggestion_key := _get_set_suggestion_key(row)
 		var selected := selected_set_suggestion_key == suggestion_key
@@ -973,7 +986,7 @@ func _add_set_suggestion_rows(parent: VBoxContainer) -> void:
 		card.name = "SetSuggestionCard"
 		card.add_theme_stylebox_override("panel", _make_stylebox(SURFACE_RAISED, TEXT_ACCENT if selected else BORDER_NEUTRAL, 8, 6.0, 4.0))
 		list.add_child(card)
-		var choice_row := HBoxContainer.new()
+		var choice_row := VBoxContainer.new()
 		choice_row.add_theme_constant_override("separation", 5)
 		card.add_child(choice_row)
 		var context_parts: Array[String] = []
@@ -1002,7 +1015,7 @@ func _add_set_suggestion_rows(parent: VBoxContainer) -> void:
 			selected_row = row
 			break
 	if not selected_row.is_empty():
-		_add_selected_set_suggestion(parent, selected_row)
+		_add_selected_set_suggestion(workspace, selected_row)
 	var ignore := _make_toggle_button(_t("battle.calc.guess.ignore"), false)
 	ignore.pressed.connect(func() -> void:
 		ignored_set_suggestions[selected_opponent_ref] = signature
@@ -1023,9 +1036,10 @@ func _select_set_suggestion(suggestion_key: String) -> void:
 	_refresh_set_suggestions_popup()
 
 
-func _add_selected_set_suggestion(parent: VBoxContainer, row: Dictionary) -> void:
+func _add_selected_set_suggestion(parent: Container, row: Dictionary) -> void:
 	var detail_panel := PanelContainer.new()
 	detail_panel.name = "SetSuggestionDetailPanel"
+	detail_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	detail_panel.add_theme_stylebox_override("panel", _make_stylebox(SURFACE_RAISED, BORDER_NEUTRAL, 8, 9.0, 7.0))
 	parent.add_child(detail_panel)
