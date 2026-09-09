@@ -22702,6 +22702,7 @@ func _on_market_buy_pressed() -> void:
 			received_currency,
 			received_amount
 		)
+		SfxManager.play("npc_shop_purchase")
 		_update_market_sell_items_from_inventory(inventory_value)
 	else:
 		var paid_amount := maxi(int(transaction.get("totalPrice", 0)), 0)

@@ -58,6 +58,13 @@ func _check_market_popup_contract() -> void:
 		and text.contains("if player_is_selling:"),
 		"successful Item Buyer sales report the authoritative wallet credit"
 	)
+	var sale_branch_index := text.find("\tif player_is_selling:\n\t\tvar received_amount")
+	var sale_sound_index := text.find('SfxManager.play("npc_shop_purchase")', sale_branch_index)
+	var sale_else_index := text.find("\telse:", sale_branch_index)
+	_check_true(
+		sale_branch_index >= 0 and sale_sound_index > sale_branch_index and sale_sound_index < sale_else_index,
+		"successful Item Buyer sales play the NPC shop sound"
+	)
 
 
 func _check_market_attendant_uses_ui() -> void:
