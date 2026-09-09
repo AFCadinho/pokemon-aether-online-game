@@ -28,6 +28,7 @@ const BATTLE_DISGUISE_EVENT_ORDER := preload("res://scripts/battle/battle_disgui
 const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_supreme_overlord_effect.gd")
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
 const BATTLE_OWNED_FORM_PROJECTION := preload("res://scripts/battle/battle_owned_form_projection.gd")
+const BATTLE_CALCDEX_ERROR_FEEDBACK := preload("res://scripts/battle/battle_calcdex_error_feedback.gd")
 const OPPONENT_PARTY_REVEAL_POLICY := preload("res://scripts/battle/opponent_party_reveal_policy.gd")
 const WILD_BATTLE_PRESENTATION_POLICY := preload("res://scripts/battle/wild_battle_presentation_policy.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
@@ -2683,6 +2684,7 @@ func _refresh_damage_calc_results() -> void:
 			return
 		projection_revision = battle_state.get_calcdex_projection_revision()
 	var use_safe_matchup := false
+	var snapshot_failure: Dictionary = {}
 	if not damage_calc_snapshot_disabled_for_battle and not projection_revision.is_empty():
 		var snapshot_response: Dictionary = await BattleApiClient.get_calcdex_snapshot(
 			damage_calc_request,
@@ -2736,6 +2738,7 @@ func _refresh_damage_calc_results() -> void:
 			calc_panel.set_knowledge_snapshot(damage_calc_knowledge_snapshot)
 			use_safe_matchup = true
 		else:
+			snapshot_failure = snapshot_response.duplicate(true)
 			damage_calc_knowledge_snapshot.clear()
 			calc_panel.set_knowledge_snapshot({})
 			if snapshot_error_code == "CALC_UNSUPPORTED_MECHANIC":
@@ -2758,7 +2761,7 @@ func _refresh_damage_calc_results() -> void:
 	else:
 		response = {
 			"success": false,
-			"error": _t("battle.calc.error.safe_snapshot_required"),
+			"error": _t(BATTLE_CALCDEX_ERROR_FEEDBACK.message_key(snapshot_failure)),
 		}
 
 	damage_calc_request_in_flight = false

@@ -42,6 +42,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_participant_privacy_contract_check.gd",
 	"res://tests/battle_pokemon_hover_level_check.gd",
 	"res://tests/battle_calcdex_snapshot_check.gd",
+	"res://tests/battle_calcdex_error_feedback_check.gd",
 	"res://tests/battle_calcdex_smogon_sets_check.gd",
 	"res://tests/battle_calcdex_set_search_check.gd",
 	"res://tests/battle_calcdex_inference_check.gd",

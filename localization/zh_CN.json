@@ -4022,6 +4022,7 @@
   "battle.calc.error.assumptions": "无法加载假设。",
   "battle.calc.error.direction_mismatch": "计算器拒绝了其他损坏方向的过时结果。",
   "battle.calc.error.failed": "伤害计算失败。",
+  "battle.calc.error.invalid_snapshot_data": "由于一只或多只宝可梦的对战数据无效或不完整，计算器无法加载。请检查招式、特性、个体值和努力值（总计最多 510）。",
   "battle.calc.error.reverse_requires_safe_snapshot": "受到的伤害正在等待隐私安全的战斗快照。战斗状态刷新后重试。",
   "battle.calc.error.safe_snapshot_required": "计算器正在等待隐私安全的战斗快照。战斗状态刷新后重试。",
   "battle.calc.error.selection": "选择可用的攻击者和防御者。",

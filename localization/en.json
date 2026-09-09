@@ -4021,6 +4021,7 @@
   "battle.calc.error.assumptions": "Could not load assumptions.",
   "battle.calc.error.direction_mismatch": "The calculator rejected a stale result for the other damage direction.",
   "battle.calc.error.failed": "Damage calculation failed.",
+  "battle.calc.error.invalid_snapshot_data": "The calculator could not load because one or more Pokémon have invalid or incomplete battle data. Check their moves, Ability, IVs, and EVs (maximum 510 total).",
   "battle.calc.error.reverse_requires_safe_snapshot": "Damage taken is waiting for a privacy-safe battle snapshot. Try again after the battle state refreshes.",
   "battle.calc.error.safe_snapshot_required": "The calculator is waiting for a privacy-safe battle snapshot. Try again after the battle state refreshes.",
   "battle.calc.error.selection": "Select an available attacker and defender.",
