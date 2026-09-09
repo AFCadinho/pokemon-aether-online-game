@@ -5016,6 +5016,7 @@
   "ui.buff.fill_remaining": "Gebruik resterende ₽{amount}",
   "ui.buff.fill_remaining_tooltip": "Vul het resterende bedrag van ₽{amount} in.",
   "ui.buff.aetherite_reward": "Je ontving {amount} Aetherite voor je bijdrage aan {boost}.",
+  "ui.buff.global_activated": "{boost} is geactiveerd!",
   "ui.buff.contribute": "Bijdragen",
   "ui.buff.contribution_unavailable": "Communitybijdragen zijn nog niet aangesloten. Geselecteerde bijdrage: ${amount}.",
   "ui.buff.global_exp.name": "Wereldwijde EXP-boost",

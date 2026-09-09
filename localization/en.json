@@ -5016,6 +5016,7 @@
   "ui.buff.fill_remaining": "Use remaining ₽{amount}",
   "ui.buff.fill_remaining_tooltip": "Fill in the remaining ₽{amount}.",
   "ui.buff.aetherite_reward": "You received {amount} Aetherite for supporting {boost}.",
+  "ui.buff.global_activated": "{boost} has been activated!",
   "ui.buff.contribute": "Contribute",
   "ui.buff.contribution_unavailable": "Community contributions are not connected yet. Selected contribution: ${amount}.",
   "ui.buff.global_exp.name": "Global EXP Boost",
