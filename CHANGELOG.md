@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calculator sets now follow the active battle format, show the format before each set name, keep Mega sets with their exact forme, and use scrollable lists for large catalogs.
+
 - Removed the experimental Grandmaster Expert prediction difficulty.
 
 - Added Grandmaster Master: Hard with selective Nightmare turns, for practicing positioning and moves that hold up against different responses.
@@ -35,11 +37,7 @@
 
 - Clicking the calculator set button again now closes its open search menu.
 
-- Calculator sets with the same name appear once; choose their different builds through the variant selector.
-
 - Opponent sets in the damage calculator can now be searched by name and selected with the mouse or keyboard.
-
-- The battle calculator now shows Smogon set sources and lets you choose between build variants.
 
 - The Item Dex and Pokédex build their windows when opened, fixed interface positions update only when needed, and busy maps check NPC obstacles more efficiently.
 - The weather effects setting now also controls overworld rain and snow.

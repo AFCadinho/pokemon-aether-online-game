@@ -102,7 +102,7 @@ func _run() -> void:
 func _fixture_set(id: String, label: String) -> Dictionary:
 	return {"id": id, "name": label, "item": "Leftovers", "ability": "Rough Skin", "nature": "Jolly",
 		"evs": {"atk": 252, "spe": 252}, "ivs": {}, "moves": ["Earthquake", "Dragon Claw"],
-		"provenance": {"kind": "pokeaether_curated"}}
+		"provenance": {"kind": "smogon", "formatId": "gen9ou", "formatName": "OU"}}
 
 
 func _expect(condition: bool, message: String) -> void:
