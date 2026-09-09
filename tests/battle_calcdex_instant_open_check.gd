@@ -35,6 +35,12 @@ func _run() -> void:
 	var refresh_start := battle_source.find("func _refresh_damage_calc_results")
 	var refresh_end := battle_source.find("\nfunc ", refresh_start + 5)
 	var refresh_source := battle_source.substr(refresh_start, refresh_end - refresh_start)
+	var closed_guard_end := refresh_source.find("\treturn")
+	var closed_guard_source := refresh_source.substr(0, closed_guard_end)
+	_check(
+		closed_guard_source.find("_schedule_damage_calc_prefetch()") >= 0,
+		"closed Calcdex keeps a public snapshot history for later damage inference"
+	)
 	_check(refresh_source.find("open_calcdex") >= 0, "cold open uses the combined endpoint")
 	_check(refresh_source.find("get_calcdex_snapshot") < 0, "cold open no longer performs a separate snapshot request")
 	_check(refresh_source.find("_damage_calc_snapshot_matches_revision") >= 0, "an exact cached revision skips the cold-open endpoint")

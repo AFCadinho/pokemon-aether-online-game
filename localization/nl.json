@@ -3986,7 +3986,7 @@
   "battle.calc.guess.loading": "Sets vergelijken…",
   "battle.calc.guess.note": "Suggesties zijn schattingen. Overnemen vervangt de getoonde Custom-set; onthulde feiten blijven behouden. Je kunt dit ongedaan maken.",
   "battle.calc.guess.unavailable": "Setsuggesties zijn momenteel niet beschikbaar.",
-  "battle.calc.guess.waiting": "Nog geen bruikbare damage- of snelheidswaarnemingen. Open Calcdex vóór een beurt om de context vast te leggen; eerdere beurten kunnen niet worden gereconstrueerd.",
+  "battle.calc.guess.waiting": "Nog geen bruikbare damage- of snelheidswaarnemingen. Calcdex registreert nieuwe beurten automatisch; onduidelijke battle-events worden overgeslagen.",
   "battle.calc.guess.partial": "Niet alle vergelijkingen konden worden afgerond.",
   "battle.calc.guess.no_match": "Geen catalogusbuild past bij de bruikbare waarnemingen.",
   "battle.calc.guess.no_catalog": "Geen sets beschikbaar voor deze Pokémon en dit format.",
