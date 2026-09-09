@@ -4267,6 +4267,7 @@
   "ui.storage.release.stop": "停止选择要释放的宝可梦",
   "ui.storage.release.releasing": "正在释放...",
   "ui.storage.release.keep_one": "你的队伍中必须至少保留一只宝可梦。",
+  "ui.storage.release.starter_protected": "你最初选择的初始宝可梦不能被放生。",
   "ui.storage.release.title": "释放宝可梦",
   "ui.storage.release.confirm": "永久释放{pokemon}？\n\n此操作无法撤消。",
   "ui.storage.release.failed": "发布失败。",

@@ -4266,6 +4266,7 @@
   "ui.storage.release.stop": "Stop choosing Pokémon to release",
   "ui.storage.release.releasing": "Releasing...",
   "ui.storage.release.keep_one": "You must keep at least one Pokémon in your party.",
+  "ui.storage.release.starter_protected": "Your original starter Pokémon cannot be released.",
   "ui.storage.release.title": "Release Pokémon",
   "ui.storage.release.confirm": "Release {pokemon} permanently?\n\nThis cannot be undone.",
   "ui.storage.release.failed": "Release failed.",
