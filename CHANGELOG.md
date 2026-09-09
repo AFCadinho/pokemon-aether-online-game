@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calcdex set suggestions now use a compact selectable list with one stable details pane, so reviewing evidence no longer changes the list height or scroll position.
+
 - Calcdex now remembers public battle snapshots while closed, so set suggestions can use damage from the turn that made you open the calculator.
 
 - AI Sparring battles now show Scholar or the selected Grandmaster difficulty instead of internal AI level names.
