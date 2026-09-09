@@ -237,7 +237,7 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.set("pvp_ai_sparring_stats_data", {"success": false})
 	overlay.call("_render_ai_sparring_stats")
 	_check(stats_list.get_child_count() == 0, "Failed statistics refresh does not leave stale rates visible")
-	_check(ai_sparring_tabs.get_tab_title(3) == "Over de bots", "Bot information tab is localized")
+	_check(ai_sparring_tabs.get_tab_title(3) == "About", "Bot information tab uses the concise title")
 	for bot_id: String in ["ai4", "ai5"]:
 		var card := overlay.find_child("AiSparringAboutCard_" + bot_id, true, false)
 		_check(card != null, "Each bot has its own profile card")
@@ -247,6 +247,10 @@ func _check_pvp_runtime_translation() -> void:
 		_check(portrait != null and portrait.texture != null, "Bot trainer portrait loads")
 		var expected_sprite := "scientist-gen7.png" if bot_id == "ai4" else "veteran-gen7.png"
 		_check(portrait.texture.resource_path.ends_with(expected_sprite), "Each bot uses its assigned trainer")
+	var difficulty_cards := overlay.find_child("AiSparringDifficultyCards", true, false) as VBoxContainer
+	_check(difficulty_cards != null and difficulty_cards.get_child_count() == 4, "Grandmaster difficulties have four separate hierarchy cards")
+	for mode_id: String in ["intermediate", "ai5", "elite", "nightmare"]:
+		_check(difficulty_cards.get_node_or_null("AiSparringDifficultyCard_" + mode_id) != null, "About has a distinct card for " + mode_id)
 	var bot_versions: Dictionary = overlay.get("pvp_ai_sparring_about_versions")
 	_check(bot_versions.size() == 5, "About has independent status for all five difficulties")
 	overlay.call("_apply_ai_sparring_bot_versions", {"success": true, "bots": [
@@ -655,7 +659,7 @@ func _check_pvp_runtime_translation() -> void:
 	for entry: Dictionary in training_ai_catalog_entries:
 		entry["homeTierId"] = "aether-ou"
 		entry["eligibleTierIds"] = ["none", "aether-ou"]
-	training_ai_available_modes.assign(["ai4", "active", "master", "nightmare", "intermediate"])
+	training_ai_available_modes.assign(["ai4", "active", "elite", "nightmare", "intermediate"])
 	overlay.call("_refresh_pvp_training_ai_mode_options")
 	_check(training_ai_bot_select.item_count == 2, "Bot selector separates Scholar and Grandmaster")
 	_check(training_ai_bot_select.get_item_text(0) == "AI4 Scholar" and training_ai_bot_select.get_item_text(1) == "AI5 Grandmaster", "Bot names remain familiar")
@@ -663,11 +667,11 @@ func _check_pvp_runtime_translation() -> void:
 	training_ai_bot_select.select(1)
 	overlay.call("_on_pvp_training_ai_bot_selected", 1)
 	_check(training_ai_mode_select.item_count == 4, "Grandmaster exposes all four server-enabled difficulties")
-	_check(training_ai_mode_select.get_item_text(0) == "Intermediate" and training_ai_mode_select.get_item_text(1) == "Hard" and training_ai_mode_select.get_item_text(2) == "Master" and training_ai_mode_select.get_item_text(3) == "Nightmare", "Master sits between Hard and Nightmare")
+	_check(training_ai_mode_select.get_item_text(0) == "Intermediate" and training_ai_mode_select.get_item_text(1) == "Hard" and training_ai_mode_select.get_item_text(2) == "Elite" and training_ai_mode_select.get_item_text(3) == "Nightmare", "Elite sits between Hard and Nightmare")
 	training_ai_mode_select.select(0)
 	_check(overlay.call("_selected_pvp_training_ai_mode") == "intermediate", "Intermediate selection preserves its server mode")
 	training_ai_mode_select.select(2)
-	_check(overlay.call("_selected_pvp_training_ai_mode") == "master", "Master selection preserves its server mode")
+	_check(overlay.call("_selected_pvp_training_ai_mode") == "elite", "Elite selection preserves its server mode")
 	training_ai_mode_select.select(3)
 	_check(overlay.call("_selected_pvp_training_ai_mode") == "nightmare", "Nightmare selection preserves its server mode")
 	training_ai_available_modes.assign(["ai4", "active"])
