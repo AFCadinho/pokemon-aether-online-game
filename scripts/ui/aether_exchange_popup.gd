@@ -21,9 +21,9 @@ const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_ra
 const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
 const EXCHANGE_SIZE := Vector2(1040, 660)
 const MAX_PRICE := 2_147_483_647
-const BROWSE_CARD_MIN_WIDTH := 128.0
-const BROWSE_CARD_HEIGHT := 172.0
-const BROWSE_GRID_MAX_COLUMNS := 4
+const BROWSE_CARD_MIN_WIDTH := 172.0
+const BROWSE_CARD_HEIGHT := 190.0
+const BROWSE_GRID_MAX_COLUMNS := 5
 const POKEMON_TYPES: Array[String] = [
 	"normal", "fire", "water", "electric", "grass", "ice", "fighting", "poison",
 	"ground", "flying", "psychic", "bug", "rock", "ghost", "dragon", "dark",
@@ -88,8 +88,19 @@ var title_label: Label
 var subtitle_label: Label
 var money_label: Label
 var tab_buttons: Dictionary = {}
-var mode_selector: OptionButton
-var asset_filter_selector: OptionButton
+var context_row: HBoxContainer
+var context_panel: PanelContainer
+var context_title_label: Label
+var context_description_label: Label
+var context_segment_panel: PanelContainer
+var context_buttons: Dictionary = {}
+var asset_buttons: Dictionary = {}
+var request_item_button: Button
+var portfolio_history := false
+var detail_panel: Control
+var action_bar: PanelContainer
+var action_content: HBoxContainer
+var status_timer: Timer
 var search_input: LineEdit
 var search_timer: Timer
 var refresh_button: Button
@@ -168,6 +179,8 @@ func open_exchange() -> void:
 	visible = true
 	size = EXCHANGE_SIZE
 	_clamp_to_parent()
+	active_tab = "browse"
+	active_section = "market"
 	_normalize_filter_for_tab()
 	confirmation_action = Callable()
 	if confirmation_overlay != null:
@@ -187,7 +200,7 @@ func open_exchange() -> void:
 	_render_current_list()
 	_refresh_controls()
 	if portfolio_loaded and browse_loaded:
-		_set_status(_t("ui.exchange.status.ready"), UI_MUTED)
+		_set_status("", UI_MUTED)
 
 
 func close_exchange() -> void:
@@ -215,6 +228,7 @@ func _build_interface() -> void:
 	margin.add_child(layout)
 	layout.add_child(_build_header())
 	layout.add_child(_build_tabs())
+	layout.add_child(_build_context_navigation())
 	layout.add_child(_build_filters())
 
 	var workspace := HBoxContainer.new()
@@ -222,13 +236,21 @@ func _build_interface() -> void:
 	workspace.add_theme_constant_override("separation", 12)
 	layout.add_child(workspace)
 	workspace.add_child(_build_list_panel())
-	workspace.add_child(_build_detail_panel())
+	detail_panel = _build_detail_panel()
+	workspace.add_child(detail_panel)
+	layout.add_child(_build_action_bar())
 
 	status_label = Label.new()
 	status_label.custom_minimum_size = Vector2(0, 24)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.add_theme_font_size_override("font_size", 11)
+	status_label.visible = false
 	layout.add_child(status_label)
+	status_timer = Timer.new()
+	status_timer.one_shot = true
+	status_timer.wait_time = 5.0
+	status_timer.timeout.connect(func() -> void: status_label.visible = false)
+	add_child(status_timer)
 
 	_build_confirmation_overlay()
 	_build_advanced_filter_panel()
@@ -359,7 +381,7 @@ func _build_header() -> Control:
 	var wallet_panel := PanelContainer.new()
 	wallet_panel.custom_minimum_size = Vector2(165, 40)
 	wallet_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	wallet_panel.add_theme_stylebox_override("panel", _panel_style(UI_INTERACTIVE, Color("#806d34aa"), 9, 1))
+	wallet_panel.add_theme_stylebox_override("panel", _panel_style(UI_INTERACTIVE, Color.TRANSPARENT, 9, 0))
 	header.add_child(wallet_panel)
 	money_label = Label.new()
 	money_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -379,51 +401,112 @@ func _build_header() -> Control:
 
 func _build_tabs() -> Control:
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 6)
+	row.add_theme_constant_override("separation", 8)
 	for section: String in ["market", "create", "mine"]:
+		if section == "mine":
+			var spacer := Control.new()
+			spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			row.add_child(spacer)
 		var button := Button.new()
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.custom_minimum_size = Vector2(0, 40)
+		button.custom_minimum_size = Vector2(160, 42)
 		button.pressed.connect(_on_section_pressed.bind(section))
+		_apply_primary_navigation_style(button)
 		row.add_child(button)
 		tab_buttons[section] = button
 	return row
 
 
+func _build_context_navigation() -> Control:
+	context_panel = PanelContainer.new()
+	context_panel.name = "ExchangeContextPanel"
+	context_panel.custom_minimum_size = Vector2(0, 52)
+	context_panel.add_theme_stylebox_override(
+		"panel", _compact_panel_style(Color("#071522cc"), Color("#29465b99"), 10, 1, 14, 5)
+	)
+	context_row = HBoxContainer.new()
+	context_row.add_theme_constant_override("separation", 14)
+	context_panel.add_child(context_row)
+	var copy := VBoxContainer.new()
+	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy.alignment = BoxContainer.ALIGNMENT_CENTER
+	copy.add_theme_constant_override("separation", 2)
+	context_row.add_child(copy)
+	context_title_label = Label.new()
+	context_title_label.add_theme_font_size_override("font_size", 16)
+	context_title_label.add_theme_color_override("font_color", UI_TEXT)
+	copy.add_child(context_title_label)
+	context_description_label = Label.new()
+	context_description_label.add_theme_font_size_override("font_size", 10)
+	context_description_label.add_theme_color_override("font_color", UI_MUTED)
+	copy.add_child(context_description_label)
+	context_segment_panel = PanelContainer.new()
+	context_segment_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	context_segment_panel.add_theme_stylebox_override(
+		"panel", _compact_panel_style(Color("#040b13e8"), Color("#29465b88"), 8, 1, 4, 4)
+	)
+	context_row.add_child(context_segment_panel)
+	var segments := HBoxContainer.new()
+	segments.add_theme_constant_override("separation", 3)
+	context_segment_panel.add_child(segments)
+	for mode: String in ["sell", "wanted", "active", "history", "browse"]:
+		var button := Button.new()
+		button.custom_minimum_size = Vector2(128, 32)
+		button.pressed.connect(_on_context_pressed.bind(mode))
+		segments.add_child(button)
+		context_buttons[mode] = button
+	return context_panel
+
+
+func _on_context_pressed(mode: String) -> void:
+	if request_busy:
+		return
+	if mode in ["active", "history"]:
+		portfolio_history = mode == "history"
+		selected_entry.clear()
+		selected_kind = ""
+		_render_current_list()
+		_refresh_controls()
+	else:
+		await _on_tab_pressed(mode)
+
+
+func _build_action_bar() -> Control:
+	action_bar = PanelContainer.new()
+	action_bar.name = "ExchangeActionBar"
+	action_bar.custom_minimum_size = Vector2(0, 76)
+	action_bar.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, Color.TRANSPARENT, 10, 0))
+	action_content = HBoxContainer.new()
+	action_content.add_theme_constant_override("separation", 16)
+	action_bar.add_child(action_content)
+	return action_bar
+
+
 func _build_filters() -> Control:
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-	mode_selector = OptionButton.new()
-	mode_selector.name = "ExchangeModeSelector"
-	mode_selector.custom_minimum_size = Vector2(150, 34)
-	mode_selector.item_selected.connect(_on_mode_selected)
-	_apply_filter_option_style(mode_selector)
-	row.add_child(mode_selector)
-	asset_filter_selector = OptionButton.new()
-	asset_filter_selector.name = "ExchangeAssetTypeSelector"
-	asset_filter_selector.custom_minimum_size = Vector2(125, 34)
+	row.add_theme_constant_override("separation", 10)
 	for filter_id: String in ["item", "pokemon"]:
-		asset_filter_selector.add_item("")
-		asset_filter_selector.set_item_metadata(asset_filter_selector.item_count - 1, filter_id)
-	asset_filter_selector.item_selected.connect(_on_asset_filter_selected)
-	_apply_filter_option_style(asset_filter_selector)
-	row.add_child(asset_filter_selector)
+		var button := Button.new()
+		button.custom_minimum_size = Vector2(100, 36)
+		button.pressed.connect(_on_filter_pressed.bind(filter_id))
+		_apply_category_button_style(button)
+		row.add_child(button)
+		asset_buttons[filter_id] = button
 	search_input = LineEdit.new()
 	search_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	search_input.custom_minimum_size = Vector2(300, 34)
+	search_input.custom_minimum_size = Vector2(180, 36)
 	search_input.clear_button_enabled = true
 	search_input.text_changed.connect(_on_search_changed)
 	_apply_line_edit_style(search_input)
 	row.add_child(search_input)
 	advanced_filter_button = Button.new()
 	advanced_filter_button.name = "AdvancedFilterButton"
-	advanced_filter_button.custom_minimum_size = Vector2(118, 34)
+	advanced_filter_button.custom_minimum_size = Vector2(112, 36)
 	advanced_filter_button.pressed.connect(_toggle_advanced_filter_panel)
-	_apply_button_style(advanced_filter_button)
+	_apply_utility_button_style(advanced_filter_button)
 	row.add_child(advanced_filter_button)
 	browse_sort_button = OptionButton.new()
 	browse_sort_button.name = "BrowseSortButton"
-	browse_sort_button.custom_minimum_size = Vector2(175, 34)
+	browse_sort_button.custom_minimum_size = Vector2(180, 36)
 	for sort_mode: String in [
 		"newest_desc", "newest_asc", "price_desc", "price_asc", "level_desc", "level_asc",
 	]:
@@ -431,14 +514,13 @@ func _build_filters() -> Control:
 		browse_sort_button.set_item_metadata(browse_sort_button.item_count - 1, sort_mode)
 	browse_sort_button.item_selected.connect(_on_browse_sort_selected)
 	_apply_filter_option_style(browse_sort_button)
-	_apply_toolbar_accent_style(browse_sort_button, UI_GOLD)
 	row.add_child(browse_sort_button)
 	refresh_button = Button.new()
-	refresh_button.custom_minimum_size = Vector2(38, 34)
+	refresh_button.custom_minimum_size = Vector2(38, 36)
 	refresh_button.pressed.connect(_refresh_current_tab)
 	refresh_button.name = "RefreshButton"
 	refresh_button.text = "↻"
-	_apply_button_style(refresh_button)
+	_apply_utility_button_style(refresh_button)
 	row.add_child(refresh_button)
 	return row
 
@@ -622,7 +704,7 @@ func _new_tristate_filter_option() -> OptionButton:
 
 
 func _apply_filter_option_style(option: OptionButton) -> void:
-	_apply_button_style(option)
+	_apply_utility_button_style(option)
 	option.add_theme_icon_override("arrow", DROPDOWN_ARROW)
 	option.add_theme_constant_override("arrow_margin", 10)
 	var popup := option.get_popup()
@@ -685,10 +767,10 @@ func _filter_dropdown_item_style(
 func _build_list_panel() -> Control:
 	var panel := PanelContainer.new()
 	panel.name = "ExchangeListPanel"
-	panel.custom_minimum_size = Vector2(615, 0)
+	panel.custom_minimum_size = Vector2(0, 0)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER, 11, 1))
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, Color.TRANSPARENT, 11, 0))
 	var margin := MarginContainer.new()
 	for side: String in ["left", "top", "right", "bottom"]:
 		margin.add_theme_constant_override("margin_%s" % side, 12)
@@ -696,10 +778,20 @@ func _build_list_panel() -> Control:
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 8)
 	margin.add_child(layout)
+	var heading := HBoxContainer.new()
+	layout.add_child(heading)
 	list_caption = Label.new()
+	list_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list_caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	list_caption.add_theme_font_size_override("font_size", 12)
-	list_caption.add_theme_color_override("font_color", UI_CYAN)
-	layout.add_child(list_caption)
+	list_caption.add_theme_color_override("font_color", UI_MUTED)
+	heading.add_child(list_caption)
+	request_item_button = Button.new()
+	request_item_button.name = "ExchangeRequestItemButton"
+	request_item_button.custom_minimum_size = Vector2(150, 32)
+	request_item_button.pressed.connect(_on_tab_pressed.bind("wishlist"))
+	_apply_button_style(request_item_button)
+	heading.add_child(request_item_button)
 	list_scroll = ScrollContainer.new()
 	list_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -769,8 +861,10 @@ func _on_tab_pressed(tab: String) -> void:
 	active_tab = tab
 	active_section = _section_for_tab(tab)
 	_normalize_filter_for_tab()
-	if active_tab not in ["browse", "wanted", "wishlist"]:
-		_hide_advanced_filter_panel()
+	_hide_advanced_filter_panel()
+	search_timer.stop()
+	search_input.text = ""
+	list_scroll.scroll_vertical = 0
 	selected_entry.clear()
 	selected_kind = ""
 	match active_tab:
@@ -786,7 +880,7 @@ func _on_tab_pressed(tab: String) -> void:
 
 
 func _on_section_pressed(section: String) -> void:
-	if request_busy or section == active_section:
+	if request_busy:
 		return
 	active_section = section
 	match section:
@@ -796,20 +890,6 @@ func _on_section_pressed(section: String) -> void:
 			await _on_tab_pressed("sell")
 		_:
 			await _on_tab_pressed("mine")
-
-
-func _on_mode_selected(index: int) -> void:
-	if request_busy or mode_selector == null or index < 0 or index >= mode_selector.item_count:
-		return
-	var tab := str(mode_selector.get_item_metadata(index))
-	if not tab.is_empty():
-		await _on_tab_pressed(tab)
-
-
-func _on_asset_filter_selected(index: int) -> void:
-	if request_busy or asset_filter_selector == null or index < 0 or index >= asset_filter_selector.item_count:
-		return
-	await _on_filter_pressed(str(asset_filter_selector.get_item_metadata(index)))
 
 
 func _on_filter_pressed(filter_id: String) -> void:
@@ -1312,6 +1392,9 @@ func _render_current_list() -> void:
 					var wish := _dictionary(value).duplicate(true)
 					wish["_exchangeKind"] = "wish"
 					entries.append(wish)
+			entries = entries.filter(func(value: Variant) -> bool:
+				return (str(_dictionary(value).get("status", "active")) != "active") == portfolio_history
+			)
 		_:
 			entries = browse_listings
 
@@ -1328,7 +1411,7 @@ func _render_current_list() -> void:
 		list_container.columns = 1
 		var empty := Label.new()
 		empty.name = "ExchangeEmptyState"
-		empty.text = _t("ui.exchange.empty.%s" % active_tab)
+		empty.text = _t("ui.exchange.empty.history" if active_tab == "mine" and portfolio_history else "ui.exchange.empty.%s" % active_tab)
 		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		empty.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1350,7 +1433,7 @@ func _render_current_list() -> void:
 func _update_list_grid_columns() -> void:
 	if list_container == null:
 		return
-	if active_tab != "browse":
+	if active_tab not in ["browse", "wishlist"]:
 		list_container.columns = 1
 		return
 	if rendered_list_entry_count == 0:
@@ -1365,7 +1448,7 @@ func _update_list_grid_columns() -> void:
 
 func _entry_button(entry: Dictionary, kind: String) -> Button:
 	var button := Button.new()
-	var browse_card := active_tab in ["browse", "wanted", "wishlist"] and kind in ["listing", "wish", "wish_catalog"]
+	var browse_card := active_tab in ["browse", "wishlist"]
 	button.custom_minimum_size = Vector2(
 		BROWSE_CARD_MIN_WIDTH if browse_card else 0.0,
 		BROWSE_CARD_HEIGHT if browse_card else 70,
@@ -1383,8 +1466,10 @@ func _entry_button(entry: Dictionary, kind: String) -> Button:
 		button.text = "%s\n%s" % [_entry_name(entry, kind), _entry_subtitle(entry, kind)]
 		button.icon = _entry_texture(entry, kind)
 	button.tooltip_text = _entry_name(entry, kind)
+	button.set_meta("exchange_selection_key", _entry_selection_key(entry, kind))
+	button.set_meta("exchange_kind", kind)
 	button.pressed.connect(_select_entry.bind(entry, kind))
-	_apply_button_style(button, _entry_matches_selection(entry, kind))
+	_apply_listing_button_style(button, _entry_matches_selection(entry, kind))
 	return button
 
 
@@ -1423,7 +1508,7 @@ func _build_browse_card_content(button: Button, entry: Dictionary, kind: String)
 	name.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	name.max_lines_visible = 2
 	name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	name.add_theme_font_size_override("font_size", 12)
+	name.add_theme_font_size_override("font_size", 15)
 	name.add_theme_color_override("font_color", UI_TEXT)
 	stack.add_child(name)
 
@@ -1435,9 +1520,16 @@ func _build_browse_card_content(button: Button, entry: Dictionary, kind: String)
 		if _entry_asset_type(entry, kind) == "pokemon"
 		else "×%d" % maxi(int(entry.get("quantity", 1)), 1)
 	)
+	metadata_label.visible = kind != "wish_catalog"
 	metadata_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	metadata_label.add_theme_font_size_override("font_size", 10)
-	metadata_label.add_theme_color_override("font_color", UI_CYAN)
+	metadata_label.add_theme_font_size_override("font_size", 13)
+	metadata_label.add_theme_color_override("font_color", UI_MUTED)
+	if _entry_asset_type(entry, kind) == "pokemon":
+		if bool(asset.get("shiny", false)):
+			metadata_label.text += " · ★"
+		if bool(asset.get("hiddenAbility", asset.get("hidden_ability", false))):
+			metadata_label.text += " · HA"
+		metadata_label.tooltip_text = _t("ui.exchange.summary.shiny") + " / " + _t("ui.exchange.summary.hidden_ability")
 	stack.add_child(metadata_label)
 
 	var price := Label.new()
@@ -1451,49 +1543,100 @@ func _build_browse_card_content(button: Button, entry: Dictionary, kind: String)
 		)
 	)
 	price.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	price.add_theme_font_size_override("font_size", 13)
-	price.add_theme_color_override("font_color", UI_GOLD)
+	price.add_theme_font_size_override("font_size", 16)
+	price.add_theme_color_override("font_color", UI_MUTED if kind == "wish_catalog" else UI_GOLD)
 	stack.add_child(price)
+	if _entry_asset_type(entry, kind) == "item" and kind != "wish_catalog" and int(entry.get("quantity", 1)) > 1:
+		var unit_price := Label.new()
+		unit_price.text = _t("ui.exchange.price_each", {"amount": _format_money(int(entry.get("unitPrice", 0)))})
+		unit_price.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		unit_price.add_theme_font_size_override("font_size", 12)
+		unit_price.add_theme_color_override("font_color", UI_MUTED)
+		stack.add_child(unit_price)
 
 
 func _select_entry(entry: Dictionary, kind: String) -> void:
+	if request_busy:
+		return
 	selected_entry = entry.duplicate(true)
 	selected_kind = kind
-	# Render the detail immediately. Rebuilding the list is deferred so a button
-	# press cannot leave the previous "select an asset" prompt on screen.
+	# Keep the grid and scroll position intact while inspecting another offer.
+	for child: Node in list_container.get_children():
+		if child is Button:
+			_apply_listing_button_style(child, str(child.get_meta("exchange_kind", "")) == kind and str(child.get_meta("exchange_selection_key", "")) == _entry_selection_key(entry, kind))
 	_render_detail()
-	call_deferred("_render_current_list")
 
 
 func _render_detail() -> void:
 	_clear_children(detail_stack)
+	_clear_children(action_content)
+	quantity_spin = null
+	price_spin = null
+	total_price_label = null
+	var is_form := active_tab in ["sell", "wishlist"]
+	detail_panel.visible = is_form
+	action_bar.visible = not is_form
+	var target: BoxContainer = detail_stack if is_form else action_content
 	if selected_entry.is_empty():
 		var prompt := Label.new()
-		prompt.text = _t("ui.exchange.detail.select")
+		prompt.text = _t("ui.exchange.select.%s" % active_tab)
 		prompt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		prompt.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		prompt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		prompt.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		prompt.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		prompt.add_theme_color_override("font_color", UI_MUTED)
-		detail_stack.add_child(prompt)
+		target.add_child(prompt)
 		return
 
 	var asset := _entry_asset(selected_entry, selected_kind)
 	var asset_type := _entry_asset_type(selected_entry, selected_kind)
-	if asset_type == "pokemon":
-		detail_stack.add_child(_build_pokemon_detail_header(asset))
-		detail_stack.add_child(_build_pokemon_quick_summary(asset))
-	else:
-		detail_stack.add_child(_build_item_detail_header(asset))
+	if is_form:
+		if asset_type == "pokemon":
+			detail_stack.add_child(_build_pokemon_detail_header(asset))
+		else:
+			detail_stack.add_child(_build_item_detail_header(asset))
+		if selected_kind == "sell":
+			_build_sell_controls(asset)
+		elif selected_kind == "wish_catalog":
+			_build_wishlist_controls()
+		return
 
-	if selected_kind == "sell":
-		_build_sell_controls(asset)
-	elif selected_kind == "wish_catalog":
-		_build_wishlist_controls()
-	elif selected_kind == "wish":
+	var identity := VBoxContainer.new()
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity.alignment = BoxContainer.ALIGNMENT_CENTER
+	action_content.add_child(identity)
+	var name := Label.new()
+	name.name = "ExchangeSelectedName"
+	name.text = _entry_name(selected_entry, selected_kind)
+	name.tooltip_text = name.text
+	name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name.add_theme_font_size_override("font_size", 17)
+	identity.add_child(name)
+	var subtitle := Label.new()
+	subtitle.text = _t("ui.exchange.summary.level", {"value": int(asset.get("level", 1))}) if asset_type == "pokemon" else "%s · ×%d" % [_asset_detail_text(asset, "item"), int(selected_entry.get("quantity", 1))]
+	subtitle.tooltip_text = subtitle.text
+	subtitle.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	subtitle.add_theme_font_size_override("font_size", 12)
+	subtitle.add_theme_color_override("font_color", UI_MUTED)
+	identity.add_child(subtitle)
+	if asset_type == "pokemon":
+		action_content.add_child(_build_summary_button(asset))
+	if selected_kind == "wish":
 		_build_wish_controls()
 	else:
 		_build_listing_controls()
+
+
+func _build_summary_button(asset: Dictionary) -> Button:
+	var button := Button.new()
+	button.name = "PokemonSummaryButton"
+	button.text = _t("ui.exchange.action.open_summary")
+	button.tooltip_text = _t("ui.exchange.action.open_summary_tooltip")
+	button.custom_minimum_size = Vector2(130, 38)
+	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	button.pressed.connect(_on_pokemon_summary_pressed.bind(asset.duplicate(true)))
+	_apply_button_style(button)
+	return button
 
 
 func _build_item_detail_header(asset: Dictionary) -> Control:
@@ -1549,233 +1692,43 @@ func _build_item_detail_header(asset: Dictionary) -> Control:
 
 
 func _build_pokemon_detail_header(asset: Dictionary) -> Control:
-	var primary_type := _optional_text(_array(asset.get("types", [])).front() if not _array(asset.get("types", [])).is_empty() else "")
-	var type_surface := TypeColors.get_slot_background(primary_type, UI_INTERACTIVE)
-	var type_border := TypeColors.get_slot_border(primary_type, UI_BORDER)
 	var hero := PanelContainer.new()
 	hero.name = "PokemonPurchaseHeader"
-	hero.add_theme_stylebox_override("panel", _compact_panel_style(type_surface.darkened(0.58), type_border, 10, 1, 8, 5))
-	var header := HBoxContainer.new()
-	header.custom_minimum_size = Vector2(0, 86)
-	header.add_theme_constant_override("separation", 10)
-	hero.add_child(header)
-	var icon_frame := PanelContainer.new()
-	icon_frame.custom_minimum_size = Vector2(86, 86)
-	icon_frame.add_theme_stylebox_override("panel", _compact_panel_style(Color(type_surface, 0.34), Color(type_border, 0.7), 9, 1, 4, 4))
-	header.add_child(icon_frame)
+	hero.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, Color.TRANSPARENT, 10, 0))
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	hero.add_child(row)
 	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(76, 76)
+	icon.custom_minimum_size = Vector2(72, 72)
 	icon.texture = _entry_texture(selected_entry, selected_kind)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon_frame.add_child(icon)
-
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	row.add_child(icon)
 	var information := VBoxContainer.new()
 	information.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	information.add_theme_constant_override("separation", 2)
-	header.add_child(information)
-	var name_row := HBoxContainer.new()
-	name_row.add_theme_constant_override("separation", 5)
-	information.add_child(name_row)
+	information.alignment = BoxContainer.ALIGNMENT_CENTER
+	information.add_theme_constant_override("separation", 4)
+	row.add_child(information)
 	var name := Label.new()
 	name.text = _entry_name(selected_entry, selected_kind)
 	name.tooltip_text = name.text
-	name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	name.clip_text = true
 	name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	name.add_theme_font_size_override("font_size", 19)
-	name.add_theme_color_override("font_color", UI_TEXT)
-	name_row.add_child(name)
+	information.add_child(name)
+	var traits := Label.new()
+	traits.text = _t("ui.exchange.summary.level", {"value": int(asset.get("level", 1))})
 	if bool(asset.get("shiny", false)):
-		name_row.add_child(_build_micro_badge("★", UI_GOLD, Color("#493a13e8"), _t("ui.exchange.summary.shiny")))
+		traits.text += " · " + _t("ui.exchange.summary.shiny")
 	if bool(asset.get("hiddenAbility", asset.get("hidden_ability", false))):
-		name_row.add_child(_build_micro_badge("HA", UI_PURPLE, Color("#35204be8"), _t("ui.exchange.summary.hidden_ability")))
-	var open_button := Button.new()
-	open_button.name = "PokemonSummaryButton"
-	open_button.text = _t("ui.mail.summary")
-	open_button.tooltip_text = _t("ui.exchange.action.open_summary_tooltip")
-	open_button.custom_minimum_size = Vector2(72, 26)
-	open_button.pressed.connect(_on_pokemon_summary_pressed.bind(asset.duplicate(true)))
-	_apply_button_style(open_button)
-	name_row.add_child(open_button)
-
-	var traits: Array[String] = [
-		_t("ui.exchange.summary.level", {"value": int(asset.get("level", 1))}),
-		_content_name("natures", _optional_text(asset.get("nature")), _optional_text(asset.get("nature"), "—")),
-	]
-	var gender := _optional_text(asset.get("gender"))
-	if not gender.is_empty():
-		traits.append(gender)
-	var trait_label := Label.new()
-	trait_label.text = " • ".join(traits)
-	trait_label.clip_text = true
-	trait_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	trait_label.add_theme_font_size_override("font_size", 11)
-	trait_label.add_theme_color_override("font_color", UI_CYAN)
-	information.add_child(trait_label)
-
-	var type_row := HBoxContainer.new()
-	type_row.add_theme_constant_override("separation", 4)
-	information.add_child(type_row)
-	for value: Variant in _array(asset.get("types", [])):
-		var type_id := _optional_text(value)
-		if not type_id.is_empty():
-			type_row.add_child(_build_type_chip(type_id))
-	var ability_id := _optional_text(asset.get("ability"))
-	var ability_label := Label.new()
-	ability_label.text = "%s  %s" % [
-		_t("ui.exchange.summary.ability"),
-		_content_name("abilities", ability_id, _humanize_identifier(ability_id, "—")),
-	]
-	ability_label.clip_text = true
-	ability_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	ability_label.add_theme_font_size_override("font_size", 10)
-	ability_label.add_theme_color_override("font_color", UI_MUTED)
-	information.add_child(ability_label)
-
+		traits.text += " · HA"
+	traits.add_theme_color_override("font_color", UI_MUTED)
+	information.add_child(traits)
+	var summary_button := _build_summary_button(asset)
+	summary_button.custom_minimum_size = Vector2(150, 36)
+	summary_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	row.add_child(summary_button)
 	return hero
-
-
-func _build_micro_badge(text: String, color: Color, background: Color, tooltip: String) -> Control:
-	var badge := PanelContainer.new()
-	badge.tooltip_text = tooltip
-	badge.add_theme_stylebox_override("panel", _compact_panel_style(background, Color(color, 0.7), 6, 1, 4, 1))
-	var label := Label.new()
-	label.text = text
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 9)
-	label.add_theme_color_override("font_color", color)
-	badge.add_child(label)
-	return badge
-
-
-func _build_type_chip(type_id: String) -> Control:
-	var chip := PanelContainer.new()
-	chip.set_meta("exchange_type_chip", true)
-	var background := TypeColors.get_slot_background(type_id, UI_INTERACTIVE)
-	var border := TypeColors.get_slot_border(type_id, UI_BORDER)
-	chip.add_theme_stylebox_override("panel", _compact_panel_style(background.darkened(0.18), border, 6, 1, 6, 2))
-	var label := Label.new()
-	label.text = _content_name("types", type_id, _humanize_identifier(type_id))
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 9)
-	label.add_theme_color_override("font_color", TypeColors.get_slot_accent(type_id, UI_TEXT))
-	chip.add_child(label)
-	return chip
-
-
-func _build_pokemon_quick_summary(asset: Dictionary) -> Control:
-	var panel := PanelContainer.new()
-	panel.name = "PokemonQuickSummary"
-	panel.add_theme_stylebox_override("panel", _compact_panel_style(Color("#07111dcc"), UI_BORDER, 8, 1, 8, 5))
-	var content := VBoxContainer.new()
-	content.add_theme_constant_override("separation", 4)
-	panel.add_child(content)
-	var ivs := _dictionary(asset.get("ivs", {}))
-	content.add_child(_quick_stat_summary(
-		_t("ui.exchange.summary.ivs", {"total": _stat_total(ivs), "maximum": 186}),
-		ivs,
-		"iv"
-	))
-	var evs := _dictionary(asset.get("evs", {}))
-	content.add_child(_quick_stat_summary(
-		_t("ui.exchange.summary.evs", {"total": _stat_total(evs), "maximum": 510}),
-		evs,
-		"ev"
-	))
-	content.add_child(_quick_moves_summary(_array(asset.get("moves", []))))
-	return panel
-
-
-func _quick_stat_summary(title_text: String, stats: Dictionary, stat_kind: String) -> Control:
-	var section := VBoxContainer.new()
-	section.add_theme_constant_override("separation", 1)
-	var title := Label.new()
-	title.text = title_text
-	title.add_theme_font_size_override("font_size", 10)
-	title.add_theme_color_override("font_color", UI_MUTED)
-	section.add_child(title)
-	var values := GridContainer.new()
-	values.columns = 6
-	values.add_theme_constant_override("h_separation", 4)
-	section.add_child(values)
-	for key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
-		var stat_amount := int(stats.get(key, 0))
-		var highlight := (stat_kind == "iv" and stat_amount == 31) or (stat_kind == "ev" and stat_amount > 0)
-		var cell := PanelContainer.new()
-		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		cell.add_theme_stylebox_override("panel", _compact_panel_style(
-			Color("#0d2335dc") if highlight else Color("#091622c4"),
-			Color(UI_CYAN, 0.55) if stat_kind == "iv" and highlight else (Color(UI_GOLD, 0.55) if highlight else Color(UI_BORDER, 0.42)),
-			5,
-			1,
-			3,
-			2
-		))
-		var cell_content := VBoxContainer.new()
-		cell_content.add_theme_constant_override("separation", 0)
-		cell.add_child(cell_content)
-		var stat_name := Label.new()
-		stat_name.text = str({
-			"hp": "HP", "atk": "Atk", "def": "Def",
-			"spa": "SpA", "spd": "SpD", "spe": "Spe",
-		}.get(key, key))
-		stat_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		stat_name.add_theme_font_size_override("font_size", 9)
-		stat_name.add_theme_color_override("font_color", UI_MUTED)
-		cell_content.add_child(stat_name)
-		var stat_value := Label.new()
-		stat_value.text = str(stat_amount)
-		stat_value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		stat_value.add_theme_font_size_override("font_size", 12)
-		stat_value.add_theme_color_override("font_color", UI_CYAN if stat_kind == "iv" and highlight else (UI_GOLD if highlight else UI_TEXT))
-		cell_content.add_child(stat_value)
-		values.add_child(cell)
-	return section
-
-
-func _quick_moves_summary(moves: Array) -> Control:
-	var section := VBoxContainer.new()
-	section.add_theme_constant_override("separation", 2)
-	var title := Label.new()
-	title.text = _t("ui.exchange.summary.moves")
-	title.add_theme_font_size_override("font_size", 10)
-	title.add_theme_color_override("font_color", UI_MUTED)
-	section.add_child(title)
-	if moves.is_empty():
-		var empty := Label.new()
-		empty.text = _t("ui.exchange.summary.no_moves")
-		empty.add_theme_font_size_override("font_size", 10)
-		empty.add_theme_color_override("font_color", UI_MUTED)
-		section.add_child(empty)
-		return section
-	var grid := GridContainer.new()
-	grid.columns = 2
-	grid.add_theme_constant_override("h_separation", 4)
-	grid.add_theme_constant_override("v_separation", 4)
-	section.add_child(grid)
-	for value: Variant in moves.slice(0, 4):
-		var move := _dictionary(value)
-		var move_id := _optional_text(move.get("id"), _optional_text(move.get("move")))
-		var fallback := _optional_text(move.get("name"), _humanize_identifier(move_id, "—"))
-		var move_type := _optional_text(move.get("type"))
-		var chip := PanelContainer.new()
-		chip.set_meta("exchange_move_chip", true)
-		chip.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		var background := TypeColors.get_slot_background(move_type, UI_INTERACTIVE)
-		var border := TypeColors.get_slot_border(move_type, UI_BORDER)
-		chip.add_theme_stylebox_override("panel", _compact_panel_style(background.darkened(0.45), Color(border, 0.72), 6, 1, 6, 3))
-		var label := Label.new()
-		label.text = _content_name("moves", move_id, fallback)
-		label.tooltip_text = label.text
-		label.clip_text = true
-		label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		label.add_theme_font_size_override("font_size", 10)
-		label.add_theme_color_override("font_color", UI_TEXT)
-		chip.add_child(label)
-		grid.add_child(chip)
-	return section
 
 
 func _on_pokemon_summary_pressed(asset: Dictionary) -> void:
@@ -1821,7 +1774,7 @@ func _build_sell_controls(asset: Dictionary) -> void:
 	price_spin.step = 1
 	price_spin.update_on_text_changed = true
 	price_spin.value_changed.connect(_update_sell_total)
-	detail_stack.add_child(_labeled_control(_t("ui.exchange.unit_price"), price_spin))
+	detail_stack.add_child(_labeled_control(_t("ui.exchange.asking_price") if asset_type == "pokemon" else _t("ui.exchange.unit_price"), price_spin))
 	total_price_label = Label.new()
 	total_price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	total_price_label.add_theme_font_size_override("font_size", 16)
@@ -1851,7 +1804,7 @@ func _build_wishlist_controls() -> void:
 	price_spin.step = 1
 	price_spin.update_on_text_changed = true
 	price_spin.value_changed.connect(_update_sell_total)
-	detail_stack.add_child(_labeled_control(_t("ui.exchange.unit_price"), price_spin))
+	detail_stack.add_child(_labeled_control(_t("ui.exchange.offer_each"), price_spin))
 	total_price_label = Label.new()
 	total_price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	total_price_label.add_theme_font_size_override("font_size", 16)
@@ -1868,7 +1821,7 @@ func _build_wishlist_controls() -> void:
 	escrow_note.text = _t("ui.exchange.wishlist.escrow_note")
 	escrow_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	escrow_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	escrow_note.add_theme_font_size_override("font_size", 10)
+	escrow_note.add_theme_font_size_override("font_size", 13)
 	escrow_note.add_theme_color_override("font_color", UI_MUTED)
 	detail_stack.add_child(escrow_note)
 	_update_sell_total(0)
@@ -1876,90 +1829,80 @@ func _build_wishlist_controls() -> void:
 
 func _build_wish_controls() -> void:
 	var status := str(selected_entry.get("status", "active"))
-	var footer := PanelContainer.new()
-	footer.name = "ExchangeWishFooter"
-	footer.add_theme_stylebox_override("panel", _compact_panel_style(Color("#07111dcc"), Color("#806d34aa"), 8, 1, 8, 5))
-	var content := VBoxContainer.new()
-	content.add_theme_constant_override("separation", 5)
-	footer.add_child(content)
-	var price_row := HBoxContainer.new()
-	price_row.add_theme_constant_override("separation", 8)
-	content.add_child(price_row)
+	var information := VBoxContainer.new()
+	information.alignment = BoxContainer.ALIGNMENT_CENTER
+	action_content.add_child(information)
 	var price := Label.new()
 	price.text = _t("ui.exchange.wishlist.offer", {"amount": _format_money(int(selected_entry.get("totalPrice", 0)))})
-	price.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	price.add_theme_font_size_override("font_size", 19)
+	price.add_theme_font_size_override("font_size", 17)
 	price.add_theme_color_override("font_color", UI_GOLD)
-	price_row.add_child(price)
-	var state := Label.new()
-	state.text = "●  %s" % _t("ui.exchange.wishlist.state.%s" % status)
-	state.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	state.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	state.add_theme_color_override("font_color", UI_GREEN if status in ["active", "fulfilled"] else UI_MUTED)
-	price_row.add_child(state)
-	if status == "active":
-		var action := Button.new()
-		action.name = "ExchangeWishActionButton"
-		action.custom_minimum_size = Vector2(0, 40)
-		if bool(selected_entry.get("isMine", false)):
-			action.text = _t("ui.exchange.action.cancel_wish")
-			action.pressed.connect(_confirm_cancel_wish)
-			_apply_danger_button_style(action)
-		else:
-			var required := maxi(int(selected_entry.get("quantity", 1)), 1)
-			var item_id := str(_dictionary(selected_entry.get("item", {})).get("itemId", ""))
-			var available := _available_item_quantity(item_id)
-			action.text = _t("ui.exchange.action.fulfill_wish")
-			action.disabled = available < required
-			action.tooltip_text = _t(
-				"ui.exchange.wishlist.need_items",
-				{"required": required, "available": available},
-			) if action.disabled else ""
-			action.pressed.connect(_confirm_fulfill_wish)
-			_apply_primary_button_style(action)
-		content.add_child(action)
-	detail_stack.add_child(footer)
+	information.add_child(price)
+	if status != "active":
+		var state := Label.new()
+		state.text = _t("ui.exchange.wishlist.state.%s" % status)
+		information.add_child(state)
+		return
+	var action := Button.new()
+	action.name = "ExchangeWishActionButton"
+	action.custom_minimum_size = Vector2(160, 40)
+	action.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	if bool(selected_entry.get("isMine", false)):
+		action.text = _t("ui.exchange.action.cancel_wish")
+		action.pressed.connect(_confirm_cancel_wish)
+		_apply_button_style(action)
+	else:
+		var required := maxi(int(selected_entry.get("quantity", 1)), 1)
+		var item_id := str(_dictionary(selected_entry.get("item", {})).get("itemId", ""))
+		var available := _available_item_quantity(item_id)
+		action.text = _t("ui.exchange.action.fulfill_wish")
+		action.disabled = available < required
+		if available < required:
+			var reason := Label.new()
+			reason.text = _t("ui.exchange.wishlist.need_items", {"required": required, "available": available})
+			reason.add_theme_font_size_override("font_size", 11)
+			reason.add_theme_color_override("font_color", UI_MUTED)
+			information.add_child(reason)
+			action.tooltip_text = reason.text
+		action.pressed.connect(_confirm_fulfill_wish)
+		_apply_primary_button_style(action)
+	action.set_meta("exchange_unavailable", action.disabled)
+	action.disabled = action.disabled or request_busy
+	action_content.add_child(action)
 
 
 func _build_listing_controls() -> void:
 	var status := str(selected_entry.get("status", "active"))
-	var footer := PanelContainer.new()
-	footer.name = "ExchangePurchaseFooter"
-	footer.add_theme_stylebox_override("panel", _compact_panel_style(Color("#07111dcc"), Color("#806d34aa"), 8, 1, 8, 5))
-	var content := VBoxContainer.new()
-	content.add_theme_constant_override("separation", 5)
-	footer.add_child(content)
-	var price_row := HBoxContainer.new()
-	price_row.add_theme_constant_override("separation", 8)
-	content.add_child(price_row)
-	var price := Label.new()
-	price.text = _t("ui.exchange.total", {"amount": _format_money(int(selected_entry.get("totalPrice", 0)))})
-	price.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	price.add_theme_font_size_override("font_size", 19)
-	price.add_theme_color_override("font_color", UI_GOLD)
-	price_row.add_child(price)
-	var state := Label.new()
-	state.text = "●  %s" % _t("ui.exchange.state.%s" % status)
-	state.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	state.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	state.add_theme_color_override("font_color", UI_GREEN if status in ["active", "sold"] else UI_MUTED)
-	price_row.add_child(state)
-	if status == "active":
-		var action := Button.new()
-		action.name = "ExchangeListingActionButton"
-		action.custom_minimum_size = Vector2(0, 40)
-		if active_tab == "mine" or bool(selected_entry.get("isMine", false)):
-			action.text = _t("ui.exchange.action.cancel") if active_tab == "mine" else _t("ui.exchange.action.owned")
-			action.disabled = active_tab != "mine"
-			if active_tab == "mine":
-				action.pressed.connect(_confirm_cancel_selected)
-		else:
-			action.text = _t("ui.exchange.action.buy")
-			action.disabled = wallet_money < int(selected_entry.get("totalPrice", 0))
-			action.pressed.connect(_confirm_buy_selected)
+	if status != "active":
+		var state := Label.new()
+		state.text = _t("ui.exchange.state.%s" % status)
+		state.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		action_content.add_child(state)
+		return
+	var action := Button.new()
+	action.name = "ExchangeListingActionButton"
+	action.custom_minimum_size = Vector2(160, 40)
+	action.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	if active_tab == "mine" or bool(selected_entry.get("isMine", false)):
+		action.text = _t("ui.exchange.action.cancel") if active_tab == "mine" else _t("ui.exchange.action.owned")
+		action.disabled = active_tab != "mine"
+		if active_tab == "mine":
+			action.pressed.connect(_confirm_cancel_selected)
+		_apply_button_style(action)
+	else:
+		action.text = _t("ui.exchange.action.buy_price", {"amount": _format_money(int(selected_entry.get("totalPrice", 0)))})
+		action.disabled = wallet_money < int(selected_entry.get("totalPrice", 0))
+		if action.disabled:
+			var reason := Label.new()
+			reason.text = _t("ui.exchange.insufficient_funds")
+			reason.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			reason.add_theme_color_override("font_color", UI_MUTED)
+			reason.add_theme_font_size_override("font_size", 12)
+			action_content.add_child(reason)
+		action.pressed.connect(_confirm_buy_selected)
 		_apply_primary_button_style(action)
-		content.add_child(action)
-	detail_stack.add_child(footer)
+	action.set_meta("exchange_unavailable", action.disabled)
+	action.disabled = action.disabled or request_busy
+	action_content.add_child(action)
 
 
 func _confirm_list_selected() -> void:
@@ -2252,9 +2195,9 @@ func _refresh_controls() -> void:
 		var button := tab_buttons[key] as Button
 		button.text = _t("ui.exchange.nav.%s" % str(key))
 		button.disabled = request_busy
-		_apply_button_style(button, str(key) == active_section)
-	_refresh_mode_selector()
-	_refresh_asset_filter_selector()
+		_apply_primary_navigation_style(button, str(key) == active_section)
+	_refresh_context_navigation()
+	_refresh_asset_filter_buttons()
 	search_input.editable = not request_busy
 	search_input.placeholder_text = _t(
 		"ui.exchange.search_wishlist" if active_tab == "wishlist"
@@ -2268,11 +2211,7 @@ func _refresh_controls() -> void:
 		)
 		advanced_filter_button.visible = active_tab == "browse"
 		advanced_filter_button.disabled = request_busy
-		_apply_toolbar_accent_style(
-			advanced_filter_button,
-			UI_PURPLE,
-			filter_count > 0 or (advanced_filter_panel != null and advanced_filter_panel.visible),
-		)
+		_apply_utility_button_style(advanced_filter_button, filter_count > 0 or (advanced_filter_panel != null and advanced_filter_panel.visible))
 	if browse_sort_button != null:
 		browse_sort_button.visible = active_tab == "browse"
 		browse_sort_button.disabled = request_busy
@@ -2285,6 +2224,18 @@ func _refresh_controls() -> void:
 		refresh_button.text = "↻"
 		refresh_button.tooltip_text = _t("ui.exchange.refresh")
 		refresh_button.disabled = request_busy
+	request_item_button.text = _t("ui.exchange.mode.wishlist")
+	request_item_button.visible = active_tab == "browse" and asset_filter == "item"
+	request_item_button.disabled = request_busy
+	for content: Control in [action_content, detail_stack]:
+		for button: Node in content.find_children("*", "Button", true, false):
+			if not button.has_meta("exchange_unavailable"):
+				button.set_meta("exchange_unavailable", (button as Button).disabled)
+			(button as Button).disabled = request_busy or bool(button.get_meta("exchange_unavailable"))
+	if quantity_spin != null:
+		quantity_spin.editable = not request_busy
+	if price_spin != null:
+		price_spin.editable = not request_busy
 	_refresh_money()
 
 
@@ -2298,51 +2249,35 @@ func _normalize_filter_for_tab() -> void:
 
 
 func _section_for_tab(tab: String) -> String:
-	if tab in ["browse", "wanted"]:
+	if tab in ["browse", "wishlist"]:
 		return "market"
-	if tab in ["sell", "wishlist"]:
+	if tab in ["sell", "wanted"]:
 		return "create"
 	return "mine"
 
 
-func _refresh_mode_selector() -> void:
-	if mode_selector == null:
-		return
-	var modes: Array[String] = []
-	if active_section == "market":
-		modes.assign(["browse", "wanted"])
-	elif active_section == "create":
-		modes.assign(["sell", "wishlist"])
-	var rebuild := mode_selector.item_count != modes.size()
-	if not rebuild:
-		for index in range(modes.size()):
-			if str(mode_selector.get_item_metadata(index)) != modes[index]:
-				rebuild = true
-				break
-	if rebuild:
-		mode_selector.clear()
-		for mode: String in modes:
-			mode_selector.add_item("")
-			mode_selector.set_item_metadata(mode_selector.item_count - 1, mode)
-	for index in range(mode_selector.item_count):
-		var mode := str(mode_selector.get_item_metadata(index))
-		mode_selector.set_item_text(index, _t("ui.exchange.mode.%s" % mode))
-		if mode == active_tab:
-			mode_selector.select(index)
-	mode_selector.visible = not modes.is_empty()
-	mode_selector.disabled = request_busy
+func _refresh_context_navigation() -> void:
+	context_panel.visible = active_tab in ["sell", "wanted", "wishlist", "mine"]
+	context_row.visible = context_panel.visible
+	if context_panel.visible:
+		context_title_label.text = _t("ui.exchange.context_title.%s" % active_tab)
+		context_description_label.text = _t("ui.exchange.context_description.%s" % active_tab)
+	for mode: String in context_buttons:
+		var button := context_buttons[mode] as Button
+		button.visible = (active_section == "create" and mode in ["sell", "wanted"]) or (active_tab == "mine" and mode in ["active", "history"]) or (active_tab == "wishlist" and mode == "browse")
+		button.text = _t("ui.exchange.context.%s" % mode)
+		button.disabled = request_busy
+		var selected := mode == active_tab or (active_tab == "mine" and mode == ("history" if portfolio_history else "active"))
+		_apply_segment_button_style(button, selected)
 
 
-func _refresh_asset_filter_selector() -> void:
-	if asset_filter_selector == null:
-		return
-	for index in range(asset_filter_selector.item_count):
-		var filter_id := str(asset_filter_selector.get_item_metadata(index))
-		asset_filter_selector.set_item_text(index, _t("ui.exchange.filter.%s" % filter_id))
-		if filter_id == asset_filter:
-			asset_filter_selector.select(index)
-	asset_filter_selector.visible = active_tab in ["browse", "sell", "mine"]
-	asset_filter_selector.disabled = request_busy
+func _refresh_asset_filter_buttons() -> void:
+	for filter_id: String in asset_buttons:
+		var button := asset_buttons[filter_id] as Button
+		button.text = _t("ui.exchange.filter.%s" % filter_id)
+		button.visible = active_tab in ["browse", "sell", "mine"]
+		button.disabled = request_busy
+		_apply_category_button_style(button, filter_id == asset_filter)
 
 
 func _center_in_parent() -> void:
@@ -2382,7 +2317,7 @@ func _update_sell_total(_value: float) -> void:
 		return
 	var quantity := int(quantity_spin.value) if quantity_spin != null else 1
 	var unit_price := int(price_spin.value) if price_spin != null else 0
-	total_price_label.text = _t("ui.exchange.total", {"amount": _format_money(quantity * unit_price)})
+	total_price_label.text = _t("ui.exchange.form_total", {"amount": _format_money(quantity * unit_price)})
 
 
 func _entry_name(entry: Dictionary, kind: String) -> String:
@@ -2413,11 +2348,13 @@ func _entry_subtitle(entry: Dictionary, kind: String) -> String:
 		return _t("ui.exchange.owned", {"quantity": int(asset.get("quantity", 1))})
 	var status := str(entry.get("status", "active"))
 	if kind == "wish":
-		return "%s  •  %s" % [
+		return "%s · ×%d · %s  •  %s" % [
+			_t("ui.exchange.order.request"), int(entry.get("quantity", 1)),
 			_t("ui.exchange.wishlist.offer", {"amount": _format_money(int(entry.get("totalPrice", 0)))}),
 			_t("ui.exchange.wishlist.state.%s" % status),
 		]
-	return "%s  •  %s" % [
+	return "%s · %s  •  %s" % [
+		_t("ui.exchange.order.listing"),
 		_t("ui.exchange.total", {"amount": _format_money(int(entry.get("totalPrice", 0)))}),
 		_t("ui.exchange.state.%s" % status),
 	]
@@ -2497,6 +2434,7 @@ func _selection_still_visible(entries: Array) -> bool:
 	for value: Variant in entries:
 		var entry := _dictionary(value)
 		if _entry_selection_key(entry, selected_kind) == _entry_selection_key(selected_entry, selected_kind):
+			selected_entry = entry.duplicate(true)
 			return true
 	return false
 
@@ -2550,6 +2488,8 @@ func _labeled_control(label_text: String, control: Control) -> Control:
 	label.add_theme_color_override("font_color", UI_TEXT)
 	row.add_child(label)
 	control.custom_minimum_size = Vector2(145, 36)
+	if control is SpinBox:
+		_apply_line_edit_style((control as SpinBox).get_line_edit())
 	row.add_child(control)
 	return row
 
@@ -2557,8 +2497,12 @@ func _labeled_control(label_text: String, control: Control) -> Control:
 func _set_status(message: String, color: Color) -> void:
 	if status_label == null:
 		return
+	status_timer.stop()
 	status_label.text = message
+	status_label.visible = not message.is_empty()
 	status_label.add_theme_color_override("font_color", color)
+	if color == UI_GREEN:
+		status_timer.start()
 
 
 func _format_money(value: int) -> String:
@@ -2577,13 +2521,6 @@ func _iv_summary(ivs: Dictionary) -> String:
 	]
 
 
-func _stat_total(stats: Dictionary) -> int:
-	var total := 0
-	for key: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
-		total += maxi(int(stats.get(key, 0)), 0)
-	return total
-
-
 func _new_request_id(prefix: String) -> String:
 	return "%s-%d-%d" % [prefix, Time.get_unix_time_from_system(), randi()]
 
@@ -2600,23 +2537,66 @@ func _apply_button_style(button: Button, selected := false) -> void:
 	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.55))
 
 
-func _apply_toolbar_accent_style(button: Button, accent: Color, emphasized := false) -> void:
-	var normal_background := accent.darkened(0.82 if not emphasized else 0.68)
-	normal_background.a = 0.92
-	var normal_border := accent
-	normal_border.a = 0.72 if not emphasized else 1.0
-	var hover_background := accent.darkened(0.70)
-	hover_background.a = 0.96
-	var pressed_background := accent.darkened(0.62)
-	pressed_background.a = 0.98
-	button.add_theme_stylebox_override("normal", _panel_style(normal_background, normal_border, 8, 1))
-	button.add_theme_stylebox_override("hover", _panel_style(hover_background, accent, 8, 1))
-	button.add_theme_stylebox_override("pressed", _panel_style(pressed_background, accent.lightened(0.12), 8, 1))
-	button.add_theme_stylebox_override("disabled", _panel_style(Color("#07111dcc"), Color("#263b4d99"), 8, 1))
-	button.add_theme_stylebox_override("focus", _panel_style(hover_background, accent.lightened(0.12), 8, 2))
-	button.add_theme_color_override("font_color", accent.lightened(0.12))
-	button.add_theme_color_override("font_hover_color", Color.WHITE)
-	button.add_theme_color_override("font_pressed_color", Color.WHITE)
+func _apply_primary_navigation_style(button: Button, selected := false) -> void:
+	var background := Color("#15566df5") if selected else Color("#071522b8")
+	var border := UI_CYAN if selected else Color("#29465b88")
+	button.add_theme_stylebox_override("normal", _panel_style(background, border, 9, 1))
+	button.add_theme_stylebox_override("hover", _panel_style(Color("#103047e8"), Color("#5fa9c2cc"), 9, 1))
+	button.add_theme_stylebox_override("pressed", _panel_style(Color("#0f465bf5"), UI_CYAN, 9, 1))
+	button.add_theme_stylebox_override("disabled", _panel_style(Color("#07111dcc"), Color("#263b4d66"), 9, 1))
+	button.add_theme_stylebox_override("focus", _panel_style(background, UI_CYAN, 9, 2))
+	button.add_theme_color_override("font_color", Color.WHITE if selected else UI_TEXT)
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.55))
+	button.add_theme_font_size_override("font_size", 15)
+
+
+func _apply_segment_button_style(button: Button, selected := false) -> void:
+	var background := Color("#17384df2") if selected else Color.TRANSPARENT
+	var border := Color("#47758f88") if selected else Color.TRANSPARENT
+	button.add_theme_stylebox_override("normal", _panel_style(background, border, 6, 1 if selected else 0))
+	button.add_theme_stylebox_override("hover", _panel_style(Color("#0e2638dd"), Color("#355f7899"), 6, 1))
+	button.add_theme_stylebox_override("pressed", _panel_style(Color("#17384df2"), UI_CYAN, 6, 1))
+	button.add_theme_stylebox_override("disabled", _panel_style(Color.TRANSPARENT, Color.TRANSPARENT, 6, 0))
+	button.add_theme_stylebox_override("focus", _panel_style(background, UI_CYAN, 6, 1))
+	button.add_theme_color_override("font_color", UI_CYAN if selected else UI_MUTED)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.5))
+
+
+func _apply_category_button_style(button: Button, selected := false) -> void:
+	var background := Color("#102b3ef0") if selected else Color("#07111d99")
+	var border := Color("#5eb8cedd") if selected else Color("#29465b77")
+	button.add_theme_stylebox_override("normal", _panel_style(background, border, 7, 1))
+	button.add_theme_stylebox_override("hover", _panel_style(Color("#102b3ef0"), Color("#5eb8cedd"), 7, 1))
+	button.add_theme_stylebox_override("pressed", _panel_style(Color("#14374df5"), UI_CYAN, 7, 1))
+	button.add_theme_stylebox_override("disabled", _panel_style(Color("#07111dcc"), Color("#263b4d66"), 7, 1))
+	button.add_theme_stylebox_override("focus", _panel_style(background, UI_CYAN, 7, 2))
+	button.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED)
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.5))
+
+
+func _apply_utility_button_style(button: Button, selected := false) -> void:
+	var background := Color("#0d2232dd") if selected else Color("#07111daa")
+	var border := Color("#4c7a92bb") if selected else Color("#29465b66")
+	button.add_theme_stylebox_override("normal", _panel_style(background, border, 7, 1))
+	button.add_theme_stylebox_override("hover", _panel_style(Color("#0d2232dd"), Color("#4c7a92bb"), 7, 1))
+	button.add_theme_stylebox_override("pressed", _panel_style(Color("#102b3ef0"), UI_CYAN, 7, 1))
+	button.add_theme_stylebox_override("disabled", _panel_style(Color("#07111dcc"), Color("#263b4d55"), 7, 1))
+	button.add_theme_stylebox_override("focus", _panel_style(background, UI_CYAN, 7, 1))
+	button.add_theme_color_override("font_color", UI_TEXT if selected else UI_MUTED)
+	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.5))
+
+
+func _apply_listing_button_style(button: Button, selected := false) -> void:
+	var background := Color("#10293bed") if selected else Color("#081725cc")
+	var border := Color("#65bfd5e6") if selected else Color("#29465b88")
+	var width := 2 if selected else 1
+	button.add_theme_stylebox_override("normal", _panel_style(background, border, 8, width))
+	button.add_theme_stylebox_override("hover", _panel_style(Color("#0e2638ed"), Color("#4f8da8cc"), 8, 1))
+	button.add_theme_stylebox_override("pressed", _panel_style(Color("#12324af5"), UI_CYAN, 8, 2))
+	button.add_theme_stylebox_override("disabled", _panel_style(Color("#07111dcc"), Color("#263b4d66"), 8, 1))
+	button.add_theme_stylebox_override("focus", _panel_style(background, UI_CYAN, 8, 2))
+	button.add_theme_color_override("font_color", UI_TEXT)
 	button.add_theme_color_override("font_disabled_color", Color(UI_MUTED, 0.55))
 
 
@@ -2643,6 +2623,7 @@ func _input_style(background: Color, border: Color, border_width := 1) -> StyleB
 
 
 func _apply_primary_button_style(button: Button) -> void:
+	_apply_button_style(button)
 	button.add_theme_stylebox_override("normal", _panel_style(Color("#15566df5"), UI_CYAN, 8, 1))
 	button.add_theme_stylebox_override("hover", _panel_style(Color("#1c6d87f5"), Color("#b8f6ff"), 8, 1))
 	button.add_theme_stylebox_override("pressed", _panel_style(Color("#0f465bf5"), UI_CYAN, 8, 1))
@@ -2650,6 +2631,7 @@ func _apply_primary_button_style(button: Button) -> void:
 
 
 func _apply_danger_button_style(button: Button) -> void:
+	_apply_button_style(button)
 	button.add_theme_stylebox_override("normal", _panel_style(Color("#5a1e2bf5"), UI_DANGER, 8, 1))
 	button.add_theme_stylebox_override("hover", _panel_style(Color("#78283af5"), Color("#ff9aaa"), 8, 1))
 	button.add_theme_stylebox_override("pressed", _panel_style(Color("#451720f5"), UI_DANGER, 8, 1))
@@ -2687,6 +2669,7 @@ func _compact_panel_style(
 
 func _clear_children(node: Node) -> void:
 	for child: Node in node.get_children():
+		node.remove_child(child)
 		child.queue_free()
 
 
