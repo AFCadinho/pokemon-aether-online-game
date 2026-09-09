@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refreshed the Aether Clash Lobby visuals from the latest map artwork.
+
 - Attuning to an Aether Beacon now plays a magical confirmation sound.
 
 - Successful Item Buyer sales now play the NPC shop sound.
