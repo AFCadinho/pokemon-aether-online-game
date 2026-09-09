@@ -887,26 +887,32 @@ func _open_set_suggestions_popup() -> void:
 	set_suggestions_popup = popup
 	set_suggestions_expanded = true
 	popup.popup_hide.connect(_on_set_suggestions_popup_hidden.bind(popup))
-	_populate_set_suggestions_popup(popup)
 	var viewport_size := get_viewport_rect().size
-	var popup_width := mini(620, maxi(360, int(viewport_size.x - 48.0)))
-	var popup_height := mini(680, maxi(360, int(viewport_size.y - 64.0)))
+	var popup_width := mini(540, maxi(360, int(viewport_size.x - 48.0)))
+	var row_count := _as_array(set_suggestions.get("suggestions", [])).size()
+	var estimated_height := 300 if row_count == 0 else 170 + row_count * 115
+	var popup_height := mini(maxi(300, estimated_height), maxi(300, mini(520, int(viewport_size.y - 80.0))))
+	_populate_set_suggestions_popup(popup, popup_width - 28)
 	popup.popup_centered(Vector2i(popup_width, popup_height))
 
 
 func _refresh_set_suggestions_popup() -> void:
 	if not is_instance_valid(set_suggestions_popup) or set_suggestions_popup.is_queued_for_deletion():
 		return
-	_populate_set_suggestions_popup(set_suggestions_popup)
+	_populate_set_suggestions_popup(set_suggestions_popup, maxi(332, set_suggestions_popup.size.x - 28))
 
 
-func _populate_set_suggestions_popup(popup: PopupPanel) -> void:
+func _populate_set_suggestions_popup(popup: PopupPanel, content_width := 500) -> void:
 	for child: Node in popup.get_children():
 		popup.remove_child(child)
 		child.queue_free()
 
 	var column := VBoxContainer.new()
 	column.name = "SetSuggestionsPopupContent"
+	# Give popup labels a real layout width before the window calculates its
+	# minimum size. Without this, the content can collapse to a narrow column and
+	# produce a very tall, apparently empty popup.
+	column.custom_minimum_size.x = content_width
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_theme_constant_override("separation", 10)
@@ -918,19 +924,16 @@ func _populate_set_suggestions_popup(popup: PopupPanel) -> void:
 	var title := _make_label(_t("battle.calc.guess.title"), 16, TEXT_PRIMARY)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(title)
-	var close_button := _make_toggle_button("×", false)
+	var close_button := _make_toggle_button(_t("common.close"), false)
 	close_button.name = "CloseSetSuggestionsPopup"
 	close_button.tooltip_text = _t("common.close")
-	close_button.custom_minimum_size = Vector2(36, 32)
+	close_button.custom_minimum_size = Vector2(76, 32)
 	close_button.pressed.connect(_close_set_suggestions_popup)
 	header.add_child(close_button)
 
-	var note := _make_label(_t("battle.calc.guess.note"), 12, TEXT_SECONDARY)
-	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	column.add_child(note)
-
 	var scroll := ScrollContainer.new()
 	scroll.name = "SetSuggestionsScroll"
+	scroll.custom_minimum_size.y = 180
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -953,8 +956,7 @@ func _add_set_suggestion_rows(parent: VBoxContainer) -> void:
 		parent.add_child(_make_label(_t("battle.calc.guess.unavailable"), 12, TEXT_MUTED))
 		return
 	if int(set_suggestions.get("observationCount", 0)) == 0:
-		var waiting := _make_label(_t("battle.calc.guess.waiting"), 12, TEXT_MUTED)
-		waiting.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		var waiting := _make_popup_label(_t("battle.calc.guess.waiting"), 12, TEXT_MUTED, 2)
 		parent.add_child(waiting)
 	if not bool(set_suggestions.get("complete", true)):
 		parent.add_child(_make_label(_t("battle.calc.guess.partial"), 12, WARNING_ACCENT))
@@ -962,33 +964,34 @@ func _add_set_suggestion_rows(parent: VBoxContainer) -> void:
 		parent.add_child(_make_label(_t("battle.calc.guess." + str(set_suggestions.get("state", "no_match"))), 12, TEXT_MUTED))
 	for row: Dictionary in rows:
 		var card := PanelContainer.new()
+		card.name = "SetSuggestionCard"
 		card.add_theme_stylebox_override("panel", _make_stylebox(SURFACE_RAISED, BORDER_NEUTRAL, 8, 10.0, 8.0))
 		parent.add_child(card)
 		var box := VBoxContainer.new()
 		box.add_theme_constant_override("separation", 5)
 		card.add_child(box)
-		var heading := "%s %s · %s" % [row.get("formatName", ""), row.get("name", ""), _t("battle.calc.guess." + str(row.get("confidence", "weak")))]
-		var title := _make_label(heading, 13, TEXT_PRIMARY)
-		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		var title := _make_popup_label(str(row.get("name", "")), 15, TEXT_PRIMARY)
+		title.name = "SetSuggestionName"
 		box.add_child(title)
+		var context_parts: Array[String] = []
+		var format_name := str(row.get("formatName", "")).strip_edges()
+		if format_name != "":
+			context_parts.append(format_name)
+		context_parts.append(_t("battle.calc.guess." + str(row.get("confidence", "weak"))))
+		box.add_child(_make_popup_label(" · ".join(context_parts), 11, TEXT_ACCENT))
 		var build := _as_dictionary(row.get("build", {}))
-		var preview := _make_label(_set_suggestion_build_text(build), 12, TEXT_SECONDARY)
-		preview.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		var preview := _make_popup_label(_set_suggestion_build_text(build), 12, TEXT_SECONDARY, 3)
+		preview.name = "SetSuggestionBuild"
 		box.add_child(preview)
 		var count := int(row.get("matchingVariantCount", 1))
 		if count > 1:
-			box.add_child(_make_label(_t("battle.calc.guess.alternatives", {"count": count}), 12, TEXT_MUTED))
-			for alternative: Dictionary in row.get("alternativeBuilds", []):
-				var alternative_label := _make_label(_set_suggestion_build_text(alternative), 11, TEXT_MUTED)
-				alternative_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-				box.add_child(alternative_label)
+			box.add_child(_make_popup_label(_t("battle.calc.guess.alternatives", {"count": count}), 11, TEXT_MUTED))
 		for item: Dictionary in row.get("evidence", []):
 			var kind := str(item.get("kind", ""))
 			var state := str(item.get("state", "unknown"))
 			var value := str(item.get("value", "")) if kind in ["move", "item", "ability"] else _t("battle.calc.guess." + kind, {"turn": item.get("turn", 0)})
 			var symbol := "✓" if state == "match" else "~" if state == "variant" else "?" if state == "unknown" else "×"
-			var explanation := _make_label("%s %s — %s" % [symbol, value, _t("battle.calc.guess." + state)], 12, CONFIRMED_ACCENT if state == "match" else TEXT_MUTED)
-			explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			var explanation := _make_popup_label("%s %s — %s" % [symbol, value, _t("battle.calc.guess." + state)], 11, CONFIRMED_ACCENT if state == "match" else TEXT_MUTED)
 			box.add_child(explanation)
 		var apply := _make_toggle_button(_t("battle.calc.guess.apply"), false)
 		apply.name = "ApplySetSuggestion"
@@ -1040,7 +1043,21 @@ func _set_suggestion_build_text(build: Dictionary) -> String:
 	for stat: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
 		if int(evs.get(stat, 0)) > 0:
 			stats.append("%s %s" % [evs[stat], stat.to_upper()])
-	return "%s · %s · %s\n%s\n%s" % [build.get("item", ""), build.get("ability", ""), build.get("nature", ""), " / ".join(stats), ", ".join(build.get("moves", []))]
+	var identity: Array[String] = []
+	for entry: Dictionary in [
+		{"label": _t("battle.calc.item"), "value": str(build.get("item", ""))},
+		{"label": _t("battle.calc.ability"), "value": str(build.get("ability", ""))},
+		{"label": _t("battle.calc.nature"), "value": str(build.get("nature", ""))},
+	]:
+		if entry["value"] != "":
+			identity.append("%s: %s" % [entry["label"], entry["value"]])
+	return "%s\n%s: %s\n%s: %s" % [
+		" · ".join(identity),
+		_t("battle.calc.evs"),
+		" / ".join(stats) if not stats.is_empty() else "0",
+		_t("battle.calc.opponent_moves"),
+		", ".join(build.get("moves", [])),
+	]
 
 
 func _apply_set_suggestion(build: Dictionary) -> void:
@@ -3072,6 +3089,13 @@ func _make_label(text: String, font_size: int, color: Color) -> Label:
 	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", color)
+	return label
+
+
+func _make_popup_label(text: String, font_size: int, color: Color, minimum_lines := 1) -> Label:
+	var label := _make_label(text, font_size, color)
+	label.tooltip_text = text
+	label.custom_minimum_size.y = ceilf(float(font_size) * 1.35 * float(maxi(minimum_lines, 1)))
 	return label
 
 

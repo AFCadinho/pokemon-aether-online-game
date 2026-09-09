@@ -51,7 +51,14 @@ func _run() -> void:
 	panel.defender_assumptions = {"nature": "Timid", "evs": {"spe": 252}}
 	panel.edited_assumption_fields = {"nature": true, "evs": true}
 	var before := panel.get_defender_assumption_state()
-	panel.show_set_suggestions(ref, revision, response)
+	var popup_response := response.duplicate(true)
+	for index in range(2):
+		var extra_row := row.duplicate(true)
+		extra_row["groupId"] = "tank-%s" % index
+		extra_row["variantId"] = "tank-extra-%s" % index
+		extra_row["name"] = "TankChomp Alternative %s" % (index + 1)
+		popup_response["suggestions"].append(extra_row)
+	panel.show_set_suggestions(ref, revision, popup_response)
 	_check(panel.get_defender_assumption_state() == before, "Receiving suggestions never edits Custom")
 	var host := VBoxContainer.new()
 	content.add_child(host)
@@ -64,6 +71,13 @@ func _run() -> void:
 	_check(panel.set_suggestions_popup.exclusive, "Suggestion popup blocks input behind its modal layer")
 	_check(panel.set_suggestions_popup.find_child("SetSuggestionsScroll", true, false) != null, "Suggestion popup scrolls independently")
 	_check(panel.set_suggestions_popup.find_child("ApplySetSuggestion", true, false) != null, "Suggestion popup has an explicit apply button")
+	var suggestion_list := panel.set_suggestions_popup.find_child("SetSuggestionsList", true, false) as VBoxContainer
+	_check(suggestion_list != null and suggestion_list.get_child_count() == 4, "All three suggested sets are shown as distinct cards")
+	_check(panel.set_suggestions_popup.size.x <= 540 and panel.set_suggestions_popup.size.y <= 520, "Suggestion popup stays compact (%s)" % panel.set_suggestions_popup.size)
+	var suggestion_name := panel.set_suggestions_popup.find_child("SetSuggestionName", true, false) as Label
+	var suggestion_build := panel.set_suggestions_popup.find_child("SetSuggestionBuild", true, false) as Label
+	_check(suggestion_name != null and suggestion_name.text == "TankChomp" and suggestion_name.custom_minimum_size.y > 0, "Suggested set name remains visibly allocated")
+	_check(suggestion_build != null and suggestion_build.text.contains("Rocky Helmet") and suggestion_build.text.contains("Earthquake") and suggestion_build.custom_minimum_size.y > 0, "Suggested build details remain visibly allocated")
 	panel._apply_set_suggestion(build)
 	_check(not is_instance_valid(panel.set_suggestions_popup), "Applying a suggestion closes the popup")
 	_check(panel.defender_assumptions["assumedMoves"][0] == "Fire Blast", "Revealed Fire Blast survives reference Toxic")

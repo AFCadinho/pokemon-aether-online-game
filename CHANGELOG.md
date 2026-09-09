@@ -4,7 +4,7 @@
 
 - AI Sparring battles now show Scholar or the selected Grandmaster difficulty instead of internal AI level names.
 
-- Calcdex now offers optional set suggestions in their own scrollable pop-up, with explanations, a preview, and an undoable choice to fill Custom while preserving revealed moves.
+- Calcdex now shows optional set suggestions as clear, compact cards in their own scrollable pop-up, with explanations and an undoable choice to fill Custom while preserving revealed moves.
 
 - AI Sparring's About page now recommends Intermediate to knowledgeable PvP beginners and Hard as the best all-round sparring partner.
 
