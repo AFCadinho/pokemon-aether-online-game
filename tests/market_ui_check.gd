@@ -53,6 +53,11 @@ func _check_market_popup_contract() -> void:
 		and text.contains("add_system_message(_market_currency_spent_message("),
 		"successful NPC purchases report the authoritative wallet deduction"
 	)
+	_check_true(
+		text.contains("add_system_message(_market_currency_received_message(")
+		and text.contains("if player_is_selling:"),
+		"successful Item Buyer sales report the authoritative wallet credit"
+	)
 
 
 func _check_market_attendant_uses_ui() -> void:

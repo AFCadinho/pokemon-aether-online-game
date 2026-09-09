@@ -1506,6 +1506,7 @@
   "ui.market.item_fallback": "Item",
   "ui.market.message.bought": "{quantity}x {item} comprado.",
   "ui.market.message.wallet_debited": "{amount} foi descontado da sua carteira.",
+  "ui.market.message.wallet_credited": "{amount} foi adicionado à sua carteira.",
   "ui.market.message.sold": "{quantity}x {item} vendido.",
   "common.loading": "Carregando...",
   "common.unavailable": "Indisponível",

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Item Buyer sales now report the exact currency added to your wallet in System chat.
+
 - NPC services such as the Move Maniac now report the exact items removed from your Bag as payment.
 
 - Successful NPC purchases now play a dedicated Poké Mart purchase sound.
