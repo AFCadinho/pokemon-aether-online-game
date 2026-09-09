@@ -4270,6 +4270,7 @@
   "ui.storage.release.stop": "Parar de escolher Pokémon para soltar",
   "ui.storage.release.releasing": "Soltando...",
   "ui.storage.release.keep_one": "Você precisa manter pelo menos um Pokémon na equipe.",
+  "ui.storage.release.starter_protected": "Seu Pokémon inicial original não pode ser solto.",
   "ui.storage.release.title": "Soltar Pokémon",
   "ui.storage.release.confirm": "Soltar {pokemon} permanentemente?\n\nIsso não pode ser desfeito.",
   "ui.storage.release.failed": "Não foi possível soltar.",

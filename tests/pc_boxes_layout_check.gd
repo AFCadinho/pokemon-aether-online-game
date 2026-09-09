@@ -76,6 +76,8 @@ func _init() -> void:
 	_check(source.contains("button.focus_mode = Control.FOCUS_NONE"), "Storage controls cannot become stale Spacebar targets")
 	_check(source.contains("PokemonStorageService.move_pokemon("), "Storage revamp preserves moving Pokémon")
 	_check(source.contains("PokemonStorageService.release_pokemon("), "Storage revamp preserves releasing Pokémon")
+	_check(source.contains('BackendErrorLocalizationService.error_code(result) == "starter_pokemon_protected"'), "Storage recognizes a protected starter release rejection")
+	_check(source.contains('BackendErrorLocalizationService.message(\n\t\t\tresult,\n\t\t\t"ui.storage.release.failed"'), "Storage shows the localized backend reason when release is rejected")
 	_check(source.contains("_open_pc_box_pokemon_summary("), "Storage revamp preserves Pokémon summaries")
 	_check(source.contains("MOUSE_BUTTON_RIGHT"), "Occupied box slots expose right-click actions")
 	_check(source.contains("func _open_pc_slot_context_menu("), "Storage owns a focused Pokémon context menu")

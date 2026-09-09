@@ -55,6 +55,11 @@ func _check_storage_runtime_translation() -> void:
 
 	_check(popup != null, "Pokémon Storage popup is constructed")
 	_check(release_button != null and release_button.text == "Vrijlaten", "Storage release action renders in Dutch")
+	_check(
+		localization_manager.call("text", "ui.storage.release.starter_protected")
+		== "Je oorspronkelijke starter-Pokémon kan niet worden vrijgelaten.",
+		"Protected starter release explains the rule in Dutch"
+	)
 	_check(release_button != null and release_button.get_theme_color("font_color") == Color("#dfeaf5"), "Inactive Storage release action stays visually neutral")
 	_check(close_button != null and close_button.tooltip_text == "Pokémonopslag sluiten", "Storage close tooltip renders in Dutch")
 	_check(close_button != null and close_button.get_theme_color("font_color") == Color("#9fb0c0"), "Storage close action stays quiet at rest")

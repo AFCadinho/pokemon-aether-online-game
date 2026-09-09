@@ -4266,6 +4266,7 @@
   "ui.storage.release.stop": "Stoppen met Pokémon kiezen om vrij te laten",
   "ui.storage.release.releasing": "Vrijlaten...",
   "ui.storage.release.keep_one": "Je moet minstens één Pokémon in je team houden.",
+  "ui.storage.release.starter_protected": "Je oorspronkelijke starter-Pokémon kan niet worden vrijgelaten.",
   "ui.storage.release.title": "Pokémon vrijlaten",
   "ui.storage.release.confirm": "{pokemon} permanent vrijlaten?\n\nDit kan niet ongedaan worden gemaakt.",
   "ui.storage.release.failed": "Vrijlaten mislukt.",

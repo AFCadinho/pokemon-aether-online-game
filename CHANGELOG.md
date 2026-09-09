@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Your original starter now always stays with you and returns to your party if borrowed Pokémon leave it empty.
+
 - Aether Exchange now has clear Buy and Sell routes, easier item requests, distinct navigation and filter styling, separate active orders and history, and a cleaner market with Pokémon details in Summary.
 
 - Smogon sets in the damage calculator now apply one editable default build without an extra list of generated variants.

@@ -40711,8 +40711,17 @@ func _release_selected_pc_pokemon() -> void:
 	var result: Dictionary = await PokemonStorageService.release_pokemon(pokemon_id)
 	pc_release_in_progress = false
 	if not bool(result.get("success", false)):
-		_set_pc_status("ui.storage.release.failed")
-		_add_chat_message(LocalizationManager.text("ui.storage.release.failed"))
+		var release_status_key := (
+			"ui.storage.release.starter_protected"
+			if BackendErrorLocalizationService.error_code(result) == "starter_pokemon_protected"
+			else "ui.storage.release.failed"
+		)
+		var release_error := BackendErrorLocalizationService.message(
+			result,
+			"ui.storage.release.failed"
+		)
+		_set_pc_status(release_status_key)
+		_add_chat_message(release_error)
 		_refresh_pc_release_controls()
 		return
 
