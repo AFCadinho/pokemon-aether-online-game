@@ -190,7 +190,7 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 	)
 	_check(
 		world_source.contains("active_battle_kind = \"training_ai\"")
-		and world_source.contains("response.get(\"trainerName\", \"AI Level 5\")")
+		and world_source.contains("var trainer_name := _training_ai_battle_display_name(response)")
 		and world_source.contains("\"_battle_sprite_id\": _training_ai_battle_sprite_id(response)")
 		and world_source.contains("battle_environment_id,\n\t\ttrue"),
 		"World starts the selected AI mode as a non-rewarding training battle with mode-specific art"
@@ -205,6 +205,17 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 		var expected := "showdown_scientist_gen7" if mode in ["ai4", "shadow"] else "showdown_veteran_gen7"
 		_check(selector.call("_training_ai_battle_sprite_id", {"trainingAiMode": mode, "aiLevel": 5}) == expected, "Server mode selects the correct trainer: " + mode)
 	_check(selector.call("_training_ai_battle_sprite_id", {"aiLevel": 4}) == "showdown_scientist_gen7", "Legacy AI4 response keeps Scholar art")
+	var name_helper_start := world_source.find("func _training_ai_battle_display_name(")
+	var name_helper_end := world_source.find("\nfunc ", name_helper_start + 1)
+	var name_helper := GDScript.new()
+	name_helper.source_code = "extends RefCounted\n" + world_source.substr(name_helper_start, name_helper_end - name_helper_start)
+	_check(name_helper.reload() == OK, "Sparring display-name selector compiles")
+	var name_selector: RefCounted = name_helper.new()
+	_check(name_selector.call("_training_ai_battle_display_name", {"trainingAiMode": "ai4", "trainerName": "AI Level 4"}) == "Scholar", "Legacy AI4 names display as Scholar")
+	_check(name_selector.call("_training_ai_battle_display_name", {"trainingAiMode": "active", "trainerName": "AI Level 5"}) == "Grandmaster Hard", "Legacy AI5 names display as Grandmaster Hard")
+	_check(name_selector.call("_training_ai_battle_display_name", {"trainingAiMode": "intermediate"}) == "Grandmaster Intermediate", "Intermediate displays its Grandmaster difficulty")
+	_check(name_selector.call("_training_ai_battle_display_name", {"trainingAiMode": "elite"}) == "Grandmaster Elite", "Elite displays its Grandmaster difficulty")
+	_check(name_selector.call("_training_ai_battle_display_name", {"trainingAiMode": "nightmare"}) == "Grandmaster Nightmare", "Nightmare displays its Grandmaster difficulty")
 	_check(trainer_catalog_source.contains('"id": "showdown_scientist_gen7"'), "Scholar battle art exists in the catalog")
 	_check(
 		FileAccess.file_exists(AI_VETERAN_TEXTURE_PATH)
