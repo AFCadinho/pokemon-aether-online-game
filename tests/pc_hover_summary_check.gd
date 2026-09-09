@@ -66,6 +66,7 @@ func _run() -> void:
 	host.add_child(exchange_card)
 	await process_frame
 	exchange_card.show_for_pokemon({
+		"nickname": null,
 		"species": "Mew",
 		"level": 26,
 		"types": ["psychic"],
@@ -80,6 +81,8 @@ func _run() -> void:
 	await process_frame
 	var exchange_stats := exchange_card.get_node("MarginContainer/VBoxContainer/StatsBoxContainer") as Control
 	var exchange_ivs := exchange_card.get_node("MarginContainer/VBoxContainer/IVDetailsContainer") as Control
+	var exchange_name := exchange_card.get_node("MarginContainer/VBoxContainer/NameLabel") as Label
+	_check(exchange_name.text == "Mew  ·  Lv. 26", "Exchange hover ignores null nicknames")
 	_check(not exchange_stats.visible, "Exchange hover cards hide calculated stats")
 	_check(exchange_ivs.visible, "Exchange hover cards show IVs")
 	_check(
