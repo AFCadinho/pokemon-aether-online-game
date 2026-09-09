@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Calcdex now offers optional set suggestions with explanations, a preview, and an undoable choice to fill Custom while preserving revealed moves.
+- Calcdex now offers optional set suggestions in their own scrollable pop-up, with explanations, a preview, and an undoable choice to fill Custom while preserving revealed moves.
 
 - AI Sparring's About page now recommends Intermediate to knowledgeable PvP beginners and Hard as the best all-round sparring partner.
 

@@ -206,6 +206,7 @@ var set_suggestions_loading := false
 var set_suggestions_expanded := false
 var ignored_set_suggestions: Dictionary = {}
 var set_suggestion_undo: Dictionary = {}
+var set_suggestions_popup: PopupPanel
 var sample_set_search_popup: PopupPanel
 var current_default_ability := ""
 var current_default_ability_species := ""
@@ -247,6 +248,7 @@ func _ready() -> void:
 
 
 func show_idle() -> void:
+	_close_set_suggestions_popup(false)
 	set_suggestions.clear()
 	set_suggestion_request_key = ""
 	set_suggestion_opponent_ref = ""
@@ -828,7 +830,7 @@ func _request_set_suggestions_if_needed() -> void:
 	if key == set_suggestion_request_key:
 		return
 	if set_suggestion_opponent_ref != selected_opponent_ref:
-		set_suggestions_expanded = false
+		_close_set_suggestions_popup(false)
 		set_suggestion_undo.clear()
 	set_suggestions.clear()
 	set_suggestion_request_key = key
@@ -844,21 +846,24 @@ func show_set_suggestions(opponent_ref: String, revision: Dictionary, response: 
 	set_suggestions = SET_SUGGESTIONS.normalize_response(response, revision, opponent_ref)
 	if is_inside_tree() and not _is_catalog_search_active():
 		_render_current_state()
+		_refresh_set_suggestions_popup()
 
 
 func _add_set_suggestions(parent: VBoxContainer) -> void:
 	if knowledge_snapshot.is_empty() or not species_scenarios.is_empty():
 		return
 	var rows := _as_array(set_suggestions.get("suggestions", []))
-	var button := _make_toggle_button(_t("battle.calc.guess.loading") if set_suggestions_loading else _t("battle.calc.guess.title"), set_suggestions_expanded)
+	var button := _make_toggle_button(_t("battle.calc.guess.loading") if set_suggestions_loading else _t("battle.calc.guess.title"), is_instance_valid(set_suggestions_popup))
 	button.name = "SetSuggestionsToggle"
 	var signature := SET_SUGGESTIONS.signature(set_suggestions)
 	if not rows.is_empty() and str(ignored_set_suggestions.get(selected_opponent_ref, "")) != signature:
 		button.add_theme_color_override("font_color", TEXT_ACCENT)
 		button.text += " (%s)" % rows.size()
 	button.pressed.connect(func() -> void:
-		set_suggestions_expanded = not set_suggestions_expanded
-		_render_current_state()
+		if is_instance_valid(set_suggestions_popup):
+			_close_set_suggestions_popup()
+		else:
+			_open_set_suggestions_popup()
 	)
 	parent.add_child(button)
 	if not set_suggestion_undo.is_empty():
@@ -866,12 +871,83 @@ func _add_set_suggestions(parent: VBoxContainer) -> void:
 		undo.name = "UndoSetSuggestion"
 		undo.pressed.connect(_undo_set_suggestion)
 		parent.add_child(undo)
-	if not set_suggestions_expanded:
+
+
+func _open_set_suggestions_popup() -> void:
+	_close_set_suggestions_popup(false)
+	var popup := PopupPanel.new()
+	popup.name = "SetSuggestionsPopup"
+	popup.exclusive = true
+	popup.unresizable = true
+	popup.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(SURFACE_PANEL, 0.995), Color(TEXT_ACCENT, 0.85), 10, 14.0, 12.0)
+	)
+	add_child(popup)
+	set_suggestions_popup = popup
+	set_suggestions_expanded = true
+	popup.popup_hide.connect(_on_set_suggestions_popup_hidden.bind(popup))
+	_populate_set_suggestions_popup(popup)
+	var viewport_size := get_viewport_rect().size
+	var popup_width := mini(620, maxi(360, int(viewport_size.x - 48.0)))
+	var popup_height := mini(680, maxi(360, int(viewport_size.y - 64.0)))
+	popup.popup_centered(Vector2i(popup_width, popup_height))
+
+
+func _refresh_set_suggestions_popup() -> void:
+	if not is_instance_valid(set_suggestions_popup) or set_suggestions_popup.is_queued_for_deletion():
 		return
+	_populate_set_suggestions_popup(set_suggestions_popup)
+
+
+func _populate_set_suggestions_popup(popup: PopupPanel) -> void:
+	for child: Node in popup.get_children():
+		popup.remove_child(child)
+		child.queue_free()
+
+	var column := VBoxContainer.new()
+	column.name = "SetSuggestionsPopupContent"
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	column.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	column.add_theme_constant_override("separation", 10)
+	popup.add_child(column)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	column.add_child(header)
+	var title := _make_label(_t("battle.calc.guess.title"), 16, TEXT_PRIMARY)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(title)
+	var close_button := _make_toggle_button("×", false)
+	close_button.name = "CloseSetSuggestionsPopup"
+	close_button.tooltip_text = _t("common.close")
+	close_button.custom_minimum_size = Vector2(36, 32)
+	close_button.pressed.connect(_close_set_suggestions_popup)
+	header.add_child(close_button)
+
 	var note := _make_label(_t("battle.calc.guess.note"), 12, TEXT_SECONDARY)
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	parent.add_child(note)
+	column.add_child(note)
+
+	var scroll := ScrollContainer.new()
+	scroll.name = "SetSuggestionsScroll"
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	column.add_child(scroll)
+	var suggestions_column := VBoxContainer.new()
+	suggestions_column.name = "SetSuggestionsList"
+	suggestions_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	suggestions_column.add_theme_constant_override("separation", 10)
+	scroll.add_child(suggestions_column)
+	_add_set_suggestion_rows(suggestions_column)
+
+
+func _add_set_suggestion_rows(parent: VBoxContainer) -> void:
+	var rows := _as_array(set_suggestions.get("suggestions", []))
+	var signature := SET_SUGGESTIONS.signature(set_suggestions)
 	if set_suggestions_loading:
+		parent.add_child(_make_label(_t("battle.calc.guess.loading"), 12, TEXT_MUTED))
 		return
 	if not bool(set_suggestions.get("success", false)):
 		parent.add_child(_make_label(_t("battle.calc.guess.unavailable"), 12, TEXT_MUTED))
@@ -885,9 +961,12 @@ func _add_set_suggestions(parent: VBoxContainer) -> void:
 	if rows.is_empty():
 		parent.add_child(_make_label(_t("battle.calc.guess." + str(set_suggestions.get("state", "no_match"))), 12, TEXT_MUTED))
 	for row: Dictionary in rows:
+		var card := PanelContainer.new()
+		card.add_theme_stylebox_override("panel", _make_stylebox(SURFACE_RAISED, BORDER_NEUTRAL, 8, 10.0, 8.0))
+		parent.add_child(card)
 		var box := VBoxContainer.new()
 		box.add_theme_constant_override("separation", 5)
-		parent.add_child(box)
+		card.add_child(box)
 		var heading := "%s %s · %s" % [row.get("formatName", ""), row.get("name", ""), _t("battle.calc.guess." + str(row.get("confidence", "weak")))]
 		var title := _make_label(heading, 13, TEXT_PRIMARY)
 		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -918,10 +997,31 @@ func _add_set_suggestions(parent: VBoxContainer) -> void:
 	var ignore := _make_toggle_button(_t("battle.calc.guess.ignore"), false)
 	ignore.pressed.connect(func() -> void:
 		ignored_set_suggestions[selected_opponent_ref] = signature
-		set_suggestions_expanded = false
+		_close_set_suggestions_popup(false)
 		_render_current_state()
 	)
 	parent.add_child(ignore)
+
+
+func _close_set_suggestions_popup(render_after := true) -> void:
+	var popup := set_suggestions_popup
+	set_suggestions_popup = null
+	set_suggestions_expanded = false
+	if is_instance_valid(popup):
+		popup.hide()
+		popup.queue_free()
+	if render_after and is_inside_tree() and not _is_catalog_search_active():
+		_render_current_state()
+
+
+func _on_set_suggestions_popup_hidden(popup: PopupPanel) -> void:
+	if set_suggestions_popup != popup:
+		return
+	set_suggestions_popup = null
+	set_suggestions_expanded = false
+	popup.queue_free()
+	if is_inside_tree() and not _is_catalog_search_active():
+		_render_current_state()
 
 
 func _make_toggle_button(text: String, active: bool) -> Button:
@@ -949,7 +1049,7 @@ func _apply_set_suggestion(build: Dictionary) -> void:
 	set_suggestion_undo = {"assumptions": defender_assumptions.duplicate(true), "edited": edited_assumption_fields.duplicate(true),
 		"selected": selected_sample_set_id, "moves": move_scenarios.duplicate(true), "opponentRef": selected_opponent_ref}
 	var adjusted := SET_SUGGESTIONS.preserve_revealed_moves(build, _get_snapshot_pokemon_by_ref(selected_opponent_ref))
-	set_suggestions_expanded = false
+	_close_set_suggestions_popup(false)
 	ignored_set_suggestions[selected_opponent_ref] = SET_SUGGESTIONS.signature(set_suggestions)
 	_apply_sample_set(adjusted)
 
