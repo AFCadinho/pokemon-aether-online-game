@@ -79,6 +79,10 @@ const SOUND_DATA := {
 		"path": "res://assets/battles/animations/teleport/PRSFX- Teleport.wav",
 		"volume_db": -3.0,
 	},
+	"aether_beacon_attuned": {
+		"path": "res://assets/battles/animations/wish/PRSFX- Wish.wav",
+		"volume_db": -4.0,
+	},
 	"field_move_cut": {
 		"path": "res://assets/battles/animations/razorleaf/PRSFX- Razor Leaf1.wav",
 		"volume_db": -4.0,
