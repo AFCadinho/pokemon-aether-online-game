@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Attuning to an Aether Beacon now plays a magical confirmation sound.
+
 - Successful Item Buyer sales now play the NPC shop sound.
 
 - Item Buyer sales now report the exact currency added to your wallet in System chat.

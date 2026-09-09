@@ -130,6 +130,17 @@ func _init() -> void:
 	)
 	_check(beacon_source.contains("_refresh_activation_state"), "Aether Beacon restores its attuned visual state")
 	_check(beacon_source.contains("_apply_activation_state(true)"), "Aether Beacon activates after attunement")
+	_check(
+		beacon_source.contains('SfxManager.play("aether_beacon_attuned")')
+		and beacon_source.find('SfxManager.play("aether_beacon_attuned")') < beacon_source.find('"add_system_message"'),
+		"A newly attuned Aether Beacon plays its confirmation sound before announcing success"
+	)
+	var sfx_source := FileAccess.get_file_as_string("res://scripts/services/sfx_manager.gd")
+	_check(
+		sfx_source.contains('"aether_beacon_attuned"')
+		and sfx_source.contains("res://assets/battles/animations/wish/PRSFX- Wish.wav"),
+		"Aether Beacon attunement uses the Wish animation sound"
+	)
 	_check(beacon_source.contains('_find_local_keeper()'), "Aether Beacon delegates its dialogue to the local Keeper")
 	_check(beacon_source.contains('"add_system_message"'), "Aether Beacon announces a new attunement in system chat")
 	_check(beacon_source.contains("AetherBeaconMenuScript"), "Aether Beacon owns the attuned Beacon action menu")
