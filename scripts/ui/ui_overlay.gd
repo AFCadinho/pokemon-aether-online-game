@@ -22704,6 +22704,7 @@ func _on_market_buy_pressed() -> void:
 				str(transaction.get("currency", "money"))
 			))
 		add_item_reward_notification(item_id, transacted_quantity)
+		SfxManager.play("npc_shop_purchase")
 		if bool(market_selected_item.get("accountUnique", false)):
 			_mark_market_item_owned(item_id)
 	_refresh_market_purchase_state()
@@ -48433,6 +48434,20 @@ func _add_chat_message(
 
 func add_system_message(text: String) -> void:
 	_add_chat_message(text)
+
+
+func add_removed_item_system_message(item_id: String, quantity: int) -> void:
+	var normalized_item_id := item_id.strip_edges().to_lower()
+	var safe_quantity := maxi(quantity, 0)
+	if normalized_item_id == "" or safe_quantity <= 0:
+		return
+	add_system_message(LocalizationManager.text(
+		"ui.npc.cost.item_removed",
+		{
+			"item": ItemLocalization.display_name(normalized_item_id, normalized_item_id.capitalize()),
+			"quantity": safe_quantity,
+		}
+	))
 
 
 func _setup_reward_notification_stack() -> void:

@@ -2,6 +2,7 @@ extends SceneTree
 
 const ITEM_FOUND_SOUND := "res://assets/audio/sfx/overworld/item_found.ogg"
 const ITEM_RECEIVED_SOUND := "res://assets/audio/sfx/overworld/item_received.ogg"
+const NPC_SHOP_PURCHASE_SOUND := "res://assets/audio/sfx/overworld/npc_shop_purchase.ogg"
 const SFX_MANAGER := "res://scripts/services/sfx_manager.gd"
 const INVENTORY_SERVICE := "res://scripts/services/inventory_service.gd"
 const ITEM_GIFT_NPC := "res://scripts/world/npcs/item_gift_npc.gd"
@@ -26,6 +27,7 @@ var failed := false
 func _init() -> void:
 	var found_stream := load(ITEM_FOUND_SOUND) as AudioStream
 	var received_stream := load(ITEM_RECEIVED_SOUND) as AudioStream
+	var npc_shop_purchase_stream := load(NPC_SHOP_PURCHASE_SOUND) as AudioStream
 	var sfx_source := FileAccess.get_file_as_string(SFX_MANAGER)
 	var inventory_source := FileAccess.get_file_as_string(INVENTORY_SERVICE)
 	var item_gift_source := FileAccess.get_file_as_string(ITEM_GIFT_NPC)
@@ -46,6 +48,7 @@ func _init() -> void:
 
 	_check(found_stream != null, "trimmed item-found OGG loads as an audio stream")
 	_check(received_stream != null, "trimmed item-received OGG loads as an audio stream")
+	_check(npc_shop_purchase_stream != null, "converted NPC shop purchase OGG loads as an audio stream")
 	_check(
 		sfx_source.contains('"item_found"')
 		and sfx_source.contains('"path": "%s"' % ITEM_FOUND_SOUND),
@@ -55,6 +58,11 @@ func _init() -> void:
 		sfx_source.contains('"item_received"')
 		and sfx_source.contains('"path": "%s"' % ITEM_RECEIVED_SOUND),
 		"SfxManager registers the item-received jingle"
+	)
+	_check(
+		sfx_source.contains('"npc_shop_purchase"')
+		and sfx_source.contains('"path": "%s"' % NPC_SHOP_PURCHASE_SOUND),
+		"SfxManager registers the NPC shop purchase sound"
 	)
 	_check(
 		not inventory_source.contains('SfxManager.play("item_received")'),
@@ -117,6 +125,21 @@ func _init() -> void:
 		overlay_source.contains("if granted_count > 0:")
 		and overlay_source.contains('SfxManager.play("item_found")'),
 		"discovering items in a bundle plays the item-found jingle"
+	)
+	var market_purchase_index := overlay_source.find("func _on_market_buy_pressed")
+	var market_purchase_success_index := overlay_source.find(
+		'if not bool(result.get("success", false)):',
+		market_purchase_index
+	)
+	var market_purchase_sound_index := overlay_source.find(
+		'SfxManager.play("npc_shop_purchase")',
+		market_purchase_success_index
+	)
+	_check(
+		market_purchase_index >= 0
+		and market_purchase_success_index > market_purchase_index
+		and market_purchase_sound_index > market_purchase_success_index,
+		"successful NPC item purchases play the dedicated shop sound"
 	)
 	_check(
 		world_source.contains("func _notify_wild_item_drop_awards")

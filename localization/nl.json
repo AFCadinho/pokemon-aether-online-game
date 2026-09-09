@@ -3473,6 +3473,7 @@
   "ui.move_mentor.status.saving": "Move wordt geleerd...",
   "ui.move_mentor.status.learned": "{pokemon} heeft {move} geleerd!",
   "ui.move_mentor.status.cost": "Kosten: {required} {item}. Je hebt er {owned}.",
+  "ui.npc.cost.item_removed": "Uit je Tas verwijderd: {quantity}× {item}.",
   "ui.move_mentor.status.resource_required": "Je hebt {required} {item} nodig. Je hebt er {owned}.",
   "ui.move_mentor.error.invalid_pokemon": "Deze Pokémon kan de Move Maniac niet gebruiken.",
   "ui.move_mentor.error.load": "De compatibele moves konden niet worden geladen.",

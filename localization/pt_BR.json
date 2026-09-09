@@ -3477,6 +3477,7 @@
   "ui.move_mentor.status.saving": "Ensinando golpe...",
   "ui.move_mentor.status.learned": "{pokemon} aprendeu {move}!",
   "ui.move_mentor.status.cost": "Custo: {required} {item}. Você tem {owned}.",
+  "ui.npc.cost.item_removed": "Removido da sua Bolsa: {quantity}× {item}.",
   "ui.move_mentor.status.resource_required": "Você precisa de {required} {item}. Você tem {owned}.",
   "ui.move_mentor.error.invalid_pokemon": "Este Pokémon não pode usar o Maníaco por Golpes.",
   "ui.move_mentor.error.load": "Não foi possível carregar os golpes compatíveis.",

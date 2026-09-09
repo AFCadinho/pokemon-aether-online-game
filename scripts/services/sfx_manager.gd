@@ -55,6 +55,10 @@ const SOUND_DATA := {
 		"path": "res://assets/audio/sfx/overworld/item_received.ogg",
 		"volume_db": -3.0,
 	},
+	"npc_shop_purchase": {
+		"path": "res://assets/audio/sfx/overworld/npc_shop_purchase.ogg",
+		"volume_db": 0.0,
+	},
 	"pokemon_recovery": {
 		"path": "res://assets/audio/sfx/overworld/pokemon_recovery.ogg",
 		"volume_db": 0.0,

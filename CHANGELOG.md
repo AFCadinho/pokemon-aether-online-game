@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- NPC services such as the Move Maniac now report the exact items removed from your Bag as payment.
+
+- Successful NPC purchases now play a dedicated Poké Mart purchase sound.
+
 - My Exchange now clearly separates the Pokémon and items you are selling from requested items, with compact side-by-side sections and Pokémon listing cards. Pokémon offers use the familiar Storage hover card with IVs, while full details remain available through Summary.
 
 - NPC shop purchases now report the exact Pokédollars, Aetherite, or Battle Points deducted from your wallet in System chat.

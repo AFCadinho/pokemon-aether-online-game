@@ -838,6 +838,7 @@ func _pokemon_move_learn_result_from_response(response: Dictionary) -> Dictionar
 		"pokemonLevelCap": _dictionary_from_value(party.get("pokemonLevelCap", {})),
 		"learnedMove": _dictionary_from_value(body.get("learnedMove", {})),
 		"replacedMove": _dictionary_from_value(body.get("replacedMove", {})),
+		"consumedItems": _array_from_value(body.get("consumedItems", [])),
 		"skipped": bool(body.get("skipped", false)),
 	}
 
