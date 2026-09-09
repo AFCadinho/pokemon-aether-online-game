@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Closing the game now waits for your latest overworld position to save, including immediately after Aethernet travel.
+
 - Calculator sets now follow the active battle format, show the format before each set name, keep Mega sets with their exact forme, and use scrollable lists for large catalogs.
 
 - Removed the experimental Grandmaster Expert prediction difficulty.

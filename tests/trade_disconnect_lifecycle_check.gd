@@ -18,6 +18,7 @@ func _init() -> void:
 	_check(realtime_source.contains("func leave_active_trade_for_exit()"), "trade service owns logout and shutdown cleanup")
 	_check(realtime_source.contains("NOTIFICATION_WM_CLOSE_REQUEST"), "application close waits for trade cleanup")
 	_check(realtime_source.contains("auto_accept_quit = false"), "automatic quit cannot bypass trade cleanup")
+	_check(realtime_source.contains('await world.call("save_current_player_state_now")'), "application close persists the world position before quitting")
 	var auth_source := FileAccess.get_file_as_string("res://scripts/services/auth_service.gd")
 	_check(auth_source.find("leave_active_trade_for_exit") < auth_source.find("/auth/logout"), "trade cleanup runs before token logout")
 	var service := Realtime.new()
