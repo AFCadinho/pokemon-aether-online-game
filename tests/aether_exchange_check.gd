@@ -193,6 +193,19 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	_check(Rect2(popup.position, popup.size) == fixed_popup_rect, "Clicking My Listings preserves the complete Exchange window geometry")
+	var context_panel := popup.get("context_panel") as PanelContainer
+	var context_title := popup.get("context_title_label") as Label
+	var context_description := popup.get("context_description_label") as Label
+	_check(context_panel.visible and context_title.text == popup.call("_t", "ui.exchange.context_title.mine"), "My Exchange has a dedicated page heading")
+	_check(not context_description.text.is_empty(), "My Exchange explains the page purpose")
+	var active_segment := context_buttons.get("active") as Button
+	var history_segment := context_buttons.get("history") as Button
+	_check(active_segment.get_theme_stylebox("normal").bg_color != history_segment.get_theme_stylebox("normal").bg_color, "Active and History form a clear selected segment")
+	var selected_primary_style := (tab_buttons.get("mine") as Button).get_theme_stylebox("normal") as StyleBoxFlat
+	var segment_style := active_segment.get_theme_stylebox("normal") as StyleBoxFlat
+	var category_style := (asset_buttons.get("item") as Button).get_theme_stylebox("normal") as StyleBoxFlat
+	_check(selected_primary_style.bg_color != segment_style.bg_color, "Primary navigation is visually distinct from local page segments")
+	_check(segment_style.bg_color != category_style.bg_color, "Local page segments are visually distinct from asset filters")
 	var drag_handle := popup.find_child("ExchangeDragHandle", true, false) as Control
 	_check(drag_handle != null, "Exchange header exposes a drag handle")
 	_check(drag_handle.mouse_default_cursor_shape == Control.CURSOR_MOVE, "Exchange drag handle uses the move cursor")
