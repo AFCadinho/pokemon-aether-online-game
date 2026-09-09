@@ -79,6 +79,10 @@ func _run() -> void:
 				await process_frame
 			var description := locale + "/" + screen
 			_check(popup.size == Vector2(1040, 660), description + ": fixed window")
+			if popup.context_panel.visible:
+				_check_bounds(popup.context_panel, popup, description)
+				_check(not popup.context_title_label.text.begins_with("ui.exchange."), description + ": translated page title")
+				_check(not popup.context_description_label.text.begins_with("ui.exchange."), description + ": translated page description")
 			for collection: Dictionary in [popup.tab_buttons, popup.context_buttons, popup.asset_buttons]:
 				for button: Button in collection.values():
 					if button.is_visible_in_tree():
