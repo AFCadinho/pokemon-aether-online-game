@@ -68,25 +68,6 @@ func _run() -> void:
 	stale_left_panel.free()
 	stale_nickname_button.free()
 	stale_copy_button.free()
-	var exchange_hover_source := Rect2(Vector2(24, 180), Vector2(172, 190))
-	overlay.call("_on_aether_exchange_pokemon_summary_hover_requested", _sample_pokemon(), exchange_hover_source)
-	await process_frame
-	await process_frame
-	var exchange_hover_popup := overlay.get("pokemon_summary_popup") as PanelContainer
-	_check(exchange_hover_popup != null and exchange_hover_popup.visible, "Exchange hover opens the existing read-only Summary card")
-	_check(exchange_hover_popup.name == "PokemonReadonlySummaryPopup", "Exchange hover uses the exact read-only Summary implementation")
-	_check(exchange_hover_popup.size == EXPECTED_SIZE, "Exchange hover keeps the full read-only Summary geometry")
-	var exchange_hover_position := overlay.call(
-		"_aether_exchange_hover_summary_position",
-		exchange_hover_source,
-		Rect2(Vector2.ZERO, root_control.size),
-		EXPECTED_SIZE,
-	) as Vector2
-	_check(not Rect2(exchange_hover_position, EXPECTED_SIZE).intersects(exchange_hover_source), "Exchange hover positions Summary beside the offer")
-	_check(str(overlay.get("aether_exchange_hover_summary_key")) != "", "Exchange tracks its temporary hover Summary")
-	overlay.call("_hide_aether_exchange_pokemon_summary_hover")
-	await process_frame
-	_check(str(overlay.get("aether_exchange_hover_summary_key")) == "", "leaving an Exchange offer closes only its temporary Summary")
 	overlay.call("_open_readonly_pokemon_summary", _sample_pokemon())
 	await process_frame
 	await process_frame

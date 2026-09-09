@@ -55,8 +55,8 @@ func _run() -> void:
 	var popup := EXCHANGE_POPUP.instantiate() as AetherExchangePopup
 	popup_host.add_child(popup)
 	popup.visible = true
-	popup.pokemon_summary_hover_requested.connect(_on_summary_hover_requested)
-	popup.pokemon_summary_hover_ended.connect(_on_summary_hover_ended)
+	popup.pokemon_hover_requested.connect(_on_summary_hover_requested)
+	popup.pokemon_hover_ended.connect(_on_summary_hover_ended)
 	await process_frame
 	_check(popup != null, "Exchange popup scene instantiates")
 	_check(popup.get_class() == "Panel", "Exchange outer window cannot be resized by child containers")
@@ -465,13 +465,13 @@ func _run() -> void:
 		for label_value: Variant in (list_container.get_child(card_index) as Button).find_children("*", "Label", true, false):
 			card_text += (label_value as Label).text
 		_check(not card_text.contains(available_label), "Browse cards omit the redundant Available status")
-	_check(first_browse_card.mouse_entered.has_connections() and first_browse_card.mouse_exited.has_connections(), "Pokémon offers expose hover summary behavior")
+	_check(first_browse_card.mouse_entered.has_connections() and first_browse_card.mouse_exited.has_connections(), "Pokémon offers expose compact hover-card behavior")
 	popup.call("_show_pokemon_hover", first_browse_card, browse_entries[0].asset)
-	_check(str(requested_hover_payload.get("species", "")) == "garchomp", "Hover summary uses the offered Pokémon payload")
-	_check(requested_hover_payload.has("ivs") and requested_hover_payload.has("evs"), "Exchange sends complete Summary data on hover")
-	_check(requested_hover_rect == first_browse_card.get_global_rect(), "Exchange anchors the read-only Summary beside the hovered offer")
+	_check(str(requested_hover_payload.get("species", "")) == "garchomp", "Hover card uses the offered Pokémon payload")
+	_check(requested_hover_payload.has("ivs"), "Exchange sends exact IV data to the hover card")
+	_check(requested_hover_rect == first_browse_card.get_global_rect(), "Exchange anchors the compact card beside the hovered offer")
 	popup.call("_hide_pokemon_hover")
-	_check(hover_end_count == 1, "Leaving a Pokémon offer hides its read-only Summary")
+	_check(hover_end_count == 1, "Leaving a Pokémon offer hides its compact hover card")
 	popup.set("wallet_money", 1_000_000)
 	popup.call("_select_entry", browse_entries[0], "listing")
 	await process_frame

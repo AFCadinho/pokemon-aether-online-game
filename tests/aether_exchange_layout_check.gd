@@ -3,6 +3,7 @@ extends SceneTree
 # Run with EXCHANGE_CAPTURE_DIR and a rendering display to save review images.
 # All data is synthetic; this check never opens a session or performs a trade.
 const POPUP := preload("res://scenes/interface/aether_exchange_popup.tscn")
+const PARTY_HOVER_CARD := preload("res://scenes/battle/party_hover_card.tscn")
 var failed := false
 
 
@@ -23,6 +24,10 @@ func _run() -> void:
 	popup.visible = true
 	var summary_overlay := (load("res://scenes/interface/ui_overlay.tscn") as PackedScene).instantiate()
 	summary_overlay.set("root_control", host)
+	var exchange_hover_card := PARTY_HOVER_CARD.instantiate() as PartyHoverCard
+	exchange_hover_card.set_show_exchange_details(true)
+	host.add_child(exchange_hover_card)
+	summary_overlay.set("aether_exchange_pokemon_hover_card", exchange_hover_card)
 	var pokemon := {
 		"pokemonId": 42, "species": "mew", "speciesId": "mew",
 		"speciesName": "Mew", "level": 26, "nature": "Hardy",
@@ -58,7 +63,7 @@ func _run() -> void:
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		localization.set_locale(locale)
 		for screen: String in ["buy", "hover", "items", "tm", "outfit", "mount", "sell", "request", "wanted", "mine", "mine-items", "history"]:
-			summary_overlay.call("_hide_aether_exchange_pokemon_summary_hover")
+			summary_overlay.call("_hide_aether_exchange_pokemon_hover")
 			await process_frame
 			popup.search_input.text = ""
 			popup.wallet_money = 24826
@@ -95,7 +100,7 @@ func _run() -> void:
 				"buy": popup._select_entry(listings[0], "listing")
 				"hover":
 					var hover_source := popup.list_container.get_child(0) as Button
-					summary_overlay.call("_on_aether_exchange_pokemon_summary_hover_requested", popup._pokemon_summary_payload(pokemon), hover_source.get_global_rect())
+					summary_overlay.call("_on_aether_exchange_pokemon_hover_requested", popup._pokemon_summary_payload(pokemon), hover_source.get_global_rect())
 				"items", "tm", "outfit", "mount": popup._select_entry(popup.browse_listings[0], "listing")
 				"sell": popup._select_entry(pokemon, "sell")
 				"request": popup._select_entry(item, "wish_catalog")
@@ -119,10 +124,12 @@ func _run() -> void:
 				if control.is_visible_in_tree():
 						_check_bounds(control, popup, description)
 			if screen == "hover":
-				var summary_popup := summary_overlay.get("pokemon_summary_popup") as PanelContainer
-				_check(summary_popup != null and summary_popup.visible, description + ": full read-only Summary is visible")
-				_check(summary_popup.name == "PokemonReadonlySummaryPopup", description + ": hover uses the existing Summary card")
-				_check_bounds(summary_popup, popup, description)
+				_check(exchange_hover_card.visible, description + ": compact Pokémon hover card is visible")
+				_check(exchange_hover_card.name == "PartyHoverCard", description + ": hover reuses the Storage card")
+				var hover_stats := exchange_hover_card.get_node("MarginContainer/VBoxContainer/StatsBoxContainer") as Control
+				var hover_ivs := exchange_hover_card.get_node("MarginContainer/VBoxContainer/IVDetailsContainer") as Control
+				_check(not hover_stats.visible and hover_ivs.visible, description + ": hover replaces calculated stats with IVs")
+				_check_bounds(exchange_hover_card, popup, description)
 			if screen in ["items", "tm", "outfit", "mount"]:
 				var item_icon := popup.list_container.get_child(0).find_child("BrowseCardIcon", true, false) as TextureRect
 				_check(item_icon != null, description + ": item offer has an icon")
@@ -170,7 +177,7 @@ func _run() -> void:
 				await RenderingServer.frame_post_draw
 				_check(viewport.get_texture().get_image().save_png(capture_dir.path_join("%s-%s.png" % [locale, screen])) == OK, description + ": screenshot")
 	localization.set_locale(previous_locale)
-	summary_overlay.call("_hide_aether_exchange_pokemon_summary_hover")
+	summary_overlay.call("_hide_aether_exchange_pokemon_hover")
 	summary_overlay.free()
 	viewport.queue_free()
 	await process_frame
