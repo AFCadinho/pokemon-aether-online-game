@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Smogon sets in the damage calculator now apply one editable default build without an extra list of generated variants.
+
+- The damage calculator now explains when invalid or incomplete Pokémon battle data prevents it from loading.
+
 - Closing the game now waits for your latest overworld position to save, including immediately after Aethernet travel.
 
 - Calculator sets now follow the active battle format, show the format before each set name, keep Mega sets with their exact forme, and use scrollable lists for large catalogs.
