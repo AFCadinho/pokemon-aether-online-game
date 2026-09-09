@@ -3986,7 +3986,7 @@
   "battle.calc.guess.loading": "Comparing sets…",
   "battle.calc.guess.note": "Suggestions are estimates. Applying replaces the Custom set shown here; revealed facts stay in place. You can undo the change.",
   "battle.calc.guess.unavailable": "Set suggestions are currently unavailable.",
-  "battle.calc.guess.waiting": "No usable damage or speed observations yet. Open Calcdex before a turn to record its context; earlier turns cannot be reconstructed.",
+  "battle.calc.guess.waiting": "No usable damage or speed observations yet. Calcdex records new turns automatically; ambiguous battle events are skipped.",
   "battle.calc.guess.partial": "Some comparisons could not be completed.",
   "battle.calc.guess.no_match": "No catalog build fits the usable observations.",
   "battle.calc.guess.no_catalog": "No sets are available for this Pokémon and format.",

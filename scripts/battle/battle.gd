@@ -2666,6 +2666,10 @@ func _is_party_rail_selection_allowed() -> bool:
 
 func _refresh_damage_calc_results() -> void:
 	if current_action_panel_mode != BattleActionsPanelMode.CALC:
+		# Set inference needs consecutive public start-of-turn snapshots. Keep
+		# collecting those while the drawer is closed so damage that prompted the
+		# player to open Calcdex can already be used as evidence.
+		_schedule_damage_calc_prefetch()
 		return
 	_sync_damage_calc_matchup_assumptions()
 	if battle_finished:
