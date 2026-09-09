@@ -3,6 +3,7 @@ extends Node
 const FORMAT_ID = "gen9nationaldex"
 const CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const CALCDEX_MATCHUP := preload("res://scripts/battle/battle_calcdex_matchup.gd")
+const CALCDEX_OPEN := preload("res://scripts/battle/battle_calcdex_open.gd")
 const CALCDEX_CANDIDATES := preload("res://scripts/battle/battle_calcdex_candidates.gd")
 const CALCDEX_INFERENCE := preload("res://scripts/battle/battle_calcdex_inference.gd")
 
@@ -515,6 +516,50 @@ func get_calcdex_snapshot(
 		}
 	)
 	return CALCDEX_SNAPSHOT.normalize_response(response, last_projection_revision)
+
+func open_calcdex(
+	request_node: HTTPRequest,
+	battle_id: String,
+	last_projection_revision: Dictionary,
+	direction: String,
+	opponent_scenario: Dictionary = {},
+	field_scenario: Dictionary = {},
+	viewer_scenario: Dictionary = {},
+	battle_state_scenario: Dictionary = {}
+) -> Dictionary:
+	var normalized_battle_id := battle_id.strip_edges()
+	if normalized_battle_id == "" or not CALCDEX_SNAPSHOT.is_valid_projection_revision(last_projection_revision):
+		return {"success": false, "code": "invalid_calcdex_request", "error": "A valid battle revision is required."}
+	var payload := {
+		"schemaVersion": CALCDEX_OPEN.SCHEMA_VERSION,
+		"lastProjectionRevision": last_projection_revision.duplicate(true),
+		"direction": direction,
+		"viewerScenario": {
+			"boosts": _normalize_damage_calc_boost_table(viewer_scenario.get("boosts", {})),
+		},
+		"opponentScenario": _normalize_damage_calc_assumptions(opponent_scenario),
+		"fieldScenario": field_scenario.duplicate(true),
+	}
+	var viewer_state: Dictionary = battle_state_scenario.get("viewer", {}) as Dictionary if battle_state_scenario.get("viewer", {}) is Dictionary else {}
+	var opponent_state: Dictionary = battle_state_scenario.get("opponent", {}) as Dictionary if battle_state_scenario.get("opponent", {}) is Dictionary else {}
+	if viewer_state.has("status"):
+		payload["viewerScenario"]["status"] = str(viewer_state.get("status", ""))
+	if viewer_state.has("currentHp"):
+		payload["viewerScenario"]["currentHp"] = maxi(0, int(viewer_state.get("currentHp", 0)))
+	if viewer_scenario.has("ability"):
+		payload["viewerScenario"]["ability"] = str(viewer_scenario.get("ability", ""))
+	if opponent_state.has("status"):
+		payload["opponentScenario"]["status"] = str(opponent_state.get("status", ""))
+	if opponent_state.has("currentHpPercent"):
+		payload["opponentScenario"]["currentHpPercent"] = clampf(float(opponent_state.get("currentHpPercent", 0.0)), 0.0, 100.0)
+	if opponent_scenario.get("assumedMoves") is Array:
+		payload["opponentScenario"]["assumedMoves"] = (opponent_scenario.get("assumedMoves") as Array).duplicate(true)
+	var response: Dictionary = await send_post_request(
+		request_node,
+		"/battle/%s/calcdex/v1/open" % normalized_battle_id.uri_encode(),
+		payload
+	)
+	return CALCDEX_OPEN.normalize_response(response, last_projection_revision)
 
 func calculate_calcdex_matchup(
 	request_node: HTTPRequest,

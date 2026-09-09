@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The battle damage calculator now opens with one combined request and reuses its exact current battle snapshot, reducing the wait during fast battles such as Aether Clash.
+
 - Smogon sets in the damage calculator now apply one editable default build without an extra list of generated variants.
 
 - The damage calculator now explains when invalid or incomplete Pokémon battle data prevents it from loading.
