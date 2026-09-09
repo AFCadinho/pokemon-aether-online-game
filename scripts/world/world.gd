@@ -3123,6 +3123,28 @@ func _training_ai_battle_sprite_id(response: Dictionary) -> String:
 	return "showdown_scientist_gen7" if scholar else "showdown_veteran_gen7"
 
 
+func _training_ai_battle_display_name(response: Dictionary) -> String:
+	var mode := str(response.get("trainingAiMode", "")).strip_edges().to_lower()
+	var public_name := {
+		"ai4": "Scholar",
+		"shadow": "Scholar",
+		"intermediate": "Grandmaster Intermediate",
+		"active": "Grandmaster Hard",
+		"elite": "Grandmaster Elite",
+		"nightmare": "Grandmaster Nightmare",
+	}.get(mode, "") as String
+	var supplied_name := str(response.get("trainerName", "")).strip_edges()
+	if supplied_name in ["AI Level 4", "AI Level 4 AI5 Shadow"]:
+		return "Scholar"
+	if supplied_name == "AI Level 5":
+		return public_name if public_name != "" else "Grandmaster Hard"
+	if supplied_name != "":
+		return supplied_name
+	if public_name != "":
+		return public_name
+	return "Scholar" if int(response.get("aiLevel", 5)) == 4 else "Grandmaster Hard"
+
+
 func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 	if is_in_battle or wild_battle_resume_pending or not bool(response.get("success", false)):
 		return false
@@ -3141,9 +3163,7 @@ func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 
 	var ai_team_value: Variant = response.get("trainingAiTeam", {})
 	var ai_team: Dictionary = ai_team_value as Dictionary if ai_team_value is Dictionary else {}
-	var trainer_name := str(response.get("trainerName", "AI Level 5")).strip_edges()
-	if trainer_name == "":
-		trainer_name = "AI Level 5"
+	var trainer_name := _training_ai_battle_display_name(response)
 	var trainer_data := {
 		"id": "training-ai-level5",
 		"name": trainer_name,
