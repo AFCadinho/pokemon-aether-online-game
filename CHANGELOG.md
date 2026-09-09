@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- NPC services such as the Move Maniac now report the exact items removed from your Bag as payment.
+
 - Successful NPC purchases now play a dedicated Poké Mart purchase sound.
 
 - My Exchange now clearly separates the Pokémon and items you are selling from requested items, with compact side-by-side sections and Pokémon listing cards.
