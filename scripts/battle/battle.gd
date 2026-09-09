@@ -476,6 +476,8 @@ func _ready() -> void:
 		calc_panel.assumption_catalog_requested.connect(_on_calc_panel_assumption_catalog_requested)
 	if not calc_panel.sample_set_catalog_requested.is_connected(_on_calc_panel_sample_set_catalog_requested):
 		calc_panel.sample_set_catalog_requested.connect(_on_calc_panel_sample_set_catalog_requested)
+	if not calc_panel.set_suggestions_requested.is_connected(_on_calc_set_suggestions_requested):
+		calc_panel.set_suggestions_requested.connect(_on_calc_set_suggestions_requested)
 	if not calc_panel.forme_catalog_requested.is_connected(_on_calc_panel_forme_catalog_requested):
 		calc_panel.forme_catalog_requested.connect(_on_calc_panel_forme_catalog_requested)
 	if not calc_panel.default_ability_requested.is_connected(_on_calc_panel_default_ability_requested):
@@ -3073,6 +3075,18 @@ func _on_calc_panel_viewer_ability_catalog_requested(species: String) -> void:
 	request_node.queue_free()
 	if current_action_panel_mode == BattleActionsPanelMode.CALC:
 		calc_panel.show_viewer_ability_catalog_response(species, response)
+
+func _on_calc_set_suggestions_requested(opponent_ref: String, revision: Dictionary) -> void:
+	if battle_finished or battle_state.battle_id.is_empty():
+		return
+	var battle_id := battle_state.battle_id
+	var request_node := HTTPRequest.new()
+	add_child(request_node)
+	var response := await BattleApiClient.get_set_suggestions(request_node, battle_id, revision, opponent_ref)
+	request_node.queue_free()
+	if battle_id == battle_state.battle_id and not battle_finished:
+		calc_panel.show_set_suggestions(opponent_ref, revision, response)
+
 
 func _on_calc_panel_sample_set_catalog_requested(species: String, format_id: String) -> void:
 	if current_action_panel_mode != BattleActionsPanelMode.CALC:

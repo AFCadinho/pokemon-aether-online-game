@@ -6,6 +6,16 @@ const CALCDEX_MATCHUP := preload("res://scripts/battle/battle_calcdex_matchup.gd
 const CALCDEX_OPEN := preload("res://scripts/battle/battle_calcdex_open.gd")
 const CALCDEX_CANDIDATES := preload("res://scripts/battle/battle_calcdex_candidates.gd")
 const CALCDEX_INFERENCE := preload("res://scripts/battle/battle_calcdex_inference.gd")
+const SET_SUGGESTIONS := preload("res://scripts/battle/battle_set_suggestions.gd")
+
+
+func get_set_suggestions(request_node: HTTPRequest, battle_id: String, revision: Dictionary, opponent_ref: String) -> Dictionary:
+	if not CALCDEX_SNAPSHOT.is_valid_projection_revision(revision) or not opponent_ref.begins_with("opponent:public-slot-"):
+		return {"success": false}
+	var response := await send_post_request(request_node, "/battle/%s/calcdex/v1/set-suggestions" % battle_id.uri_encode(), {
+		"schemaVersion": 1, "lastProjectionRevision": revision.duplicate(true), "opponentRef": opponent_ref,
+	})
+	return SET_SUGGESTIONS.normalize_response(response, revision, opponent_ref)
 
 func create_triggered_wild_battle(
 	request_node: HTTPRequest,
