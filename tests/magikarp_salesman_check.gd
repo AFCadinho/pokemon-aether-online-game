@@ -19,7 +19,7 @@ func _init() -> void:
 	var npc_source := FileAccess.get_file_as_string("res://scripts/world/npcs/magikarp_salesman_npc.gd")
 	_check(npc_source.contains('@export var sale_id := "kanto_route_3_magikarp"'), "salesman uses the one-time Route 3 sale")
 	_check(npc_source.contains("AetherConfirmationDialog"), "salesman asks for confirmation before charging")
-	_check(npc_source.contains('SfxManager.play("item_received")'), "salesman plays the received-item sound after delivery")
+	_check(npc_source.contains('SfxManager.play("npc_shop_purchase")'), "salesman plays the NPC purchase sound after delivery")
 	quit(1 if failed else 0)
 
 

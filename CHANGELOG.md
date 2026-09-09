@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Successful NPC purchases now play a dedicated Poké Mart purchase sound.
+
 - My Exchange now clearly separates the Pokémon and items you are selling from requested items, with item listings and requests shown side by side.
 
 - NPC shop purchases now report the exact Pokédollars, Aetherite, or Battle Points deducted from your wallet in System chat.

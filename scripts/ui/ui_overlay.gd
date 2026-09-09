@@ -22722,6 +22722,7 @@ func _on_market_buy_pressed() -> void:
 				str(transaction.get("currency", "money"))
 			))
 		add_item_reward_notification(item_id, transacted_quantity)
+		SfxManager.play("npc_shop_purchase")
 		if bool(market_selected_item.get("accountUnique", false)):
 			_mark_market_item_owned(item_id)
 	_refresh_market_purchase_state()
