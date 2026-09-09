@@ -22691,9 +22691,16 @@ func _on_market_buy_pressed() -> void:
 		{"quantity": transacted_quantity, "item": item_name},
 	))
 	if player_is_selling:
+		var received_amount := maxi(int(transaction.get("totalPrice", 0)), 0)
+		var received_currency := str(transaction.get("currency", "money"))
+		if received_amount > 0:
+			add_system_message(_market_currency_received_message(
+				received_amount,
+				received_currency
+			))
 		add_currency_reward_notification(
-			str(transaction.get("currency", "money")),
-			maxi(int(transaction.get("totalPrice", 0)), 0)
+			received_currency,
+			received_amount
 		)
 		_update_market_sell_items_from_inventory(inventory_value)
 	else:
@@ -22713,6 +22720,13 @@ func _on_market_buy_pressed() -> void:
 func _market_currency_spent_message(amount: int, currency: String) -> String:
 	return LocalizationManager.text(
 		"ui.market.message.wallet_debited",
+		{"amount": _format_market_currency_amount(maxi(amount, 0), currency)}
+	)
+
+
+func _market_currency_received_message(amount: int, currency: String) -> String:
+	return LocalizationManager.text(
+		"ui.market.message.wallet_credited",
 		{"amount": _format_market_currency_amount(maxi(amount, 0), currency)}
 	)
 

@@ -142,6 +142,11 @@ func _check_market_runtime_translation() -> void:
 		"Battle Point purchases report the authoritative wallet deduction"
 	)
 	_check(
+		overlay.call("_market_currency_received_message", 500, "money")
+		== "₽500 is aan je wallet toegevoegd.",
+		"Item Buyer sales report the authoritative wallet credit"
+	)
+	_check(
 		overlay.call("_market_category_label", "medicine") == "Medicijnen",
 		"Market category reuses localized Bag terminology"
 	)
