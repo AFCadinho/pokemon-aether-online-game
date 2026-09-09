@@ -3,6 +3,8 @@ extends MarginContainer
 class_name BattleDamageCalcPanel
 
 const CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
+const SET_SUGGESTIONS := preload("res://scripts/battle/battle_set_suggestions.gd")
+signal set_suggestions_requested(opponent_ref: String, revision: Dictionary)
 const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
 const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
 const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
@@ -197,6 +199,13 @@ var sample_set_format_id := ""
 var sample_set_loading := false
 var sample_set_error := ""
 var selected_sample_set_id := ""
+var set_suggestions: Dictionary = {}
+var set_suggestion_request_key := ""
+var set_suggestion_opponent_ref := ""
+var set_suggestions_loading := false
+var set_suggestions_expanded := false
+var ignored_set_suggestions: Dictionary = {}
+var set_suggestion_undo: Dictionary = {}
 var sample_set_search_popup: PopupPanel
 var current_default_ability := ""
 var current_default_ability_species := ""
@@ -238,6 +247,13 @@ func _ready() -> void:
 
 
 func show_idle() -> void:
+	set_suggestions.clear()
+	set_suggestion_request_key = ""
+	set_suggestion_opponent_ref = ""
+	set_suggestions_loading = false
+	set_suggestions_expanded = false
+	ignored_set_suggestions.clear()
+	set_suggestion_undo.clear()
 	close_assumption_popover()
 	_clear_sample_sets()
 	species_scenarios.clear()
@@ -457,6 +473,7 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		_add_move_results_table(results, defender)
 
 	render_target = inspector
+	_add_set_suggestions(inspector)
 	_add_inspector_tabs()
 	match active_inspector_tab:
 		INSPECTOR_SET:
@@ -778,6 +795,7 @@ func _clear_sample_sets() -> void:
 
 
 func _request_sample_sets_if_needed() -> void:
+	_request_set_suggestions_if_needed()
 	var species := _get_selected_opponent_species()
 	var format_id := _get_sample_set_format_id()
 	if (
@@ -796,6 +814,157 @@ func _request_sample_sets_if_needed() -> void:
 	sample_set_error = ""
 	selected_sample_set_id = ""
 	sample_set_catalog_requested.emit(species, format_id)
+
+
+func _set_suggestion_key(opponent_ref: String, revision: Dictionary) -> String:
+	return str(knowledge_snapshot.get("battleId", "")) + ":" + opponent_ref + ":" + JSON.stringify(revision)
+
+
+func _request_set_suggestions_if_needed() -> void:
+	var revision := _as_dictionary(knowledge_snapshot.get("projectionRevision", {}))
+	if not CALCDEX_SNAPSHOT.is_valid_projection_revision(revision) or selected_opponent_ref == "" or not species_scenarios.is_empty():
+		return
+	var key := _set_suggestion_key(selected_opponent_ref, revision)
+	if key == set_suggestion_request_key:
+		return
+	if set_suggestion_opponent_ref != selected_opponent_ref:
+		set_suggestions_expanded = false
+		set_suggestion_undo.clear()
+	set_suggestions.clear()
+	set_suggestion_request_key = key
+	set_suggestion_opponent_ref = selected_opponent_ref
+	set_suggestions_loading = true
+	set_suggestions_requested.emit.call_deferred(selected_opponent_ref, revision.duplicate(true))
+
+
+func show_set_suggestions(opponent_ref: String, revision: Dictionary, response: Dictionary) -> void:
+	if opponent_ref != selected_opponent_ref or revision != knowledge_snapshot.get("projectionRevision", {}):
+		return
+	set_suggestions_loading = false
+	set_suggestions = SET_SUGGESTIONS.normalize_response(response, revision, opponent_ref)
+	if is_inside_tree() and not _is_catalog_search_active():
+		_render_current_state()
+
+
+func _add_set_suggestions(parent: VBoxContainer) -> void:
+	if knowledge_snapshot.is_empty() or not species_scenarios.is_empty():
+		return
+	var rows := _as_array(set_suggestions.get("suggestions", []))
+	var button := _make_toggle_button(_t("battle.calc.guess.loading") if set_suggestions_loading else _t("battle.calc.guess.title"), set_suggestions_expanded)
+	button.name = "SetSuggestionsToggle"
+	var signature := SET_SUGGESTIONS.signature(set_suggestions)
+	if not rows.is_empty() and str(ignored_set_suggestions.get(selected_opponent_ref, "")) != signature:
+		button.add_theme_color_override("font_color", TEXT_ACCENT)
+		button.text += " (%s)" % rows.size()
+	button.pressed.connect(func() -> void:
+		set_suggestions_expanded = not set_suggestions_expanded
+		_render_current_state()
+	)
+	parent.add_child(button)
+	if not set_suggestion_undo.is_empty():
+		var undo := _make_toggle_button(_t("battle.calc.guess.undo"), false)
+		undo.name = "UndoSetSuggestion"
+		undo.pressed.connect(_undo_set_suggestion)
+		parent.add_child(undo)
+	if not set_suggestions_expanded:
+		return
+	var note := _make_label(_t("battle.calc.guess.note"), 12, TEXT_SECONDARY)
+	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	parent.add_child(note)
+	if set_suggestions_loading:
+		return
+	if not bool(set_suggestions.get("success", false)):
+		parent.add_child(_make_label(_t("battle.calc.guess.unavailable"), 12, TEXT_MUTED))
+		return
+	if int(set_suggestions.get("observationCount", 0)) == 0:
+		var waiting := _make_label(_t("battle.calc.guess.waiting"), 12, TEXT_MUTED)
+		waiting.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		parent.add_child(waiting)
+	if not bool(set_suggestions.get("complete", true)):
+		parent.add_child(_make_label(_t("battle.calc.guess.partial"), 12, WARNING_ACCENT))
+	if rows.is_empty():
+		parent.add_child(_make_label(_t("battle.calc.guess." + str(set_suggestions.get("state", "no_match"))), 12, TEXT_MUTED))
+	for row: Dictionary in rows:
+		var box := VBoxContainer.new()
+		box.add_theme_constant_override("separation", 5)
+		parent.add_child(box)
+		var heading := "%s %s · %s" % [row.get("formatName", ""), row.get("name", ""), _t("battle.calc.guess." + str(row.get("confidence", "weak")))]
+		var title := _make_label(heading, 13, TEXT_PRIMARY)
+		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		box.add_child(title)
+		var build := _as_dictionary(row.get("build", {}))
+		var preview := _make_label(_set_suggestion_build_text(build), 12, TEXT_SECONDARY)
+		preview.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		box.add_child(preview)
+		var count := int(row.get("matchingVariantCount", 1))
+		if count > 1:
+			box.add_child(_make_label(_t("battle.calc.guess.alternatives", {"count": count}), 12, TEXT_MUTED))
+			for alternative: Dictionary in row.get("alternativeBuilds", []):
+				var alternative_label := _make_label(_set_suggestion_build_text(alternative), 11, TEXT_MUTED)
+				alternative_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				box.add_child(alternative_label)
+		for item: Dictionary in row.get("evidence", []):
+			var kind := str(item.get("kind", ""))
+			var state := str(item.get("state", "unknown"))
+			var value := str(item.get("value", "")) if kind in ["move", "item", "ability"] else _t("battle.calc.guess." + kind, {"turn": item.get("turn", 0)})
+			var symbol := "✓" if state == "match" else "~" if state == "variant" else "?" if state == "unknown" else "×"
+			var explanation := _make_label("%s %s — %s" % [symbol, value, _t("battle.calc.guess." + state)], 12, CONFIRMED_ACCENT if state == "match" else TEXT_MUTED)
+			explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			box.add_child(explanation)
+		var apply := _make_toggle_button(_t("battle.calc.guess.apply"), false)
+		apply.name = "ApplySetSuggestion"
+		apply.pressed.connect(_apply_set_suggestion.bind(build))
+		box.add_child(apply)
+	var ignore := _make_toggle_button(_t("battle.calc.guess.ignore"), false)
+	ignore.pressed.connect(func() -> void:
+		ignored_set_suggestions[selected_opponent_ref] = signature
+		set_suggestions_expanded = false
+		_render_current_state()
+	)
+	parent.add_child(ignore)
+
+
+func _make_toggle_button(text: String, active: bool) -> Button:
+	var button := Button.new()
+	button.text = text
+	button.toggle_mode = true
+	button.button_pressed = active
+	button.custom_minimum_size.y = 28
+	_apply_calcdex_dropdown_style(button, 28, 12)
+	return button
+
+
+func _set_suggestion_build_text(build: Dictionary) -> String:
+	var stats: Array[String] = []
+	var evs := _as_dictionary(build.get("evs", {}))
+	for stat: String in ["hp", "atk", "def", "spa", "spd", "spe"]:
+		if int(evs.get(stat, 0)) > 0:
+			stats.append("%s %s" % [evs[stat], stat.to_upper()])
+	return "%s · %s · %s\n%s\n%s" % [build.get("item", ""), build.get("ability", ""), build.get("nature", ""), " / ".join(stats), ", ".join(build.get("moves", []))]
+
+
+func _apply_set_suggestion(build: Dictionary) -> void:
+	if not SET_SUGGESTIONS.valid_build(build) or not species_scenarios.is_empty() or set_suggestions.get("opponentRef", "") != selected_opponent_ref or set_suggestions.get("projectionRevision", {}) != knowledge_snapshot.get("projectionRevision", {}):
+		return
+	set_suggestion_undo = {"assumptions": defender_assumptions.duplicate(true), "edited": edited_assumption_fields.duplicate(true),
+		"selected": selected_sample_set_id, "moves": move_scenarios.duplicate(true), "opponentRef": selected_opponent_ref}
+	var adjusted := SET_SUGGESTIONS.preserve_revealed_moves(build, _get_snapshot_pokemon_by_ref(selected_opponent_ref))
+	set_suggestions_expanded = false
+	ignored_set_suggestions[selected_opponent_ref] = SET_SUGGESTIONS.signature(set_suggestions)
+	_apply_sample_set(adjusted)
+
+
+func _undo_set_suggestion() -> void:
+	if set_suggestion_undo.is_empty() or set_suggestion_undo.get("opponentRef") != selected_opponent_ref:
+		return
+	defender_assumptions = set_suggestion_undo["assumptions"].duplicate(true)
+	edited_assumption_fields = set_suggestion_undo["edited"].duplicate(true)
+	selected_sample_set_id = str(set_suggestion_undo["selected"])
+	move_scenarios = set_suggestion_undo["moves"].duplicate(true)
+	set_suggestion_undo.clear()
+	_apply_known_opponent_facts()
+	_emit_defender_assumptions_changed()
+	_render_current_state()
 
 
 func _get_sample_set_format_id() -> String:
@@ -965,7 +1134,16 @@ func _apply_current_defaults() -> void:
 
 
 func _apply_known_opponent_facts() -> void:
+	if not set_suggestion_undo.is_empty() and set_suggestion_undo.get("opponentRef") == selected_opponent_ref:
+		var adjusted := SET_SUGGESTIONS.preserve_revealed_moves({"moves": defender_assumptions.get("assumedMoves", [])}, _get_snapshot_pokemon_by_ref(selected_opponent_ref))
+		defender_assumptions["assumedMoves"] = adjusted["moves"]
 	for key: String in ["item", "ability"]:
+		if key == "item" and not set_suggestion_undo.is_empty():
+			var item_knowledge := _as_dictionary(_get_snapshot_pokemon_by_ref(selected_opponent_ref).get("item", {}))
+			if item_knowledge.get("state") == "known" and item_knowledge.get("value") in [null, ""]:
+				defender_assumptions.erase("item")
+				edited_assumption_fields.erase("item")
+				continue
 		var known_value := _get_known_opponent_value(key)
 		if known_value == "":
 			continue

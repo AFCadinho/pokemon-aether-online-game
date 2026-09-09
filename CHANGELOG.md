@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calcdex now offers optional set suggestions with explanations, a preview, and an undoable choice to fill Custom while preserving revealed moves.
+
 - AI Sparring's About page now recommends Intermediate to knowledgeable PvP beginners and Hard as the best all-round sparring partner.
 
 - AI Sparring Team Catalog cards can now be starred as a favorite, and Catalog team offers a checkbox to use it directly in Free Sparring.
