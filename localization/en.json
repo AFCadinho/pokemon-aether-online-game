@@ -3473,7 +3473,7 @@
   "ui.move_mentor.status.saving": "Teaching move...",
   "ui.move_mentor.status.learned": "{pokemon} learned {move}!",
   "ui.move_mentor.status.cost": "Cost: {required} {item}. You own {owned}.",
-  "ui.npc.cost.item_removed": "Removed from your Bag: {quantity}× {item}.",
+  "ui.npc.cost.item_removed": "Removed {quantity} {item} from your Bag.",
   "ui.move_mentor.status.resource_required": "You need {required} {item}. You own {owned}.",
   "ui.move_mentor.error.invalid_pokemon": "This Pokémon cannot use the Move Maniac.",
   "ui.move_mentor.error.load": "Compatible moves could not be loaded.",
