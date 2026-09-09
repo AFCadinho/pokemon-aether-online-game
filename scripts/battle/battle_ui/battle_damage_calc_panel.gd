@@ -204,6 +204,7 @@ var set_suggestion_request_key := ""
 var set_suggestion_opponent_ref := ""
 var set_suggestions_loading := false
 var set_suggestions_expanded := false
+var expanded_set_suggestion_key := ""
 var ignored_set_suggestions: Dictionary = {}
 var set_suggestion_undo: Dictionary = {}
 var set_suggestions_popup: PopupPanel
@@ -254,6 +255,7 @@ func show_idle() -> void:
 	set_suggestion_opponent_ref = ""
 	set_suggestions_loading = false
 	set_suggestions_expanded = false
+	expanded_set_suggestion_key = ""
 	ignored_set_suggestions.clear()
 	set_suggestion_undo.clear()
 	close_assumption_popover()
@@ -831,6 +833,7 @@ func _request_set_suggestions_if_needed() -> void:
 		return
 	if set_suggestion_opponent_ref != selected_opponent_ref:
 		_close_set_suggestions_popup(false)
+		expanded_set_suggestion_key = ""
 		set_suggestion_undo.clear()
 	set_suggestions.clear()
 	set_suggestion_request_key = key
@@ -963,6 +966,8 @@ func _add_set_suggestion_rows(parent: VBoxContainer) -> void:
 	if rows.is_empty():
 		parent.add_child(_make_label(_t("battle.calc.guess." + str(set_suggestions.get("state", "no_match"))), 12, TEXT_MUTED))
 	for row: Dictionary in rows:
+		var suggestion_key := _get_set_suggestion_key(row)
+		var details_expanded := expanded_set_suggestion_key == suggestion_key
 		var card := PanelContainer.new()
 		card.name = "SetSuggestionCard"
 		card.add_theme_stylebox_override("panel", _make_stylebox(SURFACE_RAISED, BORDER_NEUTRAL, 8, 10.0, 8.0))
@@ -978,25 +983,35 @@ func _add_set_suggestion_rows(parent: VBoxContainer) -> void:
 		if format_name != "":
 			context_parts.append(format_name)
 		context_parts.append(_t("battle.calc.guess." + str(row.get("confidence", "weak"))))
+		var variant_count := int(row.get("matchingVariantCount", 1))
+		context_parts.append(_t(
+			"battle.calc.guess.variant_one" if variant_count == 1 else "battle.calc.guess.variant_count",
+			{"count": variant_count}
+		))
 		box.add_child(_make_popup_label(" · ".join(context_parts), 11, TEXT_ACCENT))
 		var build := _as_dictionary(row.get("build", {}))
 		var preview := _make_popup_label(_set_suggestion_build_text(build), 12, TEXT_SECONDARY, 3)
 		preview.name = "SetSuggestionBuild"
 		box.add_child(preview)
-		var count := int(row.get("matchingVariantCount", 1))
-		if count > 1:
-			box.add_child(_make_popup_label(_t("battle.calc.guess.alternatives", {"count": count}), 11, TEXT_MUTED))
-		for item: Dictionary in row.get("evidence", []):
-			var kind := str(item.get("kind", ""))
-			var state := str(item.get("state", "unknown"))
-			var value := str(item.get("value", "")) if kind in ["move", "item", "ability"] else _t("battle.calc.guess." + kind, {"turn": item.get("turn", 0)})
-			var symbol := "✓" if state == "match" else "~" if state == "variant" else "?" if state == "unknown" else "×"
-			var explanation := _make_popup_label("%s %s — %s" % [symbol, value, _t("battle.calc.guess." + state)], 11, CONFIRMED_ACCENT if state == "match" else TEXT_MUTED)
-			box.add_child(explanation)
+		_add_set_suggestion_evidence_summary(box, row)
+		if details_expanded:
+			_add_set_suggestion_details(box, row)
+		var actions := HBoxContainer.new()
+		actions.add_theme_constant_override("separation", 6)
+		box.add_child(actions)
+		var details := _make_toggle_button(
+			_t("battle.calc.guess.hide_details") if details_expanded else _t("battle.calc.guess.show_details"),
+			details_expanded
+		)
+		details.name = "SetSuggestionDetailsToggle"
+		details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		details.pressed.connect(_toggle_set_suggestion_details.bind(suggestion_key))
+		actions.add_child(details)
 		var apply := _make_toggle_button(_t("battle.calc.guess.apply"), false)
 		apply.name = "ApplySetSuggestion"
+		apply.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		apply.pressed.connect(_apply_set_suggestion.bind(build))
-		box.add_child(apply)
+		actions.add_child(apply)
 	var ignore := _make_toggle_button(_t("battle.calc.guess.ignore"), false)
 	ignore.pressed.connect(func() -> void:
 		ignored_set_suggestions[selected_opponent_ref] = signature
@@ -1004,6 +1019,66 @@ func _add_set_suggestion_rows(parent: VBoxContainer) -> void:
 		_render_current_state()
 	)
 	parent.add_child(ignore)
+
+
+func _get_set_suggestion_key(row: Dictionary) -> String:
+	return "%s:%s" % [str(row.get("groupId", "")), str(row.get("variantId", ""))]
+
+
+func _toggle_set_suggestion_details(suggestion_key: String) -> void:
+	expanded_set_suggestion_key = "" if expanded_set_suggestion_key == suggestion_key else suggestion_key
+	_refresh_set_suggestions_popup()
+
+
+func _add_set_suggestion_evidence_summary(parent: VBoxContainer, row: Dictionary) -> void:
+	var counts := {"match": 0, "variant": 0, "unknown": 0, "conflict": 0}
+	for item: Dictionary in row.get("evidence", []):
+		var state := str(item.get("state", "unknown"))
+		if counts.has(state):
+			counts[state] = int(counts[state]) + 1
+	var summary := HBoxContainer.new()
+	summary.name = "SetSuggestionEvidenceSummary"
+	summary.add_theme_constant_override("separation", 5)
+	parent.add_child(summary)
+	for state: String in ["match", "variant", "unknown", "conflict"]:
+		var count := int(counts[state])
+		if count == 0:
+			continue
+		var symbol := "✓" if state == "match" else "~" if state == "variant" else "?" if state == "unknown" else "×"
+		var color := CONFIRMED_ACCENT if state == "match" else WARNING_ACCENT if state == "variant" else DANGER_ACCENT if state == "conflict" else TEXT_MUTED
+		var chip := _make_label("%s %s" % [symbol, count], 10, color)
+		chip.name = "SetSuggestionEvidenceCount"
+		chip.tooltip_text = _t("battle.calc.guess." + state)
+		chip.custom_minimum_size = Vector2(42, 20)
+		chip.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		chip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		chip.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		chip.mouse_filter = Control.MOUSE_FILTER_PASS
+		chip.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, Color(color, 0.75), 8, 5.0, 1.0))
+		summary.add_child(chip)
+	if summary.get_child_count() == 0:
+		var empty := _make_label("? 0", 10, TEXT_MUTED)
+		empty.tooltip_text = _t("battle.calc.guess.waiting")
+		empty.custom_minimum_size = Vector2(42, 20)
+		empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		empty.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		empty.add_theme_stylebox_override("normal", _make_stylebox(CHIP_BG, CHIP_BORDER, 8, 5.0, 1.0))
+		summary.add_child(empty)
+
+
+func _add_set_suggestion_details(parent: VBoxContainer, row: Dictionary) -> void:
+	var count := int(row.get("matchingVariantCount", 1))
+	if count > 1:
+		parent.add_child(_make_popup_label(_t("battle.calc.guess.alternatives", {"count": count}), 11, TEXT_MUTED))
+	for item: Dictionary in row.get("evidence", []):
+		var kind := str(item.get("kind", ""))
+		var state := str(item.get("state", "unknown"))
+		var value := str(item.get("value", "")) if kind in ["move", "item", "ability"] else _t("battle.calc.guess." + kind, {"turn": item.get("turn", 0)})
+		var symbol := "✓" if state == "match" else "~" if state == "variant" else "?" if state == "unknown" else "×"
+		var color := CONFIRMED_ACCENT if state == "match" else WARNING_ACCENT if state == "variant" else DANGER_ACCENT if state == "conflict" else TEXT_MUTED
+		var explanation := _make_popup_label("%s %s — %s" % [symbol, value, _t("battle.calc.guess." + state)], 11, color)
+		explanation.name = "SetSuggestionEvidenceDetail"
+		parent.add_child(explanation)
 
 
 func _close_set_suggestions_popup(render_after := true) -> void:
