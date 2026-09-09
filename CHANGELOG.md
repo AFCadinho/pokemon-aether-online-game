@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- AI Sparring Team Catalog cards can now be starred as a favorite, and that team is available directly as your Free Sparring team source.
+- AI Sparring Team Catalog cards can now be starred as a favorite, and Catalog team offers a checkbox to use it directly in Free Sparring.
 
 - Refreshed the Aether Clash Lobby visuals from the latest map artwork.
 
