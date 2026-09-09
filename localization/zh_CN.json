@@ -1488,6 +1488,7 @@
   "ui.market.category.general": "普通商品",
   "ui.market.item_fallback": "道具",
   "ui.market.message.bought": "购买了 {quantity}x {item}。",
+  "ui.market.message.wallet_debited": "已从您的钱包中扣除 {amount}。",
   "ui.market.message.sold": "已售出 {quantity}x {item}。",
   "common.loading": "加载中...",
   "common.unavailable": "不可用",
