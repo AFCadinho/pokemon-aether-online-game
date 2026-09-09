@@ -52,6 +52,12 @@ func _run() -> void:
 	panel.edited_assumption_fields = {"nature": true, "evs": true}
 	var before := panel.get_defender_assumption_state()
 	var popup_response := response.duplicate(true)
+	popup_response["suggestions"][0]["evidence"] = [
+		{"kind": "damage", "state": "match", "turn": 1, "value": "observed_range"},
+		{"kind": "move", "state": "variant", "turn": 1, "value": "Fire Blast"},
+		{"kind": "speed", "state": "unknown", "turn": 1, "value": "ambiguous"},
+		{"kind": "item", "state": "conflict", "turn": 1, "value": "Leftovers"},
+	]
 	for index in range(2):
 		var extra_row := row.duplicate(true)
 		extra_row["groupId"] = "tank-%s" % index
@@ -78,6 +84,16 @@ func _run() -> void:
 	var suggestion_build := panel.set_suggestions_popup.find_child("SetSuggestionBuild", true, false) as Label
 	_check(suggestion_name != null and suggestion_name.text == "TankChomp" and suggestion_name.custom_minimum_size.y > 0, "Suggested set name remains visibly allocated")
 	_check(suggestion_build != null and suggestion_build.text.contains("Rocky Helmet") and suggestion_build.text.contains("Earthquake") and suggestion_build.custom_minimum_size.y > 0, "Suggested build details remain visibly allocated")
+	var evidence_summary := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceSummary", true, false) as HBoxContainer
+	_check(evidence_summary != null and evidence_summary.get_child_count() == 4, "Evidence stays summarized by four stable states")
+	_check(panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) == null, "Evidence details are collapsed by default")
+	var details_toggle := panel.set_suggestions_popup.find_child("SetSuggestionDetailsToggle", true, false) as Button
+	_check(details_toggle != null, "Each suggestion offers progressive evidence disclosure")
+	if details_toggle != null:
+		details_toggle.pressed.emit()
+		await process_frame
+	_check(panel.expanded_set_suggestion_key == "tank:tank-1", "Only the selected suggestion is expanded")
+	_check(panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) != null, "Expanded suggestion shows individual evidence")
 	panel._apply_set_suggestion(build)
 	_check(not is_instance_valid(panel.set_suggestions_popup), "Applying a suggestion closes the popup")
 	_check(panel.defender_assumptions["assumedMoves"][0] == "Fire Blast", "Revealed Fire Blast survives reference Toxic")
