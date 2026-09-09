@@ -1487,7 +1487,7 @@
   "ui.market.category.general": "General goods",
   "ui.market.item_fallback": "Item",
   "ui.market.message.bought": "Bought {quantity}x {item}.",
-  "ui.market.message.wallet_debited": "{amount} was deducted from your wallet.",
+  "ui.market.message.wallet_debited": "{amount} was removed from your wallet.",
   "ui.market.message.sold": "Sold {quantity}x {item}.",
   "common.loading": "Loading...",
   "common.unavailable": "Unavailable",
