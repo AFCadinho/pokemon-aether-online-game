@@ -1546,6 +1546,7 @@ var item_dex_selected_item_id := ""
 var item_dex_selected_item: Dictionary = {}
 var item_dex_dragging := false
 var item_dex_drag_offset := Vector2.ZERO
+var aether_exchange_hover_summary_key := ""
 var pokedex_popup: PanelContainer
 var town_map_popup: TownMapPopup
 var mount_loadout_panel: Control
@@ -21792,6 +21793,8 @@ func _setup_aether_exchange_popup() -> void:
 	aether_exchange_popup.closed.connect(_hide_aether_exchange)
 	aether_exchange_popup.wallet_changed.connect(_on_aether_exchange_wallet_changed)
 	aether_exchange_popup.pokemon_summary_requested.connect(_on_aether_exchange_pokemon_summary_requested)
+	aether_exchange_popup.pokemon_summary_hover_requested.connect(_on_aether_exchange_pokemon_summary_hover_requested)
+	aether_exchange_popup.pokemon_summary_hover_ended.connect(_hide_aether_exchange_pokemon_summary_hover)
 
 func _hide_aether_exchange() -> void:
 	if aether_exchange_popup == null:
@@ -21803,7 +21806,63 @@ func _on_aether_exchange_wallet_changed() -> void:
 	refresh_money_display()
 
 func _on_aether_exchange_pokemon_summary_requested(pokemon_payload: Dictionary) -> void:
+	_hide_aether_exchange_pokemon_summary_hover()
 	_open_readonly_pokemon_summary(pokemon_payload)
+
+func _on_aether_exchange_pokemon_summary_hover_requested(pokemon_payload: Dictionary, source_rect: Rect2) -> void:
+	_hide_aether_exchange_pokemon_summary_hover()
+	var pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(pokemon_payload)
+	if pokemon == null:
+		return
+	var card_key := _get_pokemon_summary_card_key(pokemon, -1, "readonly")
+	if pokemon_summary_open_cards.has(card_key):
+		return
+	_open_readonly_pokemon_summary(pokemon_payload)
+	if pokemon_summary_popup == null or not pokemon_summary_open_cards.has(card_key):
+		return
+	aether_exchange_hover_summary_key = card_key
+	_position_aether_exchange_hover_summary(source_rect)
+	if is_inside_tree():
+		call_deferred("_deferred_position_aether_exchange_hover_summary", card_key, source_rect)
+
+func _deferred_position_aether_exchange_hover_summary(card_key: String, source_rect: Rect2) -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+	await tree.process_frame
+	await tree.process_frame
+	if aether_exchange_hover_summary_key != card_key:
+		return
+	_position_aether_exchange_hover_summary(source_rect)
+
+func _position_aether_exchange_hover_summary(source_rect: Rect2) -> void:
+	if pokemon_summary_popup == null or root_control == null:
+		return
+	var summary_size := _get_current_pokemon_summary_size()
+	var target := _aether_exchange_hover_summary_position(
+		source_rect,
+		root_control.get_global_rect(),
+		summary_size,
+	)
+	_move_pokemon_summary_to_global_position(target)
+	_store_active_pokemon_summary_card_context()
+
+func _aether_exchange_hover_summary_position(source_rect: Rect2, bounds: Rect2, summary_size: Vector2) -> Vector2:
+	var gap := 10.0
+	var target := Vector2(source_rect.end.x + gap, source_rect.position.y)
+	if target.x + summary_size.x > bounds.end.x:
+		target.x = source_rect.position.x - summary_size.x - gap
+	target.x = clampf(target.x, bounds.position.x, bounds.end.x - summary_size.x)
+	target.y = clampf(target.y, bounds.position.y, bounds.end.y - summary_size.y)
+	return target
+
+func _hide_aether_exchange_pokemon_summary_hover() -> void:
+	var card_key := aether_exchange_hover_summary_key
+	if card_key.is_empty():
+		return
+	aether_exchange_hover_summary_key = ""
+	if pokemon_summary_open_cards.has(card_key):
+		_hide_pokemon_summary_popup(card_key)
 
 func _setup_shiny_tracker_popup() -> void:
 	shiny_tracker_popup = SHINY_TRACKER_POPUP_SCENE.instantiate() as ShinyTrackerPopup

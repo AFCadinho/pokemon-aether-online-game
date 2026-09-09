@@ -21,6 +21,8 @@ func _run() -> void:
 	var popup := POPUP.instantiate() as AetherExchangePopup
 	host.add_child(popup)
 	popup.visible = true
+	var summary_overlay := (load("res://scenes/interface/ui_overlay.tscn") as PackedScene).instantiate()
+	summary_overlay.set("root_control", host)
 	var pokemon := {
 		"pokemonId": 42, "species": "mew", "speciesId": "mew",
 		"speciesName": "Mew", "level": 26, "nature": "Hardy",
@@ -56,6 +58,8 @@ func _run() -> void:
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		localization.set_locale(locale)
 		for screen: String in ["buy", "hover", "items", "tm", "outfit", "mount", "sell", "request", "wanted", "mine", "history"]:
+			summary_overlay.call("_hide_aether_exchange_pokemon_summary_hover")
+			await process_frame
 			popup.search_input.text = ""
 			popup.wallet_money = 24826
 			popup.sellable_items = [item]
@@ -81,7 +85,7 @@ func _run() -> void:
 				"buy": popup._select_entry(listings[0], "listing")
 				"hover":
 					var hover_source := popup.list_container.get_child(0) as Button
-					popup._show_pokemon_hover(hover_source, pokemon)
+					summary_overlay.call("_on_aether_exchange_pokemon_summary_hover_requested", popup._pokemon_summary_payload(pokemon), hover_source.get_global_rect())
 				"items", "tm", "outfit", "mount": popup._select_entry(popup.browse_listings[0], "listing")
 				"sell": popup._select_entry(pokemon, "sell")
 				"request": popup._select_entry(item, "wish_catalog")
@@ -102,10 +106,12 @@ func _run() -> void:
 						_check_bounds(button, popup, description)
 			for control: Control in [popup.search_input, popup.browse_sort_button, popup.advanced_filter_button, popup.refresh_button, popup.request_item_button, popup.action_bar, popup.detail_panel]:
 				if control.is_visible_in_tree():
-					_check_bounds(control, popup, description)
+						_check_bounds(control, popup, description)
 			if screen == "hover":
-				_check(popup.pokemon_hover_card.visible, description + ": Pokémon hover card is visible")
-				_check_bounds(popup.pokemon_hover_card, popup, description)
+				var summary_popup := summary_overlay.get("pokemon_summary_popup") as PanelContainer
+				_check(summary_popup != null and summary_popup.visible, description + ": full read-only Summary is visible")
+				_check(summary_popup.name == "PokemonReadonlySummaryPopup", description + ": hover uses the existing Summary card")
+				_check_bounds(summary_popup, popup, description)
 			if screen in ["items", "tm", "outfit", "mount"]:
 				var item_icon := popup.list_container.get_child(0).find_child("BrowseCardIcon", true, false) as TextureRect
 				_check(item_icon != null, description + ": item offer has an icon")
@@ -134,6 +140,8 @@ func _run() -> void:
 				await RenderingServer.frame_post_draw
 				_check(viewport.get_texture().get_image().save_png(capture_dir.path_join("%s-%s.png" % [locale, screen])) == OK, description + ": screenshot")
 	localization.set_locale(previous_locale)
+	summary_overlay.call("_hide_aether_exchange_pokemon_summary_hover")
+	summary_overlay.free()
 	viewport.queue_free()
 	await process_frame
 	PokemonAssets.party_icon_cache.clear()
