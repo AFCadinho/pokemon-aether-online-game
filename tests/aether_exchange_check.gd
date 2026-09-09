@@ -322,9 +322,18 @@ func _run() -> void:
 	_check((listings_section.find_child("PortfolioSectionTitle", true, false) as Label).text.contains("ITEMS FOR SALE"), "My Exchange names the player's sale listings explicitly")
 	_check((requests_section.find_child("PortfolioSectionTitle", true, false) as Label).text.contains("ITEM REQUESTS"), "My Exchange names the player's requests explicitly")
 	popup.set("asset_filter", "pokemon")
+	popup.set("my_listings", [
+		{"id": "pokemon-1", "assetType": "pokemon", "asset": {"species": "ekans", "speciesName": "Ekans"}, "status": "active", "quantity": 1, "totalPrice": 100},
+		{"id": "pokemon-2", "assetType": "pokemon", "asset": {"species": "vibrava", "speciesName": "Vibrava"}, "status": "active", "quantity": 1, "totalPrice": 100},
+	])
 	popup.call("_render_current_list")
 	_check(list_container.columns == 1, "Pokémon listings use one column because Pokémon requests do not exist")
+	listings_section = list_container.find_child("ExchangePortfolioListingsSection", true, false) as Control
+	var pokemon_grid := listings_section.find_child("PortfolioEntriesGrid", true, false) as GridContainer
+	_check(pokemon_grid != null and pokemon_grid.columns == 2, "The player's Pokémon listings use a compact two-column grid")
+	_check(pokemon_grid.find_children("*", "Button", true, false).size() == 2, "Pokémon portfolio cards remain individually selectable")
 	popup.set("asset_filter", "item")
+	popup.set("my_listings", [sold_listing])
 	popup.call("_render_current_list")
 	(context_buttons.get("history") as Button).pressed.emit()
 	await process_frame

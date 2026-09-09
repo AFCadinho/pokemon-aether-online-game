@@ -1496,8 +1496,22 @@ func _add_portfolio_section(section_id: String, entries: Array, kind: String) ->
 		empty.add_theme_color_override("font_color", Color(UI_MUTED, 0.78))
 		stack.add_child(empty)
 		return
+	var entry_grid := GridContainer.new()
+	entry_grid.name = "PortfolioEntriesGrid"
+	entry_grid.columns = 2 if section_id == "listings" and asset_filter == "pokemon" else 1
+	entry_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	entry_grid.add_theme_constant_override("h_separation", 8)
+	entry_grid.add_theme_constant_override("v_separation", 8)
+	stack.add_child(entry_grid)
 	for entry: Dictionary in entries:
-		stack.add_child(_entry_button(entry, kind))
+		entry_grid.add_child(_entry_button(entry, kind))
+	if entry_grid.columns == 2 and entries.size() % 2 == 1:
+		var spacer := Control.new()
+		spacer.name = "PortfolioGridSpacer"
+		spacer.custom_minimum_size = Vector2(BROWSE_CARD_MIN_WIDTH, 0)
+		spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		entry_grid.add_child(spacer)
 
 
 func _update_list_grid_columns() -> void:

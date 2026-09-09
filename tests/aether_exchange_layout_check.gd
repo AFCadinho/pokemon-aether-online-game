@@ -72,6 +72,11 @@ func _run() -> void:
 			if screen == "mine-items":
 				own_listing = {"id": "own-item", "assetType": "item", "asset": item, "quantity": 2, "unitPrice": 100, "totalPrice": 200, "status": "active"}
 			popup.my_listings = [own_listing]
+			if screen == "mine":
+				var second_listing := own_listing.duplicate(true)
+				second_listing["id"] = "own-pokemon-2"
+				second_listing["asset"] = pokemon.merged({"species": "vibrava", "speciesId": "vibrava", "speciesName": "Vibrava"}, true)
+				popup.my_listings.append(second_listing)
 			popup.portfolio_history = screen == "history"
 			popup.active_tab = {"buy": "browse", "hover": "browse", "items": "browse", "tm": "browse", "outfit": "browse", "mount": "browse", "request": "wishlist", "mine-items": "mine", "history": "mine"}.get(screen, screen)
 			popup.asset_filter = "pokemon" if screen in ["buy", "hover", "sell", "mine"] else "item"
@@ -133,6 +138,12 @@ func _run() -> void:
 				if listings_section != null:
 					_check_bounds(listings_section, popup, description)
 					_check(not (listings_section.find_child("PortfolioSectionTitle", true, false) as Label).text.begins_with("ui.exchange."), description + ": sale section title is translated")
+					if screen == "mine":
+						var pokemon_grid := listings_section.find_child("PortfolioEntriesGrid", true, false) as GridContainer
+						_check(pokemon_grid != null and pokemon_grid.columns == 2, description + ": Pokémon listings are side by side")
+						if pokemon_grid != null:
+							for pokemon_button: Button in pokemon_grid.find_children("*", "Button", true, false):
+								_check(pokemon_button.size.x < listings_section.size.x * 0.6, description + ": Pokémon card does not consume the full width")
 				if screen == "mine-items":
 					var requests_section := popup.list_container.find_child("ExchangePortfolioRequestsSection", true, false) as Control
 					_check(requests_section != null, description + ": item requests have a separate section")
