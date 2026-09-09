@@ -4,6 +4,8 @@ extends Panel
 signal closed
 signal wallet_changed
 signal pokemon_summary_requested(pokemon_payload: Dictionary)
+signal pokemon_summary_hover_requested(pokemon_payload: Dictionary, source_rect: Rect2)
+signal pokemon_summary_hover_ended
 
 const UI_BG := Color("#050b14fa")
 const UI_RAISED := Color("#081522f5")
@@ -19,7 +21,7 @@ const UI_DANGER := Color("#ef7085")
 const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
 const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
 const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
-const POKEMON_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/party_hover_card.tscn")
+const ITEM_ICON_RESOLVER := preload("res://scripts/services/item_icon_resolver.gd")
 const EXCHANGE_SIZE := Vector2(1040, 660)
 const MAX_PRICE := 2_147_483_647
 const BROWSE_CARD_MIN_WIDTH := 172.0
@@ -102,8 +104,7 @@ var detail_panel: Control
 var action_bar: PanelContainer
 var action_content: HBoxContainer
 var status_timer: Timer
-var pokemon_hover_card: PartyHoverCard
-var pokemon_hover_generation := 0
+var pokemon_hover_active := false
 var search_input: LineEdit
 var search_timer: Timer
 var refresh_button: Button
@@ -145,7 +146,6 @@ func _ready() -> void:
 	window_style.set_content_margin(SIDE_BOTTOM, 0.0)
 	add_theme_stylebox_override("panel", window_style)
 	_build_interface()
-	_build_pokemon_hover_card()
 	_center_in_parent()
 	search_timer = Timer.new()
 	search_timer.one_shot = true
@@ -484,15 +484,6 @@ func _build_action_bar() -> Control:
 	action_content.add_theme_constant_override("separation", 16)
 	action_bar.add_child(action_content)
 	return action_bar
-
-
-func _build_pokemon_hover_card() -> void:
-	pokemon_hover_card = POKEMON_HOVER_CARD_SCENE.instantiate() as PartyHoverCard
-	pokemon_hover_card.name = "ExchangePokemonHoverCard"
-	pokemon_hover_card.z_index = 9
-	pokemon_hover_card.set_show_ivs(true)
-	pokemon_hover_card.set_show_evs(true)
-	add_child(pokemon_hover_card)
 
 
 func _build_filters() -> Control:
@@ -1651,48 +1642,17 @@ func _render_detail() -> void:
 
 
 func _show_pokemon_hover(source: Control, asset: Dictionary) -> void:
-	if pokemon_hover_card == null or not visible or asset.is_empty():
+	if source == null or not visible or asset.is_empty():
 		return
-	pokemon_hover_generation += 1
-	var generation := pokemon_hover_generation
-	var payload := _pokemon_hover_payload(asset)
-	pokemon_hover_card.show_for_pokemon(payload)
-	_position_pokemon_hover(source)
-	call_deferred("_deferred_position_pokemon_hover", source, generation)
-
-
-func _deferred_position_pokemon_hover(source: Control, generation: int) -> void:
-	await get_tree().process_frame
-	await get_tree().process_frame
-	if generation != pokemon_hover_generation or pokemon_hover_card == null or not pokemon_hover_card.visible:
-		return
-	if not is_instance_valid(source):
-		return
-	_position_pokemon_hover(source)
-
-
-func _position_pokemon_hover(source: Control) -> void:
-	if pokemon_hover_card == null or source == null:
-		return
-	var bounds := get_global_rect().grow(-12.0)
-	pokemon_hover_card.position_beside_rect_within(source.get_global_rect(), bounds)
+	pokemon_hover_active = true
+	pokemon_summary_hover_requested.emit(_pokemon_summary_payload(asset), source.get_global_rect())
 
 
 func _hide_pokemon_hover() -> void:
-	pokemon_hover_generation += 1
-	if pokemon_hover_card != null:
-		pokemon_hover_card.hide_card()
-
-
-func _pokemon_hover_payload(asset: Dictionary) -> Dictionary:
-	var payload := _pokemon_summary_payload(asset)
-	var stats := _dictionary(payload.get("stats", {}))
-	if int(payload.get("maxHp", 0)) <= 0 and int(stats.get("hp", 0)) > 0:
-		payload["maxHp"] = int(stats.get("hp"))
-		payload["hp"] = int(stats.get("hp"))
-	if _optional_text(payload.get("item")).is_empty():
-		payload["item"] = _optional_text(payload.get("heldItemId"), _optional_text(payload.get("held_item_id")))
-	return payload
+	if not pokemon_hover_active:
+		return
+	pokemon_hover_active = false
+	pokemon_summary_hover_ended.emit()
 
 
 func _build_summary_button(asset: Dictionary) -> Button:
@@ -2477,20 +2437,17 @@ func _entry_texture(entry: Dictionary, kind: String) -> Texture2D:
 		if species.is_empty():
 			species = _optional_text(asset.get("speciesName"), _optional_text(asset.get("speciesId")))
 		return PokemonAssets.load_party_icon(species, bool(asset.get("shiny", false)))
-	return _load_item_icon(str(asset.get("itemId", "")))
+	return _load_item_icon(
+		str(asset.get("itemId", asset.get("id", ""))),
+		str(asset.get("machineKind", "")),
+		str(asset.get("machineMoveType", "")),
+	)
 
 
-func _load_item_icon(item_id: String) -> Texture2D:
-	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
-	for path: String in [
-		"res://assets/items/icons/field_move_charms/%s.png" % normalized,
-		"res://assets/items/icons/%s.png" % normalized,
-		"res://assets/items/icons/%s.png" % item_id.strip_edges(),
-		"res://assets/items/icons/000.png",
-	]:
-		if ResourceLoader.exists(path):
-			return load(path) as Texture2D
-	return null
+func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_type: String = "") -> Texture2D:
+	var player_save := get_node_or_null("/root/PlayerSave")
+	var cosmetic_gender := str(player_save.get("gender")) if player_save != null else "male"
+	return ITEM_ICON_RESOLVER.load_icon(item_id, machine_kind, machine_move_type, cosmetic_gender)
 
 
 func _list_caption(count: int) -> String:

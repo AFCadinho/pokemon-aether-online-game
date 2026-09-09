@@ -10,6 +10,9 @@ const PROJECT_PATH := "res://project.godot"
 
 var failed := false
 var requested_summary_payload: Dictionary = {}
+var requested_hover_payload: Dictionary = {}
+var requested_hover_rect := Rect2()
+var hover_end_count := 0
 
 
 func _init() -> void:
@@ -52,6 +55,8 @@ func _run() -> void:
 	var popup := EXCHANGE_POPUP.instantiate() as AetherExchangePopup
 	popup_host.add_child(popup)
 	popup.visible = true
+	popup.pokemon_summary_hover_requested.connect(_on_summary_hover_requested)
+	popup.pokemon_summary_hover_ended.connect(_on_summary_hover_ended)
 	await process_frame
 	_check(popup != null, "Exchange popup scene instantiates")
 	_check(popup.get_class() == "Panel", "Exchange outer window cannot be resized by child containers")
@@ -248,6 +253,16 @@ func _run() -> void:
 			charm_icon != null and charm_icon.resource_path.contains("/field_move_charms/") and not charm_icon.resource_path.ends_with("/000.png"),
 			"Exchange resolves the dedicated %s icon" % charm_id
 		)
+	var tm_icon := popup.call("_load_item_icon", "tm-thunderbolt") as Texture2D
+	_check(tm_icon != null and tm_icon.resource_path.ends_with("/machine_ELECTRIC.png"), "Exchange infers the Item Dex icon for a TM")
+	var catalog_tm_icon := popup.call("_load_item_icon", "tm-catalog-entry", "tm", "water") as Texture2D
+	_check(catalog_tm_icon != null and catalog_tm_icon.resource_path.ends_with("/machine_WATER.png"), "Exchange uses Item Dex machine metadata when provided")
+	var outfit_icon := popup.call("_load_item_icon", "mysterious-outfit") as Texture2D
+	_check(outfit_icon != null and not outfit_icon.resource_path.ends_with("/000.png"), "Exchange resolves Item Dex cosmetic previews")
+	var mount_icon := popup.call("_load_item_icon", "cyclizar-mount") as Texture2D
+	_check(mount_icon != null and not mount_icon.resource_path.ends_with("/000.png"), "Exchange resolves Item Dex mount previews")
+	var item_dex_overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	_check(item_dex_overlay_source.contains("ITEM_ICON_RESOLVER.load_icon("), "Item Dex and Exchange use the same item icon resolver")
 	_check(popup.get("quantity_spin") is SpinBox, "Item listings expose quantity input")
 	_check(popup.get("price_spin") is SpinBox, "Listings expose fixed-price input")
 	var wishlist_item := {
@@ -426,18 +441,11 @@ func _run() -> void:
 		_check(not card_text.contains(available_label), "Browse cards omit the redundant Available status")
 	_check(first_browse_card.mouse_entered.has_connections() and first_browse_card.mouse_exited.has_connections(), "Pokémon offers expose hover summary behavior")
 	popup.call("_show_pokemon_hover", first_browse_card, browse_entries[0].asset)
-	await process_frame
-	await process_frame
-	await process_frame
-	var pokemon_hover_card := popup.get("pokemon_hover_card") as PartyHoverCard
-	_check(pokemon_hover_card != null and pokemon_hover_card.visible, "Hovering a Pokémon offer shows the shared summary card")
-	_check(str(pokemon_hover_card.current_pokemon_data.get("species", "")) == "garchomp", "Hover summary uses the offered Pokémon payload")
-	var hover_ivs := pokemon_hover_card.get_node("MarginContainer/VBoxContainer/IVDetailsContainer") as Control
-	var hover_evs := pokemon_hover_card.get_node("MarginContainer/VBoxContainer/EVValueLabel") as Control
-	_check(hover_ivs.visible and hover_evs.visible, "Exchange hover summary exposes IVs and EVs")
-	_check(popup.get_global_rect().grow(1).encloses(pokemon_hover_card.get_global_rect()), "Pokémon hover summary stays inside the Exchange window")
+	_check(str(requested_hover_payload.get("species", "")) == "garchomp", "Hover summary uses the offered Pokémon payload")
+	_check(requested_hover_payload.has("ivs") and requested_hover_payload.has("evs"), "Exchange sends complete Summary data on hover")
+	_check(requested_hover_rect == first_browse_card.get_global_rect(), "Exchange anchors the read-only Summary beside the hovered offer")
 	popup.call("_hide_pokemon_hover")
-	_check(not pokemon_hover_card.visible, "Leaving a Pokémon offer hides its hover summary")
+	_check(hover_end_count == 1, "Leaving a Pokémon offer hides its read-only Summary")
 	popup.set("wallet_money", 1_000_000)
 	popup.call("_select_entry", browse_entries[0], "listing")
 	await process_frame
@@ -546,6 +554,15 @@ func _check(condition: bool, label: String) -> void:
 
 func _capture_summary_payload(payload: Dictionary) -> void:
 	requested_summary_payload = payload.duplicate(true)
+
+
+func _on_summary_hover_requested(payload: Dictionary, source_rect: Rect2) -> void:
+	requested_hover_payload = payload.duplicate(true)
+	requested_hover_rect = source_rect
+
+
+func _on_summary_hover_ended() -> void:
+	hover_end_count += 1
 
 
 func _count_meta_controls(root_node: Node, meta_key: String) -> int:

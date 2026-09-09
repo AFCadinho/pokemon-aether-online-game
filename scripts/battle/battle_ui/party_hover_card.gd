@@ -94,12 +94,6 @@ func set_show_ivs(enabled: bool) -> void:
 		iv_details_container.visible = enabled
 
 
-func set_show_evs(enabled: bool) -> void:
-	show_evs = enabled
-	if ev_value_label != null:
-		ev_value_label.visible = enabled and not ev_value_label.text.is_empty()
-
-
 func set_show_storage_details(enabled: bool) -> void:
 	show_ivs = false
 	show_evs = false

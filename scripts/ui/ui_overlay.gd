@@ -6,6 +6,7 @@ const LOAN_RETURNS_DIALOG_SCRIPT := preload("res://scripts/ui/loan_returns_dialo
 const BORROWED_POKEMON_DIALOG_SCRIPT := preload("res://scripts/ui/borrowed_pokemon_dialog.gd")
 const LOAN_SUMMARY_TIME_SCRIPT := preload("res://scripts/ui/loan_summary_time.gd")
 const SYSTEM_NOTICE_BANNER_SCRIPT := preload("res://scripts/ui/system_notice_banner.gd")
+const ITEM_ICON_RESOLVER := preload("res://scripts/services/item_icon_resolver.gd")
 const AETHER_CLASH_ANNOUNCEMENT_FORMATTER := preload(
 	"res://scripts/ui/aether_clash_announcement_formatter.gd"
 )
@@ -1545,6 +1546,7 @@ var item_dex_selected_item_id := ""
 var item_dex_selected_item: Dictionary = {}
 var item_dex_dragging := false
 var item_dex_drag_offset := Vector2.ZERO
+var aether_exchange_hover_summary_key := ""
 var pokedex_popup: PanelContainer
 var town_map_popup: TownMapPopup
 var mount_loadout_panel: Control
@@ -21791,6 +21793,8 @@ func _setup_aether_exchange_popup() -> void:
 	aether_exchange_popup.closed.connect(_hide_aether_exchange)
 	aether_exchange_popup.wallet_changed.connect(_on_aether_exchange_wallet_changed)
 	aether_exchange_popup.pokemon_summary_requested.connect(_on_aether_exchange_pokemon_summary_requested)
+	aether_exchange_popup.pokemon_summary_hover_requested.connect(_on_aether_exchange_pokemon_summary_hover_requested)
+	aether_exchange_popup.pokemon_summary_hover_ended.connect(_hide_aether_exchange_pokemon_summary_hover)
 
 func _hide_aether_exchange() -> void:
 	if aether_exchange_popup == null:
@@ -21802,7 +21806,63 @@ func _on_aether_exchange_wallet_changed() -> void:
 	refresh_money_display()
 
 func _on_aether_exchange_pokemon_summary_requested(pokemon_payload: Dictionary) -> void:
+	_hide_aether_exchange_pokemon_summary_hover()
 	_open_readonly_pokemon_summary(pokemon_payload)
+
+func _on_aether_exchange_pokemon_summary_hover_requested(pokemon_payload: Dictionary, source_rect: Rect2) -> void:
+	_hide_aether_exchange_pokemon_summary_hover()
+	var pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(pokemon_payload)
+	if pokemon == null:
+		return
+	var card_key := _get_pokemon_summary_card_key(pokemon, -1, "readonly")
+	if pokemon_summary_open_cards.has(card_key):
+		return
+	_open_readonly_pokemon_summary(pokemon_payload)
+	if pokemon_summary_popup == null or not pokemon_summary_open_cards.has(card_key):
+		return
+	aether_exchange_hover_summary_key = card_key
+	_position_aether_exchange_hover_summary(source_rect)
+	if is_inside_tree():
+		call_deferred("_deferred_position_aether_exchange_hover_summary", card_key, source_rect)
+
+func _deferred_position_aether_exchange_hover_summary(card_key: String, source_rect: Rect2) -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+	await tree.process_frame
+	await tree.process_frame
+	if aether_exchange_hover_summary_key != card_key:
+		return
+	_position_aether_exchange_hover_summary(source_rect)
+
+func _position_aether_exchange_hover_summary(source_rect: Rect2) -> void:
+	if pokemon_summary_popup == null or root_control == null:
+		return
+	var summary_size := _get_current_pokemon_summary_size()
+	var target := _aether_exchange_hover_summary_position(
+		source_rect,
+		root_control.get_global_rect(),
+		summary_size,
+	)
+	_move_pokemon_summary_to_global_position(target)
+	_store_active_pokemon_summary_card_context()
+
+func _aether_exchange_hover_summary_position(source_rect: Rect2, bounds: Rect2, summary_size: Vector2) -> Vector2:
+	var gap := 10.0
+	var target := Vector2(source_rect.end.x + gap, source_rect.position.y)
+	if target.x + summary_size.x > bounds.end.x:
+		target.x = source_rect.position.x - summary_size.x - gap
+	target.x = clampf(target.x, bounds.position.x, bounds.end.x - summary_size.x)
+	target.y = clampf(target.y, bounds.position.y, bounds.end.y - summary_size.y)
+	return target
+
+func _hide_aether_exchange_pokemon_summary_hover() -> void:
+	var card_key := aether_exchange_hover_summary_key
+	if card_key.is_empty():
+		return
+	aether_exchange_hover_summary_key = ""
+	if pokemon_summary_open_cards.has(card_key):
+		_hide_pokemon_summary_popup(card_key)
 
 func _setup_shiny_tracker_popup() -> void:
 	shiny_tracker_popup = SHINY_TRACKER_POPUP_SCENE.instantiate() as ShinyTrackerPopup
@@ -24483,67 +24543,12 @@ func _bag_gameplay_definition_for_item_id(item_id: String) -> Dictionary:
 	return {}
 
 func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_type: String = "") -> Texture2D:
-	if item_id == "escape-rope-action":
-		item_id = "escape-rope"
-	item_id = _canonical_display_item_id(item_id)
-	var cosmetic_icon := CharacterAppearanceService.get_cosmetic_item_icon(
+	return ITEM_ICON_RESOLVER.load_icon(
 		item_id,
-		_bag_item_icon_gender(item_id)
+		machine_kind,
+		machine_move_type,
+		_bag_item_icon_gender(item_id),
 	)
-	if cosmetic_icon != null:
-		return cosmetic_icon
-	var mount_id := MountService.get_mount_id_for_unlock_item(item_id)
-	if mount_id != "":
-		var mount_icon := MountService.get_mount_icon_texture(mount_id)
-		if mount_icon != null:
-			return mount_icon
-	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
-	var candidates: Array[String] = [
-		BAG_ICON_ROOT + "field_move_charms/" + normalized + ".png",
-	]
-	if normalized == "POKEDEX":
-		candidates.append("res://assets/ui/pokedex.svg")
-	var machine_icon_path := _machine_item_icon_path(item_id, machine_kind, machine_move_type)
-	if machine_icon_path != "":
-		candidates.append(machine_icon_path)
-	candidates.append_array([
-		BAG_ICON_ROOT + normalized + ".png",
-		BAG_ICON_ROOT + item_id.strip_edges() + ".png",
-		BAG_ICON_ROOT + "000.png",
-	])
-	for path: String in candidates:
-		if ResourceLoader.exists(path):
-			return load(path) as Texture2D
-	return null
-
-func _machine_item_icon_path(item_id: String, machine_kind: String, machine_move_type: String) -> String:
-	var resolved_kind := machine_kind.strip_edges().to_lower()
-	var resolved_move_type := machine_move_type.strip_edges().to_upper()
-	var normalized_item_id := _normalize_item_id(item_id)
-	if resolved_kind == "" or resolved_move_type == "":
-		for inventory_item: Dictionary in bag_inventory_items:
-			if _normalize_item_id(str(inventory_item.get("id", ""))) != normalized_item_id:
-				continue
-			resolved_kind = str(inventory_item.get("machineKind", "")).strip_edges().to_lower()
-			resolved_move_type = str(inventory_item.get("machineMoveType", "")).strip_edges().to_upper()
-			break
-	if resolved_kind == "" or resolved_move_type == "":
-		var inferred_kind := ""
-		if normalized_item_id.begins_with("tm-"):
-			inferred_kind = "tm"
-		elif normalized_item_id.begins_with("hm-"):
-			inferred_kind = "hm"
-		if inferred_kind != "":
-			if resolved_kind == "":
-				resolved_kind = inferred_kind
-			if resolved_move_type == "":
-				resolved_move_type = _get_summary_move_type(
-					normalized_item_id.trim_prefix("%s-" % inferred_kind)
-				).strip_edges().to_upper()
-	if resolved_kind not in ["tm", "hm"] or resolved_move_type == "":
-		return ""
-	var icon_prefix := "machine_tr_" if resolved_kind == "hm" else "machine_"
-	return BAG_ICON_ROOT + icon_prefix + resolved_move_type + ".png"
 
 func _ellipsize_text(value: String, max_length: int) -> String:
 	if value.length() <= max_length:
