@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The battle damage calculator now opens with one combined request and reuses its exact current battle snapshot, reducing the wait during fast battles such as Aether Clash.
+
 - Your original starter now always stays with you and returns to your party if borrowed Pokémon leave it empty.
 
 - Aether Exchange now has clear Buy and Sell routes, easier item requests, distinct navigation and filter styling, separate active orders and history, and a cleaner market with Pokémon details in Summary.

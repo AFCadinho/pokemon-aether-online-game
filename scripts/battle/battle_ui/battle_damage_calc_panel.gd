@@ -315,7 +315,7 @@ func set_defender_assumptions(assumptions: Dictionary, edited_fields: Dictionary
 		_render_current_state()
 
 
-func set_knowledge_snapshot(snapshot: Dictionary) -> void:
+func set_knowledge_snapshot(snapshot: Dictionary, notify_assumption_changes: bool = true) -> void:
 	var previous_opponent_ref := selected_opponent_ref
 	knowledge_snapshot = snapshot.duplicate(true)
 	selected_viewer_ref = _resolve_selected_ref("viewer", selected_viewer_ref)
@@ -326,7 +326,7 @@ func set_knowledge_snapshot(snapshot: Dictionary) -> void:
 	if previous_opponent_ref != "" and selected_opponent_ref != previous_opponent_ref:
 		_clear_sample_sets()
 	_request_sample_sets_if_needed()
-	_refresh_current_scenario()
+	_refresh_current_scenario(notify_assumption_changes)
 	if _is_catalog_search_active():
 		return
 	if is_inside_tree():
@@ -335,6 +335,13 @@ func set_knowledge_snapshot(snapshot: Dictionary) -> void:
 
 func set_viewer_stats_by_ref(stats_by_ref: Dictionary) -> void:
 	viewer_stats_by_ref = stats_by_ref.duplicate(true)
+
+
+func get_defender_assumption_state() -> Dictionary:
+	return {
+		"assumptions": defender_assumptions.duplicate(true),
+		"editedFields": edited_assumption_fields.duplicate(true),
+	}
 
 
 func close_assumption_popover() -> void:
@@ -921,7 +928,7 @@ func _get_sample_set_engine_format_id() -> String:
 	return "pokemmo-ou-v1" if _get_sample_set_format_id() == "pokemmo-ou" else "gen9nationaldex"
 
 
-func _refresh_current_scenario() -> void:
+func _refresh_current_scenario(notify_assumption_changes: bool = true) -> void:
 	var species := _get_selected_opponent_species()
 	if species == "":
 		return
@@ -937,7 +944,7 @@ func _refresh_current_scenario() -> void:
 		_apply_current_defaults()
 	else:
 		_apply_known_opponent_facts()
-	if defender_assumptions != previous_assumptions or edited_assumption_fields != previous_edited:
+	if notify_assumption_changes and (defender_assumptions != previous_assumptions or edited_assumption_fields != previous_edited):
 		defender_assumptions_changed.emit(defender_assumptions.duplicate(true), edited_assumption_fields.duplicate(true))
 
 

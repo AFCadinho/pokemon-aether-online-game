@@ -1,6 +1,7 @@
 extends Control
 
 signal battle_ended(result: Dictionary)
+signal damage_calc_prefetch_finished
 
 enum BattleType {
 	WILD,
@@ -237,6 +238,13 @@ var damage_calc_saved_assumptions: Dictionary = {}
 var damage_calc_knowledge_snapshot: Dictionary = {}
 var damage_calc_snapshot_battle_id := ""
 var damage_calc_snapshot_disabled_for_battle := false
+var damage_calc_prefetch_token := 0
+var damage_calc_prefetch_in_flight := false
+var damage_calc_prefetch_battle_id := ""
+var damage_calc_prefetch_revision: Dictionary = {}
+var damage_calc_prefetched_open_response: Dictionary = {}
+var damage_calc_prefetched_viewer_stats: Dictionary = {}
+var damage_calc_form_stats_cache: Dictionary = {}
 var bag_inventory_request_token := 0
 var capture_target_visibility_tween: Tween
 var summon_target_visibility_tween: Tween
@@ -1129,6 +1137,10 @@ func _get_primal_species_hover_data(species: String) -> Dictionary:
 func _fetch_battle_species_stats(species: String, level: int) -> Dictionary:
 	if species.strip_edges() == "" or level <= 0:
 		return {}
+	var cache_key := "%s|%d" % [_normalize_species_for_compare(species), level]
+	var cached_value: Variant = damage_calc_form_stats_cache.get(cache_key)
+	if cached_value is Dictionary:
+		return (cached_value as Dictionary).duplicate(true)
 	var request_node := HTTPRequest.new()
 	add_child(request_node)
 	var stats: Dictionary = await pokemon_hover_service.get_species_stats(
@@ -1138,6 +1150,8 @@ func _fetch_battle_species_stats(species: String, level: int) -> Dictionary:
 	)
 	if is_instance_valid(request_node):
 		request_node.queue_free()
+	if not stats.is_empty():
+		damage_calc_form_stats_cache[cache_key] = stats.duplicate(true)
 	return stats
 
 func _calculate_battle_stats(
@@ -2685,79 +2699,116 @@ func _refresh_damage_calc_results() -> void:
 		projection_revision = battle_state.get_calcdex_projection_revision()
 	var use_safe_matchup := false
 	var snapshot_failure: Dictionary = {}
+	var response: Dictionary = {}
 	if not damage_calc_snapshot_disabled_for_battle and not projection_revision.is_empty():
-		var snapshot_response: Dictionary = await BattleApiClient.get_calcdex_snapshot(
-			damage_calc_request,
-			battle_state.battle_id,
-			projection_revision
-		)
-		if request_token != damage_calc_request_token:
-			damage_calc_request_in_flight = false
-			if damage_calc_refresh_queued and current_action_panel_mode == BattleActionsPanelMode.CALC:
-				_refresh_damage_calc_results()
-			return
-		var snapshot_error_code := _get_damage_calc_error_code(snapshot_response)
-		if (
-			not bool(snapshot_response.get("success", false))
-			and snapshot_error_code == "CALC_STALE_PROJECTION"
-			and _is_pvp_battle()
-		):
-			# The opening realtime packet can be superseded between rendering the
-			# calculator and requesting its privacy-safe snapshot. Refresh the
-			# canonical room projection and retry exactly once with its new fence.
-			await _reconcile_pvp_battle_from_room("calcdex_stale_projection_recovery")
+		if damage_calc_prefetch_in_flight and damage_calc_prefetch_revision == projection_revision:
+			await damage_calc_prefetch_finished
 			if request_token != damage_calc_request_token or current_action_panel_mode != BattleActionsPanelMode.CALC:
 				damage_calc_request_in_flight = false
 				return
-			var refreshed_projection_revision := battle_state.get_calcdex_projection_revision()
-			if (
-				not refreshed_projection_revision.is_empty()
-				and refreshed_projection_revision != projection_revision
-			):
-				projection_revision = refreshed_projection_revision
-				snapshot_response = await BattleApiClient.get_calcdex_snapshot(
-					damage_calc_request,
-					battle_state.battle_id,
-					projection_revision
+		if _damage_calc_prefetched_response_matches_revision(projection_revision):
+			damage_calc_knowledge_snapshot = _damage_calc_as_dictionary(
+				damage_calc_prefetched_open_response.get("snapshot", {})
+			).duplicate(true)
+			var prefetched_viewer_stats := damage_calc_prefetched_viewer_stats.duplicate(true)
+			if prefetched_viewer_stats.is_empty():
+				prefetched_viewer_stats = await _get_damage_calc_viewer_stats_by_ref(
+					damage_calc_knowledge_snapshot
 				)
-				if request_token != damage_calc_request_token:
-					damage_calc_request_in_flight = false
-					if damage_calc_refresh_queued and current_action_panel_mode == BattleActionsPanelMode.CALC:
-						_refresh_damage_calc_results()
-					return
-				snapshot_error_code = _get_damage_calc_error_code(snapshot_response)
-		if bool(snapshot_response.get("success", false)):
-			damage_calc_knowledge_snapshot = _damage_calc_as_dictionary(snapshot_response.get("snapshot", {})).duplicate(true)
-			var viewer_stats_by_ref: Dictionary = await _get_damage_calc_viewer_stats_by_ref(
-				damage_calc_knowledge_snapshot
-			)
 			if request_token != damage_calc_request_token:
 				damage_calc_request_in_flight = false
 				return
-			calc_panel.set_viewer_stats_by_ref(viewer_stats_by_ref)
-			calc_panel.set_knowledge_snapshot(damage_calc_knowledge_snapshot)
+			calc_panel.set_viewer_stats_by_ref(prefetched_viewer_stats)
+			calc_panel.set_knowledge_snapshot(damage_calc_knowledge_snapshot, false)
+			_adopt_damage_calc_panel_assumptions()
+			if _can_use_prefetched_default_matchup():
+				response = _damage_calc_as_dictionary(
+					damage_calc_prefetched_open_response.get("matchup", {})
+				).duplicate(true)
+			use_safe_matchup = true
+		elif _damage_calc_snapshot_matches_revision(projection_revision):
 			use_safe_matchup = true
 		else:
-			snapshot_failure = snapshot_response.duplicate(true)
-			damage_calc_knowledge_snapshot.clear()
-			calc_panel.set_knowledge_snapshot({})
-			if snapshot_error_code == "CALC_UNSUPPORTED_MECHANIC":
-				damage_calc_snapshot_disabled_for_battle = true
-
-	var response: Dictionary
-	if use_safe_matchup:
-		var selection: Dictionary = calc_panel.get_matchup_selection()
-		if str(selection.get("attackerRef", "")) == "" or str(selection.get("defenderRef", "")) == "":
-			response = {"success": false, "error": _t("battle.calc.error.selection")}
-		else:
-			response = await BattleApiClient.calculate_calcdex_matchup(
-				damage_calc_request, battle_state.battle_id, projection_revision,
-				str(selection.get("direction", "own-to-opponent")),
-				str(selection.get("attackerRef", "")), str(selection.get("defenderRef", "")),
-				_get_damage_calc_defender_assumptions_payload(), calc_panel.get_field_scenario(),
-				calc_panel.get_species_scenario(), calc_panel.get_move_scenarios(),
-				calc_panel.get_viewer_scenario(), calc_panel.get_battle_state_scenario()
+			var selection_direction := str(calc_panel.get_matchup_selection().get("direction", "own-to-opponent"))
+			var open_response: Dictionary = await BattleApiClient.open_calcdex(
+				damage_calc_request,
+				battle_state.battle_id,
+				projection_revision,
+				selection_direction,
+				_get_damage_calc_initial_assumptions_payload(),
+				calc_panel.get_field_scenario(),
+				calc_panel.get_viewer_scenario(),
+				calc_panel.get_battle_state_scenario()
 			)
+			if request_token != damage_calc_request_token:
+				damage_calc_request_in_flight = false
+				if damage_calc_refresh_queued and current_action_panel_mode == BattleActionsPanelMode.CALC:
+					_refresh_damage_calc_results()
+				return
+			var snapshot_error_code := _get_damage_calc_error_code(open_response)
+			if (
+				not bool(open_response.get("success", false))
+				and snapshot_error_code == "CALC_STALE_PROJECTION"
+				and _is_pvp_battle()
+			):
+				# Reconcile once if a realtime packet superseded the opening fence.
+				await _reconcile_pvp_battle_from_room("calcdex_stale_projection_recovery")
+				if request_token != damage_calc_request_token or current_action_panel_mode != BattleActionsPanelMode.CALC:
+					damage_calc_request_in_flight = false
+					return
+				var refreshed_projection_revision := battle_state.get_calcdex_projection_revision()
+				if not refreshed_projection_revision.is_empty() and refreshed_projection_revision != projection_revision:
+					projection_revision = refreshed_projection_revision
+					open_response = await BattleApiClient.open_calcdex(
+						damage_calc_request,
+						battle_state.battle_id,
+						projection_revision,
+						selection_direction,
+						_get_damage_calc_initial_assumptions_payload(),
+						calc_panel.get_field_scenario(),
+						calc_panel.get_viewer_scenario(),
+						calc_panel.get_battle_state_scenario()
+					)
+					if request_token != damage_calc_request_token:
+						damage_calc_request_in_flight = false
+						if damage_calc_refresh_queued and current_action_panel_mode == BattleActionsPanelMode.CALC:
+							_refresh_damage_calc_results()
+						return
+					snapshot_error_code = _get_damage_calc_error_code(open_response)
+			if bool(open_response.get("success", false)):
+				damage_calc_knowledge_snapshot = _damage_calc_as_dictionary(open_response.get("snapshot", {})).duplicate(true)
+				var viewer_stats_by_ref: Dictionary = await _get_damage_calc_viewer_stats_by_ref(
+					damage_calc_knowledge_snapshot
+				)
+				if request_token != damage_calc_request_token:
+					damage_calc_request_in_flight = false
+					return
+				calc_panel.set_viewer_stats_by_ref(viewer_stats_by_ref)
+				calc_panel.set_knowledge_snapshot(damage_calc_knowledge_snapshot, false)
+				_adopt_damage_calc_panel_assumptions()
+				response = _damage_calc_as_dictionary(open_response.get("matchup", {})).duplicate(true)
+				use_safe_matchup = true
+			else:
+				snapshot_failure = open_response.duplicate(true)
+				damage_calc_knowledge_snapshot.clear()
+				calc_panel.set_knowledge_snapshot({})
+				if snapshot_error_code == "CALC_UNSUPPORTED_MECHANIC":
+					damage_calc_snapshot_disabled_for_battle = true
+
+	if use_safe_matchup:
+		if response.is_empty():
+			var selection: Dictionary = calc_panel.get_matchup_selection()
+			if str(selection.get("attackerRef", "")) == "" or str(selection.get("defenderRef", "")) == "":
+				response = {"success": false, "error": _t("battle.calc.error.selection")}
+			else:
+				response = await BattleApiClient.calculate_calcdex_matchup(
+					damage_calc_request, battle_state.battle_id, projection_revision,
+					str(selection.get("direction", "own-to-opponent")),
+					str(selection.get("attackerRef", "")), str(selection.get("defenderRef", "")),
+					_get_damage_calc_defender_assumptions_payload(), calc_panel.get_field_scenario(),
+					calc_panel.get_species_scenario(), calc_panel.get_move_scenarios(),
+					calc_panel.get_viewer_scenario(), calc_panel.get_battle_state_scenario()
+				)
 	else:
 		response = {
 			"success": false,
@@ -2782,6 +2833,127 @@ func _refresh_damage_calc_results() -> void:
 
 func _show_damage_calc_loading() -> void:
 	calc_panel.show_loading(_get_active_display_species("p1"), _get_active_display_species("p2"))
+
+
+func _damage_calc_snapshot_matches_revision(projection_revision: Dictionary) -> bool:
+	var cached_revision := _damage_calc_as_dictionary(
+		damage_calc_knowledge_snapshot.get("projectionRevision", {})
+	)
+	return not cached_revision.is_empty() and cached_revision == projection_revision
+
+
+func _damage_calc_prefetched_response_matches_revision(projection_revision: Dictionary) -> bool:
+	if not bool(damage_calc_prefetched_open_response.get("success", false)):
+		return false
+	var snapshot := _damage_calc_as_dictionary(damage_calc_prefetched_open_response.get("snapshot", {}))
+	return _damage_calc_as_dictionary(snapshot.get("projectionRevision", {})) == projection_revision
+
+
+func _adopt_damage_calc_panel_assumptions() -> void:
+	var state := calc_panel.get_defender_assumption_state()
+	damage_calc_defender_assumptions = _damage_calc_as_dictionary(
+		state.get("assumptions", {})
+	).duplicate(true)
+	damage_calc_assumption_edited_fields = _damage_calc_as_dictionary(
+		state.get("editedFields", {})
+	).duplicate(true)
+
+
+func _can_use_prefetched_default_matchup() -> bool:
+	var selection := calc_panel.get_matchup_selection()
+	var matchup := _damage_calc_as_dictionary(damage_calc_prefetched_open_response.get("matchup", {}))
+	var prefetched_attacker := _damage_calc_as_dictionary(matchup.get("attacker", {}))
+	var prefetched_defender := _damage_calc_as_dictionary(matchup.get("defender", {}))
+	if (
+		str(selection.get("direction", "")) != "own-to-opponent"
+		or str(selection.get("attackerRef", "")) != str(prefetched_attacker.get("pokemonRef", ""))
+		or str(selection.get("defenderRef", "")) != str(prefetched_defender.get("pokemonRef", ""))
+	):
+		return false
+	if not _damage_calc_assumptions_match_prefetched_defaults(selection):
+		return false
+	return (
+		damage_calc_assumption_edited_fields.is_empty()
+		and calc_panel.get_field_scenario().is_empty()
+		and calc_panel.get_species_scenario().is_empty()
+		and calc_panel.get_move_scenarios().is_empty()
+		and calc_panel.get_viewer_scenario().is_empty()
+	)
+
+
+func _damage_calc_assumptions_match_prefetched_defaults(selection: Dictionary) -> bool:
+	for key: Variant in damage_calc_defender_assumptions.keys():
+		if str(key) not in ["nature", "evs", "exactStats", "item", "ability"]:
+			return false
+	if (
+		str(damage_calc_defender_assumptions.get("nature", "")) != "Hardy"
+		or not _damage_calc_as_dictionary(damage_calc_defender_assumptions.get("evs", {})).is_empty()
+		or not bool(damage_calc_defender_assumptions.get("exactStats", false))
+	):
+		return false
+	var opponent_ref := str(selection.get("defenderRef", ""))
+	for opponent_value: Variant in _damage_calc_as_array(damage_calc_knowledge_snapshot.get("opponentPokemon", [])):
+		var opponent := _damage_calc_as_dictionary(opponent_value)
+		if str(opponent.get("pokemonRef", "")) != opponent_ref:
+			continue
+		for field_name: String in ["item", "ability"]:
+			var assumption := str(damage_calc_defender_assumptions.get(field_name, "")).strip_edges()
+			if assumption == "":
+				continue
+			var knowledge := _damage_calc_as_dictionary(opponent.get(field_name, {}))
+			if str(knowledge.get("state", "")) != "known" or str(knowledge.get("value", "")) != assumption:
+				return false
+		return true
+	return false
+
+
+func _schedule_damage_calc_prefetch() -> void:
+	if _is_spectator_battle() or battle_finished or battle_state.battle_id.strip_edges() == "":
+		return
+	var projection_revision := battle_state.get_calcdex_projection_revision()
+	if projection_revision.is_empty():
+		return
+	if (
+		damage_calc_prefetch_battle_id == battle_state.battle_id
+		and damage_calc_prefetch_revision == projection_revision
+	):
+		return
+	damage_calc_prefetch_token += 1
+	damage_calc_prefetch_in_flight = true
+	damage_calc_prefetch_battle_id = battle_state.battle_id
+	damage_calc_prefetch_revision = projection_revision.duplicate(true)
+	damage_calc_prefetched_open_response.clear()
+	damage_calc_prefetched_viewer_stats.clear()
+	_prefetch_damage_calc_open.call_deferred(
+		damage_calc_prefetch_token,
+		battle_state.battle_id,
+		projection_revision.duplicate(true)
+	)
+
+
+func _prefetch_damage_calc_open(token: int, battle_id: String, projection_revision: Dictionary) -> void:
+	var request_node := HTTPRequest.new()
+	add_child(request_node)
+	var open_response: Dictionary = await BattleApiClient.open_calcdex(
+		request_node,
+		battle_id,
+		projection_revision,
+		"own-to-opponent",
+		{"nature": "Hardy", "evs": {}, "exactStats": true}
+	)
+	var viewer_stats: Dictionary = {}
+	if bool(open_response.get("success", false)):
+		viewer_stats = await _get_damage_calc_viewer_stats_by_ref(
+			_damage_calc_as_dictionary(open_response.get("snapshot", {}))
+		)
+	if is_instance_valid(request_node):
+		request_node.queue_free()
+	if token == damage_calc_prefetch_token:
+		damage_calc_prefetch_in_flight = false
+		if bool(open_response.get("success", false)):
+			damage_calc_prefetched_open_response = open_response.duplicate(true)
+			damage_calc_prefetched_viewer_stats = viewer_stats.duplicate(true)
+		damage_calc_prefetch_finished.emit()
 
 
 func _get_damage_calc_viewer_stats_by_ref(snapshot: Dictionary) -> Dictionary:
@@ -3193,6 +3365,13 @@ func _get_damage_calc_defender_assumptions_payload() -> Dictionary:
 		bool(damage_calc_assumption_edited_fields.get("nature", false))
 		and bool(damage_calc_assumption_edited_fields.get("evs", false))
 	)
+	return payload
+
+
+func _get_damage_calc_initial_assumptions_payload() -> Dictionary:
+	var payload := _get_damage_calc_defender_assumptions_payload()
+	if payload == {"exactStats": false}:
+		return {"nature": "Hardy", "evs": {}, "exactStats": true}
 	return payload
 
 func _get_damage_calc_error_code(response: Dictionary) -> String:
@@ -7367,6 +7546,7 @@ func _apply_initial_battle_response(api_response: Dictionary) -> bool:
 	_update_battle_status_panels()
 	_update_party_slots()
 	_update_vs_panel_names()
+	_schedule_damage_calc_prefetch()
 	return true
 
 func _apply_team_preview_battle_response(api_response: Dictionary) -> bool:
