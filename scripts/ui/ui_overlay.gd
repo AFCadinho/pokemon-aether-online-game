@@ -7591,7 +7591,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai_sparring_history_list.add_theme_constant_override("separation", 8)
 	history_scroll.add_child(pvp_ai_sparring_history_list)
 
-	var about_page := _create_pvp_ranked_tab_page("About the bots", 14)
+	var about_page := _create_pvp_ranked_tab_page("About", 14)
 	about_page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.about")
 	pvp_ai_sparring_tabs.add_child(about_page)
 	var about_scroll := ScrollContainer.new()
@@ -7650,29 +7650,82 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 		var divider := HSeparator.new()
 		divider.modulate = Color(1, 1, 1, 0.3)
 		content.add_child(divider)
-		for mode_id: String in (["ai4"] if bot_id == "ai4" else ["intermediate", "ai5", "master", "nightmare"]):
+		if bot_id == "ai4":
+			var scholar_description := Label.new()
+			scholar_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			scholar_description.add_theme_constant_override("line_spacing", 4)
+			_set_localized_control_property(scholar_description, "text", "ui.pvp.ai_sparring.about.scholar")
+			content.add_child(scholar_description)
+			var scholar_version := Label.new()
+			scholar_version.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			scholar_version.name = "AiSparringVersion_ai4"
+			scholar_version.add_theme_font_size_override("font_size", 13)
+			content.add_child(scholar_version)
+			pvp_ai_sparring_about_versions["ai4"] = scholar_version
+			continue
+		var grandmaster_description := Label.new()
+		grandmaster_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		grandmaster_description.add_theme_color_override("font_color", Color("#a8b8cc"))
+		_set_localized_control_property(grandmaster_description, "text", "ui.pvp.ai_sparring.about.grandmaster")
+		content.add_child(grandmaster_description)
+		var difficulty_list := VBoxContainer.new()
+		difficulty_list.name = "AiSparringDifficultyCards"
+		difficulty_list.add_theme_constant_override("separation", 12)
+		content.add_child(difficulty_list)
+		for mode_id: String in ["intermediate", "ai5", "elite", "nightmare"]:
+			var mode_accent := Color("#7fc8e8")
+			match mode_id:
+				"ai5": mode_accent = Color("#efd080")
+				"elite": mode_accent = Color("#f09a68")
+				"nightmare": mode_accent = Color("#b490f4")
+			var difficulty_card := PanelContainer.new()
+			difficulty_card.name = "AiSparringDifficultyCard_" + mode_id
+			difficulty_card.add_theme_stylebox_override("panel", _make_panel_style(Color("#0b1525"), mode_accent.darkened(0.45), 9, 1))
+			difficulty_list.add_child(difficulty_card)
+			var difficulty_margin := MarginContainer.new()
+			for edge: String in ["left", "right", "top", "bottom"]:
+				difficulty_margin.add_theme_constant_override("margin_" + edge, 14)
+			difficulty_card.add_child(difficulty_margin)
+			var difficulty_content := VBoxContainer.new()
+			difficulty_content.add_theme_constant_override("separation", 8)
+			difficulty_margin.add_child(difficulty_content)
+			var difficulty_header := HBoxContainer.new()
+			difficulty_header.add_theme_constant_override("separation", 12)
+			difficulty_content.add_child(difficulty_header)
 			var difficulty_mode: String = "active" if mode_id == "ai5" else mode_id
 			var difficulty_title := Label.new()
+			difficulty_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			difficulty_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			difficulty_title.add_theme_font_size_override("font_size", 17)
+			difficulty_title.add_theme_font_size_override("font_size", 19)
+			difficulty_title.add_theme_color_override("font_color", mode_accent)
 			_set_localized_control_property(difficulty_title, "text", "ui.pvp.training.ai.difficulty_" + difficulty_mode)
-			content.add_child(difficulty_title)
-			if bot_id == "ai5":
-				var difficulty_description := Label.new()
-				difficulty_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-				_set_localized_control_property(difficulty_description, "text", "ui.pvp.ai_sparring.about.difficulty_" + mode_id)
-				content.add_child(difficulty_description)
+			difficulty_header.add_child(difficulty_title)
+			var rank_badge := PanelContainer.new()
+			rank_badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			rank_badge.add_theme_stylebox_override("panel", _make_panel_style(mode_accent.darkened(0.72), mode_accent.darkened(0.25), 12, 1))
+			difficulty_header.add_child(rank_badge)
+			var rank_margin := MarginContainer.new()
+			rank_margin.add_theme_constant_override("margin_left", 9)
+			rank_margin.add_theme_constant_override("margin_right", 9)
+			rank_margin.add_theme_constant_override("margin_top", 4)
+			rank_margin.add_theme_constant_override("margin_bottom", 4)
+			rank_badge.add_child(rank_margin)
+			var rank_label := Label.new()
+			rank_label.add_theme_font_size_override("font_size", 12)
+			rank_label.add_theme_color_override("font_color", mode_accent.lightened(0.16))
+			_set_localized_control_property(rank_label, "text", "ui.pvp.ai_sparring.about.rank_" + mode_id)
+			rank_margin.add_child(rank_label)
+			var difficulty_description := Label.new()
+			difficulty_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			difficulty_description.add_theme_constant_override("line_spacing", 3)
+			_set_localized_control_property(difficulty_description, "text", "ui.pvp.ai_sparring.about.difficulty_" + mode_id)
+			difficulty_content.add_child(difficulty_description)
 			var bot_version := Label.new()
 			bot_version.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			bot_version.name = "AiSparringVersion_" + mode_id
 			bot_version.add_theme_font_size_override("font_size", 13)
-			content.add_child(bot_version)
+			difficulty_content.add_child(bot_version)
 			pvp_ai_sparring_about_versions[mode_id] = bot_version
-		var description := Label.new()
-		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		description.add_theme_constant_override("line_spacing", 4)
-		_set_localized_control_property(description, "text", "ui.pvp.ai_sparring.about.scholar" if bot_id == "ai4" else "ui.pvp.ai_sparring.about.grandmaster")
-		content.add_child(description)
 	var about_note := Label.new()
 	about_note.add_theme_color_override("font_color", Color("#a8b8cc"))
 	about_note.add_theme_font_size_override("font_size", 13)
@@ -7764,9 +7817,9 @@ func _render_ai_sparring_stats() -> void:
 			continue
 		var is_ai5 := str(entry["bot"]) == "ai5"
 		var difficulty := str(entry.get("difficulty", "hard" if is_ai5 else "beginner"))
-		if difficulty not in (["intermediate", "hard", "master", "nightmare"] if is_ai5 else ["beginner"]):
+		if difficulty not in (["intermediate", "hard", "elite", "nightmare"] if is_ai5 else ["beginner"]):
 			continue
-		if difficulty in ["intermediate", "master"] and difficulty not in pvp_training_ai_available_modes and int(entry.get("completed", 0)) + int(entry.get("unconfirmed", 0)) == 0:
+		if difficulty in ["intermediate", "elite"] and difficulty not in pvp_training_ai_available_modes and int(entry.get("completed", 0)) + int(entry.get("unconfirmed", 0)) == 0:
 			continue
 		var has_choice_rates := is_ai5 and difficulty == "hard"
 		var accent := Color("#efd080") if is_ai5 else Color("#87d5ec")
@@ -43336,7 +43389,7 @@ func _apply_ai_sparring_bot_versions(response: Dictionary) -> void:
 	var bots_value: Variant = response.get("bots", []) if bool(response.get("success", false)) else []
 	if bots_value is Array:
 		for bot: Variant in bots_value:
-			if bot is Dictionary and str(bot.get("id", "")) in ["ai4", "ai5", "intermediate", "master", "nightmare"]:
+			if bot is Dictionary and str(bot.get("id", "")) in ["ai4", "ai5", "intermediate", "elite", "nightmare"]:
 				pvp_ai_sparring_bot_versions[str(bot["id"])] = bot
 	_refresh_ai_sparring_about()
 
@@ -43513,8 +43566,8 @@ func _create_pvp_ai_sparring_history_card(match: Dictionary) -> Control:
 		opponent_key = "ui.pvp.ai_sparring.history.opponent_intermediate"
 	elif str(match.get("aiMode", "")) == "nightmare":
 		opponent_key = "ui.pvp.ai_sparring.history.opponent_nightmare"
-	elif str(match.get("aiMode", "")) == "master":
-		opponent_key = "ui.pvp.ai_sparring.history.opponent_master"
+	elif str(match.get("aiMode", "")) == "elite":
+		opponent_key = "ui.pvp.ai_sparring.history.opponent_elite"
 	opponent.text = LocalizationManager.text(opponent_key)
 	opponent.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	opponent.add_theme_color_override("font_color", UI_TEXT)
@@ -43675,21 +43728,21 @@ func _refresh_pvp_training_ai_mode_options() -> void:
 	pvp_training_ai_bot_select.clear()
 	for bot: String in ["ai4", "ai5"]:
 		var supported := ("ai4" in pvp_training_ai_available_modes or "shadow" in pvp_training_ai_available_modes) if bot == "ai4" else ("intermediate" in pvp_training_ai_available_modes or "active" in pvp_training_ai_available_modes or "nightmare" in pvp_training_ai_available_modes)
-		if bot != "ai4" and "master" in pvp_training_ai_available_modes:
+		if bot != "ai4" and "elite" in pvp_training_ai_available_modes:
 			supported = true
 		if supported:
 			pvp_training_ai_bot_select.add_item("AI4 Scholar" if bot == "ai4" else "AI5 Grandmaster")
 			pvp_training_ai_bot_select.set_item_metadata(pvp_training_ai_bot_select.item_count - 1, bot)
 	if previous_mode not in pvp_training_ai_available_modes:
 		previous_mode = pvp_training_ai_default_mode
-	_select_option_by_metadata(pvp_training_ai_bot_select, "ai5" if previous_mode in ["intermediate", "active", "master", "nightmare"] else "ai4")
+	_select_option_by_metadata(pvp_training_ai_bot_select, "ai5" if previous_mode in ["intermediate", "active", "elite", "nightmare"] else "ai4")
 	_refresh_pvp_training_ai_difficulty_options(previous_mode)
 
 
 func _refresh_pvp_training_ai_difficulty_options(preferred_mode: String = "") -> void:
 	pvp_training_ai_mode_select.clear()
 	var grandmaster := str(pvp_training_ai_bot_select.get_selected_metadata()) == "ai5"
-	var modes: Array = ["intermediate", "active", "master", "nightmare"] if grandmaster else (["ai4"] if "ai4" in pvp_training_ai_available_modes else ["shadow"])
+	var modes: Array = ["intermediate", "active", "elite", "nightmare"] if grandmaster else (["ai4"] if "ai4" in pvp_training_ai_available_modes else ["shadow"])
 	for mode: String in modes:
 		if mode not in pvp_training_ai_available_modes:
 			continue
@@ -43884,7 +43937,7 @@ func _resolved_pvp_training_ai_team_id() -> String:
 
 func _refresh_pvp_training_ai_opponent_preview() -> void:
 	if pvp_ai_sparring_trainer_portrait != null:
-		pvp_ai_sparring_trainer_portrait.texture = load("res://assets/sprites/trainer_cards/showdown/veteran-gen7.png" if _selected_pvp_training_ai_mode() in ["active", "intermediate", "master", "nightmare"] else "res://assets/sprites/trainer_cards/showdown/scientist-gen7.png") as Texture2D
+		pvp_ai_sparring_trainer_portrait.texture = load("res://assets/sprites/trainer_cards/showdown/veteran-gen7.png" if _selected_pvp_training_ai_mode() in ["active", "intermediate", "elite", "nightmare"] else "res://assets/sprites/trainer_cards/showdown/scientist-gen7.png") as Texture2D
 	if pvp_training_ai_opponent_preview == null or pvp_training_ai_opponent_preview_grid == null:
 		return
 	if _selected_pvp_training_ai_team_source() == "paste":
@@ -43980,7 +44033,7 @@ func _load_pvp_training_ai_catalog() -> void:
 			var raw_modes: Array[String] = []
 			for mode_value: Variant in modes_value:
 				var mode := str(mode_value).strip_edges().to_lower()
-				if mode in ["ai4", "shadow", "intermediate", "active", "master", "nightmare"] and mode not in raw_modes:
+				if mode in ["ai4", "shadow", "intermediate", "active", "elite", "nightmare"] and mode not in raw_modes:
 					raw_modes.append(mode)
 			if "ai4" in raw_modes:
 				pvp_training_ai_available_modes.append("ai4")
@@ -43994,8 +44047,8 @@ func _load_pvp_training_ai_catalog() -> void:
 				pvp_training_ai_available_modes.append("intermediate")
 			if "nightmare" in raw_modes:
 				pvp_training_ai_available_modes.append("nightmare")
-			if "master" in raw_modes:
-				pvp_training_ai_available_modes.append("master")
+			if "elite" in raw_modes:
+				pvp_training_ai_available_modes.append("elite")
 		pvp_training_ai_default_mode = str(response.get("defaultMode", "ai4")).strip_edges().to_lower()
 		if pvp_training_ai_default_mode not in pvp_training_ai_available_modes:
 			pvp_training_ai_default_mode = (
@@ -44676,7 +44729,7 @@ func _selected_pvp_training_ai_mode() -> String:
 	if pvp_training_ai_mode_select == null or pvp_training_ai_mode_select.item_count == 0:
 		return pvp_training_ai_default_mode
 	var selected_mode := str(pvp_training_ai_mode_select.get_selected_metadata()).strip_edges().to_lower()
-	return selected_mode if selected_mode in ["ai4", "shadow", "intermediate", "active", "master", "nightmare"] else pvp_training_ai_default_mode
+	return selected_mode if selected_mode in ["ai4", "shadow", "intermediate", "active", "elite", "nightmare"] else pvp_training_ai_default_mode
 
 
 func _selected_pvp_training_ai_archetype() -> String:

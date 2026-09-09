@@ -38,7 +38,7 @@
 
 - Removed the experimental Grandmaster Expert prediction difficulty.
 
-- Added Grandmaster Master: Hard with selective Nightmare turns, for practicing positioning and moves that hold up against different responses.
+- Added Grandmaster Elite: Hard with selective Nightmare turns, for practicing positioning and moves that hold up against different responses.
 
 - AI Sparring calls its highest Grandmaster difficulty Nightmare; existing results and match history remain available.
 
@@ -50,7 +50,7 @@
 
 - Battle trainers now show the player facing right toward the opponent and the correct Scholar or Grandmaster sprite for AI Sparring.
 
-- About the bots now explains each Grandmaster difficulty and shows its own availability and version.
+- The clearer About tab now explains each Grandmaster difficulty, skill level, play style, availability and version.
 - Riding mounts and walking keep a more consistent speed across frame rates, and mounted appearances use less repeated work and bounded cache memory.
 
 - AI Sparring statistics now separate Beginner, Intermediate, Hard and Nightmare, each with its own results.
@@ -109,7 +109,7 @@
 - Meet AI4 Scholar and AI5 Grandmaster in clearer bot profiles with trainer portraits and more practice tips.
 
 - AI Sparring now shows the full names AI4 Scholar and AI5 Grandmaster.
-- Added an About the bots tab with their play styles, availability and server versions.
+- Added an About tab with bot play styles, availability and server versions.
 
 ## 0.3.74 - 2026-09-07
 
