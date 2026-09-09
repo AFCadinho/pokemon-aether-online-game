@@ -1415,7 +1415,10 @@ func _render_current_list() -> void:
 
 	rendered_list_entry_count = entries.size()
 	list_caption.text = _list_caption(entries.size())
-	if entries.is_empty():
+	list_caption.visible = active_tab != "mine"
+	if active_tab == "mine":
+		_render_portfolio_sections(entries)
+	elif entries.is_empty():
 		list_container.columns = 1
 		var empty := Label.new()
 		empty.name = "ExchangeEmptyState"
@@ -1436,6 +1439,63 @@ func _render_current_list() -> void:
 		selected_entry.clear()
 		selected_kind = ""
 	_render_detail()
+
+
+func _render_portfolio_sections(entries: Array) -> void:
+	list_container.columns = 1
+	var listings: Array = []
+	var wishes: Array = []
+	for value: Variant in entries:
+		var entry := _dictionary(value)
+		if str(entry.get("_exchangeKind", "listing")) == "wish":
+			wishes.append(entry)
+		else:
+			listings.append(entry)
+	_add_portfolio_section("listings", listings, "listing")
+	if asset_filter == "item":
+		_add_portfolio_section("requests", wishes, "wish")
+
+
+func _add_portfolio_section(section_id: String, entries: Array, kind: String) -> void:
+	var section := PanelContainer.new()
+	section.name = "ExchangePortfolio%sSection" % section_id.capitalize()
+	section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	section.add_theme_stylebox_override(
+		"panel", _compact_panel_style(Color("#071522cc"), Color("#29465b99"), 9, 1, 12, 10)
+	)
+	list_container.add_child(section)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 7)
+	section.add_child(stack)
+	var title := Label.new()
+	title.name = "PortfolioSectionTitle"
+	var title_variant := "history" if portfolio_history else "active"
+	var title_key := "ui.exchange.portfolio.%s_%s" % [section_id, title_variant]
+	if section_id == "listings":
+		title_key += "_%s" % asset_filter
+	title.text = _t(title_key, {"count": entries.size()})
+	title.add_theme_font_size_override("font_size", 13)
+	title.add_theme_color_override("font_color", UI_PURPLE if section_id == "requests" else UI_CYAN)
+	stack.add_child(title)
+	var description := Label.new()
+	description.name = "PortfolioSectionDescription"
+	description.text = _t("ui.exchange.portfolio.%s_description_%s" % [section_id, title_variant])
+	description.add_theme_font_size_override("font_size", 11)
+	description.add_theme_color_override("font_color", UI_MUTED)
+	stack.add_child(description)
+	if entries.is_empty():
+		var empty := Label.new()
+		empty.name = "PortfolioSectionEmptyState"
+		empty.text = _t("ui.exchange.portfolio.%s_empty_%s" % [section_id, title_variant], {
+			"asset": _t("ui.exchange.filter.%s" % asset_filter).to_lower(),
+		})
+		empty.custom_minimum_size = Vector2(0, 44)
+		empty.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		empty.add_theme_color_override("font_color", Color(UI_MUTED, 0.78))
+		stack.add_child(empty)
+		return
+	for entry: Dictionary in entries:
+		stack.add_child(_entry_button(entry, kind))
 
 
 func _update_list_grid_columns() -> void:
@@ -1575,9 +1635,8 @@ func _select_entry(entry: Dictionary, kind: String) -> void:
 	_hide_pokemon_hover()
 	selected_kind = kind
 	# Keep the grid and scroll position intact while inspecting another offer.
-	for child: Node in list_container.get_children():
-		if child is Button:
-			_apply_listing_button_style(child, str(child.get_meta("exchange_kind", "")) == kind and str(child.get_meta("exchange_selection_key", "")) == _entry_selection_key(entry, kind))
+	for child: Node in list_container.find_children("*", "Button", true, false):
+		_apply_listing_button_style(child, str(child.get_meta("exchange_kind", "")) == kind and str(child.get_meta("exchange_selection_key", "")) == _entry_selection_key(entry, kind))
 	_render_detail()
 
 

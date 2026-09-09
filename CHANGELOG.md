@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- My Exchange now clearly separates the Pokémon and items you are selling from the items you have requested.
+
 - The battle damage calculator now opens with one combined request and reuses its exact current battle snapshot, reducing the wait during fast battles such as Aether Clash.
 
 - Your original starter now always stays with you and returns to your party if borrowed Pokémon leave it empty.

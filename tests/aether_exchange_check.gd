@@ -314,13 +314,24 @@ func _run() -> void:
 	var sold_listing := {"id": "sold-1", "assetType": "item", "asset": wishlist_item, "status": "sold", "quantity": 1, "totalPrice": 500}
 	popup.set("my_listings", [sold_listing])
 	popup.call("_render_current_list")
-	_check(list_container.get_child_count() == 1, "Active view excludes completed sales but retains active requests")
+	var listings_section := list_container.find_child("ExchangePortfolioListingsSection", true, false) as Control
+	var requests_section := list_container.find_child("ExchangePortfolioRequestsSection", true, false) as Control
+	_check(listings_section != null and listings_section.find_children("*", "Button", true, false).is_empty(), "Active listings section excludes completed sales")
+	_check(requests_section != null and requests_section.find_children("*", "Button", true, false).size() == 1, "Active requests stay in their own section")
+	_check((listings_section.find_child("PortfolioSectionTitle", true, false) as Label).text.contains("ITEMS FOR SALE"), "My Exchange names the player's sale listings explicitly")
+	_check((requests_section.find_child("PortfolioSectionTitle", true, false) as Label).text.contains("ITEM REQUESTS"), "My Exchange names the player's requests explicitly")
 	(context_buttons.get("history") as Button).pressed.emit()
 	await process_frame
-	_check(list_container.get_child_count() == 1 and (list_container.get_child(0) as Button).text.contains("500"), "History shows completed offers separately")
+	listings_section = list_container.find_child("ExchangePortfolioListingsSection", true, false) as Control
+	requests_section = list_container.find_child("ExchangePortfolioRequestsSection", true, false) as Control
+	var history_listing_buttons := listings_section.find_children("*", "Button", true, false)
+	_check(history_listing_buttons.size() == 1 and (history_listing_buttons[0] as Button).text.contains("500"), "History shows completed listings in their own section")
+	_check(requests_section.find_children("*", "Button", true, false).is_empty(), "History keeps requests separate from listings")
 	(context_buttons.get("active") as Button).pressed.emit()
 	await process_frame
-	_check(list_container.get_child_count() == 1 and (list_container.get_child(0) as Button).text.contains("750"), "Returning to Active restores outstanding requests")
+	requests_section = list_container.find_child("ExchangePortfolioRequestsSection", true, false) as Control
+	var active_request_buttons := requests_section.find_children("*", "Button", true, false)
+	_check(active_request_buttons.size() == 1 and (active_request_buttons[0] as Button).text.contains("750"), "Returning to Active restores outstanding requests")
 	var sellable_garchomp := {
 		"pokemonId": 25,
 		"species": "garchomp",
