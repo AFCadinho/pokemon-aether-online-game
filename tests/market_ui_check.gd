@@ -47,6 +47,12 @@ func _check_market_popup_contract() -> void:
 		text.contains('"ui.market.message.sold" if player_is_selling else "ui.market.message.bought"'),
 		"UIOverlay posts localized role-aware transaction feedback"
 	)
+	_check_true(
+		text.contains('transaction.get("totalPrice", 0)')
+		and text.contains('transaction.get("currency", "money")')
+		and text.contains("add_system_message(_market_currency_spent_message("),
+		"successful NPC purchases report the authoritative wallet deduction"
+	)
 
 
 func _check_market_attendant_uses_ui() -> void:

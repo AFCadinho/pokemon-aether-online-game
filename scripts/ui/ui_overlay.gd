@@ -22715,10 +22715,23 @@ func _on_market_buy_pressed() -> void:
 		)
 		_update_market_sell_items_from_inventory(inventory_value)
 	else:
+		var paid_amount := maxi(int(transaction.get("totalPrice", 0)), 0)
+		if paid_amount > 0:
+			add_system_message(_market_currency_spent_message(
+				paid_amount,
+				str(transaction.get("currency", "money"))
+			))
 		add_item_reward_notification(item_id, transacted_quantity)
 		if bool(market_selected_item.get("accountUnique", false)):
 			_mark_market_item_owned(item_id)
 	_refresh_market_purchase_state()
+
+
+func _market_currency_spent_message(amount: int, currency: String) -> String:
+	return LocalizationManager.text(
+		"ui.market.message.wallet_debited",
+		{"amount": _format_market_currency_amount(maxi(amount, 0), currency)}
+	)
 
 
 func _market_item_max_purchase_quantity(item: Dictionary) -> int:

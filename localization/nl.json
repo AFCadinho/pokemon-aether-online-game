@@ -1487,6 +1487,7 @@
   "ui.market.category.general": "Algemene artikelen",
   "ui.market.item_fallback": "Item",
   "ui.market.message.bought": "{quantity}x {item} gekocht.",
+  "ui.market.message.wallet_debited": "{amount} is van je wallet afgeschreven.",
   "ui.market.message.sold": "{quantity}x {item} verkocht.",
   "common.loading": "Laden...",
   "common.unavailable": "Niet beschikbaar",
