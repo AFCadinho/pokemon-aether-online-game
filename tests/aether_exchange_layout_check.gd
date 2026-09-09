@@ -57,7 +57,7 @@ func _run() -> void:
 	var previous_locale: String = localization.current_locale
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		localization.set_locale(locale)
-		for screen: String in ["buy", "hover", "items", "tm", "outfit", "mount", "sell", "request", "wanted", "mine", "history"]:
+		for screen: String in ["buy", "hover", "items", "tm", "outfit", "mount", "sell", "request", "wanted", "mine", "mine-items", "history"]:
 			summary_overlay.call("_hide_aether_exchange_pokemon_summary_hover")
 			await process_frame
 			popup.search_input.text = ""
@@ -68,15 +68,20 @@ func _run() -> void:
 			popup.browse_wishes = [wish]
 			popup.wishlist_catalog = [item]
 			popup.my_wishes = [wish.merged({"isMine": true}, true)]
-			popup.my_listings = [listing.merged({"status": "sold"}, true)]
+			var own_listing := listing.merged({"status": "sold" if screen == "history" else "active"}, true)
+			if screen == "mine-items":
+				own_listing = {"id": "own-item", "assetType": "item", "asset": item, "quantity": 2, "unitPrice": 100, "totalPrice": 200, "status": "active"}
+			popup.my_listings = [own_listing]
 			popup.portfolio_history = screen == "history"
-			popup.active_tab = {"buy": "browse", "hover": "browse", "items": "browse", "tm": "browse", "outfit": "browse", "mount": "browse", "request": "wishlist", "history": "mine"}.get(screen, screen)
-			popup.asset_filter = "pokemon" if screen in ["buy", "hover", "sell"] else "item"
+			popup.active_tab = {"buy": "browse", "hover": "browse", "items": "browse", "tm": "browse", "outfit": "browse", "mount": "browse", "request": "wishlist", "mine-items": "mine", "history": "mine"}.get(screen, screen)
+			popup.asset_filter = "pokemon" if screen in ["buy", "hover", "sell", "mine"] else "item"
 			if screen in ["items", "tm", "outfit", "mount"]:
 				var preview_item: Dictionary = {"items": cut_charm, "tm": tm, "outfit": outfit, "mount": mount}[screen]
 				popup.browse_listings = [{"id": "item-offer", "assetType": "item", "asset": preview_item, "quantity": 1, "unitPrice": 100000, "totalPrice": 100000, "status": "active"}]
 			if screen == "history":
 				popup.asset_filter = "pokemon"
+			elif screen == "mine-items":
+				popup.asset_filter = "item"
 			popup.selected_entry = {}
 			popup.selected_kind = ""
 			popup._refresh_controls()
@@ -90,7 +95,8 @@ func _run() -> void:
 				"sell": popup._select_entry(pokemon, "sell")
 				"request": popup._select_entry(item, "wish_catalog")
 				"wanted": popup._select_entry(wish, "wish")
-				"mine": popup._select_entry(popup.my_wishes[0], "wish")
+				"mine": popup._select_entry(popup.my_listings[0], "listing")
+				"mine-items": popup._select_entry(popup.my_wishes[0], "wish")
 				"history": popup._select_entry(popup.my_listings[0], "listing")
 			for frame in range(5):
 				await process_frame
@@ -121,6 +127,17 @@ func _run() -> void:
 						_check(item_icon.texture.resource_path.ends_with("/field_move_charms/CUTCHARM.png"), description + ": Cut Charm uses its own icon")
 					elif screen == "tm":
 						_check(item_icon.texture.resource_path.ends_with("/machine_ELECTRIC.png"), description + ": TM uses its type icon")
+			if screen in ["mine", "mine-items", "history"]:
+				var listings_section := popup.list_container.find_child("ExchangePortfolioListingsSection", true, false) as Control
+				_check(listings_section != null, description + ": sale listings have their own section")
+				if listings_section != null:
+					_check_bounds(listings_section, popup, description)
+					_check(not (listings_section.find_child("PortfolioSectionTitle", true, false) as Label).text.begins_with("ui.exchange."), description + ": sale section title is translated")
+				if screen == "mine-items":
+					var requests_section := popup.list_container.find_child("ExchangePortfolioRequestsSection", true, false) as Control
+					_check(requests_section != null, description + ": item requests have a separate section")
+					if requests_section != null:
+						_check_bounds(requests_section, popup, description)
 			var active_content: Control = popup.detail_stack if popup.detail_panel.visible else popup.action_content
 			for button: Button in active_content.find_children("*", "Button", true, false):
 				if button.is_visible_in_tree():
@@ -146,7 +163,7 @@ func _run() -> void:
 	await process_frame
 	PokemonAssets.party_icon_cache.clear()
 	await process_frame
-	print("Exchange layout (4 locales, 11 screens): ", "FAIL" if failed else "PASS")
+	print("Exchange layout (4 locales, 12 screens): ", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
 
 

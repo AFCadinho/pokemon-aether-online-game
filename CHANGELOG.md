@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- My Exchange now clearly separates the Pokémon and items you are selling from the items you have requested.
+
 - NPC shop purchases now report the exact Pokédollars, Aetherite, or Battle Points deducted from your wallet in System chat.
 
 - Every Global Boost activation now sends a localized System message to all online Trainers.
