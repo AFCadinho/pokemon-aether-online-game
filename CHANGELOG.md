@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Successful Item Buyer sales now play the NPC shop sound.
+
 - Item Buyer sales now report the exact currency added to your wallet in System chat.
 
 - NPC services such as the Move Maniac now report the exact items removed from your Bag as payment.
