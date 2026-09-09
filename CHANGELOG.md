@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Smogon sets in the damage calculator now apply one editable default build without an extra list of generated variants.
+
 - The damage calculator now explains when invalid or incomplete Pokémon battle data prevents it from loading.
 
 - Calculator sets now follow the active battle format, show the format before each set name, keep Mega sets with their exact forme, and use scrollable lists for large catalogs.

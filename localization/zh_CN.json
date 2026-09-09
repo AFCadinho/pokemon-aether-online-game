@@ -3947,7 +3947,6 @@
   "battle.calc.custom_scenario": "自定义场景",
   "battle.calc.search_sets": "按名称搜索配招…",
   "battle.calc.no_matching_sets": "没有匹配的配招",
-  "battle.calc.set_variant": "配招变体",
   "battle.calc.sample_set_disclaimer": "默认使用已确认的对战信息。选择 Aether 或 Smogon 配招，或编辑数值来计算假设情景。",
   "battle.calc.sample_sets_loading": "正在加载样本集...",
   "battle.calc.sample_sets_unavailable": "没有可用的样本集",
