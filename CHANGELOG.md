@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring Team Catalog cards can now be starred as a favorite, and that team is available directly as your Free Sparring team source.
+
 - Refreshed the Aether Clash Lobby visuals from the latest map artwork.
 
 - Attuning to an Aether Beacon now plays a magical confirmation sound.

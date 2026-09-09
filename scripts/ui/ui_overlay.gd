@@ -961,6 +961,7 @@ var pvp_ai_sparring_catalog_export_button: Button
 var pvp_ai_sparring_catalog_selected_team_id := ""
 var pvp_ai_sparring_catalog_detail: Dictionary = {}
 var pvp_ai_sparring_catalog_detail_loading := false
+var pvp_ai_sparring_favorite_team_id := ""
 var pvp_ai_sparring_hover_card: PartyHoverCard
 var pvp_ai_sparring_hover_generation := 0
 var pvp_ai_sparring_hover_team_cache: Dictionary = {}
@@ -7267,6 +7268,9 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai_sparring_team_source_select.set_item_metadata(1, "party")
 	pvp_ai_sparring_team_source_select.add_item(LocalizationManager.text("ui.pvp.ai_sparring.team_source.catalog"))
 	pvp_ai_sparring_team_source_select.set_item_metadata(2, "catalog")
+	pvp_ai_sparring_team_source_select.add_item(LocalizationManager.text("ui.pvp.ai_sparring.team_source.favorite"))
+	pvp_ai_sparring_team_source_select.set_item_metadata(3, "favorite")
+	pvp_ai_sparring_team_source_select.set_item_disabled(3, true)
 	pvp_ai_sparring_team_source_select.select(0)
 	pvp_ai_sparring_team_source_select.item_selected.connect(_on_ai_sparring_team_source_selected)
 	_apply_pvp_ranked_dropdown_style(pvp_ai_sparring_team_source_select, true)
@@ -33234,6 +33238,8 @@ func _load_toggle_preferences() -> void:
 	GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
 	GameState.global_heal_requests_enabled = bool(preferences.get("globalHealRequestsEnabled", true))
 	_apply_selected_role_badge_preference(str(preferences.get("selectedRoleBadge", GameState.selected_role_badge)))
+	pvp_ai_sparring_favorite_team_id = str(preferences.get("favoriteAiSparringTeamId", "")).strip_edges()
+	_refresh_ai_sparring_player_team_source_options()
 	global_heal_requests_toggle.set_pressed_no_signal(GameState.global_heal_requests_enabled)
 	running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
 	_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
@@ -33257,6 +33263,7 @@ func _save_toggle_preferences() -> Dictionary:
 		"runningShoes": GameState.running_shoes_enabled,
 		"globalHealRequestsEnabled": GameState.global_heal_requests_enabled,
 		"selectedRoleBadge": GameState.selected_role_badge,
+		"favoriteAiSparringTeamId": pvp_ai_sparring_favorite_team_id,
 	})
 	if not bool(result.get("success", false)):
 		_add_chat_message("Could not save toggle settings. Please contact staff.")
@@ -33272,6 +33279,8 @@ func _save_toggle_preferences() -> Dictionary:
 		GameState.global_heal_requests_enabled = bool(preferences.get("globalHealRequestsEnabled", GameState.global_heal_requests_enabled))
 		global_heal_requests_toggle.set_pressed_no_signal(GameState.global_heal_requests_enabled)
 		_apply_selected_role_badge_preference(str(preferences.get("selectedRoleBadge", GameState.selected_role_badge)))
+		pvp_ai_sparring_favorite_team_id = str(preferences.get("favoriteAiSparringTeamId", pvp_ai_sparring_favorite_team_id)).strip_edges()
+		_refresh_ai_sparring_player_team_source_options()
 	return result
 
 func _refresh_world_follower_visibility() -> void:
@@ -44078,6 +44087,7 @@ func _load_pvp_training_ai_catalog() -> void:
 	_refresh_pvp_training_ai_team_source_options()
 	_refresh_pvp_training_ai_archetype_options()
 	_refresh_pvp_training_ai_team_options()
+	_refresh_ai_sparring_player_team_source_options()
 	_refresh_ai_sparring_player_catalog_options()
 	_refresh_ai_sparring_catalog_filters()
 	_refresh_ai_sparring_catalog_view()
@@ -44120,11 +44130,16 @@ func _refresh_ai_sparring_player_catalog_options(keep_selection: bool = true) ->
 
 
 func _refresh_ai_sparring_player_team_source_options() -> void:
-	if pvp_ai_sparring_team_source_select == null or pvp_ai_sparring_team_source_select.item_count < 3:
+	if pvp_ai_sparring_team_source_select == null or pvp_ai_sparring_team_source_select.item_count < 4:
 		return
 	pvp_ai_sparring_team_source_select.set_item_text(0, LocalizationManager.text("ui.pvp.ai_sparring.team_source.paste"))
 	pvp_ai_sparring_team_source_select.set_item_text(1, LocalizationManager.text("ui.pvp.team.current_option"))
 	pvp_ai_sparring_team_source_select.set_item_text(2, LocalizationManager.text("ui.pvp.ai_sparring.team_source.catalog"))
+	pvp_ai_sparring_team_source_select.set_item_text(3, LocalizationManager.text("ui.pvp.ai_sparring.team_source.favorite"))
+	var favorite_is_available := not _ai_sparring_catalog_entry(pvp_ai_sparring_favorite_team_id).is_empty()
+	pvp_ai_sparring_team_source_select.set_item_disabled(3, not favorite_is_available)
+	if not favorite_is_available and _selected_ai_sparring_team_source() == "favorite":
+		_select_option_by_metadata(pvp_ai_sparring_team_source_select, "catalog")
 
 
 func _refresh_ai_sparring_catalog_filters() -> void:
@@ -44243,6 +44258,20 @@ func _create_ai_sparring_catalog_team_card(entry: Dictionary) -> Control:
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	header.add_child(title)
+	var favorite_button := Button.new()
+	var is_favorite := team_id == pvp_ai_sparring_favorite_team_id
+	favorite_button.text = "★" if is_favorite else "☆"
+	favorite_button.tooltip_text = LocalizationManager.text(
+		"ui.pvp.ai_sparring.catalog.favorite.remove" if is_favorite else "ui.pvp.ai_sparring.catalog.favorite.add"
+	)
+	favorite_button.custom_minimum_size = Vector2(28.0, 24.0)
+	favorite_button.focus_mode = Control.FOCUS_NONE
+	favorite_button.add_theme_font_size_override("font_size", 20)
+	favorite_button.add_theme_color_override("font_color", Color("#f5df9a") if is_favorite else Color("#8ea8bd"))
+	favorite_button.add_theme_stylebox_override("normal", _make_pvp_ranked_dropdown_item_style(Color("#00000000"), Color("#2d4966")))
+	favorite_button.add_theme_stylebox_override("hover", _make_pvp_ranked_dropdown_item_style(Color("#223b56"), Color("#f5df9a")))
+	favorite_button.pressed.connect(_on_ai_sparring_catalog_favorite_pressed.bind(team_id))
+	header.add_child(favorite_button)
 	var archetype_badge := Label.new()
 	archetype_badge.text = LocalizationManager.text(
 		"ui.pvp.training.ai.archetype.%s" % str(entry.get("archetype", "balance"))
@@ -44280,7 +44309,16 @@ func _create_ai_sparring_catalog_team_card(entry: Dictionary) -> Control:
 			)
 			icons.add_child(slot)
 	_set_mouse_ignore_recursive(margin)
+	favorite_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	return panel
+
+
+func _on_ai_sparring_catalog_favorite_pressed(team_id: String) -> void:
+	pvp_ai_sparring_favorite_team_id = "" if team_id == pvp_ai_sparring_favorite_team_id else team_id
+	_refresh_ai_sparring_player_team_source_options()
+	_on_ai_sparring_team_source_selected(pvp_ai_sparring_team_source_select.selected)
+	_refresh_ai_sparring_catalog_view()
+	await _save_toggle_preferences()
 
 
 func _on_ai_sparring_catalog_team_card_gui_input(event: InputEvent, team_id: String) -> void:
@@ -44608,8 +44646,11 @@ func _selected_ai_sparring_player_catalog_team_id() -> String:
 func _refresh_ai_sparring_catalog_preview() -> void:
 	if pvp_ai_sparring_catalog_preview == null or pvp_ai_sparring_catalog_preview_grid == null:
 		return
-	var use_catalog := _selected_ai_sparring_team_source() == "catalog"
+	var source := _selected_ai_sparring_team_source()
+	var use_catalog := source in ["catalog", "favorite"]
 	var entry := _ai_sparring_catalog_entry(_selected_ai_sparring_player_catalog_team_id())
+	if source == "favorite":
+		entry = _ai_sparring_catalog_entry(pvp_ai_sparring_favorite_team_id)
 	pvp_ai_sparring_catalog_preview.visible = use_catalog and not entry.is_empty()
 	for child: Node in pvp_ai_sparring_catalog_preview_grid.get_children():
 		pvp_ai_sparring_catalog_preview_grid.remove_child(child)
@@ -44617,7 +44658,7 @@ func _refresh_ai_sparring_catalog_preview() -> void:
 	if not pvp_ai_sparring_catalog_preview.visible:
 		return
 	pvp_ai_sparring_catalog_preview_title.text = str(entry.get("displayName", ""))
-	var team_id := _selected_ai_sparring_player_catalog_team_id()
+	var team_id := pvp_ai_sparring_favorite_team_id if source == "favorite" else _selected_ai_sparring_player_catalog_team_id()
 	var pokemon := _array_from_variant(entry.get("pokemon", []))
 	for pokemon_index in range(pokemon.size()):
 		var pokemon_value: Variant = pokemon[pokemon_index]
@@ -44762,12 +44803,14 @@ func _on_pvp_training_ai_start_pressed() -> void:
 			_set_pvp_room_busy(false)
 			_set_pvp_status_key("ui.pvp.ai_sparring.party_export_failed", {}, true)
 			return
-	var player_catalog_team_id := _selected_ai_sparring_player_catalog_team_id() if team_source == "catalog" else ""
-	if team_source == "catalog" and player_catalog_team_id == "":
+	var player_catalog_team_id := (
+		pvp_ai_sparring_favorite_team_id if team_source == "favorite" else _selected_ai_sparring_player_catalog_team_id()
+	) if team_source in ["catalog", "favorite"] else ""
+	if team_source in ["catalog", "favorite"] and player_catalog_team_id == "":
 		_set_pvp_room_busy(false)
 		_set_pvp_status_key("ui.pvp.ai_sparring.catalog.team_required", {}, true)
 		return
-	if team_source == "catalog":
+	if team_source in ["catalog", "favorite"]:
 		team_text = ""
 	var ai_team_source := _selected_pvp_training_ai_team_source()
 	var ai_team_text := pvp_training_ai_custom_team_input.text.strip_edges() if pvp_training_ai_custom_team_input != null else ""
@@ -44913,7 +44956,7 @@ func _training_ai_validation_reason(response: Dictionary) -> String:
 func _on_ai_sparring_team_source_selected(_index: int) -> void:
 	var source := _selected_ai_sparring_team_source()
 	var use_party := source == "party"
-	var use_catalog := source == "catalog"
+	var use_catalog := source in ["catalog", "favorite"]
 	if pvp_training_team_input != null:
 		pvp_training_team_input.visible = source == "paste"
 	if pvp_training_team_note != null:
@@ -44921,12 +44964,14 @@ func _on_ai_sparring_team_source_selected(_index: int) -> void:
 			pvp_training_team_note,
 			"text",
 			"ui.pvp.ai_sparring.party_note" if use_party else (
-				"ui.pvp.ai_sparring.catalog.player_note" if use_catalog else "ui.pvp.training.ephemeral_note"
+				"ui.pvp.ai_sparring.catalog.favorite_note" if source == "favorite" else (
+					"ui.pvp.ai_sparring.catalog.player_note" if use_catalog else "ui.pvp.training.ephemeral_note"
+				)
 			)
 		)
 	if pvp_ai_sparring_player_catalog_search != null:
-		pvp_ai_sparring_player_catalog_search.visible = use_catalog
-	if pvp_ai_sparring_player_catalog_suggestions != null and not use_catalog:
+		pvp_ai_sparring_player_catalog_search.visible = source == "catalog"
+	if pvp_ai_sparring_player_catalog_suggestions != null and source != "catalog":
 		pvp_ai_sparring_player_catalog_suggestions.hide()
 	_refresh_ai_sparring_party_preview()
 	_refresh_ai_sparring_catalog_preview()
@@ -44957,7 +45002,7 @@ func _selected_ai_sparring_team_source() -> String:
 	if pvp_ai_sparring_team_source_select == null:
 		return "paste"
 	var source := str(pvp_ai_sparring_team_source_select.get_selected_metadata()).strip_edges().to_lower()
-	return source if source in ["paste", "party", "catalog"] else "paste"
+	return source if source in ["paste", "party", "catalog", "favorite"] else "paste"
 
 
 func _connect_ai_sparring_hover(slot: Control, pokemon_data: Dictionary) -> void:
