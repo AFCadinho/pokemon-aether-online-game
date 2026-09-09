@@ -34,7 +34,7 @@ func _run() -> void:
 	panel.set_knowledge_snapshot({
 		"format": {"formatKey": "aether-ou", "engineFormatId": "gen9nationaldex"},
 		"viewerPokemon": [{"pokemonRef": "viewer:1", "active": true, "identity": {"state": "known", "value": "Mew"}}],
-		"opponentPokemon": [{"pokemonRef": "opponent:1", "active": true, "identity": {"state": "known", "value": "Charizard"}}],
+		"opponentPokemon": [{"pokemonRef": "opponent:1", "active": true, "identity": {"state": "known", "value": "Garchomp"}}],
 	})
 	panel.selected_sample_set_id = "old-base-set"
 	panel.defender_assumptions = {"item": "Heavy-Duty Boots", "ability": "Blaze"}
@@ -44,11 +44,11 @@ func _run() -> void:
 	panel.add_child(forme_button)
 	panel.forme_menu_buttons["opponent"] = forme_button
 	var popup := forme_button.get_popup()
-	popup.add_item("Charizard Mega X", 1)
-	popup.set_item_metadata(0, "Charizard Mega X")
+	popup.add_item("Garchomp Mega", 1)
+	popup.set_item_metadata(0, "Garchomp Mega")
 	panel._on_forme_menu_item_pressed(1, "opponent")
-	_expect(panel._get_selected_opponent_species() == "Charizard Mega X", "Selected Mega forme must become the effective set species")
-	_expect(not requests.is_empty() and requests[-1] == ["Charizard Mega X", "aether-ou"], "Mega selection must reload only the Mega species catalog")
+	_expect(panel._get_selected_opponent_species() == "Garchomp Mega", "Selected Mega forme must become the effective set species")
+	_expect(not requests.is_empty() and requests[-1] == ["Garchomp Mega", "aether-ou"], "Mega selection must reload only the exact Mega species catalog")
 	_expect(panel.selected_sample_set_id == "", "Changing forme must clear the base-form set selection")
 	_expect(str(panel.defender_assumptions.get("item", "")) != "Heavy-Duty Boots", "Changing forme must clear assumptions from the old set")
 
