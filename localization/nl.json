@@ -4543,6 +4543,8 @@
   "ui.pvp.ai_sparring.about.rank_ai5": "Bovengemiddelde Showdown-speler",
   "ui.pvp.ai_sparring.about.rank_elite": "High-ladder Showdown-speler",
   "ui.pvp.ai_sparring.about.rank_nightmare": "Strafmodus",
+  "ui.pvp.ai_sparring.about.recommendation_intermediate": "Beste keuze als je nieuw bent in PvP, maar al veel Pokémonkennis hebt.",
+  "ui.pvp.ai_sparring.about.recommendation_ai5": "De beste algemene sparringpartner.",
   "ui.pvp.ai_sparring.about.difficulty_intermediate": "Speelt veilig en probeert gedurende het gevecht steeds meer over zijn tegenstander te leren. Onderweg past hij zijn plan stap voor stap aan.",
   "ui.pvp.ai_sparring.about.difficulty_ai5": "Leeft van midground plays. Hij bekijkt elk mogelijk antwoord en kiest het pad dat hem consistent kan laten winnen, zonder afhankelijk te zijn van een harde prediction.",
   "ui.pvp.ai_sparring.about.difficulty_elite": "Gebruikt dezelfde sterke midground-basis als Hard, maar straft fouten genadeloos af zodra jouw positionering je tot riskante gokken dwingt.",

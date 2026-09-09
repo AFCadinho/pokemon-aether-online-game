@@ -6,6 +6,8 @@
   "ui.pvp.ai_sparring.about.rank_ai5": "Showdown 中上水平玩家",
   "ui.pvp.ai_sparring.about.rank_elite": "Showdown 高分段玩家",
   "ui.pvp.ai_sparring.about.rank_nightmare": "惩罚模式",
+  "ui.pvp.ai_sparring.about.recommendation_intermediate": "最适合刚接触 PvP、但已具备扎实宝可梦知识的玩家。",
+  "ui.pvp.ai_sparring.about.recommendation_ai5": "最佳的综合对练伙伴。",
   "ui.pvp.ai_sparring.about.difficulty_intermediate": "采取稳健打法，并在对战过程中逐步了解对手，随之不断调整自己的计划。",
   "ui.pvp.ai_sparring.about.difficulty_ai5": "偏好能够覆盖多种回应的中间路线，不依赖激进预判，也能持续保留获胜路径。",
   "ui.pvp.ai_sparring.about.difficulty_elite": "延续 Hard 的稳健中间路线，但当你的站位迫使你冒险猜测时，会毫不留情地惩罚错误。",

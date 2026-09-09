@@ -7738,6 +7738,18 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 			rank_label.add_theme_color_override("font_color", mode_accent.lightened(0.16))
 			_set_localized_control_property(rank_label, "text", "ui.pvp.ai_sparring.about.rank_" + mode_id)
 			rank_margin.add_child(rank_label)
+			if mode_id in ["intermediate", "ai5"]:
+				var recommendation := Label.new()
+				recommendation.name = "AiSparringRecommendation_" + mode_id
+				recommendation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				recommendation.add_theme_font_size_override("font_size", 13)
+				recommendation.add_theme_color_override("font_color", mode_accent.lightened(0.16))
+				_set_localized_control_property(
+					recommendation,
+					"text",
+					"ui.pvp.ai_sparring.about.recommendation_" + mode_id
+				)
+				difficulty_content.add_child(recommendation)
 			var difficulty_description := Label.new()
 			difficulty_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			difficulty_description.add_theme_constant_override("line_spacing", 3)
