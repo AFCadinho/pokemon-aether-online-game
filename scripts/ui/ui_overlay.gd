@@ -962,7 +962,7 @@ var pvp_ai_sparring_catalog_selected_team_id := ""
 var pvp_ai_sparring_catalog_detail: Dictionary = {}
 var pvp_ai_sparring_catalog_detail_loading := false
 var pvp_ai_sparring_favorite_team_id := ""
-var pvp_ai_sparring_use_favorite_team_check: CheckButton
+var pvp_ai_sparring_use_favorite_team_check: Button
 var pvp_ai_sparring_hover_card: PartyHoverCard
 var pvp_ai_sparring_hover_generation := 0
 var pvp_ai_sparring_hover_team_cache: Dictionary = {}
@@ -7326,8 +7326,23 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	_apply_line_edit_style(pvp_ai_sparring_player_catalog_search)
 	team_layout.add_child(pvp_ai_sparring_player_catalog_search)
 
-	pvp_ai_sparring_use_favorite_team_check = CheckButton.new()
+	pvp_ai_sparring_use_favorite_team_check = Button.new()
+	pvp_ai_sparring_use_favorite_team_check.toggle_mode = true
 	pvp_ai_sparring_use_favorite_team_check.focus_mode = Control.FOCUS_NONE
+	pvp_ai_sparring_use_favorite_team_check.custom_minimum_size = Vector2(0, 32)
+	pvp_ai_sparring_use_favorite_team_check.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	pvp_ai_sparring_use_favorite_team_check.add_theme_font_size_override("font_size", 11)
+	pvp_ai_sparring_use_favorite_team_check.add_theme_color_override("font_color", Color("#d6e8f7"))
+	pvp_ai_sparring_use_favorite_team_check.add_theme_color_override("font_pressed_color", Color("#fff1a8"))
+	pvp_ai_sparring_use_favorite_team_check.add_theme_stylebox_override(
+		"normal", _make_panel_style(Color("#13253ae8"), Color("#4b7394"), 6, 1)
+	)
+	pvp_ai_sparring_use_favorite_team_check.add_theme_stylebox_override(
+		"hover", _make_panel_style(Color("#193451f2"), Color("#72cdf5"), 6, 1)
+	)
+	pvp_ai_sparring_use_favorite_team_check.add_theme_stylebox_override(
+		"pressed", _make_panel_style(Color("#3b3420f2"), Color("#f5df9a"), 6, 2)
+	)
 	pvp_ai_sparring_use_favorite_team_check.visible = false
 	pvp_ai_sparring_use_favorite_team_check.toggled.connect(_on_ai_sparring_use_favorite_team_toggled)
 	team_layout.add_child(pvp_ai_sparring_use_favorite_team_check)
@@ -44141,7 +44156,13 @@ func _refresh_ai_sparring_player_team_source_options() -> void:
 	pvp_ai_sparring_team_source_select.set_item_text(2, LocalizationManager.text("ui.pvp.ai_sparring.team_source.catalog"))
 	var favorite_is_available := not _ai_sparring_catalog_entry(pvp_ai_sparring_favorite_team_id).is_empty()
 	if pvp_ai_sparring_use_favorite_team_check != null:
-		_set_localized_control_property(pvp_ai_sparring_use_favorite_team_check, "text", "ui.pvp.ai_sparring.catalog.use_favorite")
+		_set_localized_control_property(
+			pvp_ai_sparring_use_favorite_team_check,
+			"text",
+			"ui.pvp.ai_sparring.catalog.use_favorite.active"
+			if pvp_ai_sparring_use_favorite_team_check.button_pressed
+			else "ui.pvp.ai_sparring.catalog.use_favorite"
+		)
 		pvp_ai_sparring_use_favorite_team_check.disabled = not favorite_is_available
 		if not favorite_is_available:
 			pvp_ai_sparring_use_favorite_team_check.set_pressed_no_signal(false)
@@ -44658,6 +44679,7 @@ func _uses_ai_sparring_favorite_team() -> bool:
 
 
 func _on_ai_sparring_use_favorite_team_toggled(_enabled: bool) -> void:
+	_refresh_ai_sparring_player_team_source_options()
 	_on_ai_sparring_team_source_selected(pvp_ai_sparring_team_source_select.selected)
 
 

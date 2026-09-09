@@ -4558,6 +4558,7 @@
   "ui.pvp.ai_sparring.catalog.player_note": "Usa a equipe selecionada exatamente como publicada neste treino.",
   "ui.pvp.ai_sparring.catalog.favorite_note": "Usa sua equipe favorita do catálogo exatamente como publicada neste treino.",
   "ui.pvp.ai_sparring.catalog.use_favorite": "Usar equipe favorita",
+  "ui.pvp.ai_sparring.catalog.use_favorite.active": "Usando equipe favorita",
   "ui.pvp.ai_sparring.catalog.intro": "Explore equipes publicadas, pesquise por Pokémon e veja todos os detalhes.",
   "ui.pvp.ai_sparring.catalog.search": "Pesquisar Pokémon ou equipe...",
   "ui.pvp.ai_sparring.catalog.all_archetypes": "Todos os arquétipos",
