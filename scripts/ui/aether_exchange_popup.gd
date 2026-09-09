@@ -1442,7 +1442,7 @@ func _render_current_list() -> void:
 
 
 func _render_portfolio_sections(entries: Array) -> void:
-	list_container.columns = 1
+	list_container.columns = 2 if asset_filter == "item" else 1
 	var listings: Array = []
 	var wishes: Array = []
 	for value: Variant in entries:
@@ -1474,12 +1474,14 @@ func _add_portfolio_section(section_id: String, entries: Array, kind: String) ->
 	if section_id == "listings":
 		title_key += "_%s" % asset_filter
 	title.text = _t(title_key, {"count": entries.size()})
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title.add_theme_font_size_override("font_size", 13)
 	title.add_theme_color_override("font_color", UI_PURPLE if section_id == "requests" else UI_CYAN)
 	stack.add_child(title)
 	var description := Label.new()
 	description.name = "PortfolioSectionDescription"
 	description.text = _t("ui.exchange.portfolio.%s_description_%s" % [section_id, title_variant])
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.add_theme_font_size_override("font_size", 11)
 	description.add_theme_color_override("font_color", UI_MUTED)
 	stack.add_child(description)
@@ -1500,6 +1502,9 @@ func _add_portfolio_section(section_id: String, entries: Array, kind: String) ->
 
 func _update_list_grid_columns() -> void:
 	if list_container == null:
+		return
+	if active_tab == "mine":
+		list_container.columns = 2 if asset_filter == "item" else 1
 		return
 	if active_tab not in ["browse", "wishlist"]:
 		list_container.columns = 1

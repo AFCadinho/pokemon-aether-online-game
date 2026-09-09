@@ -136,8 +136,10 @@ func _run() -> void:
 				if screen == "mine-items":
 					var requests_section := popup.list_container.find_child("ExchangePortfolioRequestsSection", true, false) as Control
 					_check(requests_section != null, description + ": item requests have a separate section")
+					_check(popup.list_container.columns == 2, description + ": sale listings and requests are side by side")
 					if requests_section != null:
 						_check_bounds(requests_section, popup, description)
+						_check(requests_section.size.x < popup.list_scroll.size.x * 0.6, description + ": request section does not consume the full width")
 			var active_content: Control = popup.detail_stack if popup.detail_panel.visible else popup.action_content
 			for button: Button in active_content.find_children("*", "Button", true, false):
 				if button.is_visible_in_tree():
