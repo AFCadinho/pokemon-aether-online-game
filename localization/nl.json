@@ -4569,6 +4569,7 @@
   "ui.pvp.ai_sparring.catalog.player_note": "Gebruikt het gekozen catalogusteam precies zoals gepubliceerd voor dit oefengevecht.",
   "ui.pvp.ai_sparring.catalog.favorite_note": "Gebruikt je favoriete catalogusteam precies zoals gepubliceerd voor dit oefengevecht.",
   "ui.pvp.ai_sparring.catalog.use_favorite": "Gebruik favoriete team",
+  "ui.pvp.ai_sparring.catalog.use_favorite.active": "Favoriete team wordt gebruikt",
   "ui.pvp.ai_sparring.catalog.intro": "Bekijk gepubliceerde oefenteams, zoek op Pokémon en inspecteer iedere set.",
   "ui.pvp.ai_sparring.catalog.search": "Zoek Pokémon of team...",
   "ui.pvp.ai_sparring.catalog.all_archetypes": "Alle archetypen",

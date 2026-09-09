@@ -4555,6 +4555,7 @@
   "ui.pvp.ai_sparring.catalog.player_note": "本次练习将完全使用已发布的所选目录队伍。",
   "ui.pvp.ai_sparring.catalog.favorite_note": "本次练习将完全使用已发布的收藏目录队伍。",
   "ui.pvp.ai_sparring.catalog.use_favorite": "使用收藏队伍",
+  "ui.pvp.ai_sparring.catalog.use_favorite.active": "正在使用收藏队伍",
   "ui.pvp.ai_sparring.catalog.intro": "浏览已发布的练习队伍，按宝可梦搜索并查看完整配置。",
   "ui.pvp.ai_sparring.catalog.search": "搜索宝可梦或队伍...",
   "ui.pvp.ai_sparring.catalog.all_archetypes": "所有类型",

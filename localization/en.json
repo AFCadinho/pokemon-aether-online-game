@@ -4569,6 +4569,7 @@
   "ui.pvp.ai_sparring.catalog.player_note": "Uses the selected catalog team exactly as published for this practice battle.",
   "ui.pvp.ai_sparring.catalog.favorite_note": "Uses your favorite catalog team exactly as published for this practice battle.",
   "ui.pvp.ai_sparring.catalog.use_favorite": "Use favorite team",
+  "ui.pvp.ai_sparring.catalog.use_favorite.active": "Using favorite team",
   "ui.pvp.ai_sparring.catalog.intro": "Browse published practice teams, search by Pokémon, and inspect every set.",
   "ui.pvp.ai_sparring.catalog.search": "Search Pokémon or team...",
   "ui.pvp.ai_sparring.catalog.all_archetypes": "All archetypes",
