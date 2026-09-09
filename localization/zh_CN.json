@@ -3474,6 +3474,7 @@
   "ui.move_mentor.status.saving": "正在教授招式……",
   "ui.move_mentor.status.learned": "{pokemon} 学会了 {move}！",
   "ui.move_mentor.status.cost": "费用：{required} 个{item}。你拥有 {owned} 个。",
+  "ui.npc.cost.item_removed": "已从背包中移除：{quantity}× {item}。",
   "ui.move_mentor.status.resource_required": "你需要 {required} 个{item}。你拥有 {owned} 个。",
   "ui.move_mentor.error.invalid_pokemon": "这只宝可梦无法使用招式狂人服务。",
   "ui.move_mentor.error.load": "无法加载兼容招式。",
