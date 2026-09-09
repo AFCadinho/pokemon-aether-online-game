@@ -41,25 +41,17 @@ func _run() -> void:
 	panel.show_sample_set_catalog_response("Mew", response)
 	_expect(panel.sample_set_options.size() == 1, "External set groups must load")
 	panel._apply_sample_set(group)
-	_expect(panel.selected_sample_set_id == "smogon-test", "Default variant must retain group identity")
-	_expect(panel.selected_sample_variant_id == "smogon-test-a", "Default variant identity must be selected")
+	_expect(panel.selected_sample_set_id == "smogon-test", "Selecting the default build must retain group identity")
 	_expect(panel.defender_assumptions["item"] == "Leftovers", "Confirmed item must override the preset")
 	_expect(panel.defender_assumptions["ivs"] == {"atk": 0}, "Non-default IVs must be applied")
-	panel._on_sample_variant_selected(1, "smogon-test")
-	_expect(panel.selected_sample_set_id == "smogon-test" and panel.selected_sample_variant_id == "smogon-test-b", "Changing variant must preserve its set group")
-	_expect(panel.defender_assumptions["assumedMoves"][1] == "Volt Switch" and panel.defender_assumptions["nature"] == "Timid", "Alternative move and nature must reach calculation inputs")
-	_expect(panel.defender_assumptions["item"] == "Leftovers", "Variant selection must preserve confirmed facts")
+	_expect(panel.defender_assumptions["assumedMoves"][1] == "U-turn" and panel.defender_assumptions["nature"] == "Bold", "Selecting a named set must apply its first Smogon build")
 	_expect(not panel.defender_assumptions.has("level") and not panel.defender_assumptions.has("hp"), "Set must not replace battle level or HP")
 	var host := VBoxContainer.new()
 	content.add_child(host)
 	panel._add_sample_set_selector(host)
 	var selector := host.find_child("SampleSetSelector", true, false) as Button
 	_expect(selector != null and selector.text == "National Dex UU Pivot", "Set menu must show format followed by set name")
-	var variants := host.find_child("SampleSetVariantSelector", true, false) as OptionButton
-	_expect(variants != null and variants.item_count == 2 and variants.selected == 1, "Variants must have a separate selector")
-	if variants != null:
-		_expect(variants.get_popup().max_size.y == 360, "Large variant menus must have a bounded scrollable height")
-		_expect("Volt Switch" in variants.get_item_tooltip(1), "Variant tooltip must describe the complete build")
+	_expect(host.find_child("SampleSetVariantSelector", true, false) == null, "Internal source alternatives must not create a variant selector")
 	panel._on_nature_option_pressed("Modest")
 	_expect(panel.selected_sample_set_id == "", "Manual edits must switch to a custom scenario")
 	panel._reset_to_current()
@@ -75,7 +67,7 @@ func _run() -> void:
 	panel.queue_free()
 	await process_frame
 	if not failed:
-		print("PASS: Smogon calculator sources, variants and confirmed facts")
+		print("PASS: Smogon calculator sets use one editable default build")
 	quit(1 if failed else 0)
 
 

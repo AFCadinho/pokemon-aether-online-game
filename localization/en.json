@@ -3946,7 +3946,6 @@
   "battle.calc.custom_scenario": "Custom scenario",
   "battle.calc.search_sets": "Search sets by name…",
   "battle.calc.no_matching_sets": "No matching sets",
-  "battle.calc.set_variant": "Set variant",
   "battle.calc.sample_set_disclaimer": "Uses confirmed battle information by default. Choose an Aether or Smogon set, or edit values to calculate a scenario.",
   "battle.calc.sample_sets_loading": "Loading sample sets...",
   "battle.calc.sample_sets_unavailable": "No sample sets available",
