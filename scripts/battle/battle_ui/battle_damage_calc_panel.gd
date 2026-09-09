@@ -796,25 +796,27 @@ func _request_sample_sets_if_needed() -> void:
 func _get_sample_set_format_id() -> String:
 	var format := _as_dictionary(knowledge_snapshot.get("format", {}))
 	var format_key := str(format.get("formatKey", "")).strip_edges().to_lower()
-	if format_key in ["aether-ou", "aether-uu", "ranked-aether-ou", "ranked-aether-uu"]:
+	if format_key == "ranked-aether-ou":
 		return "aether-ou"
-	return "gen9nationaldex"
+	if format_key == "ranked-aether-uu":
+		return "aether-uu"
+	return format_key
 
 
 func show_sample_set_catalog_response(species: String, response: Dictionary) -> void:
-	if species.to_lower() != sample_set_species.to_lower():
+	if _normalize_move_name(species) != _normalize_move_name(sample_set_species):
 		return
 	sample_set_loading = false
 	sample_set_error = ""
 	var valid_envelope := (
 		int(response.get("schemaVersion", 0)) == 1
 		and str(response.get("formatId", "")) == sample_set_format_id
-		and str(response.get("engineFormatId", "")) == "gen9nationaldex"
-		and str(response.get("dataFormatId", "")) == "gen9nationaldex"
-		and str(response.get("source", "")) in ["pokeaether_curated", "pokeaether_library"]
-		and str(response.get("species", "")).to_lower() == species.to_lower()
+		and str(response.get("engineFormatId", "")) == _get_sample_set_engine_format_id()
+		and str(response.get("catalogProfileId", "")).strip_edges() != ""
+		and str(response.get("source", "")) == "smogon_set_catalog"
+		and _normalize_move_name(str(response.get("species", ""))) == _normalize_move_name(species)
 		and response.get("sets") is Array
-		and (response.get("sets") as Array).size() <= 288
+		and (response.get("sets") as Array).size() <= 1024
 	)
 	if not valid_envelope:
 		sample_set_options.clear()
@@ -832,7 +834,7 @@ func show_sample_set_catalog_response(species: String, response: Dictionary) -> 
 
 
 func show_sample_set_catalog_error(species: String, _error: String) -> void:
-	if species.to_lower() != sample_set_species.to_lower():
+	if _normalize_move_name(species) != _normalize_move_name(sample_set_species):
 		return
 	sample_set_loading = false
 	sample_set_options.clear()
@@ -865,13 +867,17 @@ func _is_valid_sample_group(entry: Dictionary) -> bool:
 
 
 func _is_known_sample_source(provenance: Dictionary) -> bool:
-	return provenance == {"kind": "pokeaether_curated"} or (provenance.get("kind") == "smogon" and provenance.get("formatId") in ["gen9nationaldex", "gen9nationaldexuu"])
+	return (
+		provenance.get("kind") == "smogon"
+		and not str(provenance.get("formatId", "")).strip_edges().is_empty()
+		and not str(provenance.get("formatName", "")).strip_edges().is_empty()
+	)
 
 
 func _is_valid_sample_set(entry: Dictionary) -> bool:
 	if str(entry.get("id", "")).strip_edges() == "" or str(entry.get("name", "")).strip_edges() == "":
 		return false
-	if str(entry.get("ability", "")).strip_edges() == "" or str(entry.get("nature", "")).strip_edges() == "":
+	if str(entry.get("nature", "")).strip_edges() == "":
 		return false
 	if not (entry.get("evs") is Dictionary) or not (entry.get("ivs") is Dictionary) or not (entry.get("moves") is Array):
 		return false
@@ -905,7 +911,16 @@ func _get_selected_opponent_species() -> String:
 	var identity := _as_dictionary(opponent.get("identity", {}))
 	if str(identity.get("state", "")) != "known":
 		return ""
-	return str(identity.get("value", "")).strip_edges()
+	var snapshot_species := str(identity.get("value", "")).strip_edges()
+	return str(species_scenarios.get(selected_opponent_ref, snapshot_species)).strip_edges()
+
+
+func _get_sample_set_engine_format_id() -> String:
+	var format := _as_dictionary(knowledge_snapshot.get("format", {}))
+	var engine_format_id := str(format.get("engineFormatId", "")).strip_edges().to_lower()
+	if engine_format_id != "":
+		return engine_format_id
+	return "pokemmo-ou-v1" if _get_sample_set_format_id() == "pokemmo-ou" else "gen9nationaldex"
 
 
 func _refresh_current_scenario() -> void:
@@ -1021,8 +1036,8 @@ func _add_sample_set_selector(parent: Container) -> void:
 
 
 func _get_sample_set_display_name(option: Dictionary) -> String:
-	var source := _get_sample_set_source_label(option)
-	return str(option.get("name", option.get("id", ""))) + (" · " + source if source != "" else "")
+	var format_name := _get_sample_set_source_label(option)
+	return (format_name + " " if format_name != "" else "") + str(option.get("name", option.get("id", "")))
 
 
 func _close_sample_set_search() -> void:
@@ -1174,19 +1189,10 @@ func _choose_sample_set_search_result(index: int, results: ItemList) -> void:
 
 
 func _get_sample_set_source_label(option: Dictionary) -> String:
-	var sources: Array[String] = []
-	for variant: Variant in _as_array(option.get("variants", [])):
-		var label := _get_sample_set_source_label(_as_dictionary(variant))
-		if label == "":
-			label = "Aether"
-		if not sources.has(label):
-			sources.append(label)
-	if not sources.is_empty():
-		return "" if sources == ["Aether"] else _join_string_array(sources, " / ")
 	var provenance := _as_dictionary(option.get("provenance", {}))
 	if str(provenance.get("kind", "")) != "smogon":
 		return ""
-	return "Smogon · National Dex UU" if provenance.get("formatId") == "gen9nationaldexuu" else "Smogon · National Dex"
+	return str(provenance.get("formatName", "")).strip_edges()
 
 
 func _add_sample_variant_selector(parent: Container) -> void:
@@ -1210,6 +1216,7 @@ func _add_sample_variant_selector(parent: Container) -> void:
 				selector.select(index)
 		selector.item_selected.connect(_on_sample_variant_selected.bind(selected_sample_set_id))
 		_apply_calcdex_dropdown_style(selector, 36.0, 12)
+		selector.get_popup().max_size = Vector2i(700, 360)
 		parent.add_child(selector)
 		return
 
@@ -2011,10 +2018,17 @@ func _on_forme_menu_item_pressed(item_id: int, relation: String) -> void:
 	var snapshot_species := _get_snapshot_species(pokemon_ref)
 	if selected_species == "" or snapshot_species == "":
 		return
+	if relation == "opponent":
+		_clear_sample_sets()
+		defender_assumptions.clear()
+		edited_assumption_fields.clear()
 	if _normalize_move_name(selected_species) == _normalize_move_name(snapshot_species):
 		species_scenarios.erase(pokemon_ref)
 	else:
 		species_scenarios[pokemon_ref] = selected_species
+	if relation == "opponent":
+		_request_sample_sets_if_needed()
+		_refresh_current_scenario()
 	expanded_result_key = ""
 	_clear_move_scenarios()
 	last_response = {}

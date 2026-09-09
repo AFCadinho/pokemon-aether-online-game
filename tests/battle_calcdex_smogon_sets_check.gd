@@ -16,7 +16,7 @@ func _run() -> void:
 	root.add_child(panel)
 	await process_frame
 	panel.set_knowledge_snapshot({
-		"format": {"formatKey": "aether-ou"},
+		"format": {"formatKey": "aether-ou", "engineFormatId": "gen9nationaldex"},
 		"viewerPokemon": [{"pokemonRef": "viewer:1", "active": true, "identity": {"state": "known", "value": "Mew"}}],
 		"opponentPokemon": [{"pokemonRef": "opponent:1", "active": true, "identity": {"state": "known", "value": "Mew"},
 			"item": {"state": "known", "value": "Leftovers"}, "ability": {"state": "known", "value": "Synchronize"},
@@ -26,7 +26,7 @@ func _run() -> void:
 		"id": "smogon-test-a", "name": "Pivot", "item": "Heavy-Duty Boots", "ability": "Synchronize", "nature": "Bold",
 		"evs": {"hp": 252, "def": 252, "spd": 4}, "ivs": {"atk": 0},
 		"moves": ["Psychic", "U-turn", "Roost", "Will-O-Wisp"],
-		"provenance": {"kind": "smogon", "formatId": "gen9nationaldexuu"},
+		"provenance": {"kind": "smogon", "formatId": "gen9nationaldexuu", "formatName": "National Dex UU"},
 	}
 	var alternative := variant.duplicate(true)
 	alternative["id"] = "smogon-test-b"
@@ -36,7 +36,8 @@ func _run() -> void:
 	group["id"] = "smogon-test"
 	group["variants"] = [variant, alternative]
 	var response := {"schemaVersion": 1, "formatId": "aether-ou", "engineFormatId": "gen9nationaldex",
-		"dataFormatId": "gen9nationaldex", "source": "pokeaether_library", "species": "Mew", "sets": [group]}
+		"catalogProfileId": "aether-gen9-singles", "dataFormatId": "aether-gen9-singles",
+		"source": "smogon_set_catalog", "species": "Mew", "sets": [group]}
 	panel.show_sample_set_catalog_response("Mew", response)
 	_expect(panel.sample_set_options.size() == 1, "External set groups must load")
 	panel._apply_sample_set(group)
@@ -53,28 +54,20 @@ func _run() -> void:
 	content.add_child(host)
 	panel._add_sample_set_selector(host)
 	var selector := host.find_child("SampleSetSelector", true, false) as Button
-	_expect(selector != null and "Smogon · National Dex UU" in selector.text, "Set menu must show source and format")
+	_expect(selector != null and selector.text == "National Dex UU Pivot", "Set menu must show format followed by set name")
 	var variants := host.find_child("SampleSetVariantSelector", true, false) as OptionButton
 	_expect(variants != null and variants.item_count == 2 and variants.selected == 1, "Variants must have a separate selector")
 	if variants != null:
+		_expect(variants.get_popup().max_size.y == 360, "Large variant menus must have a bounded scrollable height")
 		_expect("Volt Switch" in variants.get_item_tooltip(1), "Variant tooltip must describe the complete build")
 	panel._on_nature_option_pressed("Modest")
 	_expect(panel.selected_sample_set_id == "", "Manual edits must switch to a custom scenario")
 	panel._reset_to_current()
 	_expect(not panel.defender_assumptions.has("assumedMoves"), "Reset must clear imported moves")
-	var mixed := group.duplicate(true)
-	mixed["provenance"] = {"kind": "pokeaether_curated"}
-	mixed["variants"][0]["provenance"] = {"kind": "pokeaether_curated"}
-	response["sets"] = [mixed]
-	panel.show_sample_set_catalog_response("Mew", response)
-	_expect(panel.sample_set_options.size() == 1, "Curated and Smogon builds must share one named group")
-	_expect(panel._get_sample_set_source_label(mixed) == "Aether / Smogon · National Dex UU", "Mixed group must retain both sources")
-	panel._apply_sample_set(mixed)
-	panel._on_sample_variant_selected(1, "smogon-test")
-	_expect(panel.defender_assumptions["nature"] == "Timid", "Mixed-source alternative must remain selectable")
-	var unknown := mixed.duplicate(true)
+	var unknown := group.duplicate(true)
 	unknown["variants"][1]["provenance"] = {"kind": "unknown"}
 	_expect(not panel._is_valid_sample_group(unknown), "Unknown variant sources must be rejected")
+	response["sets"] = [group]
 	var broken := response.duplicate(true)
 	broken["sets"][0]["variants"][1]["id"] = "smogon-test-a"
 	panel.show_sample_set_catalog_response("Mew", broken)
