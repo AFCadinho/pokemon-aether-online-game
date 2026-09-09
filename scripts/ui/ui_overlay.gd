@@ -7365,16 +7365,16 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai_sparring_checkbox_empty_icon = _make_ai_sparring_favorite_checkbox_icon(false)
 	pvp_ai_sparring_checkbox_checked_icon = _make_ai_sparring_favorite_checkbox_icon(true)
 	pvp_ai_sparring_use_favorite_team_check.add_theme_icon_override(
-		"checkbox", pvp_ai_sparring_checkbox_empty_icon
+		"unchecked", pvp_ai_sparring_checkbox_empty_icon
 	)
 	pvp_ai_sparring_use_favorite_team_check.add_theme_icon_override(
-		"checkbox_checked", pvp_ai_sparring_checkbox_checked_icon
+		"checked", pvp_ai_sparring_checkbox_checked_icon
 	)
 	pvp_ai_sparring_use_favorite_team_check.add_theme_icon_override(
-		"checkbox_disabled", pvp_ai_sparring_checkbox_empty_icon
+		"unchecked_disabled", pvp_ai_sparring_checkbox_empty_icon
 	)
 	pvp_ai_sparring_use_favorite_team_check.add_theme_icon_override(
-		"checkbox_checked_disabled", pvp_ai_sparring_checkbox_checked_icon
+		"checked_disabled", pvp_ai_sparring_checkbox_checked_icon
 	)
 	pvp_ai_sparring_use_favorite_team_check.visible = false
 	pvp_ai_sparring_use_favorite_team_check.toggled.connect(_on_ai_sparring_use_favorite_team_toggled)
