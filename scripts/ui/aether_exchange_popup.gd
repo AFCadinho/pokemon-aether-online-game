@@ -19,6 +19,7 @@ const UI_DANGER := Color("#ef7085")
 const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
 const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
 const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
+const POKEMON_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/party_hover_card.tscn")
 const EXCHANGE_SIZE := Vector2(1040, 660)
 const MAX_PRICE := 2_147_483_647
 const BROWSE_CARD_MIN_WIDTH := 172.0
@@ -101,6 +102,8 @@ var detail_panel: Control
 var action_bar: PanelContainer
 var action_content: HBoxContainer
 var status_timer: Timer
+var pokemon_hover_card: PartyHoverCard
+var pokemon_hover_generation := 0
 var search_input: LineEdit
 var search_timer: Timer
 var refresh_button: Button
@@ -142,6 +145,7 @@ func _ready() -> void:
 	window_style.set_content_margin(SIDE_BOTTOM, 0.0)
 	add_theme_stylebox_override("panel", window_style)
 	_build_interface()
+	_build_pokemon_hover_card()
 	_center_in_parent()
 	search_timer = Timer.new()
 	search_timer.one_shot = true
@@ -213,6 +217,7 @@ func close_exchange() -> void:
 		_hide_advanced_filter_panel()
 		return
 	is_dragging_popup = false
+	_hide_pokemon_hover()
 	visible = false
 	closed.emit()
 
@@ -479,6 +484,15 @@ func _build_action_bar() -> Control:
 	action_content.add_theme_constant_override("separation", 16)
 	action_bar.add_child(action_content)
 	return action_bar
+
+
+func _build_pokemon_hover_card() -> void:
+	pokemon_hover_card = POKEMON_HOVER_CARD_SCENE.instantiate() as PartyHoverCard
+	pokemon_hover_card.name = "ExchangePokemonHoverCard"
+	pokemon_hover_card.z_index = 9
+	pokemon_hover_card.set_show_ivs(true)
+	pokemon_hover_card.set_show_evs(true)
+	add_child(pokemon_hover_card)
 
 
 func _build_filters() -> Control:
@@ -859,6 +873,7 @@ func _on_tab_pressed(tab: String) -> void:
 	if request_busy or tab == active_tab:
 		return
 	active_tab = tab
+	_hide_pokemon_hover()
 	active_section = _section_for_tab(tab)
 	_normalize_filter_for_tab()
 	_hide_advanced_filter_panel()
@@ -989,6 +1004,7 @@ func _toggle_advanced_filter_panel() -> void:
 	if request_busy or active_tab != "browse":
 		return
 	var show_panel := not advanced_filter_panel.visible
+	_hide_pokemon_hover()
 	advanced_filter_overlay.visible = show_panel
 	advanced_filter_panel.visible = show_panel
 	if show_panel:
@@ -1365,6 +1381,7 @@ func _load_portfolio() -> bool:
 
 
 func _render_current_list() -> void:
+	_hide_pokemon_hover()
 	_clear_children(list_container)
 	var entries: Array = []
 	var kind := "listing"
@@ -1465,7 +1482,12 @@ func _entry_button(entry: Dictionary, kind: String) -> Button:
 		button.add_theme_constant_override("icon_max_width", 52)
 		button.text = "%s\n%s" % [_entry_name(entry, kind), _entry_subtitle(entry, kind)]
 		button.icon = _entry_texture(entry, kind)
-	button.tooltip_text = _entry_name(entry, kind)
+	var asset := _entry_asset(entry, kind)
+	var is_pokemon := _entry_asset_type(entry, kind) == "pokemon"
+	button.tooltip_text = "" if is_pokemon else _entry_name(entry, kind)
+	if is_pokemon:
+		button.mouse_entered.connect(_show_pokemon_hover.bind(button, asset.duplicate(true)))
+		button.mouse_exited.connect(_hide_pokemon_hover)
 	button.set_meta("exchange_selection_key", _entry_selection_key(entry, kind))
 	button.set_meta("exchange_kind", kind)
 	button.pressed.connect(_select_entry.bind(entry, kind))
@@ -1559,6 +1581,7 @@ func _select_entry(entry: Dictionary, kind: String) -> void:
 	if request_busy:
 		return
 	selected_entry = entry.duplicate(true)
+	_hide_pokemon_hover()
 	selected_kind = kind
 	# Keep the grid and scroll position intact while inspecting another offer.
 	for child: Node in list_container.get_children():
@@ -1625,6 +1648,51 @@ func _render_detail() -> void:
 		_build_wish_controls()
 	else:
 		_build_listing_controls()
+
+
+func _show_pokemon_hover(source: Control, asset: Dictionary) -> void:
+	if pokemon_hover_card == null or not visible or asset.is_empty():
+		return
+	pokemon_hover_generation += 1
+	var generation := pokemon_hover_generation
+	var payload := _pokemon_hover_payload(asset)
+	pokemon_hover_card.show_for_pokemon(payload)
+	_position_pokemon_hover(source)
+	call_deferred("_deferred_position_pokemon_hover", source, generation)
+
+
+func _deferred_position_pokemon_hover(source: Control, generation: int) -> void:
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if generation != pokemon_hover_generation or pokemon_hover_card == null or not pokemon_hover_card.visible:
+		return
+	if not is_instance_valid(source):
+		return
+	_position_pokemon_hover(source)
+
+
+func _position_pokemon_hover(source: Control) -> void:
+	if pokemon_hover_card == null or source == null:
+		return
+	var bounds := get_global_rect().grow(-12.0)
+	pokemon_hover_card.position_beside_rect_within(source.get_global_rect(), bounds)
+
+
+func _hide_pokemon_hover() -> void:
+	pokemon_hover_generation += 1
+	if pokemon_hover_card != null:
+		pokemon_hover_card.hide_card()
+
+
+func _pokemon_hover_payload(asset: Dictionary) -> Dictionary:
+	var payload := _pokemon_summary_payload(asset)
+	var stats := _dictionary(payload.get("stats", {}))
+	if int(payload.get("maxHp", 0)) <= 0 and int(stats.get("hp", 0)) > 0:
+		payload["maxHp"] = int(stats.get("hp"))
+		payload["hp"] = int(stats.get("hp"))
+	if _optional_text(payload.get("item")).is_empty():
+		payload["item"] = _optional_text(payload.get("heldItemId"), _optional_text(payload.get("held_item_id")))
+	return payload
 
 
 func _build_summary_button(asset: Dictionary) -> Button:
@@ -2415,6 +2483,7 @@ func _entry_texture(entry: Dictionary, kind: String) -> Texture2D:
 func _load_item_icon(item_id: String) -> Texture2D:
 	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
 	for path: String in [
+		"res://assets/items/icons/field_move_charms/%s.png" % normalized,
 		"res://assets/items/icons/%s.png" % normalized,
 		"res://assets/items/icons/%s.png" % item_id.strip_edges(),
 		"res://assets/items/icons/000.png",
