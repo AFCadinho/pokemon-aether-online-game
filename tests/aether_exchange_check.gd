@@ -239,6 +239,15 @@ func _run() -> void:
 	_check(item_header.get_theme_stylebox("panel") is StyleBoxFlat, "Item details use a compact information header")
 	_check(item_detail_icon != null and item_detail_icon.size == Vector2(48, 48), "Item details preserve the native 48-pixel artwork size")
 	_check(item_detail_icon.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "Item details render pixel art without smoothing")
+	for charm_id: String in [
+		"cut-charm", "dive-charm", "flash-charm", "rain-dance-charm", "rock-smash-charm",
+		"snowscape-charm", "strength-charm", "sunny-day-charm", "surf-charm", "waterfall-charm",
+	]:
+		var charm_icon := popup.call("_load_item_icon", charm_id) as Texture2D
+		_check(
+			charm_icon != null and charm_icon.resource_path.contains("/field_move_charms/") and not charm_icon.resource_path.ends_with("/000.png"),
+			"Exchange resolves the dedicated %s icon" % charm_id
+		)
 	_check(popup.get("quantity_spin") is SpinBox, "Item listings expose quantity input")
 	_check(popup.get("price_spin") is SpinBox, "Listings expose fixed-price input")
 	var wishlist_item := {
@@ -415,6 +424,20 @@ func _run() -> void:
 		for label_value: Variant in (list_container.get_child(card_index) as Button).find_children("*", "Label", true, false):
 			card_text += (label_value as Label).text
 		_check(not card_text.contains(available_label), "Browse cards omit the redundant Available status")
+	_check(first_browse_card.mouse_entered.has_connections() and first_browse_card.mouse_exited.has_connections(), "Pokémon offers expose hover summary behavior")
+	popup.call("_show_pokemon_hover", first_browse_card, browse_entries[0].asset)
+	await process_frame
+	await process_frame
+	await process_frame
+	var pokemon_hover_card := popup.get("pokemon_hover_card") as PartyHoverCard
+	_check(pokemon_hover_card != null and pokemon_hover_card.visible, "Hovering a Pokémon offer shows the shared summary card")
+	_check(str(pokemon_hover_card.current_pokemon_data.get("species", "")) == "garchomp", "Hover summary uses the offered Pokémon payload")
+	var hover_ivs := pokemon_hover_card.get_node("MarginContainer/VBoxContainer/IVDetailsContainer") as Control
+	var hover_evs := pokemon_hover_card.get_node("MarginContainer/VBoxContainer/EVValueLabel") as Control
+	_check(hover_ivs.visible and hover_evs.visible, "Exchange hover summary exposes IVs and EVs")
+	_check(popup.get_global_rect().grow(1).encloses(pokemon_hover_card.get_global_rect()), "Pokémon hover summary stays inside the Exchange window")
+	popup.call("_hide_pokemon_hover")
+	_check(not pokemon_hover_card.visible, "Leaving a Pokémon offer hides its hover summary")
 	popup.set("wallet_money", 1_000_000)
 	popup.call("_select_entry", browse_entries[0], "listing")
 	await process_frame
