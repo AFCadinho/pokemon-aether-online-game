@@ -962,7 +962,6 @@ var pvp_ai_sparring_catalog_selected_team_id := ""
 var pvp_ai_sparring_catalog_detail: Dictionary = {}
 var pvp_ai_sparring_catalog_detail_loading := false
 var pvp_ai_sparring_favorite_team_id := ""
-var pvp_ai_sparring_use_favorite_team_row: PanelContainer
 var pvp_ai_sparring_use_favorite_team_check: CheckButton
 var pvp_ai_sparring_hover_card: PartyHoverCard
 var pvp_ai_sparring_hover_generation := 0
@@ -7327,27 +7326,17 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	_apply_line_edit_style(pvp_ai_sparring_player_catalog_search)
 	team_layout.add_child(pvp_ai_sparring_player_catalog_search)
 
-	pvp_ai_sparring_use_favorite_team_row = PanelContainer.new()
-	pvp_ai_sparring_use_favorite_team_row.custom_minimum_size = Vector2(0, 34)
-	pvp_ai_sparring_use_favorite_team_row.add_theme_stylebox_override(
-		"panel", _make_panel_style(Color("#10243ae8"), Color("#4b7394"), 6, 1)
-	)
-	pvp_ai_sparring_use_favorite_team_row.visible = false
-	team_layout.add_child(pvp_ai_sparring_use_favorite_team_row)
-	var favorite_team_margin := MarginContainer.new()
-	favorite_team_margin.add_theme_constant_override("margin_left", 8)
-	favorite_team_margin.add_theme_constant_override("margin_right", 8)
-	pvp_ai_sparring_use_favorite_team_row.add_child(favorite_team_margin)
-
 	pvp_ai_sparring_use_favorite_team_check = CheckButton.new()
 	pvp_ai_sparring_use_favorite_team_check.focus_mode = Control.FOCUS_NONE
+	pvp_ai_sparring_use_favorite_team_check.custom_minimum_size = Vector2(0, 26)
 	pvp_ai_sparring_use_favorite_team_check.add_theme_font_size_override("font_size", 11)
 	pvp_ai_sparring_use_favorite_team_check.add_theme_color_override("font_color", Color("#d6e8f7"))
 	pvp_ai_sparring_use_favorite_team_check.add_theme_color_override("font_hover_color", Color("#ffffff"))
 	pvp_ai_sparring_use_favorite_team_check.add_theme_color_override("font_pressed_color", Color("#fff1a8"))
 	pvp_ai_sparring_use_favorite_team_check.add_theme_constant_override("h_separation", 8)
+	pvp_ai_sparring_use_favorite_team_check.visible = false
 	pvp_ai_sparring_use_favorite_team_check.toggled.connect(_on_ai_sparring_use_favorite_team_toggled)
-	favorite_team_margin.add_child(pvp_ai_sparring_use_favorite_team_check)
+	team_layout.add_child(pvp_ai_sparring_use_favorite_team_check)
 
 	pvp_ai_sparring_player_catalog_suggestions = PanelContainer.new()
 	pvp_ai_sparring_player_catalog_suggestions.name = "AiSparringPlayerCatalogTeamSuggestions"
@@ -44177,16 +44166,6 @@ func _refresh_ai_sparring_player_team_source_options() -> void:
 			if pvp_ai_sparring_use_favorite_team_check.button_pressed
 			else "ui.pvp.ai_sparring.catalog.use_favorite"
 		)
-		if pvp_ai_sparring_use_favorite_team_row != null:
-			pvp_ai_sparring_use_favorite_team_row.add_theme_stylebox_override(
-				"panel",
-				_make_panel_style(
-					Color("#302b1de8") if pvp_ai_sparring_use_favorite_team_check.button_pressed else Color("#10243ae8"),
-					Color("#f5df9a") if pvp_ai_sparring_use_favorite_team_check.button_pressed else Color("#4b7394"),
-					6,
-					2 if pvp_ai_sparring_use_favorite_team_check.button_pressed else 1
-				)
-			)
 		pvp_ai_sparring_use_favorite_team_check.disabled = not favorite_is_available
 		if not favorite_is_available:
 			pvp_ai_sparring_use_favorite_team_check.set_pressed_no_signal(false)
@@ -45030,8 +45009,8 @@ func _on_ai_sparring_team_source_selected(_index: int) -> void:
 		)
 	if pvp_ai_sparring_player_catalog_search != null:
 		pvp_ai_sparring_player_catalog_search.visible = use_catalog
-	if pvp_ai_sparring_use_favorite_team_row != null:
-		pvp_ai_sparring_use_favorite_team_row.visible = use_catalog
+	if pvp_ai_sparring_use_favorite_team_check != null:
+		pvp_ai_sparring_use_favorite_team_check.visible = use_catalog
 	if pvp_ai_sparring_player_catalog_suggestions != null and not use_catalog:
 		pvp_ai_sparring_player_catalog_suggestions.hide()
 	_refresh_ai_sparring_party_preview()
