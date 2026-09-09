@@ -4,8 +4,8 @@ extends Panel
 signal closed
 signal wallet_changed
 signal pokemon_summary_requested(pokemon_payload: Dictionary)
-signal pokemon_summary_hover_requested(pokemon_payload: Dictionary, source_rect: Rect2)
-signal pokemon_summary_hover_ended
+signal pokemon_hover_requested(pokemon_payload: Dictionary, source_rect: Rect2)
+signal pokemon_hover_ended
 
 const UI_BG := Color("#050b14fa")
 const UI_RAISED := Color("#081522f5")
@@ -1723,14 +1723,14 @@ func _show_pokemon_hover(source: Control, asset: Dictionary) -> void:
 	if source == null or not visible or asset.is_empty():
 		return
 	pokemon_hover_active = true
-	pokemon_summary_hover_requested.emit(_pokemon_summary_payload(asset), source.get_global_rect())
+	pokemon_hover_requested.emit(_pokemon_summary_payload(asset), source.get_global_rect())
 
 
 func _hide_pokemon_hover() -> void:
 	if not pokemon_hover_active:
 		return
 	pokemon_hover_active = false
-	pokemon_summary_hover_ended.emit()
+	pokemon_hover_ended.emit()
 
 
 func _build_summary_button(asset: Dictionary) -> Button:

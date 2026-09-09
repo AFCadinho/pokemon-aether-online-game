@@ -5,6 +5,7 @@ class_name PartyHoverCard
 const TYPE_ICON_PATH := "res://assets/sprites/types/%s.png"
 const CARD_WIDTH := 300.0
 const STORAGE_CARD_HEIGHT := 261.0
+const EXCHANGE_CARD_HEIGHT := 285.0
 const STORAGE_STAT_VALUE_SEPARATION := 4
 const IV_STAT_ENTRIES: Array[Array] = [
 	["HP", "hp"],
@@ -26,6 +27,7 @@ const NATURE_DROP_COLOR := Color(0.9372549, 0.26666668, 0.26666668, 1.0)
 @onready var ability_value_label: Label = $MarginContainer/VBoxContainer/AbilityBoxContainer/HBoxContainer/AbilityValueLabel
 @onready var item_value_label: Label = $MarginContainer/VBoxContainer/HPBoxContainer/ItemContainer/ItemValueLabel
 @onready var nature_value_label: Label = $MarginContainer/VBoxContainer/AbilityBoxContainer/NatureContainer/NatureValueLabel
+@onready var stats_container: HBoxContainer = $MarginContainer/VBoxContainer/StatsBoxContainer
 @onready var atk_value_label: Label = $MarginContainer/VBoxContainer/StatsBoxContainer/AttackContainer/ValueLabel
 @onready var def_value_label: Label = $MarginContainer/VBoxContainer/StatsBoxContainer/DefContainer/ValueLabel
 @onready var spa_value_label: Label = $MarginContainer/VBoxContainer/StatsBoxContainer/SpAContainer/ValueLabel
@@ -43,6 +45,7 @@ var ev_value_label: Label
 var show_ivs := false
 var show_evs := false
 var storage_visuals := false
+var replace_stats_with_ivs := false
 var current_pokemon_data: Dictionary = {}
 var localization_manager: Node
 
@@ -78,6 +81,7 @@ func _ready() -> void:
 	content.move_child(iv_details_container, details_index + 1)
 	ev_value_label.visible = show_evs
 	iv_details_container.visible = show_ivs
+	stats_container.visible = not replace_stats_with_ivs
 	if storage_visuals:
 		_apply_storage_visuals()
 	hide_card()
@@ -98,12 +102,32 @@ func set_show_storage_details(enabled: bool) -> void:
 	show_ivs = false
 	show_evs = false
 	storage_visuals = enabled
+	replace_stats_with_ivs = false
 	if iv_details_container != null:
 		iv_details_container.visible = false
 	if ev_value_label != null:
 		ev_value_label.visible = false
+	if stats_container != null:
+		stats_container.visible = true
 	if is_node_ready():
 		_apply_storage_visuals()
+
+
+func set_show_exchange_details(enabled: bool) -> void:
+	show_ivs = enabled
+	show_evs = false
+	storage_visuals = enabled
+	replace_stats_with_ivs = enabled
+	if iv_details_container != null:
+		iv_details_container.visible = enabled
+	if ev_value_label != null:
+		ev_value_label.visible = false
+	if stats_container != null:
+		stats_container.visible = not enabled
+	if is_node_ready():
+		_apply_storage_visuals()
+		if not current_pokemon_data.is_empty():
+			_set_ivs(current_pokemon_data.get("ivs", {}))
 
 
 func hide_card() -> void:
@@ -142,8 +166,12 @@ func _apply_storage_visuals() -> void:
 		$MarginContainer/VBoxContainer/StatsBoxContainer/SpeContainer,
 	]:
 		stat_row.add_theme_constant_override("separation", STORAGE_STAT_VALUE_SEPARATION)
-	custom_minimum_size.y = STORAGE_CARD_HEIGHT
-	size.y = STORAGE_CARD_HEIGHT
+	custom_minimum_size.y = _configured_card_height()
+	size.y = _configured_card_height()
+
+
+func _configured_card_height() -> float:
+	return EXCHANGE_CARD_HEIGHT if replace_stats_with_ivs else STORAGE_CARD_HEIGHT
 
 
 func _create_iv_details() -> PanelContainer:
@@ -214,7 +242,7 @@ func _create_iv_details() -> PanelContainer:
 func position_near_mouse(mouse_position: Vector2, viewport_size: Vector2) -> void:
 	var padding := 12.0
 	custom_minimum_size.x = CARD_WIDTH
-	custom_minimum_size.y = STORAGE_CARD_HEIGHT if storage_visuals else 0.0
+	custom_minimum_size.y = _configured_card_height() if storage_visuals else 0.0
 	size.y = 0.0
 	reset_size()
 	size.x = minf(CARD_WIDTH, maxf(1.0, viewport_size.x - padding * 2.0))
@@ -232,7 +260,7 @@ func position_near_mouse(mouse_position: Vector2, viewport_size: Vector2) -> voi
 func position_near_rect(anchor_rect: Rect2, viewport_size: Vector2) -> void:
 	var padding := 10.0
 	custom_minimum_size.x = CARD_WIDTH
-	custom_minimum_size.y = STORAGE_CARD_HEIGHT if storage_visuals else 0.0
+	custom_minimum_size.y = _configured_card_height() if storage_visuals else 0.0
 	size.y = 0.0
 	reset_size()
 	# Long move/item labels can otherwise expand this root-level card to the
@@ -262,7 +290,7 @@ func position_near_rect(anchor_rect: Rect2, viewport_size: Vector2) -> void:
 func position_beside_rect_within(anchor_rect: Rect2, bounds_rect: Rect2) -> void:
 	var padding := 10.0
 	custom_minimum_size.x = CARD_WIDTH
-	custom_minimum_size.y = STORAGE_CARD_HEIGHT if storage_visuals else 0.0
+	custom_minimum_size.y = _configured_card_height() if storage_visuals else 0.0
 	size.y = 0.0
 	reset_size()
 	size.x = minf(CARD_WIDTH, maxf(1.0, bounds_rect.size.x - padding * 2.0))
