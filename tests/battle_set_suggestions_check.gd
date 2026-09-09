@@ -78,10 +78,12 @@ func _run() -> void:
 	_check(panel.set_suggestions_popup.find_child("SetSuggestionDetailsScroll", true, false) != null, "Suggestion details scroll independently from the fixed set list")
 	_check(panel.set_suggestions_popup.find_child("ApplySetSuggestion", true, false) != null, "Suggestion popup has an explicit apply button")
 	var suggestion_list := panel.set_suggestions_popup.find_child("SetSuggestionsList", true, false) as VBoxContainer
+	var suggestion_workspace := panel.set_suggestions_popup.find_child("SetSuggestionsWorkspace", true, false) as HBoxContainer
 	var suggestion_choices := panel.set_suggestions_popup.find_child("SetSuggestionChoices", true, false) as VBoxContainer
 	_check(suggestion_choices != null and suggestion_choices.get_child_count() == 3, "All three suggestions remain visible as fixed compact choices")
+	_check(suggestion_workspace != null, "Wide suggestion popup places its choice list beside the detail pane")
 	_check(suggestion_list != null and suggestion_list.get_child_count() <= 5, "Suggestion popup keeps a compact master-detail structure")
-	_check(panel.set_suggestions_popup.size.x <= 520 and panel.set_suggestions_popup.size.y <= 460, "Suggestion popup stays compact (%s)" % panel.set_suggestions_popup.size)
+	_check(panel.set_suggestions_popup.size.x <= 760 and panel.set_suggestions_popup.size.y <= 520, "Suggestion popup uses the available matchup workspace (%s)" % panel.set_suggestions_popup.size)
 	var suggestion_name := panel.set_suggestions_popup.find_child("SetSuggestionName", true, false) as Label
 	var suggestion_build := panel.set_suggestions_popup.find_child("SetSuggestionBuild", true, false) as Label
 	_check(suggestion_name != null and suggestion_name.text == "TankChomp" and suggestion_name.custom_minimum_size.y > 0, "Suggested set name remains visibly allocated")
