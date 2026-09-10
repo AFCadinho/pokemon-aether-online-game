@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Battle Replay cards now use their empty space for a compact, right-aligned action area.
+
 - Battle Replay summaries now focus on favorites and per-category limits, with a simpler empty state.
 
 - Aether Clash now offers the leave confirmation when an active player reaches a protected portal zone, without allowing re-entry into its staging area.

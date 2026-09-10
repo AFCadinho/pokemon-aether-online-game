@@ -381,15 +381,19 @@ func _card(row: Dictionary) -> Control:
 	var card := PanelContainer.new()
 	var result := str(row.get("result", "unknown"))
 	var result_color := Color("#487f61") if result == "win" else Color("#8b4652") if result == "loss" else Color("#6b6683")
-	card.add_theme_stylebox_override("panel", _style(SURFACE_RAISED, result_color, 10, 1, 16, 16, 14, 14))
+	card.add_theme_stylebox_override("panel", _style(SURFACE_RAISED, result_color, 10, 1, 12, 12, 10, 10))
+	var card_row := HBoxContainer.new()
+	card_row.add_theme_constant_override("separation", 18)
+	card.add_child(card_row)
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 7)
-	card.add_child(layout)
+	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	layout.add_theme_constant_override("separation", 5)
+	card_row.add_child(layout)
 	var saved_title := str(row.get("title", "")).strip_edges()
 	if not saved_title.is_empty():
 		var title := Label.new()
 		title.text = saved_title
-		title.add_theme_font_size_override("font_size", 18)
+		title.add_theme_font_size_override("font_size", 17)
 		title.add_theme_color_override("font_color", INK)
 		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		layout.add_child(title)
@@ -404,15 +408,6 @@ func _card(row: Dictionary) -> Control:
 	matchup_versus.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	matchup_row.add_child(matchup_versus)
 	matchup_row.add_child(_opponent_identity(row))
-	var matchup_spacer := Control.new()
-	matchup_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	matchup_row.add_child(matchup_spacer)
-	var result_badge := Label.new()
-	result_badge.text = _t(result)
-	result_badge.add_theme_font_size_override("font_size", 12)
-	result_badge.add_theme_color_override("font_color", Color("#ffffff"))
-	result_badge.add_theme_stylebox_override("normal", _style(result_color, result_color, 6, 0, 8, 8, 4, 4))
-	matchup_row.add_child(result_badge)
 	var detail := Label.new()
 	var turns := int(round(float(row.get("turns", 0))))
 	detail.text = "%s · %s · %s" % [_t("category_" + str(row.get("kind", "ai_sparring"))),
@@ -439,8 +434,26 @@ func _card(row: Dictionary) -> Control:
 	expiry.add_theme_font_size_override("font_size", 13)
 	expiry.add_theme_color_override("font_color", Color("#f1d48b") if row.get("favorite", false) else MUTED)
 	layout.add_child(expiry)
+	var action_column := VBoxContainer.new()
+	action_column.custom_minimum_size.x = 390
+	action_column.add_theme_constant_override("separation", 8)
+	card_row.add_child(action_column)
+	var action_heading := HBoxContainer.new()
+	action_column.add_child(action_heading)
+	var action_spacer := Control.new()
+	action_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action_heading.add_child(action_spacer)
+	var result_badge := Label.new()
+	result_badge.text = _t(result)
+	result_badge.add_theme_font_size_override("font_size", 12)
+	result_badge.add_theme_color_override("font_color", Color("#ffffff"))
+	result_badge.add_theme_stylebox_override("normal", _style(result_color, result_color, 6, 0, 8, 8, 4, 4))
+	action_heading.add_child(result_badge)
 	var actions := HFlowContainer.new()
-	layout.add_child(actions)
+	actions.alignment = FlowContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("horizontal_separation", 6)
+	actions.add_theme_constant_override("vertical_separation", 6)
+	action_column.add_child(actions)
 	var battle_id := str(row.get("battleId", ""))
 	_button(actions, _t("watch"), func(): watch(battle_id), "primary").disabled = state != "available"
 	var pinned := bool(row.get("favorite", false))
