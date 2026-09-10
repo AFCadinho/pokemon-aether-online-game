@@ -56,6 +56,7 @@ func _run() -> void:
 	_check(not request_result.get("success", true), "Replay transport blocks writes before network access")
 	var controls: Control = battle.replay_controls
 	_check(controls.get_theme_stylebox("panel") != null and controls.play_button.get_theme_stylebox("normal") != null, "Replay playback uses a dedicated command deck style")
+	_check(controls.scrubber != null and controls.scrubber.max_value == controls.timeline.frames.size() - 1, "Replay playback exposes a timeline scrubber")
 	controls._toggle()
 	await process_frame
 	controls.seek(0)
