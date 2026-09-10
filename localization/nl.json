@@ -61,7 +61,7 @@
   "ui.replays.status_deleted": "Replay verwijderd",
   "ui.replays.status_none": "Geen replay beschikbaar",
   "ui.replays.pinned": "★ Favoriet · Bewaard totdat je deze verwijdert",
-  "ui.replays.expires": "Beschikbaar tot {date}",
+  "ui.replays.expires": "Eindigt {date}",
   "ui.replays.watch": "Bekijk replay",
   "ui.replays.pin": "☆ Bewaar als favoriet",
   "ui.replays.unpin": "★ Favoriet losmaken",
