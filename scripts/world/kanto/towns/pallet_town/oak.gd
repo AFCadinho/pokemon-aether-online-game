@@ -35,6 +35,11 @@ func _process(_delta: float) -> void:
 
 
 func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictionary:
+	# The desktop parcel hook is outside the bounded browser story. Yield to
+	# Oak's web-demo interaction instead of resolving that unrelated quest.
+	if OS.has_feature("web"):
+		await interact_with_player(body)
+		return {"success": true, "handled": false, "legacy": true}
 	if _is_gary_starter_sequence_active():
 		return {
 			"success": true,

@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Browser-demo players can now talk to Dadinho and Professor Oak to unlock Route 1, while regular NPC dialogue works within the demo maps.
+- Browser-demo players can now talk to Dadinho and Professor Oak to unlock Route 1, while regular NPC dialogue and toggle preferences work within the demo maps.
 
 - Browser players can now enter a bounded demo world covering Pallet Town, Route 1 and Viridian City. Browser position is saved separately, so desktop progress remains untouched.
 
