@@ -959,6 +959,12 @@ func _init() -> void:
 		false,
 		"human forced switch remains available to its action waiter"
 	)
+	_check_equal(
+		realtime_source.contains('if active_viewer_role == "spectator" and active_match_id.begins_with("ai:") and websocket.get_ready_state() == WebSocketPeer.STATE_OPEN:') \
+			and realtime_source.contains('websocket.send_text(JSON.stringify({"type": "leave"}))'),
+		true,
+		"leaving an AI live spectator stream releases its gateway lease immediately"
+	)
 
 	normal_terminal_service.free()
 	service.free()

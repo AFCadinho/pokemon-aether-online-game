@@ -1,5 +1,7 @@
 extends VBoxContainer
 
+const TrainerHeadPortraitScript := preload("res://scripts/ui/trainer_head_portrait.gd")
+
 signal watch_requested(response: Dictionary)
 
 var watch_blocked: Callable
@@ -178,6 +180,7 @@ func render() -> void:
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 16)
 		panel.add_child(row)
+		row.add_child(_create_player_portrait(entry))
 		var copy := VBoxContainer.new()
 		copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(copy)
@@ -202,6 +205,28 @@ func render() -> void:
 		button.disabled = watching or (watch_blocked.is_valid() and watch_blocked.call()) or int(entry.get("spectators", 0)) >= int(entry.get("maxSpectators", 8))
 		button.pressed.connect(watch.bind(str(entry.get("battleId", ""))))
 		row.add_child(button)
+
+func _create_player_portrait(entry: Dictionary) -> Control:
+	var frame := PanelContainer.new()
+	frame.name = "LiveBattlePlayerPortrait"
+	frame.custom_minimum_size = Vector2(46, 46)
+	frame.add_theme_stylebox_override("panel", _surface_style(Color("#0b1727"), Color("#697cc8"), 8, 1, 0))
+	var fallback := Label.new()
+	var player_name := str(entry.get("playerName", "Trainer")).strip_edges()
+	fallback.text = player_name.left(1).to_upper() if not player_name.is_empty() else "?"
+	fallback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	fallback.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	fallback.add_theme_font_size_override("font_size", 18)
+	fallback.add_theme_color_override("font_color", Color("#cfc2ff"))
+	frame.add_child(fallback)
+	var appearance_value: Variant = entry.get("playerAppearance", {})
+	if appearance_value is Dictionary and not (appearance_value as Dictionary).is_empty():
+		var portrait := TrainerHeadPortraitScript.new()
+		portrait.custom_minimum_size = Vector2(42, 42)
+		portrait.set_appearance_state(appearance_value as Dictionary)
+		frame.add_child(portrait)
+		fallback.visible = false
+	return frame
 
 func watch(battle_id: String) -> void:
 	if watching or (watch_blocked.is_valid() and watch_blocked.call()):

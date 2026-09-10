@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Live Battles now shows each opted-in player's public trainer portrait, and viewers can immediately reopen a battle after leaving it.
+
 - Finished Live Battles now hide the spectator roster rails behind the result screen, keeping the outcome clear.
 
 - AI Sparring now has a clearer spectator checkbox and a grouped start bar, with more room to paste your team.
