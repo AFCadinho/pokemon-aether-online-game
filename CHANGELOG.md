@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Shared replay codes now open from a dedicated header action instead of taking up space among library filters.
+
 - The replay library now uses category-neutral wording and only shows AI difficulty controls while browsing AI Sparring.
 
 - Battle Replays can now be shared through a replay code and watched directly from another player's library; owners can copy, renew or revoke their code.

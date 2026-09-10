@@ -16,6 +16,8 @@ var outcome: OptionButton
 var difficulty: OptionButton
 var favorites: CheckButton
 var share_code_input: LineEdit
+var shared_code_modal: Control
+var shared_code_feedback: Label
 var previous: Button
 var next: Button
 var category_buttons: Dictionary = {}
@@ -87,6 +89,7 @@ func _ready() -> void:
 	intro.add_theme_font_size_override("font_size", 14)
 	intro.add_theme_color_override("font_color", MUTED)
 	heading.add_child(intro)
+	_button(header, _t("watch_shared_title"), _open_shared_replay_dialog, "secondary")
 	_button(header, _t("close"), func(): hide(); closed.emit(), "quiet")
 	var filter_panel := PanelContainer.new()
 	filter_panel.add_theme_stylebox_override("panel", _style(Color("#0a1524"), Color("#1f405e"), 10, 1, 14, 14, 12, 12))
@@ -141,18 +144,6 @@ func _ready() -> void:
 	favorites.toggled.connect(func(_value: bool): _filter())
 	filters.add_child(favorites)
 	_button(filters, _t("refresh"), _filter, "primary")
-	filter_layout.add_child(_filter_section_label(_t("watch_shared_title").to_upper()))
-	var shared_access := HBoxContainer.new()
-	shared_access.add_theme_constant_override("separation", 8)
-	filter_layout.add_child(shared_access)
-	share_code_input = LineEdit.new()
-	share_code_input.placeholder_text = _t("share_code_placeholder")
-	share_code_input.max_length = 32
-	share_code_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_style_line_edit(share_code_input)
-	share_code_input.text_submitted.connect(func(_text: String): _watch_shared())
-	shared_access.add_child(share_code_input)
-	_button(shared_access, _t("watch_shared"), _watch_shared, "primary")
 	var summary := HBoxContainer.new()
 	summary.add_theme_constant_override("separation", 12)
 	layout.add_child(summary)
@@ -573,6 +564,8 @@ func _watch_shared() -> void:
 	var code := share_code_input.text.strip_edges()
 	if code.is_empty():
 		status.text = _t("shared_unavailable")
+		if shared_code_feedback != null:
+			shared_code_feedback.text = status.text
 		return
 	busy = true
 	status.text = _t("loading")
@@ -580,10 +573,37 @@ func _watch_shared() -> void:
 	busy = false
 	if not bool(response.get("success", false)):
 		status.text = _t("shared_unavailable")
+		if shared_code_feedback != null:
+			shared_code_feedback.text = status.text
 		playback_failed.emit(status.text)
 		return
+	if is_instance_valid(shared_code_modal):
+		shared_code_modal.queue_free()
+		shared_code_modal = null
 	return_scroll = scroll.scroll_vertical
 	playback_requested.emit(response)
+
+func _open_shared_replay_dialog() -> void:
+	if is_instance_valid(shared_code_modal):
+		return
+	var dialog := _create_replay_dialog(_t("watch_shared_title"), 500)
+	var content: VBoxContainer = dialog["content"]
+	shared_code_modal = dialog["modal"]
+	share_code_input = LineEdit.new()
+	share_code_input.placeholder_text = _t("share_code_placeholder")
+	share_code_input.max_length = 32
+	share_code_input.custom_minimum_size.y = 40
+	_style_line_edit(share_code_input)
+	content.add_child(share_code_input)
+	shared_code_feedback = Label.new()
+	shared_code_feedback.add_theme_font_size_override("font_size", 13)
+	shared_code_feedback.add_theme_color_override("font_color", DANGER)
+	content.add_child(shared_code_feedback)
+	var actions := _dialog_actions(content)
+	_button(actions, _t("cancel"), func(): shared_code_modal.queue_free(); shared_code_modal = null, "quiet")
+	var watch_button := _button(actions, _t("watch_shared"), _watch_shared, "primary")
+	share_code_input.text_submitted.connect(func(_text: String): watch_button.emit_signal("pressed"))
+	share_code_input.call_deferred("grab_focus")
 
 func _share(battle_id: String) -> void:
 	if busy:
