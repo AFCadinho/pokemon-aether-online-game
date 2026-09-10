@@ -16389,6 +16389,10 @@ func _get_latest_owned_request_pokemon_for_canonical_slot(canonical_slot: int) -
 
 func _capture_pvp_local_canonical_roster(display_response: Dictionary = {}) -> void:
 	pvp_local_canonical_roster.clear()
+	# A spectator never receives ownTeam: it is the participant's private
+	# Pokepaste. Public request/state data supplies the read-only roster instead.
+	if _is_spectator_battle():
+		return
 	if _is_training_room_battle():
 		pvp_local_canonical_roster = BATTLE_TRAINING_TEAM_CONTEXT.build_canonical_roster(
 			display_response.get("ownTeam", []),
