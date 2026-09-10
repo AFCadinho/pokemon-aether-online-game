@@ -58,7 +58,7 @@ func _run() -> void:
 	var controls: Control = battle.replay_controls
 	_check(controls.get_theme_stylebox("panel") != null and controls.play_button.get_theme_stylebox("normal") != null, "Replay playback uses a dedicated command deck style")
 	_check(controls.scrubber != null and controls.scrubber.max_value == controls.timeline.frames.size() - 1, "Replay playback exposes a timeline scrubber")
-	_check(controls.get_parent() == battle.moves_grid.get_parent() and controls.status_strip != null, "Replay controls use the move area and leave a compact status dock")
+	_check(controls.get_parent() == battle.action_side_panel and battle.action_side_panel.custom_minimum_size.y == 120.0, "Replay controls retain the full spectator-style command dock")
 	controls._toggle()
 	await process_frame
 	controls.seek(0)

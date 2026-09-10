@@ -13,7 +13,6 @@ var turn_picker: SpinBox
 var position_label: Label
 var scrubber: HSlider
 var status_label: Label
-var status_strip: PanelContainer
 var speed := 1.0
 var closing := false
 
@@ -110,61 +109,109 @@ func _scrubber_handle_icon(highlighted := false) -> ImageTexture:
 	return ImageTexture.create_from_image(image)
 
 func _build() -> void:
-	set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	offset_left = -492
-	offset_top = -212
-	offset_right = -20
-	offset_bottom = -48
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	offset_left = 12
+	offset_top = 6
+	offset_right = -12
+	offset_bottom = -6
 	z_index = 100
-	add_theme_stylebox_override("panel", _style(Color("#0b192b"), Color("#315c80"), 10, 1, 12, 12, 6, 6))
+	add_theme_stylebox_override("panel", _style(Color("#0b192b"), Color("#315c80"), 10, 1, 12, 12, 7, 7))
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 4)
+	layout.add_theme_constant_override("separation", 5)
 	add_child(layout)
-	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 8)
-	layout.add_child(header)
+	var command_row := HBoxContainer.new()
+	command_row.add_theme_constant_override("separation", 10)
+	command_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_child(command_row)
 	var live_dot := ColorRect.new()
 	live_dot.color = ACCENT
-	live_dot.custom_minimum_size = Vector2(3, 22)
-	header.add_child(live_dot)
+	live_dot.custom_minimum_size = Vector2(3, 44)
+	command_row.add_child(live_dot)
+	var details := VBoxContainer.new()
+	details.custom_minimum_size.x = 154
+	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	details.size_flags_stretch_ratio = 0.75
+	details.alignment = BoxContainer.ALIGNMENT_CENTER
+	details.add_theme_constant_override("separation", 1)
+	command_row.add_child(details)
 	var title := Label.new()
 	title.text = _t("playback_title")
-	title.add_theme_font_size_override("font_size", 15)
+	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", INK)
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_child(title)
+	details.add_child(title)
+	status_label = _tiny_label("")
+	details.add_child(status_label)
+	var transport := _group()
+	transport.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	transport.size_flags_stretch_ratio = 1.25
+	command_row.add_child(transport)
+	var transport_center := CenterContainer.new()
+	transport.add_child(transport_center)
+	var transport_buttons := HBoxContainer.new()
+	transport_buttons.add_theme_constant_override("separation", 6)
+	transport_center.add_child(transport_buttons)
+	_button(transport_buttons, "|◀", func(): seek(0), "quiet").tooltip_text = _t("begin")
+	_button(transport_buttons, "◀", func(): seek(timeline.index_for_turn(maxi(0, timeline.turn_at(index) - 1))), "quiet").tooltip_text = _t("previous_turn")
+	play_button = _button(transport_buttons, "▶  " + _t("play"), _toggle, "primary")
+	_button(transport_buttons, "▶", func():
+		var turn := timeline.turn_at(index) + 1
+		seek(timeline.index_for_turn(turn) if timeline.turn_indices.has(turn) else timeline.frames.size() - 1), "quiet").tooltip_text = _t("next_turn")
+	_button(transport_buttons, "▶|", func(): seek(timeline.frames.size() - 1), "quiet").tooltip_text = _t("end")
+	var utility_group := _group()
+	utility_group.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	utility_group.size_flags_stretch_ratio = 1.35
+	command_row.add_child(utility_group)
+	var utility_layout := HBoxContainer.new()
+	utility_layout.add_theme_constant_override("separation", 7)
+	utility_layout.alignment = BoxContainer.ALIGNMENT_CENTER
+	utility_group.add_child(utility_layout)
+	utility_layout.add_child(_tiny_label("TURN"))
+	turn_picker = SpinBox.new()
+	turn_picker.min_value = 0
+	turn_picker.max_value = timeline.turn_at(timeline.frames.size() - 1)
+	turn_picker.custom_minimum_size = Vector2(58, 34)
+	turn_picker.focus_mode = Control.FOCUS_NONE
+	turn_picker.add_theme_icon_override("updown", _dropdown_arrow_icon())
+	var turn_input := turn_picker.get_line_edit()
+	turn_input.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	turn_input.add_theme_font_size_override("font_size", 14)
+	turn_input.add_theme_color_override("font_color", INK)
+	turn_input.add_theme_stylebox_override("normal", _style(Color("#071321"), Color("#315574"), 5, 1, 7, 7, 5, 5))
+	turn_input.add_theme_stylebox_override("focus", _style(Color("#0b1e30"), ACCENT, 5, 1, 7, 7, 5, 5))
+	utility_layout.add_child(turn_picker)
+	_button(utility_layout, _t("go_turn"), func(): seek(timeline.index_for_turn(int(turn_picker.value))), "quiet")
+	utility_layout.add_child(_tiny_label("SPEED"))
+	var speeds := OptionButton.new()
+	for value: float in [0.5, 1.0, 2.0, 4.0]:
+		speeds.add_item("%s×" % value)
+	speeds.select(1)
+	speeds.custom_minimum_size = Vector2(68, 34)
+	speeds.focus_mode = Control.FOCUS_NONE
+	speeds.add_theme_icon_override("arrow", _dropdown_arrow_icon())
+	speeds.add_theme_constant_override("arrow_margin", 9)
+	speeds.add_theme_font_size_override("font_size", 14)
+	speeds.add_theme_color_override("font_color", INK)
+	speeds.add_theme_stylebox_override("normal", _style(Color("#071321"), Color("#315574"), 5, 1, 8, 8, 5, 5))
+	speeds.add_theme_stylebox_override("hover", _style(Color("#0d2840"), ACCENT, 5, 1, 8, 8, 5, 5))
+	var speed_popup := speeds.get_popup()
+	speed_popup.transparent_bg = true
+	speed_popup.add_theme_font_size_override("font_size", 14)
+	speed_popup.add_theme_color_override("font_color", INK)
+	speed_popup.add_theme_color_override("font_hover_color", INK)
+	speed_popup.add_theme_stylebox_override("panel", _style(Color("#0b1726"), Color("#315574"), 7, 1, 7, 7, 6, 6))
+	speed_popup.add_theme_stylebox_override("hover", _style(Color("#1a4160"), ACCENT, 5, 1, 8, 8, 5, 5))
+	speeds.item_selected.connect(func(selected: int):
+		speed = [0.5, 1.0, 2.0, 4.0][selected]
+		host.call("set_replay_speed", speed))
+	utility_layout.add_child(speeds)
 	position_label = Label.new()
 	position_label.add_theme_font_size_override("font_size", 13)
 	position_label.add_theme_color_override("font_color", INK)
 	position_label.add_theme_stylebox_override("normal", _style(Color("#122e47"), Color("#315c80"), 6, 1, 8, 8, 4, 4))
-	header.add_child(position_label)
-	position_label.custom_minimum_size.y = 28
-	var control_hint := _tiny_label("PLAYBACK CONTROLS")
-	control_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	header.add_child(control_hint)
-	var transport := _group()
-	transport.custom_minimum_size.y = 44
-	layout.add_child(transport)
-	var transport_center := CenterContainer.new()
-	transport.add_child(transport_center)
-	var transport_buttons := HBoxContainer.new()
-	transport_buttons.add_theme_constant_override("separation", 7)
-	transport_center.add_child(transport_buttons)
-	for button: Button in [
-		_button(transport_buttons, "|◀", func(): seek(0), "quiet"),
-		_button(transport_buttons, "◀", func(): seek(timeline.index_for_turn(maxi(0, timeline.turn_at(index) - 1))), "quiet"),
-		_button(transport_buttons, "▶  " + _t("play"), _toggle, "primary"),
-		_button(transport_buttons, "▶", func():
-			var turn := timeline.turn_at(index) + 1
-			seek(timeline.index_for_turn(turn) if timeline.turn_indices.has(turn) else timeline.frames.size() - 1), "quiet"),
-		_button(transport_buttons, "▶|", func(): seek(timeline.frames.size() - 1), "quiet")
-	]:
-		button.custom_minimum_size.y = 34
-	transport_buttons.get_child(0).tooltip_text = _t("begin")
-	transport_buttons.get_child(1).tooltip_text = _t("previous_turn")
-	play_button = transport_buttons.get_child(2) as Button
-	transport_buttons.get_child(3).tooltip_text = _t("next_turn")
-	transport_buttons.get_child(4).tooltip_text = _t("end")
+	position_label.custom_minimum_size.y = 34
+	command_row.add_child(position_label)
+	var back_button := _button(command_row, _t("back"), _close, "quiet")
+	back_button.custom_minimum_size = Vector2(66, 38)
 	var progress_row := HBoxContainer.new()
 	progress_row.add_theme_constant_override("separation", 8)
 	layout.add_child(progress_row)
@@ -186,90 +233,6 @@ func _build() -> void:
 		if value_changed:
 			seek(roundi(scrubber.value)))
 	progress_row.add_child(scrubber)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-	layout.add_child(row)
-	var spacer := Control.new()
-	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(spacer)
-	var turn_group := _group()
-	row.add_child(turn_group)
-	var turn_layout := HBoxContainer.new()
-	turn_layout.add_theme_constant_override("separation", 6)
-	turn_group.add_child(turn_layout)
-	turn_layout.add_child(_tiny_label("TURN"))
-	turn_picker = SpinBox.new()
-	turn_picker.min_value = 0
-	turn_picker.max_value = timeline.turn_at(timeline.frames.size() - 1)
-	turn_picker.custom_minimum_size = Vector2(58, 32)
-	turn_picker.focus_mode = Control.FOCUS_NONE
-	turn_picker.add_theme_icon_override("updown", _dropdown_arrow_icon())
-	var turn_input := turn_picker.get_line_edit()
-	turn_input.alignment = HORIZONTAL_ALIGNMENT_CENTER
-	turn_input.add_theme_font_size_override("font_size", 14)
-	turn_input.add_theme_color_override("font_color", INK)
-	turn_input.add_theme_stylebox_override("normal", _style(Color("#071321"), Color("#315574"), 5, 1, 7, 7, 5, 5))
-	turn_input.add_theme_stylebox_override("focus", _style(Color("#0b1e30"), ACCENT, 5, 1, 7, 7, 5, 5))
-	turn_layout.add_child(turn_picker)
-	_button(turn_layout, _t("go_turn"), func(): seek(timeline.index_for_turn(int(turn_picker.value))), "quiet")
-	var speed_group := _group()
-	row.add_child(speed_group)
-	var speed_layout := HBoxContainer.new()
-	speed_layout.add_theme_constant_override("separation", 6)
-	speed_group.add_child(speed_layout)
-	speed_layout.add_child(_tiny_label("SPEED"))
-	var speeds := OptionButton.new()
-	for value: float in [0.5, 1.0, 2.0, 4.0]:
-		speeds.add_item("%s×" % value)
-	speeds.select(1)
-	speeds.custom_minimum_size = Vector2(68, 32)
-	speeds.focus_mode = Control.FOCUS_NONE
-	speeds.add_theme_icon_override("arrow", _dropdown_arrow_icon())
-	speeds.add_theme_constant_override("arrow_margin", 9)
-	speeds.add_theme_font_size_override("font_size", 14)
-	speeds.add_theme_color_override("font_color", INK)
-	speeds.add_theme_stylebox_override("normal", _style(Color("#071321"), Color("#315574"), 5, 1, 8, 8, 5, 5))
-	speeds.add_theme_stylebox_override("hover", _style(Color("#0d2840"), ACCENT, 5, 1, 8, 8, 5, 5))
-	var speed_popup := speeds.get_popup()
-	speed_popup.transparent_bg = true
-	speed_popup.add_theme_font_size_override("font_size", 14)
-	speed_popup.add_theme_color_override("font_color", INK)
-	speed_popup.add_theme_color_override("font_hover_color", INK)
-	speed_popup.add_theme_stylebox_override("panel", _style(Color("#0b1726"), Color("#315574"), 7, 1, 7, 7, 6, 6))
-	speed_popup.add_theme_stylebox_override("hover", _style(Color("#1a4160"), ACCENT, 5, 1, 8, 8, 5, 5))
-	speeds.item_selected.connect(func(selected: int):
-		speed = [0.5, 1.0, 2.0, 4.0][selected]
-		host.call("set_replay_speed", speed))
-	speed_layout.add_child(speeds)
-	_build_status_strip()
-
-func _build_status_strip() -> void:
-	var dock: Control = host.get("action_side_panel") as Control
-	if dock == null:
-		return
-	dock.custom_minimum_size.y = 68
-	status_strip = PanelContainer.new()
-	status_strip.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	status_strip.offset_left = 12
-	status_strip.offset_top = 8
-	status_strip.offset_right = -12
-	status_strip.offset_bottom = -8
-	status_strip.mouse_filter = Control.MOUSE_FILTER_STOP
-	status_strip.add_theme_stylebox_override("panel", _style(Color("#0b192b"), Color("#315c80"), 9, 1, 12, 12, 7, 7))
-	dock.add_child(status_strip)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 10)
-	status_strip.add_child(row)
-	var label := _tiny_label("REPLAY STATUS")
-	label.custom_minimum_size.x = 94
-	row.add_child(label)
-	status_label = Label.new()
-	status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	status_label.add_theme_font_size_override("font_size", 13)
-	status_label.add_theme_color_override("font_color", INK)
-	row.add_child(status_label)
-	var back_button := _button(row, _t("back"), _close, "quiet")
-	back_button.custom_minimum_size = Vector2(66, 34)
 
 func _toggle() -> void:
 	if closing:
@@ -324,8 +287,6 @@ func stop() -> void:
 	host.call("cancel_replay_render")
 	while busy:
 		await get_tree().process_frame
-	if is_instance_valid(status_strip):
-		status_strip.queue_free()
 
 func _close() -> void:
 	if closing:
@@ -336,7 +297,6 @@ func _close() -> void:
 func _refresh() -> void:
 	play_button.text = "Ⅱ  " + _t("pause") if playing else "▶  " + _t("play")
 	position_label.text = _t("turn_position", {"turn": timeline.turn_at(index), "total": timeline.turn_at(timeline.frames.size() - 1)})
-	if is_instance_valid(status_label):
-		status_label.text = "Paused · Turn %s" % timeline.turn_at(index) if not playing else "Playing · Turn %s" % timeline.turn_at(index)
+	status_label.text = "Paused" if not playing else "Playing"
 	turn_picker.set_value_no_signal(timeline.turn_at(index))
 	scrubber.set_value_no_signal(index)
