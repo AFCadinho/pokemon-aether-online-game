@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nearby battle spectators now wait for the final animation batch before showing the result.
+
 - Reconnecting to an ongoing trainer battle now restores the battle log and Pokémon that were already revealed, including the active opponent.
 
 - Live spectators no longer receive a false sprite-reconciliation warning while an authoritative snapshot catches up.
