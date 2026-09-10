@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Battle Replays now keep the latest 10 ordinary recordings per category, reserving independent future slots for AI Sparring, PvP, PvE and wild encounters while favorites stay protected.
+
 - Live Battles now shows each opted-in player's public trainer portrait, and viewers can immediately reopen a battle after leaving it.
 
 - Finished Live Battles now hide the spectator roster rails behind the result screen, keeping the outcome clear.
