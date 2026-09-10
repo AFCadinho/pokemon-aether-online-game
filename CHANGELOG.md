@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Replay cards now keep secondary actions in a compact, styled management menu.
+
 - The shared-replay action now has a more prominent, dedicated header treatment.
 
 - Replay searches now update while typing, and a separate reset action clears the active filters.

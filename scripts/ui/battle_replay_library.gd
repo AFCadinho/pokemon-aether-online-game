@@ -480,7 +480,7 @@ func _card(row: Dictionary) -> Control:
 	expiry.add_theme_color_override("font_color", Color("#f1d48b") if row.get("favorite", false) else MUTED)
 	layout.add_child(expiry)
 	var action_column := VBoxContainer.new()
-	action_column.custom_minimum_size.x = 390
+	action_column.custom_minimum_size.x = 252
 	action_column.add_theme_constant_override("separation", 8)
 	card_row.add_child(action_column)
 	var action_heading := HBoxContainer.new()
@@ -494,20 +494,63 @@ func _card(row: Dictionary) -> Control:
 	result_badge.add_theme_color_override("font_color", Color("#ffffff"))
 	result_badge.add_theme_stylebox_override("normal", _style(result_color, result_color, 6, 0, 8, 8, 4, 4))
 	action_heading.add_child(result_badge)
-	var actions := HFlowContainer.new()
-	actions.alignment = FlowContainer.ALIGNMENT_END
-	actions.add_theme_constant_override("horizontal_separation", 6)
-	actions.add_theme_constant_override("vertical_separation", 6)
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 8)
 	action_column.add_child(actions)
 	var battle_id := str(row.get("battleId", ""))
 	_button(actions, _t("watch"), func(): watch(battle_id), "primary").disabled = state != "available"
 	var pinned := bool(row.get("favorite", false))
-	_button(actions, _t("unpin") if pinned else _t("pin"), func(): _edit(battle_id, {"favorite": not pinned}), "quiet").disabled = state != "available"
-	_button(actions, _t("rename"), func(): _rename(row), "quiet").disabled = state != "available"
-	if str(row.get("kind", "ai_sparring")) == "ai_sparring":
-		_button(actions, _t("new_share_code") if row.get("shared", false) else _t("share"), func(): _share(battle_id), "quiet").disabled = state != "available"
-	_button(actions, _t("delete"), func(): _confirm_remove(battle_id), "danger")
+	_management_menu(actions, row, battle_id, state, pinned)
 	return card
+
+func _management_menu(parent: Node, row: Dictionary, battle_id: String, state: String, pinned: bool) -> void:
+	var menu := MenuButton.new()
+	menu.text = _t("manage")
+	menu.custom_minimum_size = Vector2(112, 38)
+	menu.focus_mode = Control.FOCUS_NONE
+	menu.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	menu.add_theme_font_size_override("font_size", 14)
+	menu.add_theme_icon_override("arrow", _dropdown_arrow_icon())
+	menu.add_theme_constant_override("arrow_margin", 10)
+	menu.add_theme_stylebox_override("normal", _style(Color("#132237"), Color("#315574"), 7, 1, 10, 10, 8, 8))
+	menu.add_theme_stylebox_override("hover", _style(Color("#1a3550"), ACCENT, 7, 1, 10, 10, 8, 8))
+	menu.add_theme_stylebox_override("pressed", _style(Color("#0e2033"), ACCENT, 7, 1, 10, 10, 8, 8))
+	menu.add_theme_color_override("font_color", INK)
+	menu.add_theme_color_override("font_hover_color", INK)
+	var popup := menu.get_popup()
+	popup.transparent_bg = true
+	popup.add_theme_font_size_override("font_size", 14)
+	popup.add_theme_color_override("font_color", INK)
+	popup.add_theme_color_override("font_hover_color", INK)
+	popup.add_theme_constant_override("item_start_padding", 12)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_stylebox_override("panel", _style(Color("#0b1727"), Color("#315574"), 8, 1, 8, 8, 7, 7))
+	popup.add_theme_stylebox_override("hover", _style(Color("#1a4160"), ACCENT, 6, 1, 8, 8, 5, 5))
+	popup.add_item(_t("unpin") if pinned else _t("pin"), 0)
+	popup.add_item(_t("rename"), 1)
+	var share_index := -1
+	if str(row.get("kind", "ai_sparring")) == "ai_sparring":
+		share_index = popup.item_count
+		popup.add_item(_t("new_share_code") if row.get("shared", false) else _t("share"), 2)
+	popup.add_separator()
+	popup.add_item(_t("delete"), 3)
+	popup.set_item_disabled(0, state != "available")
+	popup.set_item_disabled(1, state != "available")
+	if share_index >= 0:
+		popup.set_item_disabled(share_index, state != "available")
+	popup.id_pressed.connect(func(id: int):
+		match id:
+			0:
+				_edit(battle_id, {"favorite": not pinned})
+			1:
+				_rename(row)
+			2:
+				_share(battle_id)
+			3:
+				_confirm_remove(battle_id)
+	)
+	parent.add_child(menu)
 
 func _player_identity(name: String, appearance: Dictionary) -> Control:
 	var identity := HBoxContainer.new()
