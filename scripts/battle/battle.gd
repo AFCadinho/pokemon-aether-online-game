@@ -10,6 +10,7 @@ var replay_generation := 0
 var replay_controls: Control
 var replay_sides_swapped := false
 var replay_trainer_data: Dictionary = {}
+var replay_is_wild_battle := false
 
 func stop_battle_replay() -> void:
 	if replay_controls != null:
@@ -29,18 +30,28 @@ func setup_battle_replay(recording: Dictionary) -> bool:
 	damage_calc_request.set_meta("replay_read_only", true)
 	var lead := PokemonFactory.create_pokemon_from_backend_payload(team[0])
 	var replay_kind := str(first.get("replayKind", "ai_sparring")).strip_edges().to_lower()
+	replay_is_wild_battle = replay_kind == "wild"
 	# AI Sparring was fought in the stadium; NPC recordings use the regular
-	# trainer environment instead of inheriting Sparring's presentation.
+	# trainer environment instead of inheriting Sparring's presentation. Wild
+	# encounters retain their normal field and do not pretend to be trainer fights.
 	var replay_environment: StringName = BATTLE_ENVIRONMENT_CATALOG.PVP_STADIUM_ENVIRONMENT_ID \
 		if replay_kind == "ai_sparring" else BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
-	_prepare_battle_setup(BattleType.TRAINER, lead, null, replay_environment)
+	var wild_opponent: Pokemon = null
+	if replay_is_wild_battle:
+		var wild_team: Array = first.get("trainerTeam", [])
+		if not wild_team.is_empty():
+			wild_opponent = PokemonFactory.create_pokemon_from_backend_payload(wild_team[0])
+	_prepare_battle_setup(BattleType.WILD if replay_is_wild_battle else BattleType.TRAINER, lead, wild_opponent, replay_environment)
 	training_ai_battle = replay_kind == "ai_sparring"
 	pvp_battle_purpose = "training" if training_ai_battle else "pve"
 	action_flow.set_local_player_id("p1")
-	npc_trainer_display_name = str(first.get("trainerName", ""))
-	var trainer_sprite := "showdown_scientist_gen7" if str(first.get("trainingAiMode", "")) in ["ai4", "shadow"] else "showdown_veteran_gen7"
-	replay_trainer_data = {"name": npc_trainer_display_name, "_battle_sprite_id": trainer_sprite}
-	_show_replay_trainers()
+	if not replay_is_wild_battle:
+		npc_trainer_display_name = str(first.get("trainerName", ""))
+		var trainer_sprite := "showdown_scientist_gen7" if str(first.get("trainingAiMode", "")) in ["ai4", "shadow"] else "showdown_veteran_gen7"
+		replay_trainer_data = {"name": npc_trainer_display_name, "_battle_sprite_id": trainer_sprite}
+		_show_replay_trainers()
+	else:
+		replay_trainer_data.clear()
 	_capture_pvp_local_canonical_roster(first)
 	opponent_party_reveal_policy.reset(true)
 	display_data_presenter.set_trainer_team(first.get("trainerTeam", []), true)
@@ -56,7 +67,8 @@ func setup_battle_replay(recording: Dictionary) -> bool:
 	# The first stored frame already contains the accepted leads, but the live
 	# battle presents both rosters before those leads appear. Keep that opening
 	# beat in the viewer as well; playback or a seek will reveal the first frame.
-	_show_replay_team_preview()
+	if not replay_is_wild_battle:
+		_show_replay_team_preview()
 	_hide_replay_actions()
 	return true
 
@@ -179,7 +191,8 @@ func switch_replay_sides() -> void:
 		return
 	replay_sides_swapped = not replay_sides_swapped
 	action_flow.set_local_player_id("p2" if replay_sides_swapped else "p1")
-	_show_replay_trainers()
+	if not replay_is_wild_battle:
+		_show_replay_trainers()
 	var preserve_team_preview := team_preview_lead_selection_active
 	restore_replay_position(replay_controls.timeline, replay_controls.index)
 	if preserve_team_preview:
