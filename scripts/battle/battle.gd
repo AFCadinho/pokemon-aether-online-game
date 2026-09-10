@@ -28,11 +28,14 @@ func setup_battle_replay(recording: Dictionary) -> bool:
 	battle_request.set_meta("replay_read_only", true)
 	damage_calc_request.set_meta("replay_read_only", true)
 	var lead := PokemonFactory.create_pokemon_from_backend_payload(team[0])
-	# AI Sparring uses the same stadium profile as the original battle. A replay
-	# must not fall back to the scene's default grass environment.
-	_prepare_battle_setup(BattleType.TRAINER, lead, null, BATTLE_ENVIRONMENT_CATALOG.PVP_STADIUM_ENVIRONMENT_ID)
-	training_ai_battle = true
-	pvp_battle_purpose = "training"
+	var replay_kind := str(first.get("replayKind", "ai_sparring")).strip_edges().to_lower()
+	# AI Sparring was fought in the stadium; NPC recordings use the regular
+	# trainer environment instead of inheriting Sparring's presentation.
+	var replay_environment: StringName = BATTLE_ENVIRONMENT_CATALOG.PVP_STADIUM_ENVIRONMENT_ID \
+		if replay_kind == "ai_sparring" else BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
+	_prepare_battle_setup(BattleType.TRAINER, lead, null, replay_environment)
+	training_ai_battle = replay_kind == "ai_sparring"
+	pvp_battle_purpose = "training" if training_ai_battle else "pve"
 	action_flow.set_local_player_id("p1")
 	npc_trainer_display_name = str(first.get("trainerName", ""))
 	var trainer_sprite := "showdown_scientist_gen7" if str(first.get("trainingAiMode", "")) in ["ai4", "shadow"] else "showdown_veteran_gen7"
