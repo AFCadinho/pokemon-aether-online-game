@@ -2,9 +2,12 @@
 
 ## Unreleased
 
+- Applying a Calcdex set suggestion now keeps the current item slot empty after the opponent's revealed item was knocked off or consumed.
+
 - Reconnecting can restore an ongoing trainer battle with its current HP, PP and pending choice. If recovery is temporarily unavailable, players can retry or return to login.
 
 - Logging in refreshes party, money, inventory and story progress when the server recovers an earned trainer reward.
+
 - Set suggestion evidence now uses readable labels such as Matches and Differences, wraps when needed, and hides empty counters.
 
 - Interrupted battle animations now release their waiting actions, and stalled effects can no longer indefinitely block the next event.
