@@ -16,6 +16,8 @@ var set_active_hud_hp_from_event: Callable
 var animation_guard: Callable
 var show_trainer_command: Callable
 var last_battle_log_player_id := ""
+var render_generation := 0
+var event_timeout_seconds := 30.0
 
 
 func setup(
@@ -59,6 +61,32 @@ func render_event(
 	presentation: Dictionary,
 	suppress_presentation_waits := false
 ) -> void:
+	render_generation += 1
+	var owned_generation := render_generation
+	var completion := {"done": false}
+	_run_event(event_data, presentation, suppress_presentation_waits, owned_generation, completion)
+	var tree := Engine.get_main_loop() as SceneTree
+	var deadline := Time.get_ticks_msec() + int(event_timeout_seconds * 1000.0)
+	while not completion["done"] and owned_generation == render_generation:
+		if tree == null or Time.get_ticks_msec() >= deadline:
+			cancel_render()
+			push_warning("Battle event presentation timed out; continuing from server events.")
+			return
+		await tree.process_frame
+
+
+func cancel_render() -> void:
+	render_generation += 1
+	if animation_router != null:
+		animation_router.cancel_render()
+
+
+func _run_event(event_data: Dictionary, presentation: Dictionary, suppressed: bool, generation: int, completion: Dictionary) -> void:
+	await _render_event(event_data, presentation, suppressed, generation)
+	completion["done"] = true
+
+
+func _render_event(event_data: Dictionary, presentation: Dictionary, suppress_presentation_waits: bool, owned_generation: int) -> void:
 	var pre_log_message := str(presentation.get("pre_log_message", ""))
 	var pre_log_kind := str(presentation.get("pre_log_kind", ""))
 	var log_message := str(presentation.get("log_message", ""))
@@ -132,6 +160,8 @@ func render_event(
 			move_animation_result,
 			suppress_presentation_waits
 		)
+		if owned_generation != render_generation:
+			return
 	var defer_stat_change_effect := (
 		stat_change_target_ident != ""
 		and effect_animation_key in ["stat_up", "stat_down"]
@@ -139,20 +169,32 @@ func render_event(
 	if effect_animation_key != "" and heal_target_ident == "" and not defer_stat_change_effect:
 		if animations_allowed:
 			await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
+			if owned_generation != render_generation:
+				return
 	if attack_actor_ident != "":
 		var substitute_revealed := false
 		if animations_allowed:
 			substitute_revealed = await animation_router.reveal_pokemon_from_substitute_for_move(attack_actor_ident)
+			if owned_generation != render_generation:
+				return
 			await animation_router.play_attack_tween_for_actor(attack_actor_ident)
+			if owned_generation != render_generation:
+				return
 		if animations_allowed and move_animation_name != "":
 			await animation_router.play_move_animation(move_animation_name, move_animation_actor_ident, move_animation_target_ident, {
 				"result": move_animation_result,
 			})
+			if owned_generation != render_generation:
+				return
 		if substitute_revealed:
 			await animation_router.restore_substitute_after_move(attack_actor_ident)
+			if owned_generation != render_generation:
+				return
 		var move_hold_seconds := message_timing.get_move_animation_hold_seconds()
 		artificial_hold_seconds += move_hold_seconds
 		await _wait(move_hold_seconds, suppress_presentation_waits)
+		if owned_generation != render_generation:
+			return
 	if damage_target_ident != "":
 		_set_active_hud_hp_from_event(damage_target_ident, event_data, true)
 		if animations_allowed:
@@ -160,10 +202,14 @@ func render_event(
 				damage_target_ident,
 				damage_sound_variant
 			)
+			if owned_generation != render_generation:
+				return
 		_set_active_hud_hp_from_event(damage_target_ident, event_data, false)
 		var damage_hold_seconds := message_timing.get_damage_animation_hold_seconds()
 		artificial_hold_seconds += damage_hold_seconds
 		await _wait(damage_hold_seconds, suppress_presentation_waits)
+		if owned_generation != render_generation:
+			return
 	if heal_target_ident != "":
 		var heal_target_visible := true
 		if animation_router != null:
@@ -174,17 +220,23 @@ func render_event(
 				if heal_followup_effect_animation_key != "":
 					if effect_animation_key != "":
 						await animation_router.play_effect_animation(effect_animation_key, effect_animation_target_ident)
+						if owned_generation != render_generation:
+							return
 					await animation_router.play_heal_presentation_for_target(
 						heal_target_ident,
 						heal_followup_effect_animation_key,
 						event_data
 					)
+					if owned_generation != render_generation:
+						return
 				else:
 					await animation_router.play_heal_presentation_for_target(
 						heal_target_ident,
 						effect_animation_key,
 						event_data
 					)
+					if owned_generation != render_generation:
+						return
 			_set_active_hud_hp_from_event(heal_target_ident, event_data, false)
 	if animations_allowed and stat_change_target_ident != "":
 		await animation_router.play_stat_change_presentation_for_target(
@@ -192,24 +244,36 @@ func render_event(
 			stat_change_amount,
 			effect_animation_key
 		)
+		if owned_generation != render_generation:
+			return
 		var stat_change_hold_seconds := message_timing.get_stat_change_animation_hold_seconds()
 		artificial_hold_seconds += stat_change_hold_seconds
 		await _wait(stat_change_hold_seconds, suppress_presentation_waits)
+		if owned_generation != render_generation:
+			return
 	if animations_allowed and ability_boost_target_ident != "":
 		await animation_router.play_stat_change_presentation_for_target(ability_boost_target_ident, 1, "stat_up")
+		if owned_generation != render_generation:
+			return
 		var ability_boost_hold_seconds := message_timing.get_stat_change_animation_hold_seconds()
 		artificial_hold_seconds += ability_boost_hold_seconds
 		await _wait(ability_boost_hold_seconds, suppress_presentation_waits)
+		if owned_generation != render_generation:
+			return
 	if faint_target_ident != "":
 		_set_active_hud_hp_from_event(faint_target_ident, event_data, false)
 		if animations_allowed:
 			await animation_router.play_faint_tween_for_target(faint_target_ident)
+			if owned_generation != render_generation:
+				return
 	if battle_message != "":
 		var message_hold_seconds := message_timing.get_battle_message_hold_seconds(event_data, battle_message)
 		await _wait(
 			max(message_hold_seconds - artificial_hold_seconds, 0.0),
 			suppress_presentation_waits
 		)
+		if owned_generation != render_generation:
+			return
 
 
 func _set_active_hud_hp_from_event(target_ident: String, event: Dictionary, use_previous_hp: bool) -> void:
@@ -245,6 +309,7 @@ func _show_trainer_move_commands(
 	animation_result: String,
 	suppress_presentation_waits := false
 ) -> void:
+	var owned_generation := render_generation
 	if not show_trainer_command.is_valid():
 		return
 	var attack_command_result: Variant = show_trainer_command.call({
@@ -263,10 +328,14 @@ func _show_trainer_move_commands(
 			),
 			suppress_presentation_waits
 		)
+		if owned_generation != render_generation:
+			return
 	if not attack_command_shown or animation_result != "miss" or target_ident == "":
 		return
 
 	await _wait(DODGE_RESPONSE_DELAY_SECONDS, suppress_presentation_waits)
+	if owned_generation != render_generation:
+		return
 	var dodge_command_result: Variant = show_trainer_command.call({
 		"kind": "dodge",
 		"player_id": _get_player_id_from_ident(target_ident),
@@ -281,6 +350,8 @@ func _show_trainer_move_commands(
 			),
 			suppress_presentation_waits
 		)
+		if owned_generation != render_generation:
+			return
 
 
 func _command_was_shown(result: Variant) -> bool:

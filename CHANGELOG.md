@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Interrupted battle animations now release their waiting actions, and stalled effects can no longer indefinitely block the next event.
+
 - PvP reconnect now survives temporary server errors and returns you to sign-in when a battle session is definitively invalid.
 
 - Battle matchmaking and reconnection requests now time out safely instead of waiting indefinitely for an unresponsive connection.
