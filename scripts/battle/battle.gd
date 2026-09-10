@@ -7389,18 +7389,17 @@ func setup_pvp_battle_from_response(
 		await _notify_pvp_entry_ready(entry_ready_callback)
 
 	restored_history_log = _restore_battle_log_from_history_response(display_response)
-	if not restored_history_log:
+	if not restored_history_log and not _is_spectator_battle():
 		_add_battle_log_messages([
 			"%s wants to battle!" % _get_player_display_name("p2"),
 			"Go! %s!" % _get_active_display_name("p1"),
 			"%s sent out %s!" % [_get_player_display_name("p2"), _get_active_display_name("p2")],
 		])
-	elif _is_spectator_battle():
+	if _is_spectator_battle():
 		# A spectator entering an active battle needs the canonical state now,
-		# not the pre-event rewind used for an animated battle intro. History is
-		# restored into the log above and its cursor is marked as consumed, so
-		# render the current snapshot directly without replaying summons, turns,
-		# switches, damage, or form changes.
+		# not the pre-event rewind used for an animated battle intro. Render the
+		# current snapshot directly even when the live bootstrap intentionally
+		# omits history, so initial summons and earlier events are never replayed.
 		if not _apply_spectator_late_join_snapshot(api_response):
 			return
 		_show_battle_controls_after_initial_events()

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Spectators now enter live battles with both active Pokémon already visible instead of replaying their opening summon animations.
+
 - Nearby battle Poké Balls now use a smaller visual size while retaining their easy-to-click area.
 
 - NPC Battle Replays now use the standard trainer arena rather than AI Sparring's stadium presentation.

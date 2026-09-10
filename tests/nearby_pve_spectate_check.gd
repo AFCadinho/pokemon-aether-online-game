@@ -59,12 +59,31 @@ func _run_checks() -> void:
 
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	var realtime_source := FileAccess.get_file_as_string("res://scripts/services/pvp_battle_realtime_service.gd")
+	var battle_source := FileAccess.get_file_as_string("res://scripts/battle/battle.gd")
 	_check(
 		world_source.contains('"battleSpectate": _get_current_battle_spectate_presence()')
 		and world_source.contains('active_battle_kind not in ["wild", "trainer"]'),
 		"world presence only advertises active wild and NPC battles"
 	)
 	_check(realtime_source.contains('else "/ws/pve-live"'), "nearby spectators use the read-only PvE stream")
+	var spectator_snapshot_index := battle_source.find(
+		"if _is_spectator_battle():\n\t\t# A spectator entering an active battle needs the canonical state now"
+	)
+	var initial_summon_index := battle_source.find(
+		'await _present_initial_summon_command("p1", _get_active_display_name("p1"))',
+		spectator_snapshot_index
+	)
+	_check(
+		spectator_snapshot_index >= 0
+		and initial_summon_index > spectator_snapshot_index
+		and battle_source.substr(spectator_snapshot_index, initial_summon_index - spectator_snapshot_index).contains(
+			"_apply_spectator_late_join_snapshot(api_response)"
+		)
+		and battle_source.substr(spectator_snapshot_index, initial_summon_index - spectator_snapshot_index).contains(
+			"\n\t\treturn\n"
+		),
+		"spectators render the current snapshot and return before initial summon animations"
+	)
 	avatar.queue_free()
 	quit(1 if failed else 0)
 
