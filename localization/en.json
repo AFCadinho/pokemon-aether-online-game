@@ -1,4 +1,8 @@
 {
+  "battle.resume.title": "Resume battle",
+  "battle.resume.retry_message": "Battle recovery is temporarily unavailable. Retry or return to login.",
+  "battle.resume.retry": "Retry",
+  "battle.resume.login": "Return to login",
   "ui.settings.performance_hint": "FPS shows how smoothly your game runs. Ping shows the delay to the server. The ping value and colour use the average of up to five recent measurements: green is low, orange is moderate, red is high.",
   "ui.settings.performance_details": "Show performance details",
   "ui.settings.performance_details_hint": "When the meter is enabled, also show average frame time and the FPS equivalent of the slowest frame in the last 5 seconds. A higher frame time or lower minimum FPS can reveal stutters.",

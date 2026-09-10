@@ -1,4 +1,8 @@
 {
+  "battle.resume.title": "Retomar batalha",
+  "battle.resume.retry_message": "Não foi possível recuperar a batalha agora. Tente novamente ou volte à tela de login.",
+  "battle.resume.retry": "Tentar novamente",
+  "battle.resume.login": "Voltar ao login",
   "ui.pvp.training.ai.difficulty_elite": "Elite",
   "ui.pvp.training.ai.mode_elite": "Grandmaster — Elite",
   "ui.pvp.ai_sparring.history.opponent_elite": "Oponente: Grandmaster — Elite",
