@@ -23,9 +23,10 @@ func _run_checks() -> void:
 	var indicator := avatar.nearby_battle_indicator as Node2D
 	_check(indicator != null and indicator.visible, "wild battle creates a clickable indicator")
 	_check(indicator.sprite.texture == POKE_BALL, "wild battle uses a Poke Ball")
+	_check(is_equal_approx(indicator.sprite.scale.x, 0.56), "battle indicator uses the compact visual scale")
 	var card_top: float = avatar.nameplate.position.y + avatar.nameplate_background.offset_top
 	_check(
-		is_equal_approx(indicator.anchor_position.y, card_top - 14.0),
+		is_equal_approx(indicator.anchor_position.y, card_top - 11.0),
 		"battle indicator sits directly above a nameplate without a role badge"
 	)
 

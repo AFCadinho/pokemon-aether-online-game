@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nearby battle Poké Balls now use a smaller visual size while retaining their easy-to-click area.
+
 - Nearby battle Poké Balls now sit directly above player nameplates and overlap role badges instead of floating far above them.
 
 - Replay transport jumps now keep an active replay playing instead of pausing it.
