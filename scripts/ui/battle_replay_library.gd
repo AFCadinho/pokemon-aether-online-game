@@ -15,6 +15,7 @@ var search: LineEdit
 var outcome: OptionButton
 var difficulty: OptionButton
 var favorites: CheckButton
+var share_code_input: LineEdit
 var previous: Button
 var next: Button
 var category_buttons: Dictionary = {}
@@ -139,6 +140,18 @@ func _ready() -> void:
 	favorites.toggled.connect(func(_value: bool): _filter())
 	filters.add_child(favorites)
 	_button(filters, _t("refresh"), _filter, "primary")
+	filter_layout.add_child(_filter_section_label(_t("watch_shared_title").to_upper()))
+	var shared_access := HBoxContainer.new()
+	shared_access.add_theme_constant_override("separation", 8)
+	filter_layout.add_child(shared_access)
+	share_code_input = LineEdit.new()
+	share_code_input.placeholder_text = _t("share_code_placeholder")
+	share_code_input.max_length = 32
+	share_code_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_style_line_edit(share_code_input)
+	share_code_input.text_submitted.connect(func(_text: String): _watch_shared())
+	shared_access.add_child(share_code_input)
+	_button(shared_access, _t("watch_shared"), _watch_shared, "primary")
 	var summary := HBoxContainer.new()
 	summary.add_theme_constant_override("separation", 12)
 	layout.add_child(summary)
@@ -459,6 +472,8 @@ func _card(row: Dictionary) -> Control:
 	var pinned := bool(row.get("favorite", false))
 	_button(actions, _t("unpin") if pinned else _t("pin"), func(): _edit(battle_id, {"favorite": not pinned}), "quiet").disabled = state != "available"
 	_button(actions, _t("rename"), func(): _rename(row), "quiet").disabled = state != "available"
+	if str(row.get("kind", "ai_sparring")) == "ai_sparring":
+		_button(actions, _t("new_share_code") if row.get("shared", false) else _t("share"), func(): _share(battle_id), "quiet").disabled = state != "available"
 	_button(actions, _t("delete"), func(): _confirm_remove(battle_id), "danger")
 	return card
 
@@ -545,6 +560,72 @@ func watch(battle_id: String) -> void:
 		return
 	return_scroll = scroll.scroll_vertical
 	playback_requested.emit(response)
+
+func _watch_shared() -> void:
+	if busy:
+		return
+	var code := share_code_input.text.strip_edges()
+	if code.is_empty():
+		status.text = _t("shared_unavailable")
+		return
+	busy = true
+	status.text = _t("loading")
+	var response := await _request("GET", "/game/replays/shared/" + code.uri_encode())
+	busy = false
+	if not bool(response.get("success", false)):
+		status.text = _t("shared_unavailable")
+		playback_failed.emit(status.text)
+		return
+	return_scroll = scroll.scroll_vertical
+	playback_requested.emit(response)
+
+func _share(battle_id: String) -> void:
+	if busy:
+		return
+	busy = true
+	status.text = _t("creating_share_code")
+	var response := await _request("POST", "/game/replays/" + battle_id.uri_encode() + "/share")
+	busy = false
+	if not bool(response.get("success", false)):
+		status.text = _t("sharing_failed")
+		return
+	var code := str(response.get("shareCode", ""))
+	var dialog := _create_replay_dialog(_t("share_title"), 520)
+	var content: VBoxContainer = dialog["content"]
+	var modal: Control = dialog["modal"]
+	var hint := Label.new()
+	hint.text = _t("share_hint")
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.add_theme_font_size_override("font_size", 14)
+	hint.add_theme_color_override("font_color", MUTED)
+	content.add_child(hint)
+	var code_field := LineEdit.new()
+	code_field.text = code
+	code_field.editable = false
+	code_field.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	code_field.add_theme_font_size_override("font_size", 18)
+	_style_line_edit(code_field)
+	content.add_child(code_field)
+	var feedback := Label.new()
+	feedback.add_theme_font_size_override("font_size", 13)
+	feedback.add_theme_color_override("font_color", ACCENT)
+	content.add_child(feedback)
+	var actions := _dialog_actions(content)
+	_button(actions, _t("stop_sharing"), func(): modal.queue_free(); _unshare(battle_id), "danger")
+	_button(actions, _t("copy_code"), func(): DisplayServer.clipboard_set(code); feedback.text = _t("code_copied"), "primary")
+	_button(actions, _t("close"), func(): modal.queue_free(), "quiet")
+	refresh()
+
+func _unshare(battle_id: String) -> void:
+	if busy:
+		return
+	busy = true
+	var response := await _request("DELETE", "/game/replays/" + battle_id.uri_encode() + "/share")
+	busy = false
+	if bool(response.get("success", false)):
+		refresh()
+	else:
+		status.text = _t("sharing_failed")
 
 func restore_library() -> void:
 	show()
@@ -655,6 +736,8 @@ func _request(method: String, path: String, body: Dictionary = {}) -> Dictionary
 		response = await BattleApiClient.send_get_request(request, path)
 	elif method == "DELETE":
 		response = await BattleApiClient.send_delete_request(request, path)
+	elif method == "POST":
+		response = await BattleApiClient.send_post_request(request, path, body)
 	else:
 		var base: String = await GatewayApiConfig.get_base_url()
 		var error := request.request(base + path, GatewayApiConfig.get_json_headers(), HTTPClient.METHOD_PATCH, JSON.stringify(body))
