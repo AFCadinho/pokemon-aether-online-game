@@ -115,6 +115,10 @@ func _run() -> void:
 	panel._undo_set_suggestion()
 	_check(panel.defender_assumptions["nature"] == "Timid" and panel.defender_assumptions["evs"] == {"spe": 252}, "Undo restores prior manual stats")
 	_check(panel.set_suggestion_undo.is_empty(), "Undo is consumed once")
+	panel.knowledge_snapshot["opponentPokemon"][0]["item"] = {"state": "known", "value": null}
+	panel._apply_set_suggestion(build)
+	_check(not panel.defender_assumptions.has("item"), "Applying a suggestion keeps a knocked-off or consumed item slot empty")
+	panel._undo_set_suggestion()
 	panel.show_set_suggestions("opponent:public-slot-2", revision, {"success": false})
 	_check(panel.set_suggestions.get("success") == true, "Wrong-opponent replies cannot erase current suggestions")
 	panel.queue_free()

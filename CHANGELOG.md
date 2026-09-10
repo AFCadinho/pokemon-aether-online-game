@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Applying a Calcdex set suggestion now keeps the current item slot empty after the opponent's revealed item was knocked off or consumed.
+
 - Set suggestion evidence now uses readable labels such as Matches and Differences, wraps when needed, and hides empty counters.
 
 - Interrupted battle animations now release their waiting actions, and stalled effects can no longer indefinitely block the next event.
