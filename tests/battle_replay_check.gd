@@ -67,6 +67,10 @@ func _run() -> void:
 	battle.switch_replay_sides()
 	_check(battle.battle_state.get_active_pokemon_species("p1") == original_p2_species and battle.battle_state.get_active_pokemon_species("p2") == original_p1_species, "Perspective switch remaps both replay sides")
 	battle.switch_replay_sides()
+	battle.replay_paused = false
+	await battle.play_replay_frame(controls.timeline, 1)
+	_check(battle.battle_state.requests == controls.timeline.state_through(1).requests, "Animated replay frame keeps the canonical recorded state without a full seek restore")
+	battle.restore_replay_position(controls.timeline, 0)
 	controls._toggle()
 	await process_frame
 	controls.seek(0)

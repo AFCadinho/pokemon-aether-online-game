@@ -12,6 +12,8 @@
 
 - Battle Replays now use a cleaner library with custom filters and favorites toggle, replay result badges, distinct watch and management actions, a balanced spectator-style information dock, refined control capsules, playback buttons in the open move-command area, a perspective switch that remaps the full replay state, and clearer cyan/red action buttons.
 
+- Battle Replay playback now avoids rebuilding the entire interface after every recorded event, making damage and other animations smoother.
+
 - Aether Clash now gives everyone the same arena view on every screen size. Only Spectate Orbs provide a wider overview; your usual zoom returns after leaving.
 
 - Open Battle Replays from the main toolbar to browse and manage your AI Sparring recordings. Replay battles with pause, turn navigation, and adjustable playback speed, or open them directly from match history.
