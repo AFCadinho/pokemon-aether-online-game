@@ -40,10 +40,9 @@ func setup_battle_replay(recording: Dictionary) -> bool:
 	display_data_presenter.set_trainer_team(first.get("trainerTeam", []), true)
 	var controls := preload("res://scripts/ui/battle_replay_controls.gd").new()
 	replay_controls = controls
-	# Replays use the former move-command area as their primary console. This
-	# keeps the battlefield controls where players expect them and leaves the
-	# lower dock available for lightweight replay context.
-	moves_grid.get_parent().add_child(controls)
+	# Match the live-spectator composition: one full-width command dock below
+	# the battlefield, with context, transport and utilities in one row.
+	action_side_panel.add_child(controls)
 	controls.close_requested.connect(func(): replay_closed.emit())
 	if not controls.setup(self, recording):
 		controls.queue_free()
