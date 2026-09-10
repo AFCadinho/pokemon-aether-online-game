@@ -1648,6 +1648,64 @@ var reward_notification_stack: VBoxContainer
 var reward_notification_event_sequence := 0
 var global_buff_notification_tokens: Dictionary = {}
 var global_buff_activation_sound_pending := false
+var replay_library: Control
+var replay_return_to_history := false
+
+func _setup_replay_library() -> void:
+	replay_library = preload("res://scripts/ui/battle_replay_library.gd").new()
+	replay_library.name = "BattleReplayLibrary"
+	root_control.add_child(replay_library)
+	replay_library.set("team_strip_factory", Callable(self, "_create_pvp_history_team_strip"))
+	replay_library.connect("closed", func(): _deactivate_ui_panel(replay_library))
+	replay_library.connect("playback_requested", _open_battle_replay)
+	replay_library.connect("playback_failed", add_system_message)
+	var slot := PanelContainer.new()
+	slot.name = "BattleReplaysSlot"
+	slot.custom_minimum_size = Vector2(52, 52)
+	slot.add_theme_stylebox_override("panel", pvp_slot.get_theme_stylebox("panel"))
+	pvp_slot.get_parent().add_child(slot)
+	pvp_slot.get_parent().move_child(slot, pvp_slot.get_index() + 1)
+	var button := TextureButton.new()
+	button.name = "BattleReplaysButton"
+	button.focus_mode = Control.FOCUS_NONE
+	button.texture_normal = load("res://assets/ui/icons/battle_replays.svg")
+	button.ignore_texture_size = true
+	button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+	button.custom_minimum_size = Vector2(40, 40)
+	_set_localized_control_property(button, "tooltip_text", "ui.replays.title")
+	button.pressed.connect(_on_replay_library_pressed)
+	slot.add_child(button)
+	_setup_icon_slot_hover(slot, button)
+
+func _on_replay_library_pressed() -> void:
+	replay_return_to_history = false
+	replay_library.call("open_library")
+	_activate_ui_panel(replay_library)
+
+func _watch_history_replay(battle_id: String) -> void:
+	replay_return_to_history = true
+	replay_library.call("watch", battle_id)
+
+func _open_battle_replay(recording: Dictionary) -> void:
+	var world := GameState.get_world()
+	if world == null or not world.has_method("start_battle_replay"):
+		return
+	if not bool(world.call("start_battle_replay", recording, Callable(self, "_return_from_replay"))):
+		add_system_message(LocalizationManager.text("ui.replays.open_failed"))
+		return
+	replay_library.hide()
+	_deactivate_ui_panel(replay_library)
+	if replay_return_to_history and pvp_room_popup != null:
+		pvp_room_popup.hide()
+		_deactivate_ui_panel(pvp_room_popup)
+
+func _return_from_replay() -> void:
+	if replay_return_to_history and pvp_room_popup != null:
+		pvp_room_popup.show()
+		_activate_ui_panel(pvp_room_popup)
+	else:
+		replay_library.call("restore_library")
+		_activate_ui_panel(replay_library)
 
 # Called when the node enters the scene tree for the first time.
 func _notification(what: int) -> void:
@@ -1664,6 +1722,7 @@ func _ready() -> void:
 	root_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root_control.theme = _make_main_ui_tooltip_theme()
 	_setup_reward_notification_stack()
+	_setup_replay_library()
 	_setup_pvp_queue_ball_spin()
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
@@ -3722,6 +3781,7 @@ func _has_visible_priority_overlay_panel() -> bool:
 
 func _priority_overlay_panels() -> Array[Control]:
 	var panels: Array[Control] = [
+		replay_library,
 		global_buff_details_panel,
 		chat_settings_popup,
 		chat_context_popup,
@@ -43683,6 +43743,13 @@ func _create_pvp_ai_sparring_history_card(match: Dictionary) -> Control:
 	details.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	details.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(details)
+	var replay_status := str(match.get("replayStatus", "none"))
+	var replay_button := Button.new()
+	replay_button.text = LocalizationManager.text("ui.replays.watch" if replay_status == "available" else "ui.replays.status_" + replay_status)
+	replay_button.disabled = replay_status != "available"
+	replay_button.pressed.connect(_watch_history_replay.bind(str(match.get("battleId", ""))))
+	_apply_button_style(replay_button)
+	layout.add_child(replay_button)
 	return card
 
 

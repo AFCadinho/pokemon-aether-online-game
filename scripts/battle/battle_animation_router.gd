@@ -29,6 +29,7 @@ var animation_guard: Callable
 var render_generation := 0
 var active_animation_nodes: Array[Node] = []
 var active_actor_restore: Callable
+var playback_speed := 1.0
 
 
 func cancel_render() -> void:
@@ -467,7 +468,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 		animation_node.background_texture_override = resources.get("background_texture", null) as Texture2D
 		animation_node.foreground_texture_override = resources.get("foreground_texture", null) as Texture2D
 		animation_node.sound_streams = resources.get("sound_streams", {}) as Dictionary
-	animation_node.speed_scale = float(config.get("speed_scale", 1.0))
+	animation_node.speed_scale = float(config.get("speed_scale", 1.0)) * playback_speed
 	animation_node.sprite_zoom_multiplier = float(config.get("sprite_zoom_multiplier", 1.0))
 	animation_node.sprite_position_scale = float(config.get("sprite_position_scale", 1.0))
 	animation_node.sprite_position_anchor = _vector2_from_config_value(

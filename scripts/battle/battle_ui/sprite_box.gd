@@ -77,6 +77,12 @@ const SUBSTITUTE_RETREAT_OFFSET := Vector2(18.0, 7.0)
 @onready var double_sprite_2: AnimatedSprite2D = $DoubleBattleContainer/SpriteSlot2/AnimatedPokemonSprite2
 
 var active_tween: Tween
+var playback_speed := 1.0:
+	set(value):
+		playback_speed = clampf(value, 0.5, 4.0)
+		for tween: Tween in [active_tween, substitute_tween]:
+			if tween != null and tween.is_valid():
+				tween.set_speed_scale(playback_speed)
 var base_sprite_positions: Dictionary = {}
 var sprite_target_scales: Dictionary = {}
 var sprite_frames_render_scales: Dictionary = {}
@@ -210,7 +216,7 @@ func play_attack_tween(offset: Vector2 = ATTACK_TWEEN_OFFSET) -> void:
 
 	_stop_active_tween()
 	_reset_sprites_pose(sprites)
-	active_tween = create_tween()
+	active_tween = create_tween().set_speed_scale(playback_speed)
 	active_tween.set_parallel(true)
 
 	for sprite in sprites:
@@ -248,7 +254,7 @@ func set_substitute_active(is_active: bool, animate := true) -> void:
 
 		substitute_sprite.scale = SUBSTITUTE_DISPLAY_SCALE * 1.08
 		substitute_sprite.modulate = Color(1.0, 1.0, 1.0, 0.0)
-		substitute_tween = create_tween().set_parallel(true)
+		substitute_tween = create_tween().set_speed_scale(playback_speed).set_parallel(true)
 		substitute_tween.tween_property(single_sprite, "modulate:a", 0.0, SUBSTITUTE_CROSSFADE_SECONDS)
 		substitute_tween.tween_property(substitute_sprite, "modulate:a", 1.0, SUBSTITUTE_CROSSFADE_SECONDS)
 		substitute_tween.tween_property(substitute_sprite, "scale", SUBSTITUTE_DISPLAY_SCALE, SUBSTITUTE_CROSSFADE_SECONDS).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -265,7 +271,7 @@ func set_substitute_active(is_active: bool, animate := true) -> void:
 		single_sprite.modulate = Color.WHITE
 		return
 
-	substitute_tween = create_tween().set_parallel(true)
+	substitute_tween = create_tween().set_speed_scale(playback_speed).set_parallel(true)
 	substitute_tween.tween_property(substitute_sprite, "modulate:a", 0.0, SUBSTITUTE_CROSSFADE_SECONDS)
 	substitute_tween.tween_property(substitute_sprite, "scale", SUBSTITUTE_DISPLAY_SCALE * 0.82, SUBSTITUTE_CROSSFADE_SECONDS).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	substitute_tween.tween_property(single_sprite, "modulate:a", 1.0, SUBSTITUTE_CROSSFADE_SECONDS)
@@ -292,7 +298,7 @@ func reveal_pokemon_from_substitute_for_move() -> bool:
 	substitute_sprite.modulate = Color.WHITE
 	single_sprite.modulate = _with_alpha(single_sprite.modulate, 0.0)
 
-	substitute_tween = create_tween().set_parallel(true)
+	substitute_tween = create_tween().set_speed_scale(playback_speed).set_parallel(true)
 	substitute_tween.tween_property(substitute_sprite, "position", _get_substitute_idle_position() + retreat_offset, SUBSTITUTE_CROSSFADE_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	substitute_tween.tween_property(substitute_sprite, "modulate:a", 0.0, SUBSTITUTE_CROSSFADE_SECONDS)
 	substitute_tween.tween_property(substitute_sprite, "scale", SUBSTITUTE_DISPLAY_SCALE * 0.88, SUBSTITUTE_CROSSFADE_SECONDS)
@@ -318,7 +324,7 @@ func restore_substitute_after_move() -> void:
 	substitute_sprite.modulate = Color(1.0, 1.0, 1.0, 0.0)
 	single_sprite.modulate = Color.WHITE
 
-	substitute_tween = create_tween().set_parallel(true)
+	substitute_tween = create_tween().set_speed_scale(playback_speed).set_parallel(true)
 	substitute_tween.tween_property(single_sprite, "modulate:a", 0.0, SUBSTITUTE_CROSSFADE_SECONDS)
 	substitute_tween.tween_property(substitute_sprite, "position", _get_substitute_idle_position(), SUBSTITUTE_CROSSFADE_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	substitute_tween.tween_property(substitute_sprite, "modulate:a", 1.0, SUBSTITUTE_CROSSFADE_SECONDS)
@@ -335,7 +341,7 @@ func play_substitute_damage_tween() -> void:
 	_stop_substitute_tween()
 	_sync_substitute_idle_pose()
 	var base_position := _get_substitute_idle_position()
-	substitute_tween = create_tween().set_parallel(true)
+	substitute_tween = create_tween().set_speed_scale(playback_speed).set_parallel(true)
 	substitute_tween.tween_property(substitute_sprite, "modulate", DAMAGE_IMPACT_COLOR, 0.03)
 	substitute_tween.tween_property(substitute_sprite, "modulate", DAMAGE_FLASH_COLOR, 0.05).set_delay(0.03)
 	substitute_tween.tween_property(substitute_sprite, "modulate", Color.WHITE, 0.08).set_delay(0.08)
@@ -380,7 +386,7 @@ func play_move_actor_motion(motion_config: Dictionary = {}, motion_direction: Ve
 	var duration: float = max(float(motion_config.get("duration", 0.45)), 0.05)
 	_stop_active_tween()
 	_reset_sprites_pose(sprites)
-	active_tween = create_tween()
+	active_tween = create_tween().set_speed_scale(playback_speed)
 	active_tween.set_parallel(true)
 
 	for sprite in sprites:
@@ -421,7 +427,7 @@ func play_damage_tween() -> void:
 
 	_stop_active_tween()
 	_reset_sprites_pose(sprites)
-	active_tween = create_tween()
+	active_tween = create_tween().set_speed_scale(playback_speed)
 	active_tween.set_parallel(true)
 
 	for sprite in sprites:
@@ -452,7 +458,7 @@ func play_hit_flash_tween(flash_config: Dictionary = {}) -> void:
 	var flash_duration: float = maxf(float(flash_config.get("duration", 0.09)), 0.02)
 	_stop_active_tween()
 	_reset_sprites_pose(sprites)
-	active_tween = create_tween()
+	active_tween = create_tween().set_speed_scale(playback_speed)
 	active_tween.set_parallel(true)
 
 	for sprite in sprites:
@@ -482,7 +488,7 @@ func play_shake_tween(shake_config: Dictionary = {}) -> void:
 
 	_stop_active_tween()
 	_reset_sprites_pose(sprites)
-	active_tween = create_tween()
+	active_tween = create_tween().set_speed_scale(playback_speed)
 	active_tween.set_parallel(true)
 
 	for sprite in sprites:
@@ -511,7 +517,7 @@ func play_heal_tween() -> void:
 
 	_stop_active_tween()
 	_reset_sprites_pose(sprites)
-	active_tween = create_tween()
+	active_tween = create_tween().set_speed_scale(playback_speed)
 	active_tween.set_parallel(true)
 
 	for sprite in sprites:
@@ -532,7 +538,7 @@ func play_stat_raise_tween() -> void:
 
 	_stop_active_tween()
 	_reset_sprites_pose(sprites)
-	active_tween = create_tween()
+	active_tween = create_tween().set_speed_scale(playback_speed)
 	active_tween.set_parallel(true)
 
 	for sprite in sprites:
@@ -559,7 +565,7 @@ func play_stat_drop_tween() -> void:
 
 	_stop_active_tween()
 	_reset_sprites_pose(sprites)
-	active_tween = create_tween()
+	active_tween = create_tween().set_speed_scale(playback_speed)
 	active_tween.set_parallel(true)
 
 	for sprite in sprites:
@@ -597,7 +603,7 @@ func play_faint_tween() -> void:
 
 	_stop_active_tween()
 	_reset_sprites_pose(sprites)
-	active_tween = create_tween()
+	active_tween = create_tween().set_speed_scale(playback_speed)
 	active_tween.set_parallel(true)
 
 	for sprite in sprites:
@@ -664,7 +670,7 @@ func _play_substitute_hit_flash_tween(flash_config: Dictionary = {}) -> void:
 	var flash_duration: float = maxf(float(flash_config.get("duration", 0.09)), 0.02)
 	_stop_substitute_tween()
 	_sync_substitute_idle_pose()
-	substitute_tween = create_tween().set_parallel(true)
+	substitute_tween = create_tween().set_speed_scale(playback_speed).set_parallel(true)
 	substitute_tween.tween_property(substitute_sprite, "modulate", DAMAGE_FLASH_COLOR, flash_duration * 0.36).set_delay(delay)
 	substitute_tween.tween_property(substitute_sprite, "modulate", Color.WHITE, flash_duration * 0.64).set_delay(delay + flash_duration * 0.36)
 	if not await AnimationWait.for_tween(self, substitute_tween):
@@ -684,7 +690,7 @@ func _play_substitute_shake_tween(shake_config: Dictionary = {}) -> void:
 	var base_position := _get_substitute_idle_position()
 	_stop_substitute_tween()
 	_sync_substitute_idle_pose()
-	substitute_tween = create_tween().set_parallel(true)
+	substitute_tween = create_tween().set_speed_scale(playback_speed).set_parallel(true)
 	for step: int in range(step_count):
 		var progress := float(step) / float(maxi(step_count - 1, 1))
 		var step_amplitude := amplitude * (1.0 - progress if decay else 1.0)
