@@ -60,6 +60,12 @@ func _run() -> void:
 	_check(controls.scrubber != null and controls.scrubber.max_value == controls.timeline.frames.size() - 1, "Replay playback exposes a timeline scrubber")
 	_check(controls.get_parent() == battle.action_side_panel and battle.action_side_panel.custom_minimum_size.y == 120.0, "Replay controls retain the full spectator-style command dock")
 	_check(controls.transport_overlay != null and controls.transport_overlay.get_parent() == battle.moves_grid.get_parent(), "Replay transport uses the open move-command area")
+	_check(controls.switch_sides_button != null and battle.has_method("switch_replay_sides"), "Replay exposes a perspective switch")
+	var original_p1_species: String = battle.battle_state.get_active_pokemon_species("p1")
+	var original_p2_species: String = battle.battle_state.get_active_pokemon_species("p2")
+	battle.switch_replay_sides()
+	_check(battle.battle_state.get_active_pokemon_species("p1") == original_p2_species and battle.battle_state.get_active_pokemon_species("p2") == original_p1_species, "Perspective switch remaps both replay sides")
+	battle.switch_replay_sides()
 	controls._toggle()
 	await process_frame
 	controls.seek(0)

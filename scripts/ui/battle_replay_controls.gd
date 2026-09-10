@@ -14,6 +14,7 @@ var position_label: Label
 var scrubber: HSlider
 var status_label: Label
 var transport_overlay: PanelContainer
+var switch_sides_button: Button
 var speed := 1.0
 var closing := false
 
@@ -198,6 +199,9 @@ func _build() -> void:
 	position_label.add_theme_stylebox_override("normal", _style(Color("#122e47"), Color("#315c80"), 6, 1, 8, 8, 4, 4))
 	position_label.custom_minimum_size.y = 34
 	command_row.add_child(position_label)
+	switch_sides_button = _button(command_row, "⇄", func(): host.call("switch_replay_sides"), "quiet")
+	switch_sides_button.custom_minimum_size = Vector2(48, 38)
+	switch_sides_button.tooltip_text = "Switch sides"
 	var back_button := _button(command_row, _t("back"), _close, "quiet")
 	back_button.custom_minimum_size = Vector2(66, 38)
 	_build_transport_overlay()
@@ -320,6 +324,11 @@ func _close() -> void:
 		return
 	await stop()
 	close_requested.emit()
+
+func refresh_side_label(swapped: bool) -> void:
+	if switch_sides_button != null:
+		switch_sides_button.text = "⇄" if not swapped else "⇄"
+		switch_sides_button.tooltip_text = "View %s side" % ("player" if swapped else "opponent")
 
 func _refresh() -> void:
 	play_button.text = "Ⅱ  " + _t("pause") if playing else "▶  " + _t("play")
