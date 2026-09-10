@@ -11,6 +11,7 @@ var pending_seek := -1
 var play_button: Button
 var turn_picker: SpinBox
 var position_label: Label
+var scrubber: HSlider
 var speed := 1.0
 var closing := false
 
@@ -95,23 +96,34 @@ func _dropdown_arrow_icon() -> ImageTexture:
 		image.set_pixel(9 - offset, 2 + offset, ACCENT)
 	return ImageTexture.create_from_image(image)
 
+func _scrubber_handle_icon(highlighted := false) -> ImageTexture:
+	var size := 16
+	var image := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	image.fill(Color("#00000000"))
+	var fill := Color("#dff8ff") if highlighted else ACCENT
+	for y in range(size):
+		for x in range(size):
+			if Vector2(x - 7.5, y - 7.5).length() <= 5.5:
+				image.set_pixel(x, y, fill)
+	return ImageTexture.create_from_image(image)
+
 func _build() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	offset_top = 8
+	offset_top = 4
 	offset_left = 12
 	offset_right = -12
-	offset_bottom = -8
+	offset_bottom = -4
 	z_index = 100
-	add_theme_stylebox_override("panel", _style(Color("#0b192b"), Color("#315c80"), 10, 1, 14, 14, 10, 10))
+	add_theme_stylebox_override("panel", _style(Color("#0b192b"), Color("#315c80"), 10, 1, 14, 14, 7, 7))
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 7)
+	layout.add_theme_constant_override("separation", 3)
 	add_child(layout)
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 8)
 	layout.add_child(header)
 	var live_dot := ColorRect.new()
 	live_dot.color = ACCENT
-	live_dot.custom_minimum_size = Vector2(3, 22)
+	live_dot.custom_minimum_size = Vector2(3, 18)
 	header.add_child(live_dot)
 	var title := Label.new()
 	title.text = _t("playback_title")
@@ -124,7 +136,29 @@ func _build() -> void:
 	position_label.add_theme_color_override("font_color", INK)
 	position_label.add_theme_stylebox_override("normal", _style(Color("#122e47"), Color("#315c80"), 6, 1, 8, 8, 4, 4))
 	header.add_child(position_label)
-	_button(header, _t("back"), _close, "quiet")
+	var back_button := _button(header, _t("back"), _close, "quiet")
+	back_button.custom_minimum_size.y = 28
+	var progress_row := HBoxContainer.new()
+	progress_row.add_theme_constant_override("separation", 8)
+	layout.add_child(progress_row)
+	var progress_caption := _tiny_label("REPLAY PROGRESS")
+	progress_caption.custom_minimum_size.x = 98
+	progress_row.add_child(progress_caption)
+	scrubber = HSlider.new()
+	scrubber.min_value = 0
+	scrubber.max_value = timeline.frames.size() - 1
+	scrubber.step = 1
+	scrubber.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scrubber.custom_minimum_size.y = 16
+	scrubber.focus_mode = Control.FOCUS_NONE
+	scrubber.tooltip_text = _t("go_turn")
+	scrubber.add_theme_stylebox_override("slider", _style(Color("#071321"), Color("#315574"), 4, 1, 0, 0, 3, 3))
+	scrubber.add_theme_icon_override("grabber", _scrubber_handle_icon())
+	scrubber.add_theme_icon_override("grabber_highlight", _scrubber_handle_icon(true))
+	scrubber.drag_ended.connect(func(value_changed: bool):
+		if value_changed:
+			seek(roundi(scrubber.value)))
+	progress_row.add_child(scrubber)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
 	layout.add_child(row)
@@ -257,3 +291,4 @@ func _refresh() -> void:
 	play_button.text = "Ⅱ  " + _t("pause") if playing else "▶  " + _t("play")
 	position_label.text = _t("turn_position", {"turn": timeline.turn_at(index), "total": timeline.turn_at(timeline.frames.size() - 1)})
 	turn_picker.set_value_no_signal(timeline.turn_at(index))
+	scrubber.set_value_no_signal(index)
