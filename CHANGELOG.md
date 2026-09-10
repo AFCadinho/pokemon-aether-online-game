@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Set suggestion evidence now uses readable labels such as Matches and Differences, wraps when needed, and hides empty counters.
+
 - Calcdex set suggestions now use a spacious side-by-side list and details view on desktop, so sets remain readable and reviewing evidence no longer changes the list height or scroll position.
 
 - Calcdex now remembers public battle snapshots while closed, so set suggestions can use damage from the turn that made you open the calculator.

@@ -88,8 +88,15 @@ func _run() -> void:
 	var suggestion_build := panel.set_suggestions_popup.find_child("SetSuggestionBuild", true, false) as Label
 	_check(suggestion_name != null and suggestion_name.text == "TankChomp" and suggestion_name.custom_minimum_size.y > 0, "Suggested set name remains visibly allocated")
 	_check(suggestion_build != null and suggestion_build.text.contains("Rocky Helmet") and suggestion_build.text.contains("Earthquake") and suggestion_build.custom_minimum_size.y > 0, "Suggested build details remain visibly allocated")
-	var evidence_summary := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceSummary", true, false) as HBoxContainer
-	_check(evidence_summary != null and evidence_summary.get_child_count() == 4, "Every choice keeps four comparable evidence counters")
+	var evidence_summary := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceSummary", true, false) as HFlowContainer
+	_check(evidence_summary != null and evidence_summary.get_child_count() == 4, "Evidence summary shows every relevant non-zero category")
+	var evidence_labels: Array[String] = []
+	if evidence_summary != null:
+		for child: Node in evidence_summary.get_children():
+			evidence_labels.append(str(child.text))
+	_check(evidence_labels.has("✓ Matches: 1") and evidence_labels.has("~ Differences: 1"), "Evidence counters explain their meaning without a legend")
+	var evidence_summaries := panel.set_suggestions_popup.find_children("SetSuggestionEvidenceSummary", "HFlowContainer", true, false)
+	_check(evidence_summaries.size() == 3 and (evidence_summaries[1] as HFlowContainer).get_child_count() == 1, "Evidence summaries hide empty counters")
 	_check(panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) != null, "The selected suggestion shows evidence without expanding its list row")
 	var choices := panel.set_suggestions_popup.find_children("SetSuggestionChoice", "Button", true, false)
 	if choices.size() > 1:
