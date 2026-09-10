@@ -437,7 +437,10 @@ func _card(row: Dictionary) -> Control:
 	var battle_id := str(row.get("battleId", ""))
 	var state := str(row.get("status", "failed"))
 	var pinned := bool(row.get("favorite", false))
+	var opponent_name := str(row.get("opponentDisplayName", "")).strip_edges()
 	var saved_title := str(row.get("title", "")).strip_edges()
+	if saved_title.is_empty():
+		saved_title = _t("default_title", {"opponent": opponent_name if not opponent_name.is_empty() else "Opponent"})
 	if not saved_title.is_empty():
 		var title_row := HBoxContainer.new()
 		title_row.add_theme_constant_override("separation", 4)

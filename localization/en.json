@@ -14,6 +14,7 @@
   "ui.pvp.ai_sparring.live.opt_in": "Show my battle publicly in Live Battles",
   "ui.pvp.ai_sparring.live.opt_in_hint": "Other players can find this battle and watch live. Only revealed battle information is shared. This applies to this battle only.",
   "ui.replays.title": "Battle Replays",
+  "ui.replays.default_title": "Battle vs. {opponent}",
   "ui.replays.intro": "Your saved battles in one place. Replays stay private unless you share a code.",
   "ui.replays.close": "Close",
   "ui.replays.cancel": "Cancel",

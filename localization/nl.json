@@ -14,6 +14,7 @@
   "ui.pvp.ai_sparring.live.opt_in": "Toon mijn battle openbaar bij Live Battles",
   "ui.pvp.ai_sparring.live.opt_in_hint": "Andere spelers kunnen dit gevecht vinden en live meekijken. Alleen onthulde gevechtsinformatie wordt gedeeld. Dit geldt alleen voor dit gevecht.",
   "ui.replays.title": "Battle Replays",
+  "ui.replays.default_title": "Battle tegen {opponent}",
   "ui.replays.intro": "Al je bewaarde gevechten op één plek. Replays blijven privé, tenzij je een code deelt.",
   "ui.replays.close": "Sluiten",
   "ui.replays.cancel": "Annuleren",
