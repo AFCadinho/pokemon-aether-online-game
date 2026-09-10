@@ -38,6 +38,7 @@
   "ui.replays.previous_page": "Vorige pagina",
   "ui.replays.next_page": "Volgende pagina",
   "ui.replays.turns": "{count} beurten",
+  "ui.replays.turn": "{count} beurt",
   "ui.replays.status_available": "Beschikbaar",
   "ui.replays.status_processing": "Opname wordt verwerkt",
   "ui.replays.status_failed": "Opname mislukt",

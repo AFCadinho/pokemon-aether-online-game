@@ -38,6 +38,7 @@
   "ui.replays.previous_page": "上一页",
   "ui.replays.next_page": "下一页",
   "ui.replays.turns": "{count} 回合",
+  "ui.replays.turn": "{count} 回合",
   "ui.replays.status_available": "可观看",
   "ui.replays.status_processing": "录制 / 处理中",
   "ui.replays.status_failed": "录制失败",

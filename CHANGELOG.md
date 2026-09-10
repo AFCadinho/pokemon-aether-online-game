@@ -6,6 +6,8 @@
 
 - Battle Replay rename and delete confirmations now match the library's visual style, with clearer primary and destructive actions.
 
+- Battle Replay cards now show a player-versus-trainer header with portraits and clearer whole-number turn metadata.
+
 - Live Battles now shows each opted-in player's public trainer portrait, and viewers can immediately reopen a battle after leaving it.
 
 - Finished Live Battles now hide the spectator roster rails behind the result screen, keeping the outcome clear.

@@ -38,6 +38,7 @@
   "ui.replays.previous_page": "Página anterior",
   "ui.replays.next_page": "Próxima página",
   "ui.replays.turns": "{count} turnos",
+  "ui.replays.turn": "{count} turno",
   "ui.replays.status_available": "Disponível",
   "ui.replays.status_processing": "Gravando / processando",
   "ui.replays.status_failed": "Falha na gravação",
