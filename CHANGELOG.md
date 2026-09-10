@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Battle matchmaking and reconnection requests now time out safely instead of waiting indefinitely for an unresponsive connection.
+
 - Calcdex set suggestions now use a spacious side-by-side list and details view on desktop, so sets remain readable and reviewing evidence no longer changes the list height or scroll position.
 
 - Calcdex now remembers public battle snapshots while closed, so set suggestions can use damage from the turn that made you open the calculator.
