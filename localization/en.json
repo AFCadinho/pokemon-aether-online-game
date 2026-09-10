@@ -66,7 +66,6 @@
   "ui.replays.pin": "☆ Keep as favorite",
   "ui.replays.unpin": "★ Unpin favorite",
   "ui.replays.rename": "Rename",
-  "ui.replays.manage": "Manage",
   "ui.replays.delete": "Delete replay",
   "ui.replays.delete_confirm": "Delete this recording? Your match history and statistics will remain.",
   "ui.replays.edit_failed": "Could not update this replay. Check availability and your 10-favorite limit, then try again.",

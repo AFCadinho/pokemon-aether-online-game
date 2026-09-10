@@ -66,7 +66,6 @@
   "ui.replays.pin": "☆ 收藏回放",
   "ui.replays.unpin": "★ 取消收藏",
   "ui.replays.rename": "修改标题",
-  "ui.replays.manage": "管理",
   "ui.replays.delete": "删除回放",
   "ui.replays.delete_confirm": "删除此录像？对战历史和统计数据将会保留。",
   "ui.replays.edit_failed": "无法更新此回放。请检查回放是否可用以及是否已达到 10 个收藏的上限，然后重试。",

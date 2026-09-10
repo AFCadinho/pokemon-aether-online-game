@@ -66,7 +66,6 @@
   "ui.replays.pin": "☆ Bewaar als favoriet",
   "ui.replays.unpin": "★ Favoriet losmaken",
   "ui.replays.rename": "Titel aanpassen",
-  "ui.replays.manage": "Beheren",
   "ui.replays.delete": "Replay verwijderen",
   "ui.replays.delete_confirm": "Deze opname verwijderen? Je wedstrijdhistorie en statistieken blijven behouden.",
   "ui.replays.edit_failed": "Aanpassen mislukt. Controleer of de replay beschikbaar is en of je nog ruimte hebt binnen de 10 favorieten.",

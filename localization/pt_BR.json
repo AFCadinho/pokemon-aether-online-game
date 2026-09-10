@@ -66,7 +66,6 @@
   "ui.replays.pin": "☆ Salvar como favorito",
   "ui.replays.unpin": "★ Remover dos favoritos",
   "ui.replays.rename": "Renomear",
-  "ui.replays.manage": "Gerenciar",
   "ui.replays.delete": "Excluir replay",
   "ui.replays.delete_confirm": "Excluir esta gravação? Seu histórico e suas estatísticas serão mantidos.",
   "ui.replays.edit_failed": "Não foi possível atualizar. Verifique a disponibilidade e o limite de 10 favoritos e tente novamente.",

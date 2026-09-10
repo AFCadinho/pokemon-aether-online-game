@@ -434,14 +434,27 @@ func _card(row: Dictionary) -> Control:
 	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 5)
 	card_row.add_child(layout)
+	var battle_id := str(row.get("battleId", ""))
+	var state := str(row.get("status", "failed"))
+	var pinned := bool(row.get("favorite", false))
 	var saved_title := str(row.get("title", "")).strip_edges()
 	if not saved_title.is_empty():
+		var title_row := HBoxContainer.new()
+		title_row.add_theme_constant_override("separation", 4)
+		layout.add_child(title_row)
 		var title := Label.new()
 		title.text = saved_title
+		title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		title.add_theme_font_size_override("font_size", 17)
 		title.add_theme_color_override("font_color", INK)
-		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		layout.add_child(title)
+		title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		title_row.add_child(title)
+		var rename_button := _card_icon_button(title_row, "✎", _t("rename"))
+		rename_button.disabled = state != "available"
+		rename_button.pressed.connect(func(): _rename(row))
+		var favorite_button := _card_icon_button(title_row, "★" if pinned else "☆", _t("unpin") if pinned else _t("pin"), pinned)
+		favorite_button.disabled = state != "available"
+		favorite_button.pressed.connect(func(): _edit(battle_id, {"favorite": not pinned}))
 	var matchup_row := HBoxContainer.new()
 	matchup_row.add_theme_constant_override("separation", 8)
 	layout.add_child(matchup_row)
@@ -471,7 +484,6 @@ func _card(row: Dictionary) -> Control:
 		teams.add_child(versus)
 		teams.add_child(team_strip_factory.call(row.get("opponentRoster", [])))
 		layout.add_child(teams)
-	var state := str(row.get("status", "failed"))
 	var expiry := Label.new()
 	expiry.text = _t("status_" + state)
 	if state == "available":
@@ -502,59 +514,32 @@ func _card(row: Dictionary) -> Control:
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 8)
 	action_column.add_child(actions)
-	var battle_id := str(row.get("battleId", ""))
 	_button(actions, _t("watch"), func(): watch(battle_id), "primary").disabled = state != "available"
-	var pinned := bool(row.get("favorite", false))
-	_management_menu(actions, row, battle_id, state, pinned)
+	if str(row.get("kind", "ai_sparring")) == "ai_sparring":
+		_button(actions, _t("new_share_code") if row.get("shared", false) else _t("share"), func(): _share(battle_id), "quiet").disabled = state != "available"
+	_button(actions, _t("delete"), func(): _confirm_remove(battle_id), "danger")
 	return card
 
-func _management_menu(parent: Node, row: Dictionary, battle_id: String, state: String, pinned: bool) -> void:
-	var menu := MenuButton.new()
-	menu.text = _t("manage")
-	menu.custom_minimum_size = Vector2(112, 38)
-	menu.focus_mode = Control.FOCUS_NONE
-	menu.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	menu.add_theme_font_size_override("font_size", 14)
-	menu.add_theme_icon_override("arrow", _dropdown_arrow_icon())
-	menu.add_theme_constant_override("arrow_margin", 10)
-	menu.add_theme_stylebox_override("normal", _style(Color("#132237"), Color("#315574"), 7, 1, 10, 10, 8, 8))
-	menu.add_theme_stylebox_override("hover", _style(Color("#1a3550"), ACCENT, 7, 1, 10, 10, 8, 8))
-	menu.add_theme_stylebox_override("pressed", _style(Color("#0e2033"), ACCENT, 7, 1, 10, 10, 8, 8))
-	menu.add_theme_color_override("font_color", INK)
-	menu.add_theme_color_override("font_hover_color", INK)
-	var popup := menu.get_popup()
-	popup.transparent_bg = true
-	popup.add_theme_font_size_override("font_size", 14)
-	popup.add_theme_color_override("font_color", INK)
-	popup.add_theme_color_override("font_hover_color", INK)
-	popup.add_theme_constant_override("item_start_padding", 12)
-	popup.add_theme_constant_override("item_end_padding", 12)
-	popup.add_theme_stylebox_override("panel", _style(Color("#0b1727"), Color("#315574"), 8, 1, 8, 8, 7, 7))
-	popup.add_theme_stylebox_override("hover", _style(Color("#1a4160"), ACCENT, 6, 1, 8, 8, 5, 5))
-	popup.add_item(_t("unpin") if pinned else _t("pin"), 0)
-	popup.add_item(_t("rename"), 1)
-	var share_index := -1
-	if str(row.get("kind", "ai_sparring")) == "ai_sparring":
-		share_index = popup.item_count
-		popup.add_item(_t("new_share_code") if row.get("shared", false) else _t("share"), 2)
-	popup.add_separator()
-	popup.add_item(_t("delete"), 3)
-	popup.set_item_disabled(0, state != "available")
-	popup.set_item_disabled(1, state != "available")
-	if share_index >= 0:
-		popup.set_item_disabled(share_index, state != "available")
-	popup.id_pressed.connect(func(id: int):
-		match id:
-			0:
-				_edit(battle_id, {"favorite": not pinned})
-			1:
-				_rename(row)
-			2:
-				_share(battle_id)
-			3:
-				_confirm_remove(battle_id)
-	)
-	parent.add_child(menu)
+func _card_icon_button(parent: Node, glyph: String, tooltip: String, active := false) -> Button:
+	var button := Button.new()
+	button.text = glyph
+	button.tooltip_text = tooltip
+	button.custom_minimum_size = Vector2(28, 28)
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_size_override("font_size", 20)
+	var base := Color("#2e2616") if active else Color("#102035")
+	var hover := Color("#5a4920") if active else Color("#1b3853")
+	var border := Color("#d6ae47") if active else Color("#284966")
+	button.add_theme_stylebox_override("normal", _style(base, border, 6, 1, 3, 3, 2, 2))
+	button.add_theme_stylebox_override("hover", _style(hover, border.lightened(0.18), 6, 1, 3, 3, 2, 2))
+	button.add_theme_stylebox_override("pressed", _style(base.darkened(0.16), border, 6, 1, 3, 3, 2, 2))
+	button.add_theme_stylebox_override("disabled", _style(Color("#101d2d"), Color("#233a52"), 6, 1, 3, 3, 2, 2))
+	button.add_theme_color_override("font_color", Color("#f1d48b") if active else MUTED)
+	button.add_theme_color_override("font_hover_color", Color("#fff0b7") if active else INK)
+	button.add_theme_color_override("font_disabled_color", Color("#52657a"))
+	parent.add_child(button)
+	return button
 
 func _player_identity(name: String, appearance: Dictionary) -> Control:
 	var identity := HBoxContainer.new()
