@@ -42,6 +42,8 @@ const ROLE_BADGE_ICON_SIZE := Vector2(28.0, 28.0)
 const ROLE_BADGE_DEFAULT_WIDTH := 30.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 const NAMEPLATE_LAYER_GAP := 2.0
+const BATTLE_INDICATOR_CARD_GAP := 2.0
+const BATTLE_INDICATOR_HALF_HEIGHT := 12.0
 const BODY_SPRITE_NAME := "BodySprite"
 const MOUNT_SPRITE_NAME := "MountSprite"
 const MOUNT_FOREGROUND_SPRITE_NAME := "MountForegroundSprite"
@@ -327,7 +329,37 @@ func _sync_nearby_battle_indicator(state: Dictionary) -> void:
 		nearby_battle_indicator.spectate_requested.connect(
 			func(target_id: int): battle_spectate_requested.emit(target_id)
 		)
-	nearby_battle_indicator.configure(user_id, kind)
+	nearby_battle_indicator.configure(
+		user_id,
+		kind,
+		_get_nearby_battle_indicator_anchor()
+	)
+
+
+func _get_nearby_battle_indicator_anchor() -> Vector2:
+	if nameplate == null:
+		return NearbyPveBattleIndicatorScript.DEFAULT_ANCHOR_POSITION
+	if role_badge_icon != null and role_badge_icon.visible:
+		return Vector2(
+			0.0,
+			nameplate.position.y
+				+ ((role_badge_icon.offset_top + role_badge_icon.offset_bottom) * 0.5)
+		)
+	if role_badge_panel != null and role_badge_panel.visible:
+		return Vector2(
+			0.0,
+			nameplate.position.y
+				+ ((role_badge_panel.offset_top + role_badge_panel.offset_bottom) * 0.5)
+		)
+	if nameplate_background != null:
+		return Vector2(
+			0.0,
+			nameplate.position.y
+				+ nameplate_background.offset_top
+				- BATTLE_INDICATOR_HALF_HEIGHT
+				- BATTLE_INDICATOR_CARD_GAP
+		)
+	return NearbyPveBattleIndicatorScript.DEFAULT_ANCHOR_POSITION
 
 
 func _apply_aethernet_effect_state(effect_state: Dictionary) -> void:
