@@ -612,13 +612,23 @@ func _opponent_identity(row: Dictionary) -> Control:
 		portrait.texture = AI_SCIENTIST_PORTRAIT if str(row.get("difficulty", "")) == "ai4" else AI_VETERAN_PORTRAIT
 		frame.add_child(portrait)
 	else:
-		var fallback := Label.new()
-		fallback.text = name.left(1).to_upper() if not name.is_empty() else "?"
-		fallback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		fallback.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		fallback.add_theme_font_size_override("font_size", 16)
-		fallback.add_theme_color_override("font_color", MUTED)
-		frame.add_child(fallback)
+		var trainer_class := str(row.get("trainerClass", "")).strip_edges().to_lower().replace(" ", "_")
+		var trainer_portrait := ResourceLoader.load("res://assets/sprites/trainer_cards/showdown/%s-gen8.png" % trainer_class) as Texture2D if not trainer_class.is_empty() else null
+		if trainer_portrait != null:
+			var portrait := TextureRect.new()
+			portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			portrait.texture = trainer_portrait
+			frame.add_child(portrait)
+		else:
+			var fallback := Label.new()
+			fallback.text = name.left(1).to_upper() if not name.is_empty() else "?"
+			fallback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			fallback.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			fallback.add_theme_font_size_override("font_size", 16)
+			fallback.add_theme_color_override("font_color", MUTED)
+			frame.add_child(fallback)
 	var label := Label.new()
 	label.text = name if not name.is_empty() else _t("category_" + kind)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
