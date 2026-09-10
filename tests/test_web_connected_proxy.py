@@ -48,6 +48,11 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertEqual(client.get("/api/auth/web/world/transitions/kanto_pallet_town__to_route_1/access").status_code, 200)
             self.assertEqual(client.post("/api/auth/web/world/transitions/kanto_pallet_town__to_route_1/enter", json={"facingDirection": "down"}).status_code, 200)
             self.assertEqual(client.get("/api/auth/web/world/areas/kanto_players_house/access").status_code, 200)
+            self.assertEqual(client.get("/api/auth/web/world/story").status_code, 200)
+            self.assertEqual(client.post("/api/auth/web/world/story/oak-complete").status_code, 200)
+            self.assertEqual(client.get("/api/npcs/kanto_players_house_father").status_code, 200)
+            self.assertEqual(client.get("/api/dialogues/kanto_players_house_father_starter_intro").status_code, 200)
+            self.assertEqual(client.post("/api/npcs/kanto_players_house_father").status_code, 403)
             for path in ["/api/auth/login", "/api/internal/test", "/api/pvp/queues/ranked/join"]:
                 self.assertEqual(client.post(path).status_code, 403)
             self.assertEqual(client.post("/api/auth/web/login", content="x" * 16385).status_code, 413)
@@ -57,7 +62,7 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertIn("frame-ancestors 'none'", client.get("/").headers["content-security-policy"])
             for path in ["/.secret", "/external.js", "/%2e%2e/etc/passwd"]:
                 self.assertEqual(client.get(path).status_code, 404)
-            self.assertEqual(len(calls), 6)
+            self.assertEqual(len(calls), 10)
 
     def test_redirects_and_upstream_failure_are_not_followed_or_exposed(self):
         for handler, status in [(lambda _: httpx.Response(302, headers={"Location": "https://example.com"}), 502),

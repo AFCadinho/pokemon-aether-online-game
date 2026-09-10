@@ -20,6 +20,10 @@ HTTP_ROUTES = {
     ("POST", "/auth/email-verification/confirm"),
 }
 HTTP_ROUTE_PREFIXES = (
+    ("GET", "/npcs/"),
+    ("GET", "/dialogues/"),
+    ("GET", "/auth/web/world/story"),
+    ("POST", "/auth/web/world/story"),
     ("GET", "/auth/web/world/transitions/"),
     ("POST", "/auth/web/world/transitions/"),
     ("GET", "/auth/web/world/areas/"),
