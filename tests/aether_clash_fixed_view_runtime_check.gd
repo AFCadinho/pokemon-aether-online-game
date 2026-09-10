@@ -148,7 +148,7 @@ func _run() -> void:
 
 
 func _check_view(camera: Camera2D, context: String) -> void:
-	_check((camera.get_viewport_rect().size / camera.zoom).is_equal_approx(Vector2(960, 540)), "Exactly 960×540 world pixels: %s" % context)
+	_check((camera.get_viewport_rect().size / camera.zoom).is_equal_approx(POLICY.WORLD_VIEW_SIZE), "Exactly 1280×720 world pixels: %s" % context)
 
 
 func _check(condition: bool, label: String) -> void:
