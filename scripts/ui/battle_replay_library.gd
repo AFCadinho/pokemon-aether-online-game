@@ -1,5 +1,7 @@
 extends Control
 
+const TrainerHeadPortraitScript := preload("res://scripts/ui/trainer_head_portrait.gd")
+
 signal closed
 signal playback_requested(recording: Dictionary)
 signal playback_failed(message: String)
@@ -30,6 +32,8 @@ const ACCENT_DARK := Color("#123c58")
 const SURFACE := Color("#101e32")
 const SURFACE_RAISED := Color("#162b45")
 const DANGER := Color("#d96570")
+const AI_SCIENTIST_PORTRAIT := preload("res://assets/sprites/trainer_cards/showdown/scientist-gen7.png")
+const AI_VETERAN_PORTRAIT := preload("res://assets/sprites/trainer_cards/showdown/veteran-gen7.png")
 const REPLAY_CATEGORIES := [
 	{"id": "", "label": "category_all"},
 	{"id": "ai_sparring", "label": "category_ai_sparring"},
@@ -369,8 +373,7 @@ func refresh() -> void:
 	for row: Dictionary in rows:
 		list.add_child(_card(row))
 	status.text = _t("empty") if rows.is_empty() else _t("count", {"count": response.get("total", 0)})
-	usage.text = _t("usage", {"used": snappedf(float(response.get("storedBytes", 0)) / 1000000.0, 0.01),
-		"max": int(response.get("maxBytes", 0)) / 1000000, "favorites": response.get("favoriteCount", 0)})
+	usage.text = _t("usage", {"favorites": response.get("favoriteCount", 0)})
 	previous.disabled = offset == 0
 	next.disabled = offset + rows.size() >= int(response.get("total", 0))
 
@@ -382,27 +385,38 @@ func _card(row: Dictionary) -> Control:
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 7)
 	card.add_child(layout)
-	var title_row := HBoxContainer.new()
-	title_row.add_theme_constant_override("separation", 10)
-	layout.add_child(title_row)
-	var title := Label.new()
-	title.text = str(row.get("title", ""))
-	if title.text.is_empty():
-		title.text = "%s · %s" % [_t("category_" + str(row.get("kind", "ai_sparring"))), str(row.get("opponentDisplayName", ""))]
-	title.add_theme_font_size_override("font_size", 19)
-	title.add_theme_color_override("font_color", INK)
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title_row.add_child(title)
+	var saved_title := str(row.get("title", "")).strip_edges()
+	if not saved_title.is_empty():
+		var title := Label.new()
+		title.text = saved_title
+		title.add_theme_font_size_override("font_size", 18)
+		title.add_theme_color_override("font_color", INK)
+		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		layout.add_child(title)
+	var matchup_row := HBoxContainer.new()
+	matchup_row.add_theme_constant_override("separation", 8)
+	layout.add_child(matchup_row)
+	matchup_row.add_child(_player_identity(PlayerSave.player_name, PlayerSave.to_appearance_state()))
+	var matchup_versus := Label.new()
+	matchup_versus.text = "VS"
+	matchup_versus.add_theme_font_size_override("font_size", 12)
+	matchup_versus.add_theme_color_override("font_color", ACCENT)
+	matchup_versus.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	matchup_row.add_child(matchup_versus)
+	matchup_row.add_child(_opponent_identity(row))
+	var matchup_spacer := Control.new()
+	matchup_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	matchup_row.add_child(matchup_spacer)
 	var result_badge := Label.new()
 	result_badge.text = _t(result)
 	result_badge.add_theme_font_size_override("font_size", 12)
 	result_badge.add_theme_color_override("font_color", Color("#ffffff"))
 	result_badge.add_theme_stylebox_override("normal", _style(result_color, result_color, 6, 0, 8, 8, 4, 4))
-	title_row.add_child(result_badge)
+	matchup_row.add_child(result_badge)
 	var detail := Label.new()
-	detail.text = "%s · %s · %s · %s" % [str(row.get("opponentDisplayName", "")), str(row.get("createdAt", "")).replace("T", " ").left(16),
-		_t(str(row.get("result", "unknown"))), _t("turns", {"count": row.get("turns", 0)})]
+	var turns := int(round(float(row.get("turns", 0))))
+	detail.text = "%s · %s · %s" % [_t("category_" + str(row.get("kind", "ai_sparring"))),
+		str(row.get("createdAt", "")).replace("T", " ").left(16), _t("turn" if turns == 1 else "turns", {"count": turns})]
 	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	detail.add_theme_font_size_override("font_size", 14)
 	detail.add_theme_color_override("font_color", MUTED)
@@ -434,6 +448,68 @@ func _card(row: Dictionary) -> Control:
 	_button(actions, _t("rename"), func(): _rename(row), "quiet").disabled = state != "available"
 	_button(actions, _t("delete"), func(): _confirm_remove(battle_id), "danger")
 	return card
+
+func _player_identity(name: String, appearance: Dictionary) -> Control:
+	var identity := HBoxContainer.new()
+	identity.add_theme_constant_override("separation", 6)
+	identity.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	var frame := PanelContainer.new()
+	frame.custom_minimum_size = Vector2(38, 38)
+	frame.add_theme_stylebox_override("panel", _style(Color("#0b1727"), ACCENT, 8, 1, 0, 0, 0, 0))
+	identity.add_child(frame)
+	var fallback := Label.new()
+	fallback.text = name.left(1).to_upper() if not name.is_empty() else "?"
+	fallback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	fallback.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	fallback.add_theme_font_size_override("font_size", 16)
+	fallback.add_theme_color_override("font_color", ACCENT)
+	frame.add_child(fallback)
+	if not appearance.is_empty():
+		var portrait := TrainerHeadPortraitScript.new()
+		portrait.custom_minimum_size = Vector2(34, 34)
+		portrait.set_appearance_state(appearance)
+		frame.add_child(portrait)
+		fallback.visible = false
+	var label := Label.new()
+	label.text = name if not name.is_empty() else "Trainer"
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 17)
+	label.add_theme_color_override("font_color", INK)
+	identity.add_child(label)
+	return identity
+
+func _opponent_identity(row: Dictionary) -> Control:
+	var name := str(row.get("opponentDisplayName", "")).strip_edges()
+	var kind := str(row.get("kind", "ai_sparring"))
+	var identity := HBoxContainer.new()
+	identity.add_theme_constant_override("separation", 6)
+	identity.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	var frame := PanelContainer.new()
+	frame.custom_minimum_size = Vector2(38, 38)
+	frame.add_theme_stylebox_override("panel", _style(Color("#0b1727"), Color("#627a99"), 8, 1, 0, 0, 0, 0))
+	identity.add_child(frame)
+	if kind == "ai_sparring":
+		var portrait := TextureRect.new()
+		portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		portrait.texture = AI_SCIENTIST_PORTRAIT if str(row.get("difficulty", "")) == "ai4" else AI_VETERAN_PORTRAIT
+		frame.add_child(portrait)
+	else:
+		var fallback := Label.new()
+		fallback.text = name.left(1).to_upper() if not name.is_empty() else "?"
+		fallback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		fallback.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		fallback.add_theme_font_size_override("font_size", 16)
+		fallback.add_theme_color_override("font_color", MUTED)
+		frame.add_child(fallback)
+	var label := Label.new()
+	label.text = name if not name.is_empty() else _t("category_" + kind)
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 17)
+	label.add_theme_color_override("font_color", INK)
+	identity.add_child(label)
+	return identity
 
 func _position_shell() -> void:
 	if shell == null:
