@@ -127,6 +127,7 @@ func _run() -> void:
 	_check(library.list.get_child_count() == 2, "Library renders management cards")
 	_check(library.shell.get_theme_stylebox("panel") != null, "Library shell has a dedicated replay visual style")
 	_check(library.search.get_theme_stylebox("focus") != null and library.outcome.get_theme_stylebox("hover") != null, "Replay filters have focused and hover states")
+	_check(library.reset_filters_button != null and library.reset_filters_button.text != "", "Replay filters reset independently of live search")
 	_check(library.outcome.get_theme_icon("arrow") != null and library.outcome.get_popup().get_theme_stylebox("panel") != null, "Replay dropdowns style their arrow and menu")
 	_check(library.favorites.get_theme_icon("checked") != null and library.favorites.get_theme_stylebox("normal") != null, "Favorites uses a dedicated toggle style")
 	library._open_shared_replay_dialog()

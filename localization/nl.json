@@ -44,6 +44,7 @@
   "ui.replays.unknown": "Bezig",
   "ui.replays.favorites": "Favorieten",
   "ui.replays.refresh": "Zoeken / verversen",
+  "ui.replays.reset_filters": "Filters resetten",
   "ui.replays.loading": "Replays laden…",
   "ui.replays.load_failed": "Je replays konden niet worden geladen. Probeer het opnieuw.",
   "ui.replays.empty": "Geen replays gevonden.",
