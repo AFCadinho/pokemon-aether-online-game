@@ -29,7 +29,7 @@
   "ui.replays.load_failed": "无法加载回放，请重试。",
   "ui.replays.empty": "未找到回放。完成一场新的 AI 陪练对战即可录制首个回放。",
   "ui.replays.count": "{count} 个回放",
-  "ui.replays.usage": "{used} / {max} MB · {favorites} / 10 个收藏 · 最近 50 场录像保留 30 天",
+  "ui.replays.usage": "{used} / {max} MB · {favorites} / 10 个收藏 · 每个类别最近 10 场录像保留 30 天",
   "ui.replays.previous_page": "上一页",
   "ui.replays.next_page": "下一页",
   "ui.replays.turns": "{count} 回合",

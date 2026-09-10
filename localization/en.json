@@ -29,7 +29,7 @@
   "ui.replays.load_failed": "Could not load your replays. Please try again.",
   "ui.replays.empty": "No replays found. Finish a new AI Sparring battle to record your first replay.",
   "ui.replays.count": "{count} replays",
-  "ui.replays.usage": "{used} / {max} MB · {favorites} / 10 favorites · Latest 50 recordings, kept for 30 days",
+  "ui.replays.usage": "{used} / {max} MB · {favorites} / 10 favorites · Latest 10 per category, kept for 30 days",
   "ui.replays.previous_page": "Previous page",
   "ui.replays.next_page": "Next page",
   "ui.replays.turns": "{count} turns",

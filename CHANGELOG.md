@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Battle Replays now keep the latest 10 ordinary recordings per category, reserving independent future slots for AI Sparring, PvP, PvE and wild encounters while favorites stay protected.
+
 - Finished Live Battles now hide the spectator roster rails behind the result screen, keeping the outcome clear.
 
 - AI Sparring now has a clearer spectator checkbox and a grouped start bar, with more room to paste your team.
