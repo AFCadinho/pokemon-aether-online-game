@@ -92,27 +92,31 @@ func _ready() -> void:
 	_button(header, _t("watch_shared_title"), _open_shared_replay_dialog, "secondary")
 	_button(header, _t("close"), func(): hide(); closed.emit(), "quiet")
 	var filter_panel := PanelContainer.new()
-	filter_panel.add_theme_stylebox_override("panel", _style(Color("#0a1524"), Color("#1f405e"), 10, 1, 14, 14, 12, 12))
+	filter_panel.add_theme_stylebox_override("panel", _style(Color("#0a1524"), Color("#1f405e"), 10, 1, 10, 10, 9, 9))
 	layout.add_child(filter_panel)
 	var filter_layout := VBoxContainer.new()
-	filter_layout.add_theme_constant_override("separation", 7)
+	filter_layout.add_theme_constant_override("separation", 5)
 	filter_panel.add_child(filter_layout)
+	var category_bar := HBoxContainer.new()
+	category_bar.add_theme_constant_override("separation", 10)
+	filter_layout.add_child(category_bar)
 	var filter_caption := Label.new()
 	filter_caption.text = "BROWSE REPLAYS"
+	filter_caption.custom_minimum_size.x = 90
+	filter_caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	filter_caption.add_theme_font_size_override("font_size", 12)
 	filter_caption.add_theme_color_override("font_color", ACCENT)
-	filter_layout.add_child(filter_caption)
-	filter_layout.add_child(_filter_section_label("CATEGORY"))
+	category_bar.add_child(filter_caption)
 	var categories := HFlowContainer.new()
+	categories.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	categories.add_theme_constant_override("horizontal_separation", 6)
 	categories.add_theme_constant_override("vertical_separation", 6)
-	filter_layout.add_child(categories)
+	category_bar.add_child(categories)
 	for entry: Dictionary in REPLAY_CATEGORIES:
 		var category_id := str(entry["id"])
 		var tab := _category_button(categories, _t(str(entry["label"])), category_id)
 		category_buttons[category_id] = tab
 	_refresh_category_tabs()
-	filter_layout.add_child(_filter_section_label("FILTER RESULTS"))
 	var filters := HFlowContainer.new()
 	filters.add_theme_constant_override("horizontal_separation", 8)
 	filters.add_theme_constant_override("vertical_separation", 8)
