@@ -14,6 +14,13 @@ var position_label: Label
 var speed := 1.0
 var closing := false
 
+const INK := Color("#edf7ff")
+const MUTED := Color("#91a8be")
+const ACCENT := Color("#55d5ff")
+const SURFACE := Color("#102239")
+const SURFACE_RAISED := Color("#17314d")
+const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/icons/battle_replays_dropdown_arrow.svg")
+
 func _t(key: String, args: Dictionary = {}) -> String:
 	return LocalizationManager.text("ui.replays." + key, args)
 
@@ -26,13 +33,60 @@ func setup(battle: Node, recording: Dictionary) -> bool:
 	_refresh()
 	return true
 
-func _button(parent: Node, text: String, action: Callable) -> Button:
+func _style(color: Color, border: Color, radius: int, width := 0, left := 9, right := 9, top := 7, bottom := 7) -> StyleBoxFlat:
+	var box := StyleBoxFlat.new()
+	box.bg_color = color
+	box.border_color = border
+	box.set_border_width_all(width)
+	box.set_corner_radius_all(radius)
+	box.content_margin_left = left
+	box.content_margin_right = right
+	box.content_margin_top = top
+	box.content_margin_bottom = bottom
+	return box
+
+func _button(parent: Node, text: String, action: Callable, variant := "secondary") -> Button:
 	var button := Button.new()
 	button.text = text
-	button.custom_minimum_size.y = 34
+	button.custom_minimum_size.y = 38
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_size_override("font_size", 14)
+	var base := SURFACE_RAISED
+	var hover := Color("#234968")
+	var border := Color("#365b79")
+	if variant == "primary":
+		base = Color("#126b91")
+		hover = Color("#198abd")
+		border = ACCENT
+	elif variant == "quiet":
+		base = Color("#13243a")
+		hover = Color("#1a3853")
+		border = Color("#315574")
+		button.add_theme_color_override("font_color", MUTED)
+	else:
+		button.add_theme_color_override("font_color", INK)
+	button.add_theme_stylebox_override("normal", _style(base, border, 7, 1))
+	button.add_theme_stylebox_override("hover", _style(hover, border.lightened(0.2), 7, 1))
+	button.add_theme_stylebox_override("pressed", _style(base.darkened(0.18), border, 7, 1))
+	button.add_theme_stylebox_override("disabled", _style(Color("#0c1725"), Color("#243a50"), 7, 1))
+	button.add_theme_color_override("font_hover_color", INK)
+	button.add_theme_color_override("font_disabled_color", Color("#52677e"))
 	button.pressed.connect(action)
 	parent.add_child(button)
 	return button
+
+func _group() -> PanelContainer:
+	var panel := PanelContainer.new()
+	panel.add_theme_stylebox_override("panel", _style(Color("#0b1726"), Color("#254966"), 8, 1, 7, 7, 6, 6))
+	return panel
+
+func _tiny_label(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 11)
+	label.add_theme_color_override("font_color", MUTED)
+	return label
 
 func _build() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -41,49 +95,96 @@ func _build() -> void:
 	offset_right = -12
 	offset_bottom = -8
 	z_index = 100
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color("101c30")
-	style.set_corner_radius_all(8)
-	style.content_margin_left = 10
-	style.content_margin_right = 10
-	style.content_margin_top = 6
-	style.content_margin_bottom = 6
-	add_theme_stylebox_override("panel", style)
-	add_theme_font_size_override("font_size", 18)
+	add_theme_stylebox_override("panel", _style(Color("#0b192b"), Color("#315c80"), 10, 1, 14, 14, 10, 10))
 	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 7)
 	add_child(layout)
 	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
 	layout.add_child(header)
+	var live_dot := ColorRect.new()
+	live_dot.color = ACCENT
+	live_dot.custom_minimum_size = Vector2(3, 22)
+	header.add_child(live_dot)
 	var title := Label.new()
 	title.text = _t("playback_title")
+	title.add_theme_font_size_override("font_size", 14)
+	title.add_theme_color_override("font_color", INK)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(title)
 	position_label = Label.new()
+	position_label.add_theme_font_size_override("font_size", 13)
+	position_label.add_theme_color_override("font_color", INK)
+	position_label.add_theme_stylebox_override("normal", _style(Color("#122e47"), Color("#315c80"), 6, 1, 8, 8, 4, 4))
 	header.add_child(position_label)
-	_button(header, _t("back"), _close)
-	var row := HFlowContainer.new()
+	_button(header, _t("back"), _close, "quiet")
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
 	layout.add_child(row)
-	_button(row, "|◀", func(): seek(0)).tooltip_text = _t("begin")
-	_button(row, "◀", func(): seek(timeline.index_for_turn(maxi(0, timeline.turn_at(index) - 1)))).tooltip_text = _t("previous_turn")
-	play_button = _button(row, _t("play"), _toggle)
-	_button(row, "▶", func():
+	var transport := _group()
+	row.add_child(transport)
+	var transport_buttons := HBoxContainer.new()
+	transport_buttons.add_theme_constant_override("separation", 5)
+	transport.add_child(transport_buttons)
+	_button(transport_buttons, "|◀", func(): seek(0), "quiet").tooltip_text = _t("begin")
+	_button(transport_buttons, "◀", func(): seek(timeline.index_for_turn(maxi(0, timeline.turn_at(index) - 1))), "quiet").tooltip_text = _t("previous_turn")
+	play_button = _button(transport_buttons, "▶  " + _t("play"), _toggle, "primary")
+	_button(transport_buttons, "▶", func():
 		var turn := timeline.turn_at(index) + 1
-		seek(timeline.index_for_turn(turn) if timeline.turn_indices.has(turn) else timeline.frames.size() - 1)).tooltip_text = _t("next_turn")
-	_button(row, "▶|", func(): seek(timeline.frames.size() - 1)).tooltip_text = _t("end")
+		seek(timeline.index_for_turn(turn) if timeline.turn_indices.has(turn) else timeline.frames.size() - 1), "quiet").tooltip_text = _t("next_turn")
+	_button(transport_buttons, "▶|", func(): seek(timeline.frames.size() - 1), "quiet").tooltip_text = _t("end")
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(spacer)
+	var turn_group := _group()
+	row.add_child(turn_group)
+	var turn_layout := HBoxContainer.new()
+	turn_layout.add_theme_constant_override("separation", 6)
+	turn_group.add_child(turn_layout)
+	turn_layout.add_child(_tiny_label("TURN"))
 	turn_picker = SpinBox.new()
 	turn_picker.min_value = 0
 	turn_picker.max_value = timeline.turn_at(timeline.frames.size() - 1)
-	turn_picker.custom_minimum_size.x = 76
-	row.add_child(turn_picker)
-	_button(row, _t("go_turn"), func(): seek(timeline.index_for_turn(int(turn_picker.value))))
+	turn_picker.custom_minimum_size = Vector2(68, 34)
+	turn_picker.focus_mode = Control.FOCUS_NONE
+	turn_picker.add_theme_icon_override("updown", DROPDOWN_ARROW)
+	var turn_input := turn_picker.get_line_edit()
+	turn_input.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	turn_input.add_theme_font_size_override("font_size", 14)
+	turn_input.add_theme_color_override("font_color", INK)
+	turn_input.add_theme_stylebox_override("normal", _style(Color("#071321"), Color("#315574"), 5, 1, 7, 7, 5, 5))
+	turn_input.add_theme_stylebox_override("focus", _style(Color("#0b1e30"), ACCENT, 5, 1, 7, 7, 5, 5))
+	turn_layout.add_child(turn_picker)
+	_button(turn_layout, _t("go_turn"), func(): seek(timeline.index_for_turn(int(turn_picker.value))), "quiet")
+	var speed_group := _group()
+	row.add_child(speed_group)
+	var speed_layout := HBoxContainer.new()
+	speed_layout.add_theme_constant_override("separation", 6)
+	speed_group.add_child(speed_layout)
+	speed_layout.add_child(_tiny_label("SPEED"))
 	var speeds := OptionButton.new()
 	for value: float in [0.5, 1.0, 2.0, 4.0]:
 		speeds.add_item("%s×" % value)
 	speeds.select(1)
+	speeds.custom_minimum_size = Vector2(74, 34)
+	speeds.focus_mode = Control.FOCUS_NONE
+	speeds.add_theme_icon_override("arrow", DROPDOWN_ARROW)
+	speeds.add_theme_constant_override("arrow_margin", 9)
+	speeds.add_theme_font_size_override("font_size", 14)
+	speeds.add_theme_color_override("font_color", INK)
+	speeds.add_theme_stylebox_override("normal", _style(Color("#071321"), Color("#315574"), 5, 1, 8, 8, 5, 5))
+	speeds.add_theme_stylebox_override("hover", _style(Color("#0d2840"), ACCENT, 5, 1, 8, 8, 5, 5))
+	var speed_popup := speeds.get_popup()
+	speed_popup.transparent_bg = true
+	speed_popup.add_theme_font_size_override("font_size", 14)
+	speed_popup.add_theme_color_override("font_color", INK)
+	speed_popup.add_theme_color_override("font_hover_color", INK)
+	speed_popup.add_theme_stylebox_override("panel", _style(Color("#0b1726"), Color("#315574"), 7, 1, 7, 7, 6, 6))
+	speed_popup.add_theme_stylebox_override("hover", _style(Color("#1a4160"), ACCENT, 5, 1, 8, 8, 5, 5))
 	speeds.item_selected.connect(func(selected: int):
 		speed = [0.5, 1.0, 2.0, 4.0][selected]
 		host.call("set_replay_speed", speed))
-	row.add_child(speeds)
+	speed_layout.add_child(speeds)
 
 func _toggle() -> void:
 	if closing:
@@ -146,6 +247,6 @@ func _close() -> void:
 	close_requested.emit()
 
 func _refresh() -> void:
-	play_button.text = _t("pause") if playing else _t("play")
+	play_button.text = "Ⅱ  " + _t("pause") if playing else "▶  " + _t("play")
 	position_label.text = _t("turn_position", {"turn": timeline.turn_at(index), "total": timeline.turn_at(timeline.frames.size() - 1)})
 	turn_picker.set_value_no_signal(timeline.turn_at(index))
