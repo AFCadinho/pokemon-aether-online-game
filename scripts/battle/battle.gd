@@ -25,7 +25,9 @@ func setup_battle_replay(recording: Dictionary) -> bool:
 	battle_request.set_meta("replay_read_only", true)
 	damage_calc_request.set_meta("replay_read_only", true)
 	var lead := PokemonFactory.create_pokemon_from_backend_payload(team[0])
-	_prepare_battle_setup(BattleType.TRAINER, lead, null)
+	# AI Sparring uses the same stadium profile as the original battle. A replay
+	# must not fall back to the scene's default grass environment.
+	_prepare_battle_setup(BattleType.TRAINER, lead, null, BATTLE_ENVIRONMENT_CATALOG.PVP_STADIUM_ENVIRONMENT_ID)
 	training_ai_battle = true
 	pvp_battle_purpose = "training"
 	action_flow.set_local_player_id("p1")

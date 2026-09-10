@@ -50,6 +50,7 @@ func _run() -> void:
 	root.add_child(battle)
 	await process_frame
 	_check(battle.setup_battle_replay(recording), "Battle scene opens in replay mode")
+	_check(str(battle.active_battle_environment_id) == "pvp_stadium", "Replay restores the AI Sparring stadium environment")
 	_check(not battle.battle_actions_ready and battle.battle_request.has_meta("replay_read_only"), "Replay cannot issue battle actions")
 	_check(not battle.action_buttons.visible, "Live action controls are hidden")
 	var request_result: Dictionary = await root.get_node("BattleApiClient").send_post_request(battle.battle_request, "/must-not-send", {})

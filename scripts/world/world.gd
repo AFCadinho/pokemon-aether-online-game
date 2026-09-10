@@ -71,7 +71,11 @@ func start_battle_replay(recording: Dictionary, return_callback: Callable) -> bo
 		return false
 	# Replays have their own close path and never enter reward/forfeit handling.
 	battle_instance.battle_ended.disconnect(_on_battle_ended)
+	# AI Sparring replays preserve the same trainer battle atmosphere as their
+	# original match instead of leaving the current map track playing.
+	MusicManager.play_trainer_battle_music()
 	if not battle_instance.setup_battle_replay(recording):
+		MusicManager.play_overworld_music()
 		_clear_battle_ui_instance()
 		return false
 	replay_return_callback = return_callback
@@ -92,6 +96,7 @@ func close_battle_replay(restore_library := true) -> void:
 	active_battle_kind = ""
 	active_battle_id = ""
 	_unlock_overworld_after_battle()
+	MusicManager.play_overworld_music()
 	if restore_library and callback.is_valid():
 		callback.call()
 
