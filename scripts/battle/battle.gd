@@ -7229,6 +7229,11 @@ func resume_trainer_battle_from_response(
 		return false
 	last_rendered_event_seq = _get_pvp_response_event_seq_end(api_response)
 	action_flow.restore_http_response(snapshot, last_rendered_event_seq)
+	# The current snapshot must not replay old events as animations or actions,
+	# but those events are still the authoritative record of what the player has
+	# already seen. Restore their log and opponent-party visibility separately.
+	_restore_battle_log_from_history_response(api_response)
+	_restore_trainer_opponent_reveals_from_history(api_response)
 	var selected := _get_player_save_pokemon_for_battle_display_data(battle_state.get_active_player_pokemon("p1"))
 	if selected != null:
 		active_player_pokemon = selected
@@ -7246,6 +7251,36 @@ func resume_trainer_battle_from_response(
 	else:
 		_show_force_switch_if_needed()
 	return true
+
+
+func _restore_trainer_opponent_reveals_from_history(api_response: Dictionary) -> void:
+	var opponent_team := _get_display_team_data("p2")
+	# The current active opponent is always public and must never be hidden after
+	# a reconnect, even when there is no retained switch event.
+	opponent_party_reveal_policy.reveal_active(opponent_team)
+
+	var events_value: Variant = api_response.get("events", [])
+	if not (events_value is Array):
+		return
+
+	for event_value: Variant in events_value as Array:
+		if not (event_value is Dictionary):
+			continue
+		var event_data := event_value as Dictionary
+		if not _is_switch_like_event(event_data):
+			continue
+		var switch_ident := _get_switch_event_ident(event_data)
+		if _get_player_id_from_ident(switch_ident) != "p2":
+			continue
+		var team_index := _find_temporary_switch_target_index(opponent_team, switch_ident, event_data)
+		if team_index < 0 or team_index >= opponent_team.size():
+			continue
+		var pokemon_value: Variant = opponent_team[team_index]
+		if not (pokemon_value is Dictionary):
+			continue
+		var pokemon_data := pokemon_value as Dictionary
+		var slot := int(pokemon_data.get("metadataSlot", pokemon_data.get("metadata_slot", team_index + 1)))
+		opponent_party_reveal_policy.reveal_slot(slot)
 
 
 func setup_trainer_battle_from_response(

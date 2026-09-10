@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reconnecting to an ongoing trainer battle now restores the battle log and Pokémon that were already revealed, including the active opponent.
+
 - Live spectators no longer receive a false sprite-reconciliation warning while an authoritative snapshot catches up.
 
 - Nearby NPC battle spectators now see both trainers and Poké Ball placeholders for concealed reserve Pokémon.
