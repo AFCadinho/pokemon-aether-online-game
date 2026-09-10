@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Finished Live Battles now hide the spectator roster rails behind the result screen, keeping the outcome clear.
+
 - AI Sparring now has a clearer spectator checkbox and a grouped start bar, with more room to paste your team.
 
 - AI Sparring now has a Live Battles tab. Allow spectators before starting to let other players find and watch your practice battle.

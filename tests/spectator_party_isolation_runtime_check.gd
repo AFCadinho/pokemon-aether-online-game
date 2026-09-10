@@ -44,6 +44,15 @@ func _ready() -> void:
 	battle.pvp_room_code = "isolation-test"
 	battle.pvp_viewer_role = "spectator"
 	battle.action_flow.set_local_player_id("p1")
+	battle.player_party_grid.show()
+	battle.player_stage_party_grid.get_parent().show()
+	battle.opponent_party_grid.show()
+	battle.opponent_stage_party_rail.show()
+	battle.battle_party_rail.show()
+	battle._hide_spectator_rosters_for_terminal_result()
+	_check(not battle.player_party_grid.visible, "spectator result hides the observed bottom roster")
+	_check(not battle.player_stage_party_grid.get_parent().visible and not battle.opponent_party_grid.visible, "spectator result hides both stage rosters")
+	_check(not battle.opponent_stage_party_rail.visible and not battle.battle_party_rail.visible, "spectator result leaves no party rail behind the overlay")
 
 	for condition: String in ["100/100", "35/100 brn", "0 fnt", "75/100 par"]:
 		var snapshot := _snapshot(condition)
