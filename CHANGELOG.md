@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- NPC Battle Replays now use the standard trainer arena rather than AI Sparring's stadium presentation.
+
 - Replay transport jumps now keep an active replay playing instead of pausing it.
 
 - Replay cards now use a compact play-icon action beneath their management controls.
