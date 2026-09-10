@@ -14600,6 +14600,14 @@ func _is_spectator_terminal_message(message: Dictionary) -> bool:
 func _finish_spectator_terminal_message(message: Dictionary) -> void:
 	if not _is_spectator_terminal_message(message):
 		return
+	if pvp_match_id.begins_with("ai:"):
+		# A terminal notification may share the last event cursor (for example a
+		# draw). Let the queued live animations finish before showing the result.
+		var deadline := Time.get_ticks_msec() + 30000
+		while not battle_finished and Time.get_ticks_msec() < deadline and (pvp_event_queue.is_rendering or pvp_idle_realtime_drain_pending or not pvp_realtime_updates.is_empty()):
+			await get_tree().process_frame
+		if battle_finished:
+			return
 	var message_type := str(message.get("type", "")).strip_edges().to_lower()
 	var end_reason := str(message.get(
 		"endReason",

@@ -205,8 +205,9 @@ func _connect_room_async(attempt_generation: int) -> void:
 	websocket.inbound_buffer_size = WEBSOCKET_BUFFER_BYTES
 	websocket.outbound_buffer_size = WEBSOCKET_BUFFER_BYTES
 	websocket.max_queued_packets = WEBSOCKET_MAX_QUEUED_PACKETS
+	var socket_path := "/ws/training-live" if active_viewer_role == "spectator" and active_match_id.begins_with("ai:") else "/ws/pvp-battle"
 	var websocket_url := ClientBuild.append_websocket_query(
-		_to_websocket_url(base_url) + "/ws/pvp-battle?token=%s" % _session_token().uri_encode()
+		_to_websocket_url(base_url) + socket_path + "?token=%s" % _session_token().uri_encode()
 	)
 	if DEBUG_PVP_REALTIME:
 		_log_realtime("Connecting websocket", "url=%s" % websocket_url)
@@ -260,10 +261,8 @@ func _build_join_payload() -> Dictionary:
 func seed_spectator_event_cursor(response: Dictionary) -> void:
 	if active_viewer_role != "spectator" or not response.has("eventSeq"):
 		return
-	last_spectator_event_seq = max(
-		last_spectator_event_seq,
-		_nonnegative_int(response.get("eventSeq", 0))
-	)
+	var cursor := maxi(-1, int(response.get("eventSeq", -1)))
+	last_spectator_event_seq = maxi(last_spectator_event_seq, cursor) if spectator_cursor_valid else cursor
 	spectator_cursor_valid = true
 
 
@@ -1378,6 +1377,10 @@ func _handle_join_error(message: Dictionary) -> void:
 	var status_code := _nonnegative_int(message.get("status", 0))
 	if status_code >= 500 or status_code in [408, 425, 429] or bool(message.get("retryable", false)):
 		_restart_stalled_connection(reason)
+		return
+	if active_viewer_role == "spectator" and active_match_id.begins_with("ai:") and code == "training_live_unavailable":
+		battle_update_received.emit({"type": "pvp.match_ended", "reason": "unavailable", "battleId": active_battle_id})
+		disconnect_room()
 		return
 	if status_code in [401, 403] or code in [
 		"pvp_identity_resolution_failed",
