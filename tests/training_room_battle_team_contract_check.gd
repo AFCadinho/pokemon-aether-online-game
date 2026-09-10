@@ -109,6 +109,10 @@ func _check_training_switches_preserve_canonical_slots() -> void:
 		capture_source.contains("\t\treturn\n\n\tfor index in range(PlayerSave.party.size()):"),
 		"Training AI canonical roster stops before account-party slots are appended"
 	)
+	_check(
+		capture_source.contains("if _is_spectator_battle():\n\t\treturn\n\tif _is_training_room_battle():"),
+		"Training spectators never require the participant's private Pokepaste"
+	)
 
 
 func _check_battle_controller_isolates_training_from_player_save() -> void:
