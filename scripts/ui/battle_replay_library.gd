@@ -373,8 +373,7 @@ func refresh() -> void:
 	for row: Dictionary in rows:
 		list.add_child(_card(row))
 	status.text = _t("empty") if rows.is_empty() else _t("count", {"count": response.get("total", 0)})
-	usage.text = _t("usage", {"used": snappedf(float(response.get("storedBytes", 0)) / 1000000.0, 0.01),
-		"max": int(response.get("maxBytes", 0)) / 1000000, "favorites": response.get("favoriteCount", 0)})
+	usage.text = _t("usage", {"favorites": response.get("favoriteCount", 0)})
 	previous.disabled = offset == 0
 	next.disabled = offset + rows.size() >= int(response.get("total", 0))
 

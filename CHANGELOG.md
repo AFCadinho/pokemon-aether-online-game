@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Battle Replay summaries now focus on favorites and per-category limits, with a simpler empty state.
+
 - Battle Replays now keep the latest 10 ordinary recordings per category, reserving independent future slots for AI Sparring, PvP, PvE and wild encounters while favorites stay protected; a compact category-tab library makes those collections easy to browse.
 
 - Battle Replay rename and delete confirmations now match the library's visual style, with clearer primary and destructive actions.
