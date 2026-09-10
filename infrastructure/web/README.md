@@ -1,4 +1,4 @@
-# Local browser build — phase 2
+# Local browser build — phase 5
 
 This is a real WebAssembly export of the existing Godot 4.6 client, using the
 `Web Local Preview` preset and the Compatibility renderer only for web. Desktop
@@ -82,15 +82,20 @@ identifiable without including user settings, sessions, or credentials.
 
 ## Asset selection
 
-The preset includes the shared client code and resources, full player assets,
-localization and login music. It excludes world scenes, generated map visuals,
-the large Pokemon sprite collections, battle/overworld music, launcher, tests,
-tools, docs and benchmarks. Shared runtime classes need more than the login
-scene's immediate resource dependencies, so scene-only export is insufficient.
+The preset includes the shared client code, all player appearance assets, the
+nine interiors/exteriors reachable inside the three-map demo, localization and
+the complete regular/shiny HOME sprite collection. AI Sparring therefore has a
+static visual fallback for every available Pokemon and form. The full animated
+Gen 5 collection is deliberately excluded: in this checkout it is about 1.1 GiB
+before Godot export and is not a viable initial browser download. A later
+on-demand asset delivery phase can add those animations without blocking play.
 
-The first preview prioritizes correct shared-client startup. Its download size
-does not predict the final demo size. The map allowlist and on-demand Gen 5
-sprite loader are later milestones, not implemented here.
+Generated demo-map textures are stored as self-contained, lossless compressed
+resources. This preserves their pixels and works on desktop and Web without
+duplicating the project. The build command verifies required/excluded pack
+markers and rejects an initial payload above 300 MiB. Phase 5 is 285 MiB before
+HTTP compression, down from the phase-4 baseline of 559 MiB while adding the
+static battle sprite catalog.
 
 ## Focused validation
 
