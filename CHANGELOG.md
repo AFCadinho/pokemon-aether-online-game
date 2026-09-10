@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nearby NPC battle spectators now see both trainers and Poké Ball placeholders for concealed reserve Pokémon.
+
 - Spectators now enter live battles with both active Pokémon already visible instead of replaying their opening summon animations.
 
 - Nearby battle Poké Balls now use a smaller visual size while retaining their easy-to-click area.
