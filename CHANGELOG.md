@@ -8,7 +8,7 @@
 
 - Battle Replays now restore AI Sparring's stadium background and battle music, then return to the map music when you close the viewer.
 
-- Battle Replays now use a cleaner library with custom filters and favorites toggle, replay result badges, distinct watch and management actions, a balanced spectator-style information dock, and playback buttons in the open move-command area.
+- Battle Replays now use a cleaner library with custom filters and favorites toggle, replay result badges, distinct watch and management actions, a balanced spectator-style information dock, refined control capsules, and playback buttons in the open move-command area.
 
 - Aether Clash now gives everyone the same arena view on every screen size. Only Spectate Orbs provide a wider overview; your usual zoom returns after leaving.
 
