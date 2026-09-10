@@ -478,12 +478,15 @@ func _card(row: Dictionary) -> Control:
 		expiry.text = _t("pinned") if row.get("favorite", false) else _t("expires", {"date": str(row.get("expiresAt", "")).left(10)})
 	expiry.add_theme_font_size_override("font_size", 13)
 	expiry.add_theme_color_override("font_color", Color("#f1d48b") if row.get("favorite", false) else MUTED)
-	layout.add_child(expiry)
+	expiry.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	expiry.custom_minimum_size.x = 150
+	expiry.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	var action_column := VBoxContainer.new()
 	action_column.custom_minimum_size.x = 252
 	action_column.add_theme_constant_override("separation", 8)
 	card_row.add_child(action_column)
 	var action_heading := HBoxContainer.new()
+	action_heading.add_theme_constant_override("separation", 8)
 	action_column.add_child(action_heading)
 	var action_spacer := Control.new()
 	action_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -494,6 +497,7 @@ func _card(row: Dictionary) -> Control:
 	result_badge.add_theme_color_override("font_color", Color("#ffffff"))
 	result_badge.add_theme_stylebox_override("normal", _style(result_color, result_color, 6, 0, 8, 8, 4, 4))
 	action_heading.add_child(result_badge)
+	action_heading.add_child(expiry)
 	var actions := HBoxContainer.new()
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 8)

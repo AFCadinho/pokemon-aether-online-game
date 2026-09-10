@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Replay expiry details now sit beside the result badge, keeping replay cards more compact.
+
 - Replay cards now keep secondary actions in a compact, styled management menu.
 
 - The shared-replay action now has a more prominent, dedicated header treatment.
