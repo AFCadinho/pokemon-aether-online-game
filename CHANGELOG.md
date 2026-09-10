@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Set suggestion evidence now uses readable labels such as Matches and Differences, wraps when needed, and hides empty counters.
+
 - Interrupted battle animations now release their waiting actions, and stalled effects can no longer indefinitely block the next event.
 
 - PvP reconnect now survives temporary server errors and returns you to sign-in when a battle session is definitively invalid.
