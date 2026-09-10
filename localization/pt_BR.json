@@ -16,6 +16,7 @@
   "ui.replays.title": "Replays de batalha",
   "ui.replays.intro": "Meus replays · Gravações privadas salvas na sua conta. Novas batalhas de AI Sparring são gravadas automaticamente.",
   "ui.replays.close": "Fechar",
+  "ui.replays.cancel": "Cancelar",
   "ui.replays.search": "Buscar título ou adversário",
   "ui.replays.all_results": "Todos os resultados",
   "ui.replays.all_difficulties": "Todas as dificuldades",

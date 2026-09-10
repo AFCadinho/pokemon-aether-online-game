@@ -16,6 +16,7 @@
   "ui.replays.title": "对战回放",
   "ui.replays.intro": "我的回放 · 私人录像保存在你的账号中。新的 AI 陪练对战会自动录制。",
   "ui.replays.close": "关闭",
+  "ui.replays.cancel": "取消",
   "ui.replays.search": "搜索标题或对手",
   "ui.replays.all_results": "全部结果",
   "ui.replays.all_difficulties": "全部难度",
