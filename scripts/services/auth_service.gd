@@ -17,6 +17,11 @@ var session_type := "player"
 var impersonated_by_user_id := 0
 var account_switch_pending := false
 var pending_login_notice := ""
+var web_remember_me := false
+
+
+func _auth_path(action: String) -> String:
+	return "/auth/web/" + action if OS.has_feature("web") else "/auth/" + action
 
 
 func is_authenticated() -> bool:
@@ -56,7 +61,7 @@ func login(username: String, password: String, remember_me: bool) -> Dictionary:
 	}
 
 	var response: Dictionary = await _request_json(
-		base_url + "/auth/login",
+		base_url + _auth_path("login"),
 		HTTPClient.METHOD_POST,
 		_client_headers(PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER])),
 		JSON.stringify(payload)
@@ -69,7 +74,8 @@ func login(username: String, password: String, remember_me: bool) -> Dictionary:
 	_apply_auth_response(body)
 	_refresh_trade_session.call_deferred()
 
-	if remember_me:
+	web_remember_me = remember_me
+	if remember_me or OS.has_feature("web"):
 		_save_session()
 	else:
 		_clear_session_file()
@@ -168,7 +174,8 @@ func restore_saved_session() -> Dictionary:
 	session_token = saved_token
 	expires_at = str(saved_session.get("expiresAt", ""))
 	current_user = _dictionary_from_value(saved_session.get("user", {}))
-	session_type = "player"
+	session_type = "web" if OS.has_feature("web") else "player"
+	web_remember_me = bool(saved_session.get("rememberMe", false))
 	impersonated_by_user_id = 0
 	account_switch_pending = false
 
@@ -178,7 +185,12 @@ func restore_saved_session() -> Dictionary:
 		_refresh_trade_session.call_deferred()
 		return me_response
 
-	clear_session()
+	# A temporary network failure must not erase a valid remembered browser login.
+	if not OS.has_feature("web") or int(me_response.get("status", 0)) in [401, 403]:
+		clear_session()
+	else:
+		session_token = ""
+		current_user.clear()
 	return me_response
 
 
@@ -191,7 +203,7 @@ func me() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + "/auth/me",
+		base_url + _auth_path("me"),
 		HTTPClient.METHOD_GET,
 		_client_headers(PackedStringArray([USER_AGENT_HEADER, ACCEPT_HEADER, get_authorization_header()])),
 		""
@@ -225,7 +237,7 @@ func logout() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + "/auth/logout",
+		base_url + _auth_path("logout"),
 		HTTPClient.METHOD_POST,
 		_client_headers(PackedStringArray([USER_AGENT_HEADER, ACCEPT_HEADER, get_authorization_header()])),
 		""
@@ -484,6 +496,8 @@ func _reset_account_runtime_state() -> void:
 
 
 func _refresh_trade_session() -> void:
+	if OS.has_feature("web"):
+		return
 	var trade_service: Object = get_node_or_null("/root/TradeService")
 	if trade_service != null and trade_service.has_method("clear_capabilities"):
 		trade_service.call("clear_capabilities")
@@ -556,6 +570,9 @@ func _extract_error(body: Dictionary, response_code: int) -> String:
 func _save_session() -> void:
 	if session_token == "" or is_impersonating():
 		return
+	if OS.has_feature("web"):
+		WebRuntime.save_session({"token": session_token, "expiresAt": expires_at, "rememberMe": web_remember_me}, web_remember_me)
+		return
 
 	var file := FileAccess.open(SESSION_FILE_PATH, FileAccess.WRITE)
 	if file == null:
@@ -570,6 +587,8 @@ func _save_session() -> void:
 
 
 func _load_session_file() -> Dictionary:
+	if OS.has_feature("web"):
+		return WebRuntime.load_session()
 	if not FileAccess.file_exists(SESSION_FILE_PATH):
 		return {}
 
@@ -592,6 +611,9 @@ func _dictionary_from_value(value: Variant) -> Dictionary:
 
 
 func _clear_session_file() -> void:
+	if OS.has_feature("web"):
+		WebRuntime.clear_session()
+		return
 	if FileAccess.file_exists(SESSION_FILE_PATH):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(SESSION_FILE_PATH))
 

@@ -12,6 +12,8 @@ const PLATFORM_QUERY_NAME := "clientPlatform"
 
 
 static func get_build_id() -> String:
+	if OS.has_feature("web"):
+		return str(ProjectSettings.get_setting("application/config/web_build_id", "web-preview-2"))
 	var environment_build_id := OS.get_environment(BUILD_ID_ENV).strip_edges()
 	if not environment_build_id.is_empty():
 		return environment_build_id

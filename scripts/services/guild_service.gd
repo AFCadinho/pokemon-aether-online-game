@@ -29,6 +29,9 @@ var delivered_notification_ids: Dictionary = {}
 
 
 func _ready() -> void:
+	if OS.has_feature("web"):
+		# Guild gameplay/notification acknowledgements are outside the web demo.
+		return
 	var timer := Timer.new()
 	timer.name = "GuildNotificationPollTimer"
 	timer.wait_time = 60.0

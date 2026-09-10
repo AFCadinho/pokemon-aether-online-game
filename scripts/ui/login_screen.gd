@@ -80,8 +80,7 @@ func _ready() -> void:
 	quit_button.pressed.connect(_on_quit_button_pressed)
 	if OS.has_feature("web"):
 		quit_button.hide()
-		# Phase 1 is a local visual preview; no production account links or sessions.
-		register_link_button.hide()
+		# Registration stays on this origin; no automatic production requests.
 		forgot_password_link_button.hide()
 	news_request.request_completed.connect(_on_news_request_completed)
 	login_news_label.meta_clicked.connect(_on_news_meta_clicked)
@@ -106,9 +105,8 @@ func _ready() -> void:
 	_center_settings_menu.call_deferred()
 	_refresh_server_health.call_deferred()
 	_fetch_news.call_deferred()
-	if not OS.has_feature("web"):
-		_restore_saved_session.call_deferred()
-	else:
+	_restore_saved_session.call_deferred()
+	if OS.has_feature("web"):
 		JavaScriptBridge.eval("window.pokeaetherPreview.loginReady = true", true)
 
 
@@ -305,6 +303,9 @@ func _on_logout_button_pressed() -> void:
 
 
 func _on_register_link_pressed() -> void:
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.pokeaetherOpenRegistration()", true)
+		return
 	OS.shell_open(REGISTER_URL)
 
 
@@ -634,6 +635,8 @@ func _restore_saved_session() -> void:
 
 
 func _apply_saved_session_preview_state() -> void:
+	if OS.has_feature("web"):
+		return
 	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
 	if not bool(profile_response.get("success", false)):
 		return
@@ -651,6 +654,10 @@ func _apply_saved_session_preview_state() -> void:
 
 
 func _enter_world() -> void:
+	if OS.has_feature("web"):
+		password_input.clear()
+		_show_saved_session_card()
+		return
 	_apply_authenticated_player_profile()
 
 	var error: Error = get_tree().change_scene_to_file(LOADING_SCENE_PATH)
@@ -680,6 +687,8 @@ func _get_idle_login_button_text() -> String:
 
 
 func _show_login_form() -> void:
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.pokeaetherPreview.authenticated = false", true)
 	login_card.visible = true
 	saved_session_card.visible = false
 	show_saved_status("")
@@ -698,6 +707,11 @@ func _show_saved_session_card() -> void:
 	show_saved_status("")
 	_apply_server_access_notice()
 	continue_button.grab_focus()
+	if OS.has_feature("web"):
+		continue_button.disabled = true
+		continue_button.text = "World demo follows in a later phase"
+		show_saved_status("Account connected. Your desktop progress is unchanged. AI Sparring and chat follow in later phases.")
+		JavaScriptBridge.eval("window.pokeaetherPreview.authenticated = true", true)
 
 
 func _setup_player_preview() -> void:

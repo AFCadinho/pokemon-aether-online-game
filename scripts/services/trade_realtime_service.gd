@@ -38,6 +38,10 @@ var application_shutdown_in_progress := false
 
 
 func _ready() -> void:
+	if OS.has_feature("web"):
+		# Browser accounts do not join desktop trades or poll invitations.
+		set_process(false)
+		return
 	# Invitation discovery and reconnect recovery must continue while modal game
 	# UI temporarily pauses regular scene processing.
 	process_mode = Node.PROCESS_MODE_ALWAYS

@@ -22,6 +22,12 @@
     progress { display: block; width: 100%; margin: 22px 0 8px; accent-color: #91ceff; }
     #status { min-height: 3em; font-size: 14px; margin-bottom: 0; }
     #badge { position: fixed; left: 12px; bottom: 10px; pointer-events: none; color: #e8ce98; background: #081321dc; border: 1px solid #53627a; border-radius: 6px; padding: 6px 10px; font-size: 12px; }
+    dialog { width: min(540px, 94vw); max-height: 90vh; border: 1px solid #53627a; border-radius: 16px; background: #0a1424; color: #edf4ff; padding: 28px; }
+    dialog::backdrop { background: #000b; }
+    label { display: block; margin: 14px 0; line-height: 1.5; }
+    input:not([type=checkbox]), select { display: block; width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #53627a; border-radius: 6px; background: #15243a; color: white; font: inherit; }
+    a { color: #91ceff; }
+    .actions { display: flex; gap: 12px; }
   </style>
   $GODOT_HEAD_INCLUDE
 </head>
@@ -29,16 +35,31 @@
   <canvas id="canvas" tabindex="0" aria-label="PokeAether game"></canvas>
   <div id="cover">
     <main>
-      <div class="eyebrow">Local preview · Phase 1</div>
+      <div class="eyebrow">Local preview · Phase 2</div>
       <h1>PokeAether</h1>
-      <p>The first step into your browser. Explore the login screen, character rendering and settings from the shared game client.</p>
-      <p>Online play and accounts are not connected in this preview. AI Sparring and the world demo follow in the next stages.</p>
+      <p>One account for browser and desktop. Sign in, register and restore your browser session without changing your saved adventure.</p>
+      <p>This local build needs the connected preview server for accounts. AI Sparring, chat and the world demo follow in later stages. Ranked stays desktop-only.</p>
       <button id="start" type="button">Open browser preview</button>
       <progress id="progress" hidden></progress>
       <p id="status" role="status" aria-live="polite">Best viewed in a desktop browser.</p>
     </main>
   </div>
-  <div id="badge">Local preview · Online play not connected</div>
+  <div id="badge">Phase 2 · Accounts · Gameplay not yet enabled</div>
+  <dialog id="registration" aria-labelledby="registration-title">
+    <form id="registration-form">
+      <h2 id="registration-title">Create your PokeAether account</h2>
+      <p>The same account works in the desktop game. Verify your email before signing in.</p>
+      <label>Username<input name="username" autocomplete="username" required minlength="3" maxlength="32" pattern="[A-Za-z0-9_]+"></label>
+      <label>Email<input name="email" autocomplete="email" type="email" required maxlength="254"></label>
+      <label>Password<input name="password" autocomplete="new-password" type="password" required minlength="8" maxlength="128"></label>
+      <label>Confirm password<input name="confirmPassword" autocomplete="new-password" type="password" required></label>
+      <label>Character gender<select name="gender"><option value="male">Male</option><option value="female">Female</option></select></label>
+      <label><input name="age" type="checkbox" required> I am at least 13 years old and, if under 18, have permission from a parent or legal guardian.</label>
+      <label><input name="legal" type="checkbox" required> I accept the <a href="https://pokeaether.com/terms" target="_blank" rel="noopener noreferrer">Terms</a> and <a href="https://pokeaether.com/code-of-conduct" target="_blank" rel="noopener noreferrer">Code of Conduct</a>, and acknowledge the <a href="https://pokeaether.com/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</label>
+      <div class="actions"><button id="register-submit">Create account</button><button id="register-close" type="button">Back to login</button></div>
+      <p id="register-status" role="status" aria-live="polite"></p>
+    </form>
+  </dialog>
   <script src="$GODOT_URL"></script>
   <script>
     const config = $GODOT_CONFIG;
@@ -49,6 +70,50 @@
     const cover = document.getElementById('cover');
     const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
     window.pokeaetherPreview = { state: 'ready' };
+    const registration = document.getElementById('registration');
+    const registerForm = document.getElementById('registration-form');
+    const registerStatus = document.getElementById('register-status');
+    const registerSubmit = document.getElementById('register-submit');
+    let registrationMeta = null;
+    window.pokeaetherOpenRegistration = async () => {
+      registration.showModal();
+      registerSubmit.disabled = true;
+      registerStatus.textContent = 'Checking account registration…';
+      try {
+        const response = await fetch('/api/auth/web/meta', { cache: 'no-store' });
+        if (!response.ok) throw new Error();
+        registrationMeta = await response.json();
+        registerSubmit.disabled = !registrationMeta.registrationEnabled;
+        registerStatus.textContent = registrationMeta.registrationEnabled ? '' : 'Account registration is currently disabled.';
+      } catch (_) { registerStatus.textContent = 'Account service unavailable. Please retry later.'; }
+    };
+    document.getElementById('register-close').onclick = () => { registerForm.reset(); registration.close(); document.getElementById('canvas').focus(); };
+    registration.addEventListener('cancel', () => registerForm.reset());
+    registerForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (!registrationMeta || registerSubmit.disabled) return;
+      const data = new FormData(registerForm);
+      if (data.get('password') !== data.get('confirmPassword')) { registerStatus.textContent = 'Passwords do not match.'; return; }
+      registerSubmit.disabled = true;
+      registerStatus.textContent = 'Creating account…';
+      try {
+        const response = await fetch('/api/auth/web/signup', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: data.get('username'), email: data.get('email'), password: data.get('password'), gender: data.get('gender'),
+            locale: 'en', minimumAgeConfirmed: data.has('age'), termsAccepted: data.has('legal'), codeOfConductAccepted: data.has('legal'), privacyPolicyAcknowledged: data.has('legal'),
+            termsVersion: registrationMeta.termsVersion, codeOfConductVersion: registrationMeta.codeOfConductVersion, privacyPolicyVersion: registrationMeta.privacyPolicyVersion }),
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          const detail = result.detail;
+          registerStatus.textContent = typeof detail === 'string' ? detail : detail?.message || 'Registration failed. Check your details and try again.';
+        } else {
+          registerForm.reset();
+          registerStatus.textContent = 'Account created. Check your email and verify your account, then return to login.';
+        }
+      } catch (_) { registerStatus.textContent = 'Account service unavailable. Please retry later.'; }
+      finally { registerSubmit.disabled = false; }
+    });
     if (!local) {
       start.disabled = true;
       status.textContent = 'This development preview must be served on localhost.';

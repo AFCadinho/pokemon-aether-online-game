@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build phase 1 of the web client; run through ops/worktrees/slot-env SLOT."""
+"""Build the web client; run through ops/worktrees/slot-env SLOT."""
 from __future__ import annotations
 
 import argparse
@@ -33,7 +33,7 @@ def main():
             digest = hashlib.file_digest(stream, 'sha256').hexdigest()
         files.append({'name': name, 'bytes': path.stat().st_size, 'sha256': digest})
     receipt = {
-        'phase': 1, 'onlineGameplay': False,
+        'phase': 2, 'accounts': True, 'onlineGameplay': False,
         'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         'dirty': bool(subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=no'], cwd=ROOT, text=True).strip()),
         'engine': subprocess.check_output([args.godot, '--version'], text=True).strip(),
