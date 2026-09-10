@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring now has a clearer spectator checkbox and a grouped start bar, with more room to paste your team.
+
 - AI Sparring now has a Live Battles tab. Allow spectators before starting to let other players find and watch your practice battle.
 
 - Battle Replays now use a cleaner library with custom filters and favorites toggle, replay result badges, distinct watch and management actions, and a dedicated battle playback command deck.
