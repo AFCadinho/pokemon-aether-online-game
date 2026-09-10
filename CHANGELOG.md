@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Players on the same map can now click the Poké Ball above a wild battle or the Great Ball above an NPC battle to watch it live.
+
 - The replay library now uses category-neutral wording and only shows AI difficulty controls while browsing AI Sparring.
 
 - Battle Replays can now be shared through a replay code and watched directly from another player's library; owners can copy, renew or revoke their code.

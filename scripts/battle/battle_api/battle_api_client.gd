@@ -74,6 +74,10 @@ func resume_trainer_battle(request_node: HTTPRequest) -> Dictionary:
 func get_npc_battle_state(request_node: HTTPRequest, battle_id: String, since_event_seq: int) -> Dictionary:
 	return await send_get_request(request_node, _append_since_event_seq_query("/battle/%s/state" % battle_id.uri_encode(), since_event_seq))
 
+
+func spectate_nearby_pve(request_node: HTTPRequest, target_user_id: int) -> Dictionary:
+	return await send_get_request(request_node, "/battle/pve/nearby/%d/spectate" % target_user_id)
+
 func create_trainer_battle(
 	request_node: HTTPRequest,
 	player: Dictionary,

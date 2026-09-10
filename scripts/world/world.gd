@@ -1520,6 +1520,7 @@ func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
 	active_battle_id = str(response.get("battleId", activity_context.get("battleId", "")))
 	active_wild_pokemon_species = wild_pokemon.species
 	active_wild_encounter_type = str(response.get("encounterType", "")).strip_edges().to_lower()
+	_publish_world_presence(true)
 	if not _mount_battle_ui():
 		_abort_battle_start(true)
 		wild_battle_resume_pending = true
@@ -1601,6 +1602,7 @@ func _resume_saved_trainer_battle(saved_state: Dictionary) -> Dictionary:
 	active_trainer_outro_dialogue_id = str(trainer_data.get("outroDialogueId", ""))
 	active_trainer_is_rematch = bool(response.get("isRematch", false))
 	active_battle_id = str(response.get("battleId", context["battleId"]))
+	_publish_world_presence(true)
 	if player_pokemon == null or not _mount_battle_ui():
 		_show_trainer_resume_retry(saved_state)
 		return {"resumed": false, "retryable": true}
@@ -2347,6 +2349,9 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 			var interaction_callable := Callable(self, "_on_remote_player_interaction_requested")
 			if avatar.has_signal("interaction_requested") and not avatar.is_connected("interaction_requested", interaction_callable):
 				avatar.connect("interaction_requested", interaction_callable)
+			var spectate_callable := Callable(self, "_on_nearby_pve_spectate_requested")
+			if avatar.has_signal("battle_spectate_requested") and not avatar.is_connected("battle_spectate_requested", spectate_callable):
+				avatar.connect("battle_spectate_requested", spectate_callable)
 
 		avatar.call("apply_state", player_state)
 		if pending_map_chat_messages.has(user_key) and avatar.has_method("show_map_chat_message"):
@@ -2468,6 +2473,12 @@ func _on_remote_player_interaction_requested(player_state: Dictionary, world_pos
 	if not remote_player_interaction_pending:
 		remote_player_interaction_pending = true
 		_resolve_remote_player_interaction.call_deferred()
+
+
+func _on_nearby_pve_spectate_requested(target_user_id: int) -> void:
+	if is_in_battle or target_user_id <= 0:
+		return
+	get_tree().call_group("ui_overlay", "start_nearby_pve_spectate", target_user_id)
 
 func _resolve_remote_player_interaction() -> void:
 	remote_player_interaction_pending = false
@@ -2617,6 +2628,7 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 		"selectedRoleBadge": GameState.selected_role_badge,
 		"activityState": "battle" if is_in_battle and active_battle_kind != "replay" else "idle",
 		"activityContext": _get_current_activity_context(),
+		"battleSpectate": _get_current_battle_spectate_presence(),
 		"teleportRevision": current_teleport_revision,
 		"walkSteps": mini(pending_happiness_walk_steps, 512),
 	}
@@ -2638,6 +2650,12 @@ func _get_current_activity_context() -> Dictionary:
 		"kind": active_battle_kind,
 		"battleId": active_battle_id,
 	}
+
+
+func _get_current_battle_spectate_presence() -> Dictionary:
+	if not is_in_battle or active_battle_kind not in ["wild", "trainer"] or active_battle_id.strip_edges().is_empty():
+		return {}
+	return {"kind": active_battle_kind, "battleId": active_battle_id}
 
 
 func _save_player_activity_state_deferred(activity_state: String, activity_context: Dictionary = {}) -> void:
@@ -2762,7 +2780,7 @@ func _get_current_player_position_signature(use_confirmed_appearance: bool = fal
 	var active_mount_id := str(player.call("get_active_mount_id")) \
 		if player.has_method("get_active_mount_id") \
 		else ""
-	return "%s|%s|%0.1f|%0.1f|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
+	return "%s|%s|%0.1f|%0.1f|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
 		_get_map_id(current_map),
 		_get_map_scene_path(current_map),
 		roundf(position.x / POSITION_SAVE_EPSILON) * POSITION_SAVE_EPSILON,
@@ -2786,6 +2804,8 @@ func _get_current_player_position_signature(use_confirmed_appearance: bool = fal
 		str(appearance_state.get("hair_color", "")),
 		str(appearance_state.get("skin_tone", "")),
 		str(appearance_state.get("eye_color", "")),
+		active_battle_kind,
+		active_battle_id,
 	]
 
 
@@ -3056,6 +3076,7 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 		return
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
+	_publish_world_presence(true)
 
 	if not _mount_battle_ui():
 		push_error("World.start_dev_wild_battle failed: could not load battle scene.")
@@ -3106,6 +3127,7 @@ func start_triggered_wild_battle_for_area(
 	active_battle_id = str(response.get("battleId", ""))
 	active_wild_encounter_type = str(response.get("encounterType", encounter_type)).strip_edges().to_lower()
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
+	_publish_world_presence(true)
 
 	var wild_pokemon_data: Dictionary = response.get("wildPokemon", {})
 	var wild_pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(wild_pokemon_data)
@@ -3215,6 +3237,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 		return response
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
+	_publish_world_presence(true)
 
 	await _wait_for_wild_encounter_cover(transition_started_at_msec)
 
@@ -3378,8 +3401,15 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 		return false
 
 	_prepare_battle_instance_reveal()
-	MusicManager.play_pvp_battle_music()
-	var battle_environment_id := _resolve_battle_environment_id("pvp", response)
+	var spectator_source_kind := str(response.get("sourceBattleKind", "")).strip_edges().to_lower()
+	if str(response.get("viewerRole", "participant")).to_lower() == "spectator" and spectator_source_kind == "wild":
+		MusicManager.play_wild_battle_music()
+	elif str(response.get("viewerRole", "participant")).to_lower() == "spectator" and spectator_source_kind == "trainer":
+		MusicManager.play_trainer_battle_music()
+	else:
+		MusicManager.play_pvp_battle_music()
+	var environment_battle_kind := spectator_source_kind if spectator_source_kind in ["wild", "trainer"] else "pvp"
+	var battle_environment_id := _resolve_battle_environment_id(environment_battle_kind, response)
 	await battle_instance.setup_pvp_battle_from_response(
 		PlayerSave.party[0] if not PlayerSave.party.is_empty() else null,
 		response,
@@ -3448,6 +3478,7 @@ func end_wild_battle(keep_overworld_locked := false) -> void:
 	active_trainer_mugshot = null
 	active_trainer_is_rematch = false
 	_save_player_activity_state_deferred("idle")
+	_publish_world_presence(true)
 	if keep_overworld_locked:
 		# A blackout moves the player to a recovery location, so it should not
 		# restore the mount from the map where the lost battle started.
@@ -4446,5 +4477,6 @@ func _abort_battle_start(preserve_activity := false) -> void:
 	active_trainer_is_rematch = false
 	if not preserve_activity:
 		_save_player_activity_state_deferred("idle")
+	_publish_world_presence(true)
 	_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()
