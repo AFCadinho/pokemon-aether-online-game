@@ -2,6 +2,133 @@ extends Control
 
 signal battle_ended(result: Dictionary)
 signal damage_calc_prefetch_finished
+signal replay_closed
+
+var replay_mode := false
+var replay_paused := true
+var replay_generation := 0
+var replay_controls: Control
+
+func stop_battle_replay() -> void:
+	if replay_controls != null:
+		await replay_controls.call("stop")
+
+func setup_battle_replay(recording: Dictionary) -> bool:
+	var frames: Array = recording.get("frames", [])
+	if frames.is_empty():
+		return false
+	var first: Dictionary = frames[0]
+	var team: Array = first.get("ownTeam", [])
+	if team.is_empty():
+		return false
+	replay_mode = true
+	battle_request.set_meta("replay_read_only", true)
+	damage_calc_request.set_meta("replay_read_only", true)
+	var lead := PokemonFactory.create_pokemon_from_backend_payload(team[0])
+	_prepare_battle_setup(BattleType.TRAINER, lead, null)
+	training_ai_battle = true
+	pvp_battle_purpose = "training"
+	action_flow.set_local_player_id("p1")
+	npc_trainer_display_name = str(first.get("trainerName", ""))
+	_show_local_player_trainer()
+	var trainer_sprite := "showdown_scientist_gen7" if str(first.get("trainingAiMode", "")) in ["ai4", "shadow"] else "showdown_veteran_gen7"
+	_show_npc_opponent_trainer({"name": npc_trainer_display_name, "_battle_sprite_id": trainer_sprite})
+	_capture_pvp_local_canonical_roster(first)
+	opponent_party_reveal_policy.reset(true)
+	display_data_presenter.set_trainer_team(first.get("trainerTeam", []), true)
+	var controls := preload("res://scripts/ui/battle_replay_controls.gd").new()
+	replay_controls = controls
+	action_side_panel.add_child(controls)
+	controls.close_requested.connect(func(): replay_closed.emit())
+	if not controls.setup(self, recording):
+		controls.queue_free()
+		return false
+	_hide_replay_actions()
+	return true
+
+func _hide_replay_actions() -> void:
+	_set_battle_actions_ready(false)
+	_set_battle_input_locked(true)
+	for control: Control in [action_buttons, moves_grid, spectator_action_panel, battle_result_overlay,
+		mega_evolution_button, z_move_button, calc_mode_button, calc_log_button]:
+		control.hide()
+	action_side_panel.get_node("MarginContainer").hide()
+	battle_stage.get_node("UtilityActions").hide()
+	battle_party_rail.hide()
+	player_party_grid.set_selection_enabled(false)
+	player_stage_party_grid.set_selection_enabled(false)
+	player_sprite_box.visible = true
+	enemy_sprite_box.visible = true
+
+func cancel_replay_render() -> void:
+	replay_generation += 1
+	replay_paused = false
+	event_renderer.cancel_render()
+	pokeball_summon_animation_player.cancel()
+
+func set_replay_speed(speed: float) -> void:
+	animation_router.playback_speed = speed
+	event_renderer.playback_speed = speed
+	player_sprite_box.playback_speed = speed
+	enemy_sprite_box.playback_speed = speed
+	pokeball_summon_animation_player.playback_speed = speed
+
+func restore_replay_position(timeline: RefCounted, index: int) -> void:
+	cancel_replay_render()
+	_clear_ordered_response_display_species()
+	_reset_battle_effect_tracking()
+	presentation_state.reset()
+	battle_state = timeline.state_through(index)
+	action_flow.setup(battle_state, battle_request, _remember_public_confirmed_abilities_from_response)
+	force_switch_flow.setup(battle_state)
+	display_data_presenter.setup(battle_state)
+	display_data_presenter.set_trainer_team(timeline.frames[0].get("trainerTeam", []), true)
+	var events: Array = timeline.events_through(index)
+	for event: Dictionary in events:
+		_remember_battle_modifier_event(event)
+		if str(event.get("type", "")) == "turn":
+			presentation_state.set_turn(int(event.get("turn", 0)))
+		elif str(event.get("type", "")) == "fieldEffect":
+			_apply_field_presentation_event(event)
+		elif str(event.get("type", "")) == "pokemonEffect":
+			_apply_volatile_condition_event(event)
+		elif str(event.get("type", "")) in ["mega", "primal", "formeChange"]:
+			display_data_presenter.remember_public_trainer_mega_species(event)
+	_remember_public_confirmed_abilities_from_response({"events": events})
+	_sync_presentation_field_from_battle_state()
+	battle_log_panel.clear_log()
+	mini_battle_feed.clear()
+	_restore_battle_log_from_history_response({"events": events})
+	_update_battle_status_panels()
+	_update_hud_panels()
+	_update_party_slots()
+	_update_vs_panel_names()
+	_update_active_sprites("snapshot_reconciliation")
+	current_action_panel.set_message("")
+	for trainer: Node in [player_trainer_sprite, enemy_trainer_sprite]:
+		if trainer != null:
+			trainer.get_node("TrainerCommandCallout").call("clear_command")
+	_hide_replay_actions()
+	replay_paused = true
+
+func play_replay_frame(timeline: RefCounted, index: int) -> void:
+	var generation := replay_generation
+	var frame: Dictionary = timeline.frames[index]
+	var events: Array = frame.get("events", [])
+	defer_force_switch_active_hide = true
+	_prepare_switch_in_presentation_for_events(events)
+	_update_battle_presentation_before_event_render(events)
+	_rewind_active_hud_hp_for_events(events)
+	_rewind_party_slots_for_events(events)
+	await _render_battle_events(events, true, "replay", false, false)
+	if generation != replay_generation:
+		defer_force_switch_active_hide = false
+		return
+	# Reconcile to the recorded result, without persistence or live requests.
+	var was_paused := replay_paused
+	restore_replay_position(timeline, index)
+	replay_paused = was_paused
+	defer_force_switch_active_hide = false
 
 enum BattleType {
 	WILD,
@@ -3401,6 +3528,8 @@ func _get_damage_calc_error_code(response: Dictionary) -> String:
 
 ## Handelt de gekozen hoofdactie af.
 func _on_action_selected(action: String) -> void:
+	if replay_mode:
+		return
 	_focus_battle_ui_layer()
 	if _is_spectator_battle():
 		if action == "run":
@@ -3713,6 +3842,8 @@ func _release_pvp_presentation_hold_from_ack_barrier(message: Dictionary) -> voi
 	pvp_presentation_schedule_token = ""
 
 func _set_battle_actions_ready(is_ready: bool) -> void:
+	if replay_mode:
+		is_ready = false
 	if _is_spectator_battle():
 		is_ready = false
 	battle_actions_ready = is_ready
@@ -9294,6 +9425,7 @@ func _render_battle_events(
 	suppress_presentation_waits := false,
 	suppress_terminal_win_presentation := false
 ) -> void:
+	var owned_replay_generation := replay_generation
 	if not _guard_pvp_render_runner(source):
 		return
 	var ordered_events: Array = _order_switch_out_heals_before_switches(
@@ -9315,6 +9447,10 @@ func _render_battle_events(
 	event_presentation.reset_recent_context()
 
 	for event_index: int in range(ordered_events.size()):
+		while replay_mode and replay_paused and owned_replay_generation == replay_generation:
+			await get_tree().process_frame
+		if replay_mode and owned_replay_generation != replay_generation:
+			return
 		var event: Variant = ordered_events[event_index]
 		if not (event is Dictionary):
 			_mark_pvp_render_event_completed(event_index + 1)
@@ -9420,6 +9556,8 @@ func _render_battle_events(
 			])
 		if not (suppress_terminal_win_presentation and event_type == "win"):
 			await event_renderer.render_event(event_data, presentation, suppress_presentation_waits)
+		if replay_mode and owned_replay_generation != replay_generation:
+			return
 		if event_type == "mega" or event_type == "primal":
 			# Reconcile once more after the transformation animation. The pre-render
 			# update gives the effect its transformed target; this final boundary

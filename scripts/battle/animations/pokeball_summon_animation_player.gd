@@ -1,6 +1,7 @@
 extends Control
 
 class_name PokeballSummonAnimationPlayer
+var playback_speed := 1.0
 
 signal ball_thrown
 signal pokemon_released
@@ -95,7 +96,7 @@ func play_summon(item_id: String, target_global_rect: Rect2 = Rect2(), side: Str
 	sprite.position = start_position
 	_set_frame(column, THROW_START_FRAME)
 	ball_thrown.emit()
-	await get_tree().create_timer(0.06).timeout
+	await get_tree().create_timer(0.06 / playback_speed).timeout
 	if token != animation_token:
 		return
 
@@ -124,7 +125,7 @@ func play_overworld_summon(item_id: String, throw_viewport_position: Vector2, ta
 	sprite.position = start_position
 	_set_frame(column, THROW_START_FRAME)
 	ball_thrown.emit()
-	await get_tree().create_timer(0.06).timeout
+	await get_tree().create_timer(0.06 / playback_speed).timeout
 	if token != animation_token:
 		return
 
@@ -207,7 +208,7 @@ func _prepare_animation() -> bool:
 
 
 func _finish_animation(token: int, hold_seconds: float) -> void:
-	await get_tree().create_timer(hold_seconds).timeout
+	await get_tree().create_timer(hold_seconds / playback_speed).timeout
 	if token == animation_token:
 		visible = false
 
@@ -233,7 +234,7 @@ func _play_throw(column: int, start_position: Vector2, target_position: Vector2,
 		sprite.position = start_position.lerp(target_position, progress) + arc
 		sprite.rotation = lerpf(-0.55, 0.25, progress)
 		_set_frame(column, THROW_START_FRAME + offset)
-		await get_tree().create_timer(FRAME_SECONDS).timeout
+		await get_tree().create_timer(FRAME_SECONDS / playback_speed).timeout
 
 
 func _play_frame_range(column: int, start_frame: int, end_frame: int, position: Vector2, token: int, frame_seconds: float = FRAME_SECONDS) -> void:
@@ -246,7 +247,7 @@ func _play_frame_range(column: int, start_frame: int, end_frame: int, position: 
 			return
 
 		_set_frame(column, frame_index)
-		await get_tree().create_timer(frame_seconds).timeout
+		await get_tree().create_timer(frame_seconds / playback_speed).timeout
 		if frame_index == end_frame:
 			break
 		frame_index += step

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Open Battle Replays from the main toolbar to browse and manage your AI Sparring recordings. Replay battles with pause, turn navigation, and adjustable playback speed, or open them directly from match history.
+
 - Applying a Calcdex set suggestion now keeps the current item slot empty after the opponent's revealed item was knocked off or consumed.
 
 - Reconnecting can restore an ongoing trainer battle with its current HP, PP and pending choice. If recovery is temporarily unavailable, players can retry or return to login.

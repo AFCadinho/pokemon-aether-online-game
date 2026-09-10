@@ -62,6 +62,38 @@ const EXPECTED_TRAINER_BATTLE_REJECTION_CODES: Array[String] = [
 
 var is_in_battle := false
 var battle_instance: Node
+var replay_return_callback: Callable
+
+func start_battle_replay(recording: Dictionary, return_callback: Callable) -> bool:
+	if is_in_battle or wild_battle_resume_pending:
+		return false
+	if not _mount_battle_ui():
+		return false
+	# Replays have their own close path and never enter reward/forfeit handling.
+	battle_instance.battle_ended.disconnect(_on_battle_ended)
+	if not battle_instance.setup_battle_replay(recording):
+		_clear_battle_ui_instance()
+		return false
+	replay_return_callback = return_callback
+	battle_instance.replay_closed.connect(close_battle_replay)
+	is_in_battle = true
+	active_battle_kind = "replay"
+	active_battle_id = ""
+	_lock_overworld_for_battle()
+	return true
+
+func close_battle_replay(restore_library := true) -> void:
+	if active_battle_kind != "replay":
+		return
+	var callback := replay_return_callback
+	replay_return_callback = Callable()
+	_clear_battle_ui_instance()
+	is_in_battle = false
+	active_battle_kind = ""
+	active_battle_id = ""
+	_unlock_overworld_after_battle()
+	if restore_library and callback.is_valid():
+		callback.call()
 
 @onready var player: CharacterBody2D = $Player
 @onready var battle_ui_host: Control = %BattleUIHost
@@ -2578,7 +2610,7 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 		"appearance": appearance_state,
 		"roles": _get_current_role_presence_state(),
 		"selectedRoleBadge": GameState.selected_role_badge,
-		"activityState": "battle" if is_in_battle else "idle",
+		"activityState": "battle" if is_in_battle and active_battle_kind != "replay" else "idle",
 		"activityContext": _get_current_activity_context(),
 		"teleportRevision": current_teleport_revision,
 		"walkSteps": mini(pending_happiness_walk_steps, 512),
@@ -2595,7 +2627,7 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 
 
 func _get_current_activity_context() -> Dictionary:
-	if not is_in_battle:
+	if not is_in_battle or active_battle_kind == "replay":
 		return {}
 	return {
 		"kind": active_battle_kind,
@@ -3355,6 +3387,10 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 
 func _interrupt_current_battle_for_pvp_match() -> bool:
 	if not is_in_battle:
+		return true
+	if active_battle_kind == "replay":
+		await battle_instance.stop_battle_replay()
+		close_battle_replay(false)
 		return true
 	if active_battle_kind == "pvp":
 		return false

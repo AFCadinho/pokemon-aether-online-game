@@ -711,6 +711,8 @@ func calculate_calcdex_inferred_matchup(
 	return CALCDEX_INFERENCE.normalize_response(response, last_projection_revision)
 
 func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
+	if request_node.has_meta("replay_read_only"):
+		return {"success": false, "error": "Replay is read-only"}
 	_configure_request_timeout(request_node)
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
 
@@ -730,6 +732,8 @@ func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
 	return await _read_json_response(request_node)
 
 func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary) -> Dictionary:
+	if request_node.has_meta("replay_read_only"):
+		return {"success": false, "error": "Replay is read-only"}
 	_configure_request_timeout(request_node)
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
 	
@@ -751,6 +755,8 @@ func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary
 
 
 func send_delete_request(request_node: HTTPRequest, path: String) -> Dictionary:
+	if request_node.has_meta("replay_read_only"):
+		return {"success": false, "error": "Replay is read-only"}
 	_configure_request_timeout(request_node)
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
 

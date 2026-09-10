@@ -18,6 +18,7 @@ var show_trainer_command: Callable
 var last_battle_log_player_id := ""
 var render_generation := 0
 var event_timeout_seconds := 30.0
+var playback_speed := 1.0
 
 
 func setup(
@@ -291,7 +292,7 @@ func _wait(seconds: float, suppressed := false) -> void:
 	if suppressed or seconds <= 0.0 or host_node == null:
 		return
 
-	await host_node.get_tree().create_timer(seconds).timeout
+	await host_node.get_tree().create_timer(seconds / maxf(playback_speed, 0.5)).timeout
 
 
 func _can_start_battle_animation(source: String, details: Dictionary = {}) -> bool:
