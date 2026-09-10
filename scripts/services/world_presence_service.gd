@@ -168,6 +168,7 @@ func update_position(state: Dictionary) -> bool:
 		"roles": state.get("roles", []),
 		"selectedRoleBadge": str(state.get("selectedRoleBadge", "")),
 		"activityState": str(state.get("activityState", "idle")),
+		"battleSpectate": state.get("battleSpectate", {}),
 		"aethernetEffect": state.get("aethernetEffect", {}),
 	}
 	last_position_payload = payload

@@ -4,6 +4,8 @@
 
 - Replay expiry labels now use a shorter, clearer format.
 
+- Players on the same map can now click the Poké Ball above a wild battle or the Great Ball above an NPC battle to watch it live.
+
 - Replay expiry details now sit beside the result badge, keeping replay cards more compact.
 
 - Replay cards now offer direct title editing and favorite toggles through compact pencil and star controls.

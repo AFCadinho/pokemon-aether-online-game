@@ -3,6 +3,7 @@ extends Node2D
 class_name RemotePlayerAvatar
 
 signal interaction_requested(player_state: Dictionary, world_position: Vector2)
+signal battle_spectate_requested(target_user_id: int)
 
 const PLAYER_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
@@ -13,6 +14,7 @@ const RoleBadgeTexture := preload("res://scripts/ui/role_badge_texture.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
 const AethernetTeleportEffectScript := preload("res://scripts/world/aethernet_teleport_effect.gd")
+const NearbyPveBattleIndicatorScript := preload("res://scripts/world/nearby_pve_battle_indicator.gd")
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
 const SORT_Z_MIN := -4096
@@ -211,6 +213,7 @@ var gameplay_identity_masked := false
 var gameplay_identity_placeholder := "???"
 var last_aethernet_effect_sequence := -1
 var active_aethernet_effect: Node
+var nearby_battle_indicator: Node2D
 var _rendered_emblem: Dictionary = {}
 var _emblem_initialized := false
 var _rendered_animation_state: Array = []
@@ -264,6 +267,7 @@ func apply_state(state: Dictionary) -> void:
 	_apply_guild_emblem(_dictionary_from_value(state.get("guildEmblem", {})))
 	_update_nameplate()
 	_apply_aethernet_effect_state(_dictionary_from_value(state.get("aethernetEffect", {})))
+	_sync_nearby_battle_indicator(state)
 
 	var position_data := _dictionary_from_value(state.get("position", {}))
 	var new_target_position := Vector2(
@@ -306,6 +310,24 @@ func apply_state(state: Dictionary) -> void:
 	_sync_mount_visual()
 	_apply_follower_state(_dictionary_from_value(state.get("follower", {})))
 	_update_sort_z()
+
+
+func _sync_nearby_battle_indicator(state: Dictionary) -> void:
+	var spectate := _dictionary_from_value(state.get("battleSpectate", {}))
+	var kind := str(spectate.get("kind", "")).strip_edges().to_lower()
+	var should_show := str(state.get("activityState", "idle")) == "battle" and kind in ["wild", "trainer"]
+	if not should_show:
+		if nearby_battle_indicator != null and is_instance_valid(nearby_battle_indicator):
+			nearby_battle_indicator.queue_free()
+		nearby_battle_indicator = null
+		return
+	if nearby_battle_indicator == null or not is_instance_valid(nearby_battle_indicator):
+		nearby_battle_indicator = NearbyPveBattleIndicatorScript.new()
+		add_child(nearby_battle_indicator)
+		nearby_battle_indicator.spectate_requested.connect(
+			func(target_id: int): battle_spectate_requested.emit(target_id)
+		)
+	nearby_battle_indicator.configure(user_id, kind)
 
 
 func _apply_aethernet_effect_state(effect_state: Dictionary) -> void:
