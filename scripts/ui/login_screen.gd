@@ -78,6 +78,11 @@ func _ready() -> void:
 	logout_button.pressed.connect(_on_logout_button_pressed)
 	options_button.pressed.connect(_on_options_button_pressed)
 	quit_button.pressed.connect(_on_quit_button_pressed)
+	if OS.has_feature("web"):
+		quit_button.hide()
+		# Phase 1 is a local visual preview; no production account links or sessions.
+		register_link_button.hide()
+		forgot_password_link_button.hide()
 	news_request.request_completed.connect(_on_news_request_completed)
 	login_news_label.meta_clicked.connect(_on_news_meta_clicked)
 	if settings_menu.has_signal("closed"):
@@ -101,7 +106,10 @@ func _ready() -> void:
 	_center_settings_menu.call_deferred()
 	_refresh_server_health.call_deferred()
 	_fetch_news.call_deferred()
-	_restore_saved_session.call_deferred()
+	if not OS.has_feature("web"):
+		_restore_saved_session.call_deferred()
+	else:
+		JavaScriptBridge.eval("window.pokeaetherPreview.loginReady = true", true)
 
 
 func _apply_remember_me_style() -> void:
@@ -334,6 +342,11 @@ func _on_settings_menu_closed() -> void:
 
 
 func _setup_background_video() -> void:
+	if OS.has_feature("web"):
+		background_video_player.stop()
+		background_video_player.hide()
+		hero_background.show()
+		return
 	var has_video := background_video_player.stream != null
 	background_video_player.visible = has_video
 	hero_background.visible = not has_video
@@ -368,6 +381,9 @@ func _center_settings_menu() -> void:
 
 
 func _fetch_news() -> void:
+	if OS.has_feature("web"):
+		_render_news_items([])
+		return
 	if NEWS_URL.is_empty():
 		_render_news_items([])
 		return

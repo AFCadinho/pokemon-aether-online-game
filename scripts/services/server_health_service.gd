@@ -19,7 +19,7 @@ static func check_async(parent: Node, status_url: String = "") -> Dictionary:
 
 	var error: Error = request.request(
 		status_url,
-		[USER_AGENT_HEADER],
+		WebRuntime.http_headers(PackedStringArray([USER_AGENT_HEADER])),
 		HTTPClient.METHOD_GET
 	)
 	if error != OK:
@@ -86,7 +86,7 @@ static func request_presence_async(parent: Node, presence_url: String) -> Dictio
 
 	var error: Error = request.request(
 		presence_url,
-		[USER_AGENT_HEADER],
+		WebRuntime.http_headers(PackedStringArray([USER_AGENT_HEADER])),
 		HTTPClient.METHOD_GET
 	)
 	if error != OK:
