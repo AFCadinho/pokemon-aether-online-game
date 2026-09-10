@@ -511,15 +511,38 @@ func _card(row: Dictionary) -> Control:
 	result_badge.add_theme_stylebox_override("normal", _style(result_color, result_color, 6, 0, 8, 8, 4, 4))
 	action_heading.add_child(expiry)
 	action_heading.add_child(result_badge)
-	var actions := HBoxContainer.new()
-	actions.alignment = BoxContainer.ALIGNMENT_END
-	actions.add_theme_constant_override("separation", 8)
-	action_column.add_child(actions)
-	_button(actions, _t("watch"), func(): watch(battle_id), "primary").disabled = state != "available"
+	var management_actions := HBoxContainer.new()
+	management_actions.alignment = BoxContainer.ALIGNMENT_END
+	management_actions.add_theme_constant_override("separation", 8)
+	action_column.add_child(management_actions)
 	if str(row.get("kind", "ai_sparring")) == "ai_sparring":
-		_button(actions, _t("new_share_code") if row.get("shared", false) else _t("share"), func(): _share(battle_id), "quiet").disabled = state != "available"
-	_button(actions, _t("delete"), func(): _confirm_remove(battle_id), "danger")
+		_button(management_actions, _t("new_share_code") if row.get("shared", false) else _t("share"), func(): _share(battle_id), "quiet").disabled = state != "available"
+	_button(management_actions, _t("delete"), func(): _confirm_remove(battle_id), "danger")
+	var play_row := HBoxContainer.new()
+	play_row.alignment = BoxContainer.ALIGNMENT_END
+	action_column.add_child(play_row)
+	var play_button := _card_play_button(play_row)
+	play_button.disabled = state != "available"
+	play_button.pressed.connect(func(): watch(battle_id))
 	return card
+
+func _card_play_button(parent: Node) -> Button:
+	var button := Button.new()
+	button.text = "▶"
+	button.tooltip_text = _t("watch")
+	button.custom_minimum_size = Vector2(46, 38)
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_size_override("font_size", 17)
+	button.add_theme_stylebox_override("normal", _style(Color("#126b91"), ACCENT, 7, 1, 8, 8, 7, 7))
+	button.add_theme_stylebox_override("hover", _style(Color("#198abd"), Color("#a5ecff"), 7, 1, 8, 8, 7, 7))
+	button.add_theme_stylebox_override("pressed", _style(Color("#0d4b68"), ACCENT, 7, 1, 8, 8, 7, 7))
+	button.add_theme_stylebox_override("disabled", _style(Color("#101d2d"), Color("#233a52"), 7, 1, 8, 8, 7, 7))
+	button.add_theme_color_override("font_color", INK)
+	button.add_theme_color_override("font_hover_color", Color("#ffffff"))
+	button.add_theme_color_override("font_disabled_color", Color("#52657a"))
+	parent.add_child(button)
+	return button
 
 func _card_icon_button(parent: Node, glyph: String, tooltip: String, active := false) -> Button:
 	var button := Button.new()

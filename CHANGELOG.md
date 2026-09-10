@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Replay cards now use a compact play-icon action beneath their management controls.
+
 - Replay expiry labels now use a shorter, clearer format.
 
 - Players on the same map can now click the Poké Ball above a wild battle or the Great Ball above an NPC battle to watch it live.
