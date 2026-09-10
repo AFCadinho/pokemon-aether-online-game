@@ -9,6 +9,12 @@ var slot_sprites: Array[AnimatedSprite2D] = []
 var team_is_shown := false
 
 
+func _notification(what: int) -> void:
+	# This off-tree loader is owned by the preview, not by the scene tree.
+	if what == NOTIFICATION_PREDELETE and is_instance_valid(sprite_loader):
+		sprite_loader.free()
+
+
 func _ready() -> void:
 	_cache_slot_sprites()
 	# The battle controller can populate this layer immediately after mounting

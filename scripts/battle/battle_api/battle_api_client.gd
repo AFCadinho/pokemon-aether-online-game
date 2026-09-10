@@ -68,6 +68,9 @@ func create_dev_wild_battle(
 func resume_wild_battle(request_node: HTTPRequest) -> Dictionary:
 	return await send_get_request(request_node, "/battle/wild/resume")
 
+func resume_trainer_battle(request_node: HTTPRequest) -> Dictionary:
+	return await send_get_request(request_node, "/battle/trainer/resume")
+
 func get_npc_battle_state(request_node: HTTPRequest, battle_id: String, since_event_seq: int) -> Dictionary:
 	return await send_get_request(request_node, _append_since_event_seq_query("/battle/%s/state" % battle_id.uri_encode(), since_event_seq))
 

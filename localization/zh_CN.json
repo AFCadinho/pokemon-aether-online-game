@@ -1,4 +1,8 @@
 {
+  "battle.resume.title": "继续对战",
+  "battle.resume.retry_message": "暂时无法恢复对战。请重试或返回登录界面。",
+  "battle.resume.retry": "重试",
+  "battle.resume.login": "返回登录",
   "ui.pvp.training.ai.difficulty_elite": "Elite",
   "ui.pvp.training.ai.mode_elite": "Grandmaster — Elite",
   "ui.pvp.ai_sparring.history.opponent_elite": "对手：Grandmaster — Elite",

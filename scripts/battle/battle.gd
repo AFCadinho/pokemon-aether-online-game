@@ -6993,6 +6993,51 @@ func play_wild_battle_intro(api_response: Dictionary) -> void:
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
 
+func resume_trainer_battle_from_response(
+	player_pokemon: Pokemon,
+	trainer_data: Dictionary,
+	api_response: Dictionary,
+	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
+) -> bool:
+	# Only an unchosen preview may use the original lead-selection workflow.
+	# The server finishes an already accepted lead before returning this snapshot.
+	if _should_show_team_preview(api_response):
+		await setup_trainer_battle_from_response(player_pokemon, trainer_data, api_response, Callable(), environment_id)
+		return battle_actions_ready
+	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
+	npc_trainer_display_name = setup_flow.get_trainer_name(trainer_data, "")
+	opponent_party_reveal_policy.reset(_trainer_team_preview_enabled(api_response))
+	battle_banter_presenter.configure(trainer_data)
+	battle_voice_director.configure(str(api_response.get("battleId", "")), "trainer", trainer_data)
+	_show_local_player_trainer()
+	_show_npc_opponent_trainer(trainer_data)
+	display_data_presenter.set_trainer_team(api_response.get("trainerTeam", []), false)
+	var snapshot := api_response.duplicate(true)
+	snapshot["events"] = []
+	snapshot["eventBatches"] = []
+	if not _apply_initial_battle_response(snapshot):
+		return false
+	last_rendered_event_seq = _get_pvp_response_event_seq_end(api_response)
+	action_flow.restore_http_response(snapshot, last_rendered_event_seq)
+	var selected := _get_player_save_pokemon_for_battle_display_data(battle_state.get_active_player_pokemon("p1"))
+	if selected != null:
+		active_player_pokemon = selected
+	_update_battle_presentation("snapshot_reconciliation")
+	_update_hud_panels()
+	_update_active_sprites()
+	player_sprite_box.visible = true
+	enemy_sprite_box.visible = true
+	_show_battle_controls_after_initial_events()
+	_set_battle_actions_ready(true)
+	if battle_state.is_battle_ended():
+		_set_battle_actions_ready(false)
+		_set_battle_input_locked(true)
+		_finish_if_battle_ended.call_deferred({}, true)
+	else:
+		_show_force_switch_if_needed()
+	return true
+
+
 func setup_trainer_battle_from_response(
 	player_pokemon: Pokemon,
 	trainer_data: Dictionary,
