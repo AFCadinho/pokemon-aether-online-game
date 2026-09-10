@@ -4423,12 +4423,25 @@ func _show_pvp_battle_result(result: Dictionary) -> void:
 	moves_grid.visible = false
 	action_buttons.visible = false
 	mechanics_panel.visible = false
+	if _is_spectator_battle():
+		_hide_spectator_rosters_for_terminal_result()
 	_refresh_pvp_battle_result_copy(result)
 	battle_result_overlay.visible = true
 	battle_result_overlay.move_to_front()
 	_start_battle_result_auto_continue()
 	battle_result_continue_button.grab_focus.call_deferred()
 	_refresh_pvp_battle_rating.call_deferred(str(result.get("matchId", "")))
+
+
+func _hide_spectator_rosters_for_terminal_result() -> void:
+	# Team Preview makes these species public while a battle is live. Once the
+	# result overlay takes focus, however, roster rails only compete with the
+	# outcome and can look like the viewer has acquired the observed team.
+	player_party_grid.visible = false
+	battle_party_rail.visible = false
+	player_stage_party_grid.get_parent().visible = false
+	opponent_party_grid.visible = false
+	opponent_stage_party_rail.visible = false
 
 
 func _refresh_pvp_battle_result_copy(result: Dictionary) -> void:

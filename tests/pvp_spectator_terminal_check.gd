@@ -37,6 +37,13 @@ func _init() -> void:
 		"spectator winner appears in the battle log, battle text, and result screen"
 	)
 	_check(
+		battle_source.contains("func _hide_spectator_rosters_for_terminal_result() -> void:") \
+			and battle_source.contains("if _is_spectator_battle():\n\t\t_hide_spectator_rosters_for_terminal_result()") \
+			and battle_source.contains("player_party_grid.visible = false") \
+			and battle_source.contains("opponent_stage_party_rail.visible = false"),
+		"spectator result overlay hides observed team rails"
+	)
+	_check(
 		battle_source.contains("if battle_finished:") \
 			and battle_source.contains("var completed_result := pending_battle_end_result.duplicate(true)") \
 			and battle_source.contains("_emit_battle_ended(completed_result)"),
