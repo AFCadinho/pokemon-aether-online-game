@@ -80,7 +80,7 @@ func _button(parent: Node, text: String, action: Callable, variant := "secondary
 
 func _group() -> PanelContainer:
 	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", _style(Color("#0b1726"), Color("#254966"), 8, 1, 7, 7, 6, 6))
+	panel.add_theme_stylebox_override("panel", _style(Color("#0c1b2b"), Color("#274b64"), 8, 1, 7, 7, 6, 6))
 	return panel
 
 func _tiny_label(text: String) -> Label:
@@ -143,6 +143,9 @@ func _build() -> void:
 	status_label = _tiny_label("")
 	details.add_child(status_label)
 	var utility_group := _group()
+	# Keep the utility controls visually light; the individual fields provide
+	# the affordance while the dock itself supplies the shared hierarchy.
+	utility_group.add_theme_stylebox_override("panel", _style(Color("#00000000"), Color("#00000000"), 9, 0, 9, 9, 7, 7))
 	utility_group.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	utility_group.size_flags_stretch_ratio = 1.0
 	command_row.add_child(utility_group)
@@ -232,20 +235,29 @@ func _build_transport_overlay() -> void:
 	transport_overlay.offset_bottom = -78
 	transport_overlay.z_index = 100
 	transport_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	transport_overlay.add_theme_stylebox_override("panel", _style(Color("#0b1726e8"), Color("#315c80"), 9, 1, 8, 8, 7, 7))
+	transport_overlay.add_theme_stylebox_override("panel", _style(Color("#081522e8"), Color("#397b9b"), 9, 1, 8, 8, 7, 7))
 	moves.get_parent().add_child(transport_overlay)
 	var transport_center := CenterContainer.new()
 	transport_overlay.add_child(transport_center)
 	var transport_buttons := HBoxContainer.new()
-	transport_buttons.add_theme_constant_override("separation", 6)
+	transport_buttons.add_theme_constant_override("separation", 5)
 	transport_center.add_child(transport_buttons)
-	_button(transport_buttons, "|◀", func(): seek(0), "quiet").tooltip_text = _t("begin")
-	_button(transport_buttons, "◀", func(): seek(timeline.index_for_turn(maxi(0, timeline.turn_at(index) - 1))), "quiet").tooltip_text = _t("previous_turn")
+	var begin_button := _button(transport_buttons, "|◀", func(): seek(0), "quiet")
+	begin_button.custom_minimum_size = Vector2(36, 36)
+	begin_button.tooltip_text = _t("begin")
+	var previous_button := _button(transport_buttons, "◀", func(): seek(timeline.index_for_turn(maxi(0, timeline.turn_at(index) - 1))), "quiet")
+	previous_button.custom_minimum_size = Vector2(36, 36)
+	previous_button.tooltip_text = _t("previous_turn")
 	play_button = _button(transport_buttons, "▶  " + _t("play"), _toggle, "primary")
-	_button(transport_buttons, "▶", func():
+	play_button.custom_minimum_size = Vector2(70, 36)
+	var next_button := _button(transport_buttons, "▶", func():
 		var turn := timeline.turn_at(index) + 1
-		seek(timeline.index_for_turn(turn) if timeline.turn_indices.has(turn) else timeline.frames.size() - 1), "quiet").tooltip_text = _t("next_turn")
-	_button(transport_buttons, "▶|", func(): seek(timeline.frames.size() - 1), "quiet").tooltip_text = _t("end")
+		seek(timeline.index_for_turn(turn) if timeline.turn_indices.has(turn) else timeline.frames.size() - 1), "quiet")
+	next_button.custom_minimum_size = Vector2(36, 36)
+	next_button.tooltip_text = _t("next_turn")
+	var end_button := _button(transport_buttons, "▶|", func(): seek(timeline.frames.size() - 1), "quiet")
+	end_button.custom_minimum_size = Vector2(36, 36)
+	end_button.tooltip_text = _t("end")
 
 func _toggle() -> void:
 	if closing:
