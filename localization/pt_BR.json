@@ -14,6 +14,7 @@
   "ui.pvp.ai_sparring.live.opt_in": "Mostrar minha batalha publicamente em Batalhas ao vivo",
   "ui.pvp.ai_sparring.live.opt_in_hint": "Outros jogadores podem encontrar esta batalha e assistir ao vivo. Apenas informações reveladas são compartilhadas. Válido somente para esta batalha.",
   "ui.replays.title": "Replays de batalha",
+  "ui.replays.default_title": "Batalha contra {opponent}",
   "ui.replays.intro": "Suas batalhas salvas em um só lugar. Os replays permanecem privados, a menos que você compartilhe um código.",
   "ui.replays.close": "Fechar",
   "ui.replays.cancel": "Cancelar",
