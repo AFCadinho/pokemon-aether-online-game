@@ -4,7 +4,7 @@
 
 - Replay expiry details now sit beside the result badge, keeping replay cards more compact.
 
-- Replay cards now keep secondary actions in a compact, styled management menu.
+- Replay cards now offer direct title editing and favorite toggles through compact pencil and star controls.
 
 - The shared-replay action now has a more prominent, dedicated header treatment.
 
