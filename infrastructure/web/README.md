@@ -93,7 +93,7 @@ on-demand asset delivery phase can add those animations without blocking play.
 Generated demo-map textures are stored as self-contained, lossless compressed
 resources. This preserves their pixels and works on desktop and Web without
 duplicating the project. The build command verifies required/excluded pack
-markers and rejects an initial payload above 300 MiB. Phase 5 is 285 MiB before
+markers and rejects an initial payload above 300 MiB. Phase 6 remains 285 MiB before
 HTTP compression, down from the phase-4 baseline of 559 MiB while adding the
 static battle sprite catalog.
 
@@ -115,8 +115,9 @@ as well as the test outcome. A Chromium pass is not a Firefox/Safari pass.
 
 The account browser test uses the disconnected static server at port 8060 and
 intercepts only `/api` requests into the paired test fixture. It covers browser
-registration, test-email verification, Godot login, remembered and tab-only
-refresh, and logout. Screenshots and non-sensitive route/status evidence go to
+registration, test-email verification, Godot login, world entry and a complete
+AI Sparring turn with an isolated catalog team. Screenshots and non-sensitive
+route/status evidence go to
 `builds/web-accounts-qa/`. It rejects any world or external request. It does not
 prove SMTP delivery, PostgreSQL concurrency or the full deployed gateway stack.
 

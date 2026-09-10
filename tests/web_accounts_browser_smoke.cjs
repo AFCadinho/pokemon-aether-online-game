@@ -89,11 +89,32 @@ const assert = require('node:assert/strict');
     assert(api.some(item => item.path === '/api/auth/web/world' && item.status === 200), 'browser world position loads');
     assert(api.some(item => item.path === '/api/auth/web/world/story' && item.status === 200), 'shared story loads through the browser boundary');
 		assert(api.some(item => item.path.startsWith('/api/npcs/') && item.status !== 403), 'demo NPC metadata crosses the browser boundary');
+		await page.mouse.click(207, 72); // Browser PvP shortcut opens AI Sparring directly.
+		await waitForApi(item => item.path === '/api/battle/pvp/training/ai/teams' && item.status === 200, 30000);
+		await page.waitForTimeout(2000);
+		await page.screenshot({ path: path.join(output, 'ai-sparring.png') });
+		assert(api.some(item => item.path === '/api/battle/pvp/training/ai/teams' && item.status === 200), 'AI Sparring catalog loads');
+		await page.mouse.click(550, 436);
+		await page.waitForTimeout(500);
+		await page.mouse.click(450, 495); // Catalog team in Godot's popup menu.
+		await page.waitForTimeout(1000);
+		await page.mouse.click(975, 739);
+		await waitForApi(item => item.path === '/api/battle/pvp/training/ai/battles' && item.status === 200, 30000);
+		await waitForApi(item => item.path === '/api/battle/web-ai-e2e/npc/lead' && item.status === 200, 30000);
+		await page.waitForTimeout(8000);
+		await page.screenshot({ path: path.join(output, 'ai-battle-turn.png') });
+		assert(api.some(item => item.path === '/api/battle/web-ai-e2e/lead' && item.status === 200), 'browser submits its AI Sparring lead');
+		assert(api.some(item => item.path === '/api/battle/web-ai-e2e/npc/lead' && item.status === 200), 'AI lead resolves');
+		await page.mouse.click(1084, 481); // Thunderbolt in the battle move grid.
+		await waitForApi(item => item.path === '/api/battle/web-ai-e2e/choice-and-resolve' && item.status === 200, 30000);
+		await page.waitForTimeout(10000);
+		await page.screenshot({ path: path.join(output, 'ai-battle-result.png') });
+		assert(api.some(item => item.path === '/api/battle/web-ai-e2e/choice-and-resolve' && item.status === 200), 'browser resolves an AI Sparring turn');
     assert.deepEqual(external, []);
     assert(!api.some(item => item.path === '/api/game/player-position' && item.status < 400), 'desktop position endpoint is never used');
 		assert(!errors.some(item => item.includes('generated/tiled_visuals')), 'browser map resources load without runtime errors');
-		fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify({ api, errors, external, registration: true, world: true }, null, 2));
-		console.log('web_accounts_browser_smoke: PASS (registration, login, browser world, no desktop position/external requests)');
+		fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify({ api, errors, external, registration: true, world: true, aiSparring: true }, null, 2));
+		console.log('web_accounts_browser_smoke: PASS (registration, login, browser world, completed AI Sparring turn, no desktop position/external requests)');
   } finally {
     fs.writeFileSync(path.join(output, 'requests.json'), JSON.stringify(api, null, 2));
 		fs.writeFileSync(path.join(output, 'errors.json'), JSON.stringify(errors, null, 2));

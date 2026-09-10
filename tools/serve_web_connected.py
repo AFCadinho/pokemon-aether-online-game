@@ -24,6 +24,7 @@ HTTP_ROUTES = {
     ("GET", "/auth/web/ai-sparring/statistics"),
     ("GET", "/auth/web/ai-sparring/history"), ("DELETE", "/auth/web/ai-sparring/history"),
     ("GET", "/battle/pvp/training/ai/teams"),
+    ("GET", "/battle/pvp/training/ai/live"),
     ("POST", "/battle/pvp/training/ai/battles"),
     ("POST", "/auth/email-verification/confirm"),
 }
@@ -31,6 +32,7 @@ AI_BATTLE_ROUTE = re.compile(
     r"^/battle/[A-Za-z0-9-]{1,128}/(?:state|lead|choice|choice-and-resolve|npc/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex/v1/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$"
 )
 HTTP_ROUTE_PREFIXES = (
+    ("GET", "/battle/pvp/training/ai/live/"),
     ("GET", "/npcs/"),
     ("GET", "/dialogues/"),
     ("GET", "/auth/web/world/story"),

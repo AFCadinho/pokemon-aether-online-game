@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring in the browser now starts correctly with a catalog team, including for new Trainers without an overworld party.
+
 - The browser demo now loads at roughly half its previous size and includes static battle sprites for the complete AI Sparring roster.
 
 - Browser players can now open AI Sparring directly and use the regular game chat, while Ranked and custom PvP remain download-only.
