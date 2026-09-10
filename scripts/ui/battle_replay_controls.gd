@@ -15,6 +15,7 @@ var scrubber: HSlider
 var status_label: Label
 var transport_overlay: PanelContainer
 var switch_sides_button: Button
+var view_swapped := false
 var speed := 1.0
 var closing := false
 
@@ -137,11 +138,13 @@ func _build() -> void:
 	details.add_theme_constant_override("separation", 1)
 	command_row.add_child(details)
 	var title := Label.new()
-	title.text = _t("playback_title")
-	title.add_theme_font_size_override("font_size", 14)
-	title.add_theme_color_override("font_color", INK)
+	title.text = "REPLAY MODE"
+	title.add_theme_font_size_override("font_size", 12)
+	title.add_theme_color_override("font_color", ACCENT)
 	details.add_child(title)
 	status_label = _tiny_label("")
+	status_label.add_theme_font_size_override("font_size", 16)
+	status_label.add_theme_color_override("font_color", INK)
 	details.add_child(status_label)
 	var utility_group := _group()
 	# Keep the utility controls visually light; the individual fields provide
@@ -199,11 +202,11 @@ func _build() -> void:
 	position_label.add_theme_stylebox_override("normal", _style(Color("#122e47"), Color("#315c80"), 6, 1, 8, 8, 4, 4))
 	position_label.custom_minimum_size.y = 34
 	command_row.add_child(position_label)
-	switch_sides_button = _button(command_row, "⇄", func(): host.call("switch_replay_sides"), "quiet")
-	switch_sides_button.custom_minimum_size = Vector2(48, 38)
-	switch_sides_button.tooltip_text = "Switch sides"
-	var back_button := _button(command_row, _t("back"), _close, "quiet")
-	back_button.custom_minimum_size = Vector2(66, 38)
+	switch_sides_button = _button(command_row, "Switch view", func(): host.call("switch_replay_sides"), "quiet")
+	switch_sides_button.custom_minimum_size = Vector2(112, 38)
+	switch_sides_button.tooltip_text = "Switch replay perspective"
+	var back_button := _button(command_row, "Leave replay", _close, "quiet")
+	back_button.custom_minimum_size = Vector2(112, 38)
 	_build_transport_overlay()
 	var progress_row := HBoxContainer.new()
 	progress_row.add_theme_constant_override("separation", 8)
@@ -326,13 +329,27 @@ func _close() -> void:
 	close_requested.emit()
 
 func refresh_side_label(swapped: bool) -> void:
+	view_swapped = swapped
 	if switch_sides_button != null:
-		switch_sides_button.text = "⇄" if not swapped else "⇄"
+		switch_sides_button.text = "Switch view"
 		switch_sides_button.tooltip_text = "View %s side" % ("player" if swapped else "opponent")
+	if status_label != null:
+		status_label.text = _perspective_label(swapped)
 
 func _refresh() -> void:
 	play_button.text = "Ⅱ  " + _t("pause") if playing else "▶  " + _t("play")
 	position_label.text = _t("turn_position", {"turn": timeline.turn_at(index), "total": timeline.turn_at(timeline.frames.size() - 1)})
-	status_label.text = "Paused" if not playing else "Playing"
+	status_label.text = _perspective_label(view_swapped)
 	turn_picker.set_value_no_signal(timeline.turn_at(index))
 	scrubber.set_value_no_signal(index)
+
+func _perspective_label(swapped: bool) -> String:
+	var players_value: Variant = timeline.frames[0].get("players", {})
+	var players: Dictionary = players_value as Dictionary if players_value is Dictionary else {}
+	var side := "p2" if swapped else "p1"
+	var player_value: Variant = players.get(side, {})
+	var player: Dictionary = player_value as Dictionary if player_value is Dictionary else {}
+	var name := str(player.get("name", "Player")).strip_edges()
+	if name.is_empty():
+		name = "Player" if not swapped else "Opponent"
+	return "Viewing from %s's perspective" % name
