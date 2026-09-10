@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Live spectators no longer receive a false sprite-reconciliation warning while an authoritative snapshot catches up.
+
 - Nearby NPC battle spectators now see both trainers and Poké Ball placeholders for concealed reserve Pokémon.
 
 - Spectators now enter live battles with both active Pokémon already visible instead of replaying their opening summon animations.
