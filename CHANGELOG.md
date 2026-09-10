@@ -4,6 +4,16 @@
 
 - NPC replay cards now use a cropped head portrait from the trainer's overworld sprite when available.
 
+- Reconnecting to an ongoing trainer battle now restores the battle log and Pokémon that were already revealed, including the active opponent.
+
+- Live spectators no longer receive a false sprite-reconciliation warning while an authoritative snapshot catches up.
+
+- Nearby NPC battle spectators now see both trainers and Poké Ball placeholders for concealed reserve Pokémon.
+
+- Spectators now enter live battles with both active Pokémon already visible instead of replaying their opening summon animations.
+
+- Nearby battle Poké Balls now use a smaller visual size while retaining their easy-to-click area.
+
 - NPC Battle Replays now use the standard trainer arena rather than AI Sparring's stadium presentation.
 
 - Nearby battle Poké Balls now sit directly above player nameplates and overlap role badges instead of floating far above them.

@@ -19,8 +19,15 @@ func _run() -> void:
 			"p1": {"side": {"pokemon": [{"ident": "p1: Pikachu", "species": "Pikachu", "active": true, "metadataSlot": 1, "condition": "37/100 par", "hp": 37, "maxHp": 100}]}, "active": [{"moves": [{"move": "Thunderbolt", "id": "thunderbolt", "pp": 3, "maxpp": 15}]}]},
 			"p2": {"wait": true, "side": {"pokemon": [{"ident": "p2: Eevee", "species": "Eevee", "active": true, "metadataSlot": 1, "condition": "60/100", "hp": 60, "maxHp": 100}]}},
 		},
-		"trainerTeam": [{"species": "Eevee", "level": 25}],
-		"events": [{"type": "damage", "target": "p1a: Pikachu", "hp": 1, "maxHp": 100, "condition": "1/100", "eventSeq": 40}],
+		"trainerTeam": [
+			{"species": "Eevee", "level": 25, "metadataSlot": 1, "ident": "p2: Eevee"},
+			{"species": "Charmander", "level": 25, "metadataSlot": 2, "ident": "p2: Charmander"},
+		],
+		"events": [
+			{"type": "turn", "turn": 1, "eventSeq": 1},
+			{"type": "switch", "target": "p2a: Charmander", "pokemonKey": "p2:slot:2", "metadataSlot": 2, "eventSeq": 2},
+			{"type": "damage", "target": "p1a: Pikachu", "hp": 1, "maxHp": 100, "condition": "1/100", "eventSeq": 40},
+		],
 	}
 	var resumed: bool = await battle.resume_trainer_battle_from_response(pokemon, {"name": "Resume Fixture"}, snapshot)
 	_check(resumed and battle.battle_actions_ready, "resumed battle accepts input")
@@ -28,6 +35,9 @@ func _run() -> void:
 	_check(battle.battle_state.get_active_player_pokemon("p1").get("condition") == "37/100 par", "old damage is not replayed over current HP/status")
 	_check(battle.battle_state.get_active_decision("p1").get("decisionId") == "original-choice", "original decision survives resume")
 	_check(battle.battle_state.requests.p1.active[0].moves[0].pp == 3, "remaining PP survives resume")
+	_check(not battle.battle_log_panel.log_buffer.is_empty(), "battle log is restored without replaying old events")
+	_check(bool(battle.opponent_party_reveal_policy.revealed_slots.get(1, false)), "current active trainer Pokemon stays visible after resume")
+	_check(bool(battle.opponent_party_reveal_policy.revealed_slots.get(2, false)), "previously switched trainer Pokemon stays visible after resume")
 	snapshot.requests.p1["forceSwitch"] = [true]
 	snapshot.requests.p1.erase("active")
 	snapshot.decisions.p1["decisionKind"] = "FORCED_SWITCH"
