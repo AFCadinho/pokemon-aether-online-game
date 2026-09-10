@@ -55,6 +55,7 @@ func _run() -> void:
 	var request_result: Dictionary = await root.get_node("BattleApiClient").send_post_request(battle.battle_request, "/must-not-send", {})
 	_check(not request_result.get("success", true), "Replay transport blocks writes before network access")
 	var controls: Control = battle.replay_controls
+	_check(controls.get_theme_stylebox("panel") != null and controls.play_button.get_theme_stylebox("normal") != null, "Replay playback uses a dedicated command deck style")
 	controls._toggle()
 	await process_frame
 	controls.seek(0)
@@ -107,6 +108,13 @@ func _run() -> void:
 	for i in range(4):
 		await process_frame
 	_check(library.list.get_child_count() == 2, "Library renders management cards")
+	_check(library.shell.get_theme_stylebox("panel") != null, "Library shell has a dedicated replay visual style")
+	_check(library.search.get_theme_stylebox("focus") != null and library.outcome.get_theme_stylebox("hover") != null, "Replay filters have focused and hover states")
+	_check(library.outcome.get_theme_icon("arrow") != null and library.outcome.get_popup().get_theme_stylebox("panel") != null, "Replay dropdowns style their arrow and menu")
+	_check(library.favorites.get_theme_icon("checked") != null and library.favorites.get_theme_stylebox("normal") != null, "Favorites uses a dedicated toggle style")
+	var card_buttons: Array[Node] = library.list.get_child(0).find_children("*", "Button", true, false)
+	var watch_button := card_buttons[0] as Button if not card_buttons.is_empty() else null
+	_check(watch_button != null and watch_button.get_theme_stylebox("normal") != null, "Replay cards provide styled actions")
 	print("Replay library geometry: viewport=%s root=%s shell=%s minimum=%s" % [root.size, library.size, library.shell.get_rect(), library.shell.get_combined_minimum_size()])
 	_check(library.shell.position.y >= 0 and library.shell.get_rect().end.y <= library.size.y + 1, "Library fits the viewport")
 	var capture_dir := OS.get_environment("POKEAETHER_REPLAY_CAPTURE_DIR")

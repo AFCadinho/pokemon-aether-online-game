@@ -21,6 +21,17 @@ var return_scroll := 0
 var team_strip_factory: Callable
 var refresh_pending := false
 
+const INK := Color("#eaf3ff")
+const MUTED := Color("#91a7bf")
+const ACCENT := Color("#55d5ff")
+const ACCENT_DARK := Color("#123c58")
+const SURFACE := Color("#101e32")
+const SURFACE_RAISED := Color("#162b45")
+const DANGER := Color("#d96570")
+const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/icons/battle_replays_dropdown_arrow.svg")
+const FILTER_CHECKED: Texture2D = preload("res://assets/ui/icons/battle_replays_filter_checked.svg")
+const FILTER_UNCHECKED: Texture2D = preload("res://assets/ui/icons/battle_replays_filter_unchecked.svg")
+
 func _t(key: String, args: Dictionary = {}) -> String:
 	return LocalizationManager.text("ui.replays." + key, args)
 
@@ -33,17 +44,8 @@ func _ready() -> void:
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(shade)
 	shell = PanelContainer.new()
-	shell.add_theme_font_size_override("font_size", 20)
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color("101c30")
-	style.border_color = Color("547297")
-	style.set_border_width_all(2)
-	style.set_corner_radius_all(12)
-	style.content_margin_left = 20
-	style.content_margin_right = 20
-	style.content_margin_top = 16
-	style.content_margin_bottom = 16
-	shell.add_theme_stylebox_override("panel", style)
+	shell.add_theme_font_size_override("font_size", 18)
+	shell.add_theme_stylebox_override("panel", _style(Color("#0c1829"), Color("#42739b"), 14, 1, 24, 24, 18, 18))
 	add_child(shell)
 	resized.connect(_position_shell)
 	shell.minimum_size_changed.connect(func(): _position_shell.call_deferred())
@@ -51,47 +53,83 @@ func _ready() -> void:
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 12)
 	shell.add_child(layout)
+	var header_panel := PanelContainer.new()
+	header_panel.add_theme_stylebox_override("panel", _style(Color("#11243a"), Color("#294e70"), 10, 1, 16, 16, 13, 13))
+	layout.add_child(header_panel)
 	var header := HBoxContainer.new()
-	layout.add_child(header)
+	header_panel.add_child(header)
+	var accent := ColorRect.new()
+	accent.color = ACCENT
+	accent.custom_minimum_size = Vector2(4, 42)
+	header.add_child(accent)
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(heading)
 	var title := Label.new()
 	title.text = _t("title")
-	title.add_theme_font_size_override("font_size", 24)
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_child(title)
-	_button(header, _t("close"), func(): hide(); closed.emit())
+	title.add_theme_font_size_override("font_size", 25)
+	title.add_theme_color_override("font_color", INK)
+	heading.add_child(title)
 	var intro := Label.new()
 	intro.text = _t("intro")
 	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	layout.add_child(intro)
+	intro.add_theme_font_size_override("font_size", 14)
+	intro.add_theme_color_override("font_color", MUTED)
+	heading.add_child(intro)
+	_button(header, _t("close"), func(): hide(); closed.emit(), "quiet")
+	var filter_panel := PanelContainer.new()
+	filter_panel.add_theme_stylebox_override("panel", _style(Color("#0a1524"), Color("#1f405e"), 10, 1, 14, 14, 12, 12))
+	layout.add_child(filter_panel)
+	var filter_layout := VBoxContainer.new()
+	filter_panel.add_child(filter_layout)
+	var filter_caption := Label.new()
+	filter_caption.text = "BROWSE REPLAYS"
+	filter_caption.add_theme_font_size_override("font_size", 12)
+	filter_caption.add_theme_color_override("font_color", ACCENT)
+	filter_layout.add_child(filter_caption)
 	var filters := HFlowContainer.new()
-	layout.add_child(filters)
+	filters.add_theme_constant_override("horizontal_separation", 8)
+	filters.add_theme_constant_override("vertical_separation", 8)
+	filter_layout.add_child(filters)
 	search = LineEdit.new()
 	search.placeholder_text = _t("search")
 	search.max_length = 80
 	search.custom_minimum_size.x = 220
+	_style_line_edit(search)
 	search.text_submitted.connect(func(_text: String): _filter())
 	filters.add_child(search)
 	outcome = OptionButton.new()
 	for key: String in ["all_results", "win", "loss", "draw"]:
 		outcome.add_item(_t(key))
 	outcome.item_selected.connect(func(_i: int): _filter())
+	_style_option(outcome)
 	filters.add_child(outcome)
 	difficulty = OptionButton.new()
 	for label: String in [_t("all_difficulties"), "Scholar", "Grandmaster Intermediate", "Grandmaster Hard", "Grandmaster Elite", "Grandmaster Nightmare"]:
 		difficulty.add_item(label)
 	difficulty.item_selected.connect(func(_i: int): _filter())
+	difficulty.custom_minimum_size.x = 210
+	_style_option(difficulty)
 	filters.add_child(difficulty)
 	favorites = CheckButton.new()
 	favorites.text = _t("favorites")
+	_style_favorites_toggle(favorites)
 	favorites.toggled.connect(func(_value: bool): _filter())
 	filters.add_child(favorites)
-	_button(filters, _t("refresh"), _filter)
+	_button(filters, _t("refresh"), _filter, "primary")
+	var summary := HBoxContainer.new()
+	summary.add_theme_constant_override("separation", 12)
+	layout.add_child(summary)
 	usage = Label.new()
-	usage.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	layout.add_child(usage)
+	usage.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	usage.add_theme_font_size_override("font_size", 14)
+	usage.add_theme_color_override("font_color", MUTED)
+	summary.add_child(usage)
 	status = Label.new()
-	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	layout.add_child(status)
+	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	status.add_theme_font_size_override("font_size", 14)
+	status.add_theme_color_override("font_color", MUTED)
+	summary.add_child(status)
 	scroll = ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -103,16 +141,109 @@ func _ready() -> void:
 	var pager := HBoxContainer.new()
 	pager.alignment = BoxContainer.ALIGNMENT_CENTER
 	layout.add_child(pager)
-	previous = _button(pager, _t("previous_page"), func(): offset = maxi(0, offset - 20); refresh())
-	next = _button(pager, _t("next_page"), func(): offset += 20; refresh())
+	previous = _button(pager, _t("previous_page"), func(): offset = maxi(0, offset - 20); refresh(), "quiet")
+	next = _button(pager, _t("next_page"), func(): offset += 20; refresh(), "quiet")
 
-func _button(parent: Node, text: String, callback: Callable) -> Button:
+func _style(color: Color, border: Color, radius: int, width := 0, left := 10, right := 10, top := 7, bottom := 7) -> StyleBoxFlat:
+	var box := StyleBoxFlat.new()
+	box.bg_color = color
+	box.border_color = border
+	box.set_border_width_all(width)
+	box.set_corner_radius_all(radius)
+	box.content_margin_left = left
+	box.content_margin_right = right
+	box.content_margin_top = top
+	box.content_margin_bottom = bottom
+	return box
+
+func _button(parent: Node, text: String, callback: Callable, variant := "secondary") -> Button:
 	var button := Button.new()
 	button.text = text
-	button.custom_minimum_size.y = 34
+	button.custom_minimum_size.y = 38
+	button.focus_mode = Control.FOCUS_NONE
+	button.add_theme_font_size_override("font_size", 14)
+	var base := Color("#1a314b")
+	var hover := Color("#244969")
+	var border := Color("#385c7b")
+	var font := INK
+	if variant == "primary":
+		base = Color("#126b91")
+		hover = Color("#198abd")
+		border = ACCENT
+	elif variant == "danger":
+		base = Color("#542632")
+		hover = Color("#763444")
+		border = DANGER
+	elif variant == "quiet":
+		base = Color("#132237")
+		hover = Color("#1b3853")
+		border = Color("#284966")
+		font = MUTED
+	button.add_theme_stylebox_override("normal", _style(base, border, 7, 1))
+	button.add_theme_stylebox_override("hover", _style(hover, border.lightened(0.18), 7, 1))
+	button.add_theme_stylebox_override("pressed", _style(base.darkened(0.16), border, 7, 1))
+	button.add_theme_stylebox_override("disabled", _style(Color("#101d2d"), Color("#233a52"), 7, 1))
+	button.add_theme_color_override("font_color", font)
+	button.add_theme_color_override("font_hover_color", INK)
+	button.add_theme_color_override("font_disabled_color", Color("#52657a"))
 	button.pressed.connect(callback)
 	parent.add_child(button)
 	return button
+
+func _style_line_edit(control: LineEdit) -> void:
+	control.add_theme_stylebox_override("normal", _style(Color("#08121f"), Color("#315574"), 7, 1, 12, 12, 8, 8))
+	control.add_theme_stylebox_override("focus", _style(Color("#0c1a2a"), ACCENT, 7, 1, 12, 12, 8, 8))
+	control.add_theme_color_override("font_color", INK)
+	control.add_theme_color_override("font_placeholder_color", Color("#7e92a8"))
+
+func _style_option(control: OptionButton) -> void:
+	control.custom_minimum_size = Vector2(145, 38)
+	control.focus_mode = Control.FOCUS_NONE
+	control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	control.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	control.add_theme_constant_override("arrow_margin", 12)
+	control.add_theme_icon_override("arrow", DROPDOWN_ARROW)
+	control.add_theme_stylebox_override("normal", _style(Color("#13243a"), Color("#315574"), 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("hover", _style(Color("#1a3550"), ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("pressed", _style(Color("#0e2033"), ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("focus", _style(Color("#13243a"), ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_color_override("font_color", INK)
+	control.add_theme_color_override("font_hover_color", INK)
+	control.add_theme_color_override("font_pressed_color", INK)
+	var popup := control.get_popup()
+	popup.transparent_bg = true
+	popup.add_theme_font_size_override("font_size", 14)
+	popup.add_theme_color_override("font_color", INK)
+	popup.add_theme_color_override("font_hover_color", INK)
+	popup.add_theme_constant_override("item_start_padding", 12)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 4)
+	popup.add_theme_stylebox_override("panel", _style(Color("#0b1727"), Color("#315574"), 8, 1, 8, 8, 7, 7))
+	popup.add_theme_stylebox_override("hover", _style(Color("#1a4160"), ACCENT, 6, 1, 8, 8, 5, 5))
+	popup.add_theme_icon_override("radio_checked", FILTER_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked", FILTER_UNCHECKED)
+
+func _style_favorites_toggle(control: CheckButton) -> void:
+	control.custom_minimum_size = Vector2(126, 38)
+	control.focus_mode = Control.FOCUS_NONE
+	control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	control.add_theme_font_size_override("font_size", 14)
+	control.add_theme_constant_override("h_separation", 7)
+	control.add_theme_stylebox_override("normal", _style(Color("#13243a"), Color("#315574"), 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("hover", _style(Color("#1a3550"), ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("pressed", _style(Color("#0e2033"), ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("normal_pressed", _style(ACCENT_DARK, ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("hover_pressed", _style(Color("#155675"), ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("pressed_pressed", _style(Color("#0f455f"), ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_color_override("font_color", INK)
+	control.add_theme_color_override("font_hover_color", INK)
+	control.add_theme_color_override("font_pressed_color", INK)
+	control.add_theme_icon_override("unchecked", FILTER_UNCHECKED)
+	control.add_theme_icon_override("unchecked_hover", FILTER_UNCHECKED)
+	control.add_theme_icon_override("unchecked_pressed", FILTER_UNCHECKED)
+	control.add_theme_icon_override("checked", FILTER_CHECKED)
+	control.add_theme_icon_override("checked_hover", FILTER_CHECKED)
+	control.add_theme_icon_override("checked_pressed", FILTER_CHECKED)
 
 func open_library() -> void:
 	show()
@@ -163,33 +294,44 @@ func refresh() -> void:
 
 func _card(row: Dictionary) -> Control:
 	var card := PanelContainer.new()
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color("182840")
-	style.set_corner_radius_all(8)
-	style.content_margin_left = 12
-	style.content_margin_right = 12
-	style.content_margin_top = 10
-	style.content_margin_bottom = 10
-	card.add_theme_stylebox_override("panel", style)
+	var result := str(row.get("result", "unknown"))
+	var result_color := Color("#487f61") if result == "win" else Color("#8b4652") if result == "loss" else Color("#6b6683")
+	card.add_theme_stylebox_override("panel", _style(SURFACE_RAISED, result_color, 10, 1, 16, 16, 14, 14))
 	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 7)
 	card.add_child(layout)
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 10)
+	layout.add_child(title_row)
 	var title := Label.new()
 	title.text = str(row.get("title", ""))
 	if title.text.is_empty():
 		title.text = "AI Sparring · %s" % str(row.get("opponentDisplayName", ""))
-	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_font_size_override("font_size", 19)
+	title.add_theme_color_override("font_color", INK)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	layout.add_child(title)
+	title_row.add_child(title)
+	var result_badge := Label.new()
+	result_badge.text = _t(result)
+	result_badge.add_theme_font_size_override("font_size", 12)
+	result_badge.add_theme_color_override("font_color", Color("#ffffff"))
+	result_badge.add_theme_stylebox_override("normal", _style(result_color, result_color, 6, 0, 8, 8, 4, 4))
+	title_row.add_child(result_badge)
 	var detail := Label.new()
 	detail.text = "%s · %s · %s · %s" % [str(row.get("opponentDisplayName", "")), str(row.get("createdAt", "")).replace("T", " ").left(16),
 		_t(str(row.get("result", "unknown"))), _t("turns", {"count": row.get("turns", 0)})]
 	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	detail.add_theme_font_size_override("font_size", 14)
+	detail.add_theme_color_override("font_color", MUTED)
 	layout.add_child(detail)
 	if team_strip_factory.is_valid():
 		var teams := HFlowContainer.new()
 		teams.add_child(team_strip_factory.call(row.get("playerRoster", [])))
 		var versus := Label.new()
 		versus.text = "VS"
+		versus.add_theme_font_size_override("font_size", 12)
+		versus.add_theme_color_override("font_color", ACCENT)
 		teams.add_child(versus)
 		teams.add_child(team_strip_factory.call(row.get("opponentRoster", [])))
 		layout.add_child(teams)
@@ -198,15 +340,17 @@ func _card(row: Dictionary) -> Control:
 	expiry.text = _t("status_" + state)
 	if state == "available":
 		expiry.text = _t("pinned") if row.get("favorite", false) else _t("expires", {"date": str(row.get("expiresAt", "")).left(10)})
+	expiry.add_theme_font_size_override("font_size", 13)
+	expiry.add_theme_color_override("font_color", Color("#f1d48b") if row.get("favorite", false) else MUTED)
 	layout.add_child(expiry)
 	var actions := HFlowContainer.new()
 	layout.add_child(actions)
 	var battle_id := str(row.get("battleId", ""))
-	_button(actions, _t("watch"), func(): watch(battle_id)).disabled = state != "available"
+	_button(actions, _t("watch"), func(): watch(battle_id), "primary").disabled = state != "available"
 	var pinned := bool(row.get("favorite", false))
-	_button(actions, _t("unpin") if pinned else _t("pin"), func(): _edit(battle_id, {"favorite": not pinned})).disabled = state != "available"
-	_button(actions, _t("rename"), func(): _rename(row)).disabled = state != "available"
-	_button(actions, _t("delete"), func(): _confirm_remove(battle_id))
+	_button(actions, _t("unpin") if pinned else _t("pin"), func(): _edit(battle_id, {"favorite": not pinned}), "quiet").disabled = state != "available"
+	_button(actions, _t("rename"), func(): _rename(row), "quiet").disabled = state != "available"
+	_button(actions, _t("delete"), func(): _confirm_remove(battle_id), "danger")
 	return card
 
 func _position_shell() -> void:
