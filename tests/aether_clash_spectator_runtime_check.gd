@@ -2,6 +2,7 @@ extends SceneTree
 
 
 const DUEL_SCENE := "res://scenes/overworld/aether_clash/aether_clash_duel.tscn"
+const CAMERA_POLICY := preload("res://scripts/services/aether_clash_camera_policy.gd")
 
 var failed := false
 
@@ -301,14 +302,14 @@ func _run() -> void:
 		"Active Guild Duel participants cannot spectate another battle"
 	)
 	_check(
-		(player_camera.get_viewport_rect().size / player_camera.zoom).is_equal_approx(Vector2(960, 540)),
-		"Active Guild Duel participants see exactly 960×540 world pixels"
+		(player_camera.get_viewport_rect().size / player_camera.zoom).is_equal_approx(CAMERA_POLICY.WORLD_VIEW_SIZE),
+		"Active Guild Duel participants see exactly 1280×720 world pixels"
 	)
 	duel.call("_apply_arena_state", _spectator_payload())
 	duel.call("_sync_local_camera_mode")
 	_check(
 		local_actor.restored_zoom_count == 0
-		and player_camera.zoom.is_equal_approx(Vector2(2, 2)),
+		and (player_camera.get_viewport_rect().size / player_camera.zoom).is_equal_approx(CAMERA_POLICY.WORLD_VIEW_SIZE),
 		"Elimination keeps the fixed arena view outside the orb"
 	)
 

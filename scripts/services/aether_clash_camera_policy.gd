@@ -3,7 +3,7 @@ extends RefCounted
 # The same logical frame is fitted inside every physical window, including
 # ultrawide and portrait windows. Output pixel density never changes arena sight.
 const FRAME_SIZE := Vector2i(1920, 1080)
-const WORLD_VIEW_SIZE := Vector2(960, 540)
+const WORLD_VIEW_SIZE := Vector2(1280, 720)
 
 
 static func active_controller(tree: SceneTree) -> Node:
