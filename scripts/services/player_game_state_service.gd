@@ -600,6 +600,7 @@ func load_player_position() -> Dictionary:
 		"hasState": bool(body.get("hasState", false)),
 		"state": _dictionary_from_value(body.get("state", {})),
 		"blackoutLoss": int(body.get("blackoutLoss", 0)),
+		"trainerRewardRecovered": bool(body.get("trainerRewardRecovered", false)),
 		"happinessUpdated": bool(body.get("happinessUpdated", false)),
 		"party": _array_from_value(body.get("party", [])),
 	}

@@ -1355,6 +1355,14 @@ func _setup_initial_world_state() -> void:
 	else:
 		await _load_player_party_state()
 		var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
+		if bool(saved_state_response.get("trainerRewardRecovered", false)):
+			# Position recovery may settle a durably earned trainer reward after
+			# the normal party bootstrap. Refresh those projections before play.
+			await _load_player_party_state()
+			var recovered_wallet: Dictionary = await PlayerWalletService.load_wallet()
+			PlayerWalletService.apply_wallet_result(recovered_wallet)
+			await InventoryService.load_inventory()
+			await PlayerGameStateService.refresh_story()
 		if bool(saved_state_response.get("success", false)) and bool(saved_state_response.get("hasState", false)):
 			saved_state = _dictionary_from_value(saved_state_response.get("state", {}))
 			_apply_saved_appearance_state(saved_state)
