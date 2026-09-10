@@ -1489,6 +1489,18 @@ func _setup_initial_world_state() -> void:
 
 
 func _setup_web_demo_world() -> void:
+	StoryService.reset_story()
+	var bootstrap_response: Dictionary = await PlayerGameStateService.bootstrap_story()
+	if not bool(bootstrap_response.get("success", false)):
+		push_warning("World: shared story bootstrap failed: %s" % str(bootstrap_response.get("error", "Unknown error")))
+		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		return
+	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
+	if not bool(profile_response.get("success", false)):
+		push_warning("World: shared player profile load failed: %s" % str(profile_response.get("error", "Unknown error")))
+		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		return
+	_apply_web_demo_profile(profile_response)
 	var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
 	if not bool(saved_state_response.get("success", false)):
 		push_warning("World: browser demo position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
@@ -1521,6 +1533,31 @@ func _setup_web_demo_world() -> void:
 	_apply_camera_limits_for_map(initial_map)
 	player.refresh_map_layers()
 	last_saved_position_signature = _get_current_player_position_signature(true)
+
+
+func _apply_web_demo_profile(profile_response: Dictionary) -> void:
+	var user := _dictionary_from_value(profile_response.get("user", {}))
+	PlayerSave.apply_account_identity(user if not user.is_empty() else AuthService.current_user)
+	var party_response := _dictionary_from_value(profile_response.get("party", {}))
+	var party_value: Variant = party_response.get("party", [])
+	PlayerSave.replace_party_from_state(party_value as Array if party_value is Array else [])
+	var preferences := _dictionary_from_value(profile_response.get("preferences", {}))
+	GameState.show_follower = bool(preferences.get("showFollower", GameState.show_follower))
+	GameState.repel_enabled = bool(preferences.get("showRepel", GameState.repel_enabled))
+	GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
+	var wallet := _dictionary_from_value(profile_response.get("wallet", {}))
+	PlayerSave.money = maxi(int(wallet.get("money", PlayerSave.money)), 0)
+	PlayerSave.bank_money = maxi(int(wallet.get("bank_money", PlayerSave.bank_money)), 0)
+	PlayerSave.gems = maxi(int(wallet.get("gems", PlayerSave.gems)), 0)
+	PlayerSave.aetherite = maxi(int(wallet.get("aetherite", PlayerSave.aetherite)), 0)
+	PlayerSave.battle_points = maxi(int(wallet.get("battle_points", PlayerSave.battle_points)), 0)
+	StoryService.apply_story(_dictionary_from_value(profile_response.get("story", {})))
+	var position_response := _dictionary_from_value(profile_response.get("position", {}))
+	var profile_state := _dictionary_from_value(position_response.get("state", {}))
+	var appearance := _dictionary_from_value(profile_state.get("appearance", {}))
+	if not appearance.is_empty():
+		PlayerSave.apply_appearance_state(appearance)
+		confirmed_appearance_state = appearance.duplicate(true)
 
 
 func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
