@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Logging in refreshes party, money, inventory and story progress when the server recovers an earned trainer reward.
+
 - Interrupted battle animations now release their waiting actions, and stalled effects can no longer indefinitely block the next event.
 
 - PvP reconnect now survives temporary server errors and returns you to sign-in when a battle session is definitively invalid.
