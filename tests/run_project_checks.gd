@@ -315,6 +315,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/aether_clash_arena_start_runtime_check.gd",
 	"res://tests/aether_clash_engagement_zones_runtime_check.gd",
 	"res://tests/aether_clash_spectator_runtime_check.gd",
+	"res://tests/aether_clash_fixed_view_runtime_check.gd",
 	"res://tests/adinho_appearance_unlock_check.gd",
 	"res://tests/ironfanton_appearance_unlock_check.gd",
 	"res://tests/no_hair_rendering_check.gd",

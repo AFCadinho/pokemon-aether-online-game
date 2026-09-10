@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+const ArenaCameraPolicy := preload("res://scripts/services/aether_clash_camera_policy.gd")
+
 signal overworld_steps_completed(step_count: int)
 signal land_mount_toggled
 
@@ -987,6 +989,9 @@ func _apply_world_pixel_scale() -> void:
 	# before Aether Clash restores its temporary zoom. The next map reapplies
 	# the correct baseline, so a detached player must simply skip this update.
 	if window == null or viewport == null:
+		return
+	var arena_controller := ArenaCameraPolicy.active_controller(get_tree())
+	if arena_controller != null and arena_controller.call("apply_world_camera_policy", world_camera):
 		return
 	var window_size := window.size
 	var effective_scale := PixelPerfectRenderingScript.resolve_world_scale_for_area(

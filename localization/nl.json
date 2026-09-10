@@ -1029,6 +1029,8 @@
   "ui.settings.world_pixel_scale_overview": "1× — Overzicht",
   "ui.settings.world_pixel_scale_balanced": "1.5× — Gebalanceerd",
   "ui.settings.world_pixel_scale_close": "2× — Dichtbij",
+  "ui.settings.world_pixel_scale_arena": "Vaste arenaweergave",
+  "ui.settings.world_pixel_scale_arena_hint": "Iedereen ziet tijdens Aether Clash hetzelfde gebied. Gebruik een Spectate Orb voor meer overzicht. Je normale zoom keert terug wanneer je vertrekt.",
   "ui.settings.world_pixel_scale_hint": "Automatisch past de zoom buiten aan de venstergrootte aan. Gebouwinterieurs gebruiken altijd 1,5×.",
   "ui.settings.cursor_scale": "Cursorgrootte",
   "ui.settings.audio": "Audio",
