@@ -48,7 +48,8 @@ const assert = require('node:assert/strict');
   };
   try {
     await page.goto('http://127.0.0.1:8060');
-    await page.evaluate(() => window.pokeaetherOpenRegistration());
+    await start();
+    await page.mouse.click(537, 682); // Godot's Create your account link.
     await page.getByLabel('Username', { exact: true }).fill('browsertrainer');
     await page.getByLabel('Email', { exact: true }).fill('browsertrainer@example.test');
     await page.getByLabel('Password', { exact: true }).fill('test-only correct horse');
@@ -60,7 +61,7 @@ const assert = require('node:assert/strict');
     await page.screenshot({ path: path.join(output, 'registration.png') });
     assert.equal((await request({ command: 'verify_test_email' })).status, 200);
     await page.getByRole('button', { name: 'Back to login' }).click();
-    await start();
+    await page.mouse.click(600, 494); // Return focus to the Godot username field.
     await page.screenshot({ path: path.join(output, 'login.png') });
     await page.keyboard.type('browsertrainer');
     await page.keyboard.press('Enter');
