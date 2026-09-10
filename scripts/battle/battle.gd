@@ -8471,7 +8471,11 @@ func _trainer_team_preview_enabled(api_response: Dictionary) -> bool:
 
 func _run_default_trainer_lead_selection() -> Dictionary:
 	_set_battle_input_locked(true)
-	var player_lead_slot := PlayerSave.get_first_usable_party_slot()
+	var player_lead_slot := (
+		_first_usable_training_ai_team_slot()
+		if training_ai_battle
+		else PlayerSave.get_first_usable_party_slot()
+	)
 	if player_lead_slot <= 0:
 		var error_message := _t("backend.error.no_usable_pokemon")
 		current_action_panel.set_message(error_message)
@@ -8497,6 +8501,19 @@ func _run_default_trainer_lead_selection() -> Dictionary:
 
 	_set_battle_input_locked(false)
 	return npc_lead_response
+
+
+func _first_usable_training_ai_team_slot() -> int:
+	for pokemon_value: Variant in _get_display_team_data("p1"):
+		if not (pokemon_value is Dictionary):
+			continue
+		var pokemon_data := pokemon_value as Dictionary
+		if not _is_pokemon_data_usable_for_lead(pokemon_data):
+			continue
+		var slot := _get_pokemon_data_canonical_party_slot(pokemon_data)
+		if slot > 0:
+			return slot
+	return 0
 
 func _run_trainer_team_preview_lead_selection() -> Dictionary:
 	team_preview_lead_selection_active = true

@@ -72,7 +72,7 @@ def main():
             f'the phase-5 budget is {MAX_INITIAL_BYTES / 1048576:.0f} MiB.'
         )
     receipt = {
-        'phase': 5, 'accounts': True, 'onlineGameplay': True,
+        'phase': 6, 'accounts': True, 'onlineGameplay': True,
         'chat': True, 'aiSparring': True, 'ranked': False,
         'assetProfile': 'demo-maps-full-player-static-home-battle',
         'maxInitialBytes': MAX_INITIAL_BYTES,
