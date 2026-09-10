@@ -66,11 +66,11 @@ func _init() -> void:
 	service._schedule_reconnect_retry()
 	_check_equal(service.reconnect_timer, 0.0, "the first reconnect retry is immediate")
 	service._schedule_reconnect_retry()
-	_check_equal(service.reconnect_timer, 1.0, "the second reconnect retry uses a short delay")
+	_check_equal(service.reconnect_timer >= 0.8 and service.reconnect_timer <= 1.0, true, "the second retry uses bounded jitter")
 	service._schedule_reconnect_retry()
-	_check_equal(service.reconnect_timer, 3.0, "later reconnect retries use the bounded delay")
+	_check_equal(service.reconnect_timer >= 2.4 and service.reconnect_timer <= 3.0, true, "later retries use bounded jitter")
 	service._schedule_reconnect_retry()
-	_check_equal(service.reconnect_timer, 3.0, "reconnect retry delay remains bounded")
+	_check_equal(service.reconnect_timer >= 2.4 and service.reconnect_timer <= 3.0, true, "reconnect retry delay remains bounded")
 	_check_equal(
 		timer_decision_guard >= timer_control_start and timer_decision_guard < request_control_start,
 		true,

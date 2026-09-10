@@ -1759,6 +1759,8 @@ func _ready() -> void:
 		ChatRealtimeService.authorized_teleport_received.connect(_on_authorized_teleport_received)
 	if not ChatRealtimeService.session_invalid.is_connected(_on_chat_session_invalid):
 		ChatRealtimeService.session_invalid.connect(_on_chat_session_invalid)
+	if not PvpBattleRealtimeService.session_invalid.is_connected(_on_pvp_session_invalid):
+		PvpBattleRealtimeService.session_invalid.connect(_on_pvp_session_invalid)
 	if not ChatRealtimeService.translation_state_changed.is_connected(_on_chat_translation_state_changed):
 		ChatRealtimeService.translation_state_changed.connect(_on_chat_translation_state_changed)
 	if not ChatRealtimeService.translation_warning.is_connected(_on_chat_translation_warning):
@@ -50734,6 +50736,11 @@ func _escape_bbcode(text: String) -> String:
 
 func _on_chat_session_invalid(_reason: String) -> void:
 	_force_session_logout(LocalizationManager.text("ui.session.signed_out"))
+
+
+func _on_pvp_session_invalid(_reason: String) -> void:
+	# Leave the socket callback before freeing the battle/world scene.
+	_force_session_logout.call_deferred(LocalizationManager.text("ui.session.signed_out"))
 
 
 func _start_session_logout_countdown(message: Dictionary) -> void:

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- PvP reconnect now survives temporary server errors and returns you to sign-in when a battle session is definitively invalid.
+
 - Battle matchmaking and reconnection requests now time out safely instead of waiting indefinitely for an unresponsive connection.
 
 - Calcdex set suggestions now use a spacious side-by-side list and details view on desktop, so sets remain readable and reviewing evidence no longer changes the list height or scroll position.
