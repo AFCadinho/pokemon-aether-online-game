@@ -6,7 +6,7 @@ signal spectate_requested(target_user_id: int)
 
 const POKE_BALL := preload("res://assets/items/icons/POKEBALL.png")
 const GREAT_BALL := preload("res://assets/items/icons/GREATBALL.png")
-const BASE_POSITION := Vector2(0, -142)
+const DEFAULT_ANCHOR_POSITION := Vector2(0, -92)
 
 var target_user_id := 0
 var battle_kind := ""
@@ -15,6 +15,7 @@ var glow_sprite: Sprite2D
 var area: Area2D
 var elapsed := 0.0
 var hover_amount := 0.0
+var anchor_position := DEFAULT_ANCHOR_POSITION
 
 
 func _ready() -> void:
@@ -45,7 +46,7 @@ func _ready() -> void:
 	sprite.scale = Vector2.ONE * 0.72
 	add_child(sprite)
 	area = Area2D.new()
-	area.position = BASE_POSITION
+	area.position = anchor_position
 	area.collision_layer = 128
 	area.collision_mask = 0
 	area.priority = 100.0
@@ -63,10 +64,16 @@ func _ready() -> void:
 	_apply_kind()
 
 
-func configure(user_id: int, kind: String) -> void:
+func configure(
+	user_id: int,
+	kind: String,
+	next_anchor_position: Vector2 = DEFAULT_ANCHOR_POSITION
+) -> void:
 	target_user_id = user_id
 	battle_kind = kind.strip_edges().to_lower()
+	anchor_position = next_anchor_position
 	if is_node_ready():
+		area.position = anchor_position
 		_apply_kind()
 
 
@@ -83,7 +90,7 @@ func _apply_kind() -> void:
 func _process(delta: float) -> void:
 	elapsed += delta
 	var wave := sin(elapsed * 3.2)
-	var animated_position := BASE_POSITION + Vector2(0, wave * 3.0)
+	var animated_position := anchor_position + Vector2(0, wave * 3.0)
 	if sprite != null:
 		sprite.position = animated_position
 		sprite.rotation = elapsed * 2.4
