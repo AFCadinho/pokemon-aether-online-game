@@ -114,6 +114,7 @@ var active_battle_id := ""
 var active_wild_pokemon_species := ""
 var active_wild_encounter_type := ""
 var wild_battle_resume_pending := false
+var trainer_resume_request_in_progress := false
 var active_trainer_id := ""
 var active_trainer_name := ""
 var active_trainer_outro_dialogue_id := ""
@@ -1355,6 +1356,14 @@ func _setup_initial_world_state() -> void:
 	else:
 		await _load_player_party_state()
 		var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
+		if bool(saved_state_response.get("trainerRewardRecovered", false)):
+			# Position recovery may settle a durably earned trainer reward after
+			# the normal party bootstrap. Refresh those projections before play.
+			await _load_player_party_state()
+			var recovered_wallet: Dictionary = await PlayerWalletService.load_wallet()
+			PlayerWalletService.apply_wallet_result(recovered_wallet)
+			await InventoryService.load_inventory()
+			await PlayerGameStateService.refresh_story()
 		if bool(saved_state_response.get("success", false)) and bool(saved_state_response.get("hasState", false)):
 			saved_state = _dictionary_from_value(saved_state_response.get("state", {}))
 			_apply_saved_appearance_state(saved_state)
@@ -1420,6 +1429,8 @@ func _setup_initial_world_state() -> void:
 
 
 func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
+	if str(_dictionary_from_value(saved_state.get("activityContext", {})).get("kind", "")) == "trainer":
+		return await _resume_saved_trainer_battle(saved_state)
 	wild_battle_resume_pending = false
 	var activity_context := _dictionary_from_value(saved_state.get("activityContext", {}))
 	if (
@@ -1493,6 +1504,97 @@ func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
 		wild_battle_resume_pending = true
 		return {"resumed": false, "retryable": true}
 	return {"resumed": true, "retryable": false}
+
+
+func _resume_saved_trainer_battle(saved_state: Dictionary) -> Dictionary:
+	if trainer_resume_request_in_progress:
+		return {"resumed": false, "retryable": true}
+	var context := _dictionary_from_value(saved_state.get("activityContext", {}))
+	if str(saved_state.get("activityState", "")) != "battle" or str(context.get("battleId", "")).is_empty():
+		return {"resumed": false, "retryable": false}
+	trainer_resume_request_in_progress = true
+	wild_battle_resume_pending = true
+	if not is_in_battle:
+		is_in_battle = true
+		active_battle_kind = "trainer"
+		active_battle_id = str(context["battleId"])
+		_lock_overworld_for_battle()
+	var request := HTTPRequest.new()
+	add_child(request)
+	var response: Dictionary = {}
+	for attempt in range(3):
+		response = await BattleApiClient.resume_trainer_battle(request)
+		if bool(response.get("success", false)) or int(response.get("status", 0)) in [401, 403]:
+			break
+		if attempt < 2:
+			await get_tree().create_timer(0.35).timeout
+	request.queue_free()
+	trainer_resume_request_in_progress = false
+	if not bool(response.get("success", false)):
+		_show_trainer_resume_retry(saved_state)
+		return {"resumed": false, "retryable": true}
+	if not bool(response.get("resumable", false)):
+		var recovery := _dictionary_from_value(response.get("recovery", {}))
+		if bool(recovery.get("hasState", false)):
+			await _load_player_party_state()
+			var wallet: Dictionary = await PlayerWalletService.load_wallet()
+			PlayerWalletService.apply_wallet_result(wallet)
+			await InventoryService.load_inventory()
+			await PlayerGameStateService.refresh_story()
+			GameState.set_prepared_world_state({
+				"hasSavedState": true, "savedState": recovery.get("state", {}),
+				"blackoutLoss": int(recovery.get("blackoutLoss", 0)),
+			})
+		wild_battle_resume_pending = false
+		_abort_battle_start(true)
+		# Expiry/reward recovery can authoritatively change party and position.
+		# Re-enter through normal saved-world loading and teleport acknowledgement.
+		get_tree().call_deferred("reload_current_scene")
+		return {"resumed": false, "retryable": false}
+	var trainer_data := TrainerMetadataService._normalize_trainer_metadata(
+		str(response.get("trainerId", "")), _dictionary_from_value(response.get("trainerData", {}))
+	)
+	if PlayerSave.party.is_empty() or str(trainer_data.get("id", "")).is_empty():
+		_show_trainer_resume_retry(saved_state)
+		return {"resumed": false, "retryable": true}
+	var lead_slot := maxi(PlayerSave.get_first_usable_party_slot() - 1, 0)
+	var player_pokemon := PlayerSave.party[lead_slot] as Pokemon
+	active_trainer_id = str(trainer_data["id"])
+	active_trainer_name = str(trainer_data.get("name", "Trainer"))
+	active_trainer_outro_dialogue_id = str(trainer_data.get("outroDialogueId", ""))
+	active_trainer_is_rematch = bool(response.get("isRematch", false))
+	active_battle_id = str(response.get("battleId", context["battleId"]))
+	if player_pokemon == null or not _mount_battle_ui():
+		_show_trainer_resume_retry(saved_state)
+		return {"resumed": false, "retryable": true}
+	MusicManager.play_trainer_battle_music(TrainerBattleMusicResolverScript.resolve_track_id(trainer_data))
+	if not await battle_instance.resume_trainer_battle_from_response(
+		player_pokemon, trainer_data, response, _resolve_battle_environment_id("trainer", trainer_data)
+	):
+		_clear_battle_ui_instance()
+		_show_trainer_resume_retry(saved_state)
+		return {"resumed": false, "retryable": true}
+	wild_battle_resume_pending = false
+	return {"resumed": true, "retryable": false}
+
+
+func _show_trainer_resume_retry(saved_state: Dictionary) -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.title = LocalizationManager.text("battle.resume.title")
+	dialog.dialog_text = LocalizationManager.text("battle.resume.retry_message")
+	dialog.ok_button_text = LocalizationManager.text("battle.resume.retry")
+	dialog.cancel_button_text = LocalizationManager.text("battle.resume.login")
+	dialog.exclusive = true
+	add_child(dialog)
+	dialog.confirmed.connect(func():
+		dialog.queue_free()
+		_resume_saved_trainer_battle.call_deferred(saved_state)
+	)
+	dialog.canceled.connect(func():
+		dialog.queue_free()
+		get_tree().call_group_flags(SceneTree.GROUP_CALL_DEFERRED, "ui_overlay", "_force_session_logout", "")
+	)
+	dialog.popup_centered(Vector2i(460, 180))
 
 
 func _resolve_saved_map_scene_path(scene_path: String) -> String:
