@@ -23,6 +23,29 @@ func _run_checks() -> void:
 	var indicator := avatar.nearby_battle_indicator as Node2D
 	_check(indicator != null and indicator.visible, "wild battle creates a clickable indicator")
 	_check(indicator.sprite.texture == POKE_BALL, "wild battle uses a Poke Ball")
+	var card_top: float = avatar.nameplate.position.y + avatar.nameplate_background.offset_top
+	_check(
+		is_equal_approx(indicator.anchor_position.y, card_top - 14.0),
+		"battle indicator sits directly above a nameplate without a role badge"
+	)
+
+	var badge_state := _player_state("wild", "wild-1")
+	badge_state["roles"] = [{
+		"id": "developer", "displayName": "Developer", "color": "#00d8b4",
+		"priority": 100, "display": {},
+	}]
+	badge_state["selectedRoleBadge"] = "developer"
+	avatar.apply_state(badge_state)
+	await process_frame
+	indicator = avatar.nearby_battle_indicator as Node2D
+	var badge_center: float = avatar.nameplate.position.y + (
+		(avatar.role_badge_icon.offset_top + avatar.role_badge_icon.offset_bottom) * 0.5
+	)
+	_check(
+		avatar.role_badge_icon.visible
+		and is_equal_approx(indicator.anchor_position.y, badge_center),
+		"battle indicator overlaps the visible role badge instead of floating above it"
+	)
 
 	avatar.apply_state(_player_state("trainer", "trainer-1"))
 	await process_frame
