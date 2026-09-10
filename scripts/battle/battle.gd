@@ -5293,7 +5293,7 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 				_set_battle_input_locked(false)
 				return false
 		else:
-			_update_battle_presentation()
+			_update_battle_presentation(_get_pvp_queue_sprite_context(source))
 
 		if await _finish_if_battle_ended():
 			return true
@@ -5335,7 +5335,7 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 			_set_battle_input_locked(false)
 			return false
 	else:
-		_update_battle_presentation()
+		_update_battle_presentation(_get_pvp_queue_sprite_context(source))
 
 	if await _finish_if_battle_ended():
 		return true
@@ -5358,6 +5358,13 @@ func _process_pvp_choice_queue_entry(response: Dictionary, source: String, metad
 	_set_battle_input_locked(false)
 	_show_moves()
 	return true
+
+
+func _get_pvp_queue_sprite_context(source: String) -> String:
+	# Snapshot catch-up restores the current authoritative field without an
+	# animation batch. Mark that explicitly so its active sprites can reconcile
+	# without disguising an unexpected species mutation on ordinary PvP paths.
+	return "snapshot_reconciliation" if source.begins_with("pvp_snapshot_") else "sprite_refresh"
 
 func _hold_pvp_moves_until_force_switch_phase_release(display_response: Dictionary, source: String) -> bool:
 	if not _pvp_should_wait_for_force_switch_phase_release(display_response):

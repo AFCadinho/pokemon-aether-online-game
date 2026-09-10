@@ -256,9 +256,11 @@ func _init() -> void:
 	_check_equal(
 		battle_source.contains("func _has_pvp_battle_update_event_gap(response: Dictionary) -> bool:") \
 			and battle_source.contains('PvpBattleRealtimeService.request_resync("A PvP render event gap was detected.")') \
-			and battle_source.contains('"pvp_snapshot_event_catchup"'),
+			and battle_source.contains('"pvp_snapshot_event_catchup"') \
+			and battle_source.contains("func _get_pvp_queue_sprite_context(source: String) -> String:") \
+			and battle_source.contains('source.begins_with("pvp_snapshot_")'),
 		true,
-		"mechanical event gaps fail closed and reconnect snapshots render the missing tail"
+		"mechanical event gaps fail closed and snapshot catch-up reconciles active sprites without a false render warning"
 	)
 	_check_equal(
 		realtime_source.contains('if message_type == "pvp.resync_required":') \
