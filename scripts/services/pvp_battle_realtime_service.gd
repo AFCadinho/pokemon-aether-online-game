@@ -50,6 +50,7 @@ var active_player_id := "p1"
 var active_viewer_role := "participant"
 var active_battle_id := ""
 var active_match_id := ""
+var active_target_user_id := 0
 var request_counter := 0
 var joined := false
 var room_is_ready := false
@@ -133,7 +134,7 @@ func _process(delta: float) -> void:
 		# Keep the async connection setup from being scheduled again while this
 		# attempt resolves. A failed attempt installs its next bounded delay.
 		reconnect_timer = RECONNECT_RETRY_DELAYS_SECONDS[-1]
-		connect_room(active_room_code, active_player_id, active_battle_id, active_match_id, active_viewer_role)
+		connect_room(active_room_code, active_player_id, active_battle_id, active_match_id, active_viewer_role, active_target_user_id)
 
 
 func connect_room(
@@ -141,7 +142,8 @@ func connect_room(
 	player_id: String,
 	battle_id: String,
 	match_id: String = "",
-	viewer_role: String = "participant"
+	viewer_role: String = "participant",
+	target_user_id: int = 0
 ) -> void:
 	if DEBUG_PVP_REALTIME:
 		_log_realtime("connect_room called", "room_code=%s player_id=%s battle_id=%s match_id=%s" % [room_code, player_id, battle_id, match_id])
@@ -160,6 +162,7 @@ func connect_room(
 	active_player_id = "p2" if player_id == "p2" else "p1"
 	active_battle_id = normalized_battle_id
 	active_match_id = match_id.strip_edges()
+	active_target_user_id = target_user_id
 	joined = false
 	join_sent = false
 	join_sent_at_msec = 0
@@ -205,7 +208,11 @@ func _connect_room_async(attempt_generation: int) -> void:
 	websocket.inbound_buffer_size = WEBSOCKET_BUFFER_BYTES
 	websocket.outbound_buffer_size = WEBSOCKET_BUFFER_BYTES
 	websocket.max_queued_packets = WEBSOCKET_MAX_QUEUED_PACKETS
-	var socket_path := "/ws/training-live" if active_viewer_role == "spectator" and active_match_id.begins_with("ai:") else "/ws/pvp-battle"
+	var socket_path := (
+		"/ws/training-live" if active_viewer_role == "spectator" and active_match_id.begins_with("ai:")
+		else "/ws/pve-live" if active_viewer_role == "spectator" and active_match_id.begins_with("pve:")
+		else "/ws/pvp-battle"
+	)
 	var websocket_url := ClientBuild.append_websocket_query(
 		_to_websocket_url(base_url) + socket_path + "?token=%s" % _session_token().uri_encode()
 	)
@@ -255,6 +262,8 @@ func _build_join_payload() -> Dictionary:
 	}
 	if active_match_id != "":
 		payload["matchId"] = active_match_id
+	if active_target_user_id > 0:
+		payload["targetUserId"] = active_target_user_id
 	return payload
 
 
@@ -271,6 +280,8 @@ func disconnect_room() -> void:
 	# intentional Leave Battle before the socket is discarded, so the same match
 	# can be opened again immediately instead of waiting for lease expiry.
 	if active_viewer_role == "spectator" and active_match_id.begins_with("ai:") and websocket.get_ready_state() == WebSocketPeer.STATE_OPEN:
+		websocket.send_text(JSON.stringify({"type": "leave"}))
+	elif active_viewer_role == "spectator" and active_match_id.begins_with("pve:") and websocket.get_ready_state() == WebSocketPeer.STATE_OPEN:
 		websocket.send_text(JSON.stringify({"type": "leave"}))
 	connection_attempt_deadline_msec = 0
 	should_reconnect = false
@@ -289,6 +300,7 @@ func disconnect_room() -> void:
 	active_viewer_role = "participant"
 	active_battle_id = ""
 	active_match_id = ""
+	active_target_user_id = 0
 	battle_event_latest_seq = 0
 	last_battle_event_seq = 0
 	last_spectator_event_seq = 0

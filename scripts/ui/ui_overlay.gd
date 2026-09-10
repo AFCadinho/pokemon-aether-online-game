@@ -48271,6 +48271,20 @@ func start_aether_clash_pvp_spectate(room_code: String) -> bool:
 	return started
 
 
+func start_nearby_pve_spectate(target_user_id: int) -> bool:
+	if target_user_id <= 0 or pvp_battle_starting:
+		return false
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.spectate_nearby_pve(request, target_user_id)
+	request.queue_free()
+	if not bool(response.get("success", false)) or not _spectator_response_has_public_teams(response):
+		add_system_message(str(response.get("error", "That nearby battle is no longer available.")))
+		return false
+	await _start_pvp_battle_from_response(response)
+	var world := get_tree().get_first_node_in_group("world")
+	return world != null and bool(world.get("is_in_battle"))
+
+
 func _clear_stale_aether_clash_pvp_spectate_start() -> void:
 	if not pvp_battle_starting:
 		return

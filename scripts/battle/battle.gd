@@ -12107,7 +12107,8 @@ func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_r
 		local_player_id,
 		battle_id,
 		pvp_match_id,
-		pvp_viewer_role
+		pvp_viewer_role,
+		int(initial_response.get("targetUserId", 0))
 	)
 	PvpBattleRealtimeService.apply_initial_timer_response(initial_response)
 	if _is_spectator_battle():
