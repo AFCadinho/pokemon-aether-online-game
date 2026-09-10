@@ -9,6 +9,9 @@ var cached_url := ""
 func get_base_url() -> String:
 	if cached_url != "":
 		return cached_url
+	if OS.has_feature("web"):
+		cached_url = WebRuntime.api_base_url()
+		return cached_url
 	
 	var env_url := OS.get_environment(API_URL_ENV).strip_edges()
 	if env_url != "":

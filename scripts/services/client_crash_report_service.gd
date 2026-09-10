@@ -43,7 +43,8 @@ func _enter_tree() -> void:
 
 	# Running the project through the editor is stopped abruptly during normal
 	# development, so only exported clients participate in crash detection.
-	if OS.has_feature("editor"):
+	# Closing or refreshing a browser tab does not guarantee _exit_tree runs.
+	if OS.has_feature("editor") or OS.has_feature("web"):
 		return
 
 	var previous_state := _read_json_dictionary(SESSION_STATE_PATH)
