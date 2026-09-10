@@ -10,7 +10,7 @@ const ARENA_STATE_REFRESH_SECONDS := 1.0
 const START_BARRIER_HALF_HEIGHT := 24.0
 const ENGAGEMENT_RING_SCRIPT: Script = preload("res://scripts/world/aether_clash_engagement_ring.gd")
 const BATTLE_INDICATOR_SCENE: PackedScene = preload("res://scenes/world/aether_clash_battle_indicator.tscn")
-const PIXEL_PERFECT_RENDERING: Script = preload("res://scripts/services/pixel_perfect_rendering.gd")
+const CAMERA_POLICY: Script = preload("res://scripts/services/aether_clash_camera_policy.gd")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const ENGAGEMENT_RADIUS := 28.0
 const ENGAGEMENT_CONTACT_DISTANCE := ENGAGEMENT_RADIUS * 2.0
@@ -20,7 +20,6 @@ const ENGAGEMENT_CONTACT_COOLDOWN_MSEC := 750
 const STAGING_EJECTION_GRACE_MSEC := 2000
 const LEAVE_DIALOG_INPUT_OWNER: StringName = &"aether_clash_leave_dialog"
 const SPECTATOR_CAMERA_INPUT_OWNER: StringName = &"aether_clash_spectator_camera"
-const PARTICIPANT_WORLD_SCALE := 2.0
 const SPECTATOR_CAMERA_DEFAULT_ZOOM := 0.75
 const SPECTATOR_CAMERA_MIN_ZOOM := 0.7
 const SPECTATOR_CAMERA_MAX_ZOOM := 1.5
@@ -62,8 +61,10 @@ var spectator_camera_bounds := Rect2()
 var spectator_camera_player_camera: Camera2D
 var spectator_camera_player_was_enabled := true
 var spectator_camera_dragging := false
-var participant_zoom_applied := false
-var participant_zoom_camera: Camera2D
+var arena_view_camera: Camera2D
+var arena_view_exiting := false
+var arena_view_window: Window
+var original_window_framing: Dictionary = {}
 var spectator_battle_request_active := false
 var spectator_battle_request_observed_world_battle := false
 
@@ -110,6 +111,7 @@ func _process(delta: float) -> void:
 
 
 func _exit_tree() -> void:
+	arena_view_exiting = true
 	_trace_aether_clash("duel_exit_tree", {
 		"sessionId": instance_session_id,
 		"mapId": map_id,
@@ -120,7 +122,7 @@ func _exit_tree() -> void:
 	_clear_battle_indicators()
 	_clear_identity_nameplate_overrides()
 	_deactivate_spectator_camera()
-	_restore_participant_zoom()
+	_restore_arena_view()
 	GameState.release_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
 	_free_leave_confirmation()
 
@@ -135,6 +137,7 @@ func configure_aether_clash_instance(instance_map_id: String) -> void:
 	map_id = normalized_id
 	location_id = normalized_id
 	instance_session_id = session_id
+	_ensure_arena_framing()
 	arena_session.clear()
 	arena_players.clear()
 	identified_enemy_user_ids.clear()
@@ -152,6 +155,7 @@ func configure_aether_clash_instance(instance_map_id: String) -> void:
 	spectator_battle_request_active = false
 	spectator_battle_request_observed_world_battle = false
 	_deactivate_spectator_camera()
+	_sync_local_camera_mode()
 	_trace_aether_clash("duel_configured", {
 		"sessionId": instance_session_id,
 		"mapId": map_id,
@@ -625,6 +629,7 @@ func _activate_spectator_camera(fallback_position: Vector2) -> void:
 			"The Aether view is unavailable right now."
 		))
 		return
+	apply_world_camera_policy(player_camera)
 	spectator_camera_bounds = _arena_visual_bounds()
 	var start_position := player.global_position if player != null else fallback_position
 	spectator_camera.global_position = _clamp_spectator_camera_position(start_position)
@@ -661,6 +666,7 @@ func _deactivate_spectator_camera() -> void:
 		spectator_camera_player_camera.enabled = spectator_camera_player_was_enabled
 	spectator_camera_player_camera = null
 	GameState.release_overworld_input_lock(SPECTATOR_CAMERA_INPUT_OWNER)
+	_sync_local_camera_mode()
 	if was_active:
 		_sync_battle_indicators()
 		_trace_aether_clash("spectator_camera_deactivated", {
@@ -878,40 +884,64 @@ func _clamp_spectator_camera_position(next_position: Vector2) -> Vector2:
 	)
 
 
+func is_arena_view_locked() -> bool:
+	# Lock before the first server response, and retain it through staging,
+	# elimination, jail and results. Only leaving the instance releases it.
+	return is_inside_tree() and not arena_view_exiting and not instance_session_id.is_empty()
+
+
+func _ensure_arena_framing() -> void:
+	if not is_arena_view_locked() or not original_window_framing.is_empty():
+		return
+	get_tree().call_group("content_creator_photo_mode", "close_photo_mode")
+	arena_view_window = get_window()
+	original_window_framing = {
+		"size": arena_view_window.content_scale_size,
+		"mode": arena_view_window.content_scale_mode,
+		"aspect": arena_view_window.content_scale_aspect,
+		"factor": arena_view_window.content_scale_factor,
+	}
+	arena_view_window.content_scale_size = CAMERA_POLICY.FRAME_SIZE
+	arena_view_window.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	arena_view_window.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
+	arena_view_window.content_scale_factor = 1.0
+
+
+func apply_world_camera_policy(camera: Camera2D) -> bool:
+	if not is_arena_view_locked() or camera == null:
+		return false
+	_ensure_arena_framing()
+	var desired_zoom := Vector2(CAMERA_POLICY.FRAME_SIZE) / CAMERA_POLICY.WORLD_VIEW_SIZE
+	if camera != arena_view_camera or not camera.zoom.is_equal_approx(desired_zoom):
+		camera.zoom = desired_zoom
+		camera.reset_smoothing()
+		camera.force_update_scroll()
+	arena_view_camera = camera
+	return true
+
+
 func _sync_local_camera_mode() -> void:
-	if spectator_camera_active:
+	if not is_arena_view_locked():
 		return
-	if not _is_local_active_participant():
-		_restore_participant_zoom()
-		return
+	_ensure_arena_framing()
 	var player := _actor_for_user_id(_local_user_id())
 	var camera := player.get_node_or_null("Camera2D") as Camera2D if player != null else null
-	if camera == null:
-		return
-	var canvas_scale := camera.get_viewport().get_screen_transform().get_scale()
-	var desired_zoom: Vector2 = PIXEL_PERFECT_RENDERING.camera_zoom_for_output_scale(
-		PARTICIPANT_WORLD_SCALE,
-		canvas_scale
-	)
-	if camera != participant_zoom_camera or not camera.zoom.is_equal_approx(desired_zoom):
-		PIXEL_PERFECT_RENDERING.apply_to_camera(
-			camera,
-			PARTICIPANT_WORLD_SCALE,
-			get_window().size
-		)
-	participant_zoom_camera = camera
-	participant_zoom_applied = true
+	apply_world_camera_policy(camera)
 
 
-func _restore_participant_zoom() -> void:
-	if not participant_zoom_applied:
-		return
-	participant_zoom_applied = false
-	if participant_zoom_camera != null and is_instance_valid(participant_zoom_camera):
-		var player := participant_zoom_camera.get_parent()
+func _restore_arena_view() -> void:
+	if is_instance_valid(arena_view_window) and not original_window_framing.is_empty():
+		arena_view_window.content_scale_size = original_window_framing["size"]
+		arena_view_window.content_scale_mode = original_window_framing["mode"]
+		arena_view_window.content_scale_aspect = original_window_framing["aspect"]
+		arena_view_window.content_scale_factor = original_window_framing["factor"]
+	original_window_framing.clear()
+	arena_view_window = null
+	if is_instance_valid(arena_view_camera):
+		var player := arena_view_camera.get_parent()
 		if player != null and player.has_method("_apply_world_pixel_scale"):
 			player.call("_apply_world_pixel_scale")
-	participant_zoom_camera = null
+	arena_view_camera = null
 
 
 func _world_battle_active() -> bool:

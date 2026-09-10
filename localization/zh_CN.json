@@ -1042,6 +1042,8 @@
   "ui.settings.world_pixel_scale_overview": "1× — 概述",
   "ui.settings.world_pixel_scale_balanced": "1.5× — 平衡",
   "ui.settings.world_pixel_scale_close": "2× — 关闭",
+  "ui.settings.world_pixel_scale_arena": "固定竞技场视野",
+  "ui.settings.world_pixel_scale_arena_hint": "Aether Clash 期间，所有玩家看到的区域大小相同。使用观战宝珠可获得更广的视野。离开后将恢复你的普通缩放设置。",
   "ui.settings.world_pixel_scale_hint": "自动模式会根据窗口大小调整户外变焦。建筑内部始终使用 1.5×。",
   "ui.settings.cursor_scale": "光标大小",
   "ui.settings.audio": "音频",

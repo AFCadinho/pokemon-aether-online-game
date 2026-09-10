@@ -1029,6 +1029,8 @@
   "ui.settings.world_pixel_scale_overview": "1× — Overview",
   "ui.settings.world_pixel_scale_balanced": "1.5× — Balanced",
   "ui.settings.world_pixel_scale_close": "2× — Close",
+  "ui.settings.world_pixel_scale_arena": "Fixed arena view",
+  "ui.settings.world_pixel_scale_arena_hint": "Everyone sees the same area during Aether Clash. Use a Spectate Orb for a wider view. Your normal zoom returns when you leave.",
   "ui.settings.world_pixel_scale_hint": "Auto adjusts outdoor zoom to the window size. Building interiors always use 1.5×.",
   "ui.settings.cursor_scale": "Cursor Size",
   "ui.settings.audio": "Audio",

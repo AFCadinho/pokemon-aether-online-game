@@ -1,5 +1,7 @@
 extends PanelContainer
 
+const ArenaCameraPolicy := preload("res://scripts/services/aether_clash_camera_policy.gd")
+
 signal closed
 
 const ExternalLinks = preload("res://scripts/core/external_links.gd")
@@ -200,6 +202,12 @@ func open(context: String = "game") -> void:
 	_refresh_support_report_state()
 	visible = true
 	_focus_active_navigation_button()
+
+
+func _process(_delta: float) -> void:
+	if visible and world_pixel_scale_options_button != null:
+		if world_pixel_scale_options_button.disabled != ArenaCameraPolicy.is_locked(get_tree()):
+			_apply_world_pixel_scale_options_to_control()
 
 
 func show_impersonation_return_confirmation() -> void:
@@ -1933,7 +1941,7 @@ func _on_resolution_selected(index: int) -> void:
 
 
 func _on_world_pixel_scale_selected(index: int) -> void:
-	if loading_controls:
+	if loading_controls or ArenaCameraPolicy.is_locked(get_tree()):
 		return
 
 	var scale_metadata: Variant = world_pixel_scale_options_button.get_item_metadata(index)
@@ -2829,6 +2837,14 @@ func _apply_world_pixel_scale_options_to_control() -> void:
 	var was_loading_controls := loading_controls
 	loading_controls = true
 	world_pixel_scale_options_button.clear()
+	var arena_locked := ArenaCameraPolicy.is_locked(get_tree())
+	world_pixel_scale_options_button.disabled = arena_locked
+	_set_localized_text(world_pixel_scale_hint_label,
+		"ui.settings.world_pixel_scale_arena_hint" if arena_locked else "ui.settings.world_pixel_scale_hint")
+	if arena_locked:
+		world_pixel_scale_options_button.add_item(LocalizationManager.text("ui.settings.world_pixel_scale_arena"))
+		loading_controls = was_loading_controls
+		return
 
 	var selected_index := 0
 	world_pixel_scale_options_button.add_item(
