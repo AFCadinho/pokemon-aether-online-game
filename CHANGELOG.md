@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Logging in refreshes party, money, inventory and story progress when the server recovers an earned trainer reward.
+- Set suggestion evidence now uses readable labels such as Matches and Differences, wraps when needed, and hides empty counters.
 
 - Interrupted battle animations now release their waiting actions, and stalled effects can no longer indefinitely block the next event.
 

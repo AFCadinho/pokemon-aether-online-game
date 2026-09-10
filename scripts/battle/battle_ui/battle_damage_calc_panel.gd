@@ -1073,18 +1073,20 @@ func _add_set_suggestion_evidence_summary(parent: Container, row: Dictionary) ->
 		var state := str(item.get("state", "unknown"))
 		if counts.has(state):
 			counts[state] = int(counts[state]) + 1
-	var summary := HBoxContainer.new()
+	var summary := HFlowContainer.new()
 	summary.name = "SetSuggestionEvidenceSummary"
-	summary.add_theme_constant_override("separation", 5)
+	summary.add_theme_constant_override("h_separation", 5)
+	summary.add_theme_constant_override("v_separation", 4)
 	parent.add_child(summary)
 	for state: String in ["match", "variant", "unknown", "conflict"]:
 		var count := int(counts[state])
-		var symbol := "✓" if state == "match" else "~" if state == "variant" else "?" if state == "unknown" else "×"
+		if count == 0:
+			continue
 		var color := TEXT_MUTED if count == 0 else CONFIRMED_ACCENT if state == "match" else WARNING_ACCENT if state == "variant" else DANGER_ACCENT if state == "conflict" else TEXT_MUTED
-		var chip := _make_label("%s %s" % [symbol, count], 10, color)
+		var chip := _make_label(_t("battle.calc.guess.evidence_%s_count" % state, {"count": count}), 10, color)
 		chip.name = "SetSuggestionEvidenceCount"
-		chip.tooltip_text = _t("battle.calc.guess." + state)
-		chip.custom_minimum_size = Vector2(42, 20)
+		chip.tooltip_text = "%s: %s" % [chip.text, _t("battle.calc.guess." + state)]
+		chip.custom_minimum_size = Vector2(0, 22)
 		chip.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		chip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		chip.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
