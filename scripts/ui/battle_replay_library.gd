@@ -28,9 +28,6 @@ const ACCENT_DARK := Color("#123c58")
 const SURFACE := Color("#101e32")
 const SURFACE_RAISED := Color("#162b45")
 const DANGER := Color("#d96570")
-const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/icons/battle_replays_dropdown_arrow.svg")
-const FILTER_CHECKED: Texture2D = preload("res://assets/ui/icons/battle_replays_filter_checked.svg")
-const FILTER_UNCHECKED: Texture2D = preload("res://assets/ui/icons/battle_replays_filter_unchecked.svg")
 
 func _t(key: String, args: Dictionary = {}) -> String:
 	return LocalizationManager.text("ui.replays." + key, args)
@@ -202,7 +199,7 @@ func _style_option(control: OptionButton) -> void:
 	control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	control.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	control.add_theme_constant_override("arrow_margin", 12)
-	control.add_theme_icon_override("arrow", DROPDOWN_ARROW)
+	control.add_theme_icon_override("arrow", _dropdown_arrow_icon())
 	control.add_theme_stylebox_override("normal", _style(Color("#13243a"), Color("#315574"), 7, 1, 10, 10, 8, 8))
 	control.add_theme_stylebox_override("hover", _style(Color("#1a3550"), ACCENT, 7, 1, 10, 10, 8, 8))
 	control.add_theme_stylebox_override("pressed", _style(Color("#0e2033"), ACCENT, 7, 1, 10, 10, 8, 8))
@@ -220,8 +217,8 @@ func _style_option(control: OptionButton) -> void:
 	popup.add_theme_constant_override("v_separation", 4)
 	popup.add_theme_stylebox_override("panel", _style(Color("#0b1727"), Color("#315574"), 8, 1, 8, 8, 7, 7))
 	popup.add_theme_stylebox_override("hover", _style(Color("#1a4160"), ACCENT, 6, 1, 8, 8, 5, 5))
-	popup.add_theme_icon_override("radio_checked", FILTER_CHECKED)
-	popup.add_theme_icon_override("radio_unchecked", FILTER_UNCHECKED)
+	popup.add_theme_icon_override("radio_checked", _filter_icon(true))
+	popup.add_theme_icon_override("radio_unchecked", _filter_icon(false))
 
 func _style_favorites_toggle(control: CheckButton) -> void:
 	control.custom_minimum_size = Vector2(126, 38)
@@ -238,12 +235,39 @@ func _style_favorites_toggle(control: CheckButton) -> void:
 	control.add_theme_color_override("font_color", INK)
 	control.add_theme_color_override("font_hover_color", INK)
 	control.add_theme_color_override("font_pressed_color", INK)
-	control.add_theme_icon_override("unchecked", FILTER_UNCHECKED)
-	control.add_theme_icon_override("unchecked_hover", FILTER_UNCHECKED)
-	control.add_theme_icon_override("unchecked_pressed", FILTER_UNCHECKED)
-	control.add_theme_icon_override("checked", FILTER_CHECKED)
-	control.add_theme_icon_override("checked_hover", FILTER_CHECKED)
-	control.add_theme_icon_override("checked_pressed", FILTER_CHECKED)
+	control.add_theme_icon_override("unchecked", _filter_icon(false))
+	control.add_theme_icon_override("unchecked_hover", _filter_icon(false, true))
+	control.add_theme_icon_override("unchecked_pressed", _filter_icon(false, true))
+	control.add_theme_icon_override("checked", _filter_icon(true))
+	control.add_theme_icon_override("checked_hover", _filter_icon(true, true))
+	control.add_theme_icon_override("checked_pressed", _filter_icon(true, true))
+
+func _dropdown_arrow_icon() -> ImageTexture:
+	var image := Image.create(12, 8, false, Image.FORMAT_RGBA8)
+	image.fill(Color("#00000000"))
+	for offset in range(4):
+		image.set_pixel(2 + offset, 2 + offset, ACCENT)
+		image.set_pixel(9 - offset, 2 + offset, ACCENT)
+	return ImageTexture.create_from_image(image)
+
+func _filter_icon(checked: bool, highlighted := false) -> ImageTexture:
+	var size := 18
+	var image := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	var border := ACCENT if checked or highlighted else Color("#476b89")
+	var fill := Color("#126b91") if checked else Color("#13243a")
+	image.fill(Color("#00000000"))
+	for y in range(2, size - 2):
+		for x in range(2, size - 2):
+			var is_border := x < 3 or x > size - 4 or y < 3 or y > size - 4
+			image.set_pixel(x, y, border if is_border else fill)
+	if checked:
+		for offset in range(4):
+			image.set_pixel(4 + offset, 8 + offset, INK)
+			image.set_pixel(4 + offset, 9 + offset, INK)
+		for offset in range(6):
+			image.set_pixel(7 + offset, 11 - offset, INK)
+			image.set_pixel(7 + offset, 12 - offset, INK)
+	return ImageTexture.create_from_image(image)
 
 func open_library() -> void:
 	show()
