@@ -17,6 +17,7 @@ const RECONNECT_RETRY_DELAYS_SECONDS: Array[float] = [0.0, 1.0, 3.0]
 const CONNECTION_HEARTBEAT_SECONDS := 5.0
 const CONNECTION_PONG_TIMEOUT_MSEC := 12000
 const JOIN_ACK_TIMEOUT_MSEC := 10000
+const CONNECT_TIMEOUT_MSEC := 10000
 const BATTLE_EVENT_GAP_TIMEOUT_MSEC := 1000
 const MAX_BUFFERED_BATTLE_EVENTS := 256
 const SESSION_INVALID_CLOSE_CODE := 1008
@@ -38,6 +39,7 @@ var reconnect_timer := 0.0
 var reconnect_retry_count := 0
 var connection_heartbeat_timer := 0.0
 var connection_attempt_generation := 0
+var connection_attempt_deadline_msec := 0
 var join_sent := false
 var join_sent_at_msec := 0
 var awaiting_pong := false
@@ -70,6 +72,8 @@ func _notification(what: int) -> void:
 
 
 func _process(delta: float) -> void:
+	if _process_connect_timeout(Time.get_ticks_msec()):
+		return
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		websocket.poll()
 		_process_packets()
@@ -91,6 +95,7 @@ func _process(delta: float) -> void:
 
 	if ready_state == WebSocketPeer.STATE_OPEN:
 		connecting = false
+		connection_attempt_deadline_msec = 0
 		session_invalid_handled = false
 		if not joined:
 			if not join_sent:
@@ -177,6 +182,7 @@ func connect_room(
 
 	should_reconnect = true
 	connecting = true
+	connection_attempt_deadline_msec = Time.get_ticks_msec() + CONNECT_TIMEOUT_MSEC
 	session_invalid_handled = false
 	connection_attempt_generation += 1
 	_connect_room_async.call_deferred(connection_attempt_generation)
@@ -262,6 +268,7 @@ func seed_spectator_event_cursor(response: Dictionary) -> void:
 
 
 func disconnect_room() -> void:
+	connection_attempt_deadline_msec = 0
 	should_reconnect = false
 	connecting = false
 	connection_attempt_generation += 1
@@ -1308,6 +1315,7 @@ func _handle_closed_socket() -> void:
 
 
 func _restart_stalled_connection(reason: String) -> void:
+	connection_attempt_deadline_msec = 0
 	_reset_battle_event_buffer()
 	connection_attempt_generation += 1
 	joined = false
@@ -1330,7 +1338,18 @@ func _restart_stalled_connection(reason: String) -> void:
 		connection_changed.emit(false)
 
 
+func _process_connect_timeout(now_msec: int) -> bool:
+	if connection_attempt_deadline_msec <= 0 or now_msec < connection_attempt_deadline_msec:
+		return false
+	if websocket.get_ready_state() == WebSocketPeer.STATE_OPEN:
+		connection_attempt_deadline_msec = 0
+		return false
+	_restart_stalled_connection("PvP connection setup timed out.")
+	return true
+
+
 func _schedule_reconnect_retry() -> void:
+	connection_attempt_deadline_msec = 0
 	var delay_index := mini(reconnect_retry_count, RECONNECT_RETRY_DELAYS_SECONDS.size() - 1)
 	reconnect_timer = RECONNECT_RETRY_DELAYS_SECONDS[delay_index]
 	reconnect_retry_count += 1

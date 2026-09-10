@@ -1,6 +1,7 @@
 extends Node
 
 const FORMAT_ID = "gen9nationaldex"
+const DEFAULT_REQUEST_TIMEOUT_SECONDS := 15.0
 const CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const CALCDEX_MATCHUP := preload("res://scripts/battle/battle_calcdex_matchup.gd")
 const CALCDEX_OPEN := preload("res://scripts/battle/battle_calcdex_open.gd")
@@ -707,6 +708,7 @@ func calculate_calcdex_inferred_matchup(
 	return CALCDEX_INFERENCE.normalize_response(response, last_projection_revision)
 
 func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
+	_configure_request_timeout(request_node)
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
 
 	var error: int = request_node.request(
@@ -725,6 +727,7 @@ func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
 	return await _read_json_response(request_node)
 
 func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary) -> Dictionary:
+	_configure_request_timeout(request_node)
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
 	
 	var error: int = request_node.request(
@@ -745,6 +748,7 @@ func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary
 
 
 func send_delete_request(request_node: HTTPRequest, path: String) -> Dictionary:
+	_configure_request_timeout(request_node)
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
 
 	var error: int = request_node.request(
@@ -761,6 +765,13 @@ func send_delete_request(request_node: HTTPRequest, path: String) -> Dictionary:
 		}
 
 	return await _read_json_response(request_node)
+
+func _configure_request_timeout(request_node: HTTPRequest) -> void:
+	# Include queue/start/resume and canonical recovery reads, not only moves.
+	# Preserve a caller's explicitly bounded budget (for example the calculator).
+	if request_node.timeout <= 0.0:
+		request_node.timeout = DEFAULT_REQUEST_TIMEOUT_SECONDS
+
 
 func _read_json_response(request_node: HTTPRequest) -> Dictionary:
 	var result: Array = await request_node.request_completed
