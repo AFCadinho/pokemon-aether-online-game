@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Shiny encounters now ask after the battle whether their replay should be kept as a favorite.
+
 - Wild Battle Replays now play as wild encounters without a trainer team-preview screen.
 
 - Nearby battle spectators now wait for the final animation batch before showing the result.

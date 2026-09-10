@@ -3,6 +3,7 @@ extends Node2D
 const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
 const AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE := "POKEAETHER_AETHER_CLASH_TRACE"
 const BATTLE_SCENE: PackedScene = preload(BATTLE_SCENE_PATH)
+const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const AETHERNET_TELEPORT_EFFECT_SCRIPT: Script = preload("res://scripts/world/aethernet_teleport_effect.gd")
 const MAP_TRANSITION_INDICATOR_SCRIPT: Script = preload("res://scripts/ui/map_transition_indicator.gd")
@@ -150,6 +151,7 @@ var pvp_battle_transition_started_at_msec := -1
 var active_battle_id := ""
 var active_wild_pokemon_species := ""
 var active_wild_encounter_type := ""
+var active_wild_replay_shiny := false
 var wild_battle_resume_pending := false
 var trainer_resume_request_in_progress := false
 var active_trainer_id := ""
@@ -1520,6 +1522,7 @@ func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
 	active_battle_id = str(response.get("battleId", activity_context.get("battleId", "")))
 	active_wild_pokemon_species = wild_pokemon.species
 	active_wild_encounter_type = str(response.get("encounterType", "")).strip_edges().to_lower()
+	active_wild_replay_shiny = wild_pokemon.shiny
 	_publish_world_presence(true)
 	if not _mount_battle_ui():
 		_abort_battle_start(true)
@@ -3061,6 +3064,7 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 	active_battle_id = ""
 	active_wild_pokemon_species = wild_pokemon.species if wild_pokemon != null else "wild Pokemon"
 	active_wild_encounter_type = ""
+	active_wild_replay_shiny = wild_pokemon != null and wild_pokemon.shiny
 	_lock_overworld_for_battle()
 	
 	var position_result := await sync_player_position_for_world_action()
@@ -3138,6 +3142,7 @@ func start_triggered_wild_battle_for_area(
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 	active_wild_pokemon_species = wild_pokemon.species
+	active_wild_replay_shiny = wild_pokemon.shiny
 
 	await _wait_for_wild_encounter_cover(transition_started_at_msec)
 
@@ -3212,6 +3217,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
 	active_wild_encounter_type = ""
+	active_wild_replay_shiny = false
 	active_trainer_id = trainer_id
 	active_trainer_name = str(trainer_data.get("name", "Trainer"))
 	active_trainer_outro_dialogue_id = str(trainer_data.get("outroDialogueId", "")).strip_edges()
@@ -3472,6 +3478,7 @@ func end_wild_battle(keep_overworld_locked := false) -> void:
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
 	active_wild_encounter_type = ""
+	active_wild_replay_shiny = false
 	active_trainer_id = ""
 	active_trainer_name = ""
 	active_trainer_outro_dialogue_id = ""
@@ -3498,6 +3505,11 @@ func _on_battle_ended(result: Dictionary) -> void:
 	var should_respawn_after_loss := _should_respawn_after_battle_loss(result, active_battle_kind)
 	var reward_battle_id := active_battle_id
 	var reward_species := active_wild_pokemon_species
+	var should_offer_shiny_replay_favorite := (
+		active_battle_kind == "wild"
+		and active_wild_replay_shiny
+		and not reward_battle_id.is_empty()
+	)
 	var reward_trainer_id := active_trainer_id
 	var reward_trainer_name := active_trainer_name
 	var trainer_outro_dialogue_id := active_trainer_outro_dialogue_id
@@ -3541,6 +3553,44 @@ func _on_battle_ended(result: Dictionary) -> void:
 			SfxManager.play("item_received")
 	if keep_locked_for_outro:
 		_unlock_overworld_after_battle()
+	if should_offer_shiny_replay_favorite:
+		_show_shiny_replay_favorite_dialog(reward_battle_id, reward_species)
+
+
+func _show_shiny_replay_favorite_dialog(battle_id: String, species: String) -> void:
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	if dialog == null:
+		return
+	add_child(dialog)
+	dialog.configure(
+		LocalizationManager.text("ui.replays.shiny_dialog.title"),
+		LocalizationManager.text("ui.replays.shiny_dialog.message", {"species": species}),
+		LocalizationManager.text("ui.replays.shiny_dialog.confirm"),
+		LocalizationManager.text("ui.replays.shiny_dialog.cancel")
+	)
+	dialog.confirmed.connect(func(): _save_shiny_replay_as_favorite.call_deferred(battle_id))
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(560, 250))
+
+
+func _save_shiny_replay_as_favorite(battle_id: String) -> void:
+	var request := HTTPRequest.new()
+	request.timeout = 20.0
+	add_child(request)
+	var base: String = await GatewayApiConfig.get_base_url()
+	var error := request.request(
+		base + "/game/replays/" + battle_id.uri_encode(),
+		GatewayApiConfig.get_json_headers(),
+		HTTPClient.METHOD_PATCH,
+		JSON.stringify({"favorite": true})
+	)
+	var response: Dictionary = await BattleApiClient._read_json_response(request) if error == OK else {"success": false}
+	request.queue_free()
+	if bool(response.get("success", false)):
+		get_tree().call_group("ui_overlay", "add_system_message", LocalizationManager.text("ui.replays.shiny_dialog.saved"))
+	else:
+		get_tree().call_group("ui_overlay", "add_system_message", LocalizationManager.text("ui.replays.shiny_dialog.save_failed"))
 
 
 func _should_respawn_after_battle_loss(result: Dictionary, battle_kind: String) -> bool:
