@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Wild replay cards now show the encountered Pokémon's HOME icon.
+
 - Shiny encounters now ask after the battle whether their replay should be kept as a favorite.
 
 - Wild Battle Replays now play as wild encounters without a trainer team-preview screen.

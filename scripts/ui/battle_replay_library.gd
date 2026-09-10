@@ -607,7 +607,28 @@ func _opponent_identity(row: Dictionary) -> Control:
 	frame.custom_minimum_size = Vector2(38, 38)
 	frame.add_theme_stylebox_override("panel", _style(Color("#0b1727"), Color("#627a99"), 8, 1, 0, 0, 0, 0))
 	identity.add_child(frame)
-	if kind == "ai_sparring":
+	if kind == "wild":
+		var species := str(row.get("wildSpecies", "")).strip_edges()
+		var shiny := bool(row.get("wildShiny", false))
+		var pokemon_icon: Texture2D = PokemonAssets.load_home_sprite(species, shiny)
+		if pokemon_icon == null:
+			pokemon_icon = PokemonAssets.load_party_icon(species, shiny)
+		if pokemon_icon != null:
+			var portrait := TextureRect.new()
+			portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			portrait.texture = pokemon_icon
+			frame.add_child(portrait)
+		else:
+			var fallback := Label.new()
+			fallback.text = name.left(1).to_upper() if not name.is_empty() else "?"
+			fallback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			fallback.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			fallback.add_theme_font_size_override("font_size", 16)
+			fallback.add_theme_color_override("font_color", MUTED)
+			frame.add_child(fallback)
+	elif kind == "ai_sparring":
 		var portrait := TextureRect.new()
 		portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
