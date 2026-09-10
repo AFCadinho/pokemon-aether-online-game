@@ -372,7 +372,7 @@ func refresh() -> void:
 	var rows: Array = response.get("replays", [])
 	for row: Dictionary in rows:
 		list.add_child(_card(row))
-	status.text = _t("empty") if rows.is_empty() else _t("count", {"count": response.get("total", 0)})
+	status.text = _t("empty") if rows.is_empty() else _t("count", {"count": int(response.get("total", 0))})
 	usage.text = _t("usage", {"favorites": response.get("favoriteCount", 0)})
 	previous.disabled = offset == 0
 	next.disabled = offset + rows.size() >= int(response.get("total", 0))
@@ -578,8 +578,13 @@ func _confirm_remove(battle_id: String) -> void:
 	dialog.popup_centered(Vector2i(440, 160))
 
 func _style_dialog(dialog: ConfirmationDialog, destructive := false) -> void:
-	dialog.add_theme_stylebox_override("panel", _style(Color("#0d1c2e"), Color("#3a6e93"), 11, 1, 20, 20, 16, 16))
+	var dialog_surface := Color("#0d1c2e")
+	var dialog_border := Color("#3a6e93")
+	dialog.add_theme_stylebox_override("panel", _style(dialog_surface, dialog_border, 11, 1, 20, 20, 16, 16))
+	dialog.add_theme_stylebox_override("titlebar", _style(Color("#10243a"), dialog_border, 11, 1, 18, 18, 10, 10))
+	dialog.add_theme_stylebox_override("titlebar_unfocused", _style(Color("#10243a"), dialog_border.darkened(0.2), 11, 1, 18, 18, 10, 10))
 	dialog.add_theme_color_override("title_color", INK)
+	dialog.add_theme_color_override("title_unfocused_color", MUTED)
 	dialog.add_theme_font_size_override("title_font_size", 18)
 	dialog.add_theme_color_override("font_color", INK)
 	dialog.add_theme_font_size_override("font_size", 15)

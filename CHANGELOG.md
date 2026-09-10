@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Replay totals now use whole numbers, and rename/delete windows now match the Battle Replay visual style throughout.
+
 - Battle Replay cards now use their empty space for a compact, right-aligned action area.
 
 - Battle Replay summaries now focus on favorites and per-category limits, with a simpler empty state.
