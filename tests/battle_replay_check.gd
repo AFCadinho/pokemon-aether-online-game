@@ -61,6 +61,7 @@ func _run() -> void:
 	_check(controls.get_parent() == battle.action_side_panel and battle.action_side_panel.custom_minimum_size.y == 120.0, "Replay controls retain the full spectator-style command dock")
 	_check(controls.transport_overlay != null and controls.transport_overlay.get_parent() == battle.moves_grid.get_parent(), "Replay transport uses the open move-command area")
 	_check(controls.switch_sides_button != null and battle.has_method("switch_replay_sides"), "Replay exposes a perspective switch")
+	_check(controls.status_label.text.contains("Viewing from"), "Replay dock identifies the active perspective")
 	var original_p1_species: String = battle.battle_state.get_active_pokemon_species("p1")
 	var original_p2_species: String = battle.battle_state.get_active_pokemon_species("p2")
 	battle.switch_replay_sides()
