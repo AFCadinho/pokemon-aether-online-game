@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Replay category and filter controls now share a compact two-row layout.
+
 - Shared replay codes now open from a dedicated header action instead of taking up space among library filters.
 
 - The replay library now uses category-neutral wording and only shows AI difficulty controls while browsing AI Sparring.
