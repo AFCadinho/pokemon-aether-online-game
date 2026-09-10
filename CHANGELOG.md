@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rename and delete actions now open fully custom Battle Replay dialogs instead of system-styled windows.
+
 - Replay totals now use whole numbers, and rename/delete windows now match the Battle Replay visual style throughout.
 
 - Battle Replay cards now use their empty space for a compact, right-aligned action area.
