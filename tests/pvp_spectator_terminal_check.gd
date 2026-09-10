@@ -23,12 +23,14 @@ func _init() -> void:
 	)
 	_check(
 		battle_source.contains("func _finish_spectator_terminal_message(message: Dictionary) -> void:") \
+			and battle_source.contains("func _spectator_terminal_waits_for_live_render() -> bool:") \
+			and battle_source.contains('pvp_match_id.begins_with("pve:")') \
 			and battle_source.contains('str(message.get("winnerSide", ""))') \
 			and battle_source.contains('str(message.get("loserSide", ""))') \
 			and battle_source.contains('finish_result["winner"] = winner_side') \
 			and battle_source.contains('"skipPartyBattleSync": true') \
 			and battle_source.contains('"localPartyDefeated": false'),
-		"spectator terminal handling preserves the public winner without participant persistence"
+		"spectator terminals wait for live render work and preserve the public winner without participant persistence"
 	)
 	_check(
 		battle_source.contains("if allows_gameplay_persistence or _is_spectator_battle():") \

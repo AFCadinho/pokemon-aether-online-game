@@ -14775,9 +14775,10 @@ func _is_spectator_terminal_message(message: Dictionary) -> bool:
 func _finish_spectator_terminal_message(message: Dictionary) -> void:
 	if not _is_spectator_terminal_message(message):
 		return
-	if pvp_match_id.begins_with("ai:"):
+	if _spectator_terminal_waits_for_live_render():
 		# A terminal notification may share the last event cursor (for example a
-		# draw). Let the queued live animations finish before showing the result.
+		# draw). Let queued live animations finish before showing the result.
+		# Nearby PvE battles use the same read-only realtime queue as AI Live.
 		var deadline := Time.get_ticks_msec() + 30000
 		while not battle_finished and Time.get_ticks_msec() < deadline and (pvp_event_queue.is_rendering or pvp_idle_realtime_drain_pending or not pvp_realtime_updates.is_empty()):
 			await get_tree().process_frame
@@ -14803,6 +14804,10 @@ func _finish_spectator_terminal_message(message: Dictionary) -> void:
 	if loser_side != "":
 		finish_result["forfeitingPlayerId"] = loser_side
 	_finish_battle(finish_result)
+
+
+func _spectator_terminal_waits_for_live_render() -> bool:
+	return pvp_match_id.begins_with("ai:") or pvp_match_id.begins_with("pve:")
 
 
 func _finish_pvp_infrastructure_no_contest(message: Dictionary) -> void:
