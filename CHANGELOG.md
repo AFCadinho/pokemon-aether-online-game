@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser players can now open AI Sparring directly and use the regular game chat, while Ranked and custom PvP remain download-only.
+
 - Browser and desktop now continue with the same Trainer position, appearance, party and story progress. Professor Oak grants the real account-bound starter in the browser demo.
 
 - Browser-demo players can now talk to Dadinho and Professor Oak to unlock Route 1, while regular NPC dialogue and toggle preferences work within the demo maps.

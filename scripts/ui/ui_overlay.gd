@@ -8218,6 +8218,10 @@ func _setup_pvp_mode_menu() -> void:
 	_set_localized_control_property(pvp_mode_tournaments_button, "tooltip_text", "ui.pvp.mode.tournaments_soon")
 	pvp_mode_tournaments_button.pressed.connect(_on_pvp_mode_tournaments_pressed)
 	layout.add_child(pvp_mode_tournaments_button)
+	if OS.has_feature("web"):
+		pvp_mode_ranked_button.visible = false
+		pvp_mode_casual_button.visible = false
+		pvp_mode_tournaments_button.visible = false
 
 func _create_pvp_mode_menu_button(
 	title_text: String,
@@ -42815,6 +42819,9 @@ func _on_aether_exchange_button_pressed() -> void:
 
 func _on_pvp_button_pressed() -> void:
 	if pvp_mode_menu == null:
+		return
+	if OS.has_feature("web"):
+		await _open_pvp_popup_section("AI Sparring")
 		return
 	if pvp_mode_menu.visible:
 		_hide_pvp_mode_menu()
