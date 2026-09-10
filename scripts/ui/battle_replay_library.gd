@@ -134,6 +134,7 @@ func _ready() -> void:
 	difficulty.custom_minimum_size.x = 210
 	_style_option(difficulty)
 	filters.add_child(difficulty)
+	_refresh_category_tabs()
 	favorites = CheckButton.new()
 	favorites.text = _t("favorites")
 	_style_favorites_toggle(favorites)
@@ -261,6 +262,11 @@ func _refresh_category_tabs() -> void:
 		button.add_theme_stylebox_override("pressed", _style(base.darkened(0.16), border, 7, width, 12, 12, 7, 7))
 		button.add_theme_color_override("font_color", INK if selected else MUTED)
 		button.add_theme_color_override("font_hover_color", INK)
+	if difficulty != null:
+		var ai_sparring_selected := category == "ai_sparring"
+		difficulty.visible = ai_sparring_selected
+		if not ai_sparring_selected:
+			difficulty.select(0)
 
 func _style_line_edit(control: LineEdit) -> void:
 	control.add_theme_stylebox_override("normal", _style(Color("#08121f"), Color("#315574"), 7, 1, 12, 12, 8, 8))
