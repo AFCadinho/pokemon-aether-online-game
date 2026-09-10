@@ -162,12 +162,14 @@ func create_training_ai_battle(
 	ai_archetype: String = "random",
 	ai_team_text: String = "",
 	player_team_id: String = "",
-	tier_id: String = "none"
+	tier_id: String = "none",
+	allow_spectators: bool = false
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,
 		"/battle/pvp/training/ai/battles",
 		{
+			"allowSpectators": allow_spectators,
 			"player": player,
 			"teamText": team_text,
 			"playerTeamId": player_team_id.strip_edges(),

@@ -924,6 +924,7 @@ var pvp_training_ai_catalog_loaded := false
 var pvp_training_ai_catalog_loading := false
 var pvp_training_ai_enabled := false
 var pvp_ai_sparring_start_button: Button
+var pvp_ai_sparring_allow_spectators: CheckBox
 var pvp_ai_sparring_tabs: TabContainer
 var pvp_ai_sparring_stats_list: VBoxContainer
 var pvp_ai_sparring_stats_status: Label
@@ -7529,6 +7530,11 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	action_step.add_theme_font_size_override("font_size", 11)
 	action_step.add_theme_color_override("font_color", Color("#b9aaff"))
 	practice_layout.add_child(action_step)
+	pvp_ai_sparring_allow_spectators = CheckBox.new()
+	pvp_ai_sparring_allow_spectators.name = "AiSparringAllowSpectators"
+	_set_localized_control_property(pvp_ai_sparring_allow_spectators, "text", "ui.pvp.ai_sparring.live.opt_in")
+	_set_localized_control_property(pvp_ai_sparring_allow_spectators, "tooltip_text", "ui.pvp.ai_sparring.live.opt_in_hint")
+	practice_layout.add_child(pvp_ai_sparring_allow_spectators)
 	pvp_ai_sparring_start_button = Button.new()
 	_set_localized_control_property(pvp_ai_sparring_start_button, "text", "ui.pvp.ai_sparring.start")
 	pvp_ai_sparring_start_button.custom_minimum_size = Vector2(0, 42)
@@ -7538,6 +7544,13 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	practice_layout.add_child(pvp_ai_sparring_start_button)
 
 	var catalog_page := _create_pvp_ranked_tab_page("Team Catalog", 14)
+	var live_page := _create_pvp_ranked_tab_page("Live Battles", 14)
+	live_page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.live.title")
+	pvp_ai_sparring_tabs.add_child(live_page)
+	var live_list := preload("res://scripts/ui/ai_sparring_live.gd").new()
+	live_list.watch_blocked = Callable(self, "_pvp_live_watch_blocked")
+	live_list.watch_requested.connect(_start_pvp_battle_from_response)
+	live_page.add_child(live_list)
 	catalog_page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.catalog")
 	pvp_ai_sparring_tabs.add_child(catalog_page)
 	var catalog_layout := VBoxContainer.new()
@@ -43494,7 +43507,8 @@ func _on_pvp_ai_sparring_tab_changed(tab_index: int) -> void:
 	var history_selected := tab_key == "ui.pvp.ai_sparring.tab.history"
 	var about_selected := tab_key == "ui.pvp.ai_sparring.tab.about"
 	var stats_selected := tab_key == "ui.pvp.ai_sparring.tab.statistics"
-	pvp_room_selected_mode = "" if history_selected or catalog_selected or about_selected or stats_selected else "ai"
+	var live_selected := tab_key == "ui.pvp.ai_sparring.live.title"
+	pvp_room_selected_mode = "" if history_selected or catalog_selected or about_selected or stats_selected or live_selected else "ai"
 	_set_pvp_popup_subtitle(_pvp_popup_subtitle_for_section("AI Sparring"))
 	if history_selected:
 		_refresh_pvp_ai_sparring_match_history()
@@ -44978,7 +44992,8 @@ func _on_pvp_training_ai_start_pressed() -> void:
 		_selected_pvp_training_ai_archetype() if ai_team_source == "catalog" else "random",
 		ai_team_text if ai_team_source == "paste" else "",
 		player_catalog_team_id,
-		_selected_ai_sparring_tier_id()
+		_selected_ai_sparring_tier_id(),
+		pvp_ai_sparring_allow_spectators.button_pressed
 	)
 	request.queue_free()
 	_set_pvp_room_busy(false)
@@ -44998,6 +45013,7 @@ func _on_pvp_training_ai_start_pressed() -> void:
 	if ai_team_source == "catalog" and _selected_pvp_training_ai_team_id() == "random":
 		_resolve_pvp_training_ai_opponent_team()
 	_set_pvp_training_team_preview(response.get("ownTeam", []))
+	pvp_ai_sparring_allow_spectators.button_pressed = false
 	await _start_training_ai_battle_from_response(response)
 
 
@@ -48335,6 +48351,8 @@ func _create_pvp_request_node() -> HTTPRequest:
 	return request
 
 func _set_pvp_room_busy(is_busy: bool) -> void:
+	if pvp_ai_sparring_allow_spectators != null:
+		pvp_ai_sparring_allow_spectators.disabled = is_busy
 	pvp_create_room_button.disabled = is_busy
 	_set_pvp_room_type_locked(is_busy or pvp_active_room_code != "")
 	if pvp_room_create_mode_button != null:

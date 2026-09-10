@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- AI Sparring now has a Live Battles tab. Allow spectators before starting to let other players find and watch your practice battle.
+
 - Battle Replays now use a cleaner library with custom filters and favorites toggle, replay result badges, distinct watch and management actions, and a dedicated battle playback command deck.
 
 - Aether Clash now gives everyone the same arena view on every screen size. Only Spectate Orbs provide a wider overview; your usual zoom returns after leaving.

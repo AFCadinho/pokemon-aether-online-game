@@ -183,8 +183,9 @@ func _check_pvp_runtime_translation() -> void:
 		"AI training action uses the interactive room-button styling"
 	)
 	_check(ai_sparring_menu_button != null, "AI Sparring has its own PvP destination")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 5, "AI Sparring separates practice, catalog, history, bot information and statistics")
-	_check(ai_sparring_tabs.get_tab_title(4) == "Statistieken", "Statistics tab is localized")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 6, "AI Sparring includes public Live Battles")
+	_check(ai_sparring_tabs.get_tab_title(1) == "Live Battles", "Live Battles tab is localized")
+	_check(ai_sparring_tabs.get_tab_title(5) == "Statistieken", "Statistics tab is localized")
 	overlay.set("pvp_ai_sparring_stats_data", {"success": true, "bots": [
 		{"bot": "ai4", "version": "v1", "completed": 2, "unconfirmed": 1, "sufficient": false},
 		{"bot": "ai5", "version": "v4", "completed": 10.0, "unconfirmed": 0, "sufficient": true, "winRate": 0.6, "nativeRate": 0.9, "fallbackRate": 0.1, "averageTurns": 25.6}
@@ -237,7 +238,7 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.set("pvp_ai_sparring_stats_data", {"success": false})
 	overlay.call("_render_ai_sparring_stats")
 	_check(stats_list.get_child_count() == 0, "Failed statistics refresh does not leave stale rates visible")
-	_check(ai_sparring_tabs.get_tab_title(3) == "About", "Bot information tab uses the concise title")
+	_check(ai_sparring_tabs.get_tab_title(4) == "About", "Bot information tab uses the concise title")
 	var intermediate_about := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.difficulty_intermediate"))
 	var nightmare_about := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.difficulty_nightmare"))
 	var grandmaster_about := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.grandmaster"))
@@ -307,8 +308,11 @@ func _check_pvp_runtime_translation() -> void:
 	_check(bot_versions["ai5"].text.contains("Serverversie niet bevestigd"), "A failed refresh clears an old confirmed version")
 	overlay.set("pvp_training_ai_resolved_team_id", "")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(0) == "Vrij oefenen", "Free sparring tab renders in Dutch")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(1) == "Teamcatalogus", "Team catalog tab renders in Dutch")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Matchhistorie", "Match history tab renders in Dutch")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Teamcatalogus", "Team catalog tab renders in Dutch")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(3) == "Matchhistorie", "Match history tab renders in Dutch")
+	var live_opt_in := overlay.get("pvp_ai_sparring_allow_spectators") as CheckBox
+	_check(live_opt_in != null and not live_opt_in.button_pressed, "Live spectators require explicit per-battle opt-in")
+	_check(live_opt_in.text == "Toon mijn battle openbaar bij Live Battles", "Spectator consent explains public visibility")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.custom_minimum_size.y == 595.0, "AI Sparring keeps a stable workspace height across tabs")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.current_tab == 0, "Free sparring is the default AI destination")
 	_check(ai_sparring_tier_select != null and ai_sparring_tier_select.item_count == 1 and ai_sparring_tier_select.get_item_text(0) == "Aether OU" and str(ai_sparring_tier_select.get_selected_metadata()) == "aether-ou", "Free sparring defaults to Aether OU before the catalog loads")
