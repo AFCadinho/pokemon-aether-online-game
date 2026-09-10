@@ -146,7 +146,7 @@ func set_loading(is_loading: bool) -> void:
 	password_input.editable = not is_loading
 	remember_me_checkbox.disabled = is_loading
 	login_button.disabled = is_loading or not server_online
-	continue_button.disabled = is_loading or not server_online
+	continue_button.disabled = OS.has_feature("web") or is_loading or not server_online
 	logout_button.disabled = is_loading
 	language_options_button.disabled = is_loading
 	login_button.text = (
@@ -572,7 +572,7 @@ func _clear_server_access_notice() -> void:
 
 func _apply_server_access_controls() -> void:
 	login_button.disabled = is_loading or not server_online
-	continue_button.disabled = is_loading or not server_online
+	continue_button.disabled = OS.has_feature("web") or is_loading or not server_online
 
 
 func _set_server_status(key: String, color: Color) -> void:

@@ -49,6 +49,7 @@
     <form id="registration-form">
       <h2 id="registration-title">Create your PokeAether account</h2>
       <p>The same account works in the desktop game. Verify your email before signing in.</p>
+      <p id="register-status" role="status" aria-live="polite"></p>
       <label>Username<input name="username" autocomplete="username" required minlength="3" maxlength="32" pattern="[A-Za-z0-9_]+"></label>
       <label>Email<input name="email" autocomplete="email" type="email" required maxlength="254"></label>
       <label>Password<input name="password" autocomplete="new-password" type="password" required minlength="8" maxlength="128"></label>
@@ -57,7 +58,6 @@
       <label><input name="age" type="checkbox" required> I am at least 13 years old and, if under 18, have permission from a parent or legal guardian.</label>
       <label><input name="legal" type="checkbox" required> I accept the <a href="https://pokeaether.com/terms" target="_blank" rel="noopener noreferrer">Terms</a> and <a href="https://pokeaether.com/code-of-conduct" target="_blank" rel="noopener noreferrer">Code of Conduct</a>, and acknowledge the <a href="https://pokeaether.com/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</label>
       <div class="actions"><button id="register-submit">Create account</button><button id="register-close" type="button">Back to login</button></div>
-      <p id="register-status" role="status" aria-live="polite"></p>
     </form>
   </dialog>
   <script src="$GODOT_URL"></script>
@@ -112,7 +112,7 @@
           registerStatus.textContent = 'Account created. Check your email and verify your account, then return to login.';
         }
       } catch (_) { registerStatus.textContent = 'Account service unavailable. Please retry later.'; }
-      finally { registerSubmit.disabled = false; }
+      finally { registerSubmit.disabled = false; registerStatus.scrollIntoView({ block: 'nearest' }); }
     });
     if (!local) {
       start.disabled = true;
