@@ -28,6 +28,9 @@ const ACCENT_DARK := Color("#123c58")
 const SURFACE := Color("#101e32")
 const SURFACE_RAISED := Color("#162b45")
 const DANGER := Color("#d96570")
+const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/icons/battle_replays_dropdown_arrow.svg")
+const FILTER_CHECKED: Texture2D = preload("res://assets/ui/icons/battle_replays_filter_checked.svg")
+const FILTER_UNCHECKED: Texture2D = preload("res://assets/ui/icons/battle_replays_filter_unchecked.svg")
 
 func _t(key: String, args: Dictionary = {}) -> String:
 	return LocalizationManager.text("ui.replays." + key, args)
@@ -110,9 +113,7 @@ func _ready() -> void:
 	filters.add_child(difficulty)
 	favorites = CheckButton.new()
 	favorites.text = _t("favorites")
-	favorites.add_theme_color_override("font_color", INK)
-	favorites.add_theme_color_override("font_hover_color", ACCENT)
-	favorites.add_theme_color_override("font_pressed_color", ACCENT)
+	_style_favorites_toggle(favorites)
 	favorites.toggled.connect(func(_value: bool): _filter())
 	filters.add_child(favorites)
 	_button(filters, _t("refresh"), _filter, "primary")
@@ -197,9 +198,52 @@ func _style_line_edit(control: LineEdit) -> void:
 
 func _style_option(control: OptionButton) -> void:
 	control.custom_minimum_size = Vector2(145, 38)
+	control.focus_mode = Control.FOCUS_NONE
+	control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	control.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	control.add_theme_constant_override("arrow_margin", 12)
+	control.add_theme_icon_override("arrow", DROPDOWN_ARROW)
 	control.add_theme_stylebox_override("normal", _style(Color("#13243a"), Color("#315574"), 7, 1, 10, 10, 8, 8))
 	control.add_theme_stylebox_override("hover", _style(Color("#1a3550"), ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("pressed", _style(Color("#0e2033"), ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("focus", _style(Color("#13243a"), ACCENT, 7, 1, 10, 10, 8, 8))
 	control.add_theme_color_override("font_color", INK)
+	control.add_theme_color_override("font_hover_color", INK)
+	control.add_theme_color_override("font_pressed_color", INK)
+	var popup := control.get_popup()
+	popup.transparent_bg = true
+	popup.add_theme_font_size_override("font_size", 14)
+	popup.add_theme_color_override("font_color", INK)
+	popup.add_theme_color_override("font_hover_color", INK)
+	popup.add_theme_constant_override("item_start_padding", 12)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 4)
+	popup.add_theme_stylebox_override("panel", _style(Color("#0b1727"), Color("#315574"), 8, 1, 8, 8, 7, 7))
+	popup.add_theme_stylebox_override("hover", _style(Color("#1a4160"), ACCENT, 6, 1, 8, 8, 5, 5))
+	popup.add_theme_icon_override("radio_checked", FILTER_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked", FILTER_UNCHECKED)
+
+func _style_favorites_toggle(control: CheckButton) -> void:
+	control.custom_minimum_size = Vector2(126, 38)
+	control.focus_mode = Control.FOCUS_NONE
+	control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	control.add_theme_font_size_override("font_size", 14)
+	control.add_theme_constant_override("h_separation", 7)
+	control.add_theme_stylebox_override("normal", _style(Color("#13243a"), Color("#315574"), 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("hover", _style(Color("#1a3550"), ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("pressed", _style(Color("#0e2033"), ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("normal_pressed", _style(ACCENT_DARK, ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("hover_pressed", _style(Color("#155675"), ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_stylebox_override("pressed_pressed", _style(Color("#0f455f"), ACCENT, 7, 1, 10, 10, 8, 8))
+	control.add_theme_color_override("font_color", INK)
+	control.add_theme_color_override("font_hover_color", INK)
+	control.add_theme_color_override("font_pressed_color", INK)
+	control.add_theme_icon_override("unchecked", FILTER_UNCHECKED)
+	control.add_theme_icon_override("unchecked_hover", FILTER_UNCHECKED)
+	control.add_theme_icon_override("unchecked_pressed", FILTER_UNCHECKED)
+	control.add_theme_icon_override("checked", FILTER_CHECKED)
+	control.add_theme_icon_override("checked_hover", FILTER_CHECKED)
+	control.add_theme_icon_override("checked_pressed", FILTER_CHECKED)
 
 func open_library() -> void:
 	show()

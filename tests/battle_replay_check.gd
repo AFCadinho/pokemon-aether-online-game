@@ -109,6 +109,8 @@ func _run() -> void:
 	_check(library.list.get_child_count() == 2, "Library renders management cards")
 	_check(library.shell.get_theme_stylebox("panel") != null, "Library shell has a dedicated replay visual style")
 	_check(library.search.get_theme_stylebox("focus") != null and library.outcome.get_theme_stylebox("hover") != null, "Replay filters have focused and hover states")
+	_check(library.outcome.get_theme_icon("arrow") != null and library.outcome.get_popup().get_theme_stylebox("panel") != null, "Replay dropdowns style their arrow and menu")
+	_check(library.favorites.get_theme_icon("checked") != null and library.favorites.get_theme_stylebox("normal") != null, "Favorites uses a dedicated toggle style")
 	var card_buttons: Array[Node] = library.list.get_child(0).find_children("*", "Button", true, false)
 	var watch_button := card_buttons[0] as Button if not card_buttons.is_empty() else null
 	_check(watch_button != null and watch_button.get_theme_stylebox("normal") != null, "Replay cards provide styled actions")

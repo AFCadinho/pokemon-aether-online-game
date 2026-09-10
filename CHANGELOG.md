@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Battle Replays now use a cleaner library with clearer filters, replay result badges and distinct watch, management and delete actions.
+- Battle Replays now use a cleaner library with custom filters and favorites toggle, replay result badges and distinct watch, management and delete actions.
 
 - Aether Clash now gives everyone the same arena view on every screen size. Only Spectate Orbs provide a wider overview; your usual zoom returns after leaving.
 
