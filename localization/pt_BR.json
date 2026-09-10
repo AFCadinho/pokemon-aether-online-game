@@ -61,7 +61,7 @@
   "ui.replays.status_deleted": "Replay excluído",
   "ui.replays.status_none": "Nenhum replay disponível",
   "ui.replays.pinned": "★ Favorito · Guardado até você removê-lo",
-  "ui.replays.expires": "Disponível até {date}",
+  "ui.replays.expires": "Termina em {date}",
   "ui.replays.watch": "Assistir replay",
   "ui.replays.pin": "☆ Salvar como favorito",
   "ui.replays.unpin": "★ Remover dos favoritos",

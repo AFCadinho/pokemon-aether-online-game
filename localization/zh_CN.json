@@ -61,7 +61,7 @@
   "ui.replays.status_deleted": "回放已删除",
   "ui.replays.status_none": "无可用回放",
   "ui.replays.pinned": "★ 已收藏 · 保留至你将其移除",
-  "ui.replays.expires": "保留至 {date}",
+  "ui.replays.expires": "截止 {date}",
   "ui.replays.watch": "观看回放",
   "ui.replays.pin": "☆ 收藏回放",
   "ui.replays.unpin": "★ 取消收藏",

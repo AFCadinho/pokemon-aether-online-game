@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Replay expiry labels now use a shorter, clearer format.
+
 - Replay expiry details now sit beside the result badge, keeping replay cards more compact.
 
 - Replay cards now offer direct title editing and favorite toggles through compact pencil and star controls.
