@@ -444,7 +444,7 @@ func _card(row: Dictionary) -> Control:
 		layout.add_child(title_row)
 		var title := Label.new()
 		title.text = saved_title
-		title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		title.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		title.add_theme_font_size_override("font_size", 17)
 		title.add_theme_color_override("font_color", INK)
 		title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
