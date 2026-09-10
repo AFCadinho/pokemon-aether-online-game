@@ -130,6 +130,12 @@ func _run() -> void:
 	_check(library.outcome.get_theme_icon("arrow") != null and library.outcome.get_popup().get_theme_stylebox("panel") != null, "Replay dropdowns style their arrow and menu")
 	_check(library.favorites.get_theme_icon("checked") != null and library.favorites.get_theme_stylebox("normal") != null, "Favorites uses a dedicated toggle style")
 	_check(library.share_code_input != null and library.share_code_input.placeholder_text != "", "Replay library exposes shared-code playback")
+	_check(not library.difficulty.visible, "Generic replay browsing hides the AI-specific difficulty filter")
+	library.category = "ai_sparring"
+	library._refresh_category_tabs()
+	_check(library.difficulty.visible, "AI Sparring browsing exposes its difficulty filter")
+	library.category = ""
+	library._refresh_category_tabs()
 	_check(library.category_buttons.size() == 5 and library.category_buttons.has("ai_sparring") and library.category_buttons.has("wild"), "Replay library exposes future-ready category tabs")
 	var card_buttons: Array[Node] = library.list.get_child(0).find_children("*", "Button", true, false)
 	var watch_button := card_buttons[0] as Button if not card_buttons.is_empty() else null
