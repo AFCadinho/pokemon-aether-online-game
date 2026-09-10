@@ -44,6 +44,7 @@
   "ui.replays.unknown": "进行中",
   "ui.replays.favorites": "收藏",
   "ui.replays.refresh": "搜索 / 刷新",
+  "ui.replays.reset_filters": "重置筛选",
   "ui.replays.loading": "正在加载回放…",
   "ui.replays.load_failed": "无法加载回放，请重试。",
   "ui.replays.empty": "未找到回放。",

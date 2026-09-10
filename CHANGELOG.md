@@ -4,6 +4,18 @@
 
 - Players on the same map can now click the Poké Ball above a wild battle or the Great Ball above an NPC battle to watch it live.
 
+- Replay expiry details now sit beside the result badge, keeping replay cards more compact.
+
+- Replay cards now offer direct title editing and favorite toggles through compact pencil and star controls.
+
+- The shared-replay action now has a more prominent, dedicated header treatment.
+
+- Replay searches now update while typing, and a separate reset action clears the active filters.
+
+- Replay category and filter controls now share a compact two-row layout.
+
+- Shared replay codes now open from a dedicated header action instead of taking up space among library filters.
+
 - The replay library now uses category-neutral wording and only shows AI difficulty controls while browsing AI Sparring.
 
 - Battle Replays can now be shared through a replay code and watched directly from another player's library; owners can copy, renew or revoke their code.

@@ -16,8 +16,11 @@ var outcome: OptionButton
 var difficulty: OptionButton
 var favorites: CheckButton
 var share_code_input: LineEdit
+var shared_code_modal: Control
+var shared_code_feedback: Label
 var previous: Button
 var next: Button
+var reset_filters_button: Button
 var category_buttons: Dictionary = {}
 var category := ""
 var offset := 0
@@ -25,6 +28,7 @@ var busy := false
 var return_scroll := 0
 var team_strip_factory: Callable
 var refresh_pending := false
+var search_filter_revision := 0
 
 const INK := Color("#eaf3ff")
 const MUTED := Color("#91a7bf")
@@ -87,39 +91,45 @@ func _ready() -> void:
 	intro.add_theme_font_size_override("font_size", 14)
 	intro.add_theme_color_override("font_color", MUTED)
 	heading.add_child(intro)
+	_button(header, _t("watch_shared_title"), _open_shared_replay_dialog, "shared")
 	_button(header, _t("close"), func(): hide(); closed.emit(), "quiet")
 	var filter_panel := PanelContainer.new()
-	filter_panel.add_theme_stylebox_override("panel", _style(Color("#0a1524"), Color("#1f405e"), 10, 1, 14, 14, 12, 12))
+	filter_panel.add_theme_stylebox_override("panel", _style(Color("#0a1524"), Color("#1f405e"), 10, 1, 10, 10, 9, 9))
 	layout.add_child(filter_panel)
 	var filter_layout := VBoxContainer.new()
-	filter_layout.add_theme_constant_override("separation", 7)
+	filter_layout.add_theme_constant_override("separation", 5)
 	filter_panel.add_child(filter_layout)
+	var category_bar := HBoxContainer.new()
+	category_bar.add_theme_constant_override("separation", 10)
+	filter_layout.add_child(category_bar)
 	var filter_caption := Label.new()
 	filter_caption.text = "BROWSE REPLAYS"
+	filter_caption.custom_minimum_size.x = 90
+	filter_caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	filter_caption.add_theme_font_size_override("font_size", 12)
 	filter_caption.add_theme_color_override("font_color", ACCENT)
-	filter_layout.add_child(filter_caption)
-	filter_layout.add_child(_filter_section_label("CATEGORY"))
+	category_bar.add_child(filter_caption)
 	var categories := HFlowContainer.new()
+	categories.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	categories.add_theme_constant_override("horizontal_separation", 6)
 	categories.add_theme_constant_override("vertical_separation", 6)
-	filter_layout.add_child(categories)
+	category_bar.add_child(categories)
 	for entry: Dictionary in REPLAY_CATEGORIES:
 		var category_id := str(entry["id"])
 		var tab := _category_button(categories, _t(str(entry["label"])), category_id)
 		category_buttons[category_id] = tab
 	_refresh_category_tabs()
-	filter_layout.add_child(_filter_section_label("FILTER RESULTS"))
-	var filters := HFlowContainer.new()
+	var filters := HBoxContainer.new()
 	filters.add_theme_constant_override("horizontal_separation", 8)
-	filters.add_theme_constant_override("vertical_separation", 8)
 	filter_layout.add_child(filters)
 	search = LineEdit.new()
 	search.placeholder_text = _t("search")
 	search.max_length = 80
-	search.custom_minimum_size.x = 220
+	search.custom_minimum_size.x = 180
+	search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_style_line_edit(search)
-	search.text_submitted.connect(func(_text: String): _filter())
+	search.text_changed.connect(_schedule_search_filter)
+	search.text_submitted.connect(_filter_from_search_submit)
 	filters.add_child(search)
 	outcome = OptionButton.new()
 	for key: String in ["all_results", "win", "loss", "draw"]:
@@ -140,19 +150,8 @@ func _ready() -> void:
 	_style_favorites_toggle(favorites)
 	favorites.toggled.connect(func(_value: bool): _filter())
 	filters.add_child(favorites)
-	_button(filters, _t("refresh"), _filter, "primary")
-	filter_layout.add_child(_filter_section_label(_t("watch_shared_title").to_upper()))
-	var shared_access := HBoxContainer.new()
-	shared_access.add_theme_constant_override("separation", 8)
-	filter_layout.add_child(shared_access)
-	share_code_input = LineEdit.new()
-	share_code_input.placeholder_text = _t("share_code_placeholder")
-	share_code_input.max_length = 32
-	share_code_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_style_line_edit(share_code_input)
-	share_code_input.text_submitted.connect(func(_text: String): _watch_shared())
-	shared_access.add_child(share_code_input)
-	_button(shared_access, _t("watch_shared"), _watch_shared, "primary")
+	reset_filters_button = _button(filters, _t("reset_filters"), _reset_filters, "quiet")
+	reset_filters_button.custom_minimum_size.x = 112
 	var summary := HBoxContainer.new()
 	summary.add_theme_constant_override("separation", 12)
 	layout.add_child(summary)
@@ -206,6 +205,12 @@ func _button(parent: Node, text: String, callback: Callable, variant := "seconda
 		base = Color("#126b91")
 		hover = Color("#198abd")
 		border = ACCENT
+	elif variant == "shared":
+		base = Color("#0d5174")
+		hover = Color("#137aaa")
+		border = ACCENT
+		button.custom_minimum_size = Vector2(154, 44)
+		button.add_theme_font_size_override("font_size", 15)
 	elif variant == "danger":
 		base = Color("#542632")
 		hover = Color("#763444")
@@ -361,6 +366,27 @@ func _filter() -> void:
 	offset = 0
 	refresh()
 
+func _schedule_search_filter(_text: String) -> void:
+	search_filter_revision += 1
+	var revision := search_filter_revision
+	await get_tree().create_timer(0.25).timeout
+	if revision != search_filter_revision or not is_inside_tree():
+		return
+	_filter()
+
+func _filter_from_search_submit(_text: String) -> void:
+	search_filter_revision += 1
+	_filter()
+
+func _reset_filters() -> void:
+	search_filter_revision += 1
+	search.text = ""
+	search_filter_revision += 1
+	outcome.select(0)
+	difficulty.select(0)
+	favorites.set_pressed_no_signal(false)
+	_filter()
+
 func refresh() -> void:
 	if busy:
 		return
@@ -408,14 +434,27 @@ func _card(row: Dictionary) -> Control:
 	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	layout.add_theme_constant_override("separation", 5)
 	card_row.add_child(layout)
+	var battle_id := str(row.get("battleId", ""))
+	var state := str(row.get("status", "failed"))
+	var pinned := bool(row.get("favorite", false))
 	var saved_title := str(row.get("title", "")).strip_edges()
 	if not saved_title.is_empty():
+		var title_row := HBoxContainer.new()
+		title_row.add_theme_constant_override("separation", 4)
+		layout.add_child(title_row)
 		var title := Label.new()
 		title.text = saved_title
+		title.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		title.add_theme_font_size_override("font_size", 17)
 		title.add_theme_color_override("font_color", INK)
-		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		layout.add_child(title)
+		title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		title_row.add_child(title)
+		var rename_button := _card_icon_button(title_row, "✎", _t("rename"))
+		rename_button.disabled = state != "available"
+		rename_button.pressed.connect(func(): _rename(row))
+		var favorite_button := _card_icon_button(title_row, "★" if pinned else "☆", _t("unpin") if pinned else _t("pin"), pinned)
+		favorite_button.disabled = state != "available"
+		favorite_button.pressed.connect(func(): _edit(battle_id, {"favorite": not pinned}))
 	var matchup_row := HBoxContainer.new()
 	matchup_row.add_theme_constant_override("separation", 8)
 	layout.add_child(matchup_row)
@@ -445,19 +484,21 @@ func _card(row: Dictionary) -> Control:
 		teams.add_child(versus)
 		teams.add_child(team_strip_factory.call(row.get("opponentRoster", [])))
 		layout.add_child(teams)
-	var state := str(row.get("status", "failed"))
 	var expiry := Label.new()
 	expiry.text = _t("status_" + state)
 	if state == "available":
 		expiry.text = _t("pinned") if row.get("favorite", false) else _t("expires", {"date": str(row.get("expiresAt", "")).left(10)})
 	expiry.add_theme_font_size_override("font_size", 13)
 	expiry.add_theme_color_override("font_color", Color("#f1d48b") if row.get("favorite", false) else MUTED)
-	layout.add_child(expiry)
+	expiry.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	expiry.custom_minimum_size.x = 150
+	expiry.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	var action_column := VBoxContainer.new()
-	action_column.custom_minimum_size.x = 390
+	action_column.custom_minimum_size.x = 252
 	action_column.add_theme_constant_override("separation", 8)
 	card_row.add_child(action_column)
 	var action_heading := HBoxContainer.new()
+	action_heading.add_theme_constant_override("separation", 8)
 	action_column.add_child(action_heading)
 	var action_spacer := Control.new()
 	action_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -468,20 +509,37 @@ func _card(row: Dictionary) -> Control:
 	result_badge.add_theme_color_override("font_color", Color("#ffffff"))
 	result_badge.add_theme_stylebox_override("normal", _style(result_color, result_color, 6, 0, 8, 8, 4, 4))
 	action_heading.add_child(result_badge)
-	var actions := HFlowContainer.new()
-	actions.alignment = FlowContainer.ALIGNMENT_END
-	actions.add_theme_constant_override("horizontal_separation", 6)
-	actions.add_theme_constant_override("vertical_separation", 6)
+	action_heading.add_child(expiry)
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 8)
 	action_column.add_child(actions)
-	var battle_id := str(row.get("battleId", ""))
 	_button(actions, _t("watch"), func(): watch(battle_id), "primary").disabled = state != "available"
-	var pinned := bool(row.get("favorite", false))
-	_button(actions, _t("unpin") if pinned else _t("pin"), func(): _edit(battle_id, {"favorite": not pinned}), "quiet").disabled = state != "available"
-	_button(actions, _t("rename"), func(): _rename(row), "quiet").disabled = state != "available"
 	if str(row.get("kind", "ai_sparring")) == "ai_sparring":
 		_button(actions, _t("new_share_code") if row.get("shared", false) else _t("share"), func(): _share(battle_id), "quiet").disabled = state != "available"
 	_button(actions, _t("delete"), func(): _confirm_remove(battle_id), "danger")
 	return card
+
+func _card_icon_button(parent: Node, glyph: String, tooltip: String, active := false) -> Button:
+	var button := Button.new()
+	button.text = glyph
+	button.tooltip_text = tooltip
+	button.custom_minimum_size = Vector2(28, 28)
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_size_override("font_size", 20)
+	var base := Color("#2e2616") if active else Color("#102035")
+	var hover := Color("#5a4920") if active else Color("#1b3853")
+	var border := Color("#d6ae47") if active else Color("#284966")
+	button.add_theme_stylebox_override("normal", _style(base, border, 6, 1, 3, 3, 2, 2))
+	button.add_theme_stylebox_override("hover", _style(hover, border.lightened(0.18), 6, 1, 3, 3, 2, 2))
+	button.add_theme_stylebox_override("pressed", _style(base.darkened(0.16), border, 6, 1, 3, 3, 2, 2))
+	button.add_theme_stylebox_override("disabled", _style(Color("#101d2d"), Color("#233a52"), 6, 1, 3, 3, 2, 2))
+	button.add_theme_color_override("font_color", Color("#f1d48b") if active else MUTED)
+	button.add_theme_color_override("font_hover_color", Color("#fff0b7") if active else INK)
+	button.add_theme_color_override("font_disabled_color", Color("#52657a"))
+	parent.add_child(button)
+	return button
 
 func _player_identity(name: String, appearance: Dictionary) -> Control:
 	var identity := HBoxContainer.new()
@@ -573,6 +631,8 @@ func _watch_shared() -> void:
 	var code := share_code_input.text.strip_edges()
 	if code.is_empty():
 		status.text = _t("shared_unavailable")
+		if shared_code_feedback != null:
+			shared_code_feedback.text = status.text
 		return
 	busy = true
 	status.text = _t("loading")
@@ -580,10 +640,37 @@ func _watch_shared() -> void:
 	busy = false
 	if not bool(response.get("success", false)):
 		status.text = _t("shared_unavailable")
+		if shared_code_feedback != null:
+			shared_code_feedback.text = status.text
 		playback_failed.emit(status.text)
 		return
+	if is_instance_valid(shared_code_modal):
+		shared_code_modal.queue_free()
+		shared_code_modal = null
 	return_scroll = scroll.scroll_vertical
 	playback_requested.emit(response)
+
+func _open_shared_replay_dialog() -> void:
+	if is_instance_valid(shared_code_modal):
+		return
+	var dialog := _create_replay_dialog(_t("watch_shared_title"), 500)
+	var content: VBoxContainer = dialog["content"]
+	shared_code_modal = dialog["modal"]
+	share_code_input = LineEdit.new()
+	share_code_input.placeholder_text = _t("share_code_placeholder")
+	share_code_input.max_length = 32
+	share_code_input.custom_minimum_size.y = 40
+	_style_line_edit(share_code_input)
+	content.add_child(share_code_input)
+	shared_code_feedback = Label.new()
+	shared_code_feedback.add_theme_font_size_override("font_size", 13)
+	shared_code_feedback.add_theme_color_override("font_color", DANGER)
+	content.add_child(shared_code_feedback)
+	var actions := _dialog_actions(content)
+	_button(actions, _t("cancel"), func(): shared_code_modal.queue_free(); shared_code_modal = null, "quiet")
+	var watch_button := _button(actions, _t("watch_shared"), _watch_shared, "primary")
+	share_code_input.text_submitted.connect(func(_text: String): watch_button.emit_signal("pressed"))
+	share_code_input.call_deferred("grab_focus")
 
 func _share(battle_id: String) -> void:
 	if busy:
