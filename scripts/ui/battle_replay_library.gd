@@ -87,12 +87,14 @@ func _ready() -> void:
 	filter_panel.add_theme_stylebox_override("panel", _style(Color("#0a1524"), Color("#1f405e"), 10, 1, 14, 14, 12, 12))
 	layout.add_child(filter_panel)
 	var filter_layout := VBoxContainer.new()
+	filter_layout.add_theme_constant_override("separation", 7)
 	filter_panel.add_child(filter_layout)
 	var filter_caption := Label.new()
 	filter_caption.text = "BROWSE REPLAYS"
 	filter_caption.add_theme_font_size_override("font_size", 12)
 	filter_caption.add_theme_color_override("font_color", ACCENT)
 	filter_layout.add_child(filter_caption)
+	filter_layout.add_child(_filter_section_label("CATEGORY"))
 	var categories := HFlowContainer.new()
 	categories.add_theme_constant_override("horizontal_separation", 6)
 	categories.add_theme_constant_override("vertical_separation", 6)
@@ -102,6 +104,7 @@ func _ready() -> void:
 		var tab := _category_button(categories, _t(str(entry["label"])), category_id)
 		category_buttons[category_id] = tab
 	_refresh_category_tabs()
+	filter_layout.add_child(_filter_section_label("FILTER RESULTS"))
 	var filters := HFlowContainer.new()
 	filters.add_theme_constant_override("horizontal_separation", 8)
 	filters.add_theme_constant_override("vertical_separation", 8)
@@ -221,16 +224,24 @@ func _category_button(parent: Node, text: String, category_id: String) -> Button
 	parent.add_child(button)
 	return button
 
+func _filter_section_label(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", Color("#7fa5bf"))
+	return label
+
 func _refresh_category_tabs() -> void:
 	for category_id: String in category_buttons:
 		var button := category_buttons[category_id] as Button
 		var selected := category_id == category
-		var base := Color("#126b91") if selected else Color("#102239")
-		var hover := Color("#198abd") if selected else Color("#1a3550")
-		var border := ACCENT if selected else Color("#315574")
-		button.add_theme_stylebox_override("normal", _style(base, border, 7, 1, 12, 12, 7, 7))
-		button.add_theme_stylebox_override("hover", _style(hover, border.lightened(0.18), 7, 1, 12, 12, 7, 7))
-		button.add_theme_stylebox_override("pressed", _style(base.darkened(0.16), border, 7, 1, 12, 12, 7, 7))
+		var base := Color("#126b91") if selected else Color("#0c1b2b")
+		var hover := Color("#198abd") if selected else Color("#142f47")
+		var border := ACCENT if selected else Color("#24445f")
+		var width := 2 if selected else 1
+		button.add_theme_stylebox_override("normal", _style(base, border, 7, width, 12, 12, 7, 7))
+		button.add_theme_stylebox_override("hover", _style(hover, border.lightened(0.18), 7, width, 12, 12, 7, 7))
+		button.add_theme_stylebox_override("pressed", _style(base.darkened(0.16), border, 7, width, 12, 12, 7, 7))
 		button.add_theme_color_override("font_color", INK if selected else MUTED)
 		button.add_theme_color_override("font_hover_color", INK)
 
@@ -454,10 +465,12 @@ func restore_library() -> void:
 func _rename(row: Dictionary) -> void:
 	var dialog := ConfirmationDialog.new()
 	dialog.title = _t("rename")
+	_style_dialog(dialog)
 	var input := LineEdit.new()
 	input.text = str(row.get("title", ""))
 	input.max_length = 80
 	input.custom_minimum_size = Vector2(360, 40)
+	_style_line_edit(input)
 	dialog.add_child(input)
 	add_child(dialog)
 	dialog.confirmed.connect(func(): _edit(str(row.get("battleId", "")), {"title": input.text}); dialog.queue_free())
@@ -469,10 +482,49 @@ func _confirm_remove(battle_id: String) -> void:
 	var dialog := ConfirmationDialog.new()
 	dialog.title = _t("delete")
 	dialog.dialog_text = _t("delete_confirm")
+	_style_dialog(dialog, true)
 	add_child(dialog)
 	dialog.confirmed.connect(func(): _remove(battle_id); dialog.queue_free())
 	dialog.canceled.connect(dialog.queue_free)
 	dialog.popup_centered(Vector2i(440, 160))
+
+func _style_dialog(dialog: ConfirmationDialog, destructive := false) -> void:
+	dialog.add_theme_stylebox_override("panel", _style(Color("#0d1c2e"), Color("#3a6e93"), 11, 1, 20, 20, 16, 16))
+	dialog.add_theme_color_override("title_color", INK)
+	dialog.add_theme_font_size_override("title_font_size", 18)
+	dialog.add_theme_color_override("font_color", INK)
+	dialog.add_theme_font_size_override("font_size", 15)
+	dialog.get_label().add_theme_color_override("font_color", INK)
+	dialog.get_label().add_theme_font_size_override("font_size", 15)
+	_style_dialog_button(dialog.get_ok_button(), "danger" if destructive else "primary")
+	_style_dialog_button(dialog.get_cancel_button(), "quiet")
+	var close: Button = dialog.get_close_button()
+	if close != null:
+		close.hide()
+
+func _style_dialog_button(button: Button, variant: String) -> void:
+	button.custom_minimum_size = Vector2(92, 38)
+	button.focus_mode = Control.FOCUS_NONE
+	button.add_theme_font_size_override("font_size", 14)
+	var base := Color("#132237")
+	var hover := Color("#1b3853")
+	var border := Color("#284966")
+	var font := MUTED
+	if variant == "primary":
+		base = Color("#126b91")
+		hover = Color("#198abd")
+		border = ACCENT
+		font = INK
+	elif variant == "danger":
+		base = Color("#542632")
+		hover = Color("#763444")
+		border = DANGER
+		font = Color("#fff0f2")
+	button.add_theme_stylebox_override("normal", _style(base, border, 7, 1))
+	button.add_theme_stylebox_override("hover", _style(hover, border.lightened(0.18), 7, 1))
+	button.add_theme_stylebox_override("pressed", _style(base.darkened(0.16), border, 7, 1))
+	button.add_theme_color_override("font_color", font)
+	button.add_theme_color_override("font_hover_color", INK)
 
 func _remove(battle_id: String) -> void:
 	if busy:
