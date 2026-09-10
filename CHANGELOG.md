@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- NPC replay cards now use a cropped head portrait from the trainer's overworld sprite when available.
+
 - NPC Battle Replays now use the standard trainer arena rather than AI Sparring's stadium presentation.
 
 - Nearby battle Poké Balls now sit directly above player nameplates and overlap role badges instead of floating far above them.

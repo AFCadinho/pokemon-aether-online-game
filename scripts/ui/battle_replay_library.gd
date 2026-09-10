@@ -613,11 +613,13 @@ func _opponent_identity(row: Dictionary) -> Control:
 		frame.add_child(portrait)
 	else:
 		var trainer_class := str(row.get("trainerClass", "")).strip_edges().to_lower().replace(" ", "_")
-		var trainer_portrait := ResourceLoader.load("res://assets/sprites/trainer_cards/showdown/%s-gen8.png" % trainer_class) as Texture2D if not trainer_class.is_empty() else null
+		var trainer_portrait := _overworld_head_portrait(trainer_class)
+		if trainer_portrait == null and not trainer_class.is_empty():
+			trainer_portrait = ResourceLoader.load("res://assets/sprites/trainer_cards/showdown/%s-gen8.png" % trainer_class) as Texture2D
 		if trainer_portrait != null:
 			var portrait := TextureRect.new()
 			portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 			portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 			portrait.texture = trainer_portrait
 			frame.add_child(portrait)
@@ -636,6 +638,21 @@ func _opponent_identity(row: Dictionary) -> Control:
 	label.add_theme_color_override("font_color", INK)
 	identity.add_child(label)
 	return identity
+
+func _overworld_head_portrait(trainer_class: String) -> Texture2D:
+	if trainer_class.is_empty():
+		return null
+	var frames := ResourceLoader.load("res://assets/npcs/classes/%s_frames.tres" % trainer_class) as SpriteFrames
+	if frames == null or not frames.has_animation(&"default") or frames.get_frame_count(&"default") == 0:
+		return null
+	var source := frames.get_frame_texture(&"default", 0) as AtlasTexture
+	if source == null or source.atlas == null:
+		return null
+	var head := AtlasTexture.new()
+	head.atlas = source.atlas
+	var region := source.region
+	head.region = Rect2(region.position, Vector2(region.size.x, region.size.y * 0.58))
+	return head
 
 func _position_shell() -> void:
 	if shell == null:
