@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nearby battle Poké Balls now use a smaller visual size while retaining their easy-to-click area.
+
 - NPC Battle Replays now use the standard trainer arena rather than AI Sparring's stadium presentation.
 
 - Nearby battle Poké Balls now sit directly above player nameplates and overlap role badges instead of floating far above them.

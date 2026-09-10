@@ -43,7 +43,7 @@ func _ready() -> void:
 	add_child(glow_sprite)
 	sprite = Sprite2D.new()
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.scale = Vector2.ONE * 0.72
+	sprite.scale = Vector2.ONE * 0.56
 	add_child(sprite)
 	area = Area2D.new()
 	area.position = anchor_position
@@ -94,12 +94,12 @@ func _process(delta: float) -> void:
 	if sprite != null:
 		sprite.position = animated_position
 		sprite.rotation = elapsed * 2.4
-		sprite.scale = Vector2.ONE * lerpf(0.72, 0.86, hover_amount)
+		sprite.scale = Vector2.ONE * lerpf(0.56, 0.66, hover_amount)
 		sprite.modulate = Color.WHITE.lerp(Color(0.82, 0.94, 1.0), hover_amount)
 	if glow_sprite != null:
 		glow_sprite.position = animated_position
-		var pulse_scale := 0.88 + (wave + 1.0) * 0.04
-		glow_sprite.scale = Vector2.ONE * pulse_scale * lerpf(1.0, 1.5, hover_amount)
+		var pulse_scale := 0.7 + (wave + 1.0) * 0.035
+		glow_sprite.scale = Vector2.ONE * pulse_scale * lerpf(1.0, 1.35, hover_amount)
 		glow_sprite.modulate = Color(0.72, 0.9, 1.0, lerpf(0.58, 1.0, hover_amount))
 
 
