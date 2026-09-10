@@ -15,6 +15,8 @@ var difficulty: OptionButton
 var favorites: CheckButton
 var previous: Button
 var next: Button
+var category_buttons: Dictionary = {}
+var category := ""
 var offset := 0
 var busy := false
 var return_scroll := 0
@@ -28,6 +30,13 @@ const ACCENT_DARK := Color("#123c58")
 const SURFACE := Color("#101e32")
 const SURFACE_RAISED := Color("#162b45")
 const DANGER := Color("#d96570")
+const REPLAY_CATEGORIES := [
+	{"id": "", "label": "category_all"},
+	{"id": "ai_sparring", "label": "category_ai_sparring"},
+	{"id": "pvp", "label": "category_pvp"},
+	{"id": "pve", "label": "category_pve"},
+	{"id": "wild", "label": "category_wild"},
+]
 
 func _t(key: String, args: Dictionary = {}) -> String:
 	return LocalizationManager.text("ui.replays." + key, args)
@@ -84,6 +93,15 @@ func _ready() -> void:
 	filter_caption.add_theme_font_size_override("font_size", 12)
 	filter_caption.add_theme_color_override("font_color", ACCENT)
 	filter_layout.add_child(filter_caption)
+	var categories := HFlowContainer.new()
+	categories.add_theme_constant_override("horizontal_separation", 6)
+	categories.add_theme_constant_override("vertical_separation", 6)
+	filter_layout.add_child(categories)
+	for entry: Dictionary in REPLAY_CATEGORIES:
+		var category_id := str(entry["id"])
+		var tab := _category_button(categories, _t(str(entry["label"])), category_id)
+		category_buttons[category_id] = tab
+	_refresh_category_tabs()
 	var filters := HFlowContainer.new()
 	filters.add_theme_constant_override("horizontal_separation", 8)
 	filters.add_theme_constant_override("vertical_separation", 8)
@@ -187,6 +205,35 @@ func _button(parent: Node, text: String, callback: Callable, variant := "seconda
 	parent.add_child(button)
 	return button
 
+func _category_button(parent: Node, text: String, category_id: String) -> Button:
+	var button := Button.new()
+	button.text = text
+	button.custom_minimum_size.y = 34
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_size_override("font_size", 13)
+	button.pressed.connect(func():
+		if category == category_id:
+			return
+		category = category_id
+		_refresh_category_tabs()
+		_filter())
+	parent.add_child(button)
+	return button
+
+func _refresh_category_tabs() -> void:
+	for category_id: String in category_buttons:
+		var button := category_buttons[category_id] as Button
+		var selected := category_id == category
+		var base := Color("#126b91") if selected else Color("#102239")
+		var hover := Color("#198abd") if selected else Color("#1a3550")
+		var border := ACCENT if selected else Color("#315574")
+		button.add_theme_stylebox_override("normal", _style(base, border, 7, 1, 12, 12, 7, 7))
+		button.add_theme_stylebox_override("hover", _style(hover, border.lightened(0.18), 7, 1, 12, 12, 7, 7))
+		button.add_theme_stylebox_override("pressed", _style(base.darkened(0.16), border, 7, 1, 12, 12, 7, 7))
+		button.add_theme_color_override("font_color", INK if selected else MUTED)
+		button.add_theme_color_override("font_hover_color", INK)
+
 func _style_line_edit(control: LineEdit) -> void:
 	control.add_theme_stylebox_override("normal", _style(Color("#08121f"), Color("#315574"), 7, 1, 12, 12, 8, 8))
 	control.add_theme_stylebox_override("focus", _style(Color("#0c1a2a"), ACCENT, 7, 1, 12, 12, 8, 8))
@@ -289,8 +336,8 @@ func refresh() -> void:
 	next.disabled = true
 	var modes := ["", "ai4", "intermediate", "active", "elite", "nightmare"]
 	var results := ["", "win", "loss", "draw"]
-	var path := "/game/replays?offset=%d&limit=20&search=%s&outcome=%s&difficulty=%s&favorites=%s" % [
-		offset, search.text.uri_encode(), results[outcome.selected], modes[difficulty.selected], "true" if favorites.button_pressed else "false"]
+	var path := "/game/replays?offset=%d&limit=20&search=%s&outcome=%s&difficulty=%s&favorites=%s&kind=%s" % [
+		offset, search.text.uri_encode(), results[outcome.selected], modes[difficulty.selected], "true" if favorites.button_pressed else "false", category.uri_encode()]
 	var response := await _request("GET", path)
 	busy = false
 	if refresh_pending:
@@ -330,7 +377,7 @@ func _card(row: Dictionary) -> Control:
 	var title := Label.new()
 	title.text = str(row.get("title", ""))
 	if title.text.is_empty():
-		title.text = "AI Sparring · %s" % str(row.get("opponentDisplayName", ""))
+		title.text = "%s · %s" % [_t("category_" + str(row.get("kind", "ai_sparring"))), str(row.get("opponentDisplayName", ""))]
 	title.add_theme_font_size_override("font_size", 19)
 	title.add_theme_color_override("font_color", INK)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -380,7 +427,9 @@ func _card(row: Dictionary) -> Control:
 func _position_shell() -> void:
 	if shell == null:
 		return
-	shell.size = Vector2(minf(1280, size.x - 48), minf(900, size.y - 80))
+	# The library is a focused management overlay, not a fullscreen page. A
+	# narrower, shorter shell keeps cards readable and the game visible around it.
+	shell.size = Vector2(minf(1040, size.x - 48), minf(760, size.y - 80))
 	shell.position = (size - shell.size) / 2.0
 
 func watch(battle_id: String) -> void:
