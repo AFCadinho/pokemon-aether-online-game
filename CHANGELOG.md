@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The browser demo now loads at roughly half its previous size and includes static battle sprites for the complete AI Sparring roster.
+
 - Browser players can now open AI Sparring directly and use the regular game chat, while Ranked and custom PvP remain download-only.
 
 - Browser and desktop now continue with the same Trainer position, appearance, party and story progress. Professor Oak grants the real account-bound starter in the browser demo.

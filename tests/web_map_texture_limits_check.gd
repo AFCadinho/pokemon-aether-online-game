@@ -1,6 +1,7 @@
 extends SceneTree
 
 const MAX_WEB_TEXTURE_SIZE := 4096
+const MAX_WEB_VISUAL_TEXTURE_BYTES := 8 * 1024 * 1024
 const WEB_VISUAL_DIRECTORIES := [
 	"res://generated/tiled_visuals/pallet_town",
 	"res://generated/tiled_visuals/route_1",
@@ -27,8 +28,11 @@ const WEB_MAP_MARKERS := {
 
 func _initialize() -> void:
 	var failures: Array[String] = []
+	var texture_bytes := 0
 	for directory: String in WEB_VISUAL_DIRECTORIES:
-		_check_directory(directory, failures)
+		texture_bytes += _check_directory(directory, failures)
+	if texture_bytes > MAX_WEB_VISUAL_TEXTURE_BYTES:
+		failures.append("Browser demo textures exceed the 8 MiB source budget: %.1f MiB" % (float(texture_bytes) / 1048576.0))
 	for scene_path: String in WEB_MAP_MARKERS:
 		_check_map_scene(scene_path, WEB_MAP_MARKERS[scene_path], failures)
 	if failures.is_empty():
@@ -40,21 +44,28 @@ func _initialize() -> void:
 	quit(1)
 
 
-func _check_directory(directory: String, failures: Array[String]) -> void:
+func _check_directory(directory: String, failures: Array[String]) -> int:
+	var texture_bytes := 0
 	for file_name: String in DirAccess.get_files_at(directory):
 		if not file_name.ends_with(".texture.res"):
 			continue
 		var path := directory.path_join(file_name)
+		texture_bytes += FileAccess.get_file_as_bytes(ProjectSettings.globalize_path(path)).size()
 		var texture := load(path) as Texture2D
 		if texture == null:
 			failures.append("Could not load %s" % path)
 			continue
+		if not texture is PortableCompressedTexture2D:
+			failures.append("Web texture is not stored losslessly compressed: %s" % path)
+		elif texture.get_compression_mode() != PortableCompressedTexture2D.COMPRESSION_MODE_LOSSLESS:
+			failures.append("Web texture does not use lossless compression: %s" % path)
 		if texture.get_width() > MAX_WEB_TEXTURE_SIZE or texture.get_height() > MAX_WEB_TEXTURE_SIZE:
 			failures.append("Web texture exceeds %dpx: %s (%dx%d)" % [
 				MAX_WEB_TEXTURE_SIZE, path, texture.get_width(), texture.get_height(),
 			])
 	for child_directory: String in DirAccess.get_directories_at(directory):
-		_check_directory(directory.path_join(child_directory), failures)
+		texture_bytes += _check_directory(directory.path_join(child_directory), failures)
+	return texture_bytes
 
 
 func _check_map_scene(scene_path: String, marker_names: Array, failures: Array[String]) -> void:

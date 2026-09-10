@@ -196,7 +196,15 @@ func _materialize_tileset_image_chunks(
 				"error": "Could not create visual tileset asset directory: %s" % error_string(dir_error),
 			}
 
-		var texture := ImageTexture.create_from_image(chunk_image)
+		# Keep generated map chunks lossless, but do not serialize the raw RGBA
+		# pixels. PortableCompressedTexture2D stores the same image in a compact
+		# form that works in desktop and Web exports without an import sidecar.
+		var texture := PortableCompressedTexture2D.new()
+		texture.keep_compressed_buffer = true
+		texture.create_from_image(
+			chunk_image,
+			PortableCompressedTexture2D.COMPRESSION_MODE_LOSSLESS
+		)
 		var save_error := ResourceSaver.save(texture, texture_path)
 		if save_error != OK:
 			return {

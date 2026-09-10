@@ -24,6 +24,7 @@ func _init() -> void:
 	_check_equal(int(result.get("ignored_object_group_count", -1)), 1, "ignored object group count")
 	_check_file_exists(GENERATED_SCENE, "visual scene exists")
 	_check_file_exists(GENERATED_TILESET, "visual tileset exists")
+	_check_generated_textures_are_lossless_compressed()
 
 	var packed_scene := load(GENERATED_SCENE) as PackedScene
 	_check_true(packed_scene != null, "visual scene loads")
@@ -36,6 +37,27 @@ func _init() -> void:
 
 	_cleanup_generated_outputs()
 	quit(1 if failed else 0)
+
+
+func _check_generated_textures_are_lossless_compressed() -> void:
+	var assets_dir := DirAccess.open(GENERATED_DIR.path_join("assets"))
+	_check_true(assets_dir != null, "generated texture directory opens")
+	if assets_dir == null:
+		return
+	var texture_files: Array[String] = []
+	for file_name: String in assets_dir.get_files():
+		if file_name.ends_with(".texture.res"):
+			texture_files.append(file_name)
+	_check_true(not texture_files.is_empty(), "generated textures exist")
+	for file_name: String in texture_files:
+		var texture := load(GENERATED_DIR.path_join("assets").path_join(file_name))
+		_check_true(texture is PortableCompressedTexture2D, "%s is portable compressed" % file_name)
+		if texture is PortableCompressedTexture2D:
+			_check_equal(
+				texture.get_compression_mode(),
+				PortableCompressedTexture2D.COMPRESSION_MODE_LOSSLESS,
+				"%s uses lossless compression" % file_name
+			)
 
 
 func _check_visual_scene(root: Node) -> void:
