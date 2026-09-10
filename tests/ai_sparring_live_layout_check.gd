@@ -22,7 +22,7 @@ func _run() -> void:
 	panel.size = Vector2(848, 578)
 	await process_frame
 	panel.entries = [
-		{"battleId": "one", "playerName": "Admin", "opponentName": "Grandmaster Hard", "difficulty": "active", "tierId": "aether-ou", "tierName": "Aether OU", "turn": 10, "startedAt": "2026-09-10T12:00:00", "spectators": 0, "maxSpectators": 8},
+		{"battleId": "one", "playerName": "Admin", "playerAppearance": {"body": "Gen4_Base_v1", "skin_tone": "#d29b78"}, "opponentName": "Grandmaster Hard", "difficulty": "active", "tierId": "aether-ou", "tierName": "Aether OU", "turn": 10, "startedAt": "2026-09-10T12:00:00", "spectators": 0, "maxSpectators": 8},
 		{"battleId": "two", "playerName": "Misty", "opponentName": "Scholar", "difficulty": "ai4", "tierId": "none", "tierName": "Open", "turn": 3, "startedAt": "2026-09-10T12:00:00", "spectators": 8, "maxSpectators": 8},
 	]
 	panel.watching = true
@@ -36,8 +36,9 @@ func _run() -> void:
 	check(panel.find_child("LiveBattlesBrowser", true, false) != null, "Search and filters share a visual surface")
 	check(panel.rows.get_child_count() == 2, "Battle cards render")
 	var first_card: PanelContainer = panel.rows.get_child(0)
-	var first_watch: Button = first_card.get_child(0).get_child(1)
-	var second_watch: Button = panel.rows.get_child(1).get_child(0).get_child(1)
+	var first_watch: Button = first_card.get_child(0).get_child(2)
+	var second_watch: Button = panel.rows.get_child(1).get_child(0).get_child(2)
+	check(first_card.get_child(0).get_child(0).name == "LiveBattlePlayerPortrait", "Live card shows the public player portrait")
 	check(first_watch.has_theme_stylebox_override("normal"), "Watch is a primary styled action")
 	check(second_watch.disabled, "Full battle has a clear disabled action")
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
