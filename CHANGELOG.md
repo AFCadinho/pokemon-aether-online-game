@@ -4,6 +4,12 @@
 
 - Set suggestion evidence now uses readable labels such as Matches and Differences, wraps when needed, and hides empty counters.
 
+- Interrupted battle animations now release their waiting actions, and stalled effects can no longer indefinitely block the next event.
+
+- PvP reconnect now survives temporary server errors and returns you to sign-in when a battle session is definitively invalid.
+
+- Battle matchmaking and reconnection requests now time out safely instead of waiting indefinitely for an unresponsive connection.
+
 - Calcdex set suggestions now use a spacious side-by-side list and details view on desktop, so sets remain readable and reviewing evidence no longer changes the list height or scroll position.
 
 - Calcdex now remembers public battle snapshots while closed, so set suggestions can use damage from the turn that made you open the calculator.

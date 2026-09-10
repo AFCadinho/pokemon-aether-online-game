@@ -17,6 +17,7 @@ const RECONNECT_RETRY_DELAYS_SECONDS: Array[float] = [0.0, 1.0, 3.0]
 const CONNECTION_HEARTBEAT_SECONDS := 5.0
 const CONNECTION_PONG_TIMEOUT_MSEC := 12000
 const JOIN_ACK_TIMEOUT_MSEC := 10000
+const CONNECT_TIMEOUT_MSEC := 10000
 const BATTLE_EVENT_GAP_TIMEOUT_MSEC := 1000
 const MAX_BUFFERED_BATTLE_EVENTS := 256
 const SESSION_INVALID_CLOSE_CODE := 1008
@@ -38,6 +39,7 @@ var reconnect_timer := 0.0
 var reconnect_retry_count := 0
 var connection_heartbeat_timer := 0.0
 var connection_attempt_generation := 0
+var connection_attempt_deadline_msec := 0
 var join_sent := false
 var join_sent_at_msec := 0
 var awaiting_pong := false
@@ -70,6 +72,8 @@ func _notification(what: int) -> void:
 
 
 func _process(delta: float) -> void:
+	if _process_connect_timeout(Time.get_ticks_msec()):
+		return
 	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
 		websocket.poll()
 		_process_packets()
@@ -91,6 +95,7 @@ func _process(delta: float) -> void:
 
 	if ready_state == WebSocketPeer.STATE_OPEN:
 		connecting = false
+		connection_attempt_deadline_msec = 0
 		session_invalid_handled = false
 		if not joined:
 			if not join_sent:
@@ -177,6 +182,7 @@ func connect_room(
 
 	should_reconnect = true
 	connecting = true
+	connection_attempt_deadline_msec = Time.get_ticks_msec() + CONNECT_TIMEOUT_MSEC
 	session_invalid_handled = false
 	connection_attempt_generation += 1
 	_connect_room_async.call_deferred(connection_attempt_generation)
@@ -262,6 +268,7 @@ func seed_spectator_event_cursor(response: Dictionary) -> void:
 
 
 func disconnect_room() -> void:
+	connection_attempt_deadline_msec = 0
 	should_reconnect = false
 	connecting = false
 	connection_attempt_generation += 1
@@ -1301,13 +1308,31 @@ func _handle_closed_socket() -> void:
 	if not _is_authenticated():
 		return
 
+	_invalidate_session("Your PvP battle session is no longer valid.")
+
+
+func _invalidate_session(reason: String) -> void:
+	if session_invalid_handled:
+		return
 	session_invalid_handled = true
 	should_reconnect = false
 	connecting = false
-	session_invalid.emit("Your PvP battle session is no longer valid.")
+	connection_attempt_generation += 1
+	connection_attempt_deadline_msec = 0
+	joined = false
+	room_is_ready = false
+	join_sent = false
+	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
+		websocket.close(SESSION_INVALID_CLOSE_CODE, "PvP session ended")
+	websocket = WebSocketPeer.new()
+	if connected:
+		connected = false
+		connection_changed.emit(false)
+	session_invalid.emit(reason)
 
 
 func _restart_stalled_connection(reason: String) -> void:
+	connection_attempt_deadline_msec = 0
 	_reset_battle_event_buffer()
 	connection_attempt_generation += 1
 	joined = false
@@ -1330,27 +1355,38 @@ func _restart_stalled_connection(reason: String) -> void:
 		connection_changed.emit(false)
 
 
+func _process_connect_timeout(now_msec: int) -> bool:
+	if connection_attempt_deadline_msec <= 0 or now_msec < connection_attempt_deadline_msec:
+		return false
+	if websocket.get_ready_state() == WebSocketPeer.STATE_OPEN:
+		connection_attempt_deadline_msec = 0
+		return false
+	_restart_stalled_connection("PvP connection setup timed out.")
+	return true
+
+
 func _schedule_reconnect_retry() -> void:
+	connection_attempt_deadline_msec = 0
 	var delay_index := mini(reconnect_retry_count, RECONNECT_RETRY_DELAYS_SECONDS.size() - 1)
-	reconnect_timer = RECONNECT_RETRY_DELAYS_SECONDS[delay_index]
+	reconnect_timer = RECONNECT_RETRY_DELAYS_SECONDS[delay_index] * randf_range(0.8, 1.0)
 	reconnect_retry_count += 1
 
 
 func _handle_join_error(message: Dictionary) -> void:
 	var code := str(message.get("code", "")).strip_edges().to_lower()
 	var reason := str(message.get("error", "Unable to join the PvP battle room."))
-	if code in [
+	var status_code := _nonnegative_int(message.get("status", 0))
+	if status_code >= 500 or status_code in [408, 425, 429] or bool(message.get("retryable", false)):
+		_restart_stalled_connection(reason)
+		return
+	if status_code in [401, 403] or code in [
 		"pvp_identity_resolution_failed",
 		"pvp_invalid_viewer_role",
 		"pvp_room_already_joined",
 		"pvp_spectator_identity_required",
 		"pvp_spectator_not_allowed",
 	]:
-		should_reconnect = false
-		connecting = false
-		session_invalid.emit(reason)
-		if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
-			websocket.close(SESSION_INVALID_CLOSE_CODE, reason)
+		_invalidate_session(reason)
 		return
 	_restart_stalled_connection(reason)
 

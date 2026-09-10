@@ -3,6 +3,7 @@ extends Control
 @export var default_is_double_battle := false
 
 const BattleSpriteRenderScale := preload("res://scripts/battle/battle_ui/battle_sprite_render_scale.gd")
+const AnimationWait := preload("res://scripts/battle/battle_animation_wait.gd")
 const IDLE_ANIMATION := "idle"
 const DEFAULT_SHEET_FRAME_SIZE := Vector2i(48, 57)
 const MIN_SHEET_FRAME_SIZE := Vector2i(16, 16)
@@ -217,7 +218,8 @@ func play_attack_tween(offset: Vector2 = ATTACK_TWEEN_OFFSET) -> void:
 		active_tween.tween_property(sprite, "position", base_position + offset, 0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		active_tween.tween_property(sprite, "position", base_position, 0.12).set_delay(0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
-	await active_tween.finished
+	if not await AnimationWait.for_tween(self, active_tween):
+		return
 	_reset_sprites_pose(sprites)
 
 func set_substitute_active(is_active: bool, animate := true) -> void:
@@ -250,7 +252,8 @@ func set_substitute_active(is_active: bool, animate := true) -> void:
 		substitute_tween.tween_property(single_sprite, "modulate:a", 0.0, SUBSTITUTE_CROSSFADE_SECONDS)
 		substitute_tween.tween_property(substitute_sprite, "modulate:a", 1.0, SUBSTITUTE_CROSSFADE_SECONDS)
 		substitute_tween.tween_property(substitute_sprite, "scale", SUBSTITUTE_DISPLAY_SCALE, SUBSTITUTE_CROSSFADE_SECONDS).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		await substitute_tween.finished
+		if not await AnimationWait.for_tween(self, substitute_tween):
+			return
 		_sync_substitute_idle_pose()
 		return
 
@@ -266,7 +269,8 @@ func set_substitute_active(is_active: bool, animate := true) -> void:
 	substitute_tween.tween_property(substitute_sprite, "modulate:a", 0.0, SUBSTITUTE_CROSSFADE_SECONDS)
 	substitute_tween.tween_property(substitute_sprite, "scale", SUBSTITUTE_DISPLAY_SCALE * 0.82, SUBSTITUTE_CROSSFADE_SECONDS).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	substitute_tween.tween_property(single_sprite, "modulate:a", 1.0, SUBSTITUTE_CROSSFADE_SECONDS)
-	await substitute_tween.finished
+	if not await AnimationWait.for_tween(self, substitute_tween):
+		return
 	substitute_sprite.visible = false
 	substitute_sprite.modulate = Color.WHITE
 	substitute_sprite.scale = SUBSTITUTE_DISPLAY_SCALE
@@ -293,7 +297,8 @@ func reveal_pokemon_from_substitute_for_move() -> bool:
 	substitute_tween.tween_property(substitute_sprite, "modulate:a", 0.0, SUBSTITUTE_CROSSFADE_SECONDS)
 	substitute_tween.tween_property(substitute_sprite, "scale", SUBSTITUTE_DISPLAY_SCALE * 0.88, SUBSTITUTE_CROSSFADE_SECONDS)
 	substitute_tween.tween_property(single_sprite, "modulate:a", 1.0, SUBSTITUTE_CROSSFADE_SECONDS)
-	await substitute_tween.finished
+	if not await AnimationWait.for_tween(self, substitute_tween):
+		return false
 	substitute_sprite.visible = false
 	_reset_sprite_pose(single_sprite)
 	return true
@@ -318,7 +323,8 @@ func restore_substitute_after_move() -> void:
 	substitute_tween.tween_property(substitute_sprite, "position", _get_substitute_idle_position(), SUBSTITUTE_CROSSFADE_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	substitute_tween.tween_property(substitute_sprite, "modulate:a", 1.0, SUBSTITUTE_CROSSFADE_SECONDS)
 	substitute_tween.tween_property(substitute_sprite, "scale", SUBSTITUTE_DISPLAY_SCALE, SUBSTITUTE_CROSSFADE_SECONDS).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	await substitute_tween.finished
+	if not await AnimationWait.for_tween(self, substitute_tween):
+		return
 	substitute_revealed_for_move = false
 	_sync_substitute_idle_pose()
 
@@ -337,7 +343,8 @@ func play_substitute_damage_tween() -> void:
 	substitute_tween.tween_property(substitute_sprite, "position", base_position + Vector2(9.0, 0.0), 0.04).set_delay(0.035)
 	substitute_tween.tween_property(substitute_sprite, "position", base_position + Vector2(-4.0, 0.0), 0.035).set_delay(0.075)
 	substitute_tween.tween_property(substitute_sprite, "position", base_position, 0.05).set_delay(0.11)
-	await substitute_tween.finished
+	if not await AnimationWait.for_tween(self, substitute_tween):
+		return
 	_sync_substitute_idle_pose()
 
 func clear_substitute_immediately() -> void:
@@ -399,7 +406,8 @@ func play_move_actor_motion(motion_config: Dictionary = {}, motion_direction: Ve
 				var opacity: float = clampf(float(point.get("opacity", 1.0)), 0.0, 1.0)
 				active_tween.tween_property(sprite, "modulate:a", opacity, segment_duration).set_delay(delay).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
-	await active_tween.finished
+	if not await AnimationWait.for_tween(self, active_tween):
+		return
 	_reset_sprites_pose(sprites)
 
 func play_damage_tween() -> void:
@@ -426,7 +434,8 @@ func play_damage_tween() -> void:
 		active_tween.tween_property(sprite, "position", base_position + Vector2(-5, 0), 0.035).set_delay(0.075)
 		active_tween.tween_property(sprite, "position", base_position, 0.05).set_delay(0.11)
 
-	await active_tween.finished
+	if not await AnimationWait.for_tween(self, active_tween):
+		return
 	_reset_sprites_pose(sprites)
 
 
@@ -450,7 +459,8 @@ func play_hit_flash_tween(flash_config: Dictionary = {}) -> void:
 		active_tween.tween_property(sprite, "modulate", DAMAGE_FLASH_COLOR, flash_duration * 0.36).set_delay(delay)
 		active_tween.tween_property(sprite, "modulate", Color.WHITE, flash_duration * 0.64).set_delay(delay + flash_duration * 0.36)
 
-	await active_tween.finished
+	if not await AnimationWait.for_tween(self, active_tween):
+		return
 	_reset_sprites_pose(sprites)
 
 func play_shake_tween(shake_config: Dictionary = {}) -> void:
@@ -490,7 +500,8 @@ func play_shake_tween(shake_config: Dictionary = {}) -> void:
 
 		active_tween.tween_property(sprite, "position", base_position, interval).set_delay(delay + duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
-	await active_tween.finished
+	if not await AnimationWait.for_tween(self, active_tween):
+		return
 	_reset_sprites_pose(sprites)
 
 func play_heal_tween() -> void:
@@ -510,7 +521,8 @@ func play_heal_tween() -> void:
 		active_tween.tween_property(sprite, "scale", target_scale * 1.025, 0.11).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		active_tween.tween_property(sprite, "scale", target_scale, 0.17).set_delay(0.11).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
-	await active_tween.finished
+	if not await AnimationWait.for_tween(self, active_tween):
+		return
 	_reset_sprites_pose(sprites)
 
 func play_stat_raise_tween() -> void:
@@ -536,7 +548,8 @@ func play_stat_raise_tween() -> void:
 		active_tween.tween_property(sprite, "scale", target_scale * peak_scale_multiplier, 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		active_tween.tween_property(sprite, "scale", target_scale, 0.18).set_delay(0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
-	await active_tween.finished
+	if not await AnimationWait.for_tween(self, active_tween):
+		return
 	_reset_sprites_pose(sprites)
 
 func play_stat_drop_tween() -> void:
@@ -562,7 +575,8 @@ func play_stat_drop_tween() -> void:
 		active_tween.tween_property(sprite, "scale", target_scale * dip_scale_multiplier, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		active_tween.tween_property(sprite, "scale", target_scale, 0.2).set_delay(0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
-	await active_tween.finished
+	if not await AnimationWait.for_tween(self, active_tween):
+		return
 	_reset_sprites_pose(sprites)
 
 func _get_stat_change_motion_scale() -> float:
@@ -591,7 +605,8 @@ func play_faint_tween() -> void:
 		active_tween.tween_property(sprite, "position", base_position + FAINT_TWEEN_OFFSET, 0.28).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 		active_tween.tween_property(sprite, "modulate:a", 0.0, 0.28)
 
-	await active_tween.finished
+	if not await AnimationWait.for_tween(self, active_tween):
+		return
 	clear_pokemon()
 
 func _stop_active_tween() -> void:
@@ -652,7 +667,8 @@ func _play_substitute_hit_flash_tween(flash_config: Dictionary = {}) -> void:
 	substitute_tween = create_tween().set_parallel(true)
 	substitute_tween.tween_property(substitute_sprite, "modulate", DAMAGE_FLASH_COLOR, flash_duration * 0.36).set_delay(delay)
 	substitute_tween.tween_property(substitute_sprite, "modulate", Color.WHITE, flash_duration * 0.64).set_delay(delay + flash_duration * 0.36)
-	await substitute_tween.finished
+	if not await AnimationWait.for_tween(self, substitute_tween):
+		return
 	_sync_substitute_idle_pose()
 
 func _play_substitute_shake_tween(shake_config: Dictionary = {}) -> void:
@@ -680,7 +696,8 @@ func _play_substitute_shake_tween(shake_config: Dictionary = {}) -> void:
 		)
 		substitute_tween.tween_property(substitute_sprite, "position", base_position + offset, interval).set_delay(delay + float(step) * interval).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	substitute_tween.tween_property(substitute_sprite, "position", base_position, interval).set_delay(delay + duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	await substitute_tween.finished
+	if not await AnimationWait.for_tween(self, substitute_tween):
+		return
 	_sync_substitute_idle_pose()
 
 func _stop_substitute_tween() -> void:
