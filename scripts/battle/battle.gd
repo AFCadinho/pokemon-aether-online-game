@@ -136,11 +136,23 @@ func play_replay_frame(timeline: RefCounted, index: int) -> void:
 	if generation != replay_generation:
 		defer_force_switch_active_hide = false
 		return
-	# Reconcile to the recorded result, without persistence or live requests.
-	var was_paused := replay_paused
-	restore_replay_position(timeline, index)
-	replay_paused = was_paused
+	# The renderer has already advanced the visible battle incrementally. Do not
+	# route normal playback through restore_replay_position here: that method is
+	# intentionally exhaustive for seeks, and rebuilding the log, HUD, rails and
+	# sprites after every frame caused a visible hitch after damage animations.
+	# Keep the canonical recorded snapshot for the next frame while limiting this
+	# boundary to the small state-derived panels the event stream does not update.
+	_reconcile_replay_frame_state(timeline, index)
 	defer_force_switch_active_hide = false
+
+func _reconcile_replay_frame_state(timeline: RefCounted, index: int) -> void:
+	battle_state = timeline.state_through(index, replay_sides_swapped)
+	action_flow.setup(battle_state, battle_request, _remember_public_confirmed_abilities_from_response)
+	force_switch_flow.setup(battle_state)
+	display_data_presenter.setup(battle_state)
+	_sync_presentation_field_from_battle_state()
+	_update_battle_status_panels()
+	_update_stat_stage_panels()
 
 func switch_replay_sides() -> void:
 	if not replay_mode or replay_controls == null or bool(replay_controls.get("closing")):
