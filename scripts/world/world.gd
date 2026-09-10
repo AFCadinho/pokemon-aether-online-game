@@ -1494,6 +1494,9 @@ func _setup_web_demo_world() -> void:
 		push_warning("World: browser demo position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
 		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
 		return
+	var story_response: Dictionary = await PlayerGameStateService.refresh_story()
+	if not bool(story_response.get("success", false)):
+		push_warning("World: browser demo story load failed: %s" % str(story_response.get("error", "Unknown error")))
 	var saved_state := _dictionary_from_value(saved_state_response.get("state", {}))
 	var saved_scene_path := _resolve_saved_map_scene_path(str(saved_state.get("mapScenePath", "")))
 	if saved_scene_path.is_empty() or not ResourceLoader.exists(saved_scene_path):

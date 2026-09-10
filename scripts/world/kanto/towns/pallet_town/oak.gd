@@ -54,6 +54,10 @@ func interact_with_player(player: Node2D) -> void:
 		is_creating_starter = false
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
+	if OS.has_feature("web"):
+		await _interact_with_web_demo_oak()
+		is_creating_starter = false
+		return
 	if _is_quest_turn_in_available():
 		await _turn_in_quest_item(player)
 		is_creating_starter = false
@@ -134,6 +138,25 @@ func interact_with_player(player: Node2D) -> void:
 			)
 		)
 		_schedule_gary_starter_sequence(player, create_result)
+
+
+func _interact_with_web_demo_oak() -> void:
+	if not StoryService.is_requirement_met("choose_starter", "talk_to_father", "completed"):
+		await show_dialogue([LocalizationManager.text("story.kanto.choose_starter.talk_to_father")])
+		return
+	var was_completed := StoryService.is_requirement_met("choose_starter", "choose_starter", "completed")
+	var result: Dictionary = await PlayerGameStateService.complete_web_demo_oak_intro()
+	if not bool(result.get("success", false)):
+		await GameErrorDialogService.show_report_to_staff_message()
+		return
+	if was_completed:
+		await show_dialogue(["Route 1 is open. Your browser-demo journey can continue!"])
+		return
+	await show_dialogue([
+		"Dadinho told me you were ready to begin.",
+		"For this browser demo, Route 1 is now open to you.",
+		"Your full starter journey continues in the downloadable game.",
+	])
 
 
 func _schedule_gary_starter_sequence(player: Node2D, create_result: Dictionary) -> void:
