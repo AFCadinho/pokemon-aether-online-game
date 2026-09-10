@@ -445,6 +445,7 @@ func _card(row: Dictionary) -> Control:
 		var title := Label.new()
 		title.text = saved_title
 		title.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		title.custom_minimum_size.x = minf(title.get_minimum_size().x, 240.0)
 		title.add_theme_font_size_override("font_size", 17)
 		title.add_theme_color_override("font_color", INK)
 		title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -466,14 +467,6 @@ func _card(row: Dictionary) -> Control:
 	matchup_versus.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	matchup_row.add_child(matchup_versus)
 	matchup_row.add_child(_opponent_identity(row))
-	var detail := Label.new()
-	var turns := int(round(float(row.get("turns", 0))))
-	detail.text = "%s · %s · %s" % [_t("category_" + str(row.get("kind", "ai_sparring"))),
-		str(row.get("createdAt", "")).replace("T", " ").left(16), _t("turn" if turns == 1 else "turns", {"count": turns})]
-	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	detail.add_theme_font_size_override("font_size", 14)
-	detail.add_theme_color_override("font_color", MUTED)
-	layout.add_child(detail)
 	if team_strip_factory.is_valid():
 		var teams := HFlowContainer.new()
 		teams.add_child(team_strip_factory.call(row.get("playerRoster", [])))
@@ -484,6 +477,14 @@ func _card(row: Dictionary) -> Control:
 		teams.add_child(versus)
 		teams.add_child(team_strip_factory.call(row.get("opponentRoster", [])))
 		layout.add_child(teams)
+	var detail := Label.new()
+	var turns := int(round(float(row.get("turns", 0))))
+	detail.text = "%s · %s · %s" % [_t("category_" + str(row.get("kind", "ai_sparring"))),
+		str(row.get("createdAt", "")).replace("T", " ").left(16), _t("turn" if turns == 1 else "turns", {"count": turns})]
+	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	detail.add_theme_font_size_override("font_size", 14)
+	detail.add_theme_color_override("font_color", MUTED)
+	layout.add_child(detail)
 	var expiry := Label.new()
 	expiry.text = _t("status_" + state)
 	if state == "available":
@@ -508,8 +509,8 @@ func _card(row: Dictionary) -> Control:
 	result_badge.add_theme_font_size_override("font_size", 12)
 	result_badge.add_theme_color_override("font_color", Color("#ffffff"))
 	result_badge.add_theme_stylebox_override("normal", _style(result_color, result_color, 6, 0, 8, 8, 4, 4))
-	action_heading.add_child(result_badge)
 	action_heading.add_child(expiry)
+	action_heading.add_child(result_badge)
 	var actions := HBoxContainer.new()
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	actions.add_theme_constant_override("separation", 8)
