@@ -356,6 +356,9 @@ var pvp_victory_message_added := false
 var pvp_switch_confirmation_active := false
 var spectator_sides_swapped := false
 var spectator_latest_raw_response: Dictionary = {}
+var spectator_source_battle_kind := ""
+var spectator_public_team_sizes: Dictionary = {}
+var spectator_trainer_presentation: Dictionary = {}
 var pending_battle_end_result: Dictionary = {}
 var battle_end_signal_emitted := false
 var battle_result_auto_continue_timer: Timer
@@ -7359,6 +7362,19 @@ func setup_pvp_battle_from_response(
 				)
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
 	pvp_battle_purpose = battle_purpose
+	spectator_source_battle_kind = str(api_response.get("sourceBattleKind", "")).strip_edges().to_lower()
+	var public_team_sizes_value: Variant = api_response.get("publicTeamSizes", {})
+	spectator_public_team_sizes = (
+		(public_team_sizes_value as Dictionary).duplicate(true)
+		if public_team_sizes_value is Dictionary
+		else {}
+	)
+	var trainer_presentation_value: Variant = api_response.get("trainerPresentation", {})
+	spectator_trainer_presentation = (
+		(trainer_presentation_value as Dictionary).duplicate(true)
+		if trainer_presentation_value is Dictionary
+		else {}
+	)
 	battle_voice_director.configure(str(api_response.get("battleId", "")), "pvp")
 	_show_pvp_trainers(display_response)
 	_capture_pvp_local_canonical_roster(display_response)
@@ -7687,6 +7703,9 @@ func _prepare_battle_setup(
 	pvp_local_canonical_roster.clear()
 	spectator_sides_swapped = false
 	spectator_latest_raw_response.clear()
+	spectator_source_battle_kind = ""
+	spectator_public_team_sizes.clear()
+	spectator_trainer_presentation.clear()
 	spectator_action_panel.visible = false
 	pending_battle_end_result.clear()
 	battle_end_signal_emitted = false
@@ -7764,12 +7783,40 @@ func _show_pvp_trainers(display_response: Dictionary) -> void:
 	var players_value: Variant = display_response.get("players", {})
 	var players: Dictionary = players_value as Dictionary if players_value is Dictionary else {}
 	if _is_spectator_battle():
+		if _is_nearby_trainer_spectator() and not spectator_trainer_presentation.is_empty():
+			if spectator_sides_swapped:
+				_show_nearby_spectator_npc_trainer(player_trainer_sprite, Vector2.RIGHT)
+				_show_response_player_trainer(enemy_trainer_sprite, players.get("p2", {}), Vector2.LEFT)
+			else:
+				_show_response_player_trainer(player_trainer_sprite, players.get("p1", {}), Vector2.RIGHT)
+				_show_nearby_spectator_npc_trainer(enemy_trainer_sprite, Vector2.LEFT)
+			return
 		_show_response_player_trainer(player_trainer_sprite, players.get("p1", {}), Vector2.RIGHT)
 		_show_response_player_trainer(enemy_trainer_sprite, players.get("p2", {}), Vector2.LEFT)
 		return
 
 	_show_local_player_trainer()
 	_show_response_player_trainer(enemy_trainer_sprite, players.get("p2", {}), Vector2.LEFT)
+
+
+func _show_nearby_spectator_npc_trainer(
+	trainer_sprite: BattleTrainerSprite,
+	facing_direction: Vector2
+) -> void:
+	var trainer_data := spectator_trainer_presentation.duplicate(true)
+	var trainer_class := str(trainer_data.get("trainerClass", "")).strip_edges().to_lower()
+	trainer_class = trainer_class.replace(" ", "_").replace("-", "_")
+	var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
+	if catalog != null and catalog.has_method("resolve_battle_sprite_id"):
+		trainer_data["_battle_sprite_id"] = str(catalog.call(
+			"resolve_battle_sprite_id",
+			str(trainer_data.get("battleSpriteId", "")),
+			"",
+			str(trainer_data.get("trainerId", "")),
+			"trainer_class_%s" % trainer_class if trainer_class != "" else ""
+		))
+	trainer_data["_battle_sprite_offset"] = Vector2(0.0, -16.0)
+	_show_npc_trainer(trainer_sprite, trainer_data, facing_direction)
 
 
 func _show_response_player_trainer(
@@ -12064,6 +12111,9 @@ func _is_training_room_battle() -> bool:
 
 func _is_spectator_battle() -> bool:
 	return _is_pvp_battle() and pvp_viewer_role == "spectator"
+
+func _is_nearby_trainer_spectator() -> bool:
+	return _is_spectator_battle() and spectator_source_battle_kind == "trainer"
 
 func _connect_pvp_realtime(local_player_id: String, battle_id: String, initial_response: Dictionary = {}) -> void:
 	pvp_event_queue.debug_enabled = DEBUG_PVP_REALTIME
@@ -16578,7 +16628,7 @@ func _vs_panel_uses_player_portraits() -> bool:
 	# Full trainer art is visible during NPC and AI battles. Retain the compact
 	# player heads exclusively for real PvP, where both player identities need
 	# to remain recognizable beside their decision timers.
-	return _is_pvp_battle() and not _is_training_room_battle()
+	return _is_pvp_battle() and not _is_training_room_battle() and not _is_nearby_trainer_spectator()
 
 
 func _vs_panel_has_method(method_name: String) -> bool:
@@ -16780,7 +16830,10 @@ func _get_active_pokemon_is_shiny(player_id: String) -> bool:
 
 func _get_display_team_data(player_id: String) -> Array:
 	if _is_spectator_battle():
-		return battle_state.get_player_team(player_id).duplicate(true)
+		return _pad_spectator_public_team(
+			battle_state.get_player_team(player_id).duplicate(true),
+			player_id
+		)
 	if _is_training_room_battle() and player_id == _get_local_state_player_id():
 		return BATTLE_TRAINING_TEAM_CONTEXT.build_display_team(
 			pvp_local_canonical_roster,
@@ -16791,6 +16844,19 @@ func _get_display_team_data(player_id: String) -> Array:
 	if _is_pvp_battle() and player_id == _get_local_state_player_id():
 		return _normalize_pvp_local_display_team_slots(display_team)
 	return display_team
+
+
+func _pad_spectator_public_team(public_team: Array, display_player_id: String) -> Array:
+	var canonical_player_id := display_player_id
+	if spectator_sides_swapped:
+		canonical_player_id = "p2" if display_player_id == "p1" else "p1"
+	var team_size := clampi(int(spectator_public_team_sizes.get(canonical_player_id, 0)), 0, 6)
+	while public_team.size() < team_size:
+		public_team.append({
+			"unrevealed": true,
+			"metadataSlot": public_team.size() + 1,
+		})
+	return public_team
 
 func _normalize_pvp_local_display_team_slots(display_team: Array) -> Array:
 	if display_team.is_empty():
