@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aether Clash now offers the leave confirmation when an active player reaches a protected portal zone, without allowing re-entry into its staging area.
+
 - Battle Replays now keep the latest 10 ordinary recordings per category, reserving independent future slots for AI Sparring, PvP, PvE and wild encounters while favorites stay protected; a compact category-tab library makes those collections easy to browse.
 
 - Battle Replay rename and delete confirmations now match the library's visual style, with clearer primary and destructive actions.
