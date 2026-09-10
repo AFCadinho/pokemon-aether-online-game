@@ -51,6 +51,7 @@ func _run() -> void:
 	await process_frame
 	_check(battle.setup_battle_replay(recording), "Battle scene opens in replay mode")
 	_check(str(battle.active_battle_environment_id) == "pvp_stadium", "Replay restores the AI Sparring stadium environment")
+	_check(battle.player_team_preview_layer.visible and battle.enemy_team_preview_layer.visible, "Replay begins with the recorded team preview")
 	_check(not battle.battle_actions_ready and battle.battle_request.has_meta("replay_read_only"), "Replay cannot issue battle actions")
 	_check(not battle.action_buttons.visible, "Live action controls are hidden")
 	var request_result: Dictionary = await root.get_node("BattleApiClient").send_post_request(battle.battle_request, "/must-not-send", {})
@@ -69,6 +70,7 @@ func _run() -> void:
 	battle.switch_replay_sides()
 	battle.replay_paused = false
 	await battle.play_replay_frame(controls.timeline, 1)
+	_check(not battle.player_team_preview_layer.visible and not battle.enemy_team_preview_layer.visible, "Playback leaves team preview before the battle frame")
 	_check(battle.battle_state.requests == controls.timeline.state_through(1).requests, "Animated replay frame keeps the canonical recorded state without a full seek restore")
 	battle.restore_replay_position(controls.timeline, 0)
 	controls._toggle()
