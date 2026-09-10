@@ -20,6 +20,7 @@ var shared_code_modal: Control
 var shared_code_feedback: Label
 var previous: Button
 var next: Button
+var reset_filters_button: Button
 var category_buttons: Dictionary = {}
 var category := ""
 var offset := 0
@@ -27,6 +28,7 @@ var busy := false
 var return_scroll := 0
 var team_strip_factory: Callable
 var refresh_pending := false
+var search_filter_revision := 0
 
 const INK := Color("#eaf3ff")
 const MUTED := Color("#91a7bf")
@@ -117,16 +119,17 @@ func _ready() -> void:
 		var tab := _category_button(categories, _t(str(entry["label"])), category_id)
 		category_buttons[category_id] = tab
 	_refresh_category_tabs()
-	var filters := HFlowContainer.new()
+	var filters := HBoxContainer.new()
 	filters.add_theme_constant_override("horizontal_separation", 8)
-	filters.add_theme_constant_override("vertical_separation", 8)
 	filter_layout.add_child(filters)
 	search = LineEdit.new()
 	search.placeholder_text = _t("search")
 	search.max_length = 80
-	search.custom_minimum_size.x = 220
+	search.custom_minimum_size.x = 180
+	search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_style_line_edit(search)
-	search.text_submitted.connect(func(_text: String): _filter())
+	search.text_changed.connect(_schedule_search_filter)
+	search.text_submitted.connect(_filter_from_search_submit)
 	filters.add_child(search)
 	outcome = OptionButton.new()
 	for key: String in ["all_results", "win", "loss", "draw"]:
@@ -147,7 +150,8 @@ func _ready() -> void:
 	_style_favorites_toggle(favorites)
 	favorites.toggled.connect(func(_value: bool): _filter())
 	filters.add_child(favorites)
-	_button(filters, _t("refresh"), _filter, "primary")
+	reset_filters_button = _button(filters, _t("reset_filters"), _reset_filters, "quiet")
+	reset_filters_button.custom_minimum_size.x = 112
 	var summary := HBoxContainer.new()
 	summary.add_theme_constant_override("separation", 12)
 	layout.add_child(summary)
@@ -355,6 +359,27 @@ func _filter() -> void:
 		return
 	offset = 0
 	refresh()
+
+func _schedule_search_filter(_text: String) -> void:
+	search_filter_revision += 1
+	var revision := search_filter_revision
+	await get_tree().create_timer(0.25).timeout
+	if revision != search_filter_revision or not is_inside_tree():
+		return
+	_filter()
+
+func _filter_from_search_submit(_text: String) -> void:
+	search_filter_revision += 1
+	_filter()
+
+func _reset_filters() -> void:
+	search_filter_revision += 1
+	search.text = ""
+	search_filter_revision += 1
+	outcome.select(0)
+	difficulty.select(0)
+	favorites.set_pressed_no_signal(false)
+	_filter()
 
 func refresh() -> void:
 	if busy:

@@ -44,6 +44,7 @@
   "ui.replays.unknown": "Em andamento",
   "ui.replays.favorites": "Favoritos",
   "ui.replays.refresh": "Buscar / atualizar",
+  "ui.replays.reset_filters": "Limpar filtros",
   "ui.replays.loading": "Carregando replays…",
   "ui.replays.load_failed": "Não foi possível carregar os replays. Tente novamente.",
   "ui.replays.empty": "Nenhum replay encontrado.",
