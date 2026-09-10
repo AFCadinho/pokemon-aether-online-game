@@ -63,6 +63,16 @@ func _button(parent: Node, text: String, action: Callable, variant := "secondary
 		base = Color("#126b91")
 		hover = Color("#198abd")
 		border = ACCENT
+	elif variant == "switch":
+		base = Color("#102b43")
+		hover = Color("#164a6b")
+		border = ACCENT
+		button.add_theme_color_override("font_color", INK)
+	elif variant == "danger":
+		base = Color("#29151f")
+		hover = Color("#4b1e2d")
+		border = Color("#b94d64")
+		button.add_theme_color_override("font_color", Color("#ffe8ee"))
 	elif variant == "quiet":
 		base = Color("#13243a")
 		hover = Color("#1a3853")
@@ -202,10 +212,10 @@ func _build() -> void:
 	position_label.add_theme_stylebox_override("normal", _style(Color("#122e47"), Color("#315c80"), 6, 1, 8, 8, 4, 4))
 	position_label.custom_minimum_size.y = 34
 	command_row.add_child(position_label)
-	switch_sides_button = _button(command_row, "Switch view", func(): host.call("switch_replay_sides"), "quiet")
+	switch_sides_button = _button(command_row, "Switch view", func(): host.call("switch_replay_sides"), "switch")
 	switch_sides_button.custom_minimum_size = Vector2(112, 38)
 	switch_sides_button.tooltip_text = "Switch replay perspective"
-	var back_button := _button(command_row, "Leave replay", _close, "quiet")
+	var back_button := _button(command_row, "Leave replay", _close, "danger")
 	back_button.custom_minimum_size = Vector2(112, 38)
 	_build_transport_overlay()
 	var progress_row := HBoxContainer.new()
