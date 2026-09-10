@@ -267,6 +267,11 @@ func seed_spectator_event_cursor(response: Dictionary) -> void:
 
 
 func disconnect_room() -> void:
+	# Training-live viewers own a short server lease. Tell the gateway about an
+	# intentional Leave Battle before the socket is discarded, so the same match
+	# can be opened again immediately instead of waiting for lease expiry.
+	if active_viewer_role == "spectator" and active_match_id.begins_with("ai:") and websocket.get_ready_state() == WebSocketPeer.STATE_OPEN:
+		websocket.send_text(JSON.stringify({"type": "leave"}))
 	connection_attempt_deadline_msec = 0
 	should_reconnect = false
 	connecting = false

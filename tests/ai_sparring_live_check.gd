@@ -9,7 +9,7 @@ func _run() -> void:
 	root.add_child(panel)
 	await process_frame
 	panel.entries = [
-		{"battleId": "a", "playerName": "Ash", "difficulty": "ai4", "tierId": "none"},
+		{"battleId": "a", "playerName": "Ash", "playerAppearance": {"body": "Gen4_Base_v1"}, "difficulty": "ai4", "tierId": "none"},
 		{"battleId": "b", "playerName": "Misty", "difficulty": "active", "tierId": "aether-ou"}]
 	panel.search.text = "ASH"
 	assert(panel.filtered_entries().size() == 1)
@@ -25,12 +25,13 @@ func _run() -> void:
 	panel.render()
 	assert(panel.rows.get_child_count() == 2)
 	for card in panel.rows.get_children():
-		assert(card.get_child(0).get_child(1).disabled)
+		assert(card.get_child(0).get_child(2).disabled)
+	assert(panel.rows.get_child(0).get_child(0).get_child(0).name == "LiveBattlePlayerPortrait")
 	panel.watch_blocked = func(): return false
 	panel.entries[0]["spectators"] = 8
 	panel.render()
-	assert(panel.rows.get_child(0).get_child(0).get_child(1).disabled)
-	assert(not panel.rows.get_child(1).get_child(0).get_child(1).disabled)
+	assert(panel.rows.get_child(0).get_child(0).get_child(2).disabled)
+	assert(not panel.rows.get_child(1).get_child(0).get_child(2).disabled)
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		root.get_node("LocalizationManager").set_locale(locale)
 		assert(not panel.refresh.text.begins_with("ui."))
