@@ -241,6 +241,8 @@ func _build_music_track_paths(track_path: String) -> Array[String]:
 
 
 func _get_external_music_roots() -> Array[String]:
+	if OS.has_feature("web"):
+		return []
 	if not external_music_root.is_empty():
 		return [external_music_root]
 

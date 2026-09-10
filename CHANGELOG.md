@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- A first local browser preview can now open the game login screen and settings without installation. Online browser gameplay is being prepared in separate stages.
 - Nearby battle spectators now wait for the final animation batch before showing the result.
 
 - NPC replay cards now use a cropped head portrait from the trainer's overworld sprite when available.

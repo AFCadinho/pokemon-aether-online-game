@@ -28,6 +28,8 @@ static func get_http_header() -> String:
 
 
 static func get_platform_id() -> String:
+	if OS.has_feature("web"):
+		return "web"
 	match OS.get_name():
 		"Windows":
 			return "windows"
@@ -42,7 +44,7 @@ static func get_platform_id() -> String:
 
 
 static func append_http_header(headers: PackedStringArray) -> PackedStringArray:
-	var result := headers.duplicate()
+	var result := WebRuntime.http_headers(headers).duplicate()
 	result.append(get_http_header())
 	result.append("%s: %s" % [PLATFORM_HEADER_NAME, get_platform_id()])
 	return result
