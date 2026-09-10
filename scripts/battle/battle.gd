@@ -50,8 +50,16 @@ func setup_battle_replay(recording: Dictionary) -> bool:
 	if not controls.setup(self, recording):
 		controls.queue_free()
 		return false
+	# The first stored frame already contains the accepted leads, but the live
+	# battle presents both rosters before those leads appear. Keep that opening
+	# beat in the viewer as well; playback or a seek will reveal the first frame.
+	_show_replay_team_preview()
 	_hide_replay_actions()
 	return true
+
+func _show_replay_team_preview() -> void:
+	team_preview_lead_selection_active = true
+	_show_team_preview_layers()
 
 func _hide_replay_actions() -> void:
 	_set_battle_actions_ready(false)
@@ -64,8 +72,9 @@ func _hide_replay_actions() -> void:
 	battle_party_rail.hide()
 	player_party_grid.set_selection_enabled(false)
 	player_stage_party_grid.set_selection_enabled(false)
-	player_sprite_box.visible = true
-	enemy_sprite_box.visible = true
+	if not team_preview_lead_selection_active:
+		player_sprite_box.visible = true
+		enemy_sprite_box.visible = true
 
 func cancel_replay_render() -> void:
 	replay_generation += 1
@@ -82,6 +91,10 @@ func set_replay_speed(speed: float) -> void:
 
 func restore_replay_position(timeline: RefCounted, index: int) -> void:
 	cancel_replay_render()
+	# Seeking is an explicit request for a recorded battle position, rather than
+	# the opening preview screen.
+	team_preview_lead_selection_active = false
+	_hide_team_preview_layers()
 	_clear_ordered_response_display_species()
 	_reset_battle_effect_tracking()
 	presentation_state.reset()
@@ -123,6 +136,10 @@ func restore_replay_position(timeline: RefCounted, index: int) -> void:
 
 func play_replay_frame(timeline: RefCounted, index: int) -> void:
 	var generation := replay_generation
+	if team_preview_lead_selection_active:
+		team_preview_lead_selection_active = false
+		_hide_team_preview_layers()
+		_update_active_sprites("replay_team_preview_complete")
 	var frame: Dictionary = timeline.frames[index]
 	var events: Array = frame.get("events", [])
 	if replay_sides_swapped:
@@ -160,7 +177,10 @@ func switch_replay_sides() -> void:
 	replay_sides_swapped = not replay_sides_swapped
 	action_flow.set_local_player_id("p2" if replay_sides_swapped else "p1")
 	_show_replay_trainers()
+	var preserve_team_preview := team_preview_lead_selection_active
 	restore_replay_position(replay_controls.timeline, replay_controls.index)
+	if preserve_team_preview:
+		_show_replay_team_preview()
 	replay_controls.call("refresh_side_label", replay_sides_swapped)
 
 enum BattleType {

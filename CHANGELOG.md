@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Battle Replays now open with the original team preview before revealing the selected leads.
+
 - Battle Replay dialog buttons now use their translated labels correctly.
 
 - Rename and delete actions now open fully custom Battle Replay dialogs instead of system-styled windows.
