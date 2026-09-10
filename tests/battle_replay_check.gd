@@ -129,7 +129,10 @@ func _run() -> void:
 	_check(library.search.get_theme_stylebox("focus") != null and library.outcome.get_theme_stylebox("hover") != null, "Replay filters have focused and hover states")
 	_check(library.outcome.get_theme_icon("arrow") != null and library.outcome.get_popup().get_theme_stylebox("panel") != null, "Replay dropdowns style their arrow and menu")
 	_check(library.favorites.get_theme_icon("checked") != null and library.favorites.get_theme_stylebox("normal") != null, "Favorites uses a dedicated toggle style")
-	_check(library.share_code_input != null and library.share_code_input.placeholder_text != "", "Replay library exposes shared-code playback")
+	library._open_shared_replay_dialog()
+	_check(library.share_code_input != null and library.share_code_input.placeholder_text != "" and is_instance_valid(library.shared_code_modal), "Replay library opens shared-code playback from its header")
+	library.shared_code_modal.queue_free()
+	library.shared_code_modal = null
 	_check(not library.difficulty.visible, "Generic replay browsing hides the AI-specific difficulty filter")
 	library.category = "ai_sparring"
 	library._refresh_category_tabs()
