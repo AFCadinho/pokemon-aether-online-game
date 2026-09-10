@@ -19,7 +19,6 @@ const MUTED := Color("#91a8be")
 const ACCENT := Color("#55d5ff")
 const SURFACE := Color("#102239")
 const SURFACE_RAISED := Color("#17314d")
-const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/icons/battle_replays_dropdown_arrow.svg")
 
 func _t(key: String, args: Dictionary = {}) -> String:
 	return LocalizationManager.text("ui.replays." + key, args)
@@ -88,6 +87,14 @@ func _tiny_label(text: String) -> Label:
 	label.add_theme_color_override("font_color", MUTED)
 	return label
 
+func _dropdown_arrow_icon() -> ImageTexture:
+	var image := Image.create(12, 8, false, Image.FORMAT_RGBA8)
+	image.fill(Color("#00000000"))
+	for offset in range(4):
+		image.set_pixel(2 + offset, 2 + offset, ACCENT)
+		image.set_pixel(9 - offset, 2 + offset, ACCENT)
+	return ImageTexture.create_from_image(image)
+
 func _build() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	offset_top = 8
@@ -147,7 +154,7 @@ func _build() -> void:
 	turn_picker.max_value = timeline.turn_at(timeline.frames.size() - 1)
 	turn_picker.custom_minimum_size = Vector2(68, 34)
 	turn_picker.focus_mode = Control.FOCUS_NONE
-	turn_picker.add_theme_icon_override("updown", DROPDOWN_ARROW)
+	turn_picker.add_theme_icon_override("updown", _dropdown_arrow_icon())
 	var turn_input := turn_picker.get_line_edit()
 	turn_input.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	turn_input.add_theme_font_size_override("font_size", 14)
@@ -168,7 +175,7 @@ func _build() -> void:
 	speeds.select(1)
 	speeds.custom_minimum_size = Vector2(74, 34)
 	speeds.focus_mode = Control.FOCUS_NONE
-	speeds.add_theme_icon_override("arrow", DROPDOWN_ARROW)
+	speeds.add_theme_icon_override("arrow", _dropdown_arrow_icon())
 	speeds.add_theme_constant_override("arrow_margin", 9)
 	speeds.add_theme_font_size_override("font_size", 14)
 	speeds.add_theme_color_override("font_color", INK)
