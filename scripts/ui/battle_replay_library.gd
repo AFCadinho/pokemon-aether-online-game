@@ -552,70 +552,76 @@ func restore_library() -> void:
 	status.text = ""
 
 func _rename(row: Dictionary) -> void:
-	var dialog := ConfirmationDialog.new()
-	dialog.title = _t("rename")
-	_style_dialog(dialog)
+	var dialog := _create_replay_dialog(_t("rename"), 440)
+	var content: VBoxContainer = dialog["content"]
+	var modal: Control = dialog["modal"]
 	var input := LineEdit.new()
 	input.text = str(row.get("title", ""))
 	input.max_length = 80
-	input.custom_minimum_size = Vector2(360, 40)
+	input.custom_minimum_size.y = 40
 	_style_line_edit(input)
-	dialog.add_child(input)
-	add_child(dialog)
-	dialog.confirmed.connect(func(): _edit(str(row.get("battleId", "")), {"title": input.text}); dialog.queue_free())
-	dialog.canceled.connect(dialog.queue_free)
-	dialog.popup_centered(Vector2i(400, 140))
-	input.grab_focus()
+	content.add_child(input)
+	var actions := _dialog_actions(content)
+	_button(actions, _t("cancel"), func(): modal.queue_free(), "quiet")
+	var confirm := _button(actions, "OK", func(): _edit(str(row.get("battleId", "")), {"title": input.text}); modal.queue_free(), "primary")
+	input.text_submitted.connect(func(_text: String): confirm.emit_signal("pressed"))
+	input.call_deferred("grab_focus")
 
 func _confirm_remove(battle_id: String) -> void:
-	var dialog := ConfirmationDialog.new()
-	dialog.title = _t("delete")
-	dialog.dialog_text = _t("delete_confirm")
-	_style_dialog(dialog, true)
-	add_child(dialog)
-	dialog.confirmed.connect(func(): _remove(battle_id); dialog.queue_free())
-	dialog.canceled.connect(dialog.queue_free)
-	dialog.popup_centered(Vector2i(440, 160))
+	var dialog := _create_replay_dialog(_t("delete"), 480)
+	var content: VBoxContainer = dialog["content"]
+	var modal: Control = dialog["modal"]
+	var message := Label.new()
+	message.text = _t("delete_confirm")
+	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	message.add_theme_font_size_override("font_size", 15)
+	message.add_theme_color_override("font_color", INK)
+	content.add_child(message)
+	var actions := _dialog_actions(content)
+	_button(actions, _t("cancel"), func(): modal.queue_free(), "quiet")
+	_button(actions, "OK", func(): _remove(battle_id); modal.queue_free(), "danger")
 
-func _style_dialog(dialog: ConfirmationDialog, destructive := false) -> void:
-	var dialog_surface := Color("#0d1c2e")
-	var dialog_border := Color("#3a6e93")
-	dialog.add_theme_stylebox_override("panel", _style(dialog_surface, dialog_border, 11, 1, 20, 20, 16, 16))
-	dialog.add_theme_stylebox_override("titlebar", _style(Color("#10243a"), dialog_border, 11, 1, 18, 18, 10, 10))
-	dialog.add_theme_stylebox_override("titlebar_unfocused", _style(Color("#10243a"), dialog_border.darkened(0.2), 11, 1, 18, 18, 10, 10))
-	dialog.add_theme_color_override("title_color", INK)
-	dialog.add_theme_color_override("title_unfocused_color", MUTED)
-	dialog.add_theme_font_size_override("title_font_size", 18)
-	dialog.add_theme_color_override("font_color", INK)
-	dialog.add_theme_font_size_override("font_size", 15)
-	dialog.get_label().add_theme_color_override("font_color", INK)
-	dialog.get_label().add_theme_font_size_override("font_size", 15)
-	_style_dialog_button(dialog.get_ok_button(), "danger" if destructive else "primary")
-	_style_dialog_button(dialog.get_cancel_button(), "quiet")
+func _create_replay_dialog(title: String, width: float) -> Dictionary:
+	var modal := Control.new()
+	modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	modal.mouse_filter = Control.MOUSE_FILTER_STOP
+	modal.z_index = 20
+	add_child(modal)
+	var shade := ColorRect.new()
+	shade.color = Color(0.01, 0.03, 0.06, 0.62)
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	shade.mouse_filter = Control.MOUSE_FILTER_STOP
+	modal.add_child(shade)
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_STOP
+	modal.add_child(center)
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size.x = width
+	panel.add_theme_stylebox_override("panel", _style(Color("#0d1c2e"), Color("#3a6e93"), 11, 1, 18, 18, 15, 15))
+	center.add_child(panel)
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 14)
+	panel.add_child(content)
+	var header := HBoxContainer.new()
+	content.add_child(header)
+	var heading := Label.new()
+	heading.text = title
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_theme_font_size_override("font_size", 19)
+	heading.add_theme_color_override("font_color", INK)
+	header.add_child(heading)
+	var close := _button(header, "×", func(): modal.queue_free(), "quiet")
+	close.custom_minimum_size = Vector2(34, 34)
+	close.add_theme_font_size_override("font_size", 20)
+	return {"modal": modal, "content": content}
 
-func _style_dialog_button(button: Button, variant: String) -> void:
-	button.custom_minimum_size = Vector2(92, 38)
-	button.focus_mode = Control.FOCUS_ALL
-	button.add_theme_font_size_override("font_size", 14)
-	var base := Color("#132237")
-	var hover := Color("#1b3853")
-	var border := Color("#284966")
-	var font := MUTED
-	if variant == "primary":
-		base = Color("#126b91")
-		hover = Color("#198abd")
-		border = ACCENT
-		font = INK
-	elif variant == "danger":
-		base = Color("#542632")
-		hover = Color("#763444")
-		border = DANGER
-		font = Color("#fff0f2")
-	button.add_theme_stylebox_override("normal", _style(base, border, 7, 1))
-	button.add_theme_stylebox_override("hover", _style(hover, border.lightened(0.18), 7, 1))
-	button.add_theme_stylebox_override("pressed", _style(base.darkened(0.16), border, 7, 1))
-	button.add_theme_color_override("font_color", font)
-	button.add_theme_color_override("font_hover_color", INK)
+func _dialog_actions(content: VBoxContainer) -> HBoxContainer:
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 8)
+	content.add_child(actions)
+	return actions
 
 func _remove(battle_id: String) -> void:
 	if busy:
