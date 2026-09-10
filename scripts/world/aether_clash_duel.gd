@@ -220,6 +220,11 @@ func is_world_actor_step_blocked(from_position: Vector2, to_position: Vector2) -
 
 	for exit_side: String in ["blue", "red"]:
 		if _enters_rect(from_position, to_position, _zone_rect(exit_side)):
+			# The staging areas stay inaccessible once the Clash starts, but their
+			# portals remain the intentional way to leave. Opening the confirmation
+			# here makes that route reachable without letting players re-enter a
+			# protected spawn area.
+			_request_leave_confirmation()
 			return true
 
 	var local_user_id := _local_user_id()

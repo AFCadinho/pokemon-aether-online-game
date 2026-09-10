@@ -189,9 +189,13 @@ func _run() -> void:
 	)
 	await process_frame
 	_check(
-		duel.get_node_or_null("ArenaHud/AetherClashLeaveConfirmation") == null,
-		"Exit-zone borders wait for an intentional portal interaction"
+		duel.get_node_or_null("ArenaHud/AetherClashLeaveConfirmation") != null,
+		"Exit-zone borders offer the leave confirmation without allowing staging re-entry"
 	)
+	var border_leave_dialog := duel.get_node_or_null("ArenaHud/AetherClashLeaveConfirmation")
+	if border_leave_dialog != null:
+		border_leave_dialog.call("_cancel")
+	await process_frame
 	var red_exit_portal := duel.get_node_or_null("Entities/Interactables/RedStagingExitPortal")
 	duel.call("request_portal_exit", "guild_duel", local_actor, red_exit_portal)
 	var red_exit_dialog := duel.get_node_or_null("ArenaHud/AetherClashLeaveConfirmation")
@@ -217,9 +221,13 @@ func _run() -> void:
 	)
 	await process_frame
 	_check(
-		duel.get_node_or_null("ArenaHud/AetherClashLeaveConfirmation") == null,
-		"Blocked staging re-entry does not open a leave dialog by itself"
+		duel.get_node_or_null("ArenaHud/AetherClashLeaveConfirmation") != null,
+		"Blocked staging re-entry offers the leave confirmation"
 	)
+	border_leave_dialog = duel.get_node_or_null("ArenaHud/AetherClashLeaveConfirmation")
+	if border_leave_dialog != null:
+		border_leave_dialog.call("_cancel")
+	await process_frame
 	var blue_exit_portal := duel.get_node_or_null("Entities/Interactables/BlueStagingExitPortal")
 	duel.call("request_portal_exit", "guild_duel", local_actor, blue_exit_portal)
 	var leave_dialog := duel.get_node_or_null("ArenaHud/AetherClashLeaveConfirmation")
