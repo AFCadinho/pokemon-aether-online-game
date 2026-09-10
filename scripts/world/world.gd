@@ -173,6 +173,10 @@ func _exit_tree() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("world")
+	if OS.has_feature("web"):
+		_ensure_map_transition_overlay()
+		await _setup_web_demo_world()
+		return
 	var step_callback := Callable(self, "_on_player_overworld_steps_completed")
 	if player.has_signal("overworld_steps_completed") and not player.is_connected("overworld_steps_completed", step_callback):
 		player.connect("overworld_steps_completed", step_callback)
@@ -219,6 +223,15 @@ func _current_fishing_area_id() -> String:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if OS.has_feature("web"):
+		if is_loading_map:
+			return
+		position_autosave_elapsed += delta
+		if position_autosave_elapsed >= POSITION_AUTOSAVE_INTERVAL_SECONDS:
+			position_autosave_elapsed = 0.0
+			if not _is_player_position_save_blocked_by_teleport():
+				await _save_current_player_position_if_changed(true)
+		return
 	_track_playtime(delta)
 	await _retry_pending_remote_authorized_teleport(delta)
 
@@ -240,12 +253,15 @@ func _process(delta: float) -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST and not GameState.gameplay_reset_in_progress:
 		_save_current_player_position_if_changed(true)
-		_flush_playtime_if_needed.call_deferred(true)
+		if not OS.has_feature("web"):
+			_flush_playtime_if_needed.call_deferred(true)
 
 func save_current_player_state() -> void:
 	if GameState.gameplay_reset_in_progress:
 		return
 	_save_current_player_position_if_changed.call_deferred(true)
+	if OS.has_feature("web"):
+		return
 	_flush_playtime_if_needed.call_deferred(true)
 	_publish_world_presence.call_deferred(true)
 
@@ -382,6 +398,8 @@ func save_current_player_state_now() -> Dictionary:
 
 	var signature: String = _get_current_player_position_signature(false)
 	var result: Dictionary = await _save_current_player_position(signature, "", false, true)
+	if OS.has_feature("web"):
+		return result
 	if bool(result.get("success", false)):
 		_publish_world_presence(true)
 	_flush_playtime_if_needed.call_deferred(true)
@@ -521,6 +539,8 @@ func _trace_aether_clash(event: String, fields: Dictionary = {}) -> void:
 
 
 func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
+	if OS.has_feature("web"):
+		return await _apply_web_demo_transition_state(state)
 	var current_map_id := _get_map_id(GameState.current_map)
 	var target_map_id := str(state.get("mapId", "")).strip_edges()
 	var reuses_presence_roster := current_map_id != "" and current_map_id == target_map_id
@@ -914,6 +934,9 @@ func _optional_string(value: Variant) -> String:
 
 
 func load_map(target_scene_path: String, target_spawn_name: String) -> void:
+	if OS.has_feature("web"):
+		push_error("World.load_map is disabled in the browser demo; use an authorized transition.")
+		return
 	if is_loading_map:
 		push_warning("World.load_map ignored because a map is already loading: %s" % target_scene_path)
 		return
@@ -1463,6 +1486,90 @@ func _setup_initial_world_state() -> void:
 	# confirmed absent/expired battle may cross into the fresh overworld boundary.
 	if not bool(wild_resume.get("resumed", false)) and not bool(wild_resume.get("retryable", false)):
 		await _save_player_activity_state("idle")
+
+
+func _setup_web_demo_world() -> void:
+	var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
+	if not bool(saved_state_response.get("success", false)):
+		push_warning("World: browser demo position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
+		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		return
+	var saved_state := _dictionary_from_value(saved_state_response.get("state", {}))
+	var saved_scene_path := _resolve_saved_map_scene_path(str(saved_state.get("mapScenePath", "")))
+	if saved_scene_path.is_empty() or not ResourceLoader.exists(saved_scene_path):
+		push_error("World: browser demo returned an unavailable map: %s" % saved_scene_path)
+		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		return
+	var initial_map := _instantiate_map(saved_scene_path)
+	if initial_map == null:
+		push_error("World: browser demo could not instantiate map: %s" % saved_scene_path)
+		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		return
+	_clear_current_map()
+	$CurrentMap.add_child(initial_map)
+	GameState.current_map = initial_map
+	JavaScriptBridge.eval("window.pokeaetherPreview = window.pokeaetherPreview || {}; window.pokeaetherPreview.worldReady = true", true)
+	_normalize_map_tree_layer_z_indices(initial_map)
+	_apply_day_night_for_map(initial_map)
+	_apply_weather_for_map(initial_map)
+	MusicManager.play_map_music(initial_map)
+	move_player_to_map(initial_map)
+	_position_player_at_saved_state(initial_map, saved_state)
+	_apply_camera_limits_for_map(initial_map)
+	player.refresh_map_layers()
+	last_saved_position_signature = _get_current_player_position_signature(true)
+
+
+func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
+	authorized_teleport_in_progress = true
+	if player == null:
+		cancel_authorized_teleport()
+		return {"success": false, "error": "World player is not ready."}
+	var target_scene_path := _resolve_saved_map_scene_path(str(state.get("mapScenePath", "")))
+	if target_scene_path.is_empty() or not ResourceLoader.exists(target_scene_path):
+		cancel_authorized_teleport()
+		return {"success": false, "error": "Browser demo map is unavailable."}
+	if not authorized_teleport_locked_overworld:
+		GameState.acquire_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
+		authorized_teleport_locked_overworld = true
+	is_loading_map = true
+	var current_scene_path := _get_map_scene_path(GameState.current_map)
+	var target_map: Node = GameState.current_map
+	var changes_map := current_scene_path != target_scene_path
+	if changes_map:
+		await _fade_map_transition(MAP_TRANSITION_COVER_ALPHA, MAP_FADE_OUT_SECONDS)
+		var packed_scene := await _load_map_scene_threaded(target_scene_path)
+		if packed_scene == null:
+			await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+			cancel_authorized_teleport()
+			is_loading_map = false
+			return {"success": false, "error": "Browser demo map could not be loaded."}
+		target_map = packed_scene.instantiate()
+		_clear_current_map()
+		$CurrentMap.add_child(target_map)
+		GameState.current_map = target_map
+		_normalize_map_depth_layer_z_indices(target_map)
+		_apply_day_night_for_map(target_map)
+		_apply_weather_for_map(target_map)
+		MusicManager.play_map_music(target_map)
+	move_player_to_map(target_map)
+	if player.has_method("reset_movement_state"):
+		player.call("reset_movement_state")
+	var position_result := _position_player_at_authorized_teleport_state(target_map, state)
+	if not bool(position_result.get("success", false)):
+		cancel_authorized_teleport()
+		is_loading_map = false
+		return position_result
+	_apply_camera_limits_for_map(target_map)
+	if changes_map:
+		await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+	last_saved_position_signature = _get_current_player_position_signature(true)
+	authorized_teleport_in_progress = false
+	is_loading_map = false
+	if authorized_teleport_locked_overworld:
+		GameState.release_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
+	authorized_teleport_locked_overworld = false
+	return {"success": true}
 	WorldPresenceService.connect_presence.call_deferred()
 	_publish_world_presence.call_deferred(true)
 
@@ -2615,6 +2722,14 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 	var active_land_mount_id := str(player.call("get_active_land_mount_id")) \
 		if player.has_method("get_active_land_mount_id") \
 		else ""
+	if OS.has_feature("web"):
+		return {
+			"mapId": _get_map_id(current_map),
+			"mapScenePath": _get_map_scene_path(current_map),
+			"position": {"x": position.x, "y": position.y},
+			"facingDirection": _direction_to_name(player.last_direction),
+			"spawnMarker": spawn_marker,
+		}
 	var state: Dictionary = {
 		"mapId": _get_map_id(current_map),
 		"mapScenePath": _get_map_scene_path(current_map),

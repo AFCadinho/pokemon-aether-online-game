@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Loopback-only phase-2 static/HTTP/WebSocket preview proxy. No production targets."""
+"""Loopback-only connected web preview proxy. No production targets."""
 import argparse
 import asyncio
 from pathlib import Path
@@ -19,6 +19,11 @@ HTTP_ROUTES = {
     ("POST", "/auth/web/signup"), ("POST", "/auth/web/login"), ("POST", "/auth/web/logout"),
     ("POST", "/auth/email-verification/confirm"),
 }
+HTTP_ROUTE_PREFIXES = (
+    ("GET", "/auth/web/world/transitions/"),
+    ("POST", "/auth/web/world/transitions/"),
+    ("GET", "/auth/web/world/areas/"),
+)
 SECURITY_HEADERS = {
     "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer",
     "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self' blob:; frame-ancestors 'none'",
@@ -58,8 +63,14 @@ def create_app(upstream, build=None, *, transport=None):
     @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"])
     async def proxy(request: Request, path: str):
         route = "/" + path
-        if (request.method, route) not in HTTP_ROUTES:
-            return JSONResponse({"error": "Not enabled in browser phase 2"}, status_code=403)
+        allowed = (request.method, route) in HTTP_ROUTES or any(
+            request.method == method and route.startswith(prefix)
+            for method, prefix in HTTP_ROUTE_PREFIXES
+        )
+        if route == "/auth/web/world" and request.method in {"GET", "PUT"}:
+            allowed = True
+        if not allowed:
+            return JSONResponse({"error": "Not enabled in this browser build"}, status_code=403)
         body = bytearray()
         async for chunk in request.stream():
             body.extend(chunk)

@@ -11,7 +11,7 @@ The browser can open the existing login screen, render the player preview, open
 settings and switch languages. A click starts the engine and unlocks browser
 audio. Refresh does not trigger the desktop interrupted-session warning.
 
-Phase 2 connects real shared accounts through dedicated `/auth/web` endpoints.
+Phase 3 connects real shared accounts and a bounded browser-world position through dedicated `/auth/web` endpoints.
 Registration retains the existing legal acceptance, registration toggle and
 email-verification flow. Login and refresh open an account card, not the world.
 Remembered sessions use browser localStorage; otherwise sessionStorage retains

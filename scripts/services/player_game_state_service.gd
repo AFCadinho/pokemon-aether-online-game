@@ -3,6 +3,7 @@ extends Node
 class_name PlayerGameStateServiceNode
 
 const PLAYER_POSITION_ENDPOINT := "/game/player-position"
+const WEB_PLAYER_POSITION_ENDPOINT := "/auth/web/world"
 const PLAYER_TELEPORT_ACK_ENDPOINT := "/game/player-position/teleport-ack"
 const PLAYER_RESPAWN_ENDPOINT := "/game/respawn"
 const PLAYER_RESPAWN_POINT_ENDPOINT := "/game/respawn-point"
@@ -586,7 +587,7 @@ func load_player_position() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_POSITION_ENDPOINT,
+		base_url + _player_position_endpoint(),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -615,7 +616,7 @@ func save_player_position(state: Dictionary) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_POSITION_ENDPOINT,
+		base_url + _player_position_endpoint(),
 		HTTPClient.METHOD_PUT,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify(state)
@@ -631,6 +632,10 @@ func save_player_position(state: Dictionary) -> Dictionary:
 		"happinessUpdated": bool(body.get("happinessUpdated", false)),
 		"party": _array_from_value(body.get("party", [])),
 	}
+
+
+func _player_position_endpoint() -> String:
+	return WEB_PLAYER_POSITION_ENDPOINT if OS.has_feature("web") else PLAYER_POSITION_ENDPOINT
 
 
 func acknowledge_player_teleport(teleport_revision: int, teleport_command_id: String = "") -> Dictionary:

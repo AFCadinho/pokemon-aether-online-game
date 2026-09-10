@@ -162,6 +162,10 @@ func _present_denied_transition(
 	var lines: Array[String] = []
 	if not dialogue_id.is_empty():
 		lines = await DialogueMetadataService.get_lines(dialogue_id)
+	if lines.is_empty() and OS.has_feature("web"):
+		var web_message := str(access.get("message", "")).strip_edges()
+		if not web_message.is_empty():
+			lines = [web_message]
 	if lines.is_empty():
 		lines = ["This area is not available right now."]
 	GameState.lock_overworld_input()

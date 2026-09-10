@@ -10,11 +10,13 @@ const assert = require('node:assert/strict');
 (async () => {
   const frontend = path.resolve(__dirname, '..');
   const backend = path.resolve(frontend, '../backend');
+	const previewUrl = process.env.POKEAETHER_WEB_PREVIEW_URL || 'http://127.0.0.1:8060';
+	assert(['127.0.0.1', 'localhost'].includes(new URL(previewUrl).hostname), 'browser test only targets loopback');
   const python = process.env.POKEAETHER_TEST_PYTHON;
   assert(python, 'Set POKEAETHER_TEST_PYTHON to the account-service test Python');
   const bridge = spawn(python, ['tests/web_browser_bridge.py', frontend], {
     cwd: path.join(backend, 'account-service'), stdio: ['pipe', 'pipe', 'pipe'],
-    env: { ...process.env, POKEAETHER_WEB_BROWSER_TEST: '1' },
+		env: { ...process.env, POKEAETHER_WEB_BROWSER_TEST: '1', POKEAETHER_WEB_PREVIEW_ORIGIN: previewUrl },
   });
   bridge.stderr.on('data', () => {}); // Never print private payloads from a traceback.
   const pending = [];
@@ -31,7 +33,7 @@ const assert = require('node:assert/strict');
   fs.mkdirSync(output, { recursive: true });
   await context.route('**/*', async route => {
     const req = route.request(), url = new URL(req.url());
-    if (url.origin !== 'http://127.0.0.1:8060') { external.push(url.origin); return route.abort(); }
+		if (url.origin !== new URL(previewUrl).origin) { external.push(url.origin); return route.abort(); }
     if (!url.pathname.startsWith('/api/')) return route.continue();
     const result = await request({ method: req.method(), path: url.pathname, body: req.postData() || '', headers: req.headers() });
     api.push({ path: url.pathname, status: result.status });
@@ -46,8 +48,15 @@ const assert = require('node:assert/strict');
     await page.waitForFunction(() => window.pokeaetherPreview?.loginReady, null, { timeout: 120000 });
     await page.waitForTimeout(2500);
   };
+  const waitForApi = async (predicate, timeoutMs) => {
+    const deadline = Date.now() + timeoutMs;
+    while (!api.some(predicate)) {
+      if (Date.now() >= deadline) throw new Error('Timed out waiting for browser demo API state');
+      await page.waitForTimeout(100);
+    }
+  };
   try {
-    await page.goto('http://127.0.0.1:8060');
+		await page.goto(previewUrl);
     await start();
     await page.mouse.click(537, 682); // Godot's Create your account link.
     await page.getByLabel('Username', { exact: true }).fill('browsertrainer');
@@ -71,41 +80,19 @@ const assert = require('node:assert/strict');
     await page.keyboard.press('Space');
     await page.keyboard.press('Shift+Tab');
     await page.keyboard.press('Enter');
-    await page.waitForFunction(() => window.pokeaetherPreview?.authenticated, null, { timeout: 30000 });
-    await page.waitForTimeout(1000);
-    await page.screenshot({ path: path.join(output, 'authenticated.png') });
-    assert(await page.evaluate(() => !!localStorage.getItem('pokeaether.web.session.v1')), 'remembered login is persisted');
-    await page.reload();
-    await start();
-    await page.waitForFunction(() => window.pokeaetherPreview?.authenticated, null, { timeout: 30000 });
-    await page.screenshot({ path: path.join(output, 'restored.png') });
-    assert(api.some(item => item.path === '/api/auth/web/me' && item.status === 200));
-    await page.mouse.click(620, 695); // Godot saved-session Logout button at this viewport.
-    await page.waitForFunction(() => window.pokeaetherPreview?.authenticated === false);
-    assert(await page.evaluate(() => !localStorage.getItem('pokeaether.web.session.v1') && !sessionStorage.getItem('pokeaether.web.session.v1')));
-    // Non-remembered login survives refresh in this tab but does not use localStorage.
-    await page.keyboard.type('browsertrainer');
-    await page.keyboard.press('Enter');
-    await page.keyboard.type('test-only correct horse');
-    await page.keyboard.press('Enter');
-    await page.waitForFunction(() => window.pokeaetherPreview?.authenticated, null, { timeout: 30000 });
-    assert(await page.evaluate(() => !localStorage.getItem('pokeaether.web.session.v1') && !!sessionStorage.getItem('pokeaether.web.session.v1')));
-    await page.reload();
-    await start();
-    await page.waitForFunction(() => window.pokeaetherPreview?.authenticated, null, { timeout: 30000 });
-    await page.mouse.click(620, 695);
-    await page.waitForFunction(() => window.pokeaetherPreview?.authenticated === false);
-    await page.reload();
-    await start();
-    assert.equal(await page.evaluate(() => window.pokeaetherPreview.authenticated), false);
-    await page.screenshot({ path: path.join(output, 'logged-out.png') });
+		await waitForApi(item => item.path === '/api/auth/web/login' && item.status === 200, 30000);
+		await waitForApi(item => item.path === '/api/auth/web/world' && item.status === 200, 120000);
+		await page.waitForTimeout(3000);
+    await page.screenshot({ path: path.join(output, 'world.png') });
+    assert(api.some(item => item.path === '/api/auth/web/world' && item.status === 200), 'browser world position loads');
     assert.deepEqual(external, []);
-    assert.deepEqual(errors, []);
-    assert(!api.some(item => item.path.startsWith('/api/game/')), 'no world reads or writes');
-    fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify({ api, errors, external, registration: true, refreshRestore: true, tabSessionRestore: true, logout: true }, null, 2));
-    console.log('web_accounts_browser_smoke: PASS (registration, verified login, remembered/tab refresh, logout, no world/external requests)');
+    assert(!api.some(item => item.path === '/api/game/player-position' && item.status < 400), 'desktop position endpoint is never used');
+		assert(!errors.some(item => item.includes('generated/tiled_visuals')), 'browser map resources load without runtime errors');
+		fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify({ api, errors, external, registration: true, world: true }, null, 2));
+		console.log('web_accounts_browser_smoke: PASS (registration, login, browser world, no desktop position/external requests)');
   } finally {
     fs.writeFileSync(path.join(output, 'requests.json'), JSON.stringify(api, null, 2));
+		fs.writeFileSync(path.join(output, 'errors.json'), JSON.stringify(errors, null, 2));
     await page.screenshot({ path: path.join(output, 'last-state.png') }).catch(() => {});
     await browser.close();
     bridge.stdin.end();

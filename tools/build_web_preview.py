@@ -33,7 +33,7 @@ def main():
             digest = hashlib.file_digest(stream, 'sha256').hexdigest()
         files.append({'name': name, 'bytes': path.stat().st_size, 'sha256': digest})
     receipt = {
-        'phase': 2, 'accounts': True, 'onlineGameplay': False,
+        'phase': 3, 'accounts': True, 'onlineGameplay': True,
         'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         'dirty': bool(subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=no'], cwd=ROOT, text=True).strip()),
         'engine': subprocess.check_output([args.godot, '--version'], text=True).strip(),

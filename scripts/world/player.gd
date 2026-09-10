@@ -916,7 +916,8 @@ func _ready() -> void:
 	_setup_map_chat_bubble()
 	_setup_fishing_prompt()
 	_setup_surf_prompt()
-	FieldMoveService.refresh_owned_charms.call_deferred()
+	if not OS.has_feature("web"):
+		FieldMoveService.refresh_owned_charms.call_deferred()
 
 	# Haal de TileMapLayer nodes uit de huidige map op als die al geldig is.
 	# Bij scene switches kan de vorige map al freed zijn terwijl de autoload nog
@@ -948,7 +949,8 @@ func _ready() -> void:
 	global_position = target_position
 	set_idle_frame()
 	_update_sort_z()
-	_setup_pokemon_follower.call_deferred()
+	if not OS.has_feature("web"):
+		_setup_pokemon_follower.call_deferred()
 
 func _on_world_pixel_scale_changed(_scale: float) -> void:
 	_apply_world_pixel_scale()
@@ -1640,6 +1642,8 @@ func set_show_follower(show_follower: bool) -> void:
 	refresh_pokemon_follower()
 
 func reset_pokemon_follower_position() -> void:
+	if OS.has_feature("web"):
+		return
 	_ensure_pokemon_follower_parent()
 	if pokemon_follower != null and is_instance_valid(pokemon_follower):
 		pokemon_follower.reset_follow_position()
@@ -2596,6 +2600,8 @@ func _refresh_sand_tilemaps(current_map: Node) -> void:
 			sand_tilemaps[layer_name] = tilemap
 
 func check_for_wild_encounter(encounter_type: String, check_position: Vector2 = Vector2.INF) -> void:
+	if OS.has_feature("web"):
+		return
 	var current_map := GameState.current_map
 	if current_map == null:
 		_debug_wild_encounter("blocked", {

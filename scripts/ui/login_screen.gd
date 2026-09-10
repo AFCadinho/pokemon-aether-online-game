@@ -146,7 +146,7 @@ func set_loading(is_loading: bool) -> void:
 	password_input.editable = not is_loading
 	remember_me_checkbox.disabled = is_loading
 	login_button.disabled = is_loading or not server_online
-	continue_button.disabled = OS.has_feature("web") or is_loading or not server_online
+	continue_button.disabled = is_loading or not server_online
 	logout_button.disabled = is_loading
 	language_options_button.disabled = is_loading
 	login_button.text = (
@@ -572,7 +572,7 @@ func _clear_server_access_notice() -> void:
 
 func _apply_server_access_controls() -> void:
 	login_button.disabled = is_loading or not server_online
-	continue_button.disabled = OS.has_feature("web") or is_loading or not server_online
+	continue_button.disabled = is_loading or not server_online
 
 
 func _set_server_status(key: String, color: Color) -> void:
@@ -654,13 +654,10 @@ func _apply_saved_session_preview_state() -> void:
 
 
 func _enter_world() -> void:
-	if OS.has_feature("web"):
-		password_input.clear()
-		_show_saved_session_card()
-		return
 	_apply_authenticated_player_profile()
 
-	var error: Error = get_tree().change_scene_to_file(LOADING_SCENE_PATH)
+	var scene_path := "res://scenes/world.tscn" if OS.has_feature("web") else LOADING_SCENE_PATH
+	var error: Error = get_tree().change_scene_to_file(scene_path)
 	if error != OK:
 		show_status_key("ui.login.error.enter_world", {}, true)
 		push_error("LoginScreen: failed to load loading scene: %s" % error_string(error))
@@ -708,9 +705,9 @@ func _show_saved_session_card() -> void:
 	_apply_server_access_notice()
 	continue_button.grab_focus()
 	if OS.has_feature("web"):
-		continue_button.disabled = true
-		continue_button.text = "World demo follows in a later phase"
-		show_saved_status("Account connected. Your desktop progress is unchanged. AI Sparring and chat follow in later phases.")
+		continue_button.disabled = is_loading or not server_online
+		continue_button.text = "Enter browser demo"
+		show_saved_status("Explore Pallet Town, Route 1 and Viridian City. Your desktop position remains unchanged.")
 		JavaScriptBridge.eval("window.pokeaetherPreview.authenticated = true", true)
 
 
