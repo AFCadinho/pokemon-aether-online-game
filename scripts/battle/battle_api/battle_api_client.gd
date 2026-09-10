@@ -136,7 +136,8 @@ func get_training_ai_teams(request_node: HTTPRequest) -> Dictionary:
 
 
 func get_training_ai_statistics(request_node: HTTPRequest) -> Dictionary:
-	return await send_get_request(request_node, "/account/pvp/training-ai/statistics")
+	var path := "/auth/web/ai-sparring/statistics" if OS.has_feature("web") else "/account/pvp/training-ai/statistics"
+	return await send_get_request(request_node, path)
 
 func get_training_ai_team(request_node: HTTPRequest, team_id: String) -> Dictionary:
 	return await send_get_request(
@@ -145,9 +146,10 @@ func get_training_ai_team(request_node: HTTPRequest, team_id: String) -> Diction
 	)
 
 func get_training_ai_match_history(request_node: HTTPRequest, limit: int = 20, offset: int = 0) -> Dictionary:
+	var path := "/auth/web/ai-sparring/history" if OS.has_feature("web") else "/account/pvp/training-ai/history/me"
 	return await send_get_request(
 		request_node,
-		"/account/pvp/training-ai/history/me?limit=%d&offset=%d" % [
+		path + "?limit=%d&offset=%d" % [
 			clampi(limit, 1, 100),
 			maxi(offset, 0),
 		]
@@ -155,7 +157,8 @@ func get_training_ai_match_history(request_node: HTTPRequest, limit: int = 20, o
 
 
 func clear_training_ai_match_history(request_node: HTTPRequest) -> Dictionary:
-	return await send_delete_request(request_node, "/account/pvp/training-ai/history/me")
+	var path := "/auth/web/ai-sparring/history" if OS.has_feature("web") else "/account/pvp/training-ai/history/me"
+	return await send_delete_request(request_node, path)
 
 func create_training_ai_battle(
 	request_node: HTTPRequest,

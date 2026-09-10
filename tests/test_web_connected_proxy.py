@@ -56,6 +56,14 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertEqual(client.get("/api/auth/web/party").status_code, 200)
             self.assertEqual(client.get("/api/auth/web/starter/options").status_code, 200)
             self.assertEqual(client.post("/api/auth/web/starter", json={"speciesId": "bulbasaur"}).status_code, 200)
+            self.assertEqual(client.get("/api/auth/web/ai-sparring/statistics").status_code, 200)
+            self.assertEqual(client.get("/api/auth/web/ai-sparring/history?limit=20&offset=0").status_code, 200)
+            self.assertEqual(client.delete("/api/auth/web/ai-sparring/history").status_code, 200)
+            self.assertEqual(client.get("/api/battle/pvp/training/ai/teams").status_code, 200)
+            self.assertEqual(client.get("/api/battle/pvp/training/ai/teams/catalog-team").status_code, 200)
+            self.assertEqual(client.post("/api/battle/pvp/training/ai/battles", json={}).status_code, 200)
+            self.assertEqual(client.post("/api/battle/training-test/choice-and-resolve", json={}).status_code, 200)
+            self.assertEqual(client.get("/api/battle/training-test/state").status_code, 200)
             self.assertEqual(client.get("/api/npcs/kanto_players_house_father").status_code, 200)
             self.assertEqual(client.get("/api/dialogues/kanto_players_house_father_starter_intro").status_code, 200)
             self.assertEqual(client.post("/api/npcs/kanto_players_house_father").status_code, 403)
@@ -68,7 +76,7 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertIn("frame-ancestors 'none'", client.get("/").headers["content-security-policy"])
             for path in ["/.secret", "/external.js", "/%2e%2e/etc/passwd"]:
                 self.assertEqual(client.get(path).status_code, 404)
-            self.assertEqual(len(calls), 16)
+            self.assertEqual(len(calls), 24)
 
     def test_redirects_and_upstream_failure_are_not_followed_or_exposed(self):
         for handler, status in [(lambda _: httpx.Response(302, headers={"Location": "https://example.com"}), 502),
@@ -94,6 +102,11 @@ class ConnectedProxyTests(unittest.TestCase):
                 self.assertEqual(socket.receive_text(), "ping")
                 self.assertEqual(socket.receive()["code"], 1000)
             self.assertIn("clientPlatform=web", paths[0])
+            with client.websocket_connect("ws://localhost/api/ws/world-presence?token=test-only&clientBuild=web-test") as socket:
+                socket.send_text("presence")
+                self.assertEqual(socket.receive_text(), "presence")
+                self.assertEqual(socket.receive()["code"], 1000)
+            self.assertIn("/ws/world-presence", paths[1])
             upstream.shutdown()
             worker.join(timeout=5)
 

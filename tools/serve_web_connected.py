@@ -3,6 +3,7 @@
 import argparse
 import asyncio
 from pathlib import Path
+import re
 from urllib.parse import urlsplit
 
 import httpx
@@ -20,8 +21,15 @@ HTTP_ROUTES = {
     ("GET", "/auth/web/preferences"), ("PUT", "/auth/web/preferences"),
     ("GET", "/auth/web/profile"), ("GET", "/auth/web/party"),
     ("GET", "/auth/web/starter/options"), ("POST", "/auth/web/starter"),
+    ("GET", "/auth/web/ai-sparring/statistics"),
+    ("GET", "/auth/web/ai-sparring/history"), ("DELETE", "/auth/web/ai-sparring/history"),
+    ("GET", "/battle/pvp/training/ai/teams"),
+    ("POST", "/battle/pvp/training/ai/battles"),
     ("POST", "/auth/email-verification/confirm"),
 }
+AI_BATTLE_ROUTE = re.compile(
+    r"^/battle/[A-Za-z0-9-]{1,128}/(?:state|lead|choice|choice-and-resolve|npc/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex/v1/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$"
+)
 HTTP_ROUTE_PREFIXES = (
     ("GET", "/npcs/"),
     ("GET", "/dialogues/"),
@@ -76,6 +84,10 @@ def create_app(upstream, build=None, *, transport=None):
         )
         if route == "/auth/web/world" and request.method in {"GET", "PUT"}:
             allowed = True
+        if request.method == "GET" and route.startswith("/battle/pvp/training/ai/teams/"):
+            allowed = True
+        if request.method in {"GET", "POST"} and AI_BATTLE_ROUTE.fullmatch(route):
+            allowed = True
         if not allowed:
             return JSONResponse({"error": "Not enabled in this browser build"}, status_code=403)
         body = bytearray()
@@ -99,19 +111,18 @@ def create_app(upstream, build=None, *, transport=None):
         except httpx.HTTPError:
             return JSONResponse({"error": "Local account gateway unavailable"}, status_code=503)
 
-    @app.websocket("/api/ws/chat")
-    async def websocket_proxy(socket: WebSocket):
+    async def websocket_proxy(socket: WebSocket, channel: str):
         if not local_request(socket):
             await socket.close(code=1008)
             return
-        # Gateway still authenticates the server-issued token. Web chat is denied
-        # by the account service until its explicit capability is implemented.
+        # Gateway still authenticates the server-issued token against the
+        # dedicated browser-chat identity capability.
         query = dict(socket.query_params)
         if not set(query) <= {"token", "clientBuild", "clientPlatform"}:
             await socket.close(code=1008)
             return
         query["clientPlatform"] = "web"
-        url = httpx.URL(upstream.replace("http://", "ws://", 1) + "/ws/chat", params=query)
+        url = httpx.URL(upstream.replace("http://", "ws://", 1) + f"/ws/{channel}", params=query)
         tasks = []
         try:
             async with connect(str(url), proxy=None, open_timeout=10, max_size=65536) as remote:
@@ -150,6 +161,14 @@ def create_app(upstream, build=None, *, transport=None):
             for task in tasks:
                 task.cancel()
             await asyncio.gather(*tasks, return_exceptions=True)
+
+    @app.websocket("/api/ws/chat")
+    async def chat_websocket_proxy(socket: WebSocket):
+        await websocket_proxy(socket, "chat")
+
+    @app.websocket("/api/ws/world-presence")
+    async def world_presence_websocket_proxy(socket: WebSocket):
+        await websocket_proxy(socket, "world-presence")
 
     @app.get("/{path:path}")
     async def static(path: str):
