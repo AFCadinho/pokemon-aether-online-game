@@ -10,6 +10,7 @@ const PLAYER_RESPAWN_POINT_ENDPOINT := "/game/respawn-point"
 const PLAYER_ACTIVITY_ENDPOINT := "/game/player-activity"
 const MAP_PLAYERS_ENDPOINT := "/game/map-players"
 const PLAYER_PREFERENCES_ENDPOINT := "/game/preferences"
+const WEB_PLAYER_PREFERENCES_ENDPOINT := "/auth/web/preferences"
 const PLAYER_PROFILE_ENDPOINT := "/game/profile"
 const PLAYER_STORY_ENDPOINT := "/game/story"
 const WEB_PLAYER_STORY_ENDPOINT := "/auth/web/world/story"
@@ -848,7 +849,7 @@ func load_player_preferences() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_PREFERENCES_ENDPOINT,
+		base_url + _player_preferences_endpoint(),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -872,7 +873,7 @@ func save_player_preferences(preferences: Dictionary) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_PREFERENCES_ENDPOINT,
+		base_url + _player_preferences_endpoint(),
 		HTTPClient.METHOD_PUT,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify(preferences)
@@ -885,6 +886,10 @@ func save_player_preferences(preferences: Dictionary) -> Dictionary:
 		"success": true,
 		"preferences": _dictionary_from_value(body.get("preferences", {})),
 	}
+
+
+func _player_preferences_endpoint() -> String:
+	return WEB_PLAYER_PREFERENCES_ENDPOINT if OS.has_feature("web") else PLAYER_PREFERENCES_ENDPOINT
 
 
 func _request_json(url: String, method: HTTPClient.Method, headers: PackedStringArray, body: String) -> Dictionary:

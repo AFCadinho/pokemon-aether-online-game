@@ -45,6 +45,8 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertEqual(json.loads(calls[0].content), {"username": "test"})
             self.assertEqual(client.get("/api/auth/web/world").status_code, 200)
             self.assertEqual(client.put("/api/auth/web/world", json={"mapId": "kanto_pallet_town"}).status_code, 200)
+            self.assertEqual(client.get("/api/auth/web/preferences").status_code, 200)
+            self.assertEqual(client.put("/api/auth/web/preferences", json={"runningShoes": True}).status_code, 200)
             self.assertEqual(client.get("/api/auth/web/world/transitions/kanto_pallet_town__to_route_1/access").status_code, 200)
             self.assertEqual(client.post("/api/auth/web/world/transitions/kanto_pallet_town__to_route_1/enter", json={"facingDirection": "down"}).status_code, 200)
             self.assertEqual(client.get("/api/auth/web/world/areas/kanto_players_house/access").status_code, 200)
@@ -62,7 +64,7 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertIn("frame-ancestors 'none'", client.get("/").headers["content-security-policy"])
             for path in ["/.secret", "/external.js", "/%2e%2e/etc/passwd"]:
                 self.assertEqual(client.get(path).status_code, 404)
-            self.assertEqual(len(calls), 10)
+            self.assertEqual(len(calls), 12)
 
     def test_redirects_and_upstream_failure_are_not_followed_or_exposed(self):
         for handler, status in [(lambda _: httpx.Response(302, headers={"Location": "https://example.com"}), 502),

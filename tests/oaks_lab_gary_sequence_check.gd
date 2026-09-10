@@ -84,6 +84,12 @@ func _run() -> void:
 		"Oak requires the player to complete Dadinho's introduction before offering a starter"
 	)
 	_check_true(
+		oak_text.contains('if OS.has_feature("web"):')
+		and oak_text.contains('await _interact_with_web_demo_oak()')
+		and oak_text.contains('return {"success": true, "handled": false, "legacy": true}'),
+		"browser Oak bypasses the unrelated desktop parcel hook"
+	)
+	_check_true(
 		gary_text.contains("starter_sequence_pending")
 		and gary_text.contains("func prepare_starter_sequence()")
 		and oak_text.contains("_prepare_gary_starter_sequence()"),
