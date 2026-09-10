@@ -46,21 +46,25 @@ func index_for_turn(turn: int) -> int:
 func turn_at(index: int) -> int:
 	return int((frames[clampi(index, 0, frames.size() - 1)] as Dictionary).get("state", {}).get("turn", 0))
 
-func events_through(index: int) -> Array:
+func events_through(index: int, swap_sides := false) -> Array:
 	var events: Array = []
 	for i in range(clampi(index + 1, 0, frames.size())):
-		events.append_array((frames[i] as Dictionary).get("events", []))
+		var frame_events: Array = (frames[i] as Dictionary).get("events", [])
+		events.append_array(_swap_sides(frame_events) if swap_sides else frame_events)
 	return events
 
-func state_through(index: int) -> BattleState:
+func state_through(index: int, swap_sides := false) -> BattleState:
 	var state := BattleState.new()
 	var start := 0
-	for checkpoint: int in _checkpoints:
-		if checkpoint <= index and checkpoint + 1 > start:
-			start = checkpoint + 1
-			state = _copy_state(_checkpoints[checkpoint])
+	if not swap_sides:
+		for checkpoint: int in _checkpoints:
+			if checkpoint <= index and checkpoint + 1 > start:
+				start = checkpoint + 1
+				state = _copy_state(_checkpoints[checkpoint])
 	for i in range(start, clampi(index + 1, 0, frames.size())):
 		var frame: Dictionary = (frames[i] as Dictionary).duplicate(true)
+		if swap_sides:
+			frame = _swap_sides(frame) as Dictionary
 		# Terminal projections may no longer carry either side's request. Retain
 		# the last known roster, then apply the recorded final damage/faint events.
 		var requests: Dictionary = state.requests.duplicate(true)
@@ -70,9 +74,27 @@ func state_through(index: int) -> BattleState:
 				requests[side] = request
 		frame["requests"] = requests
 		state.load_from_api_response(frame, true, -1, true)
-		if i % 5 == 0:
+		if not swap_sides and i % 5 == 0:
 			_checkpoints[i] = _copy_state(state)
 	return state
+
+func _swap_sides(value: Variant) -> Variant:
+	match typeof(value):
+		TYPE_DICTIONARY:
+			var source := value as Dictionary
+			var result := {}
+			for key: Variant in source.keys():
+				result[_swap_sides(key)] = _swap_sides(source[key])
+			return result
+		TYPE_ARRAY:
+			var result_array := []
+			for item: Variant in value as Array:
+				result_array.append(_swap_sides(item))
+			return result_array
+		TYPE_STRING:
+			return str(value).replace("p1", "__PAO_P1__").replace("p2", "p1").replace("__PAO_P1__", "p2")
+		_:
+			return value
 
 func _copy_state(source: BattleState) -> BattleState:
 	var result := BattleState.new()

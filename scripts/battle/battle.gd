@@ -8,6 +8,8 @@ var replay_mode := false
 var replay_paused := true
 var replay_generation := 0
 var replay_controls: Control
+var replay_sides_swapped := false
+var replay_trainer_data: Dictionary = {}
 
 func stop_battle_replay() -> void:
 	if replay_controls != null:
@@ -22,6 +24,7 @@ func setup_battle_replay(recording: Dictionary) -> bool:
 	if team.is_empty():
 		return false
 	replay_mode = true
+	replay_sides_swapped = false
 	battle_request.set_meta("replay_read_only", true)
 	damage_calc_request.set_meta("replay_read_only", true)
 	var lead := PokemonFactory.create_pokemon_from_backend_payload(team[0])
@@ -32,9 +35,9 @@ func setup_battle_replay(recording: Dictionary) -> bool:
 	pvp_battle_purpose = "training"
 	action_flow.set_local_player_id("p1")
 	npc_trainer_display_name = str(first.get("trainerName", ""))
-	_show_local_player_trainer()
 	var trainer_sprite := "showdown_scientist_gen7" if str(first.get("trainingAiMode", "")) in ["ai4", "shadow"] else "showdown_veteran_gen7"
-	_show_npc_opponent_trainer({"name": npc_trainer_display_name, "_battle_sprite_id": trainer_sprite})
+	replay_trainer_data = {"name": npc_trainer_display_name, "_battle_sprite_id": trainer_sprite}
+	_show_replay_trainers()
 	_capture_pvp_local_canonical_roster(first)
 	opponent_party_reveal_policy.reset(true)
 	display_data_presenter.set_trainer_team(first.get("trainerTeam", []), true)
@@ -82,12 +85,15 @@ func restore_replay_position(timeline: RefCounted, index: int) -> void:
 	_clear_ordered_response_display_species()
 	_reset_battle_effect_tracking()
 	presentation_state.reset()
-	battle_state = timeline.state_through(index)
+	battle_state = timeline.state_through(index, replay_sides_swapped)
 	action_flow.setup(battle_state, battle_request, _remember_public_confirmed_abilities_from_response)
 	force_switch_flow.setup(battle_state)
 	display_data_presenter.setup(battle_state)
-	display_data_presenter.set_trainer_team(timeline.frames[0].get("trainerTeam", []), true)
-	var events: Array = timeline.events_through(index)
+	display_data_presenter.set_trainer_team(
+		timeline.frames[0].get("ownTeam", []) if replay_sides_swapped else timeline.frames[0].get("trainerTeam", []),
+		true
+	)
+	var events: Array = timeline.events_through(index, replay_sides_swapped)
 	for event: Dictionary in events:
 		_remember_battle_modifier_event(event)
 		if str(event.get("type", "")) == "turn":
@@ -119,6 +125,8 @@ func play_replay_frame(timeline: RefCounted, index: int) -> void:
 	var generation := replay_generation
 	var frame: Dictionary = timeline.frames[index]
 	var events: Array = frame.get("events", [])
+	if replay_sides_swapped:
+		events = timeline._swap_sides(events) as Array
 	defer_force_switch_active_hide = true
 	_prepare_switch_in_presentation_for_events(events)
 	_update_battle_presentation_before_event_render(events)
@@ -133,6 +141,15 @@ func play_replay_frame(timeline: RefCounted, index: int) -> void:
 	restore_replay_position(timeline, index)
 	replay_paused = was_paused
 	defer_force_switch_active_hide = false
+
+func switch_replay_sides() -> void:
+	if not replay_mode or replay_controls == null or bool(replay_controls.get("closing")):
+		return
+	replay_sides_swapped = not replay_sides_swapped
+	action_flow.set_local_player_id("p2" if replay_sides_swapped else "p1")
+	_show_replay_trainers()
+	restore_replay_position(replay_controls.timeline, replay_controls.index)
+	replay_controls.call("refresh_side_label", replay_sides_swapped)
 
 enum BattleType {
 	WILD,
@@ -7669,7 +7686,11 @@ func _show_local_player_trainer() -> void:
 
 
 func _show_npc_opponent_trainer(trainer_data: Dictionary) -> void:
-	if enemy_trainer_sprite == null:
+	_show_npc_trainer(enemy_trainer_sprite, trainer_data, Vector2.LEFT)
+
+
+func _show_npc_trainer(trainer_sprite: BattleTrainerSprite, trainer_data: Dictionary, facing_direction: Vector2) -> void:
+	if trainer_sprite == null:
 		return
 	var sprite_offset := Vector2(0.0, -16.0)
 	var sprite_offset_value: Variant = trainer_data.get("_battle_sprite_offset", sprite_offset)
@@ -7682,17 +7703,27 @@ func _show_npc_opponent_trainer(trainer_data: Dictionary) -> void:
 		if catalog != null and catalog.has_method("get_texture"):
 			catalog_texture = catalog.call("get_texture", battle_sprite_id) as Texture2D
 		if catalog_texture != null:
-			enemy_trainer_sprite.show_catalog_sprite(catalog_texture, Vector2.LEFT, sprite_offset)
+			trainer_sprite.show_catalog_sprite(catalog_texture, facing_direction, sprite_offset)
 			return
 
 	var sprite_frames_value: Variant = trainer_data.get("_battle_sprite_frames", null)
 	if not (sprite_frames_value is SpriteFrames):
 		return
-	enemy_trainer_sprite.show_npc(
+	trainer_sprite.show_npc(
 		sprite_frames_value as SpriteFrames,
-		Vector2.LEFT,
+		facing_direction,
 		sprite_offset
 	)
+
+
+func _show_replay_trainers() -> void:
+	if replay_sides_swapped:
+		_show_npc_trainer(player_trainer_sprite, replay_trainer_data, Vector2.RIGHT)
+		if enemy_trainer_sprite != null:
+			enemy_trainer_sprite.show_player(PlayerSave.to_appearance_state(), Vector2.LEFT)
+	else:
+		_show_local_player_trainer()
+		_show_npc_opponent_trainer(replay_trainer_data)
 
 
 func _show_pvp_trainers(display_response: Dictionary) -> void:
