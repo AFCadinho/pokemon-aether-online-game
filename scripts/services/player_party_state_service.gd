@@ -3,6 +3,7 @@ extends Node
 class_name PlayerPartyStateServiceNode
 
 const PLAYER_PARTY_ENDPOINT := "/game/party"
+const WEB_PLAYER_PARTY_ENDPOINT := "/auth/web/party"
 const PLAYER_PARTY_BATTLE_ENDPOINT := "/game/party/battle-state"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
@@ -16,7 +17,7 @@ func load_party() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_PARTY_ENDPOINT,
+		base_url + _player_party_endpoint(),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -174,7 +175,7 @@ func get_starter_options() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + "/game/starter/options",
+		base_url + _starter_options_endpoint(),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -212,7 +213,7 @@ func claim_starter(species_id: String) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + "/game/starter",
+		base_url + _starter_claim_endpoint(),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify({
@@ -223,6 +224,18 @@ func claim_starter(species_id: String) -> Dictionary:
 	var result: Dictionary = _pokemon_create_result_from_response(response)
 	_apply_party_response(result)
 	return result
+
+
+func _player_party_endpoint() -> String:
+	return WEB_PLAYER_PARTY_ENDPOINT if OS.has_feature("web") else PLAYER_PARTY_ENDPOINT
+
+
+func _starter_options_endpoint() -> String:
+	return "/auth/web/starter/options" if OS.has_feature("web") else "/game/starter/options"
+
+
+func _starter_claim_endpoint() -> String:
+	return "/auth/web/starter" if OS.has_feature("web") else "/game/starter"
 
 
 func dev_create_pokemon(

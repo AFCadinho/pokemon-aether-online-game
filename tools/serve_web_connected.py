@@ -18,6 +18,8 @@ HTTP_ROUTES = {
     ("GET", "/auth/web/meta"), ("GET", "/auth/web/me"),
     ("POST", "/auth/web/signup"), ("POST", "/auth/web/login"), ("POST", "/auth/web/logout"),
     ("GET", "/auth/web/preferences"), ("PUT", "/auth/web/preferences"),
+    ("GET", "/auth/web/profile"), ("GET", "/auth/web/party"),
+    ("GET", "/auth/web/starter/options"), ("POST", "/auth/web/starter"),
     ("POST", "/auth/email-verification/confirm"),
 }
 HTTP_ROUTE_PREFIXES = (

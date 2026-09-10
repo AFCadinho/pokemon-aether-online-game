@@ -85,9 +85,10 @@ func _run() -> void:
 	)
 	_check_true(
 		oak_text.contains('if OS.has_feature("web"):')
-		and oak_text.contains('await _interact_with_web_demo_oak()')
+		and oak_text.contains('var create_result: Dictionary = await give_starter_pokemon(selected_species_id)')
+		and not oak_text.contains('complete_web_demo_oak_intro')
 		and oak_text.contains('return {"success": true, "handled": false, "legacy": true}'),
-		"browser Oak bypasses the unrelated desktop parcel hook"
+		"browser Oak bypasses the parcel hook but uses the canonical starter claim"
 	)
 	_check_true(
 		gary_text.contains("starter_sequence_pending")

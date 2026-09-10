@@ -35,8 +35,8 @@ func _process(_delta: float) -> void:
 
 
 func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictionary:
-	# The desktop parcel hook is outside the bounded browser story. Yield to
-	# Oak's web-demo interaction instead of resolving that unrelated quest.
+	# Parcel delivery is outside the bounded browser demo, but Oak's canonical
+	# starter flow below is shared by both clients.
 	if OS.has_feature("web"):
 		await interact_with_player(body)
 		return {"success": true, "handled": false, "legacy": true}
@@ -58,10 +58,6 @@ func interact_with_player(player: Node2D) -> void:
 	if not bool(metadata_response.get("success", false)):
 		is_creating_starter = false
 		await GameErrorDialogService.show_report_to_staff_message()
-		return
-	if OS.has_feature("web"):
-		await _interact_with_web_demo_oak()
-		is_creating_starter = false
 		return
 	if _is_quest_turn_in_available():
 		await _turn_in_quest_item(player)
@@ -106,11 +102,13 @@ func interact_with_player(player: Node2D) -> void:
 
 	var selected_species_id := str(selected_choice.get("speciesId", "")).strip_edges()
 	var selected_species_name := str(selected_choice.get("name", selected_species_id)).strip_edges()
-	_prepare_gary_starter_sequence()
+	if not OS.has_feature("web"):
+		_prepare_gary_starter_sequence()
 	var create_result: Dictionary = await give_starter_pokemon(selected_species_id)
 	is_creating_starter = false
 	if not bool(create_result.get("success", false)):
-		_cancel_gary_starter_sequence()
+		if not OS.has_feature("web"):
+			_cancel_gary_starter_sequence()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
@@ -127,7 +125,14 @@ func interact_with_player(player: Node2D) -> void:
 			{"pokemon": selected_species_name}
 		)
 	)
-	if last_starter_claim_already_completed:
+	if OS.has_feature("web"):
+		await show_dialogue(
+			_format_dialogue_lines(
+				await _resolve_dialogue_lines(starter_received_dialogue_id, starter_received_dialogue_lines),
+				selected_species_name
+			)
+		)
+	elif last_starter_claim_already_completed:
 		_cancel_gary_starter_sequence()
 		await show_dialogue(
 			_format_dialogue_lines(
@@ -143,25 +148,6 @@ func interact_with_player(player: Node2D) -> void:
 			)
 		)
 		_schedule_gary_starter_sequence(player, create_result)
-
-
-func _interact_with_web_demo_oak() -> void:
-	if not StoryService.is_requirement_met("choose_starter", "talk_to_father", "completed"):
-		await show_dialogue([LocalizationManager.text("story.kanto.choose_starter.talk_to_father")])
-		return
-	var was_completed := StoryService.is_requirement_met("choose_starter", "choose_starter", "completed")
-	var result: Dictionary = await PlayerGameStateService.complete_web_demo_oak_intro()
-	if not bool(result.get("success", false)):
-		await GameErrorDialogService.show_report_to_staff_message()
-		return
-	if was_completed:
-		await show_dialogue(["Route 1 is open. Your browser-demo journey can continue!"])
-		return
-	await show_dialogue([
-		"Dadinho told me you were ready to begin.",
-		"For this browser demo, Route 1 is now open to you.",
-		"Your full starter journey continues in the downloadable game.",
-	])
 
 
 func _schedule_gary_starter_sequence(player: Node2D, create_result: Dictionary) -> void:

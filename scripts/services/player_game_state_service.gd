@@ -12,12 +12,13 @@ const MAP_PLAYERS_ENDPOINT := "/game/map-players"
 const PLAYER_PREFERENCES_ENDPOINT := "/game/preferences"
 const WEB_PLAYER_PREFERENCES_ENDPOINT := "/auth/web/preferences"
 const PLAYER_PROFILE_ENDPOINT := "/game/profile"
+const WEB_PLAYER_PROFILE_ENDPOINT := "/auth/web/profile"
 const PLAYER_STORY_ENDPOINT := "/game/story"
 const WEB_PLAYER_STORY_ENDPOINT := "/auth/web/world/story"
 const STORY_BOOTSTRAP_ENDPOINT := "/game/story/bootstrap"
+const WEB_STORY_BOOTSTRAP_ENDPOINT := "/auth/web/world/story/bootstrap"
 const STORY_INTERACTION_ENDPOINT := "/game/story/interactions/%s"
 const WEB_STORY_INTERACTION_ENDPOINT := "/auth/web/world/story/interactions/%s"
-const WEB_OAK_COMPLETE_ENDPOINT := "/auth/web/world/story/oak-complete"
 const STORY_QUEST_ACCEPT_ENDPOINT := "/game/story/quests/%s/accept"
 const DEV_STORY_CHECKPOINT_ENDPOINT := "/game/dev/progression/story-checkpoint"
 const DEV_SIDE_QUEST_PROGRESS_ENDPOINT := "/game/dev/progression/side-quest"
@@ -37,7 +38,7 @@ func load_player_profile() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_PROFILE_ENDPOINT,
+		base_url + _player_profile_endpoint(),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -110,7 +111,7 @@ func bootstrap_story() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + STORY_BOOTSTRAP_ENDPOINT,
+		base_url + _story_bootstrap_endpoint(),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -385,34 +386,16 @@ func complete_story_interaction(
 	return result
 
 
-func complete_web_demo_oak_intro() -> Dictionary:
-	if not OS.has_feature("web"):
-		return {"success": false, "status": 0, "error": "Browser demo only."}
-	if not AuthService.is_authenticated():
-		return {"success": false, "status": 401, "error": "Not authenticated."}
-	var base_url: String = await GatewayApiConfig.get_base_url()
-	var response: Dictionary = await _request_json(
-		base_url + WEB_OAK_COMPLETE_ENDPOINT,
-		HTTPClient.METHOD_POST,
-		GatewayApiConfig.get_json_headers(),
-		""
-	)
-	if not bool(response.get("success", false)):
-		return response
-	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
-	var story: Dictionary = _dictionary_from_value(body.get("story", {}))
-	if not _is_valid_story_projection_body(story):
-		return {
-			"success": false,
-			"status": int(response.get("status", 0)),
-			"error": "Browser demo story response was invalid.",
-		}
-	StoryService.apply_story_if_not_stale(story)
-	return {"success": true, "story": StoryService.get_story()}
-
-
 func _player_story_endpoint() -> String:
 	return WEB_PLAYER_STORY_ENDPOINT if OS.has_feature("web") else PLAYER_STORY_ENDPOINT
+
+
+func _player_profile_endpoint() -> String:
+	return WEB_PLAYER_PROFILE_ENDPOINT if OS.has_feature("web") else PLAYER_PROFILE_ENDPOINT
+
+
+func _story_bootstrap_endpoint() -> String:
+	return WEB_STORY_BOOTSTRAP_ENDPOINT if OS.has_feature("web") else STORY_BOOTSTRAP_ENDPOINT
 
 
 func _story_interaction_endpoint() -> String:

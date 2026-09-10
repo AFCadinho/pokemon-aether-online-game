@@ -2,9 +2,11 @@
 
 ## Unreleased
 
+- Browser and desktop now continue with the same Trainer position, appearance, party and story progress. Professor Oak grants the real account-bound starter in the browser demo.
+
 - Browser-demo players can now talk to Dadinho and Professor Oak to unlock Route 1, while regular NPC dialogue and toggle preferences work within the demo maps.
 
-- Browser players can now enter a bounded demo world covering Pallet Town, Route 1 and Viridian City. Browser position is saved separately, so desktop progress remains untouched.
+- Browser players can now enter a bounded demo world covering Pallet Town, Route 1 and Viridian City, while locations beyond the demo remain download-only.
 
 - The local browser preview now supports shared accounts, registration, sign-in and session recovery after refreshing. Browser sign-in leaves your desktop progress untouched.
 
