@@ -94,6 +94,7 @@ func _run() -> void:
 	if evidence_summary != null:
 		for child: Node in evidence_summary.get_children():
 			evidence_labels.append(str(child.text))
+			_check((child as Label).custom_minimum_size.x > 50.0, "Evidence label reserves enough width to render its text")
 	_check(evidence_labels.has("✓ Matches: 1") and evidence_labels.has("~ Differences: 1"), "Evidence counters explain their meaning without a legend")
 	var evidence_summaries := panel.set_suggestions_popup.find_children("SetSuggestionEvidenceSummary", "HFlowContainer", true, false)
 	_check(evidence_summaries.size() == 3 and (evidence_summaries[1] as HFlowContainer).get_child_count() == 1, "Evidence summaries hide empty counters")
