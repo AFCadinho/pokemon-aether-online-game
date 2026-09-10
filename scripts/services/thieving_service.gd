@@ -23,7 +23,7 @@ var arrest_transfer_pending := false
 
 
 func _ready() -> void:
-	set_process(true)
+	set_process(not OS.has_feature("web"))
 	if not ChatRealtimeService.message_received.is_connected(_on_realtime_message_received):
 		ChatRealtimeService.message_received.connect(_on_realtime_message_received)
 

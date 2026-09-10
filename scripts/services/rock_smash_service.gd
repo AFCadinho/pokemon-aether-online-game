@@ -14,7 +14,7 @@ var was_authenticated := false
 
 
 func _ready() -> void:
-	set_process(true)
+	set_process(not OS.has_feature("web"))
 
 
 func _process(_delta: float) -> void:

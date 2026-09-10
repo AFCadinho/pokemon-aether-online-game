@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The local browser preview now supports shared accounts, registration, sign-in and session recovery after refreshing. Browser sign-in leaves your desktop progress untouched.
+
 - A first local browser preview can now open the game login screen and settings without installation. Online browser gameplay is being prepared in separate stages.
 
 - Shiny encounters now ask after the battle whether their replay should be kept as a favorite.
