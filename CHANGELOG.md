@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The shared-replay action now has a more prominent, dedicated header treatment.
+
 - Replay searches now update while typing, and a separate reset action clears the active filters.
 
 - Replay category and filter controls now share a compact two-row layout.
