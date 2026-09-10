@@ -592,13 +592,10 @@ func _style_dialog(dialog: ConfirmationDialog, destructive := false) -> void:
 	dialog.get_label().add_theme_font_size_override("font_size", 15)
 	_style_dialog_button(dialog.get_ok_button(), "danger" if destructive else "primary")
 	_style_dialog_button(dialog.get_cancel_button(), "quiet")
-	var close: Button = dialog.get_close_button()
-	if close != null:
-		close.hide()
 
 func _style_dialog_button(button: Button, variant: String) -> void:
 	button.custom_minimum_size = Vector2(92, 38)
-	button.focus_mode = Control.FOCUS_NONE
+	button.focus_mode = Control.FOCUS_ALL
 	button.add_theme_font_size_override("font_size", 14)
 	var base := Color("#132237")
 	var hover := Color("#1b3853")
