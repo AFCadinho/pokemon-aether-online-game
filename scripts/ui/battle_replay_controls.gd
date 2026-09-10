@@ -291,20 +291,28 @@ func _toggle() -> void:
 func seek(target: int) -> void:
 	if closing:
 		return
-	playing = false
+	# A transport jump is navigation, not a pause request. Preserve an active
+	# autoplay session so next/previous/skip can keep the replay running.
 	host.set("replay_paused", false)
 	pending_seek = clampi(target, 0, timeline.frames.size() - 1)
 	if busy:
 		host.call("cancel_replay_render")
 	else:
 		_apply_seek()
-	_refresh()
+		_refresh()
+		_resume_after_seek()
 
 func _apply_seek() -> void:
 	index = pending_seek
 	pending_seek = -1
 	host.call("restore_replay_position", timeline, index)
 	host.set("replay_paused", true)
+
+func _resume_after_seek() -> void:
+	if not playing or index + 1 >= timeline.frames.size():
+		return
+	host.set("replay_paused", false)
+	_run()
 
 func _run() -> void:
 	busy = true
@@ -319,6 +327,8 @@ func _run() -> void:
 		return
 	if pending_seek >= 0:
 		_apply_seek()
+		_resume_after_seek()
+		return
 	if index + 1 >= timeline.frames.size():
 		playing = false
 	_refresh()

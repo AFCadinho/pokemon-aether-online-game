@@ -76,9 +76,8 @@ func _run() -> void:
 	controls._toggle()
 	await process_frame
 	controls.seek(0)
-	while controls.busy:
-		await process_frame
-	_check(controls.index == 0 and not controls.playing, "Seeking cancels in-flight playback")
+	await process_frame
+	_check(controls.playing, "Seeking keeps active replay playback running")
 	controls._toggle()
 	await process_frame
 	await battle.stop_battle_replay()
