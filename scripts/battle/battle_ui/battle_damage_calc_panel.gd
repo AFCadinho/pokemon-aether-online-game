@@ -1082,11 +1082,15 @@ func _add_set_suggestion_evidence_summary(parent: Container, row: Dictionary) ->
 		var count := int(counts[state])
 		if count == 0:
 			continue
-		var color := TEXT_MUTED if count == 0 else CONFIRMED_ACCENT if state == "match" else WARNING_ACCENT if state == "variant" else DANGER_ACCENT if state == "conflict" else TEXT_MUTED
+		var color := CONFIRMED_ACCENT if state == "match" else WARNING_ACCENT if state == "variant" else DANGER_ACCENT if state == "conflict" else TEXT_MUTED
 		var chip := _make_label(_t("battle.calc.guess.evidence_%s_count" % state, {"count": count}), 10, color)
 		chip.name = "SetSuggestionEvidenceCount"
 		chip.tooltip_text = "%s: %s" % [chip.text, _t("battle.calc.guess." + state)]
-		chip.custom_minimum_size = Vector2(0, 22)
+		var chip_font := chip.get_theme_font("font")
+		var text_width := chip_font.get_string_size(
+			chip.text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 10
+		).x
+		chip.custom_minimum_size = Vector2(ceilf(text_width) + 12.0, 22)
 		chip.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		chip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		chip.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
