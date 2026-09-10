@@ -91,7 +91,7 @@ func _ready() -> void:
 	intro.add_theme_font_size_override("font_size", 14)
 	intro.add_theme_color_override("font_color", MUTED)
 	heading.add_child(intro)
-	_button(header, _t("watch_shared_title"), _open_shared_replay_dialog, "secondary")
+	_button(header, _t("watch_shared_title"), _open_shared_replay_dialog, "shared")
 	_button(header, _t("close"), func(): hide(); closed.emit(), "quiet")
 	var filter_panel := PanelContainer.new()
 	filter_panel.add_theme_stylebox_override("panel", _style(Color("#0a1524"), Color("#1f405e"), 10, 1, 10, 10, 9, 9))
@@ -205,6 +205,12 @@ func _button(parent: Node, text: String, callback: Callable, variant := "seconda
 		base = Color("#126b91")
 		hover = Color("#198abd")
 		border = ACCENT
+	elif variant == "shared":
+		base = Color("#0d5174")
+		hover = Color("#137aaa")
+		border = ACCENT
+		button.custom_minimum_size = Vector2(154, 44)
+		button.add_theme_font_size_override("font_size", 15)
 	elif variant == "danger":
 		base = Color("#542632")
 		hover = Color("#763444")
