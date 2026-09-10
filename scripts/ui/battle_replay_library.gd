@@ -622,6 +622,7 @@ func _opponent_identity(row: Dictionary) -> Control:
 			portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 			portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 			portrait.texture = trainer_portrait
+			portrait.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 			frame.add_child(portrait)
 		else:
 			var fallback := Label.new()
@@ -651,7 +652,9 @@ func _overworld_head_portrait(trainer_class: String) -> Texture2D:
 	var head := AtlasTexture.new()
 	head.atlas = source.atlas
 	var region := source.region
-	head.region = Rect2(region.position, Vector2(region.size.x, region.size.y * 0.58))
+	# The first tile is front-facing, but its face sits below the top hairline.
+	# Crop the full head/face band rather than only its upper (back-looking) hair.
+	head.region = Rect2(region.position + Vector2(0, region.size.y * 0.18), Vector2(region.size.x, region.size.y * 0.76))
 	return head
 
 func _position_shell() -> void:
