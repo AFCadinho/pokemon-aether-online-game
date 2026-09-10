@@ -13,6 +13,7 @@ var turn_picker: SpinBox
 var position_label: Label
 var scrubber: HSlider
 var status_label: Label
+var transport_overlay: PanelContainer
 var speed := 1.0
 var closing := false
 
@@ -130,7 +131,7 @@ func _build() -> void:
 	var details := VBoxContainer.new()
 	details.custom_minimum_size.x = 154
 	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	details.size_flags_stretch_ratio = 0.75
+	details.size_flags_stretch_ratio = 1.0
 	details.alignment = BoxContainer.ALIGNMENT_CENTER
 	details.add_theme_constant_override("separation", 1)
 	command_row.add_child(details)
@@ -141,25 +142,9 @@ func _build() -> void:
 	details.add_child(title)
 	status_label = _tiny_label("")
 	details.add_child(status_label)
-	var transport := _group()
-	transport.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	transport.size_flags_stretch_ratio = 1.25
-	command_row.add_child(transport)
-	var transport_center := CenterContainer.new()
-	transport.add_child(transport_center)
-	var transport_buttons := HBoxContainer.new()
-	transport_buttons.add_theme_constant_override("separation", 6)
-	transport_center.add_child(transport_buttons)
-	_button(transport_buttons, "|◀", func(): seek(0), "quiet").tooltip_text = _t("begin")
-	_button(transport_buttons, "◀", func(): seek(timeline.index_for_turn(maxi(0, timeline.turn_at(index) - 1))), "quiet").tooltip_text = _t("previous_turn")
-	play_button = _button(transport_buttons, "▶  " + _t("play"), _toggle, "primary")
-	_button(transport_buttons, "▶", func():
-		var turn := timeline.turn_at(index) + 1
-		seek(timeline.index_for_turn(turn) if timeline.turn_indices.has(turn) else timeline.frames.size() - 1), "quiet").tooltip_text = _t("next_turn")
-	_button(transport_buttons, "▶|", func(): seek(timeline.frames.size() - 1), "quiet").tooltip_text = _t("end")
 	var utility_group := _group()
 	utility_group.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	utility_group.size_flags_stretch_ratio = 1.35
+	utility_group.size_flags_stretch_ratio = 1.0
 	command_row.add_child(utility_group)
 	var utility_layout := HBoxContainer.new()
 	utility_layout.add_theme_constant_override("separation", 7)
@@ -212,6 +197,7 @@ func _build() -> void:
 	command_row.add_child(position_label)
 	var back_button := _button(command_row, _t("back"), _close, "quiet")
 	back_button.custom_minimum_size = Vector2(66, 38)
+	_build_transport_overlay()
 	var progress_row := HBoxContainer.new()
 	progress_row.add_theme_constant_override("separation", 8)
 	layout.add_child(progress_row)
@@ -233,6 +219,33 @@ func _build() -> void:
 		if value_changed:
 			seek(roundi(scrubber.value)))
 	progress_row.add_child(scrubber)
+
+func _build_transport_overlay() -> void:
+	var moves: Control = host.get("moves_grid") as Control
+	if moves == null or moves.get_parent() == null:
+		return
+	transport_overlay = PanelContainer.new()
+	transport_overlay.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	transport_overlay.offset_left = -380
+	transport_overlay.offset_top = -136
+	transport_overlay.offset_right = -96
+	transport_overlay.offset_bottom = -78
+	transport_overlay.z_index = 100
+	transport_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	transport_overlay.add_theme_stylebox_override("panel", _style(Color("#0b1726e8"), Color("#315c80"), 9, 1, 8, 8, 7, 7))
+	moves.get_parent().add_child(transport_overlay)
+	var transport_center := CenterContainer.new()
+	transport_overlay.add_child(transport_center)
+	var transport_buttons := HBoxContainer.new()
+	transport_buttons.add_theme_constant_override("separation", 6)
+	transport_center.add_child(transport_buttons)
+	_button(transport_buttons, "|◀", func(): seek(0), "quiet").tooltip_text = _t("begin")
+	_button(transport_buttons, "◀", func(): seek(timeline.index_for_turn(maxi(0, timeline.turn_at(index) - 1))), "quiet").tooltip_text = _t("previous_turn")
+	play_button = _button(transport_buttons, "▶  " + _t("play"), _toggle, "primary")
+	_button(transport_buttons, "▶", func():
+		var turn := timeline.turn_at(index) + 1
+		seek(timeline.index_for_turn(turn) if timeline.turn_indices.has(turn) else timeline.frames.size() - 1), "quiet").tooltip_text = _t("next_turn")
+	_button(transport_buttons, "▶|", func(): seek(timeline.frames.size() - 1), "quiet").tooltip_text = _t("end")
 
 func _toggle() -> void:
 	if closing:
@@ -287,6 +300,8 @@ func stop() -> void:
 	host.call("cancel_replay_render")
 	while busy:
 		await get_tree().process_frame
+	if is_instance_valid(transport_overlay):
+		transport_overlay.queue_free()
 
 func _close() -> void:
 	if closing:
