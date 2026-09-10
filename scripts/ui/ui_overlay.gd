@@ -7368,6 +7368,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_training_team_input = TextEdit.new()
 	_set_localized_control_property(pvp_training_team_input, "placeholder_text", "ui.pvp.training.paste_placeholder")
 	pvp_training_team_input.custom_minimum_size = Vector2(0, 110)
+	pvp_training_team_input.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pvp_training_team_input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
 	team_layout.add_child(pvp_training_team_input)
 	_apply_text_edit_style(pvp_training_team_input)
@@ -7524,24 +7525,59 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_training_ai_opponent_preview.add_child(pvp_training_ai_opponent_preview_grid)
 	_refresh_pvp_training_ai_opponent_preview()
 
+	var action_card := PanelContainer.new()
+	action_card.name = "AiSparringActionCard"
+	action_card.add_theme_stylebox_override("panel", _make_panel_style(Color("#101829f2"), Color("#7968c799"), 10, 1))
+	practice_layout.add_child(action_card)
+	var action_margin := MarginContainer.new()
+	for edge: String in ["left", "right"]:
+		action_margin.add_theme_constant_override("margin_" + edge, 14)
+	for edge: String in ["top", "bottom"]:
+		action_margin.add_theme_constant_override("margin_" + edge, 10)
+	action_card.add_child(action_margin)
+	var action_layout := VBoxContainer.new()
+	action_layout.add_theme_constant_override("separation", 8)
+	action_margin.add_child(action_layout)
 	var action_step := Label.new()
 	action_step.name = "AiSparringReadyStep"
 	_set_localized_control_property(action_step, "text", "ui.pvp.ai_sparring.step.ready")
 	action_step.add_theme_font_size_override("font_size", 11)
 	action_step.add_theme_color_override("font_color", Color("#b9aaff"))
-	practice_layout.add_child(action_step)
+	action_layout.add_child(action_step)
+	var action_row := HBoxContainer.new()
+	action_row.name = "AiSparringActionRow"
+	action_row.add_theme_constant_override("separation", 14)
+	action_layout.add_child(action_row)
 	pvp_ai_sparring_allow_spectators = CheckBox.new()
 	pvp_ai_sparring_allow_spectators.name = "AiSparringAllowSpectators"
 	_set_localized_control_property(pvp_ai_sparring_allow_spectators, "text", "ui.pvp.ai_sparring.live.opt_in")
 	_set_localized_control_property(pvp_ai_sparring_allow_spectators, "tooltip_text", "ui.pvp.ai_sparring.live.opt_in_hint")
-	practice_layout.add_child(pvp_ai_sparring_allow_spectators)
+	pvp_ai_sparring_allow_spectators.custom_minimum_size = Vector2(0, 46)
+	pvp_ai_sparring_allow_spectators.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_allow_spectators.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	pvp_ai_sparring_allow_spectators.add_theme_font_size_override("font_size", 13)
+	pvp_ai_sparring_allow_spectators.add_theme_constant_override("h_separation", 12)
+	for state: String in ["normal", "hover", "pressed", "hover_pressed", "disabled"]:
+		var selected := state in ["pressed", "hover_pressed"]
+		var hovered := state in ["hover", "hover_pressed"]
+		var fill := Color("#292346") if selected else Color("#0b1726")
+		var border := Color("#ac96ef") if selected else Color("#456688")
+		var style := _make_panel_style(fill.lightened(0.08) if hovered else fill, border, 7, 1)
+		style.content_margin_left = 12
+		style.content_margin_right = 12
+		pvp_ai_sparring_allow_spectators.add_theme_stylebox_override(state, style)
+		pvp_ai_sparring_allow_spectators.add_theme_color_override("font_" + ("color" if state == "normal" else state + "_color"), Color("#92a1b5") if state == "disabled" else Color("#f2efff"))
+	pvp_ai_sparring_allow_spectators.add_theme_stylebox_override("focus", _make_panel_style(Color.TRANSPARENT, Color("#f5df9a"), 7, 2))
+	for state: String in ["unchecked", "checked", "unchecked_disabled", "checked_disabled"]:
+		pvp_ai_sparring_allow_spectators.add_theme_icon_override(state, _make_ai_sparring_favorite_checkbox_icon(state.begins_with("checked")))
+	action_row.add_child(pvp_ai_sparring_allow_spectators)
 	pvp_ai_sparring_start_button = Button.new()
 	_set_localized_control_property(pvp_ai_sparring_start_button, "text", "ui.pvp.ai_sparring.start")
-	pvp_ai_sparring_start_button.custom_minimum_size = Vector2(0, 42)
-	pvp_ai_sparring_start_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_start_button.custom_minimum_size = Vector2(220, 46)
+	pvp_ai_sparring_start_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	pvp_ai_sparring_start_button.focus_mode = Control.FOCUS_NONE
 	pvp_ai_sparring_start_button.pressed.connect(_on_pvp_training_ai_start_pressed)
-	practice_layout.add_child(pvp_ai_sparring_start_button)
+	action_row.add_child(pvp_ai_sparring_start_button)
 
 	var catalog_page := _create_pvp_ranked_tab_page("Team Catalog", 14)
 	var live_page := _create_pvp_ranked_tab_page("Live Battles", 14)
