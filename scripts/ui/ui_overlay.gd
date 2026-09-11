@@ -8214,16 +8214,12 @@ func _setup_pvp_mode_menu() -> void:
 		Color("#b28ae8"),
 		"ui.pvp.mode.coming_soon"
 	)
-	pvp_mode_tournaments_button.disabled = true
-	pvp_mode_tournaments_button.modulate = Color(1, 1, 1, 0.58)
-	pvp_mode_tournaments_button.mouse_default_cursor_shape = Control.CURSOR_ARROW
+	pvp_mode_tournaments_button.disabled = not OS.has_feature("web")
+	pvp_mode_tournaments_button.modulate = Color(1, 1, 1, 0.82) if OS.has_feature("web") else Color(1, 1, 1, 0.58)
+	pvp_mode_tournaments_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if OS.has_feature("web") else Control.CURSOR_ARROW
 	_set_localized_control_property(pvp_mode_tournaments_button, "tooltip_text", "ui.pvp.mode.tournaments_soon")
 	pvp_mode_tournaments_button.pressed.connect(_on_pvp_mode_tournaments_pressed)
 	layout.add_child(pvp_mode_tournaments_button)
-	if OS.has_feature("web"):
-		pvp_mode_ranked_button.visible = false
-		pvp_mode_casual_button.visible = false
-		pvp_mode_tournaments_button.visible = false
 
 func _create_pvp_mode_menu_button(
 	title_text: String,
@@ -33414,6 +33410,9 @@ func _execute_escape_rope() -> void:
 
 
 func _on_my_powers_button_pressed() -> void:
+	if OS.has_feature("web"):
+		_show_web_client_required("My Powers")
+		return
 	if not bool(my_powers_button.get_meta("group_available", false)):
 		return
 	staff_actions_panel.visible = not staff_actions_panel.visible
@@ -42855,6 +42854,9 @@ func _cancel_authorized_teleport_effect(world: Node) -> void:
 		world.call("cancel_authorized_teleport")
 
 func _on_aether_exchange_button_pressed() -> void:
+	if OS.has_feature("web"):
+		_show_web_client_required("Aether Exchange")
+		return
 	if aether_exchange_popup == null:
 		return
 	aether_exchange_popup.visible = true
@@ -42863,9 +42865,6 @@ func _on_aether_exchange_button_pressed() -> void:
 
 func _on_pvp_button_pressed() -> void:
 	if pvp_mode_menu == null:
-		return
-	if OS.has_feature("web"):
-		await _open_pvp_popup_section("AI Sparring")
 		return
 	if pvp_mode_menu.visible:
 		_hide_pvp_mode_menu()
@@ -42897,10 +42896,31 @@ func _hide_pvp_mode_menu() -> void:
 	_deactivate_ui_panel(pvp_mode_menu)
 
 func _on_pvp_mode_ranked_pressed() -> void:
+	if OS.has_feature("web"):
+		_show_web_client_required("Ranked PvP")
+		return
 	await _open_pvp_popup_section("Ranked")
 
 func _on_pvp_mode_tournaments_pressed() -> void:
+	if OS.has_feature("web"):
+		_show_web_client_required("Tournaments")
+		return
 	await _open_pvp_popup_section("Tournaments")
+
+
+func _show_web_client_required(feature_name: String) -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.title = "Available in the full client"
+	dialog.dialog_text = "%s is shown here so you can explore PokeAether, but using it requires the downloadable client." % feature_name
+	dialog.ok_button_text = "Download client"
+	dialog.cancel_button_text = "Not now"
+	dialog.confirmed.connect(func(): OS.shell_open("https://pokeaether.com/download"))
+	dialog.visibility_changed.connect(func():
+		if not dialog.visible:
+			dialog.queue_free()
+	)
+	root_control.add_child(dialog)
+	dialog.popup_centered(Vector2i(480, 190))
 
 func _on_pvp_mode_casual_pressed() -> void:
 	await _open_pvp_popup_section("Custom / Casual")

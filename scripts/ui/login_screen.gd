@@ -65,6 +65,7 @@ var server_status_translation_key := "ui.login.checking_server"
 var online_players_translation_key := "ui.login.checking_players"
 var online_players_translation_values: Dictionary = {}
 var loading_language_options := false
+var web_demo_notice_acknowledged := false
 
 func _ready() -> void:
 	MusicManager.play_login_music()
@@ -286,7 +287,29 @@ func _on_login_button_pressed() -> void:
 func _on_continue_button_pressed() -> void:
 	if is_loading:
 		return
+	if OS.has_feature("web") and not web_demo_notice_acknowledged:
+		_show_web_demo_notice()
+		return
 	_enter_world()
+
+
+func _show_web_demo_notice() -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.title = "Welcome to the PokeAether browser demo"
+	dialog.dialog_text = "This browser version is a small, limited part of PokeAether. Explore the opening world, chat and practise battles here. Download the client for the full MMO experience. Your account and progress are shared."
+	dialog.ok_button_text = "Continue in browser"
+	dialog.cancel_button_text = "Download client"
+	dialog.confirmed.connect(func():
+		web_demo_notice_acknowledged = true
+		dialog.queue_free()
+		_enter_world()
+	)
+	dialog.canceled.connect(func():
+		OS.shell_open("https://pokeaether.com/download")
+		dialog.queue_free()
+	)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(540, 220))
 
 
 func _on_logout_button_pressed() -> void:
@@ -516,7 +539,10 @@ func _submit_login() -> void:
 	_apply_authenticated_player_profile()
 
 	login_submitted.emit(username, password)
-	_enter_world()
+	if OS.has_feature("web"):
+		_show_web_demo_notice()
+	else:
+		_enter_world()
 
 
 func _refresh_server_health() -> void:

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The browser demo now restores its complete interface icon set, opens the normal battle-mode chooser, supports mail, friends, bag and guild browsing, and clearly marks client-only features.
+
 - Browser battles now load the regular animated Pokémon sprites on demand while keeping lightweight HOME artwork as an immediate fallback. Party and Pokédex lists stay fast, while Pokémon details, wild battles, Trainer battles and AI Sparring reuse the cached animations.
 
 - AI Sparring in the browser now starts correctly with a catalog team, including for new Trainers without an overworld party.

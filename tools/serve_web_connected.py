@@ -21,12 +21,16 @@ HTTP_ROUTES = {
     ("POST", "/auth/web/signup"), ("POST", "/auth/web/login"), ("POST", "/auth/web/logout"),
     ("GET", "/auth/web/preferences"), ("PUT", "/auth/web/preferences"),
     ("GET", "/auth/web/profile"), ("GET", "/auth/web/party"),
+    ("GET", "/auth/web/inventory"), ("GET", "/auth/web/guilds"),
+    ("GET", "/auth/web/transit"),
     ("GET", "/auth/web/starter/options"), ("POST", "/auth/web/starter"),
     ("GET", "/auth/web/ai-sparring/statistics"),
     ("GET", "/auth/web/ai-sparring/history"), ("DELETE", "/auth/web/ai-sparring/history"),
     ("GET", "/battle/pvp/training/ai/teams"),
     ("GET", "/battle/pvp/training/ai/live"),
     ("POST", "/battle/pvp/training/ai/battles"),
+    ("POST", "/battle/wild-encounter"), ("GET", "/battle/wild/resume"),
+    ("POST", "/battle/pvp/rooms"),
     ("POST", "/auth/email-verification/confirm"),
 }
 AI_BATTLE_ROUTE = re.compile(
@@ -34,10 +38,19 @@ AI_BATTLE_ROUTE = re.compile(
 )
 HTTP_ROUTE_PREFIXES = (
     ("GET", "/battle/pvp/training/ai/live/"),
+    ("GET", "/battle/pvp/rooms/"), ("POST", "/battle/pvp/rooms/"),
     ("GET", "/npcs/"),
     ("GET", "/dialogues/"),
+    ("GET", "/encounters/"),
     ("GET", "/auth/web/world/story"),
     ("POST", "/auth/web/world/story"),
+    ("GET", "/auth/web/mail"), ("POST", "/auth/web/mail"),
+    ("GET", "/auth/web/socials"), ("POST", "/auth/web/socials"),
+    ("PUT", "/auth/web/socials"), ("DELETE", "/auth/web/socials"),
+    ("POST", "/auth/web/wild-battles/"),
+    ("POST", "/auth/web/transit/"),
+    ("GET", "/game/replays"), ("POST", "/game/replays"),
+    ("PATCH", "/game/replays"), ("DELETE", "/game/replays"),
     ("GET", "/auth/web/world/transitions/"),
     ("POST", "/auth/web/world/transitions/"),
     ("GET", "/auth/web/world/areas/"),
@@ -174,6 +187,10 @@ def create_app(upstream, build=None, *, transport=None):
     @app.websocket("/api/ws/world-presence")
     async def world_presence_websocket_proxy(socket: WebSocket):
         await websocket_proxy(socket, "world-presence")
+
+    @app.websocket("/api/ws/pvp-battle")
+    async def pvp_battle_websocket_proxy(socket: WebSocket):
+        await websocket_proxy(socket, "pvp-battle")
 
     @app.get("/pokemon-assets/gen5/{side}/{species}/{filename}")
     async def pokemon_asset(side: str, species: str, filename: str):

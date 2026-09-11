@@ -21,7 +21,6 @@
     button:focus-visible { outline: 3px solid #f7ce77; outline-offset: 4px; }
     progress { display: block; width: 100%; margin: 22px 0 8px; accent-color: #91ceff; }
     #status { min-height: 3em; font-size: 14px; margin-bottom: 0; }
-    #badge { position: fixed; left: 12px; bottom: 10px; pointer-events: none; color: #e8ce98; background: #081321dc; border: 1px solid #53627a; border-radius: 6px; padding: 6px 10px; font-size: 12px; }
     dialog { width: min(540px, 94vw); max-height: 90vh; border: 1px solid #53627a; border-radius: 16px; background: #0a1424; color: #edf4ff; padding: 28px; }
     dialog::backdrop { background: #000b; }
     label { display: block; margin: 14px 0; line-height: 1.5; }
@@ -35,7 +34,7 @@
   <canvas id="canvas" tabindex="0" aria-label="PokeAether game"></canvas>
   <div id="cover">
     <main>
-		<div class="eyebrow">Local preview · Phase 3</div>
+		<div class="eyebrow">Browser demo</div>
       <h1>PokeAether</h1>
       <p>One account for browser and desktop. Sign in, register and restore your browser session without changing your saved adventure.</p>
       <p>This local build needs the connected preview server for accounts. AI Sparring, chat and the bounded world demo are available. Ranked stays desktop-only.</p>
@@ -44,7 +43,6 @@
       <p id="status" role="status" aria-live="polite">Best viewed in a desktop browser.</p>
     </main>
   </div>
-	<div id="badge">Phase 3 · Pallet Town · Route 1 · Viridian City</div>
   <dialog id="registration" aria-labelledby="registration-title">
     <form id="registration-form">
       <h2 id="registration-title">Create your PokeAether account</h2>

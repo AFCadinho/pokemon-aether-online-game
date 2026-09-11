@@ -6,6 +6,10 @@ const MAIL_ENDPOINT := "/game/mail"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
+func _mail_endpoint() -> String:
+	return "/auth/web/mail" if OS.has_feature("web") else MAIL_ENDPOINT
+
+
 func load_mail(box: String = "inbox") -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
@@ -16,7 +20,7 @@ func load_mail(box: String = "inbox") -> Dictionary:
 	var normalized_box: String = _normalize_mail_box(box)
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + MAIL_ENDPOINT + "?box=%s" % normalized_box.uri_encode(),
+		base_url + _mail_endpoint() + "?box=%s" % normalized_box.uri_encode(),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -69,7 +73,7 @@ func send_mail(
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + MAIL_ENDPOINT,
+		base_url + _mail_endpoint(),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify(payload)
@@ -102,7 +106,7 @@ func claim_mail(mail_id: int) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + MAIL_ENDPOINT + "/%s/claim" % mail_id,
+		base_url + _mail_endpoint() + "/%s/claim" % mail_id,
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		"{}"
@@ -135,7 +139,7 @@ func mark_mail_read(mail_id: int) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + MAIL_ENDPOINT + "/%s/read" % mail_id,
+		base_url + _mail_endpoint() + "/%s/read" % mail_id,
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		"{}"
@@ -169,7 +173,7 @@ func claim_mail_attachment(mail_id: int, attachment_id: int) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + MAIL_ENDPOINT + "/%s/attachments/%s/claim" % [mail_id, attachment_id],
+		base_url + _mail_endpoint() + "/%s/attachments/%s/claim" % [mail_id, attachment_id],
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		"{}"
@@ -203,7 +207,7 @@ func delete_mail(mail_id: int, box: String = "inbox") -> Dictionary:
 	var normalized_box: String = _normalize_mail_box(box)
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + MAIL_ENDPOINT + "/%s?box=%s" % [mail_id, normalized_box.uri_encode()],
+		base_url + _mail_endpoint() + "/%s?box=%s" % [mail_id, normalized_box.uri_encode()],
 		HTTPClient.METHOD_DELETE,
 		GatewayApiConfig.get_accept_headers(),
 		""

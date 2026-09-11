@@ -6,6 +6,14 @@ const SOCIALS_ENDPOINT := "/game/socials"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 
+func _socials_endpoint() -> String:
+	return "/auth/web/socials" if OS.has_feature("web") else SOCIALS_ENDPOINT
+
+
+func _web_social_path(path: String) -> String:
+	return path.replace(SOCIALS_ENDPOINT, _socials_endpoint()) if OS.has_feature("web") else path
+
+
 func load_socials() -> Dictionary:
 	if not _is_authenticated():
 		return _auth_error()
@@ -16,7 +24,7 @@ func load_socials() -> Dictionary:
 
 	var base_url: String = str(gateway.call("get_base_url"))
 	var response: Dictionary = await _request_json(
-		base_url + SOCIALS_ENDPOINT,
+		base_url + _socials_endpoint(),
 		HTTPClient.METHOD_GET,
 		gateway.call("get_accept_headers"),
 		""
@@ -54,7 +62,7 @@ func remove_friend(username: String) -> Dictionary:
 
 	var base_url: String = str(gateway.call("get_base_url"))
 	var response: Dictionary = await _request_json(
-		base_url + SOCIALS_ENDPOINT + "/friends/%s" % normalized_username.uri_encode(),
+		base_url + _socials_endpoint() + "/friends/%s" % normalized_username.uri_encode(),
 		HTTPClient.METHOD_DELETE,
 		gateway.call("get_accept_headers"),
 		""
@@ -80,7 +88,7 @@ func unblock_user(username: String) -> Dictionary:
 
 	var base_url: String = str(gateway.call("get_base_url"))
 	var response: Dictionary = await _request_json(
-		base_url + SOCIALS_ENDPOINT + "/blocks/%s" % normalized_username.uri_encode(),
+		base_url + _socials_endpoint() + "/blocks/%s" % normalized_username.uri_encode(),
 		HTTPClient.METHOD_DELETE,
 		gateway.call("get_accept_headers"),
 		""
@@ -102,7 +110,7 @@ func update_status_message(status_message: String) -> Dictionary:
 
 	var base_url: String = str(gateway.call("get_base_url"))
 	var response: Dictionary = await _request_json(
-		base_url + SOCIALS_ENDPOINT + "/status",
+		base_url + _socials_endpoint() + "/status",
 		HTTPClient.METHOD_PUT,
 		gateway.call("get_json_headers"),
 		JSON.stringify({"statusMessage": normalized_status})
@@ -124,7 +132,7 @@ func validate_private_message_target(username: String) -> Dictionary:
 
 	var base_url: String = str(gateway.call("get_base_url"))
 	var response: Dictionary = await _request_json(
-		base_url + SOCIALS_ENDPOINT + "/private-message-target/%s" % normalized_username.uri_encode(),
+		base_url + _socials_endpoint() + "/private-message-target/%s" % normalized_username.uri_encode(),
 		HTTPClient.METHOD_GET,
 		gateway.call("get_accept_headers"),
 		""
@@ -164,7 +172,7 @@ func send_private_message(recipient_username: String, body: String, pokemon_atta
 	if not pokemon_attachments.is_empty():
 		payload["pokemonAttachments"] = pokemon_attachments.slice(0, 6)
 	var response: Dictionary = await _request_json(
-		base_url + SOCIALS_ENDPOINT + "/private-messages",
+		base_url + _socials_endpoint() + "/private-messages",
 		HTTPClient.METHOD_POST,
 		gateway.call("get_json_headers"),
 		JSON.stringify(payload)
@@ -191,7 +199,7 @@ func _friend_request_action(friendship_id: int, action: String) -> Dictionary:
 
 	var base_url: String = str(gateway.call("get_base_url"))
 	var response: Dictionary = await _request_json(
-		base_url + SOCIALS_ENDPOINT + "/friend-requests/%s/%s" % [friendship_id, action],
+		base_url + _socials_endpoint() + "/friend-requests/%s/%s" % [friendship_id, action],
 		HTTPClient.METHOD_POST,
 		gateway.call("get_json_headers"),
 		"{}"
@@ -213,7 +221,7 @@ func _username_post(path: String, username: String) -> Dictionary:
 
 	var base_url: String = str(gateway.call("get_base_url"))
 	var response: Dictionary = await _request_json(
-		base_url + path,
+		base_url + _web_social_path(path),
 		HTTPClient.METHOD_POST,
 		gateway.call("get_json_headers"),
 		JSON.stringify({"username": normalized_username})
