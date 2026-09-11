@@ -1,4 +1,4 @@
-# Local browser build — phase 5
+# Local browser build
 
 This is a real WebAssembly export of the existing Godot 4.6 client, using the
 `Web Local Preview` preset and the Compatibility renderer only for web. Desktop
@@ -7,9 +7,10 @@ committed. No second Godot project or duplicate source asset tree is created.
 
 ## Current scope
 
-The browser can open the existing login screen, render the player preview, open
-settings and switch languages. A click starts the engine and unlocks browser
-audio. Refresh does not trigger the desktop interrupted-session warning.
+The browser demo uses the existing account, world and interface. Its opening
+world is bounded to Pallet Town, Route 1 and Viridian City. Mail, friends, bag,
+guild browsing, replays, Custom battles and AI Sparring remain visible; ranked,
+competitive guild actions, Aether Exchange and My Powers require the client.
 
 Phase 3 connects real shared accounts and a bounded browser-world position through dedicated `/auth/web` endpoints.
 Registration retains the existing legal acceptance, registration toggle and
@@ -25,7 +26,7 @@ rotates only other web sessions; desktop login rotates only desktop sessions.
 Web logout does not cancel desktop queues. All existing authenticated gameplay
 and ranked routes reject web tokens by default. No character position is read or
 written; existing characters outside the future demo remain where they were.
-Background trade, guild, thieving and Rock Smash discovery are disabled on web.
+Background trade, guild notifications, thieving and Rock Smash discovery are disabled on web.
 
 The client uses the page's origin plus `/api`, never the desktop production
 fallback. News polling and password-reset links remain disabled. The shell only
@@ -83,9 +84,8 @@ identifiable without including user settings, sessions, or credentials.
 ## Asset selection
 
 The preset includes the shared client code, all player appearance assets, the
-nine interiors/exteriors reachable inside the three-map demo, localization and
-the complete regular/shiny HOME sprite collection. AI Sparring therefore has a
-static visual fallback for every available Pokemon and form. The full animated
+interiors/exteriors reachable inside the three-map demo, localization and the
+lightweight UI, item-icon, gender, badge and battle-indicator collections. The full animated
 Gen 5 collection is deliberately excluded: in this checkout it is about 1.1 GiB
 before Godot export and is not a viable initial browser download. A later
 on-demand asset delivery phase can add those animations without blocking play.

@@ -26,6 +26,10 @@ const ITEM_SEARCH_ENDPOINT := "/game/items/search?q=%s"
 const DEV_ITEM_SEARCH_ENDPOINT := "/game/dev/items/search?q=%s"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
+
+func _inventory_endpoint() -> String:
+	return "/auth/web/inventory" if OS.has_feature("web") else INVENTORY_ENDPOINT
+
 var cached_inventory_items: Array = []
 var cached_borrowed_inventory_items: Array = []
 var cached_mount_license_regions: Array[String] = []
@@ -47,7 +51,7 @@ func load_inventory() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + INVENTORY_ENDPOINT,
+		base_url + _inventory_endpoint(),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -678,6 +682,8 @@ func catch_wild_pokemon(battle_id: String, item_id: String) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var endpoint := WILD_BATTLE_CATCH_ENDPOINT % battle_id.uri_encode()
+	if OS.has_feature("web"):
+		endpoint = endpoint.replace("/game/wild-battles", "/auth/web/wild-battles")
 	var response: Dictionary = await _request_json(
 		base_url + endpoint,
 		HTTPClient.METHOD_POST,

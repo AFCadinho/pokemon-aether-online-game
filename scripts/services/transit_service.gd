@@ -8,8 +8,12 @@ const REQUEST_TIMEOUT_SECONDS := 8.0
 var pending_request_ids: Dictionary = {}
 
 
+func _transit_endpoint() -> String:
+	return "/auth/web/transit" if OS.has_feature("web") else TRANSIT_ENDPOINT
+
+
 func load_network() -> Dictionary:
-	return await _request_json(TRANSIT_ENDPOINT, HTTPClient.METHOD_GET, "")
+	return await _request_json(_transit_endpoint(), HTTPClient.METHOD_GET, "")
 
 
 func attune(destination_id: String, beacon_position: Vector2) -> Dictionary:
@@ -17,7 +21,7 @@ func attune(destination_id: String, beacon_position: Vector2) -> Dictionary:
 	if not bool(position_save.get("success", false)):
 		return position_save
 	return await _request_json(
-		TRANSIT_ENDPOINT + "/attune",
+		_transit_endpoint() + "/attune",
 		HTTPClient.METHOD_POST,
 		JSON.stringify({
 			"destinationId": destination_id,
@@ -34,7 +38,7 @@ func set_anchor(destination_id: String, beacon_position: Vector2, anchor_slot: i
 	if not bool(position_save.get("success", false)):
 		return position_save
 	return await _request_json(
-		TRANSIT_ENDPOINT + "/anchor",
+		_transit_endpoint() + "/anchor",
 		HTTPClient.METHOD_POST,
 		JSON.stringify({
 			"destinationId": destination_id,
@@ -48,6 +52,8 @@ func set_anchor(destination_id: String, beacon_position: Vector2, anchor_slot: i
 
 
 func travel(destination_id: String) -> Dictionary:
+	if OS.has_feature("web"):
+		return {"success": false, "status": 403, "error": "Aethernet travel requires the downloadable client."}
 	var request_id := str(pending_request_ids.get(destination_id, ""))
 	if request_id.is_empty():
 		request_id = "transit-%s-%s" % [Time.get_ticks_usec(), randi()]
