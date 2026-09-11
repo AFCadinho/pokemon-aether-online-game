@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Fixed browser music streams exporting as raw files without their Godot audio
+  import data, which made the WebAudio mixer receive silent samples.
+
 - Fixed browser music remaining silent when the WebAudio mixer did not advance
   the normal fade-in from its silence floor.
 

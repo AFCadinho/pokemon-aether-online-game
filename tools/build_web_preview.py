@@ -56,7 +56,7 @@ def main():
     required_markers = (
         b'generated/tiled_visuals/route_1/route_1.visual.tscn',
         b'assets/sprites/pokemon/pokemon_home/Pikachu.png',
-        b'assets/music/login/lugia_theme_lofi.ogg',
+        b'lugia_theme_lofi.ogg-2fdce23a90553d794177dfc95f259e8f.oggvorbisstr',
         b'assets/music/overworld/kanto/towns/pallet_town.ogg',
         b'assets/music/overworld/kanto/routes/route1.ogg',
         b'assets/music/overworld/kanto/towns/viridian_city.ogg',
