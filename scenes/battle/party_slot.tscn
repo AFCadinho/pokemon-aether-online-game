@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bbwshoebajex4" path="res://scripts/battle/battle_ui/party_slot.gd" id="1_qme5g"]
 [ext_resource type="Texture2D" uid="uid://dp378t40sdcy1" path="res://assets/battles/status/poisoned.png" id="2_87gny"]
+[ext_resource type="Texture2D" path="res://assets/ui/global_shiny_boost.svg" id="3_shiny"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pll4o"]
 bg_color = Color(0.008, 0.025, 0.07, 0.96)
@@ -123,17 +124,14 @@ layout_mode = 2
 theme_override_constants/separation = 4
 alignment = 1
 
-[node name="ShinyBadge" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/NameRow" unique_id=571002889]
-custom_minimum_size = Vector2(12, 20)
+[node name="ShinyBadge" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/NameRow" unique_id=571002889]
+visible = false
+custom_minimum_size = Vector2(14, 14)
 layout_mode = 2
 tooltip_text = "ui.party.shiny"
-theme_override_colors/font_color = Color(1, 0.84313726, 0.3529412, 1)
-theme_override_colors/font_outline_color = Color(0.2784314, 0.14901961, 0.019607844, 1)
-theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 15
-text = "S"
-horizontal_alignment = 1
-vertical_alignment = 1
+texture = ExtResource("3_shiny")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/NameRow" unique_id=1565839544]
 custom_minimum_size = Vector2(72, 24)

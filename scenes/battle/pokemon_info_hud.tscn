@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bbpta6p7kugpi"]
 
 [ext_resource type="Texture2D" path="res://assets/items/icons/POKEBALL.png" id="2_owned"]
+[ext_resource type="Texture2D" path="res://assets/ui/global_shiny_boost.svg" id="3_shiny"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h0kxc"]
 bg_color = Color(0.07058824, 0.13725491, 0.23529412, 1)
@@ -53,16 +54,14 @@ theme_override_constants/separation = 6
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="ShinyBadge" type="Label" parent="MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=843612097]
+[node name="ShinyBadge" type="TextureRect" parent="MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=843612097]
 visible = false
+custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 tooltip_text = "ui.party.shiny"
-theme_override_colors/font_color = Color(1, 0.84313726, 0.3529412, 1)
-theme_override_colors/font_outline_color = Color(0.2784314, 0.14901961, 0.019607844, 1)
-theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 18
-text = "S"
-vertical_alignment = 1
+texture = ExtResource("3_shiny")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/TopRow/NameContainer" unique_id=1266734243]
 layout_mode = 2

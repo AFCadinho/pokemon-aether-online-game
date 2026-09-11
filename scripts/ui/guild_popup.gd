@@ -14,6 +14,7 @@ const GUILD_MEMBER_MESSAGE_ICON: Texture2D = preload("res://assets/ui/icons/guil
 const GUILD_MEMBER_RANK_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_rank.svg")
 const GUILD_MEMBER_BANK_RIGHTS_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_bank_rights.svg")
 const GUILD_MEMBER_REMOVE_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_remove.svg")
+const MORE_ACTIONS_ICON: Texture2D = preload("res://assets/ui/icons/more.svg")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const TrainerAvatarPreviewScript := preload("res://scripts/ui/trainer_avatar_preview.gd")
 const CREATION_COST := 100000
@@ -1420,7 +1421,8 @@ func _build_guild_header_travel_actions(guild: Dictionary, is_leader: bool) -> C
 	secondary_row.add_child(base_button)
 	var options := MenuButton.new()
 	options.name = "GuildOptionsMenuButton"
-	options.text = "⋯"
+	options.icon = MORE_ACTIONS_ICON
+	options.expand_icon = true
 	options.custom_minimum_size = Vector2(36, 36)
 	_set_localized_property(options, "tooltip_text", "ui.guild.options.tooltip")
 	_apply_button_style(options)

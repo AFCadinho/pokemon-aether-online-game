@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser-demo party, battle, summary, chat and guild controls now use browser-safe texture icons instead of missing font glyphs.
+
 - Aethernet now clearly directs browser-demo players to the downloadable client instead of opening an empty travel confirmation.
 
 - The browser demo now includes login, reachable-map and wild/trainer battle music.

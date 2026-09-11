@@ -170,7 +170,7 @@ func _update_experience_bar(row: Node, experience_data: Dictionary) -> void:
 		exp_row.visible = true
 
 func _set_shiny_badge(row: Node, is_shiny: bool) -> void:
-	var shiny_badge: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/NameContainer/ShinyBadge") as Label
+	var shiny_badge: TextureRect = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/NameContainer/ShinyBadge") as TextureRect
 	if shiny_badge == null:
 		return
 
