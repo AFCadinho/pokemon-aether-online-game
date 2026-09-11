@@ -13,6 +13,12 @@ func _init() -> void:
 	_check(shell.contains("oscillator.connect(gain).connect(webAudioContext.destination)"), "the audible output test reaches the browser audio destination")
 	_check(shell.contains("playAudioTestTone();"), "the visible sound control plays the audible output test after unlocking")
 	_check(shell.contains("new NativeAudioContext(...args)"), "Godot keeps its requested WebAudio sample-rate and latency settings")
+	_check(shell.contains("if (!webAudioContext) {")
+		and shell.contains("webAudioContext = new NativeAudioContext();"),
+		"the opening click creates a resumable audio context before Godot starts asynchronously")
+	_check(shell.contains("await engine.startGame({")
+		and shell.find("await unlockAudio();", shell.find("await engine.startGame({")) > shell.find("await engine.startGame({"),
+		"the browser resumes Godot audio again after its worklet attaches")
 	_check(shell.contains("['pointerdown', 'touchend', 'keydown']"), "web shell retries audio unlock on the first game interaction")
 	print("web_audio_shell_check: %s" % ("PASS" if failures == 0 else "FAIL"))
 	quit(failures)
