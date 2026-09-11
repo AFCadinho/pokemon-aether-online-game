@@ -80,16 +80,28 @@ func walk_to_player(body: Node2D) -> void:
 		return
 
 	_play_walk_animation(direction)
-	
-	while _to_tile(get_feet_position()) != stop_tile:
+	# A vision area is short and straight. Bound this animation defensively:
+	# malformed map origins/facing data must never leave the overworld locked in
+	# an unbounded approach loop before the battle dialogue can begin.
+	var expected_steps: int = absi(stop_tile.x - npc_tile.x) + absi(stop_tile.y - npc_tile.y)
+	var maximum_steps := clampi(expected_steps + 1, 1, 16)
+	var completed_steps := 0
+	while _to_tile(get_feet_position()) != stop_tile and completed_steps < maximum_steps:
 		var current_tile := _to_tile(get_feet_position())
 		var next_tile := current_tile + Vector2i(int(direction.x), int(direction.y))
 		var target_position := _tile_to_world(next_tile)
 		var tween := create_tween()
 		tween.tween_property(self, "global_position", target_position, TILE_SIZE / MOVE_SPEED)
 		await tween.finished
+		completed_steps += 1
 		_update_sort_z()
-	
+
+	if _to_tile(get_feet_position()) != stop_tile:
+		push_warning(
+			"TrainerNPC vision approach exceeded its straight-line bound; snapping to battle position."
+		)
+		global_position = _tile_to_world(stop_tile)
+		_update_sort_z()
 	_set_idle_frame(direction)
 
 func _get_straight_line_stop_tile(npc_tile: Vector2i, player_tile: Vector2i, direction: Vector2) -> Vector2i:

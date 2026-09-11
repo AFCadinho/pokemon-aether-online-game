@@ -13,6 +13,13 @@ func _run() -> void:
 	if trainer_script == null:
 		quit(1)
 		return
+	var trainer_source := FileAccess.get_file_as_string("res://scripts/world/npcs/trainer_npc.gd")
+	_check(
+		trainer_source.contains("var maximum_steps := clampi(expected_steps + 1, 1, 16)")
+			and trainer_source.contains("completed_steps < maximum_steps")
+			and trainer_source.contains("snapping to battle position"),
+		"vision-triggered trainer movement is bounded and cannot freeze overworld input"
+	)
 	var trainer := trainer_script.new() as Node
 	trainer.set("trainer_progress_loaded", true)
 	trainer.set("trainer_progress_state", "first_encounter")

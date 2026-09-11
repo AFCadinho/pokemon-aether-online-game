@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Trainers that spot the player now use a bounded approach animation, so a bad
+  map/facing position cannot freeze the overworld before their battle begins.
+
 - Running from a wild battle now displays “Got away safely!” instead of a
   misleading wild-battle victory.
 
