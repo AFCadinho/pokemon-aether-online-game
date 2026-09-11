@@ -26,6 +26,9 @@ func _init() -> void:
 	_expect(world.contains("wild_battle_resume_pending = true")
 		and world.contains("if is_in_battle or wild_battle_resume_pending:"),
 		"A temporarily unreachable battle cannot be replaced by another battle")
+	_expect(world.contains('WildEncounterErrorRules.error_code(response) == "active_wild_battle_exists"')
+		and world.contains("var resumed := await _resume_saved_wild_battle({"),
+		"A duplicate wild encounter resumes the account-bound battle instead of showing an error")
 	_expect(world.contains('active_battle_kind = "wild"')
 		and world.contains("battle_instance.resume_wild_battle_from_response("),
 		"A valid snapshot remounts the existing wild battle")

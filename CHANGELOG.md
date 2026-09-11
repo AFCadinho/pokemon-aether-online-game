@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Browser-demo players now reopen an unfinished wild battle when they touch
+  grass again, rather than receiving a generic encounter error.
+
 - Browser battle hover cards now load speed tiers, and the damage calculator
   uses the original gender textures with browser-safe disclosure controls.
 
