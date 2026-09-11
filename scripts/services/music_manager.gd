@@ -155,13 +155,22 @@ func get_battle_music_track_label(track_id: String) -> String:
 
 func play_music(track_path: String) -> void:
 	if current_track_path == track_path and music_player.playing:
+		_report_web_audio_debug("music-already-playing", {"track": track_path})
 		return
 
 	var stream: AudioStream = _load_music_stream(track_path)
 	if stream == null:
+		_report_web_audio_debug("music-load-failed", {"track": track_path})
 		push_warning("Could not load music track: %s" % track_path)
 		return
 
+	_report_web_audio_debug("music-loaded", {
+		"track": track_path,
+		"stream_type": stream.get_class(),
+		"bus": music_player.bus,
+		"bus_muted": AudioServer.is_bus_mute(AudioServer.get_bus_index(music_player.bus)),
+		"bus_volume_db": AudioServer.get_bus_volume_db(AudioServer.get_bus_index(music_player.bus)),
+	})
 	current_track_path = track_path
 	_fade_to_stream(stream)
 
@@ -192,6 +201,11 @@ func _start_stream(stream: AudioStream) -> void:
 	music_player.stream = stream
 	music_player.volume_db = -80.0
 	music_player.play()
+	_report_web_audio_debug("music-play-requested", {
+		"track": current_track_path,
+		"playing": music_player.playing,
+		"volume_db": music_player.volume_db,
+	})
 
 
 func _on_music_finished() -> void:
@@ -331,3 +345,14 @@ func _load_music_stream_from_path(path: String) -> AudioStream:
 		_:
 			push_warning("Unsupported external music format: %s" % path)
 			return null
+
+
+func _report_web_audio_debug(event_name: String, details: Dictionary = {}) -> void:
+	if not OS.has_feature("web"):
+		return
+	var event_json := JSON.stringify(event_name)
+	var details_json := JSON.stringify(details)
+	JavaScriptBridge.eval(
+		"window.pokeaetherAudioDiagnostics?.record(%s, %s)" % [event_json, details_json],
+		true
+	)

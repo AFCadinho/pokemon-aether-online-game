@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Removed the temporary browser test-tone button and added opt-in WebAudio
+  diagnostics for investigating browser game-audio playback.
+
 - Trainers that spot the player now use a bounded approach animation, so a bad
   map/facing position cannot freeze the overworld before their battle begins.
 
