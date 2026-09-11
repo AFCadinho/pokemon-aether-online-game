@@ -369,11 +369,6 @@ func _on_settings_menu_closed() -> void:
 
 
 func _setup_background_video() -> void:
-	if OS.has_feature("web"):
-		background_video_player.stop()
-		background_video_player.hide()
-		hero_background.show()
-		return
 	var has_video := background_video_player.stream != null
 	background_video_player.visible = has_video
 	hero_background.visible = not has_video

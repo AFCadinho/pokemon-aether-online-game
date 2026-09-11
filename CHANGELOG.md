@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Browser demo: the login screen now uses the same animated background as the
+  desktop client.
+
 - Browser demo: music now opens and unlocks its shared browser audio context
   from the initial play click, so login, map and battle music can start under
   browser autoplay rules.
