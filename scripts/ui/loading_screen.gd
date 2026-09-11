@@ -226,6 +226,10 @@ func _load_world_scene_threaded() -> PackedScene:
 
 func _return_to_login(message: String) -> void:
 	push_warning("LoadingScreen: %s" % message)
+	# Preserve the actual failed loading stage when returning to the login scene.
+	# Without this, a web player only sees the form again and reasonably reads
+	# the failure as a rejected login or a lost browser session.
+	AuthService.set_pending_login_notice(message)
 	var error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
 	if error != OK:
 		push_error("LoadingScreen: failed to return to login: %s" % error_string(error))
