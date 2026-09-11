@@ -179,6 +179,26 @@
 						"x": 30,
 						"y": 45
 					}
+				},
+				"heal_npc": {
+					"facingDirection": "down",
+					"label": "Heal NPC",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "HealNPC",
+					"tile": {
+						"x": 27,
+						"y": 31
+					}
+				},
+				"heal_npc_2": {
+					"facingDirection": "down",
+					"label": "Heal NPC 2",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "HealNPC2",
+					"tile": {
+						"x": 33,
+						"y": 31
+					}
 				}
 			}
 		},
