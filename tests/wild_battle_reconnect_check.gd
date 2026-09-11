@@ -29,6 +29,10 @@ func _init() -> void:
 	_expect(world.contains('WildEncounterErrorRules.error_code(response) == "active_wild_battle_exists"')
 		and world.contains("var resumed := await _resume_saved_wild_battle({"),
 		"A duplicate wild encounter resumes the account-bound battle instead of showing an error")
+	_expect(world.contains("retry_after_expired_battle := true")
+		and world.contains("await start_triggered_wild_battle_for_area(")
+		and world.contains("forced_species_id,\n\t\t\t\t\t\tfalse"),
+		"A stale wild-battle binding is cleared and retried once in the same encounter attempt")
 	_expect(world.contains('active_battle_kind = "wild"')
 		and world.contains("battle_instance.resume_wild_battle_from_response("),
 		"A valid snapshot remounts the existing wild battle")

@@ -3269,7 +3269,8 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 func start_triggered_wild_battle_for_area(
 	area_id: String,
 	encounter_type: String = "grass",
-	forced_species_id: String = ""
+	forced_species_id: String = "",
+	retry_after_expired_battle := true
 ) -> void:
 	if is_in_battle or wild_battle_resume_pending:
 		return
@@ -3309,6 +3310,18 @@ func start_triggered_wild_battle_for_area(
 					},
 				})
 				if bool(resumed.get("resumed", false)) or bool(resumed.get("retryable", false)):
+					return
+				# The resume endpoint has authoritatively cleared an expired
+				# account binding. Start one fresh encounter immediately so a
+				# player does not have to walk out of and back into the same grass
+				# tile after a stale browser tab or server restart.
+				if retry_after_expired_battle:
+					await start_triggered_wild_battle_for_area(
+						area_id,
+						encounter_type,
+						forced_species_id,
+						false
+					)
 					return
 		if WildEncounterErrorRules.message_lines(response).is_empty():
 			push_warning("World.start_triggered_wild_battle_for_area failed: %s" % str(response.get("error", "Unknown error")))

@@ -2,8 +2,11 @@
 
 ## Unreleased
 
-- Browser audio now creates and unlocks the exact WebAudio context that Godot
-  later uses, so music, effects and cries start alongside the audible test.
+- Browser audio now leaves WebAudio context creation to Godot’s own mixer and
+  unlocks that context after startup.
+
+- An expired wild-battle recovery now immediately retries the encounter once,
+  instead of showing a generic error for the first grass tile.
 
 - Running from a wild battle now waits for the authoritative server result
   before closing the battle, preventing a hidden active battle from blocking
