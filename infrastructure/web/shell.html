@@ -65,11 +65,20 @@
     let webAudioContext = null;
     const NativeAudioContext = window.AudioContext || window.webkitAudioContext;
     if (NativeAudioContext) {
-      class CapturedAudioContext extends NativeAudioContext {
-        constructor(...args) { super(...args); webAudioContext = this; }
-      }
-      window.AudioContext = CapturedAudioContext;
-      window.webkitAudioContext = CapturedAudioContext;
+      // Godot constructs its context after the asynchronous pack download.
+      // By then the click that opened the game is no longer an activation
+      // gesture, which leaves browsers free to suspend it indefinitely.
+      // Prime one native context during that click and hand that exact context
+      // to Godot when it starts its audio driver.
+      const sharedAudioContext = function (...args) {
+        if (!webAudioContext || webAudioContext.state === 'closed') {
+          webAudioContext = new NativeAudioContext(...args);
+        }
+        return webAudioContext;
+      };
+      sharedAudioContext.prototype = NativeAudioContext.prototype;
+      window.AudioContext = sharedAudioContext;
+      window.webkitAudioContext = sharedAudioContext;
     }
     const config = $GODOT_CONFIG;
     const engine = new Engine(config);
@@ -78,9 +87,22 @@
     const progress = document.getElementById('progress');
     const cover = document.getElementById('cover');
     const soundEnable = document.getElementById('sound-enable');
-    const unlockAudio = () => {
-      if (webAudioContext) webAudioContext.resume().catch(() => {});
-      soundEnable.hidden = true;
+    const unlockAudio = async () => {
+      if (!webAudioContext && NativeAudioContext) webAudioContext = new NativeAudioContext();
+      if (!webAudioContext) {
+        soundEnable.textContent = 'Audio is not supported by this browser';
+        return false;
+      }
+      try {
+        await webAudioContext.resume();
+        if (webAudioContext.state !== 'running') throw new Error('Audio is still suspended');
+        soundEnable.hidden = true;
+        return true;
+      } catch (_) {
+        soundEnable.hidden = false;
+        soundEnable.textContent = 'Click to enable sound';
+        return false;
+      }
     };
     soundEnable.addEventListener('click', unlockAudio);
     const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
@@ -139,6 +161,9 @@
       progress.hidden = false;
       window.pokeaetherPreview.state = 'loading';
       try {
+		// This call is deliberately before the first await: it is the user
+		// gesture browsers require for Web Audio playback.
+		await unlockAudio();
         const missing = Engine.getMissingFeatures({ threads: false });
         if (missing.length) throw new Error('Browser support missing: ' + missing.join(', '));
         await engine.startGame({
