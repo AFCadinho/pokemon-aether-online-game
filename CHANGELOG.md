@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Browser music, battle sounds, cries and UI sounds now use the WebAudio
+  mixer’s reliable Master output route.
+
 - Browser audio now includes an audible output test, which also retries the
   browser sound unlock through the same audio context used by the game.
 

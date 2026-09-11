@@ -294,7 +294,7 @@ func _build_nodes() -> void:
 
 		var player: AudioStreamPlayer = AudioStreamPlayer.new()
 		player.stream = stream
-		player.bus = SettingsManager.SFX_BUS
+		player.bus = SettingsManager.get_audio_output_bus(SettingsManager.SFX_BUS)
 		sound_players[sound_key] = player
 		add_child(player)
 

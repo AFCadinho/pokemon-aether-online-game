@@ -124,7 +124,7 @@ func play(sound_id: String, volume_offset_db: float = 0.0, pitch_scale: float = 
 
 	var player := AudioStreamPlayer.new()
 	player.stream = stream
-	player.bus = DEFAULT_BUS
+	player.bus = SettingsManager.get_audio_output_bus(DEFAULT_BUS)
 	player.volume_db = float(sound_data.get("volume_db", 0.0)) + volume_offset_db
 	player.pitch_scale = pitch_scale
 	player.finished.connect(player.queue_free)
@@ -156,7 +156,7 @@ func play_pokemon_cry(species: String, volume_offset_db: float = 0.0, pitch_scal
 
 	var player := AudioStreamPlayer.new()
 	player.stream = stream
-	player.bus = SettingsManager.POKEMON_CRY_BUS
+	player.bus = SettingsManager.get_audio_output_bus(SettingsManager.POKEMON_CRY_BUS)
 	player.volume_db = POKEMON_CRY_VOLUME_DB + volume_offset_db
 	player.pitch_scale = pitch_scale
 	player.finished.connect(player.queue_free)

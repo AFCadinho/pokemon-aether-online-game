@@ -88,7 +88,7 @@ func _run() -> void:
 	)
 	_expect("await _play_counterattack()" in controller_source and controller_source.find("await _play_counterattack()") < controller_source.find("await _flee_rockets()"), "the rescuer attacks before Team Rocket flees")
 	_expect("_play_counterattack_sound(move)\n\tawait attack.play" in controller_source, "the future partner's move sound starts with its attack animation")
-	_expect("audio_player.bus = SettingsManager.SFX_BUS" in controller_source, "the counterattack sound respects the SFX volume setting")
+	_expect("audio_player.bus = SettingsManager.get_audio_output_bus(SettingsManager.SFX_BUS)" in controller_source, "the counterattack sound uses the desktop SFX bus and web-safe output route")
 	_expect("await _wait_for_interact_release()" in controller_source, "dialogue input cannot skip the next story action")
 	_expect('ROCKET_PORTRAIT_ID := "showdown_rainbowrocketgrunt"' in controller_source, "Team Rocket dialogue uses its Showdown portrait")
 	_expect("TrainerHeadPortrait.new()" in controller_source and "PlayerSave.to_appearance_state()" in controller_source, "player dialogue renders the current overworld appearance")

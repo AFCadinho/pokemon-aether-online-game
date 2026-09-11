@@ -19,7 +19,7 @@ func _init() -> void:
 	_check_contains(settings_source, "func set_pokemon_cry_volume", "cry volume has a setter")
 	_check_contains(scene_source, '[node name="PokemonCryVolumeSlider"', "settings scene has a cry volume slider")
 	_check_contains(menu_source, "SettingsManager.set_pokemon_cry_volume(value)", "cry slider updates settings")
-	_check_contains(sfx_source, "player.bus = SettingsManager.POKEMON_CRY_BUS", "Pokémon cries use their own bus")
+	_check_contains(sfx_source, "SettingsManager.get_audio_output_bus(SettingsManager.POKEMON_CRY_BUS)", "Pokémon cries retain their own bus on desktop and route safely on web")
 
 	quit(1 if failed else 0)
 

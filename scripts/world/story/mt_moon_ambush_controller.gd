@@ -350,7 +350,7 @@ func _play_counterattack_sound(move: Dictionary) -> void:
 		return
 	var audio_player := AudioStreamPlayer.new()
 	audio_player.stream = stream
-	audio_player.bus = SettingsManager.SFX_BUS
+	audio_player.bus = SettingsManager.get_audio_output_bus(SettingsManager.SFX_BUS)
 	audio_player.finished.connect(audio_player.queue_free)
 	add_child(audio_player)
 	audio_player.play()
