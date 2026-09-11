@@ -8,6 +8,7 @@ const PLAYER_TELEPORT_ACK_ENDPOINT := "/game/player-position/teleport-ack"
 const PLAYER_RESPAWN_ENDPOINT := "/game/respawn"
 const PLAYER_RESPAWN_POINT_ENDPOINT := "/game/respawn-point"
 const PLAYER_ACTIVITY_ENDPOINT := "/game/player-activity"
+const WEB_PLAYER_ACTIVITY_ENDPOINT := "/auth/web/world/activity"
 const MAP_PLAYERS_ENDPOINT := "/game/map-players"
 const PLAYER_PREFERENCES_ENDPOINT := "/game/preferences"
 const WEB_PLAYER_PREFERENCES_ENDPOINT := "/auth/web/preferences"
@@ -659,6 +660,10 @@ func _player_position_endpoint() -> String:
 	return WEB_PLAYER_POSITION_ENDPOINT if OS.has_feature("web") else PLAYER_POSITION_ENDPOINT
 
 
+func _player_activity_endpoint() -> String:
+	return WEB_PLAYER_ACTIVITY_ENDPOINT if OS.has_feature("web") else PLAYER_ACTIVITY_ENDPOINT
+
+
 func acknowledge_player_teleport(teleport_revision: int, teleport_command_id: String = "") -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
@@ -781,7 +786,7 @@ func save_player_activity_state(activity_state: String, activity_context: Dictio
 	}
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_ACTIVITY_ENDPOINT,
+		base_url + _player_activity_endpoint(),
 		HTTPClient.METHOD_PUT,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify(payload)

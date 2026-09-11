@@ -54,6 +54,7 @@ HTTP_ROUTE_PREFIXES = (
 	("GET", "/battle/pvp/rooms/"), ("POST", "/battle/pvp/rooms/"),
 	("GET", "/trainers/"),
 	("GET", "/npcs/"),
+	("GET", "/overworld-pokemon/"),
     ("GET", "/dialogues/"),
     ("GET", "/encounters/"),
     ("GET", "/auth/web/world/story"),
