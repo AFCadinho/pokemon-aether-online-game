@@ -1,5 +1,6 @@
 extends Node
 
+const WebDemoAudioCatalog := preload("res://scripts/services/web_demo_audio_catalog.gd")
 const MUSIC_CATALOG_PATH := "res://data/music_catalog.json"
 const DEFAULT_OVERWORLD_MUSIC_ID := "overworld.kanto.route.1"
 const LOGIN_MUSIC_ID := "login.lugia_theme_lofi"
@@ -346,6 +347,10 @@ func _get_music_track_label_from_path(track_path: String) -> String:
 
 
 func _load_music_stream_from_path(path: String) -> AudioStream:
+	if OS.has_feature("web"):
+		var packed_stream := WebDemoAudioCatalog.get_stream(path)
+		if packed_stream != null:
+			return packed_stream
 	if path.begins_with("res://"):
 		if ResourceLoader.exists(path):
 			return load(path) as AudioStream
