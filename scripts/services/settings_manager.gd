@@ -86,6 +86,14 @@ var enabled_language_chats: Array[String] = []
 var input_bindings: Dictionary = DEFAULT_INPUT_BINDINGS.duplicate()
 
 
+func get_audio_output_bus(preferred_bus: String) -> String:
+	# The browser AudioWorklet mixer reliably exposes the Master bus, while
+	# dynamically created category buses can remain disconnected on some WebGL
+	# builds. Route game playback directly to Master there; desktop keeps its
+	# independent Music/SFX/cry/UI controls unchanged.
+	return MASTER_BUS if OS.has_feature("web") else preferred_bus
+
+
 func _ready() -> void:
 	_ensure_audio_buses()
 	load_settings()

@@ -1795,7 +1795,7 @@ func _ready() -> void:
 	_apply_mail_ui_styles()
 	_setup_socials_attention_badge()
 	if mail_notification_sound != null and AudioServer.get_bus_index(SettingsManager.NOTIFICATION_BUS) >= 0:
-		mail_notification_sound.bus = SettingsManager.NOTIFICATION_BUS
+		mail_notification_sound.bus = SettingsManager.get_audio_output_bus(SettingsManager.NOTIFICATION_BUS)
 	_setup_loan_return_request_attention()
 	_set_socials_attention("mail", false)
 	_refresh_location_label()

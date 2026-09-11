@@ -1549,7 +1549,7 @@ func _play_one_shot_sound(sound_path: String) -> void:
 
 	var player: AudioStreamPlayer = AudioStreamPlayer.new()
 	player.stream = stream
-	player.bus = SettingsManager.SFX_BUS
+	player.bus = SettingsManager.get_audio_output_bus(SettingsManager.SFX_BUS)
 	player.finished.connect(player.queue_free)
 	parent_node.add_child(player)
 	player.play()

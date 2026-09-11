@@ -25,7 +25,7 @@ func _ready() -> void:
 	_load_music_catalog()
 	music_player = AudioStreamPlayer.new()
 	music_player.name = "MusicPlayer"
-	music_player.bus = SettingsManager.MUSIC_BUS
+	music_player.bus = SettingsManager.get_audio_output_bus(SettingsManager.MUSIC_BUS)
 	music_player.finished.connect(_on_music_finished)
 	add_child(music_player)
 
