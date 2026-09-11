@@ -24,6 +24,10 @@ func _init() -> void:
 	var sprite_source := FileAccess.get_file_as_string("res://scripts/battle/battle_ui/sprite_box.gd")
 	_check(sprite_source.contains("_upgrade_single_web_sprite.call_deferred"), "battle sprites upgrade without blocking the HOME fallback")
 	_check(sprite_source.contains("request_web_sprite_frames"), "battle, preview and detail screens share the web loader")
+	var sprite_scene := FileAccess.get_file_as_string("res://scenes/battle/sprite_box.tscn")
+	var preview_scene := FileAccess.get_file_as_string("res://scenes/battle/team_preview_layer.tscn")
+	_check(not sprite_scene.contains("assets/sprites/pokemon/front/") and sprite_scene.contains("pokemon_home/Pikachu.png"), "battle fallback does not require an excluded legacy sheet")
+	_check(not preview_scene.contains("assets/sprites/pokemon/front/") and preview_scene.contains("pokemon_home/Eevee.png"), "team preview fallback does not require an excluded legacy sheet")
 	service.free()
 	if failures == 0:
 		print("web_dynamic_pokemon_sprite_check: PASS")

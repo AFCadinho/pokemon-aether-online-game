@@ -40,6 +40,12 @@ func _process(_delta: float) -> void:
 func load_state() -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
+	# Thieving has no browser-authorized endpoint. Treat it as unavailable
+	# rather than calling the desktop /game route and filling the web console
+	# with an expected 403 during every world load.
+	if OS.has_feature("web"):
+		_apply_state({})
+		return {"success": true, "state": {}}
 	var request_generation := state_generation
 	var response := await _request_json(THIEVING_ENDPOINT, HTTPClient.METHOD_GET, "")
 	if request_generation != state_generation:
