@@ -1145,6 +1145,7 @@ func _confirm_leave_arena() -> void:
 		_leave_failed(str(begin_result.get("error", "Leaving the Clash is unavailable right now.")))
 		return
 	var guild_service := get_node_or_null("/root/GuildService")
+	# Authoritative leave operation: GuildService.leave_aether_clash_arena(instance_session_id).
 	var result: Dictionary = await guild_service.call("leave_aether_clash_arena", instance_session_id) if guild_service != null else {}
 	if not bool(result.get("success", false)):
 		if world.has_method("cancel_authorized_teleport_effect"):
@@ -1222,6 +1223,8 @@ func _on_engagement_contact_requested(
 		"method": method,
 	})
 	var guild_service := get_node_or_null("/root/GuildService")
+	# Authoritative engagement operation: GuildService.create_aether_clash_engagement(
+	# instance_session_id, target_user_id, method).
 	var result: Dictionary = await guild_service.call("create_aether_clash_engagement", instance_session_id, target_user_id, method) if guild_service != null else {}
 	engagement_requests_in_flight.erase(pair_key)
 	_trace_aether_clash("engagement_request_completed", {
