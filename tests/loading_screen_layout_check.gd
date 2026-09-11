@@ -7,6 +7,7 @@ var failed := false
 
 func _init() -> void:
 	var source := FileAccess.get_file_as_string(LOADING_SCREEN_SCRIPT)
+	_check(source.contains("AuthService.set_pending_login_notice(message)"), "loading failures remain visible after returning to login")
 	_check(source.contains('"ui.loading.preparing"'), "loading screen uses a localized player-facing title")
 	_check(source.contains('"ui.loading.secure_session"'), "loading screen localizes the authenticated transition")
 	_check(source.contains("GradientTexture2D.FILL_RADIAL"), "loading screen uses the current aura treatment")
