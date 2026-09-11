@@ -167,6 +167,9 @@ const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_p
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const OVERWORLD_MOVE_ACTION_ICON := preload("res://assets/ui/icons/overworld_move_action.svg")
 const POKEMON_SUMMARY_COPY_ICON: Texture2D = preload("res://assets/ui/icons/clipboard_copy.svg")
+const POKEMON_SUMMARY_EDIT_ICON: Texture2D = preload("res://assets/ui/icons/edit.svg")
+const MORE_ACTIONS_ICON: Texture2D = preload("res://assets/ui/icons/more.svg")
+const HIDDEN_ABILITY_ICON: Texture2D = preload("res://assets/ui/icons/hidden_ability.svg")
 const CHAT_RESIZE_ICON: Texture2D = preload("res://assets/ui/chat_resize.svg")
 const GLOBAL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_exp_boost.svg")
 const GLOBAL_SKILL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_skill_exp_boost.svg")
@@ -3148,7 +3151,8 @@ func _setup_pc_ui() -> void:
 	box_header.add_child(pc_box_tab_next_button)
 
 	pc_box_rename_button = Button.new()
-	pc_box_rename_button.text = "✎"
+	pc_box_rename_button.icon = POKEMON_SUMMARY_EDIT_ICON
+	pc_box_rename_button.expand_icon = true
 	pc_box_rename_button.custom_minimum_size = Vector2(30, 30)
 	pc_box_rename_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pc_box_rename_button, "tooltip_text", "ui.storage.box.rename")
@@ -19370,6 +19374,17 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	_set_localized_control_property(pokemon_summary_hidden_ability_badge, "tooltip_text", "ui.pokemon_summary.hidden_ability")
 	pokemon_summary_hidden_ability_badge.add_theme_stylebox_override("panel", _make_panel_style(Color("#071c33f2"), Color("#8cecff"), 8, 1))
 	sprite_stage.add_child(pokemon_summary_hidden_ability_badge)
+	var ha_row := HBoxContainer.new()
+	ha_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	ha_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pokemon_summary_hidden_ability_badge.add_child(ha_row)
+	var ha_icon := TextureRect.new()
+	ha_icon.custom_minimum_size = Vector2(14, 14)
+	ha_icon.texture = HIDDEN_ABILITY_ICON
+	ha_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	ha_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	ha_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ha_row.add_child(ha_icon)
 	var ha_label := Label.new()
 	ha_label.text = "HA"
 	ha_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -19377,7 +19392,7 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	ha_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ha_label.add_theme_font_size_override("font_size", 10)
 	ha_label.add_theme_color_override("font_color", Color("#e9fbff"))
-	pokemon_summary_hidden_ability_badge.add_child(ha_label)
+	ha_row.add_child(ha_label)
 
 	pokemon_summary_level_badge_panel = PanelContainer.new()
 	pokemon_summary_level_badge_panel.custom_minimum_size = Vector2(54, 24)
@@ -19416,12 +19431,15 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	var title_row := HBoxContainer.new()
 	title_row.add_theme_constant_override("separation", 4)
 	identity_stack.add_child(title_row)
-	var shiny_label := Label.new()
-	shiny_label.text = "S"
-	shiny_label.visible = false
-	shiny_label.add_theme_color_override("font_color", Color("#f4d36a"))
-	title_row.add_child(shiny_label)
-	nodes["shiny_label"] = shiny_label
+	var shiny_icon := TextureRect.new()
+	shiny_icon.visible = false
+	shiny_icon.custom_minimum_size = Vector2(16, 16)
+	shiny_icon.texture = GLOBAL_SHINY_BUFF_ICON
+	shiny_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	shiny_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	shiny_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title_row.add_child(shiny_icon)
+	nodes["shiny_icon"] = shiny_icon
 	var name_label := Label.new()
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_make_label_clip_width(name_label)
@@ -20261,6 +20279,17 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	)
 	_set_localized_control_property(pokemon_summary_hidden_ability_badge, "tooltip_text", "ui.pokemon_summary.hidden_ability")
 
+	var hidden_ability_badge_row := HBoxContainer.new()
+	hidden_ability_badge_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	hidden_ability_badge_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pokemon_summary_hidden_ability_badge.add_child(hidden_ability_badge_row)
+	var hidden_ability_badge_icon := TextureRect.new()
+	hidden_ability_badge_icon.custom_minimum_size = Vector2(14, 14)
+	hidden_ability_badge_icon.texture = HIDDEN_ABILITY_ICON
+	hidden_ability_badge_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	hidden_ability_badge_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	hidden_ability_badge_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hidden_ability_badge_row.add_child(hidden_ability_badge_icon)
 	var hidden_ability_badge_label := Label.new()
 	hidden_ability_badge_label.text = "HA"
 	hidden_ability_badge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -20273,7 +20302,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	hidden_ability_badge_label.add_theme_constant_override("outline_size", 1)
 	hidden_ability_badge_label.add_theme_constant_override("shadow_offset_x", 1)
 	hidden_ability_badge_label.add_theme_constant_override("shadow_offset_y", 1)
-	pokemon_summary_hidden_ability_badge.add_child(hidden_ability_badge_label)
+	hidden_ability_badge_row.add_child(hidden_ability_badge_label)
 	pokemon_summary_hidden_ability_badge.visible = false
 	sprite_frame.add_child(pokemon_summary_hidden_ability_badge)
 
@@ -20359,8 +20388,9 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	title_row.add_child(pokemon_summary_gender_label)
 
 	pokemon_summary_nickname_button = Button.new()
-	pokemon_summary_nickname_button.text = "EDIT"
-	pokemon_summary_nickname_button.custom_minimum_size = Vector2(38, 20)
+	pokemon_summary_nickname_button.icon = POKEMON_SUMMARY_EDIT_ICON
+	pokemon_summary_nickname_button.expand_icon = true
+	pokemon_summary_nickname_button.custom_minimum_size = Vector2(22, 20)
 	pokemon_summary_nickname_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	pokemon_summary_nickname_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_nickname_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -20882,15 +20912,12 @@ func _create_pokemon_summary_shiny_badge() -> PanelContainer:
 	badge_padding.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	badge.add_child(badge_padding)
 
-	pokemon_summary_shiny_badge_label = Label.new()
-	pokemon_summary_shiny_badge_label.text = "*"
-	pokemon_summary_shiny_badge_label.add_theme_font_size_override("font_size", 13)
-	pokemon_summary_shiny_badge_label.add_theme_color_override("font_color", Color("#f4d36a"))
-	pokemon_summary_shiny_badge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	pokemon_summary_shiny_badge_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	pokemon_summary_shiny_badge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_make_label_clip_width(pokemon_summary_shiny_badge_label)
-	badge_padding.add_child(pokemon_summary_shiny_badge_label)
+	var shiny_icon := TextureRect.new()
+	shiny_icon.texture = GLOBAL_SHINY_BUFF_ICON
+	shiny_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	shiny_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	shiny_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge_padding.add_child(shiny_icon)
 	return badge
 
 func _add_pokemon_summary_tab_buttons(tab_column: HBoxContainer, card_key: String) -> void:
@@ -25566,8 +25593,6 @@ func _refresh_pokemon_summary() -> void:
 	_fit_pokemon_summary_title_label()
 	if pokemon_summary_hidden_ability_badge != null:
 		pokemon_summary_hidden_ability_badge.visible = pokemon.hidden_ability
-	if pokemon_summary_shiny_badge_label != null:
-		pokemon_summary_shiny_badge_label.text = "*"
 	pokemon_summary_trainer_label.text = _pokemon_summary_trainer_and_loan_text(pokemon)
 	var level_text := LocalizationManager.text("ui.pokemon_summary.level", {"level": max(pokemon.level, 1)})
 	pokemon_summary_meta_label.text = level_text
@@ -25626,8 +25651,8 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	_apply_pokemon_summary_gender_icon(gender_icon, pokemon.gender)
 	var id_label := nodes.get("id_label") as Label
 	_set_readonly_summary_dex_number(id_label, pokemon)
-	var shiny_label := nodes.get("shiny_label") as Label
-	shiny_label.visible = pokemon.shiny
+	var shiny_icon := nodes.get("shiny_icon") as TextureRect
+	shiny_icon.visible = pokemon.shiny
 	var trainer_label := nodes.get("trainer_label") as Label
 	var trainer_text := _pokemon_summary_trainer_and_loan_text(pokemon)
 	trainer_label.text = trainer_text
@@ -31469,7 +31494,8 @@ func _setup_chat_tab_settings_ui() -> void:
 	var tab_row := $Control/ChatTabsPanel/TabRow
 	chat_settings_button = Button.new()
 	chat_settings_button.name = "ChatSettingsButton"
-	chat_settings_button.text = "..."
+	chat_settings_button.icon = MORE_ACTIONS_ICON
+	chat_settings_button.expand_icon = true
 	chat_settings_button.custom_minimum_size = Vector2(32, 28)
 	chat_settings_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(chat_settings_button, "tooltip_text", "ui.chat.settings.tooltip")
