@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Browser game audio now lets Godot create its own WebAudio mixer context
+  before the player unlocks it, preserving its required latency and sample-rate
+  settings.
+
 - The browser-demo notice now closes in place, while only its Download client
   button opens the website. The saved-session action is labelled Sign in.
 
