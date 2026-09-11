@@ -15,6 +15,7 @@ func _init() -> void:
 	_check(shell.contains("context-created"), "web shell records Godot's WebAudio context creation")
 	_check(shell.contains("worklet-module-loaded"), "web shell records Godot worklet module loading")
 	_check(shell.contains("worklet-node-connected"), "web shell records Godot worklet connection to audio output")
+	_check(shell.contains("worklet-audio-chunk"), "web shell records whether Godot sends audible sample chunks to its worklet")
 	_check(shell.contains("new NativeAudioContext(...args)"), "Godot keeps its requested WebAudio sample-rate and latency settings")
 	_check(shell.contains("webAudioContext = new NativeAudioContext(...args);")
 		and not shell.contains("webAudioContext = new NativeAudioContext();"),
