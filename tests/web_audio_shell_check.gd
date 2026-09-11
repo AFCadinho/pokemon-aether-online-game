@@ -13,6 +13,8 @@ func _init() -> void:
 	_check(shell.contains("audio-debug"), "web shell enables detailed diagnostics only from the audio-debug query")
 	_check(shell.contains("context-resume-failed"), "web shell records a failed context resume")
 	_check(shell.contains("context-created"), "web shell records Godot's WebAudio context creation")
+	_check(shell.contains("worklet-module-loaded"), "web shell records Godot worklet module loading")
+	_check(shell.contains("worklet-node-connected"), "web shell records Godot worklet connection to audio output")
 	_check(shell.contains("new NativeAudioContext(...args)"), "Godot keeps its requested WebAudio sample-rate and latency settings")
 	_check(shell.contains("webAudioContext = new NativeAudioContext(...args);")
 		and not shell.contains("webAudioContext = new NativeAudioContext();"),
