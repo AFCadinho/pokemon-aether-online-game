@@ -21,7 +21,6 @@
     button:focus-visible { outline: 3px solid #f7ce77; outline-offset: 4px; }
     progress { display: block; width: 100%; margin: 22px 0 8px; accent-color: #91ceff; }
     #status { min-height: 3em; font-size: 14px; margin-bottom: 0; }
-    #sound-enable { position: fixed; right: 22px; top: 22px; z-index: 20; border: 1px solid #e7ca73; background: #173149; color: #effdff; box-shadow: 0 5px 18px #0008; }
     dialog { width: min(540px, 94vw); max-height: 90vh; border: 1px solid #53627a; border-radius: 16px; background: #0a1424; color: #edf4ff; padding: 28px; }
     dialog::backdrop { background: #000b; }
     label { display: block; margin: 14px 0; line-height: 1.5; }
@@ -33,7 +32,6 @@
 </head>
 <body>
   <canvas id="canvas" tabindex="0" aria-label="PokeAether game"></canvas>
-  <button id="sound-enable" type="button" hidden>Test sound</button>
   <div id="cover">
     <main>
 		<div class="eyebrow">Browser demo</div>
@@ -62,6 +60,19 @@
   </dialog>
   <script src="$GODOT_URL"></script>
   <script>
+    const audioDebugEnabled = new URLSearchParams(location.search).has('audio-debug');
+    const audioDebugEvents = [];
+    const recordAudioDebug = (event, details = {}) => {
+      const entry = { at: new Date().toISOString(), event, ...details };
+      audioDebugEvents.push(entry);
+      if (audioDebugEnabled) console.info('[PokeAether audio]', entry);
+      return entry;
+    };
+    window.pokeaetherAudioDiagnostics = {
+      events: audioDebugEvents,
+      record: recordAudioDebug,
+      enabled: audioDebugEnabled,
+    };
     let webAudioContext = null;
     const NativeAudioContext = window.AudioContext || window.webkitAudioContext;
     if (NativeAudioContext) {
@@ -70,6 +81,14 @@
       // a context created by the shell.
       const sharedAudioContext = function (...args) {
         webAudioContext = new NativeAudioContext(...args);
+        recordAudioDebug('context-created', {
+          state: webAudioContext.state,
+          sampleRate: webAudioContext.sampleRate,
+          hasAudioWorklet: Boolean(webAudioContext.audioWorklet),
+        });
+        webAudioContext.addEventListener('statechange', () => {
+          recordAudioDebug('context-state', { state: webAudioContext.state });
+        });
         return webAudioContext;
       };
       sharedAudioContext.prototype = NativeAudioContext.prototype;
@@ -83,28 +102,12 @@
     const status = document.getElementById('status');
     const progress = document.getElementById('progress');
     const cover = document.getElementById('cover');
-    const soundEnable = document.getElementById('sound-enable');
     // Godot creates its WebAudio context after the asynchronous pack download.
     // The visible sound control therefore unlocks that actual mixer context,
     // rather than a separate probe context.
-    const playAudioTestTone = () => {
-      if (!webAudioContext || webAudioContext.state !== 'running') return false;
-      const oscillator = webAudioContext.createOscillator();
-      const gain = webAudioContext.createGain();
-      const now = webAudioContext.currentTime;
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(660, now);
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.08, now + 0.012);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
-      oscillator.connect(gain).connect(webAudioContext.destination);
-      oscillator.start(now);
-      oscillator.stop(now + 0.17);
-      return true;
-    };
     const unlockAudio = async () => {
       if (!webAudioContext) {
-        soundEnable.textContent = 'Preparing game audio…';
+        recordAudioDebug('resume-deferred', { reason: 'context-not-created' });
         return false;
       }
       try {
@@ -113,19 +116,13 @@
         const resume = webAudioContext.resume();
         await resume;
         if (webAudioContext.state !== 'running') throw new Error('Audio is still suspended');
+        recordAudioDebug('context-resumed', { state: webAudioContext.state });
         return true;
-      } catch (_) {
-        soundEnable.hidden = false;
-        soundEnable.textContent = 'Enable sound';
+      } catch (error) {
+        recordAudioDebug('context-resume-failed', { message: String(error?.message || error) });
         return false;
       }
     };
-    soundEnable.addEventListener('click', async () => {
-      if (await unlockAudio()) {
-        playAudioTestTone();
-        soundEnable.textContent = 'Test sound';
-      }
-    });
     // The initial pack download can outlive the opening click. Retrying from
     // the first game interaction makes the unlock reliable after that delay,
     // including on browsers that discard the original transient activation.
@@ -211,8 +208,6 @@
         // after the pack has loaded. Resume once more after that attachment.
         await unlockAudio();
         cover.hidden = true;
-        soundEnable.hidden = false;
-        soundEnable.textContent = 'Test sound';
         document.getElementById('canvas').focus();
         window.pokeaetherPreview.state = 'running';
       } catch (error) {
