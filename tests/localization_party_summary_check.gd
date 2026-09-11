@@ -48,7 +48,7 @@ func _check_party_slot_runtime_translation() -> void:
 
 	var name_label := slot.get("name_label") as Label
 	var level_label := slot.get("level_label") as Label
-	var shiny_badge := slot.get("shiny_badge") as Label
+	var shiny_badge := slot.get("shiny_badge") as TextureRect
 	var held_item_marker := slot.get("held_item_marker") as Control
 	var status_icon := slot.get("status_icon") as TextureRect
 	_check(name_label != null and name_label.text == "Pikachu", "Party keeps the canonical species name")
