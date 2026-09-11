@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Browser audio now creates and unlocks the exact WebAudio context that Godot
+  later uses, so music, effects and cries start alongside the audible test.
+
+- Running from a wild battle now waits for the authoritative server result
+  before closing the battle, preventing a hidden active battle from blocking
+  the next encounter.
+
 - Browser-game music, battle sounds and UI sounds now run in the isolated
   WebAudio context required by Godot's mixer.
 

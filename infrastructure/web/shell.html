@@ -65,12 +65,13 @@
     let webAudioContext = null;
     const NativeAudioContext = window.AudioContext || window.webkitAudioContext;
     if (NativeAudioContext) {
-      // Keep Godot's requested constructor settings intact. In particular,
-      // Godot chooses its own sample rate and latency hint for the Worklet
-      // driver; reusing a context made before those settings are known can
-      // leave its mixer silent even though ordinary Web Audio works.
+      // Browsers only allow a WebAudio context to start from a player gesture.
+      // Construct and resume one in the opening click, then hand that same
+      // context to Godot when its asynchronous WebAudio driver starts.
       const sharedAudioContext = function (...args) {
-        webAudioContext = new NativeAudioContext(...args);
+        if (!webAudioContext) {
+          webAudioContext = new NativeAudioContext(...args);
+        }
         return webAudioContext;
       };
       sharedAudioContext.prototype = NativeAudioContext.prototype;
@@ -105,8 +106,8 @@
     };
     const unlockAudio = async () => {
       if (!webAudioContext) {
-        soundEnable.textContent = 'Preparing game audio…';
-        return false;
+        if (!NativeAudioContext) return false;
+        webAudioContext = new NativeAudioContext();
       }
       try {
         // Resume synchronously while the browser still associates this work
@@ -208,6 +209,9 @@
             window.pokeaetherPreview.state = 'exited';
           }
         });
+        // The engine starts asynchronously and may only attach its worklet
+        // after the pack has loaded. Resume once more after that attachment.
+        await unlockAudio();
         cover.hidden = true;
         soundEnable.hidden = false;
         soundEnable.textContent = 'Test sound';

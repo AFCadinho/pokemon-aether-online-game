@@ -4238,16 +4238,35 @@ func _try_run() -> void:
 	_clear_mega_evolution_selection()
 	_clear_z_move_selection()
 	_set_battle_input_locked(true)
-	var response: Dictionary = await action_flow.submit_player_choice("run", 1, false, last_rendered_event_seq)
-	_set_battle_input_locked(false)
+	# A wild battle is server-owned. Submitting only the local choice leaves the
+	# NPC turn unresolved and the persisted battle active, so reconnects return
+	# to a battle the player has already visually left. Resolve Run as one
+	# complete PvE turn, just like a move or a voluntary switch.
+	var response: Dictionary = await _submit_player_choice_and_resolve("run", 1)
 	if not bool(response.get("success", false)):
 		var error_message := str(response.get("error", _t("battle.error.run_failed")))
 		current_action_panel.set_message(error_message)
 		_add_battle_log_message(error_message)
+		_set_battle_input_locked(false)
 		return
 
-	_add_battle_log_message(_t("battle.run.success"))
-	_finish_battle({"reason": "flee"})
+	if not await _render_resolved_player_choice_response(response):
+		current_action_panel.set_message(_t("battle.error.run_failed"))
+		_set_battle_input_locked(false)
+		_show_moves()
+		return
+
+	if await _finish_if_battle_ended({"reason": "flee"}):
+		return
+
+	# The server should always end a wild battle after Run. Do not close the
+	# client battle locally if it did not: retain a usable, authoritative battle
+	# instead of stranding the account in a hidden active battle.
+	var unresolved_message := _t("battle.error.run_failed")
+	current_action_panel.set_message(unresolved_message)
+	_add_battle_log_message(unresolved_message)
+	_set_battle_input_locked(false)
+	_show_moves()
 
 func _show_forfeit_confirm_dialog() -> void:
 	forfeit_return_action_view = current_action_view
