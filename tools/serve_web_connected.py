@@ -14,6 +14,7 @@ from websockets.asyncio.client import connect
 from websockets.exceptions import ConnectionClosed, InvalidStatus
 
 ROOT = Path(__file__).resolve().parents[1]
+POKEMON_ASSET_ROOT = (ROOT / "assets/sprites/pokemon/gen5").resolve()
 HTTP_ROUTES = {
     ("GET", "/auth/status"), ("GET", "/presence/online-count"),
     ("GET", "/auth/web/meta"), ("GET", "/auth/web/me"),
@@ -75,6 +76,8 @@ def create_app(upstream, build=None, *, transport=None):
         else:
             response = await call_next(request)
         response.headers.update(SECURITY_HEADERS)
+        if request.url.path.startswith("/pokemon-assets/gen5/") and response.status_code == 200:
+            response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
         return response
 
     @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"])
@@ -171,6 +174,17 @@ def create_app(upstream, build=None, *, transport=None):
     @app.websocket("/api/ws/world-presence")
     async def world_presence_websocket_proxy(socket: WebSocket):
         await websocket_proxy(socket, "world-presence")
+
+    @app.get("/pokemon-assets/gen5/{side}/{species}/{filename}")
+    async def pokemon_asset(side: str, species: str, filename: str):
+        if (side not in {"front", "back", "shiny_front", "shiny_back"}
+                or not re.fullmatch(r"[a-z0-9-]{1,96}", species)
+                or filename not in {"animation.json", "sheet.png"}):
+            return Response(status_code=404)
+        target = (POKEMON_ASSET_ROOT / side / species / filename).resolve()
+        if not target.is_relative_to(POKEMON_ASSET_ROOT) or target.is_symlink() or not target.is_file():
+            return Response(status_code=404)
+        return FileResponse(target)
 
     @app.get("/{path:path}")
     async def static(path: str):

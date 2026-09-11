@@ -1407,6 +1407,7 @@ var pokemon_summary_sprite: TextureRect
 var pokemon_summary_sprite_viewport: SubViewport
 var pokemon_summary_animated_sprite: AnimatedSprite2D
 var pokemon_summary_sprite_loader: Node = BATTLE_SPRITE_LOADER.new()
+var pokemon_summary_web_sprite_generation := 0
 var pokemon_summary_level_badge_panel: PanelContainer
 var pokemon_summary_level_badge_label: Label
 var pokemon_summary_ball_button: Button
@@ -1570,6 +1571,7 @@ var pokedex_sprite_panel: PanelContainer
 var pokedex_sprite_viewport: SubViewport
 var pokedex_animated_sprite: AnimatedSprite2D
 var pokedex_sprite_loader: Node = BATTLE_SPRITE_LOADER.new()
+var pokedex_web_sprite_generation := 0
 var pokedex_sprite_side := "front"
 var pokedex_header_stats_stack: VBoxContainer
 var pokedex_detail_stack: VBoxContainer
@@ -26131,6 +26133,8 @@ func _apply_pokemon_summary_gender_label(label: Label, gender: String) -> void:
 func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	if pokemon_summary_animated_sprite == null:
 		return
+	pokemon_summary_web_sprite_generation += 1
+	var web_generation := pokemon_summary_web_sprite_generation
 
 	var sprite_side: String = _get_pokemon_summary_sprite_side()
 	var loaded_frames: Variant = pokemon_summary_sprite_loader.call(
@@ -26154,6 +26158,7 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 		pokemon_summary_animated_sprite.scale = _get_pokemon_summary_sprite_scale(frames)
 		_apply_pokemon_summary_sprite_center_offset(frames, pokemon_summary_animated_sprite.animation)
 		pokemon_summary_animated_sprite.play()
+		_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
 		return
 
 	pokemon_summary_animated_sprite.stop()
@@ -26162,6 +26167,22 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	pokemon_summary_sprite.texture = PokemonAssets.load_home_sprite(pokemon.species, pokemon.shiny)
 	if pokemon_summary_sprite.texture == null:
 		pokemon_summary_sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
+	_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
+
+
+func _upgrade_pokemon_summary_web_sprite(generation: int, species: String, side: String, is_shiny: bool) -> void:
+	var frames: SpriteFrames = await pokemon_summary_sprite_loader.call("request_web_sprite_frames", species, side, is_shiny)
+	if frames == null or generation != pokemon_summary_web_sprite_generation or pokemon_summary_animated_sprite == null:
+		return
+	pokemon_summary_sprite.visible = false
+	pokemon_summary_animated_sprite.visible = true
+	pokemon_summary_animated_sprite.sprite_frames = frames
+	pokemon_summary_animated_sprite.animation = "idle"
+	pokemon_summary_animated_sprite.frame = 0
+	pokemon_summary_animated_sprite.position = _get_pokemon_summary_sprite_position()
+	pokemon_summary_animated_sprite.scale = _get_pokemon_summary_sprite_scale(frames)
+	_apply_pokemon_summary_sprite_center_offset(frames, "idle")
+	pokemon_summary_animated_sprite.play()
 
 func _get_pokemon_summary_sprite_side() -> String:
 	return "back" if pokemon_summary_sprite_side == "back" else "front"
@@ -35569,6 +35590,7 @@ func _refresh_pokedex_type_row(types: Array) -> void:
 		pokedex_type_row.add_child(_create_pokedex_type_badge(type_name))
 
 func _clear_pokedex_species_sprite() -> void:
+	pokedex_web_sprite_generation += 1
 	if pokedex_animated_sprite != null:
 		pokedex_animated_sprite.stop()
 		pokedex_animated_sprite.sprite_frames = null
@@ -35582,6 +35604,8 @@ func _clear_pokedex_species_sprite() -> void:
 func _set_pokedex_species_sprite(species: Dictionary) -> void:
 	if pokedex_animated_sprite == null or pokedex_sprite == null:
 		return
+	pokedex_web_sprite_generation += 1
+	var web_generation := pokedex_web_sprite_generation
 
 	var loaded_frames: SpriteFrames = null
 	for candidate: String in _pokedex_species_sprite_candidates(species):
@@ -35621,6 +35645,26 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 		pokedex_sprite_panel.tooltip_text = LocalizationManager.text("ui.pokedex.sprite.show_view", {
 			"side": LocalizationManager.text("ui.pokedex.side.%s" % target_side),
 		})
+	_upgrade_pokedex_web_sprite.call_deferred(web_generation, species.duplicate(true), _get_pokedex_sprite_side(), pokedex_shiny_mode)
+
+
+func _upgrade_pokedex_web_sprite(generation: int, species: Dictionary, side: String, is_shiny: bool) -> void:
+	var loaded_frames: SpriteFrames = null
+	for candidate: String in _pokedex_species_sprite_candidates(species):
+		loaded_frames = await pokedex_sprite_loader.call("request_web_sprite_frames", candidate, side, is_shiny)
+		if loaded_frames != null:
+			break
+	if loaded_frames == null or generation != pokedex_web_sprite_generation or pokedex_animated_sprite == null:
+		return
+	pokedex_sprite.visible = false
+	pokedex_animated_sprite.visible = true
+	pokedex_animated_sprite.sprite_frames = loaded_frames
+	pokedex_animated_sprite.animation = "idle"
+	pokedex_animated_sprite.frame = 0
+	pokedex_animated_sprite.position = _get_pokedex_sprite_position()
+	pokedex_animated_sprite.scale = _get_pokedex_sprite_scale(loaded_frames)
+	_apply_pokedex_sprite_center_offset(loaded_frames, "idle")
+	pokedex_animated_sprite.play()
 
 func _pokedex_species_sprite_candidates(species: Dictionary) -> Array[String]:
 	var candidates: Array[String] = []

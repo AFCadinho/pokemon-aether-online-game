@@ -93,9 +93,16 @@ on-demand asset delivery phase can add those animations without blocking play.
 Generated demo-map textures are stored as self-contained, lossless compressed
 resources. This preserves their pixels and works on desktop and Web without
 duplicating the project. The build command verifies required/excluded pack
-markers and rejects an initial payload above 300 MiB. Phase 6 remains 285 MiB before
+markers and rejects an initial payload above 300 MiB. Phase 7 remains 285 MiB before
 HTTP compression, down from the phase-4 baseline of 559 MiB while adding the
 static battle sprite catalog.
+
+Phase 7 serves the optional Gen 5 sheets separately under
+`/pokemon-assets/gen5/`. The browser build never embeds that 1.1 GiB source
+collection: battle and detail views show their HOME fallback immediately, fetch
+only the required front/back/shiny sheet and metadata, then retain those files
+through the browser's immutable HTTP cache. Party and Pokédex result lists keep
+using HOME icons so browsing never triggers bulk animation downloads.
 
 ## Focused validation
 
