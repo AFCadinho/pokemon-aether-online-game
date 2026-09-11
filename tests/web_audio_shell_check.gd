@@ -23,6 +23,10 @@ func _init() -> void:
 			and music_manager_source.contains("music_player.volume_db = 0.0"),
 		"web music bypasses a stuck silence-floor fade before audio reaches the worklet"
 	)
+	_check(
+		music_manager_source.contains("music_player.volume_db = 0.0 if OS.has_feature(\"web\") else -80.0"),
+		"web music starts at audible gain before Godot creates its playback stream"
+	)
 	_check(shell.contains("new NativeAudioContext(...args)"), "Godot keeps its requested WebAudio sample-rate and latency settings")
 	_check(shell.contains("webAudioContext = new NativeAudioContext(...args);")
 		and not shell.contains("webAudioContext = new NativeAudioContext();"),
