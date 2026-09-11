@@ -188,6 +188,16 @@ func _check_land_mount_runtime_contract() -> void:
 		< authorized_teleport_source.find('player.call("restore_land_mount", land_mount_id_to_restore)'),
 		"authorized route transitions preserve an active land mount"
 	)
+	var web_demo_transition_source := _function_source(world_source, "_apply_web_demo_transition_state")
+	_check(
+		web_demo_transition_source.contains('player.call("get_active_land_mount_id")')
+		and web_demo_transition_source.contains('player.call("restore_land_mount", land_mount_id_to_restore)')
+		and web_demo_transition_source.find('player.call("get_active_land_mount_id")')
+		< web_demo_transition_source.find("player.call(\"reset_movement_state\")")
+		and web_demo_transition_source.find("player.call(\"reset_movement_state\")")
+		< web_demo_transition_source.find('player.call("restore_land_mount", land_mount_id_to_restore)'),
+		"browser-demo route transitions preserve an active land mount"
+	)
 	var battle_lock_source := _function_source(world_source, "_lock_overworld_for_battle")
 	var battle_unlock_source := _function_source(world_source, "_unlock_overworld_after_battle")
 	_check(

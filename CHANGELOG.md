@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Browser-demo players now stay mounted when moving between permitted outdoor
+  maps.
+
 - Browser audio now explicitly primes its output during player interaction,
   ensuring music and sound effects can start after the web build has loaded.
 
