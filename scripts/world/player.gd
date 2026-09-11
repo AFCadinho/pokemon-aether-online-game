@@ -2600,8 +2600,6 @@ func _refresh_sand_tilemaps(current_map: Node) -> void:
 			sand_tilemaps[layer_name] = tilemap
 
 func check_for_wild_encounter(encounter_type: String, check_position: Vector2 = Vector2.INF) -> void:
-	if OS.has_feature("web"):
-		return
 	var current_map := GameState.current_map
 	if current_map == null:
 		_debug_wild_encounter("blocked", {

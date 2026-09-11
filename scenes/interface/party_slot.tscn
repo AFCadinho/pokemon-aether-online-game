@@ -111,7 +111,7 @@ theme_override_colors/font_color = Color(1, 0.8745098, 0.43137255, 1)
 theme_override_colors/font_outline_color = Color(0.09019608, 0.05490196, 0.003921569, 0.96)
 theme_override_constants/outline_size = 1
 theme_override_font_sizes/font_size = 15
-text = "✦"
+text = "S"
 horizontal_alignment = 1
 vertical_alignment = 1
 

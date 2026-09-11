@@ -2,6 +2,7 @@ extends Control
 
 const NewsLocalizationService := preload("res://scripts/services/news_localization_service.gd")
 const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style.gd")
+const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 
 signal login_submitted(username: String, password: String)
 
@@ -294,11 +295,13 @@ func _on_continue_button_pressed() -> void:
 
 
 func _show_web_demo_notice() -> void:
-	var dialog := ConfirmationDialog.new()
-	dialog.title = "Welcome to the PokeAether browser demo"
-	dialog.dialog_text = "This browser version is a small, limited part of PokeAether. Explore the opening world, chat and practise battles here. Download the client for the full MMO experience. Your account and progress are shared."
-	dialog.ok_button_text = "Continue in browser"
-	dialog.cancel_button_text = "Download client"
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	dialog.configure(
+		"Welcome to the PokeAether browser demo",
+		"This browser version is a small, limited part of PokeAether. Explore the opening world, chat and practise battles here. Download the client for the full MMO experience. Your account and progress are shared.",
+		"Continue in browser",
+		"Download client"
+	)
 	dialog.confirmed.connect(func():
 		web_demo_notice_acknowledged = true
 		dialog.queue_free()
@@ -309,7 +312,7 @@ func _show_web_demo_notice() -> void:
 		dialog.queue_free()
 	)
 	add_child(dialog)
-	dialog.popup_centered(Vector2i(540, 220))
+	dialog.popup_centered(Vector2i(560, 260))
 
 
 func _on_logout_button_pressed() -> void:
@@ -405,15 +408,15 @@ func _center_settings_menu() -> void:
 
 
 func _fetch_news() -> void:
-	if OS.has_feature("web"):
-		_render_news_items([])
-		return
 	if NEWS_URL.is_empty():
 		_render_news_items([])
 		return
 
+	var request_url := NEWS_URL
+	if OS.has_feature("web"):
+		request_url = str(JavaScriptBridge.eval("window.location.origin", true)) + "/news.json"
 	var error_code: Error = news_request.request(
-		NEWS_URL,
+		request_url,
 		[
 			USER_AGENT_HEADER,
 			"Accept-Language: %s, en;q=0.8" % LocalizationManager.get_http_locale(),
@@ -733,7 +736,6 @@ func _show_saved_session_card() -> void:
 	if OS.has_feature("web"):
 		continue_button.disabled = is_loading or not server_online
 		continue_button.text = "Enter browser demo"
-		show_saved_status("Explore Pallet Town, Route 1 and Viridian City. Your desktop position remains unchanged.")
 		JavaScriptBridge.eval("window.pokeaetherPreview.authenticated = true", true)
 
 
