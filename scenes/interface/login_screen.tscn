@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://duw5e076ulb3"]
 
 [ext_resource type="Script" uid="uid://cnuvn2omox1om" path="res://scripts/ui/login_screen.gd" id="1_login"]
-[ext_resource type="Texture2D" uid="uid://diu5e64u5vwh8" path="res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg" id="3_hero"]
-[ext_resource type="Texture2D" uid="uid://pc6wqmn6c6te" path="res://assets/ui/pokeaether_combo_logo.png" id="4_combo_logo"]
+[ext_resource type="Texture2D" path="res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg" id="3_hero"]
+[ext_resource type="Texture2D" path="res://assets/ui/pokeaether_combo_logo.png" id="4_combo_logo"]
 [ext_resource type="PackedScene" uid="uid://banqvdsruep1l" path="res://scenes/interface/settings/settings_menu.tscn" id="5_settings"]
 [ext_resource type="VideoStream" uid="uid://cg2bb0mtsdr6o" path="res://assets/video/login_background.ogv" id="6_video"]
-[ext_resource type="Texture2D" uid="uid://bucvn1i17alpn" path="res://assets/ui/pokeaether_text_logo.png" id="7_text_logo"]
+[ext_resource type="Texture2D" path="res://assets/ui/pokeaether_text_logo.png" id="7_text_logo"]
 
 [sub_resource type="Gradient" id="Gradient_login_aura"]
 offsets = PackedFloat32Array(0, 0.42, 1)
