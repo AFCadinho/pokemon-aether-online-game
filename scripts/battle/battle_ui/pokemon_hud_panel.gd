@@ -199,7 +199,9 @@ func _set_gender(row: Node, gender: String) -> void:
 		return
 
 	var symbol := str(presentation.get("symbol", ""))
-	gender_icon.texture = MALE_GENDER_ICON if symbol == "♂" else FEMALE_GENDER_ICON
+	# PokemonGenderDisplay normalizes every accepted male value to "M". Keep
+	# the original gender artwork rather than deriving a replacement tint.
+	gender_icon.texture = MALE_GENDER_ICON if symbol == "M" else FEMALE_GENDER_ICON
 	# The gender artwork already contains its intended blue or pink color.
 	gender_icon.modulate = Color.WHITE
 	gender_icon.tooltip_text = _t(str(presentation.get("localization_key", "")))
