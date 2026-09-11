@@ -20,6 +20,11 @@ func _run() -> void:
 			and trainer_source.contains("snapping to battle position"),
 		"vision-triggered trainer movement is bounded and cannot freeze overworld input"
 	)
+	_check(
+		trainer_source.contains("_recover_overworld_after_failed_battle_start()")
+		and trainer_source.contains("recover_failed_trainer_battle_start"),
+		"a rejected trainer battle restores browser overworld control after its error dialogue"
+	)
 	var trainer := trainer_script.new() as Node
 	trainer.set("trainer_progress_loaded", true)
 	trainer.set("trainer_progress_state", "first_encounter")

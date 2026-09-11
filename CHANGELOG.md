@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Fixed a rejected NPC trainer battle leaving the browser player frozen after
+  its error dialogue or on the next login.
+
 - Removed the temporary browser test-tone button and added opt-in WebAudio
   diagnostics for investigating browser game-audio playback.
 

@@ -167,6 +167,7 @@ func _show_battle_dialogue(is_rematch: bool) -> void:
 			"backend.error.trainer_battle_start",
 			dialogue_box
 		)
+		_recover_overworld_after_failed_battle_start()
 
 
 func _release_failed_battle_start() -> void:
@@ -179,6 +180,18 @@ func _release_failed_battle_start() -> void:
 	if trainer_progress_state == STATE_FIRST_ENCOUNTER:
 		triggered = false
 	_refresh_rematch_marker()
+
+
+func _recover_overworld_after_failed_battle_start() -> void:
+	# A trainer challenge takes an early, local input lock before World begins
+	# its transition. If the backend rejects that transition, the World normally
+	# releases it; invoke the idempotent recovery after the error dialogue too,
+	# so a failed request can never leave a browser player frozen on relog.
+	var world := get_tree().get_first_node_in_group("world")
+	if world != null and world.has_method("recover_failed_trainer_battle_start"):
+		world.call("recover_failed_trainer_battle_start")
+		return
+	GameState.unlock_overworld_input()
 
 
 func _resolve_rematch_dialogue_lines(trainer_metadata: Dictionary) -> Array[String]:
