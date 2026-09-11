@@ -74,6 +74,10 @@ static func _machine_icon_path(item_id: String, machine_kind: String, machine_mo
 	return ICON_ROOT + prefix + resolved_type + ".png"
 
 
+static func machine_icon_path(item_id: String, machine_kind: String = "", machine_move_type: String = "") -> String:
+	return _machine_icon_path(item_id, machine_kind, machine_move_type)
+
+
 static func _move_type(move_id: String) -> String:
 	_ensure_move_type_index()
 	var normalized_id := move_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")

@@ -24825,6 +24825,10 @@ func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_ty
 		_bag_item_icon_gender(item_id),
 	)
 
+
+func _machine_item_icon_path(item_id: String, machine_kind: String = "", machine_move_type: String = "") -> String:
+	return ITEM_ICON_RESOLVER.machine_icon_path(item_id, machine_kind, machine_move_type)
+
 func _ellipsize_text(value: String, max_length: int) -> String:
 	if value.length() <= max_length:
 		return value
