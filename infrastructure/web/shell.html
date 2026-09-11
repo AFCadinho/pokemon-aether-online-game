@@ -21,6 +21,7 @@
     button:focus-visible { outline: 3px solid #f7ce77; outline-offset: 4px; }
     progress { display: block; width: 100%; margin: 22px 0 8px; accent-color: #91ceff; }
     #status { min-height: 3em; font-size: 14px; margin-bottom: 0; }
+    #sound-enable { position: fixed; right: 22px; top: 22px; z-index: 20; border: 1px solid #e7ca73; background: #173149; color: #effdff; box-shadow: 0 5px 18px #0008; }
     dialog { width: min(540px, 94vw); max-height: 90vh; border: 1px solid #53627a; border-radius: 16px; background: #0a1424; color: #edf4ff; padding: 28px; }
     dialog::backdrop { background: #000b; }
     label { display: block; margin: 14px 0; line-height: 1.5; }
@@ -32,6 +33,7 @@
 </head>
 <body>
   <canvas id="canvas" tabindex="0" aria-label="PokeAether game"></canvas>
+  <button id="sound-enable" type="button" hidden>Enable sound</button>
   <div id="cover">
     <main>
 		<div class="eyebrow">Browser demo</div>
@@ -60,12 +62,27 @@
   </dialog>
   <script src="$GODOT_URL"></script>
   <script>
+    let webAudioContext = null;
+    const NativeAudioContext = window.AudioContext || window.webkitAudioContext;
+    if (NativeAudioContext) {
+      class CapturedAudioContext extends NativeAudioContext {
+        constructor(...args) { super(...args); webAudioContext = this; }
+      }
+      window.AudioContext = CapturedAudioContext;
+      window.webkitAudioContext = CapturedAudioContext;
+    }
     const config = $GODOT_CONFIG;
     const engine = new Engine(config);
     const start = document.getElementById('start');
     const status = document.getElementById('status');
     const progress = document.getElementById('progress');
     const cover = document.getElementById('cover');
+    const soundEnable = document.getElementById('sound-enable');
+    const unlockAudio = () => {
+      if (webAudioContext) webAudioContext.resume().catch(() => {});
+      soundEnable.hidden = true;
+    };
+    soundEnable.addEventListener('click', unlockAudio);
     const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
     window.pokeaetherPreview = { state: 'ready' };
     const registration = document.getElementById('registration');
@@ -139,6 +156,7 @@
           }
         });
         cover.hidden = true;
+        soundEnable.hidden = false;
         document.getElementById('canvas').focus();
         window.pokeaetherPreview.state = 'running';
       } catch (error) {
