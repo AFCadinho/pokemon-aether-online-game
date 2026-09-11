@@ -3,6 +3,7 @@ extends Node2D
 const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
 const AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE := "POKEAETHER_AETHER_CLASH_TRACE"
 const BATTLE_SCENE: PackedScene = preload(BATTLE_SCENE_PATH)
+const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const AETHERNET_TELEPORT_EFFECT_SCRIPT: Script = preload("res://scripts/world/aethernet_teleport_effect.gd")
 const MAP_TRANSITION_INDICATOR_SCRIPT: Script = preload("res://scripts/ui/map_transition_indicator.gd")
@@ -62,6 +63,43 @@ const EXPECTED_TRAINER_BATTLE_REJECTION_CODES: Array[String] = [
 
 var is_in_battle := false
 var battle_instance: Node
+var replay_return_callback: Callable
+
+func start_battle_replay(recording: Dictionary, return_callback: Callable) -> bool:
+	if is_in_battle or wild_battle_resume_pending:
+		return false
+	if not _mount_battle_ui():
+		return false
+	# Replays have their own close path and never enter reward/forfeit handling.
+	battle_instance.battle_ended.disconnect(_on_battle_ended)
+	# AI Sparring replays preserve the same trainer battle atmosphere as their
+	# original match instead of leaving the current map track playing.
+	MusicManager.play_trainer_battle_music()
+	if not battle_instance.setup_battle_replay(recording):
+		MusicManager.play_overworld_music()
+		_clear_battle_ui_instance()
+		return false
+	replay_return_callback = return_callback
+	battle_instance.replay_closed.connect(close_battle_replay)
+	is_in_battle = true
+	active_battle_kind = "replay"
+	active_battle_id = ""
+	_lock_overworld_for_battle()
+	return true
+
+func close_battle_replay(restore_library := true) -> void:
+	if active_battle_kind != "replay":
+		return
+	var callback := replay_return_callback
+	replay_return_callback = Callable()
+	_clear_battle_ui_instance()
+	is_in_battle = false
+	active_battle_kind = ""
+	active_battle_id = ""
+	_unlock_overworld_after_battle()
+	MusicManager.play_overworld_music()
+	if restore_library and callback.is_valid():
+		callback.call()
 
 @onready var player: CharacterBody2D = $Player
 @onready var battle_ui_host: Control = %BattleUIHost
@@ -100,6 +138,7 @@ var last_presence_position_signature := ""
 var confirmed_appearance_state: Dictionary = {}
 var remote_players_container: Node2D
 var remote_player_avatars: Dictionary = {}
+var remote_player_order_dirty := false
 var creator_remote_players_visibility_override_active := false
 var creator_remote_players_visible := true
 var creator_nameplate_visibility_override_active := false
@@ -112,7 +151,9 @@ var pvp_battle_transition_started_at_msec := -1
 var active_battle_id := ""
 var active_wild_pokemon_species := ""
 var active_wild_encounter_type := ""
+var active_wild_replay_shiny := false
 var wild_battle_resume_pending := false
+var trainer_resume_request_in_progress := false
 var active_trainer_id := ""
 var active_trainer_name := ""
 var active_trainer_outro_dialogue_id := ""
@@ -132,6 +173,10 @@ func _exit_tree() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("world")
+	if OS.has_feature("web"):
+		_ensure_map_transition_overlay()
+		await _setup_web_demo_world()
+		return
 	var step_callback := Callable(self, "_on_player_overworld_steps_completed")
 	if player.has_signal("overworld_steps_completed") and not player.is_connected("overworld_steps_completed", step_callback):
 		player.connect("overworld_steps_completed", step_callback)
@@ -178,6 +223,15 @@ func _current_fishing_area_id() -> String:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if OS.has_feature("web"):
+		if is_loading_map:
+			return
+		position_autosave_elapsed += delta
+		if position_autosave_elapsed >= POSITION_AUTOSAVE_INTERVAL_SECONDS:
+			position_autosave_elapsed = 0.0
+			if not _is_player_position_save_blocked_by_teleport():
+				await _save_current_player_position_if_changed(true)
+		return
 	_track_playtime(delta)
 	await _retry_pending_remote_authorized_teleport(delta)
 
@@ -199,12 +253,15 @@ func _process(delta: float) -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST and not GameState.gameplay_reset_in_progress:
 		_save_current_player_position_if_changed(true)
-		_flush_playtime_if_needed.call_deferred(true)
+		if not OS.has_feature("web"):
+			_flush_playtime_if_needed.call_deferred(true)
 
 func save_current_player_state() -> void:
 	if GameState.gameplay_reset_in_progress:
 		return
 	_save_current_player_position_if_changed.call_deferred(true)
+	if OS.has_feature("web"):
+		return
 	_flush_playtime_if_needed.call_deferred(true)
 	_publish_world_presence.call_deferred(true)
 
@@ -341,6 +398,8 @@ func save_current_player_state_now() -> Dictionary:
 
 	var signature: String = _get_current_player_position_signature(false)
 	var result: Dictionary = await _save_current_player_position(signature, "", false, true)
+	if OS.has_feature("web"):
+		return result
 	if bool(result.get("success", false)):
 		_publish_world_presence(true)
 	_flush_playtime_if_needed.call_deferred(true)
@@ -480,6 +539,8 @@ func _trace_aether_clash(event: String, fields: Dictionary = {}) -> void:
 
 
 func apply_authorized_teleport_state(state: Dictionary) -> Dictionary:
+	if OS.has_feature("web"):
+		return await _apply_web_demo_transition_state(state)
 	var current_map_id := _get_map_id(GameState.current_map)
 	var target_map_id := str(state.get("mapId", "")).strip_edges()
 	var reuses_presence_roster := current_map_id != "" and current_map_id == target_map_id
@@ -873,6 +934,9 @@ func _optional_string(value: Variant) -> String:
 
 
 func load_map(target_scene_path: String, target_spawn_name: String) -> void:
+	if OS.has_feature("web"):
+		push_error("World.load_map is disabled in the browser demo; use an authorized transition.")
+		return
 	if is_loading_map:
 		push_warning("World.load_map ignored because a map is already loading: %s" % target_scene_path)
 		return
@@ -1354,6 +1418,14 @@ func _setup_initial_world_state() -> void:
 	else:
 		await _load_player_party_state()
 		var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
+		if bool(saved_state_response.get("trainerRewardRecovered", false)):
+			# Position recovery may settle a durably earned trainer reward after
+			# the normal party bootstrap. Refresh those projections before play.
+			await _load_player_party_state()
+			var recovered_wallet: Dictionary = await PlayerWalletService.load_wallet()
+			PlayerWalletService.apply_wallet_result(recovered_wallet)
+			await InventoryService.load_inventory()
+			await PlayerGameStateService.refresh_story()
 		if bool(saved_state_response.get("success", false)) and bool(saved_state_response.get("hasState", false)):
 			saved_state = _dictionary_from_value(saved_state_response.get("state", {}))
 			_apply_saved_appearance_state(saved_state)
@@ -1414,11 +1486,154 @@ func _setup_initial_world_state() -> void:
 	# confirmed absent/expired battle may cross into the fresh overworld boundary.
 	if not bool(wild_resume.get("resumed", false)) and not bool(wild_resume.get("retryable", false)):
 		await _save_player_activity_state("idle")
+		WorldPresenceService.connect_presence.call_deferred()
+		_publish_world_presence.call_deferred(true)
+
+
+func _setup_web_demo_world() -> void:
+	StoryService.reset_story()
+	var bootstrap_response: Dictionary = await PlayerGameStateService.bootstrap_story()
+	if not bool(bootstrap_response.get("success", false)):
+		push_warning("World: shared story bootstrap failed: %s" % str(bootstrap_response.get("error", "Unknown error")))
+		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		return
+	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
+	if not bool(profile_response.get("success", false)):
+		push_warning("World: shared player profile load failed: %s" % str(profile_response.get("error", "Unknown error")))
+		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		return
+	_apply_web_demo_profile(profile_response)
+	var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
+	if not bool(saved_state_response.get("success", false)):
+		push_warning("World: browser demo position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
+		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		return
+	var story_response: Dictionary = await PlayerGameStateService.refresh_story()
+	if not bool(story_response.get("success", false)):
+		push_warning("World: browser demo story load failed: %s" % str(story_response.get("error", "Unknown error")))
+	var saved_state := _dictionary_from_value(saved_state_response.get("state", {}))
+	var saved_scene_path := _resolve_saved_map_scene_path(str(saved_state.get("mapScenePath", "")))
+	if saved_scene_path.is_empty() or not ResourceLoader.exists(saved_scene_path):
+		push_error("World: browser demo returned an unavailable map: %s" % saved_scene_path)
+		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		return
+	var initial_map := _instantiate_map(saved_scene_path)
+	if initial_map == null:
+		push_error("World: browser demo could not instantiate map: %s" % saved_scene_path)
+		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		return
+	_clear_current_map()
+	$CurrentMap.add_child(initial_map)
+	GameState.current_map = initial_map
+	JavaScriptBridge.eval("window.pokeaetherPreview = window.pokeaetherPreview || {}; window.pokeaetherPreview.worldReady = true", true)
+	_normalize_map_tree_layer_z_indices(initial_map)
+	_apply_day_night_for_map(initial_map)
+	_apply_weather_for_map(initial_map)
+	MusicManager.play_map_music(initial_map)
+	move_player_to_map(initial_map)
+	_position_player_at_saved_state(initial_map, saved_state)
+	_apply_camera_limits_for_map(initial_map)
+	player.refresh_map_layers()
+	last_saved_position_signature = _get_current_player_position_signature(true)
+
+
+func _apply_web_demo_profile(profile_response: Dictionary) -> void:
+	var user := _dictionary_from_value(profile_response.get("user", {}))
+	PlayerSave.apply_account_identity(user if not user.is_empty() else AuthService.current_user)
+	var party_response := _dictionary_from_value(profile_response.get("party", {}))
+	var party_value: Variant = party_response.get("party", [])
+	PlayerSave.replace_party_from_state(party_value as Array if party_value is Array else [])
+	var preferences := _dictionary_from_value(profile_response.get("preferences", {}))
+	GameState.show_follower = bool(preferences.get("showFollower", GameState.show_follower))
+	GameState.repel_enabled = bool(preferences.get("showRepel", GameState.repel_enabled))
+	GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
+	var wallet := _dictionary_from_value(profile_response.get("wallet", {}))
+	PlayerSave.money = maxi(int(wallet.get("money", PlayerSave.money)), 0)
+	PlayerSave.bank_money = maxi(int(wallet.get("bank_money", PlayerSave.bank_money)), 0)
+	PlayerSave.gems = maxi(int(wallet.get("gems", PlayerSave.gems)), 0)
+	PlayerSave.aetherite = maxi(int(wallet.get("aetherite", PlayerSave.aetherite)), 0)
+	PlayerSave.battle_points = maxi(int(wallet.get("battle_points", PlayerSave.battle_points)), 0)
+	StoryService.apply_story(_dictionary_from_value(profile_response.get("story", {})))
+	var position_response := _dictionary_from_value(profile_response.get("position", {}))
+	var profile_state := _dictionary_from_value(position_response.get("state", {}))
+	var appearance := _dictionary_from_value(profile_state.get("appearance", {}))
+	if not appearance.is_empty():
+		PlayerSave.apply_appearance_state(appearance)
+		confirmed_appearance_state = appearance.duplicate(true)
+
+
+func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
+	authorized_teleport_in_progress = true
+	if player == null:
+		cancel_authorized_teleport()
+		return {"success": false, "error": "World player is not ready."}
+	var target_scene_path := _resolve_saved_map_scene_path(str(state.get("mapScenePath", "")))
+	if target_scene_path.is_empty() or not ResourceLoader.exists(target_scene_path):
+		cancel_authorized_teleport()
+		return {"success": false, "error": "Browser demo map is unavailable."}
+	if not authorized_teleport_locked_overworld:
+		GameState.acquire_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
+		authorized_teleport_locked_overworld = true
+	is_loading_map = true
+	var current_scene_path := _get_map_scene_path(GameState.current_map)
+	var target_map: Node = GameState.current_map
+	var changes_map := current_scene_path != target_scene_path
+	# Reparenting during a browser transition clears transient activities. Keep
+	# the selected land mount so exterior demo maps retain the riding state;
+	# restore_land_mount still rejects interiors and unavailable mounts.
+	var land_mount_id_to_restore := str(player.call("get_active_land_mount_id")) \
+		if player.has_method("get_active_land_mount_id") \
+		else ""
+	if changes_map:
+		await _fade_map_transition(MAP_TRANSITION_COVER_ALPHA, MAP_FADE_OUT_SECONDS)
+		var packed_scene := await _load_map_scene_threaded(target_scene_path)
+		if packed_scene == null:
+			await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+			cancel_authorized_teleport()
+			is_loading_map = false
+			return {"success": false, "error": "Browser demo map could not be loaded."}
+		target_map = packed_scene.instantiate()
+		_clear_current_map()
+		$CurrentMap.add_child(target_map)
+		GameState.current_map = target_map
+		_normalize_map_depth_layer_z_indices(target_map)
+		_apply_day_night_for_map(target_map)
+		_apply_weather_for_map(target_map)
+		MusicManager.play_map_music(target_map)
+	move_player_to_map(target_map)
+	if player.has_method("reset_movement_state"):
+		player.call("reset_movement_state")
+	var position_result := _position_player_at_authorized_teleport_state(target_map, state)
+	if not bool(position_result.get("success", false)):
+		cancel_authorized_teleport()
+		is_loading_map = false
+		return position_result
+	_apply_camera_limits_for_map(target_map)
+	if (
+		not land_mount_id_to_restore.is_empty()
+		and player.has_method("restore_land_mount")
+		and (
+			not player.has_method("is_surfing_activity_active")
+			or not bool(player.call("is_surfing_activity_active"))
+		)
+	):
+		player.call("restore_land_mount", land_mount_id_to_restore)
+	if changes_map:
+		await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+	last_saved_position_signature = _get_current_player_position_signature(true)
+	authorized_teleport_in_progress = false
+	is_loading_map = false
+	if authorized_teleport_locked_overworld:
+		GameState.release_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
+	authorized_teleport_locked_overworld = false
+	return {"success": true}
 	WorldPresenceService.connect_presence.call_deferred()
 	_publish_world_presence.call_deferred(true)
 
 
 func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
+	if str(_dictionary_from_value(saved_state.get("activityContext", {})).get("kind", "")) == "trainer":
+		return await _resume_saved_trainer_battle(saved_state)
 	wild_battle_resume_pending = false
 	var activity_context := _dictionary_from_value(saved_state.get("activityContext", {}))
 	if (
@@ -1471,6 +1686,8 @@ func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
 	active_battle_id = str(response.get("battleId", activity_context.get("battleId", "")))
 	active_wild_pokemon_species = wild_pokemon.species
 	active_wild_encounter_type = str(response.get("encounterType", "")).strip_edges().to_lower()
+	active_wild_replay_shiny = wild_pokemon.shiny
+	_publish_world_presence(true)
 	if not _mount_battle_ui():
 		_abort_battle_start(true)
 		wild_battle_resume_pending = true
@@ -1492,6 +1709,98 @@ func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
 		wild_battle_resume_pending = true
 		return {"resumed": false, "retryable": true}
 	return {"resumed": true, "retryable": false}
+
+
+func _resume_saved_trainer_battle(saved_state: Dictionary) -> Dictionary:
+	if trainer_resume_request_in_progress:
+		return {"resumed": false, "retryable": true}
+	var context := _dictionary_from_value(saved_state.get("activityContext", {}))
+	if str(saved_state.get("activityState", "")) != "battle" or str(context.get("battleId", "")).is_empty():
+		return {"resumed": false, "retryable": false}
+	trainer_resume_request_in_progress = true
+	wild_battle_resume_pending = true
+	if not is_in_battle:
+		is_in_battle = true
+		active_battle_kind = "trainer"
+		active_battle_id = str(context["battleId"])
+		_lock_overworld_for_battle()
+	var request := HTTPRequest.new()
+	add_child(request)
+	var response: Dictionary = {}
+	for attempt in range(3):
+		response = await BattleApiClient.resume_trainer_battle(request)
+		if bool(response.get("success", false)) or int(response.get("status", 0)) in [401, 403]:
+			break
+		if attempt < 2:
+			await get_tree().create_timer(0.35).timeout
+	request.queue_free()
+	trainer_resume_request_in_progress = false
+	if not bool(response.get("success", false)):
+		_show_trainer_resume_retry(saved_state)
+		return {"resumed": false, "retryable": true}
+	if not bool(response.get("resumable", false)):
+		var recovery := _dictionary_from_value(response.get("recovery", {}))
+		if bool(recovery.get("hasState", false)):
+			await _load_player_party_state()
+			var wallet: Dictionary = await PlayerWalletService.load_wallet()
+			PlayerWalletService.apply_wallet_result(wallet)
+			await InventoryService.load_inventory()
+			await PlayerGameStateService.refresh_story()
+			GameState.set_prepared_world_state({
+				"hasSavedState": true, "savedState": recovery.get("state", {}),
+				"blackoutLoss": int(recovery.get("blackoutLoss", 0)),
+			})
+		wild_battle_resume_pending = false
+		_abort_battle_start(true)
+		# Expiry/reward recovery can authoritatively change party and position.
+		# Re-enter through normal saved-world loading and teleport acknowledgement.
+		get_tree().call_deferred("reload_current_scene")
+		return {"resumed": false, "retryable": false}
+	var trainer_data := TrainerMetadataService._normalize_trainer_metadata(
+		str(response.get("trainerId", "")), _dictionary_from_value(response.get("trainerData", {}))
+	)
+	if PlayerSave.party.is_empty() or str(trainer_data.get("id", "")).is_empty():
+		_show_trainer_resume_retry(saved_state)
+		return {"resumed": false, "retryable": true}
+	var lead_slot := maxi(PlayerSave.get_first_usable_party_slot() - 1, 0)
+	var player_pokemon := PlayerSave.party[lead_slot] as Pokemon
+	active_trainer_id = str(trainer_data["id"])
+	active_trainer_name = str(trainer_data.get("name", "Trainer"))
+	active_trainer_outro_dialogue_id = str(trainer_data.get("outroDialogueId", ""))
+	active_trainer_is_rematch = bool(response.get("isRematch", false))
+	active_battle_id = str(response.get("battleId", context["battleId"]))
+	_publish_world_presence(true)
+	if player_pokemon == null or not _mount_battle_ui():
+		_show_trainer_resume_retry(saved_state)
+		return {"resumed": false, "retryable": true}
+	MusicManager.play_trainer_battle_music(TrainerBattleMusicResolverScript.resolve_track_id(trainer_data))
+	if not await battle_instance.resume_trainer_battle_from_response(
+		player_pokemon, trainer_data, response, _resolve_battle_environment_id("trainer", trainer_data)
+	):
+		_clear_battle_ui_instance()
+		_show_trainer_resume_retry(saved_state)
+		return {"resumed": false, "retryable": true}
+	wild_battle_resume_pending = false
+	return {"resumed": true, "retryable": false}
+
+
+func _show_trainer_resume_retry(saved_state: Dictionary) -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.title = LocalizationManager.text("battle.resume.title")
+	dialog.dialog_text = LocalizationManager.text("battle.resume.retry_message")
+	dialog.ok_button_text = LocalizationManager.text("battle.resume.retry")
+	dialog.cancel_button_text = LocalizationManager.text("battle.resume.login")
+	dialog.exclusive = true
+	add_child(dialog)
+	dialog.confirmed.connect(func():
+		dialog.queue_free()
+		_resume_saved_trainer_battle.call_deferred(saved_state)
+	)
+	dialog.canceled.connect(func():
+		dialog.queue_free()
+		get_tree().call_group_flags(SceneTree.GROUP_CALL_DEFERRED, "ui_overlay", "_force_session_logout", "")
+	)
+	dialog.popup_centered(Vector2i(460, 180))
 
 
 func _resolve_saved_map_scene_path(scene_path: String) -> String:
@@ -1838,6 +2147,9 @@ func _get_decorative_row_z_index(decorative_layer: TileMapLayer, row: int) -> in
 func _build_structure_top_visual_depth_groups(map: Node) -> void:
 	var structure_layers: Array[TileMapLayer] = []
 	_collect_structure_top_visual_layers_recursive(map, structure_layers)
+	# Grass rows are already built and remain fixed throughout this pass.
+	# Keep the lookup local so map reloads/rebuilds cannot retain stale layers.
+	var grass_rows := TallGrassDepthSortingScript.collect_depth_rows(map)
 
 	for structure_layer: TileMapLayer in structure_layers:
 		if bool(structure_layer.get_meta(STRUCTURE_TOP_DEPTH_GROUPS_BUILT_META, false)):
@@ -1892,7 +2204,7 @@ func _build_structure_top_visual_depth_groups(map: Node) -> void:
 			group_z_index = maxi(
 				group_z_index,
 				MapDepthSortingScript.get_tall_grass_overlap_z_floor(
-					map,
+					grass_rows,
 					structure_layer,
 					group,
 					TREE_LAYER_Z_MIN,
@@ -2191,6 +2503,7 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 			avatar = new_avatar as Node2D
 			remote_player_avatars[user_key] = avatar
 			remote_players_container.add_child(avatar)
+			remote_player_order_dirty = true
 			if creator_nameplate_visibility_override_active and avatar.has_method("set_creator_nameplate_visible"):
 				avatar.call("set_creator_nameplate_visible", creator_nameplates_visible)
 			if avatar.has_method("set_interaction_enabled"):
@@ -2203,6 +2516,9 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 			var interaction_callable := Callable(self, "_on_remote_player_interaction_requested")
 			if avatar.has_signal("interaction_requested") and not avatar.is_connected("interaction_requested", interaction_callable):
 				avatar.connect("interaction_requested", interaction_callable)
+			var spectate_callable := Callable(self, "_on_nearby_pve_spectate_requested")
+			if avatar.has_signal("battle_spectate_requested") and not avatar.is_connected("battle_spectate_requested", spectate_callable):
+				avatar.connect("battle_spectate_requested", spectate_callable)
 
 		avatar.call("apply_state", player_state)
 		if pending_map_chat_messages.has(user_key) and avatar.has_method("show_map_chat_message"):
@@ -2225,8 +2541,11 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 
 
 func _sort_remote_player_avatar_nodes() -> void:
+	if not remote_player_order_dirty:
+		return
 	if remote_players_container == null or not is_instance_valid(remote_players_container):
 		return
+	remote_player_order_dirty = false
 
 	var avatars: Array[Node] = []
 	for child: Node in remote_players_container.get_children():
@@ -2282,6 +2601,7 @@ func _clear_remote_players() -> void:
 		if avatar != null and is_instance_valid(avatar):
 			avatar.queue_free()
 	remote_player_avatars.clear()
+	remote_player_order_dirty = false
 	# Keep the reusable container alive while its old map is removed. It will be
 	# attached to the next map's Entities/Players branch by move_player_to_map().
 	if remote_players_container != null \
@@ -2320,6 +2640,12 @@ func _on_remote_player_interaction_requested(player_state: Dictionary, world_pos
 	if not remote_player_interaction_pending:
 		remote_player_interaction_pending = true
 		_resolve_remote_player_interaction.call_deferred()
+
+
+func _on_nearby_pve_spectate_requested(target_user_id: int) -> void:
+	if is_in_battle or target_user_id <= 0:
+		return
+	get_tree().call_group("ui_overlay", "start_nearby_pve_spectate", target_user_id)
 
 func _resolve_remote_player_interaction() -> void:
 	remote_player_interaction_pending = false
@@ -2453,6 +2779,14 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 	var active_land_mount_id := str(player.call("get_active_land_mount_id")) \
 		if player.has_method("get_active_land_mount_id") \
 		else ""
+	if OS.has_feature("web"):
+		return {
+			"mapId": _get_map_id(current_map),
+			"mapScenePath": _get_map_scene_path(current_map),
+			"position": {"x": position.x, "y": position.y},
+			"facingDirection": _direction_to_name(player.last_direction),
+			"spawnMarker": spawn_marker,
+		}
 	var state: Dictionary = {
 		"mapId": _get_map_id(current_map),
 		"mapScenePath": _get_map_scene_path(current_map),
@@ -2467,8 +2801,9 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 		"appearance": appearance_state,
 		"roles": _get_current_role_presence_state(),
 		"selectedRoleBadge": GameState.selected_role_badge,
-		"activityState": "battle" if is_in_battle else "idle",
+		"activityState": "battle" if is_in_battle and active_battle_kind != "replay" else "idle",
 		"activityContext": _get_current_activity_context(),
+		"battleSpectate": _get_current_battle_spectate_presence(),
 		"teleportRevision": current_teleport_revision,
 		"walkSteps": mini(pending_happiness_walk_steps, 512),
 	}
@@ -2484,12 +2819,18 @@ func _build_current_player_position_state(spawn_marker: String, use_confirmed_ap
 
 
 func _get_current_activity_context() -> Dictionary:
-	if not is_in_battle:
+	if not is_in_battle or active_battle_kind == "replay":
 		return {}
 	return {
 		"kind": active_battle_kind,
 		"battleId": active_battle_id,
 	}
+
+
+func _get_current_battle_spectate_presence() -> Dictionary:
+	if not is_in_battle or active_battle_kind not in ["wild", "trainer"] or active_battle_id.strip_edges().is_empty():
+		return {}
+	return {"kind": active_battle_kind, "battleId": active_battle_id}
 
 
 func _save_player_activity_state_deferred(activity_state: String, activity_context: Dictionary = {}) -> void:
@@ -2614,7 +2955,7 @@ func _get_current_player_position_signature(use_confirmed_appearance: bool = fal
 	var active_mount_id := str(player.call("get_active_mount_id")) \
 		if player.has_method("get_active_mount_id") \
 		else ""
-	return "%s|%s|%0.1f|%0.1f|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
+	return "%s|%s|%0.1f|%0.1f|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
 		_get_map_id(current_map),
 		_get_map_scene_path(current_map),
 		roundf(position.x / POSITION_SAVE_EPSILON) * POSITION_SAVE_EPSILON,
@@ -2638,6 +2979,8 @@ func _get_current_player_position_signature(use_confirmed_appearance: bool = fal
 		str(appearance_state.get("hair_color", "")),
 		str(appearance_state.get("skin_tone", "")),
 		str(appearance_state.get("eye_color", "")),
+		active_battle_kind,
+		active_battle_id,
 	]
 
 
@@ -2893,6 +3236,7 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 	active_battle_id = ""
 	active_wild_pokemon_species = wild_pokemon.species if wild_pokemon != null else "wild Pokemon"
 	active_wild_encounter_type = ""
+	active_wild_replay_shiny = wild_pokemon != null and wild_pokemon.shiny
 	_lock_overworld_for_battle()
 	
 	var position_result := await sync_player_position_for_world_action()
@@ -2908,6 +3252,7 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 		return
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
+	_publish_world_presence(true)
 
 	if not _mount_battle_ui():
 		push_error("World.start_dev_wild_battle failed: could not load battle scene.")
@@ -2926,7 +3271,8 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 func start_triggered_wild_battle_for_area(
 	area_id: String,
 	encounter_type: String = "grass",
-	forced_species_id: String = ""
+	forced_species_id: String = "",
+	retry_after_expired_battle := true
 ) -> void:
 	if is_in_battle or wild_battle_resume_pending:
 		return
@@ -2949,6 +3295,36 @@ func start_triggered_wild_battle_for_area(
 		return
 	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id)
 	if not response.get("success", false):
+		# A previous browser tab can close after the authority has accepted the
+		# encounter. The account remains bound to that exact battle until it is
+		# settled, so reopen it here instead of showing a generic error and
+		# leaving the player unable to trigger another encounter.
+		if WildEncounterErrorRules.error_code(response) == "active_wild_battle_exists":
+			var existing_battle_id := _get_wild_battle_conflict_id(response)
+			if existing_battle_id != "":
+				await _cancel_wild_encounter_transition()
+				_abort_battle_start()
+				var resumed := await _resume_saved_wild_battle({
+					"activityState": "battle",
+					"activityContext": {
+						"kind": "wild",
+						"battleId": existing_battle_id,
+					},
+				})
+				if bool(resumed.get("resumed", false)) or bool(resumed.get("retryable", false)):
+					return
+				# The resume endpoint has authoritatively cleared an expired
+				# account binding. Start one fresh encounter immediately so a
+				# player does not have to walk out of and back into the same grass
+				# tile after a stale browser tab or server restart.
+				if retry_after_expired_battle:
+					await start_triggered_wild_battle_for_area(
+						area_id,
+						encounter_type,
+						forced_species_id,
+						false
+					)
+					return
 		if WildEncounterErrorRules.message_lines(response).is_empty():
 			push_warning("World.start_triggered_wild_battle_for_area failed: %s" % str(response.get("error", "Unknown error")))
 		await _cancel_wild_encounter_transition()
@@ -2958,6 +3334,7 @@ func start_triggered_wild_battle_for_area(
 	active_battle_id = str(response.get("battleId", ""))
 	active_wild_encounter_type = str(response.get("encounterType", encounter_type)).strip_edges().to_lower()
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
+	_publish_world_presence(true)
 
 	var wild_pokemon_data: Dictionary = response.get("wildPokemon", {})
 	var wild_pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(wild_pokemon_data)
@@ -2968,6 +3345,7 @@ func start_triggered_wild_battle_for_area(
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 	active_wild_pokemon_species = wild_pokemon.species
+	active_wild_replay_shiny = wild_pokemon.shiny
 
 	await _wait_for_wild_encounter_cover(transition_started_at_msec)
 
@@ -2996,6 +3374,15 @@ func start_triggered_wild_battle_for_area(
 	await _reveal_prepared_wild_battle()
 
 	await battle_instance.play_wild_battle_intro(response)
+
+
+func _get_wild_battle_conflict_id(response: Dictionary) -> String:
+	var detail := _dictionary_from_value(response.get("detail", {}))
+	if detail.is_empty():
+		detail = _dictionary_from_value(
+			_dictionary_from_value(response.get("body", {})).get("detail", {})
+		)
+	return str(detail.get("battleId", "")).strip_edges()
 
 
 func _show_wild_encounter_start_error(response: Dictionary) -> void:
@@ -3042,6 +3429,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
 	active_wild_encounter_type = ""
+	active_wild_replay_shiny = false
 	active_trainer_id = trainer_id
 	active_trainer_name = str(trainer_data.get("name", "Trainer"))
 	active_trainer_outro_dialogue_id = str(trainer_data.get("outroDialogueId", "")).strip_edges()
@@ -3067,6 +3455,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 		return response
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
+	_publish_world_presence(true)
 
 	await _wait_for_wild_encounter_cover(transition_started_at_msec)
 
@@ -3108,6 +3497,34 @@ func _is_expected_trainer_battle_rejection(response: Dictionary) -> bool:
 	)
 
 
+func _training_ai_battle_sprite_id(response: Dictionary) -> String:
+	var mode := str(response.get("trainingAiMode", ""))
+	var scholar := mode in ["ai4", "shadow"] if not mode.is_empty() else int(response.get("aiLevel", 5)) == 4
+	return "showdown_scientist_gen7" if scholar else "showdown_veteran_gen7"
+
+
+func _training_ai_battle_display_name(response: Dictionary) -> String:
+	var mode := str(response.get("trainingAiMode", "")).strip_edges().to_lower()
+	var public_name := {
+		"ai4": "Scholar",
+		"shadow": "Scholar",
+		"intermediate": "Grandmaster Intermediate",
+		"active": "Grandmaster Hard",
+		"elite": "Grandmaster Elite",
+		"nightmare": "Grandmaster Nightmare",
+	}.get(mode, "") as String
+	var supplied_name := str(response.get("trainerName", "")).strip_edges()
+	if supplied_name in ["AI Level 4", "AI Level 4 AI5 Shadow"]:
+		return "Scholar"
+	if supplied_name == "AI Level 5":
+		return public_name if public_name != "" else "Grandmaster Hard"
+	if supplied_name != "":
+		return supplied_name
+	if public_name != "":
+		return public_name
+	return "Scholar" if int(response.get("aiLevel", 5)) == 4 else "Grandmaster Hard"
+
+
 func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 	if is_in_battle or wild_battle_resume_pending or not bool(response.get("success", false)):
 		return false
@@ -3126,15 +3543,13 @@ func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 
 	var ai_team_value: Variant = response.get("trainingAiTeam", {})
 	var ai_team: Dictionary = ai_team_value as Dictionary if ai_team_value is Dictionary else {}
-	var trainer_name := str(response.get("trainerName", "AI Level 5")).strip_edges()
-	if trainer_name == "":
-		trainer_name = "AI Level 5"
+	var trainer_name := _training_ai_battle_display_name(response)
 	var trainer_data := {
 		"id": "training-ai-level5",
 		"name": trainer_name,
 		"teamDisplayName": str(ai_team.get("displayName", "")),
 		"battleTransitionStyle": "trainer",
-		"_battle_sprite_id": "showdown_veteran_gen7",
+		"_battle_sprite_id": _training_ai_battle_sprite_id(response),
 		"_battle_sprite_offset": Vector2(0.0, -16.0),
 	}
 	is_in_battle = true
@@ -3204,8 +3619,15 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 		return false
 
 	_prepare_battle_instance_reveal()
-	MusicManager.play_pvp_battle_music()
-	var battle_environment_id := _resolve_battle_environment_id("pvp", response)
+	var spectator_source_kind := str(response.get("sourceBattleKind", "")).strip_edges().to_lower()
+	if str(response.get("viewerRole", "participant")).to_lower() == "spectator" and spectator_source_kind == "wild":
+		MusicManager.play_wild_battle_music()
+	elif str(response.get("viewerRole", "participant")).to_lower() == "spectator" and spectator_source_kind == "trainer":
+		MusicManager.play_trainer_battle_music()
+	else:
+		MusicManager.play_pvp_battle_music()
+	var environment_battle_kind := spectator_source_kind if spectator_source_kind in ["wild", "trainer"] else "pvp"
+	var battle_environment_id := _resolve_battle_environment_id(environment_battle_kind, response)
 	await battle_instance.setup_pvp_battle_from_response(
 		PlayerSave.party[0] if not PlayerSave.party.is_empty() else null,
 		response,
@@ -3218,6 +3640,10 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 
 func _interrupt_current_battle_for_pvp_match() -> bool:
 	if not is_in_battle:
+		return true
+	if active_battle_kind == "replay":
+		await battle_instance.stop_battle_replay()
+		close_battle_replay(false)
 		return true
 	if active_battle_kind == "pvp":
 		return false
@@ -3264,12 +3690,14 @@ func end_wild_battle(keep_overworld_locked := false) -> void:
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
 	active_wild_encounter_type = ""
+	active_wild_replay_shiny = false
 	active_trainer_id = ""
 	active_trainer_name = ""
 	active_trainer_outro_dialogue_id = ""
 	active_trainer_mugshot = null
 	active_trainer_is_rematch = false
 	_save_player_activity_state_deferred("idle")
+	_publish_world_presence(true)
 	if keep_overworld_locked:
 		# A blackout moves the player to a recovery location, so it should not
 		# restore the mount from the map where the lost battle started.
@@ -3289,6 +3717,11 @@ func _on_battle_ended(result: Dictionary) -> void:
 	var should_respawn_after_loss := _should_respawn_after_battle_loss(result, active_battle_kind)
 	var reward_battle_id := active_battle_id
 	var reward_species := active_wild_pokemon_species
+	var should_offer_shiny_replay_favorite := (
+		active_battle_kind == "wild"
+		and active_wild_replay_shiny
+		and not reward_battle_id.is_empty()
+	)
 	var reward_trainer_id := active_trainer_id
 	var reward_trainer_name := active_trainer_name
 	var trainer_outro_dialogue_id := active_trainer_outro_dialogue_id
@@ -3332,6 +3765,44 @@ func _on_battle_ended(result: Dictionary) -> void:
 			SfxManager.play("item_received")
 	if keep_locked_for_outro:
 		_unlock_overworld_after_battle()
+	if should_offer_shiny_replay_favorite:
+		_show_shiny_replay_favorite_dialog(reward_battle_id, reward_species)
+
+
+func _show_shiny_replay_favorite_dialog(battle_id: String, species: String) -> void:
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	if dialog == null:
+		return
+	add_child(dialog)
+	dialog.configure(
+		LocalizationManager.text("ui.replays.shiny_dialog.title"),
+		LocalizationManager.text("ui.replays.shiny_dialog.message", {"species": species}),
+		LocalizationManager.text("ui.replays.shiny_dialog.confirm"),
+		LocalizationManager.text("ui.replays.shiny_dialog.cancel")
+	)
+	dialog.confirmed.connect(func(): _save_shiny_replay_as_favorite.call_deferred(battle_id))
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(560, 250))
+
+
+func _save_shiny_replay_as_favorite(battle_id: String) -> void:
+	var request := HTTPRequest.new()
+	request.timeout = 20.0
+	add_child(request)
+	var base: String = await GatewayApiConfig.get_base_url()
+	var error := request.request(
+		base + "/game/replays/" + battle_id.uri_encode(),
+		GatewayApiConfig.get_json_headers(),
+		HTTPClient.METHOD_PATCH,
+		JSON.stringify({"favorite": true})
+	)
+	var response: Dictionary = await BattleApiClient._read_json_response(request) if error == OK else {"success": false}
+	request.queue_free()
+	if bool(response.get("success", false)):
+		get_tree().call_group("ui_overlay", "add_system_message", LocalizationManager.text("ui.replays.shiny_dialog.saved"))
+	else:
+		get_tree().call_group("ui_overlay", "add_system_message", LocalizationManager.text("ui.replays.shiny_dialog.save_failed"))
 
 
 func _should_respawn_after_battle_loss(result: Dictionary, battle_kind: String) -> bool:
@@ -4268,5 +4739,17 @@ func _abort_battle_start(preserve_activity := false) -> void:
 	active_trainer_is_rematch = false
 	if not preserve_activity:
 		_save_player_activity_state_deferred("idle")
+	_publish_world_presence(true)
 	_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()
+
+
+func recover_failed_trainer_battle_start() -> void:
+	# An NPC obtains its vision lock before a trainer request begins. Keep this
+	# recovery idempotent because a normal rejected request already passes
+	# through _abort_battle_start; the second call repairs a browser-side lock
+	# left behind by an interrupted transition or error dialogue.
+	if is_in_battle:
+		_abort_battle_start()
+		return
+	_unlock_overworld_after_battle()

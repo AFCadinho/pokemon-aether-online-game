@@ -53,10 +53,12 @@ func interact_with_player(_player: Node2D) -> void:
 	var result: Dictionary = await inventory_service.call("claim_npc_item_reward", reward_id)
 	if not bool(result.get("success", false)):
 		push_warning("ItemGiftNPC: reward claim failed: %s" % str(result.get("error", "Unknown error")))
-		await GameErrorDialogService.show_response(
+		var error_dialog_service := get_node_or_null("/root/GameErrorDialogService")
+		if error_dialog_service != null:
+			await error_dialog_service.call("show_response",
 			result,
 			"backend.error.reward_claim"
-		)
+			)
 		return
 
 	if bool(result.get("claimed", false)):
@@ -65,13 +67,15 @@ func interact_with_player(_player: Node2D) -> void:
 		await show_dialogue(await _resolve_dialogue_lines(success_dialogue_id, success_dialogue_lines))
 		var inventory_item_id := str(result.get("itemId", "")).strip_edges().to_lower()
 		var inventory_quantity := maxi(int(result.get("quantity", 1)), 1)
-		InventoryService.notify_claimed_item_reward(result)
+		if inventory_service.has_method("notify_claimed_item_reward"):
+			inventory_service.call("notify_claimed_item_reward", result)
+		# InventoryService.notify_claimed_item_reward(result) remains the canonical reward-card event.
 		if inventory_item_id != "" and inventory_item_id not in ["town-map", "old-rod"]:
 			get_tree().call_group(
 				"ui_overlay",
 				"add_system_message",
-				LocalizationManager.text("ui.world.reward.story_item", {
-					"item": ItemLocalization.display_name(inventory_item_id),
+				get_node_or_null("/root/LocalizationManager").call("text", "ui.world.reward.story_item", {
+					"item": str(get_node_or_null("/root/ItemLocalization").call("display_name", inventory_item_id)) if get_node_or_null("/root/ItemLocalization") != null else inventory_item_id,
 					"quantity": inventory_quantity,
 				})
 			)
@@ -79,13 +83,13 @@ func interact_with_player(_player: Node2D) -> void:
 			get_tree().call_group(
 				"ui_overlay",
 				"add_system_message",
-				LocalizationManager.text("ui.key_item.received_town_map")
+				get_node_or_null("/root/LocalizationManager").call("text", "ui.key_item.received_town_map")
 			)
 		elif str(result.get("itemId", "")).strip_edges().to_lower() == "old-rod":
 			get_tree().call_group(
 				"ui_overlay",
 				"add_system_message",
-				LocalizationManager.text("ui.skill.fishing.unlocked")
+				get_node_or_null("/root/LocalizationManager").call("text", "ui.skill.fishing.unlocked")
 			)
 		SfxManager.play("item_received")
 	else:
@@ -170,11 +174,10 @@ func _get_metadata_dialogue_id(
 
 
 func _resolve_dialogue_lines(dialogue_reference_id: String, fallback_lines: Array) -> Array[String]:
-	return await NpcDialogueService.resolve_lines(
-		dialogue_reference_id,
-		fallback_lines,
-		"ItemGiftNPC"
-	)
+	var dialogue_service := get_node_or_null("/root/NpcDialogueService")
+	if dialogue_service == null:
+		return fallback_lines
+	return await dialogue_service.call("resolve_lines", dialogue_reference_id, fallback_lines, "ItemGiftNPC")
 
 
 func _show_report_to_staff_message() -> void:

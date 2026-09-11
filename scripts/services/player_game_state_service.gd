@@ -3,16 +3,23 @@ extends Node
 class_name PlayerGameStateServiceNode
 
 const PLAYER_POSITION_ENDPOINT := "/game/player-position"
+const WEB_PLAYER_POSITION_ENDPOINT := "/auth/web/world"
 const PLAYER_TELEPORT_ACK_ENDPOINT := "/game/player-position/teleport-ack"
 const PLAYER_RESPAWN_ENDPOINT := "/game/respawn"
 const PLAYER_RESPAWN_POINT_ENDPOINT := "/game/respawn-point"
 const PLAYER_ACTIVITY_ENDPOINT := "/game/player-activity"
+const WEB_PLAYER_ACTIVITY_ENDPOINT := "/auth/web/world/activity"
 const MAP_PLAYERS_ENDPOINT := "/game/map-players"
 const PLAYER_PREFERENCES_ENDPOINT := "/game/preferences"
+const WEB_PLAYER_PREFERENCES_ENDPOINT := "/auth/web/preferences"
 const PLAYER_PROFILE_ENDPOINT := "/game/profile"
+const WEB_PLAYER_PROFILE_ENDPOINT := "/auth/web/profile"
 const PLAYER_STORY_ENDPOINT := "/game/story"
+const WEB_PLAYER_STORY_ENDPOINT := "/auth/web/world/story"
 const STORY_BOOTSTRAP_ENDPOINT := "/game/story/bootstrap"
+const WEB_STORY_BOOTSTRAP_ENDPOINT := "/auth/web/world/story/bootstrap"
 const STORY_INTERACTION_ENDPOINT := "/game/story/interactions/%s"
+const WEB_STORY_INTERACTION_ENDPOINT := "/auth/web/world/story/interactions/%s"
 const STORY_QUEST_ACCEPT_ENDPOINT := "/game/story/quests/%s/accept"
 const DEV_STORY_CHECKPOINT_ENDPOINT := "/game/dev/progression/story-checkpoint"
 const DEV_SIDE_QUEST_PROGRESS_ENDPOINT := "/game/dev/progression/side-quest"
@@ -32,7 +39,7 @@ func load_player_profile() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_PROFILE_ENDPOINT,
+		base_url + _player_profile_endpoint(),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -79,7 +86,7 @@ func refresh_story() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_STORY_ENDPOINT,
+		base_url + _player_story_endpoint(),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -105,7 +112,7 @@ func bootstrap_story() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + STORY_BOOTSTRAP_ENDPOINT,
+		base_url + _story_bootstrap_endpoint(),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -300,7 +307,7 @@ func resolve_story_interaction(
 		return {"success": false, "status": 0, "error": "Missing story interaction id."}
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
-	var endpoint := (STORY_INTERACTION_ENDPOINT % normalized_interaction_id.uri_encode()) + "/resolve"
+	var endpoint := (_story_interaction_endpoint() % normalized_interaction_id.uri_encode()) + "/resolve"
 	var response: Dictionary = await _request_json(
 		base_url + endpoint,
 		HTTPClient.METHOD_POST,
@@ -349,7 +356,7 @@ func complete_story_interaction(
 		return {"success": false, "status": 0, "error": "Missing story completion identity."}
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
-	var endpoint := (STORY_INTERACTION_ENDPOINT % normalized_interaction_id.uri_encode()) + "/complete"
+	var endpoint := (_story_interaction_endpoint() % normalized_interaction_id.uri_encode()) + "/complete"
 	var response: Dictionary = await _request_json(
 		base_url + endpoint,
 		HTTPClient.METHOD_POST,
@@ -378,6 +385,22 @@ func complete_story_interaction(
 	result["success"] = true
 	result["story"] = story.duplicate(true)
 	return result
+
+
+func _player_story_endpoint() -> String:
+	return WEB_PLAYER_STORY_ENDPOINT if OS.has_feature("web") else PLAYER_STORY_ENDPOINT
+
+
+func _player_profile_endpoint() -> String:
+	return WEB_PLAYER_PROFILE_ENDPOINT if OS.has_feature("web") else PLAYER_PROFILE_ENDPOINT
+
+
+func _story_bootstrap_endpoint() -> String:
+	return WEB_STORY_BOOTSTRAP_ENDPOINT if OS.has_feature("web") else STORY_BOOTSTRAP_ENDPOINT
+
+
+func _story_interaction_endpoint() -> String:
+	return WEB_STORY_INTERACTION_ENDPOINT if OS.has_feature("web") else STORY_INTERACTION_ENDPOINT
 
 
 func _is_valid_story_complete_body(
@@ -586,7 +609,7 @@ func load_player_position() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_POSITION_ENDPOINT,
+		base_url + _player_position_endpoint(),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -600,6 +623,7 @@ func load_player_position() -> Dictionary:
 		"hasState": bool(body.get("hasState", false)),
 		"state": _dictionary_from_value(body.get("state", {})),
 		"blackoutLoss": int(body.get("blackoutLoss", 0)),
+		"trainerRewardRecovered": bool(body.get("trainerRewardRecovered", false)),
 		"happinessUpdated": bool(body.get("happinessUpdated", false)),
 		"party": _array_from_value(body.get("party", [])),
 	}
@@ -614,7 +638,7 @@ func save_player_position(state: Dictionary) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_POSITION_ENDPOINT,
+		base_url + _player_position_endpoint(),
 		HTTPClient.METHOD_PUT,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify(state)
@@ -630,6 +654,14 @@ func save_player_position(state: Dictionary) -> Dictionary:
 		"happinessUpdated": bool(body.get("happinessUpdated", false)),
 		"party": _array_from_value(body.get("party", [])),
 	}
+
+
+func _player_position_endpoint() -> String:
+	return WEB_PLAYER_POSITION_ENDPOINT if OS.has_feature("web") else PLAYER_POSITION_ENDPOINT
+
+
+func _player_activity_endpoint() -> String:
+	return WEB_PLAYER_ACTIVITY_ENDPOINT if OS.has_feature("web") else PLAYER_ACTIVITY_ENDPOINT
 
 
 func acknowledge_player_teleport(teleport_revision: int, teleport_command_id: String = "") -> Dictionary:
@@ -754,7 +786,7 @@ func save_player_activity_state(activity_state: String, activity_context: Dictio
 	}
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_ACTIVITY_ENDPOINT,
+		base_url + _player_activity_endpoint(),
 		HTTPClient.METHOD_PUT,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify(payload)
@@ -805,7 +837,7 @@ func load_player_preferences() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_PREFERENCES_ENDPOINT,
+		base_url + _player_preferences_endpoint(),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -829,7 +861,7 @@ func save_player_preferences(preferences: Dictionary) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_PREFERENCES_ENDPOINT,
+		base_url + _player_preferences_endpoint(),
 		HTTPClient.METHOD_PUT,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify(preferences)
@@ -842,6 +874,10 @@ func save_player_preferences(preferences: Dictionary) -> Dictionary:
 		"success": true,
 		"preferences": _dictionary_from_value(body.get("preferences", {})),
 	}
+
+
+func _player_preferences_endpoint() -> String:
+	return WEB_PLAYER_PREFERENCES_ENDPOINT if OS.has_feature("web") else PLAYER_PREFERENCES_ENDPOINT
 
 
 func _request_json(url: String, method: HTTPClient.Method, headers: PackedStringArray, body: String) -> Dictionary:

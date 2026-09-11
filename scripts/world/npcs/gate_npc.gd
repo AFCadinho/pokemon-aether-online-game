@@ -51,6 +51,12 @@ func _ready() -> void:
 
 
 func is_gate_open() -> bool:
+	if OS.has_feature("web") and not guarded_transition_id.strip_edges().is_empty():
+		return (
+			transition_access_resolved
+			and not transition_access.is_empty()
+			and bool(transition_access.get("allowed", false))
+		)
 	if not is_story_requirement_met():
 		return false
 
@@ -216,6 +222,8 @@ func _get_blocked_dialogue_lines() -> Array[String]:
 
 
 func _are_local_gate_requirements_met() -> bool:
+	if OS.has_feature("web") and not guarded_transition_id.strip_edges().is_empty():
+		return true
 	return (
 		is_story_requirement_met()
 		and not (requires_party_pokemon and PlayerSave.party.is_empty())

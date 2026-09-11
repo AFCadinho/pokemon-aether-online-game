@@ -64,6 +64,8 @@ var terrain_effects := true
 var display_own_name := true
 var hide_other_players := false
 var sprite_style := SPRITE_STYLE_ANIMATED
+var performance_details := false
+var show_performance := false
 var fullscreen := false
 var window_resolution := DEFAULT_WINDOW_RESOLUTION
 var world_pixel_scale := DEFAULT_WORLD_PIXEL_SCALE
@@ -82,6 +84,14 @@ var locale := DEFAULT_LOCALE
 var content_name_language := CONTENT_NAME_LANGUAGE_ENGLISH
 var enabled_language_chats: Array[String] = []
 var input_bindings: Dictionary = DEFAULT_INPUT_BINDINGS.duplicate()
+
+
+func get_audio_output_bus(preferred_bus: String) -> String:
+	# The browser AudioWorklet mixer reliably exposes the Master bus, while
+	# dynamically created category buses can remain disconnected on some WebGL
+	# builds. Route game playback directly to Master there; desktop keeps its
+	# independent Music/SFX/cry/UI controls unchanged.
+	return MASTER_BUS if OS.has_feature("web") else preferred_bus
 
 
 func _ready() -> void:
@@ -111,6 +121,8 @@ func load_settings() -> void:
 	display_own_name = bool(data.get("display_own_name", display_own_name))
 	hide_other_players = bool(data.get("hide_other_players", hide_other_players))
 	sprite_style = _validated_sprite_style(str(data.get("sprite_style", sprite_style)))
+	performance_details = bool(data.get("performance_details", false))
+	show_performance = bool(data.get("show_performance", false))
 	fullscreen = bool(data.get("fullscreen", fullscreen))
 	window_resolution = _validated_window_resolution(data.get("window_resolution", window_resolution))
 	var has_world_pixel_scale := data.has("world_pixel_scale")
@@ -194,6 +206,8 @@ func save_settings() -> void:
 		"display_own_name": display_own_name,
 		"hide_other_players": hide_other_players,
 		"sprite_style": sprite_style,
+		"performance_details": performance_details,
+		"show_performance": show_performance,
 		"fullscreen": fullscreen,
 		"window_resolution": {
 			"width": window_resolution.x,
@@ -279,6 +293,20 @@ func set_sprite_style(style: String) -> bool:
 
 func is_gen5_animated_sprites_installed() -> bool:
 	return PokemonAssets.has_optional_gen5_animated_sprites()
+
+
+func set_performance_details(enabled: bool) -> void:
+	if performance_details == enabled:
+		return
+	performance_details = enabled
+	_save_and_emit()
+
+
+func set_show_performance(enabled: bool) -> void:
+	if show_performance == enabled:
+		return
+	show_performance = enabled
+	_save_and_emit()
 
 
 func set_fullscreen(enabled: bool) -> void:
@@ -446,6 +474,8 @@ func set_master_volume(volume: float) -> void:
 
 	master_volume = validated_volume
 	_apply_audio_bus_volume(MASTER_BUS, master_volume)
+	if OS.has_feature("web"):
+		MusicManager.refresh_web_volume()
 	_save_and_emit()
 
 
@@ -456,6 +486,8 @@ func set_music_volume(volume: float) -> void:
 
 	music_volume = validated_volume
 	_apply_audio_bus_volume(MUSIC_BUS, music_volume)
+	if OS.has_feature("web"):
+		MusicManager.refresh_web_volume()
 	_save_and_emit()
 
 

@@ -19,9 +19,12 @@ const RECONNECT_DELAY_SECONDS := 3.0
 const SESSION_CHECK_INTERVAL_SECONDS := 10.0
 const SESSION_INVALID_CLOSE_CODE := 1008
 const DEBUG_PLAYER_UPDATE_PAYLOADS := false
+const PACKET_PROCESS_BUDGET_USEC := 2000
+const MAX_PACKETS_PER_FRAME := 64
 const PLAYER_UPDATE_LOG_PATH := "user://world_presence_player_update.log"
 
 var websocket: WebSocketPeer = WebSocketPeer.new()
+var latency := preload("res://scripts/services/connection_latency.gd").new()
 var connected := false
 var connecting := false
 var should_reconnect := false
@@ -48,7 +51,10 @@ func _process(delta: float) -> void:
 
 	var is_connected := ready_state == WebSocketPeer.STATE_OPEN
 	if connected != is_connected:
+		latency.reset()
 		connected = is_connected
+		if connected:
+			session_check_timer = 0.0
 		connection_changed.emit(connected)
 		if connected and not last_position_payload.is_empty():
 			_reset_roster()
@@ -60,7 +66,8 @@ func _process(delta: float) -> void:
 		session_check_timer -= delta
 		if session_check_timer <= 0.0:
 			session_check_timer = SESSION_CHECK_INTERVAL_SECONDS
-			_send_payload({"type": "ping"})
+			if _send_payload({"type": "ping"}):
+				latency.sent(Time.get_ticks_msec())
 		return
 
 	if ready_state == WebSocketPeer.STATE_CONNECTING:
@@ -116,6 +123,7 @@ func _connect_presence_async(attempt_id: int) -> void:
 
 
 func disconnect_presence() -> void:
+	latency.reset()
 	should_reconnect = false
 	connecting = false
 	connection_attempt_id += 1
@@ -146,7 +154,7 @@ func update_position(state: Dictionary) -> bool:
 	var presence_body: String = CharacterAppearanceService.get_presence_body_base_id(str(appearance.get("body", "")))
 	var appearance_payload: Dictionary = _build_appearance_payload(appearance)
 	appearance_payload["body"] = presence_body
-	var movement_payload: Dictionary = _build_movement_payload(state.get("movement", {}), appearance_payload, presence_body, appearance)
+	var movement_payload: Dictionary = _build_movement_payload(state.get("movement", {}))
 	var payload := {
 		"type": "position",
 		"mapId": map_id,
@@ -160,50 +168,8 @@ func update_position(state: Dictionary) -> bool:
 		"roles": state.get("roles", []),
 		"selectedRoleBadge": str(state.get("selectedRoleBadge", "")),
 		"activityState": str(state.get("activityState", "idle")),
+		"battleSpectate": state.get("battleSpectate", {}),
 		"aethernetEffect": state.get("aethernetEffect", {}),
-		"appearanceBody": presence_body,
-		"appearanceHair": str(appearance.get("hair", "")),
-		"appearanceHairStyleIndex": int(appearance.get("hair_style_index", 0)),
-		"appearanceHeadgear": str(appearance.get("headgear", "")),
-		"appearanceFacialHair": str(appearance.get("facial_hair", "")),
-		"appearanceFacegear": str(appearance.get("facegear", "")),
-		"appearanceTop": str(appearance.get("top", "")),
-		"appearanceBottom": str(appearance.get("bottom", "")),
-		"appearanceShoes": str(appearance.get("shoes", "")),
-		"appearanceHairColor": str(appearance.get("hair_color", "")),
-		"appearanceSkinTone": str(appearance.get("skin_tone", "")),
-		"appearanceEyeColor": str(appearance.get("eye_color", "")),
-		"appearanceFacegearColor": str(appearance.get("facegear_color", "")),
-		"appearanceFacialHairColor": str(appearance.get("facial_hair_color", "")),
-		"appearanceTopColor": str(appearance.get("top_color", "")),
-		"appearanceBottomColor": str(appearance.get("bottom_color", "")),
-		"appearanceShoesColor": str(appearance.get("shoes_color", "")),
-		"body": presence_body,
-		"hair": str(appearance.get("hair", "")),
-		"hair_style_index": int(appearance.get("hair_style_index", 0)),
-		"hairStyleIndex": int(appearance.get("hair_style_index", 0)),
-		"headgear": str(appearance.get("headgear", "")),
-		"facial_hair": str(appearance.get("facial_hair", "")),
-		"facegear": str(appearance.get("facegear", "")),
-		"top": str(appearance.get("top", "")),
-		"bottom": str(appearance.get("bottom", "")),
-		"shoes": str(appearance.get("shoes", "")),
-		"hair_color": str(appearance.get("hair_color", "")),
-		"hairColor": str(appearance.get("hair_color", "")),
-		"skin_tone": str(appearance.get("skin_tone", "")),
-		"skinTone": str(appearance.get("skin_tone", "")),
-		"eye_color": str(appearance.get("eye_color", "")),
-		"eyeColor": str(appearance.get("eye_color", "")),
-		"facegear_color": str(appearance.get("facegear_color", "")),
-		"facegearColor": str(appearance.get("facegear_color", "")),
-		"facial_hair_color": str(appearance.get("facial_hair_color", "")),
-		"facialHairColor": str(appearance.get("facial_hair_color", "")),
-		"top_color": str(appearance.get("top_color", "")),
-		"topColor": str(appearance.get("top_color", "")),
-		"bottom_color": str(appearance.get("bottom_color", "")),
-		"bottomColor": str(appearance.get("bottom_color", "")),
-		"shoes_color": str(appearance.get("shoes_color", "")),
-		"shoesColor": str(appearance.get("shoes_color", "")),
 	}
 	last_position_payload = payload
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
@@ -214,63 +180,13 @@ func update_position(state: Dictionary) -> bool:
 
 
 func _build_appearance_payload(appearance: Dictionary) -> Dictionary:
-	var payload: Dictionary = appearance.duplicate()
-	payload["hairStyleIndex"] = int(appearance.get("hair_style_index", 0))
-	payload["hairColor"] = str(appearance.get("hair_color", ""))
-	payload["skinTone"] = str(appearance.get("skin_tone", ""))
-	payload["eyeColor"] = str(appearance.get("eye_color", ""))
-	payload["facegearColor"] = str(appearance.get("facegear_color", ""))
-	payload["facialHairColor"] = str(appearance.get("facial_hair_color", ""))
-	payload["topColor"] = str(appearance.get("top_color", ""))
-	payload["bottomColor"] = str(appearance.get("bottom_color", ""))
-	payload["shoesColor"] = str(appearance.get("shoes_color", ""))
-	return payload
+	return appearance.duplicate()
 
 
-func _build_movement_payload(movement_value: Variant, appearance_payload: Dictionary, presence_body: String, appearance: Dictionary) -> Dictionary:
-	var payload: Dictionary = {}
+func _build_movement_payload(movement_value: Variant) -> Dictionary:
 	if movement_value is Dictionary:
-		var movement_dictionary: Dictionary = movement_value as Dictionary
-		payload = movement_dictionary.duplicate()
-	payload["appearance"] = appearance_payload
-	payload["appearanceBody"] = presence_body
-	payload["appearanceHair"] = str(appearance.get("hair", ""))
-	payload["appearanceHairStyleIndex"] = int(appearance.get("hair_style_index", 0))
-	payload["appearanceHeadgear"] = str(appearance.get("headgear", ""))
-	payload["appearanceFacialHair"] = str(appearance.get("facial_hair", ""))
-	payload["appearanceFacegear"] = str(appearance.get("facegear", ""))
-	payload["appearanceTop"] = str(appearance.get("top", ""))
-	payload["appearanceBottom"] = str(appearance.get("bottom", ""))
-	payload["appearanceShoes"] = str(appearance.get("shoes", ""))
-	payload["appearanceHairColor"] = str(appearance.get("hair_color", ""))
-	payload["appearanceSkinTone"] = str(appearance.get("skin_tone", ""))
-	payload["appearanceEyeColor"] = str(appearance.get("eye_color", ""))
-	payload["appearanceFacegearColor"] = str(appearance.get("facegear_color", ""))
-	payload["appearanceFacialHairColor"] = str(appearance.get("facial_hair_color", ""))
-	payload["appearanceTopColor"] = str(appearance.get("top_color", ""))
-	payload["appearanceBottomColor"] = str(appearance.get("bottom_color", ""))
-	payload["appearanceShoesColor"] = str(appearance.get("shoes_color", ""))
-	payload["body"] = presence_body
-	payload["hair"] = str(appearance.get("hair", ""))
-	payload["hair_color"] = str(appearance.get("hair_color", ""))
-	payload["hairColor"] = str(appearance.get("hair_color", ""))
-	payload["eye_color"] = str(appearance.get("eye_color", ""))
-	payload["eyeColor"] = str(appearance.get("eye_color", ""))
-	payload["headgear"] = str(appearance.get("headgear", ""))
-	payload["facial_hair"] = str(appearance.get("facial_hair", ""))
-	payload["facegear"] = str(appearance.get("facegear", ""))
-	payload["top"] = str(appearance.get("top", ""))
-	payload["facegear_color"] = str(appearance.get("facegear_color", ""))
-	payload["facegearColor"] = str(appearance.get("facegear_color", ""))
-	payload["facial_hair_color"] = str(appearance.get("facial_hair_color", ""))
-	payload["facialHairColor"] = str(appearance.get("facial_hair_color", ""))
-	payload["top_color"] = str(appearance.get("top_color", ""))
-	payload["topColor"] = str(appearance.get("top_color", ""))
-	payload["bottom_color"] = str(appearance.get("bottom_color", ""))
-	payload["bottomColor"] = str(appearance.get("bottom_color", ""))
-	payload["shoes_color"] = str(appearance.get("shoes_color", ""))
-	payload["shoesColor"] = str(appearance.get("shoes_color", ""))
-	return payload
+		return (movement_value as Dictionary).duplicate()
+	return {}
 
 
 func _send_payload(payload: Dictionary) -> bool:
@@ -298,7 +214,12 @@ func _handle_closed_socket() -> void:
 
 
 func _process_packets() -> void:
+	var deadline := Time.get_ticks_usec() + PACKET_PROCESS_BUDGET_USEC
+	var processed := 0
 	while websocket.get_available_packet_count() > 0:
+		if processed >= MAX_PACKETS_PER_FRAME or (processed > 0 and Time.get_ticks_usec() >= deadline):
+			break
+		processed += 1
 		var packet := websocket.get_packet()
 		var parsed_body: Variant = JSON.parse_string(packet.get_string_from_utf8())
 		if typeof(parsed_body) != TYPE_DICTIONARY:
@@ -306,6 +227,8 @@ func _process_packets() -> void:
 
 		var message: Dictionary = parsed_body
 		match str(message.get("type", "")):
+			"pong":
+				latency.received(Time.get_ticks_msec())
 			"snapshot":
 				_apply_snapshot_message(message)
 			"weather_update":

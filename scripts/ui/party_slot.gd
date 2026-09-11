@@ -42,7 +42,7 @@ const STATUS_ICON_ROWS := {
 }
 
 @onready var pokemon_sprite: TextureRect = $MarginContainer/HBoxContainer/PokemonSprite
-@onready var shiny_badge: Label = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/ShinyBadge
+@onready var shiny_badge: TextureRect = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/ShinyBadge
 @onready var name_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/NameLabel
 @onready var status_icon: TextureRect = $MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/StatusIcon
 @onready var hp_bar: ProgressBar = $MarginContainer/HBoxContainer/VBoxContainer/HPBar

@@ -63,10 +63,12 @@ func _check_catalog_and_frames() -> void:
 			"Cyclizar foreground frames match its mount frame size"
 		)
 	var bag_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	var icon_resolver_source := FileAccess.get_file_as_string("res://scripts/services/item_icon_resolver.gd")
 	_check(
 		bag_source.contains('{"id": "mounts", "labelKey": "ui.bag.category.mounts", "iconItemId": "cyclizar-mount"}')
 		and bag_source.contains('"power_stones", "mounts", "cosmetics"')
-		and bag_source.contains("MountService.get_mount_id_for_unlock_item(item_id)"),
+		and bag_source.contains("ITEM_ICON_RESOLVER.load_icon(")
+		and icon_resolver_source.contains("MountServiceScript.get_mount_id_for_unlock_item(canonical_id)"),
 		"mount entitlements have their own visible Bag category and reuse the mount sprite as icon"
 	)
 	var voucher_icon := load("res://assets/items/icons/BIKEVOUCHER.png") as Texture2D
@@ -185,6 +187,16 @@ func _check_land_mount_runtime_contract() -> void:
 		and authorized_teleport_source.find("player.call(\"reset_movement_state\")")
 		< authorized_teleport_source.find('player.call("restore_land_mount", land_mount_id_to_restore)'),
 		"authorized route transitions preserve an active land mount"
+	)
+	var web_demo_transition_source := _function_source(world_source, "_apply_web_demo_transition_state")
+	_check(
+		web_demo_transition_source.contains('player.call("get_active_land_mount_id")')
+		and web_demo_transition_source.contains('player.call("restore_land_mount", land_mount_id_to_restore)')
+		and web_demo_transition_source.find('player.call("get_active_land_mount_id")')
+		< web_demo_transition_source.find("player.call(\"reset_movement_state\")")
+		and web_demo_transition_source.find("player.call(\"reset_movement_state\")")
+		< web_demo_transition_source.find('player.call("restore_land_mount", land_mount_id_to_restore)'),
+		"browser-demo route transitions preserve an active land mount"
 	)
 	var battle_lock_source := _function_source(world_source, "_lock_overworld_for_battle")
 	var battle_unlock_source := _function_source(world_source, "_unlock_overworld_after_battle")

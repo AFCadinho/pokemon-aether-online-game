@@ -43,6 +43,8 @@ func _check_scene_staging() -> void:
 
 func _check_battle_setup_contract() -> void:
 	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	_check(source.contains("show_player(PlayerSave.to_appearance_state(), Vector2.RIGHT)"), "local trainer faces right toward the opponent")
+	_check(source.contains('players.get("p1", {}), Vector2.RIGHT)'), "spectator near-side trainer also faces right")
 	var wild_prepare_start := source.find("func prepare_wild_battle_from_response(")
 	var wild_prepare_end := source.find("\nfunc ", wild_prepare_start + 1)
 	var wild_prepare_source := source.substr(wild_prepare_start, wild_prepare_end - wild_prepare_start)
@@ -188,6 +190,8 @@ func _check_runtime_renderer() -> void:
 		"facial_hair": "Adinho_Beard",
 	}, Vector2.RIGHT)
 	_check(renderer.player_avatar != null, "player trainer avatar is composed for battle")
+	var body := renderer.player_avatar.find_child("BodySprite", true, false) as AnimatedSprite2D
+	_check(body != null and body.animation == &"idle_right", "hidden trainer initialization applies the actual right-facing animation before processing stops")
 	_check(
 		renderer.player_avatar != null and renderer.player_avatar.z_as_relative,
 		"layered player trainer art inherits the protected trainer render band"

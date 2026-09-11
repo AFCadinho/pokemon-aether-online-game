@@ -2,6 +2,7 @@ extends SceneTree
 
 
 const DUEL_SCENE := "res://scenes/overworld/aether_clash/aether_clash_duel.tscn"
+const CAMERA_POLICY := preload("res://scripts/services/aether_clash_camera_policy.gd")
 
 var failed := false
 
@@ -300,21 +301,16 @@ func _run() -> void:
 		overlay.requested_room_codes.size() == spectate_requests_before_participant_click,
 		"Active Guild Duel participants cannot spectate another battle"
 	)
-	var canvas_scale := player_camera.get_viewport().get_screen_transform().get_scale()
-	var expected_participant_zoom := Vector2(
-		2.0 / maxf(canvas_scale.x, 0.001),
-		2.0 / maxf(canvas_scale.y, 0.001)
-	)
 	_check(
-		player_camera.zoom.is_equal_approx(expected_participant_zoom),
-		"Active Guild Duel participants are forced to a 2× output zoom"
+		(player_camera.get_viewport_rect().size / player_camera.zoom).is_equal_approx(CAMERA_POLICY.WORLD_VIEW_SIZE),
+		"Active Guild Duel participants see exactly 1280×720 world pixels"
 	)
 	duel.call("_apply_arena_state", _spectator_payload())
 	duel.call("_sync_local_camera_mode")
 	_check(
-		local_actor.restored_zoom_count == 1
-		and player_camera.zoom.is_equal_approx(Vector2(1.5, 1.5)),
-		"Elimination restores the player's normal world zoom before spectating"
+		local_actor.restored_zoom_count == 0
+		and (player_camera.get_viewport_rect().size / player_camera.zoom).is_equal_approx(CAMERA_POLICY.WORLD_VIEW_SIZE),
+		"Elimination keeps the fixed arena view outside the orb"
 	)
 
 	var indicator_source := FileAccess.get_file_as_string("res://scripts/world/aether_clash_battle_indicator.gd")

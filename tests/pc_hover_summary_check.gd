@@ -60,6 +60,40 @@ func _run() -> void:
 		is_equal_approx(populated_height, PartyHoverCard.STORAGE_CARD_HEIGHT),
 		"A fully populated Storage hover card stays at the fixed height"
 	)
+
+	var exchange_card := PARTY_HOVER_SCENE.instantiate() as PartyHoverCard
+	exchange_card.set_show_exchange_details(true)
+	host.add_child(exchange_card)
+	await process_frame
+	exchange_card.show_for_pokemon({
+		"nickname": null,
+		"species": "Mew",
+		"level": 26,
+		"types": ["psychic"],
+		"hp": 96,
+		"maxHp": 96,
+		"ability": "Synchronize",
+		"nature": "Hardy",
+		"stats": {"atk": 57, "def": 65, "spa": 81, "spd": 65, "spe": 81},
+		"ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
+		"moves": ["Grass Knot", "Thunderbolt", "Calm Mind", "Substitute"],
+	})
+	await process_frame
+	var exchange_stats := exchange_card.get_node("MarginContainer/VBoxContainer/StatsBoxContainer") as Control
+	var exchange_ivs := exchange_card.get_node("MarginContainer/VBoxContainer/IVDetailsContainer") as Control
+	var exchange_name := exchange_card.get_node("MarginContainer/VBoxContainer/NameLabel") as Label
+	_check(exchange_name.text == "Mew  ·  Lv. 26", "Exchange hover ignores null nicknames")
+	_check(not exchange_stats.visible, "Exchange hover cards hide calculated stats")
+	_check(exchange_ivs.visible, "Exchange hover cards show IVs")
+	_check(
+		(exchange_ivs.find_child("AtkValue", true, false) as Label).text == "0"
+			and (exchange_ivs.find_child("SpeValue", true, false) as Label).text == "31",
+		"Exchange hover cards show the listed Pokémon's exact IV values"
+	)
+	_check(
+		is_equal_approx(exchange_card.custom_minimum_size.y, PartyHoverCard.EXCHANGE_CARD_HEIGHT),
+		"Exchange hover cards reserve room for the IV row"
+	)
 	var safe_bounds := Rect2(100, 100, 640, 320)
 	card.position_beside_rect_within(Rect2(210, 210, 118, 80), safe_bounds)
 	var positioned_rect := card.get_global_rect()

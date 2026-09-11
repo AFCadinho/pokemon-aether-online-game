@@ -6,7 +6,7 @@ const TmxXmlParser := preload("res://addons/tiled_tmx_importer/importer/tmx_xml_
 const TmxTilesetBuilder := preload("res://addons/tiled_tmx_importer/importer/tmx_tileset_builder.gd")
 const TmxVisualSceneBuilder := preload("res://addons/tiled_tmx_importer/importer/tmx_visual_scene_builder.gd")
 
-const MAX_GENERATED_TEXTURE_SIZE := 8192
+const MAX_GENERATED_TEXTURE_SIZE := 4096
 
 
 func import_tmx(tmx_path: String, output_scene_path: String) -> Dictionary:
@@ -152,9 +152,9 @@ func _materialize_tileset_image_chunks(
 			"error": "Tileset image %s is too wide for generated visual textures: %dpx." % [image_path, image_width],
 		}
 
-	var columns := int(tileset.get("columns", 0))
-	if columns <= 0:
-		columns = maxi(1, image_width / tile_width)
+	# The image grid is authoritative. Tiled can retain a stale columns value
+	# after an artist replaces or resizes the source atlas.
+	var columns := maxi(1, image_width / tile_width)
 
 	var image_tile_count := columns * int(floor(float(image_height) / float(tile_height)))
 	var tile_count := int(tileset.get("tile_count", 0))
@@ -196,7 +196,15 @@ func _materialize_tileset_image_chunks(
 				"error": "Could not create visual tileset asset directory: %s" % error_string(dir_error),
 			}
 
-		var texture := ImageTexture.create_from_image(chunk_image)
+		# Keep generated map chunks lossless, but do not serialize the raw RGBA
+		# pixels. PortableCompressedTexture2D stores the same image in a compact
+		# form that works in desktop and Web exports without an import sidecar.
+		var texture := PortableCompressedTexture2D.new()
+		texture.keep_compressed_buffer = true
+		texture.create_from_image(
+			chunk_image,
+			PortableCompressedTexture2D.COMPRESSION_MODE_LOSSLESS
+		)
 		var save_error := ResourceSaver.save(texture, texture_path)
 		if save_error != OK:
 			return {

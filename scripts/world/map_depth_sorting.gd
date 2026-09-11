@@ -4,20 +4,20 @@ const TallGrassDepthSortingScript := preload("res://scripts/world/tall_grass_dep
 
 
 static func get_tall_grass_overlap_z_floor(
-	map: Node,
+	grass_rows: Array[TileMapLayer],
 	layer: TileMapLayer,
 	group: Array[Vector2i],
 	minimum_z: int,
 	maximum_z: int
 ) -> int:
-	if map == null or layer == null:
+	if grass_rows.is_empty() or layer == null:
 		return minimum_z
 
 	var sort_z_floor := minimum_z
 	for cell: Vector2i in group:
 		var cell_center_position := layer.to_global(layer.map_to_local(cell))
-		var grass_match := TallGrassDepthSortingScript.find_depth_row_at_global_position(
-			map,
+		var grass_match := TallGrassDepthSortingScript.find_depth_row_in_layers(
+			grass_rows,
 			cell_center_position
 		)
 		var grass_row := grass_match.get("layer") as TileMapLayer

@@ -1,6 +1,8 @@
 class_name ContentCreatorPhotoMode
 extends CanvasLayer
 
+const ArenaCameraPolicy := preload("res://scripts/services/aether_clash_camera_policy.gd")
+
 const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
 const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
 const DROPDOWN_RADIO_UNCHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_unchecked.svg")
@@ -223,7 +225,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func open_photo_mode() -> void:
-	if active or GameState.is_overworld_input_locked():
+	if active or GameState.is_overworld_input_locked() or ArenaCameraPolicy.is_locked(get_tree()):
 		return
 	var world := GameState.get_world()
 	if world == null or bool(world.get("is_in_battle")) or bool(world.get("is_loading_map")):

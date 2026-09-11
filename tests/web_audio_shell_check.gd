@@ -1,0 +1,59 @@
+extends SceneTree
+
+var failures := 0
+
+
+func _init() -> void:
+	var shell := FileAccess.get_file_as_string("res://infrastructure/web/shell.html")
+	_check(shell.contains("const sharedAudioContext"), "web shell captures Godot's native audio context")
+	_check(shell.contains("await unlockAudio();"), "preview retries audio unlock from player interaction")
+	_check(shell.contains("window.AudioContext = sharedAudioContext"), "web shell observes Godot's audio context")
+	_check(not shell.contains("Test sound"), "web shell removes the temporary browser tone control")
+	_check(shell.contains("window.pokeaetherAudioDiagnostics"), "web shell exposes opt-in browser audio diagnostics")
+	_check(shell.contains("audio-debug"), "web shell enables detailed diagnostics only from the audio-debug query")
+	_check(shell.contains("context-resume-failed"), "web shell records a failed context resume")
+	_check(shell.contains("context-created"), "web shell records Godot's WebAudio context creation")
+	_check(shell.contains("worklet-module-loaded"), "web shell records Godot worklet module loading")
+	_check(shell.contains("worklet-node-connected"), "web shell records Godot worklet connection to audio output")
+	_check(shell.contains("worklet-audio-chunk"), "web shell records whether Godot sends audible sample chunks to its worklet")
+	var music_manager_source := FileAccess.get_file_as_string("res://scripts/services/music_manager.gd")
+	_check(
+		music_manager_source.contains("if OS.has_feature(\"web\"):")
+			and music_manager_source.contains("music-web-direct-start")
+			and music_manager_source.contains("music_player.volume_db = 0.0"),
+		"web music bypasses a stuck silence-floor fade before audio reaches the worklet"
+	)
+	_check(
+		music_manager_source.contains("music_player.volume_db = 0.0 if OS.has_feature(\"web\") else -80.0"),
+		"web music starts at audible gain before Godot creates its playback stream"
+	)
+	var web_audio_catalog := FileAccess.get_file_as_string("res://scripts/services/web_demo_audio_catalog.gd")
+	_check(
+		web_audio_catalog.contains("lugia_theme_lofi.ogg\")")
+			and web_audio_catalog.contains("Kanto Wild Battle.ogg\")")
+			and music_manager_source.contains("WebDemoAudioCatalog.get_stream(path)"),
+		"browser music explicitly preloads its imported streams instead of loading raw OGG paths"
+	)
+	_check(shell.contains("new NativeAudioContext(...args)"), "Godot keeps its requested WebAudio sample-rate and latency settings")
+	_check(shell.contains("webAudioContext = new NativeAudioContext(...args);")
+		and not shell.contains("webAudioContext = new NativeAudioContext();"),
+		"Godot keeps ownership of the WebAudio context instead of receiving a shell-created one")
+	_check(shell.contains("await engine.startGame({")
+		and shell.find("await unlockAudio();", shell.find("await engine.startGame({")) > shell.find("await engine.startGame({"),
+		"the browser resumes Godot audio again after its worklet attaches")
+	_check(shell.contains("['pointerdown', 'touchend', 'keydown']"), "web shell retries audio unlock on the first game interaction")
+	_check(shell.contains("window.pokeaetherBrowserAudio"), "web shell exposes native browser playback when Godot's mixer is silent")
+	_check(shell.contains("native-music-playing"), "web shell records native music playback")
+	_check(shell.contains("browser-audio/"), "web shell resolves raw exported browser audio files")
+	var bridge_source := FileAccess.get_file_as_string("res://scripts/services/web_audio_bridge.gd")
+	_check(bridge_source.contains("play_music") and bridge_source.contains("play_sfx"), "web audio bridge supports music and effects")
+	_check(music_manager_source.contains("WebAudioBridge.play_music"), "web music uses the native browser bridge")
+	print("web_audio_shell_check: %s" % ("PASS" if failures == 0 else "FAIL"))
+	quit(failures)
+
+
+func _check(ok: bool, label: String) -> void:
+	if ok:
+		return
+	failures += 1
+	push_error(label)

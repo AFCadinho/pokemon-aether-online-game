@@ -75,7 +75,8 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_sparring_catalog_search := overlay.get("pvp_ai_sparring_catalog_search") as LineEdit
 	var ai_sparring_catalog_tier := overlay.get("pvp_ai_sparring_catalog_tier") as OptionButton
 	var ai_sparring_catalog_results := overlay.get("pvp_ai_sparring_catalog_results") as VBoxContainer
-	var ai_sparring_catalog_player_select := overlay.get("pvp_ai_sparring_catalog_team_select") as OptionButton
+	var ai_sparring_catalog_player_search := overlay.get("pvp_ai_sparring_player_catalog_search") as LineEdit
+	var ai_sparring_catalog_player_suggestion_list := overlay.get("pvp_ai_sparring_player_catalog_suggestion_list") as VBoxContainer
 	var ai_sparring_catalog_use_player := overlay.get("pvp_ai_sparring_catalog_use_player_button") as Button
 	var ai_sparring_catalog_use_opponent := overlay.get("pvp_ai_sparring_catalog_use_opponent_button") as Button
 	var ai_sparring_catalog_export := overlay.get("pvp_ai_sparring_catalog_export_button") as Button
@@ -92,13 +93,16 @@ func _check_pvp_runtime_translation() -> void:
 	var ai_sparring_setup_steps := ai_team_step.get_parent() as HBoxContainer if ai_team_step != null else null
 	var training_ai_mode_row := overlay.get("pvp_training_ai_mode_row") as HBoxContainer
 	var training_ai_mode_select := overlay.get("pvp_training_ai_mode_select") as OptionButton
+	var training_ai_bot_select := overlay.get("pvp_training_ai_bot_select") as OptionButton
 	var training_ai_team_source_row := overlay.get("pvp_training_ai_team_source_row") as HBoxContainer
 	var training_ai_team_source_select := overlay.get("pvp_training_ai_team_source_select") as OptionButton
 	var training_ai_custom_team_input := overlay.get("pvp_training_ai_custom_team_input") as TextEdit
 	var training_ai_archetype_row := overlay.get("pvp_training_ai_archetype_row") as HBoxContainer
 	var training_ai_archetype_select := overlay.get("pvp_training_ai_archetype_select") as OptionButton
 	var training_ai_team_row := overlay.get("pvp_training_ai_team_row") as HBoxContainer
-	var training_ai_team_select := overlay.get("pvp_training_ai_team_select") as OptionButton
+	var training_ai_team_search := overlay.get("pvp_training_ai_team_search") as LineEdit
+	var training_ai_team_suggestions := overlay.get("pvp_training_ai_team_suggestions") as PanelContainer
+	var training_ai_team_suggestion_list := overlay.get("pvp_training_ai_team_suggestion_list") as VBoxContainer
 	var ai_opponent_preview := overlay.get("pvp_training_ai_opponent_preview") as VBoxContainer
 	var ai_opponent_preview_title := overlay.get("pvp_training_ai_opponent_preview_title") as Label
 	var ai_opponent_preview_grid := overlay.get("pvp_training_ai_opponent_preview_grid") as HBoxContainer
@@ -179,13 +183,124 @@ func _check_pvp_runtime_translation() -> void:
 		"AI training action uses the interactive room-button styling"
 	)
 	_check(ai_sparring_menu_button != null, "AI Sparring has its own PvP destination")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 4, "AI Sparring separates practice, team catalog, history and bot information")
-	_check(ai_sparring_tabs.get_tab_title(3) == "Over de bots", "Bot information tab is localized")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_count() == 6, "AI Sparring includes public Live Battles")
+	_check(ai_sparring_tabs.get_tab_title(1) == "Live Battles", "Live Battles tab is localized")
+	_check(ai_sparring_tabs.get_tab_title(5) == "Statistieken", "Statistics tab is localized")
+	overlay.set("pvp_ai_sparring_stats_data", {"success": true, "bots": [
+		{"bot": "ai4", "version": "v1", "completed": 2, "unconfirmed": 1, "sufficient": false},
+		{"bot": "ai5", "version": "v4", "completed": 10.0, "unconfirmed": 0, "sufficient": true, "winRate": 0.6, "nativeRate": 0.9, "fallbackRate": 0.1, "averageTurns": 25.6}
+	]})
+	overlay.call("_render_ai_sparring_stats")
+	var stats_list := overlay.get("pvp_ai_sparring_stats_list") as VBoxContainer
+	for bot_id: String in ["ai4", "ai5"]:
+		var stats_card := stats_list.get_node("AiSparringStatsCard_" + bot_id + ("_hard_v4" if bot_id == "ai5" else "_beginner_v1")) as PanelContainer
+		_check(stats_card.get_node("CardPadding").get_theme_constant("margin_left") == 18, "Statistics match bot profile card padding")
+		var stats_portrait := stats_card.find_child("BotPortrait", true, false) as TextureRect
+		_check(stats_portrait.texture != null and stats_portrait.texture.resource_path.ends_with("veteran-gen7.png" if bot_id == "ai5" else "scientist-gen7.png"), "Statistics use the correct trainer portrait")
+		var metrics := stats_card.find_child("Metrics", true, false) as GridContainer
+		_check(metrics.get_child_count() == (6 if bot_id == "ai5" else 4), "Metric tiles retain all applicable statistics")
+	var responsive_grid := GridContainer.new()
+	for width: int in [320, 500, 800]:
+		responsive_grid.size.x = width
+		overlay.call("_resize_ai_sparring_stats_grid", responsive_grid)
+		_check(responsive_grid.columns == (1 if width == 320 else 2 if width == 500 else 3), "Metric grid adapts to narrow and wide panels")
+	responsive_grid.free()
+	var stats_text := ""
+	for stats_label: Node in stats_list.find_children("*", "Label", true, false):
+		stats_text += (stats_label as Label).text + "\n"
+	_check(stats_text.contains("AI4 Scholar") and stats_text.contains("AI5 Grandmaster"), "Statistics show both bot versions")
+	_check(stats_text.contains("Nog onvoldoende gegevens") and stats_text.contains("60%") and stats_text.contains("90%") and stats_text.contains("26") and not stats_text.contains("10.0") and not stats_text.contains("25.6"), "Statistics show whole numbers and distinguish small samples from measured rates")
+	_check(stats_list.get_node_or_null("AiSparringOlderStatisticsToggle") == null, "No archive toggle without older statistics")
+	var archived_stats: Dictionary = overlay.get("pvp_ai_sparring_stats_data")
+	archived_stats["bots"].append({"bot": "ai5", "version": "v1", "completed": 12, "sufficient": true})
+	overlay.call("_render_ai_sparring_stats")
+	var older_stats := stats_list.get_node("AiSparringOlderStatistics") as VBoxContainer
+	var older_toggle := stats_list.get_node("AiSparringOlderStatisticsToggle") as Button
+	_check(not older_stats.visible and older_stats.get_child_count() == 1, "Historical AI5 card is collapsed by default")
+	_check(older_toggle.text == "Bekijk oudere versies", "Archive toggle is localized")
+	older_toggle.button_pressed = true
+	_check(older_stats.visible and older_toggle.text == "Verberg oudere versies", "Older statistics can be expanded")
+	older_toggle.button_pressed = false
+	_check(not older_stats.visible, "Older statistics can be collapsed again")
+	# New v1 difficulties are current cards, not archived Hard versions.
+	archived_stats["bots"].append({"bot": "ai5", "difficulty": "nightmare", "version": "v1", "completed": 0})
+	archived_stats["bots"].append({"bot": "ai5", "difficulty": "intermediate", "version": "v1", "completed": 0})
+	var saved_modes: Variant = overlay.get("pvp_training_ai_available_modes").duplicate()
+	var test_modes: Array[String] = ["ai4", "active", "nightmare"]
+	overlay.set("pvp_training_ai_available_modes", test_modes)
+	overlay.call("_render_ai_sparring_stats")
+	_check(stats_list.get_node_or_null("AiSparringStatsCard_ai5_nightmare_v1") != null, "Nightmare has a separate current card")
+	_check(stats_list.get_node_or_null("AiSparringStatsCard_ai5_intermediate_v1") == null, "Unavailable Intermediate without results stays hidden")
+	test_modes.append("intermediate")
+	overlay.call("_render_ai_sparring_stats")
+	_check(stats_list.get_node_or_null("AiSparringStatsCard_ai5_intermediate_v1") != null, "Available Intermediate has a separate current card")
+	overlay.set("pvp_training_ai_available_modes", saved_modes)
+	overlay.set("pvp_ai_sparring_stats_data", {"success": false})
+	overlay.call("_render_ai_sparring_stats")
+	_check(stats_list.get_child_count() == 0, "Failed statistics refresh does not leave stale rates visible")
+	_check(ai_sparring_tabs.get_tab_title(4) == "About", "Bot information tab uses the concise title")
+	var intermediate_about := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.difficulty_intermediate"))
+	var nightmare_about := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.difficulty_nightmare"))
+	var grandmaster_about := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.grandmaster"))
+	var intermediate_recommendation := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.recommendation_intermediate"))
+	var hard_recommendation := str(localization_manager.call("text", "ui.pvp.ai_sparring.about.recommendation_ai5"))
+	_check(intermediate_about.contains("Speelt veilig") and not intermediate_about.contains("informatie die een echte speler"), "Intermediate describes its safe learning style without disclosing its information boundary")
+	_check(intermediate_recommendation.contains("nieuw bent in PvP") and intermediate_recommendation.contains("Pokémonkennis"), "Intermediate is recommended to knowledgeable PvP beginners")
+	_check(hard_recommendation.contains("beste algemene sparringpartner"), "Hard is presented as the best all-round sparring partner")
+	_check(nightmare_about.contains("genadeloze tegenstander") and not nightmare_about.contains("weet jouw actie"), "Nightmare describes its challenge without disclosing hidden action knowledge")
+	_check(not grandmaster_about.contains("informatieregels"), "The About introduction does not advertise internal information rules")
+	for bot_id: String in ["ai4", "ai5"]:
+		var card := overlay.find_child("AiSparringAboutCard_" + bot_id, true, false)
+		_check(card != null, "Each bot has its own profile card")
+		var padding := card.get_node("CardPadding") as MarginContainer
+		_check(padding.get_theme_constant("margin_left") >= 18, "Bot copy has comfortable padding")
+		var portrait := card.find_child("AiSparringAboutPortrait_" + bot_id, true, false) as TextureRect
+		_check(portrait != null and portrait.texture != null, "Bot trainer portrait loads")
+		var expected_sprite := "scientist-gen7.png" if bot_id == "ai4" else "veteran-gen7.png"
+		_check(portrait.texture.resource_path.ends_with(expected_sprite), "Each bot uses its assigned trainer")
+	var difficulty_cards := overlay.find_child("AiSparringDifficultyCards", true, false) as VBoxContainer
+	_check(difficulty_cards != null and difficulty_cards.get_child_count() == 4, "Grandmaster difficulties have four separate hierarchy cards")
+	for mode_id: String in ["intermediate", "ai5", "elite", "nightmare"]:
+		_check(difficulty_cards.get_node_or_null("AiSparringDifficultyCard_" + mode_id) != null, "About has a distinct card for " + mode_id)
+	_check(overlay.find_child("AiSparringRecommendation_intermediate", true, false) != null, "Intermediate displays its recommendation")
+	_check(overlay.find_child("AiSparringRecommendation_ai5", true, false) != null, "Hard displays its recommendation")
 	var bot_versions: Dictionary = overlay.get("pvp_ai_sparring_about_versions")
+	_check(bot_versions.size() == 5, "About has independent status for all five difficulties")
+	overlay.call("_apply_ai_sparring_bot_versions", {"success": true, "bots": [
+		{"id": "ai5", "version": "v4", "available": false},
+		{"id": "intermediate", "version": "v1", "available": false},
+		{"id": "expert", "version": "retired", "available": true},
+		{"id": "nightmare", "version": "v1", "available": true}
+	]})
+	_check(not bot_versions.has("expert"), "Retired Expert metadata from an older server is ignored")
+	_check(bot_versions["nightmare"].text.contains("Beschikbaar om tegen te spelen") and bot_versions["nightmare"].text.contains("Serverversie: v1"), "Nightmare keeps its own version and availability when Hard is disabled")
+	_check(bot_versions["intermediate"].text.contains("Momenteel niet beschikbaar"), "Intermediate reports its own availability")
+	overlay.call("_apply_ai_sparring_bot_versions", {"success": false})
+	_check(bot_versions["nightmare"].text.contains("Beschikbaarheid niet bevestigd"), "Failed refresh clears all difficulty availability")
 	_check(bot_versions["ai5"].text.contains("Serverversie niet bevestigd"), "Missing server data does not claim a bot version")
 	overlay.set("pvp_ai_sparring_bot_versions", {"ai5": {"version": "Native Z v4", "available": true}})
 	overlay.call("_refresh_ai_sparring_about")
 	_check(bot_versions["ai5"].text.contains("Native Z v4"), "About displays the confirmed server version")
+	overlay.set("pvp_ai_sparring_bot_versions", {"ai5": {"version": "v5", "releaseStatus": "test", "available": true}})
+	var gateway_config := root.get_node("GatewayApiConfig")
+	var original_gateway_url: String = str(gateway_config.get("cached_url"))
+	for gateway_url: String in ["http://localhost:8000", "http://127.0.0.1:8000", "http://[::1]:8000", "https://test.localhost"]:
+		gateway_config.set("cached_url", gateway_url)
+		overlay.call("_refresh_ai_sparring_about")
+		_check(bot_versions["ai5"].text.contains("Serverversie: v5") and bot_versions["ai5"].text.contains("Testversie"), "Local server keeps the actual version and separate test label: " + gateway_url)
+	for gateway_url: String in ["https://api.pokeaether.com", "https://api.pokeaether.com/", "https://staging.example.com", "https://localhost.example.com", "https://localhost@api.pokeaether.com"]:
+		gateway_config.set("cached_url", gateway_url)
+		overlay.call("_refresh_ai_sparring_about")
+		_check(bot_versions["ai5"].text.contains("Serverversie: v5") and not bot_versions["ai5"].text.contains("Testversie"), "Remote server hides test label without changing actual version: " + gateway_url)
+		_check(bot_versions["ai5"].text.contains(str(localization_manager.call("text", "ui.pvp.ai_sparring.about.available"))), "Hiding test status preserves availability")
+		_check(str(overlay.get("pvp_ai_sparring_bot_versions")["ai5"]["releaseStatus"]) == "test", "Presentation does not rewrite server metadata")
+	gateway_config.set("cached_url", "http://localhost:8000")
+	overlay.call("_refresh_ai_sparring_about")
+	_check(bot_versions["ai5"].text.contains("Serverversie: v5") and bot_versions["ai5"].text.contains("Testversie"), "Version number and test status are displayed separately")
+	overlay.set("pvp_ai_sparring_bot_versions", {"ai5": {"version": "v5", "releaseStatus": "active", "available": true}})
+	overlay.call("_refresh_ai_sparring_about")
+	_check(bot_versions["ai5"].text.contains("Serverversie: v5") and not bot_versions["ai5"].text.contains("Testversie"), "Release status does not change the version number")
+	gateway_config.set("cached_url", original_gateway_url)
 	overlay.set("pvp_training_ai_resolved_team_id", "keep-selected-opponent")
 	overlay.call("_apply_ai_sparring_bot_versions", {"success": true, "bots": [{"id": "ai5", "version": "Native Z v4", "available": true}]})
 	_check(overlay.get("pvp_training_ai_resolved_team_id") == "keep-selected-opponent", "Refreshing bot information does not reroll the opponent")
@@ -193,11 +308,14 @@ func _check_pvp_runtime_translation() -> void:
 	_check(bot_versions["ai5"].text.contains("Serverversie niet bevestigd"), "A failed refresh clears an old confirmed version")
 	overlay.set("pvp_training_ai_resolved_team_id", "")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(0) == "Vrij oefenen", "Free sparring tab renders in Dutch")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(1) == "Teamcatalogus", "Team catalog tab renders in Dutch")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Matchhistorie", "Match history tab renders in Dutch")
-	_check(ai_sparring_tabs != null and ai_sparring_tabs.custom_minimum_size.y == 520.0, "AI Sparring keeps a stable workspace height across tabs")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(2) == "Teamcatalogus", "Team catalog tab renders in Dutch")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.get_tab_title(3) == "Matchhistorie", "Match history tab renders in Dutch")
+	var live_opt_in := overlay.get("pvp_ai_sparring_allow_spectators") as CheckBox
+	_check(live_opt_in != null and not live_opt_in.button_pressed, "Live spectators require explicit per-battle opt-in")
+	_check(live_opt_in.text == "Toon mijn battle openbaar bij Live Battles", "Spectator consent explains public visibility")
+	_check(ai_sparring_tabs != null and ai_sparring_tabs.custom_minimum_size.y == 595.0, "AI Sparring keeps a stable workspace height across tabs")
 	_check(ai_sparring_tabs != null and ai_sparring_tabs.current_tab == 0, "Free sparring is the default AI destination")
-	_check(ai_sparring_tier_select != null and ai_sparring_tier_select.item_count == 1 and ai_sparring_tier_select.get_item_text(0) == "Open" and str(ai_sparring_tier_select.get_selected_metadata()) == "none", "Free sparring safely defaults to the open tier")
+	_check(ai_sparring_tier_select != null and ai_sparring_tier_select.item_count == 1 and ai_sparring_tier_select.get_item_text(0) == "Aether OU" and str(ai_sparring_tier_select.get_selected_metadata()) == "aether-ou", "Free sparring defaults to Aether OU before the catalog loads")
 	_check(
 		ai_sparring_practice_hero != null
 		and ai_sparring_practice_hero.get_parent().get_parent() == ai_sparring_tabs.get_tab_control(0),
@@ -220,13 +338,13 @@ func _check_pvp_runtime_translation() -> void:
 	var history_text := ""
 	for history_label: Label in history_labels:
 		history_text += history_label.text + " "
-	_check(history_text.contains("Tegenstander: AI5 Grandmaster"), "Match history identifies AI5 Grandmaster as the opponent")
+	_check(history_text.contains("Tegenstander: Grandmaster — Hard"), "Match history identifies Grandmaster Hard as the opponent")
 	_check(history_text.contains("Gewonnen"), "Match history shows the localized player result")
 	_check(overlay.find_child("AiVeteranPortrait", true, false) != null, "AI Sparring presents the Veteran trainer identity")
 	_check(ai_team_step != null, "Free sparring groups the player's team as its first step")
 	_check(
 		ai_sparring_setup_steps != null
-		and is_equal_approx(ai_sparring_setup_steps.custom_minimum_size.y, 310.0)
+		and is_equal_approx(ai_sparring_setup_steps.custom_minimum_size.y, 385.0)
 		and ai_team_step.size_flags_vertical == Control.SIZE_EXPAND_FILL
 		and ai_opponent_step.size_flags_vertical == Control.SIZE_EXPAND_FILL,
 		"AI setup cards fill one stable shared-height row"
@@ -241,8 +359,9 @@ func _check_pvp_runtime_translation() -> void:
 	var catalog_archetypes: Array[String] = ["balance"]
 	var catalog_entries: Array[Dictionary] = [{
 		"teamId": "catalog-balance",
+		"homeTierId": "aether-ou",
 		"displayName": "Zapdos Balance",
-		"authors": ["Aether"],
+		"authors": ["Catalog Author"],
 		"archetype": "balance",
 		"eligibleTierIds": ["none", "aether-ou", "aether-uu"],
 		"pokemon": [{"species": "Zapdos"}, {"species": "Gholdengo"}],
@@ -260,8 +379,8 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_refresh_ai_sparring_catalog_filters")
 	overlay.call("_refresh_ai_sparring_catalog_view")
 	_check(ai_sparring_catalog_search != null and ai_sparring_catalog_search.placeholder_text.begins_with("Zoek Pokémon"), "Catalog search renders in Dutch")
-	_check(ai_sparring_tier_select.item_count == 3 and ai_sparring_tier_select.get_item_text(2) == "Aether UU", "Free sparring offers Open, Aether OU and Aether UU")
-	_check(ai_sparring_catalog_tier != null and ai_sparring_catalog_tier.item_count == 4, "Team catalog adds a tier eligibility filter")
+	_check(ai_sparring_tier_select.item_count == 2 and ai_sparring_tier_select.get_item_text(0) == "Aether OU" and ai_sparring_tier_select.get_item_text(1) == "Aether UU", "Free sparring offers only Aether OU and Aether UU")
+	_check(ai_sparring_catalog_tier != null and ai_sparring_catalog_tier.item_count == 2 and str(ai_sparring_catalog_tier.get_selected_metadata()) == "aether-ou", "Team catalog defaults to OU without Open or All tiers")
 	_check(ai_sparring_catalog_results != null and ai_sparring_catalog_results.get_child_count() == 1, "Catalog renders matching team cards")
 	_check(
 		overlay.call("_ai_sparring_team_display_tier", {
@@ -289,7 +408,7 @@ func _check_pvp_runtime_translation() -> void:
 	var catalog_card_text := ""
 	for catalog_label: Label in catalog_card.find_children("*", "Label", true, false) if catalog_card != null else []:
 		catalog_card_text += catalog_label.text
-	_check(not catalog_card_text.contains("Aether"), "Catalog cards omit author labels from the player view")
+	_check(not catalog_card_text.contains("Catalog Author"), "Catalog cards omit author labels from the player view")
 	ai_sparring_catalog_search.text = "Gholdengo"
 	overlay.call("_refresh_ai_sparring_catalog_view")
 	_check(ai_sparring_catalog_results.get_child_count() == 1, "Catalog search matches a Pokémon inside a team")
@@ -297,10 +416,14 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_refresh_ai_sparring_catalog_view")
 	_check(ai_sparring_catalog_results.get_child_count() == 0, "Catalog search hides teams without the requested Pokémon")
 	ai_sparring_catalog_search.text = ""
-	_check(ai_sparring_catalog_player_select != null and ai_sparring_catalog_player_select.item_count == 1, "Catalog teams populate the player selector")
+	_check(ai_sparring_catalog_player_search != null and ai_sparring_catalog_player_search.text == "Zapdos Balance", "Catalog teams populate the player search field")
 	ai_sparring_team_source.select(2)
 	overlay.call("_on_ai_sparring_team_source_selected", 2)
-	_check(ai_sparring_catalog_player_select.visible, "Choosing a catalog player team reveals its selector")
+	_check(ai_sparring_catalog_player_search.visible, "Choosing a catalog player team reveals its search field")
+	ai_sparring_catalog_player_search.text = "Balance"
+	_check(ai_sparring_catalog_player_suggestion_list.get_child_count() == 1, "Typing in the player catalog field filters its matching teams")
+	overlay.call("_on_ai_sparring_player_catalog_suggestion_selected", "catalog-balance")
+	_check(str(overlay.call("_selected_ai_sparring_player_catalog_team_id")) == "catalog-balance", "Selecting a player catalog search result chooses that exact team")
 	_check(not ai_training_input.visible, "Choosing a catalog player team hides the PokéPaste field")
 	ai_sparring_team_source.select(0)
 	overlay.call("_on_ai_sparring_team_source_selected", 0)
@@ -549,7 +672,27 @@ func _check_pvp_runtime_translation() -> void:
 		],
 	})
 	var training_ai_available_modes: Array = overlay.get("pvp_training_ai_available_modes") as Array
+	for entry: Dictionary in training_ai_catalog_entries:
+		entry["homeTierId"] = "aether-ou"
+		entry["eligibleTierIds"] = ["none", "aether-ou"]
+	training_ai_available_modes.assign(["ai4", "active", "elite", "nightmare", "intermediate"])
+	overlay.call("_refresh_pvp_training_ai_mode_options")
+	_check(training_ai_bot_select.item_count == 2, "Bot selector separates Scholar and Grandmaster")
+	_check(training_ai_bot_select.get_item_text(0) == "AI4 Scholar" and training_ai_bot_select.get_item_text(1) == "AI5 Grandmaster", "Bot names remain familiar")
+	_check(training_ai_mode_select.item_count == 1 and training_ai_mode_select.get_item_text(0) == "Beginner", "Scholar exposes only Beginner")
+	training_ai_bot_select.select(1)
+	overlay.call("_on_pvp_training_ai_bot_selected", 1)
+	_check(training_ai_mode_select.item_count == 4, "Grandmaster exposes all four server-enabled difficulties")
+	_check(training_ai_mode_select.get_item_text(0) == "Intermediate" and training_ai_mode_select.get_item_text(1) == "Hard" and training_ai_mode_select.get_item_text(2) == "Elite" and training_ai_mode_select.get_item_text(3) == "Nightmare", "Elite sits between Hard and Nightmare")
+	training_ai_mode_select.select(0)
+	_check(overlay.call("_selected_pvp_training_ai_mode") == "intermediate", "Intermediate selection preserves its server mode")
+	training_ai_mode_select.select(2)
+	_check(overlay.call("_selected_pvp_training_ai_mode") == "elite", "Elite selection preserves its server mode")
+	training_ai_mode_select.select(3)
+	_check(overlay.call("_selected_pvp_training_ai_mode") == "nightmare", "Nightmare selection preserves its server mode")
 	training_ai_available_modes.assign(["ai4", "active"])
+	training_ai_bot_select.select(0)
+	overlay.call("_on_pvp_training_ai_bot_selected", 0)
 	var training_ai_archetypes: Array = overlay.get("pvp_training_ai_catalog_archetypes") as Array
 	training_ai_archetypes.assign(["hyper_offense", "stall"])
 	overlay.set("pvp_training_ai_enabled", true)
@@ -561,11 +704,11 @@ func _check_pvp_runtime_translation() -> void:
 	_check(overlay.get("pvp_room_selected_mode") == "ai", "Free sparring selects the server-owned opponent flow")
 	_check(ai_training_input != null and ai_training_input.visible, "AI flow accepts an imported Gen 9 National Dex team")
 	_check(training_ai_mode_row != null and training_ai_mode_row.visible, "AI flow exposes AI4 and active AI5 execution modes")
-	_check(training_ai_mode_select != null and training_ai_mode_select.item_count == 2, "Both permitted AI modes are selectable")
+	_check(training_ai_bot_select.item_count == 2 and training_ai_mode_select.item_count == 1, "Both bots are selectable with filtered difficulties")
 	_check(str(training_ai_mode_select.get_selected_metadata()) == "ai4", "plain AI4 without shadow observation is the safe default")
 	_check(training_ai_team_source_row != null and training_ai_team_source_row.visible, "AI flow lets players choose a catalog or PokéPaste opponent")
 	_check(training_ai_team_source_select != null and training_ai_team_source_select.item_count == 2, "AI team source offers catalog and PokéPaste choices")
-	for select: OptionButton in [training_ai_mode_select, training_ai_team_source_select, training_ai_archetype_select, training_ai_team_select]:
+	for select: OptionButton in [training_ai_mode_select, training_ai_team_source_select, training_ai_archetype_select]:
 		_check(
 			select != null
 			and not select.fit_to_longest_item
@@ -576,7 +719,17 @@ func _check_pvp_runtime_translation() -> void:
 	_check(training_ai_archetype_row != null and training_ai_archetype_row.visible, "AI flow exposes an archetype selector")
 	_check(training_ai_archetype_select != null and training_ai_archetype_select.item_count == 2, "AI4 archetype selector excludes stall")
 	_check(training_ai_team_row != null and training_ai_team_row.visible, "AI flow exposes the sample-team selector")
-	_check(training_ai_team_select != null and training_ai_team_select.item_count == 2, "AI4 team selector excludes stall teams")
+	_check(training_ai_team_search != null and training_ai_team_search.visible and training_ai_team_search.clear_button_enabled, "AI team selector is one clearable name input")
+	_check(training_ai_team_suggestions != null and training_ai_team_suggestion_list != null and training_ai_team_suggestion_list.get_child_count() == 2, "AI4 team suggestions exclude stall teams")
+	training_ai_team_search.text = "geen-resultaat"
+	overlay.call("_on_pvp_training_ai_team_search_changed", training_ai_team_search.text)
+	_check(
+		training_ai_team_suggestion_list.get_child_count() == 1
+		and str(training_ai_team_suggestion_list.get_child(0).get_meta("team_id")) == "random",
+		"A non-matching AI team search leaves only the random choice"
+	)
+	training_ai_team_search.text = ""
+	overlay.call("_on_pvp_training_ai_team_search_changed", training_ai_team_search.text)
 	_check(ai_opponent_preview != null and ai_opponent_preview.visible, "A random AI team is resolved before the battle starts")
 	_check(ai_opponent_preview_grid != null and ai_opponent_preview_grid.get_child_count() == 6, "AI opponent preview renders all six Pokemon")
 	_check(ai_opponent_preview_title != null and ai_opponent_preview_title.text.begins_with("TEAM TEGENSTANDER"), "AI opponent preview identifies the resolved team")
@@ -587,42 +740,65 @@ func _check_pvp_runtime_translation() -> void:
 		and ai_sparring_hover_card.z_index == 1099,
 		"Free Sparring reuses the PC Pokemon hover card above the PvP popup"
 	)
+	var catalog_hover_data: Dictionary = overlay.call("_pc_pokemon_hover_data", {
+		"species": "Zamazenta",
+		"types": ["Fighting"],
+		"currentHp": 325,
+		"maxHp": 325,
+		"stats": {"hp": 325, "atk": 339, "def": 266, "spa": 176, "spd": 266, "spe": 390},
+		"moves": ["Close Combat"],
+		"moveData": [{"name": "Close Combat", "pp": 5, "maxPp": 5}],
+	})
+	_check(
+		int((catalog_hover_data.get("stats") as Dictionary).get("spe", 0)) == 390
+		and catalog_hover_data.get("moves") is Array
+		and int(((catalog_hover_data.get("moves") as Array)[0] as Dictionary).get("maxPp", 0)) == 5,
+		"Free Sparring catalog hovers keep calculated stats and complete move PP"
+	)
 	_check(
 		ai_opponent_preview_grid != null
 		and not ai_opponent_preview_grid.get_child(0).get_signal_connection_list("mouse_entered").is_empty(),
 		"AI opponent preview slots open a full Pokemon hover card"
 	)
-	var training_ai_team_style := training_ai_team_select.get_theme_stylebox("normal") as StyleBoxFlat if training_ai_team_select != null else null
-	_check(training_ai_team_style != null and training_ai_team_style.bg_color == Color("#171630"), "The final AI team choice is visually distinct from supporting settings")
 	_check(
-		training_ai_team_select != null
-		and training_ai_team_select.item_count > 1
-		and str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-screens-lameflame",
-		"AI selector preserves the stable team ID"
+		training_ai_team_suggestions != null
+		and training_ai_team_suggestion_list.get_child_count() > 1
+		and str(training_ai_team_suggestion_list.get_child(1).get_meta("team_id")) == "smogon-ndou-screens-lameflame",
+		"AI searchable selector preserves the stable team ID"
 	)
-	training_ai_team_select.select(1)
-	overlay.call("_on_pvp_training_ai_team_selected", 1)
+	overlay.call("_on_pvp_training_ai_team_suggestion_selected", "smogon-ndou-screens-lameflame")
 	_check(str(overlay.call("_resolved_pvp_training_ai_team_id")) == "smogon-ndou-screens-lameflame", "Selecting a named AI team binds its exact preview and battle identity")
 	_check(ai_opponent_preview_grid.get_child(0).tooltip_text.contains("Mawile"), "Named AI team preview uses that team's roster")
+	training_ai_team_search.text = ""
+	overlay.call("_on_pvp_training_ai_team_search_changed", training_ai_team_search.text)
 	var opponent_minimum_width_before_filter := ai_opponent_step.get_combined_minimum_size().x
 	var opponent_minimum_height_before_filter := ai_opponent_step.get_combined_minimum_size().y
-	training_ai_mode_select.select(1)
-	overlay.call("_on_pvp_training_ai_mode_selected", 1)
+	training_ai_bot_select.select(1)
+	overlay.call("_on_pvp_training_ai_bot_selected", 1)
 	_check(str(training_ai_mode_select.get_selected_metadata()) == "active", "AI5 mode can expose its complete catalog")
 	_check(training_ai_archetype_select.item_count == 3, "AI5 archetype selector keeps stall available")
-	_check(training_ai_team_select.item_count == 3, "AI5 team selector keeps stall teams available")
+	_check(training_ai_team_suggestion_list.get_child_count() == 3, "AI5 team suggestions keep stall teams available")
+	training_ai_team_search.text = "stall"
+	overlay.call("_on_pvp_training_ai_team_search_changed", training_ai_team_search.text)
+	_check(
+		training_ai_team_suggestion_list.get_child_count() == 2
+		and str(training_ai_team_suggestion_list.get_child(1).get_meta("team_id")) == "smogon-ndou-stall-example",
+		"Searching an AI team name narrows its choices without changing its stable ID"
+	)
+	training_ai_team_search.text = ""
+	overlay.call("_on_pvp_training_ai_team_search_changed", training_ai_team_search.text)
 	training_ai_archetype_select.select(2)
 	overlay.call("_on_pvp_training_ai_archetype_selected", 2)
-	_check(training_ai_team_select.item_count == 2, "Choosing an archetype filters the specific team list")
-	_check(str(training_ai_team_select.get_item_metadata(1)) == "smogon-ndou-stall-example", "Filtered team keeps its stable catalog identity")
+	_check(training_ai_team_suggestion_list.get_child_count() == 2, "Choosing an archetype filters the specific team list")
+	_check(str(training_ai_team_suggestion_list.get_child(1).get_meta("team_id")) == "smogon-ndou-stall-example", "Filtered team keeps its stable catalog identity")
 	_check(str(overlay.call("_resolved_pvp_training_ai_team_id")) == "smogon-ndou-stall-example", "Random archetype choice resolves to the exact team that will battle")
 	_check(ai_opponent_preview_grid.get_child(0).tooltip_text == "Alomomola", "AI opponent preview exposes each Pokemon name on hover")
-	training_ai_mode_select.select(0)
-	overlay.call("_on_pvp_training_ai_mode_selected", 0)
+	training_ai_bot_select.select(0)
+	overlay.call("_on_pvp_training_ai_bot_selected", 0)
 	_check(str(training_ai_mode_select.get_selected_metadata()) == "ai4", "AI4 can be reselected after browsing AI5")
 	_check(str(training_ai_archetype_select.get_selected_metadata()) == "random", "Switching to AI4 clears a selected stall archetype")
 	_check(training_ai_archetype_select.item_count == 2, "Switching to AI4 removes stall from the archetype selector")
-	_check(training_ai_team_select.item_count == 2, "Switching to AI4 removes stall from the team selector")
+	_check(training_ai_team_suggestion_list.get_child_count() == 2, "Switching to AI4 removes stall from the team suggestions")
 	var first_opponent_name_labels := ai_opponent_preview_grid.get_child(0).find_children("*", "Label", true, false)
 	_check(first_opponent_name_labels.is_empty(), "AI opponent names stay out of the compact icon row")
 	_check(
@@ -640,21 +816,31 @@ func _check_pvp_runtime_translation() -> void:
 	uu_entry["displayName"] = "UU Hyper Offense"
 	uu_entry["homeTierId"] = "aether-uu"
 	training_ai_catalog_entries.assign([cross_tier_ou_entry, uu_entry])
-	ai_sparring_tier_select.select(2)
+	ai_sparring_tier_select.select(1)
 	training_ai_archetype_select.select(1)
-	overlay.call("_on_ai_sparring_tier_selected", 2)
+	overlay.call("_on_ai_sparring_tier_selected", 1)
 	overlay.call("_on_pvp_training_ai_archetype_selected", 1)
 	_check(
-		training_ai_team_select.item_count == 2
-		and str(training_ai_team_select.get_item_metadata(1)) == "smogon-nduu-hyper-offense"
+		training_ai_team_suggestion_list.get_child_count() == 2
+		and str(training_ai_team_suggestion_list.get_child(1).get_meta("team_id")) == "smogon-nduu-hyper-offense"
 		and str(overlay.call("_resolved_pvp_training_ai_team_id")) == "smogon-nduu-hyper-offense",
 		"Aether UU random opponents resolve only from the UU home-tier catalog"
 	)
 	_check(
-		ai_sparring_catalog_player_select.item_count == 1
-		and str(ai_sparring_catalog_player_select.get_item_metadata(0)) == "smogon-nduu-hyper-offense",
+		str(overlay.call("_selected_ai_sparring_player_catalog_team_id")) == "smogon-nduu-hyper-offense",
 		"Aether UU player catalog choices exclude cross-eligible OU teams"
 	)
+	_check(str(ai_sparring_catalog_tier.get_selected_metadata()) == "aether-uu" and ai_sparring_catalog_results.get_child_count() == 1, "Practice tier changes synchronize and filter the catalog")
+	overlay.call("_on_pvp_ai_sparring_tab_changed", 1)
+	overlay.call("_on_pvp_ai_sparring_tab_changed", 0)
+	_check(str(overlay.call("_selected_ai_sparring_tier_id")) == "aether-uu", "Switching tabs preserves the selected tier")
+	overlay.call("_refresh_ai_sparring_tier_options")
+	overlay.call("_refresh_ai_sparring_catalog_filters")
+	_check(str(ai_sparring_catalog_tier.get_selected_metadata()) == "aether-uu", "Refreshing tier options preserves UU in both tabs")
+	ai_sparring_catalog_tier.select(0)
+	overlay.call("_on_ai_sparring_catalog_tier_selected", 0)
+	_check(str(overlay.call("_selected_ai_sparring_tier_id")) == "aether-ou", "Catalog tier changes synchronize back to practice")
+	_check(str(overlay.call("_resolved_pvp_training_ai_team_id")) == str(cross_tier_ou_entry["teamId"]) and str(overlay.call("_selected_ai_sparring_player_catalog_team_id")) == str(cross_tier_ou_entry["teamId"]), "Catalog tier changes replace incompatible player and opponent selections")
 	training_ai_team_source_select.select(1)
 	overlay.call("_on_pvp_training_ai_team_source_selected", 1)
 	_check(training_ai_custom_team_input != null and training_ai_custom_team_input.visible, "PokéPaste source reveals an opponent-team paste field")
@@ -787,6 +973,7 @@ func _check_pvp_runtime_translation() -> void:
 		var loader := overlay.get(loader_property) as Node
 		if loader != null:
 			loader.free()
+	await _check_sparring_source_size(overlay)
 	overlay.free()
 
 
@@ -812,6 +999,44 @@ func _check_ranked_dropdown_style(option: OptionButton, label: String) -> void:
 		and popup.has_theme_icon_override("radio_unchecked"),
 		"%s uses custom selection indicators" % label
 	)
+
+
+func _check_sparring_source_size(overlay: Node) -> void:
+	# Mount the two setup cards: unlike the production section switcher, this
+	# broad localization fixture leaves unrelated popup pages visible.
+	var workspace := overlay.find_child("AiSparringOpponentStep", true, false).get_parent() as Control
+	var parent := workspace.get_parent()
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1280, 960)
+	root.add_child(viewport)
+	workspace.reparent(viewport)
+	var opponent := overlay.get("pvp_training_ai_team_source_select") as OptionButton
+	var player := overlay.get("pvp_ai_sparring_team_source_select") as OptionButton
+	var previous_opponent := opponent.selected
+	var previous_player := player.selected
+	var catalog_size := Vector2.ZERO
+	for sources: Vector2i in [Vector2i(0, 2), Vector2i(1, 0), Vector2i(0, 0), Vector2i(1, 2), Vector2i(0, 2)]:
+		opponent.select(sources.x)
+		overlay.call("_on_pvp_training_ai_team_source_selected", sources.x)
+		player.select(sources.y)
+		overlay.call("_on_ai_sparring_team_source_selected", sources.y)
+		workspace.size = Vector2(880, 0)
+		for frame in range(8):
+			await process_frame
+		# Wrapped labels need the final column width before their minimum height
+		# settles; then measure the smallest allowed workspace, not a stale size.
+		workspace.size = Vector2(880, 0)
+		for frame in range(8):
+			await process_frame
+		if catalog_size == Vector2.ZERO:
+			catalog_size = workspace.size
+		_check(workspace.size.is_equal_approx(catalog_size), "Sparring workspace keeps catalog dimensions across both source selectors: %s vs %s" % [workspace.size, catalog_size])
+	workspace.reparent(parent)
+	viewport.queue_free()
+	opponent.select(previous_opponent)
+	overlay.call("_on_pvp_training_ai_team_source_selected", previous_opponent)
+	player.select(previous_player)
+	overlay.call("_on_ai_sparring_team_source_selected", previous_player)
 
 
 func _check(condition: bool, label: String) -> void:

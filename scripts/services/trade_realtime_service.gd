@@ -38,6 +38,10 @@ var application_shutdown_in_progress := false
 
 
 func _ready() -> void:
+	if OS.has_feature("web"):
+		# Browser accounts do not join desktop trades or poll invitations.
+		set_process(false)
+		return
 	# Invitation discovery and reconnect recovery must continue while modal game
 	# UI temporarily pauses regular scene processing.
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -220,6 +224,14 @@ func leave_active_trade_for_exit() -> Dictionary:
 
 func _shutdown_after_trade_cleanup() -> void:
 	await leave_active_trade_for_exit()
+	# This service owns the window-close flow so that an active trade can be
+	# settled first. The World close notification cannot await its HTTP request,
+	# therefore persist the authoritative overworld state here before quit() can
+	# tear down the request. This also preserves an immediate Aethernet arrival.
+	var game_state := get_node_or_null("/root/GameState")
+	var world: Node = game_state.call("get_world") if game_state != null and game_state.has_method("get_world") else null
+	if world != null and world.has_method("save_current_player_state_now"):
+		await world.call("save_current_player_state_now")
 	var tree := get_tree()
 	if tree != null:
 		tree.quit()

@@ -1,5 +1,7 @@
 extends Node
 
+const WebDemoAudioCatalog := preload("res://scripts/services/web_demo_audio_catalog.gd")
+const WebAudioBridge := preload("res://scripts/services/web_audio_bridge.gd")
 const MUSIC_CATALOG_PATH := "res://data/music_catalog.json"
 const DEFAULT_OVERWORLD_MUSIC_ID := "overworld.kanto.route.1"
 const LOGIN_MUSIC_ID := "login.lugia_theme_lofi"
@@ -25,7 +27,7 @@ func _ready() -> void:
 	_load_music_catalog()
 	music_player = AudioStreamPlayer.new()
 	music_player.name = "MusicPlayer"
-	music_player.bus = SettingsManager.MUSIC_BUS
+	music_player.bus = SettingsManager.get_audio_output_bus(SettingsManager.MUSIC_BUS)
 	music_player.finished.connect(_on_music_finished)
 	add_child(music_player)
 
@@ -154,20 +156,40 @@ func get_battle_music_track_label(track_id: String) -> String:
 
 
 func play_music(track_path: String) -> void:
+	if OS.has_feature("web"):
+		if current_track_path == track_path:
+			_report_web_audio_debug("native-music-already-selected", {"track": track_path})
+			return
+		current_track_path = track_path
+		WebAudioBridge.play_music(track_path, _web_music_volume())
+		_report_web_audio_debug("native-music-requested", {"track": track_path})
+		return
 	if current_track_path == track_path and music_player.playing:
+		_report_web_audio_debug("music-already-playing", {"track": track_path})
 		return
 
 	var stream: AudioStream = _load_music_stream(track_path)
 	if stream == null:
+		_report_web_audio_debug("music-load-failed", {"track": track_path})
 		push_warning("Could not load music track: %s" % track_path)
 		return
 
+	_report_web_audio_debug("music-loaded", {
+		"track": track_path,
+		"stream_type": stream.get_class(),
+		"bus": music_player.bus,
+		"bus_muted": AudioServer.is_bus_mute(AudioServer.get_bus_index(music_player.bus)),
+		"bus_volume_db": AudioServer.get_bus_volume_db(AudioServer.get_bus_index(music_player.bus)),
+	})
 	current_track_path = track_path
 	_fade_to_stream(stream)
 
 
 func stop_music() -> void:
 	current_track_path = ""
+	if OS.has_feature("web"):
+		WebAudioBridge.stop_music()
+		return
 	if current_tween != null:
 		current_tween.kill()
 
@@ -179,6 +201,18 @@ func stop_music() -> void:
 func _fade_to_stream(stream: AudioStream) -> void:
 	if current_tween != null:
 		current_tween.kill()
+	# In the single-threaded WebAudio driver, a tweened transition from the
+	# silence floor can leave the mixer producing zero-valued worklet blocks.
+	# Start the browser stream at its normal player volume instead. Desktop
+	# retains the crossfade below.
+	if OS.has_feature("web"):
+		_start_stream(stream)
+		music_player.volume_db = 0.0
+		_report_web_audio_debug("music-web-direct-start", {
+			"track": current_track_path,
+			"volume_db": music_player.volume_db,
+		})
+		return
 
 	current_tween = create_tween()
 	if music_player.playing:
@@ -190,8 +224,16 @@ func _fade_to_stream(stream: AudioStream) -> void:
 
 func _start_stream(stream: AudioStream) -> void:
 	music_player.stream = stream
-	music_player.volume_db = -80.0
+	# Web's sample player can snapshot the initial gain when playback starts.
+	# Give it the audible volume before play(), rather than raising it in the
+	# same frame afterwards. Desktop still starts at the fade silence floor.
+	music_player.volume_db = 0.0 if OS.has_feature("web") else -80.0
 	music_player.play()
+	_report_web_audio_debug("music-play-requested", {
+		"track": current_track_path,
+		"playing": music_player.playing,
+		"volume_db": music_player.volume_db,
+	})
 
 
 func _on_music_finished() -> void:
@@ -241,6 +283,8 @@ func _build_music_track_paths(track_path: String) -> Array[String]:
 
 
 func _get_external_music_roots() -> Array[String]:
+	if OS.has_feature("web"):
+		return []
 	if not external_music_root.is_empty():
 		return [external_music_root]
 
@@ -315,6 +359,10 @@ func _get_music_track_label_from_path(track_path: String) -> String:
 
 
 func _load_music_stream_from_path(path: String) -> AudioStream:
+	if OS.has_feature("web"):
+		var packed_stream := WebDemoAudioCatalog.get_stream(path)
+		if packed_stream != null:
+			return packed_stream
 	if path.begins_with("res://"):
 		if ResourceLoader.exists(path):
 			return load(path) as AudioStream
@@ -329,3 +377,23 @@ func _load_music_stream_from_path(path: String) -> AudioStream:
 		_:
 			push_warning("Unsupported external music format: %s" % path)
 			return null
+
+
+func _report_web_audio_debug(event_name: String, details: Dictionary = {}) -> void:
+	if not OS.has_feature("web"):
+		return
+	var event_json := JSON.stringify(event_name)
+	var details_json := JSON.stringify(details)
+	JavaScriptBridge.eval(
+		"window.pokeaetherAudioDiagnostics?.record(%s, %s)" % [event_json, details_json],
+		true
+	)
+
+
+func refresh_web_volume() -> void:
+	if OS.has_feature("web"):
+		WebAudioBridge.set_music_volume(_web_music_volume())
+
+
+func _web_music_volume() -> float:
+	return clampf(SettingsManager.master_volume / 100.0 * SettingsManager.music_volume / 100.0, 0.0, 1.0)

@@ -3,6 +3,7 @@ extends RefCounted
 class_name BattleAnimationRouter
 
 const BattleRenderLayers := preload("res://scripts/battle/battle_render_layers.gd")
+const WebAudioBridge := preload("res://scripts/services/web_audio_bridge.gd")
 const MOVE_ANIMATION_CATALOG_PATH := "res://data/battle_move_animations.json"
 const EFFECT_ANIMATION_CATALOG_PATH := "res://data/battle_effect_animations.json"
 const TAKE_DAMAGE_SOUND_PATH := "res://assets/battles/animations/common/damage/normaldamage.ogg"
@@ -26,6 +27,27 @@ var resource_cache: Dictionary = {}
 var threaded_resource_requests: Dictionary = {}
 var sound_stream_cache: Dictionary = {}
 var animation_guard: Callable
+var render_generation := 0
+var active_animation_nodes: Array[Node] = []
+var active_actor_restore: Callable
+var playback_speed := 1.0
+
+
+func cancel_render() -> void:
+	render_generation += 1
+	for node in active_animation_nodes:
+		if is_instance_valid(node):
+			node.queue_free()
+	active_animation_nodes.clear()
+	if active_actor_restore.is_valid():
+		active_actor_restore.call()
+	active_actor_restore = Callable()
+	for sprite_box in [player_sprite_box, enemy_sprite_box]:
+		if is_instance_valid(sprite_box):
+			if sprite_box.has_method("reset_battle_pose"):
+				sprite_box.reset_battle_pose()
+			if sprite_box.has_method("_stop_substitute_tween"):
+				sprite_box._stop_substitute_tween()
 
 
 func setup(player_box: Node, enemy_box: Node, parent_node: Node = null, animation_guard_callback: Callable = Callable()) -> void:
@@ -132,6 +154,7 @@ func _play_animation_config(
 	animation_options: Dictionary = {}
 ) -> void:
 	var parent_node: Node = animation_parent
+	var owned_generation := render_generation
 	if parent_node == null:
 		parent_node = player_sprite_box.get_parent()
 	if parent_node == null:
@@ -142,11 +165,14 @@ func _play_animation_config(
 
 	_request_animation_resources(config)
 	await _wait_for_animation_resources(parent_node, config)
+	if owned_generation != render_generation:
+		return
 	var resources: Dictionary = _get_animation_resources(config)
 	if resources.is_empty():
 		return
 
 	var animation_node: MoveAnimationPlayer = _create_move_animation_node(config, resources, reverse_battlefield)
+	active_animation_nodes = [animation_node]
 	if bool(config.get("split_dark_pulse_layers", false)):
 		animation_node.dark_pulse_config["draw_layer"] = "foreground"
 	_apply_move_animation_options(animation_node, config, animation_options)
@@ -155,11 +181,14 @@ func _play_animation_config(
 	var hide_actor_delay := maxf(float(config.get("hide_actor_delay", 0.0)), 0.0)
 	if hide_actor_delay > 0.0 and bool(config.get("hide_actor_sprite", false)) and parent_node.get_tree() != null:
 		await parent_node.get_tree().create_timer(hide_actor_delay).timeout
+		if owned_generation != render_generation:
+			return
 	_play_move_target_shake_if_needed(config, move_target_ident, animation_options)
 	_play_move_target_hit_flash_if_needed(config, move_target_ident, animation_options)
 
 	var overlay: Control = _create_animation_overlay(parent_node, config)
 	if overlay != null:
+		active_animation_nodes.append(overlay)
 		parent_node.add_child(overlay)
 		_move_overlay_below_sprites(overlay, parent_node, config)
 		_fit_animation_to_parent(animation_node, overlay)
@@ -167,6 +196,7 @@ func _play_animation_config(
 		_apply_move_sheet_anchor(animation_node, move_actor_ident, move_target_ident, overlay, config)
 		_apply_effect_target_offset(animation_node, target_ident, config, overlay)
 		hidden_actor_sprites = _hide_move_actor_sprite_if_needed(config, move_actor_ident)
+		active_actor_restore = _restore_move_actor_sprite_if_needed.bind(config, move_actor_ident, hidden_actor_sprites)
 		overlay.add_child(animation_node)
 		_move_timing_background_below_sprites(animation_node, parent_node, config)
 		# Add the procedural underlay only after the opaque timing background has
@@ -181,8 +211,14 @@ func _play_animation_config(
 			move_target_ident,
 			animation_options
 		)
+		if underlay_overlay != null:
+			active_animation_nodes.append(underlay_overlay)
 		await _wait_for_animation_node(animation_node, overlay)
+		if owned_generation != render_generation:
+			return
 		_restore_move_actor_sprite_if_needed(config, move_actor_ident, hidden_actor_sprites)
+		active_actor_restore = Callable()
+		active_animation_nodes.clear()
 		if is_instance_valid(overlay):
 			overlay.queue_free()
 		if is_instance_valid(underlay_overlay):
@@ -195,9 +231,14 @@ func _play_animation_config(
 	_apply_move_sheet_anchor(animation_node, move_actor_ident, move_target_ident, parent_node, config)
 	_apply_effect_target_offset(animation_node, target_ident, config, parent_node)
 	hidden_actor_sprites = _hide_move_actor_sprite_if_needed(config, move_actor_ident)
+	active_actor_restore = _restore_move_actor_sprite_if_needed.bind(config, move_actor_ident, hidden_actor_sprites)
 	parent_node.add_child(animation_node)
 	await _wait_for_animation_node(animation_node, parent_node)
+	if owned_generation != render_generation:
+		return
 	_restore_move_actor_sprite_if_needed(config, move_actor_ident, hidden_actor_sprites)
+	active_actor_restore = Callable()
+	active_animation_nodes.clear()
 
 
 func _create_dark_pulse_underlay_if_needed(
@@ -428,7 +469,7 @@ func _create_move_animation_node(config: Dictionary, resources: Dictionary = {},
 		animation_node.background_texture_override = resources.get("background_texture", null) as Texture2D
 		animation_node.foreground_texture_override = resources.get("foreground_texture", null) as Texture2D
 		animation_node.sound_streams = resources.get("sound_streams", {}) as Dictionary
-	animation_node.speed_scale = float(config.get("speed_scale", 1.0))
+	animation_node.speed_scale = float(config.get("speed_scale", 1.0)) * playback_speed
 	animation_node.sprite_zoom_multiplier = float(config.get("sprite_zoom_multiplier", 1.0))
 	animation_node.sprite_position_scale = float(config.get("sprite_position_scale", 1.0))
 	animation_node.sprite_position_anchor = _vector2_from_config_value(
@@ -1496,6 +1537,12 @@ static func get_damage_sound_path(sound_variant: String) -> String:
 func _play_one_shot_sound(sound_path: String) -> void:
 	if not _can_start_battle_animation("router.render_sound", {"sound": sound_path}):
 		return
+	if OS.has_feature("web"):
+		WebAudioBridge.play_sfx(
+			sound_path,
+			clampf(SettingsManager.master_volume / 100.0 * SettingsManager.sfx_volume / 100.0, 0.0, 1.0)
+		)
+		return
 
 	var stream: AudioStream = _get_cached_sound_stream(sound_path)
 	if stream == null:
@@ -1509,7 +1556,7 @@ func _play_one_shot_sound(sound_path: String) -> void:
 
 	var player: AudioStreamPlayer = AudioStreamPlayer.new()
 	player.stream = stream
-	player.bus = SettingsManager.SFX_BUS
+	player.bus = SettingsManager.get_audio_output_bus(SettingsManager.SFX_BUS)
 	player.finished.connect(player.queue_free)
 	parent_node.add_child(player)
 	player.play()

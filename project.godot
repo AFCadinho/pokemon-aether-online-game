@@ -45,6 +45,7 @@ ItemLocalization="*res://scripts/services/item_localization_service.gd"
 ContentLocalization="*res://scripts/services/content_localization_service.gd"
 BackendErrorLocalization="*res://scripts/services/backend_error_localization_service.gd"
 SettingsManager="*res://scripts/services/settings_manager.gd"
+WebPokemonSpriteService="*res://scripts/services/web_pokemon_sprite_service.gd"
 MusicManager="*res://scripts/services/music_manager.gd"
 SfxManager="*res://scripts/services/sfx_manager.gd"
 AuthService="*res://scripts/services/auth_service.gd"
@@ -80,6 +81,7 @@ ChatModerationService="*res://scripts/services/chat_moderation_service.gd"
 WorldPresenceService="*res://scripts/services/world_presence_service.gd"
 ModeratorTeleportService="*res://scripts/services/moderator_teleport_service.gd"
 PvpBattleRealtimeService="*res://scripts/services/pvp_battle_realtime_service.gd"
+PerformanceOverlay="*res://scripts/ui/performance_overlay.gd"
 MailService="*res://scripts/services/mail_service.gd"
 SocialService="*res://scripts/services/social_service.gd"
 PartyHealService="*res://scripts/services/party_heal_service.gd"
@@ -184,6 +186,7 @@ battle_move_4={
 
 [rendering]
 
+renderer/rendering_method.web="gl_compatibility"
 rendering_device/driver.windows="d3d12"
 textures/vram_compression/import_etc2_astc=true
 2d/snap/snap_2d_transforms_to_pixel=true

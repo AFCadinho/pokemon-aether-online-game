@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://ckxxmxljf2eer"]
 
-[ext_resource type="Texture2D" uid="uid://cqehbr5u75uy2" path="res://assets/sprites/pokemon/front/koraidon/sheet.png" id="1_2ygrx"]
+[ext_resource type="Texture2D" path="res://assets/sprites/pokemon/pokemon_home/Eevee.png" id="1_2ygrx"]
 [ext_resource type="Script" uid="uid://cm7dbce4gxp76" path="res://scripts/battle/battle_ui/team_preview_layer.gd" id="1_u5ars"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ueicy"]
 atlas = ExtResource("1_2ygrx")
-region = Rect2(0, 0, 147, 111)
+region = Rect2(0, 0, 126, 117)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_n5ix6"]
 animations = [{

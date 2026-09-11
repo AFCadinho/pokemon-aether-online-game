@@ -10,7 +10,7 @@ const ARENA_STATE_REFRESH_SECONDS := 1.0
 const START_BARRIER_HALF_HEIGHT := 24.0
 const ENGAGEMENT_RING_SCRIPT: Script = preload("res://scripts/world/aether_clash_engagement_ring.gd")
 const BATTLE_INDICATOR_SCENE: PackedScene = preload("res://scenes/world/aether_clash_battle_indicator.tscn")
-const PIXEL_PERFECT_RENDERING: Script = preload("res://scripts/services/pixel_perfect_rendering.gd")
+const CAMERA_POLICY: Script = preload("res://scripts/services/aether_clash_camera_policy.gd")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const ENGAGEMENT_RADIUS := 28.0
 const ENGAGEMENT_CONTACT_DISTANCE := ENGAGEMENT_RADIUS * 2.0
@@ -20,7 +20,6 @@ const ENGAGEMENT_CONTACT_COOLDOWN_MSEC := 750
 const STAGING_EJECTION_GRACE_MSEC := 2000
 const LEAVE_DIALOG_INPUT_OWNER: StringName = &"aether_clash_leave_dialog"
 const SPECTATOR_CAMERA_INPUT_OWNER: StringName = &"aether_clash_spectator_camera"
-const PARTICIPANT_WORLD_SCALE := 2.0
 const SPECTATOR_CAMERA_DEFAULT_ZOOM := 0.75
 const SPECTATOR_CAMERA_MIN_ZOOM := 0.7
 const SPECTATOR_CAMERA_MAX_ZOOM := 1.5
@@ -62,8 +61,10 @@ var spectator_camera_bounds := Rect2()
 var spectator_camera_player_camera: Camera2D
 var spectator_camera_player_was_enabled := true
 var spectator_camera_dragging := false
-var participant_zoom_applied := false
-var participant_zoom_camera: Camera2D
+var arena_view_camera: Camera2D
+var arena_view_exiting := false
+var arena_view_window: Window
+var original_window_framing: Dictionary = {}
 var spectator_battle_request_active := false
 var spectator_battle_request_observed_world_battle := false
 
@@ -78,8 +79,9 @@ func _ready() -> void:
 		spectator_camera_hud.region_requested.connect(_on_spectator_region_requested)
 	if not spectator_camera_hud.zoom_requested.is_connected(_on_spectator_zoom_requested):
 		spectator_camera_hud.zoom_requested.connect(_on_spectator_zoom_requested)
-	if not ChatRealtimeService.message_received.is_connected(_on_realtime_message_received):
-		ChatRealtimeService.message_received.connect(_on_realtime_message_received)
+	var chat_service := get_node_or_null("/root/ChatRealtimeService")
+	if chat_service != null and not chat_service.message_received.is_connected(_on_realtime_message_received):
+		chat_service.message_received.connect(_on_realtime_message_received)
 	arena_state_timer = Timer.new()
 	arena_state_timer.name = "ArenaStateRefreshTimer"
 	arena_state_timer.wait_time = ARENA_STATE_REFRESH_SECONDS
@@ -110,6 +112,7 @@ func _process(delta: float) -> void:
 
 
 func _exit_tree() -> void:
+	arena_view_exiting = true
 	_trace_aether_clash("duel_exit_tree", {
 		"sessionId": instance_session_id,
 		"mapId": map_id,
@@ -120,8 +123,8 @@ func _exit_tree() -> void:
 	_clear_battle_indicators()
 	_clear_identity_nameplate_overrides()
 	_deactivate_spectator_camera()
-	_restore_participant_zoom()
-	GameState.release_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
+	_restore_arena_view()
+	get_node_or_null("/root/GameState").call("release_overworld_input_lock", LEAVE_DIALOG_INPUT_OWNER)
 	_free_leave_confirmation()
 
 
@@ -135,6 +138,7 @@ func configure_aether_clash_instance(instance_map_id: String) -> void:
 	map_id = normalized_id
 	location_id = normalized_id
 	instance_session_id = session_id
+	_ensure_arena_framing()
 	arena_session.clear()
 	arena_players.clear()
 	identified_enemy_user_ids.clear()
@@ -152,6 +156,7 @@ func configure_aether_clash_instance(instance_map_id: String) -> void:
 	spectator_battle_request_active = false
 	spectator_battle_request_observed_world_battle = false
 	_deactivate_spectator_camera()
+	_sync_local_camera_mode()
 	_trace_aether_clash("duel_configured", {
 		"sessionId": instance_session_id,
 		"mapId": map_id,
@@ -216,6 +221,11 @@ func is_world_actor_step_blocked(from_position: Vector2, to_position: Vector2) -
 
 	for exit_side: String in ["blue", "red"]:
 		if _enters_rect(from_position, to_position, _zone_rect(exit_side)):
+			# The staging areas stay inaccessible once the Clash starts, but their
+			# portals remain the intentional way to leave. Opening the confirmation
+			# here makes that route reachable without letting players re-enter a
+			# protected spawn area.
+			_request_leave_confirmation()
 			return true
 
 	var local_user_id := _local_user_id()
@@ -285,7 +295,8 @@ func _refresh_arena_state() -> void:
 	if arena_state_request_active or instance_session_id.is_empty():
 		return
 	arena_state_request_active = true
-	var result: Dictionary = await GuildService.load_aether_clash_arena_state(instance_session_id)
+	var guild_service := get_node_or_null("/root/GuildService")
+	var result: Dictionary = await guild_service.call("load_aether_clash_arena_state", instance_session_id) if guild_service != null else {}
 	arena_state_request_active = false
 	if instance_session_id.is_empty():
 		return
@@ -563,7 +574,8 @@ func _actor_user_id(actor: Node) -> int:
 
 
 func _local_user_id() -> int:
-	return int(str(PlayerSave.player_id).strip_edges())
+	var player_save := get_node_or_null("/root/PlayerSave")
+	return int(str(player_save.get("player_id") if player_save != null else 0).strip_edges())
 
 
 func _is_local_active_participant() -> bool:
@@ -625,6 +637,7 @@ func _activate_spectator_camera(fallback_position: Vector2) -> void:
 			"The Aether view is unavailable right now."
 		))
 		return
+	apply_world_camera_policy(player_camera)
 	spectator_camera_bounds = _arena_visual_bounds()
 	var start_position := player.global_position if player != null else fallback_position
 	spectator_camera.global_position = _clamp_spectator_camera_position(start_position)
@@ -637,7 +650,7 @@ func _activate_spectator_camera(fallback_position: Vector2) -> void:
 	spectator_camera.enabled = true
 	spectator_camera_active = true
 	spectator_camera_hud.set_camera_active(true)
-	GameState.acquire_overworld_input_lock(SPECTATOR_CAMERA_INPUT_OWNER)
+	get_node_or_null("/root/GameState").call("acquire_overworld_input_lock", SPECTATOR_CAMERA_INPUT_OWNER)
 	_sync_battle_indicators()
 	_trace_aether_clash("spectator_camera_activated", {
 		"sessionId": instance_session_id,
@@ -660,7 +673,8 @@ func _deactivate_spectator_camera() -> void:
 	if spectator_camera_player_camera != null and is_instance_valid(spectator_camera_player_camera):
 		spectator_camera_player_camera.enabled = spectator_camera_player_was_enabled
 	spectator_camera_player_camera = null
-	GameState.release_overworld_input_lock(SPECTATOR_CAMERA_INPUT_OWNER)
+	get_node_or_null("/root/GameState").call("release_overworld_input_lock", SPECTATOR_CAMERA_INPUT_OWNER)
+	_sync_local_camera_mode()
 	if was_active:
 		_sync_battle_indicators()
 		_trace_aether_clash("spectator_camera_deactivated", {
@@ -878,40 +892,64 @@ func _clamp_spectator_camera_position(next_position: Vector2) -> Vector2:
 	)
 
 
+func is_arena_view_locked() -> bool:
+	# Lock before the first server response, and retain it through staging,
+	# elimination, jail and results. Only leaving the instance releases it.
+	return is_inside_tree() and not arena_view_exiting and not instance_session_id.is_empty()
+
+
+func _ensure_arena_framing() -> void:
+	if not is_arena_view_locked() or not original_window_framing.is_empty():
+		return
+	get_tree().call_group("content_creator_photo_mode", "close_photo_mode")
+	arena_view_window = get_window()
+	original_window_framing = {
+		"size": arena_view_window.content_scale_size,
+		"mode": arena_view_window.content_scale_mode,
+		"aspect": arena_view_window.content_scale_aspect,
+		"factor": arena_view_window.content_scale_factor,
+	}
+	arena_view_window.content_scale_size = CAMERA_POLICY.FRAME_SIZE
+	arena_view_window.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	arena_view_window.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
+	arena_view_window.content_scale_factor = 1.0
+
+
+func apply_world_camera_policy(camera: Camera2D) -> bool:
+	if not is_arena_view_locked() or camera == null:
+		return false
+	_ensure_arena_framing()
+	var desired_zoom := Vector2(CAMERA_POLICY.FRAME_SIZE) / CAMERA_POLICY.WORLD_VIEW_SIZE
+	if camera != arena_view_camera or not camera.zoom.is_equal_approx(desired_zoom):
+		camera.zoom = desired_zoom
+		camera.reset_smoothing()
+		camera.force_update_scroll()
+	arena_view_camera = camera
+	return true
+
+
 func _sync_local_camera_mode() -> void:
-	if spectator_camera_active:
+	if not is_arena_view_locked():
 		return
-	if not _is_local_active_participant():
-		_restore_participant_zoom()
-		return
+	_ensure_arena_framing()
 	var player := _actor_for_user_id(_local_user_id())
 	var camera := player.get_node_or_null("Camera2D") as Camera2D if player != null else null
-	if camera == null:
-		return
-	var canvas_scale := camera.get_viewport().get_screen_transform().get_scale()
-	var desired_zoom: Vector2 = PIXEL_PERFECT_RENDERING.camera_zoom_for_output_scale(
-		PARTICIPANT_WORLD_SCALE,
-		canvas_scale
-	)
-	if camera != participant_zoom_camera or not camera.zoom.is_equal_approx(desired_zoom):
-		PIXEL_PERFECT_RENDERING.apply_to_camera(
-			camera,
-			PARTICIPANT_WORLD_SCALE,
-			get_window().size
-		)
-	participant_zoom_camera = camera
-	participant_zoom_applied = true
+	apply_world_camera_policy(camera)
 
 
-func _restore_participant_zoom() -> void:
-	if not participant_zoom_applied:
-		return
-	participant_zoom_applied = false
-	if participant_zoom_camera != null and is_instance_valid(participant_zoom_camera):
-		var player := participant_zoom_camera.get_parent()
+func _restore_arena_view() -> void:
+	if is_instance_valid(arena_view_window) and not original_window_framing.is_empty():
+		arena_view_window.content_scale_size = original_window_framing["size"]
+		arena_view_window.content_scale_mode = original_window_framing["mode"]
+		arena_view_window.content_scale_aspect = original_window_framing["aspect"]
+		arena_view_window.content_scale_factor = original_window_framing["factor"]
+	original_window_framing.clear()
+	arena_view_window = null
+	if is_instance_valid(arena_view_camera):
+		var player := arena_view_camera.get_parent()
 		if player != null and player.has_method("_apply_world_pixel_scale"):
 			player.call("_apply_world_pixel_scale")
-	participant_zoom_camera = null
+	arena_view_camera = null
 
 
 func _world_battle_active() -> bool:
@@ -1089,7 +1127,7 @@ func _request_leave_confirmation() -> void:
 	dialog.confirmed.connect(_confirm_leave_arena)
 	dialog.canceled.connect(_close_leave_confirmation)
 	dialog.popup_centered(Vector2i(560, 260))
-	GameState.acquire_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
+	get_node_or_null("/root/GameState").call("acquire_overworld_input_lock", LEAVE_DIALOG_INPUT_OWNER)
 
 
 func _confirm_leave_arena() -> void:
@@ -1097,7 +1135,7 @@ func _confirm_leave_arena() -> void:
 		return
 	leave_request_active = true
 	_free_leave_confirmation()
-	GameState.release_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
+	get_node_or_null("/root/GameState").call("release_overworld_input_lock", LEAVE_DIALOG_INPUT_OWNER)
 	var world := get_tree().get_first_node_in_group("world")
 	if world == null:
 		_leave_failed(_text("ui.aether_clash.leave.unavailable", "Leaving the Clash is unavailable right now."))
@@ -1106,7 +1144,9 @@ func _confirm_leave_arena() -> void:
 	if not bool(begin_result.get("success", false)):
 		_leave_failed(str(begin_result.get("error", "Leaving the Clash is unavailable right now.")))
 		return
-	var result: Dictionary = await GuildService.leave_aether_clash_arena(instance_session_id)
+	var guild_service := get_node_or_null("/root/GuildService")
+	# Authoritative leave operation: GuildService.leave_aether_clash_arena(instance_session_id).
+	var result: Dictionary = await guild_service.call("leave_aether_clash_arena", instance_session_id) if guild_service != null else {}
 	if not bool(result.get("success", false)):
 		if world.has_method("cancel_authorized_teleport_effect"):
 			world.call("cancel_authorized_teleport_effect")
@@ -1124,7 +1164,7 @@ func _confirm_leave_arena() -> void:
 
 func _close_leave_confirmation() -> void:
 	_free_leave_confirmation()
-	GameState.release_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
+	get_node_or_null("/root/GameState").call("release_overworld_input_lock", LEAVE_DIALOG_INPUT_OWNER)
 
 
 func _free_leave_confirmation() -> void:
@@ -1182,11 +1222,10 @@ func _on_engagement_contact_requested(
 		"targetUserId": target_user_id,
 		"method": method,
 	})
-	var result: Dictionary = await GuildService.create_aether_clash_engagement(
-		instance_session_id,
-		target_user_id,
-		method
-	)
+	var guild_service := get_node_or_null("/root/GuildService")
+	# Authoritative engagement operation: GuildService.create_aether_clash_engagement(
+	# instance_session_id, target_user_id, method).
+	var result: Dictionary = await guild_service.call("create_aether_clash_engagement", instance_session_id, target_user_id, method) if guild_service != null else {}
 	engagement_requests_in_flight.erase(pair_key)
 	_trace_aether_clash("engagement_request_completed", {
 		"sessionId": instance_session_id,

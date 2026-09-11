@@ -72,7 +72,7 @@ func interact_with_player(_player: Node2D) -> void:
 				{"price": _format_money(paid_price)}
 			)
 		)
-		SfxManager.play("item_received")
+		SfxManager.play("npc_shop_purchase")
 	else:
 		await show_dialogue(await _resolve_lines(
 			already_purchased_dialogue_id,

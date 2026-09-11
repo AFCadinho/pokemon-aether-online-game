@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>PokeAether · Browser preview</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #070d19; color: #edf4ff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; width: 100vw; height: 100vh; outline: none; }
+    #cover { position: fixed; inset: 0; display: grid; place-items: center; background: radial-gradient(ellipse at 65% 30%, #223557, #070d19 70%); }
+    #cover[hidden] { display: none; }
+    main { width: min(540px, 90vw); padding: 38px; border: 1px solid #354967; border-radius: 20px; background: #0a1424ed; box-shadow: 0 24px 80px #0006; }
+    .eyebrow { color: #d9b977; text-transform: uppercase; letter-spacing: .16em; font-size: 12px; }
+    h1 { font-size: clamp(36px, 6vw, 52px); margin: 12px 0 18px; letter-spacing: -.04em; }
+    p { line-height: 1.6; color: #b8c9e0; }
+    button { font: inherit; font-weight: 650; color: #081626; background: #91ceff; border: 0; border-radius: 9px; padding: 14px 22px; cursor: pointer; }
+    button:disabled { opacity: .65; cursor: wait; }
+    button:focus-visible { outline: 3px solid #f7ce77; outline-offset: 4px; }
+    progress { display: block; width: 100%; margin: 22px 0 8px; accent-color: #91ceff; }
+    #status { min-height: 3em; font-size: 14px; margin-bottom: 0; }
+    dialog { width: min(540px, 94vw); max-height: 90vh; border: 1px solid #53627a; border-radius: 16px; background: #0a1424; color: #edf4ff; padding: 28px; }
+    dialog::backdrop { background: #000b; }
+    label { display: block; margin: 14px 0; line-height: 1.5; }
+    input:not([type=checkbox]), select { display: block; width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #53627a; border-radius: 6px; background: #15243a; color: white; font: inherit; }
+    a { color: #91ceff; }
+    .actions { display: flex; gap: 12px; }
+  </style>
+  $GODOT_HEAD_INCLUDE
+</head>
+<body>
+  <canvas id="canvas" tabindex="0" aria-label="PokeAether game"></canvas>
+  <div id="cover">
+    <main>
+		<div class="eyebrow">Browser demo</div>
+      <h1>PokeAether</h1>
+      <p>One account for browser and desktop. Sign in, register and restore your browser session without changing your saved adventure.</p>
+      <p>This local build needs the connected preview server for accounts. AI Sparring, chat and the bounded world demo are available. Ranked stays desktop-only.</p>
+      <button id="start" type="button">Open browser preview</button>
+      <progress id="progress" hidden></progress>
+      <p id="status" role="status" aria-live="polite">Best viewed in a desktop browser.</p>
+    </main>
+  </div>
+  <dialog id="registration" aria-labelledby="registration-title">
+    <form id="registration-form">
+      <h2 id="registration-title">Create your PokeAether account</h2>
+      <p>The same account works in the desktop game. Verify your email before signing in.</p>
+      <p id="register-status" role="status" aria-live="polite"></p>
+      <label>Username<input name="username" autocomplete="username" required minlength="3" maxlength="32" pattern="[A-Za-z0-9_]+"></label>
+      <label>Email<input name="email" autocomplete="email" type="email" required maxlength="254"></label>
+      <label>Password<input name="password" autocomplete="new-password" type="password" required minlength="8" maxlength="128"></label>
+      <label>Confirm password<input name="confirmPassword" autocomplete="new-password" type="password" required></label>
+      <label>Character gender<select name="gender"><option value="male">Male</option><option value="female">Female</option></select></label>
+      <label><input name="age" type="checkbox" required> I am at least 13 years old and, if under 18, have permission from a parent or legal guardian.</label>
+      <label><input name="legal" type="checkbox" required> I accept the <a href="https://pokeaether.com/terms" target="_blank" rel="noopener noreferrer">Terms</a> and <a href="https://pokeaether.com/code-of-conduct" target="_blank" rel="noopener noreferrer">Code of Conduct</a>, and acknowledge the <a href="https://pokeaether.com/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</label>
+      <div class="actions"><button id="register-submit">Create account</button><button id="register-close" type="button">Back to login</button></div>
+    </form>
+  </dialog>
+  <script src="$GODOT_URL"></script>
+  <script>
+    const audioDebugEnabled = new URLSearchParams(location.search).has('audio-debug');
+    const audioDebugEvents = [];
+    const recordAudioDebug = (event, details = {}) => {
+      const entry = { at: new Date().toISOString(), event, ...details };
+      audioDebugEvents.push(entry);
+      if (audioDebugEnabled) console.info('[PokeAether audio]', entry);
+      return entry;
+    };
+    window.pokeaetherAudioDiagnostics = {
+      events: audioDebugEvents,
+      record: recordAudioDebug,
+      enabled: audioDebugEnabled,
+    };
+    // A Godot WebAudio worklet can initialise successfully while sending only
+    // zero-valued blocks to its destination. Keep desktop on Godot's mixer,
+    // but use the browser's media implementation for Web exports. Source
+    // files are copied by build_web_preview.py under this same origin.
+    const browserAudioPath = resourcePath => {
+      const prefix = 'res://assets/';
+      if (typeof resourcePath !== 'string' || !resourcePath.startsWith(prefix)) return '';
+      return '/browser-audio/' + resourcePath.slice(prefix.length)
+        .split('/').map(segment => encodeURIComponent(segment)).join('/');
+    };
+    const clampVolume = value => Math.max(0, Math.min(1, Number(value) || 0));
+    let nativeMusic = null;
+    let nativeMusicPath = '';
+    let nativeMusicVolume = 0;
+    let nativeMusicPending = false;
+    const startNativeMusic = () => {
+      if (!nativeMusic) return;
+      nativeMusic.volume = nativeMusicVolume;
+      const play = nativeMusic.play();
+      if (!play || typeof play.then !== 'function') return;
+      play.then(() => {
+        nativeMusicPending = false;
+        recordAudioDebug('native-music-playing', { track: nativeMusicPath, volume: nativeMusic.volume });
+      }).catch(error => {
+        nativeMusicPending = true;
+        recordAudioDebug('native-music-deferred', { track: nativeMusicPath, message: String(error?.message || error) });
+      });
+    };
+    window.pokeaetherBrowserAudio = {
+      playMusic(resourcePath, volume) {
+        const source = browserAudioPath(resourcePath);
+        if (!source) return;
+        nativeMusicVolume = clampVolume(volume);
+        if (nativeMusicPath !== resourcePath) {
+          if (nativeMusic) nativeMusic.pause();
+          nativeMusic = new Audio(source);
+          nativeMusic.preload = 'auto';
+          nativeMusic.loop = true;
+          nativeMusicPath = resourcePath;
+        }
+        startNativeMusic();
+      },
+      stopMusic() {
+        nativeMusicPending = false;
+        if (nativeMusic) nativeMusic.pause();
+      },
+      setMusicVolume(volume) {
+        nativeMusicVolume = clampVolume(volume);
+        if (nativeMusic) nativeMusic.volume = nativeMusicVolume;
+      },
+      playSfx(resourcePath, volume, pitch = 1) {
+        const source = browserAudioPath(resourcePath);
+        if (!source) return;
+        const effect = new Audio(source);
+        effect.preload = 'auto';
+        effect.volume = clampVolume(volume);
+        effect.playbackRate = Math.max(.25, Math.min(4, Number(pitch) || 1));
+        effect.addEventListener('ended', () => effect.remove(), { once: true });
+        const play = effect.play();
+        if (play && typeof play.catch === 'function') {
+          play.catch(error => recordAudioDebug('native-sfx-deferred', {
+            track: resourcePath, message: String(error?.message || error),
+          }));
+        }
+      },
+      unlock() {
+        if (nativeMusicPending) startNativeMusic();
+      },
+    };
+    let webAudioContext = null;
+    const NativeAudioContext = window.AudioContext || window.webkitAudioContext;
+    const NativeAudioWorkletNode = window.AudioWorkletNode;
+    if (NativeAudioWorkletNode) {
+      // Observe the final Godot mixer node without taking ownership of it.
+      // A silent browser build can otherwise look healthy up through stream
+      // loading while its worklet never reaches the hardware destination.
+      const tracedAudioWorkletNode = function (context, processorName, options) {
+        const node = new NativeAudioWorkletNode(context, processorName, options);
+        let lastAudioChunkReportAt = -Infinity;
+        recordAudioDebug('worklet-node-created', {
+          processor: processorName,
+          outputChannels: options?.outputChannelCount || [],
+        });
+        try {
+          const nativeConnect = node.connect.bind(node);
+          node.connect = (...targets) => {
+            recordAudioDebug('worklet-node-connected', {
+              processor: processorName,
+              target: targets[0]?.constructor?.name || 'unknown',
+            });
+            return nativeConnect(...targets);
+          };
+        } catch (error) {
+          recordAudioDebug('worklet-connect-trace-unavailable', {
+            message: String(error?.message || error),
+          });
+        }
+        try {
+          const nativePostMessage = node.port.postMessage.bind(node.port);
+          node.port.postMessage = message => {
+            const command = message?.cmd;
+            if (command === 'start' || command === 'start_nothreads') {
+              recordAudioDebug('worklet-start-requested', { processor: processorName, command });
+            } else if (command === 'chunk' && performance.now() - lastAudioChunkReportAt >= 1000) {
+              lastAudioChunkReportAt = performance.now();
+              const samples = message.data;
+              let peak = 0;
+              if (samples?.length) {
+                for (let index = 0; index < samples.length; index += 1) {
+                  peak = Math.max(peak, Math.abs(samples[index]));
+                }
+              }
+              recordAudioDebug('worklet-audio-chunk', {
+                processor: processorName,
+                samples: samples?.length || 0,
+                peak: Number(peak.toFixed(6)),
+              });
+            }
+            return nativePostMessage(message);
+          };
+        } catch (error) {
+          recordAudioDebug('worklet-port-trace-unavailable', {
+            message: String(error?.message || error),
+          });
+        }
+        return node;
+      };
+      tracedAudioWorkletNode.prototype = NativeAudioWorkletNode.prototype;
+      Object.setPrototypeOf(tracedAudioWorkletNode, NativeAudioWorkletNode);
+      window.AudioWorkletNode = tracedAudioWorkletNode;
+    }
+    if (NativeAudioContext) {
+      // Track Godot's own audio context. It chooses the sample rate and
+      // latency settings required by its AudioWorklet mixer, so never hand it
+      // a context created by the shell.
+      const sharedAudioContext = function (...args) {
+        webAudioContext = new NativeAudioContext(...args);
+        recordAudioDebug('context-created', {
+          state: webAudioContext.state,
+          sampleRate: webAudioContext.sampleRate,
+          hasAudioWorklet: Boolean(webAudioContext.audioWorklet),
+        });
+        webAudioContext.addEventListener('statechange', () => {
+          recordAudioDebug('context-state', { state: webAudioContext.state });
+        });
+        const audioWorklet = webAudioContext.audioWorklet;
+        if (audioWorklet) {
+          try {
+            const nativeAddModule = audioWorklet.addModule.bind(audioWorklet);
+            audioWorklet.addModule = async moduleUrl => {
+              recordAudioDebug('worklet-module-loading', { module: String(moduleUrl) });
+              try {
+                const result = await nativeAddModule(moduleUrl);
+                recordAudioDebug('worklet-module-loaded', { module: String(moduleUrl) });
+                return result;
+              } catch (error) {
+                recordAudioDebug('worklet-module-failed', {
+                  module: String(moduleUrl), message: String(error?.message || error),
+                });
+                throw error;
+              }
+            };
+          } catch (error) {
+            recordAudioDebug('worklet-module-trace-unavailable', {
+              message: String(error?.message || error),
+            });
+          }
+        }
+        return webAudioContext;
+      };
+      sharedAudioContext.prototype = NativeAudioContext.prototype;
+      Object.setPrototypeOf(sharedAudioContext, NativeAudioContext);
+      window.AudioContext = sharedAudioContext;
+      window.webkitAudioContext = sharedAudioContext;
+    }
+    const config = $GODOT_CONFIG;
+    const engine = new Engine(config);
+    const start = document.getElementById('start');
+    const status = document.getElementById('status');
+    const progress = document.getElementById('progress');
+    const cover = document.getElementById('cover');
+    // Godot creates its WebAudio context after the asynchronous pack download.
+    // The visible sound control therefore unlocks that actual mixer context,
+    // rather than a separate probe context.
+    const unlockAudio = async () => {
+      if (!webAudioContext) {
+        recordAudioDebug('resume-deferred', { reason: 'context-not-created' });
+        return false;
+      }
+      try {
+        // Resume synchronously while the browser still associates this work
+        // with the player's click/key.
+        const resume = webAudioContext.resume();
+        await resume;
+        if (webAudioContext.state !== 'running') throw new Error('Audio is still suspended');
+        recordAudioDebug('context-resumed', { state: webAudioContext.state });
+        return true;
+      } catch (error) {
+        recordAudioDebug('context-resume-failed', { message: String(error?.message || error) });
+        return false;
+      }
+    };
+    // The initial pack download can outlive the opening click. Retrying from
+    // the first game interaction makes the unlock reliable after that delay,
+    // including on browsers that discard the original transient activation.
+    for (const eventName of ['pointerdown', 'touchend', 'keydown']) {
+      window.addEventListener(eventName, () => {
+        void unlockAudio();
+        window.pokeaetherBrowserAudio.unlock();
+      }, { capture: true, passive: true });
+    }
+    const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
+    window.pokeaetherPreview = { state: 'ready' };
+    const registration = document.getElementById('registration');
+    const registerForm = document.getElementById('registration-form');
+    const registerStatus = document.getElementById('register-status');
+    const registerSubmit = document.getElementById('register-submit');
+    let registrationMeta = null;
+    window.pokeaetherOpenRegistration = async () => {
+      registration.showModal();
+      registerSubmit.disabled = true;
+      registerStatus.textContent = 'Checking account registration…';
+      try {
+        const response = await fetch('/api/auth/web/meta', { cache: 'no-store' });
+        if (!response.ok) throw new Error();
+        registrationMeta = await response.json();
+        registerSubmit.disabled = !registrationMeta.registrationEnabled;
+        registerStatus.textContent = registrationMeta.registrationEnabled ? '' : 'Account registration is currently disabled.';
+      } catch (_) { registerStatus.textContent = 'Account service unavailable. Please retry later.'; }
+    };
+    document.getElementById('register-close').onclick = () => { registerForm.reset(); registration.close(); document.getElementById('canvas').focus(); };
+    registration.addEventListener('cancel', () => registerForm.reset());
+    registerForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (!registrationMeta || registerSubmit.disabled) return;
+      const data = new FormData(registerForm);
+      if (data.get('password') !== data.get('confirmPassword')) { registerStatus.textContent = 'Passwords do not match.'; return; }
+      registerSubmit.disabled = true;
+      registerStatus.textContent = 'Creating account…';
+      try {
+        const response = await fetch('/api/auth/web/signup', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: data.get('username'), email: data.get('email'), password: data.get('password'), gender: data.get('gender'),
+            locale: 'en', minimumAgeConfirmed: data.has('age'), termsAccepted: data.has('legal'), codeOfConductAccepted: data.has('legal'), privacyPolicyAcknowledged: data.has('legal'),
+            termsVersion: registrationMeta.termsVersion, codeOfConductVersion: registrationMeta.codeOfConductVersion, privacyPolicyVersion: registrationMeta.privacyPolicyVersion }),
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          const detail = result.detail;
+          registerStatus.textContent = typeof detail === 'string' ? detail : detail?.message || 'Registration failed. Check your details and try again.';
+        } else {
+          registerForm.reset();
+          registerStatus.textContent = 'Account created. Check your email and verify your account, then return to login.';
+        }
+      } catch (_) { registerStatus.textContent = 'Account service unavailable. Please retry later.'; }
+      finally { registerSubmit.disabled = false; registerStatus.scrollIntoView({ block: 'nearest' }); }
+    });
+    if (!local) {
+      start.disabled = true;
+      status.textContent = 'This development preview must be served on localhost.';
+      window.pokeaetherPreview.state = 'blocked';
+    }
+    start.addEventListener('click', async () => {
+      start.disabled = true;
+      progress.hidden = false;
+      window.pokeaetherPreview.state = 'loading';
+      try {
+		// This call is deliberately before the first await: it is the user
+		// gesture browsers require for Web Audio playback.
+		await unlockAudio();
+        const missing = Engine.getMissingFeatures({ threads: false });
+        if (missing.length) throw new Error('Browser support missing: ' + missing.join(', '));
+        await engine.startGame({
+          canvas: document.getElementById('canvas'),
+          onProgress: (current, total) => {
+            if (total > 0) { progress.max = total; progress.value = current; }
+            status.textContent = total > 0
+              ? `Loading ${Math.round(current / total * 100)}% — ${(current / 1048576).toFixed(1)} / ${(total / 1048576).toFixed(1)} MB`
+              : 'Preparing the game…';
+          },
+          onExit: () => {
+            cover.hidden = false;
+            status.textContent = 'The preview has closed. Reload this page to start again.';
+            window.pokeaetherPreview.state = 'exited';
+          }
+        });
+        // The engine starts asynchronously and may only attach its worklet
+        // after the pack has loaded. Resume once more after that attachment.
+        await unlockAudio();
+        cover.hidden = true;
+        document.getElementById('canvas').focus();
+        window.pokeaetherPreview.state = 'running';
+      } catch (error) {
+        status.textContent = 'Could not start the preview. ' + error.message + ' Reload the page to retry.';
+        window.pokeaetherPreview.state = 'error';
+      }
+    });
+  </script>
+</body>
+</html>

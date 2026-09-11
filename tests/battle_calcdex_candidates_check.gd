@@ -85,8 +85,9 @@ func _run() -> void:
 		"speciesFingerprint": "d".repeat(64),
 		"formatId": "aether-ou",
 		"engineFormatId": "gen9nationaldex",
-		"dataFormatId": "gen9nationaldex",
-		"source": "pokeaether_curated",
+		"catalogProfileId": "aether-gen9-singles",
+		"dataFormatId": "aether-gen9-singles",
+		"source": "smogon_set_catalog",
 		"species": "Mew",
 		"sets": [{
 			"id": "defensive-pivot",
@@ -98,12 +99,12 @@ func _run() -> void:
 			"ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 0},
 			"teraType": "Ghost",
 			"moves": ["Psychic", "U-turn", "Will-O-Wisp", "Roost"],
-			"provenance": {"kind": "pokeaether_curated"},
+			"provenance": {"kind": "smogon", "formatId": "gen9ou", "formatName": "OU"},
 		}],
 	})
 	await process_frame
 	if panel.sample_set_format_id != "aether-ou" or panel.sample_set_options.size() != 1:
-		_fail("the curated sample-set catalog must be available as scenarios")
+		_fail("the format-aware set catalog must be available as scenarios")
 		return
 	panel._apply_sample_set(panel.sample_set_options[0])
 	if panel.selected_sample_set_id != "defensive-pivot":

@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+const ArenaCameraPolicy := preload("res://scripts/services/aether_clash_camera_policy.gd")
+
 signal overworld_steps_completed(step_count: int)
 signal land_mount_toggled
 
@@ -7,6 +9,8 @@ const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
 const RUN_TILE_MOVE_DURATION := 0.14
 const LAND_MOUNT_TILE_MOVE_DURATION := 0.065
+const MAX_MOVEMENT_FRAME_DELTA := 0.1
+const MAX_MOVEMENT_STEPS_PER_FRAME := 4
 const MOVE_EASE_AMOUNT := 0.0
 const INPUT_BUFFER_DURATION := 0.14
 const CONTINUOUS_MOVE_HOLD_DELAY := 0.0
@@ -277,6 +281,7 @@ var held_direction_time := 0.0
 var route_gate_interaction_in_progress := false
 var appearance_sprites: Array[AnimatedSprite2D] = []
 var master_appearance_sprite: AnimatedSprite2D
+var visual_sort_depth_cache := -1
 var pokemon_follower: PokemonFollower
 var body_sprite_frames_movement_style := ""
 var activity_style := CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
@@ -911,7 +916,8 @@ func _ready() -> void:
 	_setup_map_chat_bubble()
 	_setup_fishing_prompt()
 	_setup_surf_prompt()
-	FieldMoveService.refresh_owned_charms.call_deferred()
+	if not OS.has_feature("web"):
+		FieldMoveService.refresh_owned_charms.call_deferred()
 
 	# Haal de TileMapLayer nodes uit de huidige map op als die al geldig is.
 	# Bij scene switches kan de vorige map al freed zijn terwijl de autoload nog
@@ -943,7 +949,8 @@ func _ready() -> void:
 	global_position = target_position
 	set_idle_frame()
 	_update_sort_z()
-	_setup_pokemon_follower.call_deferred()
+	if not OS.has_feature("web"):
+		_setup_pokemon_follower.call_deferred()
 
 func _on_world_pixel_scale_changed(_scale: float) -> void:
 	_apply_world_pixel_scale()
@@ -984,6 +991,9 @@ func _apply_world_pixel_scale() -> void:
 	# before Aether Clash restores its temporary zoom. The next map reapplies
 	# the correct baseline, so a detached player must simply skip this update.
 	if window == null or viewport == null:
+		return
+	var arena_controller := ArenaCameraPolicy.active_controller(get_tree())
+	if arena_controller != null and arena_controller.call("apply_world_camera_policy", world_camera):
 		return
 	var window_size := window.size
 	var effective_scale := PixelPerfectRenderingScript.resolve_world_scale_for_area(
@@ -1544,9 +1554,31 @@ func _process(delta: float) -> void:
 		_clear_held_direction()
 
 	if is_moving:
+		_advance_tile_movement(delta)
+		return
+
+	if not _can_accept_movement_input():
+		set_idle_frame()
+		return
+
+	var direction := _get_next_movement_direction()
+
+	if direction != Vector2.ZERO:
+		if not _try_start_move(direction):
+			set_idle_frame()
+
+
+func _advance_tile_movement(delta: float) -> void:
+	# Keep fractional frame time across tile boundaries. Bound hitch recovery so
+	# collisions, exits and encounter callbacks cannot run without limit.
+	var remaining_delta := clampf(delta, 0.0, MAX_MOVEMENT_FRAME_DELTA)
+	var completed_steps := 0
+	while is_moving and completed_steps < MAX_MOVEMENT_STEPS_PER_FRAME:
 		# Beweeg per render-frame naar de volgende tile.
 		# De tile-logica blijft deterministisch; alleen de visual interpolation is soepeler.
-		move_elapsed = minf(move_elapsed + delta, move_duration)
+		var consumed_delta := minf(remaining_delta, maxf(move_duration - move_elapsed, 0.0))
+		remaining_delta -= consumed_delta
+		move_elapsed = minf(move_elapsed + consumed_delta, move_duration)
 		var move_progress := move_elapsed / move_duration
 		var interpolated_position: Vector2 = move_start_position.lerp(target_position, _get_move_interpolation(move_progress))
 		global_position = _snap_world_position(interpolated_position)
@@ -1555,6 +1587,7 @@ func _process(delta: float) -> void:
 
 		# Als de bestemming is bereikt.
 		if _has_reached_target():
+			completed_steps += 1
 			global_position = _snap_world_position(target_position)
 			is_moving = false
 			_clear_stair_visual_offset()
@@ -1582,20 +1615,12 @@ func _process(delta: float) -> void:
 			if _can_accept_movement_input():
 				var next_direction := _get_next_movement_direction()
 				if next_direction != Vector2.ZERO and _try_start_move(next_direction):
+					if remaining_delta > 0.0:
+						continue
 					return
 
 			set_idle_frame()
 		return
-
-	if not _can_accept_movement_input():
-		set_idle_frame()
-		return
-
-	var direction := _get_next_movement_direction()
-
-	if direction != Vector2.ZERO:
-		if not _try_start_move(direction):
-			set_idle_frame()
 
 func refresh_pokemon_follower() -> void:
 	_ensure_pokemon_follower_parent()
@@ -1617,6 +1642,8 @@ func set_show_follower(show_follower: bool) -> void:
 	refresh_pokemon_follower()
 
 func reset_pokemon_follower_position() -> void:
+	if OS.has_feature("web"):
+		return
 	_ensure_pokemon_follower_parent()
 	if pokemon_follower != null and is_instance_valid(pokemon_follower):
 		pokemon_follower.reset_follow_position()
@@ -2713,10 +2740,28 @@ func _update_sort_z() -> void:
 	z_index = clampi(sort_z, SORT_Z_MIN, SORT_Z_MAX)
 
 func _cache_appearance_sprites() -> void:
+	visual_sort_depth_cache = -1
 	appearance_sprites.clear()
 	_collect_appearance_sprites(look_node)
 	master_appearance_sprite = _get_master_appearance_sprite()
 	_sync_appearance_animation_speeds()
+
+
+func get_visual_sort_depth() -> int:
+	if visual_sort_depth_cache >= 0:
+		return visual_sort_depth_cache
+	visual_sort_depth_cache = _get_visual_sort_depth(look_node)
+	return visual_sort_depth_cache
+
+
+func _get_visual_sort_depth(node: Node) -> int:
+	var maximum := 0
+	var canvas_item := node as CanvasItem
+	if canvas_item != null and canvas_item.z_as_relative:
+		maximum = maxi(maximum, canvas_item.z_index)
+	for child: Node in node.get_children():
+		maximum = maxi(maximum, _get_visual_sort_depth(child))
+	return maximum
 
 func _collect_appearance_sprites(parent: Node) -> void:
 	for child: Node in parent.get_children():
@@ -2857,6 +2902,7 @@ func _apply_directional_appearance_layer_order(direction: Vector2) -> void:
 		direction_id,
 		8
 	)
+	visual_sort_depth_cache = -1
 
 func _get_player_appearance_part_id(category: String) -> String:
 	match CharacterAppearanceService.normalize_part_category(category):

@@ -3,6 +3,7 @@ extends Node2D
 class_name RemotePlayerAvatar
 
 signal interaction_requested(player_state: Dictionary, world_position: Vector2)
+signal battle_spectate_requested(target_user_id: int)
 
 const PLAYER_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
@@ -13,6 +14,7 @@ const RoleBadgeTexture := preload("res://scripts/ui/role_badge_texture.gd")
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
 const AethernetTeleportEffectScript := preload("res://scripts/world/aethernet_teleport_effect.gd")
+const NearbyPveBattleIndicatorScript := preload("res://scripts/world/nearby_pve_battle_indicator.gd")
 const TILE_SIZE := 32
 const TILE_MOVE_DURATION := 0.22
 const SORT_Z_MIN := -4096
@@ -40,6 +42,8 @@ const ROLE_BADGE_ICON_SIZE := Vector2(28.0, 28.0)
 const ROLE_BADGE_DEFAULT_WIDTH := 30.0
 const NAMEPLATE_MAX_NAME_WIDTH := 132.0
 const NAMEPLATE_LAYER_GAP := 2.0
+const BATTLE_INDICATOR_CARD_GAP := 2.0
+const BATTLE_INDICATOR_HALF_HEIGHT := 9.0
 const BODY_SPRITE_NAME := "BodySprite"
 const MOUNT_SPRITE_NAME := "MountSprite"
 const MOUNT_FOREGROUND_SPRITE_NAME := "MountForegroundSprite"
@@ -211,6 +215,10 @@ var gameplay_identity_masked := false
 var gameplay_identity_placeholder := "???"
 var last_aethernet_effect_sequence := -1
 var active_aethernet_effect: Node
+var nearby_battle_indicator: Node2D
+var _rendered_emblem: Dictionary = {}
+var _emblem_initialized := false
+var _rendered_animation_state: Array = []
 
 
 func _ready() -> void:
@@ -218,6 +226,8 @@ func _ready() -> void:
 	z_as_relative = false
 	y_sort_enabled = true
 	_create_visual()
+	visibility_changed.connect(_on_visual_visibility_changed)
+	_on_visual_visibility_changed()
 	_update_animation(false)
 	_update_sort_z()
 
@@ -259,6 +269,7 @@ func apply_state(state: Dictionary) -> void:
 	_apply_guild_emblem(_dictionary_from_value(state.get("guildEmblem", {})))
 	_update_nameplate()
 	_apply_aethernet_effect_state(_dictionary_from_value(state.get("aethernetEffect", {})))
+	_sync_nearby_battle_indicator(state)
 
 	var position_data := _dictionary_from_value(state.get("position", {}))
 	var new_target_position := Vector2(
@@ -301,6 +312,54 @@ func apply_state(state: Dictionary) -> void:
 	_sync_mount_visual()
 	_apply_follower_state(_dictionary_from_value(state.get("follower", {})))
 	_update_sort_z()
+
+
+func _sync_nearby_battle_indicator(state: Dictionary) -> void:
+	var spectate := _dictionary_from_value(state.get("battleSpectate", {}))
+	var kind := str(spectate.get("kind", "")).strip_edges().to_lower()
+	var should_show := str(state.get("activityState", "idle")) == "battle" and kind in ["wild", "trainer"]
+	if not should_show:
+		if nearby_battle_indicator != null and is_instance_valid(nearby_battle_indicator):
+			nearby_battle_indicator.queue_free()
+		nearby_battle_indicator = null
+		return
+	if nearby_battle_indicator == null or not is_instance_valid(nearby_battle_indicator):
+		nearby_battle_indicator = NearbyPveBattleIndicatorScript.new()
+		add_child(nearby_battle_indicator)
+		nearby_battle_indicator.spectate_requested.connect(
+			func(target_id: int): battle_spectate_requested.emit(target_id)
+		)
+	nearby_battle_indicator.configure(
+		user_id,
+		kind,
+		_get_nearby_battle_indicator_anchor()
+	)
+
+
+func _get_nearby_battle_indicator_anchor() -> Vector2:
+	if nameplate == null:
+		return NearbyPveBattleIndicatorScript.DEFAULT_ANCHOR_POSITION
+	if role_badge_icon != null and role_badge_icon.visible:
+		return Vector2(
+			0.0,
+			nameplate.position.y
+				+ ((role_badge_icon.offset_top + role_badge_icon.offset_bottom) * 0.5)
+		)
+	if role_badge_panel != null and role_badge_panel.visible:
+		return Vector2(
+			0.0,
+			nameplate.position.y
+				+ ((role_badge_panel.offset_top + role_badge_panel.offset_bottom) * 0.5)
+		)
+	if nameplate_background != null:
+		return Vector2(
+			0.0,
+			nameplate.position.y
+				+ nameplate_background.offset_top
+				- BATTLE_INDICATOR_HALF_HEIGHT
+				- BATTLE_INDICATOR_CARD_GAP
+		)
+	return NearbyPveBattleIndicatorScript.DEFAULT_ANCHOR_POSITION
 
 
 func _apply_aethernet_effect_state(effect_state: Dictionary) -> void:
@@ -517,6 +576,7 @@ func _apply_appearance_state(appearance_state: Dictionary) -> void:
 		)
 	)
 	current_appearance_state = next_appearance_state
+	_rendered_animation_state.clear()
 	current_appearance_signature = signature
 	if body_id != current_body_id \
 		or current_gender != current_body_gender \
@@ -979,6 +1039,10 @@ func clear_gameplay_identity_mask_override() -> void:
 func _apply_guild_emblem(emblem: Dictionary) -> void:
 	if guild_emblem == null:
 		return
+	if _emblem_initialized and emblem == _rendered_emblem:
+		return
+	_emblem_initialized = true
+	_rendered_emblem = emblem.duplicate(true)
 	guild_emblem.texture = GuildEmblemTexture.create_nameplate_texture(emblem)
 	guild_emblem.visible = guild_emblem.texture != null
 	if guild_emblem_background != null:
@@ -1734,6 +1798,18 @@ func _get_appearance_signature(appearance_state: Dictionary) -> String:
 
 
 func _update_animation(is_moving: bool) -> void:
+	if is_inside_tree() and not is_visible_in_tree():
+		_rendered_animation_state.clear()
+		return
+	var next_state: Array = [is_moving, last_direction, current_activity_style,
+		current_mount_id, current_appearance_signature, current_body_movement_style]
+	if next_state == _rendered_animation_state:
+		if is_moving:
+			_sync_all_part_sprites_to_body()
+			_sync_mount_rider_delta()
+			_sync_mount_foreground_frame()
+		return
+	_rendered_animation_state = next_state
 	_apply_directional_appearance_layer_order()
 	_sync_activity_layer_offsets()
 	var uses_static_pose := _uses_static_activity_movement_pose()
@@ -1763,6 +1839,12 @@ func _update_animation(is_moving: bool) -> void:
 	_sync_mount_rider_delta()
 	_sync_mount_foreground_frame()
 	_apply_activity_visual_offset()
+
+
+func _on_visual_visibility_changed() -> void:
+	_rendered_animation_state.clear()
+	if look_node != null:
+		look_node.process_mode = Node.PROCESS_MODE_INHERIT if is_visible_in_tree() else Node.PROCESS_MODE_DISABLED
 
 
 func _uses_static_activity_movement_pose() -> bool:

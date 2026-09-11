@@ -10,6 +10,9 @@ const PROJECT_PATH := "res://project.godot"
 
 var failed := false
 var requested_summary_payload: Dictionary = {}
+var requested_hover_payload: Dictionary = {}
+var requested_hover_rect := Rect2()
+var hover_end_count := 0
 
 
 func _init() -> void:
@@ -52,20 +55,26 @@ func _run() -> void:
 	var popup := EXCHANGE_POPUP.instantiate() as AetherExchangePopup
 	popup_host.add_child(popup)
 	popup.visible = true
+	popup.pokemon_hover_requested.connect(_on_summary_hover_requested)
+	popup.pokemon_hover_ended.connect(_on_summary_hover_ended)
 	await process_frame
 	_check(popup != null, "Exchange popup scene instantiates")
 	_check(popup.get_class() == "Panel", "Exchange outer window cannot be resized by child containers")
 	_check(popup.custom_minimum_size == Vector2(1040, 660), "Exchange popup uses the production workspace size")
 	_check(popup.size == Vector2(1040, 660), "Exchange popup starts at its fixed workspace size")
 	_check(popup.call("_get_minimum_size") == Vector2(1040, 660), "Exchange content cannot increase the popup minimum size")
-	_check((popup.get("tab_buttons") as Dictionary).size() == 3, "Exchange groups navigation into Market, New order, and My orders")
-	var mode_selector := popup.get("mode_selector") as OptionButton
-	var asset_filter_selector := popup.get("asset_filter_selector") as OptionButton
-	_check(mode_selector != null and mode_selector.item_count == 2, "Market choices live in one contextual selector")
-	_check(str(mode_selector.get_item_metadata(0)) == "browse" and str(mode_selector.get_item_metadata(1)) == "wanted", "Market selector separates listings from wanted items")
-	_check(asset_filter_selector != null and asset_filter_selector.item_count == 2, "Asset type uses one compact Items or Pokémon selector")
-	_check(mode_selector.get_theme_icon("arrow").resource_path.ends_with("photo_mode_dropdown_arrow.svg"), "Context selector follows the clean Aether dropdown styling")
-	_check(asset_filter_selector.get_popup().get_theme_stylebox("panel") is StyleBoxFlat, "Asset selector menu uses the shared Aether surface")
+	var tab_buttons := popup.get("tab_buttons") as Dictionary
+	_check(tab_buttons.size() == 3, "Exchange has Buy, Sell, and My Exchange routes")
+	_check((tab_buttons.get("market") as Button).text == popup.call("_t", "ui.exchange.nav.market"), "Buy is directly visible")
+	var context_buttons := popup.get("context_buttons") as Dictionary
+	var asset_buttons := popup.get("asset_buttons") as Dictionary
+	_check(not (popup.get("context_row") as Control).visible, "Buy does not require another mode selector")
+	_check(asset_buttons.size() == 2, "Items and Pokémon are directly visible category buttons")
+	var request_button := popup.get("request_item_button") as Button
+	_check(request_button.visible, "Buy Items always offers Request an item, including an empty market")
+	_check(popup.call("_section_for_tab", "wishlist") == "market", "Requesting items belongs to Buy")
+	_check(popup.call("_section_for_tab", "wanted") == "create", "Fulfilling item requests belongs to Sell")
+	_check(not (popup.get("status_label") as Control).visible, "Idle status takes no permanent screen space")
 	_check(str(popup.get("asset_filter")) == "item", "Browse defaults to the Items category")
 	var search_input := popup.get("search_input") as LineEdit
 	var refresh_button := popup.get("refresh_button") as Button
@@ -88,14 +97,12 @@ func _run() -> void:
 	var filter_toolbar_style := advanced_filter_button.get_theme_stylebox("normal") as StyleBoxFlat
 	var sort_toolbar_style := browse_sort_button.get_theme_stylebox("normal") as StyleBoxFlat
 	var refresh_toolbar_style := refresh_button.get_theme_stylebox("normal") as StyleBoxFlat
-	_check(filter_toolbar_style.border_color != sort_toolbar_style.border_color, "Filters and sorting use distinct toolbar accents")
-	_check(sort_toolbar_style.border_color != refresh_toolbar_style.border_color, "Sorting remains distinct from the neutral Refresh action")
-	_check(filter_toolbar_style.border_color.b > filter_toolbar_style.border_color.g, "Filters use the purple Exchange accent")
-	_check(sort_toolbar_style.border_color.r > sort_toolbar_style.border_color.b, "Sorting uses the gold Exchange accent")
+	_check(filter_toolbar_style.border_color == sort_toolbar_style.border_color, "Filters and sorting use neutral styling")
+	_check(sort_toolbar_style.border_color == refresh_toolbar_style.border_color, "Secondary toolbar actions share one neutral accent")
 	advanced_filter_button.pressed.emit()
 	_check(advanced_filter_overlay.visible and advanced_filter_panel.visible, "Filter action opens a centered modal filter panel")
 	var active_filter_toolbar_style := advanced_filter_button.get_theme_stylebox("normal") as StyleBoxFlat
-	_check(active_filter_toolbar_style.bg_color != filter_toolbar_style.bg_color, "Open or active filters receive a stronger purple surface")
+	_check(active_filter_toolbar_style.bg_color != filter_toolbar_style.bg_color, "Open or active filters receive the selected cyan surface")
 	var advanced_fields := popup.get("advanced_filter_fields") as Dictionary
 	_check((_dictionary(advanced_fields.get("category")).get("root") as Control).visible, "Item filters expose item category")
 	_check(not (_dictionary(advanced_fields.get("min_level")).get("root") as Control).visible, "Item filters hide Pokémon-only fields")
@@ -176,8 +183,9 @@ func _run() -> void:
 	((popup.get("tab_buttons") as Dictionary).get("create") as Button).pressed.emit()
 	await process_frame
 	await process_frame
-	_check(str(popup.get("active_tab")) == "sell", "New order opens directly on the familiar selling flow")
-	_check(mode_selector.item_count == 2 and str(mode_selector.get_item_metadata(1)) == "wishlist", "New order groups selling and item requests contextually")
+	_check(str(popup.get("active_tab")) == "sell", "Sell opens directly on the listing flow")
+	_check((context_buttons.get("sell") as Button).visible and (context_buttons.get("wanted") as Button).visible, "Sell exposes listing and wanted items as visible choices")
+	_check(not request_button.visible, "Item requests are created from Buy, not Sell")
 	_check(Rect2(popup.position, popup.size) == fixed_popup_rect, "Clicking Sell preserves the complete Exchange window geometry")
 	var list_container := popup.get("list_container") as GridContainer
 	var empty_state := list_container.get_child(0) as Label
@@ -190,6 +198,19 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	_check(Rect2(popup.position, popup.size) == fixed_popup_rect, "Clicking My Listings preserves the complete Exchange window geometry")
+	var context_panel := popup.get("context_panel") as PanelContainer
+	var context_title := popup.get("context_title_label") as Label
+	var context_description := popup.get("context_description_label") as Label
+	_check(context_panel.visible and context_title.text == popup.call("_t", "ui.exchange.context_title.mine"), "My Exchange has a dedicated page heading")
+	_check(not context_description.text.is_empty(), "My Exchange explains the page purpose")
+	var active_segment := context_buttons.get("active") as Button
+	var history_segment := context_buttons.get("history") as Button
+	_check(active_segment.get_theme_stylebox("normal").bg_color != history_segment.get_theme_stylebox("normal").bg_color, "Active and History form a clear selected segment")
+	var selected_primary_style := (tab_buttons.get("mine") as Button).get_theme_stylebox("normal") as StyleBoxFlat
+	var segment_style := active_segment.get_theme_stylebox("normal") as StyleBoxFlat
+	var category_style := (asset_buttons.get("item") as Button).get_theme_stylebox("normal") as StyleBoxFlat
+	_check(selected_primary_style.bg_color != segment_style.bg_color, "Primary navigation is visually distinct from local page segments")
+	_check(segment_style.bg_color != category_style.bg_color, "Local page segments are visually distinct from asset filters")
 	var drag_handle := popup.find_child("ExchangeDragHandle", true, false) as Control
 	_check(drag_handle != null, "Exchange header exposes a drag handle")
 	_check(drag_handle.mouse_default_cursor_shape == Control.CURSOR_MOVE, "Exchange drag handle uses the move cursor")
@@ -197,9 +218,7 @@ func _run() -> void:
 	popup.set("active_tab", "sell")
 	popup.set("asset_filter", "")
 	popup.call("_refresh_controls")
-	_check(asset_filter_selector.visible, "Sell keeps the compact asset type selector visible")
-	_check(str(asset_filter_selector.get_item_metadata(0)) == "item", "Sell keeps the Items category available")
-	_check(str(asset_filter_selector.get_item_metadata(1)) == "pokemon", "Sell keeps the Pokémon category available")
+	_check((asset_buttons.get("item") as Button).visible and (asset_buttons.get("pokemon") as Button).visible, "Sell keeps both asset categories visible")
 	_check(str(popup.get("asset_filter")) == "item", "Sell defaults to the Items category")
 	popup.set("sellable_items", [{
 		"itemId": "poke-ball",
@@ -225,6 +244,25 @@ func _run() -> void:
 	_check(item_header.get_theme_stylebox("panel") is StyleBoxFlat, "Item details use a compact information header")
 	_check(item_detail_icon != null and item_detail_icon.size == Vector2(48, 48), "Item details preserve the native 48-pixel artwork size")
 	_check(item_detail_icon.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "Item details render pixel art without smoothing")
+	for charm_id: String in [
+		"cut-charm", "dive-charm", "flash-charm", "rain-dance-charm", "rock-smash-charm",
+		"snowscape-charm", "strength-charm", "sunny-day-charm", "surf-charm", "waterfall-charm",
+	]:
+		var charm_icon := popup.call("_load_item_icon", charm_id) as Texture2D
+		_check(
+			charm_icon != null and charm_icon.resource_path.contains("/field_move_charms/") and not charm_icon.resource_path.ends_with("/000.png"),
+			"Exchange resolves the dedicated %s icon" % charm_id
+		)
+	var tm_icon := popup.call("_load_item_icon", "tm-thunderbolt") as Texture2D
+	_check(tm_icon != null and tm_icon.resource_path.ends_with("/machine_ELECTRIC.png"), "Exchange infers the Item Dex icon for a TM")
+	var catalog_tm_icon := popup.call("_load_item_icon", "tm-catalog-entry", "tm", "water") as Texture2D
+	_check(catalog_tm_icon != null and catalog_tm_icon.resource_path.ends_with("/machine_WATER.png"), "Exchange uses Item Dex machine metadata when provided")
+	var outfit_icon := popup.call("_load_item_icon", "mysterious-outfit") as Texture2D
+	_check(outfit_icon != null and not outfit_icon.resource_path.ends_with("/000.png"), "Exchange resolves Item Dex cosmetic previews")
+	var mount_icon := popup.call("_load_item_icon", "cyclizar-mount") as Texture2D
+	_check(mount_icon != null and not mount_icon.resource_path.ends_with("/000.png"), "Exchange resolves Item Dex mount previews")
+	var item_dex_overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
+	_check(item_dex_overlay_source.contains("ITEM_ICON_RESOLVER.load_icon("), "Item Dex and Exchange use the same item icon resolver")
 	_check(popup.get("quantity_spin") is SpinBox, "Item listings expose quantity input")
 	_check(popup.get("price_spin") is SpinBox, "Listings expose fixed-price input")
 	var wishlist_item := {
@@ -273,6 +311,42 @@ func _run() -> void:
 	await process_frame
 	var cancel_wish_button := popup.find_child("ExchangeWishActionButton", true, false) as Button
 	_check(cancel_wish_button != null and not cancel_wish_button.disabled, "Owners can cancel an active wishlist order for a refund")
+	var sold_listing := {"id": "sold-1", "assetType": "item", "asset": wishlist_item, "status": "sold", "quantity": 1, "totalPrice": 500}
+	popup.set("my_listings", [sold_listing])
+	popup.call("_render_current_list")
+	var listings_section := list_container.find_child("ExchangePortfolioListingsSection", true, false) as Control
+	var requests_section := list_container.find_child("ExchangePortfolioRequestsSection", true, false) as Control
+	_check(list_container.columns == 2, "Item listings and requests use two portfolio columns")
+	_check(listings_section != null and listings_section.find_children("*", "Button", true, false).is_empty(), "Active listings section excludes completed sales")
+	_check(requests_section != null and requests_section.find_children("*", "Button", true, false).size() == 1, "Active requests stay in their own section")
+	_check((listings_section.find_child("PortfolioSectionTitle", true, false) as Label).text.contains("ITEMS FOR SALE"), "My Exchange names the player's sale listings explicitly")
+	_check((requests_section.find_child("PortfolioSectionTitle", true, false) as Label).text.contains("ITEM REQUESTS"), "My Exchange names the player's requests explicitly")
+	popup.set("asset_filter", "pokemon")
+	popup.set("my_listings", [
+		{"id": "pokemon-1", "assetType": "pokemon", "asset": {"species": "ekans", "speciesName": "Ekans"}, "status": "active", "quantity": 1, "totalPrice": 100},
+		{"id": "pokemon-2", "assetType": "pokemon", "asset": {"species": "vibrava", "speciesName": "Vibrava"}, "status": "active", "quantity": 1, "totalPrice": 100},
+	])
+	popup.call("_render_current_list")
+	_check(list_container.columns == 1, "Pokémon listings use one column because Pokémon requests do not exist")
+	listings_section = list_container.find_child("ExchangePortfolioListingsSection", true, false) as Control
+	var pokemon_grid := listings_section.find_child("PortfolioEntriesGrid", true, false) as GridContainer
+	_check(pokemon_grid != null and pokemon_grid.columns == 2, "The player's Pokémon listings use a compact two-column grid")
+	_check(pokemon_grid.find_children("*", "Button", true, false).size() == 2, "Pokémon portfolio cards remain individually selectable")
+	popup.set("asset_filter", "item")
+	popup.set("my_listings", [sold_listing])
+	popup.call("_render_current_list")
+	(context_buttons.get("history") as Button).pressed.emit()
+	await process_frame
+	listings_section = list_container.find_child("ExchangePortfolioListingsSection", true, false) as Control
+	requests_section = list_container.find_child("ExchangePortfolioRequestsSection", true, false) as Control
+	var history_listing_buttons := listings_section.find_children("*", "Button", true, false)
+	_check(history_listing_buttons.size() == 1 and (history_listing_buttons[0] as Button).text.contains("500"), "History shows completed listings in their own section")
+	_check(requests_section.find_children("*", "Button", true, false).is_empty(), "History keeps requests separate from listings")
+	(context_buttons.get("active") as Button).pressed.emit()
+	await process_frame
+	requests_section = list_container.find_child("ExchangePortfolioRequestsSection", true, false) as Control
+	var active_request_buttons := requests_section.find_children("*", "Button", true, false)
+	_check(active_request_buttons.size() == 1 and (active_request_buttons[0] as Button).text.contains("750"), "Returning to Active restores outstanding requests")
 	var sellable_garchomp := {
 		"pokemonId": 25,
 		"species": "garchomp",
@@ -318,11 +392,10 @@ func _run() -> void:
 	_check(summary_button != null, "Pokémon details expose the full read-only Summary action")
 	var current_detail_stack := popup.get("detail_stack") as VBoxContainer
 	var purchase_header := current_detail_stack.get_child(0) as PanelContainer
-	var quick_summary := current_detail_stack.get_child(1) as PanelContainer
 	_check(purchase_header != null, "Pokémon identity and Summary action share a compact header")
-	_check(quick_summary != null, "Selected Pokémon renders a compact purchase summary")
-	_check(_count_meta_controls(purchase_header, "exchange_type_chip") == 2, "Pokémon header renders both types as styled chips")
-	_check(_count_meta_controls(quick_summary, "exchange_move_chip") == 4, "Pokémon summary renders four styled move chips")
+	_check(_count_meta_controls(current_detail_stack, "exchange_type_chip") == 0, "Exchange delegates type details to Summary")
+	_check(_count_meta_controls(current_detail_stack, "exchange_move_chip") == 0, "Exchange delegates move details to Summary")
+	_check(popup.get("price_spin") is SpinBox and popup.get("quantity_spin") == null, "Pokémon selling exposes a price without an item quantity field")
 	_check(summary_button.get_theme_stylebox("normal") is StyleBoxFlat, "Pokémon Summary action uses Exchange styling")
 	popup.pokemon_summary_requested.connect(_capture_summary_payload)
 	summary_button.pressed.emit()
@@ -380,30 +453,63 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	_check(popup.size == Vector2(1040, 660), "Browse cards do not resize the Exchange popup")
-	_check(list_container.columns == 4, "Browse listings render four portrait cards per row")
+	_check(list_container.columns == 5, "Buy uses the full width for five readable cards per row")
 	_check(list_container.get_child_count() == 4, "Browse grid renders every available listing")
 	var first_browse_card := list_container.get_child(0) as Button
-	_check(first_browse_card.custom_minimum_size.y == 172.0, "Browse cards use the portrait listing height")
-	_check(first_browse_card.size.y > first_browse_card.size.x, "Pokémon browse cards are taller than they are wide")
-	_check((list_container.get_child(3) as Button).size.y > (list_container.get_child(3) as Button).size.x, "Item browse cards are taller than they are wide")
+	_check(first_browse_card.custom_minimum_size.y == 190.0, "Browse cards use the portrait listing height")
+	_check(first_browse_card.size.x >= 172.0, "Pokémon cards retain readable name and price space")
+	_check((list_container.get_child(3) as Button).size.x >= 172.0, "Item cards retain readable name and price space")
 	var available_label := str(popup.call("_t", "ui.exchange.state.active"))
 	for card_index: int in [0, 3]:
 		var card_text := ""
 		for label_value: Variant in (list_container.get_child(card_index) as Button).find_children("*", "Label", true, false):
 			card_text += (label_value as Label).text
 		_check(not card_text.contains(available_label), "Browse cards omit the redundant Available status")
+	_check(first_browse_card.mouse_entered.has_connections() and first_browse_card.mouse_exited.has_connections(), "Pokémon offers expose compact hover-card behavior")
+	popup.call("_show_pokemon_hover", first_browse_card, browse_entries[0].asset)
+	_check(str(requested_hover_payload.get("species", "")) == "garchomp", "Hover card uses the offered Pokémon payload")
+	_check(requested_hover_payload.has("ivs"), "Exchange sends exact IV data to the hover card")
+	_check(requested_hover_rect == first_browse_card.get_global_rect(), "Exchange anchors the compact card beside the hovered offer")
+	popup.call("_hide_pokemon_hover")
+	_check(hover_end_count == 1, "Leaving a Pokémon offer hides its compact hover card")
 	popup.set("wallet_money", 1_000_000)
 	popup.call("_select_entry", browse_entries[0], "listing")
 	await process_frame
 	await process_frame
-	var detail_scroll := popup.find_child("ExchangeDetailScroll", true, false) as ScrollContainer
-	current_detail_stack = popup.get("detail_stack") as VBoxContainer
-	var purchase_footer := current_detail_stack.get_child(current_detail_stack.get_child_count() - 1) as PanelContainer
-	var footer_content := purchase_footer.get_child(0) as VBoxContainer
-	var buy_button := footer_content.get_child(footer_content.get_child_count() - 1) as Button
-	_check(buy_button != null and buy_button.visible, "Browse keeps Buy Now visible with a complete Pokémon summary")
-	_check(purchase_footer.get_theme_stylebox("panel") is StyleBoxFlat, "Price and purchase action share a styled footer")
-	_check(not detail_scroll.get_v_scroll_bar().visible, "Complete Pokémon purchase details fit without vertical scrolling")
+	var action_bar := popup.get("action_bar") as Control
+	var buy_button := popup.find_child("ExchangeListingActionButton", true, false) as Button
+	_check(buy_button != null and buy_button.is_visible_in_tree() and not buy_button.disabled, "Selected offer exposes an enabled Buy action")
+	_check(buy_button.text.contains("5,000"), "Buy action clearly shows the authoritative total")
+	_check(action_bar.visible and not detail_panel.visible, "Buying uses a compact action bar instead of a permanent detail panel")
+	_check(list_panel.size.x > 950.0, "Buy gives the listing grid the full workspace width")
+	_check(action_bar.position.y + action_bar.size.y <= popup.size.y - 15.0, "Purchase actions stay inside the fixed window")
+	var selected_before_summary := (popup.get("selected_entry") as Dictionary).duplicate(true)
+	var query_before_summary := search_input.text
+	var scroll_before_summary := (popup.get("list_scroll") as ScrollContainer).scroll_vertical
+	(popup.find_child("PokemonSummaryButton", true, false) as Button).pressed.emit()
+	_check(popup.get("selected_entry") == selected_before_summary and search_input.text == query_before_summary, "Opening Summary retains the selected listing and search")
+	_check((popup.get("list_scroll") as ScrollContainer).scroll_vertical == scroll_before_summary, "Opening Summary retains browsing position")
+	buy_button.pressed.emit()
+	_check((popup.get("confirmation_overlay") as Control).visible, "Buying still requires explicit transaction confirmation")
+	_check((popup.get("confirmation_message_label") as Label).text.contains("5,000"), "Confirmation retains the authoritative purchase total")
+	popup.call("_on_confirmation_cancelled")
+	popup.set("wallet_money", 0)
+	popup.call("_render_detail")
+	await process_frame
+	_check((popup.find_child("ExchangeListingActionButton", true, false) as Button).disabled, "Unaffordable purchases are disabled")
+	popup.set("wallet_money", 1_000_000)
+	popup.call("_render_detail")
+	popup.set("request_busy", true)
+	popup.call("_refresh_controls")
+	_check((popup.find_child("ExchangeListingActionButton", true, false) as Button).disabled, "Trade action is locked while a request is running")
+	await popup.call("_finish_mutation", {"success": false, "error": "Synthetic test failure"}, "ui.exchange.status.bought")
+	_check(not (popup.find_child("ExchangeListingActionButton", true, false) as Button).disabled, "Failed purchase restores the Buy action for a retry")
+	_check(popup.get("selected_entry") == selected_before_summary, "Failed purchase retains the selected Pokémon")
+	browse_entries[0]["status"] = "sold"
+	popup.call("_render_current_list")
+	_check(popup.find_child("ExchangeListingActionButton", true, false) == null, "A refreshed sold listing cannot keep a stale Buy action")
+	browse_entries[0]["status"] = "active"
+	popup.call("_render_current_list")
 	_check(bool(popup.call("_mutation_requires_party_refresh", {"assetType": "pokemon"}, "ui.exchange.status.listed")), "Listing a Pokémon refreshes the persisted party")
 	_check(bool(popup.call("_mutation_requires_party_refresh", {"assetType": "pokemon"}, "ui.exchange.status.cancelled")), "Cancelling a Pokémon listing refreshes the persisted party")
 	_check(not bool(popup.call("_mutation_requires_party_refresh", {"assetType": "item"}, "ui.exchange.status.listed")), "Item listings do not trigger an unnecessary party refresh")
@@ -474,6 +580,15 @@ func _check(condition: bool, label: String) -> void:
 
 func _capture_summary_payload(payload: Dictionary) -> void:
 	requested_summary_payload = payload.duplicate(true)
+
+
+func _on_summary_hover_requested(payload: Dictionary, source_rect: Rect2) -> void:
+	requested_hover_payload = payload.duplicate(true)
+	requested_hover_rect = source_rect
+
+
+func _on_summary_hover_ended() -> void:
+	hover_end_count += 1
 
 
 func _count_meta_controls(root_node: Node, meta_key: String) -> int:

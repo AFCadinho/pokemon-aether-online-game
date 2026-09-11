@@ -25,6 +25,11 @@ const COLOR_MUTED := Color("9eb3c5")
 @onready var cancel_button: Button = $Center/Panel/Margin/Content/Actions/CancelButton
 @onready var confirm_button: Button = $Center/Panel/Margin/Content/Actions/ConfirmButton
 
+var _configured_title := ""
+var _configured_message := ""
+var _configured_confirm_text := ""
+var _configured_cancel_text := ""
+
 
 func _ready() -> void:
 	visible = false
@@ -35,6 +40,7 @@ func _ready() -> void:
 	if viewport != null:
 		viewport.size_changed.connect(_fit_to_viewport)
 	_apply_styles()
+	_apply_configuration()
 	close_button.pressed.connect(_cancel)
 	cancel_button.pressed.connect(_cancel)
 	confirm_button.pressed.connect(_confirm)
@@ -46,10 +52,23 @@ func configure(
 	confirm_text: String,
 	cancel_text: String
 ) -> void:
-	title_label.text = dialog_title
-	message_label.text = message
-	confirm_button.text = confirm_text
-	cancel_button.text = cancel_text
+	_configured_title = dialog_title
+	_configured_message = message
+	_configured_confirm_text = confirm_text
+	_configured_cancel_text = cancel_text
+	if is_node_ready():
+		_apply_configuration()
+
+
+func _apply_configuration() -> void:
+	if _configured_title != "":
+		title_label.text = _configured_title
+	if _configured_message != "":
+		message_label.text = _configured_message
+	if _configured_confirm_text != "":
+		confirm_button.text = _configured_confirm_text
+	if _configured_cancel_text != "":
+		cancel_button.text = _configured_cancel_text
 
 
 func configure_option(option_text: String, pressed := false) -> void:

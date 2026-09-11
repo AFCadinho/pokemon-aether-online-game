@@ -2,8 +2,332 @@
 
 ## Unreleased
 
+- Browser: use the web activity endpoint and stop desktop-only background polling, preventing browser battle sessions from being interrupted by forbidden requests.
+
+- Browser music, cries, battle effects and world effects now use the browser's
+  native audio playback when Godot's WebAudio mixer produces silent samples.
+
+- Fixed browser music streams exporting as raw files without their Godot audio
+  import data, which made the WebAudio mixer receive silent samples.
+
+- Fixed browser music remaining silent when the WebAudio mixer did not advance
+  the normal fade-in from its silence floor.
+
+- Fixed a rejected NPC trainer battle leaving the browser player frozen after
+  its error dialogue or on the next login.
+
+- Removed the temporary browser test-tone button and added opt-in WebAudio
+  diagnostics for investigating browser game-audio playback.
+
+- Trainers that spot the player now use a bounded approach animation, so a bad
+  map/facing position cannot freeze the overworld before their battle begins.
+
+- Running from a wild battle now displays “Got away safely!” instead of a
+  misleading wild-battle victory.
+
+- Browser audio now leaves WebAudio context creation to Godot’s own mixer and
+  unlocks that context after startup.
+
+- An expired wild-battle recovery now immediately retries the encounter once,
+  instead of showing a generic error for the first grass tile.
+
+- Running from a wild battle now waits for the authoritative server result
+  before closing the battle, preventing a hidden active battle from blocking
+  the next encounter.
+
+- Browser-game music, battle sounds and UI sounds now run in the isolated
+  WebAudio context required by Godot's mixer.
+
+- Browser-demo players now reopen an unfinished wild battle when they touch
+  grass again, rather than receiving a generic encounter error.
+
+- Browser battle hover cards now load speed tiers, and the damage calculator
+  uses the original gender textures with browser-safe disclosure controls.
+
+- Browser game audio now lets Godot create its own WebAudio mixer context
+  before the player unlocks it, preserving its required latency and sample-rate
+  settings.
+
+- The browser-demo notice now closes in place, while only its Download client
+  button opens the website. The saved-session action is labelled Sign in.
+
+- Browser music, battle sounds, cries and UI sounds now use the WebAudio
+  mixer’s reliable Master output route.
+
+- Browser audio now includes an audible output test, which also retries the
+  browser sound unlock through the same audio context used by the game.
+
+- Pallet Town now uses the complete current Tiled visual layout again.
+
+- Browser-demo players now stay mounted when moving between permitted outdoor
+  maps.
+
+- Browser audio now explicitly primes its output during player interaction,
+  ensuring music and sound effects can start after the web build has loaded.
+
+- Browser battle logs now use a font-safe turn divider instead of displaying
+  missing-character blocks.
+
+- Browser demo: the login screen now uses the same animated background as the
+  desktop client.
+
+- Browser demo: music now opens and unlocks its shared browser audio context
+  from the initial play click, so login, map and battle music can start under
+  browser autoplay rules.
+
+- Browser demo: entering the limited world now uses the normal account-loading
+  transition, and wild and NPC trainer battle requests support complete party
+  data.
+
+- Browser-demo party, battle, summary, chat and guild controls now use browser-safe texture icons instead of missing font glyphs.
+
+- Aethernet now clearly directs browser-demo players to the downloadable client instead of opening an empty travel confirmation.
+
+- The browser demo now includes login, reachable-map and wild/trainer battle music.
+
+- Browser-demo encounters and NPC trainer battles now start correctly, announcements load again, and unsupported icon glyphs and the login notice have browser-safe presentation.
+- The browser demo now restores its complete interface icon set, opens the normal battle-mode chooser, supports mail, friends, bag and guild browsing, and clearly marks client-only features.
+
+- Browser battles now load the regular animated Pokémon sprites on demand while keeping lightweight HOME artwork as an immediate fallback. Party and Pokédex lists stay fast, while Pokémon details, wild battles, Trainer battles and AI Sparring reuse the cached animations.
+
+- AI Sparring in the browser now starts correctly with a catalog team, including for new Trainers without an overworld party.
+
+- The browser demo now loads at roughly half its previous size and includes static battle sprites for the complete AI Sparring roster.
+
+- Browser players can now open AI Sparring directly and use the regular game chat, while Ranked and custom PvP remain download-only.
+
+- Browser and desktop now continue with the same Trainer position, appearance, party and story progress. Professor Oak grants the real account-bound starter in the browser demo.
+
+- Browser-demo players can now talk to Dadinho and Professor Oak to unlock Route 1, while regular NPC dialogue and toggle preferences work within the demo maps.
+
+- Browser players can now enter a bounded demo world covering Pallet Town, Route 1 and Viridian City, while locations beyond the demo remain download-only.
+
+- The local browser preview now supports shared accounts, registration, sign-in and session recovery after refreshing. Browser sign-in leaves your desktop progress untouched.
+
+- Wild replay cards now show the encountered Pokémon's HOME icon.
+
+- A first local browser preview can now open the game login screen and settings without installation. Online browser gameplay is being prepared in separate stages.
+
+- Shiny encounters now ask after the battle whether their replay should be kept as a favorite.
+
+- Wild Battle Replays now play as wild encounters without a trainer team-preview screen.
+
+- Nearby battle spectators now wait for the final animation batch before showing the result.
+
+- NPC replay cards now use a cropped head portrait from the trainer's overworld sprite when available.
+
+- Reconnecting to an ongoing trainer battle now restores the battle log and Pokémon that were already revealed, including the active opponent.
+
+- Live spectators no longer receive a false sprite-reconciliation warning while an authoritative snapshot catches up.
+
+- Nearby NPC battle spectators now see both trainers and Poké Ball placeholders for concealed reserve Pokémon.
+
+- Spectators now enter live battles with both active Pokémon already visible instead of replaying their opening summon animations.
+
+- Nearby battle Poké Balls now use a smaller visual size while retaining their easy-to-click area.
+
+- NPC Battle Replays now use the standard trainer arena rather than AI Sparring's stadium presentation.
+
+- Nearby battle Poké Balls now sit directly above player nameplates and overlap role badges instead of floating far above them.
+
+- Replay transport jumps now keep an active replay playing instead of pausing it.
+
+- Replay cards now use a compact play-icon action beneath their management controls.
+
+- Replay expiry labels now use a shorter, clearer format.
+
+- Players on the same map can now click the Poké Ball above a wild battle or the Great Ball above an NPC battle to watch it live.
+
+- Replay expiry details now sit beside the result badge, keeping replay cards more compact.
+
+- Replay cards now offer direct title editing and favorite toggles through compact pencil and star controls.
+
+- The shared-replay action now has a more prominent, dedicated header treatment.
+
+- Replay searches now update while typing, and a separate reset action clears the active filters.
+
+- Replay category and filter controls now share a compact two-row layout.
+
+- Shared replay codes now open from a dedicated header action instead of taking up space among library filters.
+
+- The replay library now uses category-neutral wording and only shows AI difficulty controls while browsing AI Sparring.
+
+- Battle Replays can now be shared through a replay code and watched directly from another player's library; owners can copy, renew or revoke their code.
+
+- Battle Replays now open with the original team preview before revealing the selected leads.
+
+- Battle Replay dialog buttons now use their translated labels correctly.
+
+- Rename and delete actions now open fully custom Battle Replay dialogs instead of system-styled windows.
+
+- Replay totals now use whole numbers, and rename/delete windows now match the Battle Replay visual style throughout.
+
+- Battle Replay cards now use their empty space for a compact, right-aligned action area.
+
+- Battle Replay summaries now focus on favorites and per-category limits, with a simpler empty state.
+
+- Aether Clash now offers the leave confirmation when an active player reaches a protected portal zone, without allowing re-entry into its staging area.
+
+- Battle Replays now keep the latest 10 ordinary recordings per category, reserving independent future slots for AI Sparring, PvP, PvE and wild encounters while favorites stay protected; a compact category-tab library makes those collections easy to browse.
+
+- Battle Replay rename and delete confirmations now match the library's visual style, with clearer primary and destructive actions.
+
+- Battle Replay cards now show a player-versus-trainer header with portraits and clearer whole-number turn metadata.
+
+- Live Battles now shows each opted-in player's public trainer portrait, and viewers can immediately reopen a battle after leaving it.
+
+- Finished Live Battles now hide the spectator roster rails behind the result screen, keeping the outcome clear.
+
+- AI Sparring now has a clearer spectator checkbox and a grouped start bar, with more room to paste your team.
+
+- AI Sparring now has a Live Battles tab. Allow spectators before starting to let other players find and watch your practice battle.
+
+- Battle Replays now restore AI Sparring's stadium background and battle music, then return to the map music when you close the viewer.
+
+- Battle Replays now use a cleaner library with custom filters and favorites toggle, replay result badges, distinct watch and management actions, a balanced spectator-style information dock, refined control capsules, playback buttons in the open move-command area, a perspective switch that remaps the full replay state, and clearer cyan/red action buttons.
+
+- Battle Replay playback now avoids rebuilding the entire interface after every recorded event, making damage and other animations smoother.
+
+- Aether Clash now gives everyone the same 1280×720 arena view on every screen size. Only Spectate Orbs provide a wider overview; your usual zoom returns after leaving.
+
+- Open Battle Replays from the main toolbar to browse and manage your AI Sparring recordings. Replay battles with pause, turn navigation, and adjustable playback speed, or open them directly from match history.
+
+- Applying a Calcdex set suggestion now keeps the current item slot empty after the opponent's revealed item was knocked off or consumed.
+
+- Reconnecting can restore an ongoing trainer battle with its current HP, PP and pending choice. If recovery is temporarily unavailable, players can retry or return to login.
+
+- Logging in refreshes party, money, inventory and story progress when the server recovers an earned trainer reward.
+
+- Set suggestion evidence now uses readable labels such as Matches and Differences, wraps when needed, and hides empty counters.
+
+- Interrupted battle animations now release their waiting actions, and stalled effects can no longer indefinitely block the next event.
+
+- PvP reconnect now survives temporary server errors and returns you to sign-in when a battle session is definitively invalid.
+
+- Battle matchmaking and reconnection requests now time out safely instead of waiting indefinitely for an unresponsive connection.
+
+- Calcdex set suggestions now use a spacious side-by-side list and details view on desktop, so sets remain readable and reviewing evidence no longer changes the list height or scroll position.
+
+- Calcdex now remembers public battle snapshots while closed, so set suggestions can use damage from the turn that made you open the calculator.
+
+- AI Sparring battles now show Scholar or the selected Grandmaster difficulty instead of internal AI level names.
+
+- Calcdex now shows optional set suggestions as compact comparison cards with fixed evidence counters and expandable details, plus an undoable choice to fill Custom while preserving revealed moves.
+
+- AI Sparring's About page now recommends Intermediate to knowledgeable PvP beginners and Hard as the best all-round sparring partner.
+
+- AI Sparring Team Catalog cards can now be starred as a favorite, and Catalog team offers a checkbox to use it directly in Free Sparring.
+
+- Refreshed the Aether Clash Lobby visuals from the latest map artwork.
+
+- Attuning to an Aether Beacon now plays a magical confirmation sound.
+
+- Successful Item Buyer sales now play the NPC shop sound.
+
+- Item Buyer sales now report the exact currency added to your wallet in System chat.
+
+- NPC services such as the Move Maniac now report the exact items removed from your Bag as payment.
+
+- Successful NPC purchases now play a dedicated Poké Mart purchase sound.
+
+- My Exchange now clearly separates the Pokémon and items you are selling from requested items, with compact side-by-side sections and Pokémon listing cards. Pokémon offers use the familiar Storage hover card with IVs, while full details remain available through Summary.
+
+- Fixed Exchange Pokémon hover cards showing a literal “<null>” before an unnamed Pokémon.
+
+- NPC shop purchases now report the exact Pokédollars, Aetherite, or Battle Points deducted from your wallet in System chat.
+
+- Every Global Boost activation now sends a localized System message to all online Trainers.
+
+- The battle damage calculator now opens with one combined request and reuses its exact current battle snapshot, reducing the wait during fast battles such as Aether Clash.
+
+- Your original starter now always stays with you and returns to your party if borrowed Pokémon leave it empty.
+
+- Aether Exchange now has clear Buy and Sell routes, easier item requests, distinct navigation and filter styling, the same complete item icons as the Item Dex, Pokémon details on hover and in Summary, and separate active orders and history.
+
+- Smogon sets in the damage calculator now apply one editable default build without an extra list of generated variants.
+
+- The damage calculator now explains when invalid or incomplete Pokémon battle data prevents it from loading.
+
+- Closing the game now waits for your latest overworld position to save, including immediately after Aethernet travel.
+
+- Calculator sets now follow the active battle format, show the format before each set name, keep Mega sets with their exact forme, and use scrollable lists for large catalogs.
+
+- Removed the experimental Grandmaster Expert prediction difficulty.
+
+- Added Grandmaster Elite: Hard with selective Nightmare turns, for practicing positioning and moves that hold up against different responses.
+
+- AI Sparring calls its highest Grandmaster difficulty Nightmare; existing results and match history remain available.
+
+- AI Sparring lets you search your own catalog team by name before choosing it.
+
+- AI Sparring statistics now show their catalog-team and 10-turn inclusion rule directly on the statistics page.
+
+- AI Sparring statistics now count only catalog-versus-catalog matches that last at least 10 turns; other team choices remain pure practice.
+
+- Battle trainers now show the player facing right toward the opponent and the correct Scholar or Grandmaster sprite for AI Sparring.
+
+- The clearer About tab now explains each Grandmaster difficulty, skill level, play style, availability and version.
+
+- AI Sparring's About tab now focuses on each bot's play style and challenge without revealing how the bots receive battle information.
+- Riding mounts and walking keep a more consistent speed across frame rates, and mounted appearances use less repeated work and bounded cache memory.
+
+- AI Sparring statistics now separate Beginner, Intermediate, Hard and Nightmare, each with its own results.
+
+- AI Sparring offers Grandmaster Intermediate when the server enables the fair bot, with separate match history.
+
+- AI Sparring lets you search catalog opponents by team name before choosing one.
+
+- Switching between a catalog team and PokéPaste keeps the AI Sparring window the same size.
+
+- AI Sparring now separates the Scholar/Grandmaster opponent choice from its difficulty.
+
+- AI Sparring team hovers now show complete stats, HP, types, and move PP for both bots and selected catalog teams.
+
+- Choose Beginner, Grandmaster Hard or Grandmaster Nightmare in AI Sparring when available on your server.
+
+- Clicking the calculator set button again now closes its open search menu.
+
+- Opponent sets in the damage calculator can now be searched by name and selected with the mouse or keyboard.
+
+- The Item Dex and Pokédex build their windows when opened, fixed interface positions update only when needed, and busy maps check NPC obstacles more efficiently.
+- The weather effects setting now also controls overworld rain and snow.
+
+- Bursts of online player, chat and battle updates are spread across frames to reduce short freezes without dropping updates.
+
+- Pokémon previews reuse processed sprites, new appearance colours avoid duplicate work, and visual caches have limits to reduce memory use.
+
+- Busy maps use less work for guild emblems and idle or hidden players, and closing the interface releases its Pokémon preview resources.
+
+- Sparring bot profiles now hide test labels when connected to the live server, while still showing the current bot version.
+
+- Refreshed sparring statistics with trainer portraits, clearer number cards, and a layout that adapts to smaller windows.
+
+- Busy maps now avoid repeated NPC and online-player calculations, improving smoothness in areas such as Cerulean City.
+- Sparring bots now show a simple version number, with a separate label for test versions.
+
+- Added a dedicated healing sound when medicine restores a Pokémon's HP.
+
+- Fixed moving multiple Pokémon in sequence through the PC box selector sending a later Pokémon into the first destination slot and swapping the earlier one back.
+
+- Reduced map setup pauses when entering Cerulean City and other areas with depth-sorted scenery.
+
+- The ping number now uses the same recent average as its colour indicator.
+
+- The performance meter now explains FPS and ping, colours ping using recent measurements, and offers saved optional frame-time and recent FPS-dip details.
+
+- AI Sparring and the team catalog now start on Aether OU, offer only OU and UU, and share your tier selection.
+- Show FPS and server ping while playing with an optional, saved toggle in Graphics settings.
+
+- Bot statistics now use easy-to-read whole numbers.
+
+- Older AI5 statistics are now tucked away under View older versions.
+
+- Added bot statistics for recent sparring matches, with win rates, average turns and AI5 fallback use, grouped by version.
+
+- Meet AI4 Scholar and AI5 Grandmaster in clearer bot profiles with trainer portraits and more practice tips.
+
 - AI Sparring now shows the full names AI4 Scholar and AI5 Grandmaster.
-- Added an About the bots tab with their play styles, availability and server versions.
+- Added an About tab with bot play styles, availability and server versions.
 
 ## 0.3.74 - 2026-09-07
 

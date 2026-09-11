@@ -2,6 +2,7 @@ extends Control
 
 const NewsLocalizationService := preload("res://scripts/services/news_localization_service.gd")
 const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style.gd")
+const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 
 signal login_submitted(username: String, password: String)
 
@@ -65,6 +66,7 @@ var server_status_translation_key := "ui.login.checking_server"
 var online_players_translation_key := "ui.login.checking_players"
 var online_players_translation_values: Dictionary = {}
 var loading_language_options := false
+var web_demo_notice_acknowledged := false
 
 func _ready() -> void:
 	MusicManager.play_login_music()
@@ -78,6 +80,10 @@ func _ready() -> void:
 	logout_button.pressed.connect(_on_logout_button_pressed)
 	options_button.pressed.connect(_on_options_button_pressed)
 	quit_button.pressed.connect(_on_quit_button_pressed)
+	if OS.has_feature("web"):
+		quit_button.hide()
+		# Registration stays on this origin; no automatic production requests.
+		forgot_password_link_button.hide()
 	news_request.request_completed.connect(_on_news_request_completed)
 	login_news_label.meta_clicked.connect(_on_news_meta_clicked)
 	if settings_menu.has_signal("closed"):
@@ -102,6 +108,8 @@ func _ready() -> void:
 	_refresh_server_health.call_deferred()
 	_fetch_news.call_deferred()
 	_restore_saved_session.call_deferred()
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.pokeaetherPreview.loginReady = true", true)
 
 
 func _apply_remember_me_style() -> void:
@@ -149,7 +157,7 @@ func set_loading(is_loading: bool) -> void:
 		else _get_idle_login_button_text()
 	)
 	continue_button.text = LocalizationManager.text(
-		"ui.login.entering" if is_loading else "ui.login.continue"
+		"ui.login.entering" if is_loading else _get_saved_session_button_key()
 	)
 
 	if is_loading:
@@ -203,7 +211,7 @@ func _on_locale_changed(_locale: String) -> void:
 		else _get_idle_login_button_text()
 	)
 	continue_button.text = LocalizationManager.text(
-		"ui.login.entering" if is_loading else "ui.login.continue"
+		"ui.login.entering" if is_loading else _get_saved_session_button_key()
 	)
 	if not status_translation_key.is_empty():
 		show_status_key(status_translation_key, status_translation_values, status_is_error)
@@ -280,7 +288,37 @@ func _on_login_button_pressed() -> void:
 func _on_continue_button_pressed() -> void:
 	if is_loading:
 		return
+	if OS.has_feature("web") and not web_demo_notice_acknowledged:
+		_show_web_demo_notice()
+		return
 	_enter_world()
+
+
+func _show_web_demo_notice() -> void:
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	dialog.configure(
+		"Welcome to the PokeAether browser demo",
+		"This browser version is a small, limited part of PokeAether. Explore the opening world, chat and practise battles here. Download the client for the full MMO experience. Your account and progress are shared.",
+		"Continue in browser",
+		"Download client"
+	)
+	dialog.confirmed.connect(func():
+		web_demo_notice_acknowledged = true
+		dialog.queue_free()
+		# Changing the root scene from inside the dialog's pressed-signal can be
+		# dropped by the Web input frame. Queue it on SceneTree itself after the
+		# dialog has finished dispatching and left the tree, otherwise a successful
+		# first browser login remains on the login screen with no world request.
+		get_tree().call_deferred("change_scene_to_file", LOADING_SCENE_PATH)
+	)
+	dialog.cancel_button.pressed.connect(func():
+		OS.shell_open("https://pokeaether.com/download")
+	)
+	dialog.canceled.connect(func():
+		dialog.queue_free()
+	)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(560, 260))
 
 
 func _on_logout_button_pressed() -> void:
@@ -297,6 +335,9 @@ func _on_logout_button_pressed() -> void:
 
 
 func _on_register_link_pressed() -> void:
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.pokeaetherOpenRegistration()", true)
+		return
 	OS.shell_open(REGISTER_URL)
 
 
@@ -372,8 +413,11 @@ func _fetch_news() -> void:
 		_render_news_items([])
 		return
 
+	var request_url := NEWS_URL
+	if OS.has_feature("web"):
+		request_url = str(JavaScriptBridge.eval("window.location.origin", true)) + "/news.json"
 	var error_code: Error = news_request.request(
-		NEWS_URL,
+		request_url,
 		[
 			USER_AGENT_HEADER,
 			"Accept-Language: %s, en;q=0.8" % LocalizationManager.get_http_locale(),
@@ -499,7 +543,10 @@ func _submit_login() -> void:
 	_apply_authenticated_player_profile()
 
 	login_submitted.emit(username, password)
-	_enter_world()
+	if OS.has_feature("web"):
+		_show_web_demo_notice()
+	else:
+		_enter_world()
 
 
 func _refresh_server_health() -> void:
@@ -618,6 +665,8 @@ func _restore_saved_session() -> void:
 
 
 func _apply_saved_session_preview_state() -> void:
+	if OS.has_feature("web"):
+		return
 	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
 	if not bool(profile_response.get("success", false)):
 		return
@@ -637,6 +686,10 @@ func _apply_saved_session_preview_state() -> void:
 func _enter_world() -> void:
 	_apply_authenticated_player_profile()
 
+	# The browser uses the same authenticated loading path as the desktop
+	# client.  Apart from making the hand-off feel deliberate, this hydrates
+	# the account, party, inventory and bounded-world position before the map
+	# can accept input.
 	var error: Error = get_tree().change_scene_to_file(LOADING_SCENE_PATH)
 	if error != OK:
 		show_status_key("ui.login.error.enter_world", {}, true)
@@ -663,7 +716,16 @@ func _get_idle_login_button_text() -> String:
 	)
 
 
+func _get_saved_session_button_key() -> String:
+	# The browser notice explains the demo boundary after an explicit sign-in.
+	# Keep the launch action consistent with the desktop login affordance rather
+	# than labelling it as a separate browser-demo destination.
+	return "ui.login.sign_in" if OS.has_feature("web") else "ui.login.continue"
+
+
 func _show_login_form() -> void:
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.pokeaetherPreview.authenticated = false", true)
 	login_card.visible = true
 	saved_session_card.visible = false
 	show_saved_status("")
@@ -682,6 +744,10 @@ func _show_saved_session_card() -> void:
 	show_saved_status("")
 	_apply_server_access_notice()
 	continue_button.grab_focus()
+	if OS.has_feature("web"):
+		continue_button.disabled = is_loading or not server_online
+		continue_button.text = LocalizationManager.text(_get_saved_session_button_key())
+		JavaScriptBridge.eval("window.pokeaetherPreview.authenticated = true", true)
 
 
 func _setup_player_preview() -> void:

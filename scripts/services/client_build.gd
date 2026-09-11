@@ -12,6 +12,8 @@ const PLATFORM_QUERY_NAME := "clientPlatform"
 
 
 static func get_build_id() -> String:
+	if OS.has_feature("web"):
+		return str(ProjectSettings.get_setting("application/config/web_build_id", "web-preview-2"))
 	var environment_build_id := OS.get_environment(BUILD_ID_ENV).strip_edges()
 	if not environment_build_id.is_empty():
 		return environment_build_id
@@ -28,6 +30,8 @@ static func get_http_header() -> String:
 
 
 static func get_platform_id() -> String:
+	if OS.has_feature("web"):
+		return "web"
 	match OS.get_name():
 		"Windows":
 			return "windows"
@@ -42,7 +46,7 @@ static func get_platform_id() -> String:
 
 
 static func append_http_header(headers: PackedStringArray) -> PackedStringArray:
-	var result := headers.duplicate()
+	var result := WebRuntime.http_headers(headers).duplicate()
 	result.append(get_http_header())
 	result.append("%s: %s" % [PLATFORM_HEADER_NAME, get_platform_id()])
 	return result

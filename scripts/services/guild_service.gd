@@ -29,6 +29,9 @@ var delivered_notification_ids: Dictionary = {}
 
 
 func _ready() -> void:
+	if OS.has_feature("web"):
+		# Guild gameplay/notification acknowledgements are outside the web demo.
+		return
 	var timer := Timer.new()
 	timer.name = "GuildNotificationPollTimer"
 	timer.wait_time = 60.0
@@ -40,7 +43,8 @@ func _ready() -> void:
 func load_directory() -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
-	var response := await _request_json(GUILDS_ENDPOINT, HTTPClient.METHOD_GET, "")
+	var endpoint := "/auth/web/guilds" if OS.has_feature("web") else GUILDS_ENDPOINT
+	var response := await _request_json(endpoint, HTTPClient.METHOD_GET, "")
 	if not bool(response.get("success", false)):
 		return response
 	_poll_notifications.call_deferred()

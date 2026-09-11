@@ -741,6 +741,7 @@ func _teach_selected_move(replace_slot: int) -> void:
 		pokemon_name,
 		learned_name
 	)
+	_announce_consumed_items(result.get("consumedItems", []))
 	selected_move_id = ""
 	selected_replace_slot = -1
 	_refresh_party_list()
@@ -772,6 +773,25 @@ func _announce_learned_move(
 		pokemon_context,
 		learned_move
 	)
+
+
+func _announce_consumed_items(value: Variant) -> void:
+	if not value is Array:
+		return
+	for item_value: Variant in value as Array:
+		if not item_value is Dictionary:
+			continue
+		var item := item_value as Dictionary
+		var item_id := str(item.get("itemId", "")).strip_edges()
+		var quantity := maxi(int(item.get("quantity", 0)), 0)
+		if item_id == "" or quantity <= 0:
+			continue
+		get_tree().call_group(
+			"ui_overlay",
+			"add_removed_item_system_message",
+			item_id,
+			quantity
+		)
 
 
 func _refresh_action_state() -> void:

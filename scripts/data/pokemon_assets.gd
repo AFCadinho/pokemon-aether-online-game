@@ -76,6 +76,8 @@ static func get_pokemon_sprite_roots() -> Array[String]:
 	return roots
 
 static func get_external_pokemon_sprite_root() -> String:
+	if OS.has_feature("web"):
+		return ""
 	if not external_sprite_root.is_empty():
 		return external_sprite_root
 

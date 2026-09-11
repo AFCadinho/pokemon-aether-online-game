@@ -149,6 +149,7 @@ const CODE_TO_KEY: Dictionary = {
 	"pokemon_holding_item": "ui.trade.error.pokemon_holding_item",
 	"pokemon_not_tradable": "ui.trade.error.pokemon_not_tradable",
 	"pokemon_not_owned_or_held": "ui.trade.error.pokemon_not_owned",
+	"starter_pokemon_protected": "ui.storage.release.starter_protected",
 	"pokemon_location_stale": "ui.trade.error.pokemon_moved",
 	"trade_offer_requires_party_pokemon": "ui.trade.error.party_last",
 	"trade_item_quantity_unavailable": "ui.trade.error.item_quantity",

@@ -23,18 +23,27 @@ func _init() -> void:
 	)
 	_check(
 		battle_source.contains("func _finish_spectator_terminal_message(message: Dictionary) -> void:") \
+			and battle_source.contains("func _spectator_terminal_waits_for_live_render() -> bool:") \
+			and battle_source.contains('pvp_match_id.begins_with("pve:")') \
 			and battle_source.contains('str(message.get("winnerSide", ""))') \
 			and battle_source.contains('str(message.get("loserSide", ""))') \
 			and battle_source.contains('finish_result["winner"] = winner_side') \
 			and battle_source.contains('"skipPartyBattleSync": true') \
 			and battle_source.contains('"localPartyDefeated": false'),
-		"spectator terminal handling preserves the public winner without participant persistence"
+		"spectator terminals wait for live render work and preserve the public winner without participant persistence"
 	)
 	_check(
 		battle_source.contains("if allows_gameplay_persistence or _is_spectator_battle():") \
 			and battle_source.contains('current_action_panel.set_message(message)') \
 			and battle_source.contains('_t("battle.result.winner_title", {"winner": winner_name})'),
 		"spectator winner appears in the battle log, battle text, and result screen"
+	)
+	_check(
+		battle_source.contains("func _hide_spectator_rosters_for_terminal_result() -> void:") \
+			and battle_source.contains("if _is_spectator_battle():\n\t\t_hide_spectator_rosters_for_terminal_result()") \
+			and battle_source.contains("player_party_grid.visible = false") \
+			and battle_source.contains("opponent_stage_party_rail.visible = false"),
+		"spectator result overlay hides observed team rails"
 	)
 	_check(
 		battle_source.contains("if battle_finished:") \

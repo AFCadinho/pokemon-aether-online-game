@@ -9,6 +9,12 @@ var slot_sprites: Array[AnimatedSprite2D] = []
 var team_is_shown := false
 
 
+func _notification(what: int) -> void:
+	# This off-tree loader is owned by the preview, not by the scene tree.
+	if what == NOTIFICATION_PREDELETE and is_instance_valid(sprite_loader):
+		sprite_loader.free()
+
+
 func _ready() -> void:
 	_cache_slot_sprites()
 	# The battle controller can populate this layer immediately after mounting
@@ -79,6 +85,20 @@ func _show_pokemon_in_slot(sprite: AnimatedSprite2D, pokemon_data: Dictionary, s
 	sprite.frame = 0
 	sprite.scale = _get_preview_scale_for_frames(frames)
 	sprite.visible = true
+	sprite.play()
+	var request_key := "%s|%s|%s" % [species, side, str(_get_shiny_from_data(pokemon_data))]
+	sprite.set_meta("web_sprite_request", request_key)
+	_upgrade_web_sprite.call_deferred(sprite, request_key, species, side, _get_shiny_from_data(pokemon_data))
+
+
+func _upgrade_web_sprite(sprite: AnimatedSprite2D, request_key: String, species: String, side: String, is_shiny: bool) -> void:
+	var frames: SpriteFrames = await sprite_loader.call("request_web_sprite_frames", species, side, is_shiny)
+	if frames == null or not is_instance_valid(sprite) or str(sprite.get_meta("web_sprite_request", "")) != request_key:
+		return
+	sprite.sprite_frames = frames
+	sprite.animation = IDLE_ANIMATION
+	sprite.frame = 0
+	sprite.scale = _get_preview_scale_for_frames(frames)
 	sprite.play()
 
 

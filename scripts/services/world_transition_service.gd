@@ -4,7 +4,10 @@ class_name WorldTransitionServiceNode
 
 const TRANSITION_ACCESS_ENDPOINT := "/game/world/transitions/%s/access"
 const TRANSITION_ENTER_ENDPOINT := "/game/world/transitions/%s/enter"
+const WEB_TRANSITION_ACCESS_ENDPOINT := "/auth/web/world/transitions/%s/access"
+const WEB_TRANSITION_ENTER_ENDPOINT := "/auth/web/world/transitions/%s/enter"
 const AREA_ACCESS_ENDPOINT := "/game/world/areas/%s/access"
+const WEB_AREA_ACCESS_ENDPOINT := "/auth/web/world/areas/%s/access"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 const FACING_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 
@@ -26,7 +29,7 @@ func get_area_access(area_id: String, force_refresh := false) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response := await _request_json(
-		base_url + (AREA_ACCESS_ENDPOINT % normalized_area_id.uri_encode()),
+		base_url + (_area_access_endpoint() % normalized_area_id.uri_encode()),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -55,7 +58,7 @@ func get_transition_access(transition_id: String, force_refresh := false) -> Dic
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response := await _request_json(
-		base_url + (TRANSITION_ACCESS_ENDPOINT % normalized_transition_id.uri_encode()),
+		base_url + (_transition_access_endpoint() % normalized_transition_id.uri_encode()),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
@@ -82,7 +85,7 @@ func enter_transition(transition_id: String, facing_direction: String) -> Dictio
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response := await _request_json(
-		base_url + (TRANSITION_ENTER_ENDPOINT % normalized_transition_id.uri_encode()),
+		base_url + (_transition_enter_endpoint() % normalized_transition_id.uri_encode()),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify({"facingDirection": normalized_facing_direction})
@@ -110,6 +113,18 @@ func enter_transition(transition_id: String, facing_direction: String) -> Dictio
 func clear_cache() -> void:
 	transition_access_cache.clear()
 	area_access_cache.clear()
+
+
+func _transition_access_endpoint() -> String:
+	return WEB_TRANSITION_ACCESS_ENDPOINT if OS.has_feature("web") else TRANSITION_ACCESS_ENDPOINT
+
+
+func _area_access_endpoint() -> String:
+	return WEB_AREA_ACCESS_ENDPOINT if OS.has_feature("web") else AREA_ACCESS_ENDPOINT
+
+
+func _transition_enter_endpoint() -> String:
+	return WEB_TRANSITION_ENTER_ENDPOINT if OS.has_feature("web") else TRANSITION_ENTER_ENDPOINT
 
 
 func _request_json(

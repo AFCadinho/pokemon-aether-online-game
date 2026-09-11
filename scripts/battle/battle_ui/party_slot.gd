@@ -33,7 +33,7 @@ const VERY_LONG_NAME_FONT_SIZE := 11
 @onready var icon_status_badge: Label = %IconStatusBadge
 @onready var details_column: VBoxContainer = $MarginContainer/HBoxContainer/VBoxContainer
 @onready var name_row: HBoxContainer = $MarginContainer/HBoxContainer/VBoxContainer/NameRow
-@onready var shiny_badge: Label = $MarginContainer/HBoxContainer/VBoxContainer/NameRow/ShinyBadge
+@onready var shiny_badge: TextureRect = $MarginContainer/HBoxContainer/VBoxContainer/NameRow/ShinyBadge
 @onready var name_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/NameRow/NameLabel
 @onready var bottom_row: HBoxContainer = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer
 @onready var hp_bar: ProgressBar = $MarginContainer/HBoxContainer/VBoxContainer/BottomRowContainer/HPBar
@@ -83,8 +83,7 @@ func _apply_slot_layout() -> void:
 	details_column.custom_minimum_size = Vector2(76.0, 46.0)
 	details_column.add_theme_constant_override("separation", 2)
 	name_row.custom_minimum_size = Vector2(0.0, 23.0)
-	shiny_badge.custom_minimum_size = Vector2(10.0, 16.0)
-	shiny_badge.add_theme_font_size_override("font_size", 12)
+	shiny_badge.custom_minimum_size = Vector2(12.0, 12.0)
 	name_label.custom_minimum_size = Vector2(54.0, 21.0)
 	bottom_row.custom_minimum_size = Vector2(0.0, 18.0)
 	hp_bar.custom_minimum_size = Vector2(50.0, 18.0)
@@ -356,7 +355,7 @@ func set_empty() -> void:
 
 	name_label.text = ""
 	name_label.add_theme_font_size_override("font_size", _get_name_font_size(""))
-	shiny_badge.text = ""
+	shiny_badge.visible = false
 	shiny_badge.tooltip_text = ""
 	hp_bar.value = 0
 	pokemon_icon.texture = null
@@ -431,7 +430,7 @@ func _set_species_name(species: String, is_shiny: bool) -> void:
 		display_name = str(content_localization.call("display_name", "species", species, species))
 	name_label.text = display_name
 	name_label.add_theme_font_size_override("font_size", _get_name_font_size(display_name))
-	shiny_badge.text = "S" if is_shiny else ""
+	shiny_badge.visible = is_shiny
 	shiny_badge.tooltip_text = _t("ui.party.shiny") if is_shiny else ""
 
 
@@ -442,7 +441,7 @@ func _set_pokemon_name(species: String, nickname: String, is_shiny: bool) -> voi
 	var display_name := nickname.strip_edges()
 	name_label.text = display_name
 	name_label.add_theme_font_size_override("font_size", _get_name_font_size(display_name))
-	shiny_badge.text = "S" if is_shiny else ""
+	shiny_badge.visible = is_shiny
 	shiny_badge.tooltip_text = _t("ui.party.shiny") if is_shiny else ""
 
 func _get_name_font_size(species: String) -> int:

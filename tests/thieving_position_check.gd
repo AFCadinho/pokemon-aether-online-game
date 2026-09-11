@@ -80,6 +80,24 @@ func _run() -> void:
 	npc.call("_sync_thieving_prompt")
 	var prompt := npc.get_node_or_null("ThievingPromptButton") as Button
 	_check(prompt != null and prompt.visible, "The clickable Thieving icon appears behind an eligible target")
+	var settings := get_root().get_node("SettingsManager")
+	var original_binding: int = int(settings.input_bindings.get("pickpocket", KEY_T))
+	if prompt != null:
+		prompt.tooltip_text = "unchanged during visibility refresh"
+		npc.call("_sync_thieving_prompt")
+		_check(
+			prompt.tooltip_text == "unchanged during visibility refresh",
+			"Per-frame visibility refresh does not rebuild the translated tooltip"
+		)
+		settings.input_bindings["pickpocket"] = int(KEY_Y)
+		npc.call("_on_input_binding_changed", "pickpocket", KEY_Y)
+		_check(prompt.tooltip_text.contains("Y"), "Pickpocket hotkey changes refresh the tooltip")
+		settings.input_bindings["pickpocket"] = original_binding
+		npc.call("_on_input_binding_changed", "pickpocket", original_binding)
+		prompt.tooltip_text = "stale locale"
+		npc.call("_on_locale_changed", "en")
+		_check(prompt.tooltip_text != "stale locale", "Locale changes refresh the tooltip")
+		npc.set("npc_metadata_loaded", true)
 	var nameplate := npc.get_node_or_null("Nameplate") as Control
 	_check(
 		prompt != null

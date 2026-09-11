@@ -66,11 +66,11 @@ func _init() -> void:
 	service._schedule_reconnect_retry()
 	_check_equal(service.reconnect_timer, 0.0, "the first reconnect retry is immediate")
 	service._schedule_reconnect_retry()
-	_check_equal(service.reconnect_timer, 1.0, "the second reconnect retry uses a short delay")
+	_check_equal(service.reconnect_timer >= 0.8 and service.reconnect_timer <= 1.0, true, "the second retry uses bounded jitter")
 	service._schedule_reconnect_retry()
-	_check_equal(service.reconnect_timer, 3.0, "later reconnect retries use the bounded delay")
+	_check_equal(service.reconnect_timer >= 2.4 and service.reconnect_timer <= 3.0, true, "later retries use bounded jitter")
 	service._schedule_reconnect_retry()
-	_check_equal(service.reconnect_timer, 3.0, "reconnect retry delay remains bounded")
+	_check_equal(service.reconnect_timer >= 2.4 and service.reconnect_timer <= 3.0, true, "reconnect retry delay remains bounded")
 	_check_equal(
 		timer_decision_guard >= timer_control_start and timer_decision_guard < request_control_start,
 		true,
@@ -256,9 +256,11 @@ func _init() -> void:
 	_check_equal(
 		battle_source.contains("func _has_pvp_battle_update_event_gap(response: Dictionary) -> bool:") \
 			and battle_source.contains('PvpBattleRealtimeService.request_resync("A PvP render event gap was detected.")') \
-			and battle_source.contains('"pvp_snapshot_event_catchup"'),
+			and battle_source.contains('"pvp_snapshot_event_catchup"') \
+			and battle_source.contains("func _get_pvp_queue_sprite_context(source: String) -> String:") \
+			and battle_source.contains('source.begins_with("pvp_snapshot_")'),
 		true,
-		"mechanical event gaps fail closed and reconnect snapshots render the missing tail"
+		"mechanical event gaps fail closed and snapshot catch-up reconciles active sprites without a false render warning"
 	)
 	_check_equal(
 		realtime_source.contains('if message_type == "pvp.resync_required":') \
@@ -958,6 +960,12 @@ func _init() -> void:
 		),
 		false,
 		"human forced switch remains available to its action waiter"
+	)
+	_check_equal(
+		realtime_source.contains('if active_viewer_role == "spectator" and active_match_id.begins_with("ai:") and websocket.get_ready_state() == WebSocketPeer.STATE_OPEN:') \
+			and realtime_source.contains('websocket.send_text(JSON.stringify({"type": "leave"}))'),
+		true,
+		"leaving an AI live spectator stream releases its gateway lease immediately"
 	)
 
 	normal_terminal_service.free()

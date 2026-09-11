@@ -26,6 +26,13 @@ func _init() -> void:
 	_expect(world.contains("wild_battle_resume_pending = true")
 		and world.contains("if is_in_battle or wild_battle_resume_pending:"),
 		"A temporarily unreachable battle cannot be replaced by another battle")
+	_expect(world.contains('WildEncounterErrorRules.error_code(response) == "active_wild_battle_exists"')
+		and world.contains("var resumed := await _resume_saved_wild_battle({"),
+		"A duplicate wild encounter resumes the account-bound battle instead of showing an error")
+	_expect(world.contains("retry_after_expired_battle := true")
+		and world.contains("await start_triggered_wild_battle_for_area(")
+		and world.contains("forced_species_id,\n\t\t\t\t\t\tfalse"),
+		"A stale wild-battle binding is cleared and retried once in the same encounter attempt")
 	_expect(world.contains('active_battle_kind = "wild"')
 		and world.contains("battle_instance.resume_wild_battle_from_response("),
 		"A valid snapshot remounts the existing wild battle")
@@ -34,6 +41,14 @@ func _init() -> void:
 		"Wild resume restores the snapshot without replaying old animations")
 	_expect(battle.contains("await _finish_if_battle_ended({}, true)"),
 		"A terminal snapshot immediately enters normal battle settlement")
+	var run_handler_start := battle.find("func _try_run() -> void:")
+	var run_handler_end := battle.find("func _show_forfeit_confirm_dialog()", run_handler_start)
+	var run_handler := battle.substr(run_handler_start, run_handler_end - run_handler_start)
+	_expect(run_handler.contains('await _submit_player_choice_and_resolve("run", 1)')
+		and run_handler.contains('await _render_resolved_player_choice_response(response, [], false, true)')
+		and run_handler.contains('_add_battle_log_message(_t("battle.run.success"))')
+		and run_handler.contains('await _finish_if_battle_ended({"reason": "flee"})'),
+		"Wild Run resolves server-side, hides the forfeit win event and uses the safe-escape presentation")
 	quit(1 if failed else 0)
 
 

@@ -14,6 +14,7 @@ const GUILD_MEMBER_MESSAGE_ICON: Texture2D = preload("res://assets/ui/icons/guil
 const GUILD_MEMBER_RANK_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_rank.svg")
 const GUILD_MEMBER_BANK_RIGHTS_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_bank_rights.svg")
 const GUILD_MEMBER_REMOVE_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_remove.svg")
+const MORE_ACTIONS_ICON: Texture2D = preload("res://assets/ui/icons/more.svg")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const TrainerAvatarPreviewScript := preload("res://scripts/ui/trainer_avatar_preview.gd")
 const CREATION_COST := 100000
@@ -1420,7 +1421,8 @@ func _build_guild_header_travel_actions(guild: Dictionary, is_leader: bool) -> C
 	secondary_row.add_child(base_button)
 	var options := MenuButton.new()
 	options.name = "GuildOptionsMenuButton"
-	options.text = "⋯"
+	options.icon = MORE_ACTIONS_ICON
+	options.expand_icon = true
 	options.custom_minimum_size = Vector2(36, 36)
 	_set_localized_property(options, "tooltip_text", "ui.guild.options.tooltip")
 	_apply_button_style(options)
@@ -7656,6 +7658,9 @@ func _confirm_open_guild_join(guild: Dictionary) -> void:
 
 
 func _join_selected_guild(guild: Dictionary) -> void:
+	if OS.has_feature("web"):
+		_show_web_guild_download_dialog()
+		return
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
 		_set_browse_status(_t("ui.guild.error.service_unavailable"), true)
@@ -7682,6 +7687,9 @@ func _join_selected_guild(guild: Dictionary) -> void:
 
 
 func _apply_to_selected_guild(guild: Dictionary) -> void:
+	if OS.has_feature("web"):
+		_show_web_guild_download_dialog()
+		return
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
 		_set_browse_status(_t("ui.guild.error.service_unavailable"), true)
@@ -7734,8 +7742,12 @@ func _on_create_form_changed(_unused: Variant = null) -> void:
 
 
 func _on_create_pressed() -> void:
+	if OS.has_feature("web"):
+		_show_web_guild_download_dialog()
+		return
 	if is_creating_guild:
 		return
+
 	if not membership.is_empty():
 		_set_create_status(_t("ui.guild.error.already_member"), true)
 		return
@@ -7795,6 +7807,21 @@ func _on_create_pressed() -> void:
 	_set_member_status(_t("ui.guild.status.created", {
 		"guild": str(created_guild.get("name", guild_name)),
 	}), false)
+
+
+func _show_web_guild_download_dialog() -> void:
+	var dialog := ConfirmationDialog.new()
+	dialog.title = "Continue in the full client"
+	dialog.dialog_text = "You can browse guilds in the browser demo. Creating, joining or applying to a guild requires the downloadable client."
+	dialog.ok_button_text = "Download client"
+	dialog.cancel_button_text = "Not now"
+	dialog.confirmed.connect(func(): OS.shell_open("https://pokeaether.com/download"))
+	dialog.visibility_changed.connect(func():
+		if not dialog.visible:
+			dialog.queue_free()
+	)
+	add_child(dialog)
+	dialog.popup_centered(Vector2i(500, 200))
 
 
 func _refresh_from_server() -> void:

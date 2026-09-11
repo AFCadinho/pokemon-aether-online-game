@@ -4,6 +4,7 @@ extends DialogueNPC
 class_name TransitKeeperNPC
 
 const TransitMenuScript := preload("res://scripts/ui/transit_menu.gd")
+const AetherConfirmationDialogScene := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 
 @export var local_destination_id := ""
 
@@ -18,6 +19,9 @@ func _prefetches_dialogue_metadata_on_approach() -> bool:
 
 
 func interact_with_player(_player: Node2D) -> void:
+	if OS.has_feature("web"):
+		await _show_browser_demo_notice()
+		return
 	var network_result: Dictionary = await TransitService.load_network()
 	if not bool(network_result.get("success", false)):
 		await GameErrorDialogService.show_response(network_result, "backend.error.transit_unavailable")
@@ -60,3 +64,22 @@ func interact_with_player(_player: Node2D) -> void:
 	var apply_result: Dictionary = await world.call("apply_authorized_teleport_state", body.get("state", {}))
 	if not bool(apply_result.get("success", false)):
 		await GameErrorDialogService.show_response(apply_result, "backend.error.transit_unavailable")
+
+
+func _show_browser_demo_notice() -> void:
+	var dialog := AetherConfirmationDialogScene.instantiate() as AetherConfirmationDialog
+	if dialog == null:
+		return
+	get_tree().current_scene.add_child(dialog)
+	dialog.configure(
+		LocalizationManager.text("ui.transit.browser_demo.title"),
+		LocalizationManager.text("ui.transit.browser_demo.message"),
+		LocalizationManager.text("ui.transit.browser_demo.download"),
+		LocalizationManager.text("ui.transit.browser_demo.continue")
+	)
+	dialog.confirmed.connect(func():
+		OS.shell_open("https://pokeaether.com/download")
+		dialog.queue_free()
+	)
+	dialog.canceled.connect(dialog.queue_free)
+	dialog.popup_centered(Vector2i(560, 250))

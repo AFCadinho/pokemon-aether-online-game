@@ -74,6 +74,7 @@ func interact_with_player(_player: Node2D) -> void:
 	var destination_name := _destination_name_from_network(network)
 	_apply_activation_state(true)
 	if bool(body.get("newlyAttuned", false)):
+		SfxManager.play("aether_beacon_attuned")
 		get_tree().call_group(
 			"ui_overlay",
 			"add_system_message",

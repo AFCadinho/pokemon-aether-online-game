@@ -3,6 +3,7 @@ extends RefCounted
 class_name MountService
 
 const CATALOG_PATH := "res://data/mounts.json"
+const RIDER_FRAMES_CACHE_LIMIT := 128
 const FRAME_COLUMNS := 4
 const FRAME_ROWS := 4
 const DEFAULT_FRAME_SIZE := Vector2i(64, 64)
@@ -126,7 +127,9 @@ static func get_rider_frame_delta(mount_id: String, direction: String, frame_ind
 
 
 static func get_rider_frame_offset(mount_id: String, direction: String, frame_index: int) -> Vector2i:
-	var definition := get_mount_definition(mount_id)
+	# Read-only hot path: do not deep-copy the full catalog record every frame.
+	var normalized_id := normalize_mount_id(mount_id)
+	var definition: Dictionary = _get_mount_definitions().get(normalized_id, {})
 	var rider_offsets_value: Variant = definition.get("riderOffsets", {})
 	if not rider_offsets_value is Dictionary:
 		return Vector2i.ZERO
@@ -264,6 +267,8 @@ static func get_mounted_rider_frames(
 				base_frames.get_frame_duration(animation_name, frame_index)
 			)
 
+	while _rider_frames_cache.size() >= RIDER_FRAMES_CACHE_LIMIT:
+		_rider_frames_cache.erase(_rider_frames_cache.keys()[0])
 	_rider_frames_cache[cache_key] = transformed
 	return transformed
 
@@ -333,8 +338,9 @@ static func _transform_rider_frame(
 		Image.FORMAT_RGBA8
 	)
 	output.fill(Color.TRANSPARENT)
-	for source_y: int in range(source.get_height()):
-		for source_x: int in range(source.get_width()):
+	var used_rect := source.get_used_rect()
+	for source_y: int in range(used_rect.position.y, used_rect.end.y):
+		for source_x: int in range(used_rect.position.x, used_rect.end.x):
 			var target_x := source_x + offset.x
 			var target_y := source_y + offset.y
 			var source_color := source.get_pixel(source_x, source_y)

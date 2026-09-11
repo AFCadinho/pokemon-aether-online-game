@@ -127,6 +127,26 @@ func _check_market_runtime_translation() -> void:
 		"Market formats Battle Point prices"
 	)
 	_check(
+		overlay.call("_market_currency_spent_message", 570, "money")
+		== "₽570 is van je wallet afgeschreven.",
+		"Pokédollar purchases report the authoritative wallet deduction"
+	)
+	_check(
+		overlay.call("_market_currency_spent_message", 500, "aetherite")
+		== "500 Aetherite is van je wallet afgeschreven.",
+		"Aetherite purchases report the authoritative wallet deduction"
+	)
+	_check(
+		overlay.call("_market_currency_spent_message", 40, "battle_points")
+		== "40 BP is van je wallet afgeschreven.",
+		"Battle Point purchases report the authoritative wallet deduction"
+	)
+	_check(
+		overlay.call("_market_currency_received_message", 500, "money")
+		== "₽500 is aan je wallet toegevoegd.",
+		"Item Buyer sales report the authoritative wallet credit"
+	)
+	_check(
 		overlay.call("_market_category_label", "medicine") == "Medicijnen",
 		"Market category reuses localized Bag terminology"
 	)

@@ -1,5 +1,7 @@
 extends PanelContainer
 
+const ArenaCameraPolicy := preload("res://scripts/services/aether_clash_camera_policy.gd")
+
 signal closed
 
 const ExternalLinks = preload("res://scripts/core/external_links.gd")
@@ -42,6 +44,8 @@ const LOGOUT_CONFIRM_Z_INDEX := 2200
 @onready var battle_animations_check_box: CheckBox = $MarginContainer/VBoxContainer/BattleAnimationsCheckBox
 @onready var weather_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/WeatherEffectsCheckBox
 @onready var terrain_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/TerrainEffectsCheckBox
+var performance_details_check_box: CheckBox
+var performance_check_box: CheckBox
 var display_own_name_check_box: CheckBox
 var hide_other_players_check_box: CheckBox
 var language_label: Label
@@ -153,6 +157,8 @@ func _ready() -> void:
 	display_own_name_check_box.toggled.connect(_on_display_own_name_toggled)
 	hide_other_players_check_box.toggled.connect(_on_hide_other_players_toggled)
 	sprite_style_options_button.item_selected.connect(_on_sprite_style_selected)
+	performance_details_check_box.toggled.connect(_on_performance_details_toggled)
+	performance_check_box.toggled.connect(_on_performance_toggled)
 	fullscreen_check_box.toggled.connect(_on_fullscreen_toggled)
 	resolution_options_button.item_selected.connect(_on_resolution_selected)
 	world_pixel_scale_options_button.item_selected.connect(_on_world_pixel_scale_selected)
@@ -196,6 +202,12 @@ func open(context: String = "game") -> void:
 	_refresh_support_report_state()
 	visible = true
 	_focus_active_navigation_button()
+
+
+func _process(_delta: float) -> void:
+	if visible and world_pixel_scale_options_button != null:
+		if world_pixel_scale_options_button.disabled != ArenaCameraPolicy.is_locked(get_tree()):
+			_apply_world_pixel_scale_options_to_control()
 
 
 func show_impersonation_return_confirmation() -> void:
@@ -270,6 +282,8 @@ func _apply_settings_to_controls() -> void:
 		sprite_style_options_button.select(option_index)
 	_update_sprite_style_status_label("")
 
+	performance_details_check_box.button_pressed = SettingsManager.performance_details
+	performance_check_box.button_pressed = SettingsManager.show_performance
 	fullscreen_check_box.button_pressed = SettingsManager.fullscreen
 	_apply_resolution_options_to_control()
 	_apply_world_pixel_scale_options_to_control()
@@ -412,6 +426,25 @@ func _setup_tabs() -> void:
 	var sprite_style_row := _create_labeled_control_row(
 		sprite_style_label, sprite_style_options_button
 	)
+	performance_check_box = CheckBox.new()
+	performance_check_box.name = "PerformanceCheckBox"
+	performance_check_box.focus_mode = Control.FOCUS_ALL
+	var performance_row := _create_toggle_setting(performance_check_box, "ui.settings.show_performance")
+	var performance_hint := Label.new()
+	performance_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	performance_hint.add_theme_font_size_override("font_size", 12)
+	performance_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	_set_localized_text(performance_hint, "ui.settings.performance_hint")
+	performance_details_check_box = CheckBox.new()
+	performance_details_check_box.name = "PerformanceDetailsCheckBox"
+	var performance_details_row := _create_toggle_setting(
+		performance_details_check_box, "ui.settings.performance_details"
+	)
+	var performance_details_hint := Label.new()
+	performance_details_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	performance_details_hint.add_theme_font_size_override("font_size", 12)
+	performance_details_hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	_set_localized_text(performance_details_hint, "ui.settings.performance_details_hint")
 	var fullscreen_row := _create_toggle_setting(fullscreen_check_box, "ui.settings.fullscreen")
 	var resolution_row := _create_labeled_control_row(
 		resolution_label, resolution_options_button
@@ -432,6 +465,10 @@ func _setup_tabs() -> void:
 		resolution_row,
 		world_scale_row,
 		cursor_scale_row,
+		performance_row,
+		performance_hint,
+		performance_details_row,
+		performance_details_hint,
 	])
 	_wrap_settings_section(graphics_tab, "ui.settings.section.sprites", "ui.settings.section.sprites_subtitle", [
 		sprite_style_row,
@@ -442,6 +479,10 @@ func _setup_tabs() -> void:
 		resolution_row,
 		world_scale_row,
 		cursor_scale_row,
+		performance_row,
+		performance_hint,
+		performance_details_row,
+		performance_details_hint,
 	])
 	var audio_label := master_volume_slider.get_node("../../AudioLabel") as Label
 	var battle_music_label := battle_music_options_button.get_node("../BattleMusicLabel") as Label
@@ -1870,6 +1911,16 @@ func _on_sprite_style_selected(index: int) -> void:
 	_update_sprite_style_status_label("")
 
 
+func _on_performance_details_toggled(enabled: bool) -> void:
+	if not loading_controls:
+		SettingsManager.set_performance_details(enabled)
+
+
+func _on_performance_toggled(enabled: bool) -> void:
+	if not loading_controls:
+		SettingsManager.set_show_performance(enabled)
+
+
 func _on_fullscreen_toggled(enabled: bool) -> void:
 	resolution_options_button.disabled = enabled
 	if loading_controls:
@@ -1890,7 +1941,7 @@ func _on_resolution_selected(index: int) -> void:
 
 
 func _on_world_pixel_scale_selected(index: int) -> void:
-	if loading_controls:
+	if loading_controls or ArenaCameraPolicy.is_locked(get_tree()):
 		return
 
 	var scale_metadata: Variant = world_pixel_scale_options_button.get_item_metadata(index)
@@ -2786,6 +2837,14 @@ func _apply_world_pixel_scale_options_to_control() -> void:
 	var was_loading_controls := loading_controls
 	loading_controls = true
 	world_pixel_scale_options_button.clear()
+	var arena_locked := ArenaCameraPolicy.is_locked(get_tree())
+	world_pixel_scale_options_button.disabled = arena_locked
+	_set_localized_text(world_pixel_scale_hint_label,
+		"ui.settings.world_pixel_scale_arena_hint" if arena_locked else "ui.settings.world_pixel_scale_hint")
+	if arena_locked:
+		world_pixel_scale_options_button.add_item(LocalizationManager.text("ui.settings.world_pixel_scale_arena"))
+		loading_controls = was_loading_controls
+		return
 
 	var selected_index := 0
 	world_pixel_scale_options_button.add_item(

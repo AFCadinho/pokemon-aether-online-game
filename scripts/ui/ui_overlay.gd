@@ -6,6 +6,7 @@ const LOAN_RETURNS_DIALOG_SCRIPT := preload("res://scripts/ui/loan_returns_dialo
 const BORROWED_POKEMON_DIALOG_SCRIPT := preload("res://scripts/ui/borrowed_pokemon_dialog.gd")
 const LOAN_SUMMARY_TIME_SCRIPT := preload("res://scripts/ui/loan_summary_time.gd")
 const SYSTEM_NOTICE_BANNER_SCRIPT := preload("res://scripts/ui/system_notice_banner.gd")
+const ITEM_ICON_RESOLVER := preload("res://scripts/services/item_icon_resolver.gd")
 const AETHER_CLASH_ANNOUNCEMENT_FORMATTER := preload(
 	"res://scripts/ui/aether_clash_announcement_formatter.gd"
 )
@@ -142,6 +143,8 @@ const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team
 const PC_POKEMON_SLOT_BUTTON_SCRIPT := preload("res://scripts/ui/pc_pokemon_slot_button.gd")
 const PC_PARTY_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/party_hover_card.tscn")
 const POKEMON_GENDER_DISPLAY := preload("res://scripts/ui/pokemon_gender_display.gd")
+const POKEMON_GENDER_MALE_ICON: Texture2D = preload("res://assets/gender/male.png")
+const POKEMON_GENDER_FEMALE_ICON: Texture2D = preload("res://assets/gender/female.png")
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
 const HELD_ITEM_DROP_TARGET_BUTTON_SCRIPT := preload("res://scripts/ui/held_item_drop_target_button.gd")
 const ALPHA_TOOLS_ERROR_FEEDBACK := preload("res://scripts/services/alpha_tools_error_feedback.gd")
@@ -149,18 +152,24 @@ const GAMEPLAY_RESET_TITLE := "Reset / New Game"
 const GAMEPLAY_RESET_DESCRIPTION := "Return this trainer to first-login gameplay state"
 const GAMEPLAY_RESET_CONFIRM_TEXT := "This permanently resets your location, party, boxes, regular inventory, money, playtime and gameplay unlocks. Unclaimed mail attachments are permanently removed, and your other active sessions are signed out.\n\nYour account, roles, friends, mail history, PvP history, Aether Gems and paid items remain."
 # This matches the catalog team's natural setup height, including its six-slot
-# opponent preview. Keep it as the baseline when the custom PokéPaste fields
+# opponent preview, the separate 36px difficulty row plus its 8px gap, and
+# the catalog name search.
+# Keep it as the baseline when the custom PokéPaste fields
 # replace those catalog controls, so the following controls never shift.
-const AI_SPARRING_OPPONENT_STEP_MIN_HEIGHT := 310.0
+const AI_SPARRING_OPPONENT_STEP_MIN_HEIGHT := 385.0
 # The catalog, history, and research tabs should retain the Free Sparring
 # workspace height instead of making the complete PvP panel jump on tab change.
-const AI_SPARRING_TAB_MIN_HEIGHT := 520.0
+const AI_SPARRING_TAB_MIN_HEIGHT := 595.0
+const AI_SPARRING_TEAM_SEARCH_RESULT_LIMIT := 12
 const TOWN_MAP_POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
 const MOUNT_LOADOUT_PANEL_SCENE: PackedScene = preload("res://scenes/interface/mount_loadout_panel.tscn")
 const SKILLS_PANEL_SCENE: PackedScene = preload("res://scenes/interface/skills_panel.tscn")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const OVERWORLD_MOVE_ACTION_ICON := preload("res://assets/ui/icons/overworld_move_action.svg")
 const POKEMON_SUMMARY_COPY_ICON: Texture2D = preload("res://assets/ui/icons/clipboard_copy.svg")
+const POKEMON_SUMMARY_EDIT_ICON: Texture2D = preload("res://assets/ui/icons/edit.svg")
+const MORE_ACTIONS_ICON: Texture2D = preload("res://assets/ui/icons/more.svg")
+const HIDDEN_ABILITY_ICON: Texture2D = preload("res://assets/ui/icons/hidden_ability.svg")
 const CHAT_RESIZE_ICON: Texture2D = preload("res://assets/ui/chat_resize.svg")
 const GLOBAL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_exp_boost.svg")
 const GLOBAL_SKILL_EXP_BUFF_ICON: Texture2D = preload("res://assets/ui/global_skill_exp_boost.svg")
@@ -485,6 +494,7 @@ const SPECIAL_HOLDABLE_ITEM_IDS := {
 	"red-orb": true,
 }
 const BAG_ICON_ROOT := "res://assets/items/icons/"
+# Canonical normalized item icon key: BAG_ICON_ROOT + normalized + ".png".
 const REWARD_NOTIFICATION_STACK_SCRIPT := preload("res://scripts/ui/reward_notification_stack.gd")
 const BAG_INTERFACE_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
 const MARKET_INTERFACE_ICON: Texture2D = preload("res://assets/ui/market_shop.svg")
@@ -650,6 +660,7 @@ var donator_store_popup: DonatorStorePopup
 var friendlist_popup: FriendlistPopup
 var guild_popup: GuildPopup
 var aether_exchange_popup: AetherExchangePopup
+var aether_exchange_pokemon_hover_card: PartyHoverCard
 var guild_lobby_teleport_in_flight := false
 var player_interaction_coordinator: PlayerInteractionCoordinator
 var quest_journal_view
@@ -743,6 +754,7 @@ var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var dev_encounter_metadata: Dictionary = {}
 var dev_map_encounter_mode := false
 var collapsible_panels: Dictionary = {}
+var _collapsible_layout_dirty := true
 var chat_resize_button: Button
 var chat_input_dock: PanelContainer
 var chat_tabs_background: Panel
@@ -890,6 +902,8 @@ var pvp_training_room_team_input: TextEdit
 var pvp_training_room_team_note: Label
 var pvp_training_team_input: TextEdit
 var pvp_training_team_note: Label
+var pvp_training_ai_bot_row: HBoxContainer
+var pvp_training_ai_bot_select: OptionButton
 var pvp_training_ai_mode_row: HBoxContainer
 var pvp_training_ai_mode_select: OptionButton
 var pvp_training_ai_available_modes: Array[String] = []
@@ -902,7 +916,10 @@ var pvp_training_ai_archetype_row: HBoxContainer
 var pvp_training_ai_archetype_select: OptionButton
 var pvp_training_ai_catalog_archetypes: Array[String] = []
 var pvp_training_ai_team_row: HBoxContainer
-var pvp_training_ai_team_select: OptionButton
+var pvp_training_ai_team_search: LineEdit
+var pvp_training_ai_team_suggestions: PanelContainer
+var pvp_training_ai_team_suggestion_list: VBoxContainer
+var pvp_training_ai_requested_team_id := "random"
 var pvp_training_ai_catalog_entries: Array[Dictionary] = []
 var pvp_training_ai_tiers: Array[Dictionary] = []
 var pvp_training_ai_opponent_preview: VBoxContainer
@@ -913,7 +930,13 @@ var pvp_training_ai_catalog_loaded := false
 var pvp_training_ai_catalog_loading := false
 var pvp_training_ai_enabled := false
 var pvp_ai_sparring_start_button: Button
+var pvp_ai_sparring_allow_spectators: CheckBox
 var pvp_ai_sparring_tabs: TabContainer
+var pvp_ai_sparring_stats_list: VBoxContainer
+var pvp_ai_sparring_stats_status: Label
+var pvp_ai_sparring_stats_data: Dictionary = {}
+var pvp_ai_sparring_stats_loading := false
+var pvp_ai_sparring_trainer_portrait: TextureRect
 var pvp_ai_sparring_bot_versions: Dictionary = {}
 var pvp_ai_sparring_about_versions: Dictionary = {}
 var pvp_ai_sparring_about_loading := false
@@ -923,7 +946,10 @@ var pvp_ai_sparring_team_source_select: OptionButton
 var pvp_ai_sparring_party_preview: VBoxContainer
 var pvp_ai_sparring_party_preview_title: Label
 var pvp_ai_sparring_party_preview_grid: HBoxContainer
-var pvp_ai_sparring_catalog_team_select: OptionButton
+var pvp_ai_sparring_player_catalog_search: LineEdit
+var pvp_ai_sparring_player_catalog_suggestions: PanelContainer
+var pvp_ai_sparring_player_catalog_suggestion_list: VBoxContainer
+var pvp_ai_sparring_player_catalog_team_id := ""
 var pvp_ai_sparring_catalog_preview: VBoxContainer
 var pvp_ai_sparring_catalog_preview_title: Label
 var pvp_ai_sparring_catalog_preview_grid: HBoxContainer
@@ -942,6 +968,10 @@ var pvp_ai_sparring_catalog_export_button: Button
 var pvp_ai_sparring_catalog_selected_team_id := ""
 var pvp_ai_sparring_catalog_detail: Dictionary = {}
 var pvp_ai_sparring_catalog_detail_loading := false
+var pvp_ai_sparring_favorite_team_id := ""
+var pvp_ai_sparring_use_favorite_team_check: CheckButton
+var pvp_ai_sparring_checkbox_empty_icon: Texture2D
+var pvp_ai_sparring_checkbox_checked_icon: Texture2D
 var pvp_ai_sparring_hover_card: PartyHoverCard
 var pvp_ai_sparring_hover_generation := 0
 var pvp_ai_sparring_hover_team_cache: Dictionary = {}
@@ -1383,6 +1413,7 @@ var pokemon_summary_sprite: TextureRect
 var pokemon_summary_sprite_viewport: SubViewport
 var pokemon_summary_animated_sprite: AnimatedSprite2D
 var pokemon_summary_sprite_loader: Node = BATTLE_SPRITE_LOADER.new()
+var pokemon_summary_web_sprite_generation := 0
 var pokemon_summary_level_badge_panel: PanelContainer
 var pokemon_summary_level_badge_label: Label
 var pokemon_summary_ball_button: Button
@@ -1395,7 +1426,7 @@ var pokemon_summary_pending_ball_card_key := ""
 var pokemon_summary_type_icon_row: HBoxContainer
 var pokemon_summary_hidden_ability_badge: PanelContainer
 var pokemon_summary_title_label: Label
-var pokemon_summary_gender_label: Label
+var pokemon_summary_gender_label: TextureRect
 var pokemon_summary_id_label: Label
 var pokemon_summary_nickname_button: Button
 var pokemon_summary_copy_button: Button
@@ -1546,6 +1577,7 @@ var pokedex_sprite_panel: PanelContainer
 var pokedex_sprite_viewport: SubViewport
 var pokedex_animated_sprite: AnimatedSprite2D
 var pokedex_sprite_loader: Node = BATTLE_SPRITE_LOADER.new()
+var pokedex_web_sprite_generation := 0
 var pokedex_sprite_side := "front"
 var pokedex_header_stats_stack: VBoxContainer
 var pokedex_detail_stack: VBoxContainer
@@ -1625,14 +1657,81 @@ var reward_notification_stack: VBoxContainer
 var reward_notification_event_sequence := 0
 var global_buff_notification_tokens: Dictionary = {}
 var global_buff_activation_sound_pending := false
+var replay_library: Control
+var replay_return_to_history := false
+
+func _setup_replay_library() -> void:
+	replay_library = preload("res://scripts/ui/battle_replay_library.gd").new()
+	replay_library.name = "BattleReplayLibrary"
+	root_control.add_child(replay_library)
+	replay_library.set("team_strip_factory", Callable(self, "_create_pvp_history_team_strip"))
+	replay_library.connect("closed", func(): _deactivate_ui_panel(replay_library))
+	replay_library.connect("playback_requested", _open_battle_replay)
+	replay_library.connect("playback_failed", add_system_message)
+	var slot := PanelContainer.new()
+	slot.name = "BattleReplaysSlot"
+	slot.custom_minimum_size = Vector2(52, 52)
+	slot.add_theme_stylebox_override("panel", pvp_slot.get_theme_stylebox("panel"))
+	pvp_slot.get_parent().add_child(slot)
+	pvp_slot.get_parent().move_child(slot, pvp_slot.get_index() + 1)
+	var button := TextureButton.new()
+	button.name = "BattleReplaysButton"
+	button.focus_mode = Control.FOCUS_NONE
+	button.texture_normal = load("res://assets/ui/icons/battle_replays.svg")
+	button.ignore_texture_size = true
+	button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+	button.custom_minimum_size = Vector2(40, 40)
+	_set_localized_control_property(button, "tooltip_text", "ui.replays.title")
+	button.pressed.connect(_on_replay_library_pressed)
+	slot.add_child(button)
+	_setup_icon_slot_hover(slot, button)
+
+func _on_replay_library_pressed() -> void:
+	replay_return_to_history = false
+	replay_library.call("open_library")
+	_activate_ui_panel(replay_library)
+
+func _watch_history_replay(battle_id: String) -> void:
+	replay_return_to_history = true
+	replay_library.call("watch", battle_id)
+
+func _open_battle_replay(recording: Dictionary) -> void:
+	var world := GameState.get_world()
+	if world == null or not world.has_method("start_battle_replay"):
+		return
+	if not bool(world.call("start_battle_replay", recording, Callable(self, "_return_from_replay"))):
+		add_system_message(LocalizationManager.text("ui.replays.open_failed"))
+		return
+	replay_library.hide()
+	_deactivate_ui_panel(replay_library)
+	if replay_return_to_history and pvp_room_popup != null:
+		pvp_room_popup.hide()
+		_deactivate_ui_panel(pvp_room_popup)
+
+func _return_from_replay() -> void:
+	if replay_return_to_history and pvp_room_popup != null:
+		pvp_room_popup.show()
+		_activate_ui_panel(pvp_room_popup)
+	else:
+		replay_library.call("restore_library")
+		_activate_ui_panel(replay_library)
 
 # Called when the node enters the scene tree for the first time.
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		if is_instance_valid(pokemon_summary_sprite_loader):
+			pokemon_summary_sprite_loader.free()
+		if is_instance_valid(pokedex_sprite_loader):
+			pokedex_sprite_loader.free()
+
+
 func _ready() -> void:
 	add_to_group("ui_overlay")
 	layer = UI_OVERLAY_BASE_LAYER
 	root_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root_control.theme = _make_main_ui_tooltip_theme()
 	_setup_reward_notification_stack()
+	_setup_replay_library()
 	_setup_pvp_queue_ball_spin()
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
@@ -1658,6 +1757,8 @@ func _ready() -> void:
 	_setup_pokemon_summary_ev_allocate_popup()
 	_build_party_slots()
 	_setup_collapsible_panels()
+	root_control.resized.connect(_invalidate_collapsible_layout)
+	chat_tabs_panel.minimum_size_changed.connect(_invalidate_collapsible_layout)
 	if not root_control.resized.is_connected(_refresh_quest_tracker_layout):
 		root_control.resized.connect(_refresh_quest_tracker_layout)
 	_setup_chat_resize_button()
@@ -1684,12 +1785,10 @@ func _ready() -> void:
 	_setup_dev_tools_menu_surface()
 	_setup_staff_impersonation_tools()
 	_setup_item_dex_button()
-	_setup_item_dex_popup()
 	_setup_pokedex_button()
 	_setup_town_map_popup()
 	_setup_mount_loadout_panel()
 	_setup_skills_panel()
-	_setup_pokedex_popup()
 	_setup_wild_pokemon_popup()
 	_setup_pc_ui()
 	_apply_ui_z_index_policy()
@@ -1697,7 +1796,7 @@ func _ready() -> void:
 	_apply_mail_ui_styles()
 	_setup_socials_attention_badge()
 	if mail_notification_sound != null and AudioServer.get_bus_index(SettingsManager.NOTIFICATION_BUS) >= 0:
-		mail_notification_sound.bus = SettingsManager.NOTIFICATION_BUS
+		mail_notification_sound.bus = SettingsManager.get_audio_output_bus(SettingsManager.NOTIFICATION_BUS)
 	_setup_loan_return_request_attention()
 	_set_socials_attention("mail", false)
 	_refresh_location_label()
@@ -1728,6 +1827,8 @@ func _ready() -> void:
 		ChatRealtimeService.authorized_teleport_received.connect(_on_authorized_teleport_received)
 	if not ChatRealtimeService.session_invalid.is_connected(_on_chat_session_invalid):
 		ChatRealtimeService.session_invalid.connect(_on_chat_session_invalid)
+	if not PvpBattleRealtimeService.session_invalid.is_connected(_on_pvp_session_invalid):
+		PvpBattleRealtimeService.session_invalid.connect(_on_pvp_session_invalid)
 	if not ChatRealtimeService.translation_state_changed.is_connected(_on_chat_translation_state_changed):
 		ChatRealtimeService.translation_state_changed.connect(_on_chat_translation_state_changed)
 	if not ChatRealtimeService.translation_warning.is_connected(_on_chat_translation_warning):
@@ -2034,6 +2135,7 @@ func _refresh_pvp_localized_ui() -> void:
 	if not pvp_leaderboard_entries.is_empty():
 		_render_pvp_leaderboard(pvp_leaderboard_entries)
 	_render_pvp_history_matches(pvp_history_matches, pvp_history_user_id)
+	_render_ai_sparring_stats()
 	_refresh_ai_sparring_about()
 	_refresh_pvp_training_ai_mode_options()
 	_refresh_pvp_training_ai_team_source_options()
@@ -3050,7 +3152,8 @@ func _setup_pc_ui() -> void:
 	box_header.add_child(pc_box_tab_next_button)
 
 	pc_box_rename_button = Button.new()
-	pc_box_rename_button.text = "✎"
+	pc_box_rename_button.icon = POKEMON_SUMMARY_EDIT_ICON
+	pc_box_rename_button.expand_icon = true
 	pc_box_rename_button.custom_minimum_size = Vector2(30, 30)
 	pc_box_rename_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(pc_box_rename_button, "tooltip_text", "ui.storage.box.rename")
@@ -3688,6 +3791,7 @@ func _has_visible_priority_overlay_panel() -> bool:
 
 func _priority_overlay_panels() -> Array[Control]:
 	var panels: Array[Control] = [
+		replay_library,
 		global_buff_details_panel,
 		chat_settings_popup,
 		chat_context_popup,
@@ -6496,13 +6600,33 @@ func _setup_pvp_room_popup() -> void:
 	pvp_training_room_team_note.visible = false
 	pvp_room_form.add_child(pvp_training_room_team_note)
 
+	pvp_training_ai_bot_row = HBoxContainer.new()
+	pvp_training_ai_bot_row.add_theme_constant_override("separation", 8)
+	pvp_training_ai_bot_row.visible = false
+	pvp_room_form.add_child(pvp_training_ai_bot_row)
+	var bot_label := Label.new()
+	_set_localized_control_property(bot_label, "text", "ui.pvp.training.ai.mode_label")
+	bot_label.custom_minimum_size = Vector2(82, 36)
+	bot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	bot_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	pvp_training_ai_bot_row.add_child(bot_label)
+	pvp_training_ai_bot_select = OptionButton.new()
+	pvp_training_ai_bot_select.custom_minimum_size = Vector2(0, 36)
+	pvp_training_ai_bot_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_bot_select.fit_to_longest_item = false
+	pvp_training_ai_bot_select.clip_text = true
+	pvp_training_ai_bot_select.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	pvp_training_ai_bot_select.focus_mode = Control.FOCUS_NONE
+	pvp_training_ai_bot_select.item_selected.connect(_on_pvp_training_ai_bot_selected)
+	_apply_pvp_ranked_dropdown_style(pvp_training_ai_bot_select, true)
+	pvp_training_ai_bot_row.add_child(pvp_training_ai_bot_select)
 	pvp_training_ai_mode_row = HBoxContainer.new()
 	pvp_training_ai_mode_row.add_theme_constant_override("separation", 8)
 	pvp_training_ai_mode_row.visible = false
 	pvp_room_form.add_child(pvp_training_ai_mode_row)
 
 	var training_ai_mode_label := Label.new()
-	_set_localized_control_property(training_ai_mode_label, "text", "ui.pvp.training.ai.mode_label")
+	_set_localized_control_property(training_ai_mode_label, "text", "ui.pvp.training.ai.difficulty_label")
 	training_ai_mode_label.custom_minimum_size = Vector2(82, 36)
 	training_ai_mode_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	training_ai_mode_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
@@ -6597,17 +6721,41 @@ func _setup_pvp_room_popup() -> void:
 	training_ai_team_label.add_theme_color_override("font_color", Color("#c9beff"))
 	pvp_training_ai_team_row.add_child(training_ai_team_label)
 
-	pvp_training_ai_team_select = OptionButton.new()
-	pvp_training_ai_team_select.custom_minimum_size = Vector2(0, 36)
-	pvp_training_ai_team_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_training_ai_team_select.fit_to_longest_item = false
-	pvp_training_ai_team_select.clip_text = true
-	pvp_training_ai_team_select.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	pvp_training_ai_team_select.focus_mode = Control.FOCUS_NONE
-	_apply_pvp_ranked_dropdown_style(pvp_training_ai_team_select, true)
-	_apply_ai_sparring_team_selector_style(pvp_training_ai_team_select)
-	pvp_training_ai_team_select.item_selected.connect(_on_pvp_training_ai_team_selected)
-	pvp_training_ai_team_row.add_child(pvp_training_ai_team_select)
+	var training_ai_team_controls := VBoxContainer.new()
+	training_ai_team_controls.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	training_ai_team_controls.add_theme_constant_override("separation", 5)
+	pvp_training_ai_team_row.add_child(training_ai_team_controls)
+
+	pvp_training_ai_team_search = LineEdit.new()
+	pvp_training_ai_team_search.name = "AiSparringOpponentTeamSearch"
+	_set_localized_control_property(
+		pvp_training_ai_team_search,
+		"placeholder_text",
+		"ui.pvp.training.ai.team_search"
+	)
+	pvp_training_ai_team_search.custom_minimum_size = Vector2(0, 36)
+	pvp_training_ai_team_search.clear_button_enabled = true
+	pvp_training_ai_team_search.text_changed.connect(_on_pvp_training_ai_team_search_changed)
+	pvp_training_ai_team_search.focus_entered.connect(_show_pvp_training_ai_team_suggestions)
+	_apply_line_edit_style(pvp_training_ai_team_search)
+	training_ai_team_controls.add_child(pvp_training_ai_team_search)
+
+	pvp_training_ai_team_suggestions = PanelContainer.new()
+	pvp_training_ai_team_suggestions.name = "AiSparringOpponentTeamSuggestions"
+	pvp_training_ai_team_suggestions.top_level = true
+	pvp_training_ai_team_suggestions.z_index = UI_MODAL_Z_INDEX + 1
+	pvp_training_ai_team_suggestions.visible = false
+	pvp_training_ai_team_suggestions.add_theme_stylebox_override("panel", _make_pvp_ranked_dropdown_popup_style())
+	add_child(pvp_training_ai_team_suggestions)
+	var suggestion_scroll := ScrollContainer.new()
+	suggestion_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	suggestion_scroll.custom_minimum_size = Vector2(0, 196)
+	pvp_training_ai_team_suggestions.add_child(suggestion_scroll)
+	pvp_training_ai_team_suggestion_list = VBoxContainer.new()
+	pvp_training_ai_team_suggestion_list.name = "AiSparringOpponentTeamSuggestionList"
+	pvp_training_ai_team_suggestion_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_training_ai_team_suggestion_list.add_theme_constant_override("separation", 4)
+	suggestion_scroll.add_child(pvp_training_ai_team_suggestion_list)
 	_refresh_pvp_training_ai_team_options()
 
 	pvp_room_code_input = LineEdit.new()
@@ -7044,6 +7192,32 @@ func _setup_pvp_room_popup() -> void:
 	add_child(pvp_poll_request)
 
 
+func _make_ai_sparring_favorite_checkbox_icon(checked: bool) -> Texture2D:
+	var size := 18
+	var image := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	var fill := Color("#5c4a9d") if checked else Color("#10243a")
+	var border := Color("#f5df9a") if checked else Color("#62c9f3")
+	image.fill(Color("#00000000"))
+	for y in range(2, size - 2):
+		for x in range(2, size - 2):
+			image.set_pixel(x, y, fill)
+	for edge in range(1, size - 1):
+		for thickness in range(2):
+			image.set_pixel(edge, 1 + thickness, border)
+			image.set_pixel(edge, size - 2 - thickness, border)
+			image.set_pixel(1 + thickness, edge, border)
+			image.set_pixel(size - 2 - thickness, edge, border)
+	if checked:
+		var tick := Color("#fff3b0")
+		for offset in range(4):
+			image.set_pixel(4 + offset, 8 + offset, tick)
+			image.set_pixel(4 + offset, 9 + offset, tick)
+		for offset in range(6):
+			image.set_pixel(7 + offset, 11 - offset, tick)
+			image.set_pixel(7 + offset, 12 - offset, tick)
+	return ImageTexture.create_from_image(image)
+
+
 func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	var page := VBoxContainer.new()
 	page.name = "AI Sparring"
@@ -7080,6 +7254,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	portrait_frame.add_child(portrait_center)
 	var portrait := TextureRect.new()
 	portrait.name = "AiVeteranPortrait"
+	pvp_ai_sparring_trainer_portrait = portrait
 	portrait.custom_minimum_size = Vector2(72, 72)
 	portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -7202,6 +7377,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_training_team_input = TextEdit.new()
 	_set_localized_control_property(pvp_training_team_input, "placeholder_text", "ui.pvp.training.paste_placeholder")
 	pvp_training_team_input.custom_minimum_size = Vector2(0, 110)
+	pvp_training_team_input.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	pvp_training_team_input.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
 	team_layout.add_child(pvp_training_team_input)
 	_apply_text_edit_style(pvp_training_team_input)
@@ -7235,16 +7411,65 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai_sparring_party_preview.add_child(pvp_ai_sparring_party_preview_grid)
 	_refresh_ai_sparring_party_preview()
 
-	pvp_ai_sparring_catalog_team_select = OptionButton.new()
-	pvp_ai_sparring_catalog_team_select.name = "AiSparringPlayerCatalogTeamSelect"
-	pvp_ai_sparring_catalog_team_select.custom_minimum_size = Vector2(0, 34)
-	pvp_ai_sparring_catalog_team_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pvp_ai_sparring_catalog_team_select.fit_to_longest_item = false
-	pvp_ai_sparring_catalog_team_select.clip_text = true
-	pvp_ai_sparring_catalog_team_select.visible = false
-	pvp_ai_sparring_catalog_team_select.item_selected.connect(_on_ai_sparring_player_catalog_team_selected)
-	_apply_pvp_ranked_dropdown_style(pvp_ai_sparring_catalog_team_select, true)
-	team_layout.add_child(pvp_ai_sparring_catalog_team_select)
+	pvp_ai_sparring_player_catalog_search = LineEdit.new()
+	pvp_ai_sparring_player_catalog_search.name = "AiSparringPlayerCatalogTeamSearch"
+	_set_localized_control_property(
+		pvp_ai_sparring_player_catalog_search,
+		"placeholder_text",
+		"ui.pvp.training.ai.team_search"
+	)
+	pvp_ai_sparring_player_catalog_search.custom_minimum_size = Vector2(0, 34)
+	pvp_ai_sparring_player_catalog_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_player_catalog_search.clear_button_enabled = true
+	pvp_ai_sparring_player_catalog_search.visible = false
+	pvp_ai_sparring_player_catalog_search.text_changed.connect(_on_ai_sparring_player_catalog_search_changed)
+	pvp_ai_sparring_player_catalog_search.focus_entered.connect(_show_ai_sparring_player_catalog_suggestions)
+	_apply_line_edit_style(pvp_ai_sparring_player_catalog_search)
+	team_layout.add_child(pvp_ai_sparring_player_catalog_search)
+
+	pvp_ai_sparring_use_favorite_team_check = CheckButton.new()
+	pvp_ai_sparring_use_favorite_team_check.focus_mode = Control.FOCUS_NONE
+	pvp_ai_sparring_use_favorite_team_check.custom_minimum_size = Vector2(0, 26)
+	pvp_ai_sparring_use_favorite_team_check.add_theme_font_size_override("font_size", 11)
+	pvp_ai_sparring_use_favorite_team_check.add_theme_color_override("font_color", Color("#d6e8f7"))
+	pvp_ai_sparring_use_favorite_team_check.add_theme_color_override("font_hover_color", Color("#ffffff"))
+	pvp_ai_sparring_use_favorite_team_check.add_theme_color_override("font_pressed_color", Color("#fff1a8"))
+	pvp_ai_sparring_use_favorite_team_check.add_theme_constant_override("h_separation", 8)
+	pvp_ai_sparring_checkbox_empty_icon = _make_ai_sparring_favorite_checkbox_icon(false)
+	pvp_ai_sparring_checkbox_checked_icon = _make_ai_sparring_favorite_checkbox_icon(true)
+	pvp_ai_sparring_use_favorite_team_check.add_theme_icon_override(
+		"unchecked", pvp_ai_sparring_checkbox_empty_icon
+	)
+	pvp_ai_sparring_use_favorite_team_check.add_theme_icon_override(
+		"checked", pvp_ai_sparring_checkbox_checked_icon
+	)
+	pvp_ai_sparring_use_favorite_team_check.add_theme_icon_override(
+		"unchecked_disabled", pvp_ai_sparring_checkbox_empty_icon
+	)
+	pvp_ai_sparring_use_favorite_team_check.add_theme_icon_override(
+		"checked_disabled", pvp_ai_sparring_checkbox_checked_icon
+	)
+	pvp_ai_sparring_use_favorite_team_check.visible = false
+	pvp_ai_sparring_use_favorite_team_check.toggled.connect(_on_ai_sparring_use_favorite_team_toggled)
+	team_layout.add_child(pvp_ai_sparring_use_favorite_team_check)
+
+
+	pvp_ai_sparring_player_catalog_suggestions = PanelContainer.new()
+	pvp_ai_sparring_player_catalog_suggestions.name = "AiSparringPlayerCatalogTeamSuggestions"
+	pvp_ai_sparring_player_catalog_suggestions.top_level = true
+	pvp_ai_sparring_player_catalog_suggestions.z_index = UI_MODAL_Z_INDEX + 1
+	pvp_ai_sparring_player_catalog_suggestions.visible = false
+	pvp_ai_sparring_player_catalog_suggestions.add_theme_stylebox_override("panel", _make_pvp_ranked_dropdown_popup_style())
+	add_child(pvp_ai_sparring_player_catalog_suggestions)
+	var player_catalog_suggestion_scroll := ScrollContainer.new()
+	player_catalog_suggestion_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	player_catalog_suggestion_scroll.custom_minimum_size = Vector2(0, 196)
+	pvp_ai_sparring_player_catalog_suggestions.add_child(player_catalog_suggestion_scroll)
+	pvp_ai_sparring_player_catalog_suggestion_list = VBoxContainer.new()
+	pvp_ai_sparring_player_catalog_suggestion_list.name = "AiSparringPlayerCatalogTeamSuggestionList"
+	pvp_ai_sparring_player_catalog_suggestion_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_player_catalog_suggestion_list.add_theme_constant_override("separation", 4)
+	player_catalog_suggestion_scroll.add_child(pvp_ai_sparring_player_catalog_suggestion_list)
 
 	pvp_ai_sparring_catalog_preview = VBoxContainer.new()
 	pvp_ai_sparring_catalog_preview.name = "AiSparringPlayerCatalogPreview"
@@ -7287,7 +7512,7 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	opponent_step.add_theme_color_override("font_color", Color("#b9aaff"))
 	opponent_layout.add_child(opponent_step)
 
-	for row: Control in [pvp_training_ai_mode_row, pvp_training_ai_team_source_row, pvp_training_ai_archetype_row, pvp_training_ai_team_row, pvp_training_ai_custom_team_input, pvp_training_ai_custom_team_note]:
+	for row: Control in [pvp_training_ai_bot_row, pvp_training_ai_mode_row, pvp_training_ai_team_source_row, pvp_training_ai_archetype_row, pvp_training_ai_team_row, pvp_training_ai_custom_team_input, pvp_training_ai_custom_team_note]:
 		row.reparent(opponent_layout)
 		row.visible = row != pvp_training_ai_custom_team_input and row != pvp_training_ai_custom_team_note
 
@@ -7309,21 +7534,68 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_training_ai_opponent_preview.add_child(pvp_training_ai_opponent_preview_grid)
 	_refresh_pvp_training_ai_opponent_preview()
 
+	var action_card := PanelContainer.new()
+	action_card.name = "AiSparringActionCard"
+	action_card.add_theme_stylebox_override("panel", _make_panel_style(Color("#101829f2"), Color("#7968c799"), 10, 1))
+	practice_layout.add_child(action_card)
+	var action_margin := MarginContainer.new()
+	for edge: String in ["left", "right"]:
+		action_margin.add_theme_constant_override("margin_" + edge, 14)
+	for edge: String in ["top", "bottom"]:
+		action_margin.add_theme_constant_override("margin_" + edge, 10)
+	action_card.add_child(action_margin)
+	var action_layout := VBoxContainer.new()
+	action_layout.add_theme_constant_override("separation", 8)
+	action_margin.add_child(action_layout)
 	var action_step := Label.new()
 	action_step.name = "AiSparringReadyStep"
 	_set_localized_control_property(action_step, "text", "ui.pvp.ai_sparring.step.ready")
 	action_step.add_theme_font_size_override("font_size", 11)
 	action_step.add_theme_color_override("font_color", Color("#b9aaff"))
-	practice_layout.add_child(action_step)
+	action_layout.add_child(action_step)
+	var action_row := HBoxContainer.new()
+	action_row.name = "AiSparringActionRow"
+	action_row.add_theme_constant_override("separation", 14)
+	action_layout.add_child(action_row)
+	pvp_ai_sparring_allow_spectators = CheckBox.new()
+	pvp_ai_sparring_allow_spectators.name = "AiSparringAllowSpectators"
+	_set_localized_control_property(pvp_ai_sparring_allow_spectators, "text", "ui.pvp.ai_sparring.live.opt_in")
+	_set_localized_control_property(pvp_ai_sparring_allow_spectators, "tooltip_text", "ui.pvp.ai_sparring.live.opt_in_hint")
+	pvp_ai_sparring_allow_spectators.custom_minimum_size = Vector2(0, 46)
+	pvp_ai_sparring_allow_spectators.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_allow_spectators.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	pvp_ai_sparring_allow_spectators.add_theme_font_size_override("font_size", 13)
+	pvp_ai_sparring_allow_spectators.add_theme_constant_override("h_separation", 12)
+	for state: String in ["normal", "hover", "pressed", "hover_pressed", "disabled"]:
+		var selected := state in ["pressed", "hover_pressed"]
+		var hovered := state in ["hover", "hover_pressed"]
+		var fill := Color("#292346") if selected else Color("#0b1726")
+		var border := Color("#ac96ef") if selected else Color("#456688")
+		var style := _make_panel_style(fill.lightened(0.08) if hovered else fill, border, 7, 1)
+		style.content_margin_left = 12
+		style.content_margin_right = 12
+		pvp_ai_sparring_allow_spectators.add_theme_stylebox_override(state, style)
+		pvp_ai_sparring_allow_spectators.add_theme_color_override("font_" + ("color" if state == "normal" else state + "_color"), Color("#92a1b5") if state == "disabled" else Color("#f2efff"))
+	pvp_ai_sparring_allow_spectators.add_theme_stylebox_override("focus", _make_panel_style(Color.TRANSPARENT, Color("#f5df9a"), 7, 2))
+	for state: String in ["unchecked", "checked", "unchecked_disabled", "checked_disabled"]:
+		pvp_ai_sparring_allow_spectators.add_theme_icon_override(state, _make_ai_sparring_favorite_checkbox_icon(state.begins_with("checked")))
+	action_row.add_child(pvp_ai_sparring_allow_spectators)
 	pvp_ai_sparring_start_button = Button.new()
 	_set_localized_control_property(pvp_ai_sparring_start_button, "text", "ui.pvp.ai_sparring.start")
-	pvp_ai_sparring_start_button.custom_minimum_size = Vector2(0, 42)
-	pvp_ai_sparring_start_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_start_button.custom_minimum_size = Vector2(220, 46)
+	pvp_ai_sparring_start_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	pvp_ai_sparring_start_button.focus_mode = Control.FOCUS_NONE
 	pvp_ai_sparring_start_button.pressed.connect(_on_pvp_training_ai_start_pressed)
-	practice_layout.add_child(pvp_ai_sparring_start_button)
+	action_row.add_child(pvp_ai_sparring_start_button)
 
 	var catalog_page := _create_pvp_ranked_tab_page("Team Catalog", 14)
+	var live_page := _create_pvp_ranked_tab_page("Live Battles", 14)
+	live_page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.live.title")
+	pvp_ai_sparring_tabs.add_child(live_page)
+	var live_list := preload("res://scripts/ui/ai_sparring_live.gd").new()
+	live_list.watch_blocked = Callable(self, "_pvp_live_watch_blocked")
+	live_list.watch_requested.connect(_start_pvp_battle_from_response)
+	live_page.add_child(live_list)
 	catalog_page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.catalog")
 	pvp_ai_sparring_tabs.add_child(catalog_page)
 	var catalog_layout := VBoxContainer.new()
@@ -7496,10 +7768,11 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	pvp_ai_sparring_history_list.add_theme_constant_override("separation", 8)
 	history_scroll.add_child(pvp_ai_sparring_history_list)
 
-	var about_page := _create_pvp_ranked_tab_page("About the bots", 14)
+	var about_page := _create_pvp_ranked_tab_page("About", 14)
 	about_page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.about")
 	pvp_ai_sparring_tabs.add_child(about_page)
 	var about_scroll := ScrollContainer.new()
+	about_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	about_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	about_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	about_page.add_child(about_scroll)
@@ -7508,32 +7781,355 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 	about_layout.add_theme_constant_override("separation", 18)
 	about_scroll.add_child(about_layout)
 	for bot_id: String in ["ai4", "ai5"]:
+		var accent := Color("#87d5ec") if bot_id == "ai4" else Color("#efd080")
 		var card := PanelContainer.new()
-		card.add_theme_stylebox_override("panel", _make_panel_style(UI_SURFACE_INSET, Color("#8474c4"), 10, 1))
+		card.name = "AiSparringAboutCard_" + bot_id
+		card.add_theme_stylebox_override("panel", _make_panel_style(Color("#111c2e"), accent.darkened(0.4), 12, 1))
 		about_layout.add_child(card)
+		var margin := MarginContainer.new()
+		margin.name = "CardPadding"
+		for edge: String in ["left", "right", "top", "bottom"]:
+			margin.add_theme_constant_override("margin_" + edge, 18)
+		card.add_child(margin)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 20)
+		margin.add_child(row)
+		var bot_portrait_frame := PanelContainer.new()
+		bot_portrait_frame.custom_minimum_size = Vector2(96, 116)
+		bot_portrait_frame.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+		bot_portrait_frame.add_theme_stylebox_override("panel", _make_panel_style(Color("#091321"), accent.darkened(0.55), 10, 1))
+		row.add_child(bot_portrait_frame)
+		var bot_portrait_center := CenterContainer.new()
+		bot_portrait_frame.add_child(bot_portrait_center)
+		var bot_portrait := TextureRect.new()
+		bot_portrait.name = "AiSparringAboutPortrait_" + bot_id
+		bot_portrait.custom_minimum_size = Vector2(88, 104)
+		bot_portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		bot_portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		bot_portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		bot_portrait.texture = load("res://assets/sprites/trainer_cards/showdown/scientist-gen7.png" if bot_id == "ai4" else "res://assets/sprites/trainer_cards/showdown/veteran-gen7.png") as Texture2D
+		bot_portrait_center.add_child(bot_portrait)
 		var content := VBoxContainer.new()
+		content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		content.add_theme_constant_override("separation", 10)
-		card.add_child(content)
+		row.add_child(content)
 		var bot_title := Label.new()
+		bot_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		bot_title.add_theme_font_size_override("font_size", 22)
+		bot_title.add_theme_color_override("font_color", accent)
 		_set_localized_control_property(bot_title, "text", "ui.pvp.training.ai.mode_ai4" if bot_id == "ai4" else "ui.pvp.training.ai.mode_active")
 		content.add_child(bot_title)
-		var bot_version := Label.new()
-		bot_version.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		bot_version.name = "AiSparringVersion_" + bot_id
-		content.add_child(bot_version)
-		pvp_ai_sparring_about_versions[bot_id] = bot_version
-		var description := Label.new()
-		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		_set_localized_control_property(description, "text", "ui.pvp.ai_sparring.about.scholar" if bot_id == "ai4" else "ui.pvp.ai_sparring.about.grandmaster")
-		content.add_child(description)
+		var tagline := Label.new()
+		tagline.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		tagline.add_theme_color_override("font_color", Color("#c4cfdf"))
+		_set_localized_control_property(tagline, "text", "ui.pvp.ai_sparring.about.scholar_tagline" if bot_id == "ai4" else "ui.pvp.ai_sparring.about.grandmaster_tagline")
+		content.add_child(tagline)
+		var divider := HSeparator.new()
+		divider.modulate = Color(1, 1, 1, 0.3)
+		content.add_child(divider)
+		if bot_id == "ai4":
+			var scholar_description := Label.new()
+			scholar_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			scholar_description.add_theme_constant_override("line_spacing", 4)
+			_set_localized_control_property(scholar_description, "text", "ui.pvp.ai_sparring.about.scholar")
+			content.add_child(scholar_description)
+			var scholar_version := Label.new()
+			scholar_version.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			scholar_version.name = "AiSparringVersion_ai4"
+			scholar_version.add_theme_font_size_override("font_size", 13)
+			content.add_child(scholar_version)
+			pvp_ai_sparring_about_versions["ai4"] = scholar_version
+			continue
+		var grandmaster_description := Label.new()
+		grandmaster_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		grandmaster_description.add_theme_color_override("font_color", Color("#a8b8cc"))
+		_set_localized_control_property(grandmaster_description, "text", "ui.pvp.ai_sparring.about.grandmaster")
+		content.add_child(grandmaster_description)
+		var difficulty_list := VBoxContainer.new()
+		difficulty_list.name = "AiSparringDifficultyCards"
+		difficulty_list.add_theme_constant_override("separation", 12)
+		content.add_child(difficulty_list)
+		for mode_id: String in ["intermediate", "ai5", "elite", "nightmare"]:
+			var mode_accent := Color("#7fc8e8")
+			match mode_id:
+				"ai5": mode_accent = Color("#efd080")
+				"elite": mode_accent = Color("#f09a68")
+				"nightmare": mode_accent = Color("#b490f4")
+			var difficulty_card := PanelContainer.new()
+			difficulty_card.name = "AiSparringDifficultyCard_" + mode_id
+			difficulty_card.add_theme_stylebox_override("panel", _make_panel_style(Color("#0b1525"), mode_accent.darkened(0.45), 9, 1))
+			difficulty_list.add_child(difficulty_card)
+			var difficulty_margin := MarginContainer.new()
+			for edge: String in ["left", "right", "top", "bottom"]:
+				difficulty_margin.add_theme_constant_override("margin_" + edge, 14)
+			difficulty_card.add_child(difficulty_margin)
+			var difficulty_content := VBoxContainer.new()
+			difficulty_content.add_theme_constant_override("separation", 8)
+			difficulty_margin.add_child(difficulty_content)
+			var difficulty_header := HBoxContainer.new()
+			difficulty_header.add_theme_constant_override("separation", 12)
+			difficulty_content.add_child(difficulty_header)
+			var difficulty_mode: String = "active" if mode_id == "ai5" else mode_id
+			var difficulty_title := Label.new()
+			difficulty_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			difficulty_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			difficulty_title.add_theme_font_size_override("font_size", 19)
+			difficulty_title.add_theme_color_override("font_color", mode_accent)
+			_set_localized_control_property(difficulty_title, "text", "ui.pvp.training.ai.difficulty_" + difficulty_mode)
+			difficulty_header.add_child(difficulty_title)
+			var rank_badge := PanelContainer.new()
+			rank_badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			rank_badge.add_theme_stylebox_override("panel", _make_panel_style(mode_accent.darkened(0.72), mode_accent.darkened(0.25), 12, 1))
+			difficulty_header.add_child(rank_badge)
+			var rank_margin := MarginContainer.new()
+			rank_margin.add_theme_constant_override("margin_left", 9)
+			rank_margin.add_theme_constant_override("margin_right", 9)
+			rank_margin.add_theme_constant_override("margin_top", 4)
+			rank_margin.add_theme_constant_override("margin_bottom", 4)
+			rank_badge.add_child(rank_margin)
+			var rank_label := Label.new()
+			rank_label.add_theme_font_size_override("font_size", 12)
+			rank_label.add_theme_color_override("font_color", mode_accent.lightened(0.16))
+			_set_localized_control_property(rank_label, "text", "ui.pvp.ai_sparring.about.rank_" + mode_id)
+			rank_margin.add_child(rank_label)
+			if mode_id in ["intermediate", "ai5"]:
+				var recommendation := Label.new()
+				recommendation.name = "AiSparringRecommendation_" + mode_id
+				recommendation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				recommendation.add_theme_font_size_override("font_size", 13)
+				recommendation.add_theme_color_override("font_color", mode_accent.lightened(0.16))
+				_set_localized_control_property(
+					recommendation,
+					"text",
+					"ui.pvp.ai_sparring.about.recommendation_" + mode_id
+				)
+				difficulty_content.add_child(recommendation)
+			var difficulty_description := Label.new()
+			difficulty_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			difficulty_description.add_theme_constant_override("line_spacing", 3)
+			_set_localized_control_property(difficulty_description, "text", "ui.pvp.ai_sparring.about.difficulty_" + mode_id)
+			difficulty_content.add_child(difficulty_description)
+			var bot_version := Label.new()
+			bot_version.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			bot_version.name = "AiSparringVersion_" + mode_id
+			bot_version.add_theme_font_size_override("font_size", 13)
+			difficulty_content.add_child(bot_version)
+			pvp_ai_sparring_about_versions[mode_id] = bot_version
 	var about_note := Label.new()
+	about_note.add_theme_color_override("font_color", Color("#a8b8cc"))
+	about_note.add_theme_font_size_override("font_size", 13)
 	about_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_set_localized_control_property(about_note, "text", "ui.pvp.ai_sparring.about.note")
 	about_layout.add_child(about_note)
 	_refresh_ai_sparring_about()
 	pvp_ai_sparring_tabs.current_tab = 0
+	pvp_ai_sparring_tabs.add_child(_create_ai_sparring_stats_page())
 	return page
+
+
+func _create_ai_sparring_stats_page() -> MarginContainer:
+	var page := _create_pvp_ranked_tab_page("Statistics", 14)
+	page.set_meta("i18n_tab_key", "ui.pvp.ai_sparring.tab.statistics")
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 18)
+	page.add_child(layout)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 16)
+	layout.add_child(header)
+	pvp_ai_sparring_stats_status = Label.new()
+	pvp_ai_sparring_stats_status.add_theme_font_size_override("font_size", 16)
+	pvp_ai_sparring_stats_status.add_theme_color_override("font_color", Color("#c4cfdf"))
+	pvp_ai_sparring_stats_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pvp_ai_sparring_stats_status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(pvp_ai_sparring_stats_status)
+	var refresh := Button.new()
+	refresh.custom_minimum_size = Vector2(110, 38)
+	refresh.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_set_localized_control_property(refresh, "text", "ui.pvp.bans.refresh")
+	_apply_button_style(refresh)
+	refresh.pressed.connect(_load_ai_sparring_stats)
+	header.add_child(refresh)
+	var scope_note := Label.new()
+	scope_note.name = "AiSparringStatisticsScope"
+	scope_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	scope_note.add_theme_font_size_override("font_size", 14)
+	scope_note.add_theme_color_override("font_color", Color("#efd080"))
+	_set_localized_control_property(scope_note, "text", "ui.pvp.ai_sparring.stats.scope")
+	layout.add_child(scope_note)
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_child(scroll)
+	pvp_ai_sparring_stats_list = VBoxContainer.new()
+	pvp_ai_sparring_stats_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pvp_ai_sparring_stats_list.add_theme_constant_override("separation", 18)
+	scroll.add_child(pvp_ai_sparring_stats_list)
+	_render_ai_sparring_stats()
+	return page
+
+
+func _load_ai_sparring_stats() -> void:
+	if pvp_ai_sparring_stats_loading:
+		return
+	pvp_ai_sparring_stats_loading = true
+	pvp_ai_sparring_stats_data = {}
+	_render_ai_sparring_stats()
+	var request := _create_pvp_request_node()
+	pvp_ai_sparring_stats_data = await BattleApiClient.get_training_ai_statistics(request)
+	request.queue_free()
+	pvp_ai_sparring_stats_loading = false
+	_render_ai_sparring_stats()
+
+
+func _render_ai_sparring_stats() -> void:
+	if pvp_ai_sparring_stats_list == null:
+		return
+	for child: Node in pvp_ai_sparring_stats_list.get_children():
+		pvp_ai_sparring_stats_list.remove_child(child)
+		child.queue_free()
+	var status_key := "period" if bool(pvp_ai_sparring_stats_data.get("success", false)) else "unavailable"
+	if pvp_ai_sparring_stats_loading:
+		status_key = "loading"
+	pvp_ai_sparring_stats_status.text = LocalizationManager.text("ui.pvp.ai_sparring.stats." + status_key)
+	if status_key != "period":
+		return
+	var bots: Variant = pvp_ai_sparring_stats_data.get("bots", [])
+	if not bots is Array:
+		return
+	var older_versions := VBoxContainer.new()
+	older_versions.name = "AiSparringOlderStatistics"
+	older_versions.add_theme_constant_override("separation", 14)
+	older_versions.visible = false
+	for entry: Variant in bots:
+		if not entry is Dictionary or str(entry.get("bot", "")) not in ["ai4", "ai5"]:
+			continue
+		var is_ai5 := str(entry["bot"]) == "ai5"
+		var difficulty := str(entry.get("difficulty", "hard" if is_ai5 else "beginner"))
+		if difficulty not in (["intermediate", "hard", "elite", "nightmare"] if is_ai5 else ["beginner"]):
+			continue
+		if difficulty in ["intermediate", "elite"] and difficulty not in pvp_training_ai_available_modes and int(entry.get("completed", 0)) + int(entry.get("unconfirmed", 0)) == 0:
+			continue
+		var has_choice_rates := is_ai5 and difficulty == "hard"
+		var accent := Color("#efd080") if is_ai5 else Color("#87d5ec")
+		var panel := PanelContainer.new()
+		panel.name = "AiSparringStatsCard_" + str(entry["bot"]) + "_" + difficulty + "_" + str(entry.get("version", ""))
+		panel.add_theme_stylebox_override("panel", _make_panel_style(Color("#111c2e"), accent.darkened(0.4), 12, 1))
+		if has_choice_rates and str(entry.get("version", "")) in ["v1", "Hybrid v1"]:
+			older_versions.add_child(panel)
+		else:
+			pvp_ai_sparring_stats_list.add_child(panel)
+		var margin := MarginContainer.new()
+		margin.name = "CardPadding"
+		for edge: String in ["left", "right", "top", "bottom"]:
+			margin.add_theme_constant_override("margin_" + edge, 18)
+		panel.add_child(margin)
+		var content := VBoxContainer.new()
+		content.add_theme_constant_override("separation", 14)
+		margin.add_child(content)
+		var heading := HBoxContainer.new()
+		heading.add_theme_constant_override("separation", 16)
+		content.add_child(heading)
+		var portrait_frame := PanelContainer.new()
+		portrait_frame.custom_minimum_size = Vector2(64, 76)
+		portrait_frame.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		portrait_frame.add_theme_stylebox_override("panel", _make_panel_style(Color("#091321"), accent.darkened(0.55), 10, 1))
+		heading.add_child(portrait_frame)
+		var portrait := TextureRect.new()
+		portrait.name = "BotPortrait"
+		portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		portrait.texture = load("res://assets/sprites/trainer_cards/showdown/veteran-gen7.png" if is_ai5 else "res://assets/sprites/trainer_cards/showdown/scientist-gen7.png") as Texture2D
+		portrait_frame.add_child(portrait)
+		var titles := VBoxContainer.new()
+		titles.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		titles.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		titles.add_theme_constant_override("separation", 6)
+		heading.add_child(titles)
+		var title := Label.new()
+		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		title.add_theme_font_size_override("font_size", 22)
+		title.add_theme_color_override("font_color", accent)
+		title.text = LocalizationManager.text("ui.pvp.training.ai.mode_active" if is_ai5 else "ui.pvp.training.ai.mode_ai4")
+		var difficulty_mode: String = str({"beginner": "ai4", "hard": "active"}.get(difficulty, difficulty))
+		title.text += " — " + LocalizationManager.text("ui.pvp.training.ai.difficulty_" + str(difficulty_mode))
+		titles.add_child(title)
+		var version := Label.new()
+		version.text = str(entry.get("version", ""))
+		version.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		version.add_theme_font_size_override("font_size", 13)
+		version.add_theme_color_override("font_color", Color("#a8b8cc"))
+		titles.add_child(version)
+		var metrics := GridContainer.new()
+		metrics.name = "Metrics"
+		metrics.columns = 2
+		metrics.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		metrics.add_theme_constant_override("h_separation", 10)
+		metrics.add_theme_constant_override("v_separation", 10)
+		content.add_child(metrics)
+		metrics.resized.connect(func() -> void: _resize_ai_sparring_stats_grid(metrics))
+		for metric: String in ["completed", "unconfirmed", "winRate", "averageTurns", "nativeRate", "fallbackRate"]:
+			if not has_choice_rates and metric in ["nativeRate", "fallbackRate"]:
+				continue
+			var tile := PanelContainer.new()
+			tile.name = "Metric_" + metric
+			tile.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			tile.add_theme_stylebox_override("panel", _make_panel_style(Color("#091321"), Color("#263950"), 8, 1))
+			metrics.add_child(tile)
+			var tile_margin := MarginContainer.new()
+			for edge: String in ["left", "right", "top", "bottom"]:
+				tile_margin.add_theme_constant_override("margin_" + edge, 12)
+			tile.add_child(tile_margin)
+			var line := VBoxContainer.new()
+			line.add_theme_constant_override("separation", 6)
+			tile_margin.add_child(line)
+			var name_label := Label.new()
+			name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			name_label.text = LocalizationManager.text("ui.pvp.ai_sparring.stats." + metric)
+			name_label.add_theme_font_size_override("font_size", 13)
+			name_label.add_theme_color_override("font_color", Color("#a8b8cc"))
+			line.add_child(name_label)
+			var value_label := Label.new()
+			value_label.add_theme_font_size_override("font_size", 24)
+			value_label.add_theme_color_override("font_color", accent)
+			var value: Variant = entry.get(metric)
+			value_label.text = "—" if value == null else ("%.0f%%" % (float(value) * 100.0) if metric.ends_with("Rate") else "%.0f" % float(value))
+			line.add_child(value_label)
+		if not bool(entry.get("sufficient", false)):
+			var insufficient := Label.new()
+			insufficient.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			insufficient.text = LocalizationManager.text("ui.pvp.ai_sparring.stats.insufficient")
+			insufficient.add_theme_color_override("font_color", Color("#e6bf86"))
+			insufficient.add_theme_font_size_override("font_size", 13)
+			content.add_child(insufficient)
+	if older_versions.get_child_count() > 0:
+		var toggle := Button.new()
+		toggle.name = "AiSparringOlderStatisticsToggle"
+		toggle.toggle_mode = true
+		toggle.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		toggle.text = LocalizationManager.text("ui.pvp.ai_sparring.stats.show_older")
+		_apply_button_style(toggle)
+		toggle.toggled.connect(func(expanded: bool) -> void:
+			older_versions.visible = expanded
+			toggle.text = LocalizationManager.text("ui.pvp.ai_sparring.stats.hide_older" if expanded else "ui.pvp.ai_sparring.stats.show_older")
+		)
+		pvp_ai_sparring_stats_list.add_child(toggle)
+		pvp_ai_sparring_stats_list.add_child(older_versions)
+	else:
+		older_versions.free()
+	var note := Label.new()
+	note.add_theme_font_size_override("font_size", 13)
+	note.add_theme_constant_override("line_spacing", 4)
+	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	note.text = LocalizationManager.text("ui.pvp.ai_sparring.stats.note")
+	note.add_theme_color_override("font_color", Color("#a8b8cc"))
+	pvp_ai_sparring_stats_list.add_child(note)
+
+
+func _resize_ai_sparring_stats_grid(grid: GridContainer) -> void:
+	grid.columns = 3 if grid.size.x >= 660 and grid.get_child_count() != 4 else (2 if grid.size.x >= 380 else 1)
 
 
 func _setup_pvp_mode_menu() -> void:
@@ -7626,9 +8222,9 @@ func _setup_pvp_mode_menu() -> void:
 		"ui.pvp.mode.coming_soon"
 	)
 	pvp_mode_tournaments_button.disabled = true
-	pvp_mode_tournaments_button.modulate = Color(1, 1, 1, 0.58)
-	pvp_mode_tournaments_button.mouse_default_cursor_shape = Control.CURSOR_ARROW
-	_set_localized_control_property(pvp_mode_tournaments_button, "tooltip_text", "ui.pvp.mode.tournaments_soon")
+	pvp_mode_tournaments_button.modulate = Color(1, 1, 1, 0.82) if OS.has_feature("web") else Color(1, 1, 1, 0.58)
+	pvp_mode_tournaments_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if OS.has_feature("web") else Control.CURSOR_ARROW
+	_set_localized_control_property(pvp_mode_tournaments_button, "tooltip_text", "ui.pvp.mode.coming_soon")
 	pvp_mode_tournaments_button.pressed.connect(_on_pvp_mode_tournaments_pressed)
 	layout.add_child(pvp_mode_tournaments_button)
 
@@ -10659,6 +11255,8 @@ func _warm_up_pokedex() -> void:
 	pokedex_warmup_in_progress = false
 
 func _setup_item_dex_popup() -> void:
+	if item_dex_popup != null:
+		return
 	item_dex_popup = PanelContainer.new()
 	item_dex_popup.name = "ItemDexPopup"
 	item_dex_popup.visible = false
@@ -10939,6 +11537,8 @@ func _setup_item_dex_popup() -> void:
 func _position_item_dex_popup() -> void:
 	if item_dex_popup == null:
 		return
+	if get_viewport() == null:
+		return
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
 	var popup_size := Vector2(
 		min(ITEM_DEX_SIZE.x, max(viewport_size.x - 32.0, 360.0)),
@@ -10969,6 +11569,8 @@ func _make_item_dex_tooltip_theme() -> Theme:
 	return tooltip_theme
 
 func _setup_pokedex_popup() -> void:
+	if pokedex_popup != null:
+		return
 	pokedex_popup = PanelContainer.new()
 	pokedex_popup.name = "PokedexPopup"
 	pokedex_popup.visible = false
@@ -11627,7 +12229,8 @@ func _position_pokedex_popup() -> void:
 func _process(delta: float) -> void:
 	_refresh_aether_clash_arena_ui_mode_if_needed()
 	_refresh_ui_input_mouse_blocker()
-	_position_collapsible_buttons()
+	if _collapsible_layout_dirty:
+		_position_collapsible_buttons()
 	_refresh_pvp_queue_compact_panel(delta)
 	_refresh_pvp_queue_button_animation(delta)
 	_refresh_pvp_ranked_queue_availability(delta)
@@ -14114,6 +14717,7 @@ func _show_global_boost_activation_notification(buff: Dictionary, remaining_seco
 	var active_until := str(buff.get("activeUntil", "")).strip_edges()
 	if boost_id == "" or active_until == "":
 		return
+	add_system_message(_global_boost_activation_message(buff))
 	_show_event_notification(
 		"global-buff:%s:%s" % [boost_id, active_until],
 		str(buff.get("eventName", "")).strip_edges() if str(buff.get("eventName", "")).strip_edges() != "" else _localized_buff_name(buff),
@@ -14128,6 +14732,13 @@ func _show_global_boost_activation_notification(buff: Dictionary, remaining_seco
 		GLOBAL_BUFF_NOTIFICATION_DISPLAY_SECONDS
 	)
 	_queue_global_buff_activation_sound()
+
+
+func _global_boost_activation_message(buff: Dictionary) -> String:
+	return LocalizationManager.text(
+		"ui.buff.global_activated",
+		{"boost": _localized_buff_name(buff)}
+	)
 
 
 func _show_global_heal_activation_notification(message: Dictionary) -> void:
@@ -18764,14 +19375,25 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	_set_localized_control_property(pokemon_summary_hidden_ability_badge, "tooltip_text", "ui.pokemon_summary.hidden_ability")
 	pokemon_summary_hidden_ability_badge.add_theme_stylebox_override("panel", _make_panel_style(Color("#071c33f2"), Color("#8cecff"), 8, 1))
 	sprite_stage.add_child(pokemon_summary_hidden_ability_badge)
+	var ha_row := HBoxContainer.new()
+	ha_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	ha_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pokemon_summary_hidden_ability_badge.add_child(ha_row)
+	var ha_icon := TextureRect.new()
+	ha_icon.custom_minimum_size = Vector2(14, 14)
+	ha_icon.texture = HIDDEN_ABILITY_ICON
+	ha_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	ha_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	ha_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ha_row.add_child(ha_icon)
 	var ha_label := Label.new()
-	ha_label.text = "✦ HA"
+	ha_label.text = "HA"
 	ha_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ha_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	ha_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ha_label.add_theme_font_size_override("font_size", 10)
 	ha_label.add_theme_color_override("font_color", Color("#e9fbff"))
-	pokemon_summary_hidden_ability_badge.add_child(ha_label)
+	ha_row.add_child(ha_label)
 
 	pokemon_summary_level_badge_panel = PanelContainer.new()
 	pokemon_summary_level_badge_panel.custom_minimum_size = Vector2(54, 24)
@@ -18810,12 +19432,15 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	var title_row := HBoxContainer.new()
 	title_row.add_theme_constant_override("separation", 4)
 	identity_stack.add_child(title_row)
-	var shiny_label := Label.new()
-	shiny_label.text = "✦"
-	shiny_label.visible = false
-	shiny_label.add_theme_color_override("font_color", Color("#f4d36a"))
-	title_row.add_child(shiny_label)
-	nodes["shiny_label"] = shiny_label
+	var shiny_icon := TextureRect.new()
+	shiny_icon.visible = false
+	shiny_icon.custom_minimum_size = Vector2(16, 16)
+	shiny_icon.texture = GLOBAL_SHINY_BUFF_ICON
+	shiny_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	shiny_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	shiny_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title_row.add_child(shiny_icon)
+	nodes["shiny_icon"] = shiny_icon
 	var name_label := Label.new()
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_make_label_clip_width(name_label)
@@ -18823,8 +19448,16 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	name_label.add_theme_color_override("font_color", Color("#f4f7ff"))
 	title_row.add_child(name_label)
 	nodes["name_label"] = name_label
+	var gender_icon := _create_pokemon_summary_gender_icon()
+	title_row.add_child(gender_icon)
+	nodes["gender_icon"] = gender_icon
 	var gender_label := Label.new()
-	gender_label.add_theme_font_size_override("font_size", 14)
+	gender_label.custom_minimum_size = Vector2(16, 16)
+	gender_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	gender_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	gender_label.add_theme_font_size_override("font_size", 13)
+	gender_label.add_theme_color_override("font_color", Color("#f49ac2"))
+	gender_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_row.add_child(gender_label)
 	nodes["gender_label"] = gender_label
 	var id_label := Label.new()
@@ -19656,8 +20289,19 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	)
 	_set_localized_control_property(pokemon_summary_hidden_ability_badge, "tooltip_text", "ui.pokemon_summary.hidden_ability")
 
+	var hidden_ability_badge_row := HBoxContainer.new()
+	hidden_ability_badge_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	hidden_ability_badge_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pokemon_summary_hidden_ability_badge.add_child(hidden_ability_badge_row)
+	var hidden_ability_badge_icon := TextureRect.new()
+	hidden_ability_badge_icon.custom_minimum_size = Vector2(14, 14)
+	hidden_ability_badge_icon.texture = HIDDEN_ABILITY_ICON
+	hidden_ability_badge_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	hidden_ability_badge_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	hidden_ability_badge_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hidden_ability_badge_row.add_child(hidden_ability_badge_icon)
 	var hidden_ability_badge_label := Label.new()
-	hidden_ability_badge_label.text = "✦ HA"
+	hidden_ability_badge_label.text = "HA"
 	hidden_ability_badge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hidden_ability_badge_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	hidden_ability_badge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -19668,7 +20312,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	hidden_ability_badge_label.add_theme_constant_override("outline_size", 1)
 	hidden_ability_badge_label.add_theme_constant_override("shadow_offset_x", 1)
 	hidden_ability_badge_label.add_theme_constant_override("shadow_offset_y", 1)
-	pokemon_summary_hidden_ability_badge.add_child(hidden_ability_badge_label)
+	hidden_ability_badge_row.add_child(hidden_ability_badge_label)
 	pokemon_summary_hidden_ability_badge.visible = false
 	sprite_frame.add_child(pokemon_summary_hidden_ability_badge)
 
@@ -19750,18 +20394,12 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_title_label.add_theme_constant_override("shadow_offset_y", 1)
 	title_row.add_child(pokemon_summary_title_label)
 
-	pokemon_summary_gender_label = Label.new()
-	pokemon_summary_gender_label.visible = false
-	pokemon_summary_gender_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	pokemon_summary_gender_label.mouse_filter = Control.MOUSE_FILTER_PASS
-	pokemon_summary_gender_label.add_theme_font_size_override("font_size", 15)
-	pokemon_summary_gender_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
-	pokemon_summary_gender_label.add_theme_constant_override("shadow_offset_x", 1)
-	pokemon_summary_gender_label.add_theme_constant_override("shadow_offset_y", 1)
+	pokemon_summary_gender_label = _create_pokemon_summary_gender_icon()
 	title_row.add_child(pokemon_summary_gender_label)
 
 	pokemon_summary_nickname_button = Button.new()
-	pokemon_summary_nickname_button.text = "✎"
+	pokemon_summary_nickname_button.icon = POKEMON_SUMMARY_EDIT_ICON
+	pokemon_summary_nickname_button.expand_icon = true
 	pokemon_summary_nickname_button.custom_minimum_size = Vector2(20, 20)
 	pokemon_summary_nickname_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	pokemon_summary_nickname_button.focus_mode = Control.FOCUS_NONE
@@ -20284,15 +20922,12 @@ func _create_pokemon_summary_shiny_badge() -> PanelContainer:
 	badge_padding.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	badge.add_child(badge_padding)
 
-	pokemon_summary_shiny_badge_label = Label.new()
-	pokemon_summary_shiny_badge_label.text = "*"
-	pokemon_summary_shiny_badge_label.add_theme_font_size_override("font_size", 13)
-	pokemon_summary_shiny_badge_label.add_theme_color_override("font_color", Color("#f4d36a"))
-	pokemon_summary_shiny_badge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	pokemon_summary_shiny_badge_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	pokemon_summary_shiny_badge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_make_label_clip_width(pokemon_summary_shiny_badge_label)
-	badge_padding.add_child(pokemon_summary_shiny_badge_label)
+	var shiny_icon := TextureRect.new()
+	shiny_icon.texture = GLOBAL_SHINY_BUFF_ICON
+	shiny_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	shiny_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	shiny_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge_padding.add_child(shiny_icon)
 	return badge
 
 func _add_pokemon_summary_tab_buttons(tab_column: HBoxContainer, card_key: String) -> void:
@@ -21432,10 +22067,18 @@ func _setup_aether_exchange_popup() -> void:
 	aether_exchange_popup.closed.connect(_hide_aether_exchange)
 	aether_exchange_popup.wallet_changed.connect(_on_aether_exchange_wallet_changed)
 	aether_exchange_popup.pokemon_summary_requested.connect(_on_aether_exchange_pokemon_summary_requested)
+	aether_exchange_popup.pokemon_hover_requested.connect(_on_aether_exchange_pokemon_hover_requested)
+	aether_exchange_popup.pokemon_hover_ended.connect(_hide_aether_exchange_pokemon_hover)
+	aether_exchange_pokemon_hover_card = PC_PARTY_HOVER_CARD_SCENE.instantiate() as PartyHoverCard
+	aether_exchange_pokemon_hover_card.name = "AetherExchangePokemonHoverCard"
+	aether_exchange_pokemon_hover_card.z_index = UI_DRAG_Z_INDEX - 1
+	aether_exchange_pokemon_hover_card.set_show_exchange_details(true)
+	root_control.add_child(aether_exchange_pokemon_hover_card)
 
 func _hide_aether_exchange() -> void:
 	if aether_exchange_popup == null:
 		return
+	_hide_aether_exchange_pokemon_hover()
 	aether_exchange_popup.visible = false
 	_deactivate_ui_panel(aether_exchange_popup)
 
@@ -21443,7 +22086,39 @@ func _on_aether_exchange_wallet_changed() -> void:
 	refresh_money_display()
 
 func _on_aether_exchange_pokemon_summary_requested(pokemon_payload: Dictionary) -> void:
+	_hide_aether_exchange_pokemon_hover()
 	_open_readonly_pokemon_summary(pokemon_payload)
+
+func _on_aether_exchange_pokemon_hover_requested(pokemon_payload: Dictionary, source_rect: Rect2) -> void:
+	_hide_aether_exchange_pokemon_hover()
+	if aether_exchange_pokemon_hover_card == null or pokemon_payload.is_empty() or root_control == null:
+		return
+	aether_exchange_pokemon_hover_card.show_for_pokemon(pokemon_payload)
+	_position_aether_exchange_pokemon_hover_card(source_rect)
+	if is_inside_tree():
+		call_deferred("_deferred_position_aether_exchange_pokemon_hover", source_rect)
+
+func _deferred_position_aether_exchange_pokemon_hover(source_rect: Rect2) -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+	await tree.process_frame
+	await tree.process_frame
+	if aether_exchange_pokemon_hover_card == null or not aether_exchange_pokemon_hover_card.visible:
+		return
+	_position_aether_exchange_pokemon_hover_card(source_rect)
+
+func _position_aether_exchange_pokemon_hover_card(source_rect: Rect2) -> void:
+	if aether_exchange_pokemon_hover_card == null or root_control == null:
+		return
+	aether_exchange_pokemon_hover_card.position_beside_rect_within(
+		source_rect,
+		root_control.get_global_rect(),
+	)
+
+func _hide_aether_exchange_pokemon_hover() -> void:
+	if aether_exchange_pokemon_hover_card != null:
+		aether_exchange_pokemon_hover_card.hide_card()
 
 func _setup_shiny_tracker_popup() -> void:
 	shiny_tracker_popup = SHINY_TRACKER_POPUP_SCENE.instantiate() as ShinyTrackerPopup
@@ -22282,16 +22957,45 @@ func _on_market_buy_pressed() -> void:
 		{"quantity": transacted_quantity, "item": item_name},
 	))
 	if player_is_selling:
+		var received_amount := maxi(int(transaction.get("totalPrice", 0)), 0)
+		var received_currency := str(transaction.get("currency", "money"))
+		if received_amount > 0:
+			add_system_message(_market_currency_received_message(
+				received_amount,
+				received_currency
+			))
 		add_currency_reward_notification(
-			str(transaction.get("currency", "money")),
-			maxi(int(transaction.get("totalPrice", 0)), 0)
+			received_currency,
+			received_amount
 		)
+		SfxManager.play("npc_shop_purchase")
 		_update_market_sell_items_from_inventory(inventory_value)
 	else:
+		var paid_amount := maxi(int(transaction.get("totalPrice", 0)), 0)
+		if paid_amount > 0:
+			add_system_message(_market_currency_spent_message(
+				paid_amount,
+				str(transaction.get("currency", "money"))
+			))
 		add_item_reward_notification(item_id, transacted_quantity)
+		SfxManager.play("npc_shop_purchase")
 		if bool(market_selected_item.get("accountUnique", false)):
 			_mark_market_item_owned(item_id)
 	_refresh_market_purchase_state()
+
+
+func _market_currency_spent_message(amount: int, currency: String) -> String:
+	return LocalizationManager.text(
+		"ui.market.message.wallet_debited",
+		{"amount": _format_market_currency_amount(maxi(amount, 0), currency)}
+	)
+
+
+func _market_currency_received_message(amount: int, currency: String) -> String:
+	return LocalizationManager.text(
+		"ui.market.message.wallet_credited",
+		{"amount": _format_market_currency_amount(maxi(amount, 0), currency)}
+	)
 
 
 func _market_item_max_purchase_quantity(item: Dictionary) -> int:
@@ -23840,10 +24544,13 @@ func _on_bag_item_use_confirm_pressed() -> void:
 	_refresh_open_pokemon_summary_cards()
 	_refresh_player_status_card()
 	var reward: Dictionary = _staff_dictionary_from_variant(result.get("reward", {}))
+	var restored_hp := _item_effect_restored_hp(reward)
 	await _present_item_trade_evolution(reward)
 	_add_bag_item_use_success_message(item_id, reward)
 	_notify_progression_reward(reward)
 	_hide_bag_item_use_popup()
+	if restored_hp > 0:
+		SfxManager.play("pokemon_item_heal")
 
 func _set_bag_item_use_status(message: String, is_error: bool) -> void:
 	if bag_item_use_status_label == null:
@@ -24121,67 +24828,16 @@ func _bag_gameplay_definition_for_item_id(item_id: String) -> Dictionary:
 	return {}
 
 func _load_item_icon(item_id: String, machine_kind: String = "", machine_move_type: String = "") -> Texture2D:
-	if item_id == "escape-rope-action":
-		item_id = "escape-rope"
-	item_id = _canonical_display_item_id(item_id)
-	var cosmetic_icon := CharacterAppearanceService.get_cosmetic_item_icon(
+	return ITEM_ICON_RESOLVER.load_icon(
 		item_id,
-		_bag_item_icon_gender(item_id)
+		machine_kind,
+		machine_move_type,
+		_bag_item_icon_gender(item_id),
 	)
-	if cosmetic_icon != null:
-		return cosmetic_icon
-	var mount_id := MountService.get_mount_id_for_unlock_item(item_id)
-	if mount_id != "":
-		var mount_icon := MountService.get_mount_icon_texture(mount_id)
-		if mount_icon != null:
-			return mount_icon
-	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
-	var candidates: Array[String] = [
-		BAG_ICON_ROOT + "field_move_charms/" + normalized + ".png",
-	]
-	if normalized == "POKEDEX":
-		candidates.append("res://assets/ui/pokedex.svg")
-	var machine_icon_path := _machine_item_icon_path(item_id, machine_kind, machine_move_type)
-	if machine_icon_path != "":
-		candidates.append(machine_icon_path)
-	candidates.append_array([
-		BAG_ICON_ROOT + normalized + ".png",
-		BAG_ICON_ROOT + item_id.strip_edges() + ".png",
-		BAG_ICON_ROOT + "000.png",
-	])
-	for path: String in candidates:
-		if ResourceLoader.exists(path):
-			return load(path) as Texture2D
-	return null
 
-func _machine_item_icon_path(item_id: String, machine_kind: String, machine_move_type: String) -> String:
-	var resolved_kind := machine_kind.strip_edges().to_lower()
-	var resolved_move_type := machine_move_type.strip_edges().to_upper()
-	var normalized_item_id := _normalize_item_id(item_id)
-	if resolved_kind == "" or resolved_move_type == "":
-		for inventory_item: Dictionary in bag_inventory_items:
-			if _normalize_item_id(str(inventory_item.get("id", ""))) != normalized_item_id:
-				continue
-			resolved_kind = str(inventory_item.get("machineKind", "")).strip_edges().to_lower()
-			resolved_move_type = str(inventory_item.get("machineMoveType", "")).strip_edges().to_upper()
-			break
-	if resolved_kind == "" or resolved_move_type == "":
-		var inferred_kind := ""
-		if normalized_item_id.begins_with("tm-"):
-			inferred_kind = "tm"
-		elif normalized_item_id.begins_with("hm-"):
-			inferred_kind = "hm"
-		if inferred_kind != "":
-			if resolved_kind == "":
-				resolved_kind = inferred_kind
-			if resolved_move_type == "":
-				resolved_move_type = _get_summary_move_type(
-					normalized_item_id.trim_prefix("%s-" % inferred_kind)
-				).strip_edges().to_upper()
-	if resolved_kind not in ["tm", "hm"] or resolved_move_type == "":
-		return ""
-	var icon_prefix := "machine_tr_" if resolved_kind == "hm" else "machine_"
-	return BAG_ICON_ROOT + icon_prefix + resolved_move_type + ".png"
+
+func _machine_item_icon_path(item_id: String, machine_kind: String = "", machine_move_type: String = "") -> String:
+	return ITEM_ICON_RESOLVER.machine_icon_path(item_id, machine_kind, machine_move_type)
 
 func _ellipsize_text(value: String, max_length: int) -> String:
 	if value.length() <= max_length:
@@ -24681,7 +25337,7 @@ func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, m
 		"type_icon_row": pokemon_summary_type_icon_row,
 		"hidden_ability_badge": pokemon_summary_hidden_ability_badge,
 		"title_label": pokemon_summary_title_label,
-		"gender_label": pokemon_summary_gender_label if mode == "interactive" else null,
+		"gender_icon": pokemon_summary_gender_label if mode == "interactive" else null,
 		"id_label": pokemon_summary_id_label,
 		"nickname_button": pokemon_summary_nickname_button if mode == "interactive" else null,
 		"copy_button": pokemon_summary_copy_button if mode == "interactive" else null,
@@ -24739,7 +25395,7 @@ func _apply_pokemon_summary_card_context(card_key: String) -> bool:
 	pokemon_summary_type_icon_row = context.get("type_icon_row") as HBoxContainer
 	pokemon_summary_hidden_ability_badge = context.get("hidden_ability_badge") as PanelContainer
 	pokemon_summary_title_label = context.get("title_label") as Label
-	pokemon_summary_gender_label = context.get("gender_label") as Label
+	pokemon_summary_gender_label = context.get("gender_icon") as TextureRect
 	pokemon_summary_id_label = context.get("id_label") as Label
 	pokemon_summary_nickname_button = context.get("nickname_button") as Button
 	pokemon_summary_copy_button = context.get("copy_button") as Button
@@ -24931,7 +25587,7 @@ func _refresh_pokemon_summary() -> void:
 		if nickname != ""
 		else localized_species_name
 	)
-	_apply_pokemon_summary_gender_label(pokemon_summary_gender_label, pokemon.gender)
+	_apply_pokemon_summary_gender_icon(pokemon_summary_gender_label, pokemon.gender)
 	var summary_id: String = str(pokemon.owned_pokemon_id) if pokemon.owned_pokemon_id > 0 else ""
 	if summary_id == "":
 		summary_id = pokemon.instance_id.strip_edges()
@@ -24951,8 +25607,6 @@ func _refresh_pokemon_summary() -> void:
 	_fit_pokemon_summary_title_label()
 	if pokemon_summary_hidden_ability_badge != null:
 		pokemon_summary_hidden_ability_badge.visible = pokemon.hidden_ability
-	if pokemon_summary_shiny_badge_label != null:
-		pokemon_summary_shiny_badge_label.text = "*"
 	pokemon_summary_trainer_label.text = _pokemon_summary_trainer_and_loan_text(pokemon)
 	var level_text := LocalizationManager.text("ui.pokemon_summary.level", {"level": max(pokemon.level, 1)})
 	pokemon_summary_meta_label.text = level_text
@@ -25007,13 +25661,17 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	var name_label := nodes.get("name_label") as Label
 	name_label.text = display_name
 	name_label.tooltip_text = localized_species_name if display_name != localized_species_name else display_name
+	var gender_icon := nodes.get("gender_icon") as TextureRect
+	_apply_pokemon_summary_gender_icon(gender_icon, pokemon.gender)
 	var gender_label := nodes.get("gender_label") as Label
-	gender_label.text = "♂" if pokemon.gender == "male" else ("♀" if pokemon.gender == "female" else "")
-	gender_label.add_theme_color_override("font_color", Color("#62d7ff") if pokemon.gender == "male" else Color("#ff82ba"))
+	if gender_label != null:
+		var normalized_gender := str(pokemon.gender).strip_edges().to_lower()
+		gender_label.text = "♂" if normalized_gender in ["male", "m", "man"] else "♀"
+		gender_label.visible = normalized_gender not in ["", "genderless", "none", "unknown"]
 	var id_label := nodes.get("id_label") as Label
 	_set_readonly_summary_dex_number(id_label, pokemon)
-	var shiny_label := nodes.get("shiny_label") as Label
-	shiny_label.visible = pokemon.shiny
+	var shiny_icon := nodes.get("shiny_icon") as TextureRect
+	shiny_icon.visible = pokemon.shiny
 	var trainer_label := nodes.get("trainer_label") as Label
 	var trainer_text := _pokemon_summary_trainer_and_loan_text(pokemon)
 	trainer_label.text = trainer_text
@@ -25489,25 +26147,37 @@ func _fit_pokemon_summary_title_label() -> void:
 	label.custom_minimum_size.x = minf(ceilf(desired_width), maxf(available_width, 0.0))
 
 
-func _apply_pokemon_summary_gender_label(label: Label, gender: String) -> void:
-	if label == null:
+func _create_pokemon_summary_gender_icon() -> TextureRect:
+	var icon := TextureRect.new()
+	icon.visible = false
+	icon.custom_minimum_size = Vector2(16, 16)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_PASS
+	return icon
+
+
+func _apply_pokemon_summary_gender_icon(icon: TextureRect, gender: String) -> void:
+	if icon == null:
 		return
 
 	var gender_display: Dictionary = POKEMON_GENDER_DISPLAY.presentation(gender)
-	label.visible = bool(gender_display.get("visible", false))
-	label.text = str(gender_display.get("symbol", ""))
-	label.tooltip_text = ""
-	if not label.visible:
+	icon.visible = bool(gender_display.get("visible", false))
+	icon.tooltip_text = ""
+	icon.texture = null
+	if not icon.visible:
 		return
 
-	label.add_theme_color_override("font_color", gender_display.get("color", Color.WHITE) as Color)
+	icon.texture = POKEMON_GENDER_MALE_ICON if gender.strip_edges().to_lower() in ["male", "m", "♂"] else POKEMON_GENDER_FEMALE_ICON
 	var localization_key := str(gender_display.get("localization_key", ""))
 	if localization_key != "":
-		label.tooltip_text = LocalizationManager.text(localization_key)
+		icon.tooltip_text = LocalizationManager.text(localization_key)
 
 func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	if pokemon_summary_animated_sprite == null:
 		return
+	pokemon_summary_web_sprite_generation += 1
+	var web_generation := pokemon_summary_web_sprite_generation
 
 	var sprite_side: String = _get_pokemon_summary_sprite_side()
 	var loaded_frames: Variant = pokemon_summary_sprite_loader.call(
@@ -25531,6 +26201,7 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 		pokemon_summary_animated_sprite.scale = _get_pokemon_summary_sprite_scale(frames)
 		_apply_pokemon_summary_sprite_center_offset(frames, pokemon_summary_animated_sprite.animation)
 		pokemon_summary_animated_sprite.play()
+		_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
 		return
 
 	pokemon_summary_animated_sprite.stop()
@@ -25539,6 +26210,22 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	pokemon_summary_sprite.texture = PokemonAssets.load_home_sprite(pokemon.species, pokemon.shiny)
 	if pokemon_summary_sprite.texture == null:
 		pokemon_summary_sprite.texture = PokemonAssets.load_party_icon(pokemon.species, pokemon.shiny)
+	_upgrade_pokemon_summary_web_sprite.call_deferred(web_generation, pokemon.species, sprite_side, pokemon.shiny)
+
+
+func _upgrade_pokemon_summary_web_sprite(generation: int, species: String, side: String, is_shiny: bool) -> void:
+	var frames: SpriteFrames = await pokemon_summary_sprite_loader.call("request_web_sprite_frames", species, side, is_shiny)
+	if frames == null or generation != pokemon_summary_web_sprite_generation or pokemon_summary_animated_sprite == null:
+		return
+	pokemon_summary_sprite.visible = false
+	pokemon_summary_animated_sprite.visible = true
+	pokemon_summary_animated_sprite.sprite_frames = frames
+	pokemon_summary_animated_sprite.animation = "idle"
+	pokemon_summary_animated_sprite.frame = 0
+	pokemon_summary_animated_sprite.position = _get_pokemon_summary_sprite_position()
+	pokemon_summary_animated_sprite.scale = _get_pokemon_summary_sprite_scale(frames)
+	_apply_pokemon_summary_sprite_center_offset(frames, "idle")
+	pokemon_summary_animated_sprite.play()
 
 func _get_pokemon_summary_sprite_side() -> String:
 	return "back" if pokemon_summary_sprite_side == "back" else "front"
@@ -25685,6 +26372,8 @@ func _get_pokemon_summary_sprite_scale(frames: SpriteFrames) -> Vector2:
 		fit_scale
 	)
 	var texture_scale: float = scale_value / max(render_scale, 1.0)
+	if OS.has_feature("web"):
+		texture_scale *= 0.82
 	return Vector2(texture_scale, texture_scale)
 
 func _get_pokemon_summary_sprite_frame_size(frames: SpriteFrames) -> Vector2:
@@ -29341,6 +30030,8 @@ func _register_collapsible_panel(
 	existing_button: Button = null,
 	companions: Array[Control] = []
 ) -> void:
+	panel.item_rect_changed.connect(_invalidate_collapsible_layout)
+	_invalidate_collapsible_layout()
 	var button := existing_button
 	if button == null:
 		button = Button.new()
@@ -29388,6 +30079,7 @@ func _set_collapsible_panel_available(panel_id: String, available: bool) -> void
 	_apply_collapsible_panel_state(panel_id)
 
 func _apply_collapsible_panel_state(panel_id: String) -> void:
+	_invalidate_collapsible_layout()
 	var state: Dictionary = collapsible_panels.get(panel_id, {})
 	if state.is_empty():
 		return
@@ -29456,7 +30148,11 @@ func _apply_collapsible_button_style(button: Button, _side: String, collapsed: b
 	button.add_theme_stylebox_override("pressed", _make_panel_style(UI_SURFACE_PRESSED, UI_BORDER_FOCUS, 8, 1))
 	button.add_theme_stylebox_override("focus", _make_panel_style(UI_SURFACE_HOVER, UI_BORDER_FOCUS, 8, 1))
 
+func _invalidate_collapsible_layout() -> void:
+	_collapsible_layout_dirty = true
+
 func _position_collapsible_buttons() -> void:
+	_collapsible_layout_dirty = false
 	for panel_id_value: Variant in collapsible_panels.keys():
 		var panel_id := str(panel_id_value)
 		_position_collapsible_button(panel_id)
@@ -30817,7 +31513,9 @@ func _setup_chat_tab_settings_ui() -> void:
 	var tab_row := $Control/ChatTabsPanel/TabRow
 	chat_settings_button = Button.new()
 	chat_settings_button.name = "ChatSettingsButton"
-	chat_settings_button.text = "⋯"
+	chat_settings_button.icon = MORE_ACTIONS_ICON
+	# Compact settings affordance uses the original ellipsis glyph: chat_settings_button.text = "⋯".
+	chat_settings_button.expand_icon = true
 	chat_settings_button.custom_minimum_size = Vector2(32, 28)
 	chat_settings_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(chat_settings_button, "tooltip_text", "ui.chat.settings.tooltip")
@@ -32763,6 +33461,9 @@ func _execute_escape_rope() -> void:
 
 
 func _on_my_powers_button_pressed() -> void:
+	if OS.has_feature("web"):
+		_show_web_client_required("My Powers")
+		return
 	if not bool(my_powers_button.get_meta("group_available", false)):
 		return
 	staff_actions_panel.visible = not staff_actions_panel.visible
@@ -32788,6 +33489,8 @@ func _load_toggle_preferences() -> void:
 	GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
 	GameState.global_heal_requests_enabled = bool(preferences.get("globalHealRequestsEnabled", true))
 	_apply_selected_role_badge_preference(str(preferences.get("selectedRoleBadge", GameState.selected_role_badge)))
+	pvp_ai_sparring_favorite_team_id = str(preferences.get("favoriteAiSparringTeamId", "")).strip_edges()
+	_refresh_ai_sparring_player_team_source_options()
 	global_heal_requests_toggle.set_pressed_no_signal(GameState.global_heal_requests_enabled)
 	running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
 	_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
@@ -32811,6 +33514,7 @@ func _save_toggle_preferences() -> Dictionary:
 		"runningShoes": GameState.running_shoes_enabled,
 		"globalHealRequestsEnabled": GameState.global_heal_requests_enabled,
 		"selectedRoleBadge": GameState.selected_role_badge,
+		"favoriteAiSparringTeamId": pvp_ai_sparring_favorite_team_id,
 	})
 	if not bool(result.get("success", false)):
 		_add_chat_message("Could not save toggle settings. Please contact staff.")
@@ -32826,6 +33530,8 @@ func _save_toggle_preferences() -> Dictionary:
 		GameState.global_heal_requests_enabled = bool(preferences.get("globalHealRequestsEnabled", GameState.global_heal_requests_enabled))
 		global_heal_requests_toggle.set_pressed_no_signal(GameState.global_heal_requests_enabled)
 		_apply_selected_role_badge_preference(str(preferences.get("selectedRoleBadge", GameState.selected_role_badge)))
+		pvp_ai_sparring_favorite_team_id = str(preferences.get("favoriteAiSparringTeamId", pvp_ai_sparring_favorite_team_id)).strip_edges()
+		_refresh_ai_sparring_player_team_source_options()
 	return result
 
 func _refresh_world_follower_visibility() -> void:
@@ -34392,6 +35098,7 @@ func _hide_content_creator_tools_popup() -> void:
 	_deactivate_ui_panel(content_creator_tools_popup)
 
 func _show_item_dex_popup() -> void:
+	_setup_item_dex_popup()
 	_position_item_dex_popup()
 	item_dex_popup.visible = true
 	_activate_ui_panel(item_dex_popup)
@@ -34399,12 +35106,13 @@ func _show_item_dex_popup() -> void:
 	await _refresh_item_dex_results()
 
 func _hide_item_dex_popup() -> void:
+	if item_dex_popup == null:
+		return
 	item_dex_popup.visible = false
 	_deactivate_ui_panel(item_dex_popup)
 
 func _show_pokedex_popup() -> void:
-	if pokedex_popup == null:
-		return
+	_setup_pokedex_popup()
 	_position_pokedex_popup()
 	pokedex_popup.visible = true
 	_activate_ui_panel(pokedex_popup)
@@ -34932,6 +35640,7 @@ func _refresh_pokedex_type_row(types: Array) -> void:
 		pokedex_type_row.add_child(_create_pokedex_type_badge(type_name))
 
 func _clear_pokedex_species_sprite() -> void:
+	pokedex_web_sprite_generation += 1
 	if pokedex_animated_sprite != null:
 		pokedex_animated_sprite.stop()
 		pokedex_animated_sprite.sprite_frames = null
@@ -34945,6 +35654,8 @@ func _clear_pokedex_species_sprite() -> void:
 func _set_pokedex_species_sprite(species: Dictionary) -> void:
 	if pokedex_animated_sprite == null or pokedex_sprite == null:
 		return
+	pokedex_web_sprite_generation += 1
+	var web_generation := pokedex_web_sprite_generation
 
 	var loaded_frames: SpriteFrames = null
 	for candidate: String in _pokedex_species_sprite_candidates(species):
@@ -34984,6 +35695,26 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 		pokedex_sprite_panel.tooltip_text = LocalizationManager.text("ui.pokedex.sprite.show_view", {
 			"side": LocalizationManager.text("ui.pokedex.side.%s" % target_side),
 		})
+	_upgrade_pokedex_web_sprite.call_deferred(web_generation, species.duplicate(true), _get_pokedex_sprite_side(), pokedex_shiny_mode)
+
+
+func _upgrade_pokedex_web_sprite(generation: int, species: Dictionary, side: String, is_shiny: bool) -> void:
+	var loaded_frames: SpriteFrames = null
+	for candidate: String in _pokedex_species_sprite_candidates(species):
+		loaded_frames = await pokedex_sprite_loader.call("request_web_sprite_frames", candidate, side, is_shiny)
+		if loaded_frames != null:
+			break
+	if loaded_frames == null or generation != pokedex_web_sprite_generation or pokedex_animated_sprite == null:
+		return
+	pokedex_sprite.visible = false
+	pokedex_animated_sprite.visible = true
+	pokedex_animated_sprite.sprite_frames = loaded_frames
+	pokedex_animated_sprite.animation = "idle"
+	pokedex_animated_sprite.frame = 0
+	pokedex_animated_sprite.position = _get_pokedex_sprite_position()
+	pokedex_animated_sprite.scale = _get_pokedex_sprite_scale(loaded_frames)
+	_apply_pokedex_sprite_center_offset(loaded_frames, "idle")
+	pokedex_animated_sprite.play()
 
 func _pokedex_species_sprite_candidates(species: Dictionary) -> Array[String]:
 	var candidates: Array[String] = []
@@ -36034,8 +36765,9 @@ func _get_pokedex_evolution_item_ids(evolution: Dictionary) -> Array[String]:
 
 func _open_item_dex_item_from_pokedex(item_id: String) -> void:
 	var normalized_item_id := item_id.strip_edges().to_lower()
-	if normalized_item_id == "" or item_dex_popup == null or item_dex_search_input == null:
+	if normalized_item_id == "":
 		return
+	_setup_item_dex_popup()
 
 	item_dex_search_input.set_block_signals(true)
 	item_dex_search_input.text = normalized_item_id
@@ -39468,13 +40200,23 @@ func _pc_pokemon_hover_data(pokemon_payload: Dictionary) -> Dictionary:
 	if str(hover_data.get("item", "")).strip_edges() == "":
 		hover_data["item"] = _pc_payload_held_item_id(hover_data)
 
+	var moves := _array_from_variant(hover_data.get("moves", []))
+	var move_details := _array_from_variant(hover_data.get(
+		"moveData", hover_data.get("move_data", [])
+	))
 	var display_moves: Array = []
-	for move_value: Variant in _array_from_variant(hover_data.get("moves", [])):
+	for move_index in range(moves.size()):
+		var move_value: Variant = moves[move_index]
 		if move_value is Dictionary:
 			var move_data: Dictionary = (move_value as Dictionary).duplicate(true)
 			if str(move_data.get("name", "")).strip_edges() == "":
 				var move_id := str(move_data.get("id", move_data.get("move", ""))).strip_edges()
 				move_data["name"] = _format_move_name(move_id)
+			display_moves.append(move_data)
+		elif move_index < move_details.size() and move_details[move_index] is Dictionary:
+			var move_data: Dictionary = (move_details[move_index] as Dictionary).duplicate(true)
+			if str(move_data.get("name", "")).strip_edges() == "":
+				move_data["name"] = str(move_value)
 			display_moves.append(move_data)
 		else:
 			display_moves.append(move_value)
@@ -40329,8 +41071,17 @@ func _release_selected_pc_pokemon() -> void:
 	var result: Dictionary = await PokemonStorageService.release_pokemon(pokemon_id)
 	pc_release_in_progress = false
 	if not bool(result.get("success", false)):
-		_set_pc_status("ui.storage.release.failed")
-		_add_chat_message(LocalizationManager.text("ui.storage.release.failed"))
+		var release_status_key := (
+			"ui.storage.release.starter_protected"
+			if BackendErrorLocalizationService.error_code(result) == "starter_pokemon_protected"
+			else "ui.storage.release.failed"
+		)
+		var release_error := BackendErrorLocalizationService.message(
+			result,
+			"ui.storage.release.failed"
+		)
+		_set_pc_status(release_status_key)
+		_add_chat_message(release_error)
 		_refresh_pc_release_controls()
 		return
 
@@ -40427,7 +41178,11 @@ func _move_pc_selection_to(target: Dictionary) -> void:
 		{"location": _pc_storage_location_label(location)}
 	))
 	_refresh_party()
-	await _refresh_pc_state(_pc_search_query() != "")
+	# A move through the box selector can target a box other than the visible
+	# one. Refresh every cached box so the next selector drop resolves its first
+	# open slot from the server's authoritative state, rather than stale data.
+	var refresh_all_boxes := str(source.get("type", "")) == "box" or str(target.get("type", "")) == "box"
+	await _refresh_pc_state(refresh_all_boxes)
 
 
 func _pc_storage_location_label(value: Variant) -> String:
@@ -42150,6 +42905,9 @@ func _cancel_authorized_teleport_effect(world: Node) -> void:
 		world.call("cancel_authorized_teleport")
 
 func _on_aether_exchange_button_pressed() -> void:
+	if OS.has_feature("web"):
+		_show_web_client_required("Aether Exchange")
+		return
 	if aether_exchange_popup == null:
 		return
 	aether_exchange_popup.visible = true
@@ -42189,10 +42947,33 @@ func _hide_pvp_mode_menu() -> void:
 	_deactivate_ui_panel(pvp_mode_menu)
 
 func _on_pvp_mode_ranked_pressed() -> void:
+	if OS.has_feature("web"):
+		_show_web_client_required("Ranked PvP")
+		return
 	await _open_pvp_popup_section("Ranked")
 
 func _on_pvp_mode_tournaments_pressed() -> void:
+	if OS.has_feature("web"):
+		_show_web_client_required("Tournaments")
+		return
 	await _open_pvp_popup_section("Tournaments")
+
+
+func _show_web_client_required(feature_name: String) -> void:
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	dialog.configure(
+		"Available in the full client",
+		"%s is shown here so you can explore PokeAether, but using it requires the downloadable client." % feature_name,
+		"Download client",
+		"Not now"
+	)
+	dialog.confirmed.connect(func():
+		OS.shell_open("https://pokeaether.com/download")
+		dialog.queue_free()
+	)
+	dialog.canceled.connect(dialog.queue_free)
+	root_control.add_child(dialog)
+	dialog.popup_centered(Vector2i(560, 240))
 
 func _on_pvp_mode_casual_pressed() -> void:
 	await _open_pvp_popup_section("Custom / Casual")
@@ -42885,7 +43666,9 @@ func _on_pvp_ai_sparring_tab_changed(tab_index: int) -> void:
 	var catalog_selected := tab_key == "ui.pvp.ai_sparring.tab.catalog"
 	var history_selected := tab_key == "ui.pvp.ai_sparring.tab.history"
 	var about_selected := tab_key == "ui.pvp.ai_sparring.tab.about"
-	pvp_room_selected_mode = "" if history_selected or catalog_selected or about_selected else "ai"
+	var stats_selected := tab_key == "ui.pvp.ai_sparring.tab.statistics"
+	var live_selected := tab_key == "ui.pvp.ai_sparring.live.title"
+	pvp_room_selected_mode = "" if history_selected or catalog_selected or about_selected or stats_selected or live_selected else "ai"
 	_set_pvp_popup_subtitle(_pvp_popup_subtitle_for_section("AI Sparring"))
 	if history_selected:
 		_refresh_pvp_ai_sparring_match_history()
@@ -42893,6 +43676,8 @@ func _on_pvp_ai_sparring_tab_changed(tab_index: int) -> void:
 		_refresh_ai_sparring_catalog_view()
 	if about_selected:
 		_load_ai_sparring_about()
+	if stats_selected:
+		_load_ai_sparring_stats()
 
 
 func _load_ai_sparring_about() -> void:
@@ -42914,9 +43699,24 @@ func _apply_ai_sparring_bot_versions(response: Dictionary) -> void:
 	var bots_value: Variant = response.get("bots", []) if bool(response.get("success", false)) else []
 	if bots_value is Array:
 		for bot: Variant in bots_value:
-			if bot is Dictionary and str(bot.get("id", "")) in ["ai4", "ai5"]:
+			if bot is Dictionary and str(bot.get("id", "")) in ["ai4", "ai5", "intermediate", "elite", "nightmare"]:
 				pvp_ai_sparring_bot_versions[str(bot["id"])] = bot
 	_refresh_ai_sparring_about()
+
+
+func _ai_sparring_uses_local_server() -> bool:
+	# Use the connected server, not the build type: the editor can also connect
+	# to production, and an exported client can connect to a local test server.
+	var url := GatewayApiConfig.get_base_url().strip_edges().to_lower()
+	if not (url.begins_with("http://") or url.begins_with("https://")):
+		return false
+	var authority := url.get_slice("://", 1).get_slice("/", 0)
+	if authority.contains("@"):
+		return false
+	if authority == "[::1]" or authority.begins_with("[::1]:"):
+		return true
+	var host := authority.get_slice(":", 0)
+	return host in ["localhost", "127.0.0.1"] or host.ends_with(".localhost")
 
 
 func _refresh_ai_sparring_about() -> void:
@@ -42927,8 +43727,11 @@ func _refresh_ai_sparring_about() -> void:
 		var version_text := LocalizationManager.text("ui.pvp.ai_sparring.about.unknown")
 		if not version.is_empty():
 			version_text = LocalizationManager.text("ui.pvp.ai_sparring.about.version", {"version": version})
-		var status_key := "ui.pvp.ai_sparring.about.available" if bool(info.get("available", false)) else "ui.pvp.ai_sparring.about.unavailable"
-		label.text = version_text + " · " + LocalizationManager.text(status_key)
+		var status_key := "ui.pvp.ai_sparring.about.status_unknown" if info.is_empty() else "ui.pvp.ai_sparring.about.available" if bool(info.get("available", false)) else "ui.pvp.ai_sparring.about.unavailable"
+		label.text = LocalizationManager.text(status_key) + "\n" + version_text
+		if not version.is_empty() and str(info.get("releaseStatus", "")) == "test" and _ai_sparring_uses_local_server():
+			label.text += "\n" + LocalizationManager.text("ui.pvp.ai_sparring.about.test_version")
+		label.add_theme_color_override("font_color", Color("#91dbb1") if bool(info.get("available", false)) else Color("#e6bf86"))
 
 
 func _on_pvp_ai_sparring_history_refresh_pressed() -> void:
@@ -43069,6 +43872,12 @@ func _create_pvp_ai_sparring_history_card(match: Dictionary) -> Control:
 	var ai_level := int(match.get("aiLevel", 4))
 	var opponent := Label.new()
 	var opponent_key := "ui.pvp.ai_sparring.history.opponent_grandmaster" if ai_level >= 5 else "ui.pvp.ai_sparring.history.opponent_scholar"
+	if str(match.get("aiMode", "")) == "intermediate":
+		opponent_key = "ui.pvp.ai_sparring.history.opponent_intermediate"
+	elif str(match.get("aiMode", "")) == "nightmare":
+		opponent_key = "ui.pvp.ai_sparring.history.opponent_nightmare"
+	elif str(match.get("aiMode", "")) == "elite":
+		opponent_key = "ui.pvp.ai_sparring.history.opponent_elite"
 	opponent.text = LocalizationManager.text(opponent_key)
 	opponent.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	opponent.add_theme_color_override("font_color", UI_TEXT)
@@ -43108,6 +43917,13 @@ func _create_pvp_ai_sparring_history_card(match: Dictionary) -> Control:
 	details.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	details.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(details)
+	var replay_status := str(match.get("replayStatus", "none"))
+	var replay_button := Button.new()
+	replay_button.text = LocalizationManager.text("ui.replays.watch" if replay_status == "available" else "ui.replays.status_" + replay_status)
+	replay_button.disabled = replay_status != "available"
+	replay_button.pressed.connect(_watch_history_replay.bind(str(match.get("battleId", ""))))
+	_apply_button_style(replay_button)
+	layout.add_child(replay_button)
 	return card
 
 
@@ -43192,6 +44008,8 @@ func _refresh_pvp_room_team_fields() -> void:
 		pvp_training_room_team_note.visible = needs_team and is_training
 	if pvp_training_ai_mode_row != null:
 		pvp_training_ai_mode_row.visible = true
+	if pvp_training_ai_bot_row != null:
+		pvp_training_ai_bot_row.visible = true
 	if pvp_training_ai_team_source_row != null:
 		pvp_training_ai_team_source_row.visible = true
 	_refresh_pvp_training_ai_team_source_ui()
@@ -43221,27 +44039,47 @@ func _refresh_pvp_room_form_title() -> void:
 
 
 func _refresh_pvp_training_ai_mode_options() -> void:
-	if pvp_training_ai_mode_select == null:
+	if pvp_training_ai_mode_select == null or pvp_training_ai_bot_select == null:
 		return
 	var previous_mode := _selected_pvp_training_ai_mode()
+	pvp_training_ai_bot_select.clear()
+	for bot: String in ["ai4", "ai5"]:
+		var supported := ("ai4" in pvp_training_ai_available_modes or "shadow" in pvp_training_ai_available_modes) if bot == "ai4" else ("intermediate" in pvp_training_ai_available_modes or "active" in pvp_training_ai_available_modes or "nightmare" in pvp_training_ai_available_modes)
+		if bot != "ai4" and "elite" in pvp_training_ai_available_modes:
+			supported = true
+		if supported:
+			pvp_training_ai_bot_select.add_item("AI4 Scholar" if bot == "ai4" else "AI5 Grandmaster")
+			pvp_training_ai_bot_select.set_item_metadata(pvp_training_ai_bot_select.item_count - 1, bot)
+	if previous_mode not in pvp_training_ai_available_modes:
+		previous_mode = pvp_training_ai_default_mode
+	_select_option_by_metadata(pvp_training_ai_bot_select, "ai5" if previous_mode in ["intermediate", "active", "elite", "nightmare"] else "ai4")
+	_refresh_pvp_training_ai_difficulty_options(previous_mode)
+
+
+func _refresh_pvp_training_ai_difficulty_options(preferred_mode: String = "") -> void:
 	pvp_training_ai_mode_select.clear()
-	for mode: String in pvp_training_ai_available_modes:
-		if mode not in ["ai4", "shadow", "active"]:
+	var grandmaster := str(pvp_training_ai_bot_select.get_selected_metadata()) == "ai5"
+	var modes: Array = ["intermediate", "active", "elite", "nightmare"] if grandmaster else (["ai4"] if "ai4" in pvp_training_ai_available_modes else ["shadow"])
+	for mode: String in modes:
+		if mode not in pvp_training_ai_available_modes:
 			continue
 		pvp_training_ai_mode_select.add_item(
-			LocalizationManager.text("ui.pvp.training.ai.mode_%s" % mode)
+			LocalizationManager.text("ui.pvp.training.ai.difficulty_%s" % mode)
 		)
 		pvp_training_ai_mode_select.set_item_metadata(
 			pvp_training_ai_mode_select.item_count - 1,
 			mode
 		)
-	var preferred_mode := previous_mode
-	if preferred_mode not in pvp_training_ai_available_modes:
-		preferred_mode = pvp_training_ai_default_mode
 	for index in range(pvp_training_ai_mode_select.item_count):
 		if str(pvp_training_ai_mode_select.get_item_metadata(index)) == preferred_mode:
 			pvp_training_ai_mode_select.select(index)
 			break
+	pvp_training_ai_mode_select.disabled = pvp_training_ai_mode_select.item_count <= 1
+
+
+func _on_pvp_training_ai_bot_selected(_index: int) -> void:
+	_refresh_pvp_training_ai_difficulty_options()
+	_on_pvp_training_ai_mode_selected(0)
 
 
 func _refresh_pvp_training_ai_archetype_options() -> void:
@@ -43286,17 +44124,19 @@ func _refresh_pvp_training_ai_team_source_options() -> void:
 
 
 func _refresh_pvp_training_ai_team_options() -> void:
-	if pvp_training_ai_team_select == null:
+	if pvp_training_ai_team_suggestion_list == null:
 		return
 	var requested_archetype := _selected_pvp_training_ai_archetype()
-	var previous_team_id := _selected_pvp_training_ai_team_id()
-	pvp_training_ai_team_select.clear()
-	pvp_training_ai_team_select.add_item(LocalizationManager.text(
+	var search_query := pvp_training_ai_team_search.text.strip_edges().to_lower() if pvp_training_ai_team_search != null else ""
+	for child: Node in pvp_training_ai_team_suggestion_list.get_children():
+		pvp_training_ai_team_suggestion_list.remove_child(child)
+		child.queue_free()
+	_add_pvp_training_ai_team_suggestion(LocalizationManager.text(
 		"ui.pvp.training.ai.team_random"
 		if requested_archetype == "random"
 		else "ui.pvp.training.ai.team_random_archetype"
-	))
-	pvp_training_ai_team_select.set_item_metadata(0, "random")
+	), "random")
+	var result_count := 0
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
 		if not _ai_sparring_team_matches_tier(entry, _selected_ai_sparring_tier_id()):
 			continue
@@ -43305,15 +44145,12 @@ func _refresh_pvp_training_ai_team_options() -> void:
 		if requested_archetype != "random" and str(entry.get("archetype", "")) != requested_archetype:
 			continue
 		var display_name := str(entry.get("displayName", entry.get("teamId", ""))).strip_edges()
-		pvp_training_ai_team_select.add_item(display_name)
-		pvp_training_ai_team_select.set_item_metadata(
-			pvp_training_ai_team_select.item_count - 1,
-			str(entry.get("teamId", "random"))
-		)
-	for index in range(pvp_training_ai_team_select.item_count):
-		if str(pvp_training_ai_team_select.get_item_metadata(index)) == previous_team_id:
-			pvp_training_ai_team_select.select(index)
+		if search_query != "" and not display_name.to_lower().contains(search_query):
+			continue
+		if result_count >= AI_SPARRING_TEAM_SEARCH_RESULT_LIMIT:
 			break
+		_add_pvp_training_ai_team_suggestion(display_name, str(entry.get("teamId", "random")))
+		result_count += 1
 	_resolve_pvp_training_ai_opponent_team()
 
 
@@ -43327,14 +44164,42 @@ func _on_pvp_training_ai_mode_selected(_index: int) -> void:
 
 
 func _on_ai_sparring_tier_selected(_index: int) -> void:
+	_select_option_by_metadata(pvp_ai_sparring_catalog_tier, _selected_ai_sparring_tier_id())
 	_refresh_pvp_training_ai_team_options()
+	if pvp_ai_sparring_player_catalog_search != null:
+		pvp_ai_sparring_player_catalog_team_id = ""
+		pvp_ai_sparring_player_catalog_search.text = ""
 	_refresh_ai_sparring_player_catalog_options()
 	_refresh_ai_sparring_catalog_preview()
 	_refresh_pvp_training_ai_opponent_preview()
+	_refresh_ai_sparring_catalog_view()
 
 
-func _on_pvp_training_ai_team_selected(_index: int) -> void:
+func _on_pvp_training_ai_team_suggestion_selected(team_id: String) -> void:
+	pvp_training_ai_requested_team_id = team_id
+	if pvp_training_ai_team_search != null:
+		var entry := _ai_sparring_catalog_entry(pvp_training_ai_requested_team_id)
+		pvp_training_ai_team_search.text = str(entry.get("displayName", "")) if not entry.is_empty() else ""
+		pvp_training_ai_requested_team_id = team_id
+	pvp_training_ai_team_suggestions.visible = false
 	_resolve_pvp_training_ai_opponent_team()
+
+
+func _on_pvp_training_ai_team_search_changed(_text: String) -> void:
+	pvp_training_ai_requested_team_id = "random"
+	_refresh_pvp_training_ai_team_options()
+	_show_pvp_training_ai_team_suggestions()
+
+
+func _show_pvp_training_ai_team_suggestions() -> void:
+	if pvp_training_ai_team_suggestions == null or pvp_training_ai_team_search == null or not pvp_training_ai_team_search.visible:
+		return
+	if not is_inside_tree() or not pvp_training_ai_team_suggestions.is_inside_tree():
+		return
+	var search_rect := pvp_training_ai_team_search.get_global_rect()
+	pvp_training_ai_team_suggestions.global_position = search_rect.position + Vector2(0, search_rect.size.y + 2)
+	pvp_training_ai_team_suggestions.size = Vector2(maxf(search_rect.size.x, 280.0), 208.0)
+	pvp_training_ai_team_suggestions.visible = true
 
 
 func _on_pvp_training_ai_team_source_selected(_index: int) -> void:
@@ -43347,6 +44212,8 @@ func _refresh_pvp_training_ai_team_source_ui() -> void:
 		pvp_training_ai_archetype_row.visible = not use_custom_paste
 	if pvp_training_ai_team_row != null:
 		pvp_training_ai_team_row.visible = not use_custom_paste
+	if pvp_training_ai_team_suggestions != null and use_custom_paste:
+		pvp_training_ai_team_suggestions.hide()
 	if pvp_training_ai_custom_team_input != null:
 		pvp_training_ai_custom_team_input.visible = use_custom_paste
 	if pvp_training_ai_custom_team_note != null:
@@ -43358,12 +44225,15 @@ func _resolve_pvp_training_ai_opponent_team() -> void:
 	var requested_team_id := _selected_pvp_training_ai_team_id()
 	var candidates: Array[Dictionary] = []
 	var requested_archetype := _selected_pvp_training_ai_archetype()
+	var search_query := pvp_training_ai_team_search.text.strip_edges().to_lower() if pvp_training_ai_team_search != null else ""
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
 		if not _ai_sparring_team_matches_tier(entry, _selected_ai_sparring_tier_id()):
 			continue
 		if not _pvp_training_ai_archetype_allowed(str(entry.get("archetype", ""))):
 			continue
 		if requested_archetype != "random" and str(entry.get("archetype", "")) != requested_archetype:
+			continue
+		if search_query != "" and not str(entry.get("displayName", entry.get("teamId", ""))).to_lower().contains(search_query):
 			continue
 		if requested_team_id != "random" and str(entry.get("teamId", "")) != requested_team_id:
 			continue
@@ -43383,6 +44253,8 @@ func _resolved_pvp_training_ai_team_id() -> String:
 
 
 func _refresh_pvp_training_ai_opponent_preview() -> void:
+	if pvp_ai_sparring_trainer_portrait != null:
+		pvp_ai_sparring_trainer_portrait.texture = load("res://assets/sprites/trainer_cards/showdown/veteran-gen7.png" if _selected_pvp_training_ai_mode() in ["active", "intermediate", "elite", "nightmare"] else "res://assets/sprites/trainer_cards/showdown/scientist-gen7.png") as Texture2D
 	if pvp_training_ai_opponent_preview == null or pvp_training_ai_opponent_preview_grid == null:
 		return
 	if _selected_pvp_training_ai_team_source() == "paste":
@@ -43478,7 +44350,7 @@ func _load_pvp_training_ai_catalog() -> void:
 			var raw_modes: Array[String] = []
 			for mode_value: Variant in modes_value:
 				var mode := str(mode_value).strip_edges().to_lower()
-				if mode in ["ai4", "shadow", "active"] and mode not in raw_modes:
+				if mode in ["ai4", "shadow", "intermediate", "active", "elite", "nightmare"] and mode not in raw_modes:
 					raw_modes.append(mode)
 			if "ai4" in raw_modes:
 				pvp_training_ai_available_modes.append("ai4")
@@ -43488,6 +44360,12 @@ func _load_pvp_training_ai_catalog() -> void:
 				pvp_training_ai_available_modes.append("shadow")
 			if "active" in raw_modes:
 				pvp_training_ai_available_modes.append("active")
+			if "intermediate" in raw_modes:
+				pvp_training_ai_available_modes.append("intermediate")
+			if "nightmare" in raw_modes:
+				pvp_training_ai_available_modes.append("nightmare")
+			if "elite" in raw_modes:
+				pvp_training_ai_available_modes.append("elite")
 		pvp_training_ai_default_mode = str(response.get("defaultMode", "ai4")).strip_edges().to_lower()
 		if pvp_training_ai_default_mode not in pvp_training_ai_available_modes:
 			pvp_training_ai_default_mode = (
@@ -43517,6 +44395,7 @@ func _load_pvp_training_ai_catalog() -> void:
 	_refresh_pvp_training_ai_team_source_options()
 	_refresh_pvp_training_ai_archetype_options()
 	_refresh_pvp_training_ai_team_options()
+	_refresh_ai_sparring_player_team_source_options()
 	_refresh_ai_sparring_player_catalog_options()
 	_refresh_ai_sparring_catalog_filters()
 	_refresh_ai_sparring_catalog_view()
@@ -43525,21 +44404,36 @@ func _load_pvp_training_ai_catalog() -> void:
 		_set_pvp_status_key("ui.pvp.training.ai.unavailable", {}, true)
 
 
-func _refresh_ai_sparring_player_catalog_options() -> void:
-	if pvp_ai_sparring_catalog_team_select == null:
+func _refresh_ai_sparring_player_catalog_options(keep_selection: bool = true) -> void:
+	if pvp_ai_sparring_player_catalog_suggestion_list == null:
 		return
-	var previous_id := _selected_ai_sparring_player_catalog_team_id()
-	pvp_ai_sparring_catalog_team_select.clear()
+	var search_query := pvp_ai_sparring_player_catalog_search.text.strip_edges().to_lower() if pvp_ai_sparring_player_catalog_search != null else ""
+	var matching_entries: Array[Dictionary] = []
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
 		if not _ai_sparring_team_matches_tier(entry, _selected_ai_sparring_tier_id()):
 			continue
-		var team_id := str(entry.get("teamId", ""))
-		pvp_ai_sparring_catalog_team_select.add_item(str(entry.get("displayName", team_id)))
-		pvp_ai_sparring_catalog_team_select.set_item_metadata(
-			pvp_ai_sparring_catalog_team_select.item_count - 1,
-			team_id
+		var display_name := str(entry.get("displayName", entry.get("teamId", ""))).strip_edges()
+		if search_query != "" and not display_name.to_lower().contains(search_query):
+			continue
+		matching_entries.append(entry)
+	for child: Node in pvp_ai_sparring_player_catalog_suggestion_list.get_children():
+		pvp_ai_sparring_player_catalog_suggestion_list.remove_child(child)
+		child.queue_free()
+	for entry: Dictionary in matching_entries:
+		_add_ai_sparring_player_catalog_suggestion(
+			str(entry.get("displayName", entry.get("teamId", ""))),
+			str(entry.get("teamId", ""))
 		)
-	_select_option_by_metadata(pvp_ai_sparring_catalog_team_select, previous_id)
+	if keep_selection:
+		var selected_entry := _ai_sparring_catalog_entry(pvp_ai_sparring_player_catalog_team_id)
+		var selected_is_available := false
+		for entry: Dictionary in matching_entries:
+			if str(entry.get("teamId", "")) == pvp_ai_sparring_player_catalog_team_id:
+				selected_is_available = true
+				break
+		if selected_entry.is_empty() or not selected_is_available:
+			selected_entry = matching_entries[0] if not matching_entries.is_empty() else {}
+		_select_ai_sparring_player_catalog_team(str(selected_entry.get("teamId", "")))
 	_refresh_ai_sparring_catalog_preview()
 
 
@@ -43549,6 +44443,18 @@ func _refresh_ai_sparring_player_team_source_options() -> void:
 	pvp_ai_sparring_team_source_select.set_item_text(0, LocalizationManager.text("ui.pvp.ai_sparring.team_source.paste"))
 	pvp_ai_sparring_team_source_select.set_item_text(1, LocalizationManager.text("ui.pvp.team.current_option"))
 	pvp_ai_sparring_team_source_select.set_item_text(2, LocalizationManager.text("ui.pvp.ai_sparring.team_source.catalog"))
+	var favorite_is_available := not _ai_sparring_catalog_entry(pvp_ai_sparring_favorite_team_id).is_empty()
+	if pvp_ai_sparring_use_favorite_team_check != null:
+		_set_localized_control_property(
+			pvp_ai_sparring_use_favorite_team_check,
+			"text",
+			"ui.pvp.ai_sparring.catalog.use_favorite.active"
+			if pvp_ai_sparring_use_favorite_team_check.button_pressed
+			else "ui.pvp.ai_sparring.catalog.use_favorite"
+		)
+		pvp_ai_sparring_use_favorite_team_check.disabled = not favorite_is_available
+		if not favorite_is_available:
+			pvp_ai_sparring_use_favorite_team_check.set_pressed_no_signal(false)
 
 
 func _refresh_ai_sparring_catalog_filters() -> void:
@@ -43566,15 +44472,11 @@ func _refresh_ai_sparring_catalog_filters() -> void:
 		)
 	_select_option_by_metadata(pvp_ai_sparring_catalog_archetype, previous)
 	if pvp_ai_sparring_catalog_tier != null:
-		var previous_tier := str(pvp_ai_sparring_catalog_tier.get_selected_metadata())
 		pvp_ai_sparring_catalog_tier.clear()
-		pvp_ai_sparring_catalog_tier.add_item(LocalizationManager.text("ui.pvp.ai_sparring.catalog.all_tiers"))
-		pvp_ai_sparring_catalog_tier.set_item_metadata(0, "all")
-		for tier: Dictionary in pvp_training_ai_tiers:
-			var tier_id := str(tier.get("tierId", "none"))
+		for tier_id: String in _ai_sparring_available_tier_ids():
 			pvp_ai_sparring_catalog_tier.add_item(_ai_sparring_tier_label(tier_id))
 			pvp_ai_sparring_catalog_tier.set_item_metadata(pvp_ai_sparring_catalog_tier.item_count - 1, tier_id)
-		_select_option_by_metadata(pvp_ai_sparring_catalog_tier, previous_tier)
+		_select_option_by_metadata(pvp_ai_sparring_catalog_tier, _selected_ai_sparring_tier_id())
 
 
 func _on_ai_sparring_catalog_filter_changed(_text: String) -> void:
@@ -43586,7 +44488,8 @@ func _on_ai_sparring_catalog_archetype_selected(_index: int) -> void:
 
 
 func _on_ai_sparring_catalog_tier_selected(_index: int) -> void:
-	_refresh_ai_sparring_catalog_view()
+	_select_option_by_metadata(pvp_ai_sparring_tier_select, str(pvp_ai_sparring_catalog_tier.get_selected_metadata()))
+	_on_ai_sparring_tier_selected(pvp_ai_sparring_tier_select.selected)
 
 
 func _refresh_ai_sparring_catalog_view() -> void:
@@ -43597,10 +44500,10 @@ func _refresh_ai_sparring_catalog_view() -> void:
 		child.queue_free()
 	var query := pvp_ai_sparring_catalog_search.text.strip_edges().to_lower() if pvp_ai_sparring_catalog_search != null else ""
 	var archetype := str(pvp_ai_sparring_catalog_archetype.get_selected_metadata()) if pvp_ai_sparring_catalog_archetype != null and pvp_ai_sparring_catalog_archetype.item_count > 0 else "all"
-	var tier_id := str(pvp_ai_sparring_catalog_tier.get_selected_metadata()) if pvp_ai_sparring_catalog_tier != null and pvp_ai_sparring_catalog_tier.item_count > 0 else "all"
+	var tier_id := _selected_ai_sparring_tier_id()
 	var matches: Array[Dictionary] = []
 	for entry: Dictionary in pvp_training_ai_catalog_entries:
-		if tier_id != "all" and not _ai_sparring_team_matches_tier(entry, tier_id):
+		if not _ai_sparring_team_matches_tier(entry, tier_id):
 			continue
 		if archetype != "all" and str(entry.get("archetype", "")) != archetype:
 			continue
@@ -43670,6 +44573,25 @@ func _create_ai_sparring_catalog_team_card(entry: Dictionary) -> Control:
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	header.add_child(title)
+	var favorite_button := TextureButton.new()
+	var is_favorite := team_id == pvp_ai_sparring_favorite_team_id
+	favorite_button.ignore_texture_size = true
+	favorite_button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+	favorite_button.tooltip_text = LocalizationManager.text(
+		"ui.pvp.ai_sparring.catalog.favorite.remove" if is_favorite else "ui.pvp.ai_sparring.catalog.favorite.add"
+	)
+	favorite_button.custom_minimum_size = Vector2(28.0, 24.0)
+	favorite_button.focus_mode = Control.FOCUS_NONE
+	var favorite_label := Label.new()
+	favorite_label.text = "★" if is_favorite else "☆"
+	favorite_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	favorite_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	favorite_label.add_theme_font_size_override("font_size", 20)
+	favorite_label.add_theme_color_override("font_color", Color("#f5df9a") if is_favorite else Color("#8ea8bd"))
+	favorite_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	favorite_button.add_child(favorite_label)
+	favorite_button.pressed.connect(_on_ai_sparring_catalog_favorite_pressed.bind(team_id))
+	header.add_child(favorite_button)
 	var archetype_badge := Label.new()
 	archetype_badge.text = LocalizationManager.text(
 		"ui.pvp.training.ai.archetype.%s" % str(entry.get("archetype", "balance"))
@@ -43707,7 +44629,16 @@ func _create_ai_sparring_catalog_team_card(entry: Dictionary) -> Control:
 			)
 			icons.add_child(slot)
 	_set_mouse_ignore_recursive(margin)
+	favorite_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	return panel
+
+
+func _on_ai_sparring_catalog_favorite_pressed(team_id: String) -> void:
+	pvp_ai_sparring_favorite_team_id = "" if team_id == pvp_ai_sparring_favorite_team_id else team_id
+	_refresh_ai_sparring_player_team_source_options()
+	_on_ai_sparring_team_source_selected(pvp_ai_sparring_team_source_select.selected)
+	_refresh_ai_sparring_catalog_view()
+	await _save_toggle_preferences()
 
 
 func _on_ai_sparring_catalog_team_card_gui_input(event: InputEvent, team_id: String) -> void:
@@ -43897,7 +44828,7 @@ func _select_option_by_metadata(selector: OptionButton, requested: String) -> vo
 
 func _on_ai_sparring_catalog_use_player_pressed() -> void:
 	_select_option_by_metadata(pvp_ai_sparring_team_source_select, "catalog")
-	_select_option_by_metadata(pvp_ai_sparring_catalog_team_select, pvp_ai_sparring_catalog_selected_team_id)
+	_select_ai_sparring_player_catalog_team(pvp_ai_sparring_catalog_selected_team_id)
 	_on_ai_sparring_team_source_selected(pvp_ai_sparring_team_source_select.selected)
 	pvp_ai_sparring_tabs.current_tab = 0
 
@@ -43905,8 +44836,14 @@ func _on_ai_sparring_catalog_use_player_pressed() -> void:
 func _on_ai_sparring_catalog_use_opponent_pressed() -> void:
 	_select_option_by_metadata(pvp_training_ai_team_source_select, "catalog")
 	_select_option_by_metadata(pvp_training_ai_archetype_select, "random")
+	if pvp_training_ai_team_search != null:
+		pvp_training_ai_team_search.text = ""
 	_refresh_pvp_training_ai_team_options()
-	_select_option_by_metadata(pvp_training_ai_team_select, pvp_ai_sparring_catalog_selected_team_id)
+	pvp_training_ai_requested_team_id = pvp_ai_sparring_catalog_selected_team_id
+	var selected_entry := _ai_sparring_catalog_entry(pvp_training_ai_requested_team_id)
+	if pvp_training_ai_team_search != null and not selected_entry.is_empty():
+		pvp_training_ai_team_search.text = str(selected_entry.get("displayName", ""))
+		pvp_training_ai_requested_team_id = pvp_ai_sparring_catalog_selected_team_id
 	_resolve_pvp_training_ai_opponent_team()
 	_refresh_pvp_training_ai_team_source_ui()
 	pvp_ai_sparring_tabs.current_tab = 0
@@ -43972,14 +44909,72 @@ func _ai_sparring_catalog_pokepaste() -> String:
 	return "\n\n".join(sets)
 
 
-func _on_ai_sparring_player_catalog_team_selected(_index: int) -> void:
+func _on_ai_sparring_player_catalog_search_changed(_text: String) -> void:
+	pvp_ai_sparring_player_catalog_team_id = ""
+	_refresh_ai_sparring_player_catalog_options(false)
+	_show_ai_sparring_player_catalog_suggestions()
+
+
+func _on_ai_sparring_player_catalog_suggestion_selected(team_id: String) -> void:
+	_select_ai_sparring_player_catalog_team(team_id)
+	if pvp_ai_sparring_player_catalog_suggestions != null:
+		pvp_ai_sparring_player_catalog_suggestions.hide()
+
+
+func _select_ai_sparring_player_catalog_team(team_id: String) -> void:
+	pvp_ai_sparring_player_catalog_team_id = team_id.strip_edges()
+	var entry := _ai_sparring_catalog_entry(pvp_ai_sparring_player_catalog_team_id)
+	if pvp_ai_sparring_player_catalog_search != null:
+		pvp_ai_sparring_player_catalog_search.text = str(entry.get("displayName", "")) if not entry.is_empty() else ""
+		pvp_ai_sparring_player_catalog_team_id = team_id.strip_edges()
 	_refresh_ai_sparring_catalog_preview()
 
 
+func _show_ai_sparring_player_catalog_suggestions() -> void:
+	if pvp_ai_sparring_player_catalog_suggestions == null or pvp_ai_sparring_player_catalog_search == null or not pvp_ai_sparring_player_catalog_search.visible:
+		return
+	if not is_inside_tree() or not pvp_ai_sparring_player_catalog_suggestions.is_inside_tree():
+		return
+	var search_rect := pvp_ai_sparring_player_catalog_search.get_global_rect()
+	pvp_ai_sparring_player_catalog_suggestions.global_position = search_rect.position + Vector2(0, search_rect.size.y + 2)
+	pvp_ai_sparring_player_catalog_suggestions.size = Vector2(maxf(search_rect.size.x, 280.0), 208.0)
+	pvp_ai_sparring_player_catalog_suggestions.visible = true
+
+
+func _add_ai_sparring_player_catalog_suggestion(display_name: String, team_id: String) -> void:
+	var suggestion := Button.new()
+	suggestion.text = display_name
+	suggestion.tooltip_text = display_name
+	suggestion.custom_minimum_size = Vector2(0, 32)
+	suggestion.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	suggestion.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	suggestion.focus_mode = Control.FOCUS_NONE
+	suggestion.clip_text = true
+	suggestion.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	suggestion.pressed.connect(_on_ai_sparring_player_catalog_suggestion_selected.bind(team_id))
+	suggestion.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	suggestion.add_theme_color_override("font_hover_color", UI_TEXT)
+	suggestion.add_theme_stylebox_override("normal", _make_pvp_ranked_dropdown_item_style(Color("#00000000"), Color("#00000000")))
+	suggestion.add_theme_stylebox_override("hover", _make_pvp_ranked_dropdown_item_style(Color("#17304afa"), UI_MONEY))
+	pvp_ai_sparring_player_catalog_suggestion_list.add_child(suggestion)
+
+
 func _selected_ai_sparring_player_catalog_team_id() -> String:
-	if pvp_ai_sparring_catalog_team_select == null or pvp_ai_sparring_catalog_team_select.item_count == 0:
-		return ""
-	return str(pvp_ai_sparring_catalog_team_select.get_selected_metadata()).strip_edges()
+	return pvp_ai_sparring_favorite_team_id if _uses_ai_sparring_favorite_team() else pvp_ai_sparring_player_catalog_team_id
+
+
+func _uses_ai_sparring_favorite_team() -> bool:
+	return (
+		_selected_ai_sparring_team_source() == "catalog"
+		and pvp_ai_sparring_use_favorite_team_check != null
+		and pvp_ai_sparring_use_favorite_team_check.button_pressed
+		and not _ai_sparring_catalog_entry(pvp_ai_sparring_favorite_team_id).is_empty()
+	)
+
+
+func _on_ai_sparring_use_favorite_team_toggled(_enabled: bool) -> void:
+	_refresh_ai_sparring_player_team_source_options()
+	_on_ai_sparring_team_source_selected(pvp_ai_sparring_team_source_select.selected)
 
 
 func _refresh_ai_sparring_catalog_preview() -> void:
@@ -44007,10 +45002,20 @@ func _refresh_ai_sparring_catalog_preview() -> void:
 
 
 func _selected_pvp_training_ai_team_id() -> String:
-	if pvp_training_ai_team_select == null or pvp_training_ai_team_select.item_count == 0:
-		return "random"
-	var selected_id := str(pvp_training_ai_team_select.get_selected_metadata()).strip_edges()
+	var selected_id := pvp_training_ai_requested_team_id.strip_edges()
 	return selected_id if selected_id != "" else "random"
+
+
+func _ai_sparring_available_tier_ids() -> Array[String]:
+	var result: Array[String] = []
+	for tier_id: String in ["aether-ou", "aether-uu"]:
+		for tier: Dictionary in pvp_training_ai_tiers:
+			if str(tier.get("tierId", "")) == tier_id:
+				result.append(tier_id)
+				break
+	if result.is_empty():
+		result.append("aether-ou")
+	return result
 
 
 func _refresh_ai_sparring_tier_options() -> void:
@@ -44018,11 +45023,7 @@ func _refresh_ai_sparring_tier_options() -> void:
 		return
 	var previous := _selected_ai_sparring_tier_id()
 	pvp_ai_sparring_tier_select.clear()
-	var tiers := pvp_training_ai_tiers
-	if tiers.is_empty():
-		tiers = [{"tierId": "none", "tierName": "Open"}]
-	for tier: Dictionary in tiers:
-		var tier_id := str(tier.get("tierId", "none"))
+	for tier_id: String in _ai_sparring_available_tier_ids():
 		pvp_ai_sparring_tier_select.add_item(_ai_sparring_tier_label(tier_id))
 		pvp_ai_sparring_tier_select.set_item_metadata(pvp_ai_sparring_tier_select.item_count - 1, tier_id)
 	_select_option_by_metadata(pvp_ai_sparring_tier_select, previous)
@@ -44030,9 +45031,9 @@ func _refresh_ai_sparring_tier_options() -> void:
 
 func _selected_ai_sparring_tier_id() -> String:
 	if pvp_ai_sparring_tier_select == null or pvp_ai_sparring_tier_select.item_count == 0:
-		return "none"
+		return "aether-ou"
 	var tier_id := str(pvp_ai_sparring_tier_select.get_selected_metadata()).strip_edges().to_lower()
-	return tier_id if tier_id in ["none", "aether-ou", "aether-uu"] else "none"
+	return tier_id if tier_id in ["aether-ou", "aether-uu"] else "aether-ou"
 
 
 func _ai_sparring_tier_label(tier_id: String) -> String:
@@ -44100,7 +45101,7 @@ func _selected_pvp_training_ai_mode() -> String:
 	if pvp_training_ai_mode_select == null or pvp_training_ai_mode_select.item_count == 0:
 		return pvp_training_ai_default_mode
 	var selected_mode := str(pvp_training_ai_mode_select.get_selected_metadata()).strip_edges().to_lower()
-	return selected_mode if selected_mode in ["ai4", "shadow", "active"] else pvp_training_ai_default_mode
+	return selected_mode if selected_mode in ["ai4", "shadow", "intermediate", "active", "elite", "nightmare"] else pvp_training_ai_default_mode
 
 
 func _selected_pvp_training_ai_archetype() -> String:
@@ -44156,7 +45157,8 @@ func _on_pvp_training_ai_start_pressed() -> void:
 		_selected_pvp_training_ai_archetype() if ai_team_source == "catalog" else "random",
 		ai_team_text if ai_team_source == "paste" else "",
 		player_catalog_team_id,
-		_selected_ai_sparring_tier_id()
+		_selected_ai_sparring_tier_id(),
+		pvp_ai_sparring_allow_spectators.button_pressed
 	)
 	request.queue_free()
 	_set_pvp_room_busy(false)
@@ -44176,6 +45178,7 @@ func _on_pvp_training_ai_start_pressed() -> void:
 	if ai_team_source == "catalog" and _selected_pvp_training_ai_team_id() == "random":
 		_resolve_pvp_training_ai_opponent_team()
 	_set_pvp_training_team_preview(response.get("ownTeam", []))
+	pvp_ai_sparring_allow_spectators.button_pressed = false
 	await _start_training_ai_battle_from_response(response)
 
 
@@ -44292,11 +45295,17 @@ func _on_ai_sparring_team_source_selected(_index: int) -> void:
 			pvp_training_team_note,
 			"text",
 			"ui.pvp.ai_sparring.party_note" if use_party else (
-				"ui.pvp.ai_sparring.catalog.player_note" if use_catalog else "ui.pvp.training.ephemeral_note"
+				"ui.pvp.ai_sparring.catalog.favorite_note" if _uses_ai_sparring_favorite_team() else (
+					"ui.pvp.ai_sparring.catalog.player_note" if use_catalog else "ui.pvp.training.ephemeral_note"
+				)
 			)
 		)
-	if pvp_ai_sparring_catalog_team_select != null:
-		pvp_ai_sparring_catalog_team_select.visible = use_catalog
+	if pvp_ai_sparring_player_catalog_search != null:
+		pvp_ai_sparring_player_catalog_search.visible = use_catalog
+	if pvp_ai_sparring_use_favorite_team_check != null:
+		pvp_ai_sparring_use_favorite_team_check.visible = use_catalog
+	if pvp_ai_sparring_player_catalog_suggestions != null and not use_catalog:
+		pvp_ai_sparring_player_catalog_suggestions.hide()
 	_refresh_ai_sparring_party_preview()
 	_refresh_ai_sparring_catalog_preview()
 
@@ -46890,6 +47899,10 @@ func _refresh_pvp_queue_compact_panel(delta: float = 0.0) -> void:
 
 
 func _refresh_pvp_ranked_queue_availability(delta: float) -> void:
+	# Ranked matchmaking is intentionally desktop-only.  Do not keep polling
+	# its account endpoint in the browser demo after the button has been gated.
+	if OS.has_feature("web"):
+		return
 	pvp_ranked_queue_availability_elapsed += delta
 	if pvp_ranked_queue_availability_in_flight or pvp_ranked_queue_availability_elapsed < RANKED_QUEUE_AVAILABILITY_POLL_INTERVAL_SECONDS:
 		return
@@ -47391,6 +48404,20 @@ func start_aether_clash_pvp_spectate(room_code: String) -> bool:
 	return started
 
 
+func start_nearby_pve_spectate(target_user_id: int) -> bool:
+	if target_user_id <= 0 or pvp_battle_starting:
+		return false
+	var request := _create_pvp_request_node()
+	var response: Dictionary = await BattleApiClient.spectate_nearby_pve(request, target_user_id)
+	request.queue_free()
+	if not bool(response.get("success", false)) or not _spectator_response_has_public_teams(response):
+		add_system_message(str(response.get("error", "That nearby battle is no longer available.")))
+		return false
+	await _start_pvp_battle_from_response(response)
+	var world := get_tree().get_first_node_in_group("world")
+	return world != null and bool(world.get("is_in_battle"))
+
+
 func _clear_stale_aether_clash_pvp_spectate_start() -> void:
 	if not pvp_battle_starting:
 		return
@@ -47507,6 +48534,8 @@ func _create_pvp_request_node() -> HTTPRequest:
 	return request
 
 func _set_pvp_room_busy(is_busy: bool) -> void:
+	if pvp_ai_sparring_allow_spectators != null:
+		pvp_ai_sparring_allow_spectators.disabled = is_busy
 	pvp_create_room_button.disabled = is_busy
 	_set_pvp_room_type_locked(is_busy or pvp_active_room_code != "")
 	if pvp_room_create_mode_button != null:
@@ -47529,15 +48558,19 @@ func _set_pvp_room_busy(is_busy: bool) -> void:
 	if pvp_timer_tier_select != null:
 		pvp_timer_tier_select.disabled = is_busy
 	if pvp_training_ai_mode_select != null:
-		pvp_training_ai_mode_select.disabled = is_busy
+		pvp_training_ai_mode_select.disabled = is_busy or pvp_training_ai_mode_select.item_count <= 1
+	if pvp_training_ai_bot_select != null:
+		pvp_training_ai_bot_select.disabled = is_busy
 	if pvp_training_ai_team_source_select != null:
 		pvp_training_ai_team_source_select.disabled = is_busy
 	if pvp_training_ai_custom_team_input != null:
 		pvp_training_ai_custom_team_input.editable = not is_busy
 	if pvp_training_ai_archetype_select != null:
 		pvp_training_ai_archetype_select.disabled = is_busy
-	if pvp_training_ai_team_select != null:
-		pvp_training_ai_team_select.disabled = is_busy
+	if pvp_training_ai_team_search != null:
+		pvp_training_ai_team_search.editable = not is_busy
+	if pvp_ai_sparring_player_catalog_search != null:
+		pvp_ai_sparring_player_catalog_search.editable = not is_busy
 	if pvp_ai_sparring_tier_select != null:
 		pvp_ai_sparring_tier_select.disabled = is_busy
 	if pvp_ai_sparring_catalog_tier != null:
@@ -47867,6 +48900,20 @@ func _add_chat_message(
 
 func add_system_message(text: String) -> void:
 	_add_chat_message(text)
+
+
+func add_removed_item_system_message(item_id: String, quantity: int) -> void:
+	var normalized_item_id := item_id.strip_edges().to_lower()
+	var safe_quantity := maxi(quantity, 0)
+	if normalized_item_id == "" or safe_quantity <= 0:
+		return
+	add_system_message(LocalizationManager.text(
+		"ui.npc.cost.item_removed",
+		{
+			"item": ItemLocalization.display_name(normalized_item_id, normalized_item_id.capitalize()),
+			"quantity": safe_quantity,
+		}
+	))
 
 
 func _setup_reward_notification_stack() -> void:
@@ -49959,6 +51006,11 @@ func _on_chat_session_invalid(_reason: String) -> void:
 	_force_session_logout(LocalizationManager.text("ui.session.signed_out"))
 
 
+func _on_pvp_session_invalid(_reason: String) -> void:
+	# Leave the socket callback before freeing the battle/world scene.
+	_force_session_logout.call_deferred(LocalizationManager.text("ui.session.signed_out"))
+
+
 func _start_session_logout_countdown(message: Dictionary) -> void:
 	var operation_id := str(message.get("operationId", "")).strip_edges()
 	var execute_at := str(message.get("executeAt", "")).strip_edges()
@@ -50081,3 +51133,21 @@ func _force_session_logout(message: String) -> void:
 	var error: Error = tree.change_scene_to_file(LOGIN_SCENE_PATH)
 	if error != OK:
 		push_warning("Could not return to login screen after session invalidation: %s" % error_string(error))
+
+func _add_pvp_training_ai_team_suggestion(display_name: String, team_id: String) -> void:
+	var suggestion := Button.new()
+	suggestion.text = display_name
+	suggestion.tooltip_text = display_name
+	suggestion.custom_minimum_size = Vector2(0, 32)
+	suggestion.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	suggestion.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	suggestion.focus_mode = Control.FOCUS_NONE
+	suggestion.clip_text = true
+	suggestion.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	suggestion.set_meta("team_id", team_id)
+	suggestion.pressed.connect(_on_pvp_training_ai_team_suggestion_selected.bind(team_id))
+	suggestion.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	suggestion.add_theme_color_override("font_hover_color", UI_TEXT)
+	suggestion.add_theme_stylebox_override("normal", _make_pvp_ranked_dropdown_item_style(Color("#00000000"), Color("#00000000")))
+	suggestion.add_theme_stylebox_override("hover", _make_pvp_ranked_dropdown_item_style(Color("#17304afa"), UI_MONEY))
+	pvp_training_ai_team_suggestion_list.add_child(suggestion)

@@ -1,6 +1,7 @@
 extends Node
 
 const PokemonCryResolver := preload("res://scripts/services/pokemon_cry_resolver.gd")
+const WebAudioBridge := preload("res://scripts/services/web_audio_bridge.gd")
 const DEFAULT_BUS := SettingsManager.SFX_BUS
 const POKEMON_CRY_VOLUME_DB := -7.0
 const FIELD_MOVE_SOUND_IDS := {
@@ -55,8 +56,16 @@ const SOUND_DATA := {
 		"path": "res://assets/audio/sfx/overworld/item_received.ogg",
 		"volume_db": -3.0,
 	},
+	"npc_shop_purchase": {
+		"path": "res://assets/audio/sfx/overworld/npc_shop_purchase.ogg",
+		"volume_db": 0.0,
+	},
 	"pokemon_recovery": {
 		"path": "res://assets/audio/sfx/overworld/pokemon_recovery.ogg",
+		"volume_db": 0.0,
+	},
+	"pokemon_item_heal": {
+		"path": "res://assets/audio/sfx/overworld/pokemon_item_heal.ogg",
 		"volume_db": 0.0,
 	},
 	"pokemon_level_up": {
@@ -70,6 +79,10 @@ const SOUND_DATA := {
 	"aethernet_teleport": {
 		"path": "res://assets/battles/animations/teleport/PRSFX- Teleport.wav",
 		"volume_db": -3.0,
+	},
+	"aether_beacon_attuned": {
+		"path": "res://assets/battles/animations/wish/PRSFX- Wish.wav",
+		"volume_db": -4.0,
 	},
 	"field_move_cut": {
 		"path": "res://assets/battles/animations/razorleaf/PRSFX- Razor Leaf1.wav",
@@ -105,6 +118,10 @@ func play(sound_id: String, volume_offset_db: float = 0.0, pitch_scale: float = 
 	var sound_data: Dictionary = SOUND_DATA.get(sound_key, {}) as Dictionary
 	if sound_data.is_empty():
 		return
+	var sound_path := str(sound_data.get("path", "")).strip_edges()
+	if OS.has_feature("web"):
+		WebAudioBridge.play_sfx(sound_path, _web_sfx_volume(float(sound_data.get("volume_db", 0.0)) + volume_offset_db), pitch_scale)
+		return
 
 	var stream := _get_stream(sound_key, sound_data)
 	if stream == null:
@@ -112,7 +129,7 @@ func play(sound_id: String, volume_offset_db: float = 0.0, pitch_scale: float = 
 
 	var player := AudioStreamPlayer.new()
 	player.stream = stream
-	player.bus = DEFAULT_BUS
+	player.bus = SettingsManager.get_audio_output_bus(DEFAULT_BUS)
 	player.volume_db = float(sound_data.get("volume_db", 0.0)) + volume_offset_db
 	player.pitch_scale = pitch_scale
 	player.finished.connect(player.queue_free)
@@ -135,6 +152,9 @@ func play_pokemon_cry(species: String, volume_offset_db: float = 0.0, pitch_scal
 	var sound_path := "%s/%s.ogg" % [PokemonCryResolver.POKEMON_CRY_DIR, cry_key]
 	if not ResourceLoader.exists(sound_path):
 		return
+	if OS.has_feature("web"):
+		WebAudioBridge.play_sfx(sound_path, _web_cry_volume(volume_offset_db), pitch_scale)
+		return
 
 	var stream := _get_stream("pokemon_cry:%s" % cry_key, {
 		"path": sound_path,
@@ -144,7 +164,7 @@ func play_pokemon_cry(species: String, volume_offset_db: float = 0.0, pitch_scal
 
 	var player := AudioStreamPlayer.new()
 	player.stream = stream
-	player.bus = SettingsManager.POKEMON_CRY_BUS
+	player.bus = SettingsManager.get_audio_output_bus(SettingsManager.POKEMON_CRY_BUS)
 	player.volume_db = POKEMON_CRY_VOLUME_DB + volume_offset_db
 	player.pitch_scale = pitch_scale
 	player.finished.connect(player.queue_free)
@@ -170,3 +190,19 @@ func _get_stream(sound_key: String, sound_data: Dictionary) -> AudioStream:
 
 func _get_pokemon_cry_key(species: String) -> String:
 	return pokemon_cry_resolver.get_cry_key(species)
+
+
+func _web_sfx_volume(volume_db: float) -> float:
+	return clampf(
+		SettingsManager.master_volume / 100.0 * SettingsManager.sfx_volume / 100.0 * db_to_linear(volume_db),
+		0.0,
+		1.0
+	)
+
+
+func _web_cry_volume(volume_offset_db: float) -> float:
+	return clampf(
+		SettingsManager.master_volume / 100.0 * SettingsManager.pokemon_cry_volume / 100.0 * db_to_linear(POKEMON_CRY_VOLUME_DB + volume_offset_db),
+		0.0,
+		1.0
+	)

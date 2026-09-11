@@ -1,10 +1,22 @@
 extends Node
 
 const FORMAT_ID = "gen9nationaldex"
+const DEFAULT_REQUEST_TIMEOUT_SECONDS := 15.0
 const CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const CALCDEX_MATCHUP := preload("res://scripts/battle/battle_calcdex_matchup.gd")
+const CALCDEX_OPEN := preload("res://scripts/battle/battle_calcdex_open.gd")
 const CALCDEX_CANDIDATES := preload("res://scripts/battle/battle_calcdex_candidates.gd")
 const CALCDEX_INFERENCE := preload("res://scripts/battle/battle_calcdex_inference.gd")
+const SET_SUGGESTIONS := preload("res://scripts/battle/battle_set_suggestions.gd")
+
+
+func get_set_suggestions(request_node: HTTPRequest, battle_id: String, revision: Dictionary, opponent_ref: String) -> Dictionary:
+	if not CALCDEX_SNAPSHOT.is_valid_projection_revision(revision) or not opponent_ref.begins_with("opponent:public-slot-"):
+		return {"success": false}
+	var response := await send_post_request(request_node, "/battle/%s/calcdex/v1/set-suggestions" % battle_id.uri_encode(), {
+		"schemaVersion": 1, "lastProjectionRevision": revision.duplicate(true), "opponentRef": opponent_ref,
+	})
+	return SET_SUGGESTIONS.normalize_response(response, revision, opponent_ref)
 
 func create_triggered_wild_battle(
 	request_node: HTTPRequest,
@@ -56,8 +68,15 @@ func create_dev_wild_battle(
 func resume_wild_battle(request_node: HTTPRequest) -> Dictionary:
 	return await send_get_request(request_node, "/battle/wild/resume")
 
+func resume_trainer_battle(request_node: HTTPRequest) -> Dictionary:
+	return await send_get_request(request_node, "/battle/trainer/resume")
+
 func get_npc_battle_state(request_node: HTTPRequest, battle_id: String, since_event_seq: int) -> Dictionary:
 	return await send_get_request(request_node, _append_since_event_seq_query("/battle/%s/state" % battle_id.uri_encode(), since_event_seq))
+
+
+func spectate_nearby_pve(request_node: HTTPRequest, target_user_id: int) -> Dictionary:
+	return await send_get_request(request_node, "/battle/pve/nearby/%d/spectate" % target_user_id)
 
 func create_trainer_battle(
 	request_node: HTTPRequest,
@@ -115,6 +134,11 @@ func get_training_ai_teams(request_node: HTTPRequest) -> Dictionary:
 		"/battle/pvp/training/ai/teams"
 	)
 
+
+func get_training_ai_statistics(request_node: HTTPRequest) -> Dictionary:
+	var path := "/auth/web/ai-sparring/statistics" if OS.has_feature("web") else "/account/pvp/training-ai/statistics"
+	return await send_get_request(request_node, path)
+
 func get_training_ai_team(request_node: HTTPRequest, team_id: String) -> Dictionary:
 	return await send_get_request(
 		request_node,
@@ -122,9 +146,10 @@ func get_training_ai_team(request_node: HTTPRequest, team_id: String) -> Diction
 	)
 
 func get_training_ai_match_history(request_node: HTTPRequest, limit: int = 20, offset: int = 0) -> Dictionary:
+	var path := "/auth/web/ai-sparring/history" if OS.has_feature("web") else "/account/pvp/training-ai/history/me"
 	return await send_get_request(
 		request_node,
-		"/account/pvp/training-ai/history/me?limit=%d&offset=%d" % [
+		path + "?limit=%d&offset=%d" % [
 			clampi(limit, 1, 100),
 			maxi(offset, 0),
 		]
@@ -132,7 +157,8 @@ func get_training_ai_match_history(request_node: HTTPRequest, limit: int = 20, o
 
 
 func clear_training_ai_match_history(request_node: HTTPRequest) -> Dictionary:
-	return await send_delete_request(request_node, "/account/pvp/training-ai/history/me")
+	var path := "/auth/web/ai-sparring/history" if OS.has_feature("web") else "/account/pvp/training-ai/history/me"
+	return await send_delete_request(request_node, path)
 
 func create_training_ai_battle(
 	request_node: HTTPRequest,
@@ -143,17 +169,19 @@ func create_training_ai_battle(
 	ai_archetype: String = "random",
 	ai_team_text: String = "",
 	player_team_id: String = "",
-	tier_id: String = "none"
+	tier_id: String = "none",
+	allow_spectators: bool = false
 ) -> Dictionary:
 	return await send_post_request(
 		request_node,
 		"/battle/pvp/training/ai/battles",
 		{
+			"allowSpectators": allow_spectators,
 			"player": player,
 			"teamText": team_text,
 			"playerTeamId": player_team_id.strip_edges(),
 			"teamId": ai_team_id if ai_team_id.strip_edges() != "" else "random",
-			"aiMode": ai_mode if ai_mode in ["ai4", "shadow", "active"] else "ai4",
+			"aiMode": ai_mode if ai_mode in ["ai4", "shadow", "intermediate", "active", "elite", "nightmare"] else "ai4",
 			"archetype": ai_archetype if ai_archetype.strip_edges() != "" else "random",
 			"aiTeamText": ai_team_text.strip_edges(),
 			"formatId": FORMAT_ID,
@@ -512,6 +540,50 @@ func get_calcdex_snapshot(
 	)
 	return CALCDEX_SNAPSHOT.normalize_response(response, last_projection_revision)
 
+func open_calcdex(
+	request_node: HTTPRequest,
+	battle_id: String,
+	last_projection_revision: Dictionary,
+	direction: String,
+	opponent_scenario: Dictionary = {},
+	field_scenario: Dictionary = {},
+	viewer_scenario: Dictionary = {},
+	battle_state_scenario: Dictionary = {}
+) -> Dictionary:
+	var normalized_battle_id := battle_id.strip_edges()
+	if normalized_battle_id == "" or not CALCDEX_SNAPSHOT.is_valid_projection_revision(last_projection_revision):
+		return {"success": false, "code": "invalid_calcdex_request", "error": "A valid battle revision is required."}
+	var payload := {
+		"schemaVersion": CALCDEX_OPEN.SCHEMA_VERSION,
+		"lastProjectionRevision": last_projection_revision.duplicate(true),
+		"direction": direction,
+		"viewerScenario": {
+			"boosts": _normalize_damage_calc_boost_table(viewer_scenario.get("boosts", {})),
+		},
+		"opponentScenario": _normalize_damage_calc_assumptions(opponent_scenario),
+		"fieldScenario": field_scenario.duplicate(true),
+	}
+	var viewer_state: Dictionary = battle_state_scenario.get("viewer", {}) as Dictionary if battle_state_scenario.get("viewer", {}) is Dictionary else {}
+	var opponent_state: Dictionary = battle_state_scenario.get("opponent", {}) as Dictionary if battle_state_scenario.get("opponent", {}) is Dictionary else {}
+	if viewer_state.has("status"):
+		payload["viewerScenario"]["status"] = str(viewer_state.get("status", ""))
+	if viewer_state.has("currentHp"):
+		payload["viewerScenario"]["currentHp"] = maxi(0, int(viewer_state.get("currentHp", 0)))
+	if viewer_scenario.has("ability"):
+		payload["viewerScenario"]["ability"] = str(viewer_scenario.get("ability", ""))
+	if opponent_state.has("status"):
+		payload["opponentScenario"]["status"] = str(opponent_state.get("status", ""))
+	if opponent_state.has("currentHpPercent"):
+		payload["opponentScenario"]["currentHpPercent"] = clampf(float(opponent_state.get("currentHpPercent", 0.0)), 0.0, 100.0)
+	if opponent_scenario.get("assumedMoves") is Array:
+		payload["opponentScenario"]["assumedMoves"] = (opponent_scenario.get("assumedMoves") as Array).duplicate(true)
+	var response: Dictionary = await send_post_request(
+		request_node,
+		"/battle/%s/calcdex/v1/open" % normalized_battle_id.uri_encode(),
+		payload
+	)
+	return CALCDEX_OPEN.normalize_response(response, last_projection_revision)
+
 func calculate_calcdex_matchup(
 	request_node: HTTPRequest,
 	battle_id: String,
@@ -648,6 +720,9 @@ func calculate_calcdex_inferred_matchup(
 	return CALCDEX_INFERENCE.normalize_response(response, last_projection_revision)
 
 func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
+	if request_node.has_meta("replay_read_only"):
+		return {"success": false, "error": "Replay is read-only"}
+	_configure_request_timeout(request_node)
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
 
 	var error: int = request_node.request(
@@ -666,6 +741,9 @@ func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
 	return await _read_json_response(request_node)
 
 func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary) -> Dictionary:
+	if request_node.has_meta("replay_read_only"):
+		return {"success": false, "error": "Replay is read-only"}
+	_configure_request_timeout(request_node)
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
 	
 	var error: int = request_node.request(
@@ -686,6 +764,9 @@ func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary
 
 
 func send_delete_request(request_node: HTTPRequest, path: String) -> Dictionary:
+	if request_node.has_meta("replay_read_only"):
+		return {"success": false, "error": "Replay is read-only"}
+	_configure_request_timeout(request_node)
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
 
 	var error: int = request_node.request(
@@ -702,6 +783,13 @@ func send_delete_request(request_node: HTTPRequest, path: String) -> Dictionary:
 		}
 
 	return await _read_json_response(request_node)
+
+func _configure_request_timeout(request_node: HTTPRequest) -> void:
+	# Include queue/start/resume and canonical recovery reads, not only moves.
+	# Preserve a caller's explicitly bounded budget (for example the calculator).
+	if request_node.timeout <= 0.0:
+		request_node.timeout = DEFAULT_REQUEST_TIMEOUT_SECONDS
+
 
 func _read_json_response(request_node: HTTPRequest) -> Dictionary:
 	var result: Array = await request_node.request_completed

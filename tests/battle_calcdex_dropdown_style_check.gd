@@ -98,7 +98,7 @@ func _run() -> void:
 	var usage_host := VBoxContainer.new()
 	content.add_child(usage_host)
 	panel._add_sample_set_selector(usage_host)
-	var usage_selector := _find_option_button(usage_host)
+	var usage_selector := usage_host.find_child("SampleSetSelector", true, false) as Button
 	if usage_selector == null:
 		_fail("Usage/sample-set selector was not created")
 	else:
@@ -113,7 +113,7 @@ func _run() -> void:
 	quit(0)
 
 
-func _assert_dropdown_style(selector: OptionButton, label: String) -> void:
+func _assert_dropdown_style(selector: Button, label: String) -> void:
 	if selector == null:
 		_fail("%s is missing" % label)
 		return
@@ -127,7 +127,9 @@ func _assert_dropdown_style(selector: OptionButton, label: String) -> void:
 	if selector.mouse_default_cursor_shape != Control.CURSOR_POINTING_HAND:
 		_fail("%s lacks the interactive cursor" % label)
 		return
-	var popup := selector.get_popup()
+	if not (selector is OptionButton):
+		return
+	var popup := (selector as OptionButton).get_popup()
 	if popup == null or not popup.has_theme_stylebox_override("panel"):
 		_fail("%s popup lacks its Calcdex panel style" % label)
 		return

@@ -35,6 +35,11 @@ func _process(_delta: float) -> void:
 
 
 func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictionary:
+	# Parcel delivery is outside the bounded browser demo, but Oak's canonical
+	# starter flow below is shared by both clients.
+	if OS.has_feature("web"):
+		await interact_with_player(body)
+		return {"success": true, "handled": false, "legacy": true}
 	if _is_gary_starter_sequence_active():
 		return {
 			"success": true,
@@ -97,11 +102,13 @@ func interact_with_player(player: Node2D) -> void:
 
 	var selected_species_id := str(selected_choice.get("speciesId", "")).strip_edges()
 	var selected_species_name := str(selected_choice.get("name", selected_species_id)).strip_edges()
-	_prepare_gary_starter_sequence()
+	if not OS.has_feature("web"):
+		_prepare_gary_starter_sequence()
 	var create_result: Dictionary = await give_starter_pokemon(selected_species_id)
 	is_creating_starter = false
 	if not bool(create_result.get("success", false)):
-		_cancel_gary_starter_sequence()
+		if not OS.has_feature("web"):
+			_cancel_gary_starter_sequence()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
@@ -118,7 +125,14 @@ func interact_with_player(player: Node2D) -> void:
 			{"pokemon": selected_species_name}
 		)
 	)
-	if last_starter_claim_already_completed:
+	if OS.has_feature("web"):
+		await show_dialogue(
+			_format_dialogue_lines(
+				await _resolve_dialogue_lines(starter_received_dialogue_id, starter_received_dialogue_lines),
+				selected_species_name
+			)
+		)
+	elif last_starter_claim_already_completed:
 		_cancel_gary_starter_sequence()
 		await show_dialogue(
 			_format_dialogue_lines(

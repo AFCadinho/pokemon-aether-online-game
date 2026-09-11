@@ -80,16 +80,28 @@ func walk_to_player(body: Node2D) -> void:
 		return
 
 	_play_walk_animation(direction)
-	
-	while _to_tile(get_feet_position()) != stop_tile:
+	# A vision area is short and straight. Bound this animation defensively:
+	# malformed map origins/facing data must never leave the overworld locked in
+	# an unbounded approach loop before the battle dialogue can begin.
+	var expected_steps: int = absi(stop_tile.x - npc_tile.x) + absi(stop_tile.y - npc_tile.y)
+	var maximum_steps := clampi(expected_steps + 1, 1, 16)
+	var completed_steps := 0
+	while _to_tile(get_feet_position()) != stop_tile and completed_steps < maximum_steps:
 		var current_tile := _to_tile(get_feet_position())
 		var next_tile := current_tile + Vector2i(int(direction.x), int(direction.y))
 		var target_position := _tile_to_world(next_tile)
 		var tween := create_tween()
 		tween.tween_property(self, "global_position", target_position, TILE_SIZE / MOVE_SPEED)
 		await tween.finished
+		completed_steps += 1
 		_update_sort_z()
-	
+
+	if _to_tile(get_feet_position()) != stop_tile:
+		push_warning(
+			"TrainerNPC vision approach exceeded its straight-line bound; snapping to battle position."
+		)
+		global_position = _tile_to_world(stop_tile)
+		_update_sort_z()
 	_set_idle_frame(direction)
 
 func _get_straight_line_stop_tile(npc_tile: Vector2i, player_tile: Vector2i, direction: Vector2) -> Vector2i:
@@ -155,6 +167,7 @@ func _show_battle_dialogue(is_rematch: bool) -> void:
 			"backend.error.trainer_battle_start",
 			dialogue_box
 		)
+		_recover_overworld_after_failed_battle_start()
 
 
 func _release_failed_battle_start() -> void:
@@ -167,6 +180,18 @@ func _release_failed_battle_start() -> void:
 	if trainer_progress_state == STATE_FIRST_ENCOUNTER:
 		triggered = false
 	_refresh_rematch_marker()
+
+
+func _recover_overworld_after_failed_battle_start() -> void:
+	# A trainer challenge takes an early, local input lock before World begins
+	# its transition. If the backend rejects that transition, the World normally
+	# releases it; invoke the idempotent recovery after the error dialogue too,
+	# so a failed request can never leave a browser player frozen on relog.
+	var world := get_tree().get_first_node_in_group("world")
+	if world != null and world.has_method("recover_failed_trainer_battle_start"):
+		world.call("recover_failed_trainer_battle_start")
+		return
+	GameState.unlock_overworld_input()
 
 
 func _resolve_rematch_dialogue_lines(trainer_metadata: Dictionary) -> Array[String]:
@@ -247,6 +272,10 @@ func _fail_trainer_metadata(dialogue_box: Node, message: String) -> void:
 	vision_candidate = null
 	_refresh_rematch_marker()
 	await _show_generic_trainer_error_dialogue(dialogue_box)
+	# Metadata is fetched before start_trainer_battle(), while the vision
+	# trigger already owns the overworld input lock. Release that lock here as
+	# well as in the rejected-battle path below.
+	_recover_overworld_after_failed_battle_start()
 
 func _show_generic_trainer_error_dialogue(dialogue_box: Node) -> void:
 	await GameErrorDialogService.show_report_to_staff_message(dialogue_box)

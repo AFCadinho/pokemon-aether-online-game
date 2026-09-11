@@ -3,6 +3,7 @@ extends SceneTree
 class NotificationOverlay extends Node:
 	var system_messages: Array[String] = []
 	var move_notifications: Array[Dictionary] = []
+	var removed_items: Array[Dictionary] = []
 
 	func add_system_message(message: String) -> void:
 		system_messages.append(message)
@@ -12,6 +13,9 @@ class NotificationOverlay extends Node:
 			"pokemon": pokemon_context.duplicate(true),
 			"move": (move_value as Dictionary).duplicate(true) if move_value is Dictionary else {},
 		})
+
+	func add_removed_item_system_message(item_id: String, quantity: int) -> void:
+		removed_items.append({"itemId": item_id, "quantity": quantity})
 
 const CENTER_PATHS: Array[String] = [
 	"res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn",
@@ -259,6 +263,11 @@ func _check_popup_scene() -> void:
 			and str(notification_overlay.move_notifications[0].move.get("type", "")) == "water",
 		"Move Mentor lesson adds a top-right learned-move card"
 	)
+	popup.call("_announce_consumed_items", [{"itemId": "heart-scale", "quantity": 1}])
+	_check(
+		notification_overlay.removed_items == [{"itemId": "heart-scale", "quantity": 1}],
+		"Move Mentor reports its server-confirmed item payment"
+	)
 	notification_overlay.queue_free()
 	var popup_source := FileAccess.get_file_as_string("res://scripts/ui/move_mentor_popup.gd")
 	for source: String in REQUIRED_SOURCES:
@@ -288,8 +297,9 @@ func _check_service_contract() -> void:
 	var service_source := FileAccess.get_file_as_string(PARTY_SERVICE_PATH)
 	_check(
 		service_source.contains('"/game/pokemon/%s/moves/mentor"')
-			and service_source.contains('payload["learnSource"] = learn_source'),
-		"party service loads the mentor catalog and submits the explicit mentor source"
+			and service_source.contains('payload["learnSource"] = learn_source')
+			and service_source.contains('"consumedItems": _array_from_value(body.get("consumedItems", []))'),
+		"party service submits the explicit mentor source and preserves confirmed item costs"
 	)
 	var error_service_source := FileAccess.get_file_as_string(
 		"res://scripts/services/backend_error_localization_service.gd"
@@ -328,6 +338,7 @@ func _check_localization() -> void:
 			"ui.move_mentor.status.cost",
 			"ui.move_mentor.status.resource_required",
 			"ui.move_mentor.cost.tooltip",
+			"ui.npc.cost.item_removed",
 			"ui.move_mentor.source.relearn",
 			"ui.move_mentor.npc.service_unavailable",
 		]:
