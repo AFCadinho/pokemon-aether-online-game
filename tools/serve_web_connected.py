@@ -72,6 +72,8 @@ HTTP_ROUTE_PREFIXES = (
 )
 SECURITY_HEADERS = {
     "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer",
+    # Required by Godot's SharedArrayBuffer-backed WebAudio worklet mixer.
+    "Cross-Origin-Opener-Policy": "same-origin", "Cross-Origin-Embedder-Policy": "require-corp",
     "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self' blob:; frame-ancestors 'none'",
 }
 

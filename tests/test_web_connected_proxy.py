@@ -86,8 +86,11 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertEqual(client.post("/api/battle/wild-encounter", content="x" * (128 * 1024 + 1)).status_code, 413)
             self.assertEqual(client.get("/", headers={"host": "attacker.example"}).status_code, 403)
             self.assertEqual(client.get("/", headers={"origin": "https://attacker.example"}).status_code, 403)
-            self.assertEqual(client.get("/").text, "test export")
-            self.assertIn("frame-ancestors 'none'", client.get("/").headers["content-security-policy"])
+            static = client.get("/")
+            self.assertEqual(static.text, "test export")
+            self.assertEqual(static.headers["cross-origin-opener-policy"], "same-origin")
+            self.assertEqual(static.headers["cross-origin-embedder-policy"], "require-corp")
+            self.assertIn("frame-ancestors 'none'", static.headers["content-security-policy"])
             for path in ["/.secret", "/external.js", "/%2e%2e/etc/passwd"]:
                 self.assertEqual(client.get(path).status_code, 404)
             self.assertEqual(len(calls), 29)

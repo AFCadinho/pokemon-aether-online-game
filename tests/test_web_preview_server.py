@@ -45,6 +45,8 @@ class PreviewServerTest(unittest.TestCase):
         status, headers, _ = self.request('/index.wasm')
         self.assertEqual(status, 200)
         self.assertEqual(headers['content-type'], 'application/wasm')
+        self.assertEqual(headers['cross-origin-opener-policy'], 'same-origin')
+        self.assertEqual(headers['cross-origin-embedder-policy'], 'require-corp')
         self.assertIn("connect-src 'self'", headers['content-security-policy'])
 
     def test_pokemon_assets_are_separate_and_long_lived(self):

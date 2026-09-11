@@ -47,8 +47,9 @@ only the generated export, and does not log request URLs or bodies.
 
 The assigned slot needs Godot's matching `web_nothreads_release.zip` export
 template installed in its own XDG data directory. This is engine tooling, not a
-copy of another checkout's caches. No multithreaded export or COOP/COEP headers
-are needed for this single-threaded build.
+copy of another checkout's caches. The local preview servers send COOP/COEP
+headers so Godot's WebAudio worklet mixer can use its shared-memory path; any
+future public host must send those headers too.
 
 ### Connected preview
 
