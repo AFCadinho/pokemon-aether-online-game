@@ -4250,12 +4250,18 @@ func _try_run() -> void:
 		_set_battle_input_locked(false)
 		return
 
-	if not await _render_resolved_player_choice_response(response):
+	# Showdown reports a forfeit as a terminal win for the wild side. The
+	# account state is correct, but presenting that event calls it a victory.
+	# A Run is neither a win nor a loss in the client: retain the authoritative
+	# state while replacing its terminal presentation with "Got away safely!".
+	if not await _render_resolved_player_choice_response(response, [], false, true):
 		current_action_panel.set_message(_t("battle.error.run_failed"))
 		_set_battle_input_locked(false)
 		_show_moves()
 		return
 
+	_add_battle_log_message(_t("battle.run.success"))
+	current_action_panel.set_message(_t("battle.run.success"))
 	if await _finish_if_battle_ended({"reason": "flee"}):
 		return
 

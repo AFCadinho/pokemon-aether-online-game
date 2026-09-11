@@ -45,9 +45,10 @@ func _init() -> void:
 	var run_handler_end := battle.find("func _show_forfeit_confirm_dialog()", run_handler_start)
 	var run_handler := battle.substr(run_handler_start, run_handler_end - run_handler_start)
 	_expect(run_handler.contains('await _submit_player_choice_and_resolve("run", 1)')
-		and run_handler.contains('await _render_resolved_player_choice_response(response)')
+		and run_handler.contains('await _render_resolved_player_choice_response(response, [], false, true)')
+		and run_handler.contains('_add_battle_log_message(_t("battle.run.success"))')
 		and run_handler.contains('await _finish_if_battle_ended({"reason": "flee"})'),
-		"Wild Run resolves server-side before the client closes the battle")
+		"Wild Run resolves server-side, hides the forfeit win event and uses the safe-escape presentation")
 	quit(1 if failed else 0)
 
 
