@@ -4740,3 +4740,14 @@ func _abort_battle_start(preserve_activity := false) -> void:
 	_publish_world_presence(true)
 	_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()
+
+
+func recover_failed_trainer_battle_start() -> void:
+	# An NPC obtains its vision lock before a trainer request begins. Keep this
+	# recovery idempotent because a normal rejected request already passes
+	# through _abort_battle_start; the second call repairs a browser-side lock
+	# left behind by an interrupted transition or error dialogue.
+	if is_in_battle:
+		_abort_battle_start()
+		return
+	_unlock_overworld_after_battle()
