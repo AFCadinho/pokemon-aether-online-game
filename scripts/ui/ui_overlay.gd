@@ -143,6 +143,8 @@ const PvpRankedTeamValidation := preload("res://scripts/services/pvp_ranked_team
 const PC_POKEMON_SLOT_BUTTON_SCRIPT := preload("res://scripts/ui/pc_pokemon_slot_button.gd")
 const PC_PARTY_HOVER_CARD_SCENE: PackedScene = preload("res://scenes/battle/party_hover_card.tscn")
 const POKEMON_GENDER_DISPLAY := preload("res://scripts/ui/pokemon_gender_display.gd")
+const POKEMON_GENDER_MALE_ICON: Texture2D = preload("res://assets/gender/male.png")
+const POKEMON_GENDER_FEMALE_ICON: Texture2D = preload("res://assets/gender/female.png")
 const POKEMON_SUMMARY_MOVE_REORDER_SLOT_SCRIPT := preload("res://scripts/ui/pokemon_summary_move_reorder_slot.gd")
 const HELD_ITEM_DROP_TARGET_BUTTON_SCRIPT := preload("res://scripts/ui/held_item_drop_target_button.gd")
 const ALPHA_TOOLS_ERROR_FEEDBACK := preload("res://scripts/services/alpha_tools_error_feedback.gd")
@@ -1420,7 +1422,7 @@ var pokemon_summary_pending_ball_card_key := ""
 var pokemon_summary_type_icon_row: HBoxContainer
 var pokemon_summary_hidden_ability_badge: PanelContainer
 var pokemon_summary_title_label: Label
-var pokemon_summary_gender_label: Label
+var pokemon_summary_gender_label: TextureRect
 var pokemon_summary_id_label: Label
 var pokemon_summary_nickname_button: Button
 var pokemon_summary_copy_button: Button
@@ -19427,10 +19429,9 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	name_label.add_theme_color_override("font_color", Color("#f4f7ff"))
 	title_row.add_child(name_label)
 	nodes["name_label"] = name_label
-	var gender_label := Label.new()
-	gender_label.add_theme_font_size_override("font_size", 14)
-	title_row.add_child(gender_label)
-	nodes["gender_label"] = gender_label
+	var gender_icon := _create_pokemon_summary_gender_icon()
+	title_row.add_child(gender_icon)
+	nodes["gender_icon"] = gender_icon
 	var id_label := Label.new()
 	id_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	id_label.add_theme_font_size_override("font_size", 9)
@@ -20354,14 +20355,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_title_label.add_theme_constant_override("shadow_offset_y", 1)
 	title_row.add_child(pokemon_summary_title_label)
 
-	pokemon_summary_gender_label = Label.new()
-	pokemon_summary_gender_label.visible = false
-	pokemon_summary_gender_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	pokemon_summary_gender_label.mouse_filter = Control.MOUSE_FILTER_PASS
-	pokemon_summary_gender_label.add_theme_font_size_override("font_size", 15)
-	pokemon_summary_gender_label.add_theme_color_override("font_shadow_color", Color("#00111f"))
-	pokemon_summary_gender_label.add_theme_constant_override("shadow_offset_x", 1)
-	pokemon_summary_gender_label.add_theme_constant_override("shadow_offset_y", 1)
+	pokemon_summary_gender_label = _create_pokemon_summary_gender_icon()
 	title_row.add_child(pokemon_summary_gender_label)
 
 	pokemon_summary_nickname_button = Button.new()
@@ -25302,7 +25296,7 @@ func _capture_pokemon_summary_card_context(card_key: String, pokemon: Pokemon, m
 		"type_icon_row": pokemon_summary_type_icon_row,
 		"hidden_ability_badge": pokemon_summary_hidden_ability_badge,
 		"title_label": pokemon_summary_title_label,
-		"gender_label": pokemon_summary_gender_label if mode == "interactive" else null,
+		"gender_icon": pokemon_summary_gender_label if mode == "interactive" else null,
 		"id_label": pokemon_summary_id_label,
 		"nickname_button": pokemon_summary_nickname_button if mode == "interactive" else null,
 		"copy_button": pokemon_summary_copy_button if mode == "interactive" else null,
@@ -25360,7 +25354,7 @@ func _apply_pokemon_summary_card_context(card_key: String) -> bool:
 	pokemon_summary_type_icon_row = context.get("type_icon_row") as HBoxContainer
 	pokemon_summary_hidden_ability_badge = context.get("hidden_ability_badge") as PanelContainer
 	pokemon_summary_title_label = context.get("title_label") as Label
-	pokemon_summary_gender_label = context.get("gender_label") as Label
+	pokemon_summary_gender_label = context.get("gender_icon") as TextureRect
 	pokemon_summary_id_label = context.get("id_label") as Label
 	pokemon_summary_nickname_button = context.get("nickname_button") as Button
 	pokemon_summary_copy_button = context.get("copy_button") as Button
@@ -25552,7 +25546,7 @@ func _refresh_pokemon_summary() -> void:
 		if nickname != ""
 		else localized_species_name
 	)
-	_apply_pokemon_summary_gender_label(pokemon_summary_gender_label, pokemon.gender)
+	_apply_pokemon_summary_gender_icon(pokemon_summary_gender_label, pokemon.gender)
 	var summary_id: String = str(pokemon.owned_pokemon_id) if pokemon.owned_pokemon_id > 0 else ""
 	if summary_id == "":
 		summary_id = pokemon.instance_id.strip_edges()
@@ -25628,9 +25622,8 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	var name_label := nodes.get("name_label") as Label
 	name_label.text = display_name
 	name_label.tooltip_text = localized_species_name if display_name != localized_species_name else display_name
-	var gender_label := nodes.get("gender_label") as Label
-	gender_label.text = "♂" if pokemon.gender == "male" else ("♀" if pokemon.gender == "female" else "")
-	gender_label.add_theme_color_override("font_color", Color("#62d7ff") if pokemon.gender == "male" else Color("#ff82ba"))
+	var gender_icon := nodes.get("gender_icon") as TextureRect
+	_apply_pokemon_summary_gender_icon(gender_icon, pokemon.gender)
 	var id_label := nodes.get("id_label") as Label
 	_set_readonly_summary_dex_number(id_label, pokemon)
 	var shiny_label := nodes.get("shiny_label") as Label
@@ -26110,21 +26103,31 @@ func _fit_pokemon_summary_title_label() -> void:
 	label.custom_minimum_size.x = minf(ceilf(desired_width), maxf(available_width, 0.0))
 
 
-func _apply_pokemon_summary_gender_label(label: Label, gender: String) -> void:
-	if label == null:
+func _create_pokemon_summary_gender_icon() -> TextureRect:
+	var icon := TextureRect.new()
+	icon.visible = false
+	icon.custom_minimum_size = Vector2(16, 16)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_PASS
+	return icon
+
+
+func _apply_pokemon_summary_gender_icon(icon: TextureRect, gender: String) -> void:
+	if icon == null:
 		return
 
 	var gender_display: Dictionary = POKEMON_GENDER_DISPLAY.presentation(gender)
-	label.visible = bool(gender_display.get("visible", false))
-	label.text = str(gender_display.get("symbol", ""))
-	label.tooltip_text = ""
-	if not label.visible:
+	icon.visible = bool(gender_display.get("visible", false))
+	icon.tooltip_text = ""
+	icon.texture = null
+	if not icon.visible:
 		return
 
-	label.add_theme_color_override("font_color", gender_display.get("color", Color.WHITE) as Color)
+	icon.texture = POKEMON_GENDER_MALE_ICON if gender.strip_edges().to_lower() in ["male", "m", "♂"] else POKEMON_GENDER_FEMALE_ICON
 	var localization_key := str(gender_display.get("localization_key", ""))
 	if localization_key != "":
-		label.tooltip_text = LocalizationManager.text(localization_key)
+		icon.tooltip_text = LocalizationManager.text(localization_key)
 
 func _set_pokemon_summary_sprite(pokemon: Pokemon) -> void:
 	if pokemon_summary_animated_sprite == null:

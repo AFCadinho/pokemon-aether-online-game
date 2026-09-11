@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dmbromlkpmfd" path="res://scripts/ui/party_slot.gd" id="1_kmnus"]
 [ext_resource type="Script" path="res://scripts/ui/held_item_drop_target_button.gd" id="2_held_item_drop"]
+[ext_resource type="Texture2D" path="res://assets/ui/global_shiny_boost.svg" id="3_shiny_badge"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kmnus"]
 bg_color = Color(0.03137255, 0.08235294, 0.13333334, 0.92156863)
@@ -102,18 +103,14 @@ theme_override_constants/separation = 2
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="ShinyBadge" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1535304865]
+[node name="ShinyBadge" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1535304865]
 visible = false
-custom_minimum_size = Vector2(16, 0)
+custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 tooltip_text = "ui.party.shiny"
-theme_override_colors/font_color = Color(1, 0.8745098, 0.43137255, 1)
-theme_override_colors/font_outline_color = Color(0.09019608, 0.05490196, 0.003921569, 0.96)
-theme_override_constants/outline_size = 1
-theme_override_font_sizes/font_size = 15
-text = "S"
-horizontal_alignment = 1
-vertical_alignment = 1
+texture = ExtResource("3_shiny_badge")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=714565378]
 custom_minimum_size = Vector2(72, 0)
