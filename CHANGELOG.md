@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Browser audio now explicitly primes its output during player interaction,
+  ensuring music and sound effects can start after the web build has loaded.
+
 - Browser battle logs now use a font-safe turn divider instead of displaying
   missing-character blocks.
 
