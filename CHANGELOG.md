@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Browser battle logs now use a font-safe turn divider instead of displaying
+  missing-character blocks.
+
 - Browser demo: the login screen now uses the same animated background as the
   desktop client.
 
