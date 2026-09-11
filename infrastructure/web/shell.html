@@ -82,6 +82,7 @@
       // loading while its worklet never reaches the hardware destination.
       const tracedAudioWorkletNode = function (context, processorName, options) {
         const node = new NativeAudioWorkletNode(context, processorName, options);
+        let lastAudioChunkReportAt = -Infinity;
         recordAudioDebug('worklet-node-created', {
           processor: processorName,
           outputChannels: options?.outputChannelCount || [],
@@ -97,6 +98,34 @@
           };
         } catch (error) {
           recordAudioDebug('worklet-connect-trace-unavailable', {
+            message: String(error?.message || error),
+          });
+        }
+        try {
+          const nativePostMessage = node.port.postMessage.bind(node.port);
+          node.port.postMessage = message => {
+            const command = message?.cmd;
+            if (command === 'start' || command === 'start_nothreads') {
+              recordAudioDebug('worklet-start-requested', { processor: processorName, command });
+            } else if (command === 'chunk' && performance.now() - lastAudioChunkReportAt >= 1000) {
+              lastAudioChunkReportAt = performance.now();
+              const samples = message.data;
+              let peak = 0;
+              if (samples?.length) {
+                for (let index = 0; index < samples.length; index += 1) {
+                  peak = Math.max(peak, Math.abs(samples[index]));
+                }
+              }
+              recordAudioDebug('worklet-audio-chunk', {
+                processor: processorName,
+                samples: samples?.length || 0,
+                peak: Number(peak.toFixed(6)),
+              });
+            }
+            return nativePostMessage(message);
+          };
+        } catch (error) {
+          recordAudioDebug('worklet-port-trace-unavailable', {
             message: String(error?.message || error),
           });
         }
