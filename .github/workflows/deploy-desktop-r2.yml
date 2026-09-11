@@ -456,7 +456,7 @@ jobs:
               "pokemon-shiny-back",
               "music",
           }
-          optional_gen5_ids = {
+          required_gen5_ids = {
               "pokemon-gen5-front",
               "pokemon-gen5-back",
               "pokemon-gen5-shiny-front",
@@ -495,7 +495,11 @@ jobs:
                   if pack_id != "music" and not str(pack["url"]).endswith(f"/{pack['version']}.zip"):
                       raise SystemExit(f"{manifest_path} URL does not match version for {pack_id}: {pack['url']}")
 
-              for pack_id in sorted(optional_gen5_ids & by_id.keys()):
+              missing_gen5 = sorted(required_gen5_ids - by_id.keys())
+              if missing_gen5:
+                  raise SystemExit(f"{manifest_path} missing Gen 5 sprite packs: {', '.join(missing_gen5)}")
+
+              for pack_id in sorted(required_gen5_ids):
                   pack = by_id[pack_id]
                   sha256 = str(pack.get("sha256", ""))
                   if len(sha256) != 64 or any(character not in "0123456789abcdef" for character in sha256):
