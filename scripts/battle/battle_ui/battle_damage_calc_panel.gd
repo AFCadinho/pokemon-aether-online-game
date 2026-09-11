@@ -4,6 +4,8 @@ class_name BattleDamageCalcPanel
 
 const CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
 const SET_SUGGESTIONS := preload("res://scripts/battle/battle_set_suggestions.gd")
+const MALE_GENDER_ICON: Texture2D = preload("res://assets/gender/male.png")
+const FEMALE_GENDER_ICON: Texture2D = preload("res://assets/gender/female.png")
 signal set_suggestions_requested(opponent_ref: String, revision: Dictionary)
 const DROPDOWN_ARROW: Texture2D = preload("res://assets/ui/photo_mode_dropdown_arrow.svg")
 const DROPDOWN_RADIO_CHECKED: Texture2D = preload("res://assets/ui/photo_mode_radio_checked.svg")
@@ -465,7 +467,9 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		_get_defender_hp_percent(opponent),
 		_get_boosts_label(opponent),
 		_get_effective_pokemon_status("own"),
-		_get_effective_pokemon_status("opponent")
+		_get_effective_pokemon_status("opponent"),
+		_get_pokemon_gender(viewer),
+		_get_pokemon_gender(opponent)
 	)
 	var assumptions := _get_display_assumptions(opponent)
 	var results: Array = _as_array(response.get("results", []))
@@ -1948,7 +1952,9 @@ func _add_profile_summary(
 	opponent_hp_percent: Variant = null,
 	opponent_boosts_label: String = "",
 	viewer_status: String = "",
-	opponent_status: String = ""
+	opponent_status: String = "",
+	viewer_gender: String = "",
+	opponent_gender: String = ""
 ) -> void:
 	if not knowledge_snapshot.is_empty():
 		_add_team_selector_strips()
@@ -1971,7 +1977,8 @@ func _add_profile_summary(
 		active_subtab == SUBTAB_YOUR_DAMAGE,
 		_fallback_text(viewer_sprite_species, viewer_name),
 		viewer_hp_percent,
-		viewer_status
+		viewer_status,
+		viewer_gender
 	))
 	var arrow := _make_label("VS", 10, TEXT_MUTED)
 	arrow.custom_minimum_size = Vector2(30, 0)
@@ -1993,7 +2000,8 @@ func _add_profile_summary(
 		active_subtab == SUBTAB_THEIR_DAMAGE,
 		_fallback_text(opponent_sprite_species, opponent_name),
 		opponent_hp_percent,
-		opponent_status
+		opponent_status,
+		opponent_gender
 	))
 
 
@@ -2005,7 +2013,8 @@ func _make_matchup_side(
 	is_attacker: bool,
 	sprite_species: String,
 	hp_percent: Variant,
-	status: String = ""
+	status: String = "",
+	gender: String = ""
 ) -> PanelContainer:
 	var pokemon_ref := selected_viewer_ref if relation == "viewer" else selected_opponent_ref
 	var scenario_species := str(species_scenarios.get(pokemon_ref, "")).strip_edges()
@@ -2048,6 +2057,9 @@ func _make_matchup_side(
 		name_row.add_child(name_label)
 	else:
 		name_row.add_child(_make_forme_menu_button(relation, pokemon_name))
+	var gender_icon := _make_gender_icon(gender, pokemon_name)
+	if gender_icon != null:
+		name_row.add_child(gender_icon)
 	if relation == "opponent" and not knowledge_snapshot.is_empty():
 		_add_sample_set_selector(name_row)
 		var set_selector := name_row.get_child(name_row.get_child_count() - 1) as OptionButton
@@ -2273,7 +2285,7 @@ func _on_battle_state_status_changed(index: int, relation: String, selector: Opt
 func _make_forme_menu_button(relation: String, pokemon_name: String) -> MenuButton:
 	var button := MenuButton.new()
 	button.name = "ViewerFormeSelector" if relation == "viewer" else "OpponentFormeSelector"
-	button.text = "%s  ▾" % pokemon_name
+	button.text = "%s  v" % _strip_gender_symbols(pokemon_name)
 	button.tooltip_text = _t("battle.calc.forme_tooltip")
 	button.focus_mode = Control.FOCUS_ALL
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -2952,7 +2964,9 @@ func _update_result_disclosure_button(result_key: String) -> void:
 	var button: Button = metadata.get("button") as Button
 	if button == null:
 		return
-	var symbol := "▾" if result_key == expanded_result_key else "▸"
+	# The browser fallback font does not guarantee geometric triangle glyphs.
+	# Keep the original interaction while rendering reliably on every platform.
+	var symbol := "v" if result_key == expanded_result_key else ">"
 	button.text = symbol if bool(metadata.get("compact", false)) else "%s  %s" % [symbol, str(metadata.get("moveName", ""))]
 
 
@@ -5733,8 +5747,48 @@ func _get_pokemon_label(value: Variant, fallback: String) -> String:
 	for key: String in ["displayName", "name", "species"]:
 		var text := str(pokemon.get(key, "")).strip_edges()
 		if text != "":
-			return text
+			return _strip_gender_symbols(text)
 	return fallback
+
+
+func _get_pokemon_gender(value: Variant) -> String:
+	if not (value is Dictionary):
+		return ""
+	var pokemon := value as Dictionary
+	var explicit_gender := str(pokemon.get("gender", "")).strip_edges()
+	if explicit_gender != "":
+		return explicit_gender
+	for key: String in ["displayName", "name", "species"]:
+		var text := str(pokemon.get(key, ""))
+		if text.contains("♂"):
+			return "M"
+		if text.contains("♀"):
+			return "F"
+	return ""
+
+
+func _strip_gender_symbols(value: String) -> String:
+	return value.replace("♂", "").replace("♀", "").strip_edges()
+
+
+func _make_gender_icon(gender: String, name_hint: String = "") -> TextureRect:
+	var normalized_gender := gender.strip_edges().to_lower()
+	if normalized_gender == "" and name_hint.contains("♂"):
+		normalized_gender = "m"
+	elif normalized_gender == "" and name_hint.contains("♀"):
+		normalized_gender = "f"
+	if normalized_gender not in ["m", "male", "f", "female"]:
+		return null
+	var icon := TextureRect.new()
+	icon.name = "PokemonGenderIcon"
+	icon.custom_minimum_size = Vector2(13, 13)
+	icon.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.texture = MALE_GENDER_ICON if normalized_gender in ["m", "male"] else FEMALE_GENDER_ICON
+	return icon
 
 
 func _get_hp_label(pokemon: Dictionary) -> String:
