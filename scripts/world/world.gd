@@ -1486,6 +1486,8 @@ func _setup_initial_world_state() -> void:
 	# confirmed absent/expired battle may cross into the fresh overworld boundary.
 	if not bool(wild_resume.get("resumed", false)) and not bool(wild_resume.get("retryable", false)):
 		await _save_player_activity_state("idle")
+		WorldPresenceService.connect_presence.call_deferred()
+		_publish_world_presence.call_deferred(true)
 
 
 func _setup_web_demo_world() -> void:

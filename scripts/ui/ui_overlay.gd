@@ -19450,6 +19450,15 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	var gender_icon := _create_pokemon_summary_gender_icon()
 	title_row.add_child(gender_icon)
 	nodes["gender_icon"] = gender_icon
+	var gender_label := Label.new()
+	gender_label.custom_minimum_size = Vector2(16, 16)
+	gender_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	gender_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	gender_label.add_theme_font_size_override("font_size", 13)
+	gender_label.add_theme_color_override("font_color", Color("#f49ac2"))
+	gender_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title_row.add_child(gender_label)
+	nodes["gender_label"] = gender_label
 	var id_label := Label.new()
 	id_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	id_label.add_theme_font_size_override("font_size", 9)
@@ -20390,7 +20399,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	pokemon_summary_nickname_button = Button.new()
 	pokemon_summary_nickname_button.icon = POKEMON_SUMMARY_EDIT_ICON
 	pokemon_summary_nickname_button.expand_icon = true
-	pokemon_summary_nickname_button.custom_minimum_size = Vector2(22, 20)
+	pokemon_summary_nickname_button.custom_minimum_size = Vector2(20, 20)
 	pokemon_summary_nickname_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	pokemon_summary_nickname_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_nickname_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -25653,6 +25662,11 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	name_label.tooltip_text = localized_species_name if display_name != localized_species_name else display_name
 	var gender_icon := nodes.get("gender_icon") as TextureRect
 	_apply_pokemon_summary_gender_icon(gender_icon, pokemon.gender)
+	var gender_label := nodes.get("gender_label") as Label
+	if gender_label != null:
+		var normalized_gender := str(pokemon.gender).strip_edges().to_lower()
+		gender_label.text = "♂" if normalized_gender in ["male", "m", "man"] else "♀"
+		gender_label.visible = normalized_gender not in ["", "genderless", "none", "unknown"]
 	var id_label := nodes.get("id_label") as Label
 	_set_readonly_summary_dex_number(id_label, pokemon)
 	var shiny_icon := nodes.get("shiny_icon") as TextureRect
@@ -44557,18 +44571,23 @@ func _create_ai_sparring_catalog_team_card(entry: Dictionary) -> Control:
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", UI_TEXT)
 	header.add_child(title)
-	var favorite_button := Button.new()
+	var favorite_button := TextureButton.new()
 	var is_favorite := team_id == pvp_ai_sparring_favorite_team_id
-	favorite_button.text = "★" if is_favorite else "☆"
+	favorite_button.ignore_texture_size = true
+	favorite_button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 	favorite_button.tooltip_text = LocalizationManager.text(
 		"ui.pvp.ai_sparring.catalog.favorite.remove" if is_favorite else "ui.pvp.ai_sparring.catalog.favorite.add"
 	)
 	favorite_button.custom_minimum_size = Vector2(28.0, 24.0)
 	favorite_button.focus_mode = Control.FOCUS_NONE
-	favorite_button.add_theme_font_size_override("font_size", 20)
-	favorite_button.add_theme_color_override("font_color", Color("#f5df9a") if is_favorite else Color("#8ea8bd"))
-	favorite_button.add_theme_stylebox_override("normal", _make_pvp_ranked_dropdown_item_style(Color("#00000000"), Color("#2d4966")))
-	favorite_button.add_theme_stylebox_override("hover", _make_pvp_ranked_dropdown_item_style(Color("#223b56"), Color("#f5df9a")))
+	var favorite_label := Label.new()
+	favorite_label.text = "★" if is_favorite else "☆"
+	favorite_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	favorite_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	favorite_label.add_theme_font_size_override("font_size", 20)
+	favorite_label.add_theme_color_override("font_color", Color("#f5df9a") if is_favorite else Color("#8ea8bd"))
+	favorite_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	favorite_button.add_child(favorite_label)
 	favorite_button.pressed.connect(_on_ai_sparring_catalog_favorite_pressed.bind(team_id))
 	header.add_child(favorite_button)
 	var archetype_badge := Label.new()
