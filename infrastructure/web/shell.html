@@ -33,7 +33,7 @@
 </head>
 <body>
   <canvas id="canvas" tabindex="0" aria-label="PokeAether game"></canvas>
-  <button id="sound-enable" type="button" hidden>Enable sound</button>
+  <button id="sound-enable" type="button" hidden>Test sound</button>
   <div id="cover">
     <main>
 		<div class="eyebrow">Browser demo</div>
@@ -88,9 +88,10 @@
     const cover = document.getElementById('cover');
     const soundEnable = document.getElementById('sound-enable');
     // Some browsers report a running context after resume(), but still keep
-    // its output gated until a source has started during a user gesture. A
-    // one-frame silent source satisfies that requirement without making any
-    // audible sound or competing with Godot's mixer.
+    // its output gated until a source has started during a user gesture. Keep
+    // the one-frame source for the automatic path, then use an actual short
+    // tone when the player selects Test sound. That also gives the player an
+    // immediate, unambiguous indication that their browser can output sound.
     const primeAudioOutput = () => {
       if (!webAudioContext || webAudioContext.state === 'closed') return;
       const source = webAudioContext.createBufferSource();
@@ -98,6 +99,21 @@
       source.connect(webAudioContext.destination);
       source.start(0);
       source.stop(0);
+    };
+    const playAudioTestTone = () => {
+      if (!webAudioContext || webAudioContext.state !== 'running') return false;
+      const oscillator = webAudioContext.createOscillator();
+      const gain = webAudioContext.createGain();
+      const now = webAudioContext.currentTime;
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(660, now);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.08, now + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+      oscillator.connect(gain).connect(webAudioContext.destination);
+      oscillator.start(now);
+      oscillator.stop(now + 0.17);
+      return true;
     };
     const unlockAudio = async () => {
       if (!webAudioContext && NativeAudioContext) webAudioContext = new NativeAudioContext();
@@ -112,15 +128,19 @@
         primeAudioOutput();
         await resume;
         if (webAudioContext.state !== 'running') throw new Error('Audio is still suspended');
-        soundEnable.hidden = true;
         return true;
       } catch (_) {
         soundEnable.hidden = false;
-        soundEnable.textContent = 'Click to enable sound';
+        soundEnable.textContent = 'Enable sound';
         return false;
       }
     };
-    soundEnable.addEventListener('click', unlockAudio);
+    soundEnable.addEventListener('click', async () => {
+      if (await unlockAudio()) {
+        playAudioTestTone();
+        soundEnable.textContent = 'Test sound';
+      }
+    });
     // The initial pack download can outlive the opening click. Retrying from
     // the first game interaction makes the unlock reliable after that delay,
     // including on browsers that discard the original transient activation.

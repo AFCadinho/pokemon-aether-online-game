@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Browser audio now includes an audible output test, which also retries the
+  browser sound unlock through the same audio context used by the game.
+
 - Pallet Town now uses the complete current Tiled visual layout again.
 
 - Browser-demo players now stay mounted when moving between permitted outdoor
