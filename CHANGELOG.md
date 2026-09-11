@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser: use the web activity endpoint and stop desktop-only background polling, preventing browser battle sessions from being interrupted by forbidden requests.
+
 - Browser music, cries, battle effects and world effects now use the browser's
   native audio playback when Godot's WebAudio mixer produces silent samples.
 

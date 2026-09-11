@@ -47874,6 +47874,10 @@ func _refresh_pvp_queue_compact_panel(delta: float = 0.0) -> void:
 
 
 func _refresh_pvp_ranked_queue_availability(delta: float) -> void:
+	# Ranked matchmaking is intentionally desktop-only.  Do not keep polling
+	# its account endpoint in the browser demo after the button has been gated.
+	if OS.has_feature("web"):
+		return
 	pvp_ranked_queue_availability_elapsed += delta
 	if pvp_ranked_queue_availability_in_flight or pvp_ranked_queue_availability_elapsed < RANKED_QUEUE_AVAILABILITY_POLL_INTERVAL_SECONDS:
 		return

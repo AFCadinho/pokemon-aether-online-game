@@ -174,6 +174,14 @@ func _loan_command(loan_id: String, action: String, request_id: String) -> Dicti
 
 
 func _get_resource(path: String, is_capabilities := false) -> Dictionary:
+	# Lending is not part of the browser demo.  Several HUD notification
+	# listeners still ask for its passive state, so return an explicit empty
+	# projection rather than hammering desktop-only endpoints with 403s.
+	if OS.has_feature("web"):
+		if is_capabilities:
+			capabilities = normalize_capabilities({"enabled": false})
+			return {"success": true, "capabilities": capabilities.duplicate(true)}
+		return {"success": true, "body": {"loans": [], "notifications": [], "assets": []}}
 	if not _is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
 	var gateway := get_node_or_null("/root/GatewayApiConfig")
