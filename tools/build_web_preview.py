@@ -72,8 +72,9 @@ def main():
             f'the phase-5 budget is {MAX_INITIAL_BYTES / 1048576:.0f} MiB.'
         )
     receipt = {
-        'phase': 6, 'accounts': True, 'onlineGameplay': True,
+        'phase': 7, 'accounts': True, 'onlineGameplay': True,
         'chat': True, 'aiSparring': True, 'ranked': False,
+        'dynamicPokemonSprites': True,
         'assetProfile': 'demo-maps-full-player-static-home-battle',
         'maxInitialBytes': MAX_INITIAL_BYTES,
         'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),

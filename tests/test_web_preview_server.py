@@ -47,6 +47,14 @@ class PreviewServerTest(unittest.TestCase):
         self.assertEqual(headers['content-type'], 'application/wasm')
         self.assertIn("connect-src 'self'", headers['content-security-policy'])
 
+    def test_pokemon_assets_are_separate_and_long_lived(self):
+        status, headers, body = self.request('/pokemon-assets/gen5/front/pikachu/animation.json')
+        self.assertEqual(status, 200)
+        self.assertTrue(json.loads(body)['frames'])
+        self.assertEqual(headers['cache-control'], 'public, max-age=31536000, immutable')
+        self.assertEqual(self.request('/pokemon-assets/gen5/front/pikachu/other.txt')[0], 404)
+        self.assertEqual(self.request('/pokemon-assets/gen5/front/%2e%2e/animation.json')[0], 404)
+
     def test_online_status_is_explicitly_closed(self):
         status, _, body = self.request('/api/auth/status')
         self.assertEqual(status, 200)

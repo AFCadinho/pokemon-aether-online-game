@@ -8023,6 +8023,8 @@ func _render_initial_battle_events(api_response: Dictionary) -> void:
 	_debug_battle_start("initial.render.exit lastRenderedSeq=%d" % last_rendered_event_seq)
 
 func _show_battle_controls_after_initial_events() -> void:
+	player_sprite_box.allow_web_sprite_upgrades()
+	enemy_sprite_box.allow_web_sprite_upgrades()
 	_update_battle_presentation("initial_setup")
 	if _is_spectator_battle():
 		_enter_spectator_controls()

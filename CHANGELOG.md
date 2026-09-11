@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser battles now load the regular animated Pokémon sprites on demand while keeping lightweight HOME artwork as an immediate fallback. Party and Pokédex lists stay fast, while Pokémon details, wild battles, Trainer battles and AI Sparring reuse the cached animations.
+
 - AI Sparring in the browser now starts correctly with a catalog team, including for new Trainers without an overworld party.
 
 - The browser demo now loads at roughly half its previous size and includes static battle sprites for the complete AI Sparring roster.

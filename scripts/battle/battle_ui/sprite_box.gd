@@ -95,6 +95,9 @@ var sprite_frames_cache: Dictionary = {}
 var current_single_species := ""
 var current_single_side := ""
 var current_single_is_shiny := false
+var current_double_web_identity: Dictionary = {}
+var web_sprite_request_generation := 0
+var web_sprite_upgrades_allowed := false
 var stat_stage_panel_anchor: Control
 var substitute_sprite: Sprite2D
 var substitute_tween: Tween
@@ -198,6 +201,8 @@ func reset_battle_pose() -> void:
 	_update_stat_stage_panel_positions()
 
 func clear_pokemon() -> void:
+	web_sprite_request_generation += 1
+	web_sprite_upgrades_allowed = false
 	_stop_active_tween()
 	clear_substitute_immediately()
 	set_battle_type(false)
@@ -205,6 +210,7 @@ func clear_pokemon() -> void:
 	current_single_species = ""
 	current_single_side = ""
 	current_single_is_shiny = false
+	current_double_web_identity.clear()
 	for sprite in _get_all_sprites():
 		_reset_sprite_pose(sprite)
 		sprite.visible = false
@@ -1534,10 +1540,16 @@ func set_single_pokemon(pokemon: Pokemon, side: String) -> void:
 	set_single_pokemon_species(pokemon.species, side, pokemon.shiny)
 
 func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) -> void:
+	web_sprite_request_generation += 1
+	var request_generation := web_sprite_request_generation
 	set_battle_type(true)
 	current_single_species = ""
 	current_single_side = ""
 	current_single_is_shiny = false
+	current_double_web_identity = {
+		"species_1": pokemon_1.species, "shiny_1": pokemon_1.shiny,
+		"species_2": pokemon_2.species, "shiny_2": pokemon_2.shiny, "side": side,
+	}
 	double_sprite_1.visible = false
 	double_sprite_2.visible = false
 
@@ -1563,6 +1575,11 @@ func set_double_pokemon(pokemon_1: Pokemon, pokemon_2: Pokemon, side: String) ->
 		_snap_sprite_to_pixel_grid(double_sprite_2)
 		double_sprite_2.visible = true
 		_apply_sprite_playback_mode(double_sprite_2)
+	if web_sprite_upgrades_allowed:
+		_upgrade_double_web_sprites.call_deferred(
+			request_generation, pokemon_1.species, pokemon_1.shiny,
+			pokemon_2.species, pokemon_2.shiny, side
+		)
 
 func set_single_pokemon_species(species: String, side: String, is_shiny: bool = false) -> void:
 	set_battle_type(false)
@@ -1575,6 +1592,8 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 	):
 		_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
 		return
+	web_sprite_request_generation += 1
+	var request_generation := web_sprite_request_generation
 
 	single_sprite.visible = false
 	_reset_sprite_pose(single_sprite)
@@ -1588,6 +1607,7 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 	current_single_species = species
 	current_single_side = side
 	current_single_is_shiny = is_shiny
+	current_double_web_identity.clear()
 	single_sprite.sprite_frames = frames
 	single_sprite.animation = IDLE_ANIMATION
 	single_sprite.frame = 0
@@ -1598,6 +1618,91 @@ func set_single_pokemon_species(species: String, side: String, is_shiny: bool = 
 	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
 	if substitute_active:
 		_sync_substitute_idle_pose()
+	if web_sprite_upgrades_allowed:
+		_upgrade_single_web_sprite.call_deferred(request_generation, species, side, is_shiny)
+
+
+func request_web_sprite_frames(species: String, side: String, is_shiny: bool = false) -> SpriteFrames:
+	if not WebPokemonSpriteService.is_available():
+		return null
+	for asset_id: String in _get_species_asset_id_candidates(species):
+		var result: Dictionary = await WebPokemonSpriteService.load_frames(asset_id, side, is_shiny)
+		var frames := result.get("frames") as SpriteFrames
+		if frames == null:
+			continue
+		_set_sprite_frames_render_scale(frames, float(result.get("render_scale", 1.0)))
+		_set_sprite_frames_display_scale_multiplier(frames, GEN5_BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER)
+		var frame_size_value: Variant = result.get("frame_size", Vector2.ZERO)
+		if frame_size_value is Vector2 and frame_size_value != Vector2.ZERO:
+			_set_sprite_frames_auto_anchor(frames, frame_size_value as Vector2)
+		_apply_species_position_offset(frames, species, side, is_shiny)
+		var cache_key := "%s|%s|%s|%s" % [
+			_normalize_species_asset_id(species), side.strip_edges().to_lower(),
+			str(is_shiny), str(SettingsManager.sprite_style),
+		]
+		_remember_sprite_frames(cache_key, frames)
+		return frames
+	return null
+
+
+func _upgrade_single_web_sprite(generation: int, species: String, side: String, is_shiny: bool) -> void:
+	var frames := await request_web_sprite_frames(species, side, is_shiny)
+	if (
+		frames == null or generation != web_sprite_request_generation
+		or current_single_species != species or current_single_side != side
+		or current_single_is_shiny != is_shiny or not single_sprite.visible
+	):
+		return
+	_apply_single_web_frames(frames)
+
+
+func allow_web_sprite_upgrades() -> void:
+	web_sprite_upgrades_allowed = true
+	if current_single_species != "" and single_container.visible:
+		_upgrade_single_web_sprite.call_deferred(
+			web_sprite_request_generation, current_single_species,
+			current_single_side, current_single_is_shiny
+		)
+	elif not current_double_web_identity.is_empty() and double_container.visible:
+		_upgrade_double_web_sprites.call_deferred(
+			web_sprite_request_generation,
+			str(current_double_web_identity.get("species_1", "")), bool(current_double_web_identity.get("shiny_1", false)),
+			str(current_double_web_identity.get("species_2", "")), bool(current_double_web_identity.get("shiny_2", false)),
+			str(current_double_web_identity.get("side", "front"))
+		)
+
+
+func _apply_single_web_frames(frames: SpriteFrames) -> void:
+	if frames == null:
+		return
+	single_sprite.sprite_frames = frames
+	single_sprite.animation = IDLE_ANIMATION
+	single_sprite.frame = 0
+	_set_sprite_target_scale_from_frames(single_sprite, frames)
+	_snap_sprite_to_pixel_grid(single_sprite)
+	_apply_sprite_playback_mode(single_sprite)
+	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
+
+
+func _upgrade_double_web_sprites(
+	generation: int, species_1: String, shiny_1: bool,
+	species_2: String, shiny_2: bool, side: String
+) -> void:
+	var frames_1 := await request_web_sprite_frames(species_1, side, shiny_1)
+	var frames_2 := await request_web_sprite_frames(species_2, side, shiny_2)
+	if generation != web_sprite_request_generation or not double_container.visible:
+		return
+	for entry: Array in [[double_sprite_1, frames_1], [double_sprite_2, frames_2]]:
+		var sprite := entry[0] as AnimatedSprite2D
+		var frames := entry[1] as SpriteFrames
+		if frames == null:
+			continue
+		sprite.sprite_frames = frames
+		sprite.animation = IDLE_ANIMATION
+		sprite.frame = 0
+		_set_sprite_target_scale_from_frames(sprite, frames)
+		_snap_sprite_to_pixel_grid(sprite)
+		_apply_sprite_playback_mode(sprite)
 
 func _apply_sprite_playback_mode(sprite: AnimatedSprite2D) -> void:
 	if SettingsManager.sprite_style == SettingsManager.SPRITE_STYLE_STATIC:

@@ -28,12 +28,13 @@ const assert = require('node:assert/strict');
   const browser = await chromium.launch({ executablePath: process.env.POKEAETHER_CHROME_PATH || undefined, headless: true, args: ['--enable-unsafe-swiftshader'] });
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
-  const errors = [], external = [], api = [];
+  const errors = [], external = [], api = [], pokemonAssets = [];
   const output = path.join(frontend, 'builds/web-accounts-qa');
   fs.mkdirSync(output, { recursive: true });
   await context.route('**/*', async route => {
     const req = route.request(), url = new URL(req.url());
 		if (url.origin !== new URL(previewUrl).origin) { external.push(url.origin); return route.abort(); }
+		if (url.pathname.startsWith('/pokemon-assets/gen5/')) pokemonAssets.push(url.pathname);
     if (!url.pathname.startsWith('/api/')) return route.continue();
     const result = await request({ method: req.method(), path: url.pathname, body: req.postData() || '', headers: req.headers() });
     api.push({ path: url.pathname, status: result.status });
@@ -101,10 +102,12 @@ const assert = require('node:assert/strict');
 		await page.mouse.click(975, 739);
 		await waitForApi(item => item.path === '/api/battle/pvp/training/ai/battles' && item.status === 200, 30000);
 		await waitForApi(item => item.path === '/api/battle/web-ai-e2e/npc/lead' && item.status === 200, 30000);
-		await page.waitForTimeout(8000);
+		await page.waitForTimeout(60000);
 		await page.screenshot({ path: path.join(output, 'ai-battle-turn.png') });
 		assert(api.some(item => item.path === '/api/battle/web-ai-e2e/lead' && item.status === 200), 'browser submits its AI Sparring lead');
 		assert(api.some(item => item.path === '/api/battle/web-ai-e2e/npc/lead' && item.status === 200), 'AI lead resolves');
+		assert(pokemonAssets.some(pathname => pathname.includes('/back/pikachu/')), 'player battle animation loads on demand');
+		assert(pokemonAssets.some(pathname => pathname.includes('/front/eevee/')), 'opponent battle animation loads on demand');
 		await page.mouse.click(1084, 481); // Thunderbolt in the battle move grid.
 		await waitForApi(item => item.path === '/api/battle/web-ai-e2e/choice-and-resolve' && item.status === 200, 30000);
 		await page.waitForTimeout(10000);
@@ -113,10 +116,11 @@ const assert = require('node:assert/strict');
     assert.deepEqual(external, []);
     assert(!api.some(item => item.path === '/api/game/player-position' && item.status < 400), 'desktop position endpoint is never used');
 		assert(!errors.some(item => item.includes('generated/tiled_visuals')), 'browser map resources load without runtime errors');
-		fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify({ api, errors, external, registration: true, world: true, aiSparring: true }, null, 2));
+		fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify({ api, errors, external, pokemonAssets, registration: true, world: true, aiSparring: true }, null, 2));
 		console.log('web_accounts_browser_smoke: PASS (registration, login, browser world, completed AI Sparring turn, no desktop position/external requests)');
   } finally {
     fs.writeFileSync(path.join(output, 'requests.json'), JSON.stringify(api, null, 2));
+		fs.writeFileSync(path.join(output, 'pokemon-assets.json'), JSON.stringify(pokemonAssets, null, 2));
 		fs.writeFileSync(path.join(output, 'errors.json'), JSON.stringify(errors, null, 2));
     await page.screenshot({ path: path.join(output, 'last-state.png') }).catch(() => {});
     await browser.close();
