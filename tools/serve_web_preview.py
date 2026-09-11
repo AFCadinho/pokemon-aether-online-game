@@ -26,6 +26,10 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         self.send_header('Cache-Control', cache_value)
         self.send_header('X-Content-Type-Options', 'nosniff')
         self.send_header('Referrer-Policy', 'no-referrer')
+        # Godot's WebAudio mixer uses SharedArrayBuffer-backed worklets.  The
+        # export asks the host to opt into this isolated browser context.
+        self.send_header('Cross-Origin-Opener-Policy', 'same-origin')
+        self.send_header('Cross-Origin-Embedder-Policy', 'require-corp')
         self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self' blob:; frame-ancestors 'none'")
         super().end_headers()
 

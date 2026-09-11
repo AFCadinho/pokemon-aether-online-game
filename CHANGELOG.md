@@ -9,6 +9,9 @@
   before closing the battle, preventing a hidden active battle from blocking
   the next encounter.
 
+- Browser-game music, battle sounds and UI sounds now run in the isolated
+  WebAudio context required by Godot's mixer.
+
 - Browser-demo players now reopen an unfinished wild battle when they touch
   grass again, rather than receiving a generic encounter error.
 
