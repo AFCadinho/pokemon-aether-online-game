@@ -65,13 +65,11 @@
     let webAudioContext = null;
     const NativeAudioContext = window.AudioContext || window.webkitAudioContext;
     if (NativeAudioContext) {
-      // Browsers only allow a WebAudio context to start from a player gesture.
-      // Construct and resume one in the opening click, then hand that same
-      // context to Godot when its asynchronous WebAudio driver starts.
+      // Track Godot's own audio context. It chooses the sample rate and
+      // latency settings required by its AudioWorklet mixer, so never hand it
+      // a context created by the shell.
       const sharedAudioContext = function (...args) {
-        if (!webAudioContext) {
-          webAudioContext = new NativeAudioContext(...args);
-        }
+        webAudioContext = new NativeAudioContext(...args);
         return webAudioContext;
       };
       sharedAudioContext.prototype = NativeAudioContext.prototype;
@@ -106,8 +104,8 @@
     };
     const unlockAudio = async () => {
       if (!webAudioContext) {
-        if (!NativeAudioContext) return false;
-        webAudioContext = new NativeAudioContext();
+        soundEnable.textContent = 'Preparing game audio…';
+        return false;
       }
       try {
         // Resume synchronously while the browser still associates this work

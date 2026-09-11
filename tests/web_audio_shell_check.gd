@@ -13,9 +13,9 @@ func _init() -> void:
 	_check(shell.contains("oscillator.connect(gain).connect(webAudioContext.destination)"), "the audible output test reaches the browser audio destination")
 	_check(shell.contains("playAudioTestTone();"), "the visible sound control plays the audible output test after unlocking")
 	_check(shell.contains("new NativeAudioContext(...args)"), "Godot keeps its requested WebAudio sample-rate and latency settings")
-	_check(shell.contains("if (!webAudioContext) {")
-		and shell.contains("webAudioContext = new NativeAudioContext();"),
-		"the opening click creates a resumable audio context before Godot starts asynchronously")
+	_check(shell.contains("webAudioContext = new NativeAudioContext(...args);")
+		and not shell.contains("webAudioContext = new NativeAudioContext();"),
+		"Godot keeps ownership of the WebAudio context instead of receiving a shell-created one")
 	_check(shell.contains("await engine.startGame({")
 		and shell.find("await unlockAudio();", shell.find("await engine.startGame({")) > shell.find("await engine.startGame({"),
 		"the browser resumes Godot audio again after its worklet attaches")
