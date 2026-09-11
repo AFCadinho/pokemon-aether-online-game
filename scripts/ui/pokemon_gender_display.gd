@@ -11,14 +11,14 @@ static func presentation(gender: String) -> Dictionary:
 		"male", "m", "♂":
 			return {
 				"visible": true,
-				"symbol": "♂",
+				"symbol": "M",
 				"color": MALE_COLOR,
 				"localization_key": "battle.gender.male",
 			}
 		"female", "f", "♀":
 			return {
 				"visible": true,
-				"symbol": "♀",
+				"symbol": "F",
 				"color": FEMALE_COLOR,
 				"localization_key": "battle.gender.female",
 			}

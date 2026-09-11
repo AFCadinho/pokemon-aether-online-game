@@ -19369,7 +19369,7 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	pokemon_summary_hidden_ability_badge.add_theme_stylebox_override("panel", _make_panel_style(Color("#071c33f2"), Color("#8cecff"), 8, 1))
 	sprite_stage.add_child(pokemon_summary_hidden_ability_badge)
 	var ha_label := Label.new()
-	ha_label.text = "✦ HA"
+	ha_label.text = "HA"
 	ha_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ha_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	ha_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -19415,7 +19415,7 @@ func _build_readonly_summary_profile(nodes: Dictionary, card_key: String) -> Con
 	title_row.add_theme_constant_override("separation", 4)
 	identity_stack.add_child(title_row)
 	var shiny_label := Label.new()
-	shiny_label.text = "✦"
+	shiny_label.text = "S"
 	shiny_label.visible = false
 	shiny_label.add_theme_color_override("font_color", Color("#f4d36a"))
 	title_row.add_child(shiny_label)
@@ -20261,7 +20261,7 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	_set_localized_control_property(pokemon_summary_hidden_ability_badge, "tooltip_text", "ui.pokemon_summary.hidden_ability")
 
 	var hidden_ability_badge_label := Label.new()
-	hidden_ability_badge_label.text = "✦ HA"
+	hidden_ability_badge_label.text = "HA"
 	hidden_ability_badge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hidden_ability_badge_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	hidden_ability_badge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -20365,8 +20365,8 @@ func _add_pokemon_summary_left_panel(content_row: HBoxContainer, card_key: Strin
 	title_row.add_child(pokemon_summary_gender_label)
 
 	pokemon_summary_nickname_button = Button.new()
-	pokemon_summary_nickname_button.text = "✎"
-	pokemon_summary_nickname_button.custom_minimum_size = Vector2(20, 20)
+	pokemon_summary_nickname_button.text = "EDIT"
+	pokemon_summary_nickname_button.custom_minimum_size = Vector2(38, 20)
 	pokemon_summary_nickname_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	pokemon_summary_nickname_button.focus_mode = Control.FOCUS_NONE
 	pokemon_summary_nickname_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -26325,6 +26325,8 @@ func _get_pokemon_summary_sprite_scale(frames: SpriteFrames) -> Vector2:
 		fit_scale
 	)
 	var texture_scale: float = scale_value / max(render_scale, 1.0)
+	if OS.has_feature("web"):
+		texture_scale *= 0.82
 	return Vector2(texture_scale, texture_scale)
 
 func _get_pokemon_summary_sprite_frame_size(frames: SpriteFrames) -> Vector2:
@@ -31464,7 +31466,7 @@ func _setup_chat_tab_settings_ui() -> void:
 	var tab_row := $Control/ChatTabsPanel/TabRow
 	chat_settings_button = Button.new()
 	chat_settings_button.name = "ChatSettingsButton"
-	chat_settings_button.text = "⋯"
+	chat_settings_button.text = "..."
 	chat_settings_button.custom_minimum_size = Vector2(32, 28)
 	chat_settings_button.focus_mode = Control.FOCUS_NONE
 	_set_localized_control_property(chat_settings_button, "tooltip_text", "ui.chat.settings.tooltip")

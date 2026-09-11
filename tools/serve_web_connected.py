@@ -14,6 +14,7 @@ from websockets.asyncio.client import connect
 from websockets.exceptions import ConnectionClosed, InvalidStatus
 
 ROOT = Path(__file__).resolve().parents[1]
+NEWS_URL = "https://updates.pokeaether.com/data/news.json"
 POKEMON_ASSET_ROOT = (ROOT / "assets/sprites/pokemon/gen5").resolve()
 HTTP_ROUTES = {
     ("GET", "/auth/status"), ("GET", "/presence/online-count"),
@@ -30,6 +31,7 @@ HTTP_ROUTES = {
     ("GET", "/battle/pvp/training/ai/live"),
     ("POST", "/battle/pvp/training/ai/battles"),
     ("POST", "/battle/wild-encounter"), ("GET", "/battle/wild/resume"),
+    ("POST", "/battle/trainer"), ("GET", "/battle/trainer/resume"),
     ("POST", "/battle/pvp/rooms"),
     ("POST", "/auth/email-verification/confirm"),
 }
@@ -183,6 +185,18 @@ def create_app(upstream, build=None, *, transport=None):
     @app.websocket("/api/ws/chat")
     async def chat_websocket_proxy(socket: WebSocket):
         await websocket_proxy(socket, "chat")
+
+    @app.get("/news.json")
+    async def browser_news():
+        async with httpx.AsyncClient(follow_redirects=False, timeout=8.0) as client:
+            response = await client.get(NEWS_URL, headers={"Accept": "application/json"})
+        if response.status_code != 200:
+            return Response(status_code=502)
+        return Response(
+            content=response.content,
+            media_type="application/json",
+            headers={"Cache-Control": "public, max-age=300"},
+        )
 
     @app.websocket("/api/ws/world-presence")
     async def world_presence_websocket_proxy(socket: WebSocket):

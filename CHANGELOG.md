@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Browser-demo encounters and NPC trainer battles now start correctly, announcements load again, and unsupported icon glyphs and the login notice have browser-safe presentation.
 - The browser demo now restores its complete interface icon set, opens the normal battle-mode chooser, supports mail, friends, bag and guild browsing, and clearly marks client-only features.
 
 - Browser battles now load the regular animated Pokémon sprites on demand while keeping lightweight HOME artwork as an immediate fallback. Party and Pokédex lists stay fast, while Pokémon details, wild battles, Trainer battles and AI Sparring reuse the cached animations.
