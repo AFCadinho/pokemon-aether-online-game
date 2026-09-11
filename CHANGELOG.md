@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Browser demo: music now opens and unlocks its shared browser audio context
+  from the initial play click, so login, map and battle music can start under
+  browser autoplay rules.
+
 - Browser demo: entering the limited world now uses the normal account-loading
   transition, and wild and NPC trainer battle requests support complete party
   data.
