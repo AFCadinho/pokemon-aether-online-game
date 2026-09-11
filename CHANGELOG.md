@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pallet Town now uses the complete current Tiled visual layout again.
+
 - Browser-demo players now stay mounted when moving between permitted outdoor
   maps.
 
