@@ -3292,6 +3292,24 @@ func start_triggered_wild_battle_for_area(
 		return
 	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id)
 	if not response.get("success", false):
+		# A previous browser tab can close after the authority has accepted the
+		# encounter. The account remains bound to that exact battle until it is
+		# settled, so reopen it here instead of showing a generic error and
+		# leaving the player unable to trigger another encounter.
+		if WildEncounterErrorRules.error_code(response) == "active_wild_battle_exists":
+			var existing_battle_id := _get_wild_battle_conflict_id(response)
+			if existing_battle_id != "":
+				await _cancel_wild_encounter_transition()
+				_abort_battle_start()
+				var resumed := await _resume_saved_wild_battle({
+					"activityState": "battle",
+					"activityContext": {
+						"kind": "wild",
+						"battleId": existing_battle_id,
+					},
+				})
+				if bool(resumed.get("resumed", false)) or bool(resumed.get("retryable", false)):
+					return
 		if WildEncounterErrorRules.message_lines(response).is_empty():
 			push_warning("World.start_triggered_wild_battle_for_area failed: %s" % str(response.get("error", "Unknown error")))
 		await _cancel_wild_encounter_transition()
@@ -3341,6 +3359,15 @@ func start_triggered_wild_battle_for_area(
 	await _reveal_prepared_wild_battle()
 
 	await battle_instance.play_wild_battle_intro(response)
+
+
+func _get_wild_battle_conflict_id(response: Dictionary) -> String:
+	var detail := _dictionary_from_value(response.get("detail", {}))
+	if detail.is_empty():
+		detail = _dictionary_from_value(
+			_dictionary_from_value(response.get("body", {})).get("detail", {})
+		)
+	return str(detail.get("battleId", "")).strip_edges()
 
 
 func _show_wild_encounter_start_error(response: Dictionary) -> void:
