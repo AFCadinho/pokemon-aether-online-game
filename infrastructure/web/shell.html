@@ -75,6 +75,37 @@
     };
     let webAudioContext = null;
     const NativeAudioContext = window.AudioContext || window.webkitAudioContext;
+    const NativeAudioWorkletNode = window.AudioWorkletNode;
+    if (NativeAudioWorkletNode) {
+      // Observe the final Godot mixer node without taking ownership of it.
+      // A silent browser build can otherwise look healthy up through stream
+      // loading while its worklet never reaches the hardware destination.
+      const tracedAudioWorkletNode = function (context, processorName, options) {
+        const node = new NativeAudioWorkletNode(context, processorName, options);
+        recordAudioDebug('worklet-node-created', {
+          processor: processorName,
+          outputChannels: options?.outputChannelCount || [],
+        });
+        try {
+          const nativeConnect = node.connect.bind(node);
+          node.connect = (...targets) => {
+            recordAudioDebug('worklet-node-connected', {
+              processor: processorName,
+              target: targets[0]?.constructor?.name || 'unknown',
+            });
+            return nativeConnect(...targets);
+          };
+        } catch (error) {
+          recordAudioDebug('worklet-connect-trace-unavailable', {
+            message: String(error?.message || error),
+          });
+        }
+        return node;
+      };
+      tracedAudioWorkletNode.prototype = NativeAudioWorkletNode.prototype;
+      Object.setPrototypeOf(tracedAudioWorkletNode, NativeAudioWorkletNode);
+      window.AudioWorkletNode = tracedAudioWorkletNode;
+    }
     if (NativeAudioContext) {
       // Track Godot's own audio context. It chooses the sample rate and
       // latency settings required by its AudioWorklet mixer, so never hand it
@@ -89,6 +120,29 @@
         webAudioContext.addEventListener('statechange', () => {
           recordAudioDebug('context-state', { state: webAudioContext.state });
         });
+        const audioWorklet = webAudioContext.audioWorklet;
+        if (audioWorklet) {
+          try {
+            const nativeAddModule = audioWorklet.addModule.bind(audioWorklet);
+            audioWorklet.addModule = async moduleUrl => {
+              recordAudioDebug('worklet-module-loading', { module: String(moduleUrl) });
+              try {
+                const result = await nativeAddModule(moduleUrl);
+                recordAudioDebug('worklet-module-loaded', { module: String(moduleUrl) });
+                return result;
+              } catch (error) {
+                recordAudioDebug('worklet-module-failed', {
+                  module: String(moduleUrl), message: String(error?.message || error),
+                });
+                throw error;
+              }
+            };
+          } catch (error) {
+            recordAudioDebug('worklet-module-trace-unavailable', {
+              message: String(error?.message || error),
+            });
+          }
+        }
         return webAudioContext;
       };
       sharedAudioContext.prototype = NativeAudioContext.prototype;
