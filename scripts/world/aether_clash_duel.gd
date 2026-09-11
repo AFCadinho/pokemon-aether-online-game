@@ -79,8 +79,9 @@ func _ready() -> void:
 		spectator_camera_hud.region_requested.connect(_on_spectator_region_requested)
 	if not spectator_camera_hud.zoom_requested.is_connected(_on_spectator_zoom_requested):
 		spectator_camera_hud.zoom_requested.connect(_on_spectator_zoom_requested)
-	if not ChatRealtimeService.message_received.is_connected(_on_realtime_message_received):
-		ChatRealtimeService.message_received.connect(_on_realtime_message_received)
+	var chat_service := get_node_or_null("/root/ChatRealtimeService")
+	if chat_service != null and not chat_service.message_received.is_connected(_on_realtime_message_received):
+		chat_service.message_received.connect(_on_realtime_message_received)
 	arena_state_timer = Timer.new()
 	arena_state_timer.name = "ArenaStateRefreshTimer"
 	arena_state_timer.wait_time = ARENA_STATE_REFRESH_SECONDS
@@ -123,7 +124,7 @@ func _exit_tree() -> void:
 	_clear_identity_nameplate_overrides()
 	_deactivate_spectator_camera()
 	_restore_arena_view()
-	GameState.release_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
+	get_node_or_null("/root/GameState").call("release_overworld_input_lock", LEAVE_DIALOG_INPUT_OWNER)
 	_free_leave_confirmation()
 
 
@@ -294,7 +295,8 @@ func _refresh_arena_state() -> void:
 	if arena_state_request_active or instance_session_id.is_empty():
 		return
 	arena_state_request_active = true
-	var result: Dictionary = await GuildService.load_aether_clash_arena_state(instance_session_id)
+	var guild_service := get_node_or_null("/root/GuildService")
+	var result: Dictionary = await guild_service.call("load_aether_clash_arena_state", instance_session_id) if guild_service != null else {}
 	arena_state_request_active = false
 	if instance_session_id.is_empty():
 		return
@@ -572,7 +574,8 @@ func _actor_user_id(actor: Node) -> int:
 
 
 func _local_user_id() -> int:
-	return int(str(PlayerSave.player_id).strip_edges())
+	var player_save := get_node_or_null("/root/PlayerSave")
+	return int(str(player_save.get("player_id") if player_save != null else 0).strip_edges())
 
 
 func _is_local_active_participant() -> bool:
@@ -647,7 +650,7 @@ func _activate_spectator_camera(fallback_position: Vector2) -> void:
 	spectator_camera.enabled = true
 	spectator_camera_active = true
 	spectator_camera_hud.set_camera_active(true)
-	GameState.acquire_overworld_input_lock(SPECTATOR_CAMERA_INPUT_OWNER)
+	get_node_or_null("/root/GameState").call("acquire_overworld_input_lock", SPECTATOR_CAMERA_INPUT_OWNER)
 	_sync_battle_indicators()
 	_trace_aether_clash("spectator_camera_activated", {
 		"sessionId": instance_session_id,
@@ -670,7 +673,7 @@ func _deactivate_spectator_camera() -> void:
 	if spectator_camera_player_camera != null and is_instance_valid(spectator_camera_player_camera):
 		spectator_camera_player_camera.enabled = spectator_camera_player_was_enabled
 	spectator_camera_player_camera = null
-	GameState.release_overworld_input_lock(SPECTATOR_CAMERA_INPUT_OWNER)
+	get_node_or_null("/root/GameState").call("release_overworld_input_lock", SPECTATOR_CAMERA_INPUT_OWNER)
 	_sync_local_camera_mode()
 	if was_active:
 		_sync_battle_indicators()
@@ -1124,7 +1127,7 @@ func _request_leave_confirmation() -> void:
 	dialog.confirmed.connect(_confirm_leave_arena)
 	dialog.canceled.connect(_close_leave_confirmation)
 	dialog.popup_centered(Vector2i(560, 260))
-	GameState.acquire_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
+	get_node_or_null("/root/GameState").call("acquire_overworld_input_lock", LEAVE_DIALOG_INPUT_OWNER)
 
 
 func _confirm_leave_arena() -> void:
@@ -1132,7 +1135,7 @@ func _confirm_leave_arena() -> void:
 		return
 	leave_request_active = true
 	_free_leave_confirmation()
-	GameState.release_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
+	get_node_or_null("/root/GameState").call("release_overworld_input_lock", LEAVE_DIALOG_INPUT_OWNER)
 	var world := get_tree().get_first_node_in_group("world")
 	if world == null:
 		_leave_failed(_text("ui.aether_clash.leave.unavailable", "Leaving the Clash is unavailable right now."))
@@ -1141,7 +1144,8 @@ func _confirm_leave_arena() -> void:
 	if not bool(begin_result.get("success", false)):
 		_leave_failed(str(begin_result.get("error", "Leaving the Clash is unavailable right now.")))
 		return
-	var result: Dictionary = await GuildService.leave_aether_clash_arena(instance_session_id)
+	var guild_service := get_node_or_null("/root/GuildService")
+	var result: Dictionary = await guild_service.call("leave_aether_clash_arena", instance_session_id) if guild_service != null else {}
 	if not bool(result.get("success", false)):
 		if world.has_method("cancel_authorized_teleport_effect"):
 			world.call("cancel_authorized_teleport_effect")
@@ -1159,7 +1163,7 @@ func _confirm_leave_arena() -> void:
 
 func _close_leave_confirmation() -> void:
 	_free_leave_confirmation()
-	GameState.release_overworld_input_lock(LEAVE_DIALOG_INPUT_OWNER)
+	get_node_or_null("/root/GameState").call("release_overworld_input_lock", LEAVE_DIALOG_INPUT_OWNER)
 
 
 func _free_leave_confirmation() -> void:
@@ -1217,11 +1221,8 @@ func _on_engagement_contact_requested(
 		"targetUserId": target_user_id,
 		"method": method,
 	})
-	var result: Dictionary = await GuildService.create_aether_clash_engagement(
-		instance_session_id,
-		target_user_id,
-		method
-	)
+	var guild_service := get_node_or_null("/root/GuildService")
+	var result: Dictionary = await guild_service.call("create_aether_clash_engagement", instance_session_id, target_user_id, method) if guild_service != null else {}
 	engagement_requests_in_flight.erase(pair_key)
 	_trace_aether_clash("engagement_request_completed", {
 		"sessionId": instance_session_id,

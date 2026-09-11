@@ -247,7 +247,9 @@ func _apply_context_panel_size() -> void:
 
 func _render_roster(roster: Array) -> void:
 	_clear_roster()
-	var local_user_id := int(AuthService.current_user.get("id", 0))
+	var auth_service := get_node_or_null("/root/AuthService")
+	var current_user: Dictionary = auth_service.get("current_user") as Dictionary if auth_service != null else {}
+	var local_user_id := int(current_user.get("id", 0))
 	for player_value: Variant in roster:
 		if not player_value is Dictionary:
 			continue
@@ -297,7 +299,9 @@ func _clear_roster() -> void:
 
 
 func _local_player_status(roster: Array) -> String:
-	var local_user_id := int(AuthService.current_user.get("id", 0))
+	var auth_service := get_node_or_null("/root/AuthService")
+	var current_user: Dictionary = auth_service.get("current_user") as Dictionary if auth_service != null else {}
+	var local_user_id := int(current_user.get("id", 0))
 	for player_value: Variant in roster:
 		if not player_value is Dictionary:
 			continue
