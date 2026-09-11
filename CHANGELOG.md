@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Running from a wild battle now displays “Got away safely!” instead of a
+  misleading wild-battle victory.
+
 - Browser audio now leaves WebAudio context creation to Godot’s own mixer and
   unlocks that context after startup.
 
