@@ -39,6 +39,14 @@ AI_BATTLE_ROUTE = re.compile(
     r"^/battle/[A-Za-z0-9-]{1,128}/(?:state|lead|choice|choice-and-resolve|npc/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex/v1/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$"
 )
 HTTP_ROUTE_PREFIXES = (
+	# Read/write game interfaces explicitly enabled in the browser demo. These
+	# retain the normal account and server-side authorization checks.
+	("GET", "/game/pokedex/"), ("GET", "/game/items/"),
+	("GET", "/game/skills"),
+	("GET", "/game/donator-store"), ("POST", "/game/donator-store/"),
+	("GET", "/game/guilds"), ("POST", "/game/guilds"), ("PUT", "/game/guilds/"),
+	("GET", "/game/guild-invitations"), ("POST", "/game/guild-invitations"),
+	("GET", "/game/guild-notifications"),
     ("GET", "/battle/pvp/training/ai/live/"),
     ("GET", "/battle/pvp/rooms/"), ("POST", "/battle/pvp/rooms/"),
     ("GET", "/npcs/"),
