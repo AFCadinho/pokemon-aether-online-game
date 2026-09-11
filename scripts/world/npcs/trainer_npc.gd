@@ -272,6 +272,10 @@ func _fail_trainer_metadata(dialogue_box: Node, message: String) -> void:
 	vision_candidate = null
 	_refresh_rematch_marker()
 	await _show_generic_trainer_error_dialogue(dialogue_box)
+	# Metadata is fetched before start_trainer_battle(), while the vision
+	# trigger already owns the overworld input lock. Release that lock here as
+	# well as in the rejected-battle path below.
+	_recover_overworld_after_failed_battle_start()
 
 func _show_generic_trainer_error_dialogue(dialogue_box: Node) -> void:
 	await GameErrorDialogService.show_report_to_staff_message(dialogue_box)

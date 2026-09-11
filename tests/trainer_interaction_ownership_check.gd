@@ -22,8 +22,16 @@ func _run() -> void:
 	)
 	_check(
 		trainer_source.contains("_recover_overworld_after_failed_battle_start()")
-		and trainer_source.contains("recover_failed_trainer_battle_start"),
+			and trainer_source.contains("recover_failed_trainer_battle_start"),
 		"a rejected trainer battle restores browser overworld control after its error dialogue"
+	)
+	var metadata_failure_start := trainer_source.find("func _fail_trainer_metadata")
+	var metadata_failure_end := trainer_source.find("\nfunc ", metadata_failure_start + 1)
+	var metadata_failure_source := trainer_source.substr(metadata_failure_start, metadata_failure_end - metadata_failure_start)
+	_check(
+		metadata_failure_source.contains("_show_generic_trainer_error_dialogue(dialogue_box)")
+			and metadata_failure_source.contains("_recover_overworld_after_failed_battle_start()"),
+		"a rejected trainer metadata request also restores browser overworld control"
 	)
 	var trainer := trainer_script.new() as Node
 	trainer.set("trainer_progress_loaded", true)
