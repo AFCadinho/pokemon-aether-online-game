@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Browser demo: entering the limited world now uses the normal account-loading
+  transition, and wild and NPC trainer battle requests support complete party
+  data.
+
 - Browser-demo party, battle, summary, chat and guild controls now use browser-safe texture icons instead of missing font glyphs.
 
 - Aethernet now clearly directs browser-demo players to the downloadable client instead of opening an empty travel confirmation.

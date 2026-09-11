@@ -685,8 +685,11 @@ func _apply_saved_session_preview_state() -> void:
 func _enter_world() -> void:
 	_apply_authenticated_player_profile()
 
-	var scene_path := "res://scenes/world.tscn" if OS.has_feature("web") else LOADING_SCENE_PATH
-	var error: Error = get_tree().change_scene_to_file(scene_path)
+	# The browser uses the same authenticated loading path as the desktop
+	# client.  Apart from making the hand-off feel deliberate, this hydrates
+	# the account, party, inventory and bounded-world position before the map
+	# can accept input.
+	var error: Error = get_tree().change_scene_to_file(LOADING_SCENE_PATH)
 	if error != OK:
 		show_status_key("ui.login.error.enter_world", {}, true)
 		push_error("LoginScreen: failed to load loading scene: %s" % error_string(error))

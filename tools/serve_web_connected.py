@@ -118,10 +118,16 @@ def create_app(upstream, build=None, *, transport=None):
             allowed = True
         if not allowed:
             return JSONResponse({"error": "Not enabled in this browser build"}, status_code=403)
+        # A real party can contain detailed move, IV and cosmetic data.  The
+        # 16 KiB preview default was below a legitimate wild/trainer battle
+        # payload, so the request was rejected by the local proxy before it
+        # reached the account-authorized battle service.  Keep a finite
+        # browser boundary while allowing the normal client contract.
+        max_request_bytes = 128 * 1024 if route.startswith("/battle/") else 16 * 1024
         body = bytearray()
         async for chunk in request.stream():
             body.extend(chunk)
-            if len(body) > 16384:
+            if len(body) > max_request_bytes:
                 return JSONResponse({"error": "Request too large"}, status_code=413)
         # No forwarded host/IP, cookie, origin or arbitrary authority headers.
         headers = {name: request.headers[name] for name in (

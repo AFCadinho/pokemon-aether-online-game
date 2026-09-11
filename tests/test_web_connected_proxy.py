@@ -68,6 +68,10 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertEqual(client.get("/pokemon-assets/gen5/front/pikachu/other.txt").status_code, 404)
             self.assertEqual(client.get("/api/battle/pvp/training/ai/teams/catalog-team").status_code, 200)
             self.assertEqual(client.post("/api/battle/pvp/training/ai/battles", json={}).status_code, 200)
+            # A complete six-Pokémon party can exceed the generic UI request
+            # limit. PvE battle creation keeps a bounded, larger allowance.
+            self.assertEqual(client.post("/api/battle/wild-encounter", content="x" * 20000).status_code, 200)
+            self.assertEqual(client.post("/api/battle/trainer", content="x" * 20000).status_code, 200)
             self.assertEqual(client.post("/api/battle/training-test/choice-and-resolve", json={}).status_code, 200)
             self.assertEqual(client.get("/api/battle/training-test/state").status_code, 200)
             self.assertEqual(client.get("/api/npcs/kanto_players_house_father").status_code, 200)
@@ -76,13 +80,14 @@ class ConnectedProxyTests(unittest.TestCase):
             for path in ["/api/auth/login", "/api/internal/test", "/api/pvp/queues/ranked/join"]:
                 self.assertEqual(client.post(path).status_code, 403)
             self.assertEqual(client.post("/api/auth/web/login", content="x" * 16385).status_code, 413)
+            self.assertEqual(client.post("/api/battle/wild-encounter", content="x" * (128 * 1024 + 1)).status_code, 413)
             self.assertEqual(client.get("/", headers={"host": "attacker.example"}).status_code, 403)
             self.assertEqual(client.get("/", headers={"origin": "https://attacker.example"}).status_code, 403)
             self.assertEqual(client.get("/").text, "test export")
             self.assertIn("frame-ancestors 'none'", client.get("/").headers["content-security-policy"])
             for path in ["/.secret", "/external.js", "/%2e%2e/etc/passwd"]:
                 self.assertEqual(client.get(path).status_code, 404)
-            self.assertEqual(len(calls), 26)
+            self.assertEqual(len(calls), 28)
 
     def test_redirects_and_upstream_failure_are_not_followed_or_exposed(self):
         for handler, status in [(lambda _: httpx.Response(302, headers={"Location": "https://example.com"}), 502),
