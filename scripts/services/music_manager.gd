@@ -211,7 +211,10 @@ func _fade_to_stream(stream: AudioStream) -> void:
 
 func _start_stream(stream: AudioStream) -> void:
 	music_player.stream = stream
-	music_player.volume_db = -80.0
+	# Web's sample player can snapshot the initial gain when playback starts.
+	# Give it the audible volume before play(), rather than raising it in the
+	# same frame afterwards. Desktop still starts at the fade silence floor.
+	music_player.volume_db = 0.0 if OS.has_feature("web") else -80.0
 	music_player.play()
 	_report_web_audio_debug("music-play-requested", {
 		"track": current_track_path,
