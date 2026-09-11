@@ -17,6 +17,7 @@ func _init() -> void:
 	_check(chat.contains(' + "/ws/chat?token=%s"'), "browser chat keeps the authenticated realtime transport")
 	_check(not player.contains('func check_for_wild_encounter(encounter_type: String, check_position: Vector2 = Vector2.INF) -> void:\n\tif OS.has_feature("web"):\n\t\treturn'), "browser walking can trigger wild encounters")
 	_check(preview_proxy.contains('(\"POST\", \"/battle/trainer\")'), "connected preview admits NPC trainer battle creation")
+	_check(preview_proxy.contains('max_request_bytes = 128 * 1024 if route.startswith("/battle/")'), "browser PvE accepts complete party requests")
 	_check(preview_proxy.contains('@app.get(\"/news.json\")'), "connected preview serves current announcements")
 	print("web_ai_chat_contract_check: %s" % ("PASS" if failures == 0 else "FAIL"))
 	quit(failures)
