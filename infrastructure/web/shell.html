@@ -73,6 +73,75 @@
       record: recordAudioDebug,
       enabled: audioDebugEnabled,
     };
+    // A Godot WebAudio worklet can initialise successfully while sending only
+    // zero-valued blocks to its destination. Keep desktop on Godot's mixer,
+    // but use the browser's media implementation for Web exports. Source
+    // files are copied by build_web_preview.py under this same origin.
+    const browserAudioPath = resourcePath => {
+      const prefix = 'res://assets/';
+      if (typeof resourcePath !== 'string' || !resourcePath.startsWith(prefix)) return '';
+      return '/browser-audio/' + resourcePath.slice(prefix.length)
+        .split('/').map(segment => encodeURIComponent(segment)).join('/');
+    };
+    const clampVolume = value => Math.max(0, Math.min(1, Number(value) || 0));
+    let nativeMusic = null;
+    let nativeMusicPath = '';
+    let nativeMusicVolume = 0;
+    let nativeMusicPending = false;
+    const startNativeMusic = () => {
+      if (!nativeMusic) return;
+      nativeMusic.volume = nativeMusicVolume;
+      const play = nativeMusic.play();
+      if (!play || typeof play.then !== 'function') return;
+      play.then(() => {
+        nativeMusicPending = false;
+        recordAudioDebug('native-music-playing', { track: nativeMusicPath, volume: nativeMusic.volume });
+      }).catch(error => {
+        nativeMusicPending = true;
+        recordAudioDebug('native-music-deferred', { track: nativeMusicPath, message: String(error?.message || error) });
+      });
+    };
+    window.pokeaetherBrowserAudio = {
+      playMusic(resourcePath, volume) {
+        const source = browserAudioPath(resourcePath);
+        if (!source) return;
+        nativeMusicVolume = clampVolume(volume);
+        if (nativeMusicPath !== resourcePath) {
+          if (nativeMusic) nativeMusic.pause();
+          nativeMusic = new Audio(source);
+          nativeMusic.preload = 'auto';
+          nativeMusic.loop = true;
+          nativeMusicPath = resourcePath;
+        }
+        startNativeMusic();
+      },
+      stopMusic() {
+        nativeMusicPending = false;
+        if (nativeMusic) nativeMusic.pause();
+      },
+      setMusicVolume(volume) {
+        nativeMusicVolume = clampVolume(volume);
+        if (nativeMusic) nativeMusic.volume = nativeMusicVolume;
+      },
+      playSfx(resourcePath, volume, pitch = 1) {
+        const source = browserAudioPath(resourcePath);
+        if (!source) return;
+        const effect = new Audio(source);
+        effect.preload = 'auto';
+        effect.volume = clampVolume(volume);
+        effect.playbackRate = Math.max(.25, Math.min(4, Number(pitch) || 1));
+        effect.addEventListener('ended', () => effect.remove(), { once: true });
+        const play = effect.play();
+        if (play && typeof play.catch === 'function') {
+          play.catch(error => recordAudioDebug('native-sfx-deferred', {
+            track: resourcePath, message: String(error?.message || error),
+          }));
+        }
+      },
+      unlock() {
+        if (nativeMusicPending) startNativeMusic();
+      },
+    };
     let webAudioContext = null;
     const NativeAudioContext = window.AudioContext || window.webkitAudioContext;
     const NativeAudioWorkletNode = window.AudioWorkletNode;
@@ -210,7 +279,10 @@
     // the first game interaction makes the unlock reliable after that delay,
     // including on browsers that discard the original transient activation.
     for (const eventName of ['pointerdown', 'touchend', 'keydown']) {
-      window.addEventListener(eventName, () => { void unlockAudio(); }, { capture: true, passive: true });
+      window.addEventListener(eventName, () => {
+        void unlockAudio();
+        window.pokeaetherBrowserAudio.unlock();
+      }, { capture: true, passive: true });
     }
     const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
     window.pokeaetherPreview = { state: 'ready' };

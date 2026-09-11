@@ -1,6 +1,7 @@
 extends Node
 
 const WebDemoAudioCatalog := preload("res://scripts/services/web_demo_audio_catalog.gd")
+const WebAudioBridge := preload("res://scripts/services/web_audio_bridge.gd")
 const MUSIC_CATALOG_PATH := "res://data/music_catalog.json"
 const DEFAULT_OVERWORLD_MUSIC_ID := "overworld.kanto.route.1"
 const LOGIN_MUSIC_ID := "login.lugia_theme_lofi"
@@ -155,6 +156,14 @@ func get_battle_music_track_label(track_id: String) -> String:
 
 
 func play_music(track_path: String) -> void:
+	if OS.has_feature("web"):
+		if current_track_path == track_path:
+			_report_web_audio_debug("native-music-already-selected", {"track": track_path})
+			return
+		current_track_path = track_path
+		WebAudioBridge.play_music(track_path, _web_music_volume())
+		_report_web_audio_debug("native-music-requested", {"track": track_path})
+		return
 	if current_track_path == track_path and music_player.playing:
 		_report_web_audio_debug("music-already-playing", {"track": track_path})
 		return
@@ -178,6 +187,9 @@ func play_music(track_path: String) -> void:
 
 func stop_music() -> void:
 	current_track_path = ""
+	if OS.has_feature("web"):
+		WebAudioBridge.stop_music()
+		return
 	if current_tween != null:
 		current_tween.kill()
 
@@ -376,3 +388,12 @@ func _report_web_audio_debug(event_name: String, details: Dictionary = {}) -> vo
 		"window.pokeaetherAudioDiagnostics?.record(%s, %s)" % [event_json, details_json],
 		true
 	)
+
+
+func refresh_web_volume() -> void:
+	if OS.has_feature("web"):
+		WebAudioBridge.set_music_volume(_web_music_volume())
+
+
+func _web_music_volume() -> float:
+	return clampf(SettingsManager.master_volume / 100.0 * SettingsManager.music_volume / 100.0, 0.0, 1.0)

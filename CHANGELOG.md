@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Browser music, cries, battle effects and world effects now use the browser's
+  native audio playback when Godot's WebAudio mixer produces silent samples.
+
 - Fixed browser music streams exporting as raw files without their Godot audio
   import data, which made the WebAudio mixer receive silent samples.
 
