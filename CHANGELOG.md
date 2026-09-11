@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The browser demo now includes login, reachable-map and wild/trainer battle music.
+
 - Browser-demo encounters and NPC trainer battles now start correctly, announcements load again, and unsupported icon glyphs and the login notice have browser-safe presentation.
 - The browser demo now restores its complete interface icon set, opens the normal battle-mode chooser, supports mail, friends, bag and guild browsing, and clearly marks client-only features.
 

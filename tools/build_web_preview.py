@@ -10,7 +10,10 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
-MAX_INITIAL_BYTES = 300 * 1024 * 1024
+# The browser demo deliberately ships its reachable-map and PvE music rather
+# than silently failing dynamic ResourceLoader calls. Keep a tight ceiling for
+# that complete audio slice, instead of treating it as optional content.
+MAX_INITIAL_BYTES = 312 * 1024 * 1024
 
 
 def pack_contains(path: Path, marker: bytes) -> bool:
@@ -53,6 +56,12 @@ def main():
     required_markers = (
         b'generated/tiled_visuals/route_1/route_1.visual.tscn',
         b'assets/sprites/pokemon/pokemon_home/Pikachu.png',
+        b'assets/music/login/lugia_theme_lofi.ogg',
+        b'assets/music/overworld/kanto/towns/pallet_town.ogg',
+        b'assets/music/overworld/kanto/routes/route1.ogg',
+        b'assets/music/overworld/kanto/towns/viridian_city.ogg',
+        b'assets/music/battle/wild/Kanto Wild Battle.ogg',
+        b'assets/music/battle/trainer/Kalos Trainer Battle.ogg',
     )
     forbidden_markers = (
         b'assets/sprites/pokemon/gen5/front/pikachu/sheet.png.import',

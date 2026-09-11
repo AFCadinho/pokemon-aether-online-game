@@ -84,8 +84,9 @@ identifiable without including user settings, sessions, or credentials.
 ## Asset selection
 
 The preset includes the shared client code, all player appearance assets, the
-interiors/exteriors reachable inside the three-map demo, localization and the
-lightweight UI, item-icon, gender, badge and battle-indicator collections. The full animated
+interiors/exteriors reachable inside the three-map demo, its login, Pallet Town,
+Route 1, Viridian City, Oak's Lab, Pokémon Center, wild-battle and trainer-battle
+music, localization and the lightweight UI, item-icon, gender, badge and battle-indicator collections. The full animated
 Gen 5 collection is deliberately excluded: in this checkout it is about 1.1 GiB
 before Godot export and is not a viable initial browser download. A later
 on-demand asset delivery phase can add those animations without blocking play.
@@ -93,7 +94,8 @@ on-demand asset delivery phase can add those animations without blocking play.
 Generated demo-map textures are stored as self-contained, lossless compressed
 resources. This preserves their pixels and works on desktop and Web without
 duplicating the project. The build command verifies required/excluded pack
-markers and rejects an initial payload above 300 MiB. Phase 7 remains 285 MiB before
+markers and rejects an initial payload above 312 MiB. The audio-complete browser
+demo is expected to be about 303 MiB before
 HTTP compression, down from the phase-4 baseline of 559 MiB while adding the
 static battle sprite catalog.
 
