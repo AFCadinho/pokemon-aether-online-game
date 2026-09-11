@@ -42940,18 +42940,20 @@ func _on_pvp_mode_tournaments_pressed() -> void:
 
 
 func _show_web_client_required(feature_name: String) -> void:
-	var dialog := ConfirmationDialog.new()
-	dialog.title = "Available in the full client"
-	dialog.dialog_text = "%s is shown here so you can explore PokeAether, but using it requires the downloadable client." % feature_name
-	dialog.ok_button_text = "Download client"
-	dialog.cancel_button_text = "Not now"
-	dialog.confirmed.connect(func(): OS.shell_open("https://pokeaether.com/download"))
-	dialog.visibility_changed.connect(func():
-		if not dialog.visible:
-			dialog.queue_free()
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	dialog.configure(
+		"Available in the full client",
+		"%s is shown here so you can explore PokeAether, but using it requires the downloadable client." % feature_name,
+		"Download client",
+		"Not now"
 	)
+	dialog.confirmed.connect(func():
+		OS.shell_open("https://pokeaether.com/download")
+		dialog.queue_free()
+	)
+	dialog.canceled.connect(dialog.queue_free)
 	root_control.add_child(dialog)
-	dialog.popup_centered(Vector2i(480, 190))
+	dialog.popup_centered(Vector2i(560, 240))
 
 func _on_pvp_mode_casual_pressed() -> void:
 	await _open_pvp_popup_section("Custom / Casual")
