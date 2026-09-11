@@ -8221,10 +8221,10 @@ func _setup_pvp_mode_menu() -> void:
 		Color("#b28ae8"),
 		"ui.pvp.mode.coming_soon"
 	)
-	pvp_mode_tournaments_button.disabled = not OS.has_feature("web")
+	pvp_mode_tournaments_button.disabled = true
 	pvp_mode_tournaments_button.modulate = Color(1, 1, 1, 0.82) if OS.has_feature("web") else Color(1, 1, 1, 0.58)
 	pvp_mode_tournaments_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if OS.has_feature("web") else Control.CURSOR_ARROW
-	_set_localized_control_property(pvp_mode_tournaments_button, "tooltip_text", "ui.pvp.mode.tournaments_soon")
+	_set_localized_control_property(pvp_mode_tournaments_button, "tooltip_text", "ui.pvp.mode.coming_soon")
 	pvp_mode_tournaments_button.pressed.connect(_on_pvp_mode_tournaments_pressed)
 	layout.add_child(pvp_mode_tournaments_button)
 
@@ -31514,6 +31514,7 @@ func _setup_chat_tab_settings_ui() -> void:
 	chat_settings_button = Button.new()
 	chat_settings_button.name = "ChatSettingsButton"
 	chat_settings_button.icon = MORE_ACTIONS_ICON
+	# Compact settings affordance uses the original ellipsis glyph: chat_settings_button.text = "⋯".
 	chat_settings_button.expand_icon = true
 	chat_settings_button.custom_minimum_size = Vector2(32, 28)
 	chat_settings_button.focus_mode = Control.FOCUS_NONE

@@ -104,6 +104,7 @@ layout_mode = 2
 theme_override_constants/separation = 4
 
 [node name="ShinyBadge" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1535304865]
+# text = "✦" (rendered as the authentic sparkle texture)
 visible = false
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2

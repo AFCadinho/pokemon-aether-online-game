@@ -69,6 +69,7 @@ func interact_with_player(_player: Node2D) -> void:
 		var inventory_quantity := maxi(int(result.get("quantity", 1)), 1)
 		if inventory_service.has_method("notify_claimed_item_reward"):
 			inventory_service.call("notify_claimed_item_reward", result)
+		# InventoryService.notify_claimed_item_reward(result) remains the canonical reward-card event.
 		if inventory_item_id != "" and inventory_item_id not in ["town-map", "old-rod"]:
 			get_tree().call_group(
 				"ui_overlay",
