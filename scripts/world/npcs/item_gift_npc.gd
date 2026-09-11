@@ -90,9 +90,7 @@ func interact_with_player(_player: Node2D) -> void:
 				"add_system_message",
 				get_node_or_null("/root/LocalizationManager").call("text", "ui.skill.fishing.unlocked")
 			)
-		var sfx_manager := get_node_or_null("/root/SfxManager")
-		if sfx_manager != null:
-			sfx_manager.call("play", "item_received")
+		SfxManager.play("item_received")
 	else:
 		reward_resolved = true
 		_refresh_quest_marker()
