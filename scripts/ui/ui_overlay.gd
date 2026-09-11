@@ -494,6 +494,7 @@ const SPECIAL_HOLDABLE_ITEM_IDS := {
 	"red-orb": true,
 }
 const BAG_ICON_ROOT := "res://assets/items/icons/"
+# Canonical normalized item icon key: BAG_ICON_ROOT + normalized + ".png".
 const REWARD_NOTIFICATION_STACK_SCRIPT := preload("res://scripts/ui/reward_notification_stack.gd")
 const BAG_INTERFACE_ICON: Texture2D = preload("res://assets/ui/bag-icon.svg")
 const MARKET_INTERFACE_ICON: Texture2D = preload("res://assets/ui/market_shop.svg")
