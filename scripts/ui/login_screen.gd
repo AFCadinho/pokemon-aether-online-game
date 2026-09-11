@@ -305,7 +305,11 @@ func _show_web_demo_notice() -> void:
 	dialog.confirmed.connect(func():
 		web_demo_notice_acknowledged = true
 		dialog.queue_free()
-		_enter_world()
+		# Changing the root scene from inside the dialog's pressed-signal can be
+		# dropped by the Web input frame. Defer it until the dialog has finished
+		# dispatching and left the tree, otherwise a successful first browser login
+		# remains on the login screen with no world request.
+		call_deferred("_enter_world")
 	)
 	dialog.cancel_button.pressed.connect(func():
 		OS.shell_open("https://pokeaether.com/download")

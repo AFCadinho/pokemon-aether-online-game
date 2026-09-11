@@ -79,9 +79,10 @@ const assert = require('node:assert/strict');
     // Remember me using the Godot focus chain, then submit from password.
     await page.keyboard.press('Tab');
     await page.keyboard.press('Space');
-    await page.keyboard.press('Shift+Tab');
-    await page.keyboard.press('Enter');
+		await page.keyboard.press('Shift+Tab');
+		await page.keyboard.press('Enter');
 		await waitForApi(item => item.path === '/api/auth/web/login' && item.status === 200, 30000);
+		await page.getByRole('button', { name: 'Continue in browser', exact: true }).click();
 		await waitForApi(item => item.path === '/api/auth/web/world' && item.status === 200, 120000);
 		await waitForApi(item => item.path === '/api/auth/web/profile' && item.status === 200, 30000);
 		await waitForApi(item => item.path === '/api/auth/web/world/story' && item.status === 200, 30000);
