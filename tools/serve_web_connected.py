@@ -54,6 +54,8 @@ HTTP_ROUTE_PREFIXES = (
     ("GET", "/encounters/"),
     ("GET", "/auth/web/world/story"),
     ("POST", "/auth/web/world/story"),
+	("GET", "/auth/web/world/activity"), ("PUT", "/auth/web/world/activity"),
+	("GET", "/auth/web/world/encounter-modifiers"),
     ("GET", "/auth/web/mail"), ("POST", "/auth/web/mail"),
     ("GET", "/auth/web/socials"), ("POST", "/auth/web/socials"),
     ("PUT", "/auth/web/socials"), ("DELETE", "/auth/web/socials"),
