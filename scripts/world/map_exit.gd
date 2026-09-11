@@ -48,7 +48,8 @@ func _on_body_entered(body: Node2D) -> void:
 	if normalized_transition_id.is_empty():
 		push_warning("MapExit is using legacy loading because its source map has no map_id: %s." % get_path())
 
-	var world := GameState.get_world()
+	var game_state := get_node_or_null("/root/GameState")
+	var world: Node = game_state.call("get_world") if game_state != null and game_state.has_method("get_world") else null
 	if world == null or not world.has_method("load_map"):
 		push_error("MapExit failed: could not resolve World.")
 		return
@@ -102,10 +103,8 @@ func _enter_authorized_transition(
 		push_warning("MapExit transition could not start: %s" % str(begin_result.get("error", "")))
 		return
 
-	var response: Dictionary = await WorldTransitionService.enter_transition(
-		normalized_transition_id,
-		arrival_facing_direction
-	)
+	var transition_service := get_node_or_null("/root/WorldTransitionService")
+	var response: Dictionary = await transition_service.call("enter_transition", normalized_transition_id, arrival_facing_direction) if transition_service != null else {}
 	if not bool(response.get("success", false)):
 		world.call("cancel_authorized_teleport")
 		is_transitioning = false
@@ -161,35 +160,48 @@ func _present_denied_transition(
 	var dialogue_id := str(access.get("dialogueId", "")).strip_edges()
 	var lines: Array[String] = []
 	if not dialogue_id.is_empty():
-		lines = await DialogueMetadataService.get_lines(dialogue_id)
+		var dialogue_service := get_node_or_null("/root/DialogueMetadataService")
+		lines = await dialogue_service.call("get_lines", dialogue_id) if dialogue_service != null else []
 	if lines.is_empty() and OS.has_feature("web"):
 		var web_message := str(access.get("message", "")).strip_edges()
 		if not web_message.is_empty():
 			lines = [web_message]
 	if lines.is_empty():
 		lines = ["This area is not available right now."]
-	GameState.lock_overworld_input()
-	await GameErrorDialogService.show_message(lines)
-	GameState.unlock_overworld_input()
+	var game_state := get_node_or_null("/root/GameState")
+	var error_dialog_service := get_node_or_null("/root/GameErrorDialogService")
+	if game_state != null:
+		game_state.call("lock_overworld_input")
+	if error_dialog_service != null:
+		await error_dialog_service.call("show_message", lines)
+	if game_state != null:
+		game_state.call("unlock_overworld_input")
 
 
 func _show_transition_error(response: Dictionary = {}) -> void:
-	GameState.lock_overworld_input()
+	var game_state := get_node_or_null("/root/GameState")
+	var error_dialog_service := get_node_or_null("/root/GameErrorDialogService")
+	if game_state != null:
+		game_state.call("lock_overworld_input")
 	if response.is_empty():
-		await GameErrorDialogService.show_report_to_staff_message()
+		if error_dialog_service != null:
+			await error_dialog_service.call("show_report_to_staff_message")
 	else:
-		await GameErrorDialogService.show_response(
+		if error_dialog_service != null:
+			await error_dialog_service.call("show_response",
 			response,
 			"backend.error.world_transition"
-		)
-	GameState.unlock_overworld_input()
+			)
+	if game_state != null:
+		game_state.call("unlock_overworld_input")
 
 
 func _resolve_transition_id() -> String:
 	var configured_transition_id := transition_id.strip_edges()
 	if not configured_transition_id.is_empty():
 		return configured_transition_id
-	var current_map: Node = GameState.current_map
+	var game_state := get_node_or_null("/root/GameState")
+	var current_map: Node = game_state.get("current_map") as Node if game_state != null else null
 	if current_map == null or not current_map.has_method("get_map_id"):
 		return ""
 	var source_map_id := str(current_map.call("get_map_id")).strip_edges()
