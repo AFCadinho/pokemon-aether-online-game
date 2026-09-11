@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aethernet now clearly directs browser-demo players to the downloadable client instead of opening an empty travel confirmation.
+
 - The browser demo now includes login, reachable-map and wild/trainer battle music.
 
 - Browser-demo encounters and NPC trainer battles now start correctly, announcements load again, and unsupported icon glyphs and the login notice have browser-safe presentation.
