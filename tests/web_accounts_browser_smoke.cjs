@@ -82,7 +82,9 @@ const assert = require('node:assert/strict');
 		await page.keyboard.press('Shift+Tab');
 		await page.keyboard.press('Enter');
 		await waitForApi(item => item.path === '/api/auth/web/login' && item.status === 200, 30000);
-		await page.getByRole('button', { name: 'Continue in browser', exact: true }).click();
+		// Godot renders the confirmation inside its canvas, so a DOM role click
+		// does not activate this button. Use its stable viewport position.
+		await page.mouse.click(850, 524);
 		await waitForApi(item => item.path === '/api/auth/web/world' && item.status === 200, 120000);
 		await waitForApi(item => item.path === '/api/auth/web/profile' && item.status === 200, 30000);
 		await waitForApi(item => item.path === '/api/auth/web/world/story' && item.status === 200, 30000);
