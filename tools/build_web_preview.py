@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,6 +15,32 @@ ROOT = Path(__file__).resolve().parents[1]
 # than silently failing dynamic ResourceLoader calls. Keep a tight ceiling for
 # that complete audio slice, instead of treating it as optional content.
 MAX_INITIAL_BYTES = 312 * 1024 * 1024
+WEB_AUDIO_SOURCE_DIRS = (
+    ROOT / "assets/music",
+    ROOT / "assets/audio",
+    ROOT / "assets/battles/animations",
+)
+WEB_AUDIO_SUFFIXES = {".ogg", ".wav", ".mp3"}
+
+
+def copy_browser_audio(output: Path) -> list[dict[str, object]]:
+    """Expose raw browser-playable audio outside Godot's silent web mixer."""
+    destination = output / "browser-audio"
+    if destination.exists():
+        shutil.rmtree(destination)
+    copied: list[dict[str, object]] = []
+    for source_root in WEB_AUDIO_SOURCE_DIRS:
+        for source in source_root.rglob("*"):
+            if not source.is_file() or source.suffix.lower() not in WEB_AUDIO_SUFFIXES:
+                continue
+            relative = source.relative_to(ROOT / "assets")
+            target = destination / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, target)
+            copied.append({"name": str(relative), "bytes": source.stat().st_size})
+    if not copied:
+        raise RuntimeError("No browser audio files were copied.")
+    return copied
 
 
 def pack_contains(path: Path, marker: bytes) -> bool:
@@ -44,6 +71,7 @@ def main():
     if result.returncode != 0:
         tail = console_log.read_text(errors='replace').splitlines()[-80:]
         raise RuntimeError('Godot web export failed:\n' + '\n'.join(tail))
+    browser_audio_files = copy_browser_audio(output)
     files = []
     for name in ('index.html', 'index.js', 'index.wasm', 'index.pck'):
         path = output / name
@@ -90,6 +118,8 @@ def main():
         'dirty': bool(subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=no'], cwd=ROOT, text=True).strip()),
         'engine': subprocess.check_output([args.godot, '--version'], text=True).strip(),
         'files': files,
+        'browserAudioFiles': len(browser_audio_files),
+        'browserAudioBytes': sum(int(item['bytes']) for item in browser_audio_files),
         'initialBytes': initial_bytes,
     }
     (output / 'build-receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')

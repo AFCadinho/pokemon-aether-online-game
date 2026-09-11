@@ -42,6 +42,12 @@ func _init() -> void:
 		and shell.find("await unlockAudio();", shell.find("await engine.startGame({")) > shell.find("await engine.startGame({"),
 		"the browser resumes Godot audio again after its worklet attaches")
 	_check(shell.contains("['pointerdown', 'touchend', 'keydown']"), "web shell retries audio unlock on the first game interaction")
+	_check(shell.contains("window.pokeaetherBrowserAudio"), "web shell exposes native browser playback when Godot's mixer is silent")
+	_check(shell.contains("native-music-playing"), "web shell records native music playback")
+	_check(shell.contains("browser-audio/"), "web shell resolves raw exported browser audio files")
+	var bridge_source := FileAccess.get_file_as_string("res://scripts/services/web_audio_bridge.gd")
+	_check(bridge_source.contains("play_music") and bridge_source.contains("play_sfx"), "web audio bridge supports music and effects")
+	_check(music_manager_source.contains("WebAudioBridge.play_music"), "web music uses the native browser bridge")
 	print("web_audio_shell_check: %s" % ("PASS" if failures == 0 else "FAIL"))
 	quit(failures)
 

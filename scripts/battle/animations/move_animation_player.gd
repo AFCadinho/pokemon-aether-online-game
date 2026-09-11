@@ -2,6 +2,8 @@ extends Node2D
 
 class_name MoveAnimationPlayer
 
+const WebAudioBridge := preload("res://scripts/services/web_audio_bridge.gd")
+
 signal animation_finished
 
 @export_file("*.json") var data_path := ""
@@ -3475,6 +3477,16 @@ func _timing_hide_frame(index: int, event: Dictionary) -> int:
 
 
 func _play_sound_event(event: Dictionary) -> void:
+	if OS.has_feature("web"):
+		var sound_path := str(sound_paths.get(str(event["name"]), "")).strip_edges()
+		if sound_path != "":
+			var web_volume: float = float(event["volume"]) / 100.0
+			WebAudioBridge.play_sfx(
+				sound_path,
+				clampf(SettingsManager.master_volume / 100.0 * SettingsManager.sfx_volume / 100.0 * web_volume, 0.0, 1.0),
+				float(event["pitch"]) / 100.0
+			)
+		return
 	var player: AudioStreamPlayer = sound_players.get(str(event["name"]), null) as AudioStreamPlayer
 	if player == null:
 		return

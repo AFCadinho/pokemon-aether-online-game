@@ -3,6 +3,7 @@ extends RefCounted
 class_name BattleAnimationRouter
 
 const BattleRenderLayers := preload("res://scripts/battle/battle_render_layers.gd")
+const WebAudioBridge := preload("res://scripts/services/web_audio_bridge.gd")
 const MOVE_ANIMATION_CATALOG_PATH := "res://data/battle_move_animations.json"
 const EFFECT_ANIMATION_CATALOG_PATH := "res://data/battle_effect_animations.json"
 const TAKE_DAMAGE_SOUND_PATH := "res://assets/battles/animations/common/damage/normaldamage.ogg"
@@ -1535,6 +1536,12 @@ static func get_damage_sound_path(sound_variant: String) -> String:
 
 func _play_one_shot_sound(sound_path: String) -> void:
 	if not _can_start_battle_animation("router.render_sound", {"sound": sound_path}):
+		return
+	if OS.has_feature("web"):
+		WebAudioBridge.play_sfx(
+			sound_path,
+			clampf(SettingsManager.master_volume / 100.0 * SettingsManager.sfx_volume / 100.0, 0.0, 1.0)
+		)
 		return
 
 	var stream: AudioStream = _get_cached_sound_stream(sound_path)

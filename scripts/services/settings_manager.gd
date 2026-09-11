@@ -474,6 +474,8 @@ func set_master_volume(volume: float) -> void:
 
 	master_volume = validated_volume
 	_apply_audio_bus_volume(MASTER_BUS, master_volume)
+	if OS.has_feature("web"):
+		MusicManager.refresh_web_volume()
 	_save_and_emit()
 
 
@@ -484,6 +486,8 @@ func set_music_volume(volume: float) -> void:
 
 	music_volume = validated_volume
 	_apply_audio_bus_volume(MUSIC_BUS, music_volume)
+	if OS.has_feature("web"):
+		MusicManager.refresh_web_volume()
 	_save_and_emit()
 
 

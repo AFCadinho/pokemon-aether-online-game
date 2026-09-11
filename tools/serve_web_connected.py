@@ -248,9 +248,12 @@ def create_app(upstream, build=None, *, transport=None):
     async def static(path: str):
         target = (build / (path or "index.html")).resolve()
         if (not target.is_relative_to(build) or any(part.startswith(".") for part in Path(path).parts)
-                or not target.is_file() or target.suffix not in {".html", ".js", ".wasm", ".pck", ".png", ".svg", ".ico"}):
+                or not target.is_file() or target.suffix not in {".html", ".js", ".wasm", ".pck", ".png", ".svg", ".ico", ".ogg", ".wav", ".mp3"}):
             return Response(status_code=404)
-        mime = {".wasm": "application/wasm", ".pck": "application/octet-stream"}.get(target.suffix)
+        mime = {
+            ".wasm": "application/wasm", ".pck": "application/octet-stream",
+            ".ogg": "audio/ogg", ".wav": "audio/wav", ".mp3": "audio/mpeg",
+        }.get(target.suffix)
         return FileResponse(target, media_type=mime)
 
     return app
