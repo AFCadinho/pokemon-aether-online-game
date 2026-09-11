@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- The browser-demo notice now closes in place, while only its Download client
+  button opens the website. The saved-session action is labelled Sign in.
+
 - Browser music, battle sounds, cries and UI sounds now use the WebAudio
   mixer’s reliable Master output route.
 

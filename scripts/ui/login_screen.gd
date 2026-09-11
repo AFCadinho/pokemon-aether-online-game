@@ -157,7 +157,7 @@ func set_loading(is_loading: bool) -> void:
 		else _get_idle_login_button_text()
 	)
 	continue_button.text = LocalizationManager.text(
-		"ui.login.entering" if is_loading else "ui.login.continue"
+		"ui.login.entering" if is_loading else _get_saved_session_button_key()
 	)
 
 	if is_loading:
@@ -211,7 +211,7 @@ func _on_locale_changed(_locale: String) -> void:
 		else _get_idle_login_button_text()
 	)
 	continue_button.text = LocalizationManager.text(
-		"ui.login.entering" if is_loading else "ui.login.continue"
+		"ui.login.entering" if is_loading else _get_saved_session_button_key()
 	)
 	if not status_translation_key.is_empty():
 		show_status_key(status_translation_key, status_translation_values, status_is_error)
@@ -307,8 +307,10 @@ func _show_web_demo_notice() -> void:
 		dialog.queue_free()
 		_enter_world()
 	)
-	dialog.canceled.connect(func():
+	dialog.cancel_button.pressed.connect(func():
 		OS.shell_open("https://pokeaether.com/download")
+	)
+	dialog.canceled.connect(func():
 		dialog.queue_free()
 	)
 	add_child(dialog)
@@ -710,6 +712,13 @@ func _get_idle_login_button_text() -> String:
 	)
 
 
+func _get_saved_session_button_key() -> String:
+	# The browser notice explains the demo boundary after an explicit sign-in.
+	# Keep the launch action consistent with the desktop login affordance rather
+	# than labelling it as a separate browser-demo destination.
+	return "ui.login.sign_in" if OS.has_feature("web") else "ui.login.continue"
+
+
 func _show_login_form() -> void:
 	if OS.has_feature("web"):
 		JavaScriptBridge.eval("window.pokeaetherPreview.authenticated = false", true)
@@ -733,7 +742,7 @@ func _show_saved_session_card() -> void:
 	continue_button.grab_focus()
 	if OS.has_feature("web"):
 		continue_button.disabled = is_loading or not server_online
-		continue_button.text = "Enter browser demo"
+		continue_button.text = LocalizationManager.text(_get_saved_session_button_key())
 		JavaScriptBridge.eval("window.pokeaetherPreview.authenticated = true", true)
 
 
