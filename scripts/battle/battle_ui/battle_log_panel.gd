@@ -45,7 +45,9 @@ func add_turn_header(turn: int) -> void:
 	if log_buffer != "":
 		log_buffer += "\n"
 
-	log_buffer += "[color=%s]────────────[/color]\n[color=%s][b]Turn %s[/b][/color]" % [COLOR_DIVIDER, COLOR_TURN, turn]
+	# Keep this divider ASCII-only. The compact font bundled with the web export
+	# does not contain the box-drawing glyphs used by the desktop version.
+	log_buffer += "[color=%s]------------[/color]\n[color=%s][b]Turn %s[/b][/color]" % [COLOR_DIVIDER, COLOR_TURN, turn]
 	_sync_log_text()
 	_scroll_to_bottom.call_deferred()
 
