@@ -16,6 +16,13 @@ func _init() -> void:
 	_check(shell.contains("worklet-module-loaded"), "web shell records Godot worklet module loading")
 	_check(shell.contains("worklet-node-connected"), "web shell records Godot worklet connection to audio output")
 	_check(shell.contains("worklet-audio-chunk"), "web shell records whether Godot sends audible sample chunks to its worklet")
+	var music_manager_source := FileAccess.get_file_as_string("res://scripts/services/music_manager.gd")
+	_check(
+		music_manager_source.contains("if OS.has_feature(\"web\"):")
+			and music_manager_source.contains("music-web-direct-start")
+			and music_manager_source.contains("music_player.volume_db = 0.0"),
+		"web music bypasses a stuck silence-floor fade before audio reaches the worklet"
+	)
 	_check(shell.contains("new NativeAudioContext(...args)"), "Godot keeps its requested WebAudio sample-rate and latency settings")
 	_check(shell.contains("webAudioContext = new NativeAudioContext(...args);")
 		and not shell.contains("webAudioContext = new NativeAudioContext();"),
