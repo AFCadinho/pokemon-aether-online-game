@@ -61,6 +61,7 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertEqual(client.delete("/api/auth/web/ai-sparring/history").status_code, 200)
             self.assertEqual(client.get("/api/battle/pvp/training/ai/teams").status_code, 200)
             self.assertEqual(client.get("/api/battle/pvp/training/ai/live").status_code, 200)
+            self.assertEqual(client.get("/api/pokemon/stats?species=rattata&level=2").status_code, 200)
             self.assertEqual(client.get("/api/battle/pvp/training/ai/live/training-test/spectate").status_code, 200)
             sprite = client.get("/pokemon-assets/gen5/front/pikachu/animation.json")
             self.assertEqual(sprite.status_code, 200)
@@ -87,7 +88,7 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertIn("frame-ancestors 'none'", client.get("/").headers["content-security-policy"])
             for path in ["/.secret", "/external.js", "/%2e%2e/etc/passwd"]:
                 self.assertEqual(client.get(path).status_code, 404)
-            self.assertEqual(len(calls), 28)
+            self.assertEqual(len(calls), 29)
 
     def test_redirects_and_upstream_failure_are_not_followed_or_exposed(self):
         for handler, status in [(lambda _: httpx.Response(302, headers={"Location": "https://example.com"}), 502),

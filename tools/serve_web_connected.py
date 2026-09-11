@@ -34,6 +34,8 @@ HTTP_ROUTES = {
     ("POST", "/battle/wild-encounter"), ("GET", "/battle/wild/resume"),
     ("POST", "/battle/trainer"), ("GET", "/battle/trainer/resume"),
     ("POST", "/battle/pvp/rooms"),
+    # Public species data needed by the battle hover card (including speed tiers).
+    ("GET", "/pokemon/stats"),
     ("POST", "/auth/email-verification/confirm"),
 }
 AI_BATTLE_ROUTE = re.compile(

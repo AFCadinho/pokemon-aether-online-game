@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Browser battle hover cards now load speed tiers, and the damage calculator
+  uses the original gender textures with browser-safe disclosure controls.
+
 - Browser game audio now lets Godot create its own WebAudio mixer context
   before the player unlocks it, preserving its required latency and sample-rate
   settings.
