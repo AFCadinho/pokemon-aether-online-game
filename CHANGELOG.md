@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Pallet Town now uses the complete current Tiled visual layout again.
+
+- Browser-demo players now stay mounted when moving between permitted outdoor
+  maps.
+
+- Browser audio now explicitly primes its output during player interaction,
+  ensuring music and sound effects can start after the web build has loaded.
+
 - Browser battle logs now use a font-safe turn divider instead of displaying
   missing-character blocks.
 

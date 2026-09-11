@@ -87,6 +87,18 @@
     const progress = document.getElementById('progress');
     const cover = document.getElementById('cover');
     const soundEnable = document.getElementById('sound-enable');
+    // Some browsers report a running context after resume(), but still keep
+    // its output gated until a source has started during a user gesture. A
+    // one-frame silent source satisfies that requirement without making any
+    // audible sound or competing with Godot's mixer.
+    const primeAudioOutput = () => {
+      if (!webAudioContext || webAudioContext.state === 'closed') return;
+      const source = webAudioContext.createBufferSource();
+      source.buffer = webAudioContext.createBuffer(1, 1, webAudioContext.sampleRate);
+      source.connect(webAudioContext.destination);
+      source.start(0);
+      source.stop(0);
+    };
     const unlockAudio = async () => {
       if (!webAudioContext && NativeAudioContext) webAudioContext = new NativeAudioContext();
       if (!webAudioContext) {
@@ -94,7 +106,11 @@
         return false;
       }
       try {
-        await webAudioContext.resume();
+        // Do both operations synchronously before the first await, while the
+        // browser still associates this work with the player's click/key.
+        const resume = webAudioContext.resume();
+        primeAudioOutput();
+        await resume;
         if (webAudioContext.state !== 'running') throw new Error('Audio is still suspended');
         soundEnable.hidden = true;
         return true;
@@ -105,6 +121,12 @@
       }
     };
     soundEnable.addEventListener('click', unlockAudio);
+    // The initial pack download can outlive the opening click. Retrying from
+    // the first game interaction makes the unlock reliable after that delay,
+    // including on browsers that discard the original transient activation.
+    for (const eventName of ['pointerdown', 'touchend', 'keydown']) {
+      window.addEventListener(eventName, () => { void unlockAudio(); }, { capture: true, passive: true });
+    }
     const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
     window.pokeaetherPreview = { state: 'ready' };
     const registration = document.getElementById('registration');

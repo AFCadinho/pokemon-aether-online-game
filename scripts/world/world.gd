@@ -1576,6 +1576,12 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 	var current_scene_path := _get_map_scene_path(GameState.current_map)
 	var target_map: Node = GameState.current_map
 	var changes_map := current_scene_path != target_scene_path
+	# Reparenting during a browser transition clears transient activities. Keep
+	# the selected land mount so exterior demo maps retain the riding state;
+	# restore_land_mount still rejects interiors and unavailable mounts.
+	var land_mount_id_to_restore := str(player.call("get_active_land_mount_id")) \
+		if player.has_method("get_active_land_mount_id") \
+		else ""
 	if changes_map:
 		await _fade_map_transition(MAP_TRANSITION_COVER_ALPHA, MAP_FADE_OUT_SECONDS)
 		var packed_scene := await _load_map_scene_threaded(target_scene_path)
@@ -1601,6 +1607,15 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 		is_loading_map = false
 		return position_result
 	_apply_camera_limits_for_map(target_map)
+	if (
+		not land_mount_id_to_restore.is_empty()
+		and player.has_method("restore_land_mount")
+		and (
+			not player.has_method("is_surfing_activity_active")
+			or not bool(player.call("is_surfing_activity_active"))
+		)
+	):
+		player.call("restore_land_mount", land_mount_id_to_restore)
 	if changes_map:
 		await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
 	last_saved_position_signature = _get_current_player_position_signature(true)
