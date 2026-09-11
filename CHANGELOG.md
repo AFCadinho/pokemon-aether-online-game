@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Fixed browser music remaining silent when the WebAudio mixer did not advance
+  the normal fade-in from its silence floor.
+
 - Fixed a rejected NPC trainer battle leaving the browser player frozen after
   its error dialogue or on the next login.
 

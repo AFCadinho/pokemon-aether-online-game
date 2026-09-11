@@ -188,6 +188,18 @@ func stop_music() -> void:
 func _fade_to_stream(stream: AudioStream) -> void:
 	if current_tween != null:
 		current_tween.kill()
+	# In the single-threaded WebAudio driver, a tweened transition from the
+	# silence floor can leave the mixer producing zero-valued worklet blocks.
+	# Start the browser stream at its normal player volume instead. Desktop
+	# retains the crossfade below.
+	if OS.has_feature("web"):
+		_start_stream(stream)
+		music_player.volume_db = 0.0
+		_report_web_audio_debug("music-web-direct-start", {
+			"track": current_track_path,
+			"volume_db": music_player.volume_db,
+		})
+		return
 
 	current_tween = create_tween()
 	if music_player.playing:
