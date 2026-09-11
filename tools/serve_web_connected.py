@@ -141,7 +141,13 @@ def create_app(upstream, build=None, *, transport=None):
         headers["x-pokeaether-client-platform"] = "web"
         try:
             async with httpx.AsyncClient(timeout=15, trust_env=False, transport=transport) as client:
-                result = await client.request(request.method, upstream + route, content=bytes(body), headers=headers)
+                # FastAPI's path parameter intentionally excludes the query
+                # string. Preserve that query for the allowlisted route: many
+                # normal client contracts use it for public lookup arguments
+                # (for example Pokémon hover species/level data).
+                query = request.url.query
+                upstream_url = upstream + route + (("?" + query) if query else "")
+                result = await client.request(request.method, upstream_url, content=bytes(body), headers=headers)
             # Never follow redirects (especially to external account services).
             if 300 <= result.status_code < 400:
                 return JSONResponse({"error": "Unexpected upstream redirect"}, status_code=502)
