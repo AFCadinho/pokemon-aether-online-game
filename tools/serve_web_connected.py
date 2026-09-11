@@ -21,6 +21,7 @@ HTTP_ROUTES = {
     ("GET", "/auth/web/meta"), ("GET", "/auth/web/me"),
     ("POST", "/auth/web/signup"), ("POST", "/auth/web/login"), ("POST", "/auth/web/logout"),
     ("GET", "/auth/web/preferences"), ("PUT", "/auth/web/preferences"),
+    ("PATCH", "/auth/web/party/battle-state"),
     ("GET", "/auth/web/profile"), ("GET", "/auth/web/party"),
     ("GET", "/auth/web/inventory"), ("GET", "/auth/web/guilds"),
     ("GET", "/auth/web/transit"),
