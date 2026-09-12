@@ -22,6 +22,11 @@ on:
         required: true
         default: https://web-assets.pokeaether.com
         type: string
+      source_asset_base_url:
+        description: Public HTTPS origin containing the immutable desktop source asset archives
+        required: true
+        default: https://updates.pokeaether.com
+        type: string
       api_origin:
         description: Public HTTPS origin of the production gateway
         required: true
@@ -91,14 +96,14 @@ jobs:
 
       - name: Restore required browser source assets
         env:
-          ASSET_BASE_URL: ${{ inputs.asset_base_url }}
+          SOURCE_ASSET_BASE_URL: ${{ inputs.source_asset_base_url }}
         run: |
-          curl -fsSL -o /tmp/pokemon-home.zip "${ASSET_BASE_URL}/assets/${POKEMON_HOME_ASSET_VERSION}.zip"
-          curl -fsSL -o /tmp/pokemon-home-shiny.zip "${ASSET_BASE_URL}/assets/${POKEMON_HOME_SHINY_ASSET_VERSION}.zip"
-          curl -fsSL -o /tmp/music.zip "${ASSET_BASE_URL}/assets/${MUSIC_ASSET_VERSION}.zip"
-          unzip -q /tmp/pokemon-home.zip
-          unzip -q /tmp/pokemon-home-shiny.zip
-          unzip -q /tmp/music.zip
+          curl -fsSL -o /tmp/pokemon-home.zip "${SOURCE_ASSET_BASE_URL}/assets/${POKEMON_HOME_ASSET_VERSION}.zip"
+          curl -fsSL -o /tmp/pokemon-home-shiny.zip "${SOURCE_ASSET_BASE_URL}/assets/${POKEMON_HOME_SHINY_ASSET_VERSION}.zip"
+          curl -fsSL -o /tmp/music.zip "${SOURCE_ASSET_BASE_URL}/assets/${MUSIC_ASSET_VERSION}.zip"
+          unzip -oq /tmp/pokemon-home.zip
+          unzip -oq /tmp/pokemon-home-shiny.zip
+          unzip -oq /tmp/music.zip
 
       - name: Import, verify and export Godot web client
         env:
@@ -167,6 +172,7 @@ jobs:
       - name: Publish browser sprite catalogs when absent
         env:
           ASSET_BASE_URL: ${{ inputs.asset_base_url }}
+          SOURCE_ASSET_BASE_URL: ${{ inputs.source_asset_base_url }}
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
@@ -184,7 +190,7 @@ jobs:
               echo "Browser sprite catalog already exists: ${version}"
               return
             fi
-            curl -fsSL -o "/tmp/${version}.zip" "${ASSET_BASE_URL}/assets/${version}.zip"
+            curl -fsSL -o "/tmp/${version}.zip" "${SOURCE_ASSET_BASE_URL}/assets/${version}.zip"
             python3 tools/extract_web_sprite_pack.py "/tmp/${version}.zip" --side "${side}" --output "/tmp/web-sprites/${version}"
             rclone copy "/tmp/web-sprites/${version}" "R2:${R2_BUCKET}/web/assets/${version}" \
               --immutable --header-upload "Cache-Control: public, max-age=31536000, immutable"
