@@ -7997,11 +7997,22 @@ func _render_ai_sparring_stats() -> void:
 	var bots: Variant = pvp_ai_sparring_stats_data.get("bots", [])
 	if not bots is Array:
 		return
+	var ordered_bots: Array = []
+	for ordered_difficulty: String in ["beginner", "intermediate", "hard", "elite", "nightmare"]:
+		for candidate: Variant in bots:
+			if not candidate is Dictionary:
+				continue
+			var candidate_is_ai5 := str(candidate.get("bot", "")) == "ai5"
+			var candidate_difficulty := str(candidate.get(
+				"difficulty", "hard" if candidate_is_ai5 else "beginner"
+			))
+			if candidate_difficulty == ordered_difficulty:
+				ordered_bots.append(candidate)
 	var older_versions := VBoxContainer.new()
 	older_versions.name = "AiSparringOlderStatistics"
 	older_versions.add_theme_constant_override("separation", 14)
 	older_versions.visible = false
-	for entry: Variant in bots:
+	for entry: Variant in ordered_bots:
 		if not entry is Dictionary or str(entry.get("bot", "")) not in ["ai4", "ai5"]:
 			continue
 		var is_ai5 := str(entry["bot"]) == "ai5"
