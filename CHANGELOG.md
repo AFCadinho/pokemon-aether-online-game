@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Browser players now reconnect to the shared overworld correctly, and wild or Trainer battles recover automatically after a stale local party refresh.
 - The Damage Calculator now lets you manually select available MMO OU catalog sets.
 - Prepared the browser version for secure, versioned delivery through Cloudflare Pages and R2, with password recovery available from browser login.
 - AI Sparring now offers MMO OU for AI4 Scholar and AI5 Grandmaster Hard, Elite and Nightmare.
