@@ -89,6 +89,15 @@ func _run_checks() -> void:
 		"NPC transition covers trainer loading before the battle scene mounts"
 	)
 	_check_true(
+		world_source.count('== "pokemon_party_changed_refresh_required"') >= 2
+		and world_source.count("and await _load_player_party_state()") >= 2,
+		"wild and Trainer battle starts refresh a stale party and retry once"
+	)
+	_check_true(
+		world_source.contains("PlayerSave.replace_party_from_state([])"),
+		"an authoritative empty party clears stale local party state"
+	)
+	_check_true(
 		trainer_expected_rejection_index > trainer_request_index
 		and trainer_failure_warning_index > trainer_expected_rejection_index
 		and world_source.contains('"pokemon_level_cap_party_ineligible"'),

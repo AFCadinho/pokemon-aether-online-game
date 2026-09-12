@@ -3068,19 +3068,21 @@ func _get_position_reference_tilemap(map: Node) -> TileMapLayer:
 	)
 
 
-func _load_player_party_state() -> void:
+func _load_player_party_state() -> bool:
 	var party_response: Dictionary = await PlayerPartyStateService.load_party()
 	if not bool(party_response.get("success", false)):
 		push_warning("World: player party load failed: %s" % str(party_response.get("error", "Unknown error")))
-		return
+		return false
 	if not bool(party_response.get("hasParty", false)):
-		return
+		PlayerSave.replace_party_from_state([])
+		return true
 
 	var party_value: Variant = party_response.get("party", [])
 	if not (party_value is Array):
-		return
+		return false
 
 	PlayerSave.replace_party_from_state(party_value as Array)
+	return true
 
 func create_dev_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
 	var battle_request := HTTPRequest.new()
@@ -3294,6 +3296,12 @@ func start_triggered_wild_battle_for_area(
 		await GameErrorDialogService.show_response(position_result)
 		return
 	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id)
+	if (
+		not response.get("success", false)
+		and WildEncounterErrorRules.error_code(response) == "pokemon_party_changed_refresh_required"
+		and await _load_player_party_state()
+	):
+		response = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id)
 	if not response.get("success", false):
 		# A previous browser tab can close after the authority has accepted the
 		# encounter. The account remains bound to that exact battle until it is
@@ -3447,12 +3455,30 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 		trainer_id,
 		active_trainer_is_rematch
 	)
+	if (
+		not response.get("success", false)
+		and BackendErrorLocalizationService.error_code(response) == "pokemon_party_changed_refresh_required"
+		and await _load_player_party_state()
+	):
+		response = await create_trainer_battle_response(
+			trainer_id,
+			active_trainer_is_rematch
+		)
 	if not response.get("success", false):
 		if not _is_expected_trainer_battle_rejection(response):
 			push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
 		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		return response
+	player_lead_slot = PlayerSave.get_first_usable_party_slot()
+	if player_lead_slot <= 0:
+		await _cancel_wild_encounter_transition()
+		_abort_battle_start()
+		return {
+			"success": false,
+			"code": "no_usable_pokemon",
+		}
+	player_lead_pokemon = PlayerSave.party[player_lead_slot - 1] as Pokemon
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 	_publish_world_presence(true)

@@ -162,6 +162,18 @@ func _run() -> void:
 	)
 	_check(
 		errors.call("message", {
+			"detail": {"code": "pokemon_party_changed_refresh_required"}
+		}) == "Je team was gewijzigd en is opnieuw geladen. Probeer het nogmaals.",
+		"stale battle party errors explain the automatic refresh"
+	)
+	_check(
+		errors.call("message", {
+			"detail": {"code": "ACTIVE_TRAINER_BATTLE_EXISTS"}
+		}) == "Je hebt al een actief Trainergevecht. Hervat of voltooi dat eerst.",
+		"active Trainer battle conflicts explain how to recover"
+	)
+	_check(
+		errors.call("message", {
 			"detail": {
 				"code": "trade_pokemon_level_cap_exceeded",
 				"pokemonLevel": 20.0,
