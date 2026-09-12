@@ -43905,7 +43905,7 @@ func _create_pvp_ai_sparring_history_card(match: Dictionary) -> Control:
 	if team_name != "":
 		detail_parts.append(team_name)
 	var tier_id := str(match.get("tierId", "none")).strip_edges()
-	if tier_id in ["none", "aether-ou", "aether-uu"]:
+	if tier_id in ["none", "aether-ou", "aether-uu", "pokemmo-ou"]:
 		detail_parts.append(_ai_sparring_tier_label(tier_id))
 	var turns := int(match.get("turns", 0))
 	if turns > 0:
@@ -44042,16 +44042,23 @@ func _refresh_pvp_training_ai_mode_options() -> void:
 	if pvp_training_ai_mode_select == null or pvp_training_ai_bot_select == null:
 		return
 	var previous_mode := _selected_pvp_training_ai_mode()
+	var allowed_modes: Array[String] = []
+	for mode: String in pvp_training_ai_available_modes:
+		if _ai_sparring_mode_allowed_for_tier(mode):
+			allowed_modes.append(mode)
 	pvp_training_ai_bot_select.clear()
 	for bot: String in ["ai4", "ai5"]:
-		var supported := ("ai4" in pvp_training_ai_available_modes or "shadow" in pvp_training_ai_available_modes) if bot == "ai4" else ("intermediate" in pvp_training_ai_available_modes or "active" in pvp_training_ai_available_modes or "nightmare" in pvp_training_ai_available_modes)
-		if bot != "ai4" and "elite" in pvp_training_ai_available_modes:
-			supported = true
+		var supported := ("ai4" in allowed_modes or "shadow" in allowed_modes) if bot == "ai4" else ("intermediate" in allowed_modes or "active" in allowed_modes or "elite" in allowed_modes or "nightmare" in allowed_modes)
 		if supported:
 			pvp_training_ai_bot_select.add_item("AI4 Scholar" if bot == "ai4" else "AI5 Grandmaster")
 			pvp_training_ai_bot_select.set_item_metadata(pvp_training_ai_bot_select.item_count - 1, bot)
-	if previous_mode not in pvp_training_ai_available_modes:
-		previous_mode = pvp_training_ai_default_mode
+	if previous_mode not in allowed_modes:
+		previous_mode = pvp_training_ai_default_mode if pvp_training_ai_default_mode in allowed_modes else ""
+	if previous_mode == "":
+		for fallback: String in ["active", "ai4", "shadow", "intermediate", "elite", "nightmare"]:
+			if fallback in allowed_modes:
+				previous_mode = fallback
+				break
 	_select_option_by_metadata(pvp_training_ai_bot_select, "ai5" if previous_mode in ["intermediate", "active", "elite", "nightmare"] else "ai4")
 	_refresh_pvp_training_ai_difficulty_options(previous_mode)
 
@@ -44061,7 +44068,7 @@ func _refresh_pvp_training_ai_difficulty_options(preferred_mode: String = "") ->
 	var grandmaster := str(pvp_training_ai_bot_select.get_selected_metadata()) == "ai5"
 	var modes: Array = ["intermediate", "active", "elite", "nightmare"] if grandmaster else (["ai4"] if "ai4" in pvp_training_ai_available_modes else ["shadow"])
 	for mode: String in modes:
-		if mode not in pvp_training_ai_available_modes:
+		if mode not in pvp_training_ai_available_modes or not _ai_sparring_mode_allowed_for_tier(mode):
 			continue
 		pvp_training_ai_mode_select.add_item(
 			LocalizationManager.text("ui.pvp.training.ai.difficulty_%s" % mode)
@@ -44165,6 +44172,7 @@ func _on_pvp_training_ai_mode_selected(_index: int) -> void:
 
 func _on_ai_sparring_tier_selected(_index: int) -> void:
 	_select_option_by_metadata(pvp_ai_sparring_catalog_tier, _selected_ai_sparring_tier_id())
+	_refresh_pvp_training_ai_mode_options()
 	_refresh_pvp_training_ai_team_options()
 	if pvp_ai_sparring_player_catalog_search != null:
 		pvp_ai_sparring_player_catalog_team_id = ""
@@ -44343,7 +44351,7 @@ func _load_pvp_training_ai_catalog() -> void:
 				if tier_value is Dictionary:
 					var tier := (tier_value as Dictionary).duplicate(true)
 					var tier_id := str(tier.get("tierId", "")).strip_edges().to_lower()
-					if tier_id in ["none", "aether-ou", "aether-uu"]:
+					if tier_id in ["none", "aether-ou", "aether-uu", "pokemmo-ou"]:
 						pvp_training_ai_tiers.append(tier)
 		var modes_value: Variant = response.get("availableModes", [])
 		if modes_value is Array:
@@ -44694,7 +44702,7 @@ func _render_ai_sparring_catalog_detail() -> void:
 			))
 		for tier_value: Variant in _array_from_variant(entry.get("eligibleTierIds", [])):
 			var tier_id := str(tier_value)
-			if tier_id in ["none", "aether-ou", "aether-uu"]:
+			if tier_id in ["none", "aether-ou", "aether-uu", "pokemmo-ou"]:
 				meta_parts.append(_ai_sparring_tier_label(tier_id))
 		pvp_ai_sparring_catalog_detail_meta.text = " · ".join(meta_parts)
 	if pvp_ai_sparring_catalog_use_player_button != null:
@@ -45008,7 +45016,7 @@ func _selected_pvp_training_ai_team_id() -> String:
 
 func _ai_sparring_available_tier_ids() -> Array[String]:
 	var result: Array[String] = []
-	for tier_id: String in ["aether-ou", "aether-uu"]:
+	for tier_id: String in ["aether-ou", "aether-uu", "pokemmo-ou"]:
 		for tier: Dictionary in pvp_training_ai_tiers:
 			if str(tier.get("tierId", "")) == tier_id:
 				result.append(tier_id)
@@ -45033,7 +45041,11 @@ func _selected_ai_sparring_tier_id() -> String:
 	if pvp_ai_sparring_tier_select == null or pvp_ai_sparring_tier_select.item_count == 0:
 		return "aether-ou"
 	var tier_id := str(pvp_ai_sparring_tier_select.get_selected_metadata()).strip_edges().to_lower()
-	return tier_id if tier_id in ["aether-ou", "aether-uu"] else "aether-ou"
+	return tier_id if tier_id in ["aether-ou", "aether-uu", "pokemmo-ou"] else "aether-ou"
+
+
+func _ai_sparring_mode_allowed_for_tier(mode: String) -> bool:
+	return _selected_ai_sparring_tier_id() != "pokemmo-ou" or mode in ["ai4", "shadow", "active", "elite", "nightmare"]
 
 
 func _ai_sparring_tier_label(tier_id: String) -> String:
@@ -45073,7 +45085,7 @@ func _ai_sparring_team_display_tier(entry: Dictionary) -> String:
 func _ai_sparring_team_catalog_tier(entry: Dictionary) -> String:
 	for key in ["homeTierId", "tierId", "catalogTier", "tier"]:
 		var value := str(entry.get(key, "")).strip_edges().to_lower()
-		if value in ["none", "aether-ou", "aether-uu"]:
+		if value in ["none", "aether-ou", "aether-uu", "pokemmo-ou"]:
 			return value
 	var source_file := str(entry.get("sourceFile", "")).to_lower()
 	if source_file.begins_with("open/"):
@@ -45082,10 +45094,12 @@ func _ai_sparring_team_catalog_tier(entry: Dictionary) -> String:
 		return "aether-ou"
 	if source_file.begins_with("aether-uu/"):
 		return "aether-uu"
+	if source_file.begins_with("mmo-ou/"):
+		return "pokemmo-ou"
 	var eligible_value: Variant = entry.get("eligibleTierIds", [])
 	if eligible_value is Array and (eligible_value as Array).size() == 1:
 		var only_tier := str((eligible_value as Array)[0]).strip_edges().to_lower()
-		if only_tier in ["none", "aether-ou", "aether-uu"]:
+		if only_tier in ["none", "aether-ou", "aether-uu", "pokemmo-ou"]:
 			return only_tier
 	return ""
 

@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Prepared the browser version for secure, versioned delivery through Cloudflare Pages and R2, with password recovery available from browser login.
+- AI Sparring now offers MMO OU for AI4 Scholar and AI5 Grandmaster Hard, Elite and Nightmare.
 
 ## 0.3.75
 
