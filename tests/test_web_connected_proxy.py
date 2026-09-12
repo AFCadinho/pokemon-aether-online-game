@@ -52,6 +52,8 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertEqual(client.get("/api/auth/web/world/areas/kanto_players_house/access").status_code, 200)
             self.assertEqual(client.get("/api/auth/web/world/story").status_code, 200)
             self.assertEqual(client.post("/api/auth/web/world/story/bootstrap").status_code, 200)
+            self.assertEqual(client.post("/api/auth/web/npc-rewards/test-reward/claim").status_code, 200)
+            self.assertEqual(client.post("/api/auth/web/npc-quest-item-turn-ins/test-turn-in/claim").status_code, 200)
             self.assertEqual(client.get("/api/auth/web/profile").status_code, 200)
             self.assertEqual(client.get("/api/auth/web/party").status_code, 200)
             self.assertEqual(client.get("/api/auth/web/starter/options").status_code, 200)
@@ -96,7 +98,7 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertIn("frame-ancestors 'none'", static.headers["content-security-policy"])
             for path in ["/.secret", "/external.js", "/%2e%2e/etc/passwd"]:
                 self.assertEqual(client.get(path).status_code, 404)
-            self.assertEqual(len(calls), 32)
+            self.assertEqual(len(calls), 34)
 
     def test_redirects_and_upstream_failure_are_not_followed_or_exposed(self):
         for handler, status in [(lambda _: httpx.Response(302, headers={"Location": "https://example.com"}), 502),

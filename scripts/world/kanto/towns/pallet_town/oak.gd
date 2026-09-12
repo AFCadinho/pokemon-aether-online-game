@@ -35,11 +35,6 @@ func _process(_delta: float) -> void:
 
 
 func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictionary:
-	# Parcel delivery is outside the bounded browser demo, but Oak's canonical
-	# starter flow below is shared by both clients.
-	if OS.has_feature("web"):
-		await interact_with_player(body)
-		return {"success": true, "handled": false, "legacy": true}
 	if _is_gary_starter_sequence_active():
 		return {
 			"success": true,

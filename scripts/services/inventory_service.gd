@@ -30,6 +30,16 @@ const REQUEST_TIMEOUT_SECONDS := 8.0
 func _inventory_endpoint() -> String:
 	return "/auth/web/inventory" if OS.has_feature("web") else INVENTORY_ENDPOINT
 
+
+func _npc_item_reward_endpoint(reward_id: String) -> String:
+	var endpoint := NPC_ITEM_REWARD_ENDPOINT % reward_id.uri_encode()
+	return endpoint.replace("/game/npc-rewards", "/auth/web/npc-rewards") if OS.has_feature("web") else endpoint
+
+
+func _npc_quest_item_turn_in_endpoint(turn_in_id: String) -> String:
+	var endpoint := NPC_QUEST_ITEM_TURN_IN_ENDPOINT % turn_in_id.uri_encode()
+	return endpoint.replace("/game/npc-quest-item-turn-ins", "/auth/web/npc-quest-item-turn-ins") if OS.has_feature("web") else endpoint
+
 var cached_inventory_items: Array = []
 var cached_borrowed_inventory_items: Array = []
 var cached_mount_license_regions: Array[String] = []
@@ -226,7 +236,7 @@ func claim_npc_item_reward(reward_id: String) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + NPC_ITEM_REWARD_ENDPOINT % normalized_reward_id.uri_encode(),
+		base_url + _npc_item_reward_endpoint(normalized_reward_id),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		""
@@ -440,7 +450,7 @@ func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + NPC_QUEST_ITEM_TURN_IN_ENDPOINT % normalized_turn_in_id.uri_encode(),
+		base_url + _npc_quest_item_turn_in_endpoint(normalized_turn_in_id),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		""

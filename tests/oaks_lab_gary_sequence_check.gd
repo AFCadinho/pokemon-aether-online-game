@@ -84,11 +84,11 @@ func _run() -> void:
 		"Oak requires the player to complete Dadinho's introduction before offering a starter"
 	)
 	_check_true(
-		oak_text.contains('if OS.has_feature("web"):')
-		and oak_text.contains('var create_result: Dictionary = await give_starter_pokemon(selected_species_id)')
+		oak_text.contains('var create_result: Dictionary = await give_starter_pokemon(selected_species_id)')
 		and not oak_text.contains('complete_web_demo_oak_intro')
-		and oak_text.contains('return {"success": true, "handled": false, "legacy": true}'),
-		"browser Oak bypasses the parcel hook but uses the canonical starter claim"
+		and not oak_text.contains('Parcel delivery is outside the bounded browser demo')
+		and oak_text.contains('return await super._run_story_or_legacy_interaction(body, trigger)'),
+		"browser Oak uses the canonical story hook and starter claim"
 	)
 	_check_true(
 		gary_text.contains("starter_sequence_pending")

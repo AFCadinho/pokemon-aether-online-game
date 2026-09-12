@@ -29,6 +29,8 @@ const HTTP_PREFIXES = [
   ['GET', '/auth/web/world/story'], ['POST', '/auth/web/world/story'],
   ['GET', '/auth/web/world/activity'], ['PUT', '/auth/web/world/activity'],
   ['GET', '/auth/web/world/encounter-modifiers'],
+  ['POST', '/auth/web/npc-rewards/'],
+  ['POST', '/auth/web/npc-quest-item-turn-ins/'],
   ['GET', '/auth/web/mail'], ['POST', '/auth/web/mail'],
   ['GET', '/auth/web/socials'], ['POST', '/auth/web/socials'],
   ['PUT', '/auth/web/socials'], ['DELETE', '/auth/web/socials'],
