@@ -110,7 +110,8 @@ connected preview when the integration gateway is reachable on
 `http://127.0.0.1:8000`. Otherwise it starts the offline preview. Use
 `./run_web_local.sh --connected` to require accounts and online gameplay,
 `--offline` for the standalone preview, or `--skip-build` to reuse the current
-export. The connected mode creates a pinned virtual environment below
+export. The first export can take several minutes and reports Godot's current
+phase and percentage in the terminal. The connected mode creates a pinned virtual environment below
 `builds/`; it never targets production.
 
 From the `game` workspace, for the assigned slot (example: slot-b):

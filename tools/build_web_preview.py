@@ -7,8 +7,10 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
+import time
 
 ROOT = Path(__file__).resolve().parents[1]
 # The browser demo deliberately ships its reachable-map and PvE music rather
@@ -21,6 +23,42 @@ WEB_AUDIO_SOURCE_DIRS = (
     ROOT / "assets/battles/animations",
 )
 WEB_AUDIO_SUFFIXES = {".ogg", ".wav", ".mp3"}
+ANSI_ESCAPE = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
+EXPORT_PROGRESS = re.compile(r'^\[\s*(\d+)%\s*\]\s*([A-Za-z0-9_-]+)')
+
+
+def parse_export_progress(line: str) -> tuple[int, str] | None:
+    """Extract Godot's concise percentage and phase from a console line."""
+    match = EXPORT_PROGRESS.match(ANSI_ESCAPE.sub('', line).strip())
+    if not match:
+        return None
+    return int(match.group(1)), match.group(2)
+
+
+def run_export(command: list[str], console_log: Path) -> int:
+    """Run Godot quietly while relaying useful progress to the terminal."""
+    last_progress = None
+    last_output_at = time.monotonic()
+    with console_log.open('w') as console:
+        process = subprocess.Popen(command, stdout=console, stderr=subprocess.STDOUT)
+        with console_log.open(errors='replace') as progress:
+            while True:
+                line = progress.readline()
+                if not line:
+                    if process.poll() is not None:
+                        break
+                    if time.monotonic() - last_output_at >= 15:
+                        print('Godot export is still working...', flush=True)
+                        last_output_at = time.monotonic()
+                    time.sleep(0.2)
+                    continue
+                parsed = parse_export_progress(line)
+                if parsed is not None and parsed != last_progress:
+                    percent, phase = parsed
+                    print(f'Godot export: {percent}% ({phase})', flush=True)
+                    last_progress = parsed
+                    last_output_at = time.monotonic()
+    return process.wait()
 
 
 def copy_browser_audio(output: Path) -> list[dict[str, object]]:
@@ -76,15 +114,14 @@ def main():
             godot_ignore.write_text('', encoding='utf-8')
             created_ignores.append(godot_ignore)
     try:
-        with console_log.open('w') as console:
-            result = subprocess.run([
-                args.godot, '--headless', '--log-file', str(output / 'export.log'), '--path', str(ROOT), '--export-release',
-                'Web Local Preview', str(output / 'index.html'),
-            ], stdout=console, stderr=subprocess.STDOUT)
+        returncode = run_export([
+            args.godot, '--headless', '--log-file', str(output / 'export.log'), '--path', str(ROOT), '--export-release',
+            'Web Local Preview', str(output / 'index.html'),
+        ], console_log)
     finally:
         for godot_ignore in created_ignores:
             godot_ignore.unlink(missing_ok=True)
-    if result.returncode != 0:
+    if returncode != 0:
         tail = console_log.read_text(errors='replace').splitlines()[-80:]
         raise RuntimeError('Godot web export failed:\n' + '\n'.join(tail))
     browser_audio_files = copy_browser_audio(output)
