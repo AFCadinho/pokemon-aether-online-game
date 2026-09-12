@@ -141,6 +141,7 @@
   "ui.magikarp_sale.received": "您以 ₽{price} 购买了 5 级Magikarp！",
   "backend.error.npc_pokemon_sale": "Magikarp购买无法完成。请再试一次。",
   "backend.error.generic": "出了点问题。请再试一次。",
+  "backend.error.web_demo_saved_location_outside_boundary": "你的训练家位于浏览器区域之外。请先在游戏客户端中前往真新镇、1号道路或常青市，再通过浏览器继续游戏。",
   "backend.error.pokemon_held_item_locked": "这只宝可梦生成时携带的道具已锁定，无法取下或替换。",
   "backend.error.mega_test_form_not_allowed": "仅限测试的宝可梦不能用于此操作。",
   "backend.error.mega_direct_form_not_allowed": "直接Mega战斗形式只能通过开发者测试才能使用。",

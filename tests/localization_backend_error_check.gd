@@ -82,6 +82,12 @@ func _run() -> void:
 	)
 	_check(
 		errors.call("message", {
+			"body": {"detail": {"code": "web_demo_saved_location_outside_boundary"}}
+		}) == "Je Trainer bevindt zich buiten het browsergebied. Ga via de gameclient naar Pallet Town, Route 1 of Viridian City voordat je verdergaat in de browser.",
+		"browser boundary rejection explains how to return to the supported area"
+	)
+	_check(
+		errors.call("message", {
 			"detail": {"code": "GUILD_LOBBY_TRANSIT_ATTUNEMENT_REQUIRED"}
 		}) == "Stem eerst af op een Aethernet Crystal voordat je naar de Aether Clash Lobby reist.",
 		"Guild Lobby attunement requirement displays in Dutch"

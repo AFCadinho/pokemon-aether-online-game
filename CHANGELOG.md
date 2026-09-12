@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser login now explains when your Trainer is outside the supported browser area instead of silently returning to the login screen.
+
 ## 0.3.76 - 2026-09-12
 
 - Browser blackouts now finish their heal-spot transfer completely, so players can leave the room afterward.
