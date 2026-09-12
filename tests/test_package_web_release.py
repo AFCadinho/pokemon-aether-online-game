@@ -10,6 +10,13 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class PackageWebReleaseTests(unittest.TestCase):
+    def test_browser_workflow_uses_noninteractive_source_asset_restore(self):
+        source = (ROOT / '.github/workflows/deploy-web-cloudflare.yml').read_text()
+        self.assertIn('default: https://updates.pokeaether.com', source)
+        self.assertIn('${SOURCE_ASSET_BASE_URL}/assets/${POKEMON_HOME_ASSET_VERSION}.zip', source)
+        self.assertIn('${SOURCE_ASSET_BASE_URL}/assets/${version}.zip', source)
+        self.assertEqual(source.count('unzip -oq /tmp/'), 3)
+
     def test_browser_uses_the_same_four_gen5_releases_as_desktop(self):
         import re
         def versions(name):
