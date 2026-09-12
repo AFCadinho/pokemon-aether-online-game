@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Wild Battle Replays now show the Ball animation and successful catch instead of stopping abruptly on the final turn.
+
 - Browser battles now load Gen 5 animated Pokémon sprites more reliably and with substantially lower WebGL texture overhead instead of remaining on the Pokémon HOME fallback.
 
 - Browser login now explains when your Trainer is outside the supported browser area instead of silently returning to the login screen.
