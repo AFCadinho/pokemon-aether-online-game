@@ -241,6 +241,7 @@ static func storage_location_label(value: Variant) -> String:
 
 
 func _request_json(url: String, method: HTTPClient.Method, headers: PackedStringArray, body: String) -> Dictionary:
+	url = WebRuntime.gameplay_url(url)
 	var request := HTTPRequest.new()
 	request.timeout = REQUEST_TIMEOUT_SECONDS
 	add_child(request)

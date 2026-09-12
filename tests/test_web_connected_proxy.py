@@ -52,6 +52,8 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertEqual(client.get("/api/auth/web/world/areas/kanto_players_house/access").status_code, 200)
             self.assertEqual(client.get("/api/auth/web/world/story").status_code, 200)
             self.assertEqual(client.post("/api/auth/web/world/story/bootstrap").status_code, 200)
+            self.assertEqual(client.post("/api/auth/web/npc-rewards/test-reward/claim").status_code, 200)
+            self.assertEqual(client.post("/api/auth/web/npc-quest-item-turn-ins/test-turn-in/claim").status_code, 200)
             self.assertEqual(client.get("/api/auth/web/profile").status_code, 200)
             self.assertEqual(client.get("/api/auth/web/party").status_code, 200)
             self.assertEqual(client.get("/api/auth/web/starter/options").status_code, 200)
@@ -67,7 +69,7 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertEqual(client.get("/api/battle/pvp/training/ai/live/training-test/spectate").status_code, 200)
             sprite = client.get("/pokemon-assets/gen5/front/pikachu/animation.json")
             self.assertEqual(sprite.status_code, 200)
-            self.assertEqual(sprite.headers["cache-control"], "public, max-age=31536000, immutable")
+            self.assertEqual(sprite.headers["cache-control"], "no-cache")
             self.assertEqual(client.get("/pokemon-assets/gen5/front/pikachu/other.txt").status_code, 404)
             self.assertEqual(client.get("/api/battle/pvp/training/ai/teams/catalog-team").status_code, 200)
             self.assertEqual(client.post("/api/battle/pvp/training/ai/battles", json={}).status_code, 200)
@@ -96,7 +98,7 @@ class ConnectedProxyTests(unittest.TestCase):
             self.assertIn("frame-ancestors 'none'", static.headers["content-security-policy"])
             for path in ["/.secret", "/external.js", "/%2e%2e/etc/passwd"]:
                 self.assertEqual(client.get(path).status_code, 404)
-            self.assertEqual(len(calls), 32)
+            self.assertEqual(len(calls), 34)
 
     def test_redirects_and_upstream_failure_are_not_followed_or_exposed(self):
         for handler, status in [(lambda _: httpx.Response(302, headers={"Location": "https://example.com"}), 502),
@@ -105,6 +107,21 @@ class ConnectedProxyTests(unittest.TestCase):
             result = client.get("/api/auth/web/meta")
             self.assertEqual(result.status_code, status)
             self.assertNotIn("private detail", result.text)
+
+    def test_browser_release_gameplay_and_restriction_matrix(self):
+        import json
+        routes = json.loads((proxy.ROOT / "tests/fixtures/web_release_routes.json").read_text())
+        calls = []
+        def handler(request):
+            calls.append(request)
+            return httpx.Response(200, json={"ok": True})
+        client = TestClient(proxy.create_app("http://127.0.0.1:8000", transport=httpx.MockTransport(handler)), base_url="http://localhost")
+        for method, path in routes["allowed"]:
+            self.assertEqual(client.request(method, "/api" + path).status_code, 200, (method, path))
+        accepted = len(calls)
+        for method, path in routes["denied"]:
+            self.assertEqual(client.request(method, "/api" + path).status_code, 403, (method, path))
+        self.assertEqual(len(calls), accepted, "disabled operations must never reach upstream")
 
     def test_websocket_roundtrip_and_close_through_same_origin_path(self):
         paths = []

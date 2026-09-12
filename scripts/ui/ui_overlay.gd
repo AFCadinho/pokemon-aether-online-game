@@ -7997,11 +7997,22 @@ func _render_ai_sparring_stats() -> void:
 	var bots: Variant = pvp_ai_sparring_stats_data.get("bots", [])
 	if not bots is Array:
 		return
+	var ordered_bots: Array = []
+	for ordered_difficulty: String in ["beginner", "intermediate", "hard", "elite", "nightmare"]:
+		for candidate: Variant in bots:
+			if not candidate is Dictionary:
+				continue
+			var candidate_is_ai5 := str(candidate.get("bot", "")) == "ai5"
+			var candidate_difficulty := str(candidate.get(
+				"difficulty", "hard" if candidate_is_ai5 else "beginner"
+			))
+			if candidate_difficulty == ordered_difficulty:
+				ordered_bots.append(candidate)
 	var older_versions := VBoxContainer.new()
 	older_versions.name = "AiSparringOlderStatistics"
 	older_versions.add_theme_constant_override("separation", 14)
 	older_versions.visible = false
-	for entry: Variant in bots:
+	for entry: Variant in ordered_bots:
 		if not entry is Dictionary or str(entry.get("bot", "")) not in ["ai4", "ai5"]:
 			continue
 		var is_ai5 := str(entry["bot"]) == "ai5"
@@ -39060,6 +39071,9 @@ func _on_socials_players_on_map_button_pressed() -> void:
 
 func _on_socials_loans_button_pressed() -> void:
 	_hide_socials_menu()
+	if OS.has_feature("web"):
+		_show_web_client_required("Lending")
+		return
 	var workspace := get_node_or_null("/root/LendingWorkspace")
 	if workspace == null:
 		return
@@ -41601,6 +41615,9 @@ func _on_mail_box_selected(box: String) -> void:
 	_load_mailbox()
 
 func _on_mail_claim_button_pressed() -> void:
+	if OS.has_feature("web"):
+		_show_web_client_required("Mail attachments")
+		return
 	if selected_mail_id <= 0:
 		return
 	var selected_mail := _get_mail_by_id(selected_mail_id)
@@ -41633,6 +41650,9 @@ func _on_mail_claim_button_pressed() -> void:
 
 
 func _on_mail_attachment_claim_pressed(attachment_id: int) -> void:
+	if OS.has_feature("web"):
+		_show_web_client_required("Mail attachments")
+		return
 	if selected_mail_id <= 0:
 		return
 	if active_mail_box != "inbox":
@@ -41773,6 +41793,12 @@ func _on_mail_delete_button_pressed() -> void:
 	_add_chat_message(LocalizationManager.text("ui.mail.message.deleted"))
 
 func _prepare_mail_attachment_options() -> void:
+	if OS.has_feature("web"):
+		var compose_stack := $Control/MailComposePopup/MarginContainer/VBoxContainer
+		for child_name: String in ["ItemAttachmentRow", "ItemSuggestions", "MoneyAttachmentRow", "PokemonAttachmentRow", "SelectedAttachmentsScroll"]:
+			compose_stack.get_node(child_name).hide()
+		compose_stack.get_node("AttachmentsTitle").text = "Mail attachments require the game client."
+		return
 	mail_compose_inventory_items.clear()
 	mail_compose_party_pokemon.clear()
 	_refresh_mail_attachment_summary()
@@ -42403,7 +42429,9 @@ func _refresh_mail_detail() -> void:
 	mail_claim_button.text = LocalizationManager.text(
 		"ui.mail.claim_all" if has_unclaimed_attachments else "ui.mail.all_claimed"
 	)
-	mail_claim_button.disabled = not has_unclaimed_attachments
+	mail_claim_button.disabled = OS.has_feature("web") or not has_unclaimed_attachments
+	if OS.has_feature("web"):
+		mail_claim_button.tooltip_text = "Mail attachments require the game client."
 	mail_delete_button.disabled = active_mail_box == "inbox" and has_unclaimed_attachments
 
 func _on_mail_reply_button_pressed() -> void:
@@ -42610,6 +42638,7 @@ func _create_mail_attachment_row(
 		summary_button.focus_mode = Control.FOCUS_NONE
 		summary_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		summary_button.tooltip_text = LocalizationManager.text("ui.mail.summary_tooltip")
+		summary_button.disabled = OS.has_feature("web")
 		summary_button.pressed.connect(_on_mail_pokemon_attachment_pressed.bind(pokemon_payload))
 		_apply_button_style(summary_button)
 		row.add_child(summary_button)
@@ -42620,7 +42649,9 @@ func _create_mail_attachment_row(
 		claim_button.custom_minimum_size = Vector2(58, 26)
 		claim_button.focus_mode = Control.FOCUS_NONE
 		claim_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		claim_button.disabled = active_mail_box != "inbox"
+		claim_button.disabled = OS.has_feature("web") or active_mail_box != "inbox"
+		if OS.has_feature("web"):
+			claim_button.tooltip_text = "Mail attachments require the game client."
 		claim_button.pressed.connect(_on_mail_attachment_claim_pressed.bind(attachment_id))
 		_apply_button_style(claim_button, "primary")
 		row.add_child(claim_button)
@@ -42628,6 +42659,9 @@ func _create_mail_attachment_row(
 	return panel
 
 func _on_mail_pokemon_attachment_pressed(pokemon_payload: Dictionary) -> void:
+	if OS.has_feature("web"):
+		_show_web_client_required("Mail attachments")
+		return
 	_open_readonly_pokemon_summary(pokemon_payload)
 
 func _open_readonly_pokemon_summary(pokemon_payload: Dictionary) -> void:
@@ -43905,7 +43939,7 @@ func _create_pvp_ai_sparring_history_card(match: Dictionary) -> Control:
 	if team_name != "":
 		detail_parts.append(team_name)
 	var tier_id := str(match.get("tierId", "none")).strip_edges()
-	if tier_id in ["none", "aether-ou", "aether-uu"]:
+	if tier_id in ["none", "aether-ou", "aether-uu", "pokemmo-ou"]:
 		detail_parts.append(_ai_sparring_tier_label(tier_id))
 	var turns := int(match.get("turns", 0))
 	if turns > 0:
@@ -44042,16 +44076,23 @@ func _refresh_pvp_training_ai_mode_options() -> void:
 	if pvp_training_ai_mode_select == null or pvp_training_ai_bot_select == null:
 		return
 	var previous_mode := _selected_pvp_training_ai_mode()
+	var allowed_modes: Array[String] = []
+	for mode: String in pvp_training_ai_available_modes:
+		if _ai_sparring_mode_allowed_for_tier(mode):
+			allowed_modes.append(mode)
 	pvp_training_ai_bot_select.clear()
 	for bot: String in ["ai4", "ai5"]:
-		var supported := ("ai4" in pvp_training_ai_available_modes or "shadow" in pvp_training_ai_available_modes) if bot == "ai4" else ("intermediate" in pvp_training_ai_available_modes or "active" in pvp_training_ai_available_modes or "nightmare" in pvp_training_ai_available_modes)
-		if bot != "ai4" and "elite" in pvp_training_ai_available_modes:
-			supported = true
+		var supported := ("ai4" in allowed_modes or "shadow" in allowed_modes) if bot == "ai4" else ("intermediate" in allowed_modes or "active" in allowed_modes or "elite" in allowed_modes or "nightmare" in allowed_modes)
 		if supported:
 			pvp_training_ai_bot_select.add_item("AI4 Scholar" if bot == "ai4" else "AI5 Grandmaster")
 			pvp_training_ai_bot_select.set_item_metadata(pvp_training_ai_bot_select.item_count - 1, bot)
-	if previous_mode not in pvp_training_ai_available_modes:
-		previous_mode = pvp_training_ai_default_mode
+	if previous_mode not in allowed_modes:
+		previous_mode = pvp_training_ai_default_mode if pvp_training_ai_default_mode in allowed_modes else ""
+	if previous_mode == "":
+		for fallback: String in ["active", "ai4", "shadow", "intermediate", "elite", "nightmare"]:
+			if fallback in allowed_modes:
+				previous_mode = fallback
+				break
 	_select_option_by_metadata(pvp_training_ai_bot_select, "ai5" if previous_mode in ["intermediate", "active", "elite", "nightmare"] else "ai4")
 	_refresh_pvp_training_ai_difficulty_options(previous_mode)
 
@@ -44061,7 +44102,7 @@ func _refresh_pvp_training_ai_difficulty_options(preferred_mode: String = "") ->
 	var grandmaster := str(pvp_training_ai_bot_select.get_selected_metadata()) == "ai5"
 	var modes: Array = ["intermediate", "active", "elite", "nightmare"] if grandmaster else (["ai4"] if "ai4" in pvp_training_ai_available_modes else ["shadow"])
 	for mode: String in modes:
-		if mode not in pvp_training_ai_available_modes:
+		if mode not in pvp_training_ai_available_modes or not _ai_sparring_mode_allowed_for_tier(mode):
 			continue
 		pvp_training_ai_mode_select.add_item(
 			LocalizationManager.text("ui.pvp.training.ai.difficulty_%s" % mode)
@@ -44165,6 +44206,7 @@ func _on_pvp_training_ai_mode_selected(_index: int) -> void:
 
 func _on_ai_sparring_tier_selected(_index: int) -> void:
 	_select_option_by_metadata(pvp_ai_sparring_catalog_tier, _selected_ai_sparring_tier_id())
+	_refresh_pvp_training_ai_mode_options()
 	_refresh_pvp_training_ai_team_options()
 	if pvp_ai_sparring_player_catalog_search != null:
 		pvp_ai_sparring_player_catalog_team_id = ""
@@ -44343,7 +44385,7 @@ func _load_pvp_training_ai_catalog() -> void:
 				if tier_value is Dictionary:
 					var tier := (tier_value as Dictionary).duplicate(true)
 					var tier_id := str(tier.get("tierId", "")).strip_edges().to_lower()
-					if tier_id in ["none", "aether-ou", "aether-uu"]:
+					if tier_id in ["none", "aether-ou", "aether-uu", "pokemmo-ou"]:
 						pvp_training_ai_tiers.append(tier)
 		var modes_value: Variant = response.get("availableModes", [])
 		if modes_value is Array:
@@ -44694,7 +44736,7 @@ func _render_ai_sparring_catalog_detail() -> void:
 			))
 		for tier_value: Variant in _array_from_variant(entry.get("eligibleTierIds", [])):
 			var tier_id := str(tier_value)
-			if tier_id in ["none", "aether-ou", "aether-uu"]:
+			if tier_id in ["none", "aether-ou", "aether-uu", "pokemmo-ou"]:
 				meta_parts.append(_ai_sparring_tier_label(tier_id))
 		pvp_ai_sparring_catalog_detail_meta.text = " · ".join(meta_parts)
 	if pvp_ai_sparring_catalog_use_player_button != null:
@@ -45008,7 +45050,7 @@ func _selected_pvp_training_ai_team_id() -> String:
 
 func _ai_sparring_available_tier_ids() -> Array[String]:
 	var result: Array[String] = []
-	for tier_id: String in ["aether-ou", "aether-uu"]:
+	for tier_id: String in ["aether-ou", "aether-uu", "pokemmo-ou"]:
 		for tier: Dictionary in pvp_training_ai_tiers:
 			if str(tier.get("tierId", "")) == tier_id:
 				result.append(tier_id)
@@ -45033,7 +45075,11 @@ func _selected_ai_sparring_tier_id() -> String:
 	if pvp_ai_sparring_tier_select == null or pvp_ai_sparring_tier_select.item_count == 0:
 		return "aether-ou"
 	var tier_id := str(pvp_ai_sparring_tier_select.get_selected_metadata()).strip_edges().to_lower()
-	return tier_id if tier_id in ["aether-ou", "aether-uu"] else "aether-ou"
+	return tier_id if tier_id in ["aether-ou", "aether-uu", "pokemmo-ou"] else "aether-ou"
+
+
+func _ai_sparring_mode_allowed_for_tier(mode: String) -> bool:
+	return _selected_ai_sparring_tier_id() != "pokemmo-ou" or mode in ["ai4", "shadow", "active", "elite", "nightmare"]
 
 
 func _ai_sparring_tier_label(tier_id: String) -> String:
@@ -45073,7 +45119,7 @@ func _ai_sparring_team_display_tier(entry: Dictionary) -> String:
 func _ai_sparring_team_catalog_tier(entry: Dictionary) -> String:
 	for key in ["homeTierId", "tierId", "catalogTier", "tier"]:
 		var value := str(entry.get(key, "")).strip_edges().to_lower()
-		if value in ["none", "aether-ou", "aether-uu"]:
+		if value in ["none", "aether-ou", "aether-uu", "pokemmo-ou"]:
 			return value
 	var source_file := str(entry.get("sourceFile", "")).to_lower()
 	if source_file.begins_with("open/"):
@@ -45082,10 +45128,12 @@ func _ai_sparring_team_catalog_tier(entry: Dictionary) -> String:
 		return "aether-ou"
 	if source_file.begins_with("aether-uu/"):
 		return "aether-uu"
+	if source_file.begins_with("mmo-ou/"):
+		return "pokemmo-ou"
 	var eligible_value: Variant = entry.get("eligibleTierIds", [])
 	if eligible_value is Array and (eligible_value as Array).size() == 1:
 		var only_tier := str((eligible_value as Array)[0]).strip_edges().to_lower()
-		if only_tier in ["none", "aether-ou", "aether-uu"]:
+		if only_tier in ["none", "aether-ou", "aether-uu", "pokemmo-ou"]:
 			return only_tier
 	return ""
 

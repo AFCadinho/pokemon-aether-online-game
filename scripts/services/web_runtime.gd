@@ -29,6 +29,37 @@ static func api_base_url() -> String:
 	return origin + "/api"
 
 
+static func gameplay_url(url: String) -> String:
+	if not OS.has_feature("web"):
+		return url
+	return browser_gameplay_url(url)
+
+
+static func browser_gameplay_url(url: String) -> String:
+	# Transport mapping only. The proxy and account service each keep an
+	# explicit route allowlist; this never grants access to desktop endpoints.
+	for resource: String in ["boxes", "pokemon", "party", "inventory", "wallet", "markets", "trainers"]:
+		var source := "/game/" + resource
+		var offset := url.find(source)
+		if offset < 0:
+			continue
+		var suffix := url.substr(offset + source.length())
+		if suffix == "" or suffix.begins_with("/") or suffix.begins_with("?"):
+			return url.substr(0, offset) + "/auth/web/" + resource + suffix
+	return url
+
+
+static func web_release_config() -> Dictionary:
+	if not OS.has_feature("web"):
+		return {}
+	var value: Variant = JavaScriptBridge.eval("window.POKEAETHER_WEB_RELEASE || null", true)
+	if value == null:
+		return {}
+	var json_value: Variant = JavaScriptBridge.eval("JSON.stringify(window.POKEAETHER_WEB_RELEASE)", true)
+	var parsed: Variant = JSON.parse_string(str(json_value))
+	return parsed if parsed is Dictionary else {}
+
+
 static func http_headers(headers: PackedStringArray) -> PackedStringArray:
 	if not OS.has_feature("web"):
 		return headers

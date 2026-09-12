@@ -367,6 +367,7 @@ func _reward_claim_result_from_response(response: Dictionary) -> Dictionary:
 
 
 func _request_json(url: String, method: HTTPClient.Method, headers: PackedStringArray, body: String) -> Dictionary:
+	url = WebRuntime.gameplay_url(url)
 	var request := HTTPRequest.new()
 	request.timeout = REQUEST_TIMEOUT_SECONDS
 	add_child(request)

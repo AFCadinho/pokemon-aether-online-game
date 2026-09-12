@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
-  <title>PokeAether · Browser preview</title>
+  <title>PokeAether · Browser</title>
   <style>
     :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #070d19; color: #edf4ff; }
     * { box-sizing: border-box; }
@@ -37,8 +37,8 @@
 		<div class="eyebrow">Browser demo</div>
       <h1>PokeAether</h1>
       <p>One account for browser and desktop. Sign in, register and restore your browser session without changing your saved adventure.</p>
-      <p>This local build needs the connected preview server for accounts. AI Sparring, chat and the bounded world demo are available. Ranked stays desktop-only.</p>
-      <button id="start" type="button">Open browser preview</button>
+      <p id="release-description">This local build needs the connected preview server for accounts. AI Sparring, chat and the bounded world demo are available. Ranked stays desktop-only.</p>
+      <button id="start" type="button">Open browser game</button>
       <progress id="progress" hidden></progress>
       <p id="status" role="status" aria-live="polite">Best viewed in a desktop browser.</p>
     </main>
@@ -58,8 +58,13 @@
       <div class="actions"><button id="register-submit">Create account</button><button id="register-close" type="button">Back to login</button></div>
     </form>
   </dialog>
+  <!-- POKEAETHER_RELEASE_CONFIG -->
   <script src="$GODOT_URL"></script>
   <script>
+    const webRelease = window.POKEAETHER_WEB_RELEASE || null;
+    const releaseAssetUrl = relativePath => webRelease
+      ? webRelease.assetBaseUrl + '/' + relativePath.replace(/^\/+/, '')
+      : '/' + relativePath.replace(/^\/+/, '');
     const audioDebugEnabled = new URLSearchParams(location.search).has('audio-debug');
     const audioDebugEvents = [];
     const recordAudioDebug = (event, details = {}) => {
@@ -80,8 +85,10 @@
     const browserAudioPath = resourcePath => {
       const prefix = 'res://assets/';
       if (typeof resourcePath !== 'string' || !resourcePath.startsWith(prefix)) return '';
-      return '/browser-audio/' + resourcePath.slice(prefix.length)
-        .split('/').map(segment => encodeURIComponent(segment)).join('/');
+      return releaseAssetUrl(webRelease ? 'web/releases/' + webRelease.buildId + '/browser-audio/' + resourcePath.slice(prefix.length)
+        .split('/').map(segment => encodeURIComponent(segment)).join('/')
+        : 'browser-audio/' + resourcePath.slice(prefix.length)
+        .split('/').map(segment => encodeURIComponent(segment)).join('/'));
     };
     const clampVolume = value => Math.max(0, Math.min(1, Number(value) || 0));
     let nativeMusic = null;
@@ -109,6 +116,7 @@
         if (nativeMusicPath !== resourcePath) {
           if (nativeMusic) nativeMusic.pause();
           nativeMusic = new Audio(source);
+          if (webRelease) nativeMusic.crossOrigin = 'anonymous';
           nativeMusic.preload = 'auto';
           nativeMusic.loop = true;
           nativeMusicPath = resourcePath;
@@ -127,6 +135,7 @@
         const source = browserAudioPath(resourcePath);
         if (!source) return;
         const effect = new Audio(source);
+        if (webRelease) effect.crossOrigin = 'anonymous';
         effect.preload = 'auto';
         effect.volume = clampVolume(volume);
         effect.playbackRate = Math.max(.25, Math.min(4, Number(pitch) || 1));
@@ -249,6 +258,19 @@
       window.webkitAudioContext = sharedAudioContext;
     }
     const config = $GODOT_CONFIG;
+    if (webRelease) {
+      const runtimeExecutable = releaseAssetUrl('web/releases/' + webRelease.buildId + '/index');
+      const originalSizes = config.fileSizes || {};
+      config.executable = runtimeExecutable;
+      config.mainPack = runtimeExecutable + '.pck';
+      config.fileSizes = { ...originalSizes };
+      for (const [name, size] of Object.entries(originalSizes)) {
+        if (name.startsWith('index.') && name !== 'index.js') {
+          config.fileSizes[runtimeExecutable + name.slice('index'.length)] = size;
+        }
+      }
+      document.getElementById('release-description').textContent = 'Play the bounded PokeAether browser adventure with shared accounts, chat and AI Sparring. Ranked play stays in the desktop client.';
+    }
     const engine = new Engine(config);
     const start = document.getElementById('start');
     const status = document.getElementById('status');
@@ -330,7 +352,7 @@
       } catch (_) { registerStatus.textContent = 'Account service unavailable. Please retry later.'; }
       finally { registerSubmit.disabled = false; registerStatus.scrollIntoView({ block: 'nearest' }); }
     });
-    if (!local) {
+    if (!local && !webRelease) {
       start.disabled = true;
       status.textContent = 'This development preview must be served on localhost.';
       window.pokeaetherPreview.state = 'blocked';

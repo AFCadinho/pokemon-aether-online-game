@@ -1044,6 +1044,8 @@ func _on_guild_invite_pressed() -> void:
 
 
 func _can_challenge_aether_clash() -> bool:
+	if get_tree().get_nodes_in_group("aether_clash_war_controller").is_empty():
+		return false
 	if not guild_membership_loaded or guild_membership.is_empty():
 		return false
 	return str(guild_membership.get("role", "")).strip_edges().to_lower() in ["leader", "captain"]
@@ -1312,7 +1314,7 @@ func _can_view_overworld_identity(user_id: int) -> bool:
 
 
 func _exchange_actions_allowed() -> bool:
-	return get_tree().get_nodes_in_group("aether_clash_duel_controller").is_empty()
+	return not OS.has_feature("web") and get_tree().get_nodes_in_group("aether_clash_duel_controller").is_empty()
 
 
 func _normalized_player(player: Dictionary) -> Dictionary:

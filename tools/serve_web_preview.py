@@ -22,7 +22,7 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         pass
 
     def end_headers(self):
-        cache_value = 'public, max-age=31536000, immutable' if urlsplit(self.path).path.startswith('/pokemon-assets/gen5/') else 'no-store'
+        cache_value = 'no-cache' if urlsplit(self.path).path.startswith('/pokemon-assets/gen5/') else 'no-store'
         self.send_header('Cache-Control', cache_value)
         self.send_header('X-Content-Type-Options', 'nosniff')
         self.send_header('Referrer-Policy', 'no-referrer')
@@ -47,6 +47,9 @@ class PreviewHandler(SimpleHTTPRequestHandler):
             self._json(403, {'error': 'Local preview only'}, head)
             return
         path = unquote(urlsplit(self.path).path)
+        if path == '/news.json':
+            self._json(200, {'items': []}, head)
+            return
         if path.startswith('/pokemon-assets/gen5/'):
             relative = path.removeprefix('/pokemon-assets/gen5/')
             target = (POKEMON_ASSET_ROOT / relative).resolve()

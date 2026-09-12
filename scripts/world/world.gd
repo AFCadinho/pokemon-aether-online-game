@@ -173,6 +173,11 @@ func _exit_tree() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("world")
+	_ensure_remote_players_container()
+	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
+		SettingsManager.settings_changed.connect(_on_settings_changed)
+	_sync_remote_players_visibility()
+	_connect_world_presence_signals()
 	if OS.has_feature("web"):
 		_ensure_map_transition_overlay()
 		await _setup_web_demo_world()
@@ -188,11 +193,6 @@ func _ready() -> void:
 	if not FieldMoveService.owned_charms_changed.is_connected(_validate_active_flash_source):
 		FieldMoveService.owned_charms_changed.connect(_validate_active_flash_source)
 	_ensure_map_transition_overlay()
-	_ensure_remote_players_container()
-	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
-		SettingsManager.settings_changed.connect(_on_settings_changed)
-	_sync_remote_players_visibility()
-	_connect_world_presence_signals()
 	await _setup_initial_world_state()
 	await _refresh_fishing_progression()
 	if GameState.gameplay_reset_in_progress:
@@ -226,6 +226,11 @@ func _process(delta: float) -> void:
 	if OS.has_feature("web"):
 		if is_loading_map:
 			return
+		if not is_in_battle:
+			position_presence_elapsed += delta
+			if position_presence_elapsed >= POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS:
+				position_presence_elapsed = 0.0
+				_publish_world_presence()
 		position_autosave_elapsed += delta
 		if position_autosave_elapsed >= POSITION_AUTOSAVE_INTERVAL_SECONDS:
 			position_autosave_elapsed = 0.0
@@ -1122,6 +1127,11 @@ func _capture_map_transition_snapshot() -> bool:
 
 
 func _load_map_scene_threaded(scene_path: String) -> PackedScene:
+	# Web exports can run without thread support. A threaded request may then
+	# fail even though the scene is present, after the server already committed
+	# the player's destination.
+	if OS.has_feature("web"):
+		return ResourceLoader.load(scene_path, "PackedScene") as PackedScene
 	var request_error := ResourceLoader.load_threaded_request(scene_path, "PackedScene")
 	if request_error != OK and request_error != ERR_BUSY:
 		push_error("World: could not start threaded map load for %s: %s" % [scene_path, error_string(request_error)])
@@ -1290,7 +1300,9 @@ func _reveal_prepared_wild_battle() -> void:
 	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 	await wild_encounter_transition.reveal()
-	if reveal_tween.is_valid():
+	# Both tweens may finish in the same slow frame. A completed tween can
+	# still be valid during that processing pass, but its signal already fired.
+	if reveal_tween.is_running():
 		await reveal_tween.finished
 
 
@@ -1532,9 +1544,23 @@ func _setup_web_demo_world() -> void:
 	MusicManager.play_map_music(initial_map)
 	move_player_to_map(initial_map)
 	_position_player_at_saved_state(initial_map, saved_state)
+	current_teleport_revision = int(saved_state.get("teleportRevision", current_teleport_revision))
 	_apply_camera_limits_for_map(initial_map)
 	player.refresh_map_layers()
 	last_saved_position_signature = _get_current_player_position_signature(true)
+	if bool(saved_state.get("teleportAcknowledgementRequired", false)):
+		var ack_result: Dictionary = await _ack_authorized_teleport_state(saved_state)
+		if not bool(ack_result.get("success", false)):
+			_mark_authorized_teleport_apply_failed()
+			push_warning(
+				"World: pending browser teleport acknowledgement recovery failed: %s"
+				% str(ack_result.get("error", "Unknown error"))
+			)
+	var resumed := await _resume_saved_wild_battle(saved_state)
+	if not bool(resumed.get("resumed", false)) and not bool(resumed.get("retryable", false)):
+		await _save_player_activity_state("idle")
+	WorldPresenceService.connect_presence.call_deferred()
+	_publish_world_presence.call_deferred(true)
 
 
 func _apply_web_demo_profile(profile_response: Dictionary) -> void:
@@ -1560,6 +1586,8 @@ func _apply_web_demo_profile(profile_response: Dictionary) -> void:
 	if not appearance.is_empty():
 		PlayerSave.apply_appearance_state(appearance)
 		confirmed_appearance_state = appearance.duplicate(true)
+		if player != null and player.has_method("refresh_appearance"):
+			player.call("refresh_appearance")
 
 
 func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
@@ -1620,15 +1648,24 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 		player.call("restore_land_mount", land_mount_id_to_restore)
 	if changes_map:
 		await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+	current_teleport_revision = int(state.get("teleportRevision", current_teleport_revision))
+	if bool(state.get("teleportAcknowledgementRequired", false)):
+		var ack_result: Dictionary = await _ack_authorized_teleport_state(state)
+		if not bool(ack_result.get("success", false)):
+			_mark_authorized_teleport_apply_failed()
+			return {
+				"success": false,
+				"error": str(ack_result.get("error", "Could not acknowledge browser teleport.")),
+			}
 	last_saved_position_signature = _get_current_player_position_signature(true)
 	authorized_teleport_in_progress = false
 	is_loading_map = false
 	if authorized_teleport_locked_overworld:
 		GameState.release_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
 	authorized_teleport_locked_overworld = false
-	return {"success": true}
 	WorldPresenceService.connect_presence.call_deferred()
 	_publish_world_presence.call_deferred(true)
+	return {"success": true}
 
 
 func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
@@ -2430,7 +2467,22 @@ func _publish_world_presence(force := false) -> void:
 		return
 
 	last_presence_position_signature = signature
-	WorldPresenceService.update_position(_build_current_player_position_state(""))
+	var presence_state := _build_current_player_position_state("")
+	if OS.has_feature("web"):
+		_enrich_web_world_presence_state(presence_state)
+	WorldPresenceService.update_position(presence_state)
+
+
+func _enrich_web_world_presence_state(state: Dictionary) -> void:
+	state["gender"] = PlayerSave.gender
+	state["appearance"] = _get_current_appearance_presence_state()
+	state["roles"] = _get_current_role_presence_state()
+	state["selectedRoleBadge"] = GameState.selected_role_badge
+	state["activityState"] = "battle" if is_in_battle and active_battle_kind != "replay" else "idle"
+	state["battleSpectate"] = _get_current_battle_spectate_presence()
+	state["follower"] = _get_current_follower_presence_state()
+	if player.has_method("get_network_movement_state"):
+		state["movement"] = player.call("get_network_movement_state")
 
 
 func _track_playtime(delta: float) -> void:
@@ -3068,19 +3120,21 @@ func _get_position_reference_tilemap(map: Node) -> TileMapLayer:
 	)
 
 
-func _load_player_party_state() -> void:
+func _load_player_party_state() -> bool:
 	var party_response: Dictionary = await PlayerPartyStateService.load_party()
 	if not bool(party_response.get("success", false)):
 		push_warning("World: player party load failed: %s" % str(party_response.get("error", "Unknown error")))
-		return
+		return false
 	if not bool(party_response.get("hasParty", false)):
-		return
+		PlayerSave.replace_party_from_state([])
+		return true
 
 	var party_value: Variant = party_response.get("party", [])
 	if not (party_value is Array):
-		return
+		return false
 
 	PlayerSave.replace_party_from_state(party_value as Array)
+	return true
 
 func create_dev_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
 	var battle_request := HTTPRequest.new()
@@ -3294,7 +3348,18 @@ func start_triggered_wild_battle_for_area(
 		await GameErrorDialogService.show_response(position_result)
 		return
 	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id)
+	if (
+		not response.get("success", false)
+		and WildEncounterErrorRules.error_code(response) == "pokemon_party_changed_refresh_required"
+		and await _load_player_party_state()
+	):
+		response = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id)
 	if not response.get("success", false):
+		if WildEncounterErrorRules.error_code(response) == "active_trainer_battle_exists":
+			await _cancel_wild_encounter_transition()
+			_abort_battle_start(true)
+			await _recover_conflicting_pve_battle()
+			return
 		# A previous browser tab can close after the authority has accepted the
 		# encounter. The account remains bound to that exact battle until it is
 		# settled, so reopen it here instead of showing a generic error and
@@ -3385,6 +3450,20 @@ func _get_wild_battle_conflict_id(response: Dictionary) -> String:
 	return str(detail.get("battleId", "")).strip_edges()
 
 
+func _recover_conflicting_pve_battle() -> Dictionary:
+	# Conflict details may contain only a code, not a battle ID. Read the
+	# canonical binding instead of inventing an ID or clearing server activity.
+	wild_battle_resume_pending = true
+	var position: Dictionary = await PlayerGameStateService.load_player_position()
+	if not bool(position.get("success", false)):
+		wild_battle_resume_pending = false
+		await GameErrorDialogService.show_report_to_staff_message()
+		return position
+	await _load_player_party_state()
+	var resumed := await _resume_saved_wild_battle(_dictionary_from_value(position.get("state", {})))
+	return {"success": true, "resumed": bool(resumed.get("resumed", false)), "retryable": bool(resumed.get("retryable", false))}
+
+
 func _show_wild_encounter_start_error(response: Dictionary) -> void:
 	var error_code := WildEncounterErrorRules.error_code(response)
 	var message_lines := WildEncounterErrorRules.message_lines(response)
@@ -3447,12 +3526,34 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 		trainer_id,
 		active_trainer_is_rematch
 	)
+	if (
+		not response.get("success", false)
+		and BackendErrorLocalizationService.error_code(response) == "pokemon_party_changed_refresh_required"
+		and await _load_player_party_state()
+	):
+		response = await create_trainer_battle_response(
+			trainer_id,
+			active_trainer_is_rematch
+		)
 	if not response.get("success", false):
+		if BackendErrorLocalizationService.error_code(response) in ["active_trainer_battle_exists", "active_wild_battle_exists"]:
+			await _cancel_wild_encounter_transition()
+			_abort_battle_start(true)
+			return await _recover_conflicting_pve_battle()
 		if not _is_expected_trainer_battle_rejection(response):
 			push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
 		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		return response
+	player_lead_slot = PlayerSave.get_first_usable_party_slot()
+	if player_lead_slot <= 0:
+		await _cancel_wild_encounter_transition()
+		_abort_battle_start()
+		return {
+			"success": false,
+			"code": "no_usable_pokemon",
+		}
+	player_lead_pokemon = PlayerSave.party[player_lead_slot - 1] as Pokemon
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 	_publish_world_presence(true)

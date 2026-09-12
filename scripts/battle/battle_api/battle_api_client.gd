@@ -172,6 +172,7 @@ func create_training_ai_battle(
 	tier_id: String = "none",
 	allow_spectators: bool = false
 ) -> Dictionary:
+	var normalized_tier_id := tier_id if tier_id in ["none", "aether-ou", "aether-uu", "pokemmo-ou"] else "none"
 	return await send_post_request(
 		request_node,
 		"/battle/pvp/training/ai/battles",
@@ -184,8 +185,8 @@ func create_training_ai_battle(
 			"aiMode": ai_mode if ai_mode in ["ai4", "shadow", "intermediate", "active", "elite", "nightmare"] else "ai4",
 			"archetype": ai_archetype if ai_archetype.strip_edges() != "" else "random",
 			"aiTeamText": ai_team_text.strip_edges(),
-			"formatId": FORMAT_ID,
-			"tierId": tier_id if tier_id in ["none", "aether-ou", "aether-uu"] else "none",
+			"formatId": "pokemmo-ou-v1" if normalized_tier_id == "pokemmo-ou" else FORMAT_ID,
+			"tierId": normalized_tier_id,
 		}
 	)
 

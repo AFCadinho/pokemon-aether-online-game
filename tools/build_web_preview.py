@@ -7,8 +7,10 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
+import time
 
 ROOT = Path(__file__).resolve().parents[1]
 # The browser demo deliberately ships its reachable-map and PvE music rather
@@ -21,6 +23,42 @@ WEB_AUDIO_SOURCE_DIRS = (
     ROOT / "assets/battles/animations",
 )
 WEB_AUDIO_SUFFIXES = {".ogg", ".wav", ".mp3"}
+ANSI_ESCAPE = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
+EXPORT_PROGRESS = re.compile(r'^\[\s*(\d+)%\s*\]\s*([A-Za-z0-9_-]+)')
+
+
+def parse_export_progress(line: str) -> tuple[int, str] | None:
+    """Extract Godot's concise percentage and phase from a console line."""
+    match = EXPORT_PROGRESS.match(ANSI_ESCAPE.sub('', line).strip())
+    if not match:
+        return None
+    return int(match.group(1)), match.group(2)
+
+
+def run_export(command: list[str], console_log: Path) -> int:
+    """Run Godot quietly while relaying useful progress to the terminal."""
+    last_progress = None
+    last_output_at = time.monotonic()
+    with console_log.open('w') as console:
+        process = subprocess.Popen(command, stdout=console, stderr=subprocess.STDOUT)
+        with console_log.open(errors='replace') as progress:
+            while True:
+                line = progress.readline()
+                if not line:
+                    if process.poll() is not None:
+                        break
+                    if time.monotonic() - last_output_at >= 15:
+                        print('Godot export is still working...', flush=True)
+                        last_output_at = time.monotonic()
+                    time.sleep(0.2)
+                    continue
+                parsed = parse_export_progress(line)
+                if parsed is not None and parsed != last_progress:
+                    percent, phase = parsed
+                    print(f'Godot export: {percent}% ({phase})', flush=True)
+                    last_progress = parsed
+                    last_output_at = time.monotonic()
+    return process.wait()
 
 
 def copy_browser_audio(output: Path) -> list[dict[str, object]]:
@@ -63,12 +101,27 @@ def main():
     output = ROOT / 'builds/web'
     output.mkdir(parents=True, exist_ok=True)
     console_log = output / 'export-console.log'
-    with console_log.open('w') as console:
-        result = subprocess.run([
+    # Godot treats any previously imported file below the project as an
+    # exportable resource, even when an export exclude_filter names that
+    # directory. Keep installed tooling and generated build environments out
+    # of the PCK without requiring developers to remove local state first.
+    created_ignores = []
+    for ignored_root in (ROOT / 'node_modules', ROOT / 'builds'):
+        if not ignored_root.is_dir():
+            continue
+        godot_ignore = ignored_root / '.gdignore'
+        if not godot_ignore.exists():
+            godot_ignore.write_text('', encoding='utf-8')
+            created_ignores.append(godot_ignore)
+    try:
+        returncode = run_export([
             args.godot, '--headless', '--log-file', str(output / 'export.log'), '--path', str(ROOT), '--export-release',
             'Web Local Preview', str(output / 'index.html'),
-        ], stdout=console, stderr=subprocess.STDOUT)
-    if result.returncode != 0:
+        ], console_log)
+    finally:
+        for godot_ignore in created_ignores:
+            godot_ignore.unlink(missing_ok=True)
+    if returncode != 0:
         tail = console_log.read_text(errors='replace').splitlines()[-80:]
         raise RuntimeError('Godot web export failed:\n' + '\n'.join(tail))
     browser_audio_files = copy_browser_audio(output)
@@ -84,6 +137,7 @@ def main():
     required_markers = (
         b'generated/tiled_visuals/route_1/route_1.visual.tscn',
         b'assets/sprites/pokemon/pokemon_home/Pikachu.png',
+        b'assets/sprites/pokemon/pokemon_home_shiny/pikachu.png',
         b'lugia_theme_lofi.ogg-2fdce23a90553d794177dfc95f259e8f.oggvorbisstr',
         b'assets/music/overworld/kanto/towns/pallet_town.ogg',
         b'assets/music/overworld/kanto/routes/route1.ogg',
@@ -92,6 +146,7 @@ def main():
         b'assets/music/battle/trainer/Kalos Trainer Battle.ogg',
     )
     forbidden_markers = (
+        b'node_modules/playwright-core/',
         b'assets/sprites/pokemon/gen5/front/pikachu/sheet.png.import',
         b'generated/tiled_visuals/pewter_city/pewter_city.visual.tscn.remap',
     )

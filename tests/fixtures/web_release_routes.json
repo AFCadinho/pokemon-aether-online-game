@@ -1,0 +1,32 @@
+{
+  "allowed": [
+    ["GET", "/auth/web/boxes"], ["GET", "/auth/web/boxes/0"], ["PATCH", "/auth/web/boxes/31"],
+    ["POST", "/auth/web/pokemon/storage/move"], ["DELETE", "/auth/web/pokemon/42"],
+    ["PUT", "/auth/web/party"], ["PATCH", "/auth/web/party/battle-state"],
+    ["POST", "/auth/web/party/heal"], ["POST", "/auth/web/party/swap"], ["POST", "/auth/web/party/set-slot"], ["DELETE", "/auth/web/party/5"],
+    ["POST", "/auth/web/pokemon/42/nickname"], ["POST", "/auth/web/pokemon/42/held-item"], ["DELETE", "/auth/web/pokemon/42/held-item"],
+    ["PATCH", "/auth/web/pokemon/42/ball"], ["POST", "/auth/web/pokemon/42/evs/allocate"],
+    ["POST", "/auth/web/pokemon/42/moves/learn"], ["GET", "/auth/web/pokemon/42/moves/mentor"],
+    ["POST", "/auth/web/pokemon/42/moves/delete"], ["POST", "/auth/web/pokemon/42/moves/reorder"],
+    ["POST", "/auth/web/pokemon/42/evolution"], ["POST", "/auth/web/pokemon/42/items/use"],
+    ["POST", "/auth/web/inventory/items/potion/use"], ["POST", "/auth/web/inventory/items/potion/discard"],
+    ["GET", "/auth/web/wallet"], ["POST", "/auth/web/wallet/rewards/wild-battle"], ["POST", "/auth/web/wallet/rewards/trainer-battle"],
+    ["POST", "/auth/web/respawn"], ["POST", "/auth/web/world/teleport-ack"], ["GET", "/auth/web/markets/standard"], ["POST", "/auth/web/markets/standard/purchase"], ["POST", "/auth/web/markets/standard/sell"],
+    ["GET", "/auth/web/trainers/kanto_route_1_lass_zoe/progress"], ["POST", "/auth/web/trainers/kanto_route_1_lass_zoe/rematch"],
+    ["GET", "/auth/web/mail"], ["POST", "/auth/web/mail"], ["POST", "/auth/web/mail/5/read"], ["DELETE", "/auth/web/mail/5"],
+    ["GET", "/battle/trainer/resume"], ["GET", "/battle/wild/resume"],
+    ["POST", "/battle/trainer"], ["POST", "/battle/wild-encounter"], ["POST", "/auth/web/wild-battles/battle-id/catch"],
+    ["GET", "/battle/pvp/training/ai/teams"], ["POST", "/battle/pvp/training/ai/battles"], ["GET", "/battle/test-id/state"], ["POST", "/battle/test-id/choice-and-resolve"]
+  ],
+  "denied": [
+    ["POST", "/auth/web/mail/5/claim"], ["POST", "/auth/web/mail/5/attachments/3/claim"],
+    ["POST", "/game/mail/5/claim"], ["POST", "/game/trades"], ["POST", "/game/loans"],
+    ["GET", "/game/guilds/me/bank"], ["POST", "/game/guilds/me/bank/deposit"],
+    ["POST", "/game/aether-clash/challenges"], ["POST", "/auth/web/guilds/me/bank"],
+    ["POST", "/auth/web/dev/pokemon"], ["POST", "/auth/web/pokemon"],
+    ["GET", "/auth/web/world/story-escape"], ["GET", "/auth/web/mail-escape"],
+    ["POST", "/auth/web/boxes/0"], ["PATCH", "/auth/web/boxes/0/escape"],
+    ["POST", "/auth/web/pokemon/42/moves/invent"], ["POST", "/auth/web/wallet/rewards/free-money"],
+    ["POST", "/auth/web/pokemon/42/transfer"], ["POST", "/pvp/queues/ranked/join"]
+  ]
+}

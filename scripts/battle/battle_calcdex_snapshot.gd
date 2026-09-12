@@ -369,7 +369,7 @@ static func _validate_contract_containers(snapshot: Dictionary) -> String:
 	if str(format.get("formatKey", "")) not in ["aether-ou", "aether-uu", "gen9nationaldex-casual", "gen9nationaldex-pve", "pokeaether-mega-z-test", "pokemmo-ou"] or str(format.get("engineFormatId", "")) not in ["gen9nationaldex", "pokeaether-mega-z-test-v1", "pokemmo-ou-v1"] or int(format.get("generation", 0)) != 9 or str(format.get("gameType", "")) != "singles":
 		return "Calcdex format identity is unsupported."
 	if (str(format.get("formatKey", "")) == "pokemmo-ou") != (str(format.get("engineFormatId", "")) == "pokemmo-ou-v1"):
-		return "Calcdex PokeMMO OU format identity does not match its engine."
+		return "Calcdex MMO OU format identity does not match its engine."
 	var manifest := _as_dictionary(snapshot.get("mechanicsManifest"))
 	if not is_valid_mechanics_manifest(manifest):
 		return "Calcdex mechanics manifest is unsupported."

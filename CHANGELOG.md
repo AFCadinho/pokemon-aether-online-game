@@ -1,5 +1,22 @@
 # Changelog
 
+## Unreleased
+
+## 0.3.76 - 2026-09-12
+
+- Browser blackouts now finish their heal-spot transfer completely, so players can leave the room afterward.
+- Browser players now complete staff teleports cleanly instead of becoming stuck between maps.
+- Browser players now keep their equipped outfit on login, in the world and for other players, and browser map transitions no longer disappear after the server moves them.
+- Guild challenges from a Trainer's right-click menu now appear only in the Aether Clash Lobby.
+- Battle intros no longer get stuck before sending out Pokémon when the browser has a slow frame.
+- Browser players now see other browser and desktop Trainers, restore unfinished battles, and can use PC boxes, healing, shops and battle rewards. Mail stays text-only; trading, lending, Guild Bank and Aether Clash require the game client.
+- Browser players can now start and complete Professor Oak's Parcel story instead of seeing his post-starter dialogue.
+- Browser players now reconnect to the shared overworld correctly, and wild or Trainer battles recover automatically after a stale local party refresh.
+- The Damage Calculator now lets you manually select available MMO OU catalog sets.
+- Prepared the browser version for secure, versioned delivery through Cloudflare Pages and R2, with password recovery available from browser login.
+- AI Sparring now offers MMO OU for AI4 Scholar and AI5 Grandmaster Hard, Elite and Nightmare.
+- AI Sparring statistics now list Grandmaster difficulties in their natural order, with Intermediate before Hard.
+
 ## 0.3.75
 
 ### Gameplay

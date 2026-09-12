@@ -372,6 +372,7 @@ func _check_pvp_runtime_translation() -> void:
 		{"tierId": "none", "tierName": "Open"},
 		{"tierId": "aether-ou", "tierName": "Aether OU"},
 		{"tierId": "aether-uu", "tierName": "Aether UU"},
+		{"tierId": "pokemmo-ou", "tierName": "MMO OU"},
 	]
 	overlay.set("pvp_training_ai_tiers", catalog_tiers)
 	overlay.call("_refresh_ai_sparring_tier_options")
@@ -379,8 +380,21 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_refresh_ai_sparring_catalog_filters")
 	overlay.call("_refresh_ai_sparring_catalog_view")
 	_check(ai_sparring_catalog_search != null and ai_sparring_catalog_search.placeholder_text.begins_with("Zoek Pokémon"), "Catalog search renders in Dutch")
-	_check(ai_sparring_tier_select.item_count == 2 and ai_sparring_tier_select.get_item_text(0) == "Aether OU" and ai_sparring_tier_select.get_item_text(1) == "Aether UU", "Free sparring offers only Aether OU and Aether UU")
-	_check(ai_sparring_catalog_tier != null and ai_sparring_catalog_tier.item_count == 2 and str(ai_sparring_catalog_tier.get_selected_metadata()) == "aether-ou", "Team catalog defaults to OU without Open or All tiers")
+	_check(ai_sparring_tier_select.item_count == 3 and ai_sparring_tier_select.get_item_text(0) == "Aether OU" and ai_sparring_tier_select.get_item_text(1) == "Aether UU" and ai_sparring_tier_select.get_item_text(2) == "MMO OU", "Free sparring offers Aether OU, Aether UU and MMO OU")
+	_check(ai_sparring_catalog_tier != null and ai_sparring_catalog_tier.item_count == 3 and str(ai_sparring_catalog_tier.get_selected_metadata()) == "aether-ou", "Team catalog defaults to OU without Open or All tiers")
+	var tier_mode_fixture: Array = overlay.get("pvp_training_ai_available_modes") as Array
+	tier_mode_fixture.assign(["ai4", "intermediate", "active", "elite", "nightmare"])
+	ai_sparring_tier_select.select(2)
+	overlay.call("_on_ai_sparring_tier_selected", 2)
+	_check(training_ai_bot_select.item_count == 2, "MMO OU offers Scholar and Grandmaster")
+	training_ai_bot_select.select(1)
+	overlay.call("_on_pvp_training_ai_bot_selected", 1)
+	_check(training_ai_mode_select.item_count == 3, "MMO OU offers Hard, Elite and Nightmare")
+	_check(str(training_ai_mode_select.get_item_metadata(0)) == "active", "MMO OU lists Grandmaster Hard first")
+	_check(str(training_ai_mode_select.get_item_metadata(1)) == "elite", "MMO OU offers Grandmaster Elite")
+	_check(str(training_ai_mode_select.get_item_metadata(2)) == "nightmare", "MMO OU offers Grandmaster Nightmare")
+	ai_sparring_tier_select.select(0)
+	overlay.call("_on_ai_sparring_tier_selected", 0)
 	_check(ai_sparring_catalog_results != null and ai_sparring_catalog_results.get_child_count() == 1, "Catalog renders matching team cards")
 	_check(
 		overlay.call("_ai_sparring_team_display_tier", {
@@ -679,6 +693,8 @@ func _check_pvp_runtime_translation() -> void:
 	overlay.call("_refresh_pvp_training_ai_mode_options")
 	_check(training_ai_bot_select.item_count == 2, "Bot selector separates Scholar and Grandmaster")
 	_check(training_ai_bot_select.get_item_text(0) == "AI4 Scholar" and training_ai_bot_select.get_item_text(1) == "AI5 Grandmaster", "Bot names remain familiar")
+	training_ai_bot_select.select(0)
+	overlay.call("_on_pvp_training_ai_bot_selected", 0)
 	_check(training_ai_mode_select.item_count == 1 and training_ai_mode_select.get_item_text(0) == "Beginner", "Scholar exposes only Beginner")
 	training_ai_bot_select.select(1)
 	overlay.call("_on_pvp_training_ai_bot_selected", 1)
@@ -877,7 +893,7 @@ func _check_pvp_runtime_translation() -> void:
 	room_create_button.emit_signal("pressed")
 	await process_frame
 	_check(room_tier_row != null and room_tier_row.visible, "Room creation exposes the optional battle tier")
-	_check(room_tier_select != null and room_tier_select.item_count == 5, "Custom rooms include the separate PokeMMO OU tier")
+	_check(room_tier_select != null and room_tier_select.item_count == 5, "Custom rooms include the separate MMO OU tier")
 	_check(str(room_tier_select.get_selected_metadata()) == "none", "No tier is selected by default")
 	_check(room_tier_select.get_item_text(0) == "Geen tier", "The default tier is localized in Dutch")
 	_check(room_tier_select.get_item_text(1) == "Aether OU", "Aether OU is available for unrated rooms")
@@ -892,9 +908,9 @@ func _check_pvp_runtime_translation() -> void:
 	_check(str(room_tier_select.get_selected_metadata()) == "pokeaether-mega-z-test", "Champions ZA keeps its bounded room identity")
 	_check(overlay.call("_selected_pvp_room_format_id") == "pokeaether-mega-z-test-v1", "Champions ZA maps to the versioned engine format")
 	room_tier_select.select(4)
-	_check(room_tier_select.get_item_text(4) == "PokeMMO OU", "PokeMMO OU is available for custom rooms")
-	_check(str(room_tier_select.get_selected_metadata()) == "pokemmo-ou", "PokeMMO OU has its own room identity")
-	_check(overlay.call("_selected_pvp_room_format_id") == "pokemmo-ou-v1", "PokeMMO OU maps to its isolated engine")
+	_check(room_tier_select.get_item_text(4) == "MMO OU", "MMO OU is available for custom rooms")
+	_check(str(room_tier_select.get_selected_metadata()) == "pokemmo-ou", "MMO OU has its own room identity")
+	_check(overlay.call("_selected_pvp_room_format_id") == "pokemmo-ou-v1", "MMO OU maps to its isolated engine")
 	room_tier_select.select(3)
 	_check(room_timer_check != null and room_timer_check.visible, "Training room creation exposes the shared decision timer option")
 	room_timer_check.button_pressed = true

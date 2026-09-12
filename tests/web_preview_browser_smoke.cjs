@@ -36,7 +36,7 @@ const path = require('node:path');
   fs.mkdirSync(output, { recursive: true });
   try {
     await page.goto(url);
-    await page.getByRole('button', { name: 'Open browser preview' }).click();
+    await page.getByRole('button', { name: 'Open browser game' }).click();
     await page.waitForFunction(() => window.pokeaetherPreview?.state === 'running', null, { timeout: 120000 });
     await page.waitForFunction(() => window.pokeaetherPreview?.loginReady === true, null, { timeout: 30000 });
     await page.waitForTimeout(6000);
@@ -48,7 +48,7 @@ const path = require('node:path');
     await page.screenshot({ path: path.join(output, 'settings.png') });
     await page.keyboard.press('Escape');
     await page.reload();
-    await page.getByRole('button', { name: 'Open browser preview' }).click();
+    await page.getByRole('button', { name: 'Open browser game' }).click();
     await page.waitForFunction(() => window.pokeaetherPreview?.state === 'running', null, { timeout: 120000 });
     await page.waitForFunction(() => window.pokeaetherPreview?.loginReady === true, null, { timeout: 30000 });
     await page.waitForTimeout(4000);

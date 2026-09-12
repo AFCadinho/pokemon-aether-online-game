@@ -168,8 +168,8 @@ func _check_level_five_training_ai_uses_the_same_isolation_boundary() -> void:
 		and api_source.contains("\"aiMode\": ai_mode")
 		and api_source.contains("ai_mode in [\"ai4\", \"shadow\", \"intermediate\", \"active\", \"elite\", \"nightmare\"]")
 		and not api_source.contains("\"expert\"")
-		and api_source.contains("\"archetype\": ai_archetype")
-		and api_source.contains("\"tierId\": tier_id")
+		and api_source.contains('"archetype": ai_archetype if ai_archetype.strip_edges() != "" else "random"')
+		and api_source.contains('"tierId": normalized_tier_id')
 		and overlay_source.contains("_selected_ai_sparring_tier_id()"),
 		"AI creation sends the tier, mode, archetype and selected stable team identity"
 	)

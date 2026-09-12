@@ -23,10 +23,16 @@ func load_frames(asset_id: String, side: String, is_shiny: bool = false) -> Dict
 	if _cache.has(cache_key):
 		return _cache[cache_key]
 
-	var origin := WebRuntime.api_base_url().trim_suffix("/api")
-	if origin == "":
+	var release := WebRuntime.web_release_config()
+	var configured_bases: Variant = release.get("spriteBases", {})
+	var base_root := ""
+	if configured_bases is Dictionary:
+		base_root = str((configured_bases as Dictionary).get(side_folder, "")).trim_suffix("/")
+	if base_root == "":
+		base_root = WebRuntime.api_base_url().trim_suffix("/api") + ASSET_BASE + "/" + side_folder
+	if base_root == "":
 		return {}
-	var base_url := "%s%s/%s/%s" % [origin, ASSET_BASE, side_folder, normalized_id]
+	var base_url := "%s/%s" % [base_root, normalized_id]
 	var metadata_result := await _download(base_url + "/animation.json")
 	if metadata_result.is_empty():
 		return {}
