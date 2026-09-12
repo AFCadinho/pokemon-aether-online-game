@@ -20,7 +20,7 @@ on:
       asset_base_url:
         description: Public HTTPS custom domain attached to the existing R2 bucket
         required: true
-        default: https://updates.pokeaether.com
+        default: https://web-assets.pokeaether.com
         type: string
       api_origin:
         description: Public HTTPS origin of the production gateway
