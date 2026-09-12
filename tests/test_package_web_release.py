@@ -20,6 +20,9 @@ class PackageWebReleaseTests(unittest.TestCase):
         cors = source.index('- name: Verify R2 CORS is ready')
         self.assertGreater(cors, upload)
         self.assertIn('${ASSET_BASE_URL}/web/releases/${WEB_BUILD_ID}/index.wasm', source)
+        self.assertIn('deadline=$((SECONDS + 180))', source)
+        self.assertIn('grep -Fq "${WEB_BUILD_ID}" "${public_index}"', source)
+        self.assertIn('curl --retry 6 --retry-all-errors --retry-delay 2', source)
 
     def test_browser_uses_the_same_four_gen5_releases_as_desktop(self):
         import re
