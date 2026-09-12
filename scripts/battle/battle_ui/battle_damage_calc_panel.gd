@@ -1216,7 +1216,10 @@ func show_sample_set_catalog_response(species: String, response: Dictionary) -> 
 		and str(response.get("formatId", "")) == sample_set_format_id
 		and str(response.get("engineFormatId", "")) == _get_sample_set_engine_format_id()
 		and str(response.get("catalogProfileId", "")).strip_edges() != ""
-		and str(response.get("source", "")) == "smogon_set_catalog"
+		and _is_known_sample_catalog_source(
+			str(response.get("catalogProfileId", "")),
+			str(response.get("source", ""))
+		)
 		and _normalize_move_name(str(response.get("species", ""))) == _normalize_move_name(species)
 		and response.get("sets") is Array
 		and (response.get("sets") as Array).size() <= 1024
@@ -1270,11 +1273,17 @@ func _is_valid_sample_group(entry: Dictionary) -> bool:
 
 
 func _is_known_sample_source(provenance: Dictionary) -> bool:
-	return (
-		provenance.get("kind") == "smogon"
-		and not str(provenance.get("formatId", "")).strip_edges().is_empty()
+	var kind := str(provenance.get("kind", ""))
+	if kind not in ["smogon", "afcadinho_pokemmo"]:
+		return false
+	return not str(provenance.get("formatId", "")).strip_edges().is_empty() \
 		and not str(provenance.get("formatName", "")).strip_edges().is_empty()
-	)
+
+
+func _is_known_sample_catalog_source(profile_id: String, source: String) -> bool:
+	if profile_id == "pokemmo-ou":
+		return source == "afcadinho_pokemmo_set_catalog"
+	return source == "smogon_set_catalog"
 
 
 func _is_valid_sample_set(entry: Dictionary) -> bool:
@@ -1601,7 +1610,7 @@ func _choose_sample_set_search_result(index: int, results: ItemList) -> void:
 
 func _get_sample_set_source_label(option: Dictionary) -> String:
 	var provenance := _as_dictionary(option.get("provenance", {}))
-	if str(provenance.get("kind", "")) != "smogon":
+	if str(provenance.get("kind", "")) not in ["smogon", "afcadinho_pokemmo"]:
 		return ""
 	return str(provenance.get("formatName", "")).strip_edges()
 
@@ -2062,7 +2071,7 @@ func _make_matchup_side(
 		name_row.add_child(gender_icon)
 	if relation == "opponent" and not knowledge_snapshot.is_empty():
 		_add_sample_set_selector(name_row)
-		var set_selector := name_row.get_child(name_row.get_child_count() - 1) as OptionButton
+		var set_selector := name_row.get_child(name_row.get_child_count() - 1) as Button
 		if set_selector != null:
 			set_selector.custom_minimum_size.x = 118
 			set_selector.size_flags_horizontal = Control.SIZE_SHRINK_END
