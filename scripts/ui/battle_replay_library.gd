@@ -518,8 +518,7 @@ func _card(row: Dictionary) -> Control:
 	management_actions.alignment = BoxContainer.ALIGNMENT_END
 	management_actions.add_theme_constant_override("separation", 8)
 	action_column.add_child(management_actions)
-	if str(row.get("kind", "ai_sparring")) == "ai_sparring":
-		_button(management_actions, _t("new_share_code") if row.get("shared", false) else _t("share"), func(): _share(battle_id), "quiet").disabled = state != "available"
+	_button(management_actions, _t("new_share_code") if row.get("shared", false) else _t("share"), func(): _share(battle_id), "quiet").disabled = state != "available"
 	_button(management_actions, _t("delete"), func(): _confirm_remove(battle_id), "danger")
 	var play_row := HBoxContainer.new()
 	play_row.alignment = BoxContainer.ALIGNMENT_END

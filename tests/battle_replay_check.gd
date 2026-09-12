@@ -148,9 +148,26 @@ func _run() -> void:
 		"playerRoster": [{"species": "Pikachu"}, {"species": "Charizard"}, {"species": "Tyranitar"}],
 		"opponentRoster": [{"species": "Blissey"}, {"species": "Scizor"}, {"species": "Garchomp"}]}))
 	library.list.add_child(library._card({"battleId": "preview2", "opponentDisplayName": "Grandmaster Hard", "createdAt": "2026-09-09T18:00:00", "turns": 36, "result": "loss", "status": "available", "expiresAt": "2026-10-09"}))
+	for replay_kind: String in ["wild", "pve", "pvp"]:
+		library.list.add_child(library._card({
+			"battleId": "share-" + replay_kind,
+			"kind": replay_kind,
+			"opponentDisplayName": "Replay opponent",
+			"createdAt": "2026-09-09T18:00:00",
+			"turns": 9,
+			"result": "win",
+			"status": "available",
+			"expiresAt": "2026-10-09",
+		}))
 	for i in range(4):
 		await process_frame
-	_check(library.list.get_child_count() == 2, "Library renders management cards")
+	_check(library.list.get_child_count() == 5, "Library renders management cards")
+	for card_index: int in range(2, 5):
+		var replay_card: Node = library.list.get_child(card_index)
+		var share_buttons: Array = replay_card.find_children("*", "Button", true, false).filter(
+			func(button: Button): return button.text == library._t("share")
+		)
+		_check(share_buttons.size() == 1, "Every available replay category exposes one share action")
 	_check(library.shell.get_theme_stylebox("panel") != null, "Library shell has a dedicated replay visual style")
 	_check(library.search.get_theme_stylebox("focus") != null and library.outcome.get_theme_stylebox("hover") != null, "Replay filters have focused and hover states")
 	_check(library.reset_filters_button != null and library.reset_filters_button.text != "", "Replay filters reset independently of live search")

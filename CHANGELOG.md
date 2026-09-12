@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Available Wild, PvE and PvP Battle Replays now show the same sharing action as AI Sparring replays.
+
 - Wild Battle Replays now show the Ball animation and successful catch instead of stopping abruptly on the final turn.
 
 - Browser battles now load Gen 5 animated Pokémon sprites more reliably and with substantially lower WebGL texture overhead instead of remaining on the Pokémon HOME fallback.
