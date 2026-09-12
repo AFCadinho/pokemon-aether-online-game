@@ -107,7 +107,9 @@ func _connect_presence_async(attempt_id: int) -> void:
 	if attempt_id != connection_attempt_id or not _is_authenticated():
 		connecting = false
 		return
-	if websocket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
+	var ready_state := websocket.get_ready_state()
+	if ready_state != WebSocketPeer.STATE_CLOSED:
+		connecting = ready_state == WebSocketPeer.STATE_CONNECTING
 		return
 
 	var websocket_url := ClientBuild.append_websocket_query(
@@ -198,6 +200,10 @@ func _send_payload(payload: Dictionary) -> bool:
 
 
 func _handle_closed_socket() -> void:
+	# A WebSocket handshake can fail after connect_to_url() returned OK. In that
+	# case no OPEN state was observed to clear this guard, so allow the normal
+	# reconnect loop to start a fresh attempt from the CLOSED state.
+	connecting = false
 	if session_invalid_handled:
 		return
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Players now reconnect to the shared overworld automatically after a failed connection instead of remaining visible only in chat.
+
 - Available Wild, PvE and PvP Battle Replays now show the same sharing action as AI Sparring replays.
 
 - Wild Battle Replays now show the Ball animation and successful catch instead of stopping abruptly on the final turn.
