@@ -25,6 +25,7 @@ const CODE_TO_KEY: Dictionary = {
 	"resource_not_found": "backend.error.unavailable",
 	"request_failed": "backend.error.generic",
 	"service_error": "backend.error.generic",
+	"web_demo_saved_location_outside_boundary": "backend.error.web_demo_saved_location_outside_boundary",
 	"not_enough_money": "backend.error.not_enough_money",
 	"not_enough_bank_money": "backend.error.not_enough_bank_money",
 	"bank_balance_overflow": "backend.error.bank_balance_overflow",

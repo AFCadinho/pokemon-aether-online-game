@@ -96,6 +96,8 @@ func cancel_replay_render() -> void:
 	replay_paused = false
 	event_renderer.cancel_render()
 	pokeball_summon_animation_player.cancel()
+	capture_ball_animation_player.cancel()
+	_stop_capture_target_visibility_tween()
 
 func set_replay_speed(speed: float) -> void:
 	animation_router.playback_speed = speed
@@ -103,6 +105,7 @@ func set_replay_speed(speed: float) -> void:
 	player_sprite_box.playback_speed = speed
 	enemy_sprite_box.playback_speed = speed
 	pokeball_summon_animation_player.playback_speed = speed
+	capture_ball_animation_player.playback_speed = speed
 
 func restore_replay_position(timeline: RefCounted, index: int) -> void:
 	cancel_replay_render()
@@ -147,7 +150,18 @@ func restore_replay_position(timeline: RefCounted, index: int) -> void:
 		if trainer != null:
 			trainer.get_node("TrainerCommandCallout").call("clear_command")
 	_hide_replay_actions()
+	if _replay_has_successful_capture(events):
+		enemy_sprite_box.visible = false
+		enemy_sprite_box.modulate.a = 0.0
+	else:
+		_reset_capture_target_visibility()
 	replay_paused = true
+
+func _replay_has_successful_capture(events: Array) -> bool:
+	for event: Variant in events:
+		if event is Dictionary and str(event.get("type", "")) == "capture" and bool(event.get("caught", false)):
+			return true
+	return false
 
 func play_replay_frame(timeline: RefCounted, index: int) -> void:
 	var generation := replay_generation
@@ -9730,6 +9744,16 @@ func _render_battle_events(
 			var next_ability_species := _get_active_display_species(ability_player_id) if ability_player_id != "" else ""
 			if ability_player_id != "" and previous_ability_species != next_ability_species:
 				_update_active_pokemon_presentation_for_ident(ability_target)
+		if replay_mode and event_type == "capture":
+			_reset_capture_target_visibility()
+			await capture_ball_animation_player.play_capture_preview(
+				str(event_data.get("itemId", "poke-ball")),
+				clampi(int(event_data.get("shakeCount", 3)), 0, 3),
+				bool(event_data.get("caught", false)),
+				enemy_sprite_box.get_global_rect()
+			)
+			if owned_replay_generation != replay_generation:
+				return
 
 		var presentation: Dictionary = event_presentation.build(event_data)
 		var apply_forme_change_after_render := event_type == "formeChange"

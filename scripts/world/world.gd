@@ -1,6 +1,7 @@
 extends Node2D
 
 const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
+const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE := "POKEAETHER_AETHER_CLASH_TRACE"
 const BATTLE_SCENE: PackedScene = preload(BATTLE_SCENE_PATH)
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
@@ -1507,18 +1508,18 @@ func _setup_web_demo_world() -> void:
 	var bootstrap_response: Dictionary = await PlayerGameStateService.bootstrap_story()
 	if not bool(bootstrap_response.get("success", false)):
 		push_warning("World: shared story bootstrap failed: %s" % str(bootstrap_response.get("error", "Unknown error")))
-		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		_return_web_demo_to_login(str(bootstrap_response.get("error", "Could not prepare your story progress. Please try again.")))
 		return
 	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
 	if not bool(profile_response.get("success", false)):
 		push_warning("World: shared player profile load failed: %s" % str(profile_response.get("error", "Unknown error")))
-		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		_return_web_demo_to_login(str(profile_response.get("error", "Could not load your Trainer profile. Please try again.")))
 		return
 	_apply_web_demo_profile(profile_response)
 	var saved_state_response: Dictionary = await PlayerGameStateService.load_player_position()
 	if not bool(saved_state_response.get("success", false)):
 		push_warning("World: browser demo position load failed: %s" % str(saved_state_response.get("error", "Unknown error")))
-		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		_return_web_demo_to_login(str(saved_state_response.get("error", "Could not load your browser position. Please try again.")))
 		return
 	var story_response: Dictionary = await PlayerGameStateService.refresh_story()
 	if not bool(story_response.get("success", false)):
@@ -1527,12 +1528,12 @@ func _setup_web_demo_world() -> void:
 	var saved_scene_path := _resolve_saved_map_scene_path(str(saved_state.get("mapScenePath", "")))
 	if saved_scene_path.is_empty() or not ResourceLoader.exists(saved_scene_path):
 		push_error("World: browser demo returned an unavailable map: %s" % saved_scene_path)
-		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		_return_web_demo_to_login("Your saved location is unavailable in the browser version. Download the game client to continue from that location.")
 		return
 	var initial_map := _instantiate_map(saved_scene_path)
 	if initial_map == null:
 		push_error("World: browser demo could not instantiate map: %s" % saved_scene_path)
-		get_tree().change_scene_to_file("res://scenes/interface/login_screen.tscn")
+		_return_web_demo_to_login("Could not open your saved browser location. Please try again.")
 		return
 	_clear_current_map()
 	$CurrentMap.add_child(initial_map)
@@ -1561,6 +1562,13 @@ func _setup_web_demo_world() -> void:
 		await _save_player_activity_state("idle")
 	WorldPresenceService.connect_presence.call_deferred()
 	_publish_world_presence.call_deferred(true)
+
+
+func _return_web_demo_to_login(message: String) -> void:
+	AuthService.set_pending_login_notice(message)
+	var error: Error = get_tree().change_scene_to_file(LOGIN_SCENE_PATH)
+	if error != OK:
+		push_error("World: failed to return to login: %s" % error_string(error))
 
 
 func _apply_web_demo_profile(profile_response: Dictionary) -> void:

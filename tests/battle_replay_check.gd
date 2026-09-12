@@ -84,6 +84,33 @@ func _run() -> void:
 	_check(not controls.busy and controls.closing, "Closing drains the animated renderer before freeing the battle")
 	battle.queue_free()
 	await process_frame
+	var wild_first := first.duplicate(true)
+	wild_first["replayKind"] = "wild"
+	wild_first["wildSpecies"] = "Eevee"
+	var capture_terminal := wild_first.duplicate(true)
+	capture_terminal["state"] = {"turn": 1, "ended": true, "winner": "p1"}
+	capture_terminal["events"] = [{
+		"type": "capture", "eventSeq": 1, "itemId": "ultra-ball",
+		"shakeCount": 3, "caught": true, "species": "Eevee",
+	}]
+	var wild_recording := {"schemaVersion": 1, "frames": [wild_first, capture_terminal]}
+	var wild_timeline = timeline_script.new()
+	_check(wild_timeline.load_recording(wild_recording), "Wild capture recording is accepted")
+	var wild_battle := scene.instantiate()
+	root.add_child(wild_battle)
+	await process_frame
+	_check(wild_battle.setup_battle_replay(wild_recording), "Wild capture replay opens")
+	wild_battle.replay_paused = false
+	wild_battle.set_replay_speed(8.0)
+	await wild_battle.play_replay_frame(wild_timeline, 1)
+	_check(not wild_battle.enemy_sprite_box.visible, "Successful replay capture removes the caught Pokemon")
+	wild_battle.restore_replay_position(wild_timeline, 1)
+	_check(not wild_battle.enemy_sprite_box.visible, "Seeking to the capture keeps the caught Pokemon removed")
+	wild_battle.restore_replay_position(wild_timeline, 0)
+	_check(wild_battle.enemy_sprite_box.visible, "Seeking before the capture restores the wild Pokemon")
+	await wild_battle.stop_battle_replay()
+	wild_battle.queue_free()
+	await process_frame
 	var fixture_path := OS.get_environment("POKEAETHER_REPLAY_PLAYBACK_PATH")
 	if not fixture_path.is_empty():
 		var real_recording: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(fixture_path))
