@@ -225,9 +225,21 @@ jobs:
           WEB_URL: ${{ inputs.web_url }}
           ASSET_BASE_URL: ${{ inputs.asset_base_url }}
         run: |
-          curl -fsS "${WEB_URL}/" | grep -F "${WEB_BUILD_ID}"
-          curl -fsSI -H "Origin: ${WEB_URL}" "${ASSET_BASE_URL}/web/releases/${WEB_BUILD_ID}/index.wasm" | grep -Eiq '^content-type: application/wasm'
-          curl -fsSI -H "Origin: ${WEB_URL}" "${ASSET_BASE_URL}/web/assets/${POKEMON_GEN5_FRONT_ASSET_VERSION}/pikachu/animation.json" >/dev/null
+          public_index="$(mktemp)"
+          trap 'rm -f "${public_index}"' EXIT
+          deadline=$((SECONDS + 180))
+          until curl --retry 3 --retry-all-errors --retry-delay 2 -fsS -o "${public_index}" "${WEB_URL}/" \
+            && grep -Fq "${WEB_BUILD_ID}" "${public_index}"; do
+            if (( SECONDS >= deadline )); then
+              echo "Pages did not expose build ${WEB_BUILD_ID} on ${WEB_URL} within 180 seconds" >&2
+              exit 1
+            fi
+            sleep 5
+          done
+          curl --retry 6 --retry-all-errors --retry-delay 2 -fsSI -H "Origin: ${WEB_URL}" \
+            "${ASSET_BASE_URL}/web/releases/${WEB_BUILD_ID}/index.wasm" | grep -Eiq '^content-type: application/wasm'
+          curl --retry 6 --retry-all-errors --retry-delay 2 -fsSI -H "Origin: ${WEB_URL}" \
+            "${ASSET_BASE_URL}/web/assets/${POKEMON_GEN5_FRONT_ASSET_VERSION}/pikachu/animation.json" >/dev/null
 
       - name: Publish web client manifest
         if: inputs.publish_manifest
