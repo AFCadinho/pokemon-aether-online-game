@@ -10,6 +10,7 @@ for (const [method, path] of releaseRoutes.denied) assert.equal(isAllowedApiRout
 assert.equal(isAllowedApiRoute('POST', '/auth/web/login'), true);
 assert.equal(isAllowedApiRoute('GET', '/auth/web/world/transitions/test/access'), true);
 assert.equal(isAllowedApiRoute('PUT', '/auth/web/world'), true);
+assert.equal(isAllowedApiRoute('POST', '/auth/web/world/teleport-ack'), true);
 assert.equal(isAllowedApiRoute('GET', '/battle/pvp/training/ai/teams/catalog-team'), true);
 assert.equal(isAllowedApiRoute('POST', '/battle/test-id/choice-and-resolve'), true);
 assert.equal(isAllowedApiRoute('POST', '/auth/web/npc-rewards/test-reward/claim'), true);

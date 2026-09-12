@@ -1544,9 +1544,18 @@ func _setup_web_demo_world() -> void:
 	MusicManager.play_map_music(initial_map)
 	move_player_to_map(initial_map)
 	_position_player_at_saved_state(initial_map, saved_state)
+	current_teleport_revision = int(saved_state.get("teleportRevision", current_teleport_revision))
 	_apply_camera_limits_for_map(initial_map)
 	player.refresh_map_layers()
 	last_saved_position_signature = _get_current_player_position_signature(true)
+	if bool(saved_state.get("teleportAcknowledgementRequired", false)):
+		var ack_result: Dictionary = await _ack_authorized_teleport_state(saved_state)
+		if not bool(ack_result.get("success", false)):
+			_mark_authorized_teleport_apply_failed()
+			push_warning(
+				"World: pending browser teleport acknowledgement recovery failed: %s"
+				% str(ack_result.get("error", "Unknown error"))
+			)
 	var resumed := await _resume_saved_wild_battle(saved_state)
 	if not bool(resumed.get("resumed", false)) and not bool(resumed.get("retryable", false)):
 		await _save_player_activity_state("idle")
@@ -1639,6 +1648,15 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 		player.call("restore_land_mount", land_mount_id_to_restore)
 	if changes_map:
 		await _fade_map_transition(0.0, MAP_FADE_IN_SECONDS)
+	current_teleport_revision = int(state.get("teleportRevision", current_teleport_revision))
+	if bool(state.get("teleportAcknowledgementRequired", false)):
+		var ack_result: Dictionary = await _ack_authorized_teleport_state(state)
+		if not bool(ack_result.get("success", false)):
+			_mark_authorized_teleport_apply_failed()
+			return {
+				"success": false,
+				"error": str(ack_result.get("error", "Could not acknowledge browser teleport.")),
+			}
 	last_saved_position_signature = _get_current_player_position_signature(true)
 	authorized_teleport_in_progress = false
 	is_loading_map = false

@@ -11,7 +11,7 @@
     ["POST", "/auth/web/pokemon/42/evolution"], ["POST", "/auth/web/pokemon/42/items/use"],
     ["POST", "/auth/web/inventory/items/potion/use"], ["POST", "/auth/web/inventory/items/potion/discard"],
     ["GET", "/auth/web/wallet"], ["POST", "/auth/web/wallet/rewards/wild-battle"], ["POST", "/auth/web/wallet/rewards/trainer-battle"],
-    ["POST", "/auth/web/respawn"], ["GET", "/auth/web/markets/standard"], ["POST", "/auth/web/markets/standard/purchase"], ["POST", "/auth/web/markets/standard/sell"],
+    ["POST", "/auth/web/respawn"], ["POST", "/auth/web/world/teleport-ack"], ["GET", "/auth/web/markets/standard"], ["POST", "/auth/web/markets/standard/purchase"], ["POST", "/auth/web/markets/standard/sell"],
     ["GET", "/auth/web/trainers/kanto_route_1_lass_zoe/progress"], ["POST", "/auth/web/trainers/kanto_route_1_lass_zoe/rematch"],
     ["GET", "/auth/web/mail"], ["POST", "/auth/web/mail"], ["POST", "/auth/web/mail/5/read"], ["DELETE", "/auth/web/mail/5"],
     ["GET", "/battle/trainer/resume"], ["GET", "/battle/wild/resume"],

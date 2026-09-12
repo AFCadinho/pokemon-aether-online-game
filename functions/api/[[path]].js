@@ -4,6 +4,7 @@ const HTTP_ROUTES = new Set([
   'POST /auth/web/login', 'POST /auth/web/logout',
   'GET /auth/web/preferences', 'PUT /auth/web/preferences',
   'GET /auth/web/world', 'PUT /auth/web/world',
+  'POST /auth/web/world/teleport-ack',
   'PATCH /auth/web/party/battle-state', 'GET /auth/web/profile',
   'GET /auth/web/party', 'GET /auth/web/inventory', 'GET /auth/web/guilds',
   'GET /auth/web/transit', 'GET /auth/web/starter/options', 'POST /auth/web/starter',

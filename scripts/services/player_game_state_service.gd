@@ -5,6 +5,7 @@ class_name PlayerGameStateServiceNode
 const PLAYER_POSITION_ENDPOINT := "/game/player-position"
 const WEB_PLAYER_POSITION_ENDPOINT := "/auth/web/world"
 const PLAYER_TELEPORT_ACK_ENDPOINT := "/game/player-position/teleport-ack"
+const WEB_PLAYER_TELEPORT_ACK_ENDPOINT := "/auth/web/world/teleport-ack"
 const PLAYER_RESPAWN_ENDPOINT := "/game/respawn"
 const PLAYER_RESPAWN_POINT_ENDPOINT := "/game/respawn-point"
 const PLAYER_ACTIVITY_ENDPOINT := "/game/player-activity"
@@ -677,7 +678,7 @@ func acknowledge_player_teleport(teleport_revision: int, teleport_command_id: St
 	if normalized_command_id != "":
 		payload["teleportCommandId"] = normalized_command_id
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_TELEPORT_ACK_ENDPOINT,
+		base_url + _player_teleport_ack_endpoint(),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify(payload)
@@ -691,6 +692,10 @@ func acknowledge_player_teleport(teleport_revision: int, teleport_command_id: St
 		"hasState": bool(body.get("hasState", false)),
 		"state": _dictionary_from_value(body.get("state", {})),
 	}
+
+
+func _player_teleport_ack_endpoint() -> String:
+	return WEB_PLAYER_TELEPORT_ACK_ENDPOINT if OS.has_feature("web") else PLAYER_TELEPORT_ACK_ENDPOINT
 
 
 func load_respawn_point() -> Dictionary:
