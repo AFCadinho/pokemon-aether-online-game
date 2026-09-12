@@ -10,6 +10,15 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class PackageWebReleaseTests(unittest.TestCase):
+    def test_browser_uses_the_same_four_gen5_releases_as_desktop(self):
+        import re
+        def versions(name):
+            source = (ROOT / '.github/workflows' / name).read_text()
+            return dict(re.findall(r'^  (POKEMON_GEN5_[A-Z_]+_ASSET_VERSION): (\S+)$', source, re.M))
+        browser = versions('deploy-web-cloudflare.yml')
+        self.assertEqual(len(browser), 4)
+        self.assertEqual(browser, versions('deploy-desktop-r2.yml'))
+
     def test_split_release_uses_versioned_r2_urls_and_pages_headers(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -173,6 +173,11 @@ func _exit_tree() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("world")
+	_ensure_remote_players_container()
+	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
+		SettingsManager.settings_changed.connect(_on_settings_changed)
+	_sync_remote_players_visibility()
+	_connect_world_presence_signals()
 	if OS.has_feature("web"):
 		_ensure_map_transition_overlay()
 		await _setup_web_demo_world()
@@ -188,11 +193,6 @@ func _ready() -> void:
 	if not FieldMoveService.owned_charms_changed.is_connected(_validate_active_flash_source):
 		FieldMoveService.owned_charms_changed.connect(_validate_active_flash_source)
 	_ensure_map_transition_overlay()
-	_ensure_remote_players_container()
-	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
-		SettingsManager.settings_changed.connect(_on_settings_changed)
-	_sync_remote_players_visibility()
-	_connect_world_presence_signals()
 	await _setup_initial_world_state()
 	await _refresh_fishing_progression()
 	if GameState.gameplay_reset_in_progress:
@@ -226,6 +226,11 @@ func _process(delta: float) -> void:
 	if OS.has_feature("web"):
 		if is_loading_map:
 			return
+		if not is_in_battle:
+			position_presence_elapsed += delta
+			if position_presence_elapsed >= POSITION_PRESENCE_UPDATE_INTERVAL_SECONDS:
+				position_presence_elapsed = 0.0
+				_publish_world_presence()
 		position_autosave_elapsed += delta
 		if position_autosave_elapsed >= POSITION_AUTOSAVE_INTERVAL_SECONDS:
 			position_autosave_elapsed = 0.0
@@ -1290,7 +1295,9 @@ func _reveal_prepared_wild_battle() -> void:
 	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 	await wild_encounter_transition.reveal()
-	if reveal_tween.is_valid():
+	# Both tweens may finish in the same slow frame. A completed tween can
+	# still be valid during that processing pass, but its signal already fired.
+	if reveal_tween.is_running():
 		await reveal_tween.finished
 
 
@@ -1535,6 +1542,11 @@ func _setup_web_demo_world() -> void:
 	_apply_camera_limits_for_map(initial_map)
 	player.refresh_map_layers()
 	last_saved_position_signature = _get_current_player_position_signature(true)
+	var resumed := await _resume_saved_wild_battle(saved_state)
+	if not bool(resumed.get("resumed", false)) and not bool(resumed.get("retryable", false)):
+		await _save_player_activity_state("idle")
+	WorldPresenceService.connect_presence.call_deferred()
+	_publish_world_presence.call_deferred(true)
 
 
 func _apply_web_demo_profile(profile_response: Dictionary) -> void:
@@ -1626,9 +1638,9 @@ func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
 	if authorized_teleport_locked_overworld:
 		GameState.release_overworld_input_lock(AUTHORIZED_TELEPORT_INPUT_LOCK_OWNER)
 	authorized_teleport_locked_overworld = false
-	return {"success": true}
 	WorldPresenceService.connect_presence.call_deferred()
 	_publish_world_presence.call_deferred(true)
+	return {"success": true}
 
 
 func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
@@ -3303,6 +3315,11 @@ func start_triggered_wild_battle_for_area(
 	):
 		response = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id)
 	if not response.get("success", false):
+		if WildEncounterErrorRules.error_code(response) == "active_trainer_battle_exists":
+			await _cancel_wild_encounter_transition()
+			_abort_battle_start(true)
+			await _recover_conflicting_pve_battle()
+			return
 		# A previous browser tab can close after the authority has accepted the
 		# encounter. The account remains bound to that exact battle until it is
 		# settled, so reopen it here instead of showing a generic error and
@@ -3393,6 +3410,20 @@ func _get_wild_battle_conflict_id(response: Dictionary) -> String:
 	return str(detail.get("battleId", "")).strip_edges()
 
 
+func _recover_conflicting_pve_battle() -> Dictionary:
+	# Conflict details may contain only a code, not a battle ID. Read the
+	# canonical binding instead of inventing an ID or clearing server activity.
+	wild_battle_resume_pending = true
+	var position: Dictionary = await PlayerGameStateService.load_player_position()
+	if not bool(position.get("success", false)):
+		wild_battle_resume_pending = false
+		await GameErrorDialogService.show_report_to_staff_message()
+		return position
+	await _load_player_party_state()
+	var resumed := await _resume_saved_wild_battle(_dictionary_from_value(position.get("state", {})))
+	return {"success": true, "resumed": bool(resumed.get("resumed", false)), "retryable": bool(resumed.get("retryable", false))}
+
+
 func _show_wild_encounter_start_error(response: Dictionary) -> void:
 	var error_code := WildEncounterErrorRules.error_code(response)
 	var message_lines := WildEncounterErrorRules.message_lines(response)
@@ -3465,6 +3496,10 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 			active_trainer_is_rematch
 		)
 	if not response.get("success", false):
+		if BackendErrorLocalizationService.error_code(response) in ["active_trainer_battle_exists", "active_wild_battle_exists"]:
+			await _cancel_wild_encounter_transition()
+			_abort_battle_start(true)
+			return await _recover_conflicting_pve_battle()
 		if not _is_expected_trainer_battle_rejection(response):
 			push_warning("World.start_trainer_battle failed: %s" % str(response.get("error", "Unknown error")))
 		await _cancel_wild_encounter_transition()

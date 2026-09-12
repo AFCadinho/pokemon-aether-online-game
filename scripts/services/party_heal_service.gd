@@ -287,7 +287,7 @@ func _heal_current_party_on_server(respawn_point: Dictionary = {}, public_servic
 	add_child(request)
 
 	var error := request.request(
-		base_url + PLAYER_PARTY_HEAL_ENDPOINT,
+		WebRuntime.gameplay_url(base_url + PLAYER_PARTY_HEAL_ENDPOINT),
 		headers,
 		HTTPClient.METHOD_POST,
 		request_body

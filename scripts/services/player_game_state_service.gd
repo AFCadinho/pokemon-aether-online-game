@@ -752,7 +752,7 @@ func respawn_player() -> Dictionary:
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
-		base_url + PLAYER_RESPAWN_ENDPOINT,
+		base_url + ("/auth/web/respawn" if OS.has_feature("web") else PLAYER_RESPAWN_ENDPOINT),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_accept_headers(),
 		""

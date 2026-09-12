@@ -1347,6 +1347,9 @@ func _build_guild_section_navigation(can_open_management: bool) -> Control:
 
 
 func _show_guild_section(section: String) -> void:
+	if OS.has_feature("web") and section in ["bank", "aether_clash"]:
+		_show_web_guild_download_dialog()
+		return
 	if section not in ["overview", "bank", "aether_clash", "members", "management"]:
 		return
 	active_guild_section = section

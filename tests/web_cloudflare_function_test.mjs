@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { isAllowedApiRoute, onRequest } from '../functions/api/[[path]].js';
 import { onRequestGet as getNews } from '../functions/news.json.js';
+
+const releaseRoutes = JSON.parse(readFileSync(new URL('./fixtures/web_release_routes.json', import.meta.url)));
+for (const [method, path] of releaseRoutes.allowed) assert.equal(isAllowedApiRoute(method, path), true, `${method} ${path}`);
+for (const [method, path] of releaseRoutes.denied) assert.equal(isAllowedApiRoute(method, path), false, `${method} ${path}`);
 
 assert.equal(isAllowedApiRoute('POST', '/auth/web/login'), true);
 assert.equal(isAllowedApiRoute('GET', '/auth/web/world/transitions/test/access'), true);

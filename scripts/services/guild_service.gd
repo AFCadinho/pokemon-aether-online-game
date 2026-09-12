@@ -61,6 +61,8 @@ func deliver_notification(notification: Dictionary) -> void:
 
 
 func _poll_notifications() -> void:
+	if OS.has_feature("web"):
+		return
 	if notification_poll_in_flight or not AuthService.is_authenticated():
 		return
 	notification_poll_in_flight = true
@@ -903,6 +905,8 @@ func _normalize_guild(value: Variant) -> Dictionary:
 
 
 func _request_json(path: String, method: HTTPClient.Method, body: String) -> Dictionary:
+	if OS.has_feature("web") and path != "/auth/web/guilds":
+		return {"success": false, "error": "Guild gameplay requires the game client."}
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var request := HTTPRequest.new()
 	request.timeout = REQUEST_TIMEOUT_SECONDS
