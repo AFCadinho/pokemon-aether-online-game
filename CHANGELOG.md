@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- AI Sparring now offers MMO OU for AI4 Scholar and AI5 Grandmaster Hard.
+- AI Sparring now offers MMO OU for AI4 Scholar and AI5 Grandmaster Hard, Elite and Nightmare.
 
 ## 0.3.75
 

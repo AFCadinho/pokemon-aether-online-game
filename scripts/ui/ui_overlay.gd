@@ -45045,7 +45045,7 @@ func _selected_ai_sparring_tier_id() -> String:
 
 
 func _ai_sparring_mode_allowed_for_tier(mode: String) -> bool:
-	return _selected_ai_sparring_tier_id() != "pokemmo-ou" or mode in ["ai4", "shadow", "active"]
+	return _selected_ai_sparring_tier_id() != "pokemmo-ou" or mode in ["ai4", "shadow", "active", "elite", "nightmare"]
 
 
 func _ai_sparring_tier_label(tier_id: String) -> String:
