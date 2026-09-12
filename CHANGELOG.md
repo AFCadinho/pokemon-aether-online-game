@@ -3,6 +3,7 @@
 ## Unreleased
 
 - AI Sparring now offers MMO OU for AI4 Scholar and AI5 Grandmaster Hard, Elite and Nightmare.
+- AI Sparring statistics now list Grandmaster difficulties in their natural order, with Intermediate before Hard.
 
 ## 0.3.75
 

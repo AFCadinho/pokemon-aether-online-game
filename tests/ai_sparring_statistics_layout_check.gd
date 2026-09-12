@@ -34,6 +34,9 @@ func _run() -> void:
 			for frame: int in range(8):
 				await process_frame
 			var list := overlay.get("pvp_ai_sparring_stats_list") as VBoxContainer
+			var intermediate_card := list.get_node("AiSparringStatsCard_ai5_intermediate_v1") as PanelContainer
+			var hard_card := list.get_node("AiSparringStatsCard_ai5_hard_v5") as PanelContainer
+			_check(intermediate_card.get_index() < hard_card.get_index(), "Intermediate appears before Hard")
 			for bot: String in ["ai4_beginner_v1", "ai5_hard_v5", "ai5_intermediate_v1", "ai5_elite_v1", "ai5_nightmare_v1"]:
 				var card := list.get_node("AiSparringStatsCard_" + bot) as PanelContainer
 				_check(card.get_global_rect().end.x <= width + 1, "Card fits viewport: " + locale + str(width))
