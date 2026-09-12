@@ -144,14 +144,6 @@ jobs:
           trap 'kill "${preview_pid}" 2>/dev/null || true' EXIT
           node tests/web_preview_browser_smoke.cjs
 
-      - name: Verify R2 CORS is ready
-        env:
-          WEB_URL: ${{ inputs.web_url }}
-          ASSET_BASE_URL: ${{ inputs.asset_base_url }}
-        run: |
-          headers="$(curl -fsSI -H "Origin: ${WEB_URL}" "${ASSET_BASE_URL}/assets/${POKEMON_HOME_ASSET_VERSION}.zip")"
-          printf '%s\n' "${headers}" | tr -d '\r' | grep -Fiqx "access-control-allow-origin: ${WEB_URL%/}"
-
       - name: Upload immutable runtime to R2
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
@@ -168,6 +160,14 @@ jobs:
           rclone copy builds/web-r2 "R2:${R2_BUCKET}/web/releases/${WEB_BUILD_ID}" \
             --exclude manifest-web.json --immutable \
             --header-upload "Cache-Control: public, max-age=31536000, immutable"
+
+      - name: Verify R2 CORS is ready
+        env:
+          WEB_URL: ${{ inputs.web_url }}
+          ASSET_BASE_URL: ${{ inputs.asset_base_url }}
+        run: |
+          headers="$(curl -fsSI -H "Origin: ${WEB_URL}" "${ASSET_BASE_URL}/web/releases/${WEB_BUILD_ID}/index.wasm")"
+          printf '%s\n' "${headers}" | tr -d '\r' | grep -Fiqx "access-control-allow-origin: ${WEB_URL%/}"
 
       - name: Publish browser sprite catalogs when absent
         env:
