@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- The Damage Calculator now lets you manually select available MMO OU catalog sets.
 - Prepared the browser version for secure, versioned delivery through Cloudflare Pages and R2, with password recovery available from browser login.
 - AI Sparring now offers MMO OU for AI4 Scholar and AI5 Grandmaster Hard, Elite and Nightmare.
 - AI Sparring statistics now list Grandmaster difficulties in their natural order, with Intermediate before Hard.
