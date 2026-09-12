@@ -5,6 +5,6 @@
   "compatibility_date": "2026-09-12",
   "vars": {
     "API_ORIGIN": "https://api.pokeaether.com",
-    "ASSET_BASE_URL": "https://updates.pokeaether.com"
+    "ASSET_BASE_URL": "https://web-assets.pokeaether.com"
   }
 }

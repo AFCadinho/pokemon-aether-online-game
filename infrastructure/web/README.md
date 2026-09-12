@@ -17,24 +17,25 @@ before that final step do not change the active browser release.
 
 One-time Cloudflare setup:
 
-1. Create a Direct Upload Pages project named `pokeaether-web`, with production
-   branch `main`, and attach `play.pokeaether.com` (or change the workflow
-   inputs and `wrangler.jsonc` together).
-2. Set the Pages production variable `API_ORIGIN=https://api.pokeaether.com`.
-   Preview deployments should point to a staging gateway and must not publish
-   the production web manifest.
-3. Attach an HTTPS custom domain such as `updates.pokeaether.com` to the
-   existing R2 bucket. Do not use the development `r2.dev` URL.
-4. Merge the read-only browser origin into the bucket's existing CORS policy.
-   `infrastructure/web/r2-cors.example.json` contains the required rule. Do not
-   overwrite unrelated rules used by desktop releases. Purge the R2 custom
+1. Use the Direct Upload Pages project `pokeaether-web`, with production branch
+   `main`, and attach `play.pokeaether.com` (or change the workflow inputs and
+   `wrangler.jsonc` together).
+2. Set `API_ORIGIN=https://api.pokeaether.com` and
+   `ASSET_BASE_URL=https://web-assets.pokeaether.com` for Pages production.
+   Preview deployments must not publish the production web manifest.
+3. Use the dedicated `pokeaether-web` R2 bucket through its HTTPS custom domain
+   `web-assets.pokeaether.com`. Do not use the development `r2.dev` URL or the
+   desktop update bucket.
+4. Apply the read-only browser CORS policy in
+   `infrastructure/web/r2-cors.example.json` to the web bucket. Do not add other
+   browser origins unless they are intentionally supported. Purge the R2 custom
    hostname cache once after changing CORS so cached objects receive the new
    headers.
 5. Add `CLOUDFLARE_API_TOKEN`, `R2_ACCOUNT_ID`, `R2_BUCKET`,
    `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY` to the GitHub
-   `web-production` environment. Protect that environment with an approval
-   rule. The Cloudflare API token needs Pages edit access; the R2 keys need
-   object read/write access to the selected bucket.
+   `web-production` environment, with `R2_BUCKET=pokeaether-web`. Protect that
+   environment with an approval rule. The Cloudflare API token needs Pages edit
+   access; the R2 keys need object read/write access to the selected bucket.
 6. Add Cloudflare rate-limiting rules for `POST /api/auth/web/login` and
    `POST /api/auth/web/signup`. Start with a managed challenge after 10 login
    attempts per minute per client and after 5 signup attempts per hour, then
