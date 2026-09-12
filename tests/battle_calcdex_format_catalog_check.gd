@@ -24,11 +24,32 @@ func _run() -> void:
 		"opponentPokemon": [{"pokemonRef": "opponent:1", "active": true, "identity": {"state": "known", "value": "Garchomp"}}],
 	})
 	_expect(requests == [["Garchomp", "pokemmo-ou"]], "PokeMMO battle must request only its own set catalog profile")
+	var mmo_set := {
+		"id": "rocky-helmet", "name": "Rocky Helmet", "item": "Rocky Helmet", "ability": "Rough Skin", "nature": "Impish",
+		"evs": {"hp": 252, "def": 252, "spe": 4}, "ivs": {}, "moves": ["Earthquake", "Dragon Claw", "Stealth Rock", "Toxic"],
+		"provenance": {"kind": "afcadinho_pokemmo", "formatId": "pokemmo-ou", "formatName": "MMO OU", "sourceUrl": "https://afcadinho.com/movesets/Garchomp"},
+	}
+	var mmo_variant := mmo_set.duplicate(true)
+	mmo_variant["id"] = "rocky-helmet-default"
+	var mmo_group := mmo_set.duplicate(true)
+	mmo_group["variants"] = [mmo_variant]
 	panel.show_sample_set_catalog_response("Garchomp", {
 		"schemaVersion": 1, "formatId": "pokemmo-ou", "engineFormatId": "pokemmo-ou-v1",
-		"catalogProfileId": "pokemmo-ou", "source": "smogon_set_catalog", "species": "Garchomp", "sets": [],
+		"catalogProfileId": "pokemmo-ou", "source": "afcadinho_pokemmo_set_catalog", "species": "Garchomp", "sets": [mmo_group],
 	})
-	_expect(panel.sample_set_error == "" and panel.sample_set_options.is_empty(), "A deliberately empty PokeMMO catalog must be valid")
+	_expect(panel.sample_set_error == "" and panel.sample_set_options.size() == 1, "The PokeMMO catalog must be available for manual selection")
+	var selector_host := VBoxContainer.new()
+	content.add_child(selector_host)
+	panel._add_sample_set_selector(selector_host)
+	var selector := selector_host.find_child("SampleSetSelector", true, false) as Button
+	_expect(selector != null and selector.text == "Current", "The MMO set selector must be visible before a choice")
+	selector.pressed.emit()
+	await process_frame
+	var set_results := panel.sample_set_search_popup.find_child("SampleSetSearchResults", true, false) as ItemList
+	_expect(set_results != null and set_results.item_count == 2 and set_results.get_item_metadata(1) == "rocky-helmet", "The MMO set must appear as a manual dropdown choice")
+	set_results.item_clicked.emit(1, Vector2.ZERO, MOUSE_BUTTON_LEFT)
+	_expect(panel.selected_sample_set_id == "rocky-helmet", "An MMO catalog set must be manually selectable")
+	_expect(panel.defender_assumptions.get("item") == "Rocky Helmet", "Selecting an MMO catalog set must apply its build")
 
 	requests.clear()
 	panel.set_knowledge_snapshot({
