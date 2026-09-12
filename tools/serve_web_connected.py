@@ -37,7 +37,29 @@ HTTP_ROUTES = {
     # Public species data needed by the battle hover card (including speed tiers).
     ("GET", "/pokemon/stats"),
     ("POST", "/auth/email-verification/confirm"),
+    ("GET", "/auth/web/boxes"), ("GET", "/auth/web/wallet"), ("PUT", "/auth/web/party"),
+    ("POST", "/auth/web/party/heal"), ("POST", "/auth/web/party/swap"), ("POST", "/auth/web/party/set-slot"),
+    ("POST", "/auth/web/pokemon/storage/move"),
+    ("POST", "/auth/web/wallet/rewards/wild-battle"), ("POST", "/auth/web/wallet/rewards/trainer-battle"),
+    ("POST", "/auth/web/mail"),
+    ("POST", "/auth/web/respawn"),
 }
+GAMEPLAY_ROUTES = tuple((method, re.compile(pattern)) for method, pattern in (
+    ("GET", r"/auth/web/boxes/\d+"), ("PATCH", r"/auth/web/boxes/\d+"),
+    ("DELETE", r"/auth/web/(?:pokemon|party)/\d+"),
+    ("POST", r"/auth/web/pokemon/\d+/(?:nickname|held-item|evolution|evs/allocate|items/use|moves/(?:learn|delete|reorder))"),
+    ("DELETE", r"/auth/web/pokemon/\d+/held-item"),
+    ("PATCH", r"/auth/web/pokemon/\d+/ball"),
+    ("GET", r"/auth/web/pokemon/\d+/moves/mentor"),
+    ("POST", r"/auth/web/inventory/items/[a-z0-9-]+/(?:use|discard)"),
+    ("GET", r"/auth/web/markets/[a-z0-9_-]+"),
+    ("POST", r"/auth/web/markets/[a-z0-9_-]+/purchase"),
+    ("POST", r"/auth/web/markets/standard/sell"),
+    ("GET", r"/auth/web/trainers/[a-zA-Z0-9_-]+/progress"),
+    ("POST", r"/auth/web/trainers/[a-zA-Z0-9_-]+/rematch"),
+    ("POST", r"/auth/web/mail/\d+/read"),
+    ("DELETE", r"/auth/web/mail/\d+"),
+))
 AI_BATTLE_ROUTE = re.compile(
     r"^/battle/[A-Za-z0-9-]{1,128}/(?:state|lead|choice|choice-and-resolve|npc/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex/v1/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$"
 )
@@ -47,9 +69,6 @@ HTTP_ROUTE_PREFIXES = (
 	("GET", "/game/pokedex/"), ("GET", "/game/items/"),
 	("GET", "/game/skills"),
 	("GET", "/game/donator-store"), ("POST", "/game/donator-store/"),
-	("GET", "/game/guilds"), ("POST", "/game/guilds"), ("PUT", "/game/guilds/"),
-	("GET", "/game/guild-invitations"), ("POST", "/game/guild-invitations"),
-	("GET", "/game/guild-notifications"),
 	("GET", "/battle/pvp/training/ai/live/"),
 	("GET", "/battle/pvp/rooms/"), ("POST", "/battle/pvp/rooms/"),
 	("GET", "/trainers/"),
@@ -63,7 +82,7 @@ HTTP_ROUTE_PREFIXES = (
     ("GET", "/auth/web/world/encounter-modifiers"),
     ("POST", "/auth/web/npc-rewards/"),
     ("POST", "/auth/web/npc-quest-item-turn-ins/"),
-    ("GET", "/auth/web/mail"), ("POST", "/auth/web/mail"),
+    ("GET", "/auth/web/mail"),
     ("GET", "/auth/web/socials"), ("POST", "/auth/web/socials"),
     ("PUT", "/auth/web/socials"), ("DELETE", "/auth/web/socials"),
     ("POST", "/auth/web/wild-battles/"),
@@ -111,16 +130,19 @@ def create_app(upstream, build=None, *, transport=None):
             response = await call_next(request)
         response.headers.update(SECURITY_HEADERS)
         if request.url.path.startswith("/pokemon-assets/gen5/") and response.status_code == 200:
-            response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+            # Local packs can change without their URL changing. Production
+            # uses versioned immutable R2 URLs; preview must revalidate.
+            response.headers["Cache-Control"] = "no-cache"
         return response
 
     @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"])
     async def proxy(request: Request, path: str):
         route = "/" + path
         allowed = (request.method, route) in HTTP_ROUTES or any(
-            request.method == method and route.startswith(prefix)
+            request.method == method and (route.startswith(prefix) if prefix.endswith("/") else route == prefix or route.startswith(prefix + "/"))
             for method, prefix in HTTP_ROUTE_PREFIXES
         )
+        allowed = allowed or any(request.method == method and pattern.fullmatch(route) for method, pattern in GAMEPLAY_ROUTES)
         if route == "/auth/web/world" and request.method in {"GET", "PUT"}:
             allowed = True
         if request.method == "GET" and route.startswith("/battle/pvp/training/ai/teams/"):
@@ -134,7 +156,7 @@ def create_app(upstream, build=None, *, transport=None):
         # payload, so the request was rejected by the local proxy before it
         # reached the account-authorized battle service.  Keep a finite
         # browser boundary while allowing the normal client contract.
-        max_request_bytes = 128 * 1024 if route.startswith("/battle/") else 16 * 1024
+        max_request_bytes = 128 * 1024 if route.startswith("/battle/") or route in {"/auth/web/party", "/auth/web/party/battle-state"} else 16 * 1024
         body = bytearray()
         async for chunk in request.stream():
             body.extend(chunk)

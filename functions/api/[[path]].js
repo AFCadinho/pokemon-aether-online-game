@@ -14,14 +14,18 @@ const HTTP_ROUTES = new Set([
   'POST /battle/trainer', 'GET /battle/trainer/resume',
   'POST /battle/pvp/rooms', 'GET /pokemon/stats',
   'POST /auth/email-verification/confirm',
+  'GET /auth/web/boxes', 'GET /auth/web/wallet', 'PUT /auth/web/party',
+  'POST /auth/web/party/heal', 'POST /auth/web/party/swap', 'POST /auth/web/party/set-slot',
+  'POST /auth/web/pokemon/storage/move',
+  'POST /auth/web/wallet/rewards/wild-battle', 'POST /auth/web/wallet/rewards/trainer-battle',
+  'POST /auth/web/mail',
+  'POST /auth/web/respawn',
 ]);
 
 const HTTP_PREFIXES = [
   ['GET', '/game/pokedex/'], ['GET', '/game/items/'], ['GET', '/game/skills'],
   ['GET', '/game/donator-store'], ['POST', '/game/donator-store/'],
-  ['GET', '/game/guilds'], ['POST', '/game/guilds'], ['PUT', '/game/guilds/'],
-  ['GET', '/game/guild-invitations'], ['POST', '/game/guild-invitations'],
-  ['GET', '/game/guild-notifications'], ['GET', '/battle/pvp/training/ai/live/'],
+  ['GET', '/battle/pvp/training/ai/live/'],
   ['GET', '/battle/pvp/training/ai/teams/'],
   ['GET', '/battle/pvp/rooms/'], ['POST', '/battle/pvp/rooms/'],
   ['GET', '/trainers/'], ['GET', '/npcs/'], ['GET', '/overworld-pokemon/'],
@@ -31,7 +35,7 @@ const HTTP_PREFIXES = [
   ['GET', '/auth/web/world/encounter-modifiers'],
   ['POST', '/auth/web/npc-rewards/'],
   ['POST', '/auth/web/npc-quest-item-turn-ins/'],
-  ['GET', '/auth/web/mail'], ['POST', '/auth/web/mail'],
+  ['GET', '/auth/web/mail'],
   ['GET', '/auth/web/socials'], ['POST', '/auth/web/socials'],
   ['PUT', '/auth/web/socials'], ['DELETE', '/auth/web/socials'],
   ['POST', '/auth/web/wild-battles/'], ['POST', '/auth/web/transit/'],
@@ -43,10 +47,27 @@ const HTTP_PREFIXES = [
 
 const AI_BATTLE_ROUTE = /^\/battle\/[A-Za-z0-9-]{1,128}\/(?:state|lead|choice|choice-and-resolve|npc\/(?:lead|choice)|pass-turn|pokemon-info|damage-calc|calcdex\/v1\/(?:snapshot|open|matchup|smart-matchup|inferred-matchup|set-suggestions))$/;
 const WEBSOCKETS = new Set(['/ws/chat', '/ws/world-presence', '/ws/pvp-battle']);
+const GAMEPLAY_ROUTES = [
+  ['GET', /^\/auth\/web\/boxes\/\d+$/], ['PATCH', /^\/auth\/web\/boxes\/\d+$/],
+  ['DELETE', /^\/auth\/web\/(?:pokemon|party)\/\d+$/],
+  ['POST', /^\/auth\/web\/pokemon\/\d+\/(?:nickname|held-item|evolution|evs\/allocate|items\/use|moves\/(?:learn|delete|reorder))$/],
+  ['DELETE', /^\/auth\/web\/pokemon\/\d+\/held-item$/],
+  ['PATCH', /^\/auth\/web\/pokemon\/\d+\/ball$/],
+  ['GET', /^\/auth\/web\/pokemon\/\d+\/moves\/mentor$/],
+  ['POST', /^\/auth\/web\/inventory\/items\/[a-z0-9-]+\/(?:use|discard)$/],
+  ['GET', /^\/auth\/web\/markets\/[a-z0-9_-]+$/],
+  ['POST', /^\/auth\/web\/markets\/[a-z0-9_-]+\/purchase$/],
+  ['POST', /^\/auth\/web\/markets\/standard\/sell$/],
+  ['GET', /^\/auth\/web\/trainers\/[a-zA-Z0-9_-]+\/progress$/],
+  ['POST', /^\/auth\/web\/trainers\/[a-zA-Z0-9_-]+\/rematch$/],
+  ['POST', /^\/auth\/web\/mail\/\d+\/read$/],
+  ['DELETE', /^\/auth\/web\/mail\/\d+$/],
+];
 
 export function isAllowedApiRoute(method, path) {
   const normalizedMethod = method.toUpperCase();
   if (HTTP_ROUTES.has(`${normalizedMethod} ${path}`)) return true;
+  if (GAMEPLAY_ROUTES.some(([verb, pattern]) => verb === normalizedMethod && pattern.test(path))) return true;
   if (normalizedMethod === 'GET' && WEBSOCKETS.has(path)) return true;
   if (AI_BATTLE_ROUTE.test(path) && ['GET', 'POST'].includes(normalizedMethod)) return true;
   return HTTP_PREFIXES.some(([allowedMethod, prefix]) => {
@@ -83,7 +104,7 @@ export async function onRequest(context) {
     });
   }
   const contentLength = Number(context.request.headers.get('content-length') || 0);
-  const largeBattlePayload = backendPath.startsWith('/battle/');
+  const largeBattlePayload = backendPath.startsWith('/battle/') || ['/auth/web/party', '/auth/web/party/battle-state'].includes(backendPath);
   const maximumBytes = largeBattlePayload ? 128 * 1024 : 16 * 1024;
   if (contentLength > maximumBytes) {
     return Response.json({ detail: { code: 'request_too_large' } }, {

@@ -22,7 +22,7 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         pass
 
     def end_headers(self):
-        cache_value = 'public, max-age=31536000, immutable' if urlsplit(self.path).path.startswith('/pokemon-assets/gen5/') else 'no-store'
+        cache_value = 'no-cache' if urlsplit(self.path).path.startswith('/pokemon-assets/gen5/') else 'no-store'
         self.send_header('Cache-Control', cache_value)
         self.send_header('X-Content-Type-Options', 'nosniff')
         self.send_header('Referrer-Policy', 'no-referrer')

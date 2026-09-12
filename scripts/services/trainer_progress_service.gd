@@ -107,7 +107,7 @@ func _request_progress(trainer_id: String, begin_daily_rematch: bool) -> Diction
 		url = base_url + TRAINER_REMATCH_ENDPOINT % normalized_id.uri_encode()
 		method = HTTPClient.METHOD_POST
 		headers = GatewayApiConfig.get_json_headers()
-	var error := request.request(url, headers, method, "{}" if begin_daily_rematch else "")
+	var error := request.request(WebRuntime.gameplay_url(url), headers, method, "{}" if begin_daily_rematch else "")
 	if error != OK:
 		request.queue_free()
 		return {
