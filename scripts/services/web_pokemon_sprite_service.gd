@@ -4,6 +4,8 @@ const ASSET_BASE := "/pokemon-assets/gen5"
 const IDLE_ANIMATION := "idle"
 const MAX_RESPONSE_BYTES := 4 * 1024 * 1024
 const CACHE_LIMIT := 96
+const DOWNLOAD_ATTEMPTS := 3
+const DOWNLOAD_RETRY_SECONDS := 0.35
 
 var _cache: Dictionary = {}
 
@@ -62,10 +64,23 @@ func load_frames(asset_id: String, side: String, is_shiny: bool = false) -> Dict
 
 
 func _download(url: String) -> Dictionary:
+	for attempt: int in range(DOWNLOAD_ATTEMPTS):
+		var result := await _download_once(url)
+		if not result.is_empty():
+			return result
+		if attempt + 1 < DOWNLOAD_ATTEMPTS:
+			await get_tree().create_timer(DOWNLOAD_RETRY_SECONDS).timeout
+	return {}
+
+
+func _download_once(url: String) -> Dictionary:
 	var request := HTTPRequest.new()
 	request.timeout = 12.0
 	add_child(request)
-	var start_error := request.request(url, PackedStringArray(["Accept: application/json,image/png"]), HTTPClient.METHOD_GET)
+	# Let the browser select its normal GET headers. A custom Accept header adds
+	# no value here and can trigger an unnecessary R2 CORS preflight in stricter
+	# browser/network combinations.
+	var start_error := request.request(url, PackedStringArray(), HTTPClient.METHOD_GET)
 	if start_error != OK:
 		request.queue_free()
 		return {}
@@ -88,6 +103,12 @@ func _build_frames(metadata: Dictionary, image: Image) -> SpriteFrames:
 	result.add_animation(IDLE_ANIMATION)
 	result.set_animation_loop(IDLE_ANIMATION, true)
 	result.set_animation_speed(IDLE_ANIMATION, maxf(float(metadata.get("speed", 1.0)), 0.01))
+	# Keep one GPU texture per downloaded sheet. Creating a separate ImageTexture
+	# for every frame is especially costly in WebGL (some species have 96+ frames)
+	# and can leave the immediate HOME fallback visible while textures are built.
+	var sheet_texture := ImageTexture.create_from_image(image)
+	if sheet_texture == null:
+		return null
 	for definition_value: Variant in definitions as Array:
 		if not (definition_value is Dictionary):
 			continue
@@ -99,7 +120,9 @@ func _build_frames(metadata: Dictionary, image: Image) -> SpriteFrames:
 		)
 		if region.size.x <= 0 or region.size.y <= 0 or not Rect2i(Vector2i.ZERO, image.get_size()).encloses(region):
 			continue
-		var texture := ImageTexture.create_from_image(image.get_region(region))
+		var texture := AtlasTexture.new()
+		texture.atlas = sheet_texture
+		texture.region = Rect2(region)
 		result.add_frame(IDLE_ANIMATION, texture, maxf(float(definition.get("duration", 1.0)), 0.01))
 	return result if result.get_frame_count(IDLE_ANIMATION) > 0 else null
 
