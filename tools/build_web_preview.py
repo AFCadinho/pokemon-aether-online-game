@@ -63,15 +63,18 @@ def main():
     output = ROOT / 'builds/web'
     output.mkdir(parents=True, exist_ok=True)
     console_log = output / 'export-console.log'
-    # Godot treats any imported file below the project as an exportable
-    # resource, even when an export exclude_filter names that directory.
-    # Keep local Playwright/Wrangler packages out of the PCK without requiring
-    # developers to remove their installed tooling before every build.
-    node_modules = ROOT / 'node_modules'
-    godot_ignore = node_modules / '.gdignore'
-    created_ignore = node_modules.is_dir() and not godot_ignore.exists()
-    if created_ignore:
-        godot_ignore.write_text('', encoding='utf-8')
+    # Godot treats any previously imported file below the project as an
+    # exportable resource, even when an export exclude_filter names that
+    # directory. Keep installed tooling and generated build environments out
+    # of the PCK without requiring developers to remove local state first.
+    created_ignores = []
+    for ignored_root in (ROOT / 'node_modules', ROOT / 'builds'):
+        if not ignored_root.is_dir():
+            continue
+        godot_ignore = ignored_root / '.gdignore'
+        if not godot_ignore.exists():
+            godot_ignore.write_text('', encoding='utf-8')
+            created_ignores.append(godot_ignore)
     try:
         with console_log.open('w') as console:
             result = subprocess.run([
@@ -79,7 +82,7 @@ def main():
                 'Web Local Preview', str(output / 'index.html'),
             ], stdout=console, stderr=subprocess.STDOUT)
     finally:
-        if created_ignore:
+        for godot_ignore in created_ignores:
             godot_ignore.unlink(missing_ok=True)
     if result.returncode != 0:
         tail = console_log.read_text(errors='replace').splitlines()[-80:]

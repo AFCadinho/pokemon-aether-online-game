@@ -99,6 +99,20 @@ configuration that permits the production host.
 
 ## Build and inspect
 
+For normal local use, run the convenience launcher from the frontend checkout:
+
+```sh
+./run_web_local.sh
+```
+
+It builds the browser client, opens the local URL and automatically uses the
+connected preview when the integration gateway is reachable on
+`http://127.0.0.1:8000`. Otherwise it starts the offline preview. Use
+`./run_web_local.sh --connected` to require accounts and online gameplay,
+`--offline` for the standalone preview, or `--skip-build` to reuse the current
+export. The connected mode creates a pinned virtual environment below
+`builds/`; it never targets production.
+
 From the `game` workspace, for the assigned slot (example: slot-b):
 
 ```sh
