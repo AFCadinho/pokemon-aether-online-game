@@ -45,6 +45,11 @@ func _init() -> void:
 	_check(shell.contains("window.pokeaetherBrowserAudio"), "web shell exposes native browser playback when Godot's mixer is silent")
 	_check(shell.contains("native-music-playing"), "web shell records native music playback")
 	_check(shell.contains("browser-audio/"), "web shell resolves raw exported browser audio files")
+	_check(shell.contains("if (webRelease) nativeMusic.crossOrigin = 'anonymous';")
+		and shell.contains("if (webRelease) effect.crossOrigin = 'anonymous';"),
+		"R2-hosted browser audio opts into CORS under cross-origin isolation")
+	_check(shell.contains("config.mainPack = runtimeExecutable + '.pck'"),
+		"production web releases load their large Godot pack from immutable R2 storage")
 	var bridge_source := FileAccess.get_file_as_string("res://scripts/services/web_audio_bridge.gd")
 	_check(bridge_source.contains("play_music") and bridge_source.contains("play_sfx"), "web audio bridge supports music and effects")
 	_check(music_manager_source.contains("WebAudioBridge.play_music"), "web music uses the native browser bridge")

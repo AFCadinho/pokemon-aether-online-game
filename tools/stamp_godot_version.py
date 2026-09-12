@@ -13,6 +13,10 @@ def main() -> None:
         "--build-id",
         help="Optional immutable client build identifier to write to application/config/build_id.",
     )
+    parser.add_argument(
+        "--web-build-id",
+        help="Optional immutable browser build identifier to write to application/config/web_build_id.",
+    )
     parser.add_argument("--export-presets", type=Path, help="Optional path to export_presets.cfg.")
     args = parser.parse_args()
 
@@ -32,6 +36,13 @@ def main() -> None:
             "application",
             "config/build_id",
             _quote(args.build_id),
+        )
+    if args.web_build_id is not None:
+        _replace_or_insert_project_setting(
+            project_path,
+            "application",
+            "config/web_build_id",
+            _quote(args.web_build_id),
         )
 
     if args.export_presets is not None:

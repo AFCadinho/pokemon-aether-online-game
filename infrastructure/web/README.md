@@ -1,4 +1,65 @@
-# Local browser build
+# Browser build
+
+## Production delivery on Cloudflare
+
+The production release is split deliberately. Cloudflare Pages serves the
+small HTML and JavaScript loader and its `/api/*` Function. The Godot PCK,
+WebAssembly runtime, browser audio and versioned Gen 5 sprite catalogs are
+served from the existing R2 bucket through its HTTPS custom domain. Pages has
+a 25 MiB per-file limit, so it cannot contain the complete Godot export.
+
+The manual `Deploy Browser Game to Cloudflare` workflow builds and validates
+both halves. It uploads immutable R2 objects first, deploys Pages second, checks
+the public URLs and publishes `manifest-web.json` last. Leave
+`publish_manifest` disabled for the first staging deployment. Enabling it opens
+the exact build through the existing gateway client-version gate. Failed runs
+before that final step do not change the active browser release.
+
+One-time Cloudflare setup:
+
+1. Create a Direct Upload Pages project named `pokeaether-web`, with production
+   branch `main`, and attach `play.pokeaether.com` (or change the workflow
+   inputs and `wrangler.jsonc` together).
+2. Set the Pages production variable `API_ORIGIN=https://api.pokeaether.com`.
+   Preview deployments should point to a staging gateway and must not publish
+   the production web manifest.
+3. Attach an HTTPS custom domain such as `updates.pokeaether.com` to the
+   existing R2 bucket. Do not use the development `r2.dev` URL.
+4. Merge the read-only browser origin into the bucket's existing CORS policy.
+   `infrastructure/web/r2-cors.example.json` contains the required rule. Do not
+   overwrite unrelated rules used by desktop releases. Purge the R2 custom
+   hostname cache once after changing CORS so cached objects receive the new
+   headers.
+5. Add `CLOUDFLARE_API_TOKEN`, `R2_ACCOUNT_ID`, `R2_BUCKET`,
+   `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY` to the GitHub
+   `web-production` environment. Protect that environment with an approval
+   rule. The Cloudflare API token needs Pages edit access; the R2 keys need
+   object read/write access to the selected bucket.
+6. Add Cloudflare rate-limiting rules for `POST /api/auth/web/login` and
+   `POST /api/auth/web/signup`. Start with a managed challenge after 10 login
+   attempts per minute per client and after 5 signup attempts per hour, then
+   tune from observed legitimate traffic. Keep the backend's account gates and
+   audit trail authoritative.
+
+The Pages Function forwards only the explicit browser route catalog and rejects
+desktop ranked and internal routes. It requires an HTTPS API origin, refuses a
+self-referential origin, does not follow upstream redirects and retains the
+bounded request sizes used by the local connected preview. WebSocket upgrades
+for chat, world presence and PvP-room transport pass through the same origin.
+
+Before setting `publish_manifest=true`, verify Chrome, Firefox and Safari on
+the public custom domain. Complete registration and email verification, world
+entry and transitions, a wild battle including catch/run, a trainer battle, a
+complete AI Sparring battle, refresh during each state, logout, session expiry,
+background-tab reconnect and simultaneous desktop/browser use. Record cold and
+warm load time, transferred bytes, peak memory and API/WebSocket failures. The
+current automated Chromium fixture remains a focused regression check and does
+not replace this release-candidate matrix.
+
+Rollback is manifest-based: republish the retained previous
+`manifest-web.json`, then verify `/auth/web/login` accepts its build ID. Pages
+deployments can also be rolled back in Cloudflare. Immutable R2 releases remain
+available for rollback and should only be pruned by a separate retention task.
 
 This is a real WebAssembly export of the existing Godot 4.6 client, using the
 `Web Local Preview` preset and the Compatibility renderer only for web. Desktop
@@ -14,7 +75,7 @@ competitive guild actions, Aether Exchange and My Powers require the client.
 
 Phase 3 connects real shared accounts and a bounded browser-world position through dedicated `/auth/web` endpoints.
 Registration retains the existing legal acceptance, registration toggle and
-email-verification flow. Login and refresh open an account card, not the world.
+email-verification flow. Login and refresh restore the bounded browser world.
 Remembered sessions use browser localStorage; otherwise sessionStorage retains
 the session only in this tab (including refresh). Logout clears both. Only the
 token, expiry and remember choice are stored, never a password or account profile.
@@ -23,14 +84,17 @@ preserve storage; expired/revoked/forbidden sessions clear it.
 
 The server issues `session_type=web` independently of client headers. Web login
 rotates only other web sessions; desktop login rotates only desktop sessions.
-Web logout does not cancel desktop queues. All existing authenticated gameplay
-and ranked routes reject web tokens by default. No character position is read or
-written; existing characters outside the future demo remain where they were.
+Web logout does not cancel desktop queues. Existing desktop-only and ranked
+routes reject web tokens by default. Browser movement uses the canonical
+character state through server-owned map and transition allowlists; an existing
+character outside the demo remains there and is refused browser-world entry.
 Background trade, guild notifications, thieving and Rock Smash discovery are disabled on web.
 
 The client uses the page's origin plus `/api`, never the desktop production
-fallback. News polling and password-reset links remain disabled. The shell only
-starts on loopback hosts. This is not the complete MMO demo or a public release.
+fallback. Pages proxies the approved API/WebSocket routes and same-origin news;
+password recovery opens the existing HTTPS account flow. An unconfigured export
+only starts on loopback. `package_web_release.py` injects the immutable release
+configuration that permits the production host.
 
 ## Build and inspect
 
@@ -41,7 +105,7 @@ ops/worktrees/slot-env slot-b -- python3 .worktrees/slot-b/frontend/tools/build_
 python3 .worktrees/slot-b/frontend/tools/serve_web_preview.py
 ```
 
-Open `http://127.0.0.1:8060` and click **Open browser preview**. Use
+Open `http://127.0.0.1:8060` and click **Open browser game**. Use
 `--port 8061` if that port is occupied. The server binds only to 127.0.0.1, serves
 only the generated export, and does not log request URLs or bodies.
 
@@ -141,34 +205,24 @@ Backend focused suites: `tests.test_web_sessions`,
 
 ### Remaining release requirements
 
-- The web build has a separate `web-preview-2` ID (overridable by
-  `application/config/web_build_id`) and uses the `web` manifest platform.
-  No web manifest has been published. The existing gateway manifest-unavailable
-  fail-open policy is unchanged; publish and verify an immutable web manifest
-  before a release, with reload-oriented update messaging.
+- The web build uses a separate immutable build ID and the `web` manifest
+  platform. The deployment workflow creates the manifest and publishes it only
+  after R2, Pages and public URL checks pass. No production web manifest is
+  published merely by merging this source.
 - Browser storage can be unavailable or cleared by privacy settings. Tokens are
   JavaScript-readable, as required by this Godot bearer client. Before public
   hosting, review XSS/CSP, HTTPS, session design and edge auth rate limits.
-- Registration uses the existing email URLs and operational email settings.
-  Real email delivery, password reset, browser compatibility and hosting are
-  later explicit integration/release checks, not silently enabled here.
+- Registration and recovery use the existing email URLs and operational email
+  settings. Real delivery and the browser release-candidate matrix remain
+  explicit checks before the manifest is opened to players.
 
-## Following milestones
+## Release boundary
 
-1. **Connected local alpha (phase 2, implemented):** server-issued web sessions,
-   version platform, same-origin proxy, registration and account continuity.
-2. **World demo:** Pallet, Route 1, Viridian and their necessary interiors;
-   enforce the allowed destinations server-side on all travel/respawn paths.
-   Existing desktop characters outside the area must retain their real position.
-3. **AI Sparring:** deliver Gen 5 sprites on demand with bounded caches,
-   concurrency limits, missing-sprite fallback and complete form coverage; test
-   a battle through to its recorded result. Keep the full team builder.
-4. **Social:** explicitly authorize shared chat, reconnect and background-tab
-   behavior while retaining server-side ranked exclusion. Keep sparring teams
-   separate from MMO rewards.
-5. **Release candidate:** selected map/asset manifest audit, compressed load size,
-   memory/performance measurements, Firefox and Safari checks, production hosting
-   design and an explicit promotion/deployment decision.
+Accounts, the bounded world, AI Sparring, on-demand Gen 5 sprites and browser
+social access are implemented. Production activation still requires the
+one-time Cloudflare configuration and public release-candidate checks above.
+Expanding the world boundary or enabling ranked play is a separate product and
+security decision.
 
 Reference: [Godot 4.6 web export documentation](https://docs.godotengine.org/en/4.6/tutorials/export/exporting_for_web.html).
 WebSocket proxy API: [websockets 16 client documentation](https://websockets.readthedocs.io/en/16.1/reference/asyncio/client.html).

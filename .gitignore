@@ -3,6 +3,7 @@
 
 # Local export/build output.
 /builds/*
+/node_modules/
 
 # Large generated Pokemon sprite assets are bundled outside git for builds.
 /assets/sprites/pokemon/

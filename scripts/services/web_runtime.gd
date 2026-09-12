@@ -29,6 +29,17 @@ static func api_base_url() -> String:
 	return origin + "/api"
 
 
+static func web_release_config() -> Dictionary:
+	if not OS.has_feature("web"):
+		return {}
+	var value: Variant = JavaScriptBridge.eval("window.POKEAETHER_WEB_RELEASE || null", true)
+	if value == null:
+		return {}
+	var json_value: Variant = JavaScriptBridge.eval("JSON.stringify(window.POKEAETHER_WEB_RELEASE)", true)
+	var parsed: Variant = JSON.parse_string(str(json_value))
+	return parsed if parsed is Dictionary else {}
+
+
 static func http_headers(headers: PackedStringArray) -> PackedStringArray:
 	if not OS.has_feature("web"):
 		return headers

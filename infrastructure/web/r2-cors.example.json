@@ -1,0 +1,13 @@
+{
+  "rules": [
+    {
+      "allowed": {
+        "origins": ["https://play.pokeaether.com"],
+        "methods": ["GET", "HEAD"],
+        "headers": ["Range"]
+      },
+      "exposeHeaders": ["ETag", "Content-Length", "Content-Range"],
+      "maxAgeSeconds": 7200
+    }
+  ]
+}

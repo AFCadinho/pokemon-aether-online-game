@@ -63,11 +63,24 @@ def main():
     output = ROOT / 'builds/web'
     output.mkdir(parents=True, exist_ok=True)
     console_log = output / 'export-console.log'
-    with console_log.open('w') as console:
-        result = subprocess.run([
-            args.godot, '--headless', '--log-file', str(output / 'export.log'), '--path', str(ROOT), '--export-release',
-            'Web Local Preview', str(output / 'index.html'),
-        ], stdout=console, stderr=subprocess.STDOUT)
+    # Godot treats any imported file below the project as an exportable
+    # resource, even when an export exclude_filter names that directory.
+    # Keep local Playwright/Wrangler packages out of the PCK without requiring
+    # developers to remove their installed tooling before every build.
+    node_modules = ROOT / 'node_modules'
+    godot_ignore = node_modules / '.gdignore'
+    created_ignore = node_modules.is_dir() and not godot_ignore.exists()
+    if created_ignore:
+        godot_ignore.write_text('', encoding='utf-8')
+    try:
+        with console_log.open('w') as console:
+            result = subprocess.run([
+                args.godot, '--headless', '--log-file', str(output / 'export.log'), '--path', str(ROOT), '--export-release',
+                'Web Local Preview', str(output / 'index.html'),
+            ], stdout=console, stderr=subprocess.STDOUT)
+    finally:
+        if created_ignore:
+            godot_ignore.unlink(missing_ok=True)
     if result.returncode != 0:
         tail = console_log.read_text(errors='replace').splitlines()[-80:]
         raise RuntimeError('Godot web export failed:\n' + '\n'.join(tail))
@@ -84,6 +97,7 @@ def main():
     required_markers = (
         b'generated/tiled_visuals/route_1/route_1.visual.tscn',
         b'assets/sprites/pokemon/pokemon_home/Pikachu.png',
+        b'assets/sprites/pokemon/pokemon_home_shiny/pikachu.png',
         b'lugia_theme_lofi.ogg-2fdce23a90553d794177dfc95f259e8f.oggvorbisstr',
         b'assets/music/overworld/kanto/towns/pallet_town.ogg',
         b'assets/music/overworld/kanto/routes/route1.ogg',
@@ -92,6 +106,7 @@ def main():
         b'assets/music/battle/trainer/Kalos Trainer Battle.ogg',
     )
     forbidden_markers = (
+        b'node_modules/playwright-core/',
         b'assets/sprites/pokemon/gen5/front/pikachu/sheet.png.import',
         b'generated/tiled_visuals/pewter_city/pewter_city.visual.tscn.remap',
     )

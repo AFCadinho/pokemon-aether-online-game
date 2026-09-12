@@ -47,6 +47,9 @@ class PreviewHandler(SimpleHTTPRequestHandler):
             self._json(403, {'error': 'Local preview only'}, head)
             return
         path = unquote(urlsplit(self.path).path)
+        if path == '/news.json':
+            self._json(200, {'items': []}, head)
+            return
         if path.startswith('/pokemon-assets/gen5/'):
             relative = path.removeprefix('/pokemon-assets/gen5/')
             target = (POKEMON_ASSET_ROOT / relative).resolve()
