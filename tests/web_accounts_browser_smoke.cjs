@@ -35,12 +35,18 @@ const assert = require('node:assert/strict');
   const browser = await chromium.launch({ executablePath: process.env.POKEAETHER_CHROME_PATH || undefined, headless: true, args: ['--enable-unsafe-swiftshader'] });
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   let presencePositions = 0;
+  let lastPresenceMapId = '';
+  let lastPresenceAppearance = {};
+  const presenceAppearances = [];
   await context.routeWebSocket('**/api/ws/world-presence*', socket => {
     socket.onMessage(raw => {
       const message = JSON.parse(raw);
       if (message.type === 'ping') socket.send(JSON.stringify({type: 'pong'}));
       if (message.type === 'position') {
         presencePositions += 1;
+        lastPresenceMapId = message.mapId;
+        lastPresenceAppearance = message.appearance || {};
+        presenceAppearances.push(lastPresenceAppearance);
         socket.send(JSON.stringify({type: 'snapshot', rosterRevision: presencePositions, players: [
           {userId: 1001, username: 'Native Fixture', mapId: message.mapId, position: {x: message.position.x + 64, y: message.position.y}, gender: 'male'},
           {userId: 1002, username: 'Browser Fixture', mapId: message.mapId, position: {x: message.position.x - 64, y: message.position.y}, gender: 'female'},
@@ -99,6 +105,7 @@ const assert = require('node:assert/strict');
     await page.getByText('Account created. Check your email', { exact: false }).waitFor();
     await page.screenshot({ path: path.join(output, 'registration.png') });
     assert.equal((await request({ command: 'verify_test_email' })).status, 200);
+    assert.equal((await request({ command: 'prepare_custom_exit_state' })).status, 200);
     await page.getByRole('button', { name: 'Back to login' }).click();
     await page.mouse.click(600, 494); // Return focus to the Godot username field.
     await page.screenshot({ path: path.join(output, 'login.png') });
@@ -128,6 +135,15 @@ const assert = require('node:assert/strict');
     assert(api.some(item => item.path === '/api/auth/web/world/story' && item.status === 200), 'shared story loads through the browser boundary');
 		assert(api.some(item => item.path.startsWith('/api/npcs/') && item.status === 200), 'demo NPC metadata really loads');
 		assert(presencePositions > 0, 'browser publishes its world position through the websocket');
+		assert(presenceAppearances.some(value => value.top === 'Adinho_Shirt'), `browser publishes its canonical custom outfit to native clients: ${JSON.stringify(presenceAppearances)}`);
+		await page.keyboard.press('ArrowDown');
+		await waitForApi(item => item.path === '/api/auth/web/world/transitions/kanto_players_house__to_pallet_town/enter' && item.status === 200, 30000);
+		const transitionDeadline = Date.now() + 30000;
+		while (lastPresenceMapId !== 'kanto_pallet_town') {
+			assert(Date.now() < transitionDeadline, 'browser must open Pallet Town and publish its new location');
+			await page.waitForTimeout(100);
+		}
+		await page.screenshot({ path: path.join(output, 'world-after-house-exit.png') });
 		await page.mouse.click(207, 72); // Open the browser PvP menu.
 		await page.waitForTimeout(500);
 		await page.mouse.click(330, 296); // Choose AI Sparring.
@@ -158,7 +174,7 @@ const assert = require('node:assert/strict');
     assert.deepEqual(external, []);
     assert(!api.some(item => item.path === '/api/game/player-position' && item.status < 400), 'desktop position endpoint is never used');
 		assert(!errors.some(item => item.includes('generated/tiled_visuals')), 'browser map resources load without runtime errors');
-		fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify({ api, errors, external, pokemonAssets, presencePositions, registration: true, world: true, aiSparringStarted: true, aiTurnSubmitted: true }, null, 2));
+		fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify({ api, errors, external, pokemonAssets, presencePositions, lastPresenceMapId, lastPresenceAppearance, registration: true, world: true, houseExit: true, aiSparringStarted: true, aiTurnSubmitted: true }, null, 2));
 		console.log('web_accounts_browser_smoke: PASS (registration, login, world presence, Gen5 sprites, AI Sparring start and turn)');
   } finally {
 		closing = true;
