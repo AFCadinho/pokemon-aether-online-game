@@ -23,6 +23,8 @@ class PackageWebReleaseTests(unittest.TestCase):
         self.assertIn('deadline=$((SECONDS + 180))', source)
         self.assertIn('grep -Fq "${WEB_BUILD_ID}" "${public_index}"', source)
         self.assertIn('curl --retry 6 --retry-all-errors --retry-delay 2', source)
+        self.assertIn('${WEB_URL}/pokemon-assets/gen5/${POKEMON_GEN5_FRONT_ASSET_VERSION}/pikachu/animation.json', source)
+        self.assertIn('${WEB_URL}/pokemon-assets/gen5/${POKEMON_GEN5_FRONT_ASSET_VERSION}/pikachu/sheet.png', source)
 
     def test_browser_uses_the_same_four_gen5_releases_as_desktop(self):
         import re
@@ -64,6 +66,9 @@ class PackageWebReleaseTests(unittest.TestCase):
             html = (pages / 'index.html').read_text(encoding='utf-8')
             self.assertIn('https://assets.example.test', html)
             self.assertIn('build-123', html)
+            self.assertIn('https://play.example.test/pokemon-assets/gen5/front-v1', html)
+            self.assertIn('https://play.example.test/pokemon-assets/gen5/back-v1', html)
+            self.assertNotIn('https://assets.example.test/web/assets/front-v1', html)
             self.assertFalse((pages / 'index.pck').exists())
             self.assertTrue((r2 / 'index.pck').is_file())
             release = json.loads((r2 / 'web-release.json').read_text(encoding='utf-8'))

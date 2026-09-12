@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser battles now load their animated Gen 5 Pokémon sprites through the game origin, preventing the Pokémon HOME placeholders from remaining visible when browser cross-origin handling rejects an otherwise valid R2 response.
+
 - Available Wild, PvE and PvP Battle Replays now show the same sharing action as AI Sparring replays.
 
 - Wild Battle Replays now show the Ball animation and successful catch instead of stopping abruptly on the final turn.
