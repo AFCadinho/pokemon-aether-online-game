@@ -16,6 +16,10 @@ class PackageWebReleaseTests(unittest.TestCase):
         self.assertIn('${SOURCE_ASSET_BASE_URL}/assets/${POKEMON_HOME_ASSET_VERSION}.zip', source)
         self.assertIn('${SOURCE_ASSET_BASE_URL}/assets/${version}.zip', source)
         self.assertEqual(source.count('unzip -oq /tmp/'), 3)
+        upload = source.index('- name: Upload immutable runtime to R2')
+        cors = source.index('- name: Verify R2 CORS is ready')
+        self.assertGreater(cors, upload)
+        self.assertIn('${ASSET_BASE_URL}/web/releases/${WEB_BUILD_ID}/index.wasm', source)
 
     def test_browser_uses_the_same_four_gen5_releases_as_desktop(self):
         import re
