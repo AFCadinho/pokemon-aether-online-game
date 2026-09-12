@@ -44,9 +44,9 @@ func _init() -> void:
 		"formatKey": "pokemmo-ou", "engineFormatId": "pokemmo-ou-v1",
 		"generation": 9, "gameType": "singles",
 	}
-	_check(bool(CalcdexSnapshot.normalize_response(pokemmo_response, revision).get("success", false)), "accepts the isolated PokeMMO OU calculator format")
+	_check(bool(CalcdexSnapshot.normalize_response(pokemmo_response, revision).get("success", false)), "accepts the isolated MMO OU calculator format")
 	pokemmo_response["snapshot"]["format"]["engineFormatId"] = "gen9nationaldex"
-	_check_rejected(pokemmo_response, revision, "rejects PokeMMO OU falling back to the standard engine")
+	_check_rejected(pokemmo_response, revision, "rejects MMO OU falling back to the standard engine")
 	wire_response["status"] = 200.0
 	var wire_revision: Dictionary = JSON.parse_string(JSON.stringify(revision))
 	_check(

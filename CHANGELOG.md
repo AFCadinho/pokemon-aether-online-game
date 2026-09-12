@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- AI Sparring now offers MMO OU for AI4 Scholar and AI5 Grandmaster Hard.
+
 ## 0.3.75
 
 ### Gameplay
