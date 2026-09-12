@@ -18,6 +18,7 @@ func _init() -> void:
 	_check_same_map_teleport_can_restore_cached_roster()
 	_check_presence_payload_includes_activity_state()
 	_check_connection_attempt_guard()
+	_check_failed_connection_releases_reconnect_guard()
 	_check_authoritative_weather_messages()
 
 	service.free()
@@ -139,6 +140,24 @@ func _check_connection_attempt_guard() -> void:
 	_check_equal(source.contains("var connection_attempt_id := 0"), true, "presence tracks connection attempts")
 	_check_equal(source.contains("func _connect_presence_async(attempt_id: int)"), true, "presence validates asynchronous connection attempts")
 	_check_equal(source.contains("if connecting:\n\t\treturn"), true, "presence does not reconnect while a connection is pending")
+
+
+func _check_failed_connection_releases_reconnect_guard() -> void:
+	var failed_connection_service := WorldPresenceServiceScript.new()
+	failed_connection_service.connecting = true
+	failed_connection_service.should_reconnect = true
+	failed_connection_service._handle_closed_socket()
+	_check_equal(
+		failed_connection_service.connecting,
+		false,
+		"closed handshake releases the pending connection guard"
+	)
+	_check_equal(
+		failed_connection_service.should_reconnect,
+		true,
+		"closed handshake remains eligible for reconnect"
+	)
+	failed_connection_service.free()
 
 
 func _check_authoritative_weather_messages() -> void:
