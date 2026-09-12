@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Browser blackouts now finish their heal-spot transfer completely, so players can leave the room afterward.
 - Browser players now complete staff teleports cleanly instead of becoming stuck between maps.
 - Browser players now keep their equipped outfit on login, in the world and for other players, and browser map transitions no longer disappear after the server moves them.
 - Guild challenges from a Trainer's right-click menu now appear only in the Aether Clash Lobby.
