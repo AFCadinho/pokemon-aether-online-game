@@ -135,6 +135,7 @@ const assert = require('node:assert/strict');
     assert(api.some(item => item.path === '/api/auth/web/world/story' && item.status === 200), 'shared story loads through the browser boundary');
 		assert(api.some(item => item.path.startsWith('/api/npcs/') && item.status === 200), 'demo NPC metadata really loads');
 		assert(presencePositions > 0, 'browser publishes its world position through the websocket');
+		assert(api.some(item => item.path === '/api/auth/web/world/teleport-ack' && item.status === 200), 'browser acknowledges the pending staff teleport through its scoped route');
 		assert(presenceAppearances.some(value => value.top === 'Adinho_Shirt'), `browser publishes its canonical custom outfit to native clients: ${JSON.stringify(presenceAppearances)}`);
 		await page.keyboard.press('ArrowDown');
 		await waitForApi(item => item.path === '/api/auth/web/world/transitions/kanto_players_house__to_pallet_town/enter' && item.status === 200, 30000);

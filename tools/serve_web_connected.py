@@ -43,6 +43,7 @@ HTTP_ROUTES = {
     ("POST", "/auth/web/wallet/rewards/wild-battle"), ("POST", "/auth/web/wallet/rewards/trainer-battle"),
     ("POST", "/auth/web/mail"),
     ("POST", "/auth/web/respawn"),
+    ("POST", "/auth/web/world/teleport-ack"),
 }
 GAMEPLAY_ROUTES = tuple((method, re.compile(pattern)) for method, pattern in (
     ("GET", r"/auth/web/boxes/\d+"), ("PATCH", r"/auth/web/boxes/\d+"),
