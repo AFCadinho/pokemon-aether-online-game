@@ -210,8 +210,10 @@ func _verify_integration_contract() -> void:
 	)
 	_expect(
 		inventory.contains('const NPC_QUEST_ITEM_TURN_IN_ENDPOINT := "/game/npc-quest-item-turn-ins/%s/claim"')
-		and inventory.contains("func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:"),
-		"inventory service exposes the authoritative parcel turn-in"
+		and inventory.contains("func turn_in_npc_quest_item(turn_in_id: String) -> Dictionary:")
+		and inventory.contains('"/auth/web/npc-rewards"')
+		and inventory.contains('"/auth/web/npc-quest-item-turn-ins"'),
+		"inventory service exposes authoritative desktop and browser parcel rewards and turn-in"
 	)
 	_expect(
 		inventory.contains('if bool(body.get("caught", false))')

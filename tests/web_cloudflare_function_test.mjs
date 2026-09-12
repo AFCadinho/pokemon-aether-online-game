@@ -7,6 +7,8 @@ assert.equal(isAllowedApiRoute('GET', '/auth/web/world/transitions/test/access')
 assert.equal(isAllowedApiRoute('PUT', '/auth/web/world'), true);
 assert.equal(isAllowedApiRoute('GET', '/battle/pvp/training/ai/teams/catalog-team'), true);
 assert.equal(isAllowedApiRoute('POST', '/battle/test-id/choice-and-resolve'), true);
+assert.equal(isAllowedApiRoute('POST', '/auth/web/npc-rewards/test-reward/claim'), true);
+assert.equal(isAllowedApiRoute('POST', '/auth/web/npc-quest-item-turn-ins/test-turn-in/claim'), true);
 assert.equal(isAllowedApiRoute('GET', '/auth/web/world/story-escape'), false);
 assert.equal(isAllowedApiRoute('GET', '/game/guilds-escape'), false);
 assert.equal(isAllowedApiRoute('POST', '/pvp/queues/ranked/join'), false);
