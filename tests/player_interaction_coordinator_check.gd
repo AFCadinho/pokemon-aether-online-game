@@ -281,11 +281,21 @@ func _check_aether_clash_context_action() -> void:
 	coordinator.context_more_actions_expanded = false
 	coordinator._render_context_menu()
 	await process_frame
+	_check_equal(
+		_find_player_action("Challenge to Aether Clash") == null,
+		true,
+		"Aether Clash challenges stay hidden outside the Aether Clash Lobby"
+	)
+	var lobby_controller := Node.new()
+	lobby_controller.add_to_group("aether_clash_war_controller")
+	root.add_child(lobby_controller)
+	coordinator._render_context_menu()
+	await process_frame
 	var challenge_button := _find_player_action("Challenge to Aether Clash")
 	_check_equal(
 		challenge_button != null and not challenge_button.disabled,
 		true,
-		"Guild Captains receive an independent right-click Aether Clash action"
+		"Guild Captains receive the right-click Aether Clash action in the Lobby"
 	)
 	if challenge_button != null:
 		challenge_button.pressed.emit()
@@ -357,6 +367,8 @@ func _check_aether_clash_context_action() -> void:
 		true,
 		"regular Guild members cannot send right-click Aether Clash challenges"
 	)
+	root.remove_child(lobby_controller)
+	lobby_controller.free()
 
 
 func _check_chat_moderation_context_action() -> void:

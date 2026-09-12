@@ -1044,6 +1044,8 @@ func _on_guild_invite_pressed() -> void:
 
 
 func _can_challenge_aether_clash() -> bool:
+	if get_tree().get_nodes_in_group("aether_clash_war_controller").is_empty():
+		return false
 	if not guild_membership_loaded or guild_membership.is_empty():
 		return false
 	return str(guild_membership.get("role", "")).strip_edges().to_lower() in ["leader", "captain"]
