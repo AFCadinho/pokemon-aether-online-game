@@ -25,7 +25,9 @@ One-time Cloudflare setup:
    Preview deployments must not publish the production web manifest.
 3. Use the dedicated `pokeaether-web` R2 bucket through its HTTPS custom domain
    `web-assets.pokeaether.com`. Do not use the development `r2.dev` URL or the
-   desktop update bucket.
+   desktop update bucket for browser output. The workflow reads its immutable
+   source archives from `https://updates.pokeaether.com` and publishes only the
+   extracted browser catalogs and web runtime to this dedicated bucket.
 4. Apply the read-only browser CORS policy in
    `infrastructure/web/r2-cors.example.json` to the web bucket. Do not add other
    browser origins unless they are intentionally supported. Purge the R2 custom
