@@ -57,6 +57,7 @@ const BALL_COLUMNS := {
 var sheet_texture: Texture2D
 var sprite: Sprite2D
 var animation_token := 0
+var playback_speed := 1.0
 
 
 func _ready() -> void:
@@ -112,7 +113,7 @@ func play_capture_preview(item_id: String, shake_count: int, caught: bool, targe
 	if token != animation_token:
 		return
 
-	await get_tree().create_timer(0.18).timeout
+	await get_tree().create_timer(_scaled_seconds(0.18)).timeout
 	if token == animation_token:
 		visible = false
 
@@ -134,7 +135,7 @@ func _play_throw(column: int, start_position: Vector2, target_position: Vector2,
 		sprite.position = start_position.lerp(target_position, progress) + arc
 		sprite.rotation = lerpf(-0.6, 0.2, progress)
 		_set_frame(column, THROW_START_FRAME + offset)
-		await get_tree().create_timer(FRAME_SECONDS).timeout
+		await get_tree().create_timer(_scaled_seconds(FRAME_SECONDS)).timeout
 
 
 func _play_frame_range(column: int, start_frame: int, end_frame: int, position: Vector2, token: int) -> void:
@@ -145,7 +146,11 @@ func _play_frame_range(column: int, start_frame: int, end_frame: int, position: 
 			return
 
 		_set_frame(column, frame_index)
-		await get_tree().create_timer(FRAME_SECONDS).timeout
+		await get_tree().create_timer(_scaled_seconds(FRAME_SECONDS)).timeout
+
+
+func _scaled_seconds(seconds: float) -> float:
+	return seconds / maxf(playback_speed, 0.01)
 
 
 func _set_frame(column: int, frame_index: int) -> void:

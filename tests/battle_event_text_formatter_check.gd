@@ -30,6 +30,11 @@ func _run() -> void:
 		"wild battle start messages"
 	)
 	_check_equal(
+		formatter.format_capture_event({"type": "capture", "species": "Beedrill"}),
+		"Gotcha!",
+		"successful replay capture message"
+	)
+	_check_equal(
 		formatter.format_pokemon_identity("Sparky", "Pikachu"),
 		"Sparky (Pikachu)",
 		"battle-log identity links nickname to species"

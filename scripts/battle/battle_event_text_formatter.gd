@@ -192,6 +192,9 @@ func format_win_event(winner: String) -> String:
 
 	return _t("battle.event.won", {"winner": winner})
 
+func format_capture_event(_event: Dictionary) -> String:
+	return _t("battle.capture.caught")
+
 func format_transform_event(actor: String, species: String) -> String:
 	if actor == "":
 		actor = _t("battle.fallback.pokemon")

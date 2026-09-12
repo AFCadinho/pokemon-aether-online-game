@@ -14,6 +14,7 @@ var failed := false
 
 func _init() -> void:
 	_check_previous_condition_uses_visible_scale()
+	_check_capture_event_presentation()
 	_check_stale_previous_condition_rewinds_from_authoritative_state()
 	_check_legitimate_full_hp_rewind_is_preserved()
 	_check_multihit_knockout_keeps_rendered_hp_continuity()
@@ -147,6 +148,19 @@ func _make_presentation():
 		Callable(self, "_get_pokemon_species")
 	)
 	return presentation
+
+
+func _check_capture_event_presentation() -> void:
+	var result: Dictionary = _make_presentation().build({
+		"type": "capture",
+		"caught": true,
+		"itemId": "ultra-ball",
+		"shakeCount": 3,
+		"species": "Beedrill",
+	})
+	_check_equal(str(result.get("log_message", "")), "Gotcha!", "capture event writes the replay log")
+	_check_equal(str(result.get("battle_message", "")), "Gotcha!", "capture event writes the battle message")
+	_check_equal(bool(result.get("add_blank_after", false)), true, "capture event closes its log group")
 
 
 func _check_move_and_damage_logs_link_nickname_to_species() -> void:
