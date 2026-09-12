@@ -63,7 +63,11 @@ def main() -> None:
         "releaseVersion": args.release_version,
         "assetBaseUrl": asset_base_url,
         "spriteBases": {
-            side: f"{asset_base_url}/web/assets/{version}"
+            # Keep Godot's on-demand sprite requests on the Pages origin. The
+            # narrowly scoped Pages function streams the immutable file from
+            # R2, avoiding browser-specific CORS/COEP failures inside Godot's
+            # HTTPRequest implementation.
+            side: f"{web_url}/pokemon-assets/gen5/{version}"
             for side, version in sprite_versions.items()
         },
     }
