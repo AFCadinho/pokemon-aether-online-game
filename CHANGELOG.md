@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Browser players now keep their equipped outfit on login, in the world and for other players, and browser map transitions no longer disappear after the server moves them.
 - Guild challenges from a Trainer's right-click menu now appear only in the Aether Clash Lobby.
 - Battle intros no longer get stuck before sending out Pokémon when the browser has a slow frame.
 - Browser players now see other browser and desktop Trainers, restore unfinished battles, and can use PC boxes, healing, shops and battle rewards. Mail stays text-only; trading, lending, Guild Bank and Aether Clash require the game client.

@@ -541,6 +541,7 @@ func _submit_login() -> void:
 		return
 
 	_apply_authenticated_player_profile()
+	await _apply_saved_session_preview_state()
 
 	login_submitted.emit(username, password)
 	if OS.has_feature("web"):
@@ -665,8 +666,6 @@ func _restore_saved_session() -> void:
 
 
 func _apply_saved_session_preview_state() -> void:
-	if OS.has_feature("web"):
-		return
 	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
 	if not bool(profile_response.get("success", false)):
 		return
@@ -681,6 +680,7 @@ func _apply_saved_session_preview_state() -> void:
 		return
 
 	PlayerSave.apply_appearance_state(appearance)
+	_refresh_player_preview()
 
 
 func _enter_world() -> void:

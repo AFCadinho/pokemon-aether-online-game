@@ -1127,6 +1127,11 @@ func _capture_map_transition_snapshot() -> bool:
 
 
 func _load_map_scene_threaded(scene_path: String) -> PackedScene:
+	# Web exports can run without thread support. A threaded request may then
+	# fail even though the scene is present, after the server already committed
+	# the player's destination.
+	if OS.has_feature("web"):
+		return ResourceLoader.load(scene_path, "PackedScene") as PackedScene
 	var request_error := ResourceLoader.load_threaded_request(scene_path, "PackedScene")
 	if request_error != OK and request_error != ERR_BUSY:
 		push_error("World: could not start threaded map load for %s: %s" % [scene_path, error_string(request_error)])
@@ -1572,6 +1577,8 @@ func _apply_web_demo_profile(profile_response: Dictionary) -> void:
 	if not appearance.is_empty():
 		PlayerSave.apply_appearance_state(appearance)
 		confirmed_appearance_state = appearance.duplicate(true)
+		if player != null and player.has_method("refresh_appearance"):
+			player.call("refresh_appearance")
 
 
 func _apply_web_demo_transition_state(state: Dictionary) -> Dictionary:
@@ -2442,7 +2449,22 @@ func _publish_world_presence(force := false) -> void:
 		return
 
 	last_presence_position_signature = signature
-	WorldPresenceService.update_position(_build_current_player_position_state(""))
+	var presence_state := _build_current_player_position_state("")
+	if OS.has_feature("web"):
+		_enrich_web_world_presence_state(presence_state)
+	WorldPresenceService.update_position(presence_state)
+
+
+func _enrich_web_world_presence_state(state: Dictionary) -> void:
+	state["gender"] = PlayerSave.gender
+	state["appearance"] = _get_current_appearance_presence_state()
+	state["roles"] = _get_current_role_presence_state()
+	state["selectedRoleBadge"] = GameState.selected_role_badge
+	state["activityState"] = "battle" if is_in_battle and active_battle_kind != "replay" else "idle"
+	state["battleSpectate"] = _get_current_battle_spectate_presence()
+	state["follower"] = _get_current_follower_presence_state()
+	if player.has_method("get_network_movement_state"):
+		state["movement"] = player.call("get_network_movement_state")
 
 
 func _track_playtime(delta: float) -> void:
