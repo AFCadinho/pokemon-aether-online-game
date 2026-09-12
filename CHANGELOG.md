@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Prepared the browser version for secure, versioned delivery through Cloudflare Pages and R2, with password recovery available from browser login.
+
 ## 0.3.75
 
 ### Gameplay

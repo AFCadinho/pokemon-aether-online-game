@@ -1,0 +1,233 @@
+name: Deploy Browser Game to Cloudflare
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: Browser release version, for example 0.4.0-beta.1
+        required: true
+        type: string
+      pages_project:
+        description: Existing Cloudflare Pages project name
+        required: true
+        default: pokeaether-web
+        type: string
+      web_url:
+        description: Public HTTPS origin of the Pages site
+        required: true
+        default: https://play.pokeaether.com
+        type: string
+      asset_base_url:
+        description: Public HTTPS custom domain attached to the existing R2 bucket
+        required: true
+        default: https://updates.pokeaether.com
+        type: string
+      api_origin:
+        description: Public HTTPS origin of the production gateway
+        required: true
+        default: https://api.pokeaether.com
+        type: string
+      publish_manifest:
+        description: Open this build to players after all public checks pass
+        required: true
+        default: false
+        type: boolean
+
+concurrency:
+  group: deploy-web-cloudflare
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  GODOT_VERSION: 4.6.2
+  GODOT_RELEASE: stable
+  POKEMON_HOME_ASSET_VERSION: pokemon-home-a74442caa16b
+  POKEMON_HOME_SHINY_ASSET_VERSION: pokemon-home-shiny-b7565d0885ae
+  MUSIC_ASSET_VERSION: music-3f2a6df18793
+  POKEMON_GEN5_FRONT_ASSET_VERSION: pokemon-gen5-front-895716cf7862
+  POKEMON_GEN5_BACK_ASSET_VERSION: pokemon-gen5-back-2c6f2f001f7f
+  POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION: pokemon-gen5-shiny-front-a51df15dc1fd
+  POKEMON_GEN5_SHINY_BACK_ASSET_VERSION: pokemon-gen5-shiny-back-e432df8479a4
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: web-production
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Validate release inputs
+        env:
+          RELEASE_VERSION: ${{ inputs.release_version }}
+          WEB_URL: ${{ inputs.web_url }}
+          ASSET_BASE_URL: ${{ inputs.asset_base_url }}
+          API_ORIGIN: ${{ inputs.api_origin }}
+        run: |
+          if ! printf '%s' "${RELEASE_VERSION}" | grep -Eq '^[0-9]+(\.[0-9]+){1,2}([-+][A-Za-z0-9._-]+)?$'; then
+            echo "::error::release_version must look like 0.4.0 or 0.4.0-beta.1"
+            exit 1
+          fi
+          python3 -c 'import sys, urllib.parse; values=sys.argv[1:]; assert all((u:=urllib.parse.urlsplit(v)).scheme == "https" and u.hostname and u.path == "" and not u.query and not u.fragment for v in values)' "${WEB_URL}" "${ASSET_BASE_URL}" "${API_ORIGIN}"
+          echo "WEB_BUILD_ID=${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+
+      - name: Install build tools
+        run: sudo apt-get update && sudo apt-get install -y rclone unzip
+
+      - name: Download Godot and web export template
+        run: |
+          curl -fsSL -o godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64.zip"
+          unzip -q godot.zip
+          mv "Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64" godot
+          chmod +x godot
+          curl -fsSL -o export_templates.tpz "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_export_templates.tpz"
+          unzip -q export_templates.tpz -d /tmp/godot-export-templates
+          mkdir -p "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}"
+          mv /tmp/godot-export-templates/templates/* "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}/"
+
+      - name: Restore required browser source assets
+        env:
+          ASSET_BASE_URL: ${{ inputs.asset_base_url }}
+        run: |
+          curl -fsSL -o /tmp/pokemon-home.zip "${ASSET_BASE_URL}/assets/${POKEMON_HOME_ASSET_VERSION}.zip"
+          curl -fsSL -o /tmp/pokemon-home-shiny.zip "${ASSET_BASE_URL}/assets/${POKEMON_HOME_SHINY_ASSET_VERSION}.zip"
+          curl -fsSL -o /tmp/music.zip "${ASSET_BASE_URL}/assets/${MUSIC_ASSET_VERSION}.zip"
+          unzip -q /tmp/pokemon-home.zip
+          unzip -q /tmp/pokemon-home-shiny.zip
+          unzip -q /tmp/music.zip
+
+      - name: Import, verify and export Godot web client
+        env:
+          RELEASE_VERSION: ${{ inputs.release_version }}
+        run: |
+          python3 tools/stamp_godot_version.py --project project.godot --export-presets export_presets.cfg \
+            --version "${RELEASE_VERSION}" --web-build-id "${WEB_BUILD_ID}"
+          ./godot --headless --import --quit
+          python3 tools/build_web_preview.py --godot ./godot
+
+      - name: Package Pages and R2 release
+        env:
+          RELEASE_VERSION: ${{ inputs.release_version }}
+          WEB_URL: ${{ inputs.web_url }}
+          ASSET_BASE_URL: ${{ inputs.asset_base_url }}
+        run: |
+          python3 tools/package_web_release.py \
+            --build-id "${WEB_BUILD_ID}" --release-version "${RELEASE_VERSION}" \
+            --web-url "${WEB_URL}" --asset-base-url "${ASSET_BASE_URL}" \
+            --sprite-front-version "${POKEMON_GEN5_FRONT_ASSET_VERSION}" \
+            --sprite-back-version "${POKEMON_GEN5_BACK_ASSET_VERSION}" \
+            --sprite-shiny-front-version "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}" \
+            --sprite-shiny-back-version "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}"
+
+      - name: Install browser and Cloudflare tooling
+        run: |
+          npm ci --ignore-scripts
+          npx playwright install --with-deps chromium
+
+      - name: Run release-focused checks
+        run: |
+          python3 -m unittest tests.test_package_web_release
+          node tests/web_cloudflare_function_test.mjs
+          ./godot --headless --path . --script res://tests/web_runtime_check.gd
+          ./godot --headless --path . --script res://tests/web_dynamic_pokemon_sprite_check.gd
+          python3 tools/serve_web_preview.py >/tmp/pokeaether-web-preview.log 2>&1 &
+          preview_pid="$!"
+          trap 'kill "${preview_pid}" 2>/dev/null || true' EXIT
+          node tests/web_preview_browser_smoke.cjs
+
+      - name: Verify R2 CORS is ready
+        env:
+          WEB_URL: ${{ inputs.web_url }}
+          ASSET_BASE_URL: ${{ inputs.asset_base_url }}
+        run: |
+          headers="$(curl -fsSI -H "Origin: ${WEB_URL}" "${ASSET_BASE_URL}/assets/${POKEMON_HOME_ASSET_VERSION}.zip")"
+          printf '%s\n' "${headers}" | tr -d '\r' | grep -Fiqx "access-control-allow-origin: ${WEB_URL%/}"
+
+      - name: Upload immutable runtime to R2
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+        run: |
+          python3 tools/upload_web_release.py builds/web-r2 --verify-only
+          rclone copy builds/web-r2 "R2:${R2_BUCKET}/web/releases/${WEB_BUILD_ID}" \
+            --exclude manifest-web.json --immutable \
+            --header-upload "Cache-Control: public, max-age=31536000, immutable"
+
+      - name: Publish browser sprite catalogs when absent
+        env:
+          ASSET_BASE_URL: ${{ inputs.asset_base_url }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+        run: |
+          publish_pack() {
+            side="$1"
+            version="$2"
+            if curl -fsSI "${ASSET_BASE_URL}/web/assets/${version}/pikachu/animation.json" >/dev/null; then
+              echo "Browser sprite catalog already exists: ${version}"
+              return
+            fi
+            curl -fsSL -o "/tmp/${version}.zip" "${ASSET_BASE_URL}/assets/${version}.zip"
+            python3 tools/extract_web_sprite_pack.py "/tmp/${version}.zip" --side "${side}" --output "/tmp/web-sprites/${version}"
+            rclone copy "/tmp/web-sprites/${version}" "R2:${R2_BUCKET}/web/assets/${version}" \
+              --immutable --header-upload "Cache-Control: public, max-age=31536000, immutable"
+          }
+          publish_pack front "${POKEMON_GEN5_FRONT_ASSET_VERSION}"
+          publish_pack back "${POKEMON_GEN5_BACK_ASSET_VERSION}"
+          publish_pack shiny_front "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}"
+          publish_pack shiny_back "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}"
+
+      - name: Deploy Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          PAGES_PROJECT: ${{ inputs.pages_project }}
+          API_ORIGIN: ${{ inputs.api_origin }}
+          ASSET_BASE_URL: ${{ inputs.asset_base_url }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          path = Path('wrangler.jsonc')
+          config = json.loads(path.read_text(encoding='utf-8'))
+          config['vars']['API_ORIGIN'] = os.environ['API_ORIGIN'].rstrip('/')
+          config['vars']['ASSET_BASE_URL'] = os.environ['ASSET_BASE_URL'].rstrip('/')
+          path.write_text(json.dumps(config, indent=2) + '\n', encoding='utf-8')
+          PY
+          npx wrangler pages deploy builds/web-pages --project-name "${PAGES_PROJECT}" --branch main --commit-dirty=true
+
+      - name: Verify public release files
+        env:
+          WEB_URL: ${{ inputs.web_url }}
+          ASSET_BASE_URL: ${{ inputs.asset_base_url }}
+        run: |
+          curl -fsS "${WEB_URL}/" | grep -F "${WEB_BUILD_ID}"
+          curl -fsSI -H "Origin: ${WEB_URL}" "${ASSET_BASE_URL}/web/releases/${WEB_BUILD_ID}/index.wasm" | grep -Eiq '^content-type: application/wasm'
+          curl -fsSI -H "Origin: ${WEB_URL}" "${ASSET_BASE_URL}/web/assets/${POKEMON_GEN5_FRONT_ASSET_VERSION}/pikachu/animation.json" >/dev/null
+
+      - name: Publish web client manifest
+        if: inputs.publish_manifest
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python3 tools/upload_web_release.py builds/web-r2 --manifest-only --publish-manifest

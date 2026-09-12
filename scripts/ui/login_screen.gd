@@ -82,8 +82,8 @@ func _ready() -> void:
 	quit_button.pressed.connect(_on_quit_button_pressed)
 	if OS.has_feature("web"):
 		quit_button.hide()
-		# Registration stays on this origin; no automatic production requests.
-		forgot_password_link_button.hide()
+		# Registration stays on this origin. Password recovery remains a visible,
+		# deliberate link to the existing HTTPS account flow.
 	news_request.request_completed.connect(_on_news_request_completed)
 	login_news_label.meta_clicked.connect(_on_news_meta_clicked)
 	if settings_menu.has_signal("closed"):
