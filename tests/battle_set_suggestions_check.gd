@@ -19,8 +19,9 @@ func _run() -> void:
 		"moves": ["Earthquake", "Stealth Rock", "Toxic", "Dragon Tail"]}
 	var row := {"groupId": "tank", "variantId": "tank-1", "name": "TankChomp", "formatName": "National Dex",
 		"confidence": "strong", "build": build, "referenceBuild": build, "matchingVariantCount": 2, "alternativeBuilds": [],
-		"evidence": [{"kind": "damage", "state": "match", "turn": 1, "value": "observed_range"}]}
-	var response := {"success": true, "schemaVersion": 1, "routeRevision": "set-inference-1", "projectionRevision": revision,
+		"evidence": [{"kind": "damage", "state": "match", "turn": 1, "value": "observed_range",
+			"direction": "own-to-opponent", "move": "Surf", "observedMin": 19.0, "observedMax": 21.0}]}
+	var response := {"success": true, "schemaVersion": 1, "routeRevision": "set-inference-2", "projectionRevision": revision,
 		"opponentRef": ref, "species": "Garchomp", "catalogRevision": "fixture", "suggestions": [row],
 		"variantCount": 2, "observationCount": 2, "complete": true, "state": "matches"}
 	_check(bool(Suggestions.normalize_response(JSON.parse_string(JSON.stringify(response)), revision, ref).get("success")), "Wire numbers normalize")
@@ -34,7 +35,8 @@ func _run() -> void:
 	invalid["evs"] = {"hp": 252, "def": 252, "spe": 252}
 	_check(not Suggestions.valid_build(invalid), "Illegal EV totals are rejected")
 	var new_turn_clue := response.duplicate(true)
-	new_turn_clue["suggestions"][0]["evidence"].append({"kind": "damage", "state": "match", "turn": 2, "value": "observed_range"})
+	new_turn_clue["suggestions"][0]["evidence"].append({"kind": "damage", "state": "match", "turn": 2, "value": "observed_range",
+		"direction": "opponent-to-own", "move": "Earthquake", "observedMin": 35.0, "observedMax": 42.0})
 	_check(Suggestions.signature(response) != Suggestions.signature(new_turn_clue), "A new clue from a later turn reannounces an ignored suggestion")
 	var panel := CalcPanel.new()
 	var content := VBoxContainer.new()
@@ -53,9 +55,11 @@ func _run() -> void:
 	var before := panel.get_defender_assumption_state()
 	var popup_response := response.duplicate(true)
 	popup_response["suggestions"][0]["evidence"] = [
-		{"kind": "damage", "state": "match", "turn": 1, "value": "observed_range"},
+		{"kind": "damage", "state": "match", "turn": 1, "value": "observed_range",
+			"direction": "own-to-opponent", "move": "Surf", "observedMin": 19.0, "observedMax": 21.0},
 		{"kind": "move", "state": "variant", "turn": 1, "value": "Fire Blast"},
-		{"kind": "speed", "state": "unknown", "turn": 1, "value": "ambiguous"},
+		{"kind": "speed", "state": "unknown", "turn": 1, "value": "ambiguous",
+			"opponentFirst": true, "viewerMove": "Surf", "opponentMove": "Earthquake"},
 		{"kind": "item", "state": "conflict", "turn": 1, "value": "Leftovers"},
 	]
 	for index in range(2):
@@ -89,7 +93,8 @@ func _run() -> void:
 	closest_response["state"] = "closest"
 	for suggestion: Dictionary in closest_response["suggestions"]:
 		suggestion["confidence"] = "weak"
-		suggestion["evidence"] = [{"kind": "damage", "state": "conflict", "turn": 2, "value": "observed_range"}]
+		suggestion["evidence"] = [{"kind": "damage", "state": "conflict", "turn": 2, "value": "observed_range",
+			"direction": "opponent-to-own", "move": "Earthquake", "observedMin": 35.0, "observedMax": 42.0}]
 	panel.show_set_suggestions(ref, revision, closest_response)
 	var closest_host := VBoxContainer.new()
 	content.add_child(closest_host)
@@ -135,7 +140,11 @@ func _run() -> void:
 	_check(evidence_labels.has("✓ Clues matched: 1") and evidence_labels.has("~ Differences: 1"), "Evidence counters explain their meaning without a legend")
 	var evidence_summaries := panel.set_suggestions_popup.find_children("SetSuggestionEvidenceSummary", "HFlowContainer", true, false)
 	_check(evidence_summaries.size() == 3 and (evidence_summaries[1] as HFlowContainer).get_child_count() == 1, "Evidence summaries hide empty counters")
-	_check(panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) != null, "The selected suggestion shows evidence without expanding its list row")
+	var evidence_detail := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceDetail", true, false) as Label
+	var evidence_row := panel.set_suggestions_popup.find_child("SetSuggestionEvidenceRow", true, false) as PanelContainer
+	_check(evidence_detail != null and evidence_detail.text.contains("Damage taken") and evidence_detail.text.contains("Surf"), "Damage clues state who dealt or took damage and name the move")
+	_check(evidence_row != null and evidence_row.tooltip_text.contains("19.0–21.0%") and evidence_row.tooltip_text.contains("calculated result"), "Hovering a clue explains the observed range and why the set fits")
+	_check(panel.set_suggestions_popup.find_child("SetSuggestionBuildHeading", true, false) != null and panel.set_suggestions_popup.find_child("SetSuggestionEvidenceHeading", true, false) != null, "Set details and battle clues have separate scan-friendly sections")
 	var cards: Array[Node] = []
 	for index in range(1, suggestion_choices.get_child_count()):
 		cards.append(suggestion_choices.get_child(index))
