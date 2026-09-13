@@ -20,7 +20,10 @@ func _run() -> void:
 		"viewerPokemon": [{"pokemonRef": "viewer:1", "active": true, "identity": {"state": "known", "value": "Mew"}}],
 		"opponentPokemon": [{"pokemonRef": "opponent:1", "active": true, "identity": {"state": "known", "value": "Mew"},
 			"item": {"state": "known", "value": "Leftovers"}, "ability": {"state": "known", "value": "Synchronize"},
-			"hp": {"display": {"current": 50, "maximum": 100, "scale": "percent"}}}],
+			"hp": {"display": {"current": 50, "maximum": 100, "scale": "percent"}}},
+			{"pokemonRef": "opponent:2", "active": false, "identity": {"state": "known", "value": "Garchomp"},
+			"item": {"state": "unknown"}, "ability": {"state": "unknown"},
+			"hp": {"display": {"current": 100, "maximum": 100, "scale": "percent"}}}],
 	})
 	var variant := {
 		"id": "smogon-test-a", "name": "Pivot", "item": "Heavy-Duty Boots", "ability": "Synchronize", "nature": "Bold",
@@ -54,6 +57,11 @@ func _run() -> void:
 	_expect(host.find_child("SampleSetVariantSelector", true, false) == null, "Internal source alternatives must not create a variant selector")
 	panel._on_nature_option_pressed("Modest")
 	_expect(panel.selected_sample_set_id == "", "Manual edits must switch to a custom scenario")
+	panel._on_team_icon_pressed("opponent", "opponent:2")
+	var switched := panel.get_defender_assumption_state()
+	_expect(switched["editedFields"].is_empty(), "Selecting another opponent must clear edits from the previous Pokémon")
+	_expect(switched["assumptions"] == {"nature": "Hardy", "evs": {}, "exactStats": true}, "Selecting an unrevealed opponent must start with neutral assumptions")
+	_expect(panel.selected_sample_set_id == "", "Selecting another opponent must clear the previous sample set")
 	panel._reset_to_current()
 	_expect(not panel.defender_assumptions.has("assumedMoves"), "Reset must clear imported moves")
 	var unknown := group.duplicate(true)

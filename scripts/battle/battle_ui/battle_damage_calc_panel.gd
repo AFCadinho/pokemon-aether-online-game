@@ -375,7 +375,9 @@ func set_knowledge_snapshot(snapshot: Dictionary, notify_assumption_changes: boo
 	_prune_species_scenarios()
 	_clear_confirmed_status_scenarios()
 	if previous_opponent_ref != "" and selected_opponent_ref != previous_opponent_ref:
+		close_assumption_popover()
 		_clear_sample_sets()
+		_clear_opponent_selection_assumptions()
 	_request_sample_sets_if_needed()
 	_refresh_current_scenario(notify_assumption_changes)
 	if _is_catalog_search_active():
@@ -408,6 +410,10 @@ func get_defender_assumption_state() -> Dictionary:
 		"assumptions": defender_assumptions.duplicate(true),
 		"editedFields": edited_assumption_fields.duplicate(true),
 	}
+
+
+func get_selected_opponent_species() -> String:
+	return _get_selected_opponent_species()
 
 
 func close_assumption_popover() -> void:
@@ -884,6 +890,15 @@ func _clear_sample_sets() -> void:
 	sample_set_loading = false
 	sample_set_error = ""
 	selected_sample_set_id = ""
+
+
+func _clear_opponent_selection_assumptions() -> void:
+	defender_assumptions.clear()
+	edited_assumption_fields.clear()
+	set_suggestion_undo.clear()
+	current_default_ability = ""
+	current_default_ability_species = ""
+	current_default_ability_loading = false
 
 
 func _request_sample_sets_if_needed() -> void:
@@ -1987,9 +2002,12 @@ func _on_team_icon_pressed(relation: String, pokemon_ref: String) -> void:
 	else:
 		if pokemon_ref == selected_opponent_ref:
 			return
+		close_assumption_popover()
 		_clear_sample_sets()
 		selected_opponent_ref = pokemon_ref
+		_clear_opponent_selection_assumptions()
 		_request_sample_sets_if_needed()
+		_refresh_current_scenario(false)
 	expanded_result_key = ""
 	_clear_move_scenarios()
 	last_response = {}
