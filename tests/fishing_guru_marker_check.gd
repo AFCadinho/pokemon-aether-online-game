@@ -38,9 +38,14 @@ func _run() -> void:
 	await process_frame
 	guru.call("_refresh_quest_marker")
 	marker = guru.get_node_or_null("QuestMarker") as PanelContainer
-	var marker_label := marker.get_node_or_null("Icon") as Label if marker != null else null
+	var marker_icon := marker.get_node_or_null("Icon") as TextureRect if marker != null else null
 	_expect(marker != null and marker.visible, "Fishing marker appears after Oak's Parcel is complete")
-	_expect(marker_label != null and marker_label.text == "✦", "Fishing offer uses the side-quest marker")
+	_expect(
+		marker_icon != null
+		and marker_icon.texture != null
+		and marker_icon.texture.resource_path.ends_with("side_quest_marker.svg"),
+		"Fishing offer uses the bundled side-quest marker"
+	)
 
 	guru.queue_free()
 	await process_frame

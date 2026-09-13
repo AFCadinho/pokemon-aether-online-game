@@ -148,9 +148,14 @@ func _run() -> void:
 				"statuses": ["active"],
 			}],
 		})
-		var marker := mom.get("quest_marker_label") as Label
 		mom.call("_refresh_quest_marker")
-		_expect(marker != null and marker.text == "!", "Mom shows the main-story visit marker")
+		var marker := mom.get("quest_marker_icon") as TextureRect
+		_expect(
+			marker != null
+			and marker.texture != null
+			and marker.texture.resource_path.ends_with("main_quest_marker.svg"),
+			"Mom shows the bundled main-story visit marker"
+		)
 
 	var route := route_scene.instantiate()
 	get_root().add_child(route)
