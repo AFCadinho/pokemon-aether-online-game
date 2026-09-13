@@ -49413,6 +49413,31 @@ func _format_system_warning_chat_message(text: String) -> String:
 		_escape_bbcode(text),
 	]
 
+
+func _exchange_item_request_system_message(message: Dictionary) -> String:
+	var item_id := str(message.get("itemId", "")).strip_edges()
+	var fallback_name := str(message.get("itemName", item_id)).strip_edges()
+	var item_name := ItemLocalization.display_name(item_id, fallback_name)
+	var values := {
+		"item": item_name,
+		"quantity": maxi(int(message.get("quantity", 0)), 0),
+		"amount": _format_money(maxi(int(message.get("totalPrice", 0)), 0)),
+		"fulfilled": maxi(int(message.get("fulfilledQuantity", 0)), 0),
+		"requested": maxi(int(message.get("requestedQuantity", 0)), 0),
+		"remaining": maxi(int(message.get("remainingQuantity", 0)), 0),
+	}
+	match str(message.get("role", "")).strip_edges().to_lower():
+		"seller":
+			return LocalizationManager.text("ui.exchange.system.fill_seller", values)
+		"requester":
+			return LocalizationManager.text(
+				"ui.exchange.system.fill_requester_complete"
+				if bool(message.get("completed", false))
+				else "ui.exchange.system.fill_requester_partial",
+				values,
+			)
+	return ""
+
 func _scroll_chat_to_bottom() -> void:
 	var tree := get_tree()
 	if tree == null:
@@ -49450,6 +49475,11 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	if message_type == "system.staff_announcement":
 		if system_notice_banner != null and bool(system_notice_banner.call("enqueue_notice", message)):
 			add_system_message(str(message.get("message", "")).strip_edges())
+		return
+	if message_type == "system.exchange_item_request_filled":
+		var exchange_message := _exchange_item_request_system_message(message)
+		if not exchange_message.is_empty():
+			add_system_message(exchange_message)
 		return
 	if message_type == "system.aether_clash_announcement":
 		var clash_message: String = AETHER_CLASH_ANNOUNCEMENT_FORMATTER.format_event(

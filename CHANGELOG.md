@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Both sides of an Aether Exchange item-request delivery now receive a localized system message with the result.
+
 - Movement through large maps now reuses their collision and terrain layers instead of searching the complete map again at every tile.
 
 - Item requests on the Aether Exchange can now be filled in parts, show delivery progress, and pay the offered price per item.
