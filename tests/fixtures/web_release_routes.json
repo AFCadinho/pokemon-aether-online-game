@@ -14,6 +14,7 @@
     ["POST", "/auth/web/respawn"], ["POST", "/auth/web/world/teleport-ack"], ["GET", "/auth/web/markets/standard"], ["POST", "/auth/web/markets/standard/purchase"], ["POST", "/auth/web/markets/standard/sell"],
     ["GET", "/auth/web/trainers/kanto_route_1_lass_zoe/progress"], ["POST", "/auth/web/trainers/kanto_route_1_lass_zoe/rematch"],
     ["GET", "/auth/web/mail"], ["POST", "/auth/web/mail"], ["POST", "/auth/web/mail/5/read"], ["DELETE", "/auth/web/mail/5"],
+    ["GET", "/auth/web/guilds/me"],
     ["GET", "/battle/trainer/resume"], ["GET", "/battle/wild/resume"],
     ["POST", "/battle/trainer"], ["POST", "/battle/wild-encounter"], ["POST", "/auth/web/wild-battles/battle-id/catch"],
     ["GET", "/battle/pvp/training/ai/teams"], ["POST", "/battle/pvp/training/ai/battles"], ["GET", "/battle/test-id/state"], ["POST", "/battle/test-id/choice-and-resolve"]

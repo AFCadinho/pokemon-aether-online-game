@@ -21,6 +21,7 @@ func _init() -> void:
 	_check_contains(service_source, "func cancel_application", "guild service cancels the player's application")
 	_check_contains(service_source, '"applicationCooldowns": _array', "guild service preserves application reapply cooldowns")
 	_check_contains(service_source, "func load_home", "guild service loads the member dashboard")
+	_check_contains(service_source, 'WEB_GUILD_HOME_ENDPOINT := "/auth/web/guilds/me"', "browser guild home uses its narrow authenticated route")
 	_check_contains(service_source, "func leave_guild", "guild service exposes Guild departure")
 	_check_contains(service_source, 'GUILD_HOME_ENDPOINT + "/leave"', "guild departure uses the member endpoint")
 	_check_contains(service_source, "func transfer_leadership", "guild service exposes leadership transfer")

@@ -15,6 +15,8 @@ func _init() -> void:
 	_check_contains(popup_scene_source, "guild_popup.gd", "guild popup scene loads its controller")
 	_check_contains(popup_source, '"ui.guild.title"', "guildless interface has a localized title")
 	_check_contains(popup_source, '"ui.guild.tab.browse"', "guildless interface exposes localized guild discovery")
+	_check_contains(popup_source, "GUILD_BROWSE_ICON", "Guild browsing uses a font-independent icon")
+	_check_contains(popup_source, "GuildWebClientRequiredDialog", "browser-only Guild restrictions use the themed dialog")
 	_check_contains(popup_source, '"ui.guild.tab.create"', "guildless interface exposes localized guild creation")
 	_check_contains(popup_source, "func _build_directory_filter_dialog", "guild directory exposes its filters in one dialog")
 	_check_contains(popup_source, "func _render_guild_list", "guild directory renders a compact guild list")
