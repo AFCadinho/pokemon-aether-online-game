@@ -113,7 +113,7 @@ func play_attack_tween_for_actor(actor_ident: String) -> void:
 func play_move_animation(move_name: String, actor_ident: String = "", _target_ident: String = "", options: Dictionary = {}) -> void:
 	if not SettingsManager.battle_animations:
 		if _is_miss_animation(options):
-			_notify_dodge_started(options)
+			await _notify_dodge_started(options)
 		return
 	if not _can_start_battle_animation("router.move_animation", {
 		"move": move_name,
@@ -581,7 +581,7 @@ func _play_move_target_dodge(target_ident: String, animation_options: Dictionary
 		return
 	if not returning and not bool(animation_options.get("dodge_started", false)):
 		animation_options["dodge_started"] = true
-		_notify_dodge_started(animation_options)
+		await _notify_dodge_started(animation_options)
 	var target_box := _get_sprite_box_for_ident(target_ident)
 	if target_box == null or not target_box.has_method("play_dodge_tween"):
 		return
@@ -594,7 +594,7 @@ func _play_move_target_dodge(target_ident: String, animation_options: Dictionary
 func _notify_dodge_started(animation_options: Dictionary) -> void:
 	var callback: Callable = animation_options.get("on_dodge_started", Callable())
 	if callback.is_valid():
-		callback.call()
+		await callback.call()
 
 
 func _play_move_target_shake_if_needed(config: Dictionary, target_ident: String, animation_options: Dictionary = {}) -> void:

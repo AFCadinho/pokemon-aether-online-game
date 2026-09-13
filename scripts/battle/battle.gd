@@ -247,6 +247,7 @@ const BATTLE_DAMAGE_CALC_PERSISTENCE := preload("res://scripts/battle/battle_dam
 const OPPONENT_PARTY_REVEAL_POLICY := preload("res://scripts/battle/opponent_party_reveal_policy.gd")
 const WILD_BATTLE_PRESENTATION_POLICY := preload("res://scripts/battle/wild_battle_presentation_policy.gd")
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
+const DODGE_COMMAND_DISPLAY_SECONDS := 2.60
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
 const OGERPON_BATTLE_FORM := preload("res://scripts/battle/ogerpon_battle_form.gd")
 const TYPE_CHANGE_BADGE_COLORS := {
@@ -11024,7 +11025,8 @@ func _show_battle_voice_selection(selection: Dictionary, command_kind: String) -
 	var values_value: Variant = selection.get("values", {})
 	var values: Dictionary = values_value as Dictionary if values_value is Dictionary else {}
 	var message := _t(text_key, values)
-	var shown := _show_trainer_command_text(str(selection.get("player_id", "")), message)
+	var display_seconds: float = DODGE_COMMAND_DISPLAY_SECONDS if command_kind == "dodge" else TrainerCommandCallout.DISPLAY_SECONDS
+	var shown := _show_trainer_command_text(str(selection.get("player_id", "")), message, display_seconds)
 	return {
 		"shown": shown,
 		"minimum_read_seconds": (
@@ -11046,7 +11048,11 @@ func _get_public_active_hp_percent(player_id: String) -> int:
 	return clampi(int(ceil(float(current_hp) * 100.0 / float(max_hp))), 0, 100)
 
 
-func _show_trainer_command_text(player_id: String, message: String) -> bool:
+func _show_trainer_command_text(
+	player_id: String,
+	message: String,
+	display_seconds := TrainerCommandCallout.DISPLAY_SECONDS
+) -> bool:
 	var trainer_sprite: BattleTrainerSprite
 	match player_id:
 		"p1":
@@ -11057,7 +11063,7 @@ func _show_trainer_command_text(player_id: String, message: String) -> bool:
 			return false
 	if trainer_sprite == null or not trainer_sprite.visible:
 		return false
-	trainer_sprite.show_command(message)
+	trainer_sprite.show_command(message, display_seconds)
 	return true
 
 
