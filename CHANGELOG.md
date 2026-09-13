@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Pokédex and Item Dex catalogues now load in the browser, and the Pokédex Shiny selector displays its proper icon.
 - Town Map locations, interiors, connections, and legend entries now display their icons correctly in the browser.
 - Shared confirmation and client-only dialogs now display their Aether icon correctly in the browser.
 - The Friend List refresh action now displays correctly in the browser.

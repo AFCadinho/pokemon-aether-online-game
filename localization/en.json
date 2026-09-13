@@ -1675,7 +1675,7 @@
   "ui.pokedex.dex.kanto": "Kanto Dex",
   "ui.pokedex.view": "VIEW",
   "ui.pokedex.variant.normal": "Normal",
-  "ui.pokedex.variant.shiny": "✦ Shiny",
+  "ui.pokedex.variant.shiny": "Shiny",
   "ui.pokedex.search": "Search by name or number...",
   "ui.pokedex.species_record": "SPECIES RECORD",
   "ui.pokedex.select_species": "Select a species",
