@@ -329,6 +329,10 @@ func _run() -> void:
 	popup.set("my_listings", [])
 	popup.set("my_wishes", [own_wish])
 	popup.call("_render_current_list")
+	var portfolio_progress := popup.find_child("PortfolioWishProgress", true, false) as ProgressBar
+	var portfolio_price := popup.find_child("PortfolioWishPrice", true, false) as Label
+	_check(portfolio_progress != null and portfolio_progress.value == 1 and portfolio_progress.max_value == 3, "My Exchange request cards show fulfillment progress")
+	_check(portfolio_price != null and portfolio_price.text.contains("250"), "My Exchange request cards separate the unit price from progress")
 	popup.call("_select_entry", own_wish, "wish")
 	await process_frame
 	var cancel_wish_button := popup.find_child("ExchangeWishActionButton", true, false) as Button
@@ -368,7 +372,8 @@ func _run() -> void:
 	await process_frame
 	requests_section = list_container.find_child("ExchangePortfolioRequestsSection", true, false) as Control
 	var active_request_buttons := requests_section.find_children("*", "Button", true, false)
-	_check(active_request_buttons.size() == 1 and (active_request_buttons[0] as Button).text.contains("250"), "Returning to Active restores outstanding requests at their unit price")
+	var active_request_price := requests_section.find_child("PortfolioWishPrice", true, false) as Label
+	_check(active_request_buttons.size() == 1 and active_request_price != null and active_request_price.text.contains("250"), "Returning to Active restores outstanding requests at their unit price")
 	var sellable_garchomp := {
 		"pokemonId": 25,
 		"species": "garchomp",

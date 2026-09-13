@@ -1553,14 +1553,17 @@ func _update_list_grid_columns() -> void:
 func _entry_button(entry: Dictionary, kind: String) -> Button:
 	var button := Button.new()
 	var browse_card := active_tab in ["browse", "wanted", "wishlist"]
+	var portfolio_wish := active_tab == "mine" and kind == "wish"
 	button.custom_minimum_size = Vector2(
 		BROWSE_CARD_MIN_WIDTH if browse_card else 0.0,
-		BROWSE_CARD_HEIGHT if browse_card else 70,
+		BROWSE_CARD_HEIGHT if browse_card else (82 if portfolio_wish else 70),
 	)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.clip_text = true
 	if browse_card:
 		_build_browse_card_content(button, entry, kind)
+	elif portfolio_wish:
+		_build_portfolio_wish_content(button, entry)
 	else:
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -1580,6 +1583,97 @@ func _entry_button(entry: Dictionary, kind: String) -> Button:
 	button.pressed.connect(_select_entry.bind(entry, kind))
 	_apply_listing_button_style(button, _entry_matches_selection(entry, kind))
 	return button
+
+
+func _build_portfolio_wish_content(button: Button, entry: Dictionary) -> void:
+	button.text = ""
+	button.icon = null
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for side: String in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_%s" % side, 9)
+	button.add_child(margin)
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 10)
+	margin.add_child(row)
+	var icon := TextureRect.new()
+	icon.name = "PortfolioWishIcon"
+	icon.custom_minimum_size = Vector2(48, 48)
+	icon.texture = _entry_texture(entry, "wish")
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	row.add_child(icon)
+
+	var content := VBoxContainer.new()
+	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.alignment = BoxContainer.ALIGNMENT_CENTER
+	content.add_theme_constant_override("separation", 3)
+	row.add_child(content)
+	var heading := HBoxContainer.new()
+	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	heading.add_theme_constant_override("separation", 8)
+	content.add_child(heading)
+	var name := Label.new()
+	name.name = "PortfolioWishName"
+	name.text = _entry_name(entry, "wish")
+	name.tooltip_text = name.text
+	name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name.add_theme_font_size_override("font_size", 14)
+	name.add_theme_color_override("font_color", UI_TEXT)
+	heading.add_child(name)
+	var price := Label.new()
+	price.name = "PortfolioWishPrice"
+	price.text = _t("ui.exchange.price_each", {
+		"amount": _format_money(int(entry.get("unitPrice", 0))),
+	})
+	price.add_theme_font_size_override("font_size", 13)
+	price.add_theme_color_override("font_color", UI_GOLD)
+	heading.add_child(price)
+
+	var total_quantity := maxi(int(entry.get("quantity", 1)), 1)
+	var fulfilled_quantity := _wish_fulfilled_quantity(entry)
+	var progress := ProgressBar.new()
+	progress.name = "PortfolioWishProgress"
+	progress.custom_minimum_size = Vector2(0, 8)
+	progress.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	progress.max_value = total_quantity
+	progress.value = fulfilled_quantity
+	progress.show_percentage = false
+	progress.add_theme_stylebox_override(
+		"background", _compact_panel_style(UI_INTERACTIVE, UI_BORDER, 4, 1, 0, 0)
+	)
+	progress.add_theme_stylebox_override(
+		"fill", _compact_panel_style(Color("#26778b"), UI_CYAN, 4, 1, 0, 0)
+	)
+	content.add_child(progress)
+
+	var footer := HBoxContainer.new()
+	footer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content.add_child(footer)
+	var progress_label := Label.new()
+	progress_label.name = "PortfolioWishProgressLabel"
+	progress_label.text = _t("ui.exchange.wishlist.progress", {
+		"fulfilled": fulfilled_quantity,
+		"quantity": total_quantity,
+	})
+	progress_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	progress_label.add_theme_font_size_override("font_size", 11)
+	progress_label.add_theme_color_override("font_color", UI_MUTED)
+	footer.add_child(progress_label)
+	var state := Label.new()
+	state.name = "PortfolioWishState"
+	state.text = _t("ui.exchange.wishlist.state.%s" % str(entry.get("status", "active")))
+	state.add_theme_font_size_override("font_size", 11)
+	state.add_theme_color_override("font_color", UI_PURPLE)
+	footer.add_child(state)
+	progress.tooltip_text = progress_label.text
 
 
 func _build_browse_card_content(button: Button, entry: Dictionary, kind: String) -> void:

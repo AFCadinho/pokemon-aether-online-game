@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Item requests in My Exchange now use clear compact cards with their unit price, status, and fulfillment progress.
+
 - The battle calculator now highlights its set-suggestion button only when battle evidence supports a match, instead of announcing catalog-only possibilities as new matches.
 
 - Aether Exchange item requests now show a concise transaction message followed by separate Bag and wallet changes, including creation escrow and cancellation refunds.
