@@ -1848,6 +1848,14 @@ func _show_pokemon_hover(
 	var local_hover_owner := _get_local_state_player_id()
 	var is_local_hover_owner := not _is_spectator_battle() and hover_owner_player_id == local_hover_owner
 	if is_local_hover_owner and not public_confirmed_only:
+		var current_speed := _get_owned_hover_current_speed(
+			request_pokemon_data,
+			display_data,
+			confirmed_item,
+			stat_changes
+		)
+		if current_speed > 0:
+			speed_data = {"current": current_speed}
 		var own_hover_moves := _get_own_pokemon_hover_moves(hover_owner_player_id, display_data)
 		if not own_hover_moves.is_empty():
 			confirmed_moves = own_hover_moves
@@ -1904,6 +1912,41 @@ func _show_pokemon_hover(
 			speed_data
 		)
 		_position_pokemon_hover_card()
+
+func _get_owned_hover_current_speed(
+	request_pokemon_data: Dictionary,
+	display_pokemon_data: Dictionary,
+	confirmed_item: String,
+	stat_changes: Dictionary
+) -> int:
+	var stats: Dictionary = {}
+	var saved_pokemon := _get_player_save_pokemon_for_hover(display_pokemon_data)
+	if saved_pokemon != null:
+		stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(stats, saved_pokemon.stats)
+	stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(stats, request_pokemon_data.get("stats", {}))
+	stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(stats, display_pokemon_data.get("stats", {}))
+	if not stats.has("spe") or int(stats.get("spe", 0)) <= 0:
+		return 0
+
+	var item := confirmed_item.strip_edges()
+	if item == "":
+		item = str(display_pokemon_data.get("item", request_pokemon_data.get("item", ""))).strip_edges()
+	if item == "" and saved_pokemon != null:
+		item = saved_pokemon.item
+	var species := battle_state.get_species_from_pokemon_data(display_pokemon_data)
+	var can_evolve := bool(display_pokemon_data.get(
+		"canEvolve",
+		display_pokemon_data.get("can_evolve", saved_pokemon.can_evolve if saved_pokemon != null else false)
+	))
+	stats = HeldItemStatModifierService.effective_stats(stats, item, species, can_evolve)
+
+	var current_speed := int(stats.get("spe", 0))
+	var speed_stage := clampi(int(stat_changes.get("spe", stat_changes.get("speed", 0))), -6, 6)
+	if speed_stage > 0:
+		current_speed = int(floor(float(current_speed * (2 + speed_stage)) / 2.0))
+	elif speed_stage < 0:
+		current_speed = int(floor(float(current_speed * 2) / float(2 - speed_stage)))
+	return current_speed
 
 func _apply_hover_species_metadata(display_data: Dictionary, species_metadata: Dictionary) -> void:
 	if species_metadata.is_empty():
